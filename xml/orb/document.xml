@@ -13,6 +13,7 @@
 			<function name="change">
 				<arguments>
 					<required name="id"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
@@ -130,6 +131,21 @@
 				<arguments>
 					<required name="docid"/>
 					<optional name="sortby"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="list_user_docs">
+			<function name="list_user_docs">
+				<arguments>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_user_docs">
+			<function name="submit_user_docs">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
