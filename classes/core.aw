@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.149 2003/01/23 09:51:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.150 2003/01/24 15:48:13 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1226,7 +1226,8 @@ class core extends db_connector
 			}
 		}
 
-		if (isset($class_id) && ($_t["class_id"] != $class_id) )
+		// damn it, promo boxes act as menus too
+		if (isset($class_id) && ($class_id != CL_PSEUDO) && ($_t["class_id"] != $class_id) )
 		{
 			// objekt on valest klassist
 			$this->raise_error(ERR_CORE_WTYPE,"get_object: $oid ei ole tüüpi $class_id",true);
@@ -1933,7 +1934,8 @@ class core extends db_connector
 		$cl_name = $m[1];
 
 		$urs = "";
-		foreach($arr as $k => $v)
+		$tmp = new aw_array($arr);
+		foreach($tmp->get() as $k => $v)
 		{
 			if (is_array($v))
 			{
