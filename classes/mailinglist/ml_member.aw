@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.16 2003/06/13 11:41:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.17 2003/06/13 17:16:14 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -451,6 +451,7 @@ class ml_member extends class_base
 				"parent" => $list_obj["meta"]["def_user_folder"],
 				"class_id" => $this->clid,
 				"name" => $objname,
+				"no_flush" => 1,
 				"metadata" => array("name" => $name,"email" => $email),
 			));
 			$q = "INSERT INTO ml_users (name,mail,id) VALUES ('$name','$email','$new_id')";
