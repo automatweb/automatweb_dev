@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.15 2003/06/17 12:01:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.16 2003/06/26 14:14:11 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -703,6 +703,45 @@ class converters extends aw_template
 			}
 		}
 		die();
+	}
+
+	function convert_really_old_aliases()
+	{
+		echo "converting really old image aliases... <br>\n\n<br>";
+		flush();
+		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_DOCUMENT." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			$id = $row["oid"];
+			$this->save_handle();
+			$q = "SELECT objects.*,images.*
+				FROM objects
+				LEFT JOIN images ON (objects.oid = images.id)
+				WHERE parent = '$id' AND class_id = '6' AND status = 2  
+				ORDER BY idx";
+			$this->db_query($q);
+
+			while($row = $this->db_next()) 
+			{
+				$alias = "#p".$row["idx"]."#";
+
+				// now check if the alias already exists
+				$this->save_handle();
+				if (!$this->db_fetch_field("SELECT id FROM aliases WHERE source = '$id' AND target = '$row[oid]'", "id"))
+				{
+					echo "adding alias for image $row[oid] to document $id <br>\n";
+					flush();
+					$this->addalias(array(
+						"id" => $id,
+						"alias" => $row["oid"],
+					));
+					$this->db_query("UPDATE aliases SET idx = '$row[idx]' WHERE source = '$id' AND target = '$row[oid]'");
+					
+				}
+				$this->restore_handle();
+			};
+			$this->restore_handle();
+		}
 	}
 };
 ?>

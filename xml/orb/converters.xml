@@ -56,6 +56,13 @@
 				</arguments>		
 			</function>
 		</action>
+
+		<action name="convert_really_old_aliases">
+			<function name="convert_really_old_aliases">
+				<arguments>
+				</arguments>		
+			</function>
+		</action>
 	</class>
 </orb>
 		
