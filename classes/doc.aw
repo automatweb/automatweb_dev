@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.62 2004/01/13 16:24:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.63 2004/02/13 10:02:00 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -7,7 +7,7 @@
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 
-@classinfo trans=1
+@classinfo trans=1 no_comment=1
 
 @default table=documents
 @default group=general
@@ -186,7 +186,6 @@ class doc extends class_base
 		switch($data["name"])
 		{
 			case "name":
-			case "comment":
 				$retval = PROP_IGNORE;
 				break;
 
@@ -250,15 +249,15 @@ class doc extends class_base
 		{
 			case "sections":
 				$this->update_brothers(array(
-					"id" => $args["obj"]["oid"],
-					"sections" => $args["form_data"]["sections"],
+					"id" => $args["obj_inst"]->id(),
+					"sections" => $args["request"]["sections"],
 				));
 				break;
 			
 			case "cal_event":
 				$this->create_event(array(
-					"id" => $args["obj"]["oid"],
-					"form_data" => $args["form_data"],
+					"id" => $args["obj_inst"]->id(),
+					"form_data" => $args["request"],
 				));
 				$retval = PROP_IGNORE;
 				break;
@@ -268,24 +267,24 @@ class doc extends class_base
 				break;
 
 			case "link_keywords":
-				if (!empty($args["obj"]["oid"]))
+				if (is_oid($args["obj_inst"]->id()))
 				{
 					$kw = get_instance("keywords");
-					if (isset($args["form_data"]["keywords"]))
+					if (isset($args["request"]["keywords"]))
 					{
 						$kw->update_keywords(array(
-							"keywords" => $args["form_data"]["keywords"],
-							"oid" => $args["obj"]["oid"],
+							"keywords" => $args["request"]["keywords"],
+							"oid" => $args["obj_inst"]->id(),
 						));
 					}
 					else
 					{
 						$kw->update_relations(array(
-							"id" => $args["obj"]["oid"],
-							"data" => $args["form_data"]["content"],
+							"id" => $args["obj_inst"]->id(),
+							"data" => $args["request"]["content"],
 						));
 						// also update keyword brother docs
-						$kw->update_menu_keyword_bros(array("doc_ids" => array($args["obj"]["oid"])));
+						$kw->update_menu_keyword_bros(array("doc_ids" => array($args["obj_inst"]->id())));
 					};
 				};
 				break;
@@ -345,18 +344,18 @@ class doc extends class_base
 				{
 					//print "generating preview<br>";
 					$dcx = get_instance("document");
-					$preview = $dcx->gen_preview(array("docid" => $args["obj"]["oid"]));
+					$preview = $dcx->gen_preview(array("docid" => $args["obj_inst"]->id()));
 					$this->quote($preview);
 					$this->_preview = $preview;
 				};
 				break;
 
 			case "gen_static":
-				if (!empty($data["value"]) && !empty($args["obj"]["oid"]))
+				if (!empty($data["value"]) && is_oid($args["obj_inst"]->id()))
 				{
 					$dcx = get_instance("document");
 					// but this dies anyway
-					$dcx->gen_static_doc($args["obj"]["oid"]);
+					$dcx->gen_static_doc($args["obj_inst"]->id());
 				};
 				break;
 
@@ -382,7 +381,7 @@ class doc extends class_base
 					if (is_numeric($fldr))
 					{
 						// do not create duplicates
-						$b = $args["obj"]["oid"];
+						$b = $args["obj_inst"]->id();
 						$q = sprintf("SELECT oid FROM objects
 								WHERE parent = %d AND brother_of = $b
 								AND status != 0 AND class_id IN (%d,%d)",
@@ -394,7 +393,7 @@ class doc extends class_base
 								"parent" => $fldr,
 								"class_id" => CL_BROTHER_DOCUMENT,
 								"status" => STAT_ACTIVE,
-								"brother_of" => $args["obj"]["oid"],
+								"brother_of" => $args["obj_inst"]->id(),
 							));
 						};
 					}
@@ -403,20 +402,20 @@ class doc extends class_base
 				{
 					// nuke all brothers
 					$q = sprintf("UPDATE objects SET status = 0 WHERE brother_of = %d AND class_id = %d",
-							$args["obj"]["oid"],CL_BROTHER_DOCUMENT);
+							$args["obj_inst"]->id(),CL_BROTHER_DOCUMENT);
 					$this->db_query($q);
 				}
 				break;
 
 			case "clear_styles":
-				if (isset($args["form_data"]["clear_styles"]))
+				if (isset($args["request"]["clear_styles"]))
 				{
 					$this->clear_styles = true;
 				};	
 				break;
 
 			case "duration":
-				$_start = date_edit::get_timestamp($args["form_data"]["start1"]);
+				$_start = date_edit::get_timestamp($args["request"]["start1"]);
 				$_end = $_start + (3600 * $data["value"]["hour"]) + (60 * $data["value"]["minute"]);
 				$data["value"] = $_end;
 				break;
@@ -450,7 +449,7 @@ class doc extends class_base
 		};
 
 		$old_tm = $obj_inst->prop("tm");
-		if (empty($old_tm) && !empty($args["form_data"]["tm"]))
+		if (empty($old_tm) && !empty($args["request"]["tm"]))
 		{
 			$obj_inst->set_prop("tm",date("d.m.y",$obj_inst->prop("modified")));
 		};
@@ -536,7 +535,7 @@ class doc extends class_base
 	function callback_get_doc_plugins($args = array())
 	{
                 $plugins = $this->parse_long_template(array(
-                        "parent"=> $args["obj"]["parent"],
+                        "parent"=> $args["obj_inst"]->parent(),
                         "template_dir" => $this->template_dir,
                 ));
 
@@ -545,7 +544,7 @@ class doc extends class_base
                         "category" => "document",
                         "plugins" => $plugins,
                         "method" => "get_property",
-                        "args" => $args["obj"]["meta"]["plugins"],
+                        "args" => $args["obj_inst"]->meta("plugins"),
                 ));
 
 		return $plugindata;

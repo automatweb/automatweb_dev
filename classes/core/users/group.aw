@@ -14,7 +14,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_GROUP, on_remove_ali
 /*
 
 
-@classinfo syslog_type=ST_GROUP relationmgr=yes
+@classinfo syslog_type=ST_GROUP relationmgr=yes no_comment=1
 
 @groupinfo dyn_search caption=Otsing submit=no
 @groupinfo import caption=Import
@@ -118,9 +118,6 @@ class group extends class_base
 				));				
 				break;
 
-			case "comment":
-				return PROP_IGNORE;
-
 			case "modified";
 				$prop['value'] = $this->time2date($prop['value'], 2);
 				break;
@@ -163,11 +160,11 @@ class group extends class_base
 				break;
 
 			case "roles":
-				$prop['value'] = $this->_get_roles($this->db_fetch_field("SELECT gid FROM groups WHERE oid = ".$arr["obj"]["oid"],"gid"));
+				$prop['value'] = $this->_get_roles($this->db_fetch_field("SELECT gid FROM groups WHERE oid = ".$arr["obj_inst"]->id(),"gid"));
 				break;
 
 			case "objects":
-				$prop["value"] = $this->_get_objects($this->db_fetch_field("SELECT gid FROM groups WHERE oid = ".$arr["obj"]["oid"],"gid"));
+				$prop["value"] = $this->_get_objects($this->db_fetch_field("SELECT gid FROM groups WHERE oid = ".$arr["obj_inst"]->id(),"gid"));
 				break;
 		
 			case "import_desc":
@@ -189,11 +186,11 @@ class group extends class_base
 	function set_property(&$arr)
 	{
 		$prop =& $arr["prop"];
-		$gid = $this->users->get_gid_for_oid($arr["obj"]["oid"]);
+		$gid = $this->users->get_gid_for_oid($arr["obj_inst"]->id());
 
 		if ($prop['name'] == 'data')
 		{
-			$gid = $this->users->get_gid_for_oid($arr["form_data"]["group_id"]);
+			$gid = $this->users->get_gid_for_oid($arr["request"]["group_id"]);
 			$pg = $this->users->fetchgroup($gid);
 		
 			$f = get_instance("formgen/form");
@@ -276,14 +273,14 @@ class group extends class_base
 		if ($prop['name'] == "obj_acl")
 		{
 			// read all acls from request and set them
-			$ea = $arr["form_data"]["edit_acl"];
+			$ea = $arr["request"]["edit_acl"];
 			if ($ea)
 			{
 				$a = $this->acl_list_acls();
 				$acl = array();
 				foreach($a as $a_bp => $a_name)
 				{
-					$acl[$a_name] = $arr["form_data"]["acl_".$a_bp];
+					$acl[$a_name] = $arr["request"]["acl_".$a_bp];
 				}
 				$this->save_acl($ea, $gid, $acl);
 			}
@@ -294,9 +291,9 @@ class group extends class_base
 
 	function callback_mod_retval($arr)
 	{
-		if ($arr["form_data"]["edit_acl"])
+		if ($arr["request"]["edit_acl"])
 		{
-			$arr["args"]["edit_acl"] = $arr["form_data"]["edit_acl"];
+			$arr["args"]["edit_acl"] = $arr["request"]["edit_acl"];
 		}
 	}
 
@@ -547,6 +544,8 @@ class group extends class_base
 		$la = get_instance("languages");
 		$ll = $la->get_list();
 
+		$meta = $arr["obj_inst"]->meta();
+
 		foreach($ll as $lid => $lname)
 		{
 			$ret["admin_rootmenu2[$lid]"] = array(
@@ -557,7 +556,7 @@ class group extends class_base
 				"field" => "meta",
 				"method" => "serialize",
 				"caption" => "Admin rootmen&uuml;&uuml; ($lname)",
-				"value" => $arr["obj"]["meta"]["admin_rootmenu2"][$lid],
+				"value" => $meta["admin_rootmenu2"][$lid],
 				"reltype" => "RELTYPE_ADMIN_ROOT"
 			);
 		}
