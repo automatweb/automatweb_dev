@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.89 2002/01/31 00:19:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.90 2002/01/31 22:43:59 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -261,7 +261,7 @@ class menuedit extends aw_template
 		{
 			die($this->do_rdf($section,$obj,$format,$docid));
 		}
- 
+
 		/// Vend?
 		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
 		{
@@ -346,8 +346,10 @@ class menuedit extends aw_template
 			"sel_menu_id" => $sel_menu_id
 		));
 
+
 		if ($GLOBALS["uid"] == "")
 		{
+			$this->tmp = $this->mar;
 			// if the section is marked "users_only" and the visitor is not logged in, 
 			// then redirect him  or her to the default error page
 			// we must go though all the parent menus also 
@@ -355,20 +357,20 @@ class menuedit extends aw_template
 			$uo = false;
 			while ($uo_parent)
 			{
-				if (!is_array($this->mar[$uo_parent]) && $uo_parent)
+				if (!is_array($this->tmp[$uo_parent]) && $uo_parent)
 				{
 					//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $uo_parent");
 					//$this->mar[$uo_parent] = $this->db_next();
-					$this->mar[$uo_parent] = $this->get_menu($uo_parent);
+					$this->tmp[$uo_parent] = $this->get_menu($uo_parent);
 				}
 				$uo_meta = $this->get_object_metadata(array(
-					"metadata" => $this->mar[$uo_parent]["metadata"],
+					"metadata" => $this->tmp[$uo_parent]["metadata"],
 				));
 				if ($uo_meta["users_only"] == 1)
 				{
 					$uo = true;
 				}
-				$uo_parent = $this->mar[$uo_parent]["parent"];
+				$uo_parent = $this->tmp[$uo_parent]["parent"];
 			}
 			if ($uo)
 			{
@@ -419,14 +421,14 @@ class menuedit extends aw_template
 		classload("periods","document");
 		$d = new document();
 		$this->doc = new document();
-		
-		
+
+		// FSCK	
 		if (!is_array($this->mar[$sel_menu_id]))
 		{
 			$seobj = $this->get_object($sel_menu_id);
 			$sel_menu_id = $seobj["parent"];
 		}
-		
+
 		// here we must find the menu image, if it is not specified for this menu, then use the parent's and so on.
 		$this->do_menu_images($sel_menu_id);
 
@@ -1206,7 +1208,7 @@ class menuedit extends aw_template
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
-				ORDER BY objects.parent, jrk,objects.created";
+			ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
 		$awt->stop("menuedit::db_listall_lite");
 	}
@@ -4558,8 +4560,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->db_prep_listall("objects.status = 2");
 			$this->db_listall_lite("objects.status = 2");
 
+			$cnt = 0;
+
 			while ($row = $this->db_next())
 			{
+				$cnt++;
 				$this->mpr[$row["parent"]][] = $row;
 				$this->mar[$row["oid"]] = $row;
 			}
@@ -5486,6 +5491,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$smi .= $this->parse("SEL_MENU_IMAGE");
 			}
 		}
+
 		$this->vars(array(
 			"SEL_MENU_IMAGE" => $smi,
 			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
