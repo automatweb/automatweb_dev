@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.102 2002/08/20 08:56:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.103 2002/08/24 18:28:41 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -596,6 +596,7 @@ class core extends db_connector
 			"type" => $type,
 			"lang_id" => $lang_id,
 			"active" => $active,
+			"status" => $status,
 			"orderby" => $orderby,
 		));
 			
@@ -1246,6 +1247,8 @@ class core extends db_connector
 
 		$astr = ($active) ? " AND status = 2 " : " AND status != 0 ";
 
+		$status = ($status) ? $status : 2;
+
 		$sc  = ($subclass) ? " AND subclass = '$subclass' " : "";
 
 		$fl = ($flags) ? " AND flags = '$flags' " : "";
@@ -1267,9 +1270,12 @@ class core extends db_connector
 		}
 
 		$ostr = ($orderby) ? " ORDER BY $orderby " : "";
+
+		$cl = is_array($class) ? join(",",$class) : $class;
+
 		
 		// kui tegemist on menüüdega, siis joinime kylge ka menu tabeli
-		if ($class == CL_PSEUDO)
+		if ($cl == CL_PSEUDO)
 		{
 			$typestr = (isset($type)) ? " AND menu.type = '$type' " : "";
 			$q = "SELECT objects.* FROM objects 
@@ -1280,7 +1286,7 @@ class core extends db_connector
 		{
 			$q = "SELECT objects.*
 					FROM objects
-					WHERE class_id = $class $pstr $sc $astr $fl $ostr";
+					WHERE class_id IN ($cl) $fl AND status = $status $pstr $sc $astr $ostr";
 		};
 		global $DBUG;
 		if ($DBUG)
