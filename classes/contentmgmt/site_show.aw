@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.96 2004/11/03 14:52:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.97 2004/11/05 18:21:50 duke Exp $
 
 /*
 
@@ -1855,9 +1855,14 @@ class site_show extends class_base
 			"class_id" => CL_HTML_POPUP,
 			"site_id" => array(),
 		));
-		for ($o = $pl->begin(); !$pl->end(); $o = $pl->next())
+		if (count($pl->ids()) > 0)
 		{
-			if ($o->prop("only_once") && $_SESSION["popups_shown"][$o->id()] == 1)
+			$t = get_instance(CL_HTML_POPUP);
+		};
+		foreach($pl->arr() as $o)
+		{
+			$o_id = $o->id();
+			if ($o->prop("only_once") && $_SESSION["popups_shown"][$o_id] == 1)
 			{
 				continue;
 			}
@@ -1868,30 +1873,32 @@ class site_show extends class_base
 			{
 				if ($c->prop("to") == $this->sel_section)
 				{
-					$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+					//$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+					$popups .= $t->get_popup_data($o);
 					$sh = true;
-					$_SESSION["popups_shown"][$o->id()] = 1;
+					$_SESSION["popups_shown"][$o_id] = 1;
 				}
 			}
 
-			if (!$sh && is_array($o->meta("section_include_submenus")) && count($o->meta("section_include_submenus")) > 0)
+			$inc_submenus = $o->meta("section_include_submenus");
+
+			if (!$sh && is_array($inc_submenus) && count($inc_submenus) > 0)
 			{
 				$path = obj($this->sel_section);
 				$path = $path->path();
-				$ssi = $o->meta("section_include_submenus");
 
 				foreach($path as $p_o)
 				{
-					if ($ssi[$p_o->parent()])
+					if ($inc_submenus[$p_o->parent()])
 					{
-						$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
-						$_SESSION["popups_shown"][$o->id()] = 1;
+						//$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+						$popups .= $t->get_popup_data($o);
+						$_SESSION["popups_shown"][$o_id] = 1;
 					}
 				}
 			}
 		}
-		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
-		return $retval;
+		return $popups;
 	}
 
 	////
