@@ -20,7 +20,7 @@
 @property acls type=callback callback=get_acls store=no
 @caption Lubatud
 
-@property save_acl_sep type=text store=no no-caption=1
+@property save_acl_sep type=text store=no no_caption=1
 @caption 
 
 @property save_acl type=checkbox ch_value=1 store=no
