@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.128 2004/11/04 10:40:22 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.129 2004/11/04 11:55:48 sven Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -191,14 +191,14 @@ class users extends users_user
 			$auth = get_instance(CL_AUTH_SERVER_LOCAL);
 			list($success, $error) = $auth->check_auth(NULL, array(
 				"uid" =>  $username,
-				"password" => $old_pass
+				"password" => $old_pass,
+				"pwdchange" => 1,
 			));
 			if(!$success)
 			{
 				$error = "Vana parool on vale";
 			}
 		}
-		
 		if($error)
 		{
 			return $this->mk_my_orb("change_password_not_logged", array(

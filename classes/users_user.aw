@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.99 2004/11/04 10:40:23 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.100 2004/11/04 11:55:18 sven Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -218,12 +218,7 @@ class users_user extends aw_template
 		};
 		
 		//If user logs on first time and there is setting in .ini file then he/she must chane password before login is compleated
-		if($this->require_password_change($uid) && $this->is_first_login($uid) && !$auth_id)
-		{ 
-			Header("Location: ".$this->mk_my_orb("change_password_not_logged", array("uid" => $uid), "users"));
-			exit;		
-		}
-	
+		
 		// njah. Mitte ei taha. Aga midagi yle ka ei jaa. Logime vaese bastardi sisse
 		// HUZZAH!
 		
