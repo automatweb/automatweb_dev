@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.40 2002/08/16 17:51:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.41 2002/08/24 09:10:18 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -300,7 +300,7 @@ class form_base extends form_db_base
 			$this->parse("GRID_SEL");
 		}
 
-		if (in_array($action, array("table_settings","list_actions","metainfo","set_folders","translate","sel_tables","calendar")))
+		if (in_array($action, array("table_settings","list_actions","metainfo","set_folders","translate","sel_tables","calendar","new_cal_rel","edit_cal_rel")))
 		{
 			$this->parse("SETTINGS_SEL");
 		}
@@ -327,9 +327,9 @@ class form_base extends form_db_base
 			$this->parse("HAS_ALIASMGR");
 		};
 		
-		if ($this->arr["has_calendar"])
+		if ($this->arr["uses_calendar"])
 		{
-			$this->parse("HAS_CALENDAR");
+			$this->parse("USES_CALENDAR");
 		};
 
 		$this->vars(array("FG_MENU" => $this->parse("FG_MENU")));
