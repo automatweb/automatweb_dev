@@ -1,0 +1,34 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>aliases</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>10</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali aliased</caption>
+      </property>
+      <property>
+            <name>delete</name>
+            <type>checkbox</type>
+            <value>1</value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas kustutame valitud</caption>
+      </property>
+</properties>
+
