@@ -33,6 +33,12 @@
 			<signature>
 				<caption>Signatuurid</caption>
 				<link>?class=messenger&amp;action=configure&amp;page=signature</link>
+				<sublinks>
+					<new>
+						<caption>Lisa uus</caption>
+						<link>?class=messenger&amp;action=add_signature</link>
+					</new>
+				</sublinks>
 			</signature>
 			<general>
 				<caption>Üldine</caption>
