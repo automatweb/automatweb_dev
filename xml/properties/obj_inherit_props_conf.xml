@@ -1,74 +1,78 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>donor</group>
+            <field>name</field>
+            <type>textbox</type>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>inherit_from</name>
             <table>objects</table>
-            <group>general</group>
+            <group>donor</group>
             <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_INHERIT_FROM</reltype>
-            <caption>Vali objekt, millelt p&amp;auml;rida</caption>
-      </property>
-      <property>
-            <name>inherit_to_class</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Vali klass, kuhu omadusi kirjutatakse</caption>
-      </property>
-      <property>
-            <name>inherit_to_objs</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_INHERIT_TO</reltype>
-            <multiple>1</multiple>
-            <caption>Vali objektid kuhu p&amp;auml;rida</caption>
-      </property>
-      <property>
-            <name>ihf_tree</name>
-            <table>objects</table>
-            <group>ihf</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>treeview</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>ihf_tree</parent>
-      </property>
-      <property>
-            <name>ihf_tbl</name>
-            <table>objects</table>
-            <group>ihf</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>ihf_table</parent>
+            <caption>Vali doonorid</caption>
       </property>
       <property>
-            <name>ihf_tree_right</name>
+            <name>inherit_to</name>
             <table>objects</table>
-            <group>ihf</group>
+            <group>destination</group>
             <field>meta</field>
-            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Vali sihtobjektid</caption>
+      </property>
+      <property>
+            <name>ihf_donor_tree</name>
+            <table>objects</table>
+            <group>ihf_donor</group>
+            <field>meta</field>
             <type>treeview</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>ihf_tree_right</parent>
+            <parent>ihf_donor_tree</parent>
+      </property>
+      <property>
+            <name>ihf_donor_tbl</name>
+            <table>objects</table>
+            <group>ihf_donor</group>
+            <field>meta</field>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ihf_donor_table</parent>
+      </property>
+      <property>
+            <name>ihf_destination_tree</name>
+            <table>objects</table>
+            <group>ihf_destination</group>
+            <field>meta</field>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ihf_destination_tree</parent>
+      </property>
+      <property>
+            <name>ihf_destination_tbl</name>
+            <table>objects</table>
+            <group>ihf_destination</group>
+            <field>meta</field>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ihf_destination_table</parent>
       </property>
       <property>
             <name>if_ov_toolbar</name>
             <table>objects</table>
             <group>if_ov</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -78,7 +82,6 @@
             <table>objects</table>
             <group>if_ov</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -90,11 +93,27 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <donor>
+                  <caption>Doonorklass</caption>
+                  <parent>general</parent>
+            </donor>
+            <destination>
+                  <caption>Sihtklass</caption>
+                  <parent>general</parent>
+            </destination>
             <ihf>
-                  <caption>P&amp;auml;ritavad omadused</caption>
+                  <caption>P&amp;auml;rimine</caption>
             </ihf>
+            <ihf_donor>
+                  <caption>Doonorklass</caption>
+                  <parent>ihf</parent>
+            </ihf_donor>
+            <ihf_destination>
+                  <caption>Sihtklass</caption>
+                  <parent>ihf</parent>
+            </ihf_destination>
             <if_ov>
-                  <caption>Valitud p&amp;auml;rimised</caption>
+                  <caption>Tingimused</caption>
                   <submit>no</submit>
             </if_ov>
       </groupinfo>
@@ -114,26 +133,36 @@
             </INHERIT_TO>
       </reltypes>
       <layout>
-            <ihf_main>
+            <ihf_donor_main>
                   <type>hbox</type>
-                  <group>ihf</group>
-                  <width>20%:60%:20%</width>
-            </ihf_main>
-            <ihf_tree>
+                  <group>ihf_donor</group>
+                  <width>30%:70%</width>
+            </ihf_donor_main>
+            <ihf_donor_tree>
                   <type>vbox</type>
-                  <parent>ihf_main</parent>
-                  <group>ihf</group>
-            </ihf_tree>
-            <ihf_table>
+                  <parent>ihf_donor_main</parent>
+                  <group>ihf_donor</group>
+            </ihf_donor_tree>
+            <ihf_donor_table>
                   <type>vbox</type>
-                  <parent>ihf_main</parent>
-                  <group>ihf</group>
-            </ihf_table>
-            <ihf_tree_right>
+                  <parent>ihf_donor_main</parent>
+                  <group>ihf_donor</group>
+            </ihf_donor_table>
+            <ihf_destination_main>
+                  <type>hbox</type>
+                  <group>ihf_destination</group>
+                  <width>30%:70%</width>
+            </ihf_destination_main>
+            <ihf_destination_tree>
                   <type>vbox</type>
-                  <parent>ihf_main</parent>
-                  <group>ihf</group>
-            </ihf_tree_right>
+                  <parent>ihf_destination_main</parent>
+                  <group>ihf_destination</group>
+            </ihf_destination_tree>
+            <ihf_destination_table>
+                  <type>vbox</type>
+                  <parent>ihf_destination_main</parent>
+                  <group>ihf_destination</group>
+            </ihf_destination_table>
       </layout>
 </properties>
 

@@ -3,4 +3,3 @@
 	<class name="obj_inherit_props_conf" folder="core" extends="class_base">
 	</class>
 </orb>
-		
