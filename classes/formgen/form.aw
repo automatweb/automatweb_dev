@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.111 2004/11/03 12:14:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.112 2004/11/05 13:50:10 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1455,9 +1455,12 @@ class form extends form_base
 			// we are in error, load the data from the session
 			$this->entry_id = $entry_id;
 			$this->entry = aw_global_get("form_".$this->id."_entry_".$entry_id."_data");
+
+
 			$this->controller_errors = aw_global_get("form_".$this->id."_entry_".$entry_id."_errors");
 			// use a fake entry id just so that the values get shown
 			$this->read_entry_from_array(-1);
+
 			// and clear the session
 			aw_session_del("form_".$this->id."_entry_".$entry_id."_data");
 			aw_session_del("form_".$this->id."_entry_".$entry_id."_errors");
@@ -1953,6 +1956,7 @@ class form extends form_base
 				$has_cal_errors = $errors;
 			};
 //			echo "ctrlok = $controllers_ok warnok = $controller_warnings_ok <br />";
+
 			if ( (!$controllers_ok) || ($has_errors) || (!$controller_warnings_ok))
 			{
 				// ok, now the error messages are in $this->controller_errors
