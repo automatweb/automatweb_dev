@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.12 2004/12/14 14:05:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.13 2005/02/14 15:33:25 duke Exp $
 // task.aw - TODO item
 /*
 
@@ -226,24 +226,10 @@ class task extends class_base
 
 	function set_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		
-		//the person who added the task will be a participant, whether he likes it
-		//or not
-		if($arr['new'])
-		{
-			//
-			$arr['obj_inst']->save();
-			$user = get_instance('core/users/user');
-			$person = new object($user->get_current_person());
-			$person->connect(array(
-				'reltype' => 'RELTYPE_PERSON_TASK',
-				'to' => $arr['obj_inst'],
-			));
-		}
-		
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "other_selector":
 				$elib = get_instance("calendar/event_property_lib");
@@ -251,16 +237,34 @@ class task extends class_base
 				break;
 
 			case "whole_day":
-				if ($data["value"])
+				if ($prop["value"])
 				{
-					list($m,$d,$y) = explode("-",date("m-d-Y"));
+					// ahaa! võtab terve päeva!
+					$start = $arr["obj_inst"]->prop("start1");
+					list($m,$d,$y) = explode("-",date("m-d-Y",$start));
 					$daystart = mktime(9,0,0,$m,$d,$y);
 					$dayend = mktime(17,0,0,$m,$d,$y);
 					$arr["obj_inst"]->set_prop("start1",$daystart);
+					$arr["obj_inst"]->set_prop("end",$dayend);
 				};
 				break;
 		};
 		return $retval;
+	}
+
+	function callback_post_save($arr)
+	{
+		//the person who added the task will be a participant, whether he likes it
+		//or not
+		if(!empty($arr['new']))
+		{
+			$user = get_instance('core/users/user');
+			$person = new object($user->get_current_person());
+			$person->connect(array(
+				'reltype' => 'RELTYPE_PERSON_TASK',
+				'to' => $arr['obj_inst'],
+			));
+		}
 	}
 	
 	function request_execute($obj)
