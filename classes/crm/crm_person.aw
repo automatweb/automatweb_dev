@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.9 2004/02/03 10:40:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.10 2004/02/11 19:50:48 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -223,18 +223,7 @@ class crm_person extends class_base
 					$arr["obj_inst"]->set_name($title.$form['firstname']." ".$form['lastname']);
 				}
 				break;
-
-			case "email":
-				$this->process_email($arr);
-				break;
-			
-			case "phone":
-				$this->process_phone($arr);
-				break;
-
-			case "url":
-				$this->process_url($arr);
-				break;
+		
 		};
 		return $retval;
 	}
@@ -284,99 +273,7 @@ class crm_person extends class_base
 		return $retval;
 
 	}
-
-	function process_email($arr)
-	{
-		$prop = $arr["prop"];
-
-                $target_reltype = constant($prop["reltype"]);
-                $clid = $arr["relinfo"][$target_reltype]["clid"][0];
-
-                // now get a bloody instance of that object.
-
-                $inst = get_instance($clid);
-                $inst->id_only = true;
-
-                $req = $arr["request"]["cb_emb"]["email"];
-
-                if (empty($req["new"]["mail"]))
-                {
-                        return false;
-                }
-
-                $member_id = $inst->submit(array(
-                        "name" => $req["new"]["mail"],
-                        "mail" => $req["new"]["mail"],
-                        "parent" => $req["new"]["parent"],
-                ));
-
-                $arr["obj_inst"]->connect(array(
-                        "to" => $member_id,
-                        "reltype"=> RELTYPE_EMAIL,
-                ));
-	}
 	
-	function process_phone($arr)
-	{
-		$prop = $arr["prop"];
-
-                $target_reltype = constant($prop["reltype"]);
-                $clid = $arr["relinfo"][$target_reltype]["clid"][0];
-
-                // now get a bloody instance of that object.
-
-                $inst = get_instance($clid);
-                $inst->id_only = true;
-
-                $req = $arr["request"]["cb_emb"]["phone"];
-
-                if (empty($req["new"]["name"]))
-                {
-                        return false;
-                }
-
-                $member_id = $inst->submit(array(
-                        "name" => $req["new"]["name"],
-                        "parent" => $req["new"]["parent"],
-                ));
-
-                $arr["obj_inst"]->connect(array(
-                        "to" => $member_id,
-                        "reltype"=> RELTYPE_PHONE,
-                ));
-	}
-	
-	function process_url($arr)
-	{
-		$prop = $arr["prop"];
-
-                $target_reltype = constant($prop["reltype"]);
-                $clid = $arr["relinfo"][$target_reltype]["clid"][0];
-
-                // now get a bloody instance of that object.
-
-                $inst = get_instance($clid);
-                $inst->id_only = true;
-
-                $req = $arr["request"]["cb_emb"]["url"];
-
-                if (empty($req["new"]["url"]))
-                {
-                        return false;
-                }
-
-                $member_id = $inst->submit(array(
-                        "name" => $req["new"]["name"],
-                        "url" => $req["new"]["url"],
-                        "parent" => $req["new"]["parent"],
-                ));
-
-                $arr["obj_inst"]->connect(array(
-                        "to" => $member_id,
-                        "reltype"=> RELTYPE_URL,
-                ));
-	}
-
 	function isik_toolbar(&$args)
 	{
 		$toolbar = &$args["prop"]["toolbar"];
@@ -493,7 +390,7 @@ class crm_person extends class_base
 				{
 					$toolbar->add_menu_item(array(
 						"parent" => "add_event",
-						'link' => $this->mk_my_orb('new',array(
+						'url' => $this->mk_my_orb('new',array(
 							'alias_to_org' => $args["obj_inst"]->id(),
 							'reltype_org' => $val['reltype'],
 							'class' => 'planner',
@@ -563,11 +460,12 @@ class crm_person extends class_base
 			$to_ids[] = $task->prop("to");
 		};
 
+		/*
 		if (aw_global_get("uid") == "duke")
 		{
 			if (sizeof($to_ids) > 0)
 			{
-				// find the latest object from the tables
+				 find the latest object from the tables
 				 $olist = new object_list(array(
 					"class_id" => array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL),
 					"oid" => $to_ids,
@@ -581,6 +479,7 @@ class crm_person extends class_base
 				print "</pre>";
 			};
 		};
+		*/
 
 		$conns = $o->connections_from(array(
                         "type" => 13,
