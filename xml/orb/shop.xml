@@ -190,6 +190,43 @@
 			</function>
 		</action>
 
+		<action name="change_tables">
+			<function name="change_tables">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_tables">
+			<function name="submit_tables">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="list_vouchers">
+			<function name="list_vouchers">
+				<arguments>
+					<required name="shop"/>
+					<required name="order_id"/>
+					<required name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view_voucher">
+			<function name="view_voucher">
+				<arguments>
+					<required name="shop"/>
+					<required name="order_id"/>
+					<required name="section"/>
+					<required name="item_id"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

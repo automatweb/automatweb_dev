@@ -13,6 +13,7 @@
 				<arguments>
 					<optional name="type"/>
 					<optional name="parent"/>
+					<optional name="msgid"/>
 				</arguments>
 			</function>
 		</action>

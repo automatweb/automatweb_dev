@@ -53,6 +53,7 @@
 			<function name="set_per_prices">
 				<arguments>
 					<required name="id"/>
+					<optional name="page"/>
 				</arguments>
 			</function>
 		</action>
