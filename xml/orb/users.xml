@@ -165,8 +165,8 @@
 		<action name="pwhash" nologin="1">
 			<function name="password_hash">
 				<arguments>
-					<required name="key"/>
-					<required name="uid"/>
+					<required name="k"/>
+					<required name="u"/>
 				</arguments>
 			</function>
 		</action>
