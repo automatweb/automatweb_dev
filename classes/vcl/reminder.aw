@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/reminder.aw,v 1.1 2004/06/22 14:29:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/reminder.aw,v 1.2 2004/08/25 08:36:57 duke Exp $
 // reminder UI VCL component
 
 class reminder extends core
@@ -65,10 +65,12 @@ class reminder extends core
 			"name" => "${name}[remind_time]",
 			"caption" => "Minutid",
 			"options" => array(
-				2 => 2,
 				5 => 5,
 				10 => 10,
 				15 => 15,
+				30 => 30,
+				60 => 60,
+				120 => 120,
 			),
 			"value" => $remind_time,
 		);
