@@ -16,6 +16,12 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="submit">
+			<function name="submit">
+				<arguments/>
+			</function>
+		</action>
 
 		<action name="show">
 			<function name="show">
