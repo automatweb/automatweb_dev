@@ -56,6 +56,14 @@
             <field>comment</field>
             <caption>Kommentaar</caption>
       </property>
+      <property>
+            <name>submit</name>
+            <group>general</group>
+            <form>stat</form>
+            <type>submit</type>
+            <value>Saada</value>
+            <field>submit</field>
+      </property>
       <classinfo>
             <hide_tabs>1</hide_tabs>
       </classinfo>

@@ -3,7 +3,7 @@
       <property>
             <name>whitelist</name>
             <table>objects</table>
-            <group>whitelist</group>
+            <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
@@ -11,14 +11,25 @@
             <rows>20</rows>
             <caption>Lubatud laiend (iga laiend eraldi real)</caption>
       </property>
+      <property>
+            <name>final</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <cols>60</cols>
+            <rows>10</rows>
+            <caption>Õnnestunud uploadi kviteeriv tekst</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_STAT_REPORT</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <whitelist>
+            <settings>
                   <caption>Seadistamine</caption>
-            </whitelist>
+            </settings>
       </groupinfo>
       <reltypes>
             <REPORT_TYPE>
