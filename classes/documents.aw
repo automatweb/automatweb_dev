@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.9 2001/05/22 02:05:04 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.10 2001/05/22 02:41:43 kristo Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -1092,7 +1092,6 @@ class db_documents extends aw_template
 					"lead_comments"	=> $lc,
 					"modified"	=> $this->time2date($doc[modified],2),
 					"channel"	=> $doc[channel],
-					"tm"		=> $doc[tm],
 					"link_text"	=> $doc[link_text],
 					"subtitle"	=> $doc[subtitle],
 					"RATE"		=> $pts,
@@ -1124,6 +1123,7 @@ class db_documents extends aw_template
 		$this->vars(array("SHOW_TITLE" => $sht));
 
 		// keeleseosed
+		$tm = $doc["tm"];
 		if ($this->is_template("LANG_BRO"))
 		{
 			$lab = unserialize($doc["lang_brothers"]);
@@ -1136,18 +1136,35 @@ class db_documents extends aw_template
 				reset($larr);
 				while (list(,$v) = each($larr))
 				{
-					if ($lab[$v[id]])
+					if ($lab[$v["id"]])
 					{
-						$this->vars(array("lang_id" => $v[id], "lang_name" => $v[name],"section" => $lab[$v[id]]));
-						if ($GLOBALS["lang_id"] == $v[id])
+						$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"],"section" => $lab[$v["id"]]));
+						if ($GLOBALS["lang_id"] == $v["id"])
+						{
 							$langs.=$this->parse("SLANG_BRO");
+						}
 						else
+						{
 							$langs.=$this->parse("LANG_BRO");
+							// tshekime et kui sellel dokul pole m22ratud muutmise kuup2eva, siis vaatame kas m6nel seotud dokul on
+							// ja kui on, siis kasutame seda
+							if ($tm == "")
+							{
+								$tm = $this->db_fetch_field("SELECT tm FROM documents WHERE docid = ".$lab[$v["id"]],"tm");
+							}
+						}
 					}
 				}
 				$this->vars(array("LANG_BRO" => $langs));
 			}
 		}
+		if ($tm == "")
+		{
+			$tm = $this->time2date($doc["modified"],8);
+		}
+		$this->vars(array(
+			"tm" => $tm
+		));
 
 		// failide ikoonid kui on template olemas, namely www.stat.ee jaox
 		if ($this->is_template("FILE"))
