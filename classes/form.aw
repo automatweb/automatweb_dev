@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.83 2001/11/27 17:38:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.84 2001/12/18 00:09:50 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2446,7 +2446,7 @@ class form extends form_base
 								$row["ev_delete"] = "<a href='".$this->mk_my_orb(
 									"delete_entry", 
 										array(
-											"id" => $fid,
+											"id" => $form_id,
 											"entry_id" => $row["entry_id"], 
 											"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
 										),
@@ -3871,8 +3871,9 @@ class form extends form_base
 					$lcol = "";
 					foreach($langs as $lar)
 					{
+						$lt = $el->get_lang_text($lar["id"]);
 						$this->vars(array(
-							"text" => $el->get_lang_text($lar["id"]),
+							"text" => ($lt != "" ? $lt : $el->get_text()),
 							"col" => $col,
 							"row" => $row,
 							"elid" => $el->get_id(),
@@ -3901,7 +3902,7 @@ class form extends form_base
 							$lcol1 = "";
 							foreach($langs as $lar)
 							{
-								if ($lar["id"] != $this->lang_id)
+								if ($lar["id"] != $this->lang_id && $el->arr["listbox_lang_items"][$lar["id"]][$i] != "")
 								{
 									$txt = $el->arr["listbox_lang_items"][$lar["id"]][$i];
 								}
@@ -3942,7 +3943,7 @@ class form extends form_base
 							$lcol2 = "";
 							foreach($langs as $lar)
 							{
-								if ($lar["id"] != $this->lang_id)
+								if ($lar["id"] != $this->lang_id && $el->arr["multiple_lang_items"][$lar["id"]][$i] != "")
 								{
 									$txt = $el->arr["multiple_lang_items"][$lar["id"]][$i];
 								}
@@ -3979,7 +3980,7 @@ class form extends form_base
 					$lcol3 = "";
 					foreach($langs as $lar)
 					{
-						if ($lar["id"] != $this->lang_id)
+						if ($lar["id"] != $this->lang_id && $el->arr["lang_info"][$lar["id"]] != "")
 						{
 							$txt = $el->arr["lang_info"][$lar["id"]];
 						}
@@ -4015,7 +4016,7 @@ class form extends form_base
 						$lcol4 = "";
 						foreach($langs as $lar)
 						{
-							if ($lar["id"] != $this->lang_id)
+							if ($lar["id"] != $this->lang_id && $el->arr["lang_default"][$lar["id"]] != "")
 							{
 								$txt = $el->arr["lang_default"][$lar["id"]];
 							}
@@ -4050,7 +4051,7 @@ class form extends form_base
 					$lcol5 = "";
 					foreach($langs as $lar)
 					{
-						if ($lar["id"] != $this->lang_id)
+						if ($lar["id"] != $this->lang_id && $el->arr["lang_must_error"][$lar["id"]] != "")
 						{
 							$txt = $el->arr["lang_must_error"][$lar["id"]];
 						}
@@ -4086,7 +4087,7 @@ class form extends form_base
 						$lcol6 = "";
 						foreach($langs as $lar)
 						{
-							if ($lar["id"] != $this->lang_id)
+							if ($lar["id"] != $this->lang_id && $el->arr["lang_button_text"][$lar["id"]] != "")
 							{
 								$txt = $el->arr["lang_button_text"][$lar["id"]];
 							}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.45 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.46 2001/12/18 00:09:50 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -394,7 +394,7 @@ lc_load("definition");
 				$html.=$xval." ";
 			}
 
-			return $html;
+			return strip_tags($html);
 		}
 	}
 ?>

@@ -20,7 +20,7 @@
 //   
 // everything here assumes that the form is already loaded - having to load the form would be too high level
 // for this class - it's here to handle the dirty little details and not used from outside formgen - that's also
-// the reason why we should look lightly at calling functions defined on classes derived from this 
+// the reason why we should look lightly at calling functions defined in classes derived from this 
 //
 // - terryf
 
@@ -346,7 +346,7 @@ class form_db_base extends aw_template
 	}
 
 	////
-	// !reads the data for the entry from it's designated place, maps it to elements and bundles it in an array or
+	// !reads the data for the entry from it's designated place, maps it to elements and bundles it in an array of
 	// $el_id => $el_value pairs which it returns
 	function read_entry_data($entry_id,$silent_errors = false)
 	{
@@ -510,6 +510,11 @@ class form_db_base extends aw_template
 	// $where - an optional where clause - this will be used in relation element loading
 	function do_form_db_load($entry_id,$silent_errors,&$ret,$form_id,$where = "")
 	{
+		if (!$form_id)
+		{
+			return;
+		}
+
 		$this->save_handle();
 		
 		if ($where == "")
@@ -526,11 +531,11 @@ class form_db_base extends aw_template
 		{
 			if ($silent_errors)
 			{
-				$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$form_id),false,true);
+//				$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$form_id),false,true);
 			}
 			else
 			{
-				$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$form_id),true);
+//				$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$form_id),false,true);
 			}
 		};
 

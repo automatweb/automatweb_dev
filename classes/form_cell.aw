@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.24 2001/11/14 22:20:03 lauri Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.25 2001/12/18 00:09:50 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -144,6 +144,10 @@ class form_cell extends form_base
 			$ret[$i]["order"] = $this->arr[$i]->get_order();
 			$ret[$i]["group"] = $this->arr[$i]->get_el_group();
 			$ret[$i]["lb_items"] = $this->arr[$i]->get_el_lb_items();
+			if ($this->arr[$i]->get_type() == "checkbox")
+			{
+				$ret[$i]["group"] = $this->arr[$i]->arr["ch_grp"];
+			}
 		}
 		$awt->stop("form_cell::get_elements");
 		return $ret;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.40 2001/11/27 17:38:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.41 2001/12/18 00:09:50 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -121,7 +121,7 @@ class form_element extends aw_template
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
 					"lb_size" => $this->arr["lb_size"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","relation" => "Seoseelement"))
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","relation" => "Seoseelement","activity" => "Aktiivsuse pikendamine"))
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
@@ -134,11 +134,20 @@ class form_element extends aw_template
 						"listbox_radio_checked"	=> checked($this->arr["listbox_default"] == $b),
 						"listbox_order_name" => "element_".$this->id."_lb_order_".$b,
 						"listbox_order_value" => $this->arr["listbox_order"][$b],
+						"listbox_activity_name" => "element_".$this->id."_lbact_".$b,
+						"listbox_activity_value" => $this->arr["listbox_activity"][$b],
 						"num" => $b
 					));
+					$at = "";
+					if ($this->arr["subtype"] == "activity")
+					{
+						$at = $this->parse("LISTBOX_ITEMS_ACTIVITY");
+					}
+					$this->vars(array("LISTBOX_ITEMS_ACTIVITY" => $at));
 					$lb.=$this->parse("LISTBOX_ITEMS");
 				}	
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
+				$this->vars(array("ACTIVITY" => $this->parse("ACTIVITY")));
 				$relation_lb = "";
 				$relation_uniq = "";
 				if ($this->arr["subtype"] == "relation" && !$this->form->is_form_output)
@@ -189,6 +198,10 @@ class form_element extends aw_template
 					"sort_by_order" => checked($this->arr["sort_by_order"]),
 					"sort_by_alpha" => checked($this->arr["sort_by_alpha"])
 				));
+				if ($this->arr["subtype"] == "activity")
+				{
+					$this->vars(array("LISTBOX_SORT_ACTIVITY" => $this->parse("LISTBOX_SORT_ACTIVITY")));
+				}
 				$this->vars(array(
 					"LISTBOX_SORT" => $this->parse("LISTBOX_SORT")
 				));
@@ -224,11 +237,21 @@ class form_element extends aw_template
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","count" => "Mitu","int" => "Arv"))
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","count" => "Mitu","int" => "Arv","activity" => "Aktiivsuse pikendamine")),
+					"activity_hours" => checked($this->arr["activity_type"] == "hours"),
+					"activity_days" => checked($this->arr["activity_type"] == "days"),
+					"activity_weeks" => checked($this->arr["activity_type"] == "weeks"),
+					"activity_months" => checked($this->arr["activity_type"] == "months"),
+					"activity_date" => checked($this->arr["activity_type"] == "date"),
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				$dt = $this->parse("DEFAULT_TEXT");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
+
+				if ($this->arr["subtype"] == "activity")
+				{
+					$this->vars(array("ACTIVITY" => $this->parse("ACTIVITY")));
+				}
 			}
 
 			$dc="";
@@ -323,7 +346,7 @@ class form_element extends aw_template
 				$this->vars(array(
 					"from_year" => $this->arr["from_year"],
 					"to_year" => $this->arr["to_year"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","from" => "Algus", "to" => "L&otilde;pp","expires" => "Aegumine","created" => "Loomine")),
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","from" => "Algus", "to" => "L&otilde;pp","expires" => "Aegumine","created" => "Loomine","activity" => "Aktiivsuse pikendamine")),
 					"def_date_num" => $this->arr["def_date_num"],
 					"add_types" => $this->picker($this->arr["def_date_add"],$add_types),
 					"date_now_checked" => checked($this->arr["def_date_type"] == "now"),
@@ -502,6 +525,10 @@ class form_element extends aw_template
 
 					$var=$base."_lb_order_".$b;
 					$this->arr["listbox_order"][$num] = $$var;
+
+					$var=$base."_lbact_".$b;
+					$this->arr["listbox_activity"][$num] = $$var;
+
 					$num++;
 					if ($dwat=="add" && $ar[$b] == 1)
 					{
@@ -669,6 +696,12 @@ class form_element extends aw_template
 			$this->arr["must_fill"] = $$var;
 			$var=$base."_must_error";
 			$this->arr["must_error"] = $$var;
+		}
+
+		if ($this->arr["type"] == "textbox")
+		{
+			$var=$base."_activity_type";
+			$this->arr["activity_type"] = $$var;
 		}
 
 		if ($this->arr["type"] == 'file')
@@ -891,7 +924,7 @@ class form_element extends aw_template
 	{
 		if ($this->form->arr["save_table"] == 1)
 		{
-			return $this->arr["table"];
+			return $this->arr["table"][0]["table"];
 		}
 		else
 		{
@@ -905,7 +938,7 @@ class form_element extends aw_template
 	{
 		if ($this->form->arr["save_table"] == 1)
 		{
-			return $this->arr["table_col"];
+			return $this->arr["table"][0]["col"];
 		}
 		else
 		{

@@ -57,6 +57,7 @@ class form_chain extends form_base
 		$ct["during_show_entry"] = $during_show_entry;
 		$ct["during_show_op"] = $during_show_op;
 		$ct["op_pos"] = $op_pos;
+		$ct["rep"] = $rep;
 
 		$this->chain = $ct;
 		uksort($ct["forms"],array($this,"__ch_sort"));
@@ -86,7 +87,7 @@ class form_chain extends form_base
 		{
 			foreach($forms as $fid)
 			{
-				$this->db_query("INSERT INTO form2chain(form_id,chain_id,ord) values($fid,$id,'".$ct["form_order"][$fid]."')");
+				$this->db_query("INSERT INTO form2chain(form_id,chain_id,ord,rep) values($fid,$id,'".$ct["form_order"][$fid]."','".$rep[$fid]."')");
 			}
 		}
 		return $this->mk_my_orb("change", array("id" => $id));
@@ -150,6 +151,7 @@ class form_chain extends form_base
 				$this->vars(array(
 					"fjrk" => $this->chain["form_order"][$fid],
 					"fgoto" => checked($this->chain["gotonext"][$fid]),
+					"rep" => checked($this->chain["rep"][$fid]),
 					"LANG" => $lg
 				));
 				$this->parse("FORM");

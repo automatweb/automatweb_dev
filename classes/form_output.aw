@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.18 2001/10/16 04:29:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.19 2001/12/18 00:09:50 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -256,6 +256,8 @@ class form_output extends form_base
 		classload("style");
 		$st = new style;
 
+		$els = array();
+
 		$bof = array();
 		foreach($baseform as $bf)
 		{
@@ -268,8 +270,13 @@ class form_output extends form_base
 				));
 				$a2.=$this->parse("ADD_2_LINE");
 				$bof[$bf] = $bf;
+
+				$f = new form;
+				$f->load($bf);
+				$els+=$f->get_all_elements();
 			}
 		}
+
 		foreach($forms as $fo)
 		{
 			$fos[$fo] = $fo;
@@ -283,9 +290,11 @@ class form_output extends form_base
 			"styles" => $this->picker($table_style,$st->get_select(0,ST_TABLE)),
 			"meth" => "POST",
 			"name" => $name,
-			"comment" => $comment
+			"comment" => $comment,
+			"els" => $this->multiple_option_list($els, $els)
 		));
 		$this->parse("ADD");
+		$this->parse("ADD2");
 		return $this->parse();
 	}
 
@@ -302,6 +311,8 @@ class form_output extends form_base
 			$id = $this->new_object(array("parent" => $parent, "name" => $name, "comment" => $comment, "class_id" => CL_FORM_OUTPUT));
 			$this->db_query("INSERT INTO form_output(id) VALUES($id)");
 			$this->load_output($id);
+			$elements = $this->make_keys($elements);
+
 			if (is_array($baseform))
 			{
 				// if the user selected a form to base this op on, make it look like the form.
@@ -329,10 +340,13 @@ class form_output extends form_base
 							$num=0;
 							foreach($elarr as $el)
 							{
-								$this->output[$base_row+$row][$base_col+$col]["elements"][$num] = $el->get_props();
-								$this->output[$base_row+$row][$base_col+$col]["elements"][$num]["linked_form"] = $bfid;
-								$this->output[$base_row+$row][$base_col+$col]["elements"][$num]["linked_element"] = $el->get_id();
-								$num++;
+								if ($elements[$el->get_id()] == $el->get_id())
+								{
+									$this->output[$base_row+$row][$base_col+$col]["elements"][$num] = $el->get_props();
+									$this->output[$base_row+$row][$base_col+$col]["elements"][$num]["linked_form"] = $bfid;
+									$this->output[$base_row+$row][$base_col+$col]["elements"][$num]["linked_element"] = $el->get_id();
+									$num++;
+								}
 							}
 							$this->output[$base_row+$row][$base_col+$col]["el_count"] = $num;
 							$this->output["map"][$base_row+$row][$base_col+$col]["col"] = $f->arr["map"][$row][$col]["col"]+$base_col;
