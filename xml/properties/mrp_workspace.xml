@@ -685,6 +685,20 @@
             <store>no</store>
       </property>
       <property>
+            <name>pj_project</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
+            </group>
+            <type>text</type>
+            <store>no</store>
+            <caption>Projekt</caption>
+      </property>
+      <property>
             <name>pj_case_header</name>
             <table>objects</table>
             <field>meta</field>
@@ -799,20 +813,6 @@
             <type>text</type>
             <store>no</store>
             <caption>Ressurss</caption>
-      </property>
-      <property>
-            <name>pj_project</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-            </group>
-            <type>text</type>
-            <store>no</store>
-            <caption>Projekt</caption>
       </property>
       <property>
             <name>pj_state</name>
@@ -1066,20 +1066,6 @@
             <type>text</type>
             <store>no</store>
             <caption>N&amp;auml;idis</caption>
-      </property>
-      <property>
-            <name>pjp_plaate</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-            </group>
-            <type>text</type>
-            <store>no</store>
-            <caption>Plaate</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_WORKSPACE</syslog_type>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.13 2005/03/21 15:26:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.14 2005/03/24 09:55:56 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -666,6 +666,47 @@ class mrp_prisma_import extends class_base
 		$this->_upd_cust_o($o, $dat);
 		$o->save();
 		return $o;
+	}
+
+	function get_prop_value(&$prop, $rpn)
+	{
+		switch($rpn)
+		{
+			case "makett":
+			case "kromaliin":
+			case "naidis":
+				if ($prop["value"] == 1)
+				{
+					$prop["value"] = t("Jah");
+				}
+				else
+				{
+					$prop["value"] = t("Ei");
+				}
+				break;
+
+			case "trykise_ehitus":
+				if (!$prop["value"])
+				{
+					return PROP_IGNORE;
+				}
+				// read from their table. damn. 
+				$c = $this->_get_conn();
+				if (!$c)
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = $c->db_fetch_field("SELECT TrükiseEhitus as e FROM `trükise ehitus` WHERE EhitusID = '$prop[value]'", "e");
+				return PROP_OK;
+				break;
+
+			default:
+				if ($prop["value"] == "")
+				{
+					return PROP_IGNORE;
+				}
+		}
+		return PROP_OK;
 	}
 }
 ?>

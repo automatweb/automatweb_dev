@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.55 2005/03/24 09:27:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.56 2005/03/24 09:55:56 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -208,6 +208,9 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 	@property printer_jobs type=table no_caption=1
 
+	@property pj_project type=text store=no
+	@caption Projekt
+
 	// these are shown when a job is selected
 	@property pj_case_header type=text no_caption=1 store=no
 
@@ -237,9 +240,6 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 	@property pj_resource type=text store=no
 	@caption Ressurss
-
-	@property pj_project type=text store=no
-	@caption Projekt
 
 	@property pj_state type=text store=no
 	@caption Staatus
@@ -294,9 +294,6 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 	@property pjp_naidis type=text store=no
 	@caption N&auml;idis
-
-	@property pjp_plaate type=text store=no
-	@caption Plaate
 
 // --------------- RELATION TYPES ---------------------
 
@@ -356,6 +353,8 @@ class mrp_workspace extends class_base
 			"tpldir" => "mrp/mrp_workspace",
 			"clid" => CL_MRP_WORKSPACE
 		));
+
+		$this->import = get_instance(CL_MRP_PRISMA_IMPORT);
 	}
 
 	function get_property($arr)
@@ -375,10 +374,13 @@ class mrp_workspace extends class_base
 			{
 				$job = obj($arr["request"]["pj_job"]);
 				$proj = obj($job->prop("project"));
-				$prop["value"] = $proj->prop(substr($prop["name"], 4));
-				if ($prop["value"] == "")
+				$rpn = substr($prop["name"], 4);
+				$prop["value"] = $proj->prop($rpn);
+
+				$retv = $this->import->get_prop_value($prop, $rpn);
+				if ($retv != PROP_OK)
 				{
-					return PROP_IGNORE;
+					return $retv;
 				}
 			}
 		}
@@ -434,6 +436,17 @@ class mrp_workspace extends class_base
 						break;
 
 					case "project":
+						$tmp = obj($job->prop($rpn));
+						$prop["value"] = html::href(array(
+							"url" => $this->mk_my_orb("change", array(
+								"id" => $tmp->id(),
+								"return_url" => get_ru()
+							)),
+							"caption" => 
+											"<span style='font-size:20px'>".$tmp->name()."</span>"
+						));
+						break;
+
 					case "resource":
 						$tmp = obj($job->prop($rpn));
 						$prop["value"] = html::get_change_url(
@@ -2659,6 +2672,14 @@ class mrp_workspace extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "proj_pri",
+			"caption" => t("Prioriteet"),
+			"align" => "center",
+			"chgbgcolor" => "bgcol",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
 			"name" => "resource",
 			"caption" => t("Ressurss"),
 			"align" => "center",
@@ -2773,6 +2794,7 @@ class mrp_workspace extends class_base
 					),
 					$proj->name()
 				),
+				"proj_pri" => $proj->prop("project_priority"),
 				"customer" => $custo,
 				"status" => $mrp_job->states[$job->prop("state")],
 				"bgcol" => $bgcol
