@@ -1,5 +1,5 @@
 <?php
-if (empty($_COOKIE["nocache"]))
+if (empty($_COOKIE["nocache"]) && aw_ini_get("config.use_squid"))
 {
         session_cache_limiter("public");
 };
