@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.2 2004/06/09 13:03:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.3 2004/10/22 10:56:18 dragut Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -406,6 +406,11 @@ class db_table_contents extends class_base
 	}
 
 	function get_folders($o)
+	{
+		return array();
+	}
+
+	function check_acl()
 	{
 		return array();
 	}
