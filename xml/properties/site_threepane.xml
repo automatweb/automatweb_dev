@@ -2,56 +2,73 @@
 <properties>
       <property>
             <name>frameset</name>
-            <type>objpicker</type>
-            <clid>CL_FRAMESET</clid>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SITE_FRAMESET</reltype>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Frameseti objekt</caption>
       </property>
       <property>
             <name>treeview</name>
-            <type>objpicker</type>
-            <clid>CL_TREEVIEW</clid>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SITE_TREEVIEW</reltype>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Puu objekt</caption>
       </property>
       <property>
             <name>logo</name>
             <type>relpicker</type>
-            <clid>CL_IMAGE</clid>
-            <field>meta</field>
-            <method>serialize</method>
+            <reltype>RELTYPE_SITE_LOGO</reltype>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Logo</caption>
       </property>
       <property>
             <name>info</name>
             <type>generated</type>
             <generator>callback_get_info</generator>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Metainfo</caption>
       </property>
       <property>
             <name>preview</name>
             <editonly>1</editonly>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Näita</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <SITE_FRAMESET>
+                  <value>1</value>
+                  <clid>CL_FRAMESET</clid>
+                  <caption>Frameset</caption>
+            </SITE_FRAMESET>
+            <SITE_TREEVIEW>
+                  <value>2</value>
+                  <clid>CL_TREEVIEW</clid>
+                  <caption>Puu seadistused</caption>
+            </SITE_TREEVIEW>
+            <SITE_LOGO>
+                  <value>3</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Logo</caption>
+            </SITE_LOGO>
+      </reltypes>
 </properties>
 
