@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.2 2004/06/04 11:12:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.3 2004/08/19 07:53:39 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -150,6 +150,20 @@
 @property userdate5 type=date_select  field=aw_userdate5 group=data year_from=1970 year_to=2020
 @caption User-defined date select 5
 
+@property userch1 type=textbox field=aw_userch1 group=data ch_value=1
+@caption User-defined checkbox 1
+
+@property userch2 type=textbox  field=aw_userch2 group=data ch_value=1
+@caption User-defined checkbox 2
+
+@property userch3 type=text  field=aw_userch3 group=data ch_value=1
+@caption User-defined checkbox 3
+
+@property userch4 type=textbox  field=aw_userch4 group=data ch_value=1
+@caption User-defined checkbox 4
+
+@property userch5 type=textbox  field=aw_userch5 group=data ch_value=1
+@caption User-defined checkbox 5
 
 @reltype VARUSER1 value=1 clid=CL_META
 @caption kasutajadefineeritud muutuja 1
