@@ -275,6 +275,49 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 		return $translated;
 	}
+
+	function save_properties($arr)
+	{
+		if ($GLOBALS["__obj_sys_opts"]["no_auto_translation"] == 1)
+		{
+			return $this->contained->save_properties($arr);
+		}
+
+		$oid = $arr["objdata"]["oid"];
+
+		// check if the object we are saving is the original
+		// if so, then we must also write all the untranslated properties to the translated objects. 
+		// currently, just do the objects.jrk thing.
+		if ($this->objdata[$oid]["type"] == OBJ_TRANS_ORIG)
+		{
+			// get all translations
+			$conns = $this->contained->find_connections(array(
+				"from" => $oid,
+				"type" => RELTYPE_TRANSLATION
+			));
+			foreach($conns as $c)
+			{
+				$tmp_od = $this->contained->get_objdata($c["to"]);
+				$tmp_pv = $this->contained->read_properties(array(
+					"properties" => $arr["properties"],
+					"tableinfo" => $arr["tableinfo"],
+					"objdata" => $tmp_od
+				));
+
+				$tmp_od["jrk"] = $arr["objdata"]["jrk"];
+				$tmp_pv["jrk"] = $arr["propvalues"]["jrk"];
+
+				$this->save_properties(array(
+					"properties" => $arr["properties"],
+					"objdata" => $tmp_od,
+					"tableinfo" => $arr["tableinfo"],
+					"propvalues" => $tmp_pv
+				));
+			}
+		}
+
+		return $this->contained->save_properties($arr);
+	}
 }
 
 ?>
