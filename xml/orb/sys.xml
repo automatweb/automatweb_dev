@@ -80,5 +80,12 @@
 			</function>
 		</action>
 
+		<action name="test_sites" nologin="1">
+			<function name="test_sites">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

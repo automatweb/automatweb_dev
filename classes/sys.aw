@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.43 2005/01/14 07:43:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.44 2005/01/18 10:39:06 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -779,6 +779,66 @@ class sys extends aw_template
 			$o->save();
 		}
 		die("all done!! database seems to be relatively ok!");
+	}
+
+	/** tests sites in site list. will only be called from register site
+
+		@attrib name=test_sites nologin=1
+	**/
+	function test_sites($arr)
+	{
+		set_time_limit(0);
+		echo "testing sites ... <br>\n";
+		flush();
+
+		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM aw_site_list WHERE site_used = 1 AND last_update > ".(time() - 24*3600*30), "cnt");
+
+		$errs = array();
+
+		$num = 1;
+		$this->db_query("SELECT * FROM aw_site_list WHERE site_used = 1 AND last_update > ".(time() - 24*3600*30));
+		while ($row = $this->db_next())
+		{
+			echo sprintf("%03d/%03d", $num, $cnt)." ".$row["url"]." .... \n";
+			flush();
+
+			ob_start();
+			$fc = strtolower(file_get_contents($row["url"]));
+			$ct = ob_get_contents();
+			ob_end_clean();
+
+			if (strpos($ct, "401") !== false)
+			{
+				// auth req, assume site is ok
+				$fc = "<html";
+				$ar = " (auth required) ";
+			}
+			else
+			{
+				echo $ct;
+				$ar = "";
+			}
+
+			if (strpos($fc, "<html") !== false || strpos($fc, "<head") !== false)
+			{
+				echo " <font color=green>Success</font> $ar<br>\n";
+				flush();
+			}
+			else
+			{
+				echo " <font color=red>Failed</font><br>\n";
+				echo "<pre>".htmlentities($fc)."</pre>";
+				flush();
+				$errs[] = "sait $row[url] tundub maas olevat, esilehe sisu: \n".$fc."\n\n";
+			}
+			$num++;
+		}
+
+		if (count($errs) > 0)
+		{
+			send_mail("dev@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
+		}
+		die("All done");
 	}
 };
 ?>
