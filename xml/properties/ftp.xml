@@ -4,36 +4,31 @@
             <name>server</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Server</caption>
       </property>
       <property>
             <name>username</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Kasutajanimi</caption>
       </property>
       <property>
             <name>password</name>
             <table>objects</table>
             <group>general</group>
-            <type>password</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>password</type>
             <caption>Parool</caption>
       </property>
       <classinfo>
             <syslog_type>ST_FTP_LOGIN</syslog_type>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
 </properties>
 
