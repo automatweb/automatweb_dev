@@ -182,7 +182,7 @@
 		<action name="udata" public="1">
 			<function name="do_change_site">
 				<arguments>
-					<optional name="fid"/>
+					<optional name="fid" type="int"/>
 				</arguments>
 			</function>
 		</action>
