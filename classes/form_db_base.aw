@@ -943,22 +943,25 @@ class form_db_base extends aw_template
 					else
 					if ($el->arr["type"] == "date")
 					{
-						if ($query != "")
+						if ($this->entry[$el->get_id()] > 1)
 						{
-							$pre = " AND";
-						}
-						if ($el->arr["subtype"] == "from")
-						{
-							$query.= $pre." (".$elname." >= ".$this->entry[$el->get_id()].")";
-						}
-						else
-						if ($el->arr["subtype"] == "to")
-						{
-							$query.= $pre." (".$elname." <= ".$this->entry[$el->get_id()].")";
-						}
-						else
-						{
-							$query.= $pre." (".$elname." = ".$this->entry[$el->get_id()].")";
+							if ($query != "")
+							{
+								$pre = " AND";
+							}
+							if ($el->arr["subtype"] == "from")
+							{
+								$query.= $pre." (".$elname." >= ".$this->entry[$el->get_id()].")";
+							}
+							else
+							if ($el->arr["subtype"] == "to")
+							{
+								$query.= $pre." (".$elname." <= ".$this->entry[$el->get_id()].")";
+							}
+							else
+							{
+								$query.= $pre." (".$elname." = ".$this->entry[$el->get_id()].")";
+							}
 						}
 					}
 					else

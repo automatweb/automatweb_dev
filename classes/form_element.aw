@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.66 2002/08/21 10:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.67 2002/08/28 15:22:08 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -2363,8 +2363,7 @@ class form_element extends aw_template
 			}
 			else
 			{
-				$tm = mktime($v["hour"],$v["minute"],0,1,1,2000);
-				//$tm = -1;
+				$tm = 0;
 			}
 
 			if ($this->arr["def_date_type"] == "rel")
