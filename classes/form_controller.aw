@@ -2,9 +2,13 @@
 
 classload("form_base","languages");
 
-define("CTRL_USE_TYPE_ENTRY", 1);
-define("CTRL_USE_TYPE_SHOW", 2);
-define("CTRL_USE_TYPE_LB", 3);
+// controller types in element - each controller can be used for every one of these, 
+// they are just here to specify for which controller in the element the controller is selected
+define("CTRL_USE_TYPE_ENTRY", 1);			// entry controller - checks on form submit
+define("CTRL_USE_TYPE_SHOW", 2);			// show controller - checks on form showing
+define("CTRL_USE_TYPE_LB", 3);				// listbox controller - checks every listbox element on showing
+define("CTRL_USE_TYPE_DEFVALUE", 4);	// default value controller - if element value is not set the return value of this will be used
+define("CTRL_USE_TYPE_VALUE", 5);			// value controller - evals on show and submit - the element value will be the return of this
 
 class form_controller extends form_base
 {
@@ -216,9 +220,12 @@ class form_controller extends form_base
 		{
 			foreach($co["meta"]["vars"] as $var => $vd)
 			{
+//				echo "var = '$var' <br>";
 				if (strpos($eq,"[".$var."]") !== false)
 				{
+//					echo "included <br>";
 					$val = $this->get_var_value($co, $var);
+//					echo "val = $val <br>";
 					if ($add_quotes)
 					{
 						$val = "\"".$val."\"";
@@ -453,6 +460,7 @@ class form_controller extends form_base
 			if ($et_type == "session")
 			{
 				$sff = aw_global_get("session_filled_forms");
+//				echo "sff = <pre>", var_dump($sff),"</pre> fid = $fid <br>";
 				$entry_id = $sff[$fid];
 //				echo "entry id for form $fid = $entry_id <br>";
 			}
@@ -517,6 +525,8 @@ class form_controller extends form_base
 			"ENTRY_ELEMENT" => $this->_do_type($id,CTRL_USE_TYPE_ENTRY,"ENTRY_ELEMENT"),
 			"SHOW_ELEMENT" => $this->_do_type($id,CTRL_USE_TYPE_SHOW,"SHOW_ELEMENT"),
 			"LB_ELEMENT" => $this->_do_type($id,CTRL_USE_TYPE_LB,"LB_ELEMENT"),
+			"DEFVL_ELEMENT" => $this->_do_type($id,CTRL_USE_TYPE_DEFVALUE,"DEFVL_ELEMENT"),
+			"VL_ELEMENT" => $this->_do_type($id,CTRL_USE_TYPE_VALUE,"VL_ELEMENT"),
 			"reforb" => $this->mk_reforb("submit_form_list", array("id" => $id))
 		));
 		return $this->parse();
@@ -524,6 +534,7 @@ class form_controller extends form_base
 
 	function _do_type($id, $type, $tpl)
 	{
+		$ret = "";
 		$this->db_query("SELECT form_id, el_id, form_o.name as form_name, el_o.name as el_name 
 										 FROM form_controller2element AS fc2e
 										 LEFT JOIN objects AS form_o ON form_o.oid = fc2e.form_id
@@ -550,6 +561,8 @@ class form_controller extends form_base
 		$this->_proc_arr($id, $entryels, $entryels_n, CTRL_USE_TYPE_ENTRY);
 		$this->_proc_arr($id, $showels, $showels_n, CTRL_USE_TYPE_SHOW);
 		$this->_proc_arr($id, $lbels, $lbels_n, CTRL_USE_TYPE_LB);
+		$this->_proc_arr($id, $defvlels, $defvlels_n, CTRL_USE_TYPE_DEFVALUE);
+		$this->_proc_arr($id, $vlels, $vlels_n, CTRL_USE_TYPE_VALUE);
 
 		return $this->mk_my_orb("form_list", array("id" => $id));
 	}
