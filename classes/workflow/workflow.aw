@@ -892,8 +892,6 @@ class workflow extends class_base
 
 		// I need to create a new 
 
-		//$_entity_id = $this->new_object($objdata);
-
 		// now I need to create a bunch of relations:
 		// 1 - between the object and the config form, so that I know
 		// which form should be used to edit it.
