@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.21 2003/03/12 16:28:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.22 2003/03/13 13:47:41 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -282,7 +282,11 @@ class htmlclient extends aw_template
 				break;
 
 			case "radiobutton":
-				$retval = html::radiobutton($arr);
+				$retval = html::radiobutton(array(
+					'name' => $arr['name'],
+					'value' => $arr['rb_value'],
+					'checked' => ($arr['value'] == $arr['rb_value'])
+				));
 				break;
 
 			case "submit":
