@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.159 2003/10/29 14:58:52 duke Exp $
+// $Id: class_base.aw,v 2.160 2003/10/30 16:49:47 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -114,8 +114,16 @@ class class_base extends aw_template
 		{
 			$this->id = $args["id"];
 
-			// maybe it would be a good idea to let the class override the object loading?
 			$this->obj_inst = new object($this->id);
+
+			// this is an EXPERIMENTAL interface, please do not be usink it before
+			// consulting with duke.
+			if (method_exists($this->inst,"callback_load_object"))
+			{
+				$this->inst->callback_load_object(array(
+					"request" => $args,
+				));
+			};
 
 			$this->toolbar_type = "1" == $this->obj_inst->meta("use_menubar") ? "menubar" : "tabs";
 			$this->parent = "";
@@ -283,9 +291,19 @@ class class_base extends aw_template
 
 		$this->validate_cfgform($cgid);
 
-		// heh.
-		$args["rawdata"] = $args;
-		$this->process_data($args);
+		// this is an EXPERIMENTAL interface, please do not be usink it before
+		// consulting with duke.
+		if (method_exists($this->inst,"callback_save_object"))
+		{
+			return $this->inst->callback_save_object(array(
+				"request" => $args,
+			));
+		}
+		else
+		{
+			$args["rawdata"] = $args;
+			$this->process_data($args);
+		};
 
 		$this->log_obj_change();
 
@@ -2267,7 +2285,7 @@ class class_base extends aw_template
 				"coredata" => &$this->coredata,
 				"objdata" => &$this->objdata,
 				"form_data" => &$args,
-				"request" => &$request,
+				"request" => &$args,
 				"obj_inst" => &$this->obj_inst,
 				"object" => array_merge($this->coredata,$this->objdata),
 			));
