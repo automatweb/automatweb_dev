@@ -37,6 +37,10 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 		<td class="celltext">Kataloog serveris:</td>
 		<td colspan="2" class="celltext"><input type='text' class='formtext' name='folder' value='{VAR:folder}'></td>
 	</tr>
+	<tr class="aste05">
+		<td class="celltext">Fail, kuhu export kokku pakkida:</td>
+		<td colspan="2" class="celltext"><input type='text' class='formtext' name='zip_file' value='{VAR:zip_file}'></td>
+	</tr>
 </table>
 
 </td>
