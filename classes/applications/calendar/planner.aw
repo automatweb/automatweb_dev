@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.11 2004/08/31 10:50:16 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.12 2004/08/31 11:21:36 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -448,6 +448,7 @@ class planner extends class_base
 			$di = get_date_range(array(
 				"date" => isset($arr["date"]) ? $arr["date"] : date("d-m-Y"),
 				"type" => $arr["type"],
+				"fullweeks" => 1,
 			));
 
 			$_start = $di["start"];
@@ -573,7 +574,7 @@ class planner extends class_base
 			FROM planner
 			LEFT JOIN objects ON (planner.id = objects.brother_of)
 			WHERE planner.start >= '${_start}' AND
-			(planner.end <= '${_end}' OR planner.end IS NULL) AND
+			(planner.start <= '${_end}' OR planner.end IS NULL) AND
 			objects.status != 0";
 
 		// lyhidalt. planneri tabelis peaks kirjas olema. No, but it can't be there 
