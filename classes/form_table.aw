@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.59 2002/10/08 13:41:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.60 2002/10/09 09:51:11 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -603,16 +603,19 @@ class form_table extends form_base
 					$form_id = $this->table["defs"][$i]["el_forms"][$element_id];
 					$form =& $this->cache_get_form_instance($form_id);
 					$el_ref = $form->get_element_by_id($this->table["defs"][$i]["basket_add_count_el"][$element_id]);
-					if (($fid = $el_ref->get_up_down_count_el_form()))
+					if (is_object($el_ref))
 					{
-						$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
-					}
-					else
-					{
-						$el_ref = $form->get_element_by_id($element_id);
 						if (($fid = $el_ref->get_up_down_count_el_form()))
 						{
 							$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
+						}
+						else
+						{
+							$el_ref = $form->get_element_by_id($element_id);
+							if (($fid = $el_ref->get_up_down_count_el_form()))
+							{
+								$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
+							}
 						}
 					}
 				}
