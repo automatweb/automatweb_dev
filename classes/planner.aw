@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.151 2004/01/05 14:10:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.152 2004/01/07 15:31:20 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -620,6 +620,8 @@ class planner extends class_base
 			{
 				$brlist = new object_list(array(
 					"brother_of" => $arr["event_obj"]->id(),
+					// ignore site id's for this list
+					"site_id" => array(),
 				));
 
 				for($o =& $brlist->begin(); !$brlist->end(); $o =& $brlist->next())
