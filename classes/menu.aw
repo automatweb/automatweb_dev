@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.122 2005/02/09 17:20:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.123 2005/02/21 08:57:03 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -31,7 +31,6 @@
 
 	@property icon type=icon field=meta method=serialize group=advanced
 	@caption Ikoon
-	
 
 	@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=advanced 
 	@caption Vali ikoon
@@ -1414,10 +1413,15 @@ class menu extends class_base
 
 			foreach($dat as $did => $ord)
 			{
+				$d_tpl = "seealso_document.tpl";
+				if (!empty($this->cfg["seealso_doc_tpl_names"][$tpl]))
+				{
+					$d_tpl = $this->cfg["seealso_doc_tpl_names"][$tpl];
+				}
 				$d = get_instance("document");
 				$tmp[$tpl] .= $d->gen_preview(array(
 					"docid" => $did,
-					"tpl" => "seealso_document.tpl"
+					"tpl" => $d_tpl
 				));
 			}
 		}
