@@ -4,8 +4,9 @@
 <title>{VAR:title} / Autom@tweb</title>
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
-<!-- overload the custom style sheet -->
-<link rel="stylesheet" href="{VAR:baseurl}/automatweb/get_css.aw?name=custom.css">
+<!-- SUB: custom_css -->
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/get_css.aw?name={VAR:custom}.css">
+<!-- END SUB: custom_css -->
 <script language="Javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script language="Javascript">
 <!--
