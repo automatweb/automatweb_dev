@@ -539,8 +539,7 @@ class ml_list extends aw_template
 
 	function get_all_user_folders()
 	{
-		$ufc_inst = get_instance("mailinglist/ml_list_conf");
-		return $ufc_inst->get_folders_by_id($this->list_ob["meta"]["user_form_conf"]);
+		return $this->list_ob["meta"]["user_folders"];
 	}
 
 	function get_mailto_element($lid = 0)
