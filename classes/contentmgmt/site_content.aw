@@ -2598,6 +2598,11 @@ class site_content extends menuedit
 		while ($sec && ($sec != 1)) 
 		{
 			array_push($tmp,$sec);
+			if (!isset($this->mar[$sec]))
+			{
+				$mc = get_instance("menu_cache");
+				$this->mar[$sec] = $mc->get_cached_menu($sec);
+			}
 			$sec = $this->mar[$sec]["parent"];
 			$cnt++;
 			if ($cnt > 1000)
