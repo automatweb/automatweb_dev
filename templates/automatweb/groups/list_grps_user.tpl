@@ -28,7 +28,7 @@
 					<td align="center" class="fgtext">&nbsp;{VAR:modified}&nbsp;</td>
 					<td class="fgtext2">&nbsp;<a href='{VAR:change}'>Muuda</a>&nbsp;</td>
 					<td class="fgtext2">&nbsp;<a href="javascript:box2('Oled kindel, et soovid seda gruppi  kustutada?','{VAR:delete}')">Kustuta</a>&nbsp;</td>
-					<td class="fgtext2">&nbsp;<a href="editacl.{VAR:ext}?oid={VAR:goid}&file=group.xml">ACL</a>&nbsp;</td>
+					<td class="fgtext2">&nbsp;<a href="editacl.{VAR:ext}?oid={VAR:goid}&file=default.xml">ACL</a>&nbsp;</td>
 				</tr>
 			<!-- END SUB: LINE -->
 				<tr>

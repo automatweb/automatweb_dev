@@ -150,7 +150,7 @@ href="#" onClick='window.location.reload()' onMouseOut="MM_swapImgRestore()" onM
 
 <td class="celltext" width="3%">
 <!-- SUB: CAN_ACL -->
-<a href='editacl.{VAR:ext}?oid={VAR:oid}&file=group.xml'><img src="{VAR:baseurl}/automatweb/images/blue/obj_acl.gif" border="0" alt="ACL"></a>
+<a href='editacl.{VAR:ext}?oid={VAR:oid}&file=default.xml'><img src="{VAR:baseurl}/automatweb/images/blue/obj_acl.gif" border="0" alt="ACL"></a>
 <!-- END SUB: CAN_ACL -->
 </td>
 </tr>
