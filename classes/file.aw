@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.57 2003/10/03 13:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.58 2003/10/05 18:06:04 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -61,17 +61,11 @@
 	@tableinfo files index=id master_table=objects master_index=oid	
 	@classinfo trans_id=TR_FILE
 
-	// miski is_aip globaases skoobis on faili salvestamisel oluline
-
 */
 
 
 class file extends class_base
 {
-	var $ext2type = array(
-		"pdf" => "application/pdf"
-	);
-
 	////
 	// !Konstruktor
 	function file()
@@ -85,9 +79,9 @@ class file extends class_base
 		$this->lc_load("file","lc_file");
 	}
 
-	function get_property($args = array())
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -95,14 +89,24 @@ class file extends class_base
 				$retval = PROP_IGNORE;
 				break;
 			case "filename":
-				$data["value"] = $args["obj"]["name"];
+				$data["value"] = $arr["obj_inst"]->prop("name");
 				break;
 			case "view":
-				$data["value"] = html::href(array(
-					"url" => $this->mk_my_orb("preview",array("id" => $args["obj"]["oid"],"name" => urlencode($args["obj"]["name"]))),
-					"caption" => "Näita",
-					"target" => "_blank",
-				));
+				$fname = basename($arr["obj_inst"]->prop("file"));
+				if (empty($fname))
+				{
+					$retval = PROP_IGNORE;
+				}
+				else
+				{
+					$file = $this->cfg["site_basedir"]."/files/".$fname[0]."/".$fname;
+					$size = filesize($file);
+					$data["value"] = html::href(array(
+						"url" => $this->mk_my_orb("preview",array("id" => $arr["obj_inst"]->id(),"name" => urlencode($arr["obj_inst"]->prop("name")))),
+						"caption" => sprintf("%s (%dK)",$arr["obj_inst"]->prop("name"),$size/1024),
+						"target" => "_blank",
+					));
+				};
 				break;
 
 			case "file":
@@ -113,10 +117,10 @@ class file extends class_base
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function set_property($arr = array())
 	{
-		$data = &$args["prop"];
-		$form_data = &$args["form_data"];
+		$data = &$arr["prop"];
+		$form_data = &$arr["form_data"];
 		global $file, $file_type,$file_name;
 		$retval = PROP_OK;
 		if ($data["name"] == "name")
@@ -153,12 +157,6 @@ class file extends class_base
 					$this->file_name = $file_name;
 				};
 		
-				/*	
-				if ($is_aip)
-				{
-					$this->db_query("INSERT INTO aip_files (filename, tm, menu_id, id) VALUES('$file_name','".time()."','".$parent."','$pid')");
-				}
-				*/
 			}
 			else
 			{
@@ -169,7 +167,7 @@ class file extends class_base
 		return $retval;
 	}
 
-	function callback_pre_save($args = array())
+	function callback_pre_save($arr)
 	{
 		// overwrite the name if new file is uploaded
 		if (isset($this->file_name))
@@ -536,7 +534,8 @@ class file extends class_base
 		if ($fc["type"] == "")
 		{
 			$pi = pathinfo($fc["name"]);
-			$fc["type"] = $this->ext2type[$pi['extension']];
+			$mimeregistry = get_instance("core/aw_mime_types");
+			$fc["type"] = $mimeregistry->type_for_ext($pi["extension"]);
 		}
 		header("Content-type: ".$fc["type"]);
 		header("Cache-control: public");
@@ -560,7 +559,8 @@ class file extends class_base
 			if ($fc["type"] == "")
 			{
 				$pi = pathinfo($fc["name"]);
-				$fc["type"] = $this->ext2type[$pi['extension']];
+				$mimeregistry = get_instance("core/aw_mime_types");
+				$fc["type"] = $mimeregistry->type_for_ext($pi["extension"]);
 			}
 			header("Content-type: ".$fc["type"]);
 			header("Content-Disposition: filename=$fc[name]");
