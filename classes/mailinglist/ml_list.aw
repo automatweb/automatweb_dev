@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.43 2004/02/12 09:57:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.44 2004/02/18 07:54:02 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -968,17 +968,28 @@ class ml_list extends class_base
 	function callback_gen_write_mail($arr)
 	{
 		// haudi, haudi. now I have to create the form of mail writer into here somehow	
+
+		// you see, there _is_ NO connection whatsoever
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		$all_props = $writer->get_active_properties(array(
                                 "group" => "general",
 		));
+
+		// narf, can I make this work better perhaps? I really do hate callback ..
+		// and I want to embed a new object. And I have to functionality in form
+		// of releditor. So why can't I use _that_ to write a new mail. Eh?
+
 		// would be nice to have some other and better method to do this
 		$filtered_props = array();
 		foreach($all_props as $id => $prop)
 		{
 			if ($id == "mfrom" || $id == "name" || $id == "html_mail" || $id == "message")
 			{
+				if ($prop["name"] == "mfrom")
+				{
+					$prop["type"] = "textbox";
+				};
 				$filtered_props[$id] = $prop;
 			};
 		};
@@ -997,14 +1008,22 @@ class ml_list extends class_base
 		// 1. create an object. for this I need to know the parent
 		// for starters I'll use the one from the list object itself
 		$msg_data["parent"] = $arr["obj_inst"]->parent();
-		$msg_data["subgroup"] = "send";
 		$msg_data["mto"] = $arr["obj_inst"]->id();
 
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		$writer->id_only = true;
 		// it does it's own redirecting .. duke
+
+		// no, it fucking does not!
 		$message_id = $writer->submit($msg_data);
+
+		// XXX: work out a way to save the message and not send it immediately
+		$writer->send_message(array(
+			"id" => $message_id,
+		));
+
+		// 
 	}
 	
 	/** delete members from list
