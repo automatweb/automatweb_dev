@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.12 2004/09/03 12:34:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.13 2004/09/03 15:56:58 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -477,10 +477,11 @@ class shop_order_center extends class_base
 		if ($soc->prop("use_controller") && is_oid($soc->prop("controller")))
 		{
 			$fc = get_instance(CL_FORM_CONTROLLER);
+			enter_function("shop_order_center::show_items::controller");
 			$html = $fc->eval_controller($soc->prop("controller"), array(
-				"soc" => $soc, 
-				"pl" => $pl
+				"soc" => $soc
 			));
+			exit_function("shop_order_center::show_items::controller");
 			exit_function("shop_order_center::show_items");
 			return $html; 
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.1 2004/08/23 09:11:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.2 2004/09/03 15:56:58 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -343,6 +343,37 @@ class otto_import extends class_base
 	{
 		// read csvs into db for temp crap
 		$this->update_csv_db($o);
+
+		// flush cache
+		$this->cache_files = array();
+		$fld = aw_ini_get("site_basedir")."/prod_cache";
+		$this->_get_cache_files($fld);
+		foreach($this->cache_files as $file)
+		{
+			$fp = $fld."/".$file{0}."/".$file{1}."/".$file;
+			unlink($fp);
+		}
+	}
+
+	function _get_cache_files($fld)
+	{
+		if ($dir = @opendir($fld))
+		{
+			while (($file = readdir($dir)) !== false) 
+			{
+				if (!($file == "." || $file == ".."))
+				{
+					if (is_dir($fld."/".$file))
+					{
+						$this->_get_cache_files($fld."/".$file);
+					}
+					else
+					{
+						$this->cache_files[] = $file;
+					};
+				};
+			};
+		}
 	}
 
 	function update_csv_db($o)
@@ -874,6 +905,8 @@ class otto_import extends class_base
 		echo "try fix missing images! <br>";
 		$this->pictfix(array());
 
+		$this->fix_image_codes();
+
 		// clear cache
 		$cache = get_instance("maitenance");
 		$cache->cache_clear(array("clear" => 1));
@@ -924,7 +957,8 @@ class otto_import extends class_base
 		$vars["add_to_cart"][$arr["add_to_cart"]] = $arr["add_to_cart_count"];
 
 		$i = get_instance("applications/shop/shop_order_cart");
-		return $i->submit_add_cart($vars);
+		$i->submit_add_cart($vars);
+		return aw_ini_get("baseurl").$arr["return_url"]."&afto=1";
 	}
 
 	/** 
@@ -961,6 +995,38 @@ class otto_import extends class_base
 			$this->restore_handle();
 			//echo $query,"<br>";
 		}
+	}
+
+	/** if no random other images show for some products, call this
+	
+		@attrib name=fix_image_codes
+
+	**/
+	function fix_image_codes()
+	{
+		echo "fixing image pages <br>\n";
+		flush();
+		$this->db_query("SELECT * FROM otto_prod_img WHERE p_pg IS NULL or p_nr IS NULL ");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			// find the correct ones from the prod by code
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_PRODUCT,
+				"user20" => $row["pcode"]
+			));
+			if ($ol->count() > 0)
+			{
+				$o = $ol->begin();
+				$pg = $o->prop("user18");
+				$nr = $o->prop("user19");
+				$this->db_query("UPDATE otto_prod_img SET p_pg = '$pg', p_nr = '$nr' WHERE pcode = '$row[pcode]' AND imnr = '$row[imnr]' AND nr = '$row[nr]'");
+				echo "fixed code $row[pcode] <br>\n";
+				flush();
+			}
+			$this->restore_handle();
+		}
+		die("all done! ");
 	}
 }
 

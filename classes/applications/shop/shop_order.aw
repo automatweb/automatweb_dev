@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.11 2004/08/24 13:01:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.12 2004/09/03 15:56:58 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -711,12 +711,15 @@ class shop_order extends class_base
 
 		$total += $o->meta("postal_price");
 
+		$total_incl_disc = ($total - ($total * ($o->meta("discount") / 100.0)));
+
 		$this->vars(array(
 			"HAS_SELLER" => $hs,
 			"NO_SELLER" => "",
 			"PROD" => $p,
 			"PROD_LONG" => $pl,
 			"total" => number_format($total,2),
+			"total_incl_disc" => number_format($total_incl_disc,2),
 			"id" => $o->id(),
 			"order_pdf" => $this->mk_my_orb("gen_pdf", array("id" => $o->id())),
 			"discount" => $o->meta("discount"),

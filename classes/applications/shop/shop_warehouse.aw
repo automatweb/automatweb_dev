@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.14 2004/08/19 07:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.15 2004/09/03 15:56:58 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1830,7 +1830,6 @@ class shop_warehouse extends class_base
 
 		if ($this->upd_ud)
 		{
-			echo "updud <br>";
 			$this->do_update_user_data(array(
 				"oid" => $arr["obj_inst"]->id()
 			));
@@ -2324,9 +2323,9 @@ class shop_warehouse extends class_base
 		$o->set_meta("order_cur_pages", "");
 		$o->save();
 
-		aw_session_set("wh_order_cur_order_id", NULL);
+		aw_session_del("wh_order_cur_order_id");
 
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "order_current"));
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "search_search"));
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.2 2004/08/19 07:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.3 2004/09/03 15:56:58 kristo Exp $
 // shop_order_cart_value.aw - Poe ostukorvi v&auml;&auml;rtus 
 /*
 
@@ -49,10 +49,9 @@ class shop_order_cart_value extends class_base
 
 	////
 	// !shows the object
-	function show($arr)
+	function show($arr = array())
 	{
 		$soc = get_instance(CL_SHOP_ORDER_CART);
-		$ob = new object($arr["id"]);
 
 		$count = 0;
 		foreach($soc->get_items_in_cart() as $dat)
@@ -62,10 +61,22 @@ class shop_order_cart_value extends class_base
 
 		$this->read_template("show.tpl");
 		$this->vars(array(
-			"name" => $ob->prop("name"),
 			"value" => number_format($soc->get_cart_value(),2),
 			"count" => $count
 		));
+
+		if ($count > 0)
+		{
+			$this->vars(array(
+				"HAS_ITEMS" => $this->parse("HAS_ITEMS")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"NO_ITEMS" => $this->parse("NO_ITEMS")
+			));
+		}
 		return $this->parse();
 	}
 }

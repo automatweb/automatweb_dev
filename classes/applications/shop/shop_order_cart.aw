@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.14 2004/08/30 09:32:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.15 2004/09/03 15:56:58 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -289,11 +289,14 @@ class shop_order_cart extends class_base
 			}
 		}
 
-		$_SESSION["cart"]["user_data"] = $GLOBALS["user_data"];
+		if ($arr["from"] != "confirm")
+		{
+			$_SESSION["cart"]["user_data"] = $GLOBALS["user_data"];
+		}
 
 		// check cfgform controllers for user data
 		$cfgf = $oc->prop("data_form");
-		if ($cfgf)
+		if ($cfgf && $arr["from"] != "confirm")
 		{
 			$is_valid = $this->validate_data(array(
 				"cfgform_id" => $cfgf,
@@ -323,6 +326,7 @@ class shop_order_cart extends class_base
 				);
 			}
 			aw_session_set("soc_err", $soce);
+			aw_session_set("no_cache", 1);
 
 			if (!$arr["return_url"])
 			{
@@ -345,6 +349,7 @@ class shop_order_cart extends class_base
 		if ($arr["from"] == "pre" && !$arr["order_cond_ok"])
 		{
 			aw_session_set("order_cond_fail", 1);
+			aw_session_set("no_cache", 1);
 			if (!$arr["return_url"])
 			{
 				if ($arr["from"] == "pre")
@@ -375,16 +380,26 @@ class shop_order_cart extends class_base
 				$_SESSION["cart"]["items"][$iid] += $quant;
 			}
 		}
-		$awa = new aw_array($order_data);
-		foreach($awa->get() as $iid => $dat)
+
+		if ($arr["from"] != "confirm")
 		{
-			$_SESSION["cart"]["item_data"][$iid] = $dat;
+			$awa = new aw_array($order_data);
+			foreach($awa->get() as $iid => $dat)
+			{
+				$_SESSION["cart"]["item_data"][$iid] = $dat;
+			}
 		}
 
 		if (!empty($arr["pre_confirm_order"]))
 		{
 			// go to separate page with order non modifiable and user data form below
 			return $this->mk_my_orb("pre_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"]));
+		}
+		else
+		if (!empty($arr["final_confirm_order"]))
+		{
+			// go to separate page with order non modifiable and user data form below
+			return $this->mk_my_orb("final_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"]));
 		}
 		else
 		if (!empty($arr["confirm_order"]))
@@ -601,6 +616,8 @@ class shop_order_cart extends class_base
 
 		$els["userdate1"]["year_from"] = 1930;
 		$els["userdate1"]["year_to"] = date("Y");
+		$els["userdate1"]["no_default"] = true;
+		$els["userdate1"]["value"] = -1;
 
 		// if there are errors
 		$els = $this->do_insert_user_data_errors($els);
@@ -678,6 +695,173 @@ class shop_order_cart extends class_base
 		return $this->parse();
 	}
 
+	/**
+
+		@attrib name=final_finish_order nologin=1
+
+		@param oc required
+		@param section optional
+
+	**/
+	function final_finish_order($arr)
+	{
+		extract($arr);
+		$this->read_template("final_finish_order.tpl");
+
+		$oc = obj($oc);
+
+		// get cart to user from oc
+		if ($arr["id"])
+		{
+			$cart_o = obj($arr["id"]);
+		}
+		else
+		{
+			$cart_o = obj($oc->prop("cart"));
+		}
+
+		// now get item layout from cart
+		error::throw_if(!$cart_o->prop("prod_layout"), array(
+			"id" => "ERR_NO_PROD_LAYOUT",
+			"msg" => "shop_order_cart::show(): no product layout set for cart (".$cart_o->id().") "
+		));
+		$layout = obj($cart_o->prop("prod_layout"));
+		$layout->set_prop("template", "prod_pre_confirm.tpl");
+
+		$total = 0;
+
+		$awa = new aw_array($_SESSION["cart"]["items"]);
+		foreach($awa->get() as $iid => $quant)
+		{
+			if ($quant < 1 || !$this->can("view", $iid))
+			{
+				continue;
+			}
+
+			$i = obj($iid);
+			$inst = $i->instance();
+			
+			$this->vars(array(
+				"prod_html" => $inst->do_draw_product(array(
+					"layout" => $layout,
+					"prod" => $i,
+					"quantity" => $quant,
+					"oc_obj" => $oc,
+					"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
+				))
+			));
+
+			$total += ($quant * $inst->get_price($i));
+
+			$str .= $this->parse("PROD");
+		}
+
+		$swh = get_instance(CL_SHOP_WAREHOUSE);
+		$wh_o = obj($oc->prop("warehouse"));
+
+		// fake user data
+		$wh_o->set_meta("order_cur_ud", $_SESSION["cart"]["user_data"]);
+
+		$els = $swh->callback_get_order_current_form(array(
+			"obj_inst" => $wh_o
+		));
+
+		// if there are errors
+		$els = $this->do_insert_user_data_errors($els);
+		$prevd = $els["userdate1"]["value"];
+
+		$rd = get_instance(CL_REGISTER_DATA);
+		$els = $rd->parse_properties(array(
+			"properties" => $els,
+			"name_prefix" => ""
+		));
+		$els["user_data[userdate1]"]["value"] = $prevd;
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		foreach($els as $pn => $pd)
+		{
+			if ($pd["type"] == "date_select")
+			{
+				if ($pd["value"] == -1)
+				{
+					$pd["value"] = "---.---.---";
+				}
+				else
+				{
+					$pd["value"] = date("d.m.Y", $pd["value"]);
+				}
+			}
+			else
+			if ($pd["type"] == "chooser")
+			{
+				if (is_oid($pd["value"]) && $this->can("view", $pd["value"]))
+				{
+					$tmp = obj($pd["value"]);
+					$pd["value"] = $tmp->name();
+				}
+				else
+				{
+					$pd["value"] = "";
+				}
+			}
+
+			$pd["type"] = "text";
+			$htmlc->add_property($pd);
+		}
+		$htmlc->finish_output();
+
+		$html = $htmlc->get_result(array(
+			"raw_output" => 1
+		));
+
+		if (aw_global_get("uid") != "")
+		{
+			$us = get_instance("core/users/user");
+			$objs = array(
+				"user_data_user_" => obj($us->get_current_user()),
+				"user_data_person_" => obj($us->get_current_person()),
+				"user_data_org_" => obj($us->get_current_company()),
+			);
+			$vars = array();
+			foreach($objs as $prefix => $obj)
+			{
+				$ops = $obj->properties();
+				
+				foreach($ops as $opk => $opv)
+				{
+					$vars[$prefix.$opk] = $opv;
+				}
+			}
+			$this->vars($vars);
+		}
+
+		$this->vars(array(
+			"user_data_form" => $html,
+			"PROD" => $str,
+			"total" => number_format($total, 2),
+			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"], "from" => "confirm")),
+			"postal_price" => number_format($cart_o->prop("postal_price"))
+		));
+
+		$ll = $lln = "";
+		if (aw_global_get("uid") != "")
+		{
+			$ll = $this->parse("logged");
+		}
+		else
+		{
+			$lln = $this->parse("not_logged");
+		}
+
+		$this->vars(array(
+			"logged" => $ll,
+			"not_logged" => $lln
+		));
+
+		return $this->parse();
+	}
+
 	function do_insert_user_data_errors($props)
 	{
 		$errs = new aw_array(aw_global_get("soc_err_ud"));
@@ -699,6 +883,7 @@ class shop_order_cart extends class_base
 			$ret[$pn] = $pd;
 		}
 
+		aw_session_del("soc_err_ud");
 		return $ret;
 	}
 }
