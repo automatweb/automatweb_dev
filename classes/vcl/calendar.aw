@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.43 2004/12/31 09:49:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.44 2005/01/17 16:43:10 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -209,6 +209,7 @@ class vcalendar extends aw_template
 		$data = $arr["data"];
 		$data["timestamp"] = $arr["timestamp"];
 		$data["_id"] = $this->el_count;
+		$data["id"] = $arr["data"]["id"];
 		$data['comment'] = $arr['data']['comment'];
 		$data["utextarea1"] = nl2br($data["utextarea1"]);
 
@@ -840,6 +841,11 @@ class vcalendar extends aw_template
 			"EVENT" => "",
 		));
 		$this->read_template($ct_template);
+		$dcheck = "";
+		if($this->adm_day)
+		{
+			$dcheck = $this->parse("DCHECK");
+		}
 		$dstamp = date("Ymd",$this->range["start"]);
 		$events_for_day = "";
 		if (is_array($this->items[$dstamp]))
@@ -855,6 +861,7 @@ class vcalendar extends aw_template
 		$dt = date("d",$i);
 		$mn = get_lc_month(date("m",$i));
 		$this->vars(array(
+			"DCHECK" => $dcheck,
 			"EVENT" => $events_for_day,
 			"daynum" => date("j",$this->range["start"]),
 			"dayname" => date("F d, Y",$this->range["start"]),
@@ -1156,7 +1163,10 @@ class vcalendar extends aw_template
 		$mn = locale::get_lc_month(date("m",$evt["start1"]));
 		$mn .= " " . date("H:i",$evt["start1"]);
 
-		
+		if($this->adm_day)
+		{
+			$dchecked = $this->evt_tpl->parse("DCHECKED");
+		}
 		$this->evt_tpl->vars(array(
 			"odd" => $this->event_counter % 2,
 			"time" => date("H:i",$evt["timestamp"]),
@@ -1170,6 +1180,7 @@ class vcalendar extends aw_template
 			"modifiedby" => $evt["modifiedby"],
 			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
 			"COMMENT" => "",
+			"DCHECKED" => $dchecked,
 			"comment" => $evt["comment"],
 			"day_name" => strtoupper(substr(get_lc_weekday(date("w",$evt["start1"])),0,1)),
 			"date_and_time" => $dt . ". " . $mn,

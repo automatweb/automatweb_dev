@@ -199,7 +199,7 @@ class date_edit
 					$step = isset($this->minute_step) ? $this->minute_step : 1;
 					for ($i = 0; $i <= 59; $i = $i + $step)
 					{
-						$retval .= sprintf("<option value='%s' %s>%02d</option>\n",$i,selected($i == $minute && $this->timestamp != -1),$i);
+						$retval .= sprintf("<option value='%s' %s>%02d</option>\n",$i,selected($i <= $minute && $i +  $step > $minute && $this->timestamp != -1),$i);
 					};
 					$retval .= "</select>\n";
 					break;

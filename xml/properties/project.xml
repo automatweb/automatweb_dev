@@ -113,6 +113,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>event_list</field>
+            <caption>Sündmused</caption>
       </property>
       <property>
             <name>add_event</name>

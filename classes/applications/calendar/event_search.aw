@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.15 2005/01/13 09:53:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.16 2005/01/17 16:43:09 kristo Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -359,18 +359,20 @@ class event_search extends class_base
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
-
 		$t->define_field(array(
 			"name" => "caption",
 			"caption" => t("Pealkiri"),
 		));
-
 		$t->define_field(array(
 			"name" => "active",
 			"caption" => t("Aktiivne"),
 			"align" => "center",
 		));
-
+		$t->define_field(array(
+			"name" => "clickable",
+			"caption" => t("Klikitav"),
+			"align" => "center",
+		));
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk"),
@@ -438,6 +440,11 @@ class event_search extends class_base
 					"name" => "${pname}[${sname}][active]",
 					"value" => 1,
 					"checked" => ($oldvals[$sname]["active"] == 1),
+				)),
+				"clickable" => html::checkbox(array(
+					"name" => "${pname}[${sname}][clickable]",
+					"value" => 1,
+					"checked" => ($oldvals[$sname]["clickable"] == 1),
 				)),
 				"ord" => html::textbox(array(
 					"name" => "${pname}[${sname}][ord]",
@@ -782,6 +789,10 @@ class event_search extends class_base
 				$cdat = "";
 				foreach($tabledef as $key => $propdef)
 				{
+					if($key == "content")
+					{
+						continue;
+					}
 					if ($propdef["active"])
 					{
 						$this->vars(array(
@@ -796,10 +807,12 @@ class event_search extends class_base
 				$origs = array();
 				foreach($ol->arr() as $res)
 				{
+					
 					$pr = new object($res->parent());
 					// see on project
 					// aga mitte orig_name vaid .. HAHA. bljaad raisk
 					$orig_id = $res->brother_of();
+					
 					$origs[] = $orig_id;
 					//print "oid = " . $res->id() . "<br>";
 					$mpr = $pr->parent();
@@ -809,7 +822,7 @@ class event_search extends class_base
 					//print "n = " . $res->name() . "<br>";
 					// iga sndmuse kohta ma pean vaatama kas ta on mind huvitava projekti all vï¿½ mitte?
 					$parent1 = $parent2 = "";
-					if (in_array($pr->id(),$par1))
+					if (in_array($pr->id(), $par1))
 					{
 						$parent1 = $pr->name();
 						if ($edata[$orig_id])
@@ -825,12 +838,15 @@ class event_search extends class_base
 							$edata[$orig_id]["parent2"] = $parent2;
 						};
 					};
-
+					$orig = $res->get_original();
 					if (!$edata[$orig_id])
 					{
+						//arr($orig->properties());
+						//$edata[$orig_id] = $orig->properties();
+						
 						 $edata[$orig_id] = array(
-							"event_id" => $res->id(),
-							"event" => $res->name(),
+							"event_id" => $orig->id(),
+							"event" => $orig->name(),
 							"parent1" => $parent1,
 							"parent2" => $parent2,
 							"place" => $pr->name(),
@@ -838,10 +854,11 @@ class event_search extends class_base
 							"project_selector" => "n/a",
 							"date" => date("d-m-Y", $res->prop("start1")),
 						);
-						$edata[$orig_id] = array_merge($edata[$orig_id], $res->properties());
+						$edata[$orig_id] = array_merge($edata[$orig_id], $orig->properties());
+						
 					};
-					$orig = $res->get_original();
-					$ecount[$orig->id()]++;
+					//arr($orig->properties());
+					$ecount[$orig_id]++;
 				};
 			};
 			$blist = array();
@@ -1032,7 +1049,7 @@ class event_search extends class_base
 			$t_day = mktime(0, 0, 0, $s_date["month"], 1, $s_date["year"]);
 			$day_of_week = date("w", $t_day);
 			$offset = $day_of_week - 1 < 0 ? 6 : $day_of_week - 1;
-			$weeks = ceil(($cur_days + $offset) /7);
+			$weeks = ceil(($cur_days + $offset) / 7);
 			for($i=1; $i <= $weeks; $i++)
 			{
 				if($offset)
@@ -1078,7 +1095,9 @@ class event_search extends class_base
 					"week_url" => str_replace("event_search", "", $this->mk_my_orb("search", $week_args, "event_search")),
 					"week_nr" => $i,
 				));
-				$res_weeks .= $this->parse(($i == $weeks ? "next_weeks_end": "next_weeks"));
+				
+				$nx = ($i == $weeks ? "next_weeks_end": "next_weeks").($start_day == $arr["start_date"]["day"] && $end_day == $arr["end_date"]["day"] ? "_b" : "");
+				$res_weeks .= $this->parse($nx);
 			}
 			
 			$this->vars(array(

@@ -47,6 +47,15 @@
             <caption>Päev lõpeb</caption>
       </property>
       <property>
+            <name>minute_step</name>
+            <table>objects</table>
+            <group>time_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Sündmuse sisestamise minutite täpsus</caption>
+      </property>
+      <property>
             <name>navigator_visible</name>
             <table>objects</table>
             <group>advanced</group>

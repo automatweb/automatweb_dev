@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.33 2005/01/13 10:30:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.34 2005/01/17 16:43:09 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -33,6 +33,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property day_end type=time_select group=time_settings rel=1
 	@caption Päev lõpeb
 
+	@property minute_step type=select group=time_settings
+	@caption Sündmuse sisestamise minutite täpsus
+	
 	@property navigator_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption Näita navigaatorit
 	
@@ -282,6 +285,17 @@ class planner extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "minute_step":
+				$data["options"] = array(
+					1 => 1,
+					5 => 5,
+					10 => 10,
+					15 => 15,
+					30 => 30,
+					60 => 60,
+				);
+				break;
+				
 			case "default_view":
 				$data["options"] = $this->viewtypes;
 				break;
@@ -495,18 +509,18 @@ class planner extends class_base
 
 		foreach($folderlist as $conn)
 		{
-                        $_tmp = $conn->to();
-                        $clid = $_tmp->class_id();
-                        if ($clid == CL_PLANNER && $_tmp->prop("event_folder") != "")
-                        {
-                                $folders[] = $_tmp->prop("event_folder");
-                        };
-                        if ($clid == CL_PROJECT)
-                        {
-                                $folders[] = $_tmp->id();
-                        };
+			$_tmp = $conn->to();
+			$clid = $_tmp->class_id();
+			if ($clid == CL_PLANNER && $_tmp->prop("event_folder") != "")
+			{
+				$folders[] = $_tmp->prop("event_folder");
+			};
+			if ($clid == CL_PROJECT)
+			{
+				$folders[] = $_tmp->id();
+			};
 		};
-		
+
 		// also include events from any projects that are connected to this calender
 		// if the user wants so
 
@@ -525,6 +539,11 @@ class planner extends class_base
 			// ignore projects, if there are no users connected to this calendar
 			if (sizeof($owners) == 0)
 			{
+				$pr = aw_global_get("project");
+				if(is_oid($pr))
+				{
+					$folders = array($pr);
+				}
 			}
 			else
 			{
@@ -638,6 +657,10 @@ class planner extends class_base
 
 		enter_function("get_event_list::query");
 		$this->db_query($q);
+		if ($_GET["XX5"])
+		{
+			print $q;
+		};
 		while($row = $this->db_next())
 		{
 			$rv[$row["brother_of"]] = array(
@@ -917,6 +940,10 @@ class planner extends class_base
 
 				foreach($xprops as $key => $val)
 				{
+					if(($key == "emb_end" || $key == "emb_start1") && $obj->prop("minute_step") > 1)
+					{
+						$val["minute_step"] = $obj->prop("minute_step");
+					}
 					$val["emb"] = 1;
 					$resprops[$key] = $val;
 				};
@@ -1423,15 +1450,18 @@ class planner extends class_base
 			// XXX: check acl and only show that button, if the user actually _can_
 			// edit the calendar
 
-			/*
-			$toolbar->add_button(array(
-				"name" => "delete",
-				"tooltip" => t("Kustuta märgitud sündmused"),
-				"url" => "javascript:document.changeform.action.value='delete_events';document.changeform.submit();",
-				"img" => "delete.gif",
-				"class" => "menuButton",
-			));
-			*/
+			
+			if($this->can("edit", $arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("default_view") == 1)
+			{
+				$toolbar->add_button(array(
+					"name" => "delete",
+					"tooltip" => t("Kustuta märgitud sündmused"),
+					"url" => "javascript:document.changeform.action.value='delete_events';document.changeform.submit();",
+					"img" => "delete.gif",
+					"class" => "menuButton",
+				));
+			}
+			
 
 			if ($arr["obj_inst"]->prop("my_projects") == 1 && !$arr["request"]["search"])
 			{
@@ -1444,8 +1474,18 @@ class planner extends class_base
 				));
 
 				// ignore projects, if there are no users connected to this calendar
+				// UPDATE: assume, that you would still want to sort by project
 				if (sizeof($owners) == 0)
 				{
+					$conns = $arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_EVENT_SOURCE",
+						"to.class_id" => CL_PROJECT,
+						"sort_by" => "to.name",
+					));
+					foreach($conns as $conn)
+					{
+						$prj_opts[$conn->prop("to")] = $conn->prop("to.name");
+					}
 				}
 				else
 				{
@@ -1490,20 +1530,6 @@ class planner extends class_base
 		};
 	}
 
-	function delete_events($args = array())
-	{
-		extract($args);
-		if (sizeof($mark) > 0)
-		{
-			foreach($mark as $event)
-			{
-				$obj = new object($event);
-				$obj->delete();
-			}
-		};
-		return $this->mk_my_orb("change",array("id" => $args["id"],"group" => $args["subgroup"],"date" => $args["date"]));
-	}
-
 	function connect_event($arr)
 	{
 		$ev_obj = new object($arr["event_id"]);
@@ -1533,11 +1559,30 @@ class planner extends class_base
 
 	function gen_calendar_contents($arr)
 	{
+		$wds = safe_array($arr["obj_inst"]->prop("workdays"));
+		$full_weeks = false;
+		// if no workdays are defined, use all of them
+		for($wd = 1; $wd <= 7; $wd++)
+		{
+			if(!$wds[$wd])
+			{
+				break;
+			}
+			else
+			{
+				$full_weeks = true;
+			}
+		}
 		$arr["prop"]["vcl_inst"]->configure(array(
 			"tasklist_func" => array(&$this,"get_tasklist"),
 			"overview_func" => array(&$this,"get_overview"),
+			"full_weeks" => $full_weeks,
 		));
-
+		
+		if($this->can("edit", $arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("default_view") == 1)
+		{
+			$arr["prop"]["vcl_inst"]->adm_day = 1;
+		}
 		$viewtype = $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
 
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
@@ -1565,6 +1610,7 @@ class planner extends class_base
 			$arr["prop"]["vcl_inst"]->add_item(array(
 				"timestamp" => $event["start"],
 				"data" => array(
+					"id" => $event["id"],
 					"name" => $event["name"],
 					"icon" => $event["event_icon_url"],
 					"link" => $event["link"],
@@ -2438,6 +2484,28 @@ class planner extends class_base
 			),
 			$arr['class']
 		);
+	}
+	
+	/**
+		@attrib name=delete_events
+		@param sel required
+		@param id required type=int acl=edit
+		@param group optional
+	**/
+	function delete_events($arr)
+	{
+		foreach(safe_array($arr["sel"]) as $event)
+		{
+			if(is_oid($event) && $this->can("delete", $event))
+			{
+				$obj = new object($event);
+				if(in_array($obj->class_id(), $this->event_entry_classes))
+				{
+					$obj->delete();
+				}
+			}
+		}
+		return $this->mk_my_orb("change",array("id" => $arr["id"],"group" => $arr["subgroup"],"date" => $arr["date"]));
 	}
 };
 ?>

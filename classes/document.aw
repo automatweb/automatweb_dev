@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.312 2005/01/12 11:49:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.313 2005/01/17 16:43:09 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -477,10 +477,17 @@ class document extends aw_template
 				{
 					$link = $request_uri . "&print=1";
 				}
+				// another wonderful way of showing a link
+				$link2 = aw_url_change_var(array(
+					"class" => "document",
+					"action" => "print",
+					"print" => 1,
+				));
 				$this->vars(array(
 					"docid" => $docid,
 					"printlink" => $link,
-					"tv_sel" => $GLOBALS["tv_sel"]
+					"tv_sel" => $GLOBALS["tv_sel"],
+					"printlink2" => $link2,
 				));
 				#aw_global_set("no_menus",1);
 				$_tmp = $this->parse("PRINTANDSEND");

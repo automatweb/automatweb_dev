@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.27 2005/01/13 12:59:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.28 2005/01/17 16:43:09 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -48,7 +48,7 @@
 @property event_list type=calendar no_caption=1
 @caption Sündmused
 
-@property event_list type=calendar group=event_list no_caption=1
+//@property event_list type=calendar group=event_list no_caption=1
 
 @default group=add_event
 @property add_event callback=callback_get_add_event group=add_event store=no
@@ -245,6 +245,11 @@ class project extends class_base
 		$end = $range["end"];
 		classload("icons");
 
+		if ($range["overview_start"])
+		{
+			$start = $range["overview_start"];
+		};
+
 		// event translations have the id of the object in original language
 		$o = $arr["obj_inst"];
 		obj_set_opt("no_auto_translation", 1);
@@ -278,7 +283,7 @@ class project extends class_base
 				};
 			};
 		};
-
+		
 		// aga vaat siin on mingi jama ..
 		$ol = new object_list(array(
 			"parent" => $parents,

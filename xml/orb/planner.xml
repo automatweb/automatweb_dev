@@ -37,5 +37,15 @@
 			</function>
 		</action>
 
+		<action name="delete_events">
+			<function name="delete_events">
+				<arguments>
+					<required name="sel" />
+					<required name="id" type="int" acl="edit" />
+					<optional name="group" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

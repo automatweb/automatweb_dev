@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.64 2004/12/15 12:28:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.65 2005/01/17 16:43:09 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -271,6 +271,7 @@ class html extends aw_template
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
+		$selector->set("minute_step", ($args["minute_step"] ? $args["minute_step"] : 1));
 		$selector->configure(array("hour" => 1, "minute" => 1));
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$m,$d,$y);
@@ -294,6 +295,7 @@ class html extends aw_template
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
+		$selector->set("minute_step", ($args["minute_step"] ? $args["minute_step"] : 1));
 		$set = array();
 		if (!empty($args["day"]) && $args["day"] == "text")
 		{
