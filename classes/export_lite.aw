@@ -1,6 +1,6 @@
 <?php
 
-classload("links","config","planner");
+classload("links","config");
 
 class export_lite extends aw_template
 {
