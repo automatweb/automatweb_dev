@@ -162,7 +162,10 @@ class obj_table_conf extends aw_template
 
 		if ($alias_to)
 		{
-			$this->add_alias($alias_to, $id);
+			$o = obj($alias_to);
+			$o->connect(array(
+				"to" => $id
+			));
 		}
 
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));

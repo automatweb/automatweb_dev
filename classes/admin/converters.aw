@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.43 2004/06/26 10:03:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.44 2004/06/28 19:50:44 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -267,11 +267,11 @@ class converters extends aw_template
                                 // then I should not create a new one
                                 if (!$flatlist[$val])
                                 {
-                                        $this->addalias(array(
-                                                "id" => $id,
-                                                "alias" => $val,
-                                                "reltype" => RELTYPE_ASSIGNED_MENU,
-                                        ));
+									$o = obj($id);
+									$o->connect(array(
+										"to" => $val,
+										"reltype" => RELTYPE_ASSIGNED_MENU
+									));
                                 };
                         };
                 }
@@ -287,11 +287,11 @@ class converters extends aw_template
                         {
                                 if (!$flatlist[$val])
                                 {
-                                        $this->addalias(array(
-                                                "id" => $id,
-                                                "alias" => $val,
-                                                "reltype" => RELTYPE_DOC_SOURCE,
-                                        ));
+									$o = obj($id);
+									$o->connect(array(
+										"to" => $val,
+										"reltype" => RELTYPE_DOC_SOURCE
+									));
                                 };
                         };
                 }
@@ -423,11 +423,10 @@ class converters extends aw_template
 				if ($img_id)
 				{
 					// create the relation too
-					$this->addalias(array(
-						"id" => $newid,
-						"alias" => $img_id,
-						"reltype" => 1,
-
+					$o = obj($newid);
+					$o->connect(array(
+						"to" => $img_id,
+						"reltype" => 1
 					));
 				}
 				$map[$row["id"]] = $newid;
@@ -596,12 +595,11 @@ class converters extends aw_template
 				// delete old aliases for this user.
 				$this->db_query("DELETE FROM aliases WHERE target = $trow[oid] and source = $row[oid]");
 
-				$this->addalias(array(
-					"id" => $row["oid"],
-					"alias" => $trow["oid"],
+				$o = obj($row["oid"]);
+				$o->connect(array(
+					"to" => $trow["oid"],
 					"reltype" => 2
 				));
-
 				$this->restore_handle();
 			}
 
@@ -696,9 +694,9 @@ class converters extends aw_template
 				// delete old aliases for this user.
 				$this->db_query("DELETE FROM aliases WHERE target = $trow[oid] and source = $row[oid]");
 
-				$this->addalias(array(
-					"id" => $row["oid"],
-					"alias" => $trow["oid"],
+				$o = obj($row["oid"]);
+				$o->connect(array(
+					"to" => $trow["oid"],
 					"reltype" => 2
 				));
 				$this->restore_handle();
@@ -742,18 +740,18 @@ class converters extends aw_template
 			if ($obj["meta"]["role"])
 			{
 //				echo "role = ".$obj["meta"]["role"]." <br />";
-				core::addalias(array(
-					"id" => $obj["oid"],
-					"alias" => $obj["meta"]["role"],
+				$o = obj($obj["oid"]);
+				$o->connect(array(
+					"to" => $obj["meta"]["role"],
 					"reltype" => 2
 				));
 			}
 			if ($obj["meta"]["chain"])
 			{
 //				echo "chain = ".$obj["meta"]["chain"]." <br />";
-				core::addalias(array(
-					"id" => $obj["oid"],
-					"alias" => $obj["meta"]["chain"],
+				$o = obj($obj["oid"]);
+				$o->connect(array(
+					"to" => $obj["meta"]["chain"],
 					"reltype" => 1
 				));
 			}
@@ -763,9 +761,9 @@ class converters extends aw_template
 			{
 //				echo "gid = $gid <br />";
 				$u = get_instance("users");
-				core::addalias(array(
-					"id" => $obj["oid"],
-					"alias" => $u->get_oid_for_gid($gid),
+				$o = obj($obj["oid"]);
+				$o->connect(array(
+					"to" => $u->get_oid_for_gid($gid),
 					"reltype" => 3
 				));
 				// also, add alias to acl object from group
@@ -773,9 +771,9 @@ class converters extends aw_template
 				$row = $this->db_fetch_row("SELECT * FROM aliases WHERE source = ".$u->get_oid_for_gid($gid)." AND target = ".$obj['oid']);
 				if (!is_array($row))
 				{
-					core::addalias(array(
-						"id" => $u->get_oid_for_gid($gid),
-						"alias" => $obj['oid'],
+					$o = obj($u->get_oid_for_gid($gid));
+					$o->connect(array(
+						"to" => $obj['oid'],
 						"reltype" => 3
 					));
 					echo "add alias to group ".$u->get_oid_for_gid($gid)." <br />";
@@ -872,9 +870,9 @@ class converters extends aw_template
 				{
 					echo "adding alias for image $row[oid] to document $id <br />\n";
 					flush();
-					$this->addalias(array(
-						"id" => $id,
-						"alias" => $row["oid"],
+					$o = obj($id);
+					$o->connect(array(
+						"to" => $row['oid'],
 					));
 					$this->db_query("UPDATE aliases SET idx = '$row[idx]' WHERE source = '$id' AND target = '$row[oid]'");
 					

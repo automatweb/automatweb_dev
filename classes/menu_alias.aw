@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.10 2004/06/25 21:36:28 duke Exp $
+// $Id: menu_alias.aw,v 2.11 2004/06/28 19:50:43 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -118,7 +118,10 @@ class menu_alias extends aw_template
 
 		if ($alias_to)
 		{
-			$this->add_alias($alias_to, $id);
+			$o = obj($alias_to);
+			$o->connect(array(
+				"to" => $id
+			));
 		}
 		return $this->mk_my_orb("change_alias",array("id" => $id,"return_url" => urlencode($return_url)));
 	}

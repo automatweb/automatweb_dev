@@ -1425,28 +1425,15 @@ class site_content extends menuedit
 	// !draws MENU_$name_SEEALSO_ITEM 's for the menu given in $row
 	function do_seealso_items($row,$name)
 	{
-		$menus = $this->get_aliases_of(array(
-			"oid" => $row["oid"],
-			// XXX, this relation type is defined in "menu.aw", but I feel bad
-			// about including one big-ass file just to get one constant. - duke
-			//
-			// actually, this is not the only place that has problems with that. so, 
-			// maybe we should define those somewhere else, where every class has access if they want?
-			// like menu.aw.const - defines constants for menu.aw class, and const_load("menu") includes that?
-			// whadaya think?
-			"reltype" => 5,
-			"lang_id" => aw_global_get("lang_id"),
-		));
-
 		$tmp = array();
 		$subtpl = "MENU_${name}_SEEALSO_ITEM";
 
 		$mc = get_instance("menu_cache");
-	
-		// get_aliases_of ensures that return value is always array
-		foreach($menus as $said => $foo)
+
+		$o = obj($row["oid"]);
+		foreach($o->connections_to(array("type" => 5, "to.lang_id" => aw_global_get("lang_id"))) as $c)
 		{
-			$samenu = $mc->get_cached_menu($said);
+			$samenu = $mc->get_cached_menu($c->prop("to"));
 			if ($samenu["status"] != STAT_ACTIVE)
 			{
 				continue;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.19 2004/06/26 08:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.20 2004/06/28 19:50:43 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 /*
@@ -66,7 +66,9 @@ class object_chain extends aw_template
 			$par_obj = obj($parent);
 			if ( ($par_obj->class_id() == CL_DOCUMENT) || ($par_obj->class_id() == CL_TABLE))
 			{
-				$this->add_alias($parent,$id);
+				$par_obj->connect(array(
+					"to" => $id
+				));
 			};
 		}
 
@@ -139,7 +141,10 @@ class object_chain extends aw_template
 		{
 			foreach($objects as $value)
 			{
-				$this->add_alias($parent,$value);
+				$o = obj($parent);
+				$o->connect(array(
+					"to" => $value
+				));
 			};
 		};
 

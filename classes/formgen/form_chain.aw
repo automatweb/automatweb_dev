@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.20 2004/06/26 09:47:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.21 2004/06/28 19:50:44 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -125,7 +125,10 @@ class form_chain extends form_base
 			$this->db_query("INSERT INTO form_chains(id,content) VALUES($id,'$content')");
 			if ($alias_doc)
 			{
-				$this->add_alias($alias_doc, $id);
+				$o = obj($alias_doc);
+				$o->connect(array(
+					"to" => $id
+				));
 			}
 
 		}

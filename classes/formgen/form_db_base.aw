@@ -176,7 +176,7 @@ class form_db_base extends aw_template
 				$tmp->set_parent($arr["parent"]);
 			}
 			$tmp->save();
-			aw_restor_acl();
+			aw_restore_acl();
 		}
 		$this->restore_handle();
 	}

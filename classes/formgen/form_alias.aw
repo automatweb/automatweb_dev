@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.7 2004/06/25 21:38:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_alias.aw,v 1.8 2004/06/28 19:50:44 kristo Exp $
 
 classload("formgen/form");
 class form_alias extends form_base
@@ -121,20 +121,20 @@ class form_alias extends form_base
 
 		if ($alias_to)
 		{
-			$_id = $this->add_alias($alias_to,$entry_id,serialize(array("type" => "show", "output" => 1, "form_id" => $sf)));	
-			$c = new connection($_id);
-			$c->change(array(
-				"to" => $c->prop("to")
+			$o = obj($alias_to);
+			$o->connect(array(
+				"to" => $entry_id,
+				"data" => serialize(array("type" => "show", "output" => 1, "form_id" => $sf))
 			));
 		}
 		else
 		if ($id)
 		{
 			// change alias
-			$this->change_alias(array(
-				"id" => $id,
-				"target" => $entry_id,
-				"extra" => serialize(array("type" => "show", "output" => 1, "form_id" => $sf))
+			$c = new connection($id);
+			$c->change(array(
+				"to" => $entry_id,
+				"data" => serialize(array("type" => "show", "output" => 1, "form_id" => $sf))
 			));
 		}
 

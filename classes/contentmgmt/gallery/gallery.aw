@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.6 2004/06/15 08:48:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery.aw,v 1.7 2004/06/28 19:50:44 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -114,7 +114,10 @@ class gallery extends aw_template
 			$this->db_query("INSERT INTO galleries VALUES($id,'')");
 			if ($alias_to)
 			{
-				$this->add_alias($alias_to, $id);
+				$o = obj($alias_to);
+				$o->connect(array(
+					"to" => $id
+				));
 			}
 		}
 		return $this->mk_orb("change", array("id" => $id));

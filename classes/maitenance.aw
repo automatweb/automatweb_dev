@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.8 2004/06/15 08:57:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.9 2004/06/28 19:50:43 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -677,42 +677,35 @@ class maitenance extends class_base
 		
 		foreach($mkalias_tegevusalad as $tegevusala_obj_oid)
 		{
-			$this->addalias(array(
-				'id' => $firma_obj_oid,
-				'alias' => $tegevusala_obj_oid,
-				'no_cache' => true,
-				'reltype' => 5,//TEGEVUSALAD
+			$o = obj($firma_obj_oid);
+			$o->connect(array(
+				"to" => $tegevusala_obj_oid,
+				"reltype" => 5
 			));
 		}
 		
 		foreach($mkalias_tooted as $toode_obj_oid)
 		{
-			$this->addalias(array(
-				'id' => $firma_obj_oid,
-				'alias' => $toode_obj_oid,
-				'no_cache' => true,
-				'reltype' => 6,//TOOTED
+			$o = obj($firma_obj_oid);
+			$o->connect(array(
+				"to" => $toode_obj_oid,
+				"reltype" => 6
 			));
 		}
 		
-		
-		
 		if ($isik_obj_oid > 0)
 		{	//paneme isiku firma töötajaks
-			$this->addalias(array(
-				'id' => $firma_obj_oid,
-				'alias' => $isik_obj_oid,
-				'no_cache' => true,
-				'reltype' => 8,//WORKERS
+			$o = obj($firma_obj_oid);
+			$o->connect(array(
+				"to" => $isik_obj_oid,
+				"reltype" => 8
 			));
-			
 						
 			//märgime isiku juurde mis organisatsioonis ta töötab
-			$this->addalias(array(
-				'id' => $isik_obj_oid,
-				'alias' => $firma_obj_oid,
-				'no_cache' => true,
-				'reltype' => 6,//WORK
+			$o = obj($isik_obj_oid);
+			$o->connect(array(
+				"to" => $firma_obj_oid,
+				"reltype" => 6
 			));
 			//$isik_metadata['work'] = $firma_obj_oid;
 			$this->do_update(array('work_contact' => $firma_obj_oid),$isik_obj_oid,'kliendibaas_isik');
@@ -720,99 +713,89 @@ class maitenance extends class_base
 		
 		if ($ettevotlusvorm_obj_oid > 0)
 		{
-			$this->addalias(array(
-				'id' => $firma_obj_oid,
-				'alias' => $ettevotlusvorm_obj_oid,
-				'no_cache' => true,
-				'reltype' => 1,//ETTEVOTLUSVORM
+			$o = obj($firma_obj_oid);
+			$o->connect(array(
+				"to" => $ettevotlusvorm_obj_oid,
+				"reltype" => 1
 			));
 		}
 
 		if (true==true)
 		{
-			$this->addalias(array(
-				'id' => $firma_obj_oid,
-				'alias' => $aadress_obj_oid,
-				'no_cache' => true,
-				'reltype' => 3,//ADDRESS
+			$o = obj($firma_obj_oid);
+			$o->connect(array(
+				"to" => $aadress_obj_oid,
+				"reltype" => 3
 			));
 		}
 		
 		if ($linn_obj_oid > 0)//aadressile linna seose
 		{
-			$this->addalias(array(
-				'id' => $aadress_obj_oid,
-				'alias' => $linn_obj_oid,
-				'no_cache' => true,
-				'reltype' => 1,//LINN
+			$o = obj($aadress_obj_oid);
+			$o->connect(array(
+				"to" => $linn_obj_oid,
+				"reltype" => 1
 			));
 		}
 		if ($maakond_obj_oid > 0)//aadressile maakonna seose
 		{
-			$this->addalias(array(
-				'id' => $aadress_obj_oid,
-				'alias' => $maakond_obj_oid,
-				'no_cache' => true,
-				'reltype' => 3,//MAAKOND
+			$o = obj($aadress_obj_oid);
+			$o->connect(array(
+				"to" => $maakond_obj_oid,
+				"reltype" => 3
 			));
 		}
 		
 		if ($telefon_obj_oid > 0)//aadressile telfoni seose
 		{
-			$this->addalias(array(
-				'id' => $aadress_obj_oid,
-				'alias' => $telefon_obj_oid,
-				'no_cache' => true,
-				'reltype' => 7,//TELEFON
-			));	
+			$o = obj($aadress_obj_oid);
+			$o->connect(array(
+				"to" => $telefon_obj_oid,
+				"reltype" => 7
+			));
 		}
 		if ($faks_obj_oid > 0)//aadressile faksi seose
 		{
-			$this->addalias(array(
-				'id' => $aadress_obj_oid,
-				'alias' => $faks_obj_oid,
-				'no_cache' => true,
-				'reltype' => 9,//FAKS
-			));	
+			$o = obj($aadress_obj_oid);
+			$o->connect(array(
+				"to" => $faks_obj_oid,
+				"reltype" => 9
+			));
 		}
 		if ($mobiil_obj_oid > 0)//aadressile mobiili seose
 		{
-			$this->addalias(array(
-				'id' => $aadress_obj_oid,
-				'alias' => $mobiil_obj_oid,
-				'no_cache' => true,
-				'reltype' => 8,//MOBIIL
-			));	
+			$o = obj($aadress_obj_oid);
+			$o->connect(array(
+				"to" => $mobiil_obj_oid,
+				"reltype" => 8
+			));
 		}
 
 		if ($www_obj_oid > 0)//aadressile  seose
 		{
-			$this->addalias(array(
-				'id' => $aadress_obj_oid,
-				'alias' => $www_obj_oid,
-				'no_cache' => true,
-				'reltype' => 6,//WWW
-			));	
+			$o = obj($aadress_obj_oid);
+			$o->connect(array(
+				"to" => $www_obj_oid,
+				"reltype" => 6
+			));
 		}
 		
 		if ($email_obj_oid > 0)//aadressile  seose
 		{
-			$this->addalias(array(
-				'id' => $aadress_obj_oid,
-				'alias' => $email_obj_oid,
-				'no_cache' => true,
-				'reltype' => 5,//EMAIL
-			));	
+			$o = obj($aadress_obj_oid);
+			$o->connect(array(
+				"to" => $email_obj_oid,
+				"reltype" => 5
+			));
 		}
 				
 		
 		//if (true)//aadressile seos firma/ema objekt
 		{
-			$this->addalias(array(
-				'id' => $aadress_obj_oid,
-				'alias' => $firma_obj_oid,
-				'no_cache' => true,
-				'reltype' => 4,//BELONGTO
+			$o = obj($aadress_obj_oid);
+			$o->connect(array(
+				"to" => $firma_obj_oid,
+				"reltype" => 4
 			));
 		}
 		
@@ -830,14 +813,6 @@ class maitenance extends class_base
 	//   no_cache - if true, cache is not updated
 	//   
 	
-	/*
-	addalias(array(
-		'' => '',
-		'reltype' => 5,
-	));
-	*/
-
-
 	echo 	''.$str.' 
 	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm)).'">järgmised '.$samm.'</a><br />
 	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 5)).'">järgmised '.$samm.'</a><br />

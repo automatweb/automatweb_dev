@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.57 2004/06/26 09:15:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.58 2004/06/28 19:50:43 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -380,11 +380,15 @@ class table extends aw_template
 			$this->vars(array("aliases" => $this->parse("aliases")));
 		};
 
-		$ar = $this->get_aliases_of(array("oid" => $this->table_id));
-		reset($ar);
-		while (list(,$v) = each($ar))
+		$o = obj($this->table_id);
+		foreach($o->connections_to() as $c)
 		{
-			$this->vars(array("url" => $this->mk_orb("list_aliases", array("id" => $v["id"],),"aliasmgr"),"title" => $v["name"]));
+			$this->vars(array(
+				"url" => $this->mk_orb("list_aliases", array(
+					"id" => $c->prop("to")
+				),"aliasmgr"),
+				"title" => $c->prop("to.name")
+			));
 			$this->parse("ALIAS_LINK");
 		}
 		return $this->parse();
@@ -491,11 +495,15 @@ class table extends aw_template
 			"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")
 		));
 
-		$ar = $this->get_aliases_of(array("oid" => $this->table_id));
-		reset($ar);
-		while (list(,$v) = each($ar))
+		$o = obj($this->table_id);
+		foreach($o->connections_to() as $c)
 		{
-			$this->vars(array("url" => $this->mk_orb("change", array("id" => $v["id"],"parent" => $v["parent"]),"document"),"title" => $v["name"]));
+			$this->vars(array(
+				"url" => $this->mk_orb("change", array(
+					"id" => $c->prop("to")
+				),"doc"),
+				"title" => $c->prop("to.name")
+			));
 			$this->parse("ALIAS_LINK");
 		}
 		return $this->parse();
@@ -1321,11 +1329,15 @@ class table extends aw_template
 			"cols"	=> $this->arr["cols"],
 			"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")
 		));
-		$ar = $this->get_aliases_of(array("oid" => $this->table_id));
-		reset($ar);
-		while (list(,$v) = each($ar))
+		$o = obj($this->table_id);
+		foreach($o->connections_to() as $c)
 		{
-			$this->vars(array("url" => $this->mk_orb("change", array("id" => $v["id"],"parent" => $v["parent"]),"document"),"title" => $v["name"]));
+			$this->vars(array(
+				"url" => $this->mk_orb("change", array(
+					"id" => $c->prop("to")
+				),"doc"),
+				"title" => $c->prop("to.name")
+			));
 			$this->parse("ALIAS_LINK");
 		}
 		return $this->parse();
@@ -2650,7 +2662,10 @@ class table extends aw_template
 
 		if ($alias_to)
 		{
-			$this->add_alias($alias_to, $this->id);
+			$o = obj($alias_to);
+			$o->connect(array(
+				"to" => $this->id
+			));
 		}
 
 		return $this->mk_orb("change", array("id" => $id));
@@ -2727,7 +2742,10 @@ class table extends aw_template
 		$tid = $o->save();
 
 		$this->db_query("INSERT INTO aw_tables(id) VALUES($tid)");
-		$this->add_alias($id,$tid);
+		$o = obj($id);
+		$o->connect(array(
+			"to" => $tid
+		));
 
 		return $this->mk_orb("change", array("id" => $tid), "table");
 	}

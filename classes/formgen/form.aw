@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.103 2004/06/26 09:47:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.104 2004/06/28 19:50:44 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -4260,7 +4260,10 @@ class form extends form_base
 		// XXX: sucky-sucky
 		if ($alias_doc)
 		{
-			$this->add_alias($alias_doc, $id);
+			$o = obj($alias_doc);
+			$o->connect(array(
+				"to" => $id
+			));
 		}
 
 		// uhm yeah. if the user selected a base form, then we must clone it and all the elements in it

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.284 2004/06/28 14:59:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.285 2004/06/28 19:50:43 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -194,156 +194,6 @@ class core extends acl_base
 		}
 		$q = "UPDATE objects SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
 		$this->db_query($q);
-	}
-
-	////
-	// !lisab objektile aliase
-	// source on see objekt, mille juurde lingitakse
-	// target on see, mida lingitakse
-	// aliaste tabelisse paigutame ka klassi id, nii
-	// peaks hiljem olema voimalik natuke kiirust gainida
-
-	// positioned arguments suck, add_alias is the Right Way to do this,
-	// but I will leave this in place just in case someone still
-	// needs it.
-	function add_alias($source,$target,$extra = "")
-	{
-		return $this->addalias(array(
-			"id" => $source,
-			"alias" => $target,
-			"extra" => $extra,
-		));
-	}
-
-	////
-	// !$arr must contain 
-	// id = alias id
-	// target = alias target
-	// and may contain 
-	// extra = data to write to alias table
-	function change_alias($arr) 
-	{
-		extract($arr);
-		$target_data = obj($target);
-
-		$source = $this->db_fetch_field("SELECT source FROM aliases WHERE id = '$id'", "source");
-
-		$q = "UPDATE aliases SET target = '$target' , type = '".$target_data->class_id()."' , data = '$extra' 
-					WHERE id = '$id'";
-
-		$this->db_query($q);
-
-		$this->_log(ST_CORE, SA_CHANGE_ALIAS, "Muutis objekti $source aliast $target", $source);
-	}
-
-	////
-	// !returns array of aliases pointing to object $oid
-	function get_aliases_of($args = array()) 
-	{
-		extract($args);
-		$rl = "";
-		if (!empty($reltype))
-		{
-			$rl = " AND reltype = $reltype ";
-		};
-		if (!empty($lang_id))
-		{
-			$ll = " AND lang_id = $lang_id ";
-		};
-		$q = "SELECT *,objects.name as name,objects.parent as parent FROM aliases
-			LEFT JOIN objects ON
-			(aliases.source = objects.oid)
-			WHERE target = '$oid' $rl $ll ORDER BY id";
-		$this->db_query($q);
-		$aliases = array();
-		while($row = $this->db_next())
-		{
-			$aliases[$row["source"]]=array(
-				"type" => $row["type"],
-				"name" => $row["name"], 
-				"data" => $row["data"],
-				"id" => $row["source"],
-				"parent" => $row["parent"]);
-		};
-		return $aliases;
-	}
-
-	////
-	// !the base version of per-class alias adding
-	// a class can override this, to implement adding aliases differently
-	// for instance - when adding an alias to form_entry it lets you pick the output
-	// with which the entry is shown. 
-	// but basically what this function needs to do, is to call core::add_alias($id,$alias)
-	// and finally redirect the user to $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr")
-	// parameters:
-	//   id - the id of the object where the alias will be attached
-	//   alias - the id of the object to attach as an alias
-	//   relobj_id - reference to the relation object
-	//   reltype - type of the relation
-	//   no_cache - if true, cache is not updated
-	//   add_obj_type_history - if set, save object type in session for use in aliasmgr obj type listbox
-	function addalias($arr)
-	{
-		//arr($arr);
-		extract($arr);
-
-		$extra = ($arr["extra"]) ? $arr["extra"] : "";
-
-		$target_data = obj($alias);
-
-		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$id' AND type =  '".$target_data->class_id()."'","idx");
-		if ($idx === "")
-		{
-			$idx = 1;
-		}
-		else
-		{
-			$idx++;
-		}
-
-		$relobj_id = (int)$arr["relobj_id"];
-		$reltype = (int)$arr["reltype"];
-		$q = "INSERT INTO aliases (source,target,type,data,idx,relobj_id,reltype)
-			VALUES('$id','$alias','".$target_data->class_id()."','$extra','$idx','$relobj_id','$reltype')";
-
-		$cl = $target_data->class_id();
-
-		// aliasmgr object type history
-		if (isset($add_obj_type_history))
-		{		
-			if (is_array($hist = aw_global_get('aliasmgr_obj_history')))
-			{
-				$hist[time()] = $cl;
-				array_unique($hist);
-				krsort($hist);
-				while(count($hist) > 10)
-				{
-					array_pop($hist);
-				}
-			}
-			else
-			{
-				$hist = array(time() => $cl);
-			}
-
-			aw_session_set('aliasmgr_obj_history',$hist);
-
-			$usr = get_instance('users_user');
-
-			$usr->set_user_config(array(
-				'uid' => aw_global_get('uid'),
-				'key' => 'aliasmgr_obj_history',
-				'value' => $hist
-			));
-		}
-
-		$this->db_query($q);
-
-		$ret = $this->db_last_insert_id();
-
-		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $id aliase $alias", $id);
-
-		return $ret;
 	}
 
 	////
@@ -635,7 +485,7 @@ class core extends acl_base
 		if ($arr["return_url"])
                 {
                         // override whatever there was in the URL with our value
-                        //$arr["return_url"] = urlencode(aw_global_get("REQUEST_URI"));
+                        $arr["return_url"] = urlencode(aw_global_get("REQUEST_URI"));
                 };
 
 		$this->process_orb_args("",$arr);

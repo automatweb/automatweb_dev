@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.7 2004/06/09 21:01:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.8 2004/06/28 19:50:44 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -154,7 +154,11 @@ class form_entry extends aw_template
 	function submit_select_alias($arr)
 	{
 		extract($arr);
-		$this->add_alias($docid,$alias,serialize(array("type" => $type, "output" => $output, "form_id" => $form_id)));
+		$o = obj($docid);
+		$o->connect(array(
+			"to" => $alias,
+			"data" => serialize(array("type" => $type, "output" => $output, "form_id" => $form_id))
+		));
 		return $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr");
 	}
 
