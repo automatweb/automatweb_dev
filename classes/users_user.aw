@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.40 2002/11/07 10:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.41 2002/11/15 13:30:34 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1073,17 +1073,24 @@ class users_user extends aw_template
 	//   and it is done by messenger. but then again, maybe we should - then all users that get blocked while
 	//   being logged in will get kicked out. ok, fair enough - let's make it do that. feel free to implement this. :) - terryf
 	//   :* -- duke
-	// btw, this query is very ineffective - uses a filesort
-	function get_gids_by_uid($uid)
+	// btw, this query is very ineffective - uses a filesort - that is caused by ORDER BY priority
+	// so - will anything break if I take it out? We will see.
+	function get_gids_by_uid($uid, $ret_all = false)
 	{
-		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers
-			LEFT JOIN groups ON (groupmembers.gid = groups.gid) WHERE uid = '$uid'
-			ORDER BY priority";
+		$q = "SELECT groupmembers.gid AS gid, groups.priority as priority FROM groupmembers
+			LEFT JOIN groups ON (groupmembers.gid = groups.gid) WHERE uid = '$uid'";
 		$this->db_query($q);
 		$retval = array();
 		while($row = $this->db_next())
 		{
-			$retval[(int)$row["gid"]] = (int)$row["gid"];
+			if ($ret_all)
+			{
+				$retval[(int)$row["gid"]] = $row;
+			}
+			else
+			{
+				$retval[(int)$row["gid"]] = (int)$row["gid"];
+			}
 		};
 
 		return $retval;

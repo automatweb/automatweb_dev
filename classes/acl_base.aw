@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.26 2002/11/07 23:02:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.27 2002/11/15 13:30:34 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -138,16 +138,38 @@ class acl_base extends core
 		{
 			return false;
 		}
-		$q = "SELECT *,acl.id as acl_rel_id, objects.parent as parent,".$this->sql_unpack_string().",groups.priority as priority,acl.oid as oid FROM acl 
+		// previously this query was:
+		/*		$q = "SELECT *,acl.id as acl_rel_id, objects.parent as parent,".$this->sql_unpack_string().",groups.priority as priority,acl.oid as oid FROM acl 
 										 LEFT JOIN groups ON groups.gid = acl.gid
 										 LEFT JOIN objects ON objects.oid = acl.oid
 										 WHERE acl.oid = $oid AND acl.gid IN (".$gidstr.") 
 										 ORDER BY groups.priority DESC
-										 LIMIT 1";
-						
+										 LIMIT 1";*/
+		// it returned just one row - the correct one
+		// but it was slow - created a temp table and caused a table rescan (using filesort and using temporary)
+		//
+		// so we remove the groups join and do the sort in memory
+		// we have a list of all groups that the user belongs to with their priorites
+		// and we return the one from the list with the bigest priority
+
+		$g_pris = aw_global_get("gidlist_pri");	// this gets made in users::request_startup
+
+		$max_pri = 0;
+		$max_row = array();
+		$q = "SELECT *,acl.id as acl_rel_id, objects.parent as parent,".$this->sql_unpack_string().",acl.oid as oid,acl.gid as gid FROM acl 
+										 LEFT JOIN objects ON objects.oid = acl.oid
+										 WHERE acl.oid = $oid AND acl.gid IN (".$gidstr.")";
 		$this->db_query($q);
-		$row = $this->db_next();
-		return $row;
+		while ($row = $this->db_next())
+		{
+			if ($g_pris[$row["gid"]] >= $max_pri)
+			{
+				$max_pri = $g_pris[$row["gid"]];
+				$max_row = $row;
+				$max_row["priority"] = $max_pri;
+			}
+		}
+		return $max_row;
 	}
 
 	function can_aw($access,$oid)
