@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.19 2003/05/06 13:52:27 duke Exp $
+// $Id: cfgutils.aw,v 1.20 2003/05/08 12:30:32 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -236,7 +236,7 @@ class cfgutils extends aw_template
 
 		if (is_array($objprops))
 		{
-			foreach($objprops as $objprop)
+			foreach($objprops as $name => $objprop)
 			{
 				if (is_array($objprop["group"]))
 				{
@@ -256,6 +256,12 @@ class cfgutils extends aw_template
 						$this->groupinfo[$objprop["group"]] = array("caption" => $objprop["group"]);
 					};
 				};
+
+				if (isset($coreprops[$name]))
+				{
+					unset($coreprops[$name]);
+				};
+
 			};
 		};
 
