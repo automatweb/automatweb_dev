@@ -454,33 +454,6 @@ class user extends class_base
 				}
 				$prop["value"] = $arr["request"]["aclwizard"];
 				break;
-			case "email":
-				if(!$prop["value"])
-				{
-					return PROP_OK;
-				}
-
-				if(is_oid($arr["obj_inst"]->id()) && $mail = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EMAIL"))
-				{
-					$mail->set_prop("mail", $prop["value"]);
-				}
-				else
-				{
-					$mail = new object(array(
-						"class_id" => CL_ML_MEMBER,
-						"parent" => $arr["obj_inst"]->parent(),
-					));
-					$mail->save();
-					$mail->set_prop("mail", $prop["value"]);
-					$mail->save();
-					$arr["obj_inst"]->connect(array(
-						"to" => $mail->id(),
-						"reltype" => "RELTYPE_EMAIL",
-					));
-				}
-					
-				$mail->save();
-				break;
 		}
 		return PROP_OK;
 	}
@@ -1272,6 +1245,7 @@ class user extends class_base
 
 	function callback_post_save($arr)
 	{
+		$go_to = false;
 		if ($arr["new"])
 		{
 			$this->users->add(array(
@@ -1371,15 +1345,38 @@ class user extends class_base
 						}
 					}
 				}
-
-
-				// now, find the correct brother
-				if ($go_to)
-				{
-					header("Location: ".$this->mk_my_orb("change", array("id" => $go_to), "user"));
-					die();
-				}
 			}
+		}
+
+		// create email object
+		$umail = $arr["obj_inst"]->prop("email");
+		if($mail = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+		{
+			if ($mail->prop("mail") != $umail)
+			{
+				$mail->set_prop("mail", $umail);
+				$mail->set_name($umail);
+			}
+		}
+		else
+		{
+			$mail = new object();
+			$mail->set_class_id(CL_ML_MEMBER);
+			$mail->set_parent($arr["obj_inst"]->id());
+			$mail->set_prop("mail", $umail);
+			$mail->set_name($umail);
+			$mail->save();
+			$arr["obj_inst"]->connect(array(
+				"to" => $mail->id(),
+				"reltype" => "RELTYPE_EMAIL",
+			));
+		}
+
+		// now, find the correct brother
+		if ($go_to)
+		{
+			header("Location: ".$this->mk_my_orb("change", array("id" => $go_to), "user"));
+			die();
 		}
 	}
 
