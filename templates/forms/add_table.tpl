@@ -89,7 +89,9 @@
 </tr>
 <tr>
 	<td class="fform">{VAR:LC_FORMS_CHOOSE_ELEMENTS}:</td>
-	<td class="fform" colspan=10><select class="small_button" size=7 name='columns[{VAR:column}][]' multiple>{VAR:elements}</select></td>
+	<td class="fform" ><select class="small_button" size=7 name='columns[{VAR:column}][]' multiple>{VAR:elements}</select></td>
+	<td class="fform">Vali lingi element:</td>
+	<td class="fform" colspan=10><select class="small_button" size=7 name='link_columns[{VAR:column}]'><option value=''>{VAR:link_elements}</select></td>
 </tr>
 <tr>
 	<td class="fform">{VAR:LC_FORMS_SORTABLE}:&nbsp;<input type="checkbox" name="sortable[{VAR:column}]" value="1" {VAR:sortable}></td>
