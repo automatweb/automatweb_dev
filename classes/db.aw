@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.11 2002/12/06 13:59:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.12 2002/12/17 14:04:31 duke Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -263,9 +263,17 @@ class db_connector extends root
 
 	////
 	// !fetchib kirje suvalisest tabelist
-	function get_record($table,$field,$selector)
+	function get_record($table,$field,$selector,$fields = array())
 	{
-		$q = "SELECT * FROM $table WHERE $field = '$selector'";
+		if (sizeof($fields) > 0)
+		{
+			$fields = join(",",$fields);
+		}
+		else
+		{
+			$fields = "*";
+		};
+		$q = "SELECT $fields FROM $table WHERE $field = '$selector'";
 		$this->db_query($q);
 		return $this->db_fetch_row();
 	}
