@@ -66,7 +66,7 @@ class date_edit
 		$this->fields = $fields;
 	}
 
-	function gen_edit_form($varname,$timestamp,$range1 = 2001 , $range2 = 2008,$add_empty = false)
+	function gen_edit_form($varname,$timestamp,$range1 = 2003 , $range2 = 2010,$add_empty = false)
 	{
 		if (is_array ($varname))
 		{
