@@ -98,7 +98,6 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function find_connections($arr)
 	{
 		$query_hash = md5(serialize($arr));
-
 		$res = $this->_get_cache("search-".$query_hash, 0, "connection");
 		if (!is_array($res))
 		{
@@ -191,6 +190,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function object_exists($oid)
 	{
+		if (!$oid)
+		{
+			return false;
+		}
 		$oid = $GLOBALS["object_loader"]->param_to_oid($oid);
 
 		if (!isset($this->obje_cache[$oid]))
