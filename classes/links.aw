@@ -55,7 +55,7 @@ class links extends extlinks
 		$this->mk_path($link[parent], LC_LINKS_CHANGE);
 		$this->read_template("nadd.tpl");
 		$ob = new db_objects;
-		$this->vars(array("reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id)),
+		$this->vars(array("reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id,"xparent" => $parent)),
 											"name"		=> $link[name],
 											"url"			=> $link[url],
 											"search_doc" => $this->mk_orb("search_doc", array()),
@@ -151,7 +151,8 @@ class links extends extlinks
 		// ntx, klass providib vahendid linkide lisamiseks, muutmiseks ja submiti
 		// handlemiseks, aga redirectid tehaks siiski sellest klassist, mis vajab
 		// neid teenuseid. Ntx dokumendiklassi sees.
-		
+
+		#$par_obj = $this->get_object($xparent);
 		if ($docid)
 		{
 			return $this->mk_my_orb("list_aliases", array("id" => $docid), "aliasmgr");
