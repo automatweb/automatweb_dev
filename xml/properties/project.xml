@@ -27,7 +27,10 @@
                   <caption>alamprojekt</caption>
             </SUBPROJECT>
             <PARTICIPANT>
-                  <clid>CL_USER</clid>
+                  <clid>
+                        <num_0>CL_USER</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
                   <value>2</value>
                   <caption>osaleja</caption>
             </PARTICIPANT>

@@ -1,17 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="taket_ebasket" folder="taket" extends="class_base">
-		<action name="show" >
-			<function name="show">
-				<arguments>
-					<optional name="saved" />
-					<optional name="inputErr" />
-					<optional name="sort" />
-					<optional name="dir" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="send_order" >
 			<function name="send_order">
 				<arguments>
@@ -19,15 +8,6 @@
 					<optional name="kontakttelefon" />
 					<optional name="eesperenimi" />
 					<optional name="transport_name" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_item" >
-			<function name="add_item">
-				<arguments>
-					<required name="product_code" />
-					<required name="quantity" />
 				</arguments>
 			</function>
 		</action>
