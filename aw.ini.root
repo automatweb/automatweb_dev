@@ -1,0 +1,57 @@
+#########################
+# global definitions
+
+# the folder that aw code is in
+basedir = /www/automatweb_dev
+
+# the folder where the ini parts are in
+ini_dir = ${basedir}/config/ini
+
+# global variables
+include ${ini_dir}/globals.ini
+
+# classfolders - the folders for the default add object menu
+include ${ini_dir}/classfolders.ini
+
+# classes - AW class definitions
+include ${ini_dir}/classes.ini
+
+# AW subprogram definitions
+include ${ini_dir}/programs.ini
+
+# server settings - paths and things
+include ${ini_dir}/server.ini
+
+# class specific stuff
+
+include ${ini_dir}/db.ini
+include ${ini_dir}/acl.ini
+include ${ini_dir}/groups.ini
+include ${ini_dir}/archive.ini
+include ${ini_dir}/auth.ini
+include ${ini_dir}/banner.ini
+include ${ini_dir}/bugtrack.ini
+include ${ini_dir}/cache.ini
+include ${ini_dir}/install.ini
+include ${ini_dir}/config.ini
+include ${ini_dir}/users.ini
+include ${ini_dir}/menuedit.ini
+include ${ini_dir}/document.ini
+include ${ini_dir}/mail.ini
+include ${ini_dir}/export.ini
+include ${ini_dir}/forum.ini
+include ${ini_dir}/icon.ini
+include ${ini_dir}/keyword.ini
+include ${ini_dir}/msgboard.ini
+include ${ini_dir}/sitemap.ini
+include ${ini_dir}/contacts.ini
+include ${ini_dir}/graph.ini
+include ${ini_dir}/scheduler.ini
+include ${ini_dir}/file.ini
+include ${ini_dir}/competitions.ini
+include ${ini_dir}/manager.ini
+include ${ini_dir}/languages.ini
+include ${ini_dir}/extlinks.ini
+include ${ini_dir}/datasource.ini
+include ${ini_dir}/apache_alias.ini
+include ${ini_dir}/syslog.ini
