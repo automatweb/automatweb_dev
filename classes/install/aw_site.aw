@@ -334,7 +334,7 @@ class aw_site extends class_base
 	{
 		extract($arr);
 		$ob = obj($id);
-		if ($ob->meta('upd_site') && $arr["request"]["group"] == "general")
+		if ($ob->meta('upd_site') && ($arr["request"]["group"] == "general" || $arr["request"]["group"] == ""))
 		{
 			$site = $this->get_site_def($id);
 			$this->_do_update_site($ob);
@@ -343,8 +343,12 @@ class aw_site extends class_base
 			$ob->save();
 		}
 		else
-		if ($ob->meta('gen_site') && $arr["request"]["group"] == "general")
+		if ($ob->meta('gen_site') && ($arr["request"]["group"] == "general"  || $arr["request"]["group"] == ""))
 		{
+			set_time_limit(0);
+			obj_set_opt("no_cache", 1);
+			// clear objects list
+			$GLOBALS["objects"] = array();
 			$site = $this->get_site_def($id);
 		
 			if (!$this->is_site_ok($site))
@@ -401,7 +405,7 @@ class aw_site extends class_base
 			aw_global_set("__is_install", 0);
 			flush();
 			touch("/tmp/ap_reboot");
-			echo "Valmis! sait on kasutatav 30 sekundi p&auml;rast!<br />\n";
+			echo "<br><br><b>Valmis! sait on kasutatav 30 sekundi p&auml;rast!</b><br />\n";
 			flush();
 			die();
 		}
@@ -596,6 +600,11 @@ class aw_site extends class_base
 		$GLOBALS["cfg"]["acl"]["no_check"] = 1;
 		// turn off storage cache, it concerns the other site and would be wrong
 		obj_set_opt("no_cache", 1);
+		// set the default datasource to the new db as well, so that instanced classes via messages will deal with
+		// the new db
+		// remember old default db
+		$default_db = aw_global_get("db::".$this->default_cid);
+		aw_global_set("db::".$this->default_cid, $dbi->dc[$dbi->default_cid]);
 
 		$clss = aw_ini_get("install.init_classes");
 		foreach($clss as $class)
@@ -696,6 +705,7 @@ class aw_site extends class_base
 
 		$GLOBALS["object_loader"]->switch_db_connection($old_ds);
 		$GLOBALS["cfg"]["acl"]["no_check"] = 0;
+		aw_global_set("db::".$this->default_cid, $default_db);
 	}
 
 	function create_site_name($site, &$ini_opts, &$log)
