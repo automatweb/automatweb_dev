@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.17 2004/10/27 12:04:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.18 2004/11/23 13:14:42 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -313,7 +313,7 @@ class object_translation extends aw_template
 		$this->vars(array(
 			"lang_baseurl" => aw_ini_get("baseurl")."/?set_lang_id=".$set_lang_id,
 			"lang_name" => $ld["name"],
-			"doc_url" => aw_ini_get("baseurl")."/".$od["oid"],
+			"doc_url" => aw_ini_get("baseurl")."/".$od["oid"]."?set_lang_id=".$set_lang_id,
 			"doc_name" => $od["name"],
 			"trans_msg" => nl2br($ld["meta"]["lang_trans_msg"] != "" ? $ld["meta"]["lang_trans_msg"] : $ld["meta"]["trans_msg"])
 		));
@@ -348,7 +348,7 @@ class object_translation extends aw_template
 			$this->vars(array(
 				"lang_baseurl" => aw_ini_get("baseurl")."/?set_lang_id=".$lid,
 				"lang_name" => $ld["name"],
-				"doc_url" => aw_ini_get("baseurl")."/".$od["oid"],
+				"doc_url" => aw_ini_get("baseurl")."/".$od["oid"]."?set_lang_id=".$lid,
 				"doc_name" => $od["name"],
 				"trans_msg" => nl2br($ld["meta"]["lang_trans_msg"] != "" ? $ld["meta"]["lang_trans_msg"] : $ld["meta"]["trans_msg"])
 			));
