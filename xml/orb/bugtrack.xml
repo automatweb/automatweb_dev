@@ -1,0 +1,100 @@
+<?xml version='1.0'?>
+<orb>
+
+	<class name="bugtrack">
+	
+		<action name="new">
+			<function name="orb_new">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_new">
+			<function name="orb_submit_new">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="edit">
+			<function name="orb_edit">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_edit">
+			<function name="orb_submit_edit">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="list">
+			<function name="orb_list">
+				<arguments>
+					<optional name="sortby"/>
+					<optional name="setfilt"/>
+					<optional name="setpage"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete">
+			<function name="orb_delete">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="popupfilter">
+			<function name="orb_popupfilter">
+				<arguments>
+					<optional name="setfilt"/>
+					<optional name="value"/>
+					<optional name="op"/>
+					<optional name="expr"/>
+					<optional name="field"/>
+					<optional name="sendupdate"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_popupfilter">
+			<function name="orb_submit_popupfilter">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delegate">
+			<function name="orb_popupdelegate">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_delegate">
+			<function name="orb_submit_delegate">
+				<arguments>
+					<required name="id"/>
+					<required name="developer"/>
+					<required name="status"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="showcomments">
+			<function name="orb_popupshowcomments">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		</class>
+	</orb>
