@@ -133,6 +133,8 @@ class object_tree extends class_base
 			"FOLDERS" => $this->_draw_folders($ob, $ol)
 		));
 
+		$cnt = 0;
+		$c = "";
 		foreach($ol as $oid => $od)
 		{
 			$target = "";
@@ -165,8 +167,29 @@ class object_tree extends class_base
 				"add_date" => $this->time2date($od["modified"], 2),
 				"icon" => image::make_img_tag(icons::get_icon_url($od["class_id"], $od["name"]))
 			));
-			$this->parse("FILE");
+
+			if ($this->is_template("FILE_ODD"))
+			{
+				if ($cnt % 2)
+				{
+					$c.=$this->parse("FILE_ODD");
+				}
+				else
+				{
+					$c.=$this->parse("FILE");
+				}
+			}
+			else
+			{
+				$c .= $this->parse("FILE");
+			}
+
+			$cnt++;
 		}
+		$this->vars(array(
+			"FILE" => $c,
+			"FILE_ODD" => ""
+		));
 
 		return $this->parse();
 	}
