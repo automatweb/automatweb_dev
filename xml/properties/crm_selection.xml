@@ -21,13 +21,26 @@
             <caption>Tagasiside vormid</caption>
       </property>
       <property>
-            <name>active_selection_objects</name>
-            <type>callback</type>
-            <callback>callback_obj_list</callback>
+            <name>selection_toolbar</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <table>objects</table>
             <group>contents</group>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Objektide toolbar</caption>
+      </property>
+      <property>
+            <name>selection_objects</name>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <group>contents</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objektid</caption>
       </property>
       <property>
             <name>contents</name>
