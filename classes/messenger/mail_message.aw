@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.22 2004/02/11 17:02:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.23 2004/02/12 10:58:17 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -34,10 +34,9 @@
 	@property message type=textarea cols=80 rows=40
 	@caption Sisu
 
-	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file
+	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file chooser=no 
 	@caption Manused
 
-	
 	property send type=submit value=Saada store=no 
 	caption Saada
 
@@ -58,7 +57,7 @@
 
 	classinfo relationmgr=yes
 
-	@groupinfo general submit=no
+	groupinfo general submit=no
 	@tableinfo messages index=id master_table=objects master_index=oid
 	
 	@property view_toolbar type=toolbar store=no no_caption=1 form=showmsg
