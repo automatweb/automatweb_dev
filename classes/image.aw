@@ -1,20 +1,27 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.70 2003/09/23 16:43:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.71 2003/09/24 16:34:20 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
 	@default group=general
+	@default table=objects
 
 	@property file type=fileupload table=images
 	@caption Pilt
 
-	@property file_show type=text store=no
+	@property cur_width type=text group=general,resize store=no 
+	@caption Laius
+
+	@property cur_height type=text group=general,resize store=no
+	@caption Kõrgus
+	
+	@property file_show type=text store=no editonly=1
 	@caption Eelvaade 
 
 	@property file2 type=fileupload group=img2 table=objects field=meta method=serialize 
 	@caption Suur pilt
 
-	@property file_show2 type=text group=img2 store=no
+	@property file_show2 type=text group=img2 store=no editonly=1
 	@caption Eelvaade
 
 	@property file2_del type=checkbox ch_value=1 group=img2 store=no
@@ -44,8 +51,6 @@
 		
 	@tableinfo images index=id master_table=objects master_index=oid	
 
-	@property cur_data type=text group=resize field=meta method=serialize
-	@caption Praegune pilt
 
 	@property new_w type=textbox group=resize field=meta method=serialize size=6
 	@caption Uus laius
@@ -53,9 +58,7 @@
 	@property new_h type=textbox group=resize field=meta method=serialize size=6
 	@caption Uus k&otilde;rgus
 
-	@property do_resize type=submit field=meta method=serialize group=resize value=Muuda
-
-	@classinfo trans_id=TR_IMAGE
+	@property do_resize type=submit field=meta method=serialize group=resize value=Muuda store=no
 
 */
 class image extends class_base
@@ -65,7 +68,7 @@ class image extends class_base
 		$this->init(array(
 			"tpldir" => "automatweb/images",
 			"clid" => CL_IMAGE,
-			"trid" => TR_IMAGE,
+			"trid" => 1,
 		));
 	}
 
@@ -108,14 +111,23 @@ class image extends class_base
 	{
 		if ($url)
 		{
-			$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
-			$retval = str_replace("automatweb/", "", $url);
-			//$retval .= "/aw_img.jpg";
-		}
-		else
-		{
-			$retval = "";
-		};
+			$imgbaseurl = $this->cfg["imgbaseurl"];
+			if (!empty($imgbaseurl))
+			{
+				$first = substr(basename($url),0,1);
+				$url = $this->cfg["baseurl"] . $imgbaseurl . "/" . $first . "/" . basename($url);
+			}
+			else
+			{
+				$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"image",false,true,"/");
+			}
+                        $retval = str_replace("automatweb/", "", $url);
+                }
+                else
+                {
+                        $retval = "";
+                };
+	
 		return $retval;
 	}
 
@@ -495,6 +507,21 @@ class image extends class_base
 			$url = aw_ini_get("baseurl").$url;
 		}
 		$url = str_replace("automatweb/", "", $url);
+		$imgbaseurl = aw_ini_get("image.imgbaseurl");
+		if (!empty($imgbaseurl))
+		{
+			if (preg_match("/file=(.*)$/",$url,$m))
+			{
+				$fname = $m[1];
+				$first = substr($fname,0,1);
+				$url = $this->cfg["baseurl"] . $imgbaseurl . "/" . $first . "/" . $fname;
+				if (substr($url,-11) == "/aw_img.jpg")
+				{
+					$url = str_replace("/aw_img.jpg","",$url);
+				};
+
+			};
+		}
 		return $url;
 	}
 
@@ -521,32 +548,18 @@ class image extends class_base
 		switch($prop["name"])
 		{
 			case "file_show":
-				if ($arr["obj"]["oid"])
+				$imd = $this->get_image_by_id($arr['obj_inst']->id());
+				if ($imd['file'] != '')
 				{
-					$imd = $this->get_image_by_id($arr['obj']['oid']);
-					if ($imd['file'] != '')
-					{
-						$prop['value'] = html::img(array('url' => $imd['url']));
-					};
-				}
-				else
-				{
-					$retval = PROP_IGNORE;
+					$prop['value'] = html::img(array('url' => $imd['url']));
 				};
 				break;
 			
 			case "file_show2":
-				if ($arr["obj"]["oid"])
+				$url = $this->get_url($arr["obj_inst"]->prop("file2"));
+				if ($url != '')
 				{
-					$url = $this->get_url($arr["obj"]["meta"]["file2"]);
-					if ($url != '')
-					{
-						$prop['value'] = html::img(array('url' => $url));
-					}
-					else
-					{
-						$retval = PROP_IGNORE;
-					};
+					$prop['value'] = html::img(array('url' => $url));
 				}
 				else
 				{
@@ -559,14 +572,16 @@ class image extends class_base
 				$prop["value"] = "";
 				break;
 
-			case "cur_data":
-				$imd = $this->get_image_by_id($arr['obj']['oid']);
-				if ($imd['file'] != '')
+			case "cur_width":
+			case "cur_height":
+				$fl = $arr["obj_inst"]->prop("file");
+				if (!empty($fl))
 				{
-					$sz = getimagesize($imd['file']);
-					$prop['value'] = "Laius: ".$sz[0]." <br>K&otilde;rgus: ".$sz[1]." <br>";
+					$sz = getimagesize($fl);
+					$prop["value"] = ($prop["name"] == "cur_width") ? $sz[0] : $sz[1];
 				};
 				break;
+
 		};
 
 		return $retval;
@@ -577,41 +592,52 @@ class image extends class_base
 		$prop = &$arr['prop'];
 		$retval = PROP_OK;
 		$form_data = &$arr["form_data"];
-		if ($prop['name'] == 'file')
+		switch ($prop["name"])
 		{
-			global $file,$file_type;
-			$_fi = get_instance("file");
-			if (is_uploaded_file($file))
-			{
-				$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $this->get_file(array("file" => $file))));
-				$prop["value"] = $fl;
-			}
-			else
-			{
-				$retval = PROP_IGNORE;
-			};
-		}
-		else
-		if ($prop['name'] == 'file2')
-		{
-			if ($arr["form_data"]["file2_del"] == 1)
-			{
-				$prop['value'] = '';
-			}
-			else
-			{
-				global $file2,$file2_type;
-				$_fi = get_instance("file");
-				if (is_uploaded_file($file2))
+			case "file":
+				global $file,$file_type;
+				if (is_uploaded_file($file))
 				{
-					$fl = $_fi->_put_fs(array("type" => $file2_type, "content" => $this->get_file(array("file" => $file2))));
+					$_fi = get_instance("file");
+					$fl = $_fi->_put_fs(array(
+						"type" => $file_type,
+						"content" => $this->get_file(array("file" => $file)),
+					));
 					$prop["value"] = $fl;
 				}
 				else
 				{
 					$retval = PROP_IGNORE;
 				};
-			}
+				break;
+
+			case "file2":
+				if ($arr["form_data"]["file2_del"] == 1)
+				{
+					$prop['value'] = '';
+				}
+				else
+				{
+					global $file2,$file2_type;
+					if (is_uploaded_file($file2))
+					{
+						$_fi = get_instance("file");
+						$fl = $_fi->_put_fs(array(
+							"type" => $file2_type,
+							"content" => $this->get_file(array("file" => $file2)),
+						));
+						$prop["value"] = $fl;
+					}
+					else
+					{
+						$retval = PROP_IGNORE;
+					};
+				}
+				break;
+
+			case "do_resize":
+				$this->do_resize = true;
+				break;
 		};
 		return $retval;
 	}
@@ -668,9 +694,9 @@ class image extends class_base
 
 	function callback_post_save($arr)
 	{
-		$im = $this->get_image_by_id($arr["id"]);
-		if ($im['meta']['do_resize'] != '' && false)
+		if ($this->do_resize)
 		{
+			$im = $this->get_image_by_id($arr["id"]);
 			$img = $this->_imagecreatefromstring($this->get_file(array("file" => $im['file'])), $im['file']);
 		
 			$sz = getimagesize($im['file']);
@@ -729,12 +755,6 @@ class image extends class_base
 				"content" => $fc
 			));
 		}
-
-		$this->set_object_metadata(array(
-			"oid" => $arr["id"],
-			"key" => "do_resize",
-			"value" => ""
-		));
 	}
 
 	function _imagecreatefromstring($str, $orig_filename)
