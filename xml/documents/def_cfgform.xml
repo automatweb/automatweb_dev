@@ -18,7 +18,7 @@
 	<property>
 		<name>lead</name>
 		<group>general</group>
-		<caption>Lead</caption>
+		<caption>Sissejuhatus</caption>
 	</property>
 	<property>
 		<name>content</name>
@@ -26,9 +26,10 @@
 		<caption>Sisu</caption>
 	</property>
 	<property>
-		<name>clear_styles</name>
+		<name>moreinfo</name>
 		<group>general</group>
-		<caption>Tühista stiilid</caption>
+		<caption>Toimetamata</caption>
+		<rows>20</rows>
 	</property>
 	<property>
 		<name>sbt</name> 
@@ -36,18 +37,25 @@
 		<group>general</group>
 	</property>
 	<property>
-		<name>aliasmgr</name> 
-		<group>general</group>
-	</property>
-	<property>
-		<name>is_forum</name>
-		<group>settings</group>
-		<caption>Foorum</caption>
-	</property>
-	<property>
 		<name>showlead</name>
 		<group>settings</group>
 		<caption>Näita leadi</caption>
+	</property>
+	<property>
+		<name>title_clickable</name>
+		<group>settings</group>
+		<caption>Pealkiri klikitav</caption>
+	</property>
+	<property>
+		<name>esilehel</name>
+		<group>settings</group>
+		<caption>Esilehel</caption>
+	</property>
+	<property>
+		<name>aliasmgr</name>
+		<group>relationmgr</group>
+		<caption></caption>
+		<group>general</group>
 	</property>
 
 	<groupinfo>
@@ -57,6 +65,9 @@
 		<settings>
 			<caption>Seadistused</caption>
 		</settings>
+		<relationmgr>
+			<caption>Ses. haldur</caption>
+		</relationmgr>
 	</groupinfo>
 
 
