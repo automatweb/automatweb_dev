@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.18 2003/11/08 07:50:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.19 2003/11/08 08:01:14 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -472,7 +472,7 @@ class messenger_v2 extends class_base
 		$toolbar->add_button(array(
 			"name" => "newmessage",
 			"tooltip" => "Uus kiri",
-			"url" => "javascript:aw_popup_scroll('" . $this->mk_my_orb("new",array("parent" => $drafts,"msgrid" => $this->msgobj->id()),"mail_message") . "','msgr',800,600)",
+			"url" => "javascript:aw_popup_scroll('" . $this->mk_my_orb("new",array("parent" => $drafts,"msgrid" => $this->msgobj->id()),"mail_message",false,true) . "','msgr',800,600)",
 			"img" => "new.gif",
 		));
 
@@ -536,107 +536,6 @@ class messenger_v2 extends class_base
 		));
 
 		return $this->parse();
-	}
-
-	function callback_write_mail($arr)
-	{
-		$msgobj = new object($arr["obj_inst"]->id());
-
-		$this->_connect_server(array(
-			"msgr_id" => $arr["obj_inst"]->id(),
-		));
-
-		$outbox = $msgobj->prop("msg_outbox");
-
-		$drafts = $msgobj->prop("msg_drafts");
-
-		$mailbox = $arr["request"]["mailbox"];
-		$msgid = $arr["request"]["msgid"];
-
-		$msgdata = array();
-		if (!empty($msgid))
-		{
-			$msgdata = $this->drv_inst->fetch_message(array(
-				"msgid" => $msgid,
-			));
-		};
-
-		$t = get_instance("messenger/mail_message");
-
-		$msgobjid = $arr["request"]["msgobj"];
-		if (!empty($msgobjid))
-		{
-			$mess_obj = new object($msgobjid);
-			$_msg_id = $msgobjid;
-		}
-		else
-		if (!empty($drafts))
-		{
-			// I have to create an empty mail_message object
-			$t->id_only = true;
-			$_msg_id = $t->submit(array(
-				"mfrom" => "",
-				"mto" => "",
-				"message" => "",
-				"parent" => $drafts,
-			));
-		}
-
-                $t->init_class_base();
-                $emb_group = "general";
-
-		if (!empty($_msg_id))
-		{
-			$t->id = $_msg_id;
-		};
-
-                $all_props = $t->get_active_properties(array(
-                        "group" => $emb_group,
-                ));
-
-                $t->request = $args["request"];
-
-                $all_props[] = array("type" => "hidden","name" => "class","value" => "mail_message");
-                $all_props[] = array("type" => "hidden","name" => "action","value" => "submit");
-                $all_props[] = array("type" => "hidden","name" => "group","value" => $emb_group);
-                $all_props[] = array("type" => "hidden","name" => "parent","value" => $outbox);
-		$all_props[] = array("type" => "hidden","name" => "id","value" => $_msg_id);
-
-		$all_props["mfrom"]["value"] = $msgobj->prop("fromname");
-
-		$related_lists = $msgobj->connections_from(array(
-			"type" => RELTYPE_ADDRESS,
-		));
-
-		if (sizeof($related_lists) > 0)
-		{
-			$all_props["mto"]["type"] = "relpicker";
-			$all_props["mto"]["reltype"] = "RELTYPE_ADDRESS";
-			$all_props["mto"]["size"] = 1;
-		};
-
-		if (sizeof($msgdata) > 0)
-		{
-			$all_props["mto"]["value"] = !empty($msgdata["reply_to"]) ? $msgdata["reply_to"] : $msgdata["from"];
-			$all_props["name"]["value"] = "Re: " . $msgdata["subject"];
-			$all_props["message"]["value"] = "\n\n\n" . str_replace("\n","\n> ",$msgdata["content"]);
-		};
-		
-		if (is_object($mess_obj))
-		{
-			$all_props["mto"]["value"] = $mess_obj->prop("mto");
-			$all_props["name"]["value"] = $mess_obj->name();
-			$all_props["message"]["value"] = $mess_obj->prop("message");
-		};
-
-                return $t->parse_properties(array(
-                        "properties" => $all_props,
-                        "name_prefix" => "emb",
-			//"id" => $msgobj,
-			// aga raiks .. see viitab ju messengeri objektile nüüd, mitte
-			// kirja omale, mida mul ju tegelikult vaja oleks
-			"target_obj" => $msgobj->id(),
-                ));
 	}
 
 	////
