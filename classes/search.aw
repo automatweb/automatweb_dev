@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.78 2004/10/05 09:09:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.79 2004/10/15 12:08:24 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -1283,6 +1283,24 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$tar = array(0 => LC_OBJECTS_ALL) + get_class_picker(array(
 			"only_addable" => 1
 		));
+
+		$atc_inst = get_instance("admin/add_tree_conf");
+		$atc_id = $atc_inst->get_current_conf();
+		if (is_oid($atc_id) && $this->can("view", $atc_id))
+		{
+			$atc = obj($atc_id);
+
+			$tmp = array();
+			foreach($tar as $clid => $cln)
+			{
+				if ($atc_inst->can_access_class($atc, $clid))
+				{
+					$tmp[$clid] = $cln;
+				}
+			}
+			$tar = $tmp;
+		}
+
 		return $tar;
 	}
 

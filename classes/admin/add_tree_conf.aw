@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.15 2004/09/24 11:02:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.16 2004/10/15 12:08:22 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -260,13 +260,31 @@ class add_tree_conf extends class_base
 	{
 		$o = obj($id);
 		$r = $o->meta("alias_add");
+		$v = $o->meta("visible");
 		$ret = array();
+
+		$clss = aw_ini_get("classes");
 
 		foreach($r as $clid => $one)
 		{
 			if ($one == 1)
 			{
-				$ret[$clid] = $clid;
+				// also, if the class is in some groups and for all those groups access has been turned off
+				// do not show the alias
+				$grp = explode(",",$clss[$clid]["parents"]);
+				$show = false;
+				foreach($grp as $g)
+				{
+					if ($v["fld"][$g])
+					{
+						$show = true;
+					}
+				}
+
+				if ($show)
+				{
+					$ret[$clid] = $clid;
+				}
 			}
 		}
 
@@ -288,21 +306,51 @@ class add_tree_conf extends class_base
 		$class_id = false;
 
 		$clss = aw_ini_get("classes");
-		foreach($clss as $clid => $cld)
+		if (is_class_id($class))
 		{
-			if (basename($cld["file"]) == $class)
+			$class_id = $class;
+		}
+		else
+		{
+			foreach($clss as $clid => $cld)
 			{
-				$class_id = $clid;
-				break;
+				if (basename($cld["file"]) == $class)
+				{
+					$class_id = $clid;
+					break;
+				}
 			}
 		}
+
 
 		if (!$class_id)
 		{
 			return true;
 		}
 
-		return $us[$class_id] == 1;
+		$ret = $us[$class_id] == 1;
+		if ($ret)
+		{
+			$v = $atc->meta("visible");
+			// also, if the class is in some groups and for all those groups access has been turned off
+			// do not show the alias
+			$grp = explode(",",$clss[$class_id]["parents"]);
+			$show = false;
+			foreach($grp as $g)
+			{
+				if ($v["fld"][$g])
+				{
+					$show = true;
+				}
+			}
+
+			if (!$show)
+			{
+				$ret = false;
+			}
+		}
+
+		return $ret;
 	}
 }
 ?>
