@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.13 2003/11/08 06:40:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.14 2003/11/08 08:01:50 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -163,6 +163,11 @@ class mail_message extends class_base
 			$envelope = array();
 
 			$msgr = get_instance("messenger/messenger_v2");
+			$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
+			$msgr->_connect_server(array(
+				"msgr_id" => $arr["request"]["msgrid"],
+			));
+
 			$identities = $msgr->_get_identity_list(array(
 				"id" => $arr["request"]["msgrid"],	
 			));
@@ -173,7 +178,16 @@ class mail_message extends class_base
 
                         $msg = imap_mail_compose($envelope,$body);
 
+			// but I do need to save the message in the Sent items folder!
+			$msgr->drv_inst->store_message(array(
+                                "from" => $identities[$arr["request"]["mfrom"]],
+                                "to" => $arr["request"]["mto"],
+                                "subject" => $arr["request"]["name"],
+                                "message" => $msg,
+                        ));
+
                         mail($arr["request"]["mto"],$arr["request"]["name"],"",$msg);
+
 
 			print "saadetud<p>";
 			print "<a href='javascript:window.close();'>sulge aken</a>";
