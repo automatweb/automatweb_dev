@@ -23,9 +23,8 @@
             <name>run_import</name>
             <type>text</type>
             <editonly>1</editonly>
-            <table>objects</table>
+            <store>no</store>
             <group>general</group>
-            <field>run_import</field>
             <caption>Käivita import</caption>
       </property>
 </properties>

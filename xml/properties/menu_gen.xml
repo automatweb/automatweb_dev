@@ -95,12 +95,5 @@
             <method>serialize</method>
             <caption>objektid</caption>
       </property>
-      <tableinfo>
-            <kliendibaas_firma>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_firma>
-      </tableinfo>
 </properties>
 
