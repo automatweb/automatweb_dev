@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.106 2004/10/14 13:32:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.107 2004/10/22 15:01:34 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -260,10 +260,11 @@
 	@caption alammen&uuml;&uuml;d objektist
 
 	@reltype CONTENT_FROM value=17 clid=CL_PROJECT
-	@caption Sisu objektist
+    @caption Sisu objektist
 
 	@reltype SEEALSO_DOC value=18 clid=CL_DOCUMENT
-        @caption vaata lisaks dokument
+    @caption vaata lisaks dokument
+
 */
 
 define("IP_ALLOWED", 1);
@@ -1286,6 +1287,7 @@ class menu extends class_base
 		return $ret;
 	}
 
+
 	////
 	// !this must set the content for subtemplates in main.tpl
 	// params
@@ -1304,6 +1306,7 @@ class menu extends class_base
 				"tpl" => "seealso_document.tpl"
 			));
 		}
+
 		$arr["inst"]->vars(array(
 			"SEEALSO_DOCUMENT" => $str
 		));
