@@ -166,6 +166,7 @@ class aip_change extends aw_template
 			"classid" => "formselect"
 		));
 
+		classload("file");
 		$this->vars(array(
 			"cur_pdf_1" => file::check_url($ch["meta"]["pfiles"]["1"]["url"]),
 			"cur_pdf_2" => file::check_url($ch["meta"]["pfiles"]["2"]["url"]),
