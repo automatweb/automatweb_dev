@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.50 2004/04/27 11:16:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.51 2004/04/28 21:23:59 kristo Exp $
 
 /*
 
@@ -1606,19 +1606,22 @@ class site_show extends class_base
 		else
 		{
 			$t = get_instance("users");
-			$udata = $this->get_user();
-			$jfar = $t->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
-			$jfs = "";
-			reset($jfar);
-			while (list($fid,$name) = each($jfar))
+			if ($this->is_template("JOIN_FORM"))
 			{
-				$this->vars(array(
-					"form_id" => $fid, 
-					"form_name" => $name
-				));
-				$jfs.=$this->parse("JOIN_FORM");
+				$udata = $this->get_user();
+				$jfar = $t->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
+				$jfs = "";
+				reset($jfar);
+				while (list($fid,$name) = each($jfar))
+				{
+					$this->vars(array(
+						"form_id" => $fid, 
+						"form_name" => $name
+					));
+					$jfs.=$this->parse("JOIN_FORM");
+				}
+				$this->vars(array("JOIN_FORM" => $jfs));
 			}
-			$this->vars(array("JOIN_FORM" => $jfs));
 
 			if ($this->can("edit",$section) && $this->active_doc)
 			{
@@ -2067,7 +2070,7 @@ class site_show extends class_base
 	{
 		$this->section_obj = obj(aw_global_get("section"));
 
-		if ($this->section_obj->class_id())
+		if ($this->section_obj->class_id() && isset($this->cfg["classes"][$this->section_obj->class_id()]))
 		{
 			$obj_inst = $this->section_obj->instance();
 			if (method_exists($obj_inst, "request_execute"))
