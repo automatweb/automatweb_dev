@@ -1,6 +1,6 @@
 <?php
-// $Header
-// shared memory functions here
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shm.aw,v 2.3 2002/09/26 16:04:21 kristo Exp $
+// shm.aw - shared memory functions here
 // all variable keys should be SHM_BASE + number
 
 define("SHM_BASE", 666);
