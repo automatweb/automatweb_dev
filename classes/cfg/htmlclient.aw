@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.9 2002/11/26 12:36:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.10 2002/12/17 16:10:35 axel Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -237,6 +237,10 @@ class htmlclient extends aw_template
 
 			case "submit":
 				$retval = html::submit($arr);
+				break;
+
+			case "button":
+				$retval = html::button($arr);
 				break;
 
 			case "time_select":
