@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.193 2002/12/24 11:56:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.194 2002/12/24 11:59:19 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -5000,7 +5000,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
       $f = fopen($htmlf,"r");
       $fc = fread($f,100000);
 			fclose($f);
-			$fc = "";
 
 			$fc = str_replace("[ss]","[ss".$gid."]",$fc);
 
