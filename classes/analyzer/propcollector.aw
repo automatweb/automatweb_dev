@@ -155,6 +155,10 @@ class propcollector extends aw_template
 		{
 			$fields["store"] = "no";
 		};
+		if ("container" == $fields["type"])
+		{
+			$fields["store"] = "no";
+		};
 		// add defaults as well
 		foreach($this->defaults as $key => $val)
 		{
