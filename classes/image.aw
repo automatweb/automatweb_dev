@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.91 2004/05/12 13:51:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.92 2004/05/18 14:20:21 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -626,6 +626,10 @@ class image extends class_base
 				$fl = $arr["obj_inst"]->prop("file");
 				if (!empty($fl))
 				{
+					if ($fl{0} != "/")
+					{
+						$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+					}
 					$sz = @getimagesize($fl);
 					$prop["value"] = $sz[0] . " X " . $sz[1];
 				}
@@ -771,13 +775,16 @@ class image extends class_base
 		if ($this->do_resize)
 		{
 			$img = get_instance("core/converters/image_convert");
+			if ($im['file']{0} != "/")
+			{
+				$im['file'] = $this->cfg["site_basedir"]."/files/".$im['file']{0}."/".$im['file'];
+			}
 			$img->load_from_file($im['file']);
 	
 			list($i_width, $i_height) = $img->size();
 
 			$width = $this->new_w;
 			$height = $this->new_h;
-
 			if ($width && !$height)
 			{
 				if ($width{strlen($width)-1} == "%")
@@ -788,6 +795,7 @@ class image extends class_base
 				{
 					$ratio = $width / $i_width;
 					$height = (int)($i_height * $ratio);
+					$this->new_h = $height;
 				}
 			}
 
@@ -801,6 +809,7 @@ class image extends class_base
 				{
 					$ratio = $height / $i_height;
 					$width = (int)($i_width * $ratio);
+					$this->new_w = $width;
 				}
 			}
 
