@@ -16,7 +16,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>grp_resource_schedule</group>
-            <type>calendar</type>
+            <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Tööd</caption>
@@ -32,6 +32,40 @@
             <editonly>1</editonly>
             <caption>Tööleht</caption>
       </property>
+      <property>
+            <name>unavailable_recur</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_unavailable</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_RECUR</reltype>
+            <use_form>emb</use_form>
+            <mode>manager</mode>
+            <store>no</store>
+            <caption>Kinnised ajad</caption>
+      </property>
+      <property>
+            <name>unavailable_weekends</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_unavailable</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ei t&amp;ouml;&amp;ouml;ta n&amp;auml;dalavahetustel</caption>
+      </property>
+      <property>
+            <name>unavailable_dates</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_unavailable</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <caption>Kinnised p&amp;auml;evad (formaat: p&amp;auml;ev.kuu p&amp;auml;ev.kuu)</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_RESOURCE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -46,6 +80,9 @@
             <grp_resource_settings>
                   <caption>Seaded</caption>
             </grp_resource_settings>
+            <grp_resource_unavailable>
+                  <caption>Kinnised ajad</caption>
+            </grp_resource_unavailable>
       </groupinfo>
       <reltypes>
             <MRP_OPERATOR>
@@ -63,6 +100,11 @@
                   <clid>CL_MRP_WORKSPACE</clid>
                   <caption>Ressursi omanik</caption>
             </MRP_OWNER>
+            <RECUR>
+                  <value>4</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>kordus</caption>
+            </RECUR>
       </reltypes>
 </properties>
 

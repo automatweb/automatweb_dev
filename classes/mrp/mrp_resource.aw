@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.2 2004/12/08 12:23:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.3 2004/12/15 09:58:22 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -8,7 +8,7 @@
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="Tööleht"
 @groupinfo grp_resource_settings caption="Seaded"
-
+@groupinfo grp_resource_unavailable caption="Kinnised ajad"
 
 @default table=objects
 @default field=meta
@@ -22,7 +22,7 @@
 	// @caption Tüüp
 
 @default group=grp_resource_schedule
-	@property resource_calendar type=calendar store=no no_caption=1
+	@property resource_calendar type=text store=no no_caption=1
 	@caption Tööd
 
 @default group=grp_resource_joblist
@@ -32,7 +32,16 @@
 @default group=grp_resource_settings
 	//@property operator type= ???
 
+@default group=grp_resource_unavailable
 
+	@property unavailable_recur type=releditor reltype=RELTYPE_RECUR use_form=emb mode=manager
+	@caption Kinnised ajad
+
+	@property unavailable_weekends type=checkbox ch_value=1 
+	@caption Ei t&ouml;&ouml;ta n&auml;dalavahetustel
+
+	@property unavailable_dates type=textarea rows=5 cols=50
+	@caption Kinnised p&auml;evad (formaat: p&auml;ev.kuu p&auml;ev.kuu)
 
 // --------------- RELATION TYPES ---------------------
 
@@ -45,6 +54,8 @@
 @reltype MRP_OWNER value=3 clid=CL_MRP_WORKSPACE
 @caption Ressursi omanik
 
+@reltype RECUR value=4 clid=CL_RECURRENCE
+@caption kordus
 */
 
 ### resource types
@@ -60,6 +71,9 @@ define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
+
+### misc
+define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 
 class mrp_resource extends class_base
 {
@@ -116,7 +130,7 @@ class mrp_resource extends class_base
 				break;
 
 			case "resource_calendar":
-				$this->create_resource_calendar ($arr);
+				$prop["value"] = $this->create_resource_calendar ($arr);
 				break;
 
 			case "job_list":
@@ -198,13 +212,13 @@ class mrp_resource extends class_base
 		$list = new object_list(array(
 			"class_id" => CL_MRP_JOB,
 			"resource" => $this_object->id (),
-			"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
+			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, time (), mktime (23, 59, 59)),
 		));
 		$jobs = $list->arr ();
 
 		foreach ($jobs as $job_id => $job)
 		{
-			$starttime = date ("j/m/Y H.i", $job->prop ("starttime"));
+			$starttime = date (MRP_DATE_FORMAT, $job->prop ("starttime"));
 			// $project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
 			$project = is_object ($project) ? $project->name () : "...";
 
@@ -229,19 +243,21 @@ class mrp_resource extends class_base
 	function create_resource_calendar ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
-		$calendar =& $arr["prop"]["vcl_inst"];
-		$calendar->configure(array(
-			"overview_func" => array(&$this,"get_overview"),
+
+		classload("vcl/calendar");
+		$calendar = new vcalendar (array ("tpldir" => "mrp_calendar"));
+		$calendar->init_calendar (array ());
+		$calendar->configure (array (
+			"overview_func" => array (&$this, "get_overview"),
 		));
-		$range = $calendar->get_range(array(
+		$range = $calendar->get_range (array (
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"],
 		));
 		$start = $range["start"];
 		$end = $range["end"];
-		$this->overview = array();
 
-		$list = new object_list (array(
+		$list = new object_list (array (
 			"class_id" => CL_MRP_JOB,
 			"resource" => $this_object->id (),
 			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $start, $end),
@@ -251,7 +267,7 @@ class mrp_resource extends class_base
 		{
 			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
 			{
-				// $project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
+				//$project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
 				$project = is_object ($project) ? $project->name () : "...";
 				$calendar->add_item (array (
 					"timestamp" => $job->prop ("starttime"),
@@ -262,11 +278,77 @@ class mrp_resource extends class_base
 				));
 			}
 		}
+
+		return $calendar->get_html ();
 	}
 
 	function get_overview ($arr = array())
 	{
-		return $this->overview;
+		return "asdfasdfs";
+	}
+
+	function get_unavailable_times($resource)
+	{
+		$ret = array();
+		if ($resource->prop("unavailable_weekends"))
+		{
+			$this->_get_weekends($ret);
+		}
+		$this->_get_dates($ret, $resource->prop("unavailable_dates"));
+
+		foreach($resource->connections_from(array("type" => "RELTYPE_RECUR")) as $c)
+		{
+			$this->_get_recur($ret, $c->to());
+		}
+
+		ksort($ret);
+
+		return $ret;
+	}
+
+	function _get_weekends(&$ret)
+	{
+		// let's say from next saturday for 104 weeks
+		$wd = date("w");
+		$sat = mktime(0,0,0, date("m"), date("d") + (($wd == 0) ? -1 : 6 - $wd), date("Y"));
+
+		for ($i = 0; $i < 104; $i++)
+		{
+			$tm = $sat + ($i * 7 * 24 * 3600);
+			$ret[$tm] = array($tm, 24 * 3600);
+		
+			$tm = $sat + ($i * 7 * 24 * 3600) + 24 * 3600;
+			$ret[$tm] = array($tm, 24 * 3600);
+		}
+	}
+
+	function _get_dates(&$ret, $dates)
+	{
+		$parts = preg_split('/\s+/', $dates);
+		foreach($parts as $part)
+		{
+			list($day, $mon) = explode(".", $part);
+
+			$tm = mktime(0,0,0, $mon, $day, date("Y"));
+			$ret[$tm] = array($tm, 24 * 3600);
+
+			$tm = mktime(0,0,0, $mon, $day, date("Y")+1);
+			$ret[$tm] = array($tm, 24 * 3600);
+		}
+	}
+
+	function _get_recur(&$ret, $recur)
+	{
+		$rec = get_instance(CL_RECURRENCE);
+		$tmp =  $rec->get_event_range(array(
+			"id" => $recur->id(),
+			"start" => time(), 
+			"end" => mktime(0,0,0, date("m"), date("d"), date("Y")+2)
+		));
+		foreach($tmp as $time => $row)
+		{
+			$ret[$time] = array($time, $row["recur_end"] - $time);
+		}
 	}
 }
 ?>
