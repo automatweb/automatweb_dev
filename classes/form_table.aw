@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.16 2001/09/12 16:44:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.17 2001/09/18 00:22:32 kristo Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -63,21 +63,30 @@ class form_table extends form_base
 			$this->table["defs"] = array();
 			if (is_array($columns))
 			{
+				$r_c = 0;
 				foreach($columns as $col => $ar)
 				{
-					if (is_array($ar))
+					if ($todelete[$col] != 1)
 					{
-						foreach($ar as $elid)
+						if (is_array($ar))
 						{
-							$this->table["defs"][$col]["el"][$elid] = $elid;
-							if (is_number($elid) && isset($els[$elid]))
+							foreach($ar as $elid)
 							{
-								$this->table["defs"][$col]["el_forms"][$elid] = $els[$elid];
+								$this->table["defs"][$r_c]["el"][$elid] = $elid;
+								if (is_number($elid) && isset($els[$elid]))
+								{
+									$this->table["defs"][$r_c]["el_forms"][$elid] = $els[$elid];
+								}
 							}
 						}
+						$this->table["defs"][$r_c]["lang_title"] = $names[$r_c];
+						$this->table["defs"][$r_c]["sortable"] = $sortable[$r_c];
+						$r_c++;
 					}
-					$this->table["defs"][$col]["lang_title"] = $names[$col];
-					$this->table["defs"][$col]["sortable"] = $sortable[$col];
+					else
+					{
+						$num_cols--;
+					}
 				}
 			}
 
@@ -331,15 +340,18 @@ class form_table extends form_base
 		$awt->count("form_table::row_data");
 
 		// hmph. here we must preprocess the data if any columns have more than 1 elements assigned to them, cause then the column names will be el_col_[col_number] not element names
-		for ($col = 0; $col < $this->arr["cols"]; $col++)
+		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
 			if (is_array($cc["el"]) && count($cc["el"]) > 1)
 			{
 				$str = array();
-				foreach($cc["el"] as $elid)
+				foreach($cc["el"] as $elid => $elid)
 				{
-					$str[]=$dat["ev_".$elid];
+					if ($dat["ev_".$elid] != "")
+					{
+						$str[]=$dat["ev_".$elid];
+					}
 				}
 				$dat["ev_col_".$col] = join(",",$str);
 			}
@@ -418,10 +430,10 @@ class form_table extends form_base
 		global $section;
 		$this->start_table($table_id,array("class" => "form_table", "action" => "show_user_entries", "form_id" => $form_id, "chain_id" => $chain_id, "table_id" => $table_id,"section" => $section,"op_id" => $op_id));
 
-		// leiame k6ik sisestused mis on tehtud $uid poolt $chain_id jaox.
 		$this->load_chain($chain_id);
 
 		$eids = array();
+		// leiame k6ik sisestused mis on tehtud $uid poolt $chain_id jaox.
 		$this->db_query("SELECT id FROM form_chain_entries WHERE uid = '".$GLOBALS["uid"]."'");
 		while ($row = $this->db_next())
 		{
