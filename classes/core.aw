@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.288 2004/07/16 11:11:03 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.289 2004/07/19 06:25:51 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -114,18 +114,15 @@ class core extends acl_base
 				$fields[] = "lang_id";
 				$values[] = aw_global_get("lang_id");
 			};
-			
 			/*
 				It seems that mssql doesn't support insert delayd syntax.
 				We're on the safe side as long as AWs running on
 				MSSQL have used the aw.ini directive logging_disabled.
 				Im sure a more permanent fix will surface one day.
 			*/
-			
-			//$q = sprintf("INSERT INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
-			//if (false && !$this->db_query($q,false))
-			$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
-			if (!$this->db_query($q,false))			
+
+			$q = sprintf("INSERT INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
+			if (!$this->db_query($q,false))
 			{
 				die("cannot write to syslog: " . $this->db_last_error["error_string"]);
 			};
