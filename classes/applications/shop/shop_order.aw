@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.7 2004/06/19 19:17:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.8 2004/07/29 11:30:26 rtoomas Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -65,6 +65,8 @@
 
 class shop_order extends class_base
 {
+	var $order_item_data = array();
+
 	function shop_order()
 	{
 		$this->init(array(
@@ -303,13 +305,18 @@ class shop_order extends class_base
 	function start_order($warehouse, $oc = NULL)
 	{
 		$this->order_items = array();
+		$this->order_item_data = array();
 		$this->order_warehouse = $warehouse;
 		$this->order_center = $oc;
 	}
 
-	function add_item($item, $quantity)
+	function add_item($item, $quantity, $item_data=false)
 	{
 		$this->order_items[$item] = $quantity;
+		if($item_data)
+		{
+			$this->order_item_data[$item] = $item_data;
+		}
 	}
 
 	/** returns order id 
@@ -325,8 +332,15 @@ class shop_order extends class_base
 		$oi->set_name("Tellimus laost ".$this->order_warehouse->name());
 		$oi->set_class_id(CL_SHOP_ORDER);
 		$oi->set_prop("warehouse", $this->order_warehouse->id());
-
-		$oi->set_meta("user_data", $params["user_data"]);
+		
+		if ($params["user_data"])
+		{
+			$oi->set_meta("user_data", $params["user_data"]);
+		}
+		else
+		{
+			$oi->set_meta("user_data", $_SESSION["cart"]["user_data"]);
+		}
 
 		if ($this->order_center)
 		{
@@ -435,7 +449,7 @@ class shop_order extends class_base
 			$mp[$iid] = $quant;
 			$sum += ($quant * $i_inst->get_price($i_o));
 		}
-
+		$oi->set_meta('ord_item_data', $this->order_item_data);
 		$oi->set_meta("ord_content", $mp);
 		$oi->set_prop("sum", $sum);
 		$oi->save();
@@ -467,6 +481,30 @@ class shop_order extends class_base
 			}
 		}
 
+		// if the order center has an e-mail element selected, send the order to that one as well
+		// but using a different template
+		$ud = $oi->meta("user_data");
+		if ($this->order_center->prop("mail_to_el") != "" && ($_send_to = $ud[$this->order_center->prop("mail_to_el")]) != "")
+		{
+			$html = $this->show(array(
+				"id" => $oi->id(),
+				"template" => "show_cust.tpl"
+			));
+
+			$awm = get_instance("aw_mail");
+			$awm->create_message(array(
+				"froma" => "automatweb@automatweb.com",
+				"fromn" => str_replace("http://", "", aw_ini_get("baseurl")),
+				"subject" => "Tellimus laost ".$this->order_warehouse->name(),
+				"to" => $_send_to,
+				"body" => strip_tags(str_replace("<br>", "\n",$html)),
+			));
+			$awm->htmlbodyattach(array(
+				"data" => $html
+			));
+			$awm->gen_mail();
+		}
+
 		return $oi->id();
 	}
 
@@ -486,20 +524,23 @@ class shop_order extends class_base
 		
 		$o = obj($arr["id"]);
 		$tp = $o->meta("ord_content");
+		$ord_item_data = $o->meta('ord_item_data');
 
+		//SIIN TEHAKSE VIIMANE TABEL
 		$p = "";
 		$total = 0;
 		foreach($o->connections_from(array("type" => 1 /* RELTYPE_PRODUCT */)) as $c)
 		{
 			$prod = $c->to();
 			$inst = $prod->instance();
-
-			$pr = $inst->get_price($prod);
+			$pr = $inst->get_calc_price($prod);
 			$this->vars(array(
 				"name" => $prod->name(),
 				"quant" => $tp[$prod->id()],
 				"price" => number_format($pr,2),
-				"tot_price" => number_format(((int)($tp[$prod->id()]) * $pr), 2)
+				"obj_tot_price" => number_format(((int)($tp[$prod->id()]) * $pr), 2),
+				'order_data_color' => $ord_item_data[$prod->id()]['color'],
+				'order_data_size' => $ord_item_data[$prod->id()]['size'],
 			));
 
 			$total += ($pr * $tp[$prod->id()]);
@@ -568,6 +609,10 @@ class shop_order extends class_base
 		$awa = new aw_array($o->meta("user_data"));
 		foreach($awa->get() as $ud_k => $ud_v)
 		{
+			if (is_array($ud_v) && $ud_v["year"] != "")
+			{
+				$ud_v = $ud_v["day"].".".$ud_v["month"].".".$ud_v["year"];
+			}
 			$this->vars(array(
 				"user_data_".$ud_k => $ud_v
 			));
