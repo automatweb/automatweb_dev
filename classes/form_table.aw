@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.47 2002/08/08 13:58:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.48 2002/08/12 14:38:44 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -397,6 +397,16 @@ class form_table extends form_base
 				else
 				{
 					$r_g["ev_col_".$cl] = "ev_".$dat["el"];
+					if ($dat["sort_el"])
+					{
+						$rgroupsortdat["ev_col_".$cl]["sort_el"] = "ev_".$dat["sort_el"];
+					}
+					else
+					{
+						$rgroupsortdat["ev_col_".$cl]["sort_el"] = "ev_".$dat["el"];
+					}
+
+					$rgroupsortdat["ev_col_".$cl]["sort_order"] = $dat["sort_order"];
 					if (is_array($dat["data_els"]))
 					{
 						foreach($dat["data_els"] as $datel)
@@ -416,6 +426,7 @@ class form_table extends form_base
 		}
 		$this->t->sort_by(array(
 			"rgroupby" => $r_g,
+			"rgroupsortdat" => $rgroupsortdat,
 			"vgroupby" => $v_g,
 			"vgroupdat" => $vgroupdat
 		));

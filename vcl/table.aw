@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.28 2002/08/02 13:19:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.29 2002/08/12 14:38:44 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -198,6 +198,7 @@ class aw_table
 
 		// grouping - whenever a value of one of these elements changes an extra row gets inserted into the table
 		$this->rgroupby = $params["rgroupby"];
+		$this->rgroupsortdat = $params["rgroupsortdat"];
 		$this->vgroupby = $params["vgroupby"];
 		$this->vgroupdat = $params["vgroupdat"];
 
@@ -242,7 +243,7 @@ class aw_table
 	////
 	// !the sorting function. iow - the tricky bit
 	// it must sort the data correctly, taking into account whether it is numerical or not
-	// then it must sort first by the rgroup element(s), and then the sorting element(s) 
+	// then it must sort first by the vgroup element(s), then rgroup element(s), and then the sorting element(s) 
 	function sorter($a,$b)
 	{
 		// what the hell is going on here you ask? well. 
@@ -285,10 +286,19 @@ class aw_table
 		{
 			foreach($this->rgroupby as $_rgcol => $rgel)
 			{
-				$v1 = $a[$rgel];
-				$v2 = $b[$rgel];
+				if ($this->rgroupsortdat[$_rgcol]["sort_el"])
+				{
+					$v1 = $a[$this->rgroupsortdat[$_rgcol]["sort_el"]];
+					$v2 = $b[$this->rgroupsortdat[$_rgcol]["sort_el"]];
+					$this->sort_flag = $this->nfields[$this->rgroupsortdat[$_rgcol]["sort_el"]] ? SORT_NUMERIC : SORT_REGULAR;
+				}
+				else
+				{
+					$v1 = $a[$rgel];
+					$v2 = $b[$rgel];
+					$this->sort_flag = $this->nfields[$_rgcol] ? SORT_NUMERIC : SORT_REGULAR;
+				}
 				$this->u_sorder = $this->sorder[$_rgcol];
-				$this->sort_flag = $this->nfields[$_rgcol] ? SORT_NUMERIC : SORT_REGULAR;
 				if ($v1 != $v2)
 				{
 					$skip = true;
@@ -949,6 +959,16 @@ class aw_table
 		if (is_array($this->vgroupdat))
 		{
 			foreach($this->vgroupdat as $_eln => $dat)
+			{
+				if ($dat["sort_el"])
+				{
+					$this->sorder[$_eln] = $dat["sort_order"];
+				}
+			}
+		}
+		if (is_array($this->rgroupsortdat))
+		{
+			foreach($this->rgroupsortdat as $_eln => $dat)
 			{
 				if ($dat["sort_el"])
 				{
