@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.40 2004/03/05 11:36:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.41 2004/03/08 08:43:28 duke Exp $
 
 /*
 
@@ -83,7 +83,18 @@ class site_show extends class_base
 		active_page_data::get_text_content(isset($arr["text"]) ? $arr["text"] : "");
 
 		// save path
+		// get path from the real rootmenu so we catch props?
+		if (aw_ini_get("ini_rootmenu"))
+		{
+			$tmp = aw_ini_get("rootmenu");
+			$GLOBALS["cfg"]["__default"]["rootmenu"] = aw_ini_get("ini_rootmenu");
+		}
 		$this->path = $this->section_obj->path();
+
+		if (aw_ini_get("ini_rootmenu"))
+		{
+			$GLOBALS["cfg"]["__default"]["rootmenu"] = $tmp;
+		}
 		$this->path_ids = array();
 		foreach($this->path as $p_obj)
 		{
