@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.37 2002/07/23 05:22:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.38 2002/07/23 12:56:32 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -359,6 +359,11 @@ class form_table extends form_base
 			$tbl.="</form>";
 		}
 
+		if ($this->table["no_show_empty"] && $this->num_lines < 1)
+		{
+			$tbl = $this->table["empty_table_text"];
+		}
+
 		// now, if we need to show another table as well, do the new search for it
 		if ($this->table["show_second_table"] && !aw_global_get("form_table_already_drew_2nd_table"))
 		{
@@ -383,6 +388,7 @@ class form_table extends form_base
 					}
 				}
 			}
+		enter_function("form_table::finalize::fin",array());
 			$form = new form;
 			// here we must find the value for the element($this->table["show_second_table_search_val_el"]) that was on the row
 			// we clicked on
@@ -391,6 +397,7 @@ class form_table extends form_base
 			$form->load($match_form);
 			$form->load_entry($match_entry);
 			$sve = $form->entry[$this->table["show_second_table_search_val_el"]];
+		enter_function("form_table::finalize::nds",array());
 			$tbl.=$form->new_do_search(array(
 				"entry_id" => $entry_id,
 				"restrict_search_el" => array($this->table["show_second_table_search_el"]), 
@@ -400,6 +407,8 @@ class form_table extends form_base
 				"no_form_tags" => false,
 				"search_form" => $search_form
 			));
+		exit_function("form_table::finalize::nds",array());
+		exit_function("form_table::finalize::fin",array());
 		}
 
 		return $tbl;
@@ -709,6 +718,8 @@ class form_table extends form_base
 		$this->table["show_second_table"] = $settings["show_second_table"];
 		$this->table["show_second_table_search_el"] = $settings["show_second_table_search_el"];
 		$this->table["show_second_table_search_val_el"] = $settings["show_second_table_search_val_el"];
+		$this->table["no_show_empty"] = $settings["no_show_empty"];
+		$this->table["empty_table_text"] = $settings["empty_table_text"];
 		$this->table["forms"] = $this->make_keys($settings["forms"]);
 		$this->table["languages"] = $this->make_keys($settings["languages"]);
 		$this->table["moveto"] = $this->make_keys($settings["folders"]);
@@ -809,6 +820,8 @@ class form_table extends form_base
 			"uee_grps" => $this->mpicker($this->table["user_entries_except_grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
 			"skip_one_liners" => checked($this->table["skip_one_liners"]),
 			"show_second_table" => checked($this->table["show_second_table"]),
+			"no_show_empty" => checked($this->table["no_show_empty"]),
+			"empty_table_text" => $this->table["empty_table_text"],
 			"view_cols" => $this->mpicker($this->table["view_cols"], $els),
 			"show_second_table_aliases" => $this->mpicker($this->table["show_second_table_aliases"], $this->get_aliases_for_table()),
 			"second_table_search_el" => $this->picker($this->table["show_second_table_search_el"], $els),
@@ -1434,7 +1447,8 @@ class form_table extends form_base
 		{
 			foreach($this->table["grps"] as $nr => $dat)
 			{
-				$ret[$this->table["grps_forms"][$dat["gp_el"]]] = $dat["gp_el"];
+//				echo "nr = $nr , dat = <pre>", var_dump($dat),"</pre> fid = ",$this->table["grps_forms"][$dat["gp_el"]],"<br>";
+				$ret[$this->table["grps_forms"][$dat["gp_el"]]][] = $dat["gp_el"];
 			}
 		}
 		return $ret;
