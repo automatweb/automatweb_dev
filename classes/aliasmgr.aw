@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.137 2004/01/22 13:45:05 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.138 2004/01/28 15:34:44 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -306,7 +306,13 @@ class aliasmgr extends aw_template
 	{
 		extract($args);
 
+		$o = obj($oid);
+		if ($o->is_brother())
+		{
+			$oid = $o->get_original();
+		}
 		$aliases = $this->get_oo_aliases(array("oid" => $oid));
+
 		$by_idx = $by_alias = array();
 
 		foreach($this->cfg["classes"] as $clid => $cldat)
@@ -406,12 +412,13 @@ class aliasmgr extends aw_template
 						$from_cache = true;
 						if (method_exists($$emb_obj_name,"parse_alias") && ($replacement === false))
 						{
-							$repl = $$emb_obj_name->parse_alias(array(
+							$parm = array(
 								"oid" => $oid,
 								"matches" => $adata["val"],
 								"alias" => $adata,
 								"tpls" => &$args["templates"],
-							));
+							);
+							$repl = $$emb_obj_name->parse_alias($parm);
 
 							$inplace = false;
 							if (is_array($repl))
@@ -698,7 +705,7 @@ class aliasmgr extends aw_template
 			};
 			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_ORIGINAL))
 			{
-				$type_str = "originaal (" . $langinfo[$alias->prop("lang_id")] . ")";
+				$type_str = "originaal (" . $langinfo[$alias->prop("to.lang_id")] . ")";
 			};
 
 			if ($alias->prop("relobj_id"))
