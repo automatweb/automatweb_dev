@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.129 2002/07/15 09:53:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.130 2002/07/16 17:47:04 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -4715,7 +4715,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$PRINTANDSEND = $this->parse("PRINTANDSEND");
 			}
 		}
-		upd_distance("document",$d);
+		upd_instance("document",$d);
 		return $cont;
 	}
 
