@@ -1148,7 +1148,7 @@ class grid_editor extends class_base
 					$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\">";
 				}
 
-				$cs .= $this->arr["aliases"][$map["row"]][$map["col"]];
+				$cs .= str_replace("\n", "<br/>", $this->arr["aliases"][$map["row"]][$map["col"]]);
 
 				if ($st)
 				{
