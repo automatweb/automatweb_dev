@@ -1,0 +1,52 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>template</name>
+            <table>objects</table>
+            <group>vis</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ITEM_LAYOUT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kujundusmall</caption>
+      </property>
+      <property>
+            <name>prods</name>
+            <table>objects</table>
+            <group>prods</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>prods</field>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SHOP_SPECIAL_OFFER</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_caption>1</no_caption>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <vis>
+                  <caption>N&amp;auml;itamine</caption>
+            </vis>
+            <prods>
+                  <caption>Tooted</caption>
+            </prods>
+      </groupinfo>
+      <reltypes>
+            <PRODUCT>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_SHOP_PRODUCT</num_0>
+                        <num_1>CL_SHOP_PACKET</num_1>
+                  </clid>
+                  <caption>toode</caption>
+            </PRODUCT>
+            <ITEM_LAYOUT>
+                  <value>2</value>
+                  <clid>CL_SHOP_PRODUCT_LAYOUT</clid>
+                  <caption>toote kujundusmall</caption>
+            </ITEM_LAYOUT>
+      </reltypes>
+</properties>
+
