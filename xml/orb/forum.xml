@@ -24,6 +24,76 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="edit_properties">
+			<function name="edit_properties">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_properties">
+			<function name="submit_properties">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_topic">
+			<function name="add_topic">
+				<arguments>
+					<required name="id"/>
+					<optional name="section"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="submit_topic">
+			<function name="submit_topic">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		<action name="show">
+			<function name="show">
+				<arguments>
+					<required name="board"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="show_threaded">
+			<function name="show_threaded">
+				<arguments>
+					<required name="board"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="reply">
+			<function name="reply">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="submit_comment">
+			<function name="submit_comment">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		<action name="search">
+			<function name="search">
+				<arguments>
+					<required name="board"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="submit_search">
+			<function name="submit_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 </class>
 </orb>
 		
