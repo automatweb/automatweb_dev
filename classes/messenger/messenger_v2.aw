@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.29 2004/02/25 15:46:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.30 2004/03/25 17:33:15 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -90,7 +90,7 @@ class messenger_v2 extends class_base
 
 	/**  
 		
-		@attrib name=my_messages params=name is_public="1" caption="Minu kirjad" default="0"
+		@attrib name=my_messages params=name is_public="1" caption="Minu kirjad" 
 		
 		
 		@returns
@@ -565,7 +565,7 @@ class messenger_v2 extends class_base
 
 	/** called from ORB/scheduler, runs all the filter on INBOX 
 		
-		@attrib name=run_filters params=name nologin="1" default="0"
+		@attrib name=run_filters params=name nologin="1" 
 		
 		@param id required type=int
 		
@@ -605,7 +605,7 @@ class messenger_v2 extends class_base
 
 	/**  
 		
-		@attrib name=test_filters params=name default="0"
+		@attrib name=test_filters params=name 
 		
 		@param id required type=int
 		
@@ -692,6 +692,29 @@ class messenger_v2 extends class_base
 
 		$move_ops = array();
 
+		foreach($this->subjrules as $key => $val)
+		{
+			$matches = $this->drv_inst->search_folder(sprintf('SUBJECT "%s"',$val));
+			$target = $this->targets[$key];
+			if (is_array($matches))
+			{
+				$move_ops[$target] = $matches;
+				$this->done = true;
+			};
+		};
+
+		foreach($this->fromrules as $key => $val)
+		{
+			$matches = $this->drv_inst->search_folder(sprintf('FROM "%s"',$val));
+			$target = $this->targets[$key];
+			if (is_array($matches))
+			{
+				$move_ops[$target] = $matches;
+				$this->done = true;
+			};
+		};
+
+		/*
 		foreach($contents as $mkey => $message)
 		{
 			foreach($this->subjrules as $key => $val)
@@ -721,7 +744,7 @@ class messenger_v2 extends class_base
 				}
 			};
 		}
-
+		*/
 
 		if (empty($arr["dryrun"]) && sizeof($move_ops) > 0)
 		{
