@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.170 2003/04/08 16:27:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.171 2003/04/23 13:57:39 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -132,7 +132,15 @@ class document extends aw_template
 		};
 		$row = $this->get_menu($parent);
 		$sections = $row["meta"]["sss"];
-		$periods = $row["meta"]["pers"];
+		if ($row["meta"]["all_pers"])
+		{
+			$period_instance = get_instance("periods");
+			$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
+		}
+		else
+		{
+			$periods = $row["meta"]["pers"];
+		}
 		
 		if (is_array($sections))
 		{
@@ -312,19 +320,9 @@ class document extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
-
-		// check if the menu had a form selected as a template - the difference is that then the template is not a filename
-		// but a number
-		if (is_number($tpl))
-		{
-			return $this->do_form_show($params);
-		}
-
-		
 		// k?sime dokumendi kohta infot
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
 		// menueditis.
-
 		if (!isset($doc) || !is_array($doc))
 		{
 			$doc = $this->fetch($docid, $no_acl_checks);
@@ -332,7 +330,7 @@ class document extends aw_template
 			// you sould still be left under the menu where the brother document is.
 			//	$docid = $doc["docid"];
 		};
-			
+
 		$this->dequote(&$doc["lead"]);
 		// if there is no document with that id, then bail out
 		if (!isset($doc))
@@ -404,10 +402,12 @@ class document extends aw_template
 		$doc["tpl"] = $tpl;
 		$doc["leadonly"] = $leadonly;
 		$doc["tpldir"] = &$this->template_dir;
+		$doc["vars"] = $params["vars"];
 		if ($si)
 		{
 			$si->parse_document(&$doc);
 		};
+		$params["vars"] = $doc["vars"];
 		$tpl = $doc["tpl"];
 		
 		//$meta = $doc["meta"];
@@ -418,6 +418,7 @@ class document extends aw_template
 	
 
 		$this->tpl_reset();
+
 		
 		$this->tpl_init("automatweb/documents");
 		
@@ -448,7 +449,7 @@ class document extends aw_template
 			$this->read_any_template($tpl);
 		};
 
-		if ( ($meta["show_print"]) && (not($print)) && $leadonly != 1)
+		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && !$is_printing)
 		{
 			if ($this->cfg["print_cap"] != "")
 			{
@@ -508,6 +509,7 @@ class document extends aw_template
 		// I don't think we should do that here
 		// $this->add_hit($docid);
 
+		//if ($mk_compat)
 		if ($mk_compat)
 		{
 			$this->mk_ns4_compat(&$doc["lead"]);
@@ -1009,6 +1011,7 @@ class document extends aw_template
 			"docid" => $docid,
 			"ablock"   => isset($ab) ? $ab : 0,
 			"pblock"   => isset($pb) ? $pb : 0,
+			"moreinfo" => $doc["moreinfo"],
 			"date"     => $this->time2date(time(),2),
 			"section"  => $GLOBALS["section"],
 			"lead_comments" => $lc,
@@ -1359,9 +1362,12 @@ class document extends aw_template
 		$modified = time();
 		if ($data["tm"] != "")
 		{
-			list($day,$mon,$year) = explode("/",$data["tm"]);
+			list($_date, $_time) = explode(" ", $data["tm"]);
+			list($hour, $min) = explode(":", $_time);
 
-			$ts = mktime(0,0,0,$mon,$day,$year);
+			list($day,$mon,$year) = explode("/",$_date);
+
+			$ts = mktime($hour,$min,0,$mon,$day,$year);
 			if ($ts)
 			{
 				$modified = $ts;
@@ -1369,8 +1375,8 @@ class document extends aw_template
 			else
 			{
 				// 2kki on punktidega eraldatud
-				list($day,$mon,$year) = explode(".",$row["tm"]);
-				$ts = mktime(0,0,0,$mon,$day,$year);
+				list($day,$mon,$year) = explode(".",$_date);
+				$ts = mktime($hour,$min,0,$mon,$day,$year);
 				if ($ts)
 				{
 					$modified = $ts;
@@ -1378,8 +1384,8 @@ class document extends aw_template
 				else
 				{
 					// 2kki on hoopis - 'ga eraldatud?
-					list($day,$mon,$year) = explode("-",$row["tm"]);
-					$ts = mktime(0,0,0,$mon,$day,$year);
+					list($day,$mon,$year) = explode("-",$_date);
+					$ts = mktime($hour,$min,0,$mon,$day,$year);
 					if ($ts)
 					{
 						$modified = $ts;
@@ -1936,7 +1942,7 @@ class document extends aw_template
 											"keywords"  => $document["keywords"],
 										  "lead"    => ($is_ie ? str_replace("\"","&quot;",trim($document["lead"])) : $document["lead"]),
 											"alias" => $document["alias"],
-											"content" => ($is_ie ? str_replace("\"","&quot;",trim($document["content"])) : $document["content"]),
+											"content" => ($is_ie ? str_replace("\"","&quot;",trim($document["content"])) : htmlentities($document["content"])),
 											"channel"	=> trim($document["channel"]),
 											"nobreaks"	=> $document["nobreaks"],
 											"tm"			=> trim($document["tm"]),
@@ -3487,29 +3493,34 @@ class document extends aw_template
 			"uid" => aw_global_get("uid")
 		));
 		$tekst = "";
-		while(list($k,$v) = each($feedback->tekst)) 
+		$a = new aw_array($feedback->tekst);
+		foreach($a->get() as $k => $v)
 		{
 			$tekst .= "<tr><td align='right'><input type='radio' name='tekst' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
 
 		$kujundus = "";
-		while(list($k,$v) = each($feedback->kujundus)) 
+		$a = new aw_array($feedback->kujundus);
+		foreach($a->get() as $k => $v)
 		{
 			$kujundus .= "<tr><td align='right'><input type='radio' name='kujundus' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
 		
 		$struktuur = ""; $tehnika = ""; $ala = "";	
-		while(list($k,$v) = each($feedback->struktuur)) 
+		$a = new aw_array($feedback->struktuur);
+		foreach($a->get() as $k => $v)
 		{
 			$struktuur .= "<tr><td align='right'><input type='radio' name='struktuur' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
 		
-		while(list($k,$v) = each($feedback->ala)) 
+		$a = new aw_array($feedback->ala);
+		foreach($a->get() as $k => $v)
 		{
 			$ala .= "<tr><td align='right'><input type='radio' name='ala' value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
 		
-		while(list($k,$v) = each($feedback->tehnika)) 
+		$a = new aw_array($feedback->tehnika);
+		foreach($a->get() as $k => $v)
 		{
 			$tehnika .= "<tr><td align='right'><input type='checkbox' name='tehnika[]'  value='$k'></td><td align=\"left\" class=\"text2\">$v</td></tr>";
 		};
@@ -3555,7 +3566,8 @@ class document extends aw_template
 		$this->_log(ST_DOCUMENT, SA_PRINT, "$dat[name] ",$section);
 		echo($this->gen_preview(array(
 			"docid" => $section,
-			"tpl" => "print.tpl"
+			"tpl" => "print.tpl",
+			"is_printing" => true
 		)));
 		aw_shutdown();
 		die();
