@@ -135,7 +135,7 @@ class ettevotlusvorm extends aw_template
 			$id = $this->new_object(array(
 				"name" => $ettevotlusvorm["name"],
 				"parent" => $parent,
-				"class_id" => CL_ettevotlusvorm,
+				"class_id" => CL_ETTEVOTLUSVORM,
 				"comment" => $comment,
 				"metadata" => array(
 
@@ -173,15 +173,14 @@ class ettevotlusvorm extends aw_template
 	function ettevotlusvorm_list()
 	{
 	
-	$this->db_query("select * from kliendibaas_ettevotlusvorm");
+	$q="select t1.oid,t1.name from kliendibaas_ettevotlusvorm as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
+	$this->db_query($q);
 
 			load_vcl("table");
 			$t = new aw_table(array(
 				"prefix" => "kliendibaas", 
 			));
-//echo $this->cfg["site_basedir"];
-//			$t->parse_xml_def($this->cfg["site_basedir"]."/xml/linklist/show_stats.xml"); 
-			$t->parse_xml_def("/www/automatweb_dev/xml/kliendibaas/ettevotlusvorm_list.xml"); 
+			$t->parse_xml_def($this->cfg["basedir"]."/xml/kliendibaas/ettevotlusvorm_list.xml"); 
 			
 			while ($row= $this->db_next()) 
 			{ 
