@@ -51,7 +51,6 @@ class scanner extends aw_template
 		return $ret;
 	}
 
-
 	function run()
 	{
 		$cdir = $this->cfg["basedir"] . "/classes";
@@ -69,9 +68,39 @@ class scanner extends aw_template
 		$next_free = max($trans_ids)+1;
 		$used = array();
 
+		// context translation map
+		$this->match_table = array(
+			"callback" => "text",
+			"relpicker" => "select",
+			"generated" => "text",
+		);
+
+		aw_global_set("no_db_connection",1);
+
+		$cfgu = get_instance("cfg/cfgutils");
+
 		foreach($files as $fname)
 		{
-			$this->scan_file($fname);
+			$this->valid = false;
+			//$props = $cfgu->load_class_properties(array(
+			$props = $cfgu->load_class_properties(array(
+				"file" => basename($fname,".aw"),
+			));
+			$classinfo = $cfgu->classinfo;
+			$trans_id = $classinfo["trans_id"]["text"];
+			if (!empty($props) && !empty($trans_id))
+			{
+				$props = $cfgu->load_properties(array(
+					"file" => basename($fname,".aw"),
+				));
+				$groupinfo = $cfgu->groupinfo;
+				$this->scan_file(array(
+					"file" => $fname,
+					"props" => $props,
+					"classinfo" => $classinfo,
+					"groupinfo" => $groupinfo,
+				));
+			};
 			if (!empty($this->trans_id) && !defined($this->trans_id) && !$used[$this->trans_id])
 			{
 				// create a new trans_id then!
@@ -119,51 +148,58 @@ class scanner extends aw_template
 		print "ALL DONE!!!\n";
 	}
 
-	function scan_file($fname)
+	function scan_file($arr)
 	{
-		//print "scanning $fname\n";
-		$source = file_get_contents($fname);
-		//$source = join("",file($fname));
-		$tokens = token_get_all($source);
-		$this->result = array();
-		$commstr = "";
-		foreach($tokens as $token)
-		{
-			if (is_array($token) && $token[0] === T_COMMENT)
-			{
-				$commstr .= $token[1];
-			};
-		}
-		$commlines = explode("\n",$commstr);
 		$this->strings = array();
 		$this->trans_id = "";
-		// now I have to figure out the context .. or rather the name of the file I'll be writing to
-		// how do I do that?
-		foreach($commlines as $line)
+
+		$basefile = basename($arr["file"],".aw");
+
+		foreach($arr["props"] as $prop)
 		{
-			if (preg_match("/^\s*@caption (.*)/",$line,$m))
+			$propname = $prop["name"];
+			$proptype = $prop["type"];
+
+			// ignore hidden properties for now
+			if ($proptype == "hidden")
 			{
-				$id = md5($m[1]);
-				$this->strings[$id] = array(
-					"id" => $id,
-					"text" => $m[1],
-					"ctx" => CTX_CAPTION,
-				);
-			};
-			if (preg_match("/^\s*@comment (.*)/",$line,$m))
-			{
-				$id = md5($m[1]);
-				$this->strings[$id] = array(
-					"id" => $id,
-					"text" => $m[1],
-					"ctx" => CTX_COMMENT,
-				);
+				continue;
 			};
 
-			if (preg_match("/^\s*@classinfo trans_id=(\w*)/",$line,$m))
+			if ($this->match_table[$proptype])
 			{
-				$this->trans_id = $m[1];
+				$ctx = $this->match_table[$proptype];
+			}
+			else
+			{
+				$ctx = $proptype;
 			};
+				
+			$id = md5("prop" . $basefile . $propname);
+	
+			
+			$this->strings[$id] = array(
+				"id" => $id,
+				"file" => $basefile,
+				"ctx" => $ctx,
+				"caption" => $prop["caption"],
+				"comment" => $prop["comment"],
+			);
+
+			$this->trans_id = $arr["classinfo"]["trans_id"]["text"];
+
+		}
+
+		foreach($arr["groupinfo"] as $gname => $grp)
+		{
+			$id = md5("group" . $basefile . $gname);
+			$this->strings[$id] = array(
+				"id" => $id,
+				"file" => $basefile,
+				"ctx" => "tab",
+				"caption" => $grp["caption"],
+				"comment" => $grp["comment"],
+			);
 		}
 
 		$this->valid = false;
@@ -177,41 +213,10 @@ class scanner extends aw_template
 		}
 		else
 		{
-			//$this->res = aw_serialize($strings,SERIALIZE_XML,array("ctag" => "trtemplate","num_prefix" => "string","enumerate" => false));
 			$this->valid = true;
 			print "Updating $fname\n";
-			//print_r($res);
 		};
 
-		
-
-		// now I have to check whether trans_id has been registered .. if so, do nothing
-		// if not .. generate an unique ID for it and update some kind of INI file
-		//print_r($strings);
-		/*
-		for ($i = 0; $i <= sizeof($tokens) - $winsize; $i++)
-		{
-			if (is_array($tokens[$i]) && ($tokens[$i][0] === T_STRING) && ($tokens[$i][1] === "tr"))
-			{
-				$this->check_tr(array_slice($tokens,$i,4));
-			};
-		};
-		*/
-		if (sizeof($this->result) > 0)
-		{
-			//print_r($this->result);
-		};
-	}
-
-	function check_tr($win)
-        {
-                if (    ($win[1] === "(") &&
-                        ($win[3] === ")") &&
-                        (is_array($win[0]) && is_array($win[2]))
-                )
-                {
-                        $this->result[] = $win[2][1];
-                };
 	}
 
 	function _unser($old)
@@ -228,44 +233,36 @@ class scanner extends aw_template
 			{
 				$id = $val["value"];
 			};
-			if ($val["tag"] == "text" && $val["type"] == "complete")
+			if ($val["tag"] == "file" && $val["type"] == "complete")
 			{
-				$text = $val["value"];
+				$file = $val["value"];
 			};
 			if ($val["tag"] == "ctx" && $val["type"] == "complete")
 			{
 				$ctx = $val["value"];
 			};
+			if ($val["tag"] == "caption" && $val["type"] == "complete")
+			{
+				$caption = $val["value"];
+			};
+			if ($val["tag"] == "comment" && $val["type"] == "complete")
+			{
+				$comment = $val["value"];
+			};
 			if ($val["tag"] == "string" && $val["type"] == "close")
 			{
 				$res[$id] = array(
 					"id" => $id,
-					"text" => $text,
+					"file" => $file,
 					"ctx" => $ctx,
+					"caption" => $caption,
+					"comment" => $comment,
 				);
+				$file = $ctx = $caption = $comment = "";
 			};
                 }
 		return $res;
 	}
-
-	/*
-
-	[106] => Array
-		(
-		[0] => 304
-		[1] => tr
-		)
-
-	[107] => (
-	[108] => Array
-		(
-		[0] => 312
-		[1] => "teemade kataloog"
-		)
-
-	[109] => )
-	*/
-
 
 
 };
