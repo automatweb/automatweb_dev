@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.47 2003/04/09 17:26:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.48 2003/04/16 17:26:29 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -212,7 +212,7 @@ class file extends class_base
 		{
 			if ($fi["newwindow"])
 			{
-				$ss = "target=\"_new\"";
+				$ss = "target=\"_blank\"";
 			}
 			
 			$comment = $fi["comment"];
@@ -538,7 +538,7 @@ class file extends class_base
 
 	function get_url($id,$name)	
 	{
-		$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true,"/")."/".urlencode(str_replace("/","_",$name));
+		$retval = str_replace("automatweb/","",$this->mk_my_orb("preview", array("id" => $id),"file", false,true,"/"))."/".urlencode(str_replace("/","_",$name));
 //		$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true);
 		return $retval;
 	}
