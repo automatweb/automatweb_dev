@@ -45,6 +45,13 @@
             <caption>Failinimi</caption>
       </property>
       <property>
+            <name>periodic</name>
+            <type>checkbox</type>
+            <group>advanced</group>
+            <table>objects</table>
+            <caption>Perioodiline</caption>
+      </property>
+      <property>
             <name>objtbl_conf</name>
             <type>objpicker</type>
             <clid>CL_OBJ_TABLE_CONF</clid>
@@ -261,13 +268,6 @@
             <group>advanced</group>
             <table>menu</table>
             <caption>Ilma menüüdeta</caption>
-      </property>
-      <property>
-            <name>periodic</name>
-            <type>checkbox</type>
-            <group>advanced</group>
-            <table>menu</table>
-            <caption>Perioodiline</caption>
       </property>
       <property>
             <name>target</name>
