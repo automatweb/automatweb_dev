@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.3 2003/12/08 12:56:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.4 2004/01/05 17:35:41 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -178,6 +178,7 @@ class aw_table extends aw_template
 	// vgroupby - array of elements that will be vertically grouped
 	function sort_by($params = array()) 
 	{
+
 		// see peaks olema array,
 		// kus on regitud erinevate tabelite andmed
 		$aw_tables = aw_global_get("aw_tables"); 
@@ -245,9 +246,10 @@ class aw_table extends aw_template
 		$old_loc = setlocale(LC_COLLATE,0);	
 		setlocale(LC_COLLATE, 'et_EE');
 
+
 		// sort the data
 		usort($this->data,array($this,"sorter"));
-
+		
 		// switch back to estonian
 		setlocale(LC_COLLATE, $old_loc);
 
@@ -360,17 +362,19 @@ class aw_table extends aw_template
 		{
 			foreach($this->sortby as $_coln => $_eln)
 			{
-				if (isset($a[$_eln]) && isset($b[$_eln]))
-				{
+				$this->u_sorder = $this->sorder[$_eln];
+				$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
+				//if (isset($a[$_eln]) && isset($b[$_eln]))
+				//{
 					$v1 = $a[$_eln];
 					$v2 = $b[$_eln];
-					$this->u_sorder = $this->sorder[$_eln];
-					$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
+					//$this->u_sorder = $this->sorder[$_eln];
+					//$this->sort_flag = isset($this->nfields[$_eln]) ? SORT_NUMERIC : SORT_REGULAR;
 					if ($v1 != $v2)
 					{
 						break;
 					}
-				};
+				//};
 			}
 		}
 
@@ -387,10 +391,10 @@ class aw_table extends aw_template
 
 			if ($this->u_sorder == "asc")
 			{
+				$ret = ((int)$v1) < ((int)$v2) ? -1 : 1;
 				if ($GLOBALS["vcl_sort_dbg"] == 1)
 				{
 					echo "compare integers $v1 , $v2 , ";
-					$ret = ((int)$v1) < ((int)$v2) ? -1 : 1;
 					if ($ret == -1)
 					{
 						echo " $v1 less than  $v2 <br>";
@@ -400,14 +404,15 @@ class aw_table extends aw_template
 						echo " $v1 greater than  $v2 <br>";
 					}
 				}
-				return ((int)$v1) < ((int)$v2) ? -1 : 1;
+				//return ((int)$v1) < ((int)$v2) ? -1 : 1;
+				return $ret; 
 			}
 			else
 			{
+				$ret = ((int)$v1) > ((int)$v2) ? -1 : 1;
 				if ($GLOBALS["vcl_sort_dbg"] == 1)
 				{
 					echo "compare integers $v1 , $v2 , ret $v1 less than $v2 <br>";
-					$ret = ((int)$v1) > ((int)$v2) ? -1 : 1;
 					if ($ret == -1)
 					{
 						echo " $v1 greater than  $v2 <br>";
@@ -417,7 +422,8 @@ class aw_table extends aw_template
 						echo " $v1 less than  $v2 <br>";
 					}
 				}
-				return ((int)$v1) > ((int)$v2) ? -1 : 1;
+				//return ((int)$v1) > ((int)$v2) ? -1 : 1;
+				return $ret;
 			}
 		}
 		else
@@ -671,7 +677,7 @@ class aw_table extends aw_template
 				}
 
 				// rida algab
-				$rowid = "trow" . $counter;
+				$rowid = $this->prefix . "trow" . $counter;
 				$tbl .= $this->opentag(array("name" => "tr", "domid" => $rowid, "class" => ((($counter % 2) == 0) ? $this->tr_style2 : $this->tr_style1)));
 
 				$tmp = "";
@@ -815,7 +821,14 @@ class aw_table extends aw_template
 						}
 						else
 						{
-							$val = date($v1["format"],$val);
+							if ($val == 0)
+							{
+								$val = "n/a";
+							}
+							else
+							{
+								$val = date($v1["format"],$val);
+							};
 						};
 					};
 
