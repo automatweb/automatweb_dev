@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.62 2003/06/26 14:13:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.63 2003/07/22 12:10:58 duke Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -63,7 +63,7 @@ class image extends class_base
 	{
 		// it shouldn't be, but it is an array, if a period is loaded
 		// from a stale cache.
-		if (is_array($id) && !is_numeric($id))
+		if (is_array($id) || !is_numeric($id))
 		{
 			return false;
 		}
@@ -72,8 +72,11 @@ class image extends class_base
 			$q = "SELECT objects.*,images.* FROM images
 				LEFT JOIN objects ON (objects.oid = images.id)
 				WHERE images.id = '$id'";
-			$this->db_query($q);
-			$row = $this->db_fetch_row();
+			if (method_exists($this, "db_query"))
+			{
+				$this->db_query($q);
+				$row = $this->db_fetch_row();
+			}
 			if ($row)
 			{
 				$row["url"] = $this->get_url($row["file"]);
@@ -367,7 +370,7 @@ class image extends class_base
 
 			// the site's img folder
 			$passed = false;	
-			if (is_file($fname) && is_readable($fname)) 
+			if (@is_file($fname) && @is_readable($fname)) 
 			{
 				$passed = true;
 			}
