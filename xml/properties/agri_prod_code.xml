@@ -1,0 +1,32 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>code</name>
+            <table>agri_codes</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>code</field>
+            <caption>Tootekood</caption>
+      </property>
+      <property>
+            <name>period</name>
+            <table>agri_codes</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>period</field>
+            <caption>Perioodilised andmed</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_AGRI_PROD_CODE</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <tableinfo>
+            <agri_codes>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </agri_codes>
+      </tableinfo>
+</properties>
+

@@ -1,0 +1,61 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>code_parent</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Koodide kataloog</caption>
+      </property>
+      <property>
+            <name>codes</name>
+            <table>objects</table>
+            <group>codes</group>
+            <type>table</type>
+            <store>no</store>
+            <field>codes</field>
+            <caption>Tootekoodid</caption>
+      </property>
+      <property>
+            <name>import</name>
+            <table>objects</table>
+            <group>import</group>
+            <type>fileupload</type>
+            <store>no</store>
+            <field>import</field>
+            <caption>Importfail</caption>
+      </property>
+      <property>
+            <name>import_desc</name>
+            <table>objects</table>
+            <group>import</group>
+            <type>text</type>
+            <field>import_desc</field>
+            <caption>Importfaili kirjeldus</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_AGRI_PROD_CODES</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <codes>
+                  <caption>Tootekoodid</caption>
+            </codes>
+            <import>
+                  <caption>Impordi</caption>
+            </import>
+      </groupinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>koodide kataloog</caption>
+            </FOLDER>
+      </reltypes>
+</properties>
+
