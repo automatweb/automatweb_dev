@@ -1,6 +1,6 @@
 <?php
 
-classload("form_base","languages");
+classload("formgen/form_base");
 
 // controller types in element - each controller can be used for every one of these, 
 // they are just here to specify for which controller in the element the controller is selected
@@ -23,7 +23,7 @@ class form_controller extends form_base
 		$this->read_template("add_controller.tpl");
 		$this->mk_path($parent, "Lisa kontroller");
 	
-		$l = new languages;
+		$l = get_instance("languages");
 		$lar = $l->listall();
 		foreach($lar as $ld)
 		{
@@ -81,7 +81,7 @@ class form_controller extends form_base
 		$this->read_template("add_controller.tpl");
 		$this->mk_path($co["parent"], "Muuda kontrollerit");
 
-		$l = new languages;
+		$l = get_instance("languages");
 		$lar = $l->listall();
 		foreach($lar as $ld)
 		{
@@ -157,8 +157,7 @@ class form_controller extends form_base
 			$wh = " AND objects.parent IN(".join(",",$parents).") ";
 		}
 
-		classload("objects");
-		$obj = new objects;
+		$obj = get_instance("objects");
 		$ol = $obj->get_list();
 
 		$this->db_query("SELECT oid,name,parent FROM objects WHERE class_id = ".CL_FORM_CONTROLLER." AND status != 0 $wh");
@@ -226,7 +225,7 @@ class form_controller extends form_base
 				if (strpos($eq,"[".$var."]") !== false)
 				{
 //					echo "included <br>";
-					$val = $this->get_var_value($co, $var);
+					$val = str_replace("\"", "\\\"", $this->get_var_value($co, $var));
 //					echo "val = $val <br>";
 					if ($add_quotes)
 					{
@@ -247,7 +246,7 @@ class form_controller extends form_base
 	//			echo "var = '$var' eq = $eq <br>";
 				if (strpos($eq,"[".$var."]") !== false)
 				{
-					$val = $el->get_controller_value();
+					$val = str_replace("\"", "\\\"", $el->get_controller_value());
 					if ($add_quotes)
 					{
 						$val = "\"".$val."\"";
@@ -437,8 +436,7 @@ class form_controller extends form_base
 				// we must read the data from the user info, which means that this form
 				// must have an entry in the user data for the current user
 				// so find that to get the entry id
-				classload("users");
-				$us = new users;
+				$us = get_instance("users");
 				$jfe = $us->get_join_entries();
 				$entry_id = $jfe[$fid];
 			}
@@ -595,7 +593,7 @@ class form_controller extends form_base
 						if ($ar_n[$fid][$elid] != 1)
 						{
 							// this was removed, load the form and remove controller
-							$f = new form;
+							$f = get_instance("formgen/form");
 							$f->load($fid);
 							$f->remove_controller_from_element(array(
 								"controller" => $id,
