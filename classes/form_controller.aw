@@ -51,6 +51,7 @@ class form_controller extends form_base
 			$co["meta"]["eq"] = $eq;
 			$co["meta"]["errmsg"] = $errmsg;
 			$co["meta"]["show_errors_showctl"] = $show_errors_showctl;
+			$co["meta"]["warn_only_entry_controller"] = $warn_only_entry_controller;
 			$this->save_controller($co);
 		}
 		else
@@ -65,7 +66,8 @@ class form_controller extends form_base
 					"eq" => $eq,
 					"errmsg" => $errmsg,
 					"vars" => array(),
-					"show_errors_showctl" => $show_errors_showctl
+					"show_errors_showctl" => $show_errors_showctl,
+					"warn_only_entry_controller" => $warn_only_entry_controller
 				)
 			));
 		}
@@ -124,7 +126,8 @@ class form_controller extends form_base
 			"name" => $co["name"],
 			"eq" => $co["meta"]["eq"],
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
-			"show_errors" => checked($co["meta"]["show_errors_showctl"])
+			"show_errors" => checked($co["meta"]["show_errors_showctl"]),
+			"warn_only_entry_controller" => checked($co["meta"]["warn_only_entry_controller"])
 		));
 
 		$this->vars(array(
@@ -604,6 +607,12 @@ class form_controller extends form_base
 				}
 			}
 		}
+	}
+
+	function is_warning_controller($id)
+	{
+		$co = $this->load_controller($id);
+		return $co["meta"]["warn_only_entry_controller"];
 	}
 }
 
