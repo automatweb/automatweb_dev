@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.12 2004/11/19 11:29:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.13 2004/12/27 12:34:30 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -955,6 +955,19 @@ class maitenance extends class_base
 			}
 			closedir($dh);
 		}
+	}
+
+	/** clears the cache for all sites, gets called from media once a day at 3 am
+
+		@attrib name=clear_all_sites nologin=1
+
+	**/
+	function clear_all_sites($arr)
+	{
+		$i = get_instance("admin/foreach_site");
+		$i->submit_exec(array(
+			"eurl" => "orb.aw?class=maitenance&action=cache_clear&clear=1"
+		));
 	}
 }
 ?>
