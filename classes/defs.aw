@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.46 2002/07/18 10:49:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.47 2002/07/23 12:59:34 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -736,6 +736,7 @@ if (!defined("DEFS"))
 	function aw_session_del($name)
 	{
 		session_unregister($name);
+		aw_global_set($name, "");
 	}
 };
 
