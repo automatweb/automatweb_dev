@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.3 2003/08/01 13:27:53 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.4 2003/09/08 14:50:15 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -7,6 +7,9 @@
 	@default group=general
 
 	@default table=messages
+
+	@property uidl type=textbox 
+	@caption UIDL
 
 	@property mfrom type=textbox size=80
 	@caption Kellelt
@@ -20,7 +23,7 @@
 	@property message type=textarea cols=80 rows=40 
 	@caption Sisu
 
-	@property send type=text value=Saada store=no editonly=1
+	@property send type=submit value=Saada store=no 
 	@caption Saada
 	
 	@tableinfo messages index=id master_table=objects master_index=oid
@@ -50,11 +53,13 @@ class mail_message extends class_base
 				break;
 
 			case "send":
+				/*
 				$delurl = $this->mk_my_orb("deliver",array("id" => $args["obj"]["oid"]));
 				$data["value"] = html::href(array(
 					"url" => "javascript:remote(0,300,400,\"$delurl\")",
 					"caption" => "Saada",
 				));
+				*/
 				break;
 
 		}
@@ -70,10 +75,28 @@ class mail_message extends class_base
 			case "status":
 				$data["value"] = STAT_ACTIVE;
 				break;
+	
+			case "send":
+				if ($args["form_data"]["send"])
+				{
+					$this->deliver_message = true;
+				};
+				break;
+
+					
 			
 		};
 		return $retval;
 	}
+
+	function callback_post_save($arr)
+	{
+		if ($this->deliver_message)
+		{
+			$this->deliver(array("id" => $arr["id"]));
+		};
+	}
+		
 
 	// basically the same as deliver, except that this one is _not_
 	// called through ORB, and you can specify replacements here
@@ -132,6 +155,17 @@ class mail_message extends class_base
 		print "saadetud<br />";
 		die();
 	}
+
+	function show($arr)
+	{
+		$obj = new object($arr["id"]);
+		print "<b>Kellelt:</b> " . parse_obj_name($obj->prop("mfrom")) . "<br>";
+		print "<b>Kellele:</b>" . parse_obj_name($obj->prop("to")) . "<br>";
+		print "<b>Teema:</b>" . parse_obj_name($obj->prop("name")) . "<br>";
+		print "<br><pre>" . htmlspecialchars($obj->prop("message")) . "</pre><br>";
+		exit;
+	}
+		
 
 };
 ?>
