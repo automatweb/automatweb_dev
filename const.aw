@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.51 2001/11/20 16:26:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.52 2001/11/29 13:57:05 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -264,7 +264,7 @@ else
 			preg_match("/(\w*)$/",$lib,$m);
 			$lib = $m[1];
 			$lib = "$classdir/$lib.$ext";
-			@include_once($lib);
+			include_once($lib);
 		};
 	}
 	////
@@ -589,7 +589,7 @@ define("PRG_CONFIG_DOCFOLDERS",56); // dokumendi liigutamsie kataloogide vailimi
 // $lc = keelekood, vaikimisi "ee"
 $programs = array(
 PRG_MENUEDIT					=> array("name" => MN_MENUEDIT,					"url" => "menuedit.html"),
-PRG_DOCLIST						=> array("name" => MN_DOCLIST,					"url" => "list_docs.$ext?search=1"),
+PRG_DOCLIST						=> array("name" => MN_DOCLIST,					"url" => "orb.$ext?class=docmgr&action=search"),
 PRG_USERS							=> array("name" => MN_USERS,						"url" => "orb.$ext?class=users&action=gen_list"),
 PRG_GROUPS						=> array("name" => MN_GROUPS,						"url" => "orb.$ext?class=groups&action=mk_grpframe&parent=0"),
 PRG_CONFIG						=> array("name" => MN_CONFIG,						"url" => "config.$ext"),
