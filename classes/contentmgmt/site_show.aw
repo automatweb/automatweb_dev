@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.58 2004/05/27 08:47:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.59 2004/06/02 10:52:51 kristo Exp $
 
 /*
 
@@ -553,6 +553,11 @@ class site_show extends class_base
 			{
 				$filter["limit"] = $obj->prop("ndocs"); 
 			};
+
+			if ($arr["all_langs"])
+			{
+				$filter["lang_id"] = array();
+			}
 
 			$docid = array();
 			$cnt = 0;
@@ -2005,7 +2010,7 @@ class site_show extends class_base
 		$code = $co->compile($path, $tpl, $mdefs, $no_cache);
 
 		$tpl = $path."/".$tpl;
-		$fn = "compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
+		$fn = "compiled_menu_template-".str_replace("\\","_",str_replace("/","_",str_replace(".","_",$tpl)))."-".aw_global_get("lang_id");
 
 
 		$ca = get_instance("cache");
