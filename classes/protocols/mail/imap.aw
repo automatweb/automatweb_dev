@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.14 2003/11/08 06:07:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.15 2003/11/08 07:49:39 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -121,7 +121,8 @@ class imap extends class_base
 			$mask = (1 == $obj->prop("use_ssl")) ? "{%s:%d/ssl/novalidate-cert}" : "{%s:%d}";
 
 			$this->servspec = sprintf($mask,$server,$port);
-			$this->mboxspec = $this->servspec . $this->use_mailbox;
+			$mbox = str_replace("*","&",$this->use_mailbox);
+			$this->mboxspec = $this->servspec . $mbox;
 			$this->mbox = @imap_open($this->mboxspec, $user, $password);
 			$err = imap_errors();
 			if (is_array($err))
@@ -159,10 +160,11 @@ class imap extends class_base
 			{
 				foreach($list as $item)
 				{
-					$key = $realname = substr($item->name,strlen($this->servspec));
+					$key = $realname = str_replace(chr(0),"",imap_utf7_decode(substr($item->name,strlen($this->servspec))));
 					//$status = imap_status($this->mbox,$item->name,SA_ALL);
 					$res[$key] = array(
 						"name" => $realname,
+						"int_name" => str_replace("&","*",substr($item->name,strlen($this->servspec))),
 						"realname" => strpos($realname,".") === false ? $realname : substr($realname, strrpos($realname, '.') + 1),
 						//"count" => ($status->unseen > 0) ? sprintf("<b>(%d)</b>",$status->unseen) : "",
 					);
