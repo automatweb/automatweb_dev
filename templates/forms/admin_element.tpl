@@ -133,9 +133,9 @@ function toggle_file_link_newwin()
 </tr>
 <!-- SUB: RELATION_LB -->
 <tr>
-	<td class="fgtext">{VAR:LC_FORMS_REAL_FORM}Seose form:</td>
+	<td class="fgtext">{VAR:LC_FORMS_REAL_FORM}:</td>
 	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_rel_form' onChange="ch(document.f1.{VAR:cell_id}_rel_element, this)">{VAR:rel_forms}</select></td>
-	<td class="fgtext">{VAR:LC_FORMS_REAL_EL}Seose element:</td>
+	<td class="fgtext">{VAR:LC_FORMS_REAL_EL}:</td>
 	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_rel_element'><option value=''></select>
 	<script language="javascript">
 		ch(document.f1.{VAR:cell_id}_rel_element, document.f1.{VAR:cell_id}_rel_form);
@@ -168,7 +168,7 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_SORTING}:</td>
 <td class="fgtext"><input class="small_button" type='checkbox' NAME='{VAR:cell_id}_sort_order' value='1' {VAR:sort_by_order}>&nbsp;{VAR:LC_FORMS_BY_ORDER} <input type='checkbox' NAME='{VAR:cell_id}_sort_alpha' VALUE='1'  {VAR:sort_by_alpha}>&nbsp;{VAR:LC_FORMS_BY_ALPHABET}</td>
-<td class="fgtext">{VAR:LC_FORMS_IMPORT}Impordi:</td>
+<td class="fgtext">{VAR:LC_FORMS_IMPORT}:</td>
 <td class="fgtext"><input type='file' name='{VAR:cell_id}_import' class='small_button'></td>
 </tr>
 <tr>
