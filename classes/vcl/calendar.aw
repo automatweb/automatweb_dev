@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.12 2004/02/25 15:48:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.13 2004/03/08 16:46:27 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -107,6 +107,8 @@ class vcalendar extends aw_template
 			$range["future"] = $this->future_limit;
 			$range["end"] += 86400 * 60;
 		};
+		$this->el_count = 0;
+		$this->evt_list = array();
 		$this->range = $range;
 		return $range;
 	}
@@ -118,9 +120,23 @@ class vcalendar extends aw_template
 	{
 		// convert timestamp to day, since calendar is usually day based
 		$use_date = date("Ymd",$arr["timestamp"]);
+		$this->el_count++;
 		$data = $arr["data"];
 		$data["timestamp"] = $arr["timestamp"];
-		$this->items[$use_date][] = $data;
+		$data["_id"] = $this->el_count;
+
+		$this->evt_list[$this->el_count] = $data;
+		$this->items[$use_date][] = &$this->evt_list[$this->el_count];
+
+		if (isset($arr["recurrence"]) && is_array($arr["recurrence"]))
+		{
+			$this->recur_info[$this->el_count] = $arr["recurrence"];
+			foreach($arr["recurrence"] as $tm)
+			{
+				$use_date = date("Ymd",$tm);
+				$this->items[$use_date][] = &$this->evt_list[$this->el_count];
+			};
+		};
 		// this is used for relational view
 		//if ($data["timestamp"] < $this->range["timestamp"])
 		if ($data["timestamp"] < time())
@@ -353,6 +369,8 @@ class vcalendar extends aw_template
 
 		$now = date("Ymd");
 
+		$calendar_blocks = array();
+
 		for ($j = $realstart; $j <= $realend; $j = $j + (7*86400))
 		{
 			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
@@ -368,20 +386,46 @@ class vcalendar extends aw_template
 				{
 					continue;
 				};
+
+				// uh, but we parse day by day. How do I deal with recurring information?
 				if (is_array($this->items[$dstamp]))
 				{
 					$events = $this->items[$dstamp];
 					uasort($events,array($this,"__asc_sort"));
 					foreach($events as $event)
 					{
-						$events_for_day .= $this->draw_event($event);
+						$sday = $this->draw_event($event);
+						$events_for_day .= $sday;
 					};
 				};
+				$calendar_blocks[date("Ymd",$i)] .= $events_for_day;
+			};
+		};
+		
+		for ($j = $realstart; $j <= $realend; $j = $j + (7*86400))
+		{
+			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
+			{
+				$dstamp = date("Ymd",$i);
+				$events_for_day = "";
+				$wn = date("w",$i);
+				if ($wn == 0)
+				{
+					$wn = 7;
+				};
+				if ($wn > 5)
+				{
+					continue;
+				};
+				
 				$this->vars(array(
-					"EVENT" => $events_for_day,
+					"EVENT" => $calendar_blocks[date("Ymd",$i)],
 					"daynum" => date("j",$i),
 					"dayname" => date("F d, Y",$i),
-					"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
+					"daylink" => aw_url_change_var(array(
+						"viewtype" => "day",
+						"date" => date("d-m-Y",$i),
+					)),
 				));
 				$tpl = date("Ymd",$i) == $now ? "TODAY" : "DAY";
 				$rv .= $this->parse($tpl);
@@ -392,6 +436,7 @@ class vcalendar extends aw_template
 			$rv = "";
 			$w .= $this->parse("WEEK");
 		};
+
 		$this->vars(array(
 			"HEADER" => $header,
 			"WEEK" => $w,
