@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.48 2002/09/25 22:42:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.49 2002/09/26 11:42:00 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -44,8 +44,42 @@ class aliasmgr extends aw_template
 	function _get_s_header($args)
 	{
 		$this->read_template("search.tpl");
+		$id = $args["docid"];
+		$obj = $this->get_object($id);
+
+		// generate a list of class => name pairs
+		$aliases = array();
+		$classes = $this->cfg["classes"];
+		foreach($classes as $clid => $cldat)
+		{
+			if (isset($cldat["alias"]))
+			{
+				$aliases[$cldat["file"]] = $cldat["name"];
+			}
+		}
+
 		$toolbar = get_instance("toolbar");
 		$buttons = "";
+		
+		$buttons .= $toolbar->gen_button(array(
+			"name" => "new",
+			"tooltip" => "Lisa uus objekt",
+			"url" => "javascript:redir()",
+			"imgover" => "automatweb/images/blue/awicons/new_over.gif",
+			"img" => "automatweb/images/blue/awicons/new.gif",
+		));
+
+
+		$buttons .= $toolbar->gen_separator();
+		
+		$buttons .= $toolbar->gen_button(array(
+			"name" => "refresh",
+			"tooltip" => "Reload",
+			"url" => "javascript:window.location.reload()",
+			"imgover" => "automatweb/images/blue/awicons/refresh_over.gif",
+			"img" => "automatweb/images/blue/awicons/refresh.gif",
+		));
+		
 		$buttons .= $toolbar->gen_button(array(
 			"name" => "save",
 			"tooltip" => "Tee valitud objektidele aliased",
@@ -55,8 +89,12 @@ class aliasmgr extends aw_template
 		));
 
 		$this->vars(array(
+			"aliases" => $this->picker(-1,$aliases),
 			"buttons" => $buttons,
 			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"])),
+			"id" => $id,
+			"parent" => $obj["parent"],
+			"return_url" => urlencode($this->mk_my_orb("list_aliases", array("id" => $id))),
 		));
 
 		return $this->parse();
