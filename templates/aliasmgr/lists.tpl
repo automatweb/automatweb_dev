@@ -145,37 +145,40 @@ function awdelete()
 	len = document.aform.elements.length;
 	cnt = 0;
 	chk = 0;
+	idx = 0;
 	ids = new Array();
 	for (i = 0; i < len; i++)
 	{
 		with(document.aform.elements[i])
 		{
 			if (type == "checkbox"
-				&& name.indexOf("check") != -1
-				&& checked )
+				&& name.indexOf("check") != -1 )
 			{
-				//ids[cnt] = value;
 				cnt++;
-				ids[cnt] = cnt;
+				if (checked)
+				{
+					ids[idx] = value;
+					idx++;
+				};
 			}
 		}
 	};
 	dellink = "";
-	for (i = 1; i < ids.length; i++)
+	for (i = 0; i < ids.length; i++)
 	{
-		if (i == 1)
+		if (i == 0)
 		{
-			dellink = dellink + dellinks[ids[i]];
+			dellink = dellink + ids[i];
 		}
 		else
 		{
-			dellink = dellink + ';' + dellinks[ids[i]];
+			dellink = dellink + ';' + ids[i];
 		};
 	}
 	
-	if (cnt > 0)
+	if (ids.length > 0)
 	{
-		if (confirm('Kustutada need ' + cnt + ' aliast?'))
+		if (confirm('Kustutada need ' + ids.length + ' aliast?'))
 		{
 			window.location.href = '{VAR:delorb}&id=' + dellink;
 		};
