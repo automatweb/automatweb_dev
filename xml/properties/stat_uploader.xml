@@ -17,6 +17,14 @@
             <caption>Parool</caption>
       </property>
       <property>
+            <name>report_type</name>
+            <group>general</group>
+            <form>stat</form>
+            <type>select</type>
+            <field>report_type</field>
+            <caption>Aruande tüüp</caption>
+      </property>
+      <property>
             <name>file</name>
             <group>general</group>
             <form>stat</form>
@@ -38,7 +46,7 @@
             <form>stat</form>
             <type>textbox</type>
             <field>email</field>
-            <caption>Aruande esitaja meiliaadress</caption>
+            <caption>Kontaktandmed</caption>
       </property>
       <classinfo>
             <hide_tabs>1</hide_tabs>

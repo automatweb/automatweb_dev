@@ -4,5 +4,12 @@
             <syslog_type>ST_STAT_REPORT</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <REPORT_TYPE>
+                  <value>1</value>
+                  <clid>CL_META</clid>
+                  <caption>Aruannete tyybid</caption>
+            </REPORT_TYPE>
+      </reltypes>
 </properties>
 
