@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.213 2003/01/27 19:37:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.214 2003/01/29 20:18:23 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -444,11 +444,6 @@ class menuedit extends aw_template
 				// so we can get the root menu of the menu area from the menu area's name quickly
 				$this->menu_defs_name_map[$name] = $id;
 
-				global $DBUG;
-				if ($DBUG)
-				{
-					print "drawing $id $name<br>";
-				};
 				$this->req_draw_menu($id,$name,&$path,false);
 				if ($this->sel_section == $frontpage)
 				{
@@ -2331,11 +2326,22 @@ class menuedit extends aw_template
 		$menu_check_acl = $this->cfg["menu_check_acl"];
 		$this->sub_merge = 1;
 
-		global $DBUG;
-		if ($DBUG)
+		if ($this->mar[$parent]["meta"]["show_periods"] && $this->mar[$parent]["meta"]["show_period_count"])
 		{
-			print "parent = $parent<br>";
+			// now we replace the list of menus with list of periods
+			// oh, god, I hate myself
+			$this->mpr[$parent] = array();
+			$per = get_instance("periods");
+			$perlist = new aw_array($per->list_periods(0));
+			foreach($perlist->get() as $key => $val)
+			{
+				$this->mpr[$parent][] = array(
+					"name" => $val["description"],
+					"type" => MN_CONTENT,
+				);
+			};
 		};
+
 
 		$this->level++;
 
@@ -2437,14 +2443,6 @@ class menuedit extends aw_template
 		$l = "";
 		$l_mid = "";
 		reset($this->mpr[$parent]);
-
-		global $DBX;
-		if ($DBX && ($parent == 489))
-		{
-			print "<pre>";
-			print_r($this->mpr[$parent]);
-			print "</pre>";
-		}
 
 		// find out how many menus do we have so we know when to use
 		// the _END moficator
