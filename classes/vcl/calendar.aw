@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.19 2004/07/20 13:06:41 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.20 2004/07/20 13:40:37 rtoomas Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -816,6 +816,7 @@ class vcalendar extends aw_template
 			"modifiedby" => $evt["modifiedby"],
 			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
 			"COMMENT" => "",
+			'comment' => $evt['comment'],
 		));
 
 		if (!empty($evt["comment"]))
