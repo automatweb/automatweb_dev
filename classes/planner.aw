@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.86 2003/02/20 13:36:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.87 2003/03/07 16:06:58 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -10,16 +10,16 @@
 	@default group=general
 	@classinfo relationmgr=yes 
 
-	@property default_view type=select group=advanced
+	@property default_view type=select group=advanced rel=1
 	@caption Default vaade
 
 	@property event_cfgform type=objpicker clid=CL_CFGFORM subclass=CL_DOCUMENT
 	@caption Sündmuse lisamise vorm
 
-	@property day_start type=time_select 
+	@property day_start type=time_select rel=1
 	@caption Päev algab
 
-	@property day_end type=time_select
+	@property day_end type=time_select rel=1
 	@caption Päev lõpeb
 
 	@property tab_add_visible type=checkbox ch_value=1 default=1 group=advanced
@@ -448,10 +448,27 @@ class planner extends class_base
 		{
 			$this->calaliases = $this->get_aliases(array(
 				"oid" => $oid,
-				"type" => CL_CALENDAR,
+				"type" => CL_PLANNER,
 			));
 			$this->cal_oid = $oid;
 		};
+
+		// if there is a relation object, then load it and apply the settings 
+		// it has.
+		if ($alias["relobj_id"])
+		{
+			$relobj = $this->get_object(array(
+				"oid" => $alias["relobj_id"],
+				"clid" => CL_RELATION,
+			));
+
+			$overrides = $relobj["meta"]["values"]["CL_PLANNER"];
+			if (is_array($overrides))
+			{
+				$this->overrides = $overrides;
+			};
+		}
+
 		/*
     		$c = $this->calaliases[$matches[3] - 1];
 		$replacement = $this->object_list(array("id" => $c["target"],"type" => "day"));
@@ -538,7 +555,29 @@ class planner extends class_base
 		};
 
 		$this->date = $date;
+		
 
+		
+		$actlink = $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => $act));
+		$this->conf = $obj["meta"];
+		if (is_array($this->overrides))
+		{
+			foreach($this->overrides as $key => $val)
+			{
+				$this->conf[$key] = $val;
+			};
+		};
+		
+		if (not($type))
+		{
+			$type = $this->viewtypes[$this->conf["default_view"]];
+		}
+		
+		if (!$type)
+		{
+			$type = "day";
+		};
+		
 		if ($type == "day")
 		{
 			// lame check whether to show today or just day
@@ -555,9 +594,6 @@ class planner extends class_base
 		{
 			$act = "day";
 		};
-		
-		$actlink = $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => $act));
-		$this->conf = $obj["meta"];
 		$this->actlink = $actlink;
 		// generate a menu bar
 		// tabpanel really should be in the htmlclient too
@@ -626,15 +662,6 @@ class planner extends class_base
 
 		//$this->conf = $args["config"];
 
-		if (not($type))
-		{
-			$type = $types[$this->conf["default_view"]];
-		}
-		
-		if (!$type)
-		{
-			$type = "day";
-		};
 
 		// parent_class ?
 		$this->parent_class = $object["class_id"];
