@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.113 2003/07/09 15:45:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.114 2003/07/09 17:28:00 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -770,7 +770,7 @@ class aliasmgr extends aw_template
 					"alias" => $onealias,
 					"reltype" => $reltype,
 					"relobj_id" => $relobj_id,
-					"data" => $args["data"],
+					"extra" => $args["data"],
 				));
 				$alias_reltype[$onealias] = $reltype;
 			}
@@ -781,7 +781,7 @@ class aliasmgr extends aw_template
 					"alias" => $onealias,
 					"reltype" => $reltype,
 					"relobj_id" => $relobj_id,
-					"data" => $args["data"],
+					"extra" => $args["data"],
 				));
 				$alias_reltype[$onealias] = $reltype;
 			}
