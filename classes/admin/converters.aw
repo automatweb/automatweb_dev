@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.17 2003/07/01 10:19:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.18 2003/07/08 17:48:34 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -754,6 +754,30 @@ class converters extends aw_template
 			};
 			$this->restore_handle();
 		}
+	}
+
+	function convert_copy_makes_brother()
+	{
+		$this->_copy_makes_brother_fg();
+	}
+
+	function _copy_makes_brother_fg()
+	{
+		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_FORM." AND status != 0 AND brother_of != oid");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			
+			$id = $this->db_fetch_field("SELECT id FROM forms WHERE id = '$row[oid]'", "id");
+			if ($id)
+			{
+				$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = '$id'");
+				echo "fixed form $id <br>\n";
+				flush();
+			}
+			$this->restore_handle();
+		}
+		die("all done! <br>");
 	}
 };
 ?>
