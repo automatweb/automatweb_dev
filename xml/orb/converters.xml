@@ -193,5 +193,12 @@
 			</function>
 		</action>
 
+		<action name="convert_user_fg_prof">
+			<function name="convert_user_fg_prof">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
