@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.14 2002/02/15 10:56:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.15 2002/02/15 11:52:00 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -671,20 +671,17 @@ class cal_event extends aw_template {
 			if ($this->found)
 			{
 				$this->rep_count++;
-				//$ts = mktime(0,0,0,$month,$this->d,$year);
 				
 				// something weird is going on
-				// $ts = mktime(23,59,59,1,$this->gdaynum,2001);
-				//$ts = mktime(0,0,0,$month,$this->start_day + $this->daynum,$year);
-				//$ts = mktime(23,59,59,1,$this->gdaynum + 1,2001);
 				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
-				//$ts = mktime(23,59,59,$this->start_month,$this->start_day + $this->daynum,$year);
 				$ts = mktime(23,59,59,$this->start_month,$this->start_day + $this->daynum,$this->start_year);
 
+				// temp workaround for "every week on those days";
+				$delta = ($this->repeats["day"] == 2) ? 0 : 1;
 				// try to avoid duplicate repeaters
-				if (not(in_array($this->gdaynum + 1,$this->reps)))
+				if (not(in_array($this->gdaynum + $delta,$this->reps)))
 				{
-					$this->reps[] = $this->gdaynum + 1;
+					$this->reps[] = $this->gdaynum + $delta;
 				};
 				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
 				$this->found = false;
