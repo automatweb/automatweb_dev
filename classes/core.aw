@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.231 2003/11/04 09:59:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.232 2003/11/05 13:26:31 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1988,7 +1988,10 @@ class core extends acl_base
 		}
 
 		// this could probably use some more optimizing
-		$this->use_empty = false;
+		if (empty($this->use_empty))
+		{
+			$this->use_empty = false;
+		};
 
 		// flatten is not the correct term!
 		$this->process_orb_args("",$arr);
