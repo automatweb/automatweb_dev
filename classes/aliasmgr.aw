@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.150 2004/08/23 09:42:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.151 2004/08/25 09:30:05 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -79,10 +79,6 @@ class aliasmgr extends aw_template
 		{
 			$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $id),$this->use_class));
 		}
-		else
-		{
-			$return_url = urlencode($return_url);
-		};
 		$tb = $this->mk_toolbar($args['s']['class_id'], $args['objtype']);
 
 		$this->read_template("search.tpl");
@@ -103,7 +99,7 @@ class aliasmgr extends aw_template
 				"reltype" => $reltype,
 				"return_url" => $return_url,
 			),$this->use_class),
-			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id,"reltype" => $reltype,"return_url" => $return_url),$this->use_class),
+			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id,"reltype" => $reltype,"return_url" => urlencode($return_url)),$this->use_class),
 			"toolbar" => $tb,
 			"form" => $form,
 			"table" => $search->get_results(),
@@ -765,7 +761,7 @@ class aliasmgr extends aw_template
 			"period" => $period,
 			"search_url" => $this->mk_my_orb("search_aliases",array(
 				"id" => $this->id,
-				"return_url" => $return_url,
+				"return_url" => (isset($search_return_url) ? $search_return_url : $return_url),
 			),$this->use_class),
 		));
 

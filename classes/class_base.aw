@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.294 2004/08/23 09:42:34 kristo Exp $
+// $Id: class_base.aw,v 2.295 2004/08/25 09:30:06 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -582,7 +582,7 @@ class class_base extends aw_template
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
 			"reltype" => $this->reltype,
 			"cfgform" => isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
-			"return_url" => !empty($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
+			"return_url" => !empty($this->request["return_url"]) ? $this->request["return_url"] : "",
 			"subgroup" => $this->subgroup,
 		) + (isset($this->request["extraids"]) && is_array($this->request["extraids"]) ? array("extraids" => $this->request["extraids"]) : array());
 
@@ -689,6 +689,9 @@ class class_base extends aw_template
 	**/
 	function submit($args = array())
 	{
+		// since submit should never change the return url, make sure we get at it later
+		$real_return_url = $args["return_url"];
+
 		// check whether this current class is based on class_base
 		$this->init_class_base();
 		$this->orb_action = $args["action"];
@@ -797,6 +800,8 @@ class class_base extends aw_template
 			{
 				$args["XUL"] = 1;
 			};
+			// now, before we make the url to redir to, we must urlencode the return_url address, cause this is an url
+			$args["return_url"] = urlencode($real_return_url);
 			$retval = $this->mk_my_orb($action,$args,$orb_class);
 			if ($args["return"] == "id")
 			{
@@ -984,7 +989,7 @@ class class_base extends aw_template
 		{
 			$name = $this->obj_inst->name();
 		};
-		$return_url = !empty($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "";
+		$return_url = !empty($this->request["return_url"]) ? $this->request["return_url"] : "";
 		// XXX: pathi peaks htmlclient tegema
 		$title = isset($args["title"]) ? $args["title"] : "";
 		if (is_oid($this->id))
@@ -1058,7 +1063,7 @@ class class_base extends aw_template
 		$link_args = new aw_array(array(
 			"id" => isset($this->id) ? $this->id : false,
 			"group" => "",
-			"return_url" => $return_url,
+			"return_url" => urlencode($return_url),
 		));
 
 		// so .. what .. do I add tabs as well now?
@@ -1186,7 +1191,7 @@ class class_base extends aw_template
 			{
 				$link = $this->mk_my_orb("list_aliases",array(
 					"id" => $this->id,
-					"return_url" => $return_url),
+					"return_url" => urlencode($return_url)),
 				get_class($this->orb_class));
 			};
 
@@ -2475,11 +2480,15 @@ class class_base extends aw_template
 			aw_global_set("hide_yah",1);
 		};
 
+		$return_url = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
+		$search_return_url = urlencode($args["return_url"]);
+
 		$gen = $almgr->list_aliases(array(
 			"id" => $id,
 			"reltypes" => $reltypes,
 			"rel_type_classes" => $rel_type_classes,
 			"return_url" => !empty($return_url) ? $return_url : $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
+			"search_return_url" => $search_return_url
 		));
 
 
