@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.89 2004/12/31 09:43:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.90 2005/01/05 15:45:06 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -930,9 +930,13 @@ class htmlclient extends aw_template
 
 			// would be nice if I could update the textareas right when the iframe loses focus ..
 			// I'm almost sure I can do that.
+			$baseurl = aw_ini_get("baseurl");
+			$txt .= 'remove_exp = new RegExp("href=\"' . $baseurl . '","gi");' . "\n";
 			foreach($this->rtes as $rte)
 			{
-				$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+				$txt .= "tmpdat = document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+				//$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+				$txt .= "document.changeform.elements['${rte}'].value=tmpdat.replace(remove_exp," . '"href=\"");' . "\n";
 				$data["cb_nobreaks[${rte}]"] = 1;
 			};
 
