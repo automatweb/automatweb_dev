@@ -34,6 +34,9 @@
 <td class="fform">{VAR:LC_FORMS_SORTED_CELL_SYLE_2}:</td><td class="fform"><select name='content_sorted_style2'>{VAR:content_sorted_style2}</select></td>
 </tr>
 <tr>
+<td class="fform">Linkide stiil:</td><td class="fform"><select name='link_style'>{VAR:link_style}</select></td>
+</tr>
+<tr>
 <td class="fform">{VAR:LC_FORMS_CHOOSE_FORMS_WHERE_ELEMENTS_TAKEN}:</td><td class="fform"><select class='small_button' name='forms[]' multiple size=7>{VAR:forms}</select></td>
 </tr>
 <tr>
