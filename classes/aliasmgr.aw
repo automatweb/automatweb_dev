@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.102 2003/06/03 16:51:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.103 2003/06/04 10:05:29 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -29,6 +29,7 @@ class aliasmgr extends aw_template
 		extract($args);
 
 		$this->reltype = isset($args['s']['reltype']) ? $args['s']['reltype']: $reltype;
+//		$this->reltype = isset($args['objtype']) ? $args['objtype']: NULL;
 
 		$GLOBALS['site_title'] = "Seostehaldur";
 		$this->read_template("search.tpl");
@@ -93,7 +94,7 @@ class aliasmgr extends aw_template
 				"return_url" => $return_url,
 			),$this->use_class),
 			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id,"reltype" => $reltype),$this->use_class),
-			"toolbar" => $this->mk_toolbar($args['s']['class_id']),
+			"toolbar" => $this->mk_toolbar($args['s']['class_id'], $args['objtype']),
 			"form" => $form,
 			"table" => $search->get_results(),
 		));
@@ -949,7 +950,7 @@ class aliasmgr extends aw_template
 
 	////
 	// !Search and list share the same toolbar
-	function mk_toolbar($objtype = '')
+	function mk_toolbar($objtype = '', $selectedot = '')
 	{
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
 
@@ -1047,6 +1048,11 @@ class aliasmgr extends aw_template
 
 			$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
 			$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.($sele ? $sele : $single_select).'");'."\n";
+			if ($selectedot && ($this->reltype == $k))
+			{
+				$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.$selectedot.'");'."\n";
+			}
+
 		}
 
 		$rels1 .= 'listB.addOptions("_"'.',"Objekti tüüp","capt_new_object"'.");\n";

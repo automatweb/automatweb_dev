@@ -49,7 +49,9 @@ function search_for_object()
 {
 	var search_url = "{VAR:search_url}";
 	reltype = document.foo.reltype.options[document.foo.reltype.selectedIndex].value;
-	window.location.href=search_url + "&reltype=" + reltype;
+	objtype = document.foo.aselect.value;
+
+	window.location.href=search_url + "&reltype=" + reltype + "&objtype=" + objtype;
 }
 
 function awchange()
