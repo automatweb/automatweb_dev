@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.7 2003/11/04 09:59:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.8 2003/11/13 11:09:21 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -96,9 +96,24 @@ class object_translation extends aw_template
 			"parent" => $orig->parent(),
 			"raw" => $raw,
 		));
+		if (!$clone_id)
+		{
+			error::throw(array(
+				"id" => ERR_CLONE,
+				"msg" => "object_translation::create(): could not clone object ".$orig->id()
+			));
+		}
 
 		$clone = obj($clone_id);
 //		echo "clone name = ".$clone->name()." <br>";
+		if (!$clone->parent())
+		{
+			$clone->set_parent($orig->parent());
+		}
+		if (!$clone->class_id())
+		{
+			$clone->set_class_id($orig_inst->class_id());
+		}
 		$clone->set_lang($dstlang);
 		$clone->save();
 
