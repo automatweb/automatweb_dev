@@ -1,6 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.61 2005/01/04 11:18:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.62 2005/01/04 13:42:45 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
+/*
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
+*/
+
 /*
 
 	@classinfo syslog_type=ST_FORUM
@@ -56,16 +60,16 @@
 	@caption Folderi pealkirja stiil
 	
 	@property style_folder_topic_count type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Folderi teemade arvu stiil
+	@caption Teemade arvu stiil
 	
 	@property style_folder_comment_count type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Folderi postituste arvu stiil
+	@caption Teema kausta vastuste arvu stiil
 	
 	@property style_folder_last_post type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Folderi viimase postituse stiil
+	@caption Teema kausta viimase vastuse stiil
 	
 	@property style_forum_yah type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Foorumi YAH
+	@caption Foorumi asukohariba stiil
 	
 	@property style_topic_caption type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Teema pealkirja stiil
@@ -77,22 +81,22 @@
 	@caption Teema autori stiil
 	
 	@property style_topic_last_post type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema viimase postituste stiil
+	@caption Teema viimase vastuse stiil
 
 	@property style_comment_count type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Kommentaaride arvu stiil
+	@caption Vastuste arvu stiil
 	
 	@property style_comment_creator type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema püstitaja stiil
+	@caption Teema autori stiil
 
 	@property style_comment_user type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Kommentaari kasutajainfo stiil
+	@caption Vastuse autori stiil
 
 	@property style_comment_time type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Kommentaari aja stiil
+	@caption Vastuse aja stiil
 
 	@property style_comment_text type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Kommentaari teksti stiil
+	@caption Vastuse teksti stiil
 
 	@property style_form_caption type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Sisestusvormi pealkirja stiil
@@ -1741,6 +1745,15 @@ class forum_v2 extends class_base
 			return false;
 		};
 
+		if ($_GET["XX5"])
+		{
+			$nlg = $this->get_cval("non_logged_in_users_group");
+                        $g_oid = users::get_oid_for_gid($nlg);
+			print "nlg = $nlg, g_oid = $g_oid<br>";
+
+		};		
+
+
 		$gids = aw_global_get("gidlist_oid");
 		$check_ids = array($uid_oid) + $gids;
 
@@ -1752,6 +1765,24 @@ class forum_v2 extends class_base
 		));
 
 		return sizeof($conns) > 0;
+
+	}
+
+	function on_connect_menu($arr)
+	{
+		$conn = &$arr["connection"];
+		if ($conn->prop("reltype") == RELTYPE_TOPIC_FOLDER)
+		{
+			// now I need to grant certian privileges
+			$nlg = $this->get_cval("non_logged_in_users_group");
+                        $g_oid = users::get_oid_for_gid($nlg);
+			$group = new object($g_oid);
+
+			$target_object = new object($conn->prop("to"));
+			$target_object->acl_set($group, array("can_add" => 1, "can_view" => 1));
+			$target_object->save();
+
+		};
 
 	}
 };
