@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/lv/common.aw,v 1.2 2004/11/05 13:31:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/lv/common.aw,v 1.3 2004/12/27 12:35:38 kristo Exp $
 // kuude nimed
 define("LC_M1","janvaris");
 define("LC_M2","februaris");
@@ -14,7 +14,7 @@ define("LC_M10","oktobris");
 define("LC_M11","novembris");
 define("LC_M12","decembris");
 
-define("LC_MONTH","|jaanuar|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
+define("LC_MONTH","|janvaris|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
 define("LC_WEEKDAY","|esmaspäev|teisipäev|kolmapäev|neljapäev|reede|laupäev|pühapäev");
 
 define("LC_MONDAY","Esmasp&auml;ev");
