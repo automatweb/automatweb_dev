@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.275 2004/06/25 19:20:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.276 2004/06/25 19:34:00 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -406,63 +406,6 @@ class core extends acl_base
 		{
 			$this->db_query("UPDATE hits SET hits=hits+1 WHERE oid = $oid");
 		};
-	}
-
-	////
-	// !traverses the object tree from bottom to top and returns an 
-	// array of all objects in the path
-	// params:
-	//	$oid = object to start from
-	//	$check_objs = if this is false, then only menu objects are traversed,
-	//		if this is true, all objects
-	//	$rootobj = the oid of the object where to stop traversing, ie the root of the tree
-	function get_object_chain($oid,$check_objs = false, $rootobj = 0) 
-	{
-		if (!$oid) 
-		{
-			$int = (int)$oid;
-			if (strlen($oid) > strlen($int)) 
-			{
-				print LC_CORE_NOT_AN_OBJECT;
-				die;
-			};
-		};
-		if (aw_cache_get("goc_cache",$oid))
-		{
-			return aw_cache_get("goc_cache",$oid);
-		};
-		$parent = $oid;
-		$chain = array();
-		// um. this is stupid
-		while($parent > $rootobj) 
-		{
-			$row = $this->get_menu($oid);
-			if ($check_objs && !$row)
-			{
-				$row = $this->get_object($oid);
-			}
-
-			if (!$row) 
-			{
-				// kui me parentit ei leia, siis lihtsalt
-				// jargmise while tsykli labimisega kukume
-				// siit tsyklist välja
-				$parent = 0;
-			} 
-			else 
-			{
-				$parent = $row["parent"];
-				if (isset($chain[$row["oid"]]) && is_array($chain[$row["oid"]]))
-				{
-					// if we have been here before, we have a cyclic path.. baad karma.
-					return $chain;
-				}
-				$chain[$row["oid"]] = $row;
-				$oid = $row["parent"];
-			};
-		};
-		aw_cache_set("goc_cache",$oid,$chain);
-		return $chain;
 	}
 
 	////

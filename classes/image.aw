@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.100 2004/06/19 19:15:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.101 2004/06/25 19:34:00 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -927,7 +927,9 @@ class image extends class_base
 		$gc = get_instance("contentmgmt/gallery/gallery_conf");
 		$gc->do_check_tbl();
 
-		$oc = $this->get_object_chain($pt);
+		$oc = obj($pt);
+		$oc = $oc->path();
+
 		$rv = false;
 		if ($apply_image)
 		{
@@ -935,7 +937,7 @@ class image extends class_base
 		}
 		foreach($oc as $dat)
 		{
-			$q = "SELECT conf_id FROM gallery_conf2menu LEFT JOIN objects ON objects.oid = gallery_conf2menu.conf_id WHERE menu_id = '$dat[oid]' AND objects.status != 0 $appi";
+			$q = "SELECT conf_id FROM gallery_conf2menu LEFT JOIN objects ON objects.oid = gallery_conf2menu.conf_id WHERE menu_id = '".$dat->id()."' AND objects.status != 0 $appi";
 			if (($mnid = $this->db_fetch_field($q,"conf_id")))
 			{
 				$rv = $mnid;

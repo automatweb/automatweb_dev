@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.14 2004/05/19 10:43:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.15 2004/06/25 19:34:00 kristo Exp $
 
 /*
 
@@ -288,9 +288,12 @@ class classificator extends class_base
 			$ret = array();
 		}
 
-		$ch = $this->get_object_chain($parent);
-		foreach($ch as $id => $name)
+		$pt = obj($parent);
+		$ch = $pt->path();
+		foreach($ch as $o)
 		{
+			$id = $o->id();
+			$name = $o->name();
 			$found = false;
 			$this->db_query("
 				SELECT 

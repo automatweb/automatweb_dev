@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.326 2004/06/18 16:47:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.327 2004/06/25 19:34:00 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -23,7 +23,7 @@ class menuedit extends aw_template
 	// skip_invalidate   
 	function add_new_menu($args = array())
 	{   
-		// ja eeldame, et meil on v�emalt parent ja name olemas.   
+		// ja eeldame, et meil on v?emalt parent ja name olemas.   
 		$o = obj();
 		$o->set_name($args["name"]);
 		$o->set_parent($args["parent"]);
@@ -153,13 +153,8 @@ class menuedit extends aw_template
 		{
 			// kui asi on caches, siis paneme kirja et mis lehte vaadatati.
 			$this->sel_section = $section;
-			$ch = $this->get_object_chain($section, true);
-			//reset($ch);
-			//while (list($k,$v) = each($ch))
-			foreach($ch as $k => $v)
-			{
-				$str=$v["name"]." / ".$str;
-			}
+			$tmp = obj($section);
+			$str = $tmp->path_str();
 			$this->do_syslog_core($str,$section);
 		}
 
@@ -383,7 +378,7 @@ class menuedit extends aw_template
 			$this->cfg["frontpage"] = $frontpage;
 		}
 
-		// kui sektsiooni viimane m�k on "-", paneme selle objekti sees psti
+		// kui sektsiooni viimane m?k on "-", paneme selle objekti sees psti
 		// raw flagi
 
 		if (substr($section,-1) == "-")
@@ -537,7 +532,7 @@ class menuedit extends aw_template
 		} 
 		else 
 		{
-			// mingi kontroll, et kui sektsioon ei eksisteeri, siis n�tame esilehte
+			// mingi kontroll, et kui sektsioon ei eksisteeri, siis n?tame esilehte
 			if (!(($section > 0) && $this->can("view", $section))) 
 			{
 				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section), $section);
