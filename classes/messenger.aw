@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.59 2001/06/09 00:03:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.60 2001/06/13 14:43:10 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1136,6 +1136,8 @@ class messenger extends menuedit_light
 			"attach" => $attach,
 			"attaches" => $attaches,
 			"menu" => $menu,
+			"msg_box_width" => ($this->msgconf["msg_box_width"]) ? $this->msgconf["msg_box_width"] : 60,
+			"msg_box_height" => ($this->msgconf["msg_box_height"]) ? $this->msgconf["msg_box_height"] : 20,
 			"reforb" => $this->mk_reforb("handle",array()),
 		));
 
@@ -1842,6 +1844,8 @@ class messenger extends menuedit_light
 						"msg_move_read" => checked($conf["msg_move_read"]),
 						"msg_font" => $this->picker($conf["msg_font"],array("courier" => "Courier","arial" => "Arial","Tahoma" => "Tahoma")),
 						"msg_font_size" => $this->picker($conf["msg_font_size"],array("1" => "1","2" => "2", "3" => "3","+2" => "+2", "+3" => "+3")),
+						"msg_box_width" => ($conf["msg_box_width"]) ? $conf["msg_box_width"] : 60,
+						"msg_box_height" => ($conf["msg_box_height"]) ? $conf["msg_box_height"] : 20,
 						"aftpage" => "general",
 						);
 				break;
@@ -2093,11 +2097,15 @@ class messenger extends menuedit_light
 	function account_type($args = array())
 	{
 		extract($args);
-		$this->read_template("account1.tpl");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_account_type",array()),
-		));
-		return $this->parse();
+		//$this->read_template("account1.tpl");
+		//$this->vars(array(
+		//	"reforb" => $this->mk_reforb("submit_account_type",array()),
+		//));
+		//return $this->parse();
+		return $this->mk_site_orb(array(
+				"action" => "configure_pop3",
+				"id" => "new",
+			));
 	}
 
 	////
