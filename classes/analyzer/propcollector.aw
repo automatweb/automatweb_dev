@@ -95,6 +95,10 @@ class propcollector extends aw_template
 					{
 						$this->add_reltype($m[1],$m[2]);
 					};
+					if (preg_match("/^\s*@forminfo (\w+?) (.*)/",$line,$m))
+					{
+						$this->add_forminfo($m[1],$m[2]);
+					};
 					if (preg_match("/^\s*@caption (.*)/",$line,$m))
 					{
 						$this->add_caption($m[1]);
@@ -127,6 +131,7 @@ class propcollector extends aw_template
 		$this->tableinfo = array();
 		$this->views = array();
 		$this->reltypes = array();
+		$this->forminfo = array();
 	}
 
 	function add_property($name,$data)
@@ -222,6 +227,32 @@ class propcollector extends aw_template
 		$this->reltypes[$name] = $fields;
 		$this->name = $name;
 		$this->last_element = "relation";
+
+	}
+	
+	function add_forminfo($name,$data)
+	{
+		$_x = new aw_array(explode(" ",$data));
+		$fields = array();
+		foreach($_x->get() as $field)
+		{
+			list($fname,$fvalue) = explode("=",$field);
+			if ($fname && $fvalue)
+			{
+				// try to split fvalue
+				$_split = explode(",",$fvalue);
+				if (sizeof($_split) > 1)
+				{
+					$fields[$fname] = $_split;
+				}
+				else
+				{
+					$fields[$fname] = $fvalue;
+				};
+			};
+		};
+
+		$this->forminfo[$name] = $fields;
 
 	}
 
@@ -365,6 +396,11 @@ class propcollector extends aw_template
 			if (sizeof($this->reltypes) > 0)
 			{
 				$arr["properties"]["reltypes"] = $this->reltypes;
+			};
+			
+			if (sizeof($this->forminfo) > 0)
+			{
+				$arr["properties"]["forminfo"] = $this->forminfo;
 			};
 
 			$res = $sr->xml_serialize($arr);
