@@ -66,7 +66,7 @@
 @reltype ALL_ACCESS_GRP value=3 clid=CL_GROUP
 @caption projekti haldaja grupp
 
-@reltype CSS value=4 clid=CL_GROUP
+@reltype CSS value=4 clid=CL_CSS
 @caption css stiil
 
 */
