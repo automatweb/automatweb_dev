@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.16 2004/12/20 14:32:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.17 2004/12/22 12:01:02 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -10,6 +10,9 @@
 
 @property on_init type=hidden newonly=1
 @caption Initsialiseeri objekt
+
+@property form_type type=select method=serialize field=meta
+@caption Vormi tüüp
 
 @property def_name type=textbox method=serialize field=meta
 @caption Saatja nimi
@@ -120,6 +123,10 @@
 
 @reltype OBJECT_EXPORT value=11 clid=CL_OBJECT_EXPORT
 @caption Objektide eksport
+
+@reltype CAL_REG_FORM value=12 clid=CL_CALENDAR_REGISTRATION_FORM
+@caption Kalendri sündmusele registreerimise vorm
+
 */
 
 class webform extends class_base
@@ -174,6 +181,12 @@ class webform extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "form_type":
+				$prop["options"] = array(
+					1 => t("Registri andmed"),
+					2 => t("Kalendri sündmusele registreerimise vorm"),
+				);
+				break;
 			case "search":
 				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
 				$s = get_instance(CL_REGISTER_SEARCH);
@@ -312,13 +325,19 @@ class webform extends class_base
 				$register_data = obj();
 				$register_data->set_parent($arr["obj_inst"]->id());
 				$register_data->set_class_id(CL_REGISTER_DATA);
-				$register_data->set_name("register_data_".$arr["obj_inst"]->id());
+				$register_data->set_name("Registri andmed ".$arr["obj_inst"]->id());
 				$register_data->set_status(STAT_ACTIVE);
 				$register_data->save();
+				$cal_reg_form = obj();
+				$cal_reg_form->set_parent($arr["obj_inst"]->id());
+				$cal_reg_form->set_class_id(CL_CALENDAR_REGISTRATION_FORM);
+				$cal_reg_form->set_name("Kalendri sündmusele registreerimise vorm ".$arr["obj_inst"]->id());
+				$cal_reg_form->set_status(STAT_ACTIVE);
+				$cal_reg_form->save();
 				$cfgform = obj();
 				$cfgform->set_parent($arr["obj_inst"]->id());
 				$cfgform->set_class_id(CL_CFGFORM);
-				$cfgform->set_name("cfgform_".$arr["obj_inst"]->id());
+				$cfgform->set_name("Seadete vorm ".$arr["obj_inst"]->id());
 				$cfgform->set_status(STAT_ACTIVE);
 				$cfgform->save();
 				// well, seems that this is the only way -- ahz
@@ -338,7 +357,7 @@ class webform extends class_base
 				$object_type = obj();
 				$object_type->set_parent($arr["obj_inst"]->id());
 				$object_type->set_class_id(CL_OBJECT_TYPE);
-				$object_type->set_name("object_type_".$arr["obj_inst"]->id());
+				$object_type->set_name("Objekti tüüp ".$arr["obj_inst"]->id());
 				$object_type->set_status(STAT_ACTIVE);
 				$object_type->set_prop("use_cfgform", $cfgform->id());
 				$object_type->set_prop("type", CL_REGISTER_DATA);
@@ -354,7 +373,7 @@ class webform extends class_base
 				$metamgr = obj();
 				$metamgr->set_parent($arr["obj_inst"]->id());
 				$metamgr->set_class_id(CL_METAMGR);
-				$metamgr->set_name("metamgr_".$arr["obj_inst"]->id());
+				$metamgr->set_name("Muutujate haldus ".$arr["obj_inst"]->id());
 				$metamgr->set_status(STAT_ACTIVE);
 				$metamgr->save();
 				$arr["obj_inst"]->connect(array(
@@ -377,7 +396,7 @@ class webform extends class_base
 				$dir = obj();
 				$dir->set_parent($arr["obj_inst"]->parent());
 				$dir->set_class_id(CL_MENU);
-				$dir->set_name("sisestused_".$arr["obj_inst"]->id());
+				$dir->set_name("Sisestused ".$arr["obj_inst"]->id());
 				$dir->set_status(STAT_ACTIVE);
 				$dir->save();
 				$dir->acl_set($group, array("can_add" => 1));
@@ -385,7 +404,7 @@ class webform extends class_base
 				$register = obj();
 				$register->set_parent($arr["obj_inst"]->parent());
 				$register->set_class_id(CL_REGISTER);
-				$register->set_name("register_".$arr["obj_inst"]->id());
+				$register->set_name("Register ".$arr["obj_inst"]->id());
 				$register->set_status(STAT_ACTIVE);
 				$register->set_prop("data_cfgform", $cfgform->id());
 				$register->set_prop("default_cfgform", 1);
@@ -413,7 +432,7 @@ class webform extends class_base
 				$register_search->set_parent($register->id());
 				$register_search->set_class_id(CL_REGISTER_SEARCH);
 				$register_search->set_status(STAT_ACTIVE);
-				$register_search->set_name("register_search_".$arr["obj_inst"]->id());
+				$register_search->set_name("Registri otsing ".$arr["obj_inst"]->id());
 				$register_search->set_prop("per_page", 100);
 				$register_search->set_prop("register", $register->id());
 				$register_search->prop("show_all_in_empty_search", 1);
@@ -433,7 +452,7 @@ class webform extends class_base
 				$object_export->set_class_id(CL_OBJECT_EXPORT);
 				$object_export->set_parent($arr["obj_inst"]->id());
 				$object_export->set_status(STAT_ACTIVE);
-				$object_export->set_name("object_export_".$arr["obj_inst"]->id());
+				$object_export->set_name("Objekti eksport ".$arr["obj_inst"]->id());
 				$object_export->set_prop("object_type", $object_type->id());
 				$object_export->set_prop("root_folder", $dir->id());
 				$object_export->set_prop("csv_separator", ",");
@@ -1300,7 +1319,7 @@ class webform extends class_base
 			$o->set_status(STAT_ACTIVE);
 			$o->set_meta("cfgform_id", $cfgform->id());
 			$o->set_meta("object_type", $object_type->id());
-			$o->save();
+			//$o->save();
 			$cls = get_instance(CL_CLASSIFICATOR);
 			$relprops = $this->get_properties_by_type(array(
 				"clid" => CL_REGISTER_DATA,
