@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.12 2002/02/11 17:14:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.13 2002/02/14 22:34:23 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -79,7 +79,11 @@ class cal_event extends aw_template {
 		// nimekiri tundidest
                 $h_list = range(0,23);
                 // nimekiri minutitest
-                $m_list = array("0" => "00", "15" => "15", "30" => "30", "45" => "45");
+                $m_list = array("00" => "00", "05" => "05", "10" => "10", "15" => "15", 
+			"20" => "20", "25" => "25", "30" => "30", "35" => "35", "40" => "40",
+			"45" => "45", "50" => "50", "55" => "55",
+		);
+		$smin = (sprintf("%d",$smin / 5) * 5) + 5;
 		if ($args["oid"])
 		{
 			$obj = $this->get_object($args["oid"]);
@@ -112,7 +116,9 @@ class cal_event extends aw_template {
 		if ($date)
 		{
 			list($d,$m,$y) = explode("-",$date);
-			$start = mktime(9,0,0,$m,$d,$y);
+			list($sh,$sm,$ss) = explode("-",date("H-i-s"));
+			$start = mktime($sh,$sm,$ss,$m,$d,$y);
+			//$start = time();
 		}
 		else
 		{
@@ -669,7 +675,9 @@ class cal_event extends aw_template {
 				//$ts = mktime(0,0,0,$month,$this->d,$year);
 				
 				// something weird is going on
-				$ts = mktime(23,59,59,1,$this->gdaynum + 1,2001);
+				// $ts = mktime(23,59,59,1,$this->gdaynum,2001);
+				//$ts = mktime(0,0,0,$month,$this->start_day + $this->daynum,$year);
+				//$ts = mktime(23,59,59,1,$this->gdaynum + 1,2001);
 				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
 				$ts = mktime(23,59,59,$this->start_month,$this->start_day + $this->daynum,$year);
 
