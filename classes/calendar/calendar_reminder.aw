@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_reminder.aw,v 1.1 2004/06/22 14:29:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_reminder.aw,v 1.2 2004/06/25 19:35:12 duke Exp $
 // calendar_reminder.aw - Kalendri meeldetuletus 
 /*
 
@@ -85,7 +85,7 @@ class calendar_reminder extends class_base
 		$sched = get_instance("scheduler");
                 $sched->add(array(
                         "event" => $this->mk_my_orb("process_pending_reminders", array(), "", false, true),
-                        "time" => time()+90,   // every 2 minutes
+                        "time" => time()+119,   // every 2 minutes
                 ));
 
 		$ol = new object_list(array(
@@ -99,8 +99,10 @@ class calendar_reminder extends class_base
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			// if remind_at is in the past, then send the message out
-			if ($o->prop("remind_at") <= $now)
+			$remind_at = $o->prop("remind_at");
+			if ($remind_at < $now && $remind_at >= ($now - 1 - (2*60)))
 			{
+				print "n = $now, rat = " . $o->prop("remind_at") . "<br>";
 				$event_obj = new object($o->prop("event_id"));
 				$event_name = $event_obj->name();
 				$event_start = $this->time2date($event_obj->prop("start1"),2);
@@ -109,21 +111,15 @@ class calendar_reminder extends class_base
 				$c++;
 
 				// now I need an e-mail address for the user
-				$user_obj = new object($o->prop("user_id"));
+				//$user_obj = new object($o->prop("user_id"));
 				$email = $o->prop("email");
 				if (is_email($email))
 				{
 					send_mail($email,$event_name,$msg,"From: automatweb@automatweb.com");
 				};
-				#print "@ = $email<br>";
-				#arr($user_obj);
-				#print "and the fortune is $msg<br>";
-				#arr($o);
-
-
 				// mark it as done
-					$o->set_prop("reminder_sent",1);
-					$o->save();
+				//	$o->set_prop("reminder_sent",1);
+				//	$o->save();
 			};
 		};
 		print "Sent $c reminders";
