@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.22 2002/12/11 16:24:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.23 2002/12/20 12:40:31 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -3074,7 +3074,7 @@ class form_element extends aw_template
 					$this->vars(array(
 						"el_num" => $el_num++,
 						"el_id" => $row["el_id"],
-						"el_text" => $row["el_name"],
+						"el_text" => str_replace("\n","",$row["el_name"]),
 						"form_id" => $row["form_id"]
 					));
 					$eds.=$this->parse("ELDEFS");
