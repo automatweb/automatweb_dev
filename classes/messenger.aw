@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.78 2001/06/26 00:04:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.79 2001/07/02 04:51:08 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -984,6 +984,8 @@ class messenger extends menuedit_light
 
 		$message = $args["message"];
 		$this->dequote($message);
+		$this->dequote($subject);
+		$this->dequote($subject);
 		
 		if ($args["signature"] != "none")
 		{
@@ -1233,8 +1235,10 @@ class messenger extends menuedit_light
 	{
 		$this->fields = array(
 			"mfrom" => MSG_FIELD_FROM,
+			"mto" => MSG_FIELD_TO,
 			"subject"=> MSG_FIELD_SUBJECT,
 			"message" => MSG_FIELD_CONTENT,
+
 		);
 
 		$this->connectors = array(
@@ -1400,7 +1404,7 @@ class messenger extends menuedit_light
 		$c = "";
 		foreach ($results as $id => $contents)
 		{
-			$contents["tm"] = $this->time2date($contents["tm"],3);
+			$contents["tm"] = $this->time2date($contents["tm"],2);
 			$contents["from"] = $this->MIME_decode($contents["mfrom"]);
 			$contents["folder"] = $folder_list[$contents["parent"]];
 			$contents["fid"] = $contents["parent"];
@@ -1502,12 +1506,39 @@ class messenger extends menuedit_light
 				$cc = $msg["mtargets2"];
 				$from = $this->MIME_decode($from);
 				$subject = $this->MIME_decode($msg["subject"]);
+				$to = $msg["mto"];
+				$to_parts = explode(",",$to);
+
+				$mto = "";
+				foreach($to_parts as $id => $addr)
+				{
+					$this->vars(array(
+							"addr" => htmlspecialchars(trim($addr)),
+							"encaddr" => rawurlencode($addr),
+					));
+					$mto .= $this->parse("import_contact");
+					$mto .= " ";
+				};
+
+				$cc_parts = explode(",",$cc);
+				$mcc = "";
+				foreach($cc_parts as $id => $addr)
+				{
+					$this->vars(array(
+							"addr" => htmlspecialchars(trim($addr)),
+							"encaddr" => rawurlencode($addr),
+					));
+					$mcc .= $this->parse("import_contact");
+					$mcc .= " ";
+				};
+					
 				$vars = array(
 					"mfrom" => htmlspecialchars($from),
 					"encaddr" => rawurlencode($from),
-					"mtargets1" => htmlspecialchars($msg["mto"]),
+					//"mtargets1" => htmlspecialchars($msg["mto"]),
+					"mtargets1" => $mto,
 					"subject" => htmlspecialchars($subject),
-					"mtargets2" => htmlspecialchars($cc),
+					"mtargets2" => $mcc,
 				);
 				break;
 
