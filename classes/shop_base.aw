@@ -315,7 +315,7 @@ class shop_base extends aw_template
 		extract($arr);
 		classload("objects");
 		$ob = new objects;
-		$menus = $ob->get_list();
+		$menus = $ob->get_list(false,false,($root_menu ? $root_menu : -1));
 		$items = $this->listall_items(ALL_PROPS,$arr["constraint"]);
 		$ret = array();
 		foreach($items as $iid => $irow)
