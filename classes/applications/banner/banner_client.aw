@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_client.aw,v 1.3 2004/01/13 16:24:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_client.aw,v 1.1 2004/03/26 11:46:37 kristo Exp $
 
 classload("banner/banner");
 class banner_client extends banner
