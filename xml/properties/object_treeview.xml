@@ -189,7 +189,7 @@
                   <value>1</value>
                   <clid>
                         <num_0>CL_MENU</num_0>
-                        <num_1>CL_SERR_FOLDER</num_1>
+                        <num_1>CL_SERVER_FOLDER</num_1>
                   </clid>
                   <caption>kataloog</caption>
             </FOLDER>
@@ -208,11 +208,11 @@
                   <clid>CL_CSS</clid>
                   <caption>css stiil</caption>
             </CSS>
-            <STY_DONOR>
+            <STYLE_DONOR>
                   <value>5</value>
                   <clid>CL_OBJECT_VIEW</clid>
                   <caption>stiilide doonor</caption>
-            </STY_DONOR>
+            </STYLE_DONOR>
       </reltypes>
 </properties>
 
