@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.8 2003/01/16 16:45:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.9 2003/02/05 10:52:20 kristo Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -628,7 +628,7 @@ class scheduler extends aw_template
 		};
 
 		$this->read_template("set_time.tpl");
-		$ce = get_instance("cal_event");
+		$ce = get_instance("calendar/cal_event");
 		$html = $ce->repeaters(array(
 			"id" => $id,
 			"cycle" => $cycle,
