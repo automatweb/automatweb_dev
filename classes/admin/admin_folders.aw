@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.16 2003/10/22 14:41:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.17 2003/10/29 15:11:12 duke Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -100,7 +100,7 @@ class admin_folders extends aw_template
 			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"],"period" => $this->period),"admin_menus"),
 			"root_name" => "<b>AutomatWeb</b>",
 			"has_root" => empty($this->use_parent) ? true : false,
-			"get_branch_func" => $this->mk_my_orb("gen_folders",array("parent" => ""),"workbench"),
+			"get_branch_func" => $this->mk_my_orb("gen_folders",array("parent" => "0"),"workbench"),
 		));
 
 		$awt->start("menu-list");
@@ -349,7 +349,7 @@ class admin_folders extends aw_template
 		}
 		$arr["iconurl"] = $iconurl;
 
-		if (empty($arr["link"]))
+		if (empty($arr["linkxxx"]))
 		{
 			if ($arr["admin_feature"])
 			{
