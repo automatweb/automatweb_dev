@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.106 2002/11/08 12:22:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.107 2002/11/11 15:37:38 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -3235,5 +3235,14 @@ class messenger extends menuedit_light
 		return quoted_printable_decode($retval);
 	}
 
+	function get_default_froma($ident)
+	{
+		return $this->msgconf["msg_pop3servers"][$ident]["address"];
+	}
+
+	function get_default_fromn($ident)
+	{
+		return $this->msgconf["msg_pop3servers"][$ident]["name1"]." ".$this->msgconf["msg_pop3servers"][$ident]["surname"];
+	}
 };
 ?>

@@ -4,12 +4,18 @@ classload("messenger");
 function decho($a)
 {
 	if ($GLOBALS["__debug"])
+	{
 		echo($a);
+		flush();
+	}
 };
 function dprint_r($a)
 {
 	if ($GLOBALS["__debug"])
+	{
 		print_r($a);
+		flush();
+	}
 };
 
 class ml_queue extends aw_template
@@ -369,14 +375,17 @@ class ml_queue extends aw_template
 	{
 		$sched = get_instance("scheduler");
 		$sched->add(array(
-			"event" => $this->mk_my_orb("process_queue", array("rand" => $this->gen_uniq_id()), "", false, true),
+			"event" => $this->mk_my_orb("process_queue", array(), "", false, true),
 			"time" => time()+120,	// every 2 minutes
 		));
-		echo "adding scheduler ! <br>";
+		echo "adding scheduler ! <br>\n";
+		flush();
 		decho("process_queue:<br>");//dbg
 		$tm=time();
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
 		$this->db_query("SELECT * FROM ml_queue WHERE status IN (0,1) AND start_at<='$tm'");
+		echo "select <Br>\n";
+		flush();
 		while ($r = $this->db_next())
 		{
 			$qid=(int)$r["qid"];
@@ -462,8 +471,8 @@ class ml_queue extends aw_template
 			// neid gruppi kuuluvusi pole vist vaja uuesti processida, pohh nendega :)
 		};
 		// exec dynamic rules
-		$rule_inst = get_instance("mailinglist/ml_rule");
-		$rule_inst->exec_dynamic_rules();
+//		$rule_inst = get_instance("mailinglist/ml_rule");
+//		$rule_inst->exec_dynamic_rules();
 		decho("valmis");//dbg
 		die("die");
 		return "";//hmhm
@@ -585,6 +594,10 @@ class ml_queue extends aw_template
 		};
 		$msg = $this->d->msg_get(array("id" => $mid));
 
+		$msg_meta = $this->get_object_metadata(array(
+			"oid" => $mid,
+			"key" => "msg",
+		));
 
 		$ml_list_inst = get_instance("mailinglist/ml_list");
 		$form_inst = get_instance("formgen/form");
@@ -704,8 +717,13 @@ class ml_queue extends aw_template
 		decho("msg[type]=$msg[type] html=".($msg["type"] & MSG_HTML)."<br>");
 		$is_html=$msg["type"] & MSG_HTML;
 
+		$messenger = get_instance("messenger");
+		$froma = $mfrom != "" ? $mfrom : $messenger->get_default_froma($msg_meta["identity"]);
+		$fromn = $mfrom != "" ? "" : $messenger->get_default_fromn($msg_meta["identity"]);
+		echo "froma = $froma , fromn = $fromn  <br>";
 		$this->awm->create_message(array(
-			"froma" => $mfrom,
+			"froma" => $froma,
+			"fromn" => $fromn,
 			"subject" => $subject,
 			"To" => $mailto,
 			"Sender"=>"lauri@struktuur.ee",
