@@ -371,7 +371,7 @@ class group extends class_base
 	{
 		$roles = array();
 
-		$acl = get_instance("acl_class");
+		$acl = get_instance(CL_ACL);
 		$acls = $acl->get_acls_for_group($gid);
 		foreach($acls as $acl_oid)
 		{
@@ -577,7 +577,7 @@ class group extends class_base
 	{
 		extract($arr);
 		
-		$acl = get_instance("acl_class");
+		$acl = get_instance(CL_ACL);
 		$acls = $acl->get_acls_for_group($gid);
 		foreach($acls as $acl_oid)
 		{
