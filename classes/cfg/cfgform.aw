@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.45 2004/11/26 06:32:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.46 2004/11/26 14:09:52 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -66,7 +66,9 @@
 	
 	@property gen_view_controllers type=callback callback=gen_view_controller_props group=get_controllers
 	@caption Kontrollerid
-	
+
+	@property default_table type=table group=defaults no_caption=1
+	@caption Vaikimisi väärtused
 
 	@property sysdefault type=table group=system no_caption=1
 	@caption Süsteemi seaded
@@ -78,8 +80,10 @@
 	
 	@groupinfo set_controllers caption=Salvestamine parent=controllers
 	@groupinfo get_controllers caption=Näitamine parent=controllers
-	
-	@groupinfo system caption="Seaded"
+
+	@groupinfo settings caption="Seaded"
+	@groupinfo defaults caption="Omaduste väärtused" parent=settings
+	@groupinfo system caption="Vormi seaded" parent=settings
 
 	@classinfo relationmgr=yes
 
@@ -164,8 +168,57 @@ class cfgform extends class_base
 			case "availtoolbar":
 				$this->gen_availtoolbar($arr);
 				break;
+
+			case "default_table":
+				$this->gen_default_table($arr);
+				break;
 		};
 		return $retval;
+	}
+
+	function gen_default_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Omadus",
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => "Tüüp",
+		));
+		$t->define_field(array(
+			"name" => "value",
+			"caption" => "Väärtus",
+		));
+
+		$props = $this->get_props_from_cfgform(array(
+			"id" => $arr["obj_inst"]->id(),
+		));
+
+
+		foreach($props as $prop)
+		{
+			if ($prop["type"] == "checkbox")
+			{
+				$pname = $arr["prop"]["name"];
+				$t->define_data(array(
+					"name" => $prop["name"],
+					"type" => $prop["type"],
+					"value" => html::checkbox(array(
+						"name" => $pname . "[" . $prop["name"] . "]",
+						"value" => 1,
+						"checked" => $this->prplist[$prop["name"]]["default"] == 1,
+					)),
+				));
+			};
+
+
+		};
+
+		//arr($props);
+
+
 	}
 
 	function gen_controller_props($arr)
@@ -334,7 +387,7 @@ class cfgform extends class_base
 			
 			case "gen_view_controllers":
 				$arr["obj_inst"]->set_meta("view_controllers", $arr["request"]["view_controllers"]);		
-			break;
+				break;
 			
 			case "sysdefault":
 				$ol = new object_list(array(
@@ -446,6 +499,12 @@ class cfgform extends class_base
 			case "edit_groups":
 				$this->update_groups($arr);
 				break;
+
+			case "default_table":
+				$this->default_values = $data["value"];
+				$this->_init_cfgform_data($arr["obj_inst"]);
+				$this->cfg_proplist = $this->prplist;
+				break;
 		}
 		return $retval;
 	}
@@ -487,9 +546,18 @@ class cfgform extends class_base
 			uasort($tmp,array($this,"__sort_props_by_ord"));
 			$cnt = 0;
 			$this->cfg_proplist = array();
+
 			foreach($tmp as $key => $val)
 			{
 				unset($val["tmp_ord"]);
+				if ($this->default_values[$key])
+				{
+					$val["default"] = $this->default_values[$key];	
+				}
+				else
+				{
+					unset($val["default"]);
+				};
 				$this->cfg_proplist[$key] = $val;
 			};
 			$obj_inst->set_meta("cfg_proplist",$this->cfg_proplist);
