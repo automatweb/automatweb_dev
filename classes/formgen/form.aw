@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.36 2003/02/13 09:53:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.37 2003/02/13 14:38:29 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -599,6 +599,19 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 
+		$this->do_add_col($arr);
+
+		$this->save();
+		$orb = $this->mk_orb("change", array("id" => $this->id));
+		// since this function can be called both from reforb and orb
+		// we make sure we return to the right place afterwards.
+		header("Location: $orb");
+		return $orb;
+	}
+
+	function do_add_col($arr)
+	{
+		extract($arr);
 		while ($count-- > 0)
 		{
 			$this->arr["cols"]++;
@@ -618,12 +631,6 @@ class form extends form_base
 				$this->arr["elements"][$a][$after+1] = array();
 			}
 		}
-		$this->save();
-		$orb = $this->mk_orb("change", array("id" => $this->id));
-		// since this function can be called both from reforb and orb
-		// we make sure we return to the right place afterwards.
-		header("Location: $orb");
-		return $orb;
 	}
 
 	////
