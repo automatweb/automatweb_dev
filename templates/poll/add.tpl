@@ -71,7 +71,7 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 	</tr>
 	<!-- SUB: QUESTION -->
 	<tr>
-		<td colspan="2" align="right" class="celltext"><input size="40" type='text' NAME='answer[{VAR:lang_id}][{VAR:answer_id}]' VALUE='{VAR:answer}' class="formtext"></td>
+		<td colspan="2" align="right" class="celltext"><input size="40" type='text' NAME='answer[{VAR:lang_id}][{VAR:answer_id}]' VALUE="{VAR:answer}" class="formtext"></td>
 		<td class="celltext">&nbsp;&nbsp;</td>
 		<td class="celltext">&nbsp;{VAR:clicks} ({VAR:percent}%)</td>
 	</tr>
