@@ -3,4 +3,3 @@
 	<class name="document_statistics" folder="contentmgmt" extends="class_base">
 	</class>
 </orb>
-		
