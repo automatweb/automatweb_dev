@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.8 2004/11/05 13:51:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.9 2005/01/28 14:04:50 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -275,7 +275,7 @@ class otto_prod_search extends class_base
 				if ($imnr != "")
 				{
 					$imnr = html::img(array(
-						"url" => "http://image01.otto.de/m2bilder/OttoDe/de_DE/images/formatb/".$imnr.".jpg",
+						"url" => "http://image01.otto.de/pool/OttoDe/de_DE/images/formatb/".$imnr.".jpg",
 						"width" => 80,
 						//"height" => 140,
 						"border" => "0"
