@@ -24,7 +24,7 @@
             <field>end</field>
             <table>planner</table>
             <group>general</group>
-            <caption>Kestus</caption>
+            <caption>Lõpp</caption>
       </property>
       <property>
             <name>content</name>
