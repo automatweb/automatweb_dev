@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.39 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.40 2001/07/28 00:17:06 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -188,6 +188,25 @@ class menuedit extends aw_template
 		global $baseurl;
 
 		$obj = $this->get_object($section);
+
+		$meta = $this->get_object_metadata(array(
+			"metadata" => $obj["metadata"],
+		));
+ 
+		////
+		// if the user is not logged in, then redirect him  or her to the default
+		// error page
+
+		if ( ($meta["users_only"] == 1) && (!defined("UID")) )
+		{
+			classload("config");
+			$dbc = new db_config();
+			$url = $dbc->get_simple_config("orb_err_mustlogin");
+			global $baseurl;
+			header("Location: $baseurl/$url");
+			exit;
+		};
+		
 		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
 		{
 			$section=$obj["parent"];
@@ -2210,6 +2229,18 @@ class menuedit extends aw_template
 			$this->db_query($q);
 			$menu = $this->db_next();
 
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $menu["metadata"],
+			));
+ 
+			$meta["users_only"] = $arr["users_only"];
+
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "users_only",
+				"value" => $arr["users_only"],
+			));
+
 			$sar = array(); $oidar = array();
 			// leiame koik selle menüü vennad
 			$q = "SELECT * FROM objects
@@ -2709,6 +2740,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		if (!($row = $this->db_next()))
 			$this->raise_error("menuedit->gen_change_html($id): No such menu!", true);
 
+		$meta = $this->get_object_metadata(array(
+			"metadata" => $row["metadata"],
+		));
+
 		if ($row["class_id"] == CL_PROMO)
 		{
 			classload("promo");
@@ -2806,6 +2841,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 											"number"			=> $row["number"],
 											"comment"			=> $row["comment"], 
 											"links"				=> checked($row["links"]), 
+											"users_only"  => ($meta["users_only"] == 1) ? "checked" : "",
 											"id"					=> $id,
 											"active"	    => ($row["status"] == 2) ? "checked" : "",
 											"clickable"	    => ($row["clickable"] == 1) ? "checked" : "",
@@ -3833,7 +3869,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					while (list(,$d) = each($docid))
 					{
 						$awt->stop("make_promo_boxes($section)::show_rows");
-						$pr_c.=$doc->gen_preview(array("docid" => $d, "tpl" => $row["filename"],"leadonly" => -1, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
+						$pr_c.=str_replace("\r","",str_replace("\n","",$doc->gen_preview(array("docid" => $d, "tpl" => $row["filename"],"leadonly" => -1, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1))));
 						$awt->start("make_promo_boxes($section)::show_rows");
 					}
 				}
