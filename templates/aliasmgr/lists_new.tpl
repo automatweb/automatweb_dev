@@ -75,7 +75,6 @@ function awdelete()
 {
 	len = document.aform.elements.length;
 	idx = 0;
-	dellink = "";
 	for (i = 0; i < len; i++)
 	{
 		with(document.aform.elements[i])
@@ -85,11 +84,6 @@ function awdelete()
 				if (checked)
 				{
 					idx++;
-					if (idx > 1)
-					{
-						dellink += ';';
-					}
-					dellink += value;	
 				};
 			}
 		}
@@ -99,7 +93,8 @@ function awdelete()
 	{
 		if (confirm('Kustutada need ' + idx + ' aliast?'))
 		{
-			window.location.href = 'orb.{VAR:ext}?class=aliasmgr&action=delete_alias&oid={VAR:id}&id='+dellink;
+			document.aform.subaction.value = 'delete';
+			document.aform.submit();
 		};
 	}
 	else
