@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.94 2004/06/25 18:38:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.95 2004/07/02 16:07:16 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -25,6 +25,9 @@
 
 	@property preview type=text store=no editonly=1
 	@caption Eelvaade
+
+	@property export type=text store=no editonly=1
+	@caption Ekspordi XML
 
 	@property rates callback=callback_get_rates group=rates
 	@caption Hinded
@@ -543,34 +546,6 @@ topic");
 		@comment
 
 	**/
-	/**  
-		
-		@attrib name=no_response params=name nologin="1" default="0"
-		
-		@param board required type=int
-		@param section optional
-		@param no_response define value="1"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	/**  
-		
-		@attrib name=addcomment params=name nologin="1" default="0"
-		
-		@param board required type=int
-		@param section optional
-		@param addcomment define value="1"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function show($args = array())
 	{
 		extract($args);
@@ -652,11 +627,21 @@ topic");
 		{
 			$id = $forum_obj->id();
 		};
+		
+		$author = $this->get_author($board);
+		if (empty($author))
+		{
+			$author = ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"];
+		};
 
 		$comment = stripslashes($board_obj->comment());
 		$comment = str_replace("'","",$comment);
 		$createdby = $board_obj->createdby();
 		$this->vars(array(
+			"topic" => $board_obj["name"],
+			"from" => $author,
+			"email" => $board_obj["meta"]["author_email"],
+			"created" => $this->time2date($board_obj["created"],2),
 			"topic" => $board_obj->name(),
 			"from" => ($board_obj->last() != "") ? $board_obj->last() : $createdby->name(),
 			"email" => $board_obj->meta("author_email"),
@@ -883,12 +868,23 @@ topic");
 			"id" => $forum_obj->id(),
 		));
 
+
+		$author = $this->get_author($board);
+		if (empty($author))
+		{
+			$author = ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"];
+		};
+
 		$createdby = $board_obj->createdby();
 
 		$this->vars(array(
 			"TABS" => $tabs,
 			"message" => $this->content,
 			"reforb" => $this->mk_reforb("submit_messages",array("board" => $board,"section" => $this->section,"act" => "show_threaded")),
+			"topic" => $board_obj["name"],
+			"from" => $author,
+			"email" => $board_obj["meta"]["author_email"],
+			"created" => $this->time2date($board_obj["created"],2),
 			"topic" => $board_obj->name(),
 			"from" => ($board_obj->last() != "") ? $board_obj->last() : $createdby->name(),
 			"email" => $board_obj->meta("author_email"),
@@ -1445,6 +1441,70 @@ topic");
 		};
 		return $retval;
 
+	}
+
+	/** Exports forum contents as XML
+		@attrib name=export_xml 
+		@param id required tye=int
+
+	**/
+	function export_xml($arr)
+	{
+		$ol = new object_list(array(
+			"parent" => $arr["id"],
+			"class_id" => CL_MSGBOARD_TOPIC,
+			"sort_by" => "objects.created desc",
+		));
+		$forum_obj = new object($arr["id"]);
+		$struct = array();
+		$struct["forum"] = array(
+			"name" => $forum_obj->name(),
+			"topics_on_page" => $forum_obj->prop("topicsonpage"),
+			"comments_on_page" => $forum_obj->prop("onpage"),
+			"comment" => $forum_obj->comment(),
+		);
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$topic_id = $o->id();
+			$last = $o->last();
+			$author = $last ? $last : $o->createdby();
+			if (is_object($author))
+			{
+				$author = $author->name();
+			};
+			$struct["topics"][$topic_id] = array(
+				"subject" => $o->name(),
+				"comment" => $o->prop("comment"),
+				"time" => $o->created(),
+				"author" => $author,
+				"email" => $o->meta("author_email"),
+			);
+			$this->_query_comments(array("board" => $o->id()));
+			while($row = $this->db_next())
+			{
+				$commdata = array(
+					"topic_id" => $row["board_id"],
+					"ip" => $row["ip"],
+					"time" => $row["time"],
+					"name" => $row["name"],
+					"email" => $row["email"],
+					"comment" => $row["comment"],
+					"subject" => $row["subj"],
+				);
+				$struct["comments"][$topic_id][$row["id"]] = $commdata;
+			};
+			// fer each topic, show teh contents too
+
+
+		};
+		header("Content-type: text/xml");
+		print aw_serialize($struct,SERIALIZE_XML);
+		die();
+		/*
+		print_r($ol);
+		print "exporting da thing!<br>";
+		arr($arr);
+		*/
 	}
 
 	/** Shows a list of topics for a forum 
@@ -2308,6 +2368,13 @@ topic");
 
 				break;
 
+			case "export":
+				$data["value"] = html::href(array(
+					"url" => $this->mk_my_orb("export_xml",array("id" => $arr["obj_inst"]->id())),
+					"caption" => "Ekspordi XML",
+				));
+				break;
+
 			case "addresslist":
 				$data["value"] = html::href(array(
 					"caption" => "E-posti aadressid",
@@ -2338,6 +2405,20 @@ topic");
 
 		};
 		return $retval;
+	}
+
+	function get_author($board_obj)
+	{
+		$b_obj = new object($board_obj);
+		if ($b_obj["class_id"] == CL_PERIODIC_SECTION || $b_obj["class_id"] == CL_DOCUMENT)
+		{
+			$docid = $b_obj["brother_of"];
+			$q = "SELECT author FROM documents WHERE docid = '$docid'";
+			$this->db_query($q);
+			$row = $this->db_next();
+			$author = $row["author"];
+		};
+		return $author;
 	}
 }
 ?>
