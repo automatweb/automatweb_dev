@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.4 2004/06/08 09:52:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.5 2004/06/17 13:55:15 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -76,6 +76,8 @@ class mini_gallery extends class_base
 
 		$ii = get_instance("image");
 
+		$imtpl = $this->get_template_string("IMAGE");
+
 		$str = "";
 		for ($r = 0; $r < $rows; $r++)
 		{
@@ -84,11 +86,21 @@ class mini_gallery extends class_base
 			{
 				if ($imgc < $img_c)
 				{
-					$tmp = $ii->parse_alias(array(
+					$args = array(
 						"alias" => array(
 							"target" => $img->id()
 						)
-					));
+					);
+					if ($this->is_template("IMAGE"))
+					{
+						$args["tpls"] = array(
+							"image_big_linked" => $imtpl,
+							"image_linked" => $imtpl,
+							"image_has_big" => $imtpl,
+							"image" => $imtpl
+						);
+					}
+					$tmp = $ii->parse_alias($args);
 					$this->vars(array(
 						"imgcontent" => $tmp["replacement"]
 
