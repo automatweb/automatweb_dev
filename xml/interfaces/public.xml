@@ -3,4 +3,5 @@
 	<class id="document" name="Dokumendid"/>
 	<class id="auth" name="Autentimine"/>
 	<class id="users" name="Kasutajad"/>
+	<class id="periods" name="Perioodid"/>
 </interface>
