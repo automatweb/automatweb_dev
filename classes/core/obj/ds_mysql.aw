@@ -76,7 +76,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$objtblprops = array();
 		foreach($properties as $prop => $data)
 		{
-			if ($data["store"] == "no" || $data["store"] == "connect")
+			if ($data["store"] == "no")
 			{
 				continue;
 			}
@@ -104,12 +104,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			if ($prop["method"] == "serialize")
 			{
-				/*
-				if ($prop['field'] == "meta")
-				{
-					$prop['field'] = "metadata";
-				}
-				*/
 				// metadata is unserialized in read_objprops
 				$ret[$prop["name"]] = $objdata[$prop["field"]][$prop["name"]];
 			}
@@ -126,6 +120,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// fix old broken databases where brother_of may be 0 for non-brother objects
 		$object_id = ($objdata["brother_of"] ? $objdata["brother_of"] : $objdata["oid"]);
+
+		$conn_prop_vals = array();
 
 		// do a query for each table
 		foreach($tables as $table)
@@ -146,6 +142,42 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$fields[] = $table.".".$prop["field"]." AS ".$prop["field"];
 						$_got_fields[$prop["field"]] = true;
 					}
+				}
+				else
+				if ($prop["store"] == "connect")
+				{
+					// resolve reltype and do find_connections
+					$values = array();
+					$_co_reltype = $prop["reltype"];
+					$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
+					if ($_co_reltype)
+					{
+						$this->db_query("
+							SELECT 
+								target 
+							FROM 
+								aliases 
+								LEFT JOIN objects ON objects.oid = aliases.target
+							WHERE 
+								source = '".$object_id."' AND 
+								reltype = '$_co_reltype' AND 
+								objects.status != 0
+						");
+						while ($row = $this->db_next())
+						{
+							if ($prop["multiple"] == 1)
+							{
+								$values[$row["target"]] = $row["target"];
+							}
+							else
+							{
+								$values = $row["target"];
+								break;
+							}
+						}
+					}
+					$conn_prop_vals[$prop["name"]] = $values;
+					//echo "resolved reltype to ".dbg::dump($_co_reltype)." <br>";
 				}
 				else
 				{
@@ -183,6 +215,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 				}
 			}
+		}
+
+		foreach($conn_prop_vals as $prop => $val)
+		{
+			$ret[$prop] = $val;
+			echo "set $prop => ".dbg::dump($val)." <br>";
 		}
 		return $ret;
 	}
