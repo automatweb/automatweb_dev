@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.24 2002/02/08 09:33:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.25 2002/02/12 15:31:16 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -538,7 +538,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			$sortby = $args["sortby"];
 		};
 		$this->t->sort_by(array("field" => $sortby));
-
+		
 		$this->vars(array(
 			"table" => $this->t->draw(),
 			"id" => $id,
@@ -990,7 +990,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$this->dellinks[$this->counter] = $id;
 		$this->t->merge_data(array(
 			"title" => $this->defs[$this->def_id]["title"],
-			"check" => sprintf("<input type='checkbox' name='check' value='%d'>",$this->def_id),
+			"check" => sprintf("<input type='checkbox' name='check' value='%d'>",$id),
 			"link" => sprintf("<input type='checkbox' name='link[%d]' value='1' %s>",$id,$this->aliaslinks[$id] ? "checked" : ""),
 			"icon"	=> sprintf("<img src='%s'>",get_icon_url($this->defs[$this->def_id]["class_id"],"")),
 			"alias" => sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$alias,$alias),
