@@ -1,6 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.14 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.15 2001/07/25 01:07:03 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
+lc_load("automatweb");
+lc_load("form");
 
 class form_base extends aw_template
 {
@@ -9,6 +11,17 @@ class form_base extends aw_template
 		$this->tpl_init("forms");
 		$this->db_init();
 		lc_load("definition");
+		lc_load("form");
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);
+		}
+		global $lc_automatweb;
+		if (is_array($lc_automatweb))
+		{
+			$this->vars($lc_automatweb);
+		}
 	}
 
 	////
@@ -42,6 +55,8 @@ class form_base extends aw_template
 	// $arr[elements] - array of elements in the form, indexed by row and column
 	function load($id = 0)
 	{
+		global $awt;
+		$awt->start("form:load");
 		if ($id == 0)
 		{
 			// see tuleb form klassi konstruktorist
@@ -59,6 +74,7 @@ class form_base extends aw_template
 		$this->parent = $row["parent"];
 		$this->type = $row["type"];
 		$this->comment = $row["comment"];
+		$this->lang_id = $row["lang_id"];
 		$this->entry_id = 0;
 
 		if (substr($row["content"],0,14) == "<?xml version=")
@@ -74,6 +90,7 @@ class form_base extends aw_template
 
 		$this->normalize();
 		$this->load_elements();
+		$awt->stop("form:load");
 	}
 
 	////
@@ -245,6 +262,16 @@ class form_base extends aw_template
 			$st = $this->parse();
 		}
 		$this->reset();
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);
+		}
+		global $lc_automatweb;
+		if (is_array($lc_automatweb))
+		{
+			$this->vars($lc_automatweb);
+		}
 		$this->read_template("menu.tpl");
 		$this->do_menu();
 		return $this->parse().$st;
@@ -270,7 +297,8 @@ class form_base extends aw_template
 			"sel_search"			=> $this->mk_orb("sel_search", array("id" => $this->id), "form"),
 			"metainfo"				=> $this->mk_orb("metainfo", array("id" => $this->id), "form"),
 			"import_entries" => $this->mk_my_orb("import_form_entries", array("id" => $this->id),"form_import"),
-			"set_folders" => $this->mk_my_orb("set_folders", array("id" => $this->id),"form")
+			"set_folders" => $this->mk_my_orb("set_folders", array("id" => $this->id),"form"),
+			"translate" => $this->mk_my_orb("translate", array("id" => $this->id),"form")
 		));
 
 		if ($action == "change" || $action == "show" || $action == "all_elements")
@@ -278,7 +306,7 @@ class form_base extends aw_template
 			$this->parse("GRID_SEL");
 		}
 
-		if ($action == "settings" || $action == "list_actions" || $action == "acl" || $action == "import_styles" || $action == "export_styles" || $action == "metainfo" || $action == "table_settings" || $action == "set_folders")
+		if ($action == "settings" || $action == "list_actions" || $action == "acl" || $action == "import_styles" || $action == "export_styles" || $action == "metainfo" || $action == "table_settings" || $action == "set_folders" || $action=="translate")
 		{
 			$this->parse("SETTINGS_SEL");
 		}
@@ -458,41 +486,46 @@ class form_base extends aw_template
 	}
 
 	////
-	// !returns a list of forms, filtered by type
-	function get_list($type,$addempty = false,$onlyactive = false)
+	// !returns a list of forms, filtered by type, wrapper for get_flist
+	// arguments:
+	// type(int) - listitavate vormide tüüp
+	// addempty(bool) - kas lisada tagastatava array algusse tühi element?
+	// onlyactive(bool) - whether to list only active forms?
+	function get_flist($args = array())
 	{
-		if ($addempty)
-		{
-			$ret = array("0" => "");
-		}
-		else
-		{
-			$ret = array();
-		}
-		if ($onlyactive)
-		{
-			$st = "objects.status = 2";
-		}
-		else
-		{
-			$st = "objects.status != 0";
-		}
-		$this->db_query("SELECT objects.name AS name,
-					objects.comment AS comment,
-					objects.oid AS oid,
-					forms.type AS type,
-					forms.subtype AS subtype,
-					forms.grp AS grp,
-					forms.j_order as j_order,
-					forms.j_name AS j_name
+		global $awt;
+		$awt->start("get_flist");
+		extract($args);
+
+		$ret = ($addempty) ? array("0" => "") : array();
+		$st = ($onlyactive) ? " = 2" : "!= 0";
+
+		$q = sprintf("	SELECT
+					objects.name AS name,
+					objects.oid AS oid
 				FROM forms
 				LEFT JOIN objects ON objects.oid = forms.id
-				WHERE $st AND forms.type = $type");
+				WHERE objects.status %s AND forms.type = %d",
+				$st,$type);
+		
+		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
 			$ret[$row["oid"]] = $row["name"];
 		}
+		$awt->stop("get_flist");
 		return $ret;
+	}
+
+	////
+	// !returns a list of forms, filtered by type, wrapper for get_flist
+	function get_list($type,$addempty = false,$onlyactive = false)
+	{
+		return $this->get_flist(array(
+				"type" => $type,
+				"addempty" => $addempty,
+				"onlyactive" => $onlyactive,
+		));
 	}
 
 	////
@@ -1173,6 +1206,28 @@ class form_base extends aw_template
 		{
 			$ret =$arr[$parent]["name"]."/".$ret;
 			$parent = $arr[$parent]["parent"];
+		}
+		return $ret;
+	}
+
+	function get_chains_for_form($fid)
+	{
+		$ret = array();
+		$this->db_query("SELECT chain_id FROM form2chain LEFT JOIN objects ON objects.oid = form2chain.chain_id WHERE form_id = $fid AND objects.status != 0");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["chain_id"]] = $row["chain_id"];
+		}
+		return $ret;
+	}
+
+	function get_forms_for_chain($chid)
+	{
+		$ret = array();
+		$this->db_query("SELECT form_id FROM form2chain WHERE chain_id = $chid ORDER BY ord");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["form_id"]] = $row["form_id"];
 		}
 		return $ret;
 	}
