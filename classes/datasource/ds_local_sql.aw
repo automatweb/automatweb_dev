@@ -1,5 +1,5 @@
 <?php
-// $Id: ds_local_sql.aw,v 1.4 2002/12/19 15:52:30 duke Exp $
+// $Id: ds_local_sql.aw,v 1.5 2003/01/02 13:30:12 duke Exp $
 // ds_local_sql - interface for the local SQL database
 class ds_local_sql extends aw_template
 {
@@ -17,9 +17,9 @@ class ds_local_sql extends aw_template
 		$retval = false;
 		if ($table && $idfield && $id)
 		{
-			$retval = $this->get_record($table,$idfield,$id,array_keys($fields));
+			$retval = new aw_array($this->get_record($table,$idfield,$id,array_keys($fields)));
 			$tmp = array();
-			foreach($retval as $key => $val)
+			foreach($retval->get() as $key => $val)
 			{
 				if ($fields[$key] == "serialize")
 				{
