@@ -210,7 +210,7 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-		dbg::p2("evaling $eq , res = $res<br>");
+		dbg::p2("controller id $id: evaling $eq , res = $res<br>");
 		@eval($eq);
 		if (!$contr_finish)
 		{
