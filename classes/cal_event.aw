@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.7 2002/02/06 07:30:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.8 2002/02/07 00:06:40 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -10,6 +10,28 @@ class cal_event extends aw_template {
 		extract($args);
 		$this->db_init();
 		$this->tpl_init("cal_event");
+	}
+	
+	////
+	// !Joonistab menüü
+	// argumendid:
+	// activelist(array), levelite kaupa info selle kohta, millised elemendid
+	// aktiivsed on
+	// vars(array) - muutujad, mida xml-i sisse pannakse
+	function gen_menu($args = array())
+	{
+		extract($args);
+		global $basedir;
+		load_vcl("xmlmenu");
+		$xm = new xmlmenu();
+		$xm->vars($vars);
+		$xm->load_from_files(array(
+					"xml" => $basedir . "/xml/planner/event_menu.xml",
+					"tpl" => $this->template_dir . "/menus.tpl",
+				));
+		return $xm->create(array(
+				"activelist" => $activelist,
+			));
 	}
 
 	////
@@ -198,6 +220,12 @@ class cal_event extends aw_template {
 		$object = $this->get_obj_meta($id);
 		$par_obj = $this->get_object($object["parent"]);
 		$meta = $object["meta"];
+
+		$menubar = $this->gen_menu(array(
+				"activelist" => array("event"),
+				"vars" => array("id" => $id),
+		));
+
 		$q = "SELECT *,planner.* FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE objects.oid = '$id'";
 		$this->db_query($q);
 		$row = $this->db_next();
@@ -222,6 +250,7 @@ class cal_event extends aw_template {
 		));
 
 		$this->vars(array(
+			"menubar" => $menubar,
 			"id" => $id,
 			"title" => $row["title"],
 			"place" => $row["place"],
@@ -241,9 +270,15 @@ class cal_event extends aw_template {
 
 		$obj = $this->get_object($id);
 		$par_obj = $this->get_object($obj["parent"]);
+		
+		$menubar = $this->gen_menu(array(
+				"activelist" => array("repeaters"),
+				"vars" => array("id" => $id),
+		));
 
 		$this->mk_path($par_obj["parent"],"Muuda eventit");
-		$meta = $this->get_object_metadata(array("oid" => $id,"key" => "repeaters"));
+		$key = ($stage == 2) ? "repeaters2" : "repeaters";
+		$meta = $this->get_object_metadata(array("oid" => $id,"key" => $key));
 
 		// what's that?
 		$caldata = $this->get_object_metadata(array(
@@ -295,6 +330,7 @@ class cal_event extends aw_template {
 
 		// oh, I know, this is sooo ugly
 		$this->vars(array(
+				"menubar" => $menubar,
 				"stage1" => $link1,
 				"stage2" => $link2,
 				"region1" => checked($meta["region1"]),
@@ -351,10 +387,11 @@ class cal_event extends aw_template {
 		$par_obj = $this->get_object($obj["parent"]);
 		$parent_class = $par_obj["class_id"];
 
+		$key = ($stage == 2) ? "repeaters2" : "repeaters";
 		$this->set_object_metadata(array(
 			"oid" => $id,
 			"overwrite" => 1,
-			"key" => "repeaters",
+			"key" => $key,
 			"value" => $args,
 		));
 		$q = "SELECT *,planner.* FROM objects LEFT JOIN planner ON (objects.oid = planner.id)
@@ -385,7 +422,7 @@ class cal_event extends aw_template {
 		// FIXME: this sucks
 		if ($parent_class == CL_CALENDAR)
 		{
-			return $this->mk_my_orb("event_repeaters",array("id" => $id),"planner");
+			return $this->mk_my_orb("event_repeaters",array("id" => $id,"stage" => $stage),"planner");
 		}
 		else
 		{
@@ -539,12 +576,13 @@ class cal_event extends aw_template {
 				// something weird is going on
 				$ts = mktime(23,59,59,1,$this->gdaynum,2001);
 				$this->reps[] = $this->gdaynum;
-				print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
+				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
 				$this->found = false;
 				// check whether we have reached the max count
 				if ( isset($this->max_rep_count) && ($this->rep_count == $this->max_rep_count) )
 				{
 					$this->finished = true;
+					$this->rep_end = $ts;
 					return;
 				};
 
@@ -577,7 +615,9 @@ class cal_event extends aw_template {
 
 		list($sx_m,$sx_d) = explode("-",date("n-j",$start));
 		$this->start_day = $sx_d;
+		
 		$this->start_month = $sx_m;
+
 
 		// that's a semaphore, which is used to decide whether we should drop out
 		// from the calculations
@@ -688,7 +728,7 @@ class cal_event extends aw_template {
 					$this->_process_month(array("month" => $m,"year" => $y));
 					if ($this->finished)
 					{
-						return;
+						return $this->rep_end;
 					};
 				};
 				$this->from_scratch = false;
@@ -698,7 +738,7 @@ class cal_event extends aw_template {
 			}
 
 		}
-		return $rep_end;
+		return $this->rep_end;
 	}		
 	
 	////
@@ -805,6 +845,23 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		{
 			return $this->mk_my_orb("change",array("id" => $id));
 		};
+	}
+
+	////
+	// !Displays the form for setting reminders
+	function reminder($args = array())
+	{
+		extract($args);
+		$this->read_template("reminder.tpl");
+		$menubar = $this->gen_menu(array(
+				"activelist" => array("reminder"),
+				"vars" => array("id" => $id),
+		));
+		$this->vars(array(
+			"menubar" => $menubar,
+		));
+
+		return $this->parse();
 	}
 };
 ?>
