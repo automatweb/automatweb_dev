@@ -189,10 +189,6 @@ class _int_object
 			{
 				$filter["to"] = $param["to"];
 			}
-			if (isset($param["sort_by"]))
-			{
-				$filter["sort_by"] = $param["sort_by"];
-			}
 			foreach($param as $k => $v)
 			{
 				if (substr($k, 0, 3) == "to.")
@@ -215,6 +211,12 @@ class _int_object
 				$ret[] =& new connection($c_d);
 			}
 		}
+
+		if ($param["sort_by"] != "")
+		{
+			usort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("'.$param["sort_by"].'"), $b->prop("'.$param["sort_by"].'"));'));
+		}
+
 		return $ret;
 	}
 
@@ -279,6 +281,12 @@ class _int_object
 				$ret[] =& new connection($c_d);
 			}
 		}
+
+		if ($param["sort_by"] != "")
+		{
+			usort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("'.$param["sort_by"].'"), $b->prop("'.$param["sort_by"].'"));'));
+		}
+
 		return $ret;
 	}
 
