@@ -25,6 +25,8 @@
 					<optional name="s_name" default="%"/>
 					<optional name="s_comment" default="%"/>
 					<optional name="s_type"/>
+					<optional name="s_id_from"/>
+					<optional name="s_id_to"/>
 					<optional name="return_url"/>
 				</arguments>
 			</function>
