@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.154 2003/10/14 10:17:57 kristo Exp $
+// $Id: class_base.aw,v 2.155 2003/10/21 21:30:08 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1890,11 +1890,41 @@ class class_base extends aw_template
 			$this->get_value(&$val);
 			if (!empty($val["value"]) || $val["store"] != "no")
 			{
-				$result[$val["name"]] = $val["value"];
+				//if (aw_global_get("__is_rpc_call") && $val["type"] == "fileupload" && is_readable($val["value"]))
+				if ($val["type"] == "fileupload" && is_readable($val["value"]))
+				{
+					$name = $val["name"];
+					$src = $this->get_file(array(
+						"file" => $val["value"],
+					));
+					if (aw_global_get("__is_rpc_call"))
+					{
+						$result[$name] = array("base64" => $src);
+					}
+					else
+					{
+						$result[$name] = $src;
+					};
+					$mimeinfo = get_instance("core/aw_mime_types");
+					$result[$name . "_type"] = $mimeinfo->type_for_file($val["value"]);
+				}
+				else
+				{
+					$result[$val["name"]] = $val["value"];
+				};
 			};
 		}
 
-		$retval = isset($args["raw"]) ? $result : aw_serialize($result, SERIALIZE_NATIVE);
+		if (aw_global_get("__is_rpc_call"))
+		{
+			$result["class_id"] = $this->clid;
+			return $result;
+			//$retval = aw_serialize($result, SERIALIZE_XMLRPC);
+		}
+		else
+		{
+			$retval = isset($args["raw"]) ? $result : aw_serialize($result, SERIALIZE_NATIVE);
+		};
 		return $retval;
 	}
 
@@ -1905,7 +1935,8 @@ class class_base extends aw_template
 		$raw = isset($args["raw"]) ? $args["raw"] : aw_unserialize($args["str"]);
 		$this->init_class_base();
 
-		$this->quote(&$raw);
+		// quoting thins here _seriosly_ fucks us over with binary data
+		//$this->quote(&$raw);
 
 		$this->process_data(array(
 			"parent" => $args["parent"],
