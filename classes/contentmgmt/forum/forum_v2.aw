@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.30 2004/07/02 16:07:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.31 2004/07/07 10:58:59 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -334,6 +334,7 @@ class forum_v2 extends class_base
 						arr($comments);
 						print "<br>";
 						$comm = new object();
+						print "cp is $comment_parent<br>";
 						$comm->set_parent($comment_parent);
 						$comm->set_class_id(CL_COMMENT);
 						$comm->set_name($comments["subject"]);
