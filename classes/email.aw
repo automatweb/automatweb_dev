@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.25 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.26 2003/01/03 14:57:30 kristo Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -154,7 +154,7 @@ class email extends aw_template
 				}
 			}
 			$_id = $this->new_object(array("parent" => $mail_id,"name" => $link_addr,"class_id" => CL_MAIL_LINK));
-			$this->_log(ST_ML_MAIL_LINK, SA_ADD ,sprintf(LC_EMAIL_ADD_MAIL_LINK,$subject,$link_addr)$_id);
+			$this->_log(ST_ML_MAIL_LINK, SA_ADD ,sprintf(LC_EMAIL_ADD_MAIL_LINK,$subject,$link_addr),$_id);
 		}
 
 		if ($send_mail != "")
