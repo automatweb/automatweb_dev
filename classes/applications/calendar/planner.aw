@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.32 2005/01/06 13:12:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.33 2005/01/13 10:30:37 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -495,11 +495,16 @@ class planner extends class_base
 
 		foreach($folderlist as $conn)
 		{
-			$_tmp = $conn->to();
-			if ($_tmp->prop("event_folder") != "")
-			{
-				$folders[] = $_tmp->prop("event_folder");
-			};
+                        $_tmp = $conn->to();
+                        $clid = $_tmp->class_id();
+                        if ($clid == CL_PLANNER && $_tmp->prop("event_folder") != "")
+                        {
+                                $folders[] = $_tmp->prop("event_folder");
+                        };
+                        if ($clid == CL_PROJECT)
+                        {
+                                $folders[] = $_tmp->id();
+                        };
 		};
 		
 		// also include events from any projects that are connected to this calender
