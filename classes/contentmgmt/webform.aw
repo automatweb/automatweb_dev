@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.20 2004/12/28 15:35:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.21 2004/12/29 09:46:38 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1326,7 +1326,8 @@ class webform extends class_base
 				"caption" => "Saada",
 			);
 		}
-		$rd = get_instance($arr["obj_inst"]->prop("form_type"));
+		$ftype = $arr["obj_inst"]->prop("form_type");
+		$rd = get_instance((empty($ftype) ? CL_REGISTER_DATA : $ftype));
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
 		));
