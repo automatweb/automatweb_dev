@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.99 2002/07/29 10:27:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.100 2002/08/01 17:22:06 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1436,7 +1436,7 @@ class core extends db_connector
 		// we replicate by POST request, cause this thing can be too long for a GET request
 		global $class,$action;
 
-		if (!($class == "bugtrack" && $action="add_error"))
+		if ((aw_ini_get("bugtrack.report_to_server") == 1) && !($class == "bugtrack" && $action="add_error"))
 		{
 			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
 			classload("socket");
