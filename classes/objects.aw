@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.22 2001/11/04 16:18:25 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.23 2001/11/07 17:34:53 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -659,7 +659,7 @@ class objects extends db_objects
 		// core::delete_object and core::upd_object to check if menus were changed and then flush the cache 
 		// - yeah, that would be a lot safer, but is it really necessary?
 		global $lang_id,$SITE_ID;
-
+		classload("cache");
 		$cache = new cache;
 		$cache->db_invalidate("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
 
