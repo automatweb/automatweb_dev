@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.210 2003/01/24 14:04:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.211 2003/01/24 15:01:11 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -878,9 +878,16 @@ class menuedit extends aw_template
 				$me_row = $this->get_menu($section);
 			};
 
-			if (is_array($me_row["meta"]["last_menus"]))
+			if ($me_row["class_id"] == CL_PROMO)
 			{
-				$sections = $me_row["meta"]["last_menus"];
+				if (is_array($me_row["meta"]["last_menus"]) && ($me_row["meta"]["last_menus"][0] != 0))
+				{
+					$sections = $me_row["meta"]["last_menus"];
+				}
+				else
+				{
+					$sections = array($section);
+				};
 			}
 			else
 			{
