@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.14 2001/09/10 11:11:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.15 2001/09/12 13:41:36 kristo Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -56,8 +56,8 @@ class form_table extends form_base
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-			$forms = $this->get_forms_for_table($id);
-			$els = $this->get_elements_for_forms($forms,true);
+			$t_forms = $this->get_forms_for_table($id);
+			$els = $this->get_elements_for_forms($t_forms,true);
 
 			$this->load_table($id);
 			$this->table["defs"] = array();
@@ -158,7 +158,7 @@ class form_table extends form_base
 		}
 		else
 		{
-			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_FORM_TABLE, "name" => $name, "comment" => $comment));
+			$this->id = $id = $this->new_object(array("parent" => $parent, "class_id" => CL_FORM_TABLE, "name" => $name, "comment" => $comment));
 			$this->db_query("INSERT INTO form_tables(id,num_cols) VALUES($id,'$num_cols')");
 		}
 
