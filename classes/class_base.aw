@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.331 2004/12/02 12:27:24 duke Exp $
+// $Id: class_base.aw,v 2.332 2004/12/02 14:47:15 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -839,6 +839,10 @@ class class_base extends aw_template
 			};
 			// now, before we make the url to redir to, we must urlencode the return_url address, cause this is an url
 			$args["return_url"] = urlencode($real_return_url);
+			if ($this->new && isset($_POST["cfgform"]))
+			{
+				$args["cfgform"] = $_POST["cfgform"];
+			};
 			$retval = $this->mk_my_orb($action,$args,$orb_class);
 			if ($args["return"] == "id")
 			{
