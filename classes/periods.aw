@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.10 2002/07/16 19:22:20 kristo Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.11 2002/08/29 03:10:03 kristo Exp $
 
 class db_periods extends aw_template 
 {
@@ -149,8 +149,9 @@ class db_periods extends aw_template
 		$q = "SELECT * FROM periods WHERE id = '$id'";
 		$this->db_query($q);
 		$pr = $this->db_fetch_row();
+		$pr["data"] = aw_unserialize($pr["data"]);
 
-		$str = aw_serialize($pr);
+		$str = aw_serialize($pr, SERIALIZE_PHP, array("to_file" => 1));
 		$this->cache->file_set($this->cf_name.$id, $str);
 		aw_cache_set("per_by_id", $id, $pr);
 		return $pr;
@@ -306,9 +307,21 @@ class db_periods extends aw_template
 	{
 		$this->quote($data);
 		extract($data);
+
+		$old = $this->get($id);
+
+		// if image uploaded, save it
+		$img = get_instance("image");
+		$old["data"]["image"] = $img->add_upload_image("image",0,$old["data"]["image"]["id"]);
+		$old["data"]["image_link"] = $image_link;
+
+		$dstr = aw_serialize($old["data"]);
+		$this->quote($dstr);
+
 		$q = "UPDATE periods
 			SET description = '$description',
-			    archived = '$archived'
+			    archived = '$archived',
+					data = '$dstr'
 			WHERE id = '$id'";
 		$this->db_query($q);
 		$this->cache->file_invalidate($this->cf_name.$id);
@@ -394,6 +407,8 @@ class periods extends db_periods
       "description" => $cper["description"],
 			"plist" => $this->period_olist(),
 	    "arc" => $this->option_list($cper["archived"],array("0" => "Ei","1" => "Jah")),
+			"image" => image::make_img_tag(image::check_url($cper["data"]["image"]["url"])),
+			"image_link" => $cper["data"]["image_link"],
 			"reforb" => $this->mk_reforb("submit_add", array("id" => $id))
 		));
 		return $this->parse();
