@@ -116,7 +116,7 @@
             <name>cfgmanager</name>
             <type>objpicker</type>
             <clid>CL_CFGFORM</clid>
-            <subclass>CL_PSEUDO</subclass>
+            <subclass>CL_MENU</subclass>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
@@ -320,6 +320,16 @@
             <table>menu</table>
             <field>clickable</field>
             <caption>Klikitav</caption>
+      </property>
+      <property>
+            <name>no_export</name>
+            <type>checkbox</type>
+            <group>advanced</group>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>&amp;Auml;ra n&amp;auml;ita ekspordis</caption>
       </property>
       <property>
             <name>no_menus</name>
