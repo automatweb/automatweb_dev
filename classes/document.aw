@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.59 2001/11/15 13:10:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.60 2001/11/20 11:35:01 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -495,7 +495,7 @@ class document extends aw_template
 		$this->register_sub_parser(array(
 					"idx" => 2,
 					"match" => "p",
-					"class" => "images",
+					"class" => "image",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 					"templates" => array("image","image_linked","image_inplace"),
@@ -1596,10 +1596,12 @@ class document extends aw_template
 		$addfile = $this->mk_my_orb("new",array("id" => $id, "parent" => $document["parent"]),"file");
 		$previewlink = "";
 
+		$return_url = $this->mk_my_orb("change", array("id" => $id));
 		$this->vars(array(
 			"addtable"	=> $this->mk_my_orb("add_doc", array("id" => $id, "parent" => $document["parent"]),"table"),
 			"addfile"		=> $addfile,
 			"add_img"	=> $this->mk_my_orb("new", array("parent" => $id),"images"),
+			"add_nimg"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"return_url" => urlencode($return_url),"alias_to" => $id),"image"),
 			"addlink"	=> $this->mk_my_orb("new", array("docid" => $id, "parent" => $document["parent"]),"links"),
 			"addform"		=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form"),
 			"addgraph"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"graph"),
@@ -1787,20 +1789,25 @@ class document extends aw_template
 		$upimg = "<img src='".$baseurl."/images/up.gif' border=0>";
 		$downimg = "<img src='".$baseurl."/images/down.gif' border=0>";
 
-		$img = new db_images;
-		$img->list_by_object($id,0,$s_pic_sortby,$s_pic_order);
+		$images = $this->get_aliases_for($id,CL_IMAGE,$s_pic_sortby, $s_pic_order,array("images" => "images.id = objects.oid"));
+
+//		$img = new db_images;
+//		$img->list_by_object($id,0,$s_pic_sortby,$s_pic_order);
 		$imglist = array();
 		$images_count = 0;
-		while($row = $img->db_next()) 
+		$return_url = $this->mk_my_orb("change", array("id" => $id));
+		reset($images);
+		while (list(,$row) = each($images))
 		{
 			$this->vars(array("name"				=> $row["name"], 
 												"modified"		=> $this->time2date($row["modified"],2), 
 												"modifiedby"	=> $row["modifiedby"],
-												"alias"				=> "#p".$row["idx"]."#",
+												"alias"				=> "#p".($images_count+1)."#",
 												"comment"			=> $row["comment"],
 												"id"					=> $row["oid"],
 												"pic_order"		=> $pic_order == "ASC" ? "DESC" : "ASC",
 												"ch_img"			=> $this->mk_my_orb("change", array("id" => $row["oid"]),"images"),
+												"ch_nimg"			=> $this->mk_my_orb("change", array("id" => $row["oid"],"return_url" => urlencode($return_url),"alias_to" => $id),"image"),
 												"del_img"			=> $this->mk_my_orb("delete", array("id" => $row["oid"]),"images"),
 												"pic_name_img"		=> $s_pic_sortby == "name" ? ($s_pic_order == "DESC" ? $upimg : $downimg ): "",
 												"pic_comment_img"	=> $s_pic_sortby == "comment" ? ($s_pic_order == "DESC" ? $upimg : $downimg ): "",
@@ -1809,8 +1816,7 @@ class document extends aw_template
 												"pic_modified_img"		=> $s_pic_sortby == "modified" ? ($s_pic_order == "DESC" ? $upimg : $downimg ): ""
 												));
 			$l.=$this->parse("IMG_LINE");
-			$imglist[] = sprintf("<a href='".$this->mk_my_orb("change", array("id" => $row["oid"]),"images")."'>#p%d#</a>",
-							$row["idx"]);
+			$imglist[] = "<a href='".$this->mk_my_orb("change", array("id" => $row["oid"],"return_url" => urlencode($return_url),"alias_to" => $id),"image")."'>#p".$images_count."#</a>";
 			$images_count++;
 		};
 		$this->vars(array("IMG_LINE" => $l,"imglist" => join(",",$imglist)));
@@ -2229,6 +2235,7 @@ class document extends aw_template
 
 		$contents = $arc->get(array("oid" => $args["docid"]));
 		$obj = $this->get_object($args["docid"]);
+		$this->mk_path($obj["parent"],"Arhiiv"); 
 		$meta = $arc->serializer->php_unserialize($obj["meta"]);
 
 		if (is_array($contents))
@@ -2246,8 +2253,11 @@ class document extends aw_template
 		$t->sort_by(array("field" => ($args["sortby"]) ? $args["sortby"] : "date"));
 
 		$this->vars(array(
-				"docid" => $docid,
-				"arc_table" => $t->draw(),
+			"docid" => $docid,
+			"arc_table" => $t->draw(),
+			"preview"	=> $this->mk_my_orb("preview", array("id" => $docid)),
+			"menurl"	=> $this->mk_orb("sel_menus",array("id" => $docid)),
+			"docid" => $docid
 		));
 		return $this->parse();
 	}

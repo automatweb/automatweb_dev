@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.1 2001/11/09 00:18:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.2 2001/11/20 11:35:01 kristo Exp $
 
 // yup, this class is really braindead at the moment and mostly a copy of
 // the current alias manager inside the document class, but I will optimize
@@ -115,6 +115,15 @@ class aliasmgr extends aw_template {
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id),"forum"),
 				"chlink" => "#",
 		);
+
+		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $this->id) ) );
+		$this->defs["image"] = array(
+				"alias" => "p",
+				"title" => "Image",
+				"table" => "image",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"image"),
+				"chlink" => "#",
+		);
 	}
 
 	////
@@ -182,10 +191,6 @@ class aliasmgr extends aw_template {
 			"name" => "check",
 			"align" => "center",
 		));
-		$this->t->define_field(array(
-			"name" => "radio",
-			"align" => "center",
-		));
 
 		$this->_link_aliases();
 		$this->_link_collection_aliases();
@@ -195,6 +200,7 @@ class aliasmgr extends aw_template {
 		$this->_form_aliases();
 		$this->_form_chain_aliases();
 		$this->_file_aliases();
+		$this->_image_aliases();
 		$this->_graph_aliases();
 		$this->_gallery_aliases();
 		$this->vars(array(
@@ -295,6 +301,29 @@ class aliasmgr extends aw_template {
 			$this->_common_parts($v);
 		}
 		$this->_finalize($this->defs["files"]);
+	}
+
+	function _image_aliases($args = array())
+	{
+		$this->_initialize($this->defs["image"]);
+		$files = $this->get_aliases_for($this->id,CL_IMAGE,$s_image_sortby, $s_image_order);
+		$fic = 0;
+		reset($files);
+		while (list(,$v) = each($files))
+		{
+			$fic++;
+			$return_url = $this->mk_my_orb("list_aliases", array("id" => $this->id));
+			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"], "return_url" => urlencode($return_url)),"image"),$v["name"]);
+			$this->t->define_data(array(
+				"name"                => $link,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"alias"               => "#p".$fic."#","comment" => $v["comment"],
+				"id"                  => $v["id"],
+			));
+			$this->_common_parts($v);
+		}
+		$this->_finalize($this->defs["image"]);
 	}
 
 	function _table_aliases($args = array())
@@ -482,7 +511,6 @@ class aliasmgr extends aw_template {
 	{
 		$id = ($args["id"]) ? $args["id"] : $args["oid"];
 		$this->t->merge_data(array(
-			"radio" => sprintf("<input type='radio' name='%s' value='%d' onClick='sel_%s=%d;'>",$this->attribs["table"],$id,$this->attribs["table"],$id),
 			"check" => sprintf("<input type='checkbox' name='c_%s' value='%d'>",$this->attribs["table"],$id),
 		));
 	}
