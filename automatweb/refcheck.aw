@@ -10,6 +10,12 @@ $users = new users_user;
 $gidlist = $users->get_gids_by_uid($uid);
 session_register("error");
 
+if ($uid == "")
+{
+	include("sorry.aw");
+	exit;
+}
+
 // check referer
 #if (substr($HTTP_REFERER,0,strlen($baseurl)) != $baseurl)
 #{

@@ -50,4 +50,5 @@ $vars = array(
 			"charset"				=> $t->get_charset());
 $sf->vars($vars);
 echo $sf->parse();
+
 ?>

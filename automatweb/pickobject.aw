@@ -5,6 +5,7 @@ include("admin_header.$ext");
 // see on nö lyhendatud versioon object prauserit ... saab kasutada yhe konkreetse objekti
 // välja valimiseks
 
+$ob = new db_objects;
 // catchime voimalikke erroreid
 if ($docid) 
 {
