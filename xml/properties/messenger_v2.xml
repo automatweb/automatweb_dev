@@ -67,6 +67,7 @@
             <method>serialize</method>
             <type>text</type>
             <parent>msg_cont</parent>
+            <no_caption>1</no_caption>
             <caption>Folderid</caption>
       </property>
       <property>
@@ -128,6 +129,7 @@
             <method>serialize</method>
             <type>toolbar</type>
             <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Otsingu toolbar</caption>
       </property>
       <property>
@@ -194,6 +196,7 @@
                   <num_1>rule_subject</num_1>
                   <num_2>target_folder</num_2>
             </props>
+            <store>no</store>
             <caption>Reeglid</caption>
       </property>
       <classinfo>
