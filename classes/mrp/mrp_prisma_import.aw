@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.14 2005/03/24 09:55:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.15 2005/04/06 07:19:21 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -696,7 +696,7 @@ class mrp_prisma_import extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$prop["value"] = $c->db_fetch_field("SELECT TrükiseEhitus as e FROM `trükise ehitus` WHERE EhitusID = '$prop[value]'", "e");
+				$prop["value"] = $c->db_fetch_field("SELECT TrükiseEhitus as e FROM `trykise_ehitus` WHERE EhitusID = '$prop[value]'", "e");
 				return PROP_OK;
 				break;
 

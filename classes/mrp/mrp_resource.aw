@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.42 2005/04/05 19:29:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.43 2005/04/06 07:19:21 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -977,6 +977,14 @@ class mrp_resource extends class_base
 		{
 			case MRP_STATUS_RESOURCE_AVAILABLE:
 				$thread_data = $resource->prop ("thread_data");
+				if (!is_array($thread_data))
+				{
+					$thread_data = array();
+					for($i = 1; $i <= max(1,$resource->prop("thread_info")); $i++)
+					{
+						$thread_data[$i] = array("state" => MRP_STATUS_RESOURCE_AVAILABLE);
+					}
+				}
 				$started = false;
 				$last_thread = true;
 

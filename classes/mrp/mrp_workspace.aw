@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.80 2005/04/05 19:29:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.81 2005/04/06 07:19:21 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3096,7 +3096,7 @@ class mrp_workspace extends class_base
 			case "grp_printer":
 			case "grp_printer_current":
 				$default_sortby = "tm";
-				$states = array(MRP_STATUS_PLANNED);
+				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_LOCKED,MRP_STATUS_PAUSED,MRP_STATUS_ONHOLD);
 				break;
 		}
 
