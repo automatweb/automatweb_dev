@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.268 2004/05/18 12:03:34 duke Exp $
+// $Id: class_base.aw,v 2.269 2004/05/20 11:15:50 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -502,13 +502,11 @@ class class_base extends aw_template
 
 		$properties = array("tabpanel" => $panel) + $properties;
 
-
-
 		$awt->start("parse-properties");
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
-		
+
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
 
@@ -2886,7 +2884,7 @@ class class_base extends aw_template
 
 			if ($type == "relmanager")
 			{
-				$argblock["prop"] = $property;
+				$argblock["prop"] = &$property;
 				//$target_reltype = $this->relinfo[$property["reltype"]];
 				//$argblock["prop"]["reltype"] = $target_reltype;
 				//var_dump($this->relinfo);
@@ -3039,7 +3037,7 @@ class class_base extends aw_template
 				// XXX: this invokes load_defaults, which in turn overwrites variables
 				// in $this instance. This might lead to some nasty bugs
 				$bt = $this->get_properties_by_type(array(
-					"type" => "relpicker",
+					"type" => array("relpicker","relmanager"),
 					"clid" => $_to->class_id(),
 				));
 
@@ -3061,7 +3059,7 @@ class class_base extends aw_template
 				foreach($bt as $item_key => $item)
 				{
 					// double check just in case
-					if (!empty($symname) && ($item["type"] == "relpicker") && ($item["reltype"] == $symname))
+					if (!empty($symname) && ($item["type"] == "relpicker" || $item["type"] == "relmanager") && ($item["reltype"] == $symname))
 					{
 						$target_prop = $item_key;
 					};
@@ -3616,10 +3614,11 @@ class class_base extends aw_template
 
 		$rv = array();
 
+		$type_filter = is_array($arr["type"]) ? $arr["type"] : array($arr["type"]);
+
 		foreach($all_properties as $key => $val)
 		{
-
-			if ($val["type"] == $arr["type"])
+			if (in_array($val["type"],$type_filter))
 			{
 				$rv[$key] = $val;
 			};
