@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.13 2003/05/06 13:51:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.14 2003/06/02 14:49:06 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -7,8 +7,11 @@
 	@default table=objects
 	@default group=general
 
-	@property subclass type=callback callback=callback_get_class_list field=subclass
+	@property subclass type=select 
 	@caption Klass
+
+	@property ctype type=text editonly=1 field=subclass
+	@caption Tüüp
 
 	@default field=meta
 	@default method=serialize
@@ -27,8 +30,6 @@
 
 	@groupinfo prplist caption=Omadused
 	@groupinfo grplist caption=Grupid
-	
-	@classinfo corefields=name,comment,status
 */
 class cfgform extends class_base
 {
@@ -51,7 +52,26 @@ class cfgform extends class_base
 				break;
 
 			case "preview":
-				$data["value"] = "here be dragons";
+				$data["value"] = "";
+				break;
+
+			case "subclass":
+				$retval = PROP_IGNORE;
+				if (empty($args["obj"]))
+				{
+					$retval = PROP_OK;
+					$cx = get_instance("cfg/cfgutils");
+					$class_list = new aw_array($cx->get_classes_with_properties());
+					$cp = get_class_picker(array("field" => "def"));
+					foreach($class_list->get() as $key => $val)
+					{
+						$data["options"][$key] = $val;
+					};	
+				};
+				break;
+
+			case "ctype":
+				$data["value"] = $this->cfg["classes"][$args["obj"]["subclass"]]["name"];
 				break;
 		};
 		return $retval;
@@ -127,35 +147,6 @@ class cfgform extends class_base
 		$this->cfg_groups = $grplist;
 	}
 		
-	////
-	// !Returns a list of checkboxes for selecting classes
-	function callback_get_class_list($args = array())
-	{
-		// this is only shown for new objects
-		if ($args["obj"])
-		{
-			return false;
-		};
-
-		$cx = get_instance("cfg/cfgutils");
-		$class_list = new aw_array($cx->get_classes_with_properties());
-		$cp = get_class_picker(array("field" => "def"));
-		$nodes = array();
-		$nodes[] = array("caption" => "Klassid");
-		foreach($class_list->get() as $key => $val)
-		{
-			$ckey = $cp[$key];
-			$nodes[$key] = array(
-				"caption" => $val,
-				"type" => "radiobutton",
-				"name" => "subclass",
-				"value" => $key,
-				"checked" => checked($args["obj"]["subclass"] == $key),
-			);
-		};
-		return $nodes;
-	}
-
 	////
 	// !Returns a list of checkboxes for selecting properties
 	function callback_get_prop_list($args = array())
