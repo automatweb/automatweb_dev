@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.48 2003/04/14 15:55:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.49 2003/04/17 11:13:39 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1365,7 +1365,7 @@ class form extends form_base
 						}
 					}
 					header("Location: ".$return_url);
-	//				die();
+					die();
 				}
 			}
 		}
