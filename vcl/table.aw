@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.55 2003/04/07 10:18:59 axel Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.56 2003/04/14 08:49:39 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -59,6 +59,7 @@ class aw_table
 	function define_data($row)
 	{
 		$this->data[] = $row;
+		$this->d_row_cnt++;
 	}
 
 	////
@@ -522,13 +523,15 @@ class aw_table
 		{
 			// ts?kkel ?le data
 			$counter = 0; // kasutame ridadele erineva v?rvi andmiseks
+			$p_counter = 0;
 			foreach($this->data as $k => $v)
 			{
 				$counter++;
+				$p_counter++;
 				// if this is not on the active page, don't show the damn thing
 				if (isset($has_pages) && $has_pages && isset($records_per_page) && $records_per_page)
 				{
-					$cur_page = (int)(($counter-1) / $records_per_page);
+					$cur_page = (int)(($p_counter-1) / $records_per_page);
 					if ($cur_page != $act_page)
 					{
 						continue;
