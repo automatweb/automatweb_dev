@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.225 2003/10/14 10:25:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.226 2003/10/14 10:27:44 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1750,6 +1750,11 @@ class core extends acl_base
 			{
 				$send_mail = false;
 			}
+		}
+
+		if ($err_type == ERR_ACL)
+		{
+			$send_mail = false;
 		}
 
 		if ($send_mail)
