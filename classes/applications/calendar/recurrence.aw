@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.4 2004/12/01 12:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.5 2004/12/15 10:02:11 kristo Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -47,8 +47,8 @@ the emb form. The latter I can then use for embedding cases
 @property end type=date_select table=calendar2recurrence form=+emb
 @caption Kuni
 
-@property test type=text store=no group=test
-@caption Test
+property test type=text store=no group=test
+caption Test
 
 @groupinfo test caption=Test
 
@@ -462,7 +462,26 @@ class recurrence extends class_base
 
 	}
 
+	/** returns array of events in the specified time range
 
+		@attrib api=1
+
+		@param id required
+		@param start required
+		@param end required
+
+	**/
+	function get_event_range($arr)
+	{
+		$q = "SELECT recur_start, recur_end FROM recurrence WHERE recur_id = ". $arr["id"] . " AND recur_start >= " . $arr["start"] . " AND recur_start <= ".$arr["end"]." ORDER BY recur_start";
+		$this->db_query($q);
+		$ret = array();
+		while($row = $this->db_next())
+		{
+			$ret[$row["recur_start"]] = $row;
+		}
+		return $ret;
+	}
 
 	/* Now that I have to basic functionality working pretty much fine, I need to figure out a
 	  a way to create that "clone" button.
