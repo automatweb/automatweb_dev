@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.117 2004/04/07 19:05:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.118 2004/04/30 08:49:29 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1124,6 +1124,29 @@ class users extends users_user
 		die();
 	}
 
+	function create_gidlists($uid)
+	{
+		$gidlist = array();
+		$gidlist_pri = array();
+		$gidlist_pri_oid = array();
+		$gidlist_oid = array();
+		$gl = $this->get_gids_by_uid($uid,true);
+		foreach($gl as $gid => $gd)
+		{
+			$gidlist[(int)$gid] = (int)$gd["gid"];
+			$gidlist_pri[(int)$gid] = (int)$gd["priority"];
+			if ($gd["oid"])
+			{
+				$gidlist_pri_oid[(int)$gd["oid"]] = (int)$gd["priority"];
+				$gidlist_oid[(int)$gd["oid"]] = (int)$gd["oid"];
+			}
+		}
+		aw_global_set("gidlist", $gidlist);
+		aw_global_set("gidlist_pri", $gidlist_pri);
+		aw_global_set("gidlist_pri_oid", $gidlist_pri_oid);
+		aw_global_set("gidlist_oid", $gidlist_oid);
+	}
+
 	function request_startup()
 	{
 		if (($uid = aw_global_get("uid")) != "")
@@ -1134,30 +1157,14 @@ class users extends users_user
 				// if no such user exists, log the bastard out
 				$this->kill_user();
 			}
-			$gidlist = array();
-			$gidlist_pri = array();
-			$gidlist_pri_oid = array();
-			$gidlist_oid = array();
-			$gl = $this->get_gids_by_uid($uid,true);
-			foreach($gl as $gid => $gd)
-			{
-				$gidlist[(int)$gid] = (int)$gd["gid"];
-				$gidlist_pri[(int)$gid] = (int)$gd["priority"];
-				if ($gd["oid"])
-				{
-					$gidlist_pri_oid[(int)$gd["oid"]] = (int)$gd["priority"];
-					$gidlist_oid[(int)$gd["oid"]] = (int)$gd["oid"];
-				}
-			}
 
+			$this->create_gidlists($uid);
+			$gidlist = aw_global_get("gidlist");
+			$gidlist_pri = aw_global_get("gidlist_pri");
 			if (count($gidlist) < 1)
 			{
 				$this->kill_user();
 			}
-			aw_global_set("gidlist", $gidlist);
-			aw_global_set("gidlist_pri", $gidlist_pri);
-			aw_global_set("gidlist_pri_oid", $gidlist_pri_oid);
-			aw_global_set("gidlist_oid", $gidlist_oid);
 			$this->touch($uid);
 
 			// get highest priority group
