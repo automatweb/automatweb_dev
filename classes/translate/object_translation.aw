@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.11 2004/02/11 11:57:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.12 2004/02/25 15:53:05 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -45,7 +45,14 @@ class object_translation extends aw_template
 		// steps
 		// 1 - read the original object
 		$orig = new object($args["id"]);
-		
+
+		// if the original does not have the has_translation flag set, let's set it!
+		if (!$orig->flag(OBJ_HAS_TRANSLATION))
+		{
+			$orig->set_flag(OBJ_HAS_TRANSLATION, true);
+			$orig->save();
+		}		
+
 		// 2 - resolve the id-s of srcland and dstlang
 		$l = get_instance("languages");
 		$langinfo = $l->get_list(array(
@@ -127,6 +134,7 @@ class object_translation extends aw_template
 			$clone->set_class_id($orig_inst->class_id());
 		}
 		$clone->set_lang($dstlang);
+		$clone->set_flag(OBJ_HAS_TRANSLATION);
 		$clone->save();
 
 		// we also gots to create a relation
@@ -153,7 +161,13 @@ class object_translation extends aw_template
 		return $GLOBALS["object_loader"]->ds->_get_root_obj($oid);
 	}
 
-	function translation_list($oid, $no_orig = false)
+	/** returns a list of translated objects to other lanugages, from the object $oid
+		
+		@comment 
+			opts array gives parameters, currently:
+			- ret_name - if true, array value is translated object name, not lang code
+	**/
+	function translation_list($oid, $no_orig = false, $opts = array())
 	{
 		// make language id => acceptlang lut
 		$l_inst = get_instance("languages");
@@ -165,6 +179,7 @@ class object_translation extends aw_template
 		obj_set_opt("no_auto_translation", 1);
 		$orig_id = $oid;
 		$orig_obj = obj($oid);
+		$orig_name = $orig_obj->name();
 		$orig_lang = $l_inst->get_langid_for_code($orig_obj->lang());
 		obj_set_opt("no_auto_translation", 0);
 
@@ -199,6 +214,7 @@ class object_translation extends aw_template
 				));
 
 				$orig_id = $f_conn["to"];
+				$orig_name = $f_conn["to.name"];
 				$orig_lang = $f_conn["to.lang_id"];
 			}
 		}
@@ -209,9 +225,21 @@ class object_translation extends aw_template
 		}
 		else
 		{
-			$ret = array(
-				$orig_lang => $orig_id
-			);
+			if ($opts["ret_name"])
+			{
+				$ret = array(
+					$orig_lang => array(
+						"oid" => $orig_id,
+						"name" => $orig_name
+					)
+				);
+			}
+			else
+			{
+				$ret = array(
+					$orig_lang => $orig_id
+				);
+			}
 		}
 
 		// now $conn contains all the translation relations from the original obj to the translated objs
@@ -221,67 +249,35 @@ class object_translation extends aw_template
 			{
 				if ($c["to"] != $orig_id)
 				{
+					if ($opts["ret_name"])
+					{
+						$ret[$c["to.lang_id"]] = array(
+							"name" => $c["to.name"],
+							"oid" => $c["to"]
+						);
+					}
+					else
+					{
+						$ret[$c["to.lang_id"]] = $c["to"];
+					}
+				}
+			}
+			else
+			{
+				if ($opts["ret_name"])
+				{
+					$ret[$c["to.lang_id"]] = array(
+						"name" => $c["to.name"],
+						"oid" => $c["to"]
+					);
+				}
+				else
+				{
 					$ret[$c["to.lang_id"]] = $c["to"];
 				}
 			}
-			else
-			{
-				$ret[$c["to.lang_id"]] = $c["to"];
-			}
 		}
 
-
-		/*$obj = obj($oid);
-
-		// see if the object has translations
-		$conn = $obj->connections_from(array(
-			"type" => RELTYPE_TRANSLATION
-		));
-		if (count($conn) < 1)
-		{
-			// if it has none, then try to figure out if it is a translated object
-			$conn = $obj->connections_to(array(
-				"type" => RELTYPE_TRANSLATION
-			));
-			if (count($conn) > 0)
-			{
-				// if it has connections pointing to it, then it is, so get the translations from the original
-				// we need to do this, because the previous query must ever only return 0 or 1 connections
-				reset($conn);
-				list(,$f_conn) = each($conn);
-				$obj = obj($f_conn->prop("from"));
-				$conn = $obj->connections_from(array(
-					"type" => RELTYPE_TRANSLATION
-				));
-			}
-		}
-
-		$l = get_instance("languages");
-
-		if ($no_orig)
-		{
-			$ret = array();
-		}
-		else
-		{
-			$ret = array(
-				$l->get_langid_for_code($obj->lang()) => $obj->id()
-			);
-		}
-		foreach($conn as $c)
-		{
-			if ($no_orig)
-			{
-				if ($c->prop("to") != $obj->id())
-				{
-					$ret[$c->prop("to.lang_id")] = $c->prop("to");
-				}
-			}
-			else
-			{
-				$ret[$c->prop("to.lang_id")] = $c->prop("to");
-			}
-		}*/
 		return $ret;
 	}
 
@@ -307,19 +303,19 @@ class object_translation extends aw_template
 		$ld = $l->fetch($set_lang_id);
 		
 		$this->vars(array(
-			"trans_msg" => nl2br($ld["meta"]["trans_msg"])
+			"trans_msg" => nl2br($ld["meta"]["lang_trans_msg"] != "" ? $ld["meta"]["lang_trans_msg"] : $ld["meta"]["trans_msg"])
 		));
 
 		$llist = $l->get_list();
 
 		$lt = "";
 
-		$tr = $this->translation_list($section);
-		foreach($tr as $lid => $oid)
+		$tr = $this->translation_list($section, false, array("ret_name" => true));
+		foreach($tr as $lid => $od)
 		{
 			$this->vars(array(
-				"url" => aw_ini_get("baseurl")."/".$oid,
-				"name" => $llist[$lid]
+				"url" => aw_ini_get("baseurl")."/".$od["oid"],
+				"name" => $od["name"]
 			));
 			$lt .= $this->parse("LANGUAGE");
 		}

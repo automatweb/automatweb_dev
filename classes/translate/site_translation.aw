@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.10 2004/02/11 20:04:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.11 2004/02/25 15:53:05 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -17,10 +17,10 @@
 @property inp_toolbar group=ipr_day,ipr_week,ipr_month,ipr_all type=toolbar  store=no no_caption=1 editonly=1
 @caption TB
 
-@property baselang type=select store=no
+@property baselang type=select field=meta method=serialize
 @caption Baaskeel
 
-@property targetlang type=select store=no
+@property targetlang type=select field=meta method=serialize
 @caption Sihtkeel
 
 @property targetlang_all type=checkbox ch_value=1 field=meta method=serialize
@@ -44,20 +44,20 @@
 @groupinfo untranslated caption=Tõlkimata submit=no
 @groupinfo in_progress caption="T&ouml;&ouml;s" submit=no
 
+@groupinfo utr_all caption="Kõik" parent=untranslated submit=no
 @groupinfo utr_day caption="Viimane päev" parent=untranslated submit=no
 @groupinfo utr_week caption="Viimane nädal" parent=untranslated submit=no
 @groupinfo utr_month caption="Viimane kuu" parent=untranslated submit=no
-@groupinfo utr_all caption="Kõik" parent=untranslated submit=no
 
+@groupinfo ipr_all caption="Kõik" parent=in_progress submit=no
 @groupinfo ipr_day caption="Viimane päev" parent=in_progress submit=no
 @groupinfo ipr_week caption="Viimane nädal" parent=in_progress submit=no
 @groupinfo ipr_month caption="Viimane kuu" parent=in_progress submit=no
-@groupinfo ipr_all caption="Kõik" parent=in_progress submit=no
 
+@groupinfo tr_all caption="Kõik" parent=translated submit=no
 @groupinfo tr_day caption="Viimane päev" parent=translated submit=no
 @groupinfo tr_week caption="Viimane nädal" parent=translated submit=no
 @groupinfo tr_month caption="Viimane kuu" parent=translated submit=no
-@groupinfo tr_all caption="Kõik" parent=translated submit=no
 
 @classinfo relationmgr=yes
 
@@ -193,18 +193,14 @@ class site_translation extends class_base
 				$start = mktime(0,0,0,date("m"),date("d")-7,date("Y"));
 				break;
 
-			case "utr_all":
+			default:
 				$start = false;
 				break;
 
-			default:
+			case "utr_day":
 				$start = mktime(0,0,0,date("m"),date("d"),date("Y"));
 				break;
 		};
-		if (!isset($args["request"]["clid"]))
-		{
-			$args["request"]["clid"] = CL_MENU;
-		}
 
 		$filter = array(
 			"flags" => array(
@@ -274,12 +270,12 @@ class site_translation extends class_base
 		foreach($thingies->arr() as $item)
 		{
 			$lch = array();
-
 			$g_modified = $item->modified();
 
 			$co = $item->connections_from(array(
 				"type" => RELTYPE_TRANSLATION
 			));
+
 			$co_lg = array();
 			foreach($co as $c)
 			{
@@ -341,19 +337,14 @@ class site_translation extends class_base
 				$start = mktime(0,0,0,date("m"),date("d")-7,date("Y"));
 				break;
 
-			case "tr_all":
+			default:
 				$start = false;
 				break;
 
-			default:
+			case "tr_day":
 				$start = mktime(0,0,0,date("m"),date("d"),date("Y"));
 				break;
 		};
-
-		if (!isset($args["request"]["clid"]))
-		{
-			$args["request"]["clid"] = CL_MENU;
-		}
 
 		$o = $args["obj_inst"];
 
@@ -481,27 +472,22 @@ class site_translation extends class_base
 	{
 		switch($args["request"]["group"])
 		{
-			case "tr_month":
+			case "ipr_month":
 				$start = mktime(0,0,0,date("m"),date("d")-30,date("Y"));
 				break;
 
-			case "tr_week":
+			case "ipr_week":
 				$start = mktime(0,0,0,date("m"),date("d")-7,date("Y"));
 				break;
 
-			case "tr_all":
+			case "default":
 				$start = false;
 				break;
 
-			default:
+			case "ipr_day":
 				$start = mktime(0,0,0,date("m"),date("d"),date("Y"));
 				break;
 		};
-
-		if (!isset($args["request"]["clid"]))
-		{
-			$args["request"]["clid"] = CL_MENU;
-		}
 
 		$filter = array(
 			"flags" => array(
@@ -647,11 +633,6 @@ class site_translation extends class_base
 		// 1- lisa grupp
 		$toolbar = &$arr["prop"]["toolbar"];
 
-		if (!isset($arr["request"]["clid"]))
-		{
-			$arr["request"]["clid"] = CL_MENU;
-		}
-
 		$toolbar->add_cdata(html::select(array(
 			"name" => "clid",
 			"options" => $this->_prep_clid_list(),
@@ -672,11 +653,6 @@ class site_translation extends class_base
 		// which links do I need on the toolbar?
 		// 1- lisa grupp
 		$toolbar = &$arr["prop"]["toolbar"];
-
-		if (!isset($arr["request"]["clid"]))
-		{
-			$arr["request"]["clid"] = CL_MENU;
-		}
 
 		$toolbar->add_cdata(html::select(array(
 			"name" => "clid",
@@ -699,11 +675,6 @@ class site_translation extends class_base
 		// 1- lisa grupp
 		$toolbar = &$arr["prop"]["toolbar"];
 
-		if (!isset($arr["request"]["clid"]))
-		{
-			$arr["request"]["clid"] = CL_MENU;
-		}
-		
 		$toolbar->add_cdata(html::select(array(
 			"name" => "clid",
 			"options" => $this->_prep_clid_list(),

@@ -51,19 +51,19 @@
       <property>
             <name>baselang</name>
             <type>select</type>
-            <store>no</store>
+            <field>meta</field>
+            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
-            <field>baselang</field>
             <caption>Baaskeel</caption>
       </property>
       <property>
             <name>targetlang</name>
             <type>select</type>
-            <store>no</store>
+            <field>meta</field>
+            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
-            <field>targetlang</field>
             <caption>Sihtkeel</caption>
       </property>
       <property>
@@ -149,6 +149,11 @@
                   <caption>T&amp;ouml;&amp;ouml;s</caption>
                   <submit>no</submit>
             </in_progress>
+            <utr_all>
+                  <caption>Kõik</caption>
+                  <parent>untranslated</parent>
+                  <submit>no</submit>
+            </utr_all>
             <utr_day>
                   <caption>Viimane päev</caption>
                   <parent>untranslated</parent>
@@ -164,11 +169,11 @@
                   <parent>untranslated</parent>
                   <submit>no</submit>
             </utr_month>
-            <utr_all>
+            <ipr_all>
                   <caption>Kõik</caption>
-                  <parent>untranslated</parent>
+                  <parent>in_progress</parent>
                   <submit>no</submit>
-            </utr_all>
+            </ipr_all>
             <ipr_day>
                   <caption>Viimane päev</caption>
                   <parent>in_progress</parent>
@@ -184,11 +189,11 @@
                   <parent>in_progress</parent>
                   <submit>no</submit>
             </ipr_month>
-            <ipr_all>
+            <tr_all>
                   <caption>Kõik</caption>
-                  <parent>in_progress</parent>
+                  <parent>translated</parent>
                   <submit>no</submit>
-            </ipr_all>
+            </tr_all>
             <tr_day>
                   <caption>Viimane päev</caption>
                   <parent>translated</parent>
@@ -204,11 +209,6 @@
                   <parent>translated</parent>
                   <submit>no</submit>
             </tr_month>
-            <tr_all>
-                  <caption>Kõik</caption>
-                  <parent>translated</parent>
-                  <submit>no</submit>
-            </tr_all>
       </groupinfo>
       <reltypes>
             <CLASS>
