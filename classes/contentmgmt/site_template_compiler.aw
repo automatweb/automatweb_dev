@@ -82,7 +82,7 @@ class site_template_compiler extends aw_template
 		$this->tpl_init($path, true);
 		$this->no_use_ma_cache = $no_cache;
 		//echo "compiling \$this->read_template($tpl,true)<br>";
-		$success = $this->read_template($tpl,true);
+		$success = $this->read_template($tpl);
 		if (!$success)
 		{
 			return false;

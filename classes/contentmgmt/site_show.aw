@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.71 2004/08/04 07:30:42 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.72 2004/08/16 11:39:19 kristo Exp $
 
 /*
 
@@ -2040,13 +2040,13 @@ class site_show extends class_base
 	{
 		global $awt;
 
-		$tpldir = "../".str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
+		$tpldir = str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
 		$tpldir = str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
 
 		if (isset($arr["tpldir"]) && $arr["tpldir"] != "")
 		{
 			$this->tpl_init(sprintf("../%s/automatweb/menuedit",$arr["tpldir"]));
-			$tpldir = "../".$arr["tpldir"]."/automatweb/menuedit";;
+			$tpldir = $arr["tpldir"]."/automatweb/menuedit";;
 		}
 
 
