@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>change_folder</name>
+            <type>RELATION_CHANGE_FOLDER</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Muudatuste kataloog</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_AIP_CONF</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+
