@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.13 2004/09/09 10:57:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.14 2004/09/14 09:29:23 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -205,8 +205,19 @@ class shop_order extends class_base
 					"size" => 5
 				));
 			}
+
+			$name = $c->prop("to.name");
+			$name = html::get_change_url($c->prop("to"), array(), $name);
+
+			$to = $c->to();
+			$prod_conn = reset($to->connections_to(array("from.class_id" => CL_SHOP_PRODUCT)));
+			if ($prod_conn)
+			{
+				$name = "Pakend: ".$name.",  Toode: ".html::get_change_url($prod_conn->prop("from"), array(), $prod_conn->prop("from.name"));
+			}
+
 			$arr["prop"]["vcl_inst"]->define_data(array(
-				"name" => $c->prop("to.name"),
+				"name" => $name,
 				"count" => $cnt
 			));
 		}
