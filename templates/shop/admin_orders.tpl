@@ -1,3 +1,15 @@
+<table width="750" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="left">
+
+<table border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td bgcolor="#F8F1E4"><img src="{VAR:baseurl}/img/1_table_title_nurk2.gif" align="" width="13" height="20" border="0" alt=""></td>
+
+    <td bgcolor="#F8F1E4" class="text1">
+    {VAR:LC_goto_page}:
+<b>
+
 <!-- SUB: PAGE -->
 <a href='{VAR:goto_page}'>{VAR:from} - {VAR:to}</a> |
 <!-- END SUB: PAGE -->
@@ -5,15 +17,21 @@
 <!-- SUB: SEL_PAGE -->
 {VAR:from} - {VAR:to} |
 <!-- END SUB: SEL_PAGE -->
+</b>
+&nbsp;&nbsp;
+    </td>
 
-<table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
+  </tr>
+</table>
+<hr>
+<table width="750" border="0" cellspacing="1" cellpadding="2" bgcolor="#F8F1E4">
 <tr>
-	<td class="fcaption2">Millal</td>
-	<td class="fcaption2">Kasutaja</td>
-	<td class="fcaption2">IP</td>
-	<td class="fcaption2">Hind</td>
-	<td class="fcaption2">Vaata</td>
-	<td class="fcaption2">M&auml;rgi makstuks</td>
+	<td bgcolor="#F8F1E4" class="text1">Date / Time</td>
+	<td bgcolor="#F8F1E4" class="text1">Agent</td>
+	<td bgcolor="#F8F1E4" class="text1">IP adress</td>
+	<td bgcolor="#F8F1E4" class="text1">Price</td>
+	<td bgcolor="#F8F1E4" class="text1">View</td>
+	<td bgcolor="#F8F1E4" class="text1">Mark as paid</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
@@ -21,13 +39,13 @@
 	<td class="fcaption2">{VAR:user}</td>
 	<td class="fcaption2">{VAR:ip}</td>
 	<td class="fcaption2">{VAR:price}</td>
-	<td class="fcaption2"><a href='{VAR:view}'>Vaata</a></td>
+	<td class="fcaption2"><a href='{VAR:view}'>View</a></td>
 	<td class="fcaption2">
 		<!-- SUB: IS_F -->
-		<a href='{VAR:fill}'>M&auml;rgi makstuks</a>
+		<a href='{VAR:fill}'>Mark as paid</a>
 		<!-- END SUB: IS_F -->
 		<!-- SUB: FILLED -->
-		Tellimus on makstud.
+		Order is paid
 		<!-- END SUB: FILLED -->
 	</td>
 </tr>

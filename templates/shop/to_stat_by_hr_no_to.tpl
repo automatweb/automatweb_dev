@@ -1,19 +1,19 @@
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption2">Pood:</td>
+	<td class="fcaption2">Target:</td>
 	<td colspan=3 class="fform">{VAR:name}</td>
 </tr>
 <tr>
-	<td class="fcaption2">Alates:</td>
+	<td class="fcaption2">From:</td>
 	<td colspan=3 class="fform">{VAR:from}</td>
 </tr>
 <tr>
-	<td class="fcaption2">Kuni:</td>
+	<td class="fcaption2">To:</td>
 	<td colspan=3 class="fform">{VAR:to}</td>
 </tr>
 <tr>
-	<td class="fcaption2">Tund</td>
-	<td class="fform">Tellimusi</td>
+	<td class="fcaption2">Hour</td>
+	<td class="fform">Orders</td>
 </tr>
 <!-- SUB: HR -->
 <tr>
@@ -22,15 +22,14 @@
 </tr>
 <!-- END SUB: HR -->
 <tr>
-	<td class="fcaption2">Kokku:</td>
+	<td class="fcaption2">Total:</td>
 	<td class="fform">{VAR:t_cnt}</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=4>&nbsp;</td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=4>Tellimuste arv on <font color="#0000ff">sinine</font>.</td>
-</tr>
+	<td class="fcaption2" colspan=4>The number of orders is <font color="#0000ff">blue</font>.</td></tr>
 <tr>
 	<td class="fcaption2" colspan=4><img src='{VAR:chart}'></td>
 </tr>

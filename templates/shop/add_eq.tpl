@@ -6,7 +6,7 @@
 </tr>
 <tr>
 	<td class="fcaption2">{VAR:LC_SHOP_FORMULA}:</td>
-	<td class="fcaption2" ><input type='text' name='eq' value='{VAR:eq}'></td>
+	<td class="fcaption2" ><input type='text' size='130' name='eq' value='{VAR:eq}'></td>
 </tr>
 <tr>
 	<td colspan=2 class="fcaption2">{VAR:LC_SHOP_WHEN_EMPTY}.</td>

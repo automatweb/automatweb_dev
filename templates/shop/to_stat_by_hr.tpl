@@ -1,21 +1,21 @@
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption2">Pood:</td>
+	<td class="fcaption2">Target:</td>
 	<td colspan=3 class="fform">{VAR:name}</td>
 </tr>
 <tr>
-	<td class="fcaption2">Alates:</td>
+	<td class="fcaption2">From:</td>
 	<td colspan=3 class="fform">{VAR:from}</td>
 </tr>
 <tr>
-	<td class="fcaption2">Kuni:</td>
+	<td class="fcaption2">To:</td>
 	<td colspan=3 class="fform">{VAR:to}</td>
 </tr>
 <tr>
-	<td class="fcaption2">Tund</td>
-	<td class="fform">Kokku k&auml;ive</td>
-	<td class="fform">Tellimusi</td>
-	<td class="fform">Keskmine</td>
+	<td class="fcaption2">Hour</td>
+	<td class="fform">Total turnover</td>
+	<td class="fform">Orders</td>
+	<td class="fform">Average</td>
 </tr>
 <!-- SUB: HR -->
 <tr>
@@ -26,7 +26,7 @@
 </tr>
 <!-- END SUB: HR -->
 <tr>
-	<td class="fcaption2">Kokku:</td>
+	<td class="fcaption2">Total:</td>
 	<td class="fform">{VAR:t_sum}</td>
 	<td class="fform">{VAR:t_cnt}</td>
 	<td class="fform">{VAR:t_avg}</td>
@@ -35,8 +35,7 @@
 	<td class="fcaption2" colspan=4>&nbsp;</td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=4>Kokku on <font color="#ff0000">roheline</font>, keskmine on <font color="#00ff00">punane</font> ja tellimuste arv <font color="#0000ff">sinine</font>.</td>
-</tr>
+	<td class="fcaption2" colspan=4>Total is <font color="#ff0000">green</font>, average is <font color="#00ff00">red</font> and number of orders <font color="#0000ff">blue</font>.</td></tr>
 <tr>
 	<td class="fcaption2" colspan=4><img src='{VAR:chart}'></td>
 </tr>

@@ -74,6 +74,23 @@ function idxforvalue(el,val)
 	<td class="fcaption2">{VAR:LC_SHOP_NAME1}:</td>
 	<td class="fform"><input type="text" name="name" size="40" value='{VAR:name}'></td>
 </tr>
+<!-- SUB: CHANGE -->
+<tr>
+	<td class="fcaption2" colspan=2><a href='{VAR:orders}'><b><font size=3>{VAR:LC_SHOP_ORDERS}</font></b></a></td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><a href='{VAR:tables}'>{VAR:LC_SHOP_BILL_TABLE}</a></td>
+</tr>
+<!-- END SUB: CHANGE -->
+
+<tr>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_EMAIL_TOYOU}:</td>
+</tr>
+<tr>
+	<td class="fcaption2" colspan=2><input type='text' name='emails' size=50 value='{VAR:emails}'></td>
+</tr>
+
+
 <tr>
 	<td class="fcaption2" valign="top">{VAR:LC_SHOP_COMM}:</td>
 	<td class="fform"><textarea name="comment" rows=5 cols=50>{VAR:comment}</textarea></td>
@@ -96,15 +113,9 @@ function idxforvalue(el,val)
 <!-- SUB: OF -->
 <tr>
 	<td class="fcaption2">{VAR:of_name}</td>
-	<td class="fcaption2"><input type='checkbox' name='of_rep[{VAR:of_id}]' VALUE='1' {VAR:of_checked}>&nbsp;&nbsp;V&auml;ljund:&nbsp;<select name='of_op[{VAR:of_id}]'>{VAR:of_ops}</select></td>
+	<td class="fcaption2"><input type='checkbox' name='of_rep[{VAR:of_id}]' VALUE='1' {VAR:of_checked}>&nbsp;&nbsp;Output:&nbsp;<select name='of_op[{VAR:of_id}]'>{VAR:of_ops}</select></td>
 </tr>
 <!-- END SUB: OF -->
-<tr>
-	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_EMAIL_TOYOU}:</td>
-</tr>
-<tr>
-	<td class="fcaption2" colspan=2><input type='text' name='emails' size=50 value='{VAR:emails}'></td>
-</tr>
 <tr>
 	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_OWNER_FORM}:</td>
 </tr>
@@ -135,14 +146,7 @@ function idxforvalue(el,val)
 </tr>
 <!-- END SUB: CH_OWN -->
 
-<!-- SUB: CHANGE -->
-<tr>
-	<td class="fcaption2" colspan=2><a href='{VAR:orders}'>{VAR:LC_SHOP_ORDERS}</a></td>
-</tr>
-<tr>
-	<td class="fcaption2" colspan=2><a href='{VAR:tables}'>{VAR:LC_SHOP_BILL_TABLE}</a></td>
-</tr>
-<!-- END SUB: CHANGE -->
+
 <tr>
 	<td class="fform" align="center" colspan="2"><input type="submit" value="{VAR:LC_SHOP_SAVE}">
 	</td>

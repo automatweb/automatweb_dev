@@ -43,7 +43,7 @@
 				</tr>
 				<tr>
 					<td class="fcaption2"><input type='checkbox' name='has_objs' value=1 {VAR:has_objs}></td>
-					<td class="fcaption2">{VAR:LC_SHOP_ITEM:OBJ}</td>
+					<td class="fcaption2">{VAR:LC_SHOP_ITEM_OBJ}</td>
 				</tr>
 				<tr>
 					<td class="fcaption2" colspan=2>{VAR:LC_SHOP_PRICE_FORMULA}</td>
@@ -61,6 +61,7 @@
 				<input class="small_button" type='submit' value='{VAR:LC_SHOP_SAVE}'>
 				{VAR:reforb3}
 			</form>
+			<a href='{VAR:show_free}'>{VAR:LC_SHOP_SHOW_FREE}</a>
 		</td>
 	</tr>
 	<tr>

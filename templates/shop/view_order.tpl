@@ -1,10 +1,10 @@
 <br><br>
-Kasutaja {VAR:user} (ip: {VAR:ip}) tellis kuup&auml;eval {VAR:time} j&auml;rgmised tooted:<br><br>
-<table border=1>
+{VAR:LC_SHOP_USER} {VAR:user} (ip: {VAR:ip}) {VAR:LC_SHOP_ORDERED} {VAR:time} {VAR:LC_SHOP_OITEMS}<br><br>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
 	<!-- SUB: ITEM -->
 	<tr>
-		<td colspan=20>
-			<a href='{VAR:item_link}'>{VAR:name}</a>
+		<td colspan=20  bgcolor="#F2F2F2"><span class="txt">
+		<b>	{VAR:parent_name} {VAR:name} </b>
 		</td>
 	</tr>
 	<!-- SUB: F_ROW -->
@@ -16,8 +16,12 @@ Kasutaja {VAR:user} (ip: {VAR:ip}) tellis kuup&auml;eval {VAR:time} j&auml;rgmis
 	<!-- END SUB: ITEM -->
 </table>
 <br>
-Tellija sisestas enda kohta järgmised andmed:
+<FONT size=2><FONT face=Verdana,Geneva,Arial>
+{VAR:LC_SHOP_PRICE}: {VAR:price}<br>
 <br>
+{VAR:LC_SHOP_EDATA}
+</font>
 <pre>
+<FONT size=2><FONT face=Verdana,Geneva,Arial>
 {VAR:inf_form}
-</pre>
+</font></pre>

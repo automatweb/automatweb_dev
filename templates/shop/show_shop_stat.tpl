@@ -5,7 +5,7 @@
 </tr>
 <!--<tr>
 	<td class="fcaption2"><input type='radio' name='type' value='by_cat'></td>
-	<td colspan=2 class="fcaption2">Kategooriate kaupa</td>
+	<td colspan=2 class="fcaption2">By categories</td>
 </tr>-->
 <tr>
 	<td class="fcaption2">&nbsp;</td>
