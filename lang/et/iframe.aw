@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/et/iframe.aw,v 2.1 2002/04/17 18:09:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/lang/et/iframe.aw,v 2.2 2002/04/17 22:00:56 duke Exp $
 global $lc_iframe;
 
 $lc_iframe["LC_IFRAME_SAVE"] = "Salvesta";
@@ -21,6 +21,8 @@ define("IFRAME_SYSLOG_ADD","lisas Iframe objekti '%s'");
 define("IFRAME_SCROLL_YES","näidatakse alati");
 define("IFRAME_SCROLL_AUTO","näidatakse vajadusel");
 define("IFRAME_SCROLL_NO","peidetud");
+
+define("IFRAME_RETURN_URL","Tagasi");
 
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/en/iframe.aw,v 1.1 2002/04/17 18:23:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/lang/en/iframe.aw,v 1.2 2002/04/17 22:01:11 duke Exp $
 global $lc_iframe;
 
 $lc_iframe["LC_IFRAME_SAVE"] = "Save";
@@ -21,6 +21,8 @@ define("IFRAME_SYSLOG_ADD","added an iframe object '%s'");
 define("IFRAME_SCROLL_YES","show always");
 define("IFRAME_SCROLL_AUTO","show if needed");
 define("IFRAME_SCROLL_NO","always hidden");
+
+define("IFRAME_RETURN_URL","Back");
 
 
 
