@@ -15,7 +15,7 @@ after the last element in the list
 $ol = new object_list(array(
 		"status" => STAT_ACTIVE
 	));
-for ($ol->begin(); $o =& $ol->next();)
+for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next();)
 {
 	$o->set_name("kala");
 	$o->save();
