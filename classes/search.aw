@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.59 2004/01/13 16:24:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.60 2004/01/15 19:06:24 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -148,7 +148,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				break;
 
 			case "s_location":
-				$data["options"] = $this->_get_s_parent();
+				$data["options"] = array(0 => "Igalt poolt"); //$this->_get_s_parent();
 				break;
 
 			case "s_lang_id":
@@ -640,6 +640,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$results = 0;
 			};
 
+			$obj_list = array();
+
 			// we need to make the object change links point to the remote server if specified. so fake it. 
 			if ($args["s"]["server"])
 			{
@@ -647,6 +649,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$serv = $lo->get_server($args["s"]["server"]);
 				$old_bu = $this->cfg["baseurl"];
 				$this->cfg["baseurl"] = "http://".$serv;
+				$obj_list = $this->_get_s_parent($args);
 			}
 
 			//while($row = $this->db_next())
@@ -654,7 +657,15 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			{
 				if (!$this->can("view",$row["oid"])) continue;
 
-				$row_o = obj($row["oid"]);				
+				if ($this->object_exists($row["oid"]))
+				{
+					$row_o = obj($row["oid"]);				
+					$row["location"] = $row_o->path_str();
+				}
+				else
+				{
+					$row["location"] = $obj_list[$row["parent"]];
+				}
 
 				$this->rescounter++;
 				$type = $this->cfg["classes"][$row["class_id"]]["name"];
@@ -665,7 +676,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				};
 				$row["type"] = $type;
 				
-				$row["location"] = $row_o->path_str();
 				$this->search_callback(array(
 					"name" => "modify_data",
 					"data" => &$row,
@@ -1178,10 +1188,13 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$dat = $this->_search_mk_call("objects","db_query", array("sql" => "SELECT distinct(site_id) as site_id FROM objects"), $args);
 			$sites = array("0" => "Igalt poolt");
-			foreach($dat as $row)
+			if (is_array($dat))
 			{
-				$sites[$row["site_id"]] = $row["site_id"];
-			}
+				foreach($dat as $row)
+				{
+					$sites[$row["site_id"]] = $row["site_id"];
+				}
+			};	
 			$sites["0"] = "Igalt poolt";
 			$fields["site_id"] = array(
 				"type" => "select",
@@ -1211,12 +1224,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function _get_s_parent($args = array())
 	{
-		/*$ret = $this->_search_mk_call("objects", "get_list", array(), $args);
+		$ret = $this->_search_mk_call("objects", "get_list", array(), $args);
 		if (!is_array($ret))
-		{*/
+		{
 			return array("0" => "Igalt poolt");
-		//}
-		//return array("0" => "Igalt poolt") + $ret;
+		}
+		return array("0" => "Igalt poolt") + $ret;
 	}
 
 	function _get_s_redir_target()

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.54 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.55 2004/01/15 19:06:24 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -1031,6 +1031,25 @@ class objects extends db_objects
 			$ret[$vn] = aw_ini_get($vn);
 		}
 		return $ret;
+	}
+
+	/** Object list
+		
+		@attrib name=get_list params=name default="0" nologin="1" all_args="1"
+		
+		@param ignore_langmenus optional
+		@param empty optional
+		@param rootobj optional type=int
+		
+		@returns
+		
+		
+		@comment
+			returns list of id => name pairs for all menus
+	**/
+	function orb_get_list($arr)
+	{
+		return parent::orb_get_list($arr);
 	}
 }
 
