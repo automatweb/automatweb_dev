@@ -11,6 +11,14 @@
 			</function>
 		</action>
 
+		<action name="all_elements2" >
+			<function name="gen_all_elements2">
+				<arguments>
+					<required name="id" acl="edit;view"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="all_elements" >
 			<function name="gen_all_elements">
 				<arguments>
