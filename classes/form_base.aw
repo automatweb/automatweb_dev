@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.21 2001/08/13 20:09:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.22 2001/08/31 09:08:09 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -68,7 +68,7 @@ class form_base extends aw_template
 		$awt->start("form_base::load::query");
 		$q = "SELECT forms.*,objects.* FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE forms.id = $id";
 		$this->db_query($q);
-		if (!($row = $this->db_next(false)))
+		if (!($row = $this->db_next()))
 		{
 			$this->raise_error("form->load($id): no such form!",true);
 		}
@@ -91,6 +91,16 @@ class form_base extends aw_template
 			$this->arr = $x->xml_unserialize(array("source" => $row["content"]));
 			$awt->stop("form_base::load::xml::unserialize");
 			$awt->stop("form_base::load::xml");
+		}
+		else
+		if (substr($row["content"],0,6) == "\$arr =")
+		{
+			// php serializer
+			classload("php");
+			$p = new php_serializer;
+			$awt->start("form_base::load::php::unserialize");
+			$this->arr = $p->php_unserialize($row["content"]);
+			$awt->stop("form_base::load::php::unserialize");
 		}
 		else
 		{
@@ -121,7 +131,9 @@ class form_base extends aw_template
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
 				$this->arr["contents"][$row][$col] = new form_cell();		
+				$awt->start("form_base::form_cell_load()");
 				$this->arr["contents"][$row][$col] -> load(&$this,$row,$col);
+				$awt->stop("form_base::form_cell_load()");
 			}
 		$awt->stop("form_base::load_elements");
 	}
@@ -172,9 +184,13 @@ class form_base extends aw_template
 		}
 
 		// we must also do this, because the column/row count may have changed
-		classload("xml");
+/*		classload("xml");
 		$x = new xml;
-		$contents = $x->xml_serialize($this->arr);
+		$contents = $x->xml_serialize($this->arr);*/
+		// ok, try the new php serializer
+		classload("php");
+		$p = new php_serializer;
+		$contents = $p->php_serialize($this->arr);
 
 		$this->quote(&$contents);
 
@@ -511,9 +527,18 @@ class form_base extends aw_template
 			$this->raise_error(sprintf(LC_FORM_BASE_NO_SUCH_FORM,$id),true);
 		}
 
-		classload("xml");
-		$x = new xml;
-		$this->output = $x->xml_unserialize(array("source" => $row["op"]));
+		if (substr($row["op"],0,6) == "\$arr =")
+		{
+			classload("php");
+			$p = new php_serializer;
+			$this->output = $p->php_unserialize($row["op"]);
+		}
+		else
+		{
+			classload("xml");
+			$x = new xml;
+			$this->output = $x->xml_unserialize(array("source" => $row["op"]));
+		}
 		$this->vars(array("output_id" => $id));
 		if (!isset($this->output["cols"]) || $this->output["cols"] < 1 || !isset($this->output["rows"]) || $this->output["rows"] < 1)
 		{
