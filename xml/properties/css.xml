@@ -249,6 +249,16 @@
             <caption>Saidi css failis defineeritud stiil</caption>
       </property>
       <property>
+            <name>frow_style</name>
+            <group>table</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <caption>Esimeste ridade stiil</caption>
+      </property>
+      <property>
             <name>num_frows</name>
             <group>table</group>
             <table>objects</table>
@@ -260,14 +270,14 @@
             <caption>Mitmele esimesele reale</caption>
       </property>
       <property>
-            <name>frow_style</name>
+            <name>fcol_style</name>
             <group>table</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CSS</reltype>
-            <caption>Esimeste ridade stiil</caption>
+            <caption>Esimeste tulpade stiil</caption>
       </property>
       <property>
             <name>num_fcols</name>
@@ -281,14 +291,46 @@
             <caption>Mitmele esimesele tulbale</caption>
       </property>
       <property>
-            <name>fcol_style</name>
+            <name>lrow_style</name>
             <group>table</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CSS</reltype>
-            <caption>Esimeste tulpade stiil</caption>
+            <caption>Viimaste ridade stiil</caption>
+      </property>
+      <property>
+            <name>num_lrows</name>
+            <group>table</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <datatype>int</datatype>
+            <caption>Mitmele viimasele reale</caption>
+      </property>
+      <property>
+            <name>lcol_style</name>
+            <group>table</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <caption>Viimaste tulpade stiil</caption>
+      </property>
+      <property>
+            <name>num_lcols</name>
+            <group>table</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <datatype>int</datatype>
+            <caption>Mitmele viimasele tulbale</caption>
       </property>
       <property>
             <name>header_style</name>

@@ -1414,25 +1414,35 @@ class grid_editor extends class_base
 		}
 		else
 		{
-				// tshekime et kui on esimene rida/tulp ja stiili pole m22ratud, siis
-				// v6tame tabeli stiilist, kui see on m22ratud default stiili esimese rea/tulba jaox
-				if ($this->arr["table_style"] && $row < $this->num_frows)
-				{
-					$st = $this->frow_style;
-				}
-				else
-				if ($this->arr["table_style"] && $col < $this->num_fcols)
-				{
-					$st = $this->fcol_style;
-				}
+			// tshekime et kui on esimene rida/tulp ja stiili pole m22ratud, siis
+			// v6tame tabeli stiilist, kui see on m22ratud default stiili esimese rea/tulba jaox
+			if ($this->arr["table_style"] && $row < $this->num_frows)
+			{
+				$st = $this->frow_style;
+			}
+			else
+			if ($this->arr["table_style"] && $col < $this->num_fcols)
+			{
+				$st = $this->fcol_style;
+			}
 
-				// kui tabeli stiilis pold m22ratud stiili v6i ei old esimene rida/tulp,
-				// siis v6tame default celli stiili, kui see on
-				if ($st == 0 && $this->arr["default_style"])
-				{
-					$st = $this->arr["default_style"];
-				}
-				// damn this was horrible
+			if (!$st && $this->arr["table_style"] && $row > ($this->arr["rows"] - $this->num_lrows))
+			{
+				$st = $this->lrow_style;
+			}
+
+			if (!$st && $this->arr["table_style"] && $col > ($this->arr["cols"] - $this->num_lcols))
+			{
+				$st = $this->lcol_style;
+			}
+
+			// kui tabeli stiilis pold m22ratud stiili v6i ei old esimene rida/tulp,
+			// siis v6tame default celli stiili, kui see on
+			if ($st == 0 && $this->arr["default_style"])
+			{
+				$st = $this->arr["default_style"];
+			}
+			// damn this was horrible
 
 			if (!$st)
 			{
@@ -1450,12 +1460,22 @@ class grid_editor extends class_base
 		$this->num_fcols = 0; 
 		$this->num_frows = 0;
 
+		$this->lrow_style = 0;
+		$this->lcol_style = 0; 
+		$this->num_lcols = 0; 
+		$this->num_lrows = 0;
+
 		if ($this->arr["table_style"])
 		{
 			$this->frow_style = $this->style_inst->get_frow_style($this->arr["table_style"]);
 			$this->fcol_style = $this->style_inst->get_fcol_style($this->arr["table_style"]);
 			$this->num_frows = $this->style_inst->get_num_frows($this->arr["table_style"]);
 			$this->num_fcols = $this->style_inst->get_num_fcols($this->arr["table_style"]);
+
+			$this->lrow_style = $this->style_inst->get_lrow_style($this->arr["table_style"]);
+			$this->lcol_style = $this->style_inst->get_lcol_style($this->arr["table_style"]);
+			$this->num_lrows = $this->style_inst->get_num_lrows($this->arr["table_style"]);
+			$this->num_lcols = $this->style_inst->get_num_lcols($this->arr["table_style"]);
 		}
 	}
 

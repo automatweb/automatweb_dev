@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.1 2004/11/07 19:26:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.2 2004/11/15 16:03:50 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -87,17 +87,29 @@
 @groupinfo table caption="Tabel"
 @default group=table
 
+@property frow_style type=relpicker reltype=RELTYPE_CSS
+@caption Esimeste ridade stiil
+
 @property num_frows type=textbox size=5 datatype=int
 @caption Mitmele esimesele reale
 
-@property frow_style type=relpicker reltype=RELTYPE_CSS
-@caption Esimeste ridade stiil
+@property fcol_style type=relpicker reltype=RELTYPE_CSS
+@caption Esimeste tulpade stiil
 
 @property num_fcols type=textbox size=5 datatype=int
 @caption Mitmele esimesele tulbale
 
-@property fcol_style type=relpicker reltype=RELTYPE_CSS
-@caption Esimeste tulpade stiil
+@property lrow_style type=relpicker reltype=RELTYPE_CSS
+@caption Viimaste ridade stiil
+
+@property num_lrows type=textbox size=5 datatype=int
+@caption Mitmele viimasele reale
+
+@property lcol_style type=relpicker reltype=RELTYPE_CSS
+@caption Viimaste tulpade stiil
+
+@property num_lcols type=textbox size=5 datatype=int
+@caption Mitmele viimasele tulbale
 
 @property header_style type=relpicker reltype=RELTYPE_CSS
 @caption P&auml;ise stiil
