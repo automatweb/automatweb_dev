@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.47 2004/09/20 13:12:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.48 2004/10/05 09:18:33 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -172,7 +172,8 @@ class promo extends class_base
 					'objects.jrk' => "J&auml;rjekorra j&auml;rgi",
 					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
 					'objects.modified' => "Muutmise kuup&auml;eva j&auml;rgi",
-					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
+					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi",
+					'objects.name' => "Objekti nime j&auml;rgi"
 				);
 				break;
 
@@ -811,6 +812,7 @@ class promo extends class_base
 					"caption" => $o->meta("caption"),
 					"content" => $pr_c,
 					"url" => $o->prop("link"),
+					"link" => $o->prop("link"),
 					"link_caption" => $o->meta("link_caption"),
 					"promo_doc_count" => (int)$d_cnt,
 					"image" => $image, 
