@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.49 2004/02/05 15:33:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.50 2004/02/10 15:26:19 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1556,7 +1556,7 @@ class admin_menus extends aw_template
 		
 		@attrib name=change_redir params=name default="0"
 		
-		
+	
 		@returns
 		
 		
@@ -1575,7 +1575,7 @@ class admin_menus extends aw_template
 		list($oid,) = each($sel);
 
 		$obj = obj($oid);
-		return "javascript:go_change('".basename($this->cfg["classes"][$obj->class_id()]["file"])."',".$oid.",".$parent.")";
+		return $this->mk_my_orb("change", array("id" => $oid, "parent" => $parent), $obj->class_id());
 	}
 
 	function req_serialize_obj_tree($oid)
