@@ -1,3 +1,99 @@
+#: classes/core/docgen/docgen_viewer.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum
+msgid "Omaduse  (foorum) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum_comment
+msgid "Omaduse  (foorum) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum_help
+msgid "Omaduse  (foorum) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_view
+msgid "Omaduse  (view) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_view_comment
+msgid "Omaduse  (view) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_view_help
+msgid "Omaduse  (view) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text
+msgid "Omaduse Uuenda (refresh_text) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_comment
+msgid "Omaduse Uuenda (refresh_text) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_help
+msgid "Omaduse Uuenda (refresh_text) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties
+msgid "Omaduse Uuenda (refresh_properties) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_comment
+msgid "Omaduse Uuenda (refresh_properties) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_help
+msgid "Omaduse Uuenda (refresh_properties) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:group_more_options
+msgid "Grupi Seaded (more_options) pealkiri"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
+msgid "Seose foorum (RELTYPE_FORUM) tekst"
+msgstr ""
+
 #: classes/core/docgen/docgen_viewer.aw:70
 msgid "Open DocGen"
 msgstr ""

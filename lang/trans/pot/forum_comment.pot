@@ -1,0 +1,100 @@
+#: classes/contentmgmt/forum/forum_comment.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_name
+msgid "Omaduse Pealkiri (name) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_name_comment
+msgid "Omaduse Pealkiri (name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_name_help
+msgid "Omaduse Pealkiri (name) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uname
+msgid "Omaduse Nimi (uname) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uname_comment
+msgid "Omaduse Nimi (uname) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uname_help
+msgid "Omaduse Nimi (uname) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uemail
+msgid "Omaduse E-post (uemail) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uemail_comment
+msgid "Omaduse E-post (uemail) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uemail_help
+msgid "Omaduse E-post (uemail) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_remember
+msgid "Omaduse Jäta nimi ja e-post meelde (remember) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_remember_comment
+msgid "Omaduse Jäta nimi ja e-post meelde (remember) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_remember_help
+msgid "Omaduse Jäta nimi ja e-post meelde (remember) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_commtext
+msgid "Omaduse Kommentaar (commtext) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_commtext_comment
+msgid "Omaduse Kommentaar (commtext) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_commtext_help
+msgid "Omaduse Kommentaar (commtext) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_ip
+msgid "Omaduse IP (ip) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_ip_comment
+msgid "Omaduse IP (ip) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:prop_ip_help
+msgid "Omaduse IP (ip) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+

@@ -1,3 +1,175 @@
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_maxsize
+msgid "Omaduse Kirja maksimaalne suurus (märkides) (maxsize) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_maxsize_comment
+msgid "Omaduse Kirja maksimaalne suurus (märkides) (maxsize) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_maxsize_help
+msgid "Omaduse Kirja maksimaalne suurus (märkides) (maxsize) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_newmessage
+msgid "Omaduse  (newmessage) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_newmessage_comment
+msgid "Omaduse  (newmessage) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_newmessage_help
+msgid "Omaduse  (newmessage) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_inbox_toolbar
+msgid "Omaduse  (inbox_toolbar) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_inbox_toolbar_comment
+msgid "Omaduse  (inbox_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_inbox_toolbar_help
+msgid "Omaduse  (inbox_toolbar) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_Inboxi
+msgid "Omaduse  (Inboxi) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_Inboxi_comment
+msgid "Omaduse  (Inboxi) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_Inboxi_help
+msgid "Omaduse  (Inboxi) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_inbox
+msgid "Omaduse Sissetulnud kirjad (inbox) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_inbox_comment
+msgid "Omaduse Sissetulnud kirjad (inbox) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_inbox_help
+msgid "Omaduse Sissetulnud kirjad (inbox) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox_toolbar
+msgid "Omaduse Outboxi toolbar (outbox_toolbar) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox_toolbar_comment
+msgid "Omaduse Outboxi toolbar (outbox_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox_toolbar_help
+msgid "Omaduse Outboxi toolbar (outbox_toolbar) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox
+msgid "Omaduse Välja saadetud kirjad (outbox) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox_comment
+msgid "Omaduse Välja saadetud kirjad (outbox) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox_help
+msgid "Omaduse Välja saadetud kirjad (outbox) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_archive_toolbar
+msgid "Omaduse Arhiivi toolbar (archive_toolbar) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_archive_toolbar_comment
+msgid "Omaduse Arhiivi toolbar (archive_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_archive_toolbar_help
+msgid "Omaduse Arhiivi toolbar (archive_toolbar) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_archive
+msgid "Omaduse Arhiiv (archive) caption"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_archive_comment
+msgid "Omaduse Arhiiv (archive) kommentaar"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:prop_archive_help
+msgid "Omaduse Arhiiv (archive) help"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:group_newmessage
+msgid "Grupi Uus teade (newmessage) pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:group_inbox
+msgid "Grupi Inbox (inbox) pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:group_outbox
+msgid "Grupi Outbox (outbox) pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:group_archive
+msgid "Grupi Arhiiv (archive) pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:rel_RELTYPE_OWNER
+msgid "Seose Omanik (RELTYPE_OWNER) tekst"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:rel_RELTYPE_CONTACT_LIST
+msgid "Seose Aadressiraamat (RELTYPE_CONTACT_LIST) tekst"
+msgstr ""
+
 #: classes/applications/quickmessage/quickmessagebox.aw:80
 msgid "Priit on jobu!"
 msgstr ""

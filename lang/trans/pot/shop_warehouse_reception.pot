@@ -1,3 +1,75 @@
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_confirm
+msgid "Omaduse Kinnita (confirm) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_confirm_comment
+msgid "Omaduse Kinnita (confirm) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_confirm_help
+msgid "Omaduse Kinnita (confirm) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_income
+msgid "Omaduse  (income) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_income_comment
+msgid "Omaduse  (income) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:prop_income_help
+msgid "Omaduse  (income) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:group_income
+msgid "Grupi Sissetuleku sisu (income) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:rel_RELTYPE_PRODUCT
+msgid "Seose sissetulnud toode (RELTYPE_PRODUCT) tekst"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_reception.aw:79
 msgid "Nimi"
 msgstr ""

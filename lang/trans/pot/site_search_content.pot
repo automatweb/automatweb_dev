@@ -1,3 +1,195 @@
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search
+msgid "Omaduse Otsing märksõnadest (do_keyword_search) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_comment
+msgid "Omaduse Otsing märksõnadest (do_keyword_search) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_help
+msgid "Omaduse Otsing märksõnadest (do_keyword_search) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes
+msgid "Omaduse Klassid (keyword_search_classes) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_comment
+msgid "Omaduse Klassid (keyword_search_classes) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_help
+msgid "Omaduse Klassid (keyword_search_classes) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_static
+msgid "Omaduse Otsing staatilisse koopiasse (search_static) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_static_comment
+msgid "Omaduse Otsing staatilisse koopiasse (search_static) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_static_help
+msgid "Omaduse Otsing staatilisse koopiasse (search_static) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_live
+msgid "Omaduse Otsing aktiivsest saidist (search_live) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_live_comment
+msgid "Omaduse Otsing aktiivsest saidist (search_live) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_live_help
+msgid "Omaduse Otsing aktiivsest saidist (search_live) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_multi_groups
+msgid "Omaduse Otsimisel saab kasutada mitut gruppi (multi_groups) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_multi_groups_comment
+msgid "Omaduse Otsimisel saab kasutada mitut gruppi (multi_groups) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_multi_groups_help
+msgid "Omaduse Otsimisel saab kasutada mitut gruppi (multi_groups) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_per_page
+msgid "Omaduse Mitu tulemust lehel (per_page) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_per_page_comment
+msgid "Omaduse Mitu tulemust lehel (per_page) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_per_page_help
+msgid "Omaduse Mitu tulemust lehel (per_page) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_order
+msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_order_comment
+msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_order_help
+msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg
+msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_comment
+msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_help
+msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt
+msgid "Omaduse Vaikimisi otsingu t&uuml;&uuml;p (default_search_opt) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt_comment
+msgid "Omaduse Vaikimisi otsingu t&uuml;&uuml;p (default_search_opt) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt_help
+msgid "Omaduse Vaikimisi otsingu t&uuml;&uuml;p (default_search_opt) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_reledit
+msgid "Omaduse Seos (reledit) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_reledit_comment
+msgid "Omaduse Seos (reledit) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_reledit_help
+msgid "Omaduse Seos (reledit) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_static_gen_link
+msgid "Omaduse Staatilise genereerimise link (static_gen_link) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_static_gen_link_comment
+msgid "Omaduse Staatilise genereerimise link (static_gen_link) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_static_gen_link_help
+msgid "Omaduse Staatilise genereerimise link (static_gen_link) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_static
+msgid "Grupi Staatiline otsing (static) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_keywords
+msgid "Grupi Märksõnade järgi otsing (keywords) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups
+msgid "Grupi Otsingu grupid (searchgroups) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_REPEATER
+msgid "Seose kordus staatilise koopia genereerimiseks (RELTYPE_REPEATER) tekst"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_SEARCH_GRP
+msgid "Seose otsingu grupp (RELTYPE_SEARCH_GRP) tekst"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content.aw:86
 msgid "&uuml;ksk&otilde;ik milline s&otilde;nadest"
 msgstr ""

@@ -1,0 +1,56 @@
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_notfound
+msgid "Omaduse Kuhu suunata kui ei leitud &uuml;htegi tulemust (notfound) caption"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_notfound_comment
+msgid "Omaduse Kuhu suunata kui ei leitud &uuml;htegi tulemust (notfound) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_notfound_help
+msgid "Omaduse Kuhu suunata kui ei leitud &uuml;htegi tulemust (notfound) help"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/clients/stat/ekomar/ekomar_show.aw:rel_RELTYPE_FOLDER
+msgid "Seose kuhu suunata (RELTYPE_FOLDER) tekst"
+msgstr ""
+

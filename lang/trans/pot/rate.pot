@@ -1,3 +1,123 @@
+#: classes/contentmgmt/rate/rate.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_top
+msgid "Omaduse Mitu topis (top) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_top_comment
+msgid "Omaduse Mitu topis (top) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_top_help
+msgid "Omaduse Mitu topis (top) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_top_type
+msgid "Omaduse J&auml;rjestatakse (top_type) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_top_type_comment
+msgid "Omaduse J&auml;rjestatakse (top_type) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_top_type_help
+msgid "Omaduse J&auml;rjestatakse (top_type) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from
+msgid "Omaduse Millistele objektidele kehtib (objects_from) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_comment
+msgid "Omaduse Millistele objektidele kehtib (objects_from) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_help
+msgid "Omaduse Millistele objektidele kehtib (objects_from) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_clid
+msgid "Omaduse Vali klass (objects_from_clid) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_clid_comment
+msgid "Omaduse Vali klass (objects_from_clid) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_clid_help
+msgid "Omaduse Vali klass (objects_from_clid) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_folder
+msgid "Omaduse Vali kataloogid (objects_from_folder) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_folder_comment
+msgid "Omaduse Vali kataloogid (objects_from_folder) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_folder_help
+msgid "Omaduse Vali kataloogid (objects_from_folder) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_oid
+msgid "Omaduse Vali objekt (objects_from_oid) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_oid_comment
+msgid "Omaduse Vali objekt (objects_from_oid) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:prop_objects_from_oid_help
+msgid "Omaduse Vali objekt (objects_from_oid) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:rel_RELTYPE_RATE_FOLDER
+msgid "Seose Hinnatavate objektide kataloog (RELTYPE_RATE_FOLDER) tekst"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate.aw:rel_RELTYPE_RATE_OID
+msgid "Seose Hinnatav objekt (RELTYPE_RATE_OID) tekst"
+msgstr ""
+
 #: classes/contentmgmt/rate/rate.aw:72
 msgid "Klassi järgi"
 msgstr ""

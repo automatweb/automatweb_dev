@@ -1,3 +1,143 @@
+#: classes/applications/class_designer/property_table.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_data_source
+msgid "Omaduse Demo andmete allikas (demo_data_source) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_data_source_comment
+msgid "Omaduse Demo andmete allikas (demo_data_source) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_data_source_help
+msgid "Omaduse Demo andmete allikas (demo_data_source) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_data_source_rel
+msgid "Omaduse Seose t&uuml;&uuml;p (demo_data_source_rel) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_data_source_rel_comment
+msgid "Omaduse Seose t&uuml;&uuml;p (demo_data_source_rel) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_data_source_rel_help
+msgid "Omaduse Seose t&uuml;&uuml;p (demo_data_source_rel) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_design_table
+msgid "Omaduse Veerud (design_table) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_design_table_comment
+msgid "Omaduse Veerud (design_table) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_design_table_help
+msgid "Omaduse Veerud (design_table) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_data_table
+msgid "Omaduse Demo andmed (demo_data_table) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_data_table_comment
+msgid "Omaduse Demo andmed (demo_data_table) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_data_table_help
+msgid "Omaduse Demo andmed (demo_data_table) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_rels_data_table
+msgid "Omaduse Demo seoste andmed (demo_rels_data_table) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_rels_data_table_comment
+msgid "Omaduse Demo seoste andmed (demo_rels_data_table) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_demo_rels_data_table_help
+msgid "Omaduse Demo seoste andmed (demo_rels_data_table) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_default_sort_col
+msgid "Omaduse Default sortimine (default_sort_col) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_default_sort_col_comment
+msgid "Omaduse Default sortimine (default_sort_col) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_default_sort_col_help
+msgid "Omaduse Default sortimine (default_sort_col) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_vertical_group_t
+msgid "Omaduse Vertikaalne grupeerimine (vertical_group_t) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_vertical_group_t_comment
+msgid "Omaduse Vertikaalne grupeerimine (vertical_group_t) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:prop_vertical_group_t_help
+msgid "Omaduse Vertikaalne grupeerimine (vertical_group_t) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:group_designer
+msgid "Grupi Tulbad (designer) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:group_data
+msgid "Grupi Demo andmed (data) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:group_data_rels
+msgid "Grupi Demo andmed (data_rels) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:group_settings
+msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
 #: classes/applications/class_designer/property_table.aw:78
 msgid "Kasutaja poolt sisestatud andmed"
 msgstr ""

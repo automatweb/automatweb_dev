@@ -1,3 +1,59 @@
+#: classes/install/aw_site_gen_log.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_show
+msgid "Omaduse  (show) caption"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_show_comment
+msgid "Omaduse  (show) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:prop_show_help
+msgid "Omaduse  (show) help"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:group_view
+msgid "Grupi Vaata logi (view) pealkiri"
+msgstr ""
+
 #: classes/install/aw_site_gen_log.aw:45
 msgid "Millal"
 msgstr ""

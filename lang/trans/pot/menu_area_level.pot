@@ -1,0 +1,192 @@
+#: classes/layout/menu_area_level.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_first_item_style
+msgid "Omaduse Esimese men&uuml;&uuml; stiil (first_item_style) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_first_item_style_comment
+msgid "Omaduse Esimese men&uuml;&uuml; stiil (first_item_style) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_first_item_style_help
+msgid "Omaduse Esimese men&uuml;&uuml; stiil (first_item_style) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_item_style
+msgid "Omaduse Men&uuml;&uuml; stiil (item_style) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_item_style_comment
+msgid "Omaduse Men&uuml;&uuml; stiil (item_style) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_item_style_help
+msgid "Omaduse Men&uuml;&uuml; stiil (item_style) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_last_item_style
+msgid "Omaduse Viimase men&uuml;&uuml; stiil (last_item_style) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_last_item_style_comment
+msgid "Omaduse Viimase men&uuml;&uuml; stiil (last_item_style) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_last_item_style_help
+msgid "Omaduse Viimase men&uuml;&uuml; stiil (last_item_style) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_sel_item_style
+msgid "Omaduse Valitud men&uuml;&uuml; stiil (sel_item_style) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_sel_item_style_comment
+msgid "Omaduse Valitud men&uuml;&uuml; stiil (sel_item_style) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_sel_item_style_help
+msgid "Omaduse Valitud men&uuml;&uuml; stiil (sel_item_style) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_first_sel_item_style
+msgid "Omaduse Valitud esimese men&uuml;&uuml; stiil (first_sel_item_style) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_first_sel_item_style_comment
+msgid "Omaduse Valitud esimese men&uuml;&uuml; stiil (first_sel_item_style) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_first_sel_item_style_help
+msgid "Omaduse Valitud esimese men&uuml;&uuml; stiil (first_sel_item_style) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_last_sel_item_style
+msgid "Omaduse Valitud viimase men&uuml;&uuml; stiil (last_sel_item_style) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_last_sel_item_style_comment
+msgid "Omaduse Valitud viimase men&uuml;&uuml; stiil (last_sel_item_style) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_last_sel_item_style_help
+msgid "Omaduse Valitud viimase men&uuml;&uuml; stiil (last_sel_item_style) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_separator
+msgid "Omaduse Erldaja (separator) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_separator_comment
+msgid "Omaduse Erldaja (separator) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_separator_help
+msgid "Omaduse Erldaja (separator) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_has_sub_menus
+msgid "Omaduse Kas j&auml;rgmise taseme men&uuml&uuml;d on selle taseme men&uuml;&uuml;de vahel (has_sub_menus) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_has_sub_menus_comment
+msgid "Omaduse Kas j&auml;rgmise taseme men&uuml&uuml;d on selle taseme men&uuml;&uuml;de vahel (has_sub_menus) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_has_sub_menus_help
+msgid "Omaduse Kas j&auml;rgmise taseme men&uuml&uuml;d on selle taseme men&uuml;&uuml;de vahel (has_sub_menus) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_has_sub_menus_sep
+msgid "Omaduse J&auml;rgmise taseme men&uuml;&uuml;de eraldaja (has_sub_menus_sep) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_has_sub_menus_sep_comment
+msgid "Omaduse J&auml;rgmise taseme men&uuml;&uuml;de eraldaja (has_sub_menus_sep) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_has_sub_menus_sep_help
+msgid "Omaduse J&auml;rgmise taseme men&uuml;&uuml;de eraldaja (has_sub_menus_sep) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_pre_image
+msgid "Omaduse Men&uuml;&uuml; pilt (pre_image) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_pre_image_comment
+msgid "Omaduse Men&uuml;&uuml; pilt (pre_image) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_pre_image_help
+msgid "Omaduse Men&uuml;&uuml; pilt (pre_image) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_show_comment
+msgid "Omaduse N&auml;ita kommentaari (show_comment) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_show_comment_comment
+msgid "Omaduse N&auml;ita kommentaari (show_comment) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_show_comment_help
+msgid "Omaduse N&auml;ita kommentaari (show_comment) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_comment_sep
+msgid "Omaduse Kommentaari eraldaja (comment_sep) caption"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_comment_sep_comment
+msgid "Omaduse Kommentaari eraldaja (comment_sep) kommentaar"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:prop_comment_sep_help
+msgid "Omaduse Kommentaari eraldaja (comment_sep) help"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:rel_RELTYPE_STYLE
+msgid "Seose stiil (RELTYPE_STYLE) tekst"
+msgstr ""
+
+#: classes/layout/menu_area_level.aw:rel_RELTYPE_IMAGE
+msgid "Seose pilt (RELTYPE_IMAGE) tekst"
+msgstr ""
+

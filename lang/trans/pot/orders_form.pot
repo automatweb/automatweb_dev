@@ -1,3 +1,291 @@
+#: classes/applications/orders/orders_form.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_postal_fee
+msgid "Omaduse Postikulu (postal_fee) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_postal_fee_comment
+msgid "Omaduse Postikulu (postal_fee) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_postal_fee_help
+msgid "Omaduse Postikulu (postal_fee) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_post_to
+msgid "Omaduse Mail kuhu tellimus saata (orders_post_to) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_post_to_comment
+msgid "Omaduse Mail kuhu tellimus saata (orders_post_to) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_post_to_help
+msgid "Omaduse Mail kuhu tellimus saata (orders_post_to) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_to_mail
+msgid "Omaduse Saada e-mail tellijale (orders_to_mail) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_to_mail_comment
+msgid "Omaduse Saada e-mail tellijale (orders_to_mail) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_to_mail_help
+msgid "Omaduse Saada e-mail tellijale (orders_to_mail) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_post_from
+msgid "Omaduse Kliendile saatja (e-mail) (orders_post_from) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_post_from_comment
+msgid "Omaduse Kliendile saatja (e-mail) (orders_post_from) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orders_post_from_help
+msgid "Omaduse Kliendile saatja (e-mail) (orders_post_from) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_no_pdata_check
+msgid "Omaduse Kasutajaandmed isikust (no_pdata_check) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_no_pdata_check_comment
+msgid "Omaduse Kasutajaandmed isikust (no_pdata_check) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_no_pdata_check_help
+msgid "Omaduse Kasutajaandmed isikust (no_pdata_check) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orderform
+msgid "Omaduse Tellimuse seadetevorm (orderform) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orderform_comment
+msgid "Omaduse Tellimuse seadetevorm (orderform) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_orderform_help
+msgid "Omaduse Tellimuse seadetevorm (orderform) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_itemform
+msgid "Omaduse Tellimuse rea seadetevorm (itemform) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_itemform_comment
+msgid "Omaduse Tellimuse rea seadetevorm (itemform) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_itemform_help
+msgid "Omaduse Tellimuse rea seadetevorm (itemform) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_num_rows
+msgid "Omaduse Mitu rida saab korraga korvi lisada (num_rows) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_num_rows_comment
+msgid "Omaduse Mitu rida saab korraga korvi lisada (num_rows) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_num_rows_help
+msgid "Omaduse Mitu rida saab korraga korvi lisada (num_rows) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_ordemail
+msgid "Omaduse Mail tellijale (ordemail) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_ordemail_comment
+msgid "Omaduse Mail tellijale (ordemail) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_ordemail_help
+msgid "Omaduse Mail tellijale (ordemail) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_thankudoc
+msgid "Omaduse Dokument kuhu suunata peale esitamist (thankudoc) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_thankudoc_comment
+msgid "Omaduse Dokument kuhu suunata peale esitamist (thankudoc) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_thankudoc_help
+msgid "Omaduse Dokument kuhu suunata peale esitamist (thankudoc) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_ordering
+msgid "Omaduse  (ordering) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_ordering_comment
+msgid "Omaduse  (ordering) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_ordering_help
+msgid "Omaduse  (ordering) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_has_rent
+msgid "Omaduse Saab maksta j&auml;relmaksuga (has_rent) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_has_rent_comment
+msgid "Omaduse Saab maksta j&auml;relmaksuga (has_rent) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_has_rent_help
+msgid "Omaduse Saab maksta j&auml;relmaksuga (has_rent) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_min_amt
+msgid "Omaduse J&auml;relmasu min. summa (rent_min_amt) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_min_amt_comment
+msgid "Omaduse J&auml;relmasu min. summa (rent_min_amt) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_min_amt_help
+msgid "Omaduse J&auml;relmasu min. summa (rent_min_amt) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_min_amt_payment
+msgid "Omaduse &Uuml;he makse miinimumsumma (rent_min_amt_payment) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_min_amt_payment_comment
+msgid "Omaduse &Uuml;he makse miinimumsumma (rent_min_amt_payment) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_min_amt_payment_help
+msgid "Omaduse &Uuml;he makse miinimumsumma (rent_min_amt_payment) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_min_amt_payment_text
+msgid "Omaduse Miinimumsumma veateade (rent_min_amt_payment_text) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_min_amt_payment_text_comment
+msgid "Omaduse Miinimumsumma veateade (rent_min_amt_payment_text) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_min_amt_payment_text_help
+msgid "Omaduse Miinimumsumma veateade (rent_min_amt_payment_text) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_max_amt_warn
+msgid "Omaduse J&auml;relmaksu maksimaalne summa (rent_max_amt_warn) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_max_amt_warn_comment
+msgid "Omaduse J&auml;relmaksu maksimaalne summa (rent_max_amt_warn) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_max_amt_warn_help
+msgid "Omaduse J&auml;relmaksu maksimaalne summa (rent_max_amt_warn) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_max_amt_warn_text
+msgid "Omaduse Maksimaalse summa &uuml;letamise hoiatus (rent_max_amt_warn_text) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_max_amt_warn_text_comment
+msgid "Omaduse Maksimaalse summa &uuml;letamise hoiatus (rent_max_amt_warn_text) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_max_amt_warn_text_help
+msgid "Omaduse Maksimaalse summa &uuml;letamise hoiatus (rent_max_amt_warn_text) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_item_types
+msgid "Omaduse Makseperioodid (rent_item_types) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_item_types_comment
+msgid "Omaduse Makseperioodid (rent_item_types) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_rent_item_types_help
+msgid "Omaduse Makseperioodid (rent_item_types) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:group_config
+msgid "Grupi Seaded (config) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:group_ordering
+msgid "Grupi Tellimine (ordering) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:group_payment
+msgid "Grupi Makseviisid (payment) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_ORDERFORM
+msgid "Seose Tellimuse seadetevorm (RELTYPE_ORDERFORM) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_ITEMFORM
+msgid "Seose Tellimuse rea seadetevorm (RELTYPE_ITEMFORM) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_THANKU
+msgid "Seose Dokument (RELTYPE_THANKU) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_ADDORDER
+msgid "Seose Tellimuse lisa (RELTYPE_ADDORDER) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:rel_RELTYPE_MAIL
+msgid "Seose Mail (RELTYPE_MAIL) tekst"
+msgstr ""
+
 #: classes/applications/orders/orders_form.aw:803
 msgid "Kustuta"
 msgstr ""

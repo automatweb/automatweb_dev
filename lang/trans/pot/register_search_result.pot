@@ -1,0 +1,88 @@
+#: classes/applications/register/register_search_result.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_search
+msgid "Omaduse Registri otsing (search) caption"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_search_comment
+msgid "Omaduse Registri otsing (search) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_search_help
+msgid "Omaduse Registri otsing (search) help"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_search_data
+msgid "Omaduse  (search_data) caption"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_search_data_comment
+msgid "Omaduse  (search_data) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_search_data_help
+msgid "Omaduse  (search_data) help"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_search_res
+msgid "Omaduse  (search_res) caption"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_search_res_comment
+msgid "Omaduse  (search_res) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:prop_search_res_help
+msgid "Omaduse  (search_res) help"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:group_search
+msgid "Grupi Otsing (search) pealkiri"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:group_search_res
+msgid "Grupi Tulemused (search_res) pealkiri"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:rel_RELTYPE_SEARCH
+msgid "Seose registri otsing (RELTYPE_SEARCH) tekst"
+msgstr ""
+

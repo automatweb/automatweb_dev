@@ -1,3 +1,371 @@
+#: classes/applications/shop/shop_order_center.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_warehouse
+msgid "Omaduse Ladu (warehouse) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_warehouse_comment
+msgid "Omaduse Ladu (warehouse) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_warehouse_help
+msgid "Omaduse Ladu (warehouse) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_cart
+msgid "Omaduse Ostukorv (cart) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_cart_comment
+msgid "Omaduse Ostukorv (cart) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_cart_help
+msgid "Omaduse Ostukorv (cart) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_cart_type
+msgid "Omaduse Ostukorvi tüüp (cart_type) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_cart_type_comment
+msgid "Omaduse Ostukorvi tüüp (cart_type) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_cart_type_help
+msgid "Omaduse Ostukorvi tüüp (cart_type) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed
+msgid "Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi (show_unconfirmed) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed_comment
+msgid "Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi (show_unconfirmed) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed_help
+msgid "Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi (show_unconfirmed) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_pdf_template
+msgid "Omaduse PDF Template faili nimi (pdf_template) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_pdf_template_comment
+msgid "Omaduse PDF Template faili nimi (pdf_template) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_pdf_template_help
+msgid "Omaduse PDF Template faili nimi (pdf_template) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form
+msgid "Omaduse Tellija andmete vorm (data_form) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_comment
+msgid "Omaduse Tellija andmete vorm (data_form) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_help
+msgid "Omaduse Tellija andmete vorm (data_form) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_person
+msgid "Omaduse Isiku nime element andmete vormis (data_form_person) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_person_comment
+msgid "Omaduse Isiku nime element andmete vormis (data_form_person) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_person_help
+msgid "Omaduse Isiku nime element andmete vormis (data_form_person) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_company
+msgid "Omaduse Organisatsiooni nime element andmete vormis (data_form_company) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_company_comment
+msgid "Omaduse Organisatsiooni nime element andmete vormis (data_form_company) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_company_help
+msgid "Omaduse Organisatsiooni nime element andmete vormis (data_form_company) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_to_el
+msgid "Omaduse E-maili element, kuhu saata tellimus (mail_to_el) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_to_el_comment
+msgid "Omaduse E-maili element, kuhu saata tellimus (mail_to_el) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_to_el_help
+msgid "Omaduse E-maili element, kuhu saata tellimus (mail_to_el) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_discount
+msgid "Omaduse Allahindluse element andmete vormis (data_form_discount) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_discount_comment
+msgid "Omaduse Allahindluse element andmete vormis (data_form_discount) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_data_form_discount_help
+msgid "Omaduse Allahindluse element andmete vormis (data_form_discount) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_only_active_items
+msgid "Omaduse Ainult aktiivsed tooted (only_active_items) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_only_active_items_comment
+msgid "Omaduse Ainult aktiivsed tooted (only_active_items) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_only_active_items_help
+msgid "Omaduse Ainult aktiivsed tooted (only_active_items) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_use_controller
+msgid "Omaduse N&auml;itamiseks kasuta kontrollerit (use_controller) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_use_controller_comment
+msgid "Omaduse N&auml;itamiseks kasuta kontrollerit (use_controller) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_use_controller_help
+msgid "Omaduse N&auml;itamiseks kasuta kontrollerit (use_controller) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_from_addr
+msgid "Omaduse Meili From aadress (mail_from_addr) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_from_addr_comment
+msgid "Omaduse Meili From aadress (mail_from_addr) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_from_addr_help
+msgid "Omaduse Meili From aadress (mail_from_addr) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_from_name
+msgid "Omaduse Meili From nimi (mail_from_name) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_from_name_comment
+msgid "Omaduse Meili From nimi (mail_from_name) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_from_name_help
+msgid "Omaduse Meili From nimi (mail_from_name) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_cust_content
+msgid "Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_cust_content_comment
+msgid "Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_cust_content_help
+msgid "Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_rent_min_amt
+msgid "Omaduse J&auml;relmaksu min. summa (rent_min_amt) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_rent_min_amt_comment
+msgid "Omaduse J&auml;relmaksu min. summa (rent_min_amt) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_rent_min_amt_help
+msgid "Omaduse J&auml;relmaksu min. summa (rent_min_amt) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_rent_prop
+msgid "Omaduse Elemendi (rent_prop) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_rent_prop_comment
+msgid "Omaduse Elemendi (rent_prop) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_rent_prop_help
+msgid "Omaduse Elemendi (rent_prop) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_rent_prop_val
+msgid "Omaduse v&auml;&auml;rtus j&auml;relmaksuks (rent_prop_val) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_rent_prop_val_comment
+msgid "Omaduse v&auml;&auml;rtus j&auml;relmaksuks (rent_prop_val) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_rent_prop_val_help
+msgid "Omaduse v&auml;&auml;rtus j&auml;relmaksuks (rent_prop_val) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_controller
+msgid "Omaduse Vaikimisi n&auml;itamise kontroller (controller) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_controller_comment
+msgid "Omaduse Vaikimisi n&auml;itamise kontroller (controller) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_controller_help
+msgid "Omaduse Vaikimisi n&auml;itamise kontroller (controller) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_controller_tbl
+msgid "Omaduse Kontrollerid kataloogidele (controller_tbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_controller_tbl_comment
+msgid "Omaduse Kontrollerid kataloogidele (controller_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_controller_tbl_help
+msgid "Omaduse Kontrollerid kataloogidele (controller_tbl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_layoutbl
+msgid "Omaduse Toodete layout (layoutbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_layoutbl_comment
+msgid "Omaduse Toodete layout (layoutbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_layoutbl_help
+msgid "Omaduse Toodete layout (layoutbl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_sortbl
+msgid "Omaduse Toodete sorteerimine (sortbl) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_sortbl_comment
+msgid "Omaduse Toodete sorteerimine (sortbl) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_sortbl_help
+msgid "Omaduse Toodete sorteerimine (sortbl) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_psfieldmap
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele (psfieldmap) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_psfieldmap_comment
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele (psfieldmap) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_psfieldmap_help
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele (psfieldmap) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_orgfieldmap
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele (orgfieldmap) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_orgfieldmap_comment
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele (orgfieldmap) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_orgfieldmap_help
+msgid "Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele (orgfieldmap) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:group_payment
+msgid "Grupi Makseviisid (payment) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:group_appear
+msgid "Grupi N&auml;itamine (appear) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:group_psfieldmap
+msgid "Grupi Isukuandmete kaart (psfieldmap) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:group_orgfieldmap
+msgid "Grupi Firma andmete kaart (orgfieldmap) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_WAREHOUSE
+msgid "Seose ladu (RELTYPE_WAREHOUSE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_TABLE_LAYOUT
+msgid "Seose toodete tabeli kujundus (RELTYPE_TABLE_LAYOUT) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_ITEM_LAYOUT
+msgid "Seose toote kujundus (RELTYPE_ITEM_LAYOUT) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_CART
+msgid "Seose ostukorv (RELTYPE_CART) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_ORDER_FORM
+msgid "Seose vorm tellija andmete jaoks (RELTYPE_ORDER_FORM) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_CONTROLLER
+msgid "Seose n&auml;itamise kontroller (RELTYPE_CONTROLLER) tekst"
+msgstr ""
+
 #: classes/applications/shop/shop_order_center.aw:140
 msgid "Sessionipõhine"
 msgstr ""

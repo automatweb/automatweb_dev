@@ -1,0 +1,116 @@
+#: classes/taket/taket_order_item.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_order_id
+msgid "Omaduse  (order_id) caption"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_order_id_comment
+msgid "Omaduse  (order_id) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_order_id_help
+msgid "Omaduse  (order_id) help"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_product_code
+msgid "Omaduse  (product_code) caption"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_product_code_comment
+msgid "Omaduse  (product_code) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_product_code_help
+msgid "Omaduse  (product_code) help"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_quantity
+msgid "Omaduse  (quantity) caption"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_quantity_comment
+msgid "Omaduse  (quantity) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_quantity_help
+msgid "Omaduse  (quantity) help"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_price
+msgid "Omaduse  (price) caption"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_price_comment
+msgid "Omaduse  (price) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_price_help
+msgid "Omaduse  (price) help"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_discount
+msgid "Omaduse  (discount) caption"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_discount_comment
+msgid "Omaduse  (discount) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_discount_help
+msgid "Omaduse  (discount) help"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_product_name
+msgid "Omaduse  (product_name) caption"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_product_name_comment
+msgid "Omaduse  (product_name) kommentaar"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:prop_product_name_help
+msgid "Omaduse  (product_name) help"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/taket/taket_order_item.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+

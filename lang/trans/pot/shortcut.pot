@@ -1,3 +1,43 @@
+#: classes/admin/shortcut.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_status
+msgid "Omaduse Staatus (status) caption"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_status_comment
+msgid "Omaduse Staatus (status) kommentaar"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_status_help
+msgid "Omaduse Staatus (status) help"
+msgstr ""
+
+#: classes/admin/shortcut.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
 #: classes/admin/shortcut.aw:75
 msgid " (kiirviide)"
 msgstr ""

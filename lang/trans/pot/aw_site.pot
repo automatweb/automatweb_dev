@@ -1,3 +1,235 @@
+#: classes/install/aw_site.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_site_url
+msgid "Omaduse Saidi url (site_url) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_site_url_comment
+msgid "Omaduse Saidi url (site_url) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_site_url_help
+msgid "Omaduse Saidi url (site_url) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_default_user
+msgid "Omaduse Default kasutaja (default_user) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_default_user_comment
+msgid "Omaduse Default kasutaja (default_user) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_default_user_help
+msgid "Omaduse Default kasutaja (default_user) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_default_user_pwd
+msgid "Omaduse Default kasutaja parool (default_user_pwd) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_default_user_pwd_comment
+msgid "Omaduse Default kasutaja parool (default_user_pwd) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_default_user_pwd_help
+msgid "Omaduse Default kasutaja parool (default_user_pwd) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_use_existing_database
+msgid "Omaduse Kasuta olemasolevat andmebaasi (use_existing_database) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_use_existing_database_comment
+msgid "Omaduse Kasuta olemasolevat andmebaasi (use_existing_database) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_use_existing_database_help
+msgid "Omaduse Kasuta olemasolevat andmebaasi (use_existing_database) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_db
+msgid "Omaduse Vali andmebaas (select_db) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_db_comment
+msgid "Omaduse Vali andmebaas (select_db) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_db_help
+msgid "Omaduse Vali andmebaas (select_db) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_parent_folder
+msgid "Omaduse Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse (select_parent_folder) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_parent_folder_comment
+msgid "Omaduse Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse (select_parent_folder) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_parent_folder_help
+msgid "Omaduse Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse (select_parent_folder) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_use_existing_templates
+msgid "Omaduse Vali olemasolevad templated (use_existing_templates) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_use_existing_templates_comment
+msgid "Omaduse Vali olemasolevad templated (use_existing_templates) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_use_existing_templates_help
+msgid "Omaduse Vali olemasolevad templated (use_existing_templates) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_tpl_sites
+msgid "Omaduse Vali saidid, mille templatesid valida saad (select_tpl_sites) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_tpl_sites_comment
+msgid "Omaduse Vali saidid, mille templatesid valida saad (select_tpl_sites) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_tpl_sites_help
+msgid "Omaduse Vali saidid, mille templatesid valida saad (select_tpl_sites) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_tpl_folders
+msgid "Omaduse Vali templatede kataloogid, mis uude saiti kopeerida (select_tpl_folders) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_tpl_folders_comment
+msgid "Omaduse Vali templatede kataloogid, mis uude saiti kopeerida (select_tpl_folders) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_tpl_folders_help
+msgid "Omaduse Vali templatede kataloogid, mis uude saiti kopeerida (select_tpl_folders) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_imgcss_sites
+msgid "Omaduse Vali sait, millelt v&otilde;tta css ja pildid (select_imgcss_sites) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_imgcss_sites_comment
+msgid "Omaduse Vali sait, millelt v&otilde;tta css ja pildid (select_imgcss_sites) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_select_imgcss_sites_help
+msgid "Omaduse Vali sait, millelt v&otilde;tta css ja pildid (select_imgcss_sites) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_gen_site
+msgid "Omaduse Genereeri sait! (gen_site) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_gen_site_comment
+msgid "Omaduse Genereeri sait! (gen_site) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_gen_site_help
+msgid "Omaduse Genereeri sait! (gen_site) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_upd_site
+msgid "Omaduse Uuenda saidi m&auml;&auml;rangud! (upd_site) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_upd_site_comment
+msgid "Omaduse Uuenda saidi m&auml;&auml;rangud! (upd_site) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_upd_site_help
+msgid "Omaduse Uuenda saidi m&auml;&auml;rangud! (upd_site) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_ch_warnings
+msgid "Omaduse Uuendamise hoiatused (ch_warnings) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_ch_warnings_comment
+msgid "Omaduse Uuendamise hoiatused (ch_warnings) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_ch_warnings_help
+msgid "Omaduse Uuendamise hoiatused (ch_warnings) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_site_errmsg
+msgid "Omaduse Miks saiti ei saa genereerida (site_errmsg) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_site_errmsg_comment
+msgid "Omaduse Miks saiti ei saa genereerida (site_errmsg) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_site_errmsg_help
+msgid "Omaduse Miks saiti ei saa genereerida (site_errmsg) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_site_warnmsg
+msgid "Omaduse Hoiatused: (site_warnmsg) caption"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_site_warnmsg_comment
+msgid "Omaduse Hoiatused: (site_warnmsg) kommentaar"
+msgstr ""
+
+#: classes/install/aw_site.aw:prop_site_warnmsg_help
+msgid "Omaduse Hoiatused: (site_warnmsg) help"
+msgstr ""
+
+#: classes/install/aw_site.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/install/aw_site.aw:group_templates
+msgid "Grupi Templated (templates) pealkiri"
+msgstr ""
+
+#: classes/install/aw_site.aw:group_db
+msgid "Grupi Andmebaas (db) pealkiri"
+msgstr ""
+
+#: classes/install/aw_site.aw:rel_RELTYPE_LAYOUT
+msgid "Seose saidi layout (RELTYPE_LAYOUT) tekst"
+msgstr ""
+
 #: classes/install/aw_site.aw:142
 msgid "Saidi url on m&auml;&auml;ramata!"
 msgstr ""

@@ -1,3 +1,107 @@
+#: classes/applications/awmyadmin/db_login.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_server
+msgid "Omaduse Server (db_server) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_server_comment
+msgid "Omaduse Server (db_server) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_server_help
+msgid "Omaduse Server (db_server) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_base
+msgid "Omaduse Andmebaas (db_base) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_base_comment
+msgid "Omaduse Andmebaas (db_base) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_base_help
+msgid "Omaduse Andmebaas (db_base) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_user
+msgid "Omaduse Kasutajanimi (db_user) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_user_comment
+msgid "Omaduse Kasutajanimi (db_user) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_user_help
+msgid "Omaduse Kasutajanimi (db_user) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_pass
+msgid "Omaduse Parool (db_pass) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_pass_comment
+msgid "Omaduse Parool (db_pass) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_pass_help
+msgid "Omaduse Parool (db_pass) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_create_ifnexist
+msgid "Omaduse Loo kui olemas pole (db_create_ifnexist) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_create_ifnexist_comment
+msgid "Omaduse Loo kui olemas pole (db_create_ifnexist) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:prop_db_create_ifnexist_help
+msgid "Omaduse Loo kui olemas pole (db_create_ifnexist) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_login.aw:rel_RELTYPE_SERVER_LOGIN
+msgid "Seose db serveri login (RELTYPE_SERVER_LOGIN) tekst"
+msgstr ""
+
 #: classes/applications/awmyadmin/db_login.aw:51
 msgid "The admin user for the database server has not been set!"
 msgstr ""

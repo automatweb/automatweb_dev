@@ -1,0 +1,56 @@
+#: classes/admin/tree_root.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_root
+msgid "Omaduse Rootmenüü (root) caption"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_root_comment
+msgid "Omaduse Rootmenüü (root) kommentaar"
+msgstr ""
+
+#: classes/admin/tree_root.aw:prop_root_help
+msgid "Omaduse Rootmenüü (root) help"
+msgstr ""
+
+#: classes/admin/tree_root.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/admin/tree_root.aw:rel_RELTYPE_ROOT
+msgid "Seose juurmenüü (RELTYPE_ROOT) tekst"
+msgstr ""
+

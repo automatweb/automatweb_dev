@@ -1,3 +1,55 @@
+#: classes/syslog/ipaddress.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_addr
+msgid "Omaduse IP Aadress (addr) caption"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_addr_comment
+msgid "Omaduse IP Aadress (addr) kommentaar"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_addr_help
+msgid "Omaduse IP Aadress (addr) help"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
 #: classes/syslog/ipaddress.aw:134
 msgid "ipaddress::match(%s, %s): the second parameter must be a complete ip address, it can not be a mask!"
 msgstr ""

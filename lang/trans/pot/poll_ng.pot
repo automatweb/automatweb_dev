@@ -1,3 +1,63 @@
+#: classes/poll_ng.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_choices
+msgid "Omaduse Variandid (choices) caption"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_choices_comment
+msgid "Omaduse Variandid (choices) kommentaar"
+msgstr ""
+
+#: classes/poll_ng.aw:prop_choices_help
+msgid "Omaduse Variandid (choices) help"
+msgstr ""
+
+#: classes/poll_ng.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/poll_ng.aw:group_choices
+msgid "Grupi Vastusevariandid (choices) pealkiri"
+msgstr ""
+
+#: classes/poll_ng.aw:rel_RELTYPE_ANSWER
+msgid "Seose polli vastus (RELTYPE_ANSWER) tekst"
+msgstr ""
+
 #: classes/poll_ng.aw:40
 msgid "ID"
 msgstr ""

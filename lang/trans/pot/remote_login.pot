@@ -1,3 +1,79 @@
+#: classes/core/remote_login.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_login_uid
+msgid "Omaduse Kasutajanimi (login_uid) caption"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_login_uid_comment
+msgid "Omaduse Kasutajanimi (login_uid) kommentaar"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_login_uid_help
+msgid "Omaduse Kasutajanimi (login_uid) help"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_login_password
+msgid "Omaduse Parool (login_password) caption"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_login_password_comment
+msgid "Omaduse Parool (login_password) kommentaar"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_login_password_help
+msgid "Omaduse Parool (login_password) help"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_server
+msgid "Omaduse Server (server) caption"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_server_comment
+msgid "Omaduse Server (server) kommentaar"
+msgstr ""
+
+#: classes/core/remote_login.aw:prop_server_help
+msgid "Omaduse Server (server) help"
+msgstr ""
+
+#: classes/core/remote_login.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
 #: classes/core/remote_login.aw:71
 msgid "Relax, take a cookie."
 msgstr ""

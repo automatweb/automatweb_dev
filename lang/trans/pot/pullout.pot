@@ -1,0 +1,116 @@
+#: classes/pullout.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/pullout.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/pullout.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/pullout.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/pullout.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/pullout.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/pullout.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/pullout.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/pullout.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/pullout.aw:prop_groups
+msgid "Omaduse Vali grupid, kellele pullouti näidatakse (groups) caption"
+msgstr ""
+
+#: classes/pullout.aw:prop_groups_comment
+msgid "Omaduse Vali grupid, kellele pullouti näidatakse (groups) kommentaar"
+msgstr ""
+
+#: classes/pullout.aw:prop_groups_help
+msgid "Omaduse Vali grupid, kellele pullouti näidatakse (groups) help"
+msgstr ""
+
+#: classes/pullout.aw:prop_docs
+msgid "Omaduse Vali dokument, mida näidata (docs) caption"
+msgstr ""
+
+#: classes/pullout.aw:prop_docs_comment
+msgid "Omaduse Vali dokument, mida näidata (docs) kommentaar"
+msgstr ""
+
+#: classes/pullout.aw:prop_docs_help
+msgid "Omaduse Vali dokument, mida näidata (docs) help"
+msgstr ""
+
+#: classes/pullout.aw:prop_align
+msgid "Omaduse Align (align) caption"
+msgstr ""
+
+#: classes/pullout.aw:prop_align_comment
+msgid "Omaduse Align (align) kommentaar"
+msgstr ""
+
+#: classes/pullout.aw:prop_align_help
+msgid "Omaduse Align (align) help"
+msgstr ""
+
+#: classes/pullout.aw:prop_right
+msgid "Omaduse Paremalt (right) caption"
+msgstr ""
+
+#: classes/pullout.aw:prop_right_comment
+msgid "Omaduse Paremalt (right) kommentaar"
+msgstr ""
+
+#: classes/pullout.aw:prop_right_help
+msgid "Omaduse Paremalt (right) help"
+msgstr ""
+
+#: classes/pullout.aw:prop_width
+msgid "Omaduse Laius (width) caption"
+msgstr ""
+
+#: classes/pullout.aw:prop_width_comment
+msgid "Omaduse Laius (width) kommentaar"
+msgstr ""
+
+#: classes/pullout.aw:prop_width_help
+msgid "Omaduse Laius (width) help"
+msgstr ""
+
+#: classes/pullout.aw:prop_template
+msgid "Omaduse Template (template) caption"
+msgstr ""
+
+#: classes/pullout.aw:prop_template_comment
+msgid "Omaduse Template (template) kommentaar"
+msgstr ""
+
+#: classes/pullout.aw:prop_template_help
+msgid "Omaduse Template (template) help"
+msgstr ""
+
+#: classes/pullout.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/pullout.aw:rel_RELTYPE_DOCUMENT
+msgid "Seose n&auml;idatav dokument (RELTYPE_DOCUMENT) tekst"
+msgstr ""
+

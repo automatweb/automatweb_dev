@@ -1,3 +1,115 @@
+#: classes/applications/calendar/calendar_reminder.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_user_id
+msgid "Omaduse Kasutaja id (user_id) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_user_id_comment
+msgid "Omaduse Kasutaja id (user_id) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_user_id_help
+msgid "Omaduse Kasutaja id (user_id) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_event_id
+msgid "Omaduse Eventi id (event_id) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_event_id_comment
+msgid "Omaduse Eventi id (event_id) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_event_id_help
+msgid "Omaduse Eventi id (event_id) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_reminder_rule_id
+msgid "Omaduse Meeldetuletuse reegli id (reminder_rule_id) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_reminder_rule_id_comment
+msgid "Omaduse Meeldetuletuse reegli id (reminder_rule_id) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_reminder_rule_id_help
+msgid "Omaduse Meeldetuletuse reegli id (reminder_rule_id) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_remind_at
+msgid "Omaduse Meeldetuletuse aeg (remind_at) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_remind_at_comment
+msgid "Omaduse Meeldetuletuse aeg (remind_at) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_remind_at_help
+msgid "Omaduse Meeldetuletuse aeg (remind_at) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_reminder_sent
+msgid "Omaduse Saadetud (reminder_sent) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_reminder_sent_comment
+msgid "Omaduse Saadetud (reminder_sent) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_reminder_sent_help
+msgid "Omaduse Saadetud (reminder_sent) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_email
+msgid "Omaduse E-post (email) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_email_comment
+msgid "Omaduse E-post (email) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:prop_email_help
+msgid "Omaduse E-post (email) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_reminder.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
 #: classes/applications/calendar/calendar_reminder.aw:110
 msgid "Hei, varsti algab %s, täpsemalt kell %s, vaata et sa ära ei unusta!"
 msgstr ""

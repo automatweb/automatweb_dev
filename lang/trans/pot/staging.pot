@@ -1,3 +1,159 @@
+#: classes/applications/calendar/staging.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_needs_translation
+msgid "Omaduse Vajab tõlget (needs_translation) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_needs_translation_comment
+msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_needs_translation_help
+msgid "Omaduse Vajab tõlget (needs_translation) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_is_translated
+msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_is_translated_comment
+msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_is_translated_help
+msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_start1
+msgid "Omaduse Algab (start1) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_start1_comment
+msgid "Omaduse Algab (start1) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_start1_help
+msgid "Omaduse Algab (start1) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_img
+msgid "Omaduse Pilt (img) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_img_comment
+msgid "Omaduse Pilt (img) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_img_help
+msgid "Omaduse Pilt (img) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextarea1
+msgid "Omaduse Kirjeldus (utextarea1) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextarea1_comment
+msgid "Omaduse Kirjeldus (utextarea1) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_utextarea1_help
+msgid "Omaduse Kirjeldus (utextarea1) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_project_selector
+msgid "Omaduse Projektid (project_selector) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_project_selector_comment
+msgid "Omaduse Projektid (project_selector) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_project_selector_help
+msgid "Omaduse Projektid (project_selector) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_trans
+msgid "Omaduse Tõlkimine (trans) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_trans_comment
+msgid "Omaduse Tõlkimine (trans) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_trans_help
+msgid "Omaduse Tõlkimine (trans) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_times
+msgid "Omaduse Ajad (times) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_times_comment
+msgid "Omaduse Ajad (times) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_times_help
+msgid "Omaduse Ajad (times) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:group_projects
+msgid "Grupi Projektid (projects) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:group_trans
+msgid "Grupi Tõlkimine (trans) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:group_times
+msgid "Grupi Ajad (times) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:rel_RELTYPE_PICTURE
+msgid "Seose Pilt (RELTYPE_PICTURE) tekst"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:rel_RELTYPE_COPY
+msgid "Seose Koopia (RELTYPE_COPY) tekst"
+msgstr ""
+
 #: classes/applications/calendar/staging.aw:110
 msgid "Aktiivne objekt"
 msgstr ""

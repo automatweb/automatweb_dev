@@ -1,3 +1,87 @@
+#: classes/admin/obj_table_conf.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_proptoolbar
+msgid "Omaduse  (proptoolbar) caption"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_proptoolbar_comment
+msgid "Omaduse  (proptoolbar) kommentaar"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_proptoolbar_help
+msgid "Omaduse  (proptoolbar) help"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_proptable
+msgid "Omaduse  (proptable) caption"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_proptable_comment
+msgid "Omaduse  (proptable) kommentaar"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_proptable_help
+msgid "Omaduse  (proptable) help"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_sep
+msgid "Omaduse Eraldaja ühe tulba elementide vahel (sep) caption"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_sep_comment
+msgid "Omaduse Eraldaja ühe tulba elementide vahel (sep) kommentaar"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:prop_sep_help
+msgid "Omaduse Eraldaja ühe tulba elementide vahel (sep) help"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:group_proptab
+msgid "Grupi Objektitabel (proptab) pealkiri"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:rel_RELTYPE_GROUP
+msgid "Seose Kasutajagrupp (RELTYPE_GROUP) tekst"
+msgstr ""
+
 #: classes/admin/obj_table_conf.aw:30
 msgid "ID"
 msgstr ""

@@ -1,3 +1,91 @@
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_subclass
+msgid "Omaduse Andmete tüüp (subclass) caption"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_subclass_comment
+msgid "Omaduse Andmete tüüp (subclass) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_subclass_help
+msgid "Omaduse Andmete tüüp (subclass) help"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_type
+msgid "Omaduse Source tüüp (type) caption"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_type_comment
+msgid "Omaduse Source tüüp (type) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_type_help
+msgid "Omaduse Source tüüp (type) help"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_fullpath
+msgid "Omaduse Faili asukoht (fullpath) caption"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_fullpath_comment
+msgid "Omaduse Faili asukoht (fullpath) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_fullpath_help
+msgid "Omaduse Faili asukoht (fullpath) help"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_url
+msgid "Omaduse Faili url (url) caption"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_url_comment
+msgid "Omaduse Faili url (url) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_url_help
+msgid "Omaduse Faili url (url) help"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
 #: classes/applications/clients/ut/xml_import/datasource.aw:46
 msgid "lokaalne fail (serveris)"
 msgstr ""

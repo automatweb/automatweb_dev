@@ -1,3 +1,95 @@
+#: classes/applications/apache/apache_alias.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_alias
+msgid "Omaduse Alias (alias) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_alias_comment
+msgid "Omaduse Alias (alias) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_alias_help
+msgid "Omaduse Alias (alias) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_dir
+msgid "Omaduse Kataloog serveris (dir) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_dir_comment
+msgid "Omaduse Kataloog serveris (dir) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_dir_help
+msgid "Omaduse Kataloog serveris (dir) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_tbl
+msgid "Omaduse Tabel (tbl) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_tbl_comment
+msgid "Omaduse Tabel (tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_tbl_help
+msgid "Omaduse Tabel (tbl) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_list
+msgid "Omaduse Apache konfiguratsioon (list) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_list_comment
+msgid "Omaduse Apache konfiguratsioon (list) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_list_help
+msgid "Omaduse Apache konfiguratsioon (list) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:group_list
+msgid "Grupi Nimekiri (list) pealkiri"
+msgstr ""
+
 #: classes/applications/apache/apache_alias.aw:62
 msgid "Alias ei saa olla tühi!"
 msgstr ""

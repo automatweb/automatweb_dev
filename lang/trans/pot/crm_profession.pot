@@ -1,0 +1,92 @@
+#: classes/crm/crm_profession.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_ext_id
+msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_ext_id_comment
+msgid "Omaduse Sidussüsteemi ID (ext_id) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_ext_id_help
+msgid "Omaduse Sidussüsteemi ID (ext_id) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_name_in_plural
+msgid "Omaduse Nimi mitmuses (name_in_plural) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_name_in_plural_comment
+msgid "Omaduse Nimi mitmuses (name_in_plural) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_name_in_plural_help
+msgid "Omaduse Nimi mitmuses (name_in_plural) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_trans
+msgid "Omaduse Tõlkimine (trans) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_trans_comment
+msgid "Omaduse Tõlkimine (trans) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_trans_help
+msgid "Omaduse Tõlkimine (trans) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:group_trans
+msgid "Grupi Tõlkimine (trans) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:rel_RELTYPE_SIMILARPROFESSION
+msgid "Seose Sarnane amet (RELTYPE_SIMILARPROFESSION) tekst"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:rel_RELTYPE_GROUP
+msgid "Seose grupp (RELTYPE_GROUP) tekst"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:rel_RELTYPE_DESC_FILE
+msgid "Seose Ametijuhend (RELTYPE_DESC_FILE) tekst"
+msgstr ""
+

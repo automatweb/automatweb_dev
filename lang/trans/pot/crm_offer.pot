@@ -1,3 +1,307 @@
+#: classes/crm/crm_offer.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_orderer
+msgid "Omaduse Tellija (orderer) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_orderer_comment
+msgid "Omaduse Tellija (orderer) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_orderer_help
+msgid "Omaduse Tellija (orderer) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_start1
+msgid "Omaduse Algus (start1) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_start1_comment
+msgid "Omaduse Algus (start1) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_start1_help
+msgid "Omaduse Algus (start1) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_preformer
+msgid "Omaduse  (preformer) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_preformer_comment
+msgid "Omaduse  (preformer) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_preformer_help
+msgid "Omaduse  (preformer) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_preformer_cap
+msgid "Omaduse Täitja (preformer_cap) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_preformer_cap_comment
+msgid "Omaduse Täitja (preformer_cap) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_preformer_cap_help
+msgid "Omaduse Täitja (preformer_cap) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_salesman
+msgid "Omaduse Pakkumise koostaja (salesman) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_salesman_comment
+msgid "Omaduse Pakkumise koostaja (salesman) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_salesman_help
+msgid "Omaduse Pakkumise koostaja (salesman) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_offer_status
+msgid "Omaduse Staatus (offer_status) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_offer_status_comment
+msgid "Omaduse Staatus (offer_status) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_offer_status_help
+msgid "Omaduse Staatus (offer_status) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_content
+msgid "Omaduse Sisu (content) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_content_comment
+msgid "Omaduse Sisu (content) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_content_help
+msgid "Omaduse Sisu (content) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_prev_status
+msgid "Omaduse  (prev_status) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_prev_status_comment
+msgid "Omaduse  (prev_status) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_prev_status_help
+msgid "Omaduse  (prev_status) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_sum
+msgid "Omaduse Hind (ilma KM) (sum) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_sum_comment
+msgid "Omaduse Hind (ilma KM) (sum) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_sum_help
+msgid "Omaduse Hind (ilma KM) (sum) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_is_done
+msgid "Omaduse Tehtud (is_done) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_is_done_comment
+msgid "Omaduse Tehtud (is_done) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_is_done_help
+msgid "Omaduse Tehtud (is_done) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_calendar_selector
+msgid "Omaduse Kalendrid (calendar_selector) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_calendar_selector_comment
+msgid "Omaduse Kalendrid (calendar_selector) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_calendar_selector_help
+msgid "Omaduse Kalendrid (calendar_selector) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_project_selector
+msgid "Omaduse Projektid (project_selector) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_project_selector_comment
+msgid "Omaduse Projektid (project_selector) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_project_selector_help
+msgid "Omaduse Projektid (project_selector) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_package_toolbar
+msgid "Omaduse  (package_toolbar) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_package_toolbar_comment
+msgid "Omaduse  (package_toolbar) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_package_toolbar_help
+msgid "Omaduse  (package_toolbar) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_package_table
+msgid "Omaduse  (package_table) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_package_table_comment
+msgid "Omaduse  (package_table) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_package_table_help
+msgid "Omaduse  (package_table) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_products_table
+msgid "Omaduse  (products_table) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_products_table_comment
+msgid "Omaduse  (products_table) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_products_table_help
+msgid "Omaduse  (products_table) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_packages_search
+msgid "Omaduse  (packages_search) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_packages_search_comment
+msgid "Omaduse  (packages_search) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_packages_search_help
+msgid "Omaduse  (packages_search) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_packages_search_results
+msgid "Omaduse  (packages_search_results) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_packages_search_results_comment
+msgid "Omaduse  (packages_search_results) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_packages_search_results_help
+msgid "Omaduse  (packages_search_results) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_offer_history
+msgid "Omaduse  (offer_history) caption"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_offer_history_comment
+msgid "Omaduse  (offer_history) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:prop_offer_history_help
+msgid "Omaduse  (offer_history) help"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_recurrence
+msgid "Grupi Kordumine (recurrence) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_calendars
+msgid "Grupi Kalendrid (calendars) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_projects
+msgid "Grupi Projektid (projects) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_packages_show
+msgid "Grupi Paketid (packages_show) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_products_show
+msgid "Grupi Tooted (products_show) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_history
+msgid "Grupi Ajalugu (history) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:rel_RELTYPE_RECURRENCE
+msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:rel_RELTYPE_ORDERER
+msgid "Seose Tellija (RELTYPE_ORDERER) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:rel_RELTYPE_PREFORMER
+msgid "Seose Täitja (RELTYPE_PREFORMER) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:rel_RELTYPE_SALESMAN
+msgid "Seose Pakkumise koostaja (RELTYPE_SALESMAN) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:rel_RELTYPE_PRODUCT
+msgid "Seose Toode (RELTYPE_PRODUCT) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:rel_RELTYPE_PACKAGE
+msgid "Seose Pakett (RELTYPE_PACKAGE) tekst"
+msgstr ""
+
 #: classes/crm/crm_offer.aw:125
 msgid "Koostamisel"
 msgstr ""

@@ -1,3 +1,83 @@
+#: classes/applications/orders/orders_manager.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_export_folder
+msgid "Omaduse Ekspordi kataloog (export_folder) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_export_folder_comment
+msgid "Omaduse Ekspordi kataloog (export_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_export_folder_help
+msgid "Omaduse Ekspordi kataloog (export_folder) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_toolbar
+msgid "Omaduse Tellimuste toolbar (orders_toolbar) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_toolbar_comment
+msgid "Omaduse Tellimuste toolbar (orders_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_toolbar_help
+msgid "Omaduse Tellimuste toolbar (orders_toolbar) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_table
+msgid "Omaduse Tellimuste tabel (orders_table) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_table_comment
+msgid "Omaduse Tellimuste tabel (orders_table) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_table_help
+msgid "Omaduse Tellimuste tabel (orders_table) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:group_ordermnager
+msgid "Grupi Tellimused (ordermnager) pealkiri"
+msgstr ""
+
 #: classes/applications/orders/orders_manager.aw:61
 msgid "Kustuta tellimusi"
 msgstr ""

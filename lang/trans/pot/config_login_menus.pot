@@ -1,3 +1,75 @@
+#: classes/admin/config/config_login_menus.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_login_menus
+msgid "Omaduse  (login_menus) caption"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_login_menus_comment
+msgid "Omaduse  (login_menus) kommentaar"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_login_menus_help
+msgid "Omaduse  (login_menus) help"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_activity
+msgid "Omaduse Aktiivsus (activity) caption"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_activity_comment
+msgid "Omaduse Aktiivsus (activity) kommentaar"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:prop_activity_help
+msgid "Omaduse Aktiivsus (activity) help"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:group_activity
+msgid "Grupi Aktiivsus (activity) pealkiri"
+msgstr ""
+
+#: classes/admin/config/config_login_menus.aw:rel_RELTYPE_FOLDER
+msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
+msgstr ""
+
 #: classes/admin/config/config_login_menus.aw:146
 msgid " menyy"
 msgstr ""

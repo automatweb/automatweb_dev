@@ -1,3 +1,131 @@
+#: classes/core/aw_help.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_hclass
+msgid "Omaduse  (hclass) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_hclass_comment
+msgid "Omaduse  (hclass) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_hclass_help
+msgid "Omaduse  (hclass) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_about
+msgid "Omaduse Klassi kirjeldus (about) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_about_comment
+msgid "Omaduse Klassi kirjeldus (about) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_about_help
+msgid "Omaduse Klassi kirjeldus (about) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_help_tb
+msgid "Omaduse  (help_tb) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_help_tb_comment
+msgid "Omaduse  (help_tb) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_help_tb_help
+msgid "Omaduse  (help_tb) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_htab
+msgid "Omaduse  (htab) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_htab_comment
+msgid "Omaduse  (htab) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_htab_help
+msgid "Omaduse  (htab) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_classname
+msgid "Omaduse  (classname) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_classname_comment
+msgid "Omaduse  (classname) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_classname_help
+msgid "Omaduse  (classname) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_tab_tree
+msgid "Omaduse  (tab_tree) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_tab_tree_comment
+msgid "Omaduse  (tab_tree) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_tab_tree_help
+msgid "Omaduse  (tab_tree) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_group_props
+msgid "Omaduse  (group_props) caption"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_group_props_comment
+msgid "Omaduse  (group_props) kommentaar"
+msgstr ""
+
+#: classes/core/aw_help.aw:prop_group_props_help
+msgid "Omaduse  (group_props) help"
+msgstr ""
+
+#: classes/core/aw_help.aw:group_general
+msgid "Grupi ‹ldine (general) pealkiri"
+msgstr ""
+
+#: classes/core/aw_help.aw:group_help_ui
+msgid "Grupi Omadused (help_ui) pealkiri"
+msgstr ""
+
 #: classes/core/aw_help.aw:48
 msgid "Klass on m‰‰ramata"
 msgstr ""

@@ -1,3 +1,83 @@
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession
+msgid "Omaduse Ametikoht (profession) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession_comment
+msgid "Omaduse Ametikoht (profession) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession_help
+msgid "Omaduse Ametikoht (profession) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline
+msgid "Omaduse Konkursi tähtaeg (deadline) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline_comment
+msgid "Omaduse Konkursi tähtaeg (deadline) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline_help
+msgid "Omaduse Konkursi tähtaeg (deadline) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning
+msgid "Omaduse Konkursi algusaeg (beginning) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning_comment
+msgid "Omaduse Konkursi algusaeg (beginning) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning_help
+msgid "Omaduse Konkursi algusaeg (beginning) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_SECTION
+msgid "Seose Üksus (RELTYPE_SECTION) tekst"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:349
 msgid "Kustuta fail"
 msgstr ""

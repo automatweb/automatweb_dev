@@ -1,4 +1,4 @@
-#: classes/core/trans/pot_scanner.aw:194
+#: classes/core/trans/pot_scanner.aw:195
 msgid ") === false)
 				{
 					echo "

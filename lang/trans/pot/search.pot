@@ -1,3 +1,291 @@
+#: classes/search.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/search.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/search.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/search.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/search.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/search.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_server
+msgid "Omaduse Server (s_server) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_server_comment
+msgid "Omaduse Server (s_server) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_server_help
+msgid "Omaduse Server (s_server) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_name
+msgid "Omaduse Nimi (s_name) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_name_comment
+msgid "Omaduse Nimi (s_name) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_name_help
+msgid "Omaduse Nimi (s_name) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_comment
+msgid "Omaduse Kommentaar (s_comment) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_comment_comment
+msgid "Omaduse Kommentaar (s_comment) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_comment_help
+msgid "Omaduse Kommentaar (s_comment) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_class_id
+msgid "Omaduse Tüüp (s_class_id) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_class_id_comment
+msgid "Omaduse Tüüp (s_class_id) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_class_id_help
+msgid "Omaduse Tüüp (s_class_id) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_oid
+msgid "Omaduse OID (s_oid) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_oid_comment
+msgid "Omaduse OID (s_oid) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_oid_help
+msgid "Omaduse OID (s_oid) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_location
+msgid "Omaduse Asukoht (s_location) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_location_comment
+msgid "Omaduse Asukoht (s_location) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_location_help
+msgid "Omaduse Asukoht (s_location) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_lang_id
+msgid "Omaduse Keel (s_lang_id) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_lang_id_comment
+msgid "Omaduse Keel (s_lang_id) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_lang_id_help
+msgid "Omaduse Keel (s_lang_id) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_search_bros
+msgid "Omaduse Leia vendi (s_search_bros) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_search_bros_comment
+msgid "Omaduse Leia vendi (s_search_bros) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_search_bros_help
+msgid "Omaduse Leia vendi (s_search_bros) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_status
+msgid "Omaduse Staatus (s_status) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_status_comment
+msgid "Omaduse Staatus (s_status) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_status_help
+msgid "Omaduse Staatus (s_status) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_createdby
+msgid "Omaduse Looja (s_createdby) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_createdby_comment
+msgid "Omaduse Looja (s_createdby) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_createdby_help
+msgid "Omaduse Looja (s_createdby) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_modifiedby
+msgid "Omaduse Muutja (s_modifiedby) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_modifiedby_comment
+msgid "Omaduse Muutja (s_modifiedby) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_modifiedby_help
+msgid "Omaduse Muutja (s_modifiedby) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_alias
+msgid "Omaduse Alias (s_alias) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_alias_comment
+msgid "Omaduse Alias (s_alias) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_alias_help
+msgid "Omaduse Alias (s_alias) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_period
+msgid "Omaduse Periood (s_period) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_period_comment
+msgid "Omaduse Periood (s_period) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_period_help
+msgid "Omaduse Periood (s_period) help"
+msgstr ""
+
+#: classes/search.aw:prop_s_site_id
+msgid "Omaduse Saidi ID (s_site_id) caption"
+msgstr ""
+
+#: classes/search.aw:prop_s_site_id_comment
+msgid "Omaduse Saidi ID (s_site_id) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_s_site_id_help
+msgid "Omaduse Saidi ID (s_site_id) help"
+msgstr ""
+
+#: classes/search.aw:prop_selection_manage_buttons
+msgid "Omaduse  (selection_manage_buttons) caption"
+msgstr ""
+
+#: classes/search.aw:prop_selection_manage_buttons_comment
+msgid "Omaduse  (selection_manage_buttons) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_selection_manage_buttons_help
+msgid "Omaduse  (selection_manage_buttons) help"
+msgstr ""
+
+#: classes/search.aw:prop_results
+msgid "Omaduse  (results) caption"
+msgstr ""
+
+#: classes/search.aw:prop_results_comment
+msgid "Omaduse  (results) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_results_help
+msgid "Omaduse  (results) help"
+msgstr ""
+
+#: classes/search.aw:prop_objsearch
+msgid "Omaduse  (objsearch) caption"
+msgstr ""
+
+#: classes/search.aw:prop_objsearch_comment
+msgid "Omaduse  (objsearch) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_objsearch_help
+msgid "Omaduse  (objsearch) help"
+msgstr ""
+
+#: classes/search.aw:prop_active_selection_objects
+msgid "Omaduse  (active_selection_objects) caption"
+msgstr ""
+
+#: classes/search.aw:prop_active_selection_objects_comment
+msgid "Omaduse  (active_selection_objects) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_active_selection_objects_help
+msgid "Omaduse  (active_selection_objects) help"
+msgstr ""
+
+#: classes/search.aw:prop_active_selection
+msgid "Omaduse  (active_selection) caption"
+msgstr ""
+
+#: classes/search.aw:prop_active_selection_comment
+msgid "Omaduse  (active_selection) kommentaar"
+msgstr ""
+
+#: classes/search.aw:prop_active_selection_help
+msgid "Omaduse  (active_selection) help"
+msgstr ""
+
+#: classes/search.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/search.aw:group_search
+msgid "Grupi Lihtne&nbsp;otsing (search) pealkiri"
+msgstr ""
+
+#: classes/search.aw:group_advanced
+msgid "Grupi Advanced&nbsp;otsing (advanced) pealkiri"
+msgstr ""
+
+#: classes/search.aw:group_objsearch
+msgid "Grupi Objektiotsing (objsearch) pealkiri"
+msgstr ""
+
+#: classes/search.aw:group_results
+msgid "Grupi Tulemused (results) pealkiri"
+msgstr ""
+
+#: classes/search.aw:group_selectione
+msgid "Grupi Valimid (selectione) pealkiri"
+msgstr ""
+
 #: classes/search.aw:200
 msgid "Objektitüübi omadused"
 msgstr ""

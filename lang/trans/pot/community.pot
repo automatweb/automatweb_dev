@@ -1,3 +1,239 @@
+#: classes/applications/commune/community.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_owner
+msgid "Omaduse  (owner) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_owner_comment
+msgid "Omaduse  (owner) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_owner_help
+msgid "Omaduse  (owner) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_category
+msgid "Omaduse Kategooriad (category) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_category_comment
+msgid "Omaduse Kategooriad (category) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_category_help
+msgid "Omaduse Kategooriad (category) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_forum_settings
+msgid "Omaduse Foorumi seaded (forum_settings) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_forum_settings_comment
+msgid "Omaduse Foorumi seaded (forum_settings) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_forum_settings_help
+msgid "Omaduse Foorumi seaded (forum_settings) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_calendar_settings
+msgid "Omaduse Kalendri seaded (calendar_settings) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_calendar_settings_comment
+msgid "Omaduse Kalendri seaded (calendar_settings) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_calendar_settings_help
+msgid "Omaduse Kalendri seaded (calendar_settings) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_content
+msgid "Omaduse Sisu (content) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_content_comment
+msgid "Omaduse Sisu (content) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_content_help
+msgid "Omaduse Sisu (content) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_members_toolbar
+msgid "Omaduse Liikmete toolbar (members_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_members_toolbar_comment
+msgid "Omaduse Liikmete toolbar (members_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_members_toolbar_help
+msgid "Omaduse Liikmete toolbar (members_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_members
+msgid "Omaduse Liikmed (members) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_members_comment
+msgid "Omaduse Liikmed (members) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_members_help
+msgid "Omaduse Liikmed (members) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_moderators_toolbar
+msgid "Omaduse Moderaatorite toolbar (moderators_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_moderators_toolbar_comment
+msgid "Omaduse Moderaatorite toolbar (moderators_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_moderators_toolbar_help
+msgid "Omaduse Moderaatorite toolbar (moderators_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_moderators
+msgid "Omaduse Moderaatorid (moderators) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_moderators_comment
+msgid "Omaduse Moderaatorid (moderators) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_moderators_help
+msgid "Omaduse Moderaatorid (moderators) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_blocked_toolbar
+msgid "Omaduse Blokeeritute toolbar (blocked_toolbar) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_blocked_toolbar_comment
+msgid "Omaduse Blokeeritute toolbar (blocked_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_blocked_toolbar_help
+msgid "Omaduse Blokeeritute toolbar (blocked_toolbar) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_blocked
+msgid "Omaduse Blokeeritud (blocked) caption"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_blocked_comment
+msgid "Omaduse Blokeeritud (blocked) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/community.aw:prop_blocked_help
+msgid "Omaduse Blokeeritud (blocked) help"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_general2
+msgid "Grupi Üldised seaded (general2) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_forum_settings
+msgid "Grupi Foorumi seaded (forum_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_calendar_settings
+msgid "Grupi Kalendri seaded (calendar_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_content
+msgid "Grupi Sisu (content) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_connected
+msgid "Grupi Seotud isikud (connected) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_members
+msgid "Grupi Liikmed (members) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_moderators
+msgid "Grupi Moderaatorid (moderators) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_blocked
+msgid "Grupi Blokeeritud (blocked) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:rel_RELTYPE_MODERATOR
+msgid "Seose Moderaator (RELTYPE_MODERATOR) tekst"
+msgstr ""
+
+#: classes/applications/commune/community.aw:rel_RELTYPE_MEMBER
+msgid "Seose Kogukonna liige (RELTYPE_MEMBER) tekst"
+msgstr ""
+
+#: classes/applications/commune/community.aw:rel_RELTYPE_BLOCKED
+msgid "Seose Blokeeritud kasutaja (RELTYPE_BLOCKED) tekst"
+msgstr ""
+
+#: classes/applications/commune/community.aw:rel_RELTYPE_FORUM
+msgid "Seose Foorum (RELTYPE_FORUM) tekst"
+msgstr ""
+
+#: classes/applications/commune/community.aw:rel_RELTYPE_CALENDAR
+msgid "Seose Kalender (RELTYPE_CALENDAR) tekst"
+msgstr ""
+
+#: classes/applications/commune/community.aw:rel_RELTYPE_CALENDAR_VIEW
+msgid "Seose Kalendri vaade (RELTYPE_CALENDAR_VIEW) tekst"
+msgstr ""
+
+#: classes/applications/commune/community.aw:rel_RELTYPE_CATEGORIES
+msgid "Seose Kogukondade kategooriad (RELTYPE_CATEGORIES) tekst"
+msgstr ""
+
+#: classes/applications/commune/community.aw:rel_RELTYPE_CFG_MANAGER
+msgid "Seose Seadete haldur (RELTYPE_CFG_MANAGER) tekst"
+msgstr ""
+
 #: classes/applications/commune/community.aw:140
 msgid "Blokeeri"
 msgstr ""

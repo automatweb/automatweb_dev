@@ -1,3 +1,95 @@
+#: classes/contentmgmt/server_folder.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_folder
+msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) caption"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_folder_comment
+msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_folder_help
+msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) help"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_chf_view_file
+msgid "Omaduse  (chf_view_file) caption"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_chf_view_file_comment
+msgid "Omaduse  (chf_view_file) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_chf_view_file_help
+msgid "Omaduse  (chf_view_file) help"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_chf_file
+msgid "Omaduse  (chf_file) caption"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_chf_file_comment
+msgid "Omaduse  (chf_file) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_chf_file_help
+msgid "Omaduse  (chf_file) help"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_addf_file
+msgid "Omaduse  (addf_file) caption"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_addf_file_comment
+msgid "Omaduse  (addf_file) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:prop_addf_file_help
+msgid "Omaduse  (addf_file) help"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
 #: classes/contentmgmt/server_folder.aw:71
 msgid "server_folder::show_file(%s): the fid parameter does not contain a valid object id!"
 msgstr ""

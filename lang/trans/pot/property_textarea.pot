@@ -1,0 +1,64 @@
+#: classes/applications/class_designer/property_textarea.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_cols
+msgid "Omaduse Laius (cols) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_cols_comment
+msgid "Omaduse Laius (cols) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_cols_help
+msgid "Omaduse Laius (cols) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_rows
+msgid "Omaduse Kõrgus (rows) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_rows_comment
+msgid "Omaduse Kõrgus (rows) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:prop_rows_help
+msgid "Omaduse Kõrgus (rows) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_textarea.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+

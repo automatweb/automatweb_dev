@@ -1,3 +1,147 @@
+#: classes/contentmgmt/rate/rate_scale.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid
+msgid "Omaduse Mis objektit&uuml;&uuml;bile skaala kehtib (rate_clid) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid_comment
+msgid "Omaduse Mis objektit&uuml;&uuml;bile skaala kehtib (rate_clid) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid_help
+msgid "Omaduse Mis objektit&uuml;&uuml;bile skaala kehtib (rate_clid) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_rate_folders
+msgid "Omaduse Mis kataloogidele skaala kehtib (rate_folders) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_rate_folders_comment
+msgid "Omaduse Mis kataloogidele skaala kehtib (rate_folders) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_rate_folders_help
+msgid "Omaduse Mis kataloogidele skaala kehtib (rate_folders) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr
+msgid "Omaduse Numbriline skaala (type_nr) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr_comment
+msgid "Omaduse Numbriline skaala (type_nr) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr_help
+msgid "Omaduse Numbriline skaala (type_nr) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_from
+msgid "Omaduse Alates (nr_from) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_from_comment
+msgid "Omaduse Alates (nr_from) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_from_help
+msgid "Omaduse Alates (nr_from) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_to
+msgid "Omaduse Kuni (nr_to) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_to_comment
+msgid "Omaduse Kuni (nr_to) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_to_help
+msgid "Omaduse Kuni (nr_to) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_step
+msgid "Omaduse Aste (nr_step) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_step_comment
+msgid "Omaduse Aste (nr_step) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_step_help
+msgid "Omaduse Aste (nr_step) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud
+msgid "Omaduse Kasutaja defineeritud skaala (type_ud) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud_comment
+msgid "Omaduse Kasutaja defineeritud skaala (type_ud) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud_help
+msgid "Omaduse Kasutaja defineeritud skaala (type_ud) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_no_rate
+msgid "Omaduse Lisa "ei hinda" valik (no_rate) caption"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_no_rate_comment
+msgid "Omaduse Lisa "ei hinda" valik (no_rate) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:prop_no_rate_help
+msgid "Omaduse Lisa "ei hinda" valik (no_rate) help"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:group_scale
+msgid "Grupi Skaala (scale) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/rate/rate_scale.aw:rel_RELTYPE_FOLDER
+msgid "Seose Kehtiv kataloog (RELTYPE_FOLDER) tekst"
+msgstr ""
+
 #: classes/contentmgmt/rate/rate_scale.aw:195
 msgid "ei hinda"
 msgstr ""

@@ -1,3 +1,55 @@
+#: classes/admin/add_tree_conf.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_sel
+msgid "Omaduse  (sel) caption"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_sel_comment
+msgid "Omaduse  (sel) kommentaar"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:prop_sel_help
+msgid "Omaduse  (sel) help"
+msgstr ""
+
+#: classes/admin/add_tree_conf.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
 #: classes/admin/add_tree_conf.aw:61
 msgid "Nimi"
 msgstr ""

@@ -1,3 +1,59 @@
+#: classes/crm/crm_phone.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_name
+msgid "Omaduse Number (name) caption"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_name_comment
+msgid "Omaduse Number (name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_name_help
+msgid "Omaduse Number (name) help"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_type
+msgid "Omaduse Numbri tüüp (type) caption"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_type_comment
+msgid "Omaduse Numbri tüüp (type) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_type_help
+msgid "Omaduse Numbri tüüp (type) help"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:rel_RELTYPE_BELONGTO
+msgid "Seose Numbriga seotud objekt (RELTYPE_BELONGTO) tekst"
+msgstr ""
+
 #: classes/crm/crm_phone.aw:45
 msgid "tööl"
 msgstr ""

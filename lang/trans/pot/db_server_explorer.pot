@@ -1,0 +1,84 @@
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_conf
+msgid "Omaduse Vali konfiguratsioon (conf) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_conf_comment
+msgid "Omaduse Vali konfiguratsioon (conf) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_conf_help
+msgid "Omaduse Vali konfiguratsioon (conf) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_tree
+msgid "Omaduse  (tree) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_tree_comment
+msgid "Omaduse  (tree) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_tree_help
+msgid "Omaduse  (tree) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_content
+msgid "Omaduse  (content) caption"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_content_comment
+msgid "Omaduse  (content) kommentaar"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:prop_content_help
+msgid "Omaduse  (content) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:group_explorer
+msgid "Grupi Explorer (explorer) pealkiri"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:rel_RELTYPE_CONF
+msgid "Seose konfiguratsioon (RELTYPE_CONF) tekst"
+msgstr ""
+

@@ -1,3 +1,111 @@
+#: classes/vcl/page.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_background
+msgid "Omaduse Taustapilt (background) caption"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_background_comment
+msgid "Omaduse Taustapilt (background) kommentaar"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_background_help
+msgid "Omaduse Taustapilt (background) help"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_bgcolor
+msgid "Omaduse Tausta värv (bgcolor) caption"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_bgcolor_comment
+msgid "Omaduse Tausta värv (bgcolor) kommentaar"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_bgcolor_help
+msgid "Omaduse Tausta värv (bgcolor) help"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_margin
+msgid "Omaduse Servade laius (margin) caption"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_margin_comment
+msgid "Omaduse Servade laius (margin) kommentaar"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_margin_help
+msgid "Omaduse Servade laius (margin) help"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_defayltstyle
+msgid "Omaduse Default stiil (defayltstyle) caption"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_defayltstyle_comment
+msgid "Omaduse Default stiil (defayltstyle) kommentaar"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_defayltstyle_help
+msgid "Omaduse Default stiil (defayltstyle) help"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_preview
+msgid "Omaduse Eelvaade (preview) caption"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_preview_comment
+msgid "Omaduse Eelvaade (preview) kommentaar"
+msgstr ""
+
+#: classes/vcl/page.aw:prop_preview_help
+msgid "Omaduse Eelvaade (preview) help"
+msgstr ""
+
+#: classes/vcl/page.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/vcl/page.aw:rel_RELTYPE_BACKGROUND_IMAGE
+msgid "Seose Taustapilt (RELTYPE_BACKGROUND_IMAGE) tekst"
+msgstr ""
+
+#: classes/vcl/page.aw:rel_RELTYPE_PAGESTYLE
+msgid "Seose Stiil (RELTYPE_PAGESTYLE) tekst"
+msgstr ""
+
 #: classes/vcl/page.aw:52
 msgid "Näita lehte"
 msgstr ""

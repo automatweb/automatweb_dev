@@ -1,3 +1,115 @@
+#: classes/applications/shop/shop_special_offer.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_oc
+msgid "Omaduse Tellimiskeskkond (oc) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_oc_comment
+msgid "Omaduse Tellimiskeskkond (oc) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_oc_help
+msgid "Omaduse Tellimiskeskkond (oc) help"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_template
+msgid "Omaduse Kujundusmall (template) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_template_comment
+msgid "Omaduse Kujundusmall (template) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_template_help
+msgid "Omaduse Kujundusmall (template) help"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_use_controller
+msgid "Omaduse Kasuta toodete n&auml;itamiseks kontrollerit (use_controller) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_use_controller_comment
+msgid "Omaduse Kasuta toodete n&auml;itamiseks kontrollerit (use_controller) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_use_controller_help
+msgid "Omaduse Kasuta toodete n&auml;itamiseks kontrollerit (use_controller) help"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_prods
+msgid "Omaduse  (prods) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_prods_comment
+msgid "Omaduse  (prods) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:prop_prods_help
+msgid "Omaduse  (prods) help"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:group_vis
+msgid "Grupi N&auml;itamine (vis) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:group_prods
+msgid "Grupi Tooted (prods) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:rel_RELTYPE_PRODUCT
+msgid "Seose toode (RELTYPE_PRODUCT) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:rel_RELTYPE_ITEM_LAYOUT
+msgid "Seose toote kujundusmall (RELTYPE_ITEM_LAYOUT) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:rel_RELTYPE_CONTROLLER
+msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_special_offer.aw:rel_RELTYPE_ORDER_CENTER
+msgid "Seose tellimiskeskkond (RELTYPE_ORDER_CENTER) tekst"
+msgstr ""
+
 #: classes/applications/shop/shop_special_offer.aw:81
 msgid "J&auml;rjekord"
 msgstr ""

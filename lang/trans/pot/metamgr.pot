@@ -1,3 +1,123 @@
+#: classes/meta/metamgr.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_mgrtoolbar
+msgid "Omaduse Toolbar (mgrtoolbar) caption"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_mgrtoolbar_comment
+msgid "Omaduse Toolbar (mgrtoolbar) kommentaar"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_mgrtoolbar_help
+msgid "Omaduse Toolbar (mgrtoolbar) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_manager
+msgid "Omaduse Manager (manager) caption"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_manager_comment
+msgid "Omaduse Manager (manager) kommentaar"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_manager_help
+msgid "Omaduse Manager (manager) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_treeview
+msgid "Omaduse  (treeview) caption"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_treeview_comment
+msgid "Omaduse  (treeview) kommentaar"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_treeview_help
+msgid "Omaduse  (treeview) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_metalist
+msgid "Omaduse  (metalist) caption"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_metalist_comment
+msgid "Omaduse  (metalist) kommentaar"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_metalist_help
+msgid "Omaduse  (metalist) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_mupload
+msgid "Omaduse Vali muutujatega fail (mupload) caption"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_mupload_comment
+msgid "Omaduse Vali muutujatega fail (mupload) kommentaar"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_mupload_help
+msgid "Omaduse Vali muutujatega fail (mupload) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_meta
+msgid "Omaduse Metainfo (meta) caption"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_meta_comment
+msgid "Omaduse Metainfo (meta) kommentaar"
+msgstr ""
+
+#: classes/meta/metamgr.aw:prop_meta_help
+msgid "Omaduse Metainfo (meta) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/meta/metamgr.aw:group_manager
+msgid "Grupi Muutujad (manager) pealkiri"
+msgstr ""
+
+#: classes/meta/metamgr.aw:group_import
+msgid "Grupi Import (import) pealkiri"
+msgstr ""
+
 #: classes/meta/metamgr.aw:140
 msgid "ID"
 msgstr ""

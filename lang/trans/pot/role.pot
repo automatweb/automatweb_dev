@@ -1,0 +1,104 @@
+#: classes/role.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/role.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/role.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/role.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/role.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/role.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/role.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/role.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/role.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/role.aw:prop_changes_desc
+msgid "Omaduse Muudetavad &otilde;igused (changes_desc) caption"
+msgstr ""
+
+#: classes/role.aw:prop_changes_desc_comment
+msgid "Omaduse Muudetavad &otilde;igused (changes_desc) kommentaar"
+msgstr ""
+
+#: classes/role.aw:prop_changes_desc_help
+msgid "Omaduse Muudetavad &otilde;igused (changes_desc) help"
+msgstr ""
+
+#: classes/role.aw:prop_changes
+msgid "Omaduse Muudetavad &otilde;igused (changes) caption"
+msgstr ""
+
+#: classes/role.aw:prop_changes_comment
+msgid "Omaduse Muudetavad &otilde;igused (changes) kommentaar"
+msgstr ""
+
+#: classes/role.aw:prop_changes_help
+msgid "Omaduse Muudetavad &otilde;igused (changes) help"
+msgstr ""
+
+#: classes/role.aw:prop_acls
+msgid "Omaduse Lubatud (acls) caption"
+msgstr ""
+
+#: classes/role.aw:prop_acls_comment
+msgid "Omaduse Lubatud (acls) kommentaar"
+msgstr ""
+
+#: classes/role.aw:prop_acls_help
+msgid "Omaduse Lubatud (acls) help"
+msgstr ""
+
+#: classes/role.aw:prop_save_acl_sep
+msgid "Omaduse  (save_acl_sep) caption"
+msgstr ""
+
+#: classes/role.aw:prop_save_acl_sep_comment
+msgid "Omaduse  (save_acl_sep) kommentaar"
+msgstr ""
+
+#: classes/role.aw:prop_save_acl_sep_help
+msgid "Omaduse  (save_acl_sep) help"
+msgstr ""
+
+#: classes/role.aw:prop_save_acl
+msgid "Omaduse Uuenda ACL (save_acl) caption"
+msgstr ""
+
+#: classes/role.aw:prop_save_acl_comment
+msgid "Omaduse Uuenda ACL (save_acl) kommentaar"
+msgstr ""
+
+#: classes/role.aw:prop_save_acl_help
+msgid "Omaduse Uuenda ACL (save_acl) help"
+msgstr ""
+
+#: classes/role.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/role.aw:group_acls
+msgid "Grupi Lubatud &otilde;igused (acls) pealkiri"
+msgstr ""
+

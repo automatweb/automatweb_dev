@@ -1,3 +1,287 @@
+#: classes/calendar/calendar_view.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_use_template
+msgid "Omaduse Välimus (use_template) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_use_template_comment
+msgid "Omaduse Välimus (use_template) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_use_template_help
+msgid "Omaduse Välimus (use_template) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_num_next_events
+msgid "Omaduse Mitu j&auml;rgmist (num_next_events) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_num_next_events_comment
+msgid "Omaduse Mitu j&auml;rgmist (num_next_events) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_num_next_events_help
+msgid "Omaduse Mitu j&auml;rgmist (num_next_events) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_default_view
+msgid "Omaduse Vaade (default_view) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_default_view_comment
+msgid "Omaduse Vaade (default_view) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_default_view_help
+msgid "Omaduse Vaade (default_view) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_search_form
+msgid "Omaduse Otsinguvorm (search_form) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_search_form_comment
+msgid "Omaduse Otsinguvorm (search_form) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_search_form_help
+msgid "Omaduse Otsinguvorm (search_form) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_show_days_with_events
+msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_show_days_with_events_comment
+msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_show_days_with_events_help
+msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_with_events
+msgid "Omaduse Sündmustega päev (minical_day_with_events) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_with_events_comment
+msgid "Omaduse Sündmustega päev (minical_day_with_events) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_with_events_help
+msgid "Omaduse Sündmustega päev (minical_day_with_events) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_without_events
+msgid "Omaduse Ilma sündmusteta päev (minical_day_without_events) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_without_events_comment
+msgid "Omaduse Ilma sündmusteta päev (minical_day_without_events) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_without_events_help
+msgid "Omaduse Ilma sündmusteta päev (minical_day_without_events) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_today
+msgid "Omaduse Tänane päev (minical_day_today) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_today_comment
+msgid "Omaduse Tänane päev (minical_day_today) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_today_help
+msgid "Omaduse Tänane päev (minical_day_today) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_active
+msgid "Omaduse Aktiivne päev (minical_day_active) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_active_comment
+msgid "Omaduse Aktiivne päev (minical_day_active) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_active_help
+msgid "Omaduse Aktiivne päev (minical_day_active) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_deactive
+msgid "Omaduse Deaktiivne päev (minical_day_deactive) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_deactive_comment
+msgid "Omaduse Deaktiivne päev (minical_day_deactive) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_day_deactive_help
+msgid "Omaduse Deaktiivne päev (minical_day_deactive) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_title
+msgid "Omaduse Pealkiri (minical_title) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_title_comment
+msgid "Omaduse Pealkiri (minical_title) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_title_help
+msgid "Omaduse Pealkiri (minical_title) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_background
+msgid "Omaduse Taust (minical_background) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_background_comment
+msgid "Omaduse Taust (minical_background) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_minical_background_help
+msgid "Omaduse Taust (minical_background) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_table_header
+msgid "Omaduse Tulemuste tabeli pealkiri (table_header) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_table_header_comment
+msgid "Omaduse Tulemuste tabeli pealkiri (table_header) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_table_header_help
+msgid "Omaduse Tulemuste tabeli pealkiri (table_header) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_table_frow
+msgid "Omaduse Tulemuste tabeli esimene rida (table_frow) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_table_frow_comment
+msgid "Omaduse Tulemuste tabeli esimene rida (table_frow) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_table_frow_help
+msgid "Omaduse Tulemuste tabeli esimene rida (table_frow) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_table_srow
+msgid "Omaduse Tulemuste tabeli teine rida (table_srow) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_table_srow_comment
+msgid "Omaduse Tulemuste tabeli teine rida (table_srow) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_table_srow_help
+msgid "Omaduse Tulemuste tabeli teine rida (table_srow) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_month_navigator
+msgid "Omaduse Kuu navigaator (month_navigator) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_month_navigator_comment
+msgid "Omaduse Kuu navigaator (month_navigator) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_month_navigator_help
+msgid "Omaduse Kuu navigaator (month_navigator) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_result_table
+msgid "Omaduse Tulemuste tabel (result_table) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_result_table_comment
+msgid "Omaduse Tulemuste tabel (result_table) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_result_table_help
+msgid "Omaduse Tulemuste tabel (result_table) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_show_events
+msgid "Omaduse Sündmused (show_events) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_show_events_comment
+msgid "Omaduse Sündmused (show_events) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_show_events_help
+msgid "Omaduse Sündmused (show_events) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:group_style
+msgid "Grupi Stiilid (style) pealkiri"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:group_ftresults
+msgid "Grupi Tulemuste seadistamine (ftresults) pealkiri"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:group_show_events
+msgid "Grupi Sündmused (show_events) pealkiri"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:rel_RELTYPE_EVENT_SOURCE
+msgid "Seose Võta sündmusi (RELTYPE_EVENT_SOURCE) tekst"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:rel_RELTYPE_OUTPUT
+msgid "Seose väljund (RELTYPE_OUTPUT) tekst"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:rel_RELTYPE_STYLE
+msgid "Seose Stiil (RELTYPE_STYLE) tekst"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:rel_RELTYPE_SEARCH
+msgid "Seose Otsing (RELTYPE_SEARCH) tekst"
+msgstr ""
+
 #: classes/calendar/calendar_view.aw:115
 msgid "Kuuvaade & nädala sündmused"
 msgstr ""

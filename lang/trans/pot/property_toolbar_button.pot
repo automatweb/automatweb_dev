@@ -1,3 +1,159 @@
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_ord
+msgid "Omaduse J&auml;rjekord (ord) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_ord_comment
+msgid "Omaduse J&auml;rjekord (ord) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_ord_help
+msgid "Omaduse J&auml;rjekord (ord) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_b_type
+msgid "Omaduse Nupu t&uuml;&uuml;p (b_type) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_b_type_comment
+msgid "Omaduse Nupu t&uuml;&uuml;p (b_type) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_b_type_help
+msgid "Omaduse Nupu t&uuml;&uuml;p (b_type) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_action
+msgid "Omaduse Action (but_action) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_action_comment
+msgid "Omaduse Action (but_action) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_action_help
+msgid "Omaduse Action (but_action) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_tooltip
+msgid "Omaduse Tooltip (but_tooltip) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_tooltip_comment
+msgid "Omaduse Tooltip (but_tooltip) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_tooltip_help
+msgid "Omaduse Tooltip (but_tooltip) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_img
+msgid "Omaduse Pilt (but_img) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_img_comment
+msgid "Omaduse Pilt (but_img) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_img_help
+msgid "Omaduse Pilt (but_img) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_confirm
+msgid "Omaduse Kinnitus (but_confirm) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_confirm_comment
+msgid "Omaduse Kinnitus (but_confirm) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_but_confirm_help
+msgid "Omaduse Kinnitus (but_confirm) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_men_toolbar
+msgid "Omaduse  (men_toolbar) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_men_toolbar_comment
+msgid "Omaduse  (men_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_men_toolbar_help
+msgid "Omaduse  (men_toolbar) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_men_tree
+msgid "Omaduse Puu (men_tree) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_men_tree_comment
+msgid "Omaduse Puu (men_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_men_tree_help
+msgid "Omaduse Puu (men_tree) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_men_list
+msgid "Omaduse Tabel (men_list) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_men_list_comment
+msgid "Omaduse Tabel (men_list) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:prop_men_list_help
+msgid "Omaduse Tabel (men_list) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:group_but_props
+msgid "Grupi Nupu m&auml;&auml;rangud (but_props) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:group_men_props
+msgid "Grupi Nupu m&auml;&auml;rangud (men_props) pealkiri"
+msgstr ""
+
 #: classes/applications/class_designer/property_toolbar_button.aw:65
 msgid "Eraldaja"
 msgstr ""

@@ -1,0 +1,64 @@
+#: classes/layout/yah_line.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_separator
+msgid "Omaduse Eraldaja (separator) caption"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_separator_comment
+msgid "Omaduse Eraldaja (separator) kommentaar"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_separator_help
+msgid "Omaduse Eraldaja (separator) help"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_show_nosubs
+msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) caption"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_show_nosubs_comment
+msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) kommentaar"
+msgstr ""
+
+#: classes/layout/yah_line.aw:prop_show_nosubs_help
+msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) help"
+msgstr ""
+
+#: classes/layout/yah_line.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+

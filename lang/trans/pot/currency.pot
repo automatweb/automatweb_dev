@@ -1,0 +1,40 @@
+#: classes/formgen/currency.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_comment
+msgid "Omaduse Kurss saksa marga suhtes (comment) caption"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_comment_comment
+msgid "Omaduse Kurss saksa marga suhtes (comment) kommentaar"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_comment_help
+msgid "Omaduse Kurss saksa marga suhtes (comment) help"
+msgstr ""
+
+#: classes/formgen/currency.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
