@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.13 2004/06/11 12:54:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.14 2004/06/17 14:33:12 duke Exp $
 /*
 @classinfo relationmgr=yes
 @default table=objects
@@ -193,6 +193,7 @@ class crm_selection extends class_base
 				$t->define_data(array(
 					"id" => $item->id(),
 					"name" => $item->name(),
+					"comment" => $item->comment(),
 					"status" => $object["status"],
 					"jrk" => $object["jrk"],
 					"clid" => $item->class_id(),
