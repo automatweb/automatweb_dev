@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.27 2003/01/10 08:02:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.28 2003/01/12 12:19:37 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -358,7 +358,7 @@ class form_table extends form_base
 				}
 			}
 
-			$dat["ev_delete"] = "<a href='".$del_link."'>".$deltxt."</a>";
+			$dat["ev_delete"] = "<a href=\"".$del_link."\">".$deltxt."</a>";
 
 			if (isset($dat["created"]))
 			{
@@ -1403,6 +1403,15 @@ class form_table extends form_base
 					openwindow = window.open(url,name,wprops);
 					openwindow.focus();
 				}
+
+				function ft_confirm(caption,url)
+				{
+					var answer=confirm(caption);
+					if (answer)
+					{
+						window.location=url;
+					}
+				}
 		</script>";
 	}
 
@@ -2339,6 +2348,24 @@ class form_table extends form_base
 			$ct.=$this->parse("COL_TEXT");
 		}
 
+		// delete popup text
+		$cl = "";
+		$this->vars(array(
+			'eltype' => 'delete_popup_text'
+		));
+		foreach($ls as $lid => $lname)
+		{
+			$this->vars(array(
+				"lang_id" => $lid,
+				"t_name" => (isset($this->table["texts"]['delete_popup_text'][$lid]) ? $this->table["texts"]['delete_popup_text'][$lid] : 'Kas oled kindel et soovid kustutada?' )
+			));
+			$cl .= $this->parse("CLANG");
+		}
+		$this->vars(array(
+			"CLANG" => $cl
+		));
+		$ct .= $this->parse("COL_TEXT");
+
 		$this->vars(array(
 			"COL_TEXT" => $ct,
 			"CLANG_H" => $clh,
@@ -2757,6 +2784,11 @@ class form_table extends form_base
 					),
 					"form"
 				);
+
+				if ($this->table["texts"]["delete_popup_text"][$this->lang_id] != "")
+				{
+					$link = "javascript:ft_confirm('".$this->table["texts"]["delete_popup_text"][$this->lang_id]."','$link')";
+				}
 				break;
 		}
 		return $link;
@@ -3052,14 +3084,19 @@ class form_table extends form_base
 
 	function draw_button($bt_id)
 	{
+		if ($bt_id == "delete" && $this->table["texts"]["delete_popup_text"][$this->lang_id] != "")
+		{
+			$onc = "onClick=\"if (!confirm('".$this->table["texts"]["delete_popup_text"][$this->lang_id]."')) return false;\"";
+		}
+
 		$ret = "";
 		if ($this->table["buttons"][$bt_id]["image"]["url"] != "")
 		{
-			$ret ="<input value='".$this->table["buttons"][$bt_id]["text"]."' name='butt_".$bt_id."' type='image' src='".image::check_url($this->table["buttons"][$bt_id]["image"]["url"])."'>";
+			$ret ="<input value='".$this->table["buttons"][$bt_id]["text"]."' name='butt_".$bt_id."' type='image' src='".image::check_url($this->table["buttons"][$bt_id]["image"]["url"])."' $onc>";
 		}
 		else
 		{
-			$ret ="<input type='submit' name='butt_".$bt_id."' value='".$this->table["buttons"][$bt_id]["text"]."'>";
+			$ret ="<input type='submit' name='butt_".$bt_id."' value='".$this->table["buttons"][$bt_id]["text"]."' $onc>";
 		}
 		return $ret;
 	}
