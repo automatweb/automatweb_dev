@@ -67,10 +67,13 @@ class site_show extends class_base
 
 		$this->section_obj = obj(aw_global_get("section"));
 
-		$obj_inst = $this->section_obj->instance();
-		if (method_exists($obj_inst, "request_execute"))
+		if ($this->section_obj->class_id())
 		{
-			$arr["text"] = $obj_inst->request_execute($this->section_obj);
+			$obj_inst = $this->section_obj->instance();
+			if (method_exists($obj_inst, "request_execute"))
+			{
+				$arr["text"] = $obj_inst->request_execute($this->section_obj);
+			}
 		}
 
 		// until we can have class-static variables, this actually SETS current text content
