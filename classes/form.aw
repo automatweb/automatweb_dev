@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.141 2002/09/05 09:30:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.142 2002/09/05 14:03:52 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1126,6 +1126,8 @@ class form extends form_base
 				"chain_entry_id" => $chain_entry_id,
 			));
 
+			// if any of the vacancy checks failed,
+			// merge the error messages into controller_errors
 			if ($errors)
 			{
 				if (!is_array($this->controller_errors))
@@ -1140,17 +1142,7 @@ class form extends form_base
 
 		}
 
-		if ($this->meta["calendar_chain"])
-		{
-			$fc = get_instance("form_calendar");
-		}
-
-
-		$new = true;
-		if ($entry_id)
-		{
-			$new = false;
-		}
+		$new = ($entry_id) ? false : true;
 
 		if (!$no_process_entry)
 		{
@@ -1318,16 +1310,9 @@ class form extends form_base
 			$_period_cnt = (int)$this->arr["cal_period"];
 			$q = "DELETE FROM calendar2timedef WHERE cal_id = '$id'";
 			$this->db_query($q);
-			if ($chain_entry_id)
-			{
-				$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt,relation)
-					VALUES ('$id','$id','$entry_id','$_start','$_end','$_max','2','$_period_cnt','$chain_entry_id')";
-			}
-			else
-			{
-				$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt)
-					VALUES ('$id','$id','$entry_id','$_start','$_end','$_max','2','$_period_cnt')";
-			};
+			$relation = ($chain_entry_id) ? $chain_entry_id : $this->entry_id;
+			$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt,relation)
+				VALUES ('$id','$id','$entry_id','$_start','$_end','$_max','2','$_period_cnt','$relation')";
 			$this->db_query($q);
 		};
 
