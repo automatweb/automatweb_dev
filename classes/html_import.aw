@@ -2,7 +2,6 @@
 
 /*
 	@default table=objects
-	@groupinfo general caption=üldine default=1
 	@default group=general
 	@property comment type=textarea field=comment cols=40 rows=3
 	@caption Kommentaar
@@ -323,7 +322,6 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 	function set_property($args = array())
 	{
 		$data = &$args["prop"];
-		$form = &$args["form_data"];
 		$retval = PROP_OK;
 		switch($data['name'])
 		{

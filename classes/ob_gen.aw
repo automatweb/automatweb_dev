@@ -101,7 +101,6 @@ class ob_gen extends class_base
 	function set_property($args = array())
 	{
 		$data = &$args['prop'];
-		$form = &$args['form_data'];
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
