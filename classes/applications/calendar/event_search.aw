@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.14 2005/01/12 17:40:57 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.15 2005/01/13 09:53:24 kristo Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -782,10 +782,6 @@ class event_search extends class_base
 				$cdat = "";
 				foreach($tabledef as $key => $propdef)
 				{
-					if($key == "content")
-					{
-						continue;
-					}
 					if ($propdef["active"])
 					{
 						$this->vars(array(
