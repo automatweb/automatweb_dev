@@ -26,6 +26,9 @@
 @property newwindow type=checkbox ch_value=1 table=images field=newwindow
 @caption Uues aknas
 
+@tableinfo images index=id master_table=objects master_index=oid
+
+
 
 */
 class image extends class_base
