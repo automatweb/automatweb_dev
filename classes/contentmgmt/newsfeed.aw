@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.3 2005/02/09 17:46:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.4 2005/02/25 12:57:55 duke Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -130,11 +130,13 @@ class newsfeed extends class_base
 			));
 			$first = 0;
 			$source = aw_ini_get("newsfeed.source");
+			$baseurl = aw_ini_get("baseurl");
 			foreach($ol->arr() as $o)
 			{
+				$mod_date = $o->modified();
 				if ($first == 0)
 				{
-					$first = $o->modified();
+					$first = $mod_date;
 				};
 				$oid = $o->id();
 				$art_lead = $o->prop("lead");
@@ -144,16 +146,16 @@ class newsfeed extends class_base
 				$items[] = array(
 					"item_id" => $oid,
 					"title" => $o->name(),
-					"link" => aw_ini_get("baseurl") . "/" . $oid,
-					"artdate" => date("Y-m-d",$o->modified()),
-					"start_date" => date("Y-m-d H:i:s",$o->modified()),
+					"link" => $baseurl . "/" . $oid,
+					"artdate" => date("Y-m-d",$mod_date),
+					"start_date" => date("Y-m-d H:i:s",$mod_date),
 					"end_date" => "0000-00-00 00:00:00", // documents have no ending date
 					"author" => $o->prop("author"),
 					"source" => $source,
 					"art_lead" => $art_lead,
 					"description" => $description,
-					"guid" => aw_ini_get("baseurl") . "/" . $oid,
-					"pubDate" => date("r",$o->modified()),
+					"guid" => $baseurl . "/" . $oid,
+					"pubDate" => date("r",$o->prop("doc_modified")),
 				);	
 			};
 		};
