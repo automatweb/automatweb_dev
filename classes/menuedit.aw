@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.265 2003/03/14 13:37:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.266 2003/03/17 18:36:58 duke Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -1561,12 +1561,7 @@ class menuedit extends aw_template
 		extract($arr);
 		$ret = "";
 
-		$sep = "\n";
-		if ($sharp)
-		{
-			$sep = "#";
-		}
-
+		$this->add_menu = array();
 		// check if any parent menus have config objects attached
 		$atc_id = 0;
 		$ch = $this->get_object_chain($id);
@@ -1611,7 +1606,7 @@ class menuedit extends aw_template
 					if (!isset($counts[$prnt]))
 					{
 						$counts[$prnt] = $cnt;
-				 $ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||".$sep;
+				 		$ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||".$sep;
 					}
 					if (is_array($arr))
 					{
@@ -1639,8 +1634,7 @@ class menuedit extends aw_template
 									asort($clns);
 									foreach($clns as $cl_file => $cl_name)
 									{
-										//$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
-										$addlink = "javascript:go_add('".basename($cl_file)."')";
+										$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
 
 										$cnt++;
 										$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list".$sep;
@@ -1649,37 +1643,21 @@ class menuedit extends aw_template
 							}
 							else
 							{
-								//$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $this->cfg["classes"][$meta["type"]]["file"], true, true);
-								$addlink = "javascript:go_add('".basename($this->cfg["classes"][$meta["type"]]["file"])."')";
+								$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $this->cfg["classes"][$meta["type"]]["file"], true, true);
 								$cnt++;
 								$ret .= $cnt."|".((int)$counts[$row["parent"]])."|".$row["name"]."|$addlink|list".$sep;
 							}
 						}
 					}
 				}
-				if ($ret_data)
-				{
-					return $ret;
-				}
-				else
-				{
-					die($ret);
-				}
+				return $ret;
 			}
 		}
-		if ($ret_data)
-		{
-			return ($this->req_get_default_add_menu(0, $id, $period, $sep));
-		}
-		else
-		{
-			die($this->req_get_default_add_menu(0, $id, $period, $sep));
-		}
+		return ($this->req_get_default_add_menu(0, $id, $period, 0));
 	}
 
-	function get_az_def_menu($pt, $parent, $period, $sep)
+	function get_az_def_menu($pt, $parent, $period, $fld_id)
 	{
-		$counts = array();
 		$cldata = array();
 		foreach($this->cfg["classes"] as $clid => $_cldata)
 		{
@@ -1689,29 +1667,31 @@ class menuedit extends aw_template
 			}
 		}
 
-		$cnt = 2000;
 		ksort($cldata);
-		$ret = "";
 		foreach($cldata as $letter => $clns)
 		{
-			$cnt++;
-			$ret .= $cnt."|".((int)($pt+4))."|".$letter."||".$sep;
-			$cp = $cnt;
+			$this->add_menu[$fld_id]["letter_" . $letter] = array(
+				"caption" => $letter,
+				"list" => "list",
+			);
 			asort($clns);
 			foreach($clns as $cl_file => $cl_name)
 			{
-				//$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cl_file, true, true);
-				$addlink = "javascript:go_add('".basename($cl_file)."')";
-				$cnt++;
-				$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list".$sep;
+				$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cl_file, true, true);
+				$this->add_menu["letter_" . $letter]["letter_" . $letter . $cl_file] = array(
+					"caption" => $cl_name,
+					"link" => $addlink,
+					"list" => "list",
+				);
 			}
 		}
 		return $ret;
 	}
 
-	function req_get_default_add_menu($prnt, $parent, $period, $sep)
+	function req_get_default_add_menu($prnt, $parent, $period, $fld_id = 0)
 	{
 		$ret = "";
+		# see teeb esimese taseme klassid
 		if (is_array($this->cfg["classes"]) && $prnt == 0)
 		{
 			$tcnt = 0;
@@ -1722,16 +1702,24 @@ class menuedit extends aw_template
 					$parens = explode(",", $cldata["parents"]);
 					if (in_array($prnt, $parens))
 					{
-						//$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
-						$addlink = "javascript:go_add('".basename($cldata["file"])."')";
+						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
 						$tcnt++;
-				 $ret .= ($tcnt)."|0|".$cldata["name"]."|$addlink|list".$sep;
+						$this->add_menu[0][$tcnt] = array(
+							"caption" => $cldata["name"],
+							"link" => $addlink,
+						);
 					}
 				}
 			}
-			$ret.="separator".$sep;
+			$tcnt++;
+			/*
+			$this->add_menu[0][$tcnt] = array(
+				"separator" => true,
+			);
+			*/
 		}
 
+		# see hoolitseb sügavamalt olevate klasside nimekirjade eest
 		if (is_array($this->cfg["classes"]) && $prnt != 0)
 		{
 			foreach($this->cfg["classes"] as $clid => $cldata)
@@ -1741,29 +1729,48 @@ class menuedit extends aw_template
 					$parens = explode(",", $cldata["parents"]);
 					if (in_array($prnt, $parens))
 					{
-						//$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
-						$addlink = "javascript:go_add('".basename($cldata["file"])."')";
-						$ret .= ($clid+1000)."|".((int)($prnt+4))."|".$cldata["name"]."|$addlink|list".$sep;
+						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
+						$this->add_menu[$fld_id]["class_" . $clid] = array(
+							"caption" => $cldata["name"],
+							"link" => $addlink,
+						);
 					}
 				}
 			}
-//			$ret.="separator".$sep;
 		}
 
 		if (is_array($this->cfg["classfolders"]))
 		{
+			// uh, but isn't this highly inefficient? to cycle over the array each 
+			// fscking time?
 			foreach($this->cfg["classfolders"] as $fid => $fdata)
 			{
 				if ($fdata["parent"] == $prnt)
 				{
-					$_fid = $fid+4;
-					$_fprnt = ($fdata["parent"] == 0 ? 0 : $fdata["parent"] + 4);
-					$ret .= $_fid."|".((int)$_fprnt)."|".$fdata["name"]."||list".$sep;
-					$ret .= $this->req_get_default_add_menu($fid, $parent, $period, $sep);
+					$_fid = "fld_" . $fid;
+					$_fprnt = ($fdata["parent"] == 0) ? 0 : "fld_" . $prnt;
+					$this->add_menu[$_fprnt][$_fid] = array(
+						"caption" => $fdata["name"],
+						"link" => "",
+					);
+					$this->req_get_default_add_menu($fid, $parent, $period, $_fid);
 					if (isset($fdata["all_objs"]))
 					{
-						$ret .= $this->get_az_def_menu($fid, $parent, $period, $sep);
+						$this->get_az_def_menu($fid, $parent, $period, $_fid);
 					}
+					if (isset($fdata["docforms"]))
+					{
+						$d = get_instance("doc");
+						$this->add_menu[$_fid] = $d->get_doc_add_menu($parent,$period);
+					};
+	
+					if ($fdata["separator"])
+					{	
+						$this->add_menu[$_fprnt][] = array(
+							"separator" => true,
+						);
+					};
+						
 				}
 			}
 		}
@@ -1774,12 +1781,7 @@ class menuedit extends aw_template
 	function get_popup_data($args = array())
 	{
 		extract($args);
-		if (isset($addmenu) && $addmenu == 1)
-		{
-			$this->get_add_menu($args);
-		}
 		$obj = $this->get_object($id);
-
 
 		$sep = "\n";
 		if ($sharp)
@@ -1811,8 +1813,7 @@ class menuedit extends aw_template
 
 		if ($this->can("edit", $id))
 		{
-			//$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"],"period" => $period), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
-			$churl = "javascript:go_change('".basename($this->cfg["classes"][$obj["class_id"]]["file"])."',$id,".$obj['parent'].")";
+			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"],"period" => $period), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -1826,8 +1827,7 @@ class menuedit extends aw_template
 				$retval .= "1|0|Change|".$churl."|list".$sep;
 			}
 
-			//$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
-			$cuturl = "javascript:go_cut($id,".$obj['parent'].")";
+			$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
 			if ($type == "js")
 			{
 				$this->vars(array(
@@ -1842,8 +1842,7 @@ class menuedit extends aw_template
 			}
 		}
 
-		//$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
-		$copyurl = "javascript:go_copy($id,".$obj['parent'].")";
+		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "menuedit",true,true);
 		if ($type == "js")
 		{
 			$this->vars(array(
@@ -1867,7 +1866,6 @@ class menuedit extends aw_template
 					"link" => $delurl,
 					"text" => "Delete"
 				));
-				$retval .= $this->parse("MENU_ITEM");
 			}
 			else
 			{
@@ -5192,6 +5190,9 @@ class menuedit extends aw_template
 			$this->acl_error("view", PRG_MENUEDIT);
 		}
 
+		$d = get_instance("doc");
+		$d->get_cfgform_list();
+
 		$lang_id = aw_global_get("lang_id");
 		$site_id = $this->cfg["site_id"];
 		$parent = $parent ? $parent : $this->cfg["rootmenu"];
@@ -5277,7 +5278,7 @@ class menuedit extends aw_template
 				$row["is_menu"] = 2;
 			}
 
-			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "menuedit",true,true);
+			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "menuedit",true,true);
 			//$dellink = "javascript:go_delete('menuedit',$id,$row["parent"])"; $id ==? $row["oid"]
 			if (isset($sel_objs[$row["oid"]]))
 			{
@@ -5341,7 +5342,7 @@ class menuedit extends aw_template
 			}
 		}
 
-		$content = $this->get_add_menu(array(
+		$this->get_add_menu(array(
 			"id" => $parent,
 			"ret_data" => true,
 			"sharp" => true,
@@ -5349,71 +5350,44 @@ class menuedit extends aw_template
 			"period" => $period,
 		));
 
-		if ($addobject_type == "dhtml")
+		$this->read_template("js_add_menu.tpl");
+
+		$whole_menu = "";
+
+		foreach($this->add_menu as $item_id => $item_collection)
 		{
-
-			$items = explode("#",$content);
-
-			// id|parent|caption|link
-
-			$byparent = array();
-			foreach($items as $item)
+			$menu_data = "";
+			foreach($item_collection as $el_id => $el_data)
 			{
-				list($m_id,$m_parent,$m_caption,$m_link) = explode("|",$item);
-				$real_parent = (int)$m_parent;
-				if ($m_id)
+				// if this el_id has children, make it a submenu
+				$children = isset($this->add_menu[$el_id]) ? sizeof($this->add_menu[$el_id]) : 0;
+				if (isset($el_data["separator"]))
 				{
-					  $by_parent[$real_parent][$m_id] = array(
-						  "link" => $m_link,
-						  "caption" => $m_caption,
-					  );
-				};
-			};
-
-			$this->read_template("js_add_menu.tpl");
-
-			$whole_menu = "";
-
-
-			// each parent starts a new menu
-			$bp = new aw_array($by_parent);
-			foreach($bp->get() as $item_id => $item_collection)
-			{
-				$menu_data = "";
-				foreach($item_collection as $el_id => $el_data)
+					$tpl = "MENU_SEPARATOR";
+				}
+				elseif ($children > 0)
 				{
-					// if this el_id has children, make it a submenu
-					$children = isset($by_parent[$el_id]) ? sizeof($by_parent[$el_id]) : 0;
-					if ($el_id == "separator")
-					{
-						$tpl = "MENU_SEPARATOR";
-					}
-					elseif ($children > 0)
-					{
-						$tpl = "MENU_ITEM_SUB";
-					}
-					else
-					{
-						$tpl = "MENU_ITEM";
-					};
-					$this->vars(array(
-						"caption" => $el_data["caption"],
-						"url" => $el_data["link"],
-						"sub_menu_id" => "aw_menu_" . $el_id,
-					));
-					$menu_data .= $this->parse($tpl);
+					$tpl = "MENU_ITEM_SUB";
+				}
+				else
+				{
+					$tpl = "MENU_ITEM";
 				};
 				$this->vars(array(
-					"MENU_ITEM" => $menu_data,
-					"menu_id" => "aw_menu_" . $item_id,
+					"caption" => $el_data["caption"],
+					"url" => $el_data["link"],
+					"sub_menu_id" => "aw_menu_" . $el_id,
 				));
-				$whole_menu .= $this->parse("MENU");
+				$menu_data .= $this->parse($tpl);
 			};
+			$this->vars(array(
+				"MENU_ITEM" => $menu_data,
+				"menu_id" => "aw_menu_" . $item_id,
+			));
+			$whole_menu .= $this->parse("MENU");
 		};
 
-
 		// make applet for adding objects
-		$this->read_template("java_popup_menu.tpl");
 		$this->vars(array(
 			"icon_over" => $this->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
 			"icon" => $this->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
@@ -5425,29 +5399,7 @@ class menuedit extends aw_template
 			"name" => "",
 			"height" => 22,
 			"width" => 23,
-			"url" => $host,
-			"content" => $content,
 		));
-		$up = $this->parse("URLPARAM");
-		$this->vars(array(
-			"nr" => 3,
-			"key" => "period",
-			"val" => $period,
-		));
-		$up .= $this->parse("URLPARAM");
-		$this->vars(array(
-			"URLPARAM" => $up,
-			"FETCHCONTENT" => $this->parse("FETCHCONTENT")
-		));
-
-		if ($addobject_type == "dhtml")
-		{
-			$applet_data = $whole_menu;
-		}
-		else
-		{
-			$applet_data = $this->parse();
-		};
 
 		$la = get_instance("languages");
 
@@ -5470,19 +5422,14 @@ class menuedit extends aw_template
 
 		$this->read_template("right_frame.tpl");
 
-		$this->add_object_type = $addobject_type;
-
 		$toolbar = $this->rf_toolbar(array(
 			"parent" => $parent,
-			"add_applet" => $applet_data,
+			"add_applet" => $whole_menu,
 			"sel_count" => count($sel_objs),
 		));
 
 		$toolbar_data = $toolbar->get_toolbar();
-		if ($addobject_type == "dhtml")
-		{
-			$toolbar_data .= $whole_menu;
-		};
+		$toolbar_data .= $whole_menu;
 
 		$this->vars(array(
 			"table" => $this->t->draw(),
@@ -5503,22 +5450,15 @@ class menuedit extends aw_template
 		
 		if ($this->can("add", $parent))
 		{
-			if ($this->add_object_type == "dhtml")
-			{
-				$toolbar->add_button(array(
-					"name" => "add",
-					"tooltop" => "Uus",
-					"url" => "#",
-					"onClick" => "return buttonClick(event, 'aw_menu_0');",
-					"img" => "new.gif",
-					"imgover" => "new_over.gif",
-					"class" => "menuButton",
-				));
-			}
-			else
-			{
-				$toolbar->add_cdata($add_applet);
-			};
+			$toolbar->add_button(array(
+				"name" => "add",
+				"tooltop" => "Uus",
+				"url" => "#",
+				"onClick" => "return buttonClick(event, 'aw_menu_0');",
+				"img" => "new.gif",
+				"imgover" => "new_over.gif",
+				"class" => "menuButton",
+			));
 		};
 
 		if (empty($no_save))
