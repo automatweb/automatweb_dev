@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.65 2004/05/21 07:27:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.66 2004/05/26 08:23:06 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -887,10 +887,12 @@ class admin_menus extends aw_template
 			$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_PSEUDO." AND objects.periodic = 1)) ";
 		}
 		// if no period is set in the url, BUT the menu is periodic, then only show objects from the current period
-		elseif ($menu_obj->prop("periodic") == 1 && isset($current_period))
+		// this fucks shit up. basically, a periodic menu can have non-periodic submenus
+		// in that case there really is no way of seeing them 
+		/*elseif ($menu_obj->prop("periodic") == 1 && isset($current_period))
 		{
 			$ps = " AND ((objects.period = '$current_period') OR (objects.class_id = ".CL_PSEUDO." AND objects.periodic = 1)) ";
-		}
+		}*/
 		else
 		{
 			$ps = " AND (period = 0 OR period IS NULL OR class_id IN (".CL_USER."))";
