@@ -31,6 +31,8 @@ class site_content extends menuedit
 		}*/
 
 		$obj2 = obj($section);
+		
+		// XXX: show_documents should be menu->request_execute() // duke
 		if ($text == "")
 		{
 			$__i = $obj2->instance();
@@ -39,6 +41,9 @@ class site_content extends menuedit
 				$text = $__i->request_execute($obj2);
 			}
 		}
+
+		// Now, I need a way to get content from some other object
+		
 
 		// until we can have class-static variables, this actually SETS current text content
 		classload("layout/active_page_data");
@@ -252,7 +257,7 @@ class site_content extends menuedit
 			$this->mar[$sel_menu_id] = $tmp->fetch();
 		};
 
-		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne
+		// this contains the first non-empty comment in menu-tree
 		$this->dequote($this->properties["comment"]);
 		$this->vars(array(
 			"sel_menu_comment" => $this->properties["comment"],
@@ -1839,6 +1844,7 @@ class site_content extends menuedit
 				// get list of documents in this promo box
 				$pr_c = "";
 				$docid = $this->get_default_document($row["oid"],true);
+
 				if (is_array($docid))
 				{
 					reset($docid);
@@ -2785,7 +2791,6 @@ class site_content extends menuedit
 			$obj = obj($obj->get_original());
 		}
 
-
 		// if any keywords for the menu are set, we must show all the documents that match those keywords under the menu
 		if ($obj->meta("has_kwd_rels"))
 		{
@@ -2858,6 +2863,11 @@ class site_content extends menuedit
 				{
 					$sections = array($section);
 				};
+
+						if ($GLOBALS["PROMO_DBG"] == 1)
+						{
+							echo "display doc in promo ".dbg::dump($sections)." <br>";
+						}
 			}
 			else
 			{
@@ -2895,6 +2905,7 @@ class site_content extends menuedit
 			if (is_array($sections) && ($sections[0] !== 0) && count($sections) > 0)
 			{
 				$filter["parent"] = $sections;
+				$filter["no_last"] = new obj_predicate_not(1);
 			}
 			else
 			{
@@ -2940,7 +2951,7 @@ class site_content extends menuedit
 			$filter["class_id"] = array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT);
 			$filter["lang_id"] = aw_global_get("lang_id");
 			$filter["sort_by"] = $ordby;
-			
+
 			$documents = new object_list($filter);
 
 			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
