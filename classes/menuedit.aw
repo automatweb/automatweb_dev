@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.240 2003/02/21 12:56:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.241 2003/02/21 13:30:20 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -244,9 +244,12 @@ class menuedit extends aw_template
 
 		// check whether access to that menu is denied by ACL and if so
 		// redirect the user 
-		if (not($this->can("view", $section)))
+		if (!$this->cfg["no_view_acl_checks"])
 		{
-			$this->no_access_redir($section);
+			if (not($this->can("view", $section)))
+			{
+				$this->no_access_redir($section);
+			}
 		}
 
 		// by default show both panes.
@@ -3863,7 +3866,8 @@ class menuedit extends aw_template
 					"notitleimg" => 0,
 					"tpl" => $template,
 					"keywords" => 1,
-					"boldlead" => aw_ini_get("document.boldlead")
+					"boldlead" => aw_ini_get("document.boldlead"),
+					"no_acl_checks" => $this->cfg["no_view_acl_checks"]
 				));
 
 				if ($d->referer)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.158 2003/02/19 17:51:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.159 2003/02/21 13:30:20 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -198,14 +198,14 @@ class document extends aw_template
 
 	////
 	// !Fetces a document from the database
-	function fetch($docid) 
+	function fetch($docid, $no_acl_checks = false) 
 	{
 		if (is_array($docid))
 		{
 			extract($docid);
 		}
 
-		if (not($this->can("view",$docid)))
+		if (not($this->can("view",$docid)) && !$no_acl_checks)
 		{
 			$this->data = false;
 			return false;
@@ -326,7 +326,7 @@ class document extends aw_template
 
 		if (!isset($doc) || !is_array($doc))
 		{
-			$doc = $this->fetch($docid);
+			$doc = $this->fetch($docid, $no_acl_checks);
 			// I hope this won't break anything. but now when you click on a brother document
 			// you sould still be left under the menu where the brother document is.
 			//	$docid = $doc["docid"];
@@ -3830,10 +3830,6 @@ class document extends aw_template
 
 	function do_static_search($str, $from, $sortby, $_par, $_sec)
 	{
-		$this->vars(array(
-			"baseurl" => aw_ini_get("export.form_server")
-		));
-
 		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM export_content WHERE content LIKE '%$str%' AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'", "cnt");
 		$docarr = array();
 
@@ -3978,7 +3974,7 @@ class document extends aw_template
 			"from" => $from,
 			"s_parent" => 1
 		));
-		return $this->parse();
+		return str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"),$this->parse());
 	}
 };
 ?>
