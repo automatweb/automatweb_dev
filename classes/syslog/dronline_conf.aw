@@ -7,10 +7,6 @@
 @default method=serialize
 @default group=general
 
-
-@property status type=status field=status
-@caption Staatus
-
 @property from type=date_select 
 @caption Alates
 

@@ -11,9 +11,6 @@
 @default method=serialize
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property conf type=objpicker clid=CL_DRONLINE_CONF
 @caption Konfiguratsioon
 
