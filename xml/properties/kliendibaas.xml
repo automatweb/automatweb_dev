@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>test1</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>manager</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>submit valimid</caption>
+      </property>
+      <property>
             <name>manageri</name>
             <type>text</type>
             <callback>firma_manager</callback>
@@ -149,14 +158,15 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>valim</name>
+            <name>valimid</name>
             <type>popup_objmgr</type>
             <clid>CL_SELECTION</clid>
+            <multiple>1</multiple>
             <method>serialize</method>
             <field>meta</field>
             <table>objects</table>
             <group>settings</group>
-            <caption>vali aktiivne valim</caption>
+            <caption>valimid</caption>
       </property>
       <property>
             <name>limit_per_page</name>
@@ -166,7 +176,7 @@
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>mitu veergu näita</caption>
+            <caption>mitu rida näita</caption>
       </property>
       <property>
             <name>show_columns</name>
@@ -297,6 +307,22 @@
             <caption>näita ainult tegevusalasid, kus alal on ka ettevõtteid</caption>
       </property>
       <property>
+            <name>test2</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>tests</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>test3</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>tests</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>objects_manager</name>
             <type>text</type>
             <callback>objects_manager</callback>
@@ -327,6 +353,9 @@
             <settings>
                   <caption>seaded</caption>
             </settings>
+            <tests>
+                  <caption>tests</caption>
+            </tests>
             <objects_manager>
                   <caption>objektide_lisamine</caption>
             </objects_manager>
