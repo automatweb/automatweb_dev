@@ -16,6 +16,13 @@
 			</function>
 		</action>
 
+		<action name="search_for_customers" >
+			<function name="search_for_customers">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_new_call" >
 			<function name="submit_new_call">
 				<arguments>
@@ -46,6 +53,20 @@
 				<arguments>
 					<required name="id" type="int" acl="view"/>
 					<optional name="customer" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_customer_search_results" >
+			<function name="save_customer_search_results">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_search_results" >
+			<function name="save_search_results">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
