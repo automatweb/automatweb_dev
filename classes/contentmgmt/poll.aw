@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.14 2004/04/05 07:06:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.15 2004/05/06 12:26:38 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -417,7 +417,7 @@ class poll extends class_base
 		while ($row = $this->db_next())
 		{
 			$row["answer"] = $ansa[$row["answer_id"]]["answer"];
-			list($row["ip"],) = inet::gethostbyaddr($row["ip"]);
+			list($row["ip"],) = @inet::gethostbyaddr($row["ip"]);
 			$this->t->define_data($row);
 		}
 
