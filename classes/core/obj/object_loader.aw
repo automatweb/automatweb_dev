@@ -14,6 +14,7 @@ class _int_object_loader
 	var $ds; 					// data source
 	var $object_member_funcs;	// names of all object class member functions
 	var $cfgu;					// cfgutilities instance
+	var $cache;					// cache class instance
 
 	function _int_object_loader()
 	{
@@ -41,6 +42,7 @@ class _int_object_loader
 
 		$this->object_member_funcs = get_class_methods("object");
 		$this->cfgu = get_instance("cfg/cfgutils");
+		$this->cache = get_instance("cache");
 	}
 
 	function oid_for_alias($alias)
@@ -246,6 +248,9 @@ class _int_object_loader
 		post_message_with_param(MSG_STORAGE_SAVE, $GLOBALS["objects"][$t_oid]->class_id(), array(
 			"oid" => $t_oid
 		));
+
+		// write the current time as last modification time of any object.
+		$this->cache->file_set("objlastmod", time());
 
 		return $t_oid;
 	}

@@ -1288,7 +1288,11 @@ class site_show extends class_base
 		static $last_mod;
 		if (!$last_mod)
 		{
-			$last_mod = $this->db_fetch_field("SELECT MAX(modified) as m FROM objects", "m");
+			if (($last_mod = $this->cache->file_get("objlastmod")) === false)
+			{
+				$last_mod = $this->db_fetch_field("SELECT MAX(modified) as m FROM objects", "m");
+				$this->cache->file_set("objlastmod", $last_mod);
+			}
 			// also compiled menu template
 			$last_mod = max($last_mod, @filemtime($this->compiled_filename));
 		}
