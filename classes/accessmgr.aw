@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.10 2002/11/07 10:52:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.11 2002/11/26 13:01:07 kristo Exp $
 
 class accessmgr extends aw_template
 {
@@ -16,17 +16,26 @@ class accessmgr extends aw_template
 			$this->ar = array();
 			// loome k6ik vajalikud objektid
 			// k6igepealt root objekti et saax k6igile 6igusi m22rata
-			$id = $this->new_object(array("parent" => 0, "class_id" => CL_ACCESSMGR, "status" => 0,"name" => "Accessmgr"));
+			$id = $this->new_object(array(
+				"parent" => 0, 
+				"class_id" => CL_ACCESSMGR, 
+				"status" => 0,
+				"name" => "Accessmgr"
+			));
 			$this->ar["root"] = $id;
 
 			reset($this->cfg["programs"]);
 			while (list($prid, $ar) = each($this->cfg["programs"]))
 			{
-				$id = $this->new_object(array("parent" => $this->ar["root"], "class_id" => CL_ACCESSMGR, "status" => $prid,"name" => $ar[name]));
+				$id = $this->new_object(array(
+					"parent" => $this->ar["root"], 
+					"class_id" => CL_ACCESSMGR, 
+					"status" => $prid,
+					"name" => $ar["name"]
+				));
 				$this->ar[$prid] = $id;
 			}
-			$c = get_instance("config");
-			$c->create_config("accessmgr", serialize($this->ar));
+			$this->set_cval("accessmgr", serialize($this->ar));
 		}
 	}
 
@@ -34,7 +43,10 @@ class accessmgr extends aw_template
 	{
 		$this->read_template("list.tpl");
 
-		$this->vars(array("name" => "K&otilde;ik", "oid" => $this->ar["root"]));
+		$this->vars(array(
+			"name" => "K&otilde;ik", 
+			"oid" => $this->ar["root"]
+		));
 		$this->parse("ACL");
 		$this->parse("LINE");
 		reset($this->cfg["programs"]);
@@ -64,10 +76,14 @@ class accessmgr extends aw_template
 	{
 		if (!$this->get_object($this->ar[$prid]))
 		{
-			$id = $this->new_object(array("parent" => $this->ar["root"], "class_id" => CL_ACCESSMGR, "status" => $prid, "name" => $this->cfg["programs"][$prid]["name"]));
+			$id = $this->new_object(array(
+				"parent" => $this->ar["root"], 
+				"class_id" => CL_ACCESSMGR, 
+				"status" => $prid, 
+				"name" => $this->cfg["programs"][$prid]["name"]
+			));
 			$this->ar[$prid] = $id;
-			$c = get_instance("config");
-			$c->set_simple_config("accessmgr", serialize($this->ar));
+			$this->set_cval("accessmgr", serialize($this->ar));
 		}
 	}
 
