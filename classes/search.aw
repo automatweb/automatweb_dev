@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.56 2004/01/12 15:26:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.57 2004/01/12 15:30:11 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -169,10 +169,17 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				{
 					if ($row["site_id"] != $sid)
 					{
-						$sites[$row["site_id"]] = $row["site_id"];
+						if ($row["site_id"] == 0)
+						{
+							$sites[$row["site_id"]] = "Igalt poolt";
+						}
+						else
+						{
+							$sites[$row["site_id"]] = $row["site_id"];
+						}
 					}
 				}
-				$sites["0"] = "K&otilde;ik";
+				$sites["0"] = "Igalt poolt";
 				$data["options"] = $sites;
 				break;
 		}
@@ -1161,11 +1168,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		if (!$fields["site_id"])
 		{
 			$dat = $this->_search_mk_call("objects","db_query", array("sql" => "SELECT distinct(site_id) as site_id FROM objects"), $args);
-			$sites = array("0" => "");
+			$sites = array("0" => "Igalt poolt");
 			foreach($dat as $row)
 			{
 				$sites[$row["site_id"]] = $row["site_id"];
 			}
+			$sites["0"] = "Igalt poolt";
 			$fields["site_id"] = array(
 				"type" => "select",
 				"caption" => "Saidi ID",
