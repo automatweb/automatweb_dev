@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.139 2003/11/19 13:36:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.140 2003/11/19 16:05:03 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -345,14 +345,15 @@ class planner extends class_base
 		extract($args);
 		classload("icons");
 		classload("date_calc");
+		$prj = get_instance("groupware/project");
 		$di = get_date_range(array(
 			"date" => isset($date) ? $date : date("d-m-Y"),
 			"type" => $type,
 		));
 
 		$obj = new object($id);
-		//$obj = $this->get_object($id);
 		$this->id = $id;
+
 		$this->content_gen_class = "";
 		if ($obj->meta("content_generator") != "")
 		{
@@ -384,31 +385,44 @@ class planner extends class_base
 			"ctrl" => $ctrl,
 		));
 
-		$q = "SELECT metadata FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source = '$id' AND reltype = " . RELTYPE_EVENT_SOURCE;
-		$this->db_query($q);
+
+		// generate a list of folders from which to take events
+		$cal_conns = $obj->connections_from(array(
+			"type" => RELTYPE_EVENT_SOURCE,
+		));
+
 		$folders = array($folder);
-		while($row = $this->db_next())
+		foreach($cal_conns as $conn)
 		{
-			$mx = aw_unserialize($row["metadata"]);
-			if (!empty($mx["event_folder"]))
-			{
-				$folders[] = $mx["event_folder"];
-			};
+			$_tmp = new object($conn->prop("to"));
+			$folders[] = $_tmp->prop("event_folder");
 		};
 
-		// for each of those fucking calendars I need to take into account all the connections they have...
-		// urk. Then, perhaps instead of using connections in calendar I can create those nasty brother objects?
-		// and them delete 'em if I don't need them anymore?
 
-		// hohumm. or perhaps I can create a list of stuff beforehand?
+		// also include events from any projects the user participates in
+		$project = aw_global_get("project");
+		$additional_ids = $prj->get_events_from_projects(array(
+			"project" => aw_global_get("project"),
+		));
 
 		// holy cow, can't I limit that stuff somehow? I really don't need to read _all_ the events do I?
-		$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND objects.status != 0",join(",",$folders));
-		// holy fuck. oh well. but since I read metadata anyway, why not get project_relations from that?	
+		// XXX: convert to object_list. For this I need to make sure I get all the users of "events" array
+		if (sizeof($additional_ids) > 0)
+		{
+			if (empty($project))
+			{
+				$add = " OR objects.oid IN ( " . join(",",$additional_ids) . ")";
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) $add AND objects.status != 0",join(",",$folders));
+			}
+			else
+			{
+				$add = " AND objects.oid IN ( " . join(",",$additional_ids) . ")";
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.status != 0 $add");
+			};
+		}
+			
 		$this->db_query($q);
 		$events = array();
-		$project = aw_global_get("project");
-		// hõkk!
 		// now, if a project has been requested from the URL, I need to do additional filtering for each object
 
 		// we sure pass around a LOT of data
@@ -417,10 +431,6 @@ class planner extends class_base
 		{
 			$gx = date("dmY",$row["start"]);
 			$row["meta"] = aw_unserialize($row["metadata"]);
-			if (!empty($project) && !$row["meta"]["project_connections"][$project])
-			{
-				continue;
-			};
 			unset($row["metadata"]);
 			if ($this->content_gen_class)
 			{
@@ -592,8 +602,6 @@ class planner extends class_base
 				));
 
 				$all_props = array();
-
-				$meta = $arr["event_obj"]->meta("project_connections");
 
 				foreach($conns as $conn)
 				{
@@ -961,8 +969,6 @@ class planner extends class_base
 					));
 				};
 
-				$event_obj->set_meta("project_connections",$new_ones);
-				$event_obj->save();
 			};
 			//if ($this->emb_group == "calendars" && !$is_doc)
 			if ($this->emb_group == "calendars")
