@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.5 2004/12/10 10:09:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.6 2004/12/15 12:27:52 ahti Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -28,6 +28,8 @@
 @default group=export
 
 @property export_link type=text store=no
+
+@property export_link2 type=text store=no
 
 @property export_table type=table store=no 
 @caption Esimesed 10 rida
@@ -89,6 +91,16 @@ class object_export extends class_base
 					"caption" => t("Ekspordi CSV fail")
 				));
 				break;
+			case "export_link2":
+				if (!$arr["obj_inst"]->prop("object_type"))
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = html::href(array(
+					"url" => aw_url_change_var("xls", 1),
+					"caption" => t("Ekspordi XLS fail")
+				));
+				break;
 		};
 		return $retval;
 	}
@@ -108,7 +120,12 @@ class object_export extends class_base
 
 	function save_mktbl_tbl($arr)
 	{
-		$arr["obj_inst"]->set_meta("dat", $arr["request"]["dat"]);
+		$dat = $arr["request"]["dat"];
+		foreach(safe_array($arr["request"]["dat"]) as $key => $value)
+		{
+			$dat[$key]["visible"] = $arr["request"]["visible"][$key] ? 1 : "";
+		}
+		$arr["obj_inst"]->set_meta("dat", $dat);
 	}
 
 	function _init_mktbl_tbl(&$t)
@@ -123,9 +140,10 @@ class object_export extends class_base
 			"caption" => t("J&auml;rjekord")
 		));
 
-		$t->define_field(array(
+		$t->define_chooser(array(
+			"field" => "vs",
 			"name" => "visible",
-			"caption" => t("Eksporditav")
+			"caption" => t("Eksporditav"),
 		));
 
 		$t->define_field(array(
@@ -159,11 +177,14 @@ class object_export extends class_base
 					"name" => "dat[$pn][jrk]",
 					"value" => $dat[$pn]["jrk"]
 				)),
-				"visible" => html::checkbox(array(
+				"visible" => $dat[$pn]["visible"],
+				"vs" => $pn,
+				/*"visible" => html::checkbox(array(
 					"name" => "dat[$pn][visible]",
 					"value" => 1,
 					"checked" => ($dat[$pn]["visible"] == 1)
 				)),
+				*/
 				"caption" => html::textbox(array(
 					"name" => "dat[$pn][caption]",
 					"value" => $dat[$pn]["caption"]
@@ -245,7 +266,7 @@ class object_export extends class_base
 		{
 			$filt["parent"] = $arr["obj_inst"]->prop("root_folder");
 		}
-		if (!$arr["request"]["do_exp"])
+		if (!$arr["request"]["do_exp"] || !$arr["request"]["xls"])
 		{
 			$filt["limit"] = 10;
 		}
@@ -255,10 +276,15 @@ class object_export extends class_base
 
 		if ($arr["request"]["do_exp"] == 1)
 		{
-			header("Content-type: text/csv");
+			header("Content-type: application/csv");
 			header("Content-disposition: inline; filename=eksport.csv;");
-			$sep = $arr["obj_inst"]->prop("csv_separator");
 			die($t->get_csv_file($sep == "" ? "," : $sep));
+		}
+		elseif($arr["request"]["xls"] == 1)
+		{
+			header("Content-type: application/vnd.ms-excel");
+			header("Content-disposition: inline; filename=eksport.xls;");
+			die($t->draw());
 		}
 	}
 }

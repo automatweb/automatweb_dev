@@ -50,6 +50,15 @@
             <store>no</store>
       </property>
       <property>
+            <name>export_link2</name>
+            <table>objects</table>
+            <group>export</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+      </property>
+      <property>
             <name>export_table</name>
             <table>objects</table>
             <group>export</group>
