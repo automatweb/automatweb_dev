@@ -222,7 +222,7 @@ class workflow extends class_base
 			$actor_list->add($troot);
 		}
 
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 
 		$etype_list = new object_list(array(
 			"class_id" => CL_ENTITY,
@@ -312,7 +312,7 @@ class workflow extends class_base
 			$action_list->add($troot);
 		}
 
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 
 		// get processes for actions
 		// to do that, we get all aliases that go TO the list of actions
@@ -428,7 +428,7 @@ class workflow extends class_base
 		));
 		$entity_list = $entity_tree_filter->to_list();
 
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 
 		switch($_GET["sub_tab"])
 		{
@@ -640,7 +640,7 @@ class workflow extends class_base
 		));
 		$process_list = $process_tree_filter->to_list();
 
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 
 		switch($_GET["sub_tab"])
 		{
@@ -1019,7 +1019,7 @@ class workflow extends class_base
 
 	function gen_view_toolbar($args = array())
 	{
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
 			"name" => "add",
 			"tooltop" => "Uus",

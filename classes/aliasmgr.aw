@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.148 2004/04/30 09:09:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.149 2004/06/25 20:10:46 duke Exp $
 
 class aliasmgr extends aw_template
 {
@@ -983,7 +983,7 @@ class aliasmgr extends aw_template
 	// !Search and list share the same toolbar
 	function mk_toolbar($objtype = '', $selectedot = '')
 	{
-		$toolbar = get_instance("toolbar");
+		$toolbar = get_instance("vcl/toolbar");
 
 		if (is_array($objtype) && (count($objtype) == 1))
 		{

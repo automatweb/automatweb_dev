@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.8 2004/06/17 13:54:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.9 2004/06/25 20:20:50 duke Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -478,7 +478,7 @@ class object_treeview_v2 extends class_base
 		
 		
 
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
 			"name" => "add",
 			"tooltip" => "Uus",

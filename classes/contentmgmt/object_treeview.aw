@@ -887,7 +887,7 @@ class object_treeview extends class_base
 		
 		
 
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
 			"name" => "add",
 			"tooltip" => "Uus",

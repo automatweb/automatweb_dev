@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.8 2004/06/09 20:24:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.9 2004/06/25 20:16:11 duke Exp $
 // register.aw - Register 
 /*
 
@@ -325,7 +325,7 @@ class register extends class_base
 		$html = "";
 		if ($this->can("add", $o->prop("data_rootmenu")))
 		{
-			$tb = get_instance("toolbar");
+			$tb = get_instance("vcl/toolbar");
 			$this->do_data_toolbar(array(
 				"prop" => array(
 					"toolbar" => &$tb

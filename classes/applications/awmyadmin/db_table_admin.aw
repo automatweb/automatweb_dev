@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.2 2004/06/11 08:51:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.3 2004/06/25 20:13:05 duke Exp $
 
 /*
 
@@ -125,7 +125,7 @@ class db_table_admin extends class_base
 
 		$tbl = $db->db_get_table($ob->meta('db_table'));
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
@@ -277,7 +277,7 @@ class db_table_admin extends class_base
 
 
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'new',
 			'tooltip' => 'Lisa',
@@ -389,7 +389,7 @@ class db_table_admin extends class_base
 		$tbl = $db->db_get_table($ob->meta('db_table'));
 		$fields = $this->make_keys(array_keys($tbl['fields']));
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
@@ -479,7 +479,7 @@ class db_table_admin extends class_base
 		$t->set_default_sortby('name');
 		$t->sort_by();
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'new',
 			'tooltip' => 'Lisa',

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.29 2004/06/15 08:46:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.30 2004/06/25 20:14:36 duke Exp $
 
 /*
 
@@ -889,7 +889,7 @@ class dronline extends class_base
 			"RANGE" => join(" | ",$rs)
 		));
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_cdata($this->parse());
 	
 		if (!$this->is_embedded)
@@ -1033,7 +1033,7 @@ class dronline extends class_base
 		$t->sort_by();
 		$tbl = $t->draw();
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		
 		if (!$this->is_embedded)
 		{
@@ -1564,7 +1564,7 @@ class dronline extends class_base
 		{
 			return '';
 		}
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_cdata($this->get_tb_end_cdata($arr, $id),"right");
 		return $tb->get_toolbar().$this->get_js();
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.10 2004/06/21 11:48:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.11 2004/06/25 20:19:23 duke Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -36,12 +36,11 @@ class cfgobject extends aw_template
 		$cfgforms = $ol->names();
 
 		$this->mk_path($parent,"Lisa uus konfiobjekt");
-		$toolbar = get_instance("toolbar");
+		$toolbar = get_instance("vcl/toolbar");
 		$toolbar->add_button(array(
                         "name" => "add",
                         "tooltip" => "Lisa",
                         "url" => "javascript:document.clform.submit()",
-                        "imgover" => "save_over.gif",
                         "img" => "save.gif",
                 ));
 
@@ -73,19 +72,17 @@ class cfgobject extends aw_template
 		$obj = obj($id);
 		$this->mk_path($obj->parent(),"Muuda konfiobjekti");
 
-		$toolbar = get_instance("toolbar");
+		$toolbar = get_instance("vcl/toolbar");
 		$toolbar->add_button(array(
                         "name" => "save",
                         "tooltip" => "Salvesta",
                         "url" => "javascript:document.clform.submit()",
-                        "imgover" => "save_over.gif",
                         "img" => "save.gif",
                 ));
 		$toolbar->add_button(array(
                         "name" => "search",
                         "tooltip" => "Vali objektid",
                         "url" => "javascript:show_search()",
-                        "imgover" => "search_over.gif",
                         "img" => "search.gif",
                 ));
 		
@@ -354,12 +351,11 @@ class cfgobject extends aw_template
 	{
 		extract($args);
 		
-		$toolbar = get_instance("toolbar");
+		$toolbar = get_instance("vcl/toolbar");
 		$toolbar->add_button(array(
                         "name" => "save",
                         "tooltip" => "Rakenda",
                         "url" => "javascript:document.assignform.submit()",
-                        "imgover" => "save_over.gif",
                         "img" => "save.gif",
                 ));
 
@@ -399,12 +395,11 @@ class cfgobject extends aw_template
 		$this->read_template("search.tpl");
 		$this->mk_path($obj->parent(),"Muuda konfiobjekti");
 		
-		$toolbar = get_instance("toolbar");
+		$toolbar = get_instance("vcl/toolbar");
 		$toolbar->add_button(array(
                         "name" => "save",
                         "tooltip" => "Salvesta",
                         "url" => "javascript:document.searchform.submit()",
-                        "imgover" => "save_over.gif",
                         "img" => "save.gif",
                 ));
 
@@ -412,7 +407,6 @@ class cfgobject extends aw_template
                         "name" => "search",
                         "tooltip" => "Otsi",
                         "url" => "javascript:document.queryform.submit()",
-                        "imgover" => "search_over.gif",
                         "img" => "search.gif",
                 ));
 
@@ -420,7 +414,6 @@ class cfgobject extends aw_template
                         "name" => "edit",
                         "tooltip" => "Muuda",
                         "url" => $this->mk_my_orb("change",array("id" => $id)),
-                        "imgover" => "edit_over.gif",
                         "img" => "edit.gif",
                 ));
 

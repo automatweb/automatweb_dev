@@ -24,12 +24,11 @@ class packagemgr_server extends class_base
 	{
 		extract($arr);
 
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
 			'name' => 'new',
 			'tooltip' => 'Lisa uus',
 			'url' => $this->mk_my_orb("new_package"),
-			'imgover' => 'new_over.gif',
 			'img' => 'new.gif'
 		));
 

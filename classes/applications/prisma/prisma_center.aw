@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.4 2004/06/04 10:27:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.5 2004/06/25 20:13:37 duke Exp $
 // prisma_center.aw -  
 /*
 
@@ -138,7 +138,7 @@ class prisma_center extends class_base
 			return $status;
 		};
 
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 
 		$tb->add_menu_button(array(
 			"name" => "add",

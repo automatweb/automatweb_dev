@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.1 2004/05/21 11:08:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.2 2004/06/25 20:13:05 duke Exp $
 
 /*
 	@classinfo syslog_type=ST_DB_SERVER_EXPLORER relationmgr=yes no_status=1 no_comment=1
@@ -333,7 +333,7 @@ class db_server_explorer extends class_base
 		$t->set_default_sortby('name');
 		$t->sort_by();
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'new',
 			'tooltip' => 'Lisa',
@@ -377,7 +377,7 @@ class db_server_explorer extends class_base
 			$res = $dtc->show_query_results($arr['db_id'],$arr['sql'],$nr);
 		}
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
@@ -405,7 +405,7 @@ class db_server_explorer extends class_base
 
 		$tbl = $db->db_get_table($table);
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
@@ -548,7 +548,7 @@ class db_server_explorer extends class_base
 		$t->set_default_sortby('index_name');
 		$t->sort_by();
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'new',
 			'tooltip' => 'Lisa',
@@ -591,7 +591,7 @@ class db_server_explorer extends class_base
 		$tbl = $db->db_get_table($table);
 		$fields = $this->make_keys(array_keys($tbl['fields']));
 
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
