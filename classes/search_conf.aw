@@ -225,7 +225,7 @@ class search_conf extends aw_template
 			$c_type = $t_type;
 		}
 
-		if ($search && ($sstring_title != "" || $sstring != ""))
+		if ($search && ($sstring_title != "" || $sstring != "" || $sstring_author != "" || $date_from > (24*3600*200) || $date_to > (24*3600*200)))
 		{
 			// if we should be actually searching from a form, let formgen work it's magick
 			$grps = $this->get_groups();
@@ -348,17 +348,30 @@ class search_conf extends aw_template
 
 			if ($sstring_author != "")
 			{
-				$q_cons2 .= " AND (documents.author LIKE '%%%s%%') ";
+				$this->quote(&$sstring_author);
+				if ($q_cons2 != "")
+				{
+					$q_cons2 .= " AND ";
+				}
+				$q_cons2 .= " (documents.author LIKE '%$sstring_author%') ";
 			}
 
 			if ($date_from > 24*3600*12)
 			{
-				$q_cons2 .= " AND (documents.modified >= $date_from) ";
+				if ($q_cons2 != "")
+				{
+					$q_cons2 .= " AND ";
+				}
+				$q_cons2 .= " (documents.modified >= $date_from) ";
 			}
 
 			if ($date_to > 24*3600*12)
 			{
-				$q_cons2 .= " AND (documents.modified <= $date_to) ";
+				if ($q_cons2 != "")
+				{
+					$q_cons2 .= " AND ";
+				}
+				$q_cons2 .= " (documents.modified <= $date_to) ";
 			}
 
 			// search from files and tables here. ugh. ugly. yeah. I know.
@@ -1022,34 +1035,75 @@ class search_conf extends aw_template
 		{
 			$q_cons = " AND ".$q_cons;
 		}
-		$q = "SELECT count(*) as cnt FROM export_content WHERE $p_arr_str $q_cons";
+
+                $srud = aw_ini_get("document.static_search_returns_dyn_urls");
+
+                if ($srud)
+                {
+                        $nou = " AND orig_url != '' ";
+                }
+
+		$q = "SELECT count(*) as cnt FROM export_content WHERE $p_arr_str $nou $q_cons";
 		$cnt = $this->db_fetch_field($q, "cnt");
-		
+
 		$this->do_sorting($arr);
 
 		$public_url = $this->get_cval("export::public_symlink_name");
 
-		$q = "SELECT * FROM export_content WHERE $p_arr_str $q_cons ORDER BY modified LIMIT ".$page*PER_PAGE.",".PER_PAGE;
+		$q = "SELECT * FROM export_content WHERE $p_arr_str $nou $q_cons GROUP BY title ORDER BY modified LIMIT ".$page*PER_PAGE.",".PER_PAGE;
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
-			preg_match("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt);
-			$title = strip_tags($mt[1]);
-			if (file_exists($public_url."/".$row['filename']))
+			//preg_match("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt);
+			//$title = strip_tags($mt[1]);
+			$title = $row["title"];
+			//if (file_exists($public_url."/".$row['filename']))
+                        $show = false;
+                        if ($srud)
+                        {
+                                $show = ($row["orig_url"] != "");
+                        }
+                        else
+                        {
+                                $show = file_exists($public_url."/".$row['filename']);
+                        }
+                        if ($show)
 			{
+				$fn = $row["filename"];
+				if (aw_ini_get("document.static_search_returns_dyn_urls"))
+				{
+					if ($row["orig_url"] != "")
+					{
+						$fn = $row["orig_url"];
+						if (preg_match("/^".str_replace("/","\\/",$this->cfg["baseurl"])."\/index.aw\?section=(\d+)&set_lang_id=(\d+)$/",$fn, $mt))
+						{
+							$fn = $this->cfg["baseurl"]."/".$mt[1];
+						}
+					}
+					else
+					{
+						$fn = aw_ini_get("ut.static_server")."/".$fn;
+					}
+				}
 				$this->vars(array(
-					"section" => $row["filename"],
+					"section" => $fn,
 					"title" => ($title != "" ? $title : $row["filename"]),
 					"modified" => $this->time2date($row["modified"],5),
 				));
 				$mat.=$this->parse("MATCH");
+				//$cnt++;
 			}
 		}
 		$this->vars(array(
 			"MATCH" => $mat
 		));
+		$ps = $this->do_pageselector($cnt,$arr);
+		if (!aw_ini_get("document.static_search_returns_dyn_urls"))
+		{
+			$ps = str_replace($this->cfg["baseurl"]."/orb.aw", $this->cfg["form_server"], $ps);
+		}
 		$this->vars(array(
-			"PAGESELECTOR" => str_replace($this->cfg["baseurl"]."/orb.aw", $this->cfg["form_server"], $this->do_pageselector($cnt,$arr))
+			"PAGESELECTOR" => $ps
 		));
 		if ($mat != "")
 		{
@@ -1063,7 +1117,15 @@ class search_conf extends aw_template
 				"NO_RESULTS" => $this->parse("NO_RESULTS")
 			));
 		}
-		return str_replace($this->cfg["baseurl"]."/orb.aw", $this->cfg["form_server"], $this->parse());
+
+		if (!aw_ini_get("document.static_search_returns_dyn_urls"))
+		{
+			return str_replace($this->cfg["baseurl"]."/orb.aw", $this->cfg["form_server"], $this->parse());
+		}
+		else
+		{
+			return $this->parse();
+		}
 	}
 }
 ?>

@@ -8,6 +8,9 @@
 					<optional name="s_parent"/>
 					<optional name="s_keywords"/>
 					<optional name="sstring_title"/>
+					<optional name="sstring_author"/>
+					<optional name="date_from"/>
+					<optional name="date_to"/>
 					<optional name="sstring"/>
 					<optional name="t2c_log"/>
 					<optional name="c2k_log"/>
