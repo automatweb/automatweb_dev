@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.3 2002/11/07 18:13:12 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -184,7 +184,10 @@ class form_calendar extends form_base
 			$this->db_query($q);
 			$row2 = $this->db_next();
 			$this->restore_handle();
-			$row = $row + $row2;
+			if (is_array($row2))
+			{
+				$row = $row + $row2;
+			};
 			$e_start = $row["start"];
 			$e_end = $row["end"];
 			if (!$e_end)
@@ -364,12 +367,13 @@ class form_calendar extends form_base
 			$period_cnt = 1;
 		};
 
+
 		//for ($i = ($start + $timeshift); $i <= $end; $i=$i+($shift * $timedef)+$timeshift)
 		for ($i = ($start); $i <= $end; $i=$i+($shift * $period_cnt))
 		{
 			flush();
 			// if it is in range, then ..
-			if ( ($i >= $start) && ($i <= $end) )
+			if ( ($i >= $this->start) && ($i <= $this->end) )
 			{
 				$blocks[] = array(
 					"start" => $i,
@@ -455,15 +459,12 @@ class form_calendar extends form_base
 		$this->raw_events = array();
 		$this->raw_headers = array();
 
-		//$this->load($eform);
+		$this->load($eform);
 		//$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$start' AND end >= '$end' AND relation = '$ctrl' AND status = 2";
 		$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$end' AND end >= '$start' AND relation = '$ctrl' AND status = 2";
-		global $DBUG;
-		if ($DBUG)
-		{
-			print $q;
-		};
 		$this->db_query($q);
+		$this->start = $start;
+		$this->end = $end;
 		while($row = $this->db_next())
 		{
 			$found = true;
@@ -508,15 +509,6 @@ class form_calendar extends form_base
 			// If I want to find vacancies, then I have to check whether each block has
 			// the required amount of blocks available:
 
-			global $DBUG;
-			if ($DBUG)
-			{
-				print "<pre>";
-				print_r($this->event_counts);
-				print "</pre>";
-			};
-			
-
 			//if ($check == "vacancies")
 			//{
 				$this->has_vacancies = true;
@@ -532,6 +524,7 @@ class form_calendar extends form_base
 			}
 
 			// done. now we can build the special entries for the calenar
+
 
 			foreach($this->blocks as $bid => $block)
 			{
