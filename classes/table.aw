@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.28 2002/02/18 14:17:03 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.29 2002/03/05 17:01:03 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -199,7 +199,8 @@ $orb_defs["table"] ="xml";
 		$this->arr["default_style"] = $default_style;
 		if ($default_style)
 		{
-			$this->arr["style2class"][$default_style] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = $default_style","class_id");
+			$default_style = sprintf("%d",$default_style);
+			$this->arr["style2class"][$default_style] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '$default_style'","class_id");
 		}
 
 		classload("style");
@@ -207,6 +208,8 @@ $orb_defs["table"] ="xml";
 		if ($this->arr["table_style"])
 		{
 			$tbst = $stl->mk_cache($this->arr["table_style"]);
+			$tbst["even_style"] = sprintf("%d",$tbst["even_style"]);
+			$tbst["odd_style"] = sprintf("%d",$tbst["odd_style"]);
 			$this->arr["style2class"][$tbst["even_style"]] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = ".$tbst["even_style"],"class_id");
 			$this->arr["style2class"][$tbst["odd_style"]] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = ".$tbst["odd_style"],"class_id");
 		}
