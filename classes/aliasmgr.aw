@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.162 2004/11/21 19:06:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.163 2004/11/23 13:20:40 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -276,7 +276,10 @@ class aliasmgr extends aw_template
 			$tp = $c->prop();
 			$tp["aliaslink"] = $als[$c->prop("to")];
 			$tp["source"] = $tp["from"];
-			$tp["target"] = $tp["to"];
+			$to = $c->to();
+
+			$tp["target"] = $to->id();
+			$tp["to"] = $to->id();
 			$tp["class_id"] = $tp["to.class_id"];
 			$tp["name"] = $tp["to.name"];
 			$retval[$c->prop("to.class_id")][$c->prop("idx")] = $tp;
@@ -294,18 +297,15 @@ class aliasmgr extends aw_template
 	{
 		extract($args);
 
-		enter_function("aliasmgr::parse_oo_aliases::get_oo_aliases");
 		$o = obj($oid);
 		if ($o->is_brother())
 		{
 			$oid = $o->get_original();
 		}
 		$aliases = $this->get_oo_aliases(array("oid" => $oid));
-		exit_function("aliasmgr::parse_oo_aliases::get_oo_aliases");
 
 		$by_idx = $by_alias = array();
 
-		enter_function("aliasmgr::parse_oo_aliases::make_lut");
 		$tmp = aw_ini_get("classes");
 		foreach($tmp as $clid => $cldat)
 		{
@@ -340,7 +340,6 @@ class aliasmgr extends aw_template
 				}
 			}
 		}
-		exit_function("aliasmgr::parse_oo_aliases::make_lut");
 
 		$cache_inst = get_instance("cache");
 		$classlist = aw_ini_get("classes");
@@ -381,6 +380,7 @@ class aliasmgr extends aw_template
 
 					$toreplace[$clid][$val[0]] = $aliases[$clid][$idx];
 					$toreplace[$clid][$val[0]]["val"] = $val;
+
 				}
 
 				// here we do the actual parse/replace bit
