@@ -144,7 +144,7 @@ class dns extends aw_template
 		// get domain name - last 2 parts
 		$dom = $this->get_domain_name_for_url($domain);
 
-		$cmd = "/usr/sbin/nslookup -type=NS $dom -class=IN";
+		$cmd = aw_ini_get("server.nslookup")." -type=NS $dom -class=IN";
 		$op = `$cmd`;
 				
 		// now scan the op for the needed data
