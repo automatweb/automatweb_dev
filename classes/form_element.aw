@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.16 2001/07/27 01:50:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.17 2001/07/27 02:51:44 duke Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -591,6 +591,7 @@ class form_element extends aw_template
 	{	
 		return $this->arr["text"]; 
 	}
+
 	function get_el_name()		{	return $this->arr["name"]; }
 	function get_style()	{	return $this->arr["style"]; }
 	function get_type()		{	return $this->arr["type"]; }
@@ -603,6 +604,10 @@ class form_element extends aw_template
 	function get_row()		{ return $this->row; }
 	function get_col()		{ return $this->col; }
 	function get_el_group()		{ return $this->arr["group"]; }
+	function get_el_lb_items()	
+	{
+		return $this->arr["listbox_items"];
+	} 
 
 	function save_short()
 	{
@@ -1126,9 +1131,12 @@ class form_element extends aw_template
 		else
 		if ($this->arr["type"] == "radiobutton")
 		{
+			// this is not good, I hade to hack around this naming scheme in
+			// XML-RPC.
 			$var = $this->form->post_vars[$prefix."radio_group_".$this->arr["group"]];
 		}
 		else
+			// I think the listboxes are handled as well here.
 		if ($this->arr["type"] == "multiple")
 		{
 			$var = $prefix.$this->id;

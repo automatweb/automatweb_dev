@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.2 2001/07/27 01:50:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.3 2001/07/27 02:51:44 duke Exp $
 // form_rpc.aw - RPC functions for formgen
 classload("form");
 class form_rpc extends form {
@@ -36,6 +36,10 @@ class form_rpc extends form {
 						{
 							$el_values["radio_group_$group"] = $args["elements"]["radio_$group"];
 						}
+					}
+					elseif ($props["type"] == "listbox")
+					{
+						$el_values[$id] = "element_" . $id . "_lbopt_" . $args["elements"][$props["name"]];
 					}
 					else
 					{

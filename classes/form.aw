@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.44 2001/07/27 01:50:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.45 2001/07/27 02:51:44 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -819,12 +819,14 @@ class form extends form_base
 	{
 		extract($arr);
 
+		// values can be bassed from the caller inside the $values argument, or..
 		if (is_array($values))
 		{
 			$this->post_vars = $values;
 		}
 		else
 		{
+			// .. if that is not the case, then we just import all the POST variables.
 			global $HTTP_POST_VARS;
 			$this->post_vars = $HTTP_POST_VARS;
 		};
@@ -833,15 +835,22 @@ class form extends form_base
 
 		if (!$entry_id)
 		{
+			// ff_folder on vormi konfist määratud folderi id, mille alla entry peaks
+			// minema. parent argument overraidib selle
 			$parent = isset($parent) ? $parent: $this->arr["ff_folder"];
+			
+			// what the hell is that single "form_entry" doing there in the middle?
+			// we override the lang_id here, because entries that have been entered over
+			// XML-RPC do not know what their language_id might be, so specify one.
 			$params = array(
 				"parent" => $parent,
 				"0"	=> "form_entry",
 				"class_id" => CL_FORM_ENTRY,
 				"lang_id" => $lang_id,
 			);
-			// what the hell is that single "form_entry" doing there in the middle?
+
 			$entry_id = $this->new_object($params);
+
 			$this->entry_id = $entry_id;
 			$new = true;
 		}
@@ -864,6 +873,7 @@ class form extends form_base
 			}
 		}
 
+		// what exactly does this code do?
 		if ($this->arr["name_el"])
 		{
 			$el = $this->get_element_by_id($this->arr["name_el"]);
