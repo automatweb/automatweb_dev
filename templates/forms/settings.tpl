@@ -17,13 +17,16 @@ function setLink(li,title)
 }
 
 </script>
-<table cellpadding=1 cellspacing=0 border=0>
+<table width="100%" cellpadding=1 cellspacing=0 border=0>
 
 <form action='reforb.{VAR:ext}' method=post name=ffrm>
 
 <tr>
 <td bgcolor="#FFFFFF">
 
+<table width="100%" cellpadding=3 cellspacing=0 border=0>
+<tr>
+<td class="aste01">
 
 <table cellpadding=3 cellspacing=0 border=0>
 <tr class="aste01">
@@ -67,9 +70,9 @@ function setLink(li,title)
 </tr>
 <tr class="aste01">
 <td class="celltext" colspan=2>{VAR:LC_FORMS_CONTROL_FORM_STATUS}?: &nbsp;<input type='checkbox' name='check_status' value=1 {VAR:check_status}>
-<br>
-{VAR:LC_FORMS_TEXT_DISPLAY_USER}: <input type="text" name="check_status_text" value="{VAR:check_status_text}" size="40">
-</td>
+</td></tr>
+<tr><td class="celltext">{VAR:LC_FORMS_TEXT_DISPLAY_USER}:</td>
+<td><input type="text" name="check_status_text" value="{VAR:check_status_text}" size="40" class="formtext"></td>
 </tr>
 <!-- SUB: NOSEARCH -->
 <tr class="aste01">
@@ -124,8 +127,10 @@ function setLink(li,title)
 <td colspan=2 class="celltext"><select class="formselect2" NAME='entry_name_el[]' multiple>{VAR:els}</select></td>
 </tr>
 <tr class="aste01">
-<td class="celltext" colspan=2><input class='formbutton' type='submit' NAME='save_form_settings' VALUE='{VAR:LC_FORMS_SAVE}'></td>
+<td></td>
+<td class="celltext"><input class='formbutton' type='submit' NAME='save_form_settings' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </table>
+</td></tr></table>
 {VAR:reforb}
 
 

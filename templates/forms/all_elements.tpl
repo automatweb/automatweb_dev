@@ -1,10 +1,11 @@
+<table width="100%" border=0 cellspacing=0 cellpadding=1>
+
 <form action='reforb.{VAR:ext}' method=POST>
 
-<table border=0 cellspacing=0 cellpadding=1>
 <tr>
 <td bgcolor="#FFFFFF">
 
-<table border=0 cellspacing=0 cellpadding=5>
+<table width="100%" border=0 cellspacing=0 cellpadding=5>
 <tr>
 <td class="aste01">
 
@@ -48,19 +49,43 @@
 </tr>
 <!-- END SUB: LINE -->
 </table>
+<img src="{VAR:baseurl}/autoamtweb/images/trans.gif" border="0" width="1" height="10" alt=""><br>
 <span class="celltext">
 
-{VAR:LC_FORMS_CHOOSE_STYLE}:<select name='setstyle' class='formselect2'>{VAR:styles}</select><br>
-{VAR:LC_FORMS_CHOOSE_CALALOGUE_WHERE_MOVE_ELEMENT}:<select name='setfolder' class='formselect2'>{VAR:folders}</select><br>
-{VAR:LC_FORMS_CHOOSE_ELEMENT_TYPE_WHAT_ADD}:<select name='addel' class='formselect2'>{VAR:types}</select><br>
-Vali sisestuse kontrollerid, mis valitud elementidele m&auml;&auml;ratakse:<select multiple name='add_entry_controllers[]' class='formselect2'>{VAR:controllers}</select><br>
-Vali n&auml;itamise kontrollerid, mis valitud elementidele m&auml;&auml;ratakse:<select multiple name='add_show_controllers[]' class='formselect2'>{VAR:controllers}</select><br>
-Vali listboksi kontrollerid, mis valitud elementidele m&auml;&auml;ratakse:<select multiple name='add_lb_controllers[]' class='formselect2'>{VAR:controllers}</select><br>
+{VAR:LC_FORMS_CHOOSE_STYLE}:<br>
+<select name='setstyle' class='formselect2'>{VAR:styles}</select><br>
+<img src="{VAR:baseurl}/autoamtweb/images/trans.gif" border="0" width="1" height="10" alt=""><br>
+
+{VAR:LC_FORMS_CHOOSE_CALALOGUE_WHERE_MOVE_ELEMENT}:<br>
+<select name='setfolder' class='formselect2'>{VAR:folders}</select><br>
+<img src="{VAR:baseurl}/autoamtweb/images/trans.gif" border="0" width="1" height="10" alt=""><br>
+
+{VAR:LC_FORMS_CHOOSE_ELEMENT_TYPE_WHAT_ADD}:<br>
+<select name='addel' class='formselect2'>{VAR:types}</select><br>
+<img src="{VAR:baseurl}/autoamtweb/images/trans.gif" border="0" width="1" height="10" alt=""><br>
+
+Vali sisestuse kontrollerid, mis valitud elementidele m&auml;&auml;ratakse:<br>
+<select multiple name='add_entry_controllers[]' class='formselect2'>{VAR:controllers}</select><br>
+<img src="{VAR:baseurl}/autoamtweb/images/trans.gif" border="0" width="1" height="10" alt=""><br>
+
+Vali n&auml;itamise kontrollerid, mis valitud elementidele m&auml;&auml;ratakse:<br>
+<select multiple name='add_show_controllers[]' class='formselect2'>{VAR:controllers}</select><br>
+<img src="{VAR:baseurl}/autoamtweb/images/trans.gif" border="0" width="1" height="10" alt=""><br>
+
+Vali listboksi kontrollerid, mis valitud elementidele m&auml;&auml;ratakse:<br>
+<select multiple name='add_lb_controllers[]' class='formselect2'>{VAR:controllers}</select><br>
+<img src="{VAR:baseurl}/autoamtweb/images/trans.gif" border="0" width="1" height="10" alt=""><br>
+
 <input type='submit' value='{VAR:LC_FORMS_SAVE}' class='formbutton'>&nbsp;&nbsp;
 <input type='submit' name='diliit' value='Kustuta' class='formbutton'>
 {VAR:reforb}
 
 </span>
 </td></tr></table>
-</td></tr></table>
+</td></tr>
+
 </form>
+
+</table>
+
+<br>
