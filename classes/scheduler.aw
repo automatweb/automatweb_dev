@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.13 2003/04/28 14:11:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.14 2003/05/08 10:26:08 kristo Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -286,7 +286,12 @@ class scheduler extends aw_template
 	{
 		$this->log = array();
 		return;
-		$this->log_fp = fopen($this->cfg["log_file"], "a+");
+
+		$this->log_fp = @fopen($this->cfg["log_file"], "a+");
+		if (!$this->log_fp)
+		{
+			return false;
+		};
 		flock($this->log_fp,LOCK_EX);
 
 		fseek($this->log_fp,0,SEEK_SET);
@@ -303,7 +308,7 @@ class scheduler extends aw_template
 	{
 		$this->log = array();
 		return;
-		if ($write)
+		if ($this->log_fp && $write)
 		{
 			ftruncate($this->log_fp,0);
 			fseek($this->log_fp,0,SEEK_SET);
@@ -312,8 +317,11 @@ class scheduler extends aw_template
 			fflush($this->log_fp);
 		}
 
-		flock($this->log_fp,LOCK_UN);
-		fclose($this->log_fp);
+		if ($this->log_fp)
+		{
+			flock($this->log_fp,LOCK_UN);
+			fclose($this->log_fp);
+		};
 	}
 
 	function log_event($event, $pg)
