@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.2 2001/06/05 12:08:56 duke Exp $
+// table.aw - tabelite haldus
 
 global $orb_defs;
 $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html",		"params"	=> array("id")),
@@ -47,6 +49,24 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 			$this->sub_merge = 1;
 			$this->db_init();
 			$this->table_loaded = false;
+		}
+
+		////
+		// !Parsib ntx dokumendi sees olevaid tabelite aliasi lahti
+		function parse_alias($args = array())
+		{
+			extract($args);
+			// koigepealt siis kysime koigi tabelite aliased
+			if (!is_array($this->tablealiases))
+			{
+				$this->tablealiases = $this->get_aliases(array(
+								"oid" => $oid,
+								"type" => CL_TABLE,
+							));
+			};
+			$t = $this->tablealiases[$matches[3] - 1]; 
+			$replacement = $this->show(array("id" => $t["target"]));
+			return $replacement;
 		}
 		
 		function load_table($id)
