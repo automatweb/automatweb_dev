@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.95 2004/11/03 12:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.96 2004/11/03 14:52:13 kristo Exp $
 
 /*
 
@@ -97,7 +97,6 @@ class site_show extends class_base
 		}
 
 		$this->do_check_properties(&$arr);
-
 
 		$apd = get_instance("layout/active_page_data");
 		$awt->start("xshow2");
@@ -2223,6 +2222,7 @@ class site_show extends class_base
 		$awt->stop("part6");
 
 		$rv = $this->parse();
+
 
 		$rv .= $this->build_popups();
 		return $rv;
