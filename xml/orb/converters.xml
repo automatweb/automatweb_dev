@@ -122,6 +122,13 @@
 			</function>
 		</action>
 
+		<action name="confirm_crm_choices" >
+			<function name="confirm_crm_choices">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="convert_docs_from_menu" nologin="1">
 			<function name="convert_docs_from_menu">
 				<arguments>
