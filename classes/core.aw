@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.137 2002/12/17 14:09:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.138 2002/12/17 17:40:25 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -13,15 +13,7 @@ class core extends db_connector
 	var $errmsg;		
 
 	////
-	// !kustutab kirje mingist tabelist. Kahtlane värk
-	function dele_record($table,$field,$selector)
-	{
-		$q = "DELETE FROM $table WHERE $field = '$selector'";
-		$this->db_query($q);
-	}
-
-	////
-	// !fetch a config key
+	// !fetch the value for config key $ckey
 	function get_cval($ckey)
 	{
 		$q = sprintf("SELECT content FROM config WHERE ckey = '%s'",$ckey);
@@ -29,27 +21,21 @@ class core extends db_connector
 	}
 
 	////
-	// !set a config key
+	// !set config key $ckey to value $val
 	function set_cval($ckey,$val)
 	{
-		// 1st, check if the necessary key exists
-		$ret = $this->db_fetch_field("SELECT COUNT(*) AS cnt FROM config WHERE ckey = '$ckey'","cnt");
-		if ($ret == false)
-		{
-			// no such key, so create it
-			$this->quote($value);
-			$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".aw_global_get("uid")."')");
-		}
-		else
-		{
-			$this->quote($val);
-			$q = "UPDATE config
-				SET content = '$val'
-				WHERE ckey = '$ckey'";
-			$this->db_query($q);
-		}
-		$q = sprintf("SELECT content FROM config WHERE ckey = '%s'",$ckey);
-		return $this->db_fetch_field($q,"content");
+	  echo "uid = ",aw_global_get("uid");
+	  $ret = $this->db_fetch_row("SELECT content FROM config WHERE ckey = '$ckey'");
+	  if (!is_array($ret))
+	  {
+		// create key if it does not exist
+		$this->db_query("INSERT INTO config(ckey, content, modified, modified_by) VALUES('$ckey','$val',".time().",'".aw_global_get("uid")."')");
+	  }
+	  else
+	  {
+		$this->db_query("UPDATE config SET content = '$val', modified = '".time()."', modified_by = '".aw_global_get("uid")."' WHERE ckey = '$ckey' ");
+	  }
+	  return $val;
 	}
 
 	////
