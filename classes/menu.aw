@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.81 2003/12/05 16:25:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.82 2004/01/06 11:43:42 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -460,7 +460,7 @@ class menu extends class_base
 				if ($url)
 				{
 					$url =  html::img(array("url" => $url));
-					$url .= " ( ".html::href(array(
+					$url .= " <br> ( ".html::href(array(
 						"url" => $this->mk_my_orb("change", array("id" => $imdata[$i]["image_id"]),"image"),
 						"caption" => "Muuda"
 					))." ) ";

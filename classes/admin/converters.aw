@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.26 2003/12/18 12:49:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.27 2004/01/06 11:43:41 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1002,6 +1002,43 @@ class converters extends aw_template
 			echo "template $row[name] <br>";
 			$this->restore_handle();
 		}
+	}
+
+	function convert_menu_images($arr)
+	{
+		echo "converting menu image aliases<br>\n";
+		flush();
+		$ol = new object_list(array(
+			"class_id" => CL_MENU
+		));
+		echo "got list of all menus (".$ol->count().")<br>\n";
+		flush();
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			echo "menu ".$o->name()." (".$o->id().")<br>\n";
+			flush();
+
+			$t = $o->meta("menu_images");
+			$mi = new aw_array($t);
+			foreach($mi->get() as $idx => $i)
+			{
+				if ($i["id"])
+				{
+					$o->connect(array(
+						"to" => $i["id"],
+						"reltype" => 14
+					));
+					$t[$idx]["image_id"] = $i["id"];
+				}
+			}
+			if ($o->parent() && $o->class_id())
+			{
+				$o->set_meta("menu_images", $t);
+				$o->save();
+			}
+		}
+
+		die("all done!");
 	}
 };
 ?>

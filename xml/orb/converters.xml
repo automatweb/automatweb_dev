@@ -87,6 +87,12 @@
 				</arguments>		
 			</function>
 		</action>
+		<action name="convert_menu_images" nologin="1">
+			<function name="convert_menu_images">
+				<arguments>
+				</arguments>		
+			</function>
+		</action>
 	</class>
 </orb>
 		
