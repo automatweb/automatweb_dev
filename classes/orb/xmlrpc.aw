@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.15 2004/04/11 18:25:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.16 2004/06/10 13:40:36 duke Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -28,7 +28,12 @@ class xmlrpc extends aw_template
 			"request" => $xml,
 			"session" => $arr["remote_session"]
 		));
-		return $this->decode_response($resp);
+		if (aw_global_get("xmlrpc_dbg"))
+		{
+			echo "got response = <pre>", htmlspecialchars($resp),"</pre> <br />";
+		};
+		$rv = $this->decode_response($resp);
+		return $rv;
 	}
 
 	////
@@ -377,6 +382,7 @@ class xmlrpc extends aw_template
 		{
 			$val = str_replace("<", "&lt;", $val);
 			$val = str_replace("&", "&amp;", $val);
+			$val = trim($val);
 			$pre .= $pad."<string>$val</string>\n";
 		}
 		elseif (is_array($val))
