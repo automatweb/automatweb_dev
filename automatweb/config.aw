@@ -12,20 +12,6 @@ $t = new icons;
 
 switch($type)
 {
-	case "sel_join":
-		if (!$tt->prog_acl("view", PRG_JOINFORM))
-		{
-			$tt->prog_acl_error("view", PRG_JOINFORM);
-		}
-		$c->sel_join($id);
-	case "join_form":
-		if (!$tt->prog_acl("view", PRG_JOINFORM))
-		{
-			$tt->prog_acl_error("view", PRG_JOINFORM);
-		}
-		$content = $c->sel_join_form();
-		break;
-
 	case "sel_search":
 		$c->sel_search($id);
 	case "search_form":
@@ -176,9 +162,6 @@ switch($type)
 	case "ic_grp_name":
 		$content = $t->ic_grp_name($ics);
 		break;
-
-	default:
-		$content = $c->gen_config();
 }
 
 include("admin_footer.$ext");
