@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.52 2004/11/09 17:13:07 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.53 2004/11/15 15:49:30 sven Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -10,6 +10,9 @@
 
 @property keyword type=textbox
 @caption Märksõna
+
+@reltype KEYWORD value=1 clid=CL_DOCUMENT
+@caption Dokument
 */
 
 define("ARR_LISTID", 1);
@@ -47,23 +50,18 @@ class keywords extends class_base
 	function show_documents($id)
 	{
 		extract($id);
-		$conn = new connection();
+		/*$conn = new connection();
 		$conns = $conn->find(array(
 			"from.class_id" => CL_DOCUMENT,
 			"to" => $id,
-		));
+		));*/
+		$obj = &obj($id);
+		$conns = $obj->connections_from("RELTYPE_KEYWORD");
 		
 		if($conns)
 		{
-			foreach ($conns as $item)
-			{
-				$from[] = $item["from"];
-			}
 			
-			$docs = new object_list(array(
-				"oid" => $from,
-				"class_id" => CL_DOCUMENT,
-			));
+			$docs = new object_list($conns);
 			
 			if($docs->count() > 0)
 			{

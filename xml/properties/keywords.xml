@@ -21,5 +21,12 @@
                   <master_index>brother_of</master_index>
             </keywords>
       </tableinfo>
+      <reltypes>
+            <KEYWORD>
+                  <value>1</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Dokument</caption>
+            </KEYWORD>
+      </reltypes>
 </properties>
 

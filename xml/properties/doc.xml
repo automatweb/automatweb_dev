@@ -618,12 +618,5 @@
                   <master_index>brother_of</master_index>
             </planner>
       </tableinfo>
-      <reltypes>
-            <KEYWORD>
-                  <value>1</value>
-                  <clid>CL_KEYWORD</clid>
-                  <caption>Märksõna</caption>
-            </KEYWORD>
-      </reltypes>
 </properties>
 
