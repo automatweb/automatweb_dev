@@ -1,37 +1,39 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.83 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.84 2003/12/03 12:01:23 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
         @default table=objects
 	@default group=general
-	
-	@property topicsonpage type=select field=meta method=serialize
+	@default field=meta
+	@default method=serialize
+
+	@property topicsonpage type=select 
 	@caption Teemasid lehel
 
-        @property comments type=checkbox field=meta method=serialize ch_value=1
+        @property comments type=checkbox ch_value=1
         @caption Kommenteeritav
 	
-	@property onpage type=select field=meta method=serialize
+	@property onpage type=select 
 	@caption Kommentaare lehel
         
-	@property rated type=checkbox field=meta method=serialize ch_value=1
+	@property rated type=checkbox ch_value=1
         @caption Hinnatav
 
-	@property template type=select field=meta method=serialize
+	@property template type=select 
 	@caption Template
 
 	@property preview type=text store=no editonly=1
 	@caption Eelvaade
 
-	@property rates callback=callback_get_rates field=meta method=serialize group=rates
+	@property rates callback=callback_get_rates group=rates
 	@caption Hinded
 
-	@property language callback=callback_get_languages group=languages field=meta method=serialize
-	@caption Keel
+	@property addresslist type=text store=no group=rates
+	@caption E-posti aadressid
 
-	@classinfo corefields=name,comment,status
-	@classinfo toolbar=yes
+	@property language callback=callback_get_languages group=languages 
+	@caption Keel
 
 	@groupinfo rates caption=Hinded
 	@groupinfo languages caption=Keel
@@ -2071,9 +2073,10 @@ topic");
 		return $retval;
 	}
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "template":
@@ -2090,11 +2093,22 @@ topic");
 
 			case "preview":
 				$data["value"] = html::href(array(
-					"url" => $this->mk_my_orb("topics",array("id" => $args["obj"]["oid"])),
+					"url" => $this->mk_my_orb("topics",array("id" => $arr["obj_inst"]->id())),
 					"caption" => "Näita",
 				));
+
 				break;
+
+			case "addresslist":
+				$data["value"] = html::href(array(
+					"caption" => "E-posti aadressid",
+					"url" => $this->mk_my_orb("notify_list",array("id" => $arr["obj_inst"]->id())),
+				));
+				break;
+
+
 		};
+		return $retval;
 	}
 
 	function callback_get_languages($args = array())
