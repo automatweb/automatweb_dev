@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.26 2004/10/29 16:05:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.27 2005/02/09 16:36:51 duke Exp $
 // period.aw - periods 
 /*
 
@@ -171,13 +171,6 @@ class period extends class_base
 		$tmp["type"] = "text";
 		return array($tmp);
 		*/
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_IMAGE => "perioodi pilt",
-		);
 	}
 
 	function callback_post_save($arr)
