@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalihaldus_tookogemus.aw,v 1.2 2004/06/07 13:15:40 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalihaldus_tookogemus.aw,v 1.3 2004/06/17 13:53:09 kristo Exp $
 // personalihaldus_tookogemus.aw - Töökogemus 
 /*
 
@@ -34,7 +34,6 @@ class personalihaldus_tookogemus extends class_base
 		// change this to the folder under the templates folder, where this classes templates will be, 
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
-			"tpldir" => "personalihaldus/personalihaldus_tookogemus",
 			"clid" => CL_PERSONALIHALDUS_TOOKOGEMUS
 		));
 	}
