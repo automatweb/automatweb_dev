@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.61 2003/08/27 13:47:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.62 2003/09/10 13:31:20 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -441,6 +441,11 @@ class aw_table
 		$REQUEST_URI = aw_global_get("REQUEST_URI");
 		$this->titlebar_under_groups = isset($arr["titlebar_under_groups"]) ? $arr["titlebar_under_groups"] : "";
 		$tbl = "";
+
+		if (!empty($this->table_header))
+		{
+			$tbl .= $this->table_header;
+		}
 
 		if (isset($pageselector) && $pageselector != "")
 		{
