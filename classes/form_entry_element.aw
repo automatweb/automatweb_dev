@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.58 2002/08/29 03:13:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.59 2002/09/26 16:14:52 kristo Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -186,7 +186,7 @@ class form_entry_element extends form_element
 		if ($this->arr["type"] == "textbox")
 		{
 			$src = ($this->form->arr["allow_html"]) ? $this->entry : htmlspecialchars($this->entry);
-			$src = create_links($src);
+			$src = trim(create_links(" ".$src." " ));
 			if ($this->arr["subtype"] == "int" && $this->arr["thousands_sep"] != "" && $src != " ")
 			{
 				// insert separator every after every 3 chars, starting from the end. 
