@@ -3,7 +3,7 @@
 /*
 	@default table=objects
 	
-	@property rootmenu type=select field=meta method=serialize
+	@property rootmenu type=objpicker clid=CL_MENU field=meta method=serialize
 	@caption Rootmenüü
 
 	@property subclass type=generated generator=callback_get_class_list field=subclass
@@ -11,8 +11,6 @@
 
 	@property generate editonly=1 type=text
 	@caption Genereeri objektid
-
-	@classinfo corefields=name,comment,status
 */
 class property_group extends aw_template
 {
@@ -28,7 +26,7 @@ class property_group extends aw_template
 	function callback_get_class_list($args = array())
 	{
 		// this is only shown for new objects
-		if ($args["obj"])
+		if (!$args["new"])
 		{
 			return false;
 		};
@@ -46,82 +44,11 @@ class property_group extends aw_template
 				"type" => "radiobutton",
 				"name" => "subclass",
 				"value" => $key,
-				"checked" => checked($args["obj"]["subclass"] == $key),
+				"checked" => checked($args["obj_inst"]->prop("subclass") == $key),
 			);
 		};
 		return $nodes;
 	}
-
-	function callback_get_property_list($args = array())
-	{
-		$sel_class = $args['obj']['subclass'];
-		$cfgu = get_instance('cfg/cfgutils');
-		$res = array();
-		$has_props = $cfgu->has_properties(array('clid' => $sel_class));
-		$clid = $sel_class;
-
-		load_vcl('table');
-		$this->t = new aw_table(array('prefix' => 'property_group'));
-		$this->t->parse_xml_def($this->cfg['basedir'].'/xml/cool_table.xml');
-
-                $this->t->define_field(array(
-                        'name' => 'caption',
-                        'caption' => 'Nimi',
-                        'talign' => 'center',
-                        'width' => 300,
-                        'nowrap' => 1,
-                ));
-
-                $this->t->define_field(array(
-                        'name' => 'type',
-                        'caption' => 'Tüüp',
-                        'talign' => 'center',
-                        'nowrap' => 1,
-                ));
-
-
-                $this->t->define_field(array(
-                        'name' => 'check',
-                        'caption' => 'Vali',
-                        'talign' => 'center',
-                        'align' => 'center',
-                        'nowrap' => 1,
-                ));
-
-                $this->t->define_field(array(
-                        'name' => 'ord',
-                        'caption' => 'jrk',
-                        'talign' => 'center',
-                        'align' => 'center',
-                        'nowrap' => 1,
-                ));
-
-		if ($has_props)
-		{
-			$selprops = $args['prop']['value'];
-			$props = $cfgu->load_class_properties(array('clid' => $clid));
-			foreach($props as $property)
-			{
-				$name = $property['name'];
-				$caption = $property['caption'];
-				$ord = $args["obj"]["meta"]["ord"][$name];
-				$this->t->define_data(array(
-					'caption' => $caption,
-					'type' => $property["type"],
-					'group' => $property['group'],
-					'check' => html::checkbox(array('name' => "properties[$name]",'checked' => $selprops[$name])),
-					'ord' => html::textbox(array('size' => 4, 'name' => "ord[$name]", 'value' => $ord)),
-				));
-
-			};
-
-			$res[] = array(
-				'value' => $this->t->draw(),
-			);
-		};
-		return $res;
-	}
-
 
 	function get_property($args)
 	{
@@ -129,14 +56,9 @@ class property_group extends aw_template
 		$retval = true;
 		switch($data["name"])
 		{
-			case "rootmenu":
-				$ob = get_instance("objects");
-				$data["options"] = $ob->get_list();
-				break;
-
 			case "generate":
 				$data["value"] = html::href(array(
-					"url" => $this->mk_my_orb("generate",array("id" => $args["obj"]["oid"])),
+					"url" => $this->mk_my_orb("generate",array("id" => $args["obj_inst"]->id())),
 					"caption" => "Genereeri",
 				));
 				break;
