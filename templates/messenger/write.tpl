@@ -25,12 +25,12 @@ Listidesse kirjutamisel on võimalik kasutada järgmisi aliasi:<br>
 ja e-posti aadressiga. See võimaldab saata personaliseeritud teateid.
 </td></tr>
 <tr>
-<td class="textsmallbold" width="130"><strong><a href="#" onClick="aw_popup_s('{VAR:baseurl}/?class=contacts&action=pick&type=popup&listmsg={VAR:is_list_msg}','pick',500,500); return false">Kellele:</a></strong></td>
+<td class="textsmallbold" width="130"><strong><a href="#" onClick="aw_popup_s('{VAR:pick_contact}','pick',500,500); return false">Kellele:</a></strong></td>
 <td class="textsmall"><input type="text" name="mtargets1" size="{VAR:msg_field_width}" maxlength="200" value="{VAR:mtargets1}">
 </td>
 </tr>
 <tr>
-<td class="textsmallbold" width="130"><strong><a href="#" onClick="aw_popup_s('{VAR:baseurl}/?class=contacts&action=pick&type=popup&listmsg={VAR:is_list_msg}','pick',500,500); return false">CC:</a></strong></td>
+<td class="textsmallbold" width="130"><strong><a href="#" onClick="aw_popup_s('{VAR:pick_contact}','pick',500,500); return false">CC:</a></strong></td>
 <td class="textsmall"><input type="text" name="mtargets2" size="{VAR:msg_field_width}" maxlength="200" value="{VAR:mtargets2}">
 </td>
 </tr>
@@ -210,7 +210,7 @@ msg_edit.document.close();
 </tr>
 <!-- SUB: attaches -->
 <tr>
-<td colspan="2" class="text">{VAR:cnt}. <img src="{VAR:icon}"><a href="?class=messenger&action=get_attach&msgid={VAR:msgid}&attnum={VAR:cnt}" target="_new">{VAR:name}</a></td>
+<td colspan="2" class="text">{VAR:cnt}. <img src="{VAR:icon}"><a href="{VAR:get_attach}" target="_new">{VAR:name}</a></td>
 </tr>
 <!-- END SUB: attaches -->
 <tr>
@@ -223,7 +223,7 @@ msg_edit.document.close();
 </tr>
 <tr>
 <td class="textsmallbold" width="130"><strong>Attachi AW objekt:</strong></td>
-<td class="textsmall"><a href="javascript:aw_popup_scroll('{VAR:baseurl}/orb.{VAR:ext}?class=objects&action=search&target={VAR:msg_id}&stype=1','pickaw',600,550)">Kliki siia</a></td>
+<td class="textsmall"><a href="javascript:aw_popup_scroll('{VAR:attach_aw_o}','pickaw',600,550)">Kliki siia</a></td>
 </tr>
 <tr>
 <td align="left" colspan="2" class="lefttab">
