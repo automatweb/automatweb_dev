@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.29 2002/09/25 14:59:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.30 2002/09/30 06:56:11 kristo Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -214,14 +214,6 @@ class form_chain extends form_base
 		$cntforms = $this->get_flist(array(
 			"subtype" => FSUBTYPE_CAL_CONF,
 		));
-
-		// retrieve a list of forms that can be used for adding events
-		/*
-		$ev_entry_forms = $this->get_flist(array(
-			"type" => FTYPE_ENTRY,
-			"subtype" => FSUBTYPE_EV_ENTRY,
-		));
-		*/
 
 		// no form should be selected if the user has not made a choice
 		// yet, so we add a default choise to the front of both lists
@@ -480,6 +472,7 @@ class form_chain extends form_base
 
 			$this->db_query("INSERT INTO form_chain_entries(id,chain_id)
 						VALUES($chain_entry_id,$id)");
+			$new_chain_entry = true;
 		}
 
 		// then we must let formgen process the form entry and then add the entry to the chain. 
@@ -563,7 +556,7 @@ class form_chain extends form_base
 			$cal_id = $id;
 			//print "updating time definition<br>";
 		};
-
+		
 		$f = new form;
 		$f->process_entry(array(
 				"id" => $form_id,
@@ -571,77 +564,99 @@ class form_chain extends form_base
 				"entry_id" => $form_entry_id,
 				"cal_id" => $cal_id,
 				"update_fcal_timedef" => $update_fcal_timedef,
+				"no_vac_check" => $no_vac_check,
 				"cal_relation" => $_eid,
 		));
 
-		// now update the chain entry object with the form entry name
-		$this->upd_object(array(
-			"oid" => $chain_entry_id,
-			"name" => $f->entry_name
-		));
-
-		$sbt = $f->get_opt("el_submit");
-
-		$this->add_entry_to_chain($chain_entry_id,$f->entry_id,$form_id);
-
-		$tfid = $form_id;
-
-		// sbt is a reference to the submit button object that was clicked
-
-		// the following code figures out which form in the chain should be
-		// shown next
-		if ($this->chain["gotonext"][$form_id] && ($sbt["chain_forward"] == 0) && ($sbt["confirm"] == 0))
+//		echo "err = $f->has_controller_errors , nce  =$new_chain_entry <Br>";
+		if ($f->has_controller_errors && $new_chain_entry)
 		{
-			$prev = 0;
+			$this->delete_object($chain_entry_id);
+			$chain_entry_id = 0;
+		}
+		else
+		if ($f->has_controller_warnings && $new_chain_entry)
+		{
+			$this->upd_object(array(
+				"oid" => $chain_entry_id,
+				"name" => $f->entry_name
+			));
 
-			// XXX: rewrite this without using breaks
+			$sbt = $f->get_opt("el_submit");
 
-			// need to figure out whether we have to go "back" in chain
-			// so we cycle over all the forms in the chain and ...
-			foreach($this->chain["forms"] as $fid)
+			$this->add_entry_to_chain($chain_entry_id,$f->entry_id,$form_id);
+		}
+		else
+		{
+			// now update the chain entry object with the form entry name
+			$this->upd_object(array(
+				"oid" => $chain_entry_id,
+				"name" => $f->entry_name
+			));
+
+			$sbt = $f->get_opt("el_submit");
+
+			$this->add_entry_to_chain($chain_entry_id,$f->entry_id,$form_id);
+
+			$tfid = $form_id;
+
+			// sbt is a reference to the submit button object that was clicked
+
+			// the following code figures out which form in the chain should be
+			// shown next
+			if ($this->chain["gotonext"][$form_id] && ($sbt["chain_forward"] == 0) && ($sbt["confirm"] == 0))
 			{
-				if ( $sbt["chain_backward"] > 0)
+				$prev = 0;
+
+				// XXX: rewrite this without using breaks
+
+				// need to figure out whether we have to go "back" in chain
+				// so we cycle over all the forms in the chain and ...
+				foreach($this->chain["forms"] as $fid)
 				{
-					if ($fid == $form_id)
+					if ( $sbt["chain_backward"] > 0)
 					{
-						// if prev was set in the last cycle
-						// set form_id to that
-						if ($prev)
+						if ($fid == $form_id)
 						{
-							$form_id = $prev;
+							// if prev was set in the last cycle
+							// set form_id to that
+							if ($prev)
+							{
+								$form_id = $prev;
+							}
+							// otherwise just drop out. first form
+							// can't go back.
+							break;
 						}
-						// otherwise just drop out. first form
-						// can't go back.
+					}
+
+					// default action, go to the next form.
+					// but only if it is not the last in chain
+					if ($prev == $form_id)
+					{
+						$form_id = $fid;
 						break;
 					}
-				}
 
-				// default action, go to the next form.
-				// but only if it is not the last in chain
-				if ($prev == $form_id)
+					$prev = $fid;
+				}
+			}
+
+			// so, if this was the last form in the chain and no_chain_forward is
+			// not set, do what we are supposed to to after filling the last form.
+
+			if ($tfid == $form_id && ($sbt["chain_forward"] == 0) )
+			{
+				// check that if we are after the last form then if the user has selected that we should show the entry then do so
+				if ($this->chain["after_show_entry"] == 1 && $this->chain["after_show_op"] > 0  && $this->chain["gotonext"][$form_id] == 1)
 				{
-					$form_id = $fid;
-					break;
+					return $this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $f->entry_id,"op_id" => $this->chain["after_show_op"],"section" => $section),"form");
 				}
-
-				$prev = $fid;
-			}
-		}
-
-		// so, if this was the last form in the chain and no_chain_forward is
-		// not set, do what we are supposed to to after filling the last form.
-
-		if ($tfid == $form_id && ($sbt["chain_forward"] == 0) )
-		{
-			// check that if we are after the last form then if the user has selected that we should show the entry then do so
-			if ($this->chain["after_show_entry"] == 1 && $this->chain["after_show_op"] > 0  && $this->chain["gotonext"][$form_id] == 1)
-			{
-				return $this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $f->entry_id,"op_id" => $this->chain["after_show_op"],"section" => $section),"form");
-			}
-			else
-			if ($this->chain["after_redirect"] == 1 && $this->chain["gotonext"][$form_id] == 1)
-			{
-				return $this->chain["after_redirect_url"];
+				else
+				if ($this->chain["after_redirect"] == 1 && $this->chain["gotonext"][$form_id] == 1)
+				{
+					return $this->chain["after_redirect_url"];
+				}
 			}
 		}
 
