@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.7 2004/12/06 14:41:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.8 2004/12/17 13:05:31 duke Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -844,8 +844,8 @@ class event_search extends class_base
 			$this->vars(array(
 				"begin_month_name" => locale::get_lc_month($arr["start_date"]["month"]),
 				"begin_year" => $arr["start_date"]["year"],
-				"next_month_url" => str_replace("class", "alias", $this->mk_my_orb("search", $next_month_args, "event_search")),
-				"perv_month_url" => $this->mk_my_orb("search", $prev_month_args, "event_search"),
+				"prev_month_url" => $this->mk_my_orb("search", $prev_month_args, "event_search"),
+				"next_month_url" => $this->mk_my_orb("search", $next_month_args, "event_search"),
 				"next_weeks" => $res_weeks,
 			));
 			
