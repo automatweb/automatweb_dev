@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.8 2004/02/03 16:31:20 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.9 2004/02/06 10:07:50 duke Exp $
 
 	@comment 
 	analyses aw code
@@ -218,6 +218,10 @@ class docgen_analyzer extends class_base
 					case T_COMMENT:
 						$this->last_comment = $str;
 						$this->last_comment_line = $this->get_line();
+						break;
+
+					case T_DOLLAR_OPEN_CURLY_BRACES:
+						$this->handle_brace_begin();
 						break;
 				}
 			}
