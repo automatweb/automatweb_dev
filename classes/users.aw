@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.16 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.17 2001/08/08 02:25:42 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -627,6 +627,10 @@ class users extends users_user
 
 			global $last_join_uid;
 			$last_join_uid = $add_state["uid"];
+			$uid = $add_state["uid"];
+      $session = $this->gen_uniq_id();
+			session_register("uid","session");
+			$GLOBALS["uid"] = $uid;
 			session_register("last_join_uid");
 
 			// send him some email as well
@@ -1131,12 +1135,56 @@ class users extends users_user
 			));
 			$ccr .= $this->parse("CUR");
 		}
+
+		classload("config");
+		$co = new db_config;
+		$fo = $co->get_simple_config("user_info_form");
+		if ($fo)
+		{
+			classload("form");
+			$f = new form;
+			$eid = $this->get_user_config(array("uid" => $id, "key" => "info_entry"));
+			$this->vars(array("form" => $f->gen_preview(array("id" => $fo, "entry_id" => $eid,"silent_errors" => true,"reforb" => $this->mk_reforb("submit_user_info", array("entry_id" => $eid,"u_uid" => $id),"users")))));
+		}
 		$this->vars(array(
 			"LANG" => $lp,
 			"CUR" => $ccr,
 			"reforb" => $this->mk_reforb("submit_settings", array("id" => $id))
 		));
 		return $this->parse();
+	}
+
+	function submit_user_info($arr)
+	{
+		extract($arr);
+		classload("form");
+		classload("config");
+		$co = new db_config;
+		$fo = $co->get_simple_config("user_info_form");
+
+		$f = new form;
+		$f->process_entry(array("id" => $fo, "entry_id" => $entry_id));
+
+		$this->set_user_config(array("uid" => $u_uid, "key" => "info_entry", "value" => $f->entry_id));
+
+		return $this->mk_my_orb("settings", array("id" => $u_uid));
+	}
+
+	function show_user_info()
+	{
+		classload("config");
+		$co = new db_config;
+		$fo = $co->get_simple_config("user_info_form");
+		if ($fo)
+		{
+			classload("form");
+			$f = new form;
+			$eid = $this->get_user_config(array("uid" => $GLOBALS["uid"], "key" => "info_entry"));
+			if ($eid)
+			{
+				return $f->show(array("id" => $fo, "entry_id" => $eid,"op_id" => $co->get_simple_config("user_info_op")));
+			}
+		}
 	}
 
 	////

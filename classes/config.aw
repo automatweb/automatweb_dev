@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.17 2001/08/02 03:40:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.18 2001/08/08 02:25:42 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -50,11 +50,17 @@ class db_config extends aw_template
 		$this->read_template("config.tpl");
 	
 		$al = $this->get_simple_config("after_login");
-		$ml = $this->get_simple_config("orb_err_mustlogin");
+		$if = $this->get_simple_config("user_info_form");
+		$op = $this->get_simple_config("user_info_op");
+
+		classload("form_base");
+		$fb = new form_base;
+		$ops = $fb->get_op_list($if);
 
 		$this->vars(array(
 			"after_login" => $al,
-			"orb_err_mustlogin" => $ml,
+			"forms" => $this->picker($if,$fb->get_list(FTYPE_ENTRY,true)),
+			"ops" => $this->picker($op,$ops[$if]),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links")
 		));
 		return $this->parse();
@@ -66,10 +72,11 @@ class db_config extends aw_template
 	function get_login_menus($args = array())
 	{
 		$data = $this->_get_login_menus();
-		$cur_pri = 0;
+		$cur_pri = -1;
 		$cur_menu = false;
+		global $uid;
 
-		if (is_array($data))
+		if (is_array($data["menu"]))
 		{
 			foreach($data["menu"] as $key => $val)
 			{
@@ -911,7 +918,8 @@ class db_config extends aw_template
 	{
 		extract($arr);
 		$this->set_simple_config("after_login",$after_login);
-		$this->set_simple_config("orb_err_mustlogin",$orb_err_mustlogin);
+		$this->set_simple_config("user_info_form",$user_info_form);
+		$this->set_simple_config("user_info_op",$user_info_op);
 	}
 };
 
@@ -948,6 +956,60 @@ class config extends db_config
 		$this->set_simple_config("remind_pwd_mail_subj",$pwd_mail_subj);
 
 		return $this->mk_orb("join_mail", array());
+	}
+
+	function errors($arr)
+	{
+		$this->read_template("errors.tpl");
+
+		$es = $this->get_simple_config("errors");
+		classload("xml");
+		$x = new xml;
+		$ea = $x->xml_unserialize(array("source" => $es));
+
+		classload("users");
+		$u = new users;
+		$u->listgroups(-1,-1,GRP_REGULAR,GRP_DYNAMIC);
+		while($row = $u->db_next())
+		{
+			$this->vars(array(
+				"grp_id" => $row["gid"],
+				"grp_name" => $row["name"],
+				"url" => $ea[$row["gid"]]["url"],
+				"priority" => $ea[$row["gid"]]["pri"]
+			));
+			$li.=$this->parse("LINE");
+		}
+		$this->vars(array(
+			"LINE" => $li,
+			"reforb" => $this->mk_reforb("submit_errors", array())
+		));
+		return $this->parse();
+	}
+
+	function submit_errors($arr)
+	{
+		extract($arr);
+
+		$es = $this->get_simple_config("errors");
+		classload("xml");
+		$x = new xml;
+		$ea = $x->xml_unserialize(array("source" => $es));
+
+		if (is_array($grps))
+		{
+			foreach($grps as $grp => $gar)
+			{
+				$ea[$grp]["url"] = $gar["url"];
+				$ea[$grp]["pri"] = $gar["pri"];
+			}
+		}
+
+		$ss = $x->xml_serialize($ea);
+		$this->quote(&$ss);
+		$this->set_simple_config("errors", $ss);
+
+		return $this->mk_my_orb("errors", array());
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.49 2001/07/31 10:14:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.50 2001/08/08 02:25:42 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -382,7 +382,15 @@ class form extends form_base
 		$this->arr["after_submit"] = $after_submit;
 		$this->arr["after_submit_text"] = $after_submit_text;
 		$this->arr["after_submit_link"] = $after_submit_link;
-		$this->arr["name_el"] = $entry_name_el;
+		$this->arr["name_els"] = array();
+		if (is_array($entry_name_el))
+		{
+			foreach($entry_name_el as $elid)
+			{
+				$this->arr["name_els"][$elid] = $elid;
+			}
+		}
+
 		$this->arr["try_fill"] = $try_fill;
 		$this->arr["show_table"] = $show_table;
 		$this->arr["table"] = $table;
@@ -645,7 +653,7 @@ class form extends form_base
 			"as_1"								=> ($this->arr["after_submit"] == 1 ? "CHECKED" : ""),
 			"as_2"								=> ($this->arr["after_submit"] == 2 ? "CHECKED" : ""),
 			"as_3"								=> ($this->arr["after_submit"] == 3 ? "CHECKED" : ""),
-			"els"									=> $this->picker($this->arr["name_el"],$this->get_all_elements()),
+			"els"									=> $this->multiple_option_list(is_array($this->arr["name_els"]) ? $this->arr["name_els"] : $this->arr["name_el"] ,$this->get_all_elements()),
 			"try_fill"						=> checked($this->arr["try_fill"]),
 			"show_table_checked" => checked($this->arr["show_table"]),
 			"tables" => $this->picker($this->arr["table"],$this->get_list_tables()),
@@ -678,6 +686,7 @@ class form extends form_base
 	//  $extraids - array of parameters to pass along with the form
 	//  $elvalues - array of name => value pairs for elements that specify default values
 	//  $prefix - value to prefix the element names with
+	//  $silent_errors - if true, error messages are only written to syslog, not shown to user
 	function gen_preview($arr)
 	{
 		extract($arr);
@@ -710,7 +719,7 @@ class form extends form_base
 		}
 		if (isset($entry_id) && $entry_id)
 		{
-			$this->load_entry($entry_id);
+			$this->load_entry($entry_id,$silent_errors);
 		}
 		else
 		{
@@ -867,6 +876,15 @@ class form extends form_base
 
 		$this->load($id);
 
+		if ($entry_id)	// tshekime et kas see entry on ikka loaditud formi jaox ja kui pole, siis ignoorime seda
+		{
+			$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = $entry_id","form_id");
+			if ($fid != $id)
+			{
+				$entry_id = false;
+			}
+		}
+
 		if (!$entry_id)
 		{
 			// ff_folder on vormi konfist määratud folderi id, mille alla entry peaks
@@ -908,6 +926,29 @@ class form extends form_base
 		}
 
 		// what exactly does this code do?
+		//
+		// well, you can select a bunch of elements and then the data entered in those elements will be used to neme the form_entry object.
+		// and this is where it's done - terryf
+		if (is_array($this->arr["name_els"]))
+		{
+			foreach($this->arr["name_els"] as $elid)
+			{
+				$el = $this->get_element_by_id($elid);
+				if ($el)
+				{
+					if ($el->get_type() == "")
+					{
+						$this->entry_name.= " ".$el->get_text();
+					}
+					else
+					{
+						$this->entry_name.= " ".$el->get_value();
+					}
+				}
+			}
+			$this->upd_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
+		}
+		else
 		if ($this->arr["name_el"])
 		{
 			$el = $this->get_element_by_id($this->arr["name_el"]);
@@ -1048,7 +1089,7 @@ class form extends form_base
 	}
 
 	// laeb entry parajasti aktiivse vormi jaoks
-	function load_entry($entry_id)
+	function load_entry($entry_id,$silent_errors = false)
 	{
 		$this->entry_id = $entry_id;
 
@@ -1059,7 +1100,15 @@ class form extends form_base
 
 		if (!($row = $this->db_next()))
 		{
-			$this->raise_error(sprintf(E_FORM_NO_SUCH_ENTRY,$entry_id,$id),true);
+			if ($silent_errors)
+			{
+				$this->raise_error(sprintf(E_FORM_NO_SUCH_ENTRY,$entry_id,$id),false,true);
+				$this->entry_id = 0;
+			}
+			else
+			{
+				$this->raise_error(sprintf(E_FORM_NO_SUCH_ENTRY,$entry_id,$id),true);
+			}
 		};
 
 		$row["form_".$id."_entry"] = $row["id"];
@@ -1541,6 +1590,15 @@ class form extends form_base
 		$this->db_query("SELECT oid,parent,name,comment FROM objects LEFT JOIN forms ON forms.id = objects.oid WHERE status != 0 AND class_id = ".CL_FORM." AND forms.type = ".FTYPE_ENTRY." LIMIT ".($page*$per_page).",$per_page");
 		while($row = $this->db_next())
 		{
+			$tar = array(0 => "");
+			if (is_array($ops[$row["oid"]]))
+			{
+				foreach($ops[$row["oid"]] as $opid => $opname)
+				{
+					$tar[$opid] = $opname;
+				}
+			}
+			$sel = $this->arr["search_from"][$row["oid"]] == 1 ? $this->arr["search_outputs"][$row["oid"]] : 0;
 			$this->vars(array(
 				"form_name"	=> $row["name"], 
 				"form_comment" => $row["comment"], 
@@ -1549,14 +1607,16 @@ class form extends form_base
 				"row"	=> $cnt,
 				"checked" => checked($this->arr["search_from"][$row["oid"]] == 1),
 				"prev" => $this->arr["search_from"][$row["oid"]],
-				"ops" => $this->picker($this->arr["search_outputs"][$row["oid"]],$ops[$row["oid"]])
+				"ops" => $this->picker($sel,$tar)
 			));
 			$this->parse("LINE");
 			$cnt+=2;
 		}
 
 		$this->vars(array(
-			"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id,"page" => $page))
+			"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id,"page" => $page)),
+			"formsonly" => checked($this->arr["formsonly"] == 1),
+			"chains" => $this->picker($this->arr["se_chain"], $this->get_chains(true))
 		));
 
 		return $this->do_menu_return();
@@ -1578,6 +1638,11 @@ class form extends form_base
 			$this->arr["search_outputs"][$ifid] = $$var;
 		}
 		
+		// kas ocime aint formist v6i yritame p2rga leida
+		$this->arr["formsonly"] = $formsonly;
+
+		$this->arr["se_chain"] = $se_chain;
+
 		$this->save();
 		return $this->mk_orb("sel_search", array("id" => $id,"page" => $page));
 	}
@@ -1611,22 +1676,33 @@ class form extends form_base
 		reset($this->arr["search_from"]);
 		$this->cached_results = array();
 
-		// leiame kas see otsing on p2rja kohta. 
 		$is_chain = false;
-		$fidstr = join(",", $this->map2("%s",$this->arr["search_from"]));
-		if ($fidstr != "")
+		if ($this->arr["formsonly"] != 1)
 		{
-			$this->db_query("SELECT distinct(chain_id) as chain_id FROM form2chain WHERE form_id IN ($fidstr)");
-			while ($row = $this->db_next())
+			if ($this->arr["se_chain"])
 			{
 				$is_chain = true;
-				$chain_id = $row["chain_id"];
+				$chain_id = $this->arr["se_chain"];
+			}
+			else
+			{
+				// leiame kas see otsing on p2rja kohta. 
+				$fidstr = join(",", $this->map2("%s",$this->arr["search_from"]));
+				if ($fidstr != "")
+				{
+					$this->db_query("SELECT distinct(chain_id) as chain_id FROM form2chain WHERE form_id IN ($fidstr)");
+					while ($row = $this->db_next())
+					{
+						$is_chain = true;
+						$chain_id = $row["chain_id"];
+					}
+				}
 			}
 		}
 
 		if ($is_chain)
 		{
-	//		echo "chid = $chain_id <br>";
+//		echo "chid = $chain_id <br>";
 			// loop through all the forms that are selected as search targets
 			$ar = $this->get_forms_for_chain($chain_id);
 			reset($ar);
@@ -1639,7 +1715,7 @@ class form extends form_base
 				$joinar[] = "LEFT JOIN form_".$id."_entries ON (form_".$id."_entries.chain_id = form_".$mid."_entries.chain_id OR form_".$id."_entries.chain_id IS NULL) ";
 			}
 
-			$query="SELECT ".(join(",",$formar))." FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id ".(join(" ",$joinar))."  WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL ";
+			$query="SELECT ".(join(",",$formar))." FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id ".(join(" ",$joinar))."  WHERE objects.status != 0 AND objects.lang_id = ".$GLOBALS["lang_id"]." AND form_".$mid."_entries.chain_id IS NOT NULL ";
 
 			// loop through all the elements of this form 
 			$ch_q = array();
@@ -1670,8 +1746,7 @@ class form extends form_base
 							//checkboxidest ocime aint siis kui nad on tshekitud
 							if ($el->get_value(true) == 1)
 							{
-//								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
-									$ch_q[] = " form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
+								$ch_q[$el->get_ch_grp()][] = " form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
 							}
 						}
 						else
@@ -1679,16 +1754,16 @@ class form extends form_base
 						{
 							if ($el->get_subtype() == "from")
 							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." <= ".$el->get_value().")";
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." >= ".$this->entry[$el->get_id()].")";
 							}
 							else
 							if ($el->get_subtype() == "to")
 							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." >= ".$el->get_value().")";
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." <= ".$this->entry[$el->get_id()].")";
 							}
 							else
 							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." = ".$el->get_value().")";
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." = ".$this->entry[$el->get_id()].")";
 							}
 						}
 						else
@@ -1699,10 +1774,15 @@ class form extends form_base
 				}
 			}
 	
-			$chqs = join(" OR ", $ch_q);
-			if ($chqs !="")
+			// k2ime l2bi erinevad checkboxide grupid ja paneme gruppide vahele AND ja checkboxide vahele OR
+			$chqpts = array();
+			foreach($ch_q as $chgrp => $ch_ar)
 			{
-				$query.=" AND ($chqs)";
+				$chqs = join(" OR ", $ch_ar);
+				if ($chqs !="")
+				{
+					$query.=" AND ($chqs)";
+				}
 			}
 
 			if ($query == "")
@@ -1711,9 +1791,10 @@ class form extends form_base
 			}
 
 			$matches = array();
-		echo "<!-- query = $query  --><br>\n";
+//		echo "<!-- query = $query  --><br>\n";
 //		flush();
 			$this->db_query($query);
+
 			while ($row = $this->db_next())
 			{
 				$matches[] = $row["oid"];
@@ -1735,7 +1816,7 @@ class form extends form_base
 				}
 
 				// create the sql that searches from this form's entries
-				$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 ";
+				$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 AND objects.lang_id = ".$GLOBALS["lang_id"]." " ;
 				if (is_array($parent))
 				{
 					$query .= sprintf(" AND objects.parent IN (%s)",join(",",$parent));
@@ -1751,10 +1832,11 @@ class form extends form_base
 						// oh la la
 						if ($el->get_type() == "checkbox")
 						{	
+//							echo "check!@ value = ",$this->entry[$el->get_id()]," gv = ",$el->get_value(true),"<br>";
 							//checkboxidest ocime aint siis kui nad on tshekitud
 							if ($el->get_value(true) == 1)
 							{
-								$ch_q[] = " form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
+								$ch_q[$el->get_ch_grp()][] = " form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
 							}
 						}
 						else
@@ -1762,36 +1844,48 @@ class form extends form_base
 						{
 							if ($el->get_subtype() == "from")
 							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." <= ".$this->entry[$el->get_id()].")";
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." >= ".$this->entry[$el->get_id()].")";
 							}
 							else
 							if ($el->get_subtype() == "to")
 							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." >= ".$this->entry[$el->get_id()].")";
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." <= ".$this->entry[$el->get_id()].")";
 							}
 							else
 							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." = ".$this->entry[$el->get_id()].")";
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." = ".$this->entry[$el->get_id()].")";
 							}
 						}
 						else
-						if ($this->entry[$el->get_id()] != "")	
+						if ($el->get_type() == "radiobutton")
+						{
+							// blah
+						}
+						else
+						if ($el->get_value() != "")	
 						{
 							$query.= "AND ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
 						}
 					}
 				}
 
-				$chqs = join(" OR ", $ch_q);
-				if ($chqs !="")
+				// k2ime l2bi erinevad checkboxide grupid ja paneme gruppide vahele AND ja checkboxide vahele OR
+				$chqpts = array();
+				foreach($ch_q as $chgrp => $ch_ar)
 				{
-					$query.=" AND ($chqs)";
+					$chqs = join(" OR ", $ch_ar);
+					if ($chqs !="")
+					{
+						$query.=" AND ($chqs)";
+					}
 				}
+
 				if ($query == "")
 				{
 					$query = "SELECT * FROM form_".$id."_entries";
 				}
 
+//				echo "q = $query <br>";
 				$matches = array();
 				$this->db_query($query);
 				while ($row = $this->db_next())
@@ -2074,12 +2168,20 @@ class form extends form_base
 
 								$elval["id"] = $newel;
 								$elval["ver2"] = true;
+								$elval["linked_form"] = $base;
+								$elval["linked_element"] = $elid;
 								$this->arr["elements"][$row][$col][$newel] = $elval;
+							}
+							else
+							{
+								// class style
+								$this->arr["elements"][$row][$col]["style"] = $elval;
 							}
 						}
 					}
 				}
 			}
+			$this->arr["search_from"][$base]=1;
 			$this->save();
 		}
 		return $this->mk_orb("change", array("id" => $id));
