@@ -60,12 +60,20 @@ class languages extends aw_template
 	// !trying to unify names here. 
 	// all_data - returns all data otherwise just the stuff to stick in a listbox
 	// ignore_status - if true, returns also inactive languages
+	// addempty - if true, empty element is added in the beginning
 	function get_list($arr = array())
 	{
 		extract($arr);
 		$dat = $this->listall($ignore_status);
 
-		$ret = array();
+		if ($addempty)
+		{
+			$ret = array("0" => "");
+		}
+		else
+		{
+			$ret = array();
+		}
 		foreach($dat as $ldat)
 		{
 			if ($all_data)
@@ -83,11 +91,11 @@ class languages extends aw_template
 
 	function listall($ignore_status = false)
 	{
-		$lar = aw_cache_get_array("languages");
+		$lar = new aw_array(aw_cache_get_array("languages"));
 		if (!$ignore_status)
 		{
 			$ret = array();
-			foreach($lar as $row)
+			foreach($lar->get() as $row)
 			{
 				if ($row["status"] == 2)
 				{
@@ -325,6 +333,11 @@ class languages extends aw_template
 	function request_startup()
 	{
 		$lang_id = aw_global_get("lang_id");
+		global $DBX;
+		if ($DBX)
+		{
+			var_dump($lang_id);
+		};
 
 		// if we explicitly request language change, we get that, except if the language is not active
 		// and we are not logged in
