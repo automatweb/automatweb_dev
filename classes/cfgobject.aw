@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cfgobject.aw,v 2.1 2002/10/10 13:24:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cfgobject.aw,v 2.2 2002/10/10 17:00:36 duke Exp $
 // cfgobject.aw - configuration objects
 
 class cfgobject extends aw_template
@@ -69,54 +69,93 @@ class cfgobject extends aw_template
                 ));
 		
 		$this->read_template("change.tpl");
-
-		$cfgformid = $obj["meta"]["cfgform"];
-		$l = "";
-		if ($cfgformid)
-		{
-			$cfgform = $this->get_object($cfgformid);
-			$cfgproperties = new aw_array($cfgform["meta"]["properties"]);
-			foreach($cfgproperties as $clid => $cl_properties)
-			{
-				// get_instance is cheap
-				$t = get_instance($clid);
-				$props = $t->get_properties();
-
-				foreach($cl_properties as $pkey => $val)
-				{
-					$this->vars(array(
-						"clid" => $clid,
-						"pkey" => $pkey,
-						"pname" => $clid . "::" . $props[$pkey]["caption"],
-						"checked" => checked($obj["meta"]["properties"][$clid][$pkey]),
-					));
-					$l .= $this->parse("line");
-				};
-			};
-		};
-
-		$o = "";
+		
+		// generate lists of objects
+		$o = array();
+		$cx = $this->get_class_picker(array("field" => "file"));
 		if (is_array($obj["meta"]["objects"]))
 		{
 			$oids = join(",",$obj["meta"]["objects"]);
-			$q = "SELECT oid,name FROM objects WHERE oid IN ($oids)";
+			$q = "SELECT class_id,oid,name,modified,modifiedby FROM objects WHERE oid IN ($oids)";
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
+				$churl = $this->mk_my_orb("change",array("id" => $row["oid"]),$cx[$row["class_id"]]);
 				$this->vars(array(
-					"name" => $row["name"],
+					"name" => "<a href='$churl'>$row[name]</a>",
 					"oid" => $row["oid"],
+					"modified" => $this->time2date($row["modified"],2),
+					"modifiedby" => $row["modifiedby"],
 				));
 				
-				$o .= $this->parse("oline");
+				$o[$cx[$row["class_id"]]] .= $this->parse("objline");
 			};
 		};
+
+		$cfgformid = (int)$obj["meta"]["cfgform"];
+		$c = "";
+		if ($cfgformid)
+		{
+			$html = get_instance("html");
+			$cp = $this->get_class_picker(array("index" => "file"));
+			$cfgform = $this->get_object($cfgformid);
+			$cfgproperties = new aw_array($cfgform["meta"]["properties"]);
+			// cycle over all the properties this configuration form has
+			foreach($cfgproperties->get() as $clid => $cl_properties)
+			{
+				$l = "";
+				// get_instance is cheap
+				$t = get_instance($clid);
+
+				// get the defined properties for each class in the configuraton form
+				// to get the caption
+				$props = $t->get_properties();
+
+				// create the lines with checkboxes. or smth.
+				foreach($cl_properties as $pkey => $val)
+				{
+					// what to do if the class does not provide that key anymore?
+					// should we ignore it?
+					$type = $props[$pkey]["type"];
+					if ($type == "checkbox")
+					{
+						$el = $html->checkbox(array(
+									"name"  => sprintf("properties[%s][%s]",$clid,$pkey),
+									"value" => 1,
+									"checked" => $obj["meta"]["properties"][$clid][$pkey],
+						));
+					}
+					else
+					{
+						$el = $html->text(array(
+									"name"  => sprintf("properties[%s][%s]",$clid,$pkey),
+									"size" => $props[$pkey]["size"],
+									"value" => $obj["meta"]["properties"][$clid][$pkey],
+						));
+					};
+					$this->vars(array(
+						"pname" => $props[$pkey]["caption"],
+						"el" => $el,
+					));
+					$l .= $this->parse("line");
+				};
+
+				$this->vars(array(
+					"line" => $l,
+					"clname" => $cp[$clid],
+					"objline" => $o[$clid],
+				));
+
+				$c .= $this->parse("class_container");
+			};
+		};
+
 
 		$this->vars(array(
 			"name" => $obj["name"],
 			"comment" => $obj["comment"],
 			"toolbar" => $toolbar->get_toolbar(),
-			"line" => $l,
+			"class_container" => $c,
 			"oline" => $o,
 			"search_url" => $this->mk_my_orb("search",array("id" => $id)),
 			"priority" => $obj["meta"]["priority"],
@@ -170,7 +209,14 @@ class cfgobject extends aw_template
 					}
 					else
 					{
-						$value = "";
+						if ($cl_props[$key]["type"] == "checkbox")
+						{
+							$value = 0;
+						}
+						else
+						{
+							$value = "";
+						};
 					};
 					$realclid =  $clidlist[$clid];
 					if ($cl_props[$key]["store"] == "table")
@@ -188,6 +234,7 @@ class cfgobject extends aw_template
 
 			// and now I need to update all the relevant objects
 			$objects = $obj["meta"]["objects"];
+
 			if (is_array($objects))
 			{
 				$oidlist = join(",",$objects);
@@ -197,7 +244,21 @@ class cfgobject extends aw_template
 				// first I'll create a list of objects which is sorted by class
 				while($row = $this->db_next())
 				{
+					// table will be written into later on
 					$oclist[$row["class_id"]][] = $row["oid"];
+
+					$this->save_handle();
+
+					if ($props_to_set[$row["class_id"]])
+                              {
+                                    $this->upd_object(array(
+                                          "oid" => $row["oid"],
+                                          "metadata" => $props_to_set[$row["class_id"]],
+                                    ));
+                              };
+
+					$this->restore_handle();
+
 				};
 
 				foreach($oclist as $okey => $oitems)
@@ -212,19 +273,6 @@ class cfgobject extends aw_template
 							"values" => $ref,
 						));
 					};
-
-					// unluckily I cannot to the same for metadata
-					// so I have to cycle over all the objects
-					/*
-					if ($props_to_set[$row["class_id"]])
-					{
-						$this->upd_object(array(
-							"oid" => $row["oid"],
-							"metadata" => $props_to_set[$row["class_id"]],
-						));
-					};
-					*/
-
 
 				};
 			};
@@ -342,10 +390,12 @@ class cfgobject extends aw_template
 	function save_objects($args = array())
 	{
 		extract($args);
+		$obj = $this->get_object($id);
+		$old_objs = $obj["meta"]["objects"];
 		$this->upd_object(array(
 			"oid" => $id,
 			"metadata" => array(
-				"objects" => $sel,
+				"objects" => array_merge($old_objs,$sel),
 			),
 		));
 		return $this->mk_my_orb("change",array("id" => $id));
