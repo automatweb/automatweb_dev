@@ -35,6 +35,10 @@ function selall()
 	<td colspan="4" class="fform"><input type="text" name="s_comment" value="{VAR:s_comment}"></td>
 </tr>
 <tr>
+	<td class="fform">Mis kataloogi all:</td>
+	<td colspan="4" class="fform"><select name="s_parent" class='small_button'>{VAR:s_parent}</select></td>
+</tr>
+<tr>
 	<td class="fform">T&uuml;&uuml;p:</td>
 	<td colspan="4" class="fform"><select multiple class="small_button" size="15" name='s_type[]'>{VAR:types}</select><input type='hidden' name='search' value='1'></td>
 </tr>

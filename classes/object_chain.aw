@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.10 2002/12/03 12:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.11 2003/02/25 13:52:22 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 class object_chain extends aw_template
@@ -106,7 +106,7 @@ class object_chain extends aw_template
 			"value" => $arr
 		));
 
-		return $this->mk_my_orb("change", array("id" => $id,"search" => $search,"s_name" => urlencode($s_name),"s_comment" => urlencode($s_comment),"s_type" => $s_type,"s_id_from" => $s_id_from, "s_id_to" => $s_id_to,"return_url" => urlencode($return_url)));
+		return $this->mk_my_orb("change", array("id" => $id,"search" => $search,"s_name" => urlencode($s_name),"s_comment" => urlencode($s_comment),"s_type" => $s_type,"s_id_from" => $s_id_from, "s_id_to" => $s_id_to, "s_parent" => $s_parent, "return_url" => urlencode($return_url)));
 	}
 
 	//// explodes the added object into single aliases
@@ -161,14 +161,15 @@ class object_chain extends aw_template
 			"s_comment" => $s_comment,
 			"s_id_from" => $s_id_from,
 			"s_id_to" => $s_id_to,
+			"s_parent" => $this->picker($s_parent, $this->get_menu_list(false, true)),
 			"types" => $this->multiple_option_list($this->make_keys($s_type),$tar)
 		));
 
 		$ob = get_instance("objects");
-		$ol = $ob->get_list();
+		$ol = $ob->get_list(false,false,1);
 
 		$toar = array_values($meta["objs"]);
-		if ($search && ($s_name != "%" || $s_comment != "%" || $s_type || $s_id_from != "" || $s_id_to != ""))
+		if ($search && ($s_name != "%" || $s_comment != "%" || $s_type || $s_id_from != "" || $s_id_to != "" || $s_parent != ""))
 		{
 			if (is_array($s_type))
 			{
@@ -182,19 +183,31 @@ class object_chain extends aw_template
 			{
 				$sidt = " AND oid <= '$s_id_to' ";
 			}
+			if ($s_parent)
+			{
+				$ml = $this->get_menu_list(false, false, $s_parent) + array($s_parent => "");
+				$sidp = " AND parent IN (".join(",",array_keys($ml)).") ";
+			}
 			
 			$s_names = explode("&&", $s_name);
 			$sst = join(" OR ", map("name LIKE '%%%s%%'", $s_names));
+	
+			if (!($s_comment == "%" || $s_comment == ""))
+			{
+				$sic = " (comment LIKE '%".$s_comment."%') ";
+			}
+
 			if ($sst != "")
 			{
-				$sst = "(".$sst.") AND";
+				$sst = "(".$sst.") ".($sic != "" ? " AND " : "");
 			}
-			$q = "SELECT oid FROM objects WHERE $sst (comment LIKE '%".$s_comment."%') $st $sidf $sidt AND status != 0 AND lang_id = ".aw_global_get("lang_id")." AND site_id = ".aw_ini_get("site_id");
+
+			$q = "SELECT oid FROM objects WHERE $sst $sic $st $sidf $sidt $sidp AND status != 0 AND lang_id = ".aw_global_get("lang_id")." AND site_id = ".aw_ini_get("site_id");
 			$this->db_query($q);
 //			echo "q = $q <br>";
 			while ($row = $this->db_next())
 			{
-				if (!in_array($row["oid"], $toar))
+				if (!in_array($row["oid"], $toar) && $this->can("view", $row["oid"]))
 				{
 					$toar[] = $row["oid"];
 				}
