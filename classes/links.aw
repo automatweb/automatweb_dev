@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.38 2003/09/08 14:18:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.39 2003/09/17 14:55:03 kristo Exp $
 
 /*
 
@@ -305,8 +305,11 @@ class links extends class_base
 	function add_hit($id,$host,$uid) 
 	{
 		$o = obj($id);
-		$o->set_prop("hits", $o->prop("hits")+1);
-		$o->save();
+		if ($o->can("edit"))
+		{
+			$o->set_prop("hits", $o->prop("hits")+1);
+			$o->save();
+		}
 
 		$this->_log(ST_EXTLINK, SA_CLICK, $o->name(), $id);
 	}
