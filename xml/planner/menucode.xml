@@ -6,8 +6,12 @@
 		<sublinks>
 			<edit>
 				<caption>Muuda</caption>
-				<link>?class=planner&amp;action=editevent&amp;id={VAR:id}</link>
+				<link>?class=planner&amp;action=editevent&amp;id={VAR:eid}</link>
 			</edit>
+			<repeaters>
+				<caption>Kordused</caption>
+				<link>?class=planner&amp;action=repeaters&amp;id={VAR:eid}</link>
+			</repeaters>
 		</sublinks>
 	</add>
 	<today>
