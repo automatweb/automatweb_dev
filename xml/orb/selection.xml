@@ -1,6 +1,37 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="selection" folder="kliendibaas" extends="class_base">
+		<action name="save_selection">
+			<function name="save_selection">
+				<arguments>
+					<required name="id"/>
+					<required name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="add_to_selection">
+			<function name="add_to_selection">
+				<arguments>
+					<required name="id"/>
+					<required name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="delete_from_selection">
+			<function name="delete_from_selection">
+				<arguments>
+					<required name="id"/>
+					<required name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="show">
+			<function name="show">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 
