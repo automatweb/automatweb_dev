@@ -155,10 +155,18 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$fqfn = $this->cache->get_fqfn($cfn."-$fn-$oid");
 		if (file_exists($fqfn))
 		{
+			if ($GLOBALS["INTENSE_DUKE"] == 1)
+			{
+				echo "_get_cache look for file ".$cfn."-$fn-$oid got result <br>";
+			}
 			include($fqfn);
 			return $arr;
 		}
 
+			if ($GLOBALS["INTENSE_DUKE"] == 1)
+			{
+				echo "CACHE MISS _get_cache look for file ".$cfn."-$fn-$oid  <br>";
+			}
 		return false;
 	}
 
@@ -173,6 +181,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
 		$str .= "?>";
 
+			if ($GLOBALS["INTENSE_DUKE"] == 1)
+			{
+				echo "_set_cache set file ".$cfn."-$fn-$oid  <br>";
+			}
 		$this->cache->file_set($cfn."-$fn-$oid", $str);
 		if ("objcache"  == $cfn)
 		{
@@ -186,6 +198,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		foreach($this->funcs as $func)
 		{
+			if ($GLOBALS["INTENSE_DUKE"] == 1)
+			{
+				echo "CLEAR CACHE file  ".$cfn."-$func-$oid got result <br>";
+			}
 			$this->cache->file_invalidate($cfn."-$func-$oid");
 		}
 		// if it is connection, then the next invalidate_regex will nuke it anyway
@@ -193,9 +209,17 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			//$this->cache->file_invalidate_regex($cfn."-search-(.*)-0");
 			$this->cache->file_invalidate_regex($cfn."-search-(.*)");
+			if ($GLOBALS["INTENSE_DUKE"] == 1)
+			{
+				echo "CLEAR CACHE file  ".$cfn."-search-(.*) got result <br>";
+			}
 		};
 		$this->cache->file_invalidate_regex("connection(.*)");
 		$this->cache->flush_cache();
+			if ($GLOBALS["INTENSE_DUKE"] == 1)
+			{
+				echo "CLEAR CACHE file  connection(.*) got result <br>";
+			}
 	}
 }
 ?>
