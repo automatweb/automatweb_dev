@@ -12,6 +12,17 @@
             <caption>Millal meelde tuletab</caption>
       </property>
       <property>
+            <name>emails_text</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>10</rows>
+            <caption>Saaja e-mail(id) tekstina</caption>
+      </property>
+      <property>
             <name>emails</name>
             <table>objects</table>
             <group>general</group>
@@ -20,7 +31,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_EMAIL</reltype>
             <multiple>1</multiple>
-            <caption>E-mail(id), millele meeldetuletus saadetakse</caption>
+            <caption>Saaja e-mail(id)</caption>
       </property>
       <property>
             <name>subject</name>

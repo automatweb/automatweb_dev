@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.4 2004/12/10 16:02:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.5 2004/12/15 12:30:30 ahti Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -105,6 +105,18 @@ class timing extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "activate":
+				if($arr["new"])
+				{
+					$prop["value"] = -1;
+				}
+				break;
+			case "deactivate":
+				if($arr["new"])
+				{
+					$prop["value"] = -1;
+				}
+				break;
 			case "objects_toolbar":
 				$this->objects_toolbar($arr);
 				break;

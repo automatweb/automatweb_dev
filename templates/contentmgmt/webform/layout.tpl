@@ -56,7 +56,7 @@ function selall()
 		{VAR:predefs}
 		</td>
 		<td bgcolor="{VAR:bgcolor}" align="right">
-		<input type="button" name="meta_submit[{VAR:prp_key}]" value="Muuda" onclick="window.open('{VAR:metamgr_link}', '', 'toolbar=yes,directories=yes,status=yes,location=yes,resizable=,scrollbars=,menubar=yes,height=400,width=600');">
+		<input type="button" name="meta_submit[{VAR:prp_key}]" value="Muuda" onclick="window.open('{VAR:metamgr_link}', '', 'toolbar=yes,directories=yes,status=yes,location=yes,resizable=,scrollbars=,menubar=yes,height=500,width=760');">
 		</td>
 	</tr>
 	<!-- END SUB: clf1 -->

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.13 2004/12/10 13:16:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.14 2004/12/15 12:34:16 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -364,7 +364,7 @@ class webform extends class_base
 				$dir = obj();
 				$dir->set_parent($arr["obj_inst"]->parent());
 				$dir->set_class_id(CL_MENU);
-				$dir->set_name("dir_".$arr["obj_inst"]->id());
+				$dir->set_name("sisestused_".$arr["obj_inst"]->id());
 				$dir->set_status(STAT_ACTIVE);
 				$dir->save();
 				$register = obj();
@@ -398,6 +398,7 @@ class webform extends class_base
 				$register_search->set_parent($register->id());
 				$register_search->set_class_id(CL_REGISTER_SEARCH);
 				$register_search->set_status(STAT_ACTIVE);
+				$register_search->set_name("register_search_".$arr["obj_inst"]->id());
 				$register_search->set_prop("per_page", 100);
 				$register_search->set_prop("register", $register->id());
 				$register_search->prop("show_all_in_empty_search", 1);
@@ -884,16 +885,6 @@ class webform extends class_base
 					));
 				}
 				$sc .= $this->parse("property");
-				/*
-				if ($this->is_template($prpdata["type"]."_options"))
-				{
-					$this->vars(array(
-						"richtext_checked" => checked($property["richtext"] == 1),
-						"richtext" => $property["richtext"],
-					));
-					$sc .= $this->parse($prpdata["type"]."_options");
-				};
-				*/
 			}
 			$this->vars(array(
 				"property" => $sc,
@@ -1069,7 +1060,7 @@ class webform extends class_base
 		$values = aw_global_get("wf_data");
 		
 		
-		if(strpos($_SERVER["REQUEST_URI"],"/automatweb") !== false)
+		if(strpos(strtolower($_SERVER["REQUEST_URI"]), "/automatweb") !== false)
 		{
 			$section = html::get_change_url($arr["id"], array(
 			 "group" => $arr["group"],
@@ -1175,6 +1166,10 @@ class webform extends class_base
 			{
 				$els[$key]["orient"] = $all_props[$key]["orient"];
 			}
+			if($all_props[$key]["type"] == "reset" || $all_props[$key]["type"] == "submit")
+			{
+				$els[$key]["class"] = $els[$key]["style"]["prop"];
+			}
 		}
 		classload("cfg/htmlclient");
 		$htmlc = new htmlclient(array(
@@ -1210,7 +1205,8 @@ class webform extends class_base
 	function save_form_data($arr)
 	{
 		$obj_inst = obj($arr["id"]);
-		$rval = aw_ini_get("baseurl").$obj_inst->prop("redirect");
+		$redirect = $obj_inst->prop("redirect");
+		$rval = strpos(strtolower($redirect), "http://") !== false ? $redirect : substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect;
 		if(!$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE"))
 		{
 			return $rval;

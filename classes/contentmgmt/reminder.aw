@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.4 2004/12/10 16:02:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.5 2004/12/15 12:30:29 ahti Exp $
 // reminder.aw - Meeldetuletus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_rconnect_from)
@@ -17,12 +17,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_DOCUMENT, on_rdisconne
 @property remind type=datetime_select year_from=2004 year_to=2010
 @caption Millal meelde tuletab
 
+@property emails_text type=textarea cols=40 rows=10
+@caption Saaja e-mail(id) tekstina
+
 @property emails type=relpicker reltype=RELTYPE_EMAIL multiple=1
-@caption E-mail(id), millele meeldetuletus saadetakse
+@caption Saaja e-mail(id)
 
 @property subject type=textbox
 @caption Teade
-
 
 @groupinfo objects caption="Seotud objektid" submit=no
 
@@ -110,6 +112,12 @@ class reminder extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "remind":
+				if($arr["new"])
+				{
+					$prop["value"] = -1;
+				}
+				break;
 			case "objects_toolbar":
 				$this->objects_toolbar($arr);
 				break;
@@ -181,7 +189,7 @@ class reminder extends class_base
 			"name" => "sel",
 		));
 		$objs = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_TIMING_OBJECT",
+			"type" => "RELTYPE_REMINDER_OBJECT",
 		));
 		foreach($objs as $obj)
 		{
@@ -234,12 +242,21 @@ class reminder extends class_base
 			));
 			$emls = array();
 			$emails = safe_array($obj_inst->prop("emails"));
+			$emails2 = explode(",", $obj_inst->prop("emails_text"));
 			foreach($emails as $id)
 			{
 				if(is_oid($id) && $this->can("view", $id))
 				{
 					$eml = obj($id);
-					$emls[$id] = $eml->prop("mail");
+					$emls[] = $eml->prop("mail");
+				}
+			}
+			foreach(safe_array($emails2) as $key)
+			{
+				$key = trim($key);
+				if(!in_array($key, $emls))
+				{
+					$emls[] = $key;
 				}
 			}
 			foreach($objs as $obz)
