@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.5 2002/06/13 23:03:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.6 2002/07/12 12:46:16 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 classload("objects");
@@ -108,7 +108,7 @@ class object_chain extends aw_template
 			"value" => $arr
 		));
 
-		return $this->mk_my_orb("change", array("id" => $id,"search" => $search,"s_name" => $s_name,"s_comment" => $s_comment,"s_type" => $s_type,"s_id_from" => $s_id_from, "s_id_to" => $s_id_to,"return_url" => urlencode($return_url)));
+		return $this->mk_my_orb("change", array("id" => $id,"search" => $search,"s_name" => urlencode($s_name),"s_comment" => urlencode($s_comment),"s_type" => $s_type,"s_id_from" => $s_id_from, "s_id_to" => $s_id_to,"return_url" => urlencode($return_url)));
 	}
 
 	//// explodes the added object into single aliases
@@ -184,7 +184,14 @@ class object_chain extends aw_template
 			{
 				$sidt = " AND oid <= '$s_id_to' ";
 			}
-			$q = "SELECT oid FROM objects WHERE name LIKE '%".$s_name."%' AND (comment LIKE '%".$s_comment."%') $st $sidf $sidt AND status != 0 AND lang_id = ".aw_global_get("lang_id")." AND site_id = ".aw_ini_get("site_id");
+			
+			$s_names = explode("&&", $s_name);
+			$sst = join(" OR ", $this->map("name LIKE '%%%s%%'", $s_names));
+			if ($sst != "")
+			{
+				$sst = "(".$sst.") AND";
+			}
+			$q = "SELECT oid FROM objects WHERE $sst (comment LIKE '%".$s_comment."%') $st $sidf $sidt AND status != 0 AND lang_id = ".aw_global_get("lang_id")." AND site_id = ".aw_ini_get("site_id");
 			$this->db_query($q);
 //			echo "q = $q <br>";
 			while ($row = $this->db_next())
