@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.26 2001/10/16 04:15:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.27 2001/11/08 10:39:46 duke Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 if (!defined("DEFS"))
 {
@@ -17,6 +17,15 @@ function bail_out()
 	print "<hr>\n<address>" . $SERVER_SIGNATURE . "</address>\n</body></html>";
 	exit;
 	lc_load("definition");
+}
+
+////
+// !Replaces links inside text
+function create_links($src)
+{
+	$src = preg_replace("/((http(s?):\/\/)|(www\.))(.+?)\s/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
+	$src = preg_replace("/(\w*?\@.*\.\w*)/i","<a href=\"mailto:$1\">$1</a>",$src);
+	return $src;
 }
 	
 function localparse($src = "",$vars = array())
