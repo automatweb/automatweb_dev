@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.1 2003/11/08 09:29:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.2 2003/11/18 14:42:06 duke Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -7,8 +7,16 @@
 	@default method=serialize
 	@default group=general
 
-	@property type type=select
+	@property type type=select 
 	@caption Objektitüüp
+
+	@property use_cfgform type=relpicker reltype=RELTYPE_OBJECT_CFGFORM
+	@caption Kasuta seadete vormi
+
+	@reltype OBJECT_CFGFORM value=1 clid=CL_CFGFORM
+	@caption Seadete vorm
+
+	@classinfo relationmgr=yes
 
 */
 
@@ -24,14 +32,14 @@ class object_type extends class_base
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
-		$retval = true;
+		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "type":
 				$data["options"] = $this->get_type_picker();
 				break;
 		}
-		return PROP_OK;
+		return $retval;
 	}
 
 	function get_type_picker()
