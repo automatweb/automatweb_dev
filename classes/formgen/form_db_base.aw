@@ -482,7 +482,7 @@ class form_db_base extends aw_template
 			{
 				if (substr($k,0,3) == "el_")
 				{
-					$res[substr($k,3)] = $v;
+					$res[substr($k,3)] = str_replace("\\'","'",$v);
 				}
 			}
 		}
