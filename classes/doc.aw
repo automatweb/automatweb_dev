@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.71 2004/04/29 12:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.72 2004/04/30 09:08:50 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -188,6 +188,14 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "lead":
+				$data["value"] = htmlspecialchars($data["value"]);
+				break;
+
+			case "content":
+				$data["value"] = htmlspecialchars($data["value"]);
+				break;
+
 			case "name":
 				$retval = PROP_IGNORE;
 				break;
