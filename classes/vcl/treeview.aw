@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.34 2004/11/15 15:41:57 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.35 2004/12/08 12:23:33 voldemar Exp $
 // treeview.aw - tree generator
 /*
 
@@ -904,18 +904,49 @@ class treeview extends class_base
 	//	var - variable name. links in the tree will be made with
 	//		aw_url_change_var($var, $item->id()) - the $var variable will
 	//		contain the active tree item
+	//	node_actions - array:  clid=>"action_name". This is for specifying different actions for different classes
 	// checkbox_class_filter - array of class id-s, objects of these classes will have checkboxed tree nodes. applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES
 	function tree_from_objects($arr)
 	{
 		extract($arr);
 		$tv = get_instance(CL_TREEVIEW);
-		$tree_opts["root_url"] = (empty ($arr["no_urls"]) ? aw_url_change_var($var, $arr["root_item"]->id()) : "#");
+		$aw_classes = get_class_picker (array ("field" => "def"));
+
+		$class_id = $arr["root_item"]->class_id ();
+		$class_name = strtolower (substr ($aw_classes[$class_id], 3));
+
+		if ( (is_array ($node_actions)) and ($node_actions[$class_id]) )
+		{
+			$tree_opts["root_url"] = $this->mk_my_orb ($node_actions[$class_id], array(
+				"id" => $o->id (),
+				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+			), $class_name);
+		}
+		else
+		{
+			$tree_opts["root_url"] = aw_url_change_var ($var, $arr["root_item"]->id ());
+		}
+
+		$class_id = $root_item->class_id ();
+		$class_name = strtolower (substr ($aw_classes[$class_id], 3));
+
+		if ( (is_array ($node_actions)) and ($node_actions[$class_id]) )
+		{
+			$url = $this->mk_my_orb ($node_actions[$class_id], array(
+				"id" => $o->id (),
+				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+			), $class_name);
+		}
+		else
+		{
+			$url = aw_url_change_var ($var, $root_item->id ());
+		}
 
 		$tv->start_tree($tree_opts);
 		$tv->add_item(0,array(
 			"name" => parse_obj_name($root_item->name()),
 			"id" => $root_item->id(),
-			"url" => (empty ($arr["no_urls"]) ? aw_url_change_var($var, $root_item->id()) : "#"),
+			"url" => $url,
 		));
 
 		$ic = get_instance("icons");
@@ -946,10 +977,25 @@ class treeview extends class_base
 				$checkbox_status = "undefined";
 			}
 
+			$class_id = $o->class_id ();
+			$class_name = strtolower (substr ($aw_classes[$class_id], 3));
+
+			if ( (is_array ($node_actions)) and ($node_actions[$class_id]) )
+			{
+				$url = $this->mk_my_orb ($node_actions[$class_id], array(
+					"id" => $o->id (),
+					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+				), $class_name);
+			}
+			else
+			{
+				$url = aw_url_change_var ($var, $o->id ());
+			}
+
 			$tv->add_item($o->parent(),array(
 				"name" => $oname,
 				"id" => $o->id(),
-				"url" => (empty ($arr["no_urls"]) ? aw_url_change_var($var, $o->id()) : "#"),
+				"url" => $url,
 				"iconurl" => (($o->class_id() == CL_MENU) ? NULL : $ic->get_icon_url($o->class_id(),"")),
 				"checkbox" => $checkbox_status,
 			));

@@ -17,6 +17,43 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>start</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>datetime_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Algus</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>datetime_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>L&amp;otilde;pp</caption>
+      </property>
+      <property>
+            <name>deadline</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>datetime_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Deadline</caption>
+      </property>
+      <property>
+            <name>priority</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>5</size>
+            <caption>Prioriteet</caption>
+      </property>
+      <property>
             <name>doc</name>
             <table>objects</table>
             <group>general2</group>
@@ -86,7 +123,55 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>event_list</field>
-            <caption>Sündmused</caption>
+      </property>
+      <property>
+            <name>sel_resources</name>
+            <table>objects</table>
+            <group>selres</group>
+            <type>chooser</type>
+            <orient>vertical</orient>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_RESOURCE</reltype>
+            <field>sel_resources</field>
+            <caption>Vali ressursid</caption>
+      </property>
+      <property>
+            <name>resources</name>
+            <table>objects</table>
+            <group>resources</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>resources</field>
+      </property>
+      <property>
+            <name>confirm</name>
+            <table>objects</table>
+            <group>resources</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kinnita ajad</caption>
+      </property>
+      <property>
+            <name>work_cal</name>
+            <table>objects</table>
+            <group>work_cal</group>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>work_cal</field>
+      </property>
+      <property>
+            <name>work_table</name>
+            <table>objects</table>
+            <group>work_table</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>work_table</field>
       </property>
       <property>
             <name>add_event</name>
@@ -123,11 +208,113 @@
             <field>trans</field>
             <caption>Tõlkimine</caption>
       </property>
+      <property>
+            <name>user1</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>textbox</type>
+            <field>user1</field>
+            <caption>User-defined textbox 1</caption>
+      </property>
+      <property>
+            <name>user2</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>textbox</type>
+            <field>user2</field>
+            <caption>User-defined textbox 2</caption>
+      </property>
+      <property>
+            <name>user3</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>textbox</type>
+            <field>user3</field>
+            <caption>User-defined textbox 3</caption>
+      </property>
+      <property>
+            <name>user4</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>textbox</type>
+            <field>user4</field>
+            <caption>User-defined textbox 4</caption>
+      </property>
+      <property>
+            <name>user5</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>textbox</type>
+            <field>user5</field>
+            <caption>User-defined textbox 5</caption>
+      </property>
+      <property>
+            <name>userch1</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch1</field>
+            <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
+            <name>userch2</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch2</field>
+            <caption>User-defined checkbox 2</caption>
+      </property>
+      <property>
+            <name>userch3</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch3</field>
+            <caption>User-defined checkbox 3</caption>
+      </property>
+      <property>
+            <name>userch4</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch4</field>
+            <caption>User-defined checkbox 4</caption>
+      </property>
+      <property>
+            <name>userch5</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch5</field>
+            <caption>User-defined checkbox 5</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <selres>
+                  <caption>Vali ressursid</caption>
+            </selres>
+            <resources>
+                  <caption>Jaota ressursid</caption>
+            </resources>
+            <work>
+                  <caption>T&amp;ouml;&amp;ouml;de seis</caption>
+            </work>
+            <work_table>
+                  <caption>Tabel</caption>
+                  <parent>work</parent>
+            </work_table>
+            <work_cal>
+                  <caption>Kalender</caption>
+                  <parent>work</parent>
+            </work_cal>
             <general2>
                   <parent>general</parent>
                   <caption>Üldine</caption>
@@ -153,6 +340,9 @@
             <trans>
                   <caption>Tõlkimine</caption>
             </trans>
+            <userdefined>
+                  <caption>Andmed</caption>
+            </userdefined>
       </groupinfo>
       <reltypes>
             <SUBPROJECT>
@@ -219,6 +409,11 @@
                   <clid>CL_VIDEO</clid>
                   <caption>Video</caption>
             </PRJ_VIDEO>
+            <RESOURCE>
+                  <value>12</value>
+                  <clid>CL_WORKFLOW_RESOURCE</clid>
+                  <caption>ressurrss</caption>
+            </RESOURCE>
       </reltypes>
 </properties>
 

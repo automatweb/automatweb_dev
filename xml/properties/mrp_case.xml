@@ -12,7 +12,7 @@
             <name>due_date</name>
             <group>general</group>
             <table>mrp_case</table>
-            <type>date_select</type>
+            <type>datetime_select</type>
             <field>due_date</field>
             <caption>Valmimistähtaeg</caption>
       </property>
@@ -33,16 +33,12 @@
             <caption>Kliendi prioriteet</caption>
       </property>
       <property>
-            <name>number_of_jobs</name>
+            <name>state</name>
             <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <store>no</store>
-            <newonly>1</newonly>
-            <size>3</size>
-            <caption>Tööde arv</caption>
+            <table>mrp_case</table>
+            <type>text</type>
+            <field>state</field>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>available_resources</name>
@@ -180,6 +176,16 @@
             <no_caption>1</no_caption>
             <parent>manager</parent>
       </property>
+      <property>
+            <name>schedule_chart</name>
+            <group>grp_case_schedule</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_CASE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -196,6 +202,7 @@
             </grp_case_workflow>
             <grp_case_schedule>
                   <caption>Kalender</caption>
+                  <submit>no</submit>
             </grp_case_schedule>
             <grp_case_comments>
                   <caption>Juhtumi kommentaarid</caption>

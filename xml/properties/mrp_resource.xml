@@ -11,24 +11,15 @@
             <caption>Kategooria</caption>
       </property>
       <property>
-            <name>type</name>
+            <name>resource_calendar</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <type>select</type>
-            <caption>Tüüp</caption>
-      </property>
-      <property>
-            <name>load</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_resource_load</group>
-            <type>table</type>
+            <group>grp_resource_schedule</group>
+            <type>calendar</type>
             <store>no</store>
-            <editonly>1</editonly>
-            <caption>Tööleht</caption>
+            <no_caption>1</no_caption>
+            <caption>Tööd</caption>
       </property>
       <property>
             <name>job_list</name>
@@ -47,15 +38,10 @@
       </classinfo>
       <groupinfo>
             <grp_resource_schedule>
-                  <caption>Tööd</caption>
+                  <caption>Kalender</caption>
             </grp_resource_schedule>
-            <grp_resource_load>
-                  <caption>Koormus</caption>
-                  <parent>grp_resource_schedule</parent>
-            </grp_resource_load>
             <grp_resource_joblist>
                   <caption>Tööleht</caption>
-                  <parent>grp_resource_schedule</parent>
             </grp_resource_joblist>
             <grp_resource_settings>
                   <caption>Seaded</caption>

@@ -11,6 +11,70 @@
             <caption>Keskkonna seaded</caption>
       </property>
       <property>
+            <name>box</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_customers</num_0>
+                  <num_1>grp_projects</num_1>
+                  <num_2>grp_resources</num_2>
+                  <num_3>grp_users</num_3>
+            </group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>vsplitbox</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_customers</num_0>
+                  <num_1>grp_projects</num_1>
+                  <num_2>grp_resources</num_2>
+                  <num_3>grp_users</num_3>
+            </group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <wrapchildren>1</wrapchildren>
+      </property>
+      <property>
+            <name>customer_list_toolbar</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>box</parent>
+      </property>
+      <property>
+            <name>customer_list_tree</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
+      </property>
+      <property>
+            <name>customer_list</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_customers</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
+      </property>
+      <property>
             <name>project_list_toolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -19,20 +83,7 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>manager</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>grp_projects</num_0>
-                  <num_1>grp_resources</num_1>
-            </group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <wrapchildren>1</wrapchildren>
+            <parent>box</parent>
       </property>
       <property>
             <name>project_list_tree</name>
@@ -43,7 +94,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>manager</parent>
+            <parent>vsplitbox</parent>
       </property>
       <property>
             <name>project_list</name>
@@ -54,7 +105,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>manager</parent>
+            <parent>vsplitbox</parent>
       </property>
       <property>
             <name>resource_list_toolbar</name>
@@ -65,6 +116,7 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>box</parent>
       </property>
       <property>
             <name>resource_tree</name>
@@ -75,7 +127,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>manager</parent>
+            <parent>vsplitbox</parent>
       </property>
       <property>
             <name>resource_list</name>
@@ -86,7 +138,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>manager</parent>
+            <parent>vsplitbox</parent>
       </property>
       <property>
             <name>replan</name>
@@ -96,6 +148,39 @@
             <group>grp_schedule</group>
             <type>text</type>
             <caption>Planeeri</caption>
+      </property>
+      <property>
+            <name>user_list_toolbar</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_users</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>box</parent>
+      </property>
+      <property>
+            <name>user_list_tree</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_users</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
+      </property>
+      <property>
+            <name>user_list</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_users</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vsplitbox</parent>
       </property>
       <property>
             <name>resources_folder</name>
@@ -157,6 +242,9 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <grp_customers>
+                  <caption>Kliendid</caption>
+            </grp_customers>
             <grp_projects>
                   <caption>Projektid</caption>
             </grp_projects>

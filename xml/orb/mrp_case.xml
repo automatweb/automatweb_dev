@@ -2,7 +2,7 @@
 <orb>
 	<class name="mrp_case" folder="mrp" extends="class_base">
 		<action name="add_job">
-			<function name="add_job">
+			<function name="_add_job">
 				<arguments>
 					<required name="id" type="int" />
 				</arguments>

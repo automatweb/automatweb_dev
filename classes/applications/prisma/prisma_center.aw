@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.6 2004/10/27 12:04:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.7 2004/12/08 12:23:32 voldemar Exp $
 // prisma_center.aw -  
 /*
 
@@ -44,10 +44,27 @@
 @property owv_lines type=text store=no no_caption=1
 
 
+@groupinfo org caption="Organisatsioon"
+@default group=org
+
+@layout hbox_others type=hbox group=org width=20%:80%
+
+@layout vbox_contacts_left type=vbox parent=hbox_others group=org
+
+@property unit_listing_tree type=treeview no_caption=1 store=no parent=vbox_contacts_left 
+@caption Puu
+
+@layout vbox_contacts_right type=vbox parent=hbox_others group=org
+
+@property human_resources type=table store=no no_caption=1 parent=vbox_contacts_right group=org
+@caption Inimesed
 
 
 @reltype WORKFLOW_CONFIG clid=CL_WORKFLOW_CONFIG value=1
 @caption Konfiguratsioon 
+
+@reltype COMPANY clid=CL_CRM_COMPANY value=2
+@caption Firma
 
 */
 
@@ -92,6 +109,28 @@ class prisma_center extends class_base
 
 			case "jobs":
 				$this->do_jobs_table($arr);
+
+			case "unit_listing_tree":
+				$co = get_instance(CL_CRM_COMPANY);
+				$tarr = $arr;
+				$c = reset($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_COMPANY")));
+				if ($c)
+				{
+					$tarr["obj_inst"] = $c->to();
+					$co->get_property($tarr);
+				}
+				break;
+
+			case "human_resources":
+				$co = get_instance(CL_CRM_COMPANY);
+				$tarr = $arr;
+				$c = reset($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_COMPANY")));
+				if ($c)
+				{
+					$tarr["obj_inst"] = $c->to();
+					$co->get_property($tarr);
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -272,7 +311,7 @@ class prisma_center extends class_base
 	{
 		load_vcl("table");
 		$t = new aw_table(array(
-			"xml_def" => "workflow/entity_list",
+			"xml_def" => "erp/entity_list",
 			"layout" => "generic",
 		));
 
@@ -295,6 +334,7 @@ class prisma_center extends class_base
 			$process_o = obj($type_o->prop("entity_process"));
 
 			$mod = $e->modifiedby();
+			$crea = $e->createdby();
 
 			// get entity instance real object
 			if (!$e->prop("obj_id"))
@@ -334,13 +374,17 @@ class prisma_center extends class_base
 				"type" => $type_o->name(),
 				"actor" => $actor_o->name(),
 				"modifiedby" => $mod->name(),
+				"createdby" => $crea->name(),
+				"modified" => $r_o->modified(),
+				"created" => $r_o->created(),
 				"process" => $process_o->name(),
 				"action" => $cur_state->name(),
 				"next_action" => $na
 			));
 		}
 
-		$t->set_default_sortby("name");
+		$t->set_default_sortby("created");
+		$t->set_default_sorder("desc");
 		$t->sort_by();
 		return $t->draw();
 	}
@@ -587,7 +631,7 @@ class prisma_center extends class_base
 						$col = "#FF0000";
 					}
 					$job = html::href(array(
-						"url" => $this->mk_my_orb("change", array("id" => $tmp->meta("job_id")), CL_PRISMA_ORDER),
+						"url" => $this->mk_my_orb("change", array("id" => $tmp->meta("job_id")), CL_PROJECT),
 						"caption" => $job."<br>".date("H:i", $tmp->prop("start1"))." - ".date("H:i", $tmp->prop("end")),
 					));
 				}
@@ -816,7 +860,7 @@ class prisma_center extends class_base
 						$col = "#FF0000";
 					}
 					$job = html::href(array(
-						"url" => $this->mk_my_orb("change", array("id" => $tmp->meta("job_id")), CL_PRISMA_ORDER),
+						"url" => $this->mk_my_orb("change", array("id" => $tmp->meta("job_id")), CL_PROJECT),
 						"caption" => $job."<br>".date("H:i", $tmp->prop("start1"))." - ".date("H:i", $tmp->prop("end")),
 					));
 				}

@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.1 2004/11/15 16:03:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.2 2004/12/08 12:23:32 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
 @classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes
 
+@groupinfo grp_customers caption="Kliendid"
 @groupinfo grp_projects caption="Projektid"
 @groupinfo grp_resources caption="Ressursid"
 @groupinfo grp_schedule caption="Kalender"
@@ -25,17 +26,24 @@
 	@caption Keskkonna seaded
 
 
+@default group=grp_customers
+	@property box type=text no_caption=1 store=no group=grp_customers,grp_projects,grp_resources,grp_users
+	@property vsplitbox type=text no_caption=1 store=no wrapchildren=1 group=grp_customers,grp_projects,grp_resources,grp_users
+	@property customer_list_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property customer_list_tree type=text store=no no_caption=1 parent=vsplitbox
+	@property customer_list type=table store=no no_caption=1 parent=vsplitbox
+
+
 @default group=grp_projects
-	@property project_list_toolbar type=toolbar store=no no_caption=1
-	@property manager type=text no_caption=1 store=no wrapchildren=1 group=grp_projects,grp_resources
-	@property project_list_tree type=text store=no no_caption=1 parent=manager
-	@property project_list type=table store=no no_caption=1 parent=manager
+	@property project_list_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property project_list_tree type=text store=no no_caption=1 parent=vsplitbox
+	@property project_list type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_resources
-	@property resource_list_toolbar type=toolbar store=no no_caption=1
-	@property resource_tree type=text store=no no_caption=1 parent=manager
-	@property resource_list type=table store=no no_caption=1 parent=manager
+	@property resource_list_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property resource_tree type=text store=no no_caption=1 parent=vsplitbox
+	@property resource_list type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_schedule
@@ -44,6 +52,9 @@
 
 
 @default group=grp_users
+	@property user_list_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property user_list_tree type=text store=no no_caption=1 parent=vsplitbox
+	@property user_list type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_settings
@@ -78,6 +89,20 @@
 
 */
 
+### resource types
+define ("MRP_RESOURCE_PHYSICAL", 1);
+define ("MRP_RESOURCE_OUTSOURCE", 2);
+define ("MRP_RESOURCE_GLOBAL_BUFFER", 3);
+
+### states
+define ("MRP_STATUS_NEW", 1);
+define ("MRP_STATUS_PLANNED", 2);
+define ("MRP_STATUS_INPROGRESS", 3);
+define ("MRP_STATUS_ABORTED", 4);
+define ("MRP_STATUS_DONE", 5);
+define ("MRP_STATUS_LOCKED", 6);
+define ("MRP_STATUS_OVERDUE", 7);
+
 class mrp_workspace extends class_base
 {
 	function mrp_workspace()
@@ -86,21 +111,13 @@ class mrp_workspace extends class_base
 			"tpldir" => "mrp/mrp_workspace",
 			"clid" => CL_MRP_WORKSPACE
 		));
-
-		### READ CONFIGURATION
-		### resource types
-		define ("MRP_RESOURCE_PHYSICAL", 1);
-		define ("MRP_RESOURCE_OUTSOURCE", 2);
-		define ("MRP_RESOURCE_GLOBAL_BUFFER", 3);
-
-		### folders
-		define ("MRP_FOLDER_RESOURCES", 1);
 	}
 
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		$this_object = $arr["obj_inst"];
 
 		switch($prop["name"])
 		{
@@ -184,9 +201,11 @@ class mrp_workspace extends class_base
 			),
 			"root_item" => obj ($resources_folder),
 			"ot" => $resource_tree,
-			"var" => "mrp_resource_tree_active_item",
+			"var" => "mrp_tree_active_item",
+			"node_actions" => array (
+				CL_MRP_RESOURCE => "change",
+			),
 		));
-		//!!! teha nii et ressursid oleks teistsuguste ikoonidega kui kaustad
 
 		$arr["prop"]["value"] .= $tree->finalize_tree ();
 	}
@@ -196,9 +215,9 @@ class mrp_workspace extends class_base
 		$table =& $arr["prop"]["vcl_inst"];
 		$this_object =& $arr["obj_inst"];
 
-		if (is_oid ($arr["request"]["mrp_resource_tree_active_item"]))
+		if (is_oid ($arr["request"]["mrp_tree_active_item"]))
 		{
-			$parent = obj ($arr["request"]["mrp_resource_tree_active_item"]);
+			$parent = obj ($arr["request"]["mrp_tree_active_item"]);
 
 			if ($parent->class_id () != CL_MENU)
 			{
@@ -357,10 +376,11 @@ class mrp_workspace extends class_base
 	function create_project_list_toolbar ($arr = array())
 	{
 		$toolbar =& $arr["prop"]["toolbar"];
-		$workspace = $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 		$add_project_url = $this->mk_my_orb("new", array(
 			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-			"mrp_workspace" => $workspace->id (),
+			"mrp_workspace" => $this_object->id (),
+			"parent" => $this_object->prop ("projects_folder"),
 		), "mrp_case");
 		$toolbar->add_button(array(
 			"name" => "add",
@@ -386,33 +406,38 @@ class mrp_workspace extends class_base
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "all",
+			"mrp_selected_node" => 1,
 		), "mrp_workspace");
 		$url_projects_in_work = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "inwork",
+			"mrp_selected_node" => 2,
 		), "mrp_workspace");
 		$url_projects_overdue = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "overdue",
+			"mrp_selected_node" => 3,
 		), "mrp_workspace");
 		$url_projects_new = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "new",
+			"mrp_selected_node" => 4,
 		), "mrp_workspace");
 		$url_projects_done = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
 			"mrp_projects_show" => "done",
+			"mrp_selected_node" => 5,
 		), "mrp_workspace");
 
-		$list = new object_list (array ( //!!! to finish
+		$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
+			"state" => MRP_STATUS_INPROGRESS,
 			"parent" => $this_object->prop ("projects_folder"),
 			// "createdby" => aw_global_get('uid'),
-			//"" => "",
 		));
 		$count_projects_in_work = $list->count ();
 
@@ -427,7 +452,7 @@ class mrp_workspace extends class_base
 
 		$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
-			"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time()),
+			"state" => MRP_STATUS_NEW,
 			"parent" => $this_object->prop ("projects_folder"),
 			// "createdby" => aw_global_get('uid'),
 		));
@@ -435,8 +460,7 @@ class mrp_workspace extends class_base
 
 		$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
-			"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
-			"finished_date" => new obj_predicate_not ("0"),
+			"state" => MRP_STATUS_DONE,
 			"parent" => $this_object->prop ("projects_folder"),
 			// "createdby" => aw_global_get('uid'),
 		));
@@ -479,7 +503,7 @@ class mrp_workspace extends class_base
 			"url" => $url_projects_done,
 		));
 
-		// $tree->set_selected_item($arr["request"]["meta"]);
+		$tree->set_selected_item($arr["request"]["mrp_selected_node"]);
 		$arr["prop"]["value"] = $tree->finalize_tree();
 	}
 
@@ -519,11 +543,56 @@ class mrp_workspace extends class_base
 			"records_per_page" => 50,
 		));
 
-		$list = new object_list(array(
-			"class_id" => CL_MRP_CASE,
-			"parent" => $this_object->prop ("projects_folder"),
-			// "createdby" => aw_global_get('uid'),
-		));
+		$list_request = $arr["request"]["mrp_projects_show"] ? $arr["request"]["mrp_projects_show"] : "overdue";
+
+		switch ($list_request)
+		{
+			case "all":
+				$list = new object_list(array(
+					"class_id" => CL_MRP_CASE,
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+				break;
+
+			case "inwork":
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => MRP_STATUS_INPROGRESS,
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+				break;
+
+			case "overdue":
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
+					"finished_date" => 0,
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+				break;
+
+			case "new":
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => MRP_STATUS_NEW,
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+				break;
+
+			case "done":
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => MRP_STATUS_DONE,
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+				break;
+		}
+
 		$projects = $list->arr ();
 
 		foreach ($projects as $project_id => $project)

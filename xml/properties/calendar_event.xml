@@ -18,13 +18,12 @@
       </property>
       <property>
             <name>project_selector</name>
-            <table>objects</table>
             <group>projects</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <table>planner</table>
             <type>project_selector</type>
             <store>no</store>
             <all_projects>1</all_projects>
+            <field>project_selector</field>
             <caption>Projektid</caption>
       </property>
       <property>

@@ -1,13 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.1 2004/11/15 16:03:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.2 2004/12/08 12:23:32 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
 @classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes
 
-@groupinfo grp_resource_schedule caption="Tööd"
-@groupinfo grp_resource_load caption="Koormus" parent="grp_resource_schedule"
-@groupinfo grp_resource_joblist caption="Tööleht" parent="grp_resource_schedule"
+@groupinfo grp_resource_schedule caption="Kalender"
+@groupinfo grp_resource_joblist caption="Tööleht"
 @groupinfo grp_resource_settings caption="Seaded"
 
 
@@ -19,17 +18,16 @@
 	@property category type=text editonly=1
 	@caption Kategooria
 
-	@property type type=select
-	@caption Tüüp
+	// @property type type=select
+	// @caption Tüüp
 
 @default group=grp_resource_schedule
-	@default group=grp_resource_load
-		@property load type=table store=no editonly=1
-		@caption Tööleht
+	@property resource_calendar type=calendar store=no no_caption=1
+	@caption Tööd
 
-	@default group=grp_resource_joblist
-		@property job_list type=table store=no editonly=1
-		@caption Tööleht
+@default group=grp_resource_joblist
+	@property job_list type=table store=no editonly=1
+	@caption Tööleht
 
 @default group=grp_resource_settings
 	//@property operator type= ???
@@ -48,6 +46,20 @@
 @caption Ressursi omanik
 
 */
+
+### resource types
+define ("MRP_RESOURCE_PHYSICAL", 1);
+define ("MRP_RESOURCE_OUTSOURCE", 2);
+// define ("MRP_RESOURCE_GLOBAL_BUFFER", 3);
+
+### states
+define ("MRP_STATUS_NEW", 1);
+define ("MRP_STATUS_PLANNED", 2);
+define ("MRP_STATUS_INPROGRESS", 3);
+define ("MRP_STATUS_ABORTED", 4);
+define ("MRP_STATUS_DONE", 5);
+define ("MRP_STATUS_LOCKED", 6);
+define ("MRP_STATUS_OVERDUE", 7);
 
 class mrp_resource extends class_base
 {
@@ -101,6 +113,10 @@ class mrp_resource extends class_base
 				{
 					$prop["value"] = "Ressurss ei kuulu ühessegi ressursihaldussüsteemi.";
 				}
+				break;
+
+			case "resource_calendar":
+				$this->create_resource_calendar ($arr);
 				break;
 
 			case "job_list":
@@ -175,7 +191,7 @@ class mrp_resource extends class_base
 
 		$table->set_default_sortby ("starttime");
 		$table->set_default_sorder ("asc");
-		$table->draw_text_pageselector (array(
+		$table->draw_text_pageselector (array (
 			"records_per_page" => 50,
 		));
 
@@ -188,19 +204,18 @@ class mrp_resource extends class_base
 
 		foreach ($jobs as $job_id => $job)
 		{
-			$time = getdate ($job->prop ("starttime"));
-			$starttime = $time["mday"] . "/" . $time["mon"] . "/" . $time["year"] . " " . $time["hours"] . "." . $time["minutes"];
-			$project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
+			$starttime = date ("j/m/Y H.i", $job->prop ("starttime"));
+			// $project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
 			$project = is_object ($project) ? $project->name () : "...";
 
-			$change_url = $this->mk_my_orb("change", array(
+			$change_url = $this->mk_my_orb ("change", array (
 				"id" => $job_id,
-				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
 				"group" => "",
 			), "mrp_job");
 
-			$table->define_data(array(
-				"modify" => html::href(array(
+			$table->define_data (array (
+				"modify" => html::href (array (
 					"caption" => "Ava",
 					"url" => $change_url,
 					)),
@@ -209,6 +224,49 @@ class mrp_resource extends class_base
 				"starttime" => $starttime,
 			));
 		}
+	}
+
+	function create_resource_calendar ($arr)
+	{
+		$this_object =& $arr["obj_inst"];
+		$calendar =& $arr["prop"]["vcl_inst"];
+		$calendar->configure(array(
+			"overview_func" => array(&$this,"get_overview"),
+		));
+		$range = $calendar->get_range(array(
+			"date" => $arr["request"]["date"],
+			"viewtype" => $arr["request"]["viewtype"],
+		));
+		$start = $range["start"];
+		$end = $range["end"];
+		$this->overview = array();
+
+		$list = new object_list (array(
+			"class_id" => CL_MRP_JOB,
+			"resource" => $this_object->id (),
+			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $start, $end),
+		));
+
+		if ($list->count () > 0)
+		{
+			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
+			{
+				// $project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
+				$project = is_object ($project) ? $project->name () : "...";
+				$calendar->add_item (array (
+					"timestamp" => $job->prop ("starttime"),
+					"data" => array(
+						"name" => $job->prop ("name"),
+						"link" => $this->mk_my_orb ("change",array ("id" => $job->id ()), "mrp_job"),
+					),
+				));
+			}
+		}
+	}
+
+	function get_overview ($arr = array())
+	{
+		return $this->overview;
 	}
 }
 ?>

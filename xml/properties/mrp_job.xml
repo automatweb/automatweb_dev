@@ -1,18 +1,34 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>job_toolbar</name>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>job_toolbar</field>
+      </property>
+      <property>
             <name>length</name>
             <group>general</group>
             <table>mrp_job</table>
             <type>textbox</type>
             <field>length</field>
-            <caption>Kestus (s)</caption>
+            <caption>Plaanitud kestus (h)</caption>
+      </property>
+      <property>
+            <name>buffer</name>
+            <group>general</group>
+            <table>mrp_job</table>
+            <type>textbox</type>
+            <field>buffer</field>
+            <caption>Puhveraeg (h)</caption>
       </property>
       <property>
             <name>resource</name>
             <group>general</group>
             <table>mrp_job</table>
-            <type>textbox</type>
+            <type>text</type>
             <field>resource</field>
             <caption>Ressurss</caption>
       </property>
@@ -20,7 +36,7 @@
             <name>project</name>
             <group>general</group>
             <table>mrp_job</table>
-            <type>textbox</type>
+            <type>hidden</type>
             <field>project</field>
             <caption>Projekt</caption>
       </property>
@@ -28,10 +44,17 @@
             <name>exec_order</name>
             <group>general</group>
             <table>mrp_job</table>
-            <type>textbox</type>
-            <datatype>int</datatype>
+            <type>hidden</type>
             <field>exec_order</field>
             <caption>Töö jrk. nr.</caption>
+      </property>
+      <property>
+            <name>prerequisites</name>
+            <group>general</group>
+            <table>mrp_job</table>
+            <type>textbox</type>
+            <field>prerequisites</field>
+            <caption>Eeldustööd</caption>
       </property>
       <property>
             <name>starttime</name>
@@ -42,21 +65,20 @@
             <caption>Plaanitud töösseminekuaeg (timestamp)</caption>
       </property>
       <property>
+            <name>state</name>
+            <group>general</group>
+            <table>mrp_job</table>
+            <type>radio</type>
+            <field>state</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
             <name>comment</name>
             <group>general</group>
             <table>objects</table>
             <type>textarea</type>
             <field>comment</field>
             <caption>Kommentaarid</caption>
-      </property>
-      <property>
-            <name>job_status</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Staatus (tehtud/tegemisel...)</caption>
       </property>
       <property>
             <name>started</name>
