@@ -4,6 +4,7 @@
 		<action name="do_check_import" nologin="1">
 			<function name="do_check_import">
 				<arguments>
+					<optional name="oid" />
 				</arguments>
 			</function>
 		</action>

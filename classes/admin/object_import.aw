@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.13 2004/10/04 12:00:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.14 2004/10/17 11:13:06 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -66,6 +66,8 @@ class object_import extends class_base
 			"tpldir" => "admin/object_import",
 			"clid" => CL_OBJECT_IMPORT
 		));
+
+		$this->classif_cache = array();
 	}
 
 	function get_property($arr)
@@ -90,7 +92,7 @@ class object_import extends class_base
 				$prop["value"] .= ". Hetkel on imporditud ".$arr["obj_inst"]->meta("import_row_count")." rida. <br>";
 				$prop["value"] .= "Viimane muudatus toimis kell ".date("d.m.Y H:i", $arr["obj_inst"]->meta("import_last_time"))." <br>";
 				$prop["value"] .= html::href(array(
-					"url" => $this->mk_my_orb("do_check_import"),
+					"url" => $this->mk_my_orb("do_check_import", array("oid" => $arr["obj_inst"]->id())),
 					"caption" => "J&auml;tka importi kohe"
 				));
 				break;
@@ -512,6 +514,25 @@ class object_import extends class_base
 						// get column for uniq id
 						$u_col = $p2c[$unique_id];
 						$un_filt[$unique_id] = $line[$u_col];
+
+						// if this col has a user-defined value, use that. 
+						if (!empty($userval[$unique_id]))
+						{
+							$un_filt[$unique_id] = $userval[$unique_id];
+						}
+
+						// check for classificators
+						if ($properties[$unique_id]["type"] == "classificator")
+						{
+							$tmp = $this->_resolve_classificator(array(
+								"name" => $unique_id,
+								"clid" => $class_id,
+							), $line[$u_col]);
+							if (is_oid($tmp))
+							{
+								$un_filt[$unique_id] = $tmp;
+							}
+						}
 					}
 
 					$ol = new object_list($un_filt);
@@ -568,22 +589,13 @@ class object_import extends class_base
 					// search that and then select the correct one
 					if ($properties[$pn]["type"] == "classificator")
 					{
-						if (!is_array($classif_cache[$pn]))
+						$tmp = $this->_resolve_classificator(array(
+							"name" => $pn,
+							"clid" => $class_id,
+						), $line[$idx]);
+						if (is_oid($tmp))
 						{
-							$clf = get_instance("classificator");
-							$classif_cache[$pn] = $clf->get_options_for(array(
-								"name" => $pn,
-								"clid" => $class_id
-							));
-						}
-
-						foreach($classif_cache[$pn] as $clf_id => $clf_n)
-						{
-							if (trim(strtolower($line[$idx])) == trim(strtolower($clf_n)))
-							{
-								$line[$idx] = $clf_id;
-								break;
-							}
+							$line[$idx] = $tmp;
 						}
 					}
 
@@ -665,14 +677,20 @@ class object_import extends class_base
 
 		@attrib name=do_check_import nologin="1"
 
+		@param oid optional 
 	**/
-	function do_check_import()
+	function do_check_import($arr = array())
 	{
-		$ol = new object_list(array(
+		$filt = array(
 			"class_id" => CL_OBJECT_IMPORT,
 			"site_id" => array(),
 			"lang_id" => array()
-		));
+		);
+		if ($arr["oid"])
+		{
+			$filt["oid"] = $arr["oid"];
+		}
+		$ol = new object_list($filt);
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			if ($o->meta("import_status") == 1 && $o->meta("import_last_time") < (time() - 3 * 60))
@@ -695,6 +713,28 @@ class object_import extends class_base
 				"sessid" => session_id()
 			));
 		}
+	}
+
+	function _resolve_classificator($arr, $str)
+	{
+		if (!is_array($this->classif_cache[$arr["name"]]))
+		{
+			$clf = get_instance("classificator");
+			$this->classif_cache[$arr["name"]] = $clf->get_options_for(array(
+				"name" => $arr["name"],
+				"clid" => $arr["clid"]
+			));
+		}
+
+		$str = trim(strtolower($str));
+		foreach($this->classif_cache[$arr["name"]] as $clf_id => $clf_n)
+		{
+			if ($str == trim(strtolower($clf_n)))
+			{
+				return $clf_id;
+			}
+		}
+		return NULL;
 	}
 }
 ?>
