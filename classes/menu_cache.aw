@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.21 2003/07/01 10:21:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.22 2003/07/07 15:00:00 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -169,7 +169,7 @@ class menu_cache extends aw_template
 			}
 			else
 			{
-				$subsql = " objects.status = 2 AND objects.lang_id = ".$lang_id." AND objects.site_id = ".$this->cfg["site_id"];
+				$subsql = " 1 OR 1";
 			}
 			if ( $this->_list_subs(array("where" => $subsql)) &&	$this->_list_menus(array("where" => $where,"lang_id" => $lang_id)) )
 			{
