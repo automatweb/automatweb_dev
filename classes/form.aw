@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.102 2002/06/28 14:33:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.103 2002/07/12 06:37:00 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -46,8 +46,8 @@ class form extends form_base
 		$this->ftypes = array(
 			FTYPE_ENTRY => $this->vars["LC_FORMS_TYPE_ENTRY"],
 			FTYPE_SEARCH => $this->vars["LC_FORMS_TYPE_SEARCH"],
-			FTYPE_RATING => $this->vars["LC_FORMS_TYPE_FILTER_SEARCH"],
-			FTYPE_FILTER_SEARCH => $this->vars["LC_FORMS_TYPE_RATING"],
+//			FTYPE_RATING => $this->vars["LC_FORMS_TYPE_RATING"],
+			FTYPE_FILTER_SEARCH => $this->vars["LC_FORMS_TYPE_FILTER_SEARCH"],
 			FTYPE_CONFIG => $this->vars["LC_FORMS_TYPE_CONFIG"],
 		);
 
@@ -445,14 +445,6 @@ class form extends form_base
 		{
 			$this->subtype = FSUBTYPE_EMAIL_ACTION;
 		}
-		/*
-		$this->arr["has_calendar"] = $has_calendar;
-		$this->arr["cal_controller"] = $cal_controller;
-		$this->arr["event_entry_form"] = $event_entry_form;
-		$this->arr["event_check_form"] = $event_check_form;
-		$this->arr["event_check_against_form"] = $event_check_against_form;
-		$this->arr["is_order_form"] = $is_order_form;
-		*/
 
 		$old_namels = $this->arr["name_els"];
 		$this->arr["name_els"] = array();
@@ -4201,7 +4193,7 @@ class form extends form_base
 						));
 						$lcol.=$this->parse("LCOL");
 					}
-					$this->vars(array("LCOL" => $lcol));
+					$this->vars(array("LCOL" => $lcol,"name" => $el->arr["name"]));
 					$lrow.=$this->parse("LROW");
 				}
 			}
@@ -4240,7 +4232,7 @@ class form extends form_base
 								));
 								$lcol1.=$this->parse("LCOL1");
 							}
-							$this->vars(array("LCOL1" => $lcol1));
+							$this->vars(array("LCOL1" => $lcol1,"name" => $el->arr["name"]));
 							$lrow1.=$this->parse("LROW1");
 						}
 					}
@@ -4281,7 +4273,7 @@ class form extends form_base
 								));
 								$lcol2.=$this->parse("LCOL2");
 							}
-							$this->vars(array("LCOL2" => $lcol2));
+							$this->vars(array("LCOL2" => $lcol2,"name" => $el->arr["name"]));
 							$lrow2.=$this->parse("LROW2");
 						}
 					}
@@ -4317,7 +4309,7 @@ class form extends form_base
 						));
 						$lcol3.=$this->parse("LCOL3");
 					}
-					$this->vars(array("LCOL3" => $lcol3));
+					$this->vars(array("LCOL3" => $lcol3,"name" => $el->arr["name"]));
 					$lrow3.=$this->parse("LROW3");
 				}
 			}
@@ -4353,7 +4345,7 @@ class form extends form_base
 							));
 							$lcol4.=$this->parse("LCOL4");
 						}
-						$this->vars(array("LCOL4" => $lcol4));
+						$this->vars(array("LCOL4" => $lcol4,"name" => $el->arr["name"]));
 						$lrow4.=$this->parse("LROW4");
 					}
 				}
@@ -4368,6 +4360,10 @@ class form extends form_base
 
 				foreach($elar as $el)
 				{
+					if ( ($el->arr["type"] == "") || ($el->arr["type"] == "button") )
+					{
+						continue;
+					};
 					$lcol5 = "";
 					foreach($langs as $lar)
 					{
@@ -4388,8 +4384,46 @@ class form extends form_base
 						));
 						$lcol5.=$this->parse("LCOL5");
 					}
-					$this->vars(array("LCOL5" => $lcol5));
+					$this->vars(array("LCOL5" => $lcol5,"name" => $el->arr["name"]));
 					$lrow5.=$this->parse("LROW5");
+				}
+			}
+		}
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					if ( ($el->arr["type"] == "") || ($el->arr["type"] == "button") )
+					{
+						continue;
+					};
+					$lcol8 = "";
+					foreach($langs as $lar)
+					{
+						if ($lar["id"] != $this->lang_id && $el->arr["lang_check_length_error"][$lar["id"]] != "")
+						{
+							$txt = $el->arr["lang_check_length_error"][$lar["id"]];
+						}
+						else
+						{
+							$txt = $el->arr["check_length_error"];
+						}
+						$this->vars(array(
+							"text" => $txt,
+							"col" => $col,
+							"row" => $row,
+							"elid" => $el->get_id(),
+							"lang_id" => $lar["id"],
+						));
+						$lcol8.=$this->parse("LCOL8");
+					}
+					$this->vars(array("LCOL8" => $lcol8,"name" => $el->arr["name"]));
+					$lrow8.=$this->parse("LROW8");
 				}
 			}
 		}
@@ -4424,7 +4458,7 @@ class form extends form_base
 							));
 							$lcol6.=$this->parse("LCOL6");
 						}
-						$this->vars(array("LCOL6" => $lcol6));
+						$this->vars(array("LCOL6" => $lcol6,"name" => $el->arr["name"]));
 						$lrow6.=$this->parse("LROW6");
 					}
 				}
@@ -4456,7 +4490,7 @@ class form extends form_base
 							));
 							$lcol7.=$this->parse("LCOL7");
 						}
-						$this->vars(array("LCOL7" => $lcol7));
+						$this->vars(array("LCOL7" => $lcol7,"name" => $el->arr["name"]));
 						$lrow7.=$this->parse("LROW7");
 					}
 				}
@@ -4472,6 +4506,7 @@ class form extends form_base
 			"LROW5" => $lrow5,
 			"LROW6" => $lrow6,
 			"LROW7" => $lrow7,
+			"LROW8" => $lrow8,
 			"reforb" => $this->mk_reforb("submit_translate", array("id" => $id))
 		));
 
@@ -4502,6 +4537,7 @@ class form extends form_base
 						$this->arr["elements"][$row][$col][$el->get_id()]["lang_info"][$lar["id"]] = $s[$row][$col][$lar["id"]][$el->get_id()];
 						$this->arr["elements"][$row][$col][$el->get_id()]["lang_default"][$lar["id"]] = $d[$row][$col][$lar["id"]][$el->get_id()];
 						$this->arr["elements"][$row][$col][$el->get_id()]["lang_must_error"][$lar["id"]] = $e[$row][$col][$lar["id"]][$el->get_id()];
+						$this->arr["elements"][$row][$col][$el->get_id()]["lang_check_length_error"][$lar["id"]] = $cl[$row][$col][$lar["id"]][$el->get_id()];
 						if ($el->get_type() == "button")
 						{
 							$this->arr["elements"][$row][$col][$el->get_id()]["lang_button_text"][$lar["id"]] = $b[$row][$col][$lar["id"]][$el->get_id()];
