@@ -880,6 +880,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		$sql = array();
 		$p_tmp = $params;
+
 		foreach($params as $key => $val)
 		{
 			if ($val === NULL)
@@ -1073,12 +1074,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$val = $val->get();
 				}
 				$str = array();
+
 				foreach($val as $v)
 				{
 					if ($v === "")
 					{
 						continue;
 					}
+
 					$this->quote(&$v);
 					if ($this->properties[$key]["store"] == "connect")
 					{

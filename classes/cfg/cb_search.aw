@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.18 2004/11/23 13:17:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.19 2004/11/23 13:37:53 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -470,11 +470,11 @@ class cb_search extends class_base
 					else
 					if ($this->form_dat[$clid][$key]["search_mult"])
 					{
-						$sdata[$key] = map('%%%s%%', explode(",", $val));
+						$sdata[$key] = map('%s%%', explode(",", $val));
 					}
 					else
 					{
-						$sdata[$key] = "%" . $val . "%";
+						$sdata[$key] = $val . "%";
 					}
 				};
 
@@ -1018,7 +1018,7 @@ class cb_search extends class_base
 	function proc_perm_str($o, $v, $syns)
 	{
 		// string
-		$has_pct = ($v{0} == "%" ? true : false);
+		$has_pct = (strpos($v,"%") !== NULL ? true : false);
 		$v = str_replace("%", "", $v);
 
 		$has_syn = false;
@@ -1058,7 +1058,7 @@ class cb_search extends class_base
 			$tmp = array();
 			foreach($res as $val)
 			{
-				$tmp[] = "%".$val."%";
+				$tmp[] = $val."%";
 			}
 			$res = $tmp;
 		}
