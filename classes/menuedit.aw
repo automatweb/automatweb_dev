@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.66 2001/11/14 15:48:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.67 2001/11/15 09:17:23 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -29,6 +29,11 @@ class menuedit extends aw_template
 		if (is_array($lc_menuedit))
 		{
 			$this->vars($lc_menuedit);
+		}
+		lc_site_load("menuedit",$this);
+		if (isset($GLOBALS["lc_menuedit"]) && (is_array($GLOBALS["lc_menuedit"])))
+		{
+			$this->vars($GLOBALS["lc_menuedit"]);
 		}
 		lc_load("definition");
 	}
@@ -298,6 +303,11 @@ class menuedit extends aw_template
 		$this->right_pane = (isset($no_right_pane) && $no_right_pane == true) ? false : true;
 
 		// read all the menus and other necessary info into arrays from the database
+		global $DEBUG;
+		if ($DEBUG)
+		{
+			print "active language for menus is $GLOBALS[lang_id]<br>";
+		}
 		$this->make_menu_caches();
 
 		// leiame, kas on tegemist perioodilise rubriigiga
@@ -384,7 +394,6 @@ class menuedit extends aw_template
 			$this->tpl_init("../$tpldir/automatweb/menuedit");
 		};
 		
-
 		$this->read_template($template);
 
 		classload("periods","document");
@@ -545,23 +554,15 @@ class menuedit extends aw_template
 					$blockname = sprintf("%s_L%s",$name,1);
 					$blocktemplate_subs = sprintf("MENU_%s_L%s_HAS_SUBITEMS",$name,1);
 					$blocktemplate_nosubs = sprintf("MENU_%s_L%s_NO_SUBITEMS",$name,1);
-					$this->dmsg("bn = $blockname<br>");
 
-					$this->dmsg($this->subitems);
-	
-					$this->dmsg("bt = $blocktemplate_subs<br>");
-		
 					if ($this->templates[$blocktemplate_subs])
 					{
-						$this->dmsg("<b>KRAAX</b>");
 						if ( $this->subitems[$blockname] > 0) 
 						{
-							$this->dmsg("has subitems<br>");
 							$this->vars(array($blocktemplate_subs => $this->parse($blocktemplate_subs)));
 						}
 						else
 						{
-							$this->dmsg("no subitems  - $blocktemplate_nosubs<br>");
 							$this->vars(array($blocktemplate_nosubs = $this->parse($blocktemplate_nosubs)));
 						};
 					};
@@ -1239,6 +1240,7 @@ class menuedit extends aw_template
 				{
 					$pstr = "objects.parent IN ($pstr)";
 					$ordby = "objects.modified DESC";
+					$lsas = " AND (documents.no_last != 1 OR documents.no_last is null ) ";
 				}
 				else
 				{
@@ -1260,7 +1262,8 @@ class menuedit extends aw_template
 			{
 				$ordby = "objects.jrk";
 			}
-			$this->db_query("SELECT oid FROM objects WHERE ($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr) ORDER BY $ordby $lm");
+			$q = "SELECT objects.oid FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
+			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$docid[$cnt++] = $row["oid"];
@@ -1403,7 +1406,15 @@ class menuedit extends aw_template
 		}
 		else
 		{
-			$this->read_template("folders.tpl");
+			global $HTTP_HOST;
+			if ($HTTP_HOST == "www.hermann.ee")
+			{
+				$this->read_template("folders_no_periods.tpl");
+			}
+			else
+			{
+				$this->read_template("folders.tpl");
+			};
 		};
 
 		$arr = array();
@@ -2055,6 +2066,55 @@ class menuedit extends aw_template
 					"source" => $object["oid"],
 					"objname" => $object["name"] . "(" . $object["oid"] . ")"));
 		$awt->stop("menuedit::gen_picker");
+		return $this->parse();
+	}
+
+	function gen_list_filled_forms($parent)
+	{
+		classload("form_output");
+		$this->read_template("filled_forms.tpl");
+		
+		$fop = new form_output;
+		$opar = array();
+		$this->db_query("SELECT el_id,form_id FROM element2form WHERE el_id = ".$parent);
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$fid = $row["form_id"];
+			// korjame k6ikide formide v2ljundi stiilid kokku $opar sisse
+			$opar[$fid] = $fop->get_op_list(array("id" => $fid));
+
+			$fname = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $fid", "name");
+			$this->db_query("SELECT objects.* FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id WHERE objects.status != 0");
+			while ($row = $this->db_next())
+			{
+				$this->vars(array("filler"		=> $row["createdby"], 
+													"hits"			=> $row["hits"], 
+													"form"			=> $fname,
+													"modified"	=> $this->time2date($row["modified"], 2), "oid" => $row["oid"],
+													"change"		=> $this->mk_orb("show", array("id" => $fid, "entry_id" => $row["oid"]), "form"),
+													"form_id"		=> $fid));
+				$l.=$this->parse("LINE");
+			}
+			$this->restore_handle();
+		}
+		reset($opar);
+		while (list($fid, $ar) = each($opar))
+		{
+			$this->vars(array("form_id" => $fid));
+			$fop = ""; $cnt=0;
+			reset($ar);
+			while (list($opid, $opname) = each($ar))
+			{
+				$this->vars(array("op_id" => $opid, "op_name" => $opname, "cnt" => $cnt));
+				$fop.=$this->parse("FORM_OP");
+				$cnt++;
+			}
+			$this->vars(array("FORM_OP" => $fop));
+			$f.=$this->parse("FORM");
+		}
+		$this->vars(array("LINE" => $l, "FORM" => $f,
+											"reforb"	=> $this->mk_reforb("change", array("id" => 0), "form")));
 		return $this->parse();
 	}
 
@@ -2724,6 +2784,40 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"value" => $img["url"],
 				));
 			}
+			if ($img2 != "none" && $img2 != "")
+			{
+				classload("images");
+				$t = new db_images;
+				$im = $t->_upload(array("filename" => $img2, "file_type" => $img2_type, "oid" => $id));
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img2_id",
+					"value" => $im["id"],
+				));
+				$img = $t->get_img_by_id($im["id"]);
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img2_url",
+					"value" => $img["url"],
+				));
+			}
+			if ($img3 != "none" && $img3 != "")
+			{
+				classload("images");
+				$t = new db_images;
+				$im = $t->_upload(array("filename" => $img3, "file_type" => $img3_type, "oid" => $id));
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img3_id",
+					"value" => $im["id"],
+				));
+				$img = $t->get_img_by_id($im["id"]);
+				$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "img3_url",
+					"value" => $img["url"],
+				));
+			}
 
 			global $num_menu_images; 
 
@@ -3079,6 +3173,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$os = serialize($od);
 		$this->upd_object(array("oid" => $arr["parent"], "last" => $os));
 
+		$period = $GLOBALS["period"];
+
 		if (!is_array($jrk))
 		{
 			return;
@@ -3095,62 +3191,67 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 			$q = "UPDATE objects SET jrk = '$v',$part WHERE oid = '$k'";
 			$this->db_query($q);
-			$dparts = array();
-			if ($is_forum[$k] == 1) 
+
+			if ($period)
 			{
-				$dparts[] = " is_forum = 1 ";
-			} 
-			else 
-			{
-				$dparts[] = " is_forum = 0 ";
-			};
-			if ($showlead[$k] == 1) 
-			{
-				$dparts[] = " showlead = 1 ";
-			} 
-			else 
-			{
-				$dparts[] = " showlead = 0 ";
-			};
-			if ($esilehel[$k] == 1) 
-			{
-				$dparts[] = " esilehel = 1 ";
-			} 
-			else 
-			{
-				$dparts[] = " esilehel = 0 ";
-			};
-			if ($text_ok[$k] == 1) 
-			{
-				$dparts[] = " text_ok = 1 ";
-			} 
-			else 
-			{
-				$dparts[] = " text_ok = 0 ";
-			};
-			if ($pic_ok[$k] == 1) 
-			{
-				$dparts[] = " pic_ok = 1 ";
-			} 
-			else 
-			{
-				$dparts[] = " pic_ok = 0 ";
-			};
-			if ($esilehel_uudis[$k] == 1) 
-			{
-				$dparts[] = " esilehel_uudis = 1 ";
-			} 
-			else 
-			{
-				$dparts[] = " esilehel_uudis = 0 ";
-			};
-			$dparts[] = " jrk1 = '".$jrk1[$k]."' ";
-			$dparts[] = " jrk2 = '".$jrk2[$k]."' ";
-			if (sizeof($dparts) > 0) 
-			{
-				$q = "UPDATE documents SET " . join(",",$dparts) . "WHERE docid = '$k'";
-				$this->db_query($q);
-			};
+				// these settings are in the template only if we are showing periodic documents, so ignore them otherwise
+				$dparts = array();
+				if ($is_forum[$k] == 1) 
+				{
+					$dparts[] = " is_forum = 1 ";
+				} 
+				else 
+				{
+					$dparts[] = " is_forum = 0 ";
+				};
+				if ($showlead[$k] == 1) 
+				{
+					$dparts[] = " showlead = 1 ";
+				} 
+				else 
+				{
+					$dparts[] = " showlead = 0 ";
+				};
+				if ($esilehel[$k] == 1) 
+				{
+					$dparts[] = " esilehel = 1 ";
+				} 
+				else 
+				{
+					$dparts[] = " esilehel = 0 ";
+				};
+				if ($text_ok[$k] == 1) 
+				{
+					$dparts[] = " text_ok = 1 ";
+				} 
+				else 
+				{
+					$dparts[] = " text_ok = 0 ";
+				};
+				if ($pic_ok[$k] == 1) 
+				{
+					$dparts[] = " pic_ok = 1 ";
+				} 
+				else 
+				{
+					$dparts[] = " pic_ok = 0 ";
+				};
+				if ($esilehel_uudis[$k] == 1) 
+				{
+					$dparts[] = " esilehel_uudis = 1 ";
+				} 
+				else 
+				{
+					$dparts[] = " esilehel_uudis = 0 ";
+				};
+				$dparts[] = " jrk1 = '".$jrk1[$k]."' ";
+				$dparts[] = " jrk2 = '".$jrk2[$k]."' ";
+				if (sizeof($dparts) > 0) 
+				{
+					$q = "UPDATE documents SET " . join(",",$dparts) . "WHERE docid = '$k'";
+					$this->db_query($q);
+				};
+			}
 		};
 		return $this->mk_orb("obj_list", array("parent" => $arr["parent"],"period" => $arr["period"]));
 	}
@@ -3543,17 +3644,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$this->sub_merge = 1;
 		$this->level++;
 
-
 		$cnt = 0;
-		global $DEBUG;
 
 		if (!isset($this->mpr[$parent]) || !is_array($this->mpr[$parent]))
 		{
 			$this->level--;
-			if ($DEBUG)
-			{
-				echo "returning from req_draw_menu parent = $parent <br>";
-			}
 			return 0;
 		}
 		
@@ -3589,10 +3684,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// which signifies that we sould show them anyway
 			// ignore all these if the meny is a 1st level menu 
 			$this->level--;
-			if ($DEBUG)
-			{
-				echo "returning from req_draw_menu in_path = $in_path level = $this->level parent_tpl = $parent_tpl ignore path = $ignore_path <br>";
-			}
 			$awt->stop("menuedit::req_draw_menu");
 			return 0;
 		}
@@ -3752,6 +3843,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$is_mid = true;
 			};
 
+				dbg($mn.$ap."<br>");
 			if ($this->is_template($mn.$ap."_NOSUB") && $n == 0)
 			{
 				$ap.="_NOSUB";	// menu without subitems
@@ -3760,12 +3852,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if (!$this->is_template($mn.$ap))
 			{
 				$ap = "";	
-			};
-			global $DEBUG;
-			if ($DEBUG)
-			{
-				print "mn = $mn$ap<br>";
-				print $row[name] . "<br>";
 			};
 
 			if (isset($this->mpr[$row["oid"]]) && is_array($this->mpr[$row["oid"]]))
@@ -4250,6 +4336,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$awt->start("menuedit::make_menu_caches");
 		$cache = new cache();
 		$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+		$ms = 0;
 		if (!$ms)
 		{
 			// make one big array for the whole menu
@@ -4265,7 +4352,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->mpr[$row["parent"]][] = $row;
 				$this->mar[$row["oid"]] = $row;
 			}
-			$this->dmsg(array_keys($this->mpr));
 
 			// write the data to the cache
 			$cached = array();
@@ -4558,8 +4644,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			if ($show)
 			{
+				$link = "/index.".$GLOBALS["ext"]."/section=".$this->mar[$path[$i+1]]["oid"];
+				if ($this->mar[$path[$i+1]]["link"] != "")
+				{
+					$link = $this->mar[$path[$i+1]]["link"];
+				}
+
 				$this->vars(array(
-					"link" => "/index.".$GLOBALS["ext"]."/section=".$this->mar[$path[$i+1]]["oid"],
+					"link" => $link,
 					"text" => str_replace("&nbsp;","",strip_tags($this->mar[$path[$i+1]]["name"])), 
 					"ysection" => $this->mar[$path[$i+1]]["oid"]
 				));
