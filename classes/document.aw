@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.111 2002/07/23 16:42:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.112 2002/07/24 06:20:39 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -1342,7 +1342,10 @@ class document extends aw_template
 
 		// and if the user has checked the checkbox, we should generate the static pages for the document, the parent menu
 		// and all the document's brothers
-		$this->gen_static_doc($id);
+		if ($data["gen_static"])
+		{
+			$this->gen_static_doc($id);
+		}
 
 		$this->flush_cache();
 
