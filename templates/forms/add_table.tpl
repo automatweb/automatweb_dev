@@ -37,6 +37,9 @@
 <td class="fform">Linkide stiil:</td><td class="fform"><select name='link_style'>{VAR:link_style}</select></td>
 </tr>
 <tr>
+<td class="fform"><b>Prindi</b> nupp</td><td class="fform"><input type="checkbox" name="print_button" value="1" {VAR:print_button}></td>
+</tr>
+<tr>
 <td class="fform">Vaata link <i>popup</i>-s:</td>
 <td class="fform">
 	<input type="checkbox" name="view_new_win" value="1" {VAR:view_new_win}>
