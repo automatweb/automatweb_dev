@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.6 2004/03/04 14:24:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.7 2004/04/22 10:03:29 duke Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -82,7 +82,7 @@ class relmanager extends aw_template
 		$props = $cfgu->load_properties(array(
 			"clid" => $prop["clid"][0],
 		));
-		
+
 		foreach($props as $item)
 		{
 			if (in_array($item["name"],$proplist))
@@ -130,8 +130,21 @@ class relmanager extends aw_template
 		// A new name perhaps then? Then .. how do I make sure that name is not used anywhere
 		// else? By using a special prefix? Yees .. that is it.
 
-		$prefix = "cb_emb[" . $prop["name"] . "][new]";
 
+		if (strpos($prop["name"],"[") !== false)
+		{
+			$bracket = strpos($prop["name"],"[");
+			$pre = substr($prop["name"],0,$bracket);
+			$aft = substr($prop["name"],$bracket);
+			$prefix = "cb_emb[" . $pre . "]" . $aft . "[new]";
+				//$newname = $args["name_prefix"] . "[$pre]" . $aft;
+		}
+		else
+		{
+			$prefix = "cb_emb[" . $prop["name"] . "][new]";
+
+
+		};
 
 		$addline = array();
 		
