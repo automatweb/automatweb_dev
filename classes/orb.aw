@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.50 2003/08/27 12:25:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.51 2003/11/13 11:18:56 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -940,6 +940,10 @@ class orb extends aw_template
 				$meth["values"]["parent"] = aw_global_get("section");
 			}
 		};
+		if ($id == "menu")
+		{
+			$meth["values"]["parent"] = aw_global_get("section");
+		}
 		return $meth;
 	}
 }
