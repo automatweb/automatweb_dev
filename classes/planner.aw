@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.69 2002/07/25 22:40:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.70 2002/08/21 10:40:36 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -283,14 +283,12 @@ class planner extends calendar
 		// if it's set, we get the information about possible ranges from that form
 		$menubar = $this->gen_menu(array(
 			"activelist" => array($act),
-			"vars" => array("date" => $date,"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle),
+			"vars" => array("date" => $date,"id" => $id),
 		));
 
 		$this->id = $id;
 
 		$object = $this->get_object($id);
-
-
 
 
 		if ($object["meta"]["confobject"])
@@ -315,7 +313,6 @@ class planner extends calendar
 
 		$this->parent_class = $object["class_id"];
 
-
 		$xdate = $d . $m . $y;
 
 		$this->mk_path($object["parent"],"Kalender");
@@ -330,45 +327,23 @@ class planner extends calendar
 			"type" => $type,
 		));
 
-		// if ctrl is defined, then this calendar is controlled by form
-		// and we need to load events from that form
-		if ($object["class_id"] == CL_CHAIN_ENTRY)
+		if ($object["class_id"] == CL_FORM_CHAIN)
 		{
+			// retrieve all entries that belong to this calendar.
 			classload("form_calendar");
 			$fc = new form_calendar();
 
-			// I need to figure out the chain this entry belongs to
-			$chain = $fc->get_chain_for_chain_entry($object["oid"]);
+			$fch = get_instance("form_chain");
+			$fch->load_chain($object["oid"]);
 
-			$q = "SELECT * FROM calendar2object WHERE cal_id = '$chain'";
-			$this->db_query($q);
-
-			$row = $this->db_next();
-
-			// I know the chain to which the calendar definitions apply
-			// I need to figure out the specific 
-
-			$ctrl = $row["form_id"];
-
-			// now I need to load all the entries which fall into the 
-			// requested range
-
-			/*
-			
-			print "start = $di[start]<br>";
-			print "end = $di[end]<br>";
-			print "entry_form = $ctrl<br>";
-			print "vac_form = $row[vform_id]<br>";
-			print "oid = $object[oid]<br>";
-
-			*/
-
+			$vac_cont = (int)$fch->chain["cal_controller"];
 
 			$events = $fc->get_events(array(
 				"eid" => $object["oid"],
 				"start" => $di["start"],
 				"end" => $di["end"],
-				"eform" => $ctrl,
+				"eform" => $vac_cont,
+				"ctrl" => $ctrl,
 			));
 
 			$this->raw_events = $fc->raw_events;
