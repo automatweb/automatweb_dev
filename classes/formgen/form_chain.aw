@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.19 2004/06/21 11:48:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.20 2004/06/26 09:47:43 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -210,20 +210,41 @@ class form_chain extends form_base
 					$ch_forms[$fid] = $fname;
 					$lg.=$this->parse("LANG");
 				}
+
+				$ol = new object_list(array(
+					"class_id" => CL_FORM_TABLE,
+					"site_id" => array(),
+					"lang_id" => array()
+				));
+				$ft_names = $ol->names();
+
+				$ol = new object_list(array(
+					"class_id" => CL_FORM_OUTPUT,
+					"site_id" => array(),
+					"lang_id" => array()
+				));
+				$op_names = array("" => "") + $ol->names();
+
+				$ol = new object_list(array(
+					"class_id" => CL_FORM_CONTROLLER,
+					"site_id" => array(),
+					"lang_id" => array()
+				));
+				$fc_names = array("" => "") + $ol->names(array(
+					"add_folders" => true
+				));
+
+
 				$this->vars(array(
 					"fjrk" => $this->chain["form_order"][$fid],
 					"fgoto" => checked($this->chain["gotonext"][$fid]),
 					"rep" => checked($this->chain["rep"][$fid]),
 					"show_reps" => checked($this->chain["show_reps"][$fid]),
-					"rep_tbls" => $this->picker($this->chain["rep_tbls"][$fid], $this->list_objects(array("class" => CL_FORM_TABLE))),
-					"rep_ops" => $this->picker($this->chain["rep_ops"][$fid], $this->list_objects(array("addempty" => true,"class" => CL_FORM_OUTPUT))),
+					"rep_tbls" => $this->picker($this->chain["rep_tbls"][$fid], $ft_names),
+					"rep_ops" => $this->picker($this->chain["rep_ops"][$fid], $op_names),
 					"no_load" => checked($this->chain["no_load"][$fid]),
 					"LANG" => $lg,
-					"controllers" => $this->mpicker($this->chain["controllers"][$fid],$this->list_objects(array(
-						"class" => CL_FORM_CONTROLLER,
-						"addempty" => true,
-						"add_folders" => true
-					)))
+					"controllers" => $this->mpicker($this->chain["controllers"][$fid],$fc_names)
 				));
 				$this->parse("FORM");
 			}
@@ -246,6 +267,13 @@ class form_chain extends form_base
 		$ch_forms = $default + $ch_forms;
 		//$ev_entry_forms = $default + $ev_entry_forms;
 
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_OUTPUT,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$op_names = $ol->names();
+
 		$this->vars(array(
 			"forms" => $this->multiple_option_list($this->chain["forms"],$forms),
 			"name" => $fc["name"],
@@ -253,14 +281,14 @@ class form_chain extends form_base
 			"fillonce" => checked($this->chain["fillonce"]),
 			"import" => $this->mk_my_orb("import_chain_entries", array("id" => $id),"form_import"),
 			"entries" => $this->mk_my_orb("show_chain_entries", array("id" => $id)),
-			"ops" => $this->picker($this->chain["after_show_op"], $this->list_objects(array("class" => CL_FORM_OUTPUT))),
+			"ops" => $this->picker($this->chain["after_show_op"], $op_names),
 			"after_show_entry" => checked($this->chain["after_show_entry"] == 1),
 			"during_show_entry" => checked($this->chain["during_show_entry"] == 1),
 			"op_up" => checked($this->chain["op_pos"] == "up"),
 			"op_down" => checked($this->chain["op_pos"] == "down"),
 			"op_left" => checked($this->chain["op_pos"] == "left"),
 			"op_right" => checked($this->chain["op_pos"] == "right"),
-			"d_ops" => $this->picker($this->chain["during_show_op"], $this->list_objects(array("class" => CL_FORM_OUTPUT))),
+			"d_ops" => $this->picker($this->chain["during_show_op"], $op_names),
 			"LANG_H" => $lh,
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"after_redirect" => checked($this->chain["after_redirect"] == 1),

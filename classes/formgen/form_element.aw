@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.69 2004/06/21 11:48:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.70 2004/06/26 09:47:44 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -435,11 +435,13 @@ class form_element extends aw_template
 					$this->vars(array("LISTBOX_SORT_ACTIVITY" => $this->parse("LISTBOX_SORT_ACTIVITY")));
 				}
 
-				$lbdforms = $this->list_objects(array(
-					"class" => CL_FORM,
-					"ret" => ARR_NAME,
-					"addempty" => true
+				$ol = new object_list(array(
+					"class_id" => CL_FORM,
+					"site_id" => array(),
+					"lang_id" => array()
 				));
+				$lbdforms = array("" => "") + $ol->names();
+
 				asort($lbdforms);
 				$lbdeels = array("0" => "");
 				if ($this->arr["lb_data_from_form"])

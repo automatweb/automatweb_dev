@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.30 2004/06/25 20:14:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.31 2004/06/26 09:47:44 kristo Exp $
 
 /*
 
@@ -1388,18 +1388,17 @@ class dronline extends class_base
 			'caption' => 'Vaata',
 		));
 
-		$ol = $this->list_objects(array(
-			'class' => CL_DRONLINE_LOG,
-			'return' => ARR_ALL
+		$ol = new object_list(array(
+			'class_id' => CL_DRONLINE_LOG,
 		));
 
-		foreach($ol as $oid => $od)
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$tarr = $arr;
-			$tarr['show_log_obj'] = $od['oid'];
+			$tarr['show_log_obj'] = $o->id();
 
 			$od['view'] = html::href(array(
-				'url' => $this->mk_my_orb('change', array('id' => $od['oid']), 'dronline_log'),
+				'url' => $this->mk_my_orb('change', array('id' => $o->id()), 'dronline_log'),
 				'caption' => 'Vaata',
 				'target' => '_blank'
 			));

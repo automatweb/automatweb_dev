@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.60 2004/06/26 09:07:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.61 2004/06/26 09:47:44 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2144,11 +2144,25 @@ class form_table extends form_base
 				{
 					foreach($this->table["defs"][$col]["formel"] as $fel)
 					{
+						$ol = new object_list(array(
+							"class_id" => CL_SHOP_BASKET,
+							"site_id" => array(),
+							"lang_id" => array()
+						));
+						$bk_names = array("" => "") + $ol->names();
+
+						$ol = new object_list(array(
+							"class_id" => CL_FORM_CONTROLLER,
+							"site_id" => array(),
+							"lang_id" => array()
+						));
+						$fc_names = array("" => "") + $ol->names();
+
 						$this->vars(array(
 							"fel_name" => $els[$fel],
 							"fel_id" => $fel,
-							"baskets" => $this->picker($this->table["defs"][$col]["basket"][$fel], $this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
-							"basket_controller" => $this->mpicker($this->table["defs"][$col]["basket_controller"][$fel], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true))),
+							"baskets" => $this->picker($this->table["defs"][$col]["basket"][$fel], $bk_names),
+							"basket_controller" => $this->mpicker($this->table["defs"][$col]["basket_controller"][$fel], $fc_names),
 							"basket_url" => $this->table["defs"][$col]["basket_url"][$fel],
 							"bcount_el" => $this->picker($this->table["defs"][$col]["basket_add_count_el"][$fel], $els_nof)
 						));
@@ -2238,6 +2252,14 @@ class form_table extends form_base
 
 			$sts = $style_inst->get_select(0,ST_CELL, true);
 
+			$ol = new object_list(array(
+				"class_id" => CL_FORM_CONTROLLER,
+				"site_id" => array(),
+				"lang_id" => array()
+			));
+			$bk_names = array("" => "") + $ol->names();
+
+
 			$this->vars(array(
 				"col_sortable" => checked($this->table["defs"][$col]["sortable"]),
 				"col_email" => checked($this->table["defs"][$col]["is_email"]),
@@ -2260,8 +2282,8 @@ class form_table extends form_base
 				"link_style1_styles" => $this->picker($this->table["defs"][$col]["styles"]["link_style1"], $sts),
 				"link_style2_styles" => $this->picker($this->table["defs"][$col]["styles"]["link_style2"], $sts),
 				"group_style_styles" => $this->picker($this->table["defs"][$col]["styles"]["group_style"], $sts),
-				"controllers" => $this->mpicker($this->table["defs"][$col]["controllers"], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true))),
-				"val_controller" => $this->picker($this->table["defs"][$col]["val_controller"], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true)))
+				"controllers" => $this->mpicker($this->table["defs"][$col]["controllers"], $bk_names),
+				"val_controller" => $this->picker($this->table["defs"][$col]["val_controller"], $bk_names)
 			));
 			$hst = "";
 			if ($this->table["defs"][$col]["has_col_style"])

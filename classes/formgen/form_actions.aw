@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.25 2004/06/21 11:48:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.26 2004/06/26 09:47:43 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -477,7 +477,15 @@ class form_actions extends form_base
 		$this->read_template("action_after_submit_controller.tpl");
 		$data = unserialize($row["data"]);
 
-		$lst = $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true, "add_folders" => true));
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_CONTROLLER,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$lst = array("" => "") + $ol->names(array(
+			"add_folders" => true
+		));
+
 		$this->vars(array(
 			"controller" => $this->picker($data["controller"], $lst),
 			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))

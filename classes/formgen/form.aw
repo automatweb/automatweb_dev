@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.102 2004/06/26 09:15:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.103 2004/06/26 09:47:43 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1188,6 +1188,21 @@ class form extends form_base
 		{
 			$allow_html = $this->arr['allow_html'];
 		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_TABLE,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$ft_list = $ol->names();
+
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_CONTROLLER,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$fc_list = $ol->names();
+
 		$this->vars(array(
 			"roles"		=> $this->picker($sel_role,$roles),
 			"allow_html"	=> checked($allow_html),
@@ -1205,8 +1220,8 @@ class form extends form_base
 			"email_form_action" => checked($this->subtype & FSUBTYPE_EMAIL_ACTION),
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
-			"tables" => $this->picker($this->arr["table"],$this->list_objects(array("class" => CL_FORM_TABLE))),
-			"calendar_controllers" => $this->picker($this->arr["calendar_controller"],$this->list_objects(array("class" => CL_FORM_CONTROLLER))),
+			"tables" => $this->picker($this->arr["table"],$ft_list),
+			"calendar_controllers" => $this->picker($this->arr["calendar_controller"],$fc_list),
 			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE)),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"has_calendar" => checked($this->flags & OBJ_HAS_CALENDAR),
@@ -7152,7 +7167,12 @@ class form extends form_base
 		{
 			if (!isset($this->form_element_name_cache))
 			{
-				$this->form_element_name_cache = $this->list_objects(array("class" => CL_FORM_ELEMENT));
+				$ol = new object_list(array(
+					"class_id" => CL_FORM_ELEMENT,
+					"site_id" => array(),
+					"lang_id" => array()
+				));
+				$this->form_element_name_cache = $ol->names();
 			}
 
 			if (isset($this->form_element_name_cache[substr($col, 3)]))
@@ -7257,12 +7277,19 @@ class form extends form_base
 		extract($arr);
 		$this->if_init($id, "joins.tpl", "Seosed");
 		
-		$nms = $this->list_objects(array(
-			"class" => CL_FORM
+		$ol = new object_list(array(
+			"class_id" => CL_FORM,
+			"site_id" => array(),
+			"lang_id" => array()
 		));
-		$elnms = $this->list_objects(array(
-			"class" => CL_FORM_ELEMENT
+		$nms = $ol->names();
+
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_ELEMENT,
+			"site_id" => array(),
+			"lang_id" => array()
 		));
+		$elnms = $ol->names();
 
 		$sf = $this->arr["start_search_relations_from"];
 		if ($this->type == FTYPE_ENTRY)
