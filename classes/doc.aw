@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.11 2003/04/16 14:42:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.12 2003/04/17 16:16:44 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -95,14 +95,14 @@
 @property aliasmgr type=aliasmgr store=no editonly=1
 @caption Aliastehaldur
 
-@property cal_event callback=callback_get_event_editor store=no group=calendar
-@caption Kalendrisündmus
-
 @property start type=date_select table=planner group=calendar
 @caption Algab
 
 @property link_calendars type=callback store=no callback=callback_gen_link_calendars group=calendar
 @caption Vali kalendrid, millesse see sündmus veel salvestatakse.
+
+@property main_calendar type=select field=meta method=serialize group=general table=objects
+@caption Põhikalender
 
 @property sbt type=submit value=Salvesta store=no 
 
@@ -144,6 +144,10 @@ class doc extends class_base
 				$data["options"] = array("Ignoreeri","Näita","Ära näita");
 				break;
 
+			case "main_calendar":
+				$data["options"] = $this->calendar_list;
+				break;
+
 		};
 		return $retval;
 	}
@@ -171,6 +175,23 @@ class doc extends class_base
 
 			case "link_calendars":
 				$this->update_link_calendars($args);
+				break;
+
+			case "main_calendar":
+				// I need to create a brother here
+				// to $data["value"];
+				$q = "SELECT metadata FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE relobj_id = $data[value]";
+				$target_data = $this->db_fetch_row($q);
+				$meta = aw_unserialize($target_data["metadata"]);
+				if (!empty($meta["event_folder"]))
+				{
+					$this->new_object(array(
+						"parent" => $meta["event_folder"],
+						"class_id" => CL_BROTHER_DOCUMENT,
+						"status" => STAT_ACTIVE,
+						"brother_of" => $args["obj"]["oid"],
+					));
+				}
 				break;
 
 			case "clear_styles":
@@ -259,46 +280,6 @@ class doc extends class_base
 				"img" => "preview.gif",
 			));
 		};
-	}
-
-	function callback_get_event_editor($args = array())
-	{
-		$nodes = array();
-		$id = $args["obj"]["oid"];
-		$event_data = $this->get_record("planner","id",$id,array("start","end"));
-		$def = get_instance("calendar/cal_event");
-
-		$xprops = $def->get_properties_by_group(array(
-			"classonly" => true,
-			"values" => $event_data,
-			"group" => "general",
-		));
-
-		$nodes = array_merge($nodes,$xprops);
-		return $nodes;
-	}
-
-	function create_event($args = array())
-	{
-		$ref = get_instance("calendar/cal_event");
-		$form_data = $args["form_data"];
-		$form_data["group"] = "general";
-		$form_data["classonly"] = true;
-		$savedata = $ref->process_form_data($form_data);
-		// it's rather easy from this point forward, I just have to check whether there exists a record for this
-		// object in the planner table, if so, I need to update it, if not, I need to delete it.
-		$id = $args["id"];
-		$old = $this->get_record("planner","id",$id,array("id"));
-		if (!$old)
-		{
-			// create new record
-			$q = "INSERT INTO planner (id,start,end) VALUES ('$id','$savedata[start]','$savedata[end]')";
-		}
-		else
-		{
-			$q = "UPDATE planner SET start = '$savedata[start]', end = '$savedata[end]' WHERE id = '$id'";
-		};
-		$this->db_query($q);
 	}
 
 	function show($args = array())
@@ -552,6 +533,22 @@ class doc extends class_base
 					parent IN (%s) AND 
 					class_id = %d",join(",",array_keys($to_delete)),CL_BROTHER_DOCUMENT);
 			$this->db_query($q);
+		};
+
+	}
+
+	////
+	// !Blergh, I really hate to integrate all that stuff into here
+	// and .. I think I should subclass that shit anyway
+	function set_calendars($args = array())
+	{
+		$cal_list = join(",",$args);
+		$q = "SELECT source,target,relobj_id,objects.name FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE target IN ($cal_list)";
+		$this->db_query($q);
+		$this->calendar_list = array();
+		while($row = $this->db_next())
+		{
+			$this->calendar_list[$row["relobj_id"]] = parse_obj_name($row["name"]);
 		};
 
 	}
