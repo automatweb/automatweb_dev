@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="objects">
+		<action name="search">
+			<function name="search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="browser">
+			<function name="browser">
+				<arguments>
+					<optional name="type"/>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		
