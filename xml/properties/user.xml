@@ -266,6 +266,32 @@
             <field>stat</field>
             <caption>Statistika</caption>
       </property>
+      <property>
+            <name>aclwizard_q</name>
+            <table>users</table>
+            <group>aclwizard</group>
+            <type>text</type>
+            <store>no</store>
+            <field>aclwizard_q</field>
+            <caption>Millised on kasutaja</caption>
+      </property>
+      <property>
+            <name>aclwiz</name>
+            <table>objects</table>
+            <group>aclwizard</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>aclwizard_a</name>
+            <table>users</table>
+            <group>aclwizard</group>
+            <type>text</type>
+            <store>no</store>
+            <field>aclwizard_a</field>
+            <caption></caption>
+      </property>
       <classinfo>
             <syslog_type>ST_USER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -297,6 +323,9 @@
             <stat>
                   <caption>Statistika</caption>
             </stat>
+            <aclwizard>
+                  <caption>ACL Maag</caption>
+            </aclwizard>
       </groupinfo>
       <tableinfo>
             <users>

@@ -23,6 +23,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @groupinfo groups caption=Grupid
 @groupinfo jdata caption="Liitumise info"
 @groupinfo stat caption=Statistika
+@groupinfo aclwizard caption="ACL Maag"
 
 @tableinfo users index=oid master_table=objects master_index=brother_of
 
@@ -130,6 +131,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 
 @property stat type=text store=no no_caption=1
 @caption Statistika
+
+@default group=aclwizard
+
+@property aclwizard_q type=text store=no
+@caption Millised on kasutaja
+
+@property aclwiz type=hidden table=objects field=meta method=serialize
+
+@property aclwizard_a type=text store=no
+@caption 
 
 @reltype GRP value=1 clid=CL_GROUP
 @caption Grupp
@@ -272,6 +283,31 @@ class user extends class_base
 					"caption" => "Genereeri parool"
 				));
 				break;
+
+			case "aclwizard_q":
+				$mt = $arr["obj_inst"]->meta("aclwiz");
+				$prop["value"] = "".html::textbox(array(
+					"name" => "aclwizard[user]",
+					"value" => $mt["user"],
+					"size" => "15"
+				))." &otilde;igused objektile ".html::textbox(array(
+					"name" => "aclwizard[object]",
+					"value" => $mt["object"],
+					"size" => 8
+				))."?";
+				break;
+
+			case "aclwizard_a":
+				$mt = $arr["obj_inst"]->meta("aclwiz");
+				if ($mt["user"] != "" && is_oid($mt["object"]))
+				{
+					$prop["value"] = $this->aclwizard_ponder(array(
+						"user" => $mt["user"],
+						"oid" => $mt["object"],
+						"type" => $mt["type"]
+					));
+				}
+				break;
 		}
 		return PROP_OK;
 	}	
@@ -385,6 +421,22 @@ class user extends class_base
 					}
 					$this->save_acl($ea, $gid, $acl);
 				}
+				break;
+
+			case "aclwiz":
+				if ($arr["request"]["aclwizard"]["user"] != "")
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_USER,
+						"name" => $arr["request"]["aclwizard"]["user"]
+					));
+					if ($ol->count() < 1)
+					{
+						$prop["error"] = "Sellist kasutajat pole!";
+						return PROP_FATAL_ERROR;
+					}
+				}
+				$prop["value"] = $arr["request"]["aclwizard"];
 				break;
 		}
 		return PROP_OK;
@@ -1388,5 +1440,137 @@ class user extends class_base
 		return $o;
 	}
 
+	function aclwizard_ponder($arr)
+	{
+		extract($arr);
+		// user, oid
+
+		// check if the object is deleted or under a deleted object
+		list($isd, $dat) = $this->_aclw_is_del($oid);
+		if ("del" == $isd)
+		{
+			return "Objekt on kustutatud. Pole &otilde;igusi!";
+		}
+		else
+		if ("not" == $isd)
+		{
+			return "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!";
+		}
+		else
+		if ("delp" == $isd)
+		{
+			return "Objekti &uuml;lemobjekt ($dat) on kustutatud. Pole &otilde;igusi!";
+		}
+
+		// find the controlling acl - select all gids that user belongs to
+		// order by priority desc
+		// go over objects in path
+		// if acl is set, match is there. 
+		$ca = $this->_aclw_get_controlling_acl($user, $oid);
+		if ($ca === false)
+		{
+			return "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult.";
+		}
+
+		$o_str = "";
+		if ($this->can("view", $ca["oid"]))
+		{
+			$o = obj($ca["oid"]);
+			$o_str = html::href(array(
+				"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
+				"caption" => $o->path_str()
+			));
+		}
+		else
+		{
+			$o_str = $this->db_fetch_field("select name from objects where oid = '$ca[oid]'", "name");
+		}
+		$ro = obj($oid);
+		$g_o = obj($this->users->get_oid_for_gid($ca["gid"]));
+
+		return "Info objekti ".html::href(array(
+				"url" => $this->mk_my_orb("change", array("id" => $ro->id()), $ro->class_id()),
+				"caption" => $ro->path_str()
+			))." &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti ".$o_str." ja grupi ".html::href(array(
+			"url" => $this->mk_my_orb("change", array("id" => $g_o->id()), $g_o->class_id()),
+			"caption" => $g_o->path_str()
+		))." vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>".$this->_aclw_acl_string($ca["acl"]);
+	}
+
+	function _aclw_is_del($oid)
+	{
+		if (!$this->db_fetch_field("SELECT oid FROM objects WHERE oid = '$oid'", "oid"))
+		{
+			return array("not");
+		}
+
+		$parent = $oid;
+		while ($parent)
+		{
+			$dat = $this->db_fetch_row("SELECT parent,status FROM objects WHERE oid = '$parent'");
+			if ($dat["status"] == STAT_DELETED)
+			{
+				if ($parent == $oid)
+				{
+					return array("del");
+				}
+				else
+				{
+					return array("delp", $parent);
+				}
+			}
+			$parent = $dat["parent"];
+		}
+
+		return array("ok");
+	}
+
+	function _aclw_get_controlling_acl($user, $oid)
+	{
+		$this->db_query("
+			SELECT 
+				groups.gid as gid, 
+				groups.priority as pri
+			FROM 
+				groupmembers 
+				LEFT JOIN groups ON groupmembers.gid = groups.gid
+			WHERE
+				groupmembers.uid = '$user'
+			ORDER BY groups.priority DESC
+		");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$parent = $oid;
+			while ($parent)
+			{
+				$adat = $this->db_fetch_row("SELECT * FROM acl WHERE oid = '$parent' AND gid = '$row[gid]'");
+				if (is_array($adat))
+				{
+					return $adat;
+				}
+
+				$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = '$parent'", "parent");
+			}
+			$this->restore_handle();
+		}
+
+		return false;
+	}
+
+	function _aclw_acl_string($int)
+	{
+		$ids = aw_ini_get("acl.ids");
+		$names = aw_ini_get("acl.names");
+
+		$str = array();
+		foreach($ids as $bp => $name)
+		{
+			$cn = $int & (1 << $bp);
+			$str[] = $names[$name]." => ".($cn ? "Jah" : "Ei");
+		}
+
+		return join("<br>", $str);
+	}
 }
 ?>
