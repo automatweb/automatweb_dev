@@ -28,6 +28,24 @@
 </tr>
 <!-- END SUB: LB_ELEMENT -->
 <tr>
+	<td class="fform" colspan="2">Default v&auml;&auml;rtuse kontroller:</td>
+</tr>
+<!-- SUB: DEFVL_ELEMENT -->
+<tr>
+	<td class="fform">{VAR:form_name}.{VAR:element_name}</td>
+	<td class="fform"><input type='hidden' name='defvlels[{VAR:form_id}][{VAR:el_id}]' value='1'><input type='checkbox' name='defvlels_n[{VAR:form_id}][{VAR:el_id}]' value='1' checked></td>
+</tr>
+<!-- END SUB: DEFVL_ELEMENT -->
+<tr>
+	<td class="fform" colspan="2">V&auml;&auml;rtuse kontroller:</td>
+</tr>
+<!-- SUB: VL_ELEMENT -->
+<tr>
+	<td class="fform">{VAR:form_name}.{VAR:element_name}</td>
+	<td class="fform"><input type='hidden' name='vlels[{VAR:form_id}][{VAR:el_id}]' value='1'><input type='checkbox' name='vlels_n[{VAR:form_id}][{VAR:el_id}]' value='1' checked></td>
+</tr>
+<!-- END SUB: VL_ELEMENT -->
+<tr>
 <td class="fform" colspan=2><input class='small_button' type='submit' VALUE='Salvesta'></td>
 </tr>
 </table>
