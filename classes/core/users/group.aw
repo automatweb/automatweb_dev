@@ -6,7 +6,6 @@
 
 @classinfo syslog_type=ST_GROUP relationmgr=yes
 
-@groupinfo general caption=Üldine
 @groupinfo dyn_search caption=Otsing submit=no
 @groupinfo import caption=Import
 @groupinfo roles caption=Rollid
@@ -29,13 +28,13 @@
 @property modified type=text table=objects field=modified
 @caption Muudetud
 
-@property mmodifiedby type=text store=no
+@property mmodifiedby type=text store=no editonly=1
 @caption Kes muutis
 
 @property created type=text field=created table=objects
 @caption Loodud
 
-@property mcreatedby type=text store=no
+@property mcreatedby type=text store=no editonly=1
 @caption Kes l&otilde;i
 
 @property type type=select 
@@ -115,10 +114,10 @@ class group extends class_base
 			case "data":
 				$f = get_instance("formgen/form");
 				$prop['value'] = $f->gen_preview(array(
-					"id" => $arr["objdata"]["search_form"],
+					"id" => $arr["obj_inst"]->prop("search_form"),
 					"entry_id" => $prop['value'], 
 					"extraids" => array(
-						"group_id" => $arr["obj"]["oid"],
+						"group_id" => $arr["obj_inst"]->id(),
 					),
 					"tpl" => "show_noform.tpl"
 				));				
@@ -136,21 +135,15 @@ class group extends class_base
 				break;
 
 			case "mcreatedby":
-				if ($arr["obj"]["oid"])
-				{
-					$o = obj($arr["obj"]["oid"]);
-					$prop['value'] = $o->createdby();
-					$prop["value"] = $prop["value"]->name();
-				}
+				$o = $arr["obj_inst"];
+				$prop['value'] = $o->createdby();
+				$prop["value"] = $prop["value"]->name();
 				break;
 				
 			case "mmodifiedby":
-				if ($arr["obj"]["oid"])
-				{
-					$o = obj($arr["obj"]["oid"]);
-					$prop['value'] = $o->modifiedby();
-					$prop["value"] = $prop["value"]->name();
-				}
+				$o = $arr["obj_inst"];
+				$prop['value'] = $o->modifiedby();
+				$prop["value"] = $prop["value"]->name();
 				break;
 				
 			case "type":

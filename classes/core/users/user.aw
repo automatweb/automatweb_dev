@@ -4,7 +4,6 @@
 
 @classinfo syslog_type=ST_USER relationmgr=yes
 
-@groupinfo general caption=Üldine
 @groupinfo chpwd caption="Muuda parooli"
 @groupinfo roles caption=Rollid
 @groupinfo objects caption="Objektid ja &Otilde;igused"
@@ -159,7 +158,7 @@ class user extends class_base
 			
 			case "online":
 				$timeout = ini_get("session.gc_maxlifetime");
-				$prop['value'] = ((time() - $arr["objdata"]["lastaction"]) < $timeout) ? LC_YES : LC_NO;
+				$prop['value'] = ((time() - $arr["obj_inst"]->prop("lastaction")) < $timeout) ? LC_YES : LC_NO;
 				break;
 
 			case "lastaction";
@@ -168,7 +167,7 @@ class user extends class_base
 
 			case "name":
 				$prop['value'] = $this->users->get_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
+					"uid" => $arr["obj_inst"]->prop("uid"),
 					"key" => "real_name",
 				));
 				break;
@@ -191,14 +190,14 @@ class user extends class_base
 
 			case "act_from":
 				$prop['value'] = $this->users->get_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
+					"uid" => $arr["obj_inst"]->prop("uid"),
 					"key" => "act_from",
 				));
 				break;
 			
 			case "act_to":
 				$prop['value'] = $this->users->get_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
+					"uid" => $arr["obj_inst"]->prop("uid"),
 					"key" => "act_to",
 				));
 				break;
@@ -208,23 +207,23 @@ class user extends class_base
 				break;
 
 			case "groups":
-				$prop['value'] = $this->_get_group_membership($arr["objdata"]["uid"], $arr["obj"]["oid"]);
+				$prop['value'] = $this->_get_group_membership($arr["obj_inst"]->prop("uid"), $arr["obj_inst"]->id());
 				break;
 
 			case "roles":
-				$prop['value'] = $this->_get_roles($arr["objdata"]["uid"]);
+				$prop['value'] = $this->_get_roles($arr["obj_inst"]->prop("uid"));
 				break;
 
 			case "objects_own":
-				$prop["value"] = $this->_get_objects($arr["objdata"]["uid"], true);
+				$prop["value"] = $this->_get_objects($arr["obj_inst"]->prop("uid"), true);
 				break;
 
 			case "objects_other":
-				$prop["value"] = $this->_get_objects($arr["objdata"]["uid"], false);
+				$prop["value"] = $this->_get_objects($arr["obj_inst"]->prop("uid"), false);
 				break;
 
 			case "stat":
-				$prop["value"] = $this->_get_stat($arr["objdata"]["uid"]);
+				$prop["value"] = $this->_get_stat($arr["obj_inst"]->prop("uid"));
 				break;
 
 			case "gen_pwd":
@@ -265,7 +264,7 @@ class user extends class_base
 		{
 			case "name":
 				$this->users->set_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
+					"uid" => $arr["obj_inst"]->prop("uid"),
 					"key" => "real_name",
 					"value" => $prop['value']
 				));
@@ -282,7 +281,7 @@ class user extends class_base
 
 			case "act_from":
 				$this->users->set_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
+					"uid" => $arr["obj_inst"]->prop("uid"),
 					"key" => "act_from",
 					"value" => date_edit::get_timestamp($prop['value'])
 				));
@@ -290,7 +289,7 @@ class user extends class_base
 
 			case "act_to":
 				$this->users->set_user_config(array(
-					"uid" => $arr["objdata"]["uid"],
+					"uid" => $arr["obj_inst"]->prop("uid"),
 					"key" => "act_to",
 					"value" => date_edit::get_timestamp($prop['value'])
 				));
@@ -299,7 +298,7 @@ class user extends class_base
 			case "passwd_again":
 				if ($prop['value'] != "")
 				{
-					if ($prop['value'] != $arr['form_data']['passwd'])
+					if ($prop['value'] != $arr['request']['passwd'])
 					{
 						aw_session_set("status_msg", "Paroolid pole samad!");
 					}
@@ -312,7 +311,7 @@ class user extends class_base
 					{
 						// change pwd
 						$this->users->save(array(
-							"uid" => $arr["objdata"]["uid"], 
+							"uid" => $arr["obj_inst"]->prop("uid"),
 							"password" => $prop['value']
 						));
 					}
@@ -323,26 +322,26 @@ class user extends class_base
 				if ($prop['value'] == 1)
 				{
 					$this->users->send_welcome_mail(array(
-						"uid" => $arr["objdata"]["uid"],
-						"pass" => $arr['form_data']['password']
+						"uid" => $arr["obj_inst"]->prop("uid"),
+						"pass" => $arr['request']['password']
 					));
 				}
 				break;
 
 			case "groups":
-				$prop['value'] = $this->_set_group_membership($arr["objdata"]["uid"], $arr["form_data"], $arr["obj"]["oid"]);
+				$prop['value'] = $this->_set_group_membership($arr["obj_inst"]->prop("uid"), $arr["request"], $arr["obj_inst"]->id());
 				break;
 
 			case "obj_acl":
 				// read all acls from request and set them
-				$ea = $arr["form_data"]["edit_acl"];
+				$ea = $arr["request"]["edit_acl"];
 				if ($ea)
 				{
 					$a = $this->acl_list_acls();
 					$acl = array();
 					foreach($a as $a_bp => $a_name)
 					{
-						$acl[$a_name] = $arr["form_data"]["acl_".$a_bp];
+						$acl[$a_name] = $arr["request"]["acl_".$a_bp];
 					}
 					$this->save_acl($ea, $gid, $acl);
 				}
