@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.23 2001/06/21 14:27:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.24 2001/06/29 01:07:08 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -397,6 +397,10 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 define("CL_CLIENT",69);
 
 // menyyd
+
+// eventi folder
+define("MN_EVENT_FOLDER",68);
+
 define("MN_CLIENT",69);
 // sisurubriik
 define("MN_CONTENT",70);
