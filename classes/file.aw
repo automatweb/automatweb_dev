@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.77 2004/05/19 16:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.78 2004/05/27 08:35:51 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -804,8 +804,15 @@ class file extends class_base
 		{
 			$delim = "\t";
 		}
+		$first = true;
 		while ($line = fgetcsv($fp, 100000, $delim))
 		{
+			if ($first && $params["file_has_header"])
+			{
+				$first = false;
+				continue;
+			}
+			$first = false;
 			$dat = array();
 			foreach($line as $idx => $val)
 			{

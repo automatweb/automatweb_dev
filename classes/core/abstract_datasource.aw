@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.2 2004/05/19 16:18:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.3 2004/05/27 08:35:53 kristo Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 
@@ -166,13 +166,10 @@ class abstract_datasource extends class_base
 		if ($ds_o->class_id() == CL_FILE)
 		{
 			$params["separator"] = $o->prop("file_separator");
+			$params["file_has_header"] = $o->prop("file_has_header");
 		}
 
-		$ret = $ds_i->get_objects($ds_o);
-		if ($ds_o->class_id() == CL_FILE && $o->prop("file_has_header"))
-		{
-			array_pop($ret);
-		}
+		$ret = $ds_i->get_objects($ds_o, $params);
 		return $ret;
 	}
 

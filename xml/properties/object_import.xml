@@ -30,6 +30,15 @@
             <caption>Unikaalne omadus</caption>
       </property>
       <property>
+            <name>folder_field</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Tulp, mille j&amp;auml;rgi jagatakse kataloogidesse</caption>
+      </property>
+      <property>
             <name>ds</name>
             <table>objects</table>
             <group>general</group>
@@ -69,6 +78,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>folders</name>
+            <table>objects</table>
+            <group>folders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OBJECT_IMPORT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -82,6 +101,9 @@
             <connect>
                   <caption>Seosta tulbad</caption>
             </connect>
+            <folders>
+                  <caption>Kataloogid</caption>
+            </folders>
       </groupinfo>
       <reltypes>
             <OBJECT_TYPE>

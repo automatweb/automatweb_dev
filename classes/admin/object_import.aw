@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.5 2004/05/21 11:10:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.6 2004/05/27 08:35:46 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -19,6 +19,9 @@
 @property unique_id type=select 
 @caption Unikaalne omadus
 
+@property folder_field type=select 
+@caption Tulp, mille j&auml;rgi jagatakse kataloogidesse
+
 @property ds type=relpicker reltype=RELTYPE_DATASOURCE
 @caption Andmeallikas
 
@@ -30,6 +33,9 @@
 
 @groupinfo connect caption="Seosta tulbad"
 @property connect_props type=table store=no no_caption=1 group=connect
+
+@groupinfo folders caption="Kataloogid"
+@property folders type=table store=no no_caption=1 group=folders
 
 
 @reltype OBJECT_TYPE value=1 clid=CL_OBJECT_TYPE
@@ -81,13 +87,21 @@ class object_import extends class_base
 					$prop["options"][$pn] = $_prop["caption"];
 				}
 				break;
-			
+
+			case "folder_field":
+				$prop["options"] = $this->get_cols_from_ds($arr["obj_inst"]);
+				break;
+
 			case "props":
 				$this->do_props_table($arr);
 				break;
 
 			case "connect_props":
 				$this->do_connect_props_table($arr);
+				break;
+
+			case "folders":
+				$this->do_folders_table($arr);
 				break;
 		};
 		return $retval;
@@ -115,9 +129,71 @@ class object_import extends class_base
 					$prop["value"] = 0;
 				}
 				break;
+
+			case "folders":
+				$arr["obj_inst"]->set_meta("fld_values", $arr["request"]["values"]);
+				break;
 		}
 		return $retval;
 	}	
+
+	function _init_folders_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "folder",
+			"caption" => "Kataloog",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "value",
+			"caption" => "V&auml;&auml;rtus, mille puhul pannakse sellesse kataloogi",
+			"align" => "center",
+		));
+
+		$t->set_default_sortby("folder");
+	}
+
+	function do_folders_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_folders_table($t);
+
+		$values = $arr["obj_inst"]->meta("fld_values");
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_FOLDER")) as $c)
+		{
+			$o = $c->to();
+
+			$t->define_data(array(
+				"folder" => $o->path_str(),
+				"value" => html::textbox(array(
+					"size" => 10,
+					"name" => "values[".$o->id()."]",
+					"value" => $values[$o->id()]
+				))
+			));
+
+			$ot = new object_tree(array(
+				"parent" => $o->id(),
+				"class_id" => CL_MENU
+			));
+			$ol = $ot->to_list();
+			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+			{
+				$t->define_data(array(
+					"folder" => $o->path_str(),
+					"value" => html::textbox(array(
+						"size" => 10,
+						"name" => "values[".$o->id()."]",
+						"value" => $values[$o->id()]
+					))
+				));
+			}
+		}
+
+		$t->sort_by();
+	}
 
 	function _init_props_tbl(&$t)
 	{
@@ -331,17 +407,16 @@ class object_import extends class_base
 				else
 				{
 					$dat = obj();
+					// if type has cfgform, set the object to use that so that when you change it, is show the correct form
+					if ($type_o->prop("use_cfgform"))
+					{
+						$dat->set_meta("cfgform_id", $type_o->prop("use_cfgform"));
+					}
 				}
 
 				$dat->set_class_id($class_id);
 				$dat->set_parent($o->prop("folder"));
-
-				// if type has cfgform, set the object to use that so that when you change it, is show the correct form
-				if ($type_o->prop("use_cfgform"))
-				{
-					$dat->set_meta("cfgform_id", $type_o->prop("use_cfgform"));
-				}
-				
+			
 				foreach($p2c as $pn => $idx)
 				{
 					if ($pn == "needs_translation" || $pn == "is_translated" || $idx == "dontimp")
@@ -349,6 +424,20 @@ class object_import extends class_base
 						continue;
 					}
 					$dat->set_prop($pn, convert_unicode($line[$idx]));
+				}
+
+				// now, if we have separate folder settings, then move to correct place.
+				if (($fldfld = $o->prop("folder_field")))
+				{	
+					$flds = new aw_array($o->meta("fld_values"));
+					$fldfld_val = $line[$fldfld];
+					foreach($flds->get() as $fld_id => $fld_val)
+					{
+						if ($fld_val == $fldfld_val)
+						{
+							$dat->set_parent($fld_id);
+						}
+					}
 				}
 
 				// also uservals
@@ -364,7 +453,7 @@ class object_import extends class_base
 				}
 
 				$dat->save();
-				echo "importisin objekti ".$dat->name()." <br>\n";
+				echo "importisin objekti ".$dat->name()." (".$dat->id().") kataloogi ".$dat->parent()." <br>\n";
 				flush();
 	
 			}
