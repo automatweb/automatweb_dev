@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.22 2005/03/21 21:48:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.23 2005/03/22 09:06:57 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -301,7 +301,7 @@ class mrp_job extends class_base
 				$toolbar->add_button(array(
 					"name" => "pause",
 					//"img" => "pause.gif",
-					"tooltip" => "Paus",
+					"tooltip" => t("Paus"),
 					"action" => "pause",
 				));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.50 2005/03/21 21:48:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.51 2005/03/22 09:06:57 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1167,7 +1167,7 @@ class mrp_workspace extends class_base
 				));
 				$table->define_field(array(
 					"name" => "planned_date",
-					"caption" => "Planeeritud valmimine",
+					"caption" => t("Planeeritud valmimine"),
 					"chgbgcolor" => "bgcolour_overdue",
 					"sortable" => 1,
 				));
@@ -1388,7 +1388,7 @@ class mrp_workspace extends class_base
 			### define data for html table row
 			$definition = array (
 				"modify" => html::href (array (
-					"caption" => "Ava",
+					"caption" => t("Ava"),
 					"url" => $change_url,
 					)
 				),
@@ -1528,7 +1528,7 @@ class mrp_workspace extends class_base
 				"scheduled_date" => $job->prop ("starttime"),
 				// "planned_date" => "",
 				"modify" => html::href (array (
-					"caption" => "Ava",
+					"caption" => t("Ava"),
 					"url" => $change_url,
 					)
 				),
@@ -1730,7 +1730,7 @@ class mrp_workspace extends class_base
 		}
 
 		$start_nav[] = html::href (array (
-			"caption" => "<<",
+			"caption" => t("<<"),
 			"title" => t("5 tagasi"),
 			"url" => aw_url_change_var ("mrp_chart_start", ($start - 5*$period_length)),
 		));
@@ -1747,7 +1747,7 @@ class mrp_workspace extends class_base
 			"url" => aw_url_change_var ("mrp_chart_start", ($start + $period_length + 1)),
 		));
 		$start_nav[] = html::href (array (
-			"caption" => ">>",
+			"caption" => t(">>"),
 			"title" => t("5 edasi"),
 			"url" => aw_url_change_var ("mrp_chart_start", ($start + 5*$period_length)),
 		));

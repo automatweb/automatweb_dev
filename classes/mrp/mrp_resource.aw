@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.25 2005/03/21 21:48:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.26 2005/03/22 09:06:57 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -271,7 +271,7 @@ class mrp_resource extends class_base
 
 		$table->define_field(array(
 			"name" => "client",
-			"caption" => t("Klient",
+			"caption" => t("Klient"),
 			"sortable" => 1,
 			"align" => "center"
 		));
