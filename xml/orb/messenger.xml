@@ -220,9 +220,18 @@
 			</function>
 		</action>
 
+		<action name="submit_account_type">
+			<function name="submit_account_type">
+				<arguments>
+					<required name="acctype"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="configure_pop3">
 			<function name="configure_pop3">
 				<arguments>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>
