@@ -297,7 +297,7 @@ class bugtrack extends aw_template
 			"SEL_PAGE" => ""
 		));
 
-		$q = "SELECT * FROM bugtrack $filta ORDER BY $_sby $_so LIMIT ".($page*$per_page).",$per_page";
+		$q = "SELECT * FROM bugtrack $filta LIMIT ".($page*$per_page).",$per_page";
 		$this->db_query($q);
 			
 		while($row = $this->db_next())
