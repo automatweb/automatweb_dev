@@ -122,7 +122,7 @@
             <type>releditor</type>
             <reltype>RELTYPE_PICTURE</reltype>
             <rel_id>first</rel_id>
-            <use_form>emb</use_form>
+            <props>file</props>
             <store>no</store>
             <field>picture</field>
             <caption>Pilt/foto</caption>
@@ -165,16 +165,6 @@
             <automatic>1</automatic>
             <field>rank</field>
             <caption>Ametinimetus</caption>
-      </property>
-      <property>
-            <name>sect</name>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SECTION</reltype>
-            <automatic>1</automatic>
-            <field>section</field>
-            <caption>Üksus</caption>
       </property>
       <property>
             <name>email</name>

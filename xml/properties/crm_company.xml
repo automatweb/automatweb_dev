@@ -114,6 +114,16 @@
             <caption>Kontaktisik</caption>
       </property>
       <property>
+            <name>addresslist</name>
+            <table>objects</table>
+            <group>oldcontacts</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>addresslist</field>
+            <caption>Aadress</caption>
+      </property>
+      <property>
             <name>old_human_resources</name>
             <table>objects</table>
             <group>oldcontacts</group>
@@ -137,22 +147,12 @@
             </caption>
       </property>
       <property>
-            <name>addresslist</name>
-            <table>objects</table>
-            <group>contacts2</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>vbox_contacts_left</parent>
-            <field>addresslist</field>
-            <caption>Aadress</caption>
-      </property>
-      <property>
             <name>unit_listing_tree</name>
             <table>objects</table>
             <group>contacts2</group>
             <type>treeview</type>
             <no_caption>1</no_caption>
+            <store>no</store>
             <parent>vbox_contacts_left</parent>
             <field>unit_listing_tree</field>
             <caption>Puu</caption>
@@ -167,6 +167,72 @@
             <parent>vbox_contacts_right</parent>
             <field>human_resources</field>
             <caption>Inimesed</caption>
+      </property>
+      <property>
+            <name>contact_search_firstname</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>contact_search_firstname</field>
+            <caption>Eesnimi</caption>
+      </property>
+      <property>
+            <name>contact_search_lastname</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>contact_search_lastname</field>
+            <caption>Perenimi</caption>
+      </property>
+      <property>
+            <name>contact_search_code</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>contact_search_code</field>
+            <caption>Isikukood</caption>
+      </property>
+      <property>
+            <name>contact_search</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>hidden</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_contacts_right</parent>
+            <value>1</value>
+            <field>contact_search</field>
+            <caption>contact_search</caption>
+      </property>
+      <property>
+            <name>contact_search_submit</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>contact_search_submit</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>contacts_search_results</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_contacts_right</parent>
+            <field>contacts_search_results</field>
+            <caption>Otsingutulemused</caption>
       </property>
       <property>
             <name>contact</name>
@@ -333,6 +399,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <parent>customer_hbox_toolbar</parent>
             <field>customer_toolbar</field>
             <caption>
             <![CDATA["Klientide toolbar"]]>
@@ -344,7 +411,8 @@
             <group>customers</group>
             <type>treeview</type>
             <no_caption>1</no_caption>
-            <parent>customer_hbox2</parent>
+            <parent>vbox_customers_left</parent>
+            <store>no</store>
             <field>customer_listing_tree</field>
             <caption>Rühmade puu</caption>
       </property>
@@ -355,18 +423,120 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>customer_hbox2</parent>
+            <parent>vbox_customers_right</parent>
             <field>customer</field>
             <caption>Kliendid</caption>
       </property>
       <property>
-            <name>buu</name>
+            <name>customer_search_name</name>
             <table>objects</table>
-            <group>my_customers</group>
+            <group>customers</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <field>customer_search_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>customer_search_reg</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <field>customer_search_reg</field>
+            <caption>Reg nr.</caption>
+      </property>
+      <property>
+            <name>customer_search_leader</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <field>customer_search_leader</field>
+            <caption>Firmajuht</caption>
+      </property>
+      <property>
+            <name>customer_search_</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <field>customer_search_</field>
+            <caption>Põhitegevus</caption>
+      </property>
+      <property>
+            <name>customer_search_county</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <field>customer_search_county</field>
+            <caption>Maakond</caption>
+      </property>
+      <property>
+            <name>customer_search_city</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <field>customer_search_city</field>
+            <caption>Linn/Vald/Alev</caption>
+      </property>
+      <property>
+            <name>customer_search_address</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <field>customer_search_address</field>
+            <caption>Tänav/Küla</caption>
+      </property>
+      <property>
+            <name>customer_search_submit</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>submit</type>
+            <size>15</size>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <field>customer_search_submit</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>customer_search</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>hidden</type>
+            <store>no</store>
+            <parent>vbox_customers_right</parent>
+            <value>1</value>
+            <no_caption>1</no_caption>
+            <field>customer_search</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>customer_search_results</name>
+            <table>objects</table>
+            <group>customers</group>
             <type>table</type>
             <store>no</store>
-            <field>buu</field>
-            <caption>Buu</caption>
+            <parent>vbox_customers_right</parent>
+            <no_caption>1</no_caption>
+            <field>customer_search_results</field>
+            <caption>Otsi tulemused </caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -590,7 +760,7 @@
             <PROFESSIONS>
                   <value>29</value>
                   <clid>CL_CRM_PROFESSION</clid>
-                  <caption>Võimalikud ametinimetused</caption>
+                  <caption>Võimalikud ametid</caption>
             </PROFESSIONS>
             <CATEGORY>
                   <value>30</value>
@@ -606,23 +776,37 @@
             <hbox_others>
                   <type>hbox</type>
                   <group>contacts2</group>
+                  <width>15%:30%:55%</width>
             </hbox_others>
             <vbox_contacts_left>
                   <type>vbox</type>
                   <parent>hbox_others</parent>
                   <group>contacts2</group>
-                  <width>30%</width>
             </vbox_contacts_left>
             <vbox_contacts_right>
                   <type>vbox</type>
                   <parent>hbox_others</parent>
                   <group>contacts2</group>
-                  <width>70%</width>
             </vbox_contacts_right>
-            <customer_hbox2>
+            <customer_hbox_toolbar>
                   <type>hbox</type>
                   <group>customers</group>
-            </customer_hbox2>
+            </customer_hbox_toolbar>
+            <customers_hbox_others>
+                  <type>hbox</type>
+                  <group>customers</group>
+                  <width>20%:80%</width>
+            </customers_hbox_others>
+            <vbox_customers_left>
+                  <type>vbox</type>
+                  <parent>customers_hbox_others</parent>
+                  <group>customers</group>
+            </vbox_customers_left>
+            <vbox_customers_right>
+                  <type>vbox</type>
+                  <parent>customers_hbox_others</parent>
+                  <group>customers</group>
+            </vbox_customers_right>
       </layout>
 </properties>
 

@@ -11,6 +11,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_CRM_PROFESSION</syslog_type>
+            <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
       <tableinfo>
@@ -21,11 +22,11 @@
             </kliendibaas_amet>
       </tableinfo>
       <reltypes>
-            <SIMILAR_PROFESSION>
+            <SIMILARPROFESSION>
                   <value>1</value>
                   <clid>CL_CRM_PROFESSION</clid>
                   <caption>Sarnane amet</caption>
-            </SIMILAR_PROFESSION>
+            </SIMILARPROFESSION>
       </reltypes>
 </properties>
 

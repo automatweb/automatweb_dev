@@ -1,24 +1,33 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>jrk</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
+            <field>jrk</field>
+            <caption>Järk</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SECTION</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <reltypes>
-            <SUBSECTION>
+            <SECTION>
                   <value>1</value>
                   <clid>CL_CRM_SECTION</clid>
                   <caption>Alamüksus</caption>
-            </SUBSECTION>
-            <MEMBER>
+            </SECTION>
+            <WORKERS>
                   <value>2</value>
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Liige</caption>
-            </MEMBER>
+            </WORKERS>
             <PROFESSIONS>
                   <value>3</value>
                   <clid>CL_CRM_PROFESSION</clid>
-                  <caption>Üksuse võimalikud ametid</caption>
+                  <caption>Roll</caption>
             </PROFESSIONS>
       </reltypes>
 </properties>
