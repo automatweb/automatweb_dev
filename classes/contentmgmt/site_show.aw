@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.55 2004/05/10 14:53:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.56 2004/05/12 12:39:44 duke Exp $
 
 /*
 
@@ -560,6 +560,10 @@ class site_show extends class_base
 					{
 						$ordby .= " ".$obj->meta("sort_ord");
 					}
+					if ($obj->meta("sort_by") == "documents.modified")
+					{
+						$ordby .= ", objects.created DESC";
+					};
 				}
 				else
 				{
@@ -1597,7 +1601,8 @@ class site_show extends class_base
 			"IS_NOT_FRONTPAGE2" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
 			"site_title" => strip_tags($this->site_title),
 			"site_title_rev" => $site_title_rev,
-			"active_document_title" => $adt
+			"active_document_title" => $adt,
+			"current_period" => aw_global_get("current_period"),
 		));
 
 		if (aw_global_get("uid") == "")
