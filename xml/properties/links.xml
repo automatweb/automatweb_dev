@@ -6,31 +6,32 @@
             <cols>30</cols>
             <rows>5</rows>
             <table>objects</table>
-            <field>comment</field>
             <group>general</group>
+            <field>comment</field>
             <caption>Kommentaar lingikogusse</caption>
       </property>
       <property>
             <name>url</name>
-            <table>extlinks</table>
             <type>textbox</type>
-            <field>url</field>
             <group>general</group>
+            <table>extlinks</table>
+            <field>url</field>
             <caption>URL</caption>
       </property>
       <property>
             <name>hits</name>
-            <table>extlinks</table>
             <type>text</type>
-            <field>hits</field>
             <group>general</group>
+            <table>extlinks</table>
+            <field>hits</field>
             <caption>Klikke</caption>
       </property>
       <property>
             <name>url_int_text</name>
             <type>text</type>
-            <group>general</group>
             <store>no</store>
+            <group>general</group>
+            <table>extlinks</table>
             <field>url_int_text</field>
             <caption>Saidi sisene link</caption>
       </property>
@@ -40,144 +41,144 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <search>1</search>
+            <group>general</group>
             <caption>Alt tekst</caption>
       </property>
       <property>
             <name>newwindow</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <search>1</search>
+            <group>general</group>
             <table>extlinks</table>
             <field>newwindow</field>
-            <group>general</group>
-            <search>1</search>
             <caption>Uues aknas</caption>
       </property>
       <property>
             <name>doclinkcollection</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>general</group>
             <table>extlinks</table>
             <field>doclinkcollection</field>
-            <group>general</group>
             <caption>Dokumendi lingikogusse</caption>
       </property>
       <property>
             <name>use_javascript</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <search>1</search>
+            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>Javascript</group>
-            <search>1</search>
             <caption>Kasuta javascripti</caption>
       </property>
       <property>
             <name>newwinwidth</name>
             <type>textbox</type>
             <ch_value>1</ch_value>
+            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>Javascript</group>
             <caption>Uue akna laius</caption>
       </property>
       <property>
             <name>newwinheight</name>
             <type>textbox</type>
             <ch_value>1</ch_value>
+            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>Javascript</group>
             <caption>Uue akna k&amp;otilde;rgus</caption>
       </property>
       <property>
             <name>newwintoolbar</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>Javascript</group>
             <caption>Toolbar</caption>
       </property>
       <property>
             <name>newwinlocation</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>Javascript</group>
             <caption>Address bar</caption>
       </property>
       <property>
             <name>newwinmenu</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>Javascript</group>
             <caption>Men&amp;uuml;&amp;uuml;d</caption>
       </property>
       <property>
             <name>newwinscroll</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>Javascript</group>
             <caption>Skrollbarid</caption>
       </property>
       <property>
             <name>link_image</name>
             <type>fileupload</type>
-            <group>Pilt</group>
             <store>no</store>
-            <field>link_image</field>
+            <group>Pilt</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Pilt</caption>
       </property>
       <property>
             <name>link_image_show</name>
             <type>text</type>
-            <group>Pilt</group>
             <store>no</store>
-            <field>link_image_show</field>
+            <editonly>1</editonly>
+            <group>Pilt</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption></caption>
       </property>
       <property>
             <name>link_image_check_active</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <table>objects</table>
-            <method>serialize</method>
             <group>Pilt</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Pilt aktiivne</caption>
       </property>
       <property>
             <name>link_image_active_until</name>
             <type>date_select</type>
-            <field>meta</field>
-            <table>objects</table>
-            <method>serialize</method>
             <group>Pilt</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Pilt aktiivne kuni</caption>
       </property>
       <classinfo>
-            <objtable>extlinks</objtable>
-            <objtable_index>id</objtable_index>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>&amp;Uuml;ldine</caption>
-            </general>
             <Javascript>
                   <caption>Javascript</caption>
             </Javascript>
