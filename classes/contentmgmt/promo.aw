@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.24 2004/02/13 12:12:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.25 2004/02/13 16:54:47 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -100,7 +100,10 @@ class promo extends class_base
 		{
 			case "tpl_edit":
 				$tplmgr = get_instance("templatemgr");
-				$data["options"] = $tplmgr->get_template_list(array("type" => 0, "menu" => $args["obj"]["oid"]));
+				$data["options"] = $tplmgr->get_template_list(array(
+					"type" => 0,
+					"menu" => $args["obj_inst"]->id(),
+				));
 				break;
 
 			case "tpl_lead":
@@ -178,12 +181,12 @@ class promo extends class_base
 		switch($data["name"])
 		{
 			case "section":
-				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["form_data"]["include_submenus"]);
+				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["request"]["include_submenus"]);
 				break;
 
 			case "ndocs":
-				$arr["obj_inst"]->set_meta("as_name",$arr["form_data"]["as_name"]);
-				$arr["obj_inst"]->set_meta("src_submenus",$this->make_keys($arr["form_data"]["src_submenus"]));
+				$arr["obj_inst"]->set_meta("as_name",$arr["request"]["as_name"]);
+				$arr["obj_inst"]->set_meta("src_submenus",$this->make_keys($arr["request"]["src_submenus"]));
 				break;
 		};
 		return $retval;
@@ -583,7 +586,7 @@ class promo extends class_base
 			else
 			if (is_array($o->meta("section_include_submenus")))
 			{
-				$pa = array(aw_ini_get("frontpage"), aw_ini_get("rootmenu"));
+				$pa = array(aw_ini_get("rootmenu"));
 				foreach($inst->path as $p_o)
 				{
 					$pa[] = $p_o->id();
