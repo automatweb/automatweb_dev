@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.197 2003/06/12 15:08:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.198 2003/07/01 10:23:16 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1245,16 +1245,29 @@ class document extends aw_template
 			list($_date, $_time) = explode(" ", $data["tm"]);
 			list($hour, $min) = explode(":", $_time);
 
-			list($day,$mon,$year) = explode("/",$_date);
+			$try = explode("/",$_date);
+			if (count($try) < 3)
+			{
+				$ts = 0;
+			}
+			else
+			{
+				list($day,$mon,$year) = explode("/",$_date);
 
-			$ts = mktime($hour,$min,0,$mon,$day,$year);
-			if ($ts)
+				$ts = mktime($hour,$min,0,$mon,$day,$year);
+			}
+
+			if ($ts > (3600*24*400))
 			{
 				$modified = $ts;
 			}
 			else
 			{
 				// 2kki on punktidega eraldatud
+				if ($_date == "")
+				{
+					$_date = $data["tm"];
+				}
 				list($day,$mon,$year) = explode(".",$_date);
 				$ts = mktime($hour,$min,0,$mon,$day,$year);
 				if ($ts)
