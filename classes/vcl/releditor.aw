@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.28 2004/07/19 12:36:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.29 2004/07/19 14:34:10 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -67,6 +67,8 @@ class releditor extends core
 		
 		$cache_inst = get_instance("cache");
 		$cache_inst->file_invalidate_regex('alias_cache-source-.*');
+		// XXX: there is a weird bug with connection caching .. this NEEDS to be fixed in the future
+		$cache_inst->file_invalidate_regex('connection-search.*');
 
 		if (!empty($edit_id) && is_oid($edit_id))
 		{
@@ -75,6 +77,8 @@ class releditor extends core
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => $arr["prop"]["reltype"],
 			));
+
+			
 
 			foreach($conns as $conn)
 			{
@@ -385,7 +389,7 @@ class releditor extends core
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => $arr["prop"]["reltype"],
 			));
-
+			
 			$name = $arr["prop"]["name"];
 
 			
