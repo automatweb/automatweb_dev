@@ -37,7 +37,7 @@
 <!-- END SUB: ENTRY -->
 <tr>
 	<td class="fform" align="center" colspan="2">
-		<input type="submit" value="Salvesta">
+		<input type="submit" value="Save">
 		{VAR:reforb}
 	</td>
 </tr>

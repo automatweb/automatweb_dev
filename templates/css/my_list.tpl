@@ -1,11 +1,11 @@
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <form method="POST" action="{VAR:baseurl}/automatweb/reforb.{VAR:ext}" name="csslist">
 <tr>
-<td height="15" colspan="11" class="fgtitle">&nbsp;<b>CSS Editor (minu stiilid):&nbsp;
-<b><a href="{VAR:link_groups}">Grupid</a> |
-<a href="{VAR:link_sys_styles}">Grupi stiilid</a> |
-<a href="{VAR:link_add_style}">Lisa uus</a> |
-<a href="javascript:document.csslist.submit()"><font color="red">Salvesta</font></b>
+<td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_CSS_CSS_EDITOR}:&nbsp;
+<b><a href="{VAR:link_groups}">{VAR:LC_CSS_GROUPS}</a> |
+<a href="{VAR:link_sys_styles}">{VAR:LC_CSS_GROUPS_STYLES}</a> |
+<a href="{VAR:link_add_style}">{VAR:LC_CSS_ADD_NEW}</a> |
+<a href="javascript:document.csslist.submit()"><font color="red">{VAR:LC_CSS_SAVE}</font></b>
 </td>
 </tr>
 </table>
@@ -18,10 +18,10 @@
 <tr>
 <td align="center" class="title">&nbsp;Akt.&nbsp;</td>
 <td align="center" class="title">&nbsp;#&nbsp;</td>
-<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_NAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_CAHNGED}&nbsp;</td>
 <td align="center" class="title">&nbsp;Muutja&nbsp;</td>
-<td align="center" class="title" colspan="2">&nbsp;Tegevus&nbsp;</td>
+<td align="center" class="title" colspan="2">&nbsp;{VAR:LC_CSS_ACTION}&nbsp;</td>
 </tr>
 <!-- SUB: line -->
 <tr>
@@ -31,8 +31,8 @@
 <td class="fgtext"><strong>{VAR:name}</strong></td>
 <td class="fgtext" align="center">{VAR:modified}</td>
 <td class="fgtext" align="center">{VAR:modifiedby}</td>
-<td class="fgtext" align="center"><a href="{VAR:link_edit}">Muuda</a></td>
-<td class="fgtext" align="center"><a href="javascript:box2('Oled kindel?','{VAR:link_delete}')">Kustuta</a></td>
+<td class="fgtext" align="center"><a href="{VAR:link_edit}">{VAR:LC_CSS_CHANGE}</a></td>
+<td class="fgtext" align="center"><a href="javascript:box2('Oled kindel?','{VAR:link_delete}')">{VAR:LC_CSS_DELETE}</a></td>
 </tr>
 <!-- END SUB: line -->
 </table>

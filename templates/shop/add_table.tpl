@@ -1,20 +1,20 @@
-<a href='{VAR:view}'>Vaata</a>
+<a href='{VAR:view}'>{VAR:LC_SHOP_LOOK}</a>
 <form method="POST" action="reforb.{VAR:ext}" name='q'>
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption2">Nimi:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_NAME1}:</td>
 	<td class="fcaption2" ><input type='text' name='name' value='{VAR:name}'></td>
 </tr>
 <tr>
-	<td class="fcaption2">Kommentaar:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_COMM}:</td>
 	<td class="fcaption2" ><textarea name='comment' rows=5 cols=30>{VAR:comment}</textarea></td>
 </tr>
 <tr>
-	<td class="fcaption2">Kaubaartikkel:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_GOODITEM}:</td>
 	<td class="fcaption2" ><select class='small_button' name='item'>{VAR:items}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2">Mitu tulpa:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_HOW_MANY_COL}:</td>
 	<td class="fcaption2"><input type='text' name='num_cols' value='{VAR:num_cols}' class='small_button' size=3></td>
 </tr>
 <tr>
@@ -25,17 +25,17 @@
 	<!-- SUB: H_EL -->
 		<td class="fcaption2">{VAR:el_name}</td>
 	<!-- END SUB: H_EL -->
-	<td class="fcaption2">Kogus</td>
-	<td class="fcaption2">J&auml;&auml;k</td>
-	<td class="fcaption2">Parent men&uuml;&uuml;</td>
-	<td class="fcaption2">Hind (keskmine)</td>
-	<td class="fcaption2">Broneeritud</td>
-	<td class="fcaption2">T&auml;ituvuse %</td>
-	<td class="fcaption2">Summa</td>
-	<td class="fcaption2">Nimi</td>
-	<td class="fcaption2">Vaata</td>
+	<td class="fcaption2">{VAR:LC_SHOP_AMOUNT}</td>
+	<td class="fcaption2">{VAR:LC_SHOP_LEFTOVER}</td>
+	<td class="fcaption2">{VAR:LC_SHOP_PARENT_ON_MENU}</td>
+	<td class="fcaption2">{VAR:LC_SHOP_PRICE_AVA}</td>
+	<td class="fcaption2">{VAR:LC_SHOP_BRONND}</td>
+	<td class="fcaption2">{VAR:LC_SHOP_FILLING} %</td>
+	<td class="fcaption2">{VAR:LC_SHOP_SUM}</td>
+	<td class="fcaption2">{VAR:LC_SHOP_NAME1}</td>
+	<td class="fcaption2">{VAR:LC_SHOP_LOOK}</td>
 	<td class="fcaption2">ID</td>
-	<td class="fcaption2">Pealkiri</td>
+	<td class="fcaption2">{VAR:LC_SHOP_TITLE}</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
@@ -60,11 +60,11 @@
 </td>
 </tr>
 <tr>
-	<td class="fcaption2">Vali perioodi alguse element:</td>
+	<td class="fcaption2">{VAR:}Vali perioodi alguse element:</td>
 	<td class="fcaption2"><select name='start_el'>{VAR:els}</select></td>
 </tr>
 <tr>
-	<td class="fform" align="center" colspan="2"><input type="submit" value="Salvesta"></td>
+	<td class="fform" align="center" colspan="2"><input type="submit" value="{VAR:LC_SHOP_SAVE}"></td>
 </tr>
 </table>
 {VAR:reforb}

@@ -21,14 +21,14 @@
 </actions>
 
 <data>
-<field name="qid" caption="#" talign="center" sortable="1" type="int"/>
+<field name="qid" caption="#" talign="center" sortable="1" type="int" numeric="yea"/>
 <field name="lid" caption="List" talign="center" sortable="1"/>
 <field name="mid" caption="Meil" talign="center" sortable="1"/>
 <field name="status" caption="Olek" talign="center" sortable="1"/>
-<field name="start_at" caption="Algus" talign="center" type="time" format="H:i d-M-y" sortable="1"/>
-<field name="last_sent" caption="Viimane" talign="center" type="time" format="H:i d-M-y" sortable="1"/>
-<field name="patch_size" caption="Korraga" talign="center" sortable="1" type="int"/>
-<field name="delay" caption="Oota" talign="center" sortable="1" type="int"/>
+<field name="start_at" caption="Algus" talign="center" type="time" format="H:i d-M-y" sortable="1" numeric="yea"/>
+<field name="last_sent" caption="Viimane" talign="center" type="time" format="H:i d-M-y" sortable="1" numeric="yea"/>
+<field name="patch_size" caption="Korraga" talign="center" sortable="1" type="int" numeric="yea"/>
+<field name="delay" caption="Oota" talign="center" sortable="1" type="int" numeric="yea"/>
 <field name="protsent" caption="Valmis" talign="center" sortable="1"/>
 <field name="vali" caption="Vali" talign="center"/>
 </data>

@@ -6,8 +6,8 @@
 <table border="0" cellspacing="1" cellpadding="2">
 <tr>
 <td align="center" class="title">&nbsp;#&nbsp;</td>
-<td align="center" class="title">&nbsp;Default stiil&nbsp;</td>
-<td align="center" class="title">&nbsp;Kirjeldus&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_DEFAULT_STYLE}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_DESCRIPTION}&nbsp;</td>
 </tr>
 <!-- SUB: line -->
 <tr>

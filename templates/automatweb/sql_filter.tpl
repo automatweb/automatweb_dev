@@ -2,16 +2,17 @@
 {VAR:reforb}
 <input type="hidden" name="setfilt" id="setfilt">
 <input type="hidden" name="selt" id="selt" value="">
+<input type="hidden" name="type" id="typeid" value="">
 <table border="0" cellspacing="0" cellpadding="0" >
 <tr><td class="title"></td></tr>
 <tr>
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width="100%">
 
-<tr><td class="fgtitle" width="1%">Nimi</td><td class="fgtext" colspan="3"><input type="text" name="name" value="{VAR:name}" class="small_button" Style="width:280px;"></td></tr>
-<tr><td class="fgtitle" >SQL</td><td class="fgtext" colspan="3" ><input disabled type="text" name="sql" value="{VAR:sql}" class="small_button" Style="width:280px;"></td></tr>
+<tr><td class="fgtitle" width="1%">Nimi</td><td class="fgtext" colspan="4"><input type="text" name="name" value="{VAR:name}" class="small_button" Style="width:280px;"></td></tr>
+<tr><td class="fgtitle" >SQL</td><td class="fgtext" colspan="4" ><input disabled type="text" name="sql" value="{VAR:sql}" class="small_button" Style="width:280px;"></td></tr>
 <tr><td class="fgtext" colspan="1" ><input type="submit" name="save_data"  value="Salvesta" class="small_button"></td>
-<td colspan="3" class="fgtext" align="right">
+<td colspan="4" class="fgtext" align="right">
 <input type="submit"   value="Muuda" class="small_button" OnClick="sendcmd('filter_edit_change_part');">
 <input type="submit"   value="Kustuta" class="small_button" OnClick="sendcmd('filter_edit_del');"></td></tr>
 
@@ -19,15 +20,15 @@
 <td class="title" align="left"><b><a>Seos</a></b></td>
 <td class="title" align="left"><b><a>Tingimus</a></b></td>
 <td class="title" align="center">Jrk</td>
+<td class="title" align="center">Ign</td>
 <td class="title" align="center">Vali</td>
 </tr>
 <!-- SUB: tingimused -->
 <tr>
-<td class="title" align="left">{VAR:join}</td>
-<td class="title" align="left">{VAR:sql}</td>
-<td class="title" align="center">
-<input type="text" name="j2rjekord[{VAR:tid}]" value="{VAR:tid}" size="2">
-</td>
+<td class="{VAR:rclass}" align="left">{VAR:join}</td>
+<td class="{VAR:rclass}" align="left"><a href="{VAR:modifylink}">{VAR:sql}</a></td>
+<td class="{VAR:rclass}" align="center"><input type="text" name="j2rjekord[{VAR:tid}]" value="{VAR:tid}" size="2"></td>
+<td class="{VAR:rclass}" align="center"><input type="checkbox" name="ign[{VAR:tid}]" {VAR:ignchecked}></td>
 <td class="title" align="center">
 <input type="checkbox" name="sel[]" value="{VAR:tid}">
 
@@ -39,28 +40,28 @@
 </tr>
 <!-- END SUB: tingimused -->
 
-<tr><td class="fgtext" colspan="4" >&nbsp;</td></tr>
+<tr><td class="fgtext" colspan="5" >&nbsp;</td></tr>
 
 <tr>
 <!-- SUB: LISA -->
-<td class="ftitle2" colspan="4">Lisa <input type="radio" name="addpos"  value="before" class="small_button">enne&nbsp;&nbsp;<input type="radio" name="addpos" value="after" class="small_button" checked>p‰rast valitut</td>
+<td class="ftitle2" colspan="5">Lisa <input type="radio" name="addpos"  value="before" class="small_button">enne&nbsp;&nbsp;<input type="radio" name="addpos" value="after" class="small_button" checked>p‰rast valitut</td>
 <!-- END SUB: LISA -->
 
 <!-- SUB: MUUDA -->
-<td class="ftitle2" colspan="4">Muuda filtri osa
+<td class="ftitle2" colspan="5">Muuda filtri osa
 <input type="hidden" name="is_change_part" value="1">
 <input type="hidden" name="change_part" value="{VAR:change_part}"></td>
 <!-- END SUB: MUUDA -->
 </tr>
-<tr><td class="fgtitle" >Seos</td><td class="fgtext" colspan="3"><input type="radio" name="op" id="opand" value="and" {VAR:c_opand}  class="small_button">JA&nbsp;&nbsp;<input type="radio" name="op" id="opor" value="or" class="small_button" {VAR:c_opor}>V’I</td></tr>
+<tr><td class="fgtitle" >Seos</td><td class="fgtext" colspan="4"><input type="radio" name="op" id="opand" value="and" {VAR:c_opand}  class="small_button">JA&nbsp;&nbsp;<input type="radio" name="op" id="opor" value="or" class="small_button" {VAR:c_opor}>V’I</td></tr>
 
-<tr><td class="fgtitle" >V‰li</td><td class="fgtext" colspan="3"><select class="small_button" id="fie" name="fie" onchange="onfiechange(document.forms.fr.fie.selectedIndex)">
+<tr><td class="fgtitle" >V‰li</td><td class="fgtext" colspan="4"><select class="small_button" id="fie" name="fie" onchange="onfiechange(document.forms.fr.fie.selectedIndex)">
 {VAR:fieldlist}
 </select></td></tr>
-<tr><td class="fgtitle">Vırdlus</td><td class="fgtext" colspan="3">
+<tr><td class="fgtitle">Vırdlus</td><td class="fgtext" colspan="4">
 <select class="small_button" id="expr" name="expr"></select>
 </td></tr>
-<tr><td class="fgtitle">V‰‰rtus</td><td class="fgtext" colspan="3">
+<tr><td class="fgtitle">V‰‰rtus</td><td class="fgtext" colspan="4">
 <span id="dval">
 <input class="small_button" type=text id="val" name="val" Style="width:280px;">
 </span>
@@ -83,7 +84,16 @@
 </select>
 </span>
 </td></tr>
-<tr><td class="fgtext" colspan="4" ><input class="small_button" type="submit" onclick="javascript:sendcmd('filter_edit_add');" value="{VAR:buttoncaption}"></td></tr>
+<tr><td class="fgtext"><input class="small_button" type="submit" onclick="javascript:sendcmd('filter_edit_add');" value="{VAR:buttoncaption}">
+</td>
+<td colspan="4" class="fgtext">
+<!-- SUB: addpars -->
+&nbsp;&nbsp;<input class="small_button" type="submit" onclick="javascript:sendcmd2('filter_edit_add','left');" value="Lisa (" disabled>
+&nbsp;&nbsp;<input class="small_button" type="submit" onclick="javascript:sendcmd2('filter_edit_add','right');" value="Lisa )" disabled>
+<!-- END SUB: addpars -->
+
+
+</td></tr>
 </table>
 </td></tr>
 </table>
@@ -179,7 +189,7 @@ else
 	n2ita("dval",1);
 };
 
-
+document.forms.fr.typeid.value=ftypes[sel];
 if (ftypes[sel]==2)
 {
  n2ita("ddateval",1);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.48 2001/11/09 22:47:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.49 2001/11/20 13:25:26 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -419,6 +419,8 @@ define("CL_LINK_COLLECTION",81); // lingikogu (dokualiase jaoks)
 
 define("CL_KEYWORD",82); // for keywords
 
+define("CL_KEYWORD_DB", 83); // keywordide andmebaas
+
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
 // nimekiri k6ikidest klassidest ikoonide jaox
@@ -429,7 +431,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_SHOP => array("name" => LC_CONST_SHOP, "file" => "shop", "can_add" => 1),
 			CL_SHOP_ITEM => array("name" => LC_CONST_GOODS_ART, "file" => "shop_item", "can_add" => 1),
 			CL_TABLE	=> array("name" => LC_CONST_TABLE, "file" => "table","can_add" => 1), 
-			CL_IMAGE	=> array("name" => LC_CONST_PICT, "file" => "images", "can_add" => 1), 
+			CL_IMAGE	=> array("name" => LC_CONST_PICT, "file" => "image", "can_add" => 1), 
 			CL_FORM_ENTRY => array("name" => LC_CONST_FORM_ENTRY, "file" => "form_entry"),
 			CL_FORM_ELEMENT => array("name" => LC_CONST_FORM_ELEMENT, "file" => "form_element_vis"),
 			CL_STYLE	=> array("name" => LC_CONST_STYLE, "file" => "style","class" => "style", "can_add" => 1), 
@@ -481,6 +483,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_SEARCH_FILTER => array("name" => "Otsimise filter", "file" => "search_filter", "can_add" => 1),
 			CL_HTML_POPUP => array("name" => "HTML popup", "file" => "html_popup", "can_add" => 1),
 			CL_KEYWORD => array("name" => "AW võtmesõna", "file" => "keywords", "can_add" => 1),
+			CL_KEYWORD_DB => array("name" => "V&otilde;tmes&otilde;nade baas", "file" => "keyword_db", "can_add" => 1)
 );
 // kliendid. 
 // hierarhia esimene element on root
@@ -661,4 +664,10 @@ $AW_SITES_basefolder = "/www";
 $AW_SITES_vhost_folder = "/etc/apache/vhosts";
 $AW_SITES_server_ip = "194.204.30.123";
 $AW_SITES_admin_dir = "/www/automatweb_dev/automatweb";
+
+// objektide subclassid - objects.subclass sees juusimiseks
+
+// for CL_BROTHER_DOCUMENT 
+define("SC_BROTHER_DOC_KEYWORD", 1);	// kui dokumendi vend on tehtud t2nu menuu keywordile
+
 ?>

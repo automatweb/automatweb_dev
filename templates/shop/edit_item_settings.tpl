@@ -18,41 +18,41 @@ window.location=url
 <form action='reforb.{VAR:ext}' method=POST>
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC" >
 	<tr>
-		<td class="fcaption2">Kogusega artikkel</td>
+		<td class="fcaption2">{VAR:LC_SHOP_ITEM_QUANT}</td>
 		<td class="fcaption2"><input type='checkbox' name='has_max' value=1 {VAR:has_max}></td>
-		<td class="fcaption2"><input size=3 type='text' name='max_items' VALUE='{VAR:max_items}'> artiklit kokku</td>
+		<td class="fcaption2"><input size=3 type='text' name='max_items' VALUE='{VAR:max_items}'> {VAR:LC_SHOP_ART_TOG}</td>
 	</tr>
 	<tr>
-		<td class="fcaption2">Perioodiline artikkel</td>
+		<td class="fcaption2">{VAR:LC_SHOP_PER_ART}</td>
 		<td class="fcaption2"><input type='checkbox' name='has_period' value=1 {VAR:has_period}></td>
-		<td class="fcaption2"><input type='text' name='per_cnt' class='small_button' size=3 VALUE='{VAR:per_cnt}'> kordust kokku. <a href='javascript:remote("no",500,500,"{VAR:sel_period}")'>Vali periood</a></td>
+		<td class="fcaption2"><input type='text' name='per_cnt' class='small_button' size=3 VALUE='{VAR:per_cnt}'> {VAR:LC_SHOP_REP_TOG}. <a href='javascript:remote("no",500,500,"{VAR:sel_period}")'>{VAR:LC_SHOP_CHOOSE_PER}</a></td>
 	</tr>
 	<tr>
-		<td class="fcaption2">Perioodi algus</td>
+		<td class="fcaption2">{VAR:LC_SHOP_PERIOD_STARTS}</td>
 		<td class="fcaption2" colspan=2>{VAR:per_from}</td>
 	</tr>
 	<tr>
-		<td class="fcaption2">Igale artiklile oma kalender:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_EACH_HAS_ITS_OWN}:</td>
 		<td class="fcaption2" colspan=2><input type='checkbox' name='has_objs' value=1 {VAR:has_objs}></td>
 	</tr>
 	<tr>
-		<td class="fcaption2">Koguse vorm:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_ORDER_FORM}:</td>
 		<td class="fcaption2" colspan=2>{VAR:cnt_form_name}</td>
 	</tr>
 	<tr>
-		<td class="fcaption2">Hinna arvutamise valem:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_PRICE_CAL}:</td>
 		<td class="fcaption2" colspan=2>{VAR:price_eq}</td>
 	</tr>
 	<tr>
-		<td class="fcaption2">Koguse vorm:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_ORDER_FORM}:</td>
 		<td class="fcaption2" colspan=2><select name='cnt_form'>{VAR:cnt_form}</select></td>
 	</tr>
 	<tr>
-		<td class="fcaption2">Hinna arvutamise valem:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_PRICE_CAL}:</td>
 		<td class="fcaption2" colspan=2><select name='item_eq'>{VAR:item_eq}</select></td>
 	</tr>
 	<tr>
-		<td class="fcaption2">Koguse ekstra v&auml;ljund:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_EX_OUT}:</td>
 		<td class="fcaption2" colspan=2><select name='sel_extra_op'>{VAR:extra_ops}</select></td>
 	</tr>
 </table>

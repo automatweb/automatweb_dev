@@ -8,7 +8,7 @@
 <tr>
 	<td class="fform" colspan="2" align="center">
 	{VAR:upload}
-	<input type="submit" value="Impordi">
+	<input type="submit" value="Import">
 	</td>
 </tr>
 </table>

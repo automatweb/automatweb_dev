@@ -121,6 +121,28 @@
 			</function>
 		</action>
 
+		<action name="filters_export">
+			<function name="orb_filters_export">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filters_import">
+			<function name="orb_filters_import">
+				<arguments>
+					<optional name="gid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_filters_import">
+			<function name="orb_submit_filters_import">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="filters_cut">
 			<function name="orb_filters_cut">
 				<arguments>

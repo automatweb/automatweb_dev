@@ -99,8 +99,6 @@ $lc_menuedit["LC_MENUEDIT_ACTION"] = "Action";
 $lc_menuedit["LC_MENUEDIT_PROPERTIES"] = "Properties";
 $lc_menuedit["LC_MENUEDIT_SURE_DELETE_MENU"] = "Are You sure You wish to delete this menu?";
 $lc_menuedit["LC_MENUEDIT_PERIOD"] = "Period";
-
-
-
+$lc_menuedit["LC_MENUEDIT_CHOOSE_KEYWORDS"] = "Keywords";
 
 ?>

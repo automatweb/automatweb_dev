@@ -517,6 +517,7 @@ define("LC_SEARCH_CONF_FROM_STRING"," from string '%s'");
 //shop.aw
 define("LC_SHOP_HI_USER","Hi!\n\n user %s (ip address: ");
 define("LC_SHOP_TIME",") time ");
+define("LC_SHOP_CHANGED_ORDER","\nchanged order %d and \n");
 define("LC_SHOP_ORDERED_PRODUCT"," ordered following products: \n\n");
 define("LC_SHOP_TOTAL_PRICE","\n\nPrice together: ");
 define("LC_SHOP_BILL_NR","\n\nBill number: ");

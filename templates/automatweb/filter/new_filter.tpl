@@ -15,7 +15,7 @@
 
 <tr>
 <td class="fgtitle"><input type="radio" class="small_button" name="type" value="chain">Otsi pärjast:</td>
-<td class="fgtext"><select class='small_button' NAME='target_id_c'>{VAR:chainlist}</select></td>
+<td class="fgtext"><select class='small_button' NAME='target_id_c[]' multiple>{VAR:chainlist}</select></td>
 </tr>
 
 

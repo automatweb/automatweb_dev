@@ -1,4 +1,4 @@
-<a href='{VAR:to_shop}'>Back to shop</a>
+<a href='{VAR:to_shop}'>{VAR:LC_SHOP_BACK_TO_SHOP}</a>
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 	<tr>
 		<td colspan=2 class="fcaption2">{VAR:item}</td>
@@ -16,62 +16,62 @@
 		</td>
 		<td rowspan=3 class="fcaption" valign="top">
 			<form action='reforb.{VAR:ext}' method=POST>
-			Choose item properties:
+			{VAR:LC_SHOP_CHOOSE_ITEM_PROP}:
 			<table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC" width=100% >
 				<tr>
 					<td class="fcaption2"><input type='checkbox' name='has_max' value=1 {VAR:has_max}></td>
-					<td class="fcaption2">Item with quantity</td>
+					<td class="fcaption2">{VAR:LC_SHOP_IT_WITH_QUANT}</td>
 				</tr>
 				<tr>
 					<td class="fcaption2">&nbsp;</td>
-					<td class="fcaption2"><input size=3 type='text' name='max_items' VALUE='{VAR:max_items}'> total items</td>
+					<td class="fcaption2"><input size=3 type='text' name='max_items' VALUE='{VAR:max_items}'> {VAR:LC_SHOP_ART_TOG}</td>
 				</tr>
 				<tr>
 					<td class="fcaption2"><input type='checkbox' name='has_period' value=1 {VAR:has_period}></td>
-					<td class="fcaption2">Peeeerioodiga item <a href='javascript:remote("no",500,500,"{VAR:sel_period}")'>Choose period</a></td>
+					<td class="fcaption2">{VAR:LC_SHOP_PER_ART} <a href='javascript:remote("no",500,500,"{VAR:sel_period}")'>{VAR:LC_SHOP_CHOOSE_PER}</a></td>
 				</tr>
 				<tr>
 					<td class="fcaption2">&nbsp;</td>
-					<td class="fcaption2">Alates: {VAR:per_from}</td>
+					<td class="fcaption2">{VAR:LC_SHOP_FROM}: {VAR:per_from}</td>
 				</tr>
 				<tr>
 					<td class="fcaption2">&nbsp;</td>
-					<td class="fcaption2">Mitu kordust n&auml;idatakse: <input type='text' name='per_cnt' class='small_button' size=3 VALUE='{VAR:per_cnt}'></td>
+					<td class="fcaption2">{VAR:LC_SHOP_HOW_MANY_REPLAY}: <input type='text' name='per_cnt' class='small_button' size=3 VALUE='{VAR:per_cnt}'></td>
 				</tr>
 				<tr>
 					<td class="fcaption2">&nbsp;</td>
-					<td class="fcaption2"><a href='{VAR:per_prices}'>Determine periodic prices</a></td>
+					<td class="fcaption2"><a href='{VAR:per_prices}'>{VAR:LC_SHOP_DET_PER_PRI}</a></td>
 				</tr>
 				<tr>
 					<td class="fcaption2"><input type='checkbox' name='has_objs' value=1 {VAR:has_objs}></td>
-					<td class="fcaption2">Each item has its own calendar</td>
+					<td class="fcaption2">{VAR:LC_SHOP_EACH_HAS_ITS_OWN}</td>
 				</tr>
 				<tr>
-					<td class="fcaption2" colspan=2>Hinna arvutamise valem: (kui see on t&uuml;hi, siis kasutatakse tavalist hinda)</td>
+					<td class="fcaption2" colspan=2>{VAR:LC_SHOP_PRICE_CAL}</td>
 				</tr>
 				<tr>
 					<td class="fcaption2" colspan=2>{VAR:price_eq}</td>
 				</tr>
 				<tr>
-					<td class="fcaption2" colspan=2>Kauba t&uuml;&uuml;p:</td>
+					<td class="fcaption2" colspan=2>{VAR:LC_SHOP_GOOD_TYPE}:</td>
 				</tr>
 				<tr>
 					<td class="fcaption2" colspan=2>{VAR:type}</td>
 				</tr>
 			</table>
-				<input class="small_button" type='submit' value='Salvesta'>
+				<input class="small_button" type='submit' value='{VAR:LC_SHOP_SAVE}'>
 				{VAR:reforb3}
 			</form>
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption2">Vali mis men&uuml;&uuml; alla minnakse p2rast toote tellimist:</td>
+		<td class="fcaption2">{VAR:LC_SHOP_CHOOSE_AFTER_ORDER}:</td>
 	</tr>
 	<tr>
 		<td class="fcaption2">
 			<form action='reforb.{VAR:ext}' method=POST>
 				<select class="small_button" size=10 name='redir'>{VAR:redir}</select><br>
-				<input class="small_button" type='submit' value='Salvesta'>
+				<input class="small_button" type='submit' value='{VAR:LC_SHOP_SAVE}'>
 				{VAR:reforb2}
 			</form>
 		</td>

@@ -1,19 +1,21 @@
+<link rel="stylesheet" href="http://horizon.struktuur.ee/css/styles.css">
+
 <form action='orb.aw' method="GET">
 <table border=0 cellpadding=0 cellspacing=0>
 <tr>
-<td colspan=2> In this view You can search from made reservations by passenger name, order ID or agent name. </td>
+<td colspan=2 class="text1"> {VAR:LC_SHOP_IN_THIS_VIEW}. </td>
 </tr>
 <tr>
-<td>Name:</td><td><input type='text' name='s_name' value='{VAR:s_name}'></td>
+<td class="text1">{VAR:LC_SHOP_NAME1}:</td><td><input type='text' name='s_name' value='{VAR:s_name}'></td>
 </tr>
 <tr>
-<td>ID:</td><td><input type='text' name='s_id' value='{VAR:s_id}'></td>
+<td class="text1">ID:</td><td><input type='text' name='s_id' value='{VAR:s_id}'></td>
 </tr>
 <tr>
-<td>Agent:</td><td><input type='text' name='s_agent' value='{VAR:s_agent}'></td>
+<td class="text1">{VAR:LC_SHOP_USER}:</td><td><input type='text' name='s_agent' value='{VAR:s_agent}'></td>
 </tr>
 <tr>
-<td colspan=2><input type='submit' value='Otsi'></td>
+<td colspan=2><input type='submit' value='{VAR:LC_SHOP_SEARCH}'></td>
 </tr>
 </table>
 {VAR:reforb}
@@ -24,7 +26,7 @@
 
 <table border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td bgcolor="#F8F1E4"><img src="{VAR:baseurl}/img/1_table_title_nurk2.gif" align="" width="13" height="20" border="0" alt=""></td>
+    <td bgcolor="#F8F1E4" valign="top"><img src="{VAR:baseurl}/img/1_table_title_nurk2.gif" align="" width="13" height="20" border="0" alt=""></td>
 
     <td bgcolor="#F8F1E4" class="text1">
     {VAR:LC_goto_page}:
@@ -43,7 +45,15 @@
 
   </tr>
 </table>
-<hr>
+
+<table border="0" width="750" cellspacing="0" cellpadding="1">
+<tr>
+<td bgcolor="#E8CFA5">
+
+<table border="0" width="100%" cellspacing="0" cellpadding="3" bgcolor="#FFFFFF">
+<tr><td>
+
+
 <table width="750" border="0" cellspacing="1" cellpadding="2" bgcolor="#F8F1E4">
 <tr>
 	<td bgcolor="#F8F1E4" class="text1">{VAR:LC_SHOP_ORDER} ID</td>
@@ -79,3 +89,6 @@
 </tr>
 <!-- END SUB: LINE -->
 </table>
+
+</td></tr></table>
+</td></tr></table>

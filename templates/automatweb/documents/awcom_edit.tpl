@@ -254,6 +254,8 @@ function del_gallery()
 	| Ilma parema paanita: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>
 	| Pealkiri klikitav:	<input type='checkbox' name="title_clickable" {VAR:title_clickable} value=1>
 	| T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1>
+	| Lingi võtmesõnad	<input type='checkbox' name="link_keywords" value=1>
+	| Arhiveeri	<input type='checkbox' name="archive" value=1>
 		</td>
 	</tr>
 </table>
@@ -427,6 +429,33 @@ function format(what,opt)
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
 </tr>
 <tr>
+<td class="hele_hall_taust" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Arhiiv&nbsp;</b></td>
+<td class="hele_hall_taust"><input type="checkbox" name="archive" onClick="toggle_archive_settings()" value="1" {VAR:archive}>
+</td>
+</tr>
+<tr>
+<td class="hele_hall_taust" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Arhiivikoopia nimi&nbsp;</b></td>
+<td class="hele_hall_taust"><input type="text" name="archive_name" class="tekstikast" size="80" value="{VAR:archive_name}">
+</td>
+</tr>
+<script language="JavaScript">
+function toggle_archive_settings()
+{
+	if (document.doc.archive.checked)
+	{
+		document.doc.archive_name.disabled = false;
+	}
+	else
+	{
+		document.doc.archive_name.disabled = true;
+	};
+}
+if (!document.doc.archive.checked)
+{
+	document.doc.archive_name.disabled = true;
+};
+</script>
+<tr>
 <td class="hele_hall_taust" colspan=2><b>&nbsp;Objektid&nbsp;</b> <a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa uus &gt;&gt;&gt;</a><br>
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
 	<tr>
@@ -492,6 +521,120 @@ function format(what,opt)
 	</tr>
 <!-- END SUB: NO_LINKS -->
 
+<!-- SUB: HAS_LINK_COLLECTION -->
+	<tr>
+		<td valign=top>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title">Lingikogu oksad</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title" colspan=8><a href="{VAR:addlink}">Lisa uus</a> | <a href="javascript:ch_link_collection()">Muuda</a> | <a href="javascript:del_link_collection()">Kustuta</a></td>
+				</tr>
+				<tr>
+					<td align="center" class="fcaption5_hele">Nimi</td>
+					<td align="center" class="fcaption5_hele">Kirjeldus</td>
+					<td align="center" class="fcaption5_hele">Alias</td>
+					<td align="center" class="fcaption5_hele">Muutja</td>
+					<td align="center" class="fcaption5_hele">Muudetud</td>
+					<td class="title" align="center" colspan=2>Vali</td>
+				</tr>
+				<!-- SUB: LINK_COLLECTION_LINE -->
+				<tr>
+					<td align="center" class="fcaption5_hele_taust"><a href='{VAR:ch_link_collection}'>{VAR:name}</a></td>
+					<td align="center" class="fcaption5_hele_taust">{VAR:comment}</td>
+					<td align="center" class="fcaption5_hele_taust"><input class='tekstikast_n'  onClick='this.select()' type='text' value='{VAR:alias}' onBlur='this.value="{VAR:alias}";' size=5 class='small_button'></td>
+					<td align="center" class="fcaption5_hele_taust">{VAR:modifiedby}</td>
+					<td align="center" class="fcaption5_hele_taust">{VAR:modified}</td>
+					<td align="center" class="title" width=1><input type='radio' name='links' value='{VAR:id}' onClick="sel_link={VAR:id};"></td>
+					<td align="center" class="title" width=1><input type='checkbox' name='links_c[{VAR:id}]' value=1></td>
+				</tr>
+				<!-- END SUB: LINK_COLLECTION_LINE -->
+			</table>
+		</td>
+	</tr>
+<!-- END SUB: HAS_LINK_COLLECTION -->
+
+<!-- SUB: NO_LINK_COLLECTION -->
+	<tr>
+		<td valign=top>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title">Lingikogu</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title" colspan=8><a href="{VAR:addlink}">Lisa uus</a></td>
+				</tr>
+			</table>
+		</tr>
+	</tr>
+<!-- END SUB: NO_LINK_COLLECTION -->
+
+<!-- SUB: HAS_FORUM -->
+	<tr>
+		<td valign=top>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title">Foorumid</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title" colspan=8><a href="{VAR:addlink}">Lisa uus</a> | <a href="javascript:ch_forum()">Muuda</a> | <a href="javascript:del_forum()">Kustuta</a></td>
+				</tr>
+				<tr>
+					<td align="center" class="fcaption5_hele">Nimi</td>
+					<td align="center" class="fcaption5_hele">Kirjeldus</td>
+					<td align="center" class="fcaption5_hele">Alias</td>
+					<td align="center" class="fcaption5_hele">Muutja</td>
+					<td align="center" class="fcaption5_hele">Muudetud</td>
+					<td class="title" align="center" colspan=2>Vali</td>
+				</tr>
+				<!-- SUB: FORUM_LINE -->
+				<tr>
+					<td align="center" class="fcaption5_hele_taust"><a href='{VAR:edlink}'>{VAR:name}</a></td>
+					<td align="center" class="fcaption5_hele_taust">{VAR:comment}</td>
+					<td align="center" class="fcaption5_hele_taust"><input class='tekstikast_n'  onClick='this.select()' type='text' value='{VAR:alias}' onBlur='this.value="{VAR:alias}";' size=5 class='small_button'></td>
+					<td align="center" class="fcaption5_hele_taust">{VAR:modifiedby}</td>
+					<td align="center" class="fcaption5_hele_taust">{VAR:modified}</td>
+					<td align="center" class="title" width=1><input type='radio' name='forum' value='{VAR:id}' onClick="sel_forum={VAR:id};"></td>
+					<td align="center" class="title" width=1><input type='checkbox' name='forums_c[{VAR:id}]' value=1></td>
+				</tr>
+				<!-- END SUB: FORUM_LINE -->
+			</table>
+		</td>
+	</tr>
+<!-- END SUB: HAS_FORUM -->
+
+<!-- SUB: NO_FORUM -->
+	<tr>
+		<td valign=top>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title">Foorum</td>
+				</tr>
+			</table>
+		</td>
+		<td>
+			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
+				<tr>
+					<td class="title" colspan=8><a href="{VAR:addlink}">Lisa uus</a></td>
+				</tr>
+			</table>
+		</tr>
+	</tr>
+<!-- END SUB: NO_FORUM -->
+
 <!-- SUB: HAS_IMAGES -->
 	<tr>
 		<td colspan=2><img src='{VAR:baseurl}/images/transa.gif' width=10 height=16></td>
@@ -507,7 +650,7 @@ function format(what,opt)
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:add_img}">Lisa uus</a> | <a href="javascript:ch_image()">Muuda</a> | <a href="javascript:del_image();">Kustuta</a></td>
+					<td class="title" colspan=7><a href="{VAR:add_nimg}">Lisa uus</a> | <a href="javascript:ch_image()">Muuda</a> | <a href="javascript:del_image();">Kustuta</a></td>
 				</tr>
 				<tr>
 					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=name&pic_order={VAR:pic_order}'>Nimi {VAR:pic_name_img}</a></td>
@@ -519,7 +662,7 @@ function format(what,opt)
 				</tr>
 				<!-- SUB: IMG_LINE -->
 				<tr>
-					<td align="center" class="fcaption5_hele_taust"><a href='{VAR:ch_img}'>{VAR:name}</a></td>
+					<td align="center" class="fcaption5_hele_taust"><a href='{VAR:ch_nimg}'>{VAR:name}</a></td>
 					<td align="center" class="fcaption5_hele_taust">{VAR:comment}</td>
 					<td align="center" class="fcaption5_hele_taust"><input class='tekstikast_n'  onBlur='this.value="{VAR:alias}";' onClick='this.select()' type='text' value='{VAR:alias}' size=5 class='small_button'></td>
 					<td align="center" class="fcaption5_hele_taust">{VAR:modifiedby}</td>
@@ -545,7 +688,7 @@ function format(what,opt)
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:add_img}">Lisa uus</a></td>
+					<td class="title" colspan=7><a href="{VAR:add_nimg}">Lisa uus</a></td>
 				</tr>
 			</table>
 		</tr>
@@ -922,3 +1065,5 @@ function format(what,opt)
 </table>
 {VAR:reforb}
 </form>
+<iframe width="700" height="400" frameborder="1" src="{VAR:aliasmgr_link}">
+</iframe>

@@ -5,10 +5,10 @@ Page:
 <!-- SUB: SEL_PAGE -->
 &nbsp;&gt;{VAR:page}&lt;&nbsp;
 <!-- END SUB: SEL_PAGE -->
-&nbsp;&nbsp;<a href='{VAR:add_page}'>{VAR:LC_GALLERY_ADD}</a> | <a href='{VAR:del_page}'>Kustuta lehek&uuml;lg</a><br>
+&nbsp;&nbsp;<a href='{VAR:add_page}'>{VAR:LC_GALLERY_ADD}</a> | <a href='{VAR:del_page}'>{VAR:LC_GALLERY_DEL_PAGE}</a><br>
 <form action='reforb.{VAR:ext}' METHOD=POST enctype='multipart/form-data'>
-Kas galerii on slideshow: <input type='checkbox' name='is_slideshow' value='1' {VAR:is_slideshow}><br>
-Kas slideshow on automaatne: <input type='checkbox' name='is_automatic_slideshow' value='1' {VAR:is_automatic_slideshow}><br>
+{VAR:LC_GALLERY_IS_GALLERY_SLIDESHOW}: <input type='checkbox' name='is_slideshow' value='1' {VAR:is_slideshow}><br>
+{VAR:LC_GALLERY_IS_SLIDESHOW_AUTO}: <input type='checkbox' name='is_automatic_slideshow' value='1' {VAR:is_automatic_slideshow}><br>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='1000000'>
 <table border=1 cellpadding=2 cellspacing=0>
 <!-- SUB: LINE -->

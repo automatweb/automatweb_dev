@@ -4,27 +4,27 @@ function Do(what,gid)
 {
 if (what=="uus")
 {
-	foo.gname.value=prompt("Sisesta uue grupi nimi","");
-	if (foo.gname.value=="null")
+	document.foo.gname.value=prompt("Sisesta uue grupi nimi","");
+	if (document.foo.gname.value=="null")
 		return;
 	what="filters_newgroup";
 };
 if (what=="filters_rengroup")
 {
-	foo.gname.value=prompt("Sisesta grupile uus nimi","");
-	if (foo.gname.value=="null")
+	document.foo.gname.value=prompt("Sisesta grupile uus nimi","");
+	if (document.foo.gname.value=="null")
 		return;
 };
-	foo.action.value=what;
-	foo.gid.value=gid;
-	foo.submit();
+	document.foo.action.value=what;
+	document.foo.gid.value=gid;
+	document.foo.submit();
 };
 function Do2(what,gid,fid)
 {
-	foo.action.value=what;
-	foo.gid.value=gid;
-	foo.gname.value=fid;
-	foo.submit();
+	document.foo.action.value=what;
+	document.foo.gid.value=gid;
+	document.foo.gname.value=fid;
+	document.foo.submit();
 };
 </script>
 <a href="javascript:Do('uus');">Uus grupp</a>
@@ -42,7 +42,9 @@ function Do2(what,gid,fid)
 <a href="javascript:Do('filters_new',{VAR:gid})">Uus</a> |
 <a href="javascript:Do('filters_cut',{VAR:gid})">Cut</a> |
 <a href="javascript:Do('filters_paste',{VAR:gid})">Paste</a> |
-<a href="javascript:Do('filters_del',{VAR:gid})">Kustuta</a>
+<a href="javascript:Do('filters_del',{VAR:gid})">Kustuta</a>|
+<a href="javascript:Do('filters_export',{VAR:gid})">Ekspordi</a>|
+<a href='javascript:aw_popup("{VAR:l_import}","Impordi_Filtreid",500,100);'>Impordi</a>
 </td></tr>
 <tr>
 <td class="title" align="left"><b><a>Nimi</a></b></td>

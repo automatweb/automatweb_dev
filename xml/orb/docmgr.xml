@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="docmgr">
+
+		<action name="search">
+			<function name="search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_search">
+			<function name="submit_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+	</class>
+</orb>
+		

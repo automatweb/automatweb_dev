@@ -36,44 +36,163 @@ function paste()
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
+
+
 <form action='reforb.{VAR:ext}' METHOD=POST NAME='foo'>
+
+
+<!--1-->
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+
+<tr>
+<td height="15" class="menuedittitle">
+<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="3" BORDER=0 ALT=""><br>
+	<!--begin buttonid-->
+
+
+
+	<!--2-->
+	<table border="0" cellpadding="0" cellspacing="0">
+	<tr>
+
+	<td height="15" class="menuedittitle" nowrap>
+	<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="3" BORDER=0 ALT=""><br>
+	&nbsp;<b><font color="#eeeeee">{VAR:LC_MENUEDIT_MENU_CAPS}:</font>&nbsp;
+
+
+
+	</td>
+	<td>
+	<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="3" BORDER=0 ALT=""><br>
+		<!--3-->
+		<table border="0" cellpadding="0" cellspacing="0">
+		<tr>
+
+		<!-- SUB: ADD_CAT -->
+		<!--begin button trans-->
+		
+		
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_buttontrans-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td nowrap height="15" class="menueditbuttontrans" background="{VAR:baseurl}/automatweb/images/menuedit_buttontrans-taust.gif"><a href='{VAR:addmenu}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD}</a></td>
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_buttontrans-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td width="4"><IMG SRC="automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
+			<!--end button trans-->
+			
+		<!-- END SUB: ADD_CAT -->
+
+
+		
+			<!--begin button-->
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td nowrap height="15" class="menueditbutton"><a href='{VAR:addpromo}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD_PROMO_BOX}</a></td>
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
+			<!--end button-->
+
+
+			<!--begin button-->
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td nowrap height="15" class="menueditbutton"><a href='javascript:document.foo.submit()' class="fgtitle_link">{VAR:LC_MENUEDIT_SAVE}</a></td>
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
+			<!--end button-->
+
+
+			<!--begin button-->
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td nowrap height="15" class="menueditbutton"><a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_MENUEDIT_REFRESH}</a></td>
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
+			<!--end button-->
+
+
+
+			<!--begin button-->
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td nowrap height="15" class="menueditbutton"><a href='{VAR:import}' class="fgtitle_link">{VAR:LC_MENUEDIT_IMPORT}</a></td>
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
+			<!--end button-->
+
+
+			<!--begin button-->
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td nowrap height="15" class="menueditbutton"><a href='javascript:cut()' class="fgtitle_link">Cut</a></td>
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
+			<!--end button-->
+
+
+ 
+
+			<!-- SUB: PASTE -->
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td nowrap height="15" class="menueditbutton"><a href='javascript:paste()' class="fgtitle_link">Paste</a></td>
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
+			<!-- END SUB: PASTE -->
+
+
+			<!--begin button-->
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td nowrap height="15" class="menueditbutton"><a href='javascript:del()' class="fgtitle_link">Delete</a></td>
+			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
+			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
+			<!--end button-->
+
+
+
+		</tr>
+		</table>
+		<!--END 3-->
+
+
+	</tr>
+	</table>
+	<!--END 2-->
+
+
+</td>
+
+<td align=right class="menuedittitle">[<a target="list" href='languages.{VAR:ext}'><b><font
+size=2 color="#e0e7f0">{VAR:lang_name}</font></b></a>]&nbsp;&nbsp; <a
+href='orb.aw?action=list&class=bugtrack&filt=all'><font color="#e0e7f0">BugTrack</font></a>&nbsp;<a
+href='http://www.automatweb.com' target="_new"><img border=0 src='images/jessss1.gif'></a></td>
+</tr>
+
+<tr>
+<td colspan="3" class="menuedittitle">
+<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="5" BORDER=0 ALT=""><br>
+</td>
+</tr>
+
+
+<tr>
+<td colspan="2" class="menueditsaoledsiin">
+<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="3" BORDER=0 ALT=""><br>
+
+&nbsp;{VAR:yah}&nbsp;<br>
+
+<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="2" BORDER=0 ALT=""><br>
+</td>
+
+</tr>
+</table>
+<!--END 1-->
+
+
+
+
+
+
+
+
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#CCCCCC">
 
-<table border="0" cellspacing="0" cellpadding="1" width=100%>
-<tr>
-<td bgcolor=#000000>
-<table border="0" cellspacing="0" cellpadding="0" width=100%>
-<tr>
-<td height="15" colspan="11" class="fgtitle_new" background="images/uus_sinine.gif" >&nbsp;<b>{VAR:LC_MENUEDIT_MENU_CAPS}: 
-<!-- SUB: ADD_CAT -->
-<a href='{VAR:addmenu}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD}</a>
-<!-- END SUB: ADD_CAT -->
- | <a href='{VAR:addpromo}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD_PROMO_BOX}</a>
- | <a href='javascript:document.foo.submit()' class="fgtitle_link">{VAR:LC_MENUEDIT_SAVE}</a>
- | <a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_MENUEDIT_REFRESH}</a>
- | <a href='{VAR:import}' class="fgtitle_link">{VAR:LC_MENUEDIT_IMPORT}</a>
- | <a href='javascript:cut()' class="fgtitle_link">Cut</a>
-<!-- SUB: PASTE -->
- | <a href='javascript:paste()' class="fgtitle_link">Paste</a>
-<!-- END SUB: PASTE -->
- | <a href='javascript:del()' class="fgtitle_link">Delete</a>
-</b>
-</td>
-<td height="15" colspan="11" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right>[<a target="list" href='languages.{VAR:ext}'><b><font size=2 color="#FF8080">{VAR:lang_name}</font></b></a>]&nbsp;&nbsp; <a href='orb.aw?action=list&class=bugtrack&filt=all' class='fgtitle_link'>BugTrack</a></td>
-<td height="15" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right><a href='http://www.automatweb.com' target="_new"><img border=0 src='images/jessss1.gif'></a>
-</td>
-</tr>
-</table>
-</td>
-</tr>
-</table>
-<table border="0" cellspacing="1" cellpadding="0" width=100%>
-<tr>
-<td class="title_hele" colspan=12 valign=center><table border=0 cellpadding=0 cellspacing=0><tr><td class="title_hele" >&nbsp;{VAR:yah}&nbsp;</td><td class="title_hele" ><img valign="center" src='images/transa.gif' height=18 width=1></td></tr></table></td>
-</tr>
 
+<table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
 <td height="15" class="title">&nbsp;</td>
 <td height="15" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=name&order={VAR:order1}&period={VAR:period}'>{VAR:LC_MENUEDIT_NAME}</a>{VAR:sortedimg1}&nbsp;</td>
@@ -83,7 +202,7 @@ function paste()
 <td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=modified&order={VAR:order4}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED}</a>{VAR:sortedimg4}&nbsp;</td>
 <td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=periodic&order={VAR:order6}&period={VAR:period}'>{VAR:LC_MENUEDIT_PERIODIC}</a>{VAR:sortedimg6}&nbsp;</td>
 <td align="center" colspan="4" class="title">&nbsp;{VAR:LC_MENUEDIT_ACTION}&nbsp;</td>
-<td align="center" class="title">&nbsp;{VAR:LC_MENUEDIT_CHOOSE}&nbsp;</td>
+<td align="center" class="title"><b>&nbsp;{VAR:LC_MENUEDIT_CHOOSE}&nbsp;</b></td>
 </tr>
 <!-- SUB: CUT -->
 fgtext2
@@ -133,13 +252,20 @@ fgtext
 <a href='editacl.{VAR:ext}?oid={VAR:r_menu_id}&file=menu.xml'>ACL</a>
 <!-- END SUB: CAN_ACL -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;<input type='checkbox' NAME='sel[{VAR:menu_id}]' VALUE=1>&nbsp;</td>
+<td class="title">&nbsp;<input type='checkbox' NAME='sel[{VAR:menu_id}]' VALUE=1>&nbsp;</td>
 </tr>
 <!-- END SUB: LINE -->
 </table>
+
+
+
 </td>
 </tr>
 </table>
+
+
+
+
 <input type="hidden" name="period" value="{VAR:period}">
 {VAR:reforb}
 </form>

@@ -25,7 +25,7 @@
 {VAR:reforb}
 </form>
 <Br><br>
-{VAR:LC_BANNER_STATISTICS}Statistika: <br>
+{VAR:LC_BANNER_STATISTICS}: <br>
 {VAR:LC_BANNER_TOG_BANNER_SHOW}: {VAR:t_views}<br>
 {VAR:LC_BANNER_CLICKS_TOGETHER}: {VAR:t_clicks}<br>
 {VAR:LC_BANNER_TOG_PROFILE}: {VAR:t_profiles}<br>

@@ -2,7 +2,7 @@
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
 <td class="fcaption">
-Stiili nimi:
+{VAR:LC_CSS_STYLE_NAME}:
 </td>
 <td class="fform">
 <input type="text" name="name" size="40">

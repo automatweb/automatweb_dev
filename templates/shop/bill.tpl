@@ -3,14 +3,14 @@
 
 <img border=0 src="http://www.horizontravel.ee/img.aw?file=9d02e1a98d969cd3da2bc50827168edd.pjpeg">
 
-<font face="Verdana, Arial" size="2"> <center>Arve nr.{VAR:number}</center><br><br></font>
+<font face="Verdana, Arial" size="2"> <center>{VAR:LC_SHOP_BILL_NR}.{VAR:number}</center><br><br></font>
 <font face="Verdana, Arial" size="2"> {VAR:date}</font><br>
 <hr>
 {VAR:log_info}
 <br>
 <hr>
 {VAR:ITEM}
-<font face="Verdana, Arial" size="2"><br><b>Reisijad:</b><br></font>
+<font face="Verdana, Arial" size="2"><br><b>{VAR:LC_SHOP_PASSENGERS}:</b><br></font>
 {VAR:inf_form}
 <hr>
 <table>
@@ -19,16 +19,16 @@
 			<table font face="Verdana, Arial" font size="2">
 				<tr>
 					
-<td> <font face="Verdana, Arial" size="2"> Hind kokku:&nbsp;&nbsp;</td>
+<td> <font face="Verdana, Arial" size="2"> {VAR:LC_SHOP_PRICE_TOG}:&nbsp;&nbsp;</td>
 				</tr>
 				<tr>
-					<td><font face="Verdana, Arial" size="2">Komisjon:</td>
+					<td><font face="Verdana, Arial" size="2">{VAR:LC_SHOP_COMISJON}:</td>
 				</tr>
 					<tr>
-					<td><font face="Verdana, Arial" size="2">Käibemaks (0 %):</td>
+					<td><font face="Verdana, Arial" size="2">{VAR:LC_SHOP_SOMETAX} (0 %):</td>
 				</tr>				
 				<tr>
-					<td><font face="Verdana, Arial" size="2">Tasuda: </font></td>
+					<td><font face="Verdana, Arial" size="2">{VAR:LC_SHOP_TO_PAY}: </font></td>
 
 				
 </tr>

@@ -24,7 +24,7 @@ function varvivalik(which)
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
 <td height="15" colspan="11" class="fgtitle">&nbsp;<b>CSS Editor:&nbsp;
-<b><a href="javascript:document.cssedit.submit()"><font color="red">Salvesta</font></b>
+<b><a href="javascript:document.cssedit.submit()"><font color="red">{VAR:LC_CSS_SAVE}</font></b>
 </td>
 </tr>
 </table>
@@ -38,8 +38,8 @@ function varvivalik(which)
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2">
 <tr>
-<td class="fgtext">Nimi:</td>
-<td class="fgtext"><input type="text" name="name" size="30" value="{VAR:name}"</td>
+<td class="fgtext">{VAR:LC_CSS_NAME}:</td>
+<td class="fgtext"><input type="text" name="name" size="30" value="{VAR:name}"></td>
 </tr>
 <tr>
 <td class="fgtext" valign="top">Font</td>
@@ -55,7 +55,7 @@ function varvivalik(which)
 </td>
 </tr>
 <tr>
-<td class="fgtext">Stiil</td>
+<td class="fgtext">{VAR:LC_CSS_STYLE}</td>
 <td class="fgtext">
 <input type="checkbox" name="italic" value="1" {VAR:italic}><i>Italic</i> |
 <input type="checkbox" name="bold" value="1" {VAR:bold}><b>Bold</b> |
@@ -63,7 +63,7 @@ function varvivalik(which)
 </td>
 </tr>
 <tr>
-<td class="fgtext">Suurus</td>
+<td class="fgtext">{VAR:LC_CSS_HEIGHT}</td>
 <td class="fgtext"><input type="text" name="size" size="4" maxlength="4" value="{VAR:size}">
 <select name="units">
 {VAR:units}
@@ -71,16 +71,16 @@ function varvivalik(which)
 </td>
 </tr>
 <tr>
-<td class="fgtext">Teksti värv</td>
+<td class="fgtext">{VAR:LC_CSS_TEXT_COLOR}</td>
 <td class="fgtext"><input type="text" name="fgcolor" size="7" maxlength="7" value="{VAR:fgcolor}">
 &nbsp;
-<a href="javascript:varvivalik('fgcolor')">Vali</a></td>
+<a href="javascript:varvivalik('fgcolor')">{VAR:LC_CSS_CHOOSE}</a></td>
 </tr>
 <tr>
-<td class="fgtext">Tausta värv</td>
+<td class="fgtext">{VAR:LC_CSS_BACK_COLOR}</td>
 <td class="fgtext"><input type="text" name="bgcolor" size="7" maxlength="7" value="{VAR:bgcolor}">
 &nbsp;
-<a href="javascript:varvivalik('bgcolor')">Vali</a>
+<a href="javascript:varvivalik('bgcolor')">{VAR:LC_CSS_CHOOSE}</a>
 </td>
 </tr>
 </table>
@@ -98,7 +98,7 @@ function varvivalik(which)
 <tr>
 <td valign="top" class="demo">
 Sample text here and sample form elements below<p>
-<a href="#" class="demo">Näitelink</a><p>
+<a href="#" class="demo">{VAR:LC_CSS_SLINK}</a><p>
 <input type="text" class="demo" size="30" width="30"><br>
 <input class="demo" type="checkbox">&nbsp;&nbsp;
 <input class="demo" type="checkbox">&nbsp;&nbsp;
@@ -111,9 +111,9 @@ Sample text here and sample form elements below<p>
 <input type="button" class="demo" value=" Nupp ">
 <p>
 <select class="demo" size="3">
-<option>üks
-<option>kaks
-<option>kolm
+<option>one
+<option>two
+<option>three
 </select>
 </td>
 </tr>

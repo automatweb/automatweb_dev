@@ -6,8 +6,8 @@
 <table border="0" cellspacing="1" cellpadding="2">
 <tr>
 <td align="center" class="title">&nbsp;#&nbsp;</td>
-<td align="center" class="title">&nbsp;Süsteemi stiil&nbsp;</td>
-<td align="center" class="title">&nbsp;Oma stiil&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_SYSTEM_STYLE}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_YOUR_STYLE}&nbsp;</td>
 </tr>
 <!-- SUB: line -->
 <tr>

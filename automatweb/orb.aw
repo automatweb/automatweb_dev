@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.3 2001/07/18 16:22:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.4 2001/11/20 13:25:28 kristo Exp $
 // noja tekalt voib selle ju taiesti vabalt adminni index.aw sisse integreerida
 // voi mis?
 include("const.aw");
@@ -13,16 +13,21 @@ if (!$t->prog_acl("view", PRG_MENUEDIT))
 	exit;
 }
 
+$merged = array_merge($HTTP_GET_VARS,$HTTP_POST_VARS);
 $orb = new orb(array(
 	"class" => $class,
 	"action" => $action,
-	"vars" => ($reforb == 1) ? $HTTP_POST_VARS : $HTTP_GET_VARS,
+	"vars" => $merged,
 	"silent" => false,
 ));
 $orb_data = $orb->get_data();
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
 // mingi lahendus
+if ($no_redir)
+{
+	$reforb = 0;
+};
 if (substr($orb_data,0,5) == "http:")
 {
 	$reforb = 1;

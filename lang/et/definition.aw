@@ -535,6 +535,7 @@ define("LC_SEARCH_CONF_FROM_STRING"," stringist '%s'");
 define("LC_SHOP_HI_USER","Tere!\n\n kasutaja %s (ip aadress: ");
 define("LC_SHOP_TIME",") kell ");
 define("LC_SHOP_ORDERED_PRODUCT"," tellis järgmised tooted: \n\n");
+define("LC_SHOP_CHANGED_ORDER","\nmuutes tellimust %d ");
 define("LC_SHOP_TOTAL_PRICE","\n\nKokku hind: ");
 define("LC_SHOP_BILL_NR","\n\nArve number: ");
 define("LC_SHOP_ORDERES_DATA","\n\nTellija sisestas enda kohta järgmised andmed:\n\n");

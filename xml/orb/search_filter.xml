@@ -25,6 +25,13 @@
 			</function>
 		</action>
 
+		<action name="convert_objects">
+			<function name="convert_objects">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="change">
 			<function name="orb_change">
 				<arguments>
@@ -85,6 +92,14 @@
 			</function>
 		</action>
 
+		<action name="stat_select_submit">
+			<function name="orb_stat_select_submit">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="output_submit">
 			<function name="orb_output_submit">
 				<arguments>
@@ -131,6 +146,13 @@
 		
 		<action name="submit_select_forms">
 			<function name="orb_submit_select_forms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_select_fields">
+			<function name="orb_submit_select_fields">
 				<arguments>
 				</arguments>
 			</function>

@@ -7,6 +7,8 @@
 			<function name="gen_admin_html">
 				<arguments>
 					<required name="id"/>
+					<optional name="is_filter"/>
+					<optional name="filter"/>
 				</arguments>
 			</function>
 		</action>
@@ -15,6 +17,8 @@
 			<function name="gen_admin2_html">
 				<arguments>
 					<required name="id"/>
+					<optional name="is_filter"/>
+					<optional name="filter"/>
 				</arguments>
 			</function>
 		</action>

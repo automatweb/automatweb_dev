@@ -147,5 +147,9 @@ $lc_shop["LC_SHOP_BRONND"] = "Broneeritud";
 $lc_shop["LC_SHOP_FILLING"] = "T&auml;ituvuse";
 $lc_shop["LC_SHOP_TITLE"] = "Pealkiri";
 $lc_shop["LC_SHOP_CHOOSE_PER_START_EL"] = "Vali perioodi alguse element";
+$lc_shop["LC_SHOP_SEARCH"] = "Otsi";
+$lc_shop["LC_SHOP_LEFTOVER"] = "J&auml;&auml;k";
+$lc_shop["LC_SHOP_SUM"] = "Summa";
+
 
 ?>

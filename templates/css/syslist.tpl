@@ -5,21 +5,21 @@
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2">
 <tr>
-<td colspan="8" class="title">&nbsp;<b>Süsteemsed stiiligrupid</b>
+<td colspan="8" class="title">&nbsp;<b>{VAR:LC_CSS_SYSTEM_STYLEGROUPS}</b>
 |
-<a href="{VAR:link_addgroup}">Lisa uus</a>
+<a href="{VAR:link_addgroup}">{VAR:LC_CSS_ADD_NEW}</a>
 |
-<a href="javascript:document.syslist.submit()"><font color="red">Salvesta</font></a>
+<a href="javascript:document.syslist.submit()"><font color="red">{VAR:LC_CSS_SAVE}</font></a>
 </td>
 </tr>
 <tr>
 <td align="center" class="title">&nbsp;#&nbsp;</td>
-<td align="center" class="title">&nbsp;Grupi nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Kommentaar&nbsp;</td>
-<td align="center" class="title">&nbsp;Autor&nbsp;</td>
-<td align="center" class="title">&nbsp;Aktiivne&nbsp;</td>
-<td align="center" class="title">&nbsp;Kasutusel&nbsp;</td>
-<td align="center" class="title" colspan="2">&nbsp;Tegevus&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_GROUP_NAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_COMMENT}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_AUTHOR}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_ACTIVE}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_CSS_IN_USE}&nbsp;</td>
+<td align="center" class="title" colspan="2">&nbsp;{VAR:LC_CSS_ACTION}&nbsp;</td>
 </tr>
 <!-- SUB: line -->
 <tr>
@@ -34,10 +34,10 @@
 	<input type="radio" name="use" value="{VAR:oid}" {VAR:use}>
 </td>
 <td class="fgtext" align="center">
-	<a href="{VAR:link_edgroup}">Muuda</a>
+	<a href="{VAR:link_edgroup}">{VAR:LC_CSS_CHANGE}</a>
 </td>
 <td class="fgtext" align="center">
-	<a href="{VAR:link_prevgroup}">Eelvaade</a>
+	<a href="{VAR:link_prevgroup}">{VAR:LC_CSS_PREVIEW}</a>
 </td>
 </tr>
 <!-- END SUB: line -->
