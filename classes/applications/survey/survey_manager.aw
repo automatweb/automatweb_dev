@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.5 2004/10/29 15:50:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.6 2004/10/30 13:04:00 duke Exp $
 // survey_manager.aw - Ankeetide haldur 
 /*
 
@@ -91,17 +91,24 @@ class survey_manager extends class_base
 			case "survey_name":
 				$o = $arr["obj_inst"];
 				$cform_id = $o->prop("use_cfgform");
-				$t = get_instance(CL_CFGFORM);
-				$props = $t->get_props_from_cfgform(array("id" => $cform_id));
-				$opts = array();
-				foreach($props as $key => $val)
+				if (is_oid($cform_id))
 				{
-					if ($val["type"] == "textbox")
+					$t = get_instance(CL_CFGFORM);
+					$props = $t->get_props_from_cfgform(array("id" => $cform_id));
+					$opts = array();
+					foreach($props as $key => $val)
 					{
-						$opts[$key] = $val["caption"];
+						if ($val["type"] == "textbox")
+						{
+							$opts[$key] = $val["caption"];
+						};
 					};
+					$prop["options"] = $opts;
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
 				};
-				$prop["options"] = $opts;
 				break;
 
 		};
@@ -368,9 +375,6 @@ class survey_manager extends class_base
 			};
 		}
 
-		// so basically, what is it what I want? I want to generate a nice custom form and display that
-		// to the user
-
 		$cform_id = $o->prop("use_cfgform");
 		$use_props = $all_props = array();
 		$cb_values = aw_global_get("cb_values");
@@ -400,37 +404,13 @@ class survey_manager extends class_base
 
 			aw_session_del("cb_values");
 
-			$htmlc->add_property(array(
-				"name" => "class",
-				"value" => get_class($this),
-				"type" => "hidden",
+			$htmlc->finish_output(array("data" => array(
+				"class" => get_class($this),
+				"action" => "process_survey",
+				"survey_id" => $o->id(),
+				"section" => aw_global_get("section"),
+				),
 			));
-			
-			$htmlc->add_property(array(
-				"name" => "action",
-				"value" => "process_survey",
-				"type" => "hidden",
-			));
-			
-			$htmlc->add_property(array(
-				"name" => "action",
-				"value" => "process_survey",
-				"type" => "hidden",
-			));
-			
-			$htmlc->add_property(array(
-				"name" => "survey_id",
-				"value" => $o->id(),
-				"type" => "hidden",
-			));
-			
-			$htmlc->add_property(array(
-				"name" => "section",
-				"value" => aw_global_get("section"),
-				"type" => "hidden",
-			));
-
-			$htmlc->finish_output();
 
 			$html = $htmlc->get_result(array(
 				"form_only" => 1
