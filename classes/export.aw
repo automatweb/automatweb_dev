@@ -275,7 +275,7 @@ class export extends aw_template
 			while ($row = $this->db_next())
 			{
 				$fln = basename($row["filename"]);
-				$files[$row["filename"]] = $row;
+				$files[$fln] = $row;
 			}
 			// now go over the list and remove all files that were changed or added by this export
 			foreach($this->added_files as $fn)
@@ -293,7 +293,9 @@ class export extends aw_template
 			{
 				$this->removed_files[] = $fn;
 				unlink($this->folder."/".$fn);
-				$this->db_query("DELETE FROM export_filelist WHERE filename = '$fd[filename]'");
+				// ignore folders!
+				$this->db_query("DELETE FROM export_filelist WHERE filename LIKE '%fn%'");
+				$this->db_query("DELETE FROM export_content WHERE filename LIKE '%$fn%'");
 				echo "removing file $fn <br>\n";
 				flush();
 			}
@@ -1048,12 +1050,15 @@ class export extends aw_template
 					$row = $this->db_fetch_row("SELECT * FROM export_url2filename WHERE sec_name = '$res'");
 					if (is_array($row))
 					{
+//						echo "found $res filename on db <br>";
 						// urls with that name exist
 						// check for the current url
 						$row = $this->db_fetch_row("SELECT * FROM export_url2filename WHERE url = '$qu'");
 						if (is_array($row))
 						{
 							// found the name for the current url, use it as final filename
+							$res = $row['filename'];
+//							echo "found url in db $qu filename = $res <Br>";
 						}
 						else
 						{
@@ -1062,6 +1067,7 @@ class export extends aw_template
 							$res = $_res.",".$mcnt;
 							$this->db_query("INSERT INTO export_url2filename(url, filename, sec_name, count)
 								VALUES('$qu','$res','$_res','$mcnt')");
+//							echo "did not find url in db, try sec_name $_res , got mcount $mcnt final res = $res <br>";
 						}
 					}
 					else
@@ -1069,11 +1075,7 @@ class export extends aw_template
 						// no files by that name exist, insert into the db
 						$this->db_query("INSERT INTO export_url2filename(url, filename, sec_name, count)
 							VALUES('$qu','$res','$_res','0')");
-					}
-					while ($this->fta_used[$res])
-					{
-						$mcnt++;
-						$res = $_res.",".$mcnt;
+//						echo "no file by name $res found, insert $qu <br>";
 					}
 					$this->fta_used[$res] = true;
 					$this->hash2url[$lang_id][$url] = $res;

@@ -225,7 +225,7 @@ class search_conf extends aw_template
 			else
 			if ($grps[$s_parent]["static_search"])
 			{
-				return $this->do_static_search($sstring != "" ? $sstring : $sstring_title, $page);
+				return $this->do_static_search($sstring != "" ? $sstring : $sstring_title, $page, $arr, $s_parent);
 			}
 
 
@@ -672,6 +672,7 @@ class search_conf extends aw_template
 		// $parent is the id of the menu group, not the parent menu
 		// so now we figure out the parent menus and do rec_list for all of them 
 		$mens = $this->get_menus_for_grp($parent);
+		$this->marr = $mens;
 		if (is_array($mens))
 		{
 			foreach($mens as $mn)
@@ -922,7 +923,7 @@ class search_conf extends aw_template
 		return $this->parse();
 	}
 
-	function do_static_search($str, $page)
+	function do_static_search($str, $page,$arr, $s_parent)
 	{
 		$p_arr = $this->get_parent_arr($s_parent);
 		$p_arr_str = join(",",$p_arr);
@@ -956,18 +957,23 @@ class search_conf extends aw_template
 		
 		$this->do_sorting($arr);
 
+		$public_url = $this->get_cval("export::public_symlink_name");
+
 		$q = "SELECT * FROM export_content WHERE $p_arr_str $q_cons ORDER BY modified LIMIT ".$page*PER_PAGE.",".PER_PAGE;
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
 			preg_match("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt);
 			$title = strip_tags($mt[1]);
-			$this->vars(array(
-				"section" => $row["filename"],
-				"title" => ($title != "" ? $title : $row["filename"]),
-				"modified" => $this->time2date($row["modified"],5),
-			));
-			$mat.=$this->parse("MATCH");
+			if (file_exists($public_url."/".$row['filename']))
+			{
+				$this->vars(array(
+					"section" => $row["filename"],
+					"title" => ($title != "" ? $title : $row["filename"]),
+					"modified" => $this->time2date($row["modified"],5),
+				));
+				$mat.=$this->parse("MATCH");
+			}
 		}
 		$this->vars(array(
 			"MATCH" => $mat

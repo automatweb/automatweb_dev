@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.129 2002/11/25 12:36:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.130 2002/11/29 14:40:52 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -3701,22 +3701,27 @@ class document extends aw_template
 		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM export_content WHERE content LIKE '%$str%' AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'", "cnt");
 		$docarr = array();
 
+		$public_url = $this->get_cval("export::public_symlink_name");
+
 		$this->db_query("SELECT * FROM export_content WHERE content LIKE '%$str%'  AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'");
 		while ($row = $this->db_next())
 		{
-			$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
-			$max_count = max($c,$max_count);
+			if (file_exists($public_url."/".$row['filename']))
+			{
+				$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
+				$max_count = max($c,$max_count);
 
-			$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt, PREG_SET_ORDER);
-			$title = strip_tags($mt[$nm-1][1]);
+				$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt, PREG_SET_ORDER);
+				$title = strip_tags($mt[$nm-1][1]);
 
-			$docarr[] = array(
-				"matches" => $c, 
-				"title" => $title,
-				"section" => $row["filename"],
-				"modified" => $row["modified"],
-				"filename" => $row["filename"]
-			);
+				$docarr[] = array(
+					"matches" => $c, 
+					"title" => $title,
+					"section" => $row["filename"],
+					"modified" => $row["modified"],
+					"filename" => $row["filename"]
+				);
+			}
 		}
 
 		if ($sortby == "percent")
@@ -3812,6 +3817,9 @@ class document extends aw_template
 				}
 			}
 		}
+		$pg = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $pg);
+		$prev = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $prev);
+		$next = str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"), $next);
 		$this->vars(array(
 			"PREVIOUS" => $prev,
 			"NEXT" => $next,
