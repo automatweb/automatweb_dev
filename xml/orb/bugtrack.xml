@@ -2,7 +2,23 @@
 <orb>
 
 	<class name="bugtrack">
+		<action name="search">
+			<function name="orb_search">
+				<arguments>
+					<optional name="search_sess"/>
+					<optional name="search"/>
+					<optional name="page" default="0"/>
+				</arguments>
+			</function>
+		</action>
 	
+		<action name="submit_search">
+			<function name="submit_orb_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="new">
 			<function name="orb_new">
 				<arguments>
@@ -39,6 +55,8 @@
 					<optional name="sortby"/>
 					<optional name="setfilter"/>
 					<optional name="_setfilter"/>
+					<optional name="page" default="0"/>
+					<optional name="search_sess"/>
 				</arguments>
 			</function>
 		</action>
@@ -228,5 +246,74 @@
 				</arguments>
 			</function>
 		</action>
-		</class>
-	</orb>
+
+		<action name="list_errors">
+			<function name="orb_list_errors">
+				<arguments>
+					<optional name="groupby"/>
+					<optional name="sortby"/>
+					<optional name="sort_order"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_error" nologin="1">
+			<function name="add_error">
+				<arguments>
+					<required name="site_url"/>
+					<required name="err_type"/>
+					<required name="err_msg"/>
+					<required name="err_content"/>
+					<required name="err_uid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_error">
+			<function name="orb_show_error">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_type">
+			<function name="orb_show_error_type">
+				<arguments>
+					<required name="type_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_site">
+			<function name="orb_show_site_errors">
+				<arguments>
+					<required name="site"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_types">
+			<function name="orb_show_types">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="err_type_comment">
+			<function name="orb_err_type_comment">
+				<arguments>
+					<required name="type_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_err_type_comment">
+			<function name="orb_submit_err_type_comment">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
