@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.1 2001/05/16 03:03:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.2 2001/05/18 15:31:11 duke Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -667,6 +667,17 @@ class core extends db_connector
 		}
 
 		return $objcache[$oid];
+	}
+
+	////
+	// !tagastab mingisse kindlasse klassi kuuluvad objektid
+	// hiljem voib seda funktsiooni täiendada nii, et ta joinib kylge ka igale klassile vastava tabeli
+	// argumendid
+	// class (int) - klassi id
+	function get_objects_by_class($args = array())
+	{
+		extract($args);
+		$this->db_query("SELECT objects.* FROM objects WHERE class_id = $class AND status != 0  GROUP BY objects.oid");
 	}
 
 	// miski lame funktsioon. Aga praegu paremini ei oska. templateeditor pruugib seda
