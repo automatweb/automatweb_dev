@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.14 2003/03/13 14:11:33 duke Exp $
+// $Id: cfgutils.aw,v 1.15 2003/03/28 17:29:07 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -237,12 +237,49 @@ class cfgutils extends aw_template
 		return array_merge($coreprops,$objprops);
 	}
 
+	function parse_cfgform($args = array())
+	{
+		$proplist = $grplist = array();
+		if (isset($args["xml_definition"]))
+		{
+                        $parser = get_instance("xml/xml_path_parser");
+                        $parser->parse_data(array("content" => $args["xml_definition"]));
+                        $properties = $parser->get_data("/properties/property");
+			$groupinfo = $parser->get_data("/properties/groupinfo");
+
+			// config forms have no business with other stuff in the properties definition
+			$safe_nodes = array("name","caption","group","size","cols","rows","richtext");
+			$magic = array_flip($safe_nodes);
+
+			foreach($properties as $key => $val)
+			{
+				// xml_path_parser sucks donkey balls :(
+				$xval = $this->normalize_text_nodes($val);
+				$tmp = array_intersect(array_keys($xval),array_values($safe_nodes));
+				// compact does not work on arrays :(
+				// so, do not use the variables defined in safe_nodes in here
+				extract($xval);
+				$tmp2 = compact($tmp);
+				$proplist[$xval["name"]] = compact($tmp);
+			}
+			
+			if (is_array($groupinfo[0]))
+			{	
+				foreach($groupinfo[0] as $key => $val)
+				{
+					$grplist[$key] = $this->normalize_text_nodes($val[0]);
+
+				};
+			};
+		}
+		return array($proplist,$grplist);
+	}
+
 	function parse_definition($args = array())
 	{
                 if ($args["content"])
                 {
                         $parser = get_instance("xml/xml_path_parser");
-                        //$parser->parse_data(array("content" => $source));
 
                         $parser->parse_data(array("content" => $args["content"]));
 
