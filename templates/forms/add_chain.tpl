@@ -25,6 +25,12 @@
 <tr>
 <td class="fcaption" colspan=3><input class='small_button' type='submit' VALUE='Salvesta'></td>
 </tr>
+<tr>
+<td class="fform" colspan=3><a href='{VAR:import}'>Impordi sisestusi</a></td>
+</tr>
+<tr>
+<td class="fform" colspan=3><a href='{VAR:entries}'>Sisestused</a></td>
+</tr>
 </table>
 {VAR:reforb}
 </form>
