@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.25 2004/08/26 09:28:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.26 2004/08/26 13:38:14 duke Exp $
 
 /*
 
@@ -212,8 +212,10 @@ class classificator extends class_base
 
 		$ofto = new object($clf[$name]);
 
+		$parent = is_oid($ofto->id()) ? $ofto->id() : -1;
+
 		$olx = new object_list(array(
-			"parent" => $ofto->id(),
+			"parent" => $parent,
 			"class_id" => CL_META,
 			"lang_id" => array(),
 		));
