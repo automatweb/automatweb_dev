@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="otto_import" folder="applications/shop/otto" extends="class_base">
+		<action name="pictimp" >
+			<function name="pictimp">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_add_cart" nologin="1">
+			<function name="submit_add_cart">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pictfix" >
+			<function name="pictfix">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

@@ -1,0 +1,114 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>base_url</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Toodete csv failide baasaadress</caption>
+      </property>
+      <property>
+            <name>folder_url</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kataloogideks jagamise csv url</caption>
+      </property>
+      <property>
+            <name>prod_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <caption>Toodete kataloog</caption>
+      </property>
+      <property>
+            <name>do_i</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Teosta import</caption>
+      </property>
+      <property>
+            <name>do_pict_i</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Teosta piltide import</caption>
+      </property>
+      <property>
+            <name>restart_pict_i</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Alusta piltide importi algusest</caption>
+      </property>
+      <property>
+            <name>restart_prod_i</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Alusta toodete importi algusest</caption>
+      </property>
+      <property>
+            <name>fnames</name>
+            <table>objects</table>
+            <group>files</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>30</rows>
+            <cols>80</cols>
+            <caption>Failinimed</caption>
+      </property>
+      <property>
+            <name>do_fixes</name>
+            <table>objects</table>
+            <group>post_import_fix</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Soorita parandus</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_OTTO_IMPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <files>
+                  <caption>Failid</caption>
+            </files>
+            <post_import_fix>
+                  <caption>Parandused</caption>
+            </post_import_fix>
+      </groupinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>kataloog</caption>
+            </FOLDER>
+      </reltypes>
+</properties>
+
