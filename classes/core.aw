@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.37 2001/07/12 23:27:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.38 2001/07/16 14:35:47 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -754,6 +754,7 @@ class core extends db_connector
 				{
 					foreach($parser["parserchain"] as $skey => $sval)
 					{
+						$inplace = false;
 						if (($matches[$sval["idx"]] == $sval["match"]) || (!$sval["idx"]))
 						{
 							$cls = $sval["class"];
@@ -763,13 +764,21 @@ class core extends db_connector
 							{
 								$tpls[$tpl] = $this->templates[$tpl];
 							};
+
 							$params = array(
 								"oid" => $oid,
 								"idx" => $sval["idx"],
 								"matches" => $matches,
 								"tpls" => $tpls,
 							);
+
 							$replacement = $this->parsers->$cls->$fun($params);
+							if (is_array($replacement))
+							{
+								$replacement = $replacement["replacement"];
+								$inplace = $replacement["inplace"];
+							};
+
 							if (is_array($this->parsers->$cls->blocks))
 							{
 								$this->blocks = $this->blocks + $this->parsers->$cls->blocks;
@@ -777,8 +786,15 @@ class core extends db_connector
 						};
 					};
 				};
-				
-				$text = preg_replace("/$matches[0]/",$replacement,$text);
+				if ($inplace)
+				{
+					$this->vars(array($inplace => $replacement));	
+					$text = preg_replace("/$matches[0]/","",$text);
+				}
+				else
+				{
+					$text = preg_replace("/$matches[0]/",$replacement,$text);
+				};
 				$replacement = "";
 			};
 		};

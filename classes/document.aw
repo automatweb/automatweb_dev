@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.35 2001/07/12 05:34:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.36 2001/07/16 14:35:47 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -418,7 +418,7 @@ class document extends aw_template
 					"class" => "images",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
-					"templates" => array("image","image_linked"),
+					"templates" => array("image","image_linked","image_inplace"),
 				));
 		// välised lingid
 		$this->register_sub_parser(array(
