@@ -42,6 +42,16 @@
             <store>no</store>
             <caption>Otsinguvorm</caption>
       </property>
+      <property>
+            <name>result_table</name>
+            <table>objects</table>
+            <group>ftresults</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Tulemuste tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_EVENT_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -53,6 +63,9 @@
             <ftform>
                   <caption>Otsinguvorm seadistamine</caption>
             </ftform>
+            <ftresults>
+                  <caption>Tulemuste seadistamine</caption>
+            </ftresults>
       </groupinfo>
       <reltypes>
             <EVENT_CFGFORM>
@@ -70,6 +83,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Projekti valik</caption>
             </PROJECT_SELECTOR>
+            <EVENT_SHOW>
+                  <value>4</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Näitamise vorm</caption>
+            </EVENT_SHOW>
       </reltypes>
 </properties>
 

@@ -19,6 +19,16 @@
             <caption>Tüüp</caption>
       </property>
       <property>
+            <name>use_output</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OUTPUT</reltype>
+            <caption>Väljundvorm</caption>
+      </property>
+      <property>
             <name>xml_definition</name>
             <table>objects</table>
             <group>general</group>
@@ -227,6 +237,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Kontroller</caption>
             </CONTROLLER>
+            <OUTPUT>
+                  <value>4</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Väljund</caption>
+            </OUTPUT>
       </reltypes>
 </properties>
 

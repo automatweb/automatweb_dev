@@ -14,10 +14,9 @@
             <name>menus</name>
             <table>objects</table>
             <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <callback>callback_get_menus</callback>
+            <type>table</type>
             <editonly>1</editonly>
+            <store>no</store>
             <field>menus</field>
             <caption>Vali men&amp;uuml;&amp;uuml;d</caption>
       </property>
@@ -26,11 +25,11 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <reltypes>
-            <MENU>
+            <SEARCH_LOCATION>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>menüü, mille alt otsitakse</caption>
-            </MENU>
+                  <caption>Otsingu lähtekoht</caption>
+            </SEARCH_LOCATION>
       </reltypes>
 </properties>
 

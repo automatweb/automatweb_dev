@@ -41,23 +41,14 @@
             <caption>Otsing aktiivsest saidist</caption>
       </property>
       <property>
-            <name>default_grp</name>
+            <name>multi_groups</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SEARCH_GRP</reltype>
-            <caption>Vaikimisi otsingu grupp</caption>
-      </property>
-      <property>
-            <name>default_order</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>select</type>
-            <caption>Vaikimisi sorteeritakse tulemused</caption>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Otsimisel saab kasutada mitut gruppi</caption>
       </property>
       <property>
             <name>per_page</name>
@@ -68,6 +59,25 @@
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu tulemust lehel</caption>
+      </property>
+      <property>
+            <name>default_order</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>searchgroups</group>
+            <type>select</type>
+            <caption>Vaikimisi sorteeritakse tulemused</caption>
+      </property>
+      <property>
+            <name>grpcfg</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>searchgroups</group>
+            <type>table</type>
+            <store>no</store>
+            <caption>Otsingugruppide konfigureerimine</caption>
       </property>
       <property>
             <name>reledit</name>
@@ -103,6 +113,9 @@
             <keywords>
                   <caption>Märksõnade järgi otsing</caption>
             </keywords>
+            <searchgroups>
+                  <caption>Otsingu grupid</caption>
+            </searchgroups>
       </groupinfo>
       <reltypes>
             <REPEATER>
@@ -112,7 +125,10 @@
             </REPEATER>
             <SEARCH_GRP>
                   <value>2</value>
-                  <clid>CL_SITE_SEARCH_CONTENT_GRP</clid>
+                  <clid>
+                        <num_0>CL_SITE_SEARCH_CONTENT_GRP</num_0>
+                        <num_1>CL_EVENT_SEARCH</num_1>
+                  </clid>
                   <caption>otsingu grupp</caption>
             </SEARCH_GRP>
       </reltypes>
