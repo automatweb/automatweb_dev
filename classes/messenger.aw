@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.21 2001/05/24 10:22:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.22 2001/05/24 10:36:37 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -533,7 +533,7 @@ class messenger extends menuedit_light
 					// kui status == true, siis on teade loetud
 					$msg["id"] = $msg["oid"];
 					$msg["color"] = ($msg["status"]) ? "#FFFFFF" : "#EEEEEE";
-					$msg["from"] = $msg["mfrom"];
+					$msg["from"] = htmlspecialchars($msg["mfrom"]);
 					$subject = $this->MIME_decode($msg["subject"]);
 					$msg["subject"] = "<a href='?class=messenger&action=show&id=$msg[id]'>" . $subject . "</a>";
 					$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
@@ -591,6 +591,7 @@ class messenger extends menuedit_light
 			if ($msg["type"] == 2)
 			{
 				$msg["etargets"] = $msg["mfrom"];
+				$msg["etargets"] = str_replace("\"","",$msg["etargets"]);
 			}
 			else
 			{
@@ -602,7 +603,6 @@ class messenger extends menuedit_light
 			$msg["message"] = str_replace("\n","\n$qchar",$msg["message"]);
 			$msg["message"] = "\n$qchar" . $msg["message"];
 			$msg_id = $reply;
-			print $msg["subject"];
 		}
 		elseif ($args["forward"])
 		{
