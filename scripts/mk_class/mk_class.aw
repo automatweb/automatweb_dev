@@ -63,8 +63,26 @@ $stdo = fopen("php://stdout", "w");
 echo "Hello! I am the AW class-o-maker 3000!\n";
 echo "You will answer these questions:\n\n";
 
-echo "Folder where the class file is (created under AWROOT/classes): ";
-$class['folder'] = trim(fgets($stdin));
+$continue = false;
+while(!$continue)
+{
+	echo "Folder where the class file is (created under AWROOT/classes): ";
+	$class['folder'] = trim(fgets($stdin));
+	if (is_dir("classes/" . $class["folder"]))
+	{
+		$continue = true;
+	}
+	else
+	{
+		echo "Folder does not exist, create it (1/0): ? ";
+		$answer = fgets($stdin);
+		echo "\n";
+		if ($answer == 1)
+		{
+			$continue = true;
+		};
+	};
+};
 
 echo "Class file (foo_bar): ";
 $class['file'] = trim(fgets($stdin));
@@ -113,6 +131,9 @@ if (file_exists("xml/orb/$class.xml"))
 	echo "\nERROR: file xml/orb/$class.xml already exists!\n\n";
 	exit(1);
 }
+
+print_r($class);
+exit;
 
 ////////////////////////////////////////////////////////////////////
 // now the hard bit - ini file parsing and modifying
