@@ -445,6 +445,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 		else
 		{
+			if (!$data["idx"])
+			{
+				$q = "SELECT MAX(idx) as idx FROM aliases where source = '$data[from]' and type = '$data[type]'";
+				$data["idx"] = $this->db_fetch_field($q, "idx")+1;
+			}
 			$q = "INSERT INTO aliases (
 				source,						target,					type,					data,
 				idx,						cached,					relobj_id,				reltype,
@@ -600,7 +605,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		if ($where != "")
 		{
 			$q = "SELECT objects.oid FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
-			//echo "q = $q <br />";
+//			echo "q = $q <br />";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
