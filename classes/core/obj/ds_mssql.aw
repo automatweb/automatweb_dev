@@ -1131,6 +1131,18 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				$clid = reset($params["class_id"]);
 			}
 		}
+		else
+		{
+			// if the first part is a class id and there are only two parts then it is not a join
+			// then it is a specification on what class's property to search from 
+			if (count($filt) == 2)
+			{
+				// so just return the table and field for that class
+				$prop = $GLOBALS["properties"][$clid][$filt[1]];
+				$this->used_tables[$prop["table"]] = $prop["table"];
+				return array($prop["table"], $prop["field"]);	
+			}
+		}
 
 		$this->foo = array(); 
 		$this->_req_do_pcp($filt, 1, $clid, $arr);
