@@ -21,6 +21,7 @@ class xml_path_parser
 		$this->children = array();
 		$fname = $args["fname"];
 		$cf = get_instance("cache");
+
                 $cf->get_cached_file(array(
                         "fname" => $fname,
                         "unserializer" => array(&$this,"parse_data"),
@@ -34,6 +35,7 @@ class xml_path_parser
 	{
 		$this->content = $args["content"];
 		$this->children = array();
+		$this->fname = $args["fname"];
 		$this->_setup_parser();
 		$retval = &$this->children;
 		return $retval;
@@ -62,7 +64,7 @@ class xml_path_parser
 	{
 		$this->context = array();
 		$this->paths = array();
-		
+
 		$parser = xml_parser_create();
 		xml_set_object($parser, &$this);
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
@@ -76,10 +78,13 @@ class xml_path_parser
 			$pref = htmlspecialchars(substr($frag,0,100));
 			$suf = htmlspecialchars(substr($frag,101));
 			$offender = htmlspecialchars(substr($frag,100,1));
-			echo(sprintf("XML error: %s--|<font color='red'>%s</font>|--%s %s at line %d",
-			$pref,$offender,$suf,
+			echo(sprintf("XML %s in file %s:%s <pre>%s--|<font color='red'>%s</font>|--%s</pre>",
 			xml_error_string(xml_get_error_code($parser)),
-			xml_get_current_line_number($parser)));
+			$this->fname,
+			xml_get_current_line_number($parser),
+			$pref,$offender,$suf));
+			// if we do continue then the results are undefined
+			die("<br>Cannot continue like this");
 			
 		};
 		xml_parser_free($parser);
