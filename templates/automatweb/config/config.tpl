@@ -29,6 +29,14 @@ function setLink(li,title)
 <td class="plain"><select name='user_info_op'>{VAR:ops}</select></td>
 </tr>
 <tr bgcolor="#C9EFEF">
+<td class="plain">Vali bugtracki kasutajate nimekirja grupp:</td>
+<td class="plain"><select name='bt_gid'>{VAR:bt_gid}</select></td>
+</tr>
+<tr bgcolor="#C9EFEF">
+<td class="plain">Vali bugtracki adminnide grupp:</td>
+<td class="plain"><select name='bt_adm'>{VAR:bt_adm}</select></td>
+</tr>
+<tr bgcolor="#C9EFEF">
 <td class="plain" colspan=2><input type='submit' value='Salvesta'></td>
 </tr>
 <tr bgcolor="#C9EFEF">
