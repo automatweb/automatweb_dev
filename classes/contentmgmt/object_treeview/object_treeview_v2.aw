@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.52 2005/01/25 15:35:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.53 2005/01/27 12:26:37 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -17,11 +17,15 @@
 
 @groupinfo showing caption="N&auml;itamine"
 @default group=showing
+
+@property inherit_view_props_from type=select 
+@caption P&auml;ri n&auml;itamise omadused objektist
+
 @property show_folders type=checkbox ch_value=1
 @caption N&auml;ita katalooge
 
 @property show_add type=checkbox ch_value=1
-@caption N&auml;ita toolbari
+@caption N&auml;ita t&ouml;&ouml;riistariba
 
 @property show_link_new_win type=checkbox ch_value=1
 @caption Vaata link uues aknas
@@ -91,14 +95,15 @@
 @property group_css type=relpicker reltype=RELTYPE_CSS
 @caption Grupeeriva rea stiil
 
-@property line_css type=relpicker reltype=RELTYPE_CSS
-@caption Rea stiil
-
 @groupinfo columns caption=Tulbad
 @default group=columns
 @property columns type=table no_caption=1
 @caption Tulbad
 
+@groupinfo inherit caption="P&auml;rimine"
+
+@property is_inheritable type=checkbox ch_value=1 field=meta method=serialize group=inherit
+@caption Kasutatav p&auml;rimiseks
 
 @reltype DATASOURCE value=1 clid=CL_OTV_DS_OBJ,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_ROADINFO,CL_DB_TABLE_CONTENTS
 @caption andmed
@@ -136,27 +141,56 @@ class object_treeview_v2 extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 
+		$ob = $arr["obj_inst"];
+		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
+		{
+			$ih_ob = obj($ob->prop("inherit_view_props_from"));
+		}
+		else
+		{
+			$ih_ob = $ob;
+		}
 
 		$col_list = $this->_get_col_list(array(
-			"o" => $arr['obj_inst'],
-			"hidden_cols" => ($arr['obj_inst']->prop("show_hidden_cols") == 1) ? true : false,
+			"o" => $ih_ob,
+			"hidden_cols" => ($ih_ob->prop("show_hidden_cols") == 1) ? true : false,
 		));
 
 		$col_list = array_merge(array("" => ""), $col_list);
 
 		switch($prop["name"])
 		{
+			case "inherit_view_props_from":
+				$ol = new object_list(array(
+					"class_id" => CL_OBJECT_TREEVIEW_V2,
+					"is_inheritable" => 1,
+				));
+				$prop["options"] = array("" => "") + $ol->names();
+				break;
+
 			case "show_link_field":
+				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				{
+					return PROP_IGNORE;
+				}
+
 				// another hack, just to make possible to set, that show link won't appear
 				// in any column, uh.
 				unset($col_list['']);
 				$col_list = array_merge(array("" => "", "---" => "---"), $col_list);
 				$prop['options'] = $col_list;
 				break;
+
 			case "url_field":
 				$prop['options'] = $col_list;
 				break;
+
 			case "tree_type":
+				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				{
+					return PROP_IGNORE;
+				}
+
 				$prop["options"] = array(
 					TREE_DHTML => "DHTML",
 					TREE_TABLE => t("Tabel"),
@@ -174,12 +208,17 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "sortbl":
+				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				{
+					return PROP_IGNORE;
+				}
 				$this->do_sortbl($arr);
 				break;
 
 			case "filter_table":
 				$this->do_filter_table($arr);
 				break;
+
 			case "group_by_folder":
 ////
 // here i should check, if AW object list uses meta objects to draw
@@ -196,12 +235,26 @@ class object_treeview_v2 extends class_base
 				}
 				break;
 			case "group_in_table":
+				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				{
+					return PROP_IGNORE;
+				}
 				$prop['options'] = $col_list;
 				break;
+
 			case "filter_by_char_field":
+				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				{
+					return PROP_IGNORE;
+				}
 				$prop['options'] = $col_list;
 				break;
+
 			case "filter_by_char_order":
+				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				{
+					return PROP_IGNORE;
+				}
 				$prop['options'] = array(
 					"" => "", 
 					"asc" => "A - Z",
@@ -216,7 +269,25 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "columns":
+				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				{
+					return PROP_IGNORE;
+				}
 				$this->_do_columns($arr);
+				break;
+
+			case "ds":
+			case "show_folders":
+			case "show_add":
+			case "show_link_new_win":
+			case "hide_content_table_by_default":
+			case "per_page":
+			case "show_hidden_cols":
+			case "alphabet_in_lower_case":
+				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				{
+					return PROP_IGNORE;
+				}
 				break;
 		};
 		return $retval;
@@ -296,12 +367,21 @@ class object_treeview_v2 extends class_base
 		enter_function("otv2::show");
 		$ob = obj($id);
 
+		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
+		{
+			$ih_ob = obj($ob->prop("inherit_view_props_from"));
+		}
+		else
+		{
+			$ih_ob = $ob;
+		}
+
 		$this->read_template('show.tpl');
 		// init driver
-		$d_o = obj($ob->prop("ds"));
+		$d_o = obj($ih_ob->prop("ds"));
 		$d_inst = $d_o->instance();
 
-		$this->_insert_styles($ob);
+		$this->_insert_styles($ih_ob);
 
 		// returns an array of object id's that are folders that are in the object
 		$tree_type = $ob->prop("tree_type");
@@ -316,7 +396,7 @@ class object_treeview_v2 extends class_base
 		// if is checked, that objects won't be shown by default, then don't show them, unless
 		// there are set some url params (tv_sel, char)
 		$params = array();
-		if (($ob->prop("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
+		if (($ih_ob->prop("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
 		{
 			$ol = array();
 		}
@@ -337,7 +417,7 @@ class object_treeview_v2 extends class_base
 					"filters" => array(
 						"saved_filters" => new aw_array($ob->meta("saved_filters")),
 						"group_by_folder" => $ob->prop("group_by_folder"),
-						"filter_by_char_field" => $ob->prop("filter_by_char_field"),
+						"filter_by_char_field" => $ih_ob->prop("filter_by_char_field"),
 						"char" =>  ($_GET['char'] == "all") ? $_GET['char'] : $_GET['char']{0}, 	
 					),
 				);
@@ -351,13 +431,14 @@ class object_treeview_v2 extends class_base
 					"otv_obj" => $ob,
 					"ds_obj" => $d_o,
 					"folders" => $fld,
+					"otv_obj_ih" => $ih_ob
 				));
 			}
 		}
 
 		// make folders
 		$this->vars(array(
-			"FOLDERS" => $this->_draw_folders($ob, $ol, $fld, $oid)
+			"FOLDERS" => $this->_draw_folders($ob, $ol, $fld, $oid, $ih_ob)
 		));
 
 		// get all related object types
@@ -377,7 +458,7 @@ class object_treeview_v2 extends class_base
 		
 		// if there are set some datasource fields to be displayed in one table field
 
-		$sel_columns_fields = new aw_array($ob->meta("sel_columns_fields"));
+		$sel_columns_fields = new aw_array($ih_ob->meta("sel_columns_fields"));
 
 		if ($sel_columns_fields->count() != 0)
 		{
@@ -401,7 +482,7 @@ class object_treeview_v2 extends class_base
 						if ($value["field"] == "name")
 						{
 							// make link from name field
-							$scf_val = $this->_get_link($scf_val, $ol_item["url"], $ob);
+							$scf_val = $this->_get_link($scf_val, $ol_item["url"], $ih_ob);
 						}
 						
 						$ol_item[$sel_columns_fields_key] .= $scf_val;
@@ -415,35 +496,35 @@ class object_treeview_v2 extends class_base
 
 		$this->cnt = 0;
 		$c = "";
-		$sel_cols = $ob->meta("sel_columns");
+		$sel_cols = $ih_ob->meta("sel_columns");
 
 		$col_list = $this->_get_col_list(array(
-			"o" => $ob,
+			"o" => $ih_ob,
 			"hidden_cols" => true,
 		));
 // well, if char is present in the url, then sort only by 
 // the field which is set to be filtered according to char
-		$tmp_order = $ob->prop("filter_by_char_order");
+		$tmp_order = $ih_ob->prop("filter_by_char_order");
 		if(!empty($_GET['char']) && !empty($tmp_order))
 		{
 			$tmp = new aw_array(array(
 				array(
-					"element" => $ob->prop("filter_by_char_field"),
+					"element" => $ih_ob->prop("filter_by_char_field"),
 					"ord" => $tmp_order,
 				),
 			));
 		}
 		else
 		{
-			$tmp = new aw_array($ob->meta("itemsorts"));
+			$tmp = new aw_array($ih_ob->meta("itemsorts"));
 		}
 		$this->__is = $tmp->get();
 		usort($ol, array(&$this, "__is_sorter"));
 
 		// now do pages
-		if ($ob->prop("per_page"))
+		if ($ih_ob->prop("per_page"))
 		{
-			$this->do_pageselector($ol, $ob->prop("per_page"));
+			$this->do_pageselector($ol, $ih_ob->prop("per_page"));
 		}
 
 		$has_access_to = false;
@@ -457,7 +538,7 @@ class object_treeview_v2 extends class_base
 			$last_o = $odata;
 		}
 
-		$edit_columns = safe_array($ob->meta("sel_columns_editable"));
+		$edit_columns = safe_array($ih_ob->meta("sel_columns_editable"));
 		if (!$has_access_to)
 		{
 			unset($col_list["change"]);
@@ -475,7 +556,7 @@ class object_treeview_v2 extends class_base
 		{
 			if (!$d_inst->check_acl("add", $d_o, $last_o["id"]))
 			{
-				$ob->set_prop("show_add", false);
+				$ih_ob->set_prop("show_add", false);
 			}
 		}
 		else
@@ -483,11 +564,13 @@ class object_treeview_v2 extends class_base
 		{
 			if (!$d_inst->check_acl("add", $d_o, $_GET["tv_sel"]))
 			{
-				$ob->set_prop("show_add", false);
+				$ih_ob->set_prop("show_add", false);
 			}
 		}
 
-		$group_field = $ob->prop("group_in_table");
+		$style_obj = $ih_ob;
+
+		$group_field = $ih_ob->prop("group_in_table");
 		$group_name = "";
 		$sel_cols_count = count($sel_cols);
 // parsing table rows - if the field value, which is used to make table groups
@@ -498,7 +581,7 @@ class object_treeview_v2 extends class_base
 			if(($group_name != $odata[$group_field]) && empty($_GET['char']))
 			{
 				$this->vars(array(
-					"content" => $odata[$ob->prop("group_in_table")],
+					"content" => $odata[$ih_ob->prop("group_in_table")],
 					"cols_count" => $sel_cols_count,
 //					"group_bgcolor" => $group_header_color_code,
 				));
@@ -507,17 +590,19 @@ class object_treeview_v2 extends class_base
 
 			$c .= $this->_do_parse_file_line($odata, $d_inst, $d_o, array(
 				"tree_obj" => $ob,
+				"tree_obj_ih" => $ih_ob,
 				"sel_cols" => $sel_cols,
 				"col_list" => $col_list,
 				"edit_columns" => $edit_columns,
-				"pfk" => $ob
+				"pfk" => $ob,
+				"style_obj" => $style_obj
 			));
 			$group_name = $odata[$group_field];
 
 		}
 		$tb = "";
 		$no_tb = "";
-		if ($ob->prop("show_add"))
+		if ($ih_ob->prop("show_add"))
 		{
 			$tb = $this->parse("HEADER_HAS_TOOLBAR");
 		}
@@ -528,7 +613,7 @@ class object_treeview_v2 extends class_base
 
 		// checking, if there is set a field, which values should be use to filter by first character
 		// and according to this i'm showing or not showing the alphabet list
-		$filter_by_char_field = $ob->meta("filter_by_char_field");
+		$filter_by_char_field = $ih_ob->meta("filter_by_char_field");
 		if(!empty($filter_by_char_field))
 		{
 			$alphabet_parsed = "";
@@ -542,13 +627,13 @@ class object_treeview_v2 extends class_base
 				}
 */
 /*
-				if($ob->prop("alphabet_in_lower_case"))
+				if($ih_ob->prop("alphabet_in_lower_case"))
 				{
 					$character_value = strtolower($character_value);
 				}
 */
 				$this->vars(array(
-					"char" => ($ob->prop("alphabet_in_lower_case")) ? strtolower($character) : $character, 
+					"char" => ($ih_ob->prop("alphabet_in_lower_case")) ? strtolower($character) : $character, 
 					"char_url" => aw_ini_get("baseurl")."/".$oid."?char=".$character,
 				));
 				if ($character == htmlentities(urldecode($_GET['char'])))
@@ -591,12 +676,12 @@ class object_treeview_v2 extends class_base
 			))
 		));
 
-		$udef_cols = $ob->meta("sel_columns_text");
+		$udef_cols = $ih_ob->meta("sel_columns_text");
 		if (!is_array($udef_cols))
 		{
 			$udef_cols = $col_list;
 		}
-		if (($ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
+		if (($ih_ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
 		{
 
 		}
@@ -626,9 +711,9 @@ class object_treeview_v2 extends class_base
 		}
 
 		$res = $this->parse();
-		if ($ob->prop("show_add"))
+		if ($ih_ob->prop("show_add"))
 		{
-			$res = $this->_get_add_toolbar($ob).$res;
+			$res = $this->_get_add_toolbar($ih_ob).$res;
 		}
 		exit_function("otv2::show");
 		return $res;
@@ -673,9 +758,9 @@ class object_treeview_v2 extends class_base
 
 		$t->define_field(array(
 			"name" => "fields",
-			"caption" => "Milliste v&auml;ljade sisu n&auml;idata",
+			"caption" => "Milliste v&auml;ljade sisu n&auml;idata<br>Eraldaja&nbsp;&nbsp;|&nbsp;&nbsp;Vasak&nbsp;tekst&nbsp;&nbsp;|&nbsp;&nbsp;V&auml;li&nbsp;&nbsp;|&nbsp;&nbsp;Parem&nbsp;tekst",
 			"sortable" => 1,
-
+			"align" => "center"
 		));
 	}
 
@@ -690,8 +775,18 @@ class object_treeview_v2 extends class_base
 		$cols_edit = $arr["obj_inst"]->meta("sel_columns_editable");
 		$cols_fields = $arr["obj_inst"]->meta("sel_columns_fields");
 
+		$ob = $arr["obj_inst"];
+		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
+		{
+			$ih_ob = obj($ob->prop("inherit_view_props_from"));
+		}
+		else
+		{
+			$ih_ob = $ob;
+		}
+
 		$cold = $this->_get_col_list(array(
-			"o" => $arr["obj_inst"],
+			"o" => $ih_ob,
 			"hidden_cols" => true,
 		));
 
@@ -809,12 +904,6 @@ class object_treeview_v2 extends class_base
 	{
 		$style = "textmiddle";
 		classload("layout/active_page_data");
-		if ($o->prop("line_css"))
-		{
-			$style = "st".$o->prop("line_css");
-			active_page_data::add_site_css_style($o->prop("line_css"));
-		}
-
 		$header_css = "textmiddle";
 		if ($o->prop("header_css"))
 		{
@@ -889,9 +978,9 @@ class object_treeview_v2 extends class_base
 		return $ret;
 	}
 
-	function _draw_folders($ob, $ol, $folders, $oid)
+	function _draw_folders($ob, $ol, $folders, $oid, $ih_ob)
 	{
-		if (!$ob->meta('show_folders'))
+		if (!$ih_ob->meta('show_folders'))
 		{
 			return;
 		}
@@ -938,8 +1027,6 @@ class object_treeview_v2 extends class_base
 				return $table->draw();
 				break;
 			case "TREE_DHTML":
-
-
 				classload("icons");
 				// use treeview widget
 				$tv = get_instance("vcl/treeview");
@@ -1056,6 +1143,8 @@ class object_treeview_v2 extends class_base
 		extract($parms);
 		extract($arr);
 
+		$show_link = $this->_get_link($name, $url, $parms['tree_obj_ih']);
+
 		$formatv = array(
 			"show" => $url,
 			"name" => $name,
@@ -1093,7 +1182,7 @@ class object_treeview_v2 extends class_base
 
 		$tb = "";
 		$no_tb = "";
-		if ($tree_obj->prop("show_add"))
+		if ($tree_obj_ih->prop("show_add"))
 		{
 			$tb = $this->parse("HAS_TOOLBAR");
 		}
@@ -1124,7 +1213,7 @@ class object_treeview_v2 extends class_base
 				else
 				{
 					// show link can only be on the column, which is not editable
-					$show_link_field = $tree_obj->prop("show_link_field");
+					$show_link_field = $tree_obj_ih->prop("show_link_field");
 					if (!empty($show_link_field) && $show_link_field == $colid)
 					{
 						// well, actually i don't like this hack, but if it is needed to select
@@ -1135,11 +1224,10 @@ class object_treeview_v2 extends class_base
 
 						if ($show_link_field != "---")
 						{
-
-							$url_field = $parms['tree_obj']->prop("url_field");
+							$url_field = $parms['tree_obj_ih']->prop("url_field");
 							if (!empty($url_field))
 							{
-								$content = $this->_get_link($content, $arr[$url_field], $parms['tree_obj']);
+								$content = $this->_get_link($content, $arr[$url_field], $parms['tree_obj_ih']);
 							}
 
 						}
@@ -1149,7 +1237,7 @@ class object_treeview_v2 extends class_base
 					{
 						// here i will make sure, that existing objects, which don't have the
 						// show_link_field property set, have show link in name field
-						$content = $this->_get_link($content, $url, $parms['tree_obj']);
+						$content = $this->_get_link($content, $url, $parms['tree_obj_ih']);
 					}
 				}	
 				$this->vars(array(
@@ -1168,7 +1256,7 @@ class object_treeview_v2 extends class_base
 // get row background color
 
 		$this->vars(array(
-			"bgcolor" => $this->_get_bgcolor($tree_obj, $this->cnt),
+			"bgcolor" => $this->_get_bgcolor($style_obj, $this->cnt),
 		));
 
 		return $this->parse("FILE");
@@ -1229,9 +1317,19 @@ class object_treeview_v2 extends class_base
 	{
 		$this->tree_ob = $object;
 
+		if (is_oid($object->prop("inherit_view_props_from")) && $this->can("view", $object->prop("inherit_view_props_from")))
+		{
+			$ih_ob = obj($object->prop("inherit_view_props_from"));
+		}
+		else
+		{
+			$ih_ob = $object;
+		}
+		$this->tree_ob_ih = $ih_ob;
+
 		$ol = new object_list();
 
-		$d_o = obj($this->tree_ob->prop("ds"));
+		$d_o = obj($this->tree_ob_ih->prop("ds"));
 		$d_inst = $d_o->instance();
 	
 		$folders = $d_inst->get_folders($d_o);
@@ -1295,9 +1393,19 @@ class object_treeview_v2 extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sortbl($t);
 
+		$ob = $arr["obj_inst"];
+		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
+		{
+			$ih_ob = obj($ob->prop("inherit_view_props_from"));
+		}
+		else
+		{
+			$ih_ob = $ob;
+		}
+
 		$cols = $this->_get_col_list(array(
-			"o" => $arr["obj_inst"],
-			"hidden_cols" => ($arr['obj_inst']->prop("show_hidden_cols") == 1) ? true : false,
+			"o" => $ih_ob,
+			"hidden_cols" => ($ih_ob->prop("show_hidden_cols") == 1) ? true : false,
 		));
 //		$tmp = $arr["obj_inst"]->meta("sel_columns");
 		$elements = array_merge(array("" => "") + $cols);
@@ -1477,9 +1585,19 @@ class object_treeview_v2 extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_filter_table($t);
 
+		$ob = $arr["obj_inst"];
+		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
+		{
+			$ih_ob = obj($ob->prop("inherit_view_props_from"));
+		}
+		else
+		{
+			$ih_ob = $ob;
+		}
+
 		$all_cols = $this->_get_col_list(array(
-			"o" => $arr["obj_inst"],
-			"hidden_cols" => ($arr['obj_inst']->prop("show_hidden_cols") == 1) ? true : false,
+			"o" => $ih_ob,
+			"hidden_cols" => ($ih_ob->prop("show_hidden_cols") == 1) ? true : false,
 		));
 //		$tmp = $arr["obj_inst"]->meta("sel_columns");
 		$cols = array_merge(array("" => "") + $all_cols);
@@ -1604,7 +1722,18 @@ class object_treeview_v2 extends class_base
 		extract($arr);
 
 		$ob = obj($id);
-		$d_o = obj($ob->prop("ds"));
+
+		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
+		{
+			$ih_ob = obj($ob->prop("inherit_view_props_from"));
+		}
+		else
+		{
+			$ih_ob = $ob;
+		}
+
+
+		$d_o = obj($ih_ob->prop("ds"));
 		$d_inst = $d_o->instance();
 
 		if ($subact == "delete")
@@ -1621,7 +1750,7 @@ class object_treeview_v2 extends class_base
 		if ($arr["edit_mode"] > 0)
 		{
 			$objs = safe_array($arr["objs"]);
-			$ef = safe_array($ob->meta("sel_columns_editable"));
+			$ef = safe_array($ih_ob->meta("sel_columns_editable"));
 
 			$fld = $d_inst->get_folders($d_o);
 			$ol = $d_inst->get_objects($d_o, $fld, $arr["tv_sel"]); 
@@ -1664,6 +1793,7 @@ class object_treeview_v2 extends class_base
 
 		$ol = $arr['ol'];
 		$ob = $arr['otv_obj'];
+		$ih_ob = $arr['otv_obj_ih'];
 		$d_o = $arr['ds_obj'];
 		$fld = $arr['folders'];
 		$filters = $ob->meta("saved_filters");
@@ -1713,7 +1843,7 @@ class object_treeview_v2 extends class_base
 				// filter_by_char_field property
 				if(!empty($_GET['char']))
 				{
-					$f = strtolower($ol_value[$ob->meta("filter_by_char_field")]);
+					$f = strtolower($ol_value[$ih_ob->meta("filter_by_char_field")]);
 					if((strlen($_GET['char']) == 1) && ($f{0} != strtolower($_GET['char'])))
 					{
 						unset($ol[$ol_key]);
@@ -1724,6 +1854,18 @@ class object_treeview_v2 extends class_base
 
 		}
 
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "columns" || $arr["id"] == "styles" || $arr["id"] == "inherit")
+		{
+			if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }
 ?>

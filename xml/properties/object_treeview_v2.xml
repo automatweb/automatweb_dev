@@ -11,6 +11,15 @@
             <caption>Andmed</caption>
       </property>
       <property>
+            <name>inherit_view_props_from</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>P&amp;auml;ri n&amp;auml;itamise omadused objektist</caption>
+      </property>
+      <property>
             <name>show_folders</name>
             <table>objects</table>
             <group>showing</group>
@@ -28,7 +37,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita toolbari</caption>
+            <caption>N&amp;auml;ita t&amp;ouml;&amp;ouml;riistariba</caption>
       </property>
       <property>
             <name>show_link_new_win</name>
@@ -242,16 +251,6 @@
             <caption>Grupeeriva rea stiil</caption>
       </property>
       <property>
-            <name>line_css</name>
-            <table>objects</table>
-            <group>styles</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CSS</reltype>
-            <caption>Rea stiil</caption>
-      </property>
-      <property>
             <name>columns</name>
             <table>objects</table>
             <group>columns</group>
@@ -261,6 +260,16 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Tulbad</caption>
+      </property>
+      <property>
+            <name>is_inheritable</name>
+            <table>objects</table>
+            <group>inherit</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kasutatav p&amp;auml;rimiseks</caption>
       </property>
       <classinfo>
             <syslog_type>ST_OBJECT_TREEVIEW_V2</syslog_type>
@@ -278,6 +287,9 @@
             <columns>
                   <caption>Tulbad</caption>
             </columns>
+            <inherit>
+                  <caption>P&amp;auml;rimine</caption>
+            </inherit>
       </groupinfo>
       <reltypes>
             <DATASOURCE>
