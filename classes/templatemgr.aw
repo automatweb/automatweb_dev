@@ -79,5 +79,22 @@ class templatemgr extends aw_template
 
 		return $this->parse();
 	}
+
+	////
+	// !Retrieves a list of templates
+	// type(int) 
+	function get_template_list($args = array())
+	{
+		// kysime infot adminnitemplatede kohta
+		$type = (int)$args["type"];
+		$q = "SELECT * FROM template WHERE type = $type ORDER BY id";
+		$this->db_query($q);
+		$result = array("0" => "default");
+		while($tpl = $this->db_fetch_row())
+		{
+			$result[$tpl["id"]] = $tpl["name"];
+		};
+		return $result;
+	}
 }
 ?>
