@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.8 2004/03/08 20:04:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.9 2004/03/09 14:17:28 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -263,6 +263,10 @@ class add_tree_conf extends class_base
 				{
 					continue;
 				};
+				if (!$this->can("view", $g_oid))
+				{
+					continue;
+				}
 				$o = obj($g_oid);
 				$c = $o->connections_from(array(
 					"type" => 5 /* RELTYPE_ADD_TREE from core/users/group */
@@ -279,6 +283,11 @@ class add_tree_conf extends class_base
 		if (!$ret)
 		{
 			$ret = aw_ini_get("add_tree_conf.default");
+		}
+
+		if (!$this->can("view", $ret))
+		{
+			$ret = 0;
 		}
 		return $ret;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.57 2004/03/08 19:26:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.58 2004/03/09 14:17:28 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -25,10 +25,6 @@ class admin_menus extends aw_template
 		$atc_inst = get_instance("admin/add_tree_conf");
 		$atc_id = $atc_inst->get_current_conf();
 
-		if (!$atc_id && aw_ini_get("add_tree_conf.default"))
-		{
-			$atc_id = aw_ini_get("add_tree_conf.default");
-		}
 		$this->is_atc = false;
 		if ($atc_id)
 		{

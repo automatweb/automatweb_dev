@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.51 2004/03/09 14:16:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.52 2004/03/09 14:17:26 kristo Exp $
 
 lc_load("definition");
 
@@ -411,12 +411,15 @@ class acl_base extends db_connector
 
 			$gl = aw_global_get("gidlist_oid");
 			foreach($gl as $g_oid)
-			{
-				$o = obj($g_oid);
-				if ($o->prop("priority") > $can_adm_max)
+			{	
+				if ($this->can("view", $g_oid))
 				{
-					$can_adm = $o->prop("can_admin_interface");
-					$can_adm_max = $o->prop("priority");
+					$o = obj($g_oid);
+					if ($o->prop("priority") > $can_adm_max)
+					{
+						$can_adm = $o->prop("can_admin_interface");
+						$can_adm_max = $o->prop("priority");
+					}
 				}
 			}
 
