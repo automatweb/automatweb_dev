@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.61 2004/03/11 14:30:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.62 2004/03/12 12:46:16 duke Exp $
 
 lc_load("definition");
 
@@ -297,6 +297,7 @@ class acl_base extends db_connector
 						chmod($fname, 0777);
 					}
 
+					/*
 					$fname .= "/".$hash{1};
 					if (!is_dir($fname))
 					{
@@ -310,6 +311,7 @@ class acl_base extends db_connector
 						mkdir($fname, 0777);
 						chmod($fname, 0777);
 					}
+					*/
 
 					$fp = fopen($fqfn, "w");
 					flock($fp, LOCK_EX);
@@ -445,7 +447,7 @@ class acl_base extends db_connector
 					{
 						continue;
 					}
-					$str .= "goid= $g_oid ";
+					$str .= "goid= $g_oid , type = ".$o->prop("type")." pri = ".$o->prop("priority")." ";
 					if ($o->prop("priority") > $can_adm_max)
 					{
 						$can_adm = $o->prop("can_admin_interface");
