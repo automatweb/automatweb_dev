@@ -47,6 +47,14 @@
 			</function>
 		</action>
 
+		<action name="groups">
+			<function name="groups">
+				<arguments>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_group">
 			<function name="submit_group">
 				<arguments>
