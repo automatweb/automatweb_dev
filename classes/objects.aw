@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.33 2002/07/23 21:15:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.34 2002/08/29 03:10:51 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 classload("cache");
 class db_objects extends aw_template 
@@ -332,7 +332,10 @@ class objects extends db_objects
 			{
 				$ses="AND ".$ses;
 			}
-			$this->db_query("SELECT objects.*,o_p.name as parent_name,o_p_p.name as parent_parent_name,o_p_p_p.name as parent_parent_parent_name FROM objects, objects as o_p,objects as o_p_p,objects as o_p_p_p  WHERE o_p.oid = objects.parent AND o_p_p.oid = o_p.parent AND o_p_p_p.oid = o_p_p.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) $ses");
+			$q = "SELECT * FROM objects WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) $ses";
+			// XXX: this does not find menus which are less than 3 levels deep.
+			//$q = "SELECT objects.*,o_p.name as parent_name,o_p_p.name as parent_parent_name,o_p_p_p.name as parent_parent_parent_name FROM objects, objects as o_p,objects as o_p_p,objects as o_p_p_p  WHERE o_p.oid = objects.parent AND o_p_p.oid = o_p.parent AND o_p_p_p.oid = o_p_p.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) $ses";
+			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$this->vars(array(
