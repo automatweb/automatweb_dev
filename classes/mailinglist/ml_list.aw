@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.54 2004/08/02 12:18:33 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.55 2004/08/03 10:13:15 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -253,8 +253,6 @@ class ml_list extends class_base
 		
 		$this->_log(ST_MAILINGLIST, SA_SEND,"saatis meili $id listi ".$v["name"].":$gname", $lid);
 			
-		//$this->db_query("UPDATE ml_avoidmids SET usagec='$total' WHERE aid='$aid'");
-
 		return aw_global_get("route_back");
 	}
 
@@ -512,9 +510,8 @@ class ml_list extends class_base
 		switch($data["name"])
 		{
 			case "import_textfile":	
-                        	global $import_textfile;
-				$imp = $import_textfile;
-				if (!is_uploaded_file($import_textfile))
+				$imp = $_FILES["import_text_file"]["tmp_name"];
+				if (!is_uploaded_file($imp))
 				{
 					return PROP_OK;
 				}
@@ -526,9 +523,8 @@ class ml_list extends class_base
 				break;
 	
 			case "delete_textfile":
-                        	global $delete_textfile;
-				$imp = $delete_textfile;
-				if (!is_uploaded_file($delete_textfile))
+				$imp = $_FILES["delete_textfile"]["tmp_name"];
+				if (!is_uploaded_file($imp))
 				{
 					return PROP_OK;
 				}
@@ -953,7 +949,6 @@ class ml_list extends class_base
 		{
 			$relobj = new object($args["alias"]["relobj_id"]);
 			$meta = $relobj->meta("values");
-			arr($meta);
 			if (!empty($meta["CL_ML_LIST"]["sub_form_type"]))
 			{
 				$sub_form_type = $meta["CL_ML_LIST"]["sub_form_type"];
