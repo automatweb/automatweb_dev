@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.156 2003/10/23 11:50:56 duke Exp $
+// $Id: class_base.aw,v 2.157 2003/10/28 12:08:05 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -96,6 +96,11 @@ class class_base extends aw_template
 		$this->orb_action = $args["action"];
 		
 		$this->is_translated = 0;
+
+		if (empty($args["action"]))
+		{
+			$args["action"] = "view";
+		};
 
 		if ($args["action"] == "new")
 		{
@@ -1304,9 +1309,9 @@ class class_base extends aw_template
 			$val["value"] = $val["toolbar"]->get_toolbar();
 		};
 		
-		if (($val["type"] == "table") && is_object($val["obj_inst"]))
+		if (($val["type"] == "table") && is_object($val["vcl_inst"]))
 		{
-			$val["value"] = $val["obj_inst"]->draw();
+			$val["value"] = $val["vcl_inst"]->draw();
 		};
 
 		if ($val["type"] == "date_select")
@@ -1569,7 +1574,7 @@ class class_base extends aw_template
 			if (($val["type"] == "table") && ($this->orb_action != "submit"))
 			{
 				load_vcl("table");
-				$val["obj_inst"] = new aw_table(array(
+				$val["vcl_inst"] = new aw_table(array(
 					"layout" => "generic",
 				));
 			};

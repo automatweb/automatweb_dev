@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.70 2003/10/14 12:21:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.71 2003/10/28 12:08:05 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -315,7 +315,7 @@ class menu extends class_base
 				break;
 
 			case "seealso":
-				$t = &$arr["prop"]["obj_inst"];
+				$t = &$arr["prop"]["vcl_inst"];
 				$t->define_field(array(
 					"name" => "id",
 					"caption" => "OID",
@@ -342,7 +342,7 @@ class menu extends class_base
 				break;
 
 			case "ip":
-				$t = &$arr["prop"]["obj_inst"];
+				$t = &$arr["prop"]["vcl_inst"];
 				$t->define_field(array(
 					"name" => "ip_name",
 					"caption" => "IP Nimi",
@@ -414,7 +414,7 @@ class menu extends class_base
 			// do something
 			$node["caption"] = "Pilt #" . ($i+1);
 			$node["table"] = "objects";
-			$node["name"] = "menu_images";
+			$node["name"] = "menu_images_".$i;
 			$node["field"] = "meta";
 			$node["method"] = "serialize";
 			$node["items"] = array();
@@ -447,7 +447,7 @@ class menu extends class_base
 			array_push($node["items"],$tmp);
 
 			// image preview
-			$url = image::check_url($val["url"]);
+			$url = image::check_url($args["obj"]["meta"]["menu_images"][$i]["url"]);
 			if ($url)
 			{
 				$url =  html::img(array("url" => $url));
@@ -463,7 +463,7 @@ class menu extends class_base
 			);
 			array_push($node["items"],$tmp);
 
-			$nodes[] = $node;
+			$nodes["menu_images_".$i] = $node;
 		};
 		return $nodes;
 	}
@@ -592,12 +592,12 @@ class menu extends class_base
 				// XXX: this should be rewritten to use relation manager
 				if (!$this->menu_images_done)
 				{
-					$args["metadata"]["menu_images"] = $this->update_menu_images(array(
+					$arr["obj_inst"]->set_meta("menu_images",$this->update_menu_images(array(
 						"id" => $ob->id(),
 						"img_del" => $arr["form_data"]["img_del"],
 						"img_ord" => $arr["form_data"]["img_ord"],
-						"meta" => $arr["obj"]["meta"],
-					));
+						"meta" => $arr["obj"]["meta"]
+					)));
 					$this->menu_images_done = 1;
 				};
 				break;
