@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.15 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.16 2002/09/25 15:05:43 kristo Exp $
 
 classload("objects");
 classload("menuedit","users");
@@ -100,7 +100,7 @@ class promo extends aw_template
 			"value" => $this->make_keys($groups)
 		));
 
-		return $this->mk_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
 	function change($arr)
