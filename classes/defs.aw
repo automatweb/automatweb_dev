@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.107 2003/10/14 12:21:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.108 2003/10/16 11:55:51 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -166,6 +166,12 @@ if (!defined("DEFS"))
 	{
 		$mnames = explode("|",LC_MONTH);
 		return $mnames[(int)$id];
+	}
+
+	function get_est_month($id)
+	{
+		$mnames = explode("|","jaanuar|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
+		return $mnames[(int)$id-1];
 	}
 
 	////
