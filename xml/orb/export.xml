@@ -60,6 +60,52 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="pick_active_version">
+			<function name="pick_active">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_pick_active">
+			<function name="submit_pick_active">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view_log">
+			<function name="view_log">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view_log_entry">
+			<function name="view_log_entry">
+				<arguments>
+					<required name="id"/>
+					<optional name="type" default="errors"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="del_log_entry">
+			<function name="del_log_entry">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_version">
+			<function name="delete_version">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

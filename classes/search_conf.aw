@@ -924,17 +924,56 @@ class search_conf extends aw_template
 
 	function do_static_search($str, $page)
 	{
-		$this->db_query("SELECT * FROM export_content WHERE content LIKE '%$str%' LIMIT ".$page*PER_PAGE.",".PER_PAGE);
+		$p_arr = $this->get_parent_arr($s_parent);
+		$p_arr_str = join(",",$p_arr);
+		if ($p_arr_str != "")
+		{
+			$p_arr_str = " section IN ($p_arr_str) ";
+		}
+
+		if ($t_type == 2)	//	k6ik s6nad
+		{
+			$q_cons.=" (".join(" AND ",$this->map("(content LIKE '%%%s%%')",explode(" ",$str))).")";
+		}
+		else
+		if ($t_type == 3)	//	fraas
+		{
+			$q_cons.=" (content LIKE '%".$str."%')";
+		}
+		else
+		{
+			$q_cons.=" (".join(" OR ",$this->map("(content LIKE '%%%s%%')",explode(" ",$str))).")";
+		}
+
+		$q_cons .= " AND lang_id = '".aw_global_get("lang_id")."'";
+
+		if ($p_arr_str != "" && $q_cons != "")
+		{
+			$q_cons = " AND ".$q_cons;
+		}
+		$q = "SELECT count(*) as cnt FROM export_content WHERE $p_arr_str $q_cons";
+		$cnt = $this->db_fetch_field($q, "cnt");
+		
+		$this->do_sorting($arr);
+
+		$q = "SELECT * FROM export_content WHERE $p_arr_str $q_cons ORDER BY modified LIMIT ".$page*PER_PAGE.",".PER_PAGE;
+		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
+			preg_match("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt);
+			$title = strip_tags($mt[1]);
 			$this->vars(array(
 				"section" => $row["filename"],
-				"title" => $row["filename"],
+				"title" => ($title != "" ? $title : $row["filename"]),
+				"modified" => $this->time2date($row["modified"],5),
 			));
 			$mat.=$this->parse("MATCH");
 		}
 		$this->vars(array(
 			"MATCH" => $mat
+		));
+		$this->vars(array(
+			"PAGESELECTOR" => str_replace($this->cfg["baseurl"]."/orb.aw", $this->cfg["form_server"], $this->do_pageselector($cnt,$arr))
 		));
 		if ($mat != "")
 		{
@@ -948,7 +987,7 @@ class search_conf extends aw_template
 				"NO_RESULTS" => $this->parse("NO_RESULTS")
 			));
 		}
-		return $this->parse();
+		return str_replace($this->cfg["baseurl"]."/orb.aw", $this->cfg["form_server"], $this->parse());
 	}
 }
 ?>

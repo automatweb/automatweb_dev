@@ -17,7 +17,7 @@
 
 
 
-<td class="celltitle">&nbsp;<b>Saidi export | <a href='{VAR:gen_url}'>Ekspordi</a> &nbsp;</td>
+<td class="celltitle">&nbsp;<b>Saidi export | <a href='{VAR:gen_url}'>Ekspordi</a> | <a href='{VAR:pick_active}'>Vali aktiivne versioon</a> | <a href='{VAR:view_log}'>Vaata export logi</a>&nbsp;</td>
 <td align="left"><!--save--><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:document.q.submit()" 
 onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a></td>
 </tr></table>
@@ -73,6 +73,10 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 	<tr class="aste05">
 		<td class="celltext">Kataloogid millele saab ruule teha:</td>
 		<td colspan="2" class="celltext"><select class='formselect' name='rule_folders[]' multiple size=20>{VAR:rule_folders}</select></td>
+	</tr>
+	<tr class="aste05">
+		<td class="celltext">Public kataloogi symlingi nimi:</td>
+		<td colspan="2" class="celltext"><input type='text' class='formtext' name='public_symlink_name' value='{VAR:public_symlink_name}'></td>
 	</tr>
 </table>
 

@@ -1,6 +1,7 @@
 <?php
-// $Id: export.aw,v 2.15 2002/11/21 11:30:35 kristo Exp $
-// export.aw - class for exporting site to static files
+
+classload("extlinks","config","planner");
+
 define("FN_TYPE_SECID",1);
 define("FN_TYPE_NAME",2);
 define("FN_TYPE_HASH",3);
@@ -50,12 +51,12 @@ class export extends aw_template
 		$event_id = $this->get_cval("export::event_id");
 		if (!$cal_id)
 		{
-			$pl = get_instance("planner");
+			$pl = new planner;
 			$pl->submit_add(array("parent" => 1));
 			$cal_id = $pl->id;
 			$event_id = $pl->bron_add_event(array("parent" => $cal_id,"start" => time(), "end" => time()+1));			
 
-			$c = get_instance("config");
+			$c = new config;
 			$c->set_simple_config("export::cal_id",$cal_id);
 			$c->set_simple_config("export::event_id",$event_id);
 		}
@@ -85,6 +86,9 @@ class export extends aw_template
 			"gen_url" => $this->mk_my_orb("do_export"),
 			"rules" => $this->mk_my_orb("rules"),
 			"rule_folders" => $this->multiple_option_list($fr,$o->get_list()),
+			"public_symlink_name" => $this->get_cval("export::public_symlink_name"),
+			"pick_active" => $this->mk_my_orb("pick_active_version", array()),
+			"view_log" => $this->mk_my_orb("view_log", array())
 		));
 		return $this->parse();
 	}
@@ -93,7 +97,8 @@ class export extends aw_template
 	{
 		extract($arr);
 
-		$c = get_instance("config");
+		classload("config");
+		$c = new config;
 		$c->set_simple_config("export::folder",$folder);
 		$c->set_simple_config("export::zip_file",$zip_file);
 		$c->set_simple_config("export::aw_zip_folder",$aw_zip_folder);
@@ -101,6 +106,7 @@ class export extends aw_template
 		$c->set_simple_config("export::automatic",$automatic);
 		$c->set_simple_config("export::static_site",$static_site);
 		$c->set_simple_config("export::fn_type",$fn_type);
+		$c->set_simple_config("export::public_symlink_name",$public_symlink_name);
 		$str = aw_serialize($this->make_keys($rule_folders));
 		$this->quote(&$str);
 		$c->set_simple_config("export::rule_folders",$str);
@@ -140,6 +146,21 @@ class export extends aw_template
 		@mkdir($folder,0777);
  		$this->folder = $folder;
 
+		// add the counter to the folder as folder-cnt
+		$counter = (int)$this->get_cval("export::folder_counter");
+		if (!$counter)
+		{
+			$counter = 1;
+			$conf = get_instance("config");
+			$conf->set_simple_config("export::folder_counter", 1);
+		}
+		$this->folder .= '/version-'.$counter;
+		if (!is_dir($this->folder))
+		{
+			mkdir($this->folder, 0777);
+			$this->db_query("INSERT INTO export_folders(folder, created) VALUES('$this->folder','".time()."')");
+		}
+
 		$this->hashes = array();
 
 		// import exclusion list
@@ -147,11 +168,18 @@ class export extends aw_template
 		{
 			$this->exclude_urls = $this->cfg["exclude_urls"];
 		}
+
+		$this->err_log = array();
+		$this->added_files = array();
+		$this->removed_files = array();
+		$this->changed_files = array();
 	}
 
 	function do_export($arr)
 	{
 		extract($arr);
+
+		$this->start_time = time();
 
 		$zip_file = $this->rep_dates($this->get_cval("export::zip_file"));
 		$aw_zip_folder = $this->get_cval("export::aw_zip_folder");
@@ -224,6 +252,49 @@ class export extends aw_template
 			}
 		}
 
+		// check for files that need to be removed
+		// build a list of all the menus and submenus for this rule
+		if ($rule_id)
+		{
+			$o = get_instance("objects");
+			$allmenus = array();
+			foreach($this->loaded_rule["meta"]["menus"] as $mnid)
+			{
+				$allmenus += $o->get_list(false,false,$mnid);
+				$allmenus += array($mnid => $mnid);
+			}
+
+			// for each menu , get a list of files for that menu from the database
+			$ara = new aw_array($allmenus);
+			$this->db_query("SELECT id,filename,section FROM export_filelist WHERE section IN(".$ara->to_sql().") AND lang_id = ".aw_global_get("lang_id"));
+			$files = array();
+			while ($row = $this->db_next())
+			{
+				$fln = basename($row["filename"]);
+				$files[$row["filename"]] = $row;
+			}
+			// now go over the list and remove all files that were changed or added by this export
+			foreach($this->added_files as $fn)
+			{
+				$fn = basename($fn);
+				unset($files[$fn]);
+			}
+			foreach($this->changed_files as $fn)
+			{
+				$fn = basename($fn);
+				unset($files[$fn]);
+			}
+			// and we got the list of files to delete!
+			foreach($files as $fn => $fd)
+			{
+				$this->removed_files[] = $fn;
+				unlink($this->folder."/".$fn);
+				$this->db_query("DELETE FROM export_filelist WHERE filename = '$fd[filename]'");
+				echo "removing file $fn <br>\n";
+				flush();
+			}
+		}
+
 		if ($zip_file != "")
 		{
 			// $zip_file contains the path and name of the file into which we should zip the exported site
@@ -280,6 +351,9 @@ class export extends aw_template
 			flush();
 		}
 
+		echo "creating log entry ...<br>\n";
+		flush();
+		$this->write_log();
 		echo "<br>all done. <br><br>\n\n";
 		die();
 	}
@@ -287,11 +361,23 @@ class export extends aw_template
 	function fetch_and_save_page($url, $lang_id, $single_page_only = false, $file_name = false)
 	{
 		// check if we must stop
-		if (file_exists(aw_ini_get("server.tmpdir")."/aw.export.stop"))
+		$_stfn = aw_ini_get("server.tmpdir")."/aw.export.stop";
+		if (file_exists($_stfn))
 		{
-			echo "<b>Found stop flag as ".aw_ini_get("server.tmpdir")."/aw.export.stop".", shutting down.</b><br>\n";
-			unlink(aw_ini_get("server.tmpdir")."/aw.export.stop");
-			die();
+			$_fp = fopen($_stfn,"r");
+			$rid = fread($_fp, 100);
+			fclose($_fp);
+			if (($this->rule_id && $rid == $this->rule_id) || !$this->rule_id)
+			{
+				echo "<b>Found stop flag as ".aw_ini_get("server.tmpdir")."/aw.export.stop".", shutting down.</b><br>\n";
+				$this->err_log[] = array(
+					"tm" => time(),
+					"msg" => "Found stop flag as ".aw_ini_get("server.tmpdir")."/aw.export.stop".", shutting down."
+				);
+				$this->write_log();
+				unlink(aw_ini_get("server.tmpdir")."/aw.export.stop");
+				die();
+			}
 		}
 		$url = $this->rewrite_link($url);
 		$_url = $url;
@@ -299,6 +385,10 @@ class export extends aw_template
 		if ($url == "")
 		{
 			echo "<p><Br>VIGA, tyhi url! </b><Br>";
+			$this->err_log[] = array(
+				"tm" => time(),
+				"msg" => "VIGA, tyhi url!"
+			);
 		}
 
 		$url = $this->add_session_stuff($url, $lang_id);
@@ -363,7 +453,7 @@ class export extends aw_template
 			$is_print = true;
 		}
 //		echo "url = $url, print = ",($is_print ? "jah" : "ei")," name = $name <br>";
-		$this->save_file($fc,$name, $is_print, $current_section);
+		$this->save_file($fc,$name, $is_print, $current_section, $t_lang_id);
 
 //		echo "fetch_and_save_page($_url, $lang_id) returning $f_name <br>";
 		$this->fsp_level--;
@@ -476,10 +566,19 @@ class export extends aw_template
 //		echo "convert_links(fc,$lang_id) returning <br>";
 	}
 
-	function save_file($fc,$name, $no_db = false, $cur_sec = "")
+	function save_file($fc,$name, $no_db = false, $cur_sec = "", $lang_id = "")
 	{
 //		echo "save_file(fc,$name) <br>";
 //		echo "saving file as $name <br>\n";
+		if (file_exists($name))
+		{
+			$this->changed_files[] = $name;
+		}
+		else
+		{
+			$this->added_files[] = $name;
+		}
+
 		$fp = fopen($name,"w");
 		fwrite($fp,$fc);
 		fclose($fp);
@@ -491,13 +590,26 @@ class export extends aw_template
 			$this->quote($fc);
 			preg_match("/<!-- MODIFIED:(\d*) -->/U", $fc, $mt);
 			$fn = basename($name);
+			preg_match("/<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $fc, $mt_t);
+			$title = $mt_t[1];
+			$this->quote(&$title);
 			if (($id = $this->db_fetch_field("SELECT id FROM export_content WHERE filename = '$fn'","id")))
 			{
-				$this->db_query("UPDATE export_content SET content = '$fc',modified = '$mt[1]', section = '$cur_sec' WHERE id = '$id'");
+				$this->db_query("UPDATE export_content SET lang_id = '$lang_id', content = '$fc',modified = '$mt[1]', section = '$cur_sec',title = '$title' WHERE id = '$id'");
 			}
 			else
 			{
-				$this->db_query("INSERT INTO export_content(filename, content, modified, section) VALUES('$fn', '$fc','$mt[1]','$cur_sec')");
+				$this->db_query("INSERT INTO export_content(filename, content, modified, section, lang_id,title) VALUES('$fn', '$fc','$mt[1]','$cur_sec','$lang_id','$title')");
+			}
+		}
+
+		if ($cur_sec)
+		{
+			$name = basename($name);
+			$id = $this->db_fetch_field("SELECT id FROM export_filelist WHERE filename = '$name'","id");
+			if (!$id)
+			{
+				$this->db_query("INSERT INTO export_filelist(filename,section,lang_id) VALUES('$name','$cur_sec','$lang_id')");
 			}
 		}
 //		echo "save_file(fc,$name) returning <br>";
@@ -515,10 +627,14 @@ class export extends aw_template
 		if (count($headers) < 1)
 		{
 			// we gotta get the page, cause we haven't yet
-			$fp = fopen($link,"r");
+/*			$fp = fopen($link,"r");
 			fread($fp, 1000000);
 			fclose($fp);
-			$headers = $http_response_header;
+
+			$headers = $http_response_header;*/
+
+			$this->get_page_content($link);
+			$headers = explode("\n", $this->last_request_headers);
 		}
 
 		// deduct the type from the headers - muchos beteros that way
@@ -803,7 +919,7 @@ class export extends aw_template
 				)
 			));
 
-			$pl = get_instance("planner");
+			$pl = new planner;
 			$pl->submit_add(array("parent" => $id));
 
 			$this->upd_object(array(
@@ -863,7 +979,8 @@ class export extends aw_template
 			$this->cfg["baseurl"]."/?set_lang_id=1",
 			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?set_lang_id=1",
 			$this->cfg["baseurl"]."/?set_lang_id=1",
-			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?set_lang_id=1"
+			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?set_lang_id=1",
+			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".aw_ini_get("frontpage")."&set_lang_id=1",
 		);
 		if (in_array($url,$fpurls))
 		{
@@ -913,6 +1030,9 @@ class export extends aw_template
 		else
 		if ($this->fn_type == FN_TYPE_ALIAS)
 		{
+			$qu = $url;
+			$qu = preg_replace("/tbl_sk=([^&$]*)/", "tbl_sk=tbl_sk", $qu);
+			$this->quote(&$qu);
 			preg_match("/section=([^&=?]*)/",$url,$mt);
 			$secid = $mt[1];
 			if ($secid != "")
@@ -978,9 +1098,32 @@ class export extends aw_template
 					$_res = str_replace(" ", "_", str_replace("/","_",$mn));
 					$_res = str_replace("&nbsp;", "_", $_res);
 					$res = $_res;
-					while (isset($this->fta_used[$res]))
+
+					// now check if any files with that name exist in the database
+					$row = $this->db_fetch_row("SELECT * FROM export_url2filename WHERE sec_name = '$res'");
+					if (is_array($row))
 					{
-						$res = $_res.",".($cnt++);
+						// urls with that name exist
+						// check for the current url
+						$row = $this->db_fetch_row("SELECT * FROM export_url2filename WHERE url = '$qu'");
+						if (is_array($row))
+						{
+							// found the name for the current url, use it as final filename
+						}
+						else
+						{
+							// no row for current url, find count and insert new filename and url
+							$mcnt = $this->db_fetch_field("SELECT MAX(count) AS cnt FROM export_url2filename WHERE sec_name = '$res'", "cnt")+1;
+							$res = $_res.",".$mcnt;
+							$this->db_query("INSERT INTO export_url2filename(url, filename, sec_name, count)
+								VALUES('$qu','$res','$_res','$mcnt')");
+						}
+					}
+					else
+					{
+						// no files by that name exist, insert into the db
+						$this->db_query("INSERT INTO export_url2filename(url, filename, sec_name, count)
+							VALUES('$qu','$res','$_res','0')");
 					}
 					$this->fta_used[$res] = true;
 					$this->hash2url[$lang_id][$url] = $res;
@@ -1143,8 +1286,8 @@ class export extends aw_template
 		$req .= "Host: ".$host.($port != 80 ? ":".$port : "")."\r\n";
 		$req .= "Cookie: automatweb=".$this->cookie."\r\n";
 		$req .= "\r\n";
-		$socket = get_instance("socket");
-		$socket->open(array(
+		classload("socket");
+		$socket = new socket(array(
 			"host" => $host,
 			"port" => $port,
 		));
@@ -1155,6 +1298,18 @@ class export extends aw_template
 			$ipd .= $data;
 		};
 		list($headers,$data) = explode("\r\n\r\n",$ipd,2);
+		$this->last_request_headers = $headers;
+
+		// check the data for errors
+		if (strpos($headers, "X-AW-Error: 1") !== false)
+		{
+			preg_match("/<b>AW_ERROR: (.*)<\/b>/",$data,$mt);
+			$this->err_log[] = array(
+				"tm" => time(),
+				"url" => $url,
+				"msg" => $mt[1]
+			);
+		}
 		return $data;
 	}
 
@@ -1167,8 +1322,8 @@ class export extends aw_template
 			$host = str_replace(":".$mt[1], "", $host);
 		}
 		$port = ($mt[1] ? $mt[1] : 80);
-		$socket = get_instance("socket");
-		$socket->open(array(
+		classload("socket");
+		$socket = new socket(array(
 			"host" => $host,
 			"port" => $port,
 		));
@@ -1406,6 +1561,313 @@ class export extends aw_template
 		fwrite($fp, $id);
 		fclose($fp);
 		die("Kirjutasin expordi stop flagi faili ".aw_ini_get("server.tmpdir")."/aw.export.stop<br><a href='".$this->mk_my_orb("change", array("id" => $id))."'>Tagasi</a>");
+	}
+
+	function pick_active($arr)
+	{
+		classload("html");
+		extract($arr);
+		$this->read_template("pick_active.tpl");
+
+		$liname = $this->get_cval("export::public_symlink_name");
+		$li = @readlink($liname);
+
+		$this->db_query("SELECT * FROM export_folders");
+		while ($row = $this->db_next())
+		{
+			preg_match("/version-(\d*)/", $row["folder"],$mt);
+			$this->vars(array(
+				"folder" => $row["folder"],
+				"folder_n" => $row["folder"],
+				"time" => $this->time2date($row["created"], 2),
+				"checked" => checked($li == $row["folder"]),
+				"delete" => html::href(array(
+					'url' => $this->mk_my_orb("delete_version", array("id" => $mt[1])),
+					'caption' => "Kustuta"
+				))
+			));
+			$r.= $this->parse("ROW");
+		}
+		$this->vars(array(
+			"folder" => "Loo uus aktiivse versiooni p&otilde;hjal",
+			"folder_n" => "new",
+			"time" => "",
+			"checked" => "",
+			"delete" => ""
+		));
+		$r.= $this->parse("ROW");
+
+		$this->vars(array(
+			"ROW" => $r,
+			"admin_url" => $this->mk_my_orb("export", array()),
+			"gen_url" => $this->mk_my_orb("do_export", array()),
+			"view_log" => $this->mk_my_orb("view_log", array()),
+			"reforb" => $this->mk_reforb("submit_pick_active", array())
+		));
+		return $this->parse();
+	}
+
+	function submit_pick_active($arr)
+	{
+		extract($arr);
+		// get the active link. 
+		$liname = $this->get_cval("export::public_symlink_name");
+		$li = @readlink($liname);
+
+		if ($active_version == "new")
+		{
+			// increment counter, create new folder and copy all old files to it
+			$c = get_instance("config");
+			$c->set_simple_config("export::folder_counter", $this->get_cval("export::folder_counter")+1);
+			$this->init_settings();
+
+			set_time_limit(0);
+			$this->copy_contents($li, $this->folder);
+			die("<a href='".$this->mk_my_orb("pick_active_version", array())."'>Tagasi</a>");
+		}
+		else
+		{
+			// if it is different, recreate the link
+			if ($li != $active_version && $active_version != "")
+			{
+				@unlink($liname);
+				@symlink($active_version, $liname);
+			}
+		}
+
+		return $this->mk_my_orb("pick_active_version", array());
+	}
+
+	function copy_contents($from, $to)
+	{
+		echo "copying files... \n <Br>";
+		flush();
+		if ($dir = @opendir($from)) 
+		{
+			while (($file = readdir($dir)) !== false) 
+			{
+				if (!($file == "." || $file == ".."))
+				{
+					$fn = $from."/".$file;
+					$tn = $to."/".$file;
+					if (is_dir($file))
+					{
+						// copy subdirs as well
+						mkdir($tn,0777);
+						echo "copying subfolder $fn to $tn <br>\n";
+						$this->copy_contents($fn, $tn);
+					}
+					else
+					{
+						copy($fn, $tn);
+						chmod($tn,0666);
+						echo "$fn => $tn <br>\n";
+						flush();
+					}
+				}
+			}  
+			closedir($dir);
+		}
+		echo "finished! <br>\n";
+	}
+
+	function view_log($arr)
+	{
+		extract($arr);
+		$this->read_template("view_log.tpl");
+
+		$this->db_query("
+			SELECT 
+				export_log.start AS start,
+				export_log.finish AS finish,
+				export_log.id AS id,
+				objects.name AS rule_name,
+				export_log.rule_id AS rule_id
+			FROM export_log 
+				LEFT JOIN objects ON objects.oid = export_log.rule_id 
+			ORDER BY finish DESC");
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"start" => $this->time2date($row["start"], 2),
+				"finish" => $this->time2date($row["finish"], 2),
+				"id" => $row["id"],
+				"rule_url" => $this->mk_my_orb("change", array("id" => $row["rule_id"])),
+				"rule_name" => $row["rule_name"],
+				"view" => $this->mk_my_orb("view_log_entry", array("id" => $row["id"])),
+				"delete" => $this->mk_my_orb("del_log_entry", array("id" => $row["id"]))
+			));
+			$r .= $this->parse("ROW");
+		}
+
+		$this->vars(array(
+			"pick_act" => $this->mk_my_orb("pick_active_version", array()),
+			"admin_url" => $this->mk_my_orb("export", array()),
+			"gen_url" => $this->mk_my_orb("do_export", array()),
+			"pick_act" => $this->mk_my_orb("pick_active_version", array()),
+			"ROW" => $r
+		));
+		return $this->parse();
+	}
+
+	function view_log_entry($arr)
+	{
+		classload("html");
+		extract($arr);
+		$this->read_template("view_log_entry.tpl");
+		$this->mk_path(0,html::href(array(
+				'url' => $this->mk_my_orb("view_log", array()),
+				'caption' => "Vaata tervet logi"
+			))." / Vaata logi kirjet"
+		);
+
+		$row = $this->db_fetch_row("
+			SELECT 
+				export_log.start AS start,
+				export_log.finish AS finish,
+				export_log.id AS id,
+				objects.name AS rule_name,
+				export_log.rule_id AS rule_id,
+				export_log.log AS content,
+				export_log.added_files AS added_files,
+				export_log.changed_files AS changed_files,
+				export_log.removed_files AS removed_files
+			FROM export_log 
+				LEFT JOIN objects ON objects.oid = export_log.rule_id
+			WHERE id = '$id'
+			");
+
+		if ($type == "errors")
+		{
+			$lstr = "<b>VEAD:</b><br><br>";
+			$log = new aw_array(aw_unserialize($row["content"]));
+			foreach($log->get() as $entry)
+			{
+				$lstr.="VIGA (".$this->time2date($entry["tm"],2).")<br>\n";
+				$lstr.="URL: $entry[url] <br>\n";
+				$lstr.="TEADE: $entry[msg] <br>\n-----------------------------<br>\n";
+			}
+			$lstr .=" <Br><br>";
+		}
+		if ($type == "added")
+		{
+			$lstr .= "<b>LISATUD FAILID:</b><br><br>";
+			$log = new aw_array(aw_unserialize($row["added_files"]));
+			foreach($log->get() as $entry)
+			{
+				$lstr.="FAIL: $entry <br>\n";
+			}
+			$lstr .=" <Br><br>";
+		}
+		if ($type == "removed")
+		{
+			$lstr .= "<b>KUSTUTATUD FAILID:</b><br><br>";
+			$log = new aw_array(aw_unserialize($row["removed_files"]));
+			foreach($log->get() as $entry)
+			{
+				$lstr .= "FAIL: $entry <br>\n";
+			}
+			$lstr .=" <Br><br>";
+		}
+		if ($type == "changed")
+		{
+			$lstr .= "<b>MUUDETUD FAILID:</b><br><br>";
+			$log = new aw_array(aw_unserialize($row["changed_files"]));
+			foreach($log->get() as $entry)
+			{
+				$lstr .= "FAIL: $entry <br>\n";
+			}
+		}
+
+		$this->vars(array(
+			"start" => $this->time2date($row["start"], 2),
+			"finish" => $this->time2date($row["finish"], 2),
+			"id" => $row["id"],
+			"rule_url" => $this->mk_my_orb("change", array("id" => $row["rule_id"])),
+			"rule_name" => $row["rule_name"],
+			"delete" => $this->mk_my_orb("del_log_entry", array("id" => $row["id"])),
+			"content" => $lstr,
+			"errors" => $this->mk_my_orb("view_log_entry", array("id" => $row["id"], "type" => "errors")),
+			"added" => $this->mk_my_orb("view_log_entry", array("id" => $row["id"], "type" => "added")),
+			"removed" => $this->mk_my_orb("view_log_entry", array("id" => $row["id"], "type" => "removed")),
+			"changed" => $this->mk_my_orb("view_log_entry", array("id" => $row["id"], "type" => "changed")),
+		));
+		return $this->parse();
+	}
+
+	function del_log_entry($arr)
+	{
+		extract($arr);
+		$this->db_query("DELETE FROM export_log WHERE id = '$id'");
+		return $this->mk_my_orb("view_log");
+	}
+
+	function delete_version($arr)
+	{
+		extract($arr);
+		set_time_limit(0);
+		$folder = $this->rep_dates($this->get_cval("export::folder"));
+		// add the counter to the folder as folder-cnt
+		$folder .= '/version-'.$id;
+		// right. delete all files in folder and then the folder iteself
+		$this->del_folder($folder);
+
+		$this->db_query("DELETE FROM export_folders WHERE folder = '$folder'");
+		classload("html");
+		die(html::href(array(
+			'url' => $this->mk_my_orb("pick_active_version"),
+			'caption' => "Tagasi"
+		)));
+	}
+
+	function del_folder($folder)
+	{
+		if (!is_dir($folder))
+		{
+			return;
+		}
+		echo "delete folder $folder .......<br>\n";
+		flush();
+		if ($dir = @opendir($folder)) 
+		{
+			while (($file = readdir($dir)) !== false) 
+			{
+				if (!($file == "." || $file == ".."))
+				{
+					$fn = $folder."/".$file;
+					if (is_dir($fn))
+					{
+						$this->del_folder($fn);
+					}
+					else
+					{
+						echo "delete file $fn<br>\n";
+						flush();
+						unlink($fn);
+					}
+				}
+			}  
+			echo "delf $folder <br>";
+			flush();
+			closedir($dir);
+			rmdir($folder);
+		}
+	}
+
+	function write_log()
+	{
+		echo "creating log entry ...<br>\n";
+		flush();
+		$lg = aw_serialize($this->err_log,SERIALIZE_XML);
+		$this->quote(&$lg);
+		$lg_a = aw_serialize($this->added_files,SERIALIZE_XML);
+		$this->quote(&$lg_a);
+		$lg_r = aw_serialize($this->removed_files,SERIALIZE_XML);
+		$this->quote(&$lg_r);
+		$lg_c = aw_serialize($this->changed_files,SERIALIZE_XML);
+		$this->quote(&$lg_c);
+		$this->db_query("INSERT INTO export_log(start, finish, rule_id, log,added_files,removed_files,changed_files) 
+			VALUES('$this->start_time','".time()."','$this->rule_id','$lg','$lg_a','$lg_r','$lg_c')");
 	}
 }
 ?>

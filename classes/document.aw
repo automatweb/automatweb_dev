@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.128 2002/11/24 21:13:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.129 2002/11/25 12:36:53 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -361,6 +361,8 @@ class document extends aw_template
 				$doc["title"] = "";
 				$doc["meta"]["show_print"] = 1;
 				$mk_compat = false;
+				$this->vars(array("page_title" => strip_tags($fl["comment"])));
+				$pagetitle = strip_tags($fl["comment"]);
 			};
 		}
 
@@ -939,6 +941,7 @@ class document extends aw_template
 		}
 		classload("image");
 		$this->vars(array(
+			"page_title" => ($pagetitle != "" ? $pagetitle : strip_tags($title)),
 			"title"	=> $title,
 			"menu_image" => image::check_url($mn["img_url"]),
 			"text"  => $doc["content"],
@@ -2563,6 +2566,10 @@ class document extends aw_template
 		}
 
 		$this->read_template("search.tpl");
+		if(aw_ini_get("document.search_static"))
+		{
+			return $this->do_static_search($str, $from, $sortby, $parent, $section);
+		}
 
 		if (($bs = aw_ini_get("search.baseurl")) != "")
 		{
@@ -3685,6 +3692,147 @@ class document extends aw_template
 			"form" => $form,
 			"reforb" => $this->mk_reforb("docsearch",array("no_reforb" => 1,"search" => 1, "parent" => $args["parent"])),
 			"table" => $results,
+		));
+		return $this->parse();
+	}
+
+	function do_static_search($str, $from, $sortby, $_par, $_sec)
+	{
+		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM export_content WHERE content LIKE '%$str%' AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'", "cnt");
+		$docarr = array();
+
+		$this->db_query("SELECT * FROM export_content WHERE content LIKE '%$str%'  AND filename != 'page_template.html' AND lang_id = '".aw_global_get("lang_id")."'");
+		while ($row = $this->db_next())
+		{
+			$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
+			$max_count = max($c,$max_count);
+
+			$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $row["content"], $mt, PREG_SET_ORDER);
+			$title = strip_tags($mt[$nm-1][1]);
+
+			$docarr[] = array(
+				"matches" => $c, 
+				"title" => $title,
+				"section" => $row["filename"],
+				"modified" => $row["modified"],
+				"filename" => $row["filename"]
+			);
+		}
+
+		if ($sortby == "percent")
+		{
+			$d2arr = array();
+			reset($docarr);
+			while (list(,$v) = each($docarr))
+			{
+				if ($max_count == 0)
+				{
+					$d2arr[100][] = $v;
+				}
+				else
+				{
+					$d2arr[($v["matches"]*100) / $max_count][] = $v;
+				}
+			}
+
+			krsort($d2arr,SORT_NUMERIC);
+
+			$docarr = array();
+			reset($d2arr);
+			while (list($p,$v) = each($d2arr))
+			{
+				reset($v);
+				while (list(,$v2) = each($v))
+				{
+					$docarr[] = $v2;
+				}
+			}
+		}
+
+		$per_page = 10;
+		$num = 0;
+		foreach($docarr as $perc => $row)
+		{
+			if ($num >= $from && $num < ($from + $per_page))	// show $per_page matches per screen
+			{
+				if ($max_count == 0)
+				{
+					$sstr = 100;
+				}
+				else
+				{
+					$sstr = substr(($row["matches"]*100) / $max_count,0,4);
+				}
+				$this->vars(array(
+					"section" => $row["section"],
+					"title" => ($row["title"] != "" ? $row["title"] : $row["filename"]),
+					"modified" => $this->time2date($row["modified"],5),
+					"percent" => $sstr
+				));
+				$mat.=$this->parse("MATCH");
+			}
+			$num++;
+		}
+
+		$this->vars(array(
+			"parent" => $_par,
+			"section" => $_sec,
+			"sstring" => $str,
+			"sortby" => $sortby,
+		));
+
+		// make prev page / next page
+		if ($cnt > $per_page)
+		{
+			if ($from > 0)
+			{
+				$this->vars(array("from" => $from-$per_page));
+				$prev = $this->parse("PREVIOUS");
+			}
+			if ($from+$per_page <= $cnt)
+			{
+				$this->vars(array("from" => $from+$per_page));
+				$next = $this->parse("NEXT");
+			}
+
+			for ($i=0; $i < $cnt / $per_page; $i++)
+			{
+				$this->vars(array(
+					"from" => $i*$per_page,
+					"page_from" => $i*$per_page,
+					"page_to" => min(($i+1)*$per_page,$cnt)
+				));
+				if ($i*$per_page == $from)
+				{
+					$pg.=$this->parse("SEL_PAGE");
+				}
+				else
+				{
+					$pg.=$this->parse("PAGE");
+				}
+			}
+		}
+		$this->vars(array(
+			"PREVIOUS" => $prev,
+			"NEXT" => $next,
+			"PAGE" => $pg,
+			"SEL_PAGE" => "",
+			"from" => $from,
+			"section" => 1
+		));
+
+		$ps = $this->parse("PAGESELECTOR");
+		$this->vars(array(
+			"PAGESELECTOR" => $ps,
+		));
+
+		$this->vars(array(
+			"MATCH" => $mat,
+			"sstring" => $str,
+			"matches" => $cnt,
+			"section" => 1,
+			"from" => $from,
+			"s_parent" => 1
 		));
 		return $this->parse();
 	}
