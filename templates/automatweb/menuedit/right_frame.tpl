@@ -1,24 +1,7 @@
 <script src="/automatweb/js/popup_menu.js" type="text/javascript">
-
 </script>
-
-<script>
-if (window != window.top)
-{
-	if (top.document.getElementById('status') == '[object HTMLDivElement]')
-	{
-		top.document.getElementById('status').innerHTML = 'blaa';
-	}
-	else
-	{
-		//alert('desktop not found');
-	}
-}
-</script >
-
-
-<style>
-
+<style type="text/css">
+<!--
 .boxA {
   border: 1px solid transparent;
   cursor:hand;
@@ -26,11 +9,11 @@ if (window != window.top)
   height:70px;
   float:left;
 }
-
+-->
 </style>
 
-
 <script language="javascript">
+<!--
 var chk_status = true;
 
 function selall()
@@ -152,7 +135,7 @@ function go_acl(id)
 	url = "editacl.{VAR:ext}?file=default.xml&oid=" + id;
 	document.location = url;
 }
-
+// -->
 </script>
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.49 2003/06/04 13:37:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.50 2003/07/23 11:39:27 axel Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -424,7 +424,7 @@ class objects extends db_objects
 
 		// save[0], because the composer windows has two buttons with that name and therefore
 		// we cannot refer to it as just "save"
-		print "<script>window.opener.document.writemessage.save[0].click(); window.close();</script>";
+		print "<script type=\"text/javascript\">window.opener.document.writemessage.save[0].click(); window.close();</script>";
 			
 	}
 

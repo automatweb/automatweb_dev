@@ -9,6 +9,20 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
 <script type="text/javascript">
 <!--
+function activate_window()
+{
+	if (window != window.top)
+	{
+		if (top.document.getElementById('status') == '[object HTMLDivElement]') //et siis kontrollime kas aken on desktopis
+		{
+			top.winMakeActive2((window.name.indexOf('frei') == 1) ? window.name : parent.window.name);
+		}
+	}
+}
+// -->
+</script>
+<script type="text/javascript">
+<!--
 function remote(toolbar,width,height,file)
 {
 	self.name = "root";
@@ -42,8 +56,8 @@ function check_generic_loader()
 // -->
 </script>
 </head>
-<body bgcolor='#FFFFFF' link='#0000ff' vlink='#0000ff' onLoad="create_objects(); check_generic_loader();" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table border=0 width="100%" cellspacing="0" cellpadding="2">
+<body onmousedown="activate_window();" bgcolor='#FFFFFF' link='#0000ff' vlink='#0000ff' onLoad="create_objects(); check_generic_loader();">
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
 <tr>
 <td align="left" class="yah">&nbsp;
 {VAR:site_title}

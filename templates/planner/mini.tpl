@@ -1,5 +1,5 @@
 <!-- SUB: calstyles -->
-<style>
+<style type="text/css">
 .caltable {
 	border-collapse: collapse;
 	border: 1px solid #BCDCF0;

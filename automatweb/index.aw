@@ -25,10 +25,8 @@ if (!$tableinfo["fields"]["obj_id"])
 <title><?php echo $uid,"@AutomatWeb";?></title>
 <link REL="icon" HREF="{VAR:baseurl}/automatweb/images/icons/favicon.ico" TYPE="image/x-icon">
 </head>
-
-<frameset cols="30%,*" frameborder="yes" framespacing=1>
-  <frame name="menuFrame" src="orb.aw?class=admin_folders&action=folders&parent=<?php echo $parent; ?>" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
-  <frame name="list" src="orb.aw?class=admin_menus&action=right_frame&parent=<?php echo $parent; ?>&period=<?php echo $period; ?>" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
+<frameset cols="30%,*" frameborder="yes" framespacing="1">
+  <frame name="menuFrame" src="orb.aw?class=admin_folders&action=folders&parent=<?php echo $parent; ?>" marginheight="0" marginwidth="0" scrolling="auto">
+  <frame name="list" src="orb.aw?class=admin_menus&action=right_frame&parent=<?php echo $parent; ?>&period=<?php echo $period; ?>" marginheight="0" marginwidth="0" scrolling="auto">
 </frameset>
-
 </html>

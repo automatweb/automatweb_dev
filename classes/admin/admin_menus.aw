@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.23 2003/07/22 08:38:27 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.24 2003/07/23 11:39:28 axel Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -381,8 +381,8 @@ class admin_menus extends aw_template
 		$this->vars(array(
 			"link" => $this->mk_my_orb("mk_shortcut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true),
 			"text" => "(Tee kiirviide)",
-		));*/
-		$retval .= $this->parse("MENU_ITEM");
+		));
+		$retval .= $this->parse("MENU_ITEM");*/
 
 		if ($ret_data)
 		{
