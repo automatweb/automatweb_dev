@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.39 2005/02/20 19:25:55 ahti Exp $
-// event_search.aw - Sündmuste otsing 
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.40 2005/02/21 15:48:22 ahti Exp $
+// event_search.aw - Sndmuste otsing 
 /*
 
 @classinfo syslog_type=ST_EVENT_SEARCH relationmgr=yes
@@ -14,10 +14,10 @@
 @caption Kasutatav vorm
 
 @property use_output type=relpicker reltype=RELTYPE_EVENT_SHOW
-@caption Näitamise vorm
+@caption N&auml;itamise vorm
 
 @property show_type type=select field=meta method=serialize
-@caption Näita vaikimisi sündmusi
+@caption N&auml;ta vaikimisi s&uuml;ndmusi
 
 @default group=ftsearch
 
@@ -25,7 +25,7 @@
 @caption Ajavahemiku navigaator
 
 @property ftsearch_fields type=chooser multiple=1 orient=vertical
-@caption Vabateksti väljad
+@caption Vabateksti v&auml;jad
 
 @default group=ftform
 @property ftform type=table no_caption=1
@@ -41,7 +41,7 @@
 @caption Kuu navigaatori stiil
 
 @property week_navigator_style type=relpicker reltype=RELTYPE_STYLE
-@caption Nädala navigaatori stiil
+@caption N&auml;dala navigaatori stiil
 
 @property sform_table_style type=relpicker reltype=RELTYPE_STYLE
 @caption Otsinguvormi tabeli stiil
@@ -61,13 +61,13 @@
 @caption Tulemuste tabel
 
 @reltype EVENT_CFGFORM value=1 clid=CL_CFGFORM
-@caption Sündmuse vorm
+@caption S&uuml;ndmuse vorm
 
 @reltype EVENT_SOURCE value=3 clid=CL_MENU,CL_PLANNER
-@caption Sündmuste allikas
+@caption S&uuml;ndmuste allikas
 
 @reltype EVENT_SHOW value=4 clid=CL_CFGFORM
-@caption Näitamise vorm
+@caption N&auml;itamise vorm
 
 @reltype STYLE value=5 clid=CL_CSS
 @caption Stiil
@@ -135,7 +135,7 @@ class event_search extends class_base
 		$formconfig = $o->meta("formconfig");
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => t("Tüüp"),
+			"caption" => t("Tp"),
 		));
 
 		$t->define_field(array(
@@ -176,8 +176,8 @@ class event_search extends class_base
 		
 		$format_selector = html::select(array(
 			"options" => array(
-				0 => "Ainult kuupäev",
-				1 => "Kuupäev, kellaajad"
+				0 => "Ainult kuup&auml;ev",
+				1 => "Kuup&auml;ev, kellaajad"
 			),
 			"name" => "start_date[format]",
 			"value" => $formconfig["start_date"]["format"],
@@ -185,10 +185,10 @@ class event_search extends class_base
 		
 		$t->define_data(array(
 
-			"name" => t("Alguskuupäev"),
+			"name" => t("Alguskuupï¿½v"),
 			"caption" => html::textbox(array(
 				"name" => "start_date[caption]",
-				"value" => $formconfig["start_date"]["caption"] ? $formconfig["start_date"]["caption"] : t("Alguskuupäev"),
+				"value" => $formconfig["start_date"]["caption"] ? $formconfig["start_date"]["caption"] : t("Alguskuup&auml;ev"),
 			)),
 			"active" => html::checkbox(array(
 				"name" => "start_date[active]",
@@ -199,16 +199,16 @@ class event_search extends class_base
 		));
 		
 		$t->define_data(array(
-			"name" => t("Lõppkuupäev"),
+			"name" => t("Lppkuupï¿½v"),
 			"caption" => html::textbox(array(
 				"name" => "end_date[caption]",
-				"value" => $formconfig["end_date"]["caption"] ? $formconfig["end_date"]["caption"] : t("Lõppkuupäev"),
+				"value" => $formconfig["end_date"]["caption"] ? $formconfig["end_date"]["caption"] : t("Lppkuup&auml;ev"),
 			)),
 			
 			"active" => html::checkbox(array(
 				"name" => "end_date[active]",
 				"value" => $formconfig["end_date"]["active"],
-				"checked" => $formconfig["end_date"]["active"],	
+				"checked" => $formconfig["end_date"]["active"],
 			)),
 		));
 		
@@ -285,13 +285,13 @@ class event_search extends class_base
 			case "navigator_range":
 				$prop["options"] = array(
 					0 => "Kuu navigaator",
-					1 => "Nädala navigaator",
+					1 => "N&auml;dala navigaator",
 				);
 				break;
 			case "show_type":
 				$prop["options"] = array(
-					0 => "Kuu järgi",
-					1 => "Päeva järgi",
+					0 => "Kuu j&auml;rgi",
+					1 => "P&auml;eva j&auml;rgi",
 				);
 				break;
 			case "ftsearch_fields":
@@ -375,7 +375,7 @@ class event_search extends class_base
 		));
 		$t->define_field(array(
 			"name" => "fullview",
-			"caption" => t("Täisvaates"),
+			"caption" => t("T&auml;isvaates"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -390,12 +390,12 @@ class event_search extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sep",
-			"caption" => t("Väljade eraldaja"),
+			"caption" => t("V&auml;ljade eraldaja"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "fields",
-			"caption" => t("Lisaväljad"),
+			"caption" => t("Lisav&auml;ljad"),
 		));
 		
 		$oldvals = $o->meta("result_table");
@@ -411,7 +411,7 @@ class event_search extends class_base
 		}
 		elseif (!is_oid($use_output))
 		{
-			$arr["prop"]["error"] = t("Väljundvorm on valimata");
+			$arr["prop"]["error"] = t("V&auml;ljundvorm on valimata");
 			return PROP_ERROR;
 		};
 
@@ -630,7 +630,7 @@ class event_search extends class_base
 				{
 					$search_p1 = true;
 					asort($prj_cx);
-					$prj_ch1 = array(0 => t("kõik")) + $prj_cx;
+					$prj_ch1 = array(0 => t("k&otilde;ik")) + $prj_cx;
 				}
 				else
 				{
@@ -657,7 +657,7 @@ class event_search extends class_base
 				{
 					$search_p2 = true;
 					asort($prj_cx);
-					$prj_ch2 = array(0 => t("kõik")) + $prj_cx;
+					$prj_ch2 = array(0 => t("k&otilde;ik")) + $prj_cx;
 				}
 				else
 				{
@@ -953,15 +953,15 @@ class event_search extends class_base
 				$cdat = "";
 				foreach($tabledef as $sname => $propdef)
 				{
-					if($sname == "content"))
+					if($sname == "content")
 					{
 						continue;
 					}
-					if($search["oid"] && !($propdef["fullview"]))
+					if($search["oid"] && !$propdef["fullview"])
 					{
 						continue;
 					}
-					elseif((!$propdef["active"]) && !($search["oid"]))
+					elseif(!$propdef["active"] && !$search["oid"])
 					{
 						continue;
 					}
@@ -1003,7 +1003,7 @@ class event_search extends class_base
 									$value = str_replace("#php#", "", $value);
 									$value = str_replace("#/php#", "", $value);
 									// eval is evil and inherited from the satan himself,
-								 || ( && )	// so i decided to use it here -- ahz
+									// so i decided to use it here -- ahz
 									eval($value);
 								}
 								else
@@ -1020,7 +1020,7 @@ class event_search extends class_base
 						{
 							if($obj->prop("udeftb1") != "")
 							{
-								 || ( && )$v = html::popup(array(
+								 $v = html::popup(array(
 									"url" => $obj->prop("udeftb1"),
 									"caption" => $v,
 									"target" => "_blank",
@@ -1066,22 +1066,19 @@ class event_search extends class_base
 				{
 					if(!empty($eval["content"]))
 					{
-						$eval["content"] = nl2br($eval["content"]);
-						$aliasmrg->parse_oo_aliases($ekey, $eval["content"]);
-						$content = $eval["content"];
+						$content = nl2br($eval["content"]);
 					}
 					elseif(!empty($eval["utextarea1"]))
 					{
-						$eval["utextarea1"] = nl2br($eval["utextarea1"]);
-						$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
-						$content = $eval["utextarea1"];
+						$content = nl2br($eval["utextarea1"]);
 					}
+					$aliasmrg->parse_oo_aliases($ekey, $content);
 				}
 				$i++;
 				$this->vars(array(
 					"num" => $i % 2 ? 1 : 2,
 				));
-				if($use && !$clickable && !empty($content))
+				if($use && !empty($content))
 				{
 					$this->vars(array(
 						"fulltext_name" => $tabledef[$nmx]["caption"],
