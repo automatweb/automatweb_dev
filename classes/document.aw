@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.86 2002/01/31 23:53:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.87 2002/02/01 00:08:10 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -302,6 +302,7 @@ class document extends aw_template
 		global $DEBUG;
 		extract($params);
 		global $print;	
+		$this->print = $print;
 		$tpl = isset($params["tpl"]) ? $params["tpl"] : "plain.tpl";
 		!isset($leadonly) ? $leadonly = -1 : "";
 		!isset($strip_img) ? $strip_img = 0 : "";
@@ -440,9 +441,6 @@ class document extends aw_template
 		classload("images");
 		$img = new db_images;
 
-		// calculate the amount of comments this document has
-		// can we perhaps cache that somewhere?
-		$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$docid'","cnt");
 
 		// kui vaja on näidata ainult dokumendi leadi, siis see tehakse siin
  		if ($leadonly > -1) 
@@ -550,8 +548,9 @@ class document extends aw_template
 			$doc["content"] = str_replace("#viimati_muudetud num=\"".$matches[1]."\"#",$this->get_last_doc_list($matches[1]),$doc["content"]);
 		}
 
-		// tekitame keywordide lingid
-		if (defined("KEYWORD_RELATIONS"))
+		// create keyword links unless we are in print mode, since you cant click
+		// on links on the paper they dont make sense there :P
+		if (defined("KEYWORD_RELATIONS") && not($print))
 		{
 			$this->create_keyword_relations(&$doc["content"]);
 		}
@@ -580,10 +579,6 @@ class document extends aw_template
 
 		// #top# link - viib doku yles
 		$top_link = $this->parse("top_link");
-		$this->vars(array(
-			"num_comments" => sprintf("%d",$num_comments),
-			"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid),"forum"),
-		));
 		$doc["content"] = str_replace("#top#", $top_link,$doc["content"]);
 
 		// noja, mis fucking "undef" see siin on?
@@ -640,87 +635,79 @@ class document extends aw_template
 			};
 		};
 
-		classload("msgboard");
-		$t = new msgboard;
-		$nc = $t->get_num_comments($docid);
-		$nc = $nc < 1 ? "0" : $nc;
-		$doc["content"] = str_replace("#kommentaaride arv#",$nc,$doc["content"]);
-
-		$doc["content"] = preg_replace("/#kommentaar#(.*)#\/kommentaar#/isU","<a class=\"links\" href='$baseurl/comments.$ext?section=$docid'>\\1</a>",$doc["content"]);
-
-	// <mail to="bla@ee">lahe tyyp</mail>
-    $doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
+		// <mail to="bla@ee">lahe tyyp</mail>
+    		$doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
 		
 		$doc["content"] = str_replace(LC_DOCUMENT_CURRENT_TIME,$this->time2date(time(),2),$doc["content"]);
 
-	classload("users");
-	if (!(strpos($doc["content"],"#liitumisform") === false))
-	{
-		preg_match("/#liitumisform info=\"(.*)\"#/",$doc["content"], $maat);
- 
-      // siin tuleb n2idata kasutaja liitumisformi, kuhu saab passwordi ja staffi kribada.
-      // aga aint sel juhul, kui kasutaja on enne t2itnud k6ik miski grupi formid.
-		$dbu = new users;
-		$doc["content"] = preg_replace("/#liitumisform info=\"(.*)\"#/",$dbu->get_join_form($maat[1]),$doc["content"]);
-	}
+		if (!(strpos($doc["content"],"#liitumisform") === false))
+		{
+			preg_match("/#liitumisform info=\"(.*)\"#/",$doc["content"], $maat);
+
+			// siin tuleb n2idata kasutaja liitumisformi, kuhu saab passwordi ja staffi kribada.
+			// aga aint sel juhul, kui kasutaja on enne t2itnud k6ik miski grupi formid.
+			classload("users");
+			$dbu = new users;
+			$doc["content"] = preg_replace("/#liitumisform info=\"(.*)\"#/",$dbu->get_join_form($maat[1]),$doc["content"]);
+		}
 				
-	$ab = "";
-	if ($doc["author"]) 
-	{
-		if (DOC_LINK_AUTHORS && isset($this->templates["ablock"])) 
+		$ab = "";
+		// I hate the next block of code
+		if ($doc["author"]) 
 		{
-			// YYY
-			$x = $this->get_relations_by_field(array(
-				"field"    => "title",
-				"keywords" => $doc["author"],
-				"section"  => DOC_LINK_AUTHORS_SECTION
-			));
-			$authors = array();
-			global $ext;
-			while(list($k,$v) = each($x)) 
+			if (DOC_LINK_AUTHORS && isset($this->templates["ablock"])) 
 			{
-				if (DOC_LINK_DEFAULT_LINK != "")
+				$x = $this->get_relations_by_field(array(
+					"field"    => "title",
+					"keywords" => $doc["author"],
+					"section"  => DOC_LINK_AUTHORS_SECTION
+				));
+				$authors = array();
+				global $ext;
+				while(list($k,$v) = each($x)) 
 				{
-					if ($v)
+					if (DOC_LINK_DEFAULT_LINK != "")
 					{
-						$authors[] = sprintf("<a href='/index.$ext?section=%s'>%s</a>",$v,$k);
-					} 
-					else 
+						if ($v)
+						{
+							$authors[] = sprintf("<a href='/index.$ext?section=%s'>%s</a>",$v,$k);
+						} 
+						else 
+						{
+							$authors[] = sprintf("<a href='%s'>%s</a>",DOC_LINK_DEFAULT_LINK,$k);
+						};
+					}
+					else
 					{
-						$authors[] = sprintf("<a href='%s'>%s</a>",DOC_LINK_DEFAULT_LINK,$k);
-					};
-				}
-				else
-				{
-					$authors[] = $k;
-				}
-			}; // while
-			$author = join(", ",$authors);
-			$this->vars(array("author" => $author));
-			$ab = $this->parse("ablock");
-		} 
-		else 
-		{
-			$this->vars(array("author" => $doc["author"]));
-			$ab = $this->parse("ablock");
+						$authors[] = $k;
+					}
+				}; // while
+				$author = join(", ",$authors);
+				$this->vars(array("author" => $author));
+				$ab = $this->parse("ablock");
+			} 
+			else 
+			{
+				$this->vars(array("author" => $doc["author"]));
+				$ab = $this->parse("ablock");
+			};
 		};
-	};
 
 		$points = $doc["num_ratings"] == 0 ? 3 : $doc["rating"] / $doc["num_ratings"];
 		$pts = "";
 		for ($i=0; $i < $points; $i++)
 			$pts.=$this->parse("RATE");
 
-		$this->vars(array(
-			"num_comments" =>  $nc,
-			"docid" => $docid,
-			"doc_forum_id" => $GLOBALS["doc_forum_id"]
-		));
-
 		$fr = "";
 		
 		if ($doc["is_forum"] && (not($print)) )
 		{
+			// calculate the amount of comments this document has
+			$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$docid'","cnt");
+			$this->vars(array(
+				"num_comments" => sprintf("%d",$num_comments),
+				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid),"forum"),
+			));
 			classload("forum");
 			$forum = new forum();
 			$fr = $forum->add_comment(array("board" => $docid));
@@ -3071,7 +3058,6 @@ class document extends aw_template
 		$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations 
 			LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid) 
 			WHERE keywordrelations.id = '$this->docid'";
-		print $q;
 		$this->db_query($q);
 		$keywords = array();
 		while($row = $this->db_next())
@@ -3079,7 +3065,7 @@ class document extends aw_template
 			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"],"section" => $docid),"document"),"LINK",$row["keyword"]);
 		}
 
-		if (is_array($keywords) && not($print) )
+		if (is_array($keywords))
 		{
 			// performs the actual search and replace
 			foreach ($keywords as $k_key => $k_val)
