@@ -14,18 +14,13 @@
 
 <table border="0" cellpadding="0" cellspacing="0">
 	<form method="GET" name="foo">
-	<tr>
-		<td width="5"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
-		<td width="50" valign="middle">
+	<!-- SUB: aliaslist -->
 			<select name="aselect" class="formselect">
 				<option>--Vali alias--</option>
 				{VAR:aliases}
 			</select>
-		</td>
-
-<!--ikoonid-->
-<td valign="bottom">
-{VAR:buttons}
+	<!-- END SUB: aliaslist -->
+{VAR:toolbar}
 </td>
 </tr>
 </table>
@@ -121,14 +116,6 @@ function selall()
 </form>
 <form method="GET" name="searchform" action="reforb.{VAR:ext}">
 {VAR:form}
-<table border=0 cellspacing=1 cellpadding=2>
-<tr>
-	<td class="celltext" colspan="2" align="center">
-	{VAR:reforb}
-	<input type="submit" value="Otsi">
-	</td>
-</tr>
-</table>
+{VAR:reforb}
 {VAR:table}
-<input type="button" onClick="javascript:aw_save()" value="Tekita aliased">
 </form>
