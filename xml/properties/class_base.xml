@@ -8,6 +8,7 @@
             <table>objects</table>
             <field>name</field>
             <caption>Nimi</caption>
+            <comment>Objekti nimi</comment>
       </property>
       <property>
             <name>comment</name>
@@ -16,6 +17,7 @@
             <table>objects</table>
             <field>comment</field>
             <caption>Kommentaar</caption>
+            <comment>Vabas vormis tekst objekti kohta</comment>
       </property>
       <property>
             <name>status</name>
@@ -24,6 +26,7 @@
             <table>objects</table>
             <field>status</field>
             <caption>Staatus</caption>
+            <comment>Kas objekt on aktiivne või mitte</comment>
       </property>
       <groupinfo>
             <general>
