@@ -168,9 +168,9 @@
 	<!-- box_content -->
 	<tr><td class="boxcontent">
 	
-		<!-- SUB: MENU_LOGIN_L1_ITEM -->		
+		<!-- SUB: MENU_LOGGED_L1_ITEM -->		
 		&gt; <a href="{VAR:link}" {VAR:target}>{VAR:text}</a><br>
-		<!-- END SUB: MENU_LOGIN_L1_ITEM -->
+		<!-- END SUB: MENU_LOGGED_L1_ITEM -->
 
 
 	</td></tr>

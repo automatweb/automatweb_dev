@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.46 2003/04/23 12:05:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.47 2003/05/08 09:45:44 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -859,7 +859,7 @@ class objects extends db_objects
 			"status" => 2,
 			"skip_invalidate" => true
 		));
-		$ini_opts["menuedit.menu_defs[$lo_id]"] = "LOGIN";
+		$ini_opts["menuedit.menu_defs[$lo_id]"] = "LOGGED";
 
 		$_tmp = $mned->add_new_menu(array(
 			"name" => "Tee t88d",
