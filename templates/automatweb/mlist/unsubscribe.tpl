@@ -7,15 +7,7 @@
 </tr>
 <tr>
 <td>
-Name:
-</td>
-<td>
-<input type="text" name="name" size="30">
-</td>
-</tr>
-<tr>
-<td>
-E-mail
+E-mail:
 </td>
 <td>
 <input type="text" name="email" size="30">
@@ -23,10 +15,10 @@ E-mail
 </tr>
 <tr>
 <td colspan="2">
-<input type="submit" value="Subscribe">
+<input type="submit" value="Unsubscribe">
 </td>
 </tr>
-<input type="hidden" name="op" value="1">
+<input type="hidden" name="op" value="2">
 {VAR:reforb}
 </form>
 </table>
