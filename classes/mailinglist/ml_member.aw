@@ -55,6 +55,16 @@ class ml_member extends aw_template
 		));
 		$ob["meta"]["form_entries"][$fid] = $f->entry_id;
 
+		$row = $this->db_fetch_row("SELECT * FROM ml_member2form_entry WHERE member_id = '$ob[brother_of]' AND form_id = '$fid'");
+		if (!is_array($row))
+		{
+			$this->db_query("INSERT INTO ml_member2form_entry (member_id, form_id, entry_id) VALUES('$ob[brother_of]', '$fid', '".$f->entry_id."')");
+		}
+		else
+		{
+			$this->db_query("UPDATE ml_member2form_entry SET entry_id = '".$f->entry_id."' WHERE member_id = '$ob[brother_of]' AND form_id = '$fid'");
+		}
+
 		// now put together the name of the object and update it
 		$mlc_inst = get_instance("mailinglist/ml_list_conf");
 
@@ -63,7 +73,7 @@ class ml_member extends aw_template
 		$ar = new aw_array($mlc_inst->get_forms_by_id($ob["meta"]["conf_obj"]));
 		foreach($ar->get() as $_fid)
 		{
-			$finst_ar[$_fid] = new form;
+			$finst_ar[$_fid] = get_instance("formgen/form");
 			$finst_ar[$_fid]->load($_fid);
 			if ($ob["meta"]["form_entries"][$_fid])
 			{
@@ -92,7 +102,7 @@ class ml_member extends aw_template
 		));
 
 		$rule=get_instance("mailinglist/ml_rule");
-		$rule->check_entry(array($ob["meta"]["form_entries"][$fid]));
+//		$rule->check_entry(array($ob["meta"]["form_entries"][$fid]));
 
 		$this->_log("mlist","muutis liiget $namestr");
 		return $this->mk_my_orb("change",array("id" => $id,"fid" => $fid));
@@ -150,7 +160,7 @@ class ml_member extends aw_template
 		$t->define_header("Saadetud meilid",array());
 		$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/sentmails.xml");
 
-		$q="SELECT * FROM ml_sent_mails WHERE member='$id'";
+		$q="SELECT * FROM ml_sent_mails WHERE member='$ob[brother_of]'";
 		$this->db_query($q);
 
 		while ($row = $this->db_next())
@@ -237,6 +247,72 @@ class ml_member extends aw_template
 			"ITEM" => ""
 		));
 		return $str;
+	}
+
+	function update_member_name($id)
+	{
+		$ob = $this->get_object($id, false);
+		// now put together the name of the object and update it
+		$mlc_inst = get_instance("mailinglist/ml_list_conf");
+
+		// oh crap. we have to load all the entries here, because the elements may be in any form
+		$finst_ar = array();
+		$ar = new aw_array($mlc_inst->get_forms_by_id($ob["meta"]["conf_obj"]));
+		foreach($ar->get() as $_fid)
+		{
+			$finst_ar[$_fid] = get_instance("formgen/form");
+			$finst_ar[$_fid]->load($_fid);
+			if ($ob["meta"]["form_entries"][$_fid])
+			{
+				$finst_ar[$_fid]->load_entry($ob["meta"]["form_entries"][$_fid]);
+			}
+		}
+
+		$name = array();
+		foreach($mlc_inst->get_name_els_by_id($ob["meta"]["conf_obj"]) as $elid)
+		{
+			foreach($finst_ar as $_fid => $finst)
+			{
+				if (is_object($el = $finst->get_element_by_id($elid)))
+				{
+					$name[] = $el->get_value();
+					break;
+				}
+			}
+		}
+		$namestr = join(" ", $name);
+		$this->upd_object(array(
+			"oid" => $id,
+			"name" => $namestr
+		));
+	}
+
+	////
+	// !creates list member under $parent, using form/entry pairs in $entries, member uses conf object $conf
+	function create_member($arr)
+	{
+		extract($arr);
+		$id = $this->new_object(array(
+			"parent" => $parent,
+			"class_id" => CL_ML_MEMBER,
+			"metadata" => array(
+				"conf_obj" => $conf
+			)
+		));
+
+		$dat = array("conf_obj" => $conf);
+		foreach($entries as $fid => $eid)
+		{
+			$dat["form_entries"][$fid] = $eid;
+			$this->db_query("INSERT INTO ml_member2form_entry (member_id, form_id, entry_id) VALUES('$id', '$fid', '$eid')");
+		}
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"data" => $dat
+		));
+
+		$this->update_member_name($id);
+		return $id;
 	}
 };
 ?>

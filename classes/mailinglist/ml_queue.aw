@@ -1,8 +1,6 @@
 <?php
-define('MSG_LIST',512);
-// näitab et tegemist on html teatega
-define('MSG_HTML',1024);
-
+// needed defined constants
+classload("messenger");
 function decho($a)
 {
 	if ($GLOBALS["__debug"])
@@ -253,7 +251,7 @@ class ml_queue extends aw_template
 		$this->db_query("UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qid='$id'");
 
 		$GLOBALS["reforb"]=0;// see on selleks, et ta ei hakkaks kuhugi suunama vaid prindiks skripti välja
-		return "<script language='JavaScript'>opener.history.go(0);window.close();</script>";
+		die("<script language='JavaScript'>opener.history.go(0);window.close();</script>");
 	}
 
 	////
@@ -270,12 +268,19 @@ class ml_queue extends aw_template
 			};
 			$this->db_query("DELETE FROM ml_queue WHERE qid IN ($q)");
 		};
-		return $this->mk_my_orb("queue",array(
-			"id" => $id,
-			"show" => $show,
-			"fid" => $fid,
-			"manager" => $manager
-		));
+		if ($from_mlm)
+		{
+			return $this->mk_my_orb("change", array("id" => $id), "ml_list_status");
+		}
+		else
+		{
+			return $this->mk_my_orb("queue",array(
+				"id" => $id,
+				"show" => $show,
+				"fid" => $fid,
+				"manager" => $manager
+			));
+		}
 	}
 
 	////
@@ -296,12 +301,19 @@ class ml_queue extends aw_template
 			$w="UPDATE ml_queue SET last_sent=$delta-delay WHERE qid IN ($q) AND status!=0";
 			$this->db_query($w);
 		};
-		return $this->mk_my_orb("queue",array(
-			"id" => $id,
-			"show" => $show,
-			"fid" => $fid,
-			"manager" => $manager
-		));
+		if ($from_mlm)
+		{
+			return $this->mk_my_orb("change", array("id" => $id), "ml_list_status");
+		}
+		else
+		{
+			return $this->mk_my_orb("queue",array(
+				"id" => $id,
+				"show" => $show,
+				"fid" => $fid,
+				"manager" => $manager
+			));
+		}
 	}
 
 
@@ -355,6 +367,12 @@ class ml_queue extends aw_template
 	// siit võix debugi asjad välja korjata (kus on //dbg) kui asi kasutusse läheb
 	function process_queue($arr)
 	{
+		$sched = get_instance("scheduler");
+		$sched->add(array(
+			"event" => $this->mk_my_orb("process_queue", array("rand" => $this->gen_uniq_id()), "", false, true),
+			"time" => time()+120,	// every 2 minutes
+		));
+		echo "adding scheduler ! <br>";
 		decho("process_queue:<br>");//dbg
 		$tm=time();
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
@@ -579,6 +597,7 @@ class ml_queue extends aw_template
 		$l = array();
 		foreach($user_forms as $uf_id)
 		{
+			echo "uf_id = $uf_id <br>";
 			if (($uf_eid = $m["meta"]["form_entries"][$uf_id]))
 			{
 				$uf_inst =& $form_inst->cache_get_form_instance($uf_id);
@@ -598,6 +617,7 @@ class ml_queue extends aw_template
 			}
 		}
 
+		echo "yeah <br>";
 /*		if (!isset($this->f))
 		{
 			$this->f=get_instance("formgen/form");

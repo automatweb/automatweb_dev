@@ -18,7 +18,17 @@ class ml_list extends aw_template
 		$this->mk_path($parent,"Lisa meililist");
 
 		$this->read_template("list_new.tpl");
+		$tb = get_instance("toolbar");
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:document.foo.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif"
+		));
+
 		$this->vars(array(
+			"toolbar" => $tb->get_toolbar(),
 			"name" => "", 
 			"comment" => "",
 			"vars" => $this->multiple_option_list(array(),$this->get_all_varnames()),
@@ -76,9 +86,27 @@ class ml_list extends aw_template
 				"metadata" => array(
 					"vars" => $vars,
 					"user_form_conf" => $user_form_conf,
-					"user_folders" => $this->make_keys($user_folders)
+					"user_folders" => $this->make_keys($user_folders),
+					"def_user_folder" => $def_user_folder,
+					"automatic_form" => $automatic_form,
 				)
 			));
+			$this->list_ob = $this->get_object($id, true);
+
+			$tr = $this->db_fetch_row("SELECT * FROM ml_list2automatic_form WHERE lid = '$id'");
+			if (is_array($tr))
+			{
+				$this->db_query("UPDATE ml_list2automatic_form SET fid = '$automatic_form'");
+			}
+			else
+			{
+				$this->db_query("INSERT INTO ml_list2automatic_form (lid, fid) VALUES('$id','$automatic_form')");
+			}
+			if ($automatic_form)
+			{
+				$this->update_automatic_list($id);
+			}
+
 			$this->_log("mlist","muutis meililisti $name");
 		}
 		else
@@ -130,12 +158,31 @@ class ml_list extends aw_template
 			$varparse.=$this->parse("variable");
 		};
 
+		$tb = get_instance("toolbar");
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:document.foo.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif"
+		));
+
+		$fl = array("0" => "");
+		$ll = $this->get_forms_for_list($id);
+		$this->db_query("SELECT oid, name FROM objects WHERE oid IN(".join(",",$ll).")");
+		while ($_row = $this->db_next())
+		{
+			$fl[$_row["oid"]] = $_row["name"];
+		}
 		$this->vars(array(
+			"toolbar" => $tb->get_toolbar(),
 			"name" => $row["name"],
 			"comment" => $row["comment"],
 			"variable" => $varparse,
+			"automatic_form" => $this->picker($row["meta"]["automatic_form"], $fl),
 			"ufc" => $this->picker($row["meta"]["user_form_conf"], $this->list_objects(array("class" => CL_ML_LIST_CONF, "addempty" => true))),
 			"user_folders" => $this->mpicker($row["meta"]["user_folders"], $this->get_all_user_folders()),
+			"def_user_folder" => $this->picker($row["meta"]["def_user_folder"], $this->get_all_user_folders()),
 			"reforb" => $this->mk_reforb("submit_omadused",array("id" => $id)),
 		));
 
@@ -256,13 +303,18 @@ class ml_list extends aw_template
 
 	////
 	//! Tagastab kõik formi elemendid id => name 
-	function get_all_varnames($id = false)
+	function get_all_varnames($id = false, $conf = false)
 	{
 		$ret = array();
 		$fb = get_instance("formgen/form_base");
-		if (!is_array($this->list_ob))
+		if (!is_array($this->list_ob) && $id)
 		{
 			$this->load_list($id);
+		}
+		if ($conf)
+		{
+			$ufc_inst = get_instance("mailinglist/ml_list_conf");
+			$this->formid = $ufc_inst->get_forms_by_id($conf);
 		}
 
 		$ar = new aw_array($this->formid);
@@ -287,6 +339,11 @@ class ml_list extends aw_template
 	{
 		extract($args);
 		$url=$this->mk_my_orb("post_message",array("id" => $id, "targets" => $targets),"",1);
+		$sched = get_instance("scheduler");
+		$sched->add(array(
+			"event" => $this->mk_my_orb("process_queue", array("rand" => $this->gen_uniq_id()), "ml_queue", false, true),
+			"time" => time()+120,	// every 2 minutes
+		));
 		return $url;
 	}
 
@@ -525,6 +582,104 @@ class ml_list extends aw_template
 		$this->load_list($id);
 		$ufc_inst = get_instance("mailinglist/ml_list_conf");
 		return $ufc_inst->get_forms_by_id($this->list_ob["meta"]["user_form_conf"]);
+	}
+
+	function get_all_folders_for_list($id)
+	{
+		$this->load_list($id);
+		$far = $this->get_all_user_folders();
+		$ret = array();
+		foreach($far as $fid => $fn)
+		{
+			$ret[$fid] = $fn;
+			$ret += $this->get_objects_below(array(
+				"parent" => $fid,
+				"class" => CL_PSEUDO,
+				"full" => true,
+				"ret" => ARR_NAME
+			));
+		}
+		return $ret;
+	}
+
+	////
+	// !adds a brother to the list member to the list
+	function add_member_to_list($arr)
+	{
+		extract($arr);
+		$this->load_list($lid);
+		$folder = $this->list_ob["meta"]["def_user_folder"];
+
+		$mdat = $this->get_object($mid);
+
+		$this->new_object(array(
+			"parent" => $folder,
+			"name" => $mdat["name"],
+			"class_id" => CL_ML_MEMBER,
+			"brother_of" => $mdat["oid"]
+		));
+	}
+
+	function remove_member_from_list($arr)
+	{
+		extract($arr);
+		$this->load_list($lid);
+		$members = $this->get_members($lid);
+		foreach($members as $_mid => $mdat)
+		{
+			if ($mdat["brother_of"] == $mid)
+			{
+				$this->delete_object($mdat["oid"]);
+			}
+		}
+	}
+
+	function get_list_id_by_name($name)
+	{
+		$name = substr($name, 1);
+		$ret = $this->db_fetch_field("SELECT oid FROM objects WHERE class_id = ".CL_ML_LIST." AND status != 0 AND name = '".$name."'","oid");
+		return $ret;
+	}
+
+	function update_automatic_list($id)
+	{
+		// get all members for the list
+		$mem = $this->get_members($id);
+
+		$automatic_form = $this->list_ob["meta"]["automatic_form"];
+
+		$meminf = array();
+		// get all correct form entries for list
+		$memstr = join(",", array_keys($mem));
+		if ($memstr != "")
+		{
+			$this->db_query("SELECT * FROM ml_member2form_entry WHERE member_id IN($memstr) AND form_id = '$automatic_form'");
+			while ($row = $this->db_next())
+			{
+				$meminf[$row["entry_id"]] = $row;
+			}
+		}
+
+		// get all form entries
+		$finst = get_instance("formgen/form");
+		$entries = $finst->get_entries(array("id" => $automatic_form));
+
+		$mem_inst = get_instance("mailinglist/ml_member");
+
+		// now make members from all the form entries that are already not members
+		foreach($entries as $eid => $ename)
+		{
+			if (!isset($meminf[$eid]))
+			{
+				$mem_inst->create_member(array(
+					"parent" => $this->list_ob["meta"]["def_user_folder"],
+					"entries" => array(
+						$automatic_form => $eid
+					),
+					"conf" => $this->list_ob["meta"]["user_form_conf"]
+				));
+			}
+		}
 	}
 };
 ?>

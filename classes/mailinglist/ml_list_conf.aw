@@ -27,9 +27,20 @@ class ml_list_conf extends aw_template
 		$this->read_template("change.tpl");
 
 		$finst = get_instance("formgen/form");
+		$tb = get_instance("toolbar");
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:document.add.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif"
+		));
+
 		$this->vars(array(
+			"toolbar" => $tb->get_toolbar(),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url)),
 			"forms" => $this->mpicker(array(), $finst->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true))),
+			"search_forms" => $this->picker(0, $finst->get_flist(array("type" => FTYPE_SEARCH, "addempty" => true, "addfolders" => true, "sort" => true))),
 			"folders" => $this->mpicker(array(), $this->get_menu_list())
 		));
 		return $this->parse();
@@ -62,6 +73,7 @@ class ml_list_conf extends aw_template
 			"oid" => $id,
 			"data" => array(
 				"user_form" => $this->make_keys($user_form),
+				"user_search_form" => $user_search_form,
 				"folders" => $this->make_keys($folder),
 				"name_els" => $this->make_keys($name_els),
 				"form_jrk" => $jrk,
@@ -98,6 +110,7 @@ class ml_list_conf extends aw_template
 	
 		$finst = get_instance("formgen/form");
 		$flist = $finst->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true));
+		$s_flist = $finst->get_flist(array("type" => FTYPE_SEARCH, "addempty" => true, "addfolders" => true, "sort" => true));
 
 		$elements = array();
 
@@ -135,10 +148,21 @@ class ml_list_conf extends aw_template
 			"mailto_el" => $this->picker($ob["meta"]["mailto_el"], $elements)
 		));
 
+		$tb = get_instance("toolbar");
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:document.add.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif"
+		));
+
 		$this->vars(array(
+			"toolbar" => $tb->get_toolbar(),
 			"CHANGE" => $this->parse("CHANGE"),
 			"name" => $ob["name"],
 			"forms" => $this->mpicker($ob["meta"]["user_form"], $flist),
+			"search_forms" => $this->picker($ob["meta"]["user_search_form"], $s_flist),
 			"folders" => $this->mpicker($ob["meta"]["folders"], $this->get_menu_list()),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
@@ -239,6 +263,12 @@ class ml_list_conf extends aw_template
 	{
 		$ob = $this->get_object($id);
 		return $ob["meta"]["mailto_el"];
+	}
+
+	function get_user_search_form($id)
+	{
+		$ob = $this->get_object($id);
+		return $ob["meta"]["user_search_form"];
 	}
 }
 ?>

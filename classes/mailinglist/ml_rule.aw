@@ -1,32 +1,26 @@
 <?php
+// triggerite mask
+define("T_ENTRY",1);
+define("T_INLIST",2);
+define("T_MAILSENT",4);
+define("T_MAILSENTAT",8);
+define("T_MAILSUBJ",16);
+define("T_USEDVARS",32);
 
-
-	// triggerite mask
-	define("T_ENTRY",1);
-	define("T_INLIST",2);
-	define("T_MAILSENT",4);
-	define("T_MAILSENTAT",8);
-	define("T_MAILSUBJ",16);
-	define("T_USEDVARS",32);
-	
-	// äktsionite mask
-	define("A_ADDLIST",1);
-	define("A_DELLIST",2);
-	define("A_DELETE",3);
-	define("A_DONTSEND",4);
+// äktsionite mask
+define("A_ADDLIST",1);
+define("A_DELLIST",2);
+define("A_DELETE",3);
+define("A_DONTSEND",4);
 
 // ruulid
 class ml_rule extends aw_template
 {
-
 	////
 	//! Konstruktor
 	function ml_rule()
 	{
 		$this->init("automatweb/mlist");
-		$this->dbconf=get_instance("config");
-		$this->formid=$this->dbconf->get_simple_config("ml_form");
-		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 		lc_load("definition");
 	}
 
@@ -41,19 +35,19 @@ class ml_rule extends aw_template
 
 		if ($id)
 		{
-			$name=$this->db_fetch_field("SELECT name FROM objects WHERE oid = '$id'","name");
-			$this->db_query("SELECT * FROM ml_rules WHERE rid='$id'");
-			$r=$this->db_next();
+			$ob = $this->get_object($id);
+			$name = $ob["name"];
+			$r = $this->db_fetch_row("SELECT * FROM ml_rules WHERE rid='$id'");
 		} 
 		else
 		{
 			$r=array();
 		};
 		
-		if (!isset($this->ml))
-		{
-			$this->ml = get_instance("mailinglist/ml_list");
-		};
+		$this->ml = get_instance("mailinglist/ml_list");
+		$this->fr = get_instance("formgen/form");
+		$this->conf = get_instance("mailinglist/ml_list_conf");
+
 		load_vcl("date_edit");
 		$date_edit = new date_edit(time());
 		$date_edit->configure(array(
@@ -65,12 +59,8 @@ class ml_rule extends aw_template
 			"classid" => "small_button",
 		));
 
-		if (!isset($this->fr))
-		{
-			$this->fr=get_instance("formgen/form");
-		};
 		$farr=array(
-			"id" => $this->searchformid,//searchformid
+			"id" => $this->conf->get_user_search_form($ob["meta"]["conf"]),//searchformid
 			"tpl" => "show_onlyels.tpl",
 			"formtag_name" => "foo",
 			"prefix" => "__formdta"
@@ -78,20 +68,18 @@ class ml_rule extends aw_template
 		
 		if (($r["trig"] & T_ENTRY) && $r["trig_entry"])
 		{
-			$farr["entry_id"]=$r["trig_entry"];
+			$farr["entry_id"] = $r["trig_entry"];
 		};
 
 		$fparse=$this->fr->gen_preview($farr);
-		//echo("<textarea>$fparse</textarea>");
 		$fparse=preg_replace("/<input(.+?)type='submit'(.+?)>/i","",$fparse);
 		$fparse=preg_replace("/<input(.+?)name='id'(.+?)>/i","",$fparse);
-		//echo("<textarea>$fparse</textarea>");
-		
 		
 		$alllists=$this->ml->get_lists_and_groups(array("spacer" => "&nbsp;","fullnames"=> 1));
-		$allvars=$this->ml->get_all_varnames();
-		$trig_usedvars=unserialize($r["trig_usedvars"]);
-		$t_usedvars=array_flip(is_array($trig_usedvars)?$trig_usedvars:array());
+		// we gots to give it the conf object to load the vars from 
+		$allvars=$this->ml->get_all_varnames(false, $ob["meta"]["conf"]);
+		$trig_usedvars = unserialize($r["trig_usedvars"]);
+		$t_usedvars = array_flip(is_array($trig_usedvars)?$trig_usedvars:array());
 
 
 		if (!$r["action"])
@@ -117,7 +105,24 @@ class ml_rule extends aw_template
 			};
 		};
 
+		$tb = get_instance("toolbar");
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:document.foo.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif"
+		));
+		$tb->add_button(array(
+			"name" => "search",
+			"tooltip" => "Otsi",
+			"url" => "javascript:DoTheThing('search')",
+			"imgover" => "search_over.gif",
+			"img" => "search.gif"
+		));
+
 		$this->vars(array(
+			"toolbar" => $tb->get_toolbar(),
 			"taida" => $taida,
 			"rida" => $rida,
 			"name" => $name,
@@ -145,6 +150,7 @@ class ml_rule extends aw_template
 			"a_dellist" => checked($r["action"] == A_DELLIST),
 			"a_delete" => checked($r["action"] == A_DELETE),
 			"l_vali" => $this->mk_my_orb("select_mail",array()),
+			"conf" => $this->picker($ob["meta"]["conf"], $this->list_objects(array("class" => CL_ML_LIST_CONF))),
 			"reforb" => $this->mk_reforb("submit_change",array(
 				"parent" => $parent, 
 				"id" => $id,
@@ -170,7 +176,8 @@ class ml_rule extends aw_template
 		extract($arr);
 		$this->read_template("select_mail.tpl");
 
-		$this->db_query("SELECT * FROM messages WHERE messages.type='3'");//3 on konstant MSG_LIST failist messenger.aw
+		classload("messenger");
+		$this->db_query("SELECT * FROM messages WHERE messages.type='".MSG_LIST."'");
 		while ($r = $this->db_next() )
 		{
 			$r["message"]=substr($r["message"],0,150)."...";
@@ -196,16 +203,22 @@ class ml_rule extends aw_template
 		if (!$id)
 		{
 			//echo("teen uue <br>");//dbg
-			$id=$this->new_object(array(
+			$id = $this->new_object(array(
 				"class_id" => CL_ML_RULE,
 				"name" => $name, 
 				"parent" => $parent
-				));
+			));
 			$this->db_query("INSERT INTO ml_rules (rid) VALUES ('$id')");
 			//echo("id=$id<br>");//dbg
 		};
 
-		$this->db_query("UPDATE objects SET name='$name' WHERE oid = '$id'");
+		$this->upd_object(array(
+			"oid" => $id,
+			"name" => $name,
+			"metadata" => array(
+				"conf" => $conf
+			)
+		));
 
 		$trig=0;
 		$tm_inlist?$trig|=T_INLIST:"";
@@ -220,17 +233,15 @@ class ml_rule extends aw_template
 		if ($tm_entry)
 		{
 			//echo("need to save entry data");//dbg
-			if (!isset($this->fr))
-			{
-				$this->fr=get_instance("formgen/form");
-			};
+			$this->fr = get_instance("formgen/form");
+			$this->conf = get_instance("mailinglist/ml_list_conf");
 		
 			$this->fr->process_entry(array(
 				"values" => $arr,		//Kas form_element.aw ikka võtab siit inffi?? :)
 				"entry_id" => $oldentry_id,
 				"prefix" => "__formdta",
 				"parent" => $id,
-				"id" => $this->searchformid,// peax olema searchformid
+				"id" => $this->conf->get_user_search_form($conf),// peax olema searchformid
 			));
 			$t_entry = $this->fr->entry_id?$this->fr->entry_id:$oldentry_id;
 			$t_entry = " trig_entry='$t_entry', ";
@@ -387,8 +398,13 @@ class ml_rule extends aw_template
 
 		foreach ($arr as $id)
 		{
-			$this->db_query("SELECT * FROM ml_rules WHERE rid = '$id'");
-			$r=$this->db_next();
+			$r = $this->db_fetch_row("SELECT * FROM ml_rules WHERE rid = '$id'");
+			$r_ob = $this->get_object($id);
+			if (!$r_ob["meta"]["conf"])
+			{
+				continue;	// handle old rules. handle them by ignoring them is what I mean.
+			}
+
 			//ehita query
 			$wi=array();//where osad
 			$w=&$wi;
@@ -402,22 +418,22 @@ class ml_rule extends aw_template
 
 			if (($r["trig"] & T_ENTRY) && $r["trig_entry"])
 			{
-				//echo("doing form::search() entry=".$r["trig_entry"]);//dbg
-				if (!isset($this->fr))
-				{
-					$this->fr=get_instance("formgen/form");
-				};
-				$this->fr->load($this->searchformid);
+				$this->ml = get_instance("mailinglist/ml_list");
+				$this->fr = get_instance("formgen/form");
+				$this->conf = get_instance("mailinglist/ml_list_conf");
+				$this->fr->load($this->conf->get_user_search_form($r_ob["meta"]["conf"]));
 				$matchedids=$this->fr->search($r["trig_entry"]);
-				// Ohh, lahe, minumeelest oli kuskil kirjas, et form::search tagastab
-				// array kujul formid => array(match,match), jne
-				// Aga oh imet! ära muudetud
-
-				//echo("<pre>");print_r($matchedids);echo("</pre>");//dbg
-				
+			
+				// now we got the matched entry id's, but we gots to convert them to list member id's
 				if (is_array($matchedids) && sizeof($matchedids))
 				{
-					$w[]="objects.oid IN (".join(",",$matchedids/*[$this->searchformid]*/).")";
+					$_tmp = array();
+					$this->db_query("SELECT member_id FROM ml_member2form_entry WHERE entry_id = '".join(",",$matchedids)."'");
+					while ($_row = $this->db_next())
+					{
+						$_tmp[] = $_row["member_id"];
+					}
+					$w[]="objects.oid IN (".join(",",$_tmp).")";
 				} 
 				else
 				{
@@ -427,14 +443,20 @@ class ml_rule extends aw_template
 
 			if ($r["trig"] & T_INLIST)
 			{
-				$t["ml_list2member"]=1;
 				list($lid,$gid)=explode(":",$r["trig_inlist"]);
 				if ($gid==0)
 				{
-					$w[]="ml_list2member.lid = '$lid'";
-				} else
+					$list_inst = get_instance("mailinglist/ml_list");
+					$folders = array_keys($list_inst->get_all_folders_for_list($lid));
+					$foldersstr = join(",", $folders);
+					if ($foldersstr != "")
+					{
+						$w[]="objects.parent IN ($foldersstr)";
+					}
+				} 
+				else
 				{
-					$w[]="ml_list2member.lid = '$lid' AND ml_list2member.lgroup = '$gid'";
+					$w[]="objects.parent = '$gid'";
 				};
 			};
 
@@ -464,7 +486,7 @@ class ml_rule extends aw_template
 				{
 					$this->ml=get_instance("mailinglist/ml_list");
 				};
-				$vn=$this->ml->get_all_varnames();
+				$vn=$this->ml->get_all_varnames(false, $r_ob["meta"]["conf"]);
 				$vars=unserialize($r["trig_usedvars"]);
 				foreach($vars as $vid)
 				{
@@ -591,11 +613,12 @@ class ml_rule extends aw_template
 						break;
 
 					case A_DELETE:
-						if (!isset($this->mlmember))
+/*						if (!isset($this->mlmember))
 						{
 							$this->mlmember=get_instance("mailinglist/ml_member");
 						};
-						$this->mlmember->orb_delete(array("id" => $mid,"_inner_call" => 1));
+						$this->mlmember->orb_delete(array("id" => $mid,"_inner_call" => 1));*/
+						$this->delete_object($mid);
 						//echo("A_DELETE $mid<br>");//dbg
 						break;
 
