@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_contract_stop.aw,v 1.1 2005/01/18 15:39:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_contract_stop.aw,v 1.2 2005/01/21 13:05:45 duke Exp $
 // crm_contract_stop.aw - Töölepingu peatamine 
 /*
 
@@ -15,6 +15,9 @@
 @property end type=datetime_select field=end 
 @caption Lõpeb
 
+@property person_ref type=textbox table=external_reference field=ext_id
+@caption Viit isikule
+
 @default table=objects
 
 @property type type=relpicker reltype=RELTYPE_CONTRACT_STOP_TYPE automatic=1
@@ -22,6 +25,9 @@
 
 @reltype CONTRACT_STOP_TYPE value=1 clid=CL_META
 @caption Peatumise liik
+
+@tableinfo planner index=id master_table=objects master_index=oid
+@tableinfo external_reference index=aw_id master_table=objects master_index=oid
 
 */
 
