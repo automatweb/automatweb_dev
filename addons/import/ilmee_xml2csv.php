@@ -3,7 +3,17 @@
 // sample crontab line:
 // * */4 * * * /www/automatweb_dev/scripts/php -q /www/automatweb_dev/addons/import/ilmee_xml2csv.php > /tmp/ilmee.txt 
 $table = "ilmee_data";
-$file = join("",file("http://ilm.ee/~data/include/ilm-eng_xml.php3"));
+# ttw needs forecast in english
+$exp_file = "ilm-eng_xml.php3";
+# but liiklus.ee in estonian.
+# so, if an argumeo
+
+if ($_SERVER["argv"][1] == "est")
+{
+	$exp_file = "ilm_xml.php3";
+};
+
+$file = join("",file("http://ilm.ee/~data/include/$exp_file"));
 $p = xml_parser_create();
 xml_parse_into_struct($p,$file,$vals,$index);
 xml_parser_free($p);
