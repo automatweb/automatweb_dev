@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.42 2003/01/09 17:39:24 duke Exp $
+// $Id: class_base.aw,v 2.43 2003/01/10 14:31:22 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -485,7 +485,8 @@ class class_base extends aliasmgr
 			{
 				if (isset($savedata[$name]))
 				{
-					$objdata[$name] = $savedata[$name];
+					$_field = ($name != $field) ? $field : $name;
+					$objdata[$_field] = $savedata[$name];
 				};
 			};
 		};
@@ -727,8 +728,11 @@ class class_base extends aliasmgr
 	// !Saves the object
 	function save_object($args = array())
 	{
-		$table = $this->classinfo["objtable"]["text"];
-		$idfield = $this->classinfo["objtable_index"]["text"];
+		if (is_array($this->tableinfo))
+		{
+			list($table,$data) = each($this->tableinfo);
+			$idfield = $data["index"];
+		};
 		$id = $this->id;
 		if ($table && $idfield)
 		{
@@ -741,7 +745,7 @@ class class_base extends aliasmgr
 					"id" => $id,
 				));
 			};
-		
+
 			$this->ds->ds_save_object(array(
 				"table" => $table,
 				"idfield" => $idfield,
@@ -1084,7 +1088,8 @@ class class_base extends aliasmgr
 			}
 			else
 			{
-				$property["value"] = $this->objdata[$property["name"]];
+				$_field = ($property["name"] != $property["field"]) ? $property["field"] : $property["name"];
+				$property["value"] = $this->objdata[$_field];
 			};
 		};
 	}
@@ -1213,7 +1218,8 @@ class class_base extends aliasmgr
 				{
 					$name = $key;
 				};
-				$resprops[$name] = $val;
+				$_field = ($name != $val["field"]) ? $val["field"] : $name;
+				$resprops[$_field] = $val;
 			};
 		}
 		return $resprops;
