@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.34 2004/08/10 11:23:52 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.35 2004/08/25 08:35:26 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1309,12 +1309,7 @@ class forum_v2 extends class_base
 		$emb["status"] = STAT_ACTIVE;
 		unset($emb["id"]);
                 $this->topic_id = $t->submit($emb);
-		return $this->mk_my_orb("change",array(
-			"group" => "contents",
-			"section" => $arr["section"],
-			"folder" => $arr["folder"],
-			"_alias" => get_class($this),
-		));
+		return $this->finish_action($arr);
 	}
 	
 	/** Creates a new comment object for a topic 
