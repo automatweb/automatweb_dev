@@ -140,6 +140,15 @@
             <caption>Password</caption>
       </property>
       <property>
+            <name>passwd_again</name>
+            <type>password</type>
+            <store>no</store>
+            <table>users</table>
+            <group>chpwd</group>
+            <field>passwd_again</field>
+            <caption>Password veelkord</caption>
+      </property>
+      <property>
             <name>password</name>
             <type>hidden</type>
             <table>users</table>

@@ -79,6 +79,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @property passwd field=password type=password store=no
 @caption Password
 
+@property passwd_again type=password store=no
+@caption Password veelkord
+
 @property password type=hidden table=users
 
 
