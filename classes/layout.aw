@@ -28,14 +28,14 @@
 @property grid type=callback group=layout 
 @caption Tabel
 
+@property table_style type=select group=styles
+@caption Vali vaikimisi tabeli stiil
+
 @property sel_style type=select store=no group=styles
-@caption Vali stiil
+@caption Vali elemendi stiil
 
 @property grid_styles type=callback group=styles 
 @caption Vali element
-
-@property table_style type=select group=settings 
-@caption Tabeli stiil
 
 @property row_widths type=callback callback=get_row_widths group=settings store=no
 @caption Ridade laiused

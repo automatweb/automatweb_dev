@@ -43,11 +43,23 @@
             <caption>Tabel</caption>
       </property>
       <property>
-            <name>sel_style</name>
-            <store>no</store>
+            <name>table_style</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>select</type>
             <group>styles</group>
-            <caption>Vali stiil</caption>
+            <caption>Vali vaikimisi tabeli stiil</caption>
+      </property>
+      <property>
+            <name>sel_style</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <group>styles</group>
+            <caption>Vali elemendi stiil</caption>
       </property>
       <property>
             <name>grid_styles</name>
@@ -57,15 +69,6 @@
             <type>callback</type>
             <group>styles</group>
             <caption>Vali element</caption>
-      </property>
-      <property>
-            <name>table_style</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <group>settings</group>
-            <caption>Tabeli stiil</caption>
       </property>
       <property>
             <name>row_widths</name>
@@ -134,7 +137,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <group>import</group>
-            <caption>Kas eemaldame tühjad read lõpust</caption>
+            <caption>Kas eemaldame t&amp;uuml;hjad read l&amp;otilde;pust</caption>
       </property>
       <property>
             <name>import_sep</name>
@@ -144,7 +147,7 @@
             <type>textbox</type>
             <size>1</size>
             <group>import</group>
-            <caption>Mis märgiga on tulbad eraldatud?</caption>
+            <caption>Mis m&amp;auml;rgiga on tulbad eraldatud?</caption>
       </property>
       <property>
             <name>show_in_folders</name>
