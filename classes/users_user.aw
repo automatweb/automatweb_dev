@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.13 2001/08/02 03:40:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.14 2001/08/14 09:27:02 cvs Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -111,11 +111,21 @@ class users_user extends aw_template
 	// !Logib kasutaja sisse
 	function login($params = array())
 	{
-		$uid		= $params["uid"];
-		$password	= $params["password"];
-		// need on selleks, et ei peaks global $REMOTE_ADDR tegema, vms
-		$ip		= $params["remote_ip"];
-		$host		= $params["remote_host"];
+		global $uid;
+		if ($params["uid"])
+		{
+			$uid		= $params["uid"];
+			$password	= $params["password"];
+			// need on selleks, et ei peaks global $REMOTE_ADDR tegema, vms
+			$ip		= $params["remote_ip"];
+			$host		= $params["remote_host"];
+		}
+		else
+		{
+			// this probably means we were called from inside of orb wrapper
+			$uid = $params["vars"]["uid"];
+			$password = $params["vars"]["password"];
+		};
 
 		$t 		= time();
 		$msg		= "";
@@ -206,6 +216,11 @@ class users_user extends aw_template
 		if ($success) 
 		{
 			session_register("uid");
+		}
+		else
+		{
+			session_unregister("uid");
+			$uid = "";
 		};
 		
 		if ($params["reforb"])
@@ -215,8 +230,25 @@ class users_user extends aw_template
 			$url = $t->get_simple_config("after_login");
 			$this->url = (strlen($url) > 0) ? $url : $baseurl;
 		};
+
+		if ($success)
+		{
+			global $baseurl;
+			if ($this->url != "")
+			{
+				$retval = $this->url;
+			}
+			else
+			{
+				$retval = true;
+			}
+		}
+		else
+		{
+			$retval = false;
+		};
+		return $retval;
 	
-		return $success;
 	}
 
 	////
@@ -777,11 +809,14 @@ class users_user extends aw_template
 			reset($mt);
 			while(list($efid, $ar) = each($mt))
 			{
-				while(list(,$v) = each($ar))
+				if (is_array($ar))
 				{
-					if ($jfs[$efid] == $v)
+					while(list(,$v) = each($ar))
 					{
-						$in = true;
+						if ($jfs[$efid] == $v)
+						{
+							$in = true;
+						}
 					}
 				}
 			}
