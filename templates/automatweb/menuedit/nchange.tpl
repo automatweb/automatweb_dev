@@ -275,8 +275,44 @@ function savemenu() {
 		<td class="fgtext_g">{VAR:image}</td>
 	</tr>
 	<tr>
+		<td class="title">{VAR:LC_MENUEDIT_PICTURE}:</td>
+		<td class="fgtext_g">{VAR:image2}</td>
+	</tr>
+	<tr>
+		<td class="title">{VAR:LC_MENUEDIT_PICTURE}:</td>
+		<td class="fgtext_g">{VAR:image3}</td>
+	</tr>
+	<tr>
+		<td class="title">{VAR:LC_MENUEDIT_PICTURE}:</td>
+		<td class="fgtext_g">{VAR:image4}</td>
+	</tr>
+	<tr>
+		<td class="title">{VAR:LC_MENUEDIT_PICTURE}:</td>
+		<td class="fgtext_g">{VAR:image5}</td>
+	</tr>
+	<tr>
 		<td class="title">&nbsp;</td>
 		<td class="fgtext_g"><input type='file' name='img'></td>
+	</tr>
+	<tr>
+		<td class="title">&nbsp;</td>
+		<td class="fgtext_g"><input type='file' name='img2'></td>
+	</tr>
+	<tr>
+		<td class="title">&nbsp;</td>
+		<td class="fgtext_g"><input type='file' name='img3'></td>
+	</tr>
+	<tr>
+		<td class="title">&nbsp;</td>
+		<td class="fgtext_g"><input type='file' name='img4'></td>
+	</tr>
+	<tr>
+		<td class="title">&nbsp;</td>
+		<td class="fgtext_g"><input type='file' name='img5'></td>
+	</tr>
+	<tr>
+		<td class="title">Kui pikk vahe:</td>
+		<td class="fgtext_g"><input type='text' name='img_timing' value='{VAR:img_timing}'></td>
 	</tr>
 	<tr>
 		<td class="title">Aktiivse men&uuml;&uuml; pilt:</td>
@@ -348,33 +384,16 @@ function savemenu() {
 		<td class="fgtext_g"><b>{VAR:id}</b></td>
 	</tr>
 	<tr>
-		<td class="title">&nbsp;</td>
-		<td class="fgtext_g">&nbsp;</td>
+		<td class="title">J&auml;rjekorranumber:&nbsp;</td>
+		<td class="fgtext_g">&nbsp;<input size=3 class='small_button' type='text' name='seealso_order' value='{VAR:seealso_order}'></td>
 	</tr>
 	<tr>
 		<td class="title">&nbsp;</td>
 		<td class="fgtext_g"><select class="small_button" MULTIPLE SIZE=20 name="seealso[]">{VAR:seealso}</select></td>
 	</tr>
 	<tr>
-		<td class="title" width=10% nowrap>&nbsp;</td>
-		<td class="fgtext_g">
-			<table border=0 cellpadding=0 cellspacing=0>
-				<tr>
-					<td class="fgtext_g">{VAR:LC_MENUEDIT_NAME}</td>
-					<td class="fgtext_g">{VAR:LC_MENUEDIT_ORDER}</td>
-				</tr>
-			<!-- SUB: SA_ITEM -->
-				<tr>
-					<td class="fgtext_g">{VAR:sa_name}</td>
-					<td class="fgtext_g">&nbsp;<input type="text" size=3 class="small_button" name='sa_ord[{VAR:sa_id}]' value='{VAR:sa_ord}'></td>
-				</tr>
-			<!-- END SUB: SA_ITEM -->
-			</table>
-		</td>
-	</tr>
-	<tr>
 		<td class="title" width=10% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
-		<td class="fgtext_g">&nbsp;{VAR:LC_MENUEDIT_SELECT_SUBMENUS}</td>
+		<td class="fgtext_g">&nbsp;Vali men&uuml;&uuml;d mille all k&auml;esolev men&uuml;&uuml; on vaata lisaks men&uuml;&uuml;</td>
 	</tr>
 </table>
 </td>
