@@ -1,7 +1,7 @@
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
 <td class="fgtitle">
-<b>TEEMA:</b>
+<b>{VAR:LC_MSGBOARD_BIG_SUBJECT}:</b>
 <a href="{VAR:threaded_link}">Threaded</a>
 </td>
 </tr>

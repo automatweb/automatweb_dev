@@ -2,10 +2,10 @@
 <table width="400" border="0" cellspacing="0" cellpadding="1">
 <form method="post" action="reforb.{VAR:ext}">
   <tr>
-    <td class="title" colspan="2"><b>Lisa kommentaar:</b></td>
+    <td class="title" colspan="2"><b>{VAR:LC_MSGBOARD_ADD_NEW_COMM}:</b></td>
   </tr>
   <tr>
-    <td align="right" class="fgtitle">Nimi:</td>
+    <td align="right" class="fgtitle">{VAR:LC_MSGBOARD_NAME}:</td>
     <td><input type="fgtext" size="40" NAME="name"></td>
   </tr>
   <tr>

@@ -11,7 +11,7 @@
 	</tr>
 
 	<tr>
-		<td align="right" class="fgtitle">Subjekt:&nbsp;</td>
+		<td align="right" class="fgtitle">Subject:&nbsp;</td>
 		<td class="fgtext"><input type="text" NAME="subj" size="25" ></td>
 	</tr>
 	
