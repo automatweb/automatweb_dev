@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.65 2001/06/20 04:13:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.66 2001/06/20 07:07:53 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1449,83 +1449,54 @@ class messenger extends menuedit_light
 			$message .= $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
 		};
 
+		classload("aw_mail");
+		$this->awm = new aw_mail();
 		// kui meil on tarvis saata ka valiseid faile, siis teeme seda siin
 		if (sizeof($externals) > 0)
 		{
-			classload("aw_mail");
-			$awm = new aw_mail();
-
-			// leiame kasutatud identiteedi
-			if ($identity != "default")
-			{
-				$froma = $this->msgconf["msg_pop3servers"][$args["identity"]]["address"];
-				$fromn = $this->msgconf["msg_pop3servers"][$args["identity"]]["name1"] . " " . $this->msgconf["msg_pop3servers"][$args["identity"]]["surname"];
-				if (!$froma)
-				{
-					print "E-mail address for this account has not been set. Cannot send any messages before you do that";
-					exit;
-				}
-			}
-			else
-			{
-				$froma = $udata["email"];
-				$fromn = "";
-			};
-			$awm->create_message(array(
-					"froma" => $froma,
-					"fromn" => $fromn,
+			$dto = join(",",$to);
+			$dcc = join(",",$cc);
+			$this->deliver(array(
+					"identity" => $identity,
 					"subject" => $subject,
-					"to" => join(",",$to),
-					"cc" => join(",",$cc),
-					"body" => $message,
+					"to" => $dto,
+					"cc" => $dcc,
+					"message" => $message,
+					"msg_id" => $msg_id,
 				));
-
-			// Nyyd otsime valja koik attachitavad failid ja lisame need ka kirjale
-
-			$this->get_objects_by_class(array(
-							"class" => CL_FILE,
-							"parent" => $msg_id,
-						));
-			while($row = $this->db_next())
-			{
-				// dammit, I don't like this shit a single bit,
-				// but as ahto is pushing me to complete this as fast as possible
-				// I can't spend anymore time here right now
-				$this->save_handle();
-				$q = "SELECT * FROM files WHERE id = '$row[oid]'";
-				$this->db_query($q);
-				$row2 = $this->db_next();
-				$this->restore_handle();
-				$prefix = substr($row2["file"],0,1);
-				$fname = SITE_DIR . "/files/$prefix/$row2[file]";
-				if (file_exists($fname))
-				{
-					$awm->fattach(array(	
-							"path" => $fname,
-							"name" => $row["name"],
-							"contenttype" => $row["type"],
-					));
-				};
-
-			};
-	
-			// noja lopuks siis, saadame meili minema ka
-			$awm->gen_mail();
-			$status_msg = "Meil on saadetud";
-			session_register("status_msg");
+					
 		};
 
-		if (sizeof($internals) < 0)
+		global $udata;
+		if (sizeof($internals) > 0)
 		{
-			// saadame teate sisemistele kasutajatele laiali
-			if (1);
+			classload("email");
+			$awe = new email();
+			foreach($internals as $internal)
 			{
-                               	$ser = serialize($row);
-				$this->quote($ser);
-				$this->quote($ser);
-				$q = "INSERT INTO msg_objects (message_id,content)
-						VALUES('$msg_id','$ser')";
-				$this->db_query($q);
+				$this->get_object_by_name(array(
+							"name" => $internal,
+							"class_id" => CL_MAILINGLIST,
+					));
+				$row = $this->db_next();
+				if ($row)
+				{
+					$this->save_handle();
+					$members = $awe->get_members(array(
+						"list_id" => $row["oid"],
+						));
+					$this->restore_handle();
+					$to = join(",",$members);
+					$headers = "From: $udata[email]";
+					$subject = str_replace("\\","",$subject);
+					$this->deliver(array(
+						"identity" => $identity,
+						"subject" => $subject,
+						"to" => $to,
+						"message" => $message,
+						"msg_id" => $msg_id,
+					));
+				};
 			};
 		};
 
@@ -1534,6 +1505,69 @@ class messenger extends menuedit_light
 
 		//$q = "UPDATE objects SET parent = '$outbox' WHERE oid = '$msg_id'";
 		//$this->db_query($q);
+	}
+
+	function deliver($args = array())
+	{
+
+		$this->awm->clean();
+		extract($args);
+		// leiame kasutatud identiteedi
+		if ($identity != "default")
+		{
+			$froma = $this->msgconf["msg_pop3servers"][$args["identity"]]["address"];
+			$fromn = $this->msgconf["msg_pop3servers"][$args["identity"]]["name1"] . " " . $this->msgconf["msg_pop3servers"][$args["identity"]]["surname"];
+			if (!$froma)
+			{
+				print "E-mail address for this account has not been set. Cannot send any messages before you do that";
+				exit;
+			}
+		}
+		else
+		{
+			$froma = $udata["email"];
+			$fromn = "";
+		};
+		$this->awm->create_message(array(
+				"froma" => $froma,
+				"fromn" => $fromn,
+				"subject" => $subject,
+				"to" => $to,
+				"cc" => $cc,
+				"body" => $message,
+			));
+
+		// Nyyd otsime valja koik attachitavad failid ja lisame need ka kirjale
+
+		$this->get_objects_by_class(array(
+						"class" => CL_FILE,
+						"parent" => $msg_id,
+					));
+		while($row = $this->db_next())
+		{
+			// dammit, I don't like this shit a single bit,
+			// but as ahto is pushing me to complete this as fast as possible
+			// I can't spend anymore time here right now
+			$this->save_handle();
+			$q = "SELECT * FROM files WHERE id = '$row[oid]'";
+			$this->db_query($q);
+			$row2 = $this->db_next();
+			$this->restore_handle();
+			$prefix = substr($row2["file"],0,1);
+			$fname = SITE_DIR . "/files/$prefix/$row2[file]";
+			if (file_exists($fname))
+			{
+				$this->awm->fattach(array(	
+						"path" => $fname,
+						"name" => $row["name"],
+						"contenttype" => $row["type"],
+				));
+			};
+
+		};
+
+		// noja lopuks siis, saadame meili minema ka
+		$this->awm->gen_mail();
 	}
 	
 	////
@@ -2527,6 +2561,8 @@ class messenger extends menuedit_light
 						"class_id" => CL_MESSAGE),false);
 				
 
+				// kui kirjal oli attache, siis salvestame need file objektideks
+				$dec = 0;
 				if ($res > 0)
 				{
 					for ($i = 1; $i <= $res; $i++)
@@ -2541,10 +2577,16 @@ class messenger extends menuedit_light
 									"type" => $part["headers"]["Content-Type"],
 									"content" => $part["body"],
 							));
+						}
+						else
+						{
+							// kui me attachi ei salvestanud, siis votame pärast $res-i vaiksemaks,
+							// vastasel korral satub messenger segadusse sellest
+							$dec++;
 						};
 					};
 				};
-		
+				$res = $res - $dec;	
 				$uidl = trim($data["uidl"]);
 				// registreerime vastse teate
 				//$subject = $body["headers"]["Subject"];
