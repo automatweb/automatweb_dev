@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.30 2005/03/14 17:27:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.31 2005/03/18 12:18:03 ahti Exp $
 // project.aw - Projekt 
 /*
 
@@ -409,7 +409,7 @@ class project extends class_base
 	{
 		$pr_obj = new object($arr["project_id"]);
 		$args = array(
-			"type" => RELTYPE_PRJ_EVENT,
+			"type" => "RELTYPE_PRJ_EVENT",
 		);
 
 		if (!empty($arr["class_id"]))
@@ -653,7 +653,7 @@ class project extends class_base
 
 			// but some objects have no idea about an image
 			// what the hell am I going to do with those?
-			/*$pr_image = $pr_obj->get_first_obj_by_reltype(RELTYPE_PRJ_IMAGE);
+			/*$pr_image = $pr_obj->get_first_obj_by_reltype("RELTYPE_PRJ_IMAGE");
 
 
 			if ($pr_image)
@@ -1031,7 +1031,7 @@ class project extends class_base
 		$o = $arr["obj_inst"];
 		$inst = $o->instance();
 
-		$int = $GLOBALS["relinfo"][$this->clid]["RELTYPE_PRJ_EVENT"];
+		$int = $GLOBALS["relinfo"][$this->clid][RELTYPE_PRJ_EVENT];
 
 		$clinf = aw_ini_get("classes");
 
@@ -1748,7 +1748,7 @@ class project extends class_base
 			"from" => $arr["from"],
 			"from.class_id" => CL_PROJECT,
 			//"from.lang_id" => aw_global_get("lang_id"),
-			"type" => RELTYPE_SUBPROJECT,
+			"type" => "RELTYPE_SUBPROJECT",
 		));
 
 		$res = array();
