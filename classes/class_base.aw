@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.260 2004/04/26 10:48:35 duke Exp $
+// $Id: class_base.aw,v 2.261 2004/04/27 11:42:38 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1767,6 +1767,14 @@ class class_base extends aw_template
 		{
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
+				if ($this->new && $val["editonly"])
+				{
+					continue;
+				};
+				if (!$this->new && $val["newonly"])
+				{
+					continue;
+				};
 				$meth = $val["callback"];
 				$argblock["prop"] = &$val;
 				$vx = $this->inst->$meth($argblock);
