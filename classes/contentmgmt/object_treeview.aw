@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.31 2004/10/26 11:50:51 duke Exp $
 
 /*
 
@@ -15,52 +16,57 @@
 @property status type=status field=status
 @caption Staatus
 
+@default field=meta
+@default method=serialize
+
 @property folders type=text store=no group=folders callback=callback_get_menus
 @caption Kataloogid
 
-@property show_folders type=checkbox ch_value=1 field=meta method=serialize
+@property show_folders type=checkbox ch_value=1 
 @caption N&auml;ita katalooge
 
-@property show_add type=checkbox ch_value=1 field=meta method=serialize
+@property show_add type=checkbox ch_value=1 
 @caption N&auml;ita toolbari
 
-@property tree_type type=chooser  field=meta method=serialize default=1
+@property tree_type type=chooser default=1
 @caption Puu n&auml;itamise meetod
 
-@property groupfolder_acl type=checkbox ch_value=1 field=meta method=serialize
+@property groupfolder_acl type=checkbox ch_value=1 
 @caption &Otilde;igused piiratud grupi kataloogide j&auml;rgi
 
-@property show_notact type=checkbox ch_value=1 field=meta method=serialize
+@property show_notact type=checkbox ch_value=1 
 @caption N&auml;ita mitteaktiivseid objekte
 
-@property sort_by type=select field=meta method=serialize
+@property sort_by type=select 
 @caption Objekte sorteeritakse
 
-@property tree_on_left type=checkbox ch_value=1 field=meta method=serialize
+@property tree_on_left type=checkbox ch_value=1 
 @caption Puu vasakul
 
 @property clids type=callback callback=get_clids group=clids store=no
 @caption Klassid
 
-@property style_donor type=relpicker reltype=RELTYPE_STYLE_DONOR field=meta method=serialize group=styles
+@default group=styles
+@property style_donor type=relpicker reltype=RELTYPE_STYLE_DONOR 
 @caption Stiilide doonor
 
-@property title_bgcolor type=colorpicker field=meta method=serialize group=styles
+@property title_bgcolor type=colorpicker 
 @caption Pealkirja taustav&auml;rv
 
-@property even_bgcolor type=colorpicker field=meta method=serialize group=styles
+@property even_bgcolor type=colorpicker 
 @caption Paaris rea taustav&auml;rv
 
-@property odd_bgcolor type=colorpicker field=meta method=serialize group=styles
+@property odd_bgcolor type=colorpicker 
 @caption Paaritu rea taustav&auml;rv
 
-@property header_css type=relpicker reltype=RELTYPE_CSS field=meta method=serialize  group=styles
+@property header_css type=relpicker reltype=RELTYPE_CSS 
 @caption Pealkirja stiil
 
-@property line_css type=relpicker reltype=RELTYPE_CSS field=meta method=serialize  group=styles
+@property line_css type=relpicker reltype=RELTYPE_CSS 
 @caption Rea stiil
 
-@property columns type=callback callback=callback_get_columns field=meta method=serialize group=columns
+@default group=columns
+@property columns type=callback callback=callback_get_columns 
 @caption Tulbad
 
 @reltype FOLDER value=1 clid=CL_MENU,CL_SERVER_FOLDER
@@ -211,6 +217,7 @@ class object_treeview extends class_base
 			{
 				$sf = get_instance("contentmgmt/server_folder");
 				$fl = $sf->get_contents($od);
+				$section = aw_global_get("section");
 
 				foreach($fl as $_file)
 				{
@@ -229,7 +236,7 @@ class object_treeview extends class_base
 						$act = html::href(array(
 							"url" => $this->mk_my_orb("change_file", array(
 								"fid" => $fid,
-								"section" => aw_global_get("section")
+								"section" => $section, 
 							), "server_folder"),
 							"caption" => html::img(array(
 								"border" => 0,
@@ -240,7 +247,7 @@ class object_treeview extends class_base
 					$c .= $this->_do_parse_file_line(array(
 						"name" => $_file,
 						"oid" => $fid,
-						"url" => $this->mk_my_orb("show_file", array("fid" => $fid, "section" => aw_global_get("section")), "server_folder"),
+						"url" => $this->mk_my_orb("show_file", array("fid" => $fid, "section" => $section), "server_folder"),
 						"target" => $target,
 						"fileSizeBytes" => $fileSizeBytes,
 						"fileSizeKBytes" => $fileSizeKBytes,
@@ -366,7 +373,7 @@ class object_treeview extends class_base
 
 	/**  
 		
-		@attrib name=submit_show params=name default="0"
+		@attrib name=submit_show params=name 
 		
 		
 		@returns
@@ -844,9 +851,6 @@ class object_treeview extends class_base
 
 	function _get_add_toolbar($ob)
 	{
-		$this->tpl_init("automatweb/menuedit");
-		$this->read_template("js_add_menu.tpl");
-
 		$types_c = $ob->connections_from(array(
 			"type" => RELTYPE_ADD_TYPE
 		));
@@ -857,13 +861,18 @@ class object_treeview extends class_base
 		$parent = $GLOBALS["tv_sel"] ? $GLOBALS["tv_sel"] : $this->first_folder;
 
 		$p_o = obj($parent);
+		$tb = get_instance("vcl/toolbar");
+		$tb->add_menu_button(array(
+			"name" => "add",
+			"tooltip" => "Uus",
+		));
 		if ($p_o->class_id() == CL_SERVER_FOLDER)
 		{
-			$this->vars(array(
+			$tb->add_menu_item(array(
+				"parent" => "add",
 				"url" => $this->mk_my_orb("add_file", array("id" => $p_o->id(), "section" => aw_global_get("section")), "server_folder"),
-				"caption" => $classes[CL_FILE]["name"]
+				"text" => $classes[CL_FILE]["name"]
 			));
-			$menu .= $this->parse("MENU_ITEM");
 		}
 		else
 		{
@@ -872,30 +881,14 @@ class object_treeview extends class_base
 			{
 				$c_o = $c->to();
 
-				$this->vars(array(
+				$tb->add_menu_item(array(
+					"parent" => "add",
 					"url" => $ot->get_add_url(array("id" => $c_o, "parent" => $parent, "section" => $parent)),
-					"caption" => $c_o->prop("name")
+					"text" => $c_o->prop("name")
 				));
-				$menu .= $this->parse("MENU_ITEM");
 			}
 		}
-		$this->vars(array(
-			"menu_id" => "aw_menu_0",
-			"MENU_ITEM" => $menu
-		));
-		$this->vars(array("MENU" => $this->parse("MENU")));
-		
-		
 
-		$tb = get_instance("vcl/toolbar");
-		$tb->add_button(array(
-			"name" => "add",
-			"tooltip" => "Uus",
-			"url" => "#",
-			"onClick" => "return buttonClick(event, 'aw_menu_0');",
-			"img" => "new.gif",
-			"class" => "menuButton",
-		));
 
 		$tb->add_button(array(
 			"name" => "del",
@@ -905,7 +898,7 @@ class object_treeview extends class_base
 			"img" => "delete.gif",
 			"class" => "menuButton",
 		));
-		return $this->parse().$tb->get_toolbar();
+		return $tb->get_toolbar();
 	}
 
 	/**  

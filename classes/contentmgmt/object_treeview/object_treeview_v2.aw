@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.17 2004/10/25 11:31:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.18 2004/10/26 11:51:03 duke Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -7,52 +7,57 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
 
-@property ds type=relpicker reltype=RELTYPE_DATASOURCE field=meta method=serialize
+@property ds type=relpicker reltype=RELTYPE_DATASOURCE 
 @caption Andmed
 
 
 @groupinfo showing caption="N&auml;itamine"
-@property show_folders type=checkbox ch_value=1 field=meta method=serialize group=showing
+@default group=showing
+@property show_folders type=checkbox ch_value=1 
 @caption N&auml;ita katalooge
 
-@property show_add type=checkbox ch_value=1 field=meta method=serialize group=showing
+@property show_add type=checkbox ch_value=1 
 @caption N&auml;ita toolbari
 
-@property show_link_new_win type=checkbox ch_value=1 field=meta method=serialize group=showing
+@property show_link_new_win type=checkbox ch_value=1 
 @caption Vaata link uues aknas
 
-@property tree_type type=chooser  field=meta method=serialize default=1 group=showing
+@property tree_type type=chooser default=1 
 @caption Puu n&auml;itamise meetod
 
-@property per_page type=textbox size=5 field=meta method=serialize group=showing
+@property per_page type=textbox size=5 
 @caption Mitu rida lehel
 
-@property sortbl type=table store=no group=showing
+@property sortbl type=table store=no 
 @caption Andmete sorteerimine
 
-@property filter_table type=table store=no group=showing
+@property filter_table type=table store=no 
 @caption Andmete filtreerimine
 
 @groupinfo styles caption="Stiilid"
-@property title_bgcolor type=colorpicker field=meta method=serialize group=styles
+@default group=styles
+@property title_bgcolor type=colorpicker 
 @caption Pealkirja taustav&auml;rv
 
-@property even_bgcolor type=colorpicker field=meta method=serialize group=styles
+@property even_bgcolor type=colorpicker  
 @caption Paaris rea taustav&auml;rv
 
-@property odd_bgcolor type=colorpicker field=meta method=serialize group=styles
+@property odd_bgcolor type=colorpicker 
 @caption Paaritu rea taustav&auml;rv
 
-@property header_css type=relpicker reltype=RELTYPE_CSS field=meta method=serialize  group=styles
+@property header_css type=relpicker reltype=RELTYPE_CSS  
 @caption Pealkirja stiil
 
-@property line_css type=relpicker reltype=RELTYPE_CSS field=meta method=serialize  group=styles
+@property line_css type=relpicker reltype=RELTYPE_CSS 
 @caption Rea stiil
 
 @groupinfo columns caption=Tulbad
-@property columns type=callback callback=callback_get_columns field=meta method=serialize group=columns
+@default group=columns
+@property columns type=callback callback=callback_get_columns  
 @caption Tulbad
 
 
@@ -531,9 +536,6 @@ class object_treeview_v2 extends class_base
 
 	function _get_add_toolbar($ob, $drv = NULL)
 	{
-		$this->tpl_init("automatweb/menuedit");
-		$this->read_template("js_add_menu.tpl");
-
 		// must read these from the datasource
 		$ds_o = obj($ob->prop("ds"));
 		$ds_i = $ds_o->instance();
@@ -542,35 +544,24 @@ class object_treeview_v2 extends class_base
 
 		$menu = "";
 		$classes = aw_ini_get("classes");
+		
+		$tb = get_instance("vcl/toolbar");
+		$tb->add_menu_button(array(
+			"name" => "add",
+			"tooltip" => "Uus",
+			"img" => "new.gif",
+		));
 
 
 		$ot = get_instance("admin/object_type");
 		foreach($types as $c_o)
 		{
-			$this->vars(array(
+			$tb->add_menu_item(array(
+				"parent" => "add",
 				"url" => $ot->get_add_url(array("id" => $c_o->id(), "parent" => $parent, "section" => $parent)),
-				"caption" => $c_o->prop("name")
+				"text" => $c_o->prop("name"),
 			));
-			$menu .= $this->parse("MENU_ITEM");
 		}
-
-		$this->vars(array(
-			"menu_id" => "aw_menu_0",
-			"MENU_ITEM" => $menu
-		));
-		$this->vars(array("MENU" => $this->parse("MENU")));
-		
-		
-
-		$tb = get_instance("vcl/toolbar");
-		$tb->add_button(array(
-			"name" => "add",
-			"tooltip" => "Uus",
-			"url" => "#",
-			"onClick" => "return buttonClick(event, 'aw_menu_0');",
-			"img" => "new.gif",
-			"class" => "menuButton",
-		));
 
 		$tb->add_button(array(
 			"name" => "del",
@@ -580,7 +571,7 @@ class object_treeview_v2 extends class_base
 			"img" => "delete.gif",
 			"class" => "menuButton",
 		));
-		return $this->parse().$tb->get_toolbar();
+		return $tb->get_toolbar();
 	}
 
 	function _do_parse_file_line($arr, $drv, $d_o, $parms)
