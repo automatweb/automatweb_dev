@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.3 2001/07/03 09:31:21 duke Exp $
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
 {
@@ -163,7 +164,7 @@ class db_syslog extends aw_template
 			if (!$blocked_ips[$addr])
 			{
 				$t->define_data(array(	"when" => $row[tm],
-							"uid"	=> $row[uid],
+							"uid"   => ($row[uid]) ? "<b>$row[uid]</b>" : $row["tafkap"],
 							"action"	=> $action,
 							"ip"		=> $addr,
 							"parts"	=> $parts,
