@@ -96,6 +96,21 @@ function recall()
 			};
 		};
 		document.repeater.monpwhen2.value = event.monpwhen2.value;
+
+		if (event.rep_forever.value > 0)
+		{
+			document.repeater.repeat[0].checked = true;
+		}
+		else
+		{
+			if (event.rep_type)
+			{
+				document.repeater.repeat[1].checked = true;
+				document.repeater.rep_type.selectedIndex = event.rep_type.value - 1;
+				document.repeater.rep_dur.value = event.rep_dur.value;
+			};
+		};
+			
 	
 	}
 }
@@ -202,6 +217,18 @@ function store_n_close()
 		yearskip = document.repeater.yearskip.value;
 	};
 
+	if (document.repeater.repeat[0].checked)
+	{
+		window.opener.document.event.rep_forever.value = 1;
+	};
+
+	if (document.repeater.repeat[1].checked)
+	{
+		window.opener.document.event.rep_forever.value = 0;
+		window.opener.document.event.rep_dur.value = document.repeater.rep_dur.value;
+		window.opener.document.event.rep_type.value = document.repeater.rep_type[document.repeater.rep_type.selectedIndex].value;
+	};
+
 	window.opener.document.event.dayskip.value = dayskip;
 	window.opener.document.event.weekpwhen.value = wdx.join(',');
 	window.opener.document.event.weekskip.value = weekskip;
@@ -305,8 +332,8 @@ Aastad
 <input type="radio" name="repeat" value="1" checked>Igavesti
 </td>
 <td class="fgtitle" colspan="2">
-<input type="radio" name="repeat" value="2"><input type="text" name="repeat_value" size="2" maxlength="2" value="6">
-<select name="repeat_type">
+<input type="radio" name="repeat" value="2"><input type="text" name="rep_dur" size="2" maxlength="2" value="6">
+<select name="rep_type">
 <option value="1">päeva</option>
 <option value="2">nädalat</option>
 <option value="3">kuud</option>
