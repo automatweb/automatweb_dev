@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.19 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.20 2002/11/07 12:40:32 duke Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -235,7 +235,7 @@ class poll extends aw_template
 		{
 			$this->add_alias($alias_to,$id);
 		};
-		$retval = $this->mk_my_orb("change",array("id" => $id,"return_url" => $return_url,"alias_to" => $alias_to));
+		$retval = $this->mk_my_orb("change",array("id" => $id,"return_url" => urlencode($return_url),"alias_to" => $alias_to));
 		return $retval;
 
 	}
