@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.24 2002/03/04 20:20:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.25 2002/03/05 18:27:43 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -93,6 +93,12 @@ class file extends aw_template
 			));
 			$q = "INSERT INTO files (id,type,file) VALUES('$oid','$type','$fname')";
 			$this->db_query($q);
+
+			$this->set_object_metadata(array(
+				"oid" => $oid,
+				"key" => "file_size",
+				"value" => filesize($args["filename"])
+			));
 		};
 		return $retval;
 
@@ -362,6 +368,12 @@ class file extends aw_template
 				$this->db_query("INSERT INTO files (id,showal,type,content,newwindow)
 							VALUES('$pid','$show','$file_type','$fc','$newwindow')");
 
+			$this->set_object_metadata(array(
+				"oid" => $pid,
+				"key" => "file_size",
+				"value" => filesize($file)
+			));
+
 				$this->_log("fail","Lisas faili $file_name ($pid)");
 			};
 
@@ -476,8 +488,9 @@ class file extends aw_template
 				"name" => $file_name,
 				"comment" => $comment
 			));
+			$_sz = filesize($file);
 			$f = fopen($file,"r");
-			$fc = fread($f,filesize($file));
+			$fc = fread($f,$_sz);
 			fclose($f);
 			$this->quote(&$fc);
 			$this->quote(&$fc);
@@ -488,10 +501,19 @@ class file extends aw_template
 							content = '$fc',
 							newwindow = '$newwindow'
 					WHERE id = $id");
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "file_size", 
+				"value" => $_sz
+			));
+
+			
 			$this->_log("fail","Muutis faili $id");
 		}
 
 		// Probleemikoht. Mis siis, kui ma tahan monda teise kohta minna peale submitti?
+		$obj = $this->get_object($id);
+		$parent = $obj["parent"];
 		if ($doc)
 		{
 			$retval = $this->mk_my_orb("change", array("id" => $doc),"document");
