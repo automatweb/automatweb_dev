@@ -3,8 +3,6 @@
 // ja väljastatakse see
 $sf->read_template("index.tpl");
 
-// tehakse kindlaks, milline custom_css
-$sf->vars(array("custom" => aw_global_get("uid")));
 $ta = aw_global_get("title_action");
 if ($ta != "")
 {
