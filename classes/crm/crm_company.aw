@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.33 2004/06/22 13:14:14 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.34 2004/06/22 13:15:19 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -425,7 +425,6 @@ class crm_company extends class_base
 			case "unit_listing_tree":
 			{
 				$tree_inst = &$arr['prop']['vcl_inst'];
-				$tree_inst->set_has_root(false);
 				//toplevel tree item, unit=>parent won't fall into if((int)$arr['request']['unit']), so its okay
 				if($arr['request']['unit']=='parent' || !$arr['request']['unit'])
 				{
