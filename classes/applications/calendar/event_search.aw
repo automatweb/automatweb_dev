@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.28 2005/01/26 09:02:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.29 2005/01/27 08:36:03 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -819,11 +819,16 @@ class event_search extends class_base
 				uasort($tabledef, array($this, "__sort_props_by_ord"));
 				$cdat = "";
 				$col_count = 0;
+				$clickable = false;
 				foreach($tabledef as $key => $propdef)
 				{
 					if($key == "content")
 					{
 						continue;
+					}
+					if($propdef["clickable"])
+					{
+						$clickable = true;
 					}
 					if ($propdef["active"])
 					{
@@ -1019,7 +1024,7 @@ class event_search extends class_base
 					$aliasmrg->parse_oo_aliases($ekey, $eval["content"]);
 					$content = $eval["content"];
 				}
-				elseif(!empty($eval["utextarea1"]) && $tabledef["content"]["active"])
+				elseif(!empty($eval["utextarea1"]) && )
 				{
 					$eval["utextarea1"] = nl2br($eval["utextarea1"]);
 					$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
@@ -1030,7 +1035,7 @@ class event_search extends class_base
 				$this->vars(array(
 					"num" => $i % 2 ? 1 : 2,
 				));
-				if($search["oid"])
+				if($search["oid"] or ((!$clickable) && $tabledef["content"]["active"]))
 				{
 					$this->vars(array(
 						"fulltext_name" => $tabledef[$nmx]["caption"],
