@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.72 2002/09/05 07:30:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.73 2002/09/05 13:59:32 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -2160,7 +2160,7 @@ class form_element extends aw_template
 					}
 					else
 					{
-						$cal_id = $this->id;
+						$cal_id = $this->form->id;
 						$ctrl = $this->entry_id;
 					};
 					$orb = !($this->arr["clink_no_orb"]);
