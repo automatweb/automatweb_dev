@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.289 2004/10/28 15:10:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.290 2004/10/29 09:41:12 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1256,6 +1256,7 @@ class document extends aw_template
 			"date"     => $this->time2date(time(),2),
 			"section"  => $GLOBALS["section"],
 			"lead_comments" => $lc,
+			"locale_date" => locale::get_lc_date($doc["doc_modified"],6),
 			"copyright" => $doc["copyright"],
 			"long_title" => $doc["long_title"],
 			"link_text" => $doc["link_text"],
