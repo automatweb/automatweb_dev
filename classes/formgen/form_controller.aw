@@ -468,6 +468,19 @@ class form_controller extends form_base
 				{
 					$chd = $this->get_chain_entry($chent);
 					$entry_id = $chd[$fid];
+					if (!$entry_id)
+					{
+						// if the entry for this form has not been made in the chain or is in a related form, 
+						// try and load any entry from the chain, since it will contain all the available elements anyway! yay!
+						foreach($chd as $_fid => $entry_id)
+						{
+							if ($entry_id)
+							{
+								$form =& $this->cache_get_form_instance($_fid);
+								break;
+							}
+						}
+					}
 				}
 			}
 			else
@@ -495,6 +508,7 @@ class form_controller extends form_base
 			{
 				if ($form->entry_id != $entry_id)
 				{
+//					echo "loading entry for form $form->id , entry = $entry_id <br>";
 					$form->load_entry($entry_id);
 				}
 				// and now read the damn value
@@ -504,6 +518,13 @@ class form_controller extends form_base
 					$val = $el->get_controller_value();
 //					echo "val = $val entry = $el->entry , elid = $elid <br>";
 					aw_cache_set("controller::var_value_cache", $cache_key,$val);
+					return $val;
+				}
+				else
+				{
+					aw_cache_set("controller::var_value_cache", $cache_key,$val);
+					$val = $form->entry[$elid];
+//					echo "returning pure val for element $elid <br>";
 					return $val;
 				}
 			}
