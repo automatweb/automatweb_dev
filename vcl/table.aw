@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.51 2003/03/18 11:51:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.52 2003/03/19 14:11:16 axel Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -53,7 +53,7 @@ class aw_table
 
 	////
 	// !sisestame andmed
-	function define_data($row) 
+	function define_data($row)
 	{
 		$this->data[] = $row;
 	}
@@ -171,7 +171,7 @@ class aw_table
 
 		// figure out the column by which we must sort
 		// start from the parameters
-		if (!($this->sortby = $params["field"]))
+		if (!($this->sortby = (isset($params["field"]) ? $params["field"] : NULL)))
 		{
 			// if it was not specified as a parameter the next place is the url
 			if (!($this->sortby = aw_global_get("sortby")))
@@ -180,7 +180,7 @@ class aw_table
 				if (!($this->sortby = $aw_tables[$sess_field_key]))
 				{
 					// and finally we get the default
-					$this->sortby = $this->default_order;
+					$this->sortby = isset($this->default_order) ? $this->default_order : NULL;
 				}
 			}
 		}
@@ -270,7 +270,7 @@ class aw_table
 		// and then we can compare them and thus we get to sort the entire array.
 		// why don't we just concatenate the strings together? well, because what if the first is a text element, the next
 		// a number and the 3rd a text element - if we cat them together we lose the ability to do numerical comparisons..
-
+		$v1=NULL;$v2=NULL;
 		$skip = false;
 
 		if (is_array($this->vgroupby))
@@ -344,7 +344,7 @@ class aw_table
 			}
 		}
 
-		if ($this->sort_flag == SORT_NUMERIC)
+		if (isset($this->sort_flag) && ($this->sort_flag == SORT_NUMERIC))
 		{
 			if (((int)$v1) == ((int)$v2))
 			{
@@ -365,7 +365,7 @@ class aw_table
 			$_a = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v1));
 			$_b = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v2));
 			$ret = strcoll($_a, $_b);
-			if ($this->u_sorder == "asc")
+			if (isset($this->u_sorder) && ($this->u_sorder == "asc"))
 			{
 				return $ret;
 			}
@@ -376,7 +376,7 @@ class aw_table
 		}
 	}
 
-	function draw($arr = array()) 
+	function draw($arr = array())
 	{
 		// väljastab tabeli
 		if (!is_array($this->rowdefs)) 
@@ -586,7 +586,7 @@ class aw_table
 					// määrame ära staili
 					if (!$style)
 					{
-						if (isset($this->sortby[$v1["name"]])) 
+						if (isset($this->sortby[$v1["name"]]))
 						{
 							$style_key = (($counter % 2) == 0) ? "content_sorted_style2" : "content_sorted_style1";
 							$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
@@ -609,14 +609,14 @@ class aw_table
 
 						if (!$style)
 						{
-							if (isset($this->sortby[$v1["name"]])) 
+							if (isset($this->sortby[$v1["name"]]))
 							{
 								$style = (($counter % 2) == 0) ? $this->selected2 : $this->selected1;
 								$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
-							} 
-							else 
+							}
+							else
 							{
-								$style = (($counter % 2) == 0) ? $this->style2 : $this->style1; 
+								$style = (($counter % 2) == 0) ? $this->style2 : $this->style1;
 								$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
 							};
 						}
@@ -649,7 +649,7 @@ class aw_table
 						}
 						else
 						{
-							$val = $v[$v1["name"]];	
+							$val = $v[$v1["name"]];
 						};
 					};
 
@@ -668,13 +668,29 @@ class aw_table
 						$val = "&nbsp;";
 					};
 
+					//võeh, ühesõnaga laseme $val läbi functsiooni, mis on defineeritud väljakutsuva klassi sees
+					//sealt peaks ka olema tehtud $t->caller = $this; vmt
+					//ja $t->define_field(array(
+					//	...
+					//	'callback' => 'function_name',
+					//   ));
+					// võibolla saab seda ka veidi ressursi sõbralikumalt teha
+					if (isset($v1["callback"]) && isset($this->caller))
+					{
+						if (method_exists($this->caller,$v1["callback"]))
+						{
+							$val = call_user_func (array($this->caller,$v1["callback"]), $val);
+						}
+					}
+
 					if (isset($v1["thousands_sep"]))
 					{
-						// insert separator every after every 3 chars, starting from the end. 
+						// insert separator every after every 3 chars, starting from the end.
 						$val = strrev(chunk_split(strrev(trim($val)),3,$v1["thousands_sep"]));
 						// chunk split adds one too many separators, so remove that
 						$val = substr($val,strlen($v1["thousands_sep"]));
 					}
+
 					$tbl .= str_replace("[__jrk_replace__]",$counter,$val);
 					$tbl .= $this->closetag(array("name" => "td"));
 				};
@@ -718,7 +734,7 @@ class aw_table
 			};
 		};
 		// sisu joonistamine lopeb
-	
+
 		// tabel kinni
 		if (is_array($this->tableattribs))
 		{
@@ -772,7 +788,7 @@ class aw_table
 				$cnt++;
 				reset($this->rowdefs);
 				if (is_array($this->rowdefs))
-				while(list($k1,$v1) = each($this->rowdefs)) 
+				while(list($k1,$v1) = each($this->rowdefs))
 				{
 					if ($v1["name"] == "rec") 
 					{
