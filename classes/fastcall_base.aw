@@ -9,11 +9,21 @@ class aw_template
 		// (like menuedit->right_frame) wont work
 		aw_config_init_class(&$this);
 	}
-	function vars() {}
-	function lc_load() {}
+
+	function vars() 
+	{
+	}
+
+	function lc_load() 
+	{
+		exit_function("aw_template::lc_load",array());
+	}
 };
+
 class core 
 {
-	function db_init() {}
+	function db_init() 
+	{
+	}
 };
 ?>
