@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.1 2004/10/13 14:10:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.2 2004/10/27 11:45:56 duke Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -442,6 +442,25 @@ class recurrence extends class_base
 
 
 	*/
+
+	/** returns timestamp for the next event for a specified recurrence object
+
+		@attrib api=1
+
+		@param id required
+		@param time optional
+
+	**/
+	function get_next_event($arr)
+	{
+		$time = ($arr["time"]) ? $arr["time"] : time();
+		$o = new object($arr["id"]);
+		$q = "SELECT recur_start FROM recurrence WHERE recur_id = ". $o->id() . " AND recur_start >= " . $time . " LIMIT 1";
+		$this->db_query($q);
+		$row = $this->db_next();
+		return is_array($row) ? $row["recur_start"] : false;
+
+	}
 
 
 	/* Now that I have to basic functionality working pretty much fine, I need to figure out a
