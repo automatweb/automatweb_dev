@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.16 2001/09/25 09:57:55 cvs Exp $
+
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.17 2001/10/02 15:32:29 kristo Exp $
 lc_load("mailinglist");
 class mlist extends aw_template
 {
