@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.31 2003/05/19 15:06:20 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.32 2003/05/26 13:51:04 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -454,13 +454,24 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						if (is_array($val))
 						{
 							$tmp = array();
+							$val = $this->make_keys($val);
+
+							foreach($this->cfg["classes"] as $clid => $cldat)
+							{
+								if (isset($val[basename($cldat['file'])]) || isset($val[basename($cldat['alias_class'])]))
+								{
+									$tmp[] = $clid;
+								}
+							}
+
 							foreach($val as $_v)
 							{
-								if ($_v != 0)
+								if ((is_numeric($_v)) && ($_v != 0))
 								{
 									$tmp[] = $_v;
 								}
 							}
+
 							$xval = join(",",$tmp);
 							if ($xval != "")
 							{
@@ -474,7 +485,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							$parts["class_id"] = " class_id = '$val' ";
 							$partcount++;
 						};
-						break;
+					break;
 
 					case "status":
 						if ($val == 3)
@@ -714,12 +725,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 									}
 								}
 							}
-							GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[$key][]']);
+							GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id][]']);
 							</script>
 SCR;
 						//$mselectbox = sprintf("<select multiple size='$size' name='s[%s][]' onChange='%s'>%s</select>",$key,$fieldref["onChange"],$items);
 
-						$mselectbox = '<select multiple size="'.$size.'" name="s['.$key.'][]" ></select>'.$scr;
+						$mselectbox = '<select multiple size="'.$size.'" name="s[class_id][]" ></select>'.$scr;
 
 						if (isset($fieldref["filter"]))
 						{

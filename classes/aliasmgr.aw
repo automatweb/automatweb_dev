@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.94 2003/05/23 15:22:06 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.95 2003/05/26 13:51:04 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -124,6 +124,7 @@ class aliasmgr extends aw_template
 				"selected" => $args["s"]["class_id"],
 				"filter" => "1",
 			);
+			//$fields["class_id"] = 'n/a';
 		}
 		else
 		{
@@ -926,6 +927,7 @@ class aliasmgr extends aw_template
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
 
 		$choices = array();
+		$choices2 = array();		
 		//$spacer = "&nbsp;&nbsp;&nbsp;";
 		$spacer = "";
 
@@ -948,11 +950,13 @@ class aliasmgr extends aw_template
 			}
 		}
 		asort($choices);
+		asort($choices2);
 		$choices = array_merge($ch,$choices);
+		$choices2 = array_merge($ch,$choices2);
 
 		$boxesscript = $this->get_file(array('file' => $this->cfg['tpldir'].'/aliasmgr/selectboxes.tpl'));
 
-		
+
 		$hist = aw_global_get('aliasmgr_obj_history');
 
 		$hist = !is_array($hist) ? array() : $this->make_alias_classarr2($hist);
