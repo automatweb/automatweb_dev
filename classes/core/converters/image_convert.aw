@@ -22,7 +22,7 @@ class image_convert extends class_base
 
 		$driver = "_int_image_convert_driver_".$driver;
 
-		error::throw_if(!class_exists($driver), array(
+		error::raise_if(!class_exists($driver), array(
 			"id" => "ERR_IMAGE_DRIVER",
 			"msg" => "image_covert: could not detect any supported imagehandlers!"
 		));
