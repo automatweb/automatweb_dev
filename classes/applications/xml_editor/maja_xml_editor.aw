@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.2 2004/10/21 16:44:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.3 2004/10/22 00:25:33 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -82,11 +82,12 @@ class maja_xml_editor extends class_base
 				$arr['obj_inst']->set_meta("xml_to_db_conns", $arr['request']['xml_to_db_values']);
 				break;
 			case "house_name":
-				//ok, siin ma saan selle cheki ära teha, et juhul kui house_name-i on muudetud,
-				// et siis on perse majas ja peaks ka baasis mõningad uuendused tegema
+			//Here I'll check if house_name has changed, casue when it is
+			//I have to change it in database too
 
 				$old_house_name = $arr['obj_inst']->meta("house_name");
-				$new_house_name = $arr['request']['house_name'];
+				$new_house_name = $prop['value'];
+
 				if($old_house_name != $new_house_name)
 				{
 					$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
@@ -145,8 +146,17 @@ class maja_xml_editor extends class_base
 		
 		$t->set_sortable(false);
 		
-		$data_file_content = file_get_contents($arr['obj_inst']->prop("orig_xml_file"));
+//		$data_file_content = file_get_contents($arr['obj_inst']->prop("orig_xml_file"));
 		
+		$data_file_content = $this->get_file(array(
+				"file" => $arr['obj_inst']->prop("orig_xml_file"),
+			));
+
+		if($data_file_content == false)
+		{
+			die("faili ei &otilde;nnestunud leida!");
+		}
+
 		$xml_file_content = parse_xml_def(array("xml" => $data_file_content));
 		$floors_arr = $xml_file_content[1]['korrus'];
 		$floors = array();
@@ -160,7 +170,7 @@ class maja_xml_editor extends class_base
 		
 		foreach($xml_file_content[0] as $key => $value)
 		{
-			if(strcmp($value['type'], "open") == 0)
+			if($value['type'] == "open")
 			{
 /*
 
@@ -183,7 +193,7 @@ class maja_xml_editor extends class_base
 				));
 			}
 			
-			if(strcmp($value['type'], "complete") == 0)
+			if($value['type'] == "complete")
 			{
 				$attributes = "";
 				if(isset($value['attributes']))
@@ -211,7 +221,7 @@ class maja_xml_editor extends class_base
 
 				$indent = str_repeat("&nbsp;", 5);
 
-				if(strcmp($value['tag'], "korter") == 0)
+				if($value['tag'] == "korter")
 				{
 					$floor_select = html::select(array(
 							"name" => "floors_flats[".$key."]",
@@ -230,7 +240,7 @@ class maja_xml_editor extends class_base
 				));
 			}
 			
-			if(strcmp($value['type'], "close") == 0)
+			if($value['type'] == "close")
 			{
 				$t->define_data(array(
 					"xml_element" => "&lt;/".$value['tag']."&gt;",
