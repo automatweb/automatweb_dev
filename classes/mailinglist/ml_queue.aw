@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.24 2004/02/25 15:45:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.25 2004/03/30 11:43:11 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 classload("messenger/messenger_v2");
@@ -521,12 +521,12 @@ class ml_queue extends aw_template
 				$q = "SELECT total-position AS remaining FROM ml_queue WHERE qid = '$qid'";
 				$this->db_query($q);
 				$row = $this->db_next();
-				if ($row["left"] == 0)
+				if ($row["remaining"] == 0)
 				{
 					$stat = ML_QUEUE_READY;
 				};
 				//decho("saadetud<br />");flush();//dbg
-				
+
 				// Kui on valmis, siis peab näitur näitama 100%
 				// Ta ei pruugi kunagi 100% muidu jõuda kui on valmis, sest neile liikmetele,
 				// mis on mingi teise sama meili samal saatmisel tekkinud queue itemi poolt
@@ -590,7 +590,7 @@ class ml_queue extends aw_template
 
 	function replace_tags($text,$data)
 	{
-		$nohtml=strip_tags($text);
+		$nohtml=$text;
 		preg_match_all("/#(.+?)#/e",$nohtml,$matches);
 		if (is_array($matches) && is_array($matches[1]))
 		{
