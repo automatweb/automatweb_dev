@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.47 2004/02/10 10:32:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.48 2004/02/13 10:52:25 duke Exp $
 
 /*
 
@@ -61,7 +61,7 @@
 
 @default group=Pilt
 
-@property link_image type=fileupload store=no
+@property link_image type=fileupload store=no editonly=1
 @caption Pilt
 
 @property link_image_show type=text store=no editonly=1
