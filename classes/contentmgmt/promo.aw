@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.35 2004/05/19 10:07:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.36 2004/05/27 08:48:40 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -731,6 +731,7 @@ class promo extends class_base
 				$inst->vars(array(
 					"comment" => $o->comment(),
 					"title" => $o->name(), 
+					"caption" => $o->meta("caption"),
 					"content" => $pr_c,
 					"url" => $o->prop("link"),
 					"link_caption" => $o->meta("link_caption"),
