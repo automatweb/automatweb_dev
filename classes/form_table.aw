@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.23 2001/11/14 22:17:38 lauri Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.24 2001/11/22 16:42:35 kristo Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -74,10 +74,9 @@ class form_table extends form_base
 			};
 			
 			
-			//$els = $this->get_elements_for_forms($t_forms,true);// elid => formid,elid=>formid
-			
 			$this->load_table($id);
 			$this->table["defs"] = array();
+			$doelsearchcols = array();
 			if (is_array($columns))
 			{
 				$r_c = 0;
@@ -93,6 +92,10 @@ class form_table extends form_base
 								if (is_number($elid) && isset($els[$elid]))
 								{
 									$this->table["defs"][$r_c]["el_forms"][$elid] = $els[$elid];
+									if ($doelsearch[$r_c] == 1)
+									{
+										$doelsearchcols[] = array("elid" => $elid, "elform" => $els[$elid]);
+									}
 								}
 							}
 						}
@@ -107,6 +110,7 @@ class form_table extends form_base
 						
 						$this->table["defs"][$r_c]["lang_title"] = $names[$r_c];
 						$this->table["defs"][$r_c]["sortable"] = $sortable[$r_c];
+						$this->table["defs"][$r_c]["doelsearch"] = $doelsearch[$r_c];
 						$r_c++;
 					}
 					else
@@ -125,6 +129,7 @@ class form_table extends form_base
 					$this->table["moveto"][$mfid] = $mfid;
 				}
 			}
+			$this->table["doelsearchcols"] = $doelsearchcols;
 			$this->table["table_style"] = $tablestyle;
 			$this->table["header_normal"] = $header_normal;
 			$this->table["header_sortable"] = $header_sortable;
@@ -220,7 +225,8 @@ class form_table extends form_base
 				"sortable" => checked($this->table["defs"][$col]["sortable"]),
 				"elements" => $this->multiple_option_list($this->table["defs"][$col]["el"],$els),
 				"add_col" => $this->mk_my_orb("add_col", array("id" => $id,"after" => $col)),
-				"del_col" => $this->mk_my_orb("del_col", array("id" => $id,"col" => $col))
+				"del_col" => $this->mk_my_orb("del_col", array("id" => $id,"col" => $col)),
+				"doelsearch" => checked($this->table["defs"][$col]["doelsearch"])
 			));
 
 			$lh = "";

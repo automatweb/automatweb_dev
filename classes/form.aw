@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.81 2001/11/20 13:44:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.82 2001/11/22 16:42:35 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -827,6 +827,7 @@ class form extends form_base
 	//  $prefix - value to prefix the element names with
 	//  $silent_errors - if true, error messages are only written to syslog, not shown to user
 	//	$load_entry_data - loads the specified entry's data (can be an other form) and matches the elements in this form by element names
+	//	$method - form submit mthod, defaults to POST
 	function gen_preview($arr)
 	{
 		global $awt;
@@ -900,10 +901,14 @@ class form extends form_base
 				$elvalues=$elvalues + $u->get_user_info($GLOBALS["uid"]);
 			}
 		}
-			
+
+		$method = $method != "" ? $method : "POST";
 		$tpl = isset($tpl) ? $tpl : "show.tpl";
 		$this->read_template($tpl,1);
-		$this->vars(array("form_id" => $id));
+		$this->vars(array(
+			"form_id" => $id,
+			"method" => $method
+		));
 		$images = new db_images;
 
 		$c="";
@@ -1271,6 +1276,7 @@ class form extends form_base
 	// !shows entry $entry_id of form $id using output $op_id
 	// if $no_load_entry == true, the loaded entry is used
 	// if $no_load_op == true, the loaded output is used
+	// optional - search_el and search_val - if then does a search using only that element and value
 	function show($arr)
 	{
 		global $awt;
@@ -1298,7 +1304,7 @@ class form extends form_base
 		// if this is a search form, then search, instead of showing the entered data
 		if ($this->type == FORM_SEARCH)
 		{
-			$r = $this->do_search($entry_id, $op_id);
+			$r = $this->do_search($entry_id, $op_id, $search_el, $search_val);
 			$awt->stop("form::show");
 			return $r;
 		}
@@ -1967,14 +1973,26 @@ class form extends form_base
 	// an array, that has one entry for each form selected as a search target
 	// and that entry is an array of matching entries for that form
 	// parent(int) - millise parenti alt entrysid otsida
-	function search($entry_id,$parent = 0)
+	function search($entry_id,$parent = 0,$search_el = "",$search_val = "")
 	{
 		global $awt;
 		$awt->start("form::search");
 		$awt->count("form::search");
 
 		// laeb täidetud vormi andmed sisse
-		$this->load_entry($entry_id);
+		if ($search_el != "" && $search_val != "")
+		{
+			$this->entry = array();
+			$this->entry[$search_el] = $search_val;
+			$this->read_entry_from_array($entry_id);
+			$word_search = false;
+		}
+		else
+		{
+			$this->load_entry($entry_id);
+			$word_search = true;
+		}
+		
 
 		// gather all the elements of this form in an array
 		$els = array();
@@ -2095,25 +2113,30 @@ class form extends form_base
 											$el->arr["linked_form"],
 											$el->arr["linked_element"]);
 							// now split it at the spaces
-							if (preg_match("/\"(.*)\"/",$value,$matches))
+							if ($word_search)
 							{
-								$qstr = " $elname LIKE '%$matches[1]%' ";
-							}
-							else
-							{
-								$pieces = explode(" ",$value);
-								if (is_array($pieces))
+								if (preg_match("/\"(.*)\"/",$value,$matches))
 								{
-									$qstr = join (" OR ",map("$elname LIKE '%%%s%%'",$pieces));
+									$qstr = " $elname LIKE '%$matches[1]%' ";
 								}
 								else
 								{
-									$qstr = " $elname LIKE '%$value%' ";
+									$pieces = explode(" ",$value);
+									if (is_array($pieces))
+									{
+										$qstr = join (" OR ",map("$elname LIKE '%%%s%%'",$pieces));
+									}
+									else
+									{
+										$qstr = " $elname LIKE '%$value%' ";
+									};
 								};
-							};
-
-							$query.= "AND ($qstr)";
-							//$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
+								$query.= "AND ($qstr)";
+							}
+							else
+							{
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
+							}
 						}
 						if ($el->arr["linked_form"] != $mid)
 						{
@@ -2257,24 +2280,31 @@ class form extends form_base
 						$value = $el->get_value();
 						$elname = sprintf("ev_%s",$el->arr["linked_element"]);
 						// now split it at the spaces
-						if (preg_match("/\"(.*)\"/",$value,$matches))
+						if ($word_search)
 						{
-							$qstr = " $elname LIKE '%$matches[1]%' ";
-						}
-						else
-						{
-							$pieces = explode(" ",$value);
-							if (is_array($pieces))
+							if (preg_match("/\"(.*)\"/",$value,$matches))
 							{
-								$qstr = join (" OR ",map("$elname LIKE '%%%s%%'",$pieces));
+								$qstr = " $elname LIKE '%$matches[1]%' ";
 							}
 							else
 							{
-								$qstr = " $elname LIKE '%$value%' ";
+								$pieces = explode(" ",$value);
+								if (is_array($pieces))
+								{
+									$qstr = join (" OR ",map("$elname LIKE '%%%s%%'",$pieces));
+								}
+								else
+								{
+									$qstr = " $elname LIKE '%$value%' ";
+								};
 							};
-						};
 
-						$query.= "AND ($qstr)";
+							$query.= "AND ($qstr)";
+						}
+						else
+						{	
+							$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
+						}
 					}
 				}
 			}
@@ -2311,7 +2341,7 @@ class form extends form_base
 		return $ret;
 	}
 
-	function do_search($entry_id, $output_id)
+	function do_search($entry_id, $output_id,$search_el,$search_val)
 	{
 		if ($this->arr["new_search_engine"] == 1)
 		{
@@ -2323,7 +2353,7 @@ class form extends form_base
 		$awt->count("form::do_search");
 
 		global $section;
-		$matches = $this->search($entry_id);
+		$matches = $this->search($entry_id,0,$search_el,$search_val);
 		if ($this->arr["show_table"])
 		{
 			if (!$this->arr["table"])
@@ -2356,6 +2386,9 @@ class form extends form_base
 			*/
 			// <--
 			$ft->start_table($this->arr["table"], array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section));
+
+			// make an array of linked_element => this form element
+			$linked_els = $this->get_linked2real_element_array();
 
 			// this returns an array of roms each of which is an array of elements that are actually used in the table
 			$used_els = $ft->get_used_elements();
@@ -2439,6 +2472,19 @@ class form extends form_base
 							if ($ft->table["change_col"] && $ft->table["change_col"] != "change" && ($this->can("edit",$row["entry_id"]) || $GLOBALS["SITE_ID"] == 11))
 							{
 								$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
+							}
+
+							// dis shit here makes the link that does a new search on the element you clicked 
+							if (is_array($ft->table["doelsearchcols"]))
+							{
+								foreach($ft->table["doelsearchcols"] as $_de_col => $_de_elid_ar)
+								{
+									if ($row["ev_".$_de_elid_ar["elid"]] != "")
+									{
+										$_de_url = $this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $this->entry_id, "op_id" => 1, "search_el" => $linked_els[$_de_elid_ar["elid"]], "search_val" => $row["ev_".$_de_elid_ar["elid"]]));
+										$row["ev_".$_de_elid_ar["elid"]] = "<a href='".$_de_url."'>".$row["ev_".$_de_elid_ar["elid"]]."</a>";
+									}
+								}
 							}
 							$ft->row_data($row);
 						}
@@ -2527,6 +2573,19 @@ class form extends form_base
 							if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
 							{
 								$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
+							}
+
+							// dis shit here makes the link that does a new search on the element you clicked 
+							if (is_array($ft->table["doelsearchcols"]))
+							{
+								foreach($ft->table["doelsearchcols"] as $_de_col => $_de_elid_ar)
+								{
+									if ($row["ev_".$_de_elid_ar["elid"]] != "")
+									{
+										$_de_url = $this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $this->entry_id, "op_id" => 1, "search_el" => $linked_els[$_de_elid_ar["elid"]], "search_val" => $row["ev_".$_de_elid_ar["elid"]]));
+										$row["ev_".$_de_elid_ar["elid"]] = "<a href='".$_de_url."'>".$row["ev_".$_de_elid_ar["elid"]]."</a>";
+									}
+								}
 							}
 							$ft->row_data($row);
 						}
@@ -4658,6 +4717,17 @@ class form extends form_base
 
 
 		return $sf->orb_search($arr);
+	}
+
+	function get_linked2real_element_array()
+	{
+		$ret = array();
+		$els = $this->get_all_els();
+		foreach($els as $el)
+		{
+			$ret[$el->arr["linked_element"]] = $el->get_id();
+		}
+		return $ret;
 	}
 };	// class ends
 ?>

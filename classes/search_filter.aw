@@ -220,6 +220,27 @@
 					// Ja maeitea mis siis veel on kui sama form on mitmes pärjas millest otsitakse.blah.
 					$form2chain[$r["form_id"]]=$r["chain_id"];
 				};
+
+				// right. if we are doing the click-on-word-in-result-set search we need to search only from the chain that the search-from
+				// form is in. so we check it here and remove all other chains from the search array
+				if ($GLOBALS["search_form"])
+				{
+					// find the chain the form is in. 
+					$_chid = $form2chain[$GLOBALS["search_form"]];
+
+					// now remove all other forms
+					$_f2c = array();
+					foreach($form2chain as $fid => $chid)
+					{
+						if ($chid == $_chid)
+						{
+							$_f2c[$fid] = $chid;
+						}
+					}
+					$form2chain = $_f2c;
+					$this->data["multchain"] = false;
+					$this->data["target_id"] = $_chid;
+				}
 			};
 			
 			$this->form=new form();
@@ -708,6 +729,19 @@
 									),
 								"form")."'>Kustuta</a>";
 							
+							// dis shit here makes the link that does a new search on the element you clicked 
+							if (is_array($this->ft->table["doelsearchcols"]))
+							{
+								foreach($this->ft->table["doelsearchcols"] as $_de_col => $_de_elid_ar)
+								{
+									if ($row["ev_".$_de_elid_ar["elid"]] != "")
+									{
+										$_de_url = $this->mk_my_orb("search", array("id" => $this->id, "search_el" => $_de_elid_ar["elid"], "search_val" => 	$row["ev_".$_de_elid_ar["elid"]],"search_form" => $_de_elid_ar["elform"],"section" => $GLOBALS["section"],"no_menu" => ($GLOBALS["section"] ? 1 : 0)));
+										$row["ev_".$_de_elid_ar["elid"]] = "<a href='".$_de_url."'>".$row["ev_".$_de_elid_ar["elid"]]."</a>";
+									}
+								}
+							}
+
 							$this->ft->row_data($row);
 						};
 					};
@@ -766,6 +800,19 @@
 									"after" => $this->ft->binhex($this->ft->mk_my_orb("show_user_entries", array("chain_id" => $chain_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
 								),
 							"form")."'>Kustuta</a>";
+
+							// dis shit here makes the link that does a new search on the element you clicked 
+							if (is_array($this->ft->table["doelsearchcols"]))
+							{
+								foreach($this->ft->table["doelsearchcols"] as $_de_col => $_de_elid_ar)
+								{
+									if ($row["ev_".$_de_elid_ar["elid"]] != "")
+									{
+										$_de_url = $this->mk_my_orb("search", array("id" => $this->id, "search_el" => $_de_elid_ar["elid"], "search_val" => $row["ev_".$_de_elid_ar["elid"]],"search_form" => $_de_elid_ar["elform"],"section" => $GLOBALS["section"],"no_menu" => ($GLOBALS["section"] ? 1 : 0)));
+										$row["ev_".$_de_elid_ar["elid"]] = "<a href='".$_de_url."'>".$row["ev_".$_de_elid_ar["elid"]]."</a>";
+									}
+								}
+							}
 						$this->ft->row_data($row);
 					}
 				};
@@ -854,7 +901,7 @@
 				$parse.=$tbl->show(array("id" => $this->data["stat_id"],"is_filter" => 1));
 			};
 			$parse.="</form>";
-			if (!$no_menu)
+			if (!$no_menu && !$GLOBALS["section"])
 			{
 				$parse=$this->make_upper_menu($arr,"search").$parse;
 			};
@@ -1086,6 +1133,15 @@
 					"filter" => $ft,
 					"do_ign" => $this->do_ign?1:0
 				));
+
+			// uh, yeah. yeah. I know - kinda ugly hack but damn this thing is kinda complicated and I'm in a hurry
+			if ($GLOBALS["search_el"] != "" && $GLOBALS["search_val"] != "")
+			{
+				$sqlw = "WHERE form_".$GLOBALS["search_form"]."_entries.ev_".$GLOBALS["search_el"]." = '".$GLOBALS["search_val"]."'";
+				// phuk. here we must somehow exclude all other chains from the search besides the one the element is in
+				// how the hell do we do that?
+			}
+
 			if ($GLOBALS["dbg_ft"]) echo "<textarea cols=100 rows=1>$sqlw</textarea><br>";
 			
 
