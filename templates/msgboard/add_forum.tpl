@@ -18,11 +18,11 @@
 <tr>
 <td class="fgtitle">{VAR:LC_MSGBOARD_COMMENTARY}:</td><td class="fform"><input type='text' NAME='comment' VALUE='{VAR:comment}'></td>
 </tr>
-<!-- SUB: CHANGE -->
+<!-- SUB: URL -->
 <tr>
 <td class="fgtitle">{VAR:LC_MSGBOARD_BIG_FORUM} URL:</td><td class="fform">{VAR:url}</td>
 </tr>
-<!-- END SUB: CHANGE -->
+<!-- END SUB: URL -->
 <tr>
 <td class="fgtitle">Template:</td>
 <td class="fform"><select name="template">{VAR:template}</td>
