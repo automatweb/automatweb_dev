@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.73 2001/06/21 21:13:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.74 2001/06/22 03:13:34 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -493,10 +493,14 @@ class messenger extends menuedit_light
 			};
 		};
 
+		$dummy = array("header" => "  - Mine - ");	
+		$dummy2 = array("header" => " - Liiguta - ");
 		// active_folder - selle folderi ID
+		// $id - aktiivne folder
 		$this->vars(array(
 			"line" => $c,
-			"folders_dropdown" => $this->picker($id,$folder_list),
+			"folders_dropdown" => $this->picker("dummy",$dummy + $folder_list),
+			"folders_dropdown2" => $this->picker("dummy",$dummy2 + $folder_list),
 			"active_folder" => $folder,
 			"message_count" => verbalize_number($cnt),
 			"folder_name" => $folder_name,
@@ -517,6 +521,22 @@ class messenger extends menuedit_light
 	function mailbox_op($args = array())
 	{
 		extract($args);
+		if ( ($move_to1) && ($folder1 == "header") )
+		{	
+			return $this->mk_site_orb(array(
+				"action" => "folder",
+				"id" => $active_folder,
+			));
+		};
+		
+		if ( ($move_to2) && ($folder2 == "header") )
+		{	
+			return $this->mk_site_orb(array(
+				"action" => "folder",
+				"id" => $active_folder,
+			));
+		};
+
 		global $status_msg;
 		if ($delete)
 		{
@@ -1025,7 +1045,7 @@ class messenger extends menuedit_light
 				$this->awm->fattach(array(	
 						"path" => $fname,
 						"name" => $row["name"],
-						"contenttype" => $row["type"],
+						"contenttype" => $row2["type"],
 				));
 			};
 
@@ -1249,22 +1269,47 @@ class messenger extends menuedit_light
 
 		$this->read_template("message.tpl");
 		// koostame attachide nimekirja
-		$q = "SELECT * FROM objects WHERE parent = '$id'";
-		$this->db_query($q);
+		$this->get_objects_by_class(array(
+						"class" => CL_FILE,
+						"parent" => $id,
+					));
 		$c = 0;
 		$attaches = "";
+		classload("file","xml");
+		$awf = new file();
+		$xml = new xml();
 		while($row = $this->db_next())
 		{
 			$c++;
-			$this->vars(array(
-					"aid" => $row["oid"],
-					"msg_id" => $id,
-					"cnt" => $c,
-					"msgid" => $args["id"],
-					"icon" => get_icon_url($row["class_id"],""),
-					"name" => $row["name"],
-				));
-			$attaches .= $this->parse("attach");
+			$this->save_handle();
+			$fdat = $awf->get(array("id" => $row["oid"]));
+			$this->restore_handle();
+			if ($fdat["type"] == "text/aw-event")
+			{
+				$subtpl = "event_attach";
+				$edata = $xml->xml_unserialize(array("source" => $fdat["file"]));
+				$evars = array("start" => date("H:i d-m-Y",$edata["data"]["start"]),
+						"end" => date("H:i d-m-Y",$edata["data"]["end"]),
+						"name" => $edata["data"]["title"],
+						"icon" => get_icon_url(CL_CAL_EVENT,""),
+						"id" => $row["oid"],
+						"cnt" => $c,
+					);
+				$this->vars($evars);
+			}
+			else
+			{
+				$subtpl = "attach";
+				$this->vars(array(
+						"aid" => $row["id"],
+						"msg_id" => $id,
+						"cnt" => $c,
+						"msgid" => $args["id"],
+						"icon" => get_icon_url(CL_FILE,$row["name"]),
+						"name" => $row["name"],
+					));
+			};
+			$attaches .= $this->parse($subtpl);
 		};
 		
 		$vars = array();
@@ -2025,6 +2070,7 @@ class messenger extends menuedit_light
 				$subject = $this->MIME_decode($body["headers"]["Subject"]);
 				$from = $this->MIME_decode($body["headers"]["From"]);
 				$cc = $this->MIME_decode($body["headers"]["Cc"]);
+				$to = $this->MIME_decode($body["headers"]["To"]);
 				$mfrom = $from;
 				$content = $this->MIME_decode($body["body"]);
 				$processing = true;
@@ -2111,6 +2157,7 @@ class messenger extends menuedit_light
 				"activelist" => array("configure","rules","list"),
 				));
 		$fields = array("mfrom" => "Kellelt",
+				"to" => "Kellele",
 				"subject" => "Teema",
 				"message" => "Sisu",
 		);
@@ -2175,6 +2222,7 @@ class messenger extends menuedit_light
 				));
 		$fields = array("mfrom" => "Kellelt",
 				"message" => "Sisu",
+				"to" => "Kellele",
 				"subject" => "Teema",
 		);
 		$folders = $this->_folder_list();

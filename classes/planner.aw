@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.32 2001/06/21 12:25:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.33 2001/06/22 03:13:34 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -182,7 +182,7 @@ class planner extends calendar {
 		$awf->put(array(
 				"store" => "fs",
 				"filename" => "event.xml",
-				"type" => "text/xml",
+				"type" => "text/aw-event",
 				"content" => $data,
 				"parent" => $msg_id,
 			));
@@ -1003,6 +1003,44 @@ class planner extends calendar {
 		return $this->mk_my_orb("repeaters",array("id" => $id));
 	}
 
+	function importfile($args = array())
+	{
+		classload("file","xml");
+		$awf = new file();
+		$xml = new xml();
+		extract($args);
+		$fdat = $awf->get(array("id" => $id));
+		$edata = $xml->xml_unserialize(array("source" => $fdat["file"]));
+		$start = $edata["data"]["start"];
+		$end = $edata["data"]["end"];
+		$title = $edata["data"]["title"];
+		$description = $edata["data"]["description"];
+		$this->quote($title); $this->quote($description);
+		global $udata;
+		$uid = UID;
+		$parent = $udata["home_folder"];
+		$id = $this->new_object(array(	
+			"class_id" => CL_CAL_EVENT,
+			"parent" => $parent,
+			"name" => $title,
+		),true);
+
+		$q = "INSERT INTO planner 
+			(id,uid,start,end,title,description)
+			VALUES ('$id','$uid','$start','$end','$title','$description')";
+
+		$this->db_query($q);
+		global $status_msg;
+		$status_msg = " päevaplaan on salvestatud";
+		session_register("status_msg");
+		$obj = $this->get_object($args["id"]);
+		return $this->mk_site_orb(array(
+					"class" => "messenger",
+					"action" => "show",
+					"id" => $obj["parent"],
+				));
+	}
+
 	function submit_adm_event($args = array())
 	{
 		$this->quote($args);
@@ -1097,6 +1135,8 @@ class planner extends calendar {
 				$parent = $udata["homefolder"];
 				$uid = UID;
 			};
+
+
 			$id = $this->new_object(array(	
 				"class_id" => CL_CAL_EVENT,
 				"parent" => $parent,
