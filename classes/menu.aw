@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.36 2003/02/18 09:08:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.37 2003/02/27 12:07:32 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -59,6 +59,9 @@
 	
 	@property sections type=select multiple=1 size=20 field=meta method=serialize group=relations 
 	@caption Vennastamine
+
+	@property images_from_menu type=relpicker reltype=RELTYPE_PICTURES_MENU group=presentation field=meta method=serialize
+	@caption V&otilde;ta pildid men&uuml;&uuml; alt
 
 	@property img_timing type=textbox size=3 field=meta method=serialize group=presentation
 	@caption Viivitus piltide vahel (sek.)
@@ -122,6 +125,9 @@
 	@property shop_ignoregoto type=checkbox group=advanced ch_value=1
 	@caption Ignoreeri järgmist (pood)
 
+	@property submenus_from_menu type=relpicker reltype=RELTYPE_SHOW_SUBFOLDERS_MENU group=advanced field=meta method=serialize table=objects
+	@caption V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt
+
 	@default group=show
 
 	@property left_pane type=checkbox  ch_value=1
@@ -176,6 +182,9 @@
 
 	@tableinfo menu index=id master_table=objects master_index=oid
 */
+
+define("RELTYPE_PICTURES_MENU",1);
+define("RELTYPE_SHOW_SUBFOLDERS_MENU",2);
 
 class menu extends class_base
 {
@@ -700,7 +709,7 @@ class menu extends class_base
 	function _menu_img_cmp($a,$b)
 	{
 		if ($a["ord"] == $b["ord"]) return 0;
-		return ($a["ord"] > $b["ord"]) ? -1 : 1;
+		return ($a["ord"] < $b["ord"]) ? -1 : 1;
 	}
 
 
@@ -950,7 +959,14 @@ class menu extends class_base
 			$bsar[$arow["parent"]] = $arow["parent"];
 		}
 		return $bsar;
-        }
+	}
 
+	function callback_get_rel_types()
+	{
+		return array(
+			RELTYPE_PICTURES_MENU => "v&otilde;ta pildid men&uuml;&uuml;lt",
+			RELTYPE_SHOW_SUBFOLDERS_MENU => "võta alamkaustad men&uuml;&uuml;lt",
+		);
+	}
 };
 ?>

@@ -173,6 +173,16 @@
             <caption>Vennastamine</caption>
       </property>
       <property>
+            <name>images_from_menu</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PICTURES_MENU</reltype>
+            <group>presentation</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>V&amp;otilde;ta pildid men&amp;uuml;&amp;uuml; alt</caption>
+      </property>
+      <property>
             <name>img_timing</name>
             <type>textbox</type>
             <size>3</size>
@@ -357,6 +367,16 @@
             <table>menu</table>
             <field>shop_ignoregoto</field>
             <caption>Ignoreeri järgmist (pood)</caption>
+      </property>
+      <property>
+            <name>submenus_from_menu</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SHOW_SUBFOLDERS_MENU</reltype>
+            <group>advanced</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>V&amp;otilde;ta alammen&amp;uuml;&amp;uuml;d men&amp;uuml;&amp;uuml; alt</caption>
       </property>
       <property>
             <name>left_pane</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.243 2003/02/25 14:36:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.244 2003/02/27 12:07:32 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -935,7 +935,7 @@ class menuedit extends aw_template
 				if ($pstr != "")
 				{
 					$pstr = "objects.parent IN ($pstr)";
-					$ordby = "objects.modified DESC";
+					//$ordby = "objects.modified DESC";
 					$lsas = " AND (documents.no_last != 1 OR documents.no_last is null ) ";
 				}
 				else
@@ -1062,6 +1062,12 @@ class menuedit extends aw_template
 	{
 		$section = aw_global_get("section");
 		$realsect = $this->check_section($section);
+		global $XX1;
+		if ($XX1)
+		{
+			var_dump($section);
+			var_dump($realsect);
+		};
 		$_mn = $this->get_menu($realsect);
 		$set_lang_id = false;
 		if ($_mn)
@@ -2636,6 +2642,21 @@ class menuedit extends aw_template
 			{
 				$this->subitems[$name . "_L" . $this->level]  = sizeof($this->mpr[$row["oid"]]);
 			}
+
+			// make submenus_from_menu work
+			if (($smfm = $row['meta']['submenus_from_menu']))
+			{
+				// copy all submenus
+				if (is_array($this->mpr[$smfm]))
+				{
+					foreach($this->mpr[$smfm] as $_idx => $_dat)
+					{
+						$_dat["parent"] = $row['oid'];
+						$this->mpr[$row['oid']][] = $_dat;
+					}
+				}
+			}
+
 			// je, I know, this will kind of slow down things
 			// hmhm. taimisin seda vibe esilehel - 0.05 sek. niiet mitte oluliselt. - terryf
 			// kuigi, seda siin funxioonis kasutatakse aint n2dala vasaku paani tegemisex exole. ja see v6ix ikka n2dala koodis olla. 
@@ -2888,6 +2909,12 @@ class menuedit extends aw_template
 			{
 				$imgurl = "";
 			};
+
+			if ($meta["images_from_menu"])
+			{
+				$meta["menu_images"] = $this->mar[$meta["images_from_menu"]]["meta"]["menu_images"];
+				$meta["num_menu_images"] = $this->mar[$meta["images_from_menu"]]["meta"]["num_menu_images"];
+			}
 
 			$num_menu_images = $this->cfg["num_menu_images"];
 			$has_image = false;
