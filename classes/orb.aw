@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.68 2004/09/20 14:45:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.69 2004/10/29 18:52:09 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -506,7 +506,7 @@ class orb extends aw_template
 		extract($args);
 		if ((!aw_global_get("uid")) && (!isset($this->orb_defs[$class][$action]["nologin"])))
 		{
-			$auth = get_instance("auth");
+			$auth = get_instance("core/users/auth/auth_config");
 			print $auth->show_login();
 			// dat sucks
 			exit;

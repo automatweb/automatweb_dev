@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.2 2004/10/28 17:27:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.3 2004/10/29 18:52:11 kristo Exp $
 
 lc_load("definition");
 
@@ -522,7 +522,7 @@ class acl_base extends db_connector
 		else
 		{
 			// show the login form
-			$auth = get_instance("auth");
+			$auth = get_instance("core/users/auth/auth_config");
 			print $auth->show_login();
 			// dat sucks
 			exit;
