@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.4 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.5 2002/06/13 23:03:49 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 classload("objects");
@@ -108,7 +108,7 @@ class object_chain extends aw_template
 			"value" => $arr
 		));
 
-		return $this->mk_my_orb("change", array("id" => $id,"search" => $search,"s_name" => $s_name,"s_comment" => $s_comment,"s_type" => $s_type,"return_url" => urlencode($return_url)));
+		return $this->mk_my_orb("change", array("id" => $id,"search" => $search,"s_name" => $s_name,"s_comment" => $s_comment,"s_type" => $s_type,"s_id_from" => $s_id_from, "s_id_to" => $s_id_to,"return_url" => urlencode($return_url)));
 	}
 
 	//// explodes the added object into single aliases
@@ -151,7 +151,8 @@ class object_chain extends aw_template
 		));
 
 		$tar = array(0 => "K&otilde;ik");
-		foreach($this->cfg["classes"] as $clid => $cldata)
+		$class_defs = $this->cfg["classes"];
+		foreach($class_defs as $clid => $cldata)
 		{
 			$tar[$clid] = $cldata["name"];
 		}
@@ -160,51 +161,69 @@ class object_chain extends aw_template
 			"reforb" => $this->mk_reforb("submit", array("id" => $id,"return_url" => urlencode($return_url))),
 			"s_name" => $s_name,
 			"s_comment" => $s_comment,
+			"s_id_from" => $s_id_from,
+			"s_id_to" => $s_id_to,
 			"types" => $this->multiple_option_list($this->make_keys($s_type),$tar)
 		));
 
-		if ($search && ($s_name != "%" || $s_comment != "%" || $s_type))
+		$ob = new objects;
+		$ol = $ob->get_list();
+
+		$toar = array_values($meta["objs"]);
+		if ($search && ($s_name != "%" || $s_comment != "%" || $s_type || $s_id_from != "" || $s_id_to != ""))
 		{
-			$ob = new objects;
-			$ol = $ob->get_list();
 			if (is_array($s_type))
 			{
 				$st = " AND class_id IN (".join(",",$s_type).")";
 			}
-			$q = "SELECT oid,parent,class_id,name FROM objects WHERE name LIKE '%".$s_name."%' AND (comment LIKE '%".$s_comment."%' OR comment IS NULL) $st";
+			if ($s_id_from != "")
+			{
+				$sidf = " AND oid >= '$s_id_from' ";
+			}
+			if ($s_id_to != "")
+			{
+				$sidt = " AND oid <= '$s_id_to' ";
+			}
+			$q = "SELECT oid FROM objects WHERE name LIKE '%".$s_name."%' AND (comment LIKE '%".$s_comment."%') $st $sidf $sidt AND status != 0 AND lang_id = ".aw_global_get("lang_id")." AND site_id = ".aw_ini_get("site_id");
 			$this->db_query($q);
+//			echo "q = $q <br>";
 			while ($row = $this->db_next())
 			{
-				$this->vars(array(
-					"name" => $row["name"],
-					"oid" => $row["oid"],
-					"place" => $ol[$row["parent"]],
-					"type" => $tar[$row["class_id"]],
-					"sel" => checked($meta["objs"][$oid])
-				));
-				$fo.=$this->parse("S_RESULT");
+				if (!in_array($row["oid"], $toar))
+				{
+					$toar[] = $row["oid"];
+				}
 			}
-			$this->vars(array(
-				"S_RESULT" => $fo,
-			));
 		}
 
-		$names = array();
-		$str = join(",",$this->map("%s",$meta["objs"]));
+		$qar = array();
+		$str = join(",",$this->map("%s",$toar));
 		if ($str != "")
 		{
-			$this->db_query("SELECT oid,name,class_id FROM objects WHERE oid IN (".$str.")");
+			$q = "SELECT oid,name,parent,class_id FROM objects WHERE oid IN($str)";
+			$this->db_query($q);
+
 			while ($row = $this->db_next())
 			{
-				$names[$row["oid"]] = $row["name"];
-				$this->vars(array(
-					"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),$this->cfg["classes"][$row["class_id"]]["file"]),
-					"name" => $row["name"],
-					"oid" => $row["oid"]
-				));
-				$os.=$this->parse("OBJECT");
+				$qar[$row["oid"]] = $row;
 			}
 		}
+
+		foreach($toar as $oid)
+		{
+			$row = $qar[$oid];
+			$this->vars(array(
+				"name" => $row["name"],
+				"oid" => $row["oid"],
+				"place" => $ol[$row["parent"]],
+				"type" => $tar[$row["class_id"]],
+				"sel" => checked($meta["objs"][$row["oid"]])
+			));
+			$fo.=$this->parse("S_RESULT");
+		}
+		$this->vars(array(
+			"S_RESULT" => $fo,
+		));
 
 		$this->vars(array(
 			"name" => $o["name"],
