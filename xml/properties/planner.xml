@@ -4,6 +4,7 @@
             <name>default_view</name>
             <type>select</type>
             <group>advanced</group>
+            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -23,6 +24,7 @@
       <property>
             <name>day_start</name>
             <type>time_select</type>
+            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -32,6 +34,7 @@
       <property>
             <name>day_end</name>
             <type>time_select</type>
+            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -113,6 +116,17 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Näita navigaatorit</caption>
+      </property>
+      <property>
+            <name>use_tabpanel</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <group>advanced</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kalendri näitamisel kasutatakse 'tabpanel' komponenti</caption>
       </property>
       <property>
             <name>navigator_months</name>
