@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="shop_menuedit">
+	<class name="shop_menuedit" folder="shop">
 		<action name="obj_list">
 			<function name="gen_list_objs">
 				<arguments>
