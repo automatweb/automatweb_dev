@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.180 2004/05/14 10:32:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.181 2004/05/20 08:13:09 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -446,7 +446,7 @@ class planner extends class_base
 		classload("icons");
 		classload("date_calc");
 
-		$prj = get_instance("groupware/project");
+		$prj = get_instance(CL_PROJECT);
 		$di = get_date_range(array(
 			"date" => isset($date) ? $date : date("d-m-Y"),
 			"type" => $type,
