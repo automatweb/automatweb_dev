@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.4 2004/11/30 14:42:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.5 2004/11/30 14:53:33 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1194,7 +1194,7 @@ class webform extends class_base
 			}
 			$body = "";
 			// this stuff we won't translate
-			$no_trans = array("submit", "reset", "text", "hidden");
+			$no_trans = array("submit", "reset", "text");
 			// lets translate this stuff to real things
 			foreach($arr as $key => $val)
 			{
