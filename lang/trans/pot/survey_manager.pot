@@ -1,0 +1,52 @@
+#: classes/applications/survey/survey_manager.aw:125
+msgid "Kustuta valitud ankeedid"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:127
+msgid "Kustutada valitud ankeedid?"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:142
+msgid "Kustuta valitud ankeedid"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:144
+msgid "Kustutada valitud ankeedid?"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:150
+msgid "Ekspordi ankeedid"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:202
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:233
+msgid "Vaata"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:299
+msgid "Vaata"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:447
+msgid "id"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:456
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:480
+msgid "Host"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:485
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:494
+msgid "Vaata"
+msgstr ""
+

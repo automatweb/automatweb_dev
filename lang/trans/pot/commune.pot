@@ -1,0 +1,612 @@
+#: classes/applications/commune/commune.aw:536
+msgid "Minu piltidele lisatud kommentaarid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:537
+msgid "Pildi aktsepteerimine moderaatori poolt"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:538
+msgid "Minu profiilile lisatud kommentaarid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:539
+msgid "Uus sõber"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:540
+msgid "Keskmise hinde saatmine iga pildi kohta 1 kord päevas"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:541
+msgid "Minu foorumipostitustele vastamised"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:542
+msgid "mittesõpradelt laekunud teated"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:543
+msgid "sõpradelt laekunud teated"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:681
+msgid "siia tuleb horoskoop"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:769
+msgid "Muuda valitud kommentaaride staatust"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:775
+msgid "Kustuta valitud kommentaarid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:778
+msgid "soovid tõesti valitud kommentaarid kustutada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:798
+msgid "üldine"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:811
+msgid "Kustuta kontakte"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:814
+msgid "Oled kindel, et tahad valitud eemaldada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:818
+msgid "Otsi kontaktidesse"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:858
+msgid "Eemalda valitud %slistist"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:861
+msgid "Soovid tõesti valitud %s listist eemaldada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:871
+msgid "Otsi "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:942
+msgid "Uus profiil"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:954
+msgid "Salvesta muutused"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:960
+msgid "Kustuta valitud profiilid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:963
+msgid "Oled kindel, et soovid valitud profiilid kustutada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:976
+msgid "Kustuta valitud kommentaarid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:979
+msgid "Oled kindel, et soovid valitud kommentaarid kustutada?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:999
+msgid "Lisa uus profiil"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1005
+msgid "<small>Vali profiil:</small>"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1027
+msgid "Salvesta muutused oma profiilis"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1034
+msgid "Kustuta käesolev profiil"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1037
+msgid "Olete Te kindel, et soovite kustutada käesolevat profiili?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1065
+msgid "Eemalda ennast valitud kogukondades"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1068
+msgid "oled ikka kindel?"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1178
+msgid "Kategooriad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1201
+msgid "Ühtegi kategooriat pole veel defineeritud"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1236
+msgid "ID"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1240
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1244
+msgid "Kategooriad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1248
+msgid "Liikmeid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1253
+msgid "Sinu staatus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1350
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1377
+msgid ""
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1384
+msgid ""
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1391
+msgid ""
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1398
+msgid ""
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1407
+msgid "lisa sõbraks"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1415
+msgid "lisa kontaktidesse"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1423
+msgid "blokeeri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1431
+msgid "ignoreeri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1470
+msgid "Teema"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1474
+msgid "Postitusi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1479
+msgid "Loomisaeg"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1483
+msgid "Viimane postitus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1581
+msgid "näita kõiki"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1584
+msgid " päeva"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1590
+msgid "Ära näita vanemaid teemasid, kui"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1607
+msgid "ID"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1612
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1616
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1655
+msgid "Saada sõnum"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1688
+msgid "Saada sõnum"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1716
+msgid "Grupp"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1720
+msgid "Sõpru grupis"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1743
+msgid "üldine"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1783
+msgid "ID"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1788
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1793
+msgid "Aeg"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1798
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1802
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1835
+msgid "nähtav"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1835
+msgid "peidetud"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1856
+msgid "ID"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1861
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1923
+msgid "Pilte"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1927
+msgid "Sõpru"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1931
+msgid "Kommentaare"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1935
+msgid "Sõpru"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1944
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1957
+msgid "Ignoreerituid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:1963
+msgid "Blokeerituid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2089
+msgid "Minu sõbrad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2107
+msgid "Minu kogukonnad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2176
+msgid "ID"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2181
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2186
+msgid "Aeg"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2191
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2242
+msgid "ID"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2247
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2253
+msgid "Pildid"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2258
+msgid "Vaikeprofiil"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2290
+msgid "pildid ("
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2529
+msgid "[at]"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2548
+msgid "e-mailile"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2553
+msgid "postkasti"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2651
+msgid "Mõlemad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2652
+msgid "Mees"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2653
+msgid "Naine"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2679
+msgid "Seade"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2685
+msgid "Sugu"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2689
+msgid "Vanus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2701
+msgid "Seksuaalne orientatsioon"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2721
+msgid "Grupp"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2726
+msgid "Profiili kuvamise seaded"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2739
+msgid "ei näita antud grupile"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2808
+msgid "(isikut pole)"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2827
+msgid "Naine"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2827
+msgid "Mees"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2828
+msgid "lisatud: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2829
+msgid "hinne: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2974
+msgid "(isikut pole)"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2991
+msgid "vanus: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:2992
+msgid "sõpru: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3025
+msgid "sae pekki"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3064
+msgid "-- vali pilt --"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3093
+msgid "Pilt %s"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3108
+msgid "Pilt"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3118
+msgid "Pildi nimi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3125
+msgid "Pildi kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3131
+msgid "Vali uus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3137
+msgid "Vali olemasolev"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3145
+msgid "Hinne"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3156
+msgid "Vaatamisi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3162
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3178
+msgid "Kommentaarid (%s)"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3188
+msgid "Vali uus"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3193
+msgid "Vali olemasolev"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3199
+msgid "Pildi kommentaar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3333
+msgid "hinne: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3335
+msgid "lisatud: "
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3397
+msgid "Pildi hindamine"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3778
+msgid "ToolBar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3800
+msgid "Objekt"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3807
+msgid "Asukoht"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3857
+msgid "-- vali --"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3857
+msgid "üldine"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3860
+msgid "Pane sõbragruppi"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3887
+msgid "Eemalda sõprade hulgast"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3901
+msgid "lisa sõprade hulka"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3917
+msgid "Eemalda ignoreeritute hulgast"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3931
+msgid "lisa ignoreeritute hulka"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3946
+msgid "Eemalda blokeeritute hulgast"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3959
+msgid "lisa blokeeritute hulka"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:3973
+msgid "Kommenteeri!"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4458
+msgid "Liitu!"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4466
+msgid "Uuenda andmed!"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4480
+msgid "Inboxi toolbar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4486
+msgid "Sissetulnud kirjad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4499
+msgid "Outboxi toolbar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4505
+msgid "Väljasaadetud kirjad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4518
+msgid "Arhiivi toolbar"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4524
+msgid "Arhiveeritud kirjad"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4541
+msgid "Grupp"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4564
+msgid "aga sellist kasutajat pole üldse olemas"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:4701
+msgid "Kasutajanimi"
+msgstr ""
+

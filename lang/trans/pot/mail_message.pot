@@ -1,0 +1,80 @@
+#: classes/applications/messenger/mail_message.aw:143
+msgid "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:248
+msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:509
+msgid "Saada"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:516
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:539
+msgid "Vasta"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:546
+msgid "Vasta/kõigile"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:553
+msgid "Edasta"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:561
+msgid "Kustutada see kiri? (tagasi ei saa!)"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:562
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:580
+msgid "Lisa kalendrisse"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:615
+msgid "Päised"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:620
+msgid "Tavaline"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:626
+msgid "Kõik päised"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:785
+msgid "err, ei leidnud kalendrit"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:802
+msgid "Toimetus lisatud<br>"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:824
+msgid "kustutatud!"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:826
+msgid "sulge aken"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:878
+msgid "saadetud<p>"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:879
+msgid "sulge aken"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:995
+msgid "----Forwarded message-----\n"
+msgstr ""
+

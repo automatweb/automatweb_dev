@@ -1,0 +1,4 @@
+#: classes/applications/backup/backup.aw:60
+msgid "backup::do_backup(): no server folder set for backup!"
+msgstr ""
+

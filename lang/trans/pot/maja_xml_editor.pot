@@ -1,0 +1,16 @@
+#: classes/applications/xml_editor/maja_xml_editor.aw:376
+msgid "---"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:380
+msgid "Ei Salvestata"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:713
+msgid "Couldn't open the file (%s) to write"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:719
+msgid "Cannot write to this file: %s"
+msgstr ""
+

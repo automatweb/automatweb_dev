@@ -1,0 +1,76 @@
+#: classes/applications/messenger/messenger_v2.aw:137
+msgid "kulla mees, sa pole omale default messengeri ju valinud?"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:211
+msgid "Kustutada?"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:212
+msgid "Kustuta märgitud kirjad"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:265
+msgid "IMAP extension not available"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:277
+msgid "IMAP sissepääs on konfigureerimata"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:328
+msgid "Login failed, check whether server name, user and password are correct.<br>"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:424
+msgid "ei"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:424
+msgid "jah"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:557
+msgid "Uus kiri"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:572
+msgid "Vii kirjad"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:586
+msgid "Vii valitud kirjad kataloogi"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:599
+msgid "Kustuta märgitud kirjad"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:600
+msgid "Kustutada märgitud kirjad?"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:699
+msgid "ükski kiri INBOXis ei matchinud ühegi ruuliga<br>"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:716
+msgid "ühtegi ruuli pole seostatud"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:798
+msgid "<strong>message with subject: %s</strong><br>"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:800
+msgid " &nbsp; &nbsp; uid = %s, matches subject rule %s, moving to %s folder<br>"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:811
+msgid "<strong>message with subject: %s</strong><br>"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:813
+msgid " &nbsp; &nbsp; matches from rule %s, moving to %s folder<br>"
+msgstr ""
+

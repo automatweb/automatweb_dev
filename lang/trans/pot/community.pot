@@ -1,0 +1,44 @@
+#: classes/applications/commune/community.aw:140
+msgid "Blokeeri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:141
+msgid "Tee moderaatoriks"
+msgstr ""
+
+#: classes/applications/commune/community.aw:144
+msgid "Tee liikmeks"
+msgstr ""
+
+#: classes/applications/commune/community.aw:145
+msgid "Tee moderaatoriks"
+msgstr ""
+
+#: classes/applications/commune/community.aw:148
+msgid "Tee liikmeks"
+msgstr ""
+
+#: classes/applications/commune/community.aw:149
+msgid "Blokeeri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:165
+msgid "Eemalda "
+msgstr ""
+
+#: classes/applications/commune/community.aw:288
+msgid "ID"
+msgstr ""
+
+#: classes/applications/commune/community.aw:293
+msgid "Kasutaja"
+msgstr ""
+
+#: classes/applications/commune/community.aw:297
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/commune/community.aw:301
+msgid "Lisamisaeg"
+msgstr ""
+

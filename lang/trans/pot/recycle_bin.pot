@@ -1,0 +1,60 @@
+#: classes/applications/recycle_bin/recycle_bin.aw:110
+msgid ""
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:116
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:122
+msgid "ID"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:130
+msgid "Tegevus"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:135
+msgid "Objektitüüp"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:142
+msgid "Kustutaja"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:150
+msgid "Kustutatud"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:162
+msgid "Vali"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:223
+msgid "Taasta"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:253
+msgid "Taasta valitud objektid"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:259
+msgid "Uuenda"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:266
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:268
+msgid "Kas olete 100% kindel et soovite valitud objekte l&otilde;plikult kustutada?"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:274
+msgid "T&uuml;hjenda"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:276
+msgid "Ettevaatust! Objektid kustutatakse j&auml;&auml;davalt!"
+msgstr ""
+
