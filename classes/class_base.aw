@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.292 2004/08/11 12:29:28 sven Exp $
+// $Id: class_base.aw,v 2.293 2004/08/17 11:17:48 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -120,6 +120,11 @@ class class_base extends aw_template
 		$this->vcl_delayed_init = array(
 			"comments" => 1,
 			"popup_search" => 1
+		);
+
+		// XXX: this is also temporary
+		$this->vcl_has_getter = array(
+			"classificator" => 1,
 		);
 		parent::init($arg);
 	}
@@ -1637,13 +1642,15 @@ class class_base extends aw_template
 			return false;
 		};
 
+		// so I can access this later
+		$val["orig_type"] = $val["type"];
+
 		if ($this->view == 1)
 		{
 			if ($val["type"] == "date_select")
 			{
 				$val["value"] = get_lc_date($val["value"]);
 			};
-			$val["orig_type"] = $val["type"];
 			$val["type"] = "text";
 		};
 
@@ -1653,14 +1660,6 @@ class class_base extends aw_template
 			$val["value"] = $val["vcl_inst"]->get_toolbar();
 		};
 	
-		/*
-		if (($val["type"] == "table") && is_object($val["vcl_inst"]))
-		{
-			$val["vcl_inst"]->sort_by();
-			$val["value"] = $val["vcl_inst"]->draw();
-		};
-		*/
-
 		if (($val["type"] == "relmanager") && is_object($val["vcl_inst"]))
 		{
 			$val["value"] = $val["vcl_inst"]->get_html();
@@ -1918,6 +1917,7 @@ class class_base extends aw_template
                                                 "obj_inst" => &$this->obj_inst,
 						"columns" => $this->columninfo,
 						"relinfo" => $this->relinfo,
+						"view" => $this->view,
                                         ));
 
 
@@ -2189,6 +2189,7 @@ class class_base extends aw_template
 							"obj_inst" => &$this->obj_inst,
 							"columns" => $this->columninfo,
 							"relinfo" => $this->relinfo,
+							"view" => $this->view,
 						));
 
 						if (is_array($res))
@@ -2203,7 +2204,20 @@ class class_base extends aw_template
 
 					continue;
 
-				}
+				};
+
+				if ($this->vcl_register[$val["orig_type"]] && isset($this->vcl_has_getter[$val["orig_type"]]))
+				{
+					$reginst = $this->vcl_register[$val["orig_type"]];
+					$ot = get_instance($reginst);
+					if (is_callable(array($ot,"get_vcl_property")))
+					{
+						$ot->get_vcl_property(array(
+							"property" => &$val,
+						));
+					};
+					continue;
+				};
 
 				if ($val["type"] == "releditor")
 				{
@@ -3390,65 +3404,10 @@ class class_base extends aw_template
 		@comment
 	
 	**/
-	function view($args = array())
+	function view($arr = array())
 	{
-		$args["view"] = 1;
-		return $this->change($args);
-		// create an instance of the class servicing the object ($this->inst)
-		// create an instance of the datasource ($this->ds)
-		// set $this->clid and $this->clfile (Do I need the latter at all?)
-		$this->init_class_base();
-		
-		$cli = get_instance("cfg/" . $this->output_client);
-		$this->cli = &$cli;
-
-		extract($args);
-
-		$this->id = $id;
-		$this->obj_inst = new object($id);
-
-		// get a list of active properties for this object
-		// I need an easy way to turn off individual properties
-		$realprops = $this->get_active_properties(array(
-				"clfile" => $this->clfile,
-				"group" => $args["group"],
-		));
-
-		// parse the properties - resolve generated properties and
-		// do any callbacks
-		$resprops = $this->parse_properties(array(
-			"properties" => &$realprops,
-		));
-
-
-		// so now I have a list of properties along with their values,
-		// and some information about the layout - and I want to display
-		// that stuff now
-
-		// here be some magic to determine the correct output client
-		// this means we could create a TTY client for AW :)
-		// actually I'm thinking of native clients and XML-RPC
-		// output client is probably the first that should be
-		// implemented.
-		$cli = get_instance("cfg/htmlpreview");
-
-		foreach($resprops as $val)
-		{
-			$cli->add_property($val);
-		};
-
-		$cli->finish_output(array());
-
-		$content = $cli->get_result();
-		$classname = get_class($this->orb_class);
-		$title = "Vaata $classname objekti " . $this->coredata["name"];
-
-		return $this->gen_output(array(
-			"parent" => $parent,
-			"content" => $content,
-			"title" => $title,
-			"orb_action" => "view",
-		));
+		$arr["view"] = 1;
+		return $this->change($arr);
 	}
 
 	function alter_property($arr)

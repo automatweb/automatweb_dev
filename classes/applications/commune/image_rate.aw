@@ -2,37 +2,51 @@
 // selle me teeme täpselt nii nagu kliendibaasi otsingu. ehk, see lihtsalt genereerib ühe vormi
 // and that's it. and that's that!
 /*
+@default table=objects
+@default field=meta
+@default method=serialize
+@default store=no
+
 @default group=general
 @default form=rate
 
-@property name type=text 
-@caption Nimi
+@property rate type=chooser store=no
+@caption Hinda
 
-@property image type=text
+@property vsbt type=submit store=no
+@caption Hinda
+
+@property image type=text store=no
 @caption Pilt
 
-@property image_comment type=text
+@property image_comment type=text store=no
 @caption Pildi allkiri
 
-@property current type=text
+@property current type=text store=no
 @caption Hinne
 
-@property rate type=chooser
-@caption Hinda
+@property name type=text store=no
+@caption Profiil
 
-@property vsbt type=submit
-@caption Hinda
+//@property profile_link type=text store=no
+//@caption Profiil
 
-@property comments type=comments
+//@property commune_profile_link type=text store=no
+//@caption Profiil kommuunis
+
+//@property add_friend_link type=text store=no
+//@caption Lisa sõber
+
+@property comments type=comments store=no
 @caption Kommentaarium
 
-@property vsbt2 type=submit
+@property vsbt2 type=submit store=no
 @caption Kirjuta
 
-@property prof_id type=hidden
+@property prof_id type=hidden store=no
 @caption Profiili id
 
-@property img_id type=hidden
+@property img_id type=hidden store=no
 @caption Pildi id
 
 @forminfo rate onload=init_rate onsubmit=test method=post
@@ -45,36 +59,87 @@ class image_rate extends class_base
 		$this->init();
 	}
 
+	function callback_on_load($arr)
+	{
+		//echo " callback_on_load:";
+	}
+
+	function callback_pre_edit($arr)
+	{
+		//echo " callback_pre_edit:";
+	}
+
+	function test($arr)
+	{
+		//echo "siia siis ei tulegi? :(";
+	}
+
 	function init_rate($arr)
 	{
 		$this->inst->kala = "tursk";
-		$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status = 2 ORDER BY rand()";
-                $this->db_query($q);
-                $row = $this->db_next();
+		$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status > 0";
+		$this->db_query($q);
+		
+		while($value = $this->db_next())
+		{
+		//arr($value);
+			$var[] = $value;
+		}
+		while(!is_oid($row["img_id"]))
+		{
+			shuffle($var);
+			$row = $var[0];
+		}
+		//	$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = //objects.oid) WHERE objects.status > 0 ORDER BY rand() LIMIT 1";
+		// see võtab praegu kõik süsteemis olevad kommuunide poolt tekitatud pildid,
+		// ta ei arvesta $commune->prop("profiles_folder")-ga
+		/*
+		$q2 = "select count(*) as total from profile2image left join objects on (profile2image.img_id=objects.oid) where objects.status=2";
+		$q2 = $this->db_query($q2);
+		$q3 = $this->db_next();
+		echo $q3["total"]."<br>";
+		$row = $this->db_fetch_row($q);
+		$this->db_query($q);
+		$row = $this->db_next();
+		echo $q;
+		$w = mysql_query($q);
+		$row = mysql_fetch_assoc($w);
+		
+		$w = mysql_query($q,$newqhandle);
+		while($row2 = mysql_fetch_assoc($w))
+		{
+			arr($row);
+			$row=$row2;
+		}
+		mysql_close($newqhandle);
+		*/
+		// see siin on VÄGA AJUTINE workaround :|
+		//for($i=1;$i<=2;$i++)
+		//{
+			//$row = $this->db_fetch_row($q);
+		//}
+
+		// müstika: _admin_keskkonnas!!_ hakkab mõnikord üks ja sama pilt korduma - siit saabub kogu aeg üks ja sama kirje.
+		//arr($row); echo time();
+		// kas on tegemist mingi query cachemisega?
 
 		$this->inst->profile_data = new object($row["prof_id"]);
 
 		// figure out person data
-		$conns = $this->inst->profile_data->connections_to(array(
-			"type" => 14,
-		));
-
-		if (sizeof($conns) > 0)
+		if ($conn = reset($this->inst->profile_data->connections_to(array("type" => 14))))
 		{
-			$c1 = reset($conns);
-			$this->inst->person_data = $c1->from();
+			$this->inst->person_data = $conn->from();
 		}
 		else
-		{
-			$this->inst_person_data = new object();
+		{  
+			//$this->inst_person_data = new object(); //mis see siin on?
+			$this->inst->person_data = new object();
 		};
 
 		$this->inst->image_data = new object($row["img_id"]);
-
 		$rt = get_instance(CL_RATE);
 
 		$this->inst->current = $rt->get_rating_for_object($row["img_id"]);
-
 	}
 
 	function get_property($arr)
@@ -83,13 +148,54 @@ class image_rate extends class_base
 		switch($prop["name"])
 		{
 			case "name":
-				// this is profile object, I need the person object
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("show_profile", array("id" => $this->person_data->id()), "commune"),
-					"caption" => $this->person_data->prop("firstname") . " " . $this->person_data->prop("lastname")
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $GLOBALS["id"],
+						"profile" => $this->profile_data->id(),
+						"group" => "friend_details",
+					), "commune"),
+					"caption" => $this->person_data->prop("firstname") . " " . $this->person_data->prop("lastname"),
 				));
 				break;
-
+			// all this crap get's out of here, rating should be only for rating, misc things
+			// go under profile view -- ahz
+			/*
+			case "profile_link":
+				$prop["value"] = $this->person_data->prop("firstname") . " " . $this->person_data->prop("lastname").
+					" " . html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"profile" => $this->profile_data->id(),
+						"group" => "friend_details",
+					), "commune"),
+					"caption" => "profiil",
+				));
+				break;
+			case "commune_profile_link":
+				$prop["value"] = $this->person_data->prop("firstname") . " " . $this->person_data->prop("lastname").
+					" " . html::href(array(
+					"url" => $this->mk_my_orb("commaction", array(
+						"id" => $GLOBALS["id"],
+						"profile" => $this->profile_data->id(),
+						"commact" => "profile",
+						"group" => "friends",
+					), "commune"),
+					"caption" => "profiil",
+				));
+				break;
+			// THIS should certainly NOT be here, goes under profile view -- ahz
+			case "add_friend_link":
+				$params = array(
+					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
+					"profile" => $this->profile_data->id(),
+					"commact" => "add_friend",
+					"group" => "friends",
+				);
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("commaction", $params, "commune"),
+					"caption" => "lisa sõprade hulka",
+				));
+				break;
+			*/
 			case "image":
 				$i = get_instance(CL_IMAGE);
 				$imgdata = $i->get_image_by_id($this->image_data->id());
@@ -120,6 +226,7 @@ class image_rate extends class_base
 
 			case "img_id":
 				$prop["value"] = $this->image_data->id();
+				//echo $prop["value"];
 				break;
 
 			case "current":
@@ -127,13 +234,15 @@ class image_rate extends class_base
 				break;
 
 			case "comments":
-				$prop["use_parent"] = $this->image_data->id();
+				//var_dump(aw_global_get("uid")); //mitte sisse logituna: bool(false)
+				$id = $this->image_data->id();
+				$prop["use_parent"] = $id;
 				break;
-
 
 		};
 		return PROP_OK;
 	}
+
 
 };
 ?>

@@ -50,14 +50,17 @@
             <caption>Mitu tulemust lehel</caption>
       </property>
       <property>
-            <name>static_gen_repeater</name>
+            <name>reledit</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>static</group>
-            <type>relpicker</type>
+            <type>releditor</type>
             <reltype>RELTYPE_REPEATER</reltype>
-            <caption>Vali kordus, millega tehakse staatilist koopiat otsingu jaoks</caption>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
+            <store>no</store>
+            <caption>Seos</caption>
       </property>
       <property>
             <name>static_gen_link</name>

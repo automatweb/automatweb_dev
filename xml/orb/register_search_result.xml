@@ -3,4 +3,3 @@
 	<class name="register_search_result" folder="applications/register" extends="class_base">
 	</class>
 </orb>
-		

@@ -236,7 +236,7 @@ class object_tree extends _int_obj_container_base
 	function _int_load($filter)
 	{
 		// load using only lists, not datasource. funky.
-		if (!$filter["parent"])
+		if (false && !$filter["parent"])
 		{
 			error::throw(array(
 				"id" => ERR_PARAM,
@@ -244,7 +244,10 @@ class object_tree extends _int_obj_container_base
 			));
 		}
 
-		$filter["parent"] = $GLOBALS["object_loader"]->param_to_oid($filter["parent"]);
+		if ($filter["parent"])
+		{
+			$filter["parent"] = $GLOBALS["object_loader"]->param_to_oid($filter["parent"]);
+		}
 
 		$this->_int_init_empty();
 		global $awt;

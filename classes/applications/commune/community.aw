@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.1 2004/06/25 08:51:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.2 2004/08/17 11:17:48 ahti Exp $
 // community.aw - Kogukond 
 /*
 
@@ -41,18 +41,21 @@ class community extends class_base
 	//////
 	// class_base classes usually need those, uncomment them if you want to use them
 
-	/*
+	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case 'forum':
+				
+				break;
 
 		};
 		return $retval;
 	}
-	*/
+	
 
 	/*
 	function set_property($arr = array())

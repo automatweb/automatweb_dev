@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.9 2004/07/07 18:23:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.10 2004/08/17 11:17:48 ahti Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -118,13 +118,14 @@ class forum_comment extends class_base
 	// !Returns a list of comments
 	function get_comment_list($arr)
 	{
+		//arr($arr);
 		$clist = new object_list(array(
 			"parent" => $arr["parent"],
 			"class_id" => $this->clid,
 			"period" => $arr["period"],
 			"sort_by" => "created",
 		));
-
+		//arr($clist);
 		$retval = array();
 		foreach($clist->arr() as $comment)
 		{

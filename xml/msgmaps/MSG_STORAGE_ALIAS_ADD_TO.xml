@@ -6,18 +6,23 @@
       <param>CL_OBJECT_CHAIN</param>
 </num_0>
 <num_1>
+      <class>applications/personnel_management/personnel_management_job_offer</class>
+      <func>on_connect_to_sector</func>
+      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
+</num_1>
+<num_2>
       <class>calendar/cal_event</class>
       <func>on_add_alias</func>
       <param>CL_CAL_EVENT</param>
-</num_1>
-<num_2>
+</num_2>
+<num_3>
       <class>core/users/group</class>
       <func>on_add_alias_for_group</func>
       <param>CL_GROUP</param>
-</num_2>
-<num_3>
+</num_3>
+<num_4>
       <class>formgen/form_entry</class>
       <func>on_add_alias</func>
       <param>CL_FORM_ENTRY</param>
-</num_3>
+</num_4>
 </xml>

@@ -1,49 +1,413 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.2 2004/06/16 08:50:06 ahti Exp $
-// commune.aw - Kommuun 
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.3 2004/08/17 11:17:48 ahti Exp $
+// commune.aw - Kommuun << i will burn in hell for this blasphemy....
 /*
 
 @classinfo syslog_type=ST_COMMUNE relationmgr=yes layout=boxed
+-------------------------------------------------------------------------------------
 
-@property join_obj type=relpicker reltype=RELTYPE_JOIN_OBJ method=serialize field=meta group=general table=objects
-@caption Liitumisvorm
+@default group=general
+@default table=objects
+@default field=meta
+@default method=serialize
+-------------------------------------------------------------------------------------
 
-@property my_profile type=callback callback=callback_my_profile no_caption=1 group=profile store=no
+@property locations type=callback callback=callback_get_locations no_caption=1 group=locations
+@caption Asukohad
+
+----------------------- MINA --------------------------
+
+@groupinfo me caption="Mina" submit=no
+
+----------------------- profiil --------------------------
+
+@groupinfo profile caption="Profiil" parent=me tabgroup=left submit=no
+
+
+@groupinfo profile_view caption="Vaata" parent=profile tabgroup=left submit=no
+
+@property profile_view type=callback callback=callback_show_profile group=profile_view no_caption=1 store=no
+@caption Vaata profiili
+
+
+@groupinfo profile_change caption="Muuda" parent=profile tabgroup=left
+
+//@property my_profile_toolbar type=toolbar no_caption=1 store=no
+//@caption Toolbar
+
+@property my_profile type=callback callback=callback_my_profile no_caption=1 group=profile_change store=no
 @caption Minu profiil
+
+
+@groupinfo all_profiles caption="Kõik profiilid" parent=profile tabgroup=left submit=no
+
+@property profile_toolbar type=toolbar no_caption=1 group=all_profiles store=no
+@caption Profiilide haldus
+
+@property my_profiles type=table group=all_profiles no_caption=1 store=no
+@caption Kõik minu profiilid
+
+
+//@groupinfo profile_v parent=profile tabgroup=left submit=no
+
+//@property profile_v type=callback callback=callback_show_profile group=profile_v no_caption=1
+//@caption Vaata profiili
+
+//@groupinfo add_profile caption="Lisa uus" parent=profile tabgroup=left
+
+//@property my_profile_switch type=text no_caption=1 group=profile
+//@caption Minu profiili vahetaja
+
+//@groupinfo active_profile caption="Aktiivne" parent=profile tabgroup=left submit=no
+//@property fakex type=text group=active_profile no_caption=1
+
+//@groupinfo view_profile caption="Profiili vaade" parent=friends tabgroup=left submit=no
+//@property view_profile type=callback callback=callback_show_profile group=view_profile no_caption=1
+//@caption Vaata profiili
+
+----------------------- pildid --------------------------
+
+@groupinfo images caption="Pildid" parent=me tabgroup=left
+
+
+@groupinfo my_images caption="Minu pildid" parent=images tabgroup=left
 
 @property my_images type=callback callback=callback_my_images no_caption=1 group=my_images store=no
 @caption Minu pildid
 
-@property rateform type=form sclass=applications/commune/image_rate sform=rate group=rate store=no
-@caption Hindamine2
 
-@property locations type=callback callback=callback_get_locations no_caption=1 group=locations store=no
-@caption Asukohad
+@groupinfo switch_profile caption="Vaheta profiili" parent=images tabgroup=left submit=no
 
-@groupinfo profile caption="Minu profiil"
-@groupinfo my_images caption="Minu Pildid"
-@groupinfo rate caption="Hindamine" no_submit=1
-@groupinfo locations caption="Sisuobjektid"
-@groupinfo messages caption="Teated"
-@groupinfo newmessage caption="Uus teade" parent=messages
-@groupinfo inbox caption="Inbox" parent=messages
-@groupinfo outbox caption="Outbox" parent=messages
+@property switch_profile type=table group=switch_profile no_caption=1 store=no
+@caption Vaheta profiili piltide jaoks
 
-@property newmessage type=form store=no group=newmessage sclass=applications/quickmessage/quickmessage 
-@caption Uue teate kirjutamine
+@groupinfo show_image_comments parent=images tabgroup=left submit=no
 
-@property inbox type=text store=no group=inbox
+@property image_comments_toolbar type=toolbar no_caption=1 group=show_image_comments store=no
+@caption Kommentaaride haldus
+
+@property show_image_comments type=table group=show_image_comments store=no no_caption=1 store=no
+@caption Pildi kommentaarid
+
+----------------------- sätted --------------------------
+
+@groupinfo settings caption="Sätted" parent=me tabgroup=left submit=no
+
+
+@groupinfo browsing_conditions caption="Sirvimise sätted" parent=settings tabgroup=left
+
+@property head1 type=text subtitle=1 group=browsing_conditions store=no
+@caption Muuda kasutajate sirvimise sätteid
+
+@property browsing_conditions type=table group=browsing_conditions no_caption=1 store=no
+
+
+@groupinfo view_conditions caption="Kuvamise sätted" parent=settings tabgroup=left
+
+@property head2 type=text subtitle=1 group=view_conditions store=no
+@caption Muuda kuvamise sätteid
+
+@property view_conditions type=table group=view_conditions no_caption=1 store=no
+
+
+@groupinfo message_conditions caption="Teadete sätted" parent=settings tabgroup=left
+
+@property head3 type=text subtitle=1 group=message_conditions store=no
+@caption Muuda teadete saamise/saatmise sätteid
+
+@property message_conditions type=table group=message_conditions no_caption=1 store=no
+
+ ----------------------- listid --------------------------
+
+@groupinfo lists caption="Listid" parent=me tabgroup=left submit=no
+
+
+@groupinfo friend_list caption="Sõbralist" parent=lists tabgroup=left submit=no
+
+@property head4 type=text subtitle=1 group=friend_list store=no
+@caption Sõbralist
+
+@property friend_list_toolbar type=toolbar no_caption=1 group=friend_list store=no
+@caption Sõprade haldus
+
+@property friend_list type=table group=friend_list no_caption=1 store=no
+@caption Sõbralist
+
+
+@groupinfo ignored_list caption="Ignoreeritute list" parent=lists tabgroup=left submit=no
+
+@property head5 type=text subtitle=1 group=ignored_list store=no
+@caption Ignoreeritute list
+
+@property ignored_list_toolbar type=toolbar no_caption=1 group=ignored_list store=no
+@caption Ignoreeritute haldus
+
+@property ignored_list type=table group=ignored_list no_caption=1 store=no
+@caption Ignoreeritute list
+
+
+@groupinfo blocked_list caption="Blokeeritute list" parent=lists tabgroup=left submit=no
+
+@property head6 type=text subtitle=1 group=blocked_list store=no
+@caption Blokeeritute list
+
+@property blocked_list_toolbar type=toolbar no_caption=1 group=blocked_list store=no
+@caption Blokeeritute haldus
+
+@property blocked_list type=table group=blocked_list no_caption=1 store=no
+@caption Blokeeritute list
+
+
+@groupinfo l_switch_profile caption="Vaheta profiili" parent=lists tabgroup=left submit=no
+
+@property l_switch_profile type=table group=l_switch_profile no_caption=1 store=no
+@caption Vaheta profiili listide jaoks
+
+@groupinfo profile_search parent=lists tabgroup=left submit=no caption="Otsing"
+
+//@property profile_search type=form sclass=cfg/cb_search sform=cb_search group=profile_search store=no
+//@caption Profiilide otsing
+
+@property profile_search type=callback callback=callback_profile_search group=profile_search no_caption=1 store=no
+@caption Profiili otsing
+
+----------------------- kommentaarid --------------------------
+
+@groupinfo comments caption="Kommentaarid" parent=me tabgroup=left
+
+
+@groupinfo prof_comments caption="Kommentaarid" parent=comments tabgroup=left submit=no
+
+//@property prof_comments type=comments group=prof_comments store=no
+
+@property prof_comments_toolbar type=toolbar no_caption=1 group=prof_comments store=no
+@caption Kommentaaride toolbar
+
+@property prof_comments type=table group=prof_comments no_caption=1 store=no
+@caption Kommentaarid
+
+
+@groupinfo c_switch_profile caption="Vaheta profiili" parent=comments tabgroup=left submit=no
+
+@property c_switch_profile type=table group=c_switch_profile no_caption=1 store=no
+@caption Vaheta profiili kommentaaride jaoks
+
+----------------------- horoskoop --------------------------
+
+@groupinfo horoscope caption="Horoskoop" parent=me tabgroup=left submit=no
+
+@property fake10 type=text group=horoscope store=no
+@caption Horoskoop
+
+----------------------- sobivad kasutajad --------------------------
+
+@groupinfo matching_profiles caption="Sobivad kasutajad" parent=me tabgroup=left submit=no
+
+@property fake1 type=text group=matching_profiles store=no
+@caption Sobivad kasutajad
+
+----------------------- MINA : END --------------------------
+
+----------------------- SÕBRAD --------------------------
+
+@groupinfo friends caption="Sõbrad" submit=no
+
+
+@groupinfo prof_friends caption="Minu sõbrad" parent=friends tabgroup=left submit=no
+
+@property friends_panel type=text group=prof_friends no_caption=1 store=no
+@caption Sõbrad
+
+///@property friends_panel type=callback callback=callback_friends_panel group=prof_friends no_caption=1 store=no
+
+
+@groupinfo address_book caption="Aadressiraamat" parent=friends tabgroup=left submit=no
+
+@property address_book_toolbar type=toolbar no_caption=1 group=address_book store=no
+@caption Aadressiraamatu toolbar
+
+@property address_book type=table group=address_book no_caption=1 store=no
+@caption Aadressiraamat
+
+
+
+@groupinfo friend_groups caption="Sõbragrupid" parent=friends tabgroup=left submit=no
+
+@property friend_groups_head type=text subtitle=1 group=friend_groups store=no
+
+@property friend_groups_toolbar type=toolbar no_caption=1 group=friend_groups store=no
+@caption Sõbragruppide toolbar
+
+@property friend_groups type=table group=friend_groups no_caption=1 store=no
+@caption Sõbragrupid
+
+
+@groupinfo search_n_add caption="Otsi ja lisa" parent=friends tabgroup=left submit=no
+@property fake4 type=text group=search_n_add store=no
+
+
+@groupinfo f_switch_profile caption="Vaheta profiili" parent=friends tabgroup=left submit=no
+
+@property f_switch_profile type=table group=f_switch_profile no_caption=1 store=no
+@caption Vaheta profiili sõprade jaoks
+
+
+@groupinfo friend_details parent=friends tabgroup=left 
+//submit=no
+
+@property friend_details type=callback callback=callback_friend_details group=friend_details no_caption=1 store=no
+@caption Vaata profiili
+
+@property profile_comments type=comments group=friend_details store=no
+
+//@property friends_panel type=callback callback=callback_friends_panel group=prof_friends store=no
+//@caption Sõbrad
+//@property friend_list_with_images type=text group=prof_friends no_caption=1 store=no
+//@caption Sõprade list piltidega
+
+----------------------- SÕBRAD : END --------------------------
+
+----------------------- HINDAMINE --------------------------
+
+@groupinfo ratings caption="Hindamine"
+
+
+@groupinfo rate caption="Hinda" no_submit=1 parent=ratings tabgroup=left
+
+@property rate_content type=callback callback=callback_rate_content group=rate no_caption=1 store=no
+@caption Hindamine või vaatamine
+
+
+@groupinfo top_men caption="Top-mehed" parent=ratings tabgroup=left submit=no
+
+@property top_men type=callback callback=callback_top_men group=top_men no_caption=1 store=no
+@caption Top-mehed list
+
+
+@groupinfo top_women caption="Top-naised" parent=ratings tabgroup=left submit=no
+
+@property top_women type=callback callback=callback_top_women group=top_women no_caption=1 store=no
+@caption Top-naised list
+
+
+@groupinfo last_added caption="Viimati lisatud" parent=ratings tabgroup=left submit=no
+
+@property last_added type=callback callback=callback_last_added group=last_added no_caption=1 store=no
+@caption Viimati lisatud pildid
+
+//@property rateform type=form sclass=applications/commune/image_rate sform=rate group=rate store=no
+//@caption Hindamine2
+
+----------------------- HINDAMINE : END --------------------------
+
+----------------------- POSTKAST --------------------------
+
+@groupinfo messages caption="Postkast"
+@groupinfo inbox caption="Inbox" submit=no parent=messages tabgroup=left
+@groupinfo outbox caption="Outbox" submit=no parent=messages tabgroup=left
+@groupinfo saved caption="Salvestatud" submit=no parent=messages tabgroup=left
+@property fake5 type=text group=saved store=no
+
+@groupinfo newmessage caption="Uus teade" parent=messages tabgroup=left
+
+@property inbox type=text store=no group=inbox no_caption=1 store=no
 @caption Inbox
 
-@property outbox type=text store=no group=outbox
+@property outbox type=text store=no group=outbox no_caption=1 store=no
 @caption Outbox
 
+@property newmessage type=form sclass=applications/quickmessage/quickmessage group=newmessage store=no
+@caption Uue teate kirjutamine
+
+----------------------- POSTKAST : END --------------------------
+
+----------------------- FOORUM --------------------------
+
+@groupinfo forumtab caption="Foorum" submit=no
+
+
+@groupinfo forum caption="Foorum" parent=forumtab submit=no tabgroup=left
+
+@property forum type=text group=forum no_caption=1 store=no
+@caption Foorum
+
+
+@groupinfo my_forum_topics caption="Minu foorumid" parent=forumtab submit=no tabgroup=left
+
+@property my_forum_topics type=text group=my_forum_topics no_caption=1 store=no
+@caption Minu foorumid
+
+
+@groupinfo forum_settings caption="Sätted" parent=forumtab submit=no tabgroup=left
+
+@property forum_settings type=text group=forum_settings no_caption=1 store=no
+@property Sätted
+
+----------------------- FOORUM : END --------------------------
+
+----------------------- KOGUKONNAD --------------------------
+
+@groupinfo communities caption="Kogukonnad"
+@groupinfo my_communities caption="Minu kogukonnad" parent=communities tabgroup=left submit=no
+@property fake7 type=text group=my_communities store=no
+
+@groupinfo categories caption="Kategooriad" parent=communities tabgroup=left submit=no
+@property fake8 type=text group=categories store=no
+
+----------------------- KOGUKONNAD : END --------------------------
+
+----------------------- STATISTIKA --------------------------
+
+@groupinfo statistics caption="Statistika" submit=no
+@property fake9 type=text group=statistics store=no
+
+----------------------- STATISTIKA : END --------------------------
+
+----------------------- LIITUMINE --------------------------
+
 @groupinfo join caption="Liitumine"
-@property join type=callback group=join  callback=callback_get_join store=no
+@groupinfo locations caption="Sisuobjektid"
 
+@property join type=callback group=join callback=callback_get_join store=no
+@caption Liitumine
 
-@default table=objects
-@default group=general
+----------------------- LIITUMINE : END --------------------------
+
+------------------- properties -------------------------
+
+@property join_obj type=relpicker reltype=RELTYPE_JOIN_OBJ method=serialize field=meta group=general table=objects
+@caption Liitumisvorm
+
+@property cfgmanager type=relpicker reltype=RELTYPE_CFG_MANAGER method=serialize field=meta group=general table=objects
+@caption Seadete haldur
+
+------------------- properties : end -------------------------
+
+--------- folders ----------------------
+
+@property persons_folder type=relpicker reltype=RELTYPE_PERSONS_FOLDER method=serialize field=meta group=general table=objects 
+@caption Isikute kataloog
+
+@property communities_folder type=relpicker reltype=RELTYPE_COMMUNITIES_FOLDER method=serialize field=meta group=general table=objects 
+@caption Kogukondade kataloog
+
+@property organizations_folder type=relpicker reltype=RELTYPE_ORGANIZATIONS_FOLDER method=serialize field=meta group=general table=objects 
+@caption Organisatsioonide kataloog
+
+@property profiles_folder type=relpicker reltype=RELTYPE_PROFILES_FOLDER method=serialize field=meta group=general table=objects 
+@caption Profiilide kataloog
+
+--------- folders : end ----------------------
+
+--------- reltypes --------------------------
+
+//@siia veel igast muid reltype'e, moderaator, sõbragrupid,kogukondade kategooriad, kogukondade otsing, 3 vaadet
+
+@reltype PROF_SEARCH value=77 clid=CL_CB_SEARCH
+@caption profiilide otsing
+
+@reltype FORUM value=16 clid=CL_FORUM_V2
+@caption Kommuuni foorum
 
 @reltype CONTENT value=1 clid=CL_PROMO,CL_MENU_AREA
 @caption Sisuelement
@@ -54,36 +418,269 @@
 @reltype JOIN_OBJ value=2 clid=CL_JOIN_SITE
 @caption liitumisvorm
 
+@reltype CFG_MANAGER value=15 clid=CL_CFGMANAGER
+@caption seadete haldur
+
+@reltype VAR_META value=19 clid=CL_META
+@caption isikute kataloog
+
+@reltype USER_GROUPS value=20 clid=CL_GROUP
+@caption kasutajagrupid
+
+--------- reltypes : end --------------------------
+
+--------- folders ----------------------
+
+@reltype PERSONS_FOLDER value=11 clid=CL_MENU
+@caption isikute kataloog
+
+@reltype COMMUNITIES_FOLDER value=12 clid=CL_MENU
+@caption kogukondade kataloog
+
+@reltype ORGANIZATIONS_FOLDER value=13 clid=CL_MENU
+@caption organisatsioonide kataloog
+
+@reltype PROFILES_FOLDER value=14 clid=CL_MENU
+@caption profiilide kataloog
+
+--------- folders : end ----------------------
 */
 
 class commune extends class_base
 {
+	var $common;
 	function commune()
 	{
 		$this->init(array(
+		
 			"clid" => CL_COMMUNE,
 			"tpldir" => "applications/commune/commune"
 		));
 		
-		$this->fields_from_person = array("firstname","lastname","birthday","gender");
-		$this->fields_from_profile = array("user_blob2","user_check2","user_blob1","user_text5","user_text4","user_field1","user_text1","user_text3","user_check1","user_field2","user_text2","height","weight","hair_type","sexual_orientation","eyes_color","hair_color","alcohol","tobacco","body_type");
+		$this->common = array();
+		
+		$this->fields_from_person = array(
+			"firstname",
+			"lastname",
+			"gender",
+			"nickname",
+			"social_status",
+		);
+		$this->change_fields_from_profile = array(
+			"user_field1",
+			"sexual_orientation",
+			"height",
+			"weight",
+			"body_type",
+			"hair_color",
+			"hair_type",
+			"eyes_color",
+			"tobacco",
+			"alcohol",
+			"user_text1",
+			"user_text3",
+			"user_text2",
+			"user_text5",
+			"user_blob2",
+			"user_blob1",
+			"user_text4",
+			"occupation",
+			"occupation",
+			"user_field2",
+			"user_check1",
+			"user_check2",
+		);
+		$this->show_fields_from_profile = array(
+			"user_field1",
+			"age",
+			"sexual_orientation",
+			"height",
+			"weight",
+			"body_type",
+			"hair_color",
+			"hair_type",
+			"eyes_color",
+			"tobacco",
+			"alcohol",
+			"user_text1",
+			"user_text3",
+			"user_text2",
+			"user_text5",
+			"user_field2",
+			"user_blob2",
+			"user_text4",
+			"user_blob1",
+			"occupation",
+			"user_field2",
+			"user_blob2",
+		);
+		$this->msg_vars = array(
+			"pcom" => array(false,false,"Minu piltidele lisatud kommentaarid"),
+			"pacpt" => array(false,false,"Pildi aktsepteerimine moderaatori poolt"),
+			"pacom" => array(false,false,"Minu profiilile lisatud kommentaarid"),
+			"nfriend" => array(false,false,"Uus sõber"),
+			"avgr" => array(false,false,"Keskmise hinde saatmine iga pildi kohta 1 kord päevas"),
+			"fpa" => array(false,false,"Minu foorumipostitustele vastamised"),
+			"nfm" => array(true,true,"mittesõpradelt laekunud teated"),
+			"fm" => array(true,true,"sõpradelt laekunud teated")
+		);
 	}
-	
 	function callback_on_load($arr)
 	{
-		//$this->cfgmanager = 701;
+		//echo aw_global_get("uid");
+		//arr($arr);
+		// $arr["obj_inst"] pole määratud siin...
+		$this->common["id"] = $arr["request"]["id"];
+		$commune_o = obj($arr["request"]["id"]); //miks ma seda nii teen? sest arr sisaldab ainult 'request'-i
+		/*
+		$cfgmanager_id = $commune_o->prop('cfgmanager');
+		if (isset($cfgmanager_id))
+		{
+			$this->cfgmanager = $cfgmanager_id;
+		}
+		*/
+		$this->common["obj_inst"] = $commune_o;
+		$this->common["profile"] = false;
+		$this->common["my_profile"] = false;
+		$this->common["f_group"] = false;
+		if ($this->check_rights($arr["request"]["profile"]))
+		{
+			$this->common["profile"] = obj($arr["request"]["profile"]);
+		}
+		if ($this->check_rights($arr["request"]["my_profile"]))
+		{
+			$this->common["my_profile"] = obj($arr["request"]["my_profile"]);
+		}
+		if ($this->check_rights($arr["request"]["f_group"]))
+		{
+			$this->common["f_group"] = $arr["request"]["f_group"];
+		}
 	}
+	function callback_mod_reforb($arr)
+	{
+		if($this->common["profile"])
+		{
+			$arr["profile"] = $this->common["profile"]->id();
+		}
+		if($this->common["my_profile"])
+		{
+			$arr["my_profile"] = $this->common["my_profile"]->id();
+		}
+		if($this->common["f_group"])
+		{
+			$arr["my_profile"] = $this->common["f_group"];
+		}
+		//arr($arr);
+		
+		// do a thing or few -- ahz
+	}
+	function callback_post_save($arr)
+	{
+		if($this->common["my_profile"])
+		{
+			$params = array(
+				"group" => $arr["request"]["group"],
+				"my_profile" => $this->common["my_profile"]->id(),
+			);
+			if($this->common["profile"])
+			{
+				$params["profile"] = $this->common["profile"]->id();
+			}
+			if($this->common["f_group"])
+			{
+				$params["f_group"] = $this->common["f_group"];
+			}
+			/*
+			return $this->mk_comm_orb(array(
+				"group" => $arr["request"]["group"],
+				"profile" => $this->common["profile"]->id(),
+			));
+			*/
+			// kids, don't try this at home -- ahz
+			header("location:".$this->mk_comm_orb($params));
+			die();
+		}
+		//arr($this->common["profile"]);
+	}
+	function callback_pre_edit($arr)
+	{
+		//echo dbg::process_backtrace(debug_backtrace());
+		//arr($arr);
+		// sellega on mingi jama?
+		//$this->common["arr"] = $arr;
+		//unset($arr['request']['id']);
+		//$this->common["obj_inst"] = $arr["obj_inst"];
 
+		// siin toimub request analüüs ja otsustatakse mis actioneid näidata
+		// ja kelle pilti näidata ja mida paremal näidata
+
+		//a little ORB here:
+		//arr($arr);
+		//debug:
+		//$profile_id = $arr["request"]["profile"];
+		//echo 'is_oid($profile_id{'.$profile_id.'}):';
+		//var_dump( is_oid($profile_id));
+		//echo ' $this->can("view", $profile_id)):';
+		//var_dump( $this->can("view", $profile_id));
+		
+		//kord peab üks, kord teine.. lisaks ei tohi olla: acl.no_check = 1; testi ka 4 eelnevat rida..
+		/*
+		if ($profile_id = $arr["request"]["profile"] and $this->can("view", $profile_id) and is_oid($profile_id))
+		{
+			$this->common["profile"] = obj($profile_id);
+		}*/
+		/* mingi keerulisem värk sellega, tegeleb hiljem, kui vajadust
+		if($person_o = $this->get_person())
+		{
+			if($profile_id2 = $arr["request"]["my_profile"] and is_oid($profile_id2) and $temp_obj = obj($profile_id2) and $temp_obj->is_connected_to(array(
+			"type" => "RELTYPE_PERSON",
+			"from" => 1,
+			)))
+			{
+				$this->common["my_profile"] = $temp_obj;
+			}
+		}
+		*/
+		$commune_view_actions = array("profile","friends","communities","pictures");
+		//if (method_exists($this, "show_".$commact))
+		if ($commact = $arr["request"]["commact"] and in_array($commact, $commune_view_actions))
+		{
+			$this->common["commact"] = $commact;
+		}
+		//preparings to show some particular tab:
+		switch ($arr["request"]["group"])
+		{
+			case "rate":
+			case "ratings":
+				//shouldn't be used here, unnecessary coupling with other class
+				//$ro = aw_global_get("rated_objs"); //set by rate::add_rate() .. $ro[$oid] = $rating;
+				//var_dump($ro); //false rsk, ei saa kätte - ilmselt jälle see sessioonide bug.
+				//$last_rated = end($ro);
+				$last_rated_oid = aw_global_get("last_rated_oid");
+				//echo 'last_rated:'.$last_rated_oid;//.'='.key($last_rated).' ';
+				//seda ei peagi ju siin tegema, see võtab, kel vaja näidata,
+				//siin on tarvis ainult määrata, et "seda" mis näitab, näidataks.
+			break;
+		}
+		//arr($this->common);
+		//echo dbg::process_backtrace(debug_backtrace());
+	}
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
-                $retval = PROP_OK;
-                switch($prop["name"])
-                {
-                        case "tabpanel":
-                                $logos = $arr["obj_inst"]->connections_from(array(
-                                        "type" => "RELTYPE_LAYOUT_LOGO",
-                                ));
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "fake10":
+				$prop["value"] = "ma veel teen sulle horoskoopi, neeger";
+				break;
+			case "tabpanel":
+				if (is_oid($arr["obj_inst"]->id()))
+				{
+					$logos = &$arr["obj_inst"]->connections_from(array(
+						"type" => "RELTYPE_LAYOUT_LOGO",
+					));
+				}
 
 				if (sizeof($logos) > 0)
 				{
@@ -95,168 +692,2237 @@ class commune extends class_base
 						"logo_image" => $t->get_url_by_id($first_logo->prop("to")),
 					));
 				};
-
+				
+				$prop["vcl_inst"]->vars(array(
+					"context_panel" => $this->render_context_panel($arr),
+					"action_menu" => '',//$this->render_actions($arr),
+				));
+				break;
 			case "inbox":
 				$prop["value"] = $this->create_inbox($arr);
 				break;
-			
+			case "prof_comments_toolbar":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name"		=> "hide",
+					"tooltip"	=> "Muuda valitud kommentaaride staatust",
+					"img"		=> "import.gif",
+					"action"	=> "hide_prof_com",
+				));
+				$tb->add_button(array(
+            		"name" => "delete",
+            		"tooltip" => "Kustuta valitud kommentaarid",
+            		"img" => "delete.gif",
+            		"action" => "delete_prof_com",
+					"confirm" => "soovid tõesti valitud kommentaarid kustutada?",
+        		));
+				break;
+			case "friend_groups_toolbar":
+				$tb = &$prop["vcl_inst"];
+				if($this->common["f_group"])
+				{
+					// this i gotta think through, to avoid confusion -- ahz
+				}
+				break;
+			case "friend_groups_head":
+				if($this->common["f_group"])
+				{
+					$obj = obj($this->common["f_group"]);
+					$groupname = $obj->name();
+				}
+				else
+				{
+					$groupname = "üldine";
+				}
+				$prop["value"] = $groupname;
+				break;
+			case "friend_groups":
+				$this->show_friend_groups($arr);
+				break;
+			case "address_book_toolbar":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+            		"name" => "donothing",
+            		"tooltip" => "ära tee midagi",
+            		"img" => "refresh.gif",
+            		"url" => "javascript:void(0);"
+        		));
+				break;
+			case "address_book":
+				$t = &$prop["vcl_inst"];
+				$t->define_field(array(
+					"name" => "crap",
+					"caption" => "Suva",
+					"sortable" => "1",
+				));
+				$t->define_data(array(
+					"crap" => "siin ei ole kala",
+				));
+				break;
+			case "blocked_list_toolbar":
+			case "ignored_list_toolbar":
+			case "friend_list_toolbar":
+				$vars = array(
+					"blocked_list_toolbar" => array(
+						"blokeeritute ", "remove_blocked", "blokeeritavaid", "blocked",
+					),
+					"ignored_list_toolbar" => array(
+						"ignoreeritute ", "remove_ignored", "ignoreeritavaid", "ignored",
+					),
+					"friend_list_toolbar" => array(
+						"sõbra", "remove_friend", "sõpru", "friend",
+					),
+				);
+				$prop["name"];
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+            		"name" => "delete",
+            		"tooltip" => "Eemalda valitud ".$vars[$prop["name"]][0]."listist",
+            		"img" => "delete.gif",
+            		"action" => $vars[$prop["name"]][1],
+					"confirm" => "Soovid tõesti valitud ".$vars[$prop["name"]][0]."listist eemaldada?",
+					/*
+					"url" => $this->mk_comm_orb(array(
+						"action" => "delete_obj", 
+						"del_type" => $vars[$prop["name"]][1],
+					)),
+					*/
+        		));
+				$tb->add_button(array(
+            		"name" => "search",
+            		"tooltip" => "Otsi ".$vars[$prop["name"]][2],
+            		"img" => "search.gif",
+            		"url" => $this->mk_comm_orb(array(
+							"group" => "profile_search",
+							"search_group" => $vars[$prop["name"]][3], 
+						)),
+        		));
+				break;
+			/*
+			case "profile_search":
+				$this->profile_search($arr);
+				break;
+			*/
+			case "prof_comments":
+				$this->show_prof_comments($arr);
+				break;
+			case "blocked_list":
+			case "ignored_list":
+			case "friend_list":
+				$this->show_list($arr);
+				break;
+			case "browsing_conditions":
+				$this->browsing_conditions($arr);
+				break;
+			case "message_conditions":
+				$this->message_conditions($arr);
+				break;
+			case "view_conditions":
+				$this->view_conditions($arr);
+				break;
 			case "outbox":
 				$prop["value"] = $this->create_outbox($arr);
 				break;
+			case "rateform":
+				break;
+			case "f_switch_profile":
+			case "l_switch_profile":
+			case "c_switch_profile":
+			case "switch_profile":
+				$prop["value"] = $this->show_switch_profile($arr);
+				break;
+			case "rate_content":
+				break;
+			
+			case "friends_panel":
+				if (!$profile = $this->common["my_profile"])
+				{
+					if (!$profile = $this->get_active_profile())
+					{
+						$retval = PROP_FATAL_ERROR;
+						break;
+					}
+				}
+				//siin ei tule saidi poolel ft_page parameeter kaasa - class_base puudused
+				//töötab ainult admin poolel
+				//echo dbg::process_backtrace(debug_backtrace());
+				$prop["value"] = $this->render_friends_panel($profile, $arr["request"]["ft_page"]);
+				
+				break;
+			case "my_profiles":
+				$this->do_tbl_my_profiles($arr);
+				break;
+			case "profile_settings":
+				break;
+			case "profile_toolbar":
+				$tb = &$prop["vcl_inst"];
+				
+				//$o = &$arr["obj_inst"];
+				//$folder = $o->prop("profiles_folder");
+				
+				$tb->add_button(array(
+					"name"		=> "add",
+					"tooltip"	=> "Uus profiil",
+					"img"		=> "new.gif",
+					/*
+					"url"		=> $this->mk_my_orb("new", array(
+										"parent" => $folder, 
+										"return_url" => urlencode(aw_global_get('REQUEST_URI'))), 
+										CL_PROFILE),
+					*/
+					"action" => "new_profile",
+				));
+				$tb->add_button(array(
+					"name"		=> "save",
+					"tooltip"	=> "Salvesta muutused",
+					"img"		=> "save.gif",
+					"action"	=> "",
+				));
+				$tb->add_button(array(
+            		"name" => "delete",
+            		"tooltip" => "Kustuta valitud profiilid",
+            		"img" => "delete.gif",
+            		"action" => "delete_profile",
+					"confirm" => "Oled kindel, et soovid valitud profiilid kustutada?",
+        		));
+				
+				break;
+			case "show_image_comments":
+				$this->do_tbl_image_comments($arr);
+				break;
+			case "image_comments_toolbar":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+            		"name" => "delete",
+            		"tooltip" => "Kustuta valitud kommentaarid",
+            		"img" => "delete.gif",
+            		"action" => "delete_comments",
+					"confirm" => "Oled kindel, et soovid valitud kommentaarid kustutada?",
+        		));
+				$person = $this->get_person();
+				$person->set_meta("img_id",$arr["request"]["img_id"]);
+				$person->save();
+				break;
+			/*
+			case "prof_comments":
+				$profile = $this->get_active_profile();
+				$prop["use_parent"] = $profile->id();
+				$person = $this->get_person();
+				$prop["heading"] = $person->prop("firstname")." ".$person->prop("lastname");
+				break;
+			*/
+			case "my_profile_toolbar":
+				$tb = &$prop['vcl_inst'];
+				$tb->add_button(array(
+					'name' => 'new_profile',
+					'tooltip' => 'Lisa uus profiil',
+					'img' => 'new.gif',
+					'action' => 'new_profile',
+				));
 
-                        break;
+				$tb->add_separator();
+
+				$tb->add_cdata('<small>Vali profiil:</small>');
+
+				$connected_profiles = $this->get_connections_to_profiles();
+
+				$active_profile = $this->get_active_profile();
+
+				$selected_profile = $this->common['my_profile'] ? $this->common['my_profile']->oid : $active_profile->oid;
+
+				$sel_options = array();
+				foreach($connected_profiles as $conns)
+				{
+					$to = $conns->to();
+					$sel_options[$to->oid] = $conns->prop('to.name');
+				}
+
+				$tb->add_cdata(html::select(array(
+					'name' => 'profile_oid',
+					'options' => $sel_options,
+					'selected' => $selected_profile,
+					'onchange' => 'window.location = \''.aw_url_change_var(array('my_profile' => '')).'&my_profile=\' + this.options[this.selectedIndex].value;'
+				)));
+
+				$tb->add_separator();
+
+				if($prop['group'] == 'profile_change')
+				{
+					$tb->add_button(array(
+						'name' => 'save_changes',
+						'tooltip' => 'Salvesta muutused oma profiilis',
+						'img' => 'save.gif',
+						'action' => '',
+					));
+				}
+
+
+				$tb->add_button(array(
+					'name' => 'delete_profile',
+					'tooltip' => 'Kustuta käesolev profiil',
+					'img' => 'delete.gif',
+					'action' => '',
+					'confirm' => 'Olete Te kindel, et soovite kustutada käesolevat profiili?',
+				));
+				break;
+			case "profile_comments":
+				if(!$this->common["profile"])
+				{
+					return PROP_FATAL_ERROR;
+				}
+				$profile = $this->common["profile"];
+				$prop["use_parent"] = $profile->id();
+				$person = $profile->get_first_obj_by_reltype("RELTYPE_PERSON");
+				//$person = $this->get_person();
+				$prop["heading"] = $person->prop("firstname")." ".$person->prop("lastname");
+				break;
+			case "profile_header":
+				$prop["value"] = $this->render_profile_header($arr);
+				break;
+
 		};
 		return $retval;
 	}
+	function callback_profile_search($arr)
+	{
+		// damn hell, why there isn't a common way to show an object inside an object?
+		// now i got to do that by hardcode... argh
+		// anyway, this crap needs to be rewritten anyaway -- ahz
+		//arr($arr);
+				/*
+		$htmlc->add_property(array(
+			"name" => "suck",
+			"no_caption" => 1,
+			"value" => $this->mk_reforb(
+		*/
+		/*
+		$rval["searchform"] = array(
+				"type" => "form",
+				"name" => "searchform",
+				"caption" => "kasutaja otsing",
+				"sclass" => "cfg/cb_search",
+				"sform" => "cb_search",
+			);
+			*/
+			/*
+			"form" => $html,
+			"section" => aw_global_get("section"),
+			"table" => $table
+			*/
+		//arr($arr);
+		$many_search = $this->common["obj_inst"]->connections_from(array(
+			"class" => 428,
+		));
+		foreach($many_search as $search_con)
+		{
+			$search_o = $search_con->to();
+			//$search = $search_o->instance();
+			$search = get_instance(CL_CB_SEARCH);
+			/*
+			$rval["searchform"] = array(
+				"type" => "form",
+				"name" => "searchform",
+				"caption" => "kasutaja otsing",
+				"sclass" => "cfg/cb_search",
+				"sform" => "cb_search",
+			);
+			*/
+					/*
+					"call_in" => true,
+					"section2" => "automatweb/orb.aw",
+					"ref" => $this->mk_reforb("change",array(
+						"id" => $this->common["obj_inst"]->id(),
+						"group" => $arr["request"]["group"],
+					), $arr["request"]["class"]),
+					*/
+			
+			$rval["el1"] = array(
+				"type" => "text",
+				"value" => $search->show(array(
+					"id" => $search_o->id(),
+				)),
+				"no_caption" => 1,
+			);
+			
+		}
+		return $rval;
+		/*
+		$search = get_instance(CL_CB_SEARCH);
+		$asd = $this->common["obj_inst"]->connections_from(array(
+			"class" => 428,
+		));
+		foreach($asd as $tiit)
+		{
+			$jaan = $tiit->to();
+			$var = $jaan->id();
+		}
+		$ob = obj($var);
+		$request = $arr["request"];
 
-	function callback_my_images($arr)
+		list($props, $clid, $relinfo) = $search->get_props_from_obj($ob);
+		
+		$props = $search->callback_gen_search(array(
+			"obj_inst" => $ob,
+			"request" => $request,
+		));
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		foreach($props as $pn => $pd)
+		{
+			$htmlc->add_property($pd);
+		}
+		$htmlc->add_property(array(
+			"name" => "search",
+			"caption" => "Otsi",
+			"type" => "submit",
+			"store" => "no"
+		));
+		$htmlc->finish_output();
+
+		$html = $htmlc->get_result(array(
+			//"raw_output" => 1
+		));
+
+		classload("vcl/table");
+		$t = new aw_table(array(
+			"layout" => "generic"
+		));
+		$search->mk_result_table(array(
+			"prop" => array(
+				"vcl_inst" => &$t
+			),
+			"obj_inst" => &$ob,
+			"request" => $request,
+		));
+		//arr($html);
+		$table = $t->draw();
+			//arr($t);
+		$rval["searchform"] = array(
+			"name" => "search",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $html,
+		);
+		$rval["searchresults"] = array(
+			"name" => "results",
+			"type" => "text",
+			"no_caption" => 1,
+			"value" => $table,
+		);
+		return $rval;
+		*/
+	}
+	
+	// show the content of a friend group -- ahz
+	function show_group_cont($arr, $profile, $group = 0)
+	{
+		//$vars = $group == 0 ?  : array("to" => $group);
+		//$cur_group = ;$profile->connections_from($vars)
+		$t = &$arr["prop"]["vcl_inst"];
+		/*
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+		));
+		*/
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+		));
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => "E-post",
+		));
+		$t->define_field(array(
+			"name" => "sendmessage",
+			"caption" => "",
+		));
+		/*
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+		*/
+		if($group == 0)
+		{
+			$group_cont = $profile->connections_from(array("type" => "RELTYPE_FRIEND"));
+			foreach($group_cont as $group_item_c)
+			{
+				$obj = $group_item_c->to();
+				$creator = $obj->createdby();
+				$person = $obj->get_first_obj_by_reltype("RELTYPE_PERSON");
+				//arr($person->properties());
+				$t->define_data(array(
+					"id" => $obj->id(),
+					"name" => html::href(array(
+						"url" => $this->mk_comm_orb(array(
+							"group" => "friend_details",
+							"profile" => $obj->oid
+						)),
+						"caption" => $creator->name(),
+					)),
+					"email" => html::href(array(
+						"url" => "mailto:".$person->prop("email"),
+						"caption" => $person->prop("email"),
+					)),
+					"sendmessage" => html::href(array(
+						"url" => $this->mk_comm_orb(array(
+							"user" => $creator->name(),
+							"group" => "newmessage",
+						)),
+						"caption" => "Saada sõnum",
+					)),
+				));
+			}
+		}
+		else
+		{
+			$group = obj($group);
+			$profiles = meta("users");
+			foreach($profiles as $profile)
+			{
+				$obj = obj($profile);
+				$creator = $obj->createdby();
+				$person = $obj->get_first_obj_by_reltype("RELTYPE_PERSON");
+				//arr($person->properties());
+				$t->define_data(array(
+					"id" => $obj->id(),
+					"name" => html::href(array(
+						"url" => $this->mk_comm_orb(array(
+							"group" => "friend_details",
+							"profile" => $obj->oid
+						)),
+						"caption" => $creator->name(),
+					)),
+					"email" => html::href(array(
+						"url" => "mailto:".$person->prop("email"),
+						"caption" => $person->prop("email"),
+					)),
+					"sendmessage" => html::href(array(
+						"url" => $this->mk_comm_orb(array(
+							"user" => $creator->name(),
+							"group" => "newmessage",
+						)),
+						"caption" => "Saada sõnum",
+					)),
+				));
+			}
+		}
+	}
+	
+	// show the groups for friends -- ahz
+	function show_groups($arr, $profile, $groups)
+	{
+		$filter = array();
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Grupp",
+		));
+		$t->define_field(array(
+			"name" => "count",
+			"caption" => "Sõpru grupis",
+			"type" => "int",
+		));
+		$t->define_data(array(
+			"name" => "üldine",
+			"count" => count($filter),
+		));
+		foreach($groups as $group)
+		{
+			$count = $group->meta("users");
+			//arr($group);
+			$t->define_data(array(
+				"name" => $group->prop("to.name"),
+				"count" => count($count),
+			));
+		}
+	}
+	
+	// wrapper for friend groups showing -- ahz
+	function show_friend_groups($arr)
+	{
+		$profile = $this->common["my_profile"] ? $this->common["my_profile"] : $this->get_active_profile();
+		if($this->common["f_group"])
+		{
+			$this->show_group_cont($arr, $profile, $this->common["f_group"]);
+		}
+		else
+		{
+			$groups = $profile->connections_from(array("type" => "RELTYPE_FRIEND_GROUPS"));
+			if(empty($groups))
+			{
+				$this->show_group_cont($arr, $profile);
+			}
+			else
+			{
+				$this->show_groups($arr, $profile, $groups);
+			}
+		}
+	}
+
+	function show_prof_comments($arr)
+	{
+		$profile = $this->common["my_profile"] ? $this->common["my_profile"] : $this->get_active_profile();
+		//arr($arr);
+		$prop = &$arr["prop"];
+		$t = &$prop["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+			"sortable" => "1",
+		));
+		$t->define_field(array(
+			"name" => "uname",
+			"caption" => "Nimi",
+			"sortable" => "1",
+		));
+		$t->define_field(array(
+			"name" => "ctime",
+			"caption" => "Aeg",
+			"sortable" => "1",
+		));
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => "Kommentaar",
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => "Staatus",
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+		$clist = new object_list(array(
+			"parent" => $profile->id(),
+			"class_id" => CL_COMMENT,
+			"sort_by" => "created",
+		));
+		$t->draw_text_pageselector(array(
+			"records_per_page" => 25, // rows per page
+			"d_row_cnt" => count($clist->arr()), // total rows 
+		));
+		foreach($clist->arr() as $comment)
+		{
+			//arr($this->get_active_profile());
+			//arr($comment->createdby());
+			$creator_prof = obj($comment->createdby());
+			$creator = $creator_prof->get_first_obj_by_reltype("RELTYPE_PERSON");
+			$prof = $creator->get_first_obj_by_reltype("RELTYPE_PROFILE");
+			$t->define_data(array(
+				"id" => $comment->id(),
+				"uname" => html::href(array(
+					"url" => $this->mk_comm_orb(array(
+						"profile" => $prof->id(),
+						"group" => "friend_details",
+					)),
+					"caption" => $creator_prof->name(),
+				)),
+				"ctime" =>$this->time2date($comment->created(), 2),
+				"comment" => $comment->prop("commtext"),
+				"status" => $comment->status() == STAT_ACTIVE ? "nähtav" : "peidetud",
+			));
+		}
+	}
+	function show_list($arr)
+	{
+		$loc = $arr["request"]["group"];
+		if($loc == "lists" || $loc == "friend_list")
+		{
+			$obj = $this->common["my_profile"] == true ? $this->common["my_profile"] : $this->get_active_profile();
+		}
+		else
+		{
+			$obj = $this->get_user();
+		}
+		//arr($arr);
+		$prop = &$arr["prop"];
+		$t = &$prop["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+			"sortable" => "1",
+		));
+		$t->define_field(array(
+			"name" => "uname",
+			"caption" => "Nimi",
+			"sortable" => "1",
+		));
+		$t->define_chooser(array(
+			 "name" => "sel",
+			"field" => "id",
+		));
+		$vars = array(
+			"lists" => "RELTYPE_FRIEND",
+			"friend_list" => "RELTYPE_FRIEND",
+			"blocked_list" => "RELTYPE_BLOCKED",
+			"ignored_list" => "RELTYPE_IGNORED",
+		);
+		//$profile = $this->get_active_profile();
+		$clist = $obj->connections_from(array(
+			"type" => $vars[$arr["request"]["group"]],
+		));
+		/*
+		$clist = new object_list(array(
+			"parent" => $profile_o->id(),
+			"reltype" => "RELTYPE_FRIEND",
+			"sort_by" => "created",
+		*/
+		foreach($clist as $citem)
+		{
+			
+			/*
+			$pers = $u_prof->get_first_obj_by_reltype("RELTYPE_PERSON");
+			*/
+			if($loc == "lists" || $loc == "friend_list")
+			{
+				$u_prof = $citem->to();
+				$user = $this->get_user_for_profile($u_prof);
+			}
+			else
+			{
+				$user = $citem->to();
+				$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
+				$u_prof = $person->get_first_obj_by_reltype("RELTYPE_PROFILE");
+			}
+			$t->define_data(array(
+				"id" => $u_prof->id(),
+				"uname" => html::href(array(
+					"url" => $this->mk_comm_orb(array(
+					"group" => "friend_details",
+					"profile" => $u_prof->id(),
+					)),
+					"caption" => $user->name(),
+				)),
+			));
+		}
+	}
+	function show_switch_profile($arr)
+	{
+		//arr($arr);
+		$gnames = array("switch_profile","l_switch_profile","c_switch_profile", "f_switch_profile");
+		$groupinfo = array(
+			$gnames[0] => array(
+				"caption" => "Pilte",
+				"group" => "my_images",
+				),
+			$gnames[1] => array(
+				"caption" => "Sõpru",
+				"group" => "friend_list",
+			),
+			$gnames[2] => array(
+				"caption" => "Kommentaare",
+				"group" => "prof_comments",
+			),
+			$gnames[3] => array(
+				"caption" => "Sõpru",
+				"group" => "prof_friends",
+			),
+		);
+		$group = $arr["request"]["group"];
+		$prop = &$arr["prop"];
+		$t = &$prop["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"sortable" => "1",
+		));
+		$t->define_field(array(
+			"name" => "objects",
+			"caption" => $groupinfo[$group]["caption"],
+			"sortable" => "1",
+			"type" => "int",
+		));
+		if($group == $gnames[1])
+		{
+		$t->define_field(array(
+			"name" => "ignored",
+			"caption" => "Ignoreerituid",
+			"sortable" => "1",
+			"type" => "int",
+		));
+		$t->define_field(array(
+			"name" => "blocked",
+			"caption" => "Blokeerituid",
+			"sortable" => "1",
+			"type" => "int",
+		));
+		}
+		$t->define_field(array(
+			"name" => "selected",
+			"sortable" => "1",
+		));
+		//hangime ühendused kõigile profiilidele
+		if ($person = $this->get_person())
+		{
+		
+			$cons_to_profile = $person->connections_from(array(
+				"type" => 'RELTYPE_PROFILE',  //14,
+			));
+			$active_profile_id = $person->meta("active_profile");
+			foreach($cons_to_profile as $conn)
+			{
+				
+				$item = $conn->to();
+				
+				if($group == $gnames[0])
+				{
+					$objects = $item->connections_from(array(
+						"type" => "RELTYPE_IMAGE", //12,
+					));
+				 }
+				elseif($group == $gnames[1])
+				{
+					$objects = $item->connections_from(array(
+						"type" => "RELTYPE_FRIEND",
+					));
+					$ignored = $item->connections_from(array(
+						"type" => "RELTYPE_IGNORED",
+					));
+					$blocked = $item->connections_from(array(
+						"type" => "RELTYPE_BLOCKED",
+					));
+				}
+				elseif($group == $gnames[2])
+				{
+					$objs = new object_list(array(
+						"parent" => $item->id(),
+						"class_id" => CL_COMMENT,  
+					));
+					$objects = $objs->arr();
+				}
+				elseif($group == $gnames[3])
+				{
+					$objects = $item->connections_from(array(
+						"type" => "RELTYPE_FRIEND",
+					));
+				}
+				$vars = array(
+					"name" => html::href(array(
+						"url" => $this->mk_comm_orb(array(
+							"group" => $groupinfo[$group]["group"],
+							"my_profile" => $item->id(),
+						)),
+						"caption" => $item->name(),
+					)),
+					"objects" => count($objects),
+					"selected" => ($item->id() == $active_profile_id ? "aktiivne" : ""),
+				);
+				if($group == $gnames[1])
+				{
+					$vars["ignored"] = count($ignored);
+					$vars["blocked"] = count($blocked);
+				}
+				$t->define_data($vars);
+			}
+		}
+	}
+	function render_context_panel($arr)
+	{
+		$this->read_template("context_panel.tpl");
+		$content = "";
+		/*
+		if (!$profile = $this->common["profile"])
+		{
+		*/
+			if (!$profile = $this->get_active_profile())
+			{
+				$this->vars(array("content" => $this->parse("dev")));
+				return $this->parse();
+			}
+		//}
+		//got profile..
+		
+		//siin vaja selgeks teha, mida näidata.
+		
+		//oletame et on vaja pilti näidata.
+		//ok. prooviks siis pilti näidata..
+		
+		if (!$avatar_image_id = $profile->prop("avatar_image"))
+		{
+			if ($profile_c = $profile->get_first_conn_by_reltype("RELTYPE_IMAGE"))
+			{
+				$avatar_image_id = $profile_c->prop("to");
+			}
+		}
+		if ($avatar_image_id)
+		{
+			$img_i = get_instance(CL_IMAGE);
+			$img_url = $img_i->get_url_by_id($avatar_image_id);
+			$person = $profile->get_first_obj_by_reltype("RELTYPE_PERSON");
+			$avatar_caption = aw_global_get("uid"); //person->prop("firstname")." ".$person->prop("lastname");
+			$this->vars(array(
+				"avatar_img_url" => $img_url,
+				"avatar_caption" => $avatar_caption,
+			));
+			$content = $this->parse("avatar");
+		}
+		else
+		{
+			$content = $this->parse("empty_box");
+		}
+
+		//ja lõpuks renderdame sisu.
+		$this->vars(array(
+			//"content" => $this->parse("dev"),
+			"content" => $content,
+		));
+		return $this->parse();
+	}
+	function do_tbl_image_comments($arr)
+	{
+		$prop = &$arr["prop"];
+		$t = &$prop["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+			"sortable" => "1",
+		));
+		$t->define_field(array(
+			"name" => "uname",
+			"caption" => "Nimi",
+			"sortable" => "1",
+		));
+		$t->define_field(array(
+			"name" => "ctime",
+			"caption" => "Aeg",
+			"sortable" => "1",
+		));
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => "Kommentaar",
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+		$clist = new object_list(array(
+			"parent" => $arr["request"]["img_id"],
+			"class_id" => CL_COMMENT,
+			"sort_by" => "created",
+		));
+		foreach($clist->arr() as $comment)
+		{
+			//arr($this->get_active_profile());
+			//arr($comment->createdby());
+			$creator_prof = obj($comment->createdby());
+			$creator = $creator_prof->get_first_obj_by_reltype("RELTYPE_PERSON");
+			$prof = $creator->get_first_obj_by_reltype("RELTYPE_PROFILE");
+			$t->define_data(array(
+				"id" => $comment->id(),
+				"uname" => html::href(array(
+					"url" => $this->mk_comm_orb(array(
+						"profile" => $prof->id(),
+						"group" => "friend_details",
+					)),
+					"caption" => $creator_prof->name(),
+				)),
+				"ctime" =>$this->time2date($comment->created(), 2),
+				"comment" => $comment->prop("commtext"),
+			));
+		
+		}
+	}
+	
+	function get_connections_to_profiles()
+	{
+		if($person = $this->get_person())
+		{
+			$cons = $person->connections_from(array(
+				"type" => 'RELTYPE_PROFILE',  //14,
+			));
+			return $cons;
+		}
+	}
+
+	function do_tbl_my_profiles($arr)
+	{
+		$prop = &$arr["prop"];
+		$t = &$prop["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+			"sortable" => "1",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"sortable" => "1",
+		));
+		
+		$t->define_field(array(
+			"name" => "pics",
+			"caption" => "Pildid",
+		));
+		
+		$t->define_field(array(
+			"name" => "active_prof",
+			"caption" => "Vaikeprofiil",
+		));
+		$t->define_chooser(array(
+			"name" => "selected",
+			"field" => "id",
+		));
+
+		//hangime ühendused kõigile profiilidele
+		if($cons_to_profile = $this->get_connections_to_profiles())
+		{
+			//arr($cons_to_profile);
+			$active_profile_id = $this->get_active_profile();
+			foreach($cons_to_profile as $conn)
+			{
+				$item = $conn->to();
+				$images = $item->connections_from(array(
+						"type" => "RELTYPE_IMAGE", //12,
+				));
+				$t->define_data(array(
+					"name" => html::href(array(
+								"url" => $this->mk_comm_orb(array(
+								"group" => "profile_view",
+								"my_profile" => $item->id(),
+								)),
+								"caption" => $item->name(),
+						)),
+					"id" => $item->id(),
+					"pics" => html::href(array(
+								"url" => $this->mk_comm_orb(array(
+									"group" => "my_images",
+									"my_profile" => $item->id(),
+								)),
+								"caption" => "pildid (".count($images).")",
+						)),
+					"active_prof" => html::radiobutton(array(
+						"name" => "active_profile",
+						"value" => $item->id(),
+						"checked" => (($item->id() == $active_profile_id->oid) ? true : false),
+					)),
+				));
+			}
+		}
+	}
+	
+	function render_actions($arr)
+	{
+		$this->read_template("action_menu.tpl");
+		$html = "<br />\n";
+		
+		$actions = array(
+			//"tee sõbraks" => array("act" => "add_friend", "profile" => "111")
+		);
+		
+		$basic_params = array(
+			"id" => $arr["obj_inst"]->id(),
+			"group" => $arr["request"]["group"],
+			"action" => "commaction",
+		);
+			
+		foreach ($actions as $caption => $action_params)
+		{
+			$params = array_merge($basic_params, $action_params);
+			$this->vars(array(
+				"action_link" => html::href(array(
+								"url" => $this->mk_comm_orb($params),
+								"caption" => $caption,
+						)),
+			));
+			$html .= $this->parse("actions");
+		}
+		$this->vars(array("actions" => $html));
+		return $this->parse();
+	}
+	
+	function render_online($online)
+	{
+		$this->read_template("show_profile.tpl");
+		$this->vars(array(
+			"online_light" => $online ? "green" : "red",
+			"online_caption" => $online ? "online" : "offline",
+		));
+		return $this->parse("online");
+	}
+
+	function render_karma($karma)
+	{
+		$this->read_template("show_profile.tpl");
+		$this->vars(array(
+			"karma_smiley" => $karma ? "happy" : ($karma < 0 ? "sad" : "normal"),
+			"alt_karma" => $karma,
+		));
+		return $this->parse("karma");
+	}
+
+	function render_profile_header($vars)
+	{
+		$arr = $vars["arr"];
+		$profile = $vars["profile"];
+		
+		$prof_i = get_instance(CL_PROFILE);
+		$online = $prof_i->is_online(array("obj_inst" => $profile));
+		$karma = 0; //pos, neg või 0 //not implemented yet.
+		
+		$this->read_template("show_profile.tpl");
+
+		$sub_online = $this->render_online($online);
+		$sub_karma = $this->render_karma($karma);
+		
+		// stupid "muuda" design element
+		$prof_person = $profile->get_first_obj_by_reltype("RELTYPE_PERSON");
+		$my_person = $this->get_person();
+		if ($my_person->id() == $prof_person->id())
+		{
+			$this->vars(array(
+				"my_profile_switch" => $this->render_link("MUUDA", $this->mk_comm_orb(array("group" => "profile_change",
+				"my_profile" => $profile->id(),
+				))),
+			));
+			$this->vars(array(
+				"muuda" => $this->parse("muuda"),
+			));
+		}
+		
+		$this->vars(array(
+			"online" => $sub_online,
+			"karma" => $sub_karma,
+		));
+		return $this->parse("header");
+	}
+	// "this is not my profile, you got it all wrong!!!!"
+	// in other words, a function to check whether this is your profile or not -- ahz
+	function is_not_my_profile($id)
+	{
+		$person = $this->get_person();
+		$profiles = $person->connections_from(array(
+			"type" => "RELTYPE_PROFILE",
+		));
+		foreach($profiles as $profile)
+		{
+			// we well test your innosence here upon -- ahz
+			if($profile->prop("to") == $id or !is_oid($id))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	// a check to check that it's not me.. don't ask -- ahz
+	function is_not_me($id)
 	{
 		$users = get_instance("users");
-		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-		
-		$t = get_instance(CL_CRM_PERSON);
-		$t->init_class_base();
-		$props = $t->get_property_group(array(
-			"group" => "show",
-		));
-
-		// check whether a person object exists for her
-		$persons = $user->connections_from(array(
-			"type" => "RELTYPE_PERSON",
-		));
-
-		$prof_obj = $this->_get_profile_obj();
-		if (!$prof_obj)
+		if($id == $users->get_oid_for_uid(aw_global_get("uid")) or !is_oid($id))
 		{
-			die("Viga, sellel kasutaja pole profiili");
-		};
-
-		$images = $prof_obj->connections_from(array(
-			"type" => 12,
-		));
-
-		// kõik isiku objektid?
-
+			return false;
+		}
+		return true;
+	}
+	function add_connection($vars)
+	{
+		//arr($vars);
+		// this is the place where you can add all sort of connections -- ahz
+		$rels = array("FRIEND", "IGNORED", "BLOCKED");
+		$my_user = $this->get_user();
+		if($vars["profile"])
+		{
+			$my_profile = $this->common["my_profile"] ? $this->common["my_profile"] : $this->get_active_profile();
+			$f_profile_id = $vars["profile"];
+			if($this->is_not_my_profile($f_profile_id))
+			{
+				// remove the block and ignore, if added as friend -- ahz
+				$user = $this->get_user_for_profile(obj($f_profile_id));
+				if($my_user->is_connected_to(array(
+					"to" => $user->id(),
+				)))
+				{
+					$my_user->disconnect(array(
+						"from" => $user->id(),
+					));
+				}
+				$my_profile->connect(array(
+					"to" => $f_profile_id,
+					"reltype" => "RELTYPE_".$rels[$vars["type"]],
+				));
+			}
+		}
+		else
+		{
+			$f_user = $vars["user"];
+			if($this->is_not_me($f_user))
+			{
+				$my_user->connect(array(
+					"to" => $f_user,
+					"reltype" => "RELTYPE_".$rels[$vars["type"]],
+				));
+			}
+		}
 		/*
-		if (sizeof($persons) > 0)
+		
+		// this is a cruel check, that i couldn't possibly be my own friend -- ahz 
+		if($this->is_not_my_profile($f_profile_id))
 		{
-			$po = reset($persons);
-			$poo = $po->to();
+			
+			$my_profile->connect(array(
+				"to" => $f_profile_id,
+				"reltype" => "RELTYPE_".$rels[$vars["type"]],
+			));
+		}
+		*/
+	}
+		
+	/**
+		@attrib name=commaction
 
-			$conns = $poo->connections_from(array(
-				"type" => "RELTYPE_PICTURE",
+		@param id required type=int acl=view
+		@param commact required
+		@param profile optional type=int acl=view
+		@param user optional type=int acl=view
+		@param group optional
+	**/
+	function commaction($arr)
+	{
+		//arr($arr);
+		/*
+		Array
+		(
+			[id] => 536
+			[commact] => add_friend
+			[profile] => 111
+			[user] => 1
+		)
+		*/
+		$this->callback_on_load(array("request" => $arr));
+		
+		switch($arr["commact"])
+		{
+			case "add_blocked":
+			case "add_ignored":
+			case "add_friend":
+				$names = array("add_friend", "add_ignored", "add_blocked");
+				$vars = array(
+					$names[0] => array(
+						"type" => 0,
+						"group" => "friends",
+					 ),
+					$names[1] => array(
+						"type" => 1,
+						"group" => "ignored_list",
+					 ),
+					$names[2] => array(
+						"type" => 2,
+						"group" => "blocked_list",
+					 ),
+				);
+				if($arr["commact"] == "add_friend")
+				{
+					$vars[$arr["commact"]]["profile"] = $arr["profile"];
+				}
+				else
+				{
+					$vars[$arr["commact"]]["user"] = $arr["user"];
+				}
+				//confirmation page??
+				//arr($arr);
+				$this->add_connection($vars[$arr["commact"]]);
+				return $this->mk_comm_orb(array("group" => $vars[$arr["commact"]]["group"]));
+				break;
+			/*
+			case "new_profile":
+				$this->new_profile($arr);
+				return $this->mk_comm_orb(array("group" => "friends"));
+				break;
+			*/
+			case "do_a_thing":
+				$this->do_a_thing($arr);
+				break;
+			
+			case "profile":
+			
+				return $this->mk_comm_orb(array(
+					"id" => $arr["id"],
+					"commact" => "profile",
+					"profile" => $arr["profile"],
+					"group" => $arr["group"],
+				));
+
+				switch ($arr["group"])
+				{
+					case "profile":
+					case "profile_view":
+					case "profile_change":
+						break;
+				}
+				
+				break;
+		}
+		//echo aw_global_get('REQUEST_URI'));
+		return aw_global_get("HTTP_REFERER");
+	}
+
+	function mk_comm_orb($params, $obj_inst_id = 0, $action = "change")
+	{
+		if(empty($obj_inst_id))
+		{
+			$obj_inst_id = $this->common["obj_inst"]->id();
+		}
+		$def_params = array(
+			"id" => $obj_inst_id,
+			"group" => "general",
+			//"section" => $this->common["arr"]["request"]["section"],
+		);
+		//$params will override $def_params
+		return $this->mk_my_orb($action, $params + $def_params, CL_COMMUNE);
+	}
+	function render_link($caption, $url)
+	{
+		return html::href(array(
+			"url" => $url,
+			"caption" => $caption,
+		));
+	}
+	
+	function get_link_for_obj($obj)
+	{
+		//http://rate.automatweb.com/automatweb/orb.aw?class=admin_menus&action=right_frame&parent=1132
+		$str = "";
+		$params = array("id" => $obj->id());
+		
+		$str .= html::href(array(
+			"url" => $this->mk_my_orb($params),
+			"caption" => $obj->name() ? $obj->name(): $obj->id(),
+		)).
+		$str .= ' ';
+		
+		$params = array("parent" => $obj->parent());
+		
+		$str .= html::href(array(
+			"url" => $this->mk_my_orb("right_frame", $params, "admin_menus"),
+			"caption" => '[at]',
+		));
+		return $str;
+	}
+	function update_message_conditions($arr)
+	{
+		$person = $this->get_person();
+		$person->set_meta("message_conditions", $arr["request"]["ms"]);
+		$person->save();
+	}
+	function message_conditions($arr)
+	{
+		$person = $this->get_person();
+		$prop = &$arr["prop"];
+		$t = &$prop["vcl_inst"];
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => "e-mailile",
+			"sorted" => 0,
+		));
+		$t->define_field(array(
+			"name" => "inbox",
+			"caption" => "postkasti",
+			"sorted" => 0,
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => "",
+			"sorted" => 0,
+		));
+		if(!$person_ms = $person->meta("message_conditions"))
+		{
+			$person_ms = $this->new_message_conditions($person);
+		}
+		//arr($person_ms);
+		foreach($this->msg_vars as $key => $value)
+		{
+			$t->define_data(array(
+				"email"=> html::checkbox(array(
+				"name" => "ms[".$key."][0]",
+				"value" => "true",
+				"checked" => $person_ms[$key][0],
+				)),
+				"inbox" => html::checkbox(array(
+				"name" => "ms[".$key."][1]",
+				"value" => "true",
+				"checked" => $person_ms[$key][1],
+				)),
+				"type" => $value[2],
+			));
+		}
+	}
+	function new_message_conditions($person)
+	{
+		//if person does not already have message settings, then create them
+		foreach($this->msg_vars as $key => $value)
+		{
+			$rval[$key][0]=$value[0];
+			$rval[$key][1]=$value[1];
+		}
+		$person->set_meta("message_conditions",$rval);
+		$person->save();
+		return $rval;
+	}
+	function browsing_conditions($arr)
+	{
+		$person_o = $this->get_person();
+		if(!($values = $person_o->meta("browsing_conditions")))
+		{
+			$values["sexorient"] = array();
+		}
+		//arr($values);
+		$profile_o = $this->get_active_profile();
+
+		$prof_cls_i = get_instance(CL_PROFILE);
+		$prof_cls_i->init_class_base();
+		$props = $prof_cls_i->get_property_group(array(
+			"group" => "settings",
+		));
+		// selle asemel et näha hullumoodi vaeva, otsides andmebaasist
+		// maksimaalset ja minimaalset vanust, teeb hoopis 1 - 100
+		// vanusevahemiku ja kui selliseid ei leidu, annab veateate
+		
+		/*	$v = $o_inst->get_age(array("obj_inst" => $obj));	*/
+		
+		// stringidel ei maksa eriti min/max otsingut teha, võib väga lambi vastuseid saada :|
+		
+		$query = "select max(user_field1) as max,min(user_field1) as min from aw_profiles";
+		
+		//$query = "select o.oid,v.oid left from kliendibaas_isik o left join kliendibaas_isik v on where  min(v.birthday) and max(o.birthday)";
+		//from where max(o.birthday) 
+		//$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status = 2 ORDER BY rand() LIMIT 1
+		$row = $this->db_fetch_row($query);
+		//$row2 = $this->db_fetch_row($query2);
+		//arr($row2);
+		$min = $prof_cls_i->get_age2($row["min"]);
+		$max = $prof_cls_i->get_age2($row["max"]);
+		$aoptions = array("--- vali ---");
+		if($min == 0)
+		{
+			$min++;
+		}
+		for($i = $min; $i <= $max; $i++)
+		{
+			$aoptions[$i] = $i;
+		}
+		// asd, get ages argh :(	
+		$var["sexual_orientation"] = $props["sexual_orientation"];
+		$so = $prof_cls_i->parse_properties(array(
+			"properties" => $var,
+			"obj_inst" => $profile_o,
+		));
+		$options = array(
+			"x" => "Mõlemad",
+			"M" => "Mees",
+			"N" => "Naine",
+		);
+		foreach($options as $key => $value)
+		{
+			$opts.=" ".html::radiobutton(array(
+				"name" => "bc[gender]",
+				"checked" => ($values["gender"]==$key ? true : false),
+				"value" => $key,
+				"caption" => $value,
+			));
+		}
+		//arr($so["sexual_orientation"]["options"]);
+		$sel_arr = array();
+		foreach($so["sexual_orientation"]["options"] as $key => $value)
+		{
+			$sopt.=" ".html::checkbox(array(
+				"name" => "bc[sexorient][$key]",
+				"checked" => (array_key_exists($key, $values["sexorient"]) ? true : false),
+				"value" => $key,
+				"caption" => $value,
+			));
+		}
+		$prop = &$arr["prop"];
+		$t = &$prop["vcl_inst"];
+		$t->define_field(array(
+			"name" => "setting",
+			"caption" => "Seade",
+		));
+		$t->define_field(array(
+			"name" => "settings",
+		));
+		$t->define_data(array(
+			"setting" => "Sugu",
+			"settings" => $opts
+		));
+		$t->define_data(array(
+			"setting" => "Vanus",
+			"settings" => html::select(array(
+				"name" => "bc[age_s]",
+				"options" => $aoptions,
+				"selected" => $values["age_s"],
+			))." kuni ".html::select(array(
+				"name" => "bc[age_e]",
+				"options" => $aoptions,
+				"selected" => $values["age_e"],
+			)),
+		));
+		$t->define_data(array(
+			"setting" => "Seksuaalne orientatsioon",
+			"settings" => $sopt,
+		));
+	}
+	function update_browsing_conditions($arr)
+	{
+		$person = $this->get_person();
+		$person->set_meta("browsing_conditions", $arr["request"]["bc"]);
+		$person->save();
+	}
+	function view_conditions($arr)
+	{
+		if ($person = $this->get_person())
+		{	
+			$prop = &$arr["prop"];
+			$t = &$prop["vcl_inst"];
+			$t->define_field(array(
+				"name" => "group",
+				"caption" => "Grupp",
+				"sorted" => 0,
+			));
+			$t->define_field(array(
+				"name" => "p_show_settings",
+				"caption" => "Profiili kuvamise seaded",
+				"sorted" => 0,
+			));
+			$options = array("default" => "aktiivne profiil");
+			$profs = $person->connections_from(array(
+				"type" => "RELTYPE_PROFILE",
+			));
+			foreach($profs as $prof)
+			{
+				$prof_o = $prof->to();
+				$options[$prof_o->id()] = $prof_o->name();
+				//echo $prof_o->name();
+			}
+			$options[0] = "ei näita antud grupile";
+			$groups = $this->common["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_USER_GROUPS",
+			));
+			//arr($groups);
+			//$groups = $groups->arr();
+			$selopts = $person->meta("view_conditions");
+			foreach($groups as $group)
+			{
+				$group_o = $group->to();
+				//arr($group_o->properties());
+				$t->define_data(array(
+					"group" => $group_o->name(),
+					"p_show_settings" => html::select(array(
+						"name" => "profset[".$group_o->id()."]",
+						"options" => $options,
+						"selected" => $selopts[$group_o->id()],
+					)),
+				));
+			}
+		}
+	}
+	function update_view_conditions($arr)
+	{
+		$profsets = $arr["request"]["profset"];
+		if(is_array($profsets))
+		{
+			foreach($profsets as $pid => $prof)
+			{
+				if($prof == "default")
+				{
+					unset($profsets[$pid]);
+				}
+			}
+		}
+		$person = $this->get_person();
+		$person->set_meta("view_conditions", $profsets);
+		$person->save();
+	}	
+	// for debugging and maintenance
+	function do_a_thing($arr)
+	{
+		$created = array();
+		$finded = array();
+		$not_finded = array();
+		
+		$commune = obj($arr["id"]);
+		$prof_list = new object_list(array(
+			"class_id" => CL_PROFILE,
+			"parent" => $commune->prop("profiles_folder"),
+			//"parent" => &$arr["obj_inst"]->prop("profiles_folder"),
+			//"parent" => $this->common["obj_inst"]->prop("profiles_folder"), 
+			//siia tullakse ennem kui pre_edit, kui sinna üldse minnaksegi
+		));
+		for ($profile = $prof_list->begin(); !$prof_list->end(); $profile = $prof_list->next())
+		{
+			if (!$person = $profile->get_first_obj_by_reltype("RELTYPE_PERSON"))
+			{
+				//seost (profiil -> isik) ei olnud, otsin vastupidist (isik -> profiil):
+				$conns = $profile->connections_to(array(
+					"type" => 14, //RELTYPE_PROFILE, //"RELTYPE_PROFILE", 
+					//paistab et connections_from toetab stringe, connections_to ei toeta
+				));
+			
+				if ($conn_to_profile = reset($conns)) //leidsime vastupidise sose?
+				{	
+					$person = $conn_to_profile->from();
+					
+					//!!!teeme õigetpidi seose (profile -> crm_person)
+					$profile->connect(array(
+						"to" => $person->id(),
+						"reltype" => "RELTYPE_PERSON", // 9!!,
+					));
+					echo("loodud seos: ".$this->get_link_for_obj($profile)." -> crm_person(".$this->get_link_for_obj($person).") <br>\n");
+					kdeb("loodud seos: ".$this->get_link_for_obj($profile)." -> crm_person(".$this->get_link_for_obj($person).") <br>\n");
+					$created[] = $this->get_link_for_obj($profile);
+				}
+				else
+				{
+					echo("ei leitud seost (isik -> profiil(".$this->get_link_for_obj($profile).")): isik teadmata <br>\n");
+					kdeb("ei leitud seost (isik -> profiil(".$this->get_link_for_obj($profile).")): isik teadmata <br>\n");
+					$not_finded[] = $this->get_link_for_obj($profile);
+					$profile->set_parent(1625);
+					$profile->save();
+				}
+			}
+			else 
+			{
+				echo("leiti seos: (profile(".$this->get_link_for_obj($profile).") -> crm_person(".$this->get_link_for_obj($person).")) <br>\n");
+				kdeb("leiti seos: (profile(".$this->get_link_for_obj($profile).") -> crm_person(".$this->get_link_for_obj($person).")) <br>\n");
+				$finded[] = $this->get_link_for_obj($profile);
+				
+				//if($profile->get_first_conn_by_reltype("?alias")){}
+			}
+		}
+		
+		echo "<br>\n finded:<br>\n";
+		echo join("<br>\n", $finded);
+		echo "<br>\n created:<br>\n";
+		echo join("<br>\n", $created);
+		echo "<br>\n not_finded:<br>\n";
+		echo join("<br>\n", $not_finded);
+	}
+	
+	function cb_get_last_added_items_for_page($vars)
+	{
+		$offset = $vars["offset"];
+		$length = $vars["length"];
+		$ol = $vars["params"]["object_list_for_page_view"];
+
+		$result = array();
+		$image_key_value_pairs = $ol->arr();
+		$showed_imgs = array_slice($image_key_value_pairs, $offset, $length);
+		
+		foreach ($showed_imgs as $image)
+		{
+			// image --------------------------------------------
+			$img_i = get_instance(CL_IMAGE);
+			$img_url = $img_i->get_url_by_id($image->id());
+			
+			//pean otsima vastupidise seose img->profile->person
+			$conn_prof_to_img = reset($image->connections_to(array("type"=>12)));
+			$profile = $conn_prof_to_img->from();
+			
+			// name & profile -----------------------------------
+			$prof_i = get_instance(CL_PROFILE);
+			if ($person = $prof_i->get_person_for_profile($profile))
+			{
+				$name = $person->prop("firstname")." ".$person->prop("lastname"); //$person->prop("name");
+			}
+			else
+			{
+				$name = "(isikut pole)";
+			}
+
+			// props --------------------------------------------
+			$prof_view_url = $this->mk_comm_orb(array(
+				"profile" => $profile->id(),
+				"commact" => "profile",
+				"group" => "friends",
+			));
+			$name_link = $this->render_link($name, $prof_view_url);
+			$created = $this->time2date($image->created(), 2);
+			
+			$rate = get_instance(CL_RATE);
+			$rating = $rate->get_rating_for_object($image->id());
+			
+			$result["items"][] = array(
+				"img_url" => $img_url,
+				"img_link" => $prof_view_url,
+				"name_link" => $name_link,
+				"prop1" => $person->prop("gender") == 2 ? "Naine" : "Mees",
+				"prop2" => "lisatud: ".$created,
+				"prop3" => "hinne: ".$rating,
+				"prop4" => $this->render_online($prof_i->is_online(array("obj_inst" => $profile))),
+			);
+			
+		}	
+		return $result;
+	}
+	
+	function render_page_view($vars)
+	{
+		$item_count = $vars["item_count"]; //ei pruugi olla antud, kuna ei teata seda veel. callback peab leidma selle. ta peab toetama siis teisi parameetreid.
+		$params = $vars["params"];
+		
+		$all_items = $vars["items"];
+		//ülemine vs. alumised
+		$get_data_obj = $vars["get_data_obj"];
+		$get_data_method = $vars["get_data_method"];
+		//$callback_get_data = $vars["callback_get_data"];
+		//arr($arr);
+		$ft_page = $vars["ft_page"];
+		//=============================================
+		
+		$first_page_nr = 0;
+		$page = is_numeric($ft_page) ? ($ft_page - $first_page_nr) : $first_page_nr;
+		//$page = zero based page nr
+		$items_in_page = 10;
+		
+		$this->read_template("page_view.tpl");
+
+		// hangime $showed_items:
+		$showed_items = array();
+		//if (isset($get_data_obj) and isset($get_data_method) and is_callable(array($get_data_obj, $get_data_method)))
+		if (isset($get_data_obj) and isset($get_data_method) and method_exists($get_data_obj, $get_data_method))
+		{
+			if (isset($item_count))
+			{
+				$offset = $page * $items_in_page;
+				$length = ($item_count - $offset < $items_in_page) ? ($item_count - $offset) : $items_in_page;
+
+				$data = $get_data_obj->$get_data_method(array(
+					"offset" => $offset,
+					"length" => $length,
+					"params" => $params,
+				));
+			}
+			else
+			{
+				$data = $get_data_obj->$get_data_method(array(
+					"page" => $page,
+					"items_in_page" => $items_in_page,
+					"params" => $params,
+				));
+				$item_count = $data["item_count"];
+			}
+			$showed_items = empty($data["items"]) ? array() : $data["items"]; //juhuks kui $data["items"] pole määratud
+		}
+		else
+		//andsin kogu array kaasa callbacki (cb_*) asemel,
+		//tavaliselt aga seda ei tasu teha, sest iga itemi jaoks tuleb arvutada mingeid täiendavaid
+		//infoelemente, mida kõigi itemite jaoks ei tasu teha, sest neist näidatakse ainult 1 lk jagu
+		if (is_array($all_items))
+		{
+			$showed_items = array_slice($all_items, ($page - $first_page_nr) * $items_in_page, $items_in_page);
+			
+		}
+		//arr($showed_items);
+		// beg: maname navbari -----------
+		$navbar_sub = "navbar";
+		//--- beg: table -----------
+		load_vcl('table');
+		$t = new aw_table();
+		//see saab requestist teada lehe, millel parajasti ollakse:
+		$navbar = $t->draw_text_pageselector(array(
+			"records_per_page" => $items_in_page,
+			"d_row_cnt" => $item_count,
+		));
+		//--- end: table -----------
+		$this->vars(array(
+			$navbar_sub => $navbar,
+		));
+		// end: maname navbari ------------
+		
+		// templeidist sõltuv kuvamine:
+		$parsed_items = array();
+		$item_nr = 0;
+		
+		foreach ($showed_items as $item)
+		{
+			$this->vars(array(
+				"img_url" => $item["img_url"],
+				"img_link" => $item["img_link"],
+				"name_link" => $item["name_link"],
+				"prop1" => $item["prop1"],
+				"prop2" => $item["prop2"],
+				"prop3" => $item["prop3"],
+				"prop4" => $item["prop4"],
 			));
 
-			if (sizeof($conns) > 0)
-			{
-				$img_c = reset($conns);
-				$rt = get_instance(CL_RATE);
-				$h1 = $rt->get_rating_for_object($img_c->prop("from"));
-				$hx = $img_c->prop("from");
-				$q = "SELECT hits FROM hits WHERE oid = '$hx'";
-				$this->db_query($q);
-				$row = $this->db_next();
-				$h2 = $row["hits"];
-			}
-		};
-		*/
+			$parsed_items["item$item_nr"] = $this->parse("item");
+			$item_nr++;
+		}
+		$this->vars($parsed_items);
+		
+		return $this->parse();
+	}
+	
+	function cb_get_friend_items_for_page($vars)
+	{
+		$offset = $vars["offset"];
+		$length = $vars["length"];
+		$profile = $vars["params"]["profile"];
+		$result = array();
+		$conns_to_friends = $profile->connections_from(array(
+			"type" => "RELTYPE_FRIEND",
+		));
+		$showed_conns = array_slice($conns_to_friends, $offset, $length);
+		
+		foreach($showed_conns as $conn)
+		{
+			$friend_profile = $conn->to();
+			$friend_i = $friend_profile->instance();
 
+			// image --------------------------------------------
+			if ($image_id = $friend_profile->prop("avatar_image"))
+			{
+				$img_i = get_instance(CL_IMAGE);
+				$img_url = $img_i->get_url_by_id($image_id);
+			}
+			elseif ($image_c = $friend_profile->get_first_conn_by_reltype("RELTYPE_IMAGE"))
+			{
+				$img_i = get_instance(CL_IMAGE);
+				$img_url = $img_i->get_url_by_id($image_c->prop("to"));
+			}
+			else
+			{
+				$img_url = "http://epood.primeframe.ee/img/products/puudub.gif";
+			}
+			
+			// name & profile -----------------------------------
+			if ($person = $friend_i->get_person_for_profile($friend_profile))
+			{
+				$name = $person->prop("firstname")." ".$person->prop("lastname"); //
+			}
+			else
+			{
+				$name = "(isikut pole)";
+			}
+
+			// props --------------------------------------------
+			$prof_view_url = $this->mk_comm_orb(array(
+				"profile" => $friend_profile->id(),
+				//"commact" => "profile",
+				"group" => "friend_details",
+			));
+			$name_link = $this->render_link($name, $prof_view_url);
+			$friends_count = count($friend_profile->connections_from(array("type" => "RELTYPE_FRIEND")));
+			
+			// kõik propid itemisse ------------------------------------
+			$result["items"][] = array(
+				"img_url" => $img_url,
+				"img_link" => $prof_view_url,
+				"name_link" => $name_link,
+				"prop1" => "vanus: ".$friend_i->get_age(array("obj_inst" => $friend_profile)),
+				"prop2" => "sõpru: ".$friends_count,
+				"prop3" => $this->render_online($friend_i->is_online(array("obj_inst" => $friend_profile))),
+				"prop4" => $this->render_karma(0),
+			);
+			
+		}
+		return $result;
+	}
+	function check_rights($id)
+	{
+		$retval = false;
+		if ($this->can("view", $id) and is_oid($id))
+		{
+			$retval = true;
+		}
+		return $retval;
+	}
+	function callback_my_images($arr)
+	{
+		//arr($arr);
 		$rv = array();
+		// siia tulevad ainult minu profiilide piltide vaated, teiste vaated lähevad kuskile mujale
+		// kuidas ma näitan mingi profiili pilte, kui see profiil peab olema samas ka aktiivne?
+		// niimoodi näitangi
+ 		/*arr($this->common);
+		$this->common["profile"]->id();
+		$prof_obj = is_object($this->common["profile"]) ? $this->common["profile"] : $this->get_active_profile();
+			$prof_obj = obj($arr["request"]["profile"]);
+			$rv["midavittu"] = array(
+				"name" => "profile",
+				"type" => "text",
+				"caption" => "sae pekki",
+				//"display" => "none",
+				"value" => $arr["request"]["profile"],
+			);
+		if(is_object($["profile"]))
+		{
+			$prof_obj = $this->common["profile"];
+		}
+		*/
+		if(!$person = $this->get_person())
+		{
+			return $rv;
+		}
+		if(is_object($this->common["my_profile"]))
+		{
+			$prof_obj = $this->common["my_profile"];
+		}
+		elseif(!$prof_obj = $this->get_active_profile())
+		{
+			return $rv;
+		}
+		$images = $prof_obj->connections_from(array(
+			"type" => "RELTYPE_IMAGE", //12,
+		));
+		$img_ids = array();
+		foreach($images as $imgc)
+		{
+			$img_ids[] = $imgc->prop("to");
+		}
+		//arr($images);
 		$n = 5;
 		$icount = sizeof($images);
 		if ($icount > $n)
 		{
 			$icount = $n;
 		};
-
 		$ims = array_values($images);
-
+		$rt = get_instance(CL_RATE);
 		$ti = get_instance(CL_IMAGE);
-
+		$options = array("-- vali pilt --");
+		$prof_to_person = $person->connections_from(array(
+			"type" => "RELTYPE_PROFILE",
+		));
+		foreach($prof_to_person as $prof)
+		{
+			$item = $prof->to();
+			if($item != $prof_obj)
+			{
+			$images2 = $item->connections_from(array(
+					"type" => "RELTYPE_IMAGE", //12,
+				));
+				foreach($images2 as $img_c)
+				{
+					// kui pilt on mitmes profiilis ja valitud profiiliga ka ühendatud
+					if(!in_array($img_c->prop("to"),$img_ids))
+					{
+						$img = $img_c->to();
+						$com = $img->comment();
+						$options[$img->id()] = (strlen($com) <= 15 ? $com : substr($com,0,15)."...");
+					}
+				}
+			}
+		}
 		for ($i = 1; $i <= 5; $i++)
 		{
-			$name3 = "s" . $i;
-			$rv[$name3] = array(
+			$rv["s".$i] = array(
 				"type" => "text",
-				"name" => $name3,
+				"name" => "s".$i,
 				"caption" => "Pilt $i",
 				"subtitle" => 1,
 			);
 			$key = $i;
 			$new = false;
 			if (is_object($ims[$i-1]))
-			{
+			{;
+				$nm = "myimage";
 				$new = true;
 				$target = $ims[$i-1]->to();
-				$name4 = "st" . $i;
-				$rv[$name4] = array(
+				$comment = $target->comment();
+				$rv["st".$i] = array(
 					"type" => "text",
-					"name" => $name4,
+					"name" => "st".$i,
 					"caption" => "Pilt",
 					"value" => html::img(array(
-						"url" => $ti->get_url_by_id($ims[$i-1]->prop("to")),
+						"url" => $ti->get_url_by_id($target->id()),
 					)),
+					
 				);
-				$key = $ims[$i-1]->prop("id");
-				$name1 = "myimage_file". $i;
-				$name2 = "myimage_comment" . $i;
+				$key = $target->id();
 				// but the key _needs_ to be unique!
-				$rv[$name1] = array(
-					"name" => "myimage[$key][file]",
+				$rv[$nm."_name".$i]= array(
+					"name" => $nm."[$key][name]",
+					"type" => "text",
+					"caption" => "Pildi nimi",
+					"value" => (strlen($comment)<=15?$comment:substr($comment,0,15)."..."),
+					
+				);
+				$rv[$nm."_comment".$i] = array(
+					"name" => $nm."[$key][comment]",
+					"type" => "textarea",
+					"caption" => "Pildi kommentaar",
+					"value" => $comment,
+				);
+				$rv[$nm."_file".$i] = array(
+					"name" => $nm."[$key][file]",
 					"type" => "fileupload",
 					"caption" => "Vali uus",
 				);
-				$rv[$name2] = array(
-					"name" => "myimage[$key][comment]",
-					"type" => "textarea",
-					"caption" => "Pildi kommentaar",
-					"value" => $target->comment(),
+				
+				$rv[$nm."_con".$i]= array(
+					"name" => "replace[".$key."]",
+					"type" => "select",
+					"caption" => "Vali olemasolev",
+					"options" => $options,
 				);
-				$name5 = "d" . $i;
-				$rv[$name5] = array(
-					"name" => "delete[" . $key . "]",
+				
+				$img_oid = $target->id();
+				$rv["rating".$i] = array(
+					"type" => "text",
+					"name" => "rating".$i,
+					"caption" => "Hinne",
+					"value" => $rt->get_rating_for_object($img_oid),
+				);
+				
+				$q = "SELECT hits FROM hits WHERE oid = '$img_oid'";
+				$this->db_query($q);
+				$row = $this->db_next();
+				$hits = $row["hits"];
+				$rv["hits".$i] = array(
+					"type" => "text",
+					"name" => "hits".$i,
+					"caption" => "Vaatamisi",
+					"value" => $hits,
+				);
+				$rv["d".$i] = array(
+					"name" => "delete[".$key."]",
 					"type" => "checkbox",
 					"caption" => "Kustuta",
+				);
+				$clist = new object_list(array(
+					"parent" => $img_oid,
+					"class_id" => CL_COMMENT,
+					"sort_by" => "created",
+				));
+				$clist_arr = $clist->arr();
+				$rv["comments".$i] = array(
+					"name" => "comments".$i,
+					"type" => "text",
+					"value" => html::href(array(
+						"url" => $this->mk_comm_orb(array(
+							"group" => "show_image_comments",
+							"img_id" => $target->id(),
+						)),
+						"caption" => "Kommentaarid (".count($clist_arr).")",
+					)),
 				);
 			}
 			else
 			{
-				$name1 = "newimage_file". $i;
-				$name2 = "newimage_comment" . $i;
-				$rv[$name1] = array(
-					"name" => "newimage[$i][file]",
+				$nm = "newimage";
+				$rv[$nm."_file".$i] = array(
+					"name" => $nm."[$i][file]",
 					"type" => "fileupload",
 					"caption" => "Vali uus",
 				);
-				$rv[$name2] = array(
-					"name" => "newimage[$i][comment]",
+				$rv[$nm."_con".$i]= array(
+					"name" => "nlink[$i]",
+					"type" => "select",
+					"caption" => "Vali olemasolev",
+					"options" => $options,
+				);
+				$rv[$nm."_comment".$i] = array(
+					"name" => $nm."[$i][comment]",
 					"type" => "textarea",
 					"caption" => "Pildi kommentaar",
 				);
 			};
-
 		};
-
-		// how tha FUCK do i do this?
-
-		// riiight, I need to return an arbitrary number of releditor and btw, later on I also
-		// need to keep the order
-
-		//$rv = array("images" => $props["images"]);
-		/*
-		$x = $t->parse_properties(array(
-			"properties" => $rv,
-			"obj_inst" => $poo,
-		));
-		$x["ht"] = array(
-			"name" => "ht",
-			"type" => "text",
-			"value" => "<h3>Vaatamisi: $h2, Hinne: $h1</h3>",
-		);
-		*/
+		//arr($rv);
 		return $rv;
 	}
 
+	function callback_top_men($arr)
+	{
+		$retval = array();
+		$retval["el1"] = array(
+			"type" => "text",
+			"value" => $this->render_page_view(array(
+				"ft_page" => $arr["request"]["ft_page"],
+				//"item_count" => 10, //dont know here. cb_get_top_list_items_for_page gets it.
+				"get_data_obj" => $this,
+				"get_data_method" => 'cb_get_top_list_items_for_page',
+				"params" => array("gender" => 1),
+			)),
+			"no_caption" => 1,
+		);
+	    return $retval;
+	}
+
+	function callback_top_women($arr)
+	{
+		$retval = array();
+		$retval["el1"] = array(
+			"type" => "text",
+			"value" => $this->render_page_view(array(
+				"ft_page" => $arr["request"]["ft_page"],
+				//"item_count" => 10, //dont know here. cb_get_top_list_items_for_page gets it.
+				"get_data_obj" => $this,
+				"get_data_method" => 'cb_get_top_list_items_for_page',
+				"params" => array("gender" => 2),
+			)),
+			"no_caption" => 1,
+		);
+	    return $retval;
+	}
+
+	function cb_get_top_list_items_for_page($vars)
+	{
+		//$offset = $vars["offset"];
+		//$length = $vars["length"];
+		$gender = $vars["params"]["gender"];
+		$page = $vars["page"];
+		$items_in_page = $vars["items_in_page"];
+		
+		// find all men from commune persons folder:
+		$person_list = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"parent" => $this->common["obj_inst"]->prop("persons_folder"),
+			"gender" => $gender, //men:1 women:2
+		));
+		// find all their profiles:
+		$prof_list = new object_list();
+		for ($o = $person_list->begin(); !$person_list->end(); $o = $person_list->next())
+		{
+			$conns_to_profile = $o->connections_from(array(
+				"type" => "RELTYPE_PROFILE",
+			));
+			foreach ($conns_to_profile as $profile_c) {
+				$prof_list->add($profile_c->to());
+			}
+		}
+		
+		// find all their images:
+		// and add image oid's with rating's to an array for sorting
+		$ratings_arr = array();
+		$rate = get_instance(CL_RATE);
+		for ($o = $prof_list->begin(); !$prof_list->end(); $o = $prof_list->next())
+		{
+			$conns_to_img = $o->connections_from(array(
+				"type" => "RELTYPE_IMAGE",
+			));
+			foreach ($conns_to_img as $img_c) {
+				$oid = $img_c->prop("to");
+				$ratings_arr[$oid] = $rate->get_rating_for_object($oid);
+			}
+		}
+		
+		arsort($ratings_arr);
+		$result["item_count"] = count($ratings_arr);
+		
+		$arr_oid_and_rating = array();
+		foreach ($ratings_arr as $oid => $rating) {
+			$arr_oid_and_rating[] = array("oid"=>$oid, "rating"=>$rating);
+		}
+		$limited_oid_and_rating = array_slice($arr_oid_and_rating, $page * $items_in_page, $items_in_page);
+
+		
+		foreach ($limited_oid_and_rating as $oid_and_rating)
+		{
+			$id = $oid_and_rating["oid"];
+			$rating = $oid_and_rating["rating"];
+			$image = obj($id);
+			
+			// image --------------------------------------------
+			//if ($image_c = $friend_profile->get_first_conn_by_reltype("RELTYPE_IMAGE"))
+			
+			$img_i = get_instance(CL_IMAGE);
+			$img_url = $img_i->get_url_by_id($id);
+			
+			//pean otsima vastupidise seose img->profile->person
+			$conn_prof_to_img = reset($image->connections_to(array("type"=>12)));
+			$profile = $conn_prof_to_img->from();
+			
+			// name & profile -----------------------------------
+			$prof_i = get_instance(CL_PROFILE);
+			if ($person = $prof_i->get_person_for_profile($profile))
+			{
+				$name = $person->prop("firstname")." ".$person->prop("lastname"); //$name = $person->prop("name");
+			}
+			else
+			{
+				$name = "(isikut pole)";
+			}
+
+			// props --------------------------------------------
+			$prof_view_url = $this->mk_comm_orb(array(
+				"profile" => $profile->id(),
+				"commact" => "profile",
+				"group" => "prof_friends",
+			));
+			$name_link = $this->render_link($name, $prof_view_url);
+
+			$created = $this->time2date($image->created(), 2);
+
+			$result["items"][] = array(
+				"img_url" => $img_url,
+				"img_link" => $prof_view_url,
+				"name_link" => $name_link,
+				"prop1" => $person->prop("gender") == 2 ? "Naine" : "Mees",
+				"prop2" => "hinne: ".$rating,
+				"prop3" => $this->render_online($prof_i->is_online(array("obj_inst" => $profile))),
+				"prop4" => "lisatud: ".$created, 
+			);
+			
+		}	
+		return $result;
+	}
+	
+	function get_img_list($arr)
+	{
+		$prof_list = new object_list(array(
+			"class_id" => CL_PROFILE,
+			"parent" => $arr["obj_inst"]->prop("profiles_folder"),
+			//"parent" => $this->common["obj_inst"]->prop("profiles_folder"),
+		));
+		
+		//$connection_list = $prof_list->connections_from(array("type" => "RELTYPE_IMAGE"));
+		//$img_list = $connection_list->to();
+		//kahjuks ei saa nii teha, aga võiks saada.. ideid tulevastele p6lvedele
+		
+		$prof_ids = $prof_list->ids();
+		$c = new connection();
+		$image_rels = $c->find(array("from" => $prof_ids, "type" => 12)); // => RELTYPE_IMAGE));
+		$images = array();
+		foreach($image_rels as $rel)
+		{
+			$images[$rel["to"]] = obj($rel["to"]);
+		}
+		$img_list = object_list::from_arr($images);
+
+		return $img_list;
+	}
+
+	function callback_last_added($arr)
+	{
+		$img_list = $this->get_img_list($arr);
+		$img_list->sort_by(array(
+			"prop" => "created",
+			"order" => "desc",
+		));
+		
+		$retval = array();
+		$retval["el1"] = array(
+			"type" => "text",
+			"value" => $this->render_page_view(array(
+				"ft_page" => $arr["request"]["ft_page"],
+				"item_count" => $img_list->count(),
+				"get_data_obj" => $this,
+				"get_data_method" => 'cb_get_last_added_items_for_page',
+				"params" => array("object_list_for_page_view" => $img_list),
+			)),
+			"no_caption" => 1,
+		);
+	    return $retval;
+	}
+
+	function callback_rate_content($arr)
+	{
+		$retval = array();
+		$retval["rateform"] = array(
+			"type" => "form",
+			"name" => "rateform",
+			"caption" => "Pildi hindamine",
+			"sclass" => "applications/commune/image_rate",
+			"sform" => "rate",
+		); 
+		//sclass=applications/commune/image_rate sform=rate
+	    return $retval;
+	}
+
+	// praegu ei kasutata, kuna hindamine on formis. vbl tulevikus vaja hindamine formist välja võtta.
 	function callback_rate($arr)
 	{
 		$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = objects.oid) WHERE objects.status = 2 ORDER BY rand()";
@@ -339,92 +3005,207 @@ class commune extends class_base
 		return array("name" => $prop, "scale" => $scale, "pic_id" => $pic_id);
 	}
 
+	// returns the object of active user
+	function get_user()
+	{
+		//kui kasutaja ei ole sisse loginud, siis aw_global_get("uid") ei ole määratud.
+		if($uid = aw_global_get("uid"))
+		{
+			$users = get_instance("users");
+			$oid = $users->get_oid_for_uid($uid);
+			return obj($oid);
+		}
+		return false;
+	}
+	function get_user_for_person($pers_o)
+	{
+		//arr($pers_o->properties());
+		/*
+		$cons = $pers_o->connections_from(array(
+			//"class" => CL_USER,
+		));
+		arr($cons);
+		*/
+		if ($user = obj($pers_o->createdby()))
+		{
+			return $user;
+		}
+		return FALSE;
+	}
+	function get_person_for_profile($profile_o)
+	{
+		if($person = $profile_o->get_first_obj_by_reltype("RELTYPE_PERSON"))
+		{
+			return $person;
+		}
+		return FALSE;
+	}
+	function get_user_for_profile($profile_o)
+	{
+		if($person = $profile_o->get_first_obj_by_reltype("RELTYPE_PERSON"))
+		{
+			if ($user = $this->get_user_for_person($person))
+			{
+				return $user;
+			}
+		}
+		return FALSE;
+	}
+	// returns person object of current user. Creates new, if doesn't exist jet.
+	function get_person()
+	{
+		//echo dbg::process_backtrace(debug_backtrace());
+		if (!$user = $this->get_user())
+		{
+			return FALSE;
+		}
+		// check whether a person object exists for her
+		if (!$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON"))
+		{
+			// create new person
+			$person = new object();
+			$person->set_class_id(CL_CRM_PERSON);
+			$person->set_parent($this->common["obj_inst"]->prop("persons_folder"));
+			$person->set_status(STAT_ACTIVE);
+			$person->save();
+			$user->connect(array(
+				"to" => $person->id(),
+				"reltype" => "RELTYPE_PERSON", //2,
+			));
+		}
+		return $person;
+		
+		//seda saab teha ka nii: viga ei pea kontrollima ka, see teeb isiku 2ra kui pole sellist. Kristo.
+		//problem on ainult selles, kuhu ta selle isiku teeb - nimelt samasse kataloogi, kus user.
+		//$us = get_instance(CL_USER);
+		//$person = obj($us->get_current_person());
+		//return $person;
+	}
+	function get_active_profile()
+	{
+		if ($person = $this->get_person())
+		{
+			$active_profile_id = $person->meta("active_profile");
+			//[duke] if ($this->can("view",$oid)) { $o = new object($oid) } else { print "seda ei saa laadida"; };
+			if ($active_profile_id and $this->can("view", $active_profile_id))
+			{
+				return obj($active_profile_id);
+			}
+			
+			// active not set. make one active and give it.
+			if ($profile = $person->get_first_obj_by_reltype("RELTYPE_PROFILE"))
+			{
+				$person->set_meta("active_profile", $profile->id());
+				$person->save();
+				return $profile;
+			}
+			else //-> pole yhtegi profiili sellel persoonil
+			{
+				//vbl peaks analoogselt user::get_person_for_user()-iga looma uue, kui ühtegi veel pole?
+				//esimene profiil peaks olema loodud liitumisel, kui kasutaja suvatseb väljad täita,
+				//kui ta seda ei tee, jääb profiil salvestamata.. praeguse korralduse järgi..
+				//Nii et loome uue, kui vaja on.
+				
+				$profiles_folder_id = $this->common["obj_inst"]->prop("profiles_folder");
+				if (is_oid($profiles_folder_id))
+				{
+					$profile = $this->make_profile($profiles_folder_id);
+					$person->set_meta("active_profile", $profile->id());
+					$person->save();
+					return $profile;
+				}
+			}
+			
+		}
+		return false;
+	}
+	
 	function callback_my_profile($arr)
 	{
 		$prop = $arr["prop"];
-		$rv = array();
-		$t = get_instance(CL_CRM_PERSON);
-		$t->init_class_base();
-		$props = $t->get_property_group(array(
+		
+		$prsn_cls_i = get_instance(CL_CRM_PERSON);
+		$prsn_cls_i->init_class_base();
+		$props = $prsn_cls_i->get_property_group(array(
 			"group" => "general",
 		));
+		//arr($props);
+		$person_o = $this->get_person();
+		//arr($props);
+		//echo $person_o->id();
+		$profile_o = $this->common["my_profile"] == true ? $this->common["my_profile"] : $this->get_active_profile();
+		//nüüd kopeeritakse sama struktuuriga uude array-sse ainult need propid, mida tahan
+		$wanted_props = array();
+		foreach ($this->fields_from_person as $wanted_field)
+		{
+			if (isset($props[$wanted_field]))
+			{
+				$wanted_props[$wanted_field] = $props[$wanted_field];
+			}
+		}
+		//propid saavad väärtuse $person_o-st - iga prop saab lisa elemente
+		$ret_props_person = $prsn_cls_i->parse_properties(array(
+			"properties" => $wanted_props,
+			"obj_inst" => $person_o,
+		));
+		foreach ($ret_props_person as $key => $prop)
+		{
+			$ret_props_person[$key]["name"] = "persondata[".$prop["name"]."]";
+		}
+		//nüüd sama PROFIILI propidega
 		
-		// first I need the object of active user
-		$users = get_instance("users");
-		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-
-		// check whether a person object exists for her
-		$persons = $user->connections_from(array(
-			"type" => "RELTYPE_PERSON",
-		));
-		
-		if (sizeof($persons) > 0)
+		$prof_cls_i = get_instance(CL_PROFILE);
+		$prof_cls_i->init_class_base();
+		$props = $prof_cls_i->get_all_properties();
+		//arr($props);
+		//nüüd kopeeritakse sama struktuuriga uude array-sse ainult need propid, mida tahan
+		$wanted_props = array();
+		foreach ($this->change_fields_from_profile as $wanted_field)
 		{
-			// use existing
-			$person_id = reset($persons);
-			$o = new object($person_id->prop("to"));
-
-			$po = $o->connections_from(array(
-				"type" => 14,
-			));
-			if (sizeof($po) > 0)
+			if (isset($props[$wanted_field]))
 			{
-				$pox = reset($po);
-				$po_object = $pox->to();
+				$wanted_props[$wanted_field] = $props[$wanted_field];
 			};
 		};
-
-		foreach($props as $prop)
+		//propid saavad väärtuse $profile_o-st - iga prop lisa elemente
+		$ret_props_profile = $prof_cls_i->parse_properties(array(
+			"properties" => $wanted_props,
+			"obj_inst" => $profile_o,
+		));
+		foreach ($ret_props_profile as $key => $prop)
 		{
-			if (in_array($prop["name"],$this->fields_from_person))
+			$ret_props_profile[$key]["name"] = "profdata[".$prop["name"]."]";
+			if($key == "user_field1")
 			{
-				$rv[$prop["name"]] = $prop;
-			};
-		};
-
-		$rv = $t->parse_properties(array(
-			"properties" => $rv,
-			"obj_inst" => $o,
-		));
-
-		$t2 = get_instance(CL_PROFILE);
-		$t2->init_class_base();
-		$props = $t2->get_property_group(array(
-			"group" => "settings",
-		));
-
-		$rv2 = array();
-
-		foreach($props as $prop)
-		{
-			if (in_array($prop["name"],$this->fields_from_profile))
-			{
-				$rv2[$prop["name"]] = $prop;
-			};
-		};
-
-		$res = $t2->parse_properties(array(
-			"properties" => $rv2,
-			"obj_inst" => $po_object,
-		));
-
-		foreach($res as $item)
-		{
-			$rv[$item["name"]] = $item;
-		};
-
+				$v = $prop["value"];
+				$m = $v{4}.$v{5};
+				$d = $v{6}.$v{7};
+				$y = $v{0}.$v{1}.$v{2}.$v{3};
+				$var = mktime(0,0,0,$m,$d,$y);
+				$ret_props_profile["user_field1"]["value"] = ($var == -1) ? "" : $var;
+			}
+		}
+		$ret_toolbar = array();
+		$ret_toolbar['my_profile_toolbar'] = array(
+			'name' => 'my_profile_toolbar',
+			'group' => 'profile_change',
+			'type' => 'toolbar',
+			'no_caption' => 1,
+			'caption' => 'ToolBar',
+		);
+		//arr($ret_props_person);
+		$rv = $ret_toolbar + $ret_props_person + $ret_props_profile;
+		//arr($rv);
 		return $rv;
-
-
 	}
 
 	function callback_get_locations($arr)
 	{
-		$conns = $arr["obj_inst"]->connections_from(array(
+		$conns =&$arr["obj_inst"]->connections_from(array(
 			"type" => RELTYPE_CONTENT,
 		));
 
-		$old = $arr["obj_inst"]->meta("location");
+		$old = &$arr["obj_inst"]->meta("location");
 
 		$rv = array();
 		foreach($conns as $conn)
@@ -447,23 +3228,222 @@ class commune extends class_base
 				"value" => $old[$id],
 			);
 		};
-
 		return $rv;
 	}
-
+	function callback_friend_details($arr)
+	{
+		if (!$profile = $this->common["profile"])
+		{
+			return PROP_FATAL_ERROR;
+		}
+		$my_user = $this->get_user();
+		$my_profile = $this->common["my_profile"] == true ? $this->common["my_profile"] : $this->get_active_profile(); 
+		$person = $profile->get_first_obj_by_reltype("RELTYPE_PERSON");
+		$rval["view"] = array(
+			"no_caption" => 1,
+			"type" => "text",
+			"name" => "view",
+			"value" => $this->render_profile_view($profile),
+		);
+		$params = array(
+			"group" => "friends",
+		);
+		$cons = $my_profile->connections_from(array(
+			"type" => "RELTYPE_FRIEND_GROUPS",
+		));
+		$selected = -1;
+		if(is_array($cons))
+		{
+			foreach($cons as $con)
+			{
+				if(in_array($profile->oid,$con->meta("users")))
+				{
+					$selected = $con->prop("to");
+					break;
+				}
+			}
+		}
+		$cl = get_instance("classificator");
+		$opts = $cl->get_options_for(array(
+			"name" => "friend_groups", 
+			"clid" => CL_PROFILE,
+		));
+		$sopts = array(-1 => "-- vali --", 0 => "üldine");
+		$sopts = $sopts + $opts;
+		$rval["friendgroups"] = array(
+			"caption" => "Pane sõbragruppi",
+			"type" => "text",
+			"name" => "friendgroups",
+			"value" => html::select(array(
+				"name" => "selgroup",
+				"options" => $sopts,
+				"selected" => $selected,
+				"onchange" => "window.location = '".
+				$this->mk_comm_orb(array(
+					"profile" => $profile->oid,
+					"my_profile" => $my_profile->oid,
+					"group" => $arr["request"]["group"],
+				), 0, "addtogroup")
+				."&f_group=' + this.options[this.selectedIndex].value;"
+			)),
+		);
+		if($my_profile->is_connected_to(array(
+			"to" => $profile->id(),
+			"type" => "RELTYPE_FRIEND",
+		)))
+		{
+			$params["sel[".$profile->id()."]"] = $profile->id();
+			$rval["removefriend"] = array(
+				"type" => "text",
+				"name" => "removefriend",
+				"value" => html::href(array(
+					"url" => $this->mk_comm_orb($params, 0, "remove_friend"),
+					"caption" => "Eemalda sõprade hulgast",
+				)),
+			);
+		}
+		else
+		{
+			$afparams = $params;
+			$afparams["commact"] = "add_friend";
+			$afparams["profile"] = $profile->id();
+			$rval["addfriend"] = array(
+				"type" => "text",
+				"name" => "addfriend",
+				"value" => html::href(array(
+					"url" => $this->mk_comm_orb($afparams, 0, "commaction"),
+					"caption" => "lisa sõprade hulka",
+				)),
+			);
+			$user = $this->get_user_for_profile($profile);
+			if($my_user->is_connected_to(array(
+				"to" => $user->id(),
+				"type" => "RELTYPE_IGNORED",
+			)))
+			{
+				$riparams = $params;
+				$riparams["sel[".$user->id()."]"] = $user->id();
+				$rval["removeignored"] = array(
+					"type" => "text",
+					"name" => "removeignored",
+					"value" => html::href(array(
+						"url" => $this->mk_comm_orb($riparams, 0, "remove_ignored"),
+						"caption" => "Eemalda ignoreeritute hulgast",
+					)),
+				);
+			}
+			else
+			{
+				$aiparams = $params;
+				$aiparams["user"] = $user->id();
+				$aiparams["commact"] = "add_ignored";
+				$rval["addignored"] = array(
+					"type" => "text",
+					"name" => "addignored",
+					"value" => html::href(array(
+						"url" => $this->mk_comm_orb($aiparams, 0, "commaction"),
+						"caption" => "lisa ignoreeritute hulka",
+					)),
+				);
+			}
+			if($my_user->is_connected_to(array(
+				"to" => $user->id(),
+				"type" => "RELTYPE_BLOCKED",
+			)))
+			{
+				$params["sel[".$user->id()."]"] = $user->id();
+				$rval["removeblocked"] = array(
+					"type" => "text",
+					"name" => "removeblocked",
+					"value" => html::href(array(
+						"url" => $this->mk_comm_orb($params, 0, "remove_blocked"),
+						"caption" => "Eemalda blokeeritute hulgast",
+					)),
+				);
+			}
+			else
+			{
+				$params["user"] = $user->id();
+				$params["commact"] = "add_blocked";
+				$rval["addblocked"] = array(
+					"type" => "text",
+					"name" => "addblocked",
+					"value" => html::href(array(
+						"url" => $this->mk_comm_orb($params, 0, "commaction"),
+						"caption" => "lisa blokeeritute hulka",
+					)),
+				);
+			}
+		}
+		/*
+		$rval["comments"] = array(
+			"no_caption" => 1,
+			"type" => "comments",
+			"name" => "profile_comments",
+			"heading" => $person->prop("firstname")." ".$person->prop("lastname"),
+			"use_parent" => $profile->id(),
+		);
+		$rval["submit"] = array(
+			"caption" => "Kommenteeri!",
+			"type" => "submit",
+			"name" => "kommenteeri",
+		);
+		*/
+		return $rval;
+	}
+	function render_friends_panel($profile, $ft_page)
+	{
+			switch ($this->common["commact"])
+			{
+				case "profile":
+					return $this->render_profile_view($profile);
+					break;
+				case "pictures":
+					
+					break;
+				case "communities":
+					
+					break;
+				case "friends":
+				default:
+					return $this->render_friends_page($profile, $ft_page);
+			}
+	}
+	
+	function render_friends_page($profile, $ft_page)
+	{
+		return $this->render_page_view(array(
+			"ft_page" => $ft_page,
+			"item_count" => count($profile->connections_from(array("type" => "RELTYPE_FRIEND"))),
+			"get_data_obj" => $this,
+			"get_data_method" => 'cb_get_friend_items_for_page',
+			"params" => array("profile" => $profile),
+		));
+	}
+	
 	function update_locations($arr)
 	{
-		$arr["obj_inst"]->set_meta("location",$arr["request"]["location"]);
+		$arr["obj_inst"]->set_meta("location", $arr["request"]["location"]);
 		// now I have got saving working properly .. I only need to add those elements to the classbase
 		// generated form. How?
 	}
 
 	function set_property($arr)
 	{
+		//arr($arr);
 		$prop = $arr["prop"];
 		$rv = PROP_OK;
 		switch($prop["name"])
 		{
+			case "message_conditions":
+				$this->update_message_conditions($arr);
+				break;
+			case "browsing_conditions":
+				$this->update_browsing_conditions($arr);
+				break;
+			case "view_conditions":
+				$this->update_view_conditions($arr);
+				break;
 			case "my_profile":
 				$this->update_profile($arr);
 				break;
@@ -472,6 +3452,7 @@ class commune extends class_base
 				$this->update_my_images($arr);
 				break;
 
+			case "rate_content":
 			case "rateform":
 				$this->add_rate($arr);
 				break;
@@ -481,11 +3462,11 @@ class commune extends class_base
 				break;
 
 			case "newmessage":
-				$this->create_message($arr);
+				$this->create_message($prop["value"]);
 				break;
 
 			case "join":
-				$j_oid = $arr["obj_inst"]->prop("join_obj");
+				$j_oid = &$arr["obj_inst"]->prop("join_obj");
 				if ($j_oid)
 				{
 					$tmp = $arr["request"];
@@ -507,6 +3488,23 @@ class commune extends class_base
 					}
 				}
 				break;
+				
+			case "my_profiles":
+				
+				//miks ei tööta????
+				//aw_session_set("active_profile_id", $active_profile_id);
+				//debug:
+				//echo 'aw_global_get:'.aw_global_get('active_profile_id');
+				
+				//sessioone ei saa kasutada. nt see ei tööta:
+				//aw_session_set('kala', 1);
+				//echo 'aw_global_get:'.aw_global_get('kala');
+				
+				$person = $this->get_person();
+				$person->set_meta("active_profile", $arr["request"]["active_profile"]);
+				$person->save();
+
+				break;
 		};
 		return $rv;
 	}
@@ -522,6 +3520,8 @@ class commune extends class_base
 				"rate" => $arr["request"]["rateform"]["rate"],
 				"no_redir" => 1,
 			));
+
+			//from core. gets param oid - that object gets one hit plus:
 			$this->add_hit($arr["request"]["rateform"]["img_id"]);
 		};
 
@@ -535,51 +3535,44 @@ class commune extends class_base
 				"return" => "id",
 			));
 		};
+		
+		aw_session_set("last_rated_oid", $arr["request"]["rateform"]["img_id"]);
 	}
 
 	function update_my_images($arr)
 	{
+		//arr($arr);
+		if(!$person = $this->get_person())
+		{
+			return $rv;
+		}
+		if($this->check_rights($arr["request"]["my_profile"]))
+		{
+			$profile_obj = obj($arr["request"]["my_profile"]);
+		/*
+		$xxx = $this->mk_my_orb("change", array(
+			"id" => $arr["obj_inst"]->id(),
+			"group" => "general",
+			"group" => "my_images",
+// 			"profile" => $arr["request"]["profile"],
+		), CL_COMMUNE);
+		*/
+		}
+		else if (!$profile_obj = $this->get_active_profile())
+		{
+			return $rv;
+		}
+		//arr($profile_obj);
 		$to_replace = $_FILES["myimage"]["tmp_name"];
-
 		$to_delete = $arr["request"]["delete"];
-
 		$to_add = $_FILES["newimage"]["tmp_name"];
-
-
-		// images are connected to the profile
-
-		// I need connection id-s for existing images, no?
-		
-		// check whether a person object exists for her
-
-		$profile_obj = $this->_get_profile_obj();
-
-		if (is_object($profile_obj) && is_oid($profile_obj->id()))
-		{
-			/*
-			print "found a valid profile object";
-			print "<pre>";
-			print_r($profile_obj->properties());
-			print "</pre>";
-			*/
-		}
-		else
-		{
-			// since we could not find a valid profile object, then
-			// do nothing
-
-			// XXX: make it so that we cannot reach this point if there is no valid profile
-			return false;
-		}
-
+		$to_olink = $arr["request"]["replace"];
+		$to_nlink = $arr["request"]["nlink"];
 		$t = get_instance(CL_IMAGE);
-
-
+		//arr($to_olink);
 		// okey, now I need to submit things
 
-
 		//$tmp_file_inf = $_FILES["myimage"]["tmp_name"];
-
 
 		// XXX: should I check the error information in $_FILES?
 		if (is_array($to_add))
@@ -600,154 +3593,292 @@ class commune extends class_base
 						"parent" => $profile_obj->id(),
 						"return" => "id",
 					);
-
+					
 					// need on uued pildid
 					$img_id = $t->submit($argblock);
 					$profile_obj->connect(array(
 						"to" => $img_id,
-						"reltype" => 12, // RELTYPE_IMAGE
+						"reltype" => "RELTYPE_IMAGE", // RELTYPE_IMAGE
 					));
 					$prof_id = $profile_obj->id();
 					$q = "INSERT INTO profile2image VALUES ($prof_id,$img_id)";
 					$this->db_query($q);
-				};
-			};
-		};
+				}
+			}
+		}
 
 		$images = $profile_obj->connections_from(array(
-			"type" => 12,
+			"type" => "RELTYPE_IMAGE" //12,
 		));
-
-	
+		//arr($images);
+		// asendab olemasoleva pildi ühes profiilis olemasoleva pildiga teisest profiilist
+		if(is_array($to_olink))
+		{
+			foreach($to_olink as $key => $value)
+			{
+				if(!empty($value))
+				{
+					// kui juba kuskil korra ühendati need omavahel
+					if(!array_key_exists($value, $images) and is_oid($value))
+					{
+						$img_obj = obj($key);
+						$num = count($img_obj->connections_to(array(
+							//"type" => RELTYPE_PROFILE, // millegipärast ei tunne pildi ja profiili vahel seosetüüpi ära... aga iseenest võib praegu nii olla, pärast vajaks ülevaatamist
+						)));
+						if($num == 0)
+						{
+							$img_obj->delete();
+						}
+						else
+						{
+							$profile_obj->disconnect(array(
+								"from" => $key,
+							));
+						}
+						$profile_obj->connect(array(
+							"reltype" => "RELTYPE_IMAGE",
+							"to" => $value,
+						));
+					}
+				}
+			}
+		}
+		// lisab pildi ühest profiilist teise profiili
+		if(is_array($to_nlink))
+		{
+			foreach($to_nlink as $key => $value)
+			{
+				if(!empty($value))
+				{
+					if(!array_key_exists($value, $images) and is_oid($value))
+					{
+						$profile_obj->connect(array(
+							"reltype" => "RELTYPE_IMAGE",
+							"to" => $value,
+						));
+					}
+				}
+			}
+		}
 		if (is_array($to_replace))
 		{
 			foreach($to_replace as $key => $tmp_name)
 			{
 				$tn = $tmp_name["file"];
-
+				$argblock = array(
+					"comment" => $arr["request"]["myimage"][$key]["comment"],
+					"return" => "id",
+				);
 				if ($to_delete[$key])
 				{
-					$o = new object($images[$key]->prop("to"));
-					$o->delete();
+					$img_obj = obj($key);
+					$num = count($img_obj->connections_to(array(
+						//"type" => RELTYPE_PROFILE, // millegipärast ei tunne pildi ja profiili vahel seosetüüpi ära... aga iseenest võib praegu nii olla, pärast vajaks ülevaatamist
+					)));
+					if($num == 0)
+					{
+						$img_obj->delete();
+					}
+					else
+					{
+						$profile_obj->disconnect(array(
+							"reltype" => "RELTYPE_IMAGE",
+							"from" => $key,
+						));
+					}
 				}
+				
+				elseif (is_uploaded_file($tn))
+				{
+					$img_obj = obj($key);
+					$num = count($img_obj->connections_to(array(
+						//"type" => RELTYPE_PROFILE, // millegipärast ei tunne pildi ja profiili vahel seosetüüpi ära... aga iseenest võib praegu nii olla, pärast vajaks ülevaatamist
+					)));
+					if($num == 0)
+					{
+						$img_obj->delete();
+					}
+					else
+					{
+						$profile_obj->disconnect(array(
+							"reltype" => "RELTYPE_IMAGE",
+							"from" => $key,
+						));
+					}
+					$argblock["file"] = array(
+							"name" => $_FILES["myimage"]["name"][$key]["file"],
+							"contents" => base64_encode(file_get_contents($tn)),
+							"type" => $_FILES["myimage"]["type"][$key]["file"],
+						);
+					$argblock["parent"] = $profile_obj->id();
+						// need on uued pildid
+					
+					$img_id = $t->submit($argblock);
+					
+					$profile_obj->connect(array(
+						"to" => $img_id,
+						"reltype" => "RELTYPE_IMAGE", // RELTYPE_IMAGE
+					));
+					$prof_id = $profile_obj->id();
+					
+					$q = "INSERT INTO profile2image VALUES ($prof_id,$img_id)";
+					$this->db_query($q);
+					}
 				else
 				{
-					$argblock = array(
-						"id" => $images[$key]->prop("to"),
-						"comment" => $arr["request"]["myimage"][$key]["comment"],
-						"return" => "id",
-					);
-
-					if (is_uploaded_file($tn))
-					{
-						$argblock["file"] = array(
-								"name" => $_FILES["myimage"]["name"][$key]["file"],
-								"contents" => base64_encode(file_get_contents($tn)),
-								"type" => $_FILES["myimage"]["type"][$key]["file"],
-						);
-					};
+					$argblock["id"] = $key;
 					$img_id = $t->submit($argblock);
-				};
-			};
-		};
-		return false;
+				}
+			}
+		}
+	}
+
+	/**  
+		
+		@attrib name=new_profile all_args="1"
+		@param id required type=int acl=view
+		@param group optional
+		@param return_url optional
+	
+	**/
+	function new_profile($arr)
+	{
+		$commune_o = new object($arr["id"]);
+		$profiles_folder_id = $commune_o->prop("profiles_folder");
+		
+		if (is_oid($profiles_folder_id))
+		{
+			$person = $this->get_person();
+			$profile = $this->make_profile($profiles_folder_id);
+			//$person->set_meta("active_profile", $profile->id());
+			$person->save();
+		}
+		return $this->mk_comm_orb(array("group" => $arr["group"]), $arr["obj_inst"]->id());
+		//return $this->mk_comm_orb(array("group" => $arr["group"]));
+	}
+	
+	function make_profile($folder_id)
+	{
+		$profile = new object();
+		$profile->set_parent($folder_id);
+		$profile->set_class_id(CL_PROFILE);
+
+		if (!$person = $this->get_person())
+		{
+			//vbl on kusagil vaja saada lihtsalt mingi sidumata profiili obj..
+			$profile->save();
+			return $profile;
+		}
+		
+		$nr = count($person->connections_from(array("type" => "RELTYPE_PROFILE"))) + 1;
+		$profile->set_name($person->name().' profiil '.$nr);
+		$prof_id = $profile->save();
+		
+		$person->connect(array(
+			"to" => $prof_id,
+			"reltype" => "RELTYPE_PROFILE", //14,
+		));
+		$profile->connect(array(
+			"to" => $person->id(),
+			"reltype" => "RELTYPE_PERSON", //9,
+		));
+		
+		return $profile;
 	}
 
 	function update_profile($arr)
 	{
-		// first I need the object of active user
-		$users = get_instance("users");
-		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-
-		// check whether a person object exists for her
-		$persons = $user->connections_from(array(
-			"type" => 2,
-		));
-
-		$new = false;
-
-		if (sizeof($persons) > 0)
+		if($this->common["my_profile"])
 		{
-			// use existing
-			$person_id = reset($persons);
-			$o = new object($person_id->prop("to"));
+			$person = $this->get_person_for_profile($this->common["my_profile"]);
 		}
 		else
 		{
-			// create new
-			$new = true;
-			$o = new object();
-			$o->set_class_id(CL_CRM_PERSON);
-			$o->set_parent($user->parent());
-			$o->set_status(STAT_ACTIVE);
+			$person = $this->get_person();
 		}
+		// save props for person:
+		$person_i = $person->instance();
+		$person_props = $arr["request"]["persondata"];
+		$person_props["return"] = "id";
+		$person_props["id"] = $person->id();
+		$person_id = $person_i->submit($person_props);
 
-		foreach($this->fields_from_person as $field)
-		{
-			$o->set_prop($field,$arr["request"][$field]);
-		};
-		$o->save();
-
-		if ($new)
-		{
-			$user->connect(array(
-				"to" => $o->id(),
-				"reltype" => 2,
-			));
-		};
-
-		$profs = $o->connections_from(array(
-			"type" => 14,
-		));
-
+		// save props for profile:
 		$new = false;
-		$clinst = get_instance(CL_PROFILE);
-		$vars = array();
-		$vars["group"] = "settings";
-		$vars["return"] = "id";
-		if (sizeof($profs) > 0)
+		$profile_props = $arr["request"]["profdata"];
+		//arr($arr);
+		//arr($profile_props);
+		$usr = &$profile_props["user_field1"];
+		foreach($usr as $key => $value)
 		{
-			$prof_id = reset($profs);
-			$po = new object($prof_id->prop("to"));
-			$vars["id"] = $po->id();
+			if($value < 10)
+			{
+				$usr[$key] = "0".$value;
+			}
 		}
-		else
-		{
-			//$po = new object();
-			$vars["parent"] = $user->parent();
-			$vars["status"] = STAT_ACTIVE;
-			$new = true;
-		};
-
-		foreach($this->fields_from_profile as $field)
-		{
-			$vars[$field] = $arr["request"][$field];
-		}
-
-		$id = $clinst->submit($vars);
-
-		if ($new)
-		{
-			$o->connect(array(
-				"to" => $id,
-				"reltype" => 14,
-			));
-		};
+ 		$profile_props["user_field1"] = $usr["year"].$usr["month"].$usr["day"];
+		$profile_props["group"] = "settings_yldandmed";
+		$profile_props["return"] = "id";
 		
-		$o->save();
-			
-		// now I need to submit the god damn thing
+		if($this->common["my_profile"])
+		{
+			$profile = $this->common["my_profile"];
+			$profile_props["id"] = $profile->id();
+		}
+		elseif($profile = $this->get_active_profile())
+		{
+			$profile_props["id"] = $profile->id();
+		}
+		else
+		{
+			if ($profile = $person->get_first_obj_by_reltype("RELTYPE_PROFILE"))
+			{
+				$profile_props["id"] = $profile->id();
+			}
+			else 
+			{
+				$profile_props["parent"] = &$arr["obj_inst"]->prop("profiles_folder"); //$user->parent();
+				$profile_props["status"] = STAT_ACTIVE;
+				$new = true;
+			}
+		}
+		$profile_i = get_instance(CL_PROFILE);
+		//$profile->set_meta("occupation", $profile_props["occupation"]);
+		$profile_id = $profile_i->submit($profile_props);
 
+
+		if ($new)
+		{
+			$person->connect(array(
+				"to" => $profile_id,
+				"reltype" => "RELTYPE_PROFILE", //14,
+			));
+			$profile = obj($profile_id);
+			$profile->connect(array(
+				"to" => $person->id(),
+				"reltype" => "RELTYPE_PERSON", //9,
+			));
+
+		}
+		$profile->save();
 	}
 
 	function get_content_elements($arr)
 	{
-		$obj_inst = $arr["obj_inst"];
+		$obj_inst = &$arr["obj_inst"];
+		$rv = array();
+
+		//lets check that object can be loaded
+		//used to throw error on creating new commune: object::connections_from(): no current object loaded!
+		if (!is_oid($obj_inst->id()))
+		{
+			return $rv;
+		}
+		
 		$els = $obj_inst->connections_from(array(
 			"type" => RELTYPE_CONTENT,
 		));
 		$locations = $obj_inst->meta("location");
-		$rv = array();
 		foreach($els as $el)
 		{
 			$to = $el->prop("to");
@@ -784,41 +3915,10 @@ class commune extends class_base
 		return $rv;
 	}
 
-	function _get_profile_obj()
-	{
-		$users = get_instance("users");
-		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-
-		$persons = $user->connections_from(array(
-			"type" => "RELTYPE_PERSON",
-		));
-
-		$profile_obj = false;
-
-		if (sizeof($persons) > 0)
-		{
-			list(,$tmp) = each($persons);
-			$person_obj = $tmp->to();
-
-			$prof_connections = $person_obj->connections_from(array(
-				"type" => "RELTYPE_PROFILE",
-			));
-
-			if (sizeof($prof_connections) > 0)
-			{
-				list(,$tmp) = each($prof_connections);
-				$profile_obj = $tmp->to();
-			};
-
-		};
-
-		return $profile_obj;
-	}
-
 	function callback_get_join($arr)
 	{
 		aw_global_set("no_cache", 1);
-		$j_oid = $arr["obj_inst"]->prop("join_obj");
+		$j_oid = &$arr["obj_inst"]->prop("join_obj");
 		if ($j_oid)
 		{
 			$join = obj($j_oid);
@@ -848,12 +3948,14 @@ class commune extends class_base
 		return array();
 	}
 
+	
 	function create_message($arr)
 	{
-		$msgdata = $arr["prop"]["value"];
+		//$this->cfgmanager = 701;	//why?
+		
 		$users = get_instance("users");
 		$u_id = $users->get_oid_for_uid(aw_global_get("uid"));
-		$t_id = $users->get_oid_for_uid($msgdata["user_to"]);
+		$t_id = $users->get_oid_for_uid($arr["user_to"]);
 		if (empty($t_id))
 		{
 			die("aga sellist kasutajat pole üldse olemas");
@@ -866,13 +3968,11 @@ class commune extends class_base
 		// need to resolve it!
 		$o->set_prop("user_from",$u_id);
 		$o->set_prop("user_to",$t_id);
-		$o->set_prop("subject",$msgdata["subject"]);
-		$o->set_prop("content",$msgdata["content"]);
+		$o->set_prop("subject",$arr["subject"]);
+		$o->set_prop("content",$arr["content"]);
 		$o->save();
 		// now, I need a parent! for that I take a profile
-
 	}
-
 
 	/**
 
@@ -883,7 +3983,6 @@ class commune extends class_base
 	{
 		return parent::change($arr);
 	}
-
 	/**
 
 		@attrib name=submit nologin=1
@@ -893,7 +3992,6 @@ class commune extends class_base
 	{
 		return parent::submit($arr);
 	}
-
 	function create_inbox($arr)
 	{
 		$ti = get_instance(CL_QUICKMESSAGE);
@@ -950,6 +4048,497 @@ class commune extends class_base
 		));
 		return $this->parse();
 	}
+
+	function callback_show_profile($arr)
+	{
+		//$pers = $this->get_person();
+		//echo $pers->id();
+		$retval = array();
+		//momendil ei ole seda vaja, sest ma ei kavatse suunata siia võõraste profiilide vaatamist
+		// oh, yes you do!! -- ahz
+		if ($profile = $this->common["my_profile"]) 
+		{
+			$val = $this->render_profile_view($profile);
+		}
+		elseif ($profile = $this->common["profile"]) 
+		{
+			$val = $this->render_profile_view($profile);
+		}
+		elseif ($profile = $this->get_active_profile())
+		{
+			$val = $this->render_profile_view($profile);
+		}
+		$retval["my_profile_toolbar"] = array(
+			"name" => "my_profile_toolbar",
+			"type" => "toolbar",
+			"no_caption" => 1,
+			"caption" => "ToolBar",
+		);
+		$retval["el1"] = array(
+			"type" => "text",
+			"value" => $val,
+			"no_caption" => 1,
+		);
+		/*
+		if (!$profile = $this->common["profile"]) //momendil ei ole seda vaja, sest ma ei kavatse suunata siia võõraste profiilide vaatamist
+		{
+			if ($profile = $this->get_active_profile())
+			{
+				//arr($profile);
+				$retval["el1"] = array(
+					"type" => "text",
+					"value" => $this->render_profile_view($profile),
+					"no_caption" => 1,
+				);
+			}
+		}
+		*/
+	    return $retval;
+	}
+
+	function render_profile_view($profile)
+	{
+		$rendered_value = "";
+		//show header
+		$rendered_value .= $this->render_profile_header(array(
+			"arr" => $arr,
+			"profile" => $profile,
+		));
+		
+		//show person props and profile props
+		$props = $this->get_profile_props_for_view(array(
+			"arr" => $arr,
+			"profile" => $profile,
+		));
+		
+		$rendered_value .= $this->render_property_view(array(
+			"items" => $props,
+		));
+		return $rendered_value;
+	}
+	
+	function render_property_view($vars)
+	{
+		$items = $vars["items"]; // tuleb get_profile_props_for_view()-st
+		//arr($items);
+		//neid ei anna parameetritega sisse, pole nagu mõtet praegu.
+		//$template = $vars["template"];
+		//$container_sub = $vars["container_sub"];
+		//$item_sub = $vars["item_sub"];
+		$template = "show_profile.tpl";
+		$container_sub = "property_list";
+		$item_sub = "property_item";
+		
+		//aga kui on erinevates tpl failides? 
+		//Ei ole..
+		//$container_template = $vars["container_template"];
+		//$item_template = $vars["item_template"];
+		
+		$this->read_template($template);
+
+		$row_counter = 0;
+		$rendered_str = "";
+		foreach($items as $pn => $pd)
+		{
+			$row_counter++;
+			$this->vars(array(
+				"prop_caption" => $pd["caption"].":",
+				"prop_value" => $pd["value"],
+				"evenodd" => $row_counter % 2 ? "odd" : "even",
+			));
+			$rendered_str .= $this->parse($item_sub);
+		}
+		$this->vars(array(
+			$item_sub => $rendered_str,
+		));
+		
+		if ($container_sub)
+		{
+			return $this->parse($container_sub);
+		}
+		else
+		{
+			return $this->parse();
+		}
+	}
+	
+	function get_profile_props_for_view($vars)
+	{
+		$arr = $vars["arr"];
+		$profile = $vars["profile"];
+		
+		$person_props = $this->get_parsed_viewable_props_for(array(
+			"obj" => $profile->get_first_obj_by_reltype("RELTYPE_PERSON"),
+			"fields" => $this->fields_from_person,
+		));
+		$profile_props = $this->get_parsed_viewable_props_for(array(
+			"obj" => $profile,
+			"fields" => $this->show_fields_from_profile,
+		));
+		//siin peaks key-d vbl märgistama prefiksitega "person." ja "profile.", et samu ei oleks
+		$user = $this->get_user_for_profile($profile);
+		$item["username"] = array(
+			"caption" => "Kasutajanimi",
+			"value" => $user->name(),
+		);
+		return $item + $person_props + $profile_props;
+	}
+	
+	// Annab väärtustatud propertid
+	//siin võiks olla optional, array of fields, mida tahan
+	//väljastab array, mille elemendiks: field_name => array( 'caption'=>'blaa', 'value'=>'muu');
+	function get_parsed_viewable_props_for($vars)
+	{
+		$obj = $vars["obj"];
+		//$occupation = $obj->meta("occupation");
+		$wanted_fields = $vars["fields"];
+		
+			list($all_props, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
+				"clid" => $obj->class_id(),
+			));
+			//filtreerime välja need propid, mida vaja on, 
+			$props = array();
+			if (count($wanted_fields))
+			{
+				foreach ($wanted_fields as $field_name)
+				{
+					$props[$field_name] = $all_props[$field_name];
+				}
+			}
+			else //.. kui me just kõiki ei taha:
+			{
+				$props =& $all_props;
+			}
+			//arr($props);
+			//$o_inst = $obj->instance(); //igatahes ei anna ta chooseri puhul option'eid..
+			/* n: vaja oleks sellist:
+			[gender] => Array
+			(
+				[name] => gender
+				[table] => kliendibaas_isik
+				[group] => general2
+				[type] => chooser
+				[field] => gender
+				[caption] => Sugu
+				[value] => 1
+				[options] => Array
+				(
+					[1] => mees
+					[2] => naine
+				)
+				[_parsed] => 1
+				[orig_type] => chooser
+			)
+			*/
+			//see aga annab optionid:
+			//eelmise asemel äkki säästab ühest päringust?:
+			$o_inst = get_instance($obj->class_id());
+			$o_inst->init_class_base();
+
+			//propid saavad väärtuse $obj-st - array struktuur jääb, aga täieneb, asendub
+			$parsed_props = $o_inst->parse_properties(array(
+				"properties" => $props,
+				"obj_inst" => $obj,
+			));
+			//arr($parsed_props);
+			$result_props = array();
+			foreach($props as $pn => $pd)
+			{
+				$ppd = $parsed_props[$pn];
+				$v = $obj->prop($pn);
+
+				if ($pd["type"] == "classificator" && $pd["store"] == "connect")
+				{
+					// get the first connection of that type
+					$c = reset($obj->connections_from(array("type" => $pd["reltype"])));
+					$v = $c->prop("to.name");
+				}
+				else
+				if ($pd["type"] == "classificator") // && $v) //et kas propertil on ikki väärtus ($v)
+				{
+					if(is_oid($v))
+					{
+						$tmp = obj($v);
+						$v = $tmp->name();
+					}
+					elseif($pn == "occupation")
+					{
+						if(is_array($v))
+						{
+							$num = count($v);
+							foreach($ppd["options"] as $key => $value)
+							{
+								
+								if(in_array($key,$v))
+								{
+									$num--;
+									$val.=$value;
+									if($num!=0)
+									{
+										$val.=", ";
+									}
+								}
+							}
+						}
+						$v = $val;
+					}
+					else 
+					{
+						$v = "";
+					}
+				}
+				else
+				if($pd["type"] == "text")
+				{
+					if($pn == "age")
+					{
+						$tmp = $o_inst->get_age2($obj->prop("user_field1"));
+						$v = $tmp != 0 ? $tmp : ""; 
+						//echo $v;
+					}
+				}
+				else 
+				if ($pd["type"] == "checkbox")
+				{
+					$v = $v ? LC_YES : LC_NO;
+				}
+				else 
+				if ($pd["type"] == "chooser")
+				{
+					if (count($ppd["options"]))
+					{
+						$v = $ppd["options"][$v];
+					}
+				}
+				else
+				if ($pd["type"] == "date_select")
+				{
+					if($pn = "user_field1")
+					{
+						$m = $v{4}.$v{5};
+						$d = $v{6}.$v{7};
+						$y = $v{0}.$v{1}.$v{2}.$v{3};
+						$var = mktime(0,0,0,$m,$d,$y);
+						//$v = $o_inst->make_birthday($pd);
+						$v = ($var == -1) ? "" : get_lc_date($var);
+					}
+				}
+				/*
+				else
+				if ($pn == "age")
+				{
+						$v = $o_inst->get_age(array("obj_inst" => $obj));
+				}
+				*/
+				$value = $v;
+				$result_props[$pn] = array("caption" => $ppd["caption"], "value" => $value);
+			}
+		//arr($result_props);
+		return $result_props;
+	}
+	/**	
+		@attrib name=delete_profile all_args="1"
+		@param id required type=int acl=view
+		@param group optional
+		@param return_url optional
+		
+	**/
+	function delete_profile($arr)
+	{
+		$r_url = $this->mk_my_orb(array("group" => $arr["group"]), $arr["id"]);
+		if(!$person = $this->get_person())
+		{
+			return $r_url;
+		}
+		if(is_array($arr["selected"]))
+		{
+			$ol = new object_list();
+			$ol->add($arr["selected"]);
+			$ol->delete();
+		}
+		if ($profile = $person->get_first_obj_by_reltype("RELTYPE_PROFILE"))
+		{
+			$person->set_meta("active_profile", $profile->id());
+			$person->save();
+		}
+		else //-> pole yhtegi profiili sellel persoonil
+		{
+			//vbl peaks analoogselt user::get_person_for_user()-iga looma uue, kui ühtegi veel pole?
+			//esimene profiil peaks olema loodud liitumisel, kui kasutaja suvatseb väljad täita,
+			//kui ta seda ei tee, jääb profiil salvestamata.. praeguse korralduse järgi..
+			//Nii et loome uue, kui vaja on.
+				
+			$profiles_folder_id = $this->common["obj_inst"]->prop("profiles_folder");
+			if (is_oid($profiles_folder_id))
+			{
+				$profile = $this->make_profile($profiles_folder_id);
+				$person->set_meta("active_profile", $profile->id());
+				$person->save();
+			}
+		}
+		return $r_url;
+	}
+	/**
+		@attrib name=remove_friend all_args="1"
+		@param sel required
+		@param group optional
+		@param return_url optional
+	**/
+	function remove_friend($arr)
+	{
+	// type=int acl=view
+		$profile = $this->common["my_profile"] ? $this->common["my_profile"] : $this->get_active_profile();
+		$selected = $arr["sel"];
+		foreach($selected as $sel)
+		{
+			$profile->disconnect(array(
+				"from" => $sel,
+			));
+		}
+		return $this->mk_comm_orb(array("group" => $arr["group"]), $arr["id"]);
+	}
+	/**
+		@attrib name=remove_ignored all_args="1"
+		@param sel required type=int acl=view
+		@param group optional
+		@param return_url optional
+	**/
+	function remove_ignored($arr)
+	{
+		$user = $this->get_user();
+		$selected = $arr["sel"];
+		foreach($selected as $sel)
+		{
+			$user->disconnect(array(
+				"from" => $sel,
+				"reltype" => "RELTYPE_IGNORED",
+			));
+		}
+		return $this->mk_comm_orb(array("group" => $arr["group"]),  $arr["id"]);
+	}
+	/**
+		@attrib name=remove_blocked all_args="1"
+		@param sel required type=int acl=view
+		@param group optional
+		@param return_url optional
+	**/
+	function remove_blocked($arr)
+	{
+		$user = $this->get_user();
+		$selected = $arr["sel"];
+		foreach($selected as $sel)
+		{
+			$user->disconnect(array(
+				"from" => $sel,
+				"reltype" => "RELTYPE_BLOCKED",
+			));
+		}
+		return $this->mk_comm_orb(array("group" => $arr["group"]),  $arr["id"]);
+	}
+	/**
+		@attrib name=addtogroup all_args="1"
+		@param profile required
+		@param f_group required
+		@param my_profile optional
+		@group group optional
+		@param return_url optional
+	**/
+	function addtogroup($arr)
+	{
+		arr($arr);
+		if(is_oid($arr["f_group"]))
+		{
+			$profile = $this->common["my_profile"] ? $this->common["my_profile"] : $this->get_active_profile();
+			// siit jätkame homme -- ahz
+			// asd, siiski veel mitte...
+		}
+		return $this->mk_comm_orb(array("group" => $arr["group"]), $arr["id"]);
+	}
+	/**
+		@attrib name=hide_prof_com all_args="1"
+		@param selected required type=int acl=view
+		@param profile_id required
+		@param group optional
+		@param return_url optional
+	**/
+	function hide_prof_com($arr)
+	{
+		foreach($arr["sel"] as $sel)
+		{
+			$com_o = obj($sel);
+			if($com_o->status() == STAT_NOTACTIVE)
+			{
+				$stat = STAT_ACTIVE;
+			}
+			else
+			{
+				$stat = STAT_NOTACTIVE;
+			}
+			$com_o->set_status($stat);
+			$com_o->save();
+		}
+		return $this->mk_comm_orb(array("group" => $arr["group"]), $arr["id"]);
+	}
+	/**
+		@attrib name=delete_prof_com all_args="1"
+		@param selected required type=int acl=view
+		@param profile_id required
+		@param group optional
+		@param return_url optional
+	**/
+	function delete_prof_com($arr)
+	{
+		if(is_array($arr["sel"]))
+		{
+			$ol = new object_list();
+			$ol->add($arr["sel"]);
+			$ol->delete();
+		}
+		return $this->mk_comm_orb(array("group" => $arr["group"]), $arr["id"]);
+	}
+	/**
+		@attrib name=delete_comments all_args="1"
+		@param selected required type=int acl=view
+		@param img_id required
+		@param group optional
+		@param return_url optional
+	**/
+	function delete_comments($arr)
+	{
+		$r_url = $this->mk_comm_orb(array("group" => $arr["group"]), $arr["id"]);
+		$vars = array(
+			"id" => $arr["id"], 
+			"group" => $arr["group"],
+		);
+		if(!$person = $this->get_person())
+		{
+			return $r_url;
+		}
+		
+		if(is_array($arr["sel"]))
+		{
+			$ol = new object_list();
+			$ol->add($arr["sel"]);
+			$ol->delete();
+		}
+		
+		$vars["img_id"] = $person->meta("img_id");
+		$person->set_meta("img_id","");
+		$person->save();
+		return $r_url;
+	}
+
+	function oid_is_this_persons_profile($arr = array())
+	{
+		extract($arr);
+		$person = $this->get_person();
+		if($conns = $person->connections_from(array('id' => $oid)))
+		{
+			arr($conns);
+		}
+	}
+
+
 	/**
 
 		@attrib name=show_profile
@@ -960,64 +4549,35 @@ class commune extends class_base
 	{
 		$this->read_template("show_profile.tpl");
 
-		$p_o = obj($arr["id"]);
-		foreach($p_o->properties() as $pn => $pd)
+		$person_o = obj($arr["id"]);
+		$person_props = $this->get_parsed_viewable_props_for(array("obj" => $person_o));
+		foreach($person_props as $pn => $pd)
 		{
-			$this->vars(array(
-				"person.".$pn => $p_o->prop($pn)
-			));
+				$this->vars(array(
+					'prop_caption' => $pd["caption"],
+					'prop_value' => $pd["value"],
+				));
+				$this->vars(array(
+					"person.".$pn => $this->parse("property_item"),
+				));
 		}
-		
-		$po = $p_o->connections_from(array(
-			"type" => 14,
-		));
-		if (sizeof($po) > 0)
+
+		if ($profile_o = $person_o->get_first_obj_by_reltype('RELTYPE_PROFILE'))
 		{
-			$pox = reset($po);
-			$po_object = $pox->to();
-			list($properties, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
-				"clid" => CL_PROFILE
-			));
-			
-			foreach($properties as $pn => $pd)
+			$profile_props = $this->get_parsed_viewable_props_for(array("obj" => $profile_o));
+			foreach($profile_props as $pn => $pd)
 			{
-				$v = $po_object->prop($pn);
-				if ($pd["type"] == "classificator" && $pd["store"] == "connect")
-				{
-					// get the first connection of that type
-					$c = reset($po_object->connections_from(array("type" => $pd["reltype"])));
-					$v = $c->prop("to.name");
-				}
-				else
-				if ($pd["type"] == "classificator" && $v)
-				{
-					$tmp = obj($v);
-					$v = $tmp->name();
-				}
 				$this->vars(array(
-					"profile.".$pn => $v
+					'prop_caption' => $pd["caption"],
+					'prop_value' => $pd["value"],
+				));
+				$this->vars(array(
+					"profile.".$pn => $this->parse("property_item"),
 				));
 			}
-
-			$i = get_instance("image");
-			$img = "";
-			foreach($po_object->connections_from(array("type" => "RELTYPE_IMAGE")) as $c)
-			{
-				$imgo = $c->to();
-				$url = $i->get_url_by_id($c->prop("to"));
-				$this->vars(array(
-					"image_url" => $url,
-					"image" => image::make_img_tag($url, $imgo->prop("alt")),
-					"comment" => $imgo->comment(),
-				));
-				$img .= $this->parse("IMAGE");
-			}
-			$this->vars(array(
-				"IMAGE" => $img
-			));
-		};
-
+		}
 		return $this->parse();
 	}
+
 }
 ?>

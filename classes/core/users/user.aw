@@ -150,6 +150,12 @@ EMIT_MESSAGE(MSG_USER_CREATE);
 @reltype PERSON value=2 clid=CL_CRM_PERSON
 @caption isik
 
+@reltype BLOCKED value=4 clid=CL_USER
+@caption blokeeritud
+
+@reltype IGNORED value=5 clid=CL_USER
+@caption ignoreeritud
+
 /@reltype USER_DATA value=3
 /@caption Andmed
 

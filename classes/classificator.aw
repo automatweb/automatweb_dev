@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.22 2004/07/08 11:20:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.23 2004/08/17 11:17:48 ahti Exp $
 
 /*
 
@@ -66,6 +66,10 @@ class classificator extends class_base
 	function init_vcl_property($arr)
 	{
 		$prop = &$arr["property"];
+		if ($arr["view"])
+		{
+			$this->view = 1;
+		};
 		list($choices,$name,$use_type) = $this->get_choices(array(
 			"clid" => $arr["clid"],
 			"name" => $prop["name"],
@@ -113,11 +117,16 @@ class classificator extends class_base
 		if (!empty($name))
 		{
 			$prop["caption"] = $name;
+			// so I know that these are object in that array
 		};
 		if (empty($use_type))
 		{
 			$use_type = $prop["mode"];
 		};
+		if ($this->view)
+		{
+			$use_type = "view";
+		}
 		switch($use_type)
 		{
 			case "checkboxes":
@@ -137,15 +146,33 @@ class classificator extends class_base
 				$prop["options"] = $choices->names();
 				break;
 
+			case "view":
+				$prop["options"] = $choices->names();
+				break;
+
 			default:
 				$prop["type"] = "select";
 				$prop["options"] = array("" => "") + $choices->names();
+		};
+
+		global $XX5;
+		if ($XX5)
+		{
+			arr($prop);
 		};
 
 		return array($prop["name"] => $prop);
 		// well, that was pretty easy. Now I need a way to tell the bloody classificator, that
 		// it should use connections instead of field. And what could be easier than doing
 		// it where the classificator is defined. ajee!
+	}
+
+	// this will eventually replace delayed vcl property thingie
+	function get_vcl_property($arr)
+	{
+		print "siin ei ole kala";
+
+
 	}
 
 	function get_choices($arr)

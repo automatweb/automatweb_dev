@@ -1724,3 +1724,56 @@ text-decoration:underline;
 .awmenuedittableframeclass {
 background-color: #E2E2DB
 }
+
+/********** RATE **********/
+
+.rate_rowbgcolor_odd {
+background-color: #FFF1DC;
+}
+
+.rate_rowbgcolor_even {
+background-color: #FEFAEF;
+}
+
+.rate_aw04contentcellleft {
+text-align: left;
+padding: 2px;
+padding-left: 8px;
+padding-right: 8px;
+font-family: Verdana, Arial, sans-serif;
+font-size: 11px;
+color:#000003;
+font-weight: normal;
+width: 160px;
+height: 20px;
+}
+
+.rate_aw04contentcellleft a {
+color: #005FC9;
+text-decoration:underline;
+}
+
+.rate_aw04contentcellleft a:hover {
+color: #00438E;
+text-decoration:underline;
+}
+
+.rate_aw04contentcellright {
+padding: 2px;
+padding-left: 8px;
+font-family: Verdana, Arial, sans-serif;
+font-size: 12px;
+color:#000003;
+}
+
+.rate_aw04contentcellright a {
+color: #005FC9;
+text-decoration:underline;
+}
+
+.rate_aw04contentcellright a:hover {
+color: #00438E;
+text-decoration:underline;
+}
+
+/****************************/

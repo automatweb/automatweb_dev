@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.6 2004/06/17 13:56:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.7 2004/08/17 11:17:48 ahti Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -761,12 +761,19 @@ class cb_search extends class_base
 			"request" => $request,
 		));
 		$table = $t->draw();
-
+		
+		// this is the damn magic hack, ref and section2 also.. surely there is a better way to
+		// accomplish it than this :| -- no, this is not the way to do it -- ahz
+		//$tpl = $arr["call_in"] == true ? "show2" : "show";
+		
 		$this->read_template("show.tpl");
 		$this->vars(array(
 			"form" => $html,
 			"section" => aw_global_get("section"),
-			"table" => $table
+			"table" => $table,
+			//"ref" => $arr["ref"],
+			//"section2" => $arr["section2"],
+			
 		));
 		return $this->parse();
 	}

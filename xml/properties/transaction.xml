@@ -1,41 +1,132 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>trans_from</name>
+            <name>name</name>
             <table>objects</table>
             <group>general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Selgitus</caption>
+      </property>
+      <property>
+            <name>trans_from_object</name>
+            <table>pank_transaction</table>
+            <group>general</group>
             <type>text</type>
-            <field>trans_from</field>
+            <store>no</store>
+            <field>trans_from_object</field>
             <caption>Kandja</caption>
       </property>
       <property>
-            <name>trans_to</name>
-            <table>objects</table>
+            <name>trans_from_account_hr</name>
+            <table>pank_transaction</table>
             <group>general</group>
             <type>text</type>
-            <field>trans_to</field>
+            <store>no</store>
+            <field>trans_from_account_hr</field>
+            <caption>Kandja konto</caption>
+      </property>
+      <property>
+            <name>trans_from_account</name>
+            <table>pank_transaction</table>
+            <group>general</group>
+            <type>hidden</type>
+            <no_caption>1</no_caption>
+            <field>trans_from_account</field>
+            <caption>Kandja konto</caption>
+      </property>
+      <property>
+            <name>trans_to_object</name>
+            <table>pank_transaction</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>trans_to_object</field>
             <caption>Saaja</caption>
       </property>
       <property>
-            <name>sum</name>
-            <table>objects</table>
+            <name>trans_to_account_hr</name>
+            <table>pank_transaction</table>
             <group>general</group>
             <type>text</type>
+            <store>no</store>
+            <field>trans_to_account_hr</field>
+            <caption>Saaja konto</caption>
+      </property>
+      <property>
+            <name>trans_to_account</name>
+            <table>pank_transaction</table>
+            <group>general</group>
+            <type>hidden</type>
+            <no_caption>1</no_caption>
+            <field>trans_to_account</field>
+            <caption>Saaja konto</caption>
+      </property>
+      <property>
+            <name>sum</name>
+            <table>pank_transaction</table>
+            <group>general</group>
+            <type>textbox</type>
             <field>sum</field>
             <caption>Summa</caption>
       </property>
       <property>
             <name>time</name>
-            <table>objects</table>
+            <table>pank_transaction</table>
             <group>general</group>
-            <type>text</type>
+            <type>hidden</type>
+            <no_caption>1</no_caption>
             <field>time</field>
             <caption>Kellaaeg</caption>
+      </property>
+      <property>
+            <name>time_hr</name>
+            <table>pank_transaction</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>time_hr</field>
+            <caption>Kellaaeg</caption>
+      </property>
+      <property>
+            <name>is_completed</name>
+            <table>pank_transaction</table>
+            <group>general</group>
+            <type>hidden</type>
+            <no_caption>1</no_caption>
+            <field>is_completed</field>
+            <caption>Kinnitatud</caption>
+      </property>
+      <property>
+            <name>completion_confirmation</name>
+            <table>pank_transaction</table>
+            <group>general</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>completion_confirmation</field>
+            <caption>Completion confirmation</caption>
+      </property>
+      <property>
+            <name>soorita</name>
+            <table>pank_transaction</table>
+            <group>general</group>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>soorita</field>
       </property>
       <classinfo>
             <syslog_type>ST_TRANSACTION</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
       </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+                  <submit>no</submit>
+            </general>
+      </groupinfo>
       <tableinfo>
             <pank_transaction>
                   <index>oid</index>

@@ -22,5 +22,12 @@
 			</function>
 		</action>
 
+		<action name="delete_comments" >
+			<function name="delete_comments">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,6 +1,28 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="commune" folder="applications/commune" extends="class_base">
+		<action name="commaction" >
+			<function name="commaction">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+					<required name="commact" />
+					<optional name="profile" type="int" acl="view"/>
+					<optional name="user" type="int" acl="view"/>
+					<optional name="group" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_profile" all_args="1">
+			<function name="new_profile">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+					<optional name="group" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="change" nologin="1" all_args="1">
 			<function name="change">
 				<arguments>
@@ -11,6 +33,90 @@
 		<action name="submit" nologin="1">
 			<function name="submit">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_profile" all_args="1">
+			<function name="delete_profile">
+				<arguments>
+					<required name="id" type="int" acl="view"/>
+					<optional name="group" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_friend" all_args="1">
+			<function name="remove_friend">
+				<arguments>
+					<required name="sel" />
+					<optional name="group" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_ignored" all_args="1">
+			<function name="remove_ignored">
+				<arguments>
+					<required name="sel" type="int" acl="view"/>
+					<optional name="group" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="remove_blocked" all_args="1">
+			<function name="remove_blocked">
+				<arguments>
+					<required name="sel" type="int" acl="view"/>
+					<optional name="group" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="addtogroup" all_args="1">
+			<function name="addtogroup">
+				<arguments>
+					<required name="profile" />
+					<required name="f_group" />
+					<optional name="my_profile" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="hide_prof_com" all_args="1">
+			<function name="hide_prof_com">
+				<arguments>
+					<required name="selected" type="int" acl="view"/>
+					<required name="profile_id" />
+					<optional name="group" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_prof_com" all_args="1">
+			<function name="delete_prof_com">
+				<arguments>
+					<required name="selected" type="int" acl="view"/>
+					<required name="profile_id" />
+					<optional name="group" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_comments" all_args="1">
+			<function name="delete_comments">
+				<arguments>
+					<required name="selected" type="int" acl="view"/>
+					<required name="img_id" />
+					<optional name="group" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>

@@ -44,12 +44,23 @@
             <name>main_company_info</name>
             <table>pank</table>
             <group>pank_owner_group_main_sub</group>
-            <type>text</type>
+            <type>table</type>
             <parent>main_vbox_right</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>main_company_info</field>
             <caption>Firma info</caption>
+      </property>
+      <property>
+            <name>main_company_projects_info</name>
+            <table>pank</table>
+            <group>pank_owner_group_main_sub</group>
+            <type>table</type>
+            <parent>main_vbox_right</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>main_company_projects_info</field>
+            <caption>Firma projektide info</caption>
       </property>
       <property>
             <name>main_table</name>

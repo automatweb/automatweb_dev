@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.12 2004/07/13 12:04:24 duke Exp $
+// $Id: tabpanel.aw,v 1.13 2004/08/17 11:17:48 ahti Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -61,6 +61,11 @@ class tabpanel extends aw_template
 		
 		$use_subtpl = $tab_prefix . $subtpl . "_L" . $level;
 		//$secondary = $tab_prefix . $use_subtpl;
+		global $XX3;
+		if ($XX3)
+		{
+			print "trying $use_subtpl<br>";
+		};
 		if (!$this->is_template($use_subtpl))
 		{
 			$use_subtpl = $subtpl . "_L" . $level;
@@ -74,6 +79,12 @@ class tabpanel extends aw_template
 		else
 		{
 			$this->tabcount[$tab_prefix . $level] = 1;
+		};
+
+		global $XX3;
+		if ($XX3)
+		{
+			print "using " . $tab_prefix . " for " . $args["caption"] . "<br>";
 		};
 
 		// initialize properly

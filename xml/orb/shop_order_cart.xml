@@ -21,5 +21,14 @@
 			</function>
 		</action>
 
+		<action name="pre_finish_order" nologin="1">
+			<function name="pre_finish_order">
+				<arguments>
+					<required name="oc" />
+					<optional name="section" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.3 2004/06/25 07:16:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.4 2004/08/17 11:17:48 ahti Exp $
 // quickmessage.aw - Kiirteade 
 /*
 
@@ -9,10 +9,14 @@
 @default table=quickmessages
 @default group=general
 
+@groupinfo message caption="Uus teade"
+@default group=message
+//@default form=message2 parent=message
+
 @property user_from type=text
 @caption Kellelt
 
-@property user_to type=textbox 
+@property user_to type=textbox
 @caption Kellele
 
 @property subject type=textbox
@@ -20,6 +24,29 @@
 
 @property content type=textarea
 @caption Sisu
+
+@default store=no
+@default submit=no
+
+@groupinfo inbox caption="Inbox"
+@default group=inbox
+
+@property inbox type=table no_caption=1
+@caption this is inbox
+
+
+@groupinfo outbox caption="Outbox"
+@default group=outbox
+
+@property fake1 type=text
+@caption this is outbox
+
+
+@groupinfo archive caption="Arhiiv"
+@default group=archive
+
+@property fake2 type=text
+@caption this is archive
 
 @classinfo no_status=1 no_comment=1
 
@@ -53,7 +80,9 @@ class quickmessage extends class_base
 			case "user_from":
 				$prop["value"] = aw_global_get("uid");
 				break;
-
+			case "user_to":
+				$prop["value"] = $arr["request"]["user"];
+				break;
 			case "name":
 				$retval = PROP_IGNORE;
 				break;
