@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.32 2004/12/27 12:36:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.33 2005/01/18 10:47:27 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes
@@ -932,7 +932,7 @@ class aw_site extends class_base
 			{
 				$this->warning_str = "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! ($site[url]) ";
 			}
-			if ($ip != aw_ini_get("install.default_ip"))
+			if (false && $ip != aw_ini_get("install.default_ip"))
 			{
 				$this->err_str = "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeen viitab valele IP aadressile! (vajalik = ".aw_ini_get("install.default_ip")." domeeni ip = $ip)";
 			}
