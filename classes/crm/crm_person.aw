@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.22 2004/04/13 16:07:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.23 2004/04/13 16:40:33 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -763,6 +763,13 @@ class crm_person extends class_base
 	function show_in_selection($args)
 	{
 		return $this->show(array('id' => $args['id']));
+	}
+
+	function request_execute($obj)
+	{
+		$arx = array();
+		$arx["alias"]["target"] = $obj->id();
+		return $this->parse_alias($arx);
 	}
 
 	function parse_alias($arr)
