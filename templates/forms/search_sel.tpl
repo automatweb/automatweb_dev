@@ -48,3 +48,86 @@ otsi p&auml;rjast: <select name='se_chain'>{VAR:chains}</select><Br><br>
 {VAR:reforb}
 </form>
     
+----------------------------------------------<br>
+NB! palun hetkel &uuml;lemist formi kasutada, siit edasi ei pretendeeri veel t&ouml;&ouml;tamisele. <br>
+<br><br>
+<script language="javascript">
+function ssrch()
+{
+	if (document.selsrch.search_from[0].checked)
+	{
+		document.selsrch.elements[1].disabled=false;
+		if (document.selsrch.form_op)
+		{
+			document.selsrch.form_op.disabled=false;
+		}
+		document.selsrch.search_chain.disabled=true;
+		if (document.selsrch.chain_op)
+		{
+			document.selsrch.chain_op.disabled=true;
+		}
+	}
+	else
+	{
+		document.selsrch.elements[1].disabled=true;
+		if (document.selsrch.form_op)
+		{
+			document.selsrch.form_op.disabled=true;
+		}
+		document.selsrch.search_chain.disabled=false;
+		if (document.selsrch.chain_op)
+		{
+			document.selsrch.chain_op.disabled=false;
+		}
+	}
+}
+</script>
+
+<font color="red">{VAR:status_msg}</font>
+<form action='reforb.{VAR:ext}' method="POST" name='selsrch'>
+Kas kasutada uut otsingut: <input type="checkbox" name="use_new_search" value="1" {VAR:use_new_search}><br>
+<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+	<tr>
+		<td class="plain" width="1"><input type='radio' name='search_from' value='forms' {VAR:forms_search} onClick="ssrch();return true;"></td>
+		<td class="plain" colspan="2">&nbsp;&nbsp;Otsing formidest</td>
+	</tr>
+	<tr>
+		<td class="plain"  width="1">&nbsp;</td>
+		<td class="plain">
+			Vali formid, millest otsitakse:<br>
+			<select name='forms[]' size="10" class='small_button' multiple>{VAR:forms}</select>
+		</td>
+		<td class="plain" valign="top">
+			<!-- SUB: FORM_SEL -->
+				Vali v&auml;ljund, millega tulemusi kuvatakse:<br>
+				<select name='form_op' class='small_button'>{VAR:form_op}</select>
+			<!-- END SUB: FORM_SEL -->
+    &nbsp;</td>
+	</tr>
+	<tr>
+		<td class="plain"><input type='radio' name='search_from' value='chain' {VAR:chain_search} onClick="ssrch();return true;"></td>
+		<td class="plain" colspan="2">&nbsp;&nbsp;Otsing formi p&auml;rjast</td>
+	</tr>
+	<tr>
+		<td class="plain"  width="1">&nbsp;</td>
+		<td class="plain">
+			Vali p&auml;rg, millest otsitakse:<br>
+			<select name='search_chain' class='small_button'>{VAR:nchains}</select>
+		</td>
+		<td class="plain" valign="top">
+			<!-- SUB: CHAIN_SEL -->
+				Vali v&auml;ljund, millega tulemusi kuvatakse:<br>
+				<select name='chain_op' class='small_button'>{VAR:chain_op}</select>
+			<!-- END SUB: CHAIN_SEL -->
+    &nbsp;</td>
+	</tr>
+	<tr>
+		<td colspan="3" class="plain"><input class='small_button' type='submit' value='Salvesta'></td>
+	</tr>
+</table>
+{VAR:reforb}
+</form>
+
+<script language="javascript">
+ssrch();
+</script>
