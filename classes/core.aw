@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.124 2002/11/14 15:17:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.125 2002/11/15 18:04:25 kristo Exp $
 // core.aw - Core functions
 
 // Core properties - common for all classes
@@ -411,6 +411,7 @@ class core extends db_connector
 		// we end up scanning _all_ objects which have no alias and are not deleted
 		// for no reason at all. I don't know why this is called with no value
 		// but it does sometimes
+		$this->quote($alias);
 		if (strlen($alias) == 0)
 		{
 			return false;
@@ -1528,12 +1529,20 @@ class core extends db_connector
 		$this->errmsg[] = $msg;
 		$this->errorlevel++;
 
+		$orig_msg = $msg;
+		$is_rpc_call = aw_global_get("__is_rpc_call");
+		$rpc_call_type = aw_global_get("__rpc_call_type");
+
 		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<Br><br>\n\n".$msg;
 
 		$this->_log("error",$msg);	
 		// meilime veateate listi ka
 		$subj = "Viga saidil ".$this->cfg["baseurl"];
-		header("X-AW-Error: 1");
+
+		if (!$is_rpc_call)
+		{
+			header("X-AW-Error: 1");
+		}
 		$content = "\nVeateade: ".$msg;
 		$content.= "\nKood: ".$err_type;
 		$content.= "\nfatal = ".($fatal ? "Jah" : "Ei" )."\n";
@@ -1542,6 +1551,8 @@ class core extends db_connector
 		$content.= "uid = ".aw_global_get("uid")."\n";
 		$content.= "section = ".$GLOBALS["section"]."\n";
 		$content.= "url = ".$this->cfg["baseurl"].aw_global_get("REQUEST_URI")."\n-----------------------\n";
+		$content.= "is_rpc_call = $is_rpc_call\n";
+		$content.= "rpc_call_type = $rpc_call_type\n";
 		global $HTTP_COOKIE_VARS;
 		foreach($HTTP_COOKIE_VARS as $k => $v)
 		{
@@ -1584,7 +1595,8 @@ class core extends db_connector
 		if ((aw_ini_get("bugtrack.report_to_server") == 1) && !($class == "bugtrack" && $action="add_error"))
 		{
 			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
-			$socket = get_instance("socket",array(
+			$socket = get_instance("socket");
+			$socket->open(array(
 				"host" => aw_ini_get("config.error_log_site"),
 				"port" => 80,
 			));
@@ -1612,15 +1624,24 @@ class core extends db_connector
 
 		if ($fatal)
 		{
-			$co = get_instance("config");
-			$u = $co->get_simple_config("error_redirect");
-			if ($u != "" && aw_global_get("uid") != "kix")
+			if ($is_rpc_call)
 			{
-				header("Location: $u");
+				$driver_inst = get_instance("orb/".$rpc_call_type);
+				$driver_inst->handle_error($err_type, $orig_msg);
 				die();
 			}
-			flush();
-			die("<br><b>AW_ERROR: $msg</b><br>");
+			else
+			{
+				$co = get_instance("config");
+				$u = $co->get_simple_config("error_redirect");
+				if ($u != "" && aw_global_get("uid") != "kix")
+				{
+					header("Location: $u");
+					die();
+				}
+				flush();
+				die("<br><b>AW_ERROR: $msg</b><br>");
+			}
 		};
 	}
 
