@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.2 2004/09/06 08:25:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.3 2004/09/09 11:10:27 kristo Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -352,18 +352,21 @@ class otv_ds_pp_search extends class_base
 
 			if ($fld == "__fulltext")
 			{
-				$npts = array();
-				$i = get_instance(CL_OTV_DS_POSTIPOISS);
-				$sf_tmp = $i->get_fields();
-				foreach($sf_tmp as $fld => $fld_dat)
+				if ($req["__fulltext"] != "")
 				{
-					if (!$fld_dat["in_form"] || $fld == "__fulltext")
+					$npts = array();
+					$i = get_instance(CL_OTV_DS_POSTIPOISS);
+					$sf_tmp = $i->get_fields();
+					foreach($sf_tmp as $fld => $fld_dat)
 					{
-						continue;
+						if (!$fld_dat["in_form"] || $fld == "__fulltext")
+						{
+							continue;
+						}
+						$npts[] = " aw_".$fld." LIKE '%".$req["__fulltext"]."%' ";
 					}
-					$npts[] = " aw_".$fld." LIKE '%".$req["__fulltext"]."%' ";
+					$pts[] = " (".join(" OR ", $npts).") ";
 				}
-				$pts[] = " (".join(" OR ", $npts).") ";
 			}
 			else
 			if ($req[$fld] != "")
