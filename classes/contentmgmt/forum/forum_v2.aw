@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.5 2003/07/03 15:55:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.6 2003/07/03 16:02:20 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -153,6 +153,7 @@ class forum_v2 extends class_base
 		$this->read_template("forum.tpl");
 
 		$c = "";
+			
 		foreach($flds as $fdata)
 		{
 			$this->vars(array(
@@ -630,6 +631,7 @@ class forum_v2 extends class_base
 			"action" => "view",
 			"folder" => $_GET["folder"],
 			"topic" => $_GET["topic"],
+			"c" => $_GET["c"],
 			"group" => isset($_GET["group"]) ? $_GET["group"] : "container",
 		));
 	}
