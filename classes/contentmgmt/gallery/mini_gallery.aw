@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.5 2004/06/17 13:55:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.6 2004/06/21 11:27:00 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -76,7 +76,31 @@ class mini_gallery extends class_base
 
 		$ii = get_instance("image");
 
-		$imtpl = $this->get_template_string("IMAGE");
+		$tplar = array();
+
+		if ($this->is_template("IMAGE"))
+		{
+			$imtpl = $this->get_template_string("IMAGE");
+			$tplar["image"] = $imtpl;
+		}
+
+		if ($this->is_template("IMAGE_LINKED"))
+		{
+			$imtpl = $this->get_template_string("IMAGE_LINKED");
+			$tplar["image_linked"] = $imtpl;
+		}
+
+		if ($this->is_template("IMAGE_HAS_BIG"))
+		{
+			$imtpl = $this->get_template_string("IMAGE_HAS_BIG");
+			$tplar["image_has_big"] = $imtpl;
+		}
+
+		if ($this->is_template("IMAGE_BIG_LINKED"))
+		{
+			$imtpl = $this->get_template_string("IMAGE_BIG_LINKED");
+			$tplar["image_big_linked"] = $imtpl;
+		}
 
 		$str = "";
 		for ($r = 0; $r < $rows; $r++)
@@ -91,15 +115,7 @@ class mini_gallery extends class_base
 							"target" => $img->id()
 						)
 					);
-					if ($this->is_template("IMAGE"))
-					{
-						$args["tpls"] = array(
-							"image_big_linked" => $imtpl,
-							"image_linked" => $imtpl,
-							"image_has_big" => $imtpl,
-							"image" => $imtpl
-						);
-					}
+					$args["tpls"] = $tplar;
 					$tmp = $ii->parse_alias($args);
 					$this->vars(array(
 						"imgcontent" => $tmp["replacement"]
