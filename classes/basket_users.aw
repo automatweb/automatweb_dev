@@ -130,47 +130,54 @@ class basket_users extends basket
 			"prefix" => "basket_users",
 			"tbgcolor" => "#C3D0DC",
 		));
-		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+		if (file_exists($this->cfg["site_basedir"]."/xml/basket/user_orders.xml"))
+		{
+			$this->t->parse_xml_def($this->cfg["site_basedir"]."/xml/basket/user_orders.xml");
+		}
+		else
+		{
+			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 
-		$this->t->define_field(array(
-			"name" => "oid",
-			"caption" => "Tellimuse nr",
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => 1,
-			"sortable" => 1,
-			"numeric" => 1
-		));
+			$this->t->define_field(array(
+				"name" => "oid",
+				"caption" => "Tellimuse nr",
+				"talign" => "center",
+				"align" => "center",
+				"nowrap" => 1,
+				"sortable" => 1,
+				"numeric" => 1
+			));
 
-		$this->t->define_field(array(
-			"name" => "created",
-			"caption" => "Millal",
-			"talign" => "center",
-			"nowrap" => 1,
-			"sortable" => 1,
-			"type" => "time",
-			"format" => "d-M-y/H:i",
-			"numeric" => 1
-		));
-		
-		
-		$this->t->define_field(array(
-			"name" => "t_price",
-			"caption" => "Hind",
-			"talign" => "center",
-			"nowrap" => 1,
-			"sortable" => 1,
-			"numberic" => 1
-		));
-		
-		$this->t->define_field(array(
-			"name" => "view",
-			"caption" => "Vaata",
-			"talign" => "center",
-			"nowrap" => 1,
-			"align" => "center",
-		));
-		$this->t->set_default_sortby("order_id");
+			$this->t->define_field(array(
+				"name" => "created",
+				"caption" => "Millal",
+				"talign" => "center",
+				"nowrap" => 1,
+				"sortable" => 1,
+				"type" => "time",
+				"format" => "d-M-y/H:i",
+				"numeric" => 1
+			));
+			
+			
+			$this->t->define_field(array(
+				"name" => "t_price",
+				"caption" => "Hind",
+				"talign" => "center",
+				"nowrap" => 1,
+				"sortable" => 1,
+				"numberic" => 1
+			));
+			
+			$this->t->define_field(array(
+				"name" => "view",
+				"caption" => "Vaata",
+				"talign" => "center",
+				"nowrap" => 1,
+				"align" => "center",
+			));
+			$this->t->set_default_sortby("order_id");
+		}
 	}
 }
 ?>
