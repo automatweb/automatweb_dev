@@ -1,11 +1,11 @@
-<form action='refcheck.{VAR:ext}' METHOD=POST NAME='fib'>
+<form action='reforb.{VAR:ext}' METHOD=POST NAME='fib'>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#CCCCCC">
 
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_VARIABLES}:&nbsp;<a href='javascript:fib.submit()'>{VAR:LC_MAILINGLIST_SAVE}</a></b>
+<td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_VARIABLES}:&nbsp;<a href='javascript:document.fib.submit()'>{VAR:LC_MAILINGLIST_SAVE}</a></b>
 </td>
 </tr>
 <tr>
@@ -20,7 +20,5 @@
 </tr>
 <!-- END SUB: LINE -->
 </table>
-<input type='hidden' NAME='action' VALUE='sel_vars'>
-<input type='hidden' NAME='list_id' VALUE='{VAR:list_id}'>
-<input type='hidden' NAME='parent' VALUE='{VAR:parent}'>
+{VAR:reforb}
 </form>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.9 2002/03/13 22:09:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.10 2002/03/15 01:16:01 duke Exp $
 // lists.aw - listide haldus
 lc_load("mailinglist");
 	class lists extends aw_template
@@ -16,16 +16,10 @@ lc_load("mailinglist");
 		}
 		}
 
-		function add_list($ar)
+		function add_list($args = array())
 		{
-			if (is_array($ar))
-			{
-				extract($ar);
-			}
-			else
-			{
-				$parent = $ar;
-			}
+			extract($args);
+			$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$parent'>Listid</a> / Uus list");
 			$this->read_template("list_add.tpl");
 			$this->vars(array(
 				"name" => "", 
@@ -50,7 +44,7 @@ lc_load("mailinglist");
 				$this->_log("mlist",sprintf(LC_LISTS_ADD_LIST,$name));
 			}
 			global $ext;	
-			return "list.$ext?type=change_list&id=$id";
+			return $this->mk_my_orb("change",array("id" => $id));
 		}
 
 		////
@@ -72,51 +66,31 @@ lc_load("mailinglist");
 		}
 			
 
-		function change_list($ar)
+		function change_list($args = array())
 		{
-			if (is_array($ar))
-			{
-				extract ($ar);
-			}
-			else
-			{
-				$id = $ar;
-			}
+				extract ($args);
 			$this->read_template("list_add.tpl");
 
 			$row = $this->get_object($id);
+			$this->mk_path(0,"<a href='orb.aw?class=lists&action=gen_list&parent=$row[parent]'>Listid</a> / Muuda listi");
 
 			$this->vars(array(
-				"name" => $row[name],
+				"name" => $row["name"],
 				"list_id" => $id,
-				"comment" => $row[comment],
+				"comment" => $row["comment"],
 				"reforb" => $this->mk_reforb("submit_list",array("parent" => $row[parent],"id" => $id))
 			));
 			$this->parent = $row["parent"];
 			return $this->parse();
 		}
 
-		function delete_list($ar)
+		function delete_list($args = array())
 		{
-			if (is_array($ar))
-			{
-				extract($ar);
-			}
-			else
-			{
-				$id = $ar;
-			}
-			$this->delete_object($id);
+			extract($args);
+			$this->delete_object($id,CL_MAILINGLIST);
 			$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
 			$this->_log("mlist",sprintf(LC_LISTS_ERASE_LIST,$name));
-			if (is_array($ar))
-			{
-				header("Location:orb.aw?class=menuedit&action=obj_list&parent=$parent");
-			}
-			else
-			{
-				return $id;
-			}
+			return $this->mk_my_orb("gen_list",array("parent" => $parent));
 		}
 
 		//edasisi ei kasutata. hetkel. enam. uues menyyeditoris. hetk=2/27/01
@@ -177,14 +151,14 @@ lc_load("mailinglist");
 
 				$this->vars(array("space_images"	=> $spim, 
 													"image"					=> $image,
-													"cat_name"			=> $v[data][name],
-													"cat_comment"		=> $v[data][comment],
-													"modifiedby"		=> $v[data][modifiedby],
-													"modified"			=> $this->time2date($v[data][modified],2),
-													"cat_id"				=> $v[data][oid],
-													"open_link"			=> $this->mk_my_orb("gen_list",array("parent" => $v[data][oid],"op" => "open")),
-													"change_link" => $this->mk_my_orb("change_cat",array("id" => $v[data][oid])),
-													"delete_link" => $this->mk_my_orb("delete_cat",array("id" => $v[data][oid])),
+													"cat_name"			=> $v["data"]["name"],
+													"cat_comment"		=> $v["data"]["comment"],
+													"modifiedby"		=> $v["data"]["modifiedby"],
+													"modified"			=> $this->time2date($v["data"]["modified"],2),
+													"cat_id"				=> $v["data"]["oid"],
+													"open_link"			=> $this->mk_my_orb("gen_list",array("parent" => $v["data"]["oid"],"op" => "open")),
+													"change_link" => $this->mk_my_orb("change_cat",array("id" => $v["data"]["oid"])),
+													"delete_link" => $this->mk_my_orb("delete_cat",array("id" => $v["data"]["oid"])),
 													"parent"				=> $this->selected));
 
 				$cc = "";
@@ -222,6 +196,7 @@ lc_load("mailinglist");
 		{
 			extract($args);
 			$this->read_template("list_list.tpl");
+			$this->mk_path(0,"Listid");
 			if ($parent < 1)
 				$parent = 1;
 
@@ -235,7 +210,7 @@ lc_load("mailinglist");
 			$this->vars(array(
 				"C_LINE" => $l,
 				"parent" => $parent,
-				"add_link" => $this->mk_my_orb("add_cat",array("parent" => $parent)),
+				"add_link" => $this->mk_my_orb("new",array("parent" => $parent)),
 			));
 
 			$ac = $this->parse("ADD_CAT");
@@ -248,9 +223,16 @@ lc_load("mailinglist");
 											 GROUP BY objects.oid");
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("list_id"				=> $row["oid"],
-													"list_name"			=> $row["name"],
-													"list_comment"	=> $row["comment"]));
+				$this->vars(array(
+					"list_id"				=> $row["oid"],
+					"list_name"			=> $row["name"],
+					"list_comment"	=> $row["comment"],
+					"change_link" 	=> $this->mk_my_orb("change",array("id" => $row["oid"])),
+					"members_link" 	=> $this->mk_my_orb("list_members",array("id" => $row["oid"]),"mlist"),
+					"delete_link" 	=> $this->mk_my_orb("delete",array("id" => $row["oid"],"parent" => $row["parent"])),
+					"import_link" 	=> $this->mk_my_orb("import_members",array("list_id" => $row["oid"]),"mlist"),
+					"vars_link" 	=> $this->mk_my_orb("change_vars",array("list_id" => $row["oid"]),"mlist"),
+				));
 				$ce = $this->parse("L_CHANGE");
 				$cd = $this->parse("L_DELETE");
 				$ca = $this->parse("L_ACL");
@@ -265,7 +247,12 @@ lc_load("mailinglist");
 						"checked" => $checked));
 				$c.=$this->parse("LINE");
 			}
-			$this->vars(array("LINE" => $c,"ADD_CAT" => $ac,"ADD_LIST" => $al,"parent" => $parent));
+			$this->vars(array(
+				"LINE" => $c,
+				"ADD_CAT" => $ac,
+				"ADD_LIST" => $al,
+				"reforb" => $this->mk_reforb("submit_default_list",array("parent" => $parent)),
+			));
 			return $this->parse();
 		}
 
@@ -274,6 +261,7 @@ lc_load("mailinglist");
 			extract($args);
 			$q = "UPDATE objects SET last = '$default' WHERE oid = '$parent'";
 			$this->db_query($q);
+			return $this->mk_my_orb("gen_list",array("parent" => $parent));
 		}
 
 		function add_cat($args = array())

@@ -23,16 +23,16 @@
 <tr><td bgcolor="#FFFFFF" class="fgtext">&nbsp;Nimi&nbsp;</td><td  bgcolor="#FFFFFF" class="fgtext">&nbsp;Kas meil saadetud?&nbsp;</td><td bgcolor="#FFFFFF" class="fgtext">&nbsp;Millal?&nbsp;</td><td bgcolor="#FFFFFF" class="fgtext">&nbsp;Kustuta&nbsp;</td></tr>
 <!-- SUB: LIST -->
 <tr>
-<td bgcolor="#FFFFFF" class="fgtext">&nbsp;<a href='list.{VAR:ext}?type=list_inimesed&id={VAR:list_id}'>{VAR:list_name}</a>&nbsp;</td>
+<td bgcolor="#FFFFFF" class="fgtext">&nbsp;<a href='{VAR:list_link}'>{VAR:list_name}</a>&nbsp;</td>
 <td bgcolor="#FFFFFF" class="fgtext">&nbsp;{VAR:mail_sent}&nbsp;</td>
 <td bgcolor="#FFFFFF" class="fgtext">&nbsp;{VAR:mail_when}&nbsp;</td>
-<td bgcolor="#FFFFFF" class="fgtext">&nbsp;<a href='list.{VAR:ext}?type=del_comp&lid={VAR:blid}&usid={VAR:user_id}'>Kustuta listist</a>&nbsp;</td>
+<td bgcolor="#FFFFFF" class="fgtext">&nbsp;<a href='{VAR:delete_link}'>Kustuta listist</a>&nbsp;</td>
 </tr>
 <!-- END SUB: LIST -->
 </table>
 <!-- END SUB: HAS_LIST -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=del_comp&lid={VAR:blid}&usid={VAR:user_id}'>Kustuta listist</a>&nbsp;</td>
+<td class="fgtext2">&nbsp;<a href='{VAR:delete_link}'>Kustuta listist</a>&nbsp;</td>
 <!-- END SUB: LINE -->
 </tr>
 </table>
