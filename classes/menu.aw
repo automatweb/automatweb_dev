@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.28 2003/01/28 16:44:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.29 2003/01/29 20:18:58 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -68,6 +68,9 @@
 	
 	@property pers type=select multiple=1 size=15 table=objects field=meta method=serialize group=relations
 	@caption Perioodid, mille alt dokumendid võetakse
+	
+	@property docs_per_period type=textbox size=3 group=relations table=objects field=meta method=serialize
+	@caption Dokumente perioodist
 
 	@property seealso type=select multiple=1 size=15 group=relations
 	@caption Vali menüüd, mille all see menüü on "vaata lisaks" menüü
@@ -144,9 +147,15 @@
 	
 	@property hide_noact type=checkbox ch_value=1
 	@caption Peida ära, kui dokumente pole
-	
+
 	@property ndocs type=textbox size=3 group=relations
 	@caption Mitu viimast dokumenti
+
+	@property show_periods type=checkbox ch_value=1 group=show table=objects field=meta method=serialize
+	@caption Näita perioode
+
+	@property show_period_count type=textbox size=4 group=show table=objects field=meta method=serialize
+	@caption Mitu viimast perioodi
 
 	@property export type=callback callback=callback_get_export_options group=import_export
 	@caption Eksport
