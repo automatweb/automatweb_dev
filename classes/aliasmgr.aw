@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.22 2002/01/31 00:29:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.23 2002/02/05 06:40:22 kristo Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -1061,6 +1061,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 					);
 					$repl = $$emb_obj_name->parse_alias($params);
 				
+					$inplace = false;
 					if (is_array($repl))
 					{
 						$replacement = $repl["replacement"];
