@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.1 2002/10/29 13:29:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.2 2002/11/01 16:26:00 duke Exp $
 // cfgform.aw - configuration form
+// adds, changes and in general manages configuration forms
 class cfgform extends aw_template
 {
 	function cfgform($args = array())
@@ -100,45 +101,40 @@ class cfgform extends aw_template
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
+	////
+	// !Meeza needz to rewrite that function to use the properties definitions
 	function _draw_fields($fields = array())
 	{
-		$source = get_file(array("file" => $this->cfg["basedir"] . "/xml/interfaces/config.xml"));
-		list($values,$tags) = parse_xml_def(array("xml" => $source));
+		$cx = get_instance("cfg/cfgutils");
+		$res = $cx->get_classes_with_properties();
 		$c = "";
-		$cp = $this->get_class_picker(array("index" => "file"));
-		foreach($values as $val)
+		foreach($res as $key => $val)
 		{
-			$attr = $val["attributes"];
-			if ( ($val["tag"] == "class") && ($val["type"] == "complete") )
+			// for each thingsbums I also have to create a list of all properties
+			$props = $cx->load_properties(array("clid" => $key));
+			$l = "";
+			$def = $this->cfg["classes"][$key]["def"];
+			foreach($props as $property)
 			{
-				$l = "";
-				$clid[$attr["id"]] = $attr["name"];
-				$prefix = $attr["id"];
-				$t = get_instance($attr["id"]);
-				if (method_exists($t,"get_properties"))
-				{
-					$properties = new aw_array($t->get_properties());
-					foreach($properties->get() as $pkey => $property)
-					{
-						$check = checked($fields[$prefix][$pkey]);
-						$this->vars(array(
-							"clid" => $prefix,
-							"pkey" => $pkey,
-							"pname" => $property["caption"],
-							"checked" => $check,
-						));
-
-						$l .= $this->parse("line");
-					}
-				};
+				$key = $property["name"]["text"];
+				$checked = checked($fields[$def][$key]);
 				$this->vars(array(
-					"line" => $l,
-					"cname" => $cp[$prefix],
+					"clid" => $def,
+					"pkey" => $property["name"]["text"],
+					"pname" => $property["caption"]["text"],
+					"checked" => $checked,
 				));
-
-				$c .= $this->parse("class_container");
+					
+				$l .= $this->parse("line");
 			};
-		};
+
+			$this->vars(array(
+				"line" => $l,
+				"cname" => $val,
+			));
+				
+			$c .= $this->parse("class_container");
+		}
 		return $c;
 	}
 
@@ -159,13 +155,14 @@ class cfgform extends aw_template
 			// get lost!
 			return false;
 		};
-		
-		$this->obj = $obj;
+	
 		$this->clid = $clid;
 		$this->parent = $parent;
 		$this->reforb = $reforb;
 		$this->no_filter = $no_filter;
 		$this->submit = $submit;
+		$this->no_filter = true;
+		$this->obj = $obj;
 
 		$this->odata = array_merge($obj,$obj["meta"]);
 
@@ -196,7 +193,7 @@ class cfgform extends aw_template
 		$this->start_form();
 		$this->html = get_instance("html");
 
-		$this->filter_properties = $this->get_visible_properties();
+		#$this->filter_properties = $this->get_visible_properties();
 
 		$this->level = 0;
 		$this->path = array();
@@ -374,7 +371,7 @@ class cfgform extends aw_template
 			$par = $this->get_menu($this->obj["parent"]);
 			if ($par["meta"]["cfgmanager"])
 			{
-				$cfgmanager = get_instance("cfgmanager");
+				$cfgmanager = get_instance("cfg/cfgmanager");
 				$cfgo = $cfgmanager->get_active_cfg_object($par["meta"]["cfgmanager"]);
 				$co = $this->get_object($cfgo);
 
