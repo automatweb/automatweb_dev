@@ -55,6 +55,12 @@
 <td colspan=2 class="fform"><select class='small_button' NAME='relation_forms[]' size=10 multiple>{VAR:relation_forms}</select></td>
 </tr>
 <tr>
+<td class="fform" colspan=2>{VAR:LC_FORM_EL_DEFAULT_FOLDER}:</td>
+</tr>
+<tr>
+<td colspan=2 class="fform"><select class='small_button' NAME='el_default_folder'>{VAR:el_default_folders}</select></td>
+</tr>
+<tr>
 <td class="fform" colspan=2><input class='small_button' type='submit' NAME='save_form_settings' VALUE='{VAR:LC_FORMS_SAVE} form'></td>
 </table>
 {VAR:reforb}

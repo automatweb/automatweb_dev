@@ -1,25 +1,47 @@
-<form action='reforb.{VAR:ext}' method=post>
-<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+<form action="reforb.{VAR:ext}" method="post">
+
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td class="aste01">
+
+<table border=0 cellspacing=0 cellpadding=2>
 <tr>
-<td class="fcaption">{VAR:LC_FORM_NAME}:</td><td class="fform"><input type='text' NAME='name'></td>
+<td class="celltext" width="20%" align="right">{VAR:LC_FORM_NAME}:</td>
+<td class="celltext"><input type='text' NAME='name' class="formtext" size="40"></td>
 </tr>
 <tr>
-<td class="fcaption">{VAR:LC_FORM_COMM}:</td><td class="fform"><textarea cols=50 rows=5 NAME=comment></textarea></td>
+<td class="celltext" align="right">{VAR:LC_FORM_COMM}:</td>
+<td class="celltext"><textarea cols=40 rows=5 NAME=comment></textarea></td>
 </tr>
 <tr>
-<td class="fcaption">{VAR:LC_FORM_BASE}</td><td class="fform"><select name='base'>{VAR:forms}</select></td>
+<td class="celltext" align="right">{VAR:LC_FORM_BASE}</td>
+<td class="celltext"><select name='base' class="formselect2">
+{VAR:forms}
+</select></td>
 </tr>
 <tr>
-<td class="fcaption">{VAR:LC_FORM_TYPE}:</td><td class="fform"><select  NAME=type><option VALUE='entry'>{VAR:LC_FORM_INPUT}
-<option VALUE='search'>{VAR:LC_FORM_SEARCH}
-<option VALUE='filter_search'>{VAR:LC_FORMS_FILTER_SEARCHFORM}
-<option VALUE='rating'>{VAR:LC_FORM_RESEARCH}
-</select>
-</td>
+<td class="celltext" align="right">{VAR:LC_FORM_TYPE}:</td>
+<td class="celltext"><select name="type" class="formselect2">
+{VAR:types}
+</select></td>
 </tr>
 <tr>
-<td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
+<td class="celltext" align="right">{VAR:LC_FORM_CONFIG_FILE}:<br>
+<i>Kasutatakse ainult siis, kui teed uue konfiguratsioonivormi</i>
+</td><td class="celltext"><select name="config_file" class="formselect2" disabled>
+{VAR:config_files}
+</select><input type="hidden" name="config_file" value="planner.xml"></td>
+</tr>
+<tr>
+<td class="celltext" align="right">{VAR:LC_FORM_EL_DEFAULT_FOLDER}:</td>
+<td class="celltext"><select name="el_default_folder" class="formselect2">
+{VAR:el_default_folders}
+</select></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td class="celltext"><input class='formbutton' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
 </table>
+</td></tr></TABLE>
 {VAR:reforb}
 </form>

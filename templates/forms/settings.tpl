@@ -45,27 +45,12 @@ function setLink(li,title)
 <tr>
 <td class="fform" colspan=2>Eventite sisestusvorm: &nbsp;<input type='checkbox' name='ev_entry_form' value=1 {VAR:ev_entry_form}></td>
 </tr>
-<!--
 <tr>
-<td class="fform" colspan=2 style="background: #eeeeee">Vormi kaudu tehtud pärja sisestusted omavad kalendrit: &nbsp;<input type='checkbox' name='has_calendar' value=1 {VAR:has_calendar}><br>
-Kalendri kontrollervorm: &nbsp;<select name="cal_controller">{VAR:cal_controllers}</select><br>
-<i> vorm peab sisaldama ajaelemente ja vähemalt ühte sisestust, muidu paistab kalender tühjana</i>.
-</td>
+<td class="fform" colspan=2>Kalendri vormitabel: &nbsp;<select name="event_display_table">{VAR:event_display_tables}</select></td>
 </tr>
 <tr>
-<td class="fform" colspan=2 style="background: #eeeeee">Eventite sisestusvorm kalendrile: &nbsp;
-&nbsp;<select name="event_entry_form">{VAR:event_entry_forms}</select><br>
-</td>
+<td class="fform" colspan=2>Kas vormi saab kasutada e-posti actionite jaoks?: &nbsp;<input type='checkbox' name='email_form_action' value=1 {VAR:email_form_action}></td>
 </tr>
-<tr>
-<td class="fform" colspan=2 style="background: #eeeeee">Vormi sisestuste korrektsust kontrollitakse
-selle vormi juures olevast kalendrist:<br>
-&nbsp;<input type="checkbox" name="event_check_form" value=1 {VAR:event_check_form}><select name="event_check_against_form">{VAR:event_check_against_forms}</select><br>
-Kalendris näidatakse eventeid kasutades tabelit:
-&nbsp;<select name="event_display_table">{VAR:event_display_tables}</select><br>
-</td>
-</tr>
--->
 <tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_CONTROL_FORM_STATUS}?: &nbsp;<input type='checkbox' name='check_status' value=1 {VAR:check_status}>
 <br>

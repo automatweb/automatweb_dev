@@ -75,6 +75,7 @@ Pärja sisestustel on kalender
 <input type="checkbox" name="has_calendar" value="1" {VAR:has_calendar}>
 </td>
 </tr>
+<!--
 <tr>
 <td class="fform" width="30%">
 Kalendri vorm<br>
@@ -84,6 +85,7 @@ Kalendri vorm<br>
 <select name="cal_form">{VAR:cal_forms}</select>
 </td>
 </tr>
+-->
 <tr>
 <td class="fform" width="30%">
 Kalendri kontrollervorm<br>
