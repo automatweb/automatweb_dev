@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.56 2003/09/23 16:43:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.57 2003/10/03 13:42:50 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -33,17 +33,17 @@
 	@property comment type=textbox table=objects field=comment
 	@caption Faili allkiri
 
-	@property showal type=checkbox ch_value=1
+	@property showal type=checkbox ch_value=1 group=settings
 	@caption Näita kohe
 
-	@property newwindow type=checkbox ch_value=1
+	@property newwindow type=checkbox ch_value=1 group=settings
 	@caption Uues aknas
 
 	@default table=objects
 	@default field=meta
 	@default method=serialize
 	
-	@property show_framed type=checkbox ch_value=1
+	@property show_framed type=checkbox ch_value=1 group=settings
 	@caption Näita saidi raamis
 
 	@property view type=text editonly=1
@@ -55,7 +55,7 @@
 	@property act_date type=date_select group=dates
 	@caption Avaldamise kuupäev
 
-	@groupinfo general caption=Üldine default=1
+	@groupinfo settings caption=Seadistused
         @groupinfo dates caption=Ajad
 
 	@tableinfo files index=id master_table=objects master_index=oid	
@@ -141,7 +141,14 @@ class file extends class_base
 					));
 
 					$form_data["file"] = $fs;
-					$form_data["type"] = $file_type;
+					// try and resolve the file type from file extension
+
+					$pathinfo = pathinfo($file_name);
+					$mimeregistry = get_instance("core/aw_mime_types");
+
+					$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
+					$form_data["type"] = $realtype;
+
 					$data["value"] = $fs;
 					$this->file_name = $file_name;
 				};
@@ -164,11 +171,10 @@ class file extends class_base
 
 	function callback_pre_save($args = array())
 	{
-		$coredata = &$args["coredata"];
 		// overwrite the name if new file is uploaded
 		if (isset($this->file_name))
 		{
-			$coredata["name"] = $this->file_name;
+			$arr["obj_inst"]->set_prop("name",$this->file_name);
 		};
 	}
 
@@ -247,10 +253,6 @@ class file extends class_base
 			};
 			$replacement = "<a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
 		}
-		if ($XX3)
-		{
-			print "ct = $replacement<br />";
-		};
 		return $replacement;
 	}
 
