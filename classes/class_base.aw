@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.25 2002/12/20 11:39:43 kristo Exp $
+// $Id: class_base.aw,v 2.26 2002/12/20 14:01:36 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -19,6 +19,8 @@
 
 	@property jrk type=textbox size=4 group=general
 	@caption Jrk
+
+	@groupinfo general caption=Üldine default=1
 */
 
 
