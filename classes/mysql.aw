@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.15 2002/03/05 22:59:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.16 2002/03/13 13:41:17 duke Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -350,6 +350,8 @@ class db_connector extends root
 		$tables = array();
 		while($row = $this->db_next())
 		{
+			list($key,$val) = each($row);
+			$row[0] = $val;
 			// form entry tables are ignored
 			if (not(preg_match("/form_(\d+?)_entries/",$row[0])))
 			{
