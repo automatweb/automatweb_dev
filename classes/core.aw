@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.60 2001/10/03 13:08:10 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.61 2001/10/11 09:07:41 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1373,10 +1373,12 @@ class core extends db_connector
 			$right = func_get_arg(0);
 			$oid = func_get_arg(1);
 			printf(E_ACCESS_DENIED1,"CAN_".$right,$oid);
+			mail("vead@struktuur.ee", "ACL error saidil ".$GLOBALS["baseurl"], sprintf(E_ACCESS_DENIED1,"CAN_".$right,$oid));
 		}
 		else
 		{
 			printf(E_ACCESS_DENIED2);
+			mail("vead@struktuur.ee", "ACL error saidil ".$GLOBALS["baseurl"], sprintf(E_ACCESS_DENIED2));
 		};
 		die();
 	}
