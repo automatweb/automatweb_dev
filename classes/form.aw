@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.68 2001/09/27 11:51:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.69 2001/09/28 14:51:39 cvs Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -418,6 +418,7 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 
+		$this->arr["allow_html"] = $allow_html;
 		$this->arr["bgcolor"] = $bgcolor;
 		$this->arr["border"] = $border;
 		$this->arr["cellpadding"]	= $cellpadding;
@@ -759,6 +760,7 @@ class form extends form_base
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
 		$this->vars(array(
+			"allow_html"		=> checked($this->arr["allow_html"]),
 			"form_bgcolor"				=> $this->arr["bgcolor"],
 			"form_border"					=> $this->arr["border"],
 			"form_cellpadding"		=> $this->arr["cellpadding"],
