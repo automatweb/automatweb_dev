@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.32 2004/07/07 18:23:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.33 2004/07/07 18:30:18 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1349,10 +1349,7 @@ class forum_v2 extends class_base
 				"class_id" => CL_COMMENT,
 			));
 
-			$to_delete->foreach_o(array(
-				"func" => "delete",
-				"save" => false,
-		    	));
+			$to_delete->delete();
 		};
 		return $this->finish_action($arr);
 	}
