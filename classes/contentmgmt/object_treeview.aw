@@ -89,7 +89,6 @@ class object_treeview extends class_base
 		foreach($ol as $oid)
 		{
 			$od = obj($oid);
-
 			$target = "";
 			if ($od->class_id() == CL_EXTLINK)
 			{
@@ -106,6 +105,9 @@ class object_treeview extends class_base
 				{
 					$target = "target=\"_blank\"";
 				}
+				$fileSizeBytes = number_format(filesize($od->prop('file')),2);
+				$fileSizeKBytes = number_format(filesize($od->prop('file'))/(1024),2);
+				$fileSizeMBytes = number_format(filesize($od->prop('file'))/(1024*1024),2);
 			}
 			else
 			{
@@ -143,6 +145,9 @@ class object_treeview extends class_base
 				"show" => $url,
 				"name" => $od->name(),
 				"target" => $target,
+				"sizeBytes" => $fileSizeBytes,
+				"sizeKBytes" => $fileSizeKBytes,
+				"sizeMBytes" => $fileSizeMBytes,
 				"comment" => $od->comment(),
 				"type" => $this->cfg["classes"][$od->class_id()]["name"],
 				"add_date" => $this->time2date($od->created(), 2),
