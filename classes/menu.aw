@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.86 2004/03/09 18:24:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.87 2004/04/08 09:08:08 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -749,7 +749,7 @@ class menu extends class_base
 	function callback_pre_save($arr)
 	{
 		$request = &$arr["request"];
-		if ($request["do_export"])
+		if ($request["group"] == "import_export")
 		{
 			$menu_export = get_instance("export/menu_export");
 			$menu_export->export_menus(array(
