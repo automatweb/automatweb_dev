@@ -24,11 +24,14 @@ class db_syslog extends aw_template
 		$this->read_template("parts.tpl");
 		if (is_array($syslog_types))
 		{
-			$ss = "WHERE syslog.type IN (".join(",",$this->map("'%s'",$syslog_types)).")";
-			reset($syslog_types);
-			while(list(,$v) = each($syslog_types))
+			if (count($syslog_types) > 1)	// dummy on alati olemas, j2relikult kui midagi tshekitud veel on, siis on 2
 			{
-				$this->vars(array($v."_sel" => "CHECKED"));
+				$ss = "WHERE syslog.type IN (".join(",",$this->map("'%s'",$syslog_types)).")";
+				reset($syslog_types);
+				while(list(,$v) = each($syslog_types))
+				{
+					$this->vars(array($v."_sel" => "CHECKED"));
+				}
 			}
 		}
 		else

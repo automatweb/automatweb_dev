@@ -144,8 +144,9 @@ class search_conf extends aw_template
 				$sel_keys = true;
 			}
 		}
+		$search_list = $this->get_search_list();
 		$this->vars(array(
-			"search_sel" => $this->option_list($s_parent,$this->get_search_list()),
+			"search_sel" => $this->option_list($s_parent,$search_list),
 			"sstring_title" => $sstring_title,
 			"sstring" => $sstring,
 			"t2c_or" => selected($t2c_log == "OR"),
@@ -318,7 +319,6 @@ class search_conf extends aw_template
 				$q_cons.=" AND (".$q_cons2.")";
 			}
 
-//			echo $q_cons;
 			// make pageselector
 			$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons","cnt");
 
@@ -348,9 +348,83 @@ class search_conf extends aw_template
 			$this->vars(array(
 				"SEARCH" => $this->parse("SEARCH")
 			));
+
+			// logime ka et tyyp otsis ja palju leidis.
+			$this->do_log($search_list,$s_parent,$t_type,$sstring_title,$sstring,$t2c_log,$sel_keys,$keys,$c2k_log,$cnt);
 			$awt->stop("search");
 		}
 		return $this->parse();
+	}
+
+	function do_log($search_list,$s_parent,$t_type,$sstring_title,$sstring,$t2c_log,$sel_keys,$keys,$c2k_log,$cnt)
+	{
+		$sel_parent = $search_list[$s_parent];
+		if ($t_type == 1)
+		{
+			$s = "mõni sõna";
+		}
+		else
+		if ($t_type == 2)
+		{
+			$s = "kõiki sõnu";
+		}
+		else
+		if ($t_type == 3)
+		{
+			$s = "fraas";
+		}
+		if ($sstring_title != "")
+		{
+			$l="pealkirjas ".$s." stringist '$sstring_title'";
+			if ($sstring != "")
+			{
+				if ($t2c_log == "OR")
+				{
+					$l.=" või ";
+				}
+				else	// AND
+				{
+					$l.=" ja ";
+				}
+			}
+		}
+
+		if ($c_type == 1)
+		{
+			$s = "mõni sõna";
+		}
+		else
+		if ($c_type == 2)
+		{
+			$s = "kõik sõnad";
+		}
+		else
+		if ($c_type == 3)
+		{
+			$s = "fraas";
+		}
+		if ($sstring != "")
+		{
+			$l.="sisus ".$s." stringist '$sstring'";
+			if ($sel_keys != "")
+			{
+				if ($c2k_log == "OR")
+				{
+					$l.=" või ";
+				}
+				else	// AND
+				{
+					$l.=" ja ";
+				}
+			}
+		}
+
+		if ($sel_keys)
+		{
+			$l.=" keywordidega ";
+			$l.=join(",",$this->map("%s",$keys));
+		}
+		$this->_log("search","Otsis $sel_parent alt, $l , vastuseks saadi $cnt dokumenti");
 	}
 
 	function do_sorting($pa)
