@@ -9,6 +9,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="subscribe" nologin="1">
+			<function name="subscribe">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
 		
 		<action name="post_message">
 			<function name="post_message">
