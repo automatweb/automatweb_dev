@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.3 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.4 2001/07/17 20:53:13 duke Exp $
 
 	global $orb_defs;
 	$orb_defs["variables"] = array(
@@ -39,12 +39,12 @@
 			if ($id)
 			{
 				$this->upd_object(array("oid" => $id, "name" => $name));
-				$this->_log("ml_var","Muutis meili muutujat $name");
+				$this->_log("ml_var",sprintf(LC_VARS_CHANGED_VAR,$name));
 			}
 			else
 			{
 				$id = $this->new_object(array("parent" => $parent,"name" => $name, "class_id" => CL_MAILINGLIST_VARIABLE,"status" => 2));
-				$this->_log("ml_var","Lisas meili muutuja $name");
+				$this->_log("ml_var",sprintf(LC_VARS_ADD_VAR,$name));
 			}
 
 			return "list.aw?type=change_var&id=$id";
@@ -275,12 +275,12 @@
 			{
 
 				$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $value));
-				$this->_log("ml_var","Muutis stampi $name");
+				$this->_log("ml_var",sprintf(LC_VARS_CHANGED_STAMP,$name));
 			}
 			else
 			{
 				$id = $this->new_object(array("parent" => 1,"name" => $name, "class_id" => CL_MAILINGLIST_STAMP, "comment" => $value));
-				$this->_log("ml_var","Lisas stambi $name");
+				$this->_log("ml_var",sprintf(LC_VARS_ADD_STAMP,$name));
 			}
 
 			return $id;
@@ -331,12 +331,12 @@
 			if ($id)
 			{
 				$this->upd_object(array("oid" => $id, "name" => $name, "status" => 2, "comment" => $comment));
-				$this->_log("ml_var","Muutis meili muutujate kategooriat $name");
+				$this->_log("ml_var",sprintf(LC_VARS_CHANGED_CAT,$name));
 			}
 			else
 			{
 				$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_ML_VAR_CAT, "comment" => $comment));
-				$this->_log("ml_var","Lisas meili muutujate kategooria $name");
+				$this->_log("ml_var",sprintf(LC_VARS_ADD_CAT,$name));
 			}
 
 			return $parent;

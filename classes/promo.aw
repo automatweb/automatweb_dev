@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.6 2001/07/03 18:26:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.7 2001/07/17 20:56:50 duke Exp $
 
 global $orb_defs;
 $orb_defs["promo"] = "xml";
@@ -17,12 +17,12 @@ class promo extends aw_template
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent, "Lisa promo kast");
+		$this->mk_path($parent, LC_PROMO_TODAY);
 
 		$this->read_template("add_promo.tpl");
 		$ob = new db_objects;
 		$menu = $ob->get_list();
-		$menu[$GLOBALS["rootmenu"]] = "Esileht";
+		$menu[$GLOBALS["rootmenu"]] = LC_PROMO_FRONTPAGE;
 
 		// kysime infot adminnitemplatede kohta
 		$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
@@ -79,7 +79,7 @@ class promo extends aw_template
 			$com = $all_menus ? "all_menus" : serialize($sets);
 			$this->upd_object(array("oid" => $id, "name" => $title,"last" => $type,"comment" => $com));
 			$this->db_query("UPDATE menu SET tpl_lead = '$tpl_lead', tpl_edit = '$tpl_edit' , link = '$link' WHERE id = $id");
-			$this->_log("promo", "Muutis promo kasti $title");
+			$this->_log("promo", sprintf(LC_PROMO_CHANGED_PROMO_BOX,$title));
 		}
 		else
 		{
@@ -91,7 +91,7 @@ class promo extends aw_template
 				"last" => 1,
 			));
 			$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit')");
-			$this->_log("promo", "Lisas promo kasti $title");
+			$this->_log("promo", sprintf(LC_PROMO_ADD_TO_PROMO_BOX,$title));
 		}
 		return $this->mk_orb("change", array("id" => $id));
 	}
@@ -106,7 +106,7 @@ class promo extends aw_template
 			$this->raise_error("promo->gen_change($id): No such box!", true);
 		}
 
-		$this->mk_path($row["parent"],"Muuda promo kasti");
+		$this->mk_path($row["parent"],LC_PROMO_CHANGE_PROMO_BOX);
 		$ob = new db_objects;
 
 		$sets = unserialize($row["comment"]);
@@ -133,7 +133,7 @@ class promo extends aw_template
 
 		$menu = $ob->get_list();
 		$menu[0] = "";
-		$menu[$GLOBALS["frontpage"]] = "Esileht";
+		$menu[$GLOBALS["frontpage"]] = LC_PROMO_FRONTPAGE;
 		$this->vars(array(
 			"title" => $row["name"], 
 			"section"	=> $ob->multiple_option_list($sets["section"],$menu),

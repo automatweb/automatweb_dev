@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/tests.aw,v 2.1 2001/07/17 20:51:48 duke Exp $
 global $orb_defs,$astmed,$punktid;
 $orb_defs["tests"] = 
 array("list_questions"	=> array("function" => "list_questions", "params" =>array()),
@@ -34,7 +35,7 @@ class tests extends quiz
 
 	function list_questions($arr)
 	{
-		$this->mk_path(0,"K&uuml;simused");
+		$this->mk_path(0,LC_TESTS_QUESTIONS);
 
 		$this->read_template("list_questions.tpl");
 
@@ -70,7 +71,7 @@ class tests extends quiz
 
 	function add_question($arr)
 	{
-		$this->mk_path(0,"<a href='".$this->mk_orb("list_questions",array())."'>K&uuml;simused</a> / Lisa");
+		$this->mk_path(0,"<a href='".$this->mk_orb("list_questions",array()).LC_TESTS_QUEST_ADD);
 		global $astmed,$punktid;
 		extract($arr);
 		$this->read_template("add_question.tpl");
@@ -102,7 +103,7 @@ class tests extends quiz
 
 	function change_question($arr)
 	{
-		$this->mk_path(0,"<a href='".$this->mk_orb("list_questions",array())."'>K&uuml;simused</a> / Muuda");
+		$this->mk_path(0,"<a href='".$this->mk_orb("list_questions",array()).LC_TESTS_QUEST_CHANGE);
 
 		global $astmed,$punktid;
 		extract($arr);
@@ -187,7 +188,7 @@ class tests extends quiz
 												"whodunit"	=> $row[createdby],
 												"when"			=> $this->time2date($row[created],2),
 												"raskus"		=> $row[raskus],
-												"status"		=> $row[status] == 1 ? "T&auml;idetud" : "Hinnatud",
+												"status"		=> $row[status] == 1 ? LC_TESTS_FILLED : LC_TESTS_APPRAISE,
 												"hinne"		=> $row[punkte],
 												"num_questions"		=> $row[ylesandeid],
 												"hinda"			=> $this->mk_orb("hinda_test",array("id" => $row[oid])),

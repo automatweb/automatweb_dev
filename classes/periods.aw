@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.3 2001/06/18 19:39:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.4 2001/07/17 20:55:23 duke Exp $
 class db_periods extends aw_template 
 {
 	function db_periods($oid) 
@@ -106,7 +106,7 @@ class db_periods extends aw_template
 
 		if ($data["oldactiveperiod"] != $data["activeperiod"]) {
 			$this->activate_period($data["activeperiod"],$this->oid);
-			$this->_log("period","aktiveeris perioodi $data[activeperiod]");
+			$this->_log("period",sprintf(LC_PERIODS_ACTIVATED_PERIOD,$data[activeperiod]));
 			print "#";
 		};
 

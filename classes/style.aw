@@ -19,7 +19,7 @@ $style_cache = array();
 
 	class style extends aw_template
 	{
-		var $type_names = array(0 => "Tabeli stiil", 1 => "Celli stiil", 2 => "Elemendi stiil");
+		var $type_names = array(0 => LC_STYLE_TABLE_STYLE, 1 => LC_STYLE_CELL_STYLE, 2 => LC_STYLE_ELEMENT_STYLE);
 
 		function style()
 		{
@@ -67,7 +67,7 @@ $style_cache = array();
 		{
 			extract($arr);
 
-			$this->mk_path($parent,"Stiilid");
+			$this->mk_path($parent,LC_STYLE_STYLES);
 
 			$this->read_template("list.tpl");
 			$this->db_listall($parent);
@@ -89,7 +89,7 @@ $style_cache = array();
 		{
 			extract($arr);
 
-			$this->mk_path($parent,"Lisa stiil");
+			$this->mk_path($parent,LC_STYLE_ADD_STYLE);
 
 			$this->read_template("add_sel.tpl");
 			$this->vars(array("reforb" => $this->mk_reforb("submit_sel",array("parent" => $parent))));
@@ -101,7 +101,7 @@ $style_cache = array();
 		{
 			extract($arr);
 
-			$this->mk_path($parent,"Muuda stiili");
+			$this->mk_path($parent,LC_STYLE_CHANGE_STYLE);
 
 			$this->style = $this->get($id);
 			switch($this->style["type"])

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.16 2001/07/16 06:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.17 2001/07/17 20:53:41 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -25,7 +25,7 @@ class db_objects extends aw_template
 		switch($type)
 		{
 			case "top":
-				$retval .= "<a href='$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid' target='content'>Objektid</a>&nbsp; &nbsp;<a href='$baseurl/?class=planner&action=draw_day&msgid=$msgid' target='content'>Kalender</a>";
+				$retval .= sprintf(LC_OBJECTS_OBJECTS_CAL,"$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid' target='content'","$baseurl/?class=planner&action=draw_day&msgid=$msgid' target='content'");
 
 				break;
 
@@ -245,7 +245,7 @@ class db_objects extends aw_template
 			$s_comment = "%";
 			$s_type = 0;
 		}
-		$tar = array(0 => "K&otilde;ik");
+		$tar = array(0 => LC_OBJECTS_ALL);
 		reset($this->typearr);
 		while (list(,$v) = each($this->typearr))
 		{
@@ -548,7 +548,7 @@ class objects extends db_objects
 			$s["comment"] = "%";
 			$s["type"] = 0;
 		}
-		$tar = array(0 => "K&otilde;ik");
+		$tar = array(0 => LC_OBJECTS_ALL);
 		global $class_defs;
 		reset($class_defs);
 		while (list($v,) = each($class_defs))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.4 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.5 2001/07/17 20:55:23 duke Exp $
 // syslogi vaatamine ja analüüs
 
 class db_syslog extends aw_template
@@ -58,7 +58,7 @@ class db_syslog extends aw_template
 			
 		$this->vars(array("update" => $syslog_params[update]));
 
-		$nums = array("-1" => "K&otilde;ik");
+		$nums = array("-1" => LC_SYSLOG_ALL);
 		$this->vars(array("number" => $syslog_params[number]));
 
 		if ($syslog_params[from] != "")
