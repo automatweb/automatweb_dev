@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.69 2002/09/03 06:31:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.70 2002/09/04 07:35:01 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -1990,7 +1990,7 @@ class form_element extends aw_template
 
 			case "price":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html .= "<input $disabled $stat_check type='text' NAME='".$element_name."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />\n";
+				$html .= "<input $disabled $stat_check type='text' NAME='".$element_name."' $l VALUE=\"".(htmlentities(round($this->get_val($elvalues),2)))."\" />\n";
 				break;
 
 			case "alias":
@@ -2046,6 +2046,12 @@ class form_element extends aw_template
 				// to submit the form
 				if (!$no_submit)
 				{
+					$onclick = "";
+					if ($this->onclick != "")
+					{
+						$onclick = $this->onclick;
+					}
+
 					if ($lang_id == $this->form->lang_id)
 					{
 						$butt = $this->arr["button_text"];
@@ -2058,7 +2064,7 @@ class form_element extends aw_template
 					if ($this->arr["button_img"]["use"] == 1)
 					{
 						$btype = "image";
-						$bsrc  = "src=\"".image::check_url($this->arr["button_img"]["url"])."\"";
+						$bsrc  = "src=\"".image::check_url($this->arr["button_img"]["url"])."\" alt=\"$butt\"";
 					}
 					else
 					{
@@ -2067,31 +2073,23 @@ class form_element extends aw_template
 					}
 					if ($this->arr["subtype"] == "submit" || $this->arr["type"] == "submit" || $this->arr["subtype"] == "confirm")
 					{
-//						if ($this->arr["chain_forward"] == 1)
-//						{
-//							$bname="name=\"no_chain_forward\"";
-//						}
-//						else
-//						if ($this->arr["chain_backward"] == 1)
-//						{
-//							$bname="name=\"chain_backward\"";
-//						}
-//						else
-//						if ($this->arr["subtype"] == "confirm")
-//						{
-//							$bname = "name=\"confirm\"";
-//						}
-
 						$bname = sprintf("name='submit[%d]'",$this->id);
-
-						$html .= "<input $csscl $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"return check_submit();\" />\n";
+						if ($onclick == "")
+						{
+							$onclick =  "return check_submit();";
+						}
+						$html .= "<input $csscl $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
 					}
 					else
 					if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
 					{
+						if ($onclick == "")
+						{
+							$onclick =  "form_reset(); return false;";
+						}
 						if ($btype == "image")
 						{
-							$html .= "<input $csscl $disabled type='image' $bsrc onClick=\"form_reset(); return false;\" />\n";
+							$html .= "<input $csscl $disabled type='image' $bsrc onClick=\"$onclick\" />\n";
 						}
 						else
 						{
@@ -2101,18 +2099,30 @@ class form_element extends aw_template
 					else
 					if ($this->arr["subtype"] == "url")
 					{
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\" />\n";
+						if ($onclick == "")
+						{
+							$onclick =  "window.location='".$this->arr["button_url"]."';return false;";
+						}
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
 					}
 					else
 					if ($this->arr["subtype"] == "order")
 					{
 						$loc = $this->mk_my_orb("show", array("id" => $this->arr["order_form"], "load_entry_data" => $this->form->entry_id,"section" => $GLOBALS["section"]),"form");
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\" />\n";
+						if ($onclick == "")
+						{
+							$onclick = "window.location='".$loc."';return false;";
+						}
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
 					}
 					else
 					if ($this->arr["subtype"] == "close")
 					{
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.close();return false;\" />\n";
+						if ($onclick == "")
+						{
+							$onclick = "window.close();return false;";
+						}
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"$onclick\" />\n";
 					}
 				}
 				break;
