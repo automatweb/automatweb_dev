@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.34 2004/11/02 09:58:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.35 2004/11/08 08:59:20 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -504,7 +504,17 @@ class admin_folders extends aw_template
 
 			$this->rec_admin_tree(&$arr,$row["oid"]);
 
-			$iconurl = !empty($row["icon_id"]) ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? icons::get_feature_icon_url($row["admin_feature"]) : "");
+			$row_o = obj($row["oid"]);
+			if (is_oid($row_o->meta("sel_icon")) && $this->can("view", $row_o->meta("sel_icon")))
+			{
+				$im = get_instance(CL_IMAGE);
+				$iconurl = $im->get_url_by_id($row_o->meta("sel_icon"));
+			}
+			else
+			{
+				$iconurl = !empty($row["icon_id"]) ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? icons::get_feature_icon_url($row["admin_feature"]) : "");
+			}
+
 			// as far as I know, this works everywhere
 			$blank = "about:blank";
 

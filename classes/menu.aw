@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.110 2004/11/03 14:53:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.111 2004/11/08 08:59:19 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -31,6 +31,9 @@
 
 	@property icon type=icon field=meta method=serialize group=advanced
 	@caption Ikoon
+
+	@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=advanced 
+	@caption Vali ikoon
 
 	@property sort_by_name type=checkbox field=meta method=serialize group=show ch_value=1
 	@caption Sorteeri nime järgi
@@ -265,6 +268,9 @@
 	@reltype SEEALSO_DOC value=18 clid=CL_DOCUMENT
     @caption vaata lisaks dokument
 
+	@reltype ICON value=19 clid=CL_IMAGE
+    @caption ikoon
+
 */
 
 define("IP_ALLOWED", 1);
@@ -373,6 +379,14 @@ class menu extends class_base
 
 			case "icon":
 				$ext = $this->cfg['ext'];
+				if (is_oid($ob->meta("sel_icon")) && $this->can("view", $ob->meta("sel_icon")))
+				{
+					$fi = get_instance(CL_IMAGE);
+					$icon = html::img(array(
+						"url" => $fi->get_url_by_id($ob->meta("sel_icon"))
+					));
+				}
+				else
 				if ($ob->prop("icon_id"))
 				{
 					$icon = html::img(array(

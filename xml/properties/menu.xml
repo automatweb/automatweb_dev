@@ -75,6 +75,16 @@
             <caption>Ikoon</caption>
       </property>
       <property>
+            <name>sel_icon</name>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ICON</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <caption>Vali ikoon</caption>
+      </property>
+      <property>
             <name>sort_by_name</name>
             <table>objects</table>
             <type>checkbox</type>
@@ -698,6 +708,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>vaata lisaks dokument</caption>
             </SEEALSO_DOC>
+            <ICON>
+                  <value>19</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>ikoon</caption>
+            </ICON>
       </reltypes>
 </properties>
 
