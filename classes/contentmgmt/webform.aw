@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.22 2004/12/29 10:02:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.23 2004/12/29 10:05:33 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -219,7 +219,7 @@ class webform extends class_base
 			}
 			if(!$arr["new"])
 			{
-				if($obj_inst->prop("form_type") == CL_REGISTER_DATA)
+				if($obj_inst->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM)
 				{
 					$this->p_clid = CL_REGISTER_DATA;
 				}
@@ -1280,14 +1280,14 @@ class webform extends class_base
 		$rval = $this->draw_cfgform_from_ot(array(
 			"ot" => $object_type->id(),
 			"reforb" => array(
-				"class" => $ftype == CL_REGISTER_DATA ? "webform" : "calendar_registration_form_conf",
+				"class" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? "webform" : "calendar_registration_form_conf",
 				"return_url" => $section,
-				"id" => $ftype == CL_REGISTER_DATA ? $arr["id"] : $ef_id,
+				"id" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? $arr["id"] : $ef_id,
 			),
 			"errors" => $errors,
 			"values" => $values,
 			"obj_inst" => $obj_inst,
-			"action" => $ftype == CL_REGISTER_DATA ? "save_form_data" : "submit_register",
+			"action" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? "save_form_data" : "submit_register",
 		));
 		aw_session_del("wf_errors");
 		aw_session_del("wf_data");
@@ -1614,7 +1614,7 @@ class webform extends class_base
 				if(is_oid($val) && $this->can("delete", $val))
 				{
 					$obj = obj($val);
-					if($obj->class_id = CL_REGISTER_DATA)
+					if($obj->class_id() == CL_REGISTER_DATA)
 					{
 						$obj->delete();
 					}
