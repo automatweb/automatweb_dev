@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.262 2004/06/15 08:57:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.263 2004/06/17 14:30:35 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -463,7 +463,6 @@ class document extends aw_template
 				}
 				$this->vars(array(
 					"docid" => $docid,
-					//"printlink" => $this->mk_my_orb("print",array("section" => $docid,"oid" => $oid),"document",0,1),
 					"printlink" => $link,
 				));
 				#aw_global_set("no_menus",1);
@@ -632,6 +631,12 @@ class document extends aw_template
 						$doc["lead"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["lead"]);
 					}
 				}
+				// I don't know whether this is a good idea, but fuck it, my head hurts
+				// and emsl.struktuur.ee wants this, so I'm doing this through site->parse_document
+				if (isset($doc["no_strip_lead"]))
+				{
+					$no_strip_lead = $doc["no_strip_lead"];
+				};
 				if ($no_strip_lead != 1)
 				{
 					// here we only strip images
