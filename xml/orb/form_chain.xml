@@ -25,7 +25,7 @@
 			</function>
 		</action>
 
-		<action name="show">
+		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
 					<required name="id"/>
@@ -58,7 +58,7 @@
 			</function>
 		</action>
 
-		<action name="submit_form">
+		<action name="submit_form" nologin="1">
 			<function name="submit_form">
 				<arguments>
 				</arguments>
