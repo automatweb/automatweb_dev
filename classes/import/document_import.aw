@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.2 2003/10/06 14:32:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.3 2003/12/07 19:43:39 duke Exp $
 // document_import.aw - Dokumentide import 
 /*
 
@@ -11,7 +11,7 @@
 @property file type=fileupload store=no
 @caption XML Fail
 
-@property d_period type=relpicker reltype=RELTYPE_PERIOD field=meta method=serialize
+@property d_period type=relpicker reltype=RELTYPE_DOCIMP_PERIOD field=meta method=serialize
 @caption Periood
 
 @property found type=text store=no
@@ -33,9 +33,10 @@
 
 @property content_transform type=generated generator=generate_tag_fields
 
-*/
+@reltype DOCIMP_PERIOD value=1 clid=CL_PERIOD
+@caption Periood
 
-define("RELTYPE_PERIOD", 1);
+*/
 
 class document_import extends class_base
 {
@@ -55,14 +56,14 @@ class document_import extends class_base
 		{
 			case "found":
 				$prop["value"] = "";
-				if ($args["obj"]["meta"]["temp_file"] != "")
+				if ($args["obj_inst"]->meta("temp_file") != "")
 				{
-					$tf = $this->get_file(array("file" => $args["obj"]["meta"]["temp_file"]));
+					$tf = $this->get_file(array("file" => $args["obj_inst"]->meta("temp_file")));
 					if ($tf !== false)
 					{
-						$doc_list = $this->_do_import_from_string($tf, $args["obj"]);
+						$doc_list = $this->_do_import_from_string($tf, $args["obj_inst"]);
 						
-						$prop["value"] = $this->_draw_document_list_from_arr($doc_list, $args["obj"]["meta"]["orig_filename"]);
+						$prop["value"] = $this->_draw_document_list_from_arr($doc_list, $args["obj_inst"]->meta("orig_filename"));
 					}
 				}
 				if ($prop["value"] == "")
@@ -73,9 +74,9 @@ class document_import extends class_base
 
 			case "do_import":
 				$retval = PROP_IGNORE;
-				if ($args["obj"]["meta"]["temp_file"] != "")
+				if ($args["obj_inst"]->meta("temp_file") != "")
 				{
-					$tf = $this->get_file(array("file" => $args["obj"]["meta"]["temp_file"]));
+					$tf = $this->get_file(array("file" => $args["obj_inst"]->meta("temp_file")));
 					if ($tf !== false)
 					{
 						$retval = PROP_OK;
@@ -98,12 +99,12 @@ class document_import extends class_base
 					$tf = aw_ini_get("server.tmpdir")."/docimp-".gen_uniq_id().".xml";
 					if (move_uploaded_file($_FILES["file"]["tmp_name"], $tf))
 					{
-						if ($args["obj"]["meta"]["temp_file"])
+						if ($args["obj_inst"]->meta("temp_file") != "")
 						{
-							@unlink($args["obj"]["meta"]["temp_file"]);
+							@unlink($args["obj_inst"]->meta("temp_file"));
 						}
-						$args["metadata"]["temp_file"] = $tf;
-						$args["metadata"]["orig_filename"] = $_FILES["file"]["name"];
+						$args["obj_inst"]->set_meta("temp_file",$tf);
+						$args["obj_inst"]->set_meta("orig_filename") = $_FILES["file"]["name"];
 					}
 					else
 					{
@@ -115,15 +116,15 @@ class document_import extends class_base
 			case "do_import":
 				if ($prop["value"] == 1)
 				{
-					if ($args["obj"]["meta"]["temp_file"] != "")
+					if ($args["obj_inst"]->meta("temp_file") != "")
 					{
-						$tf = $this->get_file(array("file" => $args["obj"]["meta"]["temp_file"]));
+						$tf = $this->get_file(array("file" => $args["obj_inst"]->meta("temp_file")));
 						if ($tf !== false)
 						{
-							$doc_list = $this->_do_import_from_string($tf, $args["obj"]);
-							$this->_save_imported_data($doc_list, $args["obj"]);
-							$args["metadata"]["temp_file"] = "";
-							$args["metadata"]["orig_filename"] = "";
+							$doc_list = $this->_do_import_from_string($tf, $args["obj_inst"]);
+							$this->_save_imported_data($doc_list, $args["obj_inst"]);
+							$args["obj_inst"]->set_meta("temp_file","");
+							$args["obj_inst"]->set_meta("orig_filename","");
 						}
 					}
 				}
@@ -132,7 +133,7 @@ class document_import extends class_base
 		return $retval;
 	}	
 
-	function _do_import_from_string($str, $obj)
+	function _do_import_from_string($str, $obj_inst)
 	{
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,1);
@@ -147,9 +148,10 @@ class document_import extends class_base
 
 		$docs = array();
 
-		$location_tags = $this->_explode_tags($obj["meta"]["location_tags"]);
-		$field_tags = $this->_explode_tags($obj["meta"]["field_tags"]);
-		$end_tag = strtoupper($obj["meta"]["end_tag"]);
+		$location_tags = $this->_explode_tags($obj_inst->prop("location_tags"));
+		$field_tags = $this->_explode_tags($obj_inst->prop("field_tags"));
+		$end_tag = strtoupper($obj_inst->prop("end_tag"));
+		$meta = $obj_inst->meta();
 
 		$cur_doc = array();
 
@@ -163,7 +165,7 @@ class document_import extends class_base
 
 			if (isset($field_tags[$val["tag"]]))
 			{
-				$vl = $obj["meta"]["pre_".$val["tag"]].$val["value"].$obj["meta"]["post_".$val["tag"]];
+				$vl = $meta["pre_".$val["tag"]].$val["value"].$meta["post_".$val["tag"]];
 				$cur_doc[$field_tags[$val["tag"]]] .= $vl;
 			}
 
@@ -218,9 +220,9 @@ class document_import extends class_base
 	function _save_imported_data($docs, $obj)
 	{
 		$per = get_instance("period");
-		if ($obj["meta"]["d_period"])
+		if ($obj->prop("d_period"))
 		{
-			$perid = $per->get_id_for_oid($obj["meta"]["d_period"]);
+			$perid = $per->get_id_for_oid($obj->prop("d_period"));
 		}
 		foreach($docs as $doc)
 		{
@@ -248,25 +250,7 @@ class document_import extends class_base
 			}
 			$id = $o->save();
 			$this->db_query("UPDATE documents SET modified = '".time()."' WHERE docid = $id");
-			$this->db_query("UPDATE objects SET site_id = ".aw_ini_get("site_id")." where oid = $id ");
 		}
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_PERIOD => 'periood',
-		);
-	}
-	
-	function callback_get_classes_for_relation($args = array())
-	{
-		switch($args["reltype"])
-		{
-			case RELTYPE_PERIOD:
-			return array(CL_PERIOD);
-			break;
-		};
 	}
 
 	function generate_tag_fields($arr)
