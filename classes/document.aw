@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.182 2003/05/15 16:32:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.183 2003/05/15 17:15:10 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1159,7 +1159,10 @@ class document extends aw_template
 		foreach($plugindata as $key => $val)
 		{
 			$name = "plugin.${key}";
-			$pvars[$name] = $this->parse($name);
+			if (!empty($val))
+			{
+				$pvars[$name] = $this->parse($name);
+			};
 		};
 
 		$this->vars($pvars);
