@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.11 2003/10/22 13:59:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.12 2003/12/16 12:56:48 duke Exp $
 // period.aw - periods 
 /*
 
@@ -32,7 +32,10 @@
 	@property preview type=text store=no editonly=1
 	@caption Eelvaade
 
-	@property activity type=callback callback=callback_get_activity_list group=activity no_caption=1
+	property activity type=callback callback=callback_get_activity_list group=activity no_caption=1
+	caption Aktiivsus
+	
+	@property activity type=table group=activity no_caption=1
 	@caption Aktiivsus
 
 	@tableinfo periods index=obj_id master_table=objects master_index=oid
@@ -94,6 +97,10 @@ class period extends class_base
 				));
 				break;
 
+			case "activity":
+				$this->mk_activity_table($arr);
+				break;
+
 		};
 		return $retval;
 	}
@@ -111,14 +118,18 @@ class period extends class_base
 		return $retval;
 	}
 
-	function callback_get_activity_list($args = array())
+	function mk_activity_table($arr)
 	{
 		// this is supposed to return a list of all active periods,
 		// to let the user choose the active one
+		/*
 		$table = new aw_table(array(
 			"layout" => "generic",
 			"xml_def" => "periods/list",
                 ));
+		*/
+		$table = &$arr["prop"]["vcl_inst"];
+		$table->parse_xml_def("periods/list");
 	
 		$active = $this->rec_get_active_period();	
 		$this->clist();
@@ -129,10 +140,12 @@ class period extends class_base
                         $row["active"] = $act_html;
                         $table->define_data($row);
 		};
+		/*
 		$tmp = $args["prop"];
 		$tmp["value"] = $table->draw();
 		$tmp["type"] = "text";
 		return array($tmp);
+		*/
 	}
 
 	function callback_get_rel_types()
@@ -486,6 +499,54 @@ class period extends class_base
 				"HAS_PERIOD_IMAGE" => $arr["inst"]->parse("HAS_PERIOD_IMAGE")
 			));
 		}
+		
+		if ($arr["inst"]->is_template("PERIOD_SWITCH"))
+		{
+			$per_inst = get_instance("period");
+			$plist = array_reverse($per_inst->period_list(0,false, 1), true);
+			$next = false;
+			$prev_per_id = 0;
+			$next_per_id = 0;
+			
+			foreach($plist as $pid => $pname)
+			{
+				if ($next)
+				{
+					$next_per_id = $pid;
+					$next_per_name = $pname;
+					break;
+				}
+				
+				if ($pid == $_t["id"])
+				{
+					$next = true;
+					$prev_per_id = $prev;
+					$prev_per_name = $prev_name;
+				}
+				
+				$prev = $pid;
+				$prev_name = $pname;
+			}
+		
+			$arr["inst"]->vars(array(
+				"prev_per_id" => $prev_per_id,
+				"prev_per_name" => $prev_per_name,
+				"prev_per_link" => aw_ini_get("baseurl")."/period=".$prev_per_id,
+				"next_per_id" => $next_per_id,
+				"next_per_name" => $next_per_name,
+				"next_per_link" => aw_ini_get("baseurl")."/period=".$next_per_id,
+			));
+			
+			$arr["inst"]->vars(array(
+				"HAS_PREV_PERIOD" => ($prev_per_id ? $arr["inst"]->parse("HAS_PREV_PERIOD") : ""),
+				"HAS_NEXT_PERIOD" => ($next_per_id ? $arr["inst"]->parse("HAS_NEXT_PERIOD") : ""),
+			));
+			
+			$arr["inst"]->vars(array(
+				"PERIOD_SWITCH" => $arr["inst"]->parse("PERIOD_SWITCH")
+			));
+		}
+		
 	}
 };
 ?>
