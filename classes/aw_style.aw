@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.2 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.3 2001/06/18 21:13:27 kristo Exp $
 // AW Style Engine.
-class aw_style {
+class aw_style 
+{
 	var $tags;
 	function aw_style()
 	{
@@ -13,20 +14,20 @@ class aw_style {
 	function define_styles($data)
 	{
 		// that's the whole magic
-                $parser = xml_parser_create();
-                xml_parse_into_struct($parser,$data,&$values,&$tags);
-                xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,1);
-                xml_parser_free($parser);
+		$parser = xml_parser_create();
+		xml_parse_into_struct($parser,$data,&$values,&$tags);
+		xml_parser_set_option($parser,XML_OPTION_SKIP_WHITE,1);
+		xml_parser_free($parser);
 
-                foreach ($values as $element)
-                {
-                        if ($element["tag"] == "TAG")
-                        {
-                                $id = $element["attributes"]["ID"];
-                                $this->tags[$id] = $element["value"];
-                        };
-                };
-        }
+		foreach ($values as $element)
+		{
+			if ($element["tag"] == "TAG")
+			{
+				$id = $element["attributes"]["ID"];
+				$this->tags[$id] = $element["value"];
+			};
+		};
+	}
 
 	function parse_text($text)
 	{
