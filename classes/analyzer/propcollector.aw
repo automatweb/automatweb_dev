@@ -56,10 +56,6 @@ class propcollector extends aw_template
 				{
 					print "$targetfile is up to date\n";
 					continue;
-				}
-				else
-				{
-					print "Creating $targetfile\n";
 				};
 			};
 
@@ -80,7 +76,7 @@ class propcollector extends aw_template
 						$this->add_property($m[1],$m[2]);
 					};
 
-					if (preg_match("/\s+@comment (.*)/",$line,$m))
+					if (preg_match("/\s+@caption (.*)/",$line,$m))
 					{
 						$this->add_caption($m[1]);
 					};
@@ -115,7 +111,10 @@ class propcollector extends aw_template
 		// add defaults as well
 		foreach($this->defaults as $key => $val)
 		{
-			$fields[$key] = $val;
+			if (!$fields[$key])
+			{
+				$fields[$key] = $val;
+			};
 		};
 		$this->properties[$name] = $fields;
 		$this->name = $name;
@@ -142,6 +141,7 @@ class propcollector extends aw_template
 		if (sizeof($this->properties) > 0)
 		{
 			$fullname = $outdir . $this->cl_name . ".xml";
+			print "Creating $fullname\n";
 			//print "writing out $fullname\n";
 			$res = $sr->xml_serialize(array("properties" => array_values($this->properties)));
 			//print_r($res);
