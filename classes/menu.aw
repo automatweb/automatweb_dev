@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.26 2003/01/26 20:01:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.27 2003/01/27 00:18:40 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -376,7 +376,7 @@ class menu extends class_base
 			"caption" => "Vali menüüd",
 			"options" => $submenus,
 			// this selects all choices
-			"selected" => $submenus,
+			"selected" => array_flip($submenus),
 		);
 		$nodes[] = $tmp;
 		$tmp = array(
