@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.10 2003/10/15 11:38:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.11 2003/11/08 08:36:13 duke Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -223,6 +223,18 @@ class object_list extends _int_obj_container_base
 		$l = new object_list();
 		$l->list = $param;
 		return $l;
+	}
+
+	////
+	// !Some kind of replacement for core->object_list .. returns id=>name pairs of objects
+	function names()
+	{
+		$ret = array();
+		for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
+		{
+			$ret[$o->id()] = $o->name();
+		}
+		return $ret;
 	}
 
 	// returns all object id's in the current list
