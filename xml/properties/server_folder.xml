@@ -1,0 +1,55 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>folder</name>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kataloog serveris kust failid v&amp;otilde;tta</caption>
+      </property>
+      <property>
+            <name>chf_view_file</name>
+            <type>text</type>
+            <form>ch_file</form>
+            <table>objects</table>
+            <group>general</group>
+            <field>chf_view_file</field>
+            <caption>Vaata faili</caption>
+      </property>
+      <property>
+            <name>chf_file</name>
+            <type>fileupload</type>
+            <form>ch_file</form>
+            <table>objects</table>
+            <group>general</group>
+            <field>chf_file</field>
+            <caption>Uploadi fail</caption>
+      </property>
+      <property>
+            <name>addf_file</name>
+            <type>fileupload</type>
+            <form>add_file</form>
+            <table>objects</table>
+            <group>general</group>
+            <field>addf_file</field>
+            <caption>Uploadi fail</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SERVER_FOLDER</syslog_type>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <forminfo>
+            <ch_file>
+                  <onload>init_chfile</onload>
+                  <onsubmit>submit_chfile</onsubmit>
+            </ch_file>
+            <add_file>
+                  <onload>init_addfile</onload>
+                  <onsubmit>submit_addfile</onsubmit>
+            </add_file>
+      </forminfo>
+</properties>
+

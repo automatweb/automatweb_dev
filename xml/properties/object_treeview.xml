@@ -156,7 +156,10 @@
       <reltypes>
             <FOLDER>
                   <value>1</value>
-                  <clid>CL_MENU</clid>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_SERVER_FOLDER</num_1>
+                  </clid>
                   <caption>kataloog</caption>
             </FOLDER>
             <ADD_TYPE>
@@ -169,6 +172,11 @@
                   <clid>CL_GROUP</clid>
                   <caption>projekti haldaja grupp</caption>
             </ALL_ACCESS_GRP>
+            <CSS>
+                  <value>4</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>css stiil</caption>
+            </CSS>
       </reltypes>
 </properties>
 

@@ -6,6 +6,8 @@
 
 @groupinfo folders caption=Kaustad
 @groupinfo clids caption=Objektit&uuml;&uuml;bid
+@groupinfo styles caption=Stiilid
+@groupinfo columns caption=Tulbad
 
 @default table=objects
 @default group=general
@@ -34,7 +36,25 @@
 @property clids type=callback callback=get_clids group=clids store=no
 @caption Klassid
 
-@reltype FOLDER value=1 clid=CL_MENU
+@property title_bgcolor type=colorpicker field=meta method=serialize group=styles
+@caption Pealkirja taustav&auml;rv
+
+@property even_bgcolor type=colorpicker field=meta method=serialize group=styles
+@caption Paaris rea taustav&auml;rv
+
+@property odd_bgcolor type=colorpicker field=meta method=serialize group=styles
+@caption Paaritu rea taustav&auml;rv
+
+@property header_css type=relpicker reltype=RELTYPE_CSS field=meta method=serialize  group=styles
+@caption Pealkirja stiil
+
+@property line_css type=relpicker reltype=RELTYPE_CSS field=meta method=serialize  group=styles
+@caption Rea stiil
+
+@property columns type=callback callback=callback_get_columns field=meta method=serialize group=columns
+@caption Tulbad
+
+@reltype FOLDER value=1 clid=CL_MENU,CL_SERVER_FOLDER
 @caption kataloog
 
 @reltype ADD_TYPE value=2 clid=CL_OBJECT_TYPE
@@ -43,11 +63,25 @@
 @reltype ALL_ACCESS_GRP value=3 clid=CL_GROUP
 @caption projekti haldaja grupp
 
+@reltype CSS value=4 clid=CL_GROUP
+@caption css stiil
+
 */
 
 
 class object_treeview extends class_base
 {
+	var $all_cols = array(
+		"icon" => "Ikoon",
+		"name" => "Nimi",
+		"size" => "Suurus",
+		"class_id" => "T&uuml;&uuml;p",
+		"modified" => "Muutmise kuup&auml;ev",
+		"modifiedby" => "Muutja",
+		"change" => "Muuda",
+		"select" => "Vali"
+	);
+	
 	function object_treeview()
 	{
 		$this->init(array(
@@ -85,6 +119,8 @@ class object_treeview extends class_base
 
 		$this->read_template('show.tpl');
 
+		$this->_insert_row_styles($ob);
+
 		// returns an array of object id's that are folders that are in the object
 		$fld = $this->_get_folders($ob);
 
@@ -109,12 +145,15 @@ class object_treeview extends class_base
 			}
 		}
 
-		$cnt = 0;
+		$this->cnt = 0;
 		$c = "";
+		$sel_cols = $ob->meta("sel_columns");
+
 		foreach($ol as $oid)
 		{
 			$od = obj($oid);
 			$target = "";
+			
 			if ($od->class_id() == CL_EXTLINK)
 			{
 				$li = get_instance("links");
@@ -142,6 +181,61 @@ class object_treeview extends class_base
 					"id" => $ob->id(),
 					"tv_sel" => $od->id()
 				));
+			}
+			else
+			if ($od->class_id() == CL_SERVER_FOLDER)
+			{
+				$sf = get_instance("contentmgmt/server_folder");
+				$fl = $sf->get_contents($od);
+
+				foreach($fl as $_file)
+				{
+					$fid = $od->id().":".$_file;
+
+					$fqfn = $od->prop("folder")."/".$_file;
+					$fileSizeBytes = number_format(filesize($fqfn),0);
+					$fileSizeKBytes = number_format(filesize($fqfn)/(1024),2);
+					$fileSizeMBytes = number_format(filesize($fqfn)/(1024*1024),2);
+				
+					$fowner = posix_getpwuid(fileowner($fqfn));
+
+					$act = "";
+					if (is_writable($fqfn))
+					{
+						$act = html::href(array(
+							"url" => $this->mk_my_orb("change_file", array(
+								"fid" => $fid,
+								"section" => aw_global_get("section")
+							), "server_folder"),
+							"caption" => html::img(array(
+								"border" => 0,
+								"url" =>  aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif"
+							))
+						));
+					}
+					$c .= $this->_do_parse_file_line(array(
+						"name" => $_file,
+						"oid" => $fid,
+						"url" => $this->mk_my_orb("show_file", array("fid" => $fid, "section" => aw_global_get("section")), "server_folder"),
+						"target" => $target,
+						"fileSizeBytes" => $fileSizeBytes,
+						"fileSizeKBytes" => $fileSizeKBytes,
+						"fileSizeMBytes" => $fileSizeMBytes,
+						"comment" => "",
+						"type" => $this->cfg["classes"][CL_FILE]["name"],
+						"add_date" => $this->time2date(filemtime($fqfn), 2),
+						"mod_date" => $this->time2date(filemtime($fqfn), 2),
+						"adder" => $fowner["name"],
+						"modder" => $fowner["name"],
+						"icon" => image::make_img_tag(icons::get_icon_url(CL_FILE, $_file)),
+						"bgcolor" => $this->_get_bgcolor($ob, $this->cnt),
+						"acl_obj" => $od,
+						"tree_obj" => $ob,
+						"sel_cols" => $sel_cols,
+						"act" => $act
+					));
+				}
+				continue;
 			}
 			else
 			{
@@ -180,14 +274,15 @@ class object_treeview extends class_base
 			}
 			$adder = $od->createdby();
 			$modder = $od->modifiedby();
-			$this->vars(array(
-				"show" => $url,
+
+			$c .= $this->_do_parse_file_line(array(
 				"name" => parse_obj_name($od->name()),
 				"oid" => $od->id(),
+				"url" => $url,
 				"target" => $target,
-				"sizeBytes" => $fileSizeBytes,
-				"sizeKBytes" => $fileSizeKBytes,
-				"sizeMBytes" => $fileSizeMBytes,
+				"fileSizeBytes" => $fileSizeBytes,
+				"fileSizeKBytes" => $fileSizeKBytes,
+				"fileSizeMBytes" => $fileSizeMBytes,
 				"comment" => $od->comment(),
 				"type" => $this->cfg["classes"][$od->class_id()]["name"],
 				"add_date" => $this->time2date($od->created(), 2),
@@ -195,51 +290,12 @@ class object_treeview extends class_base
 				"adder" => $adder->name(),
 				"modder" => $modder->name(),
 				"icon" => image::make_img_tag(icons::get_icon_url($od->class_id(), $od->name())),
-				"act" => $act,
-				"delete" => $delete
+				"bgcolor" => $this->_get_bgcolor($ob, $this->cnt),
+				"acl_obj" => $od,
+				"tree_obj" => $ob,
+				"sel_cols" => $sel_cols,
+				"act" => $act
 			));
-
-			$del = "";
-			if ($this->can("delete", $od->id()))
-			{
-				$del = $this->parse("DELETE");
-			}
-			$this->vars(array(
-				"DELETE" => $del
-			));
-
-			$tb = "";
-			$no_tb = "";
-			if ($ob->prop("show_add"))
-			{
-				$tb = $this->parse("HAS_TOOLBAR");
-			}
-			else
-			{
-				$no_tb = $this->parse("NO_TOOLBAR");
-			}
-			$this->vars(array(
-				"HAS_TOOLBAR" => $tb,
-				"NO_TOOLBAR" => $no_tb
-			));
-
-			if ($this->is_template("FILE_ODD"))
-			{
-				if ($cnt % 2)
-				{
-					$c.=$this->parse("FILE_ODD");
-				}
-				else
-				{
-					$c.=$this->parse("FILE");
-				}
-			}
-			else
-			{
-				$c .= $this->parse("FILE");
-			}
-
-			$cnt++;
 		}
 
 
@@ -255,7 +311,6 @@ class object_treeview extends class_base
 		}
 		$this->vars(array(
 			"FILE" => $c,
-			"FILE_ODD" => "",
 			"HEADER_HAS_TOOLBAR" => $tb,
 			"HEADER_NO_TOOLBAR" => $no_tb,
 			"reforb" => $this->mk_reforb("submit_show", array(
@@ -264,8 +319,21 @@ class object_treeview extends class_base
 			))
 		));
 
+		// columns
+		foreach($this->all_cols as $colid => $coln)
+		{
+			$str = "";
+			if ($sel_cols[$colid] == 1)
+			{
+				$str = $this->parse("HEADER_".$colid);
+			}
+			$this->vars(array(
+				"HEADER_".$colid => $str
+			));
+		}
+
 		$res = $this->parse();
-		if ($ob->prop("show_add") && count($fld))
+		if ($ob->prop("show_add"))
 		{
 			$res = $this->_get_add_toolbar($ob).$res;
 		}
@@ -289,8 +357,22 @@ class object_treeview extends class_base
 
 		if ($subact == "delete")
 		{
-			$ol = new object_list(array("oid" => $sel));
-			$ol->delete();
+			$tt = array();
+			$awa = new aw_array($sel);
+			foreach($awa->get() as $oid)
+			{
+				list($_oid, $_fn) = explode(":", $oid);
+				if (is_oid($_oid) && $_fn != "")
+				{
+					$sf = get_instance("contentmgmt/server_folder");
+					$sf->del_file($oid);
+				}
+				else
+				{
+					$o = obj($oid);
+					$o->delete();
+				}
+			}
 		}
 
 		return $return_url;
@@ -319,16 +401,29 @@ class object_treeview extends class_base
 			$con = $ob->connections_from(array(
 				"type" => RELTYPE_FOLDER
 			));
+
+			$ignoreself = $ob->meta("ignoreself");
+
 			$parent = array();
 			foreach($con as $c)
 			{
-				$parent[$c->prop("to")] = $c->prop("to");
+				// but only those that are to be ignored!
+				if ($ignoreself[$c->prop("to")])
+				{
+					$parent[$c->prop("to")] = $c->prop("to");
+				}
 			}
 		}
 
 		if (!is_array($ob->meta('clids')) || count($ob->meta('clids')) < 1)
 		{
 			return array();
+		}
+
+		$awa = new aw_array($parent);
+		if (count($awa->get()) < 1)
+		{
+			$parent = $this->first_folder;
 		}
 
 		$ol = new object_list(array(
@@ -339,6 +434,16 @@ class object_treeview extends class_base
 			"lang_id" => array()
 		));
 		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
+
+		$awa = new aw_array($parent);
+		foreach($awa->get() as $p_id)
+		{
+			$p_o = obj($p_id);
+			if ($p_o->class_id() == CL_SERVER_FOLDER)
+			{
+				$ol->add($p_o);
+			}
+		}
 
 		return $this->make_keys($ol->ids());
 	}
@@ -575,10 +680,16 @@ class object_treeview extends class_base
 			}
 			$arr["obj_inst"]->set_meta("clids", $_clids);
 		}
+
+		if ($prop["name"] == "columns")
+		{
+			$arr["obj_inst"]->set_meta("sel_columns", $arr["request"]["column"]);
+		}
+
 		if ($prop["name"] == "folders")
 		{
-			$arr['obj_inst']->set_meta("include_submenus",$arr["form_data"]["include_submenus"]);
-			$arr['obj_inst']->set_meta("ignoreself",$arr["form_data"]["ignoreself"]);
+			$arr['obj_inst']->set_meta("include_submenus",$arr["request"]["include_submenus"]);
+			$arr['obj_inst']->set_meta("ignoreself",$arr["request"]["ignoreself"]);
 		};
 
 		return PROP_OK;
@@ -635,16 +746,22 @@ class object_treeview extends class_base
 		{
 			$c_o = $conn->to();
 
+			$chk = "";
+			if ($c_o->class_id() == CL_MENU)
+			{
+				$chk = html::checkbox(array(
+					"name" => "include_submenus[".$c_o->id()."]",
+					"value" => $c_o->id(),
+					"checked" => $include_submenus[$c_o->id()],
+				));
+			}
+
 			$this->t->define_data(array(
 				"oid" => $c_o->id(),
 				"name" => $c_o->path_str(array(
 					"max_len" => 3
-				)) . "/" . $c_o->name(),
-				"check" => html::checkbox(array(
-					"name" => "include_submenus[".$c_o->id()."]",
-					"value" => $c_o->id(),
-					"checked" => $include_submenus[$c_o->id()],
 				)),
+				"check" => $chk,
 				"ignoreself" => html::checkbox(array(
 					"name" => "ignoreself[".$c_o->id()."]",
 					"value" => $c_o->id(),
@@ -674,15 +791,29 @@ class object_treeview extends class_base
 		$classes = aw_ini_get("classes");
 
 		$parent = $GLOBALS["tv_sel"] ? $GLOBALS["tv_sel"] : $this->first_folder;
-		$ot = get_instance("admin/object_type");
-		foreach($types_c as $c)
+
+		$p_o = obj($parent);
+		if ($p_o->class_id() == CL_SERVER_FOLDER)
 		{
-			$c_o = $c->to();
 			$this->vars(array(
-				"url" => $ot->get_add_url(array("id" => $c_o, "parent" => $parent, "section" => $parent)),
-				"caption" => $classes[$c_o->prop("type")]["name"]
+				"url" => $this->mk_my_orb("add_file", array("id" => $p_o->id(), "section" => aw_global_get("section")), "server_folder"),
+				"caption" => $classes[CL_FILE]["name"]
 			));
 			$menu .= $this->parse("MENU_ITEM");
+		}
+		else
+		{
+			$ot = get_instance("admin/object_type");
+			foreach($types_c as $c)
+			{
+				$c_o = $c->to();
+
+				$this->vars(array(
+					"url" => $ot->get_add_url(array("id" => $c_o, "parent" => $parent, "section" => $parent)),
+					"caption" => $classes[$c_o->prop("type")]["name"]
+				));
+				$menu .= $this->parse("MENU_ITEM");
+			}
 		}
 		$this->vars(array(
 			"menu_id" => "aw_menu_0",
@@ -812,6 +943,146 @@ class object_treeview extends class_base
 			);
 		}
 		return PROP_OK;
+	}
+
+	function _insert_row_styles($o)
+	{
+		$style = "textmiddle";
+		if ($o->prop("line_css"))
+		{
+			$style = "st".$o->prop("line_css");
+			active_page_data::add_site_css_style($o->prop("line_css"));
+		}
+
+		$header_css = "textmiddle";
+		if ($o->prop("header_css"))
+		{
+			$header_css = "st".$o->prop("header_css");
+			active_page_data::add_site_css_style($o->prop("header_css"));
+		}
+
+		$header_bg = "#E0EFEF";
+		if ($o->prop("title_bgcolor"))
+		{
+			$header_bg = "#".$o->prop("title_bgcolor");
+		}
+
+		$this->vars(array(
+			"css_class" => $style,
+			"header_css_class" => $header_css,
+			"header_bgcolor" => $header_bg
+		));
+	}
+
+	function _get_bgcolor($ob, $line)
+	{
+		$ret = "";
+		if (($line % 2) == 1)
+		{
+			$ret = $ob->prop("odd_bgcolor");
+			if ($ret == "")
+			{
+				$ret = "#EFF7F7";
+			}
+		}
+		else
+		{
+			$ret = $ob->prop("even_bgcolor");
+			if ($ret == "")
+			{
+				$ret = "#FFFFFF";
+			}
+		}
+		return $ret;
+	}
+
+	function callback_get_columns($arr)
+	{
+		$cols = $arr["obj_inst"]->meta("sel_columns");
+
+		$ret = array();
+
+		foreach($this->all_cols as $colid => $coln)
+		{
+
+			$rt = "column[".$colid."]";
+			$ret[$rt] = array(
+				'name' => $rt,
+				'caption' => $coln,
+				'type' => 'checkbox',
+				'ch_value' => 1,
+				'store' => 'no',
+				'group' => 'columns',
+				'value' => $cols[$colid]
+			);
+		}
+		return $ret;
+	}
+
+	function _do_parse_file_line($arr)
+	{
+		extract($arr);
+		$this->vars(array(
+			"show" => $url,
+			"name" => $name,
+			"oid" => $oid,
+			"target" => $target,
+			"sizeBytes" => $fileSizeBytes,
+			"sizeKBytes" => $fileSizeKBytes,
+			"sizeMBytes" => $fileSizeMBytes,
+			"comment" => $comment,
+			"type" => $type,
+			"add_date" => $add_date,
+			"mod_date" => $mod_date,
+			"adder" => $adder,
+			"modder" => $modder,
+			"icon" => $icon,
+			"act" => $act,
+			"delete" => $delete,
+			"bgcolor" => $bgcolor,
+			"size" => ($fileSizeMBytes > 1 ? $fileSizeMBytes."MB" : ($fileSizeKBytes > 1 ? $fileSizeKBytes."kb" : $fileSizeBytes."b"))
+		));
+
+		$del = "";
+		if ($this->can("delete", $acl_obj->id()))
+		{
+			$del = $this->parse("DELETE");
+		}
+		$this->vars(array(
+			"DELETE" => $del
+		));
+
+		$tb = "";
+		$no_tb = "";
+		if ($tree_obj->prop("show_add"))
+		{
+			$tb = $this->parse("HAS_TOOLBAR");
+		}
+		else
+		{
+			$no_tb = $this->parse("NO_TOOLBAR");
+		}
+		$this->vars(array(
+			"HAS_TOOLBAR" => $tb,
+			"NO_TOOLBAR" => $no_tb
+		));
+
+		// columns
+		foreach($this->all_cols as $colid => $coln)
+		{
+			$str = "";
+			if ($sel_cols[$colid] == 1)
+			{
+				$str = $this->parse("FILE_".$colid);
+			}
+			$this->vars(array(
+				"FILE_".$colid => $str
+			));
+		}
+		
+		$this->cnt++;
+
+		return $this->parse("FILE");
 	}
 }
 ?>
