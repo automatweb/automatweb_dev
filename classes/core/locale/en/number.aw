@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/en/number.aw,v 1.2 2004/03/09 11:13:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/en/number.aw,v 1.3 2004/05/06 12:36:24 duke Exp $
 // en.aw - english localization
 class number
 {
@@ -85,6 +85,7 @@ class number
 	function get_lc_sum($number)
 	{
 		$lastpart = substr($number,strpos($number,".")+1);
+		$number = str_replace(",","",$number);
 		$res = $this->get_lc_number($number);
 
 		$currency1 = aw_global_get("currency1");
