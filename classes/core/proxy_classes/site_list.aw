@@ -8,9 +8,9 @@ class __aw_proxy_site_list extends core
 		$this->remote_server = $rs;
 	}
 
-	function orb_list()
+	function orb_list($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "site_list",
@@ -20,9 +20,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function get_site_list()
+	function get_site_list($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "get_site_list",
@@ -32,9 +32,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function _get_server_stats()
+	function _get_server_stats($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "_get_server_stats",
@@ -44,9 +44,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function _get_cver_stats()
+	function _get_cver_stats($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "_get_cver_stats",
@@ -56,9 +56,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function orb_server_list()
+	function orb_server_list($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "server_list",
@@ -68,9 +68,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function orb_update_site()
+	function orb_update_site($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "update_site",
@@ -80,9 +80,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function orb_update_server()
+	function orb_update_server($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "update_server",
@@ -92,9 +92,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function orb_get_site_list()
+	function orb_get_site_list($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "get_site_list",
@@ -104,9 +104,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function server_picker()
+	function server_picker($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "server_picker",
@@ -116,9 +116,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function orb_get_server_list()
+	function orb_get_server_list($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "orb_get_server_list",
@@ -128,9 +128,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function get_server_id_by_ip()
+	function get_server_id_by_ip($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "get_server_id_by_ip",
@@ -140,9 +140,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function get_site_id_by_url()
+	function get_site_id_by_url($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "get_site_id_by_url",
@@ -152,9 +152,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function get_site_data()
+	function get_site_data($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "get_site_data",
@@ -164,9 +164,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function get_server_data()
+	function get_server_data($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "get_server_data",
@@ -176,9 +176,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function change_site()
+	function change_site($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "change_site",
@@ -188,9 +188,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function submit_change_site()
+	function submit_change_site($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "submit_change_site",
@@ -200,9 +200,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function change_server()
+	function change_server($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "change_server",
@@ -212,9 +212,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function submit_change_server()
+	function submit_change_server($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "submit_change_server",
@@ -224,9 +224,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function get_site_info()
+	function get_site_info($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "get_site_info",
@@ -236,9 +236,9 @@ class __aw_proxy_site_list extends core
 		));
 	}
 
-	function fetch_site_data()
+	function fetch_site_data($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "site_list",
 			"action" => "fetch_site_data",

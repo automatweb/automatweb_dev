@@ -118,17 +118,29 @@ if (file_exists("xml/orb/$class.xml"))
 // now the hard bit - ini file parsing and modifying
 ////////////////////////////////////////////////////////////////////
 
-echo "\n\nParsing and writing config/ini/classes.ini...\n";
-
 ////////////////////
 // write classes.ini
 ////////////////////
 
 // read config/ini/classes.ini and find the largest class number in it
 $clsini = _file_get_contents('config/ini/classes.ini');
-preg_match_all("/classes\[(\d+)\]\[def\]/",$clsini, $clid_mt);
+/*preg_match_all("/classes\[(\d+)\]\[def\]/",$clsini, $clid_mt);
 $clids = make_keys($clid_mt[1]);
-$new_clid = max($clids)+1;
+$new_clid = max($clids)+1;*/
+
+echo "\n\nRequesting new class id...\n";
+
+$basedir = realpath(".");
+include("$basedir/init.aw");
+init_config(array("ini_files" => array("$basedir/aw.ini")));
+classload("defs");
+classload("aw_template");
+aw_global_set("no_db_connection", true);
+
+$classlist = get_instance("core/class_list");
+$new_clid = $classlist->register_new_class_id(array(
+	"data" => $class
+));
 
 echo "...got new class_id = $new_clid ... \nwriting to classes.ini:...\n";
 

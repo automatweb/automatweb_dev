@@ -8,9 +8,9 @@ class __aw_proxy_class_list extends core
 		$this->remote_server = $rs;
 	}
 
-	function register_new_class_id()
+	function register_new_class_id($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "class_list",
 			"action" => "register_new_class_id",
@@ -20,9 +20,9 @@ class __aw_proxy_class_list extends core
 		));
 	}
 
-	function update_class_def()
+	function update_class_def($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "class_list",
 			"action" => "update_class_def",
@@ -32,9 +32,9 @@ class __aw_proxy_class_list extends core
 		));
 	}
 
-	function get_list()
+	function get_list($args)
 	{
-		$args = func_get_args();
+		//$args = func_get_args();
 		return $this->do_orb_method_call(array(
 			"class" => "class_list",
 			"action" => "get_list",
