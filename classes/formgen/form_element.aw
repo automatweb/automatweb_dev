@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.23 2002/12/20 12:40:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.24 2003/01/14 10:25:54 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -607,6 +607,7 @@ class form_element extends aw_template
 				$img = "";
 				if ($this->arr["button_img"]["url"] != "")
 				{
+					classload("image");
 					$img = "<img src='".image::check_url($this->arr["button_img"]["url"])."'>";
 				}
 				$this->vars(array(
