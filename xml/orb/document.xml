@@ -186,6 +186,20 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="docsearch" all_args="1">
+			<function name="docsearch">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="fetch">
+			<function name="fetch">
+				<arguments>
+					<required name="docid" type="int"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 		
 </orb>
