@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.22 2001/05/27 20:08:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.23 2001/05/27 22:19:25 cvs Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -375,6 +375,7 @@ class keywords extends aw_template {
 		$keywordlist = explode(",",$keywords);
 		$klist = array();
 		$ids = array();
+		$cids = array();
 		// vaja leida koigi votmesõnade ID-d. Kui ei ole, siis tekitame uue
 		foreach($keywordlist as $val)
 		{
@@ -387,6 +388,7 @@ class keywords extends aw_template {
 		while($row = $this->db_next())
 		{
 			$ids[$row["keyword"]] = $row["id"];
+			$cids[$row["keyword"]] = $row["category_id"];
 		};
 	
 		// teeme kindlaks koik votmesonad, millel polnud ID-d (uued)
@@ -396,6 +398,32 @@ class keywords extends aw_template {
 
 		foreach($klist as $val)
 		{
+			if (strpos($val,"/") > 0)
+			{
+				list($category,$keyword) = explode("/",$val);
+				$q = "SELECT * FROM keywordcategories WHERE name = '$category'";
+				$this->db_query($q);
+				$row = $this->db_next();
+				if (!$row)
+				{
+					$q = "SELECT MAX(id) AS id FROM keywordcategories";
+					$this->db_query($q);
+					$row = $this->db_next();
+					$catid = $row["id"];
+					$catid++;
+					$q = "INSERT INTO keywordcategories (id,name) VALUES ('$catid','$category')";
+					$this->db_query($q);
+				}
+				else
+				{
+					$catid = $row["id"];
+				};
+			}
+			else
+			{		
+				$keyword = $val;
+			};
+			// kui keywordi pole defineeritud, siis loome uue
 			if (!$ids[$val])
 			{
 				// well, it looks almost like mysql_insert_id does not work always, so we screw around a little
@@ -407,15 +435,26 @@ class keywords extends aw_template {
 				$this->save_handle();
 				$list_id = $lists->create_list(array(
 								"parent" => KEYWORD_LISTS,
-								"name" => $val,
+								"name" => $keyword,
 								"comment" => "automaagiliselt loodud list",
 							));
 				$this->restore_handle();
-				$q = "INSERT INTO keywords (id,list_id,keyword) VALUES ('$newid','$list_id','$val')";
+				$q = "INSERT INTO keywords (id,list_id,keyword,category_id) VALUES ('$newid','$list_id','$keyword','$catid')";
 				$this->db_query($q);
 				$ids[$val] = $newid;
 
+			}
+			// keyword oli, aga kategooria on muutunud
+			elseif ($cids[$val] != $catid1)
+			{
+				$q = sprintf("UPDATE keywords SET category_id = '%d',keyword = '%s' WHERE id = '%d'",$catid,$keyword,$ids[$val]);
+				$this->db_query($q);
 			};
+			// otherwise pole midagi vaja teha
+				
+				
+				
+
 		};
 
 		// nüüd peaksid koik votmesonad baasis kajastatud olema
@@ -463,7 +502,7 @@ class keywords extends aw_template {
 				{	
 					$perenimi = $el->entry;
 				};
-				$el = $f->get_element_by_name("ees_ja_perekonnanimi");
+				$el = $f->get_element_by_name("Ees_ja_perekonnanimi");
 				if ($el->entry)
 				{
 					$nimi = $el->entry;
