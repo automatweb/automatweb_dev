@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.6 2004/05/06 12:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.7 2004/05/12 13:46:14 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -51,29 +51,31 @@ class otv_ds_postipoiss extends class_base
 		"tahtaeg" => "Tahtaeg",
 		"toimik" => "Toimik",
 		"vastamiskuupaev" => "Vastamiskuupaev"*/
-		"indeks" => "Indeks",
-		"reg_kpv" => "Registreerimise kpv",
-		"regist_nr" => "Registreerimise nr",
-		"osakond" => "Osakond",
+		
+		"regist_nr" => "Nr.",
+		"indeks" => "Dokument",
+		"reg_kpv" => "Registreeritud",
+		"osakond" => "Valdkond",
 		"toimik" => "Toimik",
-		"sisse" => "Suund",
-		"sec_access" => "Juurdep&auml;&auml;s",
-		"teemad" => "Teemad",
-		"saatja_kpv" => "Saatja kuupaev",
-		"saatja_indeks" => "Saatja indeks",
-		"saatmisviis" => "Saatmisviis",
-		"asutus" => "P&auml;ritolu",
-		"isik" => "Koostaja",
-		"aadress" => "Aadress",
-		"postiindeks" => "Postiindeks",
-		"linn" => "Linn",
+		"saatja_kpv" => "Saatja kuup&auml;ev",
+		"saatja_indeks" => "Saatja nr.",
+		"pool1" => "Lepingu pool",
+		"kellelt" => "Kellelt",
+		"kellelt_isik" => "",
+		"pool2" => "Lepingu pool",
+		"Kellele" => "Kellele",
+		"kellele_isik" => "",
 		"pealkiri" => "Pealkiri",
 		"sisu" => "Sisu",
 		"lisad" => "Lisad",
-		"ikood" => "Kellelt",
-		"tahtaeg" => "Tahtaeg",
-		"vastamis_kpv" => "Vastamiskuupaev",
 		"resolutsioon" => "Resolutsioon",
+		"tahtaeg" => "T&auml;htaeg",
+		"vastamis_kpv" => "Vastatud",
+		"isik" => "T&auml;itja/L&auml;bivaataja",
+		"koostaja" => "Koostaja",
+		"koostajad" => "Osav&otilde;tjad",
+		"allkiri" => "Allkirjastaja",
+		"viide" => "Failid",
 	);
 
 	function otv_ds_postipoiss()
