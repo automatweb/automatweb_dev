@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.78 2004/05/27 08:35:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.79 2004/06/04 11:23:45 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -826,6 +826,14 @@ class file extends class_base
 	function get_folders($o)
 	{
 		return $this->get_objects($o);
+	}
+
+	// static
+	function get_file_size($fn)
+	{
+		$fn = basename($fn);
+		$path = aw_ini_get("site_basedir")."/files/".$fn{0}."/".$fn;
+		return @filesize($path);
 	}
 };
 ?>
