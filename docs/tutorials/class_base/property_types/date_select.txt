@@ -1,3 +1,9 @@
 date_select
 
 Basic widget for selecting a date (day, month and year)
+
+Default year range at the time of writing this is from 2001 to 2008.
+If you need a wider range, then you can do it like this
+
+@property birthday type=date_select year_from=1930 year_to=2030
+@caption Sünnipäev
