@@ -129,6 +129,7 @@
 					<required name="shop"/>
 					<required name="order_id"/>
 					<optional name="section"/>
+					<optional name="page"/>
 				</arguments>
 			</function>
 		</action>
@@ -139,6 +140,7 @@
 					<required name="shop"/>
 					<required name="order_id"/>
 					<optional name="section"/>
+					<optional name="page"/>
 				</arguments>
 			</function>
 		</action>
@@ -149,6 +151,7 @@
 					<define name="filter_uid" value="1"/>
 					<required name="id"/>
 					<optional name="section"/>
+					<optional name="page"/>
 				</arguments>
 			</function>
 		</action>
@@ -173,6 +176,16 @@
 		<action name="submit_owner_data">
 			<function name="submit_owner_data">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view_bill">
+			<function name="view_bill">
+				<arguments>
+					<required name="shop"/>
+					<required name="order_id"/>
+					<required name="section"/>
 				</arguments>
 			</function>
 		</action>
