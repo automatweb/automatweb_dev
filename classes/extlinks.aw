@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.6 2001/07/12 05:34:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.7 2001/09/28 14:47:08 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 lc_load("extlinks");
 
@@ -61,11 +61,22 @@ class extlinks extends aw_template {
 		$link = $this->get_link($l["target"]);
 		$this->dequote(&$link);
 
-		global $baseurl;
+		global $baseurl,$ext;
+		$linksrc = sprintf("%s/indexx.%s?id=%d",$baseurl,$ext,$link["id"]);
+		if ($link["use_javascript"])
+		{
+			$target = sprintf("onClick='javascript:window.open(\"%s\",\"w%s\",\"toolbar=%d\")'",$linksrc,$link["id"],$link["newwintoolbar"]);
+			$url = "#";
+		}
+		else
+		{
+			$url = $linksrc;
+			$target = $link["newwindow"] ? "target='_blank'" : "";
+		};
 		$vars = array(
-				"url" => $baseurl . "/indexx.aw?id=$link[id]",
+				"url" => $url,
 				"caption" => $link["name"],
-				"target" => $link["newwindow"] ? "target='_blank'" : "",
+				"target" => $target,
 			);
 
 
@@ -106,6 +117,9 @@ class extlinks extends aw_template {
 		$q = "SELECT extlinks.*,objects.* FROM extlinks LEFT JOIN objects ON objects.oid = extlinks.id WHERE id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_fetch_row();
+		$meta = $this->obj_get_meta(array("meta" => $row["meta"]));
+		$row = array_merge($row,$meta);
+		
 		if ($row["type"] == "int")
 		{
 			$row["url"] = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."?section=".$row["docid"];

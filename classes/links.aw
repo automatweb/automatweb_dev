@@ -1,4 +1,5 @@
 <?php
+// $Header
 global $orb_defs;
 $orb_defs["links"] = array("new"		=>	array("function"	=> "add",	"params"	=> array("parent"), "opt" => array("docid")),
 													 "submit"	=>	array("function"	=> "submit","params" => array("parent","id")),
@@ -39,6 +40,8 @@ class links extends extlinks
 		return $this->parse();
 	}
 
+	////
+	// !Kuvab lingi muutmise vormi
 	function change($arr)
 	{
 		extract($arr);
@@ -55,6 +58,10 @@ class links extends extlinks
 											"url"			=> $link[url],
 											"search_doc" => $this->mk_orb("search_doc", array()),
 											"desc"		=> $link[descript],
+											"newwinwidth" => ($link["newwinwidth"]) ? $link["newwinwidth"] : 640,
+											"newwinheight" => ($link["newwinheight"]) ? $link["newwinheight"] : 480,
+											"newwintoolbar" => checked($link["newwintoolbar"]),
+											"use_javascript" => checked($link["use_javascript"]),
 											"comment"	=> $link[comment],
 											"parent"	=> $this->picker($link[parent], $ob->get_list()),
 											"extlink"	=> checked($link[type] != "int"),
@@ -72,6 +79,7 @@ class links extends extlinks
 		{
 			$newlinkid = $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => CL_EXTLINK,"comment" => $comment));
 			$this->add_link(array("id"  => $newlinkid,	"oid" => $parent, "name" => $name,"url" => $url,"desc"  => $desc,"newwindow" => $newwindow,"type" => $type, "docid" => $a_docid,"doclinkcollection" => $doclinkcollection));
+			$linkid = $newlinkid;
 			if ($docid)
 			{
 				$this->add_alias($docid,$newlinkid);
@@ -80,8 +88,19 @@ class links extends extlinks
 		else
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name, "parent" => $parent,"comment" => $comment));
+			$linkid = $id;
 			$this->save_link(array("lid" => $id, "name" => $name, "url" => $url, "desc" => $desc, "newwindow" => $newwindow,"type" => $type,"docid" => $a_docid,"doclinkcollection" => $doclinkcollection));
 		}
+		// tegelikult peaks metainfo salvetamise upd_object sisse panema muidugi
+		$meta = array(
+			"use_javascript" => $use_javascript,
+			"newwinwidth" => $newwinwidth,
+			"newwinheight" => $newwinheight,
+			"newwintoolbar" => $newwintoolbar,
+		);
+
+		$this->obj_set_meta(array("oid" => $linkid,"meta" => $meta));
+		
 		if ($docid)
 		{
 			return $this->mk_my_orb("change", array("id" => $docid), "document");
