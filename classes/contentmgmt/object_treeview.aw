@@ -102,6 +102,7 @@ class object_treeview extends class_base
 				"show" => $url,
 				"name" => $od->name(),
 				"target" => $target,
+				"comment" => $od->comment(),
 				"type" => $this->cfg["classes"][$od->class_id()]["name"],
 				"add_date" => $this->time2date($od->modified(), 2),
 				"icon" => image::make_img_tag(icons::get_icon_url($od->class_id(), $od->name()))
@@ -263,6 +264,7 @@ class object_treeview extends class_base
 				"name" => $i_o->name(),
 				"url" => aw_url_change_var("tv_sel", $fld),
 				"icon" => icons::get_icon_url($i_o->class_id(), ""),
+				"comment" => $i_o->comment(),
 				"data" => array(
 					"changed" => $this->time2date($tm, 2)
 				)
