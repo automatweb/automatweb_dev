@@ -355,7 +355,7 @@ class _int_image_convert_driver_imagick extends aw_template
 	
 	function size()
 	{
-		$cmd = $this->identify." -format \"%h %w\" ".$this->filename;
+		$cmd = $this->identify." -format \"%w %h\" ".$this->filename;
 		$op = shell_exec($cmd);
 		return explode(" ", $op);
 	}
@@ -401,6 +401,7 @@ class _int_image_convert_driver_imagick extends aw_template
 
 	function save($filename, $type)
 	{
+		$tn = $this->filename;
 		switch($type)
 		{
 			case IMAGE_PNG:
