@@ -34,6 +34,7 @@
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<td><span class="text">&nbsp;Vaatamisi: <b>{VAR:views}</b></span></td>
+			<!-- SUB: HAS_RATING_SCALE -->
 			<td  align="right">
 				<table border="0" cellpadding="2" cellspacing="0">
 					<tr>
@@ -44,6 +45,7 @@
 					</tr>
 				</table>
 			</td>
+			<!-- END SUB: HAS_RATING_SCALE -->
 		</tr>
 	</table>
 </body>
