@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.317 2004/11/10 12:26:00 duke Exp $
+// $Id: class_base.aw,v 2.318 2004/11/11 13:02:03 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -459,11 +459,23 @@ class class_base extends aw_template
 			$tpls = str_replace(aw_ini_get("basedir")."/templates/", "", $this->inst->adm_template_dir);
 			$tplx = aw_ini_get("basedir")."/templates/".$tpls."/group_".$this->use_group.".tpl";
 			$tply = $this->inst->adm_template_dir."/grouptpl_default.tpl";
+			if($this->inst->adm_template_dir != $this->inst->template_dir)
+			{
+				$tpls2 = str_replace(aw_ini_get("site_basedir")."/templates/", "", $this->inst->template_dir);
+				$tplx2 = aw_ini_get("site_basedir")."/templates/".$tpls."/group_".$this->use_group.".tpl";
+				$tply2 = $this->inst->template_dir."/grouptpl_default.tpl";
+			}
 			if($this->classinfo["tplmode"] == "groups" && file_exists($tplx) && file_exists($tply))
 			{
 				$o_arr["tplmode"] = "groups";
 				$o_arr["group"] = $this->use_group;
 				$o_arr["tpldir"] = $tpls;
+			}
+			if($this->classinfo["tplmode"] == "groups" && file_exists($tplx2) && file_exists($tply2))
+			{
+				$o_arr["tplmode"] = "groups";
+				$o_arr["group"] = $this->use_group;
+				$o_arr["tpldir"] = $tpls2;
 			}
 			
 			if (!empty($template))
