@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.1 2001/06/14 12:07:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.2 2001/06/14 14:53:35 duke Exp $
 class repeater {
 	////
 	// !Konstruktor.
@@ -13,8 +13,16 @@ class repeater {
 		#$this->_init($start,$end);
 	}
 
-	function init($start,$end)
+	////
+	// !this is used to set the window on the timeline we are interested in.
+	// to handle the matters correctly we need to know when the whole timeline
+	// started and ended as well as when the event itself started. There is
+	// no need to know when the even ends, since it can not last longer than
+	// a single day. Actually now, when I think of it, this seems as a serious
+	// problem. What I want an event that spans multiple days?
+	function init($rep_start,$start,$end)
 	{
+		$this->rep_start = $rep_start;
 		// nullime kogu timeline
 		$this->vector = array();
 		// koigepealt on vaja leida vektori algus
@@ -50,10 +58,16 @@ class repeater {
 			return $this->vector;
 		};
 	}
-		
 
-	// selle funktsiooni abil impordime erinevaid repeatereid
-	// ning vastavalt sellele tykeldame vektorit.
+	////
+	//! This is used to remove the parts of the timeline we are not interested in.
+	// The processing should start either at the start of the window or at the start
+	// of the repeater, depending on whichever is first.
+	
+	// if the former is the case, we need to start the calculations from the start of the 
+	// event, not from the start of the window and then skip until we are at the start of
+	// the window. Otherwise we will mess up completely.
+
 	function handle($args = array())
 	{
 		$this->virgin = 0;
@@ -76,8 +90,6 @@ class repeater {
 					$newvec = array();
 					for ($i = $start; $i <= $end; $i = $i+$skip)
 					{
-						print "*";
-						flush();
 						if ($pwhen)
 						{
 							$mlist = explode(",",$pwhen);
@@ -124,7 +136,7 @@ class repeater {
 					if ($skip > 0)
 					{
 						$cnt = $this->get_day_diff($st,$et);
-						for ($i = 0; $i <= $cnt; $i++)
+						for ($i = 0; $i <= $cnt; $i = $i + $skip)
 						{
 							$sx = mktime(0,0,0,$m1,$d1 + $i,$y1);
 							$newstart = ($st > $sx) ? $st : $sx;

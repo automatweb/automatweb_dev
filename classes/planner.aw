@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.23 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.24 2001/06/14 14:53:35 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -149,141 +149,18 @@ class planner extends calendar {
 				"date" => $date,
 				"type" => $disp,
 		));
-		$events = $this->get_events2(array(
+		
+		$events = $this->get_events(array(
 					"start" => $di["start"],
 					"end" => $di["end"],
 					"uid" => UID,
 				));
 
 		$ddiff1 = $this->get_day_diff($di["start"],$di["end"]);
+		
 		// tsükkel yle koigi selles perioodis asuvate päevade, et
 		// leida ja paigutada events massiivi koik korduvad üritused
 		
-		for ($i = 0; $i <= $ddiff1; $i++)
-		{
-			// ja nüüd käime labi koik repeaterid, et teha kindlaks
-			// kas antud ajahetkele (päevale) tuleks moni neist kuvada
-
-			// siin peab kasutama while tsüklit, sest meil on vaja
-			// array labimise ajal sealt elemente maha rippida.
-			// ja nuh. ma tean, et see ei ole parim lahendus
-			reset($repeaters);
-			$more = true;
-			$yearpwhen = "";
-			while(list($key,$rep) = each($events))
-			{
-				$rep["end"] = $events2[$rep["eid"]]["rep_until"];
-				$sx = strtotime("+$i days",$rep["start"]);
-				$ddiff2 = $this->get_day_diff($rep["start"],$di["start"]);
-				$j = $i + $ddiff2;
-				$sx = strtotime("+$j days",$rep["start"]);
-				$s1 = date("dmY",$sx);
-				$s2 = date("dmY",$rep["start"]);
-				$ddiff = $this->get_day_diff($rep["start"],$sx);
-				if ($s1 == $s2)
-				{
-					// do nothing
-					// otherwise we would get 2 copies of that event for 
-					// that day
-				
-				}
-				elseif ($rep["end"] <= $sx)
-				{
-					// kui yritus on sellest perioodist expirenud
-					// do also nothing
-					//unset($repeaters[$key]);
-
-				}
-				elseif ($rep["start"] >= $sx)
-				{
-					// we are ignoring it
-				}
-				else
-				// Lisa see eventite plaani
-				{
-					switch($rep["type"])
-					{
-						case REP_YEAR:
-							if ($rep["skip"] > 0)
-							{
-								$startyear = date("Y",$rep["start"]);	
-								$thisyear = date("Y",strtotime("+$i days",$di["start"]));
-								if ( (($thisyear - $startyear) % $rep["skip"]) != 0)
-								{
-									// we are looking at a year we are not really interested in
-									$more = false;
-								};
-								$yearpwhen = $rep["pwhen"];
-							};
-							break;
-
-						case REP_MONTH:
-							// jätkame töötlemist, if we have the required data
-							if ($more && (($rep["skip"] > 0) || ($yearpwhen)) )
-							{
-								$startmon = date("m",$di["start"]);
-								$thismon = (int)date("m",strtotime("+$i days",$di["start"]));
-								if ($yearpwhen)
-								{
-									$yplist = explode(",",$yearpwhen);
-									$yplist = array_flip($yplist);
-									if (!isset($yplist[$thismon]))
-									{
-										$more = false;
-									};
-								}
-								else
-								{
-									$mdiff = $this->get_mon_diff($di["start"],strtotime("+$i days",$i["start"]));
-									if (($mdiff % $rep["skip"]) != 0)
-									{
-										$more = false;
-									};
-								};
-									
-							};
-								
-
-						case REP_DAY:
-							if ($more && (($ddiff % $rep["skip"]) == 0))
-							{
-								$sd = date("dmY",strtotime("+$i days",$di["start"]));
-								$events[$sd][$rep["start"]] = $events2[$rep["eid"]];
-								//print "<pre>";
-								//print_r($events2[$rep["eid"]]);
-								//print "</pre>";
-								// now, I do realize, that this is a bit 
-								// ineffective, but until I can code this better
-								// we are going to sort the list right here
-								//ksort($events[$s1][$rep["start"]]);
-								ksort($events[$sd]);
-							};
-							break;
-
-						case REP_WEEK:
-							//$wx = date("w",strtotime("+$i days",$di["start"]));
-							//$sz = date("dmY",strtotime("+$i days",$di["start"]));
-							//if ($wx == 0)
-							//{
-							//		$wx = 7;
-							//};
-							//$wxl = explode(",",$rep["pwhen"]);
-							//$wxl = array_flip($wxl);
-							// so we are supposed to do something with 
-							// repeaters that have the type "week"
-
-							// well. right now are only going to use pwhen
-							//if (isset($wxl[$wx]))
-							//{
-							//		$events[$sz][$rep["start"]] = $events2[$rep["eid"]];
-							//	ksort($events[$sz]);
-							//};
-							break;
-
-					}; // switch
-				};
-			}
-		};
 		list($d,$m,$y) = split("-",$date);
 		switch($disp)
 		{
@@ -565,60 +442,58 @@ class planner extends calendar {
 	// argumendid:
 	// start(timestamp), end(timestamp)
 	// parent(int) - kalendri ID
-
-	// tegelikult peaks siin lugema repeaterid sisse ja mitte kusagil mujal
+	//  voi
+	// uid(char) - kasutaja id, kui tegemist on kasutaja kalendriga
+	
 	function get_events($args = array())
 	{
+		classload("repeater");
+		$repeater = new repeater();
 		extract($args);
-		$retval = array();
-		$q = "SELECT * FROM planner
-			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE objects.status = 2 AND objects.parent = '$parent'
-				AND ((start >= '$start' AND start <= '$end') OR (rep_until >= '$start')) ORDER BY start";
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			$retval[] = $row;
-		};
-		return (sizeof($retval) > 0) ? $retval : false;
-	}
-	
-	// tegelikult peaks siin lugema repeaterid sisse ja mitte kusagil mujal
-	function get_events2($args = array())
-	{
-		extract($args);
+		$selector = ($uid) ? "planner.uid = '$uid'" : "objects.parent = '$parent'";
 		$retval = array();
 		$reps = array();
 		$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE objects.status = 2 AND planner.uid = '$uid'
+			WHERE objects.status = 2 AND $selector
 				AND ((start >= '$start' AND start <= '$end') OR (rep_until >= '$start'))
 				ORDER BY start";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
+			// sx-i peab kuidagi teisiti arvutama
+			// fawking kala seisneb selles, et kui sa oled 
+			// repeateritega määratud ajaloigu sees, siis
+			// ntx päevade puhul hakatakse tsyklit valest kohast ..
+			// ehk siis repeateri algusest. 
+			$ex = ($end > $row["rep_until"]) ? $row["rep_until"] : $end;
+			$repeater->init($start,$row["start"],$ex);
+			
 			$this->save_handle();
-			$q = "SELECT * FROM planner_repeaters WHERE eid = '$row[oid]'";
+			$q = "SELECT * FROM planner_repeaters WHERE eid = '$row[oid]' ORDER BY type DESC";
 			$this->db_query($q);
 			while($rep = $this->db_next())
 			{
-				$reps[$row["oid"]][] = $rep;
+				$repeater->handle($rep);
 			};
 			$this->restore_handle();
-			$retval[] = $row;
+			$vector = $repeater->get_vector();
+			if ($vector)
+			{
+				foreach($vector as $slice)
+				{
+					list($slice_start,$slice_end) = each($slice);
+					$index = date("dmY",$slice_start);
+					$retval[$index][] = $row;
+				};
+			}
+			else
+			{
+				$index = date("dmY",$row["start"]);
+				$retval[$index][] = $row;
+			};
 		};
-		foreach($retval as $key => $val)
-		{
-			printf("%s - %s - %s<br>",date("d-m-Y",$val["start"]),$val["title"],date("d-m-Y",$val["end"]));
-			// siin hakkame läbima repeatereid
-			// see peaks olema eraldi funktsioon tegelikult
-			// note. koige vaixem yhik, mil repiiter korduda saab on
-			// 1 päev. s.t. me arvutame alati ainult päevadega
-			print sizeof($reps[$val["oid"]]);
-			print "<br>";
-			print $val["oid"];
-			print "<br>";
-		};
+		
 		return (sizeof($retval) > 0) ? $retval : false;
 	}
 
@@ -852,13 +727,15 @@ class planner extends calendar {
 	{
 		extract($args);
 		// reap the old repeaters
-		$q = "DELETE FROM planner_repeaters WHERE eid = '$id'";
-		$this->db_query($q);
 		// first we will calculate the end date for those repeaters
 		switch($rep)
 		{
 			case "3":
 				$repend_date = sprintf("%02d-%02d-%04d",$repend["day"],$repend["mon"],$repend["year"]);
+				if (!is_date($repend_date))
+				{
+					$repend_date = "31-12-2037";
+				};
 				break;
 
 			case "2":
@@ -871,8 +748,9 @@ class planner extends calendar {
 				$repend_date = "31-12-2037";
 				break;
 		};
+		$q = "DELETE FROM planner_repeaters WHERE eid = '$id'";
+		$this->db_query($q);
 		// right now we will just stick with events repeating forever
-		$repend_date = "31-12-2037";
 		list($d,$m,$y) = explode("-",$repend_date);
 		$rep_until = mktime(0,0,0,$m,$d,$y);
 
@@ -929,7 +807,8 @@ class planner extends calendar {
 		if ($use[4] || $yearpwhen)
 		{
 			$_type = REP_YEAR;
-			$_skip = ($yearpwhen) ? 0 : $skip["year"];
+			$_skip = $skip["year"];
+			//$_skip = ($yearpwhen) ? 0 : $skip["year"];
 			$q = "INSERT INTO planner_repeaters (eid,type,skip,pwhen) VALUES ('$id','$_type','$_skip','$yearpwhen')";
 			$this->db_query($q);
 		};
