@@ -26,39 +26,42 @@
 											{VAR:ob_conf_table}
 
 											<!-- SUB: object -->
-											<select name='object[{VAR:field_name}]'  class="formselect">
-											{VAR:object_fields}
+											<select name='object[{VAR:field_name}][]'  class="formselect">
+											{VAR:object_f}
 											</select>
-											<input {VAR:dejoin_object} type="checkbox" name="dejoin[object][{VAR:field_name}]" title="leia id teisest tabelist">
+											<input {VAR:dejoin_object} type="checkbox" name="dejoin[object][{VAR:field_name}][]" title="leia id teisest tabelist">
 											{VAR:dejoin_object_conf}
+											<input {VAR:add} type="checkbox" name="add[object][{VAR:field_name}][]" title="extra rida"><br />
 											<!-- END SUB: object -->
 
 											<!-- SUB: meta -->
-											<input value="{VAR:object_meta}" type="text" name="meta[{VAR:field_name}]" size=8 class="formtext">
-											<input {VAR:dejoin_meta} type="checkbox" name="dejoin[meta][{VAR:field_name}]" title="leia id teisest tabelist">
+											<input value="{VAR:meta_f}" type="text" name="meta[{VAR:field_name}][]" size=8 class="formtext">
+											<input {VAR:dejoin_meta} type="checkbox" name="dejoin[meta][{VAR:field_name}][]" title="leia id teisest tabelist">
 											{VAR:dejoin_meta_conf}
+											<input {VAR:add} type="checkbox" name="add[meta][{VAR:field_name}][]" title="extra rida"><br />
 											<!-- END SUB: meta -->
 
 											<!-- SUB: sisu -->
-											<select name="sisu[{VAR:field_name}]"  class="formselect">
-												{VAR:sisu_table_data}
+											<select name="sisu[{VAR:field_name}][]"  class="formselect">
+												{VAR:sisu_f}
 											</select>
-											<input {VAR:dejoin_sisu} type="checkbox" name="dejoin[sisu][{VAR:field_name}]" title="leia id teisest tabelist">
+											<input {VAR:dejoin_sisu} type="checkbox" name="dejoin[sisu][{VAR:field_name}][]" title="leia id teisest tabelist">
 											{VAR:dejoin_sisu_conf}
+											<input {VAR:add} type="checkbox" name="add[sisu][{VAR:field_name}][]" title="extra rida"><br />
 											<!-- END SUB: sisu -->
 																						
 											<!-- SUB: dejoin -->
 												<br>
-												<select name="dejoin_table[{VAR:what}][{VAR:field_name}]" class="formselect" title="sellest tabelist">
+												<select name="dejoin_table[{VAR:what}][{VAR:field_name}][]" class="formselect" title="sellest tabelist">
 													{VAR:dejoin_tables}
 												</select>
-												<select name="dejoin_field[{VAR:what}][{VAR:field_name}]" class="formselect" title="see veerg">
+												<select name="dejoin_field[{VAR:what}][{VAR:field_name}][]" class="formselect" title="see veerg">
 													{VAR:dejoin_fields}
-												</select>
+												</select><br />
 											<!-- END SUB: dejoin -->
 
 											<!-- SUB: remember -->
-												<input {VAR:remember} type="checkbox" name="remember[{VAR:what}][{VAR:field_name}]">
+												<input {VAR:remember} type="checkbox" name="remember[{VAR:what}][{VAR:field_name}][]">
 												<small>remember join result</small>
 											<!-- END SUB: remember -->
 
@@ -71,6 +74,9 @@
 											<td class="celltext">
 												<a href="{VAR:genereeri}" target=_blank>GENEREERI TERVEST ANDMETABELIST OBJEKTID</a><br />
 												<a href="{VAR:genereeri5}" target=_blank>GENEREERI ANDMETABELIST 5 esimest OBJEKTI</a><br />
+
+												<a href="{VAR:normalizer}" target=_blank>normalizer - don't touch that !!!</a><br />
+
 											</td>
 										</tr>
 									</table>
