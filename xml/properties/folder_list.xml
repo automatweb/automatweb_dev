@@ -45,7 +45,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>&amp;Auml;ra lingi ksustu</caption>
+            <caption>&amp;Auml;ra lingi kaustu</caption>
       </property>
       <property>
             <name>only_act</name>

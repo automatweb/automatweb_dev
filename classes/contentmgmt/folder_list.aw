@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.9 2004/10/05 09:18:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.10 2004/11/09 12:13:42 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -21,7 +21,7 @@
 @caption N&auml;ita kausta all
 
 @property no_folder_links type=checkbox ch_value=1 field=meta method=serialize
-@caption &Auml;ra lingi ksustu
+@caption &Auml;ra lingi kaustu
 
 @property only_act type=checkbox ch_value=1 field=meta method=serialize
 @caption N&auml;ita ainult aktiivseid kaustu
@@ -216,6 +216,7 @@ class folder_list extends class_base
 		$this->vars(array(
 			"FOLDER" => $fls,
 			"root_name" => $rm->prop("name"),
+			"root_link" => $ssh->make_menu_link($rm),
 		));
 		return $this->parse();
 	}
