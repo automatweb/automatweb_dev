@@ -1116,7 +1116,14 @@ class site_show extends class_base
 	// into which the current document has been translated to
 	function make_context_langs()
 	{
-		$obj = $this->section_obj;
+		if ($this->active_doc)
+		{
+			$obj = obj($this->active_doc);
+		}
+		else
+		{
+			$obj = $this->section_obj;
+		}
 
 		// see if the object has translations
 		$conn = $obj->connections_from(array(
@@ -1132,7 +1139,9 @@ class site_show extends class_base
 			{
 				// if it has connections pointing to it, then it is, so get the translations from the original
 				// we need to do this, because the previous query must ever only return 0 or 1 connections
-				$obj = obj($conn[0]->prop("from"));
+				reset($conn);
+				list(,$f_conn) = each($conn);
+				$obj = obj($f_conn->prop("from"));
 				$conn = $obj->connections_from(array(
 					"type" => RELTYPE_TRANSLATION
 				));
