@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.46 2004/04/07 09:11:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.47 2004/04/07 13:12:16 kristo Exp $
 
 /*
 
@@ -1438,9 +1438,18 @@ class site_show extends class_base
 		return $last_mod;
 	}
 
-	function do_draw_menus($arr)
+	function do_draw_menus($arr, $filename = NULL, $tpldir = NULL, $tpl = NULL)
 	{
-		if (!isset($this->compiled_filename) || $this->compiled_filename == "")
+		if ($filename == NULL)
+		{
+			$filename = $this->compiled_filename;
+		}
+		else
+		{
+			$this->read_template("../../".$tpldir."/".$tpl);
+		}
+
+		if ($filename == "")
 		{
 			error::throw(array(
 				"id" => ERR_NO_COMPILED,
@@ -1449,8 +1458,13 @@ class site_show extends class_base
 		}
 	
 		enter_function("site_show::do_draw_menus");
-		include_once($this->compiled_filename);
+		include_once($filename);
 		exit_function("site_show::do_draw_menus");
+
+		if ($filename !== NULL)
+		{
+			return $this->parse();
+		}
 	}
 
 	function exec_subtemplate_handlers($arr)
