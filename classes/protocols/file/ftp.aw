@@ -88,6 +88,18 @@ class ftp extends class_base
 		};
 	}
 
+	/** closes FTP connection 
+		@attrib api=1
+	**/
+	function disconnect()
+	{
+		if ($this->verbose)
+		{
+			echo "closing connection ";
+		};
+		ftp_close($this->handle);
+	}
+
 	/** returns a list of files in the current server in folder $folder
 		@attrib api=1
 		@param folder required
