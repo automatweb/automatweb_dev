@@ -154,17 +154,20 @@ class languages extends aw_template
 		$this->db_query("SELECT DISTINCT(site_id) AS site_id FROM objects");
 		while ($row = $this->db_next())
 		{
-			// get site name from site server
-			$sd = $this->do_orb_method_call(array(
-				"class" => "site_list", 
-				"action" => "get_site_data", 
-				"params" => array(
-					"site_id" => $row["site_id"]
-				),
-				"method" => "xmlrpc",
-				"server" => "register.automatweb.com"
-			));
-			$ret[$row["site_id"]] = $sd["name"];
+			if ($row["site_id"] != 0)
+			{
+				// get site name from site server
+				$sd = $this->do_orb_method_call(array(
+					"class" => "site_list", 
+					"action" => "get_site_data", 
+					"params" => array(
+						"site_id" => $row["site_id"]
+					),
+					"method" => "xmlrpc",
+					"server" => "register.automatweb.com"
+				));
+				$ret[$row["site_id"]] = $sd["name"];
+			}
 		}
 		return $ret;
 	}
