@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.61 2002/03/12 23:14:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.62 2002/03/20 19:22:30 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -282,7 +282,7 @@ else
 	{
 		$arg_list = func_get_args();
 		global $classdir;
-		global $ext;
+		$ext = aw_ini_get("ext");
 		while(list(,$lib) = each($arg_list))
 		{
 			// votab stringist ainult selle osa, mis jääb /-i ja stringi lopu vahele
@@ -293,6 +293,32 @@ else
 			include_once($lib);
 		};
 	}
+
+	function get_instance($class)
+	{
+		global $classdir;
+		$ext = aw_ini_get("ext");
+		$id = sprintf("instance::%s",$class);
+		$instance = aw_global_get($id);
+		if (not($instance))
+		{
+			preg_match("/(\w*)$/",$class,$m);
+			$lib = $m[1];
+			$lib = "$classdir/$lib.$ext";
+			include_once($lib);
+			$instance = new $class();
+			aw_global_set($id,$instance);
+		};
+		return $instance;
+	}
+
+	function upd_instance($class,$ref)
+	{
+		$id = sprintf("instance::%s",$class);
+		aw_global_set($id,$ref);
+	}
+
+
 	////
 	// !A neat little functional programming function
 	function not($arg)
@@ -917,5 +943,7 @@ $mysqldump_path = "/usr/local/bin/mysqldump";
 $gzip_path = "/bin/gzip";
 $tar_path = "/bin/tar";
 $zip_path = "/usr/bin/zip";
+
+include("/www/automatweb_dev/init.aw");
 
 ?>
