@@ -3,7 +3,7 @@
 // sample crontab line:
 // * */4 * * * /www/automatweb_dev/scripts/php -q /www/automatweb_dev/addons/import/ilmee_xml2csv.php > /tmp/ilmee.txt 
 $table = "ilmee_data";
-$file = join("",file("http://www.ilm.ee/~data/include/ilm_xml.php3"));
+$file = join("",file("http://ilm.ee/~data/include/ilm-eng_xml.php3"));
 $p = xml_parser_create();
 xml_parse_into_struct($p,$file,$vals,$index);
 xml_parser_free($p);
@@ -39,10 +39,15 @@ foreach($vals as $key => $val)
 	{
 		$nahtus = $val["value"];
 	};
+	
+	if ($val["tag"] == "JUTT")
+	{
+		$jutt = $val["value"];
+	};
 
 	if ( ($val["tag"] == "BLOKK") && ($val["type"] == "close") && $open)
 	{
-		print "$id|$date|$oo|$paev|$nahtus\n";
+		print "$id|$date|$oo|$paev|$nahtus|$jutt\n";
 	};
 
 	if ( ($val["tag"] == "RUBRIIK") && ($val["type"] == "close") )
