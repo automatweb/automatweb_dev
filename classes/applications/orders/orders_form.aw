@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.7 2005/02/15 13:15:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.8 2005/02/21 08:49:02 kristo Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -359,7 +359,9 @@ class orders_form extends class_base
 		
 		$this->vars(array(
 			"id" => $_SESSION["order_cart_id"],
+			"udef_checkbox1_error" => $_SESSION["udef_checkbox1_error"]
 		));
+		unset($_SESSION["udef_checkbox1_error"]);
 		if($errors = aw_global_get("cb_values"))
 		{
 			foreach ($errors as $key => $value)

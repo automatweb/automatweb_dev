@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.5 2005/02/15 13:15:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.6 2005/02/21 08:49:02 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -229,7 +229,6 @@ class orders_order extends class_base
 				$person->set_prop("lastname", $props["lastname"]);
 				$person->set_prop("personal_id", $props["personal_id"]);
 				$person->set_prop("comment", $props["person_contact"]);
-				/*$person->set_prop("birthday", strtotime($props["person_birthday"]["year"]."-".$props["person_birthday"]["month"]."-".$props["person_birthday"]["day"]));*/
 				
 				$person->set_prop("birthday", mktime(0, 0, 0, $props["person_birthday"]["month"], $props["person_birthday"]["day"], $props["person_birthday"]["year"]));
 				
@@ -410,9 +409,21 @@ class orders_order extends class_base
 **/
 	function do_persondata_submit($arr)
 	{
+		$oform = &obj($_SESSION["order_form_id"]);
+		$arr["cfgform"] = $oform->prop("orderform");
+		parent::submit($arr);
+
 		if(!$arr["udef_checkbox1"])
 		{
-			$arr["udef_checkbox1"] = 0;
+			//$arr["udef_checkbox1"] = 0;
+			// fail here
+			$_SESSION["udef_checkbox1_error"] = "Tellimiseks peate n&ouml;ustuma tellimistingimustega!";
+			return $this->mk_my_orb("change", 
+				array(
+					"id" => $_SESSION["order_form_id"],
+					"group" => "persondata",
+					"section" => $_SESSION["orders_section"],
+				), CL_ORDERS_FORM);
 		}
 		
 		$_SESSION["orders_form"]["payment"]["type"] = $arr["payment_method"];

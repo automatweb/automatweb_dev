@@ -1,10 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.1 2004/11/02 14:18:08 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.2 2005/02/21 08:49:02 kristo Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
 @classinfo syslog_type=ST_ORDERS_MANAGER relationmgr=yes
 @default table=objects
+
+@property export_folder type=textbox field=meta method=serialize group=general
+@caption Ekspordi kataloog
+
+
 @default group=ordermnager
 
 
@@ -103,5 +108,136 @@ class orders_manager extends class_base
 		return $retval;
 	}	
 	*/
+
+	/** exports orders after the last batch to textfile
+
+		@attrib name=export_to_file nologin=1
+
+		@param id required type=int acl=view
+
+	**/
+	function export_to_file($arr)
+	{
+		$o = obj($arr["id"]);
+
+		// get time of last export
+		$last_export = (int)$this->get_cval("orders_manager::last_export_time");
+
+		echo "fetch orders since ".date("d.m.Y H:i", $last_export)." <br>\n";
+		flush();
+
+		// get orders created since then
+		$ol = new object_list(array(
+			"class_id" => CL_ORDERS_ORDER,
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, $last_export),
+			"lang_id" => aw_global_get("lang_id"),
+			"site_id" => array(),
+			"order_completed" => 1,
+			"sort_by" => "objects.created"
+		));
+
+		echo "got ".$ol->count()." orders <br>\n";
+		flush();
+
+		// get todays counter
+		$counter = (int)$this->get_cval("orders_manager::today_counter")+1;
+
+		if ($counter > 4)
+		{
+			$counter = 1;
+		}
+
+		// make file name
+		$fn = $o->prop("export_folder")."/".date("Y")."-".date("m")."-".date("d")."-".$counter.".csv";
+
+		echo "export to file $fn <br>";
+
+		$ex_props = array(
+			"item" => array(
+				"name" => "Toote nimi", 
+				"product_code" => "Kood", 
+				"product_color" => "V&auml;rvus",
+				"product_size" => "Suurus",
+				"product_count" => "Kogus",
+				"product_price" => "Hind",
+				"product_page" => "Lehek&uuml;lg",
+				"product_image" => "Pilt"
+			),
+			"person" => array(
+				"firstname" => "Eesnimi",
+				"lastname" => "Perekonnanimi",
+				"comment" => "Aadress",
+				"birthday" => "S&uuml;nnip&auml;ev",
+				"email" => "E-mail",
+				"phone" => "Telefon",
+			),
+			"order" => array(
+				"udef_textbox1" => "Kliendi number",
+				"udef_textbox2" => "Postiindeks",
+				"udef_textbox3" => "Linn",
+				"udef_textbox4" => "Telefon t&ouml;&ouml;l",
+				"udef_textbox5" => "Mobiil",
+				"udef_textbox6" => "Kliendo t&uuml;&uuml;p",
+			)
+		);
+
+		$lines = array();
+		$sep = ",";
+		$first = true;
+		$header = array("OID", "Millal");
+
+		// foreach orders
+		foreach($ol->arr() as $order)
+		{
+			$person = $order->get_first_obj_by_reltype("RELTYPE_PERSON");
+			if (!$person)
+			{
+				continue;
+			}
+
+			// foreach order items
+			foreach($order->connections_from(array("type" => "RELTYPE_ORDER")) as $c)
+			{
+				$line = array(
+					$order->id(),
+					date("d.m.Y H:i", $order->created())
+				);
+
+				$item = $c->to();
+
+				// write order line to file
+				foreach($ex_props as $obj => $dat)
+				{
+					foreach($dat as $prop => $head)
+					{
+						if ($first)
+						{
+							$header[] = $head;
+						}
+						$line[] = str_replace(",", " ",$$obj->prop_str($prop));
+					}
+				}
+
+				if ($first)
+				{
+					$lines[] = join($sep, $header);
+				}
+				$lines[] = join($sep, $line);
+				$first = false;
+			}
+		}
+	
+		$this->put_file(array(
+			"file" => $fn,
+			"content" => join("\n", $lines)
+		));
+
+		// write last export date
+		$this->set_cval("orders_manager::last_export_time", time());
+		$this->set_cval("orders_manager::today_counter", $counter);
+		
+
+		die("all done!");
+	}
 }
 ?>

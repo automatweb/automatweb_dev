@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>export_folder</name>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Ekspordi kataloog</caption>
+      </property>
+      <property>
             <name>orders_table</name>
             <table>objects</table>
             <group>ordermnager</group>
