@@ -76,7 +76,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$objtblprops = array();
 		foreach($properties as $prop => $data)
 		{
-			if ($data["store"] == "no")
+			if ($data["store"] == "no" || $data["store"] == "connect")
 			{
 				continue;
 			}
@@ -264,7 +264,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				continue;
 			}
 
-			if ($data["store"] != "no")
+			if ($data["store"] != "no" && $data["store"] != "connect")
 			{
 				$tbls[$data["table"]]["index"] = $tableinfo[$data["table"]]["index"];
 				// check if the property has a value
@@ -357,7 +357,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$tbls = array();
 		foreach($properties as $prop => $data)
 		{
-			if ($data["store"] != "no")
+			if ($data["store"] != "no" && $data["store"] != "connect")
 			{
 				$tbls[$data["table"]][] = $data;
 			}
