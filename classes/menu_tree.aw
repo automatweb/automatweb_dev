@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.1 2002/03/22 18:07:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.2 2002/05/08 12:46:43 duke Exp $
 // menu_tree.aw - menüüpuu
 class menu_tree extends aw_template
 {
@@ -105,6 +105,7 @@ class menu_tree extends aw_template
 						"start_from" => $val,
 						"add_start_from" => true,
 						"single_tpl" => 1,
+						"tpl_name" => "content",
 						"tpl" => "menu_tree/menu_tree.tpl",
 				)));
 				$mnl->level = 0;

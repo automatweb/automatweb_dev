@@ -1,9 +1,9 @@
 <?php
-class menuedit_light extends aw_template {
+class menuedit_light extends aw_template 
+{
 	function menuedit_light()
 	{
-		$this->db_init();
-		$this->tpl_init();
+		$this->init("");
 	}
 
 	////
@@ -22,6 +22,7 @@ class menuedit_light extends aw_template {
 		$this->sq = (isset($args["sq"])) ? $args["sq"] : 3;
 		$this->tpl = ($args["tpl"]) ? $args["tpl"] : false;
 		$this->spacer = ($args["spacer"]) ? $args["spacer"] : "&nbsp;";
+		$this->tpl_name = ($args["tpl_name"]) ? $args["tpl_name"] : "";
 		$this->threadby = ($args["threadby"]) ? $args["threadby"] : "parent";
 		$this->func_gain_data = ($args["func_gain_data"]) ? $args["func_gain_data"] : "_gen_rec_list";
 		$this->add_start_from = ($args["add_start_from"]) ? $args["add_start_from"] : false;
@@ -130,7 +131,7 @@ class menuedit_light extends aw_template {
 				{
 					if ($this->single_tpl)
 					{
-						$tpl = $this->tlist[1][0];
+						$tpl = ($this->tpl_name) ? $this->tpl_name : $this->tlist[1][0];
 					}
 					else
 					{
