@@ -9,7 +9,10 @@ class __classname extends class_base
 	function __classname()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be 
-		$this->init("__tplfolder");
+		$this->init(array(
+			'tpldir' => '__tplfolder',
+			'clid' => __classdef
+		));
 	}
 
 	////
@@ -17,14 +20,14 @@ class __classname extends class_base
 	// default toolbar includes only one button - save button
 	function mk_toolbar()
 	{
-		$tb = get_instance("toolbar");
+		$tb = get_instance('toolbar');
 		
 		$tb->add_button(array(
-			"name" => "save",
-			"tooltip" => "Salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif"
+			'name' => 'save',
+			'tooltip' => 'Salvesta',
+			'url' => 'javascript:document.add.submit()',
+			'imgover' => 'save_over.gif',
+			'img' => 'save.gif'
 		));
 
 		return $tb->get_toolbar();
@@ -40,11 +43,15 @@ class __classname extends class_base
 	{
 		extract($arr);
 		// checks ACL, sets the path and reads the template
-		$this->_add_init($arr, "__classname", "change.tpl");
+		$this->_add_init($arr, '__classname', 'change.tpl');
 
 		$this->vars(array(
-			"toolbar" => $this->mk_toolbar(),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url))
+			'toolbar' => $this->mk_toolbar(),
+			'reforb' => $this->mk_reforb('submit', array(
+				'parent' => $parent, 
+				'alias_to' => $alias_to, 
+				'return_url' => $return_url
+			))
 		));
 		return $this->parse();
 	}
@@ -59,19 +66,19 @@ class __classname extends class_base
 		if ($id)
 		{
 			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
+				'oid' => $id,
+				'name' => $name
 			));
-			$this->_log("__classname", "Muutis __classname objekti $name ($id)", $id);
+			$this->_log('__classname', "Muutis __classname objekti $name ($id)", $id);
 		}
 		else
 		{
 			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => __classdef
+				'parent' => $parent,
+				'name' => $name,
+				'class_id' => __classdef
 			));
-			$this->_log("__classname", "Lisas __classname objekti $name ($id)", $id);
+			$this->_log('__classname', "Lisas __classname objekti $name ($id)", $id);
 		}
 
 		if ($alias_to)
@@ -79,7 +86,10 @@ class __classname extends class_base
 			$this->add_alias($alias_to, $id);
 		}
 
-		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
+		return $this->mk_my_orb('change', array(
+			'id' => $id, 
+			'return_url' => urlencode($return_url)
+		));
 	}
 
 	////
@@ -91,12 +101,15 @@ class __classname extends class_base
 	{
 		extract($arr);
 		// checks ACL, sets path, reads template and returns the object
-		$ob = $this->_change_init($arr, "__classname", "change.tpl");
+		$ob = $this->_change_init($arr, '__classname', 'change.tpl');
 
 		$this->vars(array(
-			"name" => $ob["name"],
-			"toolbar" => $this->mk_toolbar(),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
+			'name' => $ob['name'],
+			'toolbar' => $this->mk_toolbar(),
+			'reforb' => $this->mk_reforb('submit', array(
+				'id' => $id, 
+				'return_url' => urlencode($return_url)
+			))
 		));
 
 		return $this->parse();
@@ -113,7 +126,7 @@ class __classname extends class_base
 	function parse_alias($args)
 	{
 		extract($args);
-		return $this->show(array("id" => $alias["target"]));
+		return $this->show(array('id' => $alias['target']));
 	}
 
 	////
@@ -123,10 +136,10 @@ class __classname extends class_base
 		extract($arr);
 		$ob = $this->get_object($id);
 
-		$this->read_template("show.tpl");
+		$this->read_template('show.tpl');
 
 		$this->vars(array(
-			"name" => $ob["name"]
+			'name' => $ob['name']
 		));
 
 		return $this->parse();
@@ -161,7 +174,8 @@ class __classname extends class_base
 	{
 		extract($arr);
 		$row = aw_unserialize($str);
-		$row["parent"] = $parent;
+		$row['parent'] = $parent;
+		unset($row['brother_of']);
 		$this->quote(&$row);
 		$id = $this->new_object($row);
 		if ($id)
@@ -182,7 +196,7 @@ class __classname extends class_base
 		extract($arr);
 		// this is the default implementation, don't include this function if you're not gonna change it
 		$this->add_alias($id,$alias);
-		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
+		header('Location: '.$this->mk_my_orb('list_aliases',array('id' => $id),'aliasmgr'));
 	}*/
 }
 ?>
