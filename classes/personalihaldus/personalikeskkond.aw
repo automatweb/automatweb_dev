@@ -1,5 +1,5 @@
 <?
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.4 2004/03/17 20:18:00 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.5 2004/04/07 10:01:12 kristo Exp $
 // personalikeskkond.aw - Personalikeskkond 
 /*
  	
@@ -1191,5 +1191,12 @@ class personalikeskkond extends class_base
 		return $retval;
 	}	
 	*/
+
+	function parse_alias($arr)
+	{
+		return $this->change(array(
+			"id" => $arr["alias"]["target"]
+		));
+	}
 }
 ?>
