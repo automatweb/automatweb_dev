@@ -87,13 +87,40 @@ class templatemgr extends aw_template
 	{
 		// kysime infot adminnitemplatede kohta
 		$type = (int)$args["type"];
+		if ($args["menu"])
+		{
+			// find the template for that type for the menu
+			if ($type == 0)
+			{
+				$d = get_instance("document");
+				$def = $d->get_edit_template($args["menu"]);
+			}
+			else
+			if ($type == 1)
+			{
+				$def = $this->get_lead_template($args["menu"]);
+			}
+			else
+			if ($type == 2)
+			{
+				$def = $this->get_long_template($args["menu"]);
+			}
+		}
 		$q = "SELECT * FROM template WHERE type = $type ORDER BY id";
 		$this->db_query($q);
 		$result = array("0" => "default");
 		while($tpl = $this->db_fetch_row())
 		{
 			$result[$tpl["id"]] = $tpl["name"];
+			if ($tpl["filename"] == $def)
+			{
+				$def_n = $tpl["name"];
+			}
 		};
+		if ($def_n != "")
+		{
+			$result["0"] = "Vaikimisi: ".$def_n;
+		}
 		return $result;
 	}
 
