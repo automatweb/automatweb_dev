@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.121 2005/02/02 12:04:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.122 2005/02/09 17:20:34 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -31,6 +31,7 @@
 
 	@property icon type=icon field=meta method=serialize group=advanced
 	@caption Ikoon
+	
 
 	@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=advanced 
 	@caption Vali ikoon
@@ -156,10 +157,13 @@
 
 	@default group=show
 
-	@property left_pane type=checkbox  ch_value=1 default=1
+	@property panes type=chooser store=no multiple=1
+	@caption Paanid
+
+	@property left_pane type=checkbox  ch_value=1 default=1 
 	@caption Vasak paan
 
-	@property right_pane type=checkbox ch_value=1 default=1
+	@property right_pane type=checkbox ch_value=1 default=1 
 	@caption Parem paan
 	
 	@property tpl_dir table=objects type=select field=meta method=serialize
@@ -206,6 +210,7 @@
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
 	@classinfo syslog_type=ST_MENU
+
 
 	@groupinfo advanced caption=Spetsiaal
 	@groupinfo keywords caption=Võtmesõnad
@@ -267,13 +272,13 @@
 	@caption alammen&uuml;&uuml;d objektist
 
 	@reltype CONTENT_FROM value=17 clid=CL_PROJECT
-    @caption Sisu objektist
+    	@caption Sisu objektist
 
 	@reltype SEEALSO_DOC value=18 clid=CL_DOCUMENT
-    @caption vaata lisaks dokument
+    	@caption vaata lisaks dokument
 
 	@reltype ICON value=19 clid=CL_IMAGE
-    @caption ikoon
+    	@caption ikoon
 
 	@reltype TIMING value=20 clid=CL_TIMING
 	@caption Aeg
@@ -345,6 +350,20 @@ class menu extends class_base
 		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
+			case "left_pane":
+			case "right_pane":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "panes":
+				$data["options"] = array(
+					"left_pane" => "Vasak",
+					"right_pane" => "Parem",
+				);
+				$data["value"]["left_pane"] = $ob->prop("left_pane");
+				$data["value"]["right_pane"] = $ob->prop("right_pane");
+				break;
+				
 			case "type":
 				$m = get_instance("menuedit");
 				$data["options"] = $m->get_type_sel();
@@ -831,6 +850,16 @@ class menu extends class_base
 
 			case "icon":
 				$retval = PROP_IGNORE;
+				break;
+			
+			case "left_pane":
+			case "right_pane":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "panes":
+				$ob->set_prop("left_pane",isset($data["value"]["left_pane"]) ? 1 : 0);
+				$ob->set_prop("right_pane",isset($data["value"]["right_pane"]) ? 1 : 0);
 				break;
 
 			case "sections":
