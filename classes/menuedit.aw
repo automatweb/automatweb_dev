@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.275 2003/04/04 16:29:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.276 2003/04/08 19:28:49 duke Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -1316,12 +1316,6 @@ class menuedit extends aw_template
 	// no, that $popup is really not needed anymore anylonger
 	function gen_folders($period,$popup = 0)
 	{
-		$u = get_instance("users");
-		$treetype = $u->get_user_config(array(
-			"uid" => aw_global_get("uid"),
-			"key" => "treetype",
-		));
-
 		if ($this->cfg["site_id"] == 88)
 		{
 			$this->read_template("folders_no_periods.tpl");
@@ -1436,7 +1430,6 @@ class menuedit extends aw_template
 		}
 		$this->vars(array(
 			"rooturl" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]))
-			//"rooturl" => "javascript:go_go(".$this->cfg['admin_rootmenu2'].",'')",
 		));
 		return $this->parse();
 	}
@@ -2082,12 +2075,6 @@ class menuedit extends aw_template
 			return "";
 		}
 
-		global $XYZ;
-		if ($XYZ)
-		{
-			print "rec_tree with $parent<br>";
-		};
-
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
@@ -2130,7 +2117,6 @@ class menuedit extends aw_template
 						"parent" => $row["parent"],
 						"iconurl" => $url,
 						"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period))
-						//"url" => "javascript:go_go(".$row["oid"].",'".$period."')",
 					));
 					if ($sub == "")
 					{
@@ -4942,17 +4928,6 @@ class menuedit extends aw_template
 			$ps = " AND ((period = '$period') OR (periodic = 1)) ";
 		}
 
-		$u = get_instance("users");
-		$addobject_type = $this->cfg["addobject_type"];
-		$_addobject_type = $u->get_user_config(array(
-			"uid" => aw_global_get("uid"),
-			"key" => "addobject_type",
-		));
-		if ($_addobject_type != "")
-		{
-			$addobject_type = $_addobject_type;
-		}
-
 		$this->read_template("js_popup_menu.tpl");
 
 		// do not show relation objects in the list. hm, I wonder whether
@@ -5264,14 +5239,6 @@ class menuedit extends aw_template
 			"url" => $this->mk_my_orb("import",array("parent" => $parent)),
 			"imgover" => "import_over.gif",
 			"img" => "import.gif",
-		));
-	
-		$toolbar->add_button(array(
-			"name" => "bugtrack",
-			"tooltip" => "Bugtrack",
-			"url" => $this->mk_my_orb("list",array("filt" => "all"),"bugtrack"),
-			"imgover" => "bugtrack_over.gif",
-			"img" => "bugtrack.gif",
 		));
 	
 		if (isset($callback) && is_array($callback) && sizeof($callback) == 2)
