@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.17 2003/07/17 12:26:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.18 2003/07/28 13:53:42 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -213,7 +213,7 @@ class cfgform extends class_base
 					if ($subclass == CL_DOCUMENT)
 					{
 						$cfgu = get_instance("cfg/cfgutils");
-						$def = file_get_contents(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml");
+						$def = join("",file(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml"));
 						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
 						$this->cfg_proplist = $proplist;
 						$this->cfg_groups = $grplist;
