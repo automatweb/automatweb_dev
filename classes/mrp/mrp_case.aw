@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.51 2005/03/30 17:10:03 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.52 2005/03/30 18:02:58 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -155,6 +155,9 @@ default group=grp_case_material
 @default group=grp_case_schedule
 	@property chart_navigation type=text store=no no_caption=1
 	@property schedule_chart type=text store=no no_caption=1
+
+	@property chart_legend type=text store=no
+	@caption Legend
 
 
 @default group=grp_case_log
@@ -381,6 +384,11 @@ class mrp_case extends class_base
 				{
 					$prop["value"] = t("Projekt pole plaanis");
 				}
+				break;
+
+			case "chart_legend":
+				$ws = get_instance(CL_MRP_WORKSPACE);
+				$prop["value"] = $ws->draw_colour_legend ();
 				break;
 
 			case "resource_tree":

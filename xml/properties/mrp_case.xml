@@ -385,6 +385,16 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>chart_legend</name>
+            <group>grp_case_schedule</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>Legend</caption>
+      </property>
+      <property>
             <name>log</name>
             <group>grp_case_log</group>
             <table>objects</table>

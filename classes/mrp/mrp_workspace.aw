@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.71 2005/03/30 17:10:03 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.72 2005/03/30 18:02:58 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -116,6 +116,9 @@
 
 	@property chart_navigation type=text store=no no_caption=1
 	@property master_schedule_chart type=text store=no no_caption=1
+
+	@property chart_legend type=text store=no
+	@caption Legend
 
 	@property chart_project_hilight_gotostart type=checkbox store=no
 	@caption Mine valitud projekti algusesse
@@ -616,6 +619,10 @@ class mrp_workspace extends class_base
 
 			case "chart_navigation":
 				$prop["value"] = $this->create_chart_navigation ($arr);
+				break;
+
+			case "chart_legend":
+				$prop["value"] = $this->draw_colour_legend ();
 				break;
 
 			case "chart_start_date":
@@ -3708,6 +3715,33 @@ class mrp_workspace extends class_base
 				"priority" => $cust->prop("priority")
 			));
 		}
+	}
+
+	function draw_colour_legend ()
+	{
+		$dfn = "";
+		$rows = "";
+		$i = 1;
+		$state_colours = $this->state_colours;
+		$state_colours["hilighted"] = "#FFE706";
+		$states = $this->states;
+		$states["hilighted"] = t("Valitud projekt");
+
+
+		foreach ($state_colours as $state => $colour)
+		{
+			$name = $states[$state];
+			$dfn .= '<td class="awmenuedittabletext" style="background-color: ' . $colour . '; width: 30px;">&nbsp;</td><td class="awmenuedittabletext" style="padding: 0px 15px 0px 6px;">' . $name . '</td>';
+
+			if (!(($i++)%3))
+			{
+				$rows .= '<tr>' . $dfn . '</tr>';
+				$dfn = "";
+			}
+		}
+
+		$rows .= '<tr>' . $dfn . '</tr>';
+		return '<table cellspacing="4" cellpadding="0">' . $rows . '</table>';
 	}
 }
 

@@ -342,6 +342,16 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>chart_legend</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>text</type>
+            <store>no</store>
+            <caption>Legend</caption>
+      </property>
+      <property>
             <name>chart_project_hilight_gotostart</name>
             <table>objects</table>
             <field>meta</field>
