@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.13 2002/07/24 20:48:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.14 2002/08/16 11:41:50 duke Exp $
 // form_actions.aw - creates and executes form actions
 
 class form_actions extends form_base
@@ -21,7 +21,7 @@ class form_actions extends form_base
 	function list_actions($arr)
 	{
 		extract($arr);
-		$this->init($id, "actions.tpl", LC_FORM_ACTIONS_FORM_ACTIONS);
+		$this->if_init($id, "actions.tpl", LC_FORM_ACTIONS_FORM_ACTIONS);
 
 		$this->db_query("SELECT *,objects.name as name, objects.comment as comment 
 										 FROM form_actions
@@ -47,7 +47,7 @@ class form_actions extends form_base
 	function add_action($arr)
 	{
 		extract($arr);
-		$this->init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_ADD_ACTIONS);
+		$this->if_init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_ADD_ACTIONS);
 		$this->vars(array(
 			"name" => "", 
 			"comment" => "", 
@@ -169,7 +169,7 @@ class form_actions extends form_base
 
 		if ($level < 2)
 		{
-			$this->init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
+			$this->if_init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
 			$this->vars(array(
 				"name"									=> $row["name"], 
 				"comment"								=> $row["comment"], 
@@ -184,7 +184,7 @@ class form_actions extends form_base
 		}
 		else
 		{
-			$this->init($id, "", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
+			$this->if_init($id, "", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
 			$dt = array("id" => $id,"aid" => $aid,"row" => $row);
 			switch($row["type"])
 			{
