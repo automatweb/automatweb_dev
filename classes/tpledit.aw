@@ -143,8 +143,8 @@ class tpledit extends aw_template
 			$fullname = $tpldir .$name;
 			$this->vars(array(
 				"name" => $name,
-				"date" => $this->time2date($stat[$fullname]["FILE_MODIFIED"],6),
-				"size" => $stat[$fullname]["FILE_SIZE"],
+				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
+				"size" => $stat[$fullname][FILE_SIZE],
 				"dirlink" => $this->mk_orb("browse",array("parent" => $parent . $sep . $name)),
 			));
 
@@ -172,10 +172,10 @@ class tpledit extends aw_template
 
 			$t->define_data(array(
 				"oid" => $tdata[$relname]["oid"],
-				"size" => $stat[$fullname]["FILE_SIZE"],
+				"size" => $stat[$fullname][FILE_SIZE],
 				"name" => $name,
 				"uid" => $tdata[$relname]["modifiedby"],
-				"date" => $this->time2date($stat[$fullname]["FILE_MODIFIED"],6),
+				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
 				"file" => $relname,
 				"fullname" => $fullname,
 				"arc" => "<input type=checkbox name=arc[$oid] $archived value=1><input type=hidden name=exists[$oid] value=1>",
@@ -569,7 +569,7 @@ class tpledit extends aw_template
 					"name" => $name,
 					"uid" => $meta["archive"][$elname]["uid"],
 					"date" => $this->time2date($elname,9),
-					"size" => $element["FILE_SIZE"],
+					"size" => $element[FILE_SIZE],
 					"activate" => "<input type=radio name=active value=" . $elname . ">",
 				));
 
