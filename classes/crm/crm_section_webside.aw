@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.4 2004/09/20 14:53:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.5 2004/10/04 09:44:52 sven Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -16,17 +16,39 @@
 @property show_sub_sections type=checkbox ch_value=1
 @caption Võta alamüksustest
 
-@property view type=chooser
-@caption Näitamine
-
-@property cols type=textbox
+@property cols type=textbox size=1
 @caption Tulpasid
 
 @default group=order
 
 @property persons_order_table type=table no_caption=1 store=no
 
-@groupinfo order caption="Järjekord"
+@default group=view
+@default field=meta
+@default method=serialize
+
+@property show_label type=text store=1 subtitle=1
+@caption Milliseid alljärgnevaid omadusi näidata? 
+
+
+@property show_name type=checkbox ch_value=1 default=1
+@caption Nimi
+
+@property show_rank type=checkbox ch_value=1 default=1
+@caption Ametikoht
+
+@property show_picture type=checkbox ch_value=1 default=1
+@caption Pilt
+
+@property show_phone type=checkbox ch_value=1 default=1
+@caption Telefon
+
+@property show_email type=checkbox ch_value=1 default=1
+@caption E-mail
+
+@groupinfo order caption="Järjekord" 
+@groupinfo view caption="Näitamine"
+
 
 
 @reltype SECTION value=1 clid=CL_CRM_SECTION
@@ -42,7 +64,8 @@ class crm_section_webside extends class_base
 		$this->init(array(
 			"tpldir" => "crm/crm_section_webside",
 			"clid" => CL_CRM_SECTION_WEBSIDE
-		));
+		));		
+		$this->submerge=1;
 	}
 
 	//////
@@ -75,6 +98,17 @@ class crm_section_webside extends class_base
 		return $retval;
 	}
 	
+	function callb_ord($arr)
+	{
+		return html::textbox(array(
+				"name" => "ord[".$arr['person_id']."]",
+				"value" => $arr['ord'],
+				"size" => 3
+		));
+	}
+	
+
+	
 	function do_persons_order_table(&$arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
@@ -85,12 +119,13 @@ class crm_section_webside extends class_base
 			"sortable" => 1,	
 		));
 		
-		
 		$table->define_field(array(
 			"name" => "ord",
 			"caption" => "Järjekord",
 			"sortable" => 1,
+			"callback" => array(&$this, "callb_ord"),
 			"numeric" => 1,
+			"callb_pass_row" => true,
 			"align" => "center",
 		));
 		
@@ -100,16 +135,12 @@ class crm_section_webside extends class_base
 		foreach ($workers->arr() as $worker)
 		{
 			$table->define_data(array(
-				"name" => $worker->name(),
-				"ord" => html::textbox(array(
-					"name" => "ord[".$worker->id()."]",
-					"value" => $worker->ord(),
-					"size" => 3
-				)),
-				//"jrk" => $worker-ord(),
+				"name" => html::get_change_url($worker->id(), array() , $worker->name()),
+				"ord" => $worker->ord(),
+				"person_id" => $worker->id(),
 			));	
 		}
-		$table->sort_by("jrk");
+		$table->set_default_sortby("ord");
 	}
 	
 	/*
@@ -124,100 +155,113 @@ class crm_section_webside extends class_base
 		return $retval;
 	}	
 	*/
-
-	function parse_person($person, $person_tpl)
+	
+	function parse_person(&$person, &$ob)
 	{
-		$this->read_template($person_tpl);
-		
+		if($ob->prop("cols") == 1)
+		{
+			$this->read_template("person_one_col.tpl");
+		}
+		else
+		{
+			$this->read_template("person.tpl");
+		}
+		$this->sub_merge = 1;
 		$this->vars(array(
-			"email" => "",
-			"phone" => "",
+			"name" => "",
 			"rank" => "",
+			"phone" => "",
+			"email" => "",
 			"photo" => "",
 		));
 		
-		if(is_oid($person->prop("email")))
+		
+		if($ob->prop("show_picture"))
+		{
+			$img_inst = get_instance(CL_IMAGE);
+			$img = $person->get_first_obj_by_reltype("RELTYPE_PICTURE");
+			
+			if($img)
+			{
+				$this->vars(array(
+					"photo" => html::img(array(
+						"url" => $img_inst->get_url_by_id($img->id()),
+					)),
+				));
+			}
+			$retval.= $this->parse("SHOW_PHOTO");
+		}
+		
+		$retval .= $this->parse("header");	
+		if($ob->prop("show_name"))
+		{
+			if($doc = $person->get_first_obj_by_reltype("RELTYPE_DESCRIPTION_DOC"))
+			{
+				$this->vars = array(
+					"name" => html::href(array(
+						"caption" => $doc->prop("name"),
+						"url" => $doc->id(),
+					)),
+				);
+			}
+			else
+			{
+				$this->vars = array(
+					"name" => $person->prop("name"),
+				);
+			}
+			
+			$retval .= $this->parse("SHOW_NAME");
+		}
+			
+		if($ob->prop("show_rank"))
+		{
+			if($person->prop("rank"))
+			{
+				$rank = &obj($person->prop("rank"));
+				$this->vars(array(
+					"rank" => $rank->name(),
+				));
+			}
+			$retval.= $this->parse("SHOW_RANK");
+		}
+		
+		
+		if($ob->prop("show_phone"))
+		{
+			$phone = &obj($person->prop("phone"));
+			$this->vars(array(
+				"phone" => $phone->name(),
+			));
+			
+			$retval.= $this->parse("SHOW_PHONE");
+		}
+		
+		if($ob->prop("show_email"))
 		{
 			$email = &obj($person->prop("email"));
 			$this->vars(array(
 				"email" => $email->prop("mail"),
 			));
+			$retval.= $this->parse("SHOW_EMAIL");
 		}
-	
-		if(is_oid($person->prop("rank")))
-		{
-			$rank = &obj($person->prop("rank"));
-			$this->vars(array(
-				"rank" => $rank->prop("name"),
-			));
-			//rank;
-		}
-		
-		if(is_oid($person->prop("phone")))
-		{
-			$phone = &obj($person->prop("phone"));
-			
-			$this->vars(array(
-				"phone" => $phone->prop("name"),
-			));
-		}
-		
-		if($img = $person->get_first_obj_by_reltype("RELTYPE_PICTURE"))
-		{
-			$img_inst = get_instance(CL_IMAGE);
-			
-			
-			$this->vars(array(
-				"photo" => html::img(array(
-					"url" => $img_inst->get_url_by_id($img->id()),
-				)),
-			));
-		}
-		
-		$this->vars(array(
-			"name" => $person->prop("name"),
-		));
+		$retval .= $this->parse("footer");
 
-		$has_nl = false;
-		foreach($person->connections_from(array("type" => "RELTYPE_DESCRIPTION_DOC")) as $c)
+		
+		$this->sub_merge = 0;
+		
+		if($ob->prop("cols") == 1)
 		{
-			if ($c->prop("to.lang_id") == aw_global_get("lang_id"))
-			{
-				$this->vars(array(
-					"name_link" => obj_link($c->prop("to"))
-				));
-				$has_nl = true;
-			}
-		}
-
-		if ($has_nl)
-		{
-			$this->vars(array(
-				"NAME_LINK" => $this->parse("NAME_LINK"),
-				"NO_NAME_LINK" => ""
-			));
+			$this->read_template("frame_one_col.tpl");
 		}
 		else
 		{
-			$this->vars(array(
-				"NAME_LINK" => "",
-				"NO_NAME_LINK" => $this->parse("NO_NAME_LINK")
-			));
+			$this->read_template("frame_one_col.tpl");
 		}
-
-		return  $this->parse();
-	}
-	
-	function generate_tableview(&$ob)
-	{
-		$section = get_instance(CL_CRM_SECTION);
-		//$company_inst = get_instance(CL_CRM_COMPANY);
-		$workers = &$section->get_section_workers($ob->id(), true);
 		
-		foreach ($workers->arr() as $worker)
-		{
-			
-		}
+		//$this->read_template("frame.tpl");
+		
+		return $retval;
 	}
 	
 	function callback_post_save($arr)
@@ -225,10 +269,13 @@ class crm_section_webside extends class_base
 		$section = get_instance(CL_CRM_SECTION);
 		$workers = $section->get_section_workers($arr["obj_inst"]->id(), true);
 		
-		foreach ($workers->arr() as $worker)
+		if(is_array($arr["request"]["ord"]))
 		{
-			$worker->set_ord($arr["request"]["ord"][$worker->id()]);
-			$worker->save();
+			foreach ($workers->arr() as $worker)
+			{
+				$worker->set_ord($arr["request"]["ord"][$worker->id()]);
+				$worker->save();
+			}
 		}
 	}
 	
@@ -251,61 +298,60 @@ class crm_section_webside extends class_base
 	{
 		$ob = &obj($arr["id"]);
 		$section = get_instance(CL_CRM_SECTION);
-		$workers = $section->get_section_workers($ob->id(), true);
+		
+		if($ob->prop("show_sub_sections"))
+		{
+			$workers = $section->get_section_workers($ob->id(), true);
+		}
+		else
+		{
+			$workers = $section->get_section_workers($ob->id(), false);
+		}
 		
 		$workers->sort_by(array(
         	"prop" => "ord",
         	"order" => "asc"
     	));
-		
+    	
 		$cols = $ob->prop("cols");
+		$workers_count = $workers->count();
+		$workers = array_values($workers->arr());
+		$rows = ceil($workers_count/$cols);
 		
-		if(!is_numeric($cols))
-		{
-			$cols = 2;
-		}
 		
-		$ob = new object($arr["id"]);
-		if($ob->prop("view") == 0)
+		if($ob->prop("cols") == 1)
 		{
-			$person_tpl = "show_table.tpl";	
+			$this->read_template("frame_one_col.tpl");
 		}
 		else
 		{
-			$person_tpl = "show_plain.tpl";
+			$this->read_template("frame_one_col.tpl");
 		}
-		
-		if($ob->prop("view") == 0)
+		//This is amazing... i wrote this and I dont understand how it works, but it does
+		for($i=0; $i<$workers_count; $i++)
 		{
-			$frm_tpl = "frame.tpl";
-			$this->read_template($frm_tpl);
-		}
-		else
-		{
-			$frm_tpl = "frame2.tpl";
-			$this->read_template($frm_tpl);	
-		}
-		
-		foreach ($workers->arr() as $worker)
-		{
-			$cur_col++;
 			$this->vars(array(
-				"person" => $this->parse_person($worker, $person_tpl),
+				"person" => $this->parse_person($workers[$i], $ob), 
 			));
-			$this->read_template($frm_tpl);
-			$person_list .= $this->parse("persons");
-			//Parse new row
-			if($cur_col == $cols && $ob->prop("view") != 1)
+			$persondata[] = $this->parse("persons");
+			$cur_row = ceil(($i + 1)/$cols);
+			//It is time to parse separ ator now
+			
+			if((($i + 1)%$cols == 0))
 			{
-				$person_list.= $this->parse("ROW_SEP");
-				$cur_col = 0;	
+				if(!($cur_row == $rows))
+				{
+					$persondata[] = $this->parse("separator");
+				}
 			}
 		}
-		$this->vars(array(
-			"persons" => $person_list,
-		));			
 		
-		return $this->parse();
+		$this->vars(array(
+			"personinfo" => join($persondata),
+		));
+		
+		return $this->parse();	
+		
 	}
 }
 ?>
