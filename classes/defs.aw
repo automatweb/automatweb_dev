@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.51 2002/08/29 03:19:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.52 2002/10/16 13:55:17 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -764,6 +764,12 @@ if (!defined("DEFS"))
 		return mktime($var["hour"], $var["minute"], $var["second"], $var["month"], $var["day"], $var["year"]);
 	}
 
+	function aw_register_default_class_member($class, $member, $value)
+	{
+		$members = aw_cache_get("__aw_default_class_members", $class);
+		$members[$member] = $value;
+		aw_cache_set("__aw_default_class_members", $class, $members);
+	}
 };
 
 ?>
