@@ -83,12 +83,12 @@ function toggle_file_link_newwin()
 <!-- SUB: TABLE_LB -->
 <tr>
 	<td class="fgtext">{VAR:LC_FORMS_TABLE}:</td>
-	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_table' onChange="ch(document.f1.{VAR:cell_id}_tbl_col, this)">{VAR:tables}</select></td>
+	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_table_{VAR:num}' onChange="ch(document.f1.{VAR:cell_id}_tbl_col_{VAR:num}, this)">{VAR:tables}</select></td>
 	<td class="fgtext">{VAR:LC_FORMS_COLUMN_IN_TABLE}:</td>
-	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_tbl_col'><option value=''></select>
+	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_tbl_col_{VAR:num}'><option value=''></select>
 	<script language="javascript">
-		ch(document.f1.{VAR:cell_id}_tbl_col, document.f1.{VAR:cell_id}_table);
-		setsel(document.f1.{VAR:cell_id}_tbl_col,"{VAR:table_col}");
+		ch(document.f1.{VAR:cell_id}_tbl_col_{VAR:num}, document.f1.{VAR:cell_id}_table_{VAR:num});
+		setsel(document.f1.{VAR:cell_id}_tbl_col_{VAR:num},"{VAR:table_col}");
 	</script>
 	</td>
 </tr>
@@ -170,15 +170,29 @@ function toggle_file_link_newwin()
 <td class="fgtext">{VAR:LC_FORMS_SIZE}:</td>
 <td class="fgtext"><input type="text" name="{VAR:cell_id}_lb_size" size=3 class='small_button' value='{VAR:lb_size}'></td>
 </tr>
+<tr>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">Sisu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default&nbsp;&nbsp;Jrk&nbsp;&nbsp;Vali
+	<!-- SUB: LISTBOX_SORT_ACTIVITY -->
+	&nbsp;Aktiivsuse pikendamine
+	<!-- END SUB: LISTBOX_SORT_ACTIVITY -->
+	</td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
 <!-- END SUB: LISTBOX_SORT -->
 
 <!-- SUB: LISTBOX_ITEMS -->
 <tr>
 <td class="fgtext">&nbsp;</td>
-<td class="fgtext"><input class="small_button" type='text' NAME='{VAR:listbox_item_id}' VALUE='{VAR:listbox_item_value}'>&nbsp;<input type='radio' NAME='{VAR:listbox_radio_name}' VALUE='{VAR:listbox_radio_value}' {VAR:listbox_radio_checked}>&nbsp;<input type='text' name='{VAR:listbox_order_name}' value='{VAR:listbox_order_value}' class='small_button' size=4>&nbsp;<input type='checkbox' name='{VAR:cell_id}_sel[{VAR:num}]' value='1'></td>
+<td class="fgtext"><input class="small_button" type='text' NAME='{VAR:listbox_item_id}' VALUE='{VAR:listbox_item_value}'>&nbsp;<input type='radio' NAME='{VAR:listbox_radio_name}' VALUE='{VAR:listbox_radio_value}' {VAR:listbox_radio_checked}>&nbsp;<input type='text' name='{VAR:listbox_order_name}' value='{VAR:listbox_order_value}' class='small_button' size=4>&nbsp;<input type='checkbox' name='{VAR:cell_id}_sel[{VAR:num}]' value='1'>
+<!-- SUB: LISTBOX_ITEMS_ACTIVITY -->
+&nbsp;<input type='text' name='{VAR:listbox_activity_name}' value='{VAR:listbox_activity_value}' class='small_button' size=4>
+<!-- END SUB: LISTBOX_ITEMS_ACTIVITY -->
+</td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
-</tr>
+</tr>	
 <!-- END SUB: LISTBOX_ITEMS -->
 
 <!-- SUB: MULTIPLE_ITEMS -->
@@ -401,6 +415,20 @@ function toggle_file_link_newwin()
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 <!-- END SUB: EL_NOHLINK -->
+
+<!-- SUB: ACTIVITY -->
+<tr>
+	<td class="fgtext">Aktiivsuse sisestatud arv on:</td>
+	<td class="fgtext">
+		<input type="radio" name="{VAR:cell_id}_activity_type" VALUE="hours" {VAR:activity_hours}> Tundides
+		<input type="radio" name="{VAR:cell_id}_activity_type" VALUE="days" {VAR:activity_days}> P&auml;evades
+		<input type="radio" name="{VAR:cell_id}_activity_type" VALUE="weeks" {VAR:activity_weeks}> N&auml;dalates
+		<input type="radio" name="{VAR:cell_id}_activity_type" VALUE="months" {VAR:activity_months}> Kuudes
+	</td>
+	<td class="fgtext"><input type="radio" name="{VAR:cell_id}_activity_type" VALUE="date" {VAR:activity_date}> Kuup&auml;ev</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: ACTIVITY -->
 
 <!-- SUB: EL_HLINK -->
 <td class="fgtext">{VAR:LC_FORMS_CHOOSE_OUTPUT}:</td>
