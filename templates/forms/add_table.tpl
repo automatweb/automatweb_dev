@@ -94,7 +94,7 @@
 	<td class="fform" colspan=10><select class="small_button" size=7 name='link_columns[{VAR:column}]'><option value=''>{VAR:link_elements}</select></td>
 </tr>
 <tr>
-	<td class="fform">{VAR:LC_FORMS_SORTABLE}:&nbsp;<input type="checkbox" name="sortable[{VAR:column}]" value="1" {VAR:sortable}></td>
+	<td class="fform">{VAR:LC_FORMS_SORTABLE}:&nbsp;<input type="checkbox" name="sortable[{VAR:column}]" value="1" {VAR:sortable}> E-mail?&nbsp;<input type="checkbox" name="is_email[{VAR:column}]" value="1" {VAR:is_email}></td>
 	<td class="fform" colspan=2>&nbsp;&nbsp;<a href='{VAR:add_col}'>{VAR:LC_FORMS_ADD_COLU}</a>&nbsp;&nbsp;<a href='{VAR:del_col}'>{VAR:LC_FORMS_DEL_COLU}</a> <input type='checkbox' name='todelete[{VAR:column}]' value='1'></td>
 	<td class="fform" colspan="8">Tulbale klikkides tehakse otsing: <input type="checkbox" name='doelsearch[{VAR:column}]' value='1' {VAR:doelsearch}></td>
 </tr>
