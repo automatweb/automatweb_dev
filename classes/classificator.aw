@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.8 2004/03/18 12:37:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.9 2004/03/23 11:31:51 duke Exp $
 
 /*
 
@@ -89,7 +89,7 @@ class classificator extends class_base
 				};
 			};
 
-			if ($use_type == "checkboxes")
+			if ($use_type == "checkboxes" || ($use_type == "select" && $prop["multiple"] == 1))
 			{
 				$prop["value"] = $connections;
 			}
@@ -117,7 +117,6 @@ class classificator extends class_base
 				$prop["type"] = "select";
 				$prop["options"] = array("" => "") + $choices->names();
 		};
-
 
 		// well, that was pretty easy. Now I need a way to tell the bloody classificator, that
 		// it should use connections instead of field. And what could be easier than doing
