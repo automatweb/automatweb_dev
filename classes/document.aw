@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.259 2004/06/02 10:54:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.260 2004/06/04 11:41:23 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1227,6 +1227,8 @@ class document extends aw_template
 			"channel"		=> $doc["channel"],
 			"tm"				=> $doc["tm"],
 			"link_text"	=> $doc["link_text"],
+			// please don't change the format
+			"start1" => date("d.m.Y", $doc["start1"]),
 			"subtitle"	=> $doc["subtitle"],
 			"RATE"			=> $pts,
 			"FORUM_ADD" => $fr,
