@@ -83,6 +83,17 @@
             <type>hidden</type>
       </property>
       <property>
+            <name>userch1</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 1</caption>
+      </property>
+      <property>
             <name>user1</name>
             <table>objects</table>
             <group>data</group>
@@ -348,17 +359,6 @@
             <caption>User-defined date select 5</caption>
       </property>
       <property>
-            <name>userch1</name>
-            <table>objects</table>
-            <group>data</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <datatype>int</datatype>
-            <caption>User-defined checkbox 1</caption>
-      </property>
-      <property>
             <name>userch2</name>
             <table>objects</table>
             <group>data</group>
@@ -571,6 +571,16 @@
             <type>reset</type>
             <store>no</store>
             <caption>User-defined reset 1</caption>
+      </property>
+      <property>
+            <name>userprint1</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>button</type>
+            <store>no</store>
+            <caption>User-defined print 1</caption>
       </property>
       <property>
             <name>udefhidden1</name>

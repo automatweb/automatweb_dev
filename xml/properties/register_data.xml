@@ -616,6 +616,15 @@
             <caption>User-defined reset 1</caption>
       </property>
       <property>
+            <name>userprint1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>button</type>
+            <store>no</store>
+            <field>userprint1</field>
+            <caption>User-defined print 1</caption>
+      </property>
+      <property>
             <name>usersel1</name>
             <group>data</group>
             <table>objects</table>

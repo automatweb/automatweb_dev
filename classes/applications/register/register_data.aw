@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.31 2005/02/02 16:52:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.32 2005/02/09 13:31:44 ahti Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -219,6 +219,8 @@
 @property userreset1 type=reset store=no
 @caption User-defined reset 1
 
+@property userprint1 type=button store=no
+@caption User-defined print 1
 
 @default table=objects
 @default method=serialize

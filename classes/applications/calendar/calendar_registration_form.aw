@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration_form.aw,v 1.2 2005/01/05 14:18:57 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration_form.aw,v 1.3 2005/02/09 13:31:42 ahti Exp $
 // calendar_registration_form.aw - Kalendri s&uuml;ndmusele registreerimise vorm 
 /*
 
@@ -39,6 +39,9 @@
 
 @groupinfo data caption="Andmed"
 @default group=data
+
+@property userch1 type=checkbox
+@caption User-defined checkbox 1
 
 @property user1 type=textbox
 @caption User-defined textbox 1
@@ -180,6 +183,9 @@
 
 @property userreset1 type=reset store=no
 @caption User-defined reset 1
+
+@property userprint1 type=button store=no
+@caption User-defined print 1
 
 
 @property udefhidden1 type=hidden

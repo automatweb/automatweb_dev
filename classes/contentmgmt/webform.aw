@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.55 2005/02/02 15:51:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.56 2005/02/09 13:31:44 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -88,6 +88,9 @@
 
 @property style_folder type=relpicker reltype=RELTYPE_STYLE_FOLDER
 @caption Stiilide kaust
+
+//@property form_output_style type=select
+//@caption Väljundi tekstide stiil
 
 @property def_caption_style type=select
 @caption Vaikimisi pealkirja stiil
@@ -211,6 +214,8 @@ class webform extends class_base
 			"tpldir" => "contentmgmt/webform",
 			"clid" => CL_WEBFORM,
 		));
+		// this stuff we won't translate
+		$this->no_trans = array("submit", "reset", "text", "button");
 		$this->n_props = array("checkboxes", "radiobuttons");
 		$this->trans_names = array(
 			"text" => t("Tekst"),
@@ -222,6 +227,7 @@ class webform extends class_base
 			"hidden" => t("Peidetud v&auml;li"),
 			"submit" => t("Saada nupp"),
 			"reset" => t("T&uuml;hista nupp"),
+			"button" => t("Prindi nupp"),
 		);
 		$this->def_props = array(
 			"firstname" => t("Eesnimi"),
@@ -231,6 +237,8 @@ class webform extends class_base
 			"phone" => t("Telefon"),
 			"fax" => t("Faks"),
 			"email" => t("E-post"),
+		);
+		$this->form_types = array(
 		);
 		$this->no_props = $this->make_keys(array("status", "name", "comment", "register_id", "person_id"));
 	}
@@ -313,6 +321,7 @@ class webform extends class_base
 				$prop["options"] = array(
 					CL_REGISTER_DATA => t("Tavaline vorm"),
 					CL_CALENDAR_REGISTRATION_FORM => t("S&uuml;ndmusele registreerimine"),
+					CL_SHOP_PRODUCT => t("Toode"),
 				);
 				break;
 				
@@ -823,8 +832,10 @@ class webform extends class_base
 			"classificator" => 3,
 			"hidden" => 4,
 			"date_select" => 5,
-			"submit" => 6,
-			"reset" => 7,
+			"checkbox" => 6,
+			"submit" => 7,
+			"reset" => 8,
+			"button" => 9,
 		);
 		$def_props = array();
 		if($this->p_clid == CL_CALENDAR_REGISTRATION_FORM)
@@ -837,6 +848,11 @@ class webform extends class_base
 		{
 			if(!array_key_exists($key, $c_props))
 			{
+				// we skip the checkboxes
+				if($prp_count[$prop["type"]] == 1 && $prop["type"] == "checkbox")
+				{
+					continue;
+				}
 				$prp_count[$prop["type"]]++;
 			}
 		}
@@ -855,6 +871,10 @@ class webform extends class_base
 			}
 			if(!array_key_exists($key, $c_props))
 			{
+				if($ext_count[$prop["type"]] == 1 && $prop["type"] == "checkbox")
+				{
+					continue;
+				}
 				$ext_count[$prop["type"]]++;
 			}
 		}
@@ -993,10 +1013,9 @@ class webform extends class_base
 				if (!is_numeric($key))
 				{
 					$by_group[$key] = array();
-				};
-			};
-		};
-
+				}
+			}
+		}
 		if (is_array($this->cfgform_i->prplist))
 		{
 			foreach($this->cfgform_i->prplist as $property)
@@ -1025,17 +1044,17 @@ class webform extends class_base
 			//"in" => "Sees",
 		);
 		$prp_types = array(
-			"" => "-- vali --",
-			"mselect" => "Mitmerealine rippmen&uuml;&uuml;",
-			"select" => "Rippmen&uuml;&uuml;",
-			"checkboxes" => "M&auml;rkeruut",
-			"radiobuttons" => "Raadionupp",
+			"" => t("-- vali --"),
+			"mselect" => t("Mitmerealine rippmen&uuml;&uuml;"),
+			"select" => t("Rippmen&uuml;&uuml;"),
+			"checkboxes" => t("M&auml;rkeruut"),
+			"radiobuttons" => t("Raadionupp"),
 		);
 		$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$metamgr = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_METAMGR");
 		$clf_type = $object_type->meta("clf_type");
 		$classificator = $object_type->meta("classificator");
-		$prp_orient = array(0 => "horisontaalne", "vertical" => "vertikaalne");
+		$prp_orient = array(0 => t("horisontaalne"), "vertical" => t("vertikaalne"));
 		foreach($by_group as $key => $proplist)
 		{
 			$this->vars(array(
@@ -1045,7 +1064,7 @@ class webform extends class_base
 			$sc = "";
 			foreach($proplist as $property)
 			{
-				$clf1 = $clf2 = "";
+				$clf1 = $clf2 = $clf3 = "";
 				$cnt++;
 				$prpdata = $this->cfgform_i->all_props[$property["name"]];
 				if (!$prpdata)
@@ -1107,18 +1126,50 @@ class webform extends class_base
 							"ordering" => "",
 						));
 					}
-					$clf1 = $this->parse("clf1");
+					$clf1 = $this->parse("CLF1");
 				}
 				elseif($prpdata["type"] == "text")
 				{
 					$this->vars(array(
 						"prp_value" => $property["value"],
 					));
-					$clf2 = $this->parse("clf2");
+					$clf2 = $this->parse("CLF2");
+				}
+				elseif($prpdata["type"] == "checkbox")
+				{
+					$x_opts = array();
+					foreach($proplist as $pp)
+					{
+						if(!in_array($pp["type"], $this->no_trans))
+						{
+							$x_opts[$pp["name"]] = $pp["caption"];
+						}
+					}
+					$this->vars(array(
+						"name_select" => html::select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][name_f]",
+							"options" => $x_opts,
+							"value" => $property["name_f"],
+						)),
+						"email_select" => html::select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][email_f]",
+							"options" => $x_opts,
+							"value" => $property["email_f"],
+						)),
+						"fld_id" => $property["folder_id"],
+					));
+					if($this->p_clid != CL_CALENDAR_REGISTRATION_FORM)
+					{
+						$this->vars(array(
+							"NE_SELECT" => $this->parse("NE_SELECT"),
+						));
+					}
+					$clf3 = $this->parse("CLF3");
 				}
 				$this->vars(array(
-					"clf1" => $clf1,
-					"clf2" => $clf2,
+					"CLF1" => $clf1,
+					"CLF2" => $clf2,
+					"CLF3" => $clf3,
 				));
 				$sc .= $this->parse("property");
 			}
@@ -1365,6 +1416,7 @@ class webform extends class_base
 					"return_url" => $section.($_GET["show"] == 1 ? "?show=1" : ""),
 					"id" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? $arr["id"] : $ef_id,
 					"doc_id" => $arr["doc_id"],
+					"subaction" => "",
 				),
 				"errors" => $errors,
 				"values" => $values,
@@ -1483,11 +1535,15 @@ class webform extends class_base
 		$tmp = $els;
 		foreach($tmp as $key => $val)
 		{
-			if(!empty($all_props[$key]["value"]))
-			{
-				$els[$key]["value"] = nl2br($all_props[$key]["value"]);
-			}
 			$aliasmgr->parse_oo_aliases($id, &$els[$key]["caption"]);
+			if($val["type"] == "text")
+			{
+				if(!empty($all_props[$key]["value"]))
+				{
+					$els[$key]["value"] = nl2br($all_props[$key]["value"]);
+				}
+				$aliasmgr->parse_oo_aliases($id, &$els[$key]["value"]);
+			}
 			// some goddamn thing messes up the element captions, reorder them
 			//$els[$key]["caption"] = $all_props[$key]["caption"];
 			$els[$key]["capt_ord"] = $all_props[$key]["wf_capt_ord"];
@@ -1516,6 +1572,16 @@ class webform extends class_base
 			if($val["type"] == "hidden")
 			{
 				$arr["reforb"][$key] = "";
+			}
+			// we do this because no one uses a simple button in a form anyway, and this is the easiest
+			// way to do it without messing up htmlclient
+			if($val["type"] == "button")
+			{
+				$els[$key]["no_caption"] = 1;
+				$els[$key]["value"] = $val["caption"];
+				unset($els[$key]["caption"]);
+				$els[$key]["onclick"] = "document.changeform.subaction.value='print';submit_changeform();";
+				$els[$key]["class"] = "sbtbutton";
 			}
 			if(in_array($clf_type[$key], $this->n_props))
 			{
@@ -1601,6 +1667,8 @@ class webform extends class_base
 	**/
 	function save_form_data($arr)
 	{
+		// we need a solid copy of arr, cause we alter the actual input many times
+		$subaction = $arr["subaction"];
 		$obj_inst = obj($arr["id"]);
 		$redirect = $obj_inst->prop("redirect");
 		$rval = (strpos(strtolower($redirect), "http://") !== false ? $redirect : (substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect));
@@ -1664,11 +1732,19 @@ class webform extends class_base
 						"clid" => CL_REGISTER_DATA,
 					));
 				}
+				if($prplist[$key]["type"] == "checkbox")
+				{
+					$m = obj();
+					$m->set_class_id(CL_ML_MEMBER);
+					$m->set_parent($prplist[$key]["folder_id"]);
+					$m->set_name($arr[$prplist[$key]["name_f"]]."<".$arr[$prplist[$key]["email_f"]].">");
+					$m->set_prop("name", $arr[$prplist[$key]["name_f"]]);
+					$m->set_prop("mail", $arr[$prplist[$key]["email_f"]]);
+					$m->save();
+				}
 				$o->set_prop($key, $val);
 			}
 			$body = "";
-			// this stuff we won't translate
-			$no_trans = array("submit", "reset", "text");
 			// lets translate this stuff to real things
 			foreach($arr as $key => $val)
 			{
@@ -1692,7 +1768,7 @@ class webform extends class_base
 					}
 					$arr[$key] = implode(", ", $vals);
 				}
-				if(!in_array($prplist[$key]["type"], $no_trans) && !empty($arr[$key]))
+				if(!in_array($prplist[$key]["type"], $this->no_trans) && !empty($arr[$key]))
 				{
 					$body .= $prplist[$key]["caption"].": ".$arr[$key]."\n";
 				}
@@ -1741,7 +1817,7 @@ class webform extends class_base
 				) + $prx);
 				$awm->gen_mail();
 			}
-			return $rval;
+			return !empty($subaction) ? $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => urlencode($rval)), CL_WEBFORM) : $rval;
 		}
 	}
 	
@@ -1764,7 +1840,7 @@ class webform extends class_base
 	/**  
 		
 		@attrib name=remove_entries	
-		@param id required type=int acl="view"
+		@param id required type=int acl=view
 		@param group optional
 		@param select required
 
@@ -1786,6 +1862,38 @@ class webform extends class_base
 			}
 		}
 		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
+	}
+	
+	/**  
+		@attrib name=show_form nologin=1
+		@param id required type=int acl=view
+		@param fid required type=int acl=view
+		@param url required
+	**/
+	function show_form($arr)
+	{
+		$obj = obj($arr["fid"]);
+		$form = $obj->instance();
+		$form->init_class_base();
+		
+		$rval = $form->view(array(
+			"id" => $arr["fid"],
+			"class" => CL_REGISTER_DATA ? "register_data" : "calendar_registration_form",
+			"action" => "view",
+			"group" => "general",
+			"cb_part" => 1,
+			"fxt" => 1,
+			"no_buttons" => 1,
+		));
+		$this->init(array(
+			"tpldir" => "automatweb/documents",
+		));
+		$this->read_template("print.tpl");
+		$this->vars(array(
+			"text" => $rval,
+		));
+		return $this->parse()."<br />".html::href(array("url" => urldecode($arr["url"]), "caption" => "Liigu edasi &raquo;"));
+		//return "valleraa, siin on vorm";
 	}
 }
 ?>

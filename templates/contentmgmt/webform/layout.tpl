@@ -1,3 +1,11 @@
+<style type="text/css">
+.form_elem
+{
+border: 1px solid #EEE;
+padding: 2px;
+background-color: #FCFCEE;
+ }
+</style>
 <script type="text/javascript">
 var chk_status = true;
 function selall()
@@ -28,15 +36,15 @@ function selall()
 	<!-- END SUB: subt -->
 	<!-- SUB: property -->
 	<tr>
-		<td width="50" bgcolor="{VAR:bgcolor}"><input type="text" name="prop_ord[{VAR:prp_key}]" value="{VAR:prp_order}" size="2" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC;"></td>
-		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpnames[{VAR:prp_key}]" value="{VAR:prp_caption}" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC;"></td>
+		<td width="50" bgcolor="{VAR:bgcolor}"><input type="text" name="prop_ord[{VAR:prp_key}]" value="{VAR:prp_order}" size="2" class="form_elem"></td>
+		<td width="150" bgcolor="{VAR:bgcolor}"><input type="text" name="prpnames[{VAR:prp_key}]" value="{VAR:prp_caption}" class="form_elem"></td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:capt_ord}</td>
 		<td width="100" bgcolor="{VAR:bgcolor}">{VAR:prp_type}</td>
-		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" id="mark[{VAR:prp_key}]" name="mark[{VAR:prp_key}]" value="{VAR:prp_key}"></td>
+		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><input type="checkbox" id="mark[{VAR:prp_key}]" name="mark[{VAR:prp_key}]" value="{VAR:prp_key}" class="form_elem"></td>
 	</tr>
-	<!-- SUB: clf1 -->
+	<!-- SUB: CLF1 -->
 	<tr>
-		<td bgcolor="{VAR:bgcolor}"'>
+		<td bgcolor="{VAR:bgcolor}">
 		Välja tüüp:
 		</td>
 		<td bgcolor="{VAR:bgcolor}">
@@ -52,7 +60,7 @@ function selall()
 	<tr>
 		<td bgcolor="{VAR:bgcolor}" colspan="5">
 		Uued variandid (eraldaja ;):
-		<input type="text" name="prp_metas[{VAR:prp_key}]" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC; width:300px">
+		<input type="text" name="prp_metas[{VAR:prp_key}]" class="form_elem" style="width:300px">
 		</td>
 	</tr>
 	<tr>
@@ -64,17 +72,35 @@ function selall()
 		<input type="button" name="meta_submit[{VAR:prp_key}]" value="Muuda" onclick="window.open('{VAR:metamgr_link}', '', 'toolbar=yes,directories=yes,status=yes,location=yes,resizable=yes,scrollbars=yes,menubar=yes,height=500,width=760');">
 		</td>
 	</tr>
-	<!-- END SUB: clf1 -->
-	<!-- SUB: clf2 -->
+	<!-- END SUB: CLF1 -->
+	<!-- SUB: CLF2 -->
 	<tr>
-		<td bgcolor="{VAR:bgcolor}"'>
+		<td bgcolor="{VAR:bgcolor}">
 		Tekst:
 		</td>
 		<td bgcolor="{VAR:bgcolor}" colspan="4">
-		<textarea name="prp_opts[{VAR:prp_key}][value]" cols="60" rows="4">{VAR:prp_value}</textarea>
+		<textarea name="prp_opts[{VAR:prp_key}][value]" cols="60" rows="4" class="form_elem">{VAR:prp_value}</textarea>
 		</td>
 	</tr>
-	<!-- END SUB: clf2 -->
+	<!-- END SUB: CLF2 -->
+	<!-- SUB: CLF3 -->
+	<tr>
+		<td bgcolor="{VAR:bgcolor}">Kausta ID:</td>
+		<td bgcolor="{VAR:bgcolor}" colspan="4"><input type="text" name="prp_opts[{VAR:prp_key}][folder_id]" value="{VAR:fld_id}" class="form_elem" /></td>
+	</tr>
+	<!-- SUB: NE_SELECT -->
+	<tr>
+		<td bgcolor="{VAR:bgcolor}">Nime väli:</td>
+		<td bgcolor="{VAR:bgcolor}">
+		{VAR:name_select}
+		</td>
+		<td bgcolor="{VAR:bgcolor}">E-maili väli:</td>
+		<td bgcolor="{VAR:bgcolor}" colspan="2">
+		{VAR:email_select}
+		</td>
+	</tr>
+	<!-- END SUB: NE_SELECT -->
+	<!-- END SUB: CLF3 -->
 	<!-- END SUB: property -->
 	</table>
 	</fieldset>
