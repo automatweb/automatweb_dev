@@ -1453,7 +1453,7 @@ class grid_editor extends class_base
 
 	function _get_edit_toolbar()
 	{
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
 			'name' => 'merge_down',
 			'tooltip' => 'Merge alla',
