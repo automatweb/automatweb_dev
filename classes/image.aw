@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.110 2004/10/05 09:22:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.111 2004/10/07 21:34:05 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1152,7 +1152,7 @@ class image extends class_base
 			$bi_link = "window.open(\"$bi_show_link\",\"popup\",\"width=".($size[0]).",height=".($size[1])."\");";
 
 			$imagetag = html::href(array(
-				"url" => "#",
+				"url" => "javascript:void(0)",
 				"onClick" => $bi_link,
 				"caption" => $imagetag
 			));
