@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.37 2004/10/22 11:18:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.38 2004/10/28 09:47:54 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -616,7 +616,7 @@ class sys extends aw_template
 		));
 
 		$ol = new object_list(array(
-			"modified" => new obj_predicate_compare(OBJ_COMP_GREATER, time()-36000*2),
+			"modified" => new obj_predicate_compare(OBJ_COMP_GREATER, time()-3600*24*3),
 			"lang_id" => array(),
 			"site_id" => array(),
 			"sort_by" => "objects.modified DESC",
