@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.71 2001/12/12 18:31:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.72 2001/12/17 23:57:20 kristo Exp $
 // core.aw - Core functions
+
+define("ARR_NAME", 1);
+define("ARR_ALL",2);
 
 classload("connect");
 class core extends db_connector
@@ -1172,7 +1175,29 @@ class core extends db_connector
 					WHERE status != 0 $pstr $cstr");
 	}
 	
-	
+	////
+	// !tagastab array oid => name matchinud objektidest
+	// parameetrid on samad, mis get_objects_by_class funxioonil
+	function list_objects($arr)
+	{
+		$ret = array();
+		$this->save_handle();
+		$this->get_objects_by_class($arr);
+		while ($row = $this->db_next())
+		{
+			if ($arr["return"] == ARR_ALL)
+			{
+				$ret[$row["oid"]] = $row;
+			}
+			else
+			{
+				$ret[$row["oid"]] = $row["name"];
+			}
+		}
+		$this->restore_handle();
+		return $ret;
+	}
+
 	////
 	// !loendab mingisse kindlasse klassi kuuluvad objektid mingi parenti all
 	// argumendid
