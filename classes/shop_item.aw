@@ -87,7 +87,10 @@ class shop_item extends aw_template
 		{
 			$o = $this->get($id);
 			$f->process_entry(array("id" => $o["form_id"],"entry_id" => $o["entry_id"]));
-			$this->upd_object(array("oid" => $id, "name" => $f->get_element_value_by_name("nimi")));
+//			$this->upd_object(array("oid" => $id, "name" => $f->get_element_value_by_name("nimi")));
+			// kui itemi nimi muutub, siis muutub vendadel ka
+			$name = $f->get_element_value_by_name("nimi");
+			$this->db_query("UPDATE objects SET name = '$name',modified = '".time()."', modifiedby = '".$GLOBALS["uid"]."' WHERE brother_of = $id ");
 			$price = $f->get_element_value_by_type("price");
 			$this->db_query("UPDATE shop_items SET price='$price' WHERE id = $id");
 		}

@@ -767,8 +767,6 @@ class shop extends aw_template
 			}
 		}
 
-		$this->read_template("order_item.tpl");
-		$parent = $this->do_shop_menus($shop,$section);
 
 		classload("form");
 
@@ -776,6 +774,8 @@ class shop extends aw_template
 
 		global $shopping_cart,$ext;
 
+		$this->read_template("order_item.tpl");
+		$parent = $this->do_shop_menus($shop,$section);
 		$f = new form;
 		$this->vars(array(
 			"item" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"],"op_id" => $row["op_id_l"])),
@@ -787,7 +787,7 @@ class shop extends aw_template
 												"id" => $row["cnt_form"],
 												"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
 												"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
-												"form_action" => "/index.".$ext)),
+												"form_action" => $GLOBALS["baseurl"]."/index.".$ext)),
 			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent))
 		));
 		return $this->parse();
