@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/message_template.aw,v 1.1 2004/06/11 11:31:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/message_template.aw,v 1.2 2004/06/11 16:24:48 duke Exp $
 // message_template.aw - Kirja template 
 /*
 
@@ -11,6 +11,9 @@
 @default method=serialize
 
 @classinfo no_comment=1
+
+@property is_html type=checkbox ch_value=1
+@caption HTML
 
 @property content type=textarea cols=50 rows=20
 @caption Sisu
