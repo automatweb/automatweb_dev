@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.18 2002/02/07 08:04:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.19 2002/02/07 09:42:39 kristo Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -319,7 +319,7 @@ class aw_table
 		}
 	}
 
-	function draw($arr) 
+	function draw($arr = array()) 
 	{
 		// väljastab tabeli
 		if (!is_array($this->rowdefs)) 
