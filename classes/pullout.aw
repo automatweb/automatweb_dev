@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.9 2003/08/26 10:49:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.10 2003/08/26 10:59:38 kristo Exp $
 // pullout.aw - Pullout manager
 
 /*
@@ -109,6 +109,10 @@ class pullout extends class_base
 		{
 			$found = true;
 		}
+		if (count($meta["groups"]) < 1)
+		{
+			$found = true;
+		}
 
 		if (!$found || $meta["docs"] == $oid)
 		{
@@ -116,6 +120,11 @@ class pullout extends class_base
 		}
 
 		$do = get_instance("document");
+		if ($meta["template"] == "")
+		{
+			$meta["template"] = "plain.tpl";
+		}
+		
 		$this->read_template($meta["template"]);
 		$this->vars(array(
 			"width" => $meta["width"],
