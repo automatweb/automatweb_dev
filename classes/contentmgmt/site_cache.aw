@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.12 2004/04/27 10:43:05 duke Exp $
 
 class site_cache extends aw_template
 {
@@ -18,13 +19,31 @@ class site_cache extends aw_template
 		$log = get_instance("contentmgmt/site_logger");
 		$log->add($arr);
 
-		if (($content = $this->get_cached_content($arr)))
+		if (false && ($content = $this->get_cached_content($arr)))
 		{
 			return $this->do_final_content_checks($content);
 		}
 
+		if (aw_ini_get("menuedit.content_from_class_base") == 1)
+		{
+			$arr["content_only"] = 1;
+		}
+		// okey, now
+
 		$inst = get_instance("contentmgmt/site_show");
 		$content = $inst->show($arr);
+
+		if (aw_ini_get("menuedit.content_from_class_base") == 1)
+		{
+			// now I'm assuming that frontpage is set to some kind of AW object
+			$obj = new object(aw_ini_get("frontpage"));
+			$t = get_instance($obj->class_id());
+			$content = $t->change(array(
+				"id" => aw_ini_get("frontpage"),
+				"content" => $content,
+			));
+		};
+
 		$this->set_cached_content($arr, $content);
 		return $this->do_final_content_checks($content);
 	}
