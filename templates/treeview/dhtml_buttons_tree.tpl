@@ -23,12 +23,30 @@ function add_node (nodeID)
 		AddedNodes = new Array ();
 	}
 
+	AddedNodesCount = AddedNodes.length + 1;
+
+	ResourceName = document.getElementById("ResourceName"+nodeID);
+	if (!ResourceName.originalName)
+	{
+		ResourceName.originalName = ResourceName.innerHTML;
+	}
+
+	if (aw_in_array(nodeID, AddedNodes))
+	{
+		ResourceName.innerHTML += "," + AddedNodesCount;
+	}
+	else
+	{
+		ResourceName.innerHTML += " - " + AddedNodesCount;
+	}
+
+
 	AddedNodes.push (nodeID);
 	AddedNodes = AddedNodes.join ("{VAR:separator}");
 	TreeInput.value = AddedNodes;
 	AddedResourcesDisplay = document.getElementById("AddedResourcesDisplay{VAR:tree_id}");
 	ResourceTag = document.getElementById("ResourceName" + nodeID);
-	Resource = ResourceTag.innerHTML;
+	Resource = ResourceTag.originalName + " - " + AddedNodesCount;
 	AddedResources = AddedResourcesDisplay.innerHTML;
 	AddedResources = AddedResources + "<br>" + Resource;
 	AddedResourcesDisplay.innerHTML = AddedResources;

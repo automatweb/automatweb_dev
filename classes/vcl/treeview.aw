@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.40 2005/02/15 12:57:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.41 2005/02/17 08:00:22 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -1109,6 +1109,7 @@ class treeview extends class_base
 	//		contain the active tree item
 	//	node_actions - array:  clid=>"action_name". This is for specifying different actions for different classes
 	// checkbox_class_filter - array of class id-s, objects of these classes will have checkboxed/buttoned tree nodes. Applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS.
+	// no_root_item - bool - if true, the single root item is not inserted into the tree
 	function tree_from_objects($arr)
 	{
 		extract($arr);
@@ -1146,11 +1147,14 @@ class treeview extends class_base
 		}
 
 		$tv->start_tree($tree_opts);
-		$tv->add_item(0,array(
-			"name" => parse_obj_name($root_item->name()),
-			"id" => $root_item->id(),
-			"url" => $url,
-		));
+		if (!$arr["no_root_item"])
+		{
+			$tv->add_item(0,array(
+				"name" => parse_obj_name($root_item->name()),
+				"id" => $root_item->id(),
+				"url" => $url,
+			));
+		}
 
 		$ic = get_instance("icons");
 
@@ -1199,7 +1203,12 @@ class treeview extends class_base
 				$url = aw_url_change_var ($var, $o->id ());
 			}
 
-			$tv->add_item($o->parent(),array(
+			$parent = $o->parent();
+			if ($arr["no_root_item"] && $parent == $root_item->id())
+			{
+				$parent = 0;
+			}
+			$tv->add_item($parent,array(
 				"name" => $oname,
 				"id" => $o->id(),
 				"url" => $url,

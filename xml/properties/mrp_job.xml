@@ -1,16 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>job_toolbar</name>
+            <name>comment</name>
             <group>general</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>job_toolbar</field>
+            <table>objects</table>
+            <type>textarea</type>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
       </property>
       <property>
             <name>length</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>textbox</type>
             <field>length</field>
@@ -18,7 +18,7 @@
       </property>
       <property>
             <name>pre_buffer</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>textbox</type>
             <field>pre_buffer</field>
@@ -26,7 +26,7 @@
       </property>
       <property>
             <name>post_buffer</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>textbox</type>
             <field>post_buffer</field>
@@ -34,7 +34,7 @@
       </property>
       <property>
             <name>resource</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>text</type>
             <field>resource</field>
@@ -42,7 +42,7 @@
       </property>
       <property>
             <name>project</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>hidden</type>
             <field>project</field>
@@ -50,7 +50,7 @@
       </property>
       <property>
             <name>exec_order</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>hidden</type>
             <field>exec_order</field>
@@ -58,7 +58,7 @@
       </property>
       <property>
             <name>prerequisites</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>textbox</type>
             <field>prerequisites</field>
@@ -66,7 +66,7 @@
       </property>
       <property>
             <name>starttime</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>datetime_select</type>
             <field>starttime</field>
@@ -74,7 +74,7 @@
       </property>
       <property>
             <name>planned_length</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>text</type>
             <field>planned_length</field>
@@ -82,60 +82,22 @@
       </property>
       <property>
             <name>state</name>
-            <group>general</group>
+            <group>data</group>
             <table>mrp_job</table>
             <type>text</type>
             <field>state</field>
             <caption>Staatus</caption>
       </property>
-      <property>
-            <name>comment</name>
-            <group>general</group>
-            <table>objects</table>
-            <type>textarea</type>
-            <field>comment</field>
-            <caption>Kommentaarid</caption>
-      </property>
-      <property>
-            <name>started</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Alustatud</caption>
-      </property>
-      <property>
-            <name>finished</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Lõpetatud</caption>
-      </property>
-      <property>
-            <name>aborted</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <caption>Katkestatud</caption>
-      </property>
-      <property>
-            <name>abort_comment</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textarea</type>
-            <caption>Katkestamise põhjus</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_MRP_JOB</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <data>
+                  <caption>Andmed</caption>
+            </data>
+      </groupinfo>
       <tableinfo>
             <mrp_job>
                   <index>oid</index>

@@ -1,17 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.10 2005/02/08 12:27:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.11 2005/02/17 08:00:23 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
-@classinfo syslog_type=ST_MRP_JOB relationmgr=yes
+@classinfo syslog_type=ST_MRP_JOB relationmgr=yes no_status=1
 
 @tableinfo mrp_job index=oid master_table=objects master_index=oid
 
-@default group=general
-	@property job_toolbar type=toolbar no_caption=1 store=no
 
+@default group=general
+@default table=objects
+	@property comment type=textarea
+	@caption Kommentaar
+
+
+@groupinfo data caption="Andmed"
+@default group=data
 @default table=mrp_job
 	@property length type=textbox
 	@caption Töö pikkus (h)
@@ -43,25 +49,23 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@property state type=text
 	@caption Staatus
 
-
-@default table=objects
-	@property comment type=textarea
-	@caption Kommentaarid
-
 @default field=meta
 @default method=serialize
-	@property started type=text
-	@caption Alustatud
+	property started type=text
+	caption Alustatud
 
-	@property finished type=text
-	@caption Lõpetatud
+	property finished type=text
+	caption Lõpetatud
 
-	@property aborted type=checkbox
-	@caption Katkestatud
+	property aborted type=checkbox
+	caption Katkestatud
 
-	@property abort_comment type=textarea
-	@caption Katkestamise põhjus
+	property abort_comment type=textarea
+	caption Katkestamise põhjus
 
+
+//// old
+	property job_toolbar type=toolbar no_caption=1 store=no
 
 // --------------- RELATION TYPES ---------------------
 

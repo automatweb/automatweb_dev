@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.21 2005/02/16 15:05:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.22 2005/02/17 08:00:22 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -562,7 +562,9 @@ class mrp_case extends class_base
 			"ot" => $resource_tree,
 			"var" => "mrp_resource_tree_active_item",
 			"checkbox_class_filter" => array (CL_MRP_RESOURCE),
+			"no_root_item" => true
 		));
+		$tree->set_only_one_level_opened(1);
 
 		$arr["prop"]["value"] = $tree->finalize_tree ();
 	}
