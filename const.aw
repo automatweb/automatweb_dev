@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.81 2003/08/01 11:26:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.82 2003/09/02 12:41:02 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -146,6 +146,10 @@ define("FILE_MODIFIED",9);
 // because "oid" is a reserved word in postgres (and probably others)
 // and we really-really want to port AW to other databases ASAP
 define("OID","oid");
+
+// CL_PSEUDO is deprecated, please use CL_MENU instead
+// it's defined here to provide a safe migration path
+define("CL_PSEUDO",1);
 
 // mix 69? well mulle meeldib see number :-P
 define("MN_CLIENT",69);
