@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.37 2004/05/13 14:51:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.38 2004/06/11 08:52:27 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -30,9 +30,7 @@ class converters extends aw_template
 		{
 			$this->save_handle();
 			
-			$meta = $this->get_object_metadata(array(
-				"metadata" => $row["metadata"]
-			));
+			$meta = aw_unserialize($row["metadata"]);
 
 			$cnt = 0;
 			$imgar = array();
@@ -127,12 +125,14 @@ class converters extends aw_template
 	**/
 	function menu_reset_template_sets()
 	{
-		$q = "SELECT oid FROM objects WHERE class_id = 1";
+		$q = "SELECT oid FROM objects WHERE class_id = 1 AND status > 0";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
 			$this->save_handle();
-			$oldmeta = $this->get_object_metadata(array("oid" => $row["oid"]));
+			aw_disable_acl();
+			$tmp = obj($row["oid"]);
+			$oldmeta = $tmp->meta();
 			if ($oldmeta)
 			{
 				if (!empty($oldmeta["tpl_dir"]))
@@ -553,7 +553,10 @@ class converters extends aw_template
 				{
 					// delete duplicates
 					$this->save_handle();
-					$this->delete_object($urow["oid"], false, false);
+					aw_disable_acl();
+					$tmp = obj($urow["oid"]);
+					$tmp->delete();
+					aw_restore_acl();
 					$this->restore_handle();
 				}
 				else
@@ -576,7 +579,10 @@ class converters extends aw_template
 			{
 				if (!isset($g_objs[$real]))
 				{
-					$this->delete_object($bro, false, false);
+					aw_disable_acl();
+					$tmp = obj($bro);
+					$tmp->delete();
+					aw_restore_acl();
 					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
 					echo "deleted bro for $o_uid (oid = $real) <br />\n";
 					flush();
@@ -678,7 +684,10 @@ class converters extends aw_template
 				{
 					// delete duplicates
 					$this->save_handle();
-					$this->delete_object($urow["oid"], false, false);
+					aw_disable_acl();
+					$tmp = obj($urow["oid"]);
+					$tmp->delete();
+					aw_restore_acl();
 					$this->restore_handle();
 				}
 				else
@@ -701,7 +710,10 @@ class converters extends aw_template
 			{
 				if (!isset($g_objs[$real]))
 				{
-					$this->delete_object($bro, false, false);
+					aw_disable_acl();
+					$tmp = obj($bro);
+					$tmp->delete();
+					aw_restore_acl();
 					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
 					echo "deleted bro for $o_uid (oid = $real) <br />\n";
 					flush();
@@ -776,9 +788,7 @@ class converters extends aw_template
 		foreach($objs as $obj)
 		{
 			echo "converting object $obj[name] ($obj[oid]) <br />\n";
-			$obj["meta"] = $this->get_object_metadata(array(
-				"metadata" => $obj["metadata"]
-			));
+			$obj["meta"] = aw_unserialize($obj["metadata"]);
 			flush();
 			// ah, fuck it. 1st, delete all aliases
 			$this->db_query("DELETE FROM aliases WHERE source = $obj[oid]");
