@@ -191,6 +191,11 @@
             <type>releditor</type>
             <reltype>RELTYPE_RULE</reltype>
             <mode>manager</mode>
+            <table_fields>
+                  <num_0>id</num_0>
+                  <num_1>rule_from</num_1>
+                  <num_2>rule_subject</num_2>
+            </table_fields>
             <props>
                   <num_0>rule_from</num_0>
                   <num_1>rule_subject</num_1>

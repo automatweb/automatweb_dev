@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mail_message" folder="messenger" extends="class_base">
+	<class name="mail_message" folder="applications/messenger" extends="class_base">
 		<action name="deliver" >
 			<function name="deliver">
 				<arguments>
