@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.188 2002/12/18 13:24:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.189 2002/12/19 10:41:46 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -634,9 +634,17 @@ class menuedit extends aw_template
 		{
 			$lp = $this->parse("LEFT_PANE");
 		}
+		else
+		{
+			$lp = $this->parse("NO_LEFT_PANE");
+		}
 		if ($this->right_pane)
 		{
 			$rp = $this->parse("RIGHT_PANE");
+		}
+		else
+		{
+			$rp = $this->parse("NO_RIGHT_PANE");
 		}
 		
 		$this->vars(array("LEFT_PANE" => $lp, "RIGHT_PANE" => $rp));
