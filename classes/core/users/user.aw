@@ -1421,6 +1421,7 @@ class user extends class_base
 			$mail->set_class_id(CL_ML_MEMBER);
 			$mail->set_parent($o->id());
 			$mail->set_prop("mail", $umail);
+			$mail->set_prop("name", $uname);
 			$mail->set_name($uname." &lt;".$umail."&gt;");
 			$mail->save();
 			$o->connect(array(
