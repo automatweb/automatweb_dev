@@ -168,9 +168,9 @@ class layout extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = obj($id);
 		$ge = get_instance("vcl/grid_editor");
-		return create_email_links($ge->show($ob['meta']['grid'], $id));
+		return create_email_links($ge->show($ob->meta('grid'), $id));
 	}
 
 	function get_property(&$arr)
@@ -378,9 +378,9 @@ class layout extends class_base
 	{
 		extract($arr);
 		
-		$obj = $this->get_object($oid);
+		$obj = obj($oid);
 		$ge = get_instance("vcl/grid_editor");
-		$ge->_init_table($obj['meta']['grid']);
+		$ge->_init_table($obj->meta('grid'));
 
 		// now we need to figure out where to apply the style
 		if ($rows != "")

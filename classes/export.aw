@@ -917,7 +917,8 @@ class export extends aw_template
 
 	function load_rule($id)
 	{
-		$this->loaded_rule = $this->get_object($id);
+		$tmp = obj($id);
+		$this->loaded_rule = $tmp->fetch();
 		$this->rule_id = $id;
 //		echo "rule = <pre>", var_dump($this->loaded_rule),"</pre> <br />";
 	}
@@ -1119,11 +1120,11 @@ class export extends aw_template
 				$cnt = 0;
 
 				// we need to check if the section is not a document
-				$obj = $this->get_object($secid);
-				if ($obj["class_id"] == CL_DOCUMENT)
+				$obj = obj($secid);
+				if ($obj->class_id() == CL_DOCUMENT)
 				{
-					$mn = strip_tags($obj["name"])."/";
-					$secid = $obj["parent"];
+					$mn = strip_tags($obj->name())."/";
+					$secid = $obj->parent();
 				}
 
 				// here we need to find all the aliases of the menus upto $rootmenu as well and
