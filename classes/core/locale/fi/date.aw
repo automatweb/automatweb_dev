@@ -8,7 +8,7 @@ class date
 			$timestamp=time();
 		}
 		
-		$month = array("jaanuar", "veebruar", "m&auml;rts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember");
+		$month = array("tammikuu", "helmikuu", "maaliskuu", "huhtikuu", "toukokuu", "kesäkuu", "heinäkuu", "elokuu", "syyskuu", "lokakuu", "marraskuu", "joulukuu");
 		switch ($format)
 		
 		{
@@ -32,10 +32,9 @@ class date
 
 	function get_lc_weekday($num, $short = false)
 	{
-		$names = array("Esmaspäev","Teisipäev","Kolmapäev","Neljapäev","Reede","Laupäev","Pühapäev");
-		// array starts from 0, estonian weekdays from 1
+		$names = array("Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai","Sunnuntai");
 		$num--;
-		return $short ? substr($names[$num],0,1) : $names[$num];
+		return $short ? substr($names[$num],0,2) : $names[$num];
 	}
 	
 	

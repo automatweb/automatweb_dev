@@ -31,6 +31,13 @@ class date
 		}
 	}
 	
+	function get_lc_weekday($num, $short = false)
+	{
+		$names = array("Monday","Tueday","Wednesday","Thursday","Friday","Saturday","Sunday");
+		$num--;
+		return $short ? substr($names[$num],0,3) : $names[$num];
+	}
+	
 	
 }
 ?>
