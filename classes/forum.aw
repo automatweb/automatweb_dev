@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.36 2002/01/11 00:42:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.37 2002/01/17 21:27:10 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -138,8 +138,109 @@ class forum extends aw_template
 		return $this->mk_my_orb("change_rates",array("id" => $id));
 	}
 
-
+	function notify_list($args = array())
+	{
+		extract($args);
+		$this->read_template("notify_list.tpl");
+		$this->mk_path(0,"Muuda foorumit");
 	
+		load_vcl("table");	
+                $t = new aw_table(array(
+                        "prefix" => "nforum",
+                        "imgurl"    => $GLOBALS["baseurl"]."/automatweb/images",
+                        "tbgcolor" => "#C3D0DC",
+                ));
+
+                $t->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+                $t->set_header_attribs(array(
+                        "id" => $id,
+                        "class" => "forum",
+                        "action" => "notify_list",
+                ));
+                $t->define_field(array(
+                        "name" => "name",
+                        "caption" => "Nimi",
+                        "talign" => "center",
+                        "align" => "center",
+                        "nowrap" => "1",
+                        "sortable" => 1,
+                ));
+                $t->define_field(array(
+                        "name" => "address",
+                        "caption" => "Aadress",
+                        "talign" => "center",
+                        "align" => "center",
+                        "nowrap" => "1",
+                        "sortable" => 1,
+                ));
+                $t->define_field(array(
+                        "name" => "check",
+                        "caption" => "Vali",
+                        "talign" => "center",
+                        "align" => "center",
+                        "nowrap" => "1",
+                        //"sortable" => 1,
+                ));
+
+		$nflist = $this->get_object_metadata(array(
+			"oid" => $id,
+			"key" => "notifylist",
+		));
+
+		if (is_array($nflist))
+		{
+			foreach($nflist as $key => $val)
+			{
+				$t->define_data(array(
+					"name" => $val["name"],
+					"address" => $val["address"],
+					"check" => "<input type='checkbox' name='chk[$key]' value='1'>",
+				));
+			}
+		};
+
+		$t->sort_by(array("field" => $sortby));
+
+		$this->vars(array(
+			"table" => $t->draw(),
+			"change_link" => $this->mk_my_orb("change",array("id" => $id)),
+			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
+			"reforb" => $this->mk_reforb("submit_notify_list",array("id" => $id)),
+		));
+		return $this->parse();
+	}
+
+	function submit_notify_list($args = array())
+	{
+		extract($args);
+		$nflist = $this->get_object_metadata(array(
+			"oid" => $id,
+			"key" => "notifylist",
+		));
+		if (is_array($chk))
+		{
+			foreach($chk as $key => $val)
+			{
+				unset($nflist[$key]);
+			};
+		};
+
+		if ($newaddress && $newname)
+		{
+			$nflist[] = array(
+				"name" => $newname,
+				"address" => $newaddress,
+			);
+		}
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "notifylist",
+			"overwrite" => 1,
+			"value" => $nflist,
+		));
+		return $this->mk_my_orb("notify_list",array("id" => $id));
+	}
+
 	////
 	// !Displays the form for configuring the form
 	function change($arr)
@@ -188,6 +289,7 @@ class forum extends aw_template
 		$this->vars(array(
 			"content_link" => $this->mk_my_orb("topics",array("id" => $id)),
 			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
+			"notify_link" => $this->mk_my_orb("notify_list",array("id" => $id)),
 			// oh god, this sucks, but alas .. positioned arguments suck too
 			"url" => str_replace("/automatweb","",$this->mk_my_orb("topics",array("id" => $id),"forum",false)),
 		));
@@ -1010,8 +1112,25 @@ class forum extends aw_template
 	{
 		$this->quote($args);
 		extract($args);
+		$forum_obj = $this->get_object($board);
+		$mx = $this->get_object_metadata(array(
+			"oid" => $forum_obj["parent"],
+			"key" => "notifylist",
+		));
 		if ( (strlen($name) > 3) && (strlen($comment) > 5) )
 		{
+			if (is_array($mx))
+			{
+				foreach($mx as $key => $val)
+				{
+					mail($val["name"] . "<" . $val["address"] . ">",
+						"Uus sissekanne teemal: $forum_obj[name]",
+						"Nimi: $name\nE-post: $email\nTeema: $subj\nKommentaar:\n$comment\n\nVastamiseks kliki siia: http://sylvester.struktuur.ee/?class=forum&action=show_threaded&board=$board",
+						"From: $name <$email>");
+	
+	
+				}
+			};
 			$name = strip_tags($name);
 			$email = strip_tags($email);
 			$comment = strip_tags($comment);
