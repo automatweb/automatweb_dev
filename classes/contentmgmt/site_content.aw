@@ -969,6 +969,10 @@ class site_content extends menuedit
 				$ap.="_NOSUB";	// menu without subitems
 			};
 			// if no correct combination exists, use the default
+			if ($GLOBALS["DBUG2"] == 1)
+			{
+				echo "try for template $mn $ap <br>";
+			}
 			if (!$this->is_template($mn.$ap))
 			{
 				$ap = "";	
@@ -1641,7 +1645,11 @@ class site_content extends menuedit
 		{
 			if (not($row["filename"]))
 			{
-				continue;
+				$row["filename"] = aw_ini_get("promo.default_tpl");
+				if (not($row["filename"]))
+				{
+					continue;
+				}
 			};
 			$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
 
@@ -1952,9 +1960,15 @@ class site_content extends menuedit
 			{
 				$sel_menu_o_img_url = image::check_url($this->mar[$si_parent]["img_url"]);
 			}
-			if ($sel_menu_meta["images_from_menu"])
+			$imfm = $sel_menu_meta["images_from_menu"];
+			if ($imfm)
 			{
-				$sel_menu_meta["menu_images"] = $this->mar[$sel_menu_meta["images_from_menu"]]["meta"]["menu_images"];
+				if (!isset($this->mar[$imfm]))
+				{
+					$mc = get_instance("menu_cache");
+					$this->mar[$imfm] = $mc->get_cached_menu($imfm);
+				}
+				$sel_menu_meta["menu_images"] = $this->mar[$imfm]["meta"]["menu_images"];
 			}
 
 			if (is_array($sel_menu_meta["menu_images"]) && count($sel_menu_meta["menu_images"]) > 0)
@@ -1994,7 +2008,7 @@ class site_content extends menuedit
 				if ($dat["url"] != "")
 				{
 					$this->vars(array(
-						"sel_menu_image_".$nr => "<img name='sel_menu_image_".$nr."' src='".image::check_url($dat["url"])."' border='0'>"
+						"sel_menu_image_".$nr => "<img name='sel_menu_image_".$nr."' src='".$dat["url"]."' border='0'>"
 					));
 				}
 			}
