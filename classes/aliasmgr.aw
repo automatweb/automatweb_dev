@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.45 2002/09/09 16:38:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.46 2002/09/17 11:00:44 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -107,6 +107,8 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	// params:
 	//   oid - the object whose aliases we must return
 	//   ret_type - if GET_ALIASES_BY_CLASS, return array is indexed by class and index, otherwise just index, default is GET_ALIASES_BY_CLASS
+	//   filter - array(classref,funcref) - if defined, this is called for each returned record
+	//   modifier(string) - allows to modify the sql clause to return only the data you need
 	function get_oo_aliases($args = array())
 	{
 		extract($args);
@@ -114,7 +116,10 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$ret_type = ($ret_type) ? $ret_type : GET_ALIASES_BY_CLASS;
 
 		$obj = $this->get_object($oid);
-		$q = "SELECT aliases.*, objects.class_id AS class_id, objects.name AS name
+		// with this you can alter the sql clause to fetch only the data you are
+		// actually going to use
+		$modifier = ($modifier) ? $modifier : "aliases.*";
+		$q = "SELECT $modifier, objects.class_id AS class_id, objects.name AS name
 			FROM aliases
 			LEFT JOIN objects ON (aliases.target = objects.oid)
 			WHERE source = '$oid' ORDER BY aliases.id";
@@ -123,7 +128,15 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		while($row = $this->db_next())
 		{
 			$row["aliaslink"] = $obj["meta"]["aliaslinks"][$row["target"]];
-			if ($ret_type == GET_ALIASES_BY_CLASS)
+			if ($filter)
+			{
+				$row = &$filter[0]->$filter[1]($row);
+				if (is_array($row))
+				{
+					$retval = $retval + $row;
+				};
+			}
+			elseif ($ret_type == GET_ALIASES_BY_CLASS)
 			{
 				$retval[$row["class_id"]][] = $row;
 			}
@@ -243,31 +256,34 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 						// if nothing comes up, we just replace it with a empty string
 						$replacement = "";
 
-						$repl = $$emb_obj_name->parse_alias(array(
-							"oid" => $oid,
-							"matches" => $adata["val"],
-							"alias" => $adata,
-							"tpls" => &$args["templates"],
-						));
+						if (method_exists($$emb_obj_name,"parse_alias"))
+						{
+							$repl = $$emb_obj_name->parse_alias(array(
+								"oid" => $oid,
+								"matches" => $adata["val"],
+								"alias" => $adata,
+								"tpls" => &$args["templates"],
+							));
 					
-						$inplace = false;
-						if (is_array($repl))
-						{
-							$replacement = $repl["replacement"];
-							$inplace = $repl["inplace"];
-						}
-						else
-						{
-							$replacement = $repl;
-						}
+							$inplace = false;
+							if (is_array($repl))
+							{
+								$replacement = $repl["replacement"];
+								$inplace = $repl["inplace"];
+							}
+							else
+							{
+								$replacement = $repl;
+							}
 
-						if ($inplace)
-						{
-							$this->tmp_vars = array($inplace => $replacement);
-							$replacement = "";
-						};
-							
-						$source = str_replace($avalue,$replacement,$source);
+							if ($inplace)
+							{
+								$this->tmp_vars = array($inplace => $replacement);
+								$replacement = "";
+							};
+								
+							$source = str_replace($avalue,$replacement,$source);
+						}
 					}
 				}
 			}
@@ -385,7 +401,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		// this will be an array of class => name pairs for all object types that can be embedded
 		$aliases = array();
 		$types = array();
-		$classes = aw_ini_get("classes");
+		$classes = $this->cfg["classes"];
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
@@ -488,7 +504,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	{
 		$this->typearr = array();
 
-		$classes = aw_ini_get("classes");
+		$classes = $this->cfg["classes"];
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
@@ -502,7 +518,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	{
 		$this->classarr = array();
 
-		$classes = aw_ini_get("classes");
+		$classes = $this->cfg["classes"];
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
@@ -532,7 +548,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	// !updates the alias list cache for object $oid
 	function cache_oo_aliases($oid)
 	{
-		$_aliases = $this->cache_oo_aliases(array("oid" => $oid));
+		$_aliases = $this->get_oo_aliases(array("oid" => $oid));
 
 		// paneme aliases kirja
     if (is_array($_aliases))
