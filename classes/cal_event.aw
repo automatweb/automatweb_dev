@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.9 2002/02/07 02:08:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.10 2002/02/07 02:29:22 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -269,6 +269,12 @@ class cal_event extends aw_template {
 		extract($args);
 
 		$obj = $this->get_obj_meta($id);
+
+		// I wonder what happens if a non-existing ID is given
+		$q = "SELECT * FROM planner WHERE id = '$id'";
+		$this->db_query($q);
+		$event = $this->db_next();
+
 		$obj_meta = $obj["meta"];
 
 		$par_obj = $this->get_object($obj["parent"]);
@@ -327,6 +333,7 @@ class cal_event extends aw_template {
 			};
 		
 			load_vcl("date_edit");
+			// set up the date editor for cycle end
 			$repend = new date_edit("start");
 			$repend->configure(array("day" => 1,"month" => 2,"year" => 3));
 			if ($meta["repend"])
@@ -338,6 +345,19 @@ class cal_event extends aw_template {
 				$_tmp = strtotime("+1 week");
 			};
 			$repend_ed= $repend->gen_edit_form("repend",$_tmp);
+			
+			// set up the date editor for cycle start
+			$repstart = new date_edit("start");
+			$repstart->configure(array("day" => 1,"month" => 2,"year" => 3));
+			if (is_array($meta["repstart"]))
+			{
+				$_tmp = mktime(0,0,0,$meta["repstart"]["month"],$meta["repstart"]["day"],$meta["repstart"]["year"]);
+			}
+			else
+			{
+				$_tmp = $event["start"];
+			};
+			$repstart_ed= $repstart->gen_edit_form("repstart",$_tmp);
 			// oh, I know, this is sooo ugly
 			$this->vars(array(
 					"region1" => checked($meta["region1"]),
@@ -371,6 +391,7 @@ class cal_event extends aw_template {
 					"region4" => checked($meta["region4"]),
 					"yearskip" => ($meta["yearskip"] > 0) ? $meta["yearskip"] : 1,
 					"repend" => $repend_ed,
+					"repstart" => $repstart_ed,
 					"repeats" => ($meta["repeats"]) ? $meta["repeats"] : 6,
 					"rep1_checked" => ($meta["rep"]) ? checked($meta["rep"] == 1) : "checked",
 					"rep2_checked" => checked($meta["rep"] == 2),
