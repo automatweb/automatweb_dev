@@ -179,7 +179,7 @@ class propcollector extends aw_template
 
 	function set_default($key,$value)
 	{
-		$this->defaults[$key] = $value;
+		$this->defaults[$key] = trim($value);
 	}
 
 	function set_classinfo($data)
@@ -190,7 +190,7 @@ class propcollector extends aw_template
 			list($fname,$fvalue) = explode("=",$field);
 			if ($fname && $fvalue)
 			{
-				$this->classinfo[$fname] = $fvalue;
+				$this->classinfo[$fname] = trim($fvalue);
 			};
 		};
 	}
