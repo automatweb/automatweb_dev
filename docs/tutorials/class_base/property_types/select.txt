@@ -1,4 +1,4 @@
-select
+<h2>select</h2>
 
 Creates a menu, from which one or more options can be selected. The options will have to be defined in the get_property call.
 

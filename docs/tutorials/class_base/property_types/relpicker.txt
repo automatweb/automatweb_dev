@@ -1,4 +1,4 @@
-relpicker
+<h2>relpicker</h2>
 
 Allows to pick one or many relations.
 
@@ -21,12 +21,12 @@ Allows to pick one or many relations.
 <b>automatic</b> If set to 1, displays all objects of this type and relation to selected object is created automatically after saving. 
 
 
-<b>Example 3.3. Displays all relations of type RELTYPE_SEEALSO and allows to pick one</b>
+<b>Example Displays all relations of type RELTYPE_SEEALSO and allows to pick one</b>
 
 @property pickrel reltype=RELTYPE_SEEALSO 
 @caption Vali seos
 
-<b> Example 3.4. Displays all relations of class CL_IMAGE and allows to pick some</b>
+<b> Example Displays all relations of class CL_IMAGE and allows to pick some</b>
 
 @property pickrel clid=CL_IMAGE multiple=1 size=5
 @caption Vali pildid

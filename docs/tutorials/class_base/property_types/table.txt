@@ -1,4 +1,4 @@
-table
+<h2>table</h2>
 
 Table is a VCL component which makes it easy to present any kind of data in tabular fashion.
 
@@ -16,14 +16,15 @@ Next step is to define the layout of your table and also provide contents for it
 #php#
 function get_property($arr)
 {
-	$data = &$arr["prop"];
+	$prop = &$arr["prop"];
 	$retval = PROP_OK;
 	switch($data["name"])
 	{
 		case "mytable":
                         $this->mk_my_table($arr);
                         break;
-         };
+        };
+        return $retval;
 
 }
 function mk_my_table($arr)

@@ -1,4 +1,4 @@
-objpicker
+<h2>objpicker</h2>
 
 Allows to pick one or more objects. You probably should use a relpicker instead, because this will list all the objects in the system and that is generally not a wanted behaviour.
 

@@ -1,4 +1,4 @@
-toolbar
+<h2>toolbar</h2>
 
 Things you can add to the toolbar:
 <ul>
@@ -15,7 +15,7 @@ Gets it's contents from a get_property call. You should probably set no_caption=
 #php#
 function get_property($arr)
 {
-	$data = &$args["prop"];
+	$prop = &$arrr["prop"];
 	$retval = PROP_OK;
 	switch($data["name"])
 	{
@@ -31,6 +31,7 @@ function get_property($arr)
 			$toolbar->add_cdata("some text");
 			break;
 	}
+	return $retval;
 };
 #/php#
 </pre>

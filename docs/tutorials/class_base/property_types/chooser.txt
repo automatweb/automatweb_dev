@@ -1,4 +1,4 @@
-chooser
+<h2>chooser</h2>
 
 #php#
 @property choices1 type=chooser
