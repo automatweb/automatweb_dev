@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.3 2004/12/15 09:58:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.4 2004/12/27 12:36:49 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -284,7 +284,13 @@ class mrp_resource extends class_base
 
 	function get_overview ($arr = array())
 	{
-		return "asdfasdfs";
+		$start = time() - (24*3600*60);
+		$end = time() + (24*3600*60);
+		for($i = $start; $i < $end; $i += (24*3600))
+		{
+			$ret[$i] = aw_url_change_var("viewtype", "week", aw_url_change_var("date", date("d", $i)."-".date("m", $i)."-".date("Y", $i)));
+		}
+		return $ret;
 	}
 
 	function get_unavailable_times($resource)
