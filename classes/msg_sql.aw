@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.9 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.10 2002/08/12 11:51:19 kristo Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
 class msg_sql_driver extends core
 {
@@ -194,7 +194,7 @@ class msg_sql_driver extends core
 		extract($args);
 		$q = "SELECT count(*) AS cnt FROM objects
 			LEFT JOIN messages ON (objects.oid = messages.id)
-			WHERE class_id = " . CL_MESSAGE . " and parent = $folder and messages.status = " . MSG_STATUS_UNREAD;
+			WHERE class_id = " . CL_MESSAGE . " and parent = '$folder' and messages.status = " . MSG_STATUS_UNREAD;
 		$this->db_query($q);
 		$row = $this->db_next();
 		return $row["cnt"];
