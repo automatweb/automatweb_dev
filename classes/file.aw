@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.38 2003/01/17 13:20:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.39 2003/01/17 15:09:25 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -467,6 +467,25 @@ class file extends class_base
 		header("Content-type: ".$fc["type"]);
 		header("Pragma: no-cache");
 		die($fc["content"]);
+	}
+
+	function view($args = array())
+	{
+		extract($args);
+		$fc = $this->get_file_by_id($id);
+		if ($this->can_be_embedded($fc))
+		{
+			$this->mk_path($fc["parent"],"Näita faili");
+			print $fc["content"];
+		}
+		else
+		{
+			header("Content-type: ".$fc["type"]);
+			header("Pragma: no-cache");
+			die($fc["content"]);
+		};
+
+
 	}
 
 	function get_url($id,$name)	
