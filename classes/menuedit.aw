@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.314 2004/03/08 17:51:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.315 2004/03/09 13:39:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -453,7 +453,8 @@ class menuedit extends aw_template
 						$filter = array(
 							"alias" => $sval,
 							"status" => STAT_ACTIVE,
-							"site_id" => aw_ini_get("site_id")
+							"site_id" => aw_ini_get("site_id"),
+							"lang_id" => array()
 						);
 						$ol = new object_list($filt);
 						if ($prnt)
