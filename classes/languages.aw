@@ -54,17 +54,30 @@ class languages extends aw_template
 
 	function listall($ignore_status = false)
 	{
+		
 		if (!$ignore_status)
 		{
 			$wg = "WHERE status = 2";
+			$clid = "active";
 		}
+		else
+		{
+			$clid = "all";
+		};
 
-		$this->db_query("SELECT * FROM languages $wg ");
-		$ret = array();
-		while ($row = $this->db_next())
-			$ret[] = $row;
-
-		return $ret;
+		$retval = aw_cache_get("languages",$clid);
+		if (not($retval))
+		{
+			$this->db_query("SELECT * FROM languages $wg ");
+			$ret = array();
+			while ($row = $this->db_next())
+			{
+				$ret[] = $row;
+			};
+			aw_cache_set("languages","active",$ret);
+			$retval = $ret;
+		};
+		return $retval;
 	}
 
 	function add()
