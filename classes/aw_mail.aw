@@ -1,7 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.4 2001/05/24 17:03:49 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.5 2001/05/30 00:46:23 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
-// mail.aw - Sending mail. MIME compatible
+// mail.aw - Sending and parsing mail. MIME compatible
+
+// I am not too happy with the structure of this class. Parts of need to be redesigned and rewritten
+// badly
+// Minu unistus ( :) ) on selline, et kohe peale parsimist, voiks sellesama klassi abil
+// teate kohe ka välja saata
 
 // ideaalis peaks see edaspidi toetama ka teisi mailisaatmismeetodeid
 // peale PHP mail funktsiooni
@@ -26,6 +31,13 @@ class aw_mail {
 	// method(string) - mis meetodi abil meili saadame?
 	function aw_mail($args = array())
 	{
+		return $this->clean($args);
+	}
+
+	////
+	// !Resets the object
+	function clean($args = array())
+	{
 		$this->message = array();
 		$this->headers = array();
 		$this->mimeparts = array();
@@ -35,6 +47,199 @@ class aw_mail {
 	}
 
 	////
+	// !Returns a decoded MIME part
+	// argumendid:
+	// part - osa number voi nimi
+	function get_part($args = array())
+	{
+		extract($args);
+		$block = array();
+		if ($part == "body")
+		{
+			$block["headers"] = $this->headers;
+			$block["body"] = $this->body;
+		}
+		else
+		{
+			$partnum = $part - 1;
+			if (!is_array($this->mimeparts[$part]))
+			{
+				return false;
+			};
+			$block = $this->mimeparts[$part];
+		};
+			
+		switch($block["headers"]["Content-Transfer-Encoding"])
+		{
+			case "base64":
+				$content = base64_decode($block["body"]);
+				break;
+
+			case "doubleROT13":
+				// $content = your_decoding_function_call_here
+				break;
+
+			default:
+				$content = $block["body"];
+		};
+		$block["body"] = $content;
+		return $block;
+	}
+
+	////
+	// !Parses a MIME formatted data block (e.g. email message)
+	// arguments:
+	// data(string) - body of the message
+	// returns the number of attaches found
+	function parse_message($args = array())
+	{
+		// First we pass the whole message through our parser
+		$res = $this->_parse_block(array(
+					"data" => $args["data"],
+					));
+
+		$this->headers = $res["headers"];
+
+		// Do we have a multipart message?
+		if (preg_match("/^multipart\/mixed/i",$this->headers["Content-Type"]))
+		{
+			$separator = "--" . $this->headers["Boundary"]; // feel free to consult the RFC to understand this
+			$msg_parts = explode($separator,$res["body"]);
+			$count = sizeof($msg_parts);
+			// we should always get at least 4 parts and it is safe to ignore first and last, since
+			// they do not contain anything of importance
+			// second will contain the body of the message, and starting from the third are the attaches
+			for ($i = 1; $i <= ($count - 2); $i++)
+			{
+				$block = $this->_parse_block(array(
+						"data" => $msg_parts[$i],
+						));
+				$headers2 = $block["headers"];
+
+				// kui see on esimene blokk, siis jarelikult on meil tegemist tekstiga, ja seda pole vaja
+				// mime-partiks teha
+				if ($i == 1)
+				{
+					$xheaders = array_merge($headers,$headers2);
+					$this->headers = $xheaders;
+					$this->body = $block["body"];
+					$this->mimeparts[0] = array(
+								"headers" => $xheaders,
+								"body" => $block["body"],
+							);
+				}
+				else
+				{
+					$this->mimeparts[] = $block;
+				}
+			};
+			$this->nparts = $count - 3;
+		}
+		else
+		{
+			// nope, it was a single-part message. 
+			$this->mimeparts[0] = $res;
+			$this->body = $res["body"];
+			$this->nparts = 0;
+		}
+		return $this->nparts;
+	}
+
+	////
+	// !Mime parser for internal use
+	// arguments:
+	// data(string) - body of the message
+	function _parse_block($args = array())
+	{
+		extract($args);
+		$in_headers = true;
+	
+		$_headers = array();
+		$headers = array();
+		$body = "";
+
+		// strip the whitespace from the beginning
+		$data = preg_replace("/^\s+?/","",$data);
+
+		// split the data to individual lines
+		// actually, I don't like this one not a single bit, but since I do not know the internals
+		// of PHP very well, I don't know whether parsing the string until the next linefeed
+		// is found, is very effective. So right now, I'll leave it as it is.
+		$lines = preg_split("/[\r|\n|\r\n|\n\r]/",$data);
+
+		$i = 0;
+
+		foreach($lines as $num => $line)
+		{
+			// If we find an empty line, then we have all the headers and can continue with 
+			if (preg_match("/^$/",$line))
+			{
+				// print "aborting on line $num<br>";
+				$in_headers = false;
+			};
+
+			if ($in_headers)
+			{
+				// If the line starts with whitespace, then we will add it to the last header
+				if (preg_match("/^\s/",$line))
+				{
+					$last = array_pop($_headers);
+					$last .= " " . trim($line);
+					array_push($_headers,$last);
+				}
+				// otherwise we just add it to the end of the headers array
+				else
+				{
+					array_push($_headers,$line);
+				};
+			}	
+			// when we get here, then this means that we have reached the body of the message.
+			// no further actions, we just fill the $body variable.
+			else
+			{
+				$body .= $line . "\n";
+			};
+		}; // foreach
+
+		// Now we will fetch all other more or less useful data out of the headers and store it in separate
+		// variables
+
+		$content_type = $boundary = $content_name = $content_encoding = "";
+	
+		foreach($_headers as $line)
+		{
+			if (preg_match("/^Content-Type: (.*); (.*)$/",$line,$matches))
+			{
+				$headers["Content-Type"] = $matches[1];
+				if (preg_match("/boundary=\"(.*)\"/",$matches[2],$bmatch))
+				{
+					$headers["Boundary"] = $bmatch[1];
+				};
+	 
+				if (preg_match("/name=\"(.*)\"/",$matches[2],$nmatch))
+				{
+					$headers["Content-Name"] = $nmatch[1];
+				};
+			}
+			elseif (preg_match("/^Date: (.*)$/",$line,$mt))
+			{
+				$headers["Date"] = $mt[1];
+			}
+			else
+			{
+				preg_match("/^(.*): (.*)$/",$line,$matches);
+				$headers[$matches[1]] = $matches[2];
+			};
+		};
+
+		$result = array(
+			"headers" => $headers,
+			"body" => $body,
+			);
+
+		return $result;
+	}
+	////
 	// !Selle funktsiooni abil loome uue teate
 	// argumendid
 	// froma(string) - kellelt (aadress)
@@ -43,7 +248,7 @@ class aw_mail {
 	// cc(string) - kellele
 	// subject(string) - kirja teema
 	// headers(array) - additional headers
-	function create($args = array())
+	function create_message($args = array())
 	{
 		if (is_array($args))
 		{
@@ -260,13 +465,6 @@ class aw_mail {
 		$email .= $this->build_message();
 		$to = $this->headers["To"];
 		$subject = $this->headers["Subject"];
-		//print "<pre>";
-		//print_r($this->headers);
-		//print "----";
-		//print "<br>";
-		//print_r($email);
-		//print "</pre>";
-		//exit;
 		unset($this->headers["To"]);
 		unset($this->headers["Subject"]);
 		foreach($this->headers as $name => $value)
@@ -275,9 +473,6 @@ class aw_mail {
 		}
 		mail($to,$subject,$email,$headers);
 		
-		//$f = popen("/usr/sbin/sendmail -f " . $this->from,"w");
-		//fwrite($f,$email);
-		//pclose($f);
 	}
 
 };
