@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.12 2005/02/17 23:06:18 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.13 2005/02/18 14:37:10 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.12 2005/02/17 13:12:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.13 2005/02/18 14:37:10 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -266,14 +266,13 @@ class mrp_schedule extends class_base
 		aliases.source = mrp_case.oid AND
 		aliases.target = " . $this->workspace_id . " AND
 		aliases.reltype = 5 AND
-		(mrp_case.state = " . MRP_STATUS_NEW . " OR mrp_case.state = " . MRP_STATUS_PLANNED ." OR mrp_case.state = 0)"
+		(mrp_case.state = " . MRP_STATUS_NEW . " OR mrp_case.state = " . MRP_STATUS_PLANNED .")"
 		);
 		$projects = array ();
 
 		### initiate project array
 		while ($project = $this->db_next ())
 		{
-//			echo "read proj $project[oid] <br>";
 			$projects[$project["oid"]] = array (
 				"jobs" => array (),
 				"starttime" => $project["starttime"],
@@ -362,6 +361,8 @@ class mrp_schedule extends class_base
 //!!! misasi on prebuffer?
 //!!! kas ressursi default puhvrid pole mitte eraldi asjad vrd. t88de puhvritega?
 
+//!!! teha et kui konfigureeritakse ajaskaala laiemaks kui sched. length siis ....
+//!!! vaadata mis saab siis kui workflows on hargnemine aga taaskokkuminek puudub. seda olukorda vist ikka ei tohi lubada, sest selle korrigeerimine siin v2listab v6imaluse teatavaid workf. konstrueerida.
 
 				if ($project_start !== false)
 				{
@@ -377,7 +378,7 @@ class mrp_schedule extends class_base
 // /* dbg */ echo "presched: minstart-". date (MRP_DATE_FORMAT,$minstart )." | length - ". $job_length/3600 ."h <br>";
 // /* dbg */ }
 
-				if ( (in_array ($job["resource"], $this->schedulable_resources)) or ($project["state"] == MRP_STATUS_NEW) )
+				if ( (in_array ($job["resource"], $this->schedulable_resources)) or ($job["state"] == MRP_STATUS_NEW) )
 				{
 					### schedule job next in line
 					list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $job_length);
@@ -805,7 +806,6 @@ class mrp_schedule extends class_base
 		### ... slot not found
 		echo VIGA2;//!!! mis teha?
 	}
-//!!! teha et kui konfigureeritakse ajaskaala laiemaks kui sched. length siis ....
 
 	function find_range ($starttime)
 	{
@@ -894,16 +894,19 @@ class mrp_schedule extends class_base
 		$day_start = mktime (0, 0, 0, date ("m", $time), date ("d", $time), date("Y", $time));
 
 		### get closest global buffer
-		if ($time > $this->scheduling_day_end)
+		if (!empty ($this->resource_data[$resource_id]["global_buffer"]))
 		{
-			$global_buffer_start = $day_start + (86400 - $this->resource_data[$resource_id]["global_buffer"]);
-		}
-		else
-		{
-			$global_buffer_start = $day_start + 86400 + (86400 - $this->resource_data[$resource_id]["global_buffer"]);
-		}
+			if ($time <= $this->scheduling_day_end)
+			{
+				$global_buffer_start = $day_start + 86400 + (86400 - $this->resource_data[$resource_id]["global_buffer"]);
+			}
+			else
+			{
+				$global_buffer_start = $day_start + (86400 - $this->resource_data[$resource_id]["global_buffer"]);
+			}
 
-		$closest_periods[$global_buffer_start] = $global_buffer_start + $this->resource_data[$resource_id]["global_buffer"];
+			$closest_periods[$global_buffer_start] = $global_buffer_start + $this->resource_data[$resource_id]["global_buffer"];
+		}
 
 		### get recurrences
 		$closest_recurrences = array ();

@@ -11,6 +11,9 @@
 	white-space: nowrap;
 	padding-right: 3px;
 	padding-left: 3px;
+	border: none;
+	border-bottom: 1px solid;
+	border-left: 1px solid;
 }
 
 .VclGanttChartDataImg
@@ -25,4 +28,25 @@
 	width: {VAR:chart_width};
 }
 
- </style>
+.VclGanttChartColumn
+{
+	border: none;
+	border-bottom: 1px solid ;
+	border-left: 1px solid #CCCCCC;
+}
+
+.VclGanttChartSubdivision
+{
+	border: none;
+	border-bottom: 1px solid;
+	border-left: 1px solid #EEEEEE;
+}
+
+.VclGanttChartTimespan
+{
+	font-size: 9px;
+	font-weight: normal;
+	border-left: 1px solid white;
+	padding-left: 1px;
+}
+</style>

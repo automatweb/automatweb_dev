@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.5 2005/02/11 08:07:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.6 2005/02/18 14:37:10 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -39,29 +39,33 @@ class gantt_chart extends class_base
 	// string chart_id - ...
 	// timestamp start - chart start time. defaults to start of week back from current time.
 	// int columns - number of divisions in chart (e.g. 7 days for a chart depicting one week). default is 7.
+	// int subdivisions - number of subdivisions in column (e.g. 24 hours for a column depicting one day). default is 1 (meaning subdivision & column coincide).
 	// int column_length - length of one division in seconds. default is 86400.
 	// int width - chart width in pixels. default is 1000.
 	// string row_dfn - title for row-titles column. default is "Ressurss".
 	// string style - style to use (default| ... ).
 	// bool row_anchors - make hyperlinks of row names (not impl. yet).
 	// bool bar_anchors - make hyperlinks of bars (not impl. yet).
-	// int time_stops - number of time stops at the top
+	// int timespans - number of time stops at the top
 	function configure_chart ($arr)
 	{
-		$this->start = (int) (empty ($arr["start"]) ? (time () - 302400) : $arr["start"]);
-		$this->column_length = (int) (empty ($arr["column_length"]) ? 86400 : $arr["column_length"]);
-		$this->columns = (empty ($arr["columns"]) ? range (1, 7) :  range (1, (int) $arr["columns"]));
-		$this->chart_width = (int) (empty ($arr["width"]) ? 1000 : $arr["width"]);
-		$this->chart_id = empty ($arr["chart_id"]) ? "0" : $arr["chart_id"];
-		$this->style = empty ($arr["style"]) ? "default" : $arr["style"];
-		$this->row_dfn = empty ($arr["row_dfn"]) ? "Ressurss" : $arr["row_dfn"];
-		$this->time_stops = empty ($arr["time_stops"]) ? 8 : $arr["time_stops"];
+		$this->start = empty ($arr["start"]) ? (time () - 302400) : (int) $arr["start"];
+		$this->column_length = empty ($arr["column_length"]) ? 86400 : (int) $arr["column_length"];
+		$this->columns = empty ($arr["columns"]) ? range (1, 7) :  range (1, (int) $arr["columns"]);
+		$this->subdivisions = empty ($arr["subdivisions"]) ? 1 :  (int) $arr["subdivisions"];
+		$this->chart_width = empty ($arr["width"]) ? 1000 : (int) $arr["width"];
+		$this->chart_id = empty ($arr["chart_id"]) ? "0" : (string) $arr["chart_id"];
+		$this->style = empty ($arr["style"]) ? "default" : (string) $arr["style"];
+		$this->row_dfn = empty ($arr["row_dfn"]) ? "Ressurss" : (string) $arr["row_dfn"];
+		$this->timespans = empty ($arr["timespans"]) ? 0 : (int) $arr["timespans"];
+		$this->timespan_range = empty ($arr["timespan_range"]) ? 86400 : (int) $arr["timespan_range"];
 		$this->end = (int) ($this->start + count ($this->columns) * $this->column_length);
 		// $this->row_anchors = $arr["row_anchors"] ? "anchors" : "noanchors";
 		// $this->bar_anchors = $arr["bar_anchors"] ? "anchors" : "noanchors";
 
 		$this->scale_quotient = (count ($this->columns) * $this->column_length) / $this->chart_width;
-		$this->cell_length = ceil ($this->column_length / $this->scale_quotient);
+		$this->cell_length = (int) ($this->column_length / $this->subdivisions);
+		$this->cell_width = ceil ($this->cell_length / $this->scale_quotient);
 	}
 
 	// Configure chart navigation
@@ -212,7 +216,7 @@ class gantt_chart extends class_base
 		foreach ($this->rows as $row)
 		{
 			$row_contents = "";
-			$cell_end = $this->start + $this->column_length;
+			$cell_end = $this->start + $this->cell_length;
 			$pointer = $this->start ;
 			$columns = count ($this->columns);
 
@@ -231,118 +235,127 @@ class gantt_chart extends class_base
 
 			while ($columns)
 			{
-				$cell_contents = "";
-				$content_length = 0;
+				$subdivisions = $this->subdivisions;
+				$cell_type = "column";
 
-				while ($pointer < $cell_end)
+				while ($subdivisions)
 				{
-					if (!is_array ($this->data[$row["name"]]))
-					{
-						break;
-					}
-					else
-					{
-						$bar = array_shift ($this->data[$row["name"]]);
+					$cell_contents = "";
+					$content_length = 0;
 
-						if (($bar["start"] >= $cell_end) or !$bar)
+					while ($pointer < $cell_end)
+					{
+						if (!is_array ($this->data[$row["name"]]))
 						{
-							### no bars or no bars left in cell
-							array_unshift ($this->data[$row["name"]], $bar);
 							break;
-						}
-					}
-
-					### set bar type
-					if (isset ($bar["force_type"]))
-					{
-						$bar_type = $bar["force_type"];
-					}
-					else
-					{
-						$bar_type = $bar["hilight"] ? "hilighted" : $bar_switch;
-					}
-
-					### trim bars starting/ending before chart start
-					if ($bar["start"] < $this->start)
-					{
-						if (($bar["start"] + $bar["length"]) > $this->start)
-						{
-							### trim bar ending after chart start
-							$bar["length"] = ($bar["start"] + $bar["length"]) - $this->start;
-							$bar["start"] = $this->start;
 						}
 						else
 						{
-							### bar ends before chart start, go to next bar for current row
-							continue;
+							$bar = array_shift ($this->data[$row["name"]]);
+
+							if (($bar["start"] >= $cell_end) or !$bar)
+							{
+								### no bars or no bars left in cell
+								array_unshift ($this->data[$row["name"]], $bar);
+								break;
+							}
 						}
+
+						### set bar type
+						if (isset ($bar["force_type"]))
+						{
+							$bar_type = $bar["force_type"];
+						}
+						else
+						{
+							$bar_type = $bar["hilight"] ? "hilighted" : $bar_switch;
+						}
+
+						### trim bars starting/ending before chart start
+						if ($bar["start"] < $this->start)
+						{
+							if (($bar["start"] + $bar["length"]) > $this->start)
+							{
+								### trim bar ending after chart start
+								$bar["length"] = ($bar["start"] + $bar["length"]) - $this->start;
+								$bar["start"] = $this->start;
+							}
+							else
+							{
+								### bar ends before chart start, go to next bar for current row
+								continue;
+							}
+						}
+
+						### split bars longer than free space in one cell
+						if ( (($bar["start"] + $bar["length"]) >= $cell_end) and ($bar["start"] < $cell_end) )
+						{
+							$split_bar = $bar;
+							$split_bar["length"] = $bar["length"] - ($cell_end - $bar["start"]);
+							$split_bar["start"] = $cell_end;
+							$split_bar["force_type"] = $bar_type;
+							array_unshift ($this->data[$row["name"]], $split_bar);
+							$bar["length"] = $cell_end - $bar["start"];
+						}
+
+						### insert preceeding whitespace
+						if ( ($bar["start"] > $pointer) and ($bar["start"] < $cell_end) )
+						{
+							$length = ceil (($bar["start"] - $pointer) / $this->scale_quotient);
+							$this->vars (array (
+								"length" => $length,
+								"baseurl" => $this->cfg["baseurl"],
+							));
+							$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell_" . $cell_type . ".cell_contents.bar_empty"));
+							$pointer += $bar["start"];
+							$content_length += $length;
+						}
+
+	// /* dbg */ if (strstr ($bar["title"], "job: 6978")){ arr ($bar); echo "[".date ("j/m/Y H.i", $bar["start"]) . "] - [".date ("j/m/Y H.i", $bar["start"] + $bar["length"]) . "]"; echo htmlentities ($row_contents);}
+
+						### parse bar
+						$length = ceil ($bar["length"] / $this->scale_quotient);
+						$this->vars (array (
+							"length" => $length,
+							"title" => $bar["title"],
+							"bar_uri" => $bar["bar_uri"],
+							"bar_uri_target" => $bar["bar_uri_target"],
+							"baseurl" => $this->cfg["baseurl"],
+						));
+						$bar_rendered = trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell_" . $cell_type . ".cell_contents.bar_" . $bar_type));
+						$cell_contents .= $bar_rendered;
+
+						### ...
+						$pointer = $bar["start"] + $bar["length"];
+						$content_length += $length;
+						$bar_switch = $bar_switch ? 0 : 1;
 					}
 
-					### split bars longer than free space in one cell
-					if ( (($bar["start"] + $bar["length"]) >= $cell_end) and ($bar["start"] < $cell_end) )
+					### fill remaining empty space
+					if ($content_length < $this->cell_width)
 					{
-						$split_bar = $bar;
-						$split_bar["length"] = $bar["length"] - ($cell_end - $bar["start"]);
-						$split_bar["start"] = $cell_end;
-						$split_bar["force_type"] = $bar_type;
-						array_unshift ($this->data[$row["name"]], $split_bar);
-						$bar["length"] = $cell_end - $bar["start"];
-					}
-
-					### insert preceeding whitespace
-					if ( ($bar["start"] > $pointer) and ($bar["start"] < $cell_end) )
-					{
-						$length = ceil (($bar["start"] - $pointer) / $this->scale_quotient);
+						$length = $this->cell_width - $content_length;
 						$this->vars (array (
 							"length" => $length,
 							"baseurl" => $this->cfg["baseurl"],
 						));
-						$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_empty"));
-						$pointer += $bar["start"];
-						$content_length += $length;
+						$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell_" . $cell_type . ".cell_contents.bar_empty"));
+						$pointer = $cell_end;
 					}
 
-// /* dbg */ if (strstr ($bar["title"], "job: 6978")){ arr ($bar); echo "[".date ("j/m/Y H.i", $bar["start"]) . "] - [".date ("j/m/Y H.i", $bar["start"] + $bar["length"]) . "]"; echo htmlentities ($row_contents);}
-
-					### parse bar
-					$length = ceil ($bar["length"] / $this->scale_quotient);
+					### parse cell
 					$this->vars (array (
-						"length" => $length,
-						"title" => $bar["title"],
-						"bar_uri" => $bar["bar_uri"],
-						"bar_uri_target" => $bar["bar_uri_target"],
-						"baseurl" => $this->cfg["baseurl"],
+						"cell_contents" => $cell_contents,
 					));
-					$bar_rendered = trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_" . $bar_type));
-					$cell_contents .= $bar_rendered;
+					$row_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell_" . $cell_type));
 
 					### ...
-					$pointer = $bar["start"] + $bar["length"];
-					$content_length += $length;
-					$bar_switch = $bar_switch ? 0 : 1;
+					$cell_end += $this->cell_length;
+					$cell_type = "subdivision";
+					$subdivisions--;
 				}
 
-				### fill remaining empty space
-				if ($content_length < $this->cell_length)
-				{
-					$length = $this->cell_length - $content_length;
-					$this->vars (array (
-						"length" => $length,
-						"baseurl" => $this->cfg["baseurl"],
-					));
-					$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_empty"));
-					$pointer = $cell_end;
-				}
-
-				### parse cell
-				$this->vars (array (
-					"cell_contents" => $cell_contents,
-				));
-				$row_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell"));
-
-				### ...
 				$columns--;
-				$cell_end += $this->column_length;
 			}
 
 			### parse row
@@ -350,7 +363,7 @@ class gantt_chart extends class_base
 				"row_name" => $row["title"],
 				"row_uri" => $row["uri"],
 				"row_uri_target" => $row["target"],
-				"data_cell" => $row_contents,
+				"data_cell_" . $cell_type => $row_contents,
 			));
 			$rows .= trim ($this->parse ("data_row" . $row_switch));
 
@@ -390,12 +403,21 @@ class gantt_chart extends class_base
 			}
 		}
 
-		$this->_get_timespans();
+		if ($this->timespans)
+		{
+			$timespans = $this->get_timespans();
+		}
+		else
+		{
+			$timespans = "";
+		}
 
 		### parse table
 		$this->vars (array (
 			"chart_id" => $this->chart_id,
 			"row_dfn" => $this->row_dfn,
+			"columns" => count ($this->columns) * $this->subdivisions,
+			"subdivision_row" => $timespans,
 			"column_head" => $header_row,
 			"data_row0" => $rows,
 		));
@@ -427,40 +449,45 @@ class gantt_chart extends class_base
 		return $this->parse();
 	}
 
-	/** draws given amount of times to the top of the graph, based on the start/end
-	**/
-	function _get_timespans()
+	// draws given amount of times to the top of the graph, based on the start/end
+	function get_timespans()
 	{
-		$ts = "";
-		$step = ($this->end - $this->start) / $this->time_stops;
-		for ($i = 0; $i < $this->time_stops; $i++)
+		if (!$this->timespans)
 		{
-			if ($i == ($this->time_stops-1))
+			return "";
+		}
+
+		$ts = "";
+		$step = $this->timespan_range / $this->timespans;
+		$time = 0;
+
+		foreach ($this->columns as $column)
+		{
+			$divisions = "";
+
+			for ($i = 0; $i < $this->timespans; $i++)
 			{
-				$time = date("d.m.Y / H:i", $this->end);
-				$align = "right";
-			}
-			else
-			if ($i == 0)
-			{
-				$time = date("d.m.Y / H:i", $this->start);
+				$division = date("H:i", $this->start + $time);
 				$align = "left";
+				$this->vars(array(
+					"time" => $division,
+					"align" => $align
+				));
+				$divisions .= $this->parse("subdivision");
+				$time += $step;
 			}
-			else
-			{
-				$time = date("d.m.Y", $this->start + ($i*$step) + $step/2);
-				$align = "center";
-			}
+
 			$this->vars(array(
-				"time" => $time,
-				"align" => $align
+				"subdivision" => $divisions,
 			));
-			$ts .= $this->parse("TIMESPAN");
+			$ts .= $this->parse("subdivision_head");
 		}
 
 		$this->vars(array(
-			"TIMESPAN" => $ts
+			"subdivision_head" => $ts
 		));
+		$ts = $this->parse("subdivision_row");
+		return $ts;
 	}
 
 	function sort_data ()
