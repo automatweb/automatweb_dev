@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.18 2004/12/22 12:16:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.19 2004/12/22 13:02:27 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -184,7 +184,7 @@ class webform extends class_base
 			case "form_type":
 				$prop["options"] = array(
 					1 => t("Registri andmed"),
-					2 => t("Kalendri sündmusele registreerimise vorm"),
+					2 => t("Sündmuse vorm"),
 				);
 				break;
 			case "search":
@@ -331,7 +331,7 @@ class webform extends class_base
 				$cal_reg_form = obj();
 				$cal_reg_form->set_parent($arr["obj_inst"]->id());
 				$cal_reg_form->set_class_id(CL_CALENDAR_REGISTRATION_FORM);
-				$cal_reg_form->set_name("Kalendri sündmusele registreerimise vorm ".$arr["obj_inst"]->id());
+				$cal_reg_form->set_name("Sündmuse vorm ".$arr["obj_inst"]->id());
 				$cal_reg_form->set_status(STAT_ACTIVE);
 				$cal_reg_form->save();
 				$cfgform = obj();
@@ -399,7 +399,7 @@ class webform extends class_base
 				$dir->set_name("Sisestused ".$arr["obj_inst"]->id());
 				$dir->set_status(STAT_ACTIVE);
 				$dir->save();
-				$dir->acl_set($group, array("can_add" => 1));
+				$dir->acl_set($group, array("can_add" => 1, "can_view" => 1));
 				$dir->save();
 				$register = obj();
 				$register->set_parent($arr["obj_inst"]->parent());
@@ -1099,7 +1099,6 @@ class webform extends class_base
 		$errors = aw_global_get("wf_errors");
 		$values = aw_global_get("wf_data");
 		
-		
 		if(strpos(strtolower($_SERVER["REQUEST_URI"]), "/automatweb") !== false)
 		{
 			$section = html::get_change_url($arr["id"], array(
@@ -1145,7 +1144,7 @@ class webform extends class_base
 					"name" => $pn."_err",
 					"type" => "text",
 					"store" => "no",
-					"value" => "<font color=red class=\"".$sel_styles["error"]."\">".$errs[$pn]["msg"]."</font>",
+					"value" => '<font color="red" class="'.$sel_styles["error"].'">'.$errs[$pn]["msg"].'</font>',
 					"no_caption" => 1,
 				);
 			}
@@ -1287,6 +1286,7 @@ class webform extends class_base
 	**/
 	function save_form_data($arr)
 	{
+		aw_session_set("no_cache", 1);
 		$obj_inst = obj($arr["id"]);
 		$redirect = $obj_inst->prop("redirect");
 		$rval = (strpos(strtolower($redirect), "http://") !== false ? $redirect : (substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect));
