@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.151 2004/08/25 09:30:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.152 2004/09/09 11:15:59 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -294,15 +294,18 @@ class aliasmgr extends aw_template
 	{
 		extract($args);
 
+		enter_function("aliasmgr::parse_oo_aliases::get_oo_aliases");
 		$o = obj($oid);
 		if ($o->is_brother())
 		{
 			$oid = $o->get_original();
 		}
 		$aliases = $this->get_oo_aliases(array("oid" => $oid));
+		exit_function("aliasmgr::parse_oo_aliases::get_oo_aliases");
 
 		$by_idx = $by_alias = array();
 
+		enter_function("aliasmgr::parse_oo_aliases::make_lut");
 		$tmp = aw_ini_get("classes");
 		foreach($tmp as $clid => $cldat)
 		{
@@ -337,12 +340,14 @@ class aliasmgr extends aw_template
 				}
 			}
 		}
+		exit_function("aliasmgr::parse_oo_aliases::make_lut");
 
 		$cache_inst = get_instance("cache");
 		$classlist = aw_ini_get("classes");
 
 		// try to find aliases until we no longer find any. 
 		// why is this? well, to enable the user to add aliases bloody anywhere. like in files that are to be shown right away
+		enter_function("aliasmgr::parse_oo_aliases::loop");
 		while (1)
 		{
 
@@ -408,7 +413,9 @@ class aliasmgr extends aw_template
 								"alias" => $adata,
 								"tpls" => &$args["templates"],
 							);
+							enter_function("aliasmgr::parse_oo_aliases::loop::do_palias");
 							$repl = $$emb_obj_name->parse_alias($parm);
+							exit_function("aliasmgr::parse_oo_aliases::loop::do_palias");
 
 							$inplace = false;
 							if (is_array($repl))
@@ -436,6 +443,7 @@ class aliasmgr extends aw_template
 				}
 			}
 		}	// while (1)
+		exit_function("aliasmgr::parse_oo_aliases::loop");
 	}
 
 	////
@@ -561,7 +569,7 @@ class aliasmgr extends aw_template
 	function list_aliases($args)
 	{
 		extract($args);
-		$GLOBALS['site_title'] = "Seostehaldur";
+		$GLOBALS['site_title'] = "Seostehaldur | ".html::get_change_url($id, array(),"Objekti muutmine");
 		classload('icons');
 
 		$obj = obj($id);
