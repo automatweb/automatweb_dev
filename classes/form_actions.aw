@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.9 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.10 2002/06/28 00:17:56 duke Exp $
 
 // form_actions.aw - creates and executes form actions
 
@@ -101,6 +101,17 @@ class form_actions extends form_base
 						$data = serialize($selarr);
 						break;
 
+					case "email_form":
+						$data = array();
+						$data["srcform"] = $arr["srcform"];
+						$data["srcfield"] = $arr["srcfield"];
+						$data["subject"] = $arr["subject"];
+						$data["from"] = $arr["from"];
+						$data["output"] = $arr["output"];
+						$data["sbt_bind"] = $arr["sbt_bind"];
+						$data = serialize($data);
+						break;
+
 					case "join_list":
 						$data["list"] = $j_list;
 						$data["checkbox"] = $j_checkbox;
@@ -156,9 +167,10 @@ class form_actions extends form_base
 			$this->vars(array(
 				"name"									=> $row["name"], 
 				"comment"								=> $row["comment"], 
-				"email_selected"				=> ($row["type"] == 'email' ? "CHECKED" : ""),
-				"move_filled_selected"	=> ($row["type"] == 'move_filled' ? "CHECKED" : ""),
-				"join_list_selected"		=> ($row["type"] == 'join_list' ? "CHECKED" : ""),
+				"email_selected"				=> checked($row["type"] == 'email'),
+				"move_filled_selected"	=> checked($row["type"] == 'move_filled'),
+				"join_list_selected"		=> checked($row["type"] == 'join_list'),
+				"email_form"						=> checked($row["type"] == 'email_form'),
 				"action_id"							=> $id,
 				"reforb"								=> $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 1))
 			));
@@ -207,6 +219,76 @@ class form_actions extends form_base
 
 					return $this->parse();
 					break;
+
+				case "email_form":
+					$this->read_template("form_email.tpl");
+					$data = unserialize($row["data"]);
+				
+					$_ops = $this->get_op_list($id);
+
+					$ops = array("0" => "-- plain text --") + $_ops[$id];
+
+					$srcforms = $this->get_flist(array(
+						"type" => FTYPE_ENTRY,
+						"subtype" => FSUBTYPE_EMAIL_ACTION,
+					));
+					
+					$els = $this->get_form_elements(array("id" => $id));
+					$sbt_binds = array("0" => "--all--");
+
+					foreach($els as $key => $val)
+					{
+						if ($val["type"] == "button")
+						{
+							$sbt_binds[$val["id"]] = $val["name"];
+						};
+
+					};
+
+
+					#$srcforms = array("0" => "--vali--") + $srcforms;
+
+					$srcfields = array();
+
+					// now I have to figure out all the e-mail fields
+					if (is_array($srcforms))
+					{
+						$fg = get_instance("form_base");
+						foreach($srcforms as $key => $val)
+						{
+							if ($key > 0)
+							{
+								$els = $this->get_form_elements(array("id" => $key));
+							foreach($els as $fkey => $fval)
+							{
+								if ($fval["subtype"] == "email")
+								{
+									$srcfields[$key] = $fval["id"];
+									$srcnames[$fval["id"]] = $fval["name"];
+								}
+
+									
+
+							};
+							};
+
+						}
+					}
+
+					$this->vars(array(
+						"srcforms" => $this->picker($data["srcform"],$srcforms),
+						"srcfields" => $this->picker($data["srcfield"],$srcnames),
+						"outputs" => $this->picker($data["output"],$ops),
+						"subject" => $data["subject"],
+						"sbt_binds" => $this->picker($data["sbt_bind"],$sbt_binds),
+						"from" => $data["from"],
+						"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
+
+					));
+
+					return $this->parse();
+					break;
+
 				case "move_filled":
 					$this->read_template("action_move_filled.tpl");
 					$selarr = unserialize($row["data"]);
@@ -273,6 +355,70 @@ class form_actions extends form_base
 		extract($arr);
 		$this->db_query("DELETE FROM form_actions WHERE id = $aid");
 		return $this->mk_my_orb("list_actions",array("id" => $id));
+	}
+
+	function do_action($args = array())
+	{
+		extract($args);
+		// retrieve e-mail aadresses to send mail to
+		$fid = sprintf("form_%d_entries",$data["srcform"]);
+		$did = sprintf("ev_%d",$data["srcfield"]);
+		$q = "SELECT $did FROM $fid LEFT JOIN objects ON ($fid.id = objects.oid) WHERE status = 2";
+
+		$this->awm = get_instance("aw_mail");
+		if ($data["output"] > 0)
+		{
+			// we have to form a special html message
+			$body=strtr($msg,array("<br>"=>"\r\n","<BR>"=>"\r\n","</p>"=>"\r\n","</P>"=>"\r\n"));
+
+		}
+		else
+		{
+			$body = $msg;
+		};
+
+		// we set all the relevant fields later on
+		$this->awm->create_message(array(
+                        "froma" => "",
+                        "fromn" => "",
+                        "subject" => "",
+                        "to" => "",
+                        "body" => $body,
+                ));
+
+		if ($data["output"] > 0)
+		{
+			$this->awm->htmlbodyattach(array("data"=>$msg));
+		};
+
+
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$addr = $row[$did];
+			// don't try to send to invalid addresses
+			if (is_email($addr))
+			{
+				print "sending to $addr<br>";
+				$this->awm->set_header("Subject",$data["subject"]);
+				$this->awm->set_header("From",$data["from"]);
+				$this->awm->set_header("To",$addr);
+				$this->awm->set_header("Return-path", $data["from"]);
+				$this->awm->gen_mail();
+			}
+			else
+			{
+				print "$addr is invalid<br>";
+			};
+		}
+
+	}
+
+	////
+	// !called from do_action - delivers an email message
+	function _deliver($args = array())
+	{
+		extract($args);
 	}
 }
 ?>
