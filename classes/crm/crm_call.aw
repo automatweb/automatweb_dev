@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.21 2004/11/24 15:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.22 2004/12/08 07:29:11 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -225,6 +225,14 @@ class crm_call extends class_base
 					'tooltip' => t('Salvesta'),
 					"action" => "save_participant_search_results"
 				));
+
+				$tb->add_button(array(
+					'name' => 'csv',
+					'img' => 'ftype_xls.gif',
+					'tooltip' => 'CSV',
+					"url" => aw_url_change_var("get_csv_file", 1)
+				));
+
 				$this->return_url=aw_global_get('REQUEST_URI');
 				break;
 			}
