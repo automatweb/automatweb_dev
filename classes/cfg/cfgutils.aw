@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.10 2003/01/15 16:20:39 duke Exp $
+// $Id: cfgutils.aw,v 1.11 2003/01/17 18:01:25 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -176,12 +176,27 @@ class cfgutils extends aw_template
 		{
 			foreach($objprops as $objprop)
 			{
-				if (!$this->groupinfo[$objprop["group"]])
+				if (is_array($objprop["group"]))
 				{
-					$this->groupinfo[$objprop["group"]] = array("caption" => $objprop["group"]);
+					foreach($objprop["group"] as $_group)
+					{
+						if (!$this->groupinfo[$_group])
+						{
+							$this->groupinfo[$_group] = array("caption" => $_group);
+						};
+
+					};
+				}
+				else
+				{
+					if (!$this->groupinfo[$objprop["group"]])
+					{
+						$this->groupinfo[$objprop["group"]] = array("caption" => $objprop["group"]);
+					};
 				};
 			};
 		};
+
 
 		if (is_array($this->tableinfo))
 		{
@@ -213,7 +228,14 @@ class cfgutils extends aw_template
 			$res = array();
 			foreach($val as $key => $val)
 			{
-				$res[$key] = $val["text"];
+				if ($val["text"])
+				{
+					$res[$key] = $val["text"];
+				}
+				else
+				{
+					$res[$key] = array_values($this->normalize_text_nodes($val[0]));
+				};
 			};
 		}
 		else
