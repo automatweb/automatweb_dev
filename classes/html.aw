@@ -1,10 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.2 2002/10/15 20:35:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.3 2002/10/31 12:20:44 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
-	function draw($args = array())
+	function draw($arg)
 	{
+		$arg = new aw_array($arg);
+		$args = $arg->get();
 		$type = $args["type"];
 		if (method_exists($this,$type))
 		{
@@ -12,8 +14,8 @@ class html extends aw_template
 		}
 		else
 		{
-			// draw the textbox for undefined elements
-			$retval = $this->textbox($args);
+			// draw the text for undefined elements
+			$retval = $this->text($args);
 		};
 		return $retval;
 	}
@@ -29,10 +31,28 @@ class html extends aw_template
 		{
 			$selected = $value;
 		};
-		$options = $this->picker($selected,$options);
-		return "<select name='$name'>\n$options</select>\n";
-	}
 
+		if ($size)
+		{
+			$sz = "size='$size' ";
+		};
+
+		if ($multiple)
+		{
+			$mz = "multiple ";
+			$name .= "[]";
+		};
+		if (is_array($selected))
+		{
+			$options = $this->mpicker($selected,$options);
+		}
+		else
+		{
+			$options = $this->picker($selected,$options);
+		};
+		return "<select name='$name' $sz $mz>\n$options</select>\n";
+	}
+	
 	////
 	// !html text input
 	// name(string)
@@ -61,6 +81,14 @@ class html extends aw_template
 		extract($args);
 		return "<input type='hidden' name='$name' value='$value' />\n";
 	}
+
+	////
+	// !File upload
+	function fileupload($args = array())
+	{
+		extract($args);
+		return "$value <input type='file' name='$name'>\n";
+	}
 	
 	////
 	// !Checkbox
@@ -72,6 +100,18 @@ class html extends aw_template
 		extract($args);
 		$checked = checked($checked);
 		return "<input type='checkbox' name='$name' value='$value' $checked/>\n";
+	}
+
+	////
+	// !Radiobutton
+	// name(string)
+	// value(string)
+	// checked(bool)
+	function radiobutton($args = array())
+	{
+		extract($args);
+		$checked = checked($checked);
+		return "<input type='radio' name='$name' value='$value' $checked/>\n $caption";
 	}
 	
 	////
