@@ -261,19 +261,34 @@ class group extends class_base
 				$act_to = ($row[5] == "NULL" || $row[5] == "" ? -1 : strtotime($row[5]));
 				$act_from = ($row[4] == "NULL" || $row[4] == "" ? -1 : strtotime($row[4]));
 
-				$row = $this->db_fetch_row("SELECT uid FROM users WHERE uid = '$uid'");
+				$row = $this->db_fetch_row("SELECT uid,oid FROM users WHERE uid = '$uid'");
 				if (!is_array($row))
 				{
-					$us->add_user(array(
+					$uo = $us->add_user(array(
 						"uid" => $uid,
 						"password" => $pass,
 						"email" => $email
 					));
-					if ($gid)
+
+					$this->users->set_user_config(array(
+						"uid" => $uid,
+						"key" => "real_name",
+						"value" => $name
+					));
+				}
+				else
+				{
+					echo "kasutaja $uid ($name) on juba olemas, lisan ainult gruppi ja ei muuda parooli!<br>";
+					if (is_oid($row["oid"]) && $this->can("view", $row["oid"]))
 					{
-						// add to specified group
-						$this->users->add_users_to_group_rec($gid, array($uid));
+						$uo = obj($row["oid"]);
 					}
+				}
+
+				if ($uo)
+				{
+					// add to specified group
+					$this->add_user_to_group($uo,$arr["obj_inst"]);
 				}
 
 				if ($act_from)
