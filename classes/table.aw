@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.37 2002/11/15 18:07:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.38 2002/12/02 11:18:52 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -2265,7 +2265,7 @@ class table extends aw_template
 		$this->mk_path($parent,LC_TABLE_ADD_TABLE);
 		$this->read_template("table_add.tpl");
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_add", array("parent" => $parent)),
+			"reforb" => $this->mk_reforb("submit_add", array("parent" => $parent, "alias_to" => $alias_to)),
 			"name" => $name,
 		 ));
 		return $this->parse();
@@ -2283,6 +2283,11 @@ class table extends aw_template
 			$this->set_object_metadata(array("oid"=>$id,"key"=>"is_filter","value"=>1));
 			$this->set_object_metadata(array("oid"=>$id,"key"=>"filter","value"=>$filter));
 		};*/
+
+		if ($alias_to)
+		{
+			$this->add_alias($alias_to, $this->id);
+		}
 
 		return $this->mk_orb("change", array("id" => $id));
 	}

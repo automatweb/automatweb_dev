@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_search_element.aw,v 1.3 2002/11/07 10:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_search_element.aw,v 1.4 2002/12/02 11:18:59 kristo Exp $
 
 classload("formgen/form_element");
 class form_search_element extends form_element
@@ -35,7 +35,6 @@ class form_search_element extends form_element
 
 	function save(&$arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		$ret = $this->do_core_save(&$arr);

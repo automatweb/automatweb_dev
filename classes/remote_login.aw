@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.10 2002/11/15 18:06:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.11 2002/12/02 11:18:52 kristo Exp $
 // remote_login.aw - AW remote login
 class remote_login extends aw_template 
 {
@@ -39,7 +39,6 @@ class remote_login extends aw_template
 
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if ($id)
 		{

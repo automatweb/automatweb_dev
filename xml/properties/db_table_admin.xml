@@ -1,15 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>name</name>
-            <type>textbox</type>
-            <group>general</group>
-            <field>name</field>
-            <table>objects</table>
-            <method>serialize</method>
-            <caption>Objekti nimi</caption>
-      </property>
-      <property>
             <name>status</name>
             <type>status</type>
             <table>objects</table>

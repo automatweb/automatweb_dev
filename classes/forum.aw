@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.59 2002/11/24 21:08:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.60 2002/12/02 11:18:52 kristo Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -1145,7 +1145,6 @@ topic");
 	// !Submits comment to a topic
 	function submit_comment($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if (!$name)
 		{
@@ -1856,7 +1855,6 @@ topic");
 	// !Submits the changed topic
 	function save_topic($arr)
 	{
-		$this->quote($arr);
 		extract($arr);
 		$this->upd_object(array(
 			"oid" => $board,

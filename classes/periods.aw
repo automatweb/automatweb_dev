@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.16 2002/11/07 10:52:24 kristo Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.17 2002/12/02 11:18:52 kristo Exp $
 
 class db_periods extends aw_template 
 {
@@ -307,7 +307,6 @@ class db_periods extends aw_template
 
 	function save($data) 
 	{
-		$this->quote($data);
 		extract($data);
 
 		$old = $this->get($id);

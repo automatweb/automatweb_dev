@@ -839,8 +839,7 @@ class search_conf extends aw_template
 		$lgps[$this->cfg["site_id"]][aw_global_get("lang_id")] = $grps;
 
 		$cache->file_set("search_groups::".$this->cfg["site_id"],aw_serialize($lgps));
-		$x = get_instance("xml");
-		$dat = $x->xml_serialize($lgps);
+		$dat = aw_serialize($lgps,SERIALIZE_XML);
 		$this->quote(&$dat);
 		$c = get_instance("config");
 		$c->set_simple_config("search_grps", $dat);

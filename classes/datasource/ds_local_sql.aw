@@ -1,5 +1,5 @@
 <?php
-// $Id: ds_local_sql.aw,v 1.2 2002/11/26 12:38:48 duke Exp $
+// $Id: ds_local_sql.aw,v 1.3 2002/12/02 11:18:57 kristo Exp $
 // ds_local_sql - interface for the local SQL database
 class ds_local_sql extends aw_template
 {
@@ -27,7 +27,6 @@ class ds_local_sql extends aw_template
 			$args["oid"] = $args["id"];
 			$retval = $this->get_object($args);
 		};
-		$this->dequote($retval);
 		return $retval;
 	}
 

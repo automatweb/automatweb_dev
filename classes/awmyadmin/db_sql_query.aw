@@ -6,9 +6,6 @@
 	@default field=meta
 	@default method=serialize
 
-	@property name type=textbox field=name
-	@caption Nimi
-
 	@property status type=status
 	@caption Staatus
 
@@ -90,7 +87,6 @@ class db_sql_query extends class_base
 
 	function show_query_results($db_base, $sql, &$num_rows)
 	{
-		$this->dequote(&$sql);
 		$db = get_instance('awmyadmin/db_login');
 		$db->login_as($db_base);
 

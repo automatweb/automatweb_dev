@@ -7,9 +7,6 @@
 	@default field=meta
 	@default method=serialize
 
-	@property name type=textbox field=name group=general 
-	@caption Nimi
-
 	@property status type=status group=general 
 	@caption Staatus
 
@@ -322,6 +319,8 @@ class db_table_contents extends class_base
 	function submit_admin_content($arr)
 	{
 		extract($arr);
+		// this is here,because these things are a part of the sql statement 
+		// and should contain ' that should be passed without quoting to the sql where part
 		$this->dequote(&$keys);
 		$ob = $this->get_object($id);
 		$db = get_instance('awmyadmin/db_login');

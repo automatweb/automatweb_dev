@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.5 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.6 2002/12/02 11:18:52 kristo Exp $
 // menu_chain.aw - menüüpärjad
 
 class menu_chain extends aw_template 
@@ -30,7 +30,6 @@ class menu_chain extends aw_template
 		};
 
 		$meta = (is_array($meta))? $meta : array();
-		$this->dequote($obj);
 
 		if ($return_url)
 		{
@@ -60,7 +59,6 @@ class menu_chain extends aw_template
 	// !Saves the menu_chain object
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$meta = aw_serialize($menus,SERIALIZE_PHP);
 		if ($id)

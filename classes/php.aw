@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.14 2002/11/26 13:00:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.15 2002/12/02 11:18:52 kristo Exp $
 // php.aw - PHP serializer
 class php_serializer 
 {
-	function php_serialize($arr,$to_file = false)
+	function php_serialize($arr)
 	{
 		if (!is_array($arr))
 		{
@@ -12,7 +12,7 @@ class php_serializer
 
 		$arrname = ($this->arr_name != "" ? $this->arr_name : "arr");
 
-		$dat = "\$".$arrname." = ".$this->req_serialize($arr,$to_file||$this->to_file).";";
+		$dat = "\$".$arrname." = ".$this->req_serialize($arr).";";
 		return $dat;
 	}
 
@@ -21,7 +21,7 @@ class php_serializer
 		$this->$key = $val;
 	}
 
-	function req_serialize($arr,$to_file)
+	function req_serialize($arr)
 	{
 		$str ="array(";
 		$td = array();
@@ -29,27 +29,14 @@ class php_serializer
 		{
 			if (is_array($v))
 			{
-				$v = $this->req_serialize($v,$to_file);
+				$v = $this->req_serialize($v);
 			}
 			else
 			{
-				if (!$to_file)
-				{
-					$v = str_replace("\"","\\\\\"",$v);
-				}
-				else
-				{
-					$v = str_replace("\"","\\\"",$v);
-				}
-				$v = str_replace("\n","\\\n",$v);
-				$v = str_replace("\r","\\\r",$v);
-				$v = str_replace("\$","\\\\\$",$v);
-				$v = "\"$v\"";
+				$v = str_replace("\\","\\\\",$v);
+				$v = "'".str_replace("'","\'", $v)."'";
 			}
-			if (!$this->for_include)
-			{
-				$k = str_replace("\"","\\\"",$k);
-			}
+
 			if ($this->no_index)
 			{
 				$td[] = $v."\n";
@@ -64,9 +51,16 @@ class php_serializer
 
 	function php_unserialize($str)
 	{
-		eval($str);
+		@eval($str);
+		if (!is_array($arr))
+		{
+			@eval(stripslashes($str));
+			if (!is_array($arr))
+			{
+				die("php_unserialize failed!");
+			}
+		}
 		return $arr;
 	}
 }
-
 ?>

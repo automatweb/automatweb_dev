@@ -138,7 +138,6 @@ class languages extends aw_template
 
 	function submit($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		if ($id)

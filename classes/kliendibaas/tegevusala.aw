@@ -79,7 +79,6 @@ class tegevusala extends aw_template
 	function submit($arr)
 	{
 		extract($arr);
-		$this->quote($tegevusala);
 		@extract($tegevusala);
 		if ($id)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.3 2002/11/13 11:35:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.5 2002/12/02 11:18:59 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -118,7 +118,12 @@ class form_entry_element extends form_element
 
 		if ($this->arr["type"] == "textarea")
 		{
-			$src = ($this->form->arr["allow_html"]) ? $this->entry : htmlspecialchars($this->entry);
+			$allow_html = 1;
+			if ($this->form->arr["allow_html_set"] == 1)
+			{
+				$allow_html = $this->form->arr["allow_html"];
+			}
+			$src = ($allow_html) ? $this->entry : htmlspecialchars($this->entry);
 			$src = create_links($src);
 			$html = str_replace("\n","<br>",$src);
 		}
@@ -281,9 +286,15 @@ class form_entry_element extends form_element
 
 		if ($this->arr["type"] == "link")
 		{
+			$target = "";
+			if ($this->arr["link_newwindow"])
+			{
+				$target = 'target="_blank"';
+			}
+
 			if ($this->arr["subtype"] == "show_op")
 			{
-				$html.="<a href='".$this->mk_my_orb("show_entry", array("id" => $this->form->id, "entry_id" => $this->entry_id, "op_id" => $this->arr["link_op"], "section" => $GLOBALS["section"]),"form")."'>".$this->arr["link_text"]."</a>";
+				$html.="<a $target href='".$this->mk_my_orb("show_entry", array("id" => $this->form->id, "entry_id" => $this->entry_id, "op_id" => $this->arr["link_op"], "section" => $GLOBALS["section"]),"form")."'>".$this->arr["link_text"]."</a>";
 			}
 			else
 			{
@@ -291,11 +302,11 @@ class form_entry_element extends form_element
 				// and the text of the element as the link caption
 				if (is_array($this->entry))
 				{
-					$html.="<a href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
+					$html.="<a $target href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
 				}
 				else
 				{
-					$html.="<a href='".$this->entry."'>".$this->arr["link_text"]."</a>";
+					$html.="<a $target href='".$this->entry."'>".$this->arr["link_text"]."</a>";
 				}
 			}
 		}

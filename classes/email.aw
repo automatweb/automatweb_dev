@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.21 2002/11/07 10:52:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.22 2002/12/02 11:18:52 kristo Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -123,7 +123,6 @@ class email extends aw_template
 
 	function save_mail($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		
 		$id = $mail_id;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.8 2002/11/07 10:52:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.9 2002/12/02 11:18:52 kristo Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -429,8 +429,6 @@ class events extends aw_template
 	// !Submits an event
 	function event_submit($args = array())
 	{
-		$this->quote($args);
-
 		extract($args);
 		$q = "";
 

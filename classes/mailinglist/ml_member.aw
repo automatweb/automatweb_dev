@@ -45,7 +45,6 @@ class ml_member extends aw_template
 	//! Händleb muutmist
 	function orb_submit_change($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 	
 		$ob = $this->get_object($id);

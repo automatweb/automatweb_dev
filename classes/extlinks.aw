@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.20 2002/11/07 10:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.21 2002/12/02 11:18:52 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -64,7 +64,6 @@ class extlinks extends aw_template
 		{
 			return;
 		}
-		$this->dequote(&$link);
 
 		if (strpos($link["url"],"@") > 0)
 		{
@@ -124,7 +123,6 @@ class extlinks extends aw_template
 
 	function save_link($args) 
 	{
-		$this->quote($args);
 		extract($args);
 		if ($type == "")
 		{

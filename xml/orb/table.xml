@@ -255,6 +255,8 @@
 			<function name="add">
 				<arguments>
 					<required name="parent"/>
+					<optional name="alias_to"/>
+					<optional name="return_url"/>
 				</arguments>
 			</function>
 		</action>

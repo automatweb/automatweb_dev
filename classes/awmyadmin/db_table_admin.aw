@@ -7,9 +7,6 @@
 	@default field=meta
 	@default method=serialize
 
-	@property name type=textbox group=general field=name
-	@caption Objekti nimi
-
 	@property status type=status 
 	@caption Staatus
 

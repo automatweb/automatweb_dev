@@ -92,7 +92,6 @@ class form_filter_search_element extends form_search_element
 
 	function save(&$arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		$ret = $this->do_core_save(&$arr);

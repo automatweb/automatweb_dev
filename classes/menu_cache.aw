@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.12 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.13 2002/12/02 11:18:52 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -94,12 +94,6 @@ class menu_cache extends aw_template
 			$row["meta"] = aw_unserialize($row["metadata"]);
 			$row["mtype"] = $row["type"];
 
-			// we need to do this, cause if the name contains quotes, then in the db they will be \\\" , then
-			// when php reads them from the db they will be \\"
-			// and when aw reads them from php (in db_next) they will be turned into \"
-			// so here we need to do another dequote
-			// how do they get like that? dunno. - terryf
-			$this->dequote(&$row["name"]);
 			// Maybe this means that some people come with knives after me sometimes,
 			// but I'm pretty sure that we do not need to save unpacked metadata
 			// in the cache, since it's available in $row[meta] anyway
@@ -135,8 +129,10 @@ class menu_cache extends aw_template
 		{
 			if ($this->loaded_cache != $filename)
 			{
+				enter_function("menu_cache::make_caches::load");
 				include($fn);
 				$this->loaded_cache = $filename;
+				exit_function("menu_cache::make_caches::load");
 			}
 		}
 		else

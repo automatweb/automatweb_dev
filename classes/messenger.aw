@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.109 2002/11/13 16:19:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.110 2002/12/02 11:18:52 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -1136,10 +1136,6 @@ class messenger extends menuedit_light
 		}
 		else
 		{
-			$this->quote($args);
-			extract($args);
-
-
 			// First we need to fetch and store the attached files. If any.
 			$this->receive_attaches(array(
 				"msg_id" => $msg_id,
@@ -2866,7 +2862,6 @@ class messenger extends menuedit_light
 	// !submitib uue ruuli
 	function submit_rule($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$keyblock = array(
 			"field" => $field,

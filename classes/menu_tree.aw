@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.4 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.5 2002/12/02 11:18:52 kristo Exp $
 // menu_tree.aw - menüüpuu
 class menu_tree extends aw_template
 {
@@ -57,7 +57,6 @@ class menu_tree extends aw_template
 
 	function submit($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		if ($id)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/manager.aw,v 2.4 2002/11/26 12:33:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/manager.aw,v 2.5 2002/12/02 11:18:52 kristo Exp $
 // that's your basic file manager with 2 frames class. On the left side is a
 // menu tree just like in /automatweb right now, on the right side we show objects
 // someday this can perhaps replace the current menuedit framework
@@ -201,7 +201,6 @@ class manager extends aw_template
 	// !Submits a menu browse view
 	function submit_browse($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if (is_array($ord))
 		{
@@ -312,7 +311,6 @@ class manager extends aw_template
 
 	function submit_menu($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if ($id)
 		{

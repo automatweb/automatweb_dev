@@ -19,7 +19,6 @@ class dns extends aw_template
 	
 	function query($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if (not($domain))
 		{
@@ -57,7 +56,6 @@ class dns extends aw_template
 	
 	function dns_query($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		if (not($domain))
 		{

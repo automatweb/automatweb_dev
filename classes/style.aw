@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.15 2002/11/15 18:08:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.16 2002/12/02 11:18:52 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -190,8 +190,6 @@ class style extends aw_template
 
 	function submit_sel($arr)
 	{
-		$this->quote(&$arr);
-
 		// lisame 6ige tyybiga
 		$id = $this->new_object(array(
 			"parent" => $arr["parent"], 
@@ -205,7 +203,6 @@ class style extends aw_template
 
 	function submit($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		$sts = serialize($st);

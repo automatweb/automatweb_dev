@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.4 2002/11/26 12:59:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.5 2002/12/02 11:18:58 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -11,12 +11,6 @@ class mysql
 
 	function db_init() 
 	{
-		/*
-		global $db_core;
-		$this->dbh = $db_core->dbh;
-		$this->db_base = $db_core->db_base;
-		$this->watch = 1;
-		*/
 		lc_load('definition');
 	}
 		
@@ -141,6 +135,7 @@ class mysql
 
 	function db_next($deq = true) 
 	{
+		$deq = !$GLOBALS['cfg']['__default']['magic_quotes_gpc'];
 		# this function cannot be called before a query is made
 		// don't need numeric indices
 		$res = @mysql_fetch_array($this->qID,MYSQL_ASSOC);
@@ -177,10 +172,8 @@ class mysql
 	function db_fetch_field($qtext,$field) 
 	{
 		$this->db_query($qtext);
-		$row = $this->db_fetch_row();
-		$val = $row[$field];
-		$this->dequote($val);
-		return $val;
+		$row = $this->db_next();
+		return $row[$field];
 	}
 
 	//// ! fetch all rows from db_query result

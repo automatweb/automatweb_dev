@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.2 2002/11/07 10:52:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.3 2002/12/02 11:18:56 kristo Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -111,7 +111,10 @@ class cfgobject extends aw_template
 
 				// get the defined properties for each class in the configuraton form
 				// to get the caption
-				$props = $t->get_properties();
+				if (method_exists($t, "get_properties"))
+				{
+					$props = $t->get_properties();
+				}
 
 				// create the lines with checkboxes. or smth.
 				foreach($cl_properties as $pkey => $val)
@@ -190,7 +193,6 @@ class cfgobject extends aw_template
 	// !Submits the configuration object
 	function submit($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$clidlist = $this->_remap_classes();
 		if ($id)
@@ -222,7 +224,10 @@ class cfgobject extends aw_template
 			foreach($cfgproperties->get() as $clid => $elements)
 			{
 				$t = get_instance($clid);
-				$cl_props = $t->get_properties();
+				if (method_exists($t, "get_properties"))
+				{
+					$cl_props = $t->get_properties();
+				}
 				foreach($elements as $key  => $val)
 				{
 					if ($properties[$clid][$key])
@@ -320,7 +325,6 @@ class cfgobject extends aw_template
 	// !Shows the form for assigning multiple configuration objects to selected objects
 	function assign($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		
 		$toolbar = get_instance("toolbar");

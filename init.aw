@@ -145,12 +145,12 @@ function init_config($arr)
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_e = $sec + $micro;
 //		echo "cache unserialize ",($ts_e - $ts_s), " seconds <br>";
-//		result: 0.000791 - too small to measure correctly
+//		result: 0.005 - too small to measure correctly
 	}
 	else
 	{
-//		list($micro,$sec) = split(" ",microtime());
-//		$ts_s = $sec + $micro;
+		list($micro,$sec) = split(" ",microtime());
+		$ts_s = $sec + $micro;
 		$rootini = false;
 		foreach($ini_files as $file)
 		{
@@ -192,7 +192,6 @@ function init_config($arr)
 
 	// only load those definitions if fastcall is not set. This shouldnt break anything
 	// and should save us a little memory. -- duke
-//	echo "fastcall = $GLOBALS[fastcall] <br>";
 	if (!$GLOBALS["fastcall"])
 	{
 		// and here do the defs for classes
@@ -213,6 +212,9 @@ function init_config($arr)
 			define($erd["def"], $erid);
 		}
 	};
+
+	// db driver quoting settings
+	$GLOBALS['cfg']['__default']['magic_quotes_gpc'] = ini_get('magic_quotes_gpc');
 }
 
 function aw_ini_set($key,$value)

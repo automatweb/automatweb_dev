@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.1 2002/11/04 00:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.2 2002/12/02 11:18:54 kristo Exp $
 
 // act_type's:
 // 0 - always active
@@ -88,7 +88,6 @@ class banner extends aw_template
 				$fc = fread($f, filesize($fail));
 				fclose($f);
 				$this->quote(&$fc);
-				$this->quote(&$fc);
 				$this->db_query("UPDATE banners SET fail = '$fc' , fail_type = '$fail_type' WHERE id = $id");
 			}
 
@@ -104,7 +103,6 @@ class banner extends aw_template
 				$f = fopen($fail,"r");
 				$fc = fread($f, filesize($fail));
 				fclose($f);
-				$this->quote(&$fc);
 				$this->quote(&$fc);
 			}
 

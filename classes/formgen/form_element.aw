@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.14 2002/11/29 15:35:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.15 2002/12/02 11:18:59 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -1632,6 +1632,7 @@ class form_element extends aw_template
 		if ($dat[$var] != $this->arr["name"])
 		{
 			$this->arr["name"] = $dat[$var];
+			$this->dequote($this->arr["name"]);
 			$this->do_change_name($dat[$var]);
 		}
 	}

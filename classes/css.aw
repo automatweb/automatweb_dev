@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.18 2002/11/22 12:14:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.19 2002/12/02 11:18:52 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -115,7 +115,6 @@ class css extends aw_template
 
 	function css_submit_new($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$id = $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => CL_CSS));
 		return $this->mk_orb("change",array("id" => $id));
@@ -345,7 +344,6 @@ class css extends aw_template
 			$this->raise_error(ERR_CSS_EGRP,"Wrong type for css_submit_add_group",true);
 		};
 		
-		$this->quote($name);
 		$gid = $this->new_object(array(
 			"name" => $name,
 			"parent" => $rootmenu,
@@ -446,7 +444,6 @@ class css extends aw_template
 			"key" => "custom_css",
 		));
 		$custom_css_xml = $meta;
-		$this->dequote($custom_css_xml);
 		$custom_css = $xml->xml_unserialize(array("source" => $custom_css_xml));
 		
 		$css_file = "";
@@ -476,9 +473,7 @@ class css extends aw_template
 	function submit_css_list($args = array())
 	{
 		extract($args);
-		$xml = get_instance("xml");
-		
-		$custom_css = $xml->xml_serialize($style);
+		$custom_css = aw_serialize($style, SERIALIZE_XML);
 		$this->quote($custom_css);
 		
 		$this->set_object_metadata(array(

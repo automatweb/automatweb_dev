@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.19 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.20 2002/12/02 11:18:52 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -27,7 +27,6 @@ class lists extends aw_template
 
 	function add_list_submit($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		if ($id)
 		{
@@ -418,7 +417,6 @@ class lists extends aw_template
 	
 	function submit_cat(&$arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		if ($id)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.18 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.19 2002/12/02 11:18:52 kristo Exp $
 
 class promo extends aw_template
 {
@@ -52,7 +52,6 @@ class promo extends aw_template
 
 	function submit($arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 
 		$a = $this->make_keys($section);

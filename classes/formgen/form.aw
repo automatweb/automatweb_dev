@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.7 2002/11/26 12:26:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.8 2002/12/02 11:18:59 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -430,11 +430,11 @@ class form extends form_base
 	// TODO: Move to another class
 	function save_settings($arr)
 	{
-		$this->dequote(&$arr);
 		extract($arr);
 		$this->load($id);
 
 		$this->arr["allow_html"] = $allow_html;
+		$this->arr['allow_html_set'] = 1;
 		$this->arr["def_style"] = $def_style;
 		$this->arr["after_submit"] = $after_submit;
 		$this->arr["after_submit_text"] = $after_submit_text;
@@ -772,9 +772,14 @@ class form extends form_base
 			FSUBTYPE_CAL_SEARCH => "Otsing",
 		);
 
+		$allow_html = true;
+		if ($this->arr['allow_html_set'])
+		{
+			$allow_html = $this->arr['allow_html'];
+		}
 		$this->vars(array(
 			"roles"		=> $this->picker($sel_role,$roles),
-			"allow_html"	=> checked($this->arr["allow_html"]),
+			"allow_html"	=> checked($allow_html),
 			"def_style"	=> $this->picker($this->arr["def_style"],$t->get_select(0,ST_CELL)),
 			"after_submit_link"	=> $this->arr["after_submit_link"],
 			"as_1"	=> ($this->arr["after_submit"] == 1 ? "CHECKED" : ""),
@@ -2000,7 +2005,6 @@ class form extends form_base
 	// !saves the forms from which to search for search form $id
 	function save_search_sel(&$arr)
 	{
-		$this->dequote(&$arr);
 		extract($arr);
 		$this->load($id);
 
@@ -3342,8 +3346,6 @@ class form extends form_base
 	{
 		extract($arr);
 
-		$this->quote($name);
-
 		$id = $this->new_object(array(
 				"parent" => $parent,
 				"name" => $name,
@@ -3513,7 +3515,6 @@ class form extends form_base
 	// !saves the elements in the cell ($row, $col) in form $id
 	function submit_cell($arr)
 	{
-		$this->dequote(&$arr);
 		extract($arr);
 		$this->load($id);
 		$this->arr["contents"][$row][$col]->submit_cell($arr);
@@ -3803,7 +3804,6 @@ class form extends form_base
 
 	function submit_metainfo(&$arr)
 	{
-		$this->quote(&$arr);
 		extract($arr);
 		$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
 		$this->_log("form","Muutis formi $this->name metainfot");
@@ -5202,7 +5202,6 @@ class form extends form_base
 	// !saves the used filter for search form $id
 	function save_filter_search_sel(&$arr)
 	{
-		$this->dequote(&$arr);
 		extract($arr);
 		$this->load($id);
 
@@ -5448,7 +5447,6 @@ class form extends form_base
 
 	function submit_calendar($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 		$this->load($id);
 		$this->arr["event_display_table"] = $event_display_table;

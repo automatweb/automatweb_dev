@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.23 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.24 2002/12/02 11:18:52 kristo Exp $
 
 classload("extlinks");
 class links extends extlinks
@@ -121,7 +121,6 @@ class links extends extlinks
 	// !Submitib add voi change actioni tulemuse
 	function submit($arr)
 	{
-		$this->quote($arr);
 		extract($arr);
 			
 		if (!$id)
@@ -333,7 +332,6 @@ class links extends extlinks
 				$name = str_replace("'","",$name);
 				$this->vars(array(
 					"name" => $name, 
-					//"name" => htmlentities($row["name"],ENT_QUOTES), 
 					"id" => $row["oid"],
 					"url" => $url
 				));
