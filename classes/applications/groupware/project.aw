@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.26 2005/01/10 12:55:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.27 2005/01/13 12:59:12 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -237,6 +237,11 @@ class project extends class_base
 		));
 
 		$start = $range["start"];
+		if ($range["overview_start"])
+		{
+			$start = $range["overview_start"];
+		};
+
 		$end = $range["end"];
 		classload("icons");
 
