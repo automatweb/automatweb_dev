@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.142 2003/11/25 16:02:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.143 2003/11/26 14:42:55 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -1042,7 +1042,16 @@ class planner extends class_base
 		}
 		else
 		{
+			if (!empty($emb["id"]))
+			{
+				$event_obj = new object($emb["id"]);
+				$emb["id"] = $event_obj->brother_of();
+			};
 			$this->event_id = $t->submit($emb);
+			if (!empty($emb["id"]))
+			{
+				$this->event_id = $event_obj->id();
+			};
 		};
 
 		//I really don't like this hack //axel
