@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.78 2004/09/03 10:03:40 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.79 2004/09/03 14:09:57 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -291,6 +291,9 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 @property projects_listing_tree type=treeview no_caption=1 parent=projects_tree 
 @property projects_listing_table type=table no_caption=1 parent=projects_table
 
+----- Minu projektid
+@property my_projects type=table no_caption=1 store=no group=my_projects
+
 -------------------------------------------------
 
 @groupinfo contacts caption="Kontaktid"
@@ -323,6 +326,7 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 
 @groupinfo org_projects_main caption="Projektid" submit=no
 @groupinfo org_projects caption="Projektid" submit=no parent=org_projects_main
+@groupinfo my_projects caption="Minu projektid" parent=org_projects_main submit=no
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -756,6 +760,10 @@ class crm_company extends class_base
 					),CL_CRM_ADDRESS);
 				}
 				$data['caption'] .= '<br><a href="'.$url.'">Muuda</a>';
+			break;
+			
+			case "my_projects":
+				$this->do_my_projects_table($arr);
 			break;
 			
 			case "projects_listing_tree":
@@ -4343,23 +4351,7 @@ class crm_company extends class_base
 	{
 		$table = &$arr["prop"]["vcl_inst"];
 		
-		$table->define_field(array(
-			"name" => "project_name",
-			"caption" => "Projekti nimi",
-			"sortable" => 1,
-		));
-		
-		$table->define_field(array(
-			"name" => "project_participants",
-			"caption" => "Projektis osalejad",
-			"sortable" => 1,
-		));
-		
-		$table->define_field(array(
-			"name" => "project_created",
-			"caption" => "Projekt loodud",
-			"sortable" => 1,
-		));
+		$this->do_projects_table_header(&$table);
 		
 		$project_conns = new connection();
 	
@@ -4404,9 +4396,68 @@ class crm_company extends class_base
 			}
 			
 			$table->define_data(array(
-				"project_name" => $project->name(),
+				"project_name" => html::get_change_url($project->id(), array(), $project->name()),
 				"project_participants"	=> $partic_row,
 				"project_created" => get_lc_date($project->created())
+			));
+		}
+	}
+	
+	function do_projects_table_header(&$table)
+	{
+		$table->define_field(array(
+			"name" => "project_name",
+			"caption" => "Nimi",
+			"sortable" => 1,
+		));
+		
+		$table->define_field(array(
+			"name" => "project_participants",
+			"caption" => "Osalejad",
+			"sortable" => 1,
+		));
+		
+		$table->define_field(array(
+			"name" => "project_created",
+			"caption" => "Loodud",
+			"sortable" => 1,
+		));
+	}
+	
+	function do_my_projects_table(&$arr)
+	{	
+		$table = &$arr["prop"]["vcl_inst"];
+		$this->do_projects_table_header(&$table);
+		
+		$uid = users::get_oid_for_uid(aw_global_get("uid"));
+		$conns = new connection();
+		$conns_arr = $conns->find(array(
+			"from.class_id" => CL_PROJECT,
+			"to" => $uid,
+			"type" =>  2,
+		));
+		foreach ($conns_arr as $my_project)
+		{
+			$project_obj = &obj($my_project["from"]);
+			
+			$participants = array();
+			$participants = $project_obj->connections_from(array(
+				"type" => "RELTYPE_PARTICIPANT",
+			));
+			
+			$partic_row = "";
+			foreach ($participants as $participant)
+			{
+				$partic_row .= " ".html::href(array(
+					"url" => html::get_change_url($participant->prop("to")),
+					"caption" => $participant->prop("to.name"),
+				)); 
+			}
+			
+			$table->define_data(array(
+				"project_name" => html::get_change_url($project_obj->id(), array(), $project_obj->name()),
+				"project_participants" => $partic_row,
+				"project_created" => get_lc_date($project_obj->created()),
 			));
 		}
 	}
