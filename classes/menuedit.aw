@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.43 2001/07/31 10:14:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.44 2001/08/08 06:12:23 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -186,17 +186,23 @@ class menuedit extends aw_template
 		global $awt;
 		global $test;
 		global $baseurl;
-
+		
 		$obj = $this->get_object($section);
 
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $obj["metadata"],
 		));
- 
+	
 		////
-		// if the user is not logged in, then redirect him  or her to the default
-		// error page
-
+		// Kui küsiti infot RDF-is, siis tagastame vastava väljundi
+		// hm. Ja tegelikult peaks selle üleüldse kuhugi mujale viima.
+		if (isset($format) && $format == "rss")
+		{
+			die($this->do_rdf($section,$obj,$format,$docid));
+		}
+ 
+		// if the section is marked "users_only" and the visitor is not logged in, 
+		// then redirect him  or her to the default error page
 		if ( ($meta["users_only"] == 1) && (!defined("UID")) )
 		{
 			classload("config");
@@ -204,18 +210,50 @@ class menuedit extends aw_template
 			$url = $dbc->get_simple_config("orb_err_mustlogin");
 			global $baseurl;
 			header("Location: $baseurl/$url");
+			// exit from inside the class, yuck.
 			exit;
 		};
 
+		/// Vend?
 		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
 		{
 			$section=$obj["parent"];
 			$docid=$obj["brother_of"];
 		}
 
-		if (isset($format) && $format == "rss")
+		
+		if (!$this->can("view", $section))
 		{
-			die($this->do_rdf($section,$obj,$format,$docid));
+			// kui kastuajal pole selle men&uuml;&uuml; vaatamise &otilde;igust, siis vaatame et millisesse persesse ta saata tuleb
+			classload("config");
+			$c = new db_config;
+			$ec = $c->get_simple_config("errors");
+			classload("xml");
+			$x = new xml;
+			$ra = $x->xml_unserialize(array("source" => $ec));
+			
+			global $gidlist;
+			if (is_array($gidlist))
+			{
+				$d_gid = 0;
+				$d_pri = 0;
+				$d_url = "";
+				foreach($gidlist as $gid)
+				{
+					if ($ra[$gid]["pri"] >= $d_pri && $ra[$gid]["url"] != "")
+					{
+						$d_gid = $gid;
+						$d_pri = $ra[$gid]["pri"];
+						$d_url = $ra[$gid]["url"];
+					}
+				}
+				if ($d_url != "")
+				{
+					header("Location: $d_url");
+					die();
+				}
+			}
+			$this->raise_error("No ACL error messages defined!",true);
 		}
 
 		// main.tpl-i muutuste testimiseks ilma seda oiget main.tpl-i muutmata
@@ -224,7 +262,8 @@ class menuedit extends aw_template
 		{
 			$template = "main2.tpl";
 		};
-		// ja kaivitame selle
+
+		// kaivitame taimeri
 		$awt->start("menuedit_show");
 
 		// by default show both panes.
@@ -234,10 +273,8 @@ class menuedit extends aw_template
 		// read all the menus and other necessary info into arrays from the database
 		$this->make_menu_caches();
 
-
 		$this->read_template($template);
 
-		// laeme dokumentide klassi
 		classload("periods","document");
 		$d = new document();
 		$this->doc = new document();
@@ -255,20 +292,24 @@ class menuedit extends aw_template
 		}
 
 		$sel_menu_id = $section;
+
 		if (!is_array($this->mar[$sel_menu_id]))
 		{
 			$seobj = $this->get_object($sel_menu_id);
 			$sel_menu_id = $seobj["parent"];
 		}
+		
 		$this->vars(array(
 			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
 			"sel_menu_image" => (isset($this->mar[$sel_menu_id]["img_url"]) && $this->mar[$sel_menu_id]["img_url"] != "" ? "<img src='".$this->mar[$sel_menu_id]["img_url"]."' border='0'>" : ""),
 			"sel_menu_id" => $sel_menu_id
 		));
+		
 		if (!$this->mar[$sel_menu_id]["left_pane"])
 		{
 			$this->left_pane = false;
 		}
+
 		if (!$this->mar[$sel_menu_id]["right_pane"])
 		{
 			$this->right_pane = false;
@@ -293,13 +334,27 @@ class menuedit extends aw_template
 		else
 		if ($periodic && $text == "") 
 		{
-			$this->vars(array("doc_content" => $this->show_periodic_documents($section,$obj)));
+			$docc = $this->show_periodic_documents($section,$obj);
+			if ($this->mar[$section]["no_menus"] == 1)
+			{
+				// this tells site index.aw not to show the index.tpl
+				$this->no_index_template = true;
+				return $docc;
+			}
+
+			$this->vars(array("doc_content" => $docc));
 		} 
 		else 
 		if ($text == "")
 		{
 			// sektsioon pole perioodiline
-			$this->vars(array("doc_content" => $this->show_documents($section,$docid,$template)));
+			$docc = $this->show_documents($section,$docid,$template);
+			if ($this->mar[$section]["no_menus"] == 1)
+			{
+				$this->no_index_template = true;
+				return $docc;
+			}
+			$this->vars(array("doc_content" => $docc));
 			if ( (is_array($this->blocks)) && (sizeof($this->blocks) > 0) )
 			{
 				while(list(,$blockdata) = each($this->blocks))
@@ -350,6 +405,7 @@ class menuedit extends aw_template
 				reset($menu_defs_v2);
 				while (list($id,$name) = each($menu_defs_v2))
 				{
+					global $DEBUG;
 					$this->req_draw_menu($id,$name,&$path,false);
 					if ($this->sel_section == $frontpage)
 					{
@@ -365,6 +421,7 @@ class menuedit extends aw_template
 			reset($this->mar);
 			global $ext;
 			global $hack;
+			// I don't think we need that anyway
 			if (defined("HACK"))
 			{
 				if (defined("UID"))
@@ -735,7 +792,13 @@ class menuedit extends aw_template
 				$this->vars(array("MENUEDIT_ACCESS" => ""));
 			}
 			$logged = $this->parse("logged");
-			$this->vars(array("logged" => $logged, "login" => ""));
+			$this->vars(array(
+				"logged" => $logged, 
+				"logged1" => $this->parse("logged1"),
+				"logged2" => $this->parse("logged2"),
+				"logged3" => $this->parse("logged3"),
+				"login" => ""
+			));
 		}
 		else
 		{
@@ -919,7 +982,8 @@ class menuedit extends aw_template
 				menu.shop_id as shop_id,
 				menu.width as width,
 				menu.right_pane as right_pane,
-				menu.left_pane as left_pane
+				menu.left_pane as left_pane,
+				menu.no_menus as no_menus
 			FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
@@ -1124,7 +1188,7 @@ class menuedit extends aw_template
 				$mpr[] = $row["parent"];
 			}
 		}
-		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PROMO);
+/*		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PROMO);
 		$this->db_query("SELECT objects.*, menu.* FROM objects
 				LEFT JOIN menu ON menu.id = objects.oid
 				WHERE objects.class_id = ".CL_PROMO." AND objects.status != 0");
@@ -1145,7 +1209,7 @@ class menuedit extends aw_template
 					}
 				}
 			}
-		}
+		}*/
 
 		// objektipuu
 		$tr = $this->rec_tree(&$arr, $GLOBALS["admin_rootmenu2"],$period);
@@ -1636,7 +1700,7 @@ class menuedit extends aw_template
 
 		$q = "SELECT objects.*,menu.*
 			FROM objects LEFT JOIN menu ON menu.id = objects.oid
-			WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_PROMO." OR objects.class_id = ".CL_BROTHER.") AND objects.status != 0 AND objects.parent = $parent $ss
+			WHERE (objects.class_id IN (".CL_PSEUDO.",".CL_PROMO.",".CL_BROTHER.",".CL_ML_LIST.")) AND objects.status != 0 AND objects.parent = $parent $ss
 			ORDER BY $sortby $order";
 		$this->db_query($q);
 
@@ -1811,6 +1875,13 @@ class menuedit extends aw_template
 		if ($mtype == MN_FORM_ELEMENT)
 		{
 			return $this->gen_list_filled_forms($parent);
+		}
+
+		if ($mtype == MN_ML_LIST)
+		{
+			classload("ml_list");
+			$ml=new ml_list();
+			return $ml->gen_list_folder($parent);
 		}
 
 		$pobj = $this->get_object($parent);
@@ -2419,6 +2490,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 							left_pane = '$left_pane',
 							shop_parallel = '$shop_parallel',
 							shop_ignoregoto = '$shop_ignoregoto',
+							no_menus = '$no_menus',
 							right_pane = '$right_pane'
 							WHERE id = '$id'";
 			$this->db_query($q);
@@ -2743,7 +2815,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 										 menu.right_pane as right_pane,
 										 menu.pers as pers,
 										 menu.shop_parallel as shop_parallel,
-										 menu.shop_ignoregoto as shop_ignoregoto
+										 menu.shop_ignoregoto as shop_ignoregoto,
+										 menu.no_menus as no_menus
 										 FROM objects 
 										 LEFT JOIN menu ON menu.id = objects.oid
 										 WHERE oid = $id");
@@ -2889,6 +2962,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 											"right_pane"	=> checked($row["right_pane"]),
 											"shop_parallel" => checked($row["shop_parallel"]),
 											"shop_ignoregoto" => checked($row["shop_ignoregoto"]),
+											"no_menus" => checked($row["no_menus"]),
 											"width" => $row["width"],
 											"pers" => $dbp->period_mlist(unserialize($row["pers"]))
 											));
@@ -3083,6 +3157,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$mn = "MENU_".$name."_L".$this->level."_ITEM";
 		$mn2 = "MENU_".$name."_L".($this->level+1)."_ITEM";
 
+		$this->vars(array(
+			"sel_menu_".$name."_L".$this->level."_cnt" => 0,
+		));
+
 		$in_path = in_array($this->mar[$parent]["oid"],$path);
 		$parent_tpl = $this->is_parent_tpl($mn2, $mn);
 		if (!(($in_path||$this->level == 1)||($parent_tpl&&$in_path)||$ignore_path))
@@ -3107,7 +3185,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// hmhm. taimisin seda vibe esilehel - 0.05 sek. niiet mitte oluliselt. - terryf
 			// kuigi, seda siin funxioonis kasutatakse aint n2dala vasaku paani tegemisex exole. ja see v6ix ikka n2dala koodis olla. 
 			// njah, praegu ainult nädalas. Aga idee on selles, et metainfo välja kasutad ka muu info salvestamiseks,
-			// mitte teha jarjest uusi valju juurde.
+			// mitte teha jarjest uusi valju juurde - duke
 			$meta = $this->get_object_metadata(array(
 					"metadata" => $row["metadata"],
 			));
@@ -3132,15 +3210,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->vars(array("lugu" => $done));
 				
 				$this->restore_handle();
-				
-
 
 			};
 
 			if ($check_acl)
 			{
 				// sellele menüüle pole oigusi, me ei näita seda
-				if (!$this->can("view",$row["oid"]))
+				if (not($this->can("view",$row["oid"])))
 				{
 					continue;
 				};
@@ -3166,6 +3242,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if ($this->sel_section == $row["oid"] && $this->is_template("MENU_".$name."_SEEALSO_ITEM"))
 			{
 				$this->do_seealso_items($row,$name);
+			}
+
+			if (in_array($row["oid"], $path))
+			{
+				$this->vars(array(
+					"sel_menu_".$name."_L".$this->level."_cnt" => $cnt,
+					"sel_menu_".$name."_L".$this->level."_name" => $row["name"]
+				));
 			}
 
 			$this->vars(array($mn2."_N" => ""));
@@ -3230,12 +3314,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if (isset($this->mpr[$row["oid"]]) && is_array($this->mpr[$row["oid"]]))
 			{
 				$hs = $this->parse("HAS_SUBITEMS_".$name);
+				$hsl = $this->parse("HAS_SUBITEMS_".$name."_L".$this->level);
 			}
 			else
 			{
 				$hs = $this->parse("NO_SUBITEMS_".$name);
+				$hsl = $this->parse("NO_SUBITEMS_".$name."_L".$this->level);
 			}
-			$this->vars(array("HAS_SUBITEMS_".$name => $hs));
+			$this->vars(array(
+				"HAS_SUBITEMS_".$name => $hs,
+				"NO_SUBITEMS_".$name => "",
+				"HAS_SUBITEMS_".$name."_L".$this->level => $hsl,
+				"NO_SUBITEMS_".$name."_L".$this->level => ""
+			));
 
 			if ($row["brother_of"])
 			{
@@ -3253,11 +3344,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 
 			$target = ($row["target"] == 1) ? sprintf("target='%s'","_new") : "";
-			$this->vars(array("text" 		=> $row["name"],
-												"link" 		=> $link,
-												"section"	=> $row["oid"],
-												"target" 	=> $target,
-												"image"		=> (isset($row["img_url"]) && $row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
+			$this->vars(array(
+				"text" 		=> $row["name"],
+				"link" 		=> $link,
+				"section"	=> $row["oid"],
+				"target" 	=> $target,
+				"image"		=> (isset($row["img_url"]) && $row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : ""),
+				"cnt" => $cnt
+			));
 	
 			if ($is_mid)
 			{
@@ -3798,6 +3892,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"leadonly" => 1,
 					"section" => $section,
 					"strip_img" => $strip_img,
+					"no_strip_lead" => $GLOBALS["no_strip_lead"],
 					"tpls" => $tpls
 				));
 				$dk++;
@@ -3823,6 +3918,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$ct = $d->gen_preview(array(
 					"docid" => $docid,
 					"section" => $section,
+					"no_strip_lead" => $GLOBALS["no_strip_lead"],
 					"notitleimg" => 0,
 					"tpl" => $tpl
 				));
@@ -3912,11 +4008,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		return $ya;
 	}
 
+	////
+	// !See jupp siin teeb promokasti
 	function make_promo_boxes($section)
 	{
 		global $awt;
 		$awt->start("make_promo_boxes($section)");
-		// see jupp siin teeb promokastid
 		$doc = new document;
 		$right_promo = "";
 		$left_promo = "";
