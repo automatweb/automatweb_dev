@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.17 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.18 2002/06/17 10:42:43 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -63,6 +63,10 @@ class extlinks extends aw_template
 		$this->dequote(&$link);
 
 		if (strpos($link["url"],"@") > 0)
+		{
+			$linksrc = $link["url"];
+		}
+		elseif ($this->cfg["directlink"] == 1)
 		{
 			$linksrc = $link["url"];
 		}
