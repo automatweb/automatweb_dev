@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.216 2004/02/17 14:41:53 duke Exp $
+// $Id: class_base.aw,v 2.217 2004/02/17 17:15:38 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2489,6 +2489,7 @@ class class_base extends aw_template
 				"all" => true,
 		));
 
+		$this->obj_inst = new object($this->id);
 		$this->load_obj_data(array("id" => $this->id));
 
 		$result = array();
@@ -2521,7 +2522,7 @@ class class_base extends aw_template
 				};
 			};
 		}
-			
+
 		// also add relations
 		$obj = new object($this->id);
 		$conns = $obj->connections_from();
