@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.92 2004/12/06 19:19:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.93 2005/01/18 10:53:08 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1130,7 +1130,8 @@ class admin_menus extends aw_template
 			$this->restore_handle();
 			
 			$iu = icons::get_icon_url($row["class_id"],$row["name"]);
-			$row["icon"] = '<img alt="'.$comment.'" src="'.$iu.'">';
+			$iconcomm = "Objekti id on ".$row["oid"];
+			$row["icon"] = '<img alt="'.$iconcomm.'" title="'.$iconcomm.'" src="'.$iu.'">';
 			$this->t->set_default_sortby("name");
 			$caption = parse_obj_name($row["name"]);
 
