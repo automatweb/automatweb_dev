@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.21 2004/11/11 15:08:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.22 2004/12/07 13:47:26 ahti Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -69,9 +69,9 @@ class rate extends class_base
 		{
 			case "objects_from":
 				$prop['options'] = array(
-					OBJECTS_FROM_CLID => "Klassi j&auml;rgi",
-					OBJECTS_FROM_FOLDER => "Kataloogi j&auml;rgi",
-					OBJECTS_FROM_OID => "Objektist"
+					OBJECTS_FROM_CLID => t("Klassi järgi"),
+					OBJECTS_FROM_FOLDER => t("Kataloogi järgi"),
+					OBJECTS_FROM_OID => t("Objektist"),
 				);
 				break;
 
@@ -100,11 +100,11 @@ class rate extends class_base
 
 			case "top_type":
 				$prop['options'] = array(
-					ORDER_HIGHEST => "K&otilde;rgeima hinde j&auml;rgi",
-					ORDER_AVERAGE => "Keskmise hinde j&auml;rgi",
-					ORDER_VIEWS => "Vaatamiste j&auml;rgi",
-					ORDER_LOWEST_RATE => "Madalaima hinde j&auml;rgi",
-					ORDER_LOWEST_VIEWS => "V&auml;him vaadatud"
+					ORDER_HIGHEST => t("K&otilde;rgeima hinde j&auml;rgi"),
+					ORDER_AVERAGE => t("Keskmise hinde j&auml;rgi"),
+					ORDER_VIEWS => t("Vaatamiste j&auml;rgi"),
+					ORDER_LOWEST_RATE => t("Madalaima hinde j&auml;rgi"),
+					ORDER_LOWEST_VIEWS => t("V&auml;him vaadatud"),
 				);
 				break;
 		}
@@ -194,6 +194,15 @@ class rate extends class_base
 				INSERT INTO ratings(oid, rating, tm, uid, ip) 
 				VALUES('$oid','$rate',".time().",'".aw_global_get("uid")."','".aw_global_get("REMOTE_ADDR")."')
 			");
+			$q = "SELECT COUNT(id) AS total FROM rating_sum WHERE oid = '$oid'";
+			if($this->db_fetch_field($q, "total") > 0)
+			{
+				$this->db_query("UPDATE rating_sum SET divider=(divider+1), sum=(sum+".(int)$rate."), avg=(sum/divider) WHERE oid='$oid'");
+			}
+			else
+			{
+				$this->db_query("INSERT INTO rating_sum VALUES('', '$oid', '$rate', '1', '$rate')");
+			}
 			$ro[$oid] = $rate;
 
 			$stat_query = "SELECT MIN(rating) AS min,MAX(rating) AS max,AVG(rating) AS avg FROM ratings WHERE oid = '$oid'";

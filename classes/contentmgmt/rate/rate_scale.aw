@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.13 2004/11/24 10:28:56 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.14 2004/12/07 13:47:26 ahti Exp $
 
 /*
 
@@ -192,7 +192,7 @@ class rate_scale extends class_base
 			$no_rate = $ob->prop("no_rate");
 			if(!empty($no_rate))
 			{
-				$ret[0] = "ei hinda";
+				$ret[0] = t("ei hinda");
 			}
 			if ($ob->prop("type_nr") == 1)
 			{
