@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.6 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.7 2001/07/28 03:27:10 duke Exp $
+// syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 lc_load("syslog");
 class db_syslog extends aw_template

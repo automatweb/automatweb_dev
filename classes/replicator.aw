@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.3 2001/07/28 03:27:10 duke Exp $
+
 
 classload("connect");
 class replicator_host extends db_connector

@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.7 2001/07/28 03:27:10 duke Exp $
 lc_load("style");
 global $orb_defs;
 // hey I just thought of another thing! you can have several aliases for 1 function :) wooho!

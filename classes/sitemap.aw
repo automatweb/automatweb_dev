@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.3 2001/07/28 03:27:10 duke Exp $
+// sitemap.aw - Site Map
 classload("menuedit");
 class sitemap extends aw_template 
 {

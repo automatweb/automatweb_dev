@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/item_type.aw,v 2.6 2001/07/28 03:27:10 duke Exp $
+// item_type.aw - kaupade tüübid
 
 global $orb_defs;
 $orb_defs["item_type"] = "xml";

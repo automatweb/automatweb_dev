@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.4 2001/07/26 16:49:57 duke Exp $
-// system.aw - various system related functions
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.5 2001/07/28 03:27:10 duke Exp $
+// sys.aw - various system related functions
 lc_load("syslog");
 global $orb_defs;
 $orb_defs["sys"] = "xml";

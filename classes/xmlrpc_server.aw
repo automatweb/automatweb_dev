@@ -81,8 +81,6 @@ class xmlrpc_server {
 			$lang_id = 1;
 		};
 
-		$this->_init_parser();
-
 		$raw = rpc_extract_struct($this->struct);
 		$datablock = _rpc_extract_struct($raw);
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.3 2001/07/27 02:51:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_rpc.aw,v 2.4 2001/07/28 03:27:10 duke Exp $
 // form_rpc.aw - RPC functions for formgen
 classload("form");
 class form_rpc extends form {
@@ -51,16 +51,45 @@ class form_rpc extends form {
 			$datablock["id"] = $form_id;
 
 			$datablock["values"] = $el_values;
+
+			$datablock["entry_id"] = $args["entry_id"];
  
 			$this->process_entry($datablock);
 		};
  
 		// entry tuleb salvestada parenti RPC_ENTRIES alla
+		$rval = ($args["entry_id"]) ? "stored" : "created";
 		$retval = array(
-			"success" => "yes",
+			"success" => $rval,
 		);
 		return $retval;
 	}	
+
+	////
+	// !Fetches a list of entries
+	function get_xml_entries($args = array())
+	{
+		$alias = $args["alias"];
+		$q = sprintf("SELECT * FROM objects WHERE name = '%s' AND class_id = %d",$alias,CL_FORM_XML_INPUT);
+		$this->db_query($q);
+		$row = $this->db_next();
+		$meta = $this->get_object_metadata(array(
+			"metadata" => $row["metadata"],
+			"key" => "forms",
+		));
+		$fid = $meta[0];
+		$this->get_entries(array("id" => $fid));
+		$struct = array();
+		while($row = $this->db_next())
+		{
+			$struct[] = array(
+				"oid" => $row["oid"],
+				"name" => $row["name"],
+			);
+		};
+		return $struct;
+	}
+		
 
 	////
 	// !Fetches information about an XML input
@@ -74,6 +103,26 @@ class form_rpc extends form {
 			"metadata" => $row["metadata"],
 		));
 		return $meta;
+	}
+
+	////
+	// !Fetches an individual entry
+	function get_rpc_entry($args = array())
+	{
+		$obj = $this->get_xml_input($args);
+		// now we have the object data, all we need is to fetch the values
+		// for entries and add those to the datablock we are about to send
+		// back
+		$entry = $this->get_entry($obj["forms"][0],$args["id"],true);
+		foreach($obj["elements"] as $key => $block)
+		{
+			if ($entry[$key])
+			{
+				$obj["elements"][$key]["value"] = $entry[$key];
+			};
+		};
+		$obj["entry_id"] = $args["id"];
+		return $obj;
 	}
 
 	////

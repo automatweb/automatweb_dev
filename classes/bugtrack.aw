@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/bugtrack.aw,v 2.8 2001/07/28 03:27:10 duke Exp $
+// bugtrack.aw - Bugträkker
 global $orb_defs;
 $orb_defs["bugtrack"] = array(
 			"new"	=> array("function" => "orb_new", "params" => array()),

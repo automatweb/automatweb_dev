@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.31 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.32 2001/07/28 03:27:10 duke Exp $
+// shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
 $orb_defs["shop"] = "xml";

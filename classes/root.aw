@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.6 2001/07/27 23:24:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.7 2001/07/28 03:27:10 duke Exp $
 // root.aw - the root class
-// actually I'm not sure this class is needed at all
 // this contains all the supplementary functions
 
 classload("defs");

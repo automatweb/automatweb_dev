@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.45 2001/07/27 02:51:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.46 2001/07/28 03:27:10 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -335,7 +335,7 @@ class form extends form_base
 
 		$this->save();
 
-		if (is_array($selel))
+/*		if (is_array($selel))
 		{
 			$this->load($id);
 			foreach($selel as $selid)
@@ -348,7 +348,7 @@ class form extends form_base
 				}
 			}
 			$this->save();
-		}
+		}*/
 		return $this->mk_my_orb("all_elements", array("id" => $id));
 	}
 
@@ -582,6 +582,7 @@ class form extends form_base
 	// 2) the actual name
 	function get_all_elements($args = array())
 	{
+		$ret = array();
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
@@ -2210,7 +2211,9 @@ class form extends form_base
 		extract($args);
 		// kui parent on antud, siis moodustame sellest IN klausli
 		$pstr = ($parent) ? " WHERE objects.parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
-		$table = sprintf("form_%d_entries",$this->id);
+		$fid = ($id) ? $id : $this->id;
+
+		$table = sprintf("form_%d_entries",$fid);
 		$q = "SELECT * FROM $table LEFT JOIN objects ON ($table.id = objects.oid) $pstr";
 		$this->db_query($q);
 	}
@@ -2524,7 +2527,7 @@ class form extends form_base
 
 	////
 	// returns the entry in an array that you can feed to restore_entry to revert the saved entry to the old data
-	function get_entry($form_id,$entry_id)
+	function get_entry($form_id,$entry_id,$id_only = false)
 	{
 		$ret = array();
 		$this->db_query("SELECT * FROM form_".$form_id."_entries WHERE id = $entry_id");
@@ -2533,9 +2536,17 @@ class form extends form_base
 		{
 			foreach($row as $k => $v)
 			{
+				$key = substr($k,3);
 				if (substr($k,0,3) == "el_")
 				{
-					$ret[$k] = $v;
+					if ( $id_only )
+					{
+						$ret[$key] = $v;
+					}
+					else
+					{
+						$ret[$k] = $v;
+					};
 				}
 			}
 		}
