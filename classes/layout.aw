@@ -120,7 +120,7 @@ class layout extends class_base
 		$grid['table_style'] = $ob->meta('table_style');
 
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
-		$tmp = str_replace("\n", "<br/>", $tmp);
+		//$tmp = str_replace("\n", "<br/>", $tmp);
 
 		$al = get_instance("aliasmgr");
 		if ($ob->prop("header") != "")
