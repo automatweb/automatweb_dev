@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.178 2004/04/29 12:20:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.179 2004/05/06 12:34:34 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -276,6 +276,7 @@ class planner extends class_base
 
 		// generate a list of folders from which to take events
 		// both calendars and projects have "event_folder"'s
+		global $awt;
 		$folderlist = $obj->connections_from(array(
 			"type" => RELTYPE_EVENT_SOURCE,
 		));
@@ -291,6 +292,7 @@ class planner extends class_base
 		
 		// also include events from any projects that are connected to this calender
 		// if the user wants so
+		$awt->start("calendar-events-from-projects");
 
 		// "my_projects" is misleading, what it actually does is that it includes
 		// events from projects that the owner of the current calendar participiates in
@@ -316,15 +318,18 @@ class planner extends class_base
 				{
 					$user_ids[] = $owner->prop("to");
 				};
-
+				$awt->start("calendar-project-event-loader");
 				// XXX: get_events_from_projects should use current date range as well
 				$event_ids = $event_ids + $prj->get_events_from_projects(array(
 					"user_ids" => $user_ids,
 					"project_id" => aw_global_get("project"),
 					"type" => "my_projects",
 				));
+				$awt->stop("calendar-project-event-loader");
 			};
 		};
+		
+		$awt->stop("calendar-events-from-projects");
 		
 		$rv = array();
 		// a project is selected, but no events in range? Just return
@@ -387,6 +392,8 @@ class planner extends class_base
 			};
 		}
 
+		$awt->start("calendar-initial-event-list");
+
 		// now, I need another clue string .. perhaps even in that big fat ass query?
 
 		$this->db_query($q);
@@ -398,31 +405,35 @@ class planner extends class_base
 				"end" => $row["end"],
 			);
 		};
+		$awt->stop("calendar-initial-event-list");
 
 		$fldstr = join(",",$folders);
 
-		// now collect recurrence data
-		$q = "SELECT planner.id,planner.start,planner.end,recurrence.recur_start,recurrence.recur_end FROM planner,aliases,recurrence,objects
-			WHERE planner.id = objects.brother_of AND objects.parent IN ($fldstr) AND recurrence.recur_end >= ${_start} AND recurrence.recur_start <= ${_end}
-				AND planner.id = aliases.source AND objects.status != 0 AND aliases.target = recurrence.recur_id
-				AND aliases.type = " . CL_RECURRENCE;
-		//print $q;
-		$this->db_query($q);
-		while($row = $this->db_next())
+		if (aw_ini_get("calendar.recurrence_enabled") == 1)
 		{
-			// now, I have to include that information in my result set as well, otherwise
-			// the events outside my current scope will not show up even it they recur
-			// in the range I'm viewing at the moment
-			$evt_id = $row["id"];
-			if (empty($rv[$evt_id]))
+			// now collect recurrence data
+			$q = "SELECT planner.id,planner.start,planner.end,recurrence.recur_start,recurrence.recur_end FROM planner,aliases,recurrence,objects
+				WHERE planner.id = objects.brother_of AND objects.parent IN ($fldstr) AND recurrence.recur_end >= ${_start} AND recurrence.recur_start <= ${_end}
+					AND planner.id = aliases.source AND objects.status != 0 AND aliases.target = recurrence.recur_id
+					AND aliases.type = " . CL_RECURRENCE;
+			//print $q;
+			$this->db_query($q);
+			while($row = $this->db_next())
 			{
-				$rv[$evt_id] = array(
-					"id" => $evt_id,
-					"start" => $row["start"],
-					"end" => $row["end"],
-				);
+				// now, I have to include that information in my result set as well, otherwise
+				// the events outside my current scope will not show up even it they recur
+				// in the range I'm viewing at the moment
+				$evt_id = $row["id"];
+				if (empty($rv[$evt_id]))
+				{
+					$rv[$evt_id] = array(
+						"id" => $evt_id,
+						"start" => $row["start"],
+						"end" => $row["end"],
+					);
+				};
+				$this->recur_info[$row["id"]][] = $row["recur_start"];
 			};
-			$this->recur_info[$row["id"]][] = $row["recur_start"];
 		};
 		return $rv;
 	}
@@ -451,9 +462,17 @@ class planner extends class_base
 		$reflist = array();
 		$this->events_done = true;
 		$rv = array();
+		global $awt;
+		$awt->start("calendar-full-event-list");
 		$this->rec = array();
 		// that eidlist thingie is no good! I might have events out of my range which I still need to include
 		// I need folders! Folders! I'm telling you! Folders! Those I can probably include in my query!
+		if (aw_global_get("uid") == "duke")
+		{
+			print "<pre>";
+			print_r($events);
+			print "</pre>";
+		};
 		foreach($events as $event)
 		{
 			// fuck me. plenty of places expect different data from me .. until I'm
@@ -467,6 +486,10 @@ class planner extends class_base
 			));
 
 			$eo = new object($row["oid"]);
+			if ($row["status"] == 0)
+			{
+				continue;
+			};
 			if ($row["brother_of"] != $row["oid"])
 			{
 				$this->save_handle();
@@ -492,6 +515,7 @@ class planner extends class_base
 				};
 			};
 		};
+		$awt->stop("calendar-full-event-list");
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "day"));
 		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "week"));
 		return isset($args["flatlist"]) ? $reflist : $rv;
@@ -537,6 +561,16 @@ class planner extends class_base
 		$obj = $args["obj_inst"];
 		//$obj = $this->get_object($args["request"]["id"]);
 		$meta = $obj->meta();
+		
+		$event_folder = $obj->prop("event_folder");
+		if (empty($event_folder))
+		{
+			return array(array(
+				"type" => "text",
+				"value" => "Sündmuste kataloog on valimata",
+			));
+			return PROP_ERROR;
+		};
 
 		// use the config form specified in the request url OR the default one from the
 		// planner configuration
@@ -781,6 +815,7 @@ class planner extends class_base
 			$event_obj = new object($emb["id"]);
 			$emb["id"] = $event_obj->brother_of();
 		};
+
 		$this->event_id = $t->submit($emb);
 		if (!empty($emb["id"]))
 		{
@@ -904,7 +939,11 @@ class planner extends class_base
                         $this->relobj_id = $alias["relobj_id"];
                 }
 
-                $replacement = $this->change(array("id" => $alias["target"]));
+                $replacement = $this->change(array(
+			"id" => $alias["target"],
+			"group" => "views",
+			"viewtype" => $_REQUEST["viewtype"],
+		));
                 return $replacement;
 
 	}
@@ -1289,7 +1328,6 @@ class planner extends class_base
 		$bro->delete();
 	}
 	
-	////
 	// !Returns a link for editing an event
 	// cal_id - calendar id
 	// event_id - id of an event
