@@ -1,4 +1,6 @@
 <?php
+// $Id: cfgutils.aw,v 1.5 2002/11/15 22:25:08 duke Exp $
+// cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
 	function cfgutils($args = array())
@@ -114,7 +116,7 @@ class cfgutils extends aw_template
 	function load_properties($args = array())
 	{
 		extract($args);
-		$coreprops = $this->load_class_properties(array("file" => "core"));
+		$coreprops = $this->load_class_properties(array("file" => "class_base"));
 		if (!$file)
 		{
 			$file = $this->clist[$clid];
