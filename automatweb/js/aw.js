@@ -45,3 +45,50 @@ function list_preset(el,oid)
 	}
 	document.getElementById(el).value=oid;
 }
+
+// set/changes cookie 
+function set_cookie(name,value)
+{
+        document.cookie = name+"="+value;
+}
+
+
+// gets the value of a cookie
+function get_cookie(name)
+{
+        if (document.cookie.length > 0)
+        {
+                // we can have multiple cookies on a domain
+                begin = document.cookie.indexOf(name+"=");
+                if (begin != -1)
+                {
+                        begin += name.length+1;
+                        end = document.cookie.indexOf(";", begin);
+                        if (end == -1) end = document.cookie.length;
+                        return document.cookie.substring(begin, end);
+                }
+        }
+        else
+        {
+                return -1;
+        }
+}
+
+// checks whether value exists in arr
+function aw_in_array(value,arr)
+{
+	for (i = 0; i < arr.length; i++)
+		if (arr[i] == value)
+			return 1;
+	return 0;
+}
+
+// removes value from array, returns the new array
+function aw_remove_arr_el(value,arr)
+{
+	rv = new Array();
+	for (i = 0; i < arr.length; i++)
+		if (arr[i] != value)
+			rv.push(arr[i]);
+	return rv;
+}
