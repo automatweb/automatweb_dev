@@ -14,14 +14,14 @@ class relpicker extends  core
 
                 $options = array("0" => "--vali--");
                 // generate option list
-                if (defined($prop["reltype"]) && constant($prop["reltype"]))
-                {
-                        $reltype = constant($prop["reltype"]);
-                }
-                else
-                {
+                //if (defined($prop["reltype"]) && constant($prop["reltype"]))
+                //{
+                //        $reltype = constant($prop["reltype"]);
+                //}
+                //else
+                //{
                         $reltype = $prop["reltype"];
-                };
+                //};
 
 		if (is_array($prop["options"]))
 		{
