@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.113 2003/06/02 13:13:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.114 2003/06/02 13:44:52 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -281,7 +281,6 @@ class planner extends class_base
 			"date" => $di["prev"],
 			"id" => $id,
 			"ctrl" => $ctrl,
-			"cb_view" => "show",
 		));
 
 		$this->nextref = $this->mk_my_orb("change",array(
@@ -291,7 +290,6 @@ class planner extends class_base
 			"date" => $di["next"],
 			"id" => $id,
 			"ctrl" => $ctrl,
-			"cb_view" => "show",
 		));
 
 		$q = "SELECT metadata FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source = '$id' AND reltype = " . RELTYPE_EVENT_SOURCE;
@@ -328,7 +326,6 @@ class planner extends class_base
 			$row["link"] = $this->mk_my_orb("change",array(
 				"id" => $id,
 				"group" => "add_event",
-				"cb_view" => "show",
 				"event_id" => $row["oid"],
 			));
 			if ($row["class_id"] == CL_BROTHER_DOCUMENT)
@@ -340,8 +337,8 @@ class planner extends class_base
 			};
 			$events[$gx][$row["brother_of"]] = $row;
 		};
-		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","cb_view" => "show"));
-		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week","cb_view" => "show"));
+		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day"));
+		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week"));
 		return $events;
 	}
 
