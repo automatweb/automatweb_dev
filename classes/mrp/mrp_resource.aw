@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.28 2005/03/24 14:58:48 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.29 2005/03/24 15:28:28 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -20,7 +20,7 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 @default field=meta
 @default method=serialize
 
-	@property state type=text group=general,grp_resource_maintenance
+	@property state type=textbox group=general,grp_resource_maintenance
 	@caption Ressursi staatus
 
 
