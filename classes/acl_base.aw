@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.65 2004/03/16 13:16:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.66 2004/03/16 14:37:06 kristo Exp $
 
 lc_load("definition");
 
@@ -14,6 +14,11 @@ class acl_base extends db_connector
 		// of course, now that we only have 5 acl settings, we don't have to do this in the db no more. 
 		// anyone wanna rewrite it? ;) - terryf
 		$qstr = array();
+		if (!is_array($this->cfg["acl"]["ids"]))
+		{
+			$this->cfg["acl"]["ids"] = aw_ini_get("acl.ids");
+		}
+
 		reset($this->cfg["acl"]["ids"]);
 		while (list($bitpos, $name) = each($this->cfg["acl"]["ids"]))
 		{
