@@ -52,5 +52,12 @@
             <objtable>images</objtable>
             <objtable_index>id</objtable_index>
       </classinfo>
+      <tableinfo>
+            <images>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </images>
+      </tableinfo>
 </properties>
 
