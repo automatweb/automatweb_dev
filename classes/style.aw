@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.12 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.13 2002/09/26 16:03:39 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -623,6 +623,7 @@ class style extends aw_template
 		{
 			$str = ".style_".$id." { \n".$fsstr." \n} \n";
 		}
+
 		if ($a_id)
 		{
 			$st = $this->mk_cache($a_id);
