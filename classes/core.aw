@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.126 2002/11/15 21:19:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.127 2002/11/24 21:15:54 duke Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -24,6 +24,30 @@ class core extends db_connector
 	// !fetch a config key
 	function get_cval($ckey)
 	{
+		$q = sprintf("SELECT content FROM config WHERE ckey = '%s'",$ckey);
+		return $this->db_fetch_field($q,"content");
+	}
+
+	////
+	// !set a config key
+	function set_cval($ckey,$val)
+	{
+		// 1st, check if the necessary key exists
+		$ret = $this->db_fetch_field("SELECT COUNT(*) AS cnt FROM config WHERE ckey = '$ckey'","cnt");
+		if ($ret == false)
+		{
+			// no such key, so create it
+			$this->quote($value);
+			$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".aw_global_get("uid")."')");
+		}
+		else
+		{
+			$this->quote($val);
+			$q = "UPDATE config
+				SET content = '$val'
+				WHERE ckey = '$ckey'";
+			$this->db_query($q);
+		}
 		$q = sprintf("SELECT content FROM config WHERE ckey = '%s'",$ckey);
 		return $this->db_fetch_field($q,"content");
 	}
@@ -413,6 +437,11 @@ class core extends db_connector
 			"created" => time(),
 			"modifiedby" => aw_global_get("uid"),
 			"modified" => time(),
+			// there is a potentional problem here - if there is some kind
+			// of master sites where the contents of multiple sites can
+			// be viewed, and then an object under one of those sites is
+			// added, it will have the site_id of the current site and
+			// not that of the parent
 			"site_id" => $this->cfg["site_id"],
 		);
 
@@ -554,6 +583,7 @@ class core extends db_connector
 		};
 		$q = " UPDATE objects SET " . join(",",$q_parts) . " WHERE oid = $params[oid] ";
 		$this->db_query($q);
+		aw_cache_set("objcache",$params["oid"],"");
 		$this->flush_cache();
 	}
 
@@ -1936,7 +1966,7 @@ class core extends db_connector
 			}
 			else
 			{
-				$ret .= "<input type='hidden' name='".$k."[".$_k."]' value='".$_v."' />\n";
+				$ret .= "<input type='hidden' name='".$k."[".$_k."]' value=\"".str_replace("\"","&amp;",$_v)."\" />\n";
 			}
 		}
 		return $ret;
@@ -1950,6 +1980,8 @@ class core extends db_connector
 		{
 			$cl_name = get_class($this);
 		}
+		preg_match("/(\w*)$/",$cl_name,$m);
+		$cl_name = $m[1];
 
 		$urs = "";
 		foreach($arr as $k => $v)
@@ -1960,7 +1992,7 @@ class core extends db_connector
 			}
 			else
 			{
-				$urs .= "<input type='hidden' name='$k' value='$v' />\n";
+				$urs .= "<input type='hidden' name='$k' value=\"".str_replace("\"","&amp;",$v)."\" />\n";
 			}
 		}
 		if (!isset($arr["no_reforb"]) || $arr["no_reforb"] != true)
@@ -2267,18 +2299,26 @@ class core extends db_connector
 	// !this should be called from the constructor of each class
 	function init()
 	{
-		$arg = func_get_arg(0);
-		if (is_array($arg))
+		$arg = @func_get_arg(0);
+		if ($arg === NULL)
 		{
-			$tpldir = $arg["tpldir"];
-			$this->clid = $arg["clid"];
+			$this->db_init();
+			$this->tpl_init("");
 		}
 		else
 		{
-			$tpldir = $arg;
-		};
-		$this->db_init();
-		$this->tpl_init($tpldir);
+			if (is_array($arg))
+			{
+				$tpldir = $arg["tpldir"];
+				$this->clid = $arg["clid"];
+			}
+			else
+			{
+				$tpldir = $arg;
+			};
+			$this->db_init();
+			$this->tpl_init($tpldir);
+		}
 	}
 
 	////
@@ -2494,84 +2534,6 @@ class core extends db_connector
 		}
 		asort($ret);
 		return $ret;
-	}
-
-	function add($args = array())
-	{
-		extract($args);
-		$this->check_class();
-		
-		$cfg = get_instance("cfg/cfgmanager");
-                return $cfg->change(array(
-                        "class_id" => $this->clid,
-                        "parent" => $parent,
-			"orb_class" => get_class($this),
-                ));
-
-	}
-
-	function change($args = array())
-	{ 
-		extract($args);
-		$this->check_class();
-		$cfg = get_instance("cfg/cfgmanager");
-		return $cfg->change(array(
-			"id" => $id,
-			"orb_class" => get_class($this),
-		));
-	}
-
-	function submit($args = array())
-	{
-		$this->check_class();
-		$cfg = get_instance("cfg/cfgmanager");
-		$args["clid"] = $this->clid;
-		return $cfg->submit($args);
-	}
-
-	////
-	// !This decides whether to perform the requested action or not
-	// acl checks for example
-	function check_class()
-	{
-		if (!$this->clid)
-		{
-			die("this class does not have a registered clid");
-		};
-	}
-
-	// this is dead.
-	function get_obj_properties($args = array())
-	{
-
-		$fields = array();
-		// private flag is used to indicate that this property 
-		// should only be used for one object. You really don't
-		// want to give for example 100 objects same new name
-		// at least, I don't see a point in doing it.
-
-		$fields["name"] = array(
-			"type" => "textbox",
-			"caption" => "Nimi",
-			"value" => $args["name"],
-			"store" => "table",
-			"table" => "objects",
-			"idfield" => "oid",
-			"private" => 1,
-		);
-
-		$fields["comment"] = array(
-			"type" => "textbox",
-			"caption" => "Kommentaar",
-			"value" => $args["comment"],
-			"store" => "table",
-			"table" => "objects",
-			"idfield" => "oid",
-			"private" => 1,
-		);
-
-		return $fields;
-
 	}
 };
 ?>
