@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.48 2004/11/24 10:27:23 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.49 2004/11/24 15:37:36 ahti Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1417,7 +1417,7 @@ class forum_v2 extends class_base
 	**/
 	function submit_comment($arr)
 	{
-		if($this->can("view", $arr["id"]) && is_oid($arr["id"])
+		if($this->can("view", $arr["id"]) && is_oid($arr["id"]))
 		{
 			$obj_inst = obj($arr["id"]);
 			$uid = aw_global_get("uid");
