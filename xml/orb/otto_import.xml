@@ -29,5 +29,12 @@
 			</function>
 		</action>
 
+		<action name="fix_prices" >
+			<function name="fix_prices">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
