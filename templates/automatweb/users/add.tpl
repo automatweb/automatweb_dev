@@ -18,6 +18,10 @@
 <td class="fform"><input type="password" name="pass2"></td>
 </tr>
 <tr>
+<td class="fcaption">Saada tervitusmeil:</td>
+<td class="fform"><input type="checkbox" name="send_welcome_mail" value="1"></td>
+</tr>
+<tr>
 <td class="fform" align="center" colspan="2">
 <input type="submit" value="Edasi">
 {VAR:reforb}
