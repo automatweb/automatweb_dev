@@ -18,4 +18,9 @@
 <!-- SUB: URLPARAM -->
 <param name="urlparam{VAR:nr}" value="&{VAR:key}={VAR:val}">  
 <!-- END SUB: URLPARAM -->
+
+<!-- SUB: FETCHCONTENT -->
+<param name="fetchcontent" value="0">
+<param name="content" value="{VAR:content}">
+<!-- END SUB: FETCHCONTENT -->
 </applet>
