@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.164 2003/03/12 11:34:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.165 2003/03/12 12:06:32 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1794,11 +1794,6 @@ class document extends aw_template
 		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
 		// menyy, mille juures on m??ratud edimistemplate
 		$_tpl = $this->get_edit_template($oob["parent"]);
-		if (is_number($_tpl))
-		{
-			$arr["template"] = $_tpl;
-			return $this->do_form_change($arr);
-		}
 
 		// try to read the template from the site, but if it does noit exist, try the admin folder
 		if ($this->read_site_template($_tpl, true) === false)
@@ -3261,87 +3256,6 @@ class document extends aw_template
 		return $tp;
 	}
 
-	////
-	// !if the menu is set to have a form as document editing template, then we do the editing bit here
-	function do_form_change($arr)
-	{
-		extract($arr);
-		$this->read_template("edit_form.tpl");
-		$obj = $this->get_object($id);
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $obj["metadata"]
-		));
-
-		$this->mk_path($obj["parent"],"Muuda dokumenti");
-
-		// mida me siis teeme? n2itame formi, mis seal muud ikka. formi entry id paneme doku metadatasse ntx. 
-
-		$f = get_instance("formgen/form");
-		$f->load($template);
-		$co = $f->gen_preview(array(
-			"entry_id" => $meta["entry_id"],
-			"tpl" => "show_noform.tpl"
-		));
-		$this->vars(array(
-			"id" => $id,
-			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
-			"content" => $co,
-			"menurl"		=> $this->mk_my_orb("sel_menus",array("id" => $id)),
-			"reforb" => $this->mk_reforb("save_form", array("id" => $id,"period" => $period))
-		));
-		return $this->parse();
-	}
-
-	function save_form($arr)
-	{
-		extract($arr);
-
-		$obj = $this->get_object($id);
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $obj["meta"]
-		));
-
-		$f = get_instance("formgen/form");
-		$f->process_entry(array(
-			"id" => $this->get_edit_template($obj["parent"]),
-			"entry_id" => $meta["entry_id"],
-		));
-
-		$this->upd_object(array(
-			"oid" => $id,
-			"name" => $f->entry_name
-		));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "entry_id",
-			"value" => $f->entry_id
-		));
-		return $this->mk_my_orb("change", array("id" => $id,"period" => $period));
-	}
-
-	function do_form_show($params)
-	{
-		extract($params);
-
-		$obj = $this->get_object($docid);
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $obj["metadata"]
-		));
-
-		$f = get_instance("formgen/form");
-
-		$tx = $f->show(array(
-			"id" => $f->get_form_for_entry($meta["entry_id"]),
-			"entry_id" => $meta["entry_id"],
-			"op_id" => $tpl
-		));
-		
-		$al = get_instance("aliasmgr");
-		$al->parse_oo_aliases($docid,&$tx,array());
-
-	}
-
 	function register_parsers()
 	{
 		// keywordide list. bijaatch!
@@ -3982,6 +3896,57 @@ class document extends aw_template
 			"s_parent" => 1
 		));
 		return str_replace($this->cfg["baseurl"]."/", aw_ini_get("export.form_server"),$this->parse());
+	}
+
+	////
+	// !finds the edit template for menu $section
+	// if the template is not set for this menu, traverses the object tree upwards 
+	// until it finds a menu for which it is set
+	function get_edit_template($section)
+	{
+		do { 
+			// for edit templates the type is 0
+			// this probably breaks the formgen edit templates, but detecting it this way
+			// caused major breakage, I got showing templates if I tried to edit documents
+			$section = (int)$section;
+			
+			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent,objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_edit LEFT JOIN objects ON objects.oid = menu.id WHERE template.type = 0 AND menu.id = $section");
+			$row = $this->db_next();
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $row["metadata"]
+			));
+
+			if ((int)$meta["template_type"] == TPLTYPE_TPL)
+			{
+				$template = $row["filename"];
+			}
+			else
+			{
+				$template = $meta["ftpl_edit"];
+			}
+			
+			if (not($row))
+			{
+				$prnt = $this->get_object($section);
+				$section = $prnt["parent"];
+			}
+			else
+			{
+				$section = $row["parent"];
+			};
+		} while ($template == "" && $section > 1);
+		if ($template == "")
+		{
+			//$this->raise_error(ERR_CORE_NOTPL,"You have not selected an document editing template for this menu!",true);
+			// just default to that
+			global $DBG;
+			if ($DBG)
+			{
+				print "not found, defaulting to edit<br>";
+			}
+			$template = "edit.tpl";
+		}
+		return $template;
 	}
 };
 ?>
