@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.6 2004/05/12 13:46:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.7 2004/05/21 11:10:10 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -821,7 +821,7 @@ class join_site extends class_base
 				$this->apply_rules_on_data_change($this->get_rules_from_obj($obj), $u_oid->id());
 
 				// if the props say so, log the user in
-				if ($obj->prop("autologin"))
+				if (true || $obj->prop("autologin"))
 				{
 					$us->login(array(
 						"uid" => $n_uid,
@@ -842,6 +842,7 @@ class join_site extends class_base
 
 		if ($join_done)
 		{
+			$this->join_done = true;
 			aw_session_set("join_err", array());
 			return $obj->prop("after_join_url");
 		}
