@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.92 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.93 2001/09/27 12:53:07 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -50,11 +50,11 @@ class messenger extends menuedit_light
 		// fast argumendi etteandmisega saab vältida rohkem aega nõudvaid operatsioone
 		// kuigi tegelikult peaks selleks messengeri klassi hoopis kaheks lööma
 		// messenger_user ja messenger. Hiljem jõuab. Ehk.
+		$this->user = $this->get_user(array(
+			"uid" => UID,
+		));
 		if (!$args["fast"])
 		{
-			$this->user = $this->get_user(array(
-				"uid" => UID,
-			));
 			classload("users");
 			$users = new users;
 			$this->msgconf = $users->get_user_config(array(
@@ -64,6 +64,10 @@ class messenger extends menuedit_light
 			$this->xml = new xml();
 			// igal klassi loomisel toome ka 
 			$this->conf = $this->_get_msg_conf(array("conf" => $this->user["messenger"]));
+			if ($this->msgconf["msg_window"])
+			{
+				$GLOBALS["no_menus"] = 1;
+			};
 		};
 	}
 	
@@ -2179,6 +2183,7 @@ class messenger extends menuedit_light
 						"msg_ondelete" => $this->picker($conf["msg_ondelete"],array("delete" => "Kustutakse", "move" => "Viiakse Trash folderisse")),
 						"msg_confirm_send" => checked($conf["msg_confirm_send"]),
 						"msg_filter_address" => checked($conf["msg_filter_address"]),
+						"msg_window" => checked($conf["msg_window"]),
 						"msg_quote_list" => $this->picker($conf["msg_quotechar"],array(">" => ">",":" => ":")),
 						"msg_default_pri" => $this->picker($conf["msg_default_pri"],array(0,1,2,3,4,5,6,7,8,9)),
 						"msg_cnt_att" => $this->picker($conf["msg_cnt_att"],array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5")),
@@ -2269,6 +2274,7 @@ class messenger extends menuedit_light
 			$this->msgconf["msg_confirm_send"] = ($msg_confirm_send) ? 1 : 0;
 			$this->msgconf["msg_move_read"] = ($msg_move_read) ? 1 : 0;
 			$this->msgconf["msg_filter_address"] = ($msg_filter_address) ? 1 : 0;
+			$this->msgconf["msg_window"] = ($msg_window) ? 1 : 0;
 		};
 
 		$users->set_user_config(array(
