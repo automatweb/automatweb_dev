@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.31 2004/07/05 10:16:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.32 2004/08/23 09:25:19 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -190,7 +190,11 @@ class sys extends aw_template
 			"www.ut.ee" => "www.ut.ee",
 			"intranet.automatweb.com" => "intranet.automatweb.com",
 			"www.notar.ee" => "www.notar.ee",
-			"prisma.struktuur.ee" => "prisma.struktuur.ee"
+			"prisma.struktuur.ee" => "prisma.struktuur.ee",
+			"koolitus.automatweb.com" => "koolitus.automatweb.com",
+			"sven.dev.struktuur.ee" => "sven.dev.struktuur.ee",
+			"otto.struktuur.ee" => "otto.struktuur.ee",
+
 		);
 		
 		$this->read_template("compare_db_step1.tpl");
@@ -507,13 +511,16 @@ class sys extends aw_template
 	{
 		$indexes = array(
 			"objects" => array(
-				"oid","class_id","status","site_id","lang_id"
+				"oid","class_id","status","site_id","lang_id","jrk","modified","created"
 			),
 			"aliases" => array(
 				"source","target", "reltype"
 			),
 			"acl" => array(
 				"gid", "oid"
+			),
+			"files" => array(
+				"showal"
 			)
 		);
 
@@ -545,6 +552,35 @@ class sys extends aw_template
 		}
 
 		die("all done! ");
+	}
+
+	/** checks if any objects of the given class exist in the current database
+	
+		@attrib name=has_objects nologin=1
+
+		@param clid required type=int 
+
+		@comment
+
+			clid - the class id to check for
+			can be used (with foreach_site) to check if a class can be safely removed
+	**/
+	function has_objects($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => $arr["clid"],
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+
+		if ($ol->count())
+		{
+			echo "<font color='red' size='7'>site ".aw_ini_get("baseurl")." HAS ".$ol->count()." objects!!!</font><br><br>";
+		}
+		else
+		{
+			echo "NEIN!!.";
+		}
 	}
 };
 ?>
