@@ -32,8 +32,8 @@ function selall()
 
 function cut()
 {
-	foo.action.value="cut";
-	foo.submit();
+	document.foo.action.value="cut";
+	document.foo.submit();
 }
 
 function ddelete()
@@ -67,8 +67,8 @@ function ddelete()
 
 function paste()
 {
-	foo.action.value="paste";
-	foo.submit();
+	document.foo.action.value="paste";
+	document.foo.submit();
 }
 
 function MM_swapImgRestore() { //v3.0
