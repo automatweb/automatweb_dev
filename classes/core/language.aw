@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.4 2004/02/12 15:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.5 2004/02/25 15:56:51 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -41,6 +41,9 @@
 
 @property lang_img_act table=languages type=relpicker reltype=RELTYPE_IMAGE field=meta method=serialize
 @caption Aktiivse keele pilt
+
+@property fp_text table=languages type=textbox field=meta method=serialize
+@caption Esilehe nimi
 
 @property langs type=table group=langs field=meta method=serialize store=no
 @caption Keeled

@@ -90,6 +90,15 @@
             <caption>Aktiivse keele pilt</caption>
       </property>
       <property>
+            <name>fp_text</name>
+            <table>languages</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Esilehe nimi</caption>
+      </property>
+      <property>
             <name>langs</name>
             <type>table</type>
             <group>langs</group>
