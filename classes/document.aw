@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.236 2004/02/12 11:11:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.237 2004/02/26 13:31:36 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3287,7 +3287,7 @@ class document extends aw_template
 		extract($arr);
 		$this->read_template("feedback_thanks.tpl");
 		$this->vars(array(
-			"eesnimi" => $eesnimi
+			"eesnimi" => strip_tags($eesnimi),
 		));
 		return $this->parse();
 	}
