@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.11 2004/08/19 07:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.12 2004/09/03 12:34:51 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -427,7 +427,8 @@ class shop_order_center extends class_base
 			$ol = new object_list(array(
 				"parent" => $parent->id(),
 				"class_id" => CL_MENU,
-				"sort_by" => "objects.jrk"
+				"sort_by" => "objects.jrk",
+				"status" => STAT_ACTIVE
 			));
 		}
 		else
@@ -435,7 +436,8 @@ class shop_order_center extends class_base
 			$ol = new object_list(array(
 				"parent" => $conf->prop("pkt_fld"),
 				"class_id" => CL_MENU,
-				"sort_by" => "objects.jrk"
+				"sort_by" => "objects.jrk",
+				"status" => STAT_ACTIVE
 			));
 		}
 
@@ -469,8 +471,20 @@ class shop_order_center extends class_base
 	**/
 	function show_items($arr)
 	{
+		enter_function("shop_order_center::show_items");
 		extract($arr);
 		$soc = obj($arr["id"]);
+		if ($soc->prop("use_controller") && is_oid($soc->prop("controller")))
+		{
+			$fc = get_instance(CL_FORM_CONTROLLER);
+			$html = $fc->eval_controller($soc->prop("controller"), array(
+				"soc" => $soc, 
+				"pl" => $pl
+			));
+			exit_function("shop_order_center::show_items");
+			return $html; 
+		}
+
 		$wh_id = $soc->prop("warehouse");
 
 		$wh = get_instance("applications/shop/shop_warehouse");
@@ -481,37 +495,27 @@ class shop_order_center extends class_base
 		$ss->_init_path_vars($tmp);
 		$html = $ss->show_documents($tmp);
 
-		if ($soc->prop("use_controller") && is_oid($soc->prop("controller")))
-		{
-			$fc = get_instance(CL_FORM_CONTROLLER);
-			$html .= $fc->eval_controller($soc->prop("controller"), array(
-				"soc" => $soc, 
-				"pl" => $pl
-			));
-		}
-		else
-		{
-			$pl = $wh->get_packet_list(array(
-				"id" => $wh_id,
-				"parent" => $section,
-				"only_active" => $soc->prop("only_active_items")
-			));
-			$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
+		$pl = $wh->get_packet_list(array(
+			"id" => $wh_id,
+			"parent" => $section,
+			"only_active" => $soc->prop("only_active_items")
+		));
+		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
 
-			// get the template for products for this folder
-			$layout = $this->get_prod_layout_for_folder($soc, $section);
+		// get the template for products for this folder
+		$layout = $this->get_prod_layout_for_folder($soc, $section);
 
-			// get the table layout for this folder
-			$t_layout = $this->get_prod_table_layout_for_folder($soc, $section);
-	
-			$html .= $this->do_draw_prods_with_layout(array(
-				"t_layout" => $t_layout, 
-				"layout" => $layout, 
-				"pl" =>  $pl,
-				"soc" => $soc
-			));
-		}
+		// get the table layout for this folder
+		$t_layout = $this->get_prod_table_layout_for_folder($soc, $section);
 
+		$html .= $this->do_draw_prods_with_layout(array(
+			"t_layout" => $t_layout, 
+			"layout" => $layout, 
+			"pl" =>  $pl,
+			"soc" => $soc
+		));
+
+		exit_function("shop_order_center::show_items");
 		return $html;
 	}
 
@@ -773,7 +777,15 @@ class shop_order_center extends class_base
 			$ret[$pn] = $all_ps[$pn];
 			$ret[$pn]["caption"] = $pd["caption"];
 			$ret[$pn]["name"] = "user_data[$pn]";
-			$ret[$pn]["value"] = $cud[$pn];
+
+			if ($ret[$pn]["type"] == "date_select")
+			{
+				$ret[$pn]["value"] = date_edit::get_timestamp($cud[$pn]);
+			}
+			else
+			{
+				$ret[$pn]["value"] = $cud[$pn];
+			}
 		}
 
 		return $ret;
