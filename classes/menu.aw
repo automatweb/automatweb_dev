@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.37 2003/02/27 12:07:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.38 2003/03/11 14:35:51 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -185,6 +185,7 @@
 
 define("RELTYPE_PICTURES_MENU",1);
 define("RELTYPE_SHOW_SUBFOLDERS_MENU",2);
+define("RELTYPE_SHOW_AS_CALENDAR",3);
 
 class menu extends class_base
 {
@@ -966,7 +967,24 @@ class menu extends class_base
 		return array(
 			RELTYPE_PICTURES_MENU => "v&otilde;ta pildid men&uuml;&uuml;lt",
 			RELTYPE_SHOW_SUBFOLDERS_MENU => "võta alamkaustad men&uuml;&uuml;lt",
+			RELTYPE_SHOW_AS_CALENDAR => "võta objekte kalendrist",
 		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		$retval = false;
+                switch($args["reltype"])
+                {
+			case RELTYPE_PICTURES_MENU:
+			case RELTYPE_SHOW_SUBFOLDERS_MENU:
+				$retval = array(CL_PSEUDO);
+				break;
+			case RELTYPE_SHOW_AS_CALENDAR:
+				$retval = array(CL_PLANNER);
+				break;
+		};
+		return $retval;
 	}
 };
 ?>
