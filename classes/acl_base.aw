@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.77 2004/06/11 08:45:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.78 2004/06/19 18:57:25 kristo Exp $
 
 lc_load("definition");
 
@@ -303,14 +303,14 @@ class acl_base extends db_connector
 			return true;
 		}
 
-		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
+		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)) || $GLOBALS["acl_dbg"])
 		{
 			// try for file cache
 			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
 			$hash = md5($fn);
 			//$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$hash{1}."/".$hash{2}."/".$fn;
 			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$fn;
-			if (file_exists($fqfn))
+			if (file_exists($fqfn) && !$GLOBALS["acl_dbg"])
 			{
 				include($fqfn);
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
