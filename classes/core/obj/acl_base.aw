@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.6 2004/12/27 12:39:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.7 2004/12/29 13:54:03 kristo Exp $
 
 lc_load("definition");
 
@@ -232,7 +232,8 @@ class acl_base extends db_connector
 				".$this->sql_unpack_string().",
 				objects.oid as oid,
 				objects.parent as parent,
-				acl.gid as gid 
+				acl.gid as gid ,
+				objects.brother_of as brother_of
 			FROM 
 				objects
 				LEFT JOIN acl ON objects.oid = acl.oid
@@ -242,6 +243,10 @@ class acl_base extends db_connector
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
+			if ($row["oid"] != $row["brother_of"] && $row["brother_of"] > 0)
+			{
+				return $this->get_acl_for_oid($row["brother_of"]);
+			}
 			$max_row["oid"] = $row["oid"];
 			$max_row["parent"] = $row["parent"];
 			if (!$row["gid"] || !isset($g_pris[$row["gid"]]))
@@ -281,10 +286,10 @@ class acl_base extends db_connector
 			{
 				$tacl = $_t;
 				$parent = $_t["parent"];
-		if ($GLOBALS["acl_dbg"] == 1)
-		{
-			echo "got acl from cache for oid $oid tacl = ".dbg::dump($tacl)." <br>";
-		}
+				if ($GLOBALS["acl_dbg"] == 1)
+				{
+					echo "got acl from cache for oid $oid tacl = ".dbg::dump($tacl)." <br>";
+				}
 				if (!isset($tacl["oid"]))
 				{
 					// if we are on any level and we get back no object, return no access
@@ -294,13 +299,12 @@ class acl_base extends db_connector
 			}
 			else
 			{
-
 				$tacl = $this->get_acl_for_oid($oid);
 
-		if ($GLOBALS["acl_dbg"] == 1)
-		{
-			echo "got acl from dfatabase for oid $oid tacl = ".dbg::dump($tacl)." <br>";
-		}				
+				if ($GLOBALS["acl_dbg"] == 1)
+				{
+					echo "got acl from dfatabase for oid $oid tacl = ".dbg::dump($tacl)." <br>";
+				}				
 		
 				if (!isset($tacl["oid"]))
 				{
@@ -376,7 +380,6 @@ class acl_base extends db_connector
 			// try for file cache
 			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
 			$hash = md5($fn);
-			//$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$hash{1}."/".$hash{2}."/".$fn;
 			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$fn;
 			if (file_exists($fqfn) && !$GLOBALS["acl_dbg"])
 			{
@@ -399,29 +402,12 @@ class acl_base extends db_connector
 					// make folders if not exist. this is copypaste from cache class, but we can't access that from here. 
 					$fname = $GLOBALS["cfg"]["cache"]["page_cache"];
 
-					// make 3-level folder structure
 					$fname .= "/".$hash{0};
 					if (!is_dir($fname))
 					{
 						mkdir($fname, 0777);
 						chmod($fname, 0777);
 					}
-
-					/*
-					$fname .= "/".$hash{1};
-					if (!is_dir($fname))
-					{
-						mkdir($fname, 0777);
-						chmod($fname, 0777);
-					}
-
-					$fname .= "/".$hash{2};
-					if (!is_dir($fname))
-					{
-						mkdir($fname, 0777);
-						chmod($fname, 0777);
-					}
-					*/
 
 					$fp = fopen($fqfn, "w");
 					flock($fp, LOCK_EX);

@@ -431,6 +431,34 @@ class _int_object_loader extends core
 					}
 				}
 
+				if ($cur_oid != $tmp["brother_of"] && $tmp["brother_of"] > 0)
+				{
+					$cur_oid = $tmp["brother_of"];
+					if (isset($GLOBALS["__obj_sys_acl_memc"][$cur_oid]))
+					{
+						$tmp = $GLOBALS["__obj_sys_acl_memc"][$cur_oid];
+					}
+					else
+					if (isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]))
+					{
+						$tmp = $GLOBALS["__obj_sys_objd_memc"][$cur_oid];
+					}
+					else
+					if ($GLOBALS["objects"][$cur_oid])
+					{
+						$tmp = $GLOBALS["objects"][$cur_oid]->obj;
+					}
+					else
+					{
+						$tmp = $this->ds->get_objdata($cur_oid, array(
+							"no_errors" => true
+						));
+						if ($tmp !== NULL)
+						{
+							$GLOBALS["__obj_sys_objd_memc"][$cur_oid] = $tmp;
+						}
+					}
+				}
 				$acld = safe_array($tmp["acldata"]);
 
 				// now, iterate over the current acl data with the current gidlist
