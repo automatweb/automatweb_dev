@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.8 2004/10/05 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.9 2004/10/14 13:41:39 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -217,8 +217,15 @@ class shop_product_packaging extends class_base
 			{
 				$tmp2 = "";
 			}
+
+			$ui = $prod->prop("user".$i);
+			if ($i == 16 && aw_ini_get("site_id") == 139 && $prod->prop("userch5"))
+			{
+				$ui = $pi->prop("user3");
+			}
+
 			$ivar = array(
-				"user".$i => $prod->prop("user".$i),
+				"user".$i => $ui,
 				"userta".$i => nl2br($prod->prop("userta".$i)),
 				"uservar".$i => $tmp,
 				"packaging_user".$i => $pi->prop("user".$i),
@@ -242,6 +249,10 @@ class shop_product_packaging extends class_base
 		$awa = new aw_array($inf["data"]);
 		foreach($awa->get() as $datan => $datav)
 		{
+			if ($datan == "url")
+			{
+				$datav =str_replace("afto=1", "",$datav);
+			}
 			$vs = array(
 				"order_data_".$datan => $datav
 			);
@@ -249,6 +260,20 @@ class shop_product_packaging extends class_base
 			$proc_ivs += $vs;
 		}
 		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
+
+		$tmp = $awa->get();
+		if ($tmp["url"] != "")
+		{
+			$l_inst->vars(Array(
+				"URL_IN_DATA" => $l_inst->parse("URL_IN_DATA")
+			));
+		}
+		else
+		{
+			$l_inst->vars(Array(
+				"NO_URL_IN_DATA" => $l_inst->parse("NO_URL_IN_DATA")
+			));
+		}
 
 		return $l_inst->parse();
 	}
