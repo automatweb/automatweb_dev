@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.33 2005/03/30 09:50:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.34 2005/03/30 15:49:37 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
-@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 confirm_save_data=1
+@classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1
 
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="Tööleht" submit=no
@@ -173,58 +173,58 @@ class mrp_resource extends class_base
 		));
 	}
 
+	function callback_on_load ($arr)
+	{
+		if (((string) $arr["request"]["action"]) == "new")
+		{
+			if (is_oid ($arr["request"]["mrp_workspace"]))
+			{
+				$this->workspace = obj ($arr["request"]["mrp_workspace"]);
+			}
+			else
+			{
+				$this->mrp_error .= t("Uut ressurssi saab luua vaid ressursihalduskeskkonnast. ");
+			}
+		}
+		else
+		{
+			$this_object = obj ($arr["request"]["id"]);
+			$this->workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+			if (!$this->workspace)
+			{
+				$this->mrp_error .= t("Ressurss ei kuulu ühessegi ressursihaldussüsteemi. ");
+			}
+		}
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object = &$arr["obj_inst"];
 
-		if ($arr["new"])
-		{
-			if (is_oid($arr["request"]["mrp_workspace"]))
-			{
-				$this->mrp_workspace = $arr["request"]["mrp_workspace"];
-				$workspace = obj($arr["request"]["mrp_workspace"]);
-			}
-			else
-			{
-				$prop["error"] = t("Kasutatav ressursihalduskeskkond määramata. ");
-				return PROP_FATAL_ERROR;
-			}
-		}
-		else
-		{
-			$workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-		}
-
 		switch($prop["name"])
 		{
 			case "category":
-				if ($workspace)
-				{
-					$resources_folder_id = $workspace->prop ("resources_folder");
-					$parent_folder_id = $this_object->parent ();
-					$parents = "";
+				$resources_folder_id = $this->workspace->prop ("resources_folder");
+				$parent_folder_id = $this_object->parent ();
+				$parents = "";
 
-					while ($resources_folder_id and ($parent_folder_id != $resources_folder_id))
-					{
-						$parent = obj ($parent_folder_id);
-						$parents = "/" . $parent->name () . $parents;
-						$parent_folder_id = $parent->parent ();
-					}
-
-					$prop["value"] = t("/Ressursid") . $parents;
-				}
-				else
+				while ($resources_folder_id and ($parent_folder_id != $resources_folder_id))
 				{
-					$prop["value"] = t("Ressurss ei kuulu ühessegi ressursihaldussüsteemi. ");
+					$parent = obj ($parent_folder_id);
+					$parents = "/" . $parent->name () . $parents;
+					$parent_folder_id = $parent->parent ();
 				}
+
+				$prop["value"] = t("/Ressursid") . $parents;
 				break;
 
 			case "resource_calendar":
 				### update schedule
 				$schedule = get_instance (CL_MRP_SCHEDULE);
-				$schedule->create (array("mrp_workspace" => $workspace->id()));
+				$schedule->create (array("mrp_workspace" => $this->workspace->id()));
 
 				$prop["value"] = $this->create_resource_calendar ($arr);
 				break;
@@ -262,7 +262,7 @@ class mrp_resource extends class_base
 			case "job_list":
 				### update schedule
 				$schedule = get_instance (CL_MRP_SCHEDULE);
-				$schedule->create (array("mrp_workspace" => $workspace->id()));
+				$schedule->create (array("mrp_workspace" => $this->workspace->id()));
 
 				$this->create_job_list_table ($arr);
 				break;
@@ -279,9 +279,9 @@ class mrp_resource extends class_base
 
 	function callback_mod_reforb ($arr)
 	{
-		if ($this->mrp_workspace)
+		if ($this->workspace)
 		{
-			$arr["mrp_workspace"] = $this->mrp_workspace;
+			$arr["mrp_workspace"] = $this->workspace;
 		}
 	}
 
@@ -290,6 +290,27 @@ class mrp_resource extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object = &$arr["obj_inst"];
+
+		### post rescheduling msg where necessary
+		switch ($prop["name"])
+		{
+			case "concurrent_threads":
+			case "global_buffer":
+				if ($this_object->prop ($prop["name"]) != $prop["value"])
+				{
+					$this->workspace->set_prop("rescheduling_needed", 1);
+				}
+				break;
+		}
+
+		switch ($prop["group"])
+		{
+			case "grp_resource_unavailable_work":
+			case "grp_resource_unavailable_una":
+			case "grp_resource_unavailable":
+				$this->workspace->set_prop("rescheduling_needed", 1);
+				break;
+		}
 
 		switch ($prop["name"])
 		{
@@ -345,6 +366,7 @@ class mrp_resource extends class_base
 	function callback_post_save ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
+		$this->workspace->save ();
 
 		### connect newly created obj. to workspace from which the req. was made
 		if ($arr["new"] and is_oid ($arr["request"]["mrp_workspace"]))

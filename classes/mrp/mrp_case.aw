@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.49 2005/03/30 10:08:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.50 2005/03/30 15:49:37 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -7,7 +7,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 
-@classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1 confirm_save_data=1
+@classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1
 
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
 
@@ -272,29 +272,50 @@ class mrp_case extends class_base
 		));
 	}
 
-	function get_property($arr)
+	function callback_on_load ($arr)
 	{
-		$prop =& $arr["prop"];
-		$retval = PROP_OK;
-		$this_object =& $arr["obj_inst"];
-
-		if ($arr["new"])
+		if (((string) $arr["request"]["action"]) == "new")
 		{
-			if (is_oid($arr["request"]["mrp_workspace"]))
+			if (is_oid ($arr["request"]["mrp_workspace"]))
 			{
-				$this->mrp_workspace = $arr["request"]["mrp_workspace"];
-				$workspace = obj($arr["request"]["mrp_workspace"]);
+				$this->workspace = obj ($arr["request"]["mrp_workspace"]);
 			}
 			else
 			{
-				$prop["error"] = t("Kasutatav ressursihalduskeskkond määramata. ");
-				return PROP_FATAL_ERROR;
+				$this->mrp_error .= t("Uut projekti saab luua vaid ressursihalduskeskkonnast. ");
 			}
 		}
 		else
 		{
-			$workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+			$this_object = obj ($arr["request"]["id"]);
+			$this->workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+			if (!$this->workspace)
+			{
+				$this->mrp_error .= t("Projektil puudub ressursihalduskeskkond. ");
+			}
 		}
+	}
+
+	function callback_mod_reforb ($arr)
+	{
+		if ($this->workspace)
+		{
+			$arr["mrp_workspace"] = $this->workspace;
+		}
+	}
+
+	function get_property($arr)
+	{
+		if ($this->mrp_error)
+		{
+			$prop["error"] = $this->mrp_error;
+			return PROP_IGNORE;
+		}
+
+		$prop =& $arr["prop"];
+		$retval = PROP_OK;
+		$this_object =& $arr["obj_inst"];
 
 		switch($prop["name"])
 		{
@@ -341,7 +362,7 @@ class mrp_case extends class_base
 				{
 					### update schedule
 					$schedule = get_instance (CL_MRP_SCHEDULE);
-					$schedule->create (array("mrp_workspace" => $workspace->id()));
+					$schedule->create (array("mrp_workspace" => $this->workspace->id()));
 				}
 
 				### project states for showing its schedule chart
@@ -380,7 +401,7 @@ class mrp_case extends class_base
 				{
 					### update schedule
 					$schedule = get_instance (CL_MRP_SCHEDULE);
-					$schedule->create (array("mrp_workspace" => $workspace->id()));
+					$schedule->create (array("mrp_workspace" => $this->workspace->id()));
 				}
 
 				$this->create_workflow_table ($arr);
@@ -398,41 +419,36 @@ class mrp_case extends class_base
 		return $retval;
 	}
 
-	function callback_mod_reforb ($arr)
-	{
-		if ($this->mrp_workspace)
-		{
-			$arr["mrp_workspace"] = $this->mrp_workspace;
-		}
-	}
-
 	function set_property($arr = array())
 	{
+		if ($this->mrp_error)
+		{
+			$prop["error"] = $this->mrp_error;
+			return PROP_FATAL_ERROR;
+		}
+
 		$this_object =& $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
 
-		if ($arr["new"])
+		### post rescheduling msg where necessary
+		$applicable_planning_states = array(
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PLANNED,
+		);
+
+		switch ($prop["name"])
 		{
-			if (is_oid($arr["request"]["mrp_workspace"]))
-			{
-				$this->mrp_workspace = $arr["request"]["mrp_workspace"];
-				$workspace = obj($arr["request"]["mrp_workspace"]);
-			}
-			else
-			{
-				$prop["error"] = t("Kasutatav ressursihalduskeskkond määramata. ");
-				return PROP_FATAL_ERROR;
-			}
-		}
-		else
-		{
-			$workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+			case "due_date":
+			case "project_priority":
+			case "starttime":
+				if ( in_array ($this_object->prop ("state"), $applicable_planning_states) and ($this_object->prop ($prop["name"]) != $prop["value"]) )
+				{
+					$this->workspace->set_prop("rescheduling_needed", 1);
+				}
+				break;
 		}
 
-		### post rescheduling msg
-		$workspace->set_prop("rescheduling_needed", 1);
-		$workspace->save();
 
 		switch($prop["name"])
 		{
@@ -493,6 +509,7 @@ class mrp_case extends class_base
 	function callback_post_save ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
+		$this->workspace->save ();
 
 		if ( ($arr["new"]) and (is_oid ($arr["request"]["mrp_workspace"])) )
 		{
@@ -1179,6 +1196,23 @@ class mrp_case extends class_base
 		}
 		else
 		{
+			$applicable_planning_states = array(
+				MRP_STATUS_INPROGRESS,
+				MRP_STATUS_PLANNED,
+			);
+
+			if (in_array ($this_object->prop ("state"), $applicable_planning_states))
+			{
+				### post rescheduling msg
+				$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+				if ($workspace)
+				{
+					$workspace->set_prop("rescheduling_needed", 1);
+					$workspace->save();
+				}
+			}
+
 			return PROP_OK;
 		}
 	}
@@ -1537,12 +1571,12 @@ class mrp_case extends class_base
 			$job->delete ();
 		}
 
-		$applicable_states = array (
-			MRP_STATUS_PLANNED,
+		$applicable_planning_states = array(
 			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PLANNED,
 		);
 
-		if (in_array ($project->prop ("state"), $applicable_states))
+		if (in_array ($project->prop ("state"), $applicable_planning_states))
 		{
 			### post rescheduling msg
 			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
@@ -1773,9 +1807,18 @@ class mrp_case extends class_base
 			$project->set_prop ("state", MRP_STATUS_ABORTED);
 			$project->save ();
 
+			### post rescheduling msg
+			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+			if ($workspace)
+			{
+				$workspace->set_prop("rescheduling_needed", 1);
+				$workspace->save();
+			}
+
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log ($project->id (), NULL, "Projekt katkestati");
+			$ws->mrp_log ($this_object->id (), NULL, "Projekt katkestati");
 
 			return $return_url;
 		}
@@ -1957,6 +2000,15 @@ class mrp_case extends class_base
 			### set project on hold
 			$project->set_prop("state", MRP_STATUS_ONHOLD);
 			$project->save();
+
+			### post rescheduling msg
+			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+			if ($workspace)
+			{
+				$workspace->set_prop("rescheduling_needed", 1);
+				$workspace->save();
+			}
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
