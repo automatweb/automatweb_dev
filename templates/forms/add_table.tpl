@@ -64,75 +64,42 @@
 <tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_CHOOSE_WHICH_COUMN_ELEMENT}:</td>
 </tr>
+<!-- SUB: COL -->
 <tr>
 <td class="fform" colspan=2>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class="fform">{VAR:LC_FORMS_COLUMN}</td>
-<!-- SUB: TITLE -->
-<td class="fform">{VAR:el_name}</td>
-<!-- END SUB: TITLE -->
-<td class="fform">{VAR:LC_FORMS_CHANGING}</td>
-<td class="fform">{VAR:LC_FORMS_LOOKING}</td>
-<td class="fform">Special</td>
-<td class="fform">{VAR:LC_FORMS_DELETE}</td>
-<td class="fform">{VAR:LC_FORMS_CREATED}</td>
-<td class="fform">{VAR:LC_FORMS_CHANGED}</td>
-<td class="fform">UID</td>
-<td class="fform">{VAR:LC_FORMS_ACTIVITY}</td>
-<td class="fform">{VAR:LC_FORMS_CHANGING_POSITION}</td>
-<!-- SUB: LANG_H -->
-<td class="fform">{VAR:LC_FORMS_COLUMN_TITLE} ({VAR:lang_name})</td>
-<!-- END SUB: LANG_H -->
-<td class="fform">{VAR:LC_FORMS_SORTABLE}?</td>
-<td class="fform">{VAR:LC_FORMS_DEL_TABLE_COL}?</td>
-<td class="fform">{VAR:LC_FORMS_TABLE_ADD_COL}?</td>
-</tr>
-
-<!-- SUB: ROW -->
-<tr>
-<td class="fform">{VAR:column}</td>
-
-<!-- SUB: COL -->
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='{VAR:el_id}' {VAR:checked}></td>
-<!-- END SUB: COL -->
-
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='change' {VAR:change_checked}></td>
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='view' {VAR:view_checked}></td>
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='special' {VAR:special_checked}></td>
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='delete' {VAR:delete_checked}></td>
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='created' {VAR:created_checked}></td>
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='modified' {VAR:modified_checked}></td>
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='uid' {VAR:uid_checked}></td>
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='active' {VAR:active_checked}></td>
-<td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='chpos' {VAR:chpos_checked}></td>
-<!-- SUB: LANG -->
-<td class="fform"><input type='text' class='small_button' name='names[{VAR:column}][{VAR:lang_id}]' VALUE='{VAR:c_name}'></td>
-<!-- END SUB: LANG -->
-<td class="fform" align="center"><input type='checkbox' name='sortable[{VAR:column}]' VALUE='1' {VAR:sortable}></td>
-<td class="fform" align="center"><input type='checkbox' name='del[{VAR:column}]' VALUE='1'></td>
-<td class="fform" align="center"><input type='checkbox' name='addaf[{VAR:column}]' VALUE='1'></td>
-</tr>
-<!-- END SUB: ROW -->
-<tr>
-<td class="fform">Vaatamine:</td>
-<!-- SUB: VCOL -->
-<td align="center" class="fform"><input type='radio' name='viewcol' value='{VAR:el_id}' {VAR:checked}></td>
-<!-- END SUB: VCOL -->
-<td class="fform">&nbsp;</td>
-<td align="center" class="fform"><input type='radio' name='viewcol' value='view' {VAR:v_view_checked}></td>
-<td class="fform" colspan="20">&nbsp;</td>
+	<td class="fform" colspan=10>Tulp {VAR:column}:</td>
 </tr>
 <tr>
-<td class="fform">Muutmine:</td>
-<!-- SUB: CCOL -->
-<td align="center" class="fform"><input type='radio' name='changecol' value='{VAR:el_id}' {VAR:checked}></td>
-<!-- END SUB: CCOL -->
-<td align="center" class="fform"><input type='radio' name='changecol' value='change' {VAR:v_change_checked}></td>
-<td class="fform" colspan="20">&nbsp;</td>
+	<!-- SUB: LANG_H -->
+	<td class="fform">{VAR:LC_FORMS_COLUMN_TITLE} ({VAR:lang_name})</td>
+	<!-- END SUB: LANG_H -->
+</tr>
+<tr>
+	<!-- SUB: LANG -->
+	<td class="fform"><input type='text' class='small_button' name='names[{VAR:column}][{VAR:lang_id}]' VALUE='{VAR:c_name}'></td>
+	<!-- END SUB: LANG -->
+</tr>
+<tr>
+	<td class="fform">Vali elemendid:</td>
+	<td class="fform" colspan=10><select class="small_button" size=7 name='columns[{VAR:column}][]' multiple>{VAR:elements}</select></td>
+</tr>
+<tr>
+	<td class="fform">Sorditav:</td>
+	<td class="fform" colspan=10><input type="checkbox" name="sortable[{VAR:column}]" value="1" {VAR:sortable}>&nbsp;&nbsp;<a href='{VAR:add_col}'>Lisa tulp</a>&nbsp;&nbsp;<a href='{VAR:del_col}'>Kustuta tulp</a></td>
 </tr>
 </table>
 </td>
+</tr>
+<!-- END SUB: COL -->
+<tr>
+	<td class="fform">Vali vaatamise element:</td>
+	<td class="fform"><select name="viewcol">{VAR:v_elements}</select></td>
+</tr>
+<tr>
+	<td class="fform">Vali muutmise element:</td>
+	<td class="fform"><select name="changecol">{VAR:c_elements}</select></td>
 </tr>
 <!-- END SUB: CHANGE -->
 <tr>
@@ -141,3 +108,5 @@
 </table>
 {VAR:reforb}
 </form>
+
+

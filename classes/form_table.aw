@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.15 2001/09/12 13:41:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.16 2001/09/12 16:44:09 kristo Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -81,42 +81,6 @@ class form_table extends form_base
 				}
 			}
 
-			if (is_array($del))
-			{
-//				echo "del <br>";
-				$td = array();
-				$nc = 0;
-				for ($i=0; $i < $num_cols; $i++)
-				{
-					if ($del[$i] != 1)
-					{
-						$td[$nc] = $this->table["defs"][$i];
-						$nc++;
-					}
-				}
-				$num_cols = $nc;
-				$this->table["defs"] = $td;
-			}
-
-			if (is_array($addaf))
-			{
-//				echo "addaf <br>";
-				$td = array();
-				$nc = 0;
-				for ($i=0; $i < $num_cols; $i++)
-				{
-					if ($addaf[$i-1] == 1)
-					{
-						$nc++;
-					}
-					
-					$td[$nc] = $this->table["defs"][$i];
-					$nc++;
-				}
-				$num_cols = $nc;
-				$this->table["defs"] = $td;
-			}
-
 			$this->table["moveto"] = array();
 			if (is_array($moveto))
 			{
@@ -148,13 +112,7 @@ class form_table extends form_base
 			$this->table["new_win_y"] = $new_win_y;
 			$this->table["new_win_scroll"] = $new_win_scroll;
 			$this->table["new_win_fixedsize"] = $new_win_fixedsize;
-			classload("xml");
-			$x = new xml;
-			$co = $x->xml_serialize($this->table);
-			$this->quote(&$co);
-//			echo "num_cols = $num_cols <br>";
-			$q = "UPDATE form_tables SET num_cols = '$num_cols' , content = '$co' WHERE id = $id";
-			$this->db_query($q);
+			$this->save_table(array("id" => $id, "num_cols" => $num_cols));
 		}
 		else
 		{
@@ -173,6 +131,22 @@ class form_table extends form_base
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
+	function save_table($arr)
+	{
+		extract($arr);
+		classload("xml");
+		$x = new xml;
+		$co = $x->xml_serialize($this->table);
+		$this->quote(&$co);
+		$noc = "";
+		if (isset($num_cols))
+		{
+			$noc = "num_cols = '$num_cols' , ";
+		}
+		$q = "UPDATE form_tables SET $noc content = '$co' WHERE id = $id";
+		$this->db_query($q);
+	}
+
 	////
 	// !shows the change form
 	function change($arr)
@@ -183,37 +157,36 @@ class form_table extends form_base
 		$tbo = $this->get_object($id);
 		$this->mk_path($this->table_parent, LC_FORM_TABLE_CHANGE_FORM_TABLE);
 
+		// nini. siin vaja teha listboxi sobiv nimekiri elementidest
 		$forms = $this->get_forms_for_table($id);
-
 		$els = $this->get_elements_for_forms($forms);
+		// lisame veel siia fake-elemendid:
+		$els["change"] = "Change";
+		$els["view"] = "View";
+		$els["special"] = "Special";
+		$els["delete"] = "Delete";
+		$els["created"] = "Created";
+		$els["modified"] = "modified";
+		$els["uid"] = "UID";
+		$els["active"] = "Active";
+		$els["chpos"] = "Move";
 
-		// teeme esimese rea elementide nimega
-		foreach($els as $elid => $elname)
-		{
-			$this->vars(array(
-				"el_name" => $elname
-			));
-			$this->parse("TITLE");
-		}
 
 		classload("languages");
 		$lang = new languages;
 		$lar = $lang->listall();
-		foreach($lar as $la)
-		{
-			$this->vars(array(
-				"lang_name" => $la["name"]
-			));
-			$this->parse("LANG_H");
-		}
 
 		for ($col=0; $col < $this->table["cols"]; $col++)
 		{
 			$this->vars(array(
 				"column" => $col,
-				"sortable" => checked($this->table["defs"][$col]["sortable"])
+				"sortable" => checked($this->table["defs"][$col]["sortable"]),
+				"elements" => $this->multiple_option_list($this->table["defs"][$col]["el"],$els),
+				"add_col" => $this->mk_my_orb("add_col", array("id" => $id,"after" => $col)),
+				"del_col" => $this->mk_my_orb("del_col", array("id" => $id,"col" => $col))
 			));
-		
+
+			$lh = "";
 			$lit = "";
 			foreach($lar as $la)
 			{
@@ -226,90 +199,24 @@ class form_table extends form_base
 					$lt = $this->table["defs"][$col]["lang_title"][$la["id"]];
 				}
 				$this->vars(array(
+					"lang_name" => $la["name"],
 					"lang_id" => $la["id"],
 					"c_name" => $lt
 				));
+				$lh.=$this->parse("LANG_H");
 				$lit.=$this->parse("LANG");
 			}
-			$this->vars(array("LANG" => $lit));
-
-			$c = "";
-			foreach($els as $elid => $elname)
-			{
-				if (is_array($this->table["defs"][$col]["el"]))	// backward compatibility sucks
-				{
-					$chk = checked(in_array($elid,$this->table["defs"][$col]["el"]));
-				}
-				else
-				{
-					$chk = checked($this->table["defs"][$col]["el"] == $elid);
-				}
-				$this->vars(array(
-					"el_id" => $elid,
-					"checked" => $chk
-				));
-				$c.=$this->parse("COL");
-			}
-			if (is_array($this->table["defs"][$col]["el"]))	// backward compatibility sucks
-			{
-				$this->vars(array(
-					"change_checked" => checked(in_array("change",$this->table["defs"][$col]["el"])),
-					"view_checked" => checked(in_array("view",$this->table["defs"][$col]["el"])),
-					"special_checked" => checked(in_array("special",$this->table["defs"][$col]["el"])),
-					"delete_checked" => checked(in_array("delete",$this->table["defs"][$col]["el"])),
-					"uid_checked" => checked(in_array("uid",$this->table["defs"][$col]["el"])),
-					"created_checked" => checked(in_array("created",$this->table["defs"][$col]["el"])),
-					"modified_checked" => checked(in_array("modified",$this->table["defs"][$col]["el"])),
-					"active_checked" => checked(in_array("active",$this->table["defs"][$col]["el"])),
-					"chpos_checked" => checked(in_array("chpos",$this->table["defs"][$col]["el"]))
-				));
-			}
-			else
-			{
-				$this->vars(array(
-					"change_checked" => checked($this->table["defs"][$col]["el"] == "change"),
-					"view_checked" => checked($this->table["defs"][$col]["el"] == "view"),
-					"special_checked" => checked($this->table["defs"][$col]["el"] == "special"),
-					"delete_checked" => checked($this->table["defs"][$col]["el"] == "delete"),
-					"uid_checked" => checked($this->table["defs"][$col]["el"] == "uid"),
-					"created_checked" => checked($this->table["defs"][$col]["el"] == "created"),
-					"modified_checked" => checked($this->table["defs"][$col]["el"] == "modified"),
-					"active_checked" => checked($this->table["defs"][$col]["el"] == "active"),
-					"chpos_checked" => checked($this->table["defs"][$col]["el"] == "chpos")
-				));
-			}
 			$this->vars(array(
-				"COL" => $c,
+				"LANG_H" => $lh,
+				"LANG" => $lit
 			));
-			$this->parse("ROW");
-		}
-
-		$vc = "";
-		foreach($els as $elid => $elname)
-		{
-			$this->vars(array(
-				"el_id" => $elid,
-				"checked" => checked($this->table["view_col"] == $elid)
-			));
-			$vc.=$this->parse("VCOL");
+		
+			$co.=$this->parse("COL");
 		}
 		$this->vars(array(
-			"VCOL" => $vc,
-			"v_view_checked" => checked($this->table["view_col"] == "view")
-		));
-
-		$cc = "";
-		foreach($els as $elid => $elname)
-		{
-			$this->vars(array(
-				"el_id" => $elid,
-				"checked" => checked($this->table["change_col"] == $elid)
-			));
-			$cc.=$this->parse("CCOL");
-		}
-		$this->vars(array(
-			"CCOL" => $cc,
-			"v_change_checked" => checked($this->table["view_col"] == "change")
+			"COL" => $co,
+			"v_elements" => $this->picker($this->table["view_col"], array(0 => "") + $els),
+			"c_elements" => $this->picker($this->table["change_col"], array(0 => "") + $els),
 		));
 
 		classload("style");
@@ -348,6 +255,33 @@ class form_table extends form_base
 			"user_button_url" => $this->table["user_button_url"]
 		));
 		return $this->parse();
+	}
+
+	function add_col($arr)
+	{
+		extract($arr);
+		$this->load_table($id);
+
+		for ($i=$this->table["cols"]-1; $i > $after ; $i--)
+		{
+			$this->table["defs"][$i+1] = $this->table["defs"][$i];
+		}
+		$this->table["defs"][$after+1] = array();
+		$this->save_table(array("id" => $id, "num_cols" => $this->table["cols"]+1));
+		header("Location: ".$this->mk_my_orb("change", array("id" => $id)));
+	}
+
+	function del_col($arr)
+	{
+		extract($arr);
+		$this->load_table($id);
+
+		for ($i=$col; $i < $this->table["cols"]; $i++)
+		{
+			$this->table["defs"][$i] = $this->table["defs"][$i+1];
+		}
+		$this->save_table(array("id" => $id, "num_cols" => $this->table["cols"]-1));
+		header("Location: ".$this->mk_my_orb("change", array("id" => $id)));
 	}
 
 	////
