@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.3 2004/11/30 14:41:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.4 2004/12/01 13:21:57 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -86,7 +86,7 @@ class object_export extends class_base
 				}
 				$prop["value"] = html::href(array(
 					"url" => aw_url_change_var("do_exp", 1),
-					"caption" => "Ekspordi CSV fail"
+					"caption" => t("Ekspordi CSV fail")
 				));
 				break;
 		};
@@ -115,22 +115,22 @@ class object_export extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Element"
+			"caption" => t("Element")
 		));
 
 		$t->define_field(array(
 			"name" => "jrk",
-			"caption" => "J&auml;rjekord"
+			"caption" => t("J&auml;rjekord")
 		));
 
 		$t->define_field(array(
 			"name" => "visible",
-			"caption" => "Eksporditav"
+			"caption" => t("Eksporditav")
 		));
 
 		$t->define_field(array(
 			"name" => "caption",
-			"caption" => "Tulba pealkiri"
+			"caption" => t("Tulba pealkiri")
 		));
 
 		$t->set_sortable(false);

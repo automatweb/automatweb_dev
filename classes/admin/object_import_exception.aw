@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import_exception.aw,v 1.2 2004/06/11 08:43:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import_exception.aw,v 1.3 2004/12/01 13:21:57 kristo Exp $
 // object_import_exception.aw - Objektide impordi erand 
 /*
 
@@ -71,12 +71,12 @@ class object_import_exception extends class_base
 	{
 		$t->define_field(array(
 			"name" => "from",
-			"caption" => "Mis asendada"
+			"caption" => t("Mis asendada")
 		));
 
 		$t->define_field(array(
 			"name" => "to",
-			"caption" => "Millega asendada"
+			"caption" => t("Millega asendada")
 		));
 
 		$t->set_sortable(false);

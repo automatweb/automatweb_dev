@@ -27,7 +27,7 @@ class admin_languages extends languages
 	**/
 	function gen_list()
 	{
-		$this->mk_path(0,"Keeled");
+		$this->mk_path(0,t("Keeled"));
 		$this->read_template("list.tpl");
 		
 		$admin_lang = aw_global_get("admin_lang");
@@ -82,7 +82,7 @@ class admin_languages extends languages
 	**/
 	function add()
 	{
-		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Keeled</a> / Lisa");
+		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>".t("Keeled")."</a> / ".t("Lisa"));
 		$this->read_template("add.tpl");
 		$tmp = aw_ini_get("languages.list");
 		$lang_codes = array();
@@ -113,7 +113,7 @@ class admin_languages extends languages
 	function change($arr)
 	{
 		extract($arr);
-		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Keeled</a> / Muuda");
+		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>".t("Keeled")."</a> / ".t("Muuda"));
 		$this->read_template("add.tpl");
 		$l = $this->fetch($id, true);
 		// ph33r my l33t copy 'n paste sk1llz

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.21 2004/11/19 16:10:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.22 2004/12/01 13:21:57 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -58,25 +58,25 @@ class add_tree_conf extends class_base
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 
 		$t->define_field(array(
 			"name" => "visible",
-			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"visible\")'>N&auml;htav</a>",
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"visible\")'>".t("N&auml;htav")."</a>",
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "usable",
-			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"usable\")'>Kasutatav</a>",
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"usable\")'>".t("Kasutatav")."</a>",
 			"align" => "center"
 		));
 
 
 		$t->define_field(array(
 			"name" => "alias_add",
-			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"alias_add\")'>Aliasena lisatav</a>",
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"alias_add\")'>".t("Aliasena lisatav")."</a>",
 			"align" => "center"
 		));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.10 2004/11/19 10:54:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.11 2004/12/01 13:21:59 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -140,7 +140,7 @@ class config_login_menus extends class_base
 			$ret[] = $tmp;
 
 			$tmp = array(
-				"caption" => $gdat["name"] . " menyy",
+				"caption" => $gdat["name"] . t(" menyy"),
 				"type" => "relpicker",
 				"name" => "lm[$gid][menu]",
 				"value" => $lm[$gid]["menu"],

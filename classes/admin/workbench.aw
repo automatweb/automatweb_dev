@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.4 2004/05/13 14:51:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.5 2004/12/01 13:21:57 kristo Exp $
 // workbench.aw - Töölaud 
 /*
 
@@ -53,7 +53,7 @@ class workbench extends class_base
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
-                {
+		{
 
 		}
 		return $retval;
@@ -125,10 +125,10 @@ class workbench extends class_base
 		$afd->use_parent = $par;
 		global $awt;
 		$awt->start("ng-gen-folders");
-                $this->vars(array(
-                        "charset" => $t->get_charset(),
-                        "content" => $afd->gen_folders($arr["period"])
-                ));
+		$this->vars(array(
+			"charset" => $t->get_charset(),
+			"content" => $afd->gen_folders($arr["period"])
+		));
 		$awt->stop("ng-gen_folders");
 		/*print "<!--";
 		print_r($awt->summaries());

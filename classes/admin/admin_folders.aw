@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.37 2004/11/19 11:30:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.38 2004/12/01 13:21:57 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -106,7 +106,7 @@ class admin_folders extends aw_template
 			"type" => !empty($treetype) ? constant($treetype) : TREE_JS,
 			"url_target" => "list",
 			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"],"period" => $this->period),"admin_menus"),
-			"root_name" => "<b>AutomatWeb</b>",
+			"root_name" => t("<b>AutomatWeb</b>"),
 			"has_root" => empty($this->use_parent) ? true : false,
 			"tree_id" => "ad_folders",
 			//"persist_state" => true,
@@ -301,7 +301,7 @@ class admin_folders extends aw_template
 					}
 				}
 			}
-			$ar[0] = "Mitteperioodilised";
+			$ar[0] = t("Mitteperioodilised");
 			$tb->add_cdata(html::select(array(
 				"name" => "period",
 				"options" => $ar,
@@ -311,13 +311,13 @@ class admin_folders extends aw_template
 
 		$tb->add_button(array(
 			"name" => "refresh",
-			"tooltip" => "Reload",
+			"tooltip" => t("Reload"),
 			"url" => "javascript:document.pform.submit();",
 			"img" => "refresh.gif",
 		));
 		$tb->add_button(array(
 			"name" => "logout",
-			"tooltip" => "Logi v&auml;lja",
+			"tooltip" => t("Logi v&auml;lja"),
 			"url" => $this->mk_my_orb("logout", array(), "users"),
 			"img" => "logout.gif",
 			"target" => "_top"

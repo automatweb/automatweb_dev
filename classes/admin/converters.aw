@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.49 2004/10/08 15:59:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.50 2004/12/01 13:21:57 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1755,6 +1755,40 @@ class converters extends aw_template
 			}
 			$this->restore_handle();
 		}
+		die("all done");
+	}
+
+	/** adds aliases for form entries for user profiles
+
+		@attrib name=convert_user_fg_prof
+
+	**/
+	function convert_user_fg_prof($arr)
+	{
+		aw_disable_messages();
+		$ul = new object_list(array(
+			"class_id" => CL_USER,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"brother_of" => new obj_predicate_prop("id")
+		));
+		foreach($ul->arr() as $o)
+		{
+			echo "user ".$o->name()." <br>\n";
+			flush();
+			$jfe = safe_array(aw_unserialize($o->prop("join_form_entry")));
+			foreach($jfe as $eid)
+			{
+				if (!$o->is_connected_to(array("to" => $eid, "type" => 7)) && $this->can("view", $eid))
+				{
+					$o->connect(array(
+						"to" => $eid,
+						"reltype" => 7
+					));
+				}
+			}
+		}
+		aw_restore_messages();
 		die("all done");
 	}
 };

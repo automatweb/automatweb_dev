@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.90 2004/11/27 11:15:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.91 2004/12/01 13:21:57 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -223,7 +223,7 @@ class admin_menus extends aw_template
 		$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj->id(),"period" => $period), "admin_menus",true,true);
 		$this->vars(array(
 			"link" => $ourl,
-			"text" => "Ava"
+			"text" => t("Ava")
 		));
 		$retval = $this->parse("MENU_ITEM");
 
@@ -233,7 +233,7 @@ class admin_menus extends aw_template
 
 			$this->vars(array(
 				"link" => $churl,
-				"text" => "Muuda"
+				"text" => t("Muuda")
 			));
 			$retval .= $this->parse("MENU_ITEM");
 
@@ -241,7 +241,7 @@ class admin_menus extends aw_template
 
 			$this->vars(array(
 				"link" => $cuturl,
-				"text" => "L&otilde;ika"
+				"text" => t("L&otilde;ika")
 			));
 			$retval .= $this->parse("MENU_ITEM");
 		}
@@ -250,7 +250,7 @@ class admin_menus extends aw_template
 
 		$this->vars(array(
 			"link" => $copyurl,
-			"text" => "Kopeeri"
+			"text" => t("Kopeeri")
 		));
 		$retval .= $this->parse("MENU_ITEM");
 
@@ -258,11 +258,11 @@ class admin_menus extends aw_template
 		{
 			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
 
-			$delurl = "javascript:if(confirm('Kustutada valitud objektid?')){window.location='$delurl';};";
+			$delurl = "javascript:if(confirm('".t("Kustutada valitud objektid?")."')){window.location='$delurl';};";
 
 			$this->vars(array(
 				"link" => $delurl,
-				"text" => "Kustuta"
+				"text" => t("Kustuta")
 			));
 			$retval .= $this->parse("MENU_ITEM");
 		}
@@ -500,7 +500,7 @@ class admin_menus extends aw_template
 	{
 		extract($arr);
 		$this->read_template("copy_feedback.tpl");
-		$this->mk_path($parent, "Vali kuidas objekte kopeerida");
+		$this->mk_path($parent, t("Vali kuidas objekte kopeerida"));
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_copy_feedback", array("parent" => $parent, "period" => $period,"sel" => $sel))
@@ -689,7 +689,7 @@ class admin_menus extends aw_template
 				{
 					if (!preg_match("/([0-9\.]+)(.*)/",$row,$mt))
 					{
-						$this->raise_error(ERR_MNEDIT_TXTIMP,"Menyyde importimisel tekkis viga real $cnt ",true);
+						$this->raise_error(ERR_MNEDIT_TXTIMP,sprintf(t("Menyyde importimisel tekkis viga real %s "),$cnt),true);
 					}
 				}
 				// now parse the position in the structure from the numbers.
@@ -706,7 +706,7 @@ class admin_menus extends aw_template
 
 				if ($_pt != "" && !$_parent)
 				{
-					$this->raise_error(ERR_MNEDIT_TXTIMP_PARENT,"Menyyde importimisel ei leidnud parent menyyd real $cnt ",true);
+					$this->raise_error(ERR_MNEDIT_TXTIMP_PARENT,sprintf(t("Menyyde importimisel ei leidnud parent menyyd real %s "),$cnt),true);
 				}
 				else
 				{
@@ -1149,7 +1149,7 @@ class admin_menus extends aw_template
 				$row["class_id"] .= " (vend)";
 			}
 						
-			$row["link"] = "<a href=\"".$this->cfg["baseurl"]."/".$row["oid"]."\">Link</a>";
+			$row["link"] = "<a href=\"".$this->cfg["baseurl"]."/".$row["oid"]."\">".t("Link")."</a>";
 			
 			
 			$row["hidden_jrk"] = $row["jrk"];
@@ -1164,7 +1164,7 @@ class admin_menus extends aw_template
 			}
 			else
 			{
-				$row["status"] = $row["status"] == 1 ? "Mitteaktiivne" : "Aktiivne";
+				$row["status"] = $row["status"] == 1 ? t("Mitteaktiivne") : t("Aktiivne");
 			}
 
 			if ($can_change)
@@ -1268,7 +1268,7 @@ class admin_menus extends aw_template
 		{
 			$toolbar->add_menu_button(array(
 				"name" => "new",
-				"tooltip" => "Uus",
+				"tooltip" => t("Uus"),
 			));
 
 			foreach($this->add_menu as $item_id => $item_collection)
@@ -1310,7 +1310,7 @@ class admin_menus extends aw_template
 		{
 			$toolbar->add_button(array(
 				"name" => "save",
-				"tooltip" => "Salvesta",
+				"tooltip" => t("Salvesta"),
 				"url" => "javascript:document.foo.submit()",
 				"img" => "save.gif",
 			));
@@ -1318,7 +1318,7 @@ class admin_menus extends aw_template
 		
 		$toolbar->add_button(array(
 			"name" => "search",
-			"tooltip" => "Otsi",
+			"tooltip" => t("Otsi"),
 			"url" => $this->mk_my_orb("search",array("parent" => $parent),"search"),
 			"img" => "search.gif",
 		));
@@ -1328,14 +1328,14 @@ class admin_menus extends aw_template
 
 		$toolbar->add_button(array(
 			"name" => "cut",
-			"tooltip" => "L&otilde;ika",
+			"tooltip" => t("L&otilde;ika"),
 			"url" => "javascript:submit('cut')",
 			"img" => "cut.gif",
 		));
 
 		$toolbar->add_button(array(
 			"name" => "copy",
-			"tooltip" => "Kopeeri",
+			"tooltip" => t("Kopeeri"),
 			"url" => "javascript:submit('copy')",
 			"img" => "copy.gif",
 		));
@@ -1344,7 +1344,7 @@ class admin_menus extends aw_template
 		{
 			$toolbar->add_button(array(
 				"name" => "paste",
-				"tooltip" => "Kleebi",
+				"tooltip" => t("Kleebi"),
 				"url" => "javascript:submit('paste')",
 				"img" => "paste.gif",
 			));
@@ -1352,14 +1352,14 @@ class admin_menus extends aw_template
 
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Kustuta",
+			"tooltip" => t("Kustuta"),
 			"url" => "javascript:if(confirm('Kustutada valitud objektid?')){submit('delete')};",
 			"img" => "delete.gif",
 		));
 
 		$toolbar->add_button(array(
 			"name" => "edit",
-			"tooltip" => "Muuda",
+			"tooltip" => t("Muuda"),
 			"url" => "javascript:change()",
 			"img" => "edit.gif",
 		));
@@ -1368,22 +1368,22 @@ class admin_menus extends aw_template
 	
 		$toolbar->add_button(array(
 			"name" => "refresh",
-			"tooltip" => "Uuenda",
+			"tooltip" => t("Uuenda"),
 			"url" => "javascript:window.location.reload()",
 			"img" => "refresh.gif",
 		));
 	
 		$toolbar->add_button(array(
 			"name" => "import",
-			"tooltip" => "Impordi",
+			"tooltip" => t("Impordi"),
 			"url" => $this->mk_my_orb("import",array("parent" => $parent)),
 			"img" => "import.gif",
 		));
 		
 		$view_types = array(
-			"big" => "Suured ikoonid",
-			"small" => "Väiksed ikoonid",
-			"detail" => "Detailne vaade",
+			"big" => t("Suured ikoonid"),
+			"small" => t("Väiksed ikoonid"),
+			"detail" => t("Detailne vaade"),
 		);
 
 
@@ -1506,7 +1506,7 @@ class admin_menus extends aw_template
 		extract($arr);
 		if (!is_array($sel))
 		{
-			$this->raise_error(ERR_MNED_NO_OBJS,"Valitud pole &uuml;htegi objekti!", true);
+			$this->raise_error(ERR_MNED_NO_OBJS,t("Valitud pole &uuml;htegi objekti!"), true);
 		}
 
 		reset($sel);

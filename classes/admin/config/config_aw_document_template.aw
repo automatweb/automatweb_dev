@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.4 2004/10/22 15:01:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.5 2004/12/01 13:21:59 kristo Exp $
 // config_aw_document_template.aw - Dokumendi Template 
 /*
 
@@ -41,9 +41,8 @@ class config_aw_document_template extends class_base
 		{
 			case "type":
 				$data["options"] = array(
-					"0" => "Muutmine", 
-					"1" => "Lead", 
-					"2" => "Vaatamine"
+					"1" => t("Lead"), 
+					"2" => t"Vaatamine")
 				);
 				break;
 		};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.20 2004/11/25 11:28:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.21 2004/12/01 13:21:57 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -125,7 +125,11 @@ class object_import extends class_base
 						"id" => $o->prop("recurrence")
 					));
 
-					$prop["value"] = get_lc_date($next, LC_DATE_FORMAT_LONG_FULLYEAR).", kell ".date("H:i", $next).", kasutaja ".$o->prop("aimp_uid")." &otilde;igustes.";
+					$prop["value"] = sprintf(t("%s, kell %s, kasutaja %s &otilde;igustes."), 
+						get_lc_date($next, LC_DATE_FORMAT_LONG_FULLYEAR), 
+						date("H:i", $next),
+						$o->prop("aimp_uid")
+					);
 				}
 				else
 				{
@@ -138,12 +142,12 @@ class object_import extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$prop["value"]  = "Import k&auml;ivitati ".date("d.m.Y H:i", $arr["obj_inst"]->meta("import_started_at"));
-				$prop["value"] .= ". Hetkel on imporditud ".$arr["obj_inst"]->meta("import_row_count")." rida. <br>";
-				$prop["value"] .= "Viimane muudatus toimis kell ".date("d.m.Y H:i", $arr["obj_inst"]->meta("import_last_time"))." <br>";
+				$prop["value"]  = sprintf(t("Import k&auml;ivitati %s."), date("d.m.Y H:i", $arr["obj_inst"]->meta("import_started_at")));
+				$prop["value"] .= sprintf(t("Hetkel on imporditud %s rida. <br>"), $arr["obj_inst"]->meta("import_row_count"));
+				$prop["value"] .= sprintf(t("Viimane muudatus toimis kell %s <br>"),date("d.m.Y H:i", $arr["obj_inst"]->meta("import_last_time")));
 				$prop["value"] .= html::href(array(
 					"url" => $this->mk_my_orb("do_check_import", array("oid" => $arr["obj_inst"]->id())),
-					"caption" => "J&auml;tka importi kohe"
+					"caption" => t("J&auml;tka importi kohe")
 				));
 				break;
 
@@ -238,13 +242,13 @@ class object_import extends class_base
 	{
 		$t->define_field(array(
 			"name" => "folder",
-			"caption" => "Kataloog",
+			"caption" => t("Kataloog"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "value",
-			"caption" => "V&auml;&auml;rtus, mille puhul pannakse sellesse kataloogi",
+			"caption" => t("V&auml;&auml;rtus, mille puhul pannakse sellesse kataloogi"),
 			"align" => "center",
 		));
 
@@ -296,31 +300,31 @@ class object_import extends class_base
 	{
 		$t->define_field(array(
 			"name" => "prop",
-			"caption" => "Omadus",
+			"caption" => t("Omadus"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "isimp",
-			"caption" => "Imporditav?",
+			"caption" => t("Imporditav?"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "userval",
-			"caption" => "V&auml;&auml;rtus k&auml;sitsi",
+			"caption" => t("V&auml;&auml;rtus k&auml;sitsi"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "has_ex",
-			"caption" => "Oman erandeid?",
+			"caption" => t("Oman erandeid?"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "ex",
-			"caption" => "Erandid",
+			"caption" => t("Erandid"),
 			"align" => "center"
 		));
 
@@ -338,7 +342,7 @@ class object_import extends class_base
 		$has_ex = $arr["obj_inst"]->meta("has_ex");
 		$ex = $arr["obj_inst"]->meta("ex");
 
-		$exes = array("" => "--vali--");
+		$exes = array("" => t("--vali--"));
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EXCEPTION")) as $c)
 		{
 			$exes[$c->prop("to")] = $c->prop("to.name");
@@ -429,7 +433,7 @@ class object_import extends class_base
 
 		$t->define_field(array(
 			"name" => "dontimp",
-			"caption" => "&Auml;ra impordi",
+			"caption" => t("&Auml;ra impordi"),
 			"align" => "center"
 		));
 	}
@@ -526,7 +530,7 @@ class object_import extends class_base
 			if ($o->meta("import_status") == 1 && $o->meta("import_last_time") < (time() - 30))
 			{
 				echo "restart import for ".$o->id()." <br>";
-				$this->_add_log($o, "Importi alustati uuesti realt ".$o->meta("import_row_count"));
+				$this->_add_log($o, sprintf(t("Importi alustati uuesti realt %s"), $o->meta("import_row_count")));
 				$this->do_exec_import($o, $o->meta("import_row_count"));
 			}
 			echo "for o ".$o->id()." status = ".$o->meta("import_status")." last time = ".date("d.m.Y H:i", $o->meta("import_last_time"))." <br>";
@@ -593,7 +597,7 @@ class object_import extends class_base
 
 				$existing_objects = $this->_get_uniq_existing($o, $properties, $tableinfo);
 
-				echo "created uniqueness filter for ".count($existing_objects)." objects. <br>\n";
+				echo sprintf(t("created uniqueness filter for %s objects. <br>\n"), count($existing_objects));
 				flush();
 			}
 
@@ -606,7 +610,7 @@ class object_import extends class_base
 					continue;
 				}
 
-				echo "impordin rida ".($line_n)."... <br>\n";
+				echo sprintf(t("impordin rida %s... <br>\n"),$line_n);
 				flush();
 
 				if (!is_array($o->prop("unique_id")) && $o->prop("unique_id") != "")
@@ -625,7 +629,7 @@ class object_import extends class_base
 					if (is_oid($t_oid) && $this->can("view", $t_oid))
 					{	
 						$dat = obj($t_oid);
-						echo "leidsin juba olemasoleva objekti ".$dat->name().", kasutan olemasolevat objekti <br>";
+						echo sprintf(t("leidsin juba olemasoleva objekti %s, kasutan olemasolevat objekti <br>"), $dat->name());
 					}
 					else
 					{
@@ -729,7 +733,7 @@ class object_import extends class_base
 				}
 
 				$dat->save();
-				echo "importisin objekti ".$dat->name()." (".$dat->id().") kataloogi ".$dat->parent()." <br>\n";
+				echo sprintf(t("importisin objekti %s (%s) kataloogi %s <br>\n"), $dat->name(),$dat->id(),$dat->parent());
 				flush();
 
 				if (($line_n % 10) == 1)
@@ -741,14 +745,14 @@ class object_import extends class_base
 
 				if (($line_n % ($row_count / 10)) == 1)
 				{
-					$this->_add_log($o, "Imporditud $line_n objekti");
+					$this->_add_log($o, sprintf(t("Imporditud %s objekti"), $line_n));
 				}
 			}
 
 			$this->_add_log($o, $this->_delete_objects($o, $properties, $tableinfo, $data_rows, $p2c, $userval, $class_id));
 			
 			$this->do_mark_finish_import($o);
-			echo "Valmis! <br>\n";
+			echo t("Valmis! <br>\n");
 			echo "<script language=javascript>setTimeout(\"window.location='".$this->mk_my_orb("change", array("id" => $o->id()))."'\", 5000);</script>";
 			die();
 		}
@@ -764,7 +768,7 @@ class object_import extends class_base
 	function do_mark_finish_import($o)
 	{
 		$o->set_meta("import_status", 0);
-		$this->_add_log($o, "Import edukalt l&otilde;ppenud");
+		$this->_add_log($o, t("Import edukalt l&otilde;ppenud"));
 	}
 
 	function callback_pre_edit($arr)
@@ -877,13 +881,13 @@ class object_import extends class_base
 			return;
 		}
 
-		echo "create uniq filter for delete <br>\n";
+		echo t("create uniq filter for delete <br>\n");
 		flush();
 
 		// get uniqueness filter
 		$uniq = $this->_get_uniq_existing($o, $properties, $tableinfo);
 
-		echo "got filter <Br>\n";
+		echo t("got filter <Br>\n");
 		flush();
 
 		// compare filter to lines read from ds	
@@ -894,7 +898,7 @@ class object_import extends class_base
 			unset($uniq[$key]);
 		}
 	
-		echo "unset keys <br>\n";
+		echo t("unset keys <br>\n");
 		flush();
 
 		if (count($uniq))
@@ -914,22 +918,22 @@ class object_import extends class_base
 		// check if the number is less than max allowed
 		if (count($uniq) > $o->prop("del_max"))
 		{
-			echo "ERROR: number of objects to delete is ".count($uniq)." greater than the max allowed: ".$o->prop("del_max")." <br>\n";
-			return "VIGA: leitud kustutamisele minevate objektide hulk ".count($uniq)." on suurem kui maksimaalne: ".$o->prop("del_max");
+			echo sprintf(t("ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"), count($uniq), $o->prop("del_max"));
+			return sprintf(t("VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"), count($uniq), $o->prop("del_max"));
 		}
 
 		// kill the bastards
 		foreach($uniq as $oid)
 		{
-			echo "delete object $oid <br>\n";
+			echo sprintf(t("delete object %s <br>\n"), $oid);
 			flush();
 			$o = obj($oid);
 			$o->delete();
 		}
 
-		echo "delete done. <br>\n";
+		echo t("delete done. <br>\n");
 		flush();
-		return "Edukalt kustutatud ".count($uniq)." objekti!";
+		return sprintf(t("Edukalt kustutatud %s objekti!"), count($uniq));
 	}
 
 	function _get_un_key_for_obj($o, $p2c, $line, $userval, $properties, $class_id)
@@ -967,7 +971,7 @@ class object_import extends class_base
 
 	function _start_log($o)
 	{
-		$o->set_meta("last_import_log", array(date("d.m.Y / H:i").": Importi alustati "));
+		$o->set_meta("last_import_log", array(date("d.m.Y / H:i").": ".t("Importi alustati ")));
 		$o->save();
 	}
 

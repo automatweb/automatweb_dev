@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.6 2004/10/27 12:04:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/shortcut.aw,v 1.7 2004/12/01 13:21:57 kristo Exp $
 // shortcut.aw - Shortcut 
 /*
 
@@ -72,7 +72,7 @@ class shortcut extends class_base
 		$val = obj($args['id']);
 		
 		$o = obj();
-		$o->set_name($val->name().' (kiirviide)');
+		$o->set_name($val->name().t(' (kiirviide)'));
 		$o->set_parent($val->parent());
 		$o->set_class_id(CL_SHORTCUT);
 		$o->set_status($val->status());
