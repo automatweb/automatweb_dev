@@ -12,7 +12,7 @@ class active_page_data extends class_base
 		static $cur_path = false;
 		if (!is_array($cur_path))
 		{
-			$mn = get_instance("menuedit");
+			$mn = get_instance("contentmgmt/site_content");
 			$mn->make_menu_caches();
 			$cur_path = $mn->get_path(aw_global_get("section"), $this->get_object(aw_global_get("section")));
 		}

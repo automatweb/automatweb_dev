@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.24 2003/02/06 09:44:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.25 2003/04/25 08:58:58 duke Exp $
 
 class db_periods extends aw_template 
 {

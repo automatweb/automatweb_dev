@@ -12,7 +12,7 @@ class contents extends aw_template
 		extract($arr);
 		$this->read_template("show.tpl");
 
-		$this->mned = get_instance("menuedit");
+		$this->mned = get_instance("contentmgmt/site_content");
 		$this->mned->make_menu_caches();
 
 		$this->mc = get_instance("menu_cache");

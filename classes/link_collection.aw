@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.9 2002/11/07 10:52:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.10 2003/04/25 08:58:57 duke Exp $
 // link_collection.aw - Lingikogude haldus
 
 class link_collection extends aw_template 
@@ -20,7 +20,7 @@ class link_collection extends aw_template
 		$this->mk_path($par_obj["parent"],sprintf("<a href='%s'>%s</a> / Lisa lingikogu oks",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$par_obj["name"]));
 		// Yes, this is really scary but I need to know where all the link
 		// collections are 
-		$awm = get_instance("menuedit");
+		$awm = get_instance("contentmgmt/site_content");
 
 		$awm->make_menu_caches();
 

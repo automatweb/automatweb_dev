@@ -408,7 +408,7 @@ class search_conf extends aw_template
 
 			$ap = $this->do_sorting($arr);
 
-			$mned = get_instance("menuedit");
+			$mned = get_instance("contentmgmt/site_content");
 			$mc = get_instance("menu_cache");
 			$mc->make_caches();
 

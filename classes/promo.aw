@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.26 2003/04/23 09:14:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.27 2003/04/25 08:58:58 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -450,7 +450,7 @@ class promo extends class_base
 	{
 		$alias = $args["alias"];
                 $this->read_template("default.tpl");
-                $me = get_instance("menuedit");
+                $me = get_instance("contentmgmt/site_content");
                 $def = new aw_array($me->get_default_document($alias["target"],true));
                 $content = "";
                 $doc = get_instance("document");

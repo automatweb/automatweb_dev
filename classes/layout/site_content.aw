@@ -76,7 +76,7 @@ class site_content extends class_base
 		$ob = $this->get_object($id);
 
 		$pd = get_instance("layout/active_page_data");
-		$mned = get_instance("menuedit");
+		$mned = get_instance("contentmgmt/site_content");
 
  		if (($txt = $pd->get_text_content()) != "")
 		{

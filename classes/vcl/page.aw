@@ -1,5 +1,5 @@
 <?php
-// $Id: page.aw,v 1.2 2002/12/19 17:59:55 duke Exp $
+// $Id: page.aw,v 1.3 2003/04/25 08:58:59 duke Exp $
 // page.aw - Generic HTML page
 /*
 	@default table=objects
@@ -58,7 +58,7 @@ class page extends class_base
 		};
 		if ($section)
 		{
-			$m = get_instance("menuedit");
+			$m = get_instance("contentmgmt/site_content");
 			$content = $m->show_documents($section,0);
 		}
 		else

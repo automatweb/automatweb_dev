@@ -58,7 +58,7 @@ class menu_area_level extends class_base
 			'tpldir' => 'layout/menu_area_level',
 			'clid' => CL_MENU_AREA_LEVEL
 		));
-		$this->mned = get_instance("menuedit");
+		$this->mned = get_instance("contentmgmt/site_content");
 	}
 
 	////
