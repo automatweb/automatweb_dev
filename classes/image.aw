@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.99 2004/06/17 13:47:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.100 2004/06/19 19:15:59 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -739,6 +739,22 @@ class image extends class_base
 						));
 						$prop["value"] = $fl;
 					}
+					// XXX: this is not the correct way to detect this
+					elseif (!empty($prop["value"]["type"]))
+					{
+						$_fi = get_instance("file");
+						$fl = $_fi->_put_fs(array(
+							"type" => !empty($prop["value"]["type"]) ? $prop["value"]["type"] : "image/jpg",
+							"content" => base64_decode($prop["value"]["contents"]),
+						));
+						if ($arr["obj_inst"]->name() == "")
+						{
+							$arr["obj_inst"]->set_name($prop["value"]["name"]);
+						}
+
+						$prop["value"] = $fl;
+						$set = true;
+					}
 					else
 					{
 						$retval = PROP_IGNORE;
@@ -808,7 +824,7 @@ class image extends class_base
 	function callback_post_save($arr)
 	{
 		$im = $this->get_image_by_id($arr["id"]);
-		if ($this->do_resize)
+		if ($this->new_w || $this->new_h)
 		{
 			$img = get_instance("core/converters/image_convert");
 			if ($im['file']{0} != "/")
