@@ -70,7 +70,7 @@ function change(val)
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <form action='reforb.{VAR:ext}' method="post" name="foo">
 
-<tr><td colspan="2" class="awmenuediticonsjoon1"><IMG SRC="images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td></tr>
+<!--<tr><td colspan="2" class="awmenuediticonsjoon1"><IMG SRC="images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td></tr>-->
 <tr>
 <td width="1"><IMG SRC="images/awmenueditor_iconbar_back.gif" WIDTH="5" HEIGHT="32" BORDER=0 ALT=""></td>
 <td width="100%" height="32" background="images/awmenueditor_iconbar_back.gif">
@@ -79,7 +79,7 @@ function change(val)
 	<tr>
 
 <!-- SUB: ADD_CAT -->
-	<td>{VAR:add_applet}</td>
+	<td valign="bottom"><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="3" BORDER=0 ALT=""><br>{VAR:add_applet}</td>
 	<td><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
 <!-- END SUB: ADD_CAT -->
 
@@ -112,10 +112,9 @@ function change(val)
 	<td><a href="#" onMouseOut="MM_swapImgRestore()" onClick='window.location.reload()' onMouseOver="MM_swapImage('refresh','','images/icons/refresh_over.gif',1)"><IMG name="refresh" SRC="images/icons/refresh.gif" WIDTH="23" HEIGHT="22" BORDER=0 ALT="{VAR:LC_MENUEDIT_REFRESH}"></a></td>
 	<td><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
 
-<!--	<td><a href="#" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('search','','images/icons/search_over.gif',1)"><IMG name="search" SRC="images/icons/search.gif" WIDTH="23" HEIGHT="22" BORDER=0 ALT=""></a></td>
-	<td><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>-->
-
 	<td><a href="orb.aw?action=list&class=bugtrack&filt=all" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('bugtrack','','images/icons/bugtrack_over.gif',1)"><IMG name="bugtrack" SRC="images/icons/bugtrack.gif" WIDTH="23" HEIGHT="22" BORDER=0 ALT="Bugtrack"></a></td>
+	<td><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
+	<td><a href="orb.aw?class=search" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('search','','images/icons/search_over.gif',1)"><IMG name="search" SRC="images/icons/search.gif" WIDTH="23" HEIGHT="22" BORDER=0 ALT="Otsi" title="Otsi"></a></td>
 	<td><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
 
 	</tr>
@@ -125,7 +124,9 @@ function change(val)
 <tr><td colspan="2" class="awmenuediticonsjoon2"><IMG SRC="images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td></tr>
 </table>
 <!-- end ICONS table -->
-
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="awmenuedittableborder">
 {VAR:table}
+</td></tr></table>
 {VAR:reforb}
 </form>
