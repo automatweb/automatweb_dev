@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.104 2002/11/02 23:26:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.105 2002/11/06 09:28:07 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -983,7 +983,7 @@ class messenger extends menuedit_light
 		if ($msg["type"] & MSG_LIST)
 		{
 			$mlist = get_instance("mailinglist/ml_list");
-			$muutujad= $mlist->get_all_varnames();
+			$muutujad= $mlist->get_all_varnames($mlist->get_list_id_by_name($msg["mtargets1"]));
 			foreach($muutujad as $k => $v)
 			{
 				$muutujalistvahe.="&nbsp;<b>#$v#</b>&nbsp;";
@@ -1597,7 +1597,11 @@ class messenger extends menuedit_light
 		};
 		$this->db_query("UPDATE messages SET type='$settype' WHERE id='$msg_id' AND type IS NULL");
 		
-		
+		if ($subject[0] == ":")
+		{
+			$sethtml .= ", type | ".MSG_LIST;
+		}
+
 		$q = "UPDATE messages
 			SET 
 				message = '$message',
