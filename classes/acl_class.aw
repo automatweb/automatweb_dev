@@ -1,13 +1,44 @@
 <?php
+/* 
 
-class acl_class extends aw_template
+@classinfo syslog_type=ST_ACL relationmgr=yes
+
+@groupinfo general caption=Üldine
+@default group=general
+@default table=objects
+
+@property chain field=meta method=serialize type=relpicker reltype=RELATION_CHAIN
+@caption Vali p&auml;rg
+
+@property role field=meta method=serialize type=relpicker reltype=RELATION_ROLE
+@caption Vali roll
+
+@property groups field=meta method=serialize type=relpicker multiple=1 reltype=RELATION_GROUP
+@caption Vali grupid
+
+@property priority field=meta method=serialize type=textbox
+@caption Prioriteet
+
+@property update_acl field=meta method=serialize type=checkbox ch_value=1 store=no 
+@caption Uuenda ACL
+
+*/
+
+define("RELATION_CHAIN", 1);
+define("RELATION_ROLE", 2);
+define("RELATION_GROUP", 3);
+
+class acl_class extends class_base
 {
 	function acl_class()
 	{
-		$this->init("automatweb/acl");
+		$this->init(array(
+			"tpldir" => "automatweb/acl",
+			"clid" => CL_ACL
+		));
 	}
 
-	function add($arr)
+/*	function add($arr)
 	{
 		extract($arr);
 		$this->read_template("add.tpl");
@@ -104,7 +135,7 @@ class acl_class extends aw_template
 			$this->update_acl($id);
 		}
 		return $this->mk_my_orb("change", array("id" => $id));
-	}
+	}*/
 
 	function update_acl($id)
 	{
@@ -124,7 +155,8 @@ class acl_class extends aw_template
 		foreach($objs->get() as $oid)
 		{
 			$o_grps = $this->get_acl_groups_for_obj($oid);
-			foreach($meta["groups"] as $grp)
+			$mg = new aw_array($meta["groups"]);
+			foreach($mg->get() as $grp)
 			{
 				// ok, before we do this, we must check if another acl object, that
 				// has a higher priority, includes this folder<->group relation
@@ -149,7 +181,7 @@ class acl_class extends aw_template
 		));
 	}
 
-	function change($arr)
+/*	function change($arr)
 	{
 		extract($arr);
 		$this->read_template("add.tpl");
@@ -182,7 +214,7 @@ class acl_class extends aw_template
 			"reforb" => $this->mk_reforb("submit", array("id" => $id))
 		));
 		return $this->parse();
-	}
+	}*/
 
 	function get_acls_for_role($role)
 	{
@@ -250,8 +282,9 @@ class acl_class extends aw_template
 		$objs = new aw_array($oc->get_objects_in_chain($meta["chain"]));
 
 		foreach($objs->get() as $_oid)
-		{
-			foreach($meta["groups"] as $_grp)
+		{	
+			$gpa = new aw_array($meta["groups"]);
+			foreach($gpa->get() as $_grp)
 			{
 				if ($oid == $_oid && $grp == $_grp)
 				{
@@ -260,6 +293,71 @@ class acl_class extends aw_template
 			}
 		}
 		return false;
+	}
+
+	function get_acls_for_group($gid)
+	{
+		$objs = $this->list_objects(array(
+			"class" => CL_ACL,
+			"return" => ARR_ALL
+		));
+
+		$ret = array();
+		foreach($objs as $oid => $odata)
+		{
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $odata["metadata"]
+			));
+			if ($meta["groups"][$gid] == $gid)
+			{
+				$ret[$oid] = $oid;
+			}
+		}
+		return $ret;
+	}
+
+	function get_roles_for_acl($oid)
+	{
+		$ob = $this->get_object($oid);
+		return $ob['meta']['role'];
+	}
+
+	function callback_get_rel_types()
+	{
+		return array(
+			RELATION_CHAIN => "p&auml;rg",
+			RELATION_ROLE => "roll",
+			RELATION_GROUP => "grupp"
+		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		if ($args["reltype"] == RELATION_CHAIN)
+		{
+			return array(CL_OBJECT_CHAIN);
+		}
+		if ($args["reltype"] == RELATION_ROLE)
+		{
+			return array(CL_ROLE);
+		}
+		if ($args["reltype"] == RELATION_GROUP)
+		{
+			return array(CL_GROUP);
+		}
+	}
+
+	////
+	// !removes group $gid from acl object $acl
+	function remove_group_from_acl($acl, $gid)
+	{
+		$ob = $this->get_object($acl);
+		unset($ob['meta']['groups'][$gid]);
+		$this->set_object_metadata(array(
+			"oid" => $acl,
+			"key" => "groups",
+			"value" => $ob['meta']['groups']
+		));
 	}
 }
 ?>
