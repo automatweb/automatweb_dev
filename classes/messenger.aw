@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.3 2001/05/17 10:26:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.4 2001/05/17 10:31:08 duke Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -852,6 +852,7 @@ class messenger extends menuedit_light
 			if ($args["sendmail"])
 			{
 				$delivery = "mail";
+				$m_addr = $target["email"];
 			};
 			if ($delivery == "fldr")
 			{
