@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.30 2001/06/20 04:13:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.31 2001/06/20 05:21:12 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -797,17 +797,9 @@ class planner extends calendar {
 				"repcheck" => ($rc > 0) ? "checked" : "",
 				"color" => $this->picker($row["color"],$colors),
 				"description" => $row["description"],
-				"dayskip" => $dayskip,
-				"daypwhen" => $daypwhen,
-				"weekskip" => $weekskip,
-				"weekpwhen" => $weekpwhen,
-				"monskip" => $monskip,
-				"monpwhen" => $monpwhen,
-				"monpwhen2" => $monpwhen2,
-				"yearskip" => $yearskip,
-				"yearpwhen" => $yearpwhen,
 				"reminder" => $row["reminder"],
 				"menubar" => $menubar,
+				"id" => $id,
 				"delete" => $delbut,
 				"private" => ($row["private"]) ? "checked" : "",
 				"place" => $row["place"],
