@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.40 2003/01/29 14:38:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.41 2003/02/02 15:33:01 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -504,7 +504,12 @@ class aw_table
 				$tbl .= $this->opentag(array("name" => "tr", "class" => ((($counter % 2) == 0) ? $this->tr_style2 : $this->tr_style1)));
 				
 				// grpupeerimine
-				$tbl .= $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v);
+				$tmp = $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v);
+				if ($tmp != "")
+				{
+					$counter = 1;
+				}
+				$tbl .= $tmp;
 				
 				// ts?kkel ?le rowdefsi, et andmed oleksid oiges j?rjekorras
 				foreach($this->rowdefs as $k1 => $v1)
