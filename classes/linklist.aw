@@ -658,7 +658,7 @@ class linklist extends class_base
 	function oooo($objects,$this_link,$this_dir,$id,$T)
 	{
 		$total2=0;
-		$ll = get_instance('extlinks');
+		$ll = get_instance('links');
 		//makes css for link objects
 		$css=$this->mk_link_css($this_link);
 		$this->css.=$css;
@@ -900,7 +900,7 @@ class linklist extends class_base
 		));
 		$ob = $this->get_object($id);
 		$this->add_hit($id);
-		$ll = get_instance('extlinks');
+		$ll = get_instance('links');
 		list($url,$target,$caption) = $ll->draw_link($id);
 //		echo $uid.' ';
 		header("Location: $url");

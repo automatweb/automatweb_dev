@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.47 2003/05/08 09:45:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.48 2003/05/19 15:40:48 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -445,7 +445,7 @@ class objects extends db_objects
 		switch($obj["class_id"])
 		{
 			case CL_EXTLINK:
-				$t = get_instance("extlinks");
+				$t = get_instance("links");
 				list($url,$target,$caption) = $t->draw_link($obj["oid"]);
 				$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
 				break;

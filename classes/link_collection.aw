@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.10 2003/04/25 08:58:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.11 2003/05/19 15:40:48 duke Exp $
 // link_collection.aw - Lingikogude haldus
 
 class link_collection extends aw_template 
@@ -235,7 +235,7 @@ class link_collection extends aw_template
 		$on_this_line = 0;
 		$c = "";
 		$_tmp = "";
-		$ec = get_instance("extlinks");
+		$ec = get_instance("links");
 		while($row = $this->db_next())
 		{
 			list($url,$target,$caption) = $ec->draw_link($row["oid"]);
