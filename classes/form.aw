@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.15 2001/06/07 12:34:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.16 2001/06/07 13:31:01 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -1761,6 +1761,44 @@ $orb_defs["form"] = "xml";
 				}
 			}
 			return false;
+		}
+
+		////
+		// !Finds the id-s for for form elements passed by name to this function
+		// argumendid:
+		// names(array) - array nimedest, mille id-sid me teada tahame
+		function get_ids_by_name($args = array())
+		{
+			extract($args);
+			$retval = array();
+			$namelist = array_flip($names);
+
+			for ($row = 0; $row < $this->arr["rows"]; $row++)
+			{
+				for ($col = 0; $col < $this->arr["cols"]; $col++)
+				{
+					$elar = array();
+					$this->arr["contents"][$row][$col]->get_els(&$elar);
+					reset($elar);
+					while(list(,$el) = each($elar))
+					{
+						$name = $el->arr["name"];
+						if (isset($namelist[$name]))
+						{
+							$retval[$name] = sprintf("el_%d",$el->arr["id"]);
+						};
+					};
+				};
+			};
+			return $retval;
+		}
+		////
+		// !Teeb paringu entryte saamiseks laaditud vormi juures
+		function get_entries($args = array())
+		{
+			$table = sprintf("form_%d_entries",$this->id);
+			$q = "SELECT * FROM $table";
+			$this->db_query($q);
 		}
 
 		////
