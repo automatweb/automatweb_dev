@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.27 2002/08/21 12:05:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.28 2002/09/04 14:50:40 duke Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -68,15 +68,13 @@ class form_chain extends form_base
 		$ct["show_reps"] = $show_reps;
 		$ct["rep_tbls"] = $rep_tbls;
 
-		//$ct["has_calendar"] = $has_calendar;
 		$ct["cal_controller"] = $cal_controller;
-		//$ct["cal_entry_form"] = $cal_entry_form;
 		
 		$this->chain = $ct;
 
 		uksort($ct["forms"],array($this,"__ch_sort"));
 		
-		$content = aw_serialize($ct,SERIALIZE_XML);
+		$content = aw_serialize($ct,SERIALIZE_PHP);
 		$this->quote(&$content);
 
 		$flags = ($has_calendar) ? OBJ_HAS_CALENDAR : 0;
@@ -470,7 +468,7 @@ class form_chain extends form_base
 	function submit_form($arr)
 	{
 		extract($arr);
-		$this->load_chain($id);
+		$ch = $this->load_chain($id);
 
 		// ok, here we must create a new chain_entry if none is specified
 		if (!$chain_entry_id)
@@ -496,19 +494,73 @@ class form_chain extends form_base
 		// processing takes place inside form->process_entry because I have better
 		// access to form elements from there
 		$update_fcal_timedef = false;
+		$cal_id = false;
+		$has_calendar = $ch["flags"] & OBJ_HAS_CALENDAR;
 
-		if ($this->chain["has_calendar"])
+		if ($has_calendar && $this->chain["cal_controller"])
 		{
-			$fc = get_instance("form_calendar");
-			$fcal = $fc->get_calendar(array(
-				"cal_id" => $id,
-			));
+			$frm = get_instance("form_base");
+			$frm->load($this->chain["cal_controller"]);
+			/*
+			print "<pre>";
+			print_r($this->chain);
+			print "</pre>";
+			*/
+			// first I have to load an entry from the calendar2forms which correspondends
+			// to this chain
 
-			if (is_array($fcal))
-			{
-				$update_fcal_timedef = $chain_entry_id;
-			};
+			// but which one? One calendar can have multiple event entry forms
+			// I have to figure out which of those should I choose.
+			// and that is where the el_relation field comes to play
+			$q = "SELECT * FROM calendar2forms WHERE cal_id = '$id'";
+			$this->db_query($q);
+			$c2f = $this->db_next();
+			// now c2f["form_id"] has the id of event entry form
+			// and c2f["el_relation"] has the id of the element in that form, which
+			// interests us. A relation element. Now we figure from which form
+			// that element originates
+			$q = "SELECT * FROM form_relations WHERE el_to = $c2f[el_relation]";
+			$this->db_query($q);
+			$f_r = $this->db_next();
 
+			// $f_r[form_from] is it.
+			// $f_r[el_from] is the element id which contains the information we want
+			/*
+			print "form: $f_r[form_from] el: $f_r[el_from]<br>";
+			*/
+
+			// and now the final step - figure out, which 
+			// load the current chain entry
+
+			$q = "SELECT * FROM form_chain_entries WHERE id = '$chain_entry_id'";
+			$this->db_query($q);
+			$fce = $this->db_next();
+			$_eids = aw_unserialize($fce["ids"]);
+
+			/*
+			print "<pre>";
+			print_r($_eids);
+			print "</pre>";
+			*/
+
+			$_eid = $_eids[$f_r["form_from"]];
+
+			/*
+			$q = sprintf("SELECT * FROM form_%d_entries WHERE id = '$_eid'",$f_r["form_from"]);
+			$this->db_query($q);
+			$_xxx = $this->db_next();
+			*/
+
+			/*
+			print "chain_entry_id = $chain_entry_id<br>";
+			print "<pre>";
+			print_r($_xxx);
+			print "</pre>";
+			*/
+
+			$update_fcal_timedef = $chain_entry_id;
+			$cal_id = $id;
+			//print "updating time definition<br>";
 		};
 
 		$f = new form;
@@ -516,7 +568,9 @@ class form_chain extends form_base
 				"id" => $form_id,
 				"chain_entry_id" => $chain_entry_id,
 				"entry_id" => $form_entry_id,
+				"cal_id" => $cal_id,
 				"update_fcal_timedef" => $update_fcal_timedef,
+				"cal_relation" => $_eid,
 		));
 
 		// now update the chain entry object with the form entry name
