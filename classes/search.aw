@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.36 2003/05/27 14:29:57 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.37 2003/05/27 16:09:04 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -670,56 +670,56 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				{
 					$fieldref['name'] = 's['.$key.']';
 				}
-				
-				
-						$scr = <<<SCR
-							<script language= "javascript">
-							function GetOptions(from, tu,tyype)
-							{
-								if (tyype=='select')
-								{
-								len = tu.options.length;
-								for (i=0; i < len; i++)
-								{
-									tu.options[0] = null
-								}
-								var j = 0;
-								len = from.options.length;
-								for (var i=0; i < len; i++)
-								{
-									if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
-									{
-										if (tyype == 'select')
-										{
-											tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, false);
-											j = j + 1;
-										}
-										else
-										{
-											tu.value = tu.value + ',' + from.options[i].value;
-										}
-									}
 
-								}
-								}
-								else
-								{
+//dont worry this is javascript
+				$scr = <<<SCR
+<script language= "javascript">
+function GetOptions(from, tu,tyype)
+{
+	if (tyype=='select')
+	{
+//		var seld = new Array();
 
-								len = tu.value = '';
-								len = from.options.length;
-								for (var i=0; i < len; i++)
-								{
-									if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
-									{
-										tu.value = tu.value + ',' + from.options[i].value;
-									}
+		len = tu.options.length;
+		for (i=0; i < len; i++)
+		{
+			tu.options[0] = null
+		}
+		var j = 0;
+		len = from.options.length;
+		for (var i=0; i < len; i++)
+		{
+			if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
+			{
+				if (tyype == 'select')
+				{
+//					tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, seld[from.options[i].value]);
+					tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, (len == 1) ? true : false);
+					j = j + 1;
+				}
+				else
+				{
+					tu.value = tu.value + ',' + from.options[i].value;
+				}
+			}
 
-								}
+		}
+	}
+	else
+	{
+		len = tu.value = '';
+		len = from.options.length;
+		for (var i=0; i < len; i++)
+		{
+			if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
+			{
+				tu.value = tu.value + ',' + from.options[i].value;
+			}
 
-								}
+		}
 
-
-							}
+	}
+}
 SCR;
 
 				switch($fieldref["type"])

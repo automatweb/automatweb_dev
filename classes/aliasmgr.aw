@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.98 2003/05/27 13:26:52 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.99 2003/05/27 16:09:04 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -101,7 +101,7 @@ class aliasmgr extends aw_template
 	}
 
 	function search_callback_get_fields(&$fields,$args)
-	{
+	{//arr($args,1);
 		if (isset($args['complex']))
 		{
 			aw_session_set('complex',"1");
@@ -135,7 +135,7 @@ class aliasmgr extends aw_template
 				"type" => "class_id_multiple",
 				"caption" => "Klass",
 				"size" => "8",
-				"options" => isset($this->rel_type_classes[$this->reltype]) ? $this->rel_type_classes[$this->reltype] : $options,
+				"options" => (isset($this->rel_type_classes[$this->reltype]) && is_array($this->rel_type_classes[$this->reltype])) ? $this->rel_type_classes[$this->reltype] : $options,
 				"selected" => $args["s"]["class_id"],
 				"filter" => "1",
 			);
@@ -166,6 +166,7 @@ class aliasmgr extends aw_template
 			);
 			$fields["class_id"] = array(
 				"type" => "class_id_hidden",
+				'value' => '0',
 			);
 
 		}
@@ -1008,16 +1009,16 @@ class aliasmgr extends aw_template
 				}
 				else
 				{
-
 				}
 				$vals = $this->mk_kstring($this->rel_type_classes[$k]);
 			}
+			$history = array();
+			$dvals = '';
 
 			if ($dval)
 			{
 				$dvals = ',"Objekti tüüp","capt_new_object"';
-
-				$comp = isset($this->rel_type_classes[$k]) ? $this->rel_type_classes[$k] : $choice;
+				$comp = (isset($this->rel_type_classes[$k]) && is_array($this->rel_type_classes[$k])) ? $this->rel_type_classes[$k] : $choice;
 				$hh = array_intersect($hist,$comp);
 				$history = $this->mk_kstring($hh);
 				if ($history)
