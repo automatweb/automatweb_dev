@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.54 2004/05/19 12:22:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.55 2004/06/08 09:54:07 kristo Exp $
 
 /*
 
@@ -97,10 +97,10 @@ class links extends class_base
 		
 		@param s_name optional
 		@param s_content optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -176,9 +176,9 @@ class links extends class_base
 				$row["createdby"] = $_tmp->name();
 				$row["modified"] = $o->modified();
 				$t->define_data($row);
-								
+
 			}
-			
+
 			$t->set_default_sortby("name");
 			$t->sort_by();
 			$this->vars(array("LINE" => $t->draw()));
