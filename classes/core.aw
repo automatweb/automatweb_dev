@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.74 2002/01/16 22:03:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.75 2002/01/31 00:26:46 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -743,6 +743,9 @@ class core extends db_connector
 		extract($args);
 		
 		// map2 supports both arrays and strings and returns array
+		global $awt;
+		$awt->start("get_alises");
+		$awt->count("get_aliases");
 		$tlist = join(',',map('%d',$type));
 
 		$q = "SELECT aliases.*,objects.*
@@ -759,6 +762,7 @@ class core extends db_connector
 			// number in the alias. (e.g. oid of #f1# is stored at the position 0, etc)
 			$aliases[] = $row;
 		};
+		$awt->stop("get_aliases");
 		
 		return $aliases;
 	}
@@ -806,6 +810,12 @@ class core extends db_connector
 	{
 		// esimesel kasutamisel loome uue nö dummy objekti, mille sisse
 		// edaspidi registreerime koikide parserite callback meetodid
+		global $awt;
+		if (is_object($awt))
+		{
+			$awt->start("register_parser");
+			$awt->count("register_parser_c");
+		};
 		if (!isset($this->parsers) || !is_object($this->parsers))
 		{
 			classload("dummy");
@@ -842,6 +852,11 @@ class core extends db_connector
 		};
 		$this->parsers->reglist[] = $block;
 		
+		if (is_object($awt))
+		{
+			$awt->stop("register_parser");
+		};
+		
 		// tagastab äsja registreeritud parseriobjekti ID nimekirjas
 		return sizeof($this->parsers->reglist) - 1;
 	}
@@ -857,6 +872,12 @@ class core extends db_connector
 	function register_sub_parser($args = array())
 	{
 		extract($args);	
+		global $awt;
+		if (is_object($awt))
+		{
+			$awt->start("register_sub_parser");
+			$awt->count("register_sub_parser_c");
+		};
 		classload($class);
 		if (!isset($this->parsers->$class) || !is_object($this->parsers->$class))
 		{
@@ -874,6 +895,10 @@ class core extends db_connector
 		);
 
 		$this->parsers->reglist[$reg_id]["parserchain"][] = $block;
+		if (is_object($awt))
+		{
+			$awt->stop("register_sub_parser");
+		};
 	}
 
 	////
@@ -886,7 +911,16 @@ class core extends db_connector
 	{
 		$this->blocks = array();
 		global $DEBUG;
+		global $awt;
+		if (is_object($awt))
+		{
+			$awt->start("parse_aliases");
+		};
 		extract($args);
+		$meta = $this->get_object_metadata(array(
+			"oid" => $oid,
+			"key" => "aliaslinks",
+		));
 
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
 		// esimese tsükliga kutsume parserite reset funktioonud välja. If any.
@@ -910,6 +944,10 @@ class core extends db_connector
 		{
 			// itereerime seni, kuni see äsjaleitud regulaaravaldis enam ei matchi.
 			$cnt = 0;
+			if (is_object($awt))
+			{
+				$awt->count("parser-cycle");
+			}
 			while(preg_match($parser["reg"],$text,$matches))
 			{
 				$cnt++;
@@ -941,9 +979,19 @@ class core extends db_connector
 								"idx" => $sval["idx"],
 								"matches" => $matches,
 								"tpls" => $tpls,
+								"meta" => $meta,
 							);
 
+							if (is_object($awt))
+							{
+								$awt->count("parse_alias_call");
+								$awt->start("actual_parse");
+							};
 							$repl = $this->parsers->$cls->$fun($params);
+							if (is_object($awt))
+							{
+								$awt->stop("actual_parse");
+							};
 							
 							if (is_array($repl))
 							{
@@ -981,6 +1029,10 @@ class core extends db_connector
 				flush();
 			};
 		};
+		if (is_object($awt))
+		{
+			$awt->stop("parse_aliases");
+		};
 		return $text;
 	}
 
@@ -1014,6 +1066,8 @@ class core extends db_connector
 	//	$rootobj = the oid of the object where to stop traversing, ie the root of the tree
 	function get_object_chain($oid,$check_objs = false, $rootobj = 0) 
 	{
+		global $awt;
+		$awt->count("get_object_chain");
 		if (!$oid) 
 		{
 			$int = (int)$oid;
@@ -1023,14 +1077,16 @@ class core extends db_connector
 				die;
 			};
 		};
+		global $goc_cache;
+		if ($goc_cache[$oid])
+		{
+			return $goc_cache[$oid];
+		};
 		$parent = $oid;
 		$chain = array();
 		while($parent > $rootobj) 
 		{
-			$q = "SELECT menu.*,objects.* FROM menu LEFT join objects on (menu.id = objects.oid)
-				WHERE id = '$oid'";
-			$this->db_query($q);
-			$row = $this->db_fetch_row();
+			$row = $this->get_menu($oid);
 			if ($check_objs && !$row)
 			{
 				$row = $this->get_object($oid);
@@ -1055,6 +1111,7 @@ class core extends db_connector
 				$oid = $row["parent"];
 			};
 		};
+		$goc_cache[$oid] = $chain;
 		return $chain;
 	}
 
@@ -1909,6 +1966,25 @@ class core extends db_connector
 
 
 		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period));
+	}
+	
+	////
+	// !Fetches and caches information about a menu
+	function get_menu($id)
+	{
+		global $gm_cache;
+		if ($gm_cache[$id])
+		{
+			return $gm_cache[$id];
+		}
+		else
+		{
+			$q = "SELECT menu.*,objects.* FROM menu LEFT join objects on (menu.id = objects.oid) WHERE id = '$id'";
+			$this->db_query($q);
+			$row = $this->db_fetch_row();
+			$gm_cache[$id] = $row;
+			return $row;
+		};
 	}
 };
 ?>
