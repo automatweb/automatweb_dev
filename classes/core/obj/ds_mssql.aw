@@ -63,7 +63,17 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 		{
 			$ret["brother_of"] = $ret["oid"];
 		}
-		return $ret;
+
+		$tmp = array();
+		foreach($ret as $k => $v)
+		{
+			if (!is_array($v))
+			{
+				$v = trim($v);
+			}
+			$tmp[$k] = $v;
+		}
+		return $tmp;
 	}
 
 
@@ -492,7 +502,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 						$seta[$prop["field"]] = $str;
 					}
 
-					if (($prop["datatype"] == "int" || in_array($data["type"], $this->numeric_datatypes)) && $seta[$prop["field"]] == "")
+					if (($prop["datatype"] == "int" || in_array($prop["type"], $this->numeric_datatypes)) && $seta[$prop["field"]] == "")
 					{
 						$seta[$prop["field"]] = "0";
 					}
