@@ -5,7 +5,10 @@ class _int_obj_ds_local_sql extends acl_base
 	function _int_obj_ds_local_sql()
 	{
 		$this->init();
-		// grmbl
+		// grmbl - acl_base class needs this. 
+		// normally it gets inited in aw_template::init
+		// but since this class hooks into the inheritance tree before that, 
+		// we gots to init it here. and we don't want all the ini settings, cause they are not needed and take up much memory
 		$this->cfg["acl"] = $GLOBALS["cfg"]["acl"];
 	}
 
