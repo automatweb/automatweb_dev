@@ -1188,8 +1188,14 @@ class search_filter extends aw_template
                 } 
                 else
                 {
-                        $sql="SELECT DISTINCT(id) FROM ".join(",",array_keys($used_tables))." $sqlw";
-                        
+					// get the first table from the join list and join objtable on that
+					list($first_tbl,) = each($used_tables);
+					$sql="
+						SELECT DISTINCT(id) AS id
+						FROM ".join(",",array_keys($used_tables))." 
+							LEFT JOIN objects ON objects.oid = $first_tbl.id
+						$sqlw AND objects.status != 0
+					";
                 };
                 if ($GLOBALS["dbg_ft"]) echo "<textarea cols=100 rows=10>$sql</textarea><br>";
 
