@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.76 2002/09/26 16:17:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.77 2002/10/09 09:58:11 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -300,6 +300,7 @@ define("ERR_SCHED_NOTIMEREP", 94);
 define("ERR_FG_NOFORMRELS", 95);
 define("ERR_ORB_RPC_NO_SERVER", 96);
 define("ERR_ORB_RPC_NO_HANDLER", 97);
+define("ERR_MNED_HIER", 98);
 
 $error_types = array(
 	ERR_ML_VAR_NO_VAR => "ERR_ML_VAR_NO_VAR",
@@ -402,5 +403,6 @@ $error_types = array(
 	ERR_MNED_NO_OBJS => "ERR_MNED_NO_OBJS",
 	ERR_ORB_RPC_NO_SERVER => "ERR_ORB_RPC_NO_SERVER",
 	ERR_ORB_RPC_NO_HANDLER => "ERR_ORB_RPC_NO_HANDLER",
+	ERR_MNED_HIER => "ERR_MNED_HIER",
 );
 ?>
