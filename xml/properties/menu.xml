@@ -693,6 +693,11 @@
                   <clid>CL_PROJECT</clid>
                   <caption>Sisu objektist</caption>
             </CONTENT_FROM>
+            <SEEALSO_DOC>
+                  <value>18</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>vaata lisaks dokument</caption>
+            </SEEALSO_DOC>
       </reltypes>
 </properties>
 
