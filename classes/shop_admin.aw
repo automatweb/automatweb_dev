@@ -329,7 +329,6 @@ class shop_admin extends shop_base
 	{
 		extract($arr);
 		$m = new shop_menuedit;
-		die($m->gen_list_menus($parent,0));
 	}
 
 	function article_frame($arr)
@@ -353,7 +352,6 @@ class shop_admin extends shop_base
 	{
 		extract($arr);
 		$m = new shop_menuedit;
-		die($m->gen_list_objs($parent,0));
 	}
 
 	function currency_redirect($arr)
