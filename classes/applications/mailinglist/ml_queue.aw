@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.4 2004/11/18 10:46:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.5 2004/11/29 16:01:04 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -636,6 +636,8 @@ class ml_queue extends aw_template
 			$member_list = new object_list(array(
 				"class_id" => CL_ML_MEMBER,
 				"parent" => $def_user_folder,
+				"lang_id" => array(),
+				"site_id" => array(),
 			));
 		}
 			
