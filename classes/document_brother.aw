@@ -139,6 +139,9 @@
 @property duration type=time_select field=end table=planner group=calendar
 @caption Kestab
 
+@property doc_modified type=hidden table=documents field=modified
+@caption Dok. modified
+
 @property link_calendars type=callback store=no callback=callback_gen_link_calendars group=calendar
 @caption Vali kalendrid, millesse see sündmus veel salvestatakse.
 
