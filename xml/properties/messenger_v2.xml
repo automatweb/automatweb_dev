@@ -201,6 +201,7 @@
                   <num_0>rule_from</num_0>
                   <num_1>rule_subject</num_1>
                   <num_2>target_folder</num_2>
+                  <num_3>on_server</num_3>
             </props>
             <store>no</store>
             <caption>Reeglid</caption>

@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>show_logged</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kui kasutaja on sisse loginud, siis täidab e-posti ja nime välja automaatselt</caption>
+      </property>
+      <property>
             <name>topic_folder</name>
             <table>objects</table>
             <group>general</group>

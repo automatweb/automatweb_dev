@@ -27,6 +27,17 @@
             <type>select</type>
             <caption>Liiguta folderisse</caption>
       </property>
+      <property>
+            <name>on_server</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <caption>Salvesta serverisse</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MAIL_RULE</syslog_type>
             <relationmgr>yes</relationmgr>

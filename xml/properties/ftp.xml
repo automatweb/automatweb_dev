@@ -26,6 +26,7 @@
             <method>serialize</method>
             <type>password</type>
             <caption>Parool</caption>
+            <comment>timeout defaults to 10 seconds</comment>
       </property>
       <classinfo>
             <syslog_type>ST_FTP_LOGIN</syslog_type>
