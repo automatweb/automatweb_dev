@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.59 2004/07/20 12:37:37 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.60 2004/07/22 10:30:20 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -1966,6 +1966,8 @@ class crm_company extends class_base
 	
 	function navtoolbar(&$args)
 	{
+		$RELTYPE_ADDRESS = 3; //crm_company.reltype_address
+		
 		$toolbar = &$args["prop"]["toolbar"];
 		$users = get_instance("users");
 
@@ -1978,13 +1980,13 @@ class crm_company extends class_base
 		// through the crm_db class, which means that they can be different for each user
 		if (empty($crm_db_id))
 		{
-			$parents[RELTYPE_JOBS] = $parents[RELTYPE_WORKERS] = $parents[RELTYPE_ADDRESS] = $args['obj_inst']->parent();
+			$parents[RELTYPE_JOBS] = $parents[RELTYPE_WORKERS] = $parents[$RELTYPE_ADDRESS] = $args['obj_inst']->parent();
 		}
 		else
 		{
 			$crm_db = new object($crm_db_id);
 			$default_dir = $crm_db->prop("dir_default");
-			$parents[RELTYPE_ADDRESS] = $crm_db->prop("dir_address") == "" ? $default_dir : $crm_db->prop('dir_address');
+			$parents[$RELTYPE_ADDRESS] = $crm_db->prop("dir_address") == "" ? $default_dir : $crm_db->prop('dir_address');
 			$parents[RELTYPE_WORKERS] = $crm_db->prop("dir_isik") == "" ? $default_dir : $crm_db->prop('dir_isik');
 		};
 
@@ -2012,8 +2014,7 @@ class crm_company extends class_base
 		));
 
 		//3 == crm_company.reltype_address=3 //
-		$alist = array(RELTYPE_WORKERS,3,RELTYPE_JOBS);
-
+		$alist = array(RELTYPE_WORKERS,$RELTYPE_ADDRESS,RELTYPE_JOBS);
 		foreach($alist as $key => $val)
 		{
 			$clids = $this->relinfo[$val]["clid"];
@@ -2607,7 +2608,7 @@ class crm_company extends class_base
 			//kinnitame aadressi kompaniiga
 			$new_company->connect(array(
 								'to' => $address->id(),
-								'reltype' => RELTYPE_ADDRESS
+								'reltype' => 3, //crm_company.reltype_address
 								));
 		}
 		$new_company->save();
