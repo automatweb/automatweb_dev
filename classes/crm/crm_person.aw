@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.56 2004/09/20 14:53:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.57 2004/10/08 15:56:12 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -861,16 +861,16 @@ class crm_person extends class_base
 		};
 
 		$conns = $o->connections_from(array(
-                        "type" => 13,
-                ));
+			"type" => 13,
+		));
 		foreach($conns as $conn)
 		{
 			$phones[] = $conn->prop("to.name");
 		};
 
 		$conns = $o->connections_from(array(
-                        "type" => 12,
-                ));
+			"type" => 12,
+		));
 		foreach($conns as $conn)
 		{
 			$url_o = $conn->to();
@@ -881,8 +881,8 @@ class crm_person extends class_base
 		};
 		
 		$conns = $o->connections_from(array(
-                        "type" => 11,
-                ));
+			"type" => 11,
+		));
 		foreach($conns as $conn)
 		{
 			$to_obj = $conn->to();
@@ -890,8 +890,8 @@ class crm_person extends class_base
 		};
 
 		$conns = $o->connections_from(array(
-                        "type" => 'RELTYPE_RANK',
-                ));
+			"type" => 'RELTYPE_RANK',
+		));
 
 		foreach($conns as $conn)
 		{
@@ -900,12 +900,39 @@ class crm_person extends class_base
 		};
 	
 		$conns = $o->connections_from(array(
-							'type' => "RELTYPE_SECTION"
-					));
+			'type' => "RELTYPE_SECTION"
+		));
 		foreach($conns as $conn)
 		{	
 			$sections_arr[$conn->prop('to')] = $conn->prop('to.name');
 		}
+
+
+		$address = "";
+		$address_d = $o->get_first_obj_by_reltype("RELTYPE_ADDRESS");
+		if ($address_d)	
+		{
+			$address_a = array();
+			if ($address_d->prop("aadress") != "")
+			{
+				$address_a[] = $address_d->prop("aadress");
+			}
+
+			if ($address_d->prop("linn"))
+			{
+				$tmp = obj($address_d->prop("linn"));
+				$address_a[] = $tmp->name();
+			}
+
+			if ($address_d->prop("riik"))
+			{
+				$tmp = obj($address_d->prop("riik"));
+				$address_a[] = $tmp->name();
+			}
+		
+			$address = join(",", $address_a);
+		}
+
 		$rv = array(
 			'name' => $o->prop('firstname').' '.$o->prop('lastname'),
 			'firstname' => $o->prop('firstname'),
@@ -917,6 +944,7 @@ class crm_person extends class_base
 			'section' => join(',',$sections_arr),
 			'ranks_arr' => $ranks_arr,
 			'sections_arr' => $sections_arr,
+			'address' => $address,
 			"add_task_url" => $this->mk_my_orb("change",array(
 				"id" => $cal_id,
 				"group" => "add_event",
