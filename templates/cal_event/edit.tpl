@@ -9,19 +9,6 @@
 <td>
 <table border="0" cellspacing="1" cellpadding="1" bgcolor="#ffffff">
 <tr>
-<td class="header1" align="center">
-&lt;Muuda&gt;
-</td>
-<td class="header1" align="center">
-<!-- SUB: repeaters -->
-<a href="{VAR:rep_link}">Kordused 1</a>
-|
-<a href="{VAR:rep_link2}">Kordused 2</a>
-<!-- END SUB: repeaters -->
-&nbsp;
-</td>
-</tr>
-<tr>
 <td colspan="2" class="header1">
 <table border="0" width="100%" cellspacing="1" cellpadding="2" bgcolor="#FFFFFF">
 <tr>

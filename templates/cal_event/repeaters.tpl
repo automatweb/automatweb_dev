@@ -360,31 +360,23 @@ function toggle_year()
 <td>
 <table border="0" cellspacing="0" cellpadding="1">
 <form method="POST" action="reforb.{VAR:ext}" name="repeater">
-<tr>
-<td colspan="3">
-<table width="100%" border="0">
-<tr>
-<td class="header1" align="center">
-<a href="{VAR:change_link}">Muuda</a>
-</td>
-<td class="header1" align="center">
-&gt;Kordused&lt;<br>
-{VAR:stage1} | {VAR:stage2}
-</td>
-</tr>
-</table>
-</td>
 <!-- days -->
 <tr>
-<td align="center" rowspan="3" width="15" valign="top"><input type="checkbox" onClick="check_day_state(99)" name="region1" value="1" class="repform" {VAR:region1} {VAR:region1_disabled}></td>
-<td align="center" width="15"><input type="radio" onClick="check_day_state(0)" name="day" value="1" class="repform" {VAR:day1}></td>
-<td class="reptext">
+<td align="center" rowspan="3" width="15" valign="top" class="fgtitle">
+<input type="checkbox" onClick="check_day_state(99)" name="region1" value="1" class="repform" {VAR:region1} {VAR:region1_disabled}>
+</td>
+<td align="center" width="15" class="fgtitle">
+<input type="radio" onClick="check_day_state(0)" name="day" value="1" class="repform" {VAR:day1}>
+</td>
+<td class="fgtitle">
 	Iga <input type="text" name="dayskip" class="repform" value="{VAR:dayskip}" size="2" maxlength="2"> päeva järel:
 </td>
 </tr>
 <tr>
-<td align="center" width="15"><input type="radio" onClick="check_day_state(1)" name="day" value="2" {VAR:day2}></td>
-<td class="reptext">
+<td align="center" width="15" class="fgtitle">
+	<input type="radio" onClick="check_day_state(1)" name="day" value="2" {VAR:day2}>
+</td>
+<td class="fgtitle" nowrap>
 	Iga nädala nendel päevadel:
 	<input type="checkbox" name="wday[1]" value="1" {VAR:wday1}>E |
 	<input type="checkbox" name="wday[2]" value="2" {VAR:wday2}> T |
@@ -396,29 +388,36 @@ function toggle_year()
 </td>
 </tr>
 <tr>
-<td align="center" width="15"><input type="radio" onClick="check_day_state(2)" name="day" value="3" {VAR:day3}></td>
-<td class="reptext">
+<td align="center" width="15" class="fgtitle">
+	<input type="radio" onClick="check_day_state(2)" name="day" value="3" {VAR:day3}></td>
+<td class="fgtitle">
 	Iga kuu nendel päevadel (nt 9,19,29): <input type="text" size="20" class="repform" name="monpwhen2" value="{VAR:monpwhen2}">
 </td>
 </tr>
 <!-- days end -->
 <tr bgcolor="#EEEEEE">
-<td colspan="3">
+<td colspan="3" class="fgtitle">
 <hr size=1 width="100%">
 </td>
 </tr>
 <!-- weeks -->
 <tr bgcolor="#EEEEEE">
-<td align="center" rowspan="2" width="15" valign="top"><input type="checkbox" onClick="check_week_state(99)" name="region2" value="1" class="repform" {VAR:region2}></td>
+<td align="center" rowspan="2" width="15" valign="top" class="fgtitle">
+<input type="checkbox" onClick="check_week_state(99)" name="region2" value="1" class="repform" {VAR:region2}>
+</td>
 
-<td align="center" width="15"><input type="radio" onClick="check_week_state(0)" name="week" value="1" class="repform" {VAR:week1}></td>
-<td class="reptext">
+<td align="center" width="15" class="fgtitle">
+<input type="radio" onClick="check_week_state(0)" name="week" value="1" class="repform" {VAR:week1}>
+</td>
+<td class="fgtitle">
 	Iga <input type="text" name="weekskip" value="{VAR:weekskip}" size="2" class="repform" maxlength="2"> nädala järel
 </td>
 </tr>
 <tr bgcolor="#EEEEEE">
-<td align="center" width="15"><input type="radio" onClick="check_week_state(1)" name="week" value="2" {VAR:week2}></td>
-<td class="reptext">
+<td align="center" width="15" class="fgtitle">
+<input type="radio" onClick="check_week_state(1)" name="week" value="2" {VAR:week2}>
+</td>
+<td class="fgtitle">
 	Iga kuu nendel päevadel
 	<input type="checkbox" name="mweek[1]" value="1" {VAR:mweek1}>1 |
 	<input type="checkbox" name="mweek[2]" value="2" {VAR:mweek2}>2 |
@@ -430,47 +429,54 @@ function toggle_year()
 </tr>
 <!-- weeks end -->
 <tr bgcolor="#EEEEEE">
-<td colspan="3">
+<td colspan="3" class="fgtitle">
 <hr size=1 width="100%">
 </td>
 </tr>
 <!-- months -->
 <tr>
-<td align="center" rowspan="2" width="15" valign="top"><input type="checkbox" onClick="check_mon_state(99)" name="region3" value="1" class="repform" {VAR:region3}></td>
-<td align="center" width="15"><input type="radio" onClick="check_mon_state(0)" name="month" class="repform" value="1" {VAR:month1}></td>
-<td class="reptext">
+<td align="center" rowspan="2" width="15" valign="top" class="fgtitle">
+<input type="checkbox" onClick="check_mon_state(99)" name="region3" value="1" class="repform" {VAR:region3}>
+</td>
+<td align="center" width="15" class="fgtitle">
+<input type="radio" onClick="check_mon_state(0)" name="month" class="repform" value="1" {VAR:month1}>
+</td>
+<td class="fgtitle">
 	Iga<input type="text" value="{VAR:monthskip}" name="monthskip" size="2" class="repform" maxlength="2"> kuu järel
 </td>
 </tr>
 <tr bgcolor="#EEEEEE">
-<td align="center" width="15"><input type="radio" onClick="check_mon_state(1)" name="month" class="repform" value="2" {VAR:month2}></td>
-<td class="reptext">
+<td align="center" width="15" class="fgtitle">
+<input type="radio" onClick="check_mon_state(1)" name="month" class="repform" value="2" {VAR:month2}>
+</td>
+<td class="fgtitle">
  Iga aasta nendel kuudel <input type="text" size="20" class="repform" name="yearpwhen" value="{VAR:yearpwhen}">
 </td>
 </tr>
 <!-- months end -->
 <tr bgcolor="#EEEEEE">
-<td colspan="3">
+<td colspan="3" class="fgtitle">
 <hr size=1 width="100%">
 </td>
 </tr>
 <!-- years -->
 <tr bgcolor="#EEEEEE">
-<td align="center" width="15" valign="top"><input type="checkbox" name="region4" value="1" onClick="toggle_year()" class="repform" {VAR:region4}></td>
+<td align="center" width="15" valign="top" class="fgtitle">
+<input type="checkbox" name="region4" value="1" onClick="toggle_year()" class="repform" {VAR:region4}></td>
 <td align="center" width="15">&nbsp;</td>
-<td class="reptext">
+<td class="fgtitle">
 	Iga  <input type="text" value="{VAR:yearskip}" size="2" name="yearskip" class="repform" maxlength="2"> aasta järel.
 </td>
 </tr>
 <!-- end years -->
 <tr bgcolor="#EEEEEE">
-<td colspan="3">
+<td colspan="3" class="fgtitle">
 <hr size=1 width="100%">
 </td>
 </tr>
 <!-- repeat types -->
 <tr>
-<td colspan="3" valign="top" class="reptext">
+<td colspan="3" valign="top" class="fgtitle">
 <input type="radio" name="rep" value="1" {VAR:rep1_checked}>Korda, kuni teisiti öeldakse (forever)<br>
 <input type="radio" name="rep" value="2" {VAR:rep2_checked}>Reserveeri<input type="text" class="repform" value="{VAR:repeats}" name="repeats" size="2"> järjestikust aega<br>
 <input type="radio" name="rep" value="3" {VAR:rep3_checked}>Kuni
@@ -479,7 +485,7 @@ function toggle_year()
 </tr>
 <!-- repeat types end -->
 <tr bgcolor="#EEEEEE">
-<td class="reptext" align="center" colspan="3">
+<td class="fgtitle" align="center" colspan="3">
 <input type="submit" value="Salvesta">
 {VAR:reforb}
 </td>

@@ -6,7 +6,9 @@
 </tr>
 <tr>
 <form method="POST" action="reforb.{VAR:ext}" name="event">
+<td>
 Meeldetuletused on veel implementeerimata.
+</td>
 </form>
 </tr>
 </table>
