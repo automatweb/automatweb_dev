@@ -24,33 +24,7 @@
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
 										<tr>
 											<td class="celltext" colspan=2>
-											<table border=1 cellpadding=0 cellspacing=0>
-											<tr><td>kommentaar</td><td>sql veerg</td><td>unique</td><td>strip html</td><td>tyyp</td><td>size</td></tr>
-										<!-- SUB: ruul -->
-											<tr>
-												<td>
-												{VAR:desc}&nbsp;
-												</td>
-												<td>
-												{VAR:mk_field}&nbsp;
-												</td>
-												<td>
-												<input type=checkbox name='{VAR:mis}[{VAR:ruul}][unique]' {VAR:unique}>
-												</td>
-												<td>
-												<input type=checkbox name='{VAR:mis}[{VAR:ruul}][strip_html]' {VAR:strip_html}>
-												</td>
-												<td>
-												<select name='{VAR:mis}[{VAR:ruul}][type]'>
-												{VAR:type}
-												</select>
-												</td>
-												<td>
-												<input class="formtext" name='{VAR:mis}[{VAR:ruul}][size]' value='{VAR:size}' type=text size=4>
-												</td>
-											</tr>
-										<!-- END SUB: ruul -->
-											</table>
+											{VAR:ruuls_table}
 											</td>
 										</tr>
 										<tr>
