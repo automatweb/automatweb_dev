@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.310 2004/10/16 22:35:30 duke Exp $
+// $Id: class_base.aw,v 2.311 2004/10/29 16:04:35 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2781,6 +2781,7 @@ class class_base extends aw_template
 			$props = $arr["props"];
 		};
 
+
 		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
@@ -2797,7 +2798,7 @@ class class_base extends aw_template
 			return $res;
 		};
 
-
+		
 		foreach($arr["request"] as $key => $val)
 		{
 			$prpdata = $props[$key];
@@ -2823,7 +2824,6 @@ class class_base extends aw_template
 				$controller_id = $controllers[$key];
 				$prpdata["value"] = $val;
 				$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"], $val);
-				//print "validating $key<br>";
 
 				if ($controller_ret != PROP_OK)
 				{
@@ -3097,6 +3097,7 @@ class class_base extends aw_template
 			{
 				$propvalues[$name]["error"] = $argblock["prop"]["error"];
 				aw_session_set("cb_values",$propvalues);
+				$this->cb_values = $propvalues;
 				$status = PROP_IGNORE;
 			}
 			
@@ -3120,6 +3121,7 @@ class class_base extends aw_template
 				{
 					$propvalues[$name]["error"] = $argblock["prop"]["error"];
 				};
+				$this->cb_values = $propvalues;
 				aw_session_set("cb_values",$propvalues);
 
 				
@@ -3170,6 +3172,7 @@ class class_base extends aw_template
 					{
 						$propvalues[$name]["error"] = $argblock["prop"]["error"];
 						aw_session_set("cb_values",$propvalues);
+						$this->cb_values = $propvalues;
 						return false;
 					};
                                 };
@@ -3390,6 +3393,7 @@ class class_base extends aw_template
 				}
 			};
 		};
+
 
 		if (method_exists($this->inst,"callback_post_save"))
 		{
