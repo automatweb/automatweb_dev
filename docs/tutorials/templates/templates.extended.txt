@@ -36,3 +36,5 @@ The templatesystem only works if both, grouptpl_default.tpl and group_[groupname
 You should NEVER EVER use it with any @layout property and "grid" layout, because it won't and never will work with those, "boxed" layout is ok.
 
 You can also consult to commune class for reference.
+
+üks uus rida lõppu
