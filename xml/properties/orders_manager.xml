@@ -10,6 +10,16 @@
             <caption>Ekspordi kataloog</caption>
       </property>
       <property>
+            <name>orders_toolbar</name>
+            <table>objects</table>
+            <group>ordermnager</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>orders_toolbar</field>
+            <caption>Tellimuste toolbar</caption>
+      </property>
+      <property>
             <name>orders_table</name>
             <table>objects</table>
             <group>ordermnager</group>
@@ -17,6 +27,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>orders_table</field>
+            <caption>Tellimuste tabel</caption>
       </property>
       <classinfo>
             <syslog_type>ST_ORDERS_MANAGER</syslog_type>

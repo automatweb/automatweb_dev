@@ -1,70 +1,30 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>orderform</name>
-            <table>objects</table>
-            <group>config</group>
-            <type>relpicker</type>
-            <field>meta</field>
-            <reltype>RELTYPE_ORDERFORM</reltype>
-            <method>serialize</method>
-            <caption>Tellimuse seadetevorm</caption>
-      </property>
-      <property>
-            <name>itemform</name>
-            <table>objects</table>
-            <group>config</group>
-            <type>relpicker</type>
-            <field>meta</field>
-            <reltype>RELTYPE_ITEMFORM</reltype>
-            <method>serialize</method>
-            <caption>Tellimuse rea seadetevorm</caption>
-      </property>
-      <property>
-            <name>ordemail</name>
-            <table>objects</table>
-            <group>config</group>
-            <type>relpicker</type>
-            <field>meta</field>
-            <reltype>RELTYPE_MAIL</reltype>
-            <method>serialize</method>
-            <caption>Mail tellijale</caption>
-      </property>
-      <property>
-            <name>thankudoc</name>
-            <table>objects</table>
-            <group>config</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_THANKU</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Dokument kuhu suunata peale esitamist</caption>
-      </property>
-      <property>
             <name>postal_fee</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Postikulu</caption>
       </property>
       <property>
             <name>orders_post_to</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Mail kuhu tellimus saata</caption>
       </property>
       <property>
             <name>orders_to_mail</name>
             <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Saada e-mail tellijale</caption>
       </property>
@@ -72,19 +32,80 @@
             <name>orders_post_from</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kliendile saatja(e-mail)</caption>
+            <type>textbox</type>
+            <caption>Kliendile saatja (e-mail)</caption>
+      </property>
+      <property>
+            <name>no_pdata_check</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kasutajaandmed isikust</caption>
+      </property>
+      <property>
+            <name>orderform</name>
+            <table>objects</table>
+            <group>config</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDERFORM</reltype>
+            <caption>Tellimuse seadetevorm</caption>
+      </property>
+      <property>
+            <name>itemform</name>
+            <table>objects</table>
+            <group>config</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ITEMFORM</reltype>
+            <caption>Tellimuse rea seadetevorm</caption>
+      </property>
+      <property>
+            <name>num_rows</name>
+            <table>objects</table>
+            <group>config</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>6</size>
+            <caption>Mitu rida saab korraga korvi lisada</caption>
+      </property>
+      <property>
+            <name>ordemail</name>
+            <table>objects</table>
+            <group>config</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAIL</reltype>
+            <caption>Mail tellijale</caption>
+      </property>
+      <property>
+            <name>thankudoc</name>
+            <table>objects</table>
+            <group>config</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_THANKU</reltype>
+            <caption>Dokument kuhu suunata peale esitamist</caption>
       </property>
       <property>
             <name>ordering</name>
             <table>objects</table>
             <group>ordering</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <no_caption>1</no_caption>
             <callback>do_order_form</callback>
-            <field>ordering</field>
       </property>
       <property>
             <name>has_rent</name>
@@ -159,13 +180,13 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <config>
+                  <caption>Seaded</caption>
+            </config>
             <ordering>
                   <caption>Tellimine</caption>
                   <submit>no</submit>
             </ordering>
-            <config>
-                  <caption>Seaded</caption>
-            </config>
             <payment>
                   <caption>Makseviisid</caption>
             </payment>
@@ -186,16 +207,16 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument</caption>
             </THANKU>
-            <MAIL>
-                  <value>5</value>
-                  <clid>CL_MESSAGE</clid>
-                  <caption>Mail</caption>
-            </MAIL>
             <ADDORDER>
                   <value>4</value>
                   <clid>CL_ORDERS_ITEM</clid>
                   <caption>Tellimuse lisa</caption>
             </ADDORDER>
+            <MAIL>
+                  <value>5</value>
+                  <clid>CL_MESSAGE</clid>
+                  <caption>Mail</caption>
+            </MAIL>
       </reltypes>
 </properties>
 

@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="orders_manager" folder="applications/orders" extends="class_base">
+		<action name="delete_orders">
+			<function name="delete_orders">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="group" />
+					<required name="sel" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="export_to_file" nologin="1">
 			<function name="export_to_file">
 				<arguments>
