@@ -1,0 +1,278 @@
+<!-- SUB: SEARCH_SCRIPT -->
+<script language="javascript">
+
+var elements = new Array();
+// elements = array(form_id, el_id,el_text);
+
+<!-- SUB: ELDEFS -->
+elements[{VAR:el_num}] = new Array({VAR:form_id},{VAR:el_id},"{VAR:el_text}");
+<!-- END SUB: ELDEFS -->
+
+function clearList(list)
+{
+	var listlen = list.length;
+
+	for(i=0; i < listlen; i++)
+		list.options[0] = null;
+}
+
+function ch(el, f_el,suf)
+{
+	var sf = f_el.options[f_el.selectedIndex].value;
+
+	clearList(el);
+	for (i=0; i < elements.length; i++)
+	{
+		if (elements[i][0] == sf)
+		{
+			el.options[el.length] = new Option(elements[i][2],""+elements[i][1],false,false);
+		}
+	}
+}
+
+function setsel(el,val)
+{
+	for (i=0; i < el.length; i++)
+	{
+		if (el.options[i].value==val)
+		{
+			el.options[i].selected = true;
+			return;
+		}
+	}
+}
+</script>
+<!-- END SUB: SEARCH_SCRIPT -->
+
+<table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC" width=100%>
+<!-- SUB: SEARCH_LB -->
+<tr>
+	<td class="fgtext">Form, millest element v&otilde;etakse:</td>
+	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_form' onChange="ch(document.f1.{VAR:cell_id}_element, this)">{VAR:forms}</select></td>
+	<td class="fgtext">Element formist:</td>
+	<td class="fgtext"><select class='small_button' NAME='{VAR:cell_id}_element'><option value=''></select>
+	<script language="javascript">
+		ch(document.f1.{VAR:cell_id}_element, document.f1.{VAR:cell_id}_form);
+		setsel(document.f1.{VAR:cell_id}_element,"{VAR:linked_el}");
+	</script>
+	</td>
+</tr>
+<!-- END SUB: SEARCH_LB -->
+<tr>
+	<td class="fgtext">T&uuml;&uuml;p:</td>
+	<td class="fgtext"><select class="small_button" NAME='{VAR:cell_id}_type'>
+    <option  VALUE=''>Tavaline tekst
+    <option  VALUE=''>---------
+    <option {VAR:type_active_textbox} VALUE='textbox'>Tekstiboks
+    <option {VAR:type_active_textarea} VALUE='textarea'>Mitmerealine tekst
+    <option {VAR:type_active_checkbox} VALUE='checkbox'>Checkbox
+    <option {VAR:type_active_radiobutton} VALUE='radiobutton'>Radiobutton
+    <option {VAR:type_active_listbox} VALUE='listbox'>Listbox
+    <option {VAR:type_active_multiple} VALUE='multiple'>Multiple listbox
+    <option {VAR:type_active_file} VALUE='file'>Faili lisamine
+    <option {VAR:type_active_link} VALUE='link'>H&uuml;perlink
+    <option {VAR:type_active_button} VALUE='button'>Nupp
+    <option {VAR:type_active_price} VALUE='price'>Hind
+    <option {VAR:type_active_date} VALUE='date'>Kuup&auml;ev
+<!-- SUB: CAN_DELETE -->
+    <option VALUE='delete'>Kustuta see element
+<!-- END SUB: CAN_DELETE -->
+    </select>
+<!-- SUB: HAS_SUBTYPE -->
+&nbsp;Alamt&uuml;&uuml;p:&nbsp;
+<select name='{VAR:cell_id}_subtype' class="small_button">{VAR:subtypes}</select>
+<!-- END SUB: HAS_SUBTYPE -->
+		</td>
+	<td class="fgtext">Nimi:</td>
+	<td class="fgtext"><input type='text' class="small_button" NAME='{VAR:cell_id}_name' VALUE='{VAR:cell_name}'></td>
+</tr>
+<!-- SUB: LISTBOX_SORT -->
+<tr>
+<td class="fgtext">Sortimine:</td>
+<td class="fgtext"><input class="small_button" type='checkbox' NAME='{VAR:cell_id}_sort_order' value='1' {VAR:sort_by_order}>&nbsp;J&auml;rjekorra j&auml;gi <input type='checkbox' NAME='{VAR:cell_id}_sort_alpha' VALUE='1'  {VAR:sort_by_alpha}>&nbsp;T&auml;hestiku j&auml;rgi</td>
+<td class="fgtext">Impordi:</td>
+<td class="fgtext"><input type='file' name='{VAR:cell_id}_import' class='small_button'></td>
+</tr>
+<tr>
+<td class="fgtext">Kas m&auml;rgitud elemendid:</td>
+<td class="fgtext"><input class="small_button" type='radio' NAME='{VAR:cell_id}_lbitems_dowhat' value='del' >&nbsp;Kustutatakse <input type='radio' NAME='{VAR:cell_id}_lbitems_dowhat' VALUE='add'>&nbsp;Lisatakse uued</td>
+<td class="fgtext">Suurus:</td>
+<td class="fgtext"><input type="text" name="{VAR:cell_id}_lb_size" size=3 class='small_button' value='{VAR:lb_size}'></td>
+</tr>
+<!-- END SUB: LISTBOX_SORT -->
+
+<!-- SUB: LISTBOX_ITEMS -->
+<tr>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext"><input class="small_button" type='text' NAME='{VAR:listbox_item_id}' VALUE='{VAR:listbox_item_value}'>&nbsp;<input type='radio' NAME='{VAR:listbox_radio_name}' VALUE='{VAR:listbox_radio_value}' {VAR:listbox_radio_checked}>&nbsp;<input type='text' name='{VAR:listbox_order_name}' value='{VAR:listbox_order_value}' class='small_button' size=4>&nbsp;<input type='checkbox' name='{VAR:cell_id}_sel[{VAR:num}]' value='1'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: LISTBOX_ITEMS -->
+
+<!-- SUB: MULTIPLE_ITEMS -->
+<tr>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:multiple_item_id}' VALUE='{VAR:multiple_item_value}'>&nbsp;<input CLASS="small_button" type='checkbox' NAME='{VAR:multiple_check_name}' VALUE='{VAR:multiple_check_value}' {VAR:multiple_check_checked}>&nbsp;<input type='text' name='{VAR:multiple_order_name}' value='{VAR:multiple_order_value}' class='small_button' size=4>&nbsp;<input type='checkbox' name='{VAR:cell_id}_sel[{VAR:num}]' value='1'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;
+</tr>
+<!-- END SUB: MULTIPLE_ITEMS -->
+
+<!-- SUB: TEXTAREA_ITEMS -->
+<tr>
+<td class="fgtext">Suurus:</td>
+<td class="fgtext">&nbsp;Laius:&nbsp;<input CLASS="small_button" SIZE=3 type='text' NAME='{VAR:textarea_cols_name}' VALUE='{VAR:textarea_cols}'>K&otilde;rgus:&nbsp;<input CLASS="small_button" SIZE=3 type='text' NAME='{VAR:textarea_rows_name}' VALUE='{VAR:textarea_rows}'></td>
+<td valign=top class="fgtext">Algne tekst:</td>
+<td class="fgtext"><input type=text CLASS="small_button"  SIZE=45 NAME='{VAR:default_name}' VALUE='{VAR:default}'></td>
+</tr>
+<!-- END SUB: TEXTAREA_ITEMS -->
+
+<!-- SUB: DATE_ITEMS -->
+<tr>
+<td class="fgtext">Mis aastast mis aastani:</td>
+<td class="fgtext">&nbsp;<input CLASS="small_button" SIZE=5 type='text' NAME='{VAR:cell_id}_from_year' VALUE='{VAR:from_year}'>&nbsp;-&nbsp;<input type=text CLASS="small_button"  SIZE=5 NAME='{VAR:cell_id}_to_year' VALUE='{VAR:to_year}'></td>
+<td valign=top class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: DATE_ITEMS -->
+
+<!-- SUB: FILE_ITEMS -->
+<tr>
+<td class="fgtext">Kuvamine:</td>
+<td class="fgtext"><input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='1' {VAR:ftype_image_selected}> pildina <input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='2' {VAR:ftype_file_selected}> lingitud failina</td>
+<td class="fgtext">Lingi tekst:</td>
+<td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:cell_id}_file_link_text' VALUE='{VAR:file_link_text}'></td>
+</tr>
+<tr>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext"><input type='radio' NAME='{VAR:cell_id}_file_show' VALUE=1 {VAR:file_show}> kuvan kohe <input type='radio' NAME='{VAR:cell_id}_file_show' VALUE=0 {VAR:file_alias}> teen aliase</td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: FILE_ITEMS -->
+
+<!-- SUB: HLINK_ITEMS -->
+<tr>
+<td class="fgtext">Lingi tekst:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_link_text' VALUE='{VAR:link_text}'></td>
+<td class="fgtext">Kirjelduse tekst:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_link_address' VALUE='{VAR:link_address}'></td>
+</tr>
+<!-- END SUB: HLINK_ITEMS -->
+
+<!-- SUB: RADIO_ITEMS -->
+<tr>
+<td class="fgtext">Grupp:</td>
+<td class="fgtext"><input class="small_button" type='text' SIZE=1 NAME='{VAR:cell_id}_group' VALUE='{VAR:cell_group}'></td>
+<td class="fgtext">Algselt valitud:</td>
+<td class="fgtext"><input type='checkbox' NAME='{VAR:default_name}' VALUE='1' {VAR:default_checked}></td>
+</tr>
+<!-- END SUB: RADIO_ITEMS -->
+
+<!-- SUB: DEFAULT_TEXT -->
+<tr>
+<td class="fgtext">Algne tekst:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:default_name}' VALUE='{VAR:default}'></td>
+<td class="fgtext">Pikkus:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" SIZE=3 NAME='{VAR:cell_id}_length' VALUE='{VAR:length}'></td>
+</tr>
+<!-- END SUB: DEFAULT_TEXT -->
+
+<!-- SUB: BUTTON_SUB_URL -->
+<tr>
+<td class="fgtext">URL:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_burl' VALUE='{VAR:button_url}'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: BUTTON_SUB_URL -->
+
+<!-- SUB: BUTTON_SUB_OP -->
+<tr>
+<td class="fgtext">V&auml;ljund:</td>
+<td class="fgtext"><select CLASS="small_button" NAME='{VAR:cell_id}_bop'>{VAR:bops}</select></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: BUTTON_SUB_OP -->
+
+<!-- SUB: BUTTON_ITEMS -->
+<tr>
+<td class="fgtext">Tekst nupul:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_btext' VALUE='{VAR:button_text}'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: BUTTON_ITEMS -->
+
+<!-- SUB: CHECKBOX_ITEMS -->
+<tr>
+<td class="fgtext">Algselt valitud:</td>
+<td class="fgtext"><input type='checkbox' NAME='{VAR:default_name}' VALUE='1' {VAR:default_checked}></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: CHECKBOX_ITEMS -->
+<!-- SUB: PRICE_ITEMS -->
+<tr>
+<td class="fgtext">Default hind:</td>
+<td class="fgtext"><input class='small_button' size=7 type='text' NAME='{VAR:cell_id}_price' VALUE='{VAR:price}'></td>
+<td class="fgtext">Pikkus:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" SIZE=3 NAME='{VAR:cell_id}_length' VALUE='{VAR:length}'></td>
+</tr>
+<tr>
+<td class="fgtext">Mis valuutas hind sisestatakse:</td>
+<td class="fgtext"><select CLASS="small_button" NAME='{VAR:cell_id}_price_cur'>{VAR:price_cur}</select></td>
+<td class="fgtext">Mis valuutas hinda veel n&auml;idata:</td>
+<td class="fgtext"><select multiple CLASS="small_button" NAME='{VAR:cell_id}_price_show[]'>{VAR:price_show}</select></td>
+</tr>
+<tr>
+<td class="fgtext">Hindade eraldaja:</td>
+<td class="fgtext"><input type='text' class='small_button' name='{VAR:cell_id}_price_sep' value='{VAR:price_sep}'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: PRICE_ITEMS -->
+<tr>
+<!-- SUB: EL_NOHLINK -->
+<td valign=top class="fgtext">Tekst:</td>
+<td valign=top class="fgtext"><input class="small_button" type='text' NAME='{VAR:cell_id}_text' VALUE="{VAR:cell_text}">&nbsp;Kaugus elemendist:&nbsp;<input class="small_button" type='text' NAME='{VAR:cell_id}_dist' size=3 VALUE='{VAR:cell_dist}'>&nbsp;pix</td>
+<!-- END SUB: EL_NOHLINK -->
+
+<!-- SUB: EL_HLINK -->
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+<!-- END SUB: EL_HLINK -->
+</tr>
+<tr>
+<td valign=top class="fgtext"><small>Subskript:</font></small></td>
+<td class="fgtext" >
+	<input type=text class="small_button" size=45 NAME='{VAR:cell_id}_info' value='{VAR:cell_info}'>
+</td>
+<Td class="fgtext">Selectrow grupp:</td>
+<Td class="fgtext"><input type='text' name='{VAR:cell_id}_srow_grp' size=15 class='small_button' value='{VAR:srow_grp}'></td>
+</tr>
+<tr>
+<td valign=top class="fgtext">Teksti asukoht:</td>
+<td valign=top class="fgtext"><input class="small_button" type='radio' NAME='{VAR:cell_id}_text_pos' VALUE='up' {VAR:text_pos_up}>&nbsp;&Uuml;leval&nbsp;<input class="small_button" type='radio' NAME='{VAR:cell_id}_text_pos' VALUE='down' {VAR:text_pos_down}>&nbsp;All&nbsp;<input class="small_button" type='radio' NAME='{VAR:cell_id}_text_pos' VALUE='left' {VAR:text_pos_left}>&nbsp;Vasakul&nbsp;<input class="small_button" type='radio' NAME='{VAR:cell_id}_text_pos' VALUE='right' {VAR:text_pos_right}>&nbsp;Paremal&nbsp;</td>
+
+<td valign=top class="fgtext"><a href='{VAR:changepos}'>Muuda elemendi asukohta</a></td>
+<td valign=top class="fgtext">&nbsp;</td>
+</tr>
+<tr>
+<td class="fgtext"><img src='/images/transa.gif' height=1 width=85><br>P&auml;rast elementi:</td>
+<td class="fgtext" colspan=1><img src='/images/transa.gif' height=1 width=275><br><input class="small_button" type='radio' NAME='{VAR:cell_id}_separator_type' VALUE='1' {VAR:sep_enter_checked}>reavahetus&nbsp;&nbsp;
+<input class="small_button" type='radio' NAME='{VAR:cell_id}_separator_type' VALUE='2' {VAR:sep_space_checked}>&nbsp;<input class="small_button" type='text' NAME='{VAR:cell_id}_sep_pixels' MAXLENGTH=10 SIZE=10 VALUE='{VAR:cell_sep_pixels}'>&nbsp;pikslit</td>
+<td class="fgtext"><img src='/images/transa.gif' height=1 width=85><br>J&auml;rjekord:</td>
+<td class="fgtext"><input class="small_button" type='text' size=2 NAME='{VAR:cell_id}_order' VALUE='{VAR:cell_order}'></td>
+</tr>
+<!-- SUB: HAS_SIMPLE_CONTROLLER -->
+<tr>
+<td class="fgtext">Peab olema t&auml;idetud:</td>
+<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_must_fill' VALUE='1' {VAR:must_fill_checked}></td>
+<td class="fgtext">Veateade:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_must_error' VALUE='{VAR:must_error}'></td>
+</tr>
+<!-- END SUB: HAS_SIMPLE_CONTROLLER -->
+</table>
