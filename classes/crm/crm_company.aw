@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.65 2004/08/18 13:20:06 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.66 2004/08/18 17:25:21 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -2767,7 +2767,7 @@ class crm_company extends class_base
 			$alias_to = $arr['request']['unit'];
 		}
 
-		$tb->add_menu_item(array(
+		/*$tb->add_menu_item(array(
 				'parent'=>'add_item',
 				'text'=>'Töötaja',
 				'link'=>$this->mk_my_orb('new',array(
@@ -2777,6 +2777,17 @@ class crm_company extends class_base
 					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
 				),'crm_person')
 				
+		));*/
+		$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text'=>'Töötaja',
+				'link'=>aw_url_change_var(array(
+						'action' => 'create_new_person',
+						'parent' => $arr['obj_inst']->id(),
+						'alias_to' => $alias_to,
+						'reltype' => $this->reltype_workers,
+						'return_url' => urlencode(aw_global_get('REQUEST_URI'))
+				))
 		));
 		
 		$tb->add_menu_item(array(
@@ -3545,6 +3556,51 @@ class crm_company extends class_base
 		{
 			return array();
 		}
+	}
+
+	/**
+		@attrib name=create_new_person
+
+		@param parent required
+		@param alias_to required
+		@param reltype required
+		@param return_url optional
+	**/
+	function create_new_person($arr)
+	{
+		/*
+			why am i writing this?
+			cos i want the created object to have certain
+			options filled with certain values! it wouldn't
+			be nice of me to hack the creating of new objects
+		*/
+		$person = new object();
+		$person->set_class_id(CL_CRM_PERSON);
+		$person->set_parent($arr['parent']);
+		$person->save();
+		$alias_to = new object($arr['alias_to']);
+
+		$alias_to->connect(array(
+			'to' => $person->id(),
+			'reltype' => $arr['reltype'],
+		));
+
+		$work_contact = 0;
+		if($alias_to->class_id()==CL_CRM_COMPANY)
+		{
+			$work_contact = $alias_to->id();
+		}
+		else
+		{
+			$person_class = get_instance('crm/crm_person');
+			$work_contact = $person_class->get_work_contacts(array(
+									'obj_inst' => &$person,
+			));
+			list($work_contact,) = each($work_contact);
+		}
+		$person->set_prop('work_contact',$work_contact);
+		$person->save();
+		return html::get_change_url($person->id());
 	}
 }
 ?>

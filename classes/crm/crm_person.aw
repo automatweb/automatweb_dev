@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.53 2004/08/17 11:16:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.54 2004/08/18 17:25:21 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -375,6 +375,17 @@ class crm_person extends class_base
 	
 		switch($data["name"])
 		{
+			case 'work_contact':
+				//i'm gonna to this manually i guess
+				//cos a person can be connected to a company
+				//through sections, relpicker obviously doesn't cover that
+				//maybe i made design flaw and should have done what i did
+				//a bit differently?
+				$company = $this->get_work_contacts($arr);
+				$data['options'] = $company;
+				$data['options'][0] = '--vali--';
+				$data['options'] = array_reverse($data['options'], true);
+			break;
 			case 'rank' :
 			{
 				//let's list the professions the organization/unit is associated with
@@ -876,7 +887,7 @@ class crm_person extends class_base
 		};
 
 		$conns = $o->connections_from(array(
-                        "type" => RELTYPE_RANK,
+                        "type" => 'RELTYPE_RANK',
                 ));
 
 		foreach($conns as $conn)
@@ -886,13 +897,12 @@ class crm_person extends class_base
 		};
 	
 		$conns = $o->connections_from(array(
-							'type' => RELTYPE_SECTION
+							'type' => "RELTYPE_SECTION"
 					));
 		foreach($conns as $conn)
 		{	
 			$sections_arr[$conn->prop('to')] = $conn->prop('to.name');
 		}
-		//arr($conn);
 		$rv = array(
 			'name' => $o->prop('firstname').' '.$o->prop('lastname'),
 			'firstname' => $o->prop('firstname'),
@@ -1981,6 +1991,64 @@ class crm_person extends class_base
 		$u_i = get_instance("core/users/user");
 		return $this->mk_my_orb("change", array(
 			"id" => $u_i->get_current_person()), CL_CRM_PERSON);
+	}
+
+	/*
+		the user can be associated with a company in two ways
+		1) crm_person.reltype_work stuff
+		2) crm_person belongs to a crm_section which can belong
+			to a company or another crm_section, eventually the section
+			is attached to a company
+	*/
+	function get_work_contacts($arr)
+	{
+		$rtrn = array();
+
+		$conns = $arr['obj_inst']->connections_from(array(
+						'type' => 'RELTYPE_WORK'
+		));
+
+		foreach($conns as $conn)
+		{
+			$rtrn[$conn->prop('to')] = $conn->prop('to.name');
+		}
+
+		$conns = $arr['obj_inst']->connections_from(array(
+						'type' => 'RELTYPE_SECTION'
+		));
+
+		foreach($conns as $conn)
+		{
+			$obj = $conn->to();
+			$this->_get_work_contacts($obj,&$rtrn);
+		}
+		return $rtrn;
+	}
+
+	function _get_work_contacts(&$obj,&$data)
+	{
+		//maybe i found the company?
+		if($obj->class_id()==CL_CRM_SECTION)
+		{
+			$conns = $obj->connections_to(array(
+							'type' => 28 //crm_company.section
+			));
+
+			foreach($conns as $conn)
+			{
+				$data[$conn->prop('from')] = $conn->prop('from.name');
+			}
+		}
+	
+		//getting the sections
+		$conns = $obj->connections_to(array(
+						'type' => 1, //crm_section.section
+		));
+		foreach($conns as $conn)
+		{
+			$obj = $conn->from();
+			$this->_get_work_contacts(&$obj,&$data);
+		}
 	}
 
 }
