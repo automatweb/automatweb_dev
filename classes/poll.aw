@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.4 2002/01/11 23:59:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.5 2002/01/12 11:07:16 duke Exp $
 session_register("poll_clicked");
 global $class_defs;
 $class_defs["poll"] = "xml";
@@ -16,10 +16,10 @@ class poll extends aw_template
 		{
 			$this->vars($lc_poll);
 		}
-		if (!$this->prog_acl("view", PRG_POLL))
-		{
-			$this->prog_acl_error("view", PRG_POLL);
-		}
+		//if (!$this->prog_acl("view", PRG_POLL))
+		//{
+		//	$this->prog_acl_error("view", PRG_POLL);
+		//}
 		//$this->sub_merge = 1;
 	}
 
