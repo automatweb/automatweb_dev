@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.72 2003/02/12 14:32:26 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.73 2003/02/13 16:19:55 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -36,6 +36,8 @@ class aliasmgr extends aw_template
 		$id = ($args["id"]) ? $args["id"] : $args["docid"];
 		$this->id = $id;
 		$obj = $this->get_object($id);
+
+		$this->reltype = $reltype;
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("search_aliases",array("no_reforb" => 1, "search" => 1, "id" => $id, "reltype" => $reltype),$this->use_class),
@@ -668,7 +670,20 @@ class aliasmgr extends aw_template
 			}
 		}
 
-		$aliases = html::select(array("options" => $choices,"name" => "aselect"));
+		if ($this->reltype)
+		{
+			$selected = "reltype_" . $this->reltype;
+		}
+		else
+		{
+			$selected = "";
+		};
+
+		$aliases = html::select(array(
+			"options" => $choices,
+			"name" => "aselect",
+			"selected" => $selected,
+		));
 
 		$toolbar->add_cdata($aliases);
 
