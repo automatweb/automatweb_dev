@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.236 2003/02/21 04:16:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.237 2003/02/21 04:38:09 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1281,7 +1281,9 @@ class menuedit extends aw_template
 		while ($row = $this->db_next())
 		{
 			$row["name"] = str_replace("\"","&quot;", $row["name"]);
-			if ($this->can("view",$row["oid"]))
+			if ($this->can("view",$row["oid"]) || 
+			    $row["oid"] == $this->cfg["admin_rootmenu2"]
+			)
 			{
 				$arr[$row["parent"]][] = $row;
 				$mpr[] = $row["parent"];
@@ -1302,11 +1304,13 @@ class menuedit extends aw_template
 			{
 				if (isset($this->x_mpr[$d_row["parent"]]))
 				{
-					$arr[$this->cfg["site_rootmenu2"]][] = $d_row;
+					$d_row["parent"] = $this->cfg["admin_rootmenu2"];
+					$arr[$this->cfg["admin_rootmenu2"]][] = $d_row;
 				}
 			}
 		}
 
+//		echo "arr = <pre>", var_dump($arr),"</pre> <br>";
 		// objektipuu
 		$tr = $this->rec_tree(&$arr, $this->cfg["admin_rootmenu2"],$period);
 
