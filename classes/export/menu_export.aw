@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.1 2003/10/06 10:22:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.2 2004/09/03 09:58:11 kristo Exp $
 // menu_export.aw - helper class for exporting menus
 class menu_export
 {
@@ -14,7 +14,6 @@ class menu_export
 	function export_menus($arr)
 	{
 		extract($arr);
-
 		if (!is_array($ex_menus))
 		{
 			return;
@@ -63,7 +62,6 @@ class menu_export
 			{
 				$row["status"] = 2;
 			}
-			flush();
 			$this->append_exp_arr($row,&$menus,$ex_icons,$i);
 		}
 
