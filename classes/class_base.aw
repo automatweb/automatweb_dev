@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.171 2003/11/18 15:13:32 duke Exp $
+// $Id: class_base.aw,v 2.172 2003/11/19 11:43:09 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -115,6 +115,7 @@ class class_base extends aw_template
 
 			$this->parent = $args["parent"];
 			$this->id = "";
+			$this->new = 1;
 			$this->obj_inst = new object();
 			$this->reltype = isset($args["reltype"]) ? $args["reltype"] : "";
 		}
@@ -1610,6 +1611,7 @@ class class_base extends aw_template
 			"data" => &$this->data,
 			"obj_inst" => &$this->obj_inst,
 			"groupinfo" => &$this->groupinfo,
+			"new" => $this->new,
 		);
 
 		$this->cfgu = get_instance("cfg/cfgutils");
