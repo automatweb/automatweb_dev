@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.41 2003/03/27 11:00:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.42 2003/04/01 14:49:22 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -128,6 +128,9 @@
 	@property submenus_from_menu type=relpicker reltype=RELTYPE_SHOW_SUBFOLDERS_MENU group=advanced field=meta method=serialize table=objects
 	@caption V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt
 
+	@property show_layout type=relpicker reltype=RELTYPE_SHOW_AS_LAYOUT group=advanced field=meta method=serialize table=objects
+	@caption Kasuta n&auml;itamiseks layouti
+
 	@default group=show
 
 	@property left_pane type=checkbox  ch_value=1
@@ -183,6 +186,7 @@
 define("RELTYPE_PICTURES_MENU",1);
 define("RELTYPE_SHOW_SUBFOLDERS_MENU",2);
 define("RELTYPE_SHOW_AS_CALENDAR",3);
+define("RELTYPE_SHOW_AS_LAYOUT",4);
 
 class menu extends class_base
 {
@@ -965,6 +969,7 @@ class menu extends class_base
 			RELTYPE_PICTURES_MENU => "v&otilde;ta pildid men&uuml;&uuml;lt",
 			RELTYPE_SHOW_SUBFOLDERS_MENU => "võta alamkaustad men&uuml;&uuml;lt",
 			RELTYPE_SHOW_AS_CALENDAR => "võta objekte kalendrist",
+			RELTYPE_SHOW_AS_LAYOUT => "kasuta saidi n&auml;itamisel layouti"
 		);
 	}
 
@@ -979,6 +984,9 @@ class menu extends class_base
 				break;
 			case RELTYPE_SHOW_AS_CALENDAR:
 				$retval = array(CL_PLANNER);
+				break;
+			case RELTYPE_SHOW_AS_LAYOUT:
+				$retval = array(CL_LAYOUT);
 				break;
 		};
 		return $retval;

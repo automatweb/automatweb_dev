@@ -379,6 +379,16 @@
             <caption>V&amp;otilde;ta alammen&amp;uuml;&amp;uuml;d men&amp;uuml;&amp;uuml; alt</caption>
       </property>
       <property>
+            <name>show_layout</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SHOW_AS_LAYOUT</reltype>
+            <group>advanced</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Kasuta n&amp;auml;itamiseks layouti</caption>
+      </property>
+      <property>
             <name>left_pane</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>

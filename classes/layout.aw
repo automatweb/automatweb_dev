@@ -107,13 +107,8 @@ class layout extends class_base
 		extract($arr);
 		$ob = $this->get_object($id);
 
-		$this->read_template('show.tpl');
-
-		$this->vars(array(
-			'name' => $ob['name']
-		));
-
-		return $this->parse();
+		$ge = get_instance("vcl/grid_editor");
+		return $ge->show($ob['meta']['grid'], $id);
 	}
 
 	function get_property(&$arr)

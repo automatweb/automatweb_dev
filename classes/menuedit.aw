@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.270 2003/03/28 11:24:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.271 2003/04/01 14:49:22 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -308,7 +308,11 @@ class menuedit extends aw_template
 		// users_only check and finding the correct template_set, probably also
 		// a few other functions
 		$this->build_menu_chain($this->sel_section);
-
+		if ($this->properties["show_layout"])
+		{
+			return $this->do_show_layout($this->properties["show_layout"]);
+		}
+		
 		// if the remote user is not logged in and the users_only property is set,
 		// redirect the him to the correspondending error page
 		if ( (aw_global_get("uid") == "") && ($this->properties["users_only"]) )
@@ -4905,6 +4909,7 @@ class menuedit extends aw_template
 			"tpl_edit" => "",
 			"ftpl_edit" => "",
 			"tpl_edit_cfgform" => "",
+			"show_layout" => ""
 		);
 	
 		while($parent)
@@ -5839,5 +5844,12 @@ class menuedit extends aw_template
 		return true;
 	}
 
+	function do_show_layout($lid)
+	{
+		$li = get_instance("layout");
+		return $li->show(array(
+			"id" => $lid
+		));
+	}
 }
 ?>
