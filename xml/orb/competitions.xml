@@ -1,0 +1,72 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="competitions">
+		<action name="list">
+			<function name="mk_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="my_list">
+			<function name="mk_list">
+				<arguments>
+					<define name="my_list" value="1"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add">
+			<function name="add">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view">
+			<function name="view">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="vcomment">
+			<function name="vcomment">
+				<arguments>
+					<required name="cid"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="toplist">
+			<function name="toplist">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_view">
+			<function name="submit_view">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		

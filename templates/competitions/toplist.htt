@@ -1,0 +1,8 @@
+<small><a href="{VAR:baseurl}/?class=competitions&action=list">Tagasi v&otilde;istlustesse</a></small><p />
+<strong>Tegijad:</strong><p />
+
+<!-- SUB: NIMED -->
+
+{VAR:koht}. {VAR:neim} - {VAR:punkte} punkti <br />
+
+<!-- END SUB: NIMED -->
