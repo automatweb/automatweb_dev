@@ -15,18 +15,6 @@
 				</arguments>
 			</function>
 		</action>
-
-		<action name="promo_convert">
-			<function name="promo_convert">
-				<arguments/>
-			</function>
-		</action>
-		
-		<action name="convert_aliases">
-			<function name="convert_aliases">
-				<arguments/>
-			</function>	
-		</action>	
 	</class>
 </orb>
 		
