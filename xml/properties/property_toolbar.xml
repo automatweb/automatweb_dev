@@ -8,6 +8,10 @@
             <method>serialize</method>
             <type>releditor</type>
             <reltype>RELTYPE_BUTTON</reltype>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>b_type</num_1>
+            </table_fields>
             <props>
                   <num_0>name</num_0>
                   <num_1>b_type</num_1>
