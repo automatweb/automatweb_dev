@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.4 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.5 2002/10/21 10:09:13 kristo Exp $
 // klass taimerite jaoks
 class aw_timer 
 {
@@ -40,6 +40,10 @@ class aw_timer
 			} 
 			else 
 			{
+				if (!is_array($this->timers[$name]))
+				{
+					$this->timers[$name] = array();
+				}
 				$this->timers[$name]["started"] = $this->get_time();
 				$this->timers[$name]["running"] = 1;
 			};
