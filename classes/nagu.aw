@@ -1,9 +1,11 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/nagu.aw,v 2.1 2001/05/25 22:53:32 duke Exp $
 
 classload("periods","images", "msgboard","config");
 
 class nagu extends aw_template
 {
+	// need kuuluvad keelekonstantide alla ja on mdx seal ka defineeritud
 	var $kuud = array(1 => "Jaanuar", 2 => "Veebruar", 3 => "M&auml;rts", 4 => "Aprill", 5 => "Mai", 6 => "Juuni",7 => "Juuli", 8 => "August", 9 => "September", 10 => "Oktoober", 11 => "November", 12 => "Detsember");
 
 	function nagu()
@@ -272,7 +274,7 @@ class nagu extends aw_template
 			$arr[parent] = 0;
 			$t = new msgboard;
 			$t->submit_add($arr);
-			$this->situ_tais();
+			$this->flush_cache();
 			return true;
 		}
 		else
