@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.103 2003/05/16 09:51:09 duke Exp $
+// $Id: class_base.aw,v 2.104 2003/05/16 12:09:35 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -386,6 +386,8 @@ class class_base extends aw_template
 		// data, that gets saved
 
 		$this->load_object(array("id" => $id));
+		$this->load_obj_data(array("id" => $id));
+
 
 		$resprops = array();
 		$savedata = array();
