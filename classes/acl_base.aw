@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.78 2004/06/19 18:57:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.79 2004/07/18 18:43:07 rtoomas Exp $
 
 lc_load("definition");
 
@@ -13,18 +13,28 @@ class acl_base extends db_connector
 		// and so, we do the packing/unpacking to integer in the database. whoop-e
 		// of course, now that we only have 5 acl settings, we don't have to do this in the db no more. 
 		// anyone wanna rewrite it? ;) - terryf
+		$s = '';
 		$qstr = array();
 		if (!is_array($this->cfg["acl"]["ids"]))
 		{
 			$this->cfg["acl"]["ids"] = $GLOBALS["cfg"]["acl"]["ids"];
 		}
-
-		reset($this->cfg["acl"]["ids"]);
-		while (list($bitpos, $name) = each($this->cfg["acl"]["ids"]))
+		if(strtolower(aw_ini_get('db.driver')=='mssql'))
 		{
-			$qstr[] = " ((acl >> $bitpos) & 3) AS $name";
+			reset($this->cfg["acl"]["ids"]);
+			while (list($bitpos, $name) = each($this->cfg["acl"]["ids"]))
+			{
+				$qstr[] = " ( cast ( (acl / ".pow(2,$bitpos).") as int ) & 3) AS $name";
+			}
 		}
-
+		else
+		{
+			reset($this->cfg["acl"]["ids"]);
+			while (list($bitpos, $name) = each($this->cfg["acl"]["ids"]))
+			{
+				$qstr[] = " ((acl >> $bitpos) & 3) AS $name";
+			}
+		}
 		$s =  join(",",$qstr);
 		return $s;
 	}
