@@ -19,6 +19,15 @@
             <caption>Seadete vorm</caption>
       </property>
       <property>
+            <name>root_class_ot</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Objektit&amp;uuml;&amp;uuml;p</caption>
+      </property>
+      <property>
             <name>next_connection</name>
             <table>objects</table>
             <group>general</group>
@@ -56,6 +65,17 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>parents</name>
+            <table>objects</table>
+            <group>parents</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Kataloogid, ksut otsida</caption>
       </property>
       <property>
             <name>search</name>
@@ -100,6 +120,9 @@
             <mktbl>
                   <caption>Koosta tulemuste tabel</caption>
             </mktbl>
+            <parents>
+                  <caption>Kataloogid</caption>
+            </parents>
             <search>
                   <caption>Otsi</caption>
                   <submit_method>get</submit_method>
@@ -111,6 +134,11 @@
                   <clid>CL_CB_SEARCH_SYNONYMS</clid>
                   <caption>s&amp;uuml;non&amp;uuml;mid</caption>
             </SYN>
+            <PARENT>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>kataloog, kust otsida</caption>
+            </PARENT>
       </reltypes>
 </properties>
 

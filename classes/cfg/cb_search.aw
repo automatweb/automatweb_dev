@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.11 2004/09/14 11:03:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.12 2004/10/22 12:28:07 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -15,6 +15,9 @@
 
 @property root_class_cf type=select
 @caption Seadete vorm
+
+@property root_class_ot type=select
+@caption Objektit&uuml;&uuml;p
 
 @property next_connection type=select
 @caption Where do you want to go from here?
@@ -32,6 +35,11 @@
 
 @property sform_tbl type=table store=no no_caption=1 
 
+@groupinfo parents caption="Kataloogid"
+
+@property parents type=table no_caption=1 group=parents
+@caption Kataloogid, ksut otsida
+
 @groupinfo search caption="Otsi" submit_method=get
 
 @property search type=callback callback=callback_gen_search group=search
@@ -45,6 +53,9 @@
 
 @reltype SYN value=1 clid=CL_CB_SEARCH_SYNONYMS
 @caption s&uuml;non&uuml;mid
+
+@reltype PARENT value=2 clid=CL_MENU
+@caption kataloog, kust otsida
 
 // step 1 - choose a class
 // step 2 - choose a connection (might be optional)
@@ -84,6 +95,17 @@ class cb_search extends class_base
 				}
 				break;
 
+			case "root_class_ot":
+				if ($arr["obj_inst"]->prop("root_class"))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_OBJECT_TYPE,
+						"subclass" => $arr["obj_inst"]->prop("root_class")
+					));
+					$prop["options"] = array("" => "") + $ol->names();
+				}
+				break;
+
 			case "next_connection":
 				return PROP_IGNORE; // just for now
 				$cfgx = get_instance("cfg/cfgutils");
@@ -113,6 +135,10 @@ class cb_search extends class_base
 
 			case "sform_tbl":
 				$this->do_sform_tbl_tbl($arr);
+				break;
+
+			case "parents":
+				$this->do_parents_tbl($arr);
 				break;
 		};
 		return $retval;
@@ -250,6 +276,10 @@ class cb_search extends class_base
 			case "sform_tbl":
 				$arr["obj_inst"]->set_meta("tdata", $arr["request"]["tdata"]);
 				break;
+
+			case "parents":
+				$arr["obj_inst"]->set_meta("parents", $arr["request"]["data"]);
+				break;
 		}
 		return $retval;
 	}	
@@ -278,36 +308,30 @@ class cb_search extends class_base
 
 			if ($item["type"] == "classificator")
 			{
-				$this->mod_chooser_prop($res, $iname, $item["clid"]);
+				$this->mod_chooser_prop($res, $iname, $item["clid"], $arr["obj_inst"]);
 			}
 		};
 		return $res;
 	}
 
-	function mod_chooser_prop(&$props, $pn, $clid)
+	function mod_chooser_prop(&$props, $pn, $clid, $o)
 	{
 		// since storage can't do this yet, we gots to do sql here :(
 		$p =& $props[$pn];
 		$opts = array("" => "");
 		if ($p["table"] != "" && $p["field"] != "")
 		{
-			/*$q = "SELECT distinct($p[field]) as val FROM $p[table]";
-			$this->db_query($q);
-			while ($row = $this->db_next())
-			{
-				$opts[$row["val"]] = $row["val"];
-			}*/
 			$clsf = get_instance("classificator");
-			$opts = $clsf->get_options_for(array(
+			$pr = array(
 				"name" => $pn,
 				"clid" => $clid
-			));
+			);
+			if (is_oid($o->prop("root_class_ot")))
+			{
+				$pr["object_type"] = $o->prop("root_class_ot");
+			}
+			$opts = $clsf->get_options_for($pr);
 		}
-
-		// now make names
-		/*$ol = new object_list(array(
-			"oid" => $opts
-		));*/
 
 		$p["type"] = "select";
 		$p["options"] = array("" => "") + $opts;
@@ -448,21 +472,28 @@ class cb_search extends class_base
 
 				$this->proc_syns_in_sdata($arr["obj_inst"], $sdata);
 
+				$do_sort_by = "";
 				if ($GLOBALS["sortby"] != "")
 				{
 					$sp = $f_props[$GLOBALS["sortby"]];
-					$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
+					//$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
+					$do_sort_by = $GLOBALS["sortby"];
 				}
 				else
 				if ($this->__tdata["__defaultsort"] != "")
 				{
 					$sp = $f_props[$this->__tdata["__defaultsort"]];
-					$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ASC ";
+					//$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ASC ";
+					$do_sort_by = $this->__tdata["__defaultsort"];
 				}
 				else
 				{
-					$sdata["sort_by"] = "objects.name ASC ";
+					//$sdata["sort_by"] = "objects.name ASC ";
+					$do_sort_by = "name";
 				}
+
+				// if there are any criteria for search from folder, add them to the filter
+				$this->_add_parent_filter($arr["obj_inst"], $sdata);
 
 				$olist_cnt = new object_list($sdata);
 
@@ -1041,6 +1072,94 @@ class cb_search extends class_base
 		}
 
 		return array_unique($tmp);
+	}
+
+	function _init_parents_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => "OID",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "use",
+			"caption" => "Kasuta?",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "subs",
+			"caption" => "K.A. Alamkataloogid?",
+			"align" => "center"
+		));
+	}
+
+	function do_parents_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_parents_tbl($t);
+
+		$data = $arr["obj_inst"]->meta("parents");
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARENT")) as $c)
+		{
+			$o = $c->to();
+
+			$t->define_data(array(
+				"id" => $o->id(),
+				"name" => $o->path_str(),
+				"use" => html::checkbox(array(
+					"name" => "data[".$o->id()."][use]",
+					"value" => 1,
+					"checked" => ($data[$o->id()]["use"] == 1)
+				)),
+				"subs" => html::checkbox(array(
+					"name" => "data[".$o->id()."][subs]",
+					"value" => 1,
+					"checked" => ($data[$o->id()]["subs"] == 1)
+				)),
+			));
+		}
+		$t->set_default_sortby("name");
+		$t->sort_by();
+	}
+
+	function _add_parent_filter($o, &$sdata)
+	{
+		$pd = safe_array($o->meta("parents"));
+		$pft = array();
+		foreach($pd as $pid => $dat)
+		{
+			if (!$dat["use"])
+			{
+				continue;
+			}
+
+			$pft[$pid] = $pid;
+			if ($dat["subs"])
+			{
+				$ot = new object_tree(array(
+					"class_id" => CL_MENU,
+					"parent" => $pid,
+					"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
+				));
+				$pft = $pft + $this->make_keys($ot->ids());
+			}
+		}
+
+		if (count($pft))
+		{
+			$sdata["parent"] = $pft;
+		}
 	}
 }
 ?>
