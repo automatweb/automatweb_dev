@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.10 2002/06/28 00:17:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.11 2002/06/28 22:02:24 duke Exp $
 
 // form_actions.aw - creates and executes form actions
 
@@ -179,173 +179,19 @@ class form_actions extends form_base
 		else
 		{
 			$this->init($id, "", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
+			$dt = array("id" => $id,"aid" => $aid,"row" => $row);
 			switch($row["type"])
 			{
 				case "email":
-					$this->read_template("action_email.tpl");
-					$try = unserialize($row["data"]);
-					if (is_array($try))
-					{
-						$data = $try;
-					}
-					else
-					{
-						$data = array("email" => $data);
-					}
-					$opar = $this->get_op_list($id);
-					classload("objects");
-					$ob = new db_objects();
-					classload("languages");
-					$la = new languages;
-					$ls = $la->listall();
-					foreach($ls as $ld)
-					{
-						$this->vars(array(
-							"lang_name" => $ld["name"],
-							"lang_id" => $ld["id"],
-							"subj" => $data["subj"][$ld["id"]]
-						));
-						$lt.=$this->parse("T_LANG");
-						$lc.=$this->parse("LANG");
-					}
-					$this->vars(array(
-						"email" => $data["email"],
-						"ops" => $this->picker($data["op_id"],array(0 => "") + (array)$opar[$id]),
-						"sec" => $this->picker($data["l_section"],$ob->get_list()),
-						"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
-						"T_LANG" => $lt,
-						"LANG" => $lc
-					));
-
-					return $this->parse();
+					return $this->_change_email_action($dt);
 					break;
 
 				case "email_form":
-					$this->read_template("form_email.tpl");
-					$data = unserialize($row["data"]);
-				
-					$_ops = $this->get_op_list($id);
-
-					$ops = array("0" => "-- plain text --") + $_ops[$id];
-
-					$srcforms = $this->get_flist(array(
-						"type" => FTYPE_ENTRY,
-						"subtype" => FSUBTYPE_EMAIL_ACTION,
-					));
-					
-					$els = $this->get_form_elements(array("id" => $id));
-					$sbt_binds = array("0" => "--all--");
-
-					foreach($els as $key => $val)
-					{
-						if ($val["type"] == "button")
-						{
-							$sbt_binds[$val["id"]] = $val["name"];
-						};
-
-					};
-
-
-					#$srcforms = array("0" => "--vali--") + $srcforms;
-
-					$srcfields = array();
-
-					// now I have to figure out all the e-mail fields
-					if (is_array($srcforms))
-					{
-						$fg = get_instance("form_base");
-						foreach($srcforms as $key => $val)
-						{
-							if ($key > 0)
-							{
-								$els = $this->get_form_elements(array("id" => $key));
-							foreach($els as $fkey => $fval)
-							{
-								if ($fval["subtype"] == "email")
-								{
-									$srcfields[$key] = $fval["id"];
-									$srcnames[$fval["id"]] = $fval["name"];
-								}
-
-									
-
-							};
-							};
-
-						}
-					}
-
-					$this->vars(array(
-						"srcforms" => $this->picker($data["srcform"],$srcforms),
-						"srcfields" => $this->picker($data["srcfield"],$srcnames),
-						"outputs" => $this->picker($data["output"],$ops),
-						"subject" => $data["subject"],
-						"sbt_binds" => $this->picker($data["sbt_bind"],$sbt_binds),
-						"from" => $data["from"],
-						"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
-
-					));
-
-					return $this->parse();
+					return $this->_change_form_email_action($dt);
 					break;
 
-				case "move_filled":
-					$this->read_template("action_move_filled.tpl");
-					$selarr = unserialize($row["data"]);
-					$this->db_query("SELECT * FROM objects WHERE class_id = 13 AND objects.status != 0 AND last = $this->id");
-					$this->vars(array("LINE" => ""));
-					while ($row = $this->db_next())
-					{
-						$this->vars(array(
-							"cat_name"		=> $row["name"], 
-							"cat_id"			=> $row["oid"], 
-							"cat_comment"	=> $row["comment"], 
-							"cat_checked" => ($selarr[$row["oid"]] == 1 ? "CHECKED" : ""),
-							"action_id"		=> $id
-						));
-						$this->parse("LINE");
-					}
-					return $this->parse();
-					break;
 				case "join_list":
-					$this->read_template("action_join_list.tpl");
-					$data = unserialize($row["data"]);
-
-					$this->load($id);
-					for ($row = 0; $row < $this->arr["rows"]; $row++)
-					{
-						for ($col = 0; $col < $this->arr["cols"]; $col++)
-						{
-							$elar = $this->arr["contents"][$row][$col]->get_elements();
-							reset($elar);
-							while (list(,$el) = each($elar))
-							{
-								if ($el["type"] == "checkbox")
-								{
-									$checks[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
-								}
-								if ($el["type"] == "textbox")
-								{
-									$texts[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
-								}
-							}
-						}
-					}
-					
-					classload("lists");
-					$li = new lists;
-					$lists = $li->get_op_list();
-
-					$this->vars(array(
-						"checkbox"	=> $this->option_list($data["checkbox"],$checks),
-						"list"			=> $this->option_list($data["list"],$lists),
-						"textbox"		=> $this->option_list($data["textbox"],$texts),
-						"name_tb"		=> $this->option_list($data["name_tb"],$texts),
-						"action_id"	=> $id,
-						"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))
-					));
-					return $this->parse();
-					break;
+					return $this->_change_join_list_action($dt);
 			}
 		}
 	}
@@ -415,10 +261,173 @@ class form_actions extends form_base
 	}
 
 	////
-	// !called from do_action - delivers an email message
-	function _deliver($args = array())
+	// !Generats the form for editing email action
+	function _change_email_action($args = array())
 	{
 		extract($args);
+		$this->read_template("action_email.tpl");
+		$try = unserialize($row["data"]);
+		if (is_array($try))
+		{
+			$data = $try;
+		}
+		else
+		{
+			$data = array("email" => $data);
+		}
+
+		$opar = $this->get_op_list($id);
+		classload("objects");
+		$ob = new db_objects();
+		classload("languages");
+		$la = new languages;
+		$ls = $la->listall();
+
+		foreach($ls as $ld)
+		{
+			$this->vars(array(
+				"lang_name" => $ld["name"],
+				"lang_id" => $ld["id"],
+				"subj" => $data["subj"][$ld["id"]]
+			));
+			$lt.=$this->parse("T_LANG");
+			$lc.=$this->parse("LANG");
+		}
+
+		$this->vars(array(
+			"email" => $data["email"],
+			"ops" => $this->picker($data["op_id"],array(0 => "") + (array)$opar[$id]),
+			"sec" => $this->picker($data["l_section"],$ob->get_list()),
+			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
+			"T_LANG" => $lt,
+			"LANG" => $lc
+		));
+
+		return $this->parse();
+
 	}
+
+	////
+	// !Generates the form for editing form based email action
+	function _change_form_email_action($args = array())
+	{
+		extract($args);
+		$this->read_template("form_email.tpl");
+		$data = unserialize($row["data"]);
+				
+		$_ops = $this->get_op_list($id);
+			
+		$ops = array("0" => "-- plain text --");
+	
+		if (is_array($_ops[$id]))
+		{
+			$ops = $ops + $_ops[$id];
+		}
+
+		$srcforms = $this->get_flist(array(
+				"type" => FTYPE_ENTRY,
+				"subtype" => FSUBTYPE_EMAIL_ACTION,
+		));
+					
+		$els = $this->get_form_elements(array("id" => $id));
+		$sbt_binds = array("0" => "--all--");
+
+		foreach($els as $key => $val)
+		{
+			if ($val["type"] == "button")
+			{
+				$sbt_binds[$val["id"]] = $val["name"];
+			};
+
+		};
+
+
+		$srcfields = array();
+
+		// now I have to figure out all the e-mail fields
+		if (is_array($srcforms))
+		{
+			$fg = get_instance("form_base");
+			foreach($srcforms as $key => $val)
+			{
+				if ($key > 0)
+				{
+					$els = $this->get_form_elements(array("id" => $key));
+					foreach($els as $fkey => $fval)
+					{
+						if ($fval["subtype"] == "email")
+						{
+							$srcfields[$key] = $fval["id"];
+							$srcnames[$fval["id"]] = $fval["name"];
+						}
+
+									
+
+					};
+				};
+
+			}
+		}
+
+		$this->vars(array(
+			"srcforms" => $this->picker($data["srcform"],$srcforms),
+			"srcfields" => $this->picker($data["srcfield"],$srcnames),
+			"outputs" => $this->picker($data["output"],$ops),
+			"subject" => $data["subject"],
+			"sbt_binds" => $this->picker($data["sbt_bind"],$sbt_binds),
+			"from" => $data["from"],
+			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
+
+		));
+
+		return $this->parse();
+
+	}
+
+	////
+	// !Generates a form for subscribing user to a mailing list
+	function _change_join_list_action($args = array())
+	{
+		extract($args);
+		$this->read_template("action_join_list.tpl");
+		$data = unserialize($row["data"]);
+
+		$this->load($id);
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = $this->arr["contents"][$row][$col]->get_elements();
+				reset($elar);
+				while (list(,$el) = each($elar))
+				{
+					if ($el["type"] == "checkbox")
+					{
+						$checks[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
+					}
+					if ($el["type"] == "textbox")
+					{
+						$texts[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
+					}
+				}
+			}
+		}
+					
+		classload("lists");
+		$li = new lists;
+		$lists = $li->get_op_list();
+
+		$this->vars(array(
+			"checkbox"	=> $this->option_list($data["checkbox"],$checks),
+			"list"			=> $this->option_list($data["list"],$lists),
+			"textbox"		=> $this->option_list($data["textbox"],$texts),
+			"name_tb"		=> $this->option_list($data["name_tb"],$texts),
+			"action_id"	=> $id,
+			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))
+		));
+		return $this->parse();
+
+	}
+
 }
 ?>
