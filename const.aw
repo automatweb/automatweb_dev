@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.90 2004/08/31 08:09:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.91 2004/08/31 11:00:03 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -18,7 +18,7 @@ $PATH_INFO = preg_replace("/\?automatweb=[^&]*/","", $PATH_INFO);
 $QUERY_STRING = preg_replace("/\?automatweb=[^&]*/","", $QUERY_STRING);
 
 // apache 2 fix
-$QUERY_STRING = str_replace("index.aw", "", str_replace("orb.aw", "", $QUERY_STRING));
+//$QUERY_STRING = str_replace("index.aw", "", str_replace("orb.aw", "", $QUERY_STRING));
 
 if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
 {
