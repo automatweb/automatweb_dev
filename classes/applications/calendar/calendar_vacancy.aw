@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.1 2004/07/23 10:58:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.2 2004/10/05 07:16:51 kristo Exp $
 // calendar_vacancy.aw - Vakants 
 /*
 
@@ -14,7 +14,36 @@
 @property end type=datetime_select table=planner
 @caption Lõpeb
 
+@property info_on_object type=text store=no
+@caption Osalejad
+
 @tableinfo planner index=id master_table=objects master_index=brother_of
+
+@property task_toolbar type=toolbar no_caption=1 store=no group=participants
+@caption "Toolbar"
+
+@property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
+@caption Osalejad
+
+@property search_contact_company type=textbox store=no group=participants
+@caption Organisatsioon
+
+@property search_contact_firstname type=textbox store=no group=participants
+@caption Eesnimi
+
+@property search_contact_lastname type=textbox store=no group=participants
+@caption Perenimi
+
+@property search_contact_code type=textbox store=no group=participants
+@caption Isikukood
+
+@property search_contact_button type=submit store=no group=participants action=search_contacts
+@caption Otsi
+
+@property search_contact_results type=table store=no group=participants no_caption=1
+@caption Tulemuste tabel
+
+@groupinfo participants caption=Osalejad submit=no
 
 */
 
@@ -84,21 +113,113 @@ class calendar_vacancy extends class_base
 
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	/*
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+         case 'info_on_object':
+				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
+				{
+					$conns = $arr['obj_inst']->connections_to(array(
+						'type' => 8,//CRM_PERSON.RELTYPE_PERSON_MEETING==8
+					));
 
+					foreach($conns as $conn)
+					{
+						$obj = $conn->from();
+						//isik
+						$prop['value'].= html::href(array(
+							'url' => html::get_change_url($obj->id()),
+							'caption' => $obj->name(),
+						));
+						//isiku default firma
+						if(is_oid($obj->prop('work_contact')))
+						{
+							$company = new object($obj->prop('work_contact'));
+							$prop['value'] .= " ".html::href(array(
+								'url' => html::get_change_url($company->id()),
+								'caption' => $company->name(),
+							));
+						}
+						//isiku ametinimetused...
+						$conns2 = $obj->connections_from(array(
+							'type' => 'RELTYPE_RANK',
+						));
+						$professions = '';
+						foreach($conns2 as $conn2)
+						{
+							$professions.=', '.$conn2->prop('to.name');
+						}
+						if(strlen($professions))
+						{
+							$prop['value'].=$professions;
+						}
+						//isiku telefonid
+						$conns2 = $obj->connections_from(array(
+							'type' => 'RELTYPE_PHONE'
+						));
+						$phones = '';
+						foreach($conns2 as $conn2)
+						{
+							$phones.=', '.$conn2->prop('to.name');
+						}
+						if(strlen($phones))
+						{
+							$prop['value'].=$phones;
+						}
+						//isiku emailid
+						$conns2 = $obj->connections_from(array(
+							'type' => 'RELTYPE_EMAIL',
+						));
+						$emails = '';
+						foreach($conns2 as $conn2)
+						{
+							$to_obj = $conn2->to();
+							$emails.=', '.$to_obj->prop('mail');
+						}
+						if(strlen($emails))
+						{
+							$prop['value'].=$emails;
+						}						
+						$prop['value'].='<br>';
+					}
+				}
+         break;
+
+
+			case 'task_toolbar' :
+				$tb = &$prop['toolbar'];
+				$tb->add_button(array(
+					'name' => 'del',
+					'img' => 'delete.gif',
+					'tooltip' => 'Kustuta valitud',
+					'action' => 'submit_delete_participants_from_calendar',
+				));
+
+				$tb->add_separator();
+
+				$tb->add_button(array(
+					'name' => 'Search',
+					'img' => 'search.gif',
+					'tooltip' => 'Otsi',
+					'url' => aw_url_change_var(array(
+						'show_search' => 1,
+					)),
+				));
+
+				$tb->add_button(array(
+					'name' => 'save',
+					'img' => 'save.gif',
+					'tooltip' => 'Salvesta',
+					"action" => "save_participant_search_results"
+				));
+				$this->return_url=aw_global_get('REQUEST_URI');
+				break;
 		};
 		return $retval;
 	}
-	*/
 
 	/*
 	function set_property($arr = array())
@@ -136,6 +257,12 @@ class calendar_vacancy extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function cb_participant_selector($arr)
+	{
+		$elib = get_instance('calendar/event_property_lib');
+		return $elib->participant_selector($arr);
 	}
 }
 ?>
