@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.200 2003/06/04 14:19:54 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.201 2003/06/04 19:21:43 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -277,6 +277,16 @@ class core extends db_connector
 		}
 	}
 
+	////
+	// !deletes all brothers of $oid
+	function delete_brothers_of($oid)
+	{
+		$this->db_query("SELECT oid FROM objects WHERE brother_of = '$oid' AND status != 0");
+		while ($row = $this->db_next())
+		{
+			$this->delete_object($row["oid"], false, false);
+		}
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	// object getting functions - by id, by alias, etc..
@@ -580,7 +590,7 @@ class core extends db_connector
 	// parent(int) - millisest nodest alustame?
 	// class(int) - milline klass meid huvitab?
 	// type(int) - kui tegemist on menüüga, siis loetakse sisse ainult seda tüüpi menüüd.
-	// active(bool) - kui true, siis tagastakse ainult need objektid, mis on aktiivse
+	// status - only objects of this status are returned if set
 	// orderby(string) - millise välja järgi tulemus järjestada?
 	// full(bool) - if true, also recurses to subfolders
 	// ret(int) - ARR_NAME or ARR_ALL, default is ARR_ALL
@@ -707,12 +717,29 @@ class core extends db_connector
 
 	////
 	// !deletes alias $target from object $source
-	function delete_alias($source,$target)
+	function delete_alias($source,$target, $no_cache = false)
 	{
 		$q = "DELETE FROM aliases WHERE source = '$source' AND target = '$target'";
 		$this->db_query($q);
-		$ainst = get_instance("aliasmgr");
-		$ainst->cache_oo_aliases($source);
+
+		// we must let the class that the alias was deleted from
+		// handle the deletion
+		$ob = $this->get_object($source);
+		$cls = aw_ini_get("classes");
+		$i = get_instance($cls[$ob["class_id"]]["file"]);
+		if (method_exists($i,"on_delete_alias"))
+		{
+			$i->on_delete_alias(array(
+				"id" => $source,
+				"alias" => $target
+			));
+		}
+
+		if (!$no_cache)
+		{
+			$ainst = get_instance("aliasmgr");
+			$ainst->cache_oo_aliases($source);
+		}
 	}
 
 	////
@@ -756,6 +783,7 @@ class core extends db_connector
 	// argumendid
 	// oid(int) - objekti id, mis meid huvitab
 	// type(int or array) - meid huvitavate objektide tyybiidentifikaatorid
+	// reltype - optional - relation type
 	function get_aliases($args = array())
 	{
 		extract($args);
@@ -774,15 +802,20 @@ class core extends db_connector
 			$typestring = " AND objects.class_id IN ($tlist)";
 		};
 
+		if ($reltype)
+		{
+			$reltypestr = " aliases.reltype = '$reltype' ";
+		}
 		$q = "SELECT aliases.*,objects.*
 			FROM aliases
 			LEFT JOIN objects ON
 			(aliases.target = objects.oid)
-			WHERE source = '$oid' $typestring
+			WHERE source = '$oid' $typestring $reltstr
 			ORDER BY aliases.id";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
+			$row["id"] = $row["target"];
 			// note that the index inside the idx array is always one less than the 
 			// number in the alias. (e.g. oid of #f1# is stored at the position 0, etc)
 			if (sizeof($type) == 1)
@@ -891,8 +924,12 @@ class core extends db_connector
 		));
 
 		$this->db_query($q);
-		$aliasmgr = get_instance("aliasmgr");
-		$aliasmgr->cache_oo_aliases($id);
+
+		if (!$no_cache)
+		{
+			$aliasmgr = get_instance("aliasmgr");
+			$aliasmgr->cache_oo_aliases($id);
+		}
 
 		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $id aliase $alias", $id);
 	}
@@ -1302,12 +1339,13 @@ class core extends db_connector
 	// !tagastab mingisse kindlasse klassi kuuluvad objektid
 	// hiljem voib seda funktsiooni täiendada nii, et ta joinib kylge ka igale klassile vastava tabeli
 	// argumendid
-	// class (int) - klassi id
+	// class (int/array) - class id
 	// parent(id/array)(opt) - kui defineeritud, siis loeb ainult objekte selle parenti all
-	// active(bool) - kui true, siis tagastame ainult aktiivsed objektid
+	// status(bool) - if set, then only objects of this status are returned
 	// subclass - objects.subclass
 	// flags - objects.flags
 	// fields(string) - can be used to specify the names of fields you need
+	// orderby - if set, object list is ordered by this
 	function get_objects_by_class($args = array())
 	{
 		extract($args);
@@ -1417,8 +1455,16 @@ class core extends db_connector
 	// lisaks:
 	// addempty - if true, empty element is inserted
 	// return - if ARR_ALL, all data about objects is returned, else only name
+	// add_folders - if true, then folder names are added to objects
 	function list_objects($arr)
 	{
+		// cache
+		$c_str = "core::list_objects_cache::".serialize($arr);
+		if (is_array(($ret = aw_global_get($c_str))))
+		{
+			return $ret;
+		}
+
 		if (isset($arr["addempty"]))
 		{
 			$ret = array("" => "");
@@ -1467,6 +1513,7 @@ class core extends db_connector
 		}
 
 		$this->restore_handle();
+		aw_global_set($c_str, $ret);
 		return $ret;
 	}
 
@@ -2003,7 +2050,7 @@ class core extends db_connector
 	function mk_path($oid,$text = "",$period = 0)
 	{
 		$path = "";
-		$ch = $this->get_object_chain($oid);
+		$ch = $this->get_object_chain($oid, true);
 		reset($ch);
 		$use = true;
 		while (list(,$row) = each($ch))
@@ -2047,7 +2094,7 @@ class core extends db_connector
 		else
 		{
 			$path = "";
-			$ch = $this->get_object_chain($oid);
+			$ch = $this->get_object_chain($oid, true);
 			reset($ch);
 			$use = true;
 			while (list(,$row) = each($ch))
