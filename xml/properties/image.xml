@@ -9,7 +9,7 @@
             <caption>Pilt</caption>
       </property>
       <property>
-            <name>cur_width</name>
+            <name>dimensions</name>
             <type>text</type>
             <group>
                   <num_0>general</num_0>
@@ -17,30 +17,8 @@
             </group>
             <store>no</store>
             <table>objects</table>
-            <field>cur_width</field>
-            <caption>Laius</caption>
-      </property>
-      <property>
-            <name>cur_height</name>
-            <type>text</type>
-            <group>
-                  <num_0>general</num_0>
-                  <num_1>resize</num_1>
-            </group>
-            <store>no</store>
-            <table>objects</table>
-            <field>cur_height</field>
-            <caption>Kõrgus</caption>
-      </property>
-      <property>
-            <name>file_show</name>
-            <type>text</type>
-            <store>no</store>
-            <editonly>1</editonly>
-            <group>general</group>
-            <table>objects</table>
-            <field>file_show</field>
-            <caption>Eelvaade </caption>
+            <field>dimensions</field>
+            <caption>Mõõtmed</caption>
       </property>
       <property>
             <name>file2</name>
@@ -50,16 +28,6 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Suur pilt</caption>
-      </property>
-      <property>
-            <name>file_show2</name>
-            <type>text</type>
-            <group>img2</group>
-            <store>no</store>
-            <editonly>1</editonly>
-            <table>objects</table>
-            <field>file_show2</field>
-            <caption>Eelvaade</caption>
       </property>
       <property>
             <name>file2_del</name>
