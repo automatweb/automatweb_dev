@@ -434,9 +434,15 @@ class image extends class_base
 					$this->db_query($q);
 				}
 			}
+		}
+		if ($prop['name'] == 'ffile')
+		{
 			return PROP_IGNORE;
 		}
-		return PROP_OK;
+		else
+		{
+			return PROP_OK;
+		};
 	}
 }
 ?>
