@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.12 2004/10/08 15:57:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.13 2004/10/22 14:58:14 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -140,10 +140,6 @@ class language extends class_base
 			case "texts":
 				$this->do_texts_table($arr);
 				break;
-
-			case "lang_status":
-				$arr["obj_inst"]->set_status($prop["value"]);
-				break;
 		};
 		return $retval;
 	}
@@ -200,6 +196,10 @@ class language extends class_base
 
 			case "texts":
 				$this->save_texts_table($arr);
+				break;
+
+			case "lang_status":
+				$arr["obj_inst"]->set_status($prop["value"]);
 				break;
 		}
 		return $retval;
