@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.17 2004/06/08 19:05:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.18 2004/06/17 14:31:14 duke Exp $
 // remote_login.aw - AW remote login
 
 /*
@@ -178,7 +178,7 @@ class remote_login extends class_base
 			"silent" => true
 		));
 
-		return array($ob["meta"]["server"],$this->cookie);
+		return array($ob->prop("server"),$this->cookie);
 	}
 
 	function get_server($id)
