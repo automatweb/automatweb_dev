@@ -21,7 +21,7 @@
 		<td class="celltext"><a href='{VAR:delete}'>Kustuta</a></td>
 	</tr>
 	<tr class="aste05">
-		<td class="celltext" colspan="2">Sisu: <a href='{VAR:errors}'>Vead</a> | <a href='{VAR:added}'>Lisatud failid</a> | <a href='{VAR:removed}'>Kustutatud failid</a> | <a href='{VAR:changed}'>Muudetud failid</a> </td>
+		<td class="celltext" colspan="2">Sisu: <a href='{VAR:errors}'>Vead</a> | <a href='{VAR:added}'>Lisatud failid</a> | <a href='{VAR:removed}'>Kustutatud failid</a> | <a href='{VAR:changed}'>Muudetud failid</a></td>
 	</tr>
 	<tr class="aste05">
 		<td class="celltext" colspan="2">{VAR:content}</td>

@@ -180,6 +180,8 @@ class export extends aw_template
 		extract($arr);
 
 		$this->start_time = time();
+		$this->db_query("INSERT INTO export_log(start, rule_id) VALUES('$this->start_time','$rule_id')");
+		$this->log_entry_id = $this->db_last_insert_id();
 
 		$zip_file = $this->rep_dates($this->get_cval("export::zip_file"));
 		$aw_zip_folder = $this->get_cval("export::aw_zip_folder");
@@ -201,6 +203,7 @@ class export extends aw_template
 		// ok, this is the complicated bit. 
 		// so, how do we do this? first. forget the time limit, this is gonna take a while.
 		set_time_limit(0);
+		ignore_user_abort(true);
 
 		echo "exporting site to folder $this->folder ... <br><br>\n\n";
 		flush();
@@ -260,12 +263,13 @@ class export extends aw_template
 			$allmenus = array();
 			foreach($this->loaded_rule["meta"]["menus"] as $mnid)
 			{
-				$allmenus += $o->get_list(false,false,$mnid);
+				// since rules do not recurse on submenus neither should we here.
+//				$allmenus += $o->get_list(false,false,$mnid);
 				$allmenus += array($mnid => $mnid);
 			}
 
 			// for each menu , get a list of files for that menu from the database
-			$ara = new aw_array($allmenus);
+			$ara = new aw_array(array_keys($allmenus));
 			$this->db_query("SELECT id,filename,section FROM export_filelist WHERE section IN(".$ara->to_sql().") AND lang_id = ".aw_global_get("lang_id"));
 			$files = array();
 			while ($row = $this->db_next())
@@ -276,12 +280,12 @@ class export extends aw_template
 			// now go over the list and remove all files that were changed or added by this export
 			foreach($this->added_files as $fn)
 			{
-				$fn = basename($fn);
+				$fn = basename($fn['name']);
 				unset($files[$fn]);
 			}
 			foreach($this->changed_files as $fn)
 			{
-				$fn = basename($fn);
+				$fn = basename($fn['name']);
 				unset($files[$fn]);
 			}
 			// and we got the list of files to delete!
@@ -369,13 +373,13 @@ class export extends aw_template
 			fclose($_fp);
 			if (($this->rule_id && $rid == $this->rule_id) || !$this->rule_id)
 			{
-				echo "<b>Found stop flag as ".aw_ini_get("server.tmpdir")."/aw.export.stop".", shutting down.</b><br>\n";
+				echo "<b>Found stop flag as ".$_stfn.", shutting down.</b><br>\n";
 				$this->err_log[] = array(
 					"tm" => time(),
-					"msg" => "Found stop flag as ".aw_ini_get("server.tmpdir")."/aw.export.stop".", shutting down."
+					"msg" => "Found stop flag as ".$_stfn.", shutting down."
 				);
 				$this->write_log();
-				unlink(aw_ini_get("server.tmpdir")."/aw.export.stop");
+				unlink($_stfn);
 				die();
 			}
 		}
@@ -570,13 +574,20 @@ class export extends aw_template
 	{
 //		echo "save_file(fc,$name) <br>";
 //		echo "saving file as $name <br>\n";
+		preg_match("/__global = (.*)/",$fc,$mt);
 		if (file_exists($name))
 		{
-			$this->changed_files[] = $name;
+			$this->changed_files[] = array(
+				'name' => $name,
+				'global' => $mt[1]
+			);
 		}
 		else
 		{
-			$this->added_files[] = $name;
+			$this->added_files[] = array(
+				'name' => $name,
+				'global' => $mt[1]
+			);
 		}
 
 		$fp = fopen($name,"w");
@@ -652,6 +663,7 @@ class export extends aw_template
 			echo "<B><font color=red><br>VIGA! EI LEIDNUD ext for type $ct <br></font></b>";
 			$this->err_log[] = array(
 				"tm" => time(),
+				"url" => $link,
 				"msg" => "VIGA! EI LEIDNUD ext for type $ct"
 			);
 		}
@@ -794,80 +806,6 @@ class export extends aw_template
 //			echo "rewrite_link($_link) returning $link <br>";
 			return $link;
 		}
-		
-//		echo "true <br>";
-		// ok here separate the baseurl bit and the other bits
-/*		$link = str_replace($baseurl, "", $link);
-	
-		// now separate it by /'s and find the first one that matches a file
-		$pathbits = array();
-		
-		$pt = strtok($link, "?&/");
-		while ($pt !== false)
-		{
-//			echo "pt = $pt <br>";
-			if ($pt != "")
-			{
-				if (!$found)
-				{
-					if (strpos($pt, "/") !== false)
-					{
-						$cname .= $pt;
-					}
-					else
-					{
-						$cname .= "/".$pt;
-					}
-					$trypath = $basedir.$cname;
-//					echo "part  = $pt ,cname = $cname,  $trypath = $trypath <br>";
-					if (is_file($trypath))
-					{
-//						echo "found file! $trypath <br>";
-						$found = true;
-					}
-				}
-				else
-				{
-					$pathbits[] = $pt;
-				}
-			}
-			$pt = strtok("?&/");
-		}
-		
-		$jo = join("&", $pathbits);
-		// now we got the path part of the link
-		if ($jo != "")
-		{
-			$end = "?".$jo;
-		}
-		$link = $baseurl.$cname.$end;
-
-		// now that we got a nice link, check if it is a class=links&action=show, cause those do redirects and
-		// php's fopen can't handle that
-		if (strpos($link, "class=links") !== false && strpos($link, "action=show") !== false)
-		{
-			preg_match("/id=(\d*)/", $link,$mt);
-
-			$el = get_instance("extlinks");
-			$ld = $el->get_link($mt[1]);
-			$link = $ld["url"];
-			if (substr($link,0,4) == "http" && strpos($link,$baseurl) === false)
-			{
-				// external link, should not be touched I guess
-//				echo "rewrite_link($_link) returning $link <br>";
-				return $link;
-			}
-
-			if (strpos($link,$baseurl) === false && $link[0] == "/")
-			{
-				$link = $baseurl.$link;
-			}
-			$link = $this->rewrite_link($link);
-//			echo "rewrote extlink $_link to $link  <br>";
-		}
-
-//		echo "rewrite_link($_link) returning $link <br>";
-		return $link;*/
 	}
 
 	function load_rule($id)
@@ -1037,6 +975,7 @@ class export extends aw_template
 		{
 			$qu = $url;
 			$qu = preg_replace("/tbl_sk=([^&$]*)/", "tbl_sk=tbl_sk", $qu);
+			$qu = preg_replace("/old_sk=([^&$]*)/", "old_sk=old_sk", $qu);
 			$this->quote(&$qu);
 			preg_match("/section=([^&=?]*)/",$url,$mt);
 			$secid = $mt[1];
@@ -1103,7 +1042,8 @@ class export extends aw_template
 					$_res = str_replace(" ", "_", str_replace("/","_",$mn));
 					$_res = str_replace("&nbsp;", "_", $_res);
 					$res = $_res;
-
+					
+					$mcnt = 0;
 					// now check if any files with that name exist in the database
 					$row = $this->db_fetch_row("SELECT * FROM export_url2filename WHERE sec_name = '$res'");
 					if (is_array($row))
@@ -1129,6 +1069,11 @@ class export extends aw_template
 						// no files by that name exist, insert into the db
 						$this->db_query("INSERT INTO export_url2filename(url, filename, sec_name, count)
 							VALUES('$qu','$res','$_res','0')");
+					}
+					while ($this->fta_used[$res])
+					{
+						$mcnt++;
+						$res = $_res.",".$mcnt;
 					}
 					$this->fta_used[$res] = true;
 					$this->hash2url[$lang_id][$url] = $res;
@@ -1690,12 +1635,12 @@ class export extends aw_template
 				export_log.rule_id AS rule_id
 			FROM export_log 
 				LEFT JOIN objects ON objects.oid = export_log.rule_id 
-			ORDER BY finish DESC");
+			ORDER BY start DESC");
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
 				"start" => $this->time2date($row["start"], 2),
-				"finish" => $this->time2date($row["finish"], 2),
+				"finish" => ($row["finish"] ? $this->time2date($row["finish"], 2) : ""),
 				"id" => $row["id"],
 				"rule_url" => $this->mk_my_orb("change", array("id" => $row["rule_id"])),
 				"rule_name" => $row["rule_name"],
@@ -1757,12 +1702,14 @@ class export extends aw_template
 		if ($type == "added")
 		{
 			$lstr .= "<b>LISATUD FAILID:</b><br><br>";
+			$lstr .= "<table border=1><tr><td class='celltext'>FAIL</td><td class='celltext'>GLOBAL</td></tr>";
 			$log = new aw_array(aw_unserialize($row["added_files"]));
 			foreach($log->get() as $entry)
 			{
-				$lstr.="FAIL: $entry <br>\n";
+				$entry['global'] = "&nbsp;".round($entry['global'],2)."&nbsp;";
+				$lstr.="<tr><td class='celltext'>$entry[name]</td><td class='celltext'>$entry[global]</td></tr>\n";
 			}
-			$lstr .=" <Br><br>";
+			$lstr .=" </table><Br><br>";
 		}
 		if ($type == "removed")
 		{
@@ -1770,18 +1717,21 @@ class export extends aw_template
 			$log = new aw_array(aw_unserialize($row["removed_files"]));
 			foreach($log->get() as $entry)
 			{
-				$lstr .= "FAIL: $entry <br>\n";
+				$lstr .= "FAIL: $entry<br>\n";
 			}
 			$lstr .=" <Br><br>";
 		}
 		if ($type == "changed")
 		{
 			$lstr .= "<b>MUUDETUD FAILID:</b><br><br>";
+			$lstr .= "<table border=1><tr><td class='celltext'>FAIL</td><td class='celltext'>GLOBAL</td></tr>";
 			$log = new aw_array(aw_unserialize($row["changed_files"]));
 			foreach($log->get() as $entry)
 			{
-				$lstr .= "FAIL: $entry <br>\n";
+				$entry['global'] = "&nbsp;".round($entry['global'],2)."&nbsp;";
+				$lstr .= "<tr><td class='celltext'>$entry[name]</td><td class='celltext'>$entry[global]</td></tr>\n";
 			}
+			$lstr .= "</table>";
 		}
 
 		$this->vars(array(
@@ -1796,6 +1746,7 @@ class export extends aw_template
 			"added" => $this->mk_my_orb("view_log_entry", array("id" => $row["id"], "type" => "added")),
 			"removed" => $this->mk_my_orb("view_log_entry", array("id" => $row["id"], "type" => "removed")),
 			"changed" => $this->mk_my_orb("view_log_entry", array("id" => $row["id"], "type" => "changed")),
+			"globals" => $this->mk_my_orb("view_log_entry", array("id" => $row["id"], "type" => "globals")),
 		));
 		return $this->parse();
 	}
@@ -1871,8 +1822,18 @@ class export extends aw_template
 		$this->quote(&$lg_r);
 		$lg_c = aw_serialize($this->changed_files,SERIALIZE_XML);
 		$this->quote(&$lg_c);
-		$this->db_query("INSERT INTO export_log(start, finish, rule_id, log,added_files,removed_files,changed_files) 
-			VALUES('$this->start_time','".time()."','$this->rule_id','$lg','$lg_a','$lg_r','$lg_c')");
+
+		$lg_g = aw_serialize($this->log_globals,SERIALIZE_XML);
+		$this->quote(&$lg_g);
+		if ($this->log_entry_id)
+		{
+			$this->db_query("UPDATE export_log SET finish = '".time()."', log = '$lg',added_files = '$lg_a',removed_files = '$lg_r',changed_files = '$lg_c',globals = '$lg_g' WHERE id = '$this->log_entry_id'"); 
+		}
+		else
+		{
+			$this->db_query("INSERT INTO export_log(start, finish, rule_id, log,added_files,removed_files,changed_files,globals) 
+				VALUES('$this->start_time','".time()."','$this->rule_id','$lg','$lg_a','$lg_r','$lg_c','$lg_g')");
+		}
 	}
 }
 ?>
