@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.2 2004/11/17 16:49:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.3 2004/11/25 11:43:42 kristo Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -526,6 +526,10 @@ class event_search extends class_base
 			if (sizeof($search["parent"]) != 0)
 			{
 				$ol = new object_list($search);
+				/*$bl = new object_list(array(
+					"brother_of" => $ol->ids(),
+				));
+				*/
 				$this->read_template("search_results.tpl");
 				$tabledef = $ob->meta("result_table");
 				uasort($tabledef,array($this,"__sort_props_by_ord"));
@@ -545,12 +549,14 @@ class event_search extends class_base
 				};
 				// või siis .. näidata ainult eventeid, mis on mõlema valitud parenti all?
 				//arr($ol);
+				$origs = array();
 				foreach($ol->arr() as $res)
 				{
 					$pr = new object($res->parent());
 					// see on project
 					// aga mitte orig_name vaid .. HAHA. bljaad raisk
 					$orig_id = $res->brother_of();
+					$origs[] = $orig_id;
 					//print "oid = " . $res->id() . "<br>";
 					$mpr = $pr->parent();
 					//print "parent = " . $pr->name() . "/" . $pr->id() . "<br>";
@@ -578,19 +584,38 @@ class event_search extends class_base
 
 					if (!$edata[$orig_id])
 					{
-					   $edata[$orig_id] = array(
-						   "event_id" => $res->id(),
-						   "event" => $res->name(),
-						   "parent1" => $parent1,
-						   "parent2" => $parent2,
-						   "place" => $pr->name(),
-						   "parent" => $mo->name(),
-						   "date" => date("d-m-Y",$res->prop("start1")),
-					   );
+					   	$edata[$orig_id] = array(
+							"event_id" => $res->id(),
+							"event" => $res->name(),
+							"parent1" => $parent1,
+							"parent2" => $parent2,
+							"place" => $pr->name(),
+							"parent" => $mo->name(),
+							"project_selector" => "n/a",
+							"date" => date("d-m-Y",$res->prop("start1")),
+						);
 						$edata[$orig_id] = array_merge($edata[$orig_id],$res->properties());
 					};
 					$orig = $res->get_original();
 					$ecount[$orig->id()]++;
+				};
+			};
+
+			$blist = new object_list(array(
+				"brother_of" => $origs,
+			));
+			$pr1 = $formconfig["project1"]["rootnode"];
+			foreach($blist->arr() as $b_o)
+			{
+				$p2 = new object($b_o->parent());
+				//$id = $b_o->id();
+				if ($p2->parent() == $pr1)
+				{
+					$orig = $b_o->brother_of();
+					if ($edata[$orig])
+					{
+						$edata[$orig]["project_selector"] = $p2->name();
+					};
 				};
 			};
 
