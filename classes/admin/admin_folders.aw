@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.20 2003/12/15 13:15:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.21 2003/12/16 13:32:13 duke Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -102,7 +102,7 @@ class admin_folders extends aw_template
 			"has_root" => empty($this->use_parent) ? true : false,
 			"tree_id" => "ad_folders",
 			//"persist_state" => true,
-			"get_branch_func" => $this->mk_my_orb("gen_folders",array("parent" => "0"),"workbench"),
+			"get_branch_func" => $this->mk_my_orb("gen_folders",array("period" => $this->period, "parent" => "0"),"workbench"),
 		));
 
 		$awt->start("menu-list");
@@ -322,6 +322,10 @@ class admin_folders extends aw_template
 			return false;
 		};
 		*/
+		if ($this->period > 0 && $arr["periodic"] != 1)
+		{
+			return false;
+		};
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
 
