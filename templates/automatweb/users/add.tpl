@@ -1,4 +1,20 @@
-<form method="POST" ACTION='reforb.{VAR:ext}'>
+<script language="javascript">
+function gp()
+{
+	pwd = new String("");
+	for (i = 0; i < 8; i++)
+	{
+		rv = Math.random()*(123-97);
+		rn = parseInt(rv);
+		rt = rn+97;
+		pwd = pwd + String.fromCharCode(rt);
+	}
+	document.ua.pass.value = pwd;
+	document.ua.pass2.value = pwd;
+	document.ua.genpwd.value = pwd;
+}
+</script>
+<form method="POST" ACTION='reforb.{VAR:ext}' name='ua'>
 {VAR:error}
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
@@ -15,11 +31,15 @@
 </tr>
 <tr>
 <td class="fcaption">Parool:</td>
-<td class="fform"><input type="password" name="pass"></td>
+<td class="fform"><input type="password" name="pass"> (<a href='#' onClick='gp();'>Genereeri</a>)</td>
 </tr>
 <tr>
 <td class="fcaption">Parool veelkord:</td>
 <td class="fform"><input type="password" name="pass2"></td>
+</tr>
+<tr>
+<td class="fcaption">Genereeritud parool:</td>
+<td class="fform"><input type="text" name="genpwd"></td>
 </tr>
 <tr>
 <td class="fcaption">Saada tervitusmeil:</td>
