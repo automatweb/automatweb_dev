@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.2 2001/05/24 16:02:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.3 2001/05/24 16:58:05 cvs Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending mail. MIME compatible
 
@@ -13,7 +13,7 @@ define('HTML','text/html');
 define('CHARSET','iso-8859-4');
 define('INLINE','inline');
 define('ATTACH','attachment');
-define('CRLF',"\r\n");
+define('CRLF',"\n");
 define('BASE64','base64');
 
 class aw_mail {
@@ -122,18 +122,30 @@ class aw_mail {
 			$contenttype .= ";\r\n\tcharset=".CHARSET ;
 		};
 
-		$msg = sprintf("Content-Type: %sContent-Transfer-Encoding: %s%s%s%s",
-					$contenttype.CRLF,
-					$encoding.CRLF,
-					(($description) ? "Content-Description: $description".CRLF:""),
-					(($disp) ? "Content-Disposition: $disp".CRLF:""),
-					CRLF.$emsg.CRLF);
 		if ($args["body"])
 		{
-			$this->mimeparts[0] = $msg;
+			if ($description)
+			{
+				$this->headers["Content-Description"] = $description;
+			};
+
+			if ($disp)
+			{
+				$this->headers["Content-Disposition"] = $disp;	
+			};		
+
+			//$this->headers["Content-Type"] = $contenttype;
+			$this->headers["Content-Transfer-Encoding"] = $encoding;
+			$this->mimeparts[0] = $emsg;
 		}
 		else
-		{
+		{	
+			$msg = sprintf("Content-Type: %sContent-Transfer-Encoding: %s%s%s%s",
+						$contenttype.CRLF,
+						$encoding.CRLF,
+						(($description) ? "Content-Description: $description".CRLF:""),
+						(($disp) ? "Content-Disposition: $disp".CRLF:""),
+						CRLF.$emsg.CRLF);
 			$this->mimeparts[] = $msg;
 		};
 
@@ -197,10 +209,14 @@ class aw_mail {
 		// we have more than one attach
 		if (is_array($this->mimeparts) && ($nparts > 1))
 		{
-			$c_ver = "MIME-Version: 1.0".CRLF;
-			$c_type = 'Content-Type: multipart/mixed;'.CRLF."\tboundary=\"$boundary\"".CRLF;
-			$c_enc = "Content-Transfer-Encoding: 8bit".CRLF;
-			$c_desc = $c_desc?"Content-Description: $c_desc".CRLF:"";
+			//$c_ver = "MIME-Version: 1.0".CRLF;
+			$this->headers["MIME-Version"] = "1.0";
+			$this->headers["Content-Type"] = "multipart/mixed;\n\tboundary=\"$boundary\"";
+			$this->headers["Content-Transfer-Encoding"] = "8bit";
+			if ($c_desc)
+			{
+				$this->headers["Content-Description"] = $c_desc;
+			};
 			$warning = CRLF.WARNING.CRLF.CRLF ;
 			
 			// Since we are here, it means we do have attachments => body must become
@@ -224,7 +240,7 @@ class aw_mail {
 			};
 
 			$msg .= "--".$boundary."--".CRLF;
-			$msg = $c_ver.$c_type.$c_enc.$c_desc.$warning.$msg;
+			$msg = $warning.$msg;
 		}
 		else
 		{
@@ -239,14 +255,26 @@ class aw_mail {
 	function gen_mail()
 	{
 		$email = "";
-		foreach($this->headers as $name => $value)
-		{
-			$email .= sprintf("%s: %s\n",$name,$value);
-		};
+		$headers = "";
 
 		$email .= $this->build_message();
-		$headers = join("\n",$this->headers);
-		mail($this->headers["To"],$this->headers["Subject],$email,$headers);
+		$to = $this->headers["To"];
+		$subject = $this->headers["Subject"];
+		//print "<pre>";
+		//print_r($this->headers);
+		//print "----";
+		//print "<br>";
+		//print_r($email);
+		//print "</pre>";
+		//exit;
+		unset($this->headers["To"]);
+		unset($this->headers["Subject"]);
+		foreach($this->headers as $name => $value)
+		{
+			$headers .= sprintf("%s: %s\n",$name,$value);
+		}
+		mail($to,$subject,$email,$headers);
+		
 		//$f = popen("/usr/sbin/sendmail -f " . $this->from,"w");
 		//fwrite($f,$email);
 		//pclose($f);
