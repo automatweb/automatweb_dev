@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.56 2004/03/16 11:29:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.57 2004/04/01 12:56:36 duke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -449,16 +449,18 @@ class aw_template extends core
 	// !Retrieves a list of subtemplates matching a regexp
 	// ex: $this->get_subtemplates_regex("plugins\.(\w*)" returns 
 	// things like plugins.add_comment, plugins.add_link, etc
+	// 
+	// don't forget to add braces () to the regex or you won't get any results
 	function get_subtemplates_regex($regex)
 	{
 		$tpls = array_keys($this->v2_name_map);
 		$res = array();
 		foreach($tpls as $key)
 		{
-		    if (preg_match("/^$regex/",$key,$matches))
-		    {
-			$res[] = $matches[1];
-		    };
+			if (preg_match("/^$regex/",$key,$matches))
+			{
+				$res[] = $matches[1];
+			};
 		};
 		return array_unique($res);
 	}
