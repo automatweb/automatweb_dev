@@ -70,16 +70,6 @@
             <caption>Näita saidi raamis</caption>
       </property>
       <property>
-            <name>view</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <editonly>1</editonly>
-            <caption>Näita faili</caption>
-      </property>
-      <property>
             <name>j_time</name>
             <table>objects</table>
             <group>dates</group>

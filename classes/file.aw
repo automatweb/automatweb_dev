@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.72 2004/04/27 13:22:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.73 2004/05/06 11:16:42 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -49,9 +49,6 @@
 	@property show_framed type=checkbox ch_value=1 group=settings
 	@caption Näita saidi raamis
 
-	@property view type=text editonly=1
-	@caption Näita faili
-
 	@property j_time type=date_select group=dates
 	@caption Jõustumise kuupäev
 
@@ -73,12 +70,14 @@ class file extends class_base
 	// !Konstruktor
 	function file()
 	{
+		obj_set_opt("no_cache", 1);
 		$this->init(array(
 			"clid" => CL_FILE,
 			"tpldir" => "file",
 		));
 		lc_load("definition");
 		$this->lc_load("file","lc_file");
+
 	}
 
 	function get_property($arr)
@@ -92,14 +91,41 @@ class file extends class_base
 				break;
 			case "filename":
 				classload("icons");
-				$name = $arr["obj_inst"]->prop("name");
-				if (!empty($name))
+
+				$fname = basename($arr["obj_inst"]->prop("file"));
+				$file = $this->cfg["site_basedir"]."/files/".$fname[0]."/".$fname;
+				$size = @filesize($file);
+				if ($size > 1024)
 				{
-					$data["value"] = html::img(array(
+					$filesize = number_format($size / 1024, 2)."kb";
+				}
+				else
+				if ($size > (1024*1024))
+				{
+					$filesize = number_format($size / (1024*1024), 2)."mb";
+				}
+				else
+				{
+					$filesize = $size." b";
+				}
+
+				$name = $arr["obj_inst"]->prop("name");
+				if (empty($name))
+				{
+					$name = $arr["obj_inst"]->prop("file");
+				}
+
+				$data["value"] = html::href(array(
+					"url" => $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name()),
+					"caption" => html::img(array(
 						"url" => icons::get_icon_url(CL_FILE,$name),
-					))." ".$name;
-				};
+						"border" => "0"
+						))." ".$name.", ".$filesize,
+					"target" => "_blank",
+				));
 				break;
+
+
 			case "view":
 				$fname = basename($arr["obj_inst"]->prop("file"));
 				if (empty($fname))
