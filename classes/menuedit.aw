@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.206 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.207 2003/01/21 12:33:48 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -3730,9 +3730,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				));
 				$values = array();
 				$err = false;
-				foreach($meth["required"] as $key => $val)
+				$mv = new aw_array($meth["values"]);
+				$mr = new aw_array($meth["required"]);
+				foreach($mr->get() as $key => $val)
 				{
-					if (in_array($key,array_keys($meth["values"])))
+					if (in_array($key,array_keys($mv->get())))
 					{
 						$values[$key] = $meth["values"][$key];
 					}
@@ -3742,9 +3744,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					};
 				};
 
-				foreach($meth["optional"] as $key => $val)
+				$mo = new aw_array($meth["optional"]);
+				foreach($mo->get() as $key => $val)
 				{
-					if (in_array($key,array_keys($meth["values"])))
+					if (in_array($key,array_keys($mv->get())))
 					{
 						$values[$key] = $meth["values"][$key];
 					}
