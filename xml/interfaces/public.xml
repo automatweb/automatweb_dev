@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<interface>
+	<class id="document" name="Dokumendid"/>
+	<class id="auth" name="Autentimine"/>
+	<class id="users" name="Kasutajad"/>
+</interface>
