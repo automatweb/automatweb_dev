@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.74 2004/08/31 12:24:54 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.75 2004/08/31 15:15:22 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -3879,7 +3879,11 @@ class crm_company extends class_base
 				{
 					$offers = new object_list($params);
 				}
-			}	
+			}
+			if(!$arr["request"]["org_id"] && !$arr["request"]["category"])
+			{
+				$offers = new object_list($params);
+			}
 		}
 		
 		if(is_object($offers))
