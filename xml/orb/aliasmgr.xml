@@ -1,9 +1,10 @@
 <?xml version='1.0'?>
 <orb>
+
 	<class name="aliasmgr">
 	
 		<action name="list_aliases">
-			<function name="list_aliases">
+			<function name="new_list_aliases">
 				<arguments>
 					<required name="id" type="int"/>
 					<optional name="table"/>
@@ -20,27 +21,34 @@
 			</function>
 		</action>
 
-		<action name="search" all_args="1">
+		<action name="search">
 			<function name="search">
-				<arguments/>
+				<arguments>
+					<required name="docid" type="int"/>
+					<optional name="s_name"/>
+					<optional name="s_type"/>
+					<optional name="s_comment"/>
+				</arguments>
 			</function>
 		</action>
 		
-		<action name="search_aliases" all_args="1">
-			<function name="search">
-				<arguments/>
+		<action name="delete_alias">
+			<function name="del_alias">
+				<arguments>
+					<required name="id"/>
+					<required name="oid"/>
+				</arguments>
 			</function>
 		</action>
-		
+
 		<action name="addalias">
-			<function name="orb_addalias">
+			<function name="addalias">
 				<arguments>
 					<required name="id"/>
 					<required name="alias"/>
 				</arguments>
 			</function>
 		</action>
-
 
 	</class>
 </orb>
