@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.5 2004/05/06 14:24:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.6 2004/05/12 13:47:00 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -106,7 +106,10 @@ class folder_list extends class_base
 			$sby = $ob->prop("sort_by");
 		}
 
-		$this->read_site_template($tpl);
+		if ($this->read_site_template($tpl, true) === false)
+		{
+			$this->read_template($tpl);
+		}
 
 		$ol = new object_list(array(
 			"parent" => $ob->prop("rootmenu"),
@@ -120,6 +123,30 @@ class folder_list extends class_base
 		$fls = "";
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
+			if ($this->is_template("SUBFOLDER"))
+			{
+				$sf = "";
+				$sol = new object_list(array(
+					"parent" => $o->id(),
+					"class_id" => CL_MENU,
+					"sort_by" => $sby
+				));
+				for ($so = $sol->begin(); !$sol->end(); $so = $sol->next())
+				{
+					$this->vars(array(
+						"name" => $so->name(),
+						"link" => $ssh->make_menu_link($so),
+						"selected" => selected($so->id() == aw_global_get("section")),
+						"comment" => nl2br($so->comment())
+					));
+					$sf .= $this->parse("SUBFOLDER");
+				}
+
+				$this->vars(array(
+					"SUBFOLDER" => $sf
+				));
+			}
+
 			$this->vars(array(
 				"name" => $o->name(),
 				"link" => $ssh->make_menu_link($o),
