@@ -308,6 +308,7 @@ function createRange(sel)
 	border: 1px solid gray;
 	margin: 1px;
 	padding: 1px;
+	background: #fff;
 }
 </style>
 
