@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.81 2003/02/13 14:43:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.82 2003/02/25 11:04:30 axel Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -220,6 +220,14 @@ if (!defined("DEFS"))
 	function disabled($arg)
 	{
 		return ($arg) ? "DISABLED" : "";
+	}
+
+	function arr($arr,$die=false)
+	{
+		echo '<pre>';
+		print_r($arr);
+		echo '</pre>';
+		if ($die) die('<hr>');
 	}
 
 	////
