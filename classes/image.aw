@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.124 2005/01/11 15:17:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.125 2005/01/19 21:27:22 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -8,8 +8,8 @@
 	
 	@property subclass type=hidden
 	
-	@property ord table=objects field=jrk type=text size=5
-	@caption J&auml;rjekord
+	/@property ord table=objects field=jrk type=text size=5 
+	/@caption J&auml;rjekord
 
 	@property file type=fileupload table=images form=+emb
 	@caption Pilt
@@ -38,15 +38,16 @@
 	@property alt type=textbox table=objects field=meta method=serialize
 	@caption Alt
 
-	@property link type=textbox table=images field=link
+	@property link type=textbox table=images field=link group=settings
 	@caption Link
 
-	@property newwindow type=checkbox ch_value=1 table=images field=newwindow
+	@property newwindow type=checkbox ch_value=1 table=images field=newwindowa group=settings
 	@caption Uues aknas
 
-	@property no_print type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@property no_print type=checkbox ch_value=1 table=objects field=meta method=serialize group=settings
 	@caption &Auml;ra n&auml;ita print-vaates
 
+	@groupinfo settings caption="Seaded"
 	@groupinfo img2 caption="Suur pilt"
 	@groupinfo resize caption="Muuda suurust"
 	@groupinfo resize_big caption="Muuda suure pildi suurust"
@@ -72,7 +73,7 @@
 
 	@property do_resize type=submit field=meta method=serialize group=resize value=Muuda store=no
 
-	@property ord type=textbox size=3 table=objects field=jrk
+	@property ord type=textbox size=3 table=objects field=jrk group=settings
 	@caption J&auml;rjekord
 
 	@property resize_warn type=text store=no
@@ -732,6 +733,7 @@ class image extends class_base
 		{
 			case "file":
 				$set = false;
+				// see on siis, kui tuleb vormist
 				if (is_uploaded_file($_FILES["file"]["tmp_name"]))
 				{
 					$_fi = get_instance("file");
@@ -753,7 +755,8 @@ class image extends class_base
 					$_fi = get_instance("file");
 					$fl = $_fi->_put_fs(array(
 						"type" => !empty($prop["value"]["type"]) ? $prop["value"]["type"] : "image/jpg",
-						"content" => base64_decode($prop["value"]["contents"]),
+						// this I think has something to do with copy&paste of objects
+						"content" => $prop["value"]["contents"],
 					));
 					if ($arr["obj_inst"]->name() == "")
 					{
@@ -1215,6 +1218,12 @@ class image extends class_base
 		$size = @getimagesize($o->prop("file2"));
 		$bi_show_link = $that->mk_my_orb("show_big", array("id" => $id), "image");
 		return  "window.open(\"$bi_show_link\",\"popup\",\"width=".($size[0]).",height=".($size[1])."\");";
+	}
+
+	function mime_type_for_image($arr)
+	{
+
+
 	}
 }
 ?>
