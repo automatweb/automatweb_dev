@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.201 2004/01/28 11:31:30 duke Exp $
+// $Id: class_base.aw,v 2.202 2004/01/29 10:46:11 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -184,7 +184,6 @@ class class_base extends aw_template
 				));
 			};
 
-			$this->toolbar_type = "1" == $this->obj_inst->meta("use_menubar") ? "menubar" : "tabs";
 			$this->parent = "";
 
 			$this->use_mode = "edit";
@@ -259,10 +258,7 @@ class class_base extends aw_template
 			}
 			elseif (isset($val["parent"]) && $val["parent"] != $this->activegroup)
 			{
-				if ($this->toolbar_type != 'menubar')
-				{
-					continue;
-				}
+				continue;
 			}
 			elseif (empty($val["parent"]) && isset($this->classinfo["hide_tabs"]))
 			{
@@ -875,15 +871,7 @@ class class_base extends aw_template
 			$this->mk_path($parent,$title,aw_global_get("period"));
 		};
 
-		if (($this->toolbar_type == 'menubar') || (isset($this->classinfo['toolbar_type']) && ($this->classinfo['toolbar_type']['text'] == 'menubar')))
-		{
-			$this->toolbar_type = 'menubar';
-			$this->tp = get_instance("vcl/menubar");
-		}
-		else
-		{
-			$this->tp = get_instance("vcl/tabpanel");
-		}
+		$this->tp = get_instance("vcl/tabpanel");
 
 
 		// I need a way to let the client (the class using class_base to
@@ -924,10 +912,7 @@ class class_base extends aw_template
 			}
 			elseif (isset($val["parent"]) && $val["parent"] != $this->activegroup)
 			{
-				if ($this->toolbar_type != 'menubar')
-				{
-					continue;
-				}
+				continue;
 			}
 			elseif (empty($val["parent"]) && isset($this->classinfo["hide_tabs"]))
 			{
@@ -2108,7 +2093,6 @@ class class_base extends aw_template
 
 		$this->id = $args["id"];
 		$obj = $this->get_object($this->id);
-		$this->toolbar_type = ((isset($obj['meta']['use_menubar']) && ($obj['meta']['use_menubar'] == '1')) ? 'menubar' : 'tabs');
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
@@ -2180,7 +2164,6 @@ class class_base extends aw_template
 		$this->request = $args;
 
 		$obj = $this->get_object($args["id"]);
-		$this->toolbar_type = ((isset($obj['meta']['use_menubar']) && ($obj['meta']['use_menubar'] == '1')) ? 'menubar' : 'tabs');
 
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
