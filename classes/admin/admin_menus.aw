@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.74 2004/07/01 13:12:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.75 2004/07/01 13:14:49 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -403,7 +403,10 @@ class admin_menus extends aw_template
 			$ps = $o->properties();
 			foreach($ps as $pn => $pv)
 			{
-				$o->set_prop($pn, $db[$pn]);
+				if ($pn != "class_id")
+				{
+					$o->set_prop($pn, $db[$pn]);
+				}
 			}
 			$id = $o->save();
 
