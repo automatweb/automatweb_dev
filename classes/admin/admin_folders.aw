@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.24 2004/01/13 16:24:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.25 2004/02/02 19:10:59 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -91,11 +91,7 @@ class admin_folders extends aw_template
 
 		$this->period = $period;
 
-		// nuhib ACL-i välja ja cacheb tulemuse
 		global $awt;
-		$awt->start("acl-cache");
-		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_MENU);
-		$awt->stop("acl-cache");
 
 		$this->tree = get_instance("vcl/treeview");
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.20 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.21 2004/02/02 19:10:59 kristo Exp $
 load_vcl("table");
 
 session_register("group_folders");
@@ -33,7 +33,6 @@ class groups extends users_user
 		$this->grpcache = array();
 
 		$this->listgroups("parent","asc",0,2);
-		$this->listacl("class_id = ".CL_GROUP." AND status = 2");
 
 		while ($row = $this->db_next())
 		{
@@ -123,7 +122,6 @@ class groups extends users_user
 
 		// make list of users who you can vju
 		$users = array("'".aw_global_get("uid")."'");
-		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{
@@ -670,7 +668,6 @@ class groups extends users_user
 		$gp = $this->fetchgroup($id);
 
 		$users = array(aw_global_get("uid") => "\"".aw_global_get("uid")."\"");
-		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{
@@ -762,7 +759,6 @@ class groups extends users_user
 		$pmembers = $this->getgroupmembers2($id);
 
 		$users = array(aw_global_get("uid") => aw_global_get("uid"));
-		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{
@@ -931,7 +927,6 @@ class groups extends users_user
 
 		$this->read_template("list_grps.tpl");
 
-		$this->listacl("objects.class_id = ".CL_GROUP);
 		$this->listgroups(-1,-1,-1,-1,$parent);
 		while ($row = $this->db_next())
 		{

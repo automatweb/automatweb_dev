@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.78 2004/01/07 18:40:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.79 2004/02/02 19:10:59 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -145,7 +145,6 @@ class users_user extends aw_template
 	function listall_acl() 
 	{
 		$users = array("'".aw_global_get("uid")."'");
-		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 		$this->db_query("SELECT groups.oid,groups.gid FROM groups LEFT JOIN objects ON objects.oid = groups.oid WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.46 2004/01/22 13:45:05 hannes Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.47 2004/02/02 19:10:59 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -263,7 +263,7 @@ class acl_base extends db_connector
 	// black magic follows.
 	function can($access, $oid)
 	{
-		if ($this->cfg["acl"]["no_check"])
+		if ($GLOBALS["cfg"]["acl"]["no_check"])
 		{
 			return true;
 		}
@@ -306,107 +306,6 @@ class acl_base extends db_connector
 
 		$access="can_".$access;
 		return $max_acl[$access];
-	}
-
-	////
-	// SELECT * FROM objects join(" ",map2("LEFT JOIN %s ON %s",$joins)) WHERE $where
-	// this function just caches the results, so that when you list objects, asking their acl is lots faster later
-	//
-	// this will be completely deprecated, when java server is used
-	function listacl($where,$joins = -1)
-	{
-		$this->save_handle();
-
-		$gidlist = aw_global_get("gidlist");
-		if (!is_array($gidlist) || count($gidlist) < 1)
-		{
-			return;
-		}
-
-		$js = "";
-		if (is_array($joins))
-		{
-			$js = join(' ',map2('LEFT JOIN %s ON %s',$joins));
-		}
-
-		// stuff all the objects in the cache, because the next query will not
-		// get a list of objects if they don't have their acl specified
-		$q = "SELECT objects.oid as oid, objects.parent as parent FROM objects $js WHERE ($where)";
-		//echo "q = $q <br />";
-		$this->db_query($q);
-		while ($row = $this->db_next())
-		{
-			$row["priority"] = -1;
-			aw_cache_set("aclcache",$row["oid"],$row);
-		}
-
-		$q = "SELECT objects.parent as parent,".$this->sql_unpack_string().", groups.priority as priority, acl.oid as oid 
-		                 FROM objects
-										 LEFT JOIN acl on (objects.oid = acl.oid )
-										 LEFT JOIN groups ON (groups.gid = acl.gid)
-										 $js
-										 WHERE ($where) AND acl.gid IN (".join(',',$gidlist).")  
-										 ORDER BY acl.oid";
-										 //OR isnull(acl.oid)	// seems we don't need these, cause every object is owned by somebody
-										 //OR  isnull(acl.gid)// and therefore will have a record in the acl table. 
-//		echo "query: '$q'<br />";
-
-		$this->db_query($q);
-		$currobj = array(); 
-		$curr_oid = 0;
-		while ($row = $this->db_next())
-		{
-//			echo "row! <br />";
-			// now find all records with the same oid and get the acl with the largest priority
-			if ($row["oid"] == $curr_oid)
-			{
-				$currobj[] = $row;
-	//			 echo "same oid ($curr_oid), adding<br />";
-			}
-			else
-			{
-		//		 echo "diff oid<br />";
-				if ($curr_oid)
-				{
-			//		 echo "listing same oids to find highest priority<br />";
-					$mp = -1;
-					reset($currobj);
-					while (list(,$v) = each($currobj))
-					{
-						if ($v["priority"] > $mp)
-						{
-							$mp = $v["priority"];
-							$ma = $v;
-				//			 echo "higher priority ($mp), setting new high, ",$v[oid],"<br />";
-						}
-					}
-					aw_cache_set("aclcache",$ma["oid"],$ma);
-//				echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br />";
-				}
-				$currobj = array();
-				$curr_oid = $row["oid"];
-				$currobj[] = $row;
-			}
-		}
-
-		if ($curr_oid)
-		{
-//			echo "1listing same oids to find highest priority<br />";
-			$mp = -1;
-			reset($currobj);
-			while (list(,$v) = each($currobj))
-			{
-				if ($v["priority"] > $mp)
-				{
-					$mp = $v["priority"];
-					$ma = $v;
-	//				 echo "higher priority ($mp), setting new high<br />";
-				}
-			}
-			aw_cache_set("aclcache",$ma["oid"],$ma);
-//			echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br />";
-		}
-		$this->restore_handle();
 	}
 
 	function create_obj_access($oid,$uuid = "")

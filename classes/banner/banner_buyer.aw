@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_buyer.aw,v 1.2 2004/01/13 16:24:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_buyer.aw,v 1.3 2004/02/02 19:10:59 kristo Exp $
 
 classload("banner/banner");
 class banner_buyer extends banner
@@ -287,7 +287,6 @@ class banner_buyer extends banner
 
 		$bar = array();
 		$bcnt = 0;
-		$this->listacl("class_id = ".CL_BANNER_BUYER." AND status != 0");
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_BANNER_BUYER." AND status != 0");
 		while ($row = $this->db_next())
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.6 2004/01/13 16:24:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.7 2004/02/02 19:10:59 kristo Exp $
 
 // act_type's:
 // 0 - always active
@@ -776,7 +776,6 @@ class banner extends aw_template
 	function get_clientarr()
 	{
 		$ret = array();
-		$this->listacl("objects.status != 0 AND objects.class_id =  ".CL_BANNER_CLIENT);
 		$this->db_query("SELECT objects.*,banner_clients.* FROM objects LEFT JOIN banner_clients ON banner_clients.id = objects.oid WHERE objects.status != 0 AND objects.class_id =  ".CL_BANNER_CLIENT." ORDER BY oid");
 		while ($row = $this->db_next())
 		{
@@ -986,7 +985,6 @@ class banner extends aw_template
 		$bstr = join(",",$this->get_banners_for_buyer($id));
 		if ($bstr != "")
 		{
-			$this->listacl("objects.class_id = ".CL_BANNER." AND objects.status != 0 AND objects.oid IN ($bstr)");
 			$this->db_query("SELECT banners.*,objects.* FROM objects LEFT JOIN banners ON banners.id = objects.oid WHERE objects.class_id = ".CL_BANNER." AND objects.status != 0 AND oid IN ($bstr)");
 			while ($row = $this->db_next())
 			{
