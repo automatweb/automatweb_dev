@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.12 2004/11/23 14:40:26 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.13 2004/11/23 14:45:12 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 
-@classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
 @default group=general
 @default table=aw_register_data
 
@@ -182,7 +182,7 @@
 
 @property udefhidden1 type=hidden field=meta method=serialize group=general table=objects
 @property udefhidden2 type=hidden field=meta method=serialize group=general table=objects
-@property udefhidden3 type=hidden field=meta method=serialize group=general	table=objects
+@property udefhidden3 type=hidden field=meta method=serialize group=general table=objects
 
 @property usertext1 type=text store=no group=data
 @caption Usertext1

@@ -498,6 +498,75 @@
             <caption>Subtitle5</caption>
       </property>
       <property>
+            <name>udefhidden1</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>udefhidden2</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>udefhidden3</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>usertext1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext1</field>
+            <caption>Usertext1</caption>
+      </property>
+      <property>
+            <name>usertext2</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext2</field>
+            <caption>Usertext2</caption>
+      </property>
+      <property>
+            <name>usertext3</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext3</field>
+            <caption>Usertext3</caption>
+      </property>
+      <property>
+            <name>usertext4</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext4</field>
+            <caption>Usertext4</caption>
+      </property>
+      <property>
+            <name>usertext5</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <field>usertext5</field>
+            <caption>Usertext5</caption>
+      </property>
+      <property>
             <name>usersubmit1</name>
             <group>data</group>
             <table>aw_register_data</table>
@@ -509,7 +578,6 @@
       <classinfo>
             <syslog_type>ST_REGISTER_DATA</syslog_type>
             <relationmgr>yes</relationmgr>
-            <no_status>1</no_status>
             <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
