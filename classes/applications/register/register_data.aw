@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.7 2004/11/11 13:21:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.8 2004/11/16 23:11:03 sven Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -164,6 +164,21 @@
 
 @property userch5 type=textbox  field=aw_userch5 group=data ch_value=1 datatype=int
 @caption User-defined checkbox 5
+
+@property usersubtitle1 type=text store=no group=data subtitle=1
+@caption Subtitle1
+
+@property usersubtitle2 type=text store=no group=data subtitle=1
+@caption Subtitle2
+
+@property usersubtitle3 type=text store=no group=data subtitle=1
+@caption Subtitle3
+
+@property usersubtitle4 type=text store=no group=data subtitle=1
+@caption Subtitle4
+
+@property usersubtitle5 type=text store=no group=data subtitle=1
+@caption Subtitle5
 
 @property usersubmit1 type=submit store=no
 @caption User-defined submit 1
