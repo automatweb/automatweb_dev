@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.66 2002/12/18 15:03:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.67 2002/12/19 15:19:26 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2090,9 +2090,15 @@ class users extends users_user
 
 	}
 
-	function get_user_picker()
+	////
+	// !generates a list of users that the current user has access to, returns an array suitable to be passed to picker()
+	// arguments:
+	//	add_empty - optional, if true, empty field is added in the beginning
+	function get_user_picker($arr = array())
 	{
-		return $this->make_keys(array_keys($this->_gen_usr_list()));
+		$ret =  $this->make_keys(array_keys($this->_gen_usr_list()));
+		ksort($ret);
+		return ($arr['add_empty'] ? array('' => '') : array()) + $ret;
 	}
 }
 ?>
