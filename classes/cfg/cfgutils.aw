@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.25 2003/09/08 15:16:01 duke Exp $
+// $Id: cfgutils.aw,v 1.26 2003/09/23 16:26:30 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -127,6 +127,7 @@ class cfgutils extends aw_template
 			$file = $this->clist[$clid];
 		};
 		$fqfn = $this->fbasedir . $file . ".xml";
+
                 $source = $this->get_file(array("file" => $fqfn));
 		$properties = array();
 
@@ -220,6 +221,7 @@ class cfgutils extends aw_template
 		// this is the stuff we need to cache
 		// maybe I should implement some kind of include for properties?
 		$filter = isset($args["filter"]) ? $args["filter"] : "";
+		$this->groupinfo = array();
 		$coreprops = $this->load_class_properties(array(
 			"file" => "class_base",
 			"filter" => $filter,
