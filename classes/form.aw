@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.57 2001/08/17 01:13:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.58 2001/09/04 16:31:12 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -845,7 +845,7 @@ class form extends form_base
 		$chk_js = "";
 		for ($i=0; $i < $this->arr["rows"]; $i++)
 		{
-			$html=$this->mk_row_html($i,$prefix,$elvalues);
+			$html=$this->mk_row_html($i,$prefix,$elvalues,$no_submit);
 			$this->vars(array("COL" => $html));
 			$c.=$this->parse("LINE");
 
@@ -896,6 +896,8 @@ class form extends form_base
 			"EXTRAIDS"					=> $ei,
 			"IMG_WRAP"					=> $ip, 
 			"form_action"				=> $form_action,
+			// lauri muudetud-> formtag_name on formi tagi nimi kuhu see form parsitakse
+			"formtag_name"				=> $formtag_name,
 			"submit_text"				=> isset($this->arr["submit_text"]) ? $this->arr["submit_text"] : "",
 			"reforb"						=> $reforb,
 			"checks"						=> $chk_js
@@ -1204,6 +1206,44 @@ class form extends form_base
 		die();
 	}
 
+	function req_load_relations($id,&$row)
+	{
+		$this->temp_ids[$id] = $id;
+		$this->save_handle();
+		$this->db_query("SELECT * FROM form_relations WHERE form_to = $id OR form_from = $id");
+		while ($r_row = $this->db_next())
+		{
+			// nii. nyt on siis see form, mille entryt loaditakse on lingitud miski teise formi kylge. 
+			// j2relikult tuleb siin loadida ka see entry, mis on lingitud
+			// niisis, tuleb teha p2ring teise formi tabelisse, milles where klauslis on see v22rtus, mis k2esolevast formist valiti
+			$this->save_handle();
+			$this->db_query("SELECT * FROM form_".$r_row["form_from"]."_entries WHERE ev_".$r_row["el_from"]." = '".$row["ev_".$r_row["el_to"]]."'");
+			$er_row = $this->db_next();
+			if (is_array($er_row))
+			{
+				$er_row["form_".$r_row["form_from"]."_entry"] = $er_row["id"];
+				$row= $row+$er_row;
+			}
+			if (!in_array($r_row["form_from"],$this->temp_ids))
+			{
+				$this->req_load_relations($r_row["form_from"],&$row);
+			}
+			$this->db_query("SELECT * FROM form_".$r_row["form_to"]."_entries WHERE ev_".$r_row["el_to"]." = '".$row["ev_".$r_row["el_from"]]."'");
+			$er_row = $this->db_next();
+			if (is_array($er_row))
+			{
+				$er_row["form_".$r_row["form_to"]."_entry"] = $er_row["id"];
+				$row= $row+$er_row;
+			}
+			if (!in_array($r_row["form_to"],$this->temp_ids))
+			{
+				$this->req_load_relations($r_row["form_to"],&$row);
+			}
+			$this->restore_handle();
+		}
+		$this->restore_handle();
+	}
+
 	// laeb entry parajasti aktiivse vormi jaoks
 	function load_entry($entry_id,$silent_errors = false)
 	{
@@ -1232,6 +1272,10 @@ class form extends form_base
 		};
 
 		$row["form_".$id."_entry"] = $row["id"];
+
+		// siin tuleb nyyd relatsioonitud formid ka sisse lugeda ja seda rekursiivselt. ugh. 
+		$this->temp_ids = array();
+		$this->req_load_relations($id,&$row);
 
 		if ($row["chain_id"])
 		{
@@ -1317,16 +1361,6 @@ class form extends form_base
 			$this->tpl_reset();
 		};
 		
-		// what the fuck is going on here? there are entry_id-s on form_XX_entry tables
-		// which are not even registered.
-		// classload("form_entry");
-		// $f_entry = new form_entry();
-		/// $block = $f_entry->get_entry(array("eid" => $entry_id));
-		// print "<pre>";
-		// print_r($block);
-		// print "</pre>";
-		// print "+++";
-
 		if (!$no_load_entry)
 		{
 			$this->load($id);
@@ -1358,51 +1392,13 @@ class form extends form_base
 			$entry_id = $this->entry_id;
 		}
 
-		if (isset($admin) && $admin)
+		if (isset($no_html) && $no_html)
 		{
-			$this->read_template("show_user_admin.tpl");
-
-			$menunames = array();
-			$this->db_query("SELECT objects.oid as oid, 
-															objects.name as name
-												FROM objects 
-												WHERE objects.class_id = 13 AND objects.status != 0 AND objects.last = $this->id");
-			while ($row = $this->db_next())
-				$menunames[$row["oid"]] = $row["name"];
-
-
-			$actioncache = array(); $ac = ""; $acc = "";
-			$this->db_query("SELECT form_actions.*,objects.name as name FROM form_actions 
-											 LEFT JOIN objects ON objects.oid = form_actions.id
-											 WHERE form_id = $this->id AND type='move_filled'");
-			while ($row = $this->db_next())
-			{
-				$row["data"] = unserialize($row["data"]);
-				if (is_array($row["data"]))
-				{
-					$this->vars(array("colspan" => sizeof($row["data"]),"action_name" => $row["name"]));
-					$ac.=$this->parse("ACTIONS");
-
-					reset($row["data"]);
-					while (list($k,$v) = each($row["data"]))
-					{
-						$this->vars(array("action_target" => $k,"action_target_name" => $menunames[$k],"parent" => $k,"op_id" => $output_id));
-						$acc.=$this->parse("ACTION_LINE");
-					}
-				}
-			}
-			$this->vars(array("ACTION_LINE" => $acc, "ACTIONS" => $ac,"op_id" => $output_id,"parent" => $this->id));
+			$this->read_template("show_user_nohtml.tpl");
 		}
 		else
 		{
-			if (isset($no_html) && $no_html)
-			{
-				$this->read_template("show_user_nohtml.tpl");
-			}
-			else
-			{
-				$this->read_template("show_user.tpl");
-			}
+			$this->read_template("show_user.tpl");
 		}
 	
 		// I think that commenting out those 2 will give us a tiny win in the speed.
@@ -1435,6 +1431,7 @@ class form extends form_base
 	
 		$op_far = $this->get_op_forms($op_id);
 
+		$awt->start("form::show::cycle");
 		// tsykkel yle koigi outputi ridade ja cellide
 		for ($row = 0; $row < $this->output["rows"]; $row++)
 		{
@@ -1468,6 +1465,8 @@ class form extends form_base
 				for ($i=0; $i < $op_cell["el_count"]; $i++)
 				{
 					// load the element from output
+					$awt->start("form::show::cycle::new_element");
+					$awt->count("form::show::cycle::new_element");
 					$el=new form_entry_element;
 					$el->load($op_cell["elements"][$i],&$this,$rcol,$rrow);
 					// if the element is linked, then fake the elements entry
@@ -1477,13 +1476,17 @@ class form extends form_base
 						$this->entry[$el->get_id()] = $this->entry[$op_cell["elements"][$i]["linked_element"]];
 						$el->set_entry($this->entry,$this->entry_id, &$this);
 					}
+					$awt->stop("form::show::cycle::new_element");
 
+					$awt->start("form::show::cycle::show");
 					if ($el)
 					{
 						$chtml.= $el->gen_show_html();
 					}
+					$awt->stop("form::show::cycle::show");
 				}
 
+				$awt->start("form::show::cycle::style");
 				if (isset($no_html) && $no_html)
 				{
 					$html.=$chtml." ";
@@ -1499,10 +1502,12 @@ class form extends form_base
 						$html.= "<td colspan=\"".$arr["colspan"]."\" rowspan=\"".$arr["rowspan"]."\">".$chtml."</td>";
 					}
 				}
+				$awt->stop("form::show::cycle::style");
 			}
 			$this->vars(array("COL" => $html));
 			$this->parse("LINE");
 		}
+		$awt->stop("form::show::cycle");
 
 		// uurime v2lja outputi tabeli stiili ja kasutame seda
 		//$this->output["table_style"] = 12220;
@@ -2057,7 +2062,7 @@ class form extends form_base
 						$jss=",".$jss;
 					}
 					$chenrties = array();
-					$q = "SELECT form_".$form_id."_entries.id as entry_id $jss FROM form_".$form_id."_entries LEFT JOIN objects ON objects.oid = form_".$form_id."_entries.id WHERE form_".$form_id."_entries.id in ($eids) AND objects.status != 0";
+					$q = "SELECT objects.modifiedby as modifiedby,objects.modified as modified,form_".$form_id."_entries.id as entry_id $jss FROM form_".$form_id."_entries LEFT JOIN objects ON objects.oid = form_".$form_id."_entries.id WHERE form_".$form_id."_entries.id in ($eids) AND objects.status != 0";
 	//				echo "q = $q <br>";
 					$this->db_query($q);
 					$cnt = 0;
@@ -2122,7 +2127,7 @@ class form extends form_base
 					}
 					$joss = join(" ",$joins);
 					$chenrties = array();
-					$q = "SELECT form_chain_entries.id as chain_entry_id $jss FROM form_chain_entries $joss WHERE form_chain_entries.id in ($eids)";
+					$q = "SELECT form_chain_entries.id as chain_entry_id,uid as modifiedby, tm as created, tm as modified  $jss FROM form_chain_entries $joss WHERE form_chain_entries.id in ($eids)";
 	//				echo "q = $q <br>";
 					$this->db_query($q);
 					$cnt = 0;
@@ -2134,7 +2139,7 @@ class form extends form_base
 						$row["ev_created"] = $this->time2date($row["created"], 2);
 						$row["ev_uid"] = $row["modifiedby"];
 						$row["ev_modified"] = $this->time2date($row["modified"], 2);
-						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $this->main_search_form,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_search_form],"section" => $section))."'>Vaata</a>";		
+						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_search_form],"section" => $section))."'>Vaata</a>";		
 						$row["ev_delete"] = "<a href='".$this->mk_my_orb(
 							"delete_entry", 
 								array(
@@ -3197,7 +3202,9 @@ class form extends form_base
 		
 		$o = new db_objects;
 		$menulist = $o->get_list();
+
 		$this->vars(array(
+			"relation_forms" => $this->multiple_option_list($this->arr["relation_forms"], $this->get_list(FTYPE_ENTRY,false,true)),
 			"ff_folder"	=> $this->picker($this->arr["ff_folder"], $menulist),
 			"ne_folder"	=> $this->picker($this->arr["newel_parent"], $menulist),
 			"tear_folder"	=> $this->picker($this->arr["tear_folder"], $menulist),
@@ -3232,6 +3239,15 @@ class form extends form_base
 			foreach($el_menus as $menuid)
 			{
 				$this->arr["el_menus"][$menuid] = $menuid;
+			}
+		}
+
+		// formid kust saab seoseelemente valida
+		if (is_array($relation_forms))
+		{
+			foreach($relation_forms as $r_fid)
+			{
+				$this->arr["relation_forms"][$r_fid] = $r_fid;
 			}
 		}
 
@@ -3278,6 +3294,25 @@ class form extends form_base
 			}
 		}
 		$awt->stop("form::get_search_targets");
+		return $ret;
+	}
+
+	function get_relation_targets()
+	{
+		global $awt;
+		$awt->start("form::get_relation_targets");
+		$awt->count("form::get_relation_targets");
+
+		$ret = array();
+		if (is_array($this->arr["relation_forms"]))
+		{
+			foreach ($this->arr["relation_forms"] as $fid => $fid)
+			{
+				$o = $this->get_object($fid);
+				$ret[$fid] = $o["name"];
+			}
+		}
+		$awt->stop("form::get_relation_targets");
 		return $ret;
 	}
 
@@ -3630,5 +3665,29 @@ class form extends form_base
 		return $this->mk_my_orb("translate", array("id" => $id));
 	}
 
+	function convformat()
+	{
+		set_time_limit(0);
+		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_FORM." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			echo "form $row[oid] \n<br>";
+			flush();
+			$f = new form;
+			$f->load($row["oid"]);
+			$f->save();
+		}
+
+		classload("form_output");
+		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_FORM_OUTPUT." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			echo "form_op $row[oid] \n<br>";
+			flush();
+			$f = new form_output;
+			$f->load_output($row["oid"]);
+			$f->save_output($row["oid"]);
+		}
+	}
 };	// class ends
 ?>
