@@ -12,10 +12,11 @@ if (!$tt->prog_acl("view", PRG_MENUEDIT))
 <html>
 <head>
 <title><?php echo $uid,"@AutomatWeb";?></title>
+<link REL="icon" HREF="{VAR:baseurl}/automatweb/images/icons/favicon.ico" TYPE="image/x-icon">
 </head>
 
 <frameset cols="30%,*" frameborder="yes" framespacing=1>
-  <frame name="menuFrame" src="orb.aw?class=menuedit&action=folders" MARGINHEIGHT=0 MARGINWIDTH=0 
+  <frame name="menuFrame" src="orb.aw?class=menuedit&action=folders" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
 <?php 
 $u = get_instance("users");
 $treetype = $u->get_user_config(array(
@@ -35,7 +36,7 @@ if ($treetype == "java")
 else 
 { 
 	echo "scrolling=auto"; } 
-?> >
+?> > 
 
   <frame name="list" src="orb.aw?class=menuedit&action=right_frame&parent=<?php echo $parent; ?>&period=<?php echo $period; ?>" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
 </frameset>
