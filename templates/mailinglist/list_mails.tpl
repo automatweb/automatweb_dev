@@ -34,7 +34,7 @@
 &nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: M_ACL -->
-<a href='editacl.{VAR:ext}?oid={VAR:mail_id}&file=email.xml'>ACL</a>
+<a href='editacl.{VAR:ext}?oid={VAR:mail_id}&file=default.xml'>ACL</a>
 <!-- END SUB: M_ACL -->
 &nbsp;</td>
 <td class="fgtext2">&nbsp;

@@ -46,7 +46,7 @@
 &nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: CAN_ACL -->
-<a href='editacl.{VAR:ext}?oid={VAR:cat_id}&file=list_cat.xml'>ACL</a>
+<a href='editacl.{VAR:ext}?oid={VAR:cat_id}&file=default.xml'>ACL</a>
 <!-- END SUB: CAN_ACL -->
 &nbsp;</td>
 </tr>

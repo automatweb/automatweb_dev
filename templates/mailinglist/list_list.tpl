@@ -48,7 +48,7 @@
 &nbsp;</td>
 <td class="celltext">&nbsp;
 <!-- SUB: CAN_ACL -->
-<a href='editacl.{VAR:ext}?oid={VAR:cat_id}&file=list_cat.xml'>ACL</a>
+<a href='editacl.{VAR:ext}?oid={VAR:cat_id}&file=default.xml'>ACL</a>
 <!-- END SUB: CAN_ACL -->
 &nbsp;</td>
 </tr>
@@ -100,7 +100,7 @@
 &nbsp;</td>
 <td class="celltext">&nbsp;
 <!-- SUB: L_ACL -->
-<a href="editacl.{VAR:ext}?oid={VAR:list_id}&file=list.xml">ACL</a>
+<a href="editacl.{VAR:ext}?oid={VAR:list_id}&file=default.xml">ACL</a>
 <!-- END SUB: L_ACL -->
 &nbsp;</td>
 <td class="celltext">&nbsp;<a href='{VAR:members_link}'>{VAR:LC_MAILINGLIST_LIST_MEMBERS}</a>&nbsp;</td>

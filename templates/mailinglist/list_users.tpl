@@ -69,7 +69,7 @@ Vali lehek&uuml;lg:
 &nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;
 <!-- SUB: U_ACL -->
-<a href='editacl.{VAR:ext}?oid={VAR:user_id}&file=list_member.xml'>ACL</a>
+<a href='editacl.{VAR:ext}?oid={VAR:user_id}&file=default.xml'>ACL</a>
 <!-- END SUB: U_ACL -->
 &nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;<input type='checkbox' NAME='ch_{VAR:user_id}' VALUE=1>&nbsp;</td>
