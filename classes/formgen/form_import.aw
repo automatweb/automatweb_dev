@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.17 2002/10/09 09:51:40 kristo Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.1 2002/10/29 10:10:42 kristo Exp $
+classload("formgen/form_base");
 class form_import extends form_base
 {
 	function form_import()
@@ -52,8 +52,7 @@ class form_import extends form_base
 	function select_form_els($arr)
 	{
 		extract($arr);
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$f->load($id);
 		$this->mk_path($f->parent, "<a href='".$this->mk_my_orb("change", array("id" => $id),"form")."'>Muuda formi</a> / Vali elemendid");
 		$this->read_template("import_entries2.tpl");
@@ -116,7 +115,7 @@ class form_import extends form_base
 	{
 		extract($arr);
 
-		$f = new form;
+		$f = get_instance("formgen/form");
 		$f->load($id);
 
 		// open the file and start reading lines from it and for each line turn it into an entry
@@ -256,8 +255,7 @@ class form_import extends form_base
 	function select_chain_els($arr)
 	{
 		extract($arr);
-		classload("form_chain");
-		$f = new form_chain;
+		$f = get_instance("formgen/form_chain");
 		$ch = $f->load_chain($id);
 		$this->mk_path($ch["parent"], sprintf(LC_FORM_IMPORT_CHAIN_ELS,$this->mk_my_orb("change", array("id" => $id),"form_chain")));
 		$this->read_template("import_entries2.tpl");
@@ -278,7 +276,7 @@ class form_import extends form_base
 		}
 
 		$els = array();
-		$form = new form;
+		$form = get_instance("formgen/form");
 		foreach($f->chain["forms"] as $fid)
 		{
 			$form->load($fid);
@@ -320,14 +318,13 @@ class form_import extends form_base
 		extract($arr);
 
 		set_time_limit(0);
-		classload("form_chain");
-		$f = new form_chain;
+		$f = get_instance("formgen/form_chain");
 		$f->load_chain($id);
 
 		// open the file and start reading lines from it and for each line turn it into an entry
 		$fp = fopen(aw_ini_get("server.tmpdir")."/".$file,"r");
 
-		$form = new form;
+		$form = get_instance("formgen/form");
 		$ar = fgetcsv($fp,100000,"\t");	// skipime esimese rea
 		while (($ar = fgetcsv($fp,100000,"\t")))
 		{
