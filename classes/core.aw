@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.78 2002/02/18 17:39:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.79 2002/02/18 18:06:38 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -569,8 +569,7 @@ class core extends db_connector
 	{
 		$q = "UPDATE objects SET cachedirty = 1 WHERE objects.site_id = ".$GLOBALS["SITE_ID"]." or objects.site_id IS NULL";
 		$this->db_query($q);
-		$GLOBALS["cahe_dirty_cache"] = array();
-
+		aw_cache_flush("cahe_dirty_cache");
 	}
 		
 	////
@@ -656,16 +655,16 @@ class core extends db_connector
 	// !returns true if object $oid 's cahe dirty flag is set
 	function cache_dirty($oid)
 	{
-		if (isset($GLOBALS["cahe_dirty_cache"][$oid]))
+		if (aw_cache_get("cahe_dirty_cache",$oid))
 		{
-			return $GLOBALS["cahe_dirty_cache"][$oid];
+			return aw_cache_get("cahe_dirty_cache",$oid);
 		}
 		else
 		{
 			$q = "SELECT cachedirty FROM objects WHERE oid = '$oid'";
 			$this->db_query($q);
 			$row = $this->db_next();
-			$GLOBALS["cahe_dirty_cache"][$oid] = $row["cachedirty"];
+			aw_cache_set("cahe_dirty_cache",$oid,$row["cachedirty"]);
 			return ($row["cachedirty"] == 1) ? true : false;
 		}
 	}
@@ -676,7 +675,7 @@ class core extends db_connector
 	{
 		$q = "UPDATE objects SET cachedirty = 0 WHERE oid = '$oid'";
 		$this->db_query($q);
-		$GLOBALS["cahe_dirty_cache"][$oid] = 0;
+		aw_cache_set("cahe_dirty_cache",$oid,0);
 	}
 
 	////
@@ -1086,10 +1085,9 @@ class core extends db_connector
 				die;
 			};
 		};
-		global $goc_cache;
-		if ($goc_cache[$oid])
+		if (aw_cache_get("goc_cache",$oid))
 		{
-			return $goc_cache[$oid];
+			return aw_cache_get("goc_cache",$oid);
 		};
 		$parent = $oid;
 		$chain = array();
@@ -1120,7 +1118,7 @@ class core extends db_connector
 				$oid = $row["parent"];
 			};
 		};
-		$goc_cache[$oid] = $chain;
+		aw_cache_set("goc_cache",$oid,$chain);
 		return $chain;
 	}
 
@@ -1171,7 +1169,6 @@ class core extends db_connector
 	// !tagastab objekti
 	function get_object($arg) 
 	{
-		global $objcache;
 		if (is_array($arg))
 		{
 			$oid = $arg["oid"];
@@ -1182,25 +1179,25 @@ class core extends db_connector
 			$oid = $arg;
 		};
 
-		if (!isset($objcache[$oid]))
+		if (!aw_cache_get("objcache",$oid))
 		{
-			$objcache[$oid] = $this->get_record("objects","oid",$oid);
+			aw_cache_set("objcache",$oid,$this->get_record("objects","oid",$oid));
 		}
 
-		if (isset($class_id) && ($objcache[$oid]["class_id"] != $class_id) )
+		$_t = aw_cache_get("objcache",$oid);
+		if (isset($class_id) && ($_t["class_id"] != $class_id) )
 		{
 			// objekt on valest klassist
 			$this->raise_error(ERR_CORE_WTYPE,"get_object: $oid ei ole tüüpi $class_id",true);
 		}
 
-		return $objcache[$oid];
+		return $_t;
 	}
 
 	////
 	// !Tagastab objekti ja tema lahtiparsitud metainfo
 	function get_obj_meta($oid)
 	{
-		global $objcache;
 		$object = $this->get_object($oid);
 		if (is_array($object))
 		{
@@ -1478,10 +1475,9 @@ class core extends db_connector
 	// until it finds a menu for which it is set
 	function get_lead_template($section)
 	{
-		global $lead_template_cache;
-		if ($lead_template_cache[$section] != "")
+		if (aw_cache_get("lead_template_cache",$section) != "")
 		{
-			$template = $lead_template_cache[$section];
+			$template = aw_cache_get("lead_template_cache",$section);
 		}
 		else
 		{
@@ -1503,7 +1499,7 @@ class core extends db_connector
 			}
 				$section = $row["parent"];
 			} while ($template == "" && $section > 1);
-			$GLOBALS["lead_template_cache"][$section] = $template;
+			aw_cache_set("lead_template_cache",$section,$template);
 		}
 		return $template;
 	}
@@ -2012,17 +2008,16 @@ class core extends db_connector
 	// !Fetches and caches information about a menu
 	function get_menu($id)
 	{
-		global $gm_cache;
-		if ($gm_cache[$id])
+		if (aw_cache_get("gm_cache",$id))
 		{
-			return $gm_cache[$id];
+			return aw_cache_get("gm_cache",$id);
 		}
 		else
 		{
 			$q = "SELECT menu.*,objects.* FROM menu LEFT join objects on (menu.id = objects.oid) WHERE id = '$id'";
 			$this->db_query($q);
 			$row = $this->db_fetch_row();
-			$gm_cache[$id] = $row;
+			aw_cache_set("gm_cache",$id,$row);
 			return $row;
 		};
 	}
