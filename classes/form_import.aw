@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.10 2002/01/04 18:30:08 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.11 2002/01/10 01:01:14 cvs Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
 lc_load("form");
@@ -316,6 +316,7 @@ class form_import extends form_base
 	{
 		extract($arr);
 
+		set_time_limit(0);
 		classload("form_chain");
 		$f = new form_chain;
 		$f->load_chain($id);
@@ -389,6 +390,12 @@ class form_import extends form_base
 						}
 						$rowels[] = "el_".$elid;
 						$rowvals[] = "'".$elvalue."'";
+
+						$_ev = $ar[$el[$elid]];
+						$this->quote(&$_ev);
+						$rowels[] = "ev_".$elid;
+						$rowvals[] = "'".$_ev."'";
+
 						$entry[$elid] = $elvalue;
 					}
 				}
