@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.110 2003/07/09 12:29:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.111 2003/07/09 14:52:32 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -300,38 +300,10 @@ class aliasmgr extends aw_template
 	function parse_oo_aliases($oid,&$source,$args = array())
 	{
 		extract($args);
-		if (!$meta)
-		{
-			$_tmp = $this->get_object($oid);
-			$meta = $_tmp["meta"];
-		};
 
-		// ok, let's try it this way
-		if (is_array($meta["aliases_by_class"]) && false)
-		{
-			$aliases = $meta["aliases_by_class"];
-		}
-		else
-		{
-			$aliases = $this->get_oo_aliases(array("oid" => $oid));
-			// write the aliases into metainfo for faster access later on
-			/*
-			if (is_array($aliases) && $oid)
-			{
-				$this->upd_object(array(
-					"oid" => $oid,
-					"metadata" => array(
-						"aliases_by_class" => $aliases,
-						"aliases" => "",
-					),
-				));
-			};
-			*/
-		};
+		$aliases = $this->get_oo_aliases(array("oid" => $oid));
+		$by_idx = $by_alias = array();
 
-		$by_idx = array();
-
-		$by_alias = array();
 		foreach($this->cfg["classes"] as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
