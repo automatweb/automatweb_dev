@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.45 2003/05/19 15:45:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.46 2003/06/18 16:02:44 duke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -130,14 +130,14 @@ class aw_template extends acl_base
 	function read_template($name,$silent = 0)
 	{
 		$this->template_filename = $this->template_dir."/".$name;
+		if (!file_exists($this->template_filename))
+		{
+			$this->template_filename = $this->adm_template_dir . "/" . $name;
+		};
+		// try to load a template from aw directory then
 		if (file_exists($this->template_filename))
 		{
 			$retval = $this->read_tpl(file($this->template_filename));
-		}
-		// try to load a template from aw directory then
-		elseif (file_exists($this->adm_template_dir . "/" . $name))
-		{
-			$retval = $this->read_tpl(file($this->adm_template_dir . "/" . $name));
 		}
 		else
 		{
