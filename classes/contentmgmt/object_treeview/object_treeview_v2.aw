@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.51 2005/01/25 10:18:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.52 2005/01/25 15:35:28 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1130,7 +1130,7 @@ class object_treeview_v2 extends class_base
 						// well, actually i don't like this hack, but if it is needed to select
 						// that show link won't appear in any columns, then this is the only way
 						// i can come out right now. The best way should be, that if no show_link_field
-						// are seelcted, THEN it won't appear in any column, but it will also break 
+						// are selected, THEN it won't appear in any column, but it will also break 
 						// existing objects so this is out of question. 
 
 						if ($show_link_field != "---")
@@ -1139,9 +1139,9 @@ class object_treeview_v2 extends class_base
 							$url_field = $parms['tree_obj']->prop("url_field");
 							if (!empty($url_field))
 							{
-								$url = $arr[$url_field];
+								$content = $this->_get_link($content, $arr[$url_field], $parms['tree_obj']);
 							}
-							$content = $this->_get_link($content, $url, $parms['tree_obj']);
+
 						}
 					}
 					else
