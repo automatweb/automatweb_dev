@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="popup_objmgr" extends="class_base">
+		<action name="show">
+			<function name="show">
+				<arguments>
+					<optional name="parent"/>
+					<optional name="multiple"/>
+					<optional name="check_name"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="search" all_args="1">
+			<function name="search">
+				<arguments>
+
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		

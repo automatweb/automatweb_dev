@@ -1,0 +1,33 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>test</name>
+            <type>popup_objmgr</type>
+            <multiple>1</multiple>
+            <height>550</height>
+            <width>650</width>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>dfghdf1</caption>
+      </property>
+      <property>
+            <name>test2</name>
+            <type>popup_objmgr</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>dfghdf2</caption>
+      </property>
+      <property>
+            <name>searching</name>
+            <callback>search</callback>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+</properties>
+
