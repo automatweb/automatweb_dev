@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.12 2005/01/28 11:16:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.13 2005/02/09 10:26:24 sven Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -20,6 +20,9 @@
 
 	@property s_class_id type=select multiple=1
 	@caption Objektit&uuml;&uuml;p
+
+	@property s_oid type=textbox
+	@caption OID
 
 	@property s_modifiedby type=textbox 
 	@caption Kustutaja
@@ -70,6 +73,7 @@ class recycle_bin extends class_base
 			case "s_comment":
 			case "s_class_id":
 			case "s_modifiedby":
+			case "s_oid":
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 
@@ -459,6 +463,11 @@ class recycle_bin extends class_base
 		if (!empty($arr["request"]["s_comment"]))
 		{
 			$where[] = " comment LIKE '%".$arr["request"]["s_comment"]."%' ";
+		}
+
+		if (!empty($arr["request"]["s_oid"]))
+		{
+			$where[] = " oid = '".$arr["request"]["s_oid"]."' ";
 		}
 
 		if (!empty($arr["request"]["s_class_id"]) && is_array($arr["request"]["s_class_id"]) && count($arr["request"]["s_class_id"]))
