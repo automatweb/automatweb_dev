@@ -198,7 +198,7 @@ function init_config($arr)
 			$f = @fopen($cache_file,"w");
 			if (!$f)
 			{
-				die("pagecache is not writable, cannot continue!");
+				die(t("pagecache is not writable, cannot continue!"));
 			};
 			fwrite($f,$str);
 			fclose($f);
@@ -440,7 +440,7 @@ function get_instance($class,$args = array(), $errors = true)
 			}
 			error::raise(array(
 				"id" => ERR_CLASS,
-				"msg" => "the requested class $class does not exist !"
+				"msg" => t("the requested class $class does not exist !"),
 			));
 		}
 		include_once($classdir."/".str_replace(".","", $class).".".$ext);
@@ -529,7 +529,7 @@ function aw_startup()
 	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["__default"]["ext"]);
 	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/common.".$GLOBALS["cfg"]["__default"]["ext"]);
 
-	$p = get_instance("period");
+	$p = get_instance(CL_PERIOD);
 	$p->request_startup();
 
 	// this check reduces the startup memory usage for not logged in users by a whopping 1.3MB! --duke
@@ -804,7 +804,7 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 	$head = "";
 	//mail("vead@struktuur.ee", $subj, $content,$head);
 
-	die("<br><b>AW_ERROR: $msg</b><br>");
+	die(t("<br><b>AW_ERROR: $msg</b><br>"));
 }
 
 function log_pv($mt)
