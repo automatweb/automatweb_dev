@@ -454,7 +454,7 @@ function aw_startup()
 	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["__default"]["ext"]);
 	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/common.".$GLOBALS["cfg"]["__default"]["ext"]);
 
-	$p = get_instance("periods");
+	$p = get_instance("period");
 	$p->request_startup();
 
 	// this check reduces the startup memory usage for not logged in users by a whopping 1.3MB! --duke
