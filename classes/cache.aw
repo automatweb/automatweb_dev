@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.34 2004/08/03 10:25:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.35 2004/10/21 20:46:14 duke Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -287,7 +287,10 @@ class cache extends core
 				// 2) get the contents of the source file
 				$contents = $this->get_file(array("file" => $fqfn));
 				// 3) pass them to unserializer
-				$result = $clobj->$clmeth(array("content" => $contents));
+				$result = $clobj->$clmeth(array(
+					"fname" => $fqfn,
+					"content" => $contents,
+				));
 			};
 			$clobj = &$args["loader"][0];
 			$clmeth = $loader[1];
