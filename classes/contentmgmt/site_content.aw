@@ -2101,7 +2101,8 @@ class site_content extends menuedit
 
 		while ($sel_image == "" && $si_parent)
 		{
-			$sel_menu_meta = $this->mar[$si_parent]["meta"];
+			$o = obj($si_parent);
+			$sel_menu_meta = $o->meta();
 			if ($sel_menu_o_img_url == "")
 			{
 				$sel_menu_o_img_url = image::check_url($this->mar[$si_parent]["img_url"]);
@@ -2117,15 +2118,15 @@ class site_content extends menuedit
 				$sel_menu_meta["menu_images"] = $this->mar[$imfm]["meta"]["menu_images"];
 			}
 
+			if ($sel_menu_meta["img_act"])
+			{
+				$sel_menu_meta["img_act_url"] = $this->image->get_url_by_id($sel_menu_meta["img_act"]);
+			}
+
 			if (is_array($sel_menu_meta["menu_images"]) && count($sel_menu_meta["menu_images"]) > 0)
 			{
 				$imgs = true;
 				break;
-			}
-
-			if ($sel_menu_meta["img_act"])
-			{
-				$sel_menu_meta["img_act_url"] = $this->image->get_url_by_id($sel_menu_meta["img_act"]);
 			}
 
 			if ($sel_menu_meta["img_act_url"] != "")
