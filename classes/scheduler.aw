@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.2 2002/07/23 21:20:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.3 2002/09/13 15:49:00 duke Exp $
 // scheduler.aw - Scheduler
 
 classload("planner","file","aw_test");
@@ -21,6 +21,12 @@ class scheduler extends aw_template
 			$this->raise_error(ERR_SCHED_NOTIMEREP, "No time or repeater id specified in adding an event", true);
 		}
 
+		if (!$event)
+		{
+			// no url? fuck off.
+			return false;
+		};
+
 		if ($time)
 		{
 			$this->evnt_add($time, $event, $uid, $password);
@@ -38,11 +44,14 @@ class scheduler extends aw_template
 				"end" => time()+24*3600*300
 			));
 			$ltime = 0;
-			foreach($reps as $time => $_e)
+			if (is_array($reps))
 			{
-				$this->evnt_add($time, $event, $uid, $password, $rep_id);
-				$ltime = $time;
-			}
+				foreach($reps as $time => $_e)
+				{
+					$this->evnt_add($time, $event, $uid, $password, $rep_id);
+					$ltime = $time;
+				}
+			};
 			// and the clever bit here - schedule an event right after the last repeater to reschedule 
 			// events for that repeater
 			if ($ltime)
@@ -89,11 +98,14 @@ class scheduler extends aw_template
 			"event" => $id, 
 			"end" => time()+24*3600*300
 		));
-		foreach($reps as $time => $_e)
+		if (is_array($reps))
 		{
-			$evdat["time"] = $time;
-			$this->repdata[] = $evdat;
-		}
+			foreach($reps as $time => $_e)
+			{
+				$evdat["time"] = $time;
+				$this->repdata[] = $evdat;
+			}
+		};
 		$this->close_session(true);
 	}
 
@@ -324,20 +336,28 @@ class scheduler extends aw_template
 	function show($arr)
 	{
 		extract($arr);
+		load_vcl("table");
+		$t = new aw_table(array("prefix" => "schedshow"));
+		$t->parse_xml_def($this->cfg["basedir"]."/xml/scheduler/show.xml");
 		$this->read_template("list.tpl");
 		$this->open_session();
 		$this->close_session();
 
 		foreach($this->repdata as $evnt)
 		{
-			$this->vars(array(
-				"time" => $this->time2date($evnt["time"], 2),
-				"event" => $evnt["event"]
+			$t->define_data(array(
+				"time" => $evnt["time"],
+				"event" => $evnt["event"],
 			));
-			$l.= $this->parse("LINE");
 		}
+
+		$t->sort_by(array(
+                        "field" => ($sortby) ? $sortby : "time",
+                        "sorder" => ($sort_order) ? $sort_order : "asc",
+                ));
+
 		$this->vars(array(
-			"LINE" => $l,
+			"table" => $t->draw(),
 			"log_url" => $this->mk_my_orb("show_log")
 		));
 		return $this->parse();
@@ -388,33 +408,238 @@ class scheduler extends aw_template
 
 	////
 	// !Displays UI for adding or editing a scheduler object
-	function change($args = array())
+	function add_sched($args = array())
+	{
+		$caption = "Lisa uus scheduler";
+		$this->mk_path($args["parent"],"Lisa uus scheduler");
+		
+		$this->read_template("add.tpl");
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit",array("parent" => $args["parent"])),
+		));
+
+		return $this->parse();
+
+	}
+
+	function change_sched($args = array())
 	{
 		extract($args);
-		if ($parent)
+		$obj = $this->get_object($id);
+		
+		$this->read_template("change.tpl");
+
+		if (is_array($obj["meta"]["sched_objects"]))
 		{
-			$caption = "Lisa uus scheduler";
-			$obj = array("parent" => $parent);
-		}
-		else
-		{
-			$caption = "Muuda scheduleri";
-			$obj = $this->get_object($id);
+			$clids = $this->get_clids();
+			$q = sprintf("SELECT * FROM objects WHERE oid IN (%s)",join(",",$obj["meta"]["sched_objects"]));
+			$this->db_query($q);
+			load_vcl("table");
+			$t = new aw_table(array("prefix" => "schedsel"));
+			$t->parse_xml_def($this->cfg["basedir"]."/xml/scheduler/selected_objs.xml");
+			while($row = $this->db_next())
+			{
+				$met = $clids[$row["class_id"]]["action"];
+				$row["method"] = "<select name='action'><option>$met</select>";
+				$row["class_id"] = $clids[$row["class_id"]]["name"];
+				$t->define_data($row);
+			};
+
+			$this->vars(array(
+				"table" => $t->draw(),
+			));
 		};
-		$this->mk_path($obj["parent"],$caption);
-		$iface = get_instance("interface");
-		$rv = $iface->_get_if(array("name" => "scheduled"));
-		print "<pre>";
-		print_r($args);
-		print_r($rv);
-		print "</pre>";
+
+		$this->mk_path($obj["parent"],"$obj[name] / Muuda scheduleri");
+
 		// we have to provide fields for entering name and comment
 		// for the scheduler object.
-		$this->read_template("change.tpl");
-		return $this->parse();
+
+		$this->vars(array(
+			"search_objs" => $this->mk_my_orb("search_objs",array("id" => $id)),
+			"set_time" => $this->mk_my_orb("set_time",array("id" => $id)),
+			"name" => $obj["name"],
+			"comment" => $obj["comment"],
+			"class" => $classes,
+			"uid" => $obj["meta"]["login_uid"],
+			"password" => $obj["meta"]["login_password"],
+			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
+		));
 
 		// and then allow for searching different objects, which could
 		// _then_ be selected for importing.
+
+		return $this->parse();
 	}
+
+	function submit($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		if ($parent)
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"name" => $name,
+				"comment" => $comment,
+				"class_id" => CL_SCHEDULER,
+			));
+		}
+		else
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
+				"comment" => $comment,
+				"metadata" => array(
+					"login_uid" => $uid,
+					"login_password" => $password,
+				),
+			));
+		};
+
+
+		return $this->mk_my_orb("change",array("id" => $id));
+	}
+
+	function search_objs($args = array())
+	{
+		extract($args);
+		$this->quote($args);
+
+		if ($save)
+		{
+			if (is_array($chk))
+			{
+				$this->upd_object(array(
+					"oid" => $id,
+					"metadata" => array("sched_objects" => $chk),
+				));
+			};
+
+			return $this->mk_my_orb("change",array("id" => $id));
+		}
+		
+		$obj = $this->get_object($id);
+
+		$clids = $this->get_clids();
+		
+		$this->read_template("search_objs.tpl");
+
+		// now, if name and clid are both set in the arguments, then we perform the actual
+		// search
+		if (isset($clid) && is_array($clid))
+		{
+			load_vcl("table");
+			$t = new aw_table(array("prefix" => "schedobj"));
+			$t->parse_xml_def($this->cfg["basedir"]."/xml/scheduler/search_objs.xml");
+
+			$q = sprintf("SELECT oid,name,class_id,modified,modifiedby FROM objects WHERE name like '%%%s%%' AND class_id IN (%s) AND status = 2 AND lang_id = %d AND site_id = %d",$name,join(",",$clid),aw_global_get("lang_id"),$this->cfg["site_id"]);
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$row["class_id"] = $clids[$row["class_id"]]["name"];
+				$row["select"] = "<input type='checkbox' name='chk[$row[oid]]' value='$row[oid]'>";
+				$t->define_data($row);
+			};
+
+			$tb = $t->draw();
+
+			$this->vars(array(
+				"table" => $t->draw(),
+			));
+		}
+
+		$chlink = $this->mk_my_orb("change",array("id" => $id));
+
+		$this->mk_path($obj["parent"],"<a href='$chlink'>$obj[name]</a> / Muuda scheduleri objekte");
+		
+		$classes = "";
+		foreach($clids as $_clid => $defs)
+		{
+			$this->vars(array(
+				"cvalue" => $_clid,
+				"cname" => $defs["name"],
+				"checked" => checked(is_array($clid) ? in_array($_clid,$clid) : 0),
+			));
+
+			$classes .= $this->parse("class");
+		};
+
+		$this->vars(array(
+			"name" => $name,
+			"class" => $classes,
+			"reforb" => $this->mk_reforb("search_objs",array("id" => $id,"no_reforb" => 1)),
+		));
+
+		return $this->parse();
+	}
+
+	function get_clids()
+	{
+		$iface = get_instance("interface");
+		// fetch the list of all interfaces that can be scheduled
+		$rv = $iface->get_if(array("name" => "scheduled"));
+
+		// id => name pairs of all class_ids that can be scheduled
+		$clids = array();
+
+
+		// now figure out methods for each of those
+		foreach($rv as $clid => $scd_classes)
+		{
+			foreach($scd_classes as $scd_method)
+			{
+				$clids[$scd_method["clid"]]["name"] = $scd_method["name"];
+				$clids[$scd_method["clid"]]["action"] = $scd_method["action"];
+				$clids[$scd_method["clid"]]["clid"] = $scd_method["id"];
+			};
+
+		};
+		return $clids;
+	}
+
+	function set_time($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($id);
+			
+		$clids = $this->get_clids();
+		
+		if (is_array($obj["meta"]["sched_objects"]) && !$cycle)
+		{
+			$clids = $this->get_clids();
+			$q = sprintf("SELECT * FROM objects WHERE oid IN (%s)",join(",",$obj["meta"]["sched_objects"]));
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$ref = $clids[$row["class_id"]];
+				$met = $ref["action"];
+				$_cl = $ref["clid"];
+				$link = $this->mk_my_orb($met,array("id" => $row["oid"]),$_cl);
+				$this->add(array("event" => $link,"rep_id" => $id, "uid" => $obj["meta"]["login_uid"],"password" => $obj["meta"]["login_password"]));
+			};
+		};
+
+		$this->read_template("set_time.tpl");
+		classload("cal_event");
+                $ce = new cal_event();
+                $html = $ce->repeaters(array(
+                        "id" => $id,
+                        "cycle" => $cycle,
+			"hide_menubar" => "hell_yes",
+			"use_class" => "scheduler",
+			"use_method" => "set_time",
+                ));	
+		$this->vars(array(
+			"table" => $html,
+		));
+		$chlink = $this->mk_my_orb("change",array("id" => $id));
+		$schedlink = $this->mk_my_orb("set_time",array("id" => $id));
+		$this->mk_path($obj["parent"],"<a href='$chlink'>$obj[name]</a> / <a href='$schedlink'>M‰‰ra scheduleri kellaajad</a>");
+		return $this->parse();
+	}
+
 }
 ?>
