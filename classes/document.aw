@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.26 2001/06/18 20:29:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.27 2001/06/18 20:49:29 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -108,24 +108,6 @@ class document extends aw_template
 		$this->db_query($q);
 	}
 
-	// kas selline doku on olemas?
-	// samas .. get_object oleks poliitiliselt oige moodus selle tegemiseks
-	function exists($docid)
-	{
-		$q = "SELECT * FROM documents WHERE docid = '$docid'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		return $row;
-	}
-
-	// teeb uue kirje documents tabelisse
-	function create_doc($docid)
-	{
-		// hm. Kas siin mitte new_object funktsiooni ei peaks kasutama?
-		$q = "INSERT INTO documents (docid) VALUES ('$docid')";
-		$this->db_query($q);
-	}
-
 	function list_docs($parent,$period = -1,$status = -1,$visible = -1)
 	{
 		global $awt;
@@ -206,28 +188,15 @@ class document extends aw_template
 		$awt->stop("db_documents->list_docs()");
 	}
 
-	function search($orderby,$sortorder,$field = "",$fval = "")
+	function fetch($docid,$field = "main") 
 	{
-		if (strlen($field) > 0) {
-			$sufix = "WHERE $field LIKE '$fval%'";
-		};
-		if ($orderby != "") {
-			$orderby = "$orderby $sortorder";
-		};
-		$q = "SELECT * FROM documents
-			LEFT JOIN objects ON
-			(documents.docid = objects.oid)
-			$sufix
-			ORDER BY $orderby
-			";
-		$this->db_query($q);
-	}
-
-	function fetch($docid,$field = "main") {
 		global $awt;
-		if ($this->period > 0) {
+		if ($this->period > 0) 
+		{
 			$sufix = " && objects.period = " . $this->period;
-		} else {
+		} 
+		else 
+		{
 			$sufix = "";
 		};
 		$awt->start("doc_fetch");
@@ -260,7 +229,8 @@ class document extends aw_template
 			$data = $this->db_fetch_row();
 		}
 
-		if (gettype($data) == "array") {
+		if (gettype($data) == "array") 
+		{
 			 $data["content"] = trim($data["content"]);
 			 $data["lead"] = trim($data["lead"]);
 			 $data["cite"] = trim($data["cite"]);
@@ -274,34 +244,9 @@ class document extends aw_template
 		return $data;
 	}
 
-	////
-	// !Obsolete?
-	function get_title($docid) {
-		return $this->db_fetch_field("SELECT title FROM documents WHERE docid='$docid'","title");
-	}
-
-	////
-	// !Obsolete?
-	function set_status($docid,$status) {
-		$q = "UPDATE objects 
-			SET status = $status
-			WHERE oid = '$docid'";
-		$this->db_query($q);
-		$this->_log("document","aktiveeris dokumendi $docid");
-	}
-
-	////
-	//! Obsolete?
-	function set_visibility($docid,$vis) {
-                $q = "UPDATE objects
-                        SET visible = $vis
-                        WHERE oid = '$docid'";
-                $this->db_query($q);
-                $this->_log("document","muutis dokumendi $docid nähtavust");
-        }
-			
 	// see on lihtsalt wrapper backwards compatibility jaoks
-	function show($docid,$text = "undef",$tpl="plain.tpl",$leadonly = -1,$secID = -1) {
+	function show($docid,$text = "undef",$tpl="plain.tpl",$leadonly = -1,$secID = -1) 
+	{
 		$params["docid"] 		= $docid;
 		$params["text"] 		= $text;
 		$params["tpl"] 		= $tpl;
@@ -894,45 +839,55 @@ class document extends aw_template
 		$retval = $this->parse();
 		return $retval;
 	}
-	function get_relations($docid) {
-	// kysiti votmesonu dokumendi kohta
+
+	function get_relations($docid) 
+	{
+		// kysiti votmesonu dokumendi kohta
 		$doc = $this->fetch($docid);
 		$keywords = split(",",$doc["keywords"]);
-		if (is_array($keywords)) {
+		if (is_array($keywords)) 
+		{
 			$qparts = array();
-			while(list($k,$v) = each($keywords)) {
+			while(list($k,$v) = each($keywords)) 
+			{
 				$v = trim($v);
 				$qparts[] = " keywords LIKE '%$v%' ";
 			};
-			if (is_array($qparts) && (sizeof($qparts) > 0)) {
+			if (is_array($qparts) && (sizeof($qparts) > 0)) 
+			{
 				$q = "SELECT docid,title,keywords FROM documents WHERE ". 
 					join(" OR ",$qparts);
 				$this->db_query($q);
 				$retval = array();
-				while($row = $this->db_next()) {
+				while($row = $this->db_next()) 
+				{
 					$retval[$row["docid"]] = $row;
 				};
 			};
-
 		};
 		return $retval;
 	}
 	
 	// kysib "sarnaseid" dokusid mingi välja kaudu
 	// XXX
-	function get_relations_by_field($params) {
+	function get_relations_by_field($params) 
+	{
 		$field = $params["field"]; // millisest väljast otsida
 		$keywords = split(",",$params["keywords"]); // mida sellest väljast otsida,
 																		// comma separated listi
 		$section = $params["section"]; // millisest sektsioonist otsida
 		// kui me midagi ei otsi, siis pole siin midagi teha ka enam. GET OUT!
-		if (!is_array($keywords)) {
+		if (!is_array($keywords)) 
+		{
 			return false;
-		} else {
+		} 
+		else 
+		{
 			// moodustame päringu dokude saamiseks, mis vastavad meile
 			// vajalikule tingimusele
 			$retval = array();
-			while(list($k,$v) = each($keywords)) {
+			while(list($k,$v) = each($keywords)) 
+			{
 				$v = trim($v);
 				$q = "SELECT docid FROM documents
 							LEFT JOIN objects ON (documents.docid = objects.oid)
@@ -941,20 +896,6 @@ class document extends aw_template
 			}; // eow
 			return $retval;
 		}; // eoi
-	}
-
-	function get_image_from_text($docid,$text) {
-		if (preg_match("/#(\w+?)(\d+?)(p)#/i",$text,$match)) {
-				$idata = $img->get_img_by_oid($docid,$match[2]);
-		} else {
-			 $idata = false;
-		};
-		return false;
-	}
-
-	// kahtlane funktsioon. Mulle tundub kusjuures, et seda ei kasutatagi kusagil
-	function import_image($tag,$content) {
-		$this->tags[$tag] = $content;
 	}
 
 	function save($data) 
@@ -989,7 +930,8 @@ class document extends aw_template
 		reset($this->knownfields);
 		// tsykkel yle koigi "tuntud" v2ljade, salvestame ainult 
 		// nende sisu, mida vormis kasutati
-		while(list($fcap,$fname) = each($this->knownfields)) {
+		while(list($fcap,$fname) = each($this->knownfields)) 
+		{
 			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search")  
 			{
 				$q_parts[] = "$fname = '$data[$fname]'";
@@ -1042,14 +984,17 @@ class document extends aw_template
 
 		// seda on järgneva päringu koostamiseks vaja, sest objektitabelis pole "title"
 		// välja. On "name"
-		if ($data["title"]) {
+		if ($data["title"]) 
+		{
 			$data["name"] = $data["title"];
 		};
 
 		$oq_parts["oid"] = $id;
 
-		while(list($fcap,$fname) = each($obj_known_fields)) {
-			if ($data[$fname]) {
+		while(list($fcap,$fname) = each($obj_known_fields)) 
+		{
+			if ($data[$fname]) 
+			{
 				$oq_parts[$fname] = $data[$fname];
 			};
 		};
@@ -1059,34 +1004,6 @@ class document extends aw_template
 		$this->_log("document","muutis dokumenti <a href='".$GLOBALS["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>");
 
 		return $this->mk_my_orb("change", array("id" => $id));
-	}
-
-	function show_text($header, $text) {
-		$this->set_root("automatweb/documents");
-		$this->read_template("plain.tpl");
-		global $docid;
-		$this->vars(array("title" => $header, "text" => $text, "image" => "","docid" => $docid));
-		return $this->parse();
-	}
-
-
-	function gen_list()
-	{
-		classload ("../vcl/table");
-		global $baseurl,$PHP_SELF,$sortby;
-		$t = new aw_table(array("prefix" => "documents",
-														"sortby" => "docid",
-														"lookfor" => $lookfor,
-														"imgurl" => $baseurl."/vcl/img",
-														"self"   => $PHP_SELF));
-		$t->parse_xml_def("../vcl/documents.xml");
-
-		$this->listall();
-		while ($row = $this->db_next())
-			$t->define_data($row);
-
-		$t->sort_by(array("field" => $sortby));
-		return $t->draw();
 	}
 
 	function select_alias($docid, $entry_id)
@@ -1102,224 +1019,6 @@ class document extends aw_template
 
 		$this->vars(array("docid" => $docid, "alias" => $entry_id, "op_sel" => $this->picker("", $karr),"form_id" => $ob["parent"]));
 		return $this->parse();
-	}
-
-	function do_search($parent,$str,$sec,$sortby,$from)
-	{
-		if ($sortby == "")
-			$sortby = "percent";
-
-		$this->tpl_init("automatweb/documents");
-		$this->quote(&$str);
-
-		if ($str == "")
-		{
-			$this->read_template("search_none.tpl");
-			return $this->parse();
-		}
-
-		$this->read_template("search.tpl");
-
-		// make list of menus
-		if ($GLOBALS["lang_menus"] == 1)
-			$ss = " AND objects.lang_id = ".$GLOBALS["lang_id"];
-
-		$this->menucache = array();
-		$this->db_query("SELECT objects.oid as oid, objects.parent as parent,objects.last as last,objects.status as status
-										 FROM objects 
-										 WHERE objects.class_id = 1 AND objects.status = 2 $ss");
-		while ($row = $this->db_next())
-		{
-			$this->menucache[$row["parent"]][] = $row;
-		}
-		// now, make a list of all menus below $parent
-		$this->marr = array($parent);
-		// list of default documents
-		$this->darr = array();
-		$this->rec_list($parent);
-
-		$ml = join(",",$this->marr);
-		$ml2 = join(",",$this->darr);
-		if ($ml != "")
-			$ml = " AND objects.parent IN ($ml) ";
-
-		if ($ml2 != "")
-			$ml.= " AND objects.oid IN ($ml2) ";
-	
-		if ($sortby == "time")
-			$ml.=" ORDER BY objects.modified DESC";
-
-		// oh crap. siin peab siis failide seest ka otsima. 
-		$mtfiles = array();
-		$this->db_query("SELECT id FROM files WHERE files.showal = 1 AND files.content LIKE '%$str%' ");
-		while ($row = $this->db_next())
-		{
-			$mtfiles[] = $row["id"];
-		}
-		$fstr = join(",",$mtfiles);
-		if ($fstr != "")
-		{
-			// nyyd leiame k6ik aliased, mis vastavatele failidele tehtud on
-			$this->db_query("SELECT * FROM aliases WHERE target IN ($fstr)");
-			while ($row = $this->db_next())
-			{
-				$faliases[] = $row["source"];
-			}
-			// nyyd on $faliases array dokumentidest, milles on tehtud aliased matchivatele failidele.
-			if (is_array($faliases))
-				$fasstr = "OR documents.docid IN (".join(",",$faliases).")";
-		}
-
-		// nini. otsime tabelite seest ka.
-		$mts = array();
-		$this->db_query("SELECT id FROM aw_tables WHERE contents LIKE '%$str%'");
-		while ($row = $this->db_next())
-		{
-			$mts[] = $row["id"];
-		}
-
-		$mtsstr = join(",",$mts);
-		if ($mtsstr != "")
-		{
-			// nyyd on teada k6ik tabelid, ksu string sisaldub
-			// leiame k6ik aliased, mis on nendele tabelitele tehtud
-			$this->db_query("SELECT * FROM aliases WHERE target IN ($mtsstr)");
-			while ($row = $this->db_next())
-			{
-				$mtals[$row["source"]] = $row["source"];
-			}
-
-			// see on siis nimekiri dokudest, kuhu on tehtud aliased tabelitest, mis matchisid
-			$mtalsstr = "OR documents.docid IN (".join(",",$mtals).")";
-			//echo "ms = $mtalsstr<br>";
-		}
-
-		$cnt = 0;
-		//max number of occurrences of search string in document
-		$max_count = 0;
-		$docarr = array();
-
-//Mingi imelik echo oli.  
-/*
-		echo "ot: SELECT documents.*,objects.parent as parent, objects.modified as modified 
-										 FROM documents 
-										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 $ml";
-*/
-		$this->db_query("SELECT documents.*,objects.parent as parent, objects.modified as modified 
-										 FROM documents 
-										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND (documents.no_search is null OR documents.no_search = 0) $ml");
-		while($row = $this->db_next())
-		{
-			// find number of matches in document for search string, for calculating percentage
-			// if match is found in title, then multiply number by 5, to emphasize importance
-			$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
-			$max_count = max($c,$max_count);
-
-			// find the first paragraph of text
-			$co = strip_tags($row["content"]);
-			$co = substr($co,0,strpos($co,"\n"));
-			$co = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$co);
-			$docarr[] = array("matches" => $c, "title" => $row["title"],"section" => $row["docid"],"content" => $co,"modified" => $this->time2date($row["modified"],5),"tm" => $row["tm"]);
-			
-			$cnt++;
-		}
-
-		if ($sortby == "percent")
-		{
-			$d2arr = array();
-			reset($docarr);
-			while (list(,$v) = each($docarr))
-			{
-				if ($max_count == 0)
-					$d2arr[100][] = $v;
-				else
-					$d2arr[($v["matches"]*100) / $max_count][] = $v;
-			}
-
-			krsort($d2arr,SORT_NUMERIC);
-
-			$docarr = array();
-			reset($d2arr);
-			while (list($p,$v) = each($d2arr))
-			{
-				reset($v);
-				while (list(,$v2) = each($v))
-					$docarr[] = $v2;
-			}
-
-		}
-
-		$per_page = 10;
-
-		$num = 0;
-		reset($docarr);
-		while (list(,$v) = each($docarr))
-		{
-			if ($num >= $from && $num < ($from + $per_page))	// show $per_page matches per screen
-			{
-				if ($max_count == 0)
-					$sstr = 100;
-				else
-					$sstr = substr(($v["matches"]*100) / $max_count,0,4);
-				$this->vars(array("title"			=> $v["title"],
-													"percent"		=> $sstr,
-													"content"		=> preg_replace("/#(.*)#/","",$v["content"]),
-													"modified"	=> $v["tm"] == "" ? $v["modified"] : $v["tm"],
-													"section"		=> $v["section"]));
-				$r.= $this->parse("MATCH");
-			}
-			$num++;
-		}
-
-		$this->vars(array("MATCH" => $r,"s_parent" => $parent,"sstring" => urlencode($str),"sstringn" => $str, "section" => $sec,"matches" => $cnt,"sortby" => $sortby));
-
-		// make prev page / next page
-		if ($cnt > $per_page)
-		{
-			if ($from > 0)
-			{
-				$this->vars(array("from" => $from-$per_page));
-				$prev = $this->parse("PREVIOUS");
-			}
-			if ($from+$per_page <= $cnt)
-			{
-				$this->vars(array("from" => $from+$per_page));
-				$next = $this->parse("NEXT");
-			}
-
-			for ($i=0; $i < $cnt / $per_page; $i++)
-			{
-				$this->vars(array("from" => $i*$per_page,"page_from" => $i*$per_page,"page_to" => ($i+1)*$per_page));
-				if ($i*$per_page == $from)
-					$pg.=$this->parse("SEL_PAGE");
-				else
-					$pg.=$this->parse("PAGE");
-			}
-		}
-		$this->vars(array("PREVIOUS" => $prev,"NEXT" => $next,"PAGE" => $pg,"SEL_PAGE" => "","from" => $from));
-		$ps = $this->parse("PAGESELECTOR");
-		$this->vars(array("PAGESELECTOR" => $ps));
-		return $this->parse();
-	}
-
-	function rec_list($parent)
-	{
-		if (!is_array($this->menucache[$parent]))
-			return;
-
-		reset($this->menucache[$parent]);
-		while(list(,$v) = each($this->menucache[$parent]))
-		{
-			if ($v["status"] == 2)
-			{
-				$this->marr[] = $v["oid"];
-				if ($v["last"] > 0)
-					$this->darr[] = $v["last"];
-				$this->rec_list($v["oid"]);
-			}
-		}
 	}
 
 	function send_link()
@@ -1350,7 +1049,9 @@ class document extends aw_template
 	{
 		$hinne = $hinne+0;
 		if ($hinne > 0)
+		{
 			$this->db_query("UPDATE documents SET rating=rating+$hinne , num_ratings=num_ratings+1 WHERE docid = $docid");
+		}
 	}
 
 	function telekava_doc($content)
@@ -1358,10 +1059,16 @@ class document extends aw_template
 		$paevad = array("0" => "#telekava_neljapaev#", "1" => "#telekava_reede#", "2" => "#telekava_laupaev#", "3" => "#telekava_pyhapaev#", "4" => "#telekava_esmaspaev#", "5" => "#telekava_teisipaev#", "6" => "#telekava_kolmapaev#");
 		reset($paevad);
 		while (list($num, $v) = each($paevad))
+		{
 			if (strpos($content,$v) === false)
+			{
 				continue;
+			}
 			else
+			{
 				break;
+			}
+		}
 
 		// arvutame v2lja, et millal oli eelmine neljap2ev
 		$sub_arr = array("0" => "3", "1" => "4", "2" => "5", "3" => "6", "4" => "0", "5" => "1", "6" => "2");
@@ -1380,7 +1087,9 @@ class document extends aw_template
 		$sar = array();
 		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
 		while ($arow = $this->db_next())
+		{
 			$sar[$arow["parent"]] = $arow["parent"];
+		}
 
 		classload("objects");
 		$ob = new db_objects;
@@ -1549,16 +1258,21 @@ class document extends aw_template
 
 		$oob = $this->get_object($id);
 		if ($oob["class_id"] == CL_BROTHER_DOCUMENT)
+		{
 			$id = $oob["brother_of"];
+		}
 
 		$document = $this->fetch($id);
 		$this->mk_path($document["parent"],"Muuda dokumenti",$document["period"]);
 		
 		// kui class_id on 1, siis jarelikult me muudame
 		// mingi sektsiooni defaulte
-		if ($document["class_id"] == 1) {
+		if ($document["class_id"] == 1) 
+		{
 			$mcap = "Sektsiooni defaultid";
-		} else {
+		} 
+		else 
+		{
 			$mcap = "Dokumendid";
 		};
 
@@ -2022,43 +1736,6 @@ class document extends aw_template
 		$this->vars(array("add_image"	=> $this->mk_my_orb("new", array("parent" => $id), "images")));
 	}
 
-		function mk_folders($parent,$str)
-		{
-			if (!is_array($this->menucache[$parent]))
-				return;
-
-			reset($this->menucache[$parent]);
-			while(list(,$v) = each($this->menucache[$parent]))
-			{
-				$name = $v["data"]["name"];
-				if ($v["data"]["parent"] == 1)
-				{
-					$words = explode(" ",$name);
-					if (count($words) == 1)
-						$name = $words[0][0].$words[0][1];
-					else
-					{
-						reset($words);
-						$mstr = "";
-						while(list(,$v3) = each($words))
-							$mstr.=$v3[0];
-						$name = $mstr;
-					}
-				}
-
-				$sep = ($str == "" ? "" : " / ");
-				$tstr = $str.$sep.$name;
-
-				if (is_array($this->extrarr[$v["data"]["oid"]]))
-				{
-					reset($this->extrarr[$v["data"]["oid"]]);
-					while (list(,$v2) = each($this->extrarr[$v["data"]["oid"]]))
-						$this->docs[$v2["docid"]] = $tstr." / ".$v2["name"];
-				}
-
-				$this->mk_folders($v["data"]["oid"],$tstr);
-			}
-		}
 
 	function delete($arr)
 	{
@@ -2305,21 +1982,9 @@ class document extends aw_template
 				$dcnt++;
 		}
 
-//		$this->docs = array("0" => "");
-//		$this->mk_folders(1,"");
-		
-
 		classload("objects");
 		$ob = new db_objects;
 	 
-/*		if ($this->period == 0) { 
-			$default_doc = $this->option_list($this->sel_doc,$this->docs);
-			$dest = $this->option_list($parent,$ob->get_list());
-		} else {
-			$default_doc = "";
-			$dest = "";
-		};*/
-
 		$this->vars(array("default_doc" => $default_doc,
 											"dest"				=> $dest,
 											"doc_default"	=> ($sub_sel == false ? "CHECKED" : "" ),
