@@ -9,7 +9,7 @@ class __classname extends aw_template
 	function __classname()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be 
-		$this->init("__classname");
+		$this->init("__tplfolder");
 	}
 
 	////
