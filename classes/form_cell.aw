@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.1 2001/05/19 23:33:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.2 2001/05/21 05:24:55 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -145,7 +145,7 @@ class form_cell extends aw_template
 			$o = new db_objects;
 			$this->vars(array("reforb"		=> $this->mk_reforb("add_element", array("id" => $this->id, "row" => $this->row, "col" => $this->col,"wizard_step" => 1),"form"),
 												"folders"		=> $this->picker($this->parent, $o->get_list()),
-												"elements"	=> $this->picker(0,$this->listall_elements())));
+												"elements"	=> $this->picker(0,$this->listall_elements(&$form))));
 			return $this->parse();
 		}
 		else
@@ -364,7 +364,7 @@ class form_cell extends aw_template
 
 	////
 	// !creates a list of all elements to be put in a listbox for the suer to select which one he wants to add
-	function listall_elements()
+	function listall_elements(&$form)
 	{
 		$this->db_query("SELECT objects.oid as oid, 
 														objects.parent as parent,
@@ -379,14 +379,14 @@ class form_cell extends aw_template
 		
 		// teeme olemasolevatest elementidest array
 		$elarr = array();
-		for ($row = 0; $row < $this->arr[rows]; $row++)
+		for ($row = 0; $row < $form->arr[rows]; $row++)
 		{
-			for ($col = 0; $col < $this->arr[cols]; $col++)
+			for ($col = 0; $col < $form->arr[cols]; $col++)
 			{
-				if (is_array($this->arr[elements][$row][$col]))
+				if (is_array($form->arr[elements][$row][$col]))
 				{
-					reset($this->arr[elements][$row][$col]);
-					while (list($eid,) = each($this->arr[elements][$row][$col]))
+					reset($form->arr[elements][$row][$col]);
+					while (list($eid,) = each($form->arr[elements][$row][$col]))
 					{
 						$elarr[$eid] = $eid;
 					}
@@ -397,7 +397,7 @@ class form_cell extends aw_template
 		$this->db_query("SELECT objects.*, form_elements.* FROM form_elements LEFT JOIN objects ON objects.oid = form_elements.id WHERE objects.status != 0");
 		while ($row = $this->db_next())
 		{
-			if (!$elar[$eid])
+			if (!$elarr[$row["oid"]])
 			{
 				// if this element does not exist in this form yet
 				// add it to the select list.

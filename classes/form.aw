@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.3 2001/05/21 03:16:48 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.4 2001/05/21 05:24:55 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -731,7 +731,7 @@ $orb_defs["form"] = "xml";
 		}
 
 		////
-		// !saves the entry for the form
+		// !saves the entry for the form $id, if $entry_id specified, updates it instead of creating a new one
 		function process_entry($arr)
 		{
 			extract($arr);
