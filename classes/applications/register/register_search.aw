@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.16 2004/12/08 07:50:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.17 2004/12/08 11:07:41 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -376,8 +376,13 @@ class register_search extends class_base
 			$table = nl2br(sprintf($ob->prop("notfound_text"), $request["rsf"][$this->fts_name]));
 		}
 		else
+		if ($request["search_butt"] != "")
 		{
 			$table = $t->draw();
+		}
+		else
+		{
+			$table = "";
 		}
 
 		if ($ob->prop("show_date") && $request["search_butt"] != "")
