@@ -9,6 +9,36 @@
             <field>jrk</field>
             <caption>Järk</caption>
       </property>
+      <property>
+            <name>has_group</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas tehakse kasutajagrupp</caption>
+      </property>
+      <property>
+            <name>has_group_subs</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas tehakse kasutajagrupp alamsektsioonidele</caption>
+      </property>
+      <property>
+            <name>has_group_subs_prof</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas tehakse kasutajagrupp alamametinimetustele</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SECTION</syslog_type>
             <relationmgr>yes</relationmgr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.16 2004/11/09 10:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.17 2004/12/28 13:32:34 kristo Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -13,6 +13,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @property jrk type=textbox size=4
 @caption Järk
+
+@property has_group type=checkbox ch_value=1 field=meta method=serialize
+@caption Kas tehakse kasutajagrupp
+
+@property has_group type=checkbox ch_value=1 field=meta method=serialize
+@caption Kas tehakse kasutajagrupp
+
+@property has_group_subs type=checkbox ch_value=1 field=meta method=serialize
+@caption Kas tehakse kasutajagrupp alamsektsioonidele
+
+@property has_group_subs_prof type=checkbox ch_value=1 field=meta method=serialize
+@caption Kas tehakse kasutajagrupp alamametinimetustele
+
 
 @reltype SECTION value=1 clid=CL_CRM_SECTION
 @caption Alamüksus

@@ -3310,6 +3310,23 @@ class crm_company extends class_base
 			)
 				
 		));
+
+		if (is_oid($arr["request"]["category"]))
+		{
+			$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text' => t('Klient'),
+				'link' => $this->mk_my_orb('new',array(
+						'parent' => $arr['obj_inst']->id(),
+						'alias_to' => $alias_to,
+						'reltype' => 3, // crm_category.CUSTOMER,
+						'return_url' => urlencode(aw_global_get('REQUEST_URI'))
+					),
+					'crm_company'
+				)
+			));
+		}
+
 		//delete button
 		$tb->add_button(array(
 			'name' => 'del',

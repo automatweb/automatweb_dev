@@ -105,10 +105,30 @@ class crm_user_creator extends core
 		return $grp;
 	}
 
-	function _req_check_grps($parent, $ol)
+	function _req_check_grps($parent, $ol, $force_has = false, $force_has_prof = false)
 	{
 		foreach($ol->arr() as $o)
 		{
+			if ($o->class_id() == CL_CRM_SECTION && !$o->prop("has_group") && !$force_has)
+			{
+				continue;
+			}
+
+			if ($o->class_id() == CL_CRM_PROFFESSION && !$force_has_prof)
+			{
+				continue;
+			}
+
+			if ($o->prop("has_group_subs"))
+			{
+				$force_has = true;
+			}
+
+			if ($o->prop("has_group_subs_prof"))
+			{
+				$force_has_prof = true;
+			}
+
 			// check of the object has a group relation
 			obj_set_opt("no_cache", 1);
 			$grp = $o->get_first_obj_by_reltype("RELTYPE_GROUP");
@@ -143,7 +163,7 @@ class crm_user_creator extends core
 					))
 				);
 				// recurse
-				$this->_req_check_grps($grp, $ol_s);
+				$this->_req_check_grps($grp, $ol_s, $force_has, $force_has_prof);
 			}
 		}
 	}
