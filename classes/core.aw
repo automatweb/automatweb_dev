@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.94 2002/07/16 23:43:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.95 2002/07/17 07:46:57 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -375,16 +375,18 @@ class core extends db_connector
 		{
 			return false;
 		};
+		/*
 		if (aw_ini_get("lang_menus") == 1)
 		{
 			$ss = " AND lang_id = ".aw_global_get("lang_id");
 		};
+		*/
 		if ($parent)
 		{
 			$ps = " AND parent = $parent ";
 		};
 		$q = "SELECT * FROM objects
-			WHERE alias = '$alias' AND status != 0 $ps $ss";
+			WHERE alias = '$alias' AND status = 2 $ps $ss";
 		$this->db_query($q);
 		$res = $this->db_fetch_row();
 		return $res;
@@ -1272,6 +1274,11 @@ class core extends db_connector
 					FROM objects
 					WHERE class_id = $class AND status = 2 $pstr $sc $astr $ostr";
 		};
+		global $DBG;
+		if ($DBG)
+		{
+			print $q;
+		}
 		$this->db_query($q);
 	}
 
@@ -2129,6 +2136,34 @@ class core extends db_connector
 		{
 			$this->vars($GLOBALS[$arr_name]);
 		}
+	}
+
+	////
+	// !generates a simple one-level menu from the given data structure - the active item is determined by orb action
+	function do_menu($items)
+	{
+		global $action;
+		$im = "";
+		foreach($items as $iid => $idata)
+		{
+			$this->vars(array(
+				"url"	=> $idata["url"],
+				"text" => $idata["name"]
+			));
+			if ($action == $iid)
+			{
+				$im.=$this->parse("SEL_ITEM");
+			}
+			else
+			{
+				$im.=$this->parse("ITEM");
+			}
+		}
+		$this->vars(array(
+			"ITEM" => $im,
+			"SEL_ITEM" => ""
+		));
+		return $this->parse();
 	}
 };
 ?>
