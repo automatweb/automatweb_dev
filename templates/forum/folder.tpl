@@ -1,6 +1,6 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-<td height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; padding-left:10px;" colspan="2"><a href="{VAR:add_topic_url}"><img src="{VAR:baseurl}/automatweb/images/forum_add_new.gif" align="absmiddle" border="0" alt="Lisa uus teema"></a> <a href="{VAR:add_topic_url}">Lisa uus teema</a>
+<td colspan="2" height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; padding-left:10px;" colspan="2"><a href="{VAR:add_topic_url}"><img src="{VAR:baseurl}/automatweb/images/forum_add_new.gif" align="absmiddle" border="0" alt="Lisa uus teema"></a> <a href="{VAR:add_topic_url}">Lisa uus teema</a>
 </td>
 </tr>
 <tr>
@@ -8,12 +8,14 @@
 <strong>{VAR:path}</strong>
 </td>
 <td class="{VAR:style_caption}">
+<!-- SUB: PAGER -->
 <!-- SUB: active_page -->
  <strong>[ {VAR:num} ]</strong>
 <!-- END SUB: active_page -->
 <!-- SUB: page -->
  <a href="{VAR:url}">{VAR:num}</a> 
 <!-- END SUB: page -->
+<!-- END SUB: PAGER -->
 </td>
 </tr>
 </table>
