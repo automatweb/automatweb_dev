@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.26 2005/01/19 18:19:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.27 2005/02/17 13:10:54 ahti Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -61,7 +61,34 @@ class shop_order_cart extends class_base
 
 		}
 		return $retval;
-	}	
+	}
+	
+	function get_cart($oc)
+	{
+		if($oc->prop("cart_type") == 1 && aw_global_get("uid") != "")
+		{
+			$user = obj(aw_global_get("uid_oid"));
+			// well, it would be wise to syncronize the session aswell...
+			$_SESSION["cart"] = $user->meta("shop_cart");
+			return $user->meta("shop_cart");
+		}
+		else
+		{
+			return $_SESSION["cart"];
+		}
+	}
+	
+	function set_cart($arr)
+	{
+		extract($arr);
+		if($oc->prop("cart_type") == 1 && aw_global_get("uid") != "")
+		{
+			$user = obj(aw_global_get("uid_oid"));
+			$user->set_meta("shop_cart", $cart);
+			$user->save();
+		}
+		$_SESSION["cart"] = $cart;
+	}
 
 	function parse_alias($arr)
 	{
@@ -126,16 +153,12 @@ class shop_order_cart extends class_base
 		$total = 0;
 		$prod_total = 0;
 
-		$awa = new aw_array($_SESSION["cart"]["items"]);
+		$cart = $this->get_cart($oc);
+		$awa = new aw_array($cart["items"]);
 		$show_info_page = true;
 		foreach($awa->get() as $iid => $quant)
 		{
-			if ($quant < 1)
-			{
-				continue;
-			}
-
-			if (!$this->can("view", $iid) || !is_oid($iid))
+			if ($quant < 1 || !is_oid($iid) || !$this->can("view", $iid))
 			{
 				continue;
 			}
@@ -169,7 +192,7 @@ class shop_order_cart extends class_base
 		$wh_o = obj($oc->prop("warehouse"));
 
 		// fake user data
-		$wh_o->set_meta("order_cur_ud", $_SESSION["cart"]["user_data"]);
+		$wh_o->set_meta("order_cur_ud", $cart["user_data"]);
 
 		$els = $swh->callback_get_order_current_form(array(
 			"obj_inst" => $wh_o
@@ -264,7 +287,8 @@ class shop_order_cart extends class_base
 	{
 		extract($arr);
 		$oc = obj($oc);
-
+		
+		$cart = $this->get_cart($oc);
 		aw_session_set("order.accept_cond", $arr["order_cond_ok"]);
 
 		// get cart to user from oc
@@ -284,7 +308,6 @@ class shop_order_cart extends class_base
 				$arr["add_to_cart_id"] => $arr["order_data"]
 			);
 		}
-
 		$awa = new aw_array($arr["add_to_cart"]);
 		foreach($awa->get() as $iid => $quant)
 		{
@@ -301,7 +324,7 @@ class shop_order_cart extends class_base
 			}
 			else
 			{
-				$cc = $_SESSION["cart"]["items"][$iid] + $quant;
+				$cc = $cart["items"][$iid] + $quant;
 			}
 
 			$mon = $i_i->get_must_order_num($i_o);
@@ -329,20 +352,23 @@ class shop_order_cart extends class_base
 				}
 			}
 		}
-
 		if ($arr["from"] != "confirm" && $arr["from"] != "")
 		{
-			$_SESSION["cart"]["user_data"] = $GLOBALS["user_data"];
+			$cart["user_data"] = $GLOBALS["user_data"];
 		}
 
 		if (isset($arr["payment_method"]))
 		{
-			$_SESSION["cart"]["payment_method"] = $arr["payment_method"];
+			$cart["payment_method"] = $arr["payment_method"];
 		}
 		if (isset($arr["num_payments"]))
 		{
-			$_SESSION["cart"]["payment"]["num_payments"] = $arr["num_payments"];
+			$cart["payment"]["num_payments"] = $arr["num_payments"];
 		}
+		$this->set_cart(array(
+			"oc" => $oc,
+			"cart" => $cart,
+		));
 
 		// check cfgform controllers for user data
 		$cfgf = $oc->prop("data_form");
@@ -417,17 +443,17 @@ class shop_order_cart extends class_base
 			}
 			die();
 		}
-
+		//arr($arr);
 		$awa = new aw_array($arr["add_to_cart"]);
 		foreach($awa->get() as $iid => $quant)
 		{
 			if ($arr["update"] == 1)
 			{
-				$_SESSION["cart"]["items"][$iid] = $quant;
+				$cart["items"][$iid] = $quant;
 			}
 			else
 			{
-				$_SESSION["cart"]["items"][$iid] += $quant;
+				$cart["items"][$iid] += $quant;
 			}
 		}
 
@@ -436,7 +462,7 @@ class shop_order_cart extends class_base
 			$awa = safe_array($order_data);
 			foreach($awa as $iid => $dat)
 			{
-				$_SESSION["cart"]["item_data"][$iid] = $dat;
+				$cart["item_data"][$iid] = $dat;
 			}
 
 			if (isset($awa["all_items"]) && is_array($awa["all_items"]))
@@ -447,14 +473,14 @@ class shop_order_cart extends class_base
 				{
 					if ($quant > 0)
 					{
-						if (!isset($_SESSION["cart"]["item_data"][$iid]) || !is_array($_SESSION["cart"]["item_data"][$iid]))
+						if (!isset($cart["item_data"][$iid]) || !is_array($cart["item_data"][$iid]))
 						{
-							$_SESSION["cart"]["item_data"][$iid] = array();
+							$cart["item_data"][$iid] = array();
 						}
 
 						foreach($awa_all as $aa_k => $aa_v)
 						{
-							$_SESSION["cart"]["item_data"][$iid][$aa_k] = $aa_v;
+							$cart["item_data"][$iid][$aa_k] = $aa_v;
 						}
 					}
 				}
@@ -468,12 +494,24 @@ class shop_order_cart extends class_base
 						$tmp = obj($iid);
 						foreach($tmp->connections_from(array("type" => "RELTYPE_PACKAGING")) as $c)
 						{
-							$_SESSION["cart"]["item_data"][$c->prop("to")] = $k_d;
+							$cart["item_data"][$c->prop("to")] = $k_d;
 						}
 					}
 				}
 			}
 		}
+		foreach(safe_array($to_remove) as $xid => $rm)
+		{
+			if($rm == 1)
+			{
+				unset($cart["items"][$xid]);
+			}
+		}
+		$this->set_cart(array(
+			"oc" => $oc,
+			"cart" => $cart,
+		));
+		//arr($cart);
 
 		if (is_oid($cart_o->prop("update_handler")) && $this->can("view", $cart_o->prop("update_handler")))
 		{
@@ -500,7 +538,7 @@ class shop_order_cart extends class_base
 
 		if (!empty($arr["clear_cart"]))
 		{
-			$this->clear_cart();
+			$this->clear_cart($oc);
 		}
 
 		if (!empty($arr["pre_confirm_order"]))
@@ -524,7 +562,7 @@ class shop_order_cart extends class_base
 		{
 			// do confirm order and show user
 			// if cart is empty, redirect to front page
-			$awa = new aw_array($_SESSION["cart"]["items"]);
+			$awa = new aw_array($cart["items"]);
 			$tmp = $awa->get();
 			if (count($tmp) < 1)
 			{
@@ -539,10 +577,10 @@ class shop_order_cart extends class_base
 
 			aw_session_del("order.accept_cond");
 			$ordid = $this->do_create_order_from_cart($arr["oc"],NULL,array(
-				"payment" => $_SESSION["cart"]["payment"],
-				"payment_type" => $_SESSION["cart"]["payment_method"]
+				"payment" => $cart["payment"],
+				"payment_type" => $cart["payment_method"]
 			));
-			$this->start_order();
+			//$this->clear_cart($oc);
 			return $this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order");
 		}
 		else
@@ -553,7 +591,7 @@ class shop_order_cart extends class_base
 
 	function do_create_order_from_cart($oc, $warehouse = NULL, $params = array())
 	{
-		$so = get_instance("applications/shop/shop_order");
+		$so = get_instance(CL_SHOP_ORDER);
 		$oc = obj($oc);
 
 		if ($warehouse === NULL)
@@ -575,39 +613,46 @@ class shop_order_cart extends class_base
 			// now, get postal_price from cart
 			$params["postal_price"] = $order_cart->prop("postal_price");
 		}
+		$cart = $this->get_cart($oc);
 
 		$so->start_order(obj($warehouse), $oc);
-
-		$awa = new aw_array($_SESSION["cart"]["items"]);
+		
+		$params["cart"] = $cart;
+		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quant)
 		{
-			$so->add_item($iid, $quant, $_SESSION['cart']['item_data'][$iid]);
+			$so->add_item($iid, $quant, $cart["item_data"][$iid]);
 		}
 
 		return $so->finish_order($params);
 	}
 
-	function start_order()
+	function add_item($iid, $quant, $oc, $prod_data = array())
 	{
-		$_SESSION["cart"] = array();
+		$cart = $this->get_cart($oc);
+		$cart["items"][$iid] += $quant;
+		$cart["item_data"][$iid] = $prod_data;
+		$this->set_cart(array(
+			"oc" => $oc,
+			"cart" => $cart,
+		));
 	}
 
-	function add_item($iid, $quant, $prod_data = array())
+	function set_item($iid, $quant, $oc)
 	{
-		$_SESSION["cart"]["items"][$iid] += $quant;
-		$_SESSION["cart"]["item_data"][$iid] = $prod_data;
-	}
-
-	function set_item($iid, $quant)
-	{
+		$cart = $this->get_cart($oc);
 		if ($quant == 0)
 		{
-			unset($_SESSION["cart"]["items"][$iid]);
+			unset($cart["items"][$iid]);
 		}
 		else
 		{
-			$_SESSION["cart"]["items"][$iid] = $quant;
+			$cart["items"][$iid] = $quant;
 		}
+		$this->set_cart(array(
+			"oc" => $oc,
+			"cart" => $cart,
+		));
 	}
 
 	function get_cart_value($prod = false)
@@ -669,9 +714,12 @@ class shop_order_cart extends class_base
 	}
 	
 
-	function clear_cart()
+	function clear_cart($oc)
 	{
-		unset($_SESSION["cart"]);
+		$this->set_cart(array(
+			"oc" => $oc,
+			"cart" => array(),
+		));
 	}
 
 	/**
@@ -734,11 +782,13 @@ class shop_order_cart extends class_base
 
 		$total = 0;
 		$prod_total = 0;
-
-		$awa = new aw_array($_SESSION["cart"]["items"]);
+		
+		$cart = $this->get_cart($oc);
+		
+		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quant)
 		{
-			if ($quant < 1 || !$this->can("view", $iid))
+			if ($quant < 1 || !is_oid($iid) || !$this->can("view", $iid))
 			{
 				continue;
 			}
@@ -755,25 +805,25 @@ class shop_order_cart extends class_base
 					"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
 				))
 			));
-
-			$total += ($quant * $inst->get_price($i));
+			$prod_total += ($quant * $inst->get_price($i));
 			if (get_class($inst) == "shop_product_packaging")
 			{
 				$prod_total += ($quant * $inst->get_prod_calc_price($i));
 			}
+			/*
 			else
 			{
 				$prod_total = $total;
 			}
+			*/
 
 			$str .= $this->parse("PROD");
 		}
-
 		$swh = get_instance(CL_SHOP_WAREHOUSE);
 		$wh_o = obj($oc->prop("warehouse"));
 
 		// fake user data
-		$wh_o->set_meta("order_cur_ud", $_SESSION["cart"]["user_data"]);
+		$wh_o->set_meta("order_cur_ud", $cart["user_data"]);
 
 		$els = $swh->callback_get_order_current_form(array(
 			"obj_inst" => $wh_o,
@@ -802,8 +852,8 @@ class shop_order_cart extends class_base
 			}
 	
 			$this->vars(array(
-				"cod_selected" => checked($_SESSION["cart"]["payment_method"] == "cod" || !$do || $_SESSION["cart"]["payment_method"] == ""),
-				"rent_selected" => checked($_SESSION["cart"]["payment_method"] == "rent"),
+				"cod_selected" => checked($cart["payment_method"] == "cod" || !$do || $cart["payment_method"] == ""),
+				"rent_selected" => checked($cart["payment_method"] == "rent"),
 			));
 
 			if ($do)
@@ -872,7 +922,7 @@ class shop_order_cart extends class_base
 
 		if (aw_global_get("uid") != "")
 		{
-			$us = get_instance("core/users/user");
+			$us = get_instance(CL_USER);
 			$objs = array(
 				"user_data_user_" => obj($us->get_current_user()),
 				"user_data_person_" => obj($us->get_current_person()),
@@ -891,7 +941,6 @@ class shop_order_cart extends class_base
 			$vars["logged"] = $this->parse("logged");
 			$this->vars($vars);
 		}
-
 		$this->vars(array(
 			"user_data_form" => $html,
 			"PROD" => $str,
@@ -953,8 +1002,10 @@ class shop_order_cart extends class_base
 		$layout->set_prop("template", "prod_pre_confirm.tpl");
 
 		$total = 0;
-
-		$awa = new aw_array($_SESSION["cart"]["items"]);
+		
+		$cart = $this->get_cart($oc);
+		
+		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quant)
 		{
 			if ($quant < 1 || !$this->can("view", $iid))
@@ -984,7 +1035,7 @@ class shop_order_cart extends class_base
 		$wh_o = obj($oc->prop("warehouse"));
 
 		// fake user data
-		$wh_o->set_meta("order_cur_ud", $_SESSION["cart"]["user_data"]);
+		$wh_o->set_meta("order_cur_ud", $cart["user_data"]);
 
 		$els = $swh->callback_get_order_current_form(array(
 			"obj_inst" => $wh_o
@@ -1084,13 +1135,13 @@ class shop_order_cart extends class_base
 		));
 
 		$can_confirm = true;
-		if (($imp = aw_ini_get("otto.import")) && $_SESSION["cart"]["payment_method"] == "rent" && $this->is_template("HAS_RENT"))
+		if (($imp = aw_ini_get("otto.import")) && $cart["payment_method"] == "rent" && $this->is_template("HAS_RENT"))
 		{
 			$i = obj($imp);
 			$cl_pgs = $this->make_keys(explode(",", $i->prop("jm_clothes")));
 			$ls_pgs = $this->make_keys(explode(",", $i->prop("jm_lasting")));
 			$ft_pgs = $this->make_keys(explode(",", $i->prop("jm_furniture")));
-			$awa = new aw_array($_SESSION["cart"]["items"]);
+			$awa = new aw_array($cart["items"]);
 			foreach($awa->get() as $iid => $quant)
 			{
 				if ($quant < 1 || !$this->can("view", $iid))
@@ -1146,16 +1197,16 @@ class shop_order_cart extends class_base
 				}
 			}
 
-			$npc = max(2,$_SESSION["cart"]["payment"]["num_payments"]["clothes"]);
+			$npc = max(2,$cart["payment"]["num_payments"]["clothes"]);
 			$cl_payment = ($cl_total+($cl_total*($npc)*1.25/100))/($npc+1);
 			$cl_tot_wr = ($cl_payment * ($npc+1));
 
-			$ft_npc = max(2,$_SESSION["cart"]["payment"]["num_payments"]["furniture"]);
+			$ft_npc = max(2,$cart["payment"]["num_payments"]["furniture"]);
 			$ft_first_payment = ($ft_total/5);
 			$ft_payment = ($ft_total-$ft_first_payment+(($ft_total-$ft_first_payment)*$ft_npc*1.25/100))/($ft_npc+1);
 			$ft_total_wr = $ft_payment * ($ft_npc+1) + $ft_first_payment;
 
-			$ls_npc = max(2,$_SESSION["cart"]["payment"]["num_payments"]["last"]);
+			$ls_npc = max(2,$cart["payment"]["num_payments"]["last"]);
 			$ls_payment = ($ls_total+($ls_total*($ls_npc)*1.25/100))/($ls_npc+1);
 			$ls_total_wr = ($ls_payment * ($ls_npc+1));
 

@@ -35,7 +35,7 @@
             <reltype>RELTYPE_PERSON</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>M&amp;uuml;ja esindaja</caption>
+            <caption>M&amp;uuml;&amp;uuml;ja esindaja</caption>
       </property>
       <property>
             <name>seller_company</name>
@@ -45,7 +45,7 @@
             <reltype>RELTYPE_ORG</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>M&amp;uuml;ja</caption>
+            <caption>M&amp;uuml;&amp;uuml;ja</caption>
       </property>
       <property>
             <name>oc</name>
@@ -64,6 +64,16 @@
             <reltype>RELTYPE_WAREHOUSE</reltype>
             <field>aw_warehouse_id</field>
             <caption>Ladu</caption>
+      </property>
+      <property>
+            <name>items_toolbar</name>
+            <table>objects</table>
+            <group>items</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>items_toolbar</field>
+            <caption>Tellimuste toolbar</caption>
       </property>
       <property>
             <name>items_orderer</name>
@@ -143,6 +153,11 @@
                   <clid>CL_SHOP_ORDER_CENTER</clid>
                   <caption>tellimiskeskkond</caption>
             </ORDER_CENTER>
+            <ORDER_TABLE_LAYOUT>
+                  <value>7</value>
+                  <clid>CL_SHOP_PRODUCT_TABLE_LAYOUT</clid>
+                  <caption>Tellimuste tabeli kujundus</caption>
+            </ORDER_TABLE_LAYOUT>
       </reltypes>
 </properties>
 

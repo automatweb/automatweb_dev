@@ -18,5 +18,16 @@
 			</function>
 		</action>
 
+		<action name="remove_items">
+			<function name="remove_items">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="group" />
+					<optional name="return_url" />
+					<required name="sel" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.9 2005/01/28 14:23:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.10 2005/02/17 13:10:54 ahti Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -205,6 +205,7 @@ class shop_packet extends class_base
 		$first = true;
 		$p_cnt = 1;
 		$pager = array();
+		$sct->get_cart($oc_obj);
 		foreach($prod->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			$w = $c->to();

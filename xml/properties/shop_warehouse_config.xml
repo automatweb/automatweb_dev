@@ -4,90 +4,100 @@
             <name>prod_fld</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <caption>Toodete kataloog</caption>
       </property>
       <property>
             <name>pkt_fld</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <caption>Pakettide kataloog</caption>
       </property>
       <property>
             <name>reception_fld</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <caption>Lao sissetulekute kataloog</caption>
       </property>
       <property>
             <name>export_fld</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <caption>Lao v&amp;auml;jaminekute kataloog</caption>
       </property>
       <property>
             <name>prod_type_fld</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <caption>Lao toodete t&amp;uuml;&amp;uuml;bid</caption>
+      </property>
+      <property>
+            <name>prod_type_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <caption>Lao toodete t&amp;uuml;&amp;uuml;pide lisamise vormi seadete vorm</caption>
       </property>
       <property>
             <name>order_fld</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <caption>Lao tellimuste kataloog</caption>
       </property>
       <property>
             <name>buyers_fld</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <caption>Lao tellijate kataloog</caption>
       </property>
       <property>
             <name>search_form</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SEARCH_FORM</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_FORM</reltype>
             <caption>Lao otsinguvorm</caption>
       </property>
       <property>
             <name>manager_cos</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MANAGER_CO</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MANAGER_CO</reltype>
             <multiple>1</multiple>
             <caption>Haldurfirmad</caption>
       </property>
@@ -95,10 +105,10 @@
             <name>sell_prods</name>
             <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Ladu m&amp;uuml;b tooteid, mitte pakendeid</caption>
       </property>
       <classinfo>
@@ -121,6 +131,11 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>haldaja firma</caption>
             </MANAGER_CO>
+            <CFGFORM>
+                  <value>4</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Seadete vorm</caption>
+            </CFGFORM>
       </reltypes>
 </properties>
 

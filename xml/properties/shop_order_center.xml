@@ -2,207 +2,231 @@
 <properties>
       <property>
             <name>warehouse</name>
-            <table>aw_shop_order_center</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_WAREHOUSE</reltype>
+            <table>aw_shop_order_center</table>
             <field>aw_warehouse_id</field>
             <caption>Ladu</caption>
       </property>
       <property>
             <name>cart</name>
-            <table>aw_shop_order_center</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_CART</reltype>
+            <table>aw_shop_order_center</table>
             <field>aw_cart_id</field>
             <caption>Ostukorv</caption>
       </property>
       <property>
-            <name>pdf_template</name>
-            <table>objects</table>
+            <name>cart_type</name>
             <group>general</group>
-            <type>textbox</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>chooser</type>
+            <caption>Ostukorvi tüüp</caption>
+      </property>
+      <property>
+            <name>show_unconfirmed</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi</caption>
+      </property>
+      <property>
+            <name>pdf_template</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
             <caption>PDF Template faili nimi</caption>
       </property>
       <property>
             <name>data_form</name>
-            <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ORDER_FORM</reltype>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDER_FORM</reltype>
             <caption>Tellija andmete vorm</caption>
       </property>
       <property>
             <name>data_form_person</name>
-            <table>objects</table>
             <group>general</group>
-            <type>select</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Isiku nime element andmete vormis</caption>
       </property>
       <property>
             <name>data_form_company</name>
-            <table>objects</table>
             <group>general</group>
-            <type>select</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Organisatsiooni nime element andmete vormis</caption>
       </property>
       <property>
             <name>mail_to_el</name>
-            <table>objects</table>
             <group>general</group>
-            <type>select</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>E-maili element, kuhu saata tellimus</caption>
       </property>
       <property>
             <name>data_form_discount</name>
-            <table>objects</table>
             <group>general</group>
-            <type>select</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Allahindluse element andmete vormis</caption>
       </property>
       <property>
             <name>only_active_items</name>
-            <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Ainult aktiivsed tooted</caption>
       </property>
       <property>
             <name>use_controller</name>
-            <table>objects</table>
             <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>N&amp;auml;itamiseks kasuta kontrollerit</caption>
       </property>
       <property>
             <name>mail_from_addr</name>
-            <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Meili From aadress</caption>
       </property>
       <property>
             <name>mail_from_name</name>
-            <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Meili From nimi</caption>
       </property>
       <property>
             <name>mail_cust_content</name>
-            <table>objects</table>
             <group>general</group>
-            <type>textarea</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>textarea</type>
             <rows>10</rows>
             <cols>80</cols>
             <caption>Meili sisu (kui t&amp;uuml;hi, siis templatest)</caption>
       </property>
       <property>
             <name>rent_min_amt</name>
-            <table>objects</table>
             <group>payment</group>
-            <type>textbox</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>J&amp;auml;relmaksu min. summa</caption>
       </property>
       <property>
             <name>rent_prop</name>
-            <table>objects</table>
             <group>payment</group>
-            <type>select</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Elemendi</caption>
       </property>
       <property>
             <name>rent_prop_val</name>
-            <table>objects</table>
             <group>payment</group>
-            <type>textbox</type>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>v&amp;auml;&amp;auml;rtus j&amp;auml;relmaksuks</caption>
       </property>
       <property>
             <name>controller</name>
-            <table>objects</table>
             <group>appear</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTROLLER</reltype>
+            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
             <caption>Vaikimisi n&amp;auml;itamise kontroller</caption>
       </property>
       <property>
             <name>controller_tbl</name>
-            <table>objects</table>
             <group>appear</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <callback>callback_get_controller_tbl</callback>
             <store>no</store>
-            <field>controller_tbl</field>
             <caption>Kontrollerid kataloogidele</caption>
       </property>
       <property>
             <name>layoutbl</name>
-            <table>objects</table>
             <group>appear</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <field>layoutbl</field>
             <caption>Toodete layout</caption>
       </property>
       <property>
             <name>sortbl</name>
-            <table>objects</table>
             <group>appear</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <field>sortbl</field>
             <caption>Toodete sorteerimine</caption>
       </property>
       <property>
             <name>psfieldmap</name>
-            <table>objects</table>
             <group>psfieldmap</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <field>psfieldmap</field>
             <caption>Vali millised elemendid tellimuse andmete vormis vastavad isukuandmetele</caption>
       </property>
       <property>
             <name>orgfieldmap</name>
-            <table>objects</table>
             <group>orgfieldmap</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <field>orgfieldmap</field>
             <caption>Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele</caption>
       </property>
       <classinfo>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.13 2005/01/18 10:51:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.14 2005/02/17 13:10:54 ahti Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -194,9 +194,11 @@ class shop_product_packaging extends class_base
 		$l_inst->read_template($layout->prop("template"));
 
 		$parent_fld = $pi;
-		do {
+		do
+		{
 			$parent_fld = obj($parent_fld->parent());
-		} while($parent_fld->class_id() != CL_MENU && $parent_fld->parent());
+		}
+		while($parent_fld->class_id() != CL_MENU && $parent_fld->parent());
 		$ivs = array(
 			"packaging_name" => $pi->name(),
 			"packaging_price" => $this->get_price($pi),
@@ -296,6 +298,7 @@ class shop_product_packaging extends class_base
 
 		// order data
 		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$soc->get_cart($oc_obj);
 		$inf = $soc->get_item_in_cart($pi->id());
 		$awa = new aw_array($inf["data"]);
 		foreach($awa->get() as $datan => $datav)

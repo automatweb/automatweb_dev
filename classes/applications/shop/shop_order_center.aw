@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.20 2005/01/28 14:06:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.21 2005/02/17 13:10:54 ahti Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -7,7 +7,6 @@
 
 @classinfo syslog_type=ST_SHOP_ORDER_CENTER relationmgr=yes
 
-@default table=objects
 @default group=general
 
 @property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE table=aw_shop_order_center field=aw_warehouse_id
@@ -16,56 +15,66 @@
 @property cart type=relpicker reltype=RELTYPE_CART table=aw_shop_order_center field=aw_cart_id
 @caption Ostukorv
 
-@property pdf_template type=textbox table=objects field=meta method=serialize
+@default table=objects
+@default field=meta
+@default method=serialize
+
+@property cart_type type=chooser
+@caption Ostukorvi tüüp
+
+@property show_unconfirmed type=checkbox ch_value=1
+@caption Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi
+
+@property pdf_template type=textbox
 @caption PDF Template faili nimi
 
-@property data_form type=relpicker reltype=RELTYPE_ORDER_FORM table=objects field=meta method=serialize
+@property data_form type=relpicker reltype=RELTYPE_ORDER_FORM
 @caption Tellija andmete vorm
 
-@property data_form_person type=select field=meta method=serialize
+@property data_form_person type=select
 @caption Isiku nime element andmete vormis
 
-@property data_form_company type=select field=meta method=serialize
+@property data_form_company type=select
 @caption Organisatsiooni nime element andmete vormis
 
-@property mail_to_el type=select table=objects field=meta method=serialize
+@property mail_to_el type=select
 @caption E-maili element, kuhu saata tellimus
 
-@property data_form_discount type=select field=meta method=serialize
+@property data_form_discount type=select
 @caption Allahindluse element andmete vormis
 
-@property only_active_items type=checkbox ch_value=1 table=objects field=meta method=serialize
+@property only_active_items type=checkbox ch_value=1
 @caption Ainult aktiivsed tooted
 
-@property use_controller type=checkbox ch_value=1 table=objects field=meta method=serialize
+@property use_controller type=checkbox ch_value=1
 @caption N&auml;itamiseks kasuta kontrollerit
 
-@property mail_from_addr type=textbox field=meta method=serialize table=objects 
+@property mail_from_addr type=textbox
 @caption Meili From aadress
 
-@property mail_from_name type=textbox field=meta method=serialize table=objects 
+@property mail_from_name type=textbox 
 @caption Meili From nimi
 
-@property mail_cust_content type=textarea field=meta method=serialize table=objects rows=10 cols=80
+@property mail_cust_content type=textarea rows=10 cols=80
 @caption Meili sisu (kui t&uuml;hi, siis templatest)
 
 @groupinfo payment caption="Makseviisid"
 @default group=payment
 
-@property rent_min_amt type=textbox field=meta method=serialize table=objects
+@property rent_min_amt type=textbox
 @caption J&auml;relmaksu min. summa
 
-@property rent_prop type=select  field=meta method=serialize table=objects
+@property rent_prop type=select
 @caption Elemendi
 
-@property rent_prop_val type=textbox  field=meta method=serialize table=objects
+@property rent_prop_val type=textbox
 @caption v&auml;&auml;rtus j&auml;relmaksuks
 
 
 @groupinfo appear caption="N&auml;itamine"
 @default group=appear
 
-@property controller type=relpicker reltype=RELTYPE_CONTROLLER table=objects field=meta method=serialize
+@property controller type=relpicker reltype=RELTYPE_CONTROLLER
 @caption Vaikimisi n&auml;itamise kontroller
 
 @property controller_tbl type=callback callback=callback_get_controller_tbl store=no
@@ -126,6 +135,13 @@ class shop_order_center extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "cart_type":
+				$prop["options"] = array(
+					0 => "Sessionipõhine",
+					1 => "Kasutajapõhine",
+				);
+				break;
+				
 			case "rent_prop":
 				$df = $arr["obj_inst"]->prop("data_form");
 				$opts = array();
@@ -554,7 +570,7 @@ class shop_order_center extends class_base
 
 		$wh_id = $soc->prop("warehouse");
 
-		$wh = get_instance("applications/shop/shop_warehouse");
+		$wh = get_instance(CL_SHOP_WAREHOUSE);
 
 		// also show docs
 		$ss = get_instance("contentmgmt/site_show");
@@ -692,14 +708,18 @@ class shop_order_center extends class_base
 		extract($arr);
 		
 		// get current person and get the orders from that
-		$u = get_instance("core/users/user");
+		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
-
+		$ord = $p->get_first_obj_by_reltype("RELTYPE_ORDER");
+		$center = $ord->get_first_obj_by_reltype("RELTYPE_ORDER_CENTER");
 		$this->read_template("orders.tpl");
-
 		foreach($p->connections_from(array("type" => "RELTYPE_ORDER")) as $c)
 		{
 			$ord = $c->to();
+			if($center->prop("show_unconfirmed") == 1 && $ord->prop("confirmed") == 1)
+			{
+				continue;
+			}
 			$this->vars(array(
 				"name" => $ord->name(),
 				"tm" => $ord->created(),

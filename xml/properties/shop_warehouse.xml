@@ -39,6 +39,25 @@
             <caption>Toodete nimekiri </caption>
       </property>
       <property>
+            <name>productgroups_toolbar</name>
+            <table>objects</table>
+            <group>productgroups</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>productgroups_toolbar</field>
+      </property>
+      <property>
+            <name>productgroups_list</name>
+            <table>objects</table>
+            <group>productgroups</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>productgroups_list</field>
+            <caption>Tootegruppide nimekiri </caption>
+      </property>
+      <property>
             <name>packets_toolbar</name>
             <table>objects</table>
             <group>packets</group>
@@ -269,6 +288,10 @@
                   <caption>Tooted</caption>
                   <submit>no</submit>
             </products>
+            <productgroups>
+                  <caption>Tootegrupid</caption>
+                  <submit>no</submit>
+            </productgroups>
             <packets>
                   <caption>Paketid</caption>
                   <submit>no</submit>

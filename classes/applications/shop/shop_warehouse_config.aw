@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.5 2004/09/17 12:18:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.6 2005/02/17 13:10:54 ahti Exp $
 // shop_warehouse_config.aw - Lao konfiguratsioon 
 /*
 
@@ -7,35 +7,40 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
-@property prod_fld type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@property prod_fld type=relpicker reltype=RELTYPE_FOLDER
 @caption Toodete kataloog
 
-@property pkt_fld type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@property pkt_fld type=relpicker reltype=RELTYPE_FOLDER
 @caption Pakettide kataloog
 
-@property reception_fld type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@property reception_fld type=relpicker reltype=RELTYPE_FOLDER
 @caption Lao sissetulekute kataloog
 
-@property export_fld type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@property export_fld type=relpicker reltype=RELTYPE_FOLDER
 @caption Lao v&auml;jaminekute kataloog
 
-@property prod_type_fld type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@property prod_type_fld type=relpicker reltype=RELTYPE_FOLDER
 @caption Lao toodete t&uuml;&uuml;bid
 
-@property order_fld type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@property prod_type_cfgform type=relpicker reltype=RELTYPE_CFGFORM
+@caption Lao toodete t&uuml;&uuml;pide lisamise vormi seadete vorm
+
+@property order_fld type=relpicker reltype=RELTYPE_FOLDER
 @caption Lao tellimuste kataloog
 
-@property buyers_fld type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
+@property buyers_fld type=relpicker reltype=RELTYPE_FOLDER
 @caption Lao tellijate kataloog
 
-@property search_form type=relpicker reltype=RELTYPE_SEARCH_FORM field=meta method=serialize
+@property search_form type=relpicker reltype=RELTYPE_SEARCH_FORM
 @caption Lao otsinguvorm
 
-@property manager_cos type=relpicker reltype=RELTYPE_MANAGER_CO field=meta method=serialize multiple=1
+@property manager_cos type=relpicker reltype=RELTYPE_MANAGER_CO multiple=1
 @caption Haldurfirmad
 
-@property sell_prods type=checkbox ch_value=1 field=meta method=serialize 
+@property sell_prods type=checkbox ch_value=1
 @caption Ladu m&uuml;b tooteid, mitte pakendeid
 
 @reltype FOLDER value=1 clid=CL_MENU
@@ -46,6 +51,9 @@
 
 @reltype MANAGER_CO value=3 clid=CL_CRM_COMPANY
 @caption haldaja firma
+
+@reltype CFGFORM value=4 clid=CL_CFGFORM
+@caption Seadete vorm
 
 */
 

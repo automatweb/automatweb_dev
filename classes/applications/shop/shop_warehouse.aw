@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.22 2005/01/31 13:19:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.23 2005/02/17 13:10:54 ahti Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -26,6 +26,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 
 @property products_list type=text store=no group=products no_caption=1 
 @caption Toodete nimekiri 
+
+/////////// productgroups tab
+@groupinfo productgroups caption="Tootegrupid" submit=no
+
+@property productgroups_toolbar type=toolbar no_caption=1 group=productgroups store=no
+
+@property productgroups_list type=table store=no group=productgroups no_caption=1 
+@caption Tootegruppide nimekiri 
 
 /////////// packets tab
 @groupinfo packets caption="Paketid" submit=no
@@ -165,6 +173,14 @@ class shop_warehouse extends class_base
 				$this->do_prod_list($arr);
 				break;
 
+			case "productgroups_toolbar":
+				$this->mk_prodg_toolbar($arr);
+				break;
+
+			case "productgroups_list":
+				$this->do_prodg_list($arr);
+				break;
+				
 			case "packets_toolbar":
 				$this->mk_pkt_toolbar($arr);
 				break;
@@ -288,11 +304,12 @@ class shop_warehouse extends class_base
 
 	function save_ord_cur_tbl($arr, $is_post = false)
 	{
-		$soc = get_instance("applications/shop/shop_order_cart");
+		$oc = obj($arr["obj_inst"]->prop("order_center"));
+		$soc = get_instance(CL_SHOP_ORDER_CART);
 		$awa = new aw_array($arr["request"]["quant"]);
 		foreach($awa->get() as $iid => $quant)
 		{
-			$soc->set_item($iid, $quant);
+			$soc->set_item($iid, $quant, $oc);
 		}
 
 		if ($is_post)
@@ -376,7 +393,8 @@ class shop_warehouse extends class_base
 		$pgnr = $arr["obj_inst"]->meta("order_cur_pages");
 
 		// stick the order in the table
-		$soc = get_instance("applications/shop/shop_order_cart");
+		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$soc->get_cart(obj($arr["obj_inst"]->prop("order_center")));
 		foreach($soc->get_items_in_cart() as $iid => $quant)
 		{
 			$item = obj($iid);
@@ -445,6 +463,66 @@ class shop_warehouse extends class_base
 			"img" => "save.gif",
 			"tooltip" => "Lisa korvi",
 			"action" => "add_to_cart"
+		));
+	}
+	
+	function mk_prodg_toolbar(&$prop)
+	{
+		$tb =& $prop["prop"]["toolbar"];
+
+		$tb->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa uus tootegrupp"),
+			"url" => $this->mk_my_orb("new", array(
+				"parent" => $this->prod_type_fld,
+				"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+				"cfgform" => $this->prod_type_cfgform,
+			), CL_WEBFORM),
+		));
+		
+		$tb->add_button(array(
+			"name" => "del",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta valitud"),
+			"action" => "remove_prod_type",
+		));
+	}
+	
+	function do_prodg_list($arr)
+	{
+		$this->_init_do_prodg_list($arr);
+		$t = &$arr["prop"]["vcl_inst"];
+		$ol = new object_list(array(
+			"parent" => $this->prod_type_fld,
+			"class_id" => CL_WEBFORM,
+		));
+		foreach($ol->arr() as $obj)
+		{
+			$t->define_data(array(
+				"id" => $obj->id(),
+				"name" => $obj->name(),
+				"change" => html::get_change_url($obj->id(), array(
+					"group" => "form",
+					"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+				), t("Muuda")),
+			));
+		}
+	}
+	
+	function _init_do_prodg_list($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+		));
+		$t->define_chooser(array(
+			"field" => "id",
 		));
 	}
 
@@ -707,41 +785,21 @@ class shop_warehouse extends class_base
 			return false;
 		}
 		$this->config = obj($arr["obj_inst"]->prop("conf"));
-		if (!$this->config->prop("prod_fld"))
+		$checks = array("prod_fld", "pkt_fld", "reception_fld", "export_fld", "prod_type_fld", "prod_type_cfgform", "order_fld", "buyers_fld");
+		foreach($checks as $check)
 		{
-			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on toodete kataloog valimata!";
-			return false;
+			if(!$this->config->prop($check))
+			{
+				return false;
+			}
 		}
-		if (!$this->config->prop("pkt_fld"))
-		{
-			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on pakettide kataloog valimata!";
-			return false;
-		}
-		if (!$this->config->prop("reception_fld"))
-		{
-			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on sissetulekute kataloog valimata!";
-			return false;
-		}
-		if (!$this->config->prop("export_fld"))
-		{
-			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on v&auml;jaminekute kataloog valimata!";
-			return false;
-		}
-		if (!$this->config->prop("prod_type_fld"))
-		{
-			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on toodete t&uuml;&uuml;pide kataloog valimata!";
-			return false;
-		}
-		if (!$this->config->prop("order_fld"))
-		{
-			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellimuste kataloog valimata!";
-			return false;
-		}
-		if (!$this->config->prop("buyers_fld"))
-		{
-			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellijate kataloog valimata!";
-			return false;
-		}
+		//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on toodete kataloog valimata!";
+		//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on pakettide kataloog valimata!";
+		//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on sissetulekute kataloog valimata!";
+		//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on v&auml;jaminekute kataloog valimata!";
+		//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on toodete t&uuml;&uuml;pide kataloog valimata!";
+		//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellimuste kataloog valimata!";
+		//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellijate kataloog valimata!";
 
 		$this->prod_fld = $this->config->prop("prod_fld");
 		$this->prod_tree_root = isset($_GET["tree_filter"]) ? $_GET["tree_filter"] : $this->config->prop("prod_fld");
@@ -749,6 +807,7 @@ class shop_warehouse extends class_base
 		$this->pkt_fld = $this->config->prop("pkt_fld");
 		$this->pkt_tree_root = isset($_GET["tree_filter"]) ? $_GET["tree_filter"] : $this->config->prop("pkt_fld");
 
+		$this->prod_type_cfgform = $this->config->prop("prod_type_cfgform");
 		$this->reception_fld = $this->config->prop("reception_fld");
 		$this->export_fld = $this->config->prop("export_fld");
 		$this->prod_type_fld = $this->config->prop("prod_type_fld");
@@ -1075,7 +1134,7 @@ class shop_warehouse extends class_base
 
 	function save_storage_inc_tbl(&$arr)
 	{
-		$re = get_instance("applications/shop/shop_warehouse_reception");
+		$re = get_instance(CL_SHOP_WAREHOUSE_RECEPTION);
 
 		$awa = new aw_array($arr["request"]["confirm"]);
 		foreach($awa->get() as $inc => $one)
@@ -1186,7 +1245,7 @@ class shop_warehouse extends class_base
 
 	function save_storage_exp_tbl(&$arr)
 	{
-		$re = get_instance("applications/shop/shop_warehouse_export");
+		$re = get_instance(CL_SHOP_WAREHOUSE_EXPORT);
 
 		$awa = new aw_array($arr["request"]["confirm"]);
 		foreach($awa->get() as $inc => $one)
@@ -1387,7 +1446,8 @@ class shop_warehouse extends class_base
 				"view" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
-						"group" => "items"
+						"group" => "items",
+						"return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
 					), CL_SHOP_ORDER),
 					"caption" => "Vaata"
 				)),
@@ -1488,7 +1548,8 @@ class shop_warehouse extends class_base
 				"view" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
-						"group" => "items"
+						"group" => "items",
+						"return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
 					), CL_SHOP_ORDER),
 					"caption" => "Vaata"
 				)),
@@ -1532,7 +1593,7 @@ class shop_warehouse extends class_base
 
 	function save_order_unconfirmed_tbl(&$arr)
 	{
-		$re = get_instance("applications/shop/shop_order");
+		$re = get_instance(CL_SHOP_ORDER);
 
 		$awa = new aw_array($arr["request"]["confirm"]);
 		foreach($awa->get() as $inc => $one)
@@ -1637,7 +1698,7 @@ class shop_warehouse extends class_base
 			$ol = new object_list();
 		}
 
-		$oinst = get_instance("applications/shop/shop_order");
+		$oinst = get_instance(CL_SHOP_ORDER);
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$t->define_data(array(
@@ -1940,7 +2001,7 @@ class shop_warehouse extends class_base
 		return $this->mk_my_orb("gen_pdf", array(
 			"id" => $ordid,
 			"html" => $arr["html"],
-		), "applications/shop/shop_order");
+		), CL_SHOP_ORDER);
 	}
 
 	function make_cur_order_id($arr)
@@ -2097,7 +2158,7 @@ class shop_warehouse extends class_base
 
 		$workers = array();
 
-		$co = get_instance("crm/crm_company");
+		$co = get_instance(CL_CRM_COMPANY);
 		$co->get_all_workers_for_company(obj($cur_co), &$workers, true);
 
 		$pop = get_instance("vcl/popup_search");
@@ -2118,7 +2179,7 @@ class shop_warehouse extends class_base
 			return;
 		}
 
-		$ps = get_instance("crm/crm_person");
+		$ps = get_instance(CL_CRM_PERSON);
 		$cos = $ps->get_all_employers_for_person(obj($cur_person));
 
 		$pop = get_instance("vcl/popup_search");
@@ -2229,12 +2290,13 @@ class shop_warehouse extends class_base
 	**/
 	function add_to_cart($arr)
 	{
-		$soc = get_instance("applications/shop/shop_order_cart");
-
+		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$warehouse = obj($arr["id"]);
+		$oc = obj($warehouse->prop("order_center"));
 		$awa = new aw_array($arr["sel"]);
 		foreach($awa->get() as $iid)
 		{
-			$soc->add_item($iid, 1);
+			$soc->add_item($iid, 1, $oc);
 		}
 
 		$this->do_save_prod_ord($arr);
@@ -2331,10 +2393,11 @@ class shop_warehouse extends class_base
 	**/
 	function clear_order($arr)
 	{
-		$soc = get_instance(CL_SHOP_ORDER_CART);
-		$soc->clear_cart();
-
 		$o = obj($arr["id"]);
+		$oc = obj($o->prop("order_center"));
+		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$soc->clear_cart($oc);
+
 		$o->set_prop("order_current_person", "");
 		$o->set_prop("order_current_org", "");
 		$o->set_meta("order_cur_ud", "");
