@@ -1,0 +1,77 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="db_server_explorer" folder="awmyadmin" extends="class_base">
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="show">
+				<arguments>
+					<required name="id"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="top">
+			<function name="top">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="tree">
+			<function name="tree">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_conf">
+			<function name="change">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_server">
+			<function name="show_server">
+				<arguments>
+					<required name="id"/>
+					<required name="server_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_database">
+			<function name="show_database">
+				<arguments>
+					<required name="id"/>
+					<required name="server_id"/>
+					<required name="db_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_table">
+			<function name="show_table">
+				<arguments>
+					<required name="id" type="int"/>
+					<required name="table"/>
+					<required name="db_id" type="int"/>
+					<required name="server_id" type="int"/>
+					<optional name="type" default="admin"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		
