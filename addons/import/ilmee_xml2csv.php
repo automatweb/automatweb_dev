@@ -17,26 +17,30 @@ if ($_SERVER["argv"][1] == "est")
 $host = "ilm.ee";
 $port = 80;
 
-
-
-$sock = @fsockopen($host,$port,&$errno, &$errstr,5);
+$sock = @fsockopen($host,$port,&$errno, &$errstr,15);
 if (!$sock)
 {
 	die("WARNING: Connection to $host:$port failed, $errstr\n;");
 };
 // nüüd tuleb HTTP päring teha
-$data = "GET $exp_file HTTP/1.1\r\nHost: $host\r\n\r\n";
+$data = "GET $exp_file HTTP/1.0\r\nHost: $host\r\n\r\n";
 fputs($sock, $data, strlen($data));
 fflush($sock);
-$file = fread($sock,65534);
+
+$file = "";
+
+while (!feof($sock))
+{
+	$file .= fread($sock, 8192);
+}
+
 fclose($sock);
 
+list($headers,$content) = explode("\r\n\r\n",$file);
 
-var_dump($file);
-exit;
 
 $p = xml_parser_create();
-xml_parse_into_struct($p,$file,$vals,$index);
+xml_parse_into_struct($p,$content,$vals,$index);
 xml_parser_free($p);
 $tmps = array();
 $ids = array();
