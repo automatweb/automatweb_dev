@@ -156,6 +156,14 @@
 			</function>
 		</action>
 
+		<action name="refine_search">
+			<function name="search">
+				<arguments>
+					<define name="refine" value="1">
+				</arguments>
+			</function>
+		</action>
+
 		<action name="do_search">
 			<function name="do_search">
 				<arguments>
