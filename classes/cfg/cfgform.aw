@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.33 2004/08/11 10:27:54 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.34 2004/08/23 09:37:04 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -498,7 +498,6 @@ class cfgform extends class_base
 			"name" => "save",
 			"tooltip" => "Salvesta",
 			"url" => "javascript:submit_changeform()",
-			"imgover" => "save_over.gif",
 			"img" => "save.gif",
 		));
 		
@@ -506,7 +505,6 @@ class cfgform extends class_base
 			"name" => "delete",
 			"tooltip" => "Kustuta valitud omadused",
 			"url" => "javascript:document.changeform.subaction.value='delete';submit_changeform();",
-			"imgover" => "delete_over.gif",
 			"img" => "delete.gif",
 		));
 
@@ -535,7 +533,6 @@ class cfgform extends class_base
 			"name" => "move",
 			"tooltip" => "Liiguta",
 			"url" => "javascript:document.changeform.subaction.value='move';submit_changeform();",
-			"imgover" => "save_over.gif",
 			"img" => "save.gif",
 		));
 		
@@ -551,7 +548,6 @@ class cfgform extends class_base
 			"name" => "addgrp",
 			"tooltip" => "Lisa grupp",
 			"url" => "javascript:document.changeform.subaction.value='addgrp';submit_changeform()",
-			"imgover" => "new_over.gif",
 			"img" => "new.gif",
 		));
 	}
@@ -581,7 +577,6 @@ class cfgform extends class_base
 			"name" => "save",
 			"tooltip" => "Salvesta",
 			"url" => "javascript:submit_changeform()",
-			"imgover" => "save_over.gif",
 			"img" => "save.gif",
 		));
 	}
@@ -762,6 +757,44 @@ class cfgform extends class_base
 			};
 		};
 		$this->cfg_groups = $grplist;
+	}
+
+	/** returns array of properties defined in the config form given
+
+		@attrib api=1
+
+		@param id required
+
+		@comment
+			id - oid of the config form to return the props for
+
+	**/
+	function get_props_from_cfgform($arr)
+	{
+		$cf = obj($arr["id"]);
+
+		$cfgx = get_instance("cfg/cfgutils");
+		$ret = $cfgx->load_class_properties(array(
+			"clid" => $cf->prop("subclass"),
+		));
+
+		$class_i = get_instance($cf->prop("subclass"));
+		$tmp = $class_i->load_from_storage(array(
+			"id" => $cf->id()
+		));
+
+		$dat = array();
+		foreach($tmp as $pn => $pd)
+		{
+			if ($pn == "needs_translation" || $pn == "is_translated" || $pn == "")
+			{
+				continue;
+			}
+			$dat[$pn] = $ret[$pn];
+			$dat[$pn]["caption"] = $pd["caption"];
+		}
+
+		return $dat;
 	}
 };
 ?>
