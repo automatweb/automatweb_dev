@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.2 2004/04/12 12:19:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.3 2004/06/08 09:17:23 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -65,7 +65,8 @@ class mini_gallery extends class_base
 
 		$images = new object_list(array(
 			"class_id" => CL_IMAGE,
-			"parent" => $ob->prop("folder")
+			"parent" => $ob->prop("folder"),
+			"order_by" => "objects.jrk"
 		));
 
 		$img_c = $images->count();
