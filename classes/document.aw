@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.283 2004/10/07 21:34:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.284 2004/10/12 13:22:34 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -556,15 +556,12 @@ class document extends aw_template
 		$this->dequote(&$doc["title"]);
 		$this->title = $doc["title"];
 
+		// hide the content of the document after the marker if the document is from the current period
+		// this functionality is used by AM and should perhaps be moved to the site class -- duke
 		if (!(($pp = strpos($doc["content"],"#poolita#")) === false))
 		{
-			//if (aw_global_get("in_archive") || aw_global_get("act_per_id") != $doc["period"])
-			//if (aw_global_get("in_archive") || aw_global_get("act_per_id") != $doc["period"])
-			//{
-			//	$doc["content"] = str_replace("#poolita#", "",$doc["content"]);
-			//}
-			//else
-			//{
+			if (aw_global_get("current_period") == $doc["period"])
+			{
 				if ($this->cfg["poolita_text"] != "")
 				{
 					$def = $this->cfg["poolita_text"];
@@ -574,7 +571,7 @@ class document extends aw_template
 					$def = "<br /><B>Edasi loe ajakirjast!</b></font>";
 				};
 				$doc["content"] = substr($doc["content"],0,$pp).$def;
-			//}
+			};
 		};
 
 		// vaatame kas vaja poolitada - kui urlis on show_all siis n2itame tervet, muidu n2itame kuni #edasi# linkini
