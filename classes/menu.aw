@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.39 2003/03/12 11:16:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.40 2003/03/18 16:57:39 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -882,7 +882,7 @@ class menu extends class_base
 	function get_pmethod_sel()
 	{
 		$aw_orb = get_instance("aw_orb");
-		return array("0" => "--vali--") + $aw_orb->get_public_classes();
+		return array("0" => "--vali--") + $aw_orb->get_classes_by_interface(array("interface" => "public"));
 	}
 
 	function get_menu_keywords($id)

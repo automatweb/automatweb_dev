@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.10 2003/03/18 16:18:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.11 2003/03/18 16:57:39 duke Exp $
 // aw_orb.aw - new and improved ORB
 
 class aw_orb extends aw_template
@@ -11,18 +11,38 @@ class aw_orb extends aw_template
 
 	////
 	// !Returns a list of all defined ORB classes
-	function get_public_classes($args = array())
+	// interface(string) - name of the interface file
+	function get_classes_by_interface($args = array())
 	{
-		$basedir = $this->cfg["basedir"];
+		if (empty($args["interface"]))
+		{
+			// wuh los, man?
+			return false;
+		};
+
+		switch($args["interface"])
+		{
+			case "content":
+				$ifile = "content.xml";
+				$flag = "is_content";
+				break;
+
+			case "interface":
+			default:
+				$ifile = "public.xml";
+				$flag = "is_public";
+		};
+
 		// klassi definitsioon sisse
 		$xmldef = $this->get_file(array(
-			"file" => "$basedir/xml/interfaces/public.xml"
+			"file" => $this->cfg["basedir"] . "/xml/interfaces/$ifile"
 		));
 
 		// loome parseri
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
+		// XXX: I need some kind of error checking here!! -- duke
 		xml_parse_into_struct($parser,$xmldef,&$values,&$tags);
 		// R.I.P. parser
 		xml_parser_free($parser);
@@ -34,7 +54,8 @@ class aw_orb extends aw_template
 			$attr = isset($val["attributes"]) ? $val["attributes"] : array();
 			if ( ($val["tag"] == "class") && ($val["type"] == "complete") && $attr['id'] != '')
 			{
-				$pm = $this->get_public_methods(array(
+				$pm = $this->get_methods_by_flag(array(
+					"flag" => $flag,
 					"id" => $attr["id"],
 					"name" => $attr["name"],
 				));
@@ -52,23 +73,25 @@ class aw_orb extends aw_template
 
 	}
 
-	function get_public_methods($args = array())
+	////
+	// !Returns a list of methods inside a class matching a flag
+	function get_methods_by_flag($args = array())
 	{
 		extract($args);
 		classload("orb");
 		$orbclass = new new_orb();
 		$orb_defs = $orbclass->load_xml_orb_def($id);
-		$pmethods = array();
+		$methods = array();
 		foreach($orb_defs[$id] as $key => $val)
 		{
-			if (is_array($val) && isset($val["is_public"]))
+			if (is_array($val) && isset($val[$flag]))
 			{
 				$caption = isset($val["caption"]) ? $val["caption"] : $val["function"];
-				$pmethods[$id . "/" . $key] = $name . " / " . $caption;
+				$methods[$id . "/" . $key] = $name . " / " . $caption;
 			}
 		};
 
-		return $pmethods;
+		return $methods;
 	}
 	
 	function get_public_method($args = array())
