@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.74 2003/02/13 17:04:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.75 2003/02/14 18:33:36 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -107,6 +107,18 @@ class aliasmgr extends aw_template
 
 		$cache_inst = get_instance("cache");
 		$alist = $this->get_aliases_for($id);
+
+		/*
+			$aclid = $alias["class_id"];
+			list($astr) = explode(",",$classes[$aclid]["alias"]);
+			// oh no. this is BAD. if I have a document with a lot of images
+			// for example and delete one of those - ALL other images
+			// will shift. I mean, fuck
+			$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
+
+
+		*/
+
 		foreach($alist as $ad)
 		{
 			if ($ad['cached'] != $cache[$ad['target']])
@@ -133,7 +145,9 @@ class aliasmgr extends aw_template
 	function get_oo_aliases($args = array())
 	{
 		extract($args);
+
 		$oid = (int)$oid;
+		$this->recover_idx_enumeration($oid);
 		$ret_type = ($ret_type) ? $ret_type : GET_ALIASES_BY_CLASS;
 
 		$obj = $this->get_object($oid);
@@ -159,7 +173,7 @@ class aliasmgr extends aw_template
 			}
 			elseif ($ret_type == GET_ALIASES_BY_CLASS)
 			{
-				$retval[$row["class_id"]][] = $row;
+				$retval[$row["class_id"]][$row["idx"]] = $row;
 			}
 			else
 			{
@@ -184,9 +198,9 @@ class aliasmgr extends aw_template
 			$meta = $_tmp["meta"];
 		};
 
-		if (is_array($meta["aliases"]))
+		if (is_array($meta["aliases_by_class"]))
 		{
-			$aliases = $meta["aliases"];
+			$aliases = $meta["aliases_by_class"];
 		}
 		else
 		{
@@ -194,13 +208,17 @@ class aliasmgr extends aw_template
 			// write the aliases into metainfo for faster access later on
 			if (is_array($aliases))
 			{
-				$this->set_object_metadata(array(
+				$this->upd_object(array(
 					"oid" => $oid,
-					"key" => "aliases",
-					"value" => $aliases,
+					"metadata" => array(
+						"aliases_by_class" => $aliases,
+						"aliases" => "",
+					),
 				));
 			};
 		};
+
+		$by_idx = array();
 
 		$by_alias = array();
 		foreach($this->cfg["classes"] as $clid => $cldat)
@@ -224,7 +242,11 @@ class aliasmgr extends aw_template
 			foreach ($matches as $key => $val)
 			{
 				$clid = $by_alias[$val[2]]["class_id"];
-				$idx = $val[3] - 1;
+				// dammit, this sucks. I need some way to figure out
+				// whether there is a correct idx set in the aliases, and if so
+				// use that, instead of the one in the list.
+				//$idx = $val[3] - 1;
+				$idx = $val[3];
 				$target = $aliases[$clid][$idx]["target"];
 
 				$toreplace[$clid][$val[0]] = $aliases[$clid][$idx];
@@ -232,6 +254,7 @@ class aliasmgr extends aw_template
 			}
 
 			// here we do the actual parse/replace bit
+
 			foreach($toreplace as $clid => $claliases)
 			{
 				$emb_obj_name = "emb" . $clid;
@@ -433,7 +456,7 @@ class aliasmgr extends aw_template
 	// params:
 	//   id - the object whose aliases we will observe
 	//   reltypes(array) - array of relation types
-	function new_list_aliases($args)
+	function list_aliases($args)
 	{
 		extract($args);
 		classload('icons');
@@ -482,11 +505,14 @@ class aliasmgr extends aw_template
 
 		$return_url = urlencode($return_url);
 
+		$this->recover_idx_enumeration($id);
+
 		// fetch a list of all the aliases for this object
 		$alist = $this->get_aliases(array(
 			"oid" => $id,
 			"type" => $types
 		));
+
 		
 		$chlinks = array();
 		foreach($alist as $alias)
@@ -496,21 +522,40 @@ class aliasmgr extends aw_template
 			// oh no. this is BAD. if I have a document with a lot of images
 			// for example and delete one of those - ALL other images
 			// will shift. I mean, fuck
-			$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
+			//$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
+			$astr = sprintf("#%s%d#",$astr,$alias["idx"]);
 			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
 			$chlinks[$alias["target"]] = $ch;
 			$reltype_id = (int)$obj["meta"]["alias_reltype"][$alias["target"]];
 
-			$alias["icon"] = sprintf("<img src='%s'>",icons::get_icon_url($aclid,""));
+			$alias["icon"] = html::img(array(
+				"url" => icons::get_icon_url($aclid,""),
+			));
+
 			// it has a meaning only for embedded aliases
 			if ($reltype_id == 0)
 			{
 				$alias["alias"] = sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
 			};
-			$alias["link"] = sprintf("<input type='checkbox' name='link[%d]' value='1' %s>",$alias["target"],checked($obj["meta"]["aliaslinks"][$alias["target"]]));
+
+			$alias["link"] = html::checkbox(array(
+				"name" => "link[" . $alias["target"] . "]",
+				"value" => 1,
+				"checked" => $obj["meta"]["aliaslinks"][$alias["target"]],
+			));
+
 			$alias["title"] = $classes[$aclid]["name"];
-			$alias["check"] = sprintf("<input type='checkbox' name='check[%d]' value='%d'>",$alias["target"],$alias["target"]);
-			$alias["name"] = sprintf("<a href='%s'>%s</a>",$ch,($alias["name"] == "" ? "(no name)" : $alias["name"]));
+
+			$alias["check"] = html::checkbox(array(
+				"name" => "check[" . $alias["target"] . "]",
+				"value" => $alias["target"],
+			));
+
+			$alias["name"] = html::href(array(
+				"url" => $ch,
+				"caption" => ($alias["name"] == "") ? "(no name)" : $alias["name"],
+			));
+
 			$alias["reltype"] = $this->reltypes[$reltype_id];
 
 			$alias["cache"] = html::checkbox(array(
@@ -525,6 +570,7 @@ class aliasmgr extends aw_template
 		$this->t->set_default_sortby("title");
 		$this->t->sort_by();
 		$toolbar = $this->mk_toolbar();
+
 		$this->vars(array(
 			"table" => $this->t->draw(),
 			"id" => $id,
@@ -534,6 +580,7 @@ class aliasmgr extends aw_template
 			"toolbar" => $toolbar,
 			"return_url" => $return_url,
 			"period" => $period,
+			"search_url" => $this->mk_my_orb("search_aliases",array("id" => $this->id),$this->use_class),
 		));
 
 		return $this->parse();
@@ -544,9 +591,9 @@ class aliasmgr extends aw_template
 	// parameters
 	//   id - the object to which the alias is added
 	//   alias - id of the object to add as alias
-	function orb_addalias($arr)
+	function create_alias($args = array())
 	{
-		extract($arr);
+		extract($args);
 		$aliases = explode(",",$alias);
 		$obj = $this->get_object($id);
 		$alias_reltype = $obj["meta"]["alias_reltype"];
@@ -578,8 +625,12 @@ class aliasmgr extends aw_template
 			"key" => "alias_reltype",
 			"value" => $alias_reltype,
 		));
+	}
 
-		return $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class));
+	function orb_addalias($args = array())
+	{
+		$this->create_alias($args);
+		return $this->mk_my_orb("list_aliases",array("id" => $args["id"]),get_class($this->orb_class));
 	}
 
 	////
@@ -607,7 +658,7 @@ class aliasmgr extends aw_template
 		{
 			if (isset($cldat["alias"]))
 			{
-				if (is_array($clid_list))
+				if (is_array($clid_list) && (sizeof($clid_list) > 0) )
 				{
 					if (in_array($clid,$clid_list))
 					{
@@ -645,14 +696,62 @@ class aliasmgr extends aw_template
 	{
 		$_aliases = $this->get_oo_aliases(array("oid" => $oid));
 
+
 		// paneme aliases kirja
 		if (is_array($_aliases))
 		{
-			$this->set_object_metadata(array(
+			$this->upd_object(array(
 				"oid" => $oid,
-				"key" => "aliases",
-				"value" => $_aliases,
+				"metadata" => array(
+					"aliases_by_class" => $_aliases,
+					"aliases" => "",
+				),
 			));
+		};
+	}
+
+	function recover_idx_enumeration($id)
+	{
+		// fetch a list of all the aliases for this object
+		$alist = $this->get_aliases(array(
+			"oid" => $id,
+		));
+
+		// we need to check whether there are any conflicts in the idx list
+		// and if so, correct them
+		$idx_check = array();
+		$need_to_enumerate = array();
+		$idx_by_class = array();
+		$idx_by_id = array();
+		foreach($alist as $alias)
+		{
+			// if any of the idx-s is 0, then we need to re-enumerate for sure.
+			if ($alias["idx"] == 0)
+			{
+				$need_to_enumerate[$alias["class_id"]] = 1;
+			};
+
+			$idx_by_class[$alias["class_id"]]++;
+
+			$idx_by_id[$alias["id"]] = $idx_by_class[$alias["class_id"]];
+
+			if ($idx_check[$alias["class_id"]][$alias["idx"]])
+			{
+				$need_to_enumerate[$alias["class_id"]] = 1;
+			}
+			else
+			{
+				$idx_check[$alias["class_id"]][$alias["idx"]] = 1;
+			};
+		}
+
+		if ( (sizeof($need_to_enumerate) > 0) && (sizeof($idx_by_id) > 0) )
+		{
+			foreach($idx_by_id as $id => $idx)
+			{
+				$q = "UPDATE aliases SET idx = '$idx' WHERE id = '$id'";
+				$this->db_query($q);
+			};
 		};
 	}
 
@@ -664,15 +763,8 @@ class aliasmgr extends aw_template
 
 		$choices = array();
 		$spacer = "&nbsp;&nbsp;&nbsp;";
-		
-		$choices["capt_new_relation"] = "Loo seos objektiga";
 
-		foreach($this->reltypes as $key => $val)
-		{
-			$choices["reltype_" . $key] = $spacer . $val;
-		};
-
-		$choices["capt_new_object"] = "Lisa uus objekt";
+		$choices["capt_new_object"] = "Objekti tüüp";
 
 		$classes = $this->cfg["classes"];
 		// generate a list of class => name pairs
@@ -687,15 +779,16 @@ class aliasmgr extends aw_template
 				$choices[$lib] = $spacer . $cldat["name"];
 			}
 		}
+	
+		array_unshift($this->reltypes,"Seose tüüp");
+		
+		$reltypes = html::select(array(
+			"options" => $this->reltypes,
+			"name" => "reltype",
+			"selected" => $this->reltype,
+		));
 
-		if ($this->reltype)
-		{
-			$selected = "reltype_" . $this->reltype;
-		}
-		else
-		{
-			$selected = "";
-		};
+		$toolbar->add_cdata($reltypes);
 
 		$aliases = html::select(array(
 			"options" => $choices,
@@ -708,10 +801,11 @@ class aliasmgr extends aw_template
 		$toolbar->add_button(array(
 			"name" => "new",
 			"tooltip" => "Lisa uus objekt",
-			"url" => "javascript:redir()",
+			"url" => "javascript:create_new_object()",
 			"imgover" => "new_over.gif",
 			"img" => "new.gif",
 		));
+		
 
 		if (is_object($this->search))
 		{
@@ -728,7 +822,7 @@ class aliasmgr extends aw_template
 			$toolbar->add_button(array(
 				"name" => "search",
 				"tooltip" => "Otsi",
-				"url" => $this->mk_my_orb("search_aliases",array("id" => $this->id),$this->use_class),
+				"url" => "javascript:search_for_object()",
 				"imgover" => "search_over.gif",
 				"img" => "search.gif",
 			));
