@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.23 2005/03/16 12:06:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.24 2005/03/16 12:21:19 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -313,7 +313,7 @@ class cb_search extends class_base
 				$this->mod_chooser_prop($res, $iname, $item["clid"], $arr["obj_inst"]);
 			}
 			else
-			if ($item["type"] == "relpicker")
+			if ($item["type"] == "relpicker" || $item["type"] == "relmanager")
 			{
 				// get all conns from that class with that reltype
 				$c = new connection();
@@ -436,7 +436,7 @@ class cb_search extends class_base
 		$classfps = array();
 		foreach($f_props as $f_pn => $f_pd)
 		{
-			if ($f_pd["type"] == "classificator" || $f_pd["type"] == "relpicker")
+			if ($f_pd["type"] == "classificator" || $f_pd["type"] == "relpicker" || $f_pd["type"] == "relmanager")
 			{
 				$classfps[$f_pn] = $f_pn;
 			}
@@ -483,7 +483,7 @@ class cb_search extends class_base
 						continue;
 					}
 
-					if ($this->in_form[$key]["type"] == "classificator" || $this->in_form[$key]["type"] == "relpicker")
+					if ($this->in_form[$key]["type"] == "classificator" || $this->in_form[$key]["type"] == "relpicker" || $this->in_form[$key]["type"] == "relmanager")
 					{
 						$sdata[$key] = $val;
 					}
