@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.378 2005/04/05 13:52:32 kristo Exp $
+// $Id: class_base.aw,v 2.379 2005/04/06 10:16:14 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1995,6 +1995,7 @@ class class_base extends aw_template
 			"obj_inst" => &$this->obj_inst,
 			"groupinfo" => &$this->groupinfo,
 			"new" => $this->new,
+			"view" => $this->view,
 		);
 
 		$this->cfgu = get_instance("cfg/cfgutils");
