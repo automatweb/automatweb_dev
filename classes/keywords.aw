@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.27 2001/06/10 22:48:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.28 2001/06/15 14:54:44 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -652,7 +652,7 @@ class keywords extends aw_template {
 		$this->vars(array(
 				"name" => $name,
 				"email" => $udata["Email"],
-				"keywords" => $this->multiple_option_list($act,$kw->get_all_keywords(array("beg" => $beg))),
+				"keywords" => $this->multiple_option_list($act,$this->get_all_keywords(array("beg" => $beg))),
 				"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode("/index.$ext?section=$section")))
 		));
 		return $this->parse();
