@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.20 2001/06/05 16:19:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.21 2001/06/05 17:40:28 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1020,7 +1020,7 @@ class core extends db_connector
 		// how do we do that? easy :) we check the url for $baseurl/automatweb :)
 		// aga mis siis, kui me mingil hetkel tahame, et automatweb oleks teisel
 		// url-il? Ntx www.kirjastus.ee/pk/automatweb juures see ei tööta. - duke
-		if (substr($GLOBALS["REQUEST_URI"],0,11) == "/automatweb" || $force_admin)
+		if ((stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false) || $force_admin)
 		{
 			// admin side.
 			return "orb.$ext?class=$cl_name&action=$fun&$urs";

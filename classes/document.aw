@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.12 2001/06/05 16:56:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.13 2001/06/05 17:40:28 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -144,6 +144,7 @@ class document extends aw_template
 		$q = "SELECT documents.lead AS lead,
 			documents.docid AS docid,
 			documents.title AS title,
+			documents.*,
 			objects.period AS period,
 			objects.class_id as class_id,
 			objects.parent as parent

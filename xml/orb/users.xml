@@ -104,7 +104,8 @@
 
 		<action name="logout">
 			<function name="orb_logout">
-
+				<arguments>
+				</arguments>
 			</function>
 		</action>
 	</class>

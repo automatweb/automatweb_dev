@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.18 2001/06/05 09:47:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.19 2001/06/05 17:40:28 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -2682,7 +2682,8 @@ classload("cache","validator","defs");
 											 menu.seealso as seealso,
 											 menu.width as width,
 											 menu.left_pane as left_pane,
-											 menu.right_pane as right_pane
+											 menu.right_pane as right_pane,
+											 menu.pers as pers
 											 FROM objects 
 											 LEFT JOIN menu ON menu.id = objects.oid
 											 WHERE oid = $id");
@@ -2750,6 +2751,9 @@ classload("cache","validator","defs");
 
 			$icon = $row["icon_id"] ? "<img src=\"".$baseurl."/icon.".$ext."?id=".$row["icon_id"]."\">" : ($row["admin_feature"] ? "<img src=\"".$this->get_feature_icon_url($row["admin_feature"])."\">" : "");
 
+			classload("periods");
+			$dbp = new db_periods($GLOBALS["per_oid"]);
+
 			$sa = unserialize($row["seealso"]);
 			$oblist = $ob->get_list();
 			$this->vars(array("parent"			=> $row["parent"], 
@@ -2793,7 +2797,8 @@ classload("cache","validator","defs");
 												"is_shop"			=> checked($row["is_shop"]),
 												"left_pane"		=> checked($row["left_pane"]),
 												"right_pane"	=> checked($row["right_pane"]),
-												"width" => $row["width"]
+												"width" => $row["width"],
+												"pers" => $dbp->period_mlist(unserialize($row["pers"]))
 												));
 
 			$this->vars(array(

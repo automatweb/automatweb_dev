@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.18 2001/05/29 16:34:55 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.19 2001/06/05 17:40:28 kristo Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -157,6 +157,7 @@ class db_documents extends aw_template
 			documents.title AS title,
 			documents.esilehel AS esilehel,
 			documents.author AS author,
+			documents.*,
 			objects.period AS period,
 			objects.class_id as class_id,
 			objects.parent as parent
@@ -1133,10 +1134,13 @@ class db_documents extends aw_template
 						"TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));
 		};
 
-		if ($GLOBALS["uid"] != "")
+		//if ($GLOBALS["uid"] != "")
+		//{
+		if ($this->prog_acl("view", PRG_MENUEDIT) && $GLOBALS["uid"] != "")
 		{
 			$this->vars(array("EDIT" => $this->parse("EDIT")));
-		}
+		};
+		//}
 
 		$sht= "";
 		if ($doc["show_title"] == 1)
