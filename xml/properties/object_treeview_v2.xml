@@ -212,6 +212,15 @@
             <caption>Paaris rea taustav&amp;auml;rv</caption>
       </property>
       <property>
+            <name>even_css_text</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Paaris rea css</caption>
+      </property>
+      <property>
             <name>odd_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
@@ -219,6 +228,15 @@
             <method>serialize</method>
             <type>colorpicker</type>
             <caption>Paaritu rea taustav&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>odd_css_text</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Paaritu rea css</caption>
       </property>
       <property>
             <name>group_header_bgcolor</name>

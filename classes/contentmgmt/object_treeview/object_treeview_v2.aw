@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.54 2005/01/27 14:51:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.55 2005/01/31 13:34:38 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -83,8 +83,14 @@
 @property even_bgcolor type=colorpicker
 @caption Paaris rea taustav&auml;rv
 
+@property even_css_text type=textbox
+@caption Paaris rea css
+
 @property odd_bgcolor type=colorpicker
 @caption Paaritu rea taustav&auml;rv
+
+@property odd_css_text type=textbox
+@caption Paaritu rea css
 
 @property group_header_bgcolor type=colorpicker
 @caption Grupeeriva rea taustav&auml;rv
@@ -728,6 +734,13 @@ class object_treeview_v2 extends class_base
 		{
 			$res = $this->_get_add_toolbar($ih_ob).$res;
 		}
+
+		if (strpos($res, "<a") !== false || strpos($res, "< a") !== false || strpos($res, "<A") !== false)
+		{
+			return $res;
+		}
+		return create_email_links($res);
+
 		exit_function("otv2::show");
 		return $res;
 	}
@@ -987,6 +1000,25 @@ class object_treeview_v2 extends class_base
 		if ($ret != "" && $ret{0} != "#")
 		{
 			$ret = "#".$ret;
+		}
+		return $ret;
+	}
+
+	function _get_style_text($ob, $line)
+	{
+		$ret = "";
+		if (($line % 2) == 1)
+		{
+			$ret = $ob->prop("odd_css_text");
+		}
+		else
+		{
+			$ret = $ob->prop("even_css_text");
+		}
+
+		if ($ret != "")
+		{
+			$ret = " style=\"$ret\"";
 		}
 		return $ret;
 	}
@@ -1270,6 +1302,7 @@ class object_treeview_v2 extends class_base
 
 		$this->vars(array(
 			"bgcolor" => $this->_get_bgcolor($style_obj, $this->cnt),
+			"style_text" => $this->_get_style_text($style_obj, $this->cnt)
 		));
 
 		return $this->parse("FILE");
