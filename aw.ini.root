@@ -68,3 +68,4 @@ include ${ini_dir}/formgen.ini
 include ${ini_dir}/poll.ini
 include ${ini_dir}/dns_server_manager.ini
 include ${ini_dir}/image.ini
+include ${ini_dir}/planner.ini
