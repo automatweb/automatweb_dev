@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.136 2002/12/30 14:47:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.137 2003/01/06 08:26:30 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1258,8 +1258,8 @@ class document extends aw_template
 
 		if ($data["clear_styles"] == 1)
 		{
-			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<br>,<p>");
-			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<br>,<p>");
+			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<br>,<p><ul><li><ol>");
+			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<br>,<p><ul><li><ol>");
 		}
 
 		if ($data["status"] == 0)
