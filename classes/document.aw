@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.104 2002/07/17 02:42:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.105 2002/07/17 04:01:31 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -191,7 +191,8 @@ class document extends aw_template
 			documents.*,
 			objects.period AS period,
 			objects.class_id as class_id,
-			objects.parent as parent
+			objects.parent as parent,
+			objects.period AS period
 			FROM documents
 			LEFT JOIN objects ON
 			(documents.docid = objects.brother_of)
@@ -221,7 +222,7 @@ class document extends aw_template
 
 		if ($docid)
 		{
-			$q = "SELECT objects.*,documents.* FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid AND status != 0 $sufix";
+			$q = "SELECT objects.*,documents.*,objects.period AS period FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid AND status != 0 $sufix";
 			$this->db_query($q);
 		}
 		$data = $this->db_next();
@@ -688,6 +689,7 @@ class document extends aw_template
 		if ($this->cfg["keyword_relations"] && not($print) && $params["keywords"])
 		{
 			$this->create_keyword_relations(&$doc["content"]);
+			$this->create_keyword_relations(&$doc["lead"]);
 		}
 	
 		// v6tame pealkirjast <p> maha
@@ -836,7 +838,7 @@ class document extends aw_template
 					{
 						if ($v)
 						{
-							$authors[] = sprintf("<a href='/index.$ext?section=%s'>%s</a>",$v,$k);
+							$authors[] = sprintf("<a href='%s'>%s</a>",document::get_link($v),$k);
 						} 
 						else 
 						{
@@ -1270,6 +1272,10 @@ class document extends aw_template
 					// 2kki on hoopis - 'ga eraldatud?
 					list($day,$mon,$year) = explode("-",$row["tm"]);
 					$ts = mktime(0,0,0,$mon,$day,$year);
+					if ($ts)
+					{
+						$modified = $ts;
+					}
 				}
 			}
 		}
@@ -3162,7 +3168,7 @@ class document extends aw_template
 		while($row = $this->db_next())
 		{
 			$tt->define_data(array(
-				"name" => sprintf("<a href='/?section=%d'>%s</a>",$row["oid"],$row["name"]),
+				"name" => sprintf("<a href='%s'>%s</a>",document::get_link($row["oid"]),$row["name"]),
 				"modified" => $this->time2date($row["modified"],2),
 				"modifiedby" => $row["modifiedby"],
 			));
