@@ -107,10 +107,20 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="week">
+			<function name="user_planner">
+				<arguments>
+					<optional name="date"/>
+					<define name="disp" value="week"/>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="overview">
 			<function name="user_planner">
 				<arguments>
+					<optional name="date"/>
 					<define name="disp" value="overview"/>
 				</arguments>
 			</function>
@@ -120,6 +130,16 @@
 			<function name="user_planner">
 				<arguments>
 					<define name="disp" value="month"/>
+					<optional name="date"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="month">
+			<function name="user_planner">
+				<arguments>
+					<define name="disp" value="month"/>
+					<optional name="date"/>
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.11 2001/05/17 12:36:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.12 2001/05/17 13:02:23 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -582,10 +582,21 @@ class planner extends calendar {
 			"2006" => "2006",
 			"2007" => "2007",
 			"2008" => "2008",
+			"2009" => "2009",
+			"2010" => "2010",
 		);
 		$mlist = explode("|",LC_MONTH);
 		unset($mlist[0]);
-		print "caption = $caption<br>";
+		if ($ctype == "oid")
+		{
+			$prev = "class=planner&action=change&id=$id&disp=$disp&date=$di[prev]";
+			$next = "class=planner&action=change&id=$id&disp=$disp&date=$di[next]";
+		}
+		else
+		{
+			$prev = "class=planner&action=$disp&date=$di[prev]";
+			$next = "class=planner&action=$disp&date=$di[next]";
+		};
 		$this->vars(array(
 			"menudef" => $menudef,
 			"caption" => $caption,
@@ -595,8 +606,8 @@ class planner extends calendar {
 			"mreforb" => $this->mk_reforb("redir",array("day" => $d,"disp" => $disp,"id" => $id)),
 			"mlist" => $this->picker($m,$mlist),
 			"ylist" => $this->picker($y,$ylist),
-			"prev" => $di["prev"],
-			"next" => $di["next"]));
+			"prev" => $prev,
+			"next" => $next));
 		return $this->parse();
 	}
 
