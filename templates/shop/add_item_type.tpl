@@ -92,56 +92,56 @@ function idxforvalue(el,val)
 <form method="POST" action="reforb.{VAR:ext}" name='q'>
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption2">T&uuml;&uuml;bi nimi:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_TYPE_NAME}:</td>
 	<td class="fcaption2"><input type='text' name='name' value='{VAR:name}'></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali form:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_FORM}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='form_id' onChange="sel_form=this.options[this.selectedIndex].value;mk_ops();">{VAR:flist}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali v&auml;ljundi stiil nimekirjas:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_OUTPUT_LIST}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='op_id'>{VAR:oplist}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali v&auml;ljundi stiil pikk:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_OUTPUT_LONG}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='op_id_l'>{VAR:oplist}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali v&auml;ljundi stiil korvis:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_OUTPUT_BASKET}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='op_id_cart'>{VAR:oplist}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali kauba koguse valimise form:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_GOODS_TOG}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='cnt_form' onChange="sel_form_cnt=this.options[this.selectedIndex].value;mk_ops_cnt();" >{VAR:flist}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali kauba koguse valimise formi v&auml;ljund ostuajaloos:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_GOODS_TOG_FORM}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='cnt_form_op'>{VAR:oplist}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali hinna valem:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_PRICE_FORMULA}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='eq'>{VAR:eqs}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Kas sellele kaubale tehakse voucher?&nbsp;<input type='checkbox' name='has_voucher' value=1 {VAR:has_voucher}></td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_MAKE_VOUCH}?&nbsp;<input type='checkbox' name='has_voucher' value=1 {VAR:has_voucher}></td>
 </tr>
 <tr>
-	<td class="fform" align="center" colspan="2"><input type="submit" value="Edasi">
+	<td class="fform" align="center" colspan="2"><input type="submit" value="{VAR:LC_SHOP_FORWARD}">
 	</td>
 </tr>
 </table>

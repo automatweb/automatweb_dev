@@ -71,27 +71,27 @@ function idxforvalue(el,val)
 <form method="POST" action="reforb.{VAR:ext}" name='q'>
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption2">Nimi:</td>
+	<td class="fcaption2">{VAR:LC_SHOP_NAME1}:</td>
 	<td class="fform"><input type="text" name="name" size="40" value='{VAR:name}'></td>
 </tr>
 <tr>
-	<td class="fcaption2" valign="top">Kommentaar:</td>
+	<td class="fcaption2" valign="top">{VAR:LC_SHOP_COMM}:</td>
 	<td class="fform"><textarea name="comment" rows=5 cols=50>{VAR:comment}</textarea></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali root kataloog:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_ROOT}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='root'>{VAR:root}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali form, mille klient peab telimisel t&auml;itma:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CLIENT_FORM}</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select multiple name='order_form[]'>{VAR:of}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali millised nendest korduvad:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_CHOOSE_ELSE}:</td>
 </tr>
 <!-- SUB: OF -->
 <tr>
@@ -100,51 +100,51 @@ function idxforvalue(el,val)
 </tr>
 <!-- END SUB: OF -->
 <tr>
-	<td class="fcaption2" colspan=2>Komaga eraldatud e-mailiaadressid, kellele tellimus saata:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_EMAIL_TOYOU}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><input type='text' name='emails' size=50 value='{VAR:emails}'></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Poeomaniku rekvisiitide form:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_OWNER_FORM}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='owner_form' onChange="sel_form=this.options[this.selectedIndex].value;mk_ops();">{VAR:forms}</select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Poeomaniku rekvisiitide formi v&auml;ljund:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_OWNER_FORM_OUTPUT}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='owner_form_op'></select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Poeomaniku rekvisiitide formi v&auml;ljund voucheril:</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_OWNER_FORM_VOU}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='owner_form_op_voucher'></select></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Poeomaniku rekvisiitide formi v&auml;ljund "Issued by":</td>
+	<td class="fcaption2" colspan=2>{VAR:LC_SHOP_OWNER_FORM_ISSU}:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='owner_form_op_issued'></select></td>
 </tr>
 <!-- SUB: CH_OWN -->
 <tr>
-	<td class="fcaption2" colspan=2><a href='{VAR:ch_own}'>Muuda poeomaniku rekvisiite</a></td>
+	<td class="fcaption2" colspan=2><a href='{VAR:ch_own}'>{VAR:LC_SHOP_PROPERTY}</a></td>
 </tr>
 <!-- END SUB: CH_OWN -->
 
 <!-- SUB: CHANGE -->
 <tr>
-	<td class="fcaption2" colspan=2><a href='{VAR:orders}'>Tellimused</a></td>
+	<td class="fcaption2" colspan=2><a href='{VAR:orders}'>{VAR:LC_SHOP_ORDERS}</a></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2><a href='{VAR:tables}'>Arve tabelid</a></td>
+	<td class="fcaption2" colspan=2><a href='{VAR:tables}'>{VAR:LC_SHOP_BILL_TABLE}</a></td>
 </tr>
 <!-- END SUB: CHANGE -->
 <tr>
-	<td class="fform" align="center" colspan="2"><input type="submit" value="Salvesta">
+	<td class="fform" align="center" colspan="2"><input type="submit" value="{VAR:LC_SHOP_SAVE}">
 	</td>
 </tr>
 </table>
