@@ -20,6 +20,7 @@ class xmlrpc extends aw_template
 			"request" => $xml,
 			"session" => $arr["remote_session"]
 		));
+		echo "val = ", htmlentities($resp)," <br>";
 		return $this->decode_response($resp);
 	}
 
@@ -73,7 +74,7 @@ class xmlrpc extends aw_template
 			{
 				$val["value"] = str_replace("__faking_bitchass_barbara_streisand__","&", $val["value"]);
 //				$this->dequote(&$val["value"]);
-				$try = aw_unserialize($val["value"]);
+				$try = aw_unserialize(urldecode($val["value"]));
 				if (is_array($try))
 				{
 					return $try;
@@ -213,7 +214,7 @@ class xmlrpc extends aw_template
 		$xml .= "\t\t<param>\n";
 		if (is_array($dat))
 		{
-			$dat = aw_serialize($dat, SERIALIZE_NATIVE);
+			$dat = urlencode(aw_serialize($dat, SERIALIZE_NATIVE));
 		}
 		$xml .= "\t\t\t<value>".$dat."</value>\n";
 		$xml .= "\t\t</param>\n";
