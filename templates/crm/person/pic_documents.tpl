@@ -1,34 +1,34 @@
+<div class="text">
+<img src="{VAR:imgurl}" align="left">
+{VAR:notes}
+<p>
+<strong>Telefon:</strong> {VAR:phone}<br>
+<strong>E-post:</strong> {VAR:email}
+<br><br>
+<table border="0" width="100%" cellpadding="3">
+<tr>
+<td width="30%" bgcolor="#EEEEEE">
 <!-- SUB: prevlink -->
-<a href="{VAR:prevurl}">Eelmised</a>
+<a href="{VAR:prevurl}"><small>&lt;&lt; Eelmised</small></a>
 <!-- END SUB: prevlink -->
-
+</td>
+<td width="40%" bgcolor="#EEEEEE">
+Autori artiklid
+</td>
+<td width="30%" bgcolor="#EEEEEE">
 <!-- SUB: nextlink -->
-<a href="{VAR:nexturl}">Järgmised</a>
+<a href="{VAR:nexturl}"><small>Järgmised &gt;&gt;</small></a>
 <!-- END SUB: nextlink -->
-<table border="0">
-<tr>
-<td>{VAR:imgurl}</td>
-</tr>
-<tr>
-<td class="text">
-<h4>{VAR:name}</h4>
-{VAR:phone}<br>
-{VAR:email}
 </td>
 </tr>
-<tr>
-<td class="plain">
+</table>
 <!-- SUB: DOCLIST -->
-Artiklid:
 <table border="0" width="100%" cellpadding="2">
 <!-- SUB: ITEM -->
 <tr>
-<td>{VAR:url}</td>
-<td>{VAR:commcount}</td>
+<td class="text">{VAR:url}</td>
+<td class="text"><a href="{VAR:commurl}"><font color="red">{VAR:commcount}</font></a></td>
 </tr>
 <!-- END SUB: ITEM -->
 </table>
 <!-- END SUB: DOCLIST -->
-</td>
-</tr>
-</table>
