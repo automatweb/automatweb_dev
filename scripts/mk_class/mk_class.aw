@@ -93,7 +93,7 @@ $class['syslog.type'] = trim(fgets($stdin));
 ////////////////////////////////////////////////////////////////////
 
 $clnf = ($class['folder'] == "" ? $class['file'].".aw" : $class['folder']."/".$class['file'].".aw");
-$tpnf = ($class['folder'] == "" ? $class['file'] : $class['folder']."/".$class['name']);
+$tpnf = ($class['folder'] == "" ? $class['file'] : $class['folder']."/".$class['file']);
 
 if (file_exists("classes/$clnf"))
 {
