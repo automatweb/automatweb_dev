@@ -405,7 +405,9 @@ no_cache - 1/0 - if 1, ds_cache is not used even if it is loaded
 **/
 function obj_set_opt($opt, $val)
 {
+	$tmp = $GLOBALS["__obj_sys_opts"][$opt];
 	$GLOBALS["__obj_sys_opts"][$opt] = $val;
+	return $tmp;
 }
 
 function dump_obj_table($pre = "")
@@ -413,7 +415,7 @@ function dump_obj_table($pre = "")
 	echo "---------------------------------------- object table dump: <br />$pre <br />\n";
 	foreach($GLOBALS["objects"] as $oid => $obj)
 	{
-		echo "oid in list $oid , data: {oid => ".$obj->id().", name = ".$obj->name()." } <br />\n";
+		echo "oid in list $oid , data: {oid => ".$obj->id().", name = ".$obj->name()." parent = ".$obj->parent()." } <br />\n";
 	}
 	echo "++++++++++<br />\n";
 	flush();

@@ -127,10 +127,13 @@ class _int_object
 				$cprms["type"] = $param["reltype"];
 			}
 
+			$tmp = obj_set_opt("no_cache", 1);
 			if (count($this->connections_from($cprms)) > 0)
 			{
+				obj_set_opt("no_cache", $tmp);
 				continue;
 			}
+			obj_set_opt("no_cache", $tmp);
 
 			$c = new connection();
 			$param["from"] = $this->obj["brother_of"];
@@ -182,7 +185,7 @@ class _int_object
 		}
 
 		$filter = array(
-			"from" => $this->obj["oid"]
+			"from" => $this->obj["brother_of"]
 		);
 
 		if ($param != NULL)
@@ -248,7 +251,7 @@ class _int_object
 		}
 
 		$filter = array(
-			"to" => $this->obj["oid"]
+			"to" => $this->obj["brother_of"]
 		);
 
 		if ($param != NULL)
@@ -1023,6 +1026,7 @@ class _int_object
 
 		// check if a brother already exists for this object under
 		// the $parent menu. 
+		$noc = obj_set_opt("no_cache", 1);
 		$ol = new object_list(array(
 			"parent" => $parent,
 			"brother_of" => $this->obj["oid"],
@@ -1031,9 +1035,11 @@ class _int_object
 		if ($ol->count() > 0)
 		{
 			$tmp = $ol->begin();
+			obj_set_opt("no_cache", $noc);
 			return $tmp->id();
 		}
 
+		obj_set_opt("no_cache", $noc);
 		return $this->_int_create_brother($parent);
 	}
 
@@ -1137,8 +1143,10 @@ class _int_object
 	function _int_do_save()
 	{
 		// first, update modifier fields
+		
 		$this->_int_set_of_value("modified", time());
 		$this->_int_set_of_value("modifiedby", aw_global_get("uid"));
+
 
 
 		if (!is_array($GLOBALS["properties"][$this->obj["class_id"]]))
@@ -1150,6 +1158,7 @@ class _int_object
 		{
 			$this->_int_init_new();
 
+
 			$this->obj["oid"] = $GLOBALS["object_loader"]->ds->create_new_object(array(
 				"objdata" => &$this->obj,
 				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
@@ -1160,7 +1169,6 @@ class _int_object
 				$this->obj["brother_of"] = $this->obj["oid"];
 			}
 		}
-
 		// now, save objdata
 		$GLOBALS["object_loader"]->ds->save_properties(array(
 			"objdata" => $this->obj,
@@ -1230,7 +1238,7 @@ class _int_object
 			}
 		}
 
-		if ($add)
+		if ($add && !aw_global_get("__is_install"))
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $GLOBALS["cfg"]["__default"]["rootmenu"]))
 			{
@@ -1280,7 +1288,7 @@ class _int_object
 				{
 					error::throw(array(
 						"id" => ERR_ACL,
-						"msg" => "object::save(): no acess to save object!"
+						"msg" => "object::save(): no access to save object!"
 					));
 				}
 			}

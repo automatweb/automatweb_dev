@@ -232,6 +232,8 @@ class connection
 			));
 		}
 
+		global $awt;
+
 		// now, check acl - both ends must be visible for the connection to be changed
 		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["from"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["to"])))
 		{
@@ -280,12 +282,16 @@ class connection
 
 				if (!$noc)
 				{
+					// [cs-rel-create] => 5.5006 (40.27%)
 					$o->set_class_id(CL_RELATION);
 					$o->set_status(STAT_ACTIVE);
 					$o->set_subclass($to->class_id());
+					$awt->start("cs-rel-save");
 					$this->conn["relobj_id"] = $o->save();
+					$awt->stop("cs-rel-save");
 				}
 			}
+
 		}
 
 		// now that everything is ok, save the damn thing
@@ -299,9 +305,11 @@ class connection
 			// add the relation id to the connection object meta field as conn_id
 			if ($this->conn["relobj_id"])
 			{
+				/*
 				$o = obj($this->conn["relobj_id"]);
 				$o->set_meta("conn_id", $this->conn["id"]);
 				$o->save();
+				*/
 			}
 
 			post_message(
@@ -326,6 +334,7 @@ class connection
 					"connection" => &$this
 				)
 			);
+
 		}
 	}
 }

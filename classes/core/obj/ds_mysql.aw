@@ -236,8 +236,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query($q);
 		$oid = $this->db_last_insert_id();
 
+
 		// create all access for the creator
 		$this->create_obj_access($oid);
+		
 
 		// set brother to self if not specified.
 		if (!$objdata["brother_of"])
@@ -276,6 +278,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 		}
+
 
 		foreach($tbls as $tbl => $dat)
 		{
