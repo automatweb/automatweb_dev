@@ -1,31 +1,31 @@
 <?xml version='1.0'?>
 <planner>
 	<config>
-		<caption>Kalendri konf</caption>
+		<caption>Configure calendar</caption>
 		<link>?class=planner&amp;action=configure&amp;id={VAR:id}</link>
 	</config>
 	<add>
-		<caption>Lisa sündmus</caption>
+		<caption>Add event</caption>
 		<link>?class=planner&amp;action=new_event&amp;parent={VAR:id}&amp;date={VAR:date}</link>
 	</add>
 	<today>
-		<caption>Täna</caption>
+		<caption>Today</caption>
 		<link>{VAR:view_today}</link>
 	</today>
 	<overview>
-		<caption>Ülevaade</caption>
+		<caption>Overview</caption>
 		<link>{VAR:view_overview}</link>
 	</overview>
 	<day>
-		<caption>Päev</caption>
+		<caption>Day</caption>
 		<link>{VAR:view_day}</link>
 	</day>
 	<week>
-		<caption>Nädal</caption>
+		<caption>Week</caption>
 		<link>{VAR:view_week}</link>
 	</week>
 	<month>
-		<caption>Kuu</caption>
+		<caption>Month</caption>
 		<link>{VAR:view_month}</link>
 	</month>
 </planner>

@@ -67,6 +67,10 @@ class propcollector extends aw_template
 				$this->cl_start($cname);
 				foreach($lines as $line)
 				{
+					if (preg_match("/\s+@classinfo (.*)/",$line,$m))
+					{
+						$this->set_classinfo($m[1]);
+					};
 					if (preg_match("/\s+@default (\w+?)=(.*)/",$line,$m))
 					{
 						$this->set_default($m[1],$m[2]);
@@ -94,6 +98,7 @@ class propcollector extends aw_template
 		$this->cl_name = $cname;
 		$this->properties = array();
 		$this->defaults = array();
+		$this->classinfo = array();
 	}
 
 	function add_property($name,$data)
@@ -126,6 +131,19 @@ class propcollector extends aw_template
 		$this->defaults[$key] = $value;
 	}
 
+	function set_classinfo($data)
+	{
+		$_x = new aw_array(explode(" ",$data));
+		foreach($_x->get() as $field)
+		{
+			list($fname,$fvalue) = explode("=",$field);
+			if ($fname && $fvalue)
+			{
+				$this->classinfo[$fname] = $fvalue;
+			};
+		};
+	}
+
 	function add_caption($caption)
 	{
 		$this->properties[$this->name]["caption"] = $caption;
@@ -143,7 +161,14 @@ class propcollector extends aw_template
 			$fullname = $outdir . $this->cl_name . ".xml";
 			print "Creating $fullname\n";
 			//print "writing out $fullname\n";
-			$res = $sr->xml_serialize(array("properties" => array_values($this->properties)));
+			$arr = array();
+			$arr["properties"] = array_values($this->properties);
+			if (sizeof($this->classinfo) > 0)
+			{
+				$arr["properties"]["classinfo"] = $this->classinfo;
+			};
+
+			$res = $sr->xml_serialize($arr);
 			//print_r($res);
 			$this->put_file(array(
 				"file" => $fullname,

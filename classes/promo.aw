@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.17 2002/10/02 07:07:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.18 2002/11/07 10:52:24 kristo Exp $
 
-classload("objects");
-classload("menuedit","users");
 class promo extends aw_template
 {
 	function promo()
@@ -18,7 +16,7 @@ class promo extends aw_template
 		$this->mk_path($parent, LC_PROMO_TODAY);
 
 		$this->read_template("add_promo.tpl");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 		$menu = $ob->get_list();
 		$menu[$this->cfg["rootmenu"]] = LC_PROMO_FRONTPAGE;
 
@@ -39,7 +37,7 @@ class promo extends aw_template
 			$short_templates[$tpl["id"]] = $tpl["name"];
 		};
 
-		$u = new users;
+		$u = get_instance("users");
 		$this->vars(array(
 			"section" => $ob->option_list($parent,$menu),
 			"left_sel" => "CHECKED",
@@ -114,7 +112,7 @@ class promo extends aw_template
 		}
 
 		$this->mk_path($row["parent"],LC_PROMO_CHANGE_PROMO_BOX);
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 
 		$sets = unserialize($row["comment"]);
 
@@ -148,7 +146,7 @@ class promo extends aw_template
 		$menu[$this->cfg["frontpage"]] = LC_PROMO_FRONTPAGE;
 
 
-		$u = new users;
+		$u = get_instance("users");
 		$this->vars(array(
 			"last_menus" => $this->multiple_option_list(unserialize($rw["sss"]), $menu),
 			"num_last" => $rw["ndocs"],

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.10 2002/10/30 11:02:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.11 2002/11/07 10:52:24 kristo Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -955,7 +955,7 @@ class search extends aw_template
 		}
 		elseif ($subaction == "assign_config")
 		{
-			$ac = get_instance("cfgobject");
+			$ac = get_instance("cfg/cfgobject");
 			die($ac->assign($args));
 		};
 

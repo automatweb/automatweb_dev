@@ -20,4 +20,5 @@
 </table>
 </fieldset>
 {VAR:reforb}
+{VAR:toolbar2}
 </form>

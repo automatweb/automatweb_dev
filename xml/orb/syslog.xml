@@ -35,6 +35,12 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="convert_syslog">
+			<function name="convert_syslog">
+				<arguments/>
+			</function>
+		</action>
 	</class>
 </orb>
 		

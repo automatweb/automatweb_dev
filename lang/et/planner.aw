@@ -25,7 +25,7 @@ $lc_planner["LC_PLANNER_REPEAT"] = "Kordus";
 
 $lc_planner["LC_PLANNER_MONTH"] = "kuu";
 
-$lc_planner["LC_PLANNER_SHOW"] = "Näita";
+$lc_planner["LC_PLANNER_SHOW"] = "Show";
 
 $lc_planner["LC_PLANNER_CHOOSE_REPLAYS"] = "Vali kordused";
 $lc_planner["LC_PLANNER_DAYS"] = "Päevad";

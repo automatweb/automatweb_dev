@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.7 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.8 2002/11/07 10:52:20 kristo Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -62,8 +62,7 @@ class events extends aw_template
 		extract($args);
 		global $year,$mon,$day,$op;
 			
-		classload("calendar");
-		$cal = new calendar();
+		$cal = get_instance("calendar");
 
 		$template = "short.tpl";
 
@@ -114,8 +113,7 @@ class events extends aw_template
 
 		$this->read_template($template);
 
-		classload("xml");
-		$xml = new xml(array("ctag" => "metadata"));
+		$xml = get_instance("xml",array("ctag" => "metadata"));
 
 		$cl = CL_EVENT;
 
@@ -686,8 +684,7 @@ class events extends aw_template
 		$mon    = ($mon) ? $mon : date("m");
 		$day = ($day) ? $day : date("d");
 		
-		classload("calendar");
-		$cal = new calendar();
+		$cal = get_instance("calendar");
 
 		$range = $cal->get_date_range(array(
 			"date" => "$day-$mon-$year",
@@ -754,8 +751,7 @@ class events extends aw_template
 		else
 		{
 			$this->read_template("table.tpl");
-			classload("xml");
-			$xml = new xml(array("ctag" => "metadata"));
+			$xml = get_instance("xml",array("ctag" => "metadata"));
 
 			$cl = CL_EVENT;
 			$uid = aw_global_get("uid");
@@ -836,8 +832,7 @@ class events extends aw_template
 	function submit_invite($args = array())
 	{
 		extract($args);
-		classload("xml");
-		$xml = new xml(array("ctag" => "metadata"));
+		$xml = get_instance("xml",array("ctag" => "metadata"));
 		$cl = CL_EVENT;
 		$q = "SELECT objects.*,events.* FROM objects
 			LEFT JOIN events ON (objects.oid = events.id)
@@ -859,8 +854,7 @@ class events extends aw_template
 	function event_view($args = array())
 	{
 		extract($args);
-		classload("xml");
-		$xml = new xml(array("ctag" => "metadata"));
+		$xml = get_instance("xml",array("ctag" => "metadata"));
 		$cl = CL_EVENT;
 		$q = "SELECT objects.*,events.* FROM objects
 			LEFT JOIN events ON (objects.oid = events.id)

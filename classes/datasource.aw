@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.4 2002/07/23 21:13:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.5 2002/11/07 10:52:19 kristo Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -127,7 +127,7 @@ class datasource extends aw_template
 		$obj = $this->get_object($id);
 		$type = $obj["meta"]["type"];
 		$url = escapeshellarg($obj["meta"]["url"]);
-		if ($type == 2)
+		if (($type == 2) || ($type == 1))
 		{
 			$read = "";
 			$curl = $this->cfg["curl_path"];

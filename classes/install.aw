@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/install.aw,v 2.3 2002/10/09 10:25:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/install.aw,v 2.4 2002/11/07 10:52:22 kristo Exp $
 // install.aw - used for creating and configuring new sites
 class install extends aw_template
 {
@@ -30,10 +30,8 @@ class install extends aw_template
 			"reforb" => $this->mk_reforb("add_site",array("no_reforb" => 1)),
 		));
 
-	
 		$ok = false;
 		$message = array();
-
 
 		$dbhost = $this->cfg["mysql_host"];
 
@@ -107,7 +105,7 @@ class install extends aw_template
 
 			$vhost_conf = localparse($vhost_template,$vars);
 
-			$fp = popen("/www/automatweb_dev/scripts/install/install","w");
+			$fp = popen($this->cfg["basedir"]."/scripts/install/install","w");
 			if (not($fp))
 			{
 				print "couldn't fork install script, check the permissions!";
@@ -173,6 +171,10 @@ class install extends aw_template
 				"file" => $basedir . "/aw.ini",
 				"content" => $config,
 			));
+
+			// now create the needed db connection and set it as default and then let all registerer classes init the database
+//			$this->do_init_site($vars);
+
 			exit;
 			header("Location: http://$awdbname");
 			exit;
@@ -241,6 +243,28 @@ class install extends aw_template
 		//return $this->parse();
 	}
 
+	function do_init_site($vars)
+	{
+		// set the default connection to the new database
+		$this->db_connect(array(
+			"username" => $vars["db_user"],
+			"server" => $vars["db_host"],
+			"base" => $vars["db_base"],
+			"password" => $vars["db_pass"],
+			"driver" => "mysql"
+		));
 
+		foreach($this->cfg["init_classes"] as $class)
+		{
+			echo "class = $class <br>";
+			$inst = get_instance($class);
+			$inst->db_init();
+			if (method_exists($inst, "on_site_init"))
+			{
+				echo "call on_site_init for class $class <br>";
+				$inst->on_site_init(&$this, $vars);
+			}
+		}
+	}
 };
 ?>

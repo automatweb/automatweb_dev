@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.123 2002/11/06 11:25:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.124 2002/11/07 10:52:19 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -871,7 +871,7 @@ class document extends aw_template
 			$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$docid'","cnt");
 			$this->vars(array(
 				"num_comments" => sprintf("%d",$num_comments),
-				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid),"forum"),
+				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid,"section" => aw_global_get("section")),"forum"),
 			));
 			$forum = get_instance("forum");
 			$fr = $forum->add_comment(array("board" => $docid));

@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.1 2002/10/29 13:29:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.2 2002/11/07 10:52:31 kristo Exp $
 // cfgobject.aw - configuration objects
+// adds, changes and in general handles configuration objects
 
 class cfgobject extends aw_template
 {

@@ -1,15 +1,26 @@
 <?php
-// $Id: treeview.aw,v 1.2 2002/11/04 20:53:13 duke Exp $
+// $Id: treeview.aw,v 1.3 2002/11/07 10:52:37 kristo Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
         @default group=general
         @property root type=select field=meta method=serialize
         @caption Root objekt
+
+	@property rootcaption type=textbox field=meta method=serialize
+	@caption Root objekti nimi
+	
+	@property icon_root type=objpicker clid=CL_ICON field=meta method=serialize
+	@caption Root objekti ikoon
         
 	@property treetype type=select field=meta method=serialize
         @caption Puu tüüp
 
+	@property icon_folder_open type=objpicker clid=CL_ICON field=meta method=serialize
+	@caption Lahtise kausta ikoon
+
+	@property icon_folder_closed type=objpicker clid=CL_ICON field=meta method=serialize
+	@caption Kinnise kausta ikoon
 */
 class treeview extends aw_template
 {
@@ -43,6 +54,8 @@ class treeview extends aw_template
 		extract($args);
 		$obj = $this->get_object($id);
 		$root = $obj["meta"]["root"];
+		$this->urltemplate = $args["urltemplate"];
+		$this->meta = $obj["meta"];
 		$rootobj = $this->get_object($root);
 		if (!$rootobj)	
 		{
@@ -75,7 +88,9 @@ class treeview extends aw_template
 			"TREE" => $tr,
 			"DOC" => "",
 			"root" => $root,
-			"rootname" => $rootobj["name"],
+			"rootname" => ($obj["meta"]["rootcaption"]) ? $obj["meta"]["rootcaption"] : $rootobj["name"],
+			"rooturl" => $this->do_item_link($rootobj),
+			"icon_root" => ($obj["meta"]["icon_root"])? $this->mk_my_orb("show",array("id" => $obj["meta"]["icon_root"]),"icons") : "/automatweb/images/aw_ikoon.gif",
                 ));
 
 		return $this->parse();
@@ -103,13 +118,29 @@ class treeview extends aw_template
 				// kui n2idatakse ja menyy on perioodiline, siis n2itame menyyd
 				// kui pole perioodiline siis ei n2ita
 				$sub = $this->rec_tree(&$arr,$row["oid"],$period);
-				$iconurl = $row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif";
-				$url = ($row["link"]) ? $row["link"] : $this->cfg["baseurl"] . "/" . $row["oid"];
+				// that's used for objects only
+				if ($row["icon_id"] > 0)
+				{
+					$icon_id = $row["icon_id"];
+				}
+				elseif ($this->meta["icon_folder_closed"])
+				{
+					$icon_id = $this->meta["icon_folder_closed"];
+				};
+				if ($icon_id)
+				{
+					$icon_url = $this->mk_my_orb("show",array("id" => $icon_id),"icons");
+				}
+				else
+				{
+					$icon_url = $baseurl . "/automatweb/images/ftv2doc.gif";
+				};
+				$url = $this->do_item_link($row);
 				$this->vars(array(
 					"name" => $row["name"],
 					"id" => $row["oid"],
 					"parent" => $row["parent"],
-					"iconurl" => $iconurl,
+					"iconurl" => $icon_url,
 					"url" => $url,
 					"targetframe" => "right",
 				));
@@ -124,6 +155,23 @@ class treeview extends aw_template
 			}
 		}
 		return $ret;
+	}
+
+	function do_item_link($row)
+	{
+		if ($row["link"])
+		{
+			$url = $row["link"];
+		}
+		elseif ($this->urltemplate)
+		{
+			$url = sprintf($this->urltemplate,$row["oid"]);
+		}
+		else
+		{
+			$url = $this->cfg["baseurl"] . "/" . $row["oid"];
+		};
+		return $url;
 	}
 
 };

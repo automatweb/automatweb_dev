@@ -68,7 +68,7 @@ class site_base extends aw_template
 	// !this can be used in on_frontpage when we need to draw the menus on frontpage
 	function do_fp_menus_return($ret,$arr = array())
 	{
-		$m = new menuedit(aw_ini_get("per_oid"));
+		$m = get_instance("menuedit",aw_ini_get("per_oid"));
 		if (is_array($arr["vars"]))
 		{
 			$arr["vars"] += $this->on_page();

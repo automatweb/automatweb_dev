@@ -99,8 +99,15 @@ class cfgutils extends aw_template
                         $parser = get_instance("xml/xml_path_parser");
                         $parser->parse_data(array("content" => $source));
                         $properties = $parser->get_data("/properties/property");
+			$classinfo = $parser->get_data("/properties/classinfo");
+			$this->classinfo = $classinfo[0];
                 };
                 return $properties;
+	}
+
+	function get_classinfo()
+	{
+		return $this->classinfo;
 	}
 	
 };

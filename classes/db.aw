@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.7 2002/10/14 07:40:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.8 2002/11/07 10:52:19 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -54,6 +54,7 @@ class db_connector extends root
 		extract($args);
 		// FIXME: validate arguments
 
+		// FIXME: dc is not an object if the $driver class had a syntax error
 		$dc = get_instance("db_drivers/".$driver);
 		if (!is_object($dc))
 		{
@@ -64,6 +65,12 @@ class db_connector extends root
 		$dc->db_connect($server,$base,$username,$password);
 
 		aw_global_set($id,$dc);
+
+		if (!$cid)
+		{
+			$cid = "DBMAIN";
+		}
+
 		$this->dc[$cid] = $dc;
 
 		return $dc;

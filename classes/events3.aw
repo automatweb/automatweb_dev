@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.5 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.6 2002/11/07 10:52:20 kristo Exp $
 // events.aw - the sucky sucky version of the PIKK calendar
 
 //  kalendri vaated teemade kaupa:
@@ -80,8 +80,7 @@ class events3 extends aw_template
 		$start = new date_edit("start");
 		$start->set("minute_step",30);
 		$start->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
-		classload("calendar");
-		$cal = new calendar();
+		$cal = get_instance("calendar");
 		if ($old["start"])
 		{
 			$old_st = $old["start"];
@@ -190,8 +189,7 @@ class events3 extends aw_template
 		extract($args);
 		global $year,$mon,$day,$op;
 			
-		classload("calendar");
-		$cal = new calendar();
+		$cal = get_instance("calendar");
 
 		$template = "short.tpl";
 
@@ -492,8 +490,7 @@ class events3 extends aw_template
 		$mon    = ($mon) ? $mon : date("m");
 		$day = ($day) ? $day : date("d");
 		
-		classload("calendar");
-		$cal = new calendar();
+		$cal = get_instance("calendar");
 
 		$range = $cal->get_date_range(array(
 					"date" => "$day-$mon-$year",
@@ -555,8 +552,7 @@ class events3 extends aw_template
 		else
 		{
 			$this->read_template("table.tpl");
-			classload("xml");
-			$xml = new xml(array("ctag" => "metadata"));
+			$xml = get_instance("xml",array("ctag" => "metadata"));
 
 			$cl = CL_EVENT;
 			$uid = aw_global_get("uid");
@@ -637,8 +633,7 @@ class events3 extends aw_template
 	function submit_invite($args = array())
 	{
 		extract($args);
-		classload("xml");
-		$xml = new xml(array("ctag" => "metadata"));
+		$xml = get_instance("xml",array("ctag" => "metadata"));
 		$cl = CL_EVENT;
 		$q = "SELECT objects.*,events.* FROM objects
 			LEFT JOIN events ON (objects.oid = events.id)
@@ -660,8 +655,7 @@ class events3 extends aw_template
 	function event_view($args = array())
 	{
 		extract($args);
-		classload("xml");
-		$xml = new xml(array("ctag" => "metadata"));
+		$xml = get_instance("xml",array("ctag" => "metadata"));
 		$cl = CL_EVENT;
 		$q = "SELECT objects.*,events.* FROM objects
 			LEFT JOIN events ON (objects.oid = events.id)

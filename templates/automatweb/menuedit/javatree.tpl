@@ -6,13 +6,15 @@
 </table>
 <IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
 <applet codebase="/automatweb/java/javatree" code="menuTree.class" width="100%" height="98%">
-<param name="background_color" value="#EEEEEE">
-<param name="mouseover_color" value="#478EB6">
+<param name="background_color" value="#FCFCF4">
+<param name="mouseover_color" value="#CCCCCC">
 <param name="selected_color" value="#B58D47">
-<param name="text_color" value="#000000">
+<param name="text_color" value=" #0018AF">
+<param name="active_text_color" value="#424242">
 <param name="top_color" value="#E0E2E5">
+<param name="font_size" value="11">
 <param name="font" value="Times New Roman">
-<param name="perioodiline" value="OFF"><!-- ON/OFF , kui on, siis puul perioodide valimise võimalus-->
+<param name="perioodiline" value="ON"><!-- ON/OFF , kui on, siis puul perioodide valimise võimalus-->
 <param name="deemon" value="OFF"><!-- ON/OFF , kui off, siis puul refresh nupp-->
 <param name="server" value="{VAR:demon_server}"><!-- deemoni asukoha server -->
 <param name="port" value="{VAR:demon_port}">

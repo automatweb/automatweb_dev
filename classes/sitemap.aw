@@ -1,10 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.8 2002/07/16 19:19:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.9 2002/11/07 10:52:25 kristo Exp $
 // sitemap.aw - Site Map
 
 // DEPRECATED - duke's new menu tree showing class deprecates this one. 
 
-classload("menuedit");
 class sitemap extends aw_template 
 {
 	function sitemap()
@@ -16,7 +15,7 @@ class sitemap extends aw_template
 	function mk_map($no_docs = false,$rootmenu = -1)
 	{
 		$this->read_template("sitemap.tpl");
-		$m = new menuedit;
+		$m = get_instance("menuedit");
 		$m->db_listall(" objects.status = 2 ");
 		while ($row = $m->db_next())
 		{

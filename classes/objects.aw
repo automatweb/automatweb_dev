@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.38 2002/10/30 11:04:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.39 2002/11/07 10:52:24 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
-classload("cache");
 class db_objects extends aw_template 
 {
 	function db_objects() 
@@ -58,8 +57,7 @@ class db_objects extends aw_template
 	function gen_folders($args = array())
 	{
 		extract($args);
-		classload("menuedit_light");
-		$mnl = new menuedit_light();
+		$mnl = get_instance("menuedit_light");
 		$udata = $this->get_user();
 		$flist = $mnl->gen_rec_list(array(
 			"start_from" => $udata["home_folder"],
@@ -292,8 +290,7 @@ class objects extends db_objects
 				$l.=$this->parse("LINE");
 			}
 		
-			classload("objects");
-			$ob = new db_objects;
+			$ob = get_instance("objects");
 
 
 			$this->vars(array(
@@ -326,8 +323,7 @@ class objects extends db_objects
 		// sort type list by name
 		asort($tar);
 
-		classload("users");
-		$u = new users;
+		$u = get_instance("users");
 		$uids = $u->listall_acl();
 		$uids[""] = "";
 
@@ -415,8 +411,7 @@ class objects extends db_objects
 		// just in case if any menus were deleted or changed - I thought it would be too expensive to put checks in 
 		// core::delete_object and core::upd_object to check if menus were changed and then flush the cache 
 		// - yeah, that would be a lot safer, but is it really necessary?
-		classload("menuedit");
-		$m = new menuedit;
+		$m = get_instance("menuedit");
 		$m->invalidate_menu_cache($updmenus);
 
 		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"],"stype" => $stype,"target" => $target,"otype" => $otype,"one" => $one,"return_url" => urlencode($return_url)));
@@ -456,8 +451,7 @@ class objects extends db_objects
 		// target sisaldab kirja id-d, mille kylge objekt attachida tuleb
 		if (is_array($sel))
 		{
-			classload("file");
-			$awf = new file();
+			$awf = get_instance("file");
 			foreach($sel as $key => $val)
 			{
 				$obj = $this->get_object($key);
@@ -507,21 +501,18 @@ class objects extends db_objects
 		switch($obj["class_id"])
 		{
 			case CL_EXTLINK:
-				classload("extlinks");
-				$t = new extlinks();
+				$t = get_instance("extlinks");
 				list($url,$target,$caption) = $t->draw_link($obj["oid"]);
 				$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
 				break;
 
 			case CL_IMAGE:
-				classload("image");
-				$t = new image();
+				$t = get_instance("image");
 				$idata = $t->get_image_by_id($obj["oid"]);
 				$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
 				break;
 			case CL_TABLE:
-				classload("table");
-				$t = new table();
+				$t = get_instance("table");
 				$replacement = $t->show(array("id" => $obj["oid"],"align" => $align));
 				break;
 
@@ -579,15 +570,13 @@ class objects extends db_objects
 				break;
 
 			case CL_GALLERY:
-				classload("gallery");
-				$t = new gallery();
+				$t = get_instance("gallery");
 				$t->load($obj["oid"],$GLOBALS["page"]);
 				$replacement = $t->show($GLOBALS["page"]);
 				break;
 
 			case CL_FILE:
-				classload("file");
-				$t = new file;
+				$t = get_instance("file");
 				$fi = $t->get_file_by_id($obj["oid"]);
 				if ($fi["showal"] == 1)
 				{
@@ -629,8 +618,7 @@ class objects extends db_objects
 
 
 			case CL_DOCUMENT:
-				classload("document");
-				$t = new document();
+				$t = get_instance("document");
 				$replacement = $t->gen_preview(array("docid" => $obj["oid"]));
 				break;
 
@@ -639,8 +627,7 @@ class objects extends db_objects
 				break;
 
 			case CL_CALENDAR:
-				classload("planner");
-				$cal = new planner();
+				$cal = get_instance("planner");
 				$cform = $args["form"];
 				$ctrl = 0;
 
@@ -772,6 +759,43 @@ class objects extends db_objects
 	{
 		extract($arr);
 		return $this->delete_aliases_of($oid);
+	}
+
+	function on_site_init(&$inst, $vars)
+	{
+		// create a few objects to init the db struct
+		$mned = get_instance("menuedit");
+		$mned->dc = $inst->dc;	// fake the db connection
+		
+		$root_id = $mned->add_new_menu(array(
+			"name" => "root",
+			"parent" => 0,
+			"type" => MN_CLIENT
+		));
+
+		$client_id = $mned->add_new_menu(array(
+			"name" => "klient",
+			"parent" => $root_id,
+			"type" => MN_CLIENT
+		));
+
+		$site_folder_id = $mned->add_new_menu(array(
+			"name" => $vars["ServerName"],
+			"parent" => $client_id,
+			"type" => MN_CLIENT
+		));
+
+		$upmenu_id = $mned->add_new_menu(array(
+			"name" => "&Uuml;lemine men&uuml;&uuml;",
+			"parent" => $site_folder_id,
+			"type" => MN_CLIENT
+		));
+
+		$leftmenu_id = $mned->add_new_menu(array(
+			"name" => "Vasak men&uuml;&uuml;",
+			"parent" => $site_folder_id,
+			"type" => MN_CLIENT
+		));
 	}
 }
 

@@ -177,7 +177,7 @@ function drawFolder(leftSide)
 
   this.blockStart("folder")
 
-  doc.write("<tr><td bgcolor='#a0a0a0' class='fgtext_bad'>") 
+  doc.write("<tr><td class='fgtext_bad'>") 
   doc.write(leftSide) 
   this.outputLink() 
   doc.write("<img id='folderIcon" + this.id + "' name='folderIcon" + this.id + "' src='" + this.iconSrc+"' border=0></a>") 

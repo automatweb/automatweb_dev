@@ -23,6 +23,9 @@ class linklist_stat extends aw_template
 			$this->mk_path($ob["parent"], "Muuda lingikogu stati");
 		}
 		$ob = $this->get_object($id); //NB see on siin lingikogu object mitte lingikogu_stat
+
+
+
 		if (!$sid)//add stat object
 		{
 			$sid = $this->new_object(array(
@@ -49,34 +52,50 @@ class linklist_stat extends aw_template
 		$kuu=date_edit::get_timestamp($st["meta"]["kuu_date"]);
 		$aasta=date_edit::get_timestamp($st["meta"]["aasta_date"]);
 
-$limit= "limit 10";
-$now=time();
+		$limit= "limit 30";
+		$now=time();
+$predefine=array("oid"=>"külastatuimad saidid","uid"=>"tihedamad kasutajad", "dayofmonth"=>"kuupäevade järgi","hour"=>"tundide kaupa","year"=>"aasta lõikes","minute"=>"minutite järgi","weekday"=>"nädalapäevade kaupa");
 
-if (($from) && ($till))
-{
-$q = "select * from lingikogu_stat where tm between $from and $till $limit";
-}
-elseif($from)
-{
-$q = "select * from lingikogu_stat where tm>=$from $limit";
-}
-elseif($till)
-{
-$q = "select * from lingikogu_stat where tm<=$till $limit";
-}
-else
-$q = "select * from lingikogu_stat $limit";
+// tahame ikka vist konreetse lingikogu kohta statistikat onju
+$where="where lkid=".$id;
 
-/*
-$q = "select * from lingikogu_stat where tm>='$tm' limit 50";
-$q = "select * from lingikogu_stat where between '$t1' and '$t2'";
-*/
+		switch($stat) 
+		{
+			case "dayofmonth": 
+				$q="select * from lingikogu_stat $where GROUP BY DAYOFMONTH(FROM_UNIXTIME(tm))";
+				$xml="";
+			break;
+			case "hour":
+				$q="select * from lingikogu_stat $where GROUP BY HOUR(FROM_UNIXTIME(tm))";
+			break;
+			case "year":
+				$q="select * from lingikogu_stat $where GROUP BY YEAR(FROM_UNIXTIME(tm))";			
+			break;
+			case "minute":
+				$q="select * from lingikogu_stat $where GROUP BY MINUTE(FROM_UNIXTIME(tm))";			
+			break;
+			case "weekday":
+//				$q="select * from lingikogu_stat $where GROUP BY DAYOFWEEK(FROM_UNIXTIME(tm))";
+				$q="select * from lingikogu_stat $where GROUP BY WEEKDAY(FROM_UNIXTIME(tm))";			
+			break;
+			case "oid": 
+				$q="select * from lingikogu_stat $where GROUP BY oid";						
+			break;
+			case "uid": 
+				$q="select * from lingikogu_stat $where GROUP BY uid";						
+			break;
 
-$stat_out = $this->show_stats($id,$q);
+			default:
+
+				$q="select * from lingikogu_stat $where and tm between $from and $till";						
+		}
+
+echo $q;
+		//siin tööötleme päringust saadud andmed tabelisse
+		if ($q)
+		$stat_out = $this->show_stats($id,$q);
 
 
-//$from_date
-		
 		$from_date = new date_edit("from_date",$from);
 		$from_date->configure(array(
 			"month" => "",
@@ -106,15 +125,27 @@ $stat_out = $this->show_stats($id,$q);
 		));
 
 
+
 //echo date('Y/m/d &\n\b\s\p\; H:i');
 
 
 		classload("linklist"); //vaja oleks see toolbar kätte saada
 
+		foreach($predefine as $key => $val)
+		{
+			$this->vars(array(
+				"link" => $this->mk_my_orb("change", array("stat"=>$key, "id" => $id, "return_url" => urlencode($return_url))),
+				"str" => $val,
+			));
+			$predefined.=$this->parse("predefine");
+		}
+
+
 		$this->vars(array(
-		"caunt"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat","caunt"),
-		"caunt_dirs"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=1","caunt"),
-		"caunt_links"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=2","caunt"),
+			"caunt"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat","caunt"),
+			"caunt_dirs"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=1","caunt"),
+			"caunt_links"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=2","caunt"),
+
 			"stat_out"=>$stat_out,
 			"from_date" => $from_date->gen_edit_form("from_date",$from),
 			"till_date" => $till_date->gen_edit_form("till_date",$till),
@@ -125,8 +156,11 @@ $stat_out = $this->show_stats($id,$q);
 			"toolbar" => linklist::lingikogu_toolbar(array("id"=>$id,"sid"=>$sid,"ob"=>"linklist")),
 			"abix" => $abix,
 			"name" => $ob["name"],
-//			"link" => $this->mk_my_orb("stats", array("id" => $id, "return_url" => urlencode($return_url))),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "sid" => $sid, "return_url" => urlencode($return_url))),
+
+
+			"predefine" => $predefined,
+
+			"reforb" => $this->mk_reforb("submit", array("parent"=>$parent, "id" => $id, "sid" => $sid, "return_url" => urlencode($return_url))),
 		));
 		return $this->parse();	
 	
@@ -170,7 +204,7 @@ $stat_out = $this->show_stats($id,$q);
 	
 
 	
-	function show_stats($id,$q) //id,query,
+	function show_stats($id,$q,$xml="show_stats.xml") //id,query,
 	{
 	
 	$this->db_query($q);
@@ -181,13 +215,14 @@ $stat_out = $this->show_stats($id,$q);
 			));
 //echo $this->cfg["site_basedir"];
 //			$t->parse_xml_def($this->cfg["site_basedir"]."/xml/linklist/show_stats.xml"); 
-			$t->parse_xml_def("/www/automatweb_dev/xml/linklist/show_stats.xml"); 
+			$t->parse_xml_def("/www/automatweb_dev/xml/linklist/".$xml); 
 			
 			while ($row= $this->db_next()) 
 			{ 
 				$tm=date('Y/m/d&\n\b\s\p\;H:i', $row["tm"]);
 				$t->define_data(array(
 					"id"=>$row["id"],
+					"lkid"=>$row["lkid"],
 					"oid"=>$row["oid"],				
 					"uid"=>$row["uid"],
 					"action"=>$row["action"],
@@ -210,4 +245,30 @@ $stat_out = $this->show_stats($id,$q);
 
 
 
+
+
+
+
+
+
+/*
+if (($from) && ($till))
+{
+$q = "select * from lingikogu_stat where tm between $from and $till $limit";
+}
+elseif($from)
+{
+$q = "select * from lingikogu_stat where tm>=$from $limit";
+}
+elseif($till)
+{
+$q = "select * from lingikogu_stat where tm<=$till $limit";
+}
+else
+$q = "select * from lingikogu_stat $limit";
+
+/*
+$q = "select * from lingikogu_stat where tm>='$tm' limit 50";
+$q = "select * from lingikogu_stat where between '$t1' and '$t2'";
+*/
 ?>

@@ -54,8 +54,7 @@ class aip_change extends aw_template
 		load_vcl("date_edit");
 		$de = new date_edit("act_time");
 
-		classload("scheduler");
-		$sch = new scheduler;
+		$sch = get_instance("scheduler");
 
 		if ($id)
 		{
@@ -307,8 +306,7 @@ class aip_change extends aw_template
 	{
 		extract($arr);
 
-		classload("config");
-		$co = new config;
+		$co = get_instance("config");
 		$co->set_simple_config("aip_change::change_dir", $change_dir);
 		$co->set_simple_config("aip_change::act_change_1", $act_1);
 		$co->set_simple_config("aip_change::act_change_2", $act_2);
@@ -325,8 +323,7 @@ class aip_change extends aw_template
 	{
 		extract($arr);
 
-		classload("scheduler");
-		$sched = new scheduler;
+		$sched = get_instance("scheduler");
 		$sched->remove(array(
 			"event" => $this->mk_my_orb("do_change", array("id" => $id))
 		));
@@ -422,8 +419,7 @@ class aip_change extends aw_template
 				if ($act["action"] == CREATE_FOLDER)
 				{
 					echo "createfolder <br>";
-					classload("menuedit");
-					$m = new menuedit;
+					$m = get_instance("menuedit");
 					// create new menu
 					// for that we have to split the damn filename into pieces and for each piece check if a menu for that 
 					// bit exists already
@@ -485,8 +481,7 @@ class aip_change extends aw_template
 				else
 				if ($act["action"] == CREATE_FILE)
 				{
-					classload("file");
-					$f = new file;
+					$f = get_instance("file");
 					$fc = $this->get_file(array(
 						"file" => $folder."/".$act["file"],
 					));
@@ -748,11 +743,6 @@ class aip_change extends aw_template
 		if (!is_array($this->mpr))
 		{
 			$this->_list_menus(array("where" => "objects.status != 0","lang_id" => aw_global_get("lang_id")));
-/*			classload("menuedit");
-			$m = new menuedit;
-			$m->make_menu_caches("objects.status != 0");
-			$this->mpr = $m->mpr;
-			$this->mar = $m->mar;*/
 		}
 		exit_function("aip_pdf::mk_menu_cache");
 	}

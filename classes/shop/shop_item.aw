@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/shop_item.aw,v 1.1 2002/11/03 10:49:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/shop_item.aw,v 1.2 2002/11/07 10:52:35 kristo Exp $
 
 define("PRICE_PER_WEEK",1);
 define("PRICE_PER_2WEEK",2);
 
 define("PR_PER_PAGE" , 12);
 
-classload("shop_base");
+classload("shop/shop_base");
 class shop_item extends shop_base
 {
 	function shop_item()
@@ -61,7 +61,7 @@ class shop_item extends shop_base
 		$this->read_template("admin_system_menu.tpl");
 
 		$o = $this->get_object($id);
-		$shm = get_instance("shop_menuedit");
+		$shm = get_instance("shop/shop_menuedit");
 		$this->vars(array(
 			"path" => $shm->mk_path($o["parent"], "",0,true,false)
 		));
@@ -129,7 +129,7 @@ class shop_item extends shop_base
 		$this->read_template("edit_item.tpl");
 
 		$shcats = array("0" => "");
-		$shop = get_instance("shop");
+		$shop = get_instance("shop/shop");
 		$shs = $shop->get_list();	// list shops
 		foreach($shs as $sh_id => $sh_name)
 		{
@@ -707,7 +707,7 @@ class shop_item extends shop_base
 		$o = $this->get_item($id,true);
 		
 		$shcats = array("0" => "");
-		$shop = get_instance("shop");
+		$shop = get_instance("shop/shop");
 		$shs = $shop->get_list();	// list shops
 		foreach($shs as $sh_id => $sh_name)
 		{

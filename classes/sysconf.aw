@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sysconf.aw,v 2.2 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sysconf.aw,v 2.3 2002/11/07 10:52:25 kristo Exp $
 // sysconf.aw - const.aw web frontend
-
-classload("aw_template");
-
 class sysconf extends aw_template 
 {
 	function sysconf($args = array())
@@ -15,8 +12,7 @@ class sysconf extends aw_template
 
 	function adm_init($args = array())
 	{
-		classload("aw_template");
-		$this->core = new aw_template();
+		$this->core = get_instance("aw_template");
 		$this->core->tpl_init("sysconf");
 		$this->core->db_init();
 	}
@@ -43,11 +39,9 @@ class sysconf extends aw_template
 		extract($args);
 		print $this->gen_menu(array("activelist" => array($page)));
 		$this->adm_init();
-		classload("objects");
-		$o = new objects;
+		$o = get_instance("objects");
 		$menus = $o->get_list();
-		classload("users_user");
-		$g = new users_user; 
+		$g = get_instance("users_user"); 
 		$g->listgroups();
 		while($row = $g->db_next())
 		{

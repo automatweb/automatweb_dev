@@ -2,13 +2,16 @@
 
 el = "fgcolor";
 
-function varv(vrv) 
+function set_color(vrv) 
 {
 	if (el == "fgcolor")
 		document.cssedit.fgcolor.value="#"+vrv;
 	else
 	if (el == "bgcolor")
 		document.cssedit.bgcolor.value="#"+vrv;
+	else
+	if (el == "bordercolor")
+		document.cssedit.bordercolor.value="#"+vrv;
 } 
 
 function varvivalik(which) 
@@ -90,6 +93,14 @@ function varvivalik(which)
 {VAR:lhunits}
 </select>
 </td>
+</tr>
+<tr>
+<td class="fgtext">Border width:</td>
+<td class="fgtext"><input type="text" name="border" size="3" maxlength="3" value="{VAR:border}"></td>
+</tr>
+<tr>
+<td class="fgtext">Border color:</td>
+<td class="fgtext"><input type="text" name="bordercolor" size="7" maxlength="7" value="{VAR:bordercolor}">&nbsp;<a href="javascript:varvivalik('bordercolor')">{VAR:LC_CSS_CHOOSE}</a></td>
 </tr>
 <tr>
 <td class="fgtext">Lingi stiil:</td>

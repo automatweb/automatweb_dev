@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.8 2002/10/18 14:18:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.9 2002/11/07 10:52:24 kristo Exp $
 // remote_login.aw - AW remote login
-classload("socket");
-
 class remote_login extends aw_template 
 {
 	function remote_login($args = array())
@@ -74,7 +72,7 @@ class remote_login extends aw_template
 	function handshake($args = array())
 	{
 		extract($args);
-		$socket = new socket(array(
+		$socket = get_instance("socket",array(
 			"host" => $host,
 			"port" => 80,
 		));
@@ -118,7 +116,7 @@ class remote_login extends aw_template
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = new socket(array(
+		$socket = get_instance("socket",array(
 			"host" => $host,
 			"port" => 80,
 		));
@@ -157,7 +155,7 @@ class remote_login extends aw_template
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = new socket(array(
+		$socket = get_instance("socket",array(
 			"host" => $host,
 			"port" => 80,
 		));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.4 2002/10/16 13:52:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.5 2002/11/07 10:52:24 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -223,8 +223,7 @@ class mlist extends aw_template
 		$this->quote(&$arr);
 		extract($arr);
 		$this->id = $id;
-		classload("variables");
-		$va = new variables;
+		$va = get_instance("variables");
 		$va->db_list();
 		while ($row = $va->db_next())
 		{

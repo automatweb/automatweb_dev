@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.18 2002/09/30 14:40:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.19 2002/11/07 10:52:24 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -487,8 +487,7 @@ class poll extends aw_template
 
 		$this->vars(array("total_answers" => $total));
 
-		classload("forum");
-		$t = new forum;
+		$t = get_instance("forum");
 
 		// pollide arhiiv
 		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_POLL." AND status != 0 AND site_id = ".$this->cfg["site_id"]);

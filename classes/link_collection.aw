@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.8 2002/06/13 23:06:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.9 2002/11/07 10:52:23 kristo Exp $
 // link_collection.aw - Lingikogude haldus
 
 class link_collection extends aw_template 
@@ -20,8 +20,7 @@ class link_collection extends aw_template
 		$this->mk_path($par_obj["parent"],sprintf("<a href='%s'>%s</a> / Lisa lingikogu oks",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$par_obj["name"]));
 		// Yes, this is really scary but I need to know where all the link
 		// collections are 
-		classload("menuedit");
-		$awm = new menuedit();
+		$awm = get_instance("menuedit");
 
 		$awm->make_menu_caches();
 
@@ -53,8 +52,7 @@ class link_collection extends aw_template
 	{
 		extract($args);
 		$this->read_template("pick_branch.tpl");
-		classload("menuedit_light");
-		$mnl = new menuedit_light();
+		$mnl = get_instance("menuedit_light");
 		$in_collection = true;
 		$par_obj = $this->get_object($parent);
 		$this->mk_path($par_obj["parent"],sprintf("<a href='%s'>%s</a> / Muuda lingikogu oksa",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$par_obj["name"]));
@@ -237,8 +235,7 @@ class link_collection extends aw_template
 		$on_this_line = 0;
 		$c = "";
 		$_tmp = "";
-		classload("extlinks");
-		$ec = new extlinks();
+		$ec = get_instance("extlinks");
 		while($row = $this->db_next())
 		{
 			list($url,$target,$caption) = $ec->draw_link($row["oid"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.3 2002/06/26 11:26:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.4 2002/11/07 10:52:24 kristo Exp $
 // menu_tree.aw - menüüpuu
 class menu_tree extends aw_template
 {
@@ -45,7 +45,7 @@ class menu_tree extends aw_template
 		};
 
 		$this->read_template("add_tree.tpl");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 		$menus = $ob->get_list();
 		$this->vars(array(
 			"name" => $name,
@@ -98,8 +98,7 @@ class menu_tree extends aw_template
 		// FIXME: this should use menu cache 
 		if (is_array($menus))
 		{
-			classload("menuedit_light");
-			$mnl = new menuedit_light();
+			$mnl = get_instance("menuedit_light");
 			foreach($menus as $val)
 			{
 				$folder_list = array_merge($folder_list,$mnl->gen_rec_list(array(

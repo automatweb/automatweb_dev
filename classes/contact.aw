@@ -15,8 +15,7 @@ class contact extends aw_template
 
 		$con_form = $this->get_cf();
 
-		clsssload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		return $f->gen_preview(array(
 			"id" => $con_form, 
 			"reforb" => $this->mk_reforb("submit_contact", array("parent" => $parent), "contact")

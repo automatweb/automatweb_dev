@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xmlform.aw,v 2.3 2002/07/23 21:21:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xmlform.aw,v 2.4 2002/11/07 10:52:25 kristo Exp $
 // handles xml based configuration forms
 class xmlform extends aw_template
 {
@@ -23,7 +23,7 @@ class xmlform extends aw_template
 		$this->read_template("show.tpl");
 
 
-		$fe = get_instance("form_element");
+		$fe = get_instance("formgen/form_element");
 		// XXX: need to load the correct form
 		$fe->form->lang_id = aw_global_get("lang_id");
 
@@ -79,6 +79,12 @@ class xmlform extends aw_template
 
 
 
+				}
+				
+				if ($attr["type"] == "textbox")
+				{
+					$tmp["type"] = "textbox";
+					$key = $attr["name"];
 				}
 
 				$tmp["text"] = $attr["caption"];
@@ -178,6 +184,12 @@ class xmlform extends aw_template
 					$tmp["button_text"] = $attr["caption"];
 					$key = $attr["name"];
 
+				}
+
+				if ($attr["type"] == "textbox")
+				{
+					$tmp["type"] = "textbox";
+					$key = $attr["name"];
 				}
 
 				// create caption

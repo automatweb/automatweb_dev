@@ -1,7 +1,5 @@
 <?php
 
-classload("objects");
-
 class keyword_db extends aw_template
 {
 	function keyword_db()
@@ -16,7 +14,7 @@ class keyword_db extends aw_template
 	
 		$this->mk_path($parent, "Lisa keywordide baas");
 
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$ol = $ob->get_list();
 		$this->vars(array(
 			"keyw_cats" => $this->multiple_option_list(array(),$ol),
@@ -75,7 +73,7 @@ class keyword_db extends aw_template
 		$obj = $this->get_object($id);
 		$this->mk_path($obj["parent"], "Muuda keywordide baasi");
 
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$ol = $ob->get_list();
 		$this->vars(array(
 			"name" => $obj["name"],

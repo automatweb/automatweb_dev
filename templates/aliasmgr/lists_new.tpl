@@ -16,7 +16,8 @@
 	<form method="GET" name="foo">
 	<tr>
 		<td width="5"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
-		<td width="50" valign="middle">
+		<!--<td width="50" valign="middle"> -->
+		<td width="50">
 			<select name="aselect" class="formselect">
 				<option>--Vali alias--</option>
 				{VAR:aliases}

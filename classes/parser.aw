@@ -75,8 +75,7 @@ class parser extends aw_template
 		extract($arr);
 		set_time_limit(0);
 		$pd = aw_unserialize($this->get_cval("parser::class_status"));
-		classload("config");
-		$co = new config;
+		$co = get_instance("config");
 
 		if (is_array($classes))
 		{

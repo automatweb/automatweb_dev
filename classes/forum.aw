@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.55 2002/11/02 23:27:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.56 2002/11/07 10:52:21 kristo Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -52,8 +52,7 @@ class forum extends aw_template
 		};
 
 		// yikes
-		classload("users_user");
-		$u = new users_user();
+		$u = get_instance("users_user");
 		$this->$members = $u->getgroupmembers("Kasutajatugi");
 		
 		$this->lc_load("msgboard","lc_msgboard");
@@ -478,6 +477,7 @@ class forum extends aw_template
 	function mk_links($args = array())
 	{
 		extract($args);
+		classload("document");
 		$alias = ($this->embedded) ? "forum" : "";
 
 		if ($id)
@@ -522,8 +522,7 @@ class forum extends aw_template
 		// this first setting should really be configurable on per-forum basis
 		if ( $this->cfg["newtopic_logged_only"] && aw_global_get("uid") == "" )
 		{
-			classload("config");
-			$c = new db_config;
+			$c = get_instance("config");
 			$doc = $c->get_simple_config("orb_err_mustlogin");
 			if ($doc != "")
 			{
@@ -1615,8 +1614,7 @@ topic");
 		{
 			if ($vars["alias"])
 			{
-				classload("orb");
-				$orb = new orb(array(
+				$orb = get_instance("orb",array(
 					"class" => $vars["alias"],
 					"action"=> $vars["action"],
 					"vars" => array_merge($vars,array("section" => aw_global_get("section"))),

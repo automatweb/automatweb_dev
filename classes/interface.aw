@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/interface.aw,v 2.1 2002/07/23 21:14:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/interface.aw,v 2.2 2002/11/07 10:52:22 kristo Exp $
 // interface.aw - class interface manager
 class interface extends aw_template
 {
@@ -10,7 +10,7 @@ class interface extends aw_template
 
 	////
 	// !Retrieves and parses an interface XML file
-	function _get_if($args = array())
+	function get_if($args = array())
 	{
 		extract($args);
 		$source = get_file(array("file" => $this->cfg["basedir"] . "/xml/interfaces/$name.xml"));
@@ -32,12 +32,10 @@ class interface extends aw_template
 			$attr = $val["attributes"];
 			if ( ($val["tag"] == "class") && ($val["type"] == "complete") )
 			{
-				$retval[$attr["id"]][$attr["action"]] = $attr;
-				$_clids = explode(",",$attr["clid"]);
-				foreach($_clids as $_clid)
-				{
-					$this->clid[constant($_clid)] = constant($_clid);
-				}
+				$cid = constant($attr["cldef"]);
+				$attr["name"] = $this->cfg["classes"][$cid]["name"];
+				$attr["clid"] = $cid;
+				$retval[$attr["cldef"]][$attr["action"]] = $attr;
 			};
 
 		};

@@ -1,5 +1,5 @@
 <?php
-// $Revision: 2.7 $
+// $Revision: 2.8 $
 // docmgr.aw - Document manager
 // our first goal is it to make a decent interface to searching
 // from documents and their archives.
@@ -39,8 +39,7 @@ class docmgr extends document
 		load_vcl("table");
 		if (defined("ARCHIVE"))
 		{
-			classload("archive");
-			$archiver = new archive();
+			$archiver = get_instance("archive");
 		};
 		// create the query string for aw_table
 		$query_string = array(); 

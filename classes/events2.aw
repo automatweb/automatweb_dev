@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.5 2002/10/30 11:07:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.6 2002/11/07 10:52:20 kristo Exp $
 // events2.aw - FormGen based events
 
 class events2 extends aw_template 
@@ -81,8 +81,7 @@ class events2 extends aw_template
 		$mon    = ($mon) ? $mon : date("m");
 		$day = ($day) ? $day : date("d");
 		
-		classload("calendar");
-		$cal = new calendar();
+		$cal = get_instance("calendar");
 
 		$range = $cal->get_date_range(array(
 					"date" => "$day-$mon-$year",

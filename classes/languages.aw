@@ -6,7 +6,7 @@ class languages extends aw_template
 		$this->init("languages");
 		lc_load("definition");
 		$this->lc_load("languages","lc_languages");
-		$this->file_cache = new cache;
+		$this->file_cache = get_instance("cache");
 		// the name of the cache file
 		$this->cf_name = "languages::cache::site_id::".$this->cfg["site_id"];
 		$this->init_cache();
@@ -106,7 +106,7 @@ class languages extends aw_template
 		}
 		else
 		{
-			return $lar;
+			return $lar->get();
 		};
 	}
 
@@ -388,6 +388,14 @@ class languages extends aw_template
 		aw_global_set("LC", $LC);
 		// and we should be all done. if after this, lang_id will still be not set I won't be able to write the
 		// code that fixes it anyway. 
+	}
+
+	function on_site_init(&$inst, $vars)
+	{
+		foreach($this->cfg["list"] as $lid => $ldat)
+		{
+			$inst->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby) values('$lid','$ldat[name]','$ldat[charset]',1,'$ldat[acceptlang]','".time()."','".$vars["default_user"]."')");
+		}
 	}
 };
 ?>

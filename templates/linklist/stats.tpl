@@ -29,6 +29,7 @@
 														<td>
 															alates:{VAR:from_date}<br />
 															kuni{VAR:till_date}<br />
+															<input type="submit" value="otsi">
 														</td>
 													</tr>
 												</table>
@@ -59,13 +60,11 @@
 
 										</tr>
 										<tr>
-											<td class="fform" colspan="2">
-																						<a href="{VAR:link}">kuu ülevaade</a>
-																						<a href="{VAR:link}">nädala stat</a>
-																						<a href="{VAR:link}">päeva stat</a>
-																						<a href="{VAR:link}">aasta stat</a>
+											<td colspan="2">
+											<!-- SUB: predefine -->
+												<li><a href="{VAR:link}">{VAR:str}</a></li>
+											<!-- END SUB: predefine -->
 
-											<input type="submit" value="otsi">
 											</td>
 											<td>
 												
@@ -77,7 +76,7 @@
 											{VAR:kuu_date}
 											</td>
 											<td>
-												<input type=submit name=x value="kuu statistika">
+												<input type=submit name=kuu_stat value="kuu statistika">
 											</td>
 										</tr>
 										<tr>
@@ -85,7 +84,7 @@
 											{VAR:aasta_date}
 											</td>
 											<td>
-												<input type=submit name=x value="aasta statistika">
+												<input type=submit name=aasta_stat value="aasta statistika">
 											</td>
 										</tr>
 

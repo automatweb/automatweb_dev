@@ -41,12 +41,20 @@
 <td class="fgtitle"><select name="weekday_style">{VAR:weekday_styles}</select></td>
 </tr>
 <tr>
+<td class="fgtitle">Nädalapäevade stiil (weekend)</td>
+<td class="fgtitle"><select name="weekend_style">{VAR:weekend_styles}</select></td>
+</tr>
+<tr>
 <td class="fgtitle">Päevade stiil</td>
 <td class="fgtitle"><select name="day_style">{VAR:day_styles}</select></td>
 </tr>
 <tr>
 <td class="fgtitle">Aktiivse päeva stiil</td>
 <td class="fgtitle"><select name="act_day_style">{VAR:act_day_styles}</select></td>
+</tr>
+<tr>
+<td class="fgtitle">Puhkepäevade stiil</td>
+<td class="fgtitle"><select name="cel_day_style">{VAR:cel_day_styles}</select></td>
 </tr>
 <tr>
 <td class="fgtitle" colspan="2" align="center">

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.4 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.5 2002/11/07 10:52:24 kristo Exp $
 // menu_chain.aw - menüüpärjad
 
 class menu_chain extends aw_template 
@@ -43,8 +43,7 @@ class menu_chain extends aw_template
 			
 		$this->read_template("change.tpl");
 
-		classload("objects");
-		$dbo = new db_objects();
+		$dbo = get_instance("objects");
 		$olist = $dbo->get_list();
 
 		$this->vars(array(
@@ -125,8 +124,7 @@ class menu_chain extends aw_template
 
 		if (is_array($menus))
 		{
-			classload("menu");
-			$mn = new menu();
+			$mn = get_instance("menu");
 			foreach($menus as $key => $val)
 			{
 				$_id = $mn->create_menu_alias(array(
@@ -146,8 +144,7 @@ class menu_chain extends aw_template
 		$this->read_template("view.tpl");
 		$meta = aw_unserialize($obj["metadata"]);
 		$content = "";
-		classload("menuedit");
-		$m = new menuedit();
+		$m = get_instance("menuedit");
 		if (is_array($meta))
 		{
 			foreach($meta as $key => $val)

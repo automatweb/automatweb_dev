@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.20 2002/09/23 17:47:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.21 2002/11/07 10:52:20 kristo Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -79,8 +79,7 @@ class email extends aw_template
 	function mk_ml_vars($parent)
 	{
 		$c="";
-		classload("mlist");
-		$va = new mlist($parent);
+		$va = get_instance("mlist",$parent);
 		$vars = join(",",$va->var_list());
 		if ($vars != "")
 		{
@@ -106,8 +105,7 @@ class email extends aw_template
 		$c = $this->mk_ml_vars($parent);
 
 		$s="";
-		classload("variables");
-		$va = new variables;
+		$va = get_instance("variables");
 		$va->db_list_stamps();
 		while ($row = $va->db_next())
 		{
@@ -186,8 +184,7 @@ class email extends aw_template
 		}
 
 		$s="";
-		classload("variables");
-		$va = new variables;
+		$va = get_instance("variables");
 		$va->db_list_stamps();
 		while ($row = $va->db_next())
 		{
@@ -271,8 +268,7 @@ class email extends aw_template
 		unset($this->varis);
 		$this->varis = array();
 		$list_id = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $mail_id","parent");
-		classload("mlist");
-		$va = new mlist($list_id);
+		$va = get_instance("mlist",$list_id);
 		$arr = $va->var_list();
 		$vs = join(",",$arr);
 		if ($vs != "")
@@ -333,8 +329,7 @@ class email extends aw_template
 	
 	function mk_stamps($ret)
 	{
-		classload("variables");
-		$va = new variables;
+		$va = get_instance("variables");
 		$va->db_list_stamps();
 		while ($row = $va->db_next())
 		{
@@ -402,7 +397,6 @@ class email extends aw_template
 	function get_members($args = array())
 	{
 		extract($args);
-		classload("defs");
 		$q = "SELECT ml_users.mail AS mail FROM objects LEFT JOIN ml_users ON (objects.oid = ml_users.id)
 			WHERE objects.parent = '$list_id' AND status = 2";
 		$this->db_query($q);
@@ -506,8 +500,7 @@ class email extends aw_template
 			$c = str_replace("\r","",$c);
 			$msg.= "\n".$c."\n";
 
-			classload("smtp");
-			$t = new smtp;
+			$t = get_instance("smtp");
 			$t->send_message(aw_ini_get("mail.smtp_server"), $mail["mail_from"], $user["mail"], $msg);
 
 			echo LC_EMAIL_SENT_EMAIL3, $user["name"], "(" ,  $user["mail"], ") 'le<br>";

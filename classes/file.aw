@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.31 2002/10/15 12:03:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.32 2002/11/07 10:52:21 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -394,8 +394,7 @@ class file extends aw_template
 			// fuck this sucks
 			if ($msg_id)
 			{
-				classload("messenger");
-				$messenger = new messenger();
+				$messenger = get_instance("messenger");
 				$row = array();
 				$row["type"] = $file_type;
 				$row["content"] = $fc;
@@ -722,8 +721,7 @@ class file extends aw_template
 					if ($fd["class_id"] == CL_IMAGE)
 					{
 						// let the image class handle this
-						classload("image");
-						$im = new image;
+						$im = get_instance("image");
 						$id = $im->get_image_by_id($file_id);
 						return array("id" => $file_id,"url" => $id["url"]);
 					}

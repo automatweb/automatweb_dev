@@ -88,7 +88,7 @@ class objconfig extends aw_template
 		// that's the form we want to use for editing object configuration
 
 		// this is now fixed width.
-		$frm = get_instance("form");
+		$frm = get_instance("formgen/form");
 		return $frm->gen_preview(array("id" => $form,"obj_id" => $id,"entry_id" => $row["id"]));
 	}
 

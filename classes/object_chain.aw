@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.8 2002/09/25 22:43:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.9 2002/11/07 10:52:24 kristo Exp $
 // object_chain.aw - Objektipärjad
-
-classload("objects");
 
 class object_chain extends aw_template
 {
@@ -166,7 +164,7 @@ class object_chain extends aw_template
 			"types" => $this->multiple_option_list($this->make_keys($s_type),$tar)
 		));
 
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$ol = $ob->get_list();
 
 		$toar = array_values($meta["objs"]);
@@ -257,6 +255,17 @@ class object_chain extends aw_template
 		extract($arr);
 		$this->expl_chain(array("id" => $alias,"parent" => $id));
 		//header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
+	}
+
+	////
+	// !Adds a new object group
+	function add_group($args = array())
+	{
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
+
+
 	}
 }
 ?>

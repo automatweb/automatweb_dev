@@ -6,9 +6,6 @@ class event extends aw_template
 	{
 		// no, I don't like that name either 
 		$this->init("planner");
-
-
-
 	}
 
 	//// 

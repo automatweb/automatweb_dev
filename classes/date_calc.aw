@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.2 2002/01/31 00:25:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.3 2002/11/07 10:52:19 kristo Exp $
 
 ////
 // !get_date_range
@@ -87,7 +87,10 @@ function get_date_range($args = array())
 	);
 	return $arr;
 }	
-	
+
+////
+// !This is the place we need to modify to support countries where
+// the week starts on sunday.
 function convert_wday($daycode)
 {
 	return ($daycode == 0) ? 7 : $daycode;

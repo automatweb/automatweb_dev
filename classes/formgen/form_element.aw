@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.3 2002/11/01 08:57:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.4 2002/11/07 10:52:34 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -177,7 +177,8 @@ class form_element extends aw_template
 				"search_all_text"					=> checked($this->arr["search_all_text"]),
 				"search_separate_words"		=> checked($this->arr["search_separate_words"]),
 				"search_logical"					=> checked($this->arr["search_logical"]),
-				"search_separate_words_sep" => $this->arr["search_separate_words_sep"]
+				"search_separate_words_sep" => $this->arr["search_separate_words_sep"],
+				"search_field_in_set"			=> checked($this->arr["search_field_in_set"])
 			));
 	
 			$this->vars(array(
@@ -803,8 +804,11 @@ class form_element extends aw_template
 
 		$var = $base."_search_logical";
 		global $$var;
-
 		$this->arr["search_logical"] = $$var;
+
+		$var = $base."_search_field_in_set";
+		global $$var;
+		$this->arr["search_field_in_set"] = $$var;
 
 		$var=$base."_text";
 		$this->arr["text"] = $$var;
@@ -2145,6 +2149,8 @@ class form_element extends aw_template
 					{
 						$butt = $this->arr["lang_button_text"][$lang_id];
 					}
+
+					get_instance("image");
 
 					if ($this->arr["button_img"]["use"] == 1)
 					{

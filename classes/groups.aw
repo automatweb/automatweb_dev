@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.10 2002/09/04 17:52:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.11 2002/11/07 10:52:22 kristo Exp $
 load_vcl("table");
-classload("users_user","config");
 
 session_register("group_folders");
 
+classload("users_user");
 class groups extends users_user
 {
 	var $typearr = array(0 => LC_GROUPS_GROUP , 1 => LC_GROUPS_USER, 2 => LC_GROUPS_DYNGROUP);
@@ -308,10 +308,10 @@ class groups extends users_user
 		$this->vars(array("LINE" => $this->make_tree($parent),"parent" => $parent));
 		$this->vars(array("grp_level"	=> $this->sel_level+1));
 
-		$t = new users;
+		$t = get_instance("users");
 		$pg = $this->fetchgroup($parent);
 
-		$ng = new groups;
+		$ng = get_instance("groups");
 		$this->vars(array(
 			"CAN_ADD"		=> ($seltype == 0 || $seltype == 2) && ($this->can("add",$pg["oid"]) || $parent < 1) ? $this->parse("CAN_ADD") : "",
 			"from"			=> aw_global_get("REQUEST_URI"),
@@ -324,8 +324,7 @@ class groups extends users_user
 
 	function submit_acl_groups($arr = array())
 	{
-		classload("acl");
-		$acl = new acl;
+		$acl = get_instance("acl");
 		$acl->submit_acl_groups($arr);
 		return "/?orb=1&class=acl&action=edit&oid=" . $arr["oid"];
 	}
@@ -359,9 +358,10 @@ class groups extends users_user
 				if ($level != 0)
 				{
 					// dyn. group, save too
-					$c = new db_config;
+					$c = get_instance("config");
 					$fid = $c->get_simple_config("user_search_form");
-					$f = new form($fid);
+					$f = get_instance("formgen/form");
+					$f->load($fid);
 					$eid = $f->process_entry($entry_id);
 
 					if (!$parent) $parent=0;
@@ -403,9 +403,9 @@ class groups extends users_user
 				else
 				{
 					// really add the dyn. group
-					$c = new db_config;
+					$c = get_instance("config");
 					$fid = $c->get_simple_config("user_search_form");
-					$f = new form($fid);
+					$f = get_instance("formgen/form");
 					$eid = $f->process_entry();
 
 					if (!$parent) $parent=0;
@@ -919,7 +919,7 @@ class groups extends users_user
 			// since we are on level 2, it is a dyn group.
 			$fid = $pg["search_form"];
 
-			$f = new form();
+			$f = get_instance("formgen/form");
 
 			global $name;
 			return $f->gen_preview(array("id" => $fid,"entry_id" => $pg["data"], "reforb" => $this->mk_reforb("submit_grp", array("parent" => $parent, "level" => 1, "search_form" => $fid, "name" => $name,"type" => 2, "gid" => $gid))));
@@ -956,7 +956,7 @@ class groups extends users_user
 			else
 			{
 				// save dyn grp
-				$f = new form();
+				$f = get_instance("formgen/form");
 				$f->process_entry(array("id" => $pg["search_form"], "entry_id" => $entry_id));
 				$eid = $f->entry_id;
 
@@ -1006,7 +1006,7 @@ class groups extends users_user
 				else
 				{
 					// really add the dyn. group
-					$f = new form();
+					$f = get_instance("formgen/form");
 					$f->process_entry(array("id" => $search_form));
 
 					if (!$parent) 
@@ -1056,7 +1056,7 @@ class groups extends users_user
 		else
 		{
 			global $name;
-			$f = new form;
+			$f = get_instance("formgen/form");
 			return $f->gen_preview(array("id" => $search_form,"reforb" => $this->mk_reforb("submit_grp", array("parent" => $parent, "level" => 1, "search_form" => $search_form, "name" => $name,"type" => 2))));
 		}
 	}

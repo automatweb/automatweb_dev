@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.35 2002/07/31 10:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.36 2002/11/07 10:52:25 kristo Exp $
 // table.aw - tabelite haldus
-
-
-classload("style");
 class table extends aw_template
 {
 	var $table_id;
@@ -168,11 +165,9 @@ class table extends aw_template
 		));
 		$this->gen_yah();
 
-		classload("style");
-		$st = new style;
+		$st = get_instance("style");
 		$stylesel = $st->get_select(0,ST_CELL,true);
-		classload("css");
-		$css = new css;
+		$css = get_instance("css");
 		$tmp = $css->get_select();
 		$stylesel = $stylesel + $tmp;
 
@@ -217,8 +212,7 @@ class table extends aw_template
 			$this->arr["style2class"][$default_style] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '$default_style'","class_id");
 		}
 
-		classload("style");
-		$stl = new style;
+		$stl = get_instance("style");
 		if ($this->arr["table_style"])
 		{
 			$tbst = $stl->mk_cache($this->arr["table_style"]);
@@ -274,8 +268,7 @@ class table extends aw_template
 			};
 			$this->vars(array("COL" => $col));
 			$this->parse("LINE");
-			classload("search_filter");
-			$flt=new search_filter();
+			$flt=get_instance("search_filter");
 			$flt->id=$GLOBALS["filter$id"];
 			$flt->__load_data();
 
@@ -339,7 +332,7 @@ class table extends aw_template
 			$this->vars(array("COL"	=> $col));
 			$this->parse("LINE");
 		}
-		$st = new style;
+		$st = get_instance("style");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"table_id" => $id,
@@ -443,7 +436,7 @@ class table extends aw_template
 
 			$this->parse("LINE");
 		}
-		$st = new style;
+		$st = get_instance("style");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_admin", array("id" => $id)),
 			"table_id" => $id,
@@ -1152,7 +1145,7 @@ class table extends aw_template
 				
 			$this->parse("LINE");
 		}
-		$st = new style;
+		$st = get_instance("style");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_styles", array("id" => $id)),
 			"table_id" => $id,
@@ -1230,11 +1223,9 @@ class table extends aw_template
 		}
 		$this->read_template("pickstyle.tpl");
 
-		classload("style");
-		$st = new style;
+		$st = get_instance("style");
 		$stylesel = $st->get_select(0,ST_CELL,true);
-		classload("css");
-		$css = new css;
+		$css = get_instance("css");
 		$tmp = $css->get_select();
 		$stylesel = $stylesel + $tmp;
 
@@ -1515,7 +1506,7 @@ class table extends aw_template
 			$table = "<b><font size=\"+1\">".$this->table_name."</font></b><br>";
 		}
 		
-		$stc = new style; 
+		$stc = get_instance("style"); 
 		$frow_style = 0; 
 		$fcol_style = 0; 
 		$num_fcols = 0; 
@@ -1664,15 +1655,13 @@ class table extends aw_template
 			$table.= $footer_style ? $stc->get_text_begin_str($footer_style).$footer.$stc->get_text_end_str($footer_style) : $footer;
 		}
 
-		classload("aliasmgr");
-		$al = new aliasmgr();
+		$al = get_instance("aliasmgr");
 		$al->parse_oo_aliases($id,&$table,array());
 
 		$retval = $table;
 
 		$css_file = "";
-		classload("css");
-		$css = new css;
+		$css = get_instance("css");
 		$used = array();
 		foreach($used_css_styles as $stylid => $stylid)
 		{

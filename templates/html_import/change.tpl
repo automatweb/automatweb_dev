@@ -23,6 +23,9 @@
 									<br>
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
 										<tr>
+											<td class="celltext" width=30% colspan=2>iga erinevat tüüpi htmli jaoks oleks mõttekas teha uus objekt
+										</tr>
+										<tr>
 											<td class="celltext" width=30%>name</td><td class="celltext"><input type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
 										</tr>
 										<tr>
@@ -32,92 +35,58 @@
 										</tr>
 										<tr>
 											<td class="celltext" colspan=2>html source kataloog<br />
-											<input type=text name="source_path" value="{VAR:source_path}">
+											<input type=text name="source_path" value="{VAR:source_path}" size=50>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2>näitefail<br />
-											<input type=text size=70 name='example' value='{VAR:example}'>
+											<td class="celltext" colspan=2>näitefail(id)<br />
+											<textarea cols=60 rows=3 name='example'>{VAR:example}</textarea>
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2>leheküljel on üks kirje
-											<input type=radio name='single' value=1 {VAR:singleon}>
+											<td class="celltext" colspan=2>
+											<input type=radio name='single' value=1 {VAR:singleon}>										
+											leheküljel on üks kirje, millel elemendid võivad paikneda suvalises kohas
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2>leheküljel on mitu kirjet
-											<input type=radio name='single' value=0 {VAR:singleoff}>
-											<table><tr><td></td><td>kirje alguskood</td><td></td><td>kirje lõpu kood</td></tr>{VAR:separators}</table>
+											<td class="celltext" colspan=2>
+											<input type=radio name='single' value=0 {VAR:singleoff}>										
+											leheküljel on mitu kirjet tabeli kujul, üks rida = üks kirje
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2>esimene rida on kirjeldus?
-											<input type=checkbox name='first_row' {VAR:first_row}>
+											<td class="celltext" colspan=2>
+											<input type=radio name='single' value=0 {VAR:singleoff_}>										
+											mingi kolmas spetsiifiline variant, mida ma pole veel teinud
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2><input type=checkbox> loodav andmetabel:
-											<b>"html_import_<b/><input type=text size=10 name='mk_my_table' value='{VAR:mk_my_table}'>"<br>
-											{VAR:mk_table}<br>
+											<td class="celltext" colspan=2>
+											<hr>
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2><input type=checkbox> loodav fail:
-											<input type=text size=10 name='mk_my_file' value='{VAR:mk_my_file}'><br>
-											{VAR:mk_file}<br>
+											<td class="celltext" colspan=2><input type=radio name=output value="mk_my_table" {VAR:is_my_table}> luuakse sql andmetabel
+											<b>"html_import_<b/>
+											<input type=text size=10 name='mk_my_table' value='{VAR:mk_my_table}' class="formtext">"<br>
 											</td>
 										</tr>
-
+										<tr>
+											<td class="celltext" colspan=2><input type=radio name=output  value="mk_my_query" {VAR:is_my_query}> luuakse sql insert laused faili
+											<input type=text size=20 name='mk_my_query' value='{VAR:mk_my_query}' class="formtext"><br>
+											</td>
+										</tr>
+										<tr>
+											<td class="celltext" colspan=2><input type=radio name=output value="mk_my_csv" {VAR:is_my_csv}> luuakse csv tyypi fail
+											<input type=text size=20 name='mk_my_csv' value='{VAR:mk_my_csv}' class="formtext"><br>
+											</td>
+										</tr>
+										<tr>
+											<td class="celltext" colspan=2><input type=radio name=output value="mk_my_xml" {VAR:is_my_xml}> luuakse xml tyypi fail
+											<input type=text size=20 name='mk_my_xml' value='{VAR:mk_my_xml}' class="formtext"><br>
+											</td>
+										</tr>
 									</table>
-									{VAR:go_go}<br>
-									{VAR:reset}<br>
-									{VAR:ruul_test}	<br>
-									failis peab sisalduma html kood:<br>
-									<textarea cols=25 rows=4 name='match'>{VAR:match}</textarea>
-									{VAR:gogo}
-									<table border=1 cellpadding=0 cellspacing=0 bordercolor=white>
-									<!-- SUB: ruulbar -->
-									<tr><td>reegel</td><td>attribuudi alguskood</td><td>kirjeldus<br>loodava veeru nimi</td><td>attribuudi lõpukood</td><td>abx</td></tr>
-									<!-- END SUB: ruulbar -->
-									<!-- SUB: ruul -->
-										<tr>
-											<td>
-											{VAR:ruul}
-											</td>
-											<td>
-											<textarea cols=25 rows=4 name='{VAR:mis}[{VAR:ruul}][begin]'>{VAR:begin}</textarea>
-											</td>
-											<td>
-										<!-- SUB: fields -->
-										<table border=0 cellpadding=0 cellspacing=0>
-											<tr>
-												<td>
-												desc:<input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][desc]' value="{VAR:desc}"size=15><br>
-												sqlveerg:<input class="formtext" type=text name='{VAR:mis}[{VAR:ruul}][mk_field]' value="{VAR:mk_field}" 	size=10><br>
-												unikaalne?<input type=checkbox>striptags?<input type=checkbox><br>
-												tyyp<select><option>varchar()<option>text<option>char<option>int</select><br>
-												size<input class="formtext" type=text size=4>
-												</td>
-											</tr>
-										</table>
-										<!-- END SUB: fields -->
-											</td>
-											<td>
-											<textarea cols=25 rows=4 name='{VAR:mis}[{VAR:ruul}][end]'>{VAR:end}</textarea>
-											</td>
-											<td><a href=#bottom>html</a>
-											</td>
-											</tr>
-									<!-- END SUB: ruul -->
-									</table>
-									<a name=bottom>
-									<table border=2 bgcolor=white>
-										<tr>
-											<td>
-												{VAR:source}
-											</td>
-										</tr>
-									<table>
 								</td>
 							</tr>
 						</table>

@@ -1,6 +1,5 @@
 <?php
 
-classload("users","object_chain","role");
 class acl_class extends aw_template
 {
 	function acl_class()
@@ -22,7 +21,7 @@ class acl_class extends aw_template
 			"class" => CL_OBJECT_CHAIN
 		));
 
-		$u = new users;
+		$u = get_instance("users");
 		$groups = $u->get_group_picker(array(
 			"type" => array(GRP_REGULAR,GRP_DEFAULT,GRP_DYNAMIC,GRP_USERGRP)
 		));
@@ -113,10 +112,10 @@ class acl_class extends aw_template
 			"metadata" => $o["metadata"]
 		));
 
-		$oc = new object_chain;
+		$oc = get_instance("object_chain");
 		$objs = $oc->get_objects_in_chain($meta["chain"]);
 
-		$ro = new role;
+		$ro = get_instance("role");
 		$mask = $ro->get_acl_mask($meta["role"]);
 		$aclarr = $ro->get_acl_values($meta["role"]);
 
@@ -162,7 +161,7 @@ class acl_class extends aw_template
 			"class" => CL_OBJECT_CHAIN
 		));
 
-		$u = new users;
+		$u = get_instance("users");
 		$groups = $u->get_group_picker(array(
 			"type" => array(GRP_REGULAR,GRP_DEFAULT,GRP_DYNAMIC,GRP_USERGRP)
 		));

@@ -15,8 +15,17 @@
 			<function name="show">
 				<arguments>
 					<optional name="id"/>
-					<optional name="aktiivne"/>
-					<optional name="otsi"/>
+					<optional name="cd"/>
+					<optional name="search"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="goto">
+			<function name="link_redirect">
+				<arguments>
+					<optional name="id"/>
+					<optional name="lkid"/>
 				</arguments>
 			</function>
 		</action>
@@ -24,6 +33,7 @@
 		<action name="submit">
 			<function name="submit">
 				<arguments>
+					<optional name="statconf"/>
 				</arguments>
 			</function>
 		</action>
@@ -36,6 +46,25 @@
 				</arguments>
 			</function>
 		</action>
+		<action name="stats_">
+			<function name="stats_">
+				<arguments>
+					<optional name="id"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="stats">
+			<function name="stats">
+				<arguments>
+					<required name="id"/>
+					<optional name="return_url"/>
+					<optional name="test"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

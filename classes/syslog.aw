@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.18 2002/09/26 16:23:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.19 2002/11/07 10:52:25 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -47,8 +47,7 @@ class db_syslog extends aw_template
 	{
 		$names = $args["name"];
 		$name_ser = aw_serialize($names,SERIALIZE_NATIVE);
-		classload("config");
-		$conf = new db_config();
+		$conf = get_instance("config");
 		$conf->set_simple_config("syslog_sites",$name_ser);
 		global $syslog_site_id;
 		$syslog_site_id = ($args["syslog_site_id"]) ? $args["syslog_site_id"] : $this->cfg["site_id"];
@@ -91,6 +90,17 @@ class db_syslog extends aw_template
 		{
 			$syslog_params = array();
 			$syslog_params[number] = 30;
+		};
+			
+		// limit the matches to last 2 days. Should speed up the query considerabely
+		$tl = time() - (60 * 60 * 24 * 2);
+		if ($ss == "")
+		{
+			$ss = "WHERE tm > $tl ";
+		}
+		else
+		{
+			$ss .= " AND tm < $tl ";
 		};
 
 		global $number,$from, $to,$user,$ip_addr,$act,$update,$sortby,$uid_c,$email_c;
@@ -167,8 +177,7 @@ class db_syslog extends aw_template
 			}
 		};
 
-		classload("users_user");
-		$u = new users_user;
+		$u = get_instance("users_user");
 		$u->listall();
 		// umh?
 		$users = array("" => "");
@@ -178,14 +187,17 @@ class db_syslog extends aw_template
 		}
 		$this->vars(array("user" => $this->option_list($syslog_params["user"],$users)));
 
-		if ($ss == "")
+		if ($syslog_params["user"])
 		{
-			$ss = " WHERE uid LIKE '%".$syslog_params["user"]."%' ";
-		}
-		else
-		{
-			$ss.=" AND uid LIKE '%".$syslog_params["user"]."%' ";		
-		}
+			if ($ss == "")
+			{
+				$ss = " WHERE uid LIKE '%".$syslog_params["user"]."%' ";
+			}
+			else
+			{
+				$ss.=" AND uid LIKE '%".$syslog_params["user"]."%' ";		
+			}
+		};
 
 		if ($syslog_params["ip_addr"] != "")
 		{
@@ -253,8 +265,16 @@ class db_syslog extends aw_template
 		
 		if ($this->cfg["has_site_id"] == 1 && $this->syslog_site_id != -1)
 		{
-			$ss .= " AND syslog.site_id = " . $this->syslog_site_id;
+			if ($ss == "")
+			{
+				$ss = " WHERE syslog.site_id = " . $this->syslog_site_id;
+			}
+			else
+			{
+				$ss .= " AND syslog.site_id = " . $this->syslog_site_id;
+			};
 		};
+
 
 		
 		$q = "SELECT * FROM syslog 

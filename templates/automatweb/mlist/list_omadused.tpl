@@ -1,27 +1,6 @@
-<script language="javascript">
-function _delete(a)
-{
-foo.lgroup.value=a;
-foo.subop.value="delete";
-foo.submit();
-};
-
-function _rename(a)
-{
-foo.lgroup.value=a;
-foo.gname.value=prompt("Sisesta grupi uus nimi:","");
-foo.subop.value="rename";
-foo.submit();
-};
-
-function _new()
-{
-foo.subop.value="new";
-foo.submit();
-};
-</script>
-<form action = 'reforb.{VAR:ext}' method=post name="foo">
+{VAR:toolbar}
 <table cellpadding=0 cellspacing=0 border=0>
+<form action = 'reforb.{VAR:ext}' method=post name="foo">
 <tr><td width=100%>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0 width=100%>
 <tr>
@@ -30,8 +9,22 @@ foo.submit();
 <tr>
 <td class="fcaption2">Kommentaar:</td><td class="fform" colspan="2"><input type='text' class='small_button' NAME='comment' VALUE='{VAR:comment}'></td>
 </tr>
+
+
+
+
+
+
+
+
+
+
 <tr>
-<tr><td class="title" colspan="3">Muutujad</td></tr>
+	<td class="fform">Vali konfiguratsioon:</td>
+	<td colspan="2" class="fform"><select NAME='user_form_conf' class="formselect">{VAR:ufc}</select></td>
+</tr>
+<tr>
+	<td class="title" colspan="3">Muutujad</td></tr>
 <!-- SUB: variable -->
 <tr height="10"><td class="fform">{VAR:name}</td>
 <td class="fform"><input type='checkbox' name="vars[]" value="{VAR:vid}" {VAR:checked}></td>
@@ -39,26 +32,23 @@ foo.submit();
 </tr>
 <!-- END SUB: variable -->
 </tr>
+<tr>
+	<td colspan="3" class="fform">Vali kataloogid, kust alt v&otilde;etakse listi liikmed:</td>
+</tr>
+<tr>
+	<td colspan="3" class="fform"><select NAME='user_folders[]' multiple size="20" class="formselect">{VAR:user_folders}</select></td>
+</tr>
+<tr>
+	<td colspan="3" class="fform">Vali kataloog kuhu pannakse automaatselt lisatud liikmed:</td>
+</tr>
+<tr>
+	<td colspan="3" class="fform"><select NAME='def_user_folder' class="formselect">{VAR:def_user_folder}</select></td>
+</tr>
+<tr>
+	<td colspan="2" class="fform">Vali form, mille sisestustest tehakse automaatselt liikmed:</td>
+	<td class="fform"><select name="automatic_form" class="small_button">{VAR:automatic_form}</select></td>
+</tr>
 
-<tr>
-<td class="fcaption2" colspan="3" align="right"><input class='small_button' type='submit' VALUE='Salvesta'></td>
-</tr>
-</table>
-</td></tr>
-<tr><td width="100%">
-<table cellpadding=3 cellspacing=1 border=0 bgcolor="#CCCCCC" width=100%>
-<tr><td class="title" colspan="3">Grupid</td></tr>
-<!-- SUB: group -->
-<tr>
-<td class="fform">{VAR:name}</td>
-<td class="fform"><a href="javascript:_delete('{VAR:lgroup}');">Kustuta</a></td>
-<td class="fform"><a href="javascript:_rename('{VAR:lgroup}');">Nimeta ümber</a></td>
-</tr>
-<!-- END SUB: group -->
-<tr>
-<td class="fform"><input type="text" name="gname" class="small_button"></td>
-<td class="fform" colspan="2"><a href="javascript:_new();">Uus</a></td>
-</td>
 </table>
 </td></tr>
 </table>

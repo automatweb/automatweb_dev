@@ -28,8 +28,8 @@ if ($vars["fastcall"] == 1)
 	session_start();
 	// loadime klassi
 	classload("fastcall_base");
-	classload($class);
 	// instantseerime
+	classload($class);
 	$inst = new $class;
 	// ja ongi k6ik
 	die($inst->$action($vars));

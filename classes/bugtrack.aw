@@ -5,7 +5,7 @@ define("MAIL_CHANGE", "muutis ");
 
 session_register("search_opts");
 
-classload("aw_template","replicator","sql_filter");
+classload("replicator");
 class bugtrack extends aw_template 
 {
 	function bugtrack()
@@ -90,7 +90,7 @@ class bugtrack extends aw_template
 			"3" => "Blokeerib töö"
 		);
 
-		$this->sql_filter=new sql_filter();
+		$this->sql_filter=get_instance("sql_filter");
 		$this->sql_filter_data=array(
 			"BT"=>array(
 				"real"=>"bugtrack",
@@ -787,8 +787,7 @@ class bugtrack extends aw_template
 	{
 		if (!isset($this->cl_users))
 		{
-			classload("users");
-			$this->cl_users = new users;
+			$this->cl_users = get_instance("users");
 		};
 		$ud = $this->cl_users->fetch($uid);
 		//echo("get_user_mail($uid)=".$ud["email"]);
@@ -900,8 +899,7 @@ class bugtrack extends aw_template
 		{
 			if (!isset($this->users))
 			{
-				classload("users");
-				$this->users=new users();
+				$this->users=get_instance("users");
 			};
 			$this->bugtr_filters=$this->users->get_user_config(array("uid" => aw_global_get("uid"), "key" => "bugtr_filters"));
 			$this->bugtr_filters["0"] = array(
@@ -946,8 +944,7 @@ class bugtrack extends aw_template
 	{
 		if (!isset($this->users))
 		{
-			classload("users");
-			$this->users=new users();
+			$this->users=get_instance("users");
 		};
 		unset($this->bugtr_filters["0"]);
 		unset($this->bugtr_filters["-1"]);
@@ -1324,8 +1321,7 @@ class bugtrack extends aw_template
 	{
 		if (!isset($this->users))
 		{
-			classload("users");
-			$this->users=new users();
+			$this->users=get_instance("users");
 		};
 		$df=$this->users->get_user_config(array("uid" => aw_global_get("uid"), "key" => "bugtr_deffilter"));
 		return $df? $df : 0;
@@ -1563,7 +1559,7 @@ class bugtrack extends aw_template
 
 		if ($search)
 		{
-			$bt = new bugtrack;
+			$bt = get_instance("bugtrack");
 			$this->vars(array(
 				"table" => $bt->orb_list(array("search_sess" => $search_sess,"page" => $page))
 			));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.16 2002/10/30 11:08:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.17 2002/11/07 10:52:19 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -130,8 +130,7 @@ class css extends aw_template
 			"activelist" => array("list")
 		));
 
-		classload("users");
-		$u = new users();
+		$u = get_instance("users");
 		$group_in_user = $u->get_user_config(array(
 			"uid" => aw_global_get("uid"),
 			"key" => "automatweb_css_group",
@@ -189,8 +188,7 @@ class css extends aw_template
 	function css_submit_list_groups($args = array())
 	{
 		extract($args);
-		classload("users");
-		$u = new users();
+		$u = get_instance("users");
 
 		$u->set_user_config(array(
 			"uid" => aw_global_get("uid"),
@@ -246,7 +244,7 @@ class css extends aw_template
 
 		$this->read_template("syslist.tpl");
 
-		$u = new config();
+		$u = get_instance("config");
 		$sys_css = $u->get_simple_config("sys_css");
 
 		if (!$group_in_use)
@@ -311,7 +309,7 @@ class css extends aw_template
 			$this->db_query($q);
 		};
 		
-		$u = new config();
+		$u = get_instance("config");
 		$sys_css = $u->set_simple_config("sys_css",$use);
 		return $this->mk_orb("syslist",array());
 	}
@@ -378,9 +376,8 @@ class css extends aw_template
 		));
 
 		extract($args);
-		classload("users","xml");
-		$u = new config();
-		$xml = new xml();
+		$u = get_instance("config");
+		$xml = get_instance("xml");
 
 		$custom_css = $u->get_simple_config(array(
 			"uid" => aw_global_get("uid"),
@@ -431,9 +428,8 @@ class css extends aw_template
 	function css_sync($args = array())
 	{
 		// loeme koigepealt koik css stiilid sisse
-		classload("users","xml","file");
-		$u = new users();
-		$xml = new xml();
+		$u = get_instance("users");
+		$xml = get_instance("xml");
 
 		$use_group = $u->get_user_config(array(
 			"uid" => aw_global_get("uid"),
@@ -464,7 +460,7 @@ class css extends aw_template
 			};
 		}
 
-		$awf = new file();
+		$awf = get_instance("file");
 		$uid = aw_global_get("uid");
 		$success =$awf->put_special_file(array(
 			"name" => aw_global_get("uid").".css",
@@ -480,8 +476,7 @@ class css extends aw_template
 	function submit_css_list($args = array())
 	{
 		extract($args);
-		classload("xml","users","file");
-		$xml = new xml();
+		$xml = get_instance("xml");
 		
 		$custom_css = $xml->xml_serialize($style);
 		$this->quote($custom_css);

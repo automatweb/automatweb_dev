@@ -101,7 +101,7 @@ function get_branch()
 <vbox>
 <hbox><!--<textbox id="word" value=""/>--><button label="Fetch!" oncommand="get_branch();"/></hbox>
 </vbox>
-<tree id="maintree" flex="1">
+<tree id="maintree" enableColumnDrag="true" flex="1">
   <treecols>
       <treecol id="oid" label="OID" primary="true" flex="3"/>
       <treecol id="subcnt" label="Sub" flex="3"/>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.169 2002/11/02 23:11:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.170 2002/11/07 10:52:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 /*
@@ -135,8 +135,6 @@
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
 define("SHARED_FOLDER_ID",2147483647);
 
-classload("cache","defs","php","file","image");
-
 class menuedit extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -162,13 +160,14 @@ class menuedit extends aw_template
 		$newoid = $this->new_object(array(
 			"name" => $args["name"],
 			"parent" => $args["parent"],
-			"status" => 2,
+			"status" => (isset($args["status"]) ? $args["status"] : 2),
 			"class_id" => CL_PSEUDO,
 			"jrk" => $args["jrk"]
 		));
-		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,MN_HOME_FOLDER_SUB);
+		$type = $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB;
+		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,$type);
 		$this->db_query($q);
-		$this->_log("menuedit",sprintf(LC_MENUEDIT_ADDED_HOMECAT_FOLDER,$args[name]));
+		$this->_log("menuedit",sprintf(LC_MENUEDIT_ADDED_HOMECAT_FOLDER,$args["name"]));
 
 		$this->invalidate_menu_cache(array($newoid));
 
@@ -193,8 +192,7 @@ class menuedit extends aw_template
 		// handle favicon
 		if (($params["section"]."") == "favicon.ico")
 		{
-			classload("config");
-			$c = new config;
+			$c = get_instance("config");
 			$c->show_favicon(array());
 		}
 
@@ -214,8 +212,7 @@ class menuedit extends aw_template
 		$act_per_id = aw_global_get("act_per_id");
 		if ($format == "rss")
 		{
-			classload("document");
-			$d = new document();
+			$d = get_instance("document");
 			$d->gen_rss_feed(array("period" => $act_per_id,"parent" => $section));
 		};
 
@@ -257,7 +254,7 @@ class menuedit extends aw_template
 			$use_cache = false;
 		};
 
-		$cache = new cache;
+		$cache = get_instance("cache");
 		$cache->set_opt("metaref",$meta["metaref"]);
 		$cache->set_opt("referer",aw_global_get("referer"));
 		if (!($res = $cache->get($section,$cp)) || $params["format"] || $not_cached)
@@ -321,6 +318,7 @@ class menuedit extends aw_template
 
 		$obj = $this->get_object($section);
 
+		classload("image");
 		$this->check_object($obj);
 
 		if (not($text))
@@ -348,6 +346,7 @@ class menuedit extends aw_template
 			$docid=$obj["brother_of"];
 		}
 
+		classload("image");
 		$_t = aw_global_get("act_period");
 		$this->vars(array(
 			"per_string" => $_t["description"],
@@ -437,9 +436,8 @@ class menuedit extends aw_template
 		
 		$this->read_template($template);
 
-		classload("periods","document");
-		$d = new document();
-		$this->doc = new document();
+		$d = get_instance("document");
+		$this->doc = get_instance("document");
 		
 		// so, if the current object is not a menu,
 		// just pretend that the parent is. Hm, I think that's wrong
@@ -455,6 +453,7 @@ class menuedit extends aw_template
 
 
 		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne
+		$this->dequote($this->properties["comment"]);
 		$this->vars(array(
 			"sel_menu_comment" => $this->properties["comment"],
 		));
@@ -680,8 +679,7 @@ class menuedit extends aw_template
 		}
 		else
 		{
-			classload("users");
-			$t = new users;
+			$t = get_instance("users");
 			$udata = $this->get_user();
 			$jfar = $t->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
 			$jfs = "";
@@ -1333,8 +1331,7 @@ class menuedit extends aw_template
 		// perioodide tropp.
 		if ($this->cfg["per_oid"])
 		{
-			classload("periods");
-			$dbp = new db_periods($this->cfg["per_oid"]);
+			$dbp = get_instance("periods",$this->cfg["per_oid"]);
 			$act_per_id = $dbp->get_active_period();
 			$dbp->clist();
 			$pl = array();
@@ -1493,8 +1490,7 @@ class menuedit extends aw_template
 		};
 
 		// now we need to make a list of all the groups created by this user
-		classload("users_user");
-		$dbu = new users_user;
+		$dbu = get_instance("users_user");
 		$dbu->listgroups(-1,-1,4);
 		$grps_arr = array();
 		while ($row = $dbu->db_next())
@@ -2187,8 +2183,7 @@ class menuedit extends aw_template
 
 	function mk_grp_tree($parent)
 	{
-		classload("groups");
-		$t = new groups;
+		$t = get_instance("groups");
 		$t->listacl("objects.class_id = ".CL_GROUP." AND objects.status = 2");
 		$t->listgroups("parent","asc",0,2);
 		$grar = array();
@@ -2340,7 +2335,7 @@ class menuedit extends aw_template
 	{
 		if (!is_array($this->pr_icons))
 		{
-			$c = new db_config;
+			$c = get_instance("config");
 			$this->pr_icons = aw_unserialize($c->get_simple_config("program_icons"));
 		}
 		$i = $this->pr_icons[$fid]["url"];
@@ -2350,7 +2345,6 @@ class menuedit extends aw_template
 
 	function get_icon_url($clid,$name)
 	{
-		classload("defs");
 		return get_icon_url($clid,$name);
 	}
 
@@ -2454,14 +2448,14 @@ class menuedit extends aw_template
 					"objtbl_conf" => $objtbl_conf,
 					"add_tree_conf" => $add_tree_conf,
 					"cfgmanager" => $cfgmanager,
-					"sort_by_name" => $sort_by_name
+					"sort_by_name" => $sort_by_name,
+					"multi_doc_style" => $multi_doc_style,
 				),
 			));
 			
 			if ($arr["keywords"] || $arr["description"])
 			{
-				classload("file","php");
-				$awf = new file();
+				$awf = get_instance("file");
 
 				$old = $awf->get_special_file(array(
 					"name" => "meta.tags",
@@ -2869,6 +2863,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$num_menu_images = $this->cfg["num_menu_images"];
 		$imgar = $meta["menu_images"];
 
+		classload("image");
 		for ($i=0; $i < $num_menu_images; $i++)
 		{
 			$image = "";
@@ -2888,15 +2883,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$this->vars(array("M_IMG" => $ims));
 
 		// keyword list
-		classload("keywords");
-		$kwds = new keywords;
+		$kwds = get_instance("keywords");
 		$all_kwds = $kwds->get_keyword_picker();
 		$kwd_list = $this->get_menu_keywords($id);
 
 		$icon = $row["icon_id"] ? "<img src=\"".$baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"]."\">" : ($row["admin_feature"] ? "<img src=\"".$this->get_feature_icon_url($row["admin_feature"])."\">" : "");
 
-		classload("periods");
-		$dbp = new db_periods($this->cfg["per_oid"]);
+		$dbp = get_instance("periods",$this->cfg["per_oid"]);
 
 		$oblist = $ob->get_list();
 
@@ -2965,6 +2958,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// mis kataloogist templatesid võtta
 			"tpl_dir" => $this->picker($meta["tpl_dir"],$template_sets),
 			//"section"			=> $this->multiple_option_list($sets["section"],$oblist),
+			"multi_doc_style" => $this->picker($meta["multi_doc_style"],array("" => "Leadid","jumpbox" => "JumpBox")),
 			// mis menüü alt viimased dokumendid võetakse?
 			"sss"					=> $this->multiple_option_list(unserialize($row["sss"]),$oblist),
 			// handwritten link. Dunno, seems kind of pointless to me really. Maybe we would
@@ -3122,8 +3116,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$af = $this->db_fetch_field("SELECT admin_feature FROM menu WHERE id = $id","admin_feature");
 		if ($af)
 		{
-			classload("config");
-			$c = new db_config;
+			$c = get_instance("config");
 			$c->set_program_icon(array("id" => $af,"icon_id" => $icon_id));
 		}
 		$this->db_query("UPDATE menu SET icon_id = $icon_id WHERE id = $id");
@@ -4004,8 +3997,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 
-		classload("icons");
-		$i = new icons();
+		$i = get_instance("icons");
 		$this->get_feature_icon_url(0);	// warm up the cache
 
 		$menus = array("0" => $id);
@@ -4136,8 +4128,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			return;
 		}
 		$mt = $this->db_fetch_field("SELECT type FROM menu WHERE id= $parent","type");
-		classload("icons");
-		$i = new icons;
+		$i = get_instance("icons");
 		reset($menus[$i_p]);
 		while (list(,$v) = each($menus[$i_p]))
 		{
@@ -4459,8 +4450,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function show_documents($section,$docid,$template = "")
 	{
-		//classload("document");
-		//$d = new document();
 		$d = get_instance("document");
 		// Vaatame, kas selle sektsiooni jaoks on "default" dokument
 		if ($docid < 1) 
@@ -4468,6 +4457,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$docid = $this->get_default_document($section);
 		};
 		$ct = "";
+
+		$jumpbox = false;
+		if ($this->is_template("JUMPBOX") && ($this->mar[$section]["meta"]["multi_doc_style"]))
+		{
+			$jumpbox = true;
+		};
+
 
 		// oleks vaja teha voimalus feedbacki tegemiseks. S.t. doku voib 
 		// lisaks enda sisule tekitada veel mingeid datat, mida siis menuedit
@@ -4498,24 +4494,80 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			while (list(,$did) = each($docid)) 
 			{
 				$d->_init_vars();
-				$ct.=$d->gen_preview(array(
-					"docid" => $did,
-					"tpl" => ($dk & 1 ? $template : $template2),
-					"leadonly" => 1,
-					"section" => $section,
-					"strip_img" => $strip_img,
-					"tpls" => $tpls,
-					"keywords" => 1,
-					"no_strip_lead" => aw_global_get("document.no_strip_lead")
-				));
+				
+				if ($jumpbox)
+				{
+					$oid = aw_global_get("oid");
+					if ($oid)
+					{
+						$tpl = ($oid == $did) ? "ACTIVE_LINK" : "LINK";
+					}
+					else
+					{
+						if ($done)
+						{
+							$tpl = "LINK";
+						}
+						else
+						{
+							$tpl = "ACTIVE_LINK";
+							$done = true;
+						};
+                                        }
+
+
+					$dobj = $this->get_object($did);
+					$this->vars(array(
+						"text" => $dobj["name"],
+						"link" => aw_global_get("baseurl") . "/section=$section" . "/oi
+						d=$did",
+					));
+					$JMP .= $this->parse($tpl);
+				}
+				else
+				{
+					$ct.=$d->gen_preview(array(
+						"docid" => $did,
+						"tpl" => ($dk & 1 ? $template : $template2),
+						"leadonly" => 1,
+						"section" => $section,
+						"strip_img" => $strip_img,
+						"tpls" => $tpls,
+						"keywords" => 1,
+						"no_strip_lead" => aw_global_get("document.no_strip_lead")
+					));
+				};
+
+				if ($tpl == "ACTIVE_LINK")
+				{
+					$ct =$d->gen_preview(array(
+						"docid" => $did,
+						"section" => $section,
+						"strip_img" => $strip_img,
+						"tpl" => $longtpl,
+						"tpls" => $tpls,
+						"keywords" => 1,
+						"no_strip_lead" => aw_global_get("document.no_strip_lead")
+					));
+				};
 
 				if ($d->referer)
 				{
 					$metaref[] = $d->referer;
 				}
-
 				$dk++;
 			} // while
+			if ($jumpbox)
+			{
+				$this->vars(array(
+					"LINK" => $JMP,
+				));
+
+				$this->vars(array(
+					"JUMPBOX" => $this->parse("JUMPBOX"),
+				));
+			};
+
 		} 
 		else 
 		{
@@ -4723,7 +4775,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !See jupp siin teeb promokasti
 	function make_promo_boxes($section)
 	{
-		$doc = new document;
+		$doc = get_instance("document");
 		$right_promo = "";
 		$left_promo = "";
 		$scroll_promo = "";
@@ -4969,8 +5021,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function make_poll()
 	{
-		classload("poll");
-		$t = new poll;
+		$t = get_instance("poll");
 		$this->vars(array("POLL" => $t->gen_user_html()));
 	}
 
@@ -4984,8 +5035,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$id=$this->cfg["frontpage"];
 			}
-			classload("search_conf");
-			$t = new search_conf;
+			$t = get_instance("search_conf");
 			$def = $GLOBALS["HTTP_GET_VARS"]["parent"] ? $GLOBALS["HTTP_GET_VARS"]["parent"] : $section;
 			$sl = $t->get_search_list(&$def);
 			$this->vars(array(
@@ -4999,10 +5049,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function do_rdf($section,$obj,$format,$docid)
 	{
-		classload("rdf");
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
-		$rdf = new rdf(array(
+		$rdf = get_instance("rdf",array(
 			"about" => "$baseurl/index.$ext/section=$section/format=rss",
 			"title" => $obj["name"],
 			"description" => $obj["description"],
@@ -5012,14 +5061,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		// read all the menus and other necessary info into arrays from the database
 		$this->make_menu_caches();
 
-		// laeme dokumentide klassi
-		classload("periods","document");
-		
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
 
 		// loome sisu
-		$d = new document();
+		$d = get_instance("document");
 		if ($periodic) 
 		{
 			// if $section is a periodic document then emulate the current period for it
@@ -5120,8 +5166,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !generates the ui for the shop
 	function do_shop($section,$shop_id)
 	{
-		classload("shop");
-		$sh = new shop;
+		$sh = get_instance("shop/shop");
 		$ret = $sh->show(array("section" => $section,"id" => $shop_id));
 		$this->vars(array("shop_menus" => $sh->shop_menus));
 		return $ret;
@@ -5130,8 +5175,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function make_langs()
 	{
 		$lang_id = aw_global_get("lang_id");
-		classload("languages");
-		$langs = new languages;
+		$langs = get_instance("languages");
 		$lar = $langs->listall();
 		$l = "";
 		foreach($lar as $row)
@@ -5297,7 +5341,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function invalidate_menu_cache($ar)
 	{
-		$cache = new cache;
+		$cache = get_instance("cache");
 
 		// here we gots to invalidate the objects::get_list cache as well, cause it also contains menus
 		// but that's gonna be a bit harder, cause it might be in a zillion different files and we must unlink
@@ -5573,8 +5617,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !Checks whether the section or one of it's parents is marked as "users_only
 	function users_only_redir()
 	{
-		classload("config");
-		$dbc = new db_config();
+		$dbc = get_instance("config");
 		$url = $dbc->get_simple_config("orb_err_mustlogin");
 		header("Location: ".$this->cfg["baseurl"]."/$url");
 		// exit from inside the class, yuck.
@@ -5586,8 +5629,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// !Redirect the user if he/she didn't have the right to view that section
 	function no_access_redir()
 	{
-		classload("config");
-		$c = new db_config;
+		$c = get_instance("config");
 		$ec = $c->get_simple_config("errors");
 		$ra = aw_unserialize($ec);
 			
@@ -5739,8 +5781,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		switch($obj["class_id"])
 		{
 			case CL_EXTLINK:
-				classload("extlinks");
-				$t = new extlinks();
+				$t = get_instance("extlinks");
 				$link = $t->get_link($obj["oid"]);
 				//list($url,$target,$caption) = $t->draw_link($obj["oid"]);
 				header("Location: $link[url]");
@@ -5749,8 +5790,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				break;
 
 			case CL_IMAGE:
-				classload("image");
-				$t = new image();
+				$t = get_instance("image");
 				$idata = $t->get_image_by_id($obj["oid"]);
 				$this->replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
 				if ($this->raw)
@@ -5761,20 +5801,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				break;
 
 			case CL_FILE:
-				classload("file");
-				$t = new file();
+				$t = get_instance("file");
 				die($t->show($obj["oid"]));
 				break;
 
 			case CL_TABLE:
-				classload("table");
-				$t = new table();
+				$t = get_instance("table");
 				$this->replacement = $t->show(array("id" => $obj["oid"],"align" => $align));
 				if ($this->raw)
 				{	
 					print $this->replacement;
 					exit;
 				};
+				break;
+
+			case CL_SITE_THREEPANE:
+				$t = get_instance("site/site_threepane");
+				print $t->show(array("id" => $obj["oid"]));
+				exit;
 				break;
 
 			default:
@@ -5813,9 +5857,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function show_folders($arr)
 	{
 		extract($arr);
-		classload("languages");
-		$t = new languages;
-		$sf = new aw_template;
+		$t = get_instance("languages");
+		$sf = get_instance("aw_template");
 		$sf->tpl_init("automatweb");
 		$sf->read_template("index_folders.tpl");
 		$sf->vars(array(
@@ -6431,8 +6474,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				break;
 
 			case "pers":
-				classload("periods");
-				$dbp = new db_periods($this->cfg["per_oid"]);
+				$dbp = get_instance("periods",$this->cfg["per_oid"]);
 				$data["options"] = $dbp->period_list(false);
 				break;
 
@@ -6486,8 +6528,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	// menu images (of which there can be 1..n)
 	function callback_get_menu_image($args = array())
 	{
-		classload("html");
-		classload("image");
+		classload("image","html");
 		$data = $args["prop"];
 		static $i = 0;
 		// each line consists of multiple elements

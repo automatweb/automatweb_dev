@@ -1,8 +1,7 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.30 2002/10/29 15:21:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.31 2002/11/07 10:52:22 kristo Exp $
 
-classload("image");
 class gallery extends aw_template
 {
 	function gallery($id = 0)
@@ -155,6 +154,7 @@ class gallery extends aw_template
 			"del_page" => $this->mk_orb("del_page", array("id" => $id))
 		));
 
+		classload("image");
 		for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
 		{
 			$this->vars(array("row" => $row));
@@ -362,6 +362,7 @@ class gallery extends aw_template
 			$this->load($id,$page);
 		}
 
+		classload("image");
 		if ($this->arr["is_automatic_slideshow"] == 1)
 		{
 			$this->read_template("show_slideshow_automatic.tpl");

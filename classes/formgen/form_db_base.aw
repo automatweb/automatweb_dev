@@ -733,7 +733,7 @@ class form_db_base extends aw_template
 
 				if ($sql == "")
 				{
-					$_tf =& $this->cache_get_form_eldat($fid);
+					$_tf = $this->cache_get_form_eldat($fid);
 					$_tftbls = $_tf["save_tables"];
 				
 					$_rtbl = form_db_base::get_rtbl_from_tbl($tbl);
@@ -806,11 +806,11 @@ class form_db_base extends aw_template
 				$fid = $this->table2form_map[$tbl];
 				if ($fid)
 				{
-					$form =& $this->cache_get_form_eldat($fid);
+					$form = $this->cache_get_form_eldat($fid);
 
 					if ($sql == "")
 					{
-						$_tf =& $this->cache_get_form_eldat($fid);
+						$_tf = $this->cache_get_form_eldat($fid);
 						$_tftbls = $_tf["save_tables"];
 
 						$sql=$tbl.".".$_tftbls["table_indexes"][form_db_base::get_rtbl_from_tbl($tbl)]." AS entry_id "; 
@@ -902,7 +902,7 @@ class form_db_base extends aw_template
 		{
 			if ($el->arr["linked_form"] && $el->arr["linked_element"])	
 			{
-				$relf =& $this->cache_get_form_eldat($el->arr["linked_form"]);
+				$relf = $this->cache_get_form_eldat($el->arr["linked_form"]);
 				$linked_el = $relf["els"][$el->arr["linked_element"]];
 				$elname = form_db_base::mk_tblcol($linked_el["table"],$linked_el["col2"],$el->arr["linked_form"]);
 				$elname2 = form_db_base::mk_tblcol($linked_el["table"],$linked_el["col"],$el->arr["linked_form"]);
@@ -1004,13 +1004,23 @@ class form_db_base extends aw_template
 						{
 							if (preg_match("/\"(.*)\"/",$value,$matches))
 							{
+								if ($el->arr["search_field_in_set"] == 1)
+								{
+									$qstr = " FIND_IN_SET('$matches[1]',$elname2) ";
+								}
+								else
 								if ($el->arr["search_all_text"] != 1)
 								{
 									$qstr = " $elname2 LIKE '%$matches[1]%' ";
 								}
 								else
 								{
-									$qstr = " $elname2 = '$matches[1]' ";
+									$sep = " = ";
+									if (strpos($matches[1], "%") !== false)
+									{
+										$sep = " LIKE ";
+									}
+									$qstr = " $elname2 $sep '$matches[1]' ";
 								}
 							}
 							else
@@ -1024,6 +1034,11 @@ class form_db_base extends aw_template
 								$pieces = explode($sep,$value);
 								if (is_array($pieces))
 								{
+									if ($el->arr["search_field_in_set"] == 1)
+									{
+										$qstr = join (" OR ",map("FIND_IN_SET('%s',$elname)",$pieces));
+									}
+									else
 									if ($el->arr["search_all_text"] != 1)
 									{
 										$qstr = join (" OR ",map("$elname LIKE '%%%s%%'",$pieces));
@@ -1035,13 +1050,23 @@ class form_db_base extends aw_template
 								}
 								else
 								{
+									if ($el->arr["search_field_in_set"] == 1)
+									{
+										$qstr = " FIND_IN_SET('$value',$elname2) ";
+									}
+									else
 									if ($el->arr["search_all_text"] != 1)
 									{
 										$qstr = " $elname2 LIKE '%$value%' ";
 									}
 									else
 									{
-										$qstr = " $elname2 = '$value' ";
+										$sep = " = ";
+										if (strpos($value, "%") !== false)
+										{
+											$sep = " LIKE ";
+										}
+										$qstr = " $elname2 $sep '$value' ";
 									}
 								};
 							};
@@ -1097,7 +1122,12 @@ class form_db_base extends aw_template
 										}
 										else
 										{
-											$qstr .= " $elname2 = '$pic' ";
+											$sep = " = ";
+											if (strpos($pic, "%") !== false)
+											{
+												$sep = " LIKE ";
+											}
+											$qstr .= " $elname2 $sep '$pic' ";
 										}
 									}
 								}
@@ -1114,13 +1144,23 @@ class form_db_base extends aw_template
 						}
 						else
 						{
+							if ($el->arr["search_field_in_set"] == 1)
+							{
+								$qstr = " FIND_IN_SET('$value',$elname2) ";
+							}
+							else
 							if ($el->arr["search_all_text"] != 1)
 							{
 								$qstr = " $elname2 LIKE '%$value%' ";
 							}
 							else
 							{
-								$qstr = " $elname2 = '$value' ";
+								$sep = " = ";
+								if (strpos($value, "%") !== false)
+								{
+									$sep = " LIKE ";
+								}
+								$qstr = " $elname2 $sep '$value' ";
 							}
 						}
 
@@ -1517,7 +1557,7 @@ class form_db_base extends aw_template
 
 		$where = "";
 
-		$inst =& $this->cache_get_form_eldat($rel_form);
+		$inst = $this->cache_get_form_eldat($rel_form);
 		if ($inst["save_table"] == 1)
 		{
 			$rel_tbl = $inst["els"][$rel_element]["table"];

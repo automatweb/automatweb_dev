@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.4 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.5 2002/11/07 10:52:24 kristo Exp $
 // pullout.aw - Pullout manager
-
-classload("menuedit","users");
-
 class pullout extends aw_template
 {
 	function pullout()
@@ -29,8 +26,8 @@ class pullout extends aw_template
 			$this->mk_path($parent,"Lisa pullout");
 		}
 
-		$m = new menuedit;
-		$u = new users;
+		$m = get_instance("menuedit");
+		$u = get_instance("users");
 
 		$this->vars(array(
 			"docs" => $this->picker(0,$m->mk_docsel()),
@@ -99,8 +96,8 @@ class pullout extends aw_template
 			$this->mk_path($o["parent"],"Muuda pullouti");
 		}
 
-		$m = new menuedit;
-		$u = new users;
+		$m = get_instance("menuedit");
+		$u = get_instance("users");
 
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $o["metadata"]
@@ -158,7 +155,7 @@ class pullout extends aw_template
 			return "";
 		}
 
-		$do = new document;
+		$do = get_instance("document");
 		$this->read_template($meta["template"]);
 		$this->vars(array(
 			"width" => $meta["width"],

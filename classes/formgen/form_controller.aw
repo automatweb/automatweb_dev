@@ -1,7 +1,5 @@
 <?php
 
-classload("formgen/form_base");
-
 // controller types in element - each controller can be used for every one of these, 
 // they are just here to specify for which controller in the element the controller is selected
 define("CTRL_USE_TYPE_ENTRY", 1);			// entry controller - checks on form submit
@@ -10,6 +8,7 @@ define("CTRL_USE_TYPE_LB", 3);				// listbox controller - checks every listbox e
 define("CTRL_USE_TYPE_DEFVALUE", 4);	// default value controller - if element value is not set the return value of this will be used
 define("CTRL_USE_TYPE_VALUE", 5);			// value controller - evals on show and submit - the element value will be the return of this
 
+classload("formgen/form_base");
 class form_controller extends form_base
 {
 	function form_controller()
@@ -151,7 +150,14 @@ class form_controller extends form_base
 	function listall($arr)
 	{
 		extract($arr);
-		$ret = array();
+		if ($add_empty)
+		{
+			$ret = array("0" => "");
+		}
+		else
+		{
+			$ret = array();
+		}
 		if (is_array($parents) && count($parents) > 0)
 		{
 			$wh = " AND objects.parent IN(".join(",",$parents).") ";
@@ -164,10 +170,6 @@ class form_controller extends form_base
 		while($row = $this->db_next())
 		{
 			$ret[$row["oid"]] = $ol[$row["parent"]]."/".$row["name"];
-		}
-		if ($add_empty)
-		{
-			$ret[""] = "";
 		}
 		return $ret;
 	}

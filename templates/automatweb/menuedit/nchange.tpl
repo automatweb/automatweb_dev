@@ -757,6 +757,14 @@ SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4
 		<td class="awtableleftcol" nowrap align="right">&nbsp;Vali:&nbsp;</td>
 		<td class="awtablerightcol"><select name="add_tree_conf">{VAR:add_tree_conf}</select></td>
 		</tr>
+		
+		<tr>
+		<td colspan="2" class="awtablehead"><b>Konfiguratsioonihaldur:</b></td>
+		</tr>
+		<tr>
+		<td class="awtableleftcol" nowrap align="right">&nbsp;Vali:&nbsp;</td>
+		<td class="awtablerightcol"><select name="cfgmanager">{VAR:cfgmanager}</select></td>
+		</tr>
 
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_search_element.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_search_element.aw,v 1.3 2002/11/07 10:52:34 kristo Exp $
 
 classload("formgen/form_element");
 class form_search_element extends form_element
@@ -179,7 +179,7 @@ class form_search_element extends form_element
 		$formcache = aw_global_get("formcache");
 		if (!isset($formcache[$this->arr["linked_form"]]))
 		{
-			$formcache[$this->arr["linked_form"]] = new form;
+			$formcache[$this->arr["linked_form"]] = get_instance("formgen/form");
 			$formcache[$this->arr["linked_form"]]->load($this->arr["linked_form"]);
 			aw_global_set("formcache", $formcache);
 		}

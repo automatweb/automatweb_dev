@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.39 2002/10/16 13:49:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.40 2002/11/07 10:52:25 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -18,8 +18,6 @@ define(GRP_USERGRP,4);
 
 define(GROUP_LEVEL_PRIORITY, 100000);
 define(USER_GROUP_PRIORITY, GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
-
-classload("defs");
 
 class users_user extends aw_template 
 {
@@ -662,7 +660,7 @@ class users_user extends aw_template
 		$sfid = $gr["search_form"];
 
 		// now do the search
-		$f = new form();
+		$f = get_instance("formgen/form");
 		$f->load($sfid);
 		// FIXME: new search func needed
 		$matches = $f->search($gr["data"]);
@@ -742,7 +740,7 @@ class users_user extends aw_template
 		$toadd = array();
 		$toremove = array();
 
-		$f = new form();
+		$f = get_instance("formgen/form");
 
 		$this->listgroups(-1,-1,2);
 		while($group = $this->db_next())
@@ -1028,8 +1026,7 @@ class users_user extends aw_template
 
 	function find_group_login_redirect($uuid)
 	{
-		classload("config");
-		$c = new db_config;
+		$c = get_instance("config");
 		$ec = $c->get_simple_config("login_grp_redirect");
 		$ra = aw_unserialize($ec);
 
@@ -1076,6 +1073,7 @@ class users_user extends aw_template
 	//   and it is done by messenger. but then again, maybe we should - then all users that get blocked while
 	//   being logged in will get kicked out. ok, fair enough - let's make it do that. feel free to implement this. :) - terryf
 	//   :* -- duke
+	// btw, this query is very ineffective - uses a filesort
 	function get_gids_by_uid($uid)
 	{
 		$q = "SELECT groupmembers.gid AS gid, groups.* FROM groupmembers

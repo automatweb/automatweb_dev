@@ -2,4 +2,6 @@
 <interface>
 	<class id="document"/>
 	<class id="links"/>
+	<class id="calendar"/>
+	<class id="forum"/>
 </interface>

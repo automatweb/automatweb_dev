@@ -2,13 +2,8 @@
 
 class add_tree_conf extends aw_template
 {
-	////////////////////////////////////
-	// the next functions are REQUIRED for all classes that can be added from menu editor interface
-	////////////////////////////////////
-
 	function add_tree_conf()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be 
 		$this->init("add_tree_conf");
 	}
 
@@ -118,36 +113,6 @@ class add_tree_conf extends aw_template
 			"priorities" => $this->picker($ob["meta"]["priority_id"],$this->list_objects(array("class" => CL_PRIORITY,"addempty" => true))),
 			"GROUP" => $gs,
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
-		));
-
-		return $this->parse();
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($args)
-	{
-		extract($args);
-		return $this->show(array("id" => $alias["target"]));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-
-		$this->read_template("show.tpl");
-
-		$this->vars(array(
-			"name" => $ob["name"]
 		));
 
 		return $this->parse();

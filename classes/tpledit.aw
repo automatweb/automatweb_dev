@@ -1,7 +1,5 @@
 <?php
 // tpledit.aw - Template Editor
-classload("defs");
-
 class tpledit extends aw_template 
 {
 	function tpledit($args =array())
@@ -246,8 +244,7 @@ class tpledit extends aw_template
 		$tpldir = $this->cfg["tpldir"];
 		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
 		$oid = $meta_obj["oid"];
-		classload("archive");
-		$arc = new archive();
+		$arc = get_instance("archive");
 		if ($meta_obj["oid"])
 		{
 			$meta = $this->obj_get_meta(array(
@@ -313,8 +310,7 @@ class tpledit extends aw_template
 		$fullpath = $tpldir . "/" . $args["file"];
 		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
 			
-		classload("archive");
-		$arc = new archive();
+		$arc = get_instance("archive");
 
 		if (not($meta_obj))
 		{
@@ -494,7 +490,6 @@ class tpledit extends aw_template
 	// Näitab templatearhiivi sisu
 	function show_archive($args = array())
 	{
-		classload("archive");
 		load_vcl("table");
 		$meta = $this->obj_get_meta(array("oid" => $args["oid"]));
 		$t = new aw_table(array(
@@ -545,7 +540,7 @@ class tpledit extends aw_template
 			"align" => "center",
 			"nowrap" => 1,
 		));
-		$arc = new archive();
+		$arc = get_instance("archive");
 		$contents = $arc->get($args);
 		// FIXME: check the object class too
 		$obj = $this->get_object($args["oid"]);
@@ -591,8 +586,7 @@ class tpledit extends aw_template
 	{
 		// active (int) - faili nimi arhiivist, mida aktiveerima peab
 		// oid (int) - millise objekti arhiivi lugeda]
-		classload("archive");
-		$arc = new archive();
+		$arc = get_instance("archive");
 		$new_template = $arc->checkout(array("oid" => $args["oid"],"version" => $args["active"]));
 
 		$obj = $this->get_object($args["oid"]);

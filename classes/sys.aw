@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.14 2002/10/10 12:56:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.15 2002/11/07 10:52:25 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -15,9 +15,28 @@ class sys extends aw_template
 	function gen_db_struct($args = array())
 	{
 		$tables = $this->db_get_struct();
-		classload("xml");
-		$xml = new xml(array("ctag" => "tabledefs"));
+		$xml = get_instance("xml",array("ctag" => "tabledefs"));
 		$ser = $xml->xml_serialize($tables);
+		header("Content-Type: text/xml");
+		header("Content-length: " . strlen($ser));
+		header("Content-Disposition: filename=awtables.xml");
+		print $ser;
+		exit;
+	}
+
+	////
+	// !Genereerib andmebaasi tabelite loomise sqli
+	function gen_create_tbl($args = array())
+	{
+		$ret = array();
+		$tables = $this->db_get_struct();
+		foreach($tables as $tblname => $tbldat)
+		{
+			$this->db_query("SHOW CREATE TABLE $tblname");
+			$row = $this->db_next();
+			$ret[$tblname] = $row["Create Table"];
+		}
+		$ser = aw_serialize($ret, SERIALIZE_XML);
 		header("Content-Type: text/xml");
 		header("Content-length: " . strlen($ser));
 		header("Content-Disposition: filename=awtables.xml");
@@ -83,7 +102,7 @@ class sys extends aw_template
 	{
 		extract($args);
 
-		$server = ($server) ? $server : "work.struktuur.ee";
+		$server = ($server) ? $server : "aw.struktuur.ee";
 		$port = ($port) ? $port : 80;
 
 		$fp=fsockopen($server,$port,&$this->errno, &$this->errstr);
@@ -154,8 +173,7 @@ class sys extends aw_template
 			"server" => $donor,
 			"url" => "/?class=sys&action=gen_db_struct",
 		));
-		classload("xml");
-		$xml = new xml(array("ctag" => "tabledefs"));
+		$xml = get_instance("xml",array("ctag" => "tabledefs"));
 		global $donor_struct;
 		$dsource = $xml->xml_unserialize(array("source" => $block));
 		$donor_struct = $dsource;
@@ -345,6 +363,7 @@ class sys extends aw_template
 						if (not(is_array($orig[$table])))
 						{
 							$line = "CREATE table $table ($key $dr[type] $flags $autoinc)";
+							echo "line = $line <br>";
 							$orig[$table] = array();
 						}
 						else
@@ -379,7 +398,10 @@ class sys extends aw_template
 
 		};
 		print "all done<br>";
-		exit;
+		if (!$args["no_exit"])
+		{
+			exit;
+		}
 	}
 
 	////
@@ -390,7 +412,7 @@ class sys extends aw_template
 		// modules whose check_environment functions are called
 		$modules = array(
 			"file",
-			"form_output",
+			"formgen/form_output",
 			"accessmgr",
 			"acl",
 			"acl_base",
@@ -410,8 +432,7 @@ class sys extends aw_template
 		{
 			echo "checking $module ... <br>";
 			flush();
-			classload($module);
-			$t = new $module;
+			$t = get_instance($module);
 			$_msg = $t->check_environment(&$this,$args["fix"]);
 			if ($_msg)
 			{
@@ -537,6 +558,31 @@ class sys extends aw_template
 
 	}
 
+	function get_table($args = array())
+	{
+		extract($args);
+		$table = $this->db_get_table(array("name" => "objects"));
+		print "<pre>";
+		print_r($table);
+		print "</pre>";
+		exit;
+	}
 
+	function on_site_init(&$inst, $vars)
+	{
+		// do a dbsync from aw.struktuur.ee
+		$block = $this->db_sync(array(
+			"server" => $donor,
+			"url" => "/?class=sys&action=gen_create_tbl",
+		));
+		$tbls = aw_unserialize($block);
+
+		foreach($tbls as $tbl => $sql)
+		{
+			echo "creating table $tbl <Br>\n";
+			flush();
+			$inst->db_query($sql);
+		}
+	}
 };
 ?>

@@ -1,6 +1,6 @@
 <?php
 // archive.aw - Archive class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.13 2002/06/26 11:29:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.14 2002/11/07 10:52:16 kristo Exp $
 
 // arhiivide jaoks tuleb luua eraldi kataloog (check), sinna sisse 
 // kahetasemeline (peaks siiski muudetav olema) kataloogipuu, igal
@@ -17,7 +17,6 @@
 
 // I think this class really should be independent, since archiving objects
 // can be quite complex
-classload("defs");
 class archive extends aw_template 
 {
 	var $arc_dir; // millises kataloogis faile hoitakse?

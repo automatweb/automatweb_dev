@@ -1,6 +1,6 @@
 <?php
 
-classload("shop_base");
+classload("shop/shop_base");
 class shop_table extends shop_base
 {
 	function shop_table()

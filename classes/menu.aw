@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.6 2002/09/09 12:28:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.7 2002/11/07 10:52:24 kristo Exp $
 // right now this class manages only the functios related to adding menu aliases
 // to documents and tables. But I think that all functions dealing with a single
 // menu should be moved here.
@@ -28,8 +28,7 @@ class menu extends aw_template
 			$title = "Lisa menüü link";
 		};
 		$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / $title");
-		classload("objects");
-		$dbo = new db_objects();
+		$dbo = get_instance("objects");
 		$olist = $dbo->get_list();
 
 		$this->vars(array(

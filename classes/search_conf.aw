@@ -1,7 +1,4 @@
 <?php
-classload("objects");
-classload("config");
-
 define("PER_PAGE",10);
 
 class search_conf extends aw_template 
@@ -19,8 +16,8 @@ class search_conf extends aw_template
 		$lang_id = aw_global_get("lang_id");
 		$SITE_ID = $this->cfg["site_id"];
 
-		$ob = new db_objects;
-		$c = new db_config;
+		$ob = get_instance("objects");
+		$c = get_instance("config");
 		$conf = unserialize($c->get_simple_config("search_conf"));
 
 		if (!$level)
@@ -62,7 +59,7 @@ class search_conf extends aw_template
 			}
 		}
 
-		$c = new db_config;
+		$c = get_instance("config");
 		$conf = unserialize($c->get_simple_config("search_conf"));
 
 		if (!$level)
@@ -835,19 +832,16 @@ class search_conf extends aw_template
 	{
 		// here we must first sort the $grps array based on user entered order
 		uasort($grps,array($this,"_grp_sort"));
-		classload("cache");
-		$cache = new cache();
+		$cache = get_instance("cache");
 
 		$lgps = $this->get_groups(true);
 		$lgps[$this->cfg["site_id"]][aw_global_get("lang_id")] = $grps;
 
 		$cache->file_set("search_groups::".$this->cfg["site_id"],aw_serialize($lgps));
-		classload("xml");
-		$x = new xml;
+		$x = get_instance("xml");
 		$dat = $x->xml_serialize($lgps);
 		$this->quote(&$dat);
-		classload("config");
-		$c = new config;
+		$c = get_instance("config");
 		$c->set_simple_config("search_grps", $dat);
 	}
 

@@ -1,14 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.3 2002/09/13 15:49:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.4 2002/11/07 10:52:24 kristo Exp $
 // scheduler.aw - Scheduler
 
-classload("planner","file","aw_test");
 class scheduler extends aw_template
 {
 	function scheduler()
 	{
 		$this->init("scheduler");
-		$this->file = new file;
+		$this->file = get_instance("file");
 	}
 
 	////
@@ -35,7 +34,7 @@ class scheduler extends aw_template
 		if ($rep_id)
 		{
 			// if we use a repeater for scheduling events we get a bunch of times and add the events for those times
-			$pl = new planner;
+			$pl = get_instance("planner");
 			$reps = $pl->get_events(array( 
 				"start" => time(), 
 				"limit" => 20,
@@ -90,7 +89,7 @@ class scheduler extends aw_template
 		$this->repdata = $newdat;
 
 		// and now add new events for that repeater
-		$pl = new planner;
+		$pl = get_instance("planner");
 		$reps = $pl->get_events(array( 
 			"start" => time(), 
 			"limit" => 20,
@@ -170,9 +169,10 @@ class scheduler extends aw_template
 		set_time_limit(0);
 		
 		// ok, here check if events are already being processed
-		if (file_exists($this->cfg["lock_file"]) && (filectime($this->cfg["lock_file"]) > (time()-3600)))
+		if (file_exists($this->cfg["lock_file"]) && (filectime($this->cfg["lock_file"]) > (time()-180)))
 		{
 			// they are so just bail out
+			echo "bailing for lock file ",$this->cfg["lock_file"],"<br>\n";
 			return;
 		}
 
@@ -192,17 +192,22 @@ class scheduler extends aw_template
 				$this->do_and_log_event($evnt);
 			}
 		}
+		echo "unlinking ",$this->cfg["lock_file"]," <Br>";
 		unlink($this->cfg["lock_file"]);
 	}
 
 	function do_and_log_event($evnt)
 	{
+		if ($evnt["event"] == "")
+		{
+			return;
+		}
+
 		preg_match("/^http:\/\/(.*)\//U",$evnt["event"], $mt);
 		$url = $mt[1];
 
 		echo "url = $url <br>";
-
-		$awt = new aw_test;
+		$awt = get_instance("aw_test");
 		$awt->handshake(array("host" => $url));
 
 		if ($evnt["uid"] && $evnt["password"])
@@ -214,7 +219,6 @@ class scheduler extends aw_template
 
 		echo "do send req $url ",substr($evnt["event"],strlen("http://")+strlen($url))," <br>";
 		$req = $awt->do_send_request(array("host" => $url, "req" => substr($evnt["event"],strlen("http://")+strlen($url))));
-//		echo "result = $req <br>";
 
 		if ($evnt["uid"] && $evnt["password"])
 		{
@@ -239,6 +243,10 @@ class scheduler extends aw_template
 			if (!$this->match($evnt, $e))
 			{
 				$newdat[] = $e;
+			}
+			else
+			{
+				echo "removing evnt $evnt[event] <br>";
 			}
 		}
 
@@ -623,15 +631,14 @@ class scheduler extends aw_template
 		};
 
 		$this->read_template("set_time.tpl");
-		classload("cal_event");
-                $ce = new cal_event();
-                $html = $ce->repeaters(array(
-                        "id" => $id,
-                        "cycle" => $cycle,
+		$ce = get_instance("cal_event");
+		$html = $ce->repeaters(array(
+			"id" => $id,
+			"cycle" => $cycle,
 			"hide_menubar" => "hell_yes",
 			"use_class" => "scheduler",
 			"use_method" => "set_time",
-                ));	
+    ));	
 		$this->vars(array(
 			"table" => $html,
 		));

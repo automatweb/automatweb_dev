@@ -7,7 +7,7 @@
 <table border="0" cellspacing="1" cellpadding="3" width="100%">
 <tr>
 <!-- SUB: level1 -->
-<td class="messengermenu" align="center" bgcolor="#39537c">
+<td class="messengermenu" align="center" bgcolor="#CCCCCC">
 <b>
 <a href="{VAR:link}">{VAR:caption}</a>
 </b>

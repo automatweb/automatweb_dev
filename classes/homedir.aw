@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.6 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.7 2002/11/07 10:52:22 kristo Exp $
 // homedir.aw - Class for managing users home directory
 
+classload("users");
 class homedir extends users 
 {
 	function homedir($args = array())

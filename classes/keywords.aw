@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.40 2002/10/30 11:06:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.41 2002/11/07 10:52:22 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
-classload("defs");
 
 define("ARR_LISTID", 1);
 define("ARR_KEYWORD", 2);
@@ -196,8 +195,7 @@ class keywords extends aw_template
 			$kwa[] = $row["keyword"];
 		};
 		$kw = join(",",$kwa);
-		classload("email");
-		$email = new email();
+		$email = get_instance("email");
 		$this->info["site_header"] ="<a href='orb.".$this->cfg["ext"]."?class=document&action=change&id=$id'>Dokument</a>";
 		$baseurl = $this->cfg["baseurl"];
 		foreach($lx as $row)
@@ -321,8 +319,7 @@ class keywords extends aw_template
 		// vahepeal kui on defineeritud m2rks6nu valinud tyypide grupp, siis paneme ta sinna gruppi ka
 		if ($this->cfg["dyn_group"])
 		{
-			classload("users_user");
-			$usu = new users_user;
+			$usu = get_instance("users_user");
 			$usu->add_users_to_group($this->cfg["dyn_group"], array(aw_global_get("uid")),0,true);
 		}
 
@@ -577,8 +574,7 @@ class keywords extends aw_template
 	
 		// teeme kindlaks koik votmesonad, millel polnud ID-d (uued)
 		// loome ka uue listi votmesona jaoks
-		classload("lists");
-		$lists = new lists();
+		$lists = get_instance("lists");
 
 		foreach($klist as $val)
 		{
@@ -745,7 +741,7 @@ class keywords extends aw_template
 		$udata = $this->_get_user_data();
 		classload("list");
 		$mlist = new mlist();
-		$kw = new keywords();
+		$kw = get_instance("keywords");
 		$act = $mlist->get_user_lists(array(
 			"uid" => aw_global_get("uid"),
 		));
@@ -774,7 +770,7 @@ class keywords extends aw_template
 	{
 		classload("list");
 		$mlist = new mlist();
-		$kw = new keywords();
+		$kw = get_instance("keywords");
 		$act = $mlist->get_user_lists(array(
 			"uid" => aw_global_get("uid"),
 		));
@@ -914,8 +910,7 @@ class keywords extends aw_template
 			$bros[$row["parent"]][$row["brother_of"]] = $row;
 		}
 
-		classload("document_brother");
-		$d = new document_brother;
+		$d = get_instance("document_brother");
 
 		// now go through all the menus and for each menu check the brother documents that are created from keywords and
 		// delete/create them as necessary
@@ -984,8 +979,7 @@ class keywords extends aw_template
 			$kwds[$row["oid"]] = $row;
 		}
 
-		classload("objects");
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$menus = $ob->get_list();
 
 		$ret = array();

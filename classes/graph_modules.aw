@@ -1,4 +1,5 @@
-<?
+<?php
+
 class graph_modules extends aw_template
 {
 		//Constructor

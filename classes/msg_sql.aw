@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.11 2002/08/12 11:59:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.12 2002/11/07 10:52:24 kristo Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
 class msg_sql_driver extends core
 {
@@ -25,6 +25,9 @@ class msg_sql_driver extends core
 				$args["id"]);
 		$this->db_query($q);
 		$row = $this->db_next();
+		$row["meta"] = $this->get_object_metadata(array(
+			"metadata" => $row["metadata"]
+		));
 		return $row;
 	}
 
@@ -276,6 +279,14 @@ class msg_sql_driver extends core
 		extract($arr);
 		$q = sprintf("SELECT count(*) as cnt FROM objects	WHERE class_id = %d AND parent = '$folder' ",CL_MESSAGE);
 		return $this->db_fetch_field($q,"cnt");
+	}
+}
+
+class msg_sql extends msg_sql_driver
+{
+	function msg_sql()
+	{
+		$this->msg_sql_driver();
 	}
 }
 ?>

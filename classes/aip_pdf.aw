@@ -119,8 +119,7 @@ class aip_pdf extends aw_template
 			}
 		}
 
-		classload("objects");
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$this->vars(array(
 			"FILE" => $f,
 			"CHANGE" => $a,
@@ -140,8 +139,7 @@ class aip_pdf extends aw_template
 		extract($arr);
 
 		set_time_limit(0);
-		classload("config");
-		$co = new config;
+		$co = get_instance("config");
 		$co->set_simple_config("aip_pdf_upload_folder", $folder);
 		$co->set_simple_config("aip_pdf_aw_folder", $parent);
 
@@ -162,8 +160,7 @@ class aip_pdf extends aw_template
 				{
 					echo "createfolder <br>";
 					$data .= "createfolder <br>";
-					classload("menuedit");
-					$m = new menuedit;
+					$m = get_instance("menuedit");
 					// create new menu
 					// for that we have to split the damn filename into pieces and for each piece check if a menu for that 
 					// bit exists already
@@ -225,8 +222,7 @@ class aip_pdf extends aw_template
 				else
 				if ($act["action"] == CREATE_FILE)
 				{
-					classload("file");
-					$f = new file;
+					$f = get_instance("file");
 					$fc = $this->get_file(array(
 						"file" => $folder."/".$act["file"],
 					));
@@ -400,11 +396,6 @@ class aip_pdf extends aw_template
 		if (!is_array($this->mpr))
 		{
 			$this->_list_menus(array("where" => "objects.status != 0","lang_id" => aw_global_get("lang_id")));
-/*			classload("menuedit");
-			$m = new menuedit;
-			$m->make_menu_caches("objects.status != 0");
-			$this->mpr = $m->mpr;
-			$this->mar = $m->mar;*/
 		}
 		exit_function("aip_pdf::mk_menu_cache");
 	}

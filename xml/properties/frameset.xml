@@ -10,7 +10,7 @@
             <caption>Frameseti template</caption>
       </property>
       <property>
-            <name>sources</name>
+            <name>framedata</name>
             <type>array</type>
             <field>meta</field>
             <method>serialize</method>

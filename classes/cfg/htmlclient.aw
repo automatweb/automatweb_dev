@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.2 2002/11/02 23:08:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.3 2002/11/07 10:52:31 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -15,6 +15,7 @@ class htmlclient extends aw_template
 		$this->res = "";
 		$this->style1 = "chformleftcol";
 		$this->style2 = "chformrightcol";
+		$this->style_subheader = "chformsubheader";
 		$this->html = get_instance("html");
 	}
 
@@ -139,7 +140,7 @@ class htmlclient extends aw_template
 	function put_header($args)
 	{
 		$this->res .= "<tr>\n";
-		$this->res .= "\t<td colspan='2' class='" . $this->style1 . "' width='160'>";
+		$this->res .= "\t<td colspan='2' class='" . $this->style_subheader . "' width='160'>";
 		$this->res .= $args["caption"];
 		$this->res .= "</td>\n";
 		$this->res .= "</tr>\n";
@@ -154,7 +155,9 @@ class htmlclient extends aw_template
 		$this->res .= "\t<td class='chformrightcol'>";
 		$this->res .= "<input type='submit' value='Salvesta' class='small_button'>";
 		$this->res .= "</td>\n";
-		$this->res .= $this->mk_reforb($action,$data,"cfgmanager");
+		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
+		unset($data["orb_class"]);
+		$this->res .= $this->mk_reforb($action,$data,$orb_class);
 		$this->res .= "</form>\n";
 		$this->res .= "</tr>\n";
 

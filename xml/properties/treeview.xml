@@ -10,6 +10,25 @@
             <caption>Root objekt</caption>
       </property>
       <property>
+            <name>rootcaption</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Root objekti nimi</caption>
+      </property>
+      <property>
+            <name>icon_root</name>
+            <type>objpicker</type>
+            <clid>CL_ICON</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Root objekti ikoon</caption>
+      </property>
+      <property>
             <name>treetype</name>
             <type>select</type>
             <field>meta</field>
@@ -17,6 +36,26 @@
             <table>objects</table>
             <group>general</group>
             <caption>Puu tüüp</caption>
+      </property>
+      <property>
+            <name>icon_folder_open</name>
+            <type>objpicker</type>
+            <clid>CL_ICON</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Lahtise kausta ikoon</caption>
+      </property>
+      <property>
+            <name>icon_folder_closed</name>
+            <type>objpicker</type>
+            <clid>CL_ICON</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kinnise kausta ikoon</caption>
       </property>
 </properties>
 

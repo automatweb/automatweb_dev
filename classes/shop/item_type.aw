@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/item_type.aw,v 1.1 2002/11/03 10:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/item_type.aw,v 1.2 2002/11/07 10:52:35 kristo Exp $
 // item_type.aw - kaupade tüübid
 
-classload("shop_base");
+classload("shop/shop_base");
 class item_type extends shop_base
 {
 	function item_type()

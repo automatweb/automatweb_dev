@@ -4,8 +4,6 @@ define("COMP_STATUS_PROPOSED",1);
 define("COMP_STATUS_CONFIRMED",2);
 define("YEAR", 3600*24*370);	// sekundeid 1s aastas
 
-classload("file");
-
 class competitions extends aw_template
 {
 	function competitions()
@@ -518,7 +516,7 @@ class competitions extends aw_template
 				$fc = fread($fp,filesize($entry));
 				fclose($fp);
 
-				$f = new file;
+				$f = get_instance("file");
 				$fdat = $f->put(array("store" => "fs", "filename" => $entry_name, "type" => $entry_type,"content" => $fc));
 				$furl = aw_ini_get("baseurl")."/files.".aw_ini_get("ext")."/id=".$fdat["id"]."/".urlencode($entry_name);
 			}

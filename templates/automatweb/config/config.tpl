@@ -68,6 +68,10 @@ function setLink(li,title)
 <td class="plain"><a href='orb.{VAR:ext}?class=config&action=other_icons'>Muud ikoonid</a></td>
 <td class="plain"><a href='orb.{VAR:ext}?class=config&action=import_other_icons'>Impordi</a></td>
 </tr>
+<tr bgcolor="#C9EFEF">
+<td class="plain"><a href='{VAR:cfgform_link}'>Klasside konfiguratsioonivormid</a></td>
+<td class="plain">&nbsp;</td>
+</tr>
 </table>
 {VAR:reforb}
 </form>

@@ -67,38 +67,28 @@ SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="5" HEIGHT="20" BORDE
 <!-- END SUB: tabs -->
 </table>
 
-<!--<tr>
-<td colspan="2">-->
+
 
 <!-- content start -->
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr><td class="awtableobjectid"><IMG
-SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="10" HEIGHT="5" BORDER=0 ALT=""></td></tr></table>
+SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="6" HEIGHT="5" BORDER=0 ALT=""></td></tr></table>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-<td align="left" valign="top" width="10" class="awtablecellbackdark"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="10" HEIGHT="1" BORDER=0 ALT=""></td>
+<td rowspan="2" align="left" valign="bottom" width="6" class="awtablecellbackdark"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtable_nurk.gif" WIDTH="6" HEIGHT="5" BORDER=0 ALT=""></td>
 <td align="left" valign="top" width="99%" bgcolor="#FFFFFF">
-<span style="font-family: Verdana; font-size: 15px;">
+<!--<span style="font-family: Verdana; font-size: 15px;">-->
 {VAR:content}
-</span>
+<!--</span>-->
 </td>
 </tr>
-<tr><td class="awtablecellbackdark"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awtable_nurk.gif" WIDTH="6" HEIGHT="5" BORDER=0 ALT=""></td>
-<td>
-        <table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-                <td width="150" class="awtablecellbackdark"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="159" HEIGHT="5" BORDER=0 ALT=""></td>
-                <td width="99%" class="awtablecellbacklight"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="85" HEIGHT="5" BORDER=0 ALT=""></td>
-          </tr>
-         </table>
-</td>
+<tr>
+<td class="awtablecellbacklight"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="85" HEIGHT="5" BORDER=0 ALT=""></td>
 </tr>
 </table>
 <br>
 
 <!-- content ends  -->
 
-<!--</td>
-</tr>
-</table>-->
+

@@ -21,6 +21,7 @@
 
 <data>
 <field name="id" caption="id" align="center" talign="center" sortable="1" width="30" chgbgcolor="cutcopied"/>
+<field name="lkid" caption="lingikogu" width="50" align="left" talign="center" sortable="1" chgbgcolor="cutcopied"/>
 <field name="oid" caption="object" width="50" align="left" talign="center" sortable="1" chgbgcolor="cutcopied"/>
 <field name="uid" caption="user" align="center" width="10" talign="center" sortable="1" chgbgcolor="cutcopied"/>
 <field name="action" caption="tegevus" width="10" talign="center" align="center" sortable="1" chgbgcolor="cutcopied"/>

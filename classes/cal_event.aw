@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.18 2002/09/13 15:49:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.19 2002/11/07 10:52:18 kristo Exp $
 
 class cal_event extends aw_template 
 {
@@ -570,8 +570,7 @@ class cal_event extends aw_template
 		};
 		$this->db_query($q);
 
-		classload("scheduler");
-		$sched = new scheduler;
+		$sched = get_instance("scheduler");
 		$sched->update_repeaters(array("id" => $id));
 
 		// FIXME: this sucks
@@ -900,8 +899,7 @@ class cal_event extends aw_template
 	function search($args = array())
 	{
 		extract($args);
-		classload("aliasmgr");
-		$amgr = new aliasmgr;
+		$amgr = get_instance("aliasmgr");
 		$this->read_template("search_doc.tpl");
 		$obj = $this->get_object($id);
 		$par_obj = $this->get_object($obj["parent"]);

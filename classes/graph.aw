@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.9 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.10 2002/11/07 10:52:22 kristo Exp $
 // graph.aw - graafikute haldamine
 
 define("TYPE_PIE",0);
@@ -408,8 +408,7 @@ class graph extends aw_template
 	//Kõigetegija bari ja line jaoks, peamiselt teeb valmis pildi ja returnib image pointeri.
 	function show_line_bar($id)
 	{
-		classload("graph_modules");
-		$gm=new graph_modules;
+		$gm=get_instance("graph_modules");
 		if ($id)
 		{
 			$q="SELECT setup,datasrc,type FROM graphs where id=$id";
@@ -733,8 +732,7 @@ class graph extends aw_template
 	//miski debug meetod, jumal teab milleks ta parasjagu hea on, a las ta olla, äki läheb vaja veel ;)
 	function tryitout($id)
 	{
-		classload("graph_modules");
-		$gm=new graph_modules;
+		$gm=get_instance("graph_modules");
 		$data=$gm->get_stats();
 		while(list(,$v) = each($data["yrows"])) 
 		{

@@ -2,10 +2,6 @@
 
 class tree_root extends aw_template
 {
-	////////////////////////////////////
-	// the next functions are REQUIRED for all classes that can be added from menu editor interface
-	////////////////////////////////////
-
 	function tree_root()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be 

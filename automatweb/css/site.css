@@ -32,6 +32,19 @@ padding-left: 6px;
 .chformrightcol a {color: #1664B9; text-decoration:underline;}
 .chformrightcol a:hover {color: #000000; text-decoration:underline;}
 
+.chformsubheader {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: normal;
+text-align: center;
+color: #000000;
+height: 28px;
+background-color: #DAE8F0;
+padding-right: 6px;
+}
+.chformsubheader a {color: #FFFFFF; text-decoration:underline;}
+.chformsubheader a:hover {color: #000000; text-decoration:underline;}
+
 
 
 
@@ -689,7 +702,7 @@ BACKGROUND: #EEEEEE; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 }
 .fgtext_bad {
 
-BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
+COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
 }
 .fgtext_g {
 

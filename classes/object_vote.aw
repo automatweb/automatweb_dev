@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.3 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.4 2002/11/07 10:52:24 kristo Exp $
 
-class  object_vote extends aw_template
+class object_vote extends aw_template
 {
 	function object_vote($args = array())
 	{
@@ -53,8 +53,7 @@ class  object_vote extends aw_template
 		extract($args);
 		$this->read_template("add_cluster.tpl");
 		$per_oid = $this->cfg["per_oid"];
-		classload("periods");
-		$dbp = new db_periods($per_oid);
+		$dbp = get_instance("periods",$per_oid);
 		$active = $dbp->get_active_period();
 		$dbp->clist();
 		$periods = array();
@@ -76,8 +75,7 @@ class  object_vote extends aw_template
 		extract($args);
 		$baseurl = $this->cfg["baseurl"];
 		$per_oid = $this->cfg["per_oid"];
-		classload("periods");
-		$dbp = new db_periods($per_oid);
+		$dbp = get_instance("periods",$per_oid);
 		$rec = $dbp->get($period);
 		$name = $rec["description"];
 		$oid = $this->new_object(array(
@@ -147,8 +145,7 @@ class  object_vote extends aw_template
 	{
 		$per_oid = $this->cfg["per_oid"];
 		$SITE_ID = $this->cfg["site_id"];
-		classload("msgboard");
-		$mboard = new msgboard();
+		$mboard = get_instance("msgboard");
 		$this->read_template("object_vote.tpl");
 		$q = "SELECT * FROM objects WHERE parent = '$per_oid' AND site_id = '$SITE_ID' and status = 2 AND class_id =" . CL_OBJECT_VOTE;
 		$this->db_query($q);
@@ -174,8 +171,7 @@ class  object_vote extends aw_template
 		$this->db_query($q);
 		$retval = "";
 		$c = "";
-		classload("document");
-		$d = new document;
+		$d = get_instance("document");
 		while($row = $this->db_next())
 		{
 			if ($votes["total"] > 0)
@@ -211,8 +207,7 @@ class  object_vote extends aw_template
 		extract($args);
 		$args["section"] = "nl" . $args["vote"];
 		$args["parent"] = 0;
-		classload("msgboard");
-		$mboard = new msgboard();
+		$mboard = get_instance("msgboard");
 		$mboard->submit_add($args);
 		$per_oid = $this->cfg["per_oid"];
 		$SITE_ID = $this->cfg["site_id"];

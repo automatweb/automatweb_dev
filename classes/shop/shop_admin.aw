@@ -1,6 +1,6 @@
 <?php
 
-classload("shop_base");
+classload("shop/shop_base");
 class shop_admin extends shop_base
 {
 	function shop_admin()
@@ -135,7 +135,7 @@ class shop_admin extends shop_base
 	{
 		extract($arr);
 
-		$sh = get_instance("shop");
+		$sh = get_instance("shop/shop");
 		$sh->submit_owner_data(array("id" => $shop_id));
 
 		return $this->mk_my_orb("system_requisites", array("shop_id" => $shop_id), "",false, true);
@@ -167,7 +167,7 @@ class shop_admin extends shop_base
 		$this->db_query("UPDATE shop SET owner_form_op = '$owner_form_op' WHERE id = '$shop_id'");
 
 		$arr["id"] = $shop_id;
-		$s = get_instance("shop");
+		$s = get_instance("shop/shop");
 		$s->submit_tables($arr);
 
 		return $this->mk_my_orb("system_invoice", array("shop_id" => $shop_id), "",false, true);
@@ -324,7 +324,7 @@ class shop_admin extends shop_base
 	function categories_right($arr)
 	{
 		extract($arr);
-		$m = get_instance("shop_menuedit");
+		$m = get_instance("shop/shop_menuedit");
 	}
 
 	function article_frame($arr)
@@ -347,7 +347,7 @@ class shop_admin extends shop_base
 	function article_right($arr)
 	{
 		extract($arr);
-		$m = get_instance("shop_menuedit");
+		$m = get_instance("shop/shop_menuedit");
 	}
 
 	function currency_redirect($arr)
@@ -464,7 +464,7 @@ class shop_admin extends shop_base
 			while(list($i_id,$i_arr) = each($items))
 			{
 				$tb = "";
-				$st = get_instance("shop_table");
+				$st = get_instance("shop/shop_table");
 			
 				$this->vars(array(
 					"item_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $i_arr[parent]","name")."<br>".$i_arr["name"],
@@ -474,7 +474,7 @@ class shop_admin extends shop_base
 
 				if (list($i_id,$i_arr) = each($items))
 				{
-					$st = get_instance("shop_table");
+					$st = get_instance("shop/shop_table");
 				
 					$this->vars(array(
 						"item_name" => $this->db_fetch_field("SELECT name FROM objects WHERE oid = $i_arr[parent]","name")."<br>".$i_arr["name"],

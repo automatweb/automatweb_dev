@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.16 2002/09/26 16:22:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.17 2002/11/07 10:52:18 kristo Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -10,8 +10,6 @@ define(CAL_SUNDAY,7);
 define(CAL_WEEK_START,1);
 define(ROLL_OVER,6 + CAL_WEEK_START);
 define(DAY,86400);
-classload("defs");
-
 class calendar extends aw_template
 {
 	////
@@ -69,7 +67,7 @@ class calendar extends aw_template
 				$searches = array("0" => " -- vali --");
 				// for each search alias, I need to figure out the name of the form
 				// and the names of all date elements in those forms
-				$form_base = get_instance("form_base");
+				$form_base = get_instance("formgen/form_base");
 				foreach($ali as $key => $val)
 				{
 					$fid = $form_base->get_form_for_entry($key);
@@ -569,7 +567,7 @@ class calendar extends aw_template
 		$year = $params["year"];
 		$xmon = $params["mon"];
 		$day = $params["day"];
-		$local = new aw_template();
+		$local = get_instance("aw_template");
 		$local->tpl_init("calendar");
 		$local->read_template("year.tpl");
 		$lines = "";
@@ -813,6 +811,77 @@ class calendar extends aw_template
 		};
 
 		return $retval;
+	}
+
+	function get_properties()
+	{
+		$css = get_instance("css");
+		$styles = $css->get_select();
+
+		$fields = array();
+		$fields["day_start"] = array(
+			"type" => "time_select",
+			"caption" => "Päev algab",
+			"value" => $args["day_start"],
+			"store" => "meta",
+		);
+		
+		$fields["day_end"] = array(
+			"type" => "time_select",
+			"caption" => "Päev lõpeb",
+			"value" => $args["day_end"],
+			"store" => "meta",
+		);
+
+		$fields["header_style"] = array(
+			"type" => "select",
+			"options" => $styles,
+			"caption" => "Pealkirja stiil",
+			"value" => $args["header_style"],
+			"store" => "meta",
+                );
+
+		$fields["weekday_style"] = array(
+			"type" => "select",
+			"options" => $styles,
+			"caption" => "Nädalapäevade stiil",
+			"value" => $args["weekday_style"],
+			"store" => "meta",
+                );
+
+		$fields["weekend_style"] = array(
+			"type" => "select",
+			"options" => $styles,
+			"caption" => "Nädalapäevade stiil (weekend)",
+			"value" => $args["weekend_style"],
+			"store" => "meta",
+                );
+
+		$fields["day_style"] = array(
+			"type" => "select",
+			"options" => $styles,
+			"caption" => "Päevade stiil",
+			"value" => $args["day_style"],
+			"store" => "meta",
+                );
+
+		$fields["act_day_style"] = array(
+			"type" => "select",
+			"options" => $styles,
+			"caption" => "Aktiivse päeva stiil",
+			"value" => $args["act_day_style"],
+			"store" => "meta",
+                );
+
+		$fields["cel_day_style"] = array(
+			"type" => "select",
+			"options" => $styles,
+			"caption" => "Puhkepäevade stiil",
+			"value" => $args["cel_day_style"],
+			"store" => "meta",
+                );
+
+		return $fields;
 	}
 
 	

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.22 2002/10/04 10:47:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.23 2002/11/07 10:52:24 kristo Exp $
 
 classload("extlinks");
 class links extends extlinks
@@ -15,8 +15,7 @@ class links extends extlinks
 	function add($arr)
 	{
 		extract($arr);
-		classload("menuedit");
-		$t = new menuedit;
+		$t = get_instance("menuedit");
 		if ($return_url)
 		{
 			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / ".LC_LINKS_ADD);
@@ -26,8 +25,7 @@ class links extends extlinks
 			$this->mk_path($parent, LC_LINKS_ADD);
 		}
 		$this->read_template("nadd.tpl");
-		classload("objects");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 		load_vcl("date_edit");
 		$de = new date_edit("active_until");
 		$de->configure(array(
@@ -54,8 +52,7 @@ class links extends extlinks
 		extract($arr);
 
 		$link = $this->get_link($id);
-		classload("menuedit");
-		$t = new menuedit;
+		$t = get_instance("menuedit");
 
 		if ($return_url)
 		{
@@ -93,7 +90,7 @@ class links extends extlinks
 		$active_until = ($link["link_image_check_active"]) ? $link["link_image_active_until"] : time() + (3 * 86400);
 
 
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 		$this->vars(array(
 			"reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id,"xparent" => $parent,"return_url" => $return_url)),
 			"name"		=> $link["name"],
@@ -203,7 +200,7 @@ class links extends extlinks
 
 		$this->obj_set_meta(array("oid" => $linkid,"meta" => $meta));
 		
-		$_fi = new file;
+		$_fi = get_instance("file");
 		// figure out whether that link already has an image attached
 		$q = "SELECT * FROM objects WHERE parent = '$id' AND class_id = " . CL_FILE;
 		$this->db_query($q);
@@ -407,6 +404,71 @@ class links extends extlinks
 			header("Location: ".$link["url"]);
 			exit;
 		};
+	}
+	
+	function get_properties($args = array())
+	{
+		$fields = array();
+		$fields["newwindow"] = array(
+			"type" => "checkbox",
+			"caption" => "Uues aknas",
+			"value" => $args["newwindow"],
+			"store" => "table",
+			"table" => "extlinks",
+			"idfield" => "id",
+		);
+
+		$fields["use_javascript"] = array(
+			"type" => "checkbox",
+			"caption" => "Kasutada lingi loomisel javascripti",
+			"value" => $args["use_javascript"],
+			"store" => "meta",
+		);
+		
+		$fields["newwinwidth"] = array(
+			"type" => "text",
+			"caption" => "Uue akna laius",
+			"value" => $args["newwinwidth"],
+			"store" => "meta",
+			"size" => 3,
+		);
+		
+		$fields["newwinheight"] = array(
+			"type" => "text",
+			"caption" => "Uue akna kõrgus",
+			"value" => $args["newwinwidth"],
+			"store" => "meta",
+			"size" => 3,
+		);
+		
+		$fields["newwintoolbar"] = array(
+			"type" => "checkbox",
+			"caption" => "Toolbar",
+			"value" => $args["newwintoolbar"],
+			"store" => "meta",
+		);
+		$fields["newwinlocation"] = array(
+			"type" => "checkbox",
+			"caption" => "Aadressiriba",
+			"value" => $args["newwinlocation"],
+			"store" => "meta",
+		);
+
+		$fields["newwinmenu"] = array(
+			"type" => "checkbox",
+			"caption" => "Menüü",
+			"value" => $args["newwinmenu"],
+			"store" => "meta",
+		);
+		
+		$fields["newwinscroll"] = array(
+			"type" => "checkbox",
+			"caption" => "Kerimisribad",
+			"value" => $args["newwinscroll"],
+			"store" => "meta",
+		);
+
+		return $fields;
 	}
 }
 ?>

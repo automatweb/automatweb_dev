@@ -1,9 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.1 2002/06/10 15:57:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.2 2002/11/07 10:52:16 kristo Exp $
 // aw_test.aw - AW remote control
-
-classload("socket");
-
 class aw_test extends aw_template 
 {
 	function aw_test($args = array())
@@ -75,8 +72,7 @@ class aw_test extends aw_template
 		$this->read_adm_template("config.tpl");
 		$num = 15;
 		$q = "";
-		classload("file");
-		$awf = new file();
+		$awf = get_instance("file");
 		$dat = $awf->get_special_file(array(
 			"name" => "testsuite.ser",
 		));
@@ -105,8 +101,7 @@ class aw_test extends aw_template
 		extract($args);
 		$block = array("server" => $server,"qs" => $query);
 		$contents = aw_serialize($block,SERIALIZE_PHP);
-		classload("file");
-		$awf = new file();
+		$awf = get_instance("file");
 		$awf->put_special_file(array(
 			"name" => "testsuite.ser",
 			"content" => $contents,
@@ -162,12 +157,13 @@ class aw_test extends aw_template
 	function handshake($args = array())
 	{
 		extract($args);
-		$socket = new socket(array(
+		$socket = get_instance("socket");
+		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
 		));
 		
-		$op = "HEAD / HTTP/1.1\r\n";
+		$op = "HEAD / HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n\r\n";
 
 		print "<pre>";
@@ -199,7 +195,8 @@ class aw_test extends aw_template
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = new socket(array(
+		$socket = get_instance("socket");
+		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
 		));
@@ -207,7 +204,7 @@ class aw_test extends aw_template
 		
 		$request = "uid=$uid&password=$password&class=users&action=login";
 
-		$op = "POST http://$host/orb.".$ext." HTTP/1.1\r\n";
+		$op = "POST http://$host/orb.".$ext." HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n";
 		$op .= "Keep-Alive: 5\r\n";
@@ -236,17 +233,17 @@ class aw_test extends aw_template
 		extract($arr);
 
 		$cookie = $this->cookie;
-		$socket = new socket(array(
+		$socket = get_instance("socket");
+		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
 		));
-		$op = "GET $req HTTP/1.1\r\n";
+		$op = "GET $req HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n\r\n";
-		//print "sending request $req\n";
+		print "sending request $req <br>\n";
 		$socket->write($op);
 		$ipd = "";
-		//print "sending $op\n";
 		while($data = $socket->read())
 		{
 			$ipd .= $data;
@@ -294,11 +291,12 @@ class aw_test extends aw_template
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = new socket(array(
+		$socket = get_instance("socket");
+		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
 		));
-		$op = "GET /index.".$this->cfg["ext"]."?class=users&action=logout HTTP/1.1\r\n";
+		$op = "GET /index.".$this->cfg["ext"]."?class=users&action=logout HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n\r\n";
 

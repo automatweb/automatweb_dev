@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.19 2002/07/02 12:49:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.20 2002/11/07 10:52:21 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -154,7 +154,7 @@ class extlinks extends aw_template
 		$q = "SELECT extlinks.*,objects.* FROM extlinks LEFT JOIN objects ON objects.oid = extlinks.id WHERE id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_fetch_row();
-		$meta = $this->obj_get_meta(array("meta" => $row["meta"]));
+		$meta = aw_unserialize($row["metadata"]);
 		$row = array_merge($row,$meta);
 		
 		if ($row["type"] == "int")

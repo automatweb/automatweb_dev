@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.4 2002/11/02 23:21:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.5 2002/11/07 10:52:22 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -61,7 +61,7 @@ class html extends aw_template
 	function textbox($args = array())
 	{
 		extract($args);
-		$size = ($size) ? $size : 30;
+		$size = ($size) ? $size : 40;
 		return "<input type='text' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
 	}
 
@@ -139,6 +139,13 @@ class html extends aw_template
 	{
 		extract($args);
 		return "<img src='$url'>";
+	}
+
+	function href($args = array())
+	{
+		extract($args);
+		$target = ($target) ? " target='$target' " : "";
+		return "<a href='$url' $target>$caption</a>";
 	}
 
 };

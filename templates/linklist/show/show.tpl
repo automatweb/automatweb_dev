@@ -31,9 +31,9 @@
 			</td>
 			<!-- END SUB: tulp -->
 	</tr>
-	<table width=100% border=1><tr><td>
+	<table width=100% border=1><tr>
 		{VAR:links}
-	</td></tr></table>
+	</tr></table>
 
 	<tr>
 		<td colspan=3>

@@ -74,7 +74,6 @@
 															<select NAME='felement' class="formselect">{VAR:felement}</select><br />
 														täidetakse katloogi
 															<select NAME='vordle' class="formselect">{VAR:vordle}</select>-ga <br />
-															
 															<br />
 															<input type=checkbox {VAR:dir_is_form_result} NAME='dir_is_form_result' value='1' class="formcheckbox">
 														katalogi lingi väärtus võetakse vormisisestusest<br />
@@ -89,8 +88,6 @@
 															<legend><b>lingi attribuudid</b></legend>
 															<input type=checkbox {VAR:active_links} NAME='active_links' value='1' class="formcheckbox">
 														kuvada ainult aktiivsed lingid<br />
-<!--															<input type=checkbox {VAR:show_links} NAME="show_links" value='1' class="formcheckbox">
-														linke näidatakse <br />-->
 														</fieldset>
 														</td>
 													</tr>
@@ -105,17 +102,26 @@
 
 												lisa tasand nr
 													<input type=text NAME='add_level' class="formtext" size=4>
+												(tasandi lisamisel saab ta algul default ehk 0 tasandi väärtused)
 
 												<table border=1>
 												<tr>
 													<td class="celltext">tasandi nr</td>
-													<td class="celltext">tulpasid</td>
-													<td class="celltext">tulpa by jrk</td>
 													<td class="celltext">templiit</td>
+
+													<td class="celltext">näita Yah</td>
+													<td class="celltext">xx</td>
+
+													<td class="celltext">näita katalooge</td>
+													<td class="celltext">tulpasid</td>
 													<td class="celltext">kataloogid sortida</td>
+													<td class="celltext">tulpa by jrk</td>
+
 													<td class="celltext">näita linke</td>
+													<td class="celltext">tulpasid</td>
 													<td class="celltext">uues aknas</td>
 													<td class="celltext">lingid sortida</td>
+
 													<td class="celltext">kustuta tase</td>
 													<td class="celltext">stiil</td>
 												</tr>
@@ -123,28 +129,43 @@
 												<tr>
 													<td> {VAR:level} </td>
 													<td>
-														<input type=text NAME='dir[{VAR:level}][tulpi]' class="formtext" value='{VAR:tulpi}' size=4>
+														<select NAME='{VAR:whaa}[{VAR:level}][level_template]' class="formselect">{VAR:level_template}</select>
 													</td>
 													<td>
-														<input type=checkbox name='dir[{VAR:level}][jrk_columns]' value=1 {VAR:jrk_columns}>
+														<input type=checkbox NAME="{VAR:whaa}[{VAR:level}][show_yah]" value='1' class="formcheckbox" {VAR:show_yah}>
 													</td>
 													<td>
-														<select NAME='dir[{VAR:level}][level_template]' class="formselect">{VAR:level_template}</select>
+														<input type=checkbox NAME="{VAR:whaa}[{VAR:level}][xx]" value='1' class="formcheckbox" {VAR:xx}>
 													</td>
 													<td>
-														<select NAME='dir[{VAR:level}][sortby_dirs]' class="formselect">{VAR:sortby_dirs}</select>
+														<input type=checkbox NAME="{VAR:whaa}[{VAR:level}][show_dir]" value='1' class="formcheckbox" {VAR:show_dir}>
 													</td>
 													<td>
-														<input type=checkbox NAME="dir[{VAR:level}][show_links]" value='1' class="formcheckbox" {VAR:show_links}>
+														<input type=text NAME='{VAR:whaa}[{VAR:level}][tulpi]' class="formtext" value='{VAR:tulpi}' size=4>
+													</td>
+
+													<td>
+														<select NAME='{VAR:whaa}[{VAR:level}][sortby_dirs]' class="formselect">{VAR:sortby_dirs}</select>
+													</td>
+
+													<td>
+														<input type=checkbox name='{VAR:whaa}[{VAR:level}][jrk_columns]' value=1 {VAR:jrk_columns}>
+													</td>
+
+													<td>
+														<input type=checkbox NAME="{VAR:whaa}[{VAR:level}][show_links]" value='1' class="formcheckbox" {VAR:show_links}>
 													</td>
 													<td>
-														<input type=checkbox NAME="dir[{VAR:level}][newwindow]" value='1' class="formcheckbox" {VAR:newwindow}>
+														<input type=text NAME='{VAR:whaa}[{VAR:level}][tulpi]' class="formtext" value='{VAR:tulpi}' size=4>
 													</td>
 													<td>
-														<select NAME='dir[{VAR:level}][sortby_links]' class="formselect">{VAR:sortby_links}</select>
+														<input type=checkbox NAME="{VAR:whaa}[{VAR:level}][newwindow]" value='1' class="formcheckbox" {VAR:newwindow}>
 													</td>
 													<td>
-														<input type=checkbox name='dir[{VAR:level}][kustuta]' value=1>
+														<select NAME='{VAR:whaa}[{VAR:level}][sortby_links]' class="formselect">{VAR:sortby_links}</select>
+													</td>
+													<td>
+														<input type=checkbox name='{VAR:whaa}[{VAR:level}][kustuta]' value=1>
 													</td>
 													<td>
 														<a href=#l{VAR:level}>stiil</a>
@@ -155,8 +176,8 @@
 											</fieldset>
 											<!-- SUB: level_styles -->
 											<fieldset>
-												<legend><b>{VAR:level} tasandi linkide stiil ja konf</b></legend>
-														<a name="l{VAR:level}">
+												<legend><b>{VAR:level} tasandi {VAR:whaa} stiil ja konf</b></legend>
+														<a name="l{VAR:level}"><a/>
 														<table border=1>
 															<tr>
 																<td class="celltext">attribuut</td>
@@ -164,37 +185,38 @@
 																<td class="celltext">nähtav</td>
 																<td class="celltext">hüperlink</td>
 																<td class="celltext">vali stiil</td>
-																<td class="celltext">tekst + linebreak</td>
+																<td class="celltext">oma tekst</td>
+																<td class="celltext">linebreak</td>
 															</tr>
 
 															<!-- SUB: level_style -->
 															<tr>
 																<td class="celltext">{VAR:mis}</td>
 																<td>
-																	<input type=text NAME='link[{VAR:level}][{VAR:mis}][jrk]' class="formtext" value="{VAR:jrk}" size=4>
+																	<input type=text NAME='{VAR:whaa}[{VAR:level}][{VAR:mis}][jrk]' class="formtext" value="{VAR:jrk}" size=4>
 																</td>
 																<td>
-																	<input type=checkbox name='link[{VAR:level}][{VAR:mis}][show]' value=1 {VAR:show}>
+																	<input type=checkbox name='{VAR:whaa}[{VAR:level}][{VAR:mis}][show]' value=1 {VAR:show}>
 																</td>
 																<td>
-																	<input type=checkbox name='link[{VAR:level}][{VAR:mis}][hyper]' value=1 {VAR:hyper}>
+																	<input type=checkbox name='{VAR:whaa}[{VAR:level}][{VAR:mis}][hyper]' value=1 {VAR:hyper}>
 																</td>
 																<td>
-																	<select NAME='link[{VAR:level}][{VAR:mis}][style]' class="formselect">{VAR:stiilid}</select>
+																	<select NAME='{VAR:whaa}[{VAR:level}][{VAR:mis}][style]' class="formselect">{VAR:stiilid}</select>
 																</td>
 																<td>
 <!-- SUB: add_text -->
-																	<input type=text NAME='link[{VAR:level}][{VAR:mis}][text]' class="formtext" value="{VAR:text}" size=14>
+																	<input type=text NAME='{VAR:whaa}[{VAR:level}][{VAR:mis}][text]' class="formtext" value="{VAR:text}" size=20>
 <!-- END SUB: add_text -->
-																	<input type=checkbox name='link[{VAR:level}][{VAR:mis}][br]' value=1 {VAR:br}>
+																</td>
+																<td>
+																	<input type=checkbox name='{VAR:whaa}[{VAR:level}][{VAR:mis}][br]' value=1 {VAR:br}>
 																</td>
 															</tr>
 															<!-- END SUB: level_style -->
 														</table>
 											</fieldset>
 											<!-- END SUB: level_styles -->
-
-<!--														<input type=text name='level' value="{VAR:level}">-->
 											{VAR:abix} miks krt see asi siin sellist värvi on, aru ma ei saa
 											</td>
 										</tr>

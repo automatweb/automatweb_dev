@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.24 2002/10/20 16:48:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.25 2002/11/07 10:52:16 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -230,7 +230,6 @@ class acl_base extends core
 		{
 			return true;
 		}
-		enter_function("acl_base::can", array());
 
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
 		{
@@ -238,7 +237,6 @@ class acl_base extends core
 		}
 
 		$access="can_".$access;
-		exit_function("acl_base::can");
 		return $max_acl[$access];
 	}
 
@@ -407,8 +405,7 @@ class acl_base extends core
 		else
 		{
 			// show the login form
-			classload("auth");
-			$auth = new auth();
+			$auth = get_instance("auth");
 			print $auth->show_login();
 			// dat sucks
 			exit;
@@ -434,8 +431,7 @@ class acl_base extends core
 			$prog_cache = aw_global_get("prog_cache");
 			if (!is_array($prog_cache))
 			{
-				classload("config");
-				$c = new db_config;
+				$c = get_instance("config");
 				$prog_cache = unserialize($c->get_simple_config("accessmgr"));
 				aw_global_set("prog_cache",$prog_cache);
 			}

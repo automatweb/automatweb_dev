@@ -1,9 +1,13 @@
-<form action="reforb.aw" method="POST" name="foo">
+{VAR:toolbar}
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
-
+<form action="reforb.aw" method="POST" name="foo">
 <tr>
 <td class="fgtitle">Nimi:</td>
 <td class="fgtext" colspan="2"><input type="text" name="name" class="small_button" value="{VAR:name}" Style="width:100%"></td>
+</tr>
+<tr>
+<td class="fgtitle">Listi konf:</td>
+<td class="fgtext" colspan="2"><select name="conf" class="small_button">{VAR:conf}</select></td>
 </tr>
 
 <tr><td class="ftitle2" colspan="3">Eeldused:</td></tr>
@@ -66,12 +70,6 @@
 <td class="fgtitle" colspan="3"><input type="radio" name="actionx" value="delete" {VAR:a_delete}>Kustuta</td>
 </tr>
 
-<tr>
-<td class="fgtitle" colspan="3" align="right">
-<input type="button" value="Otsi" class="small_button" OnClick="javascript:DoTheThing('search')">
-<input type="submit" value="Salvesta" class="small_button">
-</td>
-</tr>
 {VAR:reforb}
 
 

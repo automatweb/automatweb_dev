@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/shop.aw,v 1.1 2002/11/03 10:49:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/shop.aw,v 1.2 2002/11/07 10:52:35 kristo Exp $
 // shop.aw - Shop
 
 session_register("shopping_cart");
@@ -19,7 +19,7 @@ define("ORD_FILLED",1);
 define("SHOP_PER_PAGE",10);
 
 //lc_load("shop");
-classload("shop_base");
+classload("shop/shop_base");
 class shop extends shop_base
 {
 	function shop()

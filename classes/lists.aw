@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.18 2002/10/30 11:05:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.19 2002/11/07 10:52:24 kristo Exp $
 // lists.aw - listide haldus
 class lists extends aw_template
 {
@@ -126,12 +126,11 @@ class lists extends aw_template
 			}
 
 			// add variables to the list
-			classload("mlist");
 			$this->upd_object(array(
 				"oid" => $id,
 				"last" => serialize(array(aw_ini_get("mailinglist.default_var_cat") => 1))
 			));
-			$li = new mlist($id);
+			$li = get_instance("mlist",$id);
 
 			$var_name_to_id_map = array();
 			$this->db_query("SELECT oid, name FROM objects WHERE class_id = ".CL_MAILINGLIST_VARIABLE." AND status != 0 AND parent = ".aw_ini_get("mailinglist.default_var_cat"));

@@ -30,6 +30,16 @@
             <caption>Logo</caption>
       </property>
       <property>
+            <name>info</name>
+            <type>array</type>
+            <getter>callback_get_info</getter>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Metainfo</caption>
+      </property>
+      <property>
             <name>preview</name>
             <type>text</type>
             <table>objects</table>

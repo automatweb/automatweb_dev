@@ -1,5 +1,5 @@
 <?php
-// $Id: frameset.aw,v 1.2 2002/11/04 20:53:13 duke Exp $
+// $Id: frameset.aw,v 1.3 2002/11/07 10:52:37 kristo Exp $
 // frameset.aw - frameset generator
 /*
 	@default table=objects
@@ -7,7 +7,7 @@
 	@property template type=select field=meta method=serialize
 	@caption Frameseti template
 
-	@property sources type=array field=meta method=serialize getter=callback_get_sources 
+	@property framedata type=array field=meta method=serialize getter=callback_get_sources 
 	@caption Raamide sisu
 */
 /*
@@ -86,6 +86,7 @@ class frameset extends aw_template
 		{
 			$this->sources = $obj["meta"]["sources"];
 		};
+		$this->framedata = $obj["meta"]["framedata"];
 		$this->draw_frameset($tpl);
 		print $this->content;
 		exit;
@@ -142,7 +143,7 @@ class frameset extends aw_template
 		$tab = str_repeat("\t",$this->level);
 		$rows = ($data["rows"]) ? "rows='" . $data["rows"] . "'" : "";
 		$cols = ($data["cols"]) ? "cols='" . $data["cols"] . "'" : "";
-		$this->content .= "$tab<frameset $rows $cols>\n";
+		$this->content .= "$tab<frameset border=0 framespacing=0 $rows $cols>\n";
 		$fx = new aw_array($data["frames"]);
 		foreach($fx->get() as $key => $val)
 		{
@@ -156,7 +157,11 @@ class frameset extends aw_template
 			{
 				$source = $this->sources[$val];
 				$src = ($source) ? " src='$source'" : "";
-				$this->content .= "$tab<frame name='$val' $src>\n";
+				$_fb = $this->framedata[$val]["frameborder"];
+				$_sc = $this->framedata[$val]["scrolling"];
+				$frameborder = ($_fb) ? " frameborder='1' " : " frameborder='0' ";
+				$scrolling = ($_fb) ? " scrolling='$_sc' " : "";
+				$this->content .= "$tab<frame name='$val' $src $frameborder $scrolling>\n";
 				$this->names[] = $val;
 			};
 		};
@@ -183,12 +188,49 @@ class frameset extends aw_template
 		if ($this->names[$i])
 		{
 			$node = array();
+			$tmp = array();
+			
 			$name = $this->names[$i];
-			$node["caption"] = "Raami '$name' sisu";
-			$node["type"] = "textbox";
-			$node["size"] = "30";
-			$node["name"] = "sources[$name]";
-			$node["value"] = $args["prop"]["value"][$name];
+			$subnode0 = array(
+				"caption" => "Raam <b>'$name'</b>",
+			);
+			$subnode1 = array(
+				"caption" => "Default sisu",
+				"type" => "textbox",
+				"size" => "50",
+				"name" => "framedata[$name][source]",
+				"value" => $args["prop"]["value"][$name]["source"],
+			);
+
+			$subnode2 = array(
+				"caption" => "Default lehe stiil",
+				"type" => "objpicker",
+				"name" => "framedata[$name][style]",
+				"clid" => "CL_PAGE",
+				"value" => $args["prop"]["value"][$name]["style"],
+			);
+		
+			$value = $args["prop"]["value"][$name]["frameborder"];
+			if (!isset($value))
+			{
+				$value = 1;
+			};
+			$subnode3 = array(
+				"caption" => "Border",
+				"type" => "checkbox",
+				"name" => "framedata[$name][frameborder]",
+				"value" => $value,
+			);
+			
+			$subnode4 = array(
+				"caption" => "Keritav",
+				"type" => "select",
+				"name" => "framedata[$name][scrolling]",
+				"value" => $args["prop"]["value"][$name]["scrolling"],
+				"options" => array("" => "","yes" => "Jah","no" => "Ei"),
+			);
+
+			$node = array("type" => "subnodes","content" => array($subnode0,$subnode1,$subnode2,$subnode3,$subnode4));
 			$i++;
 		}
 		else

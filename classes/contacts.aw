@@ -640,8 +640,7 @@ class contacts extends aw_template
 
 			$dummy = array("0" => LC_CONTACT_ALL,"1" => LC_CONTACT_LISTS, "2" => "Uued listid");
 			
-			classload("ml_list");
-			$mlist = new ml_list();
+			$mlist = get_instance("mailinglist/ml_list");
 			$arr = $mlist->get_lists_and_groups(array("check_acl" => 1, "fullnames" => 1, "prefix" => ":", "spacer"=> " "));//check_acl =1,
 
 			$gd = 0;

@@ -658,8 +658,8 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">Otsing on loogiline lause:</td>
 <td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_logical' VALUE='1' {VAR:search_logical}></td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Otsing FIELD_IN_SET:</td>
+<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_field_in_set' VALUE='1' {VAR:search_field_in_set}></td>
 </tr>
 <!-- END SUB: SEARCH_PROPS -->
 

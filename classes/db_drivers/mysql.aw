@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.1 2002/10/14 07:35:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.2 2002/11/07 10:52:33 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -416,6 +416,108 @@ class mysql
 			};
 		};
 		return $tables;
+	}
+
+	function db_get_table($args = array())
+	{
+		extract($args);
+		$tables = array();
+		$this->db_query("SHOW CREATE TABLE $name");
+		$row = $this->db_next();
+		$def = $row["Create Table"];
+		preg_match("/CREATE TABLE `(\w*)` \((.*)\) TYPE/smi",$def,$m);
+		if (!$m[2])
+		{
+			return false;
+		};
+		$tokens = explode(",",str_replace("\n","",$m[2]));
+
+		$fields = $indexes = array();
+		// now figure out what each token contains
+		foreach($tokens as $token)
+		{
+			$token = trim($token);
+			$stuff = explode(" ",$token);
+			// if it starst with a identifier between upper apostrophes,
+			// then it's very likely a field definition
+			if (preg_match("/^`(\w*)`/",$token,$m))
+			{
+				$name = $m[1];
+				$type = $stuff[1];
+				$length = "";
+				if (preg_match("/(\w+?)\((\d+?)\)/",$type,$mx))
+				{
+					$type = $mx[1];
+					$length = $mx[2];
+				};
+				$x = array(
+					"name" => $name,
+					"type" => $type,
+				);
+				if (strpos($token,"unsigned"))
+				{
+					$x["unsigned"] = 1;
+				};
+				if ($length)
+				{
+					$x["length"] = $mx["2"];
+				};
+				if (strpos($token,"NOT NULL"))
+				{
+					$x["not_null"] = 1;
+				};
+				if (preg_match("/default (\S*)/",$token,$m))
+				{
+					$x["default"] = $m[1];
+				};
+				if (strpos($token,"auto_increment"))
+				{
+					$x["sequence"] = 1;
+				};
+				$fields[] = $x;
+				// but I also have to figure out the extra information
+			};
+		}
+
+		// now retrieve information about indexes
+
+		$q = "SHOW INDEX FROM $args[name]";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$name = $row["Key_name"];
+			if ($indexes[$name])
+			{
+				$idx = $indexes[$name];
+			}
+			else
+			{
+				$idx = array();
+			};
+			$idx["name"] = $name;
+			$idx["unique"] = (int)!$row["Non_unique"];
+			$idx["columns"][] = $row["Column_name"];
+			$idx["collation"] = $row["Collation"];
+			$idx["length"] = (int)$row["Sub_part"];
+			$indexes[$name] = $idx;
+		};
+
+		$definition = array(
+			"fields" => $fields,
+			"indexes" => array_values($indexes),
+		);
+
+		$serializer = get_instance("xml",array("ctag" => "schema"));
+		$serializer->set_child_id("fields","field");
+		$serializer->set_child_id("indexes","index");
+		$serializer->set_child_id("columns","column");
+		$result = $serializer->xml_serialize($definition);
+		header("Content-Type: text/xml");
+		print $result;
+		exit;
+		print "<pre>";
+		print htmlspecialchars($result);
+		print "</pre>";
 	}
 };
 ?>

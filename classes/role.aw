@@ -1,7 +1,5 @@
 <?php
 
-classload("acl_base","acl_class");
-
 class role extends aw_template
 {
 	function role()
@@ -65,7 +63,7 @@ class role extends aw_template
 
 		if ($save_acl)
 		{
-			$ac = new acl_class;
+			$ac = get_instance("acl_class");
 			$rows = $ac->get_acls_for_role($id);
 			foreach($rows as $acid)
 			{

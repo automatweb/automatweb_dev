@@ -44,6 +44,7 @@ class basket_order extends basket
 			$t_count += $icnt;
 			$t_price += $order["meta"]["prices"][$iid] * $icnt;
 		}
+		aw_global_set("cur_price_elements_sum", $t_price);
 
 		if (!$ob["meta"]["order_form_op"])
 		{

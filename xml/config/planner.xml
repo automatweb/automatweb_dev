@@ -28,5 +28,6 @@
 	<key type="checkbox" name="workday" index="5" caption="Reede"/>
 	<key type="checkbox" name="workday" index="6" caption="Laupäev"/>
 	<key type="checkbox" name="workday" index="0" caption="Pühapäev"/>
+	<key type="textbox" name="max_events" caption="Max eventeid perioodis"/>
 	<key type="submit" name="submit" caption="Salvesta"/>
 </config>

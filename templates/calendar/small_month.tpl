@@ -1,27 +1,27 @@
 <table border="0" width="150" cellpadding="0" cellspacing="0">
 <tr>
-<td colspan="7" align="center" bgcolor="#EEEEEE">
-<small>
+<td class="{VAR:header_style}" align="center">
+<a href="{VAR:prev}">&lt;&lt;</a>
+</td>
+<td colspan="5" align="center" class="{VAR:header_style}">
 {VAR:month_name}
-</small>
+</td>
+<td class="{VAR:header_style}" align="center">
+<a href="{VAR:next}">&gt;&gt;</a>
 </td>
 </tr>
 <tr>
 <!-- SUB: header_cell -->
-<td valign="middle" align="center" width="15">
-<small><b>
+<td class="{VAR:weekday_style}" valign="middle" align="center" width="15">
 {VAR:header_content}
-</small></b>
 </td>
 <!-- END SUB: header_cell -->
 </tr>
 <!-- SUB: line -->
 <tr>
 <!-- SUB: cell -->
-<td align="center" bgcolor="{VAR:bgcolor}">
-<small>
+<td align="center" class="{VAR:day_style}">
 {VAR:content}
-</small>
 </td>
 <!-- END SUB: cell -->
 </tr>

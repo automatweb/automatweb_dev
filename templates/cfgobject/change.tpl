@@ -75,4 +75,5 @@ function show_search()
 <!-- END SUB: class_container -->
 </fieldset>
 {VAR:reforb}
+{VAR:toolbar2}
 </form>

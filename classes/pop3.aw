@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.6 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.7 2002/11/07 10:52:24 kristo Exp $
 class pop3 extends aw_template
 {
 	function pop3()
@@ -82,7 +82,8 @@ class pop3 extends aw_template
 
 	function connect($server)
 	{
-		$this->fp = fsockopen($server, 110, &$errno, &$errstr, 20);
+		$server = trim($server);
+		$this->fp = fsockopen($server, 110, &$errno, &$errstr);
 		if (!$this->fp)
 		{
 			$this->raise_error(ERR_POP3_CONNECT,"pop3: error connecting, $errno , $errstr",true);

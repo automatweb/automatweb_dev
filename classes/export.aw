@@ -1,7 +1,5 @@
 <?php
 
-classload("extlinks","config","planner");
-
 define("FN_TYPE_SECID",1);
 define("FN_TYPE_NAME",2);
 define("FN_TYPE_HASH",3);
@@ -51,12 +49,12 @@ class export extends aw_template
 		$event_id = $this->get_cval("export::event_id");
 		if (!$cal_id)
 		{
-			$pl = new planner;
+			$pl = get_instance("planner");
 			$pl->submit_add(array("parent" => 1));
 			$cal_id = $pl->id;
 			$event_id = $pl->bron_add_event(array("parent" => $cal_id,"start" => time(), "end" => time()+1));			
 
-			$c = new config;
+			$c = get_instance("config");
 			$c->set_simple_config("export::cal_id",$cal_id);
 			$c->set_simple_config("export::event_id",$event_id);
 		}
@@ -94,8 +92,7 @@ class export extends aw_template
 	{
 		extract($arr);
 
-		classload("config");
-		$c = new config;
+		$c = get_instance("config");
 		$c->set_simple_config("export::folder",$folder);
 		$c->set_simple_config("export::zip_file",$zip_file);
 		$c->set_simple_config("export::aw_zip_folder",$aw_zip_folder);
@@ -798,7 +795,7 @@ class export extends aw_template
 				)
 			));
 
-			$pl = new planner;
+			$pl = get_instance("planner");
 			$pl->submit_add(array("parent" => $id));
 
 			$this->upd_object(array(
@@ -1137,8 +1134,7 @@ class export extends aw_template
 		$req .= "Host: ".$host.($port != 80 ? ":".$port : "")."\r\n";
 		$req .= "Cookie: automatweb=".$this->cookie."\r\n";
 		$req .= "\r\n";
-		classload("socket");
-		$socket = new socket(array(
+		$socket = get_instance("socket",array(
 			"host" => $host,
 			"port" => $port,
 		));
@@ -1161,8 +1157,7 @@ class export extends aw_template
 			$host = str_replace(":".$mt[1], "", $host);
 		}
 		$port = ($mt[1] ? $mt[1] : 80);
-		classload("socket");
-		$socket = new socket(array(
+		$socket = get_instance("socket",array(
 			"host" => $host,
 			"port" => $port,
 		));

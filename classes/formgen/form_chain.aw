@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.1 2002/10/28 13:58:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.2 2002/11/07 10:52:34 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -19,8 +19,7 @@ class form_chain extends form_base
 		$this->mk_path($parent,LC_FORM_CHAIN_ADD_WREATH);
 		$this->read_template("add_chain.tpl");
 
-		classload("objects");
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$this->vars(array(
 			"forms" => $this->multiple_option_list(array(),$this->get_list(FTYPE_ENTRY,false,true)),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"alias_doc" => $alias_doc)),
@@ -66,6 +65,7 @@ class form_chain extends form_base
 		
 		$ct["show_reps"] = $show_reps;
 		$ct["rep_tbls"] = $rep_tbls;
+		$ct["rep_ops"] = $rep_ops;
 
 		$ct["cal_controller"] = $cal_controller;
 		
@@ -153,8 +153,7 @@ class form_chain extends form_base
 		$this->mk_path($fc["parent"], LC_FORM_CHAIN_CHANGE_WREATH);
 		$this->read_template("add_chain.tpl");
 
-		classload("languages");
-		$la = new languages;
+		$la = get_instance("languages");
 		$lar = $la->listall();
 
 		foreach($lar as $l)
@@ -196,14 +195,14 @@ class form_chain extends form_base
 					"rep" => checked($this->chain["rep"][$fid]),
 					"show_reps" => checked($this->chain["show_reps"][$fid]),
 					"rep_tbls" => $this->picker($this->chain["rep_tbls"][$fid], $this->list_objects(array("class" => CL_FORM_TABLE))),
+					"rep_ops" => $this->picker($this->chain["rep_ops"][$fid], $this->list_objects(array("addempty" => true,"class" => CL_FORM_OUTPUT))),
 					"LANG" => $lg
 				));
 				$this->parse("FORM");
 			}
 		}
 
-		classload("objects");
-		$ob = new objects;
+		$ob = get_instance("objects");
 
 
 		$forms = $this->get_flist(array(
@@ -369,6 +368,7 @@ class form_chain extends form_base
 				"form_id" => $form_id,
 				"section" => $section,
 				"table" => $this->chain["rep_tbls"][$form_id],
+				"op" => $this->chain["rep_ops"][$form_id],
 				"attribs" => array(
 					"id" => $id,
 					"section" => $section,
@@ -793,7 +793,7 @@ class form_chain extends form_base
 
 		foreach($entdat as $row)
 		{
-			$ft->row_data($row,$form_id,$section,0,$chain,$chain_entry);
+			$ft->row_data($row,$form_id,$section,$op,$chain,$chain_entry);
 		}
 
 		return $ft->finalize_table();

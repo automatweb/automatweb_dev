@@ -15,23 +15,32 @@ class xml_path_parser
 		);
 	}
 
+		
+
 	function parse_file($args = array())
 	{
 		$basedir = aw_ini_get("basedir");
-		if ($args["fname"])
-		{
-			$this->content = join("",file($basedir . $args["fname"]));
-		}
-		else
-		{
-			$this->content = $args["content"];	
-		};
+		$this->parse_data(array("content" => join("",file($basedir . $args["fname"]))));
+	}
+	
+	function parse_data($args = array())
+	{
+		$this->content = $args["content"];
 		$this->_setup_parser();
-		print "<big>-------------------------------</big>";
-		print "<pre>";
-		print_r($this->children);
-		print "</pre>";
-		print "<big>-------------------------------</big>";
+	}
+
+	function get_data($path)
+	{
+		$els = explode("/",$path);
+		$data = &$this->children;
+		foreach($els as $prnt)
+		{
+			if ($prnt)
+			{
+				$data = &$data[$prnt];
+			};
+		};
+		return $data;
 	}
 
 	function _setup_parser()
@@ -59,7 +68,7 @@ class xml_path_parser
 	{
 		array_push($this->context,$name);
 		$ctx = "/" . join("/",$this->context);
-		print "$name starts, ctx = $ctx<br>";
+//                print "$name starts, ctx = $ctx<br>";
 
 		array_walk($this->paths,array(&$this,'depthwalker'),1);
 
@@ -73,7 +82,7 @@ class xml_path_parser
 
 	function xml_end_element($parser,$name)
 	{
-		print "$name ends<br>";
+//                print "$name ends<br>";
 
 		array_walk($this->paths,array(&$this,'depthwalker'),-1);
 		$ctx = "/" . join("/",$this->context);

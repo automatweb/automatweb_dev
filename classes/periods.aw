@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.15 2002/10/21 12:10:16 duke Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.16 2002/11/07 10:52:24 kristo Exp $
 
 class db_periods extends aw_template 
 {
@@ -11,7 +11,7 @@ class db_periods extends aw_template
 		$this->lc_load("periods","lc_periods");	
 		$this->cf_name = "periods::cache::site_id::".$this->cfg["site_id"]."::period::";
 		$this->cf_ap_name = "active_period::cache::site_id::".$this->cfg["site_id"];
-		$this->cache = new cache;
+		$this->cache = get_instance("cache");
 		$this->init_active_period_cache();
 	}
 
@@ -272,7 +272,7 @@ class db_periods extends aw_template
 	// $active muutujaga saab ette anda selle, milline periood peaks olema aktiivne
 	// kui $active == 0, siis on selected see option, mis parajasti aktiivne on
 	// kui $active == 'somethingelse', siis on selectitud vastava id-ga element
-	function period_list($active)
+	function period_list($active, $addempty = false)
 	{
 		if ($active == 0)
 		{
@@ -280,7 +280,14 @@ class db_periods extends aw_template
 		};
 		$this->active = $active;
 		$this->clist();
-		$elements = array();
+		if ($addempty)
+		{
+			$elements = array("0" => "");
+		}
+		else
+		{
+			$elements = array();
+		}
 		while($row = $this->db_next())
 		{
 			$elements[$row["id"]] = $row["description"];
@@ -422,6 +429,7 @@ class periods extends db_periods
 			"2004" => "2004",
 			"2005" => "2005",
 		);
+		classload("image");
 		$this->vars(array(
 			"ID" => $cper["id"],
       "description" => $cper["description"],

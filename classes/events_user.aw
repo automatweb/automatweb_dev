@@ -1,7 +1,6 @@
 <?php
 define(C_TYPE_PLACE,0);
 define(C_TYPE_EVENT,1);
-classload("defs");
 class events_user extends aw_template
 {
 	function events_user()
@@ -26,8 +25,7 @@ class events_user extends aw_template
 		));
 		if ($year)
 		{
-			classload("calendar");
-			$cal = new calendar();
+			$cal = get_instance("calendar");
 			$calendar = $cal->draw_month(array(
 				"year" => $year,
 				"mon" => $mon,
@@ -43,8 +41,7 @@ class events_user extends aw_template
 			{
 				$date = date("d-m-Y");
 			};
-			classload("calendar");
-			$cal = new calendar();
+			$cal = get_instance("calendar");
 			$calendar = $cal->draw_week(array(
 				"date" => $date,
 				"day" => $day,
@@ -307,8 +304,7 @@ class events_user extends aw_template
 		}
 		elseif($date)
 		{
-			classload("calendar");
-			$cal = new calendar();
+			$cal = get_instance("calendar");
 			if ($day && $mon)
 			{
 				list(,,$year) = explode("-",$date);

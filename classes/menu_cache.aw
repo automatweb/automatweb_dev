@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.11 2002/09/25 15:05:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.12 2002/11/07 10:52:24 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -113,10 +113,9 @@ class menu_cache extends aw_template
 
 	function make_caches($args = array())
 	{
-		classload("cache");
 		extract($args);
 
-		$cache = new cache();
+		$cache = get_instance("cache");
 		$where = ($args["where"]) ? $args["where"] : " objects.status = 2";
 		if (!$lang_id)
 		{

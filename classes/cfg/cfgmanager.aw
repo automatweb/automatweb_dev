@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.4 2002/11/04 21:15:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.5 2002/11/07 10:52:31 kristo Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 class cfgmanager extends aw_template
@@ -44,6 +44,11 @@ class cfgmanager extends aw_template
 		};
 
 		$filter = 0;
+
+		if (!$clfile)
+		{
+			die("coult not identify object $id");
+		};
 
 		$inst = get_instance($clfile);
 
@@ -130,12 +135,6 @@ class cfgmanager extends aw_template
 				$inst->get_property($argblock);
 			};
 
-			// we can add better object pickers later
-			if (($val["type"] == "objpicker") && $val["clid"])
-			{
-				$val["type"] = "select";
-				$val["options"] = $this->list_objects(array("class" => constant($val["clid"]), "addempty" => true));
-			};
 
 			// if the property has a getter, call it directly
 			if ($val["getter"])
@@ -145,7 +144,20 @@ class cfgmanager extends aw_template
 				{
 					while($prop = $inst->$meth($argblock))
 					{
-						$resprops[] = $prop;
+						if ($prop["type"] == "subnodes")
+						{
+							foreach($prop["content"] as $subkey => $subval)
+							{
+								$resprops[] = $subval;
+							};
+						}
+						else
+						{
+							if (sizeof($prop) != 0)
+							{
+								$resprops[] = $prop;
+							};
+						};
 					};
 
 				};
@@ -158,6 +170,20 @@ class cfgmanager extends aw_template
 
 		foreach($resprops as $val)
 		{
+			if (is_array($val["items"]))
+			{
+				foreach($val["items"] as $subkey => $subval)
+				{
+					$this->convert_element(&$subval);
+					$val["items"][$subkey] = $subval;
+				}
+			}
+			else
+			{
+				$this->convert_element(&$val);
+			};
+			
+
 			$cli->add_property($val);
 		};
 
@@ -182,13 +208,17 @@ class cfgmanager extends aw_template
 	{
 		$this->quote($args);
 		extract($args);
+		if (!$clid)
+		{
+			die("class_id is missing. please report this to duke");
+		};
 		if (!$id)
 		{
 			$id = $this->new_object(array(
 				"parent" => $parent,
 				"name" => $name,
 				"comment" => $comment,
-				"class_id" => $class_id,
+				"class_id" => $clid,
 				"alias" => $alias,
 				"status" => $status,
 			));
@@ -524,6 +554,15 @@ class cfgmanager extends aw_template
 			$res[$key] = $val["text"];
 		};
 		return $res;
+	}
+
+	function convert_element(&$val)
+	{
+		if (($val["type"] == "objpicker") && $val["clid"])
+		{
+			$val["type"] = "select";
+                        $val["options"] = $this->list_objects(array("class" => constant($val["clid"]), "addempty" => true));
+		};
 	}
 	
 	function __add($args = array())

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.3 2002/11/07 10:52:34 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -567,8 +567,7 @@ class form_output extends form_base
 			$this->parse("LINE");
 		}
 
-		classload("objects");
-		$ob = new db_objects;
+		$ob = get_instance("objects");
 
 		$this->vars(array(
 			"aliasmgr" => $this->mk_my_orb("aliasmgr",array("id" => $id)),
@@ -1102,8 +1101,7 @@ class form_output extends form_base
 		$this->read_template("op_translate.tpl");
 		$this->mk_path($this->parent,sprintf(LC_FORM_OUTPUT_OUTPUT_ADMIN,$this->mk_orb("change", array("id" => $id))));
 
-		classload("languages");
-		$la = new languages;
+		$la = get_instance("languages");
 		$langs = $la->listall();
 
 		foreach($langs as $lar)
@@ -1378,8 +1376,7 @@ class form_output extends form_base
 		extract($arr);
 		$this->load_output($id);
 
-		classload("languages");
-		$la = new languages;
+		$la = get_instance("languages");
 		$langs = $la->listall();
 
 		for ($row=0; $row < $this->output["rows"]; $row++)

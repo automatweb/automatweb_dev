@@ -126,6 +126,13 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="submit_class_cfgforms">
+			<function name="submit_class_cfgforms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="export_class_icons">
 			<function name="export_class_icons">

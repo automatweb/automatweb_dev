@@ -28,18 +28,14 @@
 									<br>
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
 										<tr>
-											<td class="celltext" width=20%>Lingikogu nimi:</td><td class="celltext"><input type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
+											<td class="celltext" width=20%>Lingikogu nimi:</td>
+											<td class="celltext"><input type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2>juurmenüü (lingikogu asukoht)<br /><select NAME='lingiroot' class="formselect">{VAR:rootitems}
-											</select></td>
-										<tr>
-											<td class="celltext">templated </td>
-											<td class="celltext">
-												<select NAME='tpls' class="formselect">{VAR:tpls}
-											</select></td>
+											<td class="celltext" colspan=2>juurmenüü (lingikogu asukoht)<br />
+												<select NAME='lingiroot' class="formselect">{VAR:rootitems}</select>
+											</td>
 										</tr>
-
 									</table>
 
 								</td>

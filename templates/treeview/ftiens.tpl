@@ -30,7 +30,7 @@ function MM_swapImage() { //v3.0
 
 USETEXTLINKS = 1
 TARGETFRAME = "{VAR:targetframe}";
-pr_{VAR:root} = gFld("<b>{VAR:rootname}</b>", "{VAR:rooturl}","{VAR:baseurl}/automatweb/images/aw_ikoon.gif")
+pr_{VAR:root} = gFld("<b>{VAR:rootname}</b>", "{VAR:rooturl}","{VAR:icon_root}")
 
 <!-- SUB: TREE -->
 	pr_{VAR:id} = insFld(pr_{VAR:parent}, gFld("{VAR:name}", "{VAR:url}","{VAR:iconurl}"));
@@ -43,7 +43,7 @@ foldersTree = pr_{VAR:root};
 </script>
 
 </head>
-<body bgcolor="#eeeeee" topmargin=0 marginheight=0>
+<body topmargin=0 marginheight=0>
 <!--
 <table border=0 width="100%" cellspacing="0" cellpadding="2">
 	<td class="tableborder">

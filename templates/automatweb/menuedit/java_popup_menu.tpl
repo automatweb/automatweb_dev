@@ -1,4 +1,4 @@
-<applet codebase="{VAR:baseurl}/automatweb/java/menyy" code="mouseLeft.class" width="{VAR:width}" height="{VAR:height}">
+<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="5" HEIGHT="4" BORDER=0 ALT=""><br><applet codebase="{VAR:baseurl}/automatweb/java/menyy" code="mouseLeft.class" width="{VAR:width}" height="{VAR:height}">
 <param name="mouse_over_icon" value="{VAR:icon_over}">
 <param name="icon" value="{VAR:icon}">
 <param name="menu_font" value="Arial">

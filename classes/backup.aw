@@ -22,8 +22,7 @@ class backup extends aw_template
 	function submit_backup($arr)
 	{
 		extract($arr);
-		classload("config");
-		$cf = new config;
+		$cf = get_instance("config");
 		$cf->set_simple_config("backup::folder", $folder);
 
 		set_time_limit(0);

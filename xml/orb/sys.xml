@@ -22,6 +22,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="get_table">
+			<function name="get_table">
+				<arguments>
+					<required name="name"/>
+				</arguments>
+			</function>
+		</action>
 		
 		<action name="dbsync" nologin="1">
 			<function name="db_compare_choose_donor">
@@ -39,6 +47,13 @@
 
 		<action name="convimages">
 			<function name="convimages">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="gen_create_tbl" nologin="1">
+			<function name="gen_create_tbl">
 				<arguments>
 				</arguments>
 			</function>

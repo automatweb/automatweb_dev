@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.3 2002/11/07 10:52:34 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1724,7 +1724,7 @@ class form_table extends form_base
 
 	function do_menu()
 	{
-		$tpl = new aw_template;
+		$tpl = get_instance("aw_template");
 		$tpl->tpl_init("forms");
 		$tpl->read_template("fg_table_menu.tpl");
 

@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.9 2002/07/17 20:33:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.10 2002/11/07 10:52:16 kristo Exp $
 
-classload("config");
 class accessmgr extends aw_template
 {
 	function accessmgr()
@@ -26,7 +25,7 @@ class accessmgr extends aw_template
 				$id = $this->new_object(array("parent" => $this->ar["root"], "class_id" => CL_ACCESSMGR, "status" => $prid,"name" => $ar[name]));
 				$this->ar[$prid] = $id;
 			}
-			$c = new config;
+			$c = get_instance("config");
 			$c->create_config("accessmgr", serialize($this->ar));
 		}
 	}
@@ -67,7 +66,7 @@ class accessmgr extends aw_template
 		{
 			$id = $this->new_object(array("parent" => $this->ar["root"], "class_id" => CL_ACCESSMGR, "status" => $prid, "name" => $this->cfg["programs"][$prid]["name"]));
 			$this->ar[$prid] = $id;
-			$c = new db_config;
+			$c = get_instance("config");
 			$c->set_simple_config("accessmgr", serialize($this->ar));
 		}
 	}

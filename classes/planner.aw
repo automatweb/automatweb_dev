@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.79 2002/10/30 11:03:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.80 2002/11/07 10:52:24 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
-classload("calendar","defs");
 define(WEEK,DAY * 7);
 define(REP_DAY,1);
 define(REP_WEEK,2);
@@ -11,6 +10,7 @@ define(REP_YEAR,4);
 lc_load("calendar");
 // Klassi sees me kujutame koiki kuupäevi kujul dd-mm-YYYY (ehk d-m-Y date format)
 
+classload("calendar");
 class planner extends calendar 
 {
 	function planner($args = array())
@@ -198,8 +198,7 @@ class planner extends calendar
 		$q = "SELECT * FROM planner WHERE id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_next();
-		classload("xml");
-		$xml = new xml(array("ctag" => "event"));
+		$xml = get_instance("xml",array("ctag" => "event"));
 		$block = array(
 			"start" => $row["start"],
 			"end" => $row["end"],
@@ -210,13 +209,12 @@ class planner extends calendar
 		);
 		$data = $xml->xml_serialize(array("data" => $block));
 		
-		classload("messenger","file");
 		if ($new)
 		{
-			$msng = new messenger();
+			$msng = get_instance("messenger");
 			$msg_id = $msng->init_message();
 		};
-		$awf = new file();
+		$awf = get_instance("file");
 		$name = ($row["title"]) ? $row["title"] : "event";
 		$awf->put(array(
 			"store" => "fs",
@@ -776,8 +774,7 @@ class planner extends calendar
 	function get_events($args = array())
 	{
 		extract($args);
-		classload("repeater");
-		$repeater = new repeater();
+		$repeater = get_instance("repeater");
 		if ($uid)
 		{
 			$selector = " AND planner.uid = '$uid'";
@@ -882,8 +879,7 @@ class planner extends calendar
 		$replacement = "";
 		if (not($this->ob))
 		{
-			classload("objects");
-			$this->ob = new objects();
+			$this->ob = get_instance("objects");
 		}
 
 		$replacement = $this->ob->show(array("id" => $args["oid"]));
@@ -893,9 +889,8 @@ class planner extends calendar
 
 	function importfile($args = array())
 	{
-		classload("file","xml");
-		$awf = new file();
-		$xml = new xml();
+		$awf = get_instance("file");
+		$xml = get_instance("xml");
 		extract($args);
 		$fdat = $awf->get_file_by_id($id);
 		$edata = $xml->xml_unserialize(array("source" => $fdat["content"]));
@@ -1211,8 +1206,7 @@ class planner extends calendar
 			$next = date("d-m-Y",strtotime("+1 week",$start));
 			$prev = date("d-m-Y",strtotime("-1 week",$start));
 		};
-		classload("users");
-		$u = new users();
+		$u = get_instance("users");
 		$cal_id = $u->get_user_config(array("uid" => aw_global_get("uid"),"key" => "calendar"));
 		if (not($cal_id))
 		{
@@ -1433,8 +1427,7 @@ class planner extends calendar
 			"activelist" => array("add"),
 			"vars" => array("id" => $parent,"date" => $date),
 		));
-		classload("cal_event");
-		$ce = new cal_event();
+		$ce = get_instance("cal_event");
 		$html = $ce->add(array(
 			"parent" => $parent,
 			"folder" => $parent,
@@ -1453,8 +1446,7 @@ class planner extends calendar
 			"activelist" => array("xxx"),
 			"vars" => array("id" => $obj["parent"]),
 		));
-		classload("cal_event");
-		$ce = new cal_event();
+		$ce = get_instance("cal_event");
 		$html = $ce->change(array(
 			"id" => $id,
 		));
@@ -1473,8 +1465,7 @@ class planner extends calendar
 			"activelist" => array("xxx"),
 			"vars" => array("id" => $obj["parent"]),
 		));
-		classload("cal_event");
-		$ce = new cal_event();
+		$ce = get_instance("cal_event");
 		$html = $ce->repeaters(array(
 			"id" => $id,
 			"cycle" => $cycle,
@@ -1507,8 +1498,7 @@ class planner extends calendar
 			"activelist" => array("xxx"),
 			"vars" => array("id" => $obj["parent"]),
 		));
-		classload("cal_event");
-		$ce = new cal_event();
+		$ce = get_instance("cal_event");
 		$html = $ce->reminder(array(
 			"id" => $id,
 		));
@@ -1526,8 +1516,7 @@ class planner extends calendar
 			"activelist" => array("xxx"),
 			"vars" => array("id" => $obj["parent"]),
 		));
-		classload("cal_event");
-		$ce = new cal_event();
+		$ce = get_instance("cal_event");
 		$html = $ce->search(array(
 			"id" => $id,
 			"s_name" => $s_name,
