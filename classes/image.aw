@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.127 2005/01/20 12:01:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.128 2005/01/20 12:06:40 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -207,7 +207,8 @@ class image extends class_base
 		{
 			return html::href(array(
 				"url" => $idata["url"],
-				"name" => $idata["name"]
+				"caption" => $idata["name"],
+				"target" => ($idata["newwindow"] ? "_blank" : "")
 			));
 		}
 		
