@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.137 2002/07/17 20:27:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.138 2002/07/23 05:21:01 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -157,8 +157,11 @@ class menuedit extends aw_template
 		// koostame array vajalikest parameetritest, mis identifitseerivad cachetava objekti
 		$cp = array();
 
+		// page, type and lcb are in the HTTP_GET_VARS too .. so why do they get
+		// separate handling?
+
 		$cp[] = $act_per_id;
-		if (isset($GLOBALS["page"]))
+/*		if (isset($GLOBALS["page"]))
 		{
 			$cp[] = $GLOBALS["page"];
 		}
@@ -169,7 +172,7 @@ class menuedit extends aw_template
 		if (isset($GLOBALS["lcb"]))
 		{
 			$cp[] = $GLOBALS["lcb"];
-		}
+		}*/
 
 		$cp[] = aw_global_get("lang_id");
 
@@ -180,6 +183,15 @@ class menuedit extends aw_template
 		{
 			if ($var != "automatweb")	// just to make sure that each user does not get it's own copy
 			{
+				if (is_array($val))
+				{
+					$ov = $val;
+					$val = "";
+					foreach($ov as $vv)
+					{
+						$val.=$vv;
+					}
+				}
 				$cp[] = $var."-".$val;
 			}
 		}
