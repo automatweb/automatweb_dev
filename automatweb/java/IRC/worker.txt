@@ -1,0 +1,5 @@
+Te kasutate internetipõhist suhtlus vahendit, mis vôimaldab suhelda teiste hetkel tööl olevate inimestega. Samuti on vôimalik ennast avalikuks töötajaks kuulutada, mis vôimaldab klientidel teiega privaatvestlust alustada.
+
+Automaatselt logiti teid teie töötajate kanalile. Paremal pool veerus asuvad hetkel kanalil viibivad inimesed, topeltklôps nimel avab privaatvestluse akna. Alati on avatud ka 'Status' kanal, kuhu kuvatakse informatsiooni ja veateateid. Avalikuks töötajaks kuulutamiseks valige menüüst 'Käsud' -> 'Saadaval'. 
+	
+Pôhjalikuma ülevaate saate lugedes abifaili.
