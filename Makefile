@@ -24,7 +24,7 @@ ini:
 	fi
 
 properties:
-	@echo "Generating propety definitions"
+	@echo "Generating property definitions"
 	@if test -e scripts/php; \
 		then \
 		./scripts/php -d register_argc_argv=1 -q -f ./scripts/prop/collect.aw \
