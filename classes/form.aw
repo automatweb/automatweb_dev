@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.21 2001/06/13 19:15:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.22 2001/06/14 08:47:39 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -43,6 +43,8 @@ $orb_defs["form"] = "xml";
 			$this->sub_merge = 1;
 
 			$this->typearr = array(FORM_ENTRY => FG_ENTRY_FORM, FORM_SEARCH => FG_SEARCH_FORM, FORM_RATING => FG_RATING_FORM);
+			$this->formaliases = "";
+			$this->entry_id = 0;
 		}
 
 		////
@@ -107,12 +109,12 @@ $orb_defs["form"] = "xml";
 				}
 
 				$fl = true;
-				for ($row = 0; $row < $this->arr[rows]; $row++)
+				for ($row = 0; $row < $this->arr["rows"]; $row++)
 				{
-					$els = $this->arr[contents][$row][$a]->get_elements();
+					$els = $this->arr["contents"][$row][$a]->get_elements();
 					reset($els);
 					while(list(,$v) = each($els))
-						if (!$this->can("delete",$v[id]))
+						if (!$this->can("delete",$v["id"]))
 							$fl = false;
 				}
 				$this->vars(array("form_col" => $a,
@@ -126,16 +128,16 @@ $orb_defs["form"] = "xml";
 				$this->parse("DC");
 			}
 
-			for ($i=0; $i < $this->arr[rows]; $i++)
+			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
 				$cols="";
 				$fl = true;
-				for ($a=0; $a < $this->arr[cols]; $a++)
+				for ($a=0; $a < $this->arr["cols"]; $a++)
 				{
 					if (!($arr = $this->get_spans($i, $a)))
 						continue;
 					
-					$els = $this->arr[contents][$arr[r_row]][$arr[r_col]]->get_elements();
+					$els = $this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->get_elements();
 
 					reset($els);
 					$el = "";
@@ -143,13 +145,13 @@ $orb_defs["form"] = "xml";
 					while (list(, $v) = each($els))
 					{
 						// the element's can_view property is ignored here
-						$this->vars(array("form_cell_text"	=> $v[text], 
-															"form_cell_order"	=> $v[order],
-															"element_id"			=> $v[id],
-															"el_name"					=> ($v[name] == "" ? "&nbsp;" : $v[name]),
-															"el_type"					=> ($v[type] == "" ? "&nbsp;" : $v[type])));
+						$this->vars(array("form_cell_text"	=> $v["text"], 
+															"form_cell_order"	=> $v["order"],
+															"element_id"			=> $v["id"],
+															"el_name"					=> ($v["name"] == "" ? "&nbsp;" : $v["name"]),
+															"el_type"					=> ($v["type"] == "" ? "&nbsp;" : $v["type"])));
 						$el.=$this->parse("ELEMENT");
-						if (!$this->can("delete",$v[id]))
+						if (!$this->can("delete",$v["id"]))
 							$fl = false;
 						$el_cnt++;
 					}
@@ -161,12 +163,12 @@ $orb_defs["form"] = "xml";
 														"exp_right"	=> $this->mk_orb("exp_cell_right", array("id" => $this->id, "col" => $a, "row" => $i)),
 														"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $this->id, "col" => $a, "row" => $i)),
 														"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $this->id, "col" => $a, "row" => $i)),
-														"admin_cell"	=> $this->mk_orb("admin_cell", array("id" => $this->id, "col" => $arr[r_col], "row" => $arr[r_row])),
-														"add_element" => $this->mk_orb("add_element", array("id" => $this->id, "col" => $arr[r_col], "row" => $arr[r_row]))));
+														"admin_cell"	=> $this->mk_orb("admin_cell", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"])),
+														"add_element" => $this->mk_orb("add_element", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"]))));
 					$sh = ""; $sv = "";
-					if ($arr[rowspan] > 1)
+					if ($arr["rowspan"] > 1)
 						$sh = $this->parse("SPLIT_HORIZONTAL");
-					if ($arr[colspan] > 1)
+					if ($arr["colspan"] > 1)
 						$sv = $this->parse("SPLIT_VERTICAL");
 
 					$eu = "";
@@ -176,10 +178,10 @@ $orb_defs["form"] = "xml";
 					if ($a != 0)
 						$el = $this->parse("EXP_LEFT");
 					$er = "";
-					if (($a+$arr[colspan]) != $this->arr[cols])
+					if (($a+$arr["colspan"]) != $this->arr["cols"])
 						$er = $this->parse("EXP_RIGHT");
 					$ed = "";
-					if (($i+$arr[rowspan]) != $this->arr[rows])
+					if (($i+$arr["rowspan"]) != $this->arr["rows"])
 						$ed = $this->parse("EXP_DOWN");
 
 					$this->vars(array("SPLIT_HORIZONTAL" => $sh, "SPLIT_VERTICAL" => $sv, "EXP_UP" => $eu, "EXP_LEFT" => $el, "EXP_RIGHT" => $er,"EXP_DOWN" => $ed));
@@ -203,8 +205,8 @@ $orb_defs["form"] = "xml";
 			}
 
 			$this->vars(array("LINE"				=> $l,
-												"addr_reforb"	=> $this->mk_reforb("add_row", array("id" => $this->id, "after" => $this->arr[rows]-1)),
-												"addc_reforb"	=> $this->mk_reforb("add_col", array("id" => $this->id, "after" => $this->arr[cols]-1)),
+												"addr_reforb"	=> $this->mk_reforb("add_row", array("id" => $this->id, "after" => $this->arr["rows"]-1)),
+												"addc_reforb"	=> $this->mk_reforb("add_col", array("id" => $this->id, "after" => $this->arr["cols"]-1)),
 												"reforb"			=> $this->mk_reforb("submit_grid", array("id" => $this->id))));
 			return $this->do_menu_return();
 		}
@@ -217,44 +219,44 @@ $orb_defs["form"] = "xml";
 			$this->init($id, "all_elements.tpl", "K&otilde;ik elemendid");
 
 			$this->vars(array("form_id" => $this->id));
-			for ($i=0; $i < $this->arr[rows]; $i++)
+			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
 				$cols="";
-				for ($a=0; $a < $this->arr[cols]; $a++)
+				for ($a=0; $a < $this->arr["cols"]; $a++)
 				{
 					$this->vars(array("ELEMENT"	=> "", "STYLEITEMS" => "", "SOME_ELEMENTS" => ""));	
 					if (!($arr = $this->get_spans($i, $a)))
 						continue;
 						
-					$els = $this->arr[contents][$arr[r_row]][$arr[r_col]]->get_elements();
+					$els = $this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->get_elements();
 					reset($els);
 					$el = "";
 					while (list(, $v) = each($els))
 					{
 						// the element's can_view property is ignored here
-						$this->vars(array("el_text"	=> ($v[text] == "" ? "&nbsp;" : $v[text]),
-															"el_name"	=> ($v[name] == "" ? "&nbsp;" : $v[name]),
-															"el_type"	=> ($v[type] == "" ? "&nbsp;" : $v[type]),
-															"form_cell_order"	=> $v[order],
-															"element_id"			=> $v[id]));
+						$this->vars(array("el_text"	=> ($v["text"] == "" ? "&nbsp;" : $v["text"]),
+															"el_name"	=> ($v["name"] == "" ? "&nbsp;" : $v["name"]),
+															"el_type"	=> ($v["type"] == "" ? "&nbsp;" : $v["type"]),
+															"form_cell_order"	=> $v["order"],
+															"element_id"			=> $v["id"]));
 						$el.=$this->parse("ELEMENT");
 					}
 
 					$sti = ""; $flag = false;
 					for ($st=0; $st < $style_count; $st++)
 					{
-						$sel = ($styles[$st][id] == $this->arr[contents][$i][$a]->get_style());
+						$sel = ($styles[$st]["id"] == $this->arr["contents"][$i][$a]->get_style());
 						if ($sel)
 							$flag=true;
-						$this->vars(array("style_id"				=> $styles[$st][id], 
+						$this->vars(array("style_id"				=> $styles[$st]["id"], 
 															"style_selected"	=> ($sel == true ? " SELECTED " : ""),
-															"style_name"			=> $styles[$st][name]));
+															"style_name"			=> $styles[$st]["name"]));
 						$sti.=$this->parse("STYLEITEMS");
 					}
-					if (!$flag && $this->arr[contents][$i][$a]->get_style() != 0)	
+					if (!$flag && $this->arr["contents"][$i][$a]->get_style() != 0)	
 					{
 						// if we didn't find the style but one was selected, then it's a temp style!
-						$this->vars(array("style_id"				=> $this->arr[contents][$i][$a]->get_style(), 
+						$this->vars(array("style_id"				=> $this->arr["contents"][$i][$a]->get_style(), 
 															"style_selected"	=> " SELECTED ", 
 															"style_name"			=> ""));
 					}
@@ -265,8 +267,8 @@ $orb_defs["form"] = "xml";
 
 					$this->vars(array("ELEMENT"				=> $el, 
 														"STYLEITEMS"		=> $sti,
-														"col"						=> $arr[r_col], 
-														"row"						=> $arr[r_row]));	
+														"col"						=> $arr["r_col"], 
+														"row"						=> $arr["r_row"]));	
 
 					if ($el == "")
 						$se = "<img src='/images/transa.gif' height=1 width=1 border=0>";
@@ -291,21 +293,21 @@ $orb_defs["form"] = "xml";
 			extract($arr);
 			$this->load($id);
 
-			$this->arr[bgcolor] = $bgcolor;
-			$this->arr[border] = $border;
-			$this->arr[cellpadding]	= $cellpadding;
-			$this->arr[cellspacing] = $cellspacing;
-			$this->arr[height] = $height;
-			$this->arr[width] = $width;
-			$this->arr[height] = $height;
-			$this->arr[hspace] = $hspace;
-			$this->arr[vspace] = $vspace;
-			$this->arr[def_style] = $def_style;
-			$this->arr[submit_text] = $submit_text;
-			$this->arr[after_submit] = $after_submit;
-			$this->arr[after_submit_text] = $after_submit_text;
-			$this->arr[after_submit_link] = $after_submit_link;
-			$this->arr[ff_folder] = $ff_folder;
+			$this->arr["bgcolor"] = $bgcolor;
+			$this->arr["border"] = $border;
+			$this->arr["cellpadding"]	= $cellpadding;
+			$this->arr["cellspacing"] = $cellspacing;
+			$this->arr["height"] = $height;
+			$this->arr["width"] = $width;
+			$this->arr["height"] = $height;
+			$this->arr["hspace"] = $hspace;
+			$this->arr["vspace"] = $vspace;
+			$this->arr["def_style"] = $def_style;
+			$this->arr["submit_text"] = $submit_text;
+			$this->arr["after_submit"] = $after_submit;
+			$this->arr["after_submit_text"] = $after_submit_text;
+			$this->arr["after_submit_link"] = $after_submit_link;
+			$this->arr["ff_folder"] = $ff_folder;
 			$this->arr["name_el"] = $entry_name_el;
 			$this->save();
 			return $this->mk_orb("table_settings", array("id" => $id));
@@ -318,11 +320,11 @@ $orb_defs["form"] = "xml";
 			extract($arr);
 			$this->load($id);
 
-			for ($i=0; $i < $this->arr[rows]; $i++)
+			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
-				for ($a=0; $a < $this->arr[cols]; $a++)
+				for ($a=0; $a < $this->arr["cols"]; $a++)
 				{
-					$this->arr[contents][$i][$a]->save_short(&$this);
+					$this->arr["contents"][$i][$a]->save_short(&$this);
 				}
 			}
 			$this->save();
@@ -339,56 +341,21 @@ $orb_defs["form"] = "xml";
 
 			while ($count-- > 0)
 			{
-				$this->arr[cols]++;
-
-				$nm = array();
-				for ($row =0; $row < $this->arr[rows]; $row++)
-					for ($col=0; $col <= $after; $col++)
-						$nm[$row][$col] = $this->arr[map][$row][$col];		// copy the left part of the map
-
-				$change = array();
-				for ($row = 0; $row < $this->arr[rows]; $row++)
-					for ($col=$after+1; $col < ($this->arr[cols]-1); $col++)
-					{
-						if ($this->arr[map][$row][$col][col] > $after)	
-						{
-							$nm[$row][$col+1][col] = $this->arr[map][$row][$col][col]+1;
-							$nm[$row][$col+1][row] = $this->arr[map][$row][$col][row];
-							$change[] = array("from" => $this->arr[map][$row][$col], "to" => $nm[$row][$col+1]);
-						}
-						else
-							$nm[$row][$col+1] = $this->arr[map][$row][$col];
-					}
-
-				reset($change);
-				while (list(,$v) = each($change))
-					for ($row=0; $row < $this->arr[rows]; $row++)
-						for ($col=0; $col <= $after; $col++)
-							if ($this->arr[map][$row][$col] == $v[from])
-								$nm[$row][$col] = $v[to];
-
-				for ($row = 0; $row < $this->arr[rows]; $row++)
-				{
-					if ($this->arr[map][$row][$after] == $this->arr[map][$row][$after+1])
-						$nm[$row][$after+1] = $nm[$row][$after];
-					else
-						$nm[$row][$after+1] = array("row" => $row, "col" => $after+1);
-				}
-
-				$this->arr[map] = $nm;
+				$this->arr["cols"]++;
+				$this->map_add_col($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$after);
 
 				// move necessary elements to the right
-				for ($i = $this->arr[cols]; $i > ($after+1); $i--)
+				for ($i = $this->arr["cols"]; $i > ($after+1); $i--)
 				{
-					for ($a = 0; $a < $this->arr[rows]; $a++)
+					for ($a = 0; $a < $this->arr["rows"]; $a++)
 					{
-						$this->arr[elements][$a][$i] = $this->arr[elements][$a][$i-1];
+						$this->arr["elements"][$a][$i] = $this->arr["elements"][$a][$i-1];
 					}
 				}
 				// zero out all elemnts on the newly added column
-				for ($a = 0; $a < $this->arr[rows]; $a++)
+				for ($a = 0; $a < $this->arr["rows"]; $a++)
 				{
-					$this->arr[elements][$a][$after+1] = array();
+					$this->arr["elements"][$a][$after+1] = array();
 				}
 			}
 			$this->save();
@@ -412,58 +379,23 @@ $orb_defs["form"] = "xml";
 
 			while ($count-- > 0)
 			{
-				$this->arr[rows]++;
-
-				$nm = array();
-				for ($row =0; $row <= $after; $row++)
-					for ($col=0; $col < $this->arr[cols]; $col++)
-						$nm[$row][$col] = $this->arr[map][$row][$col];		// copy the upper part of the map
-
-				$change = array();
-				for ($row = $after+1; $row < ($this->arr[rows]-1); $row++)
-					for ($col=0; $col < $this->arr[cols]; $col++)
-					{
-						if ($this->arr[map][$row][$col][row] > $after)	
-						{
-							$nm[$row+1][$col][col] = $this->arr[map][$row][$col][col];
-							$nm[$row+1][$col][row] = $this->arr[map][$row][$col][row]+1;
-							$change[] = array("from" => $this->arr[map][$row][$col], "to" => $nm[$row+1][$col]);
-						}
-						else
-							$nm[$row+1][$col] = $this->arr[map][$row][$col];
-					}
-
-				reset($change);
-				while (list(,$v) = each($change))
-					for ($row=0; $row <= $after; $row++)
-						for ($col=0; $col < $this->arr[cols]; $col++)
-							if ($this->arr[map][$row][$col] == $v[from])
-								$nm[$row][$col] = $v[to];
-
-				for ($col = 0; $col < $this->arr[cols]; $col++)
-				{
-					if ( $this->arr[map][$after][$col] == $this->arr[map][$after+1][$col])
-						$nm[$after+1][$col] = $nm[$after][$col];
-					else
-						$nm[$after+1][$col] = array("row" => $after+1, "col" => $col);
-				}
-
-				$this->arr[map] = $nm;
+				$this->arr["rows"]++;
+				$this->map_add_row($this->arr["rows"], $this->arr["cols"], &$this->arr["map"], $after);
 
 				// now we must also move all elements in $this->arr[elements]
 				// so that when the form is loaded they get put in the correct
 				// places.
-				for ($i=$this->arr[rows]; $i > $after; $i--)
+				for ($i=$this->arr["rows"]; $i > $after; $i--)
 				{
-					for ($a = 0; $a < $this->arr[cols]; $a++)
+					for ($a = 0; $a < $this->arr["cols"]; $a++)
 					{
-						$this->arr[elements][$i][$a] = $this->arr[elements][$i-1][$a];
+						$this->arr["elements"][$i][$a] = $this->arr["elements"][$i-1][$a];
 					}
 				}
 				// zero out all elements on the newly inserted row
-				for ($a = 0; $a < $this->arr[cols]; $a++)
+				for ($a = 0; $a < $this->arr["cols"]; $a++)
 				{
-					$this->arr[elements][$after+1][$a] = array();
+					$this->arr["elements"][$after+1][$a] = array();
 				}
 			}
 			$this->save();
@@ -479,55 +411,28 @@ $orb_defs["form"] = "xml";
 			extract($arr);
 			$this->load($id);
 
-			for ($i=0; $i < $this->arr[rows]; $i++)
+			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
 				// we don't delete the element from the database, we jsut delete it
 				// from this form. 
-				$this->arr[elements][$i][$col] = array();
-				$this->arr[contents][$i][$this->arr[cols]-1] = array();
+				$this->arr["elements"][$i][$col] = array();
+				$this->arr["contents"][$i][$col]->del();
+				$this->arr["contents"][$i][$this->arr["cols"]-1] = array();
 			}
 
-			$d_col = $col;
-
-			$nm = array();
-			for ($row =0; $row < $this->arr[rows]; $row++)
-				for ($col=0; $col < $d_col; $col++)
-					$nm[$row][$col] = $this->arr[map][$row][$col];	// copy the left part of the map
-
-			$changes = array();
-			for ($row =0 ; $row < $this->arr[rows]; $row++)
-				for ($col = $d_col+1; $col < $this->arr[cols]; $col++)
-				{
-					if ($this->arr[map][$row][$col][col] > $d_col)
-					{
-						$nm[$row][$col-1] = array("row" => $this->arr[map][$row][$col][row], "col" => $this->arr[map][$row][$col][col]-1);
-						$changes[] = array("from" => $this->arr[map][$row][$col], 
-															 "to" => array("row" => $this->arr[map][$row][$col][row], "col" => $this->arr[map][$row][$col][col]-1));
-					}
-					else
-						$nm[$row][$col-1] = $this->arr[map][$row][$col];
-					
-				}
-			$this->arr[map] = $nm;
-			
-			reset($changes);
-			while (list(,$v) = each($changes))
-				for ($row=0; $row < $this->arr[rows]; $row++)
-					for ($col=0; $col < $d_col; $col++)
-						if ($this->arr[map][$row][$col] == $v[from])
-							$this->arr[map][$row][$col] = $v[to];
+			$this->map_del_col($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$col);
 
 			// we must also shift all elements that are to the right of the deleted
 			// column 1 position to the left
-			for ($i=$d_col; $i < $this->arr[cols]; $i++)
+			for ($i=$col; $i < $this->arr["cols"]; $i++)
 			{
-				for ($a=0; $a < $this->arr[rows]; $a++)
+				for ($a=0; $a < $this->arr["rows"]; $a++)
 				{
-					$this->arr[elements][$a][$i] = $this->arr[elements][$a][$i+1];
+					$this->arr["elements"][$a][$i] = $this->arr["elements"][$a][$i+1];
 				}
 			}
 
-			$this->arr[cols]--;
+			$this->arr["cols"]--;
 			$this->save();
 			$orb = $this->mk_orb("change" , array("id" => $this->id));
 			header("Location: $orb");
@@ -541,52 +446,25 @@ $orb_defs["form"] = "xml";
 			extract($arr);
 			$this->load($id);
 
-			for ($i=0; $i < $this->arr[cols]; $i++)
+			for ($i=0; $i < $this->arr["cols"]; $i++)
 			{
-				$this->arr[elements][$row][$i] = array();
-				$this->arr[contents][$this->arr[rows]-1][$i] = "";
+				$this->arr["elements"][$row][$i] = array();
+				$this->arr["contents"][$row][$i]->del();
+				$this->arr["contents"][$this->arr["rows"]-1][$i] = "";
 			}
 
-			$d_row = $row;
-
-			$nm = array();
-			for ($row =0; $row < $d_row; $row++)
-				for ($col=0; $col < $this->arr[cols]; $col++)
-					$nm[$row][$col] = $this->arr[map][$row][$col];	// copy the upper part of the map
-
-			$changes = array();
-			for ($row =$d_row+1 ; $row < $this->arr[rows]; $row++)
-				for ($col = 0; $col < $this->arr[cols]; $col++)
-				{
-					if ($this->arr[map][$row][$col][row] > $d_row)
-					{
-						$nm[$row-1][$col] = array("row" => $this->arr[map][$row][$col][row]-1, "col" => $this->arr[map][$row][$col][col]);
-						$changes[] = array("from" => $this->arr[map][$row][$col], 
-															 "to" => array("row" => $this->arr[map][$row][$col][row]-1, "col" => $this->arr[map][$row][$col][col]));
-					}
-					else
-						$nm[$row-1][$col] = $this->arr[map][$row][$col];
-					
-				}
-			$this->arr[map] = $nm;
-			
-			reset($changes);
-			while (list(,$v) = each($changes))
-				for ($row=0; $row < $d_row; $row++)
-					for ($col=0; $col < $this->arr[cols]; $col++)
-						if ($this->arr[map][$row][$col] == $v[from])
-							$this->arr[map][$row][$col] = $v[to];
-
+			$this->map_del_row($this->arr["rows"], $this->arr["cols"], &$this->arr["map"], $row);
+	
 			// we must move all elements below the deleted row up by one
-			for ($i = $d_row; $i < $this->arr[rows]; $i++)
+			for ($i = $row; $i < $this->arr["rows"]; $i++)
 			{
-				for ($a=0; $a < $this->arr[cols]; $a++)
+				for ($a=0; $a < $this->arr["cols"]; $a++)
 				{
-					$this->arr[elements][$i][$a] = $this->arr[elements][$i+1][$a];
+					$this->arr["elements"][$i][$a] = $this->arr["elements"][$i+1][$a];
 				}
 			}
 
-			$this->arr[rows]--;
+			$this->arr["rows"]--;
 			
 			$this->save();
 			$orb = $this->mk_orb("change", array("id" => $this->id));
@@ -623,22 +501,22 @@ $orb_defs["form"] = "xml";
 			$t = new style;
 			$o = new db_objects;
 			$this->vars(array(
-				"form_bgcolor"				=> $this->arr[bgcolor],
-				"form_border"					=> $this->arr[border],
-				"form_cellpadding"		=> $this->arr[cellpadding],
-				"form_cellspacing"		=> $this->arr[cellspacing],
-				"form_height"					=> $this->arr[height],
-				"form_width"					=> $this->arr[width],
-				"form_hspace"					=> $this->arr[hspace],
-				"form_vspace"					=> $this->arr[vspace],
-				"def_style"						=> $this->picker($this->arr[def_style],$t->get_select(0,ST_CELL)),
-				"submit_text"					=> $this->arr[submit_text],
-				"after_submit_text"		=> $this->arr[after_submit_text],
-				"after_submit_link"		=> $this->arr[after_submit_link],
-				"as_1"								=> ($this->arr[after_submit] == 1 ? "CHECKED" : ""),
-				"as_2"								=> ($this->arr[after_submit] == 2 ? "CHECKED" : ""),
-				"as_3"								=> ($this->arr[after_submit] == 3 ? "CHECKED" : ""),
-				"ff_folder"						=> $this->picker($this->arr[ff_folder], $o->get_list()),
+				"form_bgcolor"				=> $this->arr["bgcolor"],
+				"form_border"					=> $this->arr["border"],
+				"form_cellpadding"		=> $this->arr["cellpadding"],
+				"form_cellspacing"		=> $this->arr["cellspacing"],
+				"form_height"					=> $this->arr["height"],
+				"form_width"					=> $this->arr["width"],
+				"form_hspace"					=> $this->arr["hspace"],
+				"form_vspace"					=> $this->arr["vspace"],
+				"def_style"						=> $this->picker($this->arr["def_style"],$t->get_select(0,ST_CELL)),
+				"submit_text"					=> $this->arr["submit_text"],
+				"after_submit_text"		=> $this->arr["after_submit_text"],
+				"after_submit_link"		=> $this->arr["after_submit_link"],
+				"as_1"								=> ($this->arr["after_submit"] == 1 ? "CHECKED" : ""),
+				"as_2"								=> ($this->arr["after_submit"] == 2 ? "CHECKED" : ""),
+				"as_3"								=> ($this->arr["after_submit"] == 3 ? "CHECKED" : ""),
+				"ff_folder"						=> $this->picker($this->arr["ff_folder"], $o->get_list()),
 				"els"									=> $this->picker($this->arr["name_el"],$this->get_all_elements())
 			));
 			$ns = "";
@@ -670,13 +548,21 @@ $orb_defs["form"] = "xml";
 			}
 			$form_action = $GLOBALS["baseurl"].$form_action;
 
-			if ($reforb == "")
+			if (!isset($reforb) || $reforb == "")
 			{
 				$reforb = $this->mk_reforb("process_entry", array("id" => $this->id));
 			}
-			if ($entry_id)
+			if (isset($entry_id) && $entry_id)
 			{
 				$this->load_entry($entry_id);
+			}
+			if (!isset($prefix))
+			{
+				$prefix = "";
+			}
+			if (!isset($elvalues))
+			{
+				$elvalues = array();
 			}
 
 			$this->read_template("show.tpl",1);
@@ -684,6 +570,7 @@ $orb_defs["form"] = "xml";
 			$images = new db_images;
 
 			$c="";
+			$chk_js = "";
 			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
 				$html=$this->mk_row_html($i,&$images,$prefix,$elvalues);
@@ -703,7 +590,7 @@ $orb_defs["form"] = "xml";
 				$images->list_by_object($this->entry_id);
 				while ($row = $images->db_next())
 				{
-					$this->vars(array("img_idx" => $row[idx],"img_id" => $row[oid]));
+					$this->vars(array("img_idx" => $row["idx"],"img_id" => $row["oid"]));
 					$pic.=$this->parse("IMAGE");
 				}
 			}
@@ -717,7 +604,7 @@ $orb_defs["form"] = "xml";
 
 			$this->vars(array("var_name" => "entry_id", "var_value" => $this->entry_id));
 			$ei = $this->parse("EXTRAIDS");
-			if (is_array($extraids))
+			if (isset($extraids) && is_array($extraids))
 			{
 				reset($extraids);
 				while(list($k,$v) = each($extraids))
@@ -729,23 +616,23 @@ $orb_defs["form"] = "xml";
 
 			$this->add_hit($this->id);
 
-			$this->vars(array("LINE"							=> $c,
-												"EXTRAIDS"					=> $ei,
-												"IMG_WRAP"					=> $ip, 
-												"form_border"				=> ($this->arr[border] != "" ? " BORDER='".$this->arr[border]."'" : ""),
-												"form_bgcolor"			=> ($this->arr[bgcolor] !="" ? " BGCOLOR='".$this->arr[bgcolor]."'" : ""),
-												"form_cellpadding"	=> ($this->arr[cellpadding] != "" ? " CELLPADDING='".$this->arr[cellpadding]."'" : ""),
-												"form_cellspacing"	=> ($this->arr[cellspacing] != "" ? " CELLSPACING='".$this->arr[cellspacing]."'" : ""),
-												"form_height"				=> ($this->arr[height] != "" ? " HEIGHT='".$this->arr[height]."'" : ""),
-												"form_width"				=> ($this->arr[width] != "" ? " WIDTH='".$this->arr[width]."'" : "" ),
-												"form_height"				=> ($this->arr[height] != "" ? " HEIGHT='".$this->arr[height]."'" : "" ),
-												"form_vspace"				=> ($this->arr[vspace] != "" ? " VSPACE='".$this->arr[vspace]."'" : ""),
-												"form_hspace"				=> ($this->arr[hspace] != "" ? " HSPACE='".$this->arr[hspace]."'" : ""),
-												"action"						=> $action,
-												"form_action"				=> $form_action,
-												"submit_text"				=> $this->arr[submit_text],
-												"reforb"						=> $reforb,
-												"checks"						=> $chk_js
+			$this->vars(array(
+				"LINE"							=> $c,
+				"EXTRAIDS"					=> $ei,
+				"IMG_WRAP"					=> $ip, 
+				"form_border"				=> (isset($this->arr["border"]) && $this->arr["border"] != "" ? " BORDER='".$this->arr["border"]."'" : ""),
+				"form_bgcolor"			=> (isset($this->arr["bgcolor"]) && $this->arr["bgcolor"] !="" ? " BGCOLOR='".$this->arr["bgcolor"]."'" : ""),
+				"form_cellpadding"	=> (isset($this->arr["cellpadding"]) && $this->arr["cellpadding"] != "" ? " CELLPADDING='".$this->arr["cellpadding"]."'" : ""),
+				"form_cellspacing"	=> (isset($this->arr["cellspacing"]) && $this->arr["cellspacing"] != "" ? " CELLSPACING='".$this->arr["cellspacing"]."'" : ""),
+				"form_height"				=> (isset($this->arr["height"]) && $this->arr["height"] != "" ? " HEIGHT='".$this->arr["height"]."'" : ""),
+				"form_width"				=> (isset($this->arr["width"]) && $this->arr["width"] != "" ? " WIDTH='".$this->arr["width"]."'" : "" ),
+				"form_height"				=> (isset($this->arr["height"]) && $this->arr["height"] != "" ? " HEIGHT='".$this->arr["height"]."'" : "" ),
+				"form_vspace"				=> (isset($this->arr["vspace"]) && $this->arr["vspace"] != "" ? " VSPACE='".$this->arr["vspace"]."'" : ""),
+				"form_hspace"				=> (isset($this->arr["hspace"]) && $this->arr["hspace"] != "" ? " HSPACE='".$this->arr["hspace"]."'" : ""),
+				"form_action"				=> $form_action,
+				"submit_text"				=> isset($this->arr["submit_text"]) ? $this->arr["submit_text"] : "",
+				"reforb"						=> $reforb,
+				"checks"						=> $chk_js
 			));
 			$st = $this->parse();				
 			return $st;
@@ -760,7 +647,8 @@ $orb_defs["form"] = "xml";
 			{
 				if (($arr = $this->get_spans($row, $a)))
 				{
-					$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($this->arr["def_style"], &$images, $arr["colspan"], $arr["rowspan"],$prefix,$elvalues);
+					$ds = isset($this->arr["def_style"]) ? $this->arr["def_style"] : 0;
+					$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($ds, &$images, $arr["colspan"], $arr["rowspan"],$prefix,$elvalues);
 				}
 			}
 			return $html;
@@ -776,13 +664,17 @@ $orb_defs["form"] = "xml";
 
 			if (!$entry_id)
 			{
-				$parent = ($parent) ? $parent: $this->arr["ff_folder"];
+				$parent = isset($parent) ? $parent: $this->arr["ff_folder"];
 				$entry_id = $this->new_object(array("parent" => $parent, "form_entry", "class_id" => CL_FORM_ENTRY));
 				$new = true;
 			}
 			else
 			{
 				$new = false;
+			}
+			if (!isset($prefix))
+			{
+				$prefix = "";
 			}
 
 			for ($i=0; $i < $this->arr["rows"]; $i++)
@@ -809,6 +701,7 @@ $orb_defs["form"] = "xml";
 				while (list($k, $v) = each($this->entry))
 				{
 					$ids.=",el_$k";
+					// see on pildi uploadimise elementide jaoks
 					if (is_array($v))
 					{
 						$v = serialize($v);
@@ -846,7 +739,7 @@ $orb_defs["form"] = "xml";
 
 			global $ext;
 
-			if ($redirect_after)
+			if (isset($redirect_after) && $redirect_after)
 			{
 				// if this variable has been set in extraids when showing the form, redirect to it
 				return $redirect_after;
@@ -908,11 +801,9 @@ $orb_defs["form"] = "xml";
 
 			while (list($k,$v) = each($row))
 			{
-				$v2 = unserialize($v);
-				if (is_array($v2))
-				{
-					$v = $v2;
-				}
+				// pildi elementide inff on arrays serializetult
+				// selle unserializeme hiljem, elemendi juures alles
+
 				if (substr($k,0,3) == "el_")
 				{
 					$this->entry[substr($k,3)] = $v;
@@ -921,11 +812,11 @@ $orb_defs["form"] = "xml";
 
 			$this->vars(array("entry_id" => $entry_id));
 
-			for ($row=0; $row < $this->arr[rows]; $row++)
+			for ($row=0; $row < $this->arr["rows"]; $row++)
 			{
-				for ($col=0; $col < $this->arr[cols]; $col++)
+				for ($col=0; $col < $this->arr["cols"]; $col++)
 				{
-					$this->arr[contents][$row][$col] -> set_entry(&$this->entry, $entry_id);
+					$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $entry_id);
 				};
 			};
 		}
@@ -943,7 +834,7 @@ $orb_defs["form"] = "xml";
 
 			$this->load_output($op_id);
 			$this->load_entry($entry_id);
-			if ($admin)
+			if (isset($admin) && $admin)
 			{
 				$this->read_template("show_user_admin.tpl");
 
@@ -953,7 +844,7 @@ $orb_defs["form"] = "xml";
 													FROM objects 
 													WHERE objects.class_id = 13 AND objects.status != 0 AND objects.last = $this->id");
 				while ($row = $this->db_next())
-					$menunames[$row[oid]] = $row[name];
+					$menunames[$row["oid"]] = $row["name"];
 
 
 				$actioncache = array(); $ac = ""; $acc = "";
@@ -962,14 +853,14 @@ $orb_defs["form"] = "xml";
 												 WHERE form_id = $this->id AND type='move_filled'");
 				while ($row = $this->db_next())
 				{
-					$row[data] = unserialize($row[data]);
-					if (is_array($row[data]))
+					$row["data"] = unserialize($row["data"]);
+					if (is_array($row["data"]))
 					{
-						$this->vars(array("colspan" => sizeof($row[data]),"action_name" => $row[name]));
+						$this->vars(array("colspan" => sizeof($row["data"]),"action_name" => $row["name"]));
 						$ac.=$this->parse("ACTIONS");
 
-						reset($row[data]);
-						while (list($k,$v) = each($row[data]))
+						reset($row["data"]);
+						while (list($k,$v) = each($row["data"]))
 						{
 							$this->vars(array("action_target" => $k,"action_target_name" => $menunames[$k],"parent" => $k,"op_id" => $output_id));
 							$acc.=$this->parse("ACTION_LINE");
@@ -980,7 +871,7 @@ $orb_defs["form"] = "xml";
 			}
 			else
 			{
-				if ($no_html)
+				if (isset($no_html) && $no_html)
 				{
 					$this->read_template("show_user_nohtml.tpl");
 				}
@@ -995,36 +886,39 @@ $orb_defs["form"] = "xml";
 //			$style_cache = array();
 //			$styles_loaded = array();
 
-			if (($def_style = $this->output[def_style]) == 0)
-				$def_style = $this->arr[def_style];
+			if (($def_style = (isset($this->output["def_style"]) ? $this->output["def_style"] : 0)) == 0)
+			{
+				$def_style = $this->arr["def_style"];
+			}
 
 			$t_style = new style();
 
-			for ($row = 0; $row < $this->output[rows]; $row++)
+			for ($row = 0; $row < $this->output["rows"]; $row++)
 			{
 				$html="";
-				for ($col = 0; $col < $this->output[cols]; $col++)
+				for ($col = 0; $col < $this->output["cols"]; $col++)
 				{
-					if (!($arr = $this->get_spans($row, $col, $this->output[map], $this->output[rows], $this->output[cols])))
+					if (!($arr = $this->get_spans($row, $col, $this->output["map"], $this->output["rows"], $this->output["cols"])))
 						continue;
-
-					$style_id = $this->output[$arr[r_row]][$arr[r_col]][style];
+	
+					$op_cell = isset($this->output[$arr["r_row"]][$arr["r_col"]]) ? $this->output[$arr["r_row"]][$arr["r_col"]] : array("style" => 0, "el_count" => 0, "els" => array());
+					$style_id = $op_cell["style"];
 					if ($style_id == 0)
 					{
 						$style_id = $def_style;
 					}
 
 					$chtml= "";
-					for ($i=0; $i < $this->output[$arr[r_row]][$arr[r_col]][el_count]; $i++)
+					for ($i=0; $i < $op_cell["el_count"]; $i++)
 					{
-						$el = $this->get_element_by_id($this->output[$arr[r_row]][$arr[r_col]][els][$i]);
+						$el = $this->get_element_by_id($op_cell["els"][$i]);
 						if ($el)
 						{
 							$chtml.= $el->gen_show_html();
 						}
 					}
 
-					if ($no_html)
+					if (isset($no_html) && $no_html)
 					{
 						$html.=$chtml." ";
 					}
@@ -1032,53 +926,38 @@ $orb_defs["form"] = "xml";
 					{
 						if ($style_id != 0)
 						{
-							$html.= $t_style->get_cell_begin_str($style_id,$arr[colspan],$arr[rowspan]).$chtml.$t_style->get_cell_end_str($style_id)."</td>";
+							$html.= $t_style->get_cell_begin_str($style_id,$arr["colspan"],$arr["rowspan"]).$chtml.$t_style->get_cell_end_str($style_id)."</td>";
 						}
 						else
 						{
-							$html.= "<td colspan=\"".$arr[colspan]."\" rowspan=\"".$arr[rowspan]."\">".$chtml."</td>";
+							$html.= "<td colspan=\"".$arr["colspan"]."\" rowspan=\"".$arr["rowspan"]."\">".$chtml."</td>";
 						}
 					}
 				}
 				$this->vars(array("COL" => $html));
 				$this->parse("LINE");
 			}
-			$this->vars(array("form_border"				=> ($this->output[border] != "" ? " BORDER='".$this->output[border]."'" : ""),
-												"form_bgcolor"			=> ($this->output[bgcolor] !="" ? " BGCOLOR='".$this->output[bgcolor]."'" : ""),
-												"form_cellpadding"	=> ($this->output[cellpadding] != "" ? " CELLPADDING='".$this->output[cellpadding]."'" : ""),
-												"form_cellspacing"	=> ($this->output[cellspacing] != "" ? " CELLSPACING='".$this->output[cellspacing]."'" : ""),
-												"form_height"				=> ($this->output[height] != "" ? " HEIGHT='".$this->output[height]."'" : ""),
-												"form_width"				=> ($this->output[width] != "" ? " WIDTH='".$this->output[width]."'" : "" ),
-												"form_height"				=> ($this->output[height] != "" ? " HEIGHT='".$this->output[height]."'" : "" ),
-												"form_vspace"				=> ($this->output[vspace] != "" ? " VSPACE='".$this->output[vspace]."'" : ""),
-												"form_hspace"				=> ($this->output[hspace] != "" ? " HSPACE='".$this->output[hspace]."'" : "")));
+			$this->vars(array(
+				"form_border"	=> (isset($this->output["border"]) && $this->output["border"] != "" ? " BORDER='".$this->output["border"]."'" : ""),
+				"form_bgcolor"	=> (isset($this->output["bgcolor"]) && $this->output["bgcolor"] !="" ? " BGCOLOR='".$this->output["bgcolor"]."'" : ""),
+				"form_cellpadding"	=> (isset($this->output["cellpadding"]) && $this->output["cellpadding"] != "" ? " CELLPADDING='".$this->output["cellpadding"]."'" : ""),
+				"form_cellspacing"	=> (isset($this->output["cellspacing"]) && $this->output["cellspacing"] != "" ? " CELLSPACING='".$this->output["cellspacing"]."'" : ""),
+				"form_height"	=> (isset($this->output["height"]) && $this->output["height"] != "" ? " HEIGHT='".$this->output["height"]."'" : ""),
+				"form_width"	=> (isset($this->output["width"]) && $this->output["width"] != "" ? " WIDTH='".$this->output["width"]."'" : "" ),
+				"form_height"	=> (isset($this->output["height"]) && $this->output["height"] != "" ? " HEIGHT='".$this->output["height"]."'" : "" ),
+				"form_vspace"	=> (isset($this->output["vspace"]) && $this->output["vspace"] != "" ? " VSPACE='".$this->output["vspace"]."'" : ""),
+				"form_hspace"	=> (isset($this->output["hspace"]) && $this->output["hspace"] != "" ? " HSPACE='".$this->output["hspace"]."'" : "")
+			));
 			return $this->parse();
 		}
 
-		function save_cells()
-		{
-			for ($row = 0; $row < $this->arr[rows]; $row++)
-				for ($col = 0; $col < $this->arr[cols]; $col++)
-					$this->arr[ceontents][$row][$col]->save_final();
-		}
-
-		////
+ 		////
 		// !Merge the cell above cell($row,$col) in form $id
 		function exp_cell_up($arr)
 		{
 			extract($arr);
 			$this->load($id);
-
-			// here we don't need to find the upper bound, because this always is the upper bound
-
-			if ($row > 0)
-			{
-				// first we must find out the colspan of the current cell and set all the cell above that one to the correct values in the map
-				for ($a=0; $a < $this->arr[cols]; $a++)
-					if ($this->arr[map][$row][$a] == $this->arr[map][$row][$col])
-						$this->arr[map][$row-1][$a] = $this->arr[map][$row][$col];		// expand the area
-			}
-
+			$this->map_exp_up($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$row,$col);
 			$this->save();
 			$orb = $this->mk_orb("change", array("id" => $this->id));
 			header("Location: $orb");
@@ -1091,22 +970,7 @@ $orb_defs["form"] = "xml";
 		{
 			extract($arr);
 			$this->init($id);
-
-			// here we must first find the lower bound for the area being expanded and use that instead the $row, because
-			// that is an arbitrary position in the area really.
-			for ($i=$row; $i < $this->arr[rows]; $i++)
-				if ($this->arr[map][$i][$col] == $this->arr[map][$row][$col])
-					$r=$i;
-				else
-					break;
-
-			if (($r+1) < $this->arr[rows])
-			{
-				for ($a=0; $a < $this->arr[cols]; $a++)
-					if ($this->arr[map][$row][$a] == $this->arr[map][$row][$col])
-						$this->arr[map][$r+1][$a] = $this->arr[map][$row][$col];		// expand the area
-			}
-
+			$this->map_exp_down($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$row,$col);
 			$this->save();
 			$orb = $this->mk_orb("change", array("id" => $this->id));
 			header("Location: $orb");
@@ -1119,16 +983,7 @@ $orb_defs["form"] = "xml";
 		{
 			extract($arr);
 			$this->load($id);
-
-			// again, this is the left bound, so we don't need to find it
-
-			if ($col > 0)
-			{
-				for ($a =0; $a < $this->arr[rows]; $a++)
-					if ($this->arr[map][$a][$col] == $this->arr[map][$row][$col])
-						$this->arr[map][$a][$col-1] = $this->arr[map][$row][$col];		// expand the area
-			}
-
+			$this->map_exp_left($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$row,$col);
 			$this->save();
 			$orb = $this->mk_orb("change", array("id" => $this->id));
 			header("Location: $orb");
@@ -1141,22 +996,7 @@ $orb_defs["form"] = "xml";
 		{
 			extract($arr);
 			$this->load($id);
-
-			// here we must first find the right bound for the area being expanded and use that instead the $row, because
-			// that is an arbitrary position in the area really.
-			for ($i=$col; $i < $this->arr[cols]; $i++)
-				if ($this->arr[map][$row][$i] == $this->arr[map][$row][$col])
-					$r=$i;
-				else
-					break;
-
-			if (($r+1) < $this->arr[cols])
-			{
-				for ($a =0; $a < $this->arr[rows]; $a++)
-					if ($this->arr[map][$a][$r] == $this->arr[map][$row][$r])
-						$this->arr[map][$a][$r+1] = $this->arr[map][$row][$r];		// expand the area
-			}
-
+			$this->map_exp_right($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$row,$col);
 			$this->save();
 			$orb = $this->mk_orb("change", array("id" => $id));
 			header("Location: $orb");
@@ -1168,7 +1008,7 @@ $orb_defs["form"] = "xml";
 			if ($this->type == 2)
 				return "search_results";
 
-			switch($this->arr[after_submit])
+			switch($this->arr["after_submit"])
 			{
 				case 1:
 					return "edit";
@@ -1181,13 +1021,13 @@ $orb_defs["form"] = "xml";
 
 		function get_ae_location()
 		{
-			return $this->arr[after_submit_link];
+			return $this->arr["after_submit_link"];
 		}
 
 		function ae_text()
 		{
 			$this->read_template("ae_text.tpl");
-			$this->vars(array("ae_text" => $this->arr[after_submit_text]));
+			$this->vars(array("ae_text" => $this->arr["after_submit_text"]));
 			return $this->parse();
 		}
 
@@ -1197,52 +1037,7 @@ $orb_defs["form"] = "xml";
 		{
 			extract($arr);
 			$this->load($id);
-
-			$lbound = -1;
-			for ($i=0; $i < $this->arr[cols] && $lbound==-1; $i++)
-				if ($this->arr[map][$row][$i] == $this->arr[map][$row][$col])
-					$lbound = $i;
-
-			$rbound = -1;
-			for ($i=$lbound; $i < $this->arr[cols] && $rbound==-1; $i++)
-				if ($this->arr[map][$row][$i] != $this->arr[map][$row][$col])
-					$rbound = $i-1;
-
-			if ($rbound == -1)
-				$rbound = $this->arr[cols]-1;
-
-			$nm = array();
-			$center = ($rbound+$lbound)/2;
-
-			for ($i=0; $i < $this->arr[rows]; $i++)
-				for ($a=0; $a < $this->arr[cols]; $a++)
-					if ($this->arr[map][$i][$a] == $this->arr[map][$row][$col])
-					{
-						if ($this->arr[map][$i][$a][col] < $center)	
-						{
-							// the hotspot of the cell is on the left of the splitter
-							if ($a <= $center)	
-								// and we currently are also on the left side then leave it be
-								$nm[$i][$a] = $this->arr[map][$i][$a];
-							else
-								// and we are on the right side choose a new one
-								$nm[$i][$a] = array("row" => $this->arr[map][$i][$a][row], "col" => floor($center)+1);
-						}
-						else
-						{
-							// the hotspot of the cell is on the right of the splitter
-							if ($a <= $center)
-								// and we are on the left side choose a new one
-								$nm[$i][$a] = array("row" => $this->arr[map][$i][$a][row], "col" => $lbound);
-							else
-								// if we are on the same side, use the current value
-								$nm[$i][$a] = $this->arr[map][$i][$a];
-						}	
-					}
-					else
-						$nm[$i][$a] = $this->arr[map][$i][$a];
-
-			$this->arr[map] = $nm;
+			$this->map_split_ver($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$row,$col);
 			$this->save();
 			$orb = $this->mk_orb("change", array("id" => $id));
 			header("Location: $orb");
@@ -1255,159 +1050,9 @@ $orb_defs["form"] = "xml";
 		{
 			extract($arr);
 			$this->load($id);
-
-			$ubound = -1;
-			for ($i=0; $i < $this->arr[rows] && $ubound==-1; $i++)
-				if ($this->arr[map][$i][$col] == $this->arr[map][$row][$col])
-					$ubound = $i;
-
-			$lbound = -1;
-			for ($i=$ubound; $i < $this->arr[rows] && $lbound==-1; $i++)
-				if ($this->arr[map][$i][$col] != $this->arr[map][$row][$col])
-					$lbound = $i-1;
-
-			if ($lbound == -1)
-				$lbound = $this->arr[rows]-1;
-
-			$nm = array();
-			$center = ($ubound+$lbound)/2;
-
-			for ($i=0; $i < $this->arr[rows]; $i++)
-				for ($a=0; $a < $this->arr[cols]; $a++)
-					if ($this->arr[map][$i][$a] == $this->arr[map][$row][$col])
-					{
-						if ($this->arr[map][$i][$a][row] < $center)	
-						{
-							// the hotspot of the cell is above the splitter
-							if ($i <= $center)	
-								// and we currently are also above then leave it be
-								$nm[$i][$a] = $this->arr[map][$i][$a];
-							else
-								// and we are below choose a new one
-								$nm[$i][$a] = array("row" => floor($center)+1, "col" => $this->arr[map][$i][$a][col]);
-						}
-						else
-						{
-							// the hotspot of the cell is below the splitter
-							if ($i <= $center)
-								// but we are above, so make new
-								$nm[$i][$a] = array("row" => $ubound, "col" => $this->arr[map][$i][$a][col]);
-							else
-								// if we are on the same side, use the current value
-								$nm[$i][$a] = $this->arr[map][$i][$a];
-						}	
-					}
-					else
-						$nm[$i][$a] = $this->arr[map][$i][$a];
-
-			$this->arr[map] = $nm;
+			$this->map_split_hor($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$row,$col);
 			$this->save();
 			$orb = $this->mk_orb("change", array("id" => $id));
-			header("Location: $orb");
-			return $orb;
-		}
-
-		////
-		// !merges the cell ($row, $col) in output $op_id of form $id with the cell immediately above it
-		function op_exp_up($arr)
-		{
-			extract($arr);
-			$this->load($id);
-			$this->load_output($op_id);
-
-			// here we don't need to find the upper bound, because this always is the upper bound
-
-			if ($row > 0)
-			{
-				// first we must find out the colspan of the current cell and set all the cell above that one to the correct values in the map
-				for ($a=0; $a < $this->output[cols]; $a++)
-					if ($this->output[map][$row][$a] == $this->output[map][$row][$col])
-						$this->output[map][$row-1][$a] = $this->output[map][$row][$col];		// expand the area
-			}
-
-			$this->save_output($op_id);
-			$orb = $this->mk_orb("change_op", array("id" => $id, "op_id" => $op_id));
-			header("Location: $orb");
-			return $orb;
-		}
-
-		////
-		// !merges the cell ($row,$col) in output $op_id of form $id with the cell below it
-		function op_exp_down($arr)
-		{
-			extract($arr);
-			$this->load($id);
-			$this->load_output($op_id);
-
-			// here we must first find the lower bound for the area being expanded and use that instead the $row, because
-			// that is an arbitrary position in the area really.
-			for ($i=$row; $i < $this->output[rows]; $i++)
-				if ($this->output[map][$i][$col] == $this->output[map][$row][$col])
-					$r=$i;
-				else
-					break;
-
-			if (($r+1) < $this->output[rows])
-			{
-				for ($a=0; $a < $this->output[cols]; $a++)
-					if ($this->output[map][$row][$a] == $this->output[map][$row][$col])
-						$this->output[map][$r+1][$a] = $this->output[map][$row][$col];		// expand the area
-			}
-
-			$this->save_output($op_id);
-			$orb = $this->mk_orb("change_op", array("id" => $id, "op_id" => $op_id));
-			header("Location: $orb");
-			return $orb;
-		}
-
-		////
-		// !merges the cell ($row,$col) in output $op_id of form $id with the cell to the left of it
-		function op_exp_left($arr)
-		{
-			extract($arr);
-			$this->load($id);
-			$this->load_output($op_id);
-
-			// again, this is the left bound, so we don't need to find it
-
-			if ($col > 0)
-			{
-				for ($a =0; $a < $this->output[rows]; $a++)
-					if ($this->output[map][$a][$col] == $this->output[map][$row][$col])
-						$this->output[map][$a][$col-1] = $this->output[map][$row][$col];		// expand the area
-			}
-
-			$this->save_output($op_id);
-			$orb = $this->mk_orb("change_op", array("id" => $id, "op_id" => $op_id));
-			header("Location: $orb");
-			return $orb;
-		}
-
-		////
-		// !merges the cell ($row,$col) in output $op_id of form $id with the cell to the left of it
-		function op_exp_right($arr)
-		{
-			extract($arr);
-			$this->load($id);
-			$this->load_output($op_id);
-
-			// here we must first find the right bound for the area being expanded and use that instead the $row, because
-			// that is an arbitrary position in the area really.
-			for ($i=$col; $i < $this->output[cols]; $i++)
-				if ($this->output[map][$row][$i] == $this->output[map][$row][$col])
-					$r=$i;
-				else
-					break;
-
-			if (($r+1) < $this->output[cols])
-			{
-				for ($a =0; $a < $this->output[rows]; $a++)
-					if ($this->output[map][$a][$r] == $this->output[map][$row][$r])
-						$this->output[map][$a][$r+1] = $this->output[map][$row][$r];		// expand the area
-			}
-
-			$this->save_output($op_id);
-			$orb = $this->mk_orb("change_op", array("id" => $id, "op_id" => $op_id));
 			header("Location: $orb");
 			return $orb;
 		}
@@ -1439,18 +1084,18 @@ $orb_defs["form"] = "xml";
 				$ol = ""; 
 				while ($orow = $this->db_next())
 				{
-					$this->vars(array("op_id"				=> $orow[id], 
-														"op_name"			=> $orow[name], 
-														"op_selected" => ($this->arr[search_outputs][$row[id]] == $orow[id] ? "SELECTED" : "")));
+					$this->vars(array("op_id"				=> $orow["id"], 
+														"op_name"			=> $orow["name"], 
+														"op_selected" => ($this->arr["search_outputs"][$row["id"]] == $orow["id"] ? "SELECTED" : "")));
 					$ol.=$this->parse("OP_ITEM");
 				}
 
-				$this->vars(array("form_name"			=> $row[name], 
-													"form_comment"	=> $row[comment], 
-													"form_location" => $row[parent], 
-													"form_id"				=> $row[id],
+				$this->vars(array("form_name"			=> $row["name"], 
+													"form_comment"	=> $row["comment"], 
+													"form_location" => $row["parent"], 
+													"form_id"				=> $row["id"],
 													"row"						=> $cnt,
-													"checked"				=> ($this->arr[search_from][$row[id]] == 1 ? "CHECKED" : ""),
+													"checked"				=> ($this->arr["search_from"][$row["id"]] == 1 ? "CHECKED" : ""),
 													"OP_ITEM"				=> $ol));
 				$this->parse("LINE");
 				$this->parse("SELLINE");
@@ -1472,14 +1117,14 @@ $orb_defs["form"] = "xml";
 			extract($arr);
 			$this->load($id);
 
-			$this->arr[search_from] = array();
+			$this->arr["search_from"] = array();
 			while( list($k,$v) = each(&$arr))
 			{
 				if (substr($k,0,3) == "ch_")
-					$this->arr[search_from][substr($k,3)] = $v;
+					$this->arr["search_from"][substr($k,3)] = $v;
 				else
 				if (substr($k,0,4) == "sel_")
-					$this->arr[search_outputs][substr($k,4)] = $v;
+					$this->arr["search_outputs"][substr($k,4)] = $v;
 			}
 			
 			$this->save();
@@ -1520,11 +1165,11 @@ $orb_defs["form"] = "xml";
 				// loop through all the elements of this form 
 				reset($els);
 				while( list(,$el) = each($els))
-					if ($el->arr[linked_form] == $id)	// and use only the elements that are members of the current form in the query
+					if ($el->arr["linked_form"] == $id)	// and use only the elements that are members of the current form in the query
 
 						// oh la la
 						if ($this->entry[$el->get_id()] != "")	
-							$query.= "AND el_".$el->arr[linked_element]." like '%".$this->entry[$el->get_id()]."%' ";
+							$query.= "AND el_".$el->arr["linked_element"]." like '%".$this->entry[$el->get_id()]."%' ";
 
 				if ($query == "")
 					$query = "SELECT * FROM form_".$id."_entries";
@@ -1532,7 +1177,7 @@ $orb_defs["form"] = "xml";
 				$matches = array();
 				$this->db_query($query);
 				while ($row = $this->db_next())
-					$matches[] = $row[id];
+					$matches[] = $row["id"];
 
 				$ret[$id] = $matches;
 			}
@@ -1551,7 +1196,7 @@ $orb_defs["form"] = "xml";
 				while (list(,$eid) = each($v))
 				{
 					$t->reset();
-					$html.=$t->show(array("id" => $fid, "entry_id" => $eid, "op_id" => $this->arr[search_outputs][$fid]));
+					$html.=$t->show(array("id" => $fid, "entry_id" => $eid, "op_id" => $this->arr["search_outputs"][$fid]));
 				}
 			}
 		
@@ -1612,9 +1257,9 @@ $orb_defs["form"] = "xml";
 		{
 			extract($arr);
 			$this->read_template("objects.tpl");
-			$this->db_query("SELECT form_id FROM form_elements WHERE id = $id");
+			$this->db_query("SELECT form_id FROM element2form WHERE el_id = $id");
 			$el_row = $this->db_next();
-			$form_id = $el_row[form_id];
+			$form_id = $el_row["form_id"];
 			
 			global $sortby;
 			if ($sortby == "")
@@ -1628,8 +1273,8 @@ $orb_defs["form"] = "xml";
 			$arr = array();
 			reset($class_defs);
 			while (list($id,$ar) = each($class_defs))
-				if ($ar[can_add])	// only object types that can be added anywhere
-					$arr[$id] = $ar[name];
+				if ($ar["can_add"])	// only object types that can be added anywhere
+					$arr[$id] = $ar["name"];
 			$this->vars(array("parent" => $parent,"types" => $this->option_list(0,$arr)));
 			$this->vars(array("ADD_CAT" => "","form_id" => $form_id));
 
@@ -1642,20 +1287,20 @@ $orb_defs["form"] = "xml";
 			$this->db_query("SELECT objects.* FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE objects.class_id = ".CL_FORM_ENTRY." AND objects.status != 0 AND form_entries.form_id = $form_id ORDER BY $sortby $order");
 			while ($row = $this->db_next())
 			{
-				$this->dequote(&$row[name]);
-				$inf = $class_defs[$row[class_id]];
-				$this->vars(array("name"				=> $row[name],
-													"oid"					=> $row[oid], 
-													"order"				=> $row[jrk], 
-													"active"			=> ($row[status] == 2 ? "CHECKED" : ""),
-													"active2"			=> $row[status],
-													"modified"		=> $this->time2date($row[modified],2),
-													"modifiedby"	=> $row[modifiedby],
-													"icon"				=> $m->get_icon_url($row[class_id],$row[name]),
-													"type"				=> $GLOBALS["class_defs"][$row[class_id]][name],
-													"change"			=> $this->mk_orb("change", array("id" => $row[oid], "parent" => $row[parent]), $inf[file])));
-				$this->vars(array("NFIRST" => $this->can("order",$row[oid]) ? $this->parse("NFIRST") : "",
-													"CAN_ACTIVE" => $this->can("active",$row[oid]) ? $this->parse("CAN_ACTIVE") : ""));
+				$this->dequote(&$row["name"]);
+				$inf = $class_defs[$row["class_id"]];
+				$this->vars(array("name"				=> $row["name"],
+													"oid"					=> $row["oid"], 
+													"order"				=> $row["jrk"], 
+													"active"			=> ($row["status"] == 2 ? "CHECKED" : ""),
+													"active2"			=> $row["status"],
+													"modified"		=> $this->time2date($row["modified"],2),
+													"modifiedby"	=> $row["modifiedby"],
+													"icon"				=> $m->get_icon_url($row["class_id"],$row["name"]),
+													"type"				=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
+													"change"			=> $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $inf["file"])));
+				$this->vars(array("NFIRST" => $this->can("order",$row["oid"]) ? $this->parse("NFIRST") : "",
+													"CAN_ACTIVE" => $this->can("active",$row["oid"]) ? $this->parse("CAN_ACTIVE") : ""));
 				$l.=$this->parse("LINE");
 			}
 
@@ -1683,7 +1328,7 @@ $orb_defs["form"] = "xml";
 		{
 			extract($arr);
 			$this->load($id);
-			return $this->arr[contents][$row][$col]->admin_cell();
+			return $this->arr["contents"][$row][$col]->admin_cell();
 		}
  
 		////
@@ -1692,7 +1337,7 @@ $orb_defs["form"] = "xml";
 		{
 			extract($arr);
 			$this->load($id);
-			$ret = $this->arr[contents][$row][$col]->add_element($wizard_step,&$this);
+			$ret = $this->arr["contents"][$row][$col]->add_element($wizard_step,&$this);
 			if ($ret == false)
 			{
 				return $this->mk_orb("admin_cell", array("id" => $this->id, "row" => $row, "col" => $col));
@@ -1721,7 +1366,7 @@ $orb_defs["form"] = "xml";
 		{
 			extract($arr);
 			$this->load($id);
-			return $this->arr[contents][$row][$col]->pickstyle();
+			return $this->arr["contents"][$row][$col]->pickstyle();
 		}
 
 		////
@@ -1731,7 +1376,7 @@ $orb_defs["form"] = "xml";
 			$this->dequote(&$arr);
 			extract($arr);
 			$this->load($id);
-			$this->arr[contents][$row][$col]->set_style($style,&$this);
+			$this->arr["contents"][$row][$col]->set_style($style,&$this);
 			$this->save();
 			return $this->mk_orb("admin_cell", array("id" => $this->id, "row" => $row, "col" => $col));
 		}
@@ -1896,11 +1541,11 @@ $orb_defs["form"] = "xml";
 
 			if (!($r == $row && $c == $col))
 			{
-				$this->arr[elements][$r][$c][$el_id] = $this->arr[elements][$row][$col][$el_id];
-				unset($this->arr[elements][$row][$col][$el_id]);
-				if (!is_array($this->arr[elements][$row][$col]))
+				$this->arr["elements"][$r][$c][$el_id] = $this->arr["elements"][$row][$col][$el_id];
+				unset($this->arr["elements"][$row][$col][$el_id]);
+				if (!is_array($this->arr["elements"][$row][$col]))
 				{
-					$this->arr[elements][$row][$col] = array();
+					$this->arr["elements"][$row][$col] = array();
 				}
 				$this->save();
 			}
@@ -1971,12 +1616,12 @@ $orb_defs["form"] = "xml";
 			if (!($cnt = $this->db_next()))
 				$this->raise_error("form->metainfo(): weird error!", true);
 
-			$this->vars(array("created"			=> $this->time2date($row[created],2), 
-												"created_by"	=> $row[createdby],
-												"modified"		=> $this->time2date($row[modified],2),
-												"modified_by"	=> $row[modifiedby],
-												"views"				=> $row[hits],
-												"num_entries"	=> $cnt[cnt],
+			$this->vars(array("created"			=> $this->time2date($row["created"],2), 
+												"created_by"	=> $row["createdby"],
+												"modified"		=> $this->time2date($row["modified"],2),
+												"modified_by"	=> $row["modifiedby"],
+												"views"				=> $row["hits"],
+												"num_entries"	=> $cnt["cnt"],
 												"position"		=> $ret,
 												"reforb"			=> $this->mk_reforb("submit_metainfo", array("id" => $this->id)),
 												"form_name"		=> $row["name"],
@@ -2133,6 +1778,28 @@ $orb_defs["form"] = "xml";
 			if ($str != "" && $entry_id)
 			{
 				$this->db_query("UPDATE form_".$form_id."_entries SET $str WHERE id = $entry_id");
+			}
+		}
+
+		function convels()
+		{
+			// convert from old representation of element -> form relations to the new and better one
+			$this->db_query("SELECT form_elements.*,objects.* FROM form_elements LEFT JOIN objects ON objects.oid = form_elements.id WHERE objects.status != 0");
+			while ($row = $this->db_next())
+			{
+				$this->save_handle();
+				echo "element ".$row["name"]." id ".$row["oid"]."<br>";
+				$fa = unserialize($row["forms"]);
+				if (is_array($fa))
+				{
+					foreach($fa as $fid)
+					{
+						$this->db_query("INSERT INTO element2form(el_id,form_id) VALUES(".$row["oid"].",$fid)");
+						echo "in form $fid <br>";
+					}
+				}
+				flush();
+				$this->restore_handle();
 			}
 		}
 	};	// class ends

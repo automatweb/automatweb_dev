@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.22 2001/06/13 19:15:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.23 2001/06/14 08:47:39 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
 
 // muh? mes number?
 // seep see nummer mille kaudu tuntakse 2ra kui tyyp klikkid kodukataloog/SHARED_FOLDERS peale
-define(SHARED_FOLDER_ID,2147483648);
+define("SHARED_FOLDER_ID",2147483648);
 
 session_register("cut_objects");
 session_register("copied_objects");
@@ -23,11 +23,13 @@ classload("cache","validator","defs");
 			$this->tpl_init("automatweb/menuedit");
 			$this->db_init();
 			$this->cache = new cache;
+			$this->feature_icons_loaded = false;
+			$this->active_doc = false;
 		}
 
 		function mk_folders($parent,$str)
 		{
-			if (!is_array($this->menucache[$parent]))
+			if (!isset($this->menucache[$parent]) || !is_array($this->menucache[$parent]))
 				return;
 
 			reset($this->menucache[$parent]);
@@ -52,7 +54,7 @@ classload("cache","validator","defs");
 				$sep = ($str == "" ? "" : " / ");
 				$tstr = $str.$sep.$name;
 
-				if (is_array($this->extrarr[$v["data"]["oid"]]))
+				if (isset($v["data"]["oid"]) && isset($this->extrarr[$v["data"]["oid"]]) && is_array($this->extrarr[$v["data"]["oid"]]))
 				{
 					reset($this->extrarr[$v["data"]["oid"]]);
 					while (list(,$v2) = each($this->extrarr[$v["data"]["oid"]]))
@@ -90,7 +92,7 @@ classload("cache","validator","defs");
 			while ($row = $this->db_next())
 			{
 				$this->save_handle();
-				$this->rd($row[oid]);
+				$this->rd($row["oid"]);
 				$this->restore_handle();
 			}
 
@@ -133,7 +135,7 @@ classload("cache","validator","defs");
 			{
 				$cp[] = $GLOBALS["act_per_id"];
 			};
-			if ($GLOBALS["page"])
+			if (isset($GLOBALS["page"]))
 			{
 				$cp[] = $GLOBALS["page"];
 			}
@@ -171,22 +173,19 @@ classload("cache","validator","defs");
 			}
 			return $res;
 		}
-				
+		
+		////
+		// !da thing. draws the site 
+		// params: section, text, docid, strip_img, template, homedir, special, format, vars, no_left_pane, no_right_pane
+		// niisiis. vars array peaks sisaldama mingeid pre-parsed html t¸kke,
+		// mis vıivad tulla ntx kusagilt orbi klassi seest vtm.
+		// array keydeks peaksid olema variabled template sees, mis siis asendatakse
+		// oma v‰‰rtustega
 		function _gen_site_html($params)
 		{
-			$section 	= $params["section"];
-			$text		= $params["text"];
-			$docid 		= $params["docid"];
-			$strip_img 	= $params["strip_img"];
-			$template 	= $params["template"] == "" ? "main.tpl" : $params["template"];
-			$homedir 	= $params["homedir"];
-			$special	= $params["special"];
-			$format 	= $params["format"];
-			// niisiis. vars array peaks sisaldama mingeid pre-parsed html t¸kke,
-			// mis vıivad tulla ntx kusagilt orbi klassi seest vtm.
-			// array keydeks peaksid olema variabled template sees, mis siis asendatakse
-			// oma v‰‰rtustega
-			$vars 		= $params["vars"];
+			extract($params);	
+			$template = isset($template) && $template != "" ? $template : "main.tpl";
+			$docid = isset($docid) ? $docid : 0;
 
 			// debuukimiseks
 			global $SITE_ID;
@@ -202,7 +201,7 @@ classload("cache","validator","defs");
 				$docid=$obj["brother_of"];
 			}
 
-			if ($format == "rss")
+			if (isset($format) && $format == "rss")
 			{
 				die($this->do_rdf($section,$obj,$format,$docid));
 			}
@@ -217,8 +216,8 @@ classload("cache","validator","defs");
 			$awt->start("menuedit_show");
 	
 			// by default show both panes.
-			$this->left_pane = $params["no_left_pane"] ? false : true;
-			$this->right_pane = $params["no_right_pane"] ? false : true;
+			$this->left_pane = (isset($no_left_pane) && $no_left_pane == true) ? false : true;
+			$this->right_pane = (isset($no_right_pane) && $no_right_pane == true) ? false : true;
 
 			// read all the menus and other necessary info into arrays from the database
 			$this->make_menu_caches();
@@ -249,7 +248,7 @@ classload("cache","validator","defs");
 			}
 			$this->vars(array(
 				"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
-				"sel_menu_image" => ($this->mar[$sel_menu_id]["img_url"] != "" ? "<img src='".$this->mar[$sel_menu_id]["img_url"]."' border='0'>" : ""),
+				"sel_menu_image" => (isset($this->mar[$sel_menu_id]["img_url"]) && $this->mar[$sel_menu_id]["img_url"] != "" ? "<img src='".$this->mar[$sel_menu_id]["img_url"]."' border='0'>" : ""),
 				"sel_menu_id" => $sel_menu_id
 			));
 			if (!$this->mar[$sel_menu_id]["left_pane"])
@@ -320,8 +319,9 @@ classload("cache","validator","defs");
 				global $menu_defs_v2,$frontpage;
 
 				$awt->start("menuedit_ver2");
-				if (is_array($menu_defs_v2))
+				if (isset($menu_defs_v2) && is_array($menu_defs_v2))
 				{
+					$this->level = 0;
 					reset($menu_defs_v2);
 					while (list($id,$name) = each($menu_defs_v2))
 					{
@@ -344,63 +344,63 @@ classload("cache","validator","defs");
 				// we build the subtemplate name from the name of the menu in the definition
 				$cur_menu = "";
 				$level = -1;
-				$pt = $row[oid];
+				$pt = $row["oid"];
 				// pt on parent?
 				while ($pt != $rootmenu && $pt > 1)
 				{
-					if ($this->mar[$pt][parent] == $rootmenu)
+					if ($this->mar[$pt]["parent"] == $rootmenu)
 					{
 						if (is_array($menu_defs[$pt]))
 						{
 							$cur_menu = $menu_defs[$pt];
-							$cur_menu[id] = $pt;
+							$cur_menu["id"] = $pt;
 						}
 					}
 
-					$pt = $this->mar[$pt][parent];
+					$pt = $this->mar[$pt]["parent"];
 					$level++;
 				}
 				// kach mingi kahtlase v‰‰rtusega h‰kk
-				$mn = "MENU_".$cur_menu[name]."_L".$level."_ITEM";	$ap = "";
+				$mn = "MENU_".$cur_menu["name"]."_L".$level."_ITEM";	$ap = "";
 				$outputs[$mn] .= "";
 				// fakk. GOTO ja selle derivatiivid imevad. Ja seda kohe sitta moodi
 				// we must only show menus that are marked to be shown
 
-				if ($row[mtype] != MN_CONTENT || $level < 1)
+				if ($row["mtype"] != MN_CONTENT || $level < 1)
 					continue;
 
-				if ($level > 1 && !in_array($row[parent],$path))
+				if ($level > 1 && !in_array($row["parent"],$path))
 					continue;
 
 				if (is_array($cur_menu))
 				{
 					// kas naidata menyyd, kui seal aktiivseid elemente pole? (hide_noact)
-					if ($row[hide_noact])
+					if ($row["hide_noact"])
 					{
 						// kaime ka alamdokud labi.
-						if (!$this->has_sub_dox($row[oid]))
+						if (!$this->has_sub_dox($row["oid"]))
 							continue;
 					}
 
 					// tshekime, et kui selle template sees on j2rgmise taseme template,
 					// siis joonistame selle enne valmis.
 					// see on sellex, et saax vibe-moodi asju teha, kus on k6ik menyyd kohe n2ha
-					$mmn = "MENU_".$cur_menu[name]."_L".($level+1)."_ITEM";
+					$mmn = "MENU_".$cur_menu["name"]."_L".($level+1)."_ITEM";
 					$mmmm = ""; //$mmmm2 = "";
 					if ($this->is_parent_tpl($mmn, $mn))
 					{
 						// make next level tuu
-						if (is_array($this->mpr[$row[oid]]))
+						if (is_array($this->mpr[$row["oid"]]))
 						{
-							reset($this->mpr[$row[oid]]);
-							while (list(,$mrow) = each($this->mpr[$row[oid]]))
+							reset($this->mpr[$row["oid"]]);
+							while (list(,$mrow) = each($this->mpr[$row["oid"]]))
 							{
 								$ap = "";
 								// niisiis. Kui menyyelemendil on link defineeritud
 								// siis kasutame seda
-								if ($mrow[link] != "")
+								if ($mrow["link"] != "")
 								{
-									$link = $mrow[link];
+									$link = $mrow["link"];
 								}
 								else
 								// kui mitte, siis
@@ -409,43 +409,43 @@ classload("cache","validator","defs");
 									// kasutame 
 									// a)aliast, kui see on olemas
 									// b)sektsiooni id-d 
-									$link .= ($mrow[alias] != "") ? $mrow[alias] : "index." . $ext . "/section=" . $mrow[oid];
+									$link .= ($mrow["alias"] != "") ? $mrow["alias"] : "index." . $ext . "/section=" . $mrow["oid"];
 								}
 								// hiljem voib-olla tekib tahtmine siia mingeid muid targeteid lisada?
 								$href_target = "_new";
-								$target = ($mrow[target] == 1) ? sprintf("target='%s'",$href_target) : "";
-								$this->vars(array(	"text" => $mrow[name],
+								$target = ($mrow["target"] == 1) ? sprintf("target='%s'",$href_target) : "";
+								$this->vars(array(	"text" => $mrow["name"],
 											"link" => $link,
 											"target" => $target,
-											"image"		=> ($mrow[img_url] != "" ? "<img src='".$mrow[img_url]."' border='0'>" : ""),
-											"section" => $mrow[oid]));
+											"image"		=> ($mrow["img_url"] != "" ? "<img src='".$mrow["img_url"]."' border='0'>" : ""),
+											"section" => $mrow["oid"]));
 								// if this is selected
-								if (in_array($mrow[oid],$path) && $mrow[clickable] == 1)
+								if (in_array($mrow["oid"],$path) && $mrow["clickable"] == 1)
 								{
 									$ap="_SEL";
 								};
-								if (($mmmm2 == "" && $mrow[mid] == 1))
+								if (($mmmm2 == "" && $mrow["mid"] == 1))
 								{
 									$ap.="_BEGIN";
 								};
-								if ($mrow[clickable] != 1)
+								if ($mrow["clickable"] != 1)
 								{
 									$ap.="_SEP";
 								};
-								if (is_array($this->mpr[$mrow[oid]]))
+								if (is_array($this->mpr[$mrow["oid"]]))
 								{
-									$hs = $this->parse("HAS_SUBITEMS_".$cur_menu[name]);
+									$hs = $this->parse("HAS_SUBITEMS_".$cur_menu["name"]);
 								}
 								else
 								{
-									$hs = $this->parse("NO_SUBITEMS_".$cur_menu[name]);
+									$hs = $this->parse("NO_SUBITEMS_".$cur_menu["name"]);
 								}
-								$this->vars(array("HAS_SUBITEMS_".$cur_menu[name] => $hs));
-								if ($mrow[mid] == 1)
+								$this->vars(array("HAS_SUBITEMS_".$cur_menu["name"] => $hs));
+								if ($mrow["mid"] == 1)
 								{
 									// need jobud tahavad, et keskmisi menyysid
 									// n2idatakse aint valitud menyyde all.
-									if (in_array($mrow[parent],$path))
+									if (in_array($mrow["parent"],$path))
 									{
 										$has_mid = true;
 										$mmmm2.=$this->parse($mmn."_MID".$ap);
@@ -464,23 +464,23 @@ classload("cache","validator","defs");
 					}
 					// ja et siis esimene tase.	
 					$ap = "";
-					if ($row[link] != "")
+					if ($row["link"] != "")
 					{
-						$link = $row[link];
+						$link = $row["link"];
 					}
 					else
 					{
 						$link = $GLOBALS["baseurl"] . "/";
-						$link .= ($row[alias] != "") ? $row[alias] : "index." . $ext . "/section=" . $row[oid];
+						$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
 					}
 					// hiljem voib-olla tekib tahtmine siia mingeid muid targeteid lisada?
 					$href_target = "_new";
-					$target = ($row[target] == 1) ? sprintf("target='%s'",$href_target) : "";
-					$this->vars(array(	"text" 		=> $row[name],
+					$target = ($row["target"] == 1) ? sprintf("target='%s'",$href_target) : "";
+					$this->vars(array(	"text" 		=> $row["name"],
 								"link" 		=> $link,
-								"section" 	=> $row[oid],
+								"section" 	=> $row["oid"],
 								"target" 	=> $target,
-								"image"		=> ($row[img_url] != "" ? "<img src='".$row[img_url]."' border='0'>" : "")));
+								"image"		=> ($row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
 
 					// if this is the first one
 					if ($outputs[$mn] == "" && $this->is_template($mn."_BEGIN"))
@@ -489,13 +489,13 @@ classload("cache","validator","defs");
 					};
 
 					// if this is selected
-					if (in_array($row[oid],$path) && $row[clickable] == 1)
+					if (in_array($row["oid"],$path) && $row["clickable"] == 1)
 					{
 						$ap.="_SEL";
-						$this->vars(array($mn."_TEXT" => $row[name]));
+						$this->vars(array($mn."_TEXT" => $row["name"]));
 					};
 
-					if ($row[clickable] != 1)
+					if ($row["clickable"] != 1)
 					{
 						$ap.="_SEP";
 					};
@@ -510,37 +510,37 @@ classload("cache","validator","defs");
 						$ap = "";
 					};
 
-					if (is_array($this->mpr[$row[oid]]))
+					if (is_array($this->mpr[$row["oid"]]))
 					{
-						$hs = $this->parse("HAS_SUBITEMS_".$cur_menu[name]);
+						$hs = $this->parse("HAS_SUBITEMS_".$cur_menu["name"]);
 					}
 					else
 					{
-						$hs = $this->parse("NO_SUBITEMS_".$cur_menu[name]);
+						$hs = $this->parse("NO_SUBITEMS_".$cur_menu["name"]);
 					}
-					$this->vars(array("HAS_SUBITEMS_".$cur_menu[name] => $hs));
+					$this->vars(array("HAS_SUBITEMS_".$cur_menu["name"] => $hs));
 
 					if ($this->is_parent_tpl("DOC_LINK",$mn))
 					{
 						// make a list of all documents under the menu
 						// and any other menus we must get the documents from
 						$ob = " jrk ";
-						if ($row[ndocs] > 0)
+						if ($row["ndocs"] > 0)
 						{
 							$ob = " objects.modified DESC ";
 						}
-						$sss = unserialize($row[sss]);
-						$sss[$row[oid]] = $row[oid];
+						$sss = unserialize($row["sss"]);
+						$sss[$row["oid"]] = $row["oid"];
 						$parstr = join(",",$sss);
 						$this->db_query("SELECT * FROM objects WHERE status = 2 AND class_id = ".CL_DOCUMENT." AND site_id = ".$GLOBALS["SITE_ID"]." AND parent IN($parstr) ORDER BY $ob");
 						$dl = "";
 						$cnt = 1;
 						while ($drow = $this->db_next())
 						{
-							if (!($row[ndocs] > 0 && $cnt > $row[ndocs]))
+							if (!($row["ndocs"] > 0 && $cnt > $row["ndocs"]))
 							{
-								$this->vars(array("link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$drow[oid], 
-																	"title" => $drow[name]));
+								$this->vars(array("link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$drow["oid"], 
+																	"title" => $drow["name"]));
 								$dl.=$this->parse("DOC_LINK");
 							}
 							$cnt ++;
@@ -551,7 +551,7 @@ classload("cache","validator","defs");
 					// paremat paani, siis topime menyyde vahele
 					// dokude leadid ka. issand kui kohutav.
 					// EEEK!
-					if ($GLOBALS["SITE_ID"] == 3 && $cur_menu[name] == "PAREM")
+					if ($GLOBALS["SITE_ID"] == 3 && $cur_menu["name"] == "PAREM")
 					{	
 						$awt->start("nn_parem");
 						// ja ongi nii.
@@ -561,19 +561,19 @@ classload("cache","validator","defs");
 						//$period = $per->rec_get_active_period($cur_menu[id]);
 						$periods = new db_periods(190);	// yeah. vasak menyy. ja ei koti.
 						$period = $periods->get_active_period(188);
-						if ($this->subs[$row[oid]] > 0) {
-							$did = $do->db_fetch_field("SELECT docid FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE objects.period = '$period' AND documents.yleval_paremal = 1 AND objects.status = 2 AND objects.parent = ".$row[oid]." AND objects.lang_id=".$GLOBALS["lang_id"],"docid");
-							$done = $do->gen_preview(array("docid" => $did, "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row[oid], 	"strip_img" => 1));
+						if ($this->subs[$row["oid"]] > 0) {
+							$did = $do->db_fetch_field("SELECT docid FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE objects.period = '$period' AND documents.yleval_paremal = 1 AND objects.status = 2 AND objects.parent = ".$row["oid"]." AND objects.lang_id=".$GLOBALS["lang_id"],"docid");
+							$done = $do->gen_preview(array("docid" => $did, "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row["oid"], 	"strip_img" => 1));
 							$this->vars(array("lugu" => $done));
 							$outputs[$mn] .= $this->parse($mn.$ap);
 						};
 						$awt->stop("nn_parem");
 					} 
 					else 
-					if ($row[mid] == 1)
+					if ($row["mid"] == 1)
 					{
 						// need jobud tahavad, et keskmisi menyysid n2idatakse aint valitud menyyde all.
-						if (in_array($row[parent],$path) && $this->is_template($mn.$ap."_MID") && $mmmm2 == "")
+						if (in_array($row["parent"],$path) && $this->is_template($mn.$ap."_MID") && $mmmm2 == "")
 						{
 							$ap.="_MID";
 							$midd.=$this->parse($mn.$ap);
@@ -643,7 +643,6 @@ classload("cache","validator","defs");
 				"uid" => $GLOBALS["uid"], 
 				"date" => $this->time2date(time(), 2),
 				"date2" => $this->time2date(time(), 8),
-				"PRINTANDSEND" => $PRINTANDSEND,
 				"CHANGEDOCUMENT" => $this->active_doc ? $this->parse("CHANGEDOCUMENT") : ""
 			));
 			if (is_array($vars))
@@ -656,7 +655,8 @@ classload("cache","validator","defs");
 				classload("users");
 				$t = new users;
 				$udata = $t->fetch($GLOBALS["uid"]);
-				$jfar = $t->get_jf_list($udata["join_grp"]);
+				$jfar = $t->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
+				$jfs = "";
 				reset($jfar);
 				while (list($fid,$name) = each($jfar))
 				{
@@ -696,7 +696,14 @@ classload("cache","validator","defs");
 			$this->vars(array("LEFT_PANE" => $lp, "RIGHT_PANE" => $rp));
 
 		  $awt->stop("menuedit_show");
-			$this->li_cache = $d->li_cache;
+			if (!isset($d->li_cache))
+			{
+				$this->li_cache = "";
+			}
+			else
+			{
+				$this->li_cache = $d->li_cache;
+			}
 			return $this->parse();
 		}
 
@@ -722,8 +729,8 @@ classload("cache","validator","defs");
 				reset($this->mpr[$oid]);
 				while (list(,$row) = each($this->mpr[$oid]))
 				{
-					$has_dox |= $this->has_sub_dox($row[oid]);
-					if ($this->subs[$row[oid]] > 0)
+					$has_dox |= $this->has_sub_dox($row["oid"]);
+					if ($this->subs[$row["oid"]] > 0)
 					{
 						$has_dox = 1;
 					}
@@ -753,7 +760,7 @@ classload("cache","validator","defs");
 			$this->db_query($q);
 			while($row = $this->db_next()) 
 			{
-				$this->subs[$row[parent]] = $row[subs];
+				$this->subs[$row["parent"]] = $row["subs"];
 			};
 			$awt->stop("menuedit_prep_listall");
 		}
@@ -765,6 +772,7 @@ classload("cache","validator","defs");
 			global $awt;
 			global $SITE_ID;
 			$awt->start("menuedit_listall");
+			$aa = "";
 			if (!$ignore)
 			{
 				// loeme sisse koik objektid
@@ -870,7 +878,7 @@ classload("cache","validator","defs");
 			$ts=join(",",$tomove);
 			if ($ts != "")
 			{
-				$this->db_query("UPDATE objects SET parent = ".$arr[dest]." WHERE oid IN ($ts)");
+				$this->db_query("UPDATE objects SET parent = ".$arr["dest"]." WHERE oid IN ($ts)");
 			}
 		}
 
@@ -880,7 +888,7 @@ classload("cache","validator","defs");
 			$awt->count("menuedit->get_default_document()");
 			$awt->start("menuedit->get_default_document()");
 
-			if ($GLOBALS["docid"] && $ignore_global == false)
+			if (isset($GLOBALS["docid"]) && $GLOBALS["docid"] && $ignore_global == false)
 			{
 				$awt->stop("menuedit->get_default_document()");
 				return $GLOBALS["docid"];
@@ -892,18 +900,18 @@ classload("cache","validator","defs");
 			}
 	
 			$obj = $this->get_object($section);	// if it is a document, use this one. 
-			if ($obj[class_id] == CL_DOCUMENT)
+			if ($obj["class_id"] == CL_DOCUMENT)
 			{
 				$awt->stop("menuedit->get_default_document()");
 				return $section;
 			}
 
-			if ($obj[class_id] == CL_BROTHER)
+			if ($obj["class_id"] == CL_BROTHER)
 			{
-				$obj = $this->get_object($obj[brother_of]);
+				$obj = $this->get_object($obj["brother_of"]);
 			}
 
-			$docid = $obj[last];
+			$docid = $obj["last"];
 			$ar = unserialize($docid);
 			if (is_array($ar))	// kuna on vaja mitme keele jaox default dokke seivida, siis uues versioonis pannaxe siia array
 													// aga backward compatibility jaox tshekime, et 2kki see on integer ikkagi
@@ -933,17 +941,21 @@ classload("cache","validator","defs");
 					$docid[$cnt++] = $row["oid"];
 				}
 
+				$awt->stop("menuedit->get_default_document()");
 				if ($cnt > 1)
 				{
 					// a list of documents
-					$awt->stop("menuedit->get_default_document()");
 					return $docid;
 				}
 				else
+				if ($cnt == 1)
 				{
 					// the correct id
-					$awt->stop("menuedit->get_default_document()");
 					return $docid[0];
+				}
+				else
+				{
+					return false;
 				}
 			}
 
@@ -966,7 +978,7 @@ classload("cache","validator","defs");
 					$this->db_query("SELECT ml_users.*,objects.name as name FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE id = $artid");
 					if (($ml_user = $this->db_next()))
 					{
-						$this->_log("pageview",$ml_user[name]." (".$ml_user[mail].") tuli lehele $log meilist ".$ml_msg[subj],$section);
+						$this->_log("pageview",$ml_user["name"]." (".$ml_user["mail"].") tuli lehele $log meilist ".$ml_msg["subj"],$section);
 
 						// and also remember the guy
 						// set a cookie, that expires in 3 years
@@ -979,7 +991,7 @@ classload("cache","validator","defs");
 			{
 					$this->db_query("SELECT ml_users.*,objects.name as name FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE id = $mlxuid");
 				if (($ml_user = $this->db_next()))
-					$this->_log("pageview",$ml_user[name]." (".$ml_user[mail].") vaatas lehte $log",$section);
+					$this->_log("pageview",$ml_user["name"]." (".$ml_user["mail"].") vaatas lehte $log",$section);
 			}
 			else
 				$this->_log("pageview","Vaatas lehte $log",$section);
@@ -993,9 +1005,9 @@ classload("cache","validator","defs");
 			for ($i=0; $i < $cnt; $i++)	
 			{
 				if (($i+1) == $cnt)
-					$log.=$mar[$path[$i+1]][name];
+					$log.=$mar[$path[$i+1]]["name"];
 				else
-					$log.=$mar[$path[$i+1]][name]." / ";
+					$log.=$mar[$path[$i+1]]["name"]." / ";
 			}
 			$this->do_syslog_core($log,$section);
 		}
@@ -1024,7 +1036,7 @@ classload("cache","validator","defs");
 				} 
 				else 
 				{
-					$section = $obj[oid];
+					$section = $obj["oid"];
 				};
       } 
 			else 
@@ -1053,14 +1065,14 @@ classload("cache","validator","defs");
 			$this->db_query($q);
 			$edit_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$edit_templates[$tpl[id]] = $tpl[name];
+				$edit_templates[$tpl["id"]] = $tpl["name"];
 			};
 			// kysime infot lyhikeste templatede kohta
 			$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
 			$this->db_query($q);
 			$short_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$short_templates[$tpl[id]] = $tpl[name];
+				$short_templates[$tpl["id"]] = $tpl["name"];
 			};
 
 			$this->vars(array("title" => "", "promo_id" => "", "section" => $ob->option_list($parent,$menu),"right_sel" => "","left_sel" => "CHECKED","parent" => $parent,"tpl_edit" => $this->option_list(0,$edit_templates),"tpl_lead" => $this->option_list(0, $short_templates)));
@@ -1108,21 +1120,21 @@ classload("cache","validator","defs");
 			classload("objects");
 			$ob = new db_objects;
 
-			$sets = unserialize($row[comment]);
+			$sets = unserialize($row["comment"]);
 
 			// kysime infot adminnitemplatede kohta
 			$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
 			$this->db_query($q);
 			$edit_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$edit_templates[$tpl[id]] = $tpl[name];
+				$edit_templates[$tpl["id"]] = $tpl["name"];
 			};
 			// kysime infot lyhikeste templatede kohta
 			$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
 			$this->db_query($q);
 			$short_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$short_templates[$tpl[id]] = $tpl[name];
+				$short_templates[$tpl["id"]] = $tpl["name"];
 			};
 
 			$this->db_query("SELECT * FROM menu WHERE id = $id");
@@ -1131,17 +1143,17 @@ classload("cache","validator","defs");
 			$menu = $ob->get_list();
 			$menu[0] = "";
 			$menu[$GLOBALS["frontpage"]] = "Esileht";
-			$this->vars(array("title"			=> $row[name], 
+			$this->vars(array("title"			=> $row["name"], 
 												"promo_id"	=> $id,
-												"section"		=> $ob->multiple_option_list($sets[section],$menu),
-												"all_menus"	=> checked($row[comment] == "all_menus"),
-												"right_sel"	=> ($sets[right] == 1 ? "CHECKED" : ""),
-												"left_sel"	=> ($sets[right] != 1 ? "CHECKED" : ""),
-												"scroll_sel"	=> checked($sets[scroll]),
-												"parent"		=> $row[parent],
-												"link"			=> $rw[link],
-												"tpl_edit" => $this->option_list($rw[tpl_edit],$edit_templates),
-												"tpl_lead" => $this->option_list($rw[tpl_lead],$short_templates),
+												"section"		=> $ob->multiple_option_list($sets["section"],$menu),
+												"all_menus"	=> checked($row["comment"] == "all_menus"),
+												"right_sel"	=> ($sets["right"] == 1 ? "CHECKED" : ""),
+												"left_sel"	=> ($sets["right"] != 1 ? "CHECKED" : ""),
+												"scroll_sel"	=> checked($sets["scroll"]),
+												"parent"		=> $row["parent"],
+												"link"			=> $rw["link"],
+												"tpl_edit" => $this->option_list($rw["tpl_edit"],$edit_templates),
+												"tpl_lead" => $this->option_list($rw["tpl_lead"],$short_templates),
 												"interface" => ($newinterface ? "new" : "")));
 
 			return $this->parse();
@@ -1186,7 +1198,7 @@ classload("cache","validator","defs");
 				{
 					$ar = unserialize($row["comment"]);
 					$row["sections"] = $ar;
-					if (is_array($ar[section]))	
+					if (is_array($ar["section"]))	
 					{
 						// put the promo box under all the places it must be shown
 						reset($ar);
@@ -1230,6 +1242,7 @@ classload("cache","validator","defs");
 				$act_per_id = $dbp->get_active_period();
 				$dbp->clist();
 				$pl = array();
+				$actrec = 0;
 				// loeme k6ik perioodid sisse
 				while ($row = $dbp->db_next())
 				{
@@ -1243,13 +1256,16 @@ classload("cache","validator","defs");
 				$ar = array();
 				for ($i=$actrec-6; $i <= ($actrec+6); $i++)
 				{
-					if ($pl[$i]["id"] == $act_per_id)
+					if (isset($pl[$i]))
 					{
-						$ar[$pl[$i]["id"]] = $pl[$i]["description"].MN_ACTIVE;
-					}
-					else
-					{
-						$ar[$pl[$i]["id"]] = $pl[$i]["description"];
+						if ($pl[$i]["id"] == $act_per_id)
+						{
+							$ar[$pl[$i]["id"]] = $pl[$i]["description"].MN_ACTIVE;
+						}
+						else
+						{
+							$ar[$pl[$i]["id"]] = $pl[$i]["description"];
+						}
 					}
 				}
 				$ar[0] = MN_PERIODIC;
@@ -1267,17 +1283,18 @@ classload("cache","validator","defs");
 
 			global $PHP_SELF,$baseurl,$ext;
 
+			$ret = "";
 			reset($arr[$parent]);
 			while (list(,$row) = each($arr[$parent]))
 			{
-				$sub = $this->rec_tree(&$arr,$row[oid],0);
+				$sub = $this->rec_tree(&$arr,$row["oid"],0);
 				$this->vars(array(
-					"name" => $row[name],
-					"id" => $row[oid],
-					"parent" => $row[parent],
-					"iconurl" => $row[icon_id] ? $baseurl."/icon.".$ext."?id=".$row[icon_id] : "images/ftv2doc.gif",
-					"url" => "menuedit_right.".$GLOBALS["ext"]."?parent=".$row[oid]));
-				$this->homefolders[$row[oid]] = $row[oid];
+					"name" => $row["name"],
+					"id" => $row["oid"],
+					"parent" => $row["parent"],
+					"iconurl" => isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/icon.".$ext."?id=".$row["icon_id"] : "images/ftv2doc.gif",
+					"url" => "menuedit_right.".$GLOBALS["ext"]."?parent=".$row["oid"]));
+				$this->homefolders[$row["oid"]] = $row["oid"];
 				if ($sub == "")
 				{
 					$ret.=$this->parse("DOC");
@@ -1299,7 +1316,7 @@ classload("cache","validator","defs");
 			// k6igepealt loeme k6ik kodukatalooma all olevad menyyd
 			$this->db_query("SELECT menu.*,objects.* FROM menu
 						LEFT JOIN objects ON objects.oid = menu.id
-						WHERE oid = $udata[home_folder]");
+						WHERE oid = ".$udata["home_folder"]);
 			if (!($hf = $this->db_next()))
 			{
 				$this->raise_error(sprintf(MN_E_NO_HOME_FOLDER,$uid),true);
@@ -1312,11 +1329,12 @@ classload("cache","validator","defs");
 			$ret = $this->rec_homefolder($arr, $hf["oid"]);
 
 			$this->vars(array(
-				"name" => $hf[name],
-				"id" => $hf[oid], 
+				"name" => $hf["name"],
+				"id" => $hf["oid"], 
 				"parent" => $admin_rootmenu2,
 				"iconurl" => $this->get_icon_url("homefolder",""),
-				"url" => "menuedit_right.".$GLOBALS["ext"]."?parent=".$hf["oid"]));
+				"url" => "menuedit_right.".$GLOBALS["ext"]."?parent=".$hf["oid"]
+			));
 			$hft = $this->parse("TREE");
 
 			// now we need to make a list of all the shared folders of all the users.
@@ -1324,6 +1342,7 @@ classload("cache","validator","defs");
 			// that should work, because if acl is checked, then only folders that are shared to this user will be visible
 			// and we exclude the users own home folder menus cause they would be duplicated there otherwise
 			$shared_arr = $this->get_shared_arr(&$arr,$this->homefolders);
+			$shares = "";
 			reset($shared_arr);
 			while (list(,$v) = each($shared_arr))
 			{
@@ -1331,7 +1350,7 @@ classload("cache","validator","defs");
 					"name"	=> $v["name"],
 					"id"	=> $v["oid"],		
 					"parent"=> SHARED_FOLDER_ID,
-					"iconurl" => $row[icon_id] ? $baseurl."/icon.".$ext."?id=".$row[icon_id] : "images/ftv2doc.gif",
+					"iconurl" => $row["icon_id"] ? $baseurl."/icon.".$ext."?id=".$row["icon_id"] : "images/ftv2doc.gif",
 					"url"	=> "menuedit_right.".$GLOBALS["ext"]."?parent=".$v["oid"]));
 				$shares.=$this->parse("DOC");
 			}
@@ -1341,7 +1360,8 @@ classload("cache","validator","defs");
 				"id" => SHARED_FOLDER_ID,		
 				"parent" => $hf["oid"],
 				"iconurl" => $this->get_icon_url("shared_folders",""),
-				"url" => "menuedit_right.".$GLOBALS["ext"]."?parent=".SHARED_FOLDER_ID));
+				"url" => "menuedit_right.".$GLOBALS["ext"]."?parent=".SHARED_FOLDER_ID
+			));
 			if ($shares != "")
 			{
 				$shfs = $this->parse("TREE");
@@ -1368,7 +1388,7 @@ classload("cache","validator","defs");
 			$this->vars(array(
 				"name"		=> "GROUPS",
 				"id"			=> "gr_".$dgid,		
-				"parent"	=> $hf[oid],
+				"parent"	=> $hf["oid"],
 				"iconurl" => $this->get_icon_url("hf_groups",""),
 				"url"			=> $this->mk_orb("mk_grpframe",array("parent" => $dgid),"groups")
 			));
@@ -1393,7 +1413,7 @@ classload("cache","validator","defs");
 				reset($v);
 				while (list(,$row) = each($v))
 				{
-					if ($row[mtype] == MN_HOME_FOLDER_SUB && !$exclude[$row["oid"]])
+					if (isset($row["mtype"]) && $row["mtype"] == MN_HOME_FOLDER_SUB && !$exclude[$row["oid"]])
 					{
 						$ret[] = $row;
 					}
@@ -1404,13 +1424,13 @@ classload("cache","validator","defs");
 
 		function rec_admin_tree(&$arr,$parent)
 		{
-			if (!is_array($arr[$parent]))
+			if (!isset($arr[$parent]) || !is_array($arr[$parent]))
 				return "";
 
 			global $admin_rootmenu2,$ext,$baseurl;
 
 			reset($arr[$parent]);
-
+			$ret = "";
 			while (list(,$row) = each($arr[$parent]))
 			{
 				if ($row["status"] != 2)
@@ -1418,14 +1438,14 @@ classload("cache","validator","defs");
 				if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && ($GLOBALS["check_prog_acl"]))
 					continue;
 
-				$sub = $this->rec_admin_tree(&$arr,$row[oid]);
+				$sub = $this->rec_admin_tree(&$arr,$row["oid"]);
 
 				if ($row["admin_feature"])
 				{
 					$sub.=$this->get_feature_tree($row["admin_feature"],$row["oid"]);
 				}
 
-				$iconurl = $row[icon_id] ? $baseurl."/icon.".$ext."?id=".$row[icon_id] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : "images/ftv2doc.gif");
+				$iconurl = isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : "images/ftv2doc.gif");
 				$this->vars(array(
 					"name"		=> $row["name"],
 					"id"			=> ($row["admin_feature"] == 4 ? "gp_" : "").$row["oid"], 
@@ -1464,61 +1484,71 @@ classload("cache","validator","defs");
 			$grar = array();
 			while ($row = $t->db_next())
 			{
-				$grar[$row[gid]] = $row;
+				$grar[$row["gid"]] = $row;
 			}
 
 			reset($grar);
 			while (list($gid,$row) = each($grar))
 			{
 				// we must convert the parent member so that it actually points to the parent OBJECT not the parent group
-				$row[parent] = $grar[$row[parent]][oid];
+				$puta = isset($row["parent"]) ? $row["parent"] : 0;
+				$row["parent"] = isset($grar[$puta]["oid"]) ? $grar[$puta]["oid"] : 0;
 
-				if ($row[parent] == 0)
+				if ($row["parent"] == 0)
 				{
-					$row[parent] = $parent;
+					$row["parent"] = $parent;
 				}
-				$grpcache[$row[parent]][] = $row;
+				$grpcache[$row["parent"]][] = $row;
 			}
 			return $this->rec_grp_tree(&$grpcache,$parent);
 		}
 
 		function rec_grp_tree(&$arr,$parent)
 		{
-			if (!is_array($arr[$parent]))
+			if (!isset($arr[$parent]) || !is_array($arr[$parent]))
 				return "";
 
 			global $PHP_SELF;
 
+			$ret = "";
 			reset($arr[$parent]);
 			while (list(,$row) = each($arr[$parent]))
 			{
-				if (!$this->can("view",$row[oid]) || $row[gid] == $GLOBALS["all_users_grp"])
+				if (!$this->can("view",$row["oid"]) || $row["gid"] == $GLOBALS["all_users_grp"])
+				{
 					continue;
+				}
 
-				$sub = $this->rec_grp_tree(&$arr,$row[oid]);
+				$sub = $this->rec_grp_tree(&$arr,$row["oid"]);
 				$this->vars(array(
-					"name" => $row[name],"id" => "gp_".$row[oid], "parent" => "gp_".$row[parent],
+					"name" => $row["name"],"id" => "gp_".$row["oid"], "parent" => "gp_".$row["parent"],
 					"iconurl" => "images/ftv2doc.gif",
-					"url"			=> $this->mk_orb("mk_grpframe",array("parent" => $row[gid]),"groups")));
+					"url"			=> $this->mk_orb("mk_grpframe",array("parent" => $row["gid"]),"groups")
+				));
 				if ($sub == "")
+				{
 					$ret.=$this->parse("DOC");
+				}
 				else
+				{
 					$ret.=$this->parse("TREE").$sub;
+				}
 			}
 			return $ret;
 		}
 
 		function rec_tree(&$arr,$parent,$period)
 		{
-			if (!is_array($arr[$parent]))
+			if (!isset($arr[$parent]) || !is_array($arr[$parent]))
 				return "";
 
 			global $PHP_SELF,$baseurl,$ext;
 
+			$ret = "";
 			reset($arr[$parent]);
 			while (list(,$row) = each($arr[$parent]))
 			{
-				if ($row["mtype"] != MN_HOME_FOLDER)
+				if (!isset($row["mtype"]) || $row["mtype"] != MN_HOME_FOLDER)
 				{
 					// tshekime et kas menyyl on submenyysid
 					// kui on, siis n2itame alati
@@ -1537,20 +1567,20 @@ classload("cache","validator","defs");
 							$url = $this->get_icon_url("promo_box","");
 						}
 						else
-						if ($row[class_id] == CL_BROTHER)
+						if ($row["class_id"] == CL_BROTHER)
 						{
 							$url = $this->get_icon_url("brother","");
 						}
 						else
 						{
-							$url = $row[icon_id] ? $baseurl."/icon.".$ext."?id=".$row[icon_id] : "images/ftv2doc.gif";
+							$url = isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/icon.".$ext."?id=".$row["icon_id"] : "images/ftv2doc.gif";
 						}
 						$this->vars(array(
 							"name" => $row["name"],
 							"id" => $row["oid"],
 							"parent" => $row["parent"],
 							"iconurl" => $url,
-							"url" => "menuedit_right.".$GLOBALS["ext"]."?parent=".$row[oid]."&period=".$period));
+							"url" => "menuedit_right.".$GLOBALS["ext"]."?parent=".$row["oid"]."&period=".$period));
 						if ($sub == "")
 						{
 							$ret.=$this->parse("DOC");
@@ -1567,7 +1597,7 @@ classload("cache","validator","defs");
 
 		function rec_tree_grps(&$arr,$parent)
 		{
-			if (!is_array($arr[$parent]))
+			if (!isset($arr[$parent]) || !is_array($arr[$parent]))
 				return "";
 
 			reset($arr[$parent]);
@@ -1674,37 +1704,38 @@ classload("cache","validator","defs");
 			$cut = $this->parse("CUT");
 			$nocut = $this->parse("NORMAL");
 
+			$l = "";
 			while ($row = $this->db_next())
 			{
-				if (!$this->can("view",$row[oid]))
+				if (!$this->can("view",$row["oid"]))
 					continue;
 
 				$r_id = ($row["class_id"] == CL_BROTHER ? $row["brother_of"] : $row["oid"]);
 
 				$this->vars(array(
 				"is_cut"				=> ($cut_objects[$row["oid"]] ? $cut : $nocut),
-				"name"					=> $row[name],
-				"menu_id"				=> $row[oid], 
-				"menu_order"		=> $row[jrk], 
-				"menu_active"		=> ($row[status] == 2 ? "CHECKED" : ""),
-				"menu_active2"	=> $row[status],
-				"prd1"					=> ($row[periodic] == 1 ? "CHECKED" : ""),
-				"prd2"					=> $row[periodic],
-				"copied"				=> $row[is_copied] == 1 ? "CHECKED" : "",
-				"modified"			=> $this->time2date($row[modified],2),
-				"modifiedby"		=> $row[modifiedby],
-				"delete"				=> $this->mk_orb("delete", array("parent" => $parent,"id" => $row[oid],"period" => $period)),
+				"name"					=> $row["name"],
+				"menu_id"				=> $row["oid"], 
+				"menu_order"		=> $row["jrk"], 
+				"menu_active"		=> ($row["status"] == 2 ? "CHECKED" : ""),
+				"menu_active2"	=> $row["status"],
+				"prd1"					=> ($row["periodic"] == 1 ? "CHECKED" : ""),
+				"prd2"					=> $row["periodic"],
+				"copied"				=> $row["is_copied"] == 1 ? "CHECKED" : "",
+				"modified"			=> $this->time2date($row["modified"],2),
+				"modifiedby"		=> $row["modifiedby"],
+				"delete"				=> $this->mk_orb("delete", array("parent" => $parent,"id" => $row["oid"],"period" => $period)),
 				"r_menu_id"			=> $r_id,
 				"properties"	=> $this->mk_orb("change", array("parent" => $parent,"id" => $r_id,"period" => $period))));
 
 				$this->vars(array(
-					"NFIRST" => $this->can("order",$row[oid]) ? $this->parse("NFIRST") : "",
-					"CAN_ACTIVE" => $this->can("active",$row[oid]) ? $this->parse("CAN_ACTIVE") : "",
-					"PERIODIC" => $this->can("periodic",$row[oid]) ? $this->parse("PERIODIC") : "",
-					"CAN_CHANGE" => $this->can("edit",$row[oid]) ? $this->parse("CAN_CHANGE") : "",
-					"CAN_DELETE" => $this->can("delete",$row[oid]) ? $this->parse("CAN_DELETE") : "",
-					"CAN_SEL_PERIOD" => $row[periodic] == 1 ? $this->parse("CAN_SEL_PERIOD") : "",
-					"CAN_ACL" => $this->can("admin",$row[oid]) ? $this->parse("CAN_ACL") : ""
+					"NFIRST" => $this->can("order",$row["oid"]) ? $this->parse("NFIRST") : "",
+					"CAN_ACTIVE" => $this->can("active",$row["oid"]) ? $this->parse("CAN_ACTIVE") : "",
+					"PERIODIC" => $this->can("periodic",$row["oid"]) ? $this->parse("PERIODIC") : "",
+					"CAN_CHANGE" => $this->can("edit",$row["oid"]) ? $this->parse("CAN_CHANGE") : "",
+					"CAN_DELETE" => $this->can("delete",$row["oid"]) ? $this->parse("CAN_DELETE") : "",
+					"CAN_SEL_PERIOD" => $row["periodic"] == 1 ? $this->parse("CAN_SEL_PERIOD") : "",
+					"CAN_ACL" => $this->can("admin",$row["oid"]) ? $this->parse("CAN_ACL") : ""
 				));
 				$l.=$this->parse("LINE");
 			} // eow
@@ -1745,19 +1776,19 @@ classload("cache","validator","defs");
 			while($row = $this->db_next())
 			{
 				$this->vars(array(
-					"icon"				=> $this->get_icon_url($row[class_id],$row[name]),
-					"name"				=> $row[name],
-					"oid"					=> $row[oid],
-					"modifiedby"	=> $row[modifiedby],
-					"modified"		=> $this->time2date($row[modified])
+					"icon"				=> $this->get_icon_url($row["class_id"],$row["name"]),
+					"name"				=> $row["name"],
+					"oid"					=> $row["oid"],
+					"modifiedby"	=> $row["modifiedby"],
+					"modified"		=> $this->time2date($row["modified"])
 				));
 				$l .= $this->parse("LINE");
 			};
 			$object = $this->get_object($parent);
 			$this->vars(array("LINE" => $l,
 					  "tpl" => $tpl,
-						"source" => $object[oid],
-					  "objname" => $object[name] . "(" . $object[oid] . ")"));
+						"source" => $object["oid"],
+					  "objname" => $object["name"] . "(" . $object["oid"] . ")"));
 			return $this->parse();
 		}
 
@@ -1766,19 +1797,13 @@ classload("cache","validator","defs");
 			classload("form_output");
 			$this->read_template("filled_forms.tpl");
 			
-			$this->db_query("SELECT * FROM form_elements WHERE id = $parent");
-			$row = $this->db_next();
-			$far = unserialize($row[forms]);
-			if (!is_array($far))
-			{
-				$far = array();
-			}
 			$fop = new form_output;
-
 			$opar = array();
-			reset($far);
-			while (list(,$fid) = each($far))
+			$this->db_query("SELECT el_id,form_id FROM element2form WHERE el_id = ".$parent);
+			while ($row = $this->db_next())
 			{
+				$this->save_handle();
+				$fid = $row["form_id"];
 				// korjame k6ikide formide v2ljundi stiilid kokku $opar sisse
 				$opar[$fid] = $fop->get_op_list(array("id" => $fid));
 
@@ -1786,14 +1811,15 @@ classload("cache","validator","defs");
 				$this->db_query("SELECT objects.* FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id WHERE objects.status != 0");
 				while ($row = $this->db_next())
 				{
-					$this->vars(array("filler"		=> $row[createdby], 
-														"hits"			=> $row[hits], 
+					$this->vars(array("filler"		=> $row["createdby"], 
+														"hits"			=> $row["hits"], 
 														"form"			=> $fname,
-														"modified"	=> $this->time2date($row[modified], 2), "oid" => $row[oid],
-														"change"		=> $this->mk_orb("show", array("id" => $fid, "entry_id" => $row[oid]), "form"),
+														"modified"	=> $this->time2date($row["modified"], 2), "oid" => $row["oid"],
+														"change"		=> $this->mk_orb("show", array("id" => $fid, "entry_id" => $row["oid"]), "form"),
 														"form_id"		=> $fid));
 					$l.=$this->parse("LINE");
 				}
+				$this->restore_handle();
 			}
 			reset($opar);
 			while (list($fid, $ar) = each($opar))
@@ -1834,7 +1860,7 @@ classload("cache","validator","defs");
 
 			$pobj = $this->get_object($parent);
 			// the default document for the menu is in menu[last][$lang_id]
-			$lastar = unserialize($pobj[last]);
+			$lastar = unserialize($pobj["last"]);
 			$default_doc = $lastar[$GLOBALS["lang_id"]];
 
 			$period = $GLOBALS["period"];
@@ -1866,7 +1892,7 @@ classload("cache","validator","defs");
 			// listime ainult need objektid, mida igale poole lisada saab
 			while (list($id,$ar) = each($class_defs))
 			{
-				if ($ar["can_add"])	
+				if (isset($ar["can_add"]) && $ar["can_add"])	
 				{
 					$types[$id] = $ar["name"];
 				}
@@ -1882,16 +1908,18 @@ classload("cache","validator","defs");
 			global $class_defs;
 			$fentries = array();	
 			$fstrs = array();
+			$ffound = false;
 			// form entries among the objects . uuh, they get special treatment!
 			// deal with all the form entries among the objecs shown
 			$this->db_query("SELECT objects.oid,form_entries.form_id FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE objects.parent = $parent AND objects.status != 0 AND objects.class_id =".CL_FORM_ENTRY);
 			while ($row = $this->db_next())
 			{
-				$fentries[$row[oid]] = $row[form_id];
-				$fstrs[] = $row[oid];
+				$fentries[$row["oid"]] = $row["form_id"];
+				$fstrs[] = $row["oid"];
 				$ffound = true;
 			}
 
+			$fshn = "";
 			if ($ffound)
 			{
 				classload("form_output");
@@ -1925,7 +1953,7 @@ classload("cache","validator","defs");
 			$this->db_query("SELECT objects.*, files.newwindow FROM objects LEFT JOIN files ON files.id = objects.oid WHERE objects.status != 0 AND objects.parent = $parent");
 			while ($row = $this->db_next())
 			{
-				$filearr[$row[oid]] = $row;
+				$filearr[$row["oid"]] = $row;
 			}
 
 			if (!$period)
@@ -1938,60 +1966,63 @@ classload("cache","validator","defs");
 				$this->listacl("objects.class_id = ".CL_PERIODIC_SECTION." AND objects.status != 0 AND objects.parent = $parent");
 				$this->db_query("SELECT objects.*,documents.* FROM objects LEFT JOIN documents ON documents.docid = objects.oid WHERE objects.class_id = ".CL_PERIODIC_SECTION." AND objects.status != 0 AND objects.parent = $parent AND objects.period = $period ORDER BY $sortby $order");
 			}
-			$total = 0; $ffound = false;
+			$total = 0; 
+			$ffound = false;
+			$def_found = false;
 			global $cut_objects,$copied_objects;
 			$cut = $this->parse("CUT");
 			$copied = $this->parse("COPIED");
 			$nocut = $this->parse("NORMAL");
+			$l = "";
 			while ($row = $this->db_next())
 			{
 				$total++;
-				$this->dequote(&$row[name]);
-				$inf = $class_defs[$row[class_id]];
+				$this->dequote(&$row["name"]);
+				$inf = $class_defs[$row["class_id"]];
 
 				$target = "";
-				$change = $this->mk_orb("change", array("id" => $row[oid], "parent" => $row[parent]), $inf[file]);
+				$change = $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $inf["file"]);
 				if ($row["class_id"] == CL_FILE)
 				{
 					if ($filearr[$row["oid"]]["newwindow"] == 1)
 					{
 						$target = "target=\"_blank\"";
 					}
-					$change = $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$row[oid]."/".urlencode($row[name]);
+					$change = $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$row["oid"]."/".urlencode($row["name"]);
 				}
 				$this->vars(array(
 					"is_cut"			=> $cut_objects[$row["oid"]] ? $cut : ($copied_objects[$row["oid"]] ? $copied : $nocut),
 					"target"			=> $target,
-					"name"				=> $row[name],
-					"class_id"		=> $row[class_id],
-					"oid"					=> $row[oid], 
-					"order"				=> $row[jrk], 
-					"form_id"			=> $row[class_id] == CL_FORM_ENTRY ? $fentries[$row[oid]] : 0,
-					"active"			=> ($row[status] == 2 ? "CHECKED" : ""),
-					"active2"			=> $row[status],
-					"modified"		=> $this->time2date($row[modified],2),
-					"esilehel_uudis"    => ($row[esilehel_uudis] > 0 ? "checked" : ""),
-					"showlead"    => ($row[showlead] > 0 ? "checked" : ""),
-					"text_ok"			=> ($row[text_ok] > 0 ? "checked" : ""),
-					"pic_ok"			=> ($row[pic_ok] > 0 ? "checked" : ""),
-					"modifiedby"	=> $row[modifiedby],
-					"is_forum"    => ($row[is_forum] > 0 ? "checked" : ""),
-					"esilehel"    => ($row[esilehel] > 0 ? "checked" : ""),
-					"jrk1"				=> $row[jrk1],
-					"jrk2"				=> $row[jrk2],
-					"icon"				=> $this->get_icon_url($row[class_id],$row[name]),
-					"type"				=> $GLOBALS["class_defs"][$row[class_id]][name],
+					"name"				=> $row["name"],
+					"class_id"		=> $row["class_id"],
+					"oid"					=> $row["oid"], 
+					"order"				=> $row["jrk"], 
+					"form_id"			=> $row["class_id"] == CL_FORM_ENTRY ? $fentries[$row["oid"]] : 0,
+					"active"			=> ($row["status"] == 2 ? "CHECKED" : ""),
+					"active2"			=> $row["status"],
+					"modified"		=> $this->time2date($row["modified"],2),
+					"esilehel_uudis"    => ($row["esilehel_uudis"] > 0 ? "checked" : ""),
+					"showlead"    => ($row["showlead"] > 0 ? "checked" : ""),
+					"text_ok"			=> ($row["text_ok"] > 0 ? "checked" : ""),
+					"pic_ok"			=> ($row["pic_ok"] > 0 ? "checked" : ""),
+					"modifiedby"	=> $row["modifiedby"],
+					"is_forum"    => ($row["is_forum"] > 0 ? "checked" : ""),
+					"esilehel"    => ($row["esilehel"] > 0 ? "checked" : ""),
+					"jrk1"				=> $row["jrk1"],
+					"jrk2"				=> $row["jrk2"],
+					"icon"				=> $this->get_icon_url($row["class_id"],$row["name"]),
+					"type"				=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
 					"change"			=> $change,
-					"checked"			=> $default_doc == $row[oid] ? "CHECKED" : "",
-					"link"				=> $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$row[oid]));
+					"checked"			=> $default_doc == $row["oid"] ? "CHECKED" : "",
+					"link"				=> $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$row["oid"]));
 				if (!$def_found)
 				{
-					$def_found = $default_doc == $row[oid] ? true : false;
+					$def_found = $default_doc == $row["oid"] ? true : false;
 				}
 				$this->vars(array(
 					"NFIRST" => $this->can("order",$row["oid"]) ? $this->parse("NFIRST") : "",
 					"CAN_ACTIVE" => $this->can("active",$row["oid"]) ? $this->parse("CAN_ACTIVE") : "",
-					"FE"			=> $row[class_id] == CL_FORM_ENTRY ? $this->parse("FE") : $this->parse("NFE"),
+					"FE"			=> $row["class_id"] == CL_FORM_ENTRY ? $this->parse("FE") : $this->parse("NFE"),
 				));
 
 				if ($row["class_id"] == CL_FORM_ENTRY)
@@ -2013,7 +2044,7 @@ classload("cache","validator","defs");
 					"NORMAL"	=> "", 
 					"PASTE"	=> $paste,
 					"total"	=> verbalize_number($total),
-					"objname" => $odata[name],
+					"objname" => $odata["name"],
 					"parent" => $parent,
 					"FORMS_SHOWN" => $fshn,
 					"reforb" => $this->mk_reforb("submit_order_doc", array("parent" => $parent,"period" => $period)),
@@ -2033,8 +2064,10 @@ classload("cache","validator","defs");
 
 			if (!$period && !$popup)
 			{	
-				$this->vars(array("default" => $this->option_list($default_doc,$this->mk_docsel($parent)),
-													"checked" => $def_found ? "" : "CHECKED"));
+				$this->vars(array(
+					"default" => $this->option_list($default_doc,$this->mk_docsel($parent)),
+					"checked" => checked($def_found)
+				));
 			}
 
 			return $this->parse();
@@ -2048,12 +2081,15 @@ classload("cache","validator","defs");
 			$this->db_query("SELECT objects.oid as oid,documents.title as title ,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid = objects.oid WHERE parent != $parent AND status = 2 AND periodic = 0 AND site_id = ".$GLOBALS["SITE_ID"]." AND class_id = ".CL_DOCUMENT);
 			while ($row = $this->db_next())
 			{
-				$this->extrarr[$row[parent]][] = array("docid" => $row[oid], "name" => substr($row[title],0,15).".aw");
+				$this->extrarr[$row["parent"]][] = array("docid" => $row["oid"], "name" => substr($row["title"],0,15).".aw");
 			}
 
+			$ss = "";
 			$this->menucache = array();
 			if ($GLOBALS["lang_menus"] == 1)
+			{
 				$ss = "AND (objects.lang_id=".$GLOBALS["lang_id"]." OR menu.type= ".MN_CLIENT.")";
+			}
 			$this->db_query("SELECT objects.oid as oid,
 					objects.parent as parent,
 					objects.name as name,
@@ -2070,22 +2106,22 @@ classload("cache","validator","defs");
 					menu.target as target
 					FROM objects 
 					LEFT JOIN menu ON menu.id = objects.oid
-					WHERE ((objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.") $prsufix) AND objects.status != 0  AND ((objects.site_id = ".$GLOBALS["SITE_ID"].") OR (objects.site_id IS NULL)) $ss
+					WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.") AND objects.status != 0  AND ((objects.site_id = ".$GLOBALS["SITE_ID"].") OR (objects.site_id IS NULL)) $ss
 					GROUP BY objects.oid
 					ORDER BY objects.parent, jrk");
 			// tsykkel yle menyyelementide
 			while ($row = $this->db_next()) 
 			{
-				$sets = unserialize($row[data]);
-				$row[name] = substr($row[name],0,15);
-				$this->menucache[$row[parent]][] = array("data" => $row);
-				if (is_array($sets[section]))
+				$sets = unserialize(!isset($row["data"]) ? "" : $row["data"]);
+				$row["name"] = substr($row["name"],0,15);
+				$this->menucache[$row["parent"]][] = array("data" => $row);
+				if (is_array($sets["section"]))
 				{
-					reset($sets[section]);
-					while(list(,$v) = each($sets[section]))
+					reset($sets["section"]);
+					while(list(,$v) = each($sets["section"]))
 					{
 						// topime menyystruktuuri arraysse
-						$row[name] = substr($row[name],0,12);
+						$row["name"] = substr($row["name"],0,12);
 						$this->menucache[$v][] = array("data" => $row);
 					}
 				}
@@ -2098,7 +2134,7 @@ classload("cache","validator","defs");
 				reset($this->menucache[$GLOBALS["admin_rootmenu2"]]);
 				while (list(,$ar) = each($this->menucache[$GLOBALS["admin_rootmenu2"]]))
 				{
-					$this->mk_folders($ar[data][oid],"");
+					$this->mk_folders($ar["data"]["oid"],"");
 				}
 			}
 			return $this->docs;
@@ -2111,7 +2147,7 @@ classload("cache","validator","defs");
 				$c = new db_config;
 				$this->pr_icons = unserialize($c->get_simple_config("program_icons"));
 			}
-			$i = $this->pr_icons[$fid][url];
+			$i = $this->pr_icons[$fid]["url"];
 			return $i == "" ? "/images/icon_aw.gif" : $i;
 		}
 
@@ -2127,11 +2163,11 @@ classload("cache","validator","defs");
 			$obj = $this->get_object($oid);
 
 			global $class_defs,$ext;
-			$inf = $class_defs[$obj[class_id]];
+			$inf = $class_defs[$obj["class_id"]];
 			if (!is_array($inf))
 				$this->raise_error("menuedit->command_redirect($oid): Unknown class $row[class_id]",true);
 
-			$url = $this->mk_orb($subaction, array("id" => $oid,"parent" => $obj[parent],"period" => $period), $inf[file]);
+			$url = $this->mk_orb($subaction, array("id" => $oid,"parent" => $obj["parent"],"period" => $period), $inf["file"]);
 			header("Location: $url");
 			die();
 		}
@@ -2150,11 +2186,11 @@ classload("cache","validator","defs");
 			global $class_defs,$ext;
 			$inf = $class_defs[$type];
 			if (!is_array($inf))
-				$this->raise_error("menuedit->command_redirect($oid): Unknown class $row[class_id]",true);
+				$this->raise_error("menuedit->command_redirect($oid): Unknown class ".$row["class_id"],true);
 			
 			if (!$period)
 				$period = 0;
-			$url = $this->mk_orb("new", array("parent" => $parent, "period" => $period), $inf[file]);
+			$url = $this->mk_orb("new", array("parent" => $parent, "period" => $period), $inf["file"]);
 			header("Location: $url");
 			die();		
 		}
@@ -2178,18 +2214,18 @@ classload("cache","validator","defs");
 				// sektsioonid, mida saab teha kohe kliendi alla
 			} 
 			else
-			if ($par_info[type] == MN_CLIENT) 
+			if ($par_info["type"] == MN_CLIENT) 
 			{
 				$classlist = $this->option_list(1,array("70" => "Sektsioon",
 																							  "71" => "Adminni menyy"));
 			} 
 			else
-			if ($par_info[type] == MN_ADMIN1) 
+			if ($par_info["type"] == MN_ADMIN1) 
 			{
 				$classlist = $this->option_list(1,array("71" => "Adminni menyy","72" => "Dokument"));
 			} 
 			else
-			if ($par_info[type] == MN_HOME_FOLDER || $par_info[type] == MN_HOME_FOLDER_SUB) 
+			if ($par_info["type"] == MN_HOME_FOLDER || $par_info["type"] == MN_HOME_FOLDER_SUB) 
 			{
 				$classlist = $this->option_list(1,array("75" => "Kataloog"));
 			} 
@@ -2270,7 +2306,7 @@ classload("cache","validator","defs");
 				{
 					if ($oid != $id)	// no recursing , please
 					{
-						$noid = $this->new_object(array("parent" => $oid,"class_id" => CL_BROTHER,"status" => 1,"brother_of" => $id,"name" => $menu[name],"comment" => $menu[comment]));
+						$noid = $this->new_object(array("parent" => $oid,"class_id" => CL_BROTHER,"status" => 1,"brother_of" => $id,"name" => $menu["name"],"comment" => $menu["comment"]));
 						$this->db_query("INSERT INTO menu(id,link,type,is_l3,is_copied,periodic,tpl_edit,tpl_view,tpl_lead,active_period,clickable,target,mid,data,hide_noact)	
 	values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$menu[periodic]','$menu[tpl_edit]','$menu[tpl_view]','$menu[tpl_lead]','$menu[active_period]','$menu[clickable]','$menu[target]','$menu[mid]','$menu[data]','$menu[hide_noact]')");
 					}
@@ -2281,14 +2317,14 @@ classload("cache","validator","defs");
         $deact_stamp = 0;
         if ($autoactivate == "on") 
 				{
-          $act_stamp = mktime($activate_at[hour],$activate_at[minute],0,$activate_at[month],
-                                $activate_at[day],$activate_at[year]);
+          $act_stamp = mktime($activate_at["hour"],$activate_at["minute"],0,$activate_at["month"],
+                                $activate_at["day"],$activate_at["year"]);
           $autoactivate = 1;
         };
         if ($autodeactivate == "on") 
 				{
-          $deact_stamp = mktime($deactivate_at[hour],$deactivate_at[minute],0,$deactivate_at[month],
-                                $deactivate_at[day],$deactivate_at[year]);
+          $deact_stamp = mktime($deactivate_at["hour"],$deactivate_at["minute"],0,$deactivate_at["month"],
+                                $deactivate_at["day"],$deactivate_at["year"]);
           $autodeactivate = 1;
         };
 
@@ -2301,15 +2337,15 @@ classload("cache","validator","defs");
 											"deactivate_at" => $deact_stamp,
 											"comment"  => $comment,
 											"alias"    => $alias);
-				if ($menu[class_id] == CL_PSEUDO)	// if this is a real menu then change it's name and all its brothers names
+				if ($menu["class_id"] == CL_PSEUDO)	// if this is a real menu then change it's name and all its brothers names
 				{
 					$this->db_query("UPDATE objects set name = '$name' WHERE status != 0 AND class_id = ".CL_BROTHER." AND brother_of = $id");
 				}
 				else
-				if ($menu[class_id] == CL_BROTHER)
+				if ($menu["class_id"] == CL_BROTHER)
 				{
 					// don't change its' name
-					unset($charr[name]);
+					unset($charr["name"]);
 				}
 
 				$sar = array();
@@ -2336,9 +2372,9 @@ classload("cache","validator","defs");
 					classload("images");
 					$t = new db_images;
 					$im = $t->_upload(array("filename" => $img, "file_type" => $img_type, "oid" => $id));
-					$tt = "img_id  = ".$im[id].",";
-					$img = $t->get_img_by_id($im[id]);
-					$tt.="img_url = '".$img[url]."',";
+					$tt = "img_id  = ".$im["id"].",";
+					$img = $t->get_img_by_id($im["id"]);
+					$tt.="img_url = '".$img["url"]."',";
 				}
 				if ($number > 0)
 				{
@@ -2412,29 +2448,29 @@ classload("cache","validator","defs");
 				}
 				$this->_log("menuedit","Lisas sektsiooni $name");
 			}
-			return $this->mk_orb("change", array("parent" => $arr[parent],"id" => $id,"period" => $arr[period]));
+			return $this->mk_orb("change", array("parent" => $arr["parent"],"id" => $id,"period" => $arr["period"]));
 		}
 
 		function submit_order($arr)
 		{
-			$obj = $this->get_object($arr[parent]);
-			$ar = unserialize($obj[last]);
-			if ($arr[default_doc] == -1)
+			$obj = $this->get_object($arr["parent"]);
+			$ar = unserialize($obj["last"]);
+			if ($arr["default_doc"] == -1)
 			{
-				$ar[$GLOBALS["lang_id"]] = $arr[default_doc2];
+				$ar[$GLOBALS["lang_id"]] = $arr["default_doc2"];
 			}
 			else
 			{
 				// menu's default document is kept in objects last, because menus don't really need it otherwise.
-				$ar[$GLOBALS["lang_id"]] = $arr[default_doc];
+				$ar[$GLOBALS["lang_id"]] = $arr["default_doc"];
 			}
-			$this->db_query("UPDATE objects SET last = '".serialize($ar)."' WHERE oid = ".$arr[parent]);
+			$this->db_query("UPDATE objects SET last = '".serialize($ar)."' WHERE oid = ".$arr["parent"]);
 
 
 			// ord sisaldab vormist sisestatud jarjekorranumbreid
 		  // old_ord sisaldab "vanu" jarjekorranumbreid (s.t. neid, mis olid enne)
-			$ord = $arr[ord];
-		  $old_ord = $arr[old_ord];
+			$ord = $arr["ord"];
+		  $old_ord = $arr["old_ord"];
 			if (is_array($ord)) {
 				while(list($oid,$value) = each($ord)) {
 					// paringu teeme ainult siis, kui jarjekorranumbrid erinevad
@@ -2447,8 +2483,8 @@ classload("cache","validator","defs");
 		
 			// act sisaldab vormis klikitud "aktiivsus" checkboxe	
 			// old_act sisaldab "vanu" aktiivsuseindikaatoreid
-			$act = $arr[act];
-		  $old_act = $arr[old_act];
+			$act = $arr["act"];
+		  $old_act = $arr["old_act"];
 			if (is_array($old_act)) {
 				while(list($oid,$value) = each($old_act)) {
 					$_act = ($act[$oid] == "on") ? 2 : 1;
@@ -2462,8 +2498,8 @@ classload("cache","validator","defs");
 
 		// prd sisaldab vormis klikitud "perioodiline" checkboxe
 		// old_prd sisaldab "vanu" perioodilisusindikaatoreid
-		$prd = $arr[prd];
-		$old_prd = $arr[old_prd];
+		$prd = $arr["prd"];
+		$old_prd = $arr["old_prd"];
 	  if (is_array($old_prd)) {
 			while(list($oid,$value) = each($old_prd)) {
 				$_prd = ($prd[$oid] == "on") ? 1 : 0;
@@ -2483,8 +2519,8 @@ classload("cache","validator","defs");
 
 		// clk sisaldab vormis klikitud "klikitav" checkboxe
 		// old_clk sisaldab "vanu" klikitavusindikaatoreid
-		$clk = $arr[clk];
-		$old_clk = $arr[old_clk];
+		$clk = $arr["clk"];
+		$old_clk = $arr["old_clk"];
 	  if (is_array($old_clk)) 
 		{
 			while(list($oid,$value) = each($old_clk)) 
@@ -2498,7 +2534,7 @@ classload("cache","validator","defs");
 		// new sisaldab vormis klikitud "uues aknas" checkboxe
 		// old_new sisaldab "vanu" uueaknaindikaatoreid
 		$new = $arr["new"];
-		$old_new = $arr[old_new];
+		$old_new = $arr["old_new"];
 	  if (is_array($old_new)) 
 		{
 			while(list($oid,$value) = each($old_new)) 
@@ -2511,8 +2547,8 @@ classload("cache","validator","defs");
 
 		// mkd sisaldab vormis klikitud "mitteaktiivne kui dokusid pole" checkboxe
 		// old_mkd sisaldab "vanu" mitteaktiivne kui dokusid poleindikaatoreid
-		$mkd = $arr[mkd];
-		$old_mkd = $arr[old_mkd];
+		$mkd = $arr["mkd"];
+		$old_mkd = $arr["old_mkd"];
 	  if (is_array($old_mkd)) 
 		{
 			while(list($oid,$value) = each($old_mkd)) 
@@ -2524,7 +2560,7 @@ classload("cache","validator","defs");
     };
 
 			// cp arrays on need elemendid, mida kopeerida soovitakse 
-			$cp = $arr[cp];
+			$cp = $arr["cp"];
 			if (is_array($cp)) {
 				// tyhistame koik senised kopeerimised 
 				$this->db_query("UPDATE menu SET is_copied = 0");
@@ -2537,27 +2573,27 @@ classload("cache","validator","defs");
 					$this->db_query($q);
 				};
 			};
-			return $this->mk_orb("menu_list", array("parent" => $arr[parent],"period" => $arr[period]));
+			return $this->mk_orb("menu_list", array("parent" => $arr["parent"],"period" => $arr["period"]));
 		}
 
 		function submit_order2($arr)
 		{
-			$jrk = $arr[jrk];
+			$jrk = $arr["jrk"];
 			if (!is_array($jrk))
 			{
-				$jrk = $arr[ord];
+				$jrk = $arr["ord"];
 			}
-			$act = $arr[act];
+			$act = $arr["act"];
 			if (!is_array($act))
-				$act = $arr[active];
-			$is_forum = $arr[is_forum];
-			$showlead = $arr[showlead];
-			$text_ok = $arr[text_ok];
-			$pic_ok = $arr[pic_ok];
-			$esilehel = $arr[esilehel];
-			$esilehel_uudis = $arr[esilehel_uudis];
-			$jrk1 = $arr[jrk1];
-			$jrk2 = $arr[jrk2];
+				$act = $arr["active"];
+			$is_forum = $arr["is_forum"];
+			$showlead = $arr["showlead"];
+			$text_ok = $arr["text_ok"];
+			$pic_ok = $arr["pic_ok"];
+			$esilehel = $arr["esilehel"];
+			$esilehel_uudis = $arr["esilehel_uudis"];
+			$jrk1 = $arr["jrk1"];
+			$jrk2 = $arr["jrk2"];
 
 			// saveme default dokumendi.
 			if ($arr["default"] == -1)
@@ -2568,11 +2604,11 @@ classload("cache","validator","defs");
 			{
 				$def_doc = $arr["default"];
 			}
-			$o = $this->get_object($arr[parent]);
-			$od = unserialize($o[last]);
+			$o = $this->get_object($arr["parent"]);
+			$od = unserialize($o["last"]);
 			$od[$GLOBALS["lang_id"]] = $def_doc;
 			$os = serialize($od);
-			$this->upd_object(array("oid" => $arr[parent], "last" => $os));
+			$this->upd_object(array("oid" => $arr["parent"], "last" => $os));
 
 			if (!is_array($jrk))
 			{
@@ -2647,7 +2683,7 @@ classload("cache","validator","defs");
 					$this->db_query($q);
 				};
 			};
-			return $this->mk_orb("obj_list", array("parent" => $arr[parent],"period" => $arr[period]));
+			return $this->mk_orb("obj_list", array("parent" => $arr["parent"],"period" => $arr["period"]));
 		}
 
 		function ndelete($arr)
@@ -2659,7 +2695,7 @@ classload("cache","validator","defs");
 			$this->rd($id);
 			$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
 			$this->_log("menuedit","Kustutas men&uuml;&uuml; $name");
-			header("Location: ".$this->mk_orb("menu_list", array("parent" => $arr[parent])));
+			header("Location: ".$this->mk_orb("menu_list", array("parent" => $arr["parent"])));
 		}
 
 		function change($arr)
@@ -2714,21 +2750,21 @@ classload("cache","validator","defs");
 			$this->db_query($q);
 			$edit_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$edit_templates[$tpl["id"]] = $tpl[name];
+				$edit_templates[$tpl["id"]] = $tpl["name"];
 			};
 			// kysime infot lyhikeste templatede kohta
 			$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
 			$this->db_query($q);
 			$short_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$short_templates[$tpl["id"]] = $tpl[name];
+				$short_templates[$tpl["id"]] = $tpl["name"];
 			};
 			// kysime infot pikkade templatede kohta
 			$q = "SELECT * FROM template WHERE type = 2 ORDER BY id";
 			$this->db_query($q);
 			$long_templates = array();
 			while($tpl = $this->db_fetch_row()) {
-				$long_templates[$tpl["id"]] = $tpl[name];
+				$long_templates[$tpl["id"]] = $tpl["name"];
 			};
 
 			$sar = array();
@@ -2849,7 +2885,7 @@ classload("cache","validator","defs");
 			reset($programs);
 			while (list($id,$v) = each($programs))
 			{
-				$ret[$id] = $v[name];
+				$ret[$id] = $v["name"];
 			}
 
 			return $ret;
@@ -2861,7 +2897,7 @@ classload("cache","validator","defs");
 			while ($row = $this->db_next())
 			{
 				$this->save_handle();
-				$id = $this->new_object(array("parent" => 1, "name" => $row[uid], "class_id" => 1, "comment" => $row[uid]." kodukataloog"));
+				$id = $this->new_object(array("parent" => 1, "name" => $row["uid"], "class_id" => 1, "comment" => $row["uid"]." kodukataloog"));
 				$this->db_query("INSERT INTO menu (id,type) VALUES($id,".MN_HOME_FOLDER.")");
 				$this->db_query("UPDATE users SET home_folder = $id WHERE uid = '$row[uid]'");
 				echo "created for $row[uid] , id = $id<br>";
@@ -2879,6 +2915,7 @@ classload("cache","validator","defs");
 			global $ext;
 
 			$ch = $this->get_object_chain($oid,false,$GLOBALS["admin_rootmenu2"]);
+			$path = "";
 			reset($ch);
 			while (list(,$row) = each($ch))
 			{
@@ -2920,17 +2957,17 @@ classload("cache","validator","defs");
 			while ($p)
 			{
 				$this->_push($this->mar[$p],"yaha");
-				if ($this->mar[$p][links])
+				if ($this->mar[$p]["links"])
 				{
 					$p = 0;
 				}	
-				$p = $this->mar[$p][parent];
+				$p = $this->mar[$p]["parent"];
 			}
 
 			while ($v = $this->_pop("yaha"))
 			{
-				$url = $baseurl."/index.".$ext."/section=".$v[oid];
-				$this->vars(array("url" => $url, "name" => $v[name], "oid" => $v[oid]));
+				$url = $baseurl."/index.".$ext."/section=".$v["oid"];
+				$this->vars(array("url" => $url, "name" => $v["name"], "oid" => $v["oid"]));
 				if ($y == "")
 				{
 					$y =$this->parse("YAH_BEGIN");
@@ -2948,8 +2985,8 @@ classload("cache","validator","defs");
 				reset($this->mpr[$parent]);
 				while (list(,$ar) = each($this->mpr[$parent]))
 				{
-					$url = $baseurl."/index.".$ext."/section=".$ar[oid];
-					$this->vars(array("url" => $url, "name" => $ar[name], "oid"=>$ar[oid]));
+					$url = $baseurl."/index.".$ext."/section=".$ar["oid"];
+					$this->vars(array("url" => $url, "name" => $ar["name"], "oid"=>$ar["oid"]));
 					$c.= $this->parse("SECTIONS_COL");
 
 					if (($cnt % LINKC_MENUSPERLINE) == 0)
@@ -2971,11 +3008,11 @@ classload("cache","validator","defs");
 			while ($row = $this->db_next())
 			{
 				$target = "";
-				if ($row[newwindow])
+				if ($row["newwindow"])
 				{
 					$target = "target='_new'";
 				}
-				$this->vars(array("url" => $row[url], "name" => $row[name], "text" => $row[comment], "target" => $target));
+				$this->vars(array("url" => $row["url"], "name" => $row["name"], "text" => $row["comment"], "target" => $target));
 				$c.=$this->parse("LINK_COL");
 
 				if (($cnt % LINKC_LINKSPERLINE) == 0)
@@ -3001,7 +3038,7 @@ classload("cache","validator","defs");
 
 			$cnt = 0;
 
-			if (!is_array($this->mpr[$parent]))
+			if (!isset($this->mpr[$parent]) || !is_array($this->mpr[$parent]))
 			{
 				$this->level--;
 				return 0;
@@ -3025,6 +3062,7 @@ classload("cache","validator","defs");
 			$this->vars(array($mn => ""));
 
 			// go over the menus on this level
+			$l = "";
 			reset($this->mpr[$parent]);
 			while (list(,$row) = each($this->mpr[$parent]))
 			{
@@ -3089,7 +3127,7 @@ classload("cache","validator","defs");
 					$ap = "";	
 				};
 
-				if (is_array($this->mpr[$row["oid"]]))
+				if (isset($this->mpr[$row["oid"]]) && is_array($this->mpr[$row["oid"]]))
 				{
 					$hs = $this->parse("HAS_SUBITEMS_".$name);
 				}
@@ -3119,7 +3157,7 @@ classload("cache","validator","defs");
 													"link" 		=> $link,
 													"section"	=> $row["oid"],
 													"target" 	=> $target,
-													"image"		=> ($row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
+													"image"		=> (isset($row["img_url"]) && $row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
 
 				$l.=$this->parse($mn.$ap);
 				$this->vars(array($mn.$ap => ""));
@@ -3152,14 +3190,14 @@ classload("cache","validator","defs");
 					$this->restore_handle();
 				}
 
-				if ($samenu[link] != "")
+				if ($samenu["link"] != "")
 				{
-					$link = $samenu[link];
+					$link = $samenu["link"];
 				}
 				else
 				{
 					$link = $baseurl."/";
-					$link .= ($samenu[alias] != "") ? $samenu[alias] : "index." . $ext . "/section=" . $samenu[oid];
+					$link .= ($samenu["alias"] != "") ? $samenu["alias"] : "index." . $ext . "/section=" . $samenu["oid"];
 				}
 
 				$this->vars(array(
@@ -3212,7 +3250,7 @@ classload("cache","validator","defs");
 			while ($eid != $id && $eid > 0)
 			{
 				$sels[$eid] = $eid;
-				$eid = $this->mar[$eid][parent];
+				$eid = $this->mar[$eid]["parent"];
 			}
 		}
 
@@ -3320,7 +3358,7 @@ classload("cache","validator","defs");
 			{
 				$db["mtype"] = MN_HOME_FOLDER_SUB;	// so you can share them later on.
 			}
-			$id = $this->new_object(array("parent" => $parent,"name" => $db["name"], "class_id" => $db["class_id"], "status" => $db[status], "comment" => $db["comment"], "jrk" => $db["jrk"], "visible" => $db["visible"], "alias" => $db["alias"], "periodic" => $db["periodic"]));
+			$id = $this->new_object(array("parent" => $parent,"name" => $db["name"], "class_id" => $db["class_id"], "status" => $db["status"], "comment" => $db["comment"], "jrk" => $db["jrk"], "visible" => $db["visible"], "alias" => $db["alias"], "periodic" => $db["periodic"]));
 			$this->db_query("INSERT INTO menu 
 						 (id,link,type,is_l3,periodic,clickable,target,mid,hide_noact,ndocs,admin_feature,number,icon_id,links) 
 			VALUES ($id,'".$db["link"]."','".$db["mtype"]."','".$db["is_l3"]."','".$db["periodic"]."','".$db["clickable"]."','".$db["target"]."','".$db["mid"]."','".$db["hide_noact"]."','".$db["ndocs"]."','".$db["admin_feature"]."','".$db["number"]."',$icon_id,'".$db["links"]."')");
@@ -3487,12 +3525,12 @@ classload("cache","validator","defs");
 		while ($p && ($cnt < 20))
 		{
 			$cnt++;
-			if ($this->mar[$p][links])
+			if (isset($this->mar[$p]["links"]) && $this->mar[$p]["links"])
 			{
 				$p = 0;
 				$links = true;
 			}	
-			$p = $this->mar[$p][parent];
+			$p = $this->mar[$p]["parent"];
 		}
 		$awt->stop("is_link_collection()");
 		return $links;
@@ -3514,13 +3552,13 @@ classload("cache","validator","defs");
 				$this->mar[$p] = $this->db_next();
 			}
 
-			if ($this->mar[$p]["is_shop"])
+			if (isset($this->mar[$p]["is_shop"]) && $this->mar[$p]["is_shop"] == 1)
 			{
 				$sh_id = $this->mar[$p]["shop_id"];
 				$p = 0;
 				$links = true;
 			}	
-			$p = $this->mar[$p]["parent"];
+			isset($this->mar[$p]["parent"]) ? $p = $this->mar[$p]["parent"] : $p = 0;
 		}
 		$awt->stop("is_shop()");
 		if (!$links)
@@ -3602,6 +3640,7 @@ classload("cache","validator","defs");
 		{
 			$docid = $this->get_default_document($section);
 		};
+		$ct = "";
 		$template = $this->get_long_template($section);
 		if (is_array($docid)) 
 		{
@@ -3708,7 +3747,7 @@ classload("cache","validator","defs");
 				$ya.=$this->parse("YAH_LINK");
 			}
 			// don't show things that are before $frontpage
-			if ($this->mar[$path[$i]][oid] == $GLOBALS["frontpage"])
+			if (isset($path[$i]) && isset($this->mar[$path[$i]]) && $this->mar[$path[$i]]["oid"] == $GLOBALS["frontpage"])
 			{
 				$show = true;
 			}
@@ -3723,6 +3762,9 @@ classload("cache","validator","defs");
 		$awt->start("make_promo_boxes($section)");
 		// see jupp siin teeb promokastid
 		$doc = new document;
+		$right_promo = "";
+		$left_promo = "";
+		$scroll_promo = "";
 		$template = $this->get_lead_template($section);
 		$q = "SELECT objects.*, template.filename as filename,menu.link as link
 				FROM objects 
@@ -3736,7 +3778,7 @@ classload("cache","validator","defs");
 			$awt->count("make_promo_boxes($section)::rows");
 			$doc->doc_count = 0;
 			$ar = unserialize($row["comment"]);
-			if ($ar["section"][$section] || ($row["comment"] == "all_menus" && $row["site_id"] == $GLOBALS["SITE_ID"]))
+			if ((isset($ar["section"][$section]) && $ar["section"][$section]) || ($row["comment"] == "all_menus" && $row["site_id"] == $GLOBALS["SITE_ID"]))
 			{
 				$awt->count("make_promo_boxes($section)::vis_rows");
 				$awt->start("make_promo_boxes($section)::show_rows");
@@ -3751,18 +3793,18 @@ classload("cache","validator","defs");
 					while (list(,$d) = each($docid))
 					{
 						$awt->stop("make_promo_boxes($section)::show_rows");
-						$pr_c.=$doc->gen_preview(array("docid" => $d, "tpl" => $row[filename],"leadonly" => -1, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
+						$pr_c.=$doc->gen_preview(array("docid" => $d, "tpl" => $row["filename"],"leadonly" => -1, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
 						$awt->start("make_promo_boxes($section)::show_rows");
 					}
 				}
 				else
 				{
 					$awt->stop("make_promo_boxes($section)::show_rows");
-					$pr_c.=$doc->gen_preview(array("docid" => $docid, "tpl" => $row[filename],"leadonly" => -1, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
+					$pr_c.=$doc->gen_preview(array("docid" => $docid, "tpl" => $row["filename"],"leadonly" => -1, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
 					$awt->start("make_promo_boxes($section)::show_rows");
 				}
 
-				$this->vars(array("title" => $row[name], "content" => $pr_c,"url" => $row[link]));
+				$this->vars(array("title" => $row["name"], "content" => $pr_c,"url" => $row["link"]));
 				$ap = "";
 				if ($row["link"] != "")
 				{

@@ -41,6 +41,7 @@ function toggle1(layer1,layer2) {
 <tr> 
 <td align="center" height="17" class="peaLingidText"><a class="peaLingid" href="javascript:toggle1('menu1','menu1b')">Toimeta</a><img src='/images/transa.gif' width=10 height=1></td>
 <td align="center" height="17" class="peaLingidText"><a href="javascript:toggle1('menu2','menu2b')" class="peaLingid" >M&auml;&auml;rangud</a><img src='/images/transa.gif' width=10 height=1></td>
+<!-- 
 <td align="center" height="17" class="peaLingidText">
 <!-- SUB: FILLED_FORMS -->
 <a href="javascript:toggle1('menu3','menu3b')" class="peaLingid">T&auml;idetud formid</a><img src='/images/transa.gif' width=10 height=1>
@@ -50,7 +51,7 @@ function toggle1(layer1,layer2) {
 <!-- SUB: OP_1 -->
 <a href="javascript:toggle1('menu4','menu4b')" class="peaLingid">V&auml;ljundid</a><img src='/images/transa.gif' width=10 height=1>
 <!-- END SUB: OP_1 -->
-&nbsp;</td>
+&nbsp;</td>-->
 </tr>
 </table>
 </td>
@@ -97,15 +98,17 @@ function toggle1(layer1,layer2) {
 <!-- SUB: CAN_ACTION -->
 <a class="alamlingid" href='{VAR:actions}'>Formi actionid</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: CAN_ACTION -->
-
+<!-- 
 <!-- SUB: CAN_ACL -->
 <a class="alamlingid" href='forms.{VAR:ext}?type=acl&id={VAR:form_id}'>ACL</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: CAN_ACL -->
-
+-->
 <!-- SUB: CAN_META -->
 <a class="alamlingid" href='{VAR:metainfo}'>Meta info</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: CAN_META -->
+<!--
 <a class="alamlingid" href='forms.{VAR:ext}?type=html&id={VAR:form_id}'>HTML</a>
+-->
 </div>
 <!-- end# menu 2 -->
 

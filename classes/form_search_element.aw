@@ -1,7 +1,4 @@
 <?php
-if (defined("FORM_SELEMENT_LOADED")) {
-} else {
-define(FORM_SELEMENT_LOADED,1);
 	session_register("clipboard");
 
 	$formcache = -1;	// array of forms
@@ -45,17 +42,17 @@ define(FORM_SELEMENT_LOADED,1);
 					}
 					else
 					{
-						$form = unserialize($row[content]);
+						$form = unserialize($row["content"]);
 					}
-					$fid = $row[id];
-					$formcache[$row[id]] = array("id" => $row[id], "name" => $row[name], "content" => $form);
+					$fid = $row["id"];
+					$formcache[$row["id"]] = array("id" => $row["id"], "name" => $row["name"], "content" => $form);
 
 					$elnum = 0;
-					for ($row = 0; $row <  $form[rows]; $row++)
+					for ($row = 0; $row <  $form["rows"]; $row++)
 					{
-						for ($col = 0; $col <  $form[cols]; $col++)
+						for ($col = 0; $col <  $form["cols"]; $col++)
 						{
-							$elar = $form[elements][$row][$col];
+							$elar = $form["elements"][$row][$col];
 							if (is_array($elar))
 							{
 								reset($elar);
@@ -63,9 +60,9 @@ define(FORM_SELEMENT_LOADED,1);
 								{
 									// el_el_id = elemendi NUMBER selle formi sees
 									$this->vars(array("form_id" => $fid, "el_el_id" => $elnum++, "el_value" => $elid, 
-																"el_text" => ($el[name] == "" ? $el[text] == "" ? $el[type] : $el[text] : $el[name]),
-																"el_type"	=> $el[type]));
-									$formcache[$fid][elements][$elid] = array("el_text" => $el[text], "el_type" => $el[type],"el_name" => $el[name]);
+																"el_text" => ($el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"]),
+																"el_type"	=> $el["type"]));
+									$formcache[$fid]["elements"][$elid] = array("el_text" => $el["text"], "el_type" => $el["type"],"el_name" => $el["name"]);
 									$ed.=$this->parse("ELDEFS");
 								}
 							}
@@ -86,13 +83,13 @@ define(FORM_SELEMENT_LOADED,1);
 			reset($formcache);
 			while (list($id,$v) = each($formcache))
 			{
-				$this->vars(array("sel_form_active" => ($this->arr[linked_form] == $id ? "SELECTED" : ""),
+				$this->vars(array("sel_form_active" => ($this->arr["linked_form"] == $id ? "SELECTED" : ""),
 													"sel_form_value"	=> $id,	
-													"sel_form_name"		=> $v[name]));
+													"sel_form_name"		=> $v["name"]));
 				$fs.=$this->parse("FORMSEL");
 
 				if ($sel_form == -1)
-					if ($this->arr[linked_form] == $id)
+					if ($this->arr["linked_form"] == $id)
 						$sel_form = $id;
 				
 				if ($lid == -1)
@@ -104,17 +101,17 @@ define(FORM_SELEMENT_LOADED,1);
 				$sel_form = $lid;
 
 			$cnt =0;
-			if (is_array($formcache[$sel_form][elements]))
+			if (is_array($formcache[$sel_form]["elements"]))
 			{
-				reset($formcache[$sel_form][elements]);
-				while (list($id, $ar) = each($formcache[$sel_form][elements]))
+				reset($formcache[$sel_form]["elements"]);
+				while (list($id, $ar) = each($formcache[$sel_form]["elements"]))
 				{
-					$nc = $chcnt-strlen($ar[el_text]);
+					$nc = $chcnt-strlen($ar["el_text"]);
 					$chs = $nc > 0 ? str_repeat("&nbsp;",$nc) : "";
 
-					$this->vars(array("sel_el_active" => ($this->arr[linked_element] == $id ? "SELECTED" : ""), 
+					$this->vars(array("sel_el_active" => ($this->arr["linked_element"] == $id ? "SELECTED" : ""), 
 														"sel_el_value"	=> $id, 
-														"sel_el_name"		=> $ar[el_name] == "" ? $ar[el_text].$chs : $ar[el_name]));
+														"sel_el_name"		=> $ar["el_name"] == "" ? $ar["el_text"].$chs : $ar["el_name"]));
 					$es.=$this->parse("ELSEL");
 					$cnt++;
 				}
@@ -127,7 +124,7 @@ define(FORM_SELEMENT_LOADED,1);
 			}
 
 			$this->vars(array("ELSEL" => $es));
-			$this->vars(array("el_id" => "el_".$this->id, "el_text" => $this->arr[text]));
+			$this->vars(array("el_id" => "el_".$this->id, "el_text" => $this->arr["text"]));
 
 			$GLOBALS["script"] .= "ch_type(document.f1.el_".$this->id."_element,document.f1.el_".$this->id."_form,\"el_".$this->id."\");";
 
@@ -142,30 +139,30 @@ define(FORM_SELEMENT_LOADED,1);
 			$base = "el_".$this->id;
 			
 			$var=$base."_text";
-			$this->arr[text] = $$var;
+			$this->arr["text"] = $$var;
 
 			$var=$base."_form";
-			$this->arr[linked_form] = $$var;
+			$this->arr["linked_form"] = $$var;
 
 			$var=$base."_element";
-			$this->arr[linked_element] = $$var;
+			$this->arr["linked_element"] = $$var;
 
 			return true;
 		}
 
 		function gen_user_html_not(&$images)		// function that doesn't use templates
 		{
-			if ($this->arr[linked_element] > 0)
+			if ($this->arr["linked_element"] > 0)
 			{
 				global $formcache;
-				if (!isset($formcache[$this->arr[linked_form]]))
+				if (!isset($formcache[$this->arr["linked_form"]]))
 				{
-					$formcache[$this->arr[linked_form]] = new form;
-					$formcache[$this->arr[linked_form]]->load($this->arr[linked_form]);
+					$formcache[$this->arr["linked_form"]] = new form;
+					$formcache[$this->arr["linked_form"]]->load($this->arr["linked_form"]);
 				}
-				$form = &$formcache[$this->arr[linked_form]];
+				$form = &$formcache[$this->arr["linked_form"]];
 
-				$t = $form->get_element_by_id($this->arr[linked_element]);
+				$t = $form->get_element_by_id($this->arr["linked_element"]);
 
 				$t->entry = $this->entry;
 				$t->entry_id = $this->entry_id;
@@ -173,12 +170,12 @@ define(FORM_SELEMENT_LOADED,1);
 				{
 					// add an empty element to the listbox so we can tell the difference, 
 					// if nothing was selected and we can then ignore the lb in the search
-					$t->arr[listbox_items][$t->arr[listbox_count]] = "";
-					$t->arr[listbox_default] = $t->arr[listbox_count];
-					$t->arr[listbox_count]++;
+					$t->arr["listbox_items"][$t->arr["listbox_count"]] = "";
+					$t->arr["listbox_default"] = $t->arr["listbox_count"];
+					$t->arr["listbox_count"]++;
 				}
-				if ($this->arr[text] != "")
-					$t->arr[text] = $this->arr[text];
+				if ($this->arr["text"] != "")
+					$t->arr["text"] = $this->arr["text"];
 
 				if (!($t->get_type() == 'file' || $t->get_type() == 'link'))
 					return $t->gen_user_html_not(&$images);
@@ -191,23 +188,23 @@ define(FORM_SELEMENT_LOADED,1);
 
 		function process_entry(&$entry, $id)
 		{
-			if (!$this->arr[linked_element])
+			if (!$this->arr["linked_element"])
 				return;
 
 			global $formcache;
-			if (!isset($formcache[$this->arr[linked_form]]))
+			if (!isset($formcache[$this->arr["linked_form"]]))
 			{
-				$formcache[$this->arr[linked_form]] = new form;
-				$formcache[$this->arr[linked_form]]->load($this->arr[linked_form]);
+				$formcache[$this->arr["linked_form"]] = new form;
+				$formcache[$this->arr["linked_form"]]->load($this->arr["linked_form"]);
 			}
-			$form = &$formcache[$this->arr[linked_form]];
+			$form = &$formcache[$this->arr["linked_form"]];
 
-			$t = $form->get_element_by_id($this->arr[linked_element]);
+			$t = $form->get_element_by_id($this->arr["linked_element"]);
 			if ($t->get_type() != "listbox")
 			{
 				$te = array();
 				$t->process_entry(&$te, $id);
-				$entry[$this->id] = $te[$this->arr[linked_element]];
+				$entry[$this->id] = $te[$this->arr["linked_element"]];
 			}
 			else
 			{
@@ -216,7 +213,7 @@ define(FORM_SELEMENT_LOADED,1);
 				$var = $t->get_id();
 				global $$var;
 
-				if ($$var == "element_".$this->arr[linked_element]."_lbopt_".$t->arr[listbox_count])
+				if ($$var == "element_".$this->arr["linked_element"]."_lbopt_".$t->arr["listbox_count"])
 					$entry[$this->id] = "";
 				else
 					$entry[$this->id] = $$var;
@@ -229,18 +226,17 @@ define(FORM_SELEMENT_LOADED,1);
 				return "";
 
 			global $formcache;
-			if (!isset($formcache[$this->arr[linked_form]]))
+			if (!isset($formcache[$this->arr["linked_form"]]))
 			{
-				$formcache[$this->arr[linked_form]] = new form;
-				$formcache[$this->arr[linked_form]]->load($this->arr[linked_form]);
+				$formcache[$this->arr["linked_form"]] = new form;
+				$formcache[$this->arr["linked_form"]]->load($this->arr["linked_form"]);
 			}
-			$form = &$formcache[$this->arr[linked_form]];
+			$form = &$formcache[$this->arr["linked_form"]];
 
-			$t = $form->get_element_by_id($this->arr[linked_element]);
+			$t = $form->get_element_by_id($this->arr["linked_element"]);
 			$t->entry = $this->entry;
 			$t->entry_id = $this->entry_id;
 			return $t->gen_show_html();
 		}
 	}
-}
 ?>

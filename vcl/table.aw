@@ -1,8 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.1 2001/05/31 18:20:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.2 2001/06/14 08:47:46 kristo Exp $
 if (!defined("AW_TABLE_LOADED"))
 {
 define("AW_TABLE_LOADED",1);
+global $PHP_SELF;
 // see on kolmas rewrite juba. ööööh 
 // samas .. suht koht rahuldav juba
 // klass tabelite joonistamiseks

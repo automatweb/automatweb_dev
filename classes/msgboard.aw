@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.3 2001/05/29 16:34:55 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.4 2001/06/14 08:47:39 kristo Exp $
 
-define(PER_PAGE,10);
-define(PER_FLAT_PAGE,20);
-define(TOPICS_PER_PAGE,7);
+define("PER_PAGE",10);
+define("PER_FLAT_PAGE",20);
+define("TOPICS_PER_PAGE",7);
 
 class msgboard extends aw_template
 {

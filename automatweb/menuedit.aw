@@ -17,6 +17,10 @@ if ($type != "objects")
 
 classload("menuedit");
 classload("acl");
+$pdata = array("description" => "");
+$period = isset($period) ? $period : 0;
+$periodic = isset($periodic) ? $periodic : 0;
+
 if ($period || $periodic) 
 {
 	classload("periods");
@@ -59,7 +63,7 @@ if (!isset($parent))
 	$parent = 1;
 };
 
-$m = new menuedit($period,$pdata[description]);
+$m = new menuedit($period,$pdata["description"]);
 
 switch ($type)
 {
@@ -84,19 +88,6 @@ switch ($type)
 		break;
 
 	case "folders":
-/*		// peatame koik taimerid ja kysime nende kohta info
-		$alltimers = $awt->summaries();
-
-		// siia paigutame koikide taimerite väärtused
-		$timers_arr = array(); 
-
-		// labelid erinevate taimerite jaoks
-		$tlabels = array("__global"  => "Kokku");
-		while(list($k,$v) = each($alltimers)) {
-			$label = ($tlabels[$k]) ? $tlabels[$k] : $k;
-			$timers_arr[] = "$label = $v" . "s";
-		};
-		die("<br><br><br><font size=1>".join(" | ",$timers_arr)."</font>");*/
 		classload("languages");
 		$t = new languages;
 		$sf->read_template("index_folders.tpl");

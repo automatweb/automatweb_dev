@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.2 2001/05/29 16:44:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.3 2001/06/14 08:47:39 kristo Exp $
 // xml.aw - generic class for handling data in xml format.
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml {
@@ -8,11 +8,11 @@ class xml {
 	function xml($args = array())
 	{
 		// konteiner tag
-		$this->ctag = ($args["ctag"]) ? $args["ctag"] : "xml";
+		$this->ctag = isset($args["ctag"]) ? $args["ctag"] : "xml";
 		// xml versioon
-		$this->xml_version = ($args["xml_version"]) ? $args["xml_version"] : "1.0";
+		$this->xml_version = isset($args["xml_version"]) ? $args["xml_version"] : "1.0";
 		// numbriliste elementide prefix arrayde serialiseerimise juures
-		$this->num_prefix = ($args["num_prefix"]) ? $args["num_prefix"] : "num_";
+		$this->num_prefix = isset($args["num_prefix"]) ? $args["num_prefix"] : "num_";
 	}
 
 	// lopetab xml definitsiooni (s.t. lisab versiooninumbri ning root tagi
@@ -188,7 +188,7 @@ class xml {
 					$path .= "[\"" . $tag . "\"]";
 
 					// value algusest ja lõpust liigne räga maha
-					$value = trim($v1["value"]);
+					$value = trim(isset($v1["value"]) ? $v1["value"] : "");
 
 					// moodustame evali jaoks rea
 					$value = str_replace("\\","\\\\",$value);

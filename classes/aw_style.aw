@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.2 2001/06/14 08:47:39 kristo Exp $
 // AW Style Engine.
 class aw_style {
 	var $tags;
@@ -20,10 +20,10 @@ class aw_style {
 
                 foreach ($values as $element)
                 {
-                        if ($element[tag] == "TAG")
+                        if ($element["tag"] == "TAG")
                         {
-                                $id = $element[attributes][ID];
-                                $this->tags[$id] = $element[value];
+                                $id = $element["attributes"]["ID"];
+                                $this->tags[$id] = $element["value"];
                         };
                 };
         }

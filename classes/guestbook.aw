@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.2 2001/06/05 14:13:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.3 2001/06/14 08:47:39 kristo Exp $
 
 global $orb_defs;
 $orb_defs["guestbook"] = array("new" => array("function" => "add" , "params" => array("parent"), "opt" => array("docid")),
 															 "submit_gb" => array("function" => "submit_gb", "params" => array()),
 															 "change" => array("function" => "change", "params" => array("id"), "opt" => array("parent", "docid")),
-															 "add_entry" => array("function" => "add_entry", "params" => array("id" => $id, "url" => $url))
+															 "add_entry" => array("function" => "add_entry", "params" => array("id","url"))
 															);
 
 class guestbook extends aw_template

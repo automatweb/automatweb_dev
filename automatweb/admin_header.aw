@@ -1,33 +1,33 @@
 <?php
-//if ($uid != "")
-//	$uid  = "";
 session_name("automatweb");
 session_start();
 $uid = $HTTP_SESSION_VARS["uid"];
-if (!$uid) {
+if (!$uid) 
+{
 	include("sorry.aw");
 	exit;
 };
-define(UID,$uid);
-classload("timer","defs","aw_template","users","objects");
+
+if ($lang_id < 1)
+{
+	$lang_id = 1;
+}
+
+define("UID",$uid);
 lc_load("automatweb");
+classload("timer","defs","aw_template","users","objects");
+
 $awt = new aw_timer;
-$sf = new aw_template;
+
 $users = new users;
 $gidlist = $users->get_gids_by_uid($uid);
-// pgn. igal adminnilehe laadimisel käperdame kasutajat? not a good idea I think.
-// $users->touch(UID);
-
 $udata = $users->fetch($uid);
-$user_email = $udata["email"];
+$user_email = isset($udata["email"]) ? $udata["email"] : "" ;
 
+$sf = new aw_template;
 $sf->tpl_init("automatweb");
 $sf->db_init();
 // do we really need that?
 $ob = new db_objects;
-
-if ($lang_id < 1)
-	$lang_id = 1;
-
 
 ?>

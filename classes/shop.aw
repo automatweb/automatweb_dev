@@ -15,7 +15,7 @@ session_register("shopping_cart");
 //	$shopping_cart["items"][$oid]["cnt_entry"] - form_entry id of the form filled to specify count and type of items
 //  $shopping_cart["price"] = total price of items in cart, not to be trusted, payment total should be calculated from database
 
-define(ORD_FILLED,1);
+define("ORD_FILLED",1);
 
 lc_load("shop");
 classload("shop_base");
@@ -25,6 +25,7 @@ class shop extends shop_base
 	{
 		$this->shop_base();
 		lc_site_load("shop",$this);
+		$this->shop_menus = "";
 	}
 
 	////
@@ -243,6 +244,7 @@ class shop extends shop_base
 		// make yah link
 		global $baseurl,$ext;
 		$p = $parent;
+		$y = "";
 		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE oid=$p");
 		$op = $this->db_next();
 		while ($p != $s["root_menu"] && $p)
@@ -930,7 +932,7 @@ class shop extends shop_base
 			"item_id" => $row["oid"],
 			"price" => $row["price"],
 			"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
-			"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $parent)),
+			"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
 			"cnt_form" => $f->gen_preview(array(
 												"id" => $itt["cnt_form"],
 												"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
@@ -955,6 +957,7 @@ class shop extends shop_base
 		classload("form");
 		$f = new form;
 
+		$old_entry = false;
 		if ($shopping_cart["items"][$item_id]["cnt_entry"])
 		{
 			$old_entry = $f->get_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"]);
@@ -1103,7 +1106,7 @@ class shop extends shop_base
 			foreach($rowels as $elid => $elval)
 			{
 				$el = $f->get_element_by_id($elid);
-				if ($sel_srs[$el->get_srow_grp()])
+				if (isset($sel_srs[$el->get_srow_grp()]))
 				{
 					// kui on, siis j2relikult n2itame selle rea elemente
 					$hasels = true;
@@ -1146,6 +1149,10 @@ class shop extends shop_base
 				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section))
 			));
 			$is_f = "";
+			if (!isset($row["status"]))
+			{
+				$row["status"] = 0;
+			}
 			if ($row["status"] != ORD_FILLED)
 			{
 				$is_f = $this->parse("IS_F");
@@ -1183,6 +1190,10 @@ class shop extends shop_base
 			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
 		));
 		$sh = $this->get($shop);
+		if (!isset($id))
+		{
+			$id = 0;
+		}
 		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / <a href='".$this->mk_orb("admin_orders", array("id" => $shop))."'>Tellimused</a> / Vaata tellimust");
 
 		// load the entry from the database
@@ -1200,6 +1211,7 @@ class shop extends shop_base
 		$images = new db_images;
 
 		$items = false;
+		$itm = "";
 		if (is_array($o_items))
 		{
 			reset($o_items);
@@ -1241,6 +1253,7 @@ class shop extends shop_base
 			}
 		}
 
+		$tx = "";
 		$this->db_query("SELECT entry_id,form_id FROM order2form_entries WHERE order_id = $order_id");
 		while ($row = $this->db_next())
 		{

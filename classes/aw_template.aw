@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.5 2001/06/08 23:20:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.6 2001/06/14 08:47:39 kristo Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -10,7 +10,8 @@ class tpl
 	function tpl($name)
 	{
 		$this->name = $name;
-	        $this->subs = array();
+    $this->subs = array();
+		$this->source = "";
 	}
 	
 	function sink($line)
@@ -50,8 +51,10 @@ class aw_template extends acl_base
 		$this->set_root($basedir);
 		$this->expandsubs = $expandsubs;
 		$this->ignored = array();
+		$this->templates = array();
 		$this->t_tree = array();
 		$this->_init_vars();
+		$this->sub_merge = 0;
 		global $basedir;
 		$this->basedir = $basedir;
 	}
@@ -162,7 +165,7 @@ class aw_template extends acl_base
 	// !Selle abil saab sisse lugeda kusagilt mujalt (mitte failist) voetud template
 	function use_template($source)
 	{
-		if (is_object($awt))
+		if (isset($awt) && is_object($awt))
 		{
 			$awt->start("read_template");
 		};
@@ -200,7 +203,7 @@ class aw_template extends acl_base
 				$this->tlist[$level][] = $m[1];
 
                                 // compatibility jauks
-                                $this->templates[$last->name] .= $line;
+                                isset($this->templates[$last->name]) ? $this->templates[$last->name].= $line : $this->templates[$last->name] = $line;
 
 				$this->relations[$m[1]] = $last->name;
 
@@ -236,7 +239,7 @@ class aw_template extends acl_base
                                 $last = array_pop($construct);
 
                                 // compatibility jauks
-                                $this->templates[$last->name] .= $line;
+                                isset($this->templates[$last->name]) ?  $this->templates[$last->name].= $line : $this->templates[$last->name] = $line;
 
                                 // ja lisame sinna töödeldava rea       
                                 $last->sink($line);
@@ -261,7 +264,7 @@ class aw_template extends acl_base
                 };
                 $last = array_pop($construct);
                 $this->construct = $last;
-		if (is_object($awt))
+		if (isset($awt) && is_object($awt))
 		{
 			$awt->stop("read_template");
 		};
@@ -271,22 +274,24 @@ class aw_template extends acl_base
 
 	////
 	// !Saab kysida, kas sellise nimega template on registreeritud
-        function is_template($name)
+	function is_template($name)
 	{
-                // wrapper backwards compatibility jaoks
-                $retval = $this->get_tpl_by_name($name,array("0"=> $this->construct));
+		// wrapper backwards compatibility jaoks
+    $retval = $this->get_tpl_by_name($name,array("0"=> $this->construct));
 		return $retval;
-        }
+  }
 
-        function is_parent_tpl($tpl,$parent)
+	function is_parent_tpl($tpl,$parent)
 	{
-		if ($this->relations[$tpl] == $parent)
+		if (isset($this->relations[$tpl]) && $this->relations[$tpl] == $parent)
 		{
 			return true;
-		} else {
+		} 
+		else 
+		{
 			return false;
 		};
-        }
+	}
        
        	////
 	// !Tagastab template nime jargi
@@ -401,7 +406,7 @@ class aw_template extends acl_base
 		// kogu asendus tehakse ühe reaga
 		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
 		// mis eval-ist läbi lastakse. 
-		$src = preg_replace("/{VAR:(.+?)}/e","\$this->vars[\"\\1\"]",$object->source);
+		$src = preg_replace("/{VAR:(.+?)}/e","isset(\$this->vars[\"\\1\"]) ? \$this->vars[\"\\1\"] : \"\"",$object->source);
 
 		// võtame selle maha ka
 		global $status_msg;
@@ -412,36 +417,36 @@ class aw_template extends acl_base
 
 		if ($this->sub_merge == 1)
 		{
-                	$this->vars[$object->name] .= $src;
+	   	isset($this->vars[$object->name]) ? $this->vars[$object->name] .= $src : $this->vars[$object->name] = $src;
 		}
 		else
 		{
 			#$this->vars[$object->name] = $src;
 		};
-                return $src;
-        }
+		return $src;
+  }
 
-        // joonistab sektsiooni
-        function draw_section($params)
+  // joonistab sektsiooni
+  function draw_section($params)
 	{
-                $section_id = $params["section_id"];  // millist sektsiooni joonistame
-                $parent     = $params["parent"];      // millisest sektsioonist joonistamist alustame
-                $use_tpl    = $params["use_tpl"];     // millist templatet selleks kasutame (obj)
-                $main_tpl   = $params["main_tpl"];    // millisest templatest joonistamist alustame (obj)
+		$section_id = $params["section_id"];  // millist sektsiooni joonistame
+		$parent     = $params["parent"];      // millisest sektsioonist joonistamist alustame
+		$use_tpl    = $params["use_tpl"];     // millist templatet selleks kasutame (obj)
+		$main_tpl   = $params["main_tpl"];    // millisest templatest joonistamist alustame (obj)
 
-                if ((!is_object($use_tpl)) || (!is_object($main_tpl)))
+		if ((!is_object($use_tpl)) || (!is_object($main_tpl)))
 		{
-                        print "unknown template";
-                        die;
-                };
+			print "unknown template";
+			die;
+		};
 
-                $current = $this->branches[$main_tpl->name][$section_id];
-                if (!(is_array($current) && sizeof($current) > 0) )
+		$current = $this->branches[$main_tpl->name][$section_id];
+		if (!(is_array($current) && sizeof($current) > 0) )
 		{
-                        return;
-                };
-                reset($current);
-                while(list($k,$v) = each($current))
+			return;
+		};
+		reset($current);
+		while(list($k,$v) = each($current))
 		{
                         $this->vars($v);
                         $this->vars_merge(array($main_tpl->name => $this->parse($use_tpl)));

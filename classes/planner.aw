@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.22 2001/06/13 19:15:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.23 2001/06/14 08:47:39 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -155,33 +155,10 @@ class planner extends calendar {
 					"uid" => UID,
 				));
 
-		foreach($events as $key => $val)
-		{
-			print $val["oid"] . "<br>";
-			print $key . "-" . $val["title"] . "<br>";
-		};
-		print "---";
-		
-		//$repeaters = $this->_get_event_repeaters(array(
-		//		"id"	=> $id,
-		//		"start" => date("d-m-Y",$di["start"]),
-		//		"end" => date("d-m-Y",$di["end"])));
-		//
-		$rlist = array();
-	
-		// see on fawking catch22 olukord.
-		// Yhest kyljest oleks vaja lugeda repeaterid enne sisse, et me saaksime
-		// planner tabelist lugeda info ka korduvate kirjete kohta.
-
-		// teisest kyljest oleks vaja teada ka infot eventite kohta enne,
-		// et me saaksime teada millise kalendri juurde need repeaterid käivad
-
-		// lahendus? planner_repeater tabelisse panna samuti kirja selle
-		// kalendri ID, mille juurde repeater kuulub.
-
 		$ddiff1 = $this->get_day_diff($di["start"],$di["end"]);
 		// tsükkel yle koigi selles perioodis asuvate päevade, et
 		// leida ja paigutada events massiivi koik korduvad üritused
+		
 		for ($i = 0; $i <= $ddiff1; $i++)
 		{
 			// ja nüüd käime labi koik repeaterid, et teha kindlaks
@@ -615,7 +592,8 @@ class planner extends calendar {
 		$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
 			WHERE objects.status = 2 AND planner.uid = '$uid'
-				AND ((start >= '$start' AND start <= '$end') OR (rep_until >= '$start')) ORDER BY start";
+				AND ((start >= '$start' AND start <= '$end') OR (rep_until >= '$start'))
+				ORDER BY start";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -632,10 +610,33 @@ class planner extends calendar {
 		foreach($retval as $key => $val)
 		{
 			printf("%s - %s - %s<br>",date("d-m-Y",$val["start"]),$val["title"],date("d-m-Y",$val["end"]));
+			// siin hakkame läbima repeatereid
+			// see peaks olema eraldi funktsioon tegelikult
+			// note. koige vaixem yhik, mil repiiter korduda saab on
+			// 1 päev. s.t. me arvutame alati ainult päevadega
+			print sizeof($reps[$val["oid"]]);
+			print "<br>";
+			print $val["oid"];
+			print "<br>";
 		};
 		return (sizeof($retval) > 0) ? $retval : false;
 	}
-	
+
+	/*
+		tyyp on 4 (year) ja pwhen on määratud, siis peame selle välja
+		lahti parsima
+
+
+
+	*/
+
+	// aga voib-olla luua nende vahemike kujutamiseks hoopis eraldi objekt?
+	function parse_repeater($args = array())
+	{
+		extract($args);
+		
+
+	}
 
 
 	function adm_event($args = array())

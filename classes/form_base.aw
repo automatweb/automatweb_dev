@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.6 2001/06/06 14:05:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.7 2001/06/14 08:47:39 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -53,11 +53,11 @@ class form_base extends aw_template
 			$this->raise_error("form->load($id): no such form!",true);
 		}
 
-		$this->name = $row[name];
-		$this->id = $row[oid];
-		$this->parent = $row[parent];
-		$this->type = $row[type];
-		$this->comment = $row[comment];
+		$this->name = $row["name"];
+		$this->id = $row["oid"];
+		$this->parent = $row["parent"];
+		$this->type = $row["type"];
+		$this->comment = $row["comment"];
 
 		if (substr($row["content"],0,14) == "<?xml version=")
 		{
@@ -67,7 +67,7 @@ class form_base extends aw_template
 		}
 		else
 		{
-			$this->arr = unserialize($row[content]);
+			$this->arr = unserialize($row["content"]);
 		}
 
 		$this->normalize();
@@ -82,11 +82,11 @@ class form_base extends aw_template
 	// puts elements in $this->arr[contents]
 	function load_elements()
 	{
-		for ($row = 0; $row < $this->arr[rows]; $row++)
-			for ($col = 0; $col < $this->arr[cols]; $col++)
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
-				$this->arr[contents][$row][$col] = new form_cell();		
-				$this->arr[contents][$row][$col] -> load($this->id, $this->type, $row, $col, &$this->arr[elements]);
+				$this->arr["contents"][$row][$col] = new form_cell();		
+				$this->arr["contents"][$row][$col] -> load($this->id, $this->type, $row, $col, &$this->arr["elements"]);
 			}
 	}
 
@@ -97,27 +97,27 @@ class form_base extends aw_template
 	function normalize()
 	{
 		// this makes sure that the map gets initialized properly
-		if (!$this->arr[map][0][0]["row"])
+		if (!$this->arr["map"][0][0]["row"])
 		{
-			$this->arr[map][0][0]["row"] = 0;
+			$this->arr["map"][0][0]["row"] = 0;
 		}
-		if (!$this->arr[map][0][0]["col"])
+		if (!$this->arr["map"][0][0]["col"])
 		{
-			$this->arr[map][0][0]["col"] = 0;
-		}
-
-		if ($this->arr[cols] < 1)
-		{
-			$this->arr[cols] = 1;
-		}
-		if ($this->arr[rows] < 1)
-		{
-			$this->arr[rows] = 1;
+			$this->arr["map"][0][0]["col"] = 0;
 		}
 
-		if (!$this->arr[ff_folder])
+		if ($this->arr["cols"] < 1)
 		{
-			$this->arr[ff_folder] = $this->parent;
+			$this->arr["cols"] = 1;
+		}
+		if ($this->arr["rows"] < 1)
+		{
+			$this->arr["rows"] = 1;
+		}
+
+		if (!$this->arr["ff_folder"])
+		{
+			$this->arr["ff_folder"] = $this->parent;
 		}
 	}
 
@@ -168,32 +168,32 @@ class form_base extends aw_template
 	function get_spans($i, $a, $map = -1,$rows = -1, $cols = -1)	// row, col
 	{
 		if ($map == -1)
-			$map = $this->arr[map];
+			$map = $this->arr["map"];
 		if ($rows == -1)
-			$rows = $this->arr[rows];
+			$rows = $this->arr["rows"];
 		if ($cols == -1)
-			$cols = $this->arr[cols];
+			$cols = $this->arr["cols"];
 
 		// find if this cell is the top left one of the area
 		$topleft = true;
 		if ($i > 0)
 		{
-			if ($map[$i-1][$a][row] == $map[$i][$a][row])
+			if ($map[$i-1][$a]["row"] == $map[$i][$a]["row"])
 				$topleft = false;
 		}
 		if ($a > 0)
 		{
-			if ($map[$i][$a-1][col] == $map[$i][$a][col])
+			if ($map[$i][$a-1]["col"] == $map[$i][$a]["col"])
 				$topleft = false;
 		}
 
 		if ($topleft)
 		{
 			// if it is, then show the correct cell and set the col/rowspan to correct values
-			for ($t_row=$i; $t_row < $rows && $map[$t_row][$a][row] == $map[$i][$a][row]; $t_row++)
+			for ($t_row=$i; $t_row < $rows && $map[$t_row][$a]["row"] == $map[$i][$a]["row"]; $t_row++)
 				;
 
-			for ($t_col=$a; $t_col < $cols && $map[$i][$t_col][col] == $map[$i][$a][col]; $t_col++)
+			for ($t_col=$a; $t_col < $cols && $map[$i][$t_col]["col"] == $map[$i][$a]["col"]; $t_col++)
 				;
 
 			$rowspan = $t_row - $i;
@@ -201,12 +201,12 @@ class form_base extends aw_template
 				
 			$this->vars(array("colspan" => $colspan, "rowspan" => $rowspan));
 			if ($colspan > 1)
-				$r_col = $map[$i][$a][col];
+				$r_col = $map[$i][$a]["col"];
 			else
 				$r_col = $a;
 
 			if ($rowspan > 1)
-				$r_row = $map[$i][$a][row];
+				$r_row = $map[$i][$a]["row"];
 			else
 				$r_row = $i;
 
@@ -347,17 +347,17 @@ class form_base extends aw_template
 		while($row = $this->db_next())
 		{
 			$this->save_handle();
-			switch($row[type])
+			switch($row["type"])
 			{
 				case "join_list":
-					$data = unserialize($row[data]);
+					$data = unserialize($row["data"]);
 					classload("list");
 					$li = new mlist($data["list"]);
 
-					if ($this->entry[$data[checkbox]] == 1 || $data[checkbox] < 1)
-						$li->db_add_user(array("name" => $this->entry[$data[name_tb]], "email" => $this->entry[$data[textbox]]));
+					if ($this->entry[$data["checkbox"]] == 1 || $data["checkbox"] < 1)
+						$li->db_add_user(array("name" => $this->entry[$data["name_tb"]], "email" => $this->entry[$data["textbox"]]));
 					else
-						$li->db_remove_user($this->entry[$data[textbox]]);
+						$li->db_remove_user($this->entry[$data["textbox"]]);
 					break;
 
 				case "email":
@@ -417,37 +417,49 @@ class form_base extends aw_template
 		return $msg;
 	}
 
+	function get_op($id)
+	{
+		$this->db_query("SELECT form_output.*,objects.* FROM objects LEFT JOIN form_output ON form_output.id = objects.oid WHERE objects.oid = $id");
+		return $this->db_next();
+	}
+
 	////
 	// !loads the specified output for the currently loaded form
 	function load_output($id)
 	{
-		$this->db_query("SELECT form_output.*, objects.name as name, objects.comment as comment
-										 FROM form_output
-										 LEFT JOIN objects ON objects.oid = form_output.id
-										 LEFT JOIN acl ON acl.oid = objects.oid
-										 WHERE form_output.id = $id
-										 GROUP BY objects.oid");
-		if (!($row = $this->db_next()))
+		if (!($row = $this->get_op($id)))
 		{
 			$this->raise_error("form->load_output($id): no such record!",true);
 		}
 
-		$this->output = unserialize($row[op]);
+		classload("xml");
+		$x = new xml;
+		$this->output = $x->xml_unserialize(array("source" => $row["op"]));
 		$this->vars(array("output_id" => $id));
-		if ($this->output[cols] < 1 || $this->output[rows] < 1)
+		if (!isset($this->output["cols"]) || $this->output["cols"] < 1 || !isset($this->output["rows"]) || $this->output["rows"] < 1)
 		{
-			$this->output[cols] = 1;
-			$this->output[rows] = 1;
-			$this->output[map][0][0]=array("row" => 0, "col" => 0);
+			$this->output["cols"] = 1;
+			$this->output["rows"] = 1;
+			$this->output["map"][0][0]=array("row" => 0, "col" => 0);
 		}
 		$this->output_id = $id;
+		$this->name = $row["name"];
+		$this->comment = $row["comment"];
+		$this->parent = $row["parent"];
 	}
 
 	////
 	// !returns a list of forms, filtered by type
-	function get_list($type)
+	function get_list($type,$addempty = false)
 	{
-		$ret = array();
+		if ($addempty)
+		{
+			$ret = array("0" => "");
+		}
+		else
+		{
+			$ret = array();
+		}
 		$this->db_query("SELECT objects.name AS name,
 					objects.comment AS comment,
 					objects.oid AS oid,
@@ -472,12 +484,476 @@ class form_base extends aw_template
 	{
 		global $SITE_ID;
 		$ret = array();
-		$this->db_query("SELECT oid,name,parent as form_id FROM objects WHERE class_id = ".CL_FORM_OUTPUT." AND status !=0 AND site_id = $SITE_ID");
+		$this->db_query("SELECT op_id,objects.name as name,form_id FROM output2form LEFT JOIN objects ON objects.oid = output2form.op_id WHERE class_id = ".CL_FORM_OUTPUT." AND status !=0 AND site_id = $SITE_ID");
 		while ($row = $this->db_next())
 		{
-			$ret[$row["form_id"]][$row["oid"]] = $row["name"];
+			$ret[$row["form_id"]][$row["op_id"]] = $row["name"];
 		}
 		return $ret;
+	}
+
+	////
+	// !adds a column to map $map with dimensions $rows / $cols , after col $after
+	function map_add_col($rows,$cols,&$map,$after)
+	{
+		$nm = array();
+		for ($row =0; $row < $rows; $row++)
+		{
+			for ($col=0; $col <= $after; $col++)
+			{
+				$nm[$row][$col] = $map[$row][$col];		// copy the left part of the map
+			}
+		}
+
+		$change = array();
+		for ($row = 0; $row < $rows; $row++)
+		{
+			for ($col=$after+1; $col < ($cols-1); $col++)
+			{
+				if ($map[$row][$col]["col"] > $after)	
+				{
+					$nm[$row][$col+1]["col"] = $map[$row][$col]["col"]+1;
+					$nm[$row][$col+1]["row"] = $map[$row][$col]["row"];
+					$change[] = array("from" => $map[$row][$col], "to" => $nm[$row][$col+1]);
+				}
+				else
+				{
+					$nm[$row][$col+1] = $map[$row][$col];
+				}
+			}
+		}
+
+		reset($change);
+		while (list(,$v) = each($change))
+		{
+			for ($row=0; $row < $rows; $row++)
+			{
+				for ($col=0; $col <= $after; $col++)
+				{
+					if ($map[$row][$col] == $v["from"])
+					{
+						$nm[$row][$col] = $v["to"];
+					}
+				}
+			}
+		}
+
+		for ($row = 0; $row < $rows; $row++)
+		{
+			if ($map[$row][$after] == $map[$row][$after+1])
+			{
+				$nm[$row][$after+1] = $nm[$row][$after];
+			}
+			else
+			{
+				$nm[$row][$after+1] = array("row" => $row, "col" => $after+1);
+			}
+		}
+
+		$map = $nm;
+	}
+
+	////
+	// !deletes col $d_col from map $map with dimensions [$rows x $cols]
+	function map_del_col($rows,$cols,&$map,$d_col)
+	{
+		$nm = array();
+		for ($row =0; $row < $rows; $row++)
+		{
+			for ($col=0; $col < $d_col; $col++)
+			{
+				$nm[$row][$col] = $map[$row][$col];	// copy the left part of the map
+			}
+		}
+
+		// shit. I remember doing this gave me a really bad headache. 
+		// .. and now, 6 months later I can understand why :p
+
+		$changes = array();
+		for ($row =0 ; $row < $rows; $row++)
+		{
+			for ($col = $d_col+1; $col < $cols; $col++)
+			{
+				if ($map[$row][$col]["col"] > $d_col)
+				{
+					$nm[$row][$col-1] = array("row" => $map[$row][$col]["row"], "col" => $map[$row][$col]["col"]-1);
+					$changes[] = array("from" => $map[$row][$col], 
+														 "to" => array("row" => $map[$row][$col]["row"], "col" => $map[$row][$col]["col"]-1));
+				}
+				else
+				{
+					$nm[$row][$col-1] = $map[$row][$col];
+				}
+			}
+		}
+		$map = $nm;
+		
+		reset($changes);
+		while (list(,$v) = each($changes))
+		{
+			for ($row=0; $row < $rows; $row++)
+			{
+				for ($col=0; $col < $d_col; $col++)
+				{
+					if ($map[$row][$col] == $v["from"])
+					{
+						$map[$row][$col] = $v["to"];
+					}
+				}
+			}
+		}
+	}
+
+	////
+	// !adds a row to the map $map [$rows x $cols] , after row $after
+	function map_add_row($rows,$cols,&$map,$after)
+	{
+		$nm = array();
+		for ($row =0; $row <= $after; $row++)
+		{
+			for ($col=0; $col < $cols; $col++)
+			{
+				$nm[$row][$col] = $map[$row][$col];		// copy the upper part of the map
+			}
+		}
+
+		$change = array();
+		for ($row = $after+1; $row < ($rows-1); $row++)
+		{
+			for ($col=0; $col < $cols; $col++)
+			{
+				if ($map[$row][$col]["row"] > $after)	
+				{
+					$nm[$row+1][$col]["col"] = $map[$row][$col]["col"];
+					$nm[$row+1][$col]["row"] = $map[$row][$col]["row"]+1;
+					$change[] = array("from" => $map[$row][$col], "to" => $nm[$row+1][$col]);
+				}
+				else
+				{
+					$nm[$row+1][$col] = $map[$row][$col];
+				}
+			}
+		}
+
+		reset($change);
+		while (list(,$v) = each($change))
+		{
+			for ($row=0; $row <= $after; $row++)
+			{
+				for ($col=0; $col < $cols; $col++)
+				{
+					if ($map[$row][$col] == $v["from"])
+					{
+						$nm[$row][$col] = $v["to"];
+					}
+				}
+			}
+		}
+
+		for ($col = 0; $col < $cols; $col++)
+		{
+			if ($map[$after][$col] == $map[$after+1][$col])
+			{
+				$nm[$after+1][$col] = $nm[$after][$col];
+			}
+			else
+			{
+				$nm[$after+1][$col] = array("row" => $after+1, "col" => $col);
+			}
+		}
+
+		$map = $nm;
+	}
+
+	////
+	// !deletes row $d_row of map $map [$rows x $cols]
+	function map_del_row($rows,$cols,&$map,$d_row)
+	{
+		$nm = array();
+		for ($row =0; $row < $d_row; $row++)
+		{
+			for ($col=0; $col < $cols; $col++)
+			{
+				$nm[$row][$col] = $map[$row][$col];	// copy the upper part of the map
+			}
+		}
+
+		$changes = array();
+		for ($row =$d_row+1 ; $row < $rows; $row++)
+		{
+			for ($col = 0; $col < $cols; $col++)
+			{
+				if ($map[$row][$col]["row"] > $d_row)
+				{
+					$nm[$row-1][$col] = array("row" => $map[$row][$col]["row"]-1, "col" => $map[$row][$col]["col"]);
+					$changes[] = array("from" => $map[$row][$col], 
+														 "to" => array("row" => $map[$row][$col]["row"]-1, "col" => $map[$row][$col]["col"]));
+				}
+				else
+				{
+					$nm[$row-1][$col] = $map[$row][$col];
+				}
+			}
+		}
+		$map = $nm;
+		
+		reset($changes);
+		while (list(,$v) = each($changes))
+		{
+			for ($row=0; $row < $d_row; $row++)
+			{
+				for ($col=0; $col < $cols; $col++)
+				{
+					if ($map[$row][$col] == $v["from"])
+					{
+						$map[$row][$col] = $v["to"];
+					}
+				}
+			}
+		}
+	}
+
+	////
+	// !merges the cell ($row,$col) of map $map with the cell above it
+	function map_exp_up($rows,$cols,&$map,$row,$col)
+	{
+		// here we don't need to find the upper bound, because this always is the upper bound
+		if ($row > 0)
+		{
+			// first we must find out the colspan of the current cell and set all the cell above that one to the correct values in the map
+			for ($a=0; $a < $cols; $a++)
+			{
+				if ($map[$row][$a] == $map[$row][$col])
+				{
+					$map[$row-1][$a] = $map[$row][$col];		// expand the area
+				}
+			}
+		}
+	}
+
+	////
+	// !merges the cell ($row,$col) in map $map, with the cell below it
+	function map_exp_down($rows,$cols,&$map,$row,$col)
+	{
+		// here we must first find the lower bound for the area being expanded and use that instead the $row, because
+		// that is an arbitrary position in the area really.
+		for ($i=$row; $i < $rows; $i++)
+		{
+			if ($map[$i][$col] == $map[$row][$col])
+			{
+				$r=$i;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (($r+1) < $rows)
+		{
+			for ($a=0; $a < $cols; $a++)
+			{
+				if ($map[$row][$a] == $map[$row][$col])
+				{
+					$map[$r+1][$a] = $map[$row][$col];		// expand the area
+				}
+			}
+		}
+	}
+
+	////
+	// !merges the cell ($row,$col) in map $map with the cell to the left of it
+	function map_exp_left($rows,$cols,&$map,$row,$col)
+	{
+		// again, this is the left bound, so we don't need to find it
+		if ($col > 0)
+		{
+			for ($a =0; $a < $rows; $a++)
+			{
+				if ($map[$a][$col] == $map[$row][$col])
+				{
+					$map[$a][$col-1] = $map[$row][$col];		// expand the area
+				}
+			}
+		}
+	}
+
+	////
+	// !merges the cell ($row,$col) of map $map with the cell to the right of it
+	function map_exp_right($rows,$cols,&$map,$row,$col)
+	{
+		// here we must first find the right bound for the area being expanded and use that instead the $row, because
+		// that is an arbitrary position in the area really.
+		for ($i=$col; $i < $cols; $i++)
+		{
+			if ($map[$row][$i] == $map[$row][$col])
+			{
+				$r=$i;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (($r+1) < $cols)
+		{
+			for ($a =0; $a < $rows; $a++)
+			{
+				if ($map[$a][$r] == $map[$row][$r])
+				{
+					$map[$a][$r+1] = $map[$row][$r];		// expand the area
+				}
+			}
+		}
+	}
+
+	////
+	// !splits the cell at $row,$col on map $map vertically
+	function map_split_ver($rows,$cols,&$map,$row,$col)
+	{
+		$lbound = -1;
+		for ($i=0; $i < $cols && $lbound==-1; $i++)
+		{
+			if ($map[$row][$i] == $map[$row][$col])
+			{
+				$lbound = $i;
+			}
+		}
+
+		$rbound = -1;
+		for ($i=$lbound; $i < $cols && $rbound==-1; $i++)
+		{
+			if ($map[$row][$i] != $map[$row][$col])
+			{
+				$rbound = $i-1;
+			}
+		}
+
+		if ($rbound == -1)
+		{
+			$rbound = $cols-1;
+		}
+
+		$nm = array();
+		$center = ($rbound+$lbound)/2;
+
+		for ($i=0; $i < $rows; $i++)
+		{
+			for ($a=0; $a < $cols; $a++)
+			{
+				if ($map[$i][$a] == $map[$row][$col])
+				{
+					if ($map[$i][$a]["col"] < $center)	
+					{
+						// the hotspot of the cell is on the left of the splitter
+						if ($a <= $center)	
+						{
+							// and we currently are also on the left side then leave it be
+							$nm[$i][$a] = $map[$i][$a];
+						}
+						else
+						{
+							// and we are on the right side choose a new one
+							$nm[$i][$a] = array("row" => $map[$i][$a]["row"], "col" => floor($center)+1);
+						}
+					}
+					else
+					{
+						// the hotspot of the cell is on the right of the splitter
+						if ($a <= $center)
+						{
+							// and we are on the left side choose a new one
+							$nm[$i][$a] = array("row" => $map[$i][$a]["row"], "col" => $lbound);
+						}
+						else
+						{
+							// if we are on the same side, use the current value
+							$nm[$i][$a] = $map[$i][$a];
+						}
+					}	
+				}
+				else
+				{
+					$nm[$i][$a] = $map[$i][$a];
+				}
+			}
+		}
+
+		$map = $nm;
+	}
+
+	function map_split_hor($rows,$cols,&$map,$row,$col)
+	{
+		$ubound = -1;
+		for ($i=0; $i < $rows && $ubound==-1; $i++)
+		{
+			if ($map[$i][$col] == $map[$row][$col])
+			{
+				$ubound = $i;
+			}
+		}
+
+		$lbound = -1;
+		for ($i=$ubound; $i < $rows && $lbound==-1; $i++)
+		{
+			if ($map[$i][$col] != $map[$row][$col])
+			{
+				$lbound = $i-1;
+			}
+		}
+
+		if ($lbound == -1)
+		{
+			$lbound = $rows-1;
+		}
+
+		$nm = array();
+		$center = ($ubound+$lbound)/2;
+
+		for ($i=0; $i < $rows; $i++)
+		{
+			for ($a=0; $a < $cols; $a++)
+			{
+				if ($map[$i][$a] == $map[$row][$col])
+				{
+					if ($map[$i][$a]["row"] < $center)	
+					{
+						// the hotspot of the cell is above the splitter
+						if ($i <= $center)	
+						{
+							// and we currently are also above then leave it be
+							$nm[$i][$a] = $map[$i][$a];
+						}
+						else
+						{
+							// and we are below choose a new one
+							$nm[$i][$a] = array("row" => floor($center)+1, "col" => $map[$i][$a]["col"]);
+						}
+					}
+					else
+					{
+						// the hotspot of the cell is below the splitter
+						if ($i <= $center)
+						{
+							// but we are above, so make new
+							$nm[$i][$a] = array("row" => $ubound, "col" => $map[$i][$a]["col"]);
+						}
+						else
+						{
+							// if we are on the same side, use the current value
+							$nm[$i][$a] = $map[$i][$a];
+						}
+					}	
+				}
+				else
+				{
+					$nm[$i][$a] = $map[$i][$a];
+				}
+			}
+		}
+
+		$map = $nm;
 	}
 }
 ?>

@@ -14,10 +14,10 @@ class languages extends aw_template
 		$this->db_query("SELECT * FROM languages WHERE status != 0");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("id" => $row[id], "name" => $row[name], "charset" => $row[charset],"acceptlang" => $row[acceptlang]));
-			$ac = $row[status] == 1 ? $this->parse("NACTIVE") : $this->parse("ACTIVE");
+			$this->vars(array("id" => $row["id"], "name" => $row["name"], "charset" => $row["charset"],"acceptlang" => $row["acceptlang"]));
+			$ac = $row["status"] == 1 ? $this->parse("NACTIVE") : $this->parse("ACTIVE");
 
-			$sel = ($GLOBALS["lang_id"]) == $row[id] ? $this->parse("SEL") : $this->parse("NSEL");
+			$sel = ($GLOBALS["lang_id"]) == $row["id"] ? $this->parse("SEL") : $this->parse("NSEL");
 
 			$this->vars(array("ACTIVE" => $ac, "NACTIVE" => "", "SEL" => $sel, "NSEL" => "","CSEL" => ""));
 			$l.=$this->parse("LINE");
@@ -29,8 +29,11 @@ class languages extends aw_template
 
 	function fetch($id,$lang = "")
 	{
+		$ss = "";
 		if ($lang != "")
+		{
 			$ss = " AND acceptlang = '$lang' ";
+		}
 		$this->db_query("SELECT * FROM languages WHERE id = $id $ss");
 		return $this->db_next();
 	}
@@ -56,7 +59,7 @@ class languages extends aw_template
 	{
 		$this->read_template("add.tpl");
 		$l = $this->fetch($id);
-		$this->vars(array("id" => $id, "name" => $l[name], "charset" => $l[charset],"acceptlang" => $l[acceptlang]));
+		$this->vars(array("id" => $id, "name" => $l["name"], "charset" => $l["charset"],"acceptlang" => $l["acceptlang"]));
 		return $this->parse();
 	}
 
@@ -100,7 +103,7 @@ class languages extends aw_template
 		$langs = array();
 		$this->db_query("SELECT * FROM languages WHERE status = 2");
 		while ($row = $this->db_next())
-			$langs[$row[acceptlang]] = $row[id];
+			$langs[$row["acceptlang"]] = $row["id"];
 
 		$larr = explode(",",$HTTP_ACCEPT_LANGUAGE);
 		reset($larr);
@@ -116,7 +119,7 @@ class languages extends aw_template
 	function get_charset()
 	{
 		$a = $this->fetch($GLOBALS["lang_id"]);
-		return $a[charset];
+		return $a["charset"];
 	}
 };
 ?>

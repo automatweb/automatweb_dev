@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.5 2001/06/05 09:49:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.6 2001/06/14 08:47:39 kristo Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -26,12 +26,13 @@ class images extends aw_template
 		extract($args);
 		$idata = $this->di->get_img_by_oid($oid,$matches[3]);
 		$replacement = "";
+		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		if ($idata)
 		{
 			$vars = array(
 					"imgref" => $idata["url"],
 					"imgcaption" => $idata["comment"],
-					"align" => $align[$matches[3]],
+					"align" => $align[$matches[4]],
 					"plink" => $idata["link"],
 			);
  
@@ -388,7 +389,7 @@ class db_images extends aw_template
 				"name" => $pname,
 				"class_id" => 6,
 				"comment" => "$descript",
-				"period" => ($set_period == 1 ? $pp[period] : $period)
+				"period" => ($set_period == 1 ? $pp["period"] : $period)
 			));
 			// ja paigutame info piltide tabelisse
 			$this->db_query("INSERT INTO images (id,file,idx,link,newwindow) VALUES('$pid','$fname.$ext','$idx','$link','$newwindow')");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.1 2001/05/19 23:35:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.2 2001/06/14 08:47:39 kristo Exp $
 
 // form_actions.aw - creates and executes form actions
 
@@ -33,9 +33,9 @@ class form_actions extends form_base
 										 WHERE objects.status != 0 AND form_actions.form_id = $id");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("action_id" => $row[id], "action_name" => $row[name], "action_comment" => $row[comment],
-												"change"	=> $this->mk_orb("change_action", array("id" => $id, "aid" => $row[id])),
-												"delete"	=> $this->mk_orb("delete_action", array("id" => $id, "aid" => $row[id]))
+			$this->vars(array("action_id" => $row["id"], "action_name" => $row["name"], "action_comment" => $row["comment"],
+												"change"	=> $this->mk_orb("change_action", array("id" => $id, "aid" => $row["id"])),
+												"delete"	=> $this->mk_orb("delete_action", array("id" => $id, "aid" => $row["id"]))
 												));
 			$this->parse("LINE");
 		}
@@ -86,9 +86,9 @@ class form_actions extends form_base
 
 					case "join_list":
 						$data["list"] = $j_list;
-						$data[checkbox] = $j_checkbox;
-						$data[textbox] = $j_textbox;
-						$data[name_tb] = $j_name_tb;
+						$data["checkbox"] = $j_checkbox;
+						$data["textbox"] = $j_textbox;
+						$data["name_tb"] = $j_name_tb;
 						$data = serialize($data);
 						break;
 				}
@@ -130,11 +130,11 @@ class form_actions extends form_base
 		if ($level < 2)
 		{
 			$this->init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id))."'>Formi actionid</a> / Muuda actionit");
-			$this->vars(array("name"									=> $row[name], 
-												"comment"								=> $row[comment], 
-												"email_selected"				=> ($row[type] == 'email' ? "CHECKED" : ""),
-												"move_filled_selected"	=> ($row[type] == 'move_filled' ? "CHECKED" : ""),
-												"join_list_selected"		=> ($row[type] == 'join_list' ? "CHECKED" : ""),
+			$this->vars(array("name"									=> $row["name"], 
+												"comment"								=> $row["comment"], 
+												"email_selected"				=> ($row["type"] == 'email' ? "CHECKED" : ""),
+												"move_filled_selected"	=> ($row["type"] == 'move_filled' ? "CHECKED" : ""),
+												"join_list_selected"		=> ($row["type"] == 'join_list' ? "CHECKED" : ""),
 												"action_id"							=> $id,
 												"reforb"								=> $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 1))));
 			return $this->parse();
@@ -142,25 +142,25 @@ class form_actions extends form_base
 		else
 		{
 			$this->init($id, "", "<a href='".$this->mk_orb("list_actions", array("id" => $id))."'>Formi actionid</a> / Muuda actionit");
-			switch($row[type])
+			switch($row["type"])
 			{
 				case "email":
 					$this->read_template("action_email.tpl");
-					$this->vars(array("email" => $row[data],
+					$this->vars(array("email" => $row["data"],
 														"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))));
 					return $this->parse();
 					break;
 				case "move_filled":
 					$this->read_template("action_move_filled.tpl");
-					$selarr = unserialize($row[data]);
+					$selarr = unserialize($row["data"]);
 					$this->db_query("SELECT * FROM objects WHERE class_id = 13 AND objects.status != 0 AND last = $this->id");
 					$this->vars(array("LINE" => ""));
 					while ($row = $this->db_next())
 					{
-						$this->vars(array("cat_name"		=> $row[name], 
-															"cat_id"			=> $row[oid], 
-															"cat_comment"	=> $row[comment], 
-															"cat_checked" => ($selarr[$row[oid]] == 1 ? "CHECKED" : ""),
+						$this->vars(array("cat_name"		=> $row["name"], 
+															"cat_id"			=> $row["oid"], 
+															"cat_comment"	=> $row["comment"], 
+															"cat_checked" => ($selarr[$row["oid"]] == 1 ? "CHECKED" : ""),
 															"action_id"		=> $id));
 						$this->parse("LINE");
 					}
@@ -168,21 +168,21 @@ class form_actions extends form_base
 					break;
 				case "join_list":
 					$this->read_template("action_join_list.tpl");
-					$data = unserialize($row[data]);
+					$data = unserialize($row["data"]);
 
 					$this->load($id);
-					for ($row = 0; $row < $this->arr[rows]; $row++)
+					for ($row = 0; $row < $this->arr["rows"]; $row++)
 					{
-						for ($col = 0; $col < $this->arr[cols]; $col++)
+						for ($col = 0; $col < $this->arr["cols"]; $col++)
 						{
-							$elar = $this->arr[contents][$row][$col]->get_elements();
+							$elar = $this->arr["contents"][$row][$col]->get_elements();
 							reset($elar);
 							while (list(,$el) = each($elar))
 							{
-								if ($el[type] == "checkbox")
-									$checks[$el[id]] = $el[name] == "" ? $el[text] == "" ? $el[type] : $el[text] : $el[name];
-								if ($el[type] == "textbox")
-									$texts[$el[id]] = $el[name] == "" ? $el[text] == "" ? $el[type] : $el[text] : $el[name];
+								if ($el["type"] == "checkbox")
+									$checks[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
+								if ($el["type"] == "textbox")
+									$texts[$el["id"]] = $el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"];
 							}
 						}
 					}
@@ -191,7 +191,7 @@ class form_actions extends form_base
 					$li = new lists;
 					$lists = $li->get_op_list();
 
-					$this->vars(array("checkbox"	=> $this->option_list($data[checkbox],$checks),
+					$this->vars(array("checkbox"	=> $this->option_list($data["checkbox"],$checks),
 														"list"			=> $this->option_list($data["list"],$lists),
 														"textbox"		=> $this->option_list($data["textbox"],$texts),
 														"name_tb"		=> $this->option_list($data["name_tb"],$texts),

@@ -1,8 +1,5 @@
 <?php
-if (defined("FORM_EELEMENT_LOADED")) {
-} else {
-define(FORM_EELEMENT_LOADED,1);
-	session_register("clipboard");
+session_register("clipboard");
 
 load_vcl("date_edit");
 
@@ -13,6 +10,7 @@ load_vcl("date_edit");
 			$this->tpl_init("forms");
 			$this->db_init();
 
+			$this->parent = 0;
 			$this->entry_id = 0;
 			$this->id = 0;
 		}
@@ -60,7 +58,7 @@ load_vcl("date_edit");
 			$cd = $this->parse("CAN_DELETE");
 
 			$li = ""; $hl = ""; $hl2 = "";
-			if ($this->arr[type] == "link")
+			if ($this->arr["type"] == "link")
 			{
 				$this->vars(array("link_text"			=> $this->arr["link_text"],
 													"link_address"	=> $this->arr["link_address"]));
@@ -72,7 +70,7 @@ load_vcl("date_edit");
 
 			$this->vars(array("EL_HLINK" => $hl, "EL_NOHLINK" => $hl2));
 			$fi = "";
-			if ($this->arr[type] == "file")
+			if ($this->arr["type"] == "file")
 			{
 				$this->vars(array("ftype_image_selected"	=> ($this->arr["ftype"] == 1 ? "CHECKED" : ""),
 													"ftype_file_selected"		=> ($this->arr["ftype"] == 2 ? "CHECKED" : ""),
@@ -364,7 +362,7 @@ load_vcl("date_edit");
 				$val = $this->entry;
 			}
 			else
-			if ($elvalues[$this->arr["name"]] != "")
+			if (isset($elvalues[$this->arr["name"]]) && $elvalues[$this->arr["name"]] != "")
 			{
 				$val = $elvalues[$this->arr["name"]];
 			}
@@ -378,33 +376,33 @@ load_vcl("date_edit");
 		function gen_user_html_not(&$images,$prefix = "",$elvalues = array())		// function that doesn't use templates
 		{
 			$html="";
-			$info = $images->proc_text($this->arr[info], $this->parent);
-			$text = ($this->arr[text] == "" ? "" : $images->proc_text($this->arr[text], $this->parent));
+			$info = $images->proc_text($this->arr["info"], $this->parent);
+			$text = ($this->arr["text"] == "" ? "" : $images->proc_text($this->arr["text"], $this->parent));
 
 			$elid = $this->id;
 																	
-			if ($this->arr[type] == "textarea")
+			if ($this->arr["type"] == "textarea")
 			{
-				$html="<textarea NAME='".$prefix.$elid."' COLS='".$this->arr[ta_cols]."' ROWS='".$this->arr[ta_rows]."'>";
+				$html="<textarea NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]."'>";
 				$html.=($this->get_val($elvalues))."</textarea>";
 			}
 			
-			if ($this->arr[type] == "radiobutton")
+			if ($this->arr["type"] == "radiobutton")
 			{
 				$ch = ($this->entry_id ? checked($this->entry == $this->id) : checked($this->arr["default"] == 1));
-				$html="<input type='radio' NAME='".$prefix."radio_group_".$this->arr[group]."' VALUE='".$this->id."' $ch>";
+				$html="<input type='radio' NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch>";
 			}
 			
-			if ($this->arr[type] == "listbox")
+			if ($this->arr["type"] == "listbox")
 			{
 				$html="<select name='".$prefix.$elid."'>";
-				for ($b=0; $b < $this->arr[listbox_count]; $b++)
+				for ($b=0; $b < $this->arr["listbox_count"]; $b++)
 				{	
 					if ($this->entry_id)
 						$lbsel = ($this->entry == "element_".$this->id."_lbopt_".$b ? " SELECTED " : "");
 					else
-						$lbsel = ($this->arr[listbox_default] == $b ? " SELECTED " : "");
-					$html.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$this->arr[listbox_items][$b];
+						$lbsel = ($this->arr["listbox_default"] == $b ? " SELECTED " : "");
+					$html.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$this->arr["listbox_items"][$b];
 				}
 				$html.="</select>";
 			}
@@ -485,8 +483,8 @@ load_vcl("date_edit");
 				$html .= $text;
 			else
 			{
-				$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='/images/transa.gif' width='1' height='".$this->arr[text_distance]."' border='0'><br>" : "<br>");
-				$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr[text_distance]."' border='0'>" : "");
+				$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
+				$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
 				if ($this->arr["text_pos"] == "up")
 					$html = $text.$sep_ver.$html;
 				else
@@ -512,7 +510,7 @@ load_vcl("date_edit");
 
 		function process_entry(&$entry, $id,$prefix = "")
 		{
-			if ($this->arr[type] == 'link')
+			if ($this->arr["type"] == 'link')
 			{
 				$var = $prefix.$this->id."_text";
 				$var2= $prefix.$this->id."_address";
@@ -521,7 +519,7 @@ load_vcl("date_edit");
 				return;
 			}
 			else
-			if ($this->arr[type] == 'file')
+			if ($this->arr["type"] == 'file')
 			{
 				$var = $prefix.$this->id;
 				global $$var;
@@ -534,10 +532,10 @@ load_vcl("date_edit");
 					global $$fn;
 
 					$im = new db_images;
-					if ($this->arr[fshow] == 1)
+					if ($this->arr["fshow"] == 1)
 					{
 						if (is_array($entry[$this->id]))	// this holds array("id" => $image_id, "idx" => $image_idx);
-							$entry[$this->id] = $im->replace($$var,$$ft,$id,$entry[$this->id][idx],"",$entry[$this->id][id],true,$$fn);
+							$entry[$this->id] = $im->replace($$var,$$ft,$id,$entry[$this->id]["idx"],"",$entry[$this->id]["id"],true,$$fn);
 						else
 							$entry[$this->id] = $im->upload($$var, $$ft, $id, "",true,$$fn);
 					}
@@ -581,35 +579,35 @@ load_vcl("date_edit");
 				return "";
 
 			$t = new db_images;
-			$html = $t->proc_text($this->arr[text],$this->parent);
+			$html = $t->proc_text($this->arr["text"],$this->parent);
 
-			if ($this->arr[type] == "textarea")
+			if ($this->arr["type"] == "textarea")
 				$html.=$t->proc_text($this->entry, $this->entry_id);
 					
-			if ($this->arr[type] == "radiobutton")
+			if ($this->arr["type"] == "radiobutton")
 				$html.=($this->entry == $this->id ? " Jah " : " Ei ");
 					
-			if ($this->arr[type] == "listbox")
+			if ($this->arr["type"] == "listbox")
 			{
 				$sp = split("_", $this->entry, 10);
-				$html.=$this->arr[listbox_items][$sp[3]];
+				$html.=$this->arr["listbox_items"][$sp[3]];
 			}
 					
-			if ($this->arr[type] == "multiple")
+			if ($this->arr["type"] == "multiple")
 			{
 				$ec=explode(",",$this->entry);
 				reset($ec);
 				while (list(, $v) = each($ec))
-					$html.=($this->arr[multiple_items][$v]." ");
+					$html.=($this->arr["multiple_items"][$v]." ");
 			}
 
-			if ($this->arr[type] == "checkbox")
+			if ($this->arr["type"] == "checkbox")
 				$html.=$this->entry == 1 ? "Jah " : " Ei ";
 					
-			if ($this->arr[type] == "textbox")
+			if ($this->arr["type"] == "textbox")
 				$html.=$t->proc_text($this->entry, $this->entry_id);
 
-			if ($this->arr[type] == "price")
+			if ($this->arr["type"] == "price")
 				$html.=$this->entry;
 
 			if ($this->arr["type"] == "date")
@@ -617,28 +615,32 @@ load_vcl("date_edit");
 				$html.=$this->time2date($this->entry,5);
 			}
 
-			if ($this->arr[type] == "file")
+			if ($this->arr["type"] == "file")
 			{
 				$im = new db_images;
+				if (!is_array($this->entry) && $this->entry != "")
+				{
+					$this->entry = unserialize($this->entry);
+				}
 				if (is_array($this->entry))	// if this is an array, then there is a file that must be shown in place
 				{
-					$row = $im->get_img_by_id($this->entry[id]);
+					$row = $im->get_img_by_id($this->entry["id"]);
 
-					if ($this->arr[ftype] == 1)
-						$html.="<img src='".$row[url]."'>";
+					if ($this->arr["ftype"] == 1)
+						$html.="<img src='".$row["url"]."'>";
 					else
-						$html.="<a href='".$row[url]."'>".$this->arr[flink_text]."</a>";
+						$html.="<a href='".$row["url"]."'>".$this->arr["flink_text"]."</a>";
 				}
 			}
 
-			if ($this->arr[type] == "link")
-				$html.="<a href='".$this->entry[address]."'>".$this->entry[text]."</a>";
+			if ($this->arr["type"] == "link")
+				$html.="<a href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
 
-			if ($this->arr[sep_type] == 1)	// reavahetus
+			if ($this->arr["sep_type"] == 1)	// reavahetus
 				$html.="<br>";
 			else
-			if ($this->arr[sep_pixels] > 0)
-				$html.="<img src='/images/transa.gif' width=".$this->arr[sep_pixels]." height=1 border=0>";
+			if ($this->arr["sep_pixels"] > 0)
+				$html.="<img src='/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
 
 			return $html;
 		}
@@ -648,32 +650,32 @@ load_vcl("date_edit");
 			if (!$this->entry_id)
 				return "";
 
-			$html = trim($this->arr[text])." ";
+			$html = trim($this->arr["text"])." ";
 
-			if ($this->arr[type] == "textarea")
+			if ($this->arr["type"] == "textarea")
 				$html.=trim($this->entry);
 					
-			if ($this->arr[type] == "radiobutton")
+			if ($this->arr["type"] == "radiobutton")
 				$html.=($this->entry == $this->id ? " Jah " : " Ei ");
 					
-			if ($this->arr[type] == "listbox")
+			if ($this->arr["type"] == "listbox")
 			{
 				$sp = split("_", $this->entry, 10);
-				$html.=$this->arr[listbox_items][$sp[3]];
+				$html.=$this->arr["listbox_items"][$sp[3]];
 			}
 					
-			if ($this->arr[type] == "multiple")
+			if ($this->arr["type"] == "multiple")
 			{
 				$ec=explode(",",$this->entry);
 				reset($ec);
 				while (list(, $v) = each($ec))
-					$html.=($this->arr[multiple_items][$v]." ");
+					$html.=($this->arr["multiple_items"][$v]." ");
 			}
 
-			if ($this->arr[type] == "checkbox")
+			if ($this->arr["type"] == "checkbox")
 				$html.=$this->entry == 1 ? "Jah " : " Ei ";
 					
-			if ($this->arr[type] == "textbox")
+			if ($this->arr["type"] == "textbox")
 				$html.=trim($this->entry);
 
 			if ($this->arr["type"] == "date")
@@ -681,14 +683,13 @@ load_vcl("date_edit");
 				$html.=$this->time2date($this->entry,5);
 			}
 
-			if ($this->arr[type] == "price")
+			if ($this->arr["type"] == "price")
 				$html.=trim($this->entry);
 
-			if ($this->arr[type] == "link")
-				$html.=$this->entry[address];
+			if ($this->arr["type"] == "link")
+				$html.=$this->entry["address"];
 
 			return $html;
 		}
 	}
-}
 ?>

@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.18 2001/06/13 19:13:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.19 2001/06/14 08:47:32 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
 
 // aw version - [major release].[minor release].[fix number]
-define(AW_VERSION,"2.0.0");
+define("AW_VERSION","2.0.0");
 
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -141,7 +141,9 @@ include("$basedir/lang/" . $LC . "/errors.aw");
 include("$basedir/lang/" . $LC . "/common.aw");
 
 $cachedir = $basedir . "/cache"; 		  // where the file cache is
-$pi = $PATH_INFO.$QUERY_STRING;
+$pi = "";
+(isset($PATH_INFO) ? $pi = $PATH_INFO: "");
+(isset($QUERY_STRING) ? $pi .= $QUERY_STRING: "");
 if ($pi) 
 {
 	 if (preg_match("/[&|=]/",$pi)) 
@@ -159,7 +161,7 @@ if ($pi)
 // miskid hardcoded id-d. BAD.
 // njah. a selle v6ib dynaamilisex teha. et andmebaasi kirjutada ja yle webi konffida nyyd. kuna menyyeditor v6tab nyyd
 // alamtemplated selle j2rgi, mis siin kirjas on. 
-if (!is_array($menu_defs))
+if (isset($menu_defs) && !is_array($menu_defs))
 {
 	$menu_defs = array();
 }
@@ -174,7 +176,7 @@ $alfa = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O",
 // a la classload("users","groups","someothershit");
 
 // sellest saab lahti, kui igalpool include("const.aw") asendada include_once("const.aw")-ga
-if (function_exists(classload)) 
+if (function_exists("classload")) 
 {
 } 
 else 
@@ -237,99 +239,98 @@ else
 // other stuff
 
 // millisele aadressile saadetakse Alerdid (ebaonnestunud sisselogimised, jne).
-define(ALERT_ADDR,"log@struktuur.ee");
+define("ALERT_ADDR","log@struktuur.ee");
 
 // mis alerdi subjectiks pannakse
-define(ALERT_SUBJECT,"%s - Jerk alert!");
+define("ALERT_SUBJECT","%s - Jerk alert!");
 
 // ja mis aadress alerdi From reale pannakse
-define(ALERT_FROM,"From: AK veebiserver <nobody@www.kirjastus.ee>");
+define("ALERT_FROM","From: AK veebiserver <nobody@www.kirjastus.ee>");
 
 // klasside nimed
-define(CL_PSEUDO,1);
-define(CL_FORM,2);
-define(CL_TABLE,3);
-define(CL_CATEGORY,4);
-define(CL_PLACE,5);
-define(CL_IMAGE,6);
-define(CL_DOCUMENT,7);
-define(CL_DEF_SETTINGS,36);
-define(CL_FORM_ENTRY,8);
-define(CL_FORM_CATEGORY,9);
-define(CL_FORM_ELEMENT,10);
-define(CL_STYLE,11);
-define(CL_FORM_OUTPUT,12);
-define(CL_FILLED_FORM_FOLDER,13);
-define(CL_FORM_ACTION,14);
-define(CL_MAILINGLIST,15);
-define(CL_MAILINGLIST_CATEGORY,16);
-define(CL_MAILINGLIST_MEMBER,17);
-define(CL_MAILINGLIST_VARIABLE,18);
-define(CL_MAILINGLIST_STAMP,19);
-define(CL_EMAIL,20);
-define(CL_EXTLINK,21);
-define(CL_PROMO,22);
-define(CL_PROMO_ARTICLE,23);
-define(CL_ML_VAR_CAT,24);
-define(CL_MAIL_LINK,25);
-define(CL_MAIL,26);
-define(CL_MAIL_FOLDER,27);
-define(CL_GRAPH,28);
-define(CL_PERIODIC_SECTION,29);
-define(CL_SECTION_LINK,30);
-define(CL_GALLERY,31);
-define(CL_POLL,33);
-define(CL_MSGBOARD_TOPIC,34);
-define(CL_NAGU,35);
-define(CL_DEF_SETTINGS,36); // default doc .. ehk default settingud 
+define("CL_PSEUDO",1);
+define("CL_FORM",2);
+define("CL_TABLE",3);
+define("CL_CATEGORY",4);
+define("CL_PLACE",5);
+define("CL_IMAGE",6);
+define("CL_DOCUMENT",7);
+define("CL_FORM_ENTRY",8);
+define("CL_FORM_CATEGORY",9);
+define("CL_FORM_ELEMENT",10);
+define("CL_STYLE",11);
+define("CL_FORM_OUTPUT",12);
+define("CL_FILLED_FORM_FOLDER",13);
+define("CL_FORM_ACTION",14);
+define("CL_MAILINGLIST",15);
+define("CL_MAILINGLIST_CATEGORY",16);
+define("CL_MAILINGLIST_MEMBER",17);
+define("CL_MAILINGLIST_VARIABLE",18);
+define("CL_MAILINGLIST_STAMP",19);
+define("CL_EMAIL",20);
+define("CL_EXTLINK",21);
+define("CL_PROMO",22);
+define("CL_PROMO_ARTICLE",23);
+define("CL_ML_VAR_CAT",24);
+define("CL_MAIL_LINK",25);
+define("CL_MAIL",26);
+define("CL_MAIL_FOLDER",27);
+define("CL_GRAPH",28);
+define("CL_PERIODIC_SECTION",29);
+define("CL_SECTION_LINK",30);
+define("CL_GALLERY",31);
+define("CL_POLL",33);
+define("CL_MSGBOARD_TOPIC",34);
+define("CL_NAGU",35);
+define("CL_DEF_SETTINGS",36); // default doc .. ehk default settingud 
 														// uute dokude jaoks
-define(CL_GROUP,37);
-define(CL_USER_GROUP,38);
-define(CL_BROTHER,39);
-define(CL_BROTHER_DOCUMENT,40);
-define(CL_FILE,41);
+define("CL_GROUP",37);
+define("CL_USER_GROUP",38);
+define("CL_BROTHER",39);
+define("CL_BROTHER_DOCUMENT",40);
+define("CL_FILE",41);
 
-define(CL_TEST_QUESTION,42);
-define(CL_TEST_TEEMA,43);
-define(CL_TEST,44);
+define("CL_TEST_QUESTION",42);
+define("CL_TEST_TEEMA",43);
+define("CL_TEST",44);
 
 // Vibe ürituste jaoks
-define(CL_EVENT,45);
-define(CL_LOCATION,46);
-define(CL_EVENT_TYPE,47);
-define(CL_LOCATION_TYPE,48);
+define("CL_EVENT",45);
+define("CL_LOCATION",46);
+define("CL_EVENT_TYPE",47);
+define("CL_LOCATION_TYPE",48);
 
 // yuck.
-define(CL_GUESTBOOK,49);
-define(CL_GUESTBOOK_ENTRY,50);
+define("CL_GUESTBOOK",49);
+define("CL_GUESTBOOK_ENTRY",50);
 
 // module access control objects
-define(CL_ACCESSMGR,51);
+define("CL_ACCESSMGR",51);
 
 // messengeri teade
-define(CL_MESSAGE,52);
+define("CL_MESSAGE",52);
 
 // kalendri event
-define(CL_CAL_EVENT,53);
+define("CL_CAL_EVENT",53);
 
 
 
-define(CL_BANNER,54);
-define(CL_BANNER_CLIENT,55);
-define(CL_BANNER_PROFILE,56);	// this actually specifies the location of the banner. legacy code sucks. what can I do.
-define(CL_BANNER_BUYER,57);		// well, these are actual clients that buy banner impressions
-define(CL_BANNER_SITE,58);		// this is just for grouping banner locations, so we can view the statistics for the site.
+define("CL_BANNER",54);
+define("CL_BANNER_CLIENT",55);
+define("CL_BANNER_PROFILE",56);	// this actually specifies the location of the banner. legacy code sucks. what can I do.
+define("CL_BANNER_BUYER",57);		// well, these are actual clients that buy banner impressions
+define("CL_BANNER_SITE",58);		// this is just for grouping banner locations, so we can view the statistics for the site.
 
-define(CL_CALENDAR,59); // kalendri objekt
+define("CL_CALENDAR",59); // kalendri objekt
 
-define(CL_SHOP,60); // pood. w00t!
-define(CL_SHOP_ITEM,61); // kaup. poes. duh. 
-define(CL_SHOP_STATS,62); // poodide statistika vaatamine k2ib selle kaudu
+define("CL_SHOP",60); // pood. w00t!
+define("CL_SHOP_ITEM",61); // kaup. poes. duh. 
+define("CL_SHOP_STATS",62); // poodide statistika vaatamine k2ib selle kaudu
 
-define(CL_CONTACT_GROUP,63); // kontaktigrupp
+define("CL_CONTACT_GROUP",63); // kontaktigrupp
 
-define(CL_SHOP_ITEM_TYPE,64); // poe kaupa tyyp
-define(CL_SHOP_EQUASION,65);  // poe kauba hinna arvutamise valem
+define("CL_SHOP_ITEM_TYPE",64); // poe kaupa tyyp
+define("CL_SHOP_EQUASION",65);  // poe kauba hinna arvutamise valem
 
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
@@ -345,7 +346,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_FORM_ENTRY => array("name" => "Formi sisestus", "file" => "form_entry"),
 			CL_FORM_ELEMENT => array("name" => "Formi element", "file" => "forms"),
 			CL_STYLE	=> array("name" => "Stiil", "file" => "style","class" => "style", "can_add" => 1), 
-			CL_FORM_OUTPUT => array("name" => "Formi v&auml;ljund", "file" => "forms"),
+			CL_FORM_OUTPUT => array("name" => "Formi v&auml;ljund", "file" => "form_output","can_add" => 1),
 			CL_FORM_ACTION => array("name" => "Formi action", "file" => "forms"),
 			CL_MAILINGLIST => array("name" => "Meilinglist", "file" => "lists","can_add" => 0),
 			CL_MAILINGLIST_MEMBER => array("name" => "Listi liige", "file" => "list"),
@@ -388,27 +389,27 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 // teisele tasemele kliente voi dokumente
 
 // mix 69? well mulle meeldib see number :-P
-define(CL_CLIENT,69);
+define("CL_CLIENT",69);
 
 // menyyd
-define(MN_CLIENT,69);
+define("MN_CLIENT",69);
 // sisurubriik
-define(MN_CONTENT,70);
+define("MN_CONTENT",70);
 // adminni ylemine menyy
-define(MN_ADMIN1,71);
+define("MN_ADMIN1",71);
 // adminni dokumenty
-define(MN_ADMIN_DOC,72);
+define("MN_ADMIN_DOC",72);
 
 // promo kast
-define(MN_PROMO_BOX,73);
+define("MN_PROMO_BOX",73);
 
 // kodukataloog
-define(MN_HOME_FOLDER,74);
+define("MN_HOME_FOLDER",74);
 // kodukataloogi alla tehtud kataloog, et sharetud katalooge olex lihtsam n2idata
-define(MN_HOME_FOLDER_SUB,75);
+define("MN_HOME_FOLDER_SUB",75);
 
 // formi element, mis on samas ka menyy
-define(MN_FORM_ELEMENT,76);
+define("MN_FORM_ELEMENT",76);
 
 // nini. siin tuleb siis nyyd see koht, kus on kirjas k6ik erinevad "alamprogrammid" , mis aw sees olemas on
 // mix nii? well, sest neile peab saama ikoone m22rata ja neid uude menyyeditori teha.
@@ -416,49 +417,49 @@ define(MN_FORM_ELEMENT,76);
 // st et seda praegu pole veel, aga see tyulex vist siia panna ju ?
 // welp, seda objekti ei pea siia kirja panema k2sici, see genereeritaxe automaagiliselt. 
 // eh-puh. symboolsed konstandid siis ka progedele
-define(PRG_MENUEDIT,1);
-define(PRG_DOCLIST,2);
-define(PRG_USERS,3);
-define(PRG_GROUPS,4);
-define(PRG_CONFIG,5);
-define(PRG_LANG,6);
-define(PRG_BUGTRACK,7);
-define(PRG_FORMGEN,8);
-define(PRG_GRAPH,9);
-define(PRG_FACE,10);
-define(PRG_POLL,11);
-define(PRG_SEARCH,12);
-define(PRG_PERIODS,13);
-define(PRG_TESTS,14);
-define(PRG_LISTS,15);
-define(PRG_VARS,16);
-define(PRG_STAMPS,17);
-define(PRG_CODESTAT,18);
-define(PRG_AWMAIL,19);
-define(PRG_QUIZ,20);
-define(PRG_EVENTS,21);
-define(PRG_EVENT_PLACES,22);
-define(PRG_GALERII,23);
-define(PRG_KROONIKA_BANNER,24);
-define(PRG_KROONIKA_ESIKAAS,25);
-define(PRG_JOINFORM,26);
-define(PRG_ICONDB,27);
-define(PRG_CLASS_ICONS,28);
-define(PRG_FILE_ICONS,29);
-define(PRG_PROGRAM_ICONS,30);
-define(PRG_OTHER_ICONS,31);
-define(PRG_IMPORT_ICONS,32);
-define(PRG_EXPORT_ICONS,33);
-define(PRG_ACCESSMGR,34);
-define(PRG_BANNERS,35);
-define(PRG_SEARCH_OBJS,36);
-define(PRG_SITE_BANNER_ADMIN,37);
-define(PRG_SITE_BANNER_STATS,38);
-define(PRG_BANNER_USERS,39);
-define(PRG_BANNER_PROFILES,40);
-define(PRG_EKOMAR,41);
-define(PRG_KEYWORD,42);
-define(PRG_CONF_JOIN_MAIL,43);
+define("PRG_MENUEDIT",1);
+define("PRG_DOCLIST",2);
+define("PRG_USERS",3);
+define("PRG_GROUPS",4);
+define("PRG_CONFIG",5);
+define("PRG_LANG",6);
+define("PRG_BUGTRACK",7);
+define("PRG_FORMGEN",8);
+define("PRG_GRAPH",9);
+define("PRG_FACE",10);
+define("PRG_POLL",11);
+define("PRG_SEARCH",12);
+define("PRG_PERIODS",13);
+define("PRG_TESTS",14);
+define("PRG_LISTS",15);
+define("PRG_VARS",16);
+define("PRG_STAMPS",17);
+define("PRG_CODESTAT",18);
+define("PRG_AWMAIL",19);
+define("PRG_QUIZ",20);
+define("PRG_EVENTS",21);
+define("PRG_EVENT_PLACES",22);
+define("PRG_GALERII",23);
+define("PRG_KROONIKA_BANNER",24);
+define("PRG_KROONIKA_ESIKAAS",25);
+define("PRG_JOINFORM",26);
+define("PRG_ICONDB",27);
+define("PRG_CLASS_ICONS",28);
+define("PRG_FILE_ICONS",29);
+define("PRG_PROGRAM_ICONS",30);
+define("PRG_OTHER_ICONS",31);
+define("PRG_IMPORT_ICONS",32);
+define("PRG_EXPORT_ICONS",33);
+define("PRG_ACCESSMGR",34);
+define("PRG_BANNERS",35);
+define("PRG_SEARCH_OBJS",36);
+define("PRG_SITE_BANNER_ADMIN",37);
+define("PRG_SITE_BANNER_STATS",38);
+define("PRG_BANNER_USERS",39);
+define("PRG_BANNER_PROFILES",40);
+define("PRG_EKOMAR",41);
+define("PRG_KEYWORD",42);
+define("PRG_CONF_JOIN_MAIL",43);
 
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
@@ -510,15 +511,15 @@ PRG_CONF_JOIN_MAIL		=> array("name" => MN_JOIN_MAIL,				"url" => "orb.aw?class=c
 );
 
 // formide tyybid
-	define(FTYPE_ENTRY,1);
-	define(FTYPE_SEARCH,2);
-	define(FTYPE_RATING,3);
+	define("FTYPE_ENTRY",1);
+	define("FTYPE_SEARCH",2);
+	define("FTYPE_RATING",3);
 
 // formide alamtyybid
-	define(FSUBTYPE_JOIN,1);
+	define("FSUBTYPE_JOIN",1);
 
 // lingikogus et mitu menyyd rea peal 
-	define(LINKC_MENUSPERLINE,3);
+	define("LINKC_MENUSPERLINE",3);
 // lingikogus et mitu linki per line
-	define(LINKC_LINKSPERLINE,3);
+	define("LINKC_LINKSPERLINE",3);
 ?>

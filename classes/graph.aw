@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.2 2001/06/05 16:41:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.3 2001/06/14 08:47:39 kristo Exp $
 // graph.aw - graafikute haldamine
 		global $orb_defs;
 		$orb_defs["graph"] = array(
@@ -23,9 +23,9 @@
 			"submit" => array("function" => "base_add")
 );
 
-define(TYPE_PIE,0);
-define(TYPE_LINE,1);
-define(TYPE_BAR,2);
+define("TYPE_PIE",0);
+define("TYPE_LINE",1);
+define("TYPE_BAR",2);
 
 	class graph extends aw_template
 	{
@@ -127,7 +127,7 @@ define(TYPE_BAR,2);
 				($setup["percentage"]=="on")?$percentage ="CHECKED":$percentage ="";
 				$this->read_template("graphs/pie.tpl");
 				$this->vars(array(
-				"name" => $row[name],
+				"name" => $row["name"],
 				"title" => $setup["title"],
 				"title_col" => $setup["title_col"],
 				"bgcolor" => $setup["bgcolor"],
@@ -136,8 +136,8 @@ define(TYPE_BAR,2);
 				"radius" => $setup["radius"],
 				"showlabels" => $showlabels,
 				"percentage" => $percentage,
-				"data" => $data[data],
-				"labels" => $data[labels],
+				"data" => $data["data"],
+				"labels" => $data["labels"],
 				"id" => $id,
 				"meta" => $this->mk_orb("meta",array("id"=>$id)),
 				"prev" => $this->mk_orb("preview",array("id" => $id))
@@ -192,8 +192,8 @@ define(TYPE_BAR,2);
 				$row=$this->db_next();
 				$setup=unserialize($row["setup"]);
 				$data=unserialize($row["data"]);
-				($setup[percentage]=="on")?$percentage=1:$percentage=0;
-				($setup[showlabels]=="on")?$showlabels=1:$showlabels=0;
+				($setup["percentage"]=="on")?$percentage=1:$percentage=0;
+				($setup["showlabels"]=="on")?$showlabels=1:$showlabels=0;
 				classload("tt_pie");
 				$p = new PieGraph(2,5,1);
 				$p->GraphBase($setup["width"],$setup["height"],$setup["bgcolor"]);
@@ -375,7 +375,7 @@ define(TYPE_BAR,2);
 		//Annab by default n2idatava graafikute listi
 		function glist($ar)
 		{	
-			($ar[parent]=="0")?$asdf="":$asdf=" AND parent=$parent";
+			($ar["parent"]=="0")?$asdf="":$asdf=" AND parent=$parent";
 			$ci=CL_GRAPH;
 			$q="SELECT o.oid,o.name,o.comment,o.createdby from objects o where class_id='$ci'$asdf";
 			$this->db_query($q);
@@ -387,9 +387,9 @@ define(TYPE_BAR,2);
 					"name" => $row["name"], 
 					"comment" => $row["comment"],
 					"id" => $row["oid"],
-					"change" => $this->mk_orb("change",array("id" => $row[oid])),
-					"meta" => $this->mk_orb("meta",array("id" => $row[oid])),
-					"preview" => $this->mk_orb("preview",array("id" => $row[oid])),
+					"change" => $this->mk_orb("change",array("id" => $row["oid"])),
+					"meta" => $this->mk_orb("meta",array("id" => $row["oid"])),
+					"preview" => $this->mk_orb("preview",array("id" => $row["oid"])),
 					"add" => $this->mk_orb("new",array("parent" => $parent))
 					));
 				$sub_html .= $this->parse("LINE");
@@ -499,22 +499,22 @@ define(TYPE_BAR,2);
 				switch($gr_type) 
 				{
 					case "syslog":
-						$Im->parseData($data[xdata],$data[ydata]);
+						$Im->parseData($data["xdata"],$data["ydata"]);
 						break;
 					case "bytes":
-						$Im->parseData($data[xdata],$data[ybytes]);
+						$Im->parseData($data["xdata"],$data["ybytes"]);
 						break;
 					case "rows":
-						$Im->parseData($data[xdata],$data[yrows]);
+						$Im->parseData($data["xdata"],$data["yrows"]);
 						break;
 					case "words":
-						$Im->parseData($data[xdata],$data[ywords]);
+						$Im->parseData($data["xdata"],$data["ywords"]);
 						break;
 					case "stats_all":
-						$Im->parseData($data[xdata],$data[ydata]);
+						$Im->parseData($data["xdata"],$data["ydata"]);
 						break;
 					case "samdelaju":
-						$Im->parseData($data[xdata],$data[ydata]);
+						$Im->parseData($data["xdata"],$data["ydata"]);
 						break;
 					default:
 						break;
@@ -523,7 +523,7 @@ define(TYPE_BAR,2);
 				//Draw Title
 				$Im->title($setup["title"],$setup["title_col"]);
 				//Draw text on x axis
-				$Im->xaxis($data[xdata],$setup["x_axis_text"],$setup["x_axis_col"]);
+				$Im->xaxis($data["xdata"],$setup["x_axis_text"],$setup["x_axis_col"]);
 				//Draw Grid
 				($setup["show_grid_val"]=="on")?$drawg=TRUE:$drawg=FALSE;
 				$Im->grid($setup["y_grid"],$drawg,$setup["y_grid_col"]);
@@ -696,7 +696,7 @@ define(TYPE_BAR,2);
 								$cur="y".$ii;
 								$curc="yc".$ii;
 								if ($i==0) {
-									$temp[x]=$blaah;
+									$temp["x"]=$blaah;
 								} else {
 								$temp[$cur]=$blaah;
 								$temp[$curc]="000000";					

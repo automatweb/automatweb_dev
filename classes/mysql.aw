@@ -87,7 +87,7 @@ class db_connector extends root {
 			{
 				$this->dequote($res);
 			}
-			$res[rec] = $this->rec_count;
+			$res["rec"] = $this->rec_count;
 		};
 		if (is_object($awt)) 
 		{

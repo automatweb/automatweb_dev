@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.8 2001/06/12 23:09:34 duke Exp $
-if (DEFS_LOADED == 1)
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.9 2001/06/14 08:47:39 kristo Exp $
+if (defined("DEFS_LOADED"))
 {
 }
 else
 {
-	define(DEFS_LOADED,1);
+	define("DEFS_LOADED",1);
 // common functions (C) StruktuurMeedia 2000,2001
 
 // saadab 404 Not found vmt.
@@ -56,7 +56,7 @@ function load_xml_orb_def($class)
 		$tagtype = $val["type"];
  
 		// tagi parameetrid, array
-		$attribs = $val["attributes"];
+		$attribs = isset($val["attributes"]) ? $val["attributes"] : "";
  
 		// kui tegemist on nö "konteiner" tag-iga, siis...
 		if (in_array($tag,$containers))
@@ -65,15 +65,15 @@ function load_xml_orb_def($class)
 			if (in_array($tagtype,array("open","complete")))
 			{
 				$$tag = $attribs["name"];
-				if (($tag == "action") && ($attribs["nologin"]))
+				if (($tag == "action") && (isset($attribs["nologin"]) && $attribs["nologin"]))
 				{
 					$orb_defs[$class][$attribs["name"]]["nologin"] = 1;
 				};
-				if (($tag == "action") && ($attribs["all_args"]))
+				if (($tag == "action") && (isset($attribs["all_args"]) && $attribs["all_args"]))
 				{
 					$orb_defs[$class][$attribs["name"]]["all_args"] = true;
 				};
-				if ($attribs["default"] && ($tag == "action"))
+				if (isset($attribs["default"]) && $attribs["default"] && ($tag == "action"))
 				{
 					$orb_defs[$class]["default"] = $attribs["name"];
 				};
@@ -87,7 +87,7 @@ function load_xml_orb_def($class)
 					$orb_defs[$class][$action]["optional"] = array();
 					$orb_defs[$class][$action]["define"] = array();
 					// default action
-					if ($attribs["default"])
+					if (isset($attribs["default"]) && $attribs["default"])
 					{
 						$orb_defs[$class]["default"] = $action;
 						//print "def is = $action<br>";
@@ -342,13 +342,14 @@ function is_ip($addr)
 	$oct = "(\d{1,3}?)";
 	$valid = preg_match("/^$oct\.$oct\.$oct\.$oct$/",$addr,$parts);
 	// kontrollime, ega ei ole tegemist bcast aadressiga
-	if ( ($parts[4] == 0) || ($parts[4] == 255) )
+	if (isset($parts[4]) && ( ($parts[4] == 0) || ($parts[4] == 255) ))
 	{
 		// ongi.
 		$valid = false;
 	};
 
-	if ($parts[1] == 0) {
+	if (isset($parts[1]) && $parts[1] == 0) 
+	{
 		$valid = false;
 	};
 
@@ -508,19 +509,19 @@ function jerk_alert($contents) {
 // hiljem voib siia turvakontrolli kylge ehitada
 function get_file($arr)
 {
-	if (!$arr[file])
+	if (!$arr["file"])
 	{
 		die("defs->get_file was called without filename");
 	};
 
-	if (!($fh = @fopen($arr[file],"r")))
+	if (!($fh = @fopen($arr["file"],"r")))
 	{
 		$retval = false;
 		die("Couldn't open file '$arr[file]'");
 	}
 	else
 	{
-		$retval = fread($fh,filesize($arr[file])); // SLURP
+		$retval = fread($fh,filesize($arr["file"])); // SLURP
 		fclose($fh);
 	};
 	return $retval;

@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.4 2001/06/06 08:36:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.5 2001/06/14 08:47:39 kristo Exp $
 
-define(DENIED,0);
-define(ALLOWED,1);
+define("DENIED",0);
+define("ALLOWED",1);
 
 $aclcache;	// this is the place, where all the acl will be stored after querying
 
@@ -63,7 +63,7 @@ class acl_base extends core
 
 		$this->db_query($q);
 		while ($row = $this->db_next())
-			$ret[$row[gid]] = $row;
+			$ret[$row["gid"]] = $row;
 
 		return $ret;
 	}
@@ -86,10 +86,14 @@ class acl_base extends core
 		reset($acl_ids);
 		while(list($bitpos,$name) = each($acl_ids))
 		{
-			if ($aclarr[$name] == 1)
+			if (isset($aclarr[$name]) && $aclarr[$name] == 1)
+			{
 				$a = ALLOWED;
+			}
 			else
+			{
 				$a = DENIED;
+			}
 
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
@@ -150,7 +154,7 @@ class acl_base extends core
 			if (is_array($GLOBALS["aclcache"][$oid]))
 			{
 				$tacl = $GLOBALS["aclcache"][$oid];
-				$parent = $GLOBALS["aclcache"][$oid][parent];
+				$parent = $GLOBALS["aclcache"][$oid]["parent"];
 				//echo "found in cache! tacl[$access] = ",$tacl[$access], ", parent = $parent<br>";
 			}
 			else
@@ -159,7 +163,7 @@ class acl_base extends core
 				if ($tacl = $this->get_acl_for_oid($oid))
 				{
 					// found acl for this object from the database, so check it
-					$parent = $tacl[parent];
+					$parent = $tacl["parent"];
 					//echo "found in db, tacl[$access] = ",$tacl[$access],", parent = $parent<br>";
 					$GLOBALS["aclcache"][$oid] = $tacl;
 				}
@@ -177,9 +181,9 @@ class acl_base extends core
 			// this could be optimized a bit by finding out the highest priority among the groups, the user belongs to
 			// and only looping until we find that, but that will not happen too often, since user groups always have the highest priority
 			// and access is almost always granted by normal groups, not user groups so it isn't worth it
-			if ($tacl[priority] > $max_priority)
+			if ($tacl["priority"] > $max_priority)
 			{
-				$max_priority = $tacl[priority];
+				$max_priority = $tacl["priority"];
 				$max_acl = $tacl;
 				//echo "bigger than max priority (",$tacl[priority],") , setting max<br>";
 			}
@@ -218,8 +222,8 @@ class acl_base extends core
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
-			$row[priority] = -1;
-			$GLOBALS["aclcache"][$row[oid]] = $row;
+			$row["priority"] = -1;
+			$GLOBALS["aclcache"][$row["oid"]] = $row;
 			//echo "adding to cache ",$row[oid],"<br>";
 		}
 
@@ -240,7 +244,7 @@ class acl_base extends core
 		{
 //			echo "row! <br>";
 			// now find all records with the same oid and get the acl with the largest priority
-			if ($row[oid] == $curr_oid)
+			if ($row["oid"] == $curr_oid)
 			{
 				$currobj[] = $row;
 	//			 echo "same oid ($curr_oid), adding<br>";
@@ -255,18 +259,18 @@ class acl_base extends core
 					reset($currobj);
 					while (list(,$v) = each($currobj))
 					{
-						if ($v[priority] > $mp)
+						if ($v["priority"] > $mp)
 						{
-							$mp = $v[priority];
+							$mp = $v["priority"];
 							$ma = $v;
 				//			 echo "higher priority ($mp), setting new high, ",$v[oid],"<br>";
 						}
 					}
-					$GLOBALS["aclcache"][$ma[oid]] = $ma;
+					$GLOBALS["aclcache"][$ma["oid"]] = $ma;
 //				echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br>";
 				}
 				$currobj = array();
-				$curr_oid = $row[oid];
+				$curr_oid = $row["oid"];
 				$currobj[] = $row;
 			}
 		}
@@ -278,14 +282,14 @@ class acl_base extends core
 			reset($currobj);
 			while (list(,$v) = each($currobj))
 			{
-				if ($v[priority] > $mp)
+				if ($v["priority"] > $mp)
 				{
-					$mp = $v[priority];
+					$mp = $v["priority"];
 					$ma = $v;
 	//				 echo "higher priority ($mp), setting new high<br>";
 				}
 			}
-			$GLOBALS["aclcache"][$ma[oid]] = $ma;
+			$GLOBALS["aclcache"][$ma["oid"]] = $ma;
 //			echo "adding to cache ",$ma[oid]," access: '",$ma[can_change],"'<br>";
 		}
 		$this->restore_handle();
@@ -310,8 +314,8 @@ class acl_base extends core
 			{
 				$this->raise_error("Teil on default grupp puudu, palun teatage sellest veast kohe info@struktuur.ee",true);
 			};
-			$this->add_acl_group_to_obj($gr[gid], $oid);
-			$this->save_acl($oid,$gr[gid], $aclarr);		// give full access to the creator
+			$this->add_acl_group_to_obj($gr["gid"], $oid);
+			$this->save_acl($oid,$gr["gid"], $aclarr);		// give full access to the creator
 		}
 	}
 
@@ -347,7 +351,7 @@ class acl_base extends core
 		{
 			return DENIED;
 		}
-		if ($GLOBALS["check_prog_acl"])
+		if (isset($GLOBALS["check_prog_acl"]) && $GLOBALS["check_prog_acl"] == true)
 		{
 			if (!is_array($prog_cache))
 			{
@@ -368,7 +372,7 @@ class acl_base extends core
 	function prog_acl_error($right,$prog)
 	{
 		global $programs;
-		die("Sorry, but you do not have $right access to program ".$programs[$prog][name]."<br>");
+		die("Sorry, but you do not have $right access to program ".$programs[$prog]["name"]."<br>");
 	}
 }
 ?>

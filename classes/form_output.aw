@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.3 2001/05/25 09:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.4 2001/06/14 08:47:39 kristo Exp $
 
 global $orb_defs;
-$orb_defs["form_output"] = 
-										array("list_op"					=> array("function" => "gen_output_list", "params" => array("id")),
+$orb_defs["form_output"] = "xml";
+
+/*										array("list_op"					=> array("function" => "gen_output_list", "params" => array("id")),
 													"add_op"					=> array("function" => "add_output",			"params" => array("id")),
 													"submit_op"				=> array("function" => "admin_output",		"params" => array()),
 													"change_op"				=> array("function" => "gen_output_grid", "params" => array("id", "op_id")),
@@ -20,7 +21,7 @@ $orb_defs["form_output"] =
 													"submit_op_settings" => array("function" => "save_output_settings", "params" => array()),
 													"op_meta"					=> array("function" => "gen_output_meta", "params" => array("id" , "op_id")),
 													"save_op_meta"		=> array("function" => "save_output_meta", "params" => array())
-												);
+												);*/
 
 class form_output extends form_base 
 {
@@ -31,9 +32,542 @@ class form_output extends form_base
 		$this->sub_merge = 1;
 	}
 
+	function add($arr)
+	{
+		extract($arr);
+		$this->read_template("add_output.tpl");
+		$this->mk_path($parent,"Lisa v&auml;ljundi stiil");
+
+		classload("style");
+		$st = new style;
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
+			"forms" => $this->multiple_option_list(array(), $this->get_list(FTYPE_ENTRY,true)),
+			"styles" => $this->picker(0,$st->get_select(0,ST_TABLE))
+		));
+		$this->parse("ADD");
+		return $this->parse();
+	}
+
+	function submit($arr)
+	{
+		extract($arr);
+
+		if ($id)
+		{
+			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
+		}
+		else
+		{
+			$id = $this->new_object(array("parent" => $parent, "name" => $name, "comment" => $comment, "class_id" => CL_FORM_OUTPUT));
+			$this->db_query("INSERT INTO form_output(id) VALUES($id)");
+			$this->load_output($id);
+			if ($baseform)
+			{
+				// if the user selected a form to base this op on, make it look like the form.
+				classload("form");
+				$f = new form;
+				$f->load($baseform);
+
+				$this->output= array();
+				$this->output["rows"] = $f->arr["rows"];
+				$this->output["cols"] = $f->arr["cols"];
+				for ($row =0; $row < $f->arr["rows"]; $row++)
+				{
+					for ($col =0; $col < $f->arr["cols"]; $col++)
+					{
+						$elarr=array();
+						$f->arr["contents"][$row][$col]->get_els(&$elarr);
+						$this->output[$row][$col]["style"] = $f->arr["contents"][$row][$col]->get_style();
+
+						$this->output[$row][$col]["el_count"] = count($elarr);
+						for ($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+						{
+							$this->output[$row][$col]["els"][$i] = $elarr[$i]->get_id();
+						}
+					}
+				}
+				$this->output["map"] = $f->arr["map"];
+				$this->save_output($id);
+			}
+		}
+
+		$this->db_query("DELETE FROM output2form WHERE op_id = $id");
+		if (is_array($forms))
+		{
+			foreach($forms as $fid)
+			{
+				$this->db_query("INSERT INTO output2form (op_id, form_id) VALUES($id,'$fid')");
+			}
+		}
+		
+		$this->load_output($id);
+		$this->output["table_style"] = $table_style;
+		$this->save_output($id);
+		return $this->mk_orb("change", array("id" => $id));
+	}
+
+	function change($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+		$this->read_template("add_output.tpl");
+		$this->mk_path($this->parent, "Muuda v&auml;ljundi stiili");
+
+		classload("style");
+		$st = new style;
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
+			"name" => $this->name,
+			"comment" => $this->comment,
+			"admin" => $this->mk_orb("admin_op", array("id" => $id)),
+			"forms" => $this->multiple_option_list($this->get_op_forms($id), $this->get_list(FTYPE_ENTRY)),
+			"styles" => $this->picker($this->output["table_style"],$st->get_select(0,ST_TABLE))
+		));
+		$this->parse("CHANGE");
+		return $this->parse();
+	}
+
+	function debug_map_print()
+	{
+		echo "<table border=1>";
+		for ($r=0; $r < $this->output["rows"]; $r++)
+		{
+			echo "<tr>";
+			for ($c=0; $c < $this->output["cols"]; $c++)
+				echo "<td>(", $this->output["map"][$r][$c]["row"], ",",$this->output["map"][$r][$c]["col"],")</td>";
+			echo "</tr>";
+		}
+		echo "</table>";
+	}
+
+	function get_op_forms($op_id)
+	{
+		$ret = array();
+		$this->db_query("SELECT form_id FROM output2form WHERE op_id = $op_id");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["form_id"]] = $row["form_id"];
+		}
+		return $ret;
+	}
+
+	////
+	// !generates the grid used in changing the output $id
+	function admin($arr)
+	{
+		extract($arr);
+		$this->read_template("output_grid.tpl");
+		$this->load_output($id);
+		$this->mk_path($this->parent,"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda v&auml;jundit</a> / Adminni");
+
+		$op_id = $id;
+
+		// vaja on arrayd el_id => el_name k6ikide elementide kohta, mis on selle v2ljundi juurde valitud formides
+		$elarr = array("0" => "");
+		$op_forms = $this->get_op_forms($id);
+		$fidstring = join(",",$this->map2("%s",$op_forms));
+		if ($fidstring != "")
+		{
+			$this->db_query(
+				"SELECT distinct(el_id) as el_id, objects.name as name
+				 FROM element2form 
+					 LEFT JOIN objects ON objects.oid = element2form.el_id
+					WHERE form_id IN ($fidstring)"
+			);
+			while ($row = $this->db_next())
+			{
+				$elarr[$row["el_id"]] = $row["name"];
+			}
+		}
+
+//		 $this->debug_map_print();
+
+		// put all styles in this form in an array so they will be faster to use
+		$style = new style;
+		$style_select = $style->get_select(0,ST_CELL);
+
+		// tabeli ylemine rida delete column nuppudega
+		for ($a=0; $a < $this->output["cols"]; $a++)
+		{
+			$fc = "";
+			if ($a == 0)
+			{
+				$this->vars(array("add_col" => $this->mk_orb("add_col", array("id" => $op_id, "after" => -1))));
+				$fc = $this->parse("FIRST_C");
+			}
+
+			$this->vars(array(
+				"add_col" => $this->mk_orb("add_col", array("id" => $op_id, "after" => $a)),
+				"del_col" => $this->mk_orb("del_col", array("id" => $op_id, "col" => $a)),
+				"FIRST_C" => $fc
+			));
+			$this->parse("DC");
+		}
+
+		for ($row = 0; $row < $this->output["rows"]; $row++)
+		{
+			$this->vars(array("COL" => ""));
+			for ($col = 0; $col < $this->output["cols"]; $col++)
+			{
+				if (!($arr = $this->get_spans($row, $col, $this->output["map"], $this->output["rows"], $this->output["cols"])))
+				{
+					// kui see cell on peidus m6ne teise all, siis 2rme seda joonista
+					continue;
+				}
+				
+				$rcol = $arr["r_col"];
+				$rrow = $arr["r_row"];
+				$cell = $this->output[$rrow][$rcol];
+
+				$element="";
+				for ($i=0; $i < $cell["el_count"]+1; $i++)
+				{
+					$this->vars(array(
+						"elsel" => $this->picker($cell["els"][$i],$elarr),
+						"element_id" => $rrow."_".$rcol."_".$i
+					));
+					$element.=$this->parse("ELEMENT");
+				}
+
+				$this->vars(array(
+					"colspan" => $arr["colspan"], 
+					"rowspan" => $arr["rowspan"],
+					"num_els_plus3" => $cell["el_count"]+5,
+					"col" => $rcol, 
+					"row" => $rrow,
+					"cell_id" => ($rrow."_".$rcol), 
+					"ELEMENT" => $element, 
+					"exp_left"	=> $this->mk_orb("exp_left", array("id" => $op_id, "col" => $col, "row" => $row)),
+					"exp_right"	=> $this->mk_orb("exp_right", array("id" => $op_id, "col" => $col, "row" => $row)),
+					"exp_up"	=> $this->mk_orb("exp_up", array("id" => $op_id, "col" => $col, "row" => $row)),
+					"exp_down"	=> $this->mk_orb("exp_down", array("id" => $op_id, "col" => $col, "row" => $row)),
+					"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $id, "col" => $col, "row" => $row)),
+					"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $id, "col" => $col, "row" => $row)),
+					"stylesel" => $this->picker($cell["style"],$style_select)
+				));
+
+				$sh = ""; $sv = "";
+				if ($arr["rowspan"] > 1)
+				{
+					$sh = $this->parse("SPLIT_HORIZONTAL");
+				}
+				if ($arr["colspan"] > 1)
+				{
+					$sv = $this->parse("SPLIT_VERTICAL");
+				}
+				$eu = "";
+				if ($row != 0)
+				{
+					$eu = $this->parse("EXP_UP");
+				}
+				$el = "";
+				if ($col != 0)
+				{
+					$el = $this->parse("EXP_LEFT");
+				}
+				$er = "";
+				if (($col+$arr["colspan"]) != $this->output["cols"])
+				{
+					$er = $this->parse("EXP_RIGHT");
+				}
+				$ed = "";
+				if (($row+$arr["rowspan"]) != $this->output["rows"])
+				{
+					$ed = $this->parse("EXP_DOWN");
+				}
+				$this->vars(array(
+					"SPLIT_HORIZONTAL" => $sh, 
+					"SPLIT_VERTICAL" => $sv, 
+					"EXP_UP" => $eu, 
+					"EXP_LEFT" => $el, 
+					"EXP_RIGHT" => $er,
+					"EXP_DOWN" => $ed
+				));
+				$spls = "";
+				if ($sh != "" || $sv != "")
+				{
+					$spls = $this->parse("SPLITS");
+				}
+				$this->vars(array("SPLITS" => $spls));
+				$this->parse("COL");
+			}
+			$fi = "";
+			if ($row==0)
+			{
+				$this->vars(array("add_row" => $this->mk_orb("add_row", array("id" => $op_id, "after" => -1))));
+				$fi = $this->parse("FIRST_R");
+			}
+			$this->vars(array(
+				"add_row" => $this->mk_orb("add_row", array("id" => $op_id, "after" => $row)),
+				"del_row" => $this->mk_orb("del_row", array("id" => $op_id, "row" => $row)),
+				"FIRST_R" => $fi
+			));
+			$this->parse("LINE");
+		}
+
+		$this->vars(array(
+			"reforb"	=> $this->mk_reforb("submit_admin", array("id" => $id, "op_id" => $op_id))
+		));
+		return $this->parse();
+	}
+
+	////
+	// !saves the output grid ($id)
+	function submit_admin($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				$cell = &$this->output[$row][$col];
+
+				$var = "stylesel_".$row."_".$col;
+				$cell["style"] = $$var;
+
+				for ($i=0; $i < $cell["el_count"]+1; $i++)
+				{
+					$var = "elsel_".$row."_".$col."_".$i;
+					$cell["els"][$i] = $$var;
+					$ls = $$var;
+				}
+				if ($ls != 0)
+				{
+					$cell["el_count"]++;
+				}
+				else
+				if ($cell["els"][$cell["el_count"]-1] == 0)
+				{
+					$cell["el_count"]--;
+				}
+
+				if ($cell["el_count"] < 0)
+				{
+					$cell["el_count"] = 0;
+				}
+			}
+		}
+		
+		$this->save_output($id);
+		return $this->mk_orb("admin_op", array("id" => $id));
+	}
+
+	////
+	// !saves the current state of the loaded form output
+	function save_output($id)
+	{
+		// saveme xml
+		classload("xml");
+		$x = new xml;
+		$tp = $x->xml_serialize($this->output);
+		$this->quote(&$tp);
+		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
+		$this->upd_object(array("oid" => $id));
+		$this->_log("form","Muutis outputi stiili $name");
+	}
+
+	////
+	// !adds a column to output $id after $after
+	function add_col($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+
+		for ($row = 0; $row < $this->output["rows"]; $row++)
+		{
+			for ($i=$this->output["cols"]; $i > $after; $i--)
+			{
+				$this->output[$row][$i+1] = $this->output[$row][$i];
+			}
+		}
+
+		for ($row = 0; $row < $this->output["rows"]; $row++)
+		{
+			$this->output[$row][$after+1] = "";
+		}
+
+		$this->output["cols"]++;
+		$this->map_add_col($this->output["rows"], $this->output["cols"], &$this->output["map"],$after);
+
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	////
+	// !deletes the column $col of output $id
+	function del_col($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+
+		for ($row = 0; $row < $this->output["rows"]; $row++)
+		{
+			for ($i=$col; $i < ($this->output["cols"]-1); $i++)
+			{
+				$this->output[$row][$i] = $this->output[$row][$i+1];
+			}
+		}
+
+		for ($row = 0; $row < $this->output["rows"]; $row++)
+		{
+			$this->output[$row][$this->output["cols"]-1] = "";
+		}
+
+		$this->map_del_col($this->output["rows"], $this->output["cols"], &$this->output["map"],$col);
+		$this->output["cols"]--;
+
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	////
+	// !adds a row to output $id after row $after
+	function add_row($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+
+		for ($row=$this->output["rows"]; $row > $after; $row--)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				$this->output[$row+1][$col] = $this->output[$row][$col];
+			}
+		}
+
+		for ($col = 0; $col < $this->output["cols"]; $col++)
+		{
+			$this->output[$after+1][$col] = "";
+		}
+
+		$this->output["rows"]++;
+		$this->map_add_row($this->output["rows"], $this->output["cols"], &$this->output["map"], $after);
+
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	////
+	// !deletes row $row of output $id 
+	function del_row($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+
+		$row_d = $row;
+		for ($row=$row_d; $row < ($this->output["rows"]-1); $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				$this->output[$row][$col] = $this->output[$row+1][$col];
+			}
+		}
+
+		for ($col = 0; $col < $this->output["cols"]; $col++)
+		{
+			$this->output[$this->output["rows"]-1][$col] = "";
+		}
+
+		$this->map_del_row($this->output["rows"], $this->output["cols"], &$this->output["map"], $row_d);
+		$this->output["rows"]--;
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	////
+	// !merges the cell ($row, $col) in output $id with the cell immediately above it
+	function exp_up($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+		$this->map_exp_up($this->output["rows"], $this->output["cols"], &$this->output["map"],$row,$col);
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	////
+	// !merges the cell ($row,$col) in output $id with the cell below it
+	function exp_down($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+		$this->map_exp_down($this->output["rows"], $this->output["cols"], &$this->output["map"],$row,$col);
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	////
+	// !merges the cell ($row,$col) in output $id with the cell to the left of it
+	function exp_left($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+		$this->map_exp_left($this->output["rows"], $this->output["cols"], &$this->output["map"],$row,$col);
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	////
+	// !merges the cell ($row,$col) in output $id with the cell to the right of it
+	function exp_right($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+		$this->map_exp_right($this->output["rows"], $this->output["cols"], &$this->output["map"],$row,$col);
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	////
+	// !splits the cell ($row,$col) in output $id vertically
+	function split_cell_ver($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+		$this->map_split_ver($this->output["rows"], $this->output["cols"], &$this->output["map"],$row,$col);
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+	////
+	// !splits the cell ($row,$col) in output $id horizontally
+	function split_cell_hor($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+		$this->map_split_hor($this->output["rows"], $this->output["cols"], &$this->output["map"],$row,$col);
+		$this->save_output($id);
+		$orb = $this->mk_orb("admin_op", array("id" => $id));
+		header("Location: $orb");
+		return $orb;
+	}
+
+// ---------------------------------------------------------------------------------
 	////
 	// !lists the outputs for this form
-	function gen_output_list($arr)
+/*	function gen_output_list($arr)
 	{
 		extract($arr);
 		$this->init($id, "output_list.tpl","V&auml;ljundite nimekiri");
@@ -192,387 +726,6 @@ class form_output extends form_base
 	}
 
 	////
-	// !saves the current state of the loaded form output
-	function save_output($id)
-	{
-		$tp = serialize($this->output);
-		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
-		$this->upd_object(array("oid" => $id));
-		$this->_log("form","Muutis formi $this->name outputi stiili $name");
-	}
-
-	////
-	// !generates the grid used in changig the output
-	function gen_output_grid($arr)
-	{
-		extract($arr);
-		$this->init($id, "output_grid.tpl", "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda formi</a> / <a href='".$this->mk_orb("op_list", array("id" => $id))."'>V&auml;ljundite nimekiri</a> / Muuda v&auml;ljundit");
-
-		$this->output = array();
-		$this->load_output($op_id);
-
-		// put all the elements in this form in an array, so it will be faster to use
-		$elarr = array();
-		for ($row = 0; $row < $this->arr[rows]; $row++)
-			for ($col = 0; $col < $this->arr[cols]; $col++)
-				$this->arr[contents][$row][$col] ->get_els(&$elarr);		// this function returns only the elements, for which can_view == 1
-
-		// put all styles in this form in an array so they will be faster to use
-		$styles = array();
-
-/*			echo "<table border=1>";
-		for ($r=0; $r < $this->output[rows]; $r++)
-		{
-			echo "<tr>";
-			for ($c=0; $c < $this->output[cols]; $c++)
-				echo "<td>(", $this->output[map][$r][$c][row], ",",$this->output[map][$r][$c][col],")</td>";
-			echo "</tr>";
-		}
-		echo "</table>";*/
-
-		$style = new style;
-		$select = $style->get_select(0,ST_CELL);
-
-		$this->vars(array("DC" => "", "FIRST_C" => ""));
-		for ($a=0; $a < $this->output[cols]; $a++)
-		{
-			$fc = "";
-			if ($a == 0)
-			{
-				$this->vars(array("add_col" => $this->mk_orb("op_add_col", array("id" => $this->id, "op_id" => $op_id, "after" => -1))));
-				$fc = $this->parse("FIRST_C");
-			}
-
-			$this->vars(array("add_col" => $this->mk_orb("op_add_col", array("id" => $this->id, "op_id" => $op_id, "after" => $a)),
-												"del_col" => $this->mk_orb("op_del_col", array("id" => $this->id, "op_id" => $op_id, "col" => $a))));
-			$this->vars(array("output_col" => $a,"FIRST_C" => $fc));
-			$this->parse("DC");
-		}
-
-		for ($row = 0; $row < $this->output[rows]; $row++)
-		{
-			$this->vars(array("COL" => ""));
-			for ($col = 0; $col < $this->output[cols]; $col++)
-			{
-				if (!($arr = $this->get_spans($row, $col, $this->output[map], $this->output[rows], $this->output[cols])))
-					continue;
-				
-				$this->vars(array("colspan" => $arr[colspan], "rowspan" => $arr[rowspan],"num_els_plus3" => $this->output[$arr[r_row]][$arr[r_col]][el_count]+4,"col" => $arr[r_col], "row" => $arr[r_row]));
-
-				$elmnt="";
-				for ($i=0; $i < $this->output[$arr[r_row]][$arr[r_col]][el_count]+1; $i++)
-				{
-					$elsel = "<option VALUE='0'>";
-					reset($elarr);
-					while (list($k, $v) = each($elarr))
-					{
-						$elsel.="<option VALUE='".$v->get_id()."' ".($this->output[$arr[r_row]][$arr[r_col]][els][$i] == $v->get_id() ? " SELECTED " : "").">".($v->get_el_name());
-					}
-					$elmnt .= "<tr><td align=right class=plain>Element:</td><td><select class='small_button'	name='elsel_".$arr[r_row]."_".$arr[r_col]."_".$i."'>$elsel</select></td></tr>";		// ok, we shouldn't probably do this, but what the heck
-				}
-				$this->vars(array("cell_id" => ($arr[r_row]."_".$arr[r_col]), "ELEMENT" => $elmnt, 
-													"exp_left"	=> $this->mk_orb("op_exp_left", array("id" => $this->id, "op_id" => $op_id, "col" => $arr[r_col], "row" => $arr[r_row])),
-													"exp_right"	=> $this->mk_orb("op_exp_right", array("id" => $this->id, "op_id" => $op_id, "col" => $arr[r_col], "row" => $arr[r_row])),
-													"exp_up"	=> $this->mk_orb("op_exp_up", array("id" => $this->id, "op_id" => $op_id, "col" => $arr[r_col], "row" => $arr[r_row])),
-													"exp_down"	=> $this->mk_orb("op_exp_down", array("id" => $this->id, "op_id" => $op_id, "col" => $arr[r_col], "row" => $arr[r_row])),
-													"stylesel" => $this->picker($this->output[$arr[r_row]][$arr[r_col]][style],$select)));
-				$this->parse("COL");
-			}
-			$fi = "";
-			if ($row==0)
-			{
-				$this->vars(array("add_row" => $this->mk_orb("op_add_row", array("id" => $this->id, "op_id" => $op_id, "after" => -1))));
-				$fi = $this->parse("FIRST_R");
-			}
-			$this->vars(array("add_row" => $this->mk_orb("op_add_row", array("id" => $this->id, "op_id" => $op_id, "after" => $row)),
-												"del_row" => $this->mk_orb("op_del_row", array("id" => $this->id, "op_id" => $op_id, "row" => $row))));
-			$this->vars(array("FIRST_R" => $fi, "output_row" => $row));
-			$this->parse("LINE");
-		}
-
-		$this->vars(array("def_style_value"			=> "", 
-											"def_style_selected"	=> "",
-											"def_style_text"			=> ""));
-		$this->parse("STYLE_LINE");
-		for ($i=0; $i < $style_count; $i++)
-		{
-			$this->vars(array("def_style_value"			=>	$styles[$i][id], 
-												"def_style_selected"	=> ($this->output[def_style] == $styles[$i][id] ? " SELECTED " : "" ),
-												"def_style_text"			=> $styles[$i][name]));
-			$this->parse("STYLE_LINE");
-		}
-
-		$this->vars(array("form_bgcolor"				=> $this->output[bgcolor],
-											"form_border"					=> $this->output[border],
-											"form_cellpadding"		=> $this->output[cellpadding],
-											"form_cellspacing"		=> $this->output[cellspacing],
-											"form_height"					=> $this->output[height],
-											"form_width"					=> $this->output[width],
-											"form_hspace"					=> $this->output[hspace],
-											"form_vspace"					=> $this->output[vspace],
-											"reforb"							=> $this->mk_reforb("submit_op_grid", array("id" => $id, "op_id" => $op_id)),
-											"id"									=> $op_id));
-		return $this->do_menu_return();
-	}
-
-	////
-	// !adds a $count columns to output $op_id of form $id after $after
-	function op_add_col($arr)
-	{
-		extract($arr);
-		$this->load($id);
-		$this->load_output($op_id);
-
-		for ($row = 0; $row < $this->output[rows]; $row++)
-			for ($i=$this->output[cols]; $i > $after; $i--)
-				$this->output[$row][$i+1] = $this->output[$row][$i];
-
-		for ($row = 0; $row < $this->output[rows]; $row++)
-			$this->output[$row][$after+1] = "";
-
-		$this->output[cols]++;
-
-		$nm = array();
-		for ($row =0; $row < $this->output[rows]; $row++)
-			for ($col=0; $col <= $after; $col++)
-				$nm[$row][$col] = $this->output[map][$row][$col];		// copy the left part of the map
-
-		$change = array();
-		for ($row = 0; $row < $this->output[rows]; $row++)
-			for ($col=$after+1; $col < ($this->output[cols]-1); $col++)
-			{
-				if ($this->output[map][$row][$col][col] > $after)	
-				{
-					$nm[$row][$col+1][col] = $this->output[map][$row][$col][col]+1;
-					$nm[$row][$col+1][row] = $this->output[map][$row][$col][row];
-					$change[] = array("from" => $this->output[map][$row][$col], "to" => $nm[$row][$col+1]);
-				}
-				else
-					$nm[$row][$col+1] = $this->output[map][$row][$col];
-			}
-
-		reset($change);
-		while (list(,$v) = each($change))
-			for ($row=0; $row < $this->output[rows]; $row++)
-				for ($col=0; $col <= $after; $col++)
-					if ($this->output[map][$row][$col] == $v[from])
-						$nm[$row][$col] = $v[to];
-
-		for ($row = 0; $row < $this->output[rows]; $row++)
-		{
-			if ($this->output[map][$row][$after] == $this->output[map][$row][$after+1])
-				$nm[$row][$after+1] = $nm[$row][$after];
-			else
-				$nm[$row][$after+1] = array("row" => $row, "col" => $after+1);
-		}
-
-		$this->output[map] = $nm;
-
-		$this->save_output($op_id);
-		$orb = $this->mk_orb("change_op", array("id" => $this->id, "op_id" => $op_id));
-		header("Location: $orb");
-		return $orb;
-	}
-
-	////
-	// !adds a row to output $op_id of form $id
-	function op_add_row($arr)
-	{
-		extract($arr);
-		$this->load($id);
-		$this->load_output($op_id);
-
-		for ($row=$this->output[rows]; $row > $after; $row--)
-			for ($col=0; $col < $this->output[cols]; $col++)
-				$this->output[$row+1][$col] = $this->output[$row][$col];
-
-		for ($col = 0; $col < $this->output[cols]; $col++)
-			$this->output[$after+1][$col] = "";
-
-		$this->output[rows]++;
-
-		$nm = array();
-		for ($row =0; $row <= $after; $row++)
-			for ($col=0; $col < $this->output[cols]; $col++)
-				$nm[$row][$col] = $this->output[map][$row][$col];		// copy the upper part of the map
-
-		$change = array();
-		for ($row = $after+1; $row < ($this->output[rows]-1); $row++)
-			for ($col=0; $col < $this->output[cols]; $col++)
-			{
-				if ($this->output[map][$row][$col][row] > $after)	
-				{
-					$nm[$row+1][$col][col] = $this->output[map][$row][$col][col];
-					$nm[$row+1][$col][row] = $this->output[map][$row][$col][row]+1;
-					$change[] = array("from" => $this->output[map][$row][$col], "to" => $nm[$row+1][$col]);
-				}
-				else
-					$nm[$row+1][$col] = $this->output[map][$row][$col];
-			}
-
-		reset($change);
-		while (list(,$v) = each($change))
-			for ($row=0; $row <= $after; $row++)
-				for ($col=0; $col < $this->output[cols]; $col++)
-					if ($this->output[map][$row][$col] == $v[from])
-						$nm[$row][$col] = $v[to];
-
-		for ($col = 0; $col < $this->output[cols]; $col++)
-		{
-			if ( $this->output[map][$after][$col] == $this->output[map][$after+1][$col])
-				$nm[$after+1][$col] = $nm[$after][$col];
-			else
-				$nm[$after+1][$col] = array("row" => $after+1, "col" => $col);
-		}
-
-		$this->output[map] = $nm;
-		$this->save_output($this->output_id);
-		$orb = $this->mk_orb("change_op", array("id" => $this->id, "op_id" => $op_id));
-		header("Location: $orb");
-		return $orb;
-	}
-	
-	////
-	// !deletes the column $col of form $id 's output $op_id
-	function op_del_col($arr)
-	{
-		extract($arr);
-		$this->load($id);
-		$this->load_output($op_id);
-
-		for ($row = 0; $row < $this->output[rows]; $row++)
-			for ($i=$col; $i < ($this->output[cols]-1); $i++)
-				$this->output[$row][$i] = $this->output[$row][$i+1];
-
-		for ($row = 0; $row < $this->output[rows]; $row++)
-			$this->output[$row][$this->output[cols]-1] = "";
-
-		$d_col = $col;
-
-		$nm = array();
-		for ($row =0; $row < $this->output[rows]; $row++)
-			for ($col=0; $col < $d_col; $col++)
-				$nm[$row][$col] = $this->output[map][$row][$col];	// copy the left part of the map
-
-		$changes = array();
-		for ($row =0 ; $row < $this->output[rows]; $row++)
-			for ($col = $d_col+1; $col < $this->output[cols]; $col++)
-			{
-				if ($this->output[map][$row][$col][col] > $d_col)
-				{
-					$nm[$row][$col-1] = array("row" => $this->output[map][$row][$col][row], "col" => $this->output[map][$row][$col][col]-1);
-					$changes[] = array("from" => $this->output[map][$row][$col], 
-														 "to" => array("row" => $this->output[map][$row][$col][row], "col" => $this->output[map][$row][$col][col]-1));
-				}
-				else
-					$nm[$row][$col-1] = $this->output[map][$row][$col];
-				
-			}
-		$this->output[map] = $nm;
-		
-		reset($changes);
-		while (list(,$v) = each($changes))
-			for ($row=0; $row < $this->output[rows]; $row++)
-				for ($col=0; $col < $d_col; $col++)
-					if ($this->output[map][$row][$col] == $v[from])
-						$this->output[map][$row][$col] = $v[to];
-
-		$this->output[cols]--;
-		$this->save_output($this->output_id);
-		$orb = $this->mk_orb("change_op", array("id" => $this->id, "op_id" => $op_id));
-		header("Location: $orb");
-		return $orb;
-	}
-	
-	////
-	// !deletes row $row of outpit $op_id of form $id
-	function op_del_row($arr)
-	{
-		extract($arr);
-		$this->load($id);
-		$this->load_output($op_id);
-
-		$row_d = $row;
-		for ($row=$row_d; $row < ($this->output[rows]-1); $row++)
-			for ($col=0; $col < $this->output[cols]; $col++)
-				$this->output[$row][$col] = $this->output[$row+1][$col];
-
-		for ($col = 0; $col < $this->output[cols]; $col++)
-			$this->output[$this->output[rows]-1][$col] = "";
-
-		$d_row = $row;
-
-		$nm = array();
-		for ($row =0; $row < $d_row; $row++)
-			for ($col=0; $col < $this->output[cols]; $col++)
-				$nm[$row][$col] = $this->output[map][$row][$col];	// copy the upper part of the map
-
-		$changes = array();
-		for ($row =$d_row+1 ; $row < $this->output[rows]; $row++)
-			for ($col = 0; $col < $this->output[cols]; $col++)
-			{
-				if ($this->output[map][$row][$col][row] > $d_row)
-				{
-					$nm[$row-1][$col] = array("row" => $this->output[map][$row][$col][row]-1, "col" => $this->output[map][$row][$col][col]);
-					$changes[] = array("from" => $this->output[map][$row][$col], 
-														 "to" => array("row" => $this->output[map][$row][$col][row]-1, "col" => $this->output[map][$row][$col][col]));
-				}
-				else
-					$nm[$row-1][$col] = $this->output[map][$row][$col];
-				
-			}
-		$this->output[map] = $nm;
-		
-		reset($changes);
-		while (list(,$v) = each($changes))
-			for ($row=0; $row < $d_row; $row++)
-				for ($col=0; $col < $this->output[cols]; $col++)
-					if ($this->output[map][$row][$col] == $v[from])
-						$this->output[map][$row][$col] = $v[to];
-
-		$this->output[rows]--;
-		$this->save_output($this->output_id);
-		$orb = $this->mk_orb("change_op", array("id" => $this->id, "op_id" => $op_id));
-		header("Location: $orb");
-		return $orb;
-	}
-
-	////
-	// !saves the form's ($id) output grid ($op_id)
-	function save_output_grid($arr)
-	{
-		$this->dequote(&$arr);
-		extract($arr);
-
-		$this->load_output($op_id);
-		for ($row=0; $row < $this->output[rows]; $row++)
-		{
-			for ($col=0; $col < $this->output[cols]; $col++)
-			{
-				$var = "stylesel_".$row."_".$col;
-				$this->output[$row][$col][style] = $$var;
-				for ($i=0; $i < $this->output[$row][$col][el_count]+1; $i++)
-				{
-					$var = "elsel_".$row."_".$col."_".$i;
-					$this->output[$row][$col][els][$i] = $$var;
-					$ls = $$var;
-				}
-				if ($ls != 0)
-					$this->output[$row][$col][el_count]++;
-				else
-				if ($this->output[$row][$col][els][$this->output[$row][$col][el_count]-1] == 0)
-					$this->output[$row][$col][el_count]--;
-
-				if ($this->output[$row][$col][el_count] < 0)
-					$this->output[$row][$col][el_count] = 0;
-			}
-		}
-		
-		$this->save_output($op_id);
-		return $this->mk_orb("change_op", array("id" => $id, "op_id" => $op_id));
-	}
-
-	////
 	// !saves table settings for output $op_id for form $id
 	function save_output_settings($arr)
 	{
@@ -614,6 +767,6 @@ class form_output extends form_base
 			$ret[$row[oid]] = $row[name];
 		}
 		return $ret;
-	}
+	}*/
 }
 ?>

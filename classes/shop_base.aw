@@ -17,7 +17,7 @@ class shop_base extends aw_template
 	// !returns the item type
 	function get_item_type($id)
 	{
-		if (is_array($this->type_cache[$id]))
+		if (isset($this->type_cache[$id]))
 		{
 			return $this->type_cache[$id];
 		}

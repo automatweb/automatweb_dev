@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.6 2001/06/05 17:40:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.7 2001/06/14 08:47:39 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs");
 lc_load("automatweb");
@@ -103,7 +103,7 @@ class orb extends aw_template {
 			bail_out();
 		};
 
-		if ($vars["reforb"] == 1)
+		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
@@ -125,7 +125,7 @@ class orb extends aw_template {
 		if ($xml)
 		{
 			// orb on defineeritud XML-i kaudu
-			if ($orb_defs[$class][$action]["all_args"] == true)
+			if (isset($orb_defs[$class][$action]["all_args"]) && $orb_defs[$class][$action]["all_args"] == true)
 			{
 				$params = $GLOBALS["HTTP_GET_VARS"];
 			}
@@ -148,7 +148,7 @@ class orb extends aw_template {
 				//optional arguments
 				foreach($optional as $key => $val)
 				{
-					$params[$key] = $vars[$key];
+					$params[$key] = isset($vars[$key]) ? $vars[$key] : "";
 				};
 				$params = array_merge($params,$defined);
 			}
@@ -197,7 +197,7 @@ class orb extends aw_template {
 		// see votab nad sealt välja ja caller saab get_info funktsiooni kaudu kätte kogu vajaliku info.
 		// no ntx aw sees on vaja kuidagi saada string aw index.tpl-i sisse pealkirjaks
 		// ilmselt see pole koige lihtsam lahendus, but hey, it works
-		if (is_array($t->info))
+		if (isset($t->info) && is_array($t->info))
 		{
 			$this->info = $t->info;
 		};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.3 2001/05/25 15:25:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.4 2001/06/14 08:47:39 kristo Exp $
 /*
 	AW Foundation Classes
 	(C) StruktuurMeedia 2000,2001
@@ -8,10 +8,11 @@ class root
 {
 	// siin asuvad mõned sagedamini kasutataivamad funktsioonid
 	var $errorlevel;
-	var $stacks; // siia me salvestame erinevad stackid
+	var $stacks = array("root" => array("subcount" => 0)); // siia me salvestame erinevad stackid
 	function root()
 	{
 		$this->errorlevel = 0;
+		$this->stacks = array();
 	}
 
 	//  siit algavad pinu funktsioonid
@@ -25,40 +26,44 @@ class root
 	// enam.
 	function _push($item,$stack = "root")
 	{
-		$subcount = $this->stacks[$stack][subcount];
+		if (!isset($this->stacks[$stack]))
+		{
+			$this->stacks[$stack]["subcount"] = 0;
+		}
+		$subcount = $this->stacks[$stack]["subcount"];
 		$subcount++;
-		$this->stacks[$stack][subcount] = $subcount;
+		$this->stacks[$stack]["subcount"] = $subcount;
 		// don't you just love those 3 dimensional arrays? ;)
-		$this->stacks[$stack][items][$subcount] = $item;
+		$this->stacks[$stack]["items"][$subcount] = $item;
 	}
 
 	function _pop($stack = "root")
 	{
-		$subcount = $this->stacks[$stack][subcount];
-		$ret = $this->stacks[$stack][items][$subcount];
-                unset($this->stacks[$stack][items][$subcount]);
+		$subcount = $this->stacks[$stack]["subcount"];
+		$ret = $this->stacks[$stack]["items"][$subcount];
+                unset($this->stacks[$stack]["items"][$subcount]);
 		$subcount--;
-		$this->stacks[$stack][subcount] = $subcount;
+		$this->stacks[$stack]["subcount"] = $subcount;
                 return $ret;
 	}
 
 	function _last($stack = "root")
 	{
-		$subcount = $this->stacks[$stack][subcount];
-		$ret = $this->stacks[$stack][items][$subcount];			
+		$subcount = $this->stacks[$stack]["subcount"];
+		$ret = $this->stacks[$stack]["items"][$subcount];			
 		return $ret;
 	}
 
 	function _get_all($stack = "root")
 	{
-		return $this->stacks[$stack][items];
+		return $this->stacks[$stack]["items"];
   }
 
 
 	function _reset($stack = "root")
 	{
-		unset($this->stacks[$stack][items]);
-		unset($this->stacks[$stack][subcount]);
+		unset($this->stacks[$stack]["items"]);
+		unset($this->stacks[$stack]["subcount"]);
 	}
 	//-----------------------------------------------------
 	// ja siit nad lõpevad

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.6 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.7 2001/06/14 08:47:39 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -53,7 +53,7 @@ class form_cell extends aw_template
 		$this->cnt = 0;
 
 		$obj = $this->get_object($this->id);
-		$this->parent = $obj[parent];
+		$this->parent = $obj["parent"];
 
 		if (is_array($arr[$row][$col]))
 		{
@@ -67,7 +67,7 @@ class form_cell extends aw_template
 			}
 		}
 
-		$this->style = $arr[$row][$col][style];
+		$this->style = isset($arr[$row][$col]["style"]) ? $arr[$row][$col]["style"] : 0;
 	}
 
 	////
@@ -112,11 +112,11 @@ class form_cell extends aw_template
 		$ret = array();
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			$ret[$i][text] = $this->arr[$i]->get_text();
-			$ret[$i][name] = $this->arr[$i]->get_el_name();
-			$ret[$i][type] = $this->arr[$i]->get_type();
-			$ret[$i][id] = $this->arr[$i]->get_id();
-			$ret[$i][order] = $this->arr[$i]->get_order();
+			$ret[$i]["text"] = $this->arr[$i]->get_text();
+			$ret[$i]["name"] = $this->arr[$i]->get_el_name();
+			$ret[$i]["type"] = $this->arr[$i]->get_type();
+			$ret[$i]["id"] = $this->arr[$i]->get_id();
+			$ret[$i]["order"] = $this->arr[$i]->get_order();
 		}
 		return $ret;
 	}
@@ -128,7 +128,7 @@ class form_cell extends aw_template
 		for ($i=0; $i < $this->cnt; $i++)
 		{
 			$this->arr[$i]->save_short();
-			$form->arr[elements][$this->row][$this->col][$this->arr[$i]->get_id()] = $this->arr[$i]->get_props();
+			$form->arr["elements"][$this->row][$this->col][$this->arr[$i]->get_id()] = $this->arr[$i]->get_props();
 		}
 	}
 
@@ -158,33 +158,30 @@ class form_cell extends aw_template
 				// add new element
 				// form elements are weird things.
 				// namely. they are at the same time menus AND form elements. 
-				// so each element is written in three places
+				// so each element is written in two places
 				// objects table, class_id = CL_PSEUDO 
 				// menu table with type MN_FORM_ELEMENT
-				// form_elements table. this just contains info in which forms the element is inserted into
-				// and the actual info about how the element is to be shown is written into the form's array. whee. 
-
+				// the actual info about how the element is to be shown is written into the form's array. whee. 
+				// and also element2form table contains all element -> table relationships
 				$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_PSEUDO));
 				$this->db_query("INSERT INTO menu (id,type) values($el,".MN_FORM_ELEMENT.")");
-				$this->db_query("INSERT INTO form_elements (id) VALUES($el)");
 			}
 			else
 			{
 				if ($el)
 				{
 					$oo = $this->get_object($el);
-					$name = $oo[name];
-					$ord = $oo[jrk];
+					$name = $oo["name"];
+					$ord = $oo["jrk"];
 				}
 			}
 		
-
 			if ($el)
 			{
 				$this->_do_add_element($this->id,$el);
 
 				// add the element into the form.
-				$form->arr[elements][$this->row][$this->col][$el] = array("id" => $el,"name" => $name,"ord" => $ord);
+				$form->arr["elements"][$this->row][$this->col][$el] = array("id" => $el,"name" => $name,"ord" => $ord);
 				$form->save();
 			}
 			return false;
@@ -197,12 +194,7 @@ class form_cell extends aw_template
 		$this->db_query("ALTER TABLE form_".$fid."_entries add el_$el text");
 
 		// and add this form to the list of forms in which the element is
-		$this->db_query("SELECT * FROM form_elements WHERE id = ".$el);
-		$row = $this->db_next();
-		$ra = unserialize($row["forms"]);
-		$ra[$fid] = $fid;
-		$rs = serialize($ra);
-		$this->db_query("UPDATE form_elements SET forms = '$rs' WHERE id = ".$el);
+		$this->db_query("INSERT INTO element2form(el_id,form_id) values($el,$fid)");
 	}
 
 	function admin_cell_actions()
@@ -230,13 +222,16 @@ class form_cell extends aw_template
 	{
 		$el = 0;
 		$c = "";
+		$cs = "";
 		for ($i=0; $i < $this->cnt; $i++)
 		{
 			$c.=$this->arr[$i]->gen_user_html_not(&$images,$prefix,$elvalues);
 			$el = &$this->arr[$i];
 		}
 		if ($c == "")
+		{
 			$c = "<img src='/images/transa.gif' height=1 width=1 border=0>";
+		}
 
 		$style_id=$this->style;
 		if (!$style_id)
@@ -246,9 +241,13 @@ class form_cell extends aw_template
 
 		$stc = new style;
 		if ($style_id)
+		{
 			$cs.= $stc->get_cell_begin_str($style_id,$colspan,$rowspan);
+		}
 		else
+		{
 			$cs .= "<td colspan=\"".$colspan."\" rowspan=\"".$rowspan."\">";
+		}
 
 		$cs.= $c;
 
@@ -291,7 +290,7 @@ class form_cell extends aw_template
 
 	function set_style($id,&$form)
 	{
-		$form->arr[elements][$this->row][$this->col][style] = $id;
+		$form->arr["elements"][$this->row][$this->col]["style"] = $id;
 	}
 
 	function set_mark($mk)
@@ -325,9 +324,9 @@ class form_cell extends aw_template
 		while(list(, $v) = each($this->parents))
 		{
 			if($first)
-				$sql = " ( parent = ".$v[id]." ";
+				$sql = " ( parent = ".$v["id"]." ";
 			else
-				$sql .= " OR parent = ".$v[id]." ";
+				$sql .= " OR parent = ".$v["id"]." ";
 			$first = false;
 		}
 		return $sql." ) ";
@@ -352,12 +351,12 @@ class form_cell extends aw_template
 	// !creats the full path of an element from an array of all menus ($arr) and the record of the element ($el)
 	function mk_element_path(&$arr, &$el)
 	{
-		$parent = $el[parent];
+		$parent = $el["parent"];
 		$ret = "";
 		while ($parent > 1)
 		{
-			$ret =$arr[$parent][name]."/".$ret;
-			$parent = $arr[$parent][parent];
+			$ret =$arr[$parent]["name"]."/".$ret;
+			$parent = $arr[$parent]["parent"];
 		}
 		return $ret;
 	}
@@ -375,33 +374,37 @@ class form_cell extends aw_template
 											GROUP BY objects.oid
 											ORDER BY objects.parent, jrk");
 		while ($row = $this->db_next())
-				$ret[$row[oid]] = $row;
+		{
+			$ret[$row["oid"]] = $row;
+		}
 		
 		// teeme olemasolevatest elementidest array
 		$elarr = array();
-		for ($row = 0; $row < $form->arr[rows]; $row++)
+		for ($row = 0; $row < $form->arr["rows"]; $row++)
 		{
-			for ($col = 0; $col < $form->arr[cols]; $col++)
+			for ($col = 0; $col < $form->arr["cols"]; $col++)
 			{
-				if (is_array($form->arr[elements][$row][$col]))
+				if (is_array($form->arr["elements"][$row][$col]))
 				{
-					reset($form->arr[elements][$row][$col]);
-					while (list($eid,) = each($form->arr[elements][$row][$col]))
+					reset($form->arr["elements"][$row][$col]);
+					while (list($eid,) = each($form->arr["elements"][$row][$col]))
 					{
 						$elarr[$eid] = $eid;
 					}
 				}
 			}
 		}
+		// can't select by class_id, cause class_id for form_elements is CL_PSEUDO
+		// so we must join menu table and select by menu type
 		$ar = array(0 => "");
-		$this->db_query("SELECT objects.*, form_elements.* FROM form_elements LEFT JOIN objects ON objects.oid = form_elements.id WHERE objects.status != 0");
+		$this->db_query("SELECT oid,name,parent FROM objects,menu WHERE objects.oid=menu.id AND menu.type= ".MN_FORM_ELEMENT." AND status != 0 AND class_id = ".CL_PSEUDO);
 		while ($row = $this->db_next())
 		{
 			if (!$elarr[$row["oid"]])
 			{
 				// if this element does not exist in this form yet
 				// add it to the select list.
-				$ar[$row[oid]] = $this->mk_element_path(&$ret,&$row).$row[name];
+				$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
 			}
 		}
 
@@ -419,19 +422,10 @@ class form_cell extends aw_template
 		{
 			if ($this->arr[$i]->save(&$arr) == false)
 			{
-				$elid = $this->arr[$i]->get_id();
+				$this->arr[$i]->del();
 				// we must delete the element from this form.
+				$elid = $this->arr[$i]->get_id();
 				unset($form->arr["elements"][$this->row][$this->col][$elid]);
-
-				// remove this form from the list of forms in which the element is
-				$row = $this->db_query("SELECT * FROM form_elements WHERE id = ".$elid);
-				$ra = unserialize($row["forms"]);
-				unset($ra[$this->id]);
-				$rs = serialize($ra);
-				$this->db_query("UPDATE form_elements SET forms = '$rs' WHERE id = ".$elid);
-
-				// also remove the column for this element from the form
-				$this->db_query("ALTER TABLE form_".$this->id."_entries DROP el_".$elid);
 			}
 			else
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.1 2001/05/25 22:52:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.2 2001/06/14 08:47:39 kristo Exp $
 class db_periods extends aw_template 
 {
 	function db_periods($oid) 
@@ -14,6 +14,7 @@ class db_periods extends aw_template
 		$oid = $this->oid;
 		$sufix = ($arc_only > -1) ? " AND archived = 1 " : "";
 		$ochain = $this->get_object_chain($this->oid);
+		$valid_period = 0;
 		if (is_array($ochain)) 
 		{
 			// hm, but we must make sure we go from bottom to top always
@@ -27,11 +28,6 @@ class db_periods extends aw_template
 				}
 				$parent = $ochain[$parent]["parent"];
 			}
-/*			while(list($k,$v) = each($ochain)) {
-				if ($v[active_period]) {
-					$valid_period = $k;
-				};
-			};*/
 		}
 		$q = "SELECT * FROM periods
 			WHERE oid = '$valid_period' $sufix ORDER BY jrk DESC";
@@ -89,9 +85,9 @@ class db_periods extends aw_template
 
 	function savestatus($data) {
 		// checkboxid, mis näitavad perioodi arhiveeritust
-		$arc_flags = $data[arc];
+		$arc_flags = $data["arc"];
 		// eelmised väärtused
-		$old_arc_flags = $data[oldarc];
+		$old_arc_flags = $data["oldarc"];
 
 		// salvestame flagid, mis naitavad perioodide arhiveeritust
 		while(list($k,$v) = each($old_arc_flags)) {
@@ -111,7 +107,7 @@ class db_periods extends aw_template
 			print "#";
 		};
 
-		$oldjrk = $data[oldjrk];
+		$oldjrk = $data["oldjrk"];
 		$jrk = $data["jrk"];
 
 		// salvestame jarjekorranumbrid
@@ -127,7 +123,7 @@ class db_periods extends aw_template
 
 	function toggle_arc_flag($id) {
 		$old = $this->get($id);
-		$new = ($old[archived] == 1) ? "0" : "1";
+		$new = ($old["archived"] == 1) ? "0" : "1";
 		$q = "UPDATE periods SET archived = '$new'
 			WHERE id = '$id'";
 		$this->db_query($q);
@@ -146,7 +142,7 @@ class db_periods extends aw_template
 		$q = "SELECT active_period FROM menu WHERE id = "  . $oid;
 		$this->db_query($q);
 		$row = $this->db_fetch_row();
-		return $row[active_period];
+		return $row["active_period"];
 	}
 
 	// ee, v6ib ju nii olla, et sellel sektsioonil pole aktiivset perioodi m22ratud, aga tema parentil on, niiet tuleb see otsida...

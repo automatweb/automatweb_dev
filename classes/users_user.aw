@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.5 2001/05/29 16:34:55 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.6 2001/06/14 08:47:39 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -10,14 +10,14 @@
 // 2 - dynamic group
 // 3 - deleted user group
 // 4 - group added below the users default group
-define(GRP_REGULAR,0);
-define(GRP_DEFAULT,1);
-define(GRP_DYNAMIC,2);
-define(GRP_DELETED_USER,3);
-define(GRP_USERGRP,4);
+define("GRP_REGULAR",0);
+define("GRP_DEFAULT",1);
+define("GRP_DYNAMIC",2);
+define("GRP_DELETED_USER",3);
+define("GRP_USERGRP",4);
 
-define(GROUP_LEVEL_PRIORITY, 100000);
-define(USER_GROUP_PRIORITY, GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
+define("GROUP_LEVEL_PRIORITY", 100000);
+define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 classload("defs");
 lc_load("users");

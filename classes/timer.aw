@@ -1,17 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.1 2001/05/24 21:11:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.2 2001/06/14 08:47:39 kristo Exp $
 // klass taimerite jaoks
-class aw_timer {
+class aw_timer 
+{
 	var $timers; // siin sailitame koiki taimereid
-	function aw_timer($precision = 4) {
+	var $counters;
+
+	function aw_timer($precision = 4) 
+	{
 		// precision - mitu kohta peale koma
 		$this->precision = $precision;
 		$this->timers = array();
+		$this->counters = array();
 		$this->start("__global");
 	}
 	
-	function count($name) {
-		if ($this->counters[$name])
+	function count($name) 
+	{
+		if (isset($this->counters[$name]))
 		{
 			$this->counters[$name]++;
 		}
@@ -28,22 +34,22 @@ class aw_timer {
 				// kui taimer juba käib, siis me ei tee midagi
 				return true;
 			} else {
-				$this->timers[$name][started] = $this->get_time();
-				$this->timers[$name][running] = 1;
+				$this->timers[$name]["started"] = $this->get_time();
+				$this->timers[$name]["running"] = 1;
 			};
 		// sellist taimerit pole olemas
 		} else {
-			$this->timers[$name][running] = 1;
-			$this->timers[$name][started] = $this->get_time();
-			$this->timers[$name][elapsed] = 0;
+			$this->timers[$name]["running"] = 1;
+			$this->timers[$name]["started"] = $this->get_time();
+			$this->timers[$name]["elapsed"] = 0;
 		};
 	}
 
 	function stop($name) {
 		if ($this->is_defined($name)) {
 			if ($this->is_running($name)) {
-				$this->timers[$name][elapsed] += ($this->get_time() - $this->timers[$name][started]);
-				$this->timers[$name][running] = 0;
+				$this->timers[$name]["elapsed"] += ($this->get_time() - $this->timers[$name]["started"]);
+				$this->timers[$name]["running"] = 0;
 			} else {
 				return false;
 			};
@@ -63,7 +69,7 @@ class aw_timer {
 		$retval = array();
 		$fstr = "%0." . $this->precision . "f";
 		while(list($timer,$val) = each($this->timers)) {
-			$retval[$timer] = sprintf($fstr,$val[elapsed]);
+			$retval[$timer] = sprintf($fstr,$val["elapsed"]);
 		};
 		if (is_array($this->counters))
 		{
@@ -85,13 +91,14 @@ class aw_timer {
 
 	// kas taimer töötab?
 	function is_running($name) {
-		return ($this->timers[$name][running] == 1);
+		return ($this->timers[$name]["running"] == 1);
 	}
 		
 
 	// kas taimer on defineeritud?
-	function is_defined($name) {
-		return ($this->timers[$name]);
+	function is_defined($name) 
+	{
+		return isset($this->timers[$name]) ? ($this->timers[$name]) : false;
 	}
 }
 ?>

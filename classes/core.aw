@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.24 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.25 2001/06/14 08:47:39 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -18,6 +18,7 @@ class core extends db_connector
 		// ntx $this->core_init();
 		global $basedir;
 		$this->basedir = $basedir;
+		$this->parsers = "";
 	}
 
 	////
@@ -122,6 +123,10 @@ class core extends db_connector
 	// !Salvestab query handle sisemise pinu sisse
 	function save_handle()
 	{
+		if (!isset($this->qID))
+		{
+			$this->qID = 0;
+		}
 		$this->_push($this->qID,"qID");
 	}
 
@@ -205,15 +210,15 @@ class core extends db_connector
 		{
 			$row = $users_cache[$uid];
 		};
-		if ($field)
+		if (isset($field))
 		{
 			$retval = $row[$field];
 		}
 		else
-		if ($row)
+		if (isset($row))
 		{
 			// inbox defauldib kodukataloogile, kui seda määratud pole
-			$inbox = $row["msg_inbox"] ? $row["msg_inbox"] : $row["home_folder"];
+			$inbox = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
 			$row["msg_inbox"] = $inbox;
 			$retval = $row;
 		};
@@ -292,7 +297,7 @@ class core extends db_connector
 		$retval = array();
 		while($row = $this->db_next())
 		{
-			$retval[] = $row[gid];
+			$retval[] = $row["gid"];
 		};
 		return $retval;
 	}
@@ -348,7 +353,7 @@ class core extends db_connector
 		foreach($values as $key => $val)
 		{
 			// Lisame ainult need valjad, mis objektitabelisse kuuluvad
-			if ($ofields[$key])
+			if (isset($ofields[$key]))
 			{
 				$cols[] = $key;
 				$vals[] = "'$val'";
@@ -478,6 +483,7 @@ class core extends db_connector
 	{
 		global $awt;
 		$awt->start("core->get_aliases_for()");
+		$ss = "";
 		if ($type != -1)
 		{
 			$ss = " AND aliases.type = $type ";
@@ -486,6 +492,8 @@ class core extends db_connector
 		{
 			$sortby = "id";
 		}
+		$js = "";
+		$fs = "";
 		if ($join != "")
 		{
 			$js = join(' ',$this->map2('LEFT JOIN %s ON %s',$join));
@@ -579,7 +587,7 @@ class core extends db_connector
 	{
 		// esimesel kasutamisel loome uue nö dummy objekti, mille sisse
 		// edaspidi registreerime koikide parserite callback meetodid
-		if (!is_object($this->parsers))
+		if (!isset($this->parsers) || !is_object($this->parsers))
 		{
 			classload("dummy");
 			$this->parsers = new dummy();
@@ -589,7 +597,7 @@ class core extends db_connector
 
 		extract($args);
 
-		if ($class && $function)
+		if (isset($class) && isset($function) && $class && $function)
 		{
 			if (!is_object($this->parsers->$class))
 			{
@@ -631,18 +639,18 @@ class core extends db_connector
 	{
 		extract($args);	
 		classload($class);
-		if (!is_object($this->parsers->$class))
+		if (!isset($this->parsers->$class) || !is_object($this->parsers->$class))
 		{
 			classload($class);
 			$this->parsers->$class = new $class;
 		};
 
 		$block = array(
-			"idx" => $idx,
-			"match" => $match,
+			"idx" => isset($idx) ? $idx : 0,
+			"match" => isset($match) ? $match : 0,
 			"class" => $class,
 			"function" => $function,
-			"templates" => ($templates) ? $templates : array(),
+			"templates" => isset($templates) ? $templates : array(),
 		);
 
 		$this->parsers->reglist[$reg_id]["parserchain"][] = $block;
@@ -784,12 +792,12 @@ class core extends db_connector
 			$oid = $arg;
 		};
 
-		if (!$objcache[$oid])
+		if (!isset($objcache[$oid]))
 		{
 			$objcache[$oid] = $this->get_record("objects","oid",$oid);
 		}
 
-		if ($class_id && ($objcache[$oid]["class_id"] != $class_id) )
+		if (isset($class_id) && ($objcache[$oid]["class_id"] != $class_id) )
 		{
 			// objekt on valest klassist
 			$this->raise_error("get_object: $oid ei ole tüüpi $class_id",true);
@@ -910,7 +918,7 @@ class core extends db_connector
 				$section = (int)$section;
 				$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_lead LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section", "filename");
 				$row = $this->db_next();
-				$template = $row["filename"];
+				$template = isset($row["filename"]) ? $row["filename"] : "";
 				$section = $row["parent"];
 			} while ($template == "" && $section > 1);
 			$GLOBALS["lead_template_cache"][$section] = $template;
@@ -937,7 +945,7 @@ class core extends db_connector
 			$section = (int)$section;
 			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_view LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section", "filename");
 			$row = $this->db_next();
-			$template = $row["filename"];
+			$template = isset($row["filename"]) ? $row["filename"] : "";
 			$section = $row["parent"];
 		} while ($template == "" && $section > 1);
 		$awt->stop("core->get_long_template()");
@@ -1079,7 +1087,7 @@ class core extends db_connector
 	{
 		extract($args);
 		global $ext;
-		if (!$class)
+		if (!isset($class))
 		{
 			$args["class"] = get_class($this);
 		};
@@ -1098,7 +1106,7 @@ class core extends db_connector
 			$cl_name = get_class($this);
 
 		$urs = join("\n",$this->map2("<input type='hidden' name='%s' value='%s'>\n",$arr));
-		if ($arr["no_reforb"] != true)
+		if (!isset($arr["no_reforb"]) || $arr["no_reforb"] != true)
 		{
 			$url = "\n<input type='hidden' name='reforb' value='1'>\n";
 		}
@@ -1112,10 +1120,13 @@ class core extends db_connector
 	{
 		global $ext;
 
+		$path = "";
 		$ch = $this->get_object_chain($oid);
 		reset($ch);
 		while (list(,$row) = each($ch))
-			$path="<a href='menuedit.$ext?parent=".$row[oid]."&type=objects&period=".$period."'>".$row[name]."</a> / ".$path;
+		{
+			$path="<a href='menuedit.$ext?parent=".$row["oid"]."&type=objects&period=".$period."'>".$row["name"]."</a> / ".$path;
+		}
 
 		$GLOBALS["site_title"] = $path.$text;
 		return $path;

@@ -11,9 +11,9 @@ $orb_defs["style"] = array("add"		=> array("function"	=> "add",			"params"	=> ar
 													 "submit_sel"	=> array("function"	=> "submit_sel")
 													);
 
-define(ST_TABLE,0);
-define(ST_CELL,1);
-define(ST_ELEMENT,2);
+define("ST_TABLE",0);
+define("ST_CELL",1);
+define("ST_ELEMENT",2);
 
 $style_cache = array();
 
@@ -48,7 +48,7 @@ $style_cache = array();
 			$this->db_listall(0,$type);
 			$arr = array();
 			while ($row = $this->db_next())
-				$arr[$row[id]] = $row[name];
+				$arr[$row["id"]] = $row["name"];
 
 			return $arr;
 		}
@@ -65,11 +65,11 @@ $style_cache = array();
 			$this->vars(array("parent" => $parent,"add" => $this->mk_orb("add",array("parent" => $parent))));
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("name" => $row[name], 
-													"type" => $this->type_names[$row[type]], 
-													"style_id" => $row[id],
-													"change"	=> $this->mk_orb("change",array("parent" => $parent, "id" => $row[id])),
-													"delete"	=> $this->mk_orb("delete",array("parent" => $parent, "id" => $row[id]))));
+				$this->vars(array("name" => $row["name"], 
+													"type" => $this->type_names[$row["type"]], 
+													"style_id" => $row["id"],
+													"change"	=> $this->mk_orb("change",array("parent" => $parent, "id" => $row["id"])),
+													"delete"	=> $this->mk_orb("delete",array("parent" => $parent, "id" => $row["id"]))));
 				$this->parse("LINE");
 			}
 			return $this->parse();
@@ -95,7 +95,7 @@ $style_cache = array();
 			$this->mk_path($parent,"Muuda stiili");
 
 			$this->style = $this->get($id);
-			switch($this->style[type])
+			switch($this->style["type"])
 			{
 				case ST_TABLE:
 					return $this->change_table($arr);
@@ -111,26 +111,26 @@ $style_cache = array();
 			extract($arr);
 			$this->read_template("change_table.tpl");
 
-			$style = unserialize($this->style[style]);
+			$style = unserialize($this->style["style"]);
 
 			$sel = $this->get_select(0,ST_CELL);
 
-			$this->vars(array("name" => $this->style[name], 
-												"comment" => $this->style[comment], 
-												"bgcolor"	=> $style[bgcolor],
-												"cellpadding"	=> $style[cellpadding],
-												"cellspacing"	=> $style[cellspacing],
-												"border"			=> $style[border],
-												"height"			=> $style[height],
-												"width"				=> $style[width],
-												"hspace"			=> $style[hspace],
-												"vspace"			=> $style[vspace],
-												"header_style"	=> $this->picker($style[header_style],$sel),
-												"footer_style"	=> $this->picker($style[footer_style],$sel),
-												"num_frows"			=> $style[num_frows],
-												"num_fcols"			=> $style[num_fcols],
-												"frow_style"	=> $this->picker($style[frow_style],$sel),
-												"fcol_style"	=> $this->picker($style[fcol_style],$sel),
+			$this->vars(array("name" => $this->style["name"], 
+												"comment" => $this->style["comment"], 
+												"bgcolor"	=> $style["bgcolor"],
+												"cellpadding"	=> $style["cellpadding"],
+												"cellspacing"	=> $style["cellspacing"],
+												"border"			=> $style["border"],
+												"height"			=> $style["height"],
+												"width"				=> $style["width"],
+												"hspace"			=> $style["hspace"],
+												"vspace"			=> $style["vspace"],
+												"header_style"	=> $this->picker($style["header_style"],$sel),
+												"footer_style"	=> $this->picker($style["footer_style"],$sel),
+												"num_frows"			=> $style["num_frows"],
+												"num_fcols"			=> $style["num_fcols"],
+												"frow_style"	=> $this->picker($style["frow_style"],$sel),
+												"fcol_style"	=> $this->picker($style["fcol_style"],$sel),
 												"reforb"			=> $this->mk_reforb("submit",array("parent" => $parent, "id" => $id))));
 
 			return $this->parse();
@@ -146,27 +146,27 @@ $style_cache = array();
 
 			$fontstyles = array('normal' => "Tavaline", 'bold' => "Bold",'italic' => "Italic", 'underline' => "Underline");
 
-			$style = unserialize($this->style[style]);
+			$style = unserialize($this->style["style"]);
 
 			$this->read_template("change_cell.tpl");
-			$this->vars(array("name" => $this->style[name], 
-												"comment" => $this->style[comment], 
-												"font1"		=> $this->option_list($style[font1], $fonts),
-												"font2"		=> $this->option_list($style[font2], $fonts),
-												"font3"		=> $this->option_list($style[font3], $fonts),
-												"fontsize"	=> $this->option_list($style[fontsize], $fontsizez),
-												"color"		=> $style[color],
-												"bgcolor"	=> $style[bgcolor],
-												"fontstyles"	=> $this->option_list($style[fontstyle], $fontstyles),
-												"align_left"	=> $style[align] == "left" ? "CHECKED" : "",
-												"align_right"	=> $style[align] == "right" ? "CHECKED" : "",
-												"align_center"	=> $style[align] == "center" ? "CHECKED" : "",
-												"valign_top"	=> $style[valign] == "top" ? "CHECKED" : "",
-												"valign_center"	=> $style[valign] == "center" ? "CHECKED" : "",
-												"valign_bottom"	=> $style[valign] == "bottom" ? "CHECKED" : "",
-												"height"	=> $style[height],
-												"width"		=> $style[width],
-												"nowrap"	=> $style[nowrap]  ? "CHECKED" : "",
+			$this->vars(array("name" => $this->style["name"], 
+												"comment" => $this->style["comment"], 
+												"font1"		=> $this->option_list($style["font1"], $fonts),
+												"font2"		=> $this->option_list($style["font2"], $fonts),
+												"font3"		=> $this->option_list($style["font3"], $fonts),
+												"fontsize"	=> $this->option_list($style["fontsize"], $fontsizez),
+												"color"		=> $style["color"],
+												"bgcolor"	=> $style["bgcolor"],
+												"fontstyles"	=> $this->option_list($style["fontstyle"], $fontstyles),
+												"align_left"	=> $style["align"] == "left" ? "CHECKED" : "",
+												"align_right"	=> $style["align"] == "right" ? "CHECKED" : "",
+												"align_center"	=> $style["align"] == "center" ? "CHECKED" : "",
+												"valign_top"	=> $style["valign"] == "top" ? "CHECKED" : "",
+												"valign_center"	=> $style["valign"] == "center" ? "CHECKED" : "",
+												"valign_bottom"	=> $style["valign"] == "bottom" ? "CHECKED" : "",
+												"height"	=> $style["height"],
+												"width"		=> $style["width"],
+												"nowrap"	=> $style["nowrap"]  ? "CHECKED" : "",
 												"reforb"	=> $this->mk_reforb("submit",array("parent" => $parent, "id" => $id))));
 			return $this->parse();
 		}
@@ -176,9 +176,9 @@ $style_cache = array();
 			$this->quote(&$arr);
 
 			// lisame 6ige tyybiga
-			$id = $this->new_object(array("parent" => $arr[parent], "class_id" => CL_STYLE, "name" => $arr[name], "comment" => $arr[comment]));
-			$this->db_query("INSERT INTO styles (id,type) values($id,".$arr[type].")");
-			return $this->mk_orb("change", array("parent" => $arr[parent], "id" => $id));
+			$id = $this->new_object(array("parent" => $arr["parent"], "class_id" => CL_STYLE, "name" => $arr["name"], "comment" => $arr["comment"]));
+			$this->db_query("INSERT INTO styles (id,type) values($id,".$arr["type"].")");
+			return $this->mk_orb("change", array("parent" => $arr["parent"], "id" => $id));
 		}
 
 		function submit($arr)
@@ -206,25 +206,25 @@ $style_cache = array();
 		{
 			$st = $this->mk_cache($id);
 
-			if ($st[type] != ST_TABLE)
+			if ($st["type"] != ST_TABLE)
 				$this->raise_error("style->get_table_string($id): Style is not for tables!");
 
-			if ($st[bgcolor] != "")
-				$str.="bgcolor=\"".$st[bgcolor]."\" ";
-			if ($st[border] != "")
-				$str.="border=\"".$st[border]."\" ";
-			if ($st[cellpadding] != "")
-				$str.="cellpadding=\"".$st[cellpadding]."\" ";
-			if ($st[cellspacing] != "")
-				$str.="cellspacing=\"".$st[cellspacing]."\" ";
-			if ($st[height] != "")
-				$str.="height=\"".$st[height]."\" ";
-			if ($st[width] != "")
-				$str.="width=\"".$st[width]."\" ";
-			if ($st[hspace] != "")
-				$str.="hspace=\"".$st[hspace]."\" ";
-			if ($st[vspace] != "")
-				$str.="vspace=\"".$st[vspace]."\" ";
+			if ($st["bgcolor"] != "")
+				$str.="bgcolor=\"".$st["bgcolor"]."\" ";
+			if ($st["border"] != "")
+				$str.="border=\"".$st["border"]."\" ";
+			if ($st["cellpadding"] != "")
+				$str.="cellpadding=\"".$st["cellpadding"]."\" ";
+			if ($st["cellspacing"] != "")
+				$str.="cellspacing=\"".$st["cellspacing"]."\" ";
+			if ($st["height"] != "")
+				$str.="height=\"".$st["height"]."\" ";
+			if ($st["width"] != "")
+				$str.="width=\"".$st["width"]."\" ";
+			if ($st["hspace"] != "")
+				$str.="hspace=\"".$st["hspace"]."\" ";
+			if ($st["vspace"] != "")
+				$str.="vspace=\"".$st["vspace"]."\" ";
 
 			return $str;
 		}
@@ -234,48 +234,48 @@ $style_cache = array();
 			$st = $this->mk_cache($id);
 
 			$fstr = array();
-			if ($st[font1] != "")		$fstr[] = $st[font1];
-			if ($st[font2] != "")		$fstr[] = $st[font2];
-			if ($st[font3] != "")		$fstr[] = $st[font3];
+			if ($st["font1"] != "")		$fstr[] = $st["font1"];
+			if ($st["font2"] != "")		$fstr[] = $st["font2"];
+			if ($st["font3"] != "")		$fstr[] = $st["font3"];
 			$fstr = join(",", $fstr);
 			$fstyles = array();
 			if ($fstr != "")
 				$fstyles[] = "face=\"".$fstr."\"";
 
-			if ($st[fontsize] != "")
-				$fstyles[] = "size=\"".$st[fontsize]."\"";
+			if ($st["fontsize"] != "")
+				$fstyles[] = "size=\"".$st["fontsize"]."\"";
 
-			if ($st[color] != "")
-				$fstyles[] = "color=\"".$st[color]."\"";
+			if ($st["color"] != "")
+				$fstyles[] = "color=\"".$st["color"]."\"";
 
 			$fsstr = join(" ",$fstyles);
 			if ($fsstr != "")
 				$str = "<font ".$fsstr.">";
 
-			if ($st[bgcolor] != "")
-				$cstyles[] = "bgcolor=\"".$st[bgcolor]."\"";
-			if ($st[align] != "")
-				$cstyles[] = "align=\"".$st[align]."\"";
-			if ($st[valign] != "")
-				$cstyles[] = "valign=\"".$st[valign]."\"";
-			if ($st[height] != "")
-				$cstyles[] = "height=\"".$st[height]."\"";
-			if ($st[width] != "")
-				$cstyles[] = "width=\"".$st[width]."\"";
-			if ($st[nowrap] != "")
+			if (isset($st["bgcolor"]) && $st["bgcolor"] != "")
+				$cstyles[] = "bgcolor=\"".$st["bgcolor"]."\"";
+			if (isset($st["align"]) && $st["align"] != "")
+				$cstyles[] = "align=\"".$st["align"]."\"";
+			if (isset($st["valign"]) && $st["valign"] != "")
+				$cstyles[] = "valign=\"".$st["valign"]."\"";
+			if (isset($st["height"]) && $st["height"] != "")
+				$cstyles[] = "height=\"".$st["height"]."\"";
+			if (isset($st["width"]) && $st["width"] != "")
+				$cstyles[] = "width=\"".$st["width"]."\"";
+			if (isset($st["nowrap"]) && $st["nowrap"] != "")
 				$cstyles[] = "nowrap";
 			if ($colspan > 0)
 				$cstyles[] = "colspan=\"".$colspan."\"";
 			if ($rowspan > 0)
 				$cstyles[] = "rowspan=\"".$rowspan."\"";
 
-			if ($st[fontstyle] == "bold")
+			if ($st["fontstyle"] == "bold")
 				$str.="<b>";
 			else
-			if ($st[fontstyle] == "italic")
+			if ($st["fontstyle"] == "italic")
 				$str.="<i>";
 			else
-			if ($st[fontstyle] == "underline")
+			if ($st["fontstyle"] == "underline")
 				$str.="<u>";
 
 			$cstr = join(" ",$cstyles);
@@ -291,16 +291,17 @@ $style_cache = array();
 		{
 			$st = $this->mk_cache($id);
 
-			if ($st[fontstyle] == "bold")
+			$str = "";
+			if ($st["fontstyle"] == "bold")
 				$str = "</b>";
 			else
-			if ($st[fontstyle] == "italic")
+			if ($st["fontstyle"] == "italic")
 				$str = "</i>";
 			else
-			if ($st[fontstyle] == "underline")
+			if ($st["fontstyle"] == "underline")
 				$str = "</u>";
 
-			if ($st[font1] != "" || $st[font2] != "" || $st[font3] != "" || $st[fontsize] != "" || $st[color] != "")
+			if ($st["font1"] != "" || $st["font2"] != "" || $st["font3"] != "" || $st["fontsize"] != "" || $st["color"] != "")
 				$str.= "</font>";
 
 			return $str;
@@ -310,28 +311,28 @@ $style_cache = array();
 		{
 			$st = $this->mk_cache($id);
 
-			return $st[frow_style];
+			return $st["frow_style"];
 		}
 
 		function get_fcol_style($id)
 		{
 			$st = $this->mk_cache($id);
 
-			return $st[fcol_style];
+			return $st["fcol_style"];
 		}
 
 		function get_num_frows($id)
 		{
 			$st = $this->mk_cache($id);
 
-			return $st[num_frows];
+			return $st["num_frows"];
 		}
 
 		function get_num_fcols($id)
 		{
 			$st = $this->mk_cache($id);
 
-			return $st[num_fcols];
+			return $st["num_fcols"];
 		}
 
 		function get_text_begin_str($id)
@@ -339,30 +340,30 @@ $style_cache = array();
 			$st = $this->mk_cache($id);
 
 			$fstr = array();
-			if ($st[font1] != "")		$fstr[] = $st[font1];
-			if ($st[font2] != "")		$fstr[] = $st[font2];
-			if ($st[font3] != "")		$fstr[] = $st[font3];
+			if ($st["font1"] != "")		$fstr[] = $st["font1"];
+			if ($st["font2"] != "")		$fstr[] = $st["font2"];
+			if ($st["font3"] != "")		$fstr[] = $st["font3"];
 			$fstr = join(",", $fstr);
 			if ($fstr != "")
 				$fstyles[] = "face=\"".$fstr."\"";
 
-			if ($st[fontsize] != "")
-				$fstyles[] = "size=\"".$st[fontsize]."\"";
+			if ($st["fontsize"] != "")
+				$fstyles[] = "size=\"".$st["fontsize"]."\"";
 
-			if ($st[color] != "")
-				$fstyles[] = "color=\"".$st[color]."\"";
+			if ($st["color"] != "")
+				$fstyles[] = "color=\"".$st["color"]."\"";
 
 			$fsstr = join(" ",$fstyles);
 			if ($fsstr != "")
 				$str = "<font ".$fsstr.">";
 
-			if ($st[fontstyle] == "bold")
+			if ($st["fontstyle"] == "bold")
 				$str.="<b>";
 			else
-			if ($st[fontstyle] == "italic")
+			if ($st["fontstyle"] == "italic")
 				$str.="<i>";
 			else
-			if ($st[fontstyle] == "underline")
+			if ($st["fontstyle"] == "underline")
 				$str.="<u>";
 
 			return $str;
@@ -372,16 +373,16 @@ $style_cache = array();
 		{
 			$st = $this->mk_cache($id);
 
-			if ($st[fontstyle] == "bold")
+			if ($st["fontstyle"] == "bold")
 				$str = "</b>";
 			else
-			if ($st[fontstyle] == "italic")
+			if ($st["fontstyle"] == "italic")
 				$str = "</i>";
 			else
-			if ($st[fontstyle] == "underline")
+			if ($st["fontstyle"] == "underline")
 				$str = "</u>";
 
-			if ($st[font1] != "" || $st[font2] != "" || $st[font3] != "" || $st[fontsize] != "" || $st[color] != "")
+			if ($st["font1"] != "" || $st["font2"] != "" || $st["font3"] != "" || $st["fontsize"] != "" || $st["color"] != "")
 				$str.= "</font>";
 
 			return $str;
@@ -390,27 +391,27 @@ $style_cache = array();
 		function get_header_style($id)
 		{
 			$st = $this->mk_cache($id);
-			return $st[header_style];
+			return $st["header_style"];
 		}
 
 		function get_footer_style($id)
 		{
 			$st = $this->mk_cache($id);
-			return $st[footer_style];
+			return $st["footer_style"];
 		}
 
 		function mk_cache($id)
 		{
 			global $style_cache;
 
-			if (is_array($style_cache[$id]))
+			if (isset($style_cache[$id]))
 			{
 				$st = $style_cache[$id];
 			}
 			else
 			{
 				$st = $this->get($id);
-				$st = unserialize($st[style]);
+				$st = unserialize($st["style"]);
 				$style_cache[$id] = $st;
 			}
 			return $st;
