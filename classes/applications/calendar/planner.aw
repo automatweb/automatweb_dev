@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.15 2004/09/01 15:32:47 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.16 2004/09/01 15:38:22 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2002,7 +2002,6 @@ class planner extends class_base
 				)),
 				"participants" => $par_href,
 			));
-			arr($result->prop("is_done"));
 		}
 		$table->set_default_sortby("modified");
 		$table->set_default_sorder("desc");
