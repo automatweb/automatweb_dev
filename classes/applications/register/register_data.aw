@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.25 2005/01/05 14:39:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.26 2005/01/06 12:33:16 ahti Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -544,9 +544,6 @@
 @property uservar35 type=classificator reltype=RELTYPE_VARUSER35 store=connect
 @caption User-defined var 35
 
-@property uservar35 type=classificator reltype=RELTYPE_VARUSER35 store=connect
-@caption User-defined var 35
-
 @property uservar36 type=classificator reltype=RELTYPE_VARUSER36 store=connect
 @caption User-defined var 36
 
@@ -607,8 +604,11 @@
 @property uservar55 type=classificator reltype=RELTYPE_VARUSER55 store=connect
 @caption User-defined var 55
 
-@property uservar56 type=classificator reltype=RELTYPE_VARUSER57 store=connect
+@property uservar56 type=classificator reltype=RELTYPE_VARUSER56 store=connect
 @caption User-defined var 56
+
+@property uservar57 type=classificator reltype=RELTYPE_VARUSER57 store=connect
+@caption User-defined var 57
 
 @property uservar58 type=classificator reltype=RELTYPE_VARUSER58 store=connect
 @caption User-defined var 58

@@ -1816,9 +1816,20 @@
             <method>serialize</method>
             <field>meta</field>
             <type>classificator</type>
-            <reltype>RELTYPE_VARUSER57</reltype>
+            <reltype>RELTYPE_VARUSER56</reltype>
             <store>connect</store>
             <caption>User-defined var 56</caption>
+      </property>
+      <property>
+            <name>uservar57</name>
+            <group>classificators</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>classificator</type>
+            <reltype>RELTYPE_VARUSER57</reltype>
+            <store>connect</store>
+            <caption>User-defined var 57</caption>
       </property>
       <property>
             <name>uservar58</name>
