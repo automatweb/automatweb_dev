@@ -98,4 +98,10 @@ a.VclGanttChartBarLink:hover span
 	border-left: 1px solid white;
 	padding-left: 2px;
 }
+
+img.VclGanttChartStartBar
+{
+	border-left: 1px solid #DF0D12;
+	margin-right: -1px;
+}
 </style>

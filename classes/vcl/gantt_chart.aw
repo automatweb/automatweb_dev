@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.8 2005/03/15 11:04:23 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.9 2005/03/29 20:39:23 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -126,7 +126,7 @@ class gantt_chart extends class_base
 	// timestamp start - bar starting place on timeline. Required.
 	// int length - bar length in seconds. Required.
 	// string title - title for the bar.
-	// string type - bar type ("hilighted" | "normal" | "inprogress" | "done"). default is "normal".
+	// string colour - (CSS colour definition, name or rgb value).  default is "silver".
 	// string uri - uri for bar hyperlink. Applies if bar_anchors property is set to true for chart.
 	// string target - uri target for bar hyperlink. Applies if bar_anchors property is set to true for chart.
 	function add_bar ($arr)
@@ -135,7 +135,7 @@ class gantt_chart extends class_base
 		$start = (int) $arr["start"];
 		$length = (int) $arr["length"];
 		$title = empty ($arr["title"]) ? "" : $arr["title"];
-		$type = (string) $arr["type"];
+		$colour = empty ($arr["colour"]) ? "silver" : $arr["colour"];
 		$uri = empty ($arr["uri"]) ? "#" : $arr["uri"];
 		$uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
@@ -143,7 +143,7 @@ class gantt_chart extends class_base
 			"start" => $start,
 			"length" => $length,
 			"title" => $title,
-			"type" => $type,
+			"colour" => $colour,
 			"bar_uri" => $uri,
 			"bar_uri_target" => $uri_target,
 			"row" => $row
@@ -215,33 +215,17 @@ class gantt_chart extends class_base
 							}
 						}
 
-						### set bar type
-						if (isset ($bar["force_type"]))
+						### set bar colour
+						if (isset ($bar["force_colour"]))
 						{
-							$bar_type = $bar["force_type"];
-							unset ($bar["force_type"]);
+							$bar_type = "continue";
+							$bar_colour = $bar["force_colour"];
+							unset ($bar["force_colour"]);
 						}
 						else
 						{
-							switch ($bar["type"])
-							{
-								case "hilighted":
-									$bar_type = "hilighted";
-									break;
-
-								case "inprogress":
-									$bar_type = "inprogress";
-									break;
-
-								case "done":
-									$bar_type = "done_" . $bar_switch;
-									break;
-
-								case "normal":
-								default:
-									$bar_type = "normal_" . $bar_switch;
-									break;
-							}
+							$bar_type = "start";
+							$bar_colour = $bar["colour"];
 						}
 
 						### trim bars starting/ending before chart start
@@ -266,7 +250,7 @@ class gantt_chart extends class_base
 							$split_bar = $bar;
 							$split_bar["length"] = $bar["length"] - ($cell_end - $bar["start"]);
 							$split_bar["start"] = $cell_end;
-							$split_bar["force_type"] = $bar_type;
+							$split_bar["force_colour"] = $bar_colour;
 							array_unshift ($this->data[$row["name"]], $split_bar);
 							$bar["length"] = $cell_end - $bar["start"];
 						}
@@ -290,12 +274,13 @@ class gantt_chart extends class_base
 						$length = ceil ($bar["length"] / $this->scale_quotient);
 						$this->vars (array (
 							"length" => $length,
+							"bar_colour" => $bar_colour,
 							"title" => $bar["title"],
 							"bar_uri" => $bar["bar_uri"],
 							"bar_uri_target" => $bar["bar_uri_target"],
 							"baseurl" => $this->cfg["baseurl"],
 						));
-						$bar_rendered = trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_" . $bar_type));
+						$bar_rendered = trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_normal_" . $bar_type));
 						$cell_contents .= $bar_rendered;
 
 						### ...
