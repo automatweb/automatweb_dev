@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.59 2004/03/16 13:59:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.60 2004/03/25 21:54:43 duke Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1281,7 +1281,6 @@ class admin_menus extends aw_template
 				"url" => "#",
 				"onClick" => "return buttonClick(event, 'aw_menu_0');",
 				"img" => "new.gif",
-				"imgover" => "new_over.gif",
 				"class" => "menuButton",
 			));
 		};
@@ -1292,7 +1291,6 @@ class admin_menus extends aw_template
 				"name" => "save",
 				"tooltip" => "Salvesta",
 				"url" => "javascript:document.foo.submit()",
-				"imgover" => "save_over.gif",
 				"img" => "save.gif",
 			));
 		};
@@ -1301,7 +1299,6 @@ class admin_menus extends aw_template
 			"name" => "search",
 			"tooltip" => "Otsi",
 			"url" => $this->mk_my_orb("search",array("parent" => $parent),"search"),
-			"imgover" => "search_over.gif",
 			"img" => "search.gif",
 		));
 		
@@ -1312,7 +1309,6 @@ class admin_menus extends aw_template
 			"name" => "cut",
 			"tooltip" => "L&otilde;ika",
 			"url" => "javascript:submit('cut')",
-			"imgover" => "cut_over.gif",
 			"img" => "cut.gif",
 		));
 
@@ -1320,7 +1316,6 @@ class admin_menus extends aw_template
 			"name" => "copy",
 			"tooltip" => "Kopeeri",
 			"url" => "javascript:submit('copy')",
-			"imgover" => "copy_over.gif",
 			"img" => "copy.gif",
 		));
 
@@ -1330,7 +1325,6 @@ class admin_menus extends aw_template
 				"name" => "paste",
 				"tooltip" => "Kleebi",
 				"url" => "javascript:submit('paste')",
-				"imgover" => "paste_over.gif",
 				"img" => "paste.gif",
 			));
 		};
@@ -1339,7 +1333,6 @@ class admin_menus extends aw_template
 			"name" => "delete",
 			"tooltip" => "Kustuta",
 			"url" => "javascript:if(confirm('Kustutada valitud objektid?')){submit('delete')};",
-			"imgover" => "delete_over.gif",
 			"img" => "delete.gif",
 		));
 
@@ -1347,7 +1340,6 @@ class admin_menus extends aw_template
 			"name" => "edit",
 			"tooltip" => "Muuda",
 			"url" => "javascript:change()",
-			"imgover" => "edit_over.gif",
 			"img" => "edit.gif",
 		));
 		
@@ -1357,7 +1349,6 @@ class admin_menus extends aw_template
 			"name" => "refresh",
 			"tooltip" => "Uuenda",
 			"url" => "javascript:window.location.reload()",
-			"imgover" => "refresh_over.gif",
 			"img" => "refresh.gif",
 		));
 	
@@ -1365,14 +1356,12 @@ class admin_menus extends aw_template
 			"name" => "import",
 			"tooltip" => "Impordi",
 			"url" => $this->mk_my_orb("import",array("parent" => $parent)),
-			"imgover" => "import_over.gif",
 			"img" => "import.gif",
 		));
 
 		$toolbar->add_button(array(
 			"name" => "view_type",
 			"tooltip" => "detailne/Ikooni vaade",
-			"imgover" => "preview_over.gif",
 			"img" => "preview.gif",
 			"url" => "#",
 			"onClick" => "return buttonClick(event, 'view_type');",

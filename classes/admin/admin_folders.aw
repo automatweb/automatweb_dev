@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.27 2004/02/27 11:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.28 2004/03/25 21:54:43 duke Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -310,14 +310,12 @@ class admin_folders extends aw_template
 			"name" => "refresh",
 			"tooltip" => "Reload",
 			"url" => "javascript:document.pform.submit();",
-			"imgover" => "refresh_over.gif",
 			"img" => "refresh.gif",
 		));
 		$tb->add_button(array(
 			"name" => "logout",
 			"tooltip" => "Logi v&auml;lja",
 			"url" => $this->mk_my_orb("logout", array(), "users"),
-			"imgover" => "logout_over.gif",
 			"img" => "logout.gif",
 			"target" => "_top"
 		));
