@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.25 2002/07/23 05:09:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.26 2002/07/23 13:04:04 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -217,12 +217,21 @@ class aw_table
 		// now go over the data and make the rowspans for the vertical grouping elements
 		if (is_array($this->vgroupby))
 		{
+			$tmp = $this->vgroupby;
 			$this->vgrowspans = array();
 			foreach($this->vgroupby as $_vgcol => $_vgel)
 			{
 				foreach($this->data as $row)
 				{
-					$val = $row[$_vgel];
+					$val = "";
+					foreach($tmp as $__vgcol => $__vgel)
+					{
+						$val .= $row[$__vgel];
+						if ($_vgcol == $__vgcol && $_vgel == $__vgel)
+						{
+							break;
+						}
+					}
 					$this->vgrowspans[$val]++;
 				}
 			}
@@ -254,8 +263,8 @@ class aw_table
 				if ($v1 != $v2)
 				{
 					$skip = true;
+					break;
 				}
-				break;
 			}
 		}
 
@@ -270,8 +279,8 @@ class aw_table
 				if ($v1 != $v2)
 				{
 					$skip = true;
+					break;
 				}
-				break;
 			}
 		}
 
@@ -537,7 +546,17 @@ class aw_table
 							// if this column is a part of vertical grouping, check if it's value has changed
 							// if it has, then set the new rowspan
 							// if not, then skip over this row
-							$_value = $v[$v1["name"]];
+
+							// build the value from all higher grouping els and this one as well
+							$_value = "";
+							foreach($this->vgroupby as $_vgcol => $_vgel)
+							{
+								$_value .= $v[$_vgel];
+								if ($v1["name"] == $_vgcol)
+								{
+									break;
+								}
+							}
 							if (!isset($this->vgrouplastvals[$_value]))
 							{
 								$this->vgrouplastvals[$_value] = $_value;
