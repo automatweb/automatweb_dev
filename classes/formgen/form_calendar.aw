@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.12 2001/12/09 23:49:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.1 2002/10/28 13:02:40 kristo Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -184,10 +184,7 @@ class form_calendar extends form_base
 			$this->db_query($q);
 			$row2 = $this->db_next();
 			$this->restore_handle();
-			if (is_array($row2))
-			{
-				$row = $row + $row2;
-			};
+			$row = $row + $row2;
 			$e_start = $row["start"];
 			$e_end = $row["end"];
 			if (!$e_end)
@@ -367,13 +364,12 @@ class form_calendar extends form_base
 			$period_cnt = 1;
 		};
 
-
 		//for ($i = ($start + $timeshift); $i <= $end; $i=$i+($shift * $timedef)+$timeshift)
 		for ($i = ($start); $i <= $end; $i=$i+($shift * $period_cnt))
 		{
 			flush();
 			// if it is in range, then ..
-			if ( ($i >= $this->start) && ($i <= $this->end) )
+			if ( ($i >= $start) && ($i <= $end) )
 			{
 				$blocks[] = array(
 					"start" => $i,
@@ -389,6 +385,13 @@ class form_calendar extends form_base
 	{
 		extract($args);	
 		$id = (int)$id;
+		/*
+		print "check_vacs()<br>";
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
+		print "<br>";
+		*/
 
 		if (is_array($entry_id))
 		{
@@ -399,9 +402,18 @@ class form_calendar extends form_base
 			$r_entry_id = $entry_id;
 		};
 		
+		/*
+		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
+			 WHERE oid = '$contr' 
+				AND relation IN ($r_entry_id) AND start <= '$end' AND end >= '$start'";
+		*/
 		$q = "SELECT MIN(max_items) AS max FROM calendar2timedef
 			 WHERE oid = '$contr' 
 				AND relation IN ($r_entry_id) AND start <= '$end' AND end >= '$start'";
+
+		/*
+		print "start = $start, end = $end<br>";
+		*/
 
 		$this->db_query($q);
 		$row2 = $this->db_next();
@@ -443,12 +455,15 @@ class form_calendar extends form_base
 		$this->raw_events = array();
 		$this->raw_headers = array();
 
-		$this->load($eform);
+		//$this->load($eform);
 		//$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$start' AND end >= '$end' AND relation = '$ctrl' AND status = 2";
 		$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$end' AND end >= '$start' AND relation = '$ctrl' AND status = 2";
+		global $DBUG;
+		if ($DBUG)
+		{
+			print $q;
+		};
 		$this->db_query($q);
-		$this->start = $start;
-		$this->end = $end;
 		while($row = $this->db_next())
 		{
 			$found = true;
@@ -493,6 +508,15 @@ class form_calendar extends form_base
 			// If I want to find vacancies, then I have to check whether each block has
 			// the required amount of blocks available:
 
+			global $DBUG;
+			if ($DBUG)
+			{
+				print "<pre>";
+				print_r($this->event_counts);
+				print "</pre>";
+			};
+			
+
 			//if ($check == "vacancies")
 			//{
 				$this->has_vacancies = true;
@@ -509,7 +533,6 @@ class form_calendar extends form_base
 
 			// done. now we can build the special entries for the calenar
 
-
 			foreach($this->blocks as $bid => $block)
 			{
 				$dkey = date("dmY",$block["start"]);
@@ -517,10 +540,7 @@ class form_calendar extends form_base
 				//$vac = $block["max"] - $block["cnt"];
 				$vac = $block["max"] - $cnt;
 
-				if (!$this->cfg["hide_availability_indicator"])
-				{
-					$title = "<small>free <b>$vac of $block[max]</b></small>";
-				};
+				$title = "<small>free <b>$vac of $block[max]</b></small>";
 
 				if ($vac == $block["max"])
 				{
@@ -580,8 +600,7 @@ class form_calendar extends form_base
 		{
 			return -1;
 		};
-		load_vcl('date_edit');
-		$_start = date_edit::get_timestamp($args["start"]);
+		$_start = get_ts_from_arr($args["start"]);
 		list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
 		if ($end > 0)
 		{
@@ -593,7 +612,7 @@ class form_calendar extends form_base
 		};
 
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
-			 WHERE oid = '$contr' AND relation IN ($rel) AND txtid = '$txtid'
+			 WHERE oid = '$contr' AND relation IN ($rel2)
 				AND start <= '$_end' AND end >= '$_start'";
 
 		$this->db_query($q);
@@ -609,7 +628,7 @@ class form_calendar extends form_base
 
 		$q = "SELECT SUM(items) AS sum FROM calendar2event
 			LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
-			WHERE oid != '$entry_id' AND relation = '$rel' AND txtid = '$txtid' AND
+			WHERE oid != '$entry_id' AND relation = '$rel' AND objects.status = 2 AND
 				cal_id = '$cal_id' AND form_id = '$id' AND end >= '$_start' AND
 				start <= '$_end'";
 		$this->db_query($q);
@@ -668,36 +687,11 @@ class form_calendar extends form_base
 		$this->db_query($q);
 		$has_vacancies = true;
 		$has_errors = false;
-		$fch = get_instance("formgen/form_chain");
+		$fch = get_instance("form_chain");
 		while($row = $this->db_next())
 		{
 			// get the vacancy controller for the chain.
 			$this->save_handle();
-			// now I need to fetch all the records for this from form the
-                        // calendar2form_relations table
-                        $q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$row[id]'";
-                        $this->db_query($q);
-                        $rels = array();
-						while($relrow = $this->db_next())
-						{
-								if ($relrow["el_count"])
-								{
-										$req_items = $args["post_vars"][$relrow["el_count"]];
-										if ($req_items == 0)
-										{
-												// default to 1. is this good?
-												$req_items = 1;
-										};
-										$relrow["req_items"] = $req_items;
-										$lb_sel = $args["post_vars"][$relrow["el_relation"]];
-										if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
-										{
-												$relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];
-												$rels[] = $relrow;
-										};
-								};
-						};
-
 			if ($row["class_id"] == CL_FORM_CHAIN)
 			{
 				$fch->load_chain($row["cal_id"]);
@@ -747,27 +741,23 @@ class form_calendar extends form_base
 			{
 				$rel2 = $rowx["id"];
 			};
-			foreach($rels as $relval)
-			{
-				$vac = $this->get_vac_by_contr(array(
-						"start" => $args["post_vars"][$row["el_start"]],
-						"contr" => $cal_controller,
-						"cal_id" => $row["cal_id"],
-						"entry_id" => $args["entry_id"],
-						"req_items" => $relval["req_items"],
-						"txtid" => $relval["txtid"],
-						"rel" => $_rel,
-						"rel2" => $rel2,
-						"id" => $id,
-				));
+			$vac = $this->get_vac_by_contr(array(
+					"start" => $args["post_vars"][$row["el_start"]],
+					"contr" => $cal_controller,
+					"cal_id" => $row["cal_id"],
+					"entry_id" => $args["entry_id"],
+					"req_items" => $_req_items,
+					"rel" => $_rel,
+					"rel2" => $rel2,
+					"id" => $id,
+			));
 
-				if ($vac < 0)
-				{
-					$has_errors = true;
-					// where do we put the error message?
-					$err_el = ($relval["el_count"]) ? $relval["el_count"] : $row["el_start"];
-					$this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
-				};
+			if ($vac < 0)
+			{
+				$has_errors = true;
+				// where do we put the error message?
+				$err_el = ($row["el_cnt"]) ? $row["el_cnt"] : $row["el_start"];
+				$this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
 			};
 			$this->restore_handle();
 
@@ -784,7 +774,6 @@ class form_calendar extends form_base
 	{
 		extract($args);
 
-		load_vcl('date_edit');
 		$this->del_event_relations($eid);
 		// cycle over all the forms that this event entry form
 		// has been assigned to and write new relations for those
@@ -794,35 +783,22 @@ class form_calendar extends form_base
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			// and I will again have check against all the records in
-			// calendar2form_relations
 			$this->save_handle();
-			// now I need to fetch all the records for this from form the
-                        // calendar2form_relations table
-                        $q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$row[id]'";
-                        $this->db_query($q);
-                        $rels = array();
-                        while($relrow = $this->db_next())
-                        {
-                                if ($relrow["el_count"])
-                                {
-                                        $count = $args["post_vars"][$relrow["el_count"]];
-                                        if ($count == 0)
-                                        {
-                                                // default to 1. is this good?
-                                                $count = 1;
-                                        };
-                                        $relrow["count"] = $count;
-					$lb_sel = $args["post_vars"][$relrow["el_relation"]];
-                                        if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
-                                        {
-                                                $relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];
-                                                $rels[] = $relrow;
-                                        };
-                                };
-                        };
+			if ($row["count"] > 0)
+			{
+				$_cnt = $row["count"];
+			}
+			else
+			{
+				$_cnt = (int)$args["post_vars"][$row["el_cnt"]];
+				// default to 1. Is this correct?
+				if ($_cnt == 0)
+				{
+					$_cnt = 1;
+				};
+			};
 
-			$_start = (int)date_edit::get_timestamp($args["post_vars"][$row["el_start"]]);
+			$_start = (int)get_ts_from_arr($args["post_vars"][$row["el_start"]]);
 
 			if ($row["end"] > 0)
 			{
@@ -830,30 +806,24 @@ class form_calendar extends form_base
 			}
 			else
 			{
-				$_end = (int)date_edit::get_timestamp($args["post_vars"][$row["el_end"]]);
+				$_end = (int)get_ts_from_arr($args["post_vars"][$row["el_end"]]);
 			};
-			
-			foreach($rels as $reval)
-			{
-				$_cnt = $reval["count"];
-				$txtid = $reval["txtid"];
-				if ($chain_entry_id && ($row["class_id"] == CL_FORM_CHAIN))
-				{
-					$_rel = $chain_entry_id;
-					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id,txtid)
-						VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id','$txtid')";
-					$this->db_query($q);
-				};
 
-				//$__rel = $args["post_vars"][$row["el_relation"]];
-				// gah, this sucks so much
-				//preg_match("/lbopt_(\d+?)$/",$__rel,$m);
-				//$_rel = (int)$m[1];
-				$_rel = $reval["el_relation"];
-				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id,txtid)
-					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id','$txtid')";
+			if ($chain_entry_id && ($row["class_id"] == CL_FORM_CHAIN))
+			{
+				$_rel = $chain_entry_id;
+				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
+					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
 				$this->db_query($q);
 			};
+
+			$__rel = $args["post_vars"][$row["el_relation"]];
+			preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+			$_rel = (int)$m[1];
+
+			$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
+				VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
+			$this->db_query($q);
 			$this->restore_handle();
 
 		};
@@ -866,346 +836,5 @@ class form_calendar extends form_base
 		$this->db_query($q);
 	}
 
-	function fg_define_calendar($args = array())
-	{
-		extract($args);
-		// generates a HTML form for defining a calendar.
-		// it consists of the following elements:
-		// 1 - el_event_start
-		// 2 - el_event_end
-		// 3 - el_event_count
-		// 4 - el_event_period
-		// 5 - el_event_release
-		// all of those elements have the type select
-		
-		// additionally, I want to display one element of type 3 for each 
-		// textbox/count element in the form
-		$this->read_template("define_calendar.tpl");
-		$count_els = new aw_array($els_count);
-		$count_lines = "";
-		$picks = array("0" => "--vali--");
-		$textboxes = array("0" => "--vali--");
-		foreach($all_els as $key => $val)
-		{
-			if ( ($val["type"] == "textbox") || ($val["type"] == "textarea") || ($val["type"] == "listbox") )
-			{
-				if ($val["subtype"] != "count")
-				{
-					$picks[$key] = $val["name"];
-				};
-			};
-
-			if (($val["type"] == "textbox") && ($val["subtype"] != "count"))
-			{
-				$textboxes[$key] = $val["name"];
-			};
-		};
-
-		foreach($count_els->get() as $key => $val)
-		{
-			if ($key)
-			{
-				$this->vars(array(
-					"el" => $val,
-					"el_id" => $key,
-					"els" => $this->picker($arr["amount_el"][$key],$picks),
-				));
-				$count_lines .= $this->parse("count_lines");
-			};
-		};
-		$period_type = ($arr["period_type"]) ? $arr["period_type"] : 1;
-		$release_type = ($arr["release_type"]) ? $arr["release_type"] : 1;
-		$units = array("0" => "minut","1" => "tund","2" => "päev");
-		$this->vars(array(
-			"els_start" => $this->picker($arr["el_event_start"],$els_start),
-			"els_end" => $this->picker($arr["el_event_end"],$els_end),
-			#"els_count" => $this->picker($arr["el_event_count"],$els_count),
-			"count_lines" => $count_lines,
-			"els_period" => $this->picker($arr["el_event_period"],$els_period),
-			"els_release" => $this->picker($arr["el_event_release"],$els_release),
-			"textboxes" => $this->picker($arr["release_textbox"],$textboxes),
-			"per_type_1_check" => checked($period_type == 1),
-			"per_type_2_check" => checked($period_type == 2),
-			"rel_type_1_check" => checked($release_type == 1),
-			"rel_type_2_check" => checked($release_type == 2),
-			"per_unit_type" => $this->picker($arr["per_unit_type"],$units),
-			"release_unit_type" => $this->picker($arr["release_unit_type"],$units),
-			"per_amount" => $arr["per_amount"],
-			"reforb"        => $this->mk_reforb("submit_calendar", array("id" => $id),"form"),
-		));
-		$retval = $this->parse();
-		return $retval;
-	}
-
-	function fg_update_cal_conf($args = array())
-	{
-		// I need to pass post_vars
-		// and $this->arr
-		$post_vars = &$args["post_vars"];
-		$arr = &$args["arr"];
-
-		// this is where we have to check the types
-		$_start = date_edit::get_timestamp($post_vars[$arr["el_event_start"]]);
-		// XXX: adding 86399 is just plain stupid
-		$_end = date_edit::get_timestamp($post_vars[$arr["el_event_end"]]) + 86399;
-		// now we need to cycle over all the $this->arr["el_amount"] elements and update
-		// the bloody records
-		
-		$_types = array(
-			"minute" => "0",
-			"hour" => "1",
-			"day" => "2",
-		);
-		
-		$cal_id = (int)$args["cal_id"];
-		$cal_relation = (int)$args["cal_relation"];
-
-		$amount_els = new aw_array($arr["amount_el"]);
-		
-		$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid' AND relation = '$cal_relation'";
-		$this->db_query($q);
-
-		$period_type = ($arr["period_type"]) ? $arr["period_type"] : 1;
-		$release_type = ($arr["release_type"]) ? $arr["release_type"] : 1;
-	
-		$_oid = $args["id"];
-		$_eid = $args["entry_id"];
-
-		$lb_id_data = array();
-
-		foreach($amount_els->get() as $el_with_value => $count_el_id)
-		{
-			$selected = $post_vars[$count_el_id];
-			if (preg_match("/^element_\d*_lbopt_(\d*)$/",$selected,$m))
-			{
-				$lb_id_data[$count_el_id] = $args["els"][$count_el_id]["lb_items"][$m[1]];
-			};
-                }
-
-		foreach($amount_els->get() as $el_with_value => $count_el_id)
-		{
-		
-			// no such thing anymore, I need to cycle over all the count elements
-			// $_cnt = $post_vars[$arr["el_event_count"]];
-			// calculate the correct data for period based on the period setting
-			if ($period_type == 1)
-			{
-				$_period = $post_vars[$arr["el_event_period"] . "_count"];
-				$_pertype = $_types[$post_vars[$arr["el_event_period"] . "_type"]];
-			}
-			elseif ($period_type == 2)
-			{
-				$_period = (int)$arr["per_amount"];
-				$_pertype = (int)$arr["per_unit_type"];
-			}
-
-			if ($release_type == 1)
-			{
-				$_release = $post_vars[$arr["el_event_release"] . "_count"];
-				$_reltype = $_types[$post_vars[$arr["el_event_release"] . "_type"]];
-			}
-			elseif ($release_type == 2)
-			{
-				$_release = $post_vars[$arr["release_textbox"]];
-				$_reltype = $arr["release_unit_type"];
-			};
-
-			$_cnt = (int)$post_vars[$el_with_value];
-
-			if ($_cnt > 0)
-			{
-				$txtid = $lb_id_data[$count_el_id];
-				$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,start,end,
-					max_items,period,period_cnt, release,release_cnt,entry_id,txtid)
-					VALUES ('$_oid','$cal_relation','$cal_id','$_start','$_end','$_cnt',
-					'$_pertype','$_period','$_reltype', '$_release','$_eid','$txtid')";
-				$this->db_query($q);
-			};
-		};
-	}
-
-	function edit_calendar_relation($args = array())
-	{
-		extract($args);
-		$this->read_template("calendar_relation.tpl");
-
-		$subrelations = array();
-		$countrelations = array();
-
-		// how the phuck do i load multiple relations then?
-		if ($id)
-		{
-			$item = $this->get_record("calendar2forms","id",$id);
-			$q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$id'";
-			$this->db_query($q);
-			while($row = $this->db_next())
-			{
-				if ($row["el_count"])
-				{
-					$subrelations[$row["el_count"]] = $row;
-				}
-				else
-				{
-					$countrelations[] = $row;
-				};
-			};
-		}
-		else
-		{
-			$item = array();
-		};
-		
-		$els_start = $els_listboxes = $els_relation = $els_end = $tables = $target_objects = array("0" => " -- Vali --");
-                $els_count = array();
-
-		$this->get_objects_by_class(array(
-			"class" => array(CL_FORM,CL_FORM_CHAIN),
-			"active" => true,
-			"flags" => OBJ_HAS_CALENDAR,
-		));
-
-                while($row = $this->db_next())
-                {
-                        $target_objects[$row["oid"]] = ($row["name"]) ? $row["name"] : "(nimetu)";
-                };
-
-		foreach($els as $key => $val)
-		{
-			if ( ($val["type"] == "date") && ($val["subtype"] == "from") )
-			{
-				$els_start[$key] = $val["name"];
-			};
-
-			if ( ($val["type"] == "date") && ($val["subtype"] == "to") )
-			{
-				$els_end[$key] = $val["name"];
-			};
-
-			if ( ($val["type"] == "textbox") && ($val["subtype"] == "count") )
-			{
-				$els_count[$key] = $val["name"];
-			};
-
-			if ( ($val["type"] == "listbox") && ($val["subtype"] == "relation") )
-			{
-				$els_relation[$key] = $val["name"];
-			};
-
-			if ($val["type"] == "listbox")
-			{
-				$els_listboxes[$key] = "element: " . $val["name"];
-			};
-		};
-
-		$ft = get_instance("formgen/form_table");
-		$tables = $tables + $ft->get_form_tables_for_form($form_id);
-
-		if ($item["end"] > 0)
-                {
-                        // Do we deal with days?
-                        if ($item["end"] >= 86400)
-                        {
-                                $end_mp = 86400;
-                        }
-                        // hours perhaps?
-                        elseif ($item["end"] >= 3600)
-                        {
-                                $end_mp = 3600;
-                        }
-                        // probably minutes then
-                        else
-                        {
-                                $end_mp = 60;
-                        };
-                        $end = (int)($item["end"] / $end_mp);
-                }
-                else
-                {
-                        $end_mp = 60;
-                        $end = 0;
-                };
-
-                $l = "";
-                foreach($els_count as $key => $val)
-                {
-                        $this->vars(array(
-                                "count_el_name" => $val,
-                                "count_el_id" => $key,
-                                "cnt_els" => $this->picker($subrelations[$key]["el_relation"],$els_listboxes),
-                        ));
-                        $l .= $this->parse("count_line");
-                }
-
-		$this->vars(array(
-                        "target_objects" => $this->picker($item["cal_id"],$target_objects),
-                        "objects_disabled" => disabled(sizeof($target_objects) == 1),
-                        "start_els" => $this->picker($item["el_start"],$els_start),
-                        "start_disabled" => disabled(sizeof($els_start) == 1),
-                        //"cnt_els" => $this->picker($item["el_cnt"],$els_count),
-                        //"count_disabled" => disabled(sizeof($els_count) == 1),
-                        "end_els" => $this->picker($item["el_end"],$els_end),
-                        "end_disabled" => disabled(sizeof($els_end) == 1),
-                        "relation_els" => $this->picker($item["el_relation"],$els_relation),
-                        "relation_disabled" => disabled(sizeof($els_relation) == 1),
-                        "ev_tables" => $this->picker($item["ev_table"],$tables),
-                        "tables_disabled" => disabled(sizeof($tables) == 1),
-                        //"cnt_type_el" => checked($item["count"] == 0),
-                        //"cnt_type_cnt" => checked($item["count"] > 0),
-                        "end_type_el" => checked($item["end"] == 0),
-                        "end_type_shift" => checked($item["end"] > 0),
-                        "end_mp" => $this->picker($end_mp,array(60 => "minut(it)",3600 => "tund(i)",86400 => "päev(a)")),
-                        "end" => $end,
-                        //"count" => (int)$item["count"],
-                        "count_line" => $l,
-                        "amount_number" => $countrelations[0]["count"],
-                        "cnt_els2" => $this->picker($countrelations[0]["el_relation"],$els_listboxes),
-                        "reforb" => $this->mk_reforb("submit_cal_rel",array("form_id" => $form_id,"id" => $id),"form"),
-                ));
-		return $this->parse();
-
-	}
-
-	function submit_calendar_relation($args = array())
-	{
-		extract($args);
-		$count = ($cnt_type == 2) ? $count : 0;
-                $end = ($end_type == 2) ? (int)$end * (int)$end_mp : 0;
-                if ($id)
-                {
-                        $q = "UPDATE calendar2forms SET
-                                cal_id = '$cal_id',
-                                el_start = '$el_start',
-                                el_cnt = '$el_cnt',
-                                ev_table = '$ev_table',
-                                el_relation = '$el_relation',
-                                el_end = '$el_end',
-                                count = '$count',
-                                end = '$end'
-                                WHERE id = '$id'";
-                }
-                else
-                {
-                        $q = "INSERT INTO calendar2forms (cal_id,form_id,el_start,el_cnt,ev_table,el_relation,el_end, count, end)
-                                VALUES ('$cal_id','$form_id','$el_start','$el_cnt','$ev_table','$el_relation','$el_end','$count','$end')";
-                        $id = $this->db_last_insert_id();
-                };
-                $this->db_query($q);
-                $amount_elements = new aw_array($amount_el);
-                $q = "DELETE FROM calendar2form_relations WHERE calendar2forms_id = '$id'";
-                $this->db_query($q);
-                foreach($amount_elements->get() as $key => $val)
-                {
-                        $q = "INSERT INTO calendar2form_relations (calendar2forms_id,el_count,el_relation) VALUES ('$id','$key','$val')";
-                        $this->db_query($q);
-                }
-
-		$amount_elements2 = new aw_array($amount_el2);
-                foreach($amount_elements2->get() as $key => $val)
-                {
-                        $cnt = $amount_number[$key];
-                        $q = "INSERT INTO calendar2form_relations (calendar2forms_id,count,el_relation) VALUES ('$id','$cnt','$val')";
-                        $this->db_query($q);
-                }
-	}
 };
 ?>
