@@ -753,32 +753,35 @@ class form_db_base extends aw_template
 						}
 					}
 				}
-				foreach($elar as $el => $eltbls)
+				if (is_array($elar))
 				{
-					$s_t = form_db_base::mk_tblname($eltbls["table"], $fid);
-					if ($s_t == $tbl && $tbl != "")
+					foreach($elar as $el => $eltbls)
 					{
-						// if this element gets written to the current table, include it in the sql
-						if ($eltbls["col"] != "" && !$only_el)
+						$s_t = form_db_base::mk_tblname($eltbls["table"], $fid);
+						if ($s_t == $tbl && $tbl != "")
 						{
-							if (isset($gp_coll_els[$el]))
+							// if this element gets written to the current table, include it in the sql
+							if ($eltbls["col"] != "" && !$only_el)
 							{
-								$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col"].") AS ev_".$el;
+								if (isset($gp_coll_els[$el]))
+								{
+									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col"].") AS ev_".$el;
+								}
+								else
+								{
+									$sql.=", ".$tbl.".".$eltbls["col"]." AS ev_".$el;
+								}
 							}
-							else
+							if ($eltbls["col2"] != "")
 							{
-								$sql.=", ".$tbl.".".$eltbls["col"]." AS ev_".$el;
-							}
-						}
-						if ($eltbls["col2"] != "")
-						{
-							if (isset($gp_coll_els[$el]))
-							{
-								$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col2"].") AS el_".$el;
-							}
-							else
-							{
-								$sql.=", ".$tbl.".".$eltbls["col2"]." AS el_".$el;
+								if (isset($gp_coll_els[$el]))
+								{
+									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col2"].") AS el_".$el;
+								}
+								else
+								{
+									$sql.=", ".$tbl.".".$eltbls["col2"]." AS el_".$el;
+								}
 							}
 						}
 					}
@@ -1622,11 +1625,12 @@ class form_db_base extends aw_template
 	// $fid - the form whose description we want to read
 	function cache_get_form_eldat($fid)
 	{
-		if (($dt = aw_cache_get("cache_get_form_eldat",$fid)))
+		if (is_array($dt = aw_cache_get("cache_get_form_eldat",$fid)))
 		{
 			return $dt;
 		}
-		$dat = aw_unserialize($this->db_fetch_field("SELECT el_tables FROM forms WHERE id = $fid","el_tables"));
+		$res = $this->db_fetch_field("SELECT el_tables FROM forms WHERE id = $fid","el_tables");
+		$dat = aw_unserialize($res);
 		if (!is_array($dat) || !is_array($dat["els"]))
 		{
 			$this->raise_error(0,"Please <a href='".aw_ini_get("baseurl")."/automatweb/orb.aw?class=form&action=change&id=$fid'>go here</a> and click the save button", true);
