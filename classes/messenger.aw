@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.24 2001/05/24 15:47:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.25 2001/05/24 20:02:28 cvs Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -533,7 +533,14 @@ class messenger extends menuedit_light
 					// kui status == true, siis on teade loetud
 					$msg["id"] = $msg["oid"];
 					$msg["color"] = ($msg["status"]) ? "#FFFFFF" : "#EEEEEE";
-					$msg["from"] = htmlspecialchars($msg["mfrom"]);
+					if ($msg["type"] == 2)
+					{
+						$msg["from"] = htmlspecialchars($msg["mfrom"]);
+					}
+					else
+					{
+						$msg["from"] = $msg["modifiedby"];
+					};
 					$subject = $this->MIME_decode($msg["subject"]);
 					$msg["subject"] = "<a href='?class=messenger&action=show&id=$msg[id]'>" . $subject . "</a>";
 					$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
@@ -637,14 +644,14 @@ class messenger extends menuedit_light
 
 		$attach = "";	
 		$this->read_template("write.tpl");
-		for ($i = 1; $i <= $this->conf["cnt_att"]; $i++)
+		for ($i = 1; $i <= $this->msgconf["msg_cnt_att"]; $i++)
 		{
 			$this->vars(array("anum" => $i));
 			$attach .= $this->parse("attach");
 		};
 	
 		$this->vars($msg);
-		if ($this->conf["confirm_send"])
+		if ($this->msgconf["msg_confirm_send"])
 		{
 			$send = $this->parse("confirmsend");
 		}
@@ -656,7 +663,7 @@ class messenger extends menuedit_light
 			"msg_id" => $msg_id,
 			"send" => $send,
 			"siglist" => $siglist,
-			"prilist" => $this->picker($this->conf["default_pri"],array("0","1","2","3","4","5","6","7","8","9")),
+			"prilist" => $this->picker($this->msgconf["msg_default_pri"],array("0","1","2","3","4","5","6","7","8","9")),
 			"attach" => $attach,
 			"menu" => $menu,
 			"reforb" => $this->mk_reforb("post",array()),
