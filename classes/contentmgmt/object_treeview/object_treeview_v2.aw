@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.21 2004/11/23 13:56:06 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.22 2004/11/25 11:26:04 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -144,7 +144,8 @@ class object_treeview_v2 extends class_base
 // don't save empty fields
 //				arr($arr["request"]["column_fields"]);
 				$valid_column_fields = array();
-				foreach($arr["request"]["column_fields"] as $key => $value)
+
+				foreach(safe_array($arr["request"]["column_fields"]) as $key => $value)
 				{
 					foreach($value as $k => $v)
 					{
@@ -267,7 +268,7 @@ class object_treeview_v2 extends class_base
 //		arr($ob->meta("sel_columns_fields"));
 //		arr($ob->meta("saved_filters"));
 
-// if there are set some fields to be displayed in one column
+// if there are set some ds fields to be displayed in one table field
 
 		$sel_columns_fields = new aw_array($ob->meta("sel_columns_fields"));
 
