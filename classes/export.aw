@@ -271,6 +271,10 @@ class export extends aw_template
 			$t_lang_id=$mt[1];
 		}
 
+		// if we switch languages, we have to remake menu caches
+		$this->menu_cache->make_caches(array("lang_id" => $t_lang_id));
+//		echo "made cache for $t_lang_id <br>";
+
 		// set the hash table
 		$this->hashes[$url] = $this->get_hash_for_url($url,$t_lang_id);
 
@@ -278,6 +282,11 @@ class export extends aw_template
 		$fp = fopen($url,"r");
 		$fc = fread($fp,10000000);
 		fclose($fp);
+		// pause for set number of seconds
+		if ($this->cfg["sleep_between_pages"])
+		{
+			sleep($this->cfg["sleep_between_pages"]);
+		}
 
 		$f_name = $this->hashes[$url].".".$this->get_ext_for_link($url,$http_response_header);
 		$name = $this->folder."/".$f_name;
@@ -314,7 +323,16 @@ class export extends aw_template
 		$fc = str_replace("\"/sitemap","\"".$baseurl."/sitemap",$fc);
 		$fc = str_replace("'/sitemap","'".$baseurl."/sitemap",$fc);
 
+		// href='/666' type of links
+		$fc = preg_replace("/href='\/(\d*)'/iU","href='".$baseurl."/\\1'",$fc);
+		$fc = preg_replace("/href=\"\/(\d*)\"/iU","href=\"".$baseurl."/\\1\"",$fc);
+
+		$fc = preg_replace("/href='\/(\d*)\?automatweb=aw_export'/iU","href='".$baseurl."/\\1'",$fc);
+		$fc = preg_replace("/href=\"\/(\d*)\?automatweb=aw_export\"/iU","href=\"".$baseurl."/\\1\"",$fc);
+
 		$fc = preg_replace("/<form(.*)action=([\"'])http:\/\/(.*)\/(.*)([\"'])(.*)>/isU","<form\\1action=\\2"."__form_action_url__"."/\\4\\5\\6>",$fc);
+
+		$temps = array();
 
 		while (($pos = strpos($fc,$baseurl)) !== false)
 		{
@@ -329,14 +347,16 @@ class export extends aw_template
 
 			// correct the link
 			$link = $this->rewrite_link(substr($fc,$begin,($end-$begin)));
-			if (!$this->is_external($link))
+
+			if ($this->is_external($link) || $this->is_dynamic($link))
 			{
-				// fetch the page
-				$fname = $this->fetch_and_save_page($link,$lang_id);
+				$fname = $this->gen_uniq_id();
+				$temps[$fname] = $link;
 			}
 			else
 			{
-				$fname = $link;
+				// fetch the page
+				$fname = $this->fetch_and_save_page($link,$lang_id);
 			}
 			// we still gotta replace the link, even if it is an extlink outta here, 
 			// cause otherwise we would end up in an infinite loop
@@ -349,6 +369,11 @@ class export extends aw_template
 		// el no translado forms
 		$fc = preg_replace("/<form(.*)action=([\"'])__form_action_url__\/(.*)([\"'])(.*)>/isU","<form\\1action=\\2".$this->cfg["form_server"]."/\\3\\4\\5>",$fc);
 
+		// and now replace temp links back
+		foreach($temps as $r => $l)
+		{
+			$fc = str_replace($r,$l, $fc);
+		}
 //		echo "convert_links(fc,$lang_id) returning <br>";
 	}
 
@@ -632,8 +657,15 @@ class export extends aw_template
 			return $this->hash2url[$lang_id][$url];
 		}
 
+		$this->menu_cache->make_caches(array("lang_id" => $lang_id));
 //		echo "get_hash_for_url($url, $lang_id)<br>";
-		if ($url == $this->cfg["baseurl"]."/?set_lang_id=1&automatweb=aw_export")
+		$fpurls = array(
+			$this->cfg["baseurl"]."/?set_lang_id=1&automatweb=aw_export",
+			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?set_lang_id=1&automatweb=aw_export",
+			$this->cfg["baseurl"]."/?automatweb=aw_export&set_lang_id=1",
+			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?automatweb=aw_export&set_lang_id=1"
+		);
+		if (in_array($url,$fpurls))
 		{
 //			echo "get_hash_for_url($url, $lang_id) returning index<br>";
 			$this->hash2url[$lang_id][$url] = "index";
@@ -695,12 +727,21 @@ class export extends aw_template
 					$mn = "";
 					$cnt = 0;
 
+/*					if ($secid == 642)
+					{
+						echo "doing 642! <br>";
+						$dbg = true;
+					}*/
 					// we need to check if the section is not a document
 					$obj = $this->get_object($secid);
 					if ($obj["class_id"] == CL_DOCUMENT)
 					{
 						$mn = strip_tags($obj["name"])."/";
 						$secid = $obj["parent"];
+/*						if ($dbg)
+						{
+							echo "got parent for doc $secid <br>";
+						}*/
 					}
 
 					// here we need to find all the aliases of the menus upto $rootmenu as well and
@@ -717,6 +758,11 @@ class export extends aw_template
 						{
 							$mn = $sec["oid"]."/".$mn;
 						}
+/*						if ($dbg)
+						{
+							echo "loop: secid = $secid mn = $mn <br>";
+						}*/
+						
 						$cnt++;
 						if ($cnt > 10)
 						{
@@ -741,6 +787,10 @@ class export extends aw_template
 					$mn = str_replace("Ö", "O", $mn);
 					$mn = str_replace("Ü", "U", $mn);
 					$mn = strip_tags($mn);
+/*					if ($dbg)
+					{
+						echo "final mn = $mn <br>";
+					}*/
 				}
 
 				if ($mn != "")
@@ -755,12 +805,17 @@ class export extends aw_template
 					$this->fta_used[$res] = true;
 //					echo "get_hash_for_url($url, $lang_id) returning ",$res,"<br>";
 					$this->hash2url[$lang_id][$url] = $res;
+/*					if ($dbg)
+					{
+						echo "final return = $res <br>";
+					}*/
 					return $res;
 				}
 			}
 		}
 
-		$tmp = $this->gen_uniq_id($url).",".$lang_id;
+		$tmp = $this->gen_uniq_id(str_replace($this->cfg["baseurl"],"",$url)).",".$lang_id;
+//		echo "made hash for link $url = $tmp <br>";
 //		echo "get_hash_for_url($url, $lang_id) returning ",$tmp,"<br>";
 		$this->hash2url[$lang_id][$url] = $tmp;
 		return $tmp;
@@ -812,6 +867,20 @@ class export extends aw_template
 			return true;
 		}
 //		echo "is_external($link) returning false<br>";
+		return false;
+	}
+
+	function is_dynamic($link)
+	{
+		if (strpos($link, "/poll.".$this->cfg["ext"]) !== false)
+		{
+			return true;
+		}
+		else
+		if (strpos($link, "class=document&action=change") !== false)
+		{
+			return true;
+		}
 		return false;
 	}
 }
