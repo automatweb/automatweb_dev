@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.257 2004/04/22 12:30:48 duke Exp $
+// $Id: class_base.aw,v 2.258 2004/04/22 12:44:08 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -663,12 +663,6 @@ class class_base extends aw_template
 			};
 		};
 
-		if ($args["cb_no_groups"] == 1)
-		{
-			$this->cb_no_groups = 1;
-		};
-
-
 		$args["rawdata"] = $args;
 		$save_ok = $this->process_data($args);
 
@@ -1051,6 +1045,7 @@ class class_base extends aw_template
 					"obj_inst" => &$this->obj_inst,
 					"request" => $this->request,
 					"activegroup" => $activegroup,
+					"tabgroup" => &$val["tabgroup"],
 				);
 
 				$res = true;
@@ -1082,6 +1077,7 @@ class class_base extends aw_template
 						"link" => $tabinfo["link"],
 						"caption" => $tabinfo["caption"],
 						"active" => !empty($val["active"]) || ($key == $this->subgroup),
+						"tabgroup" => $val["tabgroup"],
 					));
 
 					if ($this->output_client == "xulclient")
