@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.77 2004/10/19 13:24:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.78 2004/10/27 09:54:02 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -596,25 +596,21 @@ class htmlclient extends aw_template
 		return $rv;
 	}
 	
-	// returns the names of all the currently used properties,
-	// else returns empty array
-	function get_prop_names()
-	{
-		$rval = array();
-		if(is_array($this->proplist))
-		{
-			foreach($this->proplist as $key => $val)
-			{
-				$rval[] = $key;
-			}
-		}
-		return $rval;
-	}
-	
 	////
 	// !Finished the output
 	function finish_output($arr = array())
 	{
+		// returns the property names for template debugging
+		if(aw_ini_get("debug_mode") != 0 && $GLOBALS["AHTI"] == 1)
+		{
+			if(is_array($this->proplist))
+			{
+				foreach($this->proplist as $key => $val)
+				{
+					echo "$key<br />";
+				}
+			}
+		}
 		extract($arr);
 		$sbt = "";
 
