@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.61 2005/03/29 10:01:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.62 2005/03/29 10:08:25 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -367,8 +367,6 @@ class mrp_workspace extends class_base
 
 	function get_property($arr)
 	{
-// /* dbg */ if (aw_global_get('uid') !== "voldemar"){ exit ("hooldus pooleli. ~10min p2rast valmis."); }
-
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object =& $arr["obj_inst"];
@@ -821,42 +819,42 @@ class mrp_workspace extends class_base
 
 
 /* dbg */ //finish all jobs in progress and set_all_resources_available
-// if ($_GET["mrp_set_all_resources_available"])
-// {
-	// $list = new object_list (array (
-		// "class_id" => CL_MRP_JOB,
-		// "state" => MRP_STATUS_INPROGRESS,
-	// ));
+if ($_GET["mrp_set_all_resources_available"])
+{
+	$list = new object_list (array (
+		"class_id" => CL_MRP_JOB,
+		"state" => MRP_STATUS_INPROGRESS,
+	));
 
-	// $jj = $list->arr();
-	// $j = get_instance(CL_MRP_JOB);
+	$jj = $list->arr();
+	$j = get_instance(CL_MRP_JOB);
 
-	// foreach ($jj as $job_id => $job)
-	// {
-		// echo "job id: " . $job->id() ."<br>";
-		// $arr = array("id"=>$job_id);
-		// $ud = parse_url($j->done($arr));
-		// $pars = array();
-		// parse_str($ud["query"], $pars);
-		// $this->dequote($pars["errors"]);
-		// $errs = unserialize($pars["errors"]);
-		// echo "done: [" . implode(",", $errs) . "]<br><br>";
-	// }
+	foreach ($jj as $job_id => $job)
+	{
+		echo "job id: " . $job->id() ."<br>";
+		$arr = array("id"=>$job_id);
+		$ud = parse_url($j->done($arr));
+		$pars = array();
+		parse_str($ud["query"], $pars);
+		$this->dequote($pars["errors"]);
+		$errs = unserialize($pars["errors"]);
+		echo "done: [" . implode(",", $errs) . "]<br><br>";
+	}
 
-	// $list = $resource_tree->to_list();
-	// $list->filter (array (
-		// "class_id" => CL_MRP_RESOURCE,
-	// ));
-	// $list = $list->arr();
+	$list = $resource_tree->to_list();
+	$list->filter (array (
+		"class_id" => CL_MRP_RESOURCE,
+	));
+	$list = $list->arr();
 
-	// foreach ($list as $res_id => $r)
-	// {
-		// echo "res id: " . $res_id ."<br>";
-		// $r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
-		// $r->save();
-		// echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
-	// }
-// }
+	foreach ($list as $res_id => $r)
+	{
+		echo "res id: " . $res_id ."<br>";
+		$r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
+		$r->save();
+		echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
+	}
+}
 /* dbg */
 
 		classload("vcl/treeview");
