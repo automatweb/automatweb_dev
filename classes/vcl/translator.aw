@@ -1,8 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.3 2004/10/18 14:56:25 duke Exp $
-/*
-EMIT_MESSAGE(MSG_TRANSLATION_UPDATED)
-*/
+// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.4 2004/10/25 10:38:10 duke Exp $
 class translator extends  core
 {
 	function translator()
@@ -13,7 +10,21 @@ class translator extends  core
 	function init_vcl_property($arr)
 	{
 		$prop = &$arr["property"];
-		$this->obj = $arr["obj_inst"];
+
+		$o = $arr["obj_inst"]->get_original();
+		$t_conns = $o->connections_from(array(
+			"type" => RELTYPE_ORIGINAL,
+		));
+		obj_set_opt("no_auto_translation",1);
+		if (0 < sizeof($t_conns))
+		{
+			$conn = reset($t_conns);
+			$o = $conn->to();
+		};
+		obj_set_opt("no_auto_translation",0);
+		$this->obj = $o;
+
+		// siin on vaja originaal sisse lugeda
 
 
 		$i = $this->obj->instance();
@@ -46,7 +57,6 @@ class translator extends  core
                 $prefix = $arr["property"]["name"];
 
 
-                $o = $arr["obj_inst"];
                 $act_lang = $o->lang();
 
                 $conns = $o->connections_from(array(
@@ -110,22 +120,56 @@ class translator extends  core
 		$eldata = $arr["prop"]["value"];
                 $o = $arr["obj_inst"];
 		$orig = $o->get_original();
+		
+		$t_conns = $orig->connections_from(array(
+			"type" => RELTYPE_ORIGINAL,
+		));
+		obj_set_opt("no_auto_translation",1);
+		if (0 < sizeof($t_conns))
+		{
+			$conn = reset($t_conns);
+			$orig = $conn->to();
+		};
+		obj_set_opt("no_auto_translation",0);
 
 		$prnt = new object($orig->parent());
 
 		$brothers = new object_list(array(
 			"brother_of" => $orig->id(),
 		));
+
+		$o = $orig;
+
 		$brotlist = array();
+		$parents = array();
+
 		foreach($brothers->arr() as $brot)
 		{
+			$prt = new object($brot->parent());
+			$_trans = $this->_get_translations_for($prt->id());
+
 			$brotlist[$brot->parent()] = 1;
+
+			// aga üks neist on originaal. Mida ma sellega peale hakkan?
+			if (sizeof($_trans) > 0)
+			{
+				$parents[$brot->parent()] = $_trans;
+			};
 		};
+
                 obj_set_opt("no_auto_translation", 1);
 
 		$tr_conns = $prnt->connections_from(array(
 			"type" => RELTYPE_TRANSLATION, 
 		));
+
+		// 1. create a list of all brothers this object has
+		//	I need the real id-s of the parents, which means working 
+		//	around the storage
+
+		// 2. create a list of all translations this object has
+		// 3. create new translation objects if missing
+		// 4. create brothers from those translation objects where needed
                 
 
 		$tr_parents = array();
@@ -148,7 +192,7 @@ class translator extends  core
                         $translated[$to->lang()] = $to;
                 };
 		
-		obj_set_opt("no_auto_translation", 0);
+		obj_set_opt("no_auto_translation", 1);
 
                 $act_lang = $o->lang();
                 $o->set_flag(OBJ_HAS_TRANSLATION,OBJ_HAS_TRANSLATION);
@@ -192,7 +236,7 @@ class translator extends  core
                                         {
                                                 $fields_with_values++;
                                         };
-                                        //print "setting $prop_key to $prop_val<br>";
+                                        //print "setting $prop_key to $prop_val on ".$clone->id()."<br>";
                                         $clone->set_prop($prop_key,$prop_val);
                                 };
 
@@ -208,7 +252,6 @@ class translator extends  core
                                 }
                                 else
                                 {
-					//print "setting lang to $lang";
                                         $clone->set_lang($lang);
 
                                         $clone->set_flag(OBJ_HAS_TRANSLATION,OBJ_HAS_TRANSLATION);
@@ -246,6 +289,28 @@ class translator extends  core
 		post_message_with_param(MSG_TRANSLATION_UPDATED,$o->class_id(),array(
 			"oid" => $o->id(),
 		));
+	}
+
+	function _get_translations_for($id)
+	{
+		$obj = new object($id);
+                obj_set_opt("no_auto_translation", 1);
+
+		$tr_conns = $obj->connections_from(array(
+			"type" => RELTYPE_TRANSLATION, 
+		));
+
+		$rv = array();
+
+		foreach($tr_conns as $tr_conn)
+		{
+			$tr_obj = $tr_conn->to();
+			$rv[$tr_obj->lang()] = $tr_obj->id();
+		};
+
+		obj_set_opt("no_auto_translation",0);
+
+		return $rv;
 	}
 };
 ?>
