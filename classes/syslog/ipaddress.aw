@@ -24,8 +24,6 @@ class ipaddress extends class_base
 			'tpldir' => 'syslog/IP Aadress',
 			'clid' => CL_IPADDRESS
 		));
-
-		$this->do_check_tables();
 	}
 
 	////
@@ -36,8 +34,13 @@ class ipaddress extends class_base
 	function get_obj_from_ip($arr)
 	{
 		extract($arr);
-		$id = $this->db_fetch_field("SELECT id FROM ipaddresses LEFT JOIN objects ON objects.oid = ipaddresses.id WHERE ip = '$ip' AND objects.status != 0", "id");
-		if (!$id)
+		$ol = new object_list(array(
+			"class_id" => CL_IPADDRESS,
+			"site_id" => array(),
+			"class_id" => array(),
+			"ip" => $ip
+		));
+		if ($ol->count() < 0)
 		{
 			if (!$parent)
 			{
@@ -48,17 +51,20 @@ class ipaddress extends class_base
 				}
 			}
 
-			$id = $this->new_object(array(
-				'parent' => $parent,
-				'name' => $ip,
-				'class_id' => CL_IPADDRESS
-			));
-			$this->db_query("INSERT INTO ipaddresses (id, ip) VALUES('$id','$ip')");
+			$obj = new object();
+			$obj->set_parent($parent);	
+			$obj->set_name($ip);
+			$obj->set_class_id(CL_IPADDRESS);
+			$obj->set_prop("ip", $ip);
+			$obj->set_meta("ip", $ip);
+			$obj->save();
 		}
-		$ob = $this->get_object($id);
-		// fake this. 
-		$ob['meta']['ip'] = $ip;
-		return $ob;
+		else
+		{
+			$obj = $ol->begin();
+			$obj->set_meta("ip", $ip);
+		}
+		return $obj;
 	}
 
 
@@ -66,23 +72,8 @@ class ipaddress extends class_base
 	// !returns the ip address associated with the object $oid
 	function get_ip_from_obj($oid)
 	{
-		return $this->db_fetch_field("SELECT ip FROM ipaddresses LEFT JOIN objects ON objects.oid = ipaddresses.id WHERE id = '$oid' AND objects.status != 0","ip");
-	}
-
-	////
-	// !checks whether the tables required for this object exist in the database and creates them if necessary
-	function do_check_tables()
-	{
-		if (!aw_global_get("ipaddress::tables_checked"))
-		{
-			if (!$this->db_table_exists("ipaddresses"))
-			{
-				echo "creating table! <br />";
-				$this->db_query("CREATE TABLE ipaddresses (id int primary key, ip varchar(30))");
-				$this->db_query("ALTER TABLE ipaddresses ADD INDEX ip (ip)");
-			}
-			aw_global_set("ipaddress::tables_checked", true);
-		}
+		$o = obj($oid);
+		return $o->prop("ip");
 	}
 
 	////
