@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.17 2004/10/22 14:57:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.18 2005/01/18 10:47:51 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -32,6 +32,7 @@ class form_cell extends form_base
 	{
 		switch($type)
 		{
+			default:
 			case FTYPE_ENTRY:
 				$t = "formgen/form_entry_element";
 				break;
@@ -41,8 +42,6 @@ class form_cell extends form_base
 			case FTYPE_FILTER_SEARCH:
 				$t = "formgen/form_filter_search_element";
 				break;
-			default:
-				$this->raise_error(ERR_FG_ETYPE,"form_cell->mk_element($type) , error in type!",true);
 		}
 		$this->arr[$this->cnt] =& get_instance($t);
 		$this->arr[$this->cnt]->load(&$r, &$this->form, $this->col, $this->row, $this->cnt);
@@ -63,6 +62,8 @@ class form_cell extends form_base
 		// the number of elements in this cell
 		$this->cnt = 0;
 
+		$tp = $form->get_type();
+
 		if (is_array($this->form->arr["elements"][$row][$col]))
 		{
 			foreach($this->form->arr["elements"][$row][$col] as $k => $v)
@@ -71,7 +72,7 @@ class form_cell extends form_base
 				// we check if it is a number so we won't try to create elements from styles
 				if (is_number($k))	
 				{
-					$this->mk_element($form->get_type(), &$v);
+					$this->mk_element($tp, &$v);
 				}
 			}
 		}
