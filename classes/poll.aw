@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.6 2002/01/12 11:15:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.7 2002/01/17 10:36:40 kristo Exp $
 session_register("poll_clicked");
 global $class_defs;
 $class_defs["poll"] = "xml";
@@ -148,9 +148,18 @@ class poll extends aw_template
 		global $lc_poll;
 		lc_load("poll");
 		$this->vars($lc_poll);
+		if ($return_url)
+		{
+			$this->mk_path(0,sprintf("<a href='%s'>%s</a> / Lisa poll",$return_url,"Tagasi"));
+		}
+		else
+		{
+			$this->mk_path($parent,"Lisa poll");
+		};
 		$this->read_adm_template("add.tpl");
 		$this->vars(array(
-			"id" => 0,
+			"id" => "Uus",
+			"reforb" => $this->mk_reforb("submit",array("parent" => $parent,"return_url" => $return_url,"alias_to" => $alias_to)),
 		));
 		return $this->parse();
 	}
@@ -161,7 +170,6 @@ class poll extends aw_template
 	{
 		$this->quote($arr);
 		extract($arr);
-
 
 		if ($id)
 		{
@@ -195,15 +203,22 @@ class poll extends aw_template
 		}
 		else
 		{
+			$parent = ($parent) ? $parent : 0;
 			$id = $this->new_object(array(
 				"name" => $name,
 				"comment" => $comment,
 				"class_id" => CL_POLL,
 				"status" => 1,
-				"parent" => $GLOBALS["SITE_ID"],
+				//"parent" => $GLOBALS["SITE_ID"], huh?
+				"parent" => $parent,
 			));
+			if ($alias_to)
+			{
+				$this->add_alias($alias_to,$id);
+			};
 		}
-		return $this->mk_my_orb("change",array("id" => $id));
+		$retval = $this->mk_my_orb("change",array("id" => $id,"return_url" => urlencode($return_url),"alias_to" => $alias_to));
+		return $retval;
 
 	}
 
@@ -234,15 +249,25 @@ class poll extends aw_template
 		lc_load("poll");
 		$this->vars($lc_poll);
 		$this->read_adm_template("add.tpl");
-		$this->mk_path(0,"<a href='" . $this->mk_my_orb("list",array()) . "'>Pollid</a>");
+		if ($return_url)
+		{
+			$this->mk_path(0,sprintf("<a href='%s'>%s</a> / Muuda polli",urldecode($return_url),"Tagasi"));
+		}
+		else
+		{
+			$this->mk_path($parent,"<a href='" . $this->mk_my_orb("list",array()) . "'>Pollid</a>");
+		};
 
 		$poll = $this->get_object($id);
 		
 		//$questions = aw_unserialize($poll["questions"]);
 
-		//classload("languages");
-		//$l = new languages;
-		//$langs = $l->listall();
+		classload("languages");
+		$l = new languages;
+		$langs = $l->listall();
+		print "<pre>";
+		print_r($langs);
+		print "</pre>";
 		//foreach($langs as $lang)
 		//{
 		//	$this->vars(array(
@@ -262,7 +287,7 @@ class poll extends aw_template
 		$al = "";
 		$sum = 0;
 
-		// "Ford! There's an infinite number of monkeys  outside  who
+		// "Ford! There's an infinite number of monkeys outside who
 		// want to talk to us about this line of PHP code they've worked out."	
 		array_walk($answers,create_function('$val,$key,$sum','$sum = $sum + $val["clicks"];'),&$sum);
 		reset($answers);
@@ -270,13 +295,14 @@ class poll extends aw_template
 		{
 			//foreach($langs as $lang)
 			//{
+				$percent = ($sum == 0) ? 0 : $v["clicks"]*100/$sum;
 				$this->vars(array(
 					"lang_name" => $lang["name"],
 					"lang_id" => $lang["id"],
 					"answer_id" => $aid, 
 					"answer" => $v["answer"],
 					"clicks" => $v["clicks"],
-					"percent" => sprintf("%0.02f",$v["clicks"]*100/$sum),
+					"percent" => sprintf("%0.02f",$percent),
 				));
 				$al.=$this->parse("QUESTION");
 			//}
@@ -289,6 +315,7 @@ class poll extends aw_template
 			"name" => $poll["name"],
 			"sum" => $sum,
 			"comment" => $poll["comment"],
+			"EDIT" => $this->parse("EDIT"),
 			"QUESTION" => $al,
 			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
 		));
@@ -399,6 +426,21 @@ class poll extends aw_template
 		$this->vars(array("ANSWER" => $as,"question" => $qs[$lang_id], "date" => $this->time2date($poll[modified],2),"addcomment" => $t->add(0,$id,0),"num_comments" => $t->get_num_comments($id), "poll_id" => $id, "QUESTION" => $p));
 
 		return $this->parse();
+	}
+
+	function parse_alias($args = array())
+	{
+		extract($args);
+		if (!is_array($this->pollaliases) || $this->pollaliasoid != $oid)
+		{
+			$this->pollaliases = $this->get_aliases(array(
+								"oid" => $oid,
+								"type" => CL_POLL,
+			));
+			$this->pollaliasoid = $oid;
+                };
+                $f = $this->pollaliases[$matches[3] - 1];
+		return $this->gen_user_html($f["target"]);
 	}
 }
 ?>
