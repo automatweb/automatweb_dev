@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.15 2004/11/07 19:40:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.16 2005/03/20 16:48:36 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -358,7 +358,7 @@ class form_entry_element extends form_element
 
 		if ($this->arr["type"] == "alias")
 		{
-			$obj = get_instance("objects");
+			$obj = get_instance("core/objects");
 			if ( ($this->arr["alias_type"] == 1) && (strlen($this->arr["alias_subtype"]) > 2) )
 			{
 				// we need to show the actual aliased object, not the one added to the output

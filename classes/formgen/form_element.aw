@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.82 2005/03/20 16:46:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.83 2005/03/20 16:48:36 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2500,7 +2500,7 @@ class form_element extends aw_template
 				}
 				elseif ($this->arr["alias"] > 0)
 				{
-					$obj = get_instance("objects");
+					$obj = get_instance("core/objects");
 					// just show the aliased object
 					// yeah!
 					// I really hope that the thing we pass there is a reference to the form data

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.66 2005/03/20 16:46:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.1 2005/03/20 16:48:36 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class objects extends core
 {
