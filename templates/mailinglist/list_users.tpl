@@ -46,6 +46,7 @@ Vali lehek&uuml;lg:
 <!-- END SUB: U_IMPORT -->
 &nbsp;|&nbsp;<a href="{VAR:export_link}" >{VAR:LC_MAILINGLIST_EXPORT}</a>
 &nbsp;|&nbsp;<a target="_blank" href="{VAR:check_link}" >Kontrolli</a>
+&nbsp;|&nbsp;<a href="{VAR:del_link}" >Kustuta nimekiri</a>
 </b></td>
 </tr>
 
