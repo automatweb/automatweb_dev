@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.165 2003/03/12 12:04:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.166 2003/03/13 13:45:50 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -174,6 +174,10 @@ class core extends db_connector
 		{
 			$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = $oid");
 		}
+
+		// hits
+		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
+
 		if (!$no_flush)
 		{
 			$this->flush_cache();
