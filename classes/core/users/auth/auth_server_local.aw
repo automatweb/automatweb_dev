@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.1 2004/10/18 15:37:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.2 2004/11/04 11:54:09 sven Exp $
 // auth_server_local.aw - Autentimsserver Kohalik 
 /*
 
@@ -75,7 +75,13 @@ class auth_server_local extends class_base
 		{
 			$msg = "Sellist kasutajat pole $credentials[uid]";
 		};
-
+		
+		if($success && users_user::require_password_change($udata["uid"]) && users_user::is_first_login($udata["uid"]) && !$credentials["pwdchange"])
+		{ 
+			Header("Location: ".$this->mk_my_orb("change_password_not_logged", array("uid" => $udata["uid"]), "users"));
+			exit;		
+		}
+		
 		return array($success, $msg);
 	}
 }
