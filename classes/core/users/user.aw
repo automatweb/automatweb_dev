@@ -94,9 +94,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @property resend_welcome store=no type=checkbox ch_value=1
 @caption Saada tervitusmeil uuesti
 
-/@property pwd_status store=no type=text
-/@caption 
-
 @default group=roles
 
 @property roles type=text store=no no_caption=1
@@ -221,10 +218,6 @@ class user extends class_base
 					"key" => "act_to",
 				));
 				break;
-
-			/*case "pwd_status":
-				$prop['value'] = aw_global_get("status_msg");
-				break;*/
 
 			case "groups":
 				$prop['value'] = $this->_get_group_membership($arr["obj_inst"]->prop("uid"), $arr["obj_inst"]->id());
