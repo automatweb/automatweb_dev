@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.6 2004/10/29 08:41:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.7 2004/10/29 11:59:09 ahti Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -29,7 +29,7 @@ class comments extends class_base
 
 		$comms = $fcg->get_comment_list(array(
 			"parent" => $parent,
-			"sortby" => $prop["sortby"],
+			"sort_by" => $prop["sort_by"],
 		));
 		$prname = $prop["name"];
 		$pager = $this->pager(array(
