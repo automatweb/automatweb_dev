@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.22 2002/12/19 15:18:50 kristo Exp $
+// $Id: class_base.aw,v 2.23 2002/12/19 15:51:51 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -19,27 +19,6 @@
 
 	@property jrk type=textbox size=4 group=general
 	@caption Jrk
-
-	@property created type=date access=ro
-	@caption Loomise kuupäev
-
-	@property createdby type=uid access=ro
-	@caption Looja
-
-	@property modified type=date access=ro
-	@caption Muutmise kuupäev
-
-	@property modifiedby type=uid access=ro
-	@caption Muutja
-
-	@property oid type=int access=ro
-	@caption Objekti id
-
-	@property parent type=int access=ro
-	@caption Parenti id
-
-	@property class_id type=class_id access=ro
-	@caption Klassi id
 */
 
 
@@ -58,13 +37,12 @@ define('PROP_IGNORE',2);
 define('PROP_ERROR',3);
 
 // something went very very wrong, 
-// notify the user and DO NOT save the object
+// notify the user and DO NOT display the form/save the object
 define('PROP_FATAL_ERROR',4);
 
 classload("aliasmgr");
 class class_base extends aliasmgr
 {
-
 	function class_base($args = array())
 	{
 		$this->init("");
@@ -74,6 +52,7 @@ class class_base extends aliasmgr
 	{
 		$this->output_client = "htmlclient";
 		$this->ds_name = "ds_local_sql";
+		$this->default_group = "general";
 		parent::init($arg);
 	}
 
@@ -89,98 +68,48 @@ class class_base extends aliasmgr
 
 		$this->parent = $args["parent"];
 		extract($args);
-		$active = ($group) ? $group : "general";
-		$this->group = $active;
 
-		// I need an easy way to turn off individual properties
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
-				"group" => $group,
+				"group" => $args["group"],
 		));
-
-		// here be some magic to determine the correct output client
-		// this means we could create a TTY client for AW :)
-		// actually I'm thinking of native clients and XML-RPC
-		// output client is probably the first that should be
-		// implemented.
+		
+		// parse the properties - resolve generated properties and
+		// do any callbacks
+		$resprops = $this->parse_properties(array(
+			"properties" => &$realprops,
+		));
+		
 		$cli = get_instance("cfg/" . $this->output_client);
 
-		// there are two ways for a class to change the properties
-		// 1 - get_property callback - usually used to change some
-		// fields of the property - common use is to set the contents
-		// of an select field
-
-		// 2 - generator - which should return full property definitions
-		// in the same format they come from load_properties.
-		// those can be called dynamic properties I suppose
-		// since they don't have to exist anywhere in the property
-		// definitions
-	
-		// I really doubt that get_property appears out of blue
-		// while we are generating the output form
-		$callback = method_exists($this->inst,"get_property");
-
-		// need to cycle over the property nodes, do replacements
-		// where needed and then cycle over the result and generate
-		// the output
-		$resprops = array();
-
-		foreach($realprops as $key => $val)
+		if (is_array($this->layout))
 		{
-			if (is_array($val))
+			foreach($this->layout as $key => $val)
 			{
-				$this->get_value(&$val);
-			};
+				if (is_array($val))
+				{
+					$_tmp["caption"] = $val["caption"];
+					foreach($val["items"] as $item)
+					{
+						$_tmp["items"][] = $resprops[$item];
+					};
 
-			$argblock = array(
-				"prop" => &$val,
-			);
-
-			// callbackiga saad muuta ühe konkreetse omaduse sisu
-			if ($callback)
-			{
-				$status = $this->inst->get_property($argblock);
-			};
-
-			// I need other way to retrieve a list of dynamically
-			// generated properties from the class and display those
-			if ($status === PROP_IGNORE)
-			{
-				// do nothing
-			}
-			else
-			if ($val["editonly"])
-			{
-				// skip editonly elements for new objects
-			}
-			elseif ($val["type"] == "hidden")
-			{
-				// do nothing
-			}
-			else
-			{
-				$resprops[] = $val;
+				}
+				else
+				{
+					$_tmp = $resprops[$key];
+				};
+				
+				$cli->add_property($_tmp);
 			};
 		}
-
-		$content = "";
-
-		foreach($resprops as $val)
+		else
 		{
-			if (is_array($val["items"]))
-			{
-				foreach($val["items"] as $subkey => $subval)
-				{
-					$this->convert_element(&$subval);
-					$val["items"][$subkey] = $subval;
-				}
-			}
-			else
-			{
-				$this->convert_element(&$val);
-			};
-			$cli->add_property($val);
-		};
+			foreach($resprops as $val)
+                        {
+                                $cli->add_property($val);
+                        };
+                };
 
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
 
@@ -210,23 +139,77 @@ class class_base extends aliasmgr
 
 	////
 	// !Generate a form for adding or changing an object
+	// id _always_ refers to the objects table. Always. If you want to load
+	// any other data, then you'll need to use other field name
 	function change($args = array())
 	{
+		// create an instance of the class servicing the object ($this->inst)
+		// create an instance of the datasource ($this->ds)
+		// set $this->clid and $this->clfile (Do I need the latter at all?)
 		$this->init_class_base();
-
+		
 		extract($args);
 
-		$active = ($group) ? $group : "general";
-		$this->group = $active;
+		$this->id = $id;
 		
+		// get a list of active properties for this object
 		// I need an easy way to turn off individual properties
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
-				"group" => $group,
+				"group" => $args["group"],
 		));
 
-		$this->load_object(array("id" => $id));
+		// load the object data, if there is anything to load at all
+		foreach($this->tables as $key => $val)
+		{
+			// that we already got
+			if ($key != "objects")
+			{
+				if ($val["master_table"] == "objects")
+				{
+					$id_arg = $args["id"];
+				};
+		
+				$tmp = $this->load_object(array(
+					"table" => $key,
+					"idfield" => $val["index"],
+					"id" => $id_arg,
+					"fields" => $this->fields[$key],
+				));
+				$this->data[$key] = $tmp;
+				$this->objdata = $tmp;
+			}
+			else
+			{
+				// load the core data (cause the parent might have a configuration
+				// form set) and then I need to know the id of the parent, before
+				// I can fetch all the properties
+				$fields = $this->fields[$key];
+				// for objects, we always load the parent field as well
+				$fields["parent"] = "direct";
+				$tmp = $this->load_object(array(
+					"id" => $args["id"],
+					"table" => "objects",
+					"idfield" => "oid",
+					"fields" => $fields,
+				));
+				$tmp["oid"] = $this->id;
+				$this->data[$key] = $tmp;
+				$this->parent = $tmp["parent"];
+				$this->coredata = $tmp;
+			};
+		};
 
+		// parse the properties - resolve generated properties and
+		// do any callbacks
+		$resprops = $this->parse_properties(array(
+			"properties" => &$realprops,
+		));
+
+		// so now I have a list of properties along with their values,
+		// and some information about the layout - and I want to display
+		// that stuff now
+		
 		// here be some magic to determine the correct output client
 		// this means we could create a TTY client for AW :)
 		// actually I'm thinking of native clients and XML-RPC
@@ -234,78 +217,23 @@ class class_base extends aliasmgr
 		// implemented.
 		$cli = get_instance("cfg/" . $this->output_client);
 
-		// there are two ways for a class to change the properties
-		// 1 - get_property callback - usually used to change some
-		// fields of the property - common use is to set the contents
-		// of an select field
-
-		// 2 - generator - which should return full property definitions
-		// in the same format they come from load_properties.
-		// those can be called dynamic properties I suppose
-		// since they don't have to exist anywhere in the property
-		// definitions
-	
-		// I really doubt that get_property appears out of blue
-		// while we are generating the output form
-		$callback = method_exists($this->inst,"get_property");
-
-		// need to cycle over the property nodes, do replacements
-		// where needed and then cycle over the result and generate
-		// the output
-		$resprops = array();
-		foreach($realprops as $key => $val)
+		if (is_array($this->layout))
 		{
-			if (is_array($val))
+			foreach($this->layout as $key => $val)
 			{
-				$this->get_value(&$val);
-			};
-
-			$argblock = array(
-				"prop" => &$val,
-				"obj" => &$this->coredata,
-				"objdata" => &$this->objdata,
-			);
-
-			// callbackiga saad muuta ühe konkreetse omaduse sisu
-			if ($callback)
-            {
-				$status = $this->inst->get_property($argblock);
-			};
-
-			// I need other way to retrieve a list of dynamically
-			// generated properties from the class and display those
-			if ($status === PROP_IGNORE)
-			{
-				// do nothing
-			}
-			else
-			if ($val["type"] == "hidden")
-			{
-				// do nothing
-			}
-            else
-            {
-				$resprops[] = $val;
+				$_tmp = $resprops[$key];
+				if (is_array($_tmp))
+				{
+					$cli->add_property($_tmp);
+				};
 			};
 		}
-
-		$content = "";
-		
-		foreach($resprops as $val)
+		else
 		{
-			if (is_array($val["items"]))
+			foreach($resprops as $val)
 			{
-				foreach($val["items"] as $subkey => $subval)
-				{
-					$this->convert_element(&$subval);
-					$val["items"][$subkey] = $subval;
-				}
-			}
-			else
-			{
-				$this->convert_element(&$val);
+				$cli->add_property($val);
 			};
-			$cli->add_property($val);
 		};
 
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
@@ -357,6 +285,14 @@ class class_base extends aliasmgr
 		
 		extract($args);
 
+		// here we need to check whether this record really belongs to the objects
+		// table or not
+		
+		$realprops = $this->get_active_properties(array(
+			"clfile" => $this->clfile,
+			"group" => $args["group"],
+		));
+
 		if (!$id)
 		{
 			// create the object, if it wasn't already there
@@ -373,17 +309,17 @@ class class_base extends aliasmgr
 			$this->new = true;
 		}
 		$this->id = $id;
-
-		// and read it back again
-		$this->coredata = $this->ds->ds_get_object(array(
-			"id" => $this->id,
-			"class_id" => $this->clid,
+		$fields = $this->fields["objects"];
+		// for objects, we always load the parent field as well
+		$fields["parent"] = "direct";
+		$tmp = $this->load_object(array(
+			"id" => $args["id"],
+			"table" => "objects",
+			"idfield" => "oid",
+			"fields" => $fields,
 		));
 
-		$realprops = $this->get_active_properties(array(
-			"clfile" => $this->clfile,
-			"group" => $group,
-		));
+		$this->coredata = $tmp;
 
 		// now we need to figure out the save strategy
 		// cycle over the properties and sort out all the stuff
@@ -405,45 +341,56 @@ class class_base extends aliasmgr
 		$resprops = array();
 		$savedata = array();
 		$form_data = $args;
+
 		foreach($realprops as $property)
 		{
-			if (is_array($property))
-			{
-				// this return the old/saved value of the property
-				$this->get_value(&$property);
-				// new data is in $args
-			};
+                        //if (is_array($property))
+                        //{
+                                // this return the old/saved value of the property
+                         //       $this->get_value(&$property);
+                                // new data is in $args
+                        //};
 
-			$argblock = array(
-				"prop" => &$property,
-				"obj" => &$this->coredata,
-				"objdata" => &$this->objdata,
-				"form_data" => &$form_data,
-			);
+                        $argblock = array(
+                                "prop" => &$property,
+                                "obj" => &$this->coredata,
+                                "objdata" => &$this->objdata,
+                                "form_data" => &$form_data,
+                        );
 
-			// give the class a possiblity to execute some action
-			// while we are saving it.
+                        // give the class a possiblity to execute some action
+                        // while we are saving it.
 
-			// for callback, the return status of the function decides
-			// whether to save the data or not, so please, make sure
-			// that your set_property returns PROP_OK for stuff
-			// that you want to save
-			if ($callback)
-			{
-				// I need a way to let set_property insert
-				// data back into the save queue
-				$status = $this->inst->set_property($argblock);
-			}
-			else
-			{
-				$status = PROP_OK;
-			};
+                        // for callback, the return status of the function decides
+                        // whether to save the data or not, so please, make sure
+                        // that your set_property returns PROP_OK for stuff
+                        // that you want to save
+                        if ($callback)
+                        {
+                                // I need a way to let set_property insert
+                                // data back into the save queue
+                                $status = $this->inst->set_property($argblock);
+                        }
+                        else
+                        {
+                                $status = PROP_OK;
+                        };
+
+                        // move the data into save queue only of set_property
+                        // returns nothing
 
 			// move the data into save queue only of set_property
 			// returns nothing
 			if ($status == PROP_OK)
 			{
-				$savedata[$property["name"]] = $form_data[$property["name"]];
+				// that is not set for checkboxes
+				$xval = ($form_data[$property["name"]]) ? $form_data[$property["name"]] : "";
+				if (($property["type"] == "checkbox") && ($property["method"] != "serialize"))
+				{
+					$xval = (int)$xval;
+				};
+
+				$savedata[$property["name"]] = $xval;
 				$resprops[] = $property;
 			};
 
@@ -512,8 +459,7 @@ class class_base extends aliasmgr
 				};
 			};
 		};
-
-
+		
 		if (sizeof($metadata) > 0)
 		{
 			$coredata["metadata"] = $metadata;
@@ -533,6 +479,7 @@ class class_base extends aliasmgr
 				"id" => $this->id,
 				"coredata" => &$coredata,
 				"objdata" => &$objdata,
+				"form_data" => &$args,
 				"object" => array_merge($this->coredata,$this->objdata),
 			));
 		}
@@ -576,35 +523,36 @@ class class_base extends aliasmgr
 			die("this class does not have any defined properties ");
 		};
 
-		// XXX: this will probably go away
+		// some day I might want to be able to edit remote objects
+		// and this is how I will do it (unless I get a better idea)
 		$this->ds = get_instance("datasource/" . $this->ds_name);
 
-		// figure out the name of the file, that contains the required
-		// class
-		$this->cp = $this->get_class_picker(array("field" => "file"));
-		$this->clid = $this->orb_class->get_opt("clid");
-		$this->clfile = $this->cp[$this->clid];
-		
+		$clid = $this->orb_class->get_opt("clid");
+		$clfile = $this->cfg["classes"][$clid]["file"];
+
 		// temporary - until we are sure that will will not go back to
 		// the old interface
-		if ($this->clid == 1)
+		if ($clid == 1)
 		{
-			$this->clfile = "menu";
+			$clfile = "menu";
 		};
 
 		// temporary - until we switch document editing back to new interface
-		if ($this->clid == 7)
+		if ($clid == 7)
 		{
-			$this->clfile = "doc";
+			$clfile = "doc";
 		};
 
-		if (!$this->clfile)
+		if (!$clfile)
 		{
 			die("coult not identify object " . $this->clfile);
 		};
+
+		$this->clfile = $clfile;
+		$this->clid = $clid;
 		
 		// get an instance of the class that handles this object type
-		$this->inst = get_instance($this->clfile);
+		$this->inst = get_instance($clfile);
 	}
 
 	function gen_output($args = array())
@@ -612,6 +560,7 @@ class class_base extends aliasmgr
 		// XXX: figure out a way to do better titles
 		$classname = get_class($this->orb_class);
 
+		// XXX: pathi peab htmlclient tegema
 		if ($this->id)
 		{
 			$title = "Muuda $classname objekti " . $this->coredata["name"];
@@ -643,6 +592,8 @@ class class_base extends aliasmgr
 		// I need a way to let the client (the class using class_base to
 		// display the editing form) to add it's own tabs.
 
+		$activegroup = ($this->activegroup) ? $this->activegroup : $this->group;
+
 		foreach($grpnames->get() as $key => $val)
 		{
 			if ($this->id)
@@ -658,8 +609,8 @@ class class_base extends aliasmgr
 			{
 				$this->tp->add_tab(array(
 					"link" => $link,
-					"caption" => $key,
-					"active" => ($key == $this->group),
+					"caption" => $val,
+					"active" => ($key == $activegroup),
 				));
 			};
 		};
@@ -669,7 +620,7 @@ class class_base extends aliasmgr
 			$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),get_class($this->orb_class));
 			$this->tp->add_tab(array(
 				"link" => $link,
-				"caption" => "related_objects",
+				"caption" => "Seostehaldur",
 				"active" => ( ($this->action == "list_aliases") || ($this->action == "search_aliases") ),
 			));
 		};
@@ -688,29 +639,29 @@ class class_base extends aliasmgr
 		return $this->tp->get_tabpanel($vars);
 	}
 
+	////
+	// !Loads the core data
+	function load_coredata($args = array())
+	{
+		$this->coredata = $this->ds->ds_get_object(array(
+			"id" => $args["id"],
+			"class_id" => $this->clid,
+		));
+
+		$this->id = $this->coredata["oid"];
+		$this->parent = $this->coredata["parent"];
+	}
+
+	// Loads an object. Any object
 	function load_object($args = array())
 	{
-		if ($args["id"])
-		{
-			$this->coredata = $this->ds->ds_get_object(array(
-				"id" => $args["id"],
-				"class_id" => $this->clid,
-			));
-
-			$this->id = $this->coredata["oid"];
-			$this->parent = $this->coredata["parent"];
-		};
-
-		$table = $this->classinfo["objtable"]["text"];
-		$idfield = $this->classinfo["objtable_index"]["text"];
-		if ($args["id"] && $table && $idfield)
-		{
-			$this->objdata = $this->ds->ds_get_object(array(
-				"id" => $args["id"],
-				"table" => $table,
-				"idfield" => $idfield,
-			));
-		};
+		$tmp = $this->ds->ds_get_object(array(
+			"id" => $args["id"],
+			"table" => $args["table"],
+			"idfield" => $args["idfield"],
+			"fields" => $args["fields"],
+		));
+		return $tmp;
 	}
 
 	////
@@ -739,38 +690,137 @@ class class_base extends aliasmgr
 			);
 		};
 	}
-	
+
+	////
+	// !Returns a list of properties for generating an output
+	// or saving data. 
 	function get_active_properties($args = array())
 	{
-		// load all properties
+		
+		// load all properties for the current class
 		$cfgu = get_instance("cfg/cfgutils");
-		$cfile = basename($args["clfile"]);
+		$all_props = $cfgu->load_properties(array(
+			"clid" => $this->clid,
+		));
 
-		// XXX: temporary
-		if ($cfile == "document")
+		// first I need to collect the names of all groups, e.g.
+		// reorder the $all_props list based on group name
+		$bygroup = array();
+
+		foreach($all_props as $key => $val)
 		{
-			$cfile = "doc";
+			$bygroup[$val["group"]][$key] = $val;
 		};
 
-		// this finds out whether we have to load a config form
-		// and if so, do it and set $this->active_properties
-		// and $this->property_order - which we will then use
-		// for generating the list of active properties
-		$this->get_active_cfgform();
-
 		// loads all properties for this class
-		$_all_props = $cfgu->load_properties(array("file" => $cfile));
-
 		$this->classinfo = $cfgu->get_classinfo();
-		$corefields = $this->get_visible_corefields();
+		$groupinfo = new aw_array($cfgu->get_opt("groupinfo"));
+		$this->tableinfo = $cfgu->get_opt("tableinfo");
 
-		// I need names of all group and the contents of active group
-		// group means the contents of a tab
-		$activegroup = ($args["group"]) ? $args["group"] : "general";
+		if ($args["group"] && $bygroup[$args["group"]])
+		{
+			$use_group = $args["group"];
+		}
+		else
+		{
+			foreach($groupinfo->get() as $gkey => $ginfo)
+			{
+				if ($ginfo["default"])
+				{
+					$use_group = $gkey;
+				};
+			};
+		};
+
+		if (!$use_group)
+		{
+			$use_group = "general";
+		};
+
+		$this->activegroup = $use_group;
+
+		$property_list = $bygroup[$use_group];
+		// loads all properties for this class
+
+		$_all_props = $all_props;
+
+		// This concept of core fields sucks beams through a garden hose
+		$corefields = $this->get_visible_corefields();
 		
-		$elements = array();
+		// if any configuration form applies to the current object,
+		// then load it
+		$cfgform_id = (int)$this->get_active_cfgform();
+
+		$this->cfgform_id = $cfgform_id;
+
+		// the thing is - if there is a configuration form defined,
+		// then all layout information should be loaded from that form
+		// that includes the name of forms
+
+		if ($cfgform_id)
+		{
+			$cfgform = $this->get_object(array(
+				"oid" => $cfgform_id,
+				"class_id" => CL_CFGFORM,
+			));
+
+			// XXX: property_list should be an array of
+			// keys, not key => 1 pairs
+
+			// oh, and I need to deal with groups in here as well
+
+			// btw, some clients will probably want the contents
+			// of all tabs
+			$property_list = $cfgform["meta"]["property_list"];
+			$layout = $cfgform["meta"]["layout"];
+			$groupinfo = array();
+			// I need to create a flat property list from all the stuff in the layout
+			if (!$property_list)
+			{
+				$this->default_group = "";
+				foreach($layout as $key => $val)
+				{
+					if (!$this->default_group)
+					{
+						$this->default_group = $key;
+					};
+
+					$groupinfo[$key] = array(
+						"caption" => $val["caption"],
+					);
+
+					foreach($val as $skey => $items)
+					{
+						if (is_array($items))
+						{
+							foreach($items as $item)
+							{
+								$property = $item;
+								$name = $item["name"];
+								$property = $all_props[$name];
+								$property["group"] = $key;
+								$property_list[$name] = $property;
+							};
+						};
+					};
+				};
+
+			}
+		}
+		else
+		{
+			// I need names of all group and the contents of active group
+			// group means the contents of a tab
+			foreach($all_props as $key => $val)
+			{
+				$use = true;
+				$name = $val["name"];
+			};
+		};
+
+		$retval = array();
+
 		$this->groupnames = array();
-		$default_ord = 0;
 
 		// ok, first add all the generated props to the props array 
 		$all_props = array();
@@ -792,56 +842,79 @@ class class_base extends aliasmgr
 		}
 
 		// now, cycle over all the properties and do all necessary filtering
-		foreach($all_props as $val)
+		foreach($groupinfo as $key => $val)
 		{
-			$use = true;
-			$name = $val["name"];
+			$groupnames[$key] = $val["caption"];
+		};
+			
+		$this->groupnames = $groupnames;
 
-			// skip all Read-Only properties - but those will probably go away anyway
-			if ($val["access"] == "ro")
+		$tables = array();
+
+		foreach($property_list as $key => $val)
+		{
+			$property = $all_props[$key];
+
+			if ($property_list[$key]["caption"])
 			{
-				$use = false;
+				$property["caption"] = $property_list[$key]["caption"];
 			};
 
+			$grpid = ($property["group"]) ? $property["group"] : $this->default_group;
 
-			// skip if the active cfgform hides it
-			if (is_array($this->active_properties) && (!$this->active_properties[$name]))
+			if ($val["group"])
 			{
-				$use = false;
+				$grpid = $val["group"];
 			};
 
-			// skip if property is a core fields. Core fields are common to all objects
-			// and they are stored in the objects table
-			if ($val["corefield"] && !isset($corefields[$name]))
+			if ($grpid == $use_group)
 			{
-				$use = false;
+				$retval[$key] = $property;
 			};
 
-			if ($use)
+			if ($groupinfo[$grpid])
 			{
-				// stuff with no group name goes into general. 
-				$grpname = ($val["group"]) ? $val["group"] : "general";
-
-				if ($grpname == $activegroup)
-				{
-					$elkey = (int)$this->property_order[$name];
-					if (!$elkey)
-					{
-						$elkey = $default_ord;
-					};
-					$elkey .= $name;
-					$elements[$elkey] = $val;
-				};
-
-				$this->groupnames[$grpname] = $grpname;
-				$default_ord++;
+				$grpname = $groupinfo[$grpid]["caption"];
+			}
+			else
+			{
+				$grpname = $grpid;
 			};
+
+			// figure out information about the table
+			if (!$tables[$property["table"]])
+			{
+				$tables[$property["table"]] = $this->tableinfo[$property["table"]];
+			};
+
+			$fval = ($property["method"]) ? $property["method"] : "direct";
+			$_field = $property["field"];
+			if ($_field == "meta")
+			{
+				$_field = "metadata";
+			};
+			$fields[$property["table"]][$_field] = $fval;
+
+		};
+
+		$this->tables = $tables;
+		$this->fields = $fields;
+
+		if (is_array($layout[$activegroup]["items"]))
+		{
+			$idx = $activegroup;
 		}
+		else
+		{
+			$idx = $this->default_group;
+		};
 
-		// reorder the elements
-		ksort($elements,SORT_NUMERIC);
+		if (is_array($layout[$idx]["items"]))
+		{
+			$this->layout = $layout[$idx]["items"];
+		};
 
-		return $elements;
+		return $retval;
 	}
 	
 	function convert_element(&$val)
@@ -968,37 +1041,110 @@ class class_base extends aliasmgr
 	// right now this only works for documents and the "doc" class
 	function get_active_cfgform($args = array())
 	{
-		if ($this->clid == 7)
+		$retval = false;
+		if ($this->clid == CL_DOCUMENT)
 		{
 			// first, check the parent menu
 			if ($this->parent)
 			{
 				$parobj = $this->get_object($this->parent);
-				$this->parse_cfgform(array("id" => $parobj["meta"]["tpl_edit_cfgform"]));
+				$retval = (int)$parobj["meta"]["tpl_edit_cfgform"];
 			};
 
 		};
+		if ($this->clid == CL_PSEUDO)
+		{
+			if ($this->parent)
+			{
+				$parobj = $this->get_object($this->parent);
+				$retval = (int)$parobj["meta"]["cfgmanager"];
+			};
+		};
+		return $retval;
+	}
 
-//                 if there is a configuration form set for the current 
-//                 class, load it and filter our display according to that
+	function parse_properties($args = array())
+	{
+		$properties = &$args["properties"];
+	
+		// I really doubt that get_property appears out of blue
+		// while we are generating the output form
+		$callback = method_exists($this->inst,"get_property");
+		
+		// need to cycle over the property nodes, do replacements
+		// where needed and then cycle over the result and generate
+		// the output
+		$resprops = array();
 
-//                $cfg = get_instance("config");
-//                $classconf = aw_unserialize($cfg->get_simple_config("class_cfgforms"));
-//
-//                $use_form = $classconf[$this->clid];
-//                $cfgform = $this->get_object($use_form);
+		$argblock = array(
+			"obj" => &$this->coredata,
+			"objdata" => &$this->objdata,
+		);
 
-//                $def = $this->cfg["classes"][$this->clid]["def"];
-//                $this->visible_properties = $cfgform["meta"]["properties"][$def];
-//                $this->el_ord = $cfgform["meta"]['ord'][$def];
+                foreach($properties as $key => $val)
+                {
+			$name = $val["name"];
+                        if (is_array($val))
+                        {
+                                $this->get_value(&$val);
+                        };
+
+			$argblock["prop"] = &$val;
+
+			// callbackiga saad muuta ühe konkreetse omaduse sisu
+                        if ($callback)
+                        {
+                                $status = $this->inst->get_property($argblock);
+                        };
+
+			// I need other way to retrieve a list of dynamically
+			// generated properties from the class and display those
+			if ($status === PROP_IGNORE)
+			{
+				// do nothing
+			}
+			else
+			if ( ($val["editonly"] == 1) && !$this->id)
+			{
+				// do nothing
+			}
+			else
+			// this doesn't let me use layout
+			if ($val["generator"] && method_exists($this->inst,$val["generator"]))
+			{
+				$meth = $val["generator"];
+				$vx = $this->inst->$meth($argblock);
+				if (is_array($vx))
+				{
+					foreach($vx as $ekey => $eval)
+					{
+						$resprops[$ekey] = $eval;
+					};
+//                                        $resprops[$name]["items"] = $vx;
+				}
+			}
+			elseif ($val["type"] == "hidden")
+			{
+				// do nothing
+			}
+                        else
+                        {
+				$this->convert_element(&$val);
+                                $resprops[$name] = $val;
+                        };
+                }
+		return $resprops;
 	}
 
 	////
 	// !Loads and parses a configuration form
+	// returns the layout array of config form
 	// id(int) - id of the config form
+	// type(string) - layout|list - type of data to return
 	function parse_cfgform($args = array())
 	{
 		$id = (int)$args["id"];
+		$retval = false;
 		if ($id)
 		{
                         $cfgform = $this->get_object($id);
@@ -1010,9 +1156,18 @@ class class_base extends aliasmgr
 			// maybe it's better if we are "locked down" by default
 			$this->active_properties = false;
 
-			if (is_array($cfgform["meta"]["properties"]))
+			$proplist = array_keys($cfgform["meta"]["ord"]);
+
+			$this->active_properties = array_flip($proplist);
+
+			if ( is_array($cfgform["meta"]["property_list"]) )
 			{
-				$this->active_properties = $cfgform["meta"]["properties"];
+				$retval = $cfgform["meta"]["property_list"];
+			};
+
+			if ( is_array($cfgform["meta"]["layout"]) )
+			{
+				$this->layout = $cfgform["meta"]["layout"];
 			};
 
 			$this->property_order = false;
@@ -1022,7 +1177,7 @@ class class_base extends aliasmgr
 				$this->property_order = $cfgform["meta"]["ord"];
 			};
 		};
-
+		return $retval;
 	}
 
 	function gen_toolbar($args = array())
@@ -1061,7 +1216,9 @@ class class_base extends aliasmgr
 		$this->init_class_base();
 
 		$this->action = $action;
-		$this->load_object(array("id" => $id));
+		$this->load_coredata(array(
+			"id" => $args["id"],
+		));
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
@@ -1085,7 +1242,9 @@ class class_base extends aliasmgr
 		$this->init_class_base();
 
 		$this->action = $action;
-		$this->load_object(array("id" => $id));
+		$this->load_coredata(array(
+			"id" => $args["id"],
+		));
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
