@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.3 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mlist.aw,v 2.4 2002/10/16 13:52:10 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -43,6 +43,35 @@ class mlist extends aw_template
 			}
 			$sb.=" " .$order;
 		}
+
+		$tot_cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM objects
+										 LEFT JOIN acl ON acl.oid = objects.oid
+										 LEFT JOIN ml_users ON ml_users.id = objects.oid
+										 WHERE objects.parent = $this->id AND objects.status != 0 AND objects.class_id = 17", "cnt");
+		$num_pages = $tot_cnt / 200;
+
+		$p = "";
+		for ($i=0; $i < $num_pages; $i++)
+		{
+			$this->vars(array(
+				"from" => $i*200,
+				"to" => min($tot_cnt, ($i+1)*200),
+				"link" => "list.aw?type=list_inimesed&id=".$this->id."&page=$i&sortby=".$GLOBALS["sortby"]."&order=".$GLOBALS["order"]
+			));
+			if ($i == $page)
+			{
+				$p.=$this->parse("SEL_PAGE");
+			}
+			else
+			{
+				$p.=$this->parse("PAGE");
+			}
+		}
+		$this->vars(array(
+			"SEL_PAGE" => "",
+			"PAGE" => $p,
+		));
+
 		$this->db_query("SELECT objects.oid as oid, objects.name as name,ml_users.mail as mail,ml_users.is_cut as is_cut, ml_users.is_copied as is_copied,acl FROM objects
 										 LEFT JOIN acl ON acl.oid = objects.oid
 										 LEFT JOIN ml_users ON ml_users.id = objects.oid
@@ -105,7 +134,7 @@ class mlist extends aw_template
 			"name_sort_img" => ($sortby == "name" ? ($order == "ASC" ? $up : $down) : "" ),
 			"email_sort_img" => ($sortby == "email" ? ($order == "ASC" ? $up : $down) : "" ),
 			"list_id" => $id,
-			"reforb" => $this->mk_reforb("void",array("list_id" => $id)),
+			"reforb" => $this->mk_reforb("void",array("list_id" => $id, "page" => $page)),
 		));
 		return $this->parse();
 	}
