@@ -62,10 +62,9 @@ class tegevusala extends aw_template
 		$this->vars(array(
 			"name"=>$ob["name"],
 			"kood"=>$f_kood,
-			"tegevusala_ik"=>$f_tegevusala_ik,
-			"tegevusala_et"=>$f_tegevusala_et,
+			"tegevusala"=>$f_tegevusala,
+			"tegevusala_en"=>$f_tegevusala_en,
 			"kirjeldus"=>$f_kirjeldus,
-			"sourcefile"=>$f_sourcefile,
 			"toolbar"=>$toolbar->get_toolbar(),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "parent"=>$parent, "return_url" => urlencode($return_url))),
 		));
@@ -80,31 +79,34 @@ class tegevusala extends aw_template
 	function submit($arr)
 	{
 		extract($arr);
-		
+		$this->quote($tegevusala);
+		@extract($tegevusala);
 		if ($id)
 		{
 
 			$this->upd_object(array(
 				"oid" => $id,
-				"name" => $tegevusala_et,
+				"name" => $tegevusala,
 				"comment" => $comment,
 				"metadata" => array(
 				)
 			));
-			$q='update kliendibaas_tegevusala set  kood="'.$kood.'", tegevusala_ik="'.$tegevusala_ik.'", tegevusala_et="'.$tegevusala_et.'", kirjeldus="'.$kirjeldus.'" where oid='.$id;
+
+			$q='update kliendibaas_tegevusala set  kood="'.$kood.'", tegevusala="'.$tegevusala.
+			'", tegevusala_en="'.$tegevusala_en.'", kirjeldus="'.$kirjeldus.'" where oid='.$id;
 		}
 		else
 		{
 			$id = $this->new_object(array(
 				"parent" => $parent,
-				"name" => $tegevusala_et,
+				"name" => $tegevusala,
 				"class_id" => CL_TEGEVUSALA,
 				"comment" => $comment,
 				"metadata" => array(
 				)
 			));
-			$q="insert into kliendibaas_tegevusala (kood, oid, tegevusala_ik, tegevusala_et, kirjeldus)
-			values ('$kood','$id','$tegevusala_ik', '$tegevusala_et','$kirjeldus')";
+			$q="insert into kliendibaas_tegevusala (kood, oid, tegevusala_en, tegevusala, kirjeldus)
+			values ('$kood','$id','$tegevusala_en', '$tegevusala','$kirjeldus')";
 		}
 
 $this->db_query($q);
