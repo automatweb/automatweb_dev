@@ -24,15 +24,15 @@ text-decoration: none;
 <table border="0" width="100%" cellpadding="3" cellspacing="0">
 	<tr bgcolor="{VAR:header_bgcolor}">
 		<!-- SUB: HEADER_icon -->
-		<td class="{VAR:css_class}">&nbsp;</td>
+		<td class="{VAR:header_css_class}">&nbsp;</td>
 		<!-- END SUB: HEADER_icon -->
 
 		<!-- SUB: HEADER_name -->
-		<td class="{VAR:css_class}">Nimi</td>
+		<td class="{VAR:header_css_class}">Nimi</td>
 		<!-- END SUB: HEADER_name -->
 
 		<!-- SUB: HEADER_size -->
-		<td class="{VAR:css_class}">Suurus</td>
+		<td class="{VAR:header_css_class}">Suurus</td>
 		<!-- END SUB: HEADER_size -->
 
 		<!-- SUB: HEADER_class_id -->
