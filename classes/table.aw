@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.18 2001/12/19 00:02:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.19 2001/12/19 12:30:04 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -8,7 +8,7 @@ $orb_defs["table"] ="xml";
 
 	classload("images");
 	classload("style");
-  lc_load("table");
+	lc_load("table");
 	class table extends aw_template
 	{
 		var $table_id;
@@ -155,7 +155,7 @@ $orb_defs["table"] ="xml";
 		$links = array(
 			"change_url" => $this->mk_my_orb("change", array("id" => $this->id)),
 			"edit_url" => $this->mk_my_orb("styles", array("id" => $this->id)),
-			"props_url" => $this->mk_my_orb("edit_properties",array("id" => $this->id)),
+			"config_url" => $this->mk_my_orb("configure",array("id" => $this->id)),
 			"admin_url" => $this->mk_my_orb("admin", array("id" => $this->id)),
 			"preview_url" => $this->mk_my_orb("view", array("id" => $this->id)),
 			"import_url" => $this->mk_my_orb("gen_import", array("id" => $this->id)),
@@ -191,7 +191,9 @@ $orb_defs["table"] ="xml";
 		/*$this->is_filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"is_filter"));
 		$this->filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"filter"));*/
 
-		$this->arr = unserialize($row[contents]);
+		$this->meta = aw_unserialize($row["metadata"]);
+
+		$this->arr = unserialize($row["contents"]);
 
 		if ($this->arr["cols"]  < 1 || $this->arr["rows"]  < 1)
 		{
@@ -221,6 +223,61 @@ $orb_defs["table"] ="xml";
 			"view"		=> $this->mk_orb("view", array("id" => $id)),
 		));
 		return $this->parse();
+	}
+
+	////
+	// !Table configuration form
+	function configure($args = array())
+	{
+		extract($args);
+		$this->load_table($id);
+		$this->read_template("configure.tpl");
+		$menu = $this->gen_navbar(array(
+			"activelist" => array("configure"),
+		));
+		$st = new style();
+		$this->vars(array(
+			"menu" => $menu,
+			"aliases" => checked($this->meta["aliases"]),
+			"reforb" => $this->mk_reforb("submit_config",array("id" => $id)),
+			"table_name" => $this->table_name,
+			"table_header" => $this->arr["table_header"],
+			"table_footer" => $this->arr["table_footer"],
+			"tablestyle" => $this->option_list($this->arr["table_style"], $st->get_select($this->table_parent,ST_TABLE)),
+			"defaultstyle" => $this->option_list($this->arr["default_style"], $st->get_select($this->table_parent,ST_CELL)),
+			"show_title"  => checked($this->arr["show_title"]),
+		));
+		return $this->parse();
+	}
+
+	////
+	// !submits table configuration
+	function submit_config($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$this->load_table($id);
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"data" => array(
+				"aliases" => $aliases,
+			),
+		));
+
+		$this->arr["table_footer"] = $table_footer;
+		$this->arr["table_header"] = $table_header;
+		$this->arr["show_title"] = $show_title;
+		$this->arr["table_style"] = $table_style;
+		$this->arr["default_style"] = $default_style;
+
+		// touch the object
+		$this->upd_object(array(
+			"oid" => $id,
+			"name" => $table_name,
+		));
+		$this->save_table($args,false);
+		$this->_log("table", "changed configuration of table $table_name");
+		return $this->mk_my_orb("configure",array("id" => $id));
 	}
 	
 	////
@@ -320,21 +377,15 @@ $orb_defs["table"] ="xml";
 		$st = new style;
 		$this->vars(array("reforb" => $this->mk_reforb("submit", array("id" => $id)),
 											"table_id" => $id,
-											"change"	=> $this->mk_orb("change", array("id" => $id)),
-											"styles"	=> $this->mk_orb("styles", array("id" => $id)),
-											"aliases" => $this->mk_my_orb("aliases",array("id" => $id)),
-											"admin"	=> $this->mk_orb("admin", array("id" => $id)),
-											"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
-											"view"		=> $this->mk_orb("view", array("id" => $id)),
+											"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
 											"menu" => $menu,
-											"tablestyle" => $this->option_list($this->arr[table_style], $st->get_select($this->table_parent,ST_TABLE)),
-											"defaultstyle" => $this->option_list($this->arr[default_style], $st->get_select($this->table_parent,ST_CELL)),
-											"table_name" => $this->table_name,
-											"table_header" => $this->arr[table_header],
-											"table_footer" => $this->arr[table_footer],
 											"extdata" => $extdata,
-											"show_title"	=> $this->arr[show_title] ? "CHECKED" : "",
 											"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")));
+
+		if ($this->meta["aliases"])
+		{
+			$this->vars(array("aliases" => $this->parse("aliases")));
+		};
 
 		$ar = $this->get_aliases_of($this->table_id);
 		reset($ar);
@@ -417,17 +468,6 @@ $orb_defs["table"] ="xml";
 			$st = new style;
 			$this->vars(array("reforb" => $this->mk_reforb("submit_admin", array("id" => $id)),
 												"table_id" => $id,
-												"change"	=> $this->mk_orb("change", array("id" => $id)),
-												"styles"	=> $this->mk_orb("styles", array("id" => $id)),
-												"admin"	=> $this->mk_orb("admin", array("id" => $id)),
-												"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
-												"view"		=> $this->mk_orb("view", array("id" => $id)),
-												"tablestyle" => $this->option_list($this->arr[table_style], $st->get_select($this->table_parent,ST_TABLE)),
-												"defaultstyle" => $this->option_list($this->arr[default_style], $st->get_select($this->table_parent,ST_CELL)),
-												"table_name" => $this->table_name,
-												"table_header" => $this->arr[table_header],
-												"table_footer" => $this->arr[table_footer],
-												"show_title"	=> $this->arr[show_title] ? "CHECKED" : "",
 												"menu" => $menu,
 												"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")));
 
@@ -451,7 +491,7 @@ $orb_defs["table"] ="xml";
 					$this->arr["contents"][$a][$i]["text"] = $text[$a][$i];
 				}
 
-			$this->arr[show_title] = $show_title;
+			//$this->arr[show_title] = $show_title;
 		}
 		
 		function submit($arr)
@@ -460,9 +500,9 @@ $orb_defs["table"] ="xml";
 
 //			$this->arr[table_style] = $arr[table_style];
 //			$this->arr[default_style] = $arr[default_style];
-			$this->arr[table_footer] = $arr[table_footer];
-			$this->arr[table_header] = $arr[table_header];
-			$this->upd_object(array("oid" => $arr[id], "name" => $arr[table_name]));
+//			$this->arr[table_footer] = $arr[table_footer];
+//			$this->arr[table_header] = $arr[table_header];
+//			$this->upd_object(array("oid" => $arr[id], "name" => $arr[table_name]));
 			$this->save_table($arr);
 			$this->_log("table", "changed table $arr[table_name]");
 			return $this->mk_orb("change", array("id" => $arr[id]));
@@ -500,8 +540,10 @@ $orb_defs["table"] ="xml";
 			$ar["str"]=serialize($this->arr);
 			$this->quote($ar);
 			extract($ar);
+
+			$q = "UPDATE aw_tables SET contents = '$str' WHERE id = ".$this->table_id;
+			$this->db_query($q);
 						
-			$this->db_query("UPDATE aw_tables SET contents = '$str' WHERE id = ".$this->table_id);
 			$this->upd_object(array("oid" => $this->table_id));
 		}
 		
@@ -981,16 +1023,9 @@ $orb_defs["table"] ="xml";
 			$st = new style;
 			$this->vars(array("reforb" => $this->mk_reforb("submit_styles", array("id" => $id)),
 												"table_id" => $id,
-												"change"	=> $this->mk_orb("change", array("id" => $id)),
-												"import"	=> $this->mk_orb("gen_import", array("id" => $id)),
-												"styles"	=> $this->mk_orb("styles", array("id" => $id)),
-												"admin"	=> $this->mk_orb("admin", array("id" => $id)),
-												"view"		=> $this->mk_orb("view", array("id" => $id)),
 												"rows"	=> $this->arr[rows],
 												"menu" => $menu,
 												"cols"	=> $this->arr[cols],
-												"tablestyle" => $this->option_list($this->arr[table_style], $st->get_select($this->table_parent,ST_TABLE)),
-												"defaultstyle" => $this->option_list($this->arr[default_style], $st->get_select($this->table_parent,ST_CELL)),
 												"addstyle"		=> $this->mk_orb("new",array("parent" => $this->table_parent),"style")));
 			$ar = $this->get_aliases_of($this->table_id);
 			reset($ar);
@@ -1009,8 +1044,6 @@ $orb_defs["table"] ="xml";
 
 			$this->load_table($id);
 
-			$this->arr[table_style] = $table_style;
-			$this->arr[default_style] = $default_style;
 			$this->save_table($arr, false);
 
 			return $this->mk_orb("styles", array("id" => $id));
