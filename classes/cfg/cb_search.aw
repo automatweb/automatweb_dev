@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.29 2005/03/29 11:25:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.30 2005/04/06 12:19:21 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -505,7 +505,17 @@ class cb_search extends class_base
 					{
 						if ($this->form_dat[$clid][$key]["search_tb"] == 1)
 						{
-							$sdata[$clss[$clid]["def"].".".$f_props[$key]["reltype"].".name"] = "%".$val."%";
+							$s_v = "";
+							if ($this->form_dat[$clid][$key]["search_mult"])
+							{
+								$s_v = map('%s%%', explode(",", $val));
+							}
+							else
+							{
+								$s_v = "%".$val."%";
+							}
+
+							$sdata[$clss[$clid]["def"].".".$f_props[$key]["reltype"].".name"] = $s_v;
 						}
 						else
 						{
@@ -546,6 +556,7 @@ class cb_search extends class_base
 			
 				$sdata["limit"] = 500;
 				$sdata["join_strategy"] = "data";
+				$sdata["site_id"] = array();
 				$olist_cnt = new object_list($sdata);
 
 				if ($data["per_page"])
@@ -564,7 +575,7 @@ class cb_search extends class_base
 					$row = array();
 					foreach($this->in_results as $iname => $item)
 					{
-						$row[$iname] = $o->prop_str($iname);
+						$row[$iname] = create_email_links($o->prop_str($iname));
 					}
 
 					foreach($price_props as $p_pn)

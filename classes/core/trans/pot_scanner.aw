@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.17 2005/04/05 14:06:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.18 2005/04/06 12:19:21 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -26,6 +26,8 @@ class pot_scanner extends core
 				$this->scan_file($class, $potf);
 			}
 		}
+
+		$this->_scan_ini_file();
 		echo "all done \n\n";
 	}
 
@@ -146,39 +148,10 @@ class pot_scanner extends core
 		{
 			echo "scanned file $file_from \n";
 
-			if (file_exists($file_to))
-			{
-				$tmpf = tempnam(aw_ini_get("server.tmpdir"), "awtrans");
-				$this->_write_file($tmpf, $strings, date("r", filemtime($file_to)), $file_from);
-			
-				if (md5($this->get_file(array("file" => $tmpf))) != md5($this->get_file(array("file" => $file_to))))
-				{
-					$this->_write_file($file_to, $strings, date("r"), $file_from);
-				}
-				@unlink($tmpf);
-			}
-			else
-			{
-				$this->_write_file($file_to, $strings, date("r"), $file_from);
-			}
+			$this->_cond_write_file($file_to, $strings, $file_from);
 
 			// now, for all languages, check of the .po file exists and if not, copy the new .pot over to that
-			$langs = $this->_get_langs();
-			foreach($langs as $lang)
-			{
-				$fn = aw_ini_get("basedir")."/lang/trans/$lang/po/".basename($file_to,".pot").".po";
-				if (!file_exists($fn))
-				{
-					copy($file_to, $fn);
-				}
-				else
-				{
-					// -U updates file in place, and real men do not need a backup
-					shell_exec("msgmerge -U --backup=off $fn $file_to 2>/dev/null");
-					//shell_exec("msgmerge -U --backup=off $fn $file_to -o $fn");
-
-				}
-			}
+			$this->_do_update_po($file_to);
 		}
 	}
 
@@ -478,5 +451,68 @@ class pot_scanner extends core
 			fwrite($fp, "\n");
 		}
 		fclose($fp);
+	}
+
+	function _scan_ini_file()
+	{
+		// compare mod dates
+		$inif = aw_ini_get("basedir")."/aw.ini";
+		$inipot = aw_ini_get("transdir")."/aw.ini.pot";
+		if (filemtime($inif) > filemtime($inipot))
+		{
+			// for now, scan all class names
+			$clss = aw_ini_get("classes");
+
+			$strings = array();
+			foreach($clss as $clid => $cld)
+			{
+				$strings[] = array(
+					"line" => "class_".$clid,
+					"str" => "Klassi ".$cld["name"]." ($clid) nimi",
+				);
+			}
+
+			$this->_cond_write_file($inipot, $strings, $inif);
+			$this->_do_update_po($inipot);
+			echo "wrote ini file translation\n";
+		}
+	}
+
+	function _cond_write_file($file_to, $strings, $file_from)
+	{
+		if (file_exists($file_to))
+		{
+			$tmpf = tempnam(aw_ini_get("server.tmpdir"), "awtrans");
+			$this->_write_file($tmpf, $strings, date("r", filemtime($file_to)), $file_from);
+		
+			if (md5($this->get_file(array("file" => $tmpf))) != md5($this->get_file(array("file" => $file_to))))
+			{
+				$this->_write_file($file_to, $strings, date("r"), $file_from);
+			}
+			@unlink($tmpf);
+		}
+		else
+		{
+			$this->_write_file($file_to, $strings, date("r"), $file_from);
+		}
+	}
+
+	function _do_update_po($file_to)
+	{
+		$langs = $this->_get_langs();
+		foreach($langs as $lang)
+		{
+			$fn = aw_ini_get("basedir")."/lang/trans/$lang/po/".basename($file_to,".pot").".po";
+			if (!file_exists($fn))
+			{
+				copy($file_to, $fn);
+			}
+			else
+			{
+				// -U updates file in place, and real men do not need a backup
+				shell_exec("msgmerge -U --backup=off $fn $file_to 2>/dev/null");
+				//shell_exec("msgmerge -U --backup=off $fn $file_to -o $fn");
+			}
+		}
 	}
 }

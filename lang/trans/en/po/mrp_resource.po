@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:49 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 15:13:04 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -303,74 +303,98 @@ msgstr ""
 msgid "Seose T&ouml;&ouml;aja kordus (RELTYPE_RECUR_WRK) tekst"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:139
 msgid "Vaba"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:140
 msgid "Kasutusel"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:141
 msgid "Suletud"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:145
 msgid "Uus"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:146
 msgid "Planeeritud"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:147
 msgid "Töös"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:148
 msgid "Katkestatud"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:149
 msgid "Valmis"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:150
 msgid "Lukustatud"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:151
 msgid "Paus"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:152
 msgid "Kustutatud"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:153
 msgid "Plaanist väljas"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:154
 msgid "Arhiveeritud"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:184
 msgid "Uut ressurssi saab luua vaid ressursihalduskeskkonnast. "
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:194
 msgid "Ressurss ei kuulu ühessegi ressursihaldussüsteemi. "
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:226
 msgid "/Ressursid"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:243
 msgid "Ressursi kasutust planeeritakse"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:244
 msgid "Ressursi kasutust ei planeerita"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:245
 msgid "Ressurss on allhange"
 msgstr ""
 
-msgid "Klient"
+#: classes/mrp/mrp_resource.aw:446 classes/mrp/mrp_resource.aw:524
+msgid "Ava"
 msgstr ""
 
-msgid "Projekt-Töö nr."
-msgstr ""
-
-msgid "Alustamisaeg"
-msgstr ""
-
+#: classes/mrp/mrp_resource.aw:451
 msgid "Staatus"
 msgstr ""
 
-msgid "Ava"
+#: classes/mrp/mrp_resource.aw:456
+msgid "Alustamisaeg"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:462
+msgid "Projekt-Töö nr."
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:468
+msgid "Klient"
 msgstr ""

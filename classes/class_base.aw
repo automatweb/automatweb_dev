@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.379 2005/04/06 10:16:14 duke Exp $
+// $Id: class_base.aw,v 2.380 2005/04/06 12:19:20 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1900,7 +1900,6 @@ class class_base extends aw_template
 		if ( 	/*($property["trans"] == 0) &&*/
 			empty($property["emb"]) &&
 			is_object($this->obj_inst) &&
-			$property["store"] != "connect" && 
 			$property["store"] != "no" && 
 			empty($property["value"]) && 
 			$this->obj_inst->is_property($property["name"]) && 
@@ -1910,7 +1909,7 @@ class class_base extends aw_template
 			// gives the correct result .. all connections of that type
 			if ($this->view == 1)
 			{
-				$property["value"] = $this->obj_inst->prop_str($property["name"]);
+				$property["value"] = create_email_links($this->obj_inst->prop_str($property["name"]));
 			}
 			else
 			{
@@ -2264,8 +2263,15 @@ class class_base extends aw_template
 				// fuck me plenty
 				if ($this->view && $val["orig_type"] == "select" && is_oid($val["value"]))
 				{
-					$tmp = new object($val["value"]);
-					$val["value"] = $tmp->name();
+					if (!$this->can("view", $val["value"]))
+					{
+						$val["value"] = "";
+					}
+					else
+					{
+						$tmp = new object($val["value"]);
+						$val["value"] = $tmp->name();
+					}
 				}
 				else
 				if ($this->view && $val["orig_type"] == "select" && is_array($val["value"]) && count(is_array($val["value"])))

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:51 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 15:17:56 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,91 +10,91 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :prop_name
+#: classes/class_base.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr ""
 
-#: :prop_name_comment
+#: classes/class_base.aw:prop_name_comment
 msgid "Omaduse Nimi (name) kommentaar"
 msgstr ""
 
-#: :prop_name_help
+#: classes/class_base.aw:prop_name_help
 msgid "Omaduse Nimi (name) help"
 msgstr ""
 
-#: :prop_comment
+#: classes/class_base.aw:prop_comment
 msgid "Omaduse Kommentaar (comment) caption"
 msgstr ""
 
-#: :prop_comment_comment
+#: classes/class_base.aw:prop_comment_comment
 msgid "Omaduse Kommentaar (comment) kommentaar"
 msgstr ""
 
-#: :prop_comment_help
+#: classes/class_base.aw:prop_comment_help
 msgid "Omaduse Kommentaar (comment) help"
 msgstr ""
 
-#: :prop_status
+#: classes/class_base.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
 msgstr ""
 
-#: :prop_status_comment
+#: classes/class_base.aw:prop_status_comment
 msgid "Omaduse Aktiivne (status) kommentaar"
 msgstr ""
 
-#: :prop_status_help
+#: classes/class_base.aw:prop_status_help
 msgid "Omaduse Aktiivne (status) help"
 msgstr ""
 
-#: :prop_needs_translation
+#: classes/class_base.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr ""
 
-#: :prop_needs_translation_comment
+#: classes/class_base.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
 msgstr ""
 
-#: :prop_needs_translation_help
+#: classes/class_base.aw:prop_needs_translation_help
 msgid "Omaduse Vajab tõlget (needs_translation) help"
 msgstr ""
 
-#: :prop_is_translated
+#: classes/class_base.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
 msgstr ""
 
-#: :prop_is_translated_comment
+#: classes/class_base.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
-#: :prop_is_translated_help
+#: classes/class_base.aw:prop_is_translated_help
 msgid "Omaduse Tõlge kinnitatud (is_translated) help"
 msgstr ""
 
-#: :group_general
+#: classes/class_base.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
-#: :581
+#: classes/class_base.aw:581
 msgid "tab panel"
 msgstr ""
 
-#: :1145
+#: classes/class_base.aw:1145
 msgid "Tagasi"
 msgstr ""
 
-#: :1323
+#: classes/class_base.aw:1323
 msgid "Seostehaldur"
 msgstr ""
 
-#: :2968
+#: classes/class_base.aw:2975
 msgid "See väli ei tohi olla tühi!"
 msgstr ""
 
-#: :2977
+#: classes/class_base.aw:2984
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: :4214
+#: classes/class_base.aw:4221
 msgid "%s is not a valid configuration form!"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon,  4 Apr 2005 14:20:22 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 15:12:59 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -639,22 +639,26 @@ msgid "Kuup&auml;ev tekstina?"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1789
-msgid "Filtreeritav v&auml;li"
+msgid "Grupp"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1795
-msgid "Filtreeritav v&auml;&auml;rtus"
+msgid "Filtreeritav v&auml;li"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1801
+msgid "Filtreeritav v&auml;&auml;rtus"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1807
 msgid "Kas t&auml;pne?"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2141
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2159
 msgid "Tulp"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2147
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2165
 msgid "Muundaja"
 msgstr ""
 

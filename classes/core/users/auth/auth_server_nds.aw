@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.2 2005/03/22 15:32:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.3 2005/04/06 12:19:21 kristo Exp $
 // auth_server_nds.aw - Autentimisserver NDS 
 /*
 
@@ -263,9 +263,9 @@ class auth_server_nds extends class_base
 		{
 			$cred["mail"] = $info[0]["eMailAddress"]["0"];
 		}
-		if ($info["count"] > 0 && $info[0]["givenName"]["count"])
+		if ($info["count"] > 0 && $info[0]["givenname"]["count"])
 		{
-			$cred["name"] = $info[0]["givenName"]["0"];
+			$cred["name"] = $info[0]["givenname"]["0"];
 		}
 	}
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:37 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 15:17:52 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,43 +10,43 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :49 :59 :98
+#: classes/vcl/releditor.aw:49 classes/vcl/releditor.aw:59 classes/vcl/releditor.aw:98
 msgid " "
 msgstr ""
 
-#: :50
+#: classes/vcl/releditor.aw:50
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr ""
 
-#: :60
+#: classes/vcl/releditor.aw:60
 msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 msgstr ""
 
-#: :99
+#: classes/vcl/releditor.aw:99
 msgid "Seda seost ei saa redigeerida!"
 msgstr ""
 
-#: :346
+#: classes/vcl/releditor.aw:346
 msgid "Uus"
 msgstr ""
 
-#: :353
+#: classes/vcl/releditor.aw:353
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: :361
+#: classes/vcl/releditor.aw:361
 msgid "Klooni valitud objektid"
 msgstr ""
 
-#: :418 :528
+#: classes/vcl/releditor.aw:418 classes/vcl/releditor.aw:528
 msgid "Muuda"
 msgstr ""
 
-#: :492 :517
+#: classes/vcl/releditor.aw:492 classes/vcl/releditor.aw:517
 msgid "ID"
 msgstr ""
 
-#: :522
+#: classes/vcl/releditor.aw:522
 msgid "Nimi"
 msgstr ""
 

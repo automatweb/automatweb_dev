@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.70 2005/04/04 08:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.71 2005/04/06 12:19:21 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1785,6 +1785,12 @@ class object_treeview_v2 extends class_base
 	function _init_filter_table(&$t)
 	{
 		$t->define_field(array(
+			"name" => "filter_group",
+			"caption" => t("Grupp"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
 			"name" => "filter_field",
 			"caption" => t("Filtreeritav v&auml;li"),
 			"align" => "center",
@@ -1828,9 +1834,15 @@ class object_treeview_v2 extends class_base
 		$saved_filters = new aw_array($arr['obj_inst']->meta("saved_filters"));
 
 		$max_id = 0;
+		$max_grp = 0;
 		foreach($saved_filters->get() as $id => $filter_data)
 		{
 			$t->define_data(array(
+				"filter_group" => html::textbox(array(
+						"name" => "filters[".$id."][group]",
+						"size" => 5,
+						"value" => $filter_data['group'],
+					)),
 				"filter_field" => html::select(array(
 						"name" => "filters[".$id."][field]",
 						"options" => $cols,
@@ -1848,10 +1860,16 @@ class object_treeview_v2 extends class_base
 			));
 
 			$max_id = max($max_id, $id);
+			$max_grp = max($max_grp, $filter_data["group"]);
 		}
 		$max_id++;
 
 		$t->define_data(array(
+			"filter_group" => html::textbox(array(
+					"name" => "filters[".$max_id."][group]",
+					"size" => 5,
+					"value" => $max_grp+1,
+				)),
 			"filter_field" => html::select(array(
 					"name" => "filters[".$max_id."][field]",
 					"options" => $cols,

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:23:38 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 15:13:01 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,200 +9,199 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/cfg/cb_search.aw:prop_name
+# classes/cfg/cb_search.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_name_comment
+# classes/cfg/cb_search.aw:prop_name_comment
 msgid "Omaduse Nimi (name) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_name_help
+# classes/cfg/cb_search.aw:prop_name_help
 msgid "Omaduse Nimi (name) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_comment
+# classes/cfg/cb_search.aw:prop_comment
 msgid "Omaduse Kommentaar (comment) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_comment_comment
+# classes/cfg/cb_search.aw:prop_comment_comment
 msgid "Omaduse Kommentaar (comment) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_comment_help
+# classes/cfg/cb_search.aw:prop_comment_help
 msgid "Omaduse Kommentaar (comment) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_status
+# classes/cfg/cb_search.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_status_comment
+# classes/cfg/cb_search.aw:prop_status_comment
 msgid "Omaduse Aktiivne (status) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_status_help
+# classes/cfg/cb_search.aw:prop_status_help
 msgid "Omaduse Aktiivne (status) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_root_class
+# classes/cfg/cb_search.aw:prop_root_class
 msgid "Omaduse Juurklass (root_class) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_root_class_comment
+# classes/cfg/cb_search.aw:prop_root_class_comment
 msgid "Omaduse Juurklass (root_class) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_root_class_help
+# classes/cfg/cb_search.aw:prop_root_class_help
 msgid "Omaduse Juurklass (root_class) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_root_class_cf
+# classes/cfg/cb_search.aw:prop_root_class_cf
 msgid "Omaduse Seadete vorm (root_class_cf) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_root_class_cf_comment
+# classes/cfg/cb_search.aw:prop_root_class_cf_comment
 msgid "Omaduse Seadete vorm (root_class_cf) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_root_class_cf_help
+# classes/cfg/cb_search.aw:prop_root_class_cf_help
 msgid "Omaduse Seadete vorm (root_class_cf) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_root_class_ot
+# classes/cfg/cb_search.aw:prop_root_class_ot
 msgid "Omaduse Objektit&uuml;&uuml;p (root_class_ot) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_root_class_ot_comment
+# classes/cfg/cb_search.aw:prop_root_class_ot_comment
 msgid "Omaduse Objektit&uuml;&uuml;p (root_class_ot) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_root_class_ot_help
+# classes/cfg/cb_search.aw:prop_root_class_ot_help
 msgid "Omaduse Objektit&uuml;&uuml;p (root_class_ot) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_next_connection
+# classes/cfg/cb_search.aw:prop_next_connection
 msgid "Omaduse Where do you want to go from here? (next_connection) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_next_connection_comment
+# classes/cfg/cb_search.aw:prop_next_connection_comment
 msgid "Omaduse Where do you want to go from here? (next_connection) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_next_connection_help
+# classes/cfg/cb_search.aw:prop_next_connection_help
 msgid "Omaduse Where do you want to go from here? (next_connection) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_view_cf
+# classes/cfg/cb_search.aw:prop_view_cf
 msgid "Omaduse Vaatamise seadete vorm (view_cf) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_view_cf_comment
+# classes/cfg/cb_search.aw:prop_view_cf_comment
 msgid "Omaduse Vaatamise seadete vorm (view_cf) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_view_cf_help
+# classes/cfg/cb_search.aw:prop_view_cf_help
 msgid "Omaduse Vaatamise seadete vorm (view_cf) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_choose_fields
+# classes/cfg/cb_search.aw:prop_choose_fields
 msgid "Omaduse Vali omadused (choose_fields) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_choose_fields_comment
+# classes/cfg/cb_search.aw:prop_choose_fields_comment
 msgid "Omaduse Vali omadused (choose_fields) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_choose_fields_help
+# classes/cfg/cb_search.aw:prop_choose_fields_help
 msgid "Omaduse Vali omadused (choose_fields) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_sform_tbl
+# classes/cfg/cb_search.aw:prop_sform_tbl
 msgid "Omaduse  (sform_tbl) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_sform_tbl_comment
+# classes/cfg/cb_search.aw:prop_sform_tbl_comment
 msgid "Omaduse  (sform_tbl) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_sform_tbl_help
+# classes/cfg/cb_search.aw:prop_sform_tbl_help
 msgid "Omaduse  (sform_tbl) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_parents
+# classes/cfg/cb_search.aw:prop_parents
 msgid "Omaduse Kataloogid, ksut otsida (parents) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_parents_comment
+# classes/cfg/cb_search.aw:prop_parents_comment
 msgid "Omaduse Kataloogid, ksut otsida (parents) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_parents_help
+# classes/cfg/cb_search.aw:prop_parents_help
 msgid "Omaduse Kataloogid, ksut otsida (parents) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_search
+# classes/cfg/cb_search.aw:prop_search
 msgid "Omaduse Otsi (search) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_search_comment
+# classes/cfg/cb_search.aw:prop_search_comment
 msgid "Omaduse Otsi (search) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_search_help
+# classes/cfg/cb_search.aw:prop_search_help
 msgid "Omaduse Otsi (search) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_sbt
+# classes/cfg/cb_search.aw:prop_sbt
 msgid "Omaduse Otsi (sbt) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_sbt_comment
+# classes/cfg/cb_search.aw:prop_sbt_comment
 msgid "Omaduse Otsi (sbt) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_sbt_help
+# classes/cfg/cb_search.aw:prop_sbt_help
 msgid "Omaduse Otsi (sbt) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_results
+# classes/cfg/cb_search.aw:prop_results
 msgid "Omaduse Tulemused (results) caption"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_results_comment
+# classes/cfg/cb_search.aw:prop_results_comment
 msgid "Omaduse Tulemused (results) kommentaar"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:prop_results_help
+# classes/cfg/cb_search.aw:prop_results_help
 msgid "Omaduse Tulemused (results) help"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:group_general
+# classes/cfg/cb_search.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:group_props
+# classes/cfg/cb_search.aw:group_props
 msgid "Grupi Väljad (props) pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:group_mktbl
+# classes/cfg/cb_search.aw:group_mktbl
 msgid "Grupi Koosta tulemuste tabel (mktbl) pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:group_parents
+# classes/cfg/cb_search.aw:group_parents
 msgid "Grupi Kataloogid (parents) pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:group_search
+# classes/cfg/cb_search.aw:group_search
 msgid "Grupi Otsi (search) pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:rel_RELTYPE_SYN
+# classes/cfg/cb_search.aw:rel_RELTYPE_SYN
 msgid "Seose s&uuml;non&uuml;mid (RELTYPE_SYN) tekst"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:rel_RELTYPE_PARENT
+# classes/cfg/cb_search.aw:rel_RELTYPE_PARENT
 msgid "Seose kataloog, kust otsida (RELTYPE_PARENT) tekst"
 msgstr ""
 
@@ -230,7 +229,7 @@ msgstr ""
 msgid "Tekst"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:185 classes/cfg/cb_search.aw:759
+#: classes/cfg/cb_search.aw:185 classes/cfg/cb_search.aw:770
 msgid "J&auml;rjekord"
 msgstr ""
 
@@ -238,75 +237,74 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:720
+#: classes/cfg/cb_search.aw:731
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:726
+#: classes/cfg/cb_search.aw:737
 msgid "Kataloog"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:732
+#: classes/cfg/cb_search.aw:743
 msgid "Mitu kirjet lehel"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:766
+#: classes/cfg/cb_search.aw:777
 msgid "Element"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:772
+#: classes/cfg/cb_search.aw:783
 msgid "Tabelis"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:778
+#: classes/cfg/cb_search.aw:789
 msgid "Hind"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:784
+#: classes/cfg/cb_search.aw:795
 msgid "Sorditav"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:790
+#: classes/cfg/cb_search.aw:801
 msgid "Vaikimisi sort"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:796
+#: classes/cfg/cb_search.aw:807
 msgid "Vaata tulp"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:802
+#: classes/cfg/cb_search.aw:813
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:818
+#: classes/cfg/cb_search.aw:829
 msgid "Muuda"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:819
+#: classes/cfg/cb_search.aw:830
 msgid "Vaata"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:820
+#: classes/cfg/cb_search.aw:831
 msgid "Kustuta"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:920
+#: classes/cfg/cb_search.aw:931
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1159
+#: classes/cfg/cb_search.aw:1170
 msgid "OID"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1166
+#: classes/cfg/cb_search.aw:1177
 msgid "Nimi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1173
+#: classes/cfg/cb_search.aw:1184
 msgid "Kasuta?"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1179
+#: classes/cfg/cb_search.aw:1190
 msgid "K.A. Alamkataloogid?"
 msgstr ""
-

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:41 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 15:13:00 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,25 +9,57 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/core/converters/image_convert.aw:111
+#: classes/core/converters/image_convert.aw:120
+#: classes/core/converters/image_convert.aw:130
+#: classes/core/converters/image_convert.aw:142
+#: classes/core/converters/image_convert.aw:151
+#: classes/core/converters/image_convert.aw:168
+#: classes/core/converters/image_convert.aw:177
+#: classes/core/converters/image_convert.aw:188
+#: classes/core/converters/image_convert.aw:199
+#: classes/core/converters/image_convert.aw:212
+#: classes/core/converters/image_convert.aw:221
 msgid "image_covert: could not detect any supported imagehandlers!"
 msgstr ""
 
+#: classes/core/converters/image_convert.aw:274
 msgid ""
 "image_convert::gd_driver::load_from_string(): could not detect image format!"
 msgstr ""
 
+#: classes/core/converters/image_convert.aw:305
 msgid ""
 "image_convert::gd_driver::load_from_file(): could not detect image format!"
 msgstr ""
 
+#: classes/core/converters/image_convert.aw:346
+#: classes/core/converters/image_convert.aw:499
+#: classes/core/converters/image_convert.aw:680
 msgid "image_convert::get(%s): unknown image type!"
 msgstr ""
 
+#: classes/core/converters/image_convert.aw:376
 msgid "image_convert::save(%s,%s): unknown image type!"
 msgstr ""
 
+#: classes/core/converters/image_convert.aw:447
 msgid "image_convert::load_from_file(%s): no such file!"
 msgstr ""
 
+#: classes/core/converters/image_convert.aw:531
 msgid "image_convert::save(%s, %s): unknown image type!"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:595
+msgid ""
+"image_convert::load_from_string(): could not read image from string! reason "
+"= %s, desc = %s"
+msgstr ""
+
+#: classes/core/converters/image_convert.aw:611
+#: classes/core/converters/image_convert.aw:628
+msgid ""
+"image_convert::load_from_file(%s): could not read image from file! reason = %"
+"s, desc = %s"
 msgstr ""

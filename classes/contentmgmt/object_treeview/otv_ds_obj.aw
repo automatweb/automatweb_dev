@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.32 2005/04/04 08:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.33 2005/04/06 12:19:21 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -503,30 +503,50 @@ class otv_ds_obj extends class_base
 		// if there is $params['filters'] array then lets filter
 		if(!empty($params['filters']) && is_array($params['filters']))
 		{
-			// filtering by these filters which are saved in otv
+			// make array by group
+			$filt_by_grp = array();
 			foreach($params['filters']['saved_filters']->get() as $filter)
 			{
-				if ($filter["field"] == "__fulltext")
+				if (!isset($filter["group"]))
 				{
-					$cond = array();
-					foreach($this->_filt_get_fields($ob) as $_fn => $_fc)
+					$filter["group"] = "";
+				}
+				$filt_by_grp[$filter["group"]][] = $filter;
+			}
+
+			// filtering by these filters which are saved in otv
+			foreach($filt_by_grp as $grp => $filters)
+			{
+				$cur_filt = array();
+				foreach($filters as $filter)
+				{
+					if ($filter["field"] == "__fulltext")
 					{
-						$cond[$_fn] = "%".$filter["value"]."%";
+						$cond = array();
+						foreach($this->_filt_get_fields($ob) as $_fn => $_fc)
+						{
+							$cond[$_fn] = "%".$filter["value"]."%";
+						}
+						$cur_filt[] = new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => $cond
+						));
 					}
-					$_ft[] = new object_list_filter(array(
-						"logic" => "OR",
-						"conditions" => $cond
-					));
+					else
+					if ($filter['is_strict'] == 1)
+					{
+						$cur_filt[$filter['field']] = $filter['value'];
+					}
+					else
+					{
+						$cur_filt[$filter['field']] = "%".$filter['value']."%";
+					}
 				}
-				else
-				if ($filter['is_strict'] == 1)
-				{
-					$_ft[$filter['field']] = $filter['value'];
-				}
-				else
-				{
-					$_ft[$filter['field']] = "%".$filter['value']."%";
-				}
+
+				$_ft[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => $cur_filt
+				));
 			}
 			// filtering by $tv_sel
 			if (($ob->prop("use_meta_as_folders") == 1) && empty($params['filters']['char']) && !empty($tv_sel))
@@ -543,7 +563,6 @@ class otv_ds_obj extends class_base
 					$_ft[$params['filters']['filter_by_char_field']] = $params['filters']['char']."%";
 				}
 			}
-
 		}
 
 		enter_function("otv_ds_obj::get_objects::list");
