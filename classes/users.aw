@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.70 2002/12/30 13:39:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.71 2002/12/30 13:40:41 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2105,7 +2105,7 @@ class users extends users_user
 		));
 
 		$host = aw_global_get("HTTP_HOST");
-		return str_replace("/automatweb", "", $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $hash),"users",0,0));
+		return str_replace("orb.aw", "index.aw", str_replace("/automatweb", "", $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $hash),"users",0,0)));
 	}
 }
 ?>
