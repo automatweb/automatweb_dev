@@ -4,6 +4,7 @@
 		<action name="method_parser" is_public="1" caption="Meetodi kuvaja">
 			<function name="method_parser">
 				<arguments>
+					<required name="id" type="int" acl="view"/>
 				</arguments>
 			</function>
 		</action>
