@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.58 2002/11/11 15:56:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.59 2002/11/11 15:59:57 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -35,7 +35,7 @@ class aliasmgr extends aw_template
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("search_aliases",array("no_reforb" => 1, "search" => 1, "id" => $id),$this->use_class),
-			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"]),$this->use_class),
+			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id),$this->use_class),
 			"toolbar" => $this->mk_toolbar(),
 			"form" => $form,
 			"table" => $search->get_results(),
