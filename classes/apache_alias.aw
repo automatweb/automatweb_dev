@@ -99,13 +99,17 @@ class apache_alias extends aw_template
 			$title = "Lisa alias";
 		};
 
+		$error = aw_global_get("ap_error");
+
+
 		$link = $this->mk_my_orb("list",array(),"apache_alias",1,0);
 		$this->mk_path(-1,"<a href='$link'>Aliased</a> / $title");
 
 		$this->vars(array(
 			"id" => $rec["id"],
-			"alias" => $rec["alias"],
-			"dir" => $rec["dir"],
+			"alias" => ($error) ? aw_global_get("ap_alias") : $rec["alias"],
+			"dir" => ($error) ? aw_global_get("ap_dir") : $rec["dir"],
+			"error" => $error,
 			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
 		));
 
@@ -118,6 +122,31 @@ class apache_alias extends aw_template
 	{
 		$this->quote($args);
 		extract($args);
+
+		if (strlen($alias) == 0)
+		{
+			$error .= "Alias ei saa olla tühi!<br>";
+		};
+
+		if (strlen($dir) == 0)
+		{
+			$error .= "Kataloog ei saa olla tühi!<br>";
+		};
+
+		$check = $this->get_record("apache_aliases","alias",$alias);
+		if ($check)
+		{
+			$error .= "Sellise nimega alias on juba olemas!<br>";
+		};
+
+		if ($error)
+		{
+			aw_session_set("ap_alias",$alias);
+			aw_session_set("ap_dir",$dir);
+			aw_session_set("ap_error",$error);
+			return $this->mk_my_orb($id ? "change" : "new",array("id" => $id));
+		};
+
 		$uid = aw_global_get("uid");
 		$t = time();
 		if ($id)
