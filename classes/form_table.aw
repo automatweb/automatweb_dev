@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.38 2002/07/23 12:56:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.39 2002/07/23 16:40:45 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -720,6 +720,7 @@ class form_table extends form_base
 		$this->table["show_second_table_search_val_el"] = $settings["show_second_table_search_val_el"];
 		$this->table["no_show_empty"] = $settings["no_show_empty"];
 		$this->table["empty_table_text"] = $settings["empty_table_text"];
+		$this->table["no_grpels_in_restrict"] = $settings["no_grpels_in_restrict"];
 		$this->table["forms"] = $this->make_keys($settings["forms"]);
 		$this->table["languages"] = $this->make_keys($settings["languages"]);
 		$this->table["moveto"] = $this->make_keys($settings["folders"]);
@@ -820,6 +821,7 @@ class form_table extends form_base
 			"uee_grps" => $this->mpicker($this->table["user_entries_except_grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
 			"skip_one_liners" => checked($this->table["skip_one_liners"]),
 			"show_second_table" => checked($this->table["show_second_table"]),
+			"no_grpels_in_restrict" => checked($this->table["no_grpels_in_restrict"]),
 			"no_show_empty" => checked($this->table["no_show_empty"]),
 			"empty_table_text" => $this->table["empty_table_text"],
 			"view_cols" => $this->mpicker($this->table["view_cols"], $els),
@@ -1573,7 +1575,7 @@ class form_table extends form_base
 		$url = $ru.$sep."use_table=".$alias_target;
 		// if we are doing grouping in the table then we must include the group elements value(s) as a restrict search element
 		// as well, because it would make a whole lotta sense that way
-		if (is_array($this->table["rgrps"]))
+		if (is_array($this->table["rgrps"]) && !$this->table["no_grpels_in_restrict"])
 		{
 			foreach($this->table["rgrps"] as $nr => $_dat)
 			{
