@@ -73,12 +73,23 @@ function parse_config($file)
 					// ok, do the bad eval version
 					$arrparams = substr($varname,$bpos);
 					$arrname = substr($varname,0,$bpos);
-					if (!is_array($GLOBALS["cfg"][$varclass][$arrname]))
+					if (!isset($GLOBALS["cfg"][$varclass][$arrname]) || !is_array($GLOBALS["cfg"][$varclass][$arrname]))
 					{
 						$GLOBALS["cfg"][$varclass][$arrname] = array();
 					}
-					$code = "\$GLOBALS[cfg][\$varclass][\$arrname]".$arrparams." = \"".$varvalue."\";";
-//					echo "evaling $code <br>";
+					$code = "\$GLOBALS[\"cfg\"][\"\$varclass\"][\"\$arrname\"]".$arrparams." = \"".$varvalue."\";";
+					$len = strlen($code);
+					for($i = 0; $i < $len; $i++)
+					{
+						if ($code{$i} == "[" && !($code{$i+1} == "\"" || $code{$i+1} == "'"))
+						{
+							$code = substr($code, 0, $i+1)."\"".substr($code, $i+1);
+						}
+						if ($code{$i} == "]" && !($code{$i-1} == "\"" || $code{$i-1} == "'"))
+						{
+							$code = substr($code, 0, $i)."\"".substr($code, $i);
+						}
+					}
 					eval($code);
 				}
 				else
@@ -192,7 +203,7 @@ function init_config($arr)
 
 	// only load those definitions if fastcall is not set. This shouldnt break anything
 	// and should save us a little memory. -- duke
-	if (!$GLOBALS["fastcall"])
+	if (!isset($GLOBALS["fastcall"]))
 	{
 		// and here do the defs for classes
 		foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
@@ -241,7 +252,7 @@ function aw_config_init_class(&$that)
 {
 //	enter_function("__global::aw_config_init_class",array());
 	$class = get_class($that);
-	$that->cfg = array_merge($GLOBALS["cfg"][$class],$GLOBALS["cfg"]["__default"]);
+	$that->cfg = array_merge((isset($GLOBALS["cfg"][$class]) ? $GLOBALS["cfg"][$class] : array()),$GLOBALS["cfg"]["__default"]);
 	$that->cfg["acl"] = $GLOBALS["cfg"]["acl"];
 	$that->cfg["config"] = $GLOBALS["cfg"]["config"];
 //	exit_function("__global::aw_config_init_class");
@@ -437,6 +448,19 @@ function aw_shutdown()
 	echo "<!--\n";
 	echo "enter_function calls = ".$GLOBALS["enter_function_calls"]." \n";
 	echo "exit_function calls = ".$GLOBALS["exit_function_calls"]." \n";
+/*	echo "error handler calls = ".$GLOBALS["error_handler_calls"]." \n";
+	echo "error handler calls by type: \n";
+	foreach($GLOBALS["error_handler_calls_by_type"] as $errno => $cnt)
+	{
+		echo "    $errno => $cnt \n";
+	}
+	echo "\nerror handler calls by file: \n";
+	arsort($GLOBALS["error_handler_calls_by_file"]);
+	foreach($GLOBALS["error_handler_calls_by_file"] as $errno => $cnt)
+	{
+		arsort($GLOBALS["error_handler_calls_by_file_line"][$errno]);
+		echo "    $errno => $cnt (on lines: ".join(" ",map2("lnr: %s , cnt = %s ;",$GLOBALS["error_handler_calls_by_file_line"][$errno])).")\n";
+	}*/
 	echo "-->\n";
 }
 
@@ -479,4 +503,92 @@ function exit_function($name,$ret = "")
 	$GLOBALS["exit_function_calls"]++;
 }
 
+$GLOBALS["error_handler_calls"] = 0;
+
+function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
+{
+	if ($errno == 8 || $errno == 2)
+	{
+		$GLOBALS["error_handler_calls"]++;
+		if (!isset($GLOBALS["error_handler_calls_by_type"][$errno]))
+		{
+			$GLOBALS["error_handler_calls_by_type"][$errno] = 0;
+		}
+		$GLOBALS["error_handler_calls_by_type"][$errno]++;
+
+		if (!isset($GLOBALS["error_handler_calls_by_file"][$errfile]))
+		{
+			$GLOBALS["error_handler_calls_by_file"][$errfile] = 0;
+		}
+		$GLOBALS["error_handler_calls_by_file"][$errfile]++;
+
+		if (!isset($GLOBALS["error_handler_calls_by_file_line"][$errfile][$errline]))
+		{
+			$GLOBALS["error_handler_calls_by_file_line"][$errfile][$errline] = 0;
+		}
+		$GLOBALS["error_handler_calls_by_file_line"][$errfile][$errline]++;
+		return;
+	}
+	/*ob_start();
+	var_dump($context);
+	$ct = ob_get_contents();
+	ob_end_clean();*/
+
+	$is_rpc_call = $GLOBALS["__aw_globals"]["__is_rpc_call"];
+	$rpc_call_type = $GLOBALS["__aw_globals"]["__rpc_call_type"];
+
+	$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<Br><br>\n\n PHP error: errno = $errno , errstr = $errstr, errfile = $errfile, errline = $errline , context = $context\n<br>";
+
+	// meilime veateate listi ka
+	$subj = "Viga saidil ".$GLOBALS["cfg"]["__default"]["baseurl"];
+	if (!$is_rpc_call && !headers_sent())
+	{
+		header("X-AW-Error: 1");
+	}
+	$content = "\nVeateade: ".$msg;
+	$content.= "\nKood: ".$err_type;
+	$content.= "\nfatal = ".($fatal ? "Jah" : "Ei" )."\n";
+	$content.= "PHP_SELF = ".$GLOBALS["__aw_globals"]["PHP_SELF"]."\n";
+	$content.= "lang_id = ".$GLOBALS["__aw_globals"]["lang_id"]."\n";
+	$content.= "uid = ".$GLOBALS["__aw_globals"]["uid"]."\n";
+	$content.= "section = ".$GLOBALS["section"]."\n";
+	$content.= "url = ".$GLOBALS["cfg"]["__default"]["baseurl"].$GLOBALS["__aw_globals"]["REQUEST_URI"]."\n-----------------------\n";
+	$content.= "is_rpc_call = $is_rpc_call\n";
+	$content.= "rpc_call_type = $rpc_call_type\n";
+	global $HTTP_COOKIE_VARS;
+	foreach($HTTP_COOKIE_VARS as $k => $v)
+	{
+		$content.="HTTP_COOKIE_VARS[$k] = $v \n";
+	}
+	global $HTTP_GET_VARS;
+	foreach($HTTP_GET_VARS as $k => $v)
+	{
+		$content.="HTTP_GET_VARS[$k] = $v \n";
+	}
+	global $HTTP_POST_VARS;
+	foreach($HTTP_POST_VARS as $k => $v)
+	{
+		$content.="HTTP_POST_VARS[$k] = $v \n";
+	}
+	global $HTTP_SERVER_VARS;
+	foreach($HTTP_SERVER_VARS as $k => $v)
+	{
+		// we will not send out the password or the session key
+		if ( ($k == "PHP_AUTH_PW") || ($k == "automatweb") )
+		{
+			continue;
+		};
+		$content.="HTTP_SERVER_VARS[$k] = $v \n";
+	}
+
+	// try to find the user's email;
+	$head = "";
+	mail("vead@struktuur.ee", $subj, $content,$head);
+
+	die("<br><b>AW_ERROR: $msg</b><br>");
+}
+
+/*error_reporting(E_ALL ^ E_NOTICE);
+set_error_handler("__aw_error_handler");
+error_reporting(E_ALL ^ E_NOTICE);*/
 ?>
