@@ -110,6 +110,7 @@ class form_db_base extends aw_template
 			if ($this->arr["save_tables_obj_tbl"] != "")
 			{
 				// if we get here, we must create an object in the object table and also add a row in the corresponding table
+				$this->quote(&$arr["name"]);
 				$entry_id = $this->new_object($arr);
 			}
 			else
@@ -142,6 +143,7 @@ class form_db_base extends aw_template
 			// if we are not saving in precreated tables we always create a new object for entry forms
 			// and we should have an option for search forms so that their entries could be saved in the session
 			// so we won't be creating all kinds of useless search-objects and slow down the system.
+			$this->quote(&$arr["name"]);
 			$entry_id = $this->new_object($arr);
 		}
 		$this->restore_handle();
