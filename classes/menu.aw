@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.23 2003/01/24 13:15:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.24 2003/01/24 13:43:28 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -145,7 +145,7 @@
 	@property hide_noact type=checkbox ch_value=1
 	@caption Peida ära, kui dokumente pole
 	
-	@property ndocs type=textbox size=3
+	@property ndocs type=textbox size=3 group=relations
 	@caption Mitu viimast dokumenti
 
 	@classinfo relationmgr=yes
