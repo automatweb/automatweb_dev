@@ -43,7 +43,7 @@
 		</action>
 
 		<action name="edit">
-			<function name="create_message">
+			<function name="gen_edit_form">
 				<arguments>
 					<required name="id"/>
 				</arguments>
