@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.11 2004/10/17 21:07:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.12 2004/10/29 15:53:58 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -95,7 +95,7 @@ class project extends class_base
 		
 		lc_site_load("project",&$this);
 
-		$this->event_entry_classes = array(CL_CALENDAR_EVENT,CL_STAGING);
+		$this->event_entry_classes = array(CL_CALENDAR_EVENT,CL_STAGING,CL_CRM_MEETING,CL_TASK,CL_CRM_CALL);
 	}
 
 	function get_property($arr)
@@ -196,8 +196,11 @@ class project extends class_base
 		$ol = new object_list(array(
 			"parent" => $parents,
 			"sort_by" => "planner.start",
-			new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
+			"class_id" => $this->event_entry_classes,
+			"CL_STAGING.start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start),
 		));
+		//new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
+
 
 		$req = urlencode(aw_global_get("REQUEST_URI"));
 
@@ -214,7 +217,8 @@ class project extends class_base
 			$start = $o->prop("start1");
 			$clid = $o->class_id();
 			
-			$clinf = $this->cfg["classes"][$clid];
+			$clss = aw_ini_get("classes");
+			$clinf = $clss[$clid];
 
 			$link = $this->mk_my_orb("change",array("id" => $id,"return_url" => $req),$clid);
 
@@ -339,7 +343,7 @@ class project extends class_base
 	{
 		aw_disable_acl();
 		$ol = new object_list(array(
-			"brother_of" => 4521,
+			"brother_of" => 10412,
 			"lang_id" => array(),
 		));
 		echo dbg::dump($ol);
@@ -349,6 +353,7 @@ class project extends class_base
 		{
 			print "id = " . $o->id();
 			print "prnt = " . $o->parent();
+			print "lang = " . $o->lang();
 			print "<br>";
 		};
 		
@@ -388,9 +393,6 @@ class project extends class_base
 	{
 		extract($arr);
 
-		// ooo fuck .. see ju keerab mul kõik perse!
-		// events will ALWAYS be placed under the original project object. translations are just that ..
-		// translations .. they do not contain other objects
 		$o = new object($arr["id"]);
 		$orig_conns = $o->connections_from(array(
 			"type" => 103,
@@ -438,6 +440,7 @@ class project extends class_base
 		if ($arr["range"]["limit_events"])
 		{
 			$limit = " LIMIT ".$arr["range"]["limit_events"];
+			$limit_num = $arr["range"]["limit_events"];
 		}
 
 		// ma pean lugema sündmusi sellest projektist ja selle alamprojektidest.
@@ -445,10 +448,12 @@ class project extends class_base
 		$_end = $arr["range"]["end"];
 		$lang_id = aw_global_get("lang_id");
 		$stat_str = "objects.status != 0";
-		if ($arr["status"])
+
+		if ($arr["status"] && aw_global_get("uid") == "")
 		{
 			$stat_str = "objects.status = " . $arr["status"];
 		};
+
 		// mulle tundub et ma pean siis lugema kõiki objekte sõltumata lang_id-st
 		/*
 		$q = "SELECT objects.oid AS id,objects.parent,objects.class_id,objects.brother_of,objects.name,planner.start,planner.end
@@ -458,13 +463,28 @@ class project extends class_base
                         (planner.end <= '${_end}' OR planner.end IS NULL) AND
                         $stat_str AND parent IN (${parent}) AND lang_id = ${lang_id} $limit";
 		*/		
-		$q = "SELECT objects.oid AS id,objects.parent,objects.class_id,objects.brother_of,objects.name,planner.start,planner.end
+
+
+		$active_lang_only = aw_ini_get("project.act_lang_only");
+
+		$q = "
+			SELECT 
+				objects.oid AS id,
+				objects.parent,
+				objects.class_id,
+				objects.brother_of,
+				objects.name,
+				planner.start,
+				planner.end
 			FROM planner
 			LEFT JOIN objects ON (planner.id = objects.brother_of)
 			WHERE planner.start >= '${_start}' AND
 			(planner.end <= '${_end}' OR planner.end IS NULL) AND
-			$stat_str AND parent IN (${parent}) $limit";
+			$stat_str AND objects.parent IN (${parent}) order by planner.start"; // $limit
 
+		
+
+		enter_function("project::query");
 		dbg::p1($q);
 		$this->db_query($q);
 		$events = array();
@@ -473,20 +493,20 @@ class project extends class_base
 		obj_set_opt("no_auto_translation", 0);
 		$lang_id = aw_global_get("lang_id");
 		// weblingi jaoks on vaja küsida connectioneid selle projekti juurde!
-		$active_lang_only = aw_ini_get("project.act_lang_only");
 		while($row = $this->db_next())
 		{
 			// now figure out which project this thing belongs to?
-			$pr_obj = new object($row["parent"]);
 			$projects[$row["parent"]] = $row["parent"];
 			$web_page_id = $row["parent"];
+
 			if (!$this->can("view",$row["brother_of"]))
 			{
+				dbg::p1($row["name"]);
+				dbg::p1("skip1");
 				continue;
 			};
+
 			$e_obj = new object($row["brother_of"]);
-			//$e_obj = new object($row["id"]);
-			// XXX: can this code be made optional?
 			$pr_obj = new object($e_obj->parent());
 			$project_name = $pr_obj->name();
 
@@ -494,11 +514,11 @@ class project extends class_base
 			// check whether this project has an attached image
 			if ($active_lang_only == 1 && $pr_obj->lang_id() != $lang_id)
 			{
+				dbg::p1($row["name"]);
+				dbg::p1("skip2");
 				continue;
-			}
-			else
-			{
 			};
+
 
 			obj_set_opt("no_auto_translation",1);
 			$fx = $pr_obj->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
@@ -512,7 +532,6 @@ class project extends class_base
 				"from.lang_id" => aw_global_get("lang_id"),
 			));
 
-
 			$first = reset($conns);
 			if (is_object($first))
 			{
@@ -522,14 +541,16 @@ class project extends class_base
 			};
 			
 
+			// but some objects have no idea about an image
+			// what the hell am I going to do with those?
 			$pr_image = $pr_obj->get_first_obj_by_reltype(RELTYPE_PRJ_IMAGE);
+
 
 			if ($pr_image)
 			{
 				$inst = $pr_image->instance();
 				$row["project_image"] = $inst->get_url_by_id($pr_image->id());
 			};
-
 
 			$events[$e_obj->brother_of()] = array(
 				"start" => $row["start"],
@@ -548,7 +569,14 @@ class project extends class_base
 				),$row["class_id"],true,true),
 			);
 			$ids[$row["brother_of"]] = $row["brother_of"];
+
+			if (++$limit_counter >= $limit_num && $limit_num)
+			{
+				break;
+			}
 		};
+
+		exit_function("project::query");
 
 		if (sizeof($events) > 0)
 		{
@@ -557,12 +585,14 @@ class project extends class_base
 
 			$this->prj_levels[$mpr->id()] = $this->prj_level;
 			$this->prj_level++;
+
 	
 			$this->used = array();
 			$prj_levels = $this->prj_levels;
 
 
 			$this->_recurse_projects2($mpr->id());
+			
 
 			$ol = new object_list(array(
 				"brother_of" => $ids,
@@ -597,6 +627,7 @@ class project extends class_base
 			};
 
 		};
+
 
 		return $events;
 	}
@@ -831,11 +862,12 @@ class project extends class_base
 				"name" => "x_" . $o->id(),
 				"parent" => "subprj",
 				"text" => "Etendus",
-				"link" => $this->mk_my_orb("change",array(
-					"id" => $o->id(),
-					"group" => "add_event",
+				"link" => $this->mk_my_orb("new",array(
+					"parent" => $o->id(),
+					"group" => "change",
 					"clid" => CL_STAGING,
-				)),
+					"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+				),CL_STAGING),
 			));
 		};
 
