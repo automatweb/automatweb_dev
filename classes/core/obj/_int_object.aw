@@ -991,7 +991,7 @@ class _int_object
 			$type = "oid";
 		}
 
-		$val = $this->obj["properties"][$param];
+		$val = $this->_int_get_prop($param);
 		switch($type)
 		{
 			case "relmanager":
