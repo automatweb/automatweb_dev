@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.344 2004/12/17 12:11:57 duke Exp $
+// $Id: class_base.aw,v 2.345 2004/12/21 13:39:55 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2377,8 +2377,8 @@ class class_base extends aw_template
 								"name" => "grp_" . $grp_id,
 								"img" => empty($grp_data["icon"]) ? "" : $grp_data["icon"] . ".gif",
 								"tooltip" => $grp_data["caption"],
-								"target" => "_top",
-								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases")) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id)),
+								"target" => "contentarea",
+								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => 1)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => 1)),
 							));
 							
 						}
