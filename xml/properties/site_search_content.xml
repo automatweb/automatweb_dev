@@ -80,6 +80,15 @@
             <caption>Otsingugruppide konfigureerimine</caption>
       </property>
       <property>
+            <name>default_search_opt</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>searchgroups</group>
+            <type>select</type>
+            <caption>Vaikimisi otsingu t&amp;uuml;&amp;uuml;p</caption>
+      </property>
+      <property>
             <name>reledit</name>
             <table>objects</table>
             <field>meta</field>

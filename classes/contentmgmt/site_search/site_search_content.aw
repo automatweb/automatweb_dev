@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.30 2004/12/06 12:18:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.31 2004/12/08 10:25:50 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -40,6 +40,8 @@ caption Vaikimisi otsingu grupp
 @property grpcfg type=table group=searchgroups
 @caption Otsingugruppide konfigureerimine
 
+@property default_search_opt type=select group=searchgroups
+@caption Vaikimisi otsingu t&uuml;&uuml;p
 
 property static_gen_repeater type=relpicker reltype=RELTYPE_REPEATER group=static
 caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
@@ -120,8 +122,17 @@ class site_search_content extends class_base
 					}
 				}
 				asort($options);
-				$data["options"] = $options;
-			break;
+				$prop["options"] = $options;
+				break;
+
+			case "default_search_opt":
+				$prop["options"] = array(
+					0 => "--",
+					S_OPT_ANY_WORD => "&Uuml;ksk&otilde;ik milline s&otilde;na",
+					S_OPT_ALL_WORDS => "K&otilde;ik s&otilde;nad",
+					S_OPT_PHRASE => "Fraas"
+				);
+				break;
 		};
 		return $retval;
 	}
@@ -1022,7 +1033,7 @@ class site_search_content extends class_base
 		
 		if (empty($arr["opts"]["str"]))
 		{
-			$arr["opts"]["str"] = S_OPT_ANY_WORD;
+			$arr["opts"]["str"] = $o->prop("default_search_opt") ? $o->prop("default_search_opt") : S_OPT_PHRASE;
 		}
 
 		load_vcl("date_edit");
