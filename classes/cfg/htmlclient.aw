@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.92 2005/02/14 13:26:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.93 2005/02/14 13:33:33 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -505,7 +505,6 @@ class htmlclient extends aw_template
 	// !Creates a submit button
 	function put_submit($arr)
 	{
-		arr($arr);
 		$name = "SUBMIT";
 		$tpl_vars = array(
 			"sbt_caption" => $arr["caption"] ? $arr["caption"] : "Salvesta",
