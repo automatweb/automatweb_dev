@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.16 2004/05/17 10:31:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.17 2004/06/15 10:39:10 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -167,6 +167,8 @@ class vcalendar extends aw_template
 
 	function get_html($arr = array())
 	{
+		global $awt;
+		$awt->start("gen-calendar-html");
 		$this->styles = array();
 		if (is_array($arr["style"]))
 		{
@@ -189,7 +191,9 @@ class vcalendar extends aw_template
 		switch($this->range["viewtype"])
 		{
 			case "month":
+				$awt->start("draw-month");
 				$content = $this->draw_month();
+				$awt->stop("draw-month");
 				$caption = get_est_month(date("m",$this->range["timestamp"]));
 				$caption .= " ";
 				$caption .= date("Y",$this->range["timestamp"]);
@@ -230,10 +234,12 @@ class vcalendar extends aw_template
 			$meth = $this->overview_func[1];
 			if (method_exists($inst,$meth))
 			{
+				$awt->start("get-overview");
 				$overview_items = $inst->$meth(array(
 					"start" => $ostart,
 					"end" => $oend,
 				));
+				$awt->stop("get-overview");
 			};
 
 			if (is_array($overview_items))
@@ -271,7 +277,8 @@ class vcalendar extends aw_template
 				$ri = 0;
 				$re = 0;
 			};
-				
+			
+			$awt->start("draw-s-month");
 			for ($i = $ri; $i <= $re; $i++)
 			{
 				$range = get_date_range(array(
@@ -280,6 +287,7 @@ class vcalendar extends aw_template
 				));
 				$mn .= $this->draw_s_month($range);
 			};
+			$awt->stop("draw-s-month");
 		};
 
 		$this->read_template($this->container_template);
@@ -304,12 +312,14 @@ class vcalendar extends aw_template
 		$tasks = array();
 		if (isset($this->tasklist_func))
 		{
+			$awt->start("get-tasklist");
 			$inst = $this->tasklist_func[0];
 			$meth = $this->tasklist_func[1];
 			if (method_exists($inst,$meth))
 			{
 				$tasks = $inst->$meth();
 			};
+			$awt->stop("get-tasklist");
 		};
 
 		$tstr = "";
@@ -344,9 +354,13 @@ class vcalendar extends aw_template
 			$years[$i] = $i;
 		};
 
+		// I'm trying to get the javascript function inside the template to generate
+		// a correct url
+		$urlsufix = strpos(aw_global_get("REQUEST_URI"),"?") === false ? "?" : "";
+
 		$this->vars(array(
 			"PAGE" => $ts,
-			"mininaviurl" => aw_url_change_var("date",""),
+			"mininaviurl" => aw_url_change_var("date","") . $urlsufix,
 			"naviurl" => aw_url_change_var("date",""),
 			"mnames" => html::picker((int)$m,$mnames),
 			"years" => html::picker($y,$years),
@@ -359,6 +373,8 @@ class vcalendar extends aw_template
 			"today_date" => date("d.m.Y"),
 			"act_day_tm" => $this->range["timestamp"],
 		));
+
+		$awt->stop("gen-calendar-html");
 
 		return $this->parse();
 	}
