@@ -837,16 +837,16 @@
             <contacts>
                   <caption>Kontaktid</caption>
             </contacts>
-            <oldcontacts>
-                  <caption>Isikud</caption>
-                  <parent>people</parent>
-                  <submit>no</submit>
-            </oldcontacts>
             <contacts2>
                   <caption>Puuvaade</caption>
                   <parent>people</parent>
                   <submit>no</submit>
             </contacts2>
+            <oldcontacts>
+                  <caption>Isikud</caption>
+                  <parent>people</parent>
+                  <submit>no</submit>
+            </oldcontacts>
             <overview>
                   <caption>Tegevused</caption>
             </overview>

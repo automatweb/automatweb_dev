@@ -341,8 +341,8 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 @groupinfo people caption="Inimesed"
 
 @groupinfo contacts caption="Kontaktid"
-@groupinfo oldcontacts caption="Isikud" parent=people submit=no
 @groupinfo contacts2 caption="Puuvaade" parent=people submit=no
+@groupinfo oldcontacts caption="Isikud" parent=people submit=no
 @groupinfo overview caption="Tegevused" 
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
 @groupinfo calls caption="Kõned" parent=overview submit=no
@@ -783,7 +783,7 @@ class crm_company extends class_base
 			break;
 			*/
 			case 'people':
-				$arr['link'] = aw_url_change_var(array("group" => "contacts2"));
+				//$arr['link'] = aw_url_change_var(array("group" => "contacts2"));
 				//arr($arr);
 			break;
 		}
