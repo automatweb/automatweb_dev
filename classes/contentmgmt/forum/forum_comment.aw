@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.8 2004/07/02 16:22:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.9 2004/07/07 18:23:24 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -57,24 +57,24 @@ class forum_comment extends class_base
 		));
 	}
 
-	function get_property($args = array())
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "uname":
-				if (is_object($args["obj_inst"]) && !is_oid($args["obj_inst"]->id()))
+				if (is_object($arr["obj_inst"]) && !is_oid($arr["obj_inst"]->id()))
 				{
-					$data["value"] = $_COOKIE["aw_mb_name"];
-					$this->dequote($data["value"]);
+					$prop["value"] = $_COOKIE["aw_mb_name"];
+					$this->dequote($prop["value"]);
 				};
 				break;
 			case "uemail":
-				if (is_object($args["obj_inst"]) && !is_oid($args["obj_inst"]->id()))
+				if (is_object($arr["obj_inst"]) && !is_oid($arr["obj_inst"]->id()))
 				{
-					$data["value"] = $_COOKIE["aw_mb_mail"];
-					$this->dequote($data["value"]);
+					$prop["value"] = $_COOKIE["aw_mb_mail"];
+					$this->dequote($prop["value"]);
 
 				};
 				break;
@@ -87,18 +87,25 @@ class forum_comment extends class_base
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "remember":
-				if (!empty($data["value"]) && !headers_sent())
+				if (!empty($prop["value"]) && !headers_sent())
 				{
 					$t = time();
-					setcookie("aw_mb_name",$args["request"]["uname"],time()+24*3600*1000);
-					setcookie("aw_mb_mail",$args["request"]["uemail"],time()+24*3600*1000);
+					setcookie("aw_mb_name",$arr["request"]["uname"],time()+24*3600*1000);
+					setcookie("aw_mb_mail",$arr["request"]["uemail"],time()+24*3600*1000);
+				};
+				break;
+
+			case "ip":
+				if (empty($prop["value"]))
+				{
+					$prop["value"] = aw_global_get("REMOTE_ADDR");
 				};
 				break;
 	
@@ -111,27 +118,22 @@ class forum_comment extends class_base
 	// !Returns a list of comments
 	function get_comment_list($arr)
 	{
-		$retval = "";
-		$qparts = array(
+		$clist = new object_list(array(
 			"parent" => $arr["parent"],
 			"class_id" => $this->clid,
-			//"status" => STAT_ACTIVE,
-		);
-		if (!empty($arr["period"]))
-		{
-			$qparts["period"] = $arr["period"];
-		};
-		$q = sprintf("SELECT oid,uname,name,created,createdby,commtext FROM objects
-				LEFT JOIN forum_comments ON (objects.oid = forum_comments.id)
-				WHERE (%s) ORDER BY created",join(" AND ",map2("%s='%s'",$qparts)));
-
-		$this->db_query($q);
+			"period" => $arr["period"],
+			"sort_by" => "created",
+		));
 
 		$retval = array();
-
-		while($row = $this->db_next())
+		foreach($clist->arr() as $comment)
 		{
-			$retval[$row["oid"]] = $row;
+			$row = $comment->properties();
+			$row["created"] = $comment->created();
+			$creator = $comment->createdby();
+			$row["createdby"] = $creator->name();
+			$row["oid"] = $comment->id();
+			$retval[$comment->id()] = $row;
 		};
 
 		return $retval;

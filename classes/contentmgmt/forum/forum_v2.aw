@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.31 2004/07/07 10:58:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.32 2004/07/07 18:23:24 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -815,19 +815,23 @@ class forum_v2 extends class_base
 		$this->_add_style("style_comment_text");
 		$this->vars($this->style_data);
 
-		$comments_on_page = $args["obj_inst"]->prop("topics_on_page");
+		$comments_on_page = $args["obj_inst"]->prop("comments_on_page");
 		if (empty($comments_on_page))
 		{
 			$comments_on_page = 5;
 		};
 		
-		$t = get_instance("contentmgmt/forum/forum_comment");
-		$comments = $t->get_comment_list(array("parent" => $args["request"]["topic"]));
+		$t = get_instance(CL_COMMENT);
+		$comments = $t->get_comment_list(array("parent" => $topic_obj->id()));
 
 		$c = $pager = "";
 		
 		$tcount = sizeof($comments);
-		$num_pages = (int)(($tcount / $comments_on_page) + 1);
+		$num_pages = (int)(($tcount / $comments_on_page));
+		if ($tcount % $comments_on_page)
+		{
+			$num_pages++;
+		};
 		$selpage = (int)$args["request"]["page"];
 		if ($selpage == 0)
 		{
@@ -842,6 +846,10 @@ class forum_v2 extends class_base
 		$to = $from + $comments_on_page - 1;
 		$cnt = 0;
 
+		// XXX: is there a better way to do this?
+		$can_delete = $this->can_admin_forum();
+
+
 		if (is_array($comments))
 		{
 			foreach($comments as $comment)
@@ -852,12 +860,21 @@ class forum_v2 extends class_base
 					continue;
 				};
 				$this->vars(array(
+					"id" => $comment["oid"],
 					"name" => $comment["name"],
 					"commtext" => nl2br($comment["commtext"]),
 					"date" => $this->time2date($comment["created"],2),
 					"createdby" => $comment["createdby"],
 					"uname" => $comment["uname"],
+					"ip" => $comment["ip"],
 				));
+				if ($can_delete)
+				{
+					$this->vars(array(
+						"ADMIN_BLOCK" => $this->parse("ADMIN_BLOCK"),
+					));
+				};
+
 				$c .= $this->parse("COMMENT");
 			};
 		};		
@@ -867,18 +884,22 @@ class forum_v2 extends class_base
 		{
 			$this->vars(array(
 				"num" => $i,
-				"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"topic" => $topic_obj->id(),"page" => $i,"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+				"url" => $this->mk_my_orb("change",array(
+					"id" => $args["obj_inst"]->id(),
+					"topic" => $topic_obj->id(),
+					"page" => $i,
+					"group" => $args["request"]["group"],
+					"section" => aw_global_get("section"),
+					"_alias" => get_class($this),
+				)),
 			));
 			$pager .= $this->parse($selpage == $i ? "active_page" : "page");
 		};
 	
 		// path drawing starts
 		$path = array();
-		$o = obj($args["request"]["topic"]);
-
 		$fld = $topic_obj->parent(); 
-
-		$obj_chain = array_reverse($o->path());
+		$obj_chain = array_reverse($topic_obj->path());
 
 		$show = true;
 		foreach($obj_chain as $_to)
@@ -899,53 +920,33 @@ class forum_v2 extends class_base
 				continue;
 			}
 
-			/*if ($key == $fld)
+			$obj = $_to;
+			if ($obj->class_id() == CL_MENU)
 			{
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $fld,"section" => aw_global_get("section"),"_alias" => get_class($this))),
-					"caption" => $name,
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $args["obj_inst"]->id(),
+						"group" => $args["request"]["group"],
+						"folder" => $obj->id(),
+						"section" => aw_global_get("section"),
+						"_alias" => get_class($this),
+					)),
+					"caption" => $obj->name(),
 				));
 			}
-			else
-			{*/
-				//$obj = new object($key);
-				$obj = $_to;
-				if ($obj->class_id() == CL_MENU)
-				{
-					/*if ($obj->id() == $args["obj_inst"]->prop("topic_folder"))
-					{
-						$name = html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
-							"caption" => $name,
-						));
-					}
-					else
-					{*/
-						$name = html::href(array(
-							"url" => $this->mk_my_orb("change",array(
-								"id" => $args["obj_inst"]->id(),
-								"group" => $args["request"]["group"],
-								"folder" => $obj->id(),
-								"section" => aw_global_get("section"),
-								"_alias" => get_class($this),
-							)),
-							"caption" => $obj->name(),
-						));
-					//};
-				}
-				elseif ($obj->class_id() == CL_MSGBOARD_TOPIC)
-				{
-					$name = html::href(array(
-						"url" => $this->mk_my_orb("change",array(
-							"id" => $args["obj_inst"]->id(),
-							"group" => $args["request"]["group"],
-							"topic" => $_to->id(),
-							"section" => aw_global_get("section"),
-							"_alias" => get_class($this),
-						)),
-						"caption" => $obj->name(),
-					));
-				};
+			elseif ($obj->class_id() == CL_MSGBOARD_TOPIC)
+			{
+				$name = html::href(array(
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $args["obj_inst"]->id(),
+						"group" => $args["request"]["group"],
+						"topic" => $_to->id(),
+						"section" => aw_global_get("section"),
+						"_alias" => get_class($this),
+					)),
+					"caption" => $obj->name(),
+				));
+			};
 
 						
 			//};
@@ -972,6 +973,20 @@ class forum_v2 extends class_base
 			"COMMENT" => $c,
 			"path" => join(" &gt; ",$path),
 		));
+
+		if ($num_pages > 1)
+		{
+			$this->vars(array(
+				"PAGER" => $this->parse("PAGER"),
+			));
+		};
+
+		if ($can_delete)
+		{
+			$this->vars(array(
+				"DELETE_ACTION" => $this->parse("DELETE_ACTION"),
+			));
+		};
 
 		$rv = $this->parse();
 
@@ -1175,12 +1190,17 @@ class forum_v2 extends class_base
 		};
 	}
 
-	function callback_mod_reforb($arr)
+	function callback_mod_reforb($arr,$request)
 	{
 		if (!empty($this->reforb_action))
 		{
 			$arr["action"] = $this->reforb_action;
 		};
+		if (is_numeric($request["page"]))
+		{
+			$arr["page"] = $request["page"];
+		};
+
 	}
 
 	function update_topic_selector($arr)
@@ -1312,13 +1332,35 @@ class forum_v2 extends class_base
 		$emb["status"] = STAT_ACTIVE;
                 $this->comm_id = $t->submit($emb);
 
-		return $this->mk_my_orb("change",array(
-			"id" => $arr["id"],
-			"group" => $arr["group"],
-			"section" => $arr["section"],
-			"topic" => $arr["topic"],
-			"_alias" => get_class($this),
-		));
+		return $this->finish_action($arr);
+	}
+
+	/**
+		@attrib name=delete_comments
+
+	**/
+	function delete_comments($arr)
+	{
+		if ($this->can_admin_forum() && sizeof($arr["del"]) > 0)
+		{
+			$to_delete = new object_list(array(
+				"oid" => $arr["del"],
+				"parent" => $arr["topic"],
+				"class_id" => CL_COMMENT,
+			));
+
+			$to_delete->foreach_o(array(
+				"func" => "delete",
+				"save" => false,
+		    	));
+		};
+		return $this->finish_action($arr);
+	}
+
+	function can_admin_forum()
+	{
+		// XXX: implement a better check perhaps?
+		return $this->prog_acl_auth("view",PRG_MENUEDIT);
 	}
 
 };
