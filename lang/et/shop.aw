@@ -14,7 +14,7 @@ $lc_shop["LC_SHOP_OWNER_FORM_OUTPUT"] = "Poeomaniku rekvisiitide formi v&auml;lj
 $lc_shop["LC_SHOP_OWNER_FORM_VOU"] = "Poeomaniku rekvisiitide formi v&auml;ljund voucheril";
 $lc_shop["LC_SHOP_OWNER_FORM_ISSU"] = "Poeomaniku rekvisiitide formi v&auml;ljund Issued by";
 $lc_shop["LC_SHOP_OWNER_PROPERTY"] = "Muuda poeomaniku rekvisiite";
-$lc_shop["LC_SHOP_ORDER"] = "Tellimused";
+$lc_shop["LC_SHOP_ORDER"] = "ORDER";
 $lc_shop["LC_SHOP_BILL_TABLE"] = "Arve tabelid";
 $lc_shop["LC_SHOP_SAVE"] = "Salvesta";
 
@@ -66,4 +66,5 @@ $lc_shop["LC_SHOP_TOGETHER"] = "Kokku";
 $lc_shop["LC_SHOP_ORDERS_NUMBER_IS"] = "Tellimuste arv on";
 $lc_shop["LC_SHOP_BLUE"] = "sinine";
 
+$lc_shop["LC_SHOP_SHOW_FREE"] = "N&auml;ita kauba tellimusi";
 ?>

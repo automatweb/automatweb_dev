@@ -12,7 +12,7 @@ $lc_shop["LC_SHOP_OWNER_FORM_OUTPUT"] = "Shopowners propetry form output";
 $lc_shop["LC_SHOP_OWNER_FORM_VOU"] = "Shopowners information form output on voucher";
 $lc_shop["LC_SHOP_OWNER_FORM_ISSU"] = "Shopowners information form output on Issued by";
 $lc_shop["LC_SHOP_OWNER_PROPERTY"] = "Change shopowners information";
-$lc_shop["LC_SHOP_ORDER"] = "Orders";
+$lc_shop["LC_SHOP_ORDER"] = "Order";
 $lc_shop["LC_SHOP_BILL_TABLE"] = "Bill tables";
 $lc_shop["LC_SHOP_SAVE"] = "Save";
 
@@ -62,4 +62,5 @@ $lc_shop["LC_SHOP_TOGETHER"] = "Together";
 $lc_shop["LC_SHOP_ORDERS_NUMBER_IS"] = "Orders number is";
 $lc_shop["LC_SHOP_BLUE"] = "blue";
 
+$lc_shop["LC_SHOP_SHOW_FREE"] = "Show item reservations";
 ?>
