@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.50 2004/02/29 17:43:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.51 2004/03/09 14:16:03 duke Exp $
 
 lc_load("definition");
 
@@ -40,10 +40,15 @@ class acl_base extends db_connector
 		return $ret;
 	}
 
-	function add_acl_group_to_obj($gid,$oid)
+	function add_acl_group_to_obj($gid,$oid,$aclarr = array())
 	{
 		$this->db_query("insert into acl(gid,oid) values($gid,$oid)");
-		$this->save_acl($oid,$gid,$this->cfg["acl"]["default"]);		// set default acl to the new relation
+		if (sizeof($aclarr) == 0)
+		{
+			// set default acl if not specified otherwise
+			$aclarr = $this->cfg["acl"]["default"];
+		};
+		$this->save_acl($oid,$gid,$aclarr);		
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
 		$c->file_invalidate_regex("acl-cache(.*)");
@@ -204,22 +209,18 @@ class acl_base extends db_connector
 		//	echo "entering can, access = $access, oid = $oid<br />";
 		while ($oid > 0)
 		{
-//			echo "oid = $oid<br />";
 			$_t = aw_cache_get("aclcache",$oid);
 			if (is_array($_t))
 			{
 				$tacl = $_t;
 				$parent = $_t["parent"];
-//				echo "found in cache! tacl[$access] = ",$tacl[$access], ", parent = $parent<br />";
 			}
 			else
 			{
-//				echo "not found in cache!<br />";
 				if ($tacl = $this->get_acl_for_oid($oid))
 				{
 					// found acl for this object from the database, so check it
 					$parent = $tacl["parent"];
-//					echo "found in db, tacl[$access] = ",$tacl[$access],", parent = $parent<br />";
 					aw_cache_set("aclcache",$oid,$tacl);
 				}
 				else
@@ -228,7 +229,6 @@ class acl_base extends db_connector
 					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $oid","parent");
 					$tacl = array("oid" => $oid,"parent" => $parent,"priority" => -1);
 					aw_cache_set("aclcache",$oid,$tacl);
-//					echo "not found in db, parent = $parent<br />";
 				}
 			}
 
@@ -240,10 +240,7 @@ class acl_base extends db_connector
 			{
 				$max_priority = $tacl["priority"];
 				$max_acl = $tacl;
-//				echo "bigger than max priority (",$tacl[priority],") , setting max<br />";
 			}
-			// siin oli 100, aga seda on imho ilmselgelt liiga palju
-			// 25 peaks vist piisama kyll
 			if (++$cnt > 100)
 			{
 				$this->raise_error(ERR_ACL_EHIER,"acl_base->can($access,$oid): error in object hierarchy, count exceeded!",true);
@@ -253,11 +250,8 @@ class acl_base extends db_connector
 		}
 
 		$this->restore_handle();
-		// and now return the highest found
-//		return 1;
 
-		// nini ja nyt kui see on aw.struktuur.ee siis kysime java k2est ka
-//		echo "returning from can_aw , oid = $o_oid , result = <pre>", var_dump($max_acl),"</pre> <br />";
+		// and now return the highest found
 		return $max_acl;
 	}
 
@@ -326,6 +320,7 @@ class acl_base extends db_connector
 		if ($uuid != "")
 		{
 			reset($acl_ids);
+			$aclarr = array();
 			while (list(,$k) = each($acl_ids))
 			{
 				$aclarr[$k] = $this->cfg["acl"]["allowed"];
@@ -336,8 +331,8 @@ class acl_base extends db_connector
 			{
 				$this->raise_error(ERR_ACL_NOGRP,LC_NO_DEFAULT_GROUP,true);
 			};
-			$this->add_acl_group_to_obj($gr["gid"], $oid);
-			$this->save_acl($oid,$gr["gid"], $aclarr);		// give full access to the creator
+			$this->add_acl_group_to_obj($gr["gid"], $oid, $aclarr);
+			//$this->save_acl($oid,$gr["gid"], $aclarr);		// give full access to the creator
 		}
 	}
 
