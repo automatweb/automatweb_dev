@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.23 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.24 2001/10/01 13:47:04 cvs Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -74,6 +74,7 @@ class form_base extends aw_template
 		}
 		$awt->stop("form_base::load::query");
 
+
 		$this->name = $row["name"];
 		$this->id = $row["oid"];
 		$this->parent = $row["parent"];
@@ -107,6 +108,7 @@ class form_base extends aw_template
 			$this->arr = unserialize($row["content"]);
 		}
 
+		$this->allow_html = $this->arr["allow_html"];
 		$awt->start("form_base::load::normalize");
 		$this->normalize();
 		$awt->stop("form_base::load::normalize");
