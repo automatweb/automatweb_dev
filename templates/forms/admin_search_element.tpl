@@ -40,12 +40,11 @@
 </STYLE>
 <script language="javascript">
 
-	<!-- SUB: ELDEFS -->
-
-	var form_{VAR:form_id}_el_{VAR:el_el_id}_value = "{VAR:el_value}";
-	var form_{VAR:form_id}_el_{VAR:el_el_id}_text = "{VAR:el_text}";
-	var form_{VAR:form_id}_el_{VAR:el_el_id}_type = "{VAR:el_type}";
-	<!-- END SUB: ELDEFS -->
+<!-- SUB: ELDEFS -->
+var form_{VAR:form_id}_el_{VAR:el_el_id}_value = "{VAR:el_value}";
+var form_{VAR:form_id}_el_{VAR:el_el_id}_text = "{VAR:el_text}";
+var form_{VAR:form_id}_el_{VAR:el_el_id}_type = "{VAR:el_type}";
+<!-- END SUB: ELDEFS -->
 
 	function ch_type_var(tp,suf)
 	{
@@ -182,6 +181,9 @@
 <SPAN ID='multiple_{VAR:el_id}' CLASS='multiple'>Multiple listbox</SPAN>
 <SPAN ID='empty_{VAR:el_id}' CLASS='empty'></SPAN>
 </SPAN>&nbsp;</td>
+</tr>
+<tr>
+<td class="fform" colspan=2>Kustuta see element? <input type='checkbox' name='{VAR:el_id}_del' value='1'>
 </tr>
 </table>
 </td>

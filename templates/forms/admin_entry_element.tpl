@@ -37,8 +37,8 @@
 <tr>
 <td class="fgtext">Kas m&auml;rgitud elemendid:</td>
 <td class="fgtext"><input class="small_button" type='radio' NAME='{VAR:cell_id}_lbitems_dowhat' value='del' >&nbsp;Kustutatakse <input type='radio' NAME='{VAR:cell_id}_lbitems_dowhat' VALUE='add'>&nbsp;Lisatakse uued</td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Suurus:</td>
+<td class="fgtext"><input type="text" name="{VAR:cell_id}_lb_size" size=3 class='small_button' value='{VAR:lb_size}'></td>
 </tr>
 <!-- END SUB: LISTBOX_SORT -->
 
@@ -54,9 +54,9 @@
 <!-- SUB: MULTIPLE_ITEMS -->
 <tr>
 <td class="fgtext">&nbsp;</td>
-<td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:multiple_item_id}' VALUE='{VAR:multiple_item_value}'>&nbsp;<input CLASS="small_button" type='checkbox' NAME='{VAR:multiple_check_name}' VALUE='{VAR:multiple_check_value}' {VAR:multiple_check_checked}>&nbsp;<input type='text' name='{VAR:multiple_order_name}' value='{VAR:multiple_order_value}' class='small_button' size=4></td>
+<td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:multiple_item_id}' VALUE='{VAR:multiple_item_value}'>&nbsp;<input CLASS="small_button" type='checkbox' NAME='{VAR:multiple_check_name}' VALUE='{VAR:multiple_check_value}' {VAR:multiple_check_checked}>&nbsp;<input type='text' name='{VAR:multiple_order_name}' value='{VAR:multiple_order_value}' class='small_button' size=4>&nbsp;<input type='checkbox' name='{VAR:cell_id}_sel[{VAR:num}]' value='1'></td>
 <td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;
 </tr>
 <!-- END SUB: MULTIPLE_ITEMS -->
 

@@ -24,7 +24,7 @@
 			</tr>
 			<!-- SUB: ROW -->
 			<tr>
-				<td class="fform">{VAR:row}</td>
+				<td class="fform">{VAR:drow}</td>
 				<!-- SUB: COL -->
 					<td class="fform"><input type='radio' name='s_cell' value='{VAR:row}_{VAR:col}' {VAR:checked}></td>
 				<!-- END SUB: COL -->
@@ -47,7 +47,7 @@
 			</tr>
 			<!-- SUB: ROWC -->
 			<tr>
-				<td class="fform">{VAR:row}</td>
+				<td class="fform">{VAR:drow}</td>
 				<!-- SUB: COLC -->
 					<td class="fform"><input type='checkbox' name='c_cell[{VAR:cnt}]' value='{VAR:row}_{VAR:col}'}></td>
 				<!-- END SUB: COLC -->

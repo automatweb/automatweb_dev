@@ -84,6 +84,8 @@ function toggle1(layer1,layer2) {
 <!-- SUB: CAN_ALL -->
 <a class="alamlingid" href='{VAR:all_elements}'>K&otilde;ik elemendid</a>
 <!-- END SUB: CAN_ALL -->
+
+<a class="alamlingid" href='{VAR:import_entries}'>Impordi andmeid</a>
 </div>
 <!-- end# menu 1 -->
 

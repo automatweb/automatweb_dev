@@ -72,7 +72,7 @@
 	<td   bgcolor=#ffffff ><input class='small' size=2 type='text' NAME='element_{VAR:element_id}_order' VALUE='{VAR:form_cell_order}'></td>
 	<td   bgcolor=#ffffff class='fgen_text'>{VAR:el_name}</td>
 	<td  bgcolor=#ffffff class='fgen_text'>{VAR:el_type}</td>
-	<td  bgcolor=#ffffff  colspan=2><input class='small' size=15 type='text' NAME='element_{VAR:element_id}_text' VALUE='{VAR:form_cell_text}'></td>
+	<td  bgcolor=#ffffff  colspan=2><input class='small' size=15 type='text' NAME='element_{VAR:element_id}_text' VALUE='{VAR:form_cell_text}'><span class='fgen_text'><a href='{VAR:chpos}'>M</a></span></td>
 </tr>
 <!-- END SUB: ELEMENT -->
 
