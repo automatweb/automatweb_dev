@@ -52,6 +52,9 @@ function varvivalik()
 </td>
 </tr>
 <tr>
+<td class="fform" colspan=2>Kas formi &uuml;&uuml;ritatakse t&auml;ita kasutaja liitumisel sisestatud andmetega: &nbsp;<input type='checkbox' name='try_fill' value=1 {VAR:try_fill}></td>
+</tr>
+<tr>
 <td class="fform" colspan=2>Kataloog kuhu salvestatakse formi sisestatud info:</td>
 </tr>
 <tr>
@@ -65,10 +68,10 @@ function varvivalik()
 <td class="fform"><input type='radio' NAME='after_submit' VALUE='1' {VAR:as_1}>muuda sisestust</td>
 <td class="fform">&nbsp;</td>
 </tr>
-<tr>
+<!--<tr>
 <td class="fform"><input type='radio' NAME='after_submit' VALUE='2' {VAR:as_2}>n&auml;ita teksti:</td>
 <td class="fform"><textarea NAME='after_submit_text' cols=40 rows=10>{VAR:after_submit_text}</textarea></td>
-</tr>
+</tr>-->
 <tr>
 <td class="fform"><input type='radio' NAME='after_submit' VALUE='3' {VAR:as_3}>mine aadressile:</td>
 <td class="fform"><input type='text' NAME='after_submit_link' value='{VAR:after_submit_link}'></td>

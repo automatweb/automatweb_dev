@@ -27,6 +27,22 @@
 	</td>
 </tr>
 <tr>
+	<td class="fform" colspan=2>Vali cell, kuhu element kopeerida (lisatakse uued elemendid):</td>
+</tr>
+<tr>
+	<td class="fform" colspan=2>
+		<table border=1 cellpadding=0 cellspacing=0>
+			<!-- SUB: ROWC -->
+			<tr>
+				<!-- SUB: COLC -->
+					<td class="fform"><input type='checkbox' name='c_cell[{VAR:cnt}]' value='{VAR:row}_{VAR:col}'}></td>
+				<!-- END SUB: COLC -->
+			</tr>
+			<!-- END SUB: ROWC -->
+		</table>
+	</td>
+</tr>
+<tr>
 	<td class="fform" colspan="3" align="center">
 	{VAR:reforb}
 	<input type="submit" class='small_button' value="Salvesta">
