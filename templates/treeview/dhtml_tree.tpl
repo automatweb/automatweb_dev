@@ -140,7 +140,7 @@ open_nodes = new Array({VAR:open_nodes});
 .nodetextbuttonlike {
 	color: black;
 	font-family: Arial,Helvetica,sans-serif;
-	font-size: 14px;
+	font-size: 12px;
 	text-decoration: none;
 	vertical-align: middle;
 }
