@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.10 2003/03/18 12:15:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.11 2003/04/03 22:32:51 duke Exp $
 include("const.aw");
 
 //$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS,$_GET,$_POST);
@@ -15,7 +15,19 @@ if (!is_array($_POST))
         $_POST = $HTTP_POST_VARS;
 };
 
-$vars = array_merge($_GET,$_POST,$AW_GET_VARS);
+$vars = array();
+if (is_array($_GET))
+{
+	$vars = $vars + $_GET;
+};
+if (is_array($_POST))
+{
+	$vars = $vars + $_POST;
+};
+if (is_array($_AW_GET_VARS))
+{
+	$vars = $vars + $_AW_GET_VARS;
+};
 
 $class = $vars["class"];
 $action = $vars["action"];
