@@ -1,6 +1,6 @@
 <?php
 
-if ($alias)
+if ($alias && $alias != "forum_v2")
 {
 	$class = $alias;
 };
