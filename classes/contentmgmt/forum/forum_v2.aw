@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.12 2003/12/10 16:56:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.13 2004/01/09 09:08:57 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -11,24 +11,24 @@
 	@default field=meta
 	@default method=serialize
 
-	@property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
-	@caption Teemade kataloog
-	@comment Sellest kataloogist võetakse foorumi teemasid
+	property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
+	caption Teemade kataloog
+	comment Sellest kataloogist võetakse foorumi teemasid
 	
 	@property address_folder type=relpicker reltype=RELTYPE_ADDRESS_FOLDER
 	@caption Listiliikmete kataloog
 	@comment Sellesse kataloogi paigutatakse "listi liikmete" objektid
 
-	@property topics_on_page type=select
+	@property topics_on_page type=chooser 
 	@caption Teemasid lehel
 
-	@property comments_on_page type=select
+	@property comments_on_page type=chooser 
 	@caption Postitusi lehel
 
-	@property topic_depth type=select default=1
+	@property topic_depth type=chooser default=1 
 	@caption Teemade sügavus
 
-	@property topic_selector type=callback callback=callback_get_topic_selector group=topic_selector
+	@property topic_selector type=text group=topic_selector no_caption=1
 	@caption Teemade tasemed
 
 	@property container type=text store=no group=container no_caption=1
@@ -83,7 +83,7 @@
 	@caption Kommentaari teksti stiil
 
 	@groupinfo container caption=Foorum submit=no
-	@groupinfo topic_selector caption="Teemad"
+	@groupinfo topic_selector caption="Teemad" 
 	@groupinfo contents caption=Sisu submit=no parent=container
 	@groupinfo styles caption=Stiilid
 	@groupinfo add_topic caption="Lisa teema" parent=container
@@ -128,6 +128,10 @@ class forum_v2 extends class_base
 				$data["options"] = array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5");
 				break;
 
+			case "topic_selector":
+				$data["value"] = $this->get_topic_selector($arr);
+				break;
+
 		};	
 		return $retval;
 	}
@@ -153,15 +157,23 @@ class forum_v2 extends class_base
 		return $retval;
 	}
 
+	function callback_pre_edit($arr)
+	{
+		$this->rel_id = $arr["request"]["rel_id"];
+		$this->rel_id = aw_global_get("section");
+	}
+
 	function callback_gen_contents($args = array())
 	{
 		classload("layout/active_page_data");
 		$this->style_data = array();
+		/*
 		$fld = $args["obj_inst"]->prop("topic_folder");
 		if (!is_numeric($fld))
 		{
 			return false;
 		};			
+		*/
 
 		$this->obj_inst = $args["obj_inst"];
 		$style_donor = $this->obj_inst->prop("style_donor");
@@ -171,7 +183,7 @@ class forum_v2 extends class_base
 		};
 		$this->_add_style("style_caption");
 		
-		$args["fld"] = $fld;
+		//$args["fld"] = $fld;
 
 		if (is_numeric($args["request"]["topic"]))
 		{
@@ -185,6 +197,8 @@ class forum_v2 extends class_base
 		{
 			$retval = $this->draw_all_folders($args);
 		};
+
+		// bummer ... I need to be able to draw multiple topics
 
 		$prop = $args["prop"];
 		//$prop["type"] = "text";
@@ -219,13 +233,29 @@ class forum_v2 extends class_base
 		};
 
 		$this->depth = $depth;
+		$this->exclude = $args["obj_inst"]->meta("exclude");
+		$this->exclude_subs = $args["obj_inst"]->meta("exclude_subs");
 
-		$this->level = 0;
+		$this->level = 1;
 		$this->group = $args["request"]["group"];
-		$c = $this->_draw_one_level(array(
-			"parent" => $args["fld"],
-			"id" => $args["obj_inst"]->id(),
+
+		$conns = $args["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_TOPIC_FOLDER,
 		));
+
+		$c = "";
+		// I need to consolidate this code in some way with the code that draws 
+		// the topic selector .. oh .. herr god, how the fuck am I going to do that?
+		foreach($conns as $conn)
+		{
+			$c .= $this->_draw_one_level(array(
+				//"parent" => $args["fld"],
+				"parent" => $conn->prop("to"),
+				"id" => $args["obj_inst"]->id(),
+			));
+		};
+
+
 
 		$this->vars(array(
 			"forum_contents" => $c,
@@ -237,7 +267,6 @@ class forum_v2 extends class_base
 
 	function _draw_one_level($arr)
 	{
-		$this->level++;
 		if ($this->level == $this->depth)
 		{
 			$c .= $this->_draw_last_level(array(
@@ -260,7 +289,7 @@ class forum_v2 extends class_base
 						"id" => $arr["id"],
 						"c" => $folder_obj->id(),
 						"group" => $this->group,
-						"section" => aw_global_get("section"),
+						"section" => $this->rel_id,
 						"_alias" => get_class($this),
 					)),
 				));
@@ -272,12 +301,17 @@ class forum_v2 extends class_base
 					"spacer" => str_repeat("&nbsp;",6*($this->level-1)),
 				));
 
-				$c .= $this->parse($tplname);
+				if (empty($this->exclude[$folder_obj->id()]))
+				{
+					$c .= $this->parse($tplname);
+				};
 
+				$this->level++;
 				$c .= $this->_draw_one_level(array(
 					"parent" => $folder_obj->id(),
 					"id" => $arr["id"],
 				));
+				$this->level--;
 
 				// so if I want to make this work, I need to figure out how
 				// many levels do I have to draw. I have to make this function recursive.
@@ -296,7 +330,6 @@ class forum_v2 extends class_base
 
 			}
 		};
-		$this->level--;
 		return $c;
 	}
 
@@ -348,7 +381,7 @@ class forum_v2 extends class_base
 					"id" => $arr["id"],
 					"folder" => $sub_folder_obj->id(),
 					"group" => $this->group,
-					"section" => aw_global_get("section"),
+					"section" => $this->rel_id,
 					"_alias" => get_class($this),
 				)),
 			));
@@ -404,14 +437,14 @@ class forum_v2 extends class_base
 			if ($key == $fld)
 			{
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => $this->rel_id,"_alias" => get_class($this))),
 					"caption" => $name,
 				));
 			}
 			else
 			{
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"c" => $key,"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"c" => $key,"group" => $args["request"]["group"],"section" => $this->rel_id,"_alias" => get_class($this))),
 					"caption" => $name,
 				));
 
@@ -515,7 +548,12 @@ class forum_v2 extends class_base
 			"name" => $topic_obj->name(),
 			"path" => join(" &gt; ",array_reverse($path)),
 			"active_page" => $pager,
-
+			"add_topic_url" => $this->mk_my_orb("add_topic",array(
+				"id" => $args["obj_inst"]->id(),
+				"section" => aw_global_get("section"),
+				"folder" => $args["request"]["folder"],
+				"_alias" => get_class($this),
+			)),
 		));
 		return $this->parse();
 	}
@@ -635,6 +673,11 @@ class forum_v2 extends class_base
 			"comment" => $topic_obj->comment(),
 			"COMMENT" => $c,
 			"path" => join(" &gt; ",array_reverse($path)),
+			"reforb" => $this->mk_reforb("submit_comment",array(
+				"id" => $args["obj_inst"]->id(),
+				"section" => aw_global_get("section"),
+				"topic" => $topic_obj->id(),
+			)),
 		));
 
 		return $this->parse();
@@ -829,26 +872,60 @@ class forum_v2 extends class_base
 		$this->style_data[$name] = "st" . $st_data;
 	}
 
-	function callback_get_topic_selector($arr)
+	function get_topic_selector($arr)
 	{
-		$depth = $arr["obj_inst"]->prop("topic_depth");
-		$rv = array();
-		for ($i = 1; $i < $depth; $i++)
+		// I need to create a list of topics and add a checkbox for each one
+			// I need to create a list of topics and add a checkbox for each one
+		$depth = $arr["obj_inst"]->prop("topic_folder");
+		$this->rv = "";
+
+		$ot = new object_tree(array(
+			   "parent" => $arr["obj_inst"]->prop("topic_folder"),
+			   "class_id" => CL_MENU,
+		));
+
+		$this->ot = $ot;
+
+		$this->read_template("topic_selector.tpl");
+		$this->exclude = $arr["obj_inst"]->meta("exclude");
+		$this->exclude_subs = $arr["obj_inst"]->meta("exclude_subs");
+
+		$this->_do_rec_topic(array(
+			"parent" => $arr["obj_inst"]->prop("topic_folder"),
+		));
+
+		$this->vars(array(
+			"ITEM" => $this->rv,
+		));
+		return $this->parse();
+	}
+
+
+	// so now, how do I do the consolidation?
+	function _do_rec_topic($arr)
+	{
+		static $level = 0;
+		$litems = $this->ot->level($arr["parent"]);
+		foreach($litems as $item)
 		{
-			$name = "hide_folder[$i]";
-			$rv[$name] = array(
-				"type" => "checkbox",
-				"name" => $name,
-				"ch_value" => 1,
-				"caption" => "Peida #$i tase",
-			);
+			$this->vars(array(
+				"caption" => $item->name(),
+				"id" => $item->id(),
+				"spacer" => str_repeat("&nbsp;",$level*3),
+				"exclude" => checked($this->exclude[$item->id()]),
+				"exclude_subs" => checked($this->exclude_subs[$item->id()]),
+			));
+			$this->rv .= $this->parse("ITEM");
+			$level++;
+			$this->_do_rec_topic(array("parent" => $item->id()));
+			$level--;
 		};
-		return $rv;
 	}
 
 	function update_topic_selector($arr)
 	{
-		arr($arr);
+		$arr["obj_inst"]->set_meta("exclude",$arr["request"]["exclude"]);
+		$arr["obj_inst"]->set_meta("exclude_subs",$arr["request"]["exclude_subs"]);
 	}
 
 	////
@@ -863,9 +940,14 @@ class forum_v2 extends class_base
 			"relationmgr" => false,
 		);
 
-		return $this->change(array(
+		// nii. see paneb selle paika. Ja nüt, mk_my_orb peaks suutma detectida kas 
+		// relobj_id on püsti ja kui on, siis tegema kõik lingid selle baasil.
+		// ah? mis?
+		$act = isset($_GET["action"]) ? $_GET["action"] : "change";
+		return $this->$act(array(
 			"id" => $alias["target"],
-			"action" => "view",
+			"action" => isset($_GET["action"]) ? $_GET["action"] : "view",
+			"rel_id" => $args["alias"]["relobj_id"],
 			"folder" => $_GET["folder"],
 			"topic" => $_GET["topic"],
 			"c" => $_GET["c"],
@@ -890,5 +972,52 @@ class forum_v2 extends class_base
 
 		return $this->parse();
 	}
+
+	function add_topic($arr)
+	{
+		$this->read_template("add_topic.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_topic",array(
+				"id" => $arr["id"],
+				"section" => aw_global_get("section"),
+				"folder" => $arr["folder"],
+			)),
+		));
+		return $this->parse();
+	}
+
+	function submit_topic($arr)
+	{
+		$t = get_instance("contentmgmt/forum/forum_topic");
+                $emb = $arr;
+		$emb["parent"] = $arr["folder"];
+                $t->id_only = true;
+		$emb["forum_id"] = $arr["id"];
+		unset($emb["id"]);
+                $this->topic_id = $t->submit($emb);
+		return $this->mk_my_orb("change",array(
+			"group" => "container",
+			"section" => $arr["section"],
+			"folder" => $arr["folder"],
+			"_alias" => get_class($this),
+		));
+	}
+	
+	function submit_comment($arr)
+	{
+		$t = get_instance("contentmgmt/forum/forum_comment");
+                $emb = $arr;
+                $t->id_only = true;
+		unset($emb["id"]);
+		$emb["parent"] = $arr["topic"];
+                $this->comm_id = $t->submit($emb);
+		return $this->mk_my_orb("change",array(
+			"group" => "container",
+			"section" => $arr["section"],
+			"topic" => $arr["topic"],
+			"_alias" => get_class($this),
+		));
+	}
+
 };
 ?>
