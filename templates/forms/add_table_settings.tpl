@@ -150,6 +150,7 @@
 															<td class="celltext">Vertikaalne:</td>
 															<td class="celltext">Eraldaja enne</td>
 															<td class="celltext">Eraldaja p&auml;rast</td>
+															<td class="celltext">Eraldaja elementide vahel</td>
 															<td class="celltext">Muu info elemendid:</td>
 															<td class="celltext">Muu info eraldajad:</td>
 															<td class="celltext">Tulba pealkiri(vertikaalse grupi)</td>
@@ -173,12 +174,20 @@
 															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][pre_sep]" value="{VAR:pre_sep}" size="4"></td>
 															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][after_sep]" value="{VAR:after_sep}" size="4"></td>
 															<td class="celltext"><select class="formselect" name="rgrps[{VAR:grp_nr}][data_els][]" multiple size="10">{VAR:data_els}</select></td>
+															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][mid_sep]" value="{VAR:mid_sep}" size="4"></td>
+
 															<td class="celltext">
 																<table border="0">
+																	<tr>
+																		<td class="celltext">Element</td>
+																		<td class="celltext">Enne</td>
+																		<td class="celltext">P&auml;rast</td>
+																	</tr>
 																	<!-- SUB: DATEL -->
 																	<tr>
 																		<td class="celltext">{VAR:del_name}</td>
 																		<td class="celltext"><input type="text" name="rgrps[{VAR:grp_nr}][data_els_seps][{VAR:del}]" class="formtext" size="4" value="{VAR:del_sep}"></td>
+																		<td class="celltext"><input type="text" name="rgrps[{VAR:grp_nr}][data_els_seps_after][{VAR:del}]" class="formtext" size="4" value="{VAR:del_sep_after}"></td>
 																	</tr>
 																	<!-- END SUB: DATEL -->
 																</table>
