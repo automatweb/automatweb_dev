@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.61 2001/09/05 15:18:10 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.62 2001/09/05 15:36:04 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2124,6 +2124,7 @@ class form extends form_base
 					{
 						$q_els[] = "form_".$form_id."_entries.id as entry_id";
 						$has_eid = true;
+						$real_form_id = $form_id;
 					}
 					foreach($el_arr as $elid)
 					{
@@ -2155,7 +2156,7 @@ class form extends form_base
 						$row["ev_created"] = $this->time2date($row["created"], 2);
 						$row["ev_uid"] = $row["modifiedby"];
 						$row["ev_modified"] = $this->time2date($row["modified"], 2);
-						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $this->main_search_form,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_search_form],"section" => $section))."'>Vaata</a>";		
+						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $real_form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$real_form_id],"section" => $section))."'>Vaata</a>";		
 						$row["ev_delete"] = "<a href='".$this->mk_my_orb(
 							"delete_entry", 
 								array(
@@ -2166,7 +2167,7 @@ class form extends form_base
 							"form")."'>Kustuta</a>";
 						if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
 						{
-							$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $this->main_search_form,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_search_form],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
+							$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $real_form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$real_form_id],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
 						}
 						if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
 						{
