@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.58 2002/11/21 15:47:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.59 2002/11/25 12:59:30 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -797,6 +797,19 @@ if (!defined("DEFS"))
 		if (!$leave_global)
 		{
 			aw_global_set($name, "");
+		}
+	}
+
+	////
+	// !deletes all variables from the session that match preg pattern $pattern
+	function aw_session_del_patt($pattern)
+	{
+		foreach($GLOBALS["HTTP_SESSION_VARS"] as $vn => $vv)
+		{
+			if (preg_match($pattern, $vn))
+			{
+				aw_session_del($vn);
+			}
 		}
 	}
 
