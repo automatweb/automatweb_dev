@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.89 2004/04/27 13:22:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.90 2004/05/06 12:21:19 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -57,7 +57,8 @@
 
 	@property do_resize type=submit field=meta method=serialize group=resize value=Muuda store=no
 
-	@classinfo no_status=1
+	@property ord type=textbox size=3 table=objects field=jrk
+	@caption J&auml;rjekord
 
 */
 class image extends class_base
@@ -661,7 +662,7 @@ class image extends class_base
 				{
 					$_fi = get_instance("file");
 					$fl = $_fi->_put_fs(array(
-						"type" => "image/jpg",
+						"type" => !empty($prop["value"]["type"]) ? $prop["value"]["type"] : "image/jpg",
 						"content" => base64_decode($prop["value"]["contents"]),
 					));
 					$prop["value"] = $fl;

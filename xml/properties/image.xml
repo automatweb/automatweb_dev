@@ -129,10 +129,18 @@
             <value>Muuda</value>
             <store>no</store>
       </property>
+      <property>
+            <name>ord</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <size>3</size>
+            <field>jrk</field>
+            <caption>J&amp;auml;rjekord</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <syslog_type>ST_IMAGE</syslog_type>
-            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <img2>
