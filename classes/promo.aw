@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.34 2003/06/04 16:38:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.35 2003/06/17 11:58:50 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -10,9 +10,6 @@
 
 	@property tpl_lead type=select table=menu group=show
 	@caption Template näitamiseks
-	
-	@property tpl_edit type=select table=menu group=show
-	@caption Template muutmiseks
 	
 	@property type type=select table=objects field=meta method=serialize
 	@caption Kasti tüüp
@@ -35,11 +32,11 @@
 	@property use_fld_tpl type=checkbox ch_value=1 group=show method=serialize
 	@caption Kasuta dokumendi asukoha templatet
 	
-	@property section type=text callback=callback_get_menus group=menus method=serialize
-	@caption Vali menüüd, mille all kasti näidata
-	
 	@property all_menus type=checkbox ch_value=1 value=1 group=menus method=serialize
 	@caption Näita igal pool
+
+	@property section type=text callback=callback_get_menus group=menus method=serialize
+	@caption Vali menüüd, mille all kasti näidata
 	
 	@property last_menus type=text callback=callback_get_doc_sources group=menus method=serialize
 	@caption Vali menüüd, mille alt viimaseid dokumente võetakse
@@ -94,27 +91,25 @@ class promo extends class_base
 		$retval = PROP_OK; 
 		switch($data["name"])
 		{
-			case "tpl_edit":
-				// kysime infot adminnitemplatede kohta
-				$q = "SELECT * FROM template WHERE type = 0 ORDER BY id";
-				$this->db_query($q);
-				$edit_templates = array();
-				while($tpl = $this->db_fetch_row()) 
-				{
-					$edit_templates[$tpl["id"]] = $tpl["name"];
-				};
-				$data["options"] = $edit_templates;
-				break;
-
 			case "tpl_lead":
 				// kysime infot lyhikeste templatede kohta
 				$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
 				$this->db_query($q);
-				$short_templates = array("" => "Vali template");
+				$short_templates = array("0" => "Vali template");
+				$def_name = "";
 				while($tpl = $this->db_fetch_row()) 
 				{
+					if ($tpl["filename"] == aw_ini_get("promo.default_tpl"))
+					{
+						$def_name = $tpl["id"];
+						$tpl["name"] .= " (V) ";
+					}
 					$short_templates[$tpl["id"]] = $tpl["name"];
 				};
+				if ($def_name != "" && !$data["value"])
+				{
+					$data["value"] = $def_name;
+				}
 				$data["options"] = $short_templates;
 				break;
 	
@@ -216,7 +211,7 @@ class promo extends class_base
 				$this->restore_handle();
 				$this->t->define_data(array(
 					"oid" => $row["oid"],
-					"name" => $path . "/" . $row["name"],
+					"name" => $path,
 					"check" => html::checkbox(array(
 						"name" => "include_submenus[$row[oid]]",
 						"value" => $row["oid"],
@@ -287,14 +282,14 @@ class promo extends class_base
 				// it shouldn't be too bad, cause get_object is cached.
 				// still, it sucks.
 				$this->save_handle();
-				$chain = $this->get_obj_chain(array(
+				$chain = array_reverse($this->get_obj_chain(array(
 					"oid" => $row["oid"],
-				));
+				)),true);
 				$this->restore_handle();
 				$path = join("/",array_slice($chain,-3));
 				$this->t->define_data(array(
 					"oid" => $row["oid"],
-					"name" => $path . "/" . $row["name"],
+					"name" => $path,
 					"as_name" => html::radiobutton(array(
 						"name" => "as_name",
 						"value" => $row["oid"],
