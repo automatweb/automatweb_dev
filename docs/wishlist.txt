@@ -19,6 +19,7 @@ Miks see hea on?
 Miks see hea on?
 	Selge arusaam programmeerija, mis seoseid ta loob/kustutab.
 
+3) object_list'ist võiks saada otsida ka parent'i parent'i järgi, midagi sarnast nagu "parent.parent.class_id" => 4343, "parent.parent" => 54353 võiks ka töötada
 
--- 
-klass folder, millel on meetodid get_objects / get_sub_folders jne, et ei peaks igalepoole pikka object_list'i filtrit kirjutama kui foldereid tahad.
+ 
+4) klass folder, millel on meetodid get_objects / get_sub_folders jne, et ei peaks igalepoole pikka object_list'i filtrit kirjutama kui foldereid tahad.
