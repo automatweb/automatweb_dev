@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.87 2003/03/19 18:08:17 duke Exp $
+// $Id: class_base.aw,v 2.88 2003/03/27 12:04:45 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1151,6 +1151,8 @@ class class_base extends aliasmgr
 			// of all tabs
 			$row = array();
 			$t = get_instance("doc");
+			// XXX, if we use config forms, then parse_properties
+			// will be called twice. (first time in get_properties_by_group)
 			$xprops = $t->get_properties_by_group(array(
                                 "content" => $cfgform["meta"]["xml_definition"],
                                 "group" => "general",
@@ -1296,8 +1298,8 @@ class class_base extends aliasmgr
 		};
 	
 		$argblock = array(
-			'oid' => $this->id,
-			'request' => isset($this->request) ? $this->request : "",
+			"oid" => isset($this->id) ? $this->id : "",
+			"request" => isset($this->request) ? $this->request : "",
 		);
 
 		// 1) generate a list of all views
@@ -1328,7 +1330,7 @@ class class_base extends aliasmgr
 			};
 	
 			$argblock = array(
-				"id" => $this->id,
+				"id" => isset($this->id) ? $this->id : "",
 				"obj" => &$this->coredata,
                                 "objdata" => &$this->objdata,
 			);
@@ -1390,6 +1392,15 @@ class class_base extends aliasmgr
 		{
 			return false;
 		};
+
+		if ($val["type"] == "date_select")
+		{
+			// set the date to "now" for empty date_selects
+			if (empty($this->id))
+			{
+				$val["value"] = time();
+			};
+		}
 
 		if (($val["type"] == "popup_objmgr"))
 		{
@@ -1464,7 +1475,7 @@ class class_base extends aliasmgr
 		if (($val["type"] == "relpicker") && isset($val["clid"]))
 		{
 			// retrieve the list of all aliases first time this is invoked
-			if (!is_array($this->alist))
+			if (empty($this->alist))
 			{
 				$almgr = get_instance("aliasmgr");
 				if (isset($this->id))
@@ -1479,7 +1490,7 @@ class class_base extends aliasmgr
 				};
 			};
 
-			if (defined($val["clid"]))
+			if (defined($val["clid"]) && isset($this->alist[constant($val["clid"])]))
 			{
 				$objlist = new aw_array($this->alist[constant($val["clid"])]);
 			}
@@ -1640,13 +1651,6 @@ class class_base extends aliasmgr
 	function get_active_cfgform($args = array())
 	{
 		$retval = false;
-		if ($this->clid == CL_DOCUMENT)
-		{
-			$m = get_instance("menuedit");
-			$obj = $this->get_object($this->id);
-			$m->build_menu_chain($obj["parent"]);
-			$retval = (int)$m->properties["tpl_edit_cfgform"];
-		};
 		if ($this->clid == CL_PSEUDO)
 		{
 			if (isset($this->parent))
@@ -1678,8 +1682,9 @@ class class_base extends aliasmgr
 		$argblock = array(
 			"obj" => &$this->coredata,
 			"objdata" => &$this->objdata,
-			"request" => $this->request
+			"request" => isset($this->request) ? $this->request : "",
 		);
+
 
 		foreach($properties as $key => $val)
 		{
@@ -1714,6 +1719,11 @@ class class_base extends aliasmgr
 			if ( isset($val["editonly"]) && empty($this->id))
 			{
 				// do nothing
+			}
+			else
+			if ($val["type"] == "aliasmgr" && empty($this->id))
+			{
+				// do not show alias manager if  no id
 			}
 			else
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
@@ -1808,6 +1818,7 @@ class class_base extends aliasmgr
 				"id" => $this->id,
 			));
 		};
+		/*
 		if ($this->cfgform_id)
 		{
 			$ac = $this->get_object($this->cfgform_id);
@@ -1817,6 +1828,7 @@ class class_base extends aliasmgr
 				"target" => "_blank",
 			)));
 		};
+		*/
 		$this->toolbar = $toolbar->get_toolbar();
 		$this->toolbar2 = $toolbar->get_toolbar(array("id" => "bottom"));
 
@@ -2085,7 +2097,7 @@ class class_base extends aliasmgr
 		// get a list of active properties for this object
 		// I need an easy way to turn off individual properties
 		$realprops = $this->get_active_properties(array(
-				"classonly" => $args["classonly"],
+				"classonly" => isset($args["classonly"]) ? $args["classonly"] : false,
 				"clfile" => $this->clfile,
 				"content" => $args["content"],
 				"group" => $args["group"],
