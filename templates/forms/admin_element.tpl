@@ -274,31 +274,37 @@ function toggle_file_link_newwin()
 <td class="fgtext">&nbsp;{VAR:LC_FORMS_YEAR}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_year' value='1' {VAR:has_year}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_year_ord' value='{VAR:year_ord}' size="2" class="small_button"></td>
+<td class="fgtext">&nbsp;textbox <input type='checkbox' name='{VAR:cell_id}_year_textbox' value='1' {VAR:year_textbox}></td>
 </tr>
 <tr>
 <td class="fgtext">&nbsp;{VAR:LC_FORMS_MONTH}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_month' value='1' {VAR:has_month}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_month_ord' value='{VAR:month_ord}' size="2" class="small_button"></td>
+<td class="fgtext">&nbsp;textbox <input type='checkbox' name='{VAR:cell_id}_month_textbox' value='1' {VAR:month_textbox}></td>
 </tr>
 <tr>
 <td class="fgtext">&nbsp;{VAR:LC_FORMS_DAY}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_day' value='1' {VAR:has_day}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_day_ord' value='{VAR:day_ord}' size="2" class="small_button"></td>
+<td class="fgtext">&nbsp;textbox <input type='checkbox' name='{VAR:cell_id}_day_textbox' value='1' {VAR:day_textbox}></td>
 </tr>
 <tr>
 <td class="fgtext">&nbsp;{VAR:LC_FORMS_HOUR}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_hr' value='1' {VAR:has_hr}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_hr_ord' value='{VAR:hr_ord}' size="2" class="small_button"></td>
+<td class="fgtext">&nbsp;textbox <input type='checkbox' name='{VAR:cell_id}_hr_textbox' value='1' {VAR:hr_textbox}></td>
 </tr>
 <tr>
 <td class="fgtext">&nbsp;{VAR:LC_FORMS_MINUT}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_minute' value='1' {VAR:has_minute}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_minute_ord' value='{VAR:minute_ord}' size="2" class="small_button"></td>
+<td class="fgtext">&nbsp;textbox <input type='checkbox' name='{VAR:cell_id}_minute_textbox' value='1' {VAR:minute_textbox}></td>
 </tr>
 <tr>
 <td class="fgtext">&nbsp;{VAR:LC_FORMS_SECUND}:</td>
 <td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_has_second' value='1' {VAR:has_second}></td>
 <td class="fgtext">&nbsp;<input type='text' name='{VAR:cell_id}_second_ord' value='{VAR:second_ord}' size="2" class="small_button"></td>
+<td class="fgtext">&nbsp;textbox <input type='checkbox' name='{VAR:cell_id}_second_textbox' value='1' {VAR:second_textbox}></td>
 </tr>
 </table>
 </td>
