@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.77 2004/06/18 16:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.78 2004/06/22 08:09:56 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -654,7 +654,7 @@ class doc extends class_base
 
 		// can't use empty on function 
 		$def_cfgform = aw_ini_get("document.default_cfgform");
-		if (empty($def_cfgform))
+		if (!empty($def_cfgform))
 		{
 			$retval["ng_doc"] = array(
 				"caption" => "Dokument 2.0",
