@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.53 2005/03/18 11:46:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.54 2005/03/18 12:50:36 ahti Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1809,7 +1809,7 @@ class converters extends aw_template
 			flush();
 
 			$c = $o->connections_from(array(
-				"type" => RELTYPE_EMAIL
+				"type" =>  "RELTYPE_EMAIL",
 			));
 			if (!count($c))
 			{
