@@ -6,6 +6,9 @@
 				<arguments>
 					<optional name="stype" type="int"/>
 					<optional name="target" type="int"/>
+					<optional name="otype" type="int"/>
+					<optional name="one" type="int"/>
+					<optional name="return_url"/>
 				</arguments>
 			</function>
 		</action>
