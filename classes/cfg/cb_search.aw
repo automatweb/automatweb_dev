@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.16 2004/11/19 11:32:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.17 2004/11/23 10:40:22 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -286,6 +286,7 @@ class cb_search extends class_base
 
 	function callback_gen_search($arr)
 	{
+		enter_function("cb_search::callback_gen_search");
 		// now, get a list of properties in both classes and generate the search form
 		// get a list of properties in both classes
 		$this->_prepare_form_data($arr);
@@ -311,11 +312,13 @@ class cb_search extends class_base
 				$this->mod_chooser_prop($res, $iname, $item["clid"], $arr["obj_inst"]);
 			}
 		};
+		exit_function("cb_search::callback_gen_search");
 		return $res;
 	}
 
 	function mod_chooser_prop(&$props, $pn, $clid, $o)
 	{
+		enter_function("cb_search::mod_chooser_prop");
 		// since storage can't do this yet, we gots to do sql here :(
 		$p =& $props[$pn];
 		$opts = array("" => "");
@@ -335,12 +338,15 @@ class cb_search extends class_base
 
 		$p["type"] = "select";
 		$p["options"] = array("" => "") + $opts;
+		exit_function("cb_search::mod_chooser_prop");
 	}
 
 	function _prepare_search($arr)
 	{
+		enter_function("cb_search::_prepare_search");
 		if ($this->search_prepared)
 		{
+			exit_function("cb_search::_prepare_search");
 			return false;
 		}
 		$this->search_data = array();
@@ -354,6 +360,7 @@ class cb_search extends class_base
 			};
 		};
 
+		exit_function("cb_search::_prepare_search");
 	}
 
 	function __proptbl_srt($pa, $pb)
@@ -370,6 +377,7 @@ class cb_search extends class_base
 
 	function mk_result_table($arr)
 	{
+		enter_function("cb_search::mk_result_table");
 		$this->_prepare_form_data($arr);
 		$this->_prepare_search($arr);
 		$t = &$arr["prop"]["vcl_inst"];
@@ -495,7 +503,8 @@ class cb_search extends class_base
 				// if there are any criteria for search from folder, add them to the filter
 				$this->_add_parent_filter($arr["obj_inst"], $sdata);
 			
-				$sdada["limit"] = 500;
+				$sdata["limit"] = 500;
+				$sdata["join_strategy"] = "data";
 				$olist_cnt = new object_list($sdata);
 
 				if ($data["per_page"])
@@ -506,7 +515,9 @@ class cb_search extends class_base
 						"records_per_page" => $data["per_page"]
 					));
 				}
+
 				$olist = new object_list($sdata);
+				enter_function("cb_search::mk_result_table::objloop");
 				for($o = $olist->begin(); !$olist->end(); $o = $olist->next())
 				{
 					// not so simple - need to replace classificators with vals
@@ -548,10 +559,14 @@ class cb_search extends class_base
 					$row["oid"] = $o->id();
 					$t->define_data($row);
 				};
+				exit_function("cb_search::mk_result_table::objloop");
 			};
 		};
 
-		$t->sort_by();
+		enter_function("cb_search::mk_result_table::sort");
+		$t->sort_by();	
+		exit_function("cb_search::mk_result_table::sort");
+		exit_function("cb_search::mk_result_table");
 	}
 				
 	function _prepare_form_data($arr)
@@ -560,6 +575,7 @@ class cb_search extends class_base
 		{
 			return false;
 		};
+		enter_function("cb_search::_prepare_form_data");
 		$this->prepared = true;
 		$o = $arr["obj_inst"];
 
@@ -627,10 +643,12 @@ class cb_search extends class_base
 
 
 		*/
+		exit_function("cb_search::_prepare_form_data");
 	}
 
 	function get_props_from_obj($o, $addt = true)
 	{
+		enter_function("cb_search::get_props_from_obj");
 		// get a list of properties in both classes
 		$cfgx = get_instance("cfg/cfgutils");
 		$ret = $cfgx->load_class_properties(array(
@@ -688,6 +706,7 @@ class cb_search extends class_base
 			$ret["name"]["table"] = "objects";
 			$ret["name"]["field"] = "name";
 		}
+		exit_function("cb_search::get_props_from_obj");
 		return array($ret, $o->prop("root_class"), $cfgx->get_relinfo());
 	}
 
@@ -823,6 +842,7 @@ class cb_search extends class_base
 
 	function show($arr)
 	{
+		enter_function("cb_search::show");
 		aw_session_set("no_cache", 1);
 		$ob = new object($arr["id"]);
 		$request = array("s" => $GLOBALS["s"]);
@@ -886,11 +906,13 @@ class cb_search extends class_base
 			//"section2" => $arr["section2"],
 			
 		));
+		exit_function("cb_search::show");
 		return $this->parse();
 	}
 
 	function get_callback_properties($ob)
 	{
+		enter_function("cb_search::get_callback_properties");
 		$request = array("s" => $GLOBALS["s"]);
 		if ($GLOBALS["search_butt"])
 		{
@@ -903,10 +925,12 @@ class cb_search extends class_base
 
 		list($props, $clid, $relinfo) = $this->get_props_from_obj($ob);
 		
-		return $this->callback_gen_search(array(
+		$tmp = $this->callback_gen_search(array(
 			"obj_inst" => $ob,
 			"request" => $request
 		));
+		exit_function("cb_search::get_callback_properties");
+		return $tmp;
 	}
 
 	/** populates the current search result's table
@@ -955,6 +979,7 @@ class cb_search extends class_base
 	**/
 	function proc_syns_in_sdata($o, &$sdata)
 	{
+		enter_function("cb_search::proc_syns_in_sdata");
 		$scs = $o->connections_from(array(
 			"type" => "RELTYPE_SYN"
 		));
@@ -991,6 +1016,7 @@ class cb_search extends class_base
 				$sdata[$k] = $v;
 			}
 		}
+		exit_function("cb_search::proc_syns_in_sdata");
 	}
 
 	function proc_perm_str($o, $v, $syns)
@@ -1140,6 +1166,7 @@ class cb_search extends class_base
 
 	function _add_parent_filter($o, &$sdata)
 	{
+		enter_function("cb_search::_add_parent_filter");
 		$pd = safe_array($o->meta("parents"));
 		$pft = array();
 		foreach($pd as $pid => $dat)
@@ -1165,6 +1192,7 @@ class cb_search extends class_base
 		{
 			$sdata["parent"] = $pft;
 		}
+		exit_function("cb_search::_add_parent_filter");
 	}
 }
 ?>

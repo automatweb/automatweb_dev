@@ -808,20 +808,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$where .= ($where != "" ? " AND " : "")." objects.lang_id = '".aw_global_get("lang_id")."' ";
 		}
 
-		// make joins
-		$js = array();
-		foreach($this->used_tables as $tbl)
-		{
-			if ($tbl != "objects")
-			{
-				$js[] = " LEFT JOIN $tbl ON $tbl.".$this->tableinfo[$tbl]["index"]." = objects.brother_of ";
-			}
-		}
-		foreach($this->alias_joins as $aj)
-		{
-			$js[] = " LEFT JOIN aliases $aj[name] ON $aj[on] ";
-		}
-		$joins = join("", $js).join(" ", $this->joins);
+		$joins = $this->_get_joins($params);
 
 		$ret = array();
 		if ($where != "")
@@ -830,7 +817,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$acld = ", objects.acldata as acldata, objects.parent as parent";
 			}
-			$q = "SELECT objects.oid as oid,objects.name as name,objects.parent as parent  $acld FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
+			$q = "SELECT objects.oid as oid,objects.name as name,objects.parent as parent  $acld FROM $joins WHERE $where ".$this->sby." ".$this->limit;
 
 			$acldata = array();
 			$parentdata = array();
@@ -907,6 +894,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ("limit" == (string)($key))
 			{
 				$this->limit = " LIMIT $val ";
+				continue;
+			}
+
+			if ("join_strategy" == (string)($key))
+			{
 				continue;
 			}
 
@@ -1409,6 +1401,78 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		if ($pos < (count($filt)-1))
 		{
 			$this->_req_do_pcp($filt, $pos+1, $new_clid, $arr);
+		}
+	}
+
+	function _get_joins($params)
+	{
+		// check if join strategy is present in args and do joins based on that
+		if (!empty($params["join_strategy"]))
+		{
+			$join_strategy = $params["join_strategy"];
+		}
+		else
+		{
+			$join_strategy = "obj";
+		}
+
+		if ($join_strategy == "obj")
+		{
+			// make joins
+			$js = array();
+			foreach($this->used_tables as $tbl)
+			{
+				if ($tbl != "objects")
+				{
+					$js[] = " LEFT JOIN $tbl ON $tbl.".$this->tableinfo[$tbl]["index"]." = objects.brother_of ";
+				}
+			}
+			foreach($this->alias_joins as $aj)
+			{
+				$js[] = " LEFT JOIN aliases $aj[name] ON $aj[on] ";
+			}
+			return "objects ".join("", $js).join(" ", $this->joins);
+		}
+		else
+		if ($join_strategy == "data")
+		{
+			// make joins
+			$js = array();
+			$first_table = NULL;
+			foreach($this->used_tables as $tbl)
+			{
+				if ($tbl == "objects")
+				{
+					continue;
+				}
+
+				if (count($js) == 0)
+				{
+					// first table
+					$js[] = $tbl;
+					$first_table = $tbl;
+				}
+				else
+				{
+					// other tables
+					$js[] = " LEFT JOIN $tbl ON $tbl.".$this->tableinfo[$tbl]["index"]." = objects.brother_of ";
+				}
+			}
+
+			if ($first_table !== NULL)
+			{
+				$js[] = " LEFT JOIN objects ON objects.oid = $first_table.".$this->tableinfo[$first_table]["index"];
+			}
+			else
+			{
+				$js[] = " objects ";
+			}
+
+			foreach($this->alias_joins as $aj)
+			{
+				$js[] = " LEFT JOIN aliases $aj[name] ON $aj[on] ";
+			}
+			return join("", $js).join(" ", $this->joins);
 		}
 	}
 }
