@@ -1152,3 +1152,6 @@ function savemenu() {
 -->
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<script language="javascript">
+onOff('bob1284','dip1284','visible','dd1284');
+</script>
