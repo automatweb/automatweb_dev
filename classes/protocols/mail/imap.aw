@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.18 2004/03/04 15:17:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.19 2004/03/25 17:33:27 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -276,6 +276,12 @@ class imap extends class_base
 		};
 		$rv = $mbox_over["contents"];
 		return $rv;
+	}
+	
+	function search_folder($string)
+	{
+		$results = imap_search($this->mbox,$string,ST_UID);
+		return $results;
 	}
 
 	function __date_sort($el1, $el2)
