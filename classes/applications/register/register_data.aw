@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.22 2004/12/30 14:35:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.23 2004/12/31 10:30:13 ahti Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -180,19 +180,19 @@
 @property usersubtitle5 type=text store=no subtitle=1
 @caption Subtitle5
 
-@property usertext1 type=text field=meta method=serialize group=general table=objects
+@property usertext1 type=text field=meta method=serialize table=objects
 @caption Usertext1
 
-@property usertext2 type=text field=meta method=serialize group=general table=objects
+@property usertext2 type=text field=meta method=serialize table=objects
 @caption Usertext2
 
-@property usertext3 type=text field=meta method=serialize group=general table=objects
+@property usertext3 type=text field=meta method=serialize table=objects
 @caption Usertext3
 
-@property usertext4 type=text field=meta method=serialize group=general table=objects
+@property usertext4 type=text field=meta method=serialize table=objects
 @caption Usertext4
 
-@property usertext5 type=text field=meta method=serialize group=general table=objects
+@property usertext5 type=text field=meta method=serialize table=objects
 @caption Usertext5
 
 @property usertext6 type=text store=no
