@@ -49,6 +49,13 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="submit_repeaters">
+			<function name="submit_repeaters">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="submit_adm_event">
 			<function name="submit_adm_event">
