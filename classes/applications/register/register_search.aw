@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.7 2004/06/17 13:41:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.8 2004/07/08 11:34:58 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -482,11 +482,19 @@ class register_search extends class_base
 			);
 		}
 
+		#echo dbg::dump($tmp);
 		$i = get_instance($clid);
 		$xp = $i->parse_properties(array(
 			"properties" => $tmp,
 			"name_prefix" => "rsf"
 		));
+		/*
+		$xp = $i->process_properties(array(
+			"properties" => $tmp,
+			"name_prefix" => "rsf"
+		));
+		*/
+		//arr($xp);
 
 		$xp["search_butt"] = array(
 			"name" => "search_butt",
@@ -494,6 +502,7 @@ class register_search extends class_base
 			"type" => "submit",
 			"store" => "no",
 		);
+		header("loll");
 
 		return $xp;
 	}
