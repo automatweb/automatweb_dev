@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.16 2005/01/26 10:39:09 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.17 2005/02/01 12:37:36 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -9,7 +9,7 @@
 	HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 	
 	------------------------------------------------------------------------
-	@default group=general
+@default group=general
 	
 	@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 rel=1
 	@caption Listi liikmete allikas
@@ -29,7 +29,7 @@
 	@property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
 	@caption Listi liikmete seadetevorm
 	------------------------------------------------------------------------
-	@default group=member_list
+@default group=member_list
 		
 	@property member_list_tb type=toolbar store=no no_caption=1
 	@caption Listi staatuse toolbar
@@ -38,7 +38,7 @@
 	@caption Liikmed
 
 	------------------------------------------------------------------------
-	@default group=subscribing
+@default group=subscribing
 
 	@property confirm_subscribe type=checkbox ch_value=1 
 	@caption Liitumiseks on vaja kinnitust
@@ -54,7 +54,7 @@
 	@comment Iga aadress eraldi real, nimi ja aadress komaga eraldatud
 
 	------------------------------------------------------------------------
-	@default group=unsubscribing
+@default group=unsubscribing
 	
 	@property confirm_unsubscribe type=checkbox ch_value=1 
 	@caption Lahkumiseks on vaja kinnitust
@@ -69,7 +69,7 @@
 	@caption Massiline kustutamine
 	
 	------------------------------------------------------------------------
-	@default group=export_members
+@default group=export_members
 	@property export_type type=chooser orient=vertical store=no
 	@caption Formaat
 	
@@ -80,7 +80,7 @@
 	@caption Ekspordi
 
 	------------------------------------------------------------------------
-	@default group=list_status
+@default group=list_status
 
 	@property list_status_tb type=toolbar store=no no_caption=1
 	@caption Listi staatuse toolbar
@@ -89,7 +89,7 @@
 	@caption Listi staatus
 	
 	------------------------------------------------------------------------
-	@default group=unsent
+@default group=unsent
 
 	@property unsent_tb type=toolbar store=no no_caption=1
 	@caption Listi staatuse toolbar
@@ -98,7 +98,7 @@
 	@caption Listi staatus
 	
 	------------------------------------------------------------------------
-	@default group=write_mail
+@default group=write_mail
 
 	@property mail_toolbar type=toolbar no_caption=1
 	@caption Maili toolbar
@@ -107,7 +107,7 @@
 	@caption Maili kirjutamine
 
 	------------------------------------------------------------------------
-	@default group=mail_report
+@default group=mail_report
 
 	@property mail_subject type=text store=no 
 	@caption Teema
@@ -128,7 +128,7 @@
 	@caption Meili raport
 	
 	------------------------------------------------------------------------
-	@default group=show_mail
+@default group=show_mail
 	@property show_mail_subject type=text store=no
 	@caption Teema
 
@@ -139,17 +139,31 @@
 	@caption Sisu
 
 	------------------------------------------------------------------------
+@default group=export_to_file
+
+	@property expf_path type=textbox 
+	@caption Kataloog serveris
+
+	@property expf_num_per_day type=textbox size=5
+	@caption Mitu korda p&auml;evas eksport teha
+
+	@property expf_next_time type=text store=no
+	@caption Millal j&auml;rgmine eksport toimub
+
+	------------------------------------------------------------------------
 	@groupinfo membership caption=Liikmed 
-	@groupinfo member_list caption=Nimekiri submit=no parent=membership
-	@groupinfo subscribing caption=Liitumine parent=membership
-	@groupinfo unsubscribing caption=Lahkumine parent=membership
-	@groupinfo export_members caption=Eksport parent=membership
+		@groupinfo member_list caption=Nimekiri submit=no parent=membership
+		@groupinfo subscribing caption=Liitumine parent=membership
+		@groupinfo unsubscribing caption=Lahkumine parent=membership
+		@groupinfo export_members caption=Eksport parent=membership
+		@groupinfo export_to_file caption="Eksport faili" parent=membership
+
 	@groupinfo raports caption=Kirjad
-	@groupinfo list_status caption="Saadetud kirjad" parent=raports submit=no
-	@groupinfo unsent caption="Saatmata kirjad" parent=raports submit=no
-	@groupinfo write_mail caption="Saada kiri" parent=raports 
-	@groupinfo mail_report caption="Kirja raport" parent=raports submit=no
-	@groupinfo show_mail caption="Listi kiri" parent=raports submit=no
+		@groupinfo list_status caption="Saadetud kirjad" parent=raports submit=no
+		@groupinfo unsent caption="Saatmata kirjad" parent=raports submit=no
+		@groupinfo write_mail caption="Saada kiri" parent=raports 
+		@groupinfo mail_report caption="Kirja raport" parent=raports submit=no
+		@groupinfo show_mail caption="Listi kiri" parent=raports submit=no
 
 	------------------------------------------------------------------------
 	@classinfo syslog_type=ST_MAILINGLIST
@@ -1937,6 +1951,33 @@ class ml_list extends class_base
 			}
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "membership"));
+	}
+
+	function callback_post_save($arr)
+	{
+		$sc = get_instance("scheduler");
+		$url = str_replace("automatweb/", "", $this->mk_my_orb("exp_to_file", array("id" => $arr["obj_inst"]->id())));
+		$sc->remove(array(
+			"event" => $url
+		));
+
+		if ($arr["obj_inst"]->prop("expf_path") != "" && $arr["obj_inst"]->prop("expf_num_per_day") > 0)
+		{
+			$this->_add_expf_sched($arr["obj_inst"]);
+		}
+	}
+
+	function _add_expf_sched($o)
+	{
+		// get start of day
+		$time = time() % (24*3600);
+
+		// get num of hours between exports
+		$numh = 24 / $o->prop("expf_num_per_day");
+
+		// get num secs
+		$nums = $numh ;
+		// make next time		
 	}
 }
 ?>

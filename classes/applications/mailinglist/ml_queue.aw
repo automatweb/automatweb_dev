@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.13 2005/01/25 15:12:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.14 2005/02/01 12:37:36 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -564,12 +564,12 @@ class ml_queue extends aw_template
 		$msg_obj = new object($msg["mail"]);
 		$is_html = $msg_obj->prop("html_mail") == 1024;
 		//$is_html=$msg["type"] & MSG_HTML;
-		$message = $msg["message"];
+		$message = nl2br($msg["message"]);
 
 		$c_title = $msg_obj->prop("msg_contener_title");
 		$c_content = $msg_obj->prop("msg_contener_content");
 		$al = get_instance("aliasmgr");
-		$al->parse_oo_aliases($msg_data["id"], &$message);
+		$al->parse_oo_aliases($msg["mail"], &$message);
 		$tpl = $msg_obj->meta("template_selector");
 		if(is_oid($tpl) && $this->can("view", $tpl))
 		{
@@ -580,7 +580,7 @@ class ml_queue extends aw_template
 			{
 				$subject = $tsubject;
 			}
-			$message = nl2br($message);
+			
 			$template = str_replace("#title#", $c_title, $template);
 			$template = str_replace("#container#", $c_content, $template);
 			$message = str_replace("#content#", $message, $template);
