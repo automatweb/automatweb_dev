@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.137 2003/01/06 08:26:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.138 2003/01/09 12:39:46 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -2510,6 +2510,7 @@ class document extends aw_template
 		$row["oid"] = 0;
 		$row["parent"] = $parent;
 		$row["lang_id"] = aw_global_get("lang_id");
+		$row["period"] = $arr["period"];
 		$this->quote(&$row);
 		$id = $this->new_object($row);
 
