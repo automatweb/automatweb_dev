@@ -6,60 +6,30 @@
 
 <!-- SUB: ERROR -->
 <tr>
-	<td colspan="2" class="{VAR:form_error}">{VAR:error_text}</td>
+	<td colspan="2" class="form_error">{VAR:error_text}</td>
 </tr>
 <!-- END SUB: ERROR -->
 
 <!-- SUB: PROP_ERR_MSG -->
 <tr>
-	<td class="{VAR:webform_caption}"></td>
-	<td class='{VAR:webform_errmsg}'>{VAR:err_msg}</td>
+	<td class="webform_caption"></td>
+	<td class='webform_errmsg'>{VAR:err_msg}</td>
 </tr>	
 <!-- END SUB: PROP_ERR_MSG -->
 
 <!-- SUB: LINE -->
 <tr>
-	<td class='{VAR:webform_caption}'>
+	<td class='webform_caption'>
 	{VAR:caption}
 	</td>
-	<td class='{VAR:webform_element}'>
+	<td class='webform_element'>
 	{VAR:element}
 	</td>
 </tr>
 <!-- END SUB: LINE -->
-<!-- SUB: LINE_TOP -->
-<tr>
-	<td class='{VAR:webform_caption}'>
-	</td>
-	<td class='{VAR:webform_element}'>
-	{VAR:caption}<br />
-	{VAR:element}
-	</td>
-</tr>
-<!-- END SUB: LINE_TOP -->
-<!-- SUB: LINE_BOTTOM -->
-<tr>
-	<td class='{VAR:webform_caption}'>
-	</td>
-	<td class='{VAR:webform_element}'>
-	{VAR:element}<br />
-	{VAR:caption}
-	</td>
-</tr>
-<!-- END SUB: LINE_BOTTOM -->
-<!-- SUB: LINE_RIGHT -->
-<tr>
-	<td class='{VAR:webform_caption}'>
-	{VAR:element}
-	</td>
-	<td class='{VAR:webform_element}'>
-	{VAR:caption}
-	</td>
-</tr>
-<!-- END SUB: LINE_RIGHT -->
 <!-- SUB: HEADER -->
 <tr>
-	<td class='{VAR:webform_header}' colspan="2">
+	<td class='webform_header' colspan="2">
 	{VAR:caption}
 	</td>
 </tr>
@@ -67,7 +37,7 @@
 
 <!-- SUB: SUB_TITLE -->
 <tr>
-	<td colspan='2' class='{VAR:webform_subtitle}'>
+	<td colspan='2' class='webform_subtitle'>
 	{VAR:value}
 	</td>
 </tr>
@@ -75,7 +45,7 @@
 
 <!-- SUB: CONTENT -->
 <tr>
-	<td colspan='2' class='{VAR:webform_content}'>
+	<td colspan='2' class='webform_content'>
 	{VAR:value}
 	</td>
 </tr>
@@ -83,7 +53,7 @@
 
 <!-- SUB: SUBMIT -->
 <tr>
-	<td class='{VAR:webform_content}' colspan="2">
+	<td class='webform_content' colspan="2">
 		<input type='submit' name='{VAR:name}' value='{VAR:sbt_caption}'>
 	</td>
 </tr>
