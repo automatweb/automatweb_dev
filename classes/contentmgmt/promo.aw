@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.38 2004/06/07 12:23:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.39 2004/06/09 20:26:43 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -691,7 +691,7 @@ class promo extends class_base
 			{
 				$show_promo = false;
 			};
-			
+
 			// this line decides, whether we should show this promo box here or not.
 			// now, how do I figure out whether the promo box is actually in my path?
 			if ($show_promo)
