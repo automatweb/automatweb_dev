@@ -11,23 +11,18 @@
 <a href="javascript:document.f1.submit()">{VAR:LC_FORMS_SAVE}</a>
 &nbsp;|&nbsp;
 <!-- SUB: CAN_ADD -->
-<a href='{VAR:add_el}'>{VAR:LC_FORMS_ADD}</a>
+<a href='{VAR:add_el}'>{VAR:LC_FORMS_ADD}</a> | 
 <!-- END SUB: CAN_ADD -->
 
-</b></td>
+</b>Celli stiil: <select name="cell_style" class="formselect">{VAR:cell_style}</select>
+
+</td>
 </tr>
 
 <!-- SUB: ELEMENT_LINE -->
 <tr><td><a name='el_{VAR:after}'>{VAR:element}</td></tr>
 <tr>
 <td height="15" colspan="15" class="fgtitle"><a href="javascript:document.f1.submit()">{VAR:LC_FORMS_SAVE}</a>
-<!-- SUB: EL_ADD -->
-
-<!-- END SUB: EL_ADD -->
-
-<!-- SUB: EL_ACL -->
-&nbsp;|&nbsp;<a href="editacl.{VAR:ext}?oid={VAR:element_id}&file=form_element.xml" >ACL</a>
-<!-- END SUB: EL_ACL -->
 </td>
 </tr>
 <!-- END SUB: ELEMENT_LINE -->
@@ -40,15 +35,3 @@
 {VAR:reforb}
 </font>
 </form>
-<script language=javascript>
-function doSave(el)
-{
-	document.f1.savedfrom.value=el;
-	document.f1.submit();
-}
-function doAddEl()
-{
-	document.f1.action.value='add_element';
-	document.f1.submit();
-}
-</script>
