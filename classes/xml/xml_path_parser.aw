@@ -92,7 +92,7 @@ class xml_path_parser
 
 		array_walk($this->paths,array(&$this,'depthwalker'),1);
 
-		if ($this->paths[$ctx]["depth"] <= 0)
+		if (empty($this->paths[$ctx]) || ($this->paths[$ctx]["depth"] <= 0))
 		{
 			$this->paths[$ctx] = array("depth" => 0,"children" => 0);
 		};
@@ -152,9 +152,9 @@ class xml_path_parser
 		if ((strpos($key,$ctx) === 0))
 		{
 			// now check whether the ending tag has any children defined - if so, push 'em
-			if ($this->children[$this->pname])
+			if (isset($this->children[$this->pname]))
 			{
-				if (!is_array($this->children[$this->directparent][$this->pname]))
+				if (empty($this->children[$this->directparent][$this->pname]))
 				{
 					$this->children[$this->directparent][$this->pname] = array();
 				};
