@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.95 2002/07/17 07:46:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.96 2002/07/17 20:31:01 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -2115,7 +2115,6 @@ class core extends db_connector
 	{
 		$this->db_init();
 		$this->tpl_init($tpldir);
-		aw_config_init_class(&$this);
 	}
 
 	////
