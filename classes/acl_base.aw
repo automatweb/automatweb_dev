@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.36 2003/04/23 13:53:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.37 2003/06/04 19:22:16 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -109,6 +109,10 @@ class acl_base extends core
 
 	function get_acl_for_oid_gid($oid,$gid)
 	{
+		if (!$oid || !$gid)
+		{
+			return;
+		}
 		$q = "SELECT
 						*,
 						acl.id as acl_rel_id,
@@ -527,6 +531,44 @@ class acl_base extends core
 		echo "Port 80</ADDRESS>";
 		echo "</BODY></HTML>";
 		die();
+	}
+
+	////
+	// !returns all objects that have acl relations set for the groups
+	// parameters
+	//	grps - array of groups to return
+	function acl_get_acls_for_groups($arr)
+	{
+		extract($arr);
+		$gids = join(",", $grps);
+		if ($gids == "")
+		{
+			return array();
+		}
+
+		$ret = array();
+
+		$sql = "
+			SELECT 
+				objects.name as obj_name, 
+				objects.oid,
+				objects.createdby as createdby,
+				acl.gid,
+				groups.name as grp_name,
+				".$this->sql_unpack_string()."
+			FROM
+				acl
+				LEFT JOIN objects ON objects.oid = acl.oid
+				LEFT JOIN groups ON groups.gid = acl.gid
+			WHERE
+				acl.gid IN ($gids)
+		";
+		$this->db_query($sql);
+		while ($row = $this->db_next())
+		{
+			$ret[] = $row;
+		}
+		return $ret;
 	}
 }
 ?>
