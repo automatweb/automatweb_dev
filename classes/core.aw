@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.93 2002/06/28 19:11:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.94 2002/07/16 23:43:45 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1162,7 +1162,7 @@ class core extends db_connector
 		if ($no_cache)
 		{
 			$_t = $this->get_record("objects","oid",$oid);
-			if ($unserialize_meta)
+			if ($unserialize_meta && $_t)
 			{
 				$_t["meta"] = aw_unserialize($_t["metadata"]);
 			}
@@ -1172,7 +1172,7 @@ class core extends db_connector
 			if (!($_t = aw_cache_get("objcache",$oid)))
 			{
 				$_t = $this->get_record("objects","oid",$oid);
-				if ($unserialize_meta)
+				if ($unserialize_meta && $_t)
 				{
 					$_t["meta"] = aw_unserialize($_t["metadata"]);
 				}

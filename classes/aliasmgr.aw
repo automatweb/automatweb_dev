@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.37 2002/07/05 11:47:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.38 2002/07/16 23:43:45 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -150,7 +150,7 @@ class aliasmgr extends aw_template
 				"class" => "document",
 				"class_id" => CL_DOCUMENT,
 				"generator" => "_document_aliases",
-				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"poll"),
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"document"),
 				"chlink" => $this->mk_my_orb("change",array(),"document"),
 				"field" => "id"
 		);
@@ -244,16 +244,16 @@ class aliasmgr extends aw_template
 				"field" => "id"
 		);
 		
-		//$this->defs["poll"] = array(
-		//		"alias" => "k",
-		//		"title" => "poll",
-		//		"class" => "poll",
-		//		"class_id" => CL_POLL,
-		//		"generator" => "_poll_aliases",
-		//		"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"poll"),
-		//		"chlink" => $this->mk_my_orb("change",array(),"poll"),
-		//		"field" => "id"
-		//);
+		$this->defs["poll"] = array(
+				"alias" => "a",
+				"title" => "poll",
+				"class" => "poll",
+				"class_id" => CL_POLL,
+				"generator" => "_poll_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"poll"),
+				"chlink" => $this->mk_my_orb("change",array(),"poll"),
+				"field" => "id"
+		);
 		
 		$this->defs["calendars"] = array(
 				"alias" => "k",

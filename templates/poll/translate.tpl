@@ -40,41 +40,34 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 
 <table border="0">
 	<tr>
-		<td class="celltext">ID:</td>
-		<td colspan="3" class="celltext">{VAR:id} 
-		<!-- SUB: CHANGE -->
-			<a href='{VAR:translate}'>T&otilde;lgi</a>
-		<!-- END SUB: CHANGE -->
-		</td>
-	</tr>
-	<tr>
 		<td class="celltext">Keel:&nbsp;&nbsp;</td>
-		<td colspan="3" class="celltext"><b>{VAR:lang}</b></td>
+		<!-- SUB: LANG_H -->
+		<td class="celltext"><b>{VAR:lang}</b></td>
+		<!-- END SUB: LANG_H -->
 	</tr>
 	<tr>
 		<td class="celltext">{VAR:LC_POLL_QUESTION}:</td>
+		<!-- SUB: LANG_Q -->
 		<td class="celltext"><input size="40" type='text' NAME='name[{VAR:lang_id}]' VALUE='{VAR:name}' class="formtext"></td>
-		<td class="celltext">&nbsp;&nbsp;</td>
-		<td class="celltext">Klikke:</td>
+		<!-- END SUB: LANG_Q -->
 	</tr>
 	<tr>
 		<td class="celltext" valign="top">{VAR:LC_POLL_COMMENTARY}:</td>
-		<td colspan="3" class="celltext"><textarea NAME='comment[{VAR:lang_id}]' cols=40 rows=5 class="formtext">{VAR:comment}</textarea></td>
+		<!-- SUB: LANG_C -->
+		<td class="celltext"><textarea NAME='comment[{VAR:lang_id}]' cols=40 rows=5 class="formtext">{VAR:comment}</textarea></td>
+		<!-- END SUB: LANG_C -->
 	</tr>
 	<tr>
-		<td class="celltext" colspan="4">Vastused:</td>
+		<td class="celltext" colspan="40">Vastused:</td>
 	</tr>
 	<!-- SUB: QUESTION -->
 	<tr>
-		<td colspan="2" align="right" class="celltext"><input size="40" type='text' NAME='answer[{VAR:lang_id}][{VAR:answer_id}]' VALUE='{VAR:answer}' class="formtext"></td>
-		<td class="celltext">&nbsp;&nbsp;</td>
-		<td class="celltext">&nbsp;{VAR:clicks} ({VAR:percent}%)</td>
+		<td class="celltext">&nbsp;</td>
+		<!-- SUB: LANG_A -->
+		<td class="celltext"><input size="40" type='text' NAME='answer[{VAR:lang_id}][{VAR:answer_id}]' VALUE='{VAR:answer}' class="formtext"></td>
+		<!-- END SUB: LANG_A -->
 	</tr>
 	<!-- END SUB: QUESTION -->
-	<tr>
-		<td colspan="3" class="celltext" align="right"><b>Kokku:</b></td>
-		<td class="celltext">&nbsp;<b>{VAR:sum}</b> ({VAR:percent}%)</td>
-	</tr>
 </table>
 
 {VAR:reforb}
