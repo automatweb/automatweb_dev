@@ -3,7 +3,7 @@
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <!-- SUB: LANG -->
 <tr bgcolor="#C9EFEF">
-<td class="plain">E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajate andmete alias on #liituja_andmed# , kasutajanime alias #kasutaja# ja parooli alias #parool#). ({VAR:name})</td>
+<td class="plain">E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajate andmete alias on #liituja_andmed# , kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#). ({VAR:name})</td>
 </tr>
 <tr bgcolor="#C9EFEF">
 <td class="plain">Subject: <input type='text' name='join_mail_subj[{VAR:acceptlang}]' value='{VAR:join_mail_subj}'></td>

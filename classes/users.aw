@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.68 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.69 2002/12/30 13:32:22 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -490,6 +490,7 @@ class users extends users_user
 			$mail = str_replace("#parool#", $udata["password"],$mail);
 			$mail = str_replace("#kasutaja#", $arr["id"],$mail);
 			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true, "user" => $arr["id"]))),$mail);
+			$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($arr["id"]), $mail);
 
 			mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			$jsa = $c->get_simple_config("join_send_also");
@@ -566,6 +567,7 @@ class users extends users_user
 			$mail = str_replace("#parool#", $add_state["pass"],$mail);
 			$mail = str_replace("#kasutaja#", $add_state["uid"],$mail);
 			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true))),$mail);
+			$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($add_state["uid"]), $mail);
 
 			mail($add_state["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			$jsa = $c->get_simple_config("join_send_also");
@@ -620,6 +622,7 @@ class users extends users_user
 				$mail = str_replace("#parool#", $add_state["pass"],$mail);
 				$mail = str_replace("#kasutaja#", $add_state["uid"],$mail);
 				$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true, "user" => $add_state["uid"]))),$mail);
+				$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($add_state["uid"]), $mail);
 
 				mail($add_state["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 				$jsa = $c->get_simple_config("join_send_also");
@@ -1770,7 +1773,6 @@ class users extends users_user
 			$q = "SELECT * FROM users WHERE email = '$email' AND blocked = 0";
 		};
 		$this->db_query($q);
-		global $status_msg;
 		while($row = $this->db_next())
 		{
 			if ($type == "email")
@@ -1780,27 +1782,11 @@ class users extends users_user
 			if (not(is_email($row["email"])))
 			{
 				$status_msg .= "Kasutajal $uid puudub korrektne e-posti aadress. Palun pöörduge veebisaidi haldaja poole";
-				session_register("status_msg");
-				return $this->mk_my_orb("send_hash",array());
+				aw_session_set("status_msg", $status_msg);
 				return $this->mk_my_orb("send_hash",array());
 			};
-			$ts = time();
-			$hash = substr(gen_uniq_id(),0,15);
 
-			$this->set_user_config(array(
-				"uid" => $uid,
-				"key" => "password_hash",
-				"value" => $hash,
-			));
-
-			$this->set_user_config(array(
-				"uid" => $uid,
-				"key" => "password_hash_timestamp",
-				"value" => $ts,
-			));
-
-			$host = aw_global_get("HTTP_HOST");
-			$churl = $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $hash),"users",0,0);
+			$churl = $this->get_change_pwd_hash_link($uid);
 
 			$email = $this->cfg["webmaster_mail"];
 
@@ -2099,6 +2085,27 @@ class users extends users_user
 		$ret =  $this->make_keys(array_keys($this->_gen_usr_list()));
 		ksort($ret);
 		return ($arr['add_empty'] ? array('' => '') : array()) + $ret;
+	}
+
+	function get_change_pwd_hash_link($uid)
+	{
+		$ts = time();
+		$hash = substr(gen_uniq_id(),0,15);
+
+		$this->set_user_config(array(
+			"uid" => $uid,
+			"key" => "password_hash",
+			"value" => $hash,
+		));
+
+		$this->set_user_config(array(
+			"uid" => $uid,
+			"key" => "password_hash_timestamp",
+			"value" => $ts,
+		));
+
+		$host = aw_global_get("HTTP_HOST");
+		return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $hash),"users",0,0);
 	}
 }
 ?>
