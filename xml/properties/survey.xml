@@ -212,6 +212,23 @@
             <field>utext8</field>
             <caption>utext8</caption>
       </property>
+      <property>
+            <name>remote_host</name>
+            <table>survey</table>
+            <group>survey</group>
+            <type>textbox</type>
+            <field>remote_host</field>
+            <caption>Remote host</caption>
+      </property>
+      <property>
+            <name>sbt</name>
+            <table>survey</table>
+            <group>survey</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>sbt</field>
+            <caption>Submit</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SURVEY</syslog_type>
             <relationmgr>yes</relationmgr>

@@ -450,13 +450,13 @@
             <store>no</store>
       </property>
       <property>
-            <name>rate_content</name>
+            <name>rate</name>
             <group>rate</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
-            <callback>callback_rate_content</callback>
+            <callback>callback_rate</callback>
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Hindamine või vaatamine</caption>
@@ -584,12 +584,23 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>my_communtities</name>
+            <name>my_communities_toolbar</name>
             <group>my_communities</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Minu kogukondade toolbar</caption>
+      </property>
+      <property>
+            <name>my_communities</name>
+            <group>my_communities</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Minu kogukonnad</caption>
@@ -600,9 +611,9 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
+            <type>treeview</type>
             <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Kategooriad</caption>
       </property>
       <property>
@@ -680,6 +691,16 @@
             <type>relpicker</type>
             <reltype>RELTYPE_CFG_MANAGER</reltype>
             <caption>Seadete haldur</caption>
+      </property>
+      <property>
+            <name>pic_folder</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PIC_FOLDER</reltype>
+            <caption>Piltide kataloog</caption>
       </property>
       <property>
             <name>persons_folder</name>
@@ -1073,25 +1094,30 @@
                   <clid>CL_GROUP</clid>
                   <caption>kasutajagrupid</caption>
             </USER_GROUPS>
+            <PIC_FOLDER>
+                  <value>25</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Piltide kataloog</caption>
+            </PIC_FOLDER>
             <PERSONS_FOLDER>
                   <value>11</value>
                   <clid>CL_MENU</clid>
-                  <caption>isikute kataloog</caption>
+                  <caption>Isikute kataloog</caption>
             </PERSONS_FOLDER>
             <COMMUNITIES_FOLDER>
                   <value>12</value>
                   <clid>CL_MENU</clid>
-                  <caption>kogukondade kataloog</caption>
+                  <caption>Kogukondade kataloog</caption>
             </COMMUNITIES_FOLDER>
             <ORGANIZATIONS_FOLDER>
                   <value>13</value>
                   <clid>CL_MENU</clid>
-                  <caption>organisatsioonide kataloog</caption>
+                  <caption>Organisatsioonide kataloog</caption>
             </ORGANIZATIONS_FOLDER>
             <PROFILES_FOLDER>
                   <value>14</value>
                   <clid>CL_MENU</clid>
-                  <caption>profiilide kataloog</caption>
+                  <caption>Profiilide kataloog</caption>
             </PROFILES_FOLDER>
       </reltypes>
 </properties>

@@ -15,7 +15,7 @@
             <group>general</group>
             <table>objects</table>
             <type>relpicker</type>
-            <reltype>RELTYPE_CFG_MANAGER</reltype>
+            <reltype>RELTYPE_AVATAR</reltype>
             <method>serialize</method>
             <field>meta</field>
             <caption>Avatar</caption>
@@ -350,6 +350,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>Pilt</caption>
             </IMAGE>
+            <AVATAR>
+                  <value>20</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Avatar</caption>
+            </AVATAR>
             <CFG_MANAGER>
                   <value>15</value>
                   <clid>CL_CFGMANAGER</clid>

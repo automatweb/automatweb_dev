@@ -6,8 +6,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SECTION</reltype>
+            <type>select</type>
             <caption>Üksus</caption>
       </property>
       <property>
@@ -124,6 +123,11 @@
                   <clid>CL_CRM_SECTION</clid>
                   <caption>&amp;uuml;ksus</caption>
             </SECTION>
+            <ORG>
+                  <value>2</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Organisatsioon</caption>
+            </ORG>
       </reltypes>
 </properties>
 

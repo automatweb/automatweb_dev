@@ -171,6 +171,24 @@
             <caption>Kirja sisu</caption>
       </property>
       <property>
+            <name>msg_contener_title</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Konteineri pealkiri</caption>
+      </property>
+      <property>
+            <name>msg_contener_content</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Konteineri sisu</caption>
+      </property>
+      <property>
             <name>msg_attachments</name>
             <group>general</group>
             <table>messages</table>

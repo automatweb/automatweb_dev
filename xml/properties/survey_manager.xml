@@ -31,9 +31,41 @@
             <caption>Kuhu ümber suunata</caption>
       </property>
       <property>
-            <name>filled_surveys</name>
+            <name>users_only</name>
             <table>objects</table>
-            <group>filled_surveys</group>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Täita saavad ainult registreeritud kasutajad</caption>
+      </property>
+      <property>
+            <name>survey_name</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <caption>Ankeedi nimi</caption>
+      </property>
+      <property>
+            <name>survey_toolbar</name>
+            <table>objects</table>
+            <group>survey_list</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Nimekirja toolbar</caption>
+      </property>
+      <property>
+            <name>survey_list</name>
+            <table>objects</table>
+            <group>survey_list</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -42,27 +74,50 @@
             <caption>Täidetud ankeedid</caption>
       </property>
       <property>
-            <name>sweepstake1</name>
+            <name>search_form</name>
             <table>objects</table>
-            <group>sweepstake</group>
+            <group>survey_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_search_form</callback>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>search_results_toolbar</name>
+            <table>objects</table>
+            <group>survey_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Otsingutulemuste toolbar</caption>
+      </property>
+      <property>
+            <name>search_results</name>
+            <table>objects</table>
+            <group>survey_search</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <caption>Paarid</caption>
+            <no_caption>1</no_caption>
+            <caption>Tulemus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SURVEY_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <filled_surveys>
-                  <caption>Täidetud ankeedid</caption>
+            <survey_list>
+                  <caption>Nimekiri</caption>
                   <submit>no</submit>
-            </filled_surveys>
-            <sweepstake>
-                  <caption>Loosimine</caption>
-            </sweepstake>
+            </survey_list>
+            <survey_search>
+                  <caption>Otsing</caption>
+            </survey_search>
       </groupinfo>
       <reltypes>
             <SURVEY_FOLDER>

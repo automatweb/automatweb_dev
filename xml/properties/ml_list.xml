@@ -20,7 +20,7 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Lase liitumisel folderit valida</caption>
+            <caption>Lase liitumisel kausta valida</caption>
       </property>
       <property>
             <name>sub_form_type</name>
@@ -273,7 +273,7 @@
             <group>mail_report</group>
             <type>text</type>
             <store>no</store>
-            <caption>Viimane batch saadeti</caption>
+            <caption>Viimane kiri saadeti</caption>
       </property>
       <property>
             <name>mail_report</name>
@@ -371,8 +371,7 @@
                   <value>1</value>
                   <clid>
                         <num_0>CL_MENU</num_0>
-                        <num_1>CL_USER</num_1>
-                        <num_2>CL_GROUP</num_2>
+                        <num_1>CL_GROUP</num_1>
                   </clid>
                   <caption>Listi liikmete allikas</caption>
             </MEMBER_PARENT>
