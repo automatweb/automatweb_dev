@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.6 2003/05/12 18:15:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.7 2003/05/13 11:27:07 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -237,7 +237,9 @@ class converters extends aw_template
 		$row = $this->db_next();
 		if ($row["pcnt"] == 0)
 		{
-			return "Perioodid on juba konverditud";
+			$url = $this->cfg["baseurl"] . "/automatweb";
+			header("Location: $url");
+			exit;
 		};
 		
 
