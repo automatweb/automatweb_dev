@@ -127,11 +127,35 @@ background: #DBE8EE;
 
 .aste01 {background: #DBE8EE;}
 .aste02 {background: #95B4C5;}
-.aste03 {background: #A2BCCC;}
-.aste04 {background: #B0C8D4;}
-.aste05 {background: #BDD2DC;}
+.aste03 {
+	background: #A2BCCC;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	text-decoration: none;
+}
+.aste04 {
+	background: #B0C8D4;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	text-decoration: none;
+}
+.aste05 {
+	background: #BDD2DC;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	text-decoration: none;
+}
 .aste06 {background: #CADBE4;}
-.aste07 {background: #DBE8EE;}
+.aste07 {
+	background: #DBE8EE;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	text-decoration: none;
+}
 
 
 
