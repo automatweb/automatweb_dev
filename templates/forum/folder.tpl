@@ -4,9 +4,11 @@
 </td>
 </tr>
 <tr>
+<!-- SUB: SHOW_PATH -->
 <td class="{VAR:style_forum_yah}">
 <strong>{VAR:path}</strong>
 </td>
+<!-- END SUB: SHOW_PATH -->
 <td class="{VAR:style_caption}">
 <!-- SUB: PAGER -->
 <!-- SUB: active_page -->
