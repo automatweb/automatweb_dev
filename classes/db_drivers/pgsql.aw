@@ -168,8 +168,10 @@ class pgsql
 		{
 			$this->db_query($qtext);
 		}
-		while ($arr[]=$this->db_next())
-		{}
+		while ($row=$this->db_next())
+		{
+			$arr[]=$row;
+		}
 		return $arr;
 	}
 
