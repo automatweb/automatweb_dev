@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.11 2001/09/05 11:59:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.12 2001/09/05 13:13:06 duke Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -144,6 +144,8 @@ class form_table extends form_base
 			$this->table["view_col"] = $viewcol;
 			$this->table["change_col"] = $changecol;
 			$this->table["view_new_win"] = $view_new_win;
+			$this->table["new_win_x"] = $new_win_x;
+			$this->table["new_win_y"] = $new_win_y;
 			classload("xml");
 			$x = new xml;
 			$co = $x->xml_serialize($this->table);
@@ -321,6 +323,8 @@ class form_table extends form_base
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"CHANGE" => $this->parse("CHANGE"),
 			"tablestyles" => $this->picker($this->table["table_style"],$s->get_select(0,ST_TABLE)),
+			"new_win_x" => ($this->table["new_win_x"]) ? $this->table["new_win_x"] : 100,
+			"new_win_y" => ($this->table["new_win_y"]) ? $this->table["new_win_y"] : 100,
 			"view_new_win" => checked($this->table["view_new_win"]),
 			"header_normal" => $this->picker($this->table["header_normal"],$css),
 			"header_sortable" => $this->picker($this->table["header_sortable"],$css),
