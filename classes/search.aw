@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.55 2003/12/30 15:18:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.56 2004/01/12 15:26:10 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -291,8 +291,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	// 	obj - reference to caller
 	function show($args = array())
 	{
-
-
 		$val = $args['s']['class_id'];
 		if (is_array($val) || (($va = explode(',',ltrim($val,','))) && (count($va)>0)))
 		{
@@ -332,7 +330,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"alias" => "",
 			"redir_target" => "",
 			"oid" => "",
-			"site_id" => aw_ini_get('site_id'),
+			"site_id" => '0',
+			"search_bros" => 0
 		);
 
 		$_obj = $args["obj"];
@@ -573,6 +572,13 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							$parts["oid"] = " oid = '$oid' ";
 							$partcount++;
 						};
+						break;
+
+					case "search_bros":
+						if (!$val)
+						{
+							$parts["brother_of"] = " objects.oid = objects.brother_of ";
+						}
 						break;
 
 					default:
@@ -1164,7 +1170,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				"type" => "select",
 				"caption" => "Saidi ID",
 				"options" => $sites,
-				"selected" => ($args["s"]["site_id"] ? $args["s"]["site_id"] : aw_ini_get("site_id")),
+				"selected" => ($args["s"]["site_id"] ? $args["s"]["site_id"] : 0),
 			);
 		};
 		
@@ -1647,6 +1653,15 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						$partcount++;
 					};
 					break;
+
+				case "search_bros":
+					echo "hum <br>";
+						if (!$val)
+						{
+							$parts["search_bros"] = " objects.brother_of = objects.oid ";
+							$partcount++;
+						};
+						break;
 
 				default:
 			};
