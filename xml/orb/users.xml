@@ -18,6 +18,24 @@
 			</function>
 		</action>
 
+		<action name="change_password_not_logged" nologin="1" is_public="1" all_args="1">
+			<function name="change_password_not_logged">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_change_password_not_logged" nologin="1" is_public="1">
+			<function name="submit_change_password_not_logged">
+				<arguments>
+					<optional name="username" />
+					<optional name="old_pass" />
+					<optional name="new_pass" />
+					<optional name="new_pass_repeat" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_change_pwd">
 			<function name="submit_change_pwd">
 				<arguments>
