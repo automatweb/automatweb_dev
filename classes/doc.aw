@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.18 2003/06/03 15:22:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.19 2003/06/03 16:43:42 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -98,8 +98,8 @@
 @property start1 type=datetime_select field=start table=planner group=calendar
 @caption Algab 
 
-@property end1 type=time_select field=end table=planner group=calendar
-@caption Lõpeb
+@property duration type=time_select field=end table=planner group=calendar
+@caption Kestab
 
 @property link_calendars type=callback store=no callback=callback_gen_link_calendars group=calendar
 @caption Vali kalendrid, millesse see sündmus veel salvestatakse.
@@ -151,6 +151,14 @@ class doc extends class_base
 
 			case "calendar_relation":
 				$data["options"] = $this->calendar_list;
+				break;
+
+			case "duration":
+				$_tmp = $args["data"]["planner"]["end"] - $args["data"]["planner"]["start"];
+				$data["value"] = array(
+					"hour" => (int)($_tmp/3600),
+					"minute" => $_tmp % 3600,
+				);
 				break;
 
 		};
@@ -235,6 +243,12 @@ class doc extends class_base
 				{
 					$this->clear_styles = true;
 				};	
+				break;
+
+			case "duration":
+				$_start = date_edit::get_timestamp($args["form_data"]["start1"]);
+				$_end = $_start + (3600 * $data["value"]["hour"]) + (60 * $data["value"]["minute"]);
+				$data["value"] = $_end;
 				break;
 
 		};
