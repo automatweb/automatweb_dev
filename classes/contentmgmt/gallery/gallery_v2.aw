@@ -1,12 +1,11 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.34 2004/01/13 16:24:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.35 2004/02/11 09:58:11 duke Exp $
 
 /*
 
 @classinfo syslog_type=ST_GALLERY relationmgr=yes
 
-@groupinfo general caption=Üldine
 @groupinfo page_1 caption=Lehek&uuml;lg&nbsp;1
 @groupinfo page_2 caption=Lehek&uuml;lg&nbsp;2
 @groupinfo page_3 caption=Lehek&uuml;lg&nbsp;3
@@ -22,56 +21,60 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
-@property conf_id type=text size=3 field=meta method=serialize
+@property conf_id type=text size=3 
 @caption Konfiguratsioon:
 
-@property reinit_layout type=checkbox ch_value=1 field=meta method=serialize
+@property reinit_layout type=checkbox ch_value=1
 @caption Uuenda layout (kustutab k&otilde;ik pildid!)
 
-@property num_pages type=textbox size=3 field=meta method=serialize
+@property num_pages type=textbox size=3 
 @caption Mitu lehte:
 
-@property pg_1_content type=text field=meta method=serialize group=page_1 no_caption=1
-@property pg_2_content type=text field=meta method=serialize group=page_2 no_caption=1
-@property pg_3_content type=text field=meta method=serialize group=page_3 no_caption=1
-@property pg_4_content type=text field=meta method=serialize group=page_4 no_caption=1
-@property pg_5_content type=text field=meta method=serialize group=page_5 no_caption=1
-@property pg_6_content type=text field=meta method=serialize group=page_6 no_caption=1
-@property pg_7_content type=text field=meta method=serialize group=page_7 no_caption=1
-@property pg_8_content type=text field=meta method=serialize group=page_8 no_caption=1
-@property pg_9_content type=text field=meta method=serialize group=page_9 no_caption=1
+@property pg_1_content type=text group=page_1 no_caption=1
+@property pg_2_content type=text group=page_2 no_caption=1
+@property pg_3_content type=text group=page_3 no_caption=1
+@property pg_4_content type=text group=page_4 no_caption=1
+@property pg_5_content type=text group=page_5 no_caption=1
+@property pg_6_content type=text group=page_6 no_caption=1
+@property pg_7_content type=text group=page_7 no_caption=1
+@property pg_8_content type=text group=page_8 no_caption=1
+@property pg_9_content type=text group=page_9 no_caption=1
 
-@property preview type=text field=meta method=serialize group=preview no_caption=1
+@property preview type=text group=preview no_caption=1
 
-@property import_ftp type=checkbox ch_value=1 field=meta method=serialize group=import
+@default group=import
+
+@property import_ftp type=checkbox ch_value=1
 @caption Impordi FTP serverist
 
-@property ftp_login type=relpicker field=meta method=serialize group=import reltype=RELATION_FTP_LOGIN
+@property ftp_login type=relpicker reltype=RELTYPE_FTP_LOGIN
 @caption FTP Server
 
-@property ftp_folder type=textbox field=meta method=serialize group=import
+@property ftp_folder type=textbox 
 @caption FTP Serveri kataloog
 
-@property import_local type=checkbox ch_value=1 field=meta method=serialize group=import default=1
+@property import_local type=checkbox ch_value=1 default=1
 @caption Impordi kataloogist
 
-@property local_folder type=textbox field=meta method=serialize group=import
+@property local_folder type=textbox 
 @caption Kataloog
 
-@property import_zip type=checkbox ch_value=1 field=meta method=serialize group=import
+@property import_zip type=checkbox ch_value=1 
 @caption Impordi ZIP failist
 
-@property zip_file type=fileupload group=import store=no
+@property zip_file type=fileupload store=no
 @caption Uploadi ZIP fail
 
-@property import_overwrite type=checkbox ch_value=1 field=meta method=serialize group=import
+@property import_overwrite type=checkbox ch_value=1 
 @caption Importimisel kirjuta olemasolevad pildid &uuml;le
 
-@property import_add_pages type=checkbox ch_value=1 field=meta method=serialize group=import
+@property import_add_pages type=checkbox ch_value=1 
 @caption Importimisel lisa vajadusel lehek&uuml;lgi
 
-@property do_import type=submit field=meta method=serialize group=import value=Impordi
+@property do_import type=submit value=Impordi
 
 @classinfo no_status=1
 
@@ -134,7 +137,7 @@ class gallery_v2 extends class_base
 		else
 		if ($prop['name'] == "conf_id")
 		{
-			if (!($pt = $arr['obj']['parent']))
+			if (!($pt = $arr['obj_inst']->parent()))
 			{
 				$pt = $arr['request']['parent'];
 			}
@@ -155,14 +158,14 @@ class gallery_v2 extends class_base
 		if (substr($prop['name'], 0, 3) == 'pg_')
 		{
 			$prop['value'] = $this->_get_edit_page(array(
-				"oid" => $arr['obj']['oid'],
+				"oid" => $arr['obj_inst']->id(),
 				"page" => (int)substr($prop['name'], 3, 1)
 			));
 		}
 		else
 		if ($prop['name'] == "do_import")
 		{
-			if (!$arr['obj']['meta']['import_local'] && !$arr['obj']['meta']['import_ftp'] && !$arr['obj']['meta']['import_zip'])
+			if ($arr['obj_inst']->prop('import_local') != 1 && $arr['obj_inst']->prop('import_ftp') != 1 && $arr['obj_inst']->prop('import_zip') != 1)
 			{
 				return PROP_IGNORE;
 			}
@@ -197,11 +200,12 @@ class gallery_v2 extends class_base
 	function callback_mod_tab($parm)
 	{
 		$id = $parm['id'];
+		$od = $parm["obj_inst"];
 		if (substr($id, 0, 5) == 'page_')
 		{
-			$od = $this->get_object($parm['obj_inst']->id());
+			//$od = $this->get_object($parm['obj_inst']->id());
 			$pgnr = substr($id, 5);
-			if ($pgnr > $od['meta']['num_pages'])
+			if ($pgnr > $od->prop('num_pages')
 			{
 				return false;
 			}
