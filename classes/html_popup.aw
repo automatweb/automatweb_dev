@@ -1,85 +1,50 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.4 2003/01/07 14:25:08 kristo Exp $
-class html_popup extends aw_template 
+// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.5 2003/01/26 21:16:07 duke Exp $
+
+/*
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+	@default group=general
+
+	@property url type=textbox size=40 
+	@caption Sisu (URL)
+
+	@property width type=textbox size=4 maxlength=4
+	@caption Laius
+
+	@property height type=textbox size=4 maxlength=4
+	@caption Kõrgus
+	
+	@property menus type=select multiple=1 size=20
+	@caption Menüüd
+
+
+
+*/
+class html_popup extends class_base
 {
 	function html_popup($args = array())
 	{
-		$this->init("automatweb/html_popup");
-	}
-
-	function add($args = array())
-	{
-		extract($args);
-		$ob = get_instance("objects");
-		$menu = $ob->get_list();
-		$this->mk_path($parent,"Lisa uus popup");
-		$this->read_template("change.tpl");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit",array("parent" => $parent)),
-			"menus" => $ob->multiple_option_list(array(),$menu),
+		$this->init(array(
+			"tpldir" => "automatweb/html_popup",
+			"clid" => CL_HTML_POPUP,
 		));
-		return $this->parse();
 	}
 
-	function submit($args = array())
+	function get_property($args)
 	{
-		extract($args);
-		// järelikult on tegu uue objektiga
-		if ($parent)
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
 		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_HTML_POPUP,
-				"status" => 2,
-			));
-		}
-		else
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-			));
-		}
-
-		$meta = array(
-			"url" => $url,
-			"width" => $width,
-			"height" => $height,
-			"menus" => $menus,
-		);
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => $meta,
-		));
-
-		return $this->mk_orb("change",array("id" => $id));
-	}
-	
-	function change($args = array())
-	{
-		extract($args);
-		$ob = get_instance("objects");
-		$menu = $ob->get_list();
-		$obj = $this->get_object($id);
-		$meta = $this->get_object_metadata(array("oid" => $id));
-		$this->mk_path($obj["parent"],"Muuda popuppi");
-		$this->read_template("change.tpl");
-		if (not($meta["menus"]))
-		{
-			$meta["menus"] = array();
+			case "menus":
+				$ob = get_instance("objects");
+				$data["options"] = $ob->get_list();
+				break;
 		};
-		$this->vars(array(
-			"name" => $obj["name"],
-			"url" => $meta["url"],
-			"menus" => $ob->multiple_option_list(array_flip($meta["menus"]),$menu),
-			"width" => $meta["width"],
-			"height" => $meta["height"],
-			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
-		));
-		return $this->parse();
+		return $retval;
 	}
 };
 ?>
