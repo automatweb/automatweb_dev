@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.57 2002/11/14 16:12:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.58 2002/11/15 07:27:23 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1745,16 +1745,12 @@ class users extends users_user
 		extract($args);
 		if (($type == "uid") && not(is_valid("uid",$uid)))
 		{
-			global $status_msg;
-			$status_msg = "Vigane kasutajanimi";
-			session_register("status_msg");
+			aw_session_set("status_msg","Vigane kasutajanimi");
 			return $this->mk_my_orb("send_hash",array());
 		};
 		if (($type == "email") && not(is_email($email)))
 		{
-			global $status_msg;
-			$status_msg = "Vigane e-posti aadress";
-			session_register("status_msg");
+			aw_session_set("status_msg","Vigane e-posti aadress");
 			return $this->mk_my_orb("send_hash",array());
 		};
 		if ($type == "uid")
@@ -1775,8 +1771,7 @@ class users extends users_user
 			};
 			if (not(is_email($row["email"])))
 			{
-				$status_msg .= "Kasutajal $uid puudub korrektne e-posti aadress. Palun pöörduge veebisaidi haldaja poole";
-				session_register("status_msg");
+				aw_session_set("status_msg","Kasutajal $uid puudub korrektne e-posti aadress. Palun pöörduge veebisaidi haldaja poole");
 				return $this->mk_my_orb("send_hash",array());
 			};
 			$ts = time();
@@ -1802,9 +1797,8 @@ class users extends users_user
 			$msg = "Tere $row[uid]\n\nTeie isikliku parooli vahetamiseks kodulehel $host tuleb teil klikkida lingil\n\n$churl\n\nLingile klikkides avanab Teile parooli muutmise leht. Soovitame parool välja vahetada!\n\nProbleemide korral saatke email $email.\n\nKõike paremat soovides,\n$host";
 			$from = sprintf("%s <%s>",$this->cfg["webmaster_name"],$this->cfg["webmaster_mail"]);
 			mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: $from");
-			$status_msg .= "Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br>Täname!<br>";
+			aw_session_set("status_msg","Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br>Täname!<br>");
 		};
-		session_register("status_msg");
 		return $this->mk_my_orb("send_hash",array());
 	}
 
@@ -1919,11 +1913,9 @@ class users extends users_user
 		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
 		$this->db_query($q);
 		$row = $this->db_next();
-		global $status_msg;
 		if (not($row))
 		{
-			$status_msg = "Sellist kasutajat pole registreeritud";
-			session_register("status_msg");
+			aw_session_set("status_msg","Sellist kasutajat pole registreeritud");
 			return $this->mk_my_orb("send_hash",array());
 		};
 		
@@ -1934,22 +1926,19 @@ class users extends users_user
 
 		if ($pwhash1 != $pwhash)
 		{
-			$status_msg = "Sellist võtit pole väljastatud";
-			session_register("status_msg");
+			aw_session_set("status_msg","Sellist võtit pole väljastatud");
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 		
 		if (not(is_valid("password",$pass1)))
 		{
-			$status_msg = "Parool sisaldab keelatud märke";
-			session_register("status_msg");
+			aw_session_set("status_msg","Parool sisaldab keelatud märke");
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 
 		if ($pass1 != $pass2)
 		{
-			$status_msg = "Paroolid peavad olema ühesugused";
-			session_register("status_msg");
+			aw_session_set("status_msg","Paroolid peavad olema ühesugused");
 			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 
@@ -1960,8 +1949,7 @@ class users extends users_user
 		$this->_log("auth","$uid vahetas parooli (hash)");
 //		$this->read_adm_template("password_change_success.tpl");
 //		return $this->parse();
-		$status_msg = "<b><font color=green>Parool on edukalt vahetatud</font></b>";
-		session_register("status_msg");
+		aw_session_set("status_msg","<b><font color=green>Parool on edukalt vahetatud</font></b>");
 		return $this->login(array("uid" => $uid, "password" => $pass1));
 	}
 
