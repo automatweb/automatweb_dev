@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.82 2003/03/13 15:16:51 duke Exp $
+// $Id: class_base.aw,v 2.83 2003/03/17 19:13:19 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -78,6 +78,21 @@ class class_base extends aliasmgr
 		$this->parent = $args["parent"];
 		extract($args);
 
+		// try to load the bastard
+		if ($args["cfgform"])
+		{
+			$_tmp = $this->get_object(array(
+				"oid" => $args["cfgform"],
+				"class" => CL_CFGFORM,
+				"subclass" => $this->clid,
+			));
+
+			if ($_tmp)
+			{
+				$this->cfgform_id = $_tmp["oid"];
+			};
+		};
+
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => $args["group"],
@@ -141,6 +156,7 @@ class class_base extends aliasmgr
 			"period" => $period,
 			"alias_to" => $this->request["alias_to"],
 			"reltype" => $this->request["reltype"],
+			"cfgform" => $this->cfgform_id,
 			"return_url" => urlencode($this->request["return_url"]),
 		);
 
@@ -179,6 +195,22 @@ class class_base extends aliasmgr
 		extract($args);
 
 		$this->id = $id;
+		
+		$obj = $this->get_object($this->id);
+		if (isset($obj["meta"]["cfgform_id"]))
+		{
+			$cfgform_id = $obj["meta"]["cfgform_id"];
+			$_tmp = $this->get_object(array(
+				"oid" => $cfgform_id,
+				"class" => CL_CFGFORM,
+				"subclass" => $this->clid,
+			));
+
+			if ($_tmp)
+			{
+				$this->cfgform_id = $_tmp["oid"];
+			};
+		};
 
 		// get a list of active properties for this object
 		// I need an easy way to turn off individual properties
@@ -187,7 +219,7 @@ class class_base extends aliasmgr
 				"group" => $args["group"],
 				"cb_view" => $args["cb_view"],
 		));
-
+		
 		$this->load_obj_data(array("id" => $this->id));
 
 		if (method_exists($this->inst,"callback_pre_edit"))
@@ -198,7 +230,6 @@ class class_base extends aliasmgr
 			));
 		};
 
-		$obj = $this->get_object($this->id);
 
 		$this->request = $args;
 
@@ -297,6 +328,21 @@ class class_base extends aliasmgr
 		extract($args);
 
 		$this->id = $id;
+		
+		// try to load the bastard
+		if ($args["cfgform"])
+		{
+			$_tmp = $this->get_object(array(
+				"oid" => $args["cfgform"],
+				"class" => CL_CFGFORM,
+				"subclass" => $this->clid,
+			));
+
+			if ($_tmp)
+			{
+				$this->cfgform_id = $_tmp["oid"];
+			};
+		};
 
 		// get the list of properties in the active group
 		// actually, it does a little more than dat, it also
@@ -525,6 +571,11 @@ class class_base extends aliasmgr
 				"object" => array_merge($this->coredata,$this->objdata),
 			));
 		}
+
+		if (isset($this->cfgform_id))
+		{
+			$coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
+		};
 
 		$this->ds->ds_save_object(array("id" => $id,"clid" => $this->clid),$coredata);
 
@@ -1087,18 +1138,20 @@ class class_base extends aliasmgr
 		
 		// if any configuration form applies to the current object,
 		// then load it
-		$cfgform_id = (int)$this->get_active_cfgform();
-
-		$this->cfgform_id = $cfgform_id;
+		if (empty($this->cfgform_id))
+		{
+			$cfgform_id = (int)$this->get_active_cfgform();
+			$this->cfgform_id = $cfgform_id;
+		}
 
 		// the thing is - if there is a configuration form defined,
 		// then all layout information should be loaded from that form
 		// that includes the name of forms
 
-		if ($cfgform_id)
+		if ($this->cfgform_id)
 		{
 			$cfgform = $this->get_object(array(
-				"oid" => $cfgform_id,
+				"oid" => $this->cfgform_id,
 				"class_id" => CL_CFGFORM,
 			));
 
@@ -1392,7 +1445,7 @@ class class_base extends aliasmgr
 			$val["type"] = "select";
 		};
 
-		if (($val["type"] == "aliasmgr"))
+		if (($val["type"] == "aliasmgr") && isset($this->id))
 		{
 			$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),"aliasmgr");
 			$val["value"] = "<iframe width='100%' height='800' frameborder='0' src='$link'></iframe>";
@@ -1986,6 +2039,26 @@ class class_base extends aliasmgr
 			"title" => $title,
 			"orb_action" => "view",
 		));
+	}
+
+	////
+	// !Returns a list of config forms used by thiss
+	function get_cfgform_list($args = array())
+	{
+		$this->get_objects_by_class(array(
+			"class" => CL_CFGFORM,
+			"subclass" => $this->clid,
+			"fields" => "oid,name",
+		));
+
+		$retval = array();
+
+		// I also have to add a list of the plain old document types here
+		while ($row = $this->db_next())
+		{
+			$retval[$row["oid"]] = $row["name"];
+		};	
+		return $retval;
 	}
 
 	function get_properties_by_group($args = array())
