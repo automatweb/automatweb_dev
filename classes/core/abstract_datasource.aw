@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.3 2004/05/27 08:35:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.4 2004/07/01 16:33:13 duke Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 
@@ -135,7 +135,13 @@ class abstract_datasource extends class_base
 		{
 			return array();
 		}
-		// get the real datasource 
+		// get the real datasource 	
+		$l = $o->prop("ds");
+		if (!$this->can("view",$l))
+		{
+			return array();
+		};
+			
 		$ds_o = obj($o->prop("ds"));
 		$ds_i = $ds_o->instance();
 
