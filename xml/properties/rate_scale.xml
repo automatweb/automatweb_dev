@@ -1,96 +1,100 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>rate_clid</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mis objektit&amp;uuml;&amp;uuml;bile skaala kehtib</caption>
+      </property>
+      <property>
+            <name>rate_folders</name>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mis kataloogidele skaala kehtib</caption>
+      </property>
+      <property>
             <name>type_nr</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>scale</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>scale</group>
-            <table>objects</table>
             <caption>Numbriline skaala</caption>
       </property>
       <property>
             <name>nr_from</name>
             <type>textbox</type>
             <size>3</size>
+            <table>objects</table>
+            <group>scale</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>scale</group>
-            <table>objects</table>
             <caption>Alates</caption>
       </property>
       <property>
             <name>nr_to</name>
             <type>textbox</type>
             <size>3</size>
+            <table>objects</table>
+            <group>scale</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>scale</group>
-            <table>objects</table>
             <caption>Kuni</caption>
       </property>
       <property>
             <name>nr_step</name>
             <type>textbox</type>
             <size>3</size>
+            <table>objects</table>
+            <group>scale</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>scale</group>
-            <table>objects</table>
             <caption>Aste</caption>
       </property>
       <property>
             <name>type_ud</name>
             <type>checkbox</type>
             <ch_value>2</ch_value>
+            <table>objects</table>
+            <group>scale</group>
             <field>meta</field>
             <method>serialize</method>
-            <group>scale</group>
-            <table>objects</table>
             <caption>Kasutaja defineeritud skaala</caption>
       </property>
       <property>
             <name>ud_scale</name>
             <type>generated</type>
-            <field>meta</field>
-            <method>serialize</method>
             <generator>get_udscale_entries</generator>
+            <table>objects</table>
             <group>scale</group>
-            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption></caption>
-      </property>
-      <property>
-            <name>rate_clid</name>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Mis objektit&amp;uuml;&amp;uuml;bile skaala kehtib</caption>
-      </property>
-      <property>
-            <name>rate_folders</name>
-            <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <multiple>1</multiple>
-            <reltype>RELTYPE_FOLDER</reltype>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Mis kataloogidele skaala kehtib</caption>
       </property>
       <classinfo>
             <syslog_type>ST_RATE_SCALE</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <scale>
                   <caption>Skaala</caption>
             </scale>
       </groupinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kehtiv kataloog</caption>
+            </FOLDER>
+      </reltypes>
 </properties>
 
