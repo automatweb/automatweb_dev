@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.17 2001/05/27 22:39:04 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.18 2001/05/29 16:34:55 cvs Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -1000,12 +1000,13 @@ class db_documents extends aw_template
 			$doc["content"] = preg_replace("/#huvid_check algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
 		}
 
-		if (!(strpos($doc["content"],"#huvid_kategooriad#") === false))
+		if (!(strpos($doc["content"],"#huvid_kategooriad") === false))
 		{
+			preg_match("/#huvid_kategooriad go=\"(.*)\"#/",$doc["content"], $maat);
 			classload("keywords");
 			$kw = new keywords;
-			$blah = $kw->show_categories();
-			$doc["content"] = preg_replace("/#huvid_kategooriad#/",$blah,$doc["content"]);
+			$blah = $kw->show_categories(array("after" => $maat[1]));
+			$doc["content"] = preg_replace("/#huvid_kategooriad go=\"(.*)\"#/",$blah,$doc["content"]);
 		}
 
 		$awt->stop("db_documents->gen_preview()::misc_replaces");

@@ -1,5 +1,5 @@
 <br><br>
-Kasutaja {VAR:user} (ip: {VAR:ip}) tellis poest kuup&auml;eval {VAR:time} j&auml;rgmised kaubad:<br><br>
+Kasutaja {VAR:user} (ip: {VAR:ip}) tellis kuup&auml;eval {VAR:time} j&auml;rgmised tooted:<br><br>
 <table border=1>
 	<!-- SUB: ITEM -->
 	<tr>

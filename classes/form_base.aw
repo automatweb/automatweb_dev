@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.3 2001/05/21 07:07:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.4 2001/05/29 16:34:55 cvs Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -349,9 +349,25 @@ class form_base extends aw_template
 					break;
 
 				case "email":
+					if ($GLOBALS["uid"] != "")
+					{
+						if (!is_array($jfes))
+						{
+							classload("users");
+							$us = new users;
+							$uif = $us->fetch($GLOBALS["uid"]);
+							$jfes = unserialize($uif["join_form_entry"]);
+						}
+
+						$app = "\n\nKasutaja ".$GLOBALS["uid"]." info:\n\n";
+						foreach($jfes as $fid => $eid)
+						{
+							$app.=$this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form")."\n";
+						}
+					}
 					$this->load_entry($entry_id);
 					$msg = $this->show_text();
-					mail($row["data"],"Tellimus AutomatWebist", $msg,"From: automatweb@automatweb.com\n");
+					mail($row["data"],"Tellimus AutomatWebist", $msg.$app,"From: automatweb@automatweb.com\n");
 					break;
 			}
 			$this->restore_handle();

@@ -428,7 +428,7 @@ class shop extends aw_template
 		// now we must also send an email to somebody notifying them of the new order.
 		// the email must contain all the info about the purchase, including all the
 		// items and their counts and also the order form data.
-		$mail = "Tere!\n\nStatisikameti poest ".$sh["name"]." tellis kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." järgmised kaubad: \n\n";
+		$mail = "Tere!\n\\ kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." tellis järgmised tooted: \n\n";
 
 		classload("form");
 		$f = new form;
@@ -474,7 +474,7 @@ class shop extends aw_template
 		$emails = explode(",",$sh["emails"]);
 		foreach($emails as $email)
 		{
-			mail($email,"Tellimus Poest", $mail,"From: automatweb@automatweb.com\n");
+			mail($email,"Tellimus", $mail,"From: automatweb@automatweb.com\n");
 		}
 
 		// zero out the customers shopping cart as well.

@@ -234,6 +234,7 @@ function del_gallery()
 			Aktiivne:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>
 			Foorum:	<input type='checkbox' name='is_forum' value='1' {VAR:is_forum}>
 	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
+	| Ilma parema paanita: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>
 		</td>
 	</tr>
 </table>

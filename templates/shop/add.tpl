@@ -9,7 +9,7 @@
 	<td class="fform"><textarea name="comment" rows=5 cols=50>{VAR:comment}</textarea></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>Vali poe root kataloog:</td>
+	<td class="fcaption2" colspan=2>Vali root kataloog:</td>
 </tr>
 <tr>
 	<td class="fcaption2" colspan=2><select name='root'>{VAR:root}</select></td>
@@ -29,9 +29,6 @@
 <!-- SUB: CHANGE -->
 <tr>
 	<td class="fcaption2" colspan=2><a href='{VAR:orders}'>Tellimused</a></td>
-</tr>
-<tr>
-	<td class="fcaption2" colspan=2><a href='{VAR:stat_by_turnover}'>K&auml;ibe statistika</a></td>
 </tr>
 <!-- END SUB: CHANGE -->
 <tr>

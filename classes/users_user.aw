@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.4 2001/05/28 08:07:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.5 2001/05/29 16:34:55 cvs Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -153,13 +153,19 @@ class users_user extends aw_template {
 			$this->db_query($q);
 			$udata = $this->db_next();
 		};
-		if (!is_array($udata))
+		if ($udata)
+		{
+		}
+		else
 		{
 			$msg = "Sellist kasutajat pole $uid";
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			$success = false;
-		}
+			session_unregister("uid");
+			unset($uid);
+			return false;
+		};
 
 		if (($password != $udata["password"]))
 		{

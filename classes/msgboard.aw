@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.2 2001/05/25 22:49:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.3 2001/05/29 16:34:55 cvs Exp $
 
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
@@ -456,7 +456,8 @@ class msgboard extends aw_template
 				$lc = $numcomments[$row[oid]]["mtime"];
 				$this->vars(array("topic" => $row[name], "from" => $row[last],"created" => $this->time2date($row[created],2), "text" => str_replace("\n","<br>",$row[comment]),"topic_id" => $row[oid],"cnt" => ( $nc < 1 ? "0" : $nc),
 													"lastmessage" => $this->time2date($lc,2)));
-				$dt = $GLOBALS["uid"] != "" ? $this->parse("DELETE") : "";
+				// priviligeerimata kasutajad ei nae kustuta linki. praegu kasutan menuediti oigusi selleks 
+				$dt = $this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "";
 
 				$this->save_handle();
 				if ($aw_mb_last[$row[oid]] < 1)

@@ -165,7 +165,7 @@
 			</function>
 		</action>
 		
-		<action name="show">
+		<action name="show" nologin="1">
 			<function name="gen_preview">
 				<arguments>
 					<required name="id"/>
@@ -223,7 +223,7 @@
 			</function>
 		</action>
 		
-		<action name="show_entry">
+		<action name="show_entry" nologin="1">
 			<function name="show">
 				<arguments>
 					<required name="id"/>
