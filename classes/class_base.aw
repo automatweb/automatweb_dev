@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.26 2002/12/20 14:01:36 duke Exp $
+// $Id: class_base.aw,v 2.27 2002/12/20 14:31:07 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -891,7 +891,7 @@ class class_base extends aliasmgr
 			};
 
 			// figure out information about the table
-			if (!$tables[$property["table"]])
+			if ($property["table"] && !$tables[$property["table"]])
 			{
 				$tables[$property["table"]] = $this->tableinfo[$property["table"]];
 			};
