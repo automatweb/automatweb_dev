@@ -46,7 +46,8 @@
       </property>
       <property>
             <name>objtbl_conf</name>
-            <type>select</type>
+            <type>objpicker</type>
+            <clid>CL_OBJ_TABLE_CONF</clid>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
@@ -55,7 +56,8 @@
       </property>
       <property>
             <name>add_tree_conf</name>
-            <type>select</type>
+            <type>objpicker</type>
+            <clid>CL_ADD_TREE_CONF</clid>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
@@ -64,7 +66,8 @@
       </property>
       <property>
             <name>cfgmanager</name>
-            <type>select</type>
+            <type>objpicker</type>
+            <clid>CL_CFGMANAGER</clid>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
@@ -181,6 +184,14 @@
             </caption>
       </property>
       <property>
+            <name>seealso_refs</name>
+            <type>hidden</type>
+            <method>serialize</method>
+            <field>meta</field>
+            <table>objects</table>
+            <group>relations</group>
+      </property>
+      <property>
             <name>seealso_order</name>
             <type>textbox</type>
             <group>relations</group>
@@ -203,6 +214,40 @@
             <group>advanced</group>
             <table>menu</table>
             <caption>Menüü tüüp</caption>
+      </property>
+      <property>
+            <name>admin_feature</name>
+            <type>select</type>
+            <group>advanced</group>
+            <table>menu</table>
+            <caption>Vali programm</caption>
+      </property>
+      <property>
+            <name>pclass</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <caption>Vali meetod</caption>
+      </property>
+      <property>
+            <name>pm_url_admin</name>
+            <type>checkbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <caption>Meetod viitab adminni</caption>
+      </property>
+      <property>
+            <name>pm_url_menus</name>
+            <type>checkbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <caption>Meetodi väljundi kuvamisel menüüde näitamine</caption>
       </property>
       <property>
             <name>clickable</name>

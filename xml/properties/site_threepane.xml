@@ -32,8 +32,8 @@
       </property>
       <property>
             <name>info</name>
-            <type>array</type>
-            <getter>callback_get_info</getter>
+            <type>generated</type>
+            <generator>callback_get_info</generator>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
@@ -42,6 +42,7 @@
       </property>
       <property>
             <name>preview</name>
+            <editonly>1</editonly>
             <type>text</type>
             <table>objects</table>
             <group>general</group>

@@ -3,20 +3,21 @@
       <property>
             <name>template</name>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Frameseti template</caption>
       </property>
       <property>
             <name>framedata</name>
-            <type>array</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <getter>callback_get_sources</getter>
+            <type>generated</type>
+            <editonly>1</editonly>
+            <generator>callback_get_sources</generator>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Raamide sisu</caption>
       </property>
 </properties>
