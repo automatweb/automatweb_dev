@@ -6,7 +6,7 @@
 <field name="from" caption="Kellelt" talign="center" sortable="1" nowrap="1"/>
 <field name="subject" caption="Teema" talign="center" sortable="1"/>
 <field name="date" caption="Kuup&amp;auml;ev" talign="center" nowrap="1" align="center" sortable="1" type="time" format="H:i d-M" smart="1"/>
-<field name="size" caption="KB" talign="center" nowrap="1" align="center" sortable="1"/>
+<field name="size" caption="KB" talign="center" nowrap="1" align="center" sortable="1" numeric="1"/>
 </data>
 
 </tabledef>
