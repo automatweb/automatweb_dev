@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.50 2003/06/17 11:58:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.51 2003/06/18 15:25:28 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -140,10 +140,10 @@
 
 	@default group=show
 
-	@property left_pane type=checkbox  ch_value=1
+	@property left_pane type=checkbox  ch_value=1 default=1
 	@caption Vasak paan
 
-	@property right_pane type=checkbox ch_value=1
+	@property right_pane type=checkbox ch_value=1 default=1
 	@caption Parem paan
 	
 	@property tpl_dir table=objects type=select field=meta method=serialize
@@ -459,7 +459,10 @@ class menu extends class_base
 			// grkeywords just triggers an action, nothing should
 			// be saved into the objects table
 			case "grkeywords":
-				$this->save_menu_keywords($data["value"],$args["obj"]["oid"]);
+				if (!empty($args["obj"]["oid"]))
+				{
+					$this->save_menu_keywords($data["value"],$args["obj"]["oid"]);
+				};
 				$retval = PROP_IGNORE;
 				break;
 
@@ -467,12 +470,15 @@ class menu extends class_base
 			// update_seealso creates $this->seealso_refs (which is a hidden
 			// element for simplicity) 
 			case "seealso":
-				$this->update_seealso(array(
-					"id" => $args["obj"]["oid"],
-					"meta" => $args["obj"]["meta"],
-					"seealso" => $args["form_data"]["seealso"],
-					"seealso_order" => $args["form_data"]["seealso_order"],
-				));
+				if (!empty($args["obj"]["oid"]))
+				{
+					$this->update_seealso(array(
+						"id" => $args["obj"]["oid"],
+						"meta" => $args["obj"]["meta"],
+						"seealso" => $args["form_data"]["seealso"],
+						"seealso_order" => $args["form_data"]["seealso_order"],
+					));
+				};
 				$retval = PROP_IGNORE;
 				break;
 
@@ -487,11 +493,14 @@ class menu extends class_base
 				break;
 
 			case "sections":
-				$this->update_brothers(array(
-					"id" => $args["obj"]["oid"],
-					"menu" => array_merge($args["obj"],$args["objdata"]),
-					"sections" => $args["form_data"]["sections"],
-				));
+				if (!empty($args["obj"]["oid"]))
+				{
+					$this->update_brothers(array(
+						"id" => $args["obj"]["oid"],
+						"menu" => array_merge($args["obj"],$args["objdata"]),
+						"sections" => $args["form_data"]["sections"],
+					));
+				};
 				break;
 
 			case "type":
