@@ -1779,6 +1779,10 @@ class user extends class_base
 		$c = reset($ml_m->connections_to(array("from.class_id" => CL_USER, "type" => 6)));
 		obj_set_opt("no_cache", 0);
 
+		if (!$c)
+		{
+			return;
+		}
 		$user = $c->from();
 
 		$rn = $this->users->get_user_config(array(
