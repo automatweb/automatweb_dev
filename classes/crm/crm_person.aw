@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.33 2004/06/25 09:07:09 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.34 2004/06/25 09:11:02 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -371,7 +371,7 @@ class crm_person extends class_base
 				break;
 
 			case "navtoolbar":
-				$this->isik_toolbar($arr);
+				$this->isik_toolbar(&$arr);
 				break;
 
 			case "gender":
