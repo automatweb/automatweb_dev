@@ -9,9 +9,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 */
 
 class site_search extends class_base

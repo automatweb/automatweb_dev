@@ -10,9 +10,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property type_nr type=checkbox ch_value=1 field=meta method=serialize group=scale
 @caption Numbriline skaala
 
