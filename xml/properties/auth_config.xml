@@ -4,37 +4,41 @@
             <name>no_user_grp</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_GROUP</reltype>
-            <field>no_user_grp</field>
             <caption>Grupp, kuhu pannakse kasutajad, keda kohalikus s&amp;uuml;steemis pole</caption>
       </property>
       <property>
             <name>auto_create_user</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>auto_create_user</field>
             <caption>Kas lastakse sisse logida kasutajatel, keda kohalikus s&amp;uuml;steemis pole</caption>
       </property>
       <property>
             <name>servers</name>
             <table>objects</table>
             <group>servers</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>servers</field>
       </property>
       <property>
             <name>activity</name>
             <table>objects</table>
             <group>activity</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>activity</field>
             <caption>Aktiivsus</caption>
       </property>
       <classinfo>
@@ -61,7 +65,7 @@
                   <caption>autentimisserver</caption>
             </AUTH_SERVER>
             <GROUP>
-                  <value>1</value>
+                  <value>2</value>
                   <clid>CL_GROUP</clid>
                   <caption>grupp</caption>
             </GROUP>

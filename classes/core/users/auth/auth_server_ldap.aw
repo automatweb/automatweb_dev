@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.2 2004/10/19 21:02:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.3 2004/10/20 09:22:19 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -66,7 +66,7 @@ class auth_server_ldap extends class_base
 		{
 			return array(false, "Ei saanud &uuml;hendust LDAP serveriga ".$server->prop("server"));
 		}
-		ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
+		//ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
 
 		$uid = $credentials["uid"];
 		if ($server->prop("ad_domain"))

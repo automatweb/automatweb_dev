@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.1 2004/10/18 15:37:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.2 2004/10/20 09:22:19 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -7,6 +7,8 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
 @property no_user_grp type=relpicker reltype=RELTYPE_GROUP
 @caption Grupp, kuhu pannakse kasutajad, keda kohalikus s&uuml;steemis pole
@@ -26,7 +28,7 @@
 @reltype AUTH_SERVER value=1 clid=CL_AUTH_SERVER_LDAP,CL_AUTH_SERVER_LOCAL
 @caption autentimisserver
 
-@reltype GROUP value=1 clid=CL_GROUP
+@reltype GROUP value=2 clid=CL_GROUP
 @caption grupp
 */
 
@@ -267,7 +269,7 @@ class auth_config extends class_base
 			"class_id" => CL_USER,
 			"name" => $cred["uid"]
 		));
-		if (count($ol))
+		if ($ol->count())
 		{
 			return true;
 		}
@@ -278,6 +280,7 @@ class auth_config extends class_base
 			return false;
 		}
 
+		aw_disable_acl();
 		// create local user
 		$us = get_instance(CL_USER);
 		$new_user = $us->add_user(array(
@@ -292,6 +295,7 @@ class auth_config extends class_base
 			$gp = get_instance(CL_GROUP);
 			$gp->add_user_to_group($new_user, obj($grp));
 		}
+		aw_restore_acl();
 		return true;
 	}
 }
