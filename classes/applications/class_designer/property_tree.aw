@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.3 2005/03/16 14:45:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.4 2005/03/17 13:42:38 kristo Exp $
 // property_tree.aw - Puu komponent 
 /*
 
@@ -188,7 +188,7 @@ class property_tree extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["return_url"] = $arr["return_url"] != "" ? $arr["return_url"] : post_ru();
+		$arr["return_url"] = $_SERVER["REQUEST_METHOD"] == "GET" ? post_ru() : $arr["return_url"];
 		$arr["ts"] = $_GET["ts"];
 	}
 

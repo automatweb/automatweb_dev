@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.67 2004/10/28 09:49:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.68 2005/03/17 13:42:38 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -477,6 +477,7 @@ class aw_template extends core
 			$xsrc = str_replace("\"","\\\"",$cur_src);
 			$this->c_templates[$fq_name] = preg_replace("/{VAR:(.+?)}/","\".\$vars[\$1].\"",$xsrc);
 		};
+
 		$this->templates[$cur_name] = $cur_src;	// ugh, this line for aliasmanager and image_inplace compatibility :(
 		$this->v2_name_map[$cur_name] = $fq_name;
 		$this->v2_name_map[$fq_name] = $fq_name;

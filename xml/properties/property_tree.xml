@@ -11,17 +11,6 @@
             <caption>Ilma tekstita</caption>
       </property>
       <property>
-            <name>demo_content</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textarea</type>
-            <rows>6</rows>
-            <cols>40</cols>
-            <caption>Demo sisu</caption>
-      </property>
-      <property>
             <name>ct_toolbar</name>
             <table>objects</table>
             <group>content</group>

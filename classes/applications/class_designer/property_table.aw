@@ -1,14 +1,20 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.4 2005/03/11 20:03:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.5 2005/03/17 13:42:38 kristo Exp $
 // property_table.aw - Tabel 
 /*
 
 @classinfo syslog_type=ST_PROPERTY_TABLE relationmgr=yes no_comment=1 no_status=1
 
 @default table=objects
-@default group=general
 @default field=meta
 @default method=serialize
+
+@default group=general
+	@property demo_data_source type=select
+	@caption Demo andmete allikas
+
+	@property demo_data_source_rel type=select
+	@caption Seose t&uuml;&uuml;p
 
 @default group=designer
 
@@ -20,8 +26,23 @@
 	@property demo_data_table type=table no_caption=1
 	@caption Demo andmed
 
+@default group=data_rels
+
+	@property demo_rels_data_table type=table no_caption=1
+	@caption Demo seoste andmed
+
+@default group=settings
+
+	@property default_sort_col type=select
+	@caption Default sortimine
+
+	@property vertical_group_t type=table
+	@caption Vertikaalne grupeerimine
+
 @groupinfo designer caption="Tulbad"
 @groupinfo data caption="Demo andmed"
+@groupinfo data_rels caption="Demo andmed"
+@groupinfo settings caption="Seaded"
 
 */
 
@@ -47,8 +68,54 @@ class property_table extends class_base
 			case "demo_data_table":
 				$this->generate_demo_data_table(&$arr);
 				break;
+
+			case "demo_rels_data_table":
+				$this->generate_demo_rels_data_table(&$arr);
+				break;
+
+			case "demo_data_source":
+				$prop["options"] = array(
+					"user" => "Kasutaja poolt sisestatud andmed",
+					"rels" => "Seostatud objektid"
+				);
+				break;
+
+			case "demo_data_source_rel":
+				if ($arr["obj_inst"]->prop("demo_data_source") != "rels")
+				{
+					return PROP_IGNORE;
+				}
+				$do = $this->_get_designer($arr["obj_inst"]);
+				$ol = new object_list($do->connections_from(array("type" => "RELTYPE_RELATION")));
+				$prop["options"] = $ol->names();
+				break;
+	
+			case "default_sort_col":
+				$ol = new object_list(array(
+					"parent" => $arr["obj_inst"]->id(),
+					"class_id" => CL_PROPERTY_TABLE_COLUMN
+				));
+				$prop["options"] = array("" => "") + $ol->names();
+				break;
+
+			case "vertical_group_t":
+				$this->_vertical_group_t($arr);
+				break;
 		};
 		return $retval;
+	}
+
+	function _get_designer($o)
+	{
+		$pt = $o->path();
+		foreach($pt as $p)
+		{
+			if ($p->class_id() == CL_CLASS_DESIGNER)
+			{
+				return $p;
+			}
+		}
+		return NULL;
 	}
 
 	function set_property($arr = array())
@@ -65,6 +132,21 @@ class property_table extends class_base
 				$this->save_demo_data_t($arr);
 				break;
 
+			case "demo_rels_data_table":
+				$this->save_demo_rels_data_t($arr);
+				break;
+
+			case "vertical_group_t":
+				$t = array();
+				foreach($arr["request"]["vert_grp_cols"] as $cl)
+				{
+					if ($cl != "")
+					{
+						$t[] = $cl;
+					}
+				}
+				$arr["obj_inst"]->set_meta("vert_grp_cols", $t);
+				break;
 		}
 		return $retval;
 	}	
@@ -222,9 +304,7 @@ class property_table extends class_base
 		$ol = new object_list(array(
 			"parent" => $arr["obj_inst"]->id(),
 			"class_id" => CL_PROPERTY_TABLE_COLUMN,
-		));
-		$ol->sort_by(array(
-			"prop" => "ord"
+			"sort_by" => "jrk"
 		));
 
 		foreach($ol->arr() as $o)
@@ -259,7 +339,6 @@ class property_table extends class_base
 				));
 			}
 			$nr++;
-
 			$t->define_data($row_def);
 		}
 	}
@@ -343,6 +422,91 @@ class property_table extends class_base
 			$rv .= "\t\t" . '));' . "\n";
 			
 		};
+
+		// generate data as well
+		if ($obj->prop("demo_data_source") != "rels")
+		{
+			$dd = safe_array($obj->meta("demo_data"));
+			foreach($dd as $row)
+			{
+				$rv .= "\t\t\$t->define_data(array(\n";
+				foreach(safe_array($row) as $k => $v)
+				{
+					$k = strtolower(preg_replace("/\s/","_",$k));
+					$rv .= "\t\t\t\"$k\" => \"$v\",\n";
+				}
+				$rv .= "\t\t));\n";
+			}
+		}
+		else
+		{
+			// gen code that reads shit from rels
+			if (is_oid($obj->prop("demo_data_source_rel")) &&  
+				$this->can("view", $obj->prop("demo_data_source_rel")))
+			{
+				$rel = obj($obj->prop("demo_data_source_rel"));
+
+				$rv .= "\t\tforeach(\$arr[\"obj_inst\"]->connections_from(array(\"type\" => \"RELTYPE_".strtoupper($rel->name())."\")) as \$c)\n";
+				$rv .= "\t\t{\n";
+				$rv .= "\t\t\t\$to = \$c->to();\n";
+				$rv .= "\t\t\t\$t->define_data(array(\n";
+
+				$col2prop = safe_array($obj->meta("col2prop"));
+				foreach($col2prop as $col_oid => $prop)
+				{
+					if (!is_oid($col_oid) || !$this->can("view", $col_oid))
+					{
+						continue;
+					}
+	
+					$colo = obj($col_oid);
+					$k = strtolower(preg_replace("/\s/","_",$colo->name()));
+					$rv .= "\t\t\t\t\"$k\" => \$to->prop_str(\"$prop\"),\n";
+				}
+			
+				$rv .= "\t\t\t));\n";
+				$rv .= "\t\t}\n";
+			}
+		}
+
+		$vgsa = safe_array($obj->meta("vert_grp_cols"));
+		$vgs = array();
+		foreach($vgsa as $oid)
+		{
+			if (is_oid($oid) && $this->can("view", $oid))
+			{
+				$o = obj($oid);
+				$k = strtolower(preg_replace("/\s/","_",$o->name()));
+				$vgs[$k] = $k;
+			}
+		}
+
+		if (is_oid($obj->prop("default_sort_col")) && $this->can("view", $obj->prop("default_sort_col")))
+		{
+			$dsc = obj($obj->prop("default_sort_col"));
+			$k = strtolower(preg_replace("/\s/","_",$dsc->name()));
+			$rv .= "\t\t\$t->set_default_sortby(\"$k\");\n";
+			if (!(is_oid($obj->prop("vertical_group_col")) && $this->can("view", $obj->prop("vertical_group_col"))))
+			{
+				$rv .= "\t\t\$t->sort_by();\n";
+			}
+		}
+
+		if (count($vgs))
+		{
+			$dsc = obj($obj->prop("vertical_group_col"));
+			$k = strtolower(preg_replace("/\s/","_",$dsc->name()));
+			$rv .= "\t\t\$t->sort_by(array(\n";
+			$rv .= "\t\t\t\"vgroupby\" => array(\n";
+			foreach($vgs as $vgc)
+			{
+				$rv .= "\t\t\t\t\"$vgc\" => \"$vgc\",\n";
+			}
+			$rv .= "\t\t\t)\n";
+			$rv .= "\t\t));\n";
+			$rv .= "\t\t\$t->set_sortable(false);\n";
+		}
+
 		$rv .= "\t}\n\n";
 		return $rv;
 	}
@@ -387,7 +551,162 @@ class property_table extends class_base
 		{
 			$t->define_data($row);
 		}
+
+		$vgsa = safe_array($el->meta("vert_grp_cols"));
+		$vgs = array();
+		foreach($vgsa as $oid)
+		{
+			if (is_oid($oid) && $this->can("view", $oid))
+			{
+				$o = obj($oid);
+				$vgs[$o->name()] = $o->name();
+			}
+		}
+
+		if (is_oid($el->prop("default_sort_col")) && $this->can("view", $el->prop("default_sort_col")))
+		{
+			$dsc = obj($el->prop("default_sort_col"));
+			$k = $dsc->name();
+			$t->set_default_sortby($k);
+			if (count($vgs))
+			{
+				$t->sort_by();
+			}
+		}
+
+		if (count($vgs))
+		{
+			$dsc = obj($el->prop("vertical_group_col"));
+			$k = $dsc->name();
+
+			$t->sort_by(array(
+				"vgroupby" => $vgs
+			));
+			$t->set_sortable(false);
+		}
+
 		$propdata["vcl_inst"] = $t;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		$tp = $arr["obj_inst"]->prop("demo_data_source");
+
+		if ($arr["id"] == "data" && $tp == "rels")
+		{
+			return false;
+		}
+		if ($arr["id"] == "data_rels" && $tp != "rels")
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function _init_demo_rels_data_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "col",
+			"caption" => "Tulp",
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "prop",
+			"caption" => "Omadus",
+			"align" => "center",
+			"sortable" => 1
+		));
+	}
+
+	function generate_demo_rels_data_table($arr)
+	{
+		// read type of object from rel
+		if (!is_oid($arr["obj_inst"]->prop("demo_data_source_rel")) || 
+			!$this->can("view", $arr["obj_inst"]->prop("demo_data_source_rel")))
+		{
+			return;
+		}
+
+		$rel = obj($arr["obj_inst"]->prop("demo_data_source_rel"));
+		$clid = $rel->prop("r_class_id");
+		if (is_array($clid))
+		{
+			$clid = reset($clid);
+		}
+		$cfgu = get_instance("cfg/cfgutils");
+		$ps = $cfgu->load_properties(array(
+			"clid" => $clid
+		));
+		$props = array();
+		foreach($ps as $pn => $pd)
+		{
+			if ($pd["store"] == "no")
+			{
+				continue;
+			}
+			$props[$pn] = $pd["caption"];
+		}
+
+		// let user match property to table column
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_demo_rels_data_t($t);
+
+		$table_items = new object_list(array(
+			"parent" => $arr["obj_inst"]->id(),
+			"class_id" => CL_PROPERTY_TABLE_COLUMN
+		));
+		$col2prop = safe_array($arr["obj_inst"]->meta("col2prop"));
+		foreach($table_items->arr() as $o)
+		{
+			$t->define_data(array(
+				"col" => $o->name(),
+				"prop" => html::select(array(
+					"name" => "col2prop[".$o->id()."]",
+					"options" => $props,
+					"value" => $col2prop[$o->id()]
+				))
+			));
+		}
+	}
+
+	function save_demo_rels_data_t($arr)
+	{
+		$arr["obj_inst"]->set_meta("col2prop", $arr["request"]["col2prop"]);
+	}
+
+	function _init_vertical_group_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "col",
+			"caption" => "Tulp",
+			"align" => "center"
+		));
+	}
+
+	function _vertical_group_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_vertical_group_t($t);
+
+		$vgd = safe_array($arr["obj_inst"]->meta("vert_grp_cols"));
+		$vgd[] = "";
+
+		$cols = new object_list(array("class_id" => CL_PROPERTY_TABLE_COLUMN, "parent" => $arr["obj_inst"]->id()));
+
+		foreach($vgd as $vge)
+		{
+			$t->define_data(array(
+				"col" => html::select(array(
+					"name" => "vert_grp_cols[]",
+					"options" => array("" => "") + $cols->names(),
+					"value" => $vge
+				))
+			));
+		}
+
+		$t->set_sortable(false);
 	}
 }
 ?>

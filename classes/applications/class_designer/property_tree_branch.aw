@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree_branch.aw,v 1.1 2005/03/16 14:45:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree_branch.aw,v 1.2 2005/03/17 13:42:38 kristo Exp $
 // property_tree_branch.aw - Puu oks 
 /*
 
@@ -42,7 +42,7 @@ class property_tree_branch extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["return_url"] = $arr["return_url"] != "" ? $arr["return_url"] : post_ru();
+		$arr["return_url"] = $_SERVER["REQUEST_METHOD"] == "GET" ? post_ru() : $arr["return_url"];
 	}
 
 	function get_vis_tree_item(&$tv, $o, $var, $el)
@@ -77,7 +77,7 @@ class property_tree_branch extends class_base
 		$pt = $item->parent() == $el->id() ? "0" : $item->parent();
 
 		$ret .= "\t\t\$t->add_item($pt, array(\n";
-		$ret .= "\t\t\t\"name\" => \$_GET[\"$var\"] == ".$item->id()." ? \"<b>".$item->name()."</b>\" : \"".$item->name()."\",\n";
+		$ret .= "\t\t\t\"name\" => \$arr[\"request\"][\"$var\"] == ".$item->id()." ? \"<b>".$item->name()."</b>\" : \"".$item->name()."\",\n";
 		$ret .= "\t\t\t\"id\" => ".$item->id().",\n";
 		$ret .= "\t\t\t\"url\" => aw_url_change_var(\"$var\", ".$item->id()."),\n";
 		$ret .= "\t\t\t\"iconurl\" => icons::get_icon_url(CL_MENU, \"\"),\n";
