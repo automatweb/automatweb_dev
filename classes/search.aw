@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.40 2003/05/28 13:37:25 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.41 2003/05/29 15:31:02 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -743,7 +743,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						$this->vars(array(
 							'selected' => $selected,
 							'element' => 's[class_id][]',
-							'type' => 'select',
 						));
 
 
@@ -771,7 +770,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						$this->vars(array(
 							'selected' => $selected,
 							'element' => 's[class_id]',
-							'type' => 'textbox',
 						));
 
 						$element = html::hidden($fieldref).$this->parse('getoptions');

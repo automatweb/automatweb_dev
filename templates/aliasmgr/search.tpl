@@ -187,7 +187,7 @@ function search_selall()
 <tr>
 	<td class='chformleftcol' width='160' nowrap></td>
 	<td class='chformrightcol'>
-	<input type='submit' value='otsi' onclick="javascript:document.searchform.submit()" />
+	<input type='submit' value='Otsi' onclick="javascript:document.searchform.submit()" />
 	</td>
 </tr></table>
 {VAR:reforb}

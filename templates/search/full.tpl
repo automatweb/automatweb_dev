@@ -62,8 +62,7 @@ background-color: #478EB6;
 <!--tabelraam-->
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr><td class="awtableobjectid"><img
-SRC="http://axel.dev.struktuur.ee/automatweb/images/blue/trans.gif" WIDTH="6" HEIGHT="5" BORDER=0 ALT=""></td></tr></table>
+<tr><td class="awtableobjectid" style="height:5"><div style="width:6;height:5" /></td></tr></table>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>

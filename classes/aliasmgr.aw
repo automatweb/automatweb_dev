@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.99 2003/05/27 16:09:04 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.100 2003/05/29 15:31:02 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -10,7 +10,6 @@ class aliasmgr extends aw_template
 {
 	function aliasmgr($args = array())
 	{
-
 //		arr($this->cfg,1);
 		extract($args);
 		$this->use_class = isset($args["use_class"]) ? $args["use_class"] : get_class($this);
@@ -28,7 +27,9 @@ class aliasmgr extends aw_template
 	function search($args = array())
 	{
 		extract($args);
+
 		$this->reltype = isset($args['s']['reltype']) ? $args['s']['reltype']: $reltype;
+
 		$GLOBALS['site_title'] = "Seostehaldur";
 		$this->read_template("search.tpl");
 		$search = get_instance("search");
@@ -92,16 +93,16 @@ class aliasmgr extends aw_template
 				"return_url" => $return_url,
 			),$this->use_class),
 			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id,"reltype" => $reltype),$this->use_class),
-			"toolbar" => $this->mk_toolbar(),
+			"toolbar" => $this->mk_toolbar($args['s']['class_id']),
 			"form" => $form,
 			"table" => $search->get_results(),
 		));
-		$results = $search->get_results();
+		//$results = $search->get_results();
 		return $this->parse();
 	}
 
 	function search_callback_get_fields(&$fields,$args)
-	{//arr($args,1);
+	{
 		if (isset($args['complex']))
 		{
 			aw_session_set('complex',"1");
@@ -156,6 +157,7 @@ class aliasmgr extends aw_template
 			$fields["alias"] = "n/a";
 			$fields["period"] = "n/a";
 			$fields["site_id"] = "n/a";
+			
 			$fields["complexity"] = array(
 				"type" => "text",
 				"caption" => "",
@@ -168,8 +170,10 @@ class aliasmgr extends aw_template
 				"type" => "class_id_hidden",
 				'value' => '0',
 			);
-
 		}
+
+
+
 	}
 
 	function search_callback_modify_data($row,$args)
@@ -706,7 +710,7 @@ class aliasmgr extends aw_template
 
 		$this->t->set_default_sortby("title");
 		$this->t->sort_by();
-		$toolbar = $this->mk_toolbar();
+		$toolbar = $this->mk_toolbar($args['s']['class_id']);
 
 		if (isset($this->reforb))
 		{
@@ -952,9 +956,23 @@ class aliasmgr extends aw_template
 
 	////
 	// !Search and list share the same toolbar
-	function mk_toolbar()
+	function mk_toolbar($objtype = '')
 	{
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
+
+		if (is_array($objtype) && (count($objtype) == 1))
+		{
+			$objtype = array_pop($objtype);
+		}
+		else
+		if (is_numeric($objtype = ltrim($objtype,',')))
+		{
+
+		}
+		else
+		{
+			$objtype = NULL;
+		}
 
 		$choices = array();
 		$choices2 = array();
@@ -979,7 +997,6 @@ class aliasmgr extends aw_template
 
 		$boxesscript = $this->get_file(array('file' => $this->cfg['tpldir'].'/aliasmgr/selectboxes.tpl'));
 
-
 		$hist = aw_global_get('aliasmgr_obj_history');
 
 		$hist = !is_array($hist) ? array() : $this->make_alias_classarr2($hist);
@@ -987,6 +1004,8 @@ class aliasmgr extends aw_template
 		foreach($this->reltypes as $k => $v)
 		{
 			$dval = true;
+			$single_select = "capt_new_object";
+			$sele = NULL;
 			if ($k == 0)
 			{
 				$choice =  &$choices;
@@ -1000,18 +1019,24 @@ class aliasmgr extends aw_template
 			{
 				$vals = $this->mk_kstring($choice);
 				$defaults1 .= 'listB.setDefaultOption("'.$k.'","capt_new_object");'."\n";
+				if (isset($choice[$objtype]))
+					$sele = $objtype;
 			}
 			else
 			{
 				if (count($this->rel_type_classes[$k])<=1)
 				{
 					$dval = false;
+					$single_select = $this->rel_type_classes[$k][0];
 				}
 				else
 				{
 				}
 				$vals = $this->mk_kstring($this->rel_type_classes[$k]);
+				if (isset($this->rel_type_classes[$k][$objtype]))
+					$sele = $objtype;
 			}
+
 			$history = array();
 			$dvals = '';
 
@@ -1028,8 +1053,7 @@ class aliasmgr extends aw_template
 			}
 
 			$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
-			$defaults1 .= 'listB.setDefaultOption("'.$k.'","capt_new_object");'."\n";
-			//$defaults1 .= 'listB.setDefaultOption("'.$k.'","0");'."\n";
+			$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.($sele ? $sele : $single_select).'");'."\n";
 		}
 
 		$rels1 .= 'listB.addOptions("_"'.',"Objekti tüüp","capt_new_object"'.");\n";
@@ -1041,16 +1065,15 @@ class aliasmgr extends aw_template
 
 		$toolbar->add_cdata(
 			html::select(array(
-				"options" => array('_' => 'Seose tüüp') + $this->reltypes,
+				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => 'Seose tüüp') + $this->reltypes),
 				"name" => "reltype",
 				"selected" => $this->reltype,
-//				"selected" => (count($this->reltypes) == 1) ? 0 : NULL,
 				'onchange' => "listB.populate();",
 			))
 		);
 
 		$ht = <<<HTM
-			<select NAME="aselect" style="width:200px">
+			<select NAME="aselect" style="width:200px" onChange="GetOptions(document.foo.aselect,document.searchform.elements['s[class_id]']);">
 				<script LANGUAGE="JavaScript">listB.printOptions()</SCRIPT>
 			</select>
 HTM;
@@ -1071,7 +1094,7 @@ HTM;
 			$toolbar->add_button(array(
 				"name" => "search",
 				"tooltip" => "Otsi",
-				"url" => "javascript:document.searchform.submit();",
+				"url" => "javascript:if (document.foo.reltype.value!='_') {document.searchform.submit();} else alert('Vali seosetüüp!')",
 				"imgover" => "search_over.gif",
 				"img" => "search.gif",
 			));
@@ -1135,7 +1158,6 @@ HTM;
 
 		return $toolbar->get_toolbar();
 	}
-
 
 	function mk_kstring($arr)
 	{

@@ -15,9 +15,9 @@
 <!-- END SUB: hidden -->
 <!-- SUB: getoptions -->
 <script language= "javascript">
-function GetOptions(from, tu,tyype)
+function GetOptions(from, tu)
 {
-	if (tyype == 'select')
+	if (tu.type == 'select-multiple')
 	{
 		var defaults = new Array();
 
@@ -42,15 +42,23 @@ tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, (
 	}
 	else
 	{
-		len = tu.value = '';
-		len = from.options.length;
-		for (var i=0; i < len; i++)
+		if (from.value == 'capt_new_object')
 		{
-			if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
-			{
-				tu.value = tu.value + ',' + from.options[i].value;
-			}
 
+			len = tu.value = '';
+			len = from.options.length;
+			for (var i=0; i < len; i++)
+			{
+				if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
+				{
+					tu.value = tu.value + ',' + from.options[i].value;
+				}
+
+			}
+		}
+		else
+		{
+			tu.value = from.value;
 		}
 
 	}
@@ -59,7 +67,7 @@ tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, (
 
 if (document.forms['searchform'].elements['{VAR:element}'])
 {
-	GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['{VAR:element}'], '{VAR:type}');
+	GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['{VAR:element}']);
 }
 </script>
 <!-- END SUB: getoptions -->
