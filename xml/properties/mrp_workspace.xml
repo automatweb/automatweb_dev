@@ -200,7 +200,7 @@
             <group>grp_schedule</group>
             <type>select</type>
             <store>no</store>
-            <caption>Vali projekt</caption>
+            <caption>Valitud projekt</caption>
       </property>
       <property>
             <name>chart_project_hilight_gotostart</name>

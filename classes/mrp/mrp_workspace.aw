@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.26 2005/02/11 16:43:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.27 2005/02/14 10:17:17 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -61,7 +61,7 @@
 	@property master_schedule_chart type=text store=no no_caption=1
 
 	@property chart_project_hilight type=select store=no
-	@caption Vali projekt
+	@caption Valitud projekt
 
 	@property chart_project_hilight_gotostart type=checkbox store=no
 	@caption Mine valitud projekti algusesse
@@ -135,7 +135,7 @@
 
 @default group=grp_settings_salesman
 	@property sales_pri_tbl type=table no_caption=1
-	
+
 
 @default group=grp_printer
 	@property printer_jobs type=table no_caption=1
@@ -714,11 +714,11 @@ class mrp_workspace extends class_base
 			), "mrp_resource");
 
 			$operators = array();
-			
+
 			foreach(safe_array($res2p[$resource_id]) as $person)
 			{
 				$operators[] = html::get_change_url(
-					$person->id(), 
+					$person->id(),
 					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
 					$person->name()
 				);
@@ -808,7 +808,7 @@ class mrp_workspace extends class_base
 			"img" => "copy.gif",
 		));
 
-		if (count(safe_array($_SESSION["mrp_workspace"]["cut_resources"])) > 0 || 
+		if (count(safe_array($_SESSION["mrp_workspace"]["cut_resources"])) > 0 ||
 			count(safe_array($_SESSION["mrp_workspace"]["copied_resources"])) > 0)
 		{
 			$toolbar->add_button(array(
