@@ -1,5 +1,5 @@
 <?php
-// $Id: treeview.aw,v 1.3 2002/11/07 10:52:37 kristo Exp $
+// $Id: treeview.aw,v 1.4 2002/11/18 18:46:33 kristo Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -129,7 +129,7 @@ class treeview extends aw_template
 				};
 				if ($icon_id)
 				{
-					$icon_url = $this->mk_my_orb("show",array("id" => $icon_id),"icons");
+					$icon_url = $this->mk_my_orb("show",array("id" => $icon_id),"icons",0,1);
 				}
 				else
 				{
@@ -174,5 +174,78 @@ class treeview extends aw_template
 		return $url;
 	}
 
+	////
+	// !inits tree
+	// params:
+	//   root_name - root menu name
+	//   root_url - root menu url
+	//   root_icon - root menu icon
+	function start_tree($arr)
+	{
+		$this->items = array();
+		$this->tree_dat = $arr;
+	}
+
+	////
+	// !adds item to the tree
+	// params:
+	//    parent - the parent of the item to be added
+	//    item - array of item data: 
+	//      id - id of the item
+	//      name - the name of the item
+	//      url - the link for the item
+	//      icon - the url of the icon
+	//      target - the target frame of the link
+	function add_item($parent, $item)
+	{
+		$this->items[$parent][] = $item;
+	}
+
+	function finalize_tree()
+	{
+		$this->read_template("ftiens.tpl");
+    // objektipuu
+    $tr = $this->req_finalize_tree(0);
+		$this->vars(array(
+			"TREE" => $tr,
+			"DOC" => "",
+			"root" => 0,
+			"rootname" => $this->tree_dat["root_name"],
+			"rooturl" => $this->tree_dat["root_url"],
+			"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
+		));
+		return $this->parse();
+	}
+
+	function req_finalize_tree($parent)
+	{
+		if (!isset($this->items[$parent]) || !is_array($this->items[$parent]))
+		{
+			return '';
+		}
+
+		$ret = '';
+		foreach($this->items[$parent] as $row)
+		{
+			$sub = $this->req_finalize_tree($row['id']);
+			$this->vars(array(
+				'name' => $row['name'],
+				'id' => $row['id'],
+				'parent' => $parent,
+				'iconurl' => $row['icon'] == '' ? $this->cfg['baseurl'].'/automatweb/images/aw_ikoon.gif' : $row['icon'],
+				'url' => $row['url'],
+				'targetframe' => $row['target'],
+			));
+			if ($sub == "")
+			{
+				$ret.=$this->parse('DOC');
+			}
+			else
+			{
+				$ret.=$this->parse('TREE').$sub;
+			}
+		}
+		return $ret;
+	}
 };
 ?>
