@@ -125,9 +125,9 @@ function toggle1(layer1,layer2) {
 <a class="alamlingid" href='{VAR:metainfo}'>Metainfo</a><img src='{VAR:baseurl}/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: CAN_META -->
 
-<!-- SUB: HAS_CALENDAR -->
+<!-- SUB: USES_CALENDAR -->
 <a class="alamlingid" href='{VAR:calendar}'>Kalender</a><img src='{VAR:baseurl}/images/transa.gif' width=8 height=1 border=0>
-<!-- END SUB: HAS_CALENDAR -->
+<!-- END SUB: USES_CALENDAR -->
 
 <a class="alamlingid" href='{VAR:set_folders}'>{VAR:LC_FORMS_CHOOSE_CATALOGUES}</a><img src='{VAR:baseurl}/images/transa.gif' WIDTH=8 height=1 border=0>
 
