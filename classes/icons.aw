@@ -267,8 +267,18 @@ class icons extends aw_template
 		return $ret;
 	}
 
-	function show($id)
+	function show()
 	{
+		$arg = func_get_arg(0);
+		if (is_array($arg))
+		{
+			extract($arg);
+		}
+		else
+		{
+			$id = $arg;
+		};
+
 		if (!$id)
 		{
 			header("Location: ".$this->cfg["baseurl"]."/automatweb/images/icon_aw.gif");
