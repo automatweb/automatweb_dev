@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.23 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.24 2001/10/10 18:21:54 cvs Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -20,6 +20,7 @@ class users extends users_user
 	{
 		$this->db_init();
 		$this->tpl_init("automatweb/users");
+		lc_site_load("definition",&$this);
 		lc_load("definition");
 		global $lc_users;
 		if (is_array($lc_users))
@@ -668,7 +669,7 @@ class users extends users_user
 			session_register("last_join_uid");
 
 			// send him some email as well
-			classload("config");
+/*			classload("config");
 			$c = new config;
 			$mail = $c->get_simple_config("join_mail");
 			$mail = str_replace("#parool#", $add_state["pass"],$mail);
@@ -680,7 +681,7 @@ class users extends users_user
 			if ($jsa != "")
 			{
 				mail($jsa,$c->get_simple_config("join_mail_subj"),$mail,"From: ".MAIL_FROM);
-			}
+			}*/
 			$add_state = "";
 			$GLOBALS["session_filled_forms"] = array();
 
@@ -1110,7 +1111,7 @@ class users extends users_user
 			$tmp = array();
 			foreach($elvs as $k => $v)
 			{
-				if (is_number($k) && is_number($v))
+				if (is_number($k))
 				{
 					$tmp[$k] = $v;
 				}
