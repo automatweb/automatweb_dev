@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.12 2004/11/26 14:03:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.13 2005/03/15 10:41:54 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
