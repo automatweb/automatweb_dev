@@ -719,6 +719,19 @@ class ml_rule extends aw_template
 		//echo("check out return_infoz: rarr=<pre>");print_r($ruledta);echo("<pre><br>");//dbg
 		$this->execute_rules($matches,$ruledta);
 	}
+
+	function exec_dynamic_rules()
+	{
+		$rarr = array();
+		$this->db_query("SELECT * FROM rules LEFT JOIN objects ON objects.oid = rules.rid WHERE objects.status != 0 AND dynamic=1");
+		while ($row = $this->db_next())
+		{
+			$rarr[] = $row["rid"];
+		}
+		$rule_inst = get_instance("mailinglist/ml_rule");
+		$mt = $rule_inst->match_rules($rarr);
+		$rule_inst->execute_rules($mt);
+	}
 }
 
 ?>

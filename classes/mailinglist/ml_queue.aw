@@ -461,6 +461,9 @@ class ml_queue extends aw_template
 			aw_global_set("uid",$this->originaluid);
 			// neid gruppi kuuluvusi pole vist vaja uuesti processida, pohh nendega :)
 		};
+		// exec dynamic rules
+		$rule_inst = get_instance("mailinglist/ml_rule");
+		$rule_inst->exec_dynamic_rules();
 		decho("valmis");//dbg
 		die("die");
 		return "";//hmhm

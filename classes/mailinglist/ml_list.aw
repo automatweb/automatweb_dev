@@ -667,6 +667,7 @@ class ml_list extends aw_template
 		$mem_inst = get_instance("mailinglist/ml_member");
 
 		// now make members from all the form entries that are already not members
+		$cr = false;
 		foreach($entries as $eid => $ename)
 		{
 			if (!isset($meminf[$eid]))
@@ -678,7 +679,13 @@ class ml_list extends aw_template
 					),
 					"conf" => $this->list_ob["meta"]["user_form_conf"]
 				));
+				$cr = true;
 			}
+		}
+		if ($cr)
+		{
+			$rule_inst = get_instance("mailinglist/ml_rule");
+			$rule_inst->exec_dynamic_rules();
 		}
 	}
 };
