@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.61 2005/03/02 07:39:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.62 2005/03/08 14:36:23 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1399,7 +1399,7 @@ class object_treeview_v2 extends class_base
 					$content .= $sep_after[$colid];
 				}
 				$this->vars(array(
-					"content" => $content
+					"content" => $content,
 				));
 				$str .= $this->parse("COLUMN");
 			}
