@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.66 2002/07/17 20:17:44 kristo Exp $
-
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.67 2002/07/23 05:29:53 kristo Exp $
+error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
 
@@ -347,9 +347,7 @@ $error_types = array(
 	ERR_FG_NOTBLELS => "ERR_FG_NOTBLELS",
 	ERR_FG_EMETAINFO => "ERR_FG_EMETAINFO",
 	ERR_EMAIL_NOEMAIL => "ERR_EMAIL_NOEMAIL",
-	ERR_EMAIL_NOEMAIL => "ERR_EMAIL_NOEMAIL",
 	ERR_EMAIL_NOUSER => "ERR_EMAIL_NOUSER",
-	ERR_EMAIL_NOEMAIL => "ERR_EMAIL_NOEMAIL",
 	ERR_CSS_EGRP => "ERR_CSS_EGRP",
 	ERR_CONTACT_NOFORM => "ERR_CONTACT_NOFORM",
 	ERR_CONF_NLOGIN => "ERR_CONF_NLOGIN",
