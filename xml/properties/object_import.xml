@@ -1,0 +1,117 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <caption>Kataloog, kuhu pannakse objektid</caption>
+      </property>
+      <property>
+            <name>object_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJECT_TYPE</reltype>
+            <caption>Imporditava objekti t&amp;uuml;&amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>unique_id</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Unikaalne omadus</caption>
+      </property>
+      <property>
+            <name>import_file</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <caption>Imporditav fail</caption>
+      </property>
+      <property>
+            <name>import_file_show</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Uploaditud fail</caption>
+      </property>
+      <property>
+            <name>file_has_header</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Esimene rida on pealkrijadega</caption>
+      </property>
+      <property>
+            <name>do_import</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Teosta import</caption>
+      </property>
+      <property>
+            <name>props</name>
+            <table>objects</table>
+            <group>props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>connect_props</name>
+            <table>objects</table>
+            <group>connect</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_OBJECT_IMPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <props>
+                  <caption>Omadused</caption>
+            </props>
+            <connect>
+                  <caption>Seosta tulbad</caption>
+            </connect>
+      </groupinfo>
+      <reltypes>
+            <OBJECT_TYPE>
+                  <value>1</value>
+                  <clid>CL_OBJECT_TYPE</clid>
+                  <caption>imporditav klass</caption>
+            </OBJECT_TYPE>
+            <FOLDER>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>kataloog kuhu objektid panna</caption>
+            </FOLDER>
+      </reltypes>
+</properties>
+
