@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.16 2001/06/07 13:31:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.17 2001/06/07 18:11:36 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -1796,8 +1796,10 @@ $orb_defs["form"] = "xml";
 		// !Teeb paringu entryte saamiseks laaditud vormi juures
 		function get_entries($args = array())
 		{
+			extract($args);
+			$pstr = ($parent) ? " WHERE objects.parent = $parent " : "";
 			$table = sprintf("form_%d_entries",$this->id);
-			$q = "SELECT * FROM $table";
+			$q = "SELECT * FROM $table LEFT JOIN objects ON ($table.id = objects.oid) $pstr";
 			$this->db_query($q);
 		}
 
