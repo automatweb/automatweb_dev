@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.5 2001/05/16 05:42:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.6 2001/05/16 06:17:29 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -288,23 +288,53 @@ class planner extends calendar {
 				$c = "";
 				$c1 = "";
 				$c2 = "";
+				$head = "";
+				for ($i = 1; $i <= 7; $i++)
+				{
+					$this->vars(array("headline" => get_lc_weekday($i)));
+					$head .= $this->parse("header");
+				};
 				for ($i = $start; $i <= $end; $i++)
 				{
 					$wx++;
 					if (($i >= $start_d) && ($i <= $end_d))
 					{
-						$title = "test";
-						$this->vars(array(
-								"title" => $title,
-						));
-						$c2 .= $this->parse("element");
+						$title = "";
+						$j = $i - 1;
+						$dx = date("dmY",strtotime("+$j days",$di["start"]));
+						if (is_array($events[$dx]))
+						{
+							foreach($events[$dx] as $key => $e)
+							{
+								$this->vars(array(
+										"color" => $e["color"],
+										"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
+										"title" => $e["title"],
+										"id" => $e["id"],
+								));
+								$c2 .= $this->parse("line.subline.element");
+							};
+						};
 						$this->vars(array("element" => $c2));
 						$c2 = "";
+						$bgcolor = ($dx == $xdate) ? "#DDDDDD" : "#FFFFFF";
+						$thisday = date("d",strtotime("+$j days",$di["start"])) . "." . get_lc_month(date("m",$di["start"]));
+						$this->vars(array(
+								"dayname" => $thisday,
+								"bgcolor" => $bgcolor,
+								"did" => $args["id"],
+								"date" => date("d-m-Y",strtotime("+$j days",$di["start"])),
+						));
+						$showday = $this->parse("showday");
+						$this->vars(array("showday" => $showday));
 						$c1 .= $this->parse("line.subline");
 					}
 					else
 					{
-						$this->vars(array("element" => "&nbsp;"));
+						$this->vars(array("element" => "&nbsp;",
+									"dayname" => "",
+									"showday" => "",
+									"bgcolor" => "#ffffff"));
 						$c1 .= $this->parse("line.subline");
 					};
 					if ($wx == 7)
@@ -315,7 +345,8 @@ class planner extends calendar {
 						$wx = 0;
 					};
 				};
-				$this->vars(array("line" => $c));
+				$this->vars(array("line" => $c,
+						"header" => $head));
 				$content = $this->parse();
 				break;
 
