@@ -105,9 +105,9 @@ class menuedit_light extends aw_template
 		}
 		else
 		{
-			$q = sprintf("SELECT * FROM objects WHERE class_id = '%d' AND parent IN (%s) AND status = 2 ORDER BY jrk",
+			$q = sprintf("SELECT * FROM objects WHERE class_id = '%d' AND parent IN (%s) AND status = 2 AND lang_id = %d ORDER BY jrk",
 					$this->class_id,
-					$plist);
+					$plist,aw_global_get("lang_id"));
 		};
 		$this->db_query($q);
 		$_parents = array();
