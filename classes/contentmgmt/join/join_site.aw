@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.14 2004/11/23 16:06:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.15 2005/03/18 12:21:27 ahti Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -206,12 +206,12 @@ class join_site extends class_base
 
 			$arr["obj_inst"]->connect(array(
 				"to" => $rid,
-				"reltype" => RELTYPE_JOIN_RULE
+				"reltype" => "RELTYPE_JOIN_RULE",
 			));
 
 			$o->connect(array(
 				"to" => $arr["obj_inst"]->id(),
-				"reltype" => 1 // RELTYPE_JOIN_CONF from join_site_rule
+				"reltype" => "RELTYPE_JOIN_CONF", // from join_site_rule
 			));
 		}
 	}
@@ -254,7 +254,7 @@ class join_site extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_rules_table($t);
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_JOIN_RULE)) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_JOIN_RULE")) as $c)
 		{
 			$to = $c->to();
 
@@ -927,7 +927,7 @@ class join_site extends class_base
 
 		$u_o->connect(array(
 			"to" => $p_id,
-			"reltype" => 2 // RELTYPE_PERSON from core/users/user
+			"reltype" => "RELTYPE_PERSON" // from core/users/user
 		));
 
 
@@ -939,7 +939,7 @@ class join_site extends class_base
 
 		$person->connect(array(
 			"to" => $c_id,
-			"reltype" => 6 // RELTYPE_WORK from crm/crm_person
+			"reltype" => "RELTYPE_WORK" // from crm/crm_person
 		));
 		
 		$a_objs = array();
@@ -958,11 +958,11 @@ class join_site extends class_base
 
 			$u_o->connect(array(
 				"to" => $o_id,
-				"reltype" => 3 // RELTYPE_USER_DATA from core/users/user
+				"reltype" => "RELTYPE_USER_DATA" // from core/users/user
 			));
 			$person->connect(array(
 				"to" => $o_id,
-				"reltype" => 15 // RELTYPE_USER_DATA from crm/crm_person
+				"reltype" => "RELTYPE_USER_DATA" // from crm/crm_person
 			));
 			$a_objs[$o->class_id()] = $o_id;
 			
@@ -976,7 +976,7 @@ class join_site extends class_base
 	function _get_clids($ob)
 	{
 		$ret = array(CL_USER,CL_CRM_PERSON, CL_CRM_COMPANY);
-		foreach($ob->connections_from(array("type" => RELTYPE_JOIN_CLASS)) as $c)
+		foreach($ob->connections_from(array("type" => "RELTYPE_JOIN_CLASS")) as $c)
 		{
 			$cfgf = $c->to();
 			$ret[] = $cfgf->prop("type");
@@ -1086,7 +1086,7 @@ class join_site extends class_base
 				else
 				if ($clid == CL_CRM_PERSON)
 				{
-					$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
+					$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
 					if ($c)
 					{
 						$data_o = $c->to();
@@ -1095,11 +1095,11 @@ class join_site extends class_base
 				else
 				if ($clid == CL_CRM_COMPANY)
 				{
-					$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
+					$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
 					if ($c)
 					{
 						$tmp = $c->to();
-						$c = reset($tmp->connections_from(array("type" => 6 /* RELTYPE_WORK from crm_person */)));
+						$c = reset($tmp->connections_from(array("type" => "RELTYPE_WORK" /* from crm_person */)));
 						if ($c)
 						{
 							$data_o = $c->to();
@@ -1154,7 +1154,7 @@ class join_site extends class_base
 					if ($props[$pid]["type"] == "relpicker")
 					{
 						$tmp = reset($ob->connections_from(array(
-							"type" => 5, // RELTYPE_REL_OBJ 
+							"type" => "RELTYPE_REL_OBJ", 
 							"to.class_id" => $clid
 						)));
 						if ($tmp)
@@ -1286,7 +1286,7 @@ class join_site extends class_base
 			}
 			elseif ($clid == CL_CRM_PERSON)
 			{
-				$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
+				$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
 				if ($c)
 				{
 					$data_o = $c->to();
@@ -1294,11 +1294,11 @@ class join_site extends class_base
 			}
 			elseif ($clid == CL_CRM_COMPANY)
 			{
-				$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
+				$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
 				if ($c)
 				{
 					$tmp = $c->to();
-					$c = reset($tmp->connections_from(array("type" => 6 /* RELTYPE_WORK from crm_person */)));
+					$c = reset($tmp->connections_from(array("type" => "RELTYPE_WORK" /* from crm_person */)));
 					if ($c)
 					{
 						$data_o = $c->to();
