@@ -21,7 +21,7 @@
 			</function>
 		</action>
 
-		<action name="cache_clear" >
+		<action name="cache_clear" nologin="1">
 			<function name="cache_clear">
 				<arguments>
 					<optional name="clear" />

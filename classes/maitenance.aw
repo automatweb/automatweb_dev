@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.9 2004/06/28 19:50:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.10 2004/09/09 11:03:51 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -831,7 +831,7 @@ class maitenance extends class_base
 	
 	/**  
 		
-		@attrib name=cache_clear params=name default="0"
+		@attrib name=cache_clear params=name default="0" nologin="1"
 		
 		@param clear optional
 		@param list optional
