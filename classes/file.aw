@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.60 2003/10/15 10:33:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.61 2003/10/15 10:59:15 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -59,7 +59,7 @@
 	@caption Avaldamise kuupäev
 
 	@groupinfo settings caption=Seadistused
-        @groupinfo dates caption=Ajad
+    @groupinfo dates caption=Ajad
 
 	@tableinfo files index=id master_table=objects master_index=oid	
 	@classinfo trans_id=TR_FILE
@@ -73,6 +73,7 @@ class file extends class_base
 	// !Konstruktor
 	function file()
 	{
+		enter_function("file::file",array());
 		$this->init(array(
 			"clid" => CL_FILE,
 			"tpldir" => "file",
@@ -80,10 +81,12 @@ class file extends class_base
 		));
 		lc_load("definition");
 		$this->lc_load("file","lc_file");
+		exit_function("file::file");
 	}
 
 	function get_property($arr)
 	{
+		enter_function("file::get_property",array());
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
@@ -121,11 +124,13 @@ class file extends class_base
 				break;
 
 		}
+		exit_function("file::get_property");
 		return $retval;
 	}
 
 	function set_property($arr = array())
 	{
+		enter_function("file::set_property",array());
 		$data = &$arr["prop"];
 		$form_data = &$arr["form_data"];
 		global $file, $file_type,$file_name;
@@ -134,6 +139,19 @@ class file extends class_base
 		{
 			$retval = PROP_IGNORE;
 		};
+		if ($data["name"] == "file_url")
+		{
+			if ($data["value"] != "")
+			{
+				$proto_find = get_instance("protocols/protocol_finder");
+				$proto_inst = $proto_find->inst($data["value"]);
+
+				$str = $proto_inst->get($data["value"]);
+				preg_match("/<title>(.*)<\/title>/isU", $str, $mt);
+				$this->file_name = $mt[1];
+			}
+		}
+		else
 		if ($data["name"] == "file")
 		{
 			if (is_uploaded_file($file))
@@ -171,25 +189,30 @@ class file extends class_base
 			};
 		};
 		// cause everything is alreay handled here
+		exit_function("file::set_property");
 		return $retval;
 	}
 
 	function callback_pre_save($arr)
 	{
+		enter_function("file::callback_pre_save",array());
 		// overwrite the name if new file is uploaded
 		if (isset($this->file_name))
 		{
 			$arr["obj_inst"]->set_prop("name",$this->file_name);
 		};
+		exit_function("file::callback_pre_save");
 	}
 
 	////
 	// !Aliaste parsimine
 	function parse_alias($args = array())
 	{
+		enter_function("file::parse_alias",array());
 		extract($args);
 		if (!$alias["target"])
 		{
+		exit_function("file::parse_alias");
 			return "";
 		}
 
@@ -275,6 +298,7 @@ class file extends class_base
 			};
 			$replacement = "<a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
 		}
+		exit_function("file::parse_alias");
 		return $replacement;
 	}
 
@@ -283,6 +307,7 @@ class file extends class_base
 	// returns the name of the file that the data was saved in
 	function _put_fs($args = array())
 	{
+		enter_function("file::_put_fs",array());
 		$site_basedir = $this->cfg["site_basedir"];
 		// find the extension for the file
 		list($major,$minor) = explode("/",$args["type"]);
@@ -300,6 +325,7 @@ class file extends class_base
 			"file" => $file,
 			"content" => $args["content"],
 		));
+		exit_function("file::_put_fs");
 		return $file;
 	}
 
@@ -308,14 +334,18 @@ class file extends class_base
 	// $args should contain line from that table
 	function can_be_embedded(&$row)
 	{
+		enter_function("file::can_be_embedded",array());
 		if (is_object($row))
 		{
+		exit_function("file::can_be_embedded");
 			return in_array($row->prop("type"),$this->cfg["embtypes"]);
 		}
 		else
 		{
+		exit_function("file::can_be_embedded");
 			return in_array($row["type"],$this->cfg["embtypes"]);
 		}
+		exit_function("file::can_be_embedded");
 	}
 
 
@@ -332,6 +362,7 @@ class file extends class_base
 	// returns the id if the file
 	function save_file($arr)
 	{
+		enter_function("file::save_file",array());
 		extract($arr);
 
 		if ($content != "")
@@ -388,6 +419,7 @@ class file extends class_base
 			$this->db_query("UPDATE files SET $upds WHERE id = '$file_id'");
 		}
 
+		exit_function("file::save_file");
 		return $file_id;
 	}
 
@@ -400,6 +432,7 @@ class file extends class_base
 	// content(string) - faili sisu
 	function put($args = array())
 	{
+		enter_function("file::put",array());
 		extract($args);
 		$this->save_file(array(
 			"type" => $type,
@@ -408,6 +441,7 @@ class file extends class_base
 			"name" => $filename,
 			"comment" => $comment
 		));
+		exit_function("file::put");
 	}
 
 	////
@@ -419,6 +453,7 @@ class file extends class_base
 	// sys(bool) - kas panna faili systeemi juurde?
 	function put_special_file($args = array())
 	{
+		enter_function("file::put_special_file",array());
 		if ($args["sys"])
 		{
 			$path = $this->cfg["basedir"] . "/files";
@@ -438,11 +473,13 @@ class file extends class_base
 			"content" => $args["content"],
 		));
 
+		exit_function("file::put_special_file");
 		return $success;
 	}
 	
 	function get_special_file($args = array())
 	{
+		enter_function("file::get_special_file",array());
 		if ($args["sys"])
 		{
 			$path = $this->cfg["basedir"] . "/files";
@@ -461,6 +498,7 @@ class file extends class_base
 			"file" => $path . "/" . $args["name"],
 		));
 
+		exit_function("file::get_special_file");
 		return $contents;
 	}
 
@@ -471,17 +509,20 @@ class file extends class_base
 	// parent - koht, mille alla koopia teha
 	function cp($args = array())
 	{
+		enter_function("file::cp",array());
 		extract($args);
 		$old = $this->get_file_by_id($id);
 		$old["file_id"] = 0;
 		$old["parent"] = $parent;
 		$this->save_file($old);
+		exit_function("file::cp");
 	}
 
 	////
 	// !checks whether the directory needed for file storing exists and is writable
 	function check_environment($args = array())
 	{
+		enter_function("file::check_environment",array());
 		$retval = "";
 		if ($this->cfg["site_basedir"] == "") 
 		{
@@ -513,6 +554,7 @@ class file extends class_base
 				};
 			};
 		};
+		exit_function("file::check_environment");
 		return $retval;
 	}
 
@@ -520,6 +562,7 @@ class file extends class_base
 	// !returns file by id
 	function get_file_by_id($id) 
 	{
+		enter_function("file::get_file_by_id",array());
 		$row = new aw_array($this->get_object($id));
 		$this->db_query("SELECT * FROM files WHERE id = $id");
 		$ar = new aw_array($this->db_next());
@@ -549,6 +592,7 @@ class file extends class_base
 		{
 			$this->dequote($ret["content"]);
 		};
+		exit_function("file::get_file_by_id");
 		return $ret;
 	}
 
@@ -556,6 +600,7 @@ class file extends class_base
 	// !Näitab faili. DUH.
 	function show($id)
 	{
+		enter_function("file::show",array());
 		if (is_array($id))
 		{
 			extract($id);
@@ -576,10 +621,12 @@ class file extends class_base
 		//header("Content-Length: ".strlen($fc["content"]));
 		//header("Pragma: no-cache");
 		die($fc["content"]);
+		exit_function("file::show");
 	}
 
 	function view($args = array())
 	{
+		enter_function("file::view",array());
 		extract($args);
 		$fc = $this->get_file_by_id($id);
 		if ($this->can_be_embedded($fc))
@@ -602,12 +649,15 @@ class file extends class_base
 		};
 
 
+		exit_function("file::view");
 	}
 
 	function get_url($id,$name)	
 	{
+		enter_function("file::get_url",array());
 		$retval = str_replace("automatweb/","",$this->mk_my_orb("preview", array("id" => $id),"file", false,true,"/"))."/".urlencode(str_replace("/","_",$name));
 //		$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true);
+		exit_function("file::get_url");
 		return $retval;
 	}
 
@@ -619,8 +669,10 @@ class file extends class_base
 	// removes fastcall=1
 	function check_url($url)
 	{
+		enter_function("file::check_url",array());
 		if ($url == "")
 		{
+		exit_function("file::check_url");
 			return $url;
 		}
 		$url = preg_replace("/^http:\/\/(.*)\//U","/",$url);
@@ -641,6 +693,7 @@ class file extends class_base
 			}
 		}
 		$url = str_replace("automatweb/", "", $url);
+		exit_function("file::check_url");
 		return aw_ini_get("baseurl").$url;
 	}
 
@@ -651,6 +704,7 @@ class file extends class_base
 	// $file_id - if not specified, file will be added, else changed
 	function add_upload_image($name,$parent,$file_id = 0)
 	{
+		enter_function("file::add_upload_image",array());
 		$file_id = (int)$file_id;
 
 		if ($file_id)
@@ -682,6 +736,7 @@ class file extends class_base
 				"type" => $type
 			));
 
+		exit_function("file::add_upload_image");
 			return array("id" => $id,"url" => $this->get_url($id,$fname), "orig_name" => $fname);
 		}
 		else
@@ -696,6 +751,7 @@ class file extends class_base
 						// let the image class handle this
 						$im = get_instance("image");
 						$id = $im->get_image_by_id($file_id);
+		exit_function("file::add_upload_image");
 						return array("id" => $file_id,"url" => $id["url"]);
 					}
 					// if we get here, we're pretty much fucked, so bail out
@@ -703,18 +759,23 @@ class file extends class_base
 				}
 				else
 				{
+		exit_function("file::add_upload_image");
 					return array("id" => $file_id,"url" => $this->get_url($file_id, $fd["name"]), "orig_name" => $fd["name"]);
 				}
 			}
 			else
 			{
+		exit_function("file::add_upload_image");
 				return false;
 			}
 		}
+		exit_function("file::add_upload_image");
 	}
 
 	function request_execute($obj)
 	{
+		enter_function("file::request_execute",array());
+		exit_function("file::request_execute");
 		return $this->show($obj->id());
 	}
 };
