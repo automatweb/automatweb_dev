@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.160 2004/01/29 14:30:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.161 2004/01/29 17:42:37 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -84,7 +84,7 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 	@property project type=hidden group=views
 	@caption Projekti ID
 	
-	@property calendar_contents type=calendar group=views no_caption=1
+	@property calendar_contents type=calendar group=views no_caption=1 viewtype=week
 	@caption Kalendri sisu
 
 	property show_day callback=callback_show_day group=show_day 
@@ -3049,7 +3049,7 @@ class planner extends class_base
 
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
-			"viewtype" => $arr["request"]["viewtype"],
+			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $arr["prop"]["viewtype"],
 		));
 
 		// that is all nice and well. But I also need a separate function for 
