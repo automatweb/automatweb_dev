@@ -43,6 +43,7 @@
 					<required name="id"/>
 					<optional name="from"/>
 					<optional name="section"/>
+					<optional name="archive"/>
 				</arguments>
 			</function>
 		</action>
