@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.55 2002/10/30 11:00:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.56 2002/11/07 22:57:59 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -308,7 +308,7 @@ class users extends users_user
 			$this->vars(array(
 				"uid"				=> $row["uid"], 
 				"logs"				=> $row["logins"],
-				"online"			=> ((time() - $row["lastaction"]) < $timeout) ? LC_YES : LC_NO,
+				"online"			=> ((time() - $row["lastaction"]) < $timeout) ? "yes" : "no",
 				"last"				=> $this->time2date($row["lastaction"],2),
 				"change"			=> $this->mk_orb("change", array("id" => $row["uid"])),
 				"delete"			=> $this->mk_orb("delete", array("id" => $row["uid"])),
