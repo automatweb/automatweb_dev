@@ -219,7 +219,14 @@ class _int_object
 				{
 					// it is "RELTYPE_FOO"
 					// resolve it to numeric
-					$param["type"] = $GLOBALS["relinfo"][$this->obj["class_id"]][$param["type"]]["value"];
+					if (!$GLOBALS["relinfo"][$this->obj["class_id"]][$param["type"]]["value"])
+					{
+						$param["type"] = -1; // won't match anything
+					}
+					else
+					{
+						$param["type"] = $GLOBALS["relinfo"][$this->obj["class_id"]][$param["type"]]["value"];
+					}
 				}
 				if ($param["type"])
 				{
