@@ -13,10 +13,7 @@ class _config_dummy {};
 
 function aw_ini_get($var)
 {
-//	enter_function("__global::aw_ini_get",array());
-	/*
-	$_config_instance =& __init_config_instance();
-	*/
+	enter_function("__global::aw_ini_get",array());
 	if (($pos = strpos($var,".")) !== false)
 	{
 		$class = substr($var,0,$pos);
@@ -26,26 +23,12 @@ function aw_ini_get($var)
 	{
 		$class = "__default";
 	}
+	exit_function("__global::aw_ini_get");
 	return $GLOBALS["cfg"][$class][$var];
-//	exit_function("__global::aw_ini_get");
-	//return $_config_instance->data[$class][$var];
-}
-
-function &__init_config_instance()
-{
-	global $_config_instance;
-	if (!is_object($_config_instance))
-	{
-		$_config_instance = new _config_dummy;
-		$_config_instance->data = array();
-	}
-	return $_config_instance;
 }
 
 function parse_config($file)
 {
-	$_config_instance =& __init_config_instance();
-	
 	$fd = file($file);
 	foreach($fd as $line)
 	{
@@ -90,13 +73,6 @@ function parse_config($file)
 					// ok, do the bad eval version
 					$arrparams = substr($varname,$bpos);
 					$arrname = substr($varname,0,$bpos);
-					/*
-					if (!is_array($_config_instance->data[$varclass][$arrname]))
-					{
-						$_config_instance->data[$varclass][$arrname] = array();
-					}
-					$code = "\$_config_instance->data[\$varclass][\$arrname]".$arrparams." = \"".$varvalue."\";";
-					*/
 					if (!is_array($GLOBALS["cfg"][$varclass][$arrname]))
 					{
 						$GLOBALS["cfg"][$varclass][$arrname] = array();
@@ -108,7 +84,6 @@ function parse_config($file)
 				else
 				{
 					// and stuff the thing in the array
-					//$_config_instance->data[$varclass][$varname] = $varvalue;
 					$GLOBALS["cfg"][$varclass][$varname] = $varvalue;
 					//echo "setting [$varclass][$varname] to $varvalue <br>";
 				}
@@ -159,8 +134,6 @@ function init_config($arr)
 //	echo "timestamping took ",($ts_e - $ts_s), "seconds <br>";
 //	result: 0.00013	 - too small to measure correctly
 
-	$_config_instance =& __init_config_instance();
-
 	if ($is_cached)
 	{
 //		list($micro,$sec) = split(" ",microtime());
@@ -168,7 +141,6 @@ function init_config($arr)
 		$f = fopen($cache_file,"r");
 		$fc = fread($f,filesize($cache_file));
 		fclose($f);
-		//$_config_instance->data = unserialize($fc);
 		$GLOBALS["cfg"] = unserialize($fc);
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_e = $sec + $micro;
@@ -186,8 +158,6 @@ function init_config($arr)
 		// and write to cache if file is specified
 		if ($cache_file)
 		{
-			//$_ci =& __init_config_instance();
-			//$str = serialize($_ci->data);
 			$str = serialize($GLOBALS["cfg"]);
 			$f = fopen($cache_file,"w");
 			fwrite($f,$str);
@@ -206,7 +176,6 @@ function init_config($arr)
 	if (strpos($PHP_SELF,"automatweb")) 
 	{
 		// keemia. Kui oleme saidi adminnis sees, siis votame templated siit
-		// $_config_instance->data["__default"]["tpldir"] = aw_ini_get("basedir") . "/templates";
 		$GLOBALS["cfg"]["__default"]["tpldir"] = aw_ini_get("basedir") . "/templates";
 	} 
 	// kui saidi "sees", siis votame templated tolle saidi juurest, ehk siis ei puutu miskit
@@ -216,14 +185,12 @@ function init_config($arr)
 	if (!$GLOBALS["fastcall"])
 	{
 		// and here do the defs for classes
-		//foreach($_config_instance->data["__default"]["classes"] as $clid => $cld)
 		foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 		{
 			define($cld["def"], $clid);
 		}
 
 		// and here do the defs for programs
-		//foreach($_config_instance->data["__default"]["programs"] as $prid => $prd)
 		foreach($GLOBALS["cfg"]["__default"]["programs"] as $prid => $prd)
 		{
 			define($prd["def"], $prid);
@@ -243,10 +210,10 @@ function aw_ini_set($key,$value)
 function aw_config_init_class(&$that)
 {
 //	enter_function("__global::aw_config_init_class",array());
-	//$_config_instance =& __init_config_instance();
 	$class = get_class($that);
-	//$that->cfg = array_merge($_config_instance->data[$class],$_config_instance->data["__default"]);
 	$that->cfg = array_merge($GLOBALS["cfg"][$class],$GLOBALS["cfg"]["__default"]);
+	$that->cfg["acl"] = $GLOBALS["cfg"]["acl"];
+	$that->cfg["config"] = $GLOBALS["cfg"]["config"];
 //	exit_function("__global::aw_config_init_class");
 }
 
@@ -260,7 +227,7 @@ function lc_load($file)
 	{
 		$admin_lang_lc = "et";
 	}
-	@include_once(aw_ini_get("basedir")."/lang/" . $admin_lang_lc . "/$file.".aw_ini_get("ext"));
+	@include_once($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $admin_lang_lc . "/$file.".$GLOBALS["cfg"]["__default"]["ext"]);
 //	exit_function("__global::lc_load");
 }
 
@@ -269,13 +236,13 @@ function lc_site_load($file,&$obj)
 {
 //	enter_function("__global::lc_site_load",array());
 	$LC = aw_global_get("LC");
-	$fname = aw_ini_get("site_basedir")."/lang/".$LC."/$file.".aw_ini_get("ext");
+	$fname = $GLOBALS["cfg"]["__default"]["site_basedir"]."/lang/".$LC."/$file.".$GLOBALS["cfg"]["__default"]["ext"];
 	global $DLC;
 	if ($DLC)
 	{
 		print "fn = $fname<br>";
 	};
-	@include_once(aw_ini_get("site_basedir")."/lang/" . $LC . "/$file.".aw_ini_get("ext"));
+	@include_once($GLOBALS["cfg"]["__default"]["site_basedir"]."/lang/" . $LC . "/$file.".$GLOBALS["cfg"]["__default"]["ext"]);
 	if ($obj)
 	{
 		// kui objekt anti kaasa, siis loeme tema template sisse muutuja $lc_$file 
@@ -306,7 +273,7 @@ function classload($args)
 		// vältimaks katseid laadida faile /etc/passwd
 		preg_match("/(\w*)$/",$lib,$m);
 		$lib = $m[1];
-		$lib = aw_ini_get("classdir")."/".$lib.".".aw_ini_get("ext");
+		$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
 		include_once($lib);
 	};
 //	exit_function("__global::classload");
@@ -315,8 +282,8 @@ function classload($args)
 function get_instance($class,$args = array())
 {
 //	enter_function("__global::get_instance",array());
-	$classdir = aw_ini_get("classdir");
-	$ext = aw_ini_get("ext");
+	$classdir = $GLOBALS["cfg"]["__default"]["classdir"];
+	$ext = $GLOBALS["cfg"]["__default"]["ext"];
 	$id = sprintf("instance::%s",$class);
 	$instance = aw_global_get($id);
 	if (not($instance))
@@ -353,14 +320,9 @@ function not($arg)
 	return !$arg;
 }
 
-function sysload($lib)
-{
-	classload($lib);
-}
-
 function load_vcl($lib)
 {
-	include_once(aw_ini_get("basedir")."/vcl/$lib.".aw_ini_get("ext"));
+	include_once($GLOBALS["cfg"]["__default"]["basedir"]."/vcl/$lib.".$GLOBALS["cfg"]["__default"]["ext"]);
 }
 
 
@@ -369,40 +331,29 @@ function load_vcl($lib)
 // available in parse_config, but now most of them are.
 function aw_startup()
 {
-	list($micro,$sec) = split(" ",microtime());
-	$ts_s = $sec + $micro;
+//	list($micro,$sec) = split(" ",microtime());
+//	$ts_s = $sec + $micro;
 
-	classload("languages");
-	$l = new languages;
+	$l = get_instance("languages");
 	$l->request_startup();
 
-	$LC = aw_global_get("LC");	
-	if (empty($LC))
-	{
-		$LC="et";
-	}
+	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["__default"]["ext"]);
+	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/common.".$GLOBALS["cfg"]["__default"]["ext"]);
 
-	@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
-	@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
-
-	classload("periods");
-	$p = new periods;
+	$p = get_instance("periods");
 	$p->request_startup();
 
-	classload("users");
-	$u = new users;
+	$u = get_instance("users");
 	$u->request_startup();
 
 	$syslog = get_instance("syslog");
 	$syslog->request_startup();
 
-	classload("menuedit");
-	$m = new menuedit();
-
+	$m = get_instance("menuedit");
 	$m->request_startup();
 
-	list($micro,$sec) = split(" ",microtime());
-	$ts_e = $sec + $micro;
+//	list($micro,$sec) = split(" ",microtime());
+//	$ts_e = $sec + $micro;
 	// the following breaks reforb
 	#echo("<!-- aw_startup() took ".($ts_e - $ts_s)." seconds -->\n");
 }
@@ -429,11 +380,6 @@ function aw_shutdown()
 	echo "enter_function calls = ".$GLOBALS["enter_function_calls"]." \n";
 	echo "exit_function calls = ".$GLOBALS["exit_function_calls"]." \n";
 	echo "-->\n";
-
-	if ($GLOBALS["acl_server_socket"])
-	{
-		fclose($GLOBALS["acl_server_socket"]);
-	}
 }
 
 function &__get_site_instance()
@@ -441,7 +387,7 @@ function &__get_site_instance()
 	global $__site_instance;
 	if (!is_object($__site_instance))
 	{
-		@include("site.".aw_ini_get("ext"));
+		@include("site.".$GLOBALS["cfg"]["__default"]["ext"]);
 		if (class_exists("site"))
 		{
 			$__site_instance = new site;
