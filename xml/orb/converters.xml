@@ -49,6 +49,13 @@
 				</arguments>		
 			</function>
 		</action>
+
+		<action name="convert_fg_tables_deleted">
+			<function name="convert_fg_tables_deleted">
+				<arguments>
+				</arguments>		
+			</function>
+		</action>
 	</class>
 </orb>
 		

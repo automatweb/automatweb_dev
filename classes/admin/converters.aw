@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.9 2003/06/04 19:17:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.10 2003/06/06 13:38:21 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -630,6 +630,37 @@ class converters extends aw_template
 			}
 		}
 		die("Valmis!");
+	}
+
+	function convert_fg_tables_deleted()
+	{
+		$ol = $this->list_objects(array(
+			"class" => CL_FORM
+		));
+
+		echo "converting formgen tables! <br><br>\n";
+
+		$GLOBALS["DUKE"] = 1;
+		aw_global_set("__from_raise_error",1);
+
+		foreach($ol as $oid => $_d)
+		{
+			echo "form $oid <br>\n";
+			flush();
+			$tbl = "form_".$oid."_entries";
+			$this->db_add_col($tbl, array(
+				"name" => "deleted",
+				"type" => "int",
+				"default" => 0
+			));
+			
+			$this->db_add_index($tbl, array(
+				"name" => "deleted",
+				"col" => "deleted"
+			));
+			die();
+		}
+		die();
 	}
 };
 ?>
