@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.55 2001/06/05 13:45:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.56 2001/06/07 19:17:48 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -195,15 +195,21 @@ class messenger extends menuedit_light
 	// !Joonistab XML-is defineeritud menüü
 	// argumendid:
 	// activelist(array), levelite kaupa info selle kohta, millised elemendid aktiivsed on
+	// vars(array) - muutujad mida xml-i sisse pannakse
 	// veel natuke, ja selle koodi voib siit välja visata, ning eraldi klassiks
 	// vormistada. 
 	function gen_msg_menu($args = array())
 	{
+		extract($args);
 		global $basedir;
 		$fname = $basedir . "/xml/messenger/menucode.xml";
 		$menudef = $this->get_file(array(
 					"file" => $basedir . "/xml/messenger/menucode.xml",
 				));
+		if (is_array($vars))
+		{
+			$menudef = $this->localparse($menudef,$args["vars"]);
+		};
 		classload("xml");
 		$xml = new xml();
 		$this->menudefs = $xml->xml_unserialize(array(
@@ -257,6 +263,169 @@ class messenger extends menuedit_light
 				$this->level--;
 			};
 		};
+	}
+
+	////
+	// !Contact manager
+	function contacts($args = array())
+	{
+		extract($args);
+		$menu = $this->gen_msg_menu(array(
+				"activelist" => array("contacts","list"),
+				"vars" => array("folder" => ($folder) ? "folder=$folder" : ""),
+				));
+		
+		$this->read_template("contacts.tpl");
+		global $udata;
+		$folder = ($args["folder"]) ? $args["folder"] : $udata["home_folder"];
+		$this->get_objects_by_class(array(
+					"parent" => $folder,
+					"class" => CL_CONTACT_GROUP,
+				));
+		$glist = "";
+		$cnt = 0;
+		while($row = $this->db_next())
+		{
+			$cnt++;
+			$this->vars(array(
+					"jrk" => $cnt,
+					"name" => $row["name"],
+					"id" => $row["oid"],
+					"members" => "n/a",
+			));
+			$glist .= $this->parse("gline");
+		};
+		classload("form");
+		$f = new form(2007);
+		$f->load(2007);
+		$ids = $f->get_ids_by_name(array("names" => array("name","surname","email","phone")));
+		$f->get_entries(array("parent" => $folder));
+		$c = "";
+		$cnt = 0;
+		while($row = $f->db_next())
+		{
+			$this->vars(array(
+					"name" => $row[$ids["name"]] . " " . $row[$ids["surname"]],
+					"email" => $row[$ids["email"]],
+					"phone" => $row[$ids["phone"]],
+					"id" => $row["id"],
+					"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
+			));
+			$cnt++;
+			$c .= $this->parse("line");
+		};
+		$this->vars(array(
+				"menu" => $menu,
+				"line" => $c,
+				"gline" => $glist,
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Displays a form for editing/adding a contact
+	function edit_contact($args = array())
+	{
+		extract($args);
+		$menu = $this->gen_msg_menu(array(
+				"activelist" => ($args["id"]) ? array("contacts") : array("contacts","newcontact"),
+			));
+		classload("form");
+		$f = new form(2007);
+		global $ext;
+		$form = $f->gen_preview(array(
+						"id" => 2007,
+						"entry_id" => ($args["id"]) ? $args["id"] : "",
+						"reforb" => $this->mk_reforb("submit_contact",array("folder" => $folder)),
+						"form_action" => "/index.$ext",
+					));
+		$this->read_template("edit_contact.tpl");
+		$this->vars(array(
+				"menu" => $menu,
+				"form" => $form,
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Submits a contact
+	function submit_contact($args = array())
+	{
+		extract($args);
+		classload("form");
+		$f = new form(2007);
+		// save the form entry, and now .. should we show it?
+		$args["id"] = 2007;
+		$args["parent"] = $folder;
+		$f->process_entry($args);
+		global $status_msg;
+		$status_msg = ($entry_id) ? "Kontakt on salvestatud" : "Kontakt on lisatud";
+		session_register("status_msg");
+		if (!$entry_id)
+		{
+			$entry_id = $f->entry_id;
+		};
+		$ref = $this->mk_site_orb(array(
+					"action" => "edit_contact",
+					"id" => $entry_id,
+			));
+		return $ref;
+	}
+
+	////
+	// !Kuvab kontaktigrupi muutmis/lisamisvormi
+	function edit_contact_group($args = array())
+	{
+		extract($args);
+		$menu = $this->gen_msg_menu(array(
+				"activelist" => ($args["id"]) ? array("contacts") : array("contacts","newgroup"),
+			));
+		$this->read_template("contact_group.tpl");
+		$name = "";
+		if ($args["id"])
+		{
+			$obj = $this->get_object($args["id"]);
+			$name = $obj["name"];
+		};
+		$this->vars(array(
+				"name" => $name,
+				"menu" => $menu,
+				"reforb" => $this->mk_reforb("submit_contact_group",array("id" => $id,"folder" => $folder)),
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Submitib kontaktigrupi
+	function submit_contact_group($args = array())
+	{
+		extract($args);
+		// kui folder on defineeritud, siis lisame grupi selle alla
+		// kui mitte, siis otse kodukataloogi alla
+		global $udata;
+		$folder = ($folder) ? $folder: $udata["home_folder"];
+		if ($args["id"])
+		{
+			$this->upd_object(array(
+						"oid" => $id,
+						"name" => $name,
+			));
+		}
+		else
+		{
+			$id = $this->new_object(array(
+						"class_id" => CL_CONTACT_GROUP,
+						"name" => $name,
+						"parent" => $folder,
+			));
+		};
+		global $status_msg;
+		$status_msg = ($args["id"]) ? "Kontaktigrupp on salvestatud" : "Kontaktigrupp on lisatud";
+		session_register("status_msg");
+		return $this->mk_site_orb(array(
+					"action" => "edit_contact_group",
+					"id" => $id,
+		));
 	}
 
 	////
