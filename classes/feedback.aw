@@ -32,6 +32,8 @@ class db_feedback extends aw_template
 	{
 		$this->quote(&$data);
 		extract($data);
+		$ip = $_SERVER["REMOTE_ADDR"];
+		$host = gethostbyaddr($ip);
 		$msg = "
 Dokument: ".aw_ini_get("baseurl")."/?section=$docid\n
 Pealkirjaga: $title\n
@@ -39,7 +41,8 @@ Pealkirjaga: $title\n
 Arvamust avaldas:\n
 Nimi: $eesnimi $perenimi
 $gender
-E-post: $mail";
+E-post: $mail
+IP: $ip/$host";
 		if ($homepage)
 		{
 			$msg .= "Koduleht: $homepage\n";
