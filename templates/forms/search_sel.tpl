@@ -5,7 +5,7 @@
 <script language="javascript">
 function ssrch()
 {
-	document.selsrch.elements[2].disabled=true;
+/*	document.selsrch.elements[2].disabled=true;
 	if (document.selsrch.form_op)
 	{
 		document.selsrch.form_op.disabled=true;
@@ -32,7 +32,7 @@ function ssrch()
 		{
 			document.selsrch.chain_op.disabled=false;
 		}
-	}
+	}*/
 }
 </script>
 
