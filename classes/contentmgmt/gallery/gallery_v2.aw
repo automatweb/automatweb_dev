@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.45 2004/05/20 12:00:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.46 2004/05/20 12:12:51 kristo Exp $
 
 /*
 
@@ -329,7 +329,7 @@ class gallery_v2 extends class_base
 		$ob = $this->get_object($arr["id"]);
 		$meta = $ob['meta'];
 
-		if ($meta['do_import'] != "" || ($meta["import_zip"] && $meta["up_zip_file"]))
+		if ($meta['do_import'] != "" || ($meta["import_zip"] && $meta["up_zip_file"] && $arr["request"]["group"] == "import"))
 		{
 			set_time_limit(0);
 			if ($meta['import_overwrite'] == 1)
