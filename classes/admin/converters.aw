@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.39 2004/06/15 08:49:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.40 2004/06/18 17:24:08 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -408,15 +408,14 @@ class converters extends aw_template
 				{
 					$undat["image"] = $img_id;
 				};
-				$newid = $this->new_object(array(
-					"parent" => $parent,
-					"name" => $row["description"],
-					"comment" => $comment,
-					"class_id" => CL_PERIOD,
-					"jrk" => $row["jrk"],
-					"status" => !empty($row["archived"]) ? STAT_ACTIVE : STAT_NOTACTIVE,
-					"metadata" => $undat,
-				));
+				$_meta = aw_serialize($undat);
+				$this->quote(&$_meta);
+				$this->db_query("INSERT INTO 
+						objects(parent,name,comment,class_id, jrk, status, metadata, createdby, created, modifiedby, modified)
+						values('$parent','$row[description]','$comment',".CL_PERIOD.",'$row[jrk]','".!empty($row["archived"]) ? STAT_ACTIVE : STAT_NOTACTIVE."',
+						'$_meta','".aw_global_get("uid")."','".time()."','".aw_global_get("uid")."','".time()."')
+				");
+				$newid = $this->db_last_insert_id();
 				if ($img_id)
 				{
 					// create the relation too
@@ -477,12 +476,13 @@ class converters extends aw_template
 		{
 			if (!is_numeric($val['oid']))
 			{
-				$oid = $this->new_object(array(
-					"name" => $val['uid'], 
-					"class_id" => CL_USER, 
-					"status" => 2,
-					"parent" => $uroot
-				));
+				$this->db_query("INSERT INTO 
+						objects(parent,name,comment,class_id, jrk, status, metadata, createdby, created, modifiedby, modified)
+						values('$uroot','$val[uid]','',".CL_USER.",'','2',
+						'','".aw_global_get("uid")."','".time()."','".aw_global_get("uid")."','".time()."')
+				");
+				$oid = $this->db_last_insert_id();
+
 				if (is_numeric($oid))
 				{
 					$this->db_query('update users set oid='.$oid.' where uid="'.$val['uid'].'"');
@@ -592,15 +592,8 @@ class converters extends aw_template
 //				flush();
 				if (!isset($u_objs[$real]))
 				{
-					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
-					$_t = $this->new_object(array(
-						"parent" => $row["oid"],
-						"class_id" => CL_USER,
-						"brother_of" => $real,
-						"name" => $o_uid,
-						"no_flush" => 1,
-						"status" => STAT_ACTIVE
-					));
+					$tmp = obj($real);
+					$_t = $tmp->create_brother($row["oid"]);
 					echo "lisasin kasutaja venna $o_uid parent = $row[oid] , oid is $_t<br />\n";
 					flush();
 				}
@@ -721,14 +714,9 @@ class converters extends aw_template
 				if (!isset($u_objs[$real]))
 				{
 					$o_uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $real", "uid");
-					$this->new_object(array(
-						"parent" => $row["oid"],
-						"class_id" => CL_USER,
-						"brother_of" => $real,
-						"name" => $o_uid,
-						"status" => STAT_ACTIVE,
-						"no_flush" => 1
-					));
+					$tmp = obj($real);
+					$tmp->create_brother($row["oid"]);
+
 					echo "lisasin kasutaja venna $o_uid <br />\n";
 					flush();
 				}
@@ -1154,13 +1142,12 @@ class converters extends aw_template
 		{
 			$this->save_handle();
 
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_CONFIG_AW_DOCUMENT_TEMPLATE,
-				"status" => 2,
-				"name" => $row["name"]
-			));
-
+			$this->db_query("INSERT INTO 
+					objects(parent,name,comment,class_id, jrk, status, metadata, createdby, created, modifiedby, modified)
+					values('$parent','$row[name]','',".CL_CONFIG_AW_DOCUMENT_TEMPLATE.",'','2',
+					'','".aw_global_get("uid")."','".time()."','".aw_global_get("uid")."','".time()."')
+			");
+			$id = $this->db_last_insert_id();
 			$this->db_query("UPDATE template SET obj_id = '$id' WHERE id = '$row[id]'");
 
 			echo "template $row[name] <br>";

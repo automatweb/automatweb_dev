@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.69 2004/06/15 08:50:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.70 2004/06/18 17:24:08 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -390,22 +390,23 @@ class admin_menus extends aw_template
 				$db["mtype"] = MN_HOME_FOLDER_SUB;	// so you can share them later on.
 			}
 
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $db["name"], 
-				"class_id" => $db["class_id"],
-				"status" => $db["status"], 
-				"comment" => $db["comment"], 
-				"jrk" => $db["jrk"], 
-				"alias" => $db["alias"], 
-				"periodic" => $db["periodic"]
-			));
-			$this->db_query("INSERT INTO menu 
-						 (id,link,type,is_l3,periodic,clickable,target,mid,hide_noact,ndocs,admin_feature,number,icon_id,links) 
-			VALUES ($id,'".$db["link"]."','".$db["mtype"]."','".$db["is_l3"]."','".$db["periodic"]."','".$db["clickable"]."','".$db["target"]."','".$db["mid"]."','".$db["hide_noact"]."','".$db["ndocs"]."','".$db["admin_feature"]."','".$db["number"]."',$icon_id,'".$db["links"]."')");
+			$o = obj();
+			$o->set_parent($parent);
+			$o->set_name($db["name"]);
+			$o->set_class_id($db["class_id"]);
+			$o->set_status($db["status"]);
+			$o->set_comment($db["comment"]);
+			$o->set_jrk($db["jrk"]);
+			$o->set_alias($db["alias"]);
+			$o->set_periodic($db["periodic"]);
 
+			$ps = $o->properties();
+			foreach($ps as $pn => $pv)
+			{
+				$o->set_prop($pn, $db[$pn]);
+			}
+			$id = $o->save();
 
-			
 			// tegime vanema menyy 2ra, teeme lapsed ka.
 			$this->req_import_menus($db["oid"],$menus,$id);
 		}
@@ -752,18 +753,26 @@ class admin_menus extends aw_template
 					// now create the damn thing.
 					$this->quote(&$mt);
 					$this->quote(&$mopts);
-					$id = $this->new_object(array(
-						"parent" => $_parent,
-						"class_id" => CL_PSEUDO,
-						"name" => trim($mt[2]),
-						"comment" => $mopts["comment"],
-						"status" => ($mopts["act"] ? 2 : 1),
-						"alias" => $mopts["alias"],
-						"jrk" => substr($mt[1],($pos > 0 ? $pos+1 : 0))
-					));
 
-					$this->db_query("INSERT INTO menu (id,type,link,clickable,target,mid,hide_noact,width,right_pane,left_pane)
-						VALUES($id,".MN_CONTENT.",'".$mopts["link"]."','".$mopts["click"]."','".$mopts["target"]."','".$mopts["mid"]."','".$mopts["makdp"]."','".$mopts["width"]."','".(!$mopts["rp"])."','".(!$mopts["lp"])."')");
+					$o = obj();
+					$o->set_parent($_parent);
+					$o->set_name($mt[2]);
+					$o->set_class_id(CL_PSEUDO);
+					$o->set_status(($mopts["act"] ? 2 : 1));
+					$o->set_alias($mopts["alias"]);
+					$o->set_jrk(substr($mt[1],($pos > 0 ? $pos+1 : 0)));
+
+					$o->set_prop("type", MN_CONTENT);
+					$o->set_prop("link", $mopts["link"]);
+					$o->set_prop("clickable", $mopts["click"]);
+					$o->set_prop("target", $mopts["target"]);
+					$o->set_prop("mid", $mopts["mid"]);
+					$o->set_prop("hide_noact", $mopts["makdp"]);
+					$o->set_prop("width", $mopts["width"]);
+					$o->set_prop("right_pane", !$mopts["rp"]);
+					$o->set_prop("left_pane", !$mopts["lp"]);
+
+					$id = $o->save();
 					$levels[$mt[1]] = $id;
 				}
 			}
@@ -1552,97 +1561,6 @@ class admin_menus extends aw_template
 				}
 			}
 		}
-	}
-
-	////
-	// !this should creates a string representation of the menu
-	// parameters
-	//    oid - menu id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$this->ser_obj = array();
-		$hash = gen_uniq_id();
-		$this->menu_hash2id[$oid] = $hash;
-		$od = obj($oid);
-		$od = $od->fetch();
-		$od["parent"] = 0;
-		$od["oid"] = $hash;
-
-		$row = $this->db_fetch_row("SELECT * FROM menu WHERE id = '$oid'");
-		$row["id"] = $hash;
-		$dat = array(
-			"object" => $od,
-			"table" => $row
-		);
-		$this->ser_obj[$hash] = $dat;
-
-		if ($this->serialize_submenus || aw_global_get("__is_rpc_call"))
-		{
-			$this->req_serialize_obj_tree($oid);
-		}
-		else
-		{
-			if ($this->serialize_subobjs || aw_global_get("__is_rpc_call"))
-			{
-				$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_PSEUDO." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
-				while ($row = $this->db_next())
-				{
-					$dat = $this->serialize(array("oid" => $row["oid"]));
-					if ($dat !== false)
-					{
-						$hash = gen_uniq_id();
-						$this->ser_obj[$hash] = array("is_object" => true, "objstr" => $dat, "parent" => $this->menu_hash2id[$oid]);
-					}
-				}
-			}
-		}
-
-		return serialize($this->ser_obj);
-	}
-
-	////
-	// !this should create a menu from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$dat = unserialize($str);
-
-		$hash2id = array(0 => $parent);
-
-		foreach($dat as $hash => $row)
-		{
-			if (!$row["is_object"])
-			{
-				$ob = $row["object"];
-				unset($ob["brother_of"]);
-				$ob["parent"] = $hash2id[$ob["parent"]];
-				$this->quote(&$ob);
-				$id = $this->new_object($ob);
-				$hash2id[$hash] = $id;
-
-				$menu = $row["table"];
-				$m_ids = array("id");
-				$m_vls = array($id);
-				foreach($menu as $col => $val)
-				{
-					if ($col != "id" && $col != "rec")
-					{
-						$m_ids[] = $col;
-						$m_vls[] = "'".$val."'";
-					}
-				}
-				$this->db_query("INSERT INTO menu (".join(",",$m_ids).") VALUES(".join(",",$m_vls).")");
-			}
-			else
-			{
-				$this->unserialize(array("str" => $row["objstr"], "parent" => $hash2id[$row["parent"]], "period" => $period));
-			}
-		}
-		return true;
 	}
 }
 ?>
