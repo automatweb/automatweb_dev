@@ -127,6 +127,16 @@
             <caption>Tausta pilt on ...</caption>
       </property>
       <property>
+            <name>max_icons_in_column</name>
+            <type>textbox</type>
+            <size>4</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Desktopil tulpa max ikoone</caption>
+      </property>
+      <property>
             <name>startdesktop</name>
             <type>text</type>
             <table>objects</table>

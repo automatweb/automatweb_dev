@@ -1,6 +1,41 @@
 <?php
 /*
 
+/////////////////////////////////////////////
+
+todo:
+
+"send to" contextmenus, saab objekti saata kuhugi kausta
+"cut"
+"copy"
+
+menueditoris võiks olla paste nupp vaikimisi hidden, et siis saaks teisest aknast ta nähtavaks teha peale "cut/copy" tegevust
+
+"save"
+"documents" - recently opened, changed documents
+"programs"
+
+
+"prügikast"
+"otsing"
+"my computer" rootkaust
+"my home" kodukaust
+
+
+"minimiseeri kõik aknad"
+
+
+"new ..." submenu:document, image, link ...
+
+
+"print" võiks olla näiteks dokumendil, pildil ...
+
+kalendri päevavaade taustale
+
+
+/////////////////////
+
+
 @classinfo relationmgr=yes
 
 @groupinfo general caption=Üldine
@@ -53,10 +88,15 @@
 @property backgroundtype type=select
 @caption Tausta pilt on ...
 
-//group=general,activedesktop
+@property max_icons_in_column type=textbox size=4
+@caption Desktopil tulpa max ikoone
+
 
 @property startdesktop type=text
 @caption Käivita
+
+
+
 
 @groupinfo activedesktop caption=Aktivedesktop
 @default group=activedesktop
@@ -79,9 +119,11 @@
 @property activedesktop_href type=checkbox value=1 ch_value=1
 @caption Lingid on klikitavad
 
-
-
 */
+
+define('SCREENWIDTH', '1200');
+define('SCREENHEIGHT', '900');
+
 
 define('BACKGROUNDIMAGE', 1);
 define('DATADIR', 2);
@@ -148,14 +190,17 @@ class desktop extends class_base
 		{
 			case 'startdesktop':
 
-			$scr = "<script>
+			$scr = "
+<script type=\"text/javascript\">
+<!--			
 function pop(url,w,h)
 {
 	//prop='width=' + w + ',height=' + h + ',status=yes,scrollbars=no,toolbar=no,menubar=no,resizable=yes';
 	prop = 'fullscreen';
-	window.open(url,'pilt',prop);
+	window.open(url,'foo',prop);
 	return false;
 }
+-->
 </script>";
 
 			$link = $scr.html::button(array(
@@ -218,6 +263,11 @@ function pop(url,w,h)
 			case 'AC_width':
 				$data['value'] = between((int)$form[$data['name']],50, 1200, (int)$form[$data['name']], 500);
 			break;
+			case 'max_icons_in_column':
+				$data['value'] = between((int)$form[$data['name']],2, 13, (int)$form[$data['name']], 7);
+			break;
+
+
 		};
 
 		return $retval;
@@ -254,10 +304,8 @@ function pop(url,w,h)
 
 	function show_desktop($args = array())
 	{
-
-
 		$ob = $this->get_object($args['id']);
-		$current_layout = $this->get_object_metadata(array(OID => $args['id'],'key' => 'desktop_layout'));
+		$current_layout = $ob['meta']['desktop_layout'];
 
 		$this->read_template('desktop.tpl');
 
@@ -283,90 +331,98 @@ function pop(url,w,h)
 			'icons_path' => $this->cfg['baseurl'].'/automatweb/images/icons',
 			'images_path' => $this->cfg['baseurl'].'/automatweb/images',
 			'transgif' => $this->cfg['baseurl'].'/automatweb/images/trans.gif',
+			'desktop_change' => $desktop_change = $this->mk_my_orb('change', array('id' => $args['id']), 'desktop'),
+			'logouturl' => $logouturl = $this->mk_my_orb('logout', array(), 'users'),
 		));
 
-		
-			// ----------- keelevalik
-			$l = get_instance('languages');
-			$langs = $l->get_list(array('all_data' => 1));
+
+		// ----------- keelevalik
+		$l = get_instance('languages');
+		$langs = $l->get_list(array('all_data' => 1));
 
 
 
-			$lc = aw_global_get('admin_lang_lc');
+		$lc = aw_global_get('admin_lang_lc');
 
 
-			foreach($langs as $val)
+		foreach($langs as $val)
+		{
+			if($val['acceptlang'] == $lc)
 			{
-				if($val['acceptlang'] == $lc)
-				{
-					$this->vars(array(
-						'active_acceptlang' => $val['acceptlang'],
-						'active_lang' => $val['name'],
-					));
-				}
-				$req_uri = preg_replace('/&set_lang_id=[0-9]+/','',aw_global_get('REQUEST_URI'));
-
 				$this->vars(array(
-					//'icon' => '<IMG SRC="'.$this->cfg['baseurl'].'/automatweb/images/trans.gif" WIDTH="1" HEIGHT="7" BORDER=0 ALT="" />',
-					'caption' => $val['name'],
-					'title' => $val['acceptlang'].' '.$val['charset'] ,
-					'url' => $req_uri.'&set_lang_id='.$val['id'],
+					'active_acceptlang' => $val['acceptlang'],
+					'active_lang' => $val['name'],
 				));
-				$menucontent .= $this->parse('MENU_ITEM_lang');
 			}
-			$this->vars(array('name' => 'filemenu_lang', 'content' => $menucontent));
-			$this->menu .= $this->parse('MENU');
+			$req_uri = preg_replace('/&set_lang_id=[^&$]/','',aw_global_get('REQUEST_URI'));
+
+			$this->vars(array(
+				//'icon' => '<IMG SRC="'.$this->cfg['baseurl'].'/automatweb/images/trans.gif" WIDTH="1" HEIGHT="7" BORDER=0 ALT="" />',
+				'caption' => $val['name'],
+				'title' => $val['acceptlang'].' '.$val['charset'] ,
+				'url' => $req_uri.'&set_lang_id='.$val['id'],
+			));
+			$menucontent .= $this->parse('MENU_ITEM_lang');
+		}
+		$this->vars(array('name' => 'filemenu_lang', 'content' => $menucontent));
+		$this->menu .= $this->parse('MENU');
 
 
+		//settings
+		$this->vars(array(
+			'url' => $desktop_change,
+			'caption' => 'Desktopi seaded',
+			'title' => 'Desktopi seaded',
+			'clid' => 'icons/small_settings.gif',
+			'icon' => 'small_settings.gif',
+		));
 		$cnt += 1;
-		$this->levelcontent[1]['items'].= $this->parse('RUN_MENU_ITEM');
+		$this->levelcontent[1]['items'].= $this->parse('MENU_ITEM');
+
+		//help
+		$this->vars(array(
+			'url' => "javascript:document.write(666);document.close()",
+			'caption' => 'Abi',
+			'title' => 'Abi info desktopi kohta',
+			'clid' => 'icons/prog_11.gif',
+			'icon' => 'prog_11.gif',
+		));
+		$cnt += 1;
+		$this->levelcontent[1]['items'].= $this->parse('MENU_ITEM');
+
+
+
+		//run
+		$this->vars(array(
+			'url' => '',
+			'caption' => 'Run...',
+			'title' => 'Käivita programm',
+			'onclick' => "javascript: valu = prompt('Run...', ''); if (valu){ drun(valu)}; return false;",
+			'icon' => 'class_111.gif',
+		));
+		$cnt += 1;
+		$this->levelcontent[1]['items'].= $this->parse('MENU_ITEM2');
+
+
+
+		//logout
+		$this->vars(array(
+			'url' => $logouturl,
+			'caption' => 'Logi välja',
+			'title' => '',
+			//'clid' => 'icons/small_delete.gif',
+			'icon' => 'small_delete.gif',
+		));
+		$cnt += 1;
+		$this->levelcontent[1]['items'].= $this->parse('MENU_ITEM2');
+
+
+
 
 		//main menu
 		if ($ob['meta']['datadir'])
 		{
 
-
-			//$ico = icons::get_icon_url(CL_PSEUDO,'');
-			//$icon = '<img src="'.$ico.'" border="0" height="16">';
-
-
-			// ----------- lisalingid startmenüüs
-/*
-			$this->vars(array(
-				'icon' => $icon,
-				'caption' => 'programmid',
-				'sub_menu_id' => 'filemenu'.'programs',
-			));
-			$this->levelcontent[1]['items'] = $this->parse('MENU_ITEM_SUB');
-*/
-/*			$cnt += 1;
-			$this->vars(array(
-				'caption' => 'Google',
-				'url' => 'http://www.google.com/',
-				'title' => '',
-				'clid' => '1',
-			));
-			$this->levelcontent[1]['items'].= $this->parse('MENU_ITEM');
-*/
-/*
-			// ----------- programmid
-			$this->menu .= '<div id="filemenu'.'programs'.'" class="menu"  style="z-index:1" onmouseover="menuMouseover(event)">'."\n";
-			$cnt += 1;
-
-			foreach($this->cfg['programs'] as $val)
-			{
-				if (isset($val['name']) && isset($val['url']))
-				{
-					$this->vars(array(
-						'icon' => $icon,
-						'caption' => $val['name'],
-						'url' => $val['url'],
-					));
-					$this->menu .= $this->parse('MENU_ITEM');
-				}
-			}
-			$this->menu .= '</div>'."\n\n";
-*/
 			$this->genmenu(array($ob['meta']['datadir']),1);
 
 		}
@@ -468,9 +524,15 @@ function pop(url,w,h)
 		$desktop_items = '';
 		if ($ob['meta']['desktopobjects'])
 		{
-			$arr = $this->get_objects_below(array('parent' => $ob['meta']['desktopobjects'], 'orderby' => 'jrk', 'ret' => ARR_ALL));
+			$arr = $this->get_objects_below(array('parent' => $ob['meta']['desktopobjects'], 'orderby' => OID, 'ret' => ARR_ALL));//'orderby' => 'jrk'
+
 			if (count($arr)>0)
 			{
+
+				$maxw = (int)(SCREENWIDTH/80);
+				$maxh = (int)(SCREENHEIGHT/80);
+				$space_reserved = array();
+
 				foreach($arr as $val)
 				{
 					$val['meta'] = aw_unserialize($val['metadata']);
@@ -497,7 +559,7 @@ function pop(url,w,h)
 					if ($val['class_id'] == CL_PSEUDO)
 					{
 						$context_items['open'] = array(
-							'title' => '<b>Ava puuta kaust</b>',
+							'title' => 'Ava puuta kaust',
 							'caption' => 'Ava',
 							'url' => $this->mk_my_orb('right_frame', array('parent' => $val[OID]),'admin_menus'),
 							'wxy' => $this->xy,
@@ -519,7 +581,7 @@ function pop(url,w,h)
 						$val['change_url'] = $this->mk_my_orb('change', array('id' => $val['oid']),$cldat['file']);
 
 						$context_items['view'] = array(
-							'title' => '<b>Vaata</b>',
+							'title' => 'Vaata',
 							'caption' => 'Vaata',
 							'url' => $this->mk_my_orb('view', array('id' => $val['oid']),$cldat['file']),
 							'wxy' => $this->xy,
@@ -557,22 +619,33 @@ function pop(url,w,h)
 						$icon_context_items .= $this->parse(isset($cval['tpl']) ? $cval['tpl'] : 'ICON_CONTEXT_ITEM');
 					}
 
-
 					//vaatame kas ikoonil on salvestatud asukoht
 					if (isset($current_layout['I']['dra'.$val[OID]]))
 					{
-						if ($current_layout['I']['dra'.$val[OID]]['left'])
-						{
-							$val['POS'] = 'position:absolute;left:'.$current_layout['I']['dra'.$val[OID]]['left'].';top:'.$current_layout['I']['dra'.$val[OID]]['top'].';z-index:'.$current_layout['I']['dra'.$val[OID]]['z'];
-						}
-						else
-						{
-							$val['POS'] = 'float:left;z-index:3;';
-						}
+						$cl = $current_layout['I']['dra'.$val[OID]];
+						$val['POS'] = 'position:absolute;left:'.$cl['left'].';top:'.$cl['top'].';z-index:'.$cl['z'];
+
+						$x = (int)(((int)$cl['left'] + 30) / 80);
+						$y = (int)(((int)$cl['top'] + 30) / 80);
+						$space_reserved[$x][$y] = true;
 					}
 					else
 					{
-						$val['POS'] = 'float:left;z-index:1;';
+						//tuleb leida vaba ruum
+
+
+						for($i = 0;$i < $maxw;$i++)
+						{
+							for($j = 0;$j < $maxh;$j++)
+							{
+								if (!isset($space_reserved[$i][$j]))
+								{
+									$space_reserved[$i][$j] = true;
+						$val['POS'] = 'position:absolute;left:'.(80 * $i).'px;top:'.(80 * $j).'px;z-index:3';
+									break 2;
+								}
+							}
+						}
 					}
 
 					$val['ICON_CONTEXT_ITEM'] = $icon_context_items;
@@ -649,10 +722,8 @@ function pop(url,w,h)
 
 		$this->vars(array(
 			'date' => date('d.').(defined($month = 'LC_M'.date('n')) ? constant($month) : date(' n')).date(' Y'),
-			'desktop_change' => $this->mk_my_orb('change', array('id' => $args['id']), 'desktop'),
 		));
 		$this->vars(array(
-			//'redirect' =>
 			'activedesktop' => $activedesktop,
 			'RUNPROGRAMS' => $RUNPROGRAMS,
 			'OPENSAVEDWINDOWS2' => $OPENSAVEDWINDOWS2,
@@ -663,21 +734,19 @@ function pop(url,w,h)
 			'add_folder' => $this->mk_my_orb('new', array('parent' => $ob['meta']['desktopobjects']), 'menu'),
 			'add_object_type' => $this->mk_my_orb('new', array('parent' => $ob['meta']['launchbar']), 'object_type'),
 			'pipe_url' => $this->mk_my_orb('pipe', array('id' => $ob['oid'])),
-			//'showclock' => $ob['meta']['showclock'] ? 'true' : 'false',
 			'showclock' => 'true',
-			//'CLOCK' => $ob['meta']['showclock'] ? $this->parse('CLOCK') : '',
 			'CLOCK' => $this->parse('CLOCK'),
 			'refresh_url' => $this->mk_my_orb('redirect', array('url' => urlencode(aw_global_get('REQUEST_URI')))),
+//'showclock' => $ob['meta']['showclock'] ? 'true' : 'false',
+//'CLOCK' => $ob['meta']['showclock'] ? $this->parse('CLOCK') : '',
 //'refresh_url' => aw_global_get("REQUEST_URI").'&plah=0',
+//'active_acceptlang' => aw_global_get('admin_lang_lc'),
+//'aw_icon' => $this->cfg['baseurl'].'/automatweb/images/aw_ikoon.gif',
 			'REQUEST_URI' => aw_global_get('REQUEST_URI'),
 			'minikal' => $ob['meta']['calendar'] ? $this->calender_navigator(array('id' => $ob['meta']['calendar'])) : $this->parse('NOCALENDER'),
 			'bgstyle' => $bgstyle,
-			'calendar' => $calendar,
-			//'aw_icon' => $this->cfg['baseurl'].'/automatweb/images/aw_ikoon.gif',
 			'DESKTOP_ITEM' => $desktop_items,
-			'clockwidth' => 4 + ($usdate ? 4 : 0),
 			'usdate' => (int)$usdate,
-			//'active_acceptlang' => aw_global_get('admin_lang_lc'),
 			'launchbar' => $launchbar,
 			'datadir' => $ob['meta']['datadir'],
 			'filemenufix' => ($this->cnt + $cnt) * 25,
@@ -722,37 +791,50 @@ function pop(url,w,h)
 
 		if (isset($args['reorder']))
 		{
-			$current_layout = $this->get_object_metadata(array(OID => $args['id'],'key' => 'desktop_layout'));
+			$ob = $this->get_object($args['id']);
+			$current_layout = $ob['meta']['desktop_layout'];
+
+			$orderby = ($args['orderby'] && ($args['orderby'] != 'lineup')) ? $args['orderby'] : OID;
+			$arr = $this->get_objects_below(array('parent' => $ob['meta']['desktopobjects'], 'orderby' => $orderby, 'ret' => ARR_ALL));
+
 			$i=0;
 			$j=0;
-			foreach($current_layout['I'] as $key => $val)
+			foreach($arr as $val)
 			{
-				$current_layout['I'][$key]['top'] = $newt = (($i * 76) . 'px');
-				$current_layout['I'][$key]['left'] = $newl =(($j * 76) . 'px');
+				$key = 'dra'.$val[OID];
+				
+				
+				if ($args['orderby'] === 'lineup')
+				{
+					$top = (int)$current_layout['I'][$key]['top'];
+					$newt = (((int)(($top + 30 ) / 80)) * 80).'px';
+					$left = (int)$current_layout['I'][$key]['left'];
+					$newl = (((int)(($left+ 30) / 80)) * 80).'px';
+				}
+				else
+				{
+ 					$newt = (($i * 80) . 'px');
+ 					$newl =(($j * 80) . 'px');
+				}
+				
+				$current_layout['I'][$key]['top'] = $newt;
+				$current_layout['I'][$key]['left'] = $newl;
 
 				$str.="parent.document.getElementById('".$key."').style.left='".$newl."';\n";
 				$str.="parent.document.getElementById('".$key."').style.top='".$newt."';\n";
+				//$str.="parent.document.getElementById('".$key."').style.zIndex='2';\n";
 
 				$i++;
-				if ($i >= 3)
+				if ($i >= ($ob['meta']['max_icons_in_column'] ? $ob['meta']['max_icons_in_column'] :7))
 				{
 					$i = 0;
 					$j++;
 				}
 			}
-
-
-			//$current_layout['I'] = array();
-
-
 			$this->set_object_metadata(array(OID => $args['id'], 'key' => 'desktop_layout', 'value' => $current_layout));
-			//die('reordered');
 		}
-
 		elseif (isset($args['I']))
 		{
-//		arr($args,1);
-
 			$current_layout = $this->get_object_metadata(array(OID => $args['id'],'key' => 'desktop_layout'));
 
 			$strint = $this->str_int($args['element'],'both');
@@ -770,25 +852,19 @@ function pop(url,w,h)
 				'WC' => $args['WC'],
 				'WS' => $args['WS'],
 				'WI' => $args['WI'],
-			);//array('top' => (int)$args['top'], 'left' => (int)$args['left']);
-
-			//arr($current_layout);
-
+			);
 			$this->set_object_metadata(array(OID => $args['id'], 'key' => 'desktop_layout', 'value' => $current_layout));
 		}
-
-		//set metadata ('key' => $args['element'], 'value' => array('top' => $args['top'],'left' => $args['left'],));
-
-	//		echo 'left: '.$args['left'].' top: '.$args['top'].' element: '.$args['element'],'integer';
-
 
 		echo '<html>
 		<head>
 		<title>wehee</title>
 		</head>
 		<body>
-		<script>
+<script type="text/javascript">
+<!--		
 		'.$str.'
+		-->
 		</script>
 		<span id="activity" style="color:red;postition:absolute;" ></span>
 		</body></html>';
@@ -802,16 +878,17 @@ function pop(url,w,h)
 
 		echo "<html><head><title>objekti Kustutamine</title></head>
 		<body>
-		kustutamine...";
+		";
 		flush();
 
 		$str = '';
 		//arr($args,1);
 		if ($this->can('delete', $args['id']))
 		{
-			if (($args['class_id'] != CL_PSEUDO) &&   $this->cfg['classes'][$args['class_id']]['file'] != '')
+			$cdat = $this->cfg['classes'][$args['class_id']];
+			if (($args['class_id'] != CL_PSEUDO) &&   $cdat['file'] != '')
 			{
-				$inst = get_instance($this->cfg['classes'][$args['class_id']]['alias_class'] != '' ? $this->cfg['classes'][$row['class_id']]['alias_class'] : $this->cfg['classes'][$args['class_id']]['file']);
+				$inst = get_instance($cdat['alias_class'] != '' ? $cdat['alias_class'] : $cdat['file']);
 				if (method_exists($inst, 'delete_hook'))
 				{
 					$inst->delete_hook(array('oid' => $args['id']));
@@ -819,25 +896,19 @@ function pop(url,w,h)
 			}
 			$this->delete_object($args['id']);
 
-			$str="parent.document.getElementById('dra".$args['id']."').style.visibility='hidden';\n";
+			$str="parent.document.getElementById('dra".$args['id']."').style.visibility = 'hidden';\n";
 		}
 		else
 		{
 			$str = "alert('Ei saanud kustutada, puuduvad õigused!');\n";
 		}
 
-		echo <<<DEL
-		<script>
-		$str
-		</script>
-		<body>
-		<span id="activity" style="color:red;postition:absolute;" ></span>
-		$txt
-		</body>
-		</html>
-DEL;
-
-die;
+		echo '<script type="text/javascript">
+		/*<![CDATA[*/
+		'.$str.'
+		/*]]>*/
+		</script></body></html>';
+		die;
 	}
 
 
@@ -978,6 +1049,7 @@ die;
 									'url' => $this->mk_my_orb('new', array('parent' => $this->newobjects),$this->cfg['classes'][$type]['file']),
 									'title' => '',
 									'clid' => $type,
+									'icon' => 'class_'.$type.'.gif',
 								));
 								$items .= $this->parse('MENU_ITEM');
 							break;
@@ -989,6 +1061,7 @@ die;
 									'url' => $this->mk_my_orb('change', array('id' => $val[OID]),$this->cfg['classes'][$type]['file']),
 									'title' => '',
 									'clid' => $type,
+									'icon' => 'class_'.$type.'.gif',
 								));
 								$items .= $this->parse('MENU_ITEM');
 						}
@@ -1058,7 +1131,7 @@ die;
 
 //	'parent' => $ob['meta']['datadir'],
 //	'full' => true,
-
+/*
 	function get_objects_below($args = array())
 	{
 		extract($args);
@@ -1091,26 +1164,11 @@ die;
 			}
 		}
 
-		// just pass everything, hopefully wont break anything, but it does kill
-		// a bunch of warnings
 		$this->get_objects_by_class($args);
 
 		while($row = $this->db_next())
 		{
 			$groups[$row['oid']] = $row;
-			/*
-			if (isset($ret) && $ret == ARR_NAME)
-			{
-				$groups[$row["oid"]] = $row["name"];
-			}
-			else
-			{
-				$row["meta"] = $this->get_object_metadata(array(
-					"metadata" => $row["metadata"]
-				));
-				$groups[$row["oid"]] = $row;
-			}
-			*/
 
 			$this->vars(array(
 				'url' => '',
@@ -1124,7 +1182,7 @@ die;
 		$this->pars .= $this->parse('MENU');
 		return $groups;
 	}
-
+*/
 
 	////
 	// !this should create a string representation of the object

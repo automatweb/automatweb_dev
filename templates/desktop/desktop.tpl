@@ -18,9 +18,15 @@ IMG {border-width:0px}
   cursor:hand;
 }
 
-.boxB {
-  background-color: #fffff0;
-  padding: 2px;
+.iconname
+{
+padding-left:2px;
+padding-right:2px;
+background-color:#1166C0;
+color:#ffffff;
+font-size:13px;
+font-weight:bold;
+spacing:2px;
 }
 
 .wincap{}
@@ -50,7 +56,7 @@ margin:0px;padding:0em;z-index: 100;
   cursor: default;
   color: #ffffff;
   font-family: "MS Sans Serif", "Arial", "Helvetica";
-  font-size: 10pt;
+  font-size: 11px;
   font-weight: bold;
   margin: 0px;
   padding: 0px 2px 0px 2px;
@@ -79,7 +85,7 @@ margin:0px;padding:0em;z-index: 100;
   border-width: 0px;
   color: #000000;
   font-family: "Arial", "Helvetica", sans-serif;
-  font-size: 10pt;
+  font-size: 11px;
   margin: 0px 0px 0px 0px;
   overflow: hidden;
   padding: 1px;
@@ -88,7 +94,7 @@ margin:0px;padding:0em;z-index: 100;
 
 body {
   font-family: "Arial", "Helvetica", sans-serif;
-  font-size: 10pt;
+  font-size: 10px;
   margin: 0px 0px 0px 0px;
 
 	color: #{VAR:backgroundtextcolor};
@@ -106,7 +112,7 @@ div.menuBar a.menuButton,
 div.menu,
 div.menu a.menuItem {
   font-family: "MS Sans Serif", Arial, sans-serif;
-  font-size: 10pt;
+  font-size: 12px;
   font-style: normal;
   font-weight: normal;
   color: #000000;
@@ -163,7 +169,7 @@ div.menu {
   position: absolute;
   top: 0px;
   visibility: hidden;
-  z-index: 1001;
+  z-index: 8001;
 }
 
 div.menu a.menuItem {
@@ -171,6 +177,7 @@ div.menu a.menuItem {
   cursor: default;
   display: block;
   padding: 3px 1em;
+  border:transparent 1px;
   text-decoration: none;
   white-space: nowrap;
 }
@@ -223,11 +230,11 @@ if({VAR:usdate})
 	if (hour > 12)
 	{
 		hour = hour - 12;
-		usd = 'PM';
+		usd = 'PL';
 	}
 	else
 	{
-		usd = 'AM';
+		usd = 'EL';
 	}
 }
 else
@@ -536,6 +543,13 @@ function winRestore() {
 
   this.isMinimized = false;
 }
+
+function winMakeActive2(el)
+{
+	//window.name(el);
+	winList[el.substr(1)].makeActive();
+}
+
 
 function winMakeActive() {
 
@@ -1509,7 +1523,7 @@ function is_number(a_string) {
 tc = a_string.charAt(0);
 if (tc == "0" || tc == "1" || tc == "2" || tc == "3" ||	tc == "4" || tc == "5" || tc == "6" || tc == "7" || tc == "8" || tc == "9") {
 return true;
-} 
+}
 else {
 return false;
    }
@@ -1553,9 +1567,9 @@ divv += " document.getElementById('" + el + "').innerHTML = '';";
 divv += " document.getElementById('WINSPACE" + el + "').innerHTML = '';";
 divv += " hide('" + baritem + "');";
 divv += 'return false;" title="Sulge aken" >Sulge</a>';
-divv += '<a class="menuItem" href="" onclick="WINDOW[' + win + '].window.focus();';
-divv += " hide('" + baritem + "');";
-divv += 'return false;" title="" >Tõsta esile</a>';
+//divv += '<a class="menuItem" href="" onclick="WINDOW[' + win + '].window.focus();';
+//divv += " hide('" + baritem + "');";
+//divv += 'return false;" title="" >Tõsta esile</a>';
 divv += '</div>';
 
 document.getElementById('BARITEMSP' + el).innerHTML = divv;
@@ -1567,8 +1581,8 @@ windstatus += 'onclick=" ';
 windstatus += 'document.getElementById(' + ifr + ').style.visibility = ' + "'" + 'visible' + "'" + ';';
 //windstatus +='winList[' + ifr + '].restore();';
 windstatus += 'return false;" ';
-windstatus += 'oncontextmenu="buttonClick(event, ' + "'" + baritem + "'" + ',40 + barheight); return false;" >';
-windstatus += '<img style="position:relative;top:4px;" src="{VAR:images_path}/' + icon + '" height="16" />&nbsp;' + capt + '</a>';
+windstatus += 'oncontextmenu="buttonClick(event, ' + "'" + baritem + "'" + ',20 + barheight); return false;" >';
+windstatus += '<img style="position:relative;top:4px;" src="{VAR:images_path}/' + icon + '" height="16" alt=""/>&nbsp;' + capt + '</a>';
 
 document.getElementById(el).innerHTML = windstatus;
 
@@ -1583,18 +1597,18 @@ fen ='';
 fen +='<div name="' + ifrn + '" id="' + ifrn + '" class="window" style="left:' + (23 * win + 50) + 'px;top:' + (30 * win + 40) + 'px;width:' + w + 'px;z-index: 100;">';
 fen +='<div class="titleBar" style="z-index: 100;">';
 fen +='<span class="titleBarText" id="tb' + ifrn + '">';
-fen +='<img style="position:relative;top:1px;" src="{VAR:images_path}/' + icon + '" height="14" />&nbsp;';
+fen +='<img style="position:relative;top:1px;" src="{VAR:images_path}/' + icon + '" height="14" alt=""/>&nbsp;';
 fen +='<span class="wincap" id="wc' + ifrn + '">' + capt + '</span></span>';
-fen +='<img class="titleBarButtons" src="" /><img height="17" ';
-fen +='src="http://axel.struktuur.ee/tmp/restore.gif" alt="" ';
+fen +='<img class="titleBarButtons" src="" alt=""/><img height="17" ';
+fen +='src="{VAR:baseurl}/automatweb/images/minimize.gif" alt="" ';
 fen +='onclick="hide(' + ifr + ');';
 //fen +='winList[' + ifr + '].minimize();';
 fen +='return false;" />';
-//fen +='<img  height="17" src="http://axel.struktuur.ee/tmp/max.gif" alt="" ';
+//fen +='<img  height="17" src="{VAR:baseurl}/automatweb/images/max.gif" alt="" ';
 //fen +="onclick=" + '"' + "document.getElementById('ClA" + w + "').style.width='800px';";
 //fen +='document.getElementById(' + ifr + ').style.height=' + "'" + '500px' + "'" + '; ';
 //fen +='return false;" />';
-fen +='<img  height="17" src="http://axel.struktuur.ee/tmp/close.gif" alt="Close" ';
+fen +='<img  height="17" src="{VAR:baseurl}/automatweb/images/exit.gif" alt="Close" ';
 fen +='onclick="';
 fen += ' WINDOW[' + win + '] = false;';
 fen += " document.getElementById('" + el + "').innerHTML = '';";
@@ -1602,7 +1616,8 @@ fen += " document.getElementById('WINSPACE" + el + "').innerHTML = '';";
 fen += " document.getElementById('" + baritem + "').style.visibility = 'hidden';";
 fen += " hide('" + baritem + "');";
 
-fen +='return false;" /></div><div id="ClA' + w + '" class="clientArea" style="height:' + h + 'px;z-index: 100;"><iframe name="i' + ifrn + '" id="i' + ifrn + '" ';
+fen +='return false;" /></div><div id="ClA' + w + '" class="clientArea" style="height:' + h + 'px;z-index: 100;">';
+fen +='<iframe name="i' + ifrn + '" id="i' + ifrn + '" ';
 fen +='width="100%" height="100%" style="" class="windowframe" src=""></iframe></div></div>';
 document.getElementById('WINSPACE' + el).innerHTML = fen;
 
@@ -1655,14 +1670,15 @@ function drun(txt)
 	if (programs[txt])
 	{
 		url = '{VAR:new_link}'.replace('xxx', txt);
-		pop(url,{VAR:xy}, txt, programs[txt]);
+		ico = "" + programs[txt] + "";
+		pop(url,{VAR:xy}, txt, ico);
 	}
 	else
 	{
 		alert('programmi ei leitud');
 	}
 
-	return false;
+	//return false;
 }
 
 //     var kasIE=false;
@@ -1720,17 +1736,17 @@ function savedesktop(a)
     }
   }
 
-  List = document.getElementsByTagName("IFRAME");
-  for (var i = 0; i < List.length; i++)
-  {
-    if (List[i].className == "windowframe")
-    {
-    id = List[i].id;
-//alert(top.frames[List[i].id].document.title);
-
-    allelements += '&WS[' + id + '][src]=' + encodeURIComponent(List[i].src) + "";
-    }
-  }
+	List = document.getElementsByTagName("IFRAME");
+	for (var i = 0; i < List.length; i++)
+	{
+		if (List[i].className == "windowframe")
+		{
+			id = List[i].id;
+			//alert(top.frames[List[i].id].document.location);
+			ur = top.frames[List[i].id].document.location;
+			allelements += '&WS[' + id + '][src]=' + encodeURIComponent(ur) + "";
+		}
+	}
 
   List = document.getElementsByTagName("SPAN");
   for (var i = 0; i < List.length; i++)
@@ -1754,12 +1770,11 @@ function savedesktop(a)
 
 }
 
-function reordericons(a)
+function reordericons(orderby)
 {
-  top.frames['pipe'].document.getElementById('activity').innerHTML = 'reordering..';
-  document.getElementById('pipe').src = '{VAR:pipe_url}&reorder=1';
+  top.frames['pipe'].document.getElementById('activity').innerHTML = 'Sorteerimine..';
+  document.getElementById('pipe').src = '{VAR:pipe_url}&reorder=1&orderby=' + orderby;
 }
-
 
 function findPosX(obj)
 {
@@ -1827,14 +1842,18 @@ function deletion(url)
 	document.getElementById('pipe').src = url;
 }
 
+var exit_is_ok = false;
 
 /*//]]>*/
 </script></head>
+<body onunload="return false;if (!exit_is_ok){ alert('Korralikuks väljumiseks kasuta tausta menuüüs olevat [Sulge Desktop] nuppu!');window.open('{VAR:REQUEST_URI}','foo','fullscreen');}else{}">
 
-<body>
-<div id="bodycontext" class="menu" onmouseover="menuMouseover(event)">
-<a class="menuItem" href="" title="whee" onclick="pop('{VAR:add_folder}',{VAR:xy}, 'Lisa Kaust', '1');hide('bodycontext');return false;">
-<img src="{VAR:icons_path}/class_1.gif" height="16" alt="" />
+<div id="status" style="position:absolute;top:0px;left:400px;zIndex:6666;">status</div>
+
+<!-- taustamenüü -->
+<div id="bodycontext" class="menu"  onmouseover="menuMouseover(event)">
+<a class="menuItem" href=""
+title="whee" onclick="pop('{VAR:add_folder}',{VAR:xy}, 'Lisa Kaust', '1');hide('bodycontext');return false;"><img src="{VAR:icons_path}/class_1.gif" height="16" alt="" />
 Lisa Kaust</a>
 <a class="menuItem" href="" onclick="pop('{VAR:desktop_change}',{VAR:xy}, 'Desktopi seaded', '1');hide('bodycontext');return false;"
 title="Desktopi seaded"><img src="{VAR:icons_path}/small_settings.gif" height="16" alt="" />
@@ -1842,39 +1861,66 @@ Seaded</a>
 <a class="menuItem" href="" onclick="javascript:savedesktop(0);hide('bodycontext');return false;"
 title="Salvesta desktop"><img src="{VAR:icons_path}/save.gif" height="16" alt="" />
 Salvesta</a>
-<a class="menuItem" onclick="reordericons(0);hide('bodycontext');return false;" href="{VAR:refresh_url}"
-title="Sorteeri ikoonid"><img src="{VAR:icons_path}/prog_42.gif" height="16"/>
-Sorteeri ikoonid</a>
-<a class="menuItem" onclick="hide('bodycontext');return false;" href="{VAR:refresh_url}"
-title="Refresh"><img src="{VAR:images_path}/blue/awicons/refresh.gif" height="16" />
+<a class="menuItem"
+href=""
+	onclick="return false;"
+	onmouseover="menuItemMouseover(event, 'sortmenu');"><span
+	class="menuItemText"><img src="{VAR:icons_path}/prog_42.gif" height="16" alt=""/>
+Sorteeri ikoonid</span><span
+	class="menuItemArrow"><img src="{VAR:baseurl}/automatweb/images/arr.gif" alt="" /></span></a>
+<a class="menuItem" onclick="reordericons('lineup');hide('bodycontext');return false;" href=""
+title="Joonda"><img src="{VAR:icons_path}/prog_42.gif" height="16" alt=""/>
+Joonda ikoonid</a>
+<a class="menuItem" onclick="exit_is_ok=true;hide('bodycontext');" href="{VAR:refresh_url}"
+title="Refresh"><img src="{VAR:images_path}/blue/awicons/refresh.gif" height="16" alt=""/>
 Värskenda</a>
-<a class="menuItem" href="{VAR:baseurl}/orb.{VAR:ext}?class=users&action=logout"
-title="Logout" >Logi välja</a>
+<a class="menuItem" href="{VAR:logouturl}"
+title="Logout" onclick="exit_is_ok=true;" >Logi välja</a>
 <a class="menuItem" href="" onclick="
 var x=window.confirm('Oled sa ikka kindel, et tahad AW desktopi sulgeda?', 'jep', 'näi')
-if (x){window.close();} else {hide('bodycontext');}return false;"
+if (x){exit_is_ok=true;window.close();} else {hide('bodycontext');}return false;"
 title="Sulge desktop"><img src="{VAR:icons_path}/small_delete.gif" height="16" alt="" />
 Sulge Desktop</a>
 </div>
+<!-- sorteerimise alammenüü -->
+<div id="sortmenu" class="menu"  onmouseover="menuMouseover(event)">
+<a class="menuItem" onclick="reordericons('name');hidemenus();return false;" href=""
+title="Sorteeri ikoonid">Nime</a>
+<a class="menuItem" onclick="reordericons('modified');hidemenus();return false;" href=""
+title="Sorteeri ikoonid">Muudetud</a>
+<a class="menuItem" onclick="reordericons('class_id');hidemenus();return false;" href=""
+title="Sorteeri ikoonid">Tüüp</a>
+<a class="menuItem" onclick="reordericons('jrk');hidemenus();return false;" href=""
+title="Sorteeri ikoonid">Jrk</a>
+</div>
 
-<!-- tausta menüü -->
-<a id="backg" style="position:absolute;top:0px;left:0px;width:100%;height:100%;z-index:1;text-decoration:none;cursor:pointer;"
-oncontextmenu="rbackmenu(event);return false;" onclick="hide('bodycontext');return false;"
+<!-- taustamenüü avamiseks link -->
+<a id="backg" class="menuButton"
+style="position:absolute;top:0px;left:0px;width:100%;height:100%;cursor:pointer;"
+onmouseover="buttonMouseover(event, 'bodycontext',0);"
+oncontextmenu="rbackmenu(event);return false;" onclick="hidemenus();return false;"
  href=""></a>
+<!-- end: taustamenüü -->
+
 
 
 <!-- SUB: activedesktop -->
-<table id="activedesktop1" cellspacing="0" cellpadding="0" 
-style="border:0px;position:absolute;top:{VAR:top}px;left:{VAR:left}px;height:{VAR:height}px;width:{VAR:width}px;z-index:20;">
-<tr><td><div class="boxB" style="color:white;background-color:gray;z-index:21;"
+<!--
+<table id="activedesktop1" cellspacing="0" cellpadding="0"
+style="border:0px;position:absolute;top:{VAR:top}px;left:{VAR:left}px;height:{VAR:height}px;width:{VAR:width}px;z-index:1;">
+<tr><td><div class="boxB" style="color:white;background-color:gray;z-index:1;"
 onmousedown="dragStart(event,'activedesktop1');"><b>tiri</b></div></td></tr>
 <tr><td>
 <iframe name="activedesktop" id="activedesktop" scrolling="auto" src="{VAR:url}"
-style="width:100%;height:110%;border:0px;z-index:22"></iframe>
-</td></tr></table>
+style="width:100%;height:110%;border:0px;z-index:1"></iframe>
+</td></tr></table>-->
+
+<iframe name="activedesktop" id="activedesktop" scrolling="auto" src="{VAR:url}"
+style="position:absolute;top:{VAR:top}px;left:{VAR:left}px;height:{VAR:height}px;width:{VAR:width}px;z-index:1;border:0px"></iframe>
+
 <!-- END SUB: activedesktop -->
 
-<iframe name="pipe" id="pipe" scrolling="no" width="100" height="50" src="{VAR:pipe_url}" style="border:0px;position:absolute;right:0px;z-index:5"></iframe>
+<iframe name="pipe" id="pipe" scrolling="no" width="100" height="50" src="{VAR:pipe_url}" style="border:0px;position:absolute;right:0px;z-index:0"></iframe>
 
 <!--
 <a href="" onclick="document.getElementById('sample1').style.visibility = 'visible';return false;">show</a>
@@ -1900,15 +1946,15 @@ return false;">Window 2</a>
 
 
 
-<div class="menuBar" style="width:100%;height:25;position:absolute;bottom:0px;left:0px;z-index:0"><img oncontextmenu="return false;"
-src="{VAR:transgif}" width="100%" height="20" /></div>
+<div class="menuBar" style="width:100%;height:25;position:absolute;bottom:0px;left:0px;z-index:2"><img oncontextmenu="return false;"
+src="{VAR:transgif}" width="100%" height="20" alt=""/></div>
 
 <div class="menuBar" style="position:absolute;bottom:0px;left:0px;white-space:nowrap">
 <!-- start nupp -->
 <a class="menuButton" style="z-index:4000"
 href="" title="Start" onclick="return buttonClick(event, 'filemenu{VAR:datadir}',{VAR:filemenufix} + barheight);"
 onmouseover="buttonMouseover(event, 'filemenu{VAR:datadir}',{VAR:filemenufix} + barheight);"><img
-onclick="return false;" style="border:0px;position:relative;top:4px;z-index:10" src="{VAR:images_path}/icon_aw.gif " height="16"/></a>
+onclick="return false;" style="border:0px;position:relative;top:4px;z-index:10" src="{VAR:images_path}/icon_aw.gif " height="16" alt=""/></a>
 
 
 {VAR:launchbar}
@@ -1956,16 +2002,15 @@ onmouseover="buttonMouseover(event, 'launche',20 + barheight);">{VAR:showlaunche
 <span id="BARITEMSPw[9]" name="BARITEMSPw[9]"></span>
 
 <!-- keelevaliku nupp -->
-
 <div class="menuBar" style="z-index:1100;position:absolute;bottom:0px;right:0px;white-space:nowrap">
-<img src="{VAR:transgif}"  width="1" height="16" />
+<img src="{VAR:transgif}"  width="1" height="16" alt=""/>
 <a class="menuButton" style="background-color:#0000b0;color:#eeeeee;border-left:0px"
 href="" onclick="return buttonClick(event, 'filemenu_lang',{VAR:langmenufix} + barheight);"
 oncontextmenu="return false;"
 onmouseover="buttonMouseover(event, 'filemenu_lang',{VAR:langmenufix} + barheight);" title="{VAR:active_lang}">{VAR:active_acceptlang}</a>
 
 
-{VAR:calendar}
+
 
 <!-- SUB: CLOCK -->
 <a class="menuButton"
@@ -2004,7 +2049,6 @@ onmouseout="document.getElementById('dra{VAR:oid}').style.backgroundColor='trans
 <!-- tausta ikoonid -->
 <!-- SUB: DESKTOP_ITEM -->
 <table class="boxA" id="dra{VAR:oid}"
-
 onmouseover="document.getElementById('dra{VAR:oid}').style.border='1px dotted #888888'"
 onmouseout="document.getElementById('dra{VAR:oid}').style.border='1px solid transparent'"
 oncontextmenu="return false;"
@@ -2017,14 +2061,13 @@ ondblclick="javascript:pop('{VAR:default_url}',{VAR:xy},'{VAR:name}','{VAR:clid}
 onmouseover="buttonMouseover(event, 'context{VAR:oid}',-2);"
 class="boxB"
 onmousedown="dragStart(event,'dra{VAR:oid}');"
-onmouseover="this.style.border='0px solid blue'"
-onmouseout="this.style.border='0px'"
 src="{VAR:icons_path}/class_{VAR:clid}.gif"
-height="32" width="32" border="0"
-style="z-index:1;" /></a>
+height="32" width="32" border="0" alt=""
+style="z-index:1;"
+ /></a>
 </td></tr>
 <tr><td align="center">
-<span style="z-index:1;background-color:#1166C0;color:#ffffff;font-weight:bold;spacing:2px;">{VAR:icon_caption}</span>
+<span class="iconname">{VAR:icon_caption}</span>
 </td></tr>
 </table>
 <div id="context{VAR:oid}" class="menu" onmouseover="menuMouseover(event)">
@@ -2034,7 +2077,7 @@ style="z-index:1;" /></a>
 onclick="javascript:pop('{VAR:url}',{VAR:wxy},'{VAR:name}','{VAR:class_id}');
 
 hide('context{VAR:oid}');
-return false;"><img src="{VAR:icons_path}/{VAR:iconfile}" height="16"/>
+return false;"><img src="{VAR:icons_path}/{VAR:iconfile}" height="16" alt=""/>
 {VAR:caption}</a>
 <!-- END SUB: ICON_CONTEXT_ITEM -->
 
@@ -2042,7 +2085,7 @@ return false;"><img src="{VAR:icons_path}/{VAR:iconfile}" height="16"/>
 <a class="menuItem" href="" title="{VAR:title}"
 onclick="deletion('{VAR:url}');
 hide('context{VAR:oid}');
-return false;"><img src="{VAR:icons_path}/{VAR:iconfile}" height="16"/>
+return false;"><img src="{VAR:icons_path}/{VAR:iconfile}" height="16" alt=""/>
 {VAR:caption}</a>
 <!-- END SUB: ICON_CONTEXT_ITEM2 -->
 
@@ -2061,7 +2104,7 @@ return false;"><img src="{VAR:icons_path}/{VAR:iconfile}" height="16"/>
 class="menuButton" title="{VAR:title}" style="z-index:80;"
 oncontextmenu="return buttonClick(event, 'launche{VAR:oid}',80 + barheight + 5);"
 onmouseover="buttonMouseover(event, 'launche{VAR:oid}',80 + barheight + 5);"><img style="position:relative;top:4px;z-index:81;height:16px"
-src="{VAR:icons_path}/class_{VAR:clid}.gif" ALT="" /></a>
+src="{VAR:icons_path}/class_{VAR:clid}.gif" alt="" /></a>
 <!-- END SUB: LAUNCHER -->
 
 
@@ -2069,8 +2112,8 @@ src="{VAR:icons_path}/class_{VAR:clid}.gif" ALT="" /></a>
 <div id="launche{VAR:oid}" class="menu" onmouseover="menuMouseover(event)">
 <a class="menuItem" href="" title="{VAR:title}" onclick="javascript:pop('{VAR:url}',{VAR:xy},'{VAR:title}','{VAR:oid}');hide('launche{VAR:oid}');return false;"><b>{VAR:title}</b></a>
 <a class="menuItem" href="" title="Muuda Programm" onclick="javascript:pop('{VAR:change_object_type}',{VAR:xy},'Muuda programm','111');hide('launche{VAR:oid}');return false;">Muuda</a>
-<a class="menuItem" href="" title="Kustuta Programm" 
-onclick="javascript:pop('{VAR:delete_object_type}',{VAR:xy},'Kustuta programm','111');hide('launche{VAR:oid}');return false;"><img src="{VAR:icons_path}/small_delete.gif" height="16"/>
+<a class="menuItem" href="" title="Kustuta Programm"
+onclick="javascript:pop('{VAR:delete_object_type}',{VAR:xy},'Kustuta programm','111');hide('launche{VAR:oid}');return false;"><img src="{VAR:icons_path}/small_delete.gif" height="16" alt=""/>
 Kustuta</a>
 <a class="menuItem" href="" title="Lisa Programm" onclick="javascript:pop('{VAR:add_object_type}',{VAR:xy},'Lisa programm','111');hide('launche{VAR:oid}');return false;">Lisa programm</a>
 </div>
@@ -2083,28 +2126,30 @@ Kustuta</a>
 
 <!-- SUB: MENU_ITEM_SUB -->
 <a class="menuItem" href=""
-	onclick="hidemenus();return false;"
-	onmouseover="menuItemMouseover(event, '{VAR:sub_menu_id}');"><span
-	class="menuItemText"><img src="{VAR:icons_path}/class_{VAR:clid}.gif"
-	height="16" borer="0" alt="" /> {VAR:caption}</span><span
-	class="menuItemArrow">&gt;</span></a>
+	onclick="return false;"
+	onmouseover="menuItemMouseover(event, '{VAR:sub_menu_id}');"><img src="{VAR:icons_path}/class_{VAR:clid}.gif"
+	height="16" alt="" />
+	<span
+	class="menuItemText">{VAR:caption}</span><span
+	class="menuItemArrow"><img src="{VAR:baseurl}/automatweb/images/arr.gif" alt="" /></span></a>
 <!-- END SUB: MENU_ITEM_SUB -->
 
 <!-- SUB: MENU_ITEM -->
 <a class="menuItem" title="{VAR:title}"
 href=""
 onclick="javascript:pop('{VAR:url}',{VAR:xy},'{VAR:caption}', '{VAR:clid}');hidemenus();return false;"><img
-SRC="{VAR:icons_path}/class_{VAR:clid}.gif"
-height="16" BORDER=0 ALT="" /> {VAR:caption}</a>
+src="{VAR:icons_path}/{VAR:icon}"
+height="16" alt="" /> {VAR:caption}</a>
 <!-- END SUB: MENU_ITEM -->
 
-<!-- SUB: RUN_MENU_ITEM -->
-<a class="menuItem" title="Käivita programm"
-href=""
-onclick="javascript:valu = prompt('Run...', ''); drun(valu); return false;"><img
-SRC="{VAR:icons_path}/class_111.gif"
-height="16" BORDER=0 ALT="" />Run...</a>
-<!-- END SUB: RUN_MENU_ITEM -->
+
+<!-- SUB: MENU_ITEM2 -->
+<a class="menuItem" title="{VAR:title}"
+href="{VAR:url}"
+onclick="{VAR:onclick}"><img
+src="{VAR:icons_path}/{VAR:icon}"
+height="16" alt="" />{VAR:caption}</a>
+<!-- END SUB: MENU_ITEM2 -->
 
 
 <!--javascript:pop('{VAR:url}',{VAR:xy},'{VAR:caption}');<input type="radio" name="lang" style="height:8px;width:10"/>-->
@@ -2122,30 +2167,23 @@ height="16" BORDER=0 ALT="" />Run...</a>
 </div>
 <!-- END SUB: MENU -->
 
-<form name="test">
-<input name="posxy" value="" type="text" style="visibility:hidden;">
+<form name="test"  action="">
+<input name="posxy" value="" type="text" style="visibility:hidden;" />
 </form>
-
 
 <script type="text/javascript">
 //<![CDATA[
 
 var mvw = new Array();
 
-//
-//]]></script>
-
-
-<img id="ow{VAR:cnt}" name="ow{VAR:cnt}" height="300" width="300" class="menuItem" src="{VAR:transgif}" style="position:absolute;z-index:0"
-onload="javascript:
+function openwins()
+{
 <!-- SUB: OPENSAVEDWINDOWS -->
 mvw[{VAR:cnt}] = pop('{VAR:url}',{VAR:xy}, '{VAR:caption}', '{VAR:icon}');
 <!-- END SUB: OPENSAVEDWINDOWS -->
-return false;" />
+setTimeout('moveit()', 300);
+}
 
-<script type="text/javascript">
-
-//<![CDATA[
 if ({VAR:showclock})
 {
 	clock();
@@ -2158,7 +2196,7 @@ document.getElementById(mvw[{VAR:cnt}]).style.left = '{VAR:left}';
 <!-- END SUB: OPENSAVEDWINDOWS2 -->
 }
 
-setTimeout('moveit()', 1000);
+setTimeout('openwins()', 300);
 
 
 //document.getElementById(winname).style.top = '{VAR:top}';
@@ -2167,7 +2205,8 @@ setTimeout('moveit()', 1000);
 //function donothing(){alert('ok');return true;}
 //document.getElementById(winname).style.zIndex = {VAR:z};
 
-//]]></script>
+/*//]]>*/
+</script>
 
 
 </body>
