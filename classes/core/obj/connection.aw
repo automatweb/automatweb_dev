@@ -255,7 +255,31 @@ class connection
 				$to = obj($this->conn["to"]);
 
 				$o = obj();
-				$o->set_parent($from->parent());
+				if ($GLOBALS["object_loader"]->ds->can("add", $from->parent()))
+				{
+					$o->set_parent($from->parent());
+				}
+				else
+				if ($GLOBALS["object_loader"]->ds->can("add", $from->id()))
+				{
+					$o->set_parent($from->id());
+				}
+				if ($GLOBALS["object_loader"]->ds->can("add", $to->parent()))
+				{
+					$o->set_parent($from->parent());
+				}
+				else
+				if ($GLOBALS["object_loader"]->ds->can("add", $to->id()))
+				{
+					$o->set_parent($from->id());
+				}
+				else
+				{
+					error::throw(array(
+						"id" => ERR_ACL,
+						"msg" => "connection::save(): no access to create relation object!"
+					));
+				}
 				$o->set_class_id(CL_RELATION);
 				$o->set_status(STAT_ACTIVE);
 				$o->set_subclass($to->class_id());

@@ -665,7 +665,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function object_exists($oid)
 	{
-		return ($this->db_fetch_field("SELECT status FROM objects WHERE oid = '$oid'", "status") > 0);
+		if (is_object($oid))
+		{
+			$oid = $oid->id();
+		}
+		$stat = $this->db_fetch_field("SELECT status FROM objects WHERE oid = '$oid'", "status");
+		return ($stat > 0);
 	}
 
 	function req_make_sql($params, $logic = "AND")
@@ -745,6 +750,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$str = array();
 				foreach($val as $v)
 				{
+					if ($v === "")
+					{
+						continue;
+					}
 					if (strpos("%", $v) !== false)
 					{
 						$str[] = $tf." LIKE '".$v."'";
