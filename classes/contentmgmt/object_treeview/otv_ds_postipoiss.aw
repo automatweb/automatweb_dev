@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.14 2004/08/23 09:31:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.15 2004/08/30 09:25:04 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -475,8 +475,19 @@ class otv_ds_postipoiss extends class_base
 
 		$patt = $o->prop("ct_fld")."/*".$arr["real_nr"];
 		$ret = glob($patt);
-		readfile($ret[0]);
-		die();
+		// check if the last letters are the real number
+		foreach($ret as $fn)
+		{
+			if (substr($fn, -(strlen($arr["real_nr"])+1)) == ".".$arr["real_nr"])
+			{
+				readfile($fn);
+				die();
+			}
+		}
+		error::throw(array(
+			"id" => "ERR_PP_NO_FILE",
+			"msg" => "otv_ds_postipoiss::pget_file(): no file $arr[fnam] find for xml $arr[real_nr]!"
+		));
 	}
 
 	function request_execute($obj)
@@ -491,7 +502,7 @@ class otv_ds_postipoiss extends class_base
 			$files = explode(",", $fc["viide"]);
 	
 			list($tmp, $real_nr) = explode("_", $td[1]);
-		
+
 			return $this->pget_file(array(
 				"oid" => $td[0],
 				"fnam" => $files[$td[2]-1],
