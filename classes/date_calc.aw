@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.15 2004/09/16 15:48:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.16 2004/10/05 09:23:43 kristo Exp $
 
 ////
 // !get_date_range
@@ -206,6 +206,13 @@ function get_date_range($args = array())
 			$end_ts = mktime(23,59,59,12,31,2003);
 			break;
 
+		case "last_events":
+			$start_ts = $rg_start;
+			$end_ts = time()+24*3600*1000; // far enough methinks
+
+			$next = $end_ts + 1;
+			$prev = $start_ts - 1;
+			break;
 	};
 
 	$start_wd = convert_wday(date("w",$start_ts));
