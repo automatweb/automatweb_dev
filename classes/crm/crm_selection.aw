@@ -7,15 +7,8 @@
 @default field=meta
 @default method=serialize
 
-//	@property pilot type=relpicker reltype=PILOT
-//	@caption näitamise pilootobjekt
-
 @property template type=select
 @caption Näitamise template
-
-//	@property use_existing_pilot type=checkbox
-//	@caption näitamisel kasuta konkreetse objekti pilootobjekti kui on olemas
-
 
 property active_selection type=textbox group=selectione
 
@@ -24,16 +17,17 @@ property active_selection type=textbox group=selectione
 
 @default group=contents
 @groupinfo contents submit=no caption="Objektid"
-@property active_selection_objects type=callback callback=callback_obj_list
+
+@property selection_toolbar type=toolbar store=no no_caption=1
+@caption Objektide toolbar
+
+@property selection_objects type=table store=no no_caption=1
+@caption Objektid
 
 @default group=preview
 @groupinfo preview caption="Näita" submit=no
 @property contents type=callback callback=show_selection
 
-*/
-
-
-/*
 @reltype BACKFORMS2 value=1 clid=CL_PILOT
 @caption Tagasisidevorm
 
@@ -53,8 +47,6 @@ CREATE TABLE `selection` (
 ) TYPE=MyISAM;
 
 */
-
-
 class crm_selection extends class_base
 {
 	var $selections_reltype;
@@ -91,6 +83,15 @@ class crm_selection extends class_base
 				$retval = PROP_IGNORE;
 				break;
 
+			case "selection_toolbar":
+				$this->gen_selection_toolbar($arr);
+				break;
+
+			case "selection_objects":
+				$this->gen_object_table($arr);
+				break;
+
+
 		}
 		return  $retval;
 	}
@@ -113,20 +114,6 @@ class crm_selection extends class_base
 		return $retval;
 	}
 
-	function callback_obj_list($args)
-	{
-		// this is invoked directly by class_base .. which in turn invokes the stupid
-		// obj_list function. why the fuck does this have to be this way?
-		$list_arg["obj"]["id"] = $args["obj_inst"]->meta("active_selection") != "" ?  $args["obj_inst"]->meta("active_selection") : $args["obj_inst"]->id();
-		$list_arg['obj']['parent'] = $args['obj_inst']->parent();
-		$list_arg['obj']['meta']['active_selection'] = $list_arg['obj']['id'] ? $list_arg['obj']['id'] : $args['obj']['meta']['selections'][0];
-		$list_arg['sel']['oid'] = $args['obj']['id'];
-		return $dat = $this->obj_list(array(
-			"id" => $args["obj_inst"]->id(),
-		));
-	}
-
-
 	function show_selection($args)
 	{
 		$retval = $this->show(array(
@@ -142,13 +129,11 @@ class crm_selection extends class_base
 	////
 	// !Generates a list of objects in a selection
 	// id - id of the selection
-	function obj_list($arr)
+	function gen_object_table($arr)
 	{
-		$objects = $this->get_selection($arr["id"]);
+		$objects = $this->get_selection($arr["obj_inst"]->id());
+		$t = &$arr["prop"]["vcl_inst"];
 
-		load_vcl('table');
-		$t = new aw_table();
-		$t->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
 		$t->set_default_sortby('jrk');
 
 		$t->define_field(array(
@@ -188,7 +173,7 @@ class crm_selection extends class_base
 
 		$t->define_chooser(array(
 			"name" => "sel",
-			"field" => "oid",
+			"field" => "id",
 		));
 
 		if (is_array($objects))
@@ -206,25 +191,6 @@ class crm_selection extends class_base
 				));
 			}
 		}
-		$t->sort_by();
-		$nodes = array();
-
-		$nodes['manager'] = array(
-			"value" =>
-			$this->mk_toolbar(array(
-				// whatta fuck?
-				'id' => $arr["id"],
-				'selection' => $args['sel'][OID],
-				'parent' => $args['obj']['parent'],
-				'selected' => $meta['active_selection'],
-				'show_buttons' => array('activate','add','change','save','delete'),
-			)).
-			$t->draw().
-			html::hidden(array('name' => 'this_selection', 'value' => $arr["id"])).
-			// what the fuck is going on with that active_selection?
-			html::hidden(array('name' => 'active_selection', 'value' => $meta['active_selection'])),
-		);
-		return $nodes;
 	}
 
 	function callb_name($arr)
@@ -302,6 +268,8 @@ class crm_selection extends class_base
 			$o->set_name($args["new_selection_name"]);
 			$o->set_status(STAT_NOTACTIVE);
 			$o->set_parent($args["parent"]);
+
+
 			$o->save();
 
 
@@ -328,46 +296,22 @@ class crm_selection extends class_base
 
 	}
 
-	//arr - array of selection id-s
-	//selected - selected selection
-	//parent - parent
-	//align - toolbar align (left|center|right)
-	//show_buttons - list of buttons to show
-	function mk_toolbar($args)
+	function gen_selection_toolbar($arr)
 	{
-		$str = '';
-		extract($args);
-		$delbutton = isset($delbutton)?$delbutton:true;
-		$align = isset($align)?$align:'left';
-		$toolbar = get_instance("toolbar");
+		$toolbar = &$arr["prop"]["toolbar"];
 
-		// ah et mõni teine objekt saab ka siis selektsionina käituda jah? god fucking dammit
-		if ($args["connection_source"])
-		{
-			$source_object = new object($args["connection_source"]);
-		}
-		else
-		{
-			$source_object = new object($args["id"]);
-		};
+		$ops = array();
 
-		$conns = $source_object->connections_from(array(
+		$conns = $arr["obj_inst"]->connections_from(array(
 			"class" => CL_CRM_SELECTION,
 		));
 
-		// lisame aktiivse objekti ka, kui ta on valim
-		if ($source_object->class_id() == CL_CRM_SELECTION)
-		{
-			$arr[$source_object->id()] = $source_object->name();
-		}
-	
-		$ops = array();
+		$ops[0] = '- lisa uude valimisse -';
 		foreach($conns as $conn)
 		{
 			$ops[$conn->prop("to")] = $conn->prop("to.name");
 		};
 		
-		$ops[0] = '- lisa uude valimisse -';
 		$str .= html::select(array(
 			'name' => 'add_to_selection',
 			'options' => $ops,
@@ -384,68 +328,58 @@ class crm_selection extends class_base
 		}
 
 		$toolbar->add_cdata($str);
+		$parent = $arr["obj_inst"]->parent();
+		
 		$REQUEST_URI = aw_global_get("REQUEST_URI");
-		foreach ($show_buttons as $button)
-		{
-			switch ($button)
-			{
-				case 'activate':
-					$toolbar->add_button(array(
-					"name" => 'activate',
-						"tooltip" => 'aktiveeri',
-						"url" => "#",
-						"img" => "refresh.gif",
-						// siit nagu midagi hargneks juba. urk
-						'onClick' => 'document.changeform.active_selection.value = document.changeform.add_to_selection.value;document.changeform.submit()',
-					));
-					break;
-				case 'add':
-					$toolbar->add_button(array(
-						"name" => 'go_add',
-						"tooltip" => "Lisa valitud valimisse",
-						"url" => "#",
-						"img" => "import.gif",
-						'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
-					));
-					break;
-				case 'change':
-					$toolbar->add_button(array(
-						"name" => 'change_it',
-						"tooltip" => 'Muuda valimit',
-						"url" => "#",
-						"img" => "edit.gif",
-			'onClick' => "JavaScript: if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array(),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
-					));
-					break;
-				case 'save':
-					$toolbar->add_button(array(
-						"name" => "save",
-						"tooltip" => "Salvesta",
-						"url" => "#",
-						"img" => "save.gif",
-						'onClick' => "go_manage_selection(document.changeform.active_selection.value,'".$REQUEST_URI."','save_selection','".$parent."');return true;",
-					));
-					break;
+		
+		$toolbar->add_button(array(
+			"name" => 'go_add',
+			"tooltip" => "Lisa valitud valimisse",
+			"url" => "#",
+			"img" => "import.gif",
+			'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
+		));
+		$toolbar->add_button(array(
+			"name" => 'activate',
+				"tooltip" => 'aktiveeri',
+				"url" => "#",
+				"img" => "refresh.gif",
+				'onClick' => 'document.changeform.active_selection.value = document.changeform.add_to_selection.value;document.changeform.submit()',
+		));
 
-				case 'delete':
-					$toolbar->add_button(array(
-						"name" => "delete",
-						"tooltip" => "Kustuta valitud objektid valimist",
-						"url" => "#",
-						"img" => "delete.gif",
-						'onClick' => "go_manage_selection(document.changeform.this_selection.value,'".$REQUEST_URI."','delete_from_selection','".$parent."');return true;",
-					));
-					break;
-			}
-		}
 
-		$str = html::hidden(array('name' => 'del'));
+		$toolbar->add_button(array(
+			"name" => 'change_it',
+			"tooltip" => 'Muuda valimit',
+			"url" => "#",
+			"img" => "edit.gif",
+'onClick' => "JavaScript: if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array(),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
+		));
+
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "#",
+			"img" => "save.gif",
+			'onClick' => "go_manage_selection(document.changeform.active_selection.value,'".$REQUEST_URI."','save_selection','".$parent."');return true;",
+		));
+
+		$toolbar->add_button(array(
+			"name" => "delete",
+			"tooltip" => "Kustuta valitud objektid valimist",
+			"url" => "#",
+			"img" => "delete.gif",
+			'onClick' => "go_manage_selection(document.changeform.this_selection.value,'".$REQUEST_URI."','delete_from_selection','".$parent."');return true;",
+		));
+
+		$str = "";
+		$str .= html::hidden(array('name' => 'this_selection', 'value' => $arr["obj_inst"]->id()));
+		//$str .= html::hidden(array('name' => 'active_selection', 'value' => $meta['active_selection'])),
+		$str .= html::hidden(array('name' => 'del'));
 		$str .= html::hidden(array('name' => 'new_selection_name'));
 		$str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/kliendibaas/selall.script'));
 		$str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/selection/go_add_to_selection.script'));
-		$toolbar->align = $align;
 		$toolbar->add_cdata($str);
-		return $toolbar->get_toolbar();
 	}
 
 	function get_selection($oid, $activs_only = false)
