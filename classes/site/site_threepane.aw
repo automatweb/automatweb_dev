@@ -1,5 +1,5 @@
 <?php
-// $Id: site_threepane.aw,v 1.4 2002/11/08 15:02:24 duke Exp $
+// $Id: site_threepane.aw,v 1.5 2002/11/14 16:04:18 duke Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
@@ -17,10 +17,10 @@
 	@xproperty logo type=imgupload field=meta method=serialize
 	@xcaption Logo
 
-	@property info type=array getter=callback_get_info field=meta method=serialize
+	@property info type=generated generator=callback_get_info field=meta method=serialize
 	@caption Metainfo
 
-	@property preview type=text
+	@property preview editonly=1 type=text
 	@caption Näita
 
 	@classinfo relationmgr=yes
@@ -44,10 +44,9 @@ class site_threepane extends aw_template
 			case "preview":
 				classload("html");
 				$id = $args["obj"]["oid"];
-				if ($id)
-				{
-					$data["value"] = html::href(array("url" => $this->cfg["baseurl"] . "/orb.aw?class=site_threepane&action=show&id=$id","caption" => "Näita saiti","target" => "_blank"));
-				};
+				// no need to check whether id exists, since this only called
+				// for existing objects
+				$data["value"] = html::href(array("url" => $this->cfg["baseurl"] . "/orb.aw?class=site_threepane&action=show&id=$id","caption" => "Näita saiti","target" => "_blank"));
 				break;
 		};
 	}
@@ -55,15 +54,15 @@ class site_threepane extends aw_template
 	function show($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
-		// let's show the site
-		if ($obj["class_id"] != CL_SITE_THREEPANE)
-		{
-			die("what are you up to?");
-		};
+		$obj = $this->get_object(array(
+			"oid" => $id,
+			"class_id" => CL_SITE_THREEPANE,
+		));
+
 		$fr = get_instance("vcl/frameset");
 		$frdata = $this->get_object($obj["meta"]["frameset"]);
 		$frmeta = $frdata["meta"];
+
 		// first: load and generate the frameset
 		switch($type)
 		{
@@ -135,59 +134,55 @@ class site_threepane extends aw_template
 				$res = $fr->show(array(
 						"id" => $obj["meta"]["frameset"],
 						"sources" => $sources,
+						"title" => $obj["name"],
 				));
 				print $res;
 				exit;
 		};
 	}
 
+	////
+	// !Called from class_base, generates a list for entering metainfo
 	function callback_get_info($args = array())
 	{
 		$data = $args["prop"];
-		static $i = 0;
+		$names = new aw_array($data["value"]["name"]);
+		$content = new aw_array($data["value"]["content"]);
+		$nodes = array();
 		$max = 0;
-		$naxnax = new aw_array($data["value"]["name"]);
-		foreach($naxnax->get() as $key => $val)
+		foreach($names->get() as $key => $name)
 		{
+			$max = $key;
+			$val = $content->get_at($key);
 			if ($val)
 			{
-				$max++;
+				$nodes[] = $this->_gen_line($key,$name,$val);
 			};
 		};
-//                $max = sizeof($data["value"]["name"]);
-		if ($i < ($max + 1))
-		{	
-			if ($data["value"]["name"][$i] || ($i == $max))
-			{
-				$node["caption"] = "Metainfo";
-				$node["items"] = array();
+		$max++;
+		$nodes[] = $this->_gen_line($max,"","");
+		return $nodes;
+	}
 
-				$tmp = array(
+	function _gen_line($key,$name,$value)
+	{
+		return array(
+			"caption" => "Metainfo",
+			"items" => array(
+				array(
 					"type" => "textbox",
-					"name" => "info[name][$i]",
+					"name" => "info[name][$key]",
 					"size" => 25,
-					"value" => $data["value"]["name"][$i],
-				);
-				array_push($node["items"],$tmp);
-				$tmp = array(
+					"value" => $name,
+				),
+				array(
 					"type" => "textbox",
-					"name" => "info[content][$i]",
+					"name" => "info[content][$key]",
 					"size" => 25,
-					"value" => $data["value"]["content"][$i],
-				);
-				array_push($node["items"],$tmp);
-			}
-			else
-			{
-				$node = array();
-			};
-			$i++;
-		}
-		else
-		{
-			$node = false;
-		};
-		return $node;
+					"value" => $value,
+				),
+			),
+		);
 	}
 };
 ?>
