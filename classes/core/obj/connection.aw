@@ -202,6 +202,11 @@ class connection
 	}
 
 
+	function save()
+	{
+		$this->_int_save();
+	}
+
 	////////////////////////////
 	// private functions
 
