@@ -44,16 +44,6 @@
             <caption>Deadline</caption>
       </property>
       <property>
-            <name>priority</name>
-            <table>objects</table>
-            <group>general2</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <size>5</size>
-            <caption>Prioriteet</caption>
-      </property>
-      <property>
             <name>doc</name>
             <table>objects</table>
             <group>general2</group>
@@ -123,55 +113,6 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>event_list</field>
-      </property>
-      <property>
-            <name>sel_resources</name>
-            <table>objects</table>
-            <group>selres</group>
-            <type>chooser</type>
-            <orient>vertical</orient>
-            <multiple>1</multiple>
-            <store>connect</store>
-            <reltype>RELTYPE_RESOURCE</reltype>
-            <field>sel_resources</field>
-            <caption>Vali ressursid</caption>
-      </property>
-      <property>
-            <name>resources</name>
-            <table>objects</table>
-            <group>resources</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>resources</field>
-      </property>
-      <property>
-            <name>confirm</name>
-            <table>objects</table>
-            <group>resources</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kinnita ajad</caption>
-      </property>
-      <property>
-            <name>work_cal</name>
-            <table>objects</table>
-            <group>work_cal</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>work_cal</field>
-      </property>
-      <property>
-            <name>work_table</name>
-            <table>objects</table>
-            <group>work_table</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>work_table</field>
       </property>
       <property>
             <name>add_event</name>
@@ -298,23 +239,6 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <selres>
-                  <caption>Vali ressursid</caption>
-            </selres>
-            <resources>
-                  <caption>Jaota ressursid</caption>
-            </resources>
-            <work>
-                  <caption>T&amp;ouml;&amp;ouml;de seis</caption>
-            </work>
-            <work_table>
-                  <caption>Tabel</caption>
-                  <parent>work</parent>
-            </work_table>
-            <work_cal>
-                  <caption>Kalender</caption>
-                  <parent>work</parent>
-            </work_cal>
             <general2>
                   <parent>general</parent>
                   <caption>Üldine</caption>
@@ -409,11 +333,6 @@
                   <clid>CL_VIDEO</clid>
                   <caption>Video</caption>
             </PRJ_VIDEO>
-            <RESOURCE>
-                  <value>12</value>
-                  <clid>CL_WORKFLOW_RESOURCE</clid>
-                  <caption>ressurrss</caption>
-            </RESOURCE>
       </reltypes>
 </properties>
 
