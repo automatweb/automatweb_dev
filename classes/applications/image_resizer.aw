@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/Attic/image_resizer.aw,v 1.1 2004/08/03 07:14:26 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/Attic/image_resizer.aw,v 1.2 2004/08/05 16:36:39 rtoomas Exp $
 // image_resizer.aw - Piltide muutja 
 
 /*
@@ -9,8 +9,14 @@
 @default table=objects
 @default group=general
 
+@property input_type type=chooser method=serialize field=meta
+@caption Sisendi tüüp
+
 @property from_folder type=textbox method=serialize field=meta
-@caption Piltide kaust
+@caption Süsteemi kaust
+
+@property from_folder_aw type=relpicker reltype=RELTYPE_IMAGE_FOLDER field=meta
+@caption AW kaust
 
 @groupinfo config caption="Võimalused"
 @default group=config
@@ -36,7 +42,12 @@
 @property do_resize type=submit value=Töötle action=do_resize store=no
 @caption Töötle
 
+@reltype IMAGE_FOLDER value=1 clid=CL_MENU
+@caption Piltide kaust
+
 */
+define('INPUT_TYPE_AW_FOLDER', 1);
+define('INPUT_TYPE_SYSTEM_FOLDER', 2);
 
 class image_resizer extends class_base
 {
@@ -56,6 +67,29 @@ class image_resizer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case 'from_folder':
+				if($arr['obj_inst']->meta('input_type')==INPUT_TYPE_AW_FOLDER)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case 'from_folder_aw':
+				if($arr['obj_inst']->meta('input_type')==INPUT_TYPE_SYSTEM_FOLDER)
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case 'input_type':
+				$prop['options'] = array(
+					1=>'AW kaust',
+					2=>'Süsteemi kaust',
+				);
+
+				if(!$arr['obj_inst']->meta('input_type'))
+				{
+					$prop['value'] = INPUT_TYPE_SYSTEM_FOLDER;
+				}
+			break;
 			case 'from_folder_contents':
 				$this->do_from_folder_contents($arr);
 			break;
@@ -112,7 +146,71 @@ class image_resizer extends class_base
 		return $this->parse();
 	}
 
-	function status_info($arr)	
+	function _get_info_on_image($o)
+	{
+		$rtrn = array();
+		if(!is_object($this->converter))
+		{
+			$this->converter = get_instance('core/converters/image_convert');
+		}
+		if(file_exists($o->prop('file2')))
+		{
+			$file = $o->prop('file2');
+			$ext = substr($file,strpos($file,'.')+1);
+			$this->converter->load_from_file($file);
+			$size = $this->converter->size();			
+			$rtrn = array(
+						'file_name' => $file,
+						'caption' => $o->name(),
+						'file_type' => $this->get_file_type_for_extension($ext),
+						'writeable' => is_writeable($file),
+						'width' => $size[0],
+						'height' => $size[1],
+			);
+		}
+		return $rtrn;
+	}
+
+	function _parse_folder_for_info($obj, $data)
+	{
+		$ol = new object_list(array(
+					'class_id' => CL_IMAGE,
+					'parent' => $obj->id(),
+		));
+
+		$arr = $ol->arr();
+		foreach($arr as $o)
+		{
+			$data['files'][$o->id()] = $this->_get_info_on_image($o);
+		}
+
+		$ol = new object_list(array(
+					'class_id' => CL_MENU,
+					'parent' => $obj->id(),
+		));
+
+		$arr = $ol->arr();
+		foreach($arr as $o)
+		{
+			$this->_parse_folder_for_info(&$o, &$data);
+		}
+	}
+
+	function status_info_aw_folder($arr)
+	{
+		//sorry, aga ei ole valitud kausta
+		if(!is_object($arr['obj_inst']) || !is_oid($arr['obj_inst']->meta('from_folder_aw')))
+		{
+			return array('files'=>array());
+		}
+
+		//vihkan rekursiivsust :(
+		$data = array('files'=>array());
+		$this->_parse_folder_for_info(new object($arr['obj_inst']->meta('from_folder_aw')), &$data);
+		return $data;
+	}
+
+	function status_info_system_folder($arr)	
 	{
 		$rtrn = array('ok'=>0,'nok'=>0,'files'=>array(),'err'=>array());
 		$extensions = array('jpg','png');
@@ -171,7 +269,7 @@ class image_resizer extends class_base
 									'writeable' => is_writable($path."/".$file),
 									'width' => $size[0],
 									'height' => $size[1],
-							);
+								);
 							
 							}
 							$rtrn['ok']++;
@@ -181,12 +279,8 @@ class image_resizer extends class_base
 			}
 			return $rtrn;
 		}
-		else
-		{
-			return false;
-		}
 		@closedir($dir);
-		return true;
+		return array();
 	}
 
 	/**
@@ -195,7 +289,15 @@ class image_resizer extends class_base
 	function do_resize($arr)
 	{
 		$obj = new object($arr['id']);
-		$result = $this->status_info(array('obj_inst'=>&$obj));
+		if($obj->meta('input_type')==INPUT_TYPE_AW_FOLDER)
+		{
+			$arr['obj_inst'] = &$obj;
+			$result = $this->status_info_aw_folder(&$arr);
+		}
+		else
+		{
+			$result = $this->status_info_system_folder(array('obj_inst'=>&$obj));
+		}
 
 		$converter = get_instance('core/converters/image_convert');
 		foreach($result['files'] as $file)
@@ -256,20 +358,50 @@ class image_resizer extends class_base
 	{
 		$this->_init_do_from_folder_contents($arr);
 		$arr['all_image_files'] = 1;
-		$data = $this->status_info($arr);
+
+		if($arr['obj_inst']->meta('input_type')==INPUT_TYPE_AW_FOLDER)
+		{
+			$data = $this->status_info_aw_folder(&$arr);
+		}
+		else
+		{
+			$data = $this->status_info_system_folder(&$arr);
+		}
 		
 		$table =& $arr['prop']['vcl_inst'];
-		
+		/*if(!is_array($data['files']))
+		{
+			return;
+		}*/
 		foreach($data['files'] as $data_item)
 		{
 			$writeable = $data_item['writeable']?"Jah":"Ei";
 			$table->define_data(array(
-				'file_name' => $data_item['file_name'],
+				'file_name' => isset($data_item['caption'])?$data_item['caption']:$data_item['file_name'],
 				'writeable' => $writeable,
 				'width' => $data_item['width'],
 				'height' => $data_item['height'],
 			));
 		}
 	}
+
+	function get_file_type_for_extension($ext)
+	{
+		$type = '';
+		switch(strtolower($ext))
+		{
+			case 'png':
+				$type = IMAGE_PNG;
+			break;
+			case 'jpg':
+				$type = IMAGE_JPEG;
+			break;
+			default:
+				$type = IMAGE_PNG;
+			break;
+		}
+		return $type;
+	}
+
 }
 ?>
