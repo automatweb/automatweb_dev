@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.22 2001/09/18 00:37:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.23 2001/09/25 06:01:10 cvs Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -1300,7 +1300,7 @@ class form_element extends aw_template
 				}
 				else
 				{
-					$im->upload($$var, $$ft, $id, "",true,$$fn);
+					$entry[$this->id] = $im->upload($$var, $$ft, $id, "",true,$$fn);
 				}
 				$this->entry = $entry[$this->id];
 				$this->entry_id = $id;

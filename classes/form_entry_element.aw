@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.33 2001/09/18 00:37:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.34 2001/09/25 06:01:40 cvs Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -187,6 +187,7 @@ lc_load("definition");
 				if (is_array($this->entry))	// if this is an array, then there is a file that must be shown in place
 				{
 					$row = $im->get_img_by_id($this->entry["id"]);
+					$row["url"] = str_replace("?","/",$row["url"]);
 					if ($this->arr["ftype"] == 1)
 					{
 						$html.="<img src='".$row["url"]."'>";
