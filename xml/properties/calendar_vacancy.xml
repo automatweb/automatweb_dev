@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>start</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>start</field>
+            <caption>Algab</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>end</field>
+            <caption>Lõpeb</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CALENDAR_VACANCY</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <tableinfo>
+            <planner>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </planner>
+      </tableinfo>
+</properties>
+

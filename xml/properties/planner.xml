@@ -81,6 +81,28 @@
             <caption>Näidatavad päevad</caption>
       </property>
       <property>
+            <name>vac_count</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>vac_settings</group>
+            <type>textbox</type>
+            <size>2</size>
+            <default>10</default>
+            <caption>Vabu aegu</caption>
+      </property>
+      <property>
+            <name>vac_length</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>vac_settings</group>
+            <type>textbox</type>
+            <size>2</size>
+            <default>90</default>
+            <caption>Vaba aja pikkus (minutid)</caption>
+      </property>
+      <property>
             <name>navtoolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -123,6 +145,39 @@
             <callback>callback_get_add_event</callback>
             <caption>Lisa sündmus</caption>
       </property>
+      <property>
+            <name>create_event_table</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>create_events</group>
+            <store>no</store>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <caption>Loo sündmused</caption>
+      </property>
+      <property>
+            <name>vacancies</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>create_vacancies</group>
+            <store>no</store>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <caption>Ajad</caption>
+      </property>
+      <property>
+            <name>confirm_vacancies</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>create_vacancies</group>
+            <store>no</store>
+            <type>checkbox</type>
+            <no_caption>1</no_caption>
+            <caption>Kinnita vabad ajad</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
@@ -138,10 +193,25 @@
                   <caption>Sisuseaded</caption>
                   <parent>general</parent>
             </advanced>
+            <vac_settings>
+                  <caption>Vabad ajad</caption>
+                  <parent>general</parent>
+            </vac_settings>
             <views>
                   <caption>Sündmused</caption>
                   <submit>no</submit>
             </views>
+            <vacancies>
+                  <caption>Vabad ajad</caption>
+            </vacancies>
+            <create_events>
+                  <caption>Sündmuste lisamine</caption>
+                  <parent>vacancies</parent>
+            </create_events>
+            <create_vacancies>
+                  <caption>Vabad ajad</caption>
+                  <parent>vacancies</parent>
+            </create_vacancies>
             <time_settings>
                   <caption>Ajaseaded</caption>
                   <parent>general</parent>
@@ -180,7 +250,10 @@
             </GET_DC_RELATION>
             <EVENT_FOLDER>
                   <value>6</value>
-                  <clid>CL_MENU</clid>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_PLANNER</num_1>
+                  </clid>
                   <caption>sündmuste kataloog</caption>
             </EVENT_FOLDER>
             <EVENT_ENTRY>
