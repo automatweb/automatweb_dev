@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.59 2004/12/16 16:16:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.60 2004/12/16 16:27:13 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1688,6 +1688,9 @@ class forum_v2 extends class_base
 	**/
 	function delete_comments($arr)
 	{
+		// _can_admin requires reltypes defined in class header, creating an instance
+		// of the object loads them
+		$forum_obj = new object($arr["id"]);
 		if ($this->_can_admin($arr["id"]) && sizeof($arr["del"]) > 0)
 		{
 			$to_delete = new object_list(array(
