@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.4 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.5 2002/09/26 16:07:43 kristo Exp $
 // remote_login.aw - AW remote login
 classload("socket");
 
@@ -77,12 +77,15 @@ class remote_login extends aw_template
 			"port" => 80,
 		));
 		
-		$op = "HEAD / HTTP/1.1\r\n";
+		$op = "HEAD /orb.".$this->cfg["ext"]."?class=remote_login&action=getcookie&fastcall=1 HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n\r\n";
 
-		print "<pre>";
-		print "Acquiring session\n";
-		flush();
+		if (!$silent)
+		{
+			print "<pre>";
+			print "Acquiring session  \n";
+			flush();
+		}
 
 		$socket->write($op);
 
@@ -100,9 +103,13 @@ class remote_login extends aw_template
 
 		$this->cookie = $cookie;
 
-		print "Got session, ID is $cookie\n";
-		print "</pre>";
-		flush();
+		if (!$silent)
+		{
+			print "Got session, ID is $cookie\n";
+			print "</pre>";
+			flush();
+		}
+		return $cookie;
 	}
 
 	function login($args = array())
@@ -124,8 +131,13 @@ class remote_login extends aw_template
 		$op .= "Referer: http://$host/login.".$this->cfg["ext"]."\r\n";
 		$op .= "Content-type: application/x-www-form-urlencoded\r\n";
 		$op .= "Content-Length: " . strlen($request) . "\r\n\r\n";
-		print "<pre>";
-		print "Logging in\n";
+
+		if (!$silent)
+		{
+			print "<pre>";
+			print "Logging in\n";
+		}
+
 		$socket->write($op);
 		$socket->write($request);
 	
@@ -135,10 +147,14 @@ class remote_login extends aw_template
 			$ipd .= $data;
 		};
 		$this->socket = $socket;
-		list($headers,$data) = explode("\r\n\r\n",$ipd);
-		print "Succeeded? Server returned $data\n";
-		print "</pre>";
-		flush();
+
+		if (!$silent)
+		{
+			list($headers,$data) = explode("\r\n\r\n",$ipd);
+			print "Succeeded? Server returned $data\n";
+			print "</pre>";
+			flush();
+		}
 	}
 
 	function logout($args = array())
@@ -153,8 +169,12 @@ class remote_login extends aw_template
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n\r\n";
 
-		print "<pre>";
-		print "Logging out:<bR>";
+		if (!$silent)
+		{
+			print "<pre>";
+			print "Logging out:<bR>";
+		}
+
 		$socket->write($op);
 		
 		while($data = $socket->read())
@@ -162,11 +182,40 @@ class remote_login extends aw_template
 			$ipd .= $data;
 		};
 
-		list($headers,$data) = explode("\r\n\r\n",$ipd);
-		print "Succeeded? Server returned $data\n";
-		print "</pre>";
-		flush();
+		if (!$silent)
+		{
+			list($headers,$data) = explode("\r\n\r\n",$ipd);
+			print "Succeeded? Server returned $data\n";
+			print "</pre>";
+			flush();
+		}
 	}
 
+	function set_session_cookie($c)
+	{
+		$this->cookie = $c;
+	}
+
+	function login_from_obj($id)
+	{
+		$ob = $this->get_object($id);
+		$this->handshake(array(
+			"silent" => true,
+			"host" => $ob["name"]
+		));
+
+		$this->login(array(
+			"host" => $ob["name"],
+			"uid" => $ob["meta"]["login_uid"],
+			"password" => $ob["meta"]["login_password"],
+		));
+
+		return array($ob["name"],$this->cookie);
+	}
+
+	function getcookie($arr)
+	{
+		return ("Relax, take a cookie.");
+	}
 };
 ?>
