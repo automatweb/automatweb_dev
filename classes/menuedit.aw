@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.230 2003/02/10 14:04:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.231 2003/02/11 15:54:32 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -640,6 +640,15 @@ class menuedit extends aw_template
 				"site_title" => strip_tags($this->site_title),
 			));
 		};
+
+		$cd_n = "";
+		if ($this->active_doc)
+		{
+			$cd_n = $this->parse("CHANGEDOCUMENT_NOLOGIN");
+		}
+		$this->vars(array(
+			"CHANGEDOCUMENT_NOLOGIN" => $cd_n
+		));
 		
 		if ($this->left_pane)
 		{
