@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.4 2004/11/05 10:33:04 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.5 2004/11/05 10:49:16 sven Exp $
 // recycle_bin.aw - Prügikast 
 /*
 @default table=objects
@@ -8,7 +8,7 @@
 @property toolbar type=toolbar store=no no_caption=1
 @property recycle_table type=table store=no no_caption=1
 
-@groupinfo recycle submit=no caption="Kustutatud objektid"
+@groupinfo recycle submit=no caption="Prügikast"
 */
 class recycle_bin extends class_base
 {
