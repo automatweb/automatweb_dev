@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.1 2003/04/21 07:59:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.2 2003/04/30 11:19:57 duke Exp $
+define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -79,19 +80,9 @@ class admin_folders extends aw_template
 		$this->db_query($q);
 	}
 
-	// well, mul on vaja kuvada see asi popupi sees, niisiis tegin ma miniversiooni folders.tpl-ist
-	// ja lisasin siia uue parameetri
-	// no, that $popup is really not needed anymore anylonger
-	function gen_folders($period,$popup = 0)
+	function gen_folders($period)
 	{
-		if ($this->cfg["site_id"] == 88)
-		{
-			$this->read_template("folders_no_periods.tpl");
-		}
-		else
-		{
-			$this->read_template("folders.tpl");
-		};
+		$this->read_template("folders.tpl");
 
 		$arr = array();
 		$mpr = array();
@@ -103,10 +94,8 @@ class admin_folders extends aw_template
 		$this->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
 		while ($row = $this->db_next())
 		{
-			$row["name"] = str_replace("\"","&quot;", $row["name"]);
-			if ($this->can("view",$row["oid"]) || 
-			    $row["oid"] == $this->cfg["admin_rootmenu2"]
-			)
+			$row["name"] = parse_obj_name($row["name"]);
+			if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
 			{
 				$arr[$row["parent"]][] = $row;
 				$mpr[] = $row["parent"];
@@ -153,12 +142,14 @@ class admin_folders extends aw_template
 			"DOC" => "",
 			"root" => $this->cfg["admin_rootmenu2"],
 			"uid" => aw_global_get("uid"),
-			"date" => $this->time2date(time(),2)
+			"date" => $this->time2date(time(),2),
+			"rooturl" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]),"admin_menus"),
 		));
 
 		// perioodide tropp.
 		if ($this->cfg["per_oid"])
 		{
+			$tb = get_instance("toolbar");
 			$dbp = get_instance("periods",$this->cfg["per_oid"]);
 			$act_per_id = $dbp->get_active_period();
 			$dbp->clist();
@@ -195,10 +186,26 @@ class admin_folders extends aw_template
 			$this->vars(array(
 				"periods" => str_replace("\n","",$this->picker($period,$ar))
 			));
+			$tb->add_cdata(html::select(array(
+				"name" => "period",
+				"options" => $ar,
+				"selected" => isset($period) ? $period : 0,
+			)));
+			$tb->add_button(array(
+				"name" => "refresh",
+				"tooltip" => "Reload",
+				"url" => "javascript:document.pform.submit();",
+				"imgover" => "refresh_over.gif",
+				"img" => "refresh.gif",
+			));
+			$tb->add_cdata($this->mk_reforb("folders",array("no_reforb" => 1)));
+			$this->vars(array(
+				"toolbar" => $tb->get_toolbar(),
+			));
+			$this->vars(array(
+				"has_toolbar" => $this->parse("has_toolbar"),
+			));
 		}
-		$this->vars(array(
-			"rooturl" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]),"admin_menus")
-		));
 		return $this->parse();
 	}
 
@@ -267,7 +274,6 @@ class admin_folders extends aw_template
 			"parent" => $admin_rootmenu2,
 			"iconurl" => icons::get_icon_url("homefolder",""),
 			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf["oid"]),"admin_menus")
-			//"url" => "javascript:go_go(".$hf["oid"].",'')",
 		));
 		$hft = $this->parse("TREE");
 
@@ -286,7 +292,6 @@ class admin_folders extends aw_template
 				"parent"=> SHARED_FOLDER_ID,
 				"iconurl" => $row["icon_id"] ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif",
 				"url"	=> $this->mk_my_orb("right_frame", array("parent" => $v["oid"]),"admin_menus"),
-				//"url" => "javascript:go_go(".$v["oid"].",'')",
 			));
 			$shares.=$this->parse("DOC");
 		}
@@ -399,7 +404,7 @@ class admin_folders extends aw_template
 				"id"			=> ($row["admin_feature"] == 4 ? "gp_" : "").$row["oid"], 
 				"parent"	=> ($parent == $this->cfg["amenustart"] ? $admin_rootmenu2 : $row["parent"]),
 				"iconurl" =>  $iconurl,
-				"url"			=> $row["link"] != "" ? $row["link"] : ($row["admin_feature"] ? $this->cfg["programs"][$row["admin_feature"]]["url"]: $blank)));
+				"url"			=> !empty($row["link"]) ? $row["link"] : ($row["admin_feature"] ? $this->cfg["programs"][$row["admin_feature"]]["url"]: $blank)));
 
 			if ($sub == "")
 			{
