@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.2 2003/11/11 10:23:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.3 2003/11/20 21:21:49 duke Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -44,7 +44,7 @@ class crm_offer extends class_base
 			'typestrs' => 'pakkumise',
 		);
 		
-		$kohtumine = get_instance('kliendibaas/kohtumine');
+		$kohtumine = get_instance('crm/crm_meeting');
 		$kohtumine->_change($args);
 	}
 

@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_corpform.aw,v 1.2 2003/11/20 21:21:49 duke Exp $
 /*
 //	@tableinfo kliendibaas_ettevotlusvorm index=oid master_table=objects master_index=oid
 
@@ -12,6 +13,8 @@
 
 //	@property vorm type=textbox size=10
 //	@caption vorm
+	
+	@classinfo no_status=1
 */
 
 
@@ -36,17 +39,5 @@ class crm_corpform extends class_base
 		));
 	}
 
-	function get_property($args)
-	{
-		$data = &$args['prop'];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
-		}
-		return  $retval;
-	}
-}
+};
 ?>

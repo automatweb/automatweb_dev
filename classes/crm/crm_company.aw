@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.3 2003/11/20 21:21:49 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
@@ -6,7 +7,7 @@
 @default table=objects
 @default group=general
 
-@property navtoolbar type=toolbar store=no no_caption=1 group=general,overview
+@property navtoolbar type=toolbar store=no no_caption=1 group=general,overview editonly=1
 
 @property name type=textbox size=30 maxlenght=255 table=objects
 @caption Organisatsiooni nimi
@@ -17,19 +18,19 @@
 @property reg_nr type=textbox size=10 maxlenght=20 table=kliendibaas_firma
 @caption Registri number
 
-@property pohitegevus type=relpicker reltype=TEGEVUSALAD table=kliendibaas_firma
+@property pohitegevus type=relpicker reltype=RELTYPE_TEGEVUSALAD table=kliendibaas_firma
 @caption Põhitegevus
 
-@property ettevotlusvorm type=relpicker reltype=ETTEVOTLUSVORM table=kliendibaas_firma
+@property ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM table=kliendibaas_firma
 @caption Õiguslik vorm
 
-@property tooted type=relpicker reltype=TOOTED method=serialize field=meta table=objects
+@property tooted type=relpicker reltype=RELTYPE_TOOTED method=serialize field=meta table=objects
 @caption Tooted
 
 @property kaubamargid type=textarea cols=65 rows=3 table=kliendibaas_firma
 @caption Kaubamärgid
 
-@property contact type=relpicker reltype=ADDRESS table=kliendibaas_firma
+@property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma
 @caption Aadress
 
 @property tegevuse_kirjeldus type=textarea cols=65 rows=3 table=kliendibaas_firma
@@ -38,7 +39,7 @@
 @property logo type=textbox size=40 method=serialize field=meta table=objects
 @caption Organisatsiooni logo(url)
 
-//@property firmajuht type=relpicker reltype=WORKERS table=kliendibaas_firma
+//@property firmajuht type=relpicker reltype=RELTYPE_WORKERS table=kliendibaas_firma
 @property firmajuht type=text table=kliendibaas_firma store=
 @caption Organisatsiooni juht
 
@@ -52,16 +53,16 @@
 //@groupinfo look caption=Vaata
 //@property look type=text callback=look_firma table=objects method=serialize field=meta
 
-@reltype ETTEVOTLUSVORM value=1 clid=CL_ETTEVOTLUSVORM
+@reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
 
-@reltype ADDRESS value=3 clid=CL_ADDRESS
+@reltype ADDRESS value=3 clid=CL_CRM_ADDRESS
 @caption Kontaktaadress
 
-@reltype TEGEVUSALAD value=5 clid=CL_TEGEVUSALA
+@reltype TEGEVUSALAD value=5 clid=CL_CRM_SECTOR
 @caption Tegevusalad
 
-@reltype TOOTED value=6 clid=CL_TOODE
+@reltype TOOTED value=6 clid=CL_CRM_PRODUCT
 @caption Tooted
 
 @reltype CHILD_ORG value=7 clid=CL_CRM_COMPANY
@@ -73,7 +74,7 @@
 @reltype PAKKUMINE value=9 clid=CL_CRM_OFFER
 @caption Pakkumine
 
-@reltype TEHING value=10 clid=CL_CRL_DEAL
+@reltype TEHING value=10 clid=CL_CRM_DEAL
 @caption Tehing
 
 @reltype KOHTUMINE value=11 clid=CL_CRM_MEETING
@@ -81,6 +82,8 @@
 
 @reltype CALL value=12 clid=CL_CRM_CALL
 @caption Kõne
+
+@classinfo no_status=1
 			
 */
 /*
@@ -104,7 +107,14 @@ CREATE TABLE `kliendibaas_firma` (
 
 class crm_company extends class_base
 {
-
+	function crm_company()
+	{
+		$this->init(array(
+			'clid' => CL_CRM_COMPANY,
+			'tpldir' => 'firma',
+		));
+	}
+	
 	function look_firma()
 	{
 
@@ -116,29 +126,18 @@ class crm_company extends class_base
 
 	}
 
-	function crm_company()
-	{
-		$this->init(array(
-			'clid' => CL_CRM_COMPANY,
-			'tpldir' => 'firma',
-		));
-	}
-
 	function get_property($args)
 	{
 		$data = &$args['prop'];
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
 			case 'firmajuht':
 				$i = 1;
 				$arr = $this->get_aliases(array(
 					'oid' => $args['obj_inst']->id(),
 					'reltype' => RELTYPE_WORKERS,
-					'type' => CL_ISIK,
+					'type' => CL_CRM_PERSON,
 				));
 //arr($arr);
 				$str = '
@@ -170,21 +169,7 @@ class crm_company extends class_base
 			break;
 			
 			case 'navtoolbar':
-				/*
-				if (!aw_global_get('kliendibaas') || !$args['obj'][OID])
-				{
-					$retval=PROP_IGNORE;
-				}
-				else
-				{
-					$args['kliendibaas'] = aw_global_get('kliendibaas');
-					$this->firma_toolbar($args);
-				}*/
-		                if ($args['obj']['oid'])
-                		{
-					$args['kliendibaas'] = aw_global_get('kliendibaas');
-					$this->firma_toolbar($args);
-				}
+				$this->firma_toolbar($args);
 			break;
 			
 		};
@@ -212,12 +197,10 @@ class crm_company extends class_base
 
 	function callback_org_actions($args)
 	{
-		$relobjects = $this->get_aliases(array(
-			'oid' => $args['obj'][OID],
-			'type' => CL_DOCUMENT,
-			//'reltype' => ,
-		));
-		
+		/// XXX: I need to rewrite this and put in some more logical place
+		$ob = $args["obj_inst"];
+		$conns = $ob->connections_from();
+
 		$t = new aw_table(array(
 			'prefix' => 'org_actions',
 		));
@@ -265,17 +248,13 @@ class crm_company extends class_base
 			'sortable' => '1',
 		));
 
-		// soooo , I need the names of the relations
-		//$reltype_caption = $this->callback_get_rel_types();
-		
-		foreach($relobjects as $val)
+		$classes = $this->cfg["classes"];
+	
+		foreach($conns as $conn)
 		{
-		//arr($val);
-			$pl = $this->db_fetch_row('select * from planner where id='.$val[OID]);
-			$doc = $this->db_fetch_row('select * from documents where docid='.$val[OID]);		
+			$item = new object($conn->prop("to"));
 			
-			$classes = $this->cfg["classes"];
-			$cldat = $classes[$val['class_id']];
+			$cldat = $classes[$item->class_id()];
 			if (isset($cldat["alias"]))
 			{
 				if ($cldat["alias_class"])
@@ -286,11 +265,13 @@ class crm_company extends class_base
 			
 			
 			$t->define_data(array(
-				'name' => html::href(array('caption' => $val['name'],'url' => $this->mk_my_orb('change', array('id' => $val[OID]), $cldat["file"]))),
+				'name' => html::href(array('caption' => $item->name(),'url' => $this->mk_my_orb('change', array('id' => $item->id()), $cldat["file"]))),
 				// oh geez. so that is how it's done
-				'type' => $reltype_caption[$val['reltype']],
-				'event_start' => date('Y-m-d H:i',$pl['start']),
-				'event_end' => date('Y-m-d H:i',$pl['end']),
+				'type' => $cldat["name"],
+				//'type' => $reltype_caption[$val['reltype']],
+				//'event_start' => date('Y-m-d H:i',$pl['start']),
+				'event_start' => date('Y-m-d H:i',$item->prop("start1")),
+				'event_end' => date('Y-m-d H:i',$item->prop("duration")),
 				'moreinfo' => $doc['moreinfo'],
 				'modifiedby' => $val['modifiedby'],
 				'createdby' => $val['createdby'],
@@ -312,40 +293,44 @@ class crm_company extends class_base
 		$toolbar = &$args["prop"]["toolbar"];
 		$menu_cdata = '';
 		$this->read_template('js_popup_menu.tpl');
+		$users = get_instance("users");
 
-		$kliendibaas = $this->get_object($args['kliendibaas']);
-		//arr($kliendibaas);
-		if ($args['kliendibaas'])
+                $crm_db_id = $users->get_user_config(array(
+                        "uid" => aw_global_get("uid"),
+                        "key" => "kliendibaas",
+                ));
+
+		$cal_id = $users->get_user_config(array(
+			"uid" => aw_global_get("uid"),
+			"key" => "user_calendar",
+		));
+
+		if (empty($crm_db_id))
 		{
-			$parents[RELTYPE_ADDRESS] = $kliendibaas['meta']['dir_address'] ? $kliendibaas['meta']['dir_address'] : $kliendibaas['meta']['dir_default'];
-			$parents[RELTYPE_TEGEVUSALAD] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas['meta']['dir_tegevusala'] : $kliendibaas['meta']['dir_default'];
-			$parents[RELTYPE_WORKERS] = $kliendibaas['meta']['dir_isik'] ? $kliendibaas['meta']['dir_isik'] : $kliendibaas['meta']['dir_default'];
-			$parents[RELTYPE_ETTEVOTLUSVORM] = $kliendibaas['meta']['dir_ettevotlusvorm'] ? $kliendibaas['meta']['dir_ettevotlusvorm'] : $kliendibaas['meta']['dir_default'];
-			
-			$cfgform[RELTYPE_CALL] = $kliendibaas['meta']['kone_form'] ? $kliendibaas['meta']['kone_form'] : $kliendibaas['meta']['default_form'];
-			$cfgform[RELTYPE_PAKKUMINE] = $kliendibaas['meta']['pakkumine_form'] ? $kliendibaas['meta']['pakkumine_form'] : $kliendibaas['meta']['default_form'];
-			$cfgform[RELTYPE_KOHTUMINE] = $kliendibaas['meta']['kohtumine_form'] ? $kliendibaas['meta']['kohtumine_form'] : $kliendibaas['meta']['default_form'];
-			$cfgform[RELTYPE_TEHING] = $kliendibaas['meta']['tehing_form'] ? $kliendibaas['meta']['tehing_form'] : $kliendibaas['meta']['default_form'];
+			$parents[RELTYPE_ETTEVOTLUSVORM] = $parents[RELTYPE_WORKERS] = $parents[RELTYPE_ADDRESS] = $parents[RELTYPE_TEGEVUSALAD] = $args['obj_inst']->parent();
 		}
 		else
 		{
-			$parents[RELTYPE_ETTEVOTLUSVORM] = $parents[RELTYPE_WORKERS] = $parents[RELTYPE_ADDRESS] = $parents[RELTYPE_TEGEVUSALAD] = $args['obj']['parent'];
-		}
+			$crm_db = new object($crm_db_id);
+			$default_dir = $crm_db->prop("dir_default");
+			$parents[RELTYPE_ADDRESS] = $crm_db->prop("dir_address") == "" ? $default_dir : $crm_db->prop('dir_address');
+			$parents[RELTYPE_TEGEVUSALAD] = $crm_db->prop("dir_tegevusala") == "" ? $default_dir : $crm_db->prop('dir_address');
+			$parents[RELTYPE_WORKERS] = $crm_db->prop("dir_isik") == "" ? $default_dir : $crm_db->prop('dir_isik');
+			$parents[RELTYPE_ETTEVOTLUSVORM] = $crm_db->prop("dir_ettevotlusvorm") == "" ? $default_dir : $crm_db->prop('dir_ettevotlusvorm');
+		};
 
-		if ($cal_id = aw_global_get('user_calendar'))
+		if (!empty($cal_id))
 		{
-			$user_calendar = $this->get_object($cal_id);
-			$parents[RELTYPE_CALL] = $parents[RELTYPE_PAKKUMINE] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_TEHING] = $user_calendar['meta']['event_folder'];
+			$user_calendar = new object($cal_id);
+			$parents[RELTYPE_CALL] = $parents[RELTYPE_PAKKUMINE] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_TEHING] = $user_calendar->prop('event_folder');
 		}
 
 
 		$alist = array(
-			array('caption' => 'Töötaja','class' => 'isik', 'reltype' => RELTYPE_WORKERS),
-			array('caption' => 'Tegevusala','class' => 'tegevusala', 'reltype' => RELTYPE_TEGEVUSALAD),
-			array('caption' => 'Aadress','class' => 'address', 'reltype' => RELTYPE_ADDRESS),
-			array('caption' => 'Õiguslik vorm','class' => 'ettevotlusvorm', 'reltype' => RELTYPE_ETTEVOTLUSVORM),
-			//array('caption' => 'Pakkumine','class' => 'pakkumine', 'reltype' => PAKKUMINE),
-			//array('caption' => '','class' => '', 'reltype' => ),
+			array('caption' => 'Töötaja','clid' => CL_CRM_PERSON, 'reltype' => RELTYPE_WORKERS),
+			array('caption' => 'Tegevusala','clid' => CL_CRM_SECTOR, 'reltype' => RELTYPE_TEGEVUSALAD),
+			array('caption' => 'Aadress','clid' => CL_CRM_ADDRESS, 'reltype' => RELTYPE_ADDRESS),
+			array('caption' => 'Õiguslik vorm','clid' => CL_CRM_CORPFORM, 'reltype' => RELTYPE_ETTEVOTLUSVORM),
 		);
 		
 		
@@ -354,33 +339,30 @@ class crm_company extends class_base
 		{
 			foreach($alist as $key => $val)
 			{
+				$classinf = $this->cfg["classes"][$val["clid"]];
 				if (!$parents[$val['reltype']])
 				{
 					$this->vars(array(
 						'title' => 'Kalender määramata',
-						'text' => 'Lisa '.$val['caption'],
+						'text' => 'Lisa '.$classinf["name"],
 					));
 					$menudata .= $this->parse("MENU_ITEM_DISABLED");
 				}
 				else
 				{
-				// continue;
 					$this->vars(array(
 						'link' => $this->mk_my_orb('new',array(
-							'alias_to' => $args['obj']['oid'],
+							'alias_to' => $args['obj_inst']->id(),
 							'reltype' => $val['reltype'],
 							'class' => 'planner',
 							'id' => $cal_id,
 							'group' => 'add_event',
 							'action' => 'change',
-							'title' => $val['title'].' : '.$args['obj']['name'],
-//							'reltype' => $val['reltype'],
-//							'class' => $val['class'],
-//http://axel.dev.struktuur.ee/automatweb/orb.aw?class=planner&action=change&id=125451&group=add_event
+							'title' => $classinf["name"].' : '.$args['obj_inst']->name(),
 							'parent' => $parents[$val['reltype']],
 							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 						)),
-						'text' => 'Lisa '.$val['caption'],
+						'text' => 'Lisa '.$classinf["name"],
 					));
 					$menudata .= $this->parse("MENU_ITEM");	
 				}
@@ -394,10 +376,10 @@ class crm_company extends class_base
 		};
 
 		$action = array(
-			array('reltype' => RELTYPE_PAKKUMINE, 'title' => 'Pakkumine'),
-			array('reltype' => RELTYPE_TEHING,'title' => 'Tehing'),
-			array('reltype' => RELTYPE_KOHTUMINE, 'title' => 'Kohtumine'),
-			array('reltype' => RELTYPE_KONE,'title' => 'Kõne'),
+			array("reltype" => RELTYPE_PAKKUMINE,"clid" => CL_CRM_OFFER),
+			array("reltype" => RELTYPE_TEHING,"clid" => CL_CRM_DEAL),
+			array("reltype" => RELTYPE_KOHTUMINE,"clid" => CL_CRM_MEETING),
+			array("reltype" => RELTYPE_CALL,"clid" => CL_CRM_CALL),
 		);
 
 		$menudata = '';
@@ -405,11 +387,12 @@ class crm_company extends class_base
 		{
 			foreach($action as $key => $val)
 			{
-				if (!$parents[$val['reltype']] || !$cfgform[$val['reltype']])
+				$classinf = $this->cfg["classes"][$val["clid"]];
+				if (!$parents[$val['reltype']])
 				{
 					$this->vars(array(
-						'title' => 'Konfivorm, kalender või kalendri sündumste kataloog määramata',
-						'text' => 'Lisa '.$val['title'],
+						'title' => 'Kalender või kalendri sündmuste kataloog määramata',
+						'text' => 'Lisa '.$classinf["name"],
 					));
 					$menudata .= $this->parse("MENU_ITEM_DISABLED");
 				}
@@ -417,18 +400,18 @@ class crm_company extends class_base
 				{
 					$this->vars(array(
 						'link' => $this->mk_my_orb('new',array(
-							'alias_to_org' => $args['obj']['oid'],
+							'alias_to_org' => $args['obj_inst']->id(),
 							'reltype_org' => $val['reltype'],
 							'class' => 'planner',
 							'id' => $cal_id,
 							'group' => 'add_event',
+							'clid' => $val["clid"],
 							'action' => 'change',
-							'title' => urlencode($val['title'].': '.$args['obj']['name']),
+							'title' => urlencode($classinf["name"].': '.$args['obj_inst']->name()),
 							'parent' => $parents[$val['reltype']],
 							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-							'cfgform_id' => $cfgform[$val['reltype']],
 						)),
-						'text' => 'Lisa '.$val['title'],
+						'text' => 'Lisa '.$classinf["name"],
 					));
 					$menudata .= $this->parse("MENU_ITEM");
 				}
@@ -467,8 +450,8 @@ class crm_company extends class_base
 			"img" => "new.gif",
 			"class" => "menuButton",
 		));
-		
-		if ($cal_id = aw_global_get('user_calendar'))
+	
+		if (!empty($cal_id))	
 		{
 			$toolbar->add_button(array(
 				"name" => "user_calendar",

@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_county.aw,v 1.2 2003/11/20 21:21:49 duke Exp $
 /*
 	@tableinfo kliendibaas_maakond index=oid master_table=objects master_index=oid
 
@@ -12,6 +13,8 @@
 @caption Kommentaar
 	
 //	@default table=kliendibaas_maakond
+
+	@classinfo no_status=1
 
 */
 
@@ -34,19 +37,6 @@ class crm_county extends class_base
 		$this->init(array(
 			'clid' => CL_CRM_COUNTY,
 		));
-	}
-	function get_property($args)
-	{
-		$data = &$args['prop'];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
-			
-		}
-		return  $retval;
 	}
 }
 ?>

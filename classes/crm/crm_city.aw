@@ -10,6 +10,8 @@
 
 @property comment type=textarea cols=40 rows=3 table=objects field=comment
 @caption Kommentaar
+
+	@classinfo no_status=1
 	
 	//@property location type=textarea
 	//@caption Asukoha kirjeldus
@@ -36,17 +38,5 @@ class crm_city extends class_base
 		));
 	}
 
-	function get_property($args)
-	{
-		$data = &$args['prop'];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
-		}
-		return  $retval;
-	}
-}
+};
 ?>

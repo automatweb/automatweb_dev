@@ -1,4 +1,5 @@
 <?php                  
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.2 2003/11/20 21:21:49 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
@@ -43,7 +44,7 @@
 @property spouse type=textbox size=25 maxlength=50
 @caption Abikaasa
 
-@property children type=relpicker reltype=CHILDREN
+@property children type=relpicker reltype=RELTYPE_CHILDREN
 @caption Lapsed
 
 //	@property digitalID type=textbox size=20 maxlength=300
@@ -52,16 +53,16 @@
 @property pictureurl type=textbox size=40 maxlength=200
 @caption Pildi/foto url
 
-@property picture type=relpicker reltype=PICTURE
+@property picture type=relpicker reltype=RELTYPE_PICTURE
 @caption Pilt/foto
 
-@property work_contact type=relpicker reltype=WORK table=kliendibaas_isik
+@property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik
 @caption Organisatsioon
 
-@property rank type=relpicker reltype=RANK table=kliendibaas_isik
+@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik
 @caption Ametinimetus
 
-@property personal_contact type=relpicker reltype=ADDRESS table=kliendibaas_isik
+@property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_isik
 @caption Kodused kontaktandmed
 
 @property comment type=textarea cols=40 rows=3 table=objects field=comment
@@ -80,15 +81,18 @@
 @default method=serialize
 @groupinfo forms caption=Väljundid
 
-@property forms type=relpicker reltype=BACKFORMS
+@property forms type=relpicker reltype=RELTYPE_BACKFORMS
 @caption tagasiside vormid
 selection.aw
+
 @property templates type=select
 @caption templiidid
 
 @default group=show
 @groupinfo show caption=Visiitkaart submit=no
 @property dokus type=text callback=show_isik
+
+@classinfo no_status=1
 
 
 */
@@ -123,7 +127,7 @@ CREATE TABLE `kliendibaas_isik` (
 */
 
 /*
-@reltype ADDRESS value=1 clid=CL_ADDRESS
+@reltype ADDRESS value=1 clid=CL_CRM_ADDRESS
 @caption aadressid
 
 @reltype PICTURE value=3 clid=CL_IMAGE
@@ -138,7 +142,7 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype WORK value=6 clid=CL_CRM_COMPANY
 @caption töökoht
 
-@reltype RANK value=7 clid=CL_AMET
+@reltype RANK value=7 clid=CL_CRM_PROFESSION
 @caption ametinimetus
 
 @reltype ISIK_KOHTUMINE value=8 clid=CL_CRM_MEETING
@@ -152,7 +156,6 @@ CREATE TABLE `kliendibaas_isik` (
 
 class crm_person extends class_base
 {
-
 	function crm_person()
 	{
 		$this->init(array(
@@ -197,17 +200,12 @@ class crm_person extends class_base
 				$data['value'] = $arr['obj']['name'];
 				break;
 
-			case 'status':
-				$retval = PROP_IGNORE;
-				break;
-
 			case 'forms':
 				$data['multiple'] = 1;
 				break;
 
 			case 'navtoolbar':
 				// kust see global tuleb?
-				$args['kliendibaas'] = aw_global_get('kliendibaas');
 				$this->isik_toolbar($arr);
 				break;
 			break;
@@ -225,150 +223,166 @@ class crm_person extends class_base
 	
 	function isik_toolbar(&$args)
 	{
-			$toolbar = &$args["prop"]["toolbar"];
+		$toolbar = &$args["prop"]["toolbar"];
 
-			$this->read_template('../firma/js_popup_menu.tpl');
-			
-			$kliendibaas = $this->get_object($args['kliendibaas']);
-			//arr($kliendibaas);
-			if ($args['kliendibaas'])
-			{
-$parents[RELTYPE_WORK] = $kliendibaas['meta']['dir_firma'] ? $kliendibaas['meta']['dir_firma'] : $kliendibaas['meta']['dir_default'];
-$cfgform[RELTYPE_ISIK_KOHTUMINE] = $kliendibaas['meta']['kohtumine_form'] ? $kliendibaas['meta']['kohtumine_form'] : $kliendibaas['meta']['default_form'];
-$cfgform[RELTYPE_ISIK_KONE] = $kliendibaas['meta']['kone_form'] ? $kliendibaas['meta']['kone_form'] : $kliendibaas['meta']['default_form'];
-			}
-			else
-			{
-				$parents[RELTYPE_WORK] = $args['obj']['parent'];
-			}
+		$this->read_template('../firma/js_popup_menu.tpl');
 
-			if ($cal_id = aw_global_get('user_calendar'))
+		$users = get_instance("users");
+		$crm_db_id = $users->get_user_config(array(
+			"uid" => aw_global_get("uid"),
+			"key" => "kliendibaas",
+		));
+
+		$cal_id = $users->get_user_config(array(
+			"uid" => aw_global_get("uid"),
+			"key" => "user_calendar",
+		));
+
+		$parents = array();
+
+		if (empty($crm_db_id))
+		{
+			$parents[RELTYPE_WORK] = $args["obj_inst"]->parent();
+		}
+		else
+		{
+			$crm_db = new object($crm_db_id);
+			$parents[RELTYPE_WORK] = $crm_db->prop("dir_firma") == "" ? $crm_db->prop("dir_default") : $crm_db->prop("dir_firma");
+		}
+
+		if (!empty($cal_id))
+		{
+			$user_calendar = new object($cal_id);
+			$parents[RELTYPE_ISIK_KONE] = $parents[RELTYPE_ISIK_KOHTUMINE] = $user_calendar->prop('event_folder');
+		}
+
+		$alist = array(
+			array('caption' => 'Organisatsioon','class' => 'crm_company', 'reltype' => RELTYPE_WORK),
+		);
+
+		$menudata = '';
+		if (is_array($alist))
+		{
+			foreach($alist as $key => $val)
 			{
-				$user_calendar = $this->get_object($cal_id);
-				$parents[RELTYPE_ISIK_KONE] = $parents[RELTYPE_ISIK_KOHTUMINE] = $user_calendar['meta']['event_folder'];
-			}
-	
-	
-			$alist = array(
-				array('caption' => 'Organisatsioon','class' => 'crm_company', 'reltype' => RELTYPE_WORK),
-			);
-			$menudata = '';
-			if (is_array($alist))
-			{
-				foreach($alist as $key => $val)
+				if (!$parents[$val['reltype']])
 				{
-					if (!$parents[$val['reltype']])
-					{
-						$this->vars(array(
-							'alt' => 'Kalender määramata',
-							'text' => 'Lisa '.$val['caption'],
-						));
-						$menudata .= $this->parse("MENU_ITEM_DISABLED");
-					}
-					else
-					{
-					// continue;
-						$this->vars(array(
-							'link' => $this->mk_my_orb('new',array(
-								'alias_to' => $args['obj']['oid'],
-								'reltype' => $val['reltype'],
-								'class' => $val['class'],
-								'parent' => $parents[$val['reltype']],
-								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-							)),
-							'text' => 'Lisa '.$val['caption'],
-						));
-						$menudata .= $this->parse("MENU_ITEM");	
-					}
-				};
-				
-				$this->vars(array(
-					"MENU_ITEM" => $menudata,
-					"id" => "add_relation",
-				));
-				$addbutton = $this->parse();
-                		$toolbar->add_cdata($addbutton);
-				$toolbar->add_button(array(
-					"name" => "add_item_button",
-					"tooltip" => "Uus",
-					"url" => "",
-					"onClick" => "return buttonClick(event, 'add_relation');",
-					"img" => "new.gif",
-					"class" => "menuButton",
-				));
-				
-			};
-			
-			
-
-			$action = array(
-				//array('caption' => 'Lisa Pakkumine','class' => '', 'reltype' => PAKKUMINE, 'title' => 'Pakkumine'),
-				array('reltype' => RELTYPE_ISIK_KOHTUMINE,'title' => 'Kohtumine'),
-				array('reltype' => RELTYPE_ISIK_KONE,'title' => 'Kõne'),
-			);
-
-			$menudata = '';
-			if (is_array($action))
-			{
-				foreach($action as $key => $val)
-				{
-					if (!$parents[$val['reltype']] || !$cfgform[$val['reltype']])
-					{
-						$this->vars(array(
-							'title' => 'Konfivorm või kalender määramata',
-							'text' => 'Lisa '.$val['title'],
-						));
-						$menudata .= $this->parse("MENU_ITEM_DISABLED");
-					}
-					else
-					{
-						$this->vars(array(
-							'link' => $this->mk_my_orb('new',array(
-								'alias_to_org' => $args['obj']['oid'],
-								'reltype_org' => $val['reltype'],
-								'class' => 'planner',
-								'id' => $cal_id,
-								'group' => 'add_event',
-								'action' => 'change',
-								'title' => $val['title'].': '.$args['obj']['name'],
-								'parent' => $parents[$val['reltype']],///?
-								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-								'cfgform_id' => $cfgform[$val['reltype']],
-							)),
-							'text' => 'Lisa '.$val['title'],
-						));
-						$menudata .= $this->parse("MENU_ITEM");
-					}
-				};
-
-				$this->vars(array(
-					"MENU_ITEM" => $menudata,
-					"id" => "add_event",
-				));
-				$eventbutton = $this->parse();
-                		$toolbar->add_cdata($eventbutton);
-				$toolbar->add_button(array(
-					"name" => "add_event_button",
-					"tooltip" => "Uus",
-					"url" => "",
-					"onClick" => "return buttonClick(event, 'add_event');",
-					"img" => "new.gif",
-					"class" => "menuButton",
-				));
-
-				if ($cal_id = aw_global_get('user_calendar'))
-				{
-					$toolbar->add_button(array(
-						"name" => "user_calendar",
-						"tooltip" => "Kasutaja kalender",
-						"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
-						"onClick" => "",
-						"img" => "icon_cal_today.gif",
-						"class" => "menuButton",
+					$this->vars(array(
+						'alt' => 'Kalender määramata',
+						'text' => 'Lisa '.$val['caption'],
 					));
+					$menudata .= $this->parse("MENU_ITEM_DISABLED");
 				}
-
+				else
+				{
+					// see on nyyd sihuke link, mis lisab uue objekti
+					// ja seostab selle olemasolevaga. grr.
+					$this->vars(array(
+						'link' => $this->mk_my_orb('new',array(
+							'alias_to' => $args['obj_inst']->id(),
+							'reltype' => $val['reltype'],
+							'class' => $val['class'],
+							'parent' => $parents[$val['reltype']],
+							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						)),
+						'text' => 'Lisa '.$val['caption'],
+					));
+					$menudata .= $this->parse("MENU_ITEM");	
+				}
 			};
+			
+			$this->vars(array(
+				"MENU_ITEM" => $menudata,
+				"id" => "add_relation",
+			));
+			$addbutton = $this->parse();
+			$toolbar->add_cdata($addbutton);
+			$toolbar->add_button(array(
+				"name" => "add_item_button",
+				"tooltip" => "Uus",
+				"url" => "",
+				"onClick" => "return buttonClick(event, 'add_relation');",
+				"img" => "new.gif",
+				"class" => "menuButton",
+			));
+			
+		};
+		
+		
+
+		$action = array(
+			array(
+				"reltype" => RELTYPE_ISIK_KOHTUMINE,
+				"clid" => CL_CRM_MEETING,
+			),
+			array(
+				"reltype" => RELTYPE_ISIK_KONE,
+				"clid" => CL_CRM_CALL,
+			),
+		);
+
+		$menudata = '';
+		if (is_array($action))
+		{
+			foreach($action as $key => $val)
+			{
+				if (!$parents[$val['reltype']])
+				{
+					$this->vars(array(
+						'title' => 'Kalender määramata',
+						'text' => 'Lisa '.$this->cfg["classes"][$val["clid"]]["name"],
+					));
+					$menudata .= $this->parse("MENU_ITEM_DISABLED");
+				}
+				else
+				{
+					$this->vars(array(
+						'link' => $this->mk_my_orb('new',array(
+							'alias_to_org' => $args["obj_inst"]->id(),
+							'reltype_org' => $val['reltype'],
+							'class' => 'planner',
+							'id' => $cal_id,
+							'clid' => $val["clid"],
+							'group' => 'add_event',
+							'action' => 'change',
+							'title' => $this->cfg["classes"][$val["clid"]]["name"].': '.$args['obj_inst']->name(),
+							'parent' => $parents[$val['reltype']],///?
+							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						)),
+						'text' => 'Lisa '.$this->cfg["classes"][$val["clid"]]["name"],
+					));
+					$menudata .= $this->parse("MENU_ITEM");
+				}
+			};
+
+			$this->vars(array(
+				"MENU_ITEM" => $menudata,
+				"id" => "add_event",
+			));
+			$eventbutton = $this->parse();
+			$toolbar->add_cdata($eventbutton);
+			$toolbar->add_button(array(
+				"name" => "add_event_button",
+				"tooltip" => "Uus",
+				"url" => "",
+				"onClick" => "return buttonClick(event, 'add_event');",
+				"img" => "new.gif",
+				"class" => "menuButton",
+			));
+
+			if (!empty($cal_id))
+			{
+				$toolbar->add_button(array(
+					"name" => "user_calendar",
+					"tooltip" => "Kasutaja kalender",
+					"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
+					"onClick" => "",
+					"img" => "icon_cal_today.gif",
+					"class" => "menuButton",
+				));
+			}
+
+		};
 
 	}
 

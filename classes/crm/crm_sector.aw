@@ -16,6 +16,8 @@
 
 	@property kood type=textbox size=8 table=kliendibaas_tegevusala
 	@caption Tegevusala kood
+
+	@classinfo no_status=1
 */
 
 /*
@@ -40,35 +42,31 @@ class crm_sector extends class_base
 			'clid' => CL_CRM_SECTOR,
 		));
 	}
-	function get_property($args)
+
+	function get_property($arr)
 	{
-		$data = &$args['prop'];
+		$data = &$arr['prop'];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
 			case 'name':
-				$retval=PROP_IGNORE;
-			break;
+				$retval = PROP_IGNORE;
+				break;
 			
 		}
 		return  $retval;
 	}
 	
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		$form = &$args["form_data"];
-		$obj = &$args["obj"];		
-//arr($args);
+		$form = &$arr["form_data"];
 		switch($data["name"])
 		{
 			case 'kood':
-				$obj['name'] =  ($form['kood'] ? ''.$form['kood'].' ' : '').$form['tegevusala'];
-			break;
+				$arr["obj_inst"]->set_name(($form['kood'] ? ''.$form['kood'].' ' : '').$form['tegevusala']);
+				break;
 		};
 		return $retval;
 	}	

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.1 2003/11/11 10:23:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.2 2003/11/20 21:21:49 duke Exp $
 // phone.aw - Telefon 
 /*
 
@@ -13,6 +13,8 @@
 
 @property comment type=textbox
 @caption Kommentaar
+
+@classinfo no_status=1
 */
 
 /*
@@ -29,18 +31,5 @@ class crm_phone extends class_base
 		));
 	}
 	
-	function get_property($args)
-	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
-		{
-			case 'status':
-				$retval = PROP_IGNORE;
-				break;
-			
-		};
-		return $retval;
-	}
-}
+};
 ?>

@@ -15,6 +15,8 @@
 
 	@property kood type=textbox size=8 table=kliendibaas_toode
 	@caption Toote kood	
+
+	@classinfo no_status=1
 	
 */
 
@@ -47,9 +49,6 @@ class crm_product extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case 'status':
-				$retval = PROP_IGNORE;
-				break;
 			case 'name':
 				$retval = PROP_IGNORE;
 				break;			

@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.2 2003/11/20 21:21:49 duke Exp $
 /*
 	@classinfo relationmgr=yes
 	@tableinfo kliendibaas_address index=oid master_table=objects master_index=oid
@@ -17,35 +18,37 @@
 	@property postiindeks type=textbox size=5 maxlength=5
 	@caption Postinindex
 	
-	@property linn type=relpicker reltype=LINN table=kliendibaas_address
+	@property linn type=relpicker reltype=RELTYPE_LINN 
 	@caption Linn/Vald/Alev
 
-	@property maakond type=relpicker reltype=MAAKOND table=kliendibaas_address
+	@property maakond type=relpicker reltype=RELTYPE_MAAKOND 
 	@caption Maakond
 
-	@property riik type=relpicker reltype=RIIK table=kliendibaas_address
+	@property riik type=relpicker reltype=RELTYPE_RIIK 
 	@caption Riik
 	
-	@property telefon type=relpicker reltype=TELEFON
+	@property telefon type=relpicker reltype=RELTYPE_TELEFON
 	@caption Telefon
 
-	@property mobiil type=relpicker reltype=MOBIIL
+	@property mobiil type=relpicker reltype=RELTYPE_MOBIIL
 	@caption Mobiiltelefon
 
-	@property faks type=relpicker reltype=FAKS
+	@property faks type=relpicker reltype=RELTYPE_FAKS
 	@caption Faks
 
 	@property piipar type=textbox size=20 maxlength=20
 	@caption Piipar
 	
-	@property e_mail type=relpicker reltype=EMAIL
+	@property e_mail type=relpicker reltype=RELTYPE_EMAIL
 	@caption E-mail
 
-	@property kodulehekylg type=relpicker reltype=WWW
+	@property kodulehekylg type=relpicker reltype=RELTYPE_WWW
 	@caption Kodulehekülg
 			
 	@property comment type=textarea cols=65 rows=3 table=objects field=comment
 	@caption Kommentaar
+
+	@classinfo no_status=1
 	
 */
 
@@ -91,13 +94,13 @@ CREATE TABLE `kliendibaas_address` (
 @reltype WWW value=6 clid=CL_EXTLINK
 @caption Koduleht
 
-@reltype TELEFON value=7 clid=CL_PHONE
+@reltype TELEFON value=7 clid=CL_CRM_PHONE
 @caption Telefon
 
-@reltype MOBIIL value=8 clid=CL_PHONE
+@reltype MOBIIL value=8 clid=CL_CRM_PHONE
 @caption Mobiil
 
-@reltype FAKS value=9 clid=CL_PHONE
+@reltype FAKS value=9 clid=CL_CRM_PHONE
 @caption Faks
 */
 
@@ -110,56 +113,53 @@ class crm_address extends class_base
 		));
 	}
 
-	function get_property($args)
+	function set_property($arr)
 	{
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
-		{
-			case 'status':
-				$retval=PROP_IGNORE;
-				break;
-
-			case 'name':
-				$retval=PROP_IGNORE;
-			break;
-		}
-		return $retval;
-	}
-	
-	function set_property($args = array())
-	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-		$form = &$args["form_data"];
-		$obj = &$args["obj"];
+		$form = &$arr["request"];
 
 		switch($data["name"])
 		{
 			case 'riik':
-				
-				if ($form['aadress'])
+				// generate a name for the object
+				$name = array();	
+				if (!empty($form["aadress"]))
+				{
 					$name[] = $form['aadress'];
-				if ($form['linn'])
-					$name[] = $this->db_fetch_field('select name from objects where oid="'.$form['linn'].'"','name');
-				if ($form['maakond'])
-					$name[] = $this->db_fetch_field('select name from objects where oid="'.$form['maakond'].'"','name');
+				};
+
+				if (!empty($form["linn"]))
+				{
+					$city_obj = new object($form["linn"]);
+					$name[] = $city_obj->name();
+				};
+				if (!empty($form["maakond"]))
+				{
+					$county_obj = new object($form["maakond"]);
+					$name[] = $county_obj->name();
+				};
 				
 				if (count($name) < 1)
 				{
-					if ($form['e_mail'])
-						$name[] = $form['e_mail'];
+					if (!empty($form["e_mail"]))
+					{
+						$name[] = $form["e_mail"];
+					};
 				}
 				
 				if (count($name) < 1)
 				{
-					if ($form['telefon'])
-						$name[] = 'tel:'.$form['telefon'];
+					if (!empty($form["telefon"]))
+					{
+						$name[] = 'tel:'.$form["telefon"];
+					};
 				}
-					
-				$obj['name'] =  implode(', ',$name);
-			break;
+
+				$arr["obj_inst"]->set_name(join(", ",$name));
+				break;
 		};
 		return $retval;
 	}	
-}
+};
 ?>

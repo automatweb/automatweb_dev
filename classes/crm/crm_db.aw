@@ -9,7 +9,7 @@
 	@default method=serialize
 
 
-	@property selections type=relpicker reltype=SELECTIONS group=general
+	@property selections type=relpicker reltype=RELTYPE_SELECTIONS group=general
 	@caption Vaikimisi valim
 
 //////////////////////////////////////////////////////	
@@ -33,79 +33,51 @@
 	@property make_search type=textbox size=1
 	@property search_type type=textbox size=1
 	
-	
-//	@property page type=textbox size=3
-//	@caption page
-//	@property search type=textbox size=3
-/	@property search_require type=textbox size=3
-/	@property do_search type=textbox size=3
-/	@caption do otsing
-/	@property search_history type=textbox size=3
-/	@property search_require_history type=textbox size=3
-/	@property actions type=text
-/	@caption actions
-/	@property select type=textbox size=3
-/	@property objs type=textbox size=3
-/	@property sele type=checkbox ch_value=on
-
 ////////////////////////////////////////////////////////////
 
 	@default group=tegevusalad
 	@groupinfo tegevusalad submit=no caption=Tegevusalad 
 
-@property tegtoolbar type=toolbar store=no no_caption=1	
+	@property tegtoolbar type=toolbar store=no no_caption=1	
 	
 	@property tegevusala_manager type=text callback=tegevusala_manager
 	
 	//valimi nupud	
 	@property selection_manage_buttons2 type=text callback=selection_manage_bar
 	
-//	@property teg_page type=textbox size=3
-//	@caption teg_page
-//	@property teg_do_search type=textbox size=3
-//	@caption do otsing
-//	@property teg_search type=textbox size=3
 
 ////////////////////////////////////////////////////////////
 	@default group=settings
 	@groupinfo settings caption=Seaded
 
-//	@property limit_per_page type=textbox size=8
-//	@caption mitu rida näita
-//	@property show_columns type=select multiple=1
-//	@caption ettevõtete tabelis näita neid veerge
-	
-//	@property order_by_columns type=select
-//	@caption sorteeri veeru järgi
-
-	@property dir_firma type=relpicker reltype=FIRMA_CAT
+	@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT
 	@caption Vaikimisi firmade kataloog
 
-	@property dir_isik type=relpicker reltype=ISIK_CAT
+	@property dir_isik type=relpicker reltype=RELTYPE_ISIK_CAT
 	@caption Vaikimisi töötajate kataloog
 
-	@property dir_address type=relpicker reltype=ADDRESS_CAT
+	@property dir_address type=relpicker reltype=RELTYPE_ADDRESS_CAT
 	@caption Vaikimisi aadresside kataloog
 
-	@property dir_ettevotlusvorm type=relpicker reltype=ETTEVOTLUSVORM_CAT
+	@property dir_ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM_CAT
 	@caption Vaikimisi õiguslike vormide kataloog
 
-	@property dir_linn type=relpicker reltype=LINN_CAT
+	@property dir_linn type=relpicker reltype=RELTYPE_LINN_CAT
 	@caption Vaikimisi linnade kataloog
 
-	@property dir_maakond type=relpicker reltype=MAAKOND_CAT
+	@property dir_maakond type=relpicker reltype=RELTYPE_MAAKOND_CAT
 	@caption Vaikimisi maakondade kataloog
 
-//	@property dir_riik type=relpicker reltype=RIIK_CAT
+//	@property dir_riik type=relpicker reltype=RELTYPE_RIIK_CAT
 //	@caption riikide kataloog(id)
 
-	@property dir_tegevusala type=relpicker reltype=TEGEVUSALA_CAT
+	@property dir_tegevusala type=relpicker reltype=RELTYPE_TEGEVUSALA_CAT
 	@caption Vaikimisi tegevusalade kataloog
 
-	@property dir_toode type=relpicker reltype=TOODE_CAT
+	@property dir_toode type=relpicker reltype=RELTYPE_TOODE_CAT
 	@caption Vaikimisi toodete kataloog
 
-	@property dir_default type=relpicker reltype=GENERAL_CAT
+	@property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT
 	@caption Vaikimisi kataloog, kui mõni eelnevatest pole määratud, siis kasutatakse seda
 
 	@property kone_form type=relpicker reltype=RELTYPE_FORMS
@@ -131,17 +103,6 @@
 	
 	@property default_kliendibaas type=checkbox 
 	@caption See on kasutaja default kliendibaas
-
-
-////////////////////////////////////////////////////////////
-/	@default group=tests
-/	@groupinfo tests caption=tests
-/
-/	@property test2 type=text
-/
-/	@property test3 type=text
-/
-////////////////////////////////////////////////////////////
 
 
 	@default group=objects_manager
@@ -209,7 +170,7 @@
 @reltype ETTEVOTLUSVORM_CAT value=12 clid=CL_MENU
 @caption Õiguslike vormide kataloogid
 
-@reltype RELTYPE_FORMS  value=13 clid=CL_CFGFORM
+@reltype FORMS  value=13 clid=CL_CFGFORM
 @caption Sisestusvormid
 
 // this seems to be the same as the first one
@@ -279,11 +240,15 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function callback_obj_list($args)
 	{
-		classload('kliendibaas/selection');
+		classload('crm/crm_selection');
 		$arg2['obj'][OID] = $args['obj']['meta']['active_selection'];
 		$arg2['obj']['parent'] = $args['obj']['parent'];
 		$arg2['obj']['meta']['active_selection'] = $args['obj']['meta']['active_selection'];
 		$arg2['sel']['oid'] = $args['obj'][OID];	
+		if (!is_object($this->selection_object))
+		{
+			$this->selection_object = new crm_selection();
+		};
 		return $this->selection_object->obj_list($arg2);
 	}
 	
@@ -292,8 +257,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$nodes = array();
 		if (!is_object($this->selection_object) && method_exists($this,'callback_obj_list'))
 		{
-			classload('kliendibaas/selection');
-			$this->selection_object = new selection();
+			classload('crm/crm_selection');
+			$this->selection_object = new crm_selection();
 			$this->selection = $args['obj'];
 		}
 		$nodes['toolbar'] = array(
@@ -317,14 +282,13 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$retval = PROP_OK;
 		$meta = &$args['obj']['meta'];
 		$req = &$args['request'];
-		//print_r($args);die();
 		
 		//// valim///
 		/* loome valimi instansi kui seda juba tehtud pole */
 		if (!is_object($this->selection_object) && method_exists($this,'callback_obj_list'))
 		{
-			classload('kliendibaas/selection');
-			$this->selection_object = new selection();
+			classload('crm/crm_selection');
+			$this->selection_object = new crm_selection();
 			$this->selection = $args['obj'];
 		}
 
@@ -360,43 +324,36 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			
 			case 'default_kliendibaas':
 				$this->users = get_instance("users");
-				
-				if ($args['obj'][OID] ==
-					$this->users->get_user_config(array(
-						"uid" => aw_global_get("uid"),
-						"key" => "kliendibaas",
-				)))
-				{
-					$data['checked'] = true;
-				}
-				$data['ch_value'] = $args['obj'][OID];
-			
-			break;
+                                $obj_id = $args["obj_inst"]->id();
+
+                                $data['value'] = $this->users->get_user_config(array(
+                                        "uid" => aw_global_get("uid"),
+                                        "key" => "kliendibaas",
+                                ));
+                                $data['ch_value'] = $args["obj_inst"]->id();
+				break;
 
 			
 			case 'orgtoolbar':
 				$this->org_toolbar($args);
-			break;
+				break;
+
 			case 'tegtoolbar':
 				$this->teg_toolbar($args);
-			break;
+				break;
+
 			case 'addtoolbar':
 				$this->add_toolbar($args);
-			break;
+				break;
 
-			case 'jrk':
-				$retval=PROP_IGNORE;
-			break;
 			case 'flimit':
 				$data['options'] = array ('10' => '10', '20' => '20', '30' => '30');
-			break;
+				break;
+
 			case 'pagelimit':
 				$data['options'] = array ('10' => '10', '20' => '20', '30' => '30');
-			break;
+				break;
 			
-			case 'alias':
-				$retval=PROP_IGNORE;
-			break;
 			case 'search_form':
 
 /*				if (isset($req['do_search']))
@@ -405,14 +362,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					$meta['search'] = $meta['search_history'][$req['search_history']];
 				}*/
 				$data['value'] = $this->search_form($args);
-			break;
+				break;
 
 			case 'sfield':
 				$retval=PROP_IGNORE;
-			break;
+				break;
+
 			case 'exclude':
 				$retval=PROP_IGNORE;
-			break;
+				break;
+
 			case 'make_search':
 
 				/*$this->set_object_metadata(array(
@@ -424,7 +383,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$args['obj']['oid']['meta']['make_search'] = '0';
 				$retval=PROP_IGNORE;
 				
-			break;
+				break;
+
 			case 'search_type':
 				$args['obj']['oid']['meta']['search_type'] = '0';
 				$retval=PROP_IGNORE;
@@ -485,39 +445,27 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	{
 		$data = &$args["prop"];
 		$form = &$args["form_data"];
-		$meta =  &$args['obj']['meta'];
 		$retval = PROP_OK;
-		
 		switch($data['name'])
 		{
 		
 			case 'sfield':
 				if (!$form['sfield'])
+				{
 					$retval = PROP_IGNORE;
-			break;
+				};
+				break;
 			
 			case 'default_kliendibaas':
-
-				$this->users = get_instance("users");
-
-				$kb = $this->users->get_user_config(array(
-					"uid" => aw_global_get("uid"),
-					"key" => "kliendibaas",
-				));
-				if(($kb == $args['obj'][OID]) || ($kb == ''))
-				{
-					$this->users->set_user_config(array(
-						"uid" => aw_global_get("uid"),
-						"key" => "kliendibaas",
-						"value" => $form['default_kliendibaas'],
-					));
-					aw_session_set('kliendibaas', $form['default_kliendibaas']);
-				}
-
-			break;
+				$users = get_instance("users");
+                                $users->set_user_config(array(
+                                        "uid" => aw_global_get("uid"),
+                                        "key" => "kliendibaas",
+                                        "value" => $data["value"],
+                                ));
+				break;
 
 		};
-
 		return $retval;
 	}
 
@@ -545,7 +493,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$arr = $this->db_fetch_array('
 		select t1.oid as oid, t1.name as name, t2.kood as kood from objects t1 left join kliendibaas_tegevusala t2 on t1.oid=t2.oid
 		where '.$teg_parent.' 
-		t1.status>0 and class_id='.CL_TEGEVUSALA.' and
+		t1.status>0 and class_id='.CL_CRM_SECTOR.' and
 		length(t2.kood)<=2
 		order by t2.kood
 		limit '.$limit.'
@@ -556,7 +504,7 @@ elseif ($tase == 2)
 		$arr = $this->db_fetch_array('
 		select t1.oid as oid, t1.name as name, t2.kood as kood from objects t1 left join kliendibaas_tegevusala t2 on t1.oid=t2.oid
 		where '.$teg_parent.' 		
-		t1.status>0 and class_id='.CL_TEGEVUSALA.' and
+		t1.status>0 and class_id='.CL_CRM_SECTOR.' and
 		length(t2.kood)>2 and length(t2.kood)<=4 and
 		
 		t2.kood like("'.$kood.'%")
@@ -569,7 +517,7 @@ elseif ($tase == 3)
 		$arr = $this->db_fetch_array('
 		select t1.oid as oid, t1.name as name, t2.kood as kood from objects t1 left join kliendibaas_tegevusala t2 on t1.oid=t2.oid
 		where '.$teg_parent.' 
-		t1.status>0 and class_id='.CL_TEGEVUSALA.' and
+		t1.status>0 and class_id='.CL_CRM_SECTOR.' and
 		length(t2.kood)>4 and length(t2.kood)<=6 and
 		
 		t2.kood like("'.$kood.'%")
@@ -697,7 +645,7 @@ elseif ($tase == 3)
 			'.implode(' ',$join_tables).'
 			where 
 			al.target="'.$teg_oid.'" and al.reltype=5 and al.source<>0 and 
-			t1.class_id='.CL_FIRMA.' and t1.status<>0 and
+			t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
 			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
 			
 			order by t1.name
@@ -896,7 +844,7 @@ elseif ($tase == 3)
 			select count(*) as cnt from objects as t1 
 			'.implode(' ',$join_tables).'
 			where 
-			t1.class_id='.CL_FIRMA.' and t1.status<>0 and
+			t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
 			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
 			'.$search_params.'
 			','cnt');
@@ -907,7 +855,7 @@ elseif ($tase == 3)
 			$cnt = $this->db_fetch_field('
 			select count(*) as cnt from objects as t1
 			where 
-			t1.class_id='.CL_FIRMA.' and t1.status<>0 and
+			t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
 			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
 			and t1.name like ("'.$letter.'%")
 			','cnt');
@@ -990,7 +938,7 @@ elseif ($tase == 3)
 			from objects as t1 
 			'.implode(' ',$join_tables).'
 			where 
-			t1.class_id='.CL_FIRMA.' and t1.status<>0 and
+			t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
 			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
 			'.$search_params.'
 			order by t1.name
@@ -1004,7 +952,7 @@ elseif ($tase == 3)
 			from objects as t1 
 			'.implode(' ',$join_tables).'
 			where 
-			t1.class_id='.CL_FIRMA.' and t1.status<>0 and
+			t1.class_id='.CL_CRM_COMPANY.' and t1.status<>0 and
 			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
 			and t1.name like ("'.$letter.'%")
 			order by t1.name
@@ -1029,7 +977,7 @@ elseif ($tase == 3)
 		if (!$args['obj']['meta']['search_type'])
 		{
 			$all_letters = $this->db_fetch_array('select substring(name,1,1) as letter from objects 
-			where class_id='.CL_FIRMA.' and status<>0 and parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).' 
+			where class_id='.CL_CRM_COMPANY.' and status<>0 and parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).' 
 			group by substring(name,1,1)
 			order by substring(name,1,1)
 			limit 50
@@ -1175,7 +1123,7 @@ elseif ($tase == 3)
 						'url' => $this->mk_my_orb('change',array(
 							'id' => $val[OID],
 							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-						), 'kliendibaas/firma'),
+						), 'crm/crm_company'),
 						'caption' => $val['name'],
 					)),
 					'check' => $check,
@@ -1187,7 +1135,7 @@ elseif ($tase == 3)
 						'url' => $this->mk_my_orb('change',array(
 							'id' => $val['firmajuht_oid'],
 							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-						), 'kliendibaas/isik'),
+						), 'crm/crm_person'),
 						'caption' => $val['firmajuht'],
 					)),
 					'linn' => $val['linn'],
@@ -1203,542 +1151,6 @@ elseif ($tase == 3)
 		$tf->sort_by();
 		return $tf->draw();
 	}	
-
-	/*
-	function tegevusala_manager_($ob)
-	{
-		$meta=$ob['obj']['meta'];
-		$limit=$meta['limit_per_page']?$meta['limit_per_page']:20;
-		$req=$ob['request'];
-		$page=$meta['teg_page']?$meta['teg_page']:0;
-		$page=isset($req['page'])?$req['page']:$page;
-
-		load_vcl('table');
-		$t = new aw_table(array(
-			'prefix' => 'kliendibaas_manager',
-		));
-		$t->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
-
-		$t->define_field(array(
-			'name' => 'kood',
-			'caption' => 'kood',
-		));
-
-		$t->define_field(array(
-			'name' => 'tegevusala',
-			'caption' => 'tegevusala',
-		));
-
-		$t->define_field(array(
-			'name' => 'fcount',
-			'caption' => 'firmasid',
-		));
-
-		$t->define_field(array(
-			'name' => 'check',
-			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
-			'width'=> 15,
-		));
-
-		$find = new aw_table(array(
-			'prefix' => 'kliendibaas_manager_search',
-		));
-
-		$search=html::textbox(array('name' => 'teg_search[kood]','value' => $meta['search'][$key],'size' => 20)).' '.
-		html::textbox(array('name' => 'teg_search[tegevusala]','value' => $meta['search'][$key],'size' => 20)).' '.
-		html::button(array('value' => 'otsi','onclick' => 'document.changeform.teg_do_search.value=1;document.changeform.submit()'));
-
-
-		if ($meta['teg_do_search'])
-		{
-			$where="where kood like '%".$meta['teg_search']['kood']."%' and tegevusala like '%".$meta['teg_search']['tegevusala']."%' and";
-
-			$q = 'select count(*) as cnt from kliendibaas_tegevusala as t1 left join objects as t2 on t1.oid=t2.oid '.$where.' status<>0';
-			$cnt = $this->db_fetch_field($q,'cnt');
-
-			$q = 'select t1.oid,t1.tegevusala,t1.kood from
-		 	kliendibaas_tegevusala as t1 '.$where.
-		 	' order by t1.kood LIMIT '.($page*$limit).','.((int)$limit);
-
-			$data = $this->db_fetch_array($q);
-			$t=$this->tegevusalad_table($data,$selection,$t,$ob['obj'][OID],'');
-
-		}
-		else
-		{
-//			$where=$req['kood']?"where kood like '".$req['kood']."%'":' where LENGTH(kood) < 3 ';
-//		}
-
-//		$leftright=$meta['where_firm']?'right':'left';
-
-
-		$level=$req['level']?$req['level']:'1';
-		$grp="concat('".$req['section']."',SUBSTRING(kood,".$level.",2))";
-
-		$gsection=$req['section']?"and kood like '".$req['section']."%'":'';
-
-
-
-		$q="select ".$grp." as code from kliendibaas_tegevusala as t1 left join objects as t2 on t1.oid=t2.oid where status<>0 ".$gsection." group by ".$grp." order by kood";
-
-		$data = $this->db_query($q);
-		while ($row=$this->db_next())
-		{
-			if (strlen(trim($row['code']))>0)
-			{
-				$wheres[]="'".str_pad($row['code'], 6,'0')."'";
-			}
-		}
-
-
-		if (is_array($wheres))
-		{
-
-			$where = ' where kood in ('.implode(',',$wheres).') ';
-
-			$q = 'select count(distinct kood) as cnt from kliendibaas_tegevusala '.$where.'';
-			$cnt = $this->db_fetch_field($q,'cnt');
-*/
-/*			$q = 'select t1.oid,t1.tegevusala,t1.kood,count(t2.reg_nr) as fcount from
-		 	kliendibaas_tegevusala as t1
-		 	'.$leftright.' join kliendibaas_firma as t2
-		 	on t2.pohitegevus=t1.oid '.$where.
-		 	'   group by t1.kood order by t1.kood LIMIT '.($page*$limit).','.((int)$limit);*/
-/*
-			$q = 'select t1.oid,t1.tegevusala,t1.kood from
-			kliendibaas_tegevusala as t1 '.$where.
-			' group by t1.kood   order by t1.kood LIMIT '.($page*$limit).','.((int)$limit);
-
-			$data = $this->db_fetch_array($q);
-
-			//die();
-
-			$t=$this->tegevusalad_table($data,$selection,$t,$ob['obj'][OID],$level+2);
-		}
-		else
-		{
-			$t='<br />ei leidnud<br />';
-		}
-}
-
-
-
-
-		$navigate=array(
-			' |< '=> 0,
-			' < ' => abs($page-1),
-			' || '=> $page,
-			' > ' => ($page+1),
-			' >| '=> ((int)($cnt/$limit)),
-		);
-		$nav=$this->my_buttons($navigate,'teg_page');
-
-
-		//function page_numbers($url,$min,$max)
-
-
-		$lks = '';
-		for ($i=0;$i<=((int)($cnt/$limit));$i++)
-		{
-			$lks.=
-			html::href(array('caption'=>'<b>'.($i+1).'</b>',
-				'url'=>$this->mk_my_orb('change',
-					array(
-						'id'=>$ob['obj'][OID],
-						'group'=>'tegevusalad',
-						'kood'=>$row['kood'],
-						'page'=>$i,
-						'level'=> $level,
-						'section' =>$req['section'],
-					)//'prev'=>$req['kood'])
-				)
-			)).' ';
-
-		}
-
-
-		$nodes = array();
-		$nodes['teg'] = array(
-			"value" => $nav.$lks.'total :'.$cnt.'.  '.$back.$t.$search,
-		);
-		return $nodes;
-
-//		$data['value']=$this->selall().$this->tegevusala_manager($args);
-	}
-
-*/
-/*
-	function tegevusalad_table($data,$selection,$t,$oid,$level)
-	{
-		$arr = new aw_array($data);
-		foreach($arr->get() as $row)
-		{
-			$row['check']=html::checkbox(array('name'=>'sel['.$row[OID].']'));
-//			$row['change']=html::href(array('caption'=>'muuda','url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/tegevusala')));
-			$row['fcount']=$row['fcount']?(html::href(array('caption'=>'<b> [ '.$row['fcount'].' ] </b>',
-				'url'=>$this->mk_my_orb('change',
-					array('id'=>$oid, 'group'=>'manager', 'kood'=>$row['kood'])
-				)
-			))):'';
-			$section=substr($row['kood'],0,2);
-			$row['kood']=html::href(array('caption'=>'<b>'.$row['kood'].'</b>',
-				'url'=>$this->mk_my_orb('change',
-					array('id'=>$oid, 'group'=>'tegevusalad', 'kood'=>$row['kood'],'page'=>0,'level'=> $level, 'section' =>$section)//'prev'=>$req['kood'])
-				)
-			));
-			$row['tegevusala']=html::href(array('caption'=>$row['tegevusala'],'url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/tegevusala')));
-
-			$t->define_data(
-				$row
-			);
-		}
-		return $t->draw();
-	}
-	*/	
-			
-/*
-	function firma_manager_($args)
-	{
-	//arr($args,1);
-//error_reporting(E_ALL);
-		$meta = $args['obj']['meta'];
-		$limit = (isset($meta['limit_per_page']) && ($meta['limit_per_page'] > 0)) ? $meta['limit_per_page'] : 20;
-		$req = $args['request'];
-		$page = isset($meta['page']) ? $meta['page'] : 0;
-		$page = isset($req['page']) ? $req['page'] : $page;
-		$order_by = isset($meta['order_by_columns']) ? $meta['order_by_columns'] : 'objects.name';
-		$where = ' where objects.status<>0 && objects.parent="'.FIRMA_CAT.'" ';
-
-		$sele = isset($meta['sele']) ? $meta['sele'] : false ;
-
-
-//		if ($req['do_search'])
-//		{
-//			$meta['do_search'] = true;
-//			$meta['search'] = $meta['search_history'];
-//		}
-//
-//		if ($meta['do_search'])
-//			$meta['search'] = $this->search_values;
-
-//
-//		if (is_array($meta['valim']))
-//		{
-//			$sl = get_instance('kliendibaas/selection');
-//			$selection = $sl->get_selection($meta['valim']);
-//		}
-//		else
-//		{
-//			$nodes = array();
-//			$nodes[] = array(
-//				"value" => 'vali seadetest valim',
-//			);
-//			return $nodes;
-//		}
-
-
-
-
-///rõvedus!! aga ma tahan et baasist tõesti ei küsitaks asju mida vaja pole
-		$tabelid = array(
-			'vorm' => 'left join kliendibaas_ettevotlusvorm as vorm on vorm.oid=firma.ettevotlusvorm',
-			'juht' => 'left join kliendibaas_isik as juht on juht.oid=firma.firmajuht',
-			'f_address' => 'left join kliendibaas_address as f_address on f_address.oid=firma.contact',
-			'f_riik' => 'left join kliendibaas_riik as f_riik on f_riik.oid=f_address.riik',
-			'f_maakond' => 'left join kliendibaas_maakond as f_maakond on f_maakond.oid=f_address.maakond',
-			'f_linn' => 'left join kliendibaas_linn as f_linn on f_linn.oid=f_address.linn',
-			'firma'=>' ',
-			'tegevusala'=>'left join kliendibaas_tegevusala as tegevusala on tegevusala.oid=firma.pohitegevus',
-		);
-
-		load_vcl('table');
-
-		if (!$sele)
-		{
-			$like_st = '%';
-			$like_en = '%';
-
-			if (isset($req['kood']))
-			{
-				unset($meta['search']);
-				unset($meta['search_require']);
-				$page = 0;
-				$joini['tegevusala']++;
-				$meta['search']['tegevusala_kood'] = $req['kood'];
-				$like_st = '';
-				$like_en = '';
-			}
-		}
-
-		$t = new aw_table(array(
-			'prefix' => 'kliendibaas_manager',
-		));
-		$t->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
-
-		
-		if (!is_array($meta['show_columns']) || (count($meta['show_columns']) < 1)) 
-		{
-			$meta['show_columns'] = array('firma_nimetus' => 'firma nimi');
-		}
-
-		foreach($this->show_columns as $key => $val)
-		{
-
-			if (
-				!(isset($meta['show_columns'][$key])
-				||
-				(((isset($meta['do_search']) && $meta['do_search']) || (isset($req['do_search']) && $req['do_search']))  && $meta['search'][$key])
-				||((isset($meta['do_search']) && $meta['do_search']) && $meta['search_require'][$key]))
-			)
-			{
-				continue;
-			}
-
-			switch($key)
-			{
-				case 'firma_oid':
-					$fields[$key]='objects.oid';
-				break;
-				case 'kaubamargid':
-					$fields[$key]='firma.kaubamargid';
-					$joini['firma']++;
-				break;
-				case 'tegevuse_kirjeldus':
-					$fields[$key]='firma.tegevuse_kirjeldus';
-					$joini['firma']++;
-				break;
-				case 'tegevusala_kood':
-					$fields[$key]='tegevusala.kood';
-					$joini['firma']++;
-				break;
-				case 'firma_ettevotlusvorm':
-					$fields[$key]='vorm.name';
-					$joini['vorm']++;
-				break;
-				case 'pohitegevus':
-					$fields[$key]='tegevusala.tegevusala';
-					$joini['tegevusala']++;
-				break;
-				case 'f_aadress':
-					$fields[$key]='f_address.aadress';
-					$joini['f_address']++;
-				break;
-				case 'f_riik':
-					$fields[$key]='f_riik.name';
-					$joini['f_address']++;
-					$joini['f_riik']++;
-				break;
-				case 'f_linn':
-					$fields[$key]='f_linn.name';
-					$joini['f_address']++;
-					$joini['f_linn']++;
-				break;
-				case 'f_maakond':
-					$fields[$key]='f_maakond.name';
-					$joini['f_address']++;
-					$joini['f_maakond']++;
-				break;
-				case 'f_postiindeks':
-					$fields[$key]='f_address.postiindeks';
-					$joini['f_address']++;
-				break;
-				case 'f_telefon':
-					$fields[$key]='f_address.telefon';
-					$joini['f_address']++;
-				break;
-				case 'f_mobiil':
-					$fields[$key]='f_address.mobiil';
-					$joini['f_address']++;
-				break;
-				case 'f_faks':
-					$fields[$key]='f_address.faks';
-					$joini['f_address']++;
-				break;
-				case 'f_piipar':
-					$fields[$key]='f_address.piipar';
-					$joini['f_address']++;
-				break;
-				case 'f_e_mail':
-					$fields[$key]='f_address.e_mail';
-					$joini['f_address']++;
-				break;
-				case 'f_kodulehekylg':
-					$fields[$key]='f_address.kodulehekylg';
-					$joini['f_address']++;
-				break;
-				case 'firma_juht':
-					$fields[$key]='juht.name';
-					$joini['juht']++;
-				break;
-				case 'firma_nimetus':
-					$fields[$key]='objects.name';
-				break;
-				case 'firma_reg_nr':
-					$fields[$key]='firma.reg_nr';
-					$joini['firma']++;
-				break;
-			}
-
-			if (!$sele)
-			{
-				if ($meta['do_search'])
-				{
-
-					if ($meta['search'][$key])
-					{
-						$where.=' and '.$fields[$key]." like '".$like_st.addslashes($meta['search'][$key]).$like_en."' ";
-					}
-
-//					if ($meta['search_require'][$key])
-//					{
-//						$where.=' and '.$fields[$key].' IS NOT NULL and '.$fields[$key]." <> '' ";
-//
-//					}
-				}
-
-
-//				else
-//				{
-//					if ($req['do_search'])
-//					{
-//						if ($meta['search_history'][$req['search_history']][$key])
-//						{
-//							$where.=' and '.$fields[$key]." like '".$like_st.addslashes($meta['search_history'][$req['search_history']][$key]).$like_en."' ";
-//						}
-//
-//					if ($meta['search_history'][$req['search_history']][$key])
-//					{
-//						$where.=' and '.$fields[$key].' IS NOT NULL and '.$fields[$key]." <> '' ";
-//
-//					}
-//					}
-//				}
-				
-
-			}
-
-
-			if (!isset($meta['show_columns'][$key]))
-			{
-				unset($fields[$key]);
-			}
-			else
-			{
-				$fields[$key].=' as '.$key;
-				$t->define_field(array(
-					'name' => $key,
-					'caption' => $val,
-				));
-			}
-		}
-		$s_hist = '';
-		if (isset($meta['search_history']) && is_array($meta['search_history']))
-		{
-			foreach ($meta['search_history'] as $key => $val)
-			{
-				$s_hist .= html::href(array('caption' => 'otsing',
-					'url'=>$this->mk_my_orb('change',
-						array(
-							'id' => $args['obj'][OID],
-							'group' 	=> 'manager',
-	//						'page' => $i,
-							'do_search' => 1,
-							'search_history' => $key,
-						)
-					)
-				)).'<br />';
-			}
-		}
-
-		$fields[OID] ='firma.oid as oid';
-
-		$t->define_field(array(
-			'name' => 'check',
-			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
-			'width'=> 15,
-		));
-
-		$fields[OID] ='firma.oid as oid';
-
-		foreach($tabelid as $key => $val)
-		{
-			if (isset($joini[$key]))
-			{
-				$join[$key]=$val;
-			}
-		}
-
-		if (!$sele)
-		{
-			$q='select count(*) as cnt from kliendibaas_firma as firma left join objects on firma.oid=objects.oid '.@implode(' ',$join).$where;
-			$cnt = $this->db_fetch_field($q,'cnt');
-
-			$q='select '.implode(',',$fields).' from kliendibaas_firma as firma left join objects on firma.oid=objects.oid '.
-			@implode(' ',$join).' '.
-			$where.' order by '.$order_by.
-			' LIMIT '.($page*$limit).','.((int)$limit);
-		}
-		elseif (is_array($selection))
-		{
-			foreach ($selection as $key => $val)
-			{
-				$oidss[]='firma.oid='.$key;
-			}
-			$where.=' and ('.implode(' or ',$oidss).') ';
-			$cnt = count($selection);
-			$q='select '.implode(',',$fields).' from kliendibaas_firma as firma left join objects on firma.oid=objects.oid '.
-			@implode(' ',$join).' '.
-			$where.' order by '.$order_by.
-			' LIMIT '.($page*$limit).','.((int)$limit);
-		}
-		$data = $this->db_fetch_array($q);
-
-		//define data
-		$t=$this->firmad_table($data,isset($selection) ? $selection : array(),$t);
-
-		$navigate=array(
-			' |< '=> 0,
-			' < ' => abs($page-1),
-			' |'.($page+1).'| '=> $page,
-			' > ' => ($page+1),
-			' >| ' => ((int)($cnt/$limit)),
-		);
-
-		$last = ((int)($cnt/$limit));
-		$lks = '';
-		for ($i = 0; $i <= $last; $i++)
-		{
-			$lks.=(($i==$page)?' [':'').
-			html::href(array('caption'=>'<b>'.($i+1).'</b>',
-				'url'=>$this->mk_my_orb('change',
-					array(
-						'id'=>$args['obj'][OID],
-						'group' => 'manager',
-						'page' => $i,
-					)
-				)
-			)).(($i==$page)?'] ':'').' ';
-			if (($i==10) && ($last>15))
-			{
-				$lks.=' ... ';
-				$i=$last-2;
-			}
-		}
-
-		$nav = $this->my_buttons($navigate,'page');
-
-//		return $node["value"] = 'total: '.$cnt.'<br />'.$nav.'lk: '.$lks.'<br />'.$t;
-
-
-
-		$nodes = array();
-		$nodes['firms'] = array(
-			"value" => 'total: '.$cnt.'<br />'.$nav.'lk: '.$lks.'<br />'.$t.'<br />'.$s_hist,
-		);
-		return $nodes;
-
-}
-*/
 
 	function search_form($args)
 	{
@@ -1813,7 +1225,7 @@ elseif ($tase == 3)
 		//ettevõtlusvorm
 		$id = 'ettevotlusvorm';
 		$arr = $this->db_fetch_array('select oid, name from objects where 
-			class_id='.CL_ETTEVOTLUSVORM.' and 
+			class_id='.CL_CRM_CORPFORM.' and 
 			parent'.$this->parent_in($this->got_aliases[ETTEVOTLUSVORM_CAT]). ' order by name'
 		);
 		$options ='<option value="0"> - kõik - </option>';
@@ -1832,7 +1244,7 @@ elseif ($tase == 3)
 		//linn
 		$id = 'linn';
 		$arr = $this->db_fetch_array('select oid, name from objects where 
-			class_id='.CL_LINN.' and 
+			class_id='.CL_CRM_CITY.' and 
 			parent'.$this->parent_in($this->got_aliases[LINN_CAT]). ' order by name'
 		);
 		$options ='<option value="0"> - kõik - </option>';
@@ -1851,7 +1263,7 @@ elseif ($tase == 3)
 		//maakond
 		$id = 'maakond';
 		$arr = $this->db_fetch_array('select oid, name from objects where 
-			class_id='.CL_MAAKOND.' and 
+			class_id='.CL_CRM_COUNTY.' and 
 			parent'.$this->parent_in($this->got_aliases[MAAKOND_CAT]). ' order by name'
 		);
 		$options ='<option value="0"> - kõik - </option>';
@@ -1889,30 +1301,28 @@ elseif ($tase == 3)
 	function org_toolbar(&$args)
 	{//arr($args,1);
 		$toolbar = &$args["prop"]["toolbar"];                
-		if ($args['obj'][OID])
+		if (empty($args["new"]))
                 {
 			$this->read_template('js_popup_menu.tpl');
-			
-			$kliendibaas = $this->get_object($args['obj'][OID]);
+		
+			$crm_db = $args["obj_inst"];
 
-$parents[CL_FIRMA] = $kliendibaas['meta']['dir_firma'] ? $kliendibaas['meta']['dir_firma'] : $kliendibaas['meta']['dir_default'];
-			
+			$parents[CL_CRM_COMPANY] = $crm_db->prop("dir_firma") == "" ? $crm_db->prop("dir_default") : $crm_db->prop("dir_firma");
+
 			$alist = array(
-				array('title' => 'Organisatsioon','class' => 'firma', 'class_id' => CL_FIRMA),
-//				array('caption' => 'Lisa tegevusala','class' => 'tegevusala', 'reltype' => TEGEVUSALAD),
-				
-				//array('caption' => '','class' => '', 'reltype' => ),				
+				array('clid' => CL_CRM_COMPANY),
 			);
 			$menudata = '';
 			if (is_array($alist))
 			{
 				foreach($alist as $key => $val)
 				{
-					if (!$parents[$val['class_id']])
+					$classinf = $this->cfg["classes"][$val["clid"]];
+					if (!$parents[$val['clid']])
 					{
 						$this->vars(array(
 							'title' => 'Kaust määramata',
-							'text' => 'Lisa '.$val['title'],
+							'text' => 'Lisa '.$classinf["name"],
 						));
 						$menudata .= $this->parse("MENU_ITEM_DISABLED");
 					}
@@ -1921,11 +1331,11 @@ $parents[CL_FIRMA] = $kliendibaas['meta']['dir_firma'] ? $kliendibaas['meta']['d
 
 						$this->vars(array(
 							'link' => $this->mk_my_orb('new',array(
-								'class' => $val['class'],
-								'parent' => $parents[$val['class_id']],
+								'class' => basename($classinf["file"]),
+								'parent' => $parents[$val['clid']],
 								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 							)),
-							'text' => 'Lisa '.$val['title'],
+							'text' => 'Lisa '.$classinf["name"],
 						));
 
 						$menudata .= $this->parse("MENU_ITEM");
@@ -1951,9 +1361,13 @@ $parents[CL_FIRMA] = $kliendibaas['meta']['dir_firma'] ? $kliendibaas['meta']['d
                                 "class" => "menuButton",
                         ));
 
-
+			$users = get_instance("users");
+			$cal_id = $users->get_user_config(array(
+				"uid" => aw_global_get("uid"),
+				"key" => "user_calendar",
+                	));
 			
-			if ($cal_id = aw_global_get('user_calendar'))
+			if (!empty($cal_id))	
 			{
 				$toolbar->add_button(array(
 					"name" => "user_calendar",
@@ -2002,7 +1416,6 @@ $parents[CL_FIRMA] = $kliendibaas['meta']['dir_firma'] ? $kliendibaas['meta']['d
 			'onClick' => "document.getElementById('search_type').value = '0';document.forms[0].submit();return false;",
 			"url" => '',
 			"img" => "prog_42.gif",
-			"imgover" => "prog_42.gif",
 		));
 		
 		$toolbar->add_button(array(
@@ -2019,40 +1432,40 @@ $parents[CL_FIRMA] = $kliendibaas['meta']['dir_firma'] ? $kliendibaas['meta']['d
 	function add_toolbar(&$args)
 	{
 		$toolbar = &$args["prop"]["toolbar"];                
-		if ($args['obj'][OID])
+		if (empty($args["new"]))
                 {
 			$this->read_template('js_popup_menu.tpl');
+
+			$crm_db = $args["obj_inst"];
 			
-			$kliendibaas = $this->get_object($args['obj'][OID]);
 			$par = array(
-				CL_FIRMA => 'firma',
-				CL_ISIK => 'isik',
-				CL_TOODE => 'toode',
-				CL_TEGEVUSALA => 'tegevusala',
-				CL_LINN => 'linn',
-				CL_MAAKOND => 'maakond',
-				CL_AMET => 'amet',
-				CL_ETTEVOTLUSVORM => 'ettevotlusvorm',
-				CL_ADDRESS => 'address',
+				CL_CRM_COMPANY => 'firma',
+				CL_CRM_PERSON => 'isik',
+				CL_CRM_PRODUCT => 'toode',
+				CL_CRM_SECTOR => 'tegevusala',
+				CL_CRM_CITY => 'linn',
+				CL_CRM_COUNTY => 'maakond',
+				CL_CRM_PROFESSION => 'amet',
+				CL_CRM_CORPFORM => 'ettevotlusvorm',
+				CL_CRM_ADDRESS => 'address',
 			//telefon
 			);
 
 			foreach($par as $key => $val)
 			{
-				$parents[$key] = $kliendibaas['meta']['dir_'.$val] ? $kliendibaas['meta']['dir_'.$val] : $kliendibaas['meta']['dir_default'];
+				$parents[$key] = $crm_db->prop("dir_".$val) ? $kliendibaas['meta']['dir_'.$val] : $kliendibaas['meta']['dir_default'];
 			}
 
 			$alist = array(
-				array('title' => 'Organisatsioon','class' => 'firma', 'class_id' => CL_FIRMA),
-				array('title' => 'Isik','class' => 'isik', 'class_id' => CL_ISIK),
-				array('title' => 'Õiguslik vorm','class' => 'ettevotlusvorm', 'class_id' => CL_ETTEVOTLUSVORM),
-				array('title' => 'Toode','class' => 'toode', 'class_id' => CL_TOODE),
-				array('title' => 'Tegevusala','class' => 'tegevusala', 'class_id' => CL_TEGEVUSALA),
-				array('title' => 'Linn','class' => 'linn', 'class_id' => CL_LINN),
-				array('title' => 'Maakond','class' => 'maakond', 'class_id' => CL_MAAKOND),
-				array('title' => 'Ametinimetus','class' => 'amet', 'class_id' => CL_AMET),
-				array('title' => 'Kliendibaas','class' => 'kliendibaas', 'class_id' => CL_KLIENDIBAAS),
-				//array('title' => '','class' => '', 'class_id' => CL_),
+				array('title' => 'Organisatsioon','class' => 'crm_company', 'class_id' => CL_CRM_COMPANY),
+				array('title' => 'Isik','class' => 'crm_person', 'class_id' => CL_CRM_PERSON),
+				array('title' => 'Õiguslik vorm','class' => 'crm_corpform', 'class_id' => CL_CRM_CORPFORM),
+				array('title' => 'Toode','class' => 'crm_product', 'class_id' => CL_CRM_PRODUCT),
+				array('title' => 'Tegevusala','class' => 'crm_sector', 'class_id' => CL_CRM_SECTOR),
+				array('title' => 'Linn','class' => 'crm_city', 'class_id' => CL_CRM_CITY),
+				array('title' => 'Maakond','class' => 'crm_county', 'class_id' => CL_CRM_COUNTY),
+				array('title' => 'Ametinimetus','class' => 'crm_profession', 'class_id' => CL_CRM_PROFESSION),
+				array('title' => 'Kliendibaas','class' => 'crm_db', 'class_id' => CL_CRM_DB),
 
 			);
 			$menudata = '';
@@ -2060,11 +1473,12 @@ $parents[CL_FIRMA] = $kliendibaas['meta']['dir_firma'] ? $kliendibaas['meta']['d
 			{
 				foreach($alist as $key => $val)
 				{
+					$classinf = $this->cfg["classes"][$val["class_id"]];
 					if (!$parents[$val['class_id']])
 					{
 						$this->vars(array(
-							'title' => $val['title'].' kaust määramata',
-							'text' => 'Lisa '.$val['title'],
+							'title' => $classinf['name'].' kaust määramata',
+							'text' => 'Lisa '.$classinf['name'],
 						));
 						$menudata .= $this->parse("MENU_ITEM_DISABLED");
 					}
@@ -2072,11 +1486,11 @@ $parents[CL_FIRMA] = $kliendibaas['meta']['dir_firma'] ? $kliendibaas['meta']['d
 					{
 						$this->vars(array(
 							'link' => $this->mk_my_orb('new',array(
-								'class' => $val['class'],
+								'class' => basename($classinf["file"]),
 								'parent' => $parents[$val['class_id']],
 								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 							)),
-							'text' => $val['title'],
+							'text' => $classinf["name"],
 						));
 
 						$menudata .= $this->parse("MENU_ITEM");
@@ -2108,28 +1522,28 @@ $parents[CL_FIRMA] = $kliendibaas['meta']['dir_firma'] ? $kliendibaas['meta']['d
 
 	function teg_toolbar(&$args)
 	{
-                if ($args['obj'][OID])
+                if (empty($args["new"]))
                 {
 			$toolbar = &$args["prop"]["toolbar"];
 			$this->read_template('js_popup_menu.tpl');
-			$kliendibaas = $this->get_object($args['obj'][OID]);
-			//arr($kliendibaas);
+			$crm_db = $args["obj_inst"];
 
-$parents[CL_TEGEVUSALA] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas['meta']['dir_tegevusala'] : $kliendibaas['meta']['dir_default'];
+			$parents[CL_CRM_SECTOR] = $crm_db->prop('dir_tegevusala') == "" ? $crm_db->prop("dir_default") : $crm_db->prop("dir_tegevusala");
 			
 			$alist = array(
-				array('title' => 'Tegevusala','class' => 'tegevusala', 'class_id' => CL_TEGEVUSALA),
+				array('clid' => CL_CRM_SECTOR),
 			);
 			$menudata = '';
 			if (is_array($alist))
 			{
 				foreach($alist as $key => $val)
 				{
-					if (!$parents[$val['class_id']])
+					$classinf = $this->cfg["classes"][$val["clid"]];
+					if (!$parents[$val['clid']])
 					{
 						$this->vars(array(
 							'title' => 'Kaust määramata',
-							'text' => 'Lisa '.$val['title'],
+							'text' => 'Lisa '.$classinf["name"],
 						));
 						$menudata .= $this->parse("MENU_ITEM_DISABLED");
 					}
@@ -2137,11 +1551,11 @@ $parents[CL_TEGEVUSALA] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas[
 					{
 						$this->vars(array(
 						'link' => $this->mk_my_orb('new',array(
-							'class' => $val['class'],
-							'parent' => $val['parent'],
+							'class' => basename($classinf["file"]),
+							'parent' => $parents[$val['clid']],
 							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 							)),
-							'text' => 'Lisa '.$val['title'],
+							'text' => 'Lisa '.$classinf['name'],
 						));
 						$menudata .= $this->parse("MENU_ITEM");
 					}
@@ -2165,8 +1579,14 @@ $parents[CL_TEGEVUSALA] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas[
                                 "img" => "new.gif",
                                 "class" => "menuButton",
                         ));
+			
+			$users = get_instance("users");
+			$cal_id = $users->get_user_config(array(
+				"uid" => aw_global_get("uid"),
+				"key" => "user_calendar",
+                	));
 
-			if ($cal_id = aw_global_get('user_calendar'))
+			if (!empty($cal_id))
 			{
 				$toolbar->add_button(array(
 					"name" => "user_calendar",
@@ -2176,9 +1596,6 @@ $parents[CL_TEGEVUSALA] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas[
 					"img" => "icon_cal_today.gif",
 					"class" => "menuButton",
 				));
-				//$user_calendar = $this->get_object($cal_id);
-				//$getevent_folder = $user_calendar['meta']['event_folder'];
-                		//$toolbar->add_cdata($getevent_folder);
 			}
 
 		
@@ -2204,7 +1621,7 @@ $parents[CL_TEGEVUSALA] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas[
 		$q = 'SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent='.$events.' AND objects.status != 0';
 		$arr = $this->db_fetch_array($q);
 
-		$arr2 = $this->db_fetch_array('select oid, name from objects where class_id='.CL_FIRMA.' and status != 0 and parent='.($kb['meta']['dir_firma']).' limit 5000');		
+		$arr2 = $this->db_fetch_array('select oid, name from objects where class_id='.CL_CRM_COMPANY.' and status != 0 and parent='.($kb['meta']['dir_firma']).' limit 5000');		
 				
 		foreach($arr as $val)
 		{
@@ -2343,7 +1760,7 @@ $parents[CL_TEGEVUSALA] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas[
 			'site_id' => aw_ini_get('site_id'),
 			'parent' => $kb['meta']['dir_firma'],
 			'name' => strtoupper(trim($name)),
-			'class_id' => CL_FIRMA,
+			'class_id' => CL_CRM_COMPANY,
 		);
 
 		$obj = $this->do_insert($objects_data,'objects');
@@ -2376,269 +1793,5 @@ $parents[CL_TEGEVUSALA] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas[
 	}
 
 	
-/*		
-	function search_form_($ob)
-	{
-		
-		$meta=$ob['obj']['meta'];
-		load_vcl('table');
-
-		$find = new aw_table(array(
-			'prefix' => 'kliendibaas_manager_search',
-		));
-		$find->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
-			$find->define_field(array(
-			'name' => 'attrib',
-			'caption' => 'atribuut',
-			'width'=> 25,
-		));
-		$find->define_field(array(
-			'name' => 'input',
-			'caption' => 'otsingu string',
-			'width'=> 100,
-		));
-		$find->define_field(array(
-			'name' => 'require',
-			'caption' => "<a href='javascript:selall(\"search_require\")'>peab olemas olema</a>",
-			'width'=> 15,
-		));
-
-		foreach($this->show_columns as $key => $val)
-		{
-			$find->define_data(array(
-				'attrib' => $val,
-				'input' => html::textbox(array('name'=>'search['.$key.']','value' => isset($meta['search'][$key]) ? $meta['search'][$key] : '','size'=>20)),
-				'require' => html::checkbox(array('name'=> 'search_require['.$key.']','value'=> 1,'checked'=> isset($meta['search_require'][$key]) ? $meta['search_require'][$key] : false)),
-			));
-		}
-
-		$submit=html::button(array('value'=>'otsi','onclick'=>'document.changeform.do_search.value=1;document.changeform.submit()'));
-
-		return '<table width=200><tr><td>'.$find->draw().'</td></tr></table>'.$submit.'<br />';
-	}
-*/
-
-/*
-	function firmad_table($data,$selection,$t)
-	{
-		$arr = new aw_array($data);
-		foreach($arr->get() as $row)
-		{
-			$row['check'] = html::checkbox(array('name'=>'sel['.$row[OID].']','checked' => isset($selection[$row[OID]]) ? $selection[$row[OID]] : false,'value' => $row[OID]));
-			$row['check'].= html::hidden(array('name'=>'objs['.$row[OID].']' ,'value'=>1));
-
-
-			if (isset($row['firma_nimetus']))
-			{
-				$row['firma_nimetus'] = html::href(array('caption'=>$row['firma_nimetus'],'url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/firma')));
-			}
-			if (isset($row['f_kodulehekylg']))
-			{
-				$row['f_kodulehekylg']=html::href(array('url'=> ((strpos($row['f_kodulehekylg'],'://')===false) ? 'http://' : '').$row['f_kodulehekylg'],'caption'=> $row['f_kodulehekylg'], 'target' => '_blank' ));
-			}
-			if (isset($row['f_e_mail']))
-			{
-				$row['f_e_mail']=html::href(array('url'=>'mailto:'.$row['f_e_mail'],'caption'=> $row['f_e_mail']));
-			}
-
-			$t->define_data(
-				$row
-			);
-		}
-		return $t->draw();
-	}
-
-	function my_buttons($button,$page)
-	{
-		$nav = '';
-		foreach($button as $key => $val)
-		{
-			$nav.=html::button(array('value'=>$key,'onclick'=>'document.changeform.'.$page.'.value='.$val.';document.changeform.submit()'));
-		}
-		return $nav;
-	}
-*/
-/*
-	////
-	// ! create new contact entry
-	// contact		at least one element required here
-	//	name
-	//	riik
-	//	linn
-	//	...
-	// name
-	// parent
-	// comment
-	// ...
-	function new_address($arr,$tyyp,$class_id)
-	{
-		extract($arr);
-
-		print_r($arr);die();
-	//		echo $parent.'sfdgs';
-			foreach ($datas as $key=>$val)
-			{
-				{
-					$this->quote($val);
-					$f[]=$key;
-					$v[]="'".$val."'";
-				}
-			}
-
-			$id = $this->new_object(array(
-				"name" => $name,
-				"parent" => $parent,
-				"class_id" => $class_id,
-				"comment" => $comment,
-				"metadata" => array(
-//					"contact"=>$contact,
-				)
-			));
-			$f[]=OID;
-			$v[]="'".$id."'";
-
-			$q='insert into kliendibaas_'.$tyyp.'('.implode(",",$f).')values('.implode(",",$v).')';
-
-		$this->db_query($q);
-		return $id;
-	}
-*/
-/*
-	function owerview($args)
-	{
-		$arr=array(
-			CL_LINN => 'linn',
-			CL_RIIK => 'riik',
-			CL_MAAKOND => 'maakond',
-			CL_TEGEVUSALA => 'tegevusala',
-			CL_TOODE => 'toode',
-			CL_FIRMA => 'firma',
-			CL_ETTEVOTLUSVORM => 'ettevõtlusvorm',
-//			'' => '',
-//			'' => '',
-		);
-
-		$nodes = array();
-		$nodes['overv'] = array(
-			"value" => 'TEST',
-		);
-		return $nodes;
-	}
-*/
-
-
-	
-		
-/*
-
-			$q = 'select oid,kood from kliendibaas_tegevusala where length(kood)=5';
-			$data = $this->db_fetch_array($q);
-			foreach($data as $val)
-			{
-					$k='0'.$val['kood'];
-				echo			$q = "update kliendibaas_tegevusala set kood='".$k."' where oid=".$val[OID];
-//				$this->db_query($q);
-
-			}
-
-
-/*
-
-$arr=$this->db_fetch_array('select kood1,kood from html_import_tegevusalad');
-
-foreach ($arr as $key => $val)
-{
-	if (($val['kood1'] && $val['kood']) && ($val['kood1']<>$val['kood']))
-	{
-		$this->db_query("update kliendibaas_tegevusala set kood='".$val['kood']."' where kood='".$val['kood1']."'");
-//		echo $val['kood1'].'=>'.$val['kood'].'<br />';
-	}
-}
-
-die('done');
-
-
-//alter table kliendibaas_fimra change column pohitegevus pohitegevus varchar(20);
-/*
-		$arr=$this->db_fetch_array('
-		select t2.pohitegevus as oih, t1.oid as fioid  from kliendibaas_firma as t1, html_import_firmad as t2
-		where t1.reg_nr=t2.reg_nr
-
-		');
-
-/*
-		$arr=$this->db_fetch_array('
-			select t2.oid as fioid, t1.oid as oih  from kliendibaas_tegevusala as t1,kliendibaas_firma as t2
-			where t1.kood=t2.pohitegevus
-
-
-		 ');
-
-foreach ($arr as $row)
-{
-$q="update kliendibaas_firma set pohitegevus='".$row['oih']."' where oid=".$row['fioid'];
-$this->db_query($q);
-}
-		print_r($arr);
-		die();
-*/
-
-/*		$arr=array(
-			'linn' => 'linn',
-			'riik' => 'riik',
-			'maakond' => 'maakond',
-			'tegevusala' => 'tegevusala',
-			'toode' => 'toode',
-			'firma' => 'firma',
-			'ettevotlusvorm' => 'ettevõtlusvorm',
-//			'' => '',
-//			'' => '',
-		);
-
-
-*/
-
-
-	/*function objects_manager($args)
-	{
-		$arr = array(
-			'linn' => 'linn',
-			'riik' => 'riik',
-			'maakond' => 'maakond',
-			'tegevusala' => 'tegevusala',
-			'toode' => 'toode',
-			'firma' => 'firma',
-			'ettevotlusvorm' => 'ettevõtlusvorm',
-//			'' => '',
-//			'' => '',
-		);
-
-		foreach ($arr as $key => $value)
-		{
-			$k = $this->mk_my_orb('new', array('parent' => $args['obj']['parent']),$key);
-			$arr2[$k] = $value;
-		}
-		$str .= 'lisa objekt ';
-		$str .= html::select(array('name' => 'mk_new', 'options' => $arr2, 'onchange' =>
-			"window.open(document.changeform.mk_new.value,'new object','')"
-		));
-
-		$nodes = array();
-		$nodes['obj'] = array(
-			"value" => $str,
-		);
-		return $nodes;
-	}*/
-
-	/*	function callback_obj_list_($args)
-	{
-		$arg2['obj'][OID] = isset($args['obj']['meta']['active_selection']) ? 
-			$args['obj']['meta']['active_selection'] : $args['obj'][OID];
-		$arg2['obj']['parent'] = $args['obj']['parent'];
-		$arg2['obj']['meta']['active_selection'] = $arg2['obj'][OID] ? $arg2['obj'][OID] : $args['obj']['meta']['selections'][0];
-		$arg2['sel']['oid'] = $args['obj'][OID];
-		return $dat = $this->obj_list($arg2);
-	}	*/
-
-}
+};
 ?>

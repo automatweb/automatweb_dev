@@ -20,9 +20,9 @@
 @property active_selection type=textbox group=selectione
 
 @property forms type=checkbox
-@caption Näita tagasisisde linke
+@caption Näita tagasiside linke
 
-@property forms type=relpicker reltype=BACKFORMS2
+@property forms type=relpicker reltype=RELTYPE_BACKFORMS2
 @caption tagasiside vormid
 
 ////////////////////////////////////////////////////////////
