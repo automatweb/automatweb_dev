@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.84 2003/03/13 12:13:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.85 2003/03/13 15:25:27 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -354,6 +354,7 @@ if (!defined("DEFS"))
 
 	function aw_unserialize($str,$dequote = 0)
 	{
+		$retval = false;
 		if ($dequote)
 		{
 			$str = stripslashes($str);
@@ -377,8 +378,9 @@ if (!defined("DEFS"))
 			$ser = get_instance("orb/xmlrpc");
 			$retval = $ser->xmlrpc_unserialize($str);
 		}
-		else
+		elseif (!empty($str))
 		{
+			
 			$retval = unserialize($str);
 		}
 		return $retval;
@@ -465,21 +467,27 @@ if (!defined("DEFS"))
 
 	function aw_cache_set($cache,$key,$val = "")
 	{
-		// if $key is array, we will just stick it into the cache. 
-		// NO!! that's what aw_cache_set_array() is for!!! - terryf
 		if (!is_array($GLOBALS["__aw_cache"]))
 		{
 			$GLOBALS["__aw_cache"] = array($cache => array($key => $val));
 		}
 		else
-		if (!is_array($GLOBALS["__aw_cache"][$cache]))
 		{
-			$GLOBALS["__aw_cache"][$cache] = array($key => $val);
-		}
-		else
-		{
-			$GLOBALS["__aw_cache"][$cache][$key] = $val;
-		}
+			// init it, if empty - kills warning
+			if (empty($GLOBALS["__aw_cache"][$cache]))
+			{
+				$GLOBALS["__aw_cache"][$cache] = "";
+			};
+
+			if (!is_array($GLOBALS["__aw_cache"][$cache]))
+			{
+				$GLOBALS["__aw_cache"][$cache] = array($key => $val);
+			}
+			else
+			{
+				$GLOBALS["__aw_cache"][$cache][$key] = $val;
+			}
+		};
 	}
 
 	function aw_cache_flush($cache)
