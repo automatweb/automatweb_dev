@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.113 2004/11/17 09:55:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.114 2004/11/30 20:49:45 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -360,7 +360,7 @@ class menu extends class_base
 
 			case "tpl_dir":
 				$template_sets = aw_ini_get("menuedit.template_sets");
-				$data["options"] = array_merge(array("" => "kasuta parenti valikut"),$template_sets);
+				$data["options"] = array_merge(array("" => t("kasuta parenti valikut")),$template_sets);
 				break;
 			
 			case "sections":
@@ -405,7 +405,7 @@ class menu extends class_base
 					}
 					else
 					{
-						$icon = "(no icon set)";
+						$icon = t("(no icon set)");
 					};
 				};
 				$data["value"] = $icon;
@@ -436,25 +436,25 @@ class menu extends class_base
 				));
 				$t->define_field(array(
 					"name" => "field",
-					"caption" => "Väli",
+					"caption" => t("Väli"),
 				));
 				$t->define_field(array(
 					"name" => "order",
-					"caption" => "Järjekord",
+					"caption" => t("Järjekord"),
 				));
 
 				$fields = array(
 					'' => "",
-					'objects.jrk' => "J&auml;rjekorra j&auml;rgi",
-					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
-					'objects.modified' => "Muutmise kuup&auml;eva j&auml;rgi",
-					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi",
-					'planner.start' => "Kalendris valitud aja j&auml;rgi",
+					'objects.jrk' => t("J&auml;rjekorra j&auml;rgi"),
+					'objects.created' => t("Loomise kuup&auml;eva j&auml;rgi"),
+					'objects.modified' => t("Muutmise kuup&auml;eva j&auml;rgi"),
+					'documents.modified' => t("Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"),
+					'planner.start' => t("Kalendris valitud aja j&auml;rgi"),
 				);
 
 				$orders = array(
-					'DESC' => "Suurem (uuem) enne",
-					'ASC' => "V&auml;iksem (vanem) enne",
+					'DESC' => t("Suurem (uuem) enne"),
+					'ASC' => t("V&auml;iksem (vanem) enne"),
 				);
 
 				$idx = 1;
@@ -497,18 +497,18 @@ class menu extends class_base
 			case "sort_by":
 				$data['options'] = array(
 					'' => "",
-					'objects.jrk' => "J&auml;rjekorra j&auml;rgi",
-					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
-					'objects.modified' => "Muutmise kuup&auml;eva j&auml;rgi",
-					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi",
-					'planner.start' => "Kalendris valitud aja j&auml;rgi",
+					'objects.jrk' => t("J&auml;rjekorra j&auml;rgi"),
+					'objects.created' => t("Loomise kuup&auml;eva j&auml;rgi"),
+					'objects.modified' => t("Muutmise kuup&auml;eva j&auml;rgi"),
+					'documents.modified' => t("Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"),
+					'planner.start' => t("Kalendris valitud aja j&auml;rgi"),
 				);
 				break;
 
 			case "sort_ord":
 				$data['options'] = array(
-					'DESC' => "Suurem (uuem) enne",
-					'ASC' => "V&auml;iksem (vanem) enne",
+					'DESC' => t("Suurem (uuem) enne"),
+					'ASC' => t("V&auml;iksem (vanem) enne"),
 				);
 				break;
 
@@ -516,14 +516,14 @@ class menu extends class_base
 				$t = &$arr["prop"]["vcl_inst"];
 				$t->define_field(array(
 					"name" => "id",
-					"caption" => "OID",
+					"caption" => t("OID"),
 					"type" => "int",
 					"talign" => "center",
 				));
 
 				$t->define_field(array(
 					"name" => "name",
-					"caption" => "Nimi",
+					"caption" => t("Nimi"),
 				));
 
 				$see_also_conns = $arr["obj_inst"]->connections_from(array(
@@ -543,25 +543,25 @@ class menu extends class_base
 				$t = &$arr["prop"]["vcl_inst"];
 				$t->define_field(array(
 					"name" => "ip_name",
-					"caption" => "IP Nimi",
+					"caption" => t("IP Nimi"),
 					"sortable" => 1,
 					"align" => "center"
 				));
 				$t->define_field(array(
 					"name" => "ip",
-					"caption" => "IP Aadress",
+					"caption" => t("IP Aadress"),
 					"sortable" => 1,
 					"align" => "center"
 				));
 				$t->define_field(array(
 					"name" => "allowed",
-					"caption" => "Lubatud",
+					"caption" => t("Lubatud"),
 					"sortable" => 0,
 					"align" => "center"
 				));
 				$t->define_field(array(
 					"name" => "denied",
-					"caption" => "Keelatud",
+					"caption" => t("Keelatud"),
 					"sortable" => 0,
 					"align" => "center"
 				));
@@ -620,7 +620,7 @@ class menu extends class_base
 		$cnt = aw_ini_get("menu.num_menu_images");
 		$imdata = $arr["obj_inst"]->meta("menu_images");
 
-		$imgrels = array(0 => "Vali pilt..");
+		$imgrels = array(0 => t("Vali pilt.."));
 		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_IMAGE)) as $conn)
 		{
 			$imgrels[$conn->prop("to")] = $conn->prop("to.name");
@@ -639,7 +639,7 @@ class menu extends class_base
 					$url =  html::img(array("url" => $url));
 					$url .= " <br> ( ".html::href(array(
 						"url" => $this->mk_my_orb("change", array("id" => $imdata[$i]["image_id"]),"image"),
-						"caption" => "Muuda"
+						"caption" => t("Muuda")
 					))." ) ";
 				}
 			}
@@ -673,25 +673,25 @@ class menu extends class_base
 	{
 		$t->define_field(array(
 			"name" => "nr",
-			"caption" => "NR",
+			"caption" => t("NR"),
 			"talign" => "center",
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"talign" => "center",
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "preview",
-			"caption" => "Eelvaade",
+			"caption" => t("Eelvaade"),
 			"talign" => "center",
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "rel",
-			"caption" => "Vali Pilt",
+			"caption" => t("Vali Pilt"),
 			"talign" => "center",
 			"align" => "center",
 		));
@@ -712,7 +712,7 @@ class menu extends class_base
 			"multiple" => 1,
 			"size" => 15,
 			"name" => "ex_menus",
-			"caption" => "Vali menüüd",
+			"caption" => t("Vali menüüd"),
 			"options" => $submenus,
 			// this selects all choices
 			"selected" => array_flip($submenus),
@@ -722,19 +722,19 @@ class menu extends class_base
 			"type" => "checkbox",
 			"name" => "allactive",
 			"value" => 1,
-			"caption" => "Märgi kõik menüüd aktiivseks",
+			"caption" => t("Märgi kõik menüüd aktiivseks"),
 		);
 		$nodes[] = $tmp;
 		$tmp = array(
 			"type" => "checkbox",
 			"name" => "ex_icons",
 			"value" => 1,
-			"caption" => "Ekspordi ikoonid",
+			"caption" => t("Ekspordi ikoonid"),
 		);
 		$nodes[] = $tmp;
 		$tmp = array(
 			"type" => "submit",
-			"value" => "Ekspordi",
+			"value" => t("Ekspordi"),
 			"name" => "do_export",
 		);
 		$nodes[] = $tmp;
@@ -753,7 +753,7 @@ class menu extends class_base
 		$nodes[] = array(
 			"type" => "select",
 			"name" => "pclass",
-			"caption" => "Vali meetod",
+			"caption" => t("Vali meetod"),
 			"options" => array(),
 			"selected" => $arr["obj_inst"]->meta("pclass"),
 			"options" => $this->get_pmethod_sel(),
@@ -766,7 +766,7 @@ class menu extends class_base
 			$nodes[] = array(
 				"type" => "select",
 				"name" => "pobject",
-				"caption" => "Vali meetodiga seotud objekt",
+				"caption" => t("Vali meetodiga seotud objekt"),
 				"selected" => $arr["obj_inst"]->meta("pobject"),
 				"options" => $this->get_pobjects($class_id),
 			);
@@ -776,7 +776,7 @@ class menu extends class_base
 			$nodes[] = array(
 				"type" => "select",
 				"name" => "pgroup",
-				"caption" => "Vali meetodiga seotud grupp",
+				"caption" => t("Vali meetodiga seotud grupp"),
 				"options" => $this->get_object_groups($class_id),
 				"selected" => $arr["obj_inst"]->meta("pgroup"),
 			);
@@ -785,7 +785,7 @@ class menu extends class_base
 			"type" => "checkbox",
 			"name" => "pm_url_admin",
 			"value" => 1,
-			"caption" => "Meetod viitab adminni",
+			"caption" => t("Meetod viitab adminni"),
 			"ch_value" => $arr["obj_inst"]->meta("pm_url_admin"),
 		);
 		
@@ -793,7 +793,7 @@ class menu extends class_base
 			"type" => "checkbox",
 			"name" => "pm_url_menus",
 			"value" => 1,
-			"caption" => "Meetodi väljundi kuvamisel näidatakse menüüsid",
+			"caption" => t("Meetodi väljundi kuvamisel näidatakse menüüsid"),
 			"ch_value" => $arr["obj_inst"]->meta("pm_url_menus"),
 		);
 				
@@ -929,7 +929,7 @@ class menu extends class_base
 					$ol = new object_list($filt);
 					if (count($ol->ids()))
 					{
-						$data["error"] = "Selline alias on juba olemas!";
+						$data["error"] = t("Selline alias on juba olemas!");
 						return PROP_FATAL_ERROR;
 					}
 				}
@@ -958,7 +958,7 @@ class menu extends class_base
 			"class_id" => $class_id,
 			"limit" => 100,
 		));
-		return array(0 => "-- vali --") + $objects->names();
+		return array(0 => t("-- vali --")) + $objects->names();
 	}
 	
 	function update_menu_images($args = array())
@@ -1038,11 +1038,11 @@ class menu extends class_base
 				"url" => $link,
 				"caption" => $obj->name(),
 			));
-			$title .= " / Muuda";
+			$title .= " / ".t("Muuda");
 		}
 		else
 		{
-			$title = "Lisa";
+			$title = t("Lisa");
 		};
 		return $title;
 	}
@@ -1051,7 +1051,7 @@ class menu extends class_base
 	// !tagastab array adminni featuuridest, mida sobib ette s88ta aw_template->picker funxioonile
 	function get_feature_sel()
 	{
-		$ret = array("0" => "--vali--");
+		$ret = array("0" => t("--vali--"));
 		$prog = aw_ini_get("programs");
 		reset($prog);
 		while (list($id,$v) = each($prog))
@@ -1071,7 +1071,7 @@ class menu extends class_base
 	function get_pmethod_sel()
 	{
 		$orb = get_instance("orb");
-		return array("0" => "--vali--") + $orb->get_classes_by_interface(array("interface" => "public"));
+		return array("0" => t("--vali--")) + $orb->get_classes_by_interface(array("interface" => "public"));
 	}
 
 	function get_menu_keywords($id)
@@ -1185,7 +1185,7 @@ class menu extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -1193,7 +1193,7 @@ class menu extends class_base
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 		));
 /*		$t->define_field(array(
@@ -1237,7 +1237,7 @@ class menu extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -1245,12 +1245,12 @@ class menu extends class_base
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 		));
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => "k.a. alammen&uuml;&uuml;d",
+			"caption" => t("k.a. alammen&uuml;&uuml;d"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
