@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.15 2003/05/08 10:24:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.16 2003/05/08 13:43:39 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -242,6 +242,8 @@ class form_base extends form_db_base
 		$el_tbls["save_table_data"] = $this->arr["save_tables"];
 		$el_tbls["save_table_start_from"] = $this->arr["save_table_start_from"];
 		$el_tbls["save_tables_obj_tbl"] = $this->arr["save_tables_obj_tbl"];
+
+		$el_tbls["is_translatable"] = $this->arr["is_translatable"];
 
 		$this->upd_object(array(
 			"oid" => $this->id,

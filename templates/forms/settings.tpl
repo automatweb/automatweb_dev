@@ -131,6 +131,10 @@ function setLink(li,title)
 <td class="celltext"><input type="checkbox" name="hide_empty_rows" value="1" {VAR:hide_empty_rows}></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">T&ouml;lgitav?:</td>
+<td class="celltext"><input type="checkbox" name="is_translatable" value="1" {VAR:is_translatable}></td>
+</tr>
+<tr class="aste01">
 <td></td>
 <td class="celltext"><input class='formbutton' type='submit' NAME='save_form_settings' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </table>

@@ -221,8 +221,22 @@ class form_db_base extends aw_template
 				};
 			}
 
-			$sql = "INSERT INTO form_".$this->id."_entries($ids) VALUES($vals)";
-			$this->db_query($sql);
+			// now, if this form is translated, then copy the entry to all languages
+			if ($this->arr["is_translatable"])
+			{
+				$l = get_instance("languages");
+				$ll = $l->get_list();
+				foreach($ll as $lid => $ld)
+				{
+					$sql = "INSERT INTO form_".$this->id."_entries($ids,lang_id) VALUES($vals,$lid)";
+					$this->db_query($sql);
+				}
+			}
+			else
+			{
+				$sql = "INSERT INTO form_".$this->id."_entries($ids) VALUES($vals)";
+				$this->db_query($sql);
+			}
 		}
 		$this->restore_handle();
 	}
@@ -319,7 +333,9 @@ class form_db_base extends aw_template
 		{
 			// create sql 
 			$ids = "id = $entry_id";
-			$first = true;
+			$lang_ids = "";
+
+			$is_trans = $this->arr["is_translatable"];
 
 			reset($entry_data);
 			while (list($k, $v) = each($entry_data))
@@ -334,12 +350,26 @@ class form_db_base extends aw_template
 						$v = aw_serialize($v, SERIALIZE_NATIVE);
 					}
 					$this->quote(&$v);
-					$ids.=",el_$k = '$v',ev_$k = '$ev'";
+					if ($el->is_translatable() && $is_trans)
+					{
+						$lang_ids.=",el_$k = '$v',ev_$k = '$ev'";
+					}
+					else
+					{
+						$ids.=",el_$k = '$v',ev_$k = '$ev'";
+					}
 				}
 			}
 
 			$sql = "UPDATE form_".$this->id."_entries SET $ids WHERE id = $entry_id";
 			$this->db_query($sql);
+
+			if ($lang_ids != "")
+			{
+				$ids = substr($lang_ids, 1);
+				$sql = "UPDATE form_".$this->id."_entries SET $ids WHERE id = $entry_id AND lang_id = ".aw_global_get("lang_id");
+				$this->db_query($sql);
+			}
 		}
 		$this->restore_handle();
 	}
@@ -433,6 +463,10 @@ class form_db_base extends aw_template
 			$sql_join = "form_".$this->id."_entries";
 			$idx_tbl = "form_".$this->id."_entries";
 			$idx_col = "id";
+			if ($this->arr["is_translatable"])
+			{
+				$lang = " AND $idx_tbl.lang_id = ".aw_global_get("lang_id");
+			}
 		}
 		else
 		{
@@ -453,8 +487,13 @@ class form_db_base extends aw_template
 				$idx_tbl = form_db_base::mk_tblname("form_".$this->id."_entries", $this->id);
 				$idx_col = "id";
 			}
+
+			if ($this->arr["is_translatable"])
+			{
+				$lang = " AND $idx_tbl.lang_id = ".aw_global_get("lang_id");
+			}
 		}
-		$sql = "SELECT $sql_data FROM $sql_join WHERE $idx_tbl.$idx_col = '$entry_id'";
+		$sql = "SELECT $sql_data FROM $sql_join WHERE $idx_tbl.$idx_col = '$entry_id' $lang";
 		if ($GLOBALS["fg_re_dbg"] == 1)	echo "read_entry sql = $sql <br>";
 
 		$this->db_query($sql);
@@ -717,7 +756,16 @@ class form_db_base extends aw_template
 						$__t2fid = $this->table2form_map[$jdata["to_tbl"]];
 						if (!($this->do_not_fetch[$__tfid] == $__tfid || $this->do_not_fetch[$__t2fid] == $__t2fid) || $jdata["to_tbl"] == "objects")
 						{
-							$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
+							// also, get the form and check if it is translatable. 
+							// if it is, then we must add the lang_id parameter to the join clause.
+							$__fi = $this->cache_get_form_eldat($__t2fid);
+							$lang = "";
+							if ($__fi["is_translatable"] && !$dat["save_table"])
+							{
+								$lang = " AND $jdata[to_tbl].lang_id = ".aw_global_get("lang_id");
+							}
+
+							$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON (".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"]." $lang) ";
 							$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
 						}
 						else

@@ -734,6 +734,15 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: SEARCH_PROPS -->
 
+<!-- SUB: IS_TRANSLATABLE -->
+<tr>
+<td class="fgtext">Kas element on t&otilde;lgitav?</td>
+<td class="fgtext"><input type="checkbox" value="1" name="{VAR:cell_id}_is_translatable" {VAR:is_translatable}></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: IS_TRANSLATABLE -->
+
 <!-- SUB: HAS_CONTROLLER -->
 <tr>
 <td class="fgtext">Vali elemendi sisestuse kontroller(id):</td>

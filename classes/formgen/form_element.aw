@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.38 2003/04/23 14:21:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.39 2003/05/08 13:43:39 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -191,7 +191,8 @@ class form_element extends aw_template
 				"search_field_in_set"			=> checked($this->arr["search_field_in_set"]),
 				"link_newwindow"					=> checked($this->arr["link_newwindow"]),
 				"search_logical_append" => $this->arr["search_logical_append"],
-				"search_logical_prepend" => $this->arr["search_logical_prepend"]
+				"search_logical_prepend" => $this->arr["search_logical_prepend"],
+				"is_translatable" => checked($this->arr["is_translatable"]),
 			));
 
 			$this->vars(array(
@@ -777,7 +778,9 @@ class form_element extends aw_template
 				$_tbp.=$this->parse("TABLE_LB");
 				$this->vars(array("TABLE_LB" => $_tbp));
 			}
+
 			$this->vars(array(
+				"IS_TRANSLATABLE" => ($this->form->arr["is_translatable"] ? $this->parse("IS_TRANSLATABLE") : ""),
 				"LISTBOX_ITEMS"		=> $lb,
 				"MULTIPLE_ITEMS"	=> $mu,
 				"TEXTAREA_ITEMS"	=> $ta,
@@ -808,6 +811,9 @@ class form_element extends aw_template
 
 		$var = $base."_ignore_text";
 		$this->arr["ignore_text"] = $$var;
+
+		$var = $base."_is_translatable";
+		$this->arr["is_translatable"] = $$var;
 
 		$cnt =0;
 		if (is_array($this->arr["table"]))
@@ -1559,6 +1565,11 @@ class form_element extends aw_template
 	function get_related_element() 
 	{ 
 		return $this->arr["rel_element"]; 
+	}
+
+	function is_translatable()
+	{
+		return $this->arr["is_translatable"];
 	}
 
 	function get_el_lb_items()	

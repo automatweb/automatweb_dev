@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.53 2003/05/08 10:25:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.54 2003/05/08 13:43:39 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -450,6 +450,14 @@ class form extends form_base
 		$this->arr["search_act_lang_only"] = $search_act_lang_only;
 		$this->arr["hide_empty_rows"] = $hide_empty_rows;
 
+		if ($is_translatable && !$this->arr["is_translatable"])
+		{
+			// create translations for ell entries
+			$this->_create_translations();
+		}
+
+		$this->arr["is_translatable"] = $is_translatable;
+
 		$this->subtype = 0;
 		if ($email_form_action)
 		{
@@ -834,6 +842,7 @@ class form extends form_base
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
 			"search_act_lang_only" => checked($this->arr["search_act_lang_only"]),
 			"hide_empty_rows" => checked($this->arr["hide_empty_rows"]),
+			"is_translatable" => checked($this->arr["is_translatable"])
 		));
 
 		$ns = "";
@@ -4288,6 +4297,7 @@ class form extends form_base
 		$_menulist = $o->get_list();
 
 		$_tp = $this->get_list(FTYPE_ENTRY,false,true);
+		asort($_tp);
 
 		// we must remove the current form from the list of relation forms so that the user can't relate a form to itself
 		$_tmp = array();
@@ -6056,6 +6066,76 @@ class form extends form_base
 			return $inst->do_export($arr);
 		}
 		return $this->mk_my_orb("export", array("id" => $id));
+	}
+
+	function _create_translations()
+	{
+		// this will only work if the form is not saved to other tables...
+		if (!$this->arr["save_table"])
+		{
+			$tb = "form_".$this->id."_entries";
+
+			// check if lang_id column exists, if not, add it!
+			$tbl = $this->db_get_table($tb);
+			if (!isset($tbl["fields"]["lang_id"]))
+			{
+				$this->db_add_col($tb, array(
+					"name" => "lang_id",
+					"type" => "int",
+					"default" => $this->lang_id
+				));
+				$this->db_add_index($tb, array(
+					"name" => "lang_id",
+					"col" => "lang_id"
+				));
+				// now we gots to drop the primary key on id column as well..
+				$sql = "ALTER TABLE $tb DROP PRIMARY KEY";
+				$this->db_query($sql);
+			}
+
+			$e2l = array();
+
+			$sql = "SELECT id, lang_id FROM $tb";
+			$this->db_query($sql);
+			while ($row = $this->db_next())
+			{
+				$e2l[$row['id']][$row['lang_id']] = $row["id"];
+			}
+
+			$l = get_instance("languages");
+			$la = $l->get_list();
+
+			// now go over all entries and check if they have data for all languages.
+			// if not, then add it.
+			foreach($e2l as $eid => $ldat)
+			{
+				foreach($la as $lang_id => $lang_dat)
+				{
+					if (!isset($ldat[$lang_id]))
+					{
+						// we must copy data from the default language (the form's language)
+						$sql = "SELECT * FROM $tb WHERE lang_id = ".$this->lang_id." AND id = $eid";
+						$row = $this->db_fetch_row($sql);
+
+						$cols = array();
+						$vals = array();
+						foreach($row as $col => $val)
+						{
+							if ($col != "id" && $col != "lang_id")
+							{
+								$cols[] = $col;
+								$vals[] = $val;
+							}
+						}
+						$this->quote($vals);
+						$_cols = join(",", $cols);
+						$_vals = join(",", map("'%s'",$vals));
+						$sql = "INSERT INTO $tb (id,lang_id,$_cols) VALUES('$eid','$lang_id',$_vals)";
+						$this->db_query($sql);
+					}
+				}
+			}
+		}
 	}
 };	// class ends
 ?>
