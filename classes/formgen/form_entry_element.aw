@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.9 2003/10/06 14:32:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.10 2003/10/13 12:24:42 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -155,7 +155,14 @@ class form_entry_element extends form_element
 			$sp[3] = (int)$sp[3];
 			if ($this->form->lang_id != $lang_id)
 			{
-				$html=$this->arr["listbox_lang_items"][$lang_id][$sp[3]];
+				if (isset($this->arr["listbox_lang_items"][$lang_id][$sp[3]]))
+				{
+					$html=$this->arr["listbox_lang_items"][$lang_id][$sp[3]];
+				}
+				else
+				{
+					$html=$this->arr["listbox_items"][$sp[3]];
+				}
 			}
 			else
 			{
