@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.122 2002/11/06 11:23:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.123 2002/11/06 11:25:05 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1353,7 +1353,11 @@ class document extends aw_template
 		{
 			$oq_parts["alias"] = $data["alias"];
 		};
-			
+
+		if ($modified)
+		{
+			$oq_parts["modified"] = $modified;
+		};
 
 		$this->upd_object($oq_parts);
 
