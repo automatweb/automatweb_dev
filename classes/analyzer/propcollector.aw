@@ -1,4 +1,5 @@
 <?php
+// creates xml files out of property definitions
 class propcollector extends aw_template
 {
 	function propcollector($args = array())
@@ -42,6 +43,34 @@ class propcollector extends aw_template
 		asort($files);
 		$counter = 0;
 		$total = 0;
+
+		// there are 3 ways to define a tag
+		// with a context
+		// 	@tag name key1=value1 key2=value2 .. keyN=valueN
+		// without a context, key=value pairs
+		// 	@tag key1=value1 key2=value2 .. keyN=valueN
+		// simple value
+		//	@tag value, always belongs to some previous tag
+
+		define('TAG_CTX',1);
+		define('TAG_PAIRS',2);
+		define('TAG_VALUE',3);
+
+		$tags = array(
+			"classinfo" => TAG_PAIRS,
+			"default" => TAG_PAIRS,
+			"groupinfo" => TAG_CTX,
+			"tableinfo" => TAG_CTX,
+			"property" => TAG_CTX,
+			"layout" => TAG_CTX,
+			"forminfo" => TAG_CTX,
+			"reltype" => TAG_CTX,
+			"column" => TAG_CTX,
+			"caption" => TAG_VALUE,
+			"comment" => TAG_VALUE,
+		);
+
+
 		// now we need to parse all the files for properties
 		foreach($files as $key => $name)
 		{
@@ -49,19 +78,24 @@ class propcollector extends aw_template
 			// xml file is already up to date
 			$cname = substr(basename($name),0,-3);
 			$targetfile = $this->cfg["basedir"] . "/xml/properties/$cname" . ".xml";
-			$total++;
+			$skip = false;
 			if (file_exists($targetfile))
 			{
+				$total++;
 				$target_mtime = filemtime($targetfile);
 				$source_mtime = filemtime($name);
 
 				if ($source_mtime < $target_mtime)
 				{
 					//print "$targetfile is up to date\n";
-					continue;
+					$skip = true;
 				};
 			};
 
+			if ($skip == true)
+			{
+				continue;
+			};
 
 			$lines = @file($name);
 
@@ -71,53 +105,83 @@ class propcollector extends aw_template
 				$this->cl_start($cname);
 				foreach($lines as $line)
 				{
-					if (preg_match("/^\s*@classinfo (.*)/",$line,$m))
+					$taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m);
+					$tagname = $m[1];
+					$tagdata = $m[2];
+					if (isset($tags[$tagname]) && $tags[$tagname] == TAG_PAIRS)
 					{
-						$this->set_classinfo($m[1]);
+						$attribs = $this->_parse_attribs($m[2]);
+						if ($tagname == "classinfo")
+						{
+							$this->classinfo = array_merge($this->classinfo,$attribs);
+						};
+						if ($tagname == "default")
+						{
+							$this->defaults = array_merge($this->defaults,$attribs);
+						};
+
 					};
-					if (preg_match("/^\s*@groupinfo (\w+?) (.*)/",$line,$m))
+
+					if (isset($tags[$tagname]) && $tags[$tagname] == TAG_CTX)
 					{
-						$this->set_groupinfo($m[1],$m[2]);
+						preg_match("/(\w+?) (.*)/",$tagdata,$m);
+						$aname = $m[1];
+						$attribs = $m[2];
+						if ($tagname == "groupinfo")
+						{
+							$this->set_groupinfo($aname,$attribs);
+						}
+						else
+						if ($tagname == "tableinfo")
+						{
+							$this->set_tableinfo($aname,$attribs);
+						}
+						else
+						if ($tagname == "property")
+						{
+							$this->add_property($aname,$attribs);
+						}
+						else
+						if ($tagname == "layout")
+						{
+							$this->add_layout($aname,$attribs);
+						}
+						else
+						if ($tagname == "reltype")
+						{
+							$this->add_reltype($aname,$attribs);
+						}
+						else
+						if ($tagname == "forminfo")
+						{
+							$this->add_forminfo($aname,$attribs);
+						}
+						else
+						{
+							$this->classdef[$tagname][$aname] = $this->_parse_attribs($attribs);
+							$this->name = $aname;
+							$this->last_element = $tagname;
+						};
 					};
-					if (preg_match("/^\s*@tableinfo (\w+?) (.*)/",$line,$m))
+
+					if (isset($tags[$tagname]) && $tags[$tagname] == TAG_VALUE)
 					{
-						$this->set_tableinfo($m[1],$m[2]);
-					};
-					if (preg_match("/^\s*@default (\w+?)=(.*)/",$line,$m))
-					{
-						$this->set_default($m[1],$m[2]);
-					};
-					if (preg_match("/^\s*@property (\w+?) (.*)/",$line,$m))
-					{
-						$this->add_property($m[1],$m[2]);
-					};
-					if (preg_match("/^\s*@layout (\w+?) (.*)/",$line,$m))
-					{
-						$this->add_layout($m[1],$m[2]);
-					};
-					if (preg_match("/^\s*@reltype (\w+?) (.*)/",$line,$m))
-					{
-						$this->add_reltype($m[1],$m[2]);
-					};
-					if (preg_match("/^\s*@forminfo (\w+?) (.*)/",$line,$m))
-					{
-						$this->add_forminfo($m[1],$m[2]);
-					};
-					if (preg_match("/^\s*@caption (.*)/",$line,$m))
-					{
-						$this->add_caption($m[1]);
-					};
-					if (preg_match("/^\s*@comment (.*)/",$line,$m))
-					{
-						$this->add_comment($m[1]);
+						if ($tagname == "caption")
+						{
+							$this->add_caption($tagdata);
+						};
+						if ($tagname == "comment")
+						{
+							$this->add_comment($tagdata);
+						};
 					};
 				};
-				if (sizeof($this->properties) > 0)
+
+				$success = $this->cl_end();
+				if ($success)
 				{
 					$counter++;
 				};
-				$this->cl_end();
-				//print "parsed $name<br />";
 			};
 		};
 		printf("Updated %d files out of %d\nAll done.\n",$counter,$total);
@@ -137,6 +201,7 @@ class propcollector extends aw_template
 		$this->reltypes = array();
 		$this->forminfo = array();
 		$this->layout = array();
+		$this->classdef = array();
 	}
 
 	function add_property($name,$data)
@@ -236,24 +301,6 @@ class propcollector extends aw_template
 		$this->forminfo[$name] = $this->_parse_attribs($data);
 	}
 
-	function set_default($key,$value)
-	{
-		$this->defaults[$key] = trim($value);
-	}
-
-	function set_classinfo($data)
-	{
-		$_x = new aw_array(explode(" ",$data));
-		foreach($_x->get() as $field)
-		{
-			list($fname,$fvalue) = explode("=",$field);
-			if ($fname && $fvalue)
-			{
-				$this->classinfo[$fname] = trim($fvalue);
-			};
-		};
-	}
-	
 	function set_groupinfo($id,$data)
 	{
 		$open_token = false;
@@ -330,6 +377,10 @@ class propcollector extends aw_template
 			case "relation":
 				$this->reltypes[$this->name]["caption"] = $caption;
 				break;
+
+			case "column":
+				$this->classdef["column"][$this->name]["caption"] = $caption;
+				break;
 		};
 	}
 	
@@ -348,6 +399,7 @@ class propcollector extends aw_template
 		$sr = get_instance("xml",array("ctag" => ""));
 		$sr->set_child_id("properties","property");
 		$outdir = $this->cfg["basedir"] . "/xml/properties/";
+		$success = false;
 		if (sizeof($this->properties) > 0 || sizeof($this->classinfo) > 0)
 		{
 			$fullname = $outdir . $this->cl_name . ".xml";
@@ -391,13 +443,20 @@ class propcollector extends aw_template
 				$arr["properties"]["forminfo"] = $this->forminfo;
 			};
 
+			if (sizeof($this->classdef["column"]) > 0)
+			{
+				$arr["properties"]["columns"] = $this->classdef["column"];
+			};
+
 			$res = $sr->xml_serialize($arr);
 			//print_r($res);
 			$this->put_file(array(
 				"file" => $fullname,
 				"content" => $res,
 			));
+			$success = true;
 		};
+		return $success;
 	}
 	
 	function _parse_attribs($data)
