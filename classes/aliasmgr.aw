@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.144 2004/03/17 13:44:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.145 2004/04/06 15:17:56 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -266,7 +266,7 @@ class aliasmgr extends aw_template
 		// lets' remove this for now. If there is a problem with alias enumeration
 		// somewhere, then it should be fixed case by case basis instead of doing
 		// it blindly over and over and over and over again
-		//$this->recover_idx_enumeration($oid);
+		$this->recover_idx_enumeration($oid);
 
 		$obj = obj($oid);
 		$als = $obj->meta("aliaslinks");
@@ -1030,7 +1030,7 @@ class aliasmgr extends aw_template
 
 		$hist = !is_array($hist) ? array() : $this->make_alias_classarr2($hist);
 
-		$this->reltypes[RELTYPE_BROTHER] = "lisa vend";
+		$this->reltypes[RELTYPE_BROTHER] = "too vend";
 		$this->rel_type_classes[RELTYPE_BROTHER] = array(
 			CL_MENU => $this->cfg["classes"][CL_MENU]["name"]
 		);
