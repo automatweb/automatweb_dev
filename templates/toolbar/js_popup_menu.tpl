@@ -17,6 +17,10 @@
 	class="menuItemArrow"><img src="{VAR:baseurl}/automatweb/images/arr.gif" alt="" border="0" /></span></a>
 <!-- END SUB: MENU_ITEM_SUB -->
 
+<!-- SUB: MENU_SEPARATOR -->
+<div class="menuItemSep"></div>
+<!-- END SUB: MENU_SEPARATOR -->
+
 </div>
 
 
