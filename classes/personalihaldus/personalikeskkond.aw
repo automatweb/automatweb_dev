@@ -1,5 +1,5 @@
 <?
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.1 2004/03/16 14:07:00 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.2 2004/03/17 10:32:54 duke Exp $
 // personalikeskkond.aw - Personalikeskkond 
 /*
  	
@@ -112,6 +112,12 @@
 
 class personalikeskkond extends class_base
 {
+	function personalikeskkond()
+	{
+		$this->init(array(
+			'clid' => CL_PERSONALIKESKKOND,
+		));
+	}
 	
 	//////
 	// class_base classes usually need those, uncomment them if you want to use them	
