@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.14 2001/12/19 23:24:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.15 2002/01/04 15:49:32 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -159,6 +159,15 @@ class aliasmgr extends aw_template {
 				"field" => "id"
 		);
 		
+		$this->defs["object_chain"] = array(
+				"alias" => "oc",
+				"title" => "objektipärg",
+				"generator" => "_object_chain_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"object_chain"),
+				"chlink" => $this->mk_my_orb("change",array(),"object_chain"),
+				"field" => "id"
+		);
+		
 		$this->defs["menus"] = array(
 				"alias" => "m",
 				"title" => "menüü link",
@@ -175,6 +184,16 @@ class aliasmgr extends aw_template {
 				"generator" => "_pullout_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"pullout"),
 				"chlink" => $this->mk_my_orb("change",array(),"pullout"),
+				"field" => "id"
+		);
+		
+		$this->defs["calendars"] = array(
+				"alias" => "k",
+				"title" => "calendar",
+				"class_id" => CL_CALENDAR,
+				"generator" => "_calendar_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"planner"),
+				"chlink" => $this->mk_my_orb("change",array(),"planner"),
 				"field" => "id"
 		);
 
@@ -342,6 +361,27 @@ class aliasmgr extends aw_template {
 		};
 	}
 	
+	function _object_chain_aliases($args = array())
+	{
+		$menu_chains = $this->get_aliases_for($this->id,CL_OBJECT_CHAIN,$_sby, $s_link_order);
+		reset($menu_chains);
+		while (list(,$v) = each($menu_chains))
+		{	
+			$meta = aw_unserialize($v["metadata"]);
+			$this->dequote($v);
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => $this->return_url),"object_chain");
+			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+			$this->t->define_data(array(
+				"name"                => $mchain,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description"             => $v["comment"],
+			));
+			$this->_common_parts($v);
+		};
+	}
+	
 	function _menu_chain_aliases($args = array())
 	{
 		$menu_chains = $this->get_aliases_for($this->id,CL_MENU_CHAIN,$_sby, $s_link_order);
@@ -365,7 +405,7 @@ class aliasmgr extends aw_template {
 	
 	function _menu_aliases($args = array())
 	{
-		$menu_chains = $this->get_aliases_for($this->id,CL_MENU_ALIAS,$_sby, $s_link_order);
+		$menu_chains = $this->get_aliases_for($this->id,CL_PSEUDO,$_sby, $s_link_order);
 		reset($menu_chains);
 		while (list(,$v) = each($menu_chains))
 		{	
@@ -389,6 +429,25 @@ class aliasmgr extends aw_template {
 		while (list(,$v) = each($menu_chains))
 		{	
 			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"pullout");
+			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+			$this->t->define_data(array(
+				"name"                => $mchain,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description"             => $v["comment"],
+			));
+			$this->_common_parts($v);
+		};
+	}
+	
+	function _calendar_aliases($args = array())
+	{
+		$aliases = $this->get_aliases_for($this->id,CL_PULLOUT,$_sby, $s_link_order);
+		reset($aliases);
+		while (list(,$v) = each($aliases))
+		{	
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"planner");
 			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$v["url"] = $url;
 			$this->t->define_data(array(
