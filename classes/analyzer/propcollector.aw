@@ -36,35 +36,40 @@ class propcollector extends aw_template
         function req_dir($args = array())
         {
                 $path = $args["path"];
-                if ($dir = opendir($path))
-                {
-                        while (($file = readdir($dir)) !== false)
-                        {
-                                # skip the stuff that starts with .
-                                if (substr($file,0,1) == ".")
-                                {
-                                        continue;
-                                };
+		$paths = is_array($path) ? $path : array($path);
+		foreach($paths as $path)
+		{
+			if ($dir = opendir($path))
+			{
+				while (($file = readdir($dir)) !== false)
+				{
+					# skip the stuff that starts with .
+					if (substr($file,0,1) == ".")
+					{
+						continue;
+					};
 
-                                $fqfn = $path . "/" . $file;
-                                if (is_dir($fqfn) && !is_link($fqfn) && ($file != "CVS"))
-                                {
-                                        $this->req_dir(array("path" => $fqfn));
-                                }
-                                elseif (is_file($fqfn) && is_readable($fqfn) && (preg_match("/\.aw$/",$fqfn)))
-                                {
-                                        $this->files[] = $fqfn;
-                                };
-                        };
-                        closedir($dir);
-                };
+					$fqfn = $path . "/" . $file;
+					if (is_dir($fqfn) && !is_link($fqfn) && ($file != "CVS"))
+					{
+						$this->req_dir(array("path" => $fqfn));
+					}
+					elseif (is_file($fqfn) && is_readable($fqfn) && (preg_match("/\.aw$/",$fqfn)))
+					{
+						$this->files[] = $fqfn;
+					};
+				};
+				closedir($dir);
+			};
+		};
         }
 
 	function run($args = array())
 	{
 		$cdir = $this->cfg["basedir"] . "/classes";
+		$sdir = $this->cfg["basedir"] . "/scripts";
 		$this->files = array();
-		$this->req_dir(array("path" => $cdir));
+		$this->req_dir(array("path" => array($cdir,$sdir)));
 		$files = $this->files;
 		asort($files);
 		$counter = 0;
