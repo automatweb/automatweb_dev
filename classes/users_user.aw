@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.71 2003/11/19 16:23:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.72 2003/11/19 16:32:35 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -18,6 +18,12 @@ define(GRP_USERGRP,4);
 
 define(GROUP_LEVEL_PRIORITY, 100000);
 define(USER_GROUP_PRIORITY, GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
+
+/*
+
+EMIT_MESSAGE(MSG_USER_LOGIN);
+
+*/
 
 class users_user extends aw_template 
 {
@@ -339,6 +345,9 @@ class users_user extends aw_template
 		{
 			aw_session_set('aliasmgr_obj_history',$aliasmgr_hist);
 		}
+
+		// notify listeners
+		post_message("MSG_USER_LOGIN", array("uid" => $uid));
 		
 		// now that we got the whether he can log in bit cleared, try to find an url to redirect to
 		// 1st is the url that was requested before the user was forced to login.
