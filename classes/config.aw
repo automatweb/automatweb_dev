@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.64 2004/11/07 19:14:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.65 2004/11/19 11:28:43 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -75,6 +75,7 @@ class config extends db_config
 				"pwd_mail" => $this->get_simple_config("remind_pwd_mail".$ldata["acceptlang"]),
 				"join_mail_subj" => $this->get_simple_config("join_mail_subj".$ldata["acceptlang"]),
 				"pwd_mail_subj" => $this->get_simple_config("remind_pwd_mail_subj".$ldata["acceptlang"]),
+				"join_hash_section" => $this->get_simple_config("join_hash_section".$ldata["acceptlang"]),
 				"acceptlang" => $ldata["acceptlang"],
 				"name" => $ldata["name"]
 			));
@@ -114,6 +115,7 @@ class config extends db_config
 			$this->set_simple_config("remind_pwd_mail".$ldata["acceptlang"],$pwd_mail[$ldata["acceptlang"]]);
 			$this->set_simple_config("join_mail_subj".$ldata["acceptlang"],$join_mail_subj[$ldata["acceptlang"]]);
 			$this->set_simple_config("remind_pwd_mail_subj".$ldata["acceptlang"],$pwd_mail_subj[$ldata["acceptlang"]]);
+			$this->set_simple_config("join_hash_section".$ldata["acceptlang"],$join_hash_section[$ldata["acceptlang"]]);
 		}
 		$this->set_simple_config("join_send_also",$join_send_also);
 
