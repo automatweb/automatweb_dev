@@ -35,6 +35,20 @@
 				</arguments>		
 			</function>
 		</action>
+
+		<action name="groups_convert">
+			<function name="groups_convert">
+				<arguments>
+				</arguments>		
+			</function>
+		</action>
+
+		<action name="convert_acl_to_classbase">
+			<function name="convert_acl_to_classbase">
+				<arguments>
+				</arguments>		
+			</function>
+		</action>
 	</class>
 </orb>
 		
