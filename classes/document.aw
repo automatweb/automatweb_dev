@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.18 2001/06/08 18:58:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.19 2001/06/09 00:54:09 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -529,6 +529,18 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 				));
+		
+		// keywordide list. bijaatch!
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)huvid(.+?)(#)/i",
+					));
+
+		$this->register_sub_parser(array(
+					"class" => "keywords",
+					"reg_id" => $mp,
+					"function" => "parse_aliases",
+					));
+	
 
 		if ($notitleimg != 1)
 		{
@@ -542,10 +554,10 @@ class document extends aw_template
 			$doc["title"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc[title]);
 		}
 
-		if (!(strpos($doc[content], "#board_last5#") === false))
+		if (!(strpos($doc["content"], "#board_last5#") === false))
 		{
 			$mb = new msgboard;
-			$doc[content] = str_replace("#board_last5#",$mb->mk_last5(),$doc[content]);
+			$doc["content"] = str_replace("#board_last5#",$mb->mk_last5(),$doc[content]);
 		}
 
 		// noja, mis fucking "undef" see siin on?
@@ -556,7 +568,7 @@ class document extends aw_template
 					));
 
 		}; 
-
+		
 		if (!$doc["nobreaks"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 			{
 				$doc[content] = str_replace("\r\n","<br>",$doc[content]);
@@ -665,38 +677,6 @@ class document extends aw_template
 		$doc[content] = preg_replace("/#liitumisform info=\"(.*)\"#/",$dbu->get_join_form($maat[1]),$doc[content]);
 	}
 				
-	// keywordide list. bijaatch!
-	if (!(strpos($doc["content"],"#huvid_form") === false))
-	{
-		preg_match("/#huvid_form algus=\"(.*)\" go=\"(.*)\"#/",$doc["content"], $maat);
- 
-			classload("keywords");
-			$kw = new keywords;
-			$t_int_form = $kw->show_interests_form($maat[1],$maat[2]);
- 
-			$doc["content"] = preg_replace("/#huvid_form algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
-		}
- 
-		if (!(strpos($doc["content"],"#huvid_check") === false))
-		{
-			preg_match("/#huvid_check algus=\"(.*)\" go=\"(.*)\"#/",$doc["content"], $maat);
-			classload("keywords");
-			$kw = new keywords;
-			$t_int_form = $kw->show_interests_form2(array(
-							"beg" => $maat[1],
-							"section" => $maat[2],
-				));
-			$doc["content"] = preg_replace("/#huvid_check algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
-    }
- 
-		if (!(strpos($doc["content"],"#huvid_kategooriad") === false))
-		{
-			preg_match("/#huvid_kategooriad go=\"(.*)\"#/",$doc["content"], $maat);
-			classload("keywords");
-			$kw = new keywords;
-			$blah = $kw->show_categories(array("after" => $maat[1]));
-			$doc["content"] = preg_replace("/#huvid_kategooriad go=\"(.*)\"#/",$blah,$doc["content"]);
-		}
 
 	if ($doc[author]) {
 	  if (DOC_LINK_AUTHORS && ($this->templates[ablock])) {
@@ -816,36 +796,32 @@ class document extends aw_template
 		{
 			$lab = unserialize($doc["lang_brothers"]);
 			$langs = "";
-			if (!is_array($larr))
+			classload("languages");
+			$l = new languages;
+			$larr = $l->listall();
+			reset($larr);
+			while (list(,$v) = each($larr))
 			{
-				classload("languages");
-				$l = new languages;
-				$larr = $l->listall();
-				reset($larr);
-				while (list(,$v) = each($larr))
+				if ($lab[$v["id"]])
 				{
-					if ($lab[$v["id"]])
+					$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"],"section" => $lab[$v["id"]]));
+					if ($GLOBALS["lang_id"] == $v["id"])
 					{
-						$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"],"section" => $lab[$v["id"]]));
-						if ($GLOBALS["lang_id"] == $v["id"])
-						{
-							$langs.=$this->parse("SLANG_BRO");
-						}
-						else
-						{
-							$langs.=$this->parse("LANG_BRO");
-							// tshekime et kui sellel dokul pole m22ratud muutmise kuup2eva, siis vaatame kas m6nel seotud dokul on
-						// ja kui on, siis kasutame seda
-						if ($tm == "")
-						{
-							$tm = $this->db_fetch_field("SELECT tm FROM documents WHERE
-docid = ".$lab[$v["id"]],"tm");
-						}
-            }
-          }
-        }
-        $this->vars(array("LANG_BRO" => $langs));
-      }
+						$langs.=$this->parse("SLANG_BRO");
+					}
+					else
+					{
+						$langs.=$this->parse("LANG_BRO");
+						// tshekime et kui sellel dokul pole m22ratud muutmise kuup2eva, siis vaatame kas m6nel seotud dokul on
+					// ja kui on, siis kasutame seda
+					if ($tm == "")
+					{
+						$tm = $this->db_fetch_field("SELECT tm FROM documents WHERE docid = ".$lab[$v["id"]],"tm");
+					}
+					}
+				}
+			}
+       $this->vars(array("LANG_BRO" => $langs));
     }
 		
 		$tm = $doc["tm"];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.22 2001/06/07 22:35:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.23 2001/06/09 00:54:09 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -672,7 +672,7 @@ class core extends db_connector
 				{
 					foreach($parser["parserchain"] as $skey => $sval)
 					{
-						if ($matches[$sval["idx"]] == $sval["match"])
+						if (($matches[$sval["idx"]] == $sval["match"]) || (!$sval["idx"]))
 						{
 							$cls = $sval["class"];
 							$fun = $sval["function"];

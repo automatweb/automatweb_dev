@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.25 2001/05/28 01:03:46 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.26 2001/06/09 00:54:09 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -573,6 +573,28 @@ class keywords extends aw_template {
 		$res["Nimi"] = $nimi;
 		$res["Email"] = $udata["email"];
 		return $res;
+	}
+
+	function parse_aliases($args = array())
+	{
+		extract($args);
+		$retval = "";
+		if (preg_match("/_form algus=\"(.*)\" go=\"(.*)\"/",$matches[2], $maat))
+		{
+			$retval = $this->show_interests_form($maat[1],$maat[2]);
+		}
+		elseif (preg_match("/_check algus=\"(.*)\" go=\"(.*)\"/",$matches[2], $maat))
+		{
+			$retval = $this->show_interests_form2(array(
+						"beg" => $maat[1],
+						"section" => $maat[2],
+					));
+		}
+		elseif (preg_match("/_kategooriad go=\"(.*)\"/",$matches[2], $maat))
+		{
+			$retval = $this->show_categories(array("after" => $maat[1]));
+		};
+		return $retval;
 	}
 
 	function show_interests_form($beg = "",$section = 0)
