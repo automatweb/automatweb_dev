@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.26 2004/12/02 17:20:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.27 2004/12/08 15:09:05 duke Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -38,8 +38,21 @@ class scheduler extends aw_template
 
 		if ($rep_id)
 		{
+			$now = time();
+			// XXX: convert to storage as soon as possible
+			$ltime = 0;
+			$q = "SELECT * FROM recurrence WHERE recur_id = '${rep_id}' AND recur_start >= '${now}' ORDER BY recur_start LIMIT 20";
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$this->evnt_add($row["recur_start"],$event,$uid,$password,$rep_id,$event_id);
+				$ltime = $row["recur_start"];
+				//arr($row);
+			};
 			// if we use a repeater for scheduling events we get a bunch of times and add the events for those times
-			$pl = get_instance(CL_PLANNER);
+			//$pl = get_instance(CL_PLANNER);
+			// siin tuleb lugeda sisse otse repeaters tabelist asju
+			/*
 			$reps = $pl->get_events(array( 
 				"start" => time(), 
 				"limit" => 20,
@@ -47,7 +60,8 @@ class scheduler extends aw_template
 				"event" => $rep_id, 
 				"end" => time()+24*3600*300
 			));
-			$ltime = 0;
+			*/
+			/*
 			if (is_array($reps))
 			{
 				foreach($reps as $time => $_e)
@@ -56,6 +70,7 @@ class scheduler extends aw_template
 					$ltime = $time;
 				}
 			};
+			*/
 			// and the clever bit here - schedule an event right after the last repeater to reschedule 
 			// events for that repeater
 			if ($ltime)
@@ -140,7 +155,7 @@ class scheduler extends aw_template
 			{
 				if ($evnt["event"] == $event && $evnt["uid"] == $uid)
 				{
-					unset($this->repdata[$key]);
+					//unset($this->repdata[$key]);
 				}
 			}
 		}
@@ -203,7 +218,6 @@ class scheduler extends aw_template
 		{
 			ftruncate($this->session_fp,0);
 			fseek($this->session_fp,0,SEEK_SET);
-
 			fwrite($this->session_fp, aw_serialize($this->repdata,SERIALIZE_XML));
 			fflush($this->session_fp);
 		}
