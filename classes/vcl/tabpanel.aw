@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.7 2004/01/13 16:24:33 kristo Exp $
+// $Id: tabpanel.aw,v 1.8 2004/04/22 12:28:22 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -22,6 +22,10 @@ class tabpanel extends aw_template
 	// link(string)
 	function add_tab($args = array())
 	{
+		$tab_prefix = isset($args["tabgroup"]) ? $args["tabgroup"] . "_" : "";
+		// 1. I'll add one optional argument - tabgroup
+		// 2. I'll prepare a different subtemplate in the tabpanel template
+		// 3. If no such template exists, then I ignore the tabgroup key
 		if (isset($args["active"]) && $args["active"])
 		{
 			$subtpl = "sel_tab";
@@ -54,22 +58,35 @@ class tabpanel extends aw_template
 			"caption" => $args["caption"],
 			"link" => $args["link"],
 		));
-		if (isset($this->tabcount[$level]))
+		
+		$use_subtpl = $tab_prefix . $subtpl . "_L" . $level;
+		//$secondary = $tab_prefix . $use_subtpl;
+		if (!$this->is_template($use_subtpl))
 		{
-			$this->tabcount[$level]++;
+			$use_subtpl = $subtpl . "_L" . $level;
+			$tab_prefix = "";
+		};
+
+		if (isset($this->tabcount[$tab_prefix . $level]))
+		{
+			$this->tabcount[$tab_prefix . $level]++;
 		}
 		else
 		{
-			$this->tabcount[$level] = 1;
+			$this->tabcount[$tab_prefix . $level] = 1;
 		};
 
 		// initialize properly
-		if (empty($this->tabs[$level]))
+		if (empty($this->tabs[$tab_prefix . $level]))
 		{
-			$this->tabs[$level] = "";
+			$this->tabs[$tab_prefix . $level] = "";
 		};
 		
-		$this->tabs[$level] .= $this->parse($subtpl . "_L" . $level);
+
+		//$this->tabs[$level] .= $this->parse($subtpl . "_L" . $level);
+		$this->tabs[$tab_prefix . $level] .= $this->parse($use_subtpl);
+
+		// so, I need a way to specify other tab groups.
 	}
 
 	////
@@ -82,17 +99,26 @@ class tabpanel extends aw_template
 		{
 			if (($val > 1) || !$this->hide_one_tab)
 			{
+				$prefix = "";
+				$lnr = $level;
+				if (strpos($level,"_") !== false)
+				{
+					$px = strpos($level,"_") + 1;
+					$prefix = substr($level,0,strpos($level,"_") + 1);
+					$lnr = substr($level,$px);
+				};
 				$this->vars(array(
-					"tab_L" . $level  => $this->tabs[$level],
+					$prefix . "tab_L" . $lnr  => $this->tabs[$level],
 				));
 				$this->vars(array(
-					"tabs_L" . $level => $this->parse("tabs_L" . $level),
+					$prefix . "tabs_L" . $lnr => $this->parse($prefix . "tabs_L" . $lnr),
 				));
 			};
 		};
 
 		$toolbar = isset($args["toolbar"]) ? $args["toolbar"] : "";
 		$toolbar2 = isset($args["toolbar2"]) ? $args["toolbar2"] : "";
+
 
 		$this->vars(array(
 			//"tabs" => $tabs,
