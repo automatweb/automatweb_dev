@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.48 2004/06/25 18:29:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.49 2004/06/25 21:27:37 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 
 define("ARR_LISTID", 1);
@@ -53,8 +53,8 @@ class keywords extends aw_template
 	{
 		extract($args);
 		$this->read_template("change.tpl");
-		$obj = $this->get_object($id);
-		$this->mk_path($obj["parent"],"Muuda võtmesõma");
+		$obj = new object($id);
+		$this->mk_path($obj->parent(),"Muuda võtmesõma");
 		$kw = $this->db_fetch_field("SELECT keyword FROM keywords WHERE oid = '$id'","keyword");
 		$this->vars(array(
 			"keyword" => $kw,
@@ -238,7 +238,7 @@ class keywords extends aw_template
 	{
 		extract($args);
 		$gp = $this->get_object($this->cfg["list"]);
-		$doc = $this->get_object($id);
+		$doc = new object($id);
 		$q = "SELECT keywords.list_id AS list_id,keywords.keyword AS keyword  FROM keywords2objects
 			LEFT JOIN keywords ON (keywords2objects.keyword_id = keywords.id)
 			WHERE keywords.oid = $id";
@@ -292,7 +292,7 @@ class keywords extends aw_template
 			{
 				$content = $ml["contents"];
 				$content = str_replace("#url#","$baseurl/index.".$this->cfg["ext"]."?section=$id",$content);
-				$content = str_replace("#title#",$doc["name"],$content);
+				$content = str_replace("#title#",$doc->name(),$content);
 				$content = str_replace("#keyword#",$kw,$content);
 				$email->mail_members(array(
 					"list_id" => $row["list_id"],

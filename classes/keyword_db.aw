@@ -103,14 +103,14 @@ class keyword_db extends aw_template
 	{
 		extract($arr);
 		$this->read_template("add_db.tpl");
-		
-		$obj = $this->get_object($id);
-		$this->mk_path($obj["parent"], "Muuda keywordide baasi");
+	
+		$obj = new object($id);
+		$this->mk_path($obj->parent(), "Muuda keywordide baasi");
 
 		$ob = get_instance("objects");
 		$ol = $ob->get_list();
 		$this->vars(array(
-			"name" => $obj["name"],
+			"name" => $obj->name(),
 			"keyw_cats" => $this->multiple_option_list($this->get_keyw_cats($id),$ol),
 			"bro_cats" => $this->multiple_option_list($this->get_bro_cats($id),$ol),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id))
