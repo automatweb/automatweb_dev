@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.2 2004/12/27 12:42:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.3 2005/01/18 11:17:26 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -19,6 +19,8 @@
 	@property template type=select trans=1
 	@caption Template
 
+	@property num_levels type=select
+	@caption Tasemeid
 */
 class menu_tree extends class_base
 {
@@ -36,6 +38,17 @@ class menu_tree extends class_base
 		$retval = true;
 		switch($data["name"])
 		{
+			case "num_levels":
+				$data["options"] = array(
+					0 => "K&otilde;ik",
+					1 => 1,
+					2 => 2,
+					3 => 3,
+					4 => 4,
+					5 => 5
+				);
+				break;
+
 			case "menus":
 				$ol = new object_list(array(
 					"class_id" => CL_MENU,
@@ -75,6 +88,8 @@ class menu_tree extends class_base
 		$this->shown = array();
 
 		$obj = obj($alias["target"]);
+		$this->mt_obj = $obj;
+
 		$menus = $obj->meta("menus");
 		$cho = $obj->meta("children_only");
 		$this->children_only = !empty($cho) ? true : false;
@@ -250,11 +265,20 @@ class menu_tree extends class_base
 		{
 			$parent = 0;
 		};
+
 		$slice = $this->object_list[$parent];
 		if (!is_array($slice))
 		{
 			return false;
 		};
+
+		if ($this->mt_obj->prop("num_levels") > 0 && $this->mt_obj->prop("num_levels") < $this->rec_level)
+		{
+			return;
+		}
+
+		$this->rec_level++;
+
 		$slicesize = sizeof($slice);
 		$slicecounter = 0;
 		while(list($k,$v) = each($slice))
@@ -392,6 +416,8 @@ class menu_tree extends class_base
 				};
 			};
 		};
+
+		$this->rec_level--;
 	}
 }
 ?>

@@ -33,6 +33,15 @@
             <trans>1</trans>
             <caption>Template</caption>
       </property>
+      <property>
+            <name>num_levels</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>select</type>
+            <caption>Tasemeid</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
       </classinfo>
