@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.138 2002/12/17 17:40:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.139 2002/12/18 16:59:00 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -24,7 +24,6 @@ class core extends db_connector
 	// !set config key $ckey to value $val
 	function set_cval($ckey,$val)
 	{
-	  echo "uid = ",aw_global_get("uid");
 	  $ret = $this->db_fetch_row("SELECT content FROM config WHERE ckey = '$ckey'");
 	  if (!is_array($ret))
 	  {
