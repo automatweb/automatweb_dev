@@ -42,7 +42,7 @@
       <property>
             <name>mupload</name>
             <table>objects</table>
-            <group>manager</group>
+            <group>import</group>
             <type>fileupload</type>
             <store>no</store>
             <field>mupload</field>
@@ -64,7 +64,11 @@
       <groupinfo>
             <manager>
                   <caption>Muutujad</caption>
+                  <submit>no</submit>
             </manager>
+            <import>
+                  <caption>Import</caption>
+            </import>
       </groupinfo>
 </properties>
 

@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>ext_id</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>subclass</field>
+            <type>textbox</type>
+            <caption>Sidussüsteemi ID</caption>
+      </property>
+      <property>
             <name>name_in_plural</name>
             <table>kliendibaas_amet</table>
             <group>general</group>
@@ -50,6 +58,11 @@
                   <clid>CL_GROUP</clid>
                   <caption>grupp</caption>
             </GROUP>
+            <DESC_FILE>
+                  <value>2</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Ametijuhend</caption>
+            </DESC_FILE>
       </reltypes>
 </properties>
 

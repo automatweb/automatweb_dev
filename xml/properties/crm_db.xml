@@ -77,7 +77,7 @@
             <caption>Vaikimisi firmade kaust</caption>
       </property>
       <property>
-            <name>dir_isik</name>
+            <name>folder_person</name>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
@@ -273,6 +273,11 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>Sisestusvormid</caption>
             </FORMS>
+            <METAMGR>
+                  <value>14</value>
+                  <clid>CL_METAMGR</clid>
+                  <caption>Muutujad</caption>
+            </METAMGR>
       </reltypes>
 </properties>
 

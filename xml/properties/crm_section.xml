@@ -10,6 +10,15 @@
             <caption>Järk</caption>
       </property>
       <property>
+            <name>ext_id</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
+            <field>subclass</field>
+            <caption>Sidussüsteemi ID</caption>
+      </property>
+      <property>
             <name>has_group</name>
             <table>objects</table>
             <group>general</group>

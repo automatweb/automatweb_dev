@@ -107,6 +107,16 @@
             <caption>Sünnipäev</caption>
       </property>
       <property>
+            <name>education</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <automatic>1</automatic>
+            <field>education</field>
+            <caption>Haridus</caption>
+      </property>
+      <property>
             <name>social_status</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -132,6 +142,16 @@
             <reltype>RELTYPE_CHILDREN</reltype>
             <field>children</field>
             <caption>Lapsed</caption>
+      </property>
+      <property>
+            <name>pictureurl</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <size>40</size>
+            <maxlength>200</maxlength>
+            <field>pictureurl</field>
+            <caption>Pildi/foto url</caption>
       </property>
       <property>
             <name>picture</name>
@@ -193,6 +213,17 @@
             <caption>Organisatsioon</caption>
       </property>
       <property>
+            <name>org_section</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SECTION</reltype>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Osakond</caption>
+      </property>
+      <property>
             <name>rank</name>
             <table>kliendibaas_isik</table>
             <group>contact</group>
@@ -201,6 +232,15 @@
             <automatic>1</automatic>
             <field>rank</field>
             <caption>Ametinimetus</caption>
+      </property>
+      <property>
+            <name>address</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS</reltype>
+            <field>address</field>
+            <caption>Aadress</caption>
       </property>
       <property>
             <name>email</name>
@@ -383,7 +423,7 @@
             <type>releditor</type>
             <store>no</store>
             <mode>manager</mode>
-            <reltype>RELTYPE_ADD_EDUCATION</reltype>
+            <reltype>RELTYPE_EDUCATION</reltype>
             <props>
                   <num_0>school</num_0>
                   <num_1>date_from</num_1>
@@ -398,68 +438,6 @@
                   <num_3>date_to</num_3>
             </table_fields>
             <field>add_edu_editor</field>
-      </property>
-      <property>
-            <name>basic_education_edit</name>
-            <table>kliendibaas_isik</table>
-            <group>education</group>
-            <type>releditor</type>
-            <store>no</store>
-            <reltype>RELTYPE_BASIC_EDUCATION</reltype>
-            <props>
-                  <num_0>school</num_0>
-                  <num_1>date_from</num_1>
-                  <num_2>date_to</num_2>
-                  <num_3>additonal_info</num_3>
-            </props>
-            <field>basic_education_edit</field>
-      </property>
-      <property>
-            <name>secondary_education_edit</name>
-            <table>kliendibaas_isik</table>
-            <group>education</group>
-            <type>releditor</type>
-            <store>no</store>
-            <reltype>RELTYPE_SECONDARY_EDUCATION</reltype>
-            <props>
-                  <num_0>school</num_0>
-                  <num_1>date_from</num_1>
-                  <num_2>date_to</num_2>
-                  <num_3>additonal_info</num_3>
-            </props>
-            <field>secondary_education_edit</field>
-      </property>
-      <property>
-            <name>higher_education_edit</name>
-            <table>kliendibaas_isik</table>
-            <group>education</group>
-            <type>releditor</type>
-            <store>no</store>
-            <reltype>RELTYPE_HIGHER_EDUCATION</reltype>
-            <props>
-                  <num_0>school</num_0>
-                  <num_1>profession</num_1>
-                  <num_2>date_from</num_2>
-                  <num_3>date_to</num_3>
-                  <num_4>additonal_info</num_4>
-            </props>
-            <field>higher_education_edit</field>
-      </property>
-      <property>
-            <name>vocational_education_edit</name>
-            <table>kliendibaas_isik</table>
-            <group>education</group>
-            <type>releditor</type>
-            <store>no</store>
-            <reltype>RELTYPE_VOCATIONAL_EDUCATION</reltype>
-            <props>
-                  <num_0>school</num_0>
-                  <num_1>profession</num_1>
-                  <num_2>date_from</num_2>
-                  <num_3>date_to</num_3>
-                  <num_4>additonal_info</num_4>
-            </props>
-            <field>vocational_education_edit</field>
       </property>
       <property>
             <name>templates</name>
@@ -643,31 +621,6 @@
                   <clid>CL_CRM_PERSON_LANGUAGE</clid>
                   <caption>Keeleoskus</caption>
             </LANGUAGE_SKILL>
-            <BASIC_EDUCATION>
-                  <value>28</value>
-                  <clid>CL_CRM_PERSON_BASIC_EDUCATION</clid>
-                  <caption>Põhiharidus</caption>
-            </BASIC_EDUCATION>
-            <HIGHER_EDUCATION>
-                  <value>29</value>
-                  <clid>CL_CRM_PERSON_HIGHER_EDUCATION</clid>
-                  <caption>Kõrgharidus</caption>
-            </HIGHER_EDUCATION>
-            <VOCATIONAL_EDUCATION>
-                  <value>30</value>
-                  <clid>CL_CRM_PERSON_VOCATIONAL_EDUCATION</clid>
-                  <caption>Kutseharidus</caption>
-            </VOCATIONAL_EDUCATION>
-            <SECONDARY_EDUCATION>
-                  <value>31</value>
-                  <clid>CL_CRM_PERSON_SECONDARY_EDUCATION</clid>
-                  <caption>Keskharidus</caption>
-            </SECONDARY_EDUCATION>
-            <ADD_EDUCATION>
-                  <value>32</value>
-                  <clid>CL_CRM_PERSON_ADD_EDUCATION</clid>
-                  <caption>Täienduskoolitus</caption>
-            </ADD_EDUCATION>
             <PROGRAMMING_SKILLS>
                   <value>33</value>
                   <clid>CL_CRM_PERSON_PROGRAMMING_SKILLS</clid>
@@ -711,6 +664,16 @@
                   <clid>CL_META</clid>
                   <caption>Sõbragrupid</caption>
             </FRIEND_GROUPS>
+            <VACATION>
+                  <value>41</value>
+                  <clid>CL_CRM_VACATION</clid>
+                  <caption>Puhkus</caption>
+            </VACATION>
+            <CONTRACT_STOP>
+                  <value>42</value>
+                  <clid>CL_CRM_CONTRACT_STOP</clid>
+                  <caption>Töölepingu peatamine</caption>
+            </CONTRACT_STOP>
       </reltypes>
 </properties>
 
