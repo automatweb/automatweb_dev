@@ -23,7 +23,9 @@
 									<br>
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
 										<tr>
-											<td class="celltext" width=30% colspan=2>
+											<td class="celltext" width=30% colspan=2 align=right>
+											<b><a href="http://aw.struktuur.ee/index.aw?section=53471" target=_blank>help?</a></b>
+											<td>
 										</tr>
 										<tr>
 											<td class="celltext" width=30%>name</td><td class="celltext"><input type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
@@ -31,11 +33,21 @@
 										<tr>
 											<td class="celltext" width=30%>kommentaarid:</td><td class="celltext">
 											<textarea name="comment" rows=3 cols=40  class="formtext">{VAR:comment}</textarea>
+
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext" colspan=2>html source kataloog<br />
+											<td class="celltext" colspan=2>
+											<input type="radio" name="file_list" value=0 {VAR:file_list_off}> 
+											html source kataloog<br />
 											<input type=text name="source_path" value="{VAR:source_path}" size=50>
+										</tr>
+										<tr>
+											<td class="celltext" colspan=2>
+											<input type="radio" name="file_list" value=1 {VAR:file_list_on}>
+											failide nimekiri<br />
+											<textarea cols=60 rows=3 name='files'>{VAR:files}</textarea>
+											</td>
 										</tr>
 										<tr>
 											<td class="celltext" colspan=2>näitefail(id)<br />
@@ -58,38 +70,6 @@
 											<td class="celltext" colspan=2>tulevikus
 											<input type=radio name='single' value=0 {VAR:singleoff_}>
 											mingi kolmas spetsiifiline variant, mida ma pole veel teinud
-											</td>
-										</tr>
-										<tr>
-											<td class="celltext" colspan=2>
-											<hr>
-											</td>
-										</tr>
-										<tr>
-											<td class="celltext" colspan=2><input type=radio name=output value="mk_my_table" {VAR:is_my_table}> luuakse sql andmetabel
-											<b>"html_import_<b/>
-											<input type=text size=10 name='mk_my_table' value='{VAR:mk_my_table}' class="formtext">"<br>
-											</td>
-										</tr>
-										<tr>
-											<td class="celltext" colspan=2><input type=radio name=output  value="mk_my_query" {VAR:is_my_query}> luuakse sql insert laused faili
-											<input type=text size=20 name='mk_my_query' value='{VAR:mk_my_query}' class="formtext"><br>
-											</td>
-										</tr>
-										<tr>
-											<td class="celltext" colspan=2>tulevikus<input type=radio name=output value="mk_my_csv" {VAR:is_my_csv}> luuakse csv tyypi fail
-											<input type=text size=20 name='mk_my_csv' value='{VAR:mk_my_csv}' class="formtext"><br>
-											</td>
-										</tr>
-										<tr>
-											<td class="celltext" colspan=2>tulevikus<input type=radio name=output value="mk_my_xml" {VAR:is_my_xml}> luuakse xml tyypi fail
-											<input type=text size=20 name='mk_my_xml' value='{VAR:mk_my_xml}' class="formtext"><br>
-											</td>
-										</tr>
-										<tr>
-											<td class="celltext" colspan=2>
-											väike docu:<br />
-											{VAR:docu}
 											</td>
 										</tr>
 									</table>
