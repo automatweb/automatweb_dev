@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.158 2003/10/28 13:20:26 duke Exp $
+// $Id: class_base.aw,v 2.159 2003/10/29 14:58:52 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -28,7 +28,6 @@
 	@caption Tõlge kinnitatud
 
 	@groupinfo general caption=Üldine default=1
-	@classinfo trans_id=TR_CLASS_BASE
 */
 
 
@@ -104,13 +103,6 @@ class class_base extends aw_template
 
 		if ($args["action"] == "new")
 		{
-			// that just checks whether the parent allows to add stuff
-			// below it
-			if (!$this->ds->ds_can_add($args))
-			{
-				die($this->ds->get_error_text());
-			};
-
 			$this->use_mode = "new";
 
 			$this->parent = $args["parent"];
@@ -121,28 +113,30 @@ class class_base extends aw_template
 		elseif (($args["action"] == "change") || ($args["action"] == "view"))
 		{
 			$this->id = $args["id"];
-			$obj = $this->get_object($this->id);
 
+			// maybe it would be a good idea to let the class override the object loading?
 			$this->obj_inst = new object($this->id);
 
-			$this->toolbar_type = ((isset($obj['meta']['use_menubar']) && ($obj['meta']['use_menubar'] == '1')) ? 'menubar' : 'tabs');
+			$this->toolbar_type = "1" == $this->obj_inst->meta("use_menubar") ? "menubar" : "tabs";
 			$this->parent = "";
 
 			$this->use_mode = "edit";
 
-			if ($obj["class_id"] == CL_RELATION)
+			if ($this->obj_inst->class_id() == CL_RELATION)
 			{
 				$this->is_rel = true;
 				$def = $this->cfg["classes"][$this->clid]["def"];
-				$this->values = $obj["meta"]["values"][$def];
-				$this->values["name"] = $obj["name"];
+				$meta = $this->obj_inst->meta("values");
+				$this->values = $meta[$def];
+				$this->values["name"] = $this->obj_inst->name();
 			};
 
 			$this->subgroup = isset($args["subgroup"]) ? $args["subgroup"] : "";
 		};
 
+		// hmm, and maybe .. just maybe this is something else that a class would want to override . or?
 		$cfgform_id = $this->get_cfgform_for_object(array(
-			"meta" => $obj["meta"],
+			"meta" => $this->obj_inst->meta(),
 			"args" => $args,
 		));
 
@@ -239,32 +233,10 @@ class class_base extends aw_template
 		{
 			$content = $cli->get_result();
 		};
-
 		
-		//this hack is for desktop. we need to show new object in desktop 'realtime'
-		$added = '';
-		if (isset($GLOBALS['added_object']))
-		{
-			$added = "
-			
-<script type=\"text/javascript\">
-<!--
-	if (window != window.top)
-	{
-		if (top.document.getElementById('status') == '[object HTMLDivElement]') //et siis kontrollime kas aken on desktopis
-		{
-			top.fetch_object('".$GLOBALS['added_object']."');
-		}
-	}
-// -->
-</script>			
-			";
-			aw_session_del('added_object');
-		}
-
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
-			"content" => $added.(isset($content) ? $content : ""),//axel häkkis
+			"content" => isset($content) ? $content : "",
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
 		return $rv;
@@ -2323,7 +2295,7 @@ class class_base extends aw_template
 				"obj_inst" => $this->obj_inst,
 				"objdata" => $this->objdata,
 				"form_data" => &$args,
-				"request" => &$request,
+				"request" => &$args,
 				"obj_inst" => &$this->obj_inst,
 				"new" => $new,
 			));
