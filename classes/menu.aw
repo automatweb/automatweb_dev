@@ -1,22 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.11 2002/11/19 14:09:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.12 2002/11/24 15:23:28 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
 	// stuff that goes into the objects table
 	@default table=objects
-
-	@property alias type=textbox group=general 
-	@caption Alias
-
-	@property status type=status group=general 
-	@caption Staatus
-
-	@property jrk type=textbox size=4 group=general
-	@caption Jrk
-
-	@property comment type=textbox group=general
-	@caption Kommentaar
 
 	@property users_only type=checkbox field=meta method=serialize group=advanced
 	@caption Ainult sisselogitud kasutajatele
@@ -137,13 +125,16 @@
 	@caption Template set 
 	
 	@property tpl_edit type=select 
-	@caption Template muutmiseks
+	@caption Template dokumendi muutmiseks
 	
 	@property tpl_view type=select
-	@caption Template näitamiseks (pikk)
+	@caption Template dokumendi näitamiseks (pikk)
 	
 	@property tpl_lead type=select
-	@caption Template näitamiseks (lühike)
+	@caption Template dokumendi näitamiseks (lühike)
+
+	@property tpl_edit_cfgform type=cfgform_picker clid=CL_DOCUMENT table=objects field=meta method=serialize
+	@caption Konfivorm/template dokumendi muutmiseks
 	
 	@property hide_noact type=checkbox
 	@caption Peida ära, kui dokumente pole
@@ -154,6 +145,7 @@
 	@classinfo relationmgr=yes
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
+	@classinfo corefields=name,comment,alias,status,jrk
 */
 class menu extends aw_template
 {
@@ -597,6 +589,13 @@ class menu extends aw_template
 		// now sort the image array
 		usort($timgar,array($this,"_menu_img_cmp"));
 		return $timgar;
+	}
+
+	function callback_post_save($args = array())
+	{
+		$this->updmenus[] = (int)$args["id"];
+		$m = get_instance("menuedit");
+		$m->invalidate_menu_cache($this->updmenus);
 	}
 
 };
