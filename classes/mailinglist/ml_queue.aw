@@ -494,7 +494,7 @@ class ml_queue extends aw_template
 					break;
 				}
 			}
-			//decho ("found member $_mid <br>");
+			echo ("found member $_mid <br>");
 /*			if ($avoidmids != "")
 			{
 				$midnotin="AND mid NOT IN (".$avoidmids.")";
@@ -652,7 +652,7 @@ class ml_queue extends aw_template
 		
 		//$message=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["message"]);
 		//$subject=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["subject"]);
-		//$mailfrom=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["mfrom"]);
+		$mailfrom=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["mfrom"]);
 
 		// pane logi tablasse kirja meili saatmine
 		
