@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.44 2001/06/01 05:07:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.45 2001/06/01 05:35:02 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -894,19 +894,23 @@ class messenger extends menuedit_light
 			};
 		};
 
-		print "sending mail....<br>";
 
-		exit;
-
-		// signatuur loppu
 		$message = $args["message"];
-		$message .= "\n--\n" . $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
+		$this->dequote($message);
 		
-		if ($etargets)
+		if ($args["signature"] != "none")
 		{
-			$external = true;
+			// signatuur loppu
+			$message .= "\n--\n" . $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
+		};
+
+		// kui meil on tarvis saata ka valiseid faile, siis teeme seda siin
+		if (sizeof($externals) > 0)
+		{
 			classload("aw_mail");
 			$awm = new aw_mail();
+
+			// leiame kasutatud identiteedi
 			if ($identity != "default")
 			{
 				$froma = $this->msgconf["msg_identities"][$args["identity"]]["email"];
@@ -917,46 +921,70 @@ class messenger extends menuedit_light
 				$froma = $udata["email"];
 				$fromn = "";
 			};
-			$this->dequote($message);
+			
 			$awm->create_message(array(
 					"froma" => $froma,
 					"fromn" => $fromn,
 					"subject" => $subject,
-					"to" => $etargets,
+					"to" => join(",",$externals),
 					"body" => $message,
 				));
-		};
 
-				
-				if ($external)
-				{
-					$awm->fattach(array(
-						"path" => $tmpname,
-						"name" => basename($attach_name[$idx]),
-						"contenttype" => $attach_type[$idx],
-					));
-				}
-				else
-				{
-                                	$ser = serialize($row);
-					$this->quote($ser);
-					$this->quote($ser);
-					$q = "INSERT INTO msg_objects (message_id,content)
-							VALUES('$msg_id','$ser')";
-					$this->db_query($q);
-				};
-			
+			// Nyyd otsime valja koik attachitavad failid ja lisame need ka kirjale
 
-		
-		if ($external)
-		{
+			$this->get_objects_by_class(array(
+							"class" => CL_FILE,
+							"parent" => $msg_id,
+						));
+			while($row = $this->db_next())
+			{
+				// dammit, I don't like this shit a single bit,
+				// but as ahto is pushing me to complete this as fast as possible
+				// I can't spend anymore time here right now
+				$this->save_handle();
+				$q = "SELECT * FROM files WHERE id = '$row[oid]'";
+				$this->db_query($q);
+				$row2 = $this->db_next();
+				$this->restore_handle();
+				$prefix = substr($row2["file"],0,1);
+				$fname = SITE_DIR . "/files/$prefix/$row2[file]";
+				$awm->fattach(array(	
+						"path" => $fname,
+						"name" => $row["name"],
+						"contenttype" => $row["type"],
+				));
+
+			};
+	
+			// noja lopuks siis, saadame meili minema ka
 			$awm->gen_mail();
 			$status_msg = "Meil on saadetud";
 			session_register("status_msg");
-			return $this->mk_site_orb(array(
-				"action" => "folder",
-			));
 		};
+
+		if (sizeof($internals) < 0)
+		{
+			// saadame teate sisemistele kasutajatele laiali
+			if (1);
+			{
+                               	$ser = serialize($row);
+				$this->quote($ser);
+				$this->quote($ser);
+				$q = "INSERT INTO msg_objects (message_id,content)
+						VALUES('$msg_id','$ser')";
+				$this->db_query($q);
+			};
+		};
+
+		// ja lopuks liigutame ta draftist ära outboxi
+		$outbox = $this->conf["msg_outbox"];
+
+		$q = "UPDATE objects SET parent = '$outbox' WHERE oid = '$msg_id'";
+		$this->db_query($q);
+
+		// at this moment we just return from this function call
+		return $this->mk_site_orb(array());
+
 		
 		$uid = UID;
 		$t = time();
