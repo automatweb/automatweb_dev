@@ -67,20 +67,20 @@ class propcollector extends aw_template
 				$this->cl_start($cname);
 				foreach($lines as $line)
 				{
-					if (preg_match("/\s+@classinfo (.*)/",$line,$m))
+					if (preg_match("/^\s*@classinfo (.*)/",$line,$m))
 					{
 						$this->set_classinfo($m[1]);
 					};
-					if (preg_match("/\s+@default (\w+?)=(.*)/",$line,$m))
+					if (preg_match("/^\s*@default (\w+?)=(.*)/",$line,$m))
 					{
 						$this->set_default($m[1],$m[2]);
 					};
-					if (preg_match("/\s+@property (\w+?) (.*)/",$line,$m))
+					if (preg_match("/^\s*@property (\w+?) (.*)/",$line,$m))
 					{
 						$this->add_property($m[1],$m[2]);
 					};
 
-					if (preg_match("/\s+@caption (.*)/",$line,$m))
+					if (preg_match("/^\s*@caption (.*)/",$line,$m))
 					{
 						$this->add_caption($m[1]);
 					};
