@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.55 2004/11/15 16:38:20 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.56 2004/11/15 16:45:58 sven Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -69,15 +69,16 @@ class keywords extends class_base
 			if($docs->count() > 0)
 			{
 				
+				$docarr = &$docs->arr();
 				//Well if we have only one document linked with keyword, no point to show complete list
 				if($docs->count() == 1)
 				{
-					return aw_ini_get("baseurl")."/".$doc->id();
+					return aw_ini_get("baseurl")."/".current($docarr[0])->id();
 				}
 				
 				$this->read_template("/automatweb/keywords/doclist2.tpl");
 				//$this->submerge = 1;
-				foreach ($docs->arr() as $doc)
+				foreach ($docarr as $doc)
 				{
 					$this->vars(array(
 						"date" => get_lc_date($doc->prop("modified")),
