@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.82 2004/09/15 18:06:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.83 2004/09/16 08:55:08 kristo Exp $
 
 lc_load("definition");
 
@@ -80,8 +80,8 @@ class acl_base extends db_connector
 		{
 			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
 			// convert gid to oid
-			$g = get_instance("groups");
-			$g_oid = $g->oid_for_gid($gid);
+			$g = get_instance("users");
+			$g_oid = $g->get_oid_for_gid($gid);
 			unset($ad[$g_oid]);
 			$ser = aw_serialize($ad);
 			$this->quote(&$ser);
@@ -124,8 +124,8 @@ class acl_base extends db_connector
 		{
 			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
 			// convert gid to oid
-			$g = get_instance("groups");
-			$g_oid = $g->oid_for_gid($gid);
+			$g = get_instance("users");
+			$g_oid = $g->get_oid_for_gid($gid);
 			$ad[$g_oid] = $nd;
 			$ser = aw_serialize($ad);
 			$this->quote(&$ser);
@@ -178,8 +178,8 @@ class acl_base extends db_connector
 		{
 			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
 			// convert gid to oid
-			$g = get_instance("groups");
-			$g_oid = $g->oid_for_gid($gid);
+			$g = get_instance("users");
+			$g_oid = $g->get_oid_for_gid($gid);
 			$ad[$g_oid] = $nd;
 			$ser = aw_serialize($ad);
 			$this->quote(&$ser);
