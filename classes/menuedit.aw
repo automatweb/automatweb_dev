@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.179 2002/12/02 18:54:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.180 2002/12/03 11:18:45 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2345,13 +2345,13 @@ class menuedit extends aw_template
 					"name" => "meta.tags",
 				));
 
-				$meta = aw_unserialize($old);
+				$meta_t = aw_unserialize($old);
 
-				$meta[$id] = array(
+				$meta_t[$id] = array(
 					"keywords" => $arr["keywords"],
 					"description" => $arr["description"],
 				);
-				$ser_meta = aw_serialize($meta,SERIALIZE_PHP);
+				$ser_meta = aw_serialize($meta_t,SERIALIZE_PHP);
 
 				$awf->put_special_file(array(
 					"name" => "meta.tags",
