@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.4 2001/05/25 15:25:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.5 2001/05/29 12:25:50 kristo Exp $
 if (DEFS_LOADED == 1)
 {
 }
@@ -272,11 +272,11 @@ function is_valid($set,$string)
 {
 	$sets = array(
 		"password" 	=> array(
-			"content" 	=> "1234567890qwertyuiopasdfghjklzxcvbnm_",
+			"content" 	=> "1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM",
 			"min"		=> 4,
 			"max"		=> 32),
 		"uid"		=> array(
-			"content"	=> "1234567890qwertyuiopasdfghjklzxcvbnm_",
+			"content"	=> "1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM",
 			"min"		=> 3,
 			"max"		=> 30)
 		);
