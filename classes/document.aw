@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.317 2005/02/16 19:21:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.318 2005/03/17 18:26:01 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -814,21 +814,6 @@ class document extends aw_template
 				$doc["title"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["title"]);
 			}
 		};
-
-		// this is useless. do we use that code anywhere?
-		if (!(strpos($doc["content"], "#board_last5#") === false))
-		{
-			$mb = get_instance("forum");
-			$doc["content"] = str_replace("#board_last5#",$mb->mk_last5(),$doc["content"]);
-		}
-		
-		// this is useless. do we use that code anywhere?
-		if (!(strpos($doc["lead"], "#board_last5#") === false))
-		{
-			$mb = get_instance("forum");
-			$doc["lead"] = str_replace("#board_last5#",$mb->mk_last5(),$doc["lead"]);
-		}
-		
 
 		// used in am - shows all documents whose author field == current documents title field
 		if (!(strpos($doc["content"], "#autori_dokumendid#") === false))
