@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.19 2003/11/27 17:44:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.20 2003/12/01 14:27:00 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -39,7 +39,10 @@ class toolbar extends aw_template
 		$arr["onClick"] = "return buttonClick(event, '${name}');";
 		$arr["class"] = "menuButton";
 		$arr["url"] = "";
-		$arr["img"] = "new.gif";
+		if (empty($arr["img"]))
+		{
+			$arr["img"] = "new.gif";
+		};
 		$arr["type"] = "button";
 		$arr["id"] = $name;
 		$this->matrix[$arr["name"]] = $arr;
@@ -47,6 +50,10 @@ class toolbar extends aw_template
 
 	function add_menu_item($arr)
 	{
+		if ($arr["onClick"])
+		{
+			$arr["onClick"] = " onClick=\"". $arr["onClick"] . "\"";
+		};
 		$this->vars($arr);
 		$tpl = isset($arr["disabled"]) ? "MENU_ITEM_DISABLED" : "MENU_ITEM";
 		$this->menus[$arr["parent"]] .= $this->parse($tpl);
