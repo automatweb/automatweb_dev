@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.31 2001/11/23 16:39:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.32 2001/12/05 23:04:07 duke Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 if (!defined("DEFS"))
 {
@@ -40,107 +40,6 @@ function localparse($src = "",$vars = array())
 	return preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
 }
 
-// laeb XML failist orbi definitsiooni
-function load_xml_orb_def($class)
-{
-	global $basedir;
-	// klassi definitsioon sisse
-	$xmldef = get_file(array(
-		"file" => "$basedir/xml/orb/$class.xml"
-	));
-
-	// loome parseri
-	$parser = xml_parser_create();
-	xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
-	// xml data arraysse
-	xml_parse_into_struct($parser,$xmldef,&$values,&$tags);
-	// R.I.P. parser
-	xml_parser_free($parser);
- 
-	// konteinerite tüübid
-	$containers = array("class","action","function","arguments");
- 
-	// argumentide tüübid
-	$argtypes = array("optional","required","define");
- 
-	// ja siia moodustub loplik struktuur
-	$orb_defs = array();
-	
-	foreach($values as $key => $val)
-	{
-		// parajasti töödeldava tag-i nimi
-		$tag = $val["tag"];
- 
-		// on kas tyhi, "open", "close" voi "complete".
-		$tagtype = $val["type"];
- 
-		// tagi parameetrid, array
-		$attribs = isset($val["attributes"]) ? $val["attributes"] : "";
- 
-		// kui tegemist on nö "konteiner" tag-iga, siis...
-		if (in_array($tag,$containers))
-		{
-
-			if (in_array($tagtype,array("open","complete")))
-			{
-				$$tag = $attribs["name"];
-				if (($tag == "action") && (isset($attribs["nologin"]) && $attribs["nologin"]))
-				{
-					$orb_defs[$class][$attribs["name"]]["nologin"] = 1;
-				};
-				if (($tag == "action") && (isset($attribs["all_args"]) && $attribs["all_args"]))
-				{
-					$orb_defs[$class][$attribs["name"]]["all_args"] = true;
-				};
-				if (isset($attribs["default"]) && $attribs["default"] && ($tag == "action"))
-				{
-					$orb_defs[$class]["default"] = $attribs["name"];
-				};
-				if ($tag == "function")
-				{
-					$orb_defs[$class][$action][$tag] = $$tag;
-					// seda saab kasutada monede lisakontrollide jaoks
-					$orb_defs[$class][$action]["xml"] = 1;
-					// initsialiseerime need arrayd
-					$orb_defs[$class][$action]["required"] = array();
-					$orb_defs[$class][$action]["optional"] = array();
-					$orb_defs[$class][$action]["define"] = array();
-					// default action
-					if (isset($attribs["default"]) && $attribs["default"])
-					{
-						$orb_defs[$class]["default"] = $action;
-						//print "def is = $action<br>";
-					};
-				};
-			}
-			elseif ($tagtype == "close")
-			{
-				$$tag = "";
-			};
-		};
- 
-		// kui leidsime argumenti määrava tag-i, siis ...
-		if (in_array($tag,$argtypes))
-		{
-			// kontroll, just in case
-			if ($tagtype == "complete")
-			{
-				if ($tag == "define")
-				{
-					$val = $attribs["value"];
-				}
-				else
-				{
-					$val = 1;
-				};
-				$orb_defs[$class][$action][$tag][$attribs["name"]] = $val;
-			};
-		};
-	}; // foreach
-
-	return $orb_defs;
-}; // function
-	
 //// 
 // !Parsib XML formaadis datat, s.t. laseb selle läbi PHP xml_parse_into_struct funktsiooni
 // ja tagastab $values ja $keys arrayd
