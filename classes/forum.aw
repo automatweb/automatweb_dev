@@ -1,5 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.26 2001/12/11 07:03:07 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.27 2001/12/13 17:26:06 duke Exp $
+// foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
+// hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -58,36 +60,15 @@ class forum extends aw_template
 			));
 		}
 	
-		// dammit, this sucks so much. Do we really have to
-		// use separate calls?
 		$this->set_object_metadata(array(
 			"oid" => $id,
-			"key" => "comments",
-			"value" => $comments,
-		));
-		
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "rated",
-			"value" => $rated,
-		));
-		
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "template",
-			"value" => $template,
-		));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "onpage",
-			"value" => $onpage,
-		));
-		
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "topicsonpage",
-			"value" => $topicsonpage,
+			"data" => array(
+				"comments" => $comments,
+				"rated" => $rated,
+				"template" => $template,
+				"onpage" => $onpage,
+				"topicsonpage" => $topicsonpage,
+			),
 		));
 
 		if ($pobj["class_id"] == CL_DOCUMENT)
@@ -135,9 +116,9 @@ class forum extends aw_template
 			$pobj = $this->get_object($obj["parent"]);
 			$title = "Muuda foorumit";
 			$this->mk_path($parent, $title);
-			$meta = $this->get_object_metadata(array("metadata" => $o["metadata"]));
+			$meta = $this->get_object_metadata(array("metadata" => $obj["metadata"]));
 		};
-
+	
 		if ($pobj["class_id"] == CL_DOCUMENT)
 		{
 			$this->mk_path($pobj["parent"],sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$pobj["name"]) . " / $title");
@@ -884,6 +865,7 @@ class forum extends aw_template
 			"topic" => ($args["name"]) ? $args["name"] : "nimetu",
 			"created" => $this->time2date($args["created"],2),
 			"from" => $args["createdby"],
+			"text" => $args["comment"],
 			"createdby" => ($args["last"]) ? $args["last"] : $args["createdby"],
 			"last" => $this->time2date($args["modified"],2),
 			"lastmessage" => $this->time2date($args["modified"],2),
@@ -996,6 +978,7 @@ class forum extends aw_template
 		$this->vars(array(
 			"name" => $top["name"],
 			"comment" => $top["comment"],
+			"from" => $top["last"],
 			"reforb" => $this->mk_reforb("save_topic", array("board" => $board))
 		));
 		return $this->parse();
@@ -1010,6 +993,7 @@ class forum extends aw_template
 		$this->upd_object(array(
 			"oid" => $board,
 			"name" => $topic,
+			"last" => $from,
 			"comment" => $comment
 		));
 		return $this->mk_my_orb("show", array("board" => $board));
