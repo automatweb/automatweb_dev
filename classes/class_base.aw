@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.8 2002/11/17 13:33:10 kristo Exp $
+// $Id: class_base.aw,v 2.9 2002/11/18 13:37:43 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -753,7 +753,7 @@ class class_base extends aliasmgr
 		}
 		else
 		{
-			$this->mk_path($parent,"<a href='$self_url'>Lisa $classname</a>");
+			$this->mk_path($args["parent"],"<a href='$self_url'>Lisa $classname</a>");
 		}
 		$this->read_template($tpl);
 	}
