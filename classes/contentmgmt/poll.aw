@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.5 2004/02/10 12:58:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.6 2004/02/20 12:11:39 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -15,11 +15,18 @@ session_register("poll_clicked");
 @classinfo syslog_type=ST_POLL
 
 @groupinfo clicks caption=Klikke
+
+	@groupinfo clicks_stats caption=Statistika parent=clicks
+	@groupinfo clicks_detail caption=Vastajad parent=clicks
+
 @groupinfo translate caption=T&otilde;lgi
 @groupinfo activity caption=Aktiivsus
 
-@property clicks type=text store=no group=clicks
+@property clicks type=text store=no group=clicks_detail
 @caption Klikid
+
+@property clicks_stats type=text store=no group=clicks_stats
+@caption Statistika
 
 @default group=general
 
@@ -403,6 +410,82 @@ class poll extends class_base
 		return $this->t->draw();
 	}
 
+	function clicks_stats($arr)
+	{
+		extract($arr);
+		load_vcl("table");
+		$this->t = new aw_table(array("prefix" => "images"));
+		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+		$this->t->define_field(array(
+			"name" => "answer",
+			"caption" => "Vastus",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$this->t->define_field(array(
+			"name" => "clicks",
+			"caption" => "Klikke",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "int"
+		));
+
+		$this->t->define_field(array(
+			"name" => "percent",
+			"caption" => "Protsent",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "int"
+		));
+
+		$this->t->define_field(array(
+			"name" => "img",
+			"caption" => "",
+			"talign" => "center",
+			"align" => "left",
+			"sortable" => 0,
+			"width" => "200"
+		));
+
+		$id = $arr["obj_inst"]->id();
+		$ansa = $this->get_answers($id);
+
+		$dat = array();
+		$t_clicks = 0;
+		$this->db_query("SELECT count(*) as cnt, answer_id FROM poll_clicks WHERE poll_id = '$id' AND answer_id != 0 group by answer_id");
+		while ($row = $this->db_next())
+		{
+			$dat[$row["answer_id"]] = $row;
+			$t_clicks += $row["cnt"];
+		}
+
+		foreach($ansa as $ansa_id => $adat)
+		{
+			$pct = (100.0*$dat[$ansa_id]["cnt"]) / $t_clicks;
+
+			$pr = floor(($pct)+0.5);
+
+			$img = html::img(array(
+				'url' => $this->cfg['baseurl'].'/automatweb/images/bar.gif',
+				'height' => 5,
+				'width' => ($pr == 0 ? '1' : $pr.'%')
+			));
+
+			$this->t->define_data(array(
+				"answer" => $adat["answer"],
+				"clicks" => (int)$dat[$ansa_id]["cnt"],
+				"percent" => number_format($pct, 2)." %",
+				"img" => $img
+			));
+		}
+
+		$this->t->sort_by();
+		return $this->t->draw();
+	}
+
 	function on_get_subtemplate_content($arr)
 	{
 		$arr["inst"]->vars(array(
@@ -459,6 +542,11 @@ class poll extends class_base
 		if ($prop["name"] == "clicks")
 		{
 			$prop["value"] = $this->clicks($arr);
+		}
+		else
+		if ($prop["name"] == "clicks_stats")
+		{
+			$prop["value"] = $this->clicks_stats($arr);
 		}
 		else
 		if ($prop["name"] == "activity")

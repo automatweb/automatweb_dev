@@ -4,9 +4,17 @@
             <name>clicks</name>
             <type>text</type>
             <store>no</store>
-            <group>clicks</group>
+            <group>clicks_detail</group>
             <field>clicks</field>
             <caption>Klikid</caption>
+      </property>
+      <property>
+            <name>clicks_stats</name>
+            <type>text</type>
+            <store>no</store>
+            <group>clicks_stats</group>
+            <field>clicks_stats</field>
+            <caption>Statistika</caption>
       </property>
       <property>
             <name>in_archive</name>
@@ -62,6 +70,14 @@
             <clicks>
                   <caption>Klikke</caption>
             </clicks>
+            <clicks_stats>
+                  <caption>Statistika</caption>
+                  <parent>clicks</parent>
+            </clicks_stats>
+            <clicks_detail>
+                  <caption>Vastajad</caption>
+                  <parent>clicks</parent>
+            </clicks_detail>
             <translate>
                   <caption>T&amp;otilde;lgi</caption>
             </translate>
