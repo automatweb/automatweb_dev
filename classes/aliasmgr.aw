@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.158 2004/11/02 10:00:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.159 2004/11/03 12:17:56 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -795,6 +795,11 @@ class aliasmgr extends aw_template
 		extract($args);
 		$aliases = explode(",",$alias);
 
+		if ($reltype == "_")
+		{
+			$reltype = "";
+		}
+
 		foreach($aliases as $onealias)
 		{
 			$o = obj($id);
@@ -935,7 +940,7 @@ class aliasmgr extends aw_template
 		{
 			list($astr) = explode(",",$tmp[$c->prop("to.class_id")]["alias"]);
 			//$ret[$c->prop("id")] = "#".$astr.(++$cnts[$c->prop("to.class_id")])."#";
-			$ret[$c->prop("id")] = "#".$astr.($c->prop("idx"))."#";
+			$ret[$c->prop("to")] = "#".$astr.($c->prop("idx"))."#";
 		}
 		return $ret;
 	}
