@@ -11,7 +11,8 @@ class site_list extends class_base
 		
 		@attrib name=site_list params=name default="0"
 		
-		
+		@param actonly optional type=int
+
 		@returns
 		
 		
@@ -71,11 +72,16 @@ class site_list extends class_base
 			'caption' => 'Muuda',
 		));
 
+		if ($actonly)
+		{
+			$wh = " WHERE site_used = 1 ";
+		}
 		$cnt = $cnt_used = 0; 
 		$this->db_query("
 			SELECT aw_site_list.*, aw_server_list.name as server_name 
 			FROM aw_site_list
 				LEFT JOIN aw_server_list ON aw_server_list.id = aw_site_list.server_id
+				$wh
 			ORDER BY id
 		");
 		while ($row = $this->db_next())
@@ -91,6 +97,11 @@ class site_list extends class_base
 			if ($row["site_used"])
 			{
 				$cnt_used ++;
+			}
+			else
+			{
+				$row["last_update"] = "";
+				$row["code_branch"] = "";
 			}
 
 			$row["site_used"] = $row["site_used"] == 1 ? "Jah" : "Ei";

@@ -4,6 +4,7 @@
 		<action name="site_list">
 			<function name="orb_list">
 				<arguments>
+					<optional name="actonly" type="int" />
 				</arguments>
 			</function>
 		</action>
