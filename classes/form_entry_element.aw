@@ -299,7 +299,7 @@ define(FORM_EELEMENT_LOADED,1);
 			return true;
 		}
 
-		function gen_user_html_not(&$images)		// function that doesn't use templates
+		function gen_user_html_not(&$images,$prefix = "")		// function that doesn't use templates
 		{
 			$html="";
 			$info = $images->proc_text($this->arr[info], $this->parent);
@@ -309,19 +309,19 @@ define(FORM_EELEMENT_LOADED,1);
 																	
 			if ($this->arr[type] == "textarea")
 			{
-				$html="<textarea NAME='$elid' COLS='".$this->arr[ta_cols]."' ROWS='".$this->arr[ta_rows]."'>";
+				$html="<textarea NAME='".$prefix.$elid."' COLS='".$this->arr[ta_cols]."' ROWS='".$this->arr[ta_rows]."'>";
 				$html.=($this->entry_id ? $this->entry : $this->arr["default"])."</textarea>";
 			}
 			
 			if ($this->arr[type] == "radiobutton")
 			{
 				$ch = ($this->entry_id ? ($this->entry == $this->id ? " CHECKED " : " " ) : ($this->arr["default"] == 1 ? " CHECKED " : ""));
-				$html="<input type='radio' NAME='radio_group_".$this->arr[group]."' VALUE='".$this->id."' $ch>";
+				$html="<input type='radio' NAME='".$prefix."radio_group_".$this->arr[group]."' VALUE='".$this->id."' $ch>";
 			}
 			
 			if ($this->arr[type] == "listbox")
 			{
-				$html="<select name='$elid'>";
+				$html="<select name='".$prefix.$elid."'>";
 				for ($b=0; $b < $this->arr[listbox_count]; $b++)
 				{	
 					if ($this->entry_id)
@@ -335,7 +335,7 @@ define(FORM_EELEMENT_LOADED,1);
 				
 			if ($this->arr[type] == "multiple")
 			{
-				$html="<select NAME='".$elid."[]' MULTIPLE>";
+				$html="<select NAME='".$prefix.$elid."[]' MULTIPLE>";
 
 				if ($this->entry_id)
 					$ear = explode(",",$this->entry);
@@ -361,18 +361,18 @@ define(FORM_EELEMENT_LOADED,1);
 			if ($this->arr[type] == "checkbox")
 			{
 				$sel = ($this->entry_id ? ($this->entry == 1 ? " CHECKED " : " " ) : ($this->arr["default"] == 1 ? " CHECKED " : ""));
-				$html = "<input type='checkbox' NAME='$elid' VALUE='1' $sel>";
+				$html = "<input type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>";
 			}
 			
 			if ($this->arr[type] == "textbox")
 			{
 				$l = $this->arr[length] ? "SIZE='".$this->arr[length]."'" : "";
-				$html = "<input type='text' NAME='$elid' $l VALUE='".($this->entry_id ? $this->entry : $this->arr["default"])."'>";
+				$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->entry_id ? $this->entry : $this->arr["default"])."'>";
 			}
 
 			if ($this->arr["type"] == "price")
 			{
-				$html = "<input type='text' NAME='$elid' VALUE='".($this->entry_id ? $this->entry : $this->arr["price"])."'>";
+				$html = "<input type='text' NAME='".$prefix.$elid."' VALUE='".($this->entry_id ? $this->entry : $this->arr["price"])."'>";
 			}
 
 			if ($this->arr[type] == "submit")
@@ -382,12 +382,12 @@ define(FORM_EELEMENT_LOADED,1);
 				$html = "<input type='reset' VALUE='".$this->arr["button_text"]."'>";
 				
 			if($this->arr[type] == "file")
-				$html = "<input type='file' NAME='$elid'>";
+				$html = "<input type='file' NAME='".$prefix.$elid."'>";
 
 			if($this->arr[type] == "link")
 			{
-				$html="<table border=0><tr><td align=right>".$this->arr[link_text]."</td><td><input type='text' NAME='".$elid."_text' VALUE='".($this->entry_id ? $this->entry[text] : "")."'></td></tr>";
-				$html.="<tr><td align=right>".$this->arr[link_address]."</td><td><input type='text' NAME='".$elid."_address' VALUE='".($this->entry_id ? $this->entry[address] : "")."'></td></tr></table>";
+				$html="<table border=0><tr><td align=right>".$this->arr[link_text]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry[text] : "")."'></td></tr>";
+				$html.="<tr><td align=right>".$this->arr[link_address]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry[address] : "")."'></td></tr></table>";
 			}
 
 			if ($this->arr[type] == "")
@@ -419,12 +419,12 @@ define(FORM_EELEMENT_LOADED,1);
 			return $html;
 		}
 
-		function process_entry(&$entry, $id)
+		function process_entry(&$entry, $id,$prefix = "")
 		{
 			if ($this->arr[type] == 'link')
 			{
-				$var = $this->id."_text";
-				$var2= $this->id."_address";
+				$var = $prefix.$this->id."_text";
+				$var2= $prefix.$this->id."_address";
 				global $$var, $$var2;
 				$entry[$this->id] = array("text" => $$var, "address" => $$var2);
 				return;
@@ -432,7 +432,7 @@ define(FORM_EELEMENT_LOADED,1);
 			else
 			if ($this->arr[type] == 'file')
 			{
-				$var = $this->id;
+				$var = $prefix.$this->id;
 				global $$var;
 
 				if ($$var != "none")
@@ -457,9 +457,9 @@ define(FORM_EELEMENT_LOADED,1);
 			}
 			else
 			if ($this->arr[type] == "radiobutton")
-				$var = "radio_group_".$this->arr[group];
+				$var = $prefix."radio_group_".$this->arr[group];
 			else
-				$var = $this->id;
+				$var = $prefix.$this->id;
 
 			global $$var;
 			$entry[$this->id] = $$var;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.2 2001/05/21 04:01:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.3 2001/05/21 07:07:34 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -350,24 +350,40 @@ class form_base extends aw_template
 
 				case "email":
 					$this->load_entry($entry_id);
-					$msg = "";
-					for ($r = 0; $r < $this->arr[rows]; $r++)
-					{
-						for ($c = 0; $c < $this->arr[cols]; $c++)
-						{
-							$elr = array();
-							$this->arr[contents][$r][$c]->get_els(&$elr);
-							reset($elr);
-							while (list(,$v) = each($elr))
-								$msg.=$v->gen_show_text();
-						}
-						$msg.="\n";
-					}
-					mail($row[data],"Tellimus AutomatWebist", $msg,"From: automatweb@automatweb.com\n");
+					$msg = $this->show_text();
+					mail($row["data"],"Tellimus AutomatWebist", $msg,"From: automatweb@automatweb.com\n");
 					break;
 			}
 			$this->restore_handle();
 		}
+	}
+
+	////
+	// !generates a plain-text representation of the loaded entry for the loaded form, suitable for e-mailing
+	function show_text()
+	{
+		$msg = "";
+		for ($r = 0; $r < $this->arr["rows"]; $r++)
+		{
+			$msg.=$this->mk_show_text_row($r)."\n";
+		}
+		return $msg;
+	}
+
+	////
+	// !generates row $r of the plain-text representation of the loaded entry for the loaded form 
+	function mk_show_text_row($r)
+	{
+		$msg = "";
+		for ($c = 0; $c < $this->arr["cols"]; $c++)
+		{
+			$elr = array();
+			$this->arr["contents"][$r][$c]->get_els(&$elr);
+			reset($elr);
+			while (list(,$v) = each($elr))
+				$msg.=$v->gen_show_text();
+		}
+		return $msg;
 	}
 
 	////

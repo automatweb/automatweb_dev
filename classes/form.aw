@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.4 2001/05/21 05:24:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.5 2001/05/21 07:07:34 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -14,6 +14,11 @@ $orb_defs["form"] = "xml";
 	define(FORM_SEARCH,2);
 	define(FORM_RATING,3);
 
+	// constants for get_elements_for_row - specify wheter the return array is 
+	// element_name => element_value
+	define(ARR_ELNAME, 1);
+	// or element_id => element_value
+	define(ARR_ELID,2);
 
 	class form extends form_base
 	{
@@ -666,14 +671,7 @@ $orb_defs["form"] = "xml";
 			$c="";
 			for ($i=0; $i < $this->arr[rows]; $i++)
 			{
-				$html="";
-				for ($a=0; $a < $this->arr[cols]; $a++)
-				{
-					if (($arr = $this->get_spans($i, $a)))
-					{
-						$html.=$this->arr[contents][$arr[r_row]][$arr[r_col]]->gen_user_html_not($this->arr[def_style], &$images, $arr[colspan], $arr[rowspan]);
-					}
-				}
+				$html=$this->mk_row_html($i,&$images);
 				$this->vars(array("COL" => $html));
 				$c.=$this->parse("LINE");
 			}
@@ -731,7 +729,23 @@ $orb_defs["form"] = "xml";
 		}
 
 		////
+		// !generates one row of form elements
+		function mk_row_html($row,&$images,$prefix = "")
+		{
+			$html = "";
+			for ($a=0; $a < $this->arr["cols"]; $a++)
+			{
+				if (($arr = $this->get_spans($row, $a)))
+				{
+					$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($this->arr["def_style"], &$images, $arr["colspan"], $arr["rowspan"],$prefix);
+				}
+			}
+			return $html;
+		}
+
+		////
 		// !saves the entry for the form $id, if $entry_id specified, updates it instead of creating a new one
+		// elements are assumed to be prefixed by $prefix
 		function process_entry($arr)
 		{
 			extract($arr);
@@ -739,7 +753,7 @@ $orb_defs["form"] = "xml";
 
 			if (!$entry_id)
 			{
-				$entry_id = $this->new_object(array("parent" => $this->arr[ff_folder], "name" => "form_entry", "class_id" => CL_FORM_ENTRY));
+				$entry_id = $this->new_object(array("parent" => $this->arr["ff_folder"], "name" => "form_entry", "class_id" => CL_FORM_ENTRY));
 				$new = true;
 			}
 			else
@@ -747,11 +761,11 @@ $orb_defs["form"] = "xml";
 				$new = false;
 			}
 
-			for ($i=0; $i < $this->arr[rows]; $i++)
+			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
-				for ($a=0; $a < $this->arr[cols]; $a++)
+				for ($a=0; $a < $this->arr["cols"]; $a++)
 				{
-					$this->arr[contents][$i][$a] -> process_entry(&$this->entry, $entry_id);
+					$this->arr["contents"][$i][$a] -> process_entry(&$this->entry, $entry_id,$prefix);
 				}
 			}
 
@@ -1903,6 +1917,51 @@ $orb_defs["form"] = "xml";
 			}
 
 			return $this->entry[$el->get_id()];
+		}
+
+		////
+		// !returns the number of rows in the currently loaded form
+		function get_num_rows()
+		{
+			return $this->arr["rows"];
+		}
+
+		////
+		// !returns all the element_name => value pairs for the specified row
+		// type values are defined in the beginning of this file
+		function get_elements_for_row($row,$type = ARR_ELNAME)
+		{
+			$ret = array();
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+				reset($elar);
+				while (list(,$el) = each($elar))
+				{
+					if ($type == ARR_ELNAME)
+					{
+						$k = $el->get_el_name();
+					}
+					else
+					if ($type == ARR_ELID)
+					{
+						$k = $el->get_id();
+					}
+					$ret[$k] = $this->entry[$el->get_id()];
+				}
+			}
+			return $ret;
+		}
+
+		////
+		// !returns true if the value is the value that a checkbox recieves if it is checked
+		function is_checked_value($val)
+		{
+			if ($val == '1')
+			{
+				return true;
+			}
+			return false;
 		}
 	};	// class ends
 ?>
