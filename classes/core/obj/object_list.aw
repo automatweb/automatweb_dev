@@ -25,6 +25,11 @@ class object_list extends _int_obj_container_base
 			));
 		}
 
+		// we should check the individual arguments as well .. if "oid" is an object
+		// (aw_array) .. then this thingie will return absurd results .. like 
+		// for id-s of all documents in the database.. yehh ...it happened
+		// in UT --duke
+
 		$this->_int_filter($param);
 	}
 
