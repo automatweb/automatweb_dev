@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.172 2005/01/19 11:51:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.173 2005/01/21 12:56:13 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -75,7 +75,7 @@ if (!defined("DEFS"))
 
 	function get_lc_date($time=0, $format=3)
 	{
-		$inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);		
+		$inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);		
 		if(!is_object($inst))
 		{
 			$inst = get_instance("core/locale/en/date");
