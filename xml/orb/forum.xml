@@ -135,6 +135,32 @@
 				<optional name="section"/>
 			</function>
 		</action>
+
+		<action name="delete_topic">
+			<function name="del_topic">
+				<required name="forum_id"/>
+				<required name="board"/>
+			</function>
+		</action>
+
+		<action name="change_topic">
+			<function name="change_topic">
+				<required name="board"/>
+			</function>
+		</action>
+
+		<action name="save_topic">
+			<function name="save_topic">
+			</function>
+		</action>
+
+		<action name="del_msg">
+			<function name="del_msg">
+				<required name="comment"/>
+				<required name="board"/>
+			</function>
+		</action>
+
 </class>
 </orb>
 		
