@@ -28,3 +28,5 @@
 </table>
 {VAR:reforb}
 </form>
+Kasutaja info:
+{VAR:form}
