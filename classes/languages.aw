@@ -107,7 +107,7 @@ class languages extends aw_template
 	{
 		$id = (int)$id;
 		$status = $this->db_fetch_field("SELECT status FROM languages WHERE id = $id","status");
-		if ($status != 2)
+		if ($status != 2 && $GLOBALS["uid"] == "")
 		{
 			return false;
 		}
