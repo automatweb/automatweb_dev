@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.39 2003/05/08 13:43:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.40 2003/05/08 14:24:55 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2188,7 +2188,8 @@ class form_element extends aw_template
 					$larr = $this->arr["multiple_items"];
 				}
 
-				foreach($larr as $b => $itval)
+				$_larr = new aw_array($larr);
+				foreach($_larr->get() as $b => $itval)
 				{
 					$sel = false;
 					if ($this->entry_id)
@@ -3584,6 +3585,7 @@ class form_element extends aw_template
 
 	function _do_init_multiple_items()
 	{
+		$lang_id = aw_global_get("lang_id");
 		if ($this->arr["lb_data_from_form"] && $this->arr["lb_data_from_el"])
 		{
 			$opts = array(
