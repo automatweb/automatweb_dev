@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.15 2002/01/04 15:49:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.16 2002/01/07 20:18:37 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -143,11 +143,13 @@ class aliasmgr extends aw_template {
 
 		$this->defs["form_entry"] = array(
 				"alias" => "r",
-				"title" => "vormi sisetus",
+				"title" => "vormi sisestus",
 				"generator" => "_form_entry_aliases",
 				"class_id" => CL_FORM_ENTRY,
 				"addlink" => $this->mk_my_orb("new_entry_alias",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"form_alias"),
-				"chlink" => "#",
+				
+				"chlink" => $this->mk_my_orb("change_entry_alias",array("return_url" => $return_url),"form_alias"),
+				"field" => "id",
 		);
 		
 		$this->defs["menu_chains"] = array(
@@ -187,15 +189,15 @@ class aliasmgr extends aw_template {
 				"field" => "id"
 		);
 		
-		$this->defs["calendars"] = array(
-				"alias" => "k",
-				"title" => "calendar",
-				"class_id" => CL_CALENDAR,
-				"generator" => "_calendar_aliases",
-				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"planner"),
-				"chlink" => $this->mk_my_orb("change",array(),"planner"),
-				"field" => "id"
-		);
+		//$this->defs["calendars"] = array(
+		//		"alias" => "k",
+		//		"title" => "calendar",
+		//		"class_id" => CL_CALENDAR,
+		//		"generator" => "_calendar_aliases",
+		//		"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"planner"),
+		//		"chlink" => $this->mk_my_orb("change",array(),"planner"),
+		//		"field" => "id"
+		//);
 
 	}
 
@@ -309,6 +311,7 @@ class aliasmgr extends aw_template {
 			$aliases[$cnt] = $val["title"];
 
 			$this->def_id = $key;
+			$this->def_cnt = $cnt;
 
 			$this->_initialize($key);
 			$this->$val["generator"]();
@@ -599,14 +602,16 @@ class aliasmgr extends aw_template {
 		while (list(,$v) = each($fes))
 		{
 			$fec++;
-			$url = $this->mk_orb("change_entry_alias", array("id" => $v["id"]),"form_alias");
-			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$url = $this->mk_orb("change_entry_alias", array("id" => $v["id"],"return_url" => $this->return_url),"form_alias");
+			$name = ($v["name"]) ? $v["name"] : "(nimetu)";
+			$link = sprintf("<a href='%s'>%s</a>",$url,$name);
 			$v["link"] = $link;
+			$v["url"] = $url;
 			$this->t->define_data(array(
 				"name"                => $link,
 				"modified"            => $this->time2date($v["modified"],2),
 				"modifiedby"          => $v["modifiedby"],
-				"description" => $v["comment"],
+				"description" 	      => $v["comment"],
 				"id"                  => $v["id"],
 			));
 			$this->_common_parts($v);
@@ -628,8 +633,8 @@ class aliasmgr extends aw_template {
 			{
 				$lcc++;
 				$name = ($val["name"]) ? $val["name"] : "(nimetu)";
-				$url = $this->defs["link_collections"]["chlink"] . "&id=?" . $val["oid"];
-				$link = sprintf("<a href='%s&id=%d'>%s</a>",$url,$name);
+				$url = $this->defs["link_collections"]["chlink"] . "&id=" . $val["oid"];
+				$link = sprintf("<a href='%s'>%s</a>",$url,$name);
 				$val["url"] = $url;
 				$this->t->define_data(array(
 					"name" => $link,
