@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.15 2003/06/26 18:22:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.16 2003/07/09 06:58:02 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -878,6 +878,8 @@ class admin_menus extends aw_template
 		// perhaps this should even be in the config file?
 		$containers = array(CL_PSEUDO,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
 
+		$num_records = 0;
+
 		while ($row = $this->db_next())
 		{
 			if (!$this->can("view", $row["oid"]))
@@ -977,6 +979,8 @@ class admin_menus extends aw_template
 				$this->t->define_data($row);
 			}
 
+			$num_records++;
+
 		}
 		$this->get_add_menu(array(
 			"id" => $parent,
@@ -1068,8 +1072,21 @@ class admin_menus extends aw_template
 		$toolbar_data = $toolbar->get_toolbar();
 		$toolbar_data .= $whole_menu;
 
+		if ($num_records < 50)
+		{
+			$arg = array();
+		}
+		else
+		{
+			$arg = array(
+				"has_pages" => true,
+				"records_per_page" => 50,
+				"pageselector" => "lb"
+			);
+		}
+
 		$this->vars(array(
-			"table" => $this->t->draw(),
+			"table" => $this->t->draw($arg),
 			"reforb" => $this->mk_reforb("submit_rf", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order)),
 			"parent" => $parent,
 			"period" => $period,
