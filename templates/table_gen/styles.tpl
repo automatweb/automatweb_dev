@@ -1,3 +1,4 @@
+{VAR:menu}
 <script language="javascript">
 function exp_left(row,col)
 {
@@ -59,19 +60,6 @@ function pick_style(row,col)
 	remote("no",200,200,url);
 }
 </script>
-<table hspace=0 vspace=0 cellpadding=3  bgcolor=#a0a0a0>
-	<tr>
-		<td bgcolor=#f0f0f0><a href='{VAR:change}'>{VAR:LC_TABLE_FILL}</a></td>
-		<td bgcolor=#a0a0a0><a href='{VAR:styles}'>{VAR:LC_TABLE_EDIT}</a></td>
-		<td bgcolor=#f0f0f0><a href='{VAR:admin}'>{VAR:LC_TABLE_ADMIN}</a></td>
-		<td bgcolor=#f0f0f0><a href='{VAR:view}'>{VAR:LC_TABLE_PREVIEW}</a></td>
-		<td bgcolor=#f0f0f0><a href='{VAR:import}'>{VAR:LC_TABLE_IMPORT}</a></td>
-		<!-- SUB: ALIAS_LINK -->
-		<td bgcolor=#f0f0f0><a href='{VAR:url}'>{VAR:title}</a></td>
-		<!-- END SUB: ALIAS_LINK -->
-		<td bgcolor=#f0f0f0><a href='{VAR:addstyle}'>{VAR:LC_TABLE_ADD_STYLE}</a></td>
-	</tr>
-</table>
 <br>
 <form action='reforb.{VAR:ext}' method=post NAME='q'>
 <input type='submit' NAME='save_table' VALUE='{VAR:LC_TABLE_SAVE}'>

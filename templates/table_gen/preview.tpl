@@ -1,0 +1,2 @@
+{VAR:menu}
+{VAR:content}

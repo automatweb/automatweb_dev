@@ -1,11 +1,4 @@
-<table hspace=0 vspace=0 cellpadding=3  bgcolor=#a0a0a0>
-	<tr>
-		<td bgcolor=#f0f0f0><a href='{VAR:change}'>{VAR:LC_TABLE_EDIT}</a></td>
-		<td bgcolor=#f0f0f0><a href='{VAR:styles}'>{VAR:LC_TABLE_STYLES}</a></td>
-		<td bgcolor=#f0f0f0><a href='{VAR:view}'>{VAR:LC_TABLE_PREVIEW}</a></td>
-		<td bgcolor=#a0a0a0><a href='{VAR:import}'>{VAR:LC_TABLE_IMPORT}</a></td>
-	</tr>
-</table>
+{VAR:menu}
 <br>
 <form action = 'reforb.{VAR:ext}' method=post enctype='multipart/form-data'>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='1000000'>
