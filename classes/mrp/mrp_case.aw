@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.32 2005/03/15 11:01:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.33 2005/03/15 12:26:42 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -165,7 +165,7 @@ default group=grp_case_material
 
 @default group=grp_case_comments
 
-	@property user_comments type=comments 
+	@property user_comments type=comments
 	@caption Kommentaarid juhtumi ja tööde kohta
 
 
@@ -1498,6 +1498,88 @@ class mrp_case extends class_base
 			return false;
 		}
 		return true;
+	}
+
+/**
+    @attrib name=can_start_job
+	@param project required type=int
+	@param job required type=int
+**/
+	function can_start_job ($arr)
+	{
+		if (is_oid ($arr["project"]) and is_oid ($arr["job"]))
+		{
+			$project = obj ($arr["project"]);
+			$job = obj ($arr["job"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		### check if project is ready to go on
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_NEW,
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_LOCKED,
+			MRP_STATUS_OVERDUE,
+		);
+
+		if (!in_array ($project->prop ("state"), $applicable_states))
+		{
+			return false;
+		}
+
+		### check if all prerequisite jobs are done
+		$prerequisites = explode (",", $job->prop ("prerequisites"));
+		$applicable_states = array (
+			MRP_STATUS_DONE,
+		);
+
+		foreach ($prerequisites as $prerequisite_oid)
+		{
+			$prerequisite = obj ($prerequisite_oid);
+
+			if (!in_array ($prerequisite->prop ("state"), $applicable_states))
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+/**
+    @attrib name=start
+	@param project required type=int
+**/
+	function start_project ($arr)
+	{
+		if (is_oid ($arr["project"]))
+		{
+			$project = obj ($arr["project"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_LOCKED,
+		);
+
+		if (in_array ($project->prop ("state"), $applicable_states))
+		{
+			$project->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
+			$project->save ();
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 
