@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.40 2002/07/23 12:53:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.41 2002/07/23 17:51:52 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -2173,8 +2173,11 @@ class users extends users_user
 		$q = "UPDATE users SET password = '$newpass' WHERE uid = '$uid'";
 		$this->db_query($q);
 		$this->_log("auth","$uid vahetas parooli (hash)");
-		$this->read_adm_template("password_change_success.tpl");
-		return $this->parse();
+//		$this->read_adm_template("password_change_success.tpl");
+//		return $this->parse();
+		$status_msg = "<b><font color=green>Parool on edukalt vahetatud</font></b>";
+		session_register("status_msg");
+		return $this->mk_my_orb("send_hash",array());
 	}
 
 	function request_startup()
