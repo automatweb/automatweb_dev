@@ -117,21 +117,6 @@
 			</function>
 		</action>
 
-		<action name="list_user_docs">
-			<function name="list_user_docs">
-				<arguments>
-					<optional name="parent"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_user_docs">
-			<function name="submit_user_docs">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="send" nologin="1">
 			<function name="send">
 				<arguments>
