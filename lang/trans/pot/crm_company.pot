@@ -74,6 +74,10 @@ msgstr ""
 msgid "Kandidaadid"
 msgstr ""
 
+#: classes/crm/crm_company.aw:1534
+msgid "X"
+msgstr ""
+
 #: classes/crm/crm_company.aw:1552
 msgid "Vaata kandidaate"
 msgstr ""
@@ -88,6 +92,10 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:1579
 msgid "Kandidaadid"
+msgstr ""
+
+#: classes/crm/crm_company.aw:1585
+msgid "X"
 msgstr ""
 
 #: classes/crm/crm_company.aw:1602
@@ -364,6 +372,10 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:4043
 msgid "Staatus"
+msgstr ""
+
+#: classes/crm/crm_company.aw:4051
+msgid "X"
 msgstr ""
 
 #: classes/crm/crm_company.aw:4097

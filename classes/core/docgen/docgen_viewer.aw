@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.22 2005/03/20 15:39:18 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.23 2005/03/23 11:45:07 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -67,7 +67,7 @@ class docgen_viewer extends class_base
 			case "view":
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("frames", array("id" => $arr["obj_inst"]->id())),
-					"caption" => "Open DocGen"
+					"caption" => t("Open DocGen")
 				));
 				break;
 		}
@@ -95,7 +95,7 @@ class docgen_viewer extends class_base
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgclsss",
 			"persist_state" => true,
-			"root_name" => "Classes",
+			"root_name" => t("Classes"),
 			"url_target" => "list"
 		));
 
@@ -644,7 +644,7 @@ class docgen_viewer extends class_base
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgdoclss",
 			"persist_state" => true,
-			"root_name" => "Classes",
+			"root_name" => t("Classes"),
 			"url_target" => "list"
 		));
 
@@ -713,7 +713,7 @@ class docgen_viewer extends class_base
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgdoclss",
 			"persist_state" => true,
-			"root_name" => "Classes",
+			"root_name" => t("Classes"),
 			"url_target" => "list"
 		));
 
@@ -919,37 +919,37 @@ class docgen_viewer extends class_base
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("class_list"),
 			"target" => "classlist",
-			"caption" => "K&otilde;ik klassid"
+			"caption" => t("K&otilde;ik klassid")
 		));
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("doc_class_list"),
 			"target" => "classlist",
-			"caption" => "Dokumenteeritud klassid"
+			"caption" => t("Dokumenteeritud klassid")
 		));
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("api_class_list"),
 			"target" => "classlist",
-			"caption" => "API klassid"
+			"caption" => t("API klassid")
 		));
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("doclist"),
 			"target" => "classlist",
-			"caption" => "Eraldi dokumentatsioon"
+			"caption" => t("Eraldi dokumentatsioon")
 		));
 		
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("proplist",array('id'=>$arr['id'])),
 			"target" => "classlist",
-			"caption" => "Classbase tagid"
+			"caption" => t("Classbase tagid")
 		));
 
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("do_db_update",array('id'=>$arr['id'])),
 			"target" => "bott",
-			"caption" => "Uuenda API andmebaas"
+			"caption" => t("Uuenda API andmebaas")
 		));
 
 		if ($arr["id"])
@@ -960,7 +960,7 @@ class docgen_viewer extends class_base
 			$ret[] = html::href(array(
 				"url" => $this->mk_my_orb("change", array("id" => $f_id, "group" => "contents"), CL_FORUM_V2),
 				"target" => "list",
-				"caption" => "Foorum"
+				"caption" => t("Foorum")
 			));
 		}
 
@@ -986,16 +986,16 @@ class docgen_viewer extends class_base
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgclsss",
 			"persist_state" => true,
-			"root_name" => "Classes",
+			"root_name" => t("Classes"),
 			"url_target" => "list"
 		));
 
 		$this->ic = get_instance("core/icons");
 		
 		$this->_req_mk_prop_tree(array(
-						'id' => $arr['id'],
-						'tree' => &$tv, 
-						'classdir' => $this->cfg["classdir"],
+			'id' => $arr['id'],
+			'tree' => &$tv, 
+			'classdir' => $this->cfg["classdir"],
 		));
 		
 		$this->vars(array(
@@ -1030,11 +1030,11 @@ class docgen_viewer extends class_base
 				'name' => $option_name,
 				'id' => $option_name,
 				'url' => $this->mk_my_orb(
-								'prop_info',
-								array(
-									'option' => $option_name,
-									'id' => $obj->id(),
-								)
+					'prop_info',
+					array(
+						'option' => $option_name,
+						'id' => $obj->id(),
+					)
 				),
 				'target' => 'propinfo',
 			));
@@ -1056,7 +1056,7 @@ class docgen_viewer extends class_base
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgclsss",
 			"persist_state" => true,
-			"root_name" => "Classes",
+			"root_name" => t("Classes"),
 			"url_target" => "list"
 		));
 
@@ -1154,7 +1154,7 @@ class docgen_viewer extends class_base
 			"type" => TREE_DHTML,
 			"tree_id" => "dcgclsssapi",
 			"persist_state" => true,
-			"root_name" => "Classes",
+			"root_name" => t("Classes"),
 			"url_target" => "list"
 		));
 	

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.2 2005/03/18 12:22:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.3 2005/03/23 11:45:07 kristo Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
@@ -69,16 +69,11 @@ class otv_ds_kultuuriaken extends class_base
 
 	function otv_ds_kultuuriaken()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "contentmgmt/object_treeview/otv_ds_kultuuriaken",
 			"clid" => CL_OTV_DS_KULTUURIAKEN
 		));
 	}
-
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
 
 	function get_property($arr)
 	{
@@ -201,7 +196,7 @@ class otv_ds_kultuuriaken extends class_base
 		));
 		$t->define_field(array(
 			"name" => "form_field",
-			"caption" => "Vormi v&auml;li",
+			"caption" => t("Vormi v&auml;li"),
 		));
 		
 		

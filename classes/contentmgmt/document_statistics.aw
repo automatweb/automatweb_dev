@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.17 2005/03/10 12:49:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.18 2005/03/23 11:45:07 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -79,23 +79,23 @@ class document_statistics extends class_base
 		switch($data["name"])
 		{
 			case "mail_info":
-				$data["value"] = "#sisu# asendatakse statistika tabeliga. ";
+				$data["value"] = t("#sisu# asendatakse statistika tabeliga. ");
 				break;
 
 			case "timespan":
 				$data["options"] = array(
-					"day" => "P&auml;ev",
-					"week" => "N&auml;dal",
-					"mon" => "Kuu"
+					"day" => t("P&auml;ev"),
+					"week" => t("N&auml;dal"),
+					"mon" => t("Kuu")
 				);
 				break;
 
 			case "period_type":
 				$data["options"] = array(
-					"rel" => "Seostatud perioodid",
-					"all" => "K&otilde;ik perioodid",
-					"not" => "Mitteperioodilised",
-					"act" => "Aktiivne periood"
+					"rel" => t("Seostatud perioodid"),
+					"all" => t("K&otilde;ik perioodid"),
+					"not" => t("Mitteperioodilised"),
+					"act" => t("Aktiivne periood")
 				);
 				break;
 
@@ -108,12 +108,12 @@ class document_statistics extends class_base
 				
 				$data["vcl_inst"]->define_field(array(
 					"name" => "docid",
-					"caption" => "Dokument"
+					"caption" => t("Dokument")
 				));
 
 				$data["vcl_inst"]->define_field(array(
 					"name" => "hits",
-					"caption" => "Vaatamisi",
+					"caption" => t("Vaatamisi"),
 					"align" => "center",
 					"type" => "int",
 					"numeric" => 1,
@@ -163,12 +163,12 @@ class document_statistics extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Kataloog"
+			"caption" => t("Kataloog")
 		));
 
 		$t->define_field(array(
 			"name" => "subs",
-			"caption" => "K.A. Alamkataloogid",
+			"caption" => t("K.A. Alamkataloogid"),
 			"align" => "center"
 		));
 	}
@@ -198,7 +198,7 @@ class document_statistics extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Periood"
+			"caption" => t("Periood")
 		));
 	}
 

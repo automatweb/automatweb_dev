@@ -1,0 +1,8 @@
+#: classes/contentmgmt/gallery/gallery_v2.aw:148
+msgid "Sellele kataloogile pole konfiguratsiooni valitud!"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:391
+msgid "Sellist kataloogi pole serveris! (%s)"
+msgstr ""
+

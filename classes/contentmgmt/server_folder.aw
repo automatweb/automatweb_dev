@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.3 2004/12/01 14:05:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.4 2005/03/23 11:45:07 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -68,7 +68,7 @@ class server_folder extends class_base
 		list($oid, $fname) = explode(":", $fid);
 		error::raise_if(!is_oid($oid), array(
 			"id" => ERR_PARAM,
-			"msg" => "server_folder::show_file($fid): the fid parameter does not contain a valid object id!"
+			"msg" => sprintf(t("server_folder::show_file(%s): the fid parameter does not contain a valid object id!"), $fid)
 		));
 		$o = obj($oid);
 		$fname = urldecode($fname);
@@ -94,7 +94,7 @@ class server_folder extends class_base
 		list($oid, $fname) = explode(":", $fid);
 		error::raise_if(!is_oid($oid), array(
 			"id" => ERR_PARAM,
-			"msg" => "server_folder::del_file($fid): the fid parameter does not contain a valid object id!"
+			"msg" => sprintf(t("server_folder::del_file(%s): the fid parameter does not contain a valid object id!"), $fid)
 		));
 		$o = obj($oid);
 		$fqfn = $o->prop("folder")."/".basename($fname);
@@ -122,7 +122,7 @@ class server_folder extends class_base
 
 		error::raise_if(!is_oid($oid), array(
 			"id" => ERR_PARAM,
-			"msg" => "server_folder::change_file($fid): the fid parameter does not contain a valid object id!"
+			"msg" => sprintf(t("server_folder::change_file(%s): the fid parameter does not contain a valid object id!"), $fid)
 		));
 		$o = obj($oid);
 		$fqfn = $o->prop("folder")."/".basename($fname);
@@ -145,7 +145,7 @@ class server_folder extends class_base
 		list($oid, $fname) = explode(":", $fid);
 		error::raise_if(!is_oid($oid), array(
 			"id" => ERR_PARAM,
-			"msg" => "server_folder::change_file($fid): the fid parameter does not contain a valid object id!"
+			"msg" => sprintf(t("server_folder::change_file(%s): the fid parameter does not contain a valid object id!"), $fid)
 		));
 		$o = obj($oid);
 		$old_fqfn = $o->prop("folder")."/".urldecode(basename($fname));
@@ -222,7 +222,7 @@ class server_folder extends class_base
 
 		error::raise_if(!is_oid($id), array(
 			"id" => ERR_PARAM,
-			"msg" => "server_folder::submit_addfile($id): the id parameter does not contain a valid object id!"
+			"msg" => sprintf(t("server_folder::submit_addfile(%s): the id parameter does not contain a valid object id!"), $id)
 		));
 
 		$o = obj($id);

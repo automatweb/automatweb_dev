@@ -131,7 +131,7 @@ class crm_role_manager extends class_base
 
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => "Vali roll",
+			"caption" => t("Vali roll"),
 			"align" => "center"
 		));
 

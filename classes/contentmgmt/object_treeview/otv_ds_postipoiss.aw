@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.21 2005/03/14 17:27:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.22 2005/03/23 11:45:07 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -112,7 +112,7 @@ class otv_ds_postipoiss extends class_base
 			case "update_cache":
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("do_cache_update"),
-					"caption" => "Uuenda cache"
+					"caption" => t("Uuenda cache")
 				));
 				break;
 		};
@@ -134,7 +134,7 @@ class otv_ds_postipoiss extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => t("Nimi")
 		));
 	}
 
@@ -144,7 +144,7 @@ class otv_ds_postipoiss extends class_base
 		$this->_init_ct_tbl($t);
 
 		$t->define_data(array(
-			"name" => "<b>Kataloogid</b>"
+			"name" => t("<b>Kataloogid</b>")
 		));
 
 		foreach($this->get_folders($arr["obj_inst"]) as $fld)
@@ -155,7 +155,7 @@ class otv_ds_postipoiss extends class_base
 		}
 
 		$t->define_data(array(
-			"name" => "<b>Failid</b>"
+			"name" => t("<b>Failid</b>")
 		));
 
 		foreach($this->get_objects($arr["obj_inst"]) as $fld)
@@ -315,7 +315,7 @@ class otv_ds_postipoiss extends class_base
 		{
 			error::raise(array(
 				"id" => ERR_NO_FILE,
-				"msg" => "the subject xml file (".$o->prop("subj_xml").") does not exist!"
+				"msg" => sprintf(t("the subject xml file (%s) does not exist!"), $o->prop("subj_xml"))
 			));
 		}
 		// parse the subject xml file
@@ -493,10 +493,6 @@ class otv_ds_postipoiss extends class_base
 				}
 			}
 		}
-		/*error::raise(array(
-			"id" => "ERR_PP_NO_FILE",
-			"msg" => "otv_ds_postipoiss::pget_file(): no file $arr[fnam] find for xml $arr[real_nr]!"
-		));*/
 		header("Location: ".aw_ini_get("baseurl"));
 		die();
 	}
@@ -629,7 +625,7 @@ class otv_ds_postipoiss extends class_base
 			echo "Cache on uuem kui failid, uuendada pole vaja (".date("d.m.Y H:i", $c_mtime)." > ".date("d.m.Y H:i", $mtime).") !<br>";
 			return;
 		}
-	//die("fc = $file_cnt , cache = $cache_count <br>");
+
 		$this->db_query("DELETE FROM aw_otv_ds_pp_cache WHERE aw_pp_id = '".$o->id()."'");
 		$this->db_query("DELETE FROM aw_otv_ds_pp_cache_file2folder WHERE aw_pp_id = '".$o->id()."'");
 		

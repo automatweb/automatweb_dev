@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.8 2005/02/14 13:26:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.9 2005/03/23 11:45:08 kristo Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see kõik pole
@@ -137,26 +137,26 @@ class metamgr extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"sortable" => 1,
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"callback" => array(&$this, "callb_name"),
 			"callb_pass_row" => true,
 		));
 
 		$t->define_field(array(
 			"name" => "value",
-			"caption" => "Väärtus",
+			"caption" => t("Väärtus"),
 			"callback" => array(&$this, "callb_value"),
 			"callb_pass_row" => true,
 		));
 
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "Jrk",
+			"caption" => t("Jrk"),
 			"sortable" => 1,
 			"callback" => array(&$this, "callb_ord"),
 			"callb_pass_row" => true,
@@ -312,7 +312,7 @@ class metamgr extends class_base
 		$toolbar = &$arr["prop"]["toolbar"];
 		$toolbar->add_button(array(
 			"name" => "save",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"action" => "",
 			"img" => "save.gif",
 		));
@@ -320,7 +320,7 @@ class metamgr extends class_base
 
 		$toolbar->add_menu_button(array(
 			"name" => "move",
-			"tooltip" => "Liiguta valitud omadused gruppi",
+			"tooltip" => t("Liiguta valitud omadused gruppi"),
 			"img" => "import.gif",
 		));
 		
@@ -350,7 +350,8 @@ class metamgr extends class_base
 					$toolbar->add_menu_item(array(
 						"name" => "mnx_" . $id,
 						"parent" => "mn_" . $id,
-						"text" => "<b>" . $o->name() . "</b>",
+						"text" => 
+									"<b>".$o->name()."</b>",
 						"url" => "javascript:document.changeform.meta.value='$id';document.changeform.action.value='move_items';document.changeform.submit()",
 						"disabled" => ($id == $arr["request"]["meta"]),
 					));
@@ -374,8 +375,8 @@ class metamgr extends class_base
 		$toolbar->add_separator();
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Kustuta valitud muutujad",
-			"confirm" => "Kustuta valitud muutujad?",
+			"tooltip" => t("Kustuta valitud muutujad"),
+			"confirm" => t("Kustuta valitud muutujad?"),
 			"action" => "delete_marked",
 			"img" => "delete.gif",
 		));

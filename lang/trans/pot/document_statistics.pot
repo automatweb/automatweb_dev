@@ -1,0 +1,52 @@
+#: classes/contentmgmt/document_statistics.aw:82
+msgid "#sisu# asendatakse statistika tabeliga. "
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:87
+msgid "P&auml;ev"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:88
+msgid "N&auml;dal"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:89
+msgid "Kuu"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:95
+msgid "Seostatud perioodid"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:96
+msgid "K&otilde;ik perioodid"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:97
+msgid "Mitteperioodilised"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:98
+msgid "Aktiivne periood"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:111
+msgid "Dokument"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:116
+msgid "Vaatamisi"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:166
+msgid "Kataloog"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:171
+msgid "K.A. Alamkataloogid"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:201
+msgid "Periood"
+msgstr ""
+

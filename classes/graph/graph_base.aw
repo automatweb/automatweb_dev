@@ -14,7 +14,7 @@ class graph_base extends class_base
 
 	function get_module_name()
 	{
-		die("ERROR: graph_base::get_module_name not overriden!");
+		die(t("ERROR: graph_base::get_module_name not overriden!"));
 	}
 
 	function prop_gen($arr)
@@ -28,7 +28,7 @@ class graph_base extends class_base
 	{
 		return array('data_x' => array(
 			'name' => 'data_x',
-			'caption' => 'X-telje v&auml;&auml;rtused',
+			'caption' => t('X-telje v&auml;&auml;rtused'),
 			'type' => 'textbox',
 			'table' => 'objects',
 			'field' => 'meta',

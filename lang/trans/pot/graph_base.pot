@@ -1,0 +1,8 @@
+#: classes/graph/graph_base.aw:17
+msgid "ERROR: graph_base::get_module_name not overriden!"
+msgstr ""
+
+#: classes/graph/graph_base.aw:31
+msgid "X-telje v&auml;&auml;rtused"
+msgstr ""
+

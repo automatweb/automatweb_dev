@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.37 2005/03/18 12:25:19 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.38 2005/03/23 11:45:08 kristo Exp $
 
 /*
 
@@ -99,16 +99,14 @@ class dronline extends class_base
 		);
 
 		$this->tablist = array(
-			'dronline' => 'Online',
-			'stat_time' => 'Statistika aja l&otilde;ikes',
-			'stat_addr' => 'Statistika aadresside l&otilde;ikes',
-			'stat_obj' => 'Statistika objektide l&otilde;ikes',
-			'ipblock' => 'IP Blokk',
-			//'show_queries' => 'Salvestatud p&auml;ringud',
-			'general' => 'M&auml;&auml;rangud',
-			//'tab_conf' => 'P&auml;ringud',
-			'folders' => "Kataloogid",
-			'aliasmgr' => "Seostehaldur",
+			'dronline' => t('Online'),
+			'stat_time' => t('Statistika aja l&otilde;ikes'),
+			'stat_addr' => t('Statistika aadresside l&otilde;ikes'),
+			'stat_obj' => t('Statistika objektide l&otilde;ikes'),
+			'ipblock' => t('IP Blokk'),
+			'general' => t('M&auml;&auml;rangud'),
+			'folders' => t("Kataloogid"),
+			'aliasmgr' => t("Seostehaldur"),
 		);
 
 		$this->query_tabs = array(
@@ -116,10 +114,10 @@ class dronline extends class_base
 		);
 
 		$this->statuses = array(
-			DRO_C_NOTCREATED => 'Cache tegemata',
-			DRO_C_OUTOFDATE => 'Cache vananenud',
-			DRO_C_READY => 'Cache valmis',
-			DRO_C_UPDATING => 'Cache uuendamisel'
+			DRO_C_NOTCREATED => t('Cache tegemata'),
+			DRO_C_OUTOFDATE => t('Cache vananenud'),
+			DRO_C_READY => t('Cache valmis'),
+			DRO_C_UPDATING => t('Cache uuendamisel')
 		);
 
 		$today = mktime(0,0,0,date("m"), date("j"), date("Y"));
@@ -134,47 +132,47 @@ class dronline extends class_base
 			"1" => array(
 				"from" => $today,
 				"to" => time()+24*3600, 
-				"text" => "T&auml;na"
+				"text" => t("T&auml;na")
 			),
 			"2" => array(
 				"from" => (get_day_start()-24*3600),
 				"to" => get_day_start(),
-				"text" => "Eile"
+				"text" => t("Eile")
 			),
 			"3" => array(
 				"from" => $this_week, 
 				"to" => time()+24*3600,
-				"text" => "See n&auml;dal"
+				"text" => t("See n&auml;dal")
 			),
 			"4" => array(
 				"from" => ($this_week-(24*3600*7)), 
 				"to" => time()+24*3600,
-				"text" => "Viimased 2 n&auml;dalat"
+				"text" => t("Viimased 2 n&auml;dalat")
 			),
 			"5" => array(
 				"from" => $this_month, 
 				"to" => time()+24*3600,
-				"text" => "See kuu"
+				"text" => t("See kuu")
 			),
 			"6" => array(
 				"from" => ($this_month-(24*3600*31)), 
 				"to" => time()+24*3600,
-				"text" => "Viimased 2 kuud"
+				"text" => t("Viimased 2 kuud")
 			),
 			"7" => array(
 				"from" => ($this_month-(24*3600*31*6)), 
 				"to" => time()+24*3600,
-				"text" => "Viimased pool aastat"
+				"text" => t("Viimased pool aastat")
 			),
 			"8" => array(
 				"from" => ($this_year), 
 				"to" => time()+24*3600,
-				"text" => "See aasta"
+				"text" => t("See aasta")
 			),
 			"9" => array(
 				"from" => ($this_year-(24*3600*356)), 
 				"to" => time()+24*3600,
-				"text" => "Viimased 2 aastat"
+				"text" => t("Viimased 2 aastat")
 			)
 		);
 		
@@ -306,11 +304,11 @@ class dronline extends class_base
 		$df = aw_ini_get('config.dateformats');
 		$t->define_field(array(
 			'name' => 'rec',
-			'caption' => 'Nr',
+			'caption' => t('Nr'),
 		));
 		$t->define_field(array(
 			'name' => 'tm',
-			'caption' => 'Millal',
+			'caption' => t('Millal'),
 			'sortable' => 1,
 			'numeric' => 1,
 			'type' => 'time',
@@ -319,45 +317,45 @@ class dronline extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'uid',
-			'caption' => 'UID',
+			'caption' => t('UID'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'who',
-			'caption' => 'Kes',
+			'caption' => t('Kes'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'ip',
-			'caption' => 'IP',
+			'caption' => t('IP'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'type',
-			'caption' => 'T&uuml;&uuml;p',
+			'caption' => t('T&uuml;&uuml;p'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'act_id',
-			'caption' => 'Tegevus',
+			'caption' => t('Tegevus'),
 			'sortable' => 1,
 		));
 		if (aw_ini_get("syslog.has_site_id"))
 		{
 			$t->define_field(array(
 				'name' => 'site_id',
-				'caption' => 'Saidi ID',
+				'caption' => t('Saidi ID'),
 				'sortable' => 1,
 			));
 		}
 		$t->define_field(array(
 			'name' => 'oid',
-			'caption' => 'OID',
+			'caption' => t('OID'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'action',
-			'caption' => 'Mida',
+			'caption' => t('Mida'),
 			'sortable' => 1,
 		));
 
@@ -454,7 +452,7 @@ class dronline extends class_base
 			$sql[] = 'syslog.tm >= '.$this->def_spans[$mt['def_span']]['from'];
 			$sql[] = 'syslog.tm <= '.$this->def_spans[$mt['def_span']]['to'];
 			$this->vars(array(
-				"desc" => "M&auml;&auml;ratud vahemik:",
+				"desc" => t("M&auml;&auml;ratud vahemik:"),
 				"value" => $this->def_spans[$mt['def_span']]["text"]
 			));
 			$cd .= $this->parse("LINE");
@@ -465,7 +463,7 @@ class dronline extends class_base
 			{
 				$sql[] = 'syslog.tm >= '.$mt['from'];
 				$this->vars(array(
-					"desc" => "Alates:",
+					"desc" => t("Alates:"),
 					"value" => $this->time2date($mt['from'],2)
 				));
 				$cd .= $this->parse("LINE");
@@ -474,7 +472,7 @@ class dronline extends class_base
 			{
 				$sql[] = 'syslog.tm <= '.$mt['to'];
 				$this->vars(array(
-					"desc" => "Kuni:",
+					"desc" => t("Kuni:"),
 					"value" => $this->time2date($mt['to'],2)
 				));
 				$cd .= $this->parse("LINE");
@@ -484,7 +482,7 @@ class dronline extends class_base
 		{
 			$sql[] = 'syslog.uid = \''.$mt['user'].'\'';
 			$this->vars(array(
-				"desc" => "Kasutaja:",
+				"desc" => t("Kasutaja:"),
 				"value" => $mt['user']
 			));
 			$cd .= $this->parse("LINE");
@@ -493,7 +491,7 @@ class dronline extends class_base
 		{
 			$sql[] = 'syslog.ip LIKE \'%'.$mt['address'].'%\'';
 			$this->vars(array(
-				"desc" => "IP:",
+				"desc" => t("IP:"),
 				"value" => $mt['address']
 			));
 			$cd .= $this->parse("LINE");
@@ -503,7 +501,7 @@ class dronline extends class_base
 			$tfl = explode(',', $mt['textfilter']);
 			$sql[] = '('.join(' OR ', map('syslog.action LIKE \'%%%s%%\'', $tfl)).')';
 			$this->vars(array(
-				"desc" => "Tegevuse filter:",
+				"desc" => t("Tegevuse filter:"),
 				"value" => $mt['textfilter']
 			));
 			$cd .= $this->parse("LINE");
@@ -516,7 +514,7 @@ class dronline extends class_base
 			{
 				$sql[] = "syslog.site_id IN (".join(",",map("%s",$mt['sites'])).")";
 				$this->vars(array(
-					"desc" => "Saidid:",
+					"desc" => t("Saidid:"),
 					"value" => join(",",$mt['sites'])
 				));
 				$cd .= $this->parse("LINE");
@@ -527,7 +525,7 @@ class dronline extends class_base
 		{
 			$sql[] = "syslog.lang_id IN (".join(",",map("%s",$mt['languages'])).")";
 			$this->vars(array(
-				"desc" => "Keeled:",
+				"desc" => t("Keeled:"),
 				"value" => join(",",$mt['languages'])
 			));
 			$cd .= $this->parse("LINE");
@@ -562,7 +560,7 @@ class dronline extends class_base
 			{
 				$sql[] = "syslog.oid IN (".join(",",$fflds).")";
 				$this->vars(array(
-					"desc" => "Objektid:",
+					"desc" => t("Objektid:"),
 					"value" => join(",",$fflds)
 				));
 				$cd .= $this->parse("LINE");
@@ -611,7 +609,7 @@ class dronline extends class_base
 			{
 				$tsql[] = 'syslog.type IN ('.join(',',$tin).')';
 				$this->vars(array(
-					"desc" => "T&uuml;&uuml;bid:",
+					"desc" => t("T&uuml;&uuml;bid:"),
 					"value" => join(", ", $t_strs)
 				));
 				$cd .= $this->parse("LINE");
@@ -620,7 +618,7 @@ class dronline extends class_base
 			{
 				$tsql[] = 'syslog.act_id IN ('.join(',',$ain).')';
 				$this->vars(array(
-					"desc" => "Tegevused:",
+					"desc" => t("Tegevused:"),
 					"value" => join(", ", $a_strs)
 				));
 				$cd .= $this->parse("LINE");
@@ -629,7 +627,7 @@ class dronline extends class_base
 			{
 				$tsql[] = '('.join(' OR ',$cin).')';
 				$this->vars(array(
-					"desc" => "Kombinatsioonid:",
+					"desc" => t("Kombinatsioonid:"),
 					"value" => join(", ", $c_strs)
 				));
 				$cd .= $this->parse("LINE");
@@ -644,7 +642,7 @@ class dronline extends class_base
 		{
 			$sql[] = 'syslog.ip NOT IN ('.join(',',map('\'%s\'',$bip)).')';
 			$this->vars(array(
-				"desc" => "Blokeeritud IP'd:",
+				"desc" => t("Blokeeritud IP'd:"),
 				"value" => join(',',map('\'%s\'',$bip))
 			));
 			$cd .= $this->parse("LINE");
@@ -813,7 +811,7 @@ class dronline extends class_base
 
 		$t->define_field(array(
 			'name' => 'tm',
-			'caption' => 'Vahemik',
+			'caption' => t('Vahemik'),
 			'sortable' => 1,
 			'type' => 'time',
 			'numeric' => 1,
@@ -823,14 +821,14 @@ class dronline extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'cnt',
-			'caption' => 'Mitu',
+			'caption' => t('Mitu'),
 			'sortable' => 1,
 			'numeric' => 1,
 			'width' => '10%'
 		));
 		$t->define_field(array(
 			'name' => 'bar',
-			'caption' => '%',
+			'caption' => t('%'),
 			'sortable' => 0,
 		));
 
@@ -962,7 +960,7 @@ class dronline extends class_base
 
 		$t->define_field(array(
 			'name' => 'rec',
-			'caption' => '#',
+			'caption' => t('#'),
 			'sortable' => 1,
 			'numeric' => 1,
 			'nowrap' => 1
@@ -970,20 +968,20 @@ class dronline extends class_base
 
 		$t->define_field(array(
 			'name' => 'ip',
-			'caption' => 'IP Aadress',
+			'caption' => t('IP Aadress'),
 			'sortable' => 0,
 			'nowrap' => 1,
 			'width' => 1
 		));
 		$t->define_field(array(
 			'name' => 'cnt',
-			'caption' => 'Mitu',
+			'caption' => t('Mitu'),
 			'sortable' => 1,
 			'numeric' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'bar',
-			'caption' => '%',
+			'caption' => t('%'),
 			'sortable' => 0,
 		));
 		if ($arr['query'] == '' && !$this->is_embedded)
@@ -1040,8 +1038,8 @@ class dronline extends class_base
 		if (!$this->is_embedded)
 		{
 			$tb->add_button(array(
-				'name' => 'Blokeeri',
-				'tooltip' => 'Blokeeri',
+				'name' => t('Blokeeri'),
+				'tooltip' => t('Blokeeri'),
 				'url' => 'javascript:document.blokk.submit()',
 				'imgover' => 'save_over.gif',
 				'img' => 'save.gif'
@@ -1130,7 +1128,7 @@ class dronline extends class_base
 
 		$t->define_field(array(
 			'name' => 'rec',
-			'caption' => '#',
+			'caption' => t('#'),
 			'sortable' => 1,
 			'numeric' => 1,
 			'nowrap' => 1
@@ -1138,7 +1136,7 @@ class dronline extends class_base
 
 		$t->define_field(array(
 			'name' => 'oid',
-			'caption' => 'OID',
+			'caption' => t('OID'),
 			'sortable' => 1,
 			'nowrap' => 1,
 			'width' => 1
@@ -1146,7 +1144,7 @@ class dronline extends class_base
 
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => 'Nimi',
+			'caption' => t('Nimi'),
 			'sortable' => 1,
 		));
 
@@ -1154,20 +1152,20 @@ class dronline extends class_base
 		{
 			$t->define_field(array(
 				'name' => 'oppnar',
-				'caption' => 'Detailid',
+				'caption' => t('Detailid'),
 				'sortable' => 0,
 			));
 		}
 
 		$t->define_field(array(
 			'name' => 'cnt',
-			'caption' => 'Mitu',
+			'caption' => t('Mitu'),
 			'sortable' => 1,
 			'numeric' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'bar',
-			'caption' => '%',
+			'caption' => t('%'),
 			'sortable' => 0,
 		));
 
@@ -1281,7 +1279,7 @@ class dronline extends class_base
 		else
 		if ($prop['name'] == 'rerun_queries')
 		{
-			$prop['value'] = 'Uuenda p&auml;ringute&nbsp;cache';
+			$prop['value'] = t('Uuenda p&auml;ringute&nbsp;cache');
 		}
 		else
 		if ($prop['name'] == 'bg_query_created' && !$arr['new'] && is_oid($arr["obj_inst"]->id()))
@@ -1357,7 +1355,7 @@ class dronline extends class_base
 
 		$t->define_field(array(
 			'name' => 'oid',
-			'caption' => '#',
+			'caption' => t('#'),
 			'sortable' => 1,
 			'numeric' => 1,
 			'nowrap' => 1
@@ -1365,14 +1363,14 @@ class dronline extends class_base
 
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => 'Nimi',
+			'caption' => t('Nimi'),
 			'sortable' => 1,
 		));
 
 		$df = aw_ini_get('config.dateformats');
 		$t->define_field(array(
 			'name' => 'modified',
-			'caption' => 'Muudetud',
+			'caption' => t('Muudetud'),
 			'sortable' => 1,
 			'numeric' => 1,
 			'type' => 'time',
@@ -1381,13 +1379,13 @@ class dronline extends class_base
 
 		$t->define_field(array(
 			'name' => 'modifiedby',
-			'caption' => 'Kes Muutis',
+			'caption' => t('Kes Muutis'),
 			'sortable' => 1,
 		));
 
 		$t->define_field(array(
 			'name' => 'view',
-			'caption' => 'Vaata',
+			'caption' => t('Vaata'),
 		));
 
 		$ol = new object_list(array(
@@ -1401,7 +1399,7 @@ class dronline extends class_base
 
 			$od['view'] = html::href(array(
 				'url' => $this->mk_my_orb('change', array('id' => $o->id()), 'dronline_log'),
-				'caption' => 'Vaata',
+				'caption' => t('Vaata'),
 				'target' => '_blank'
 			));
 			
@@ -1429,7 +1427,7 @@ class dronline extends class_base
 	function get_block_ips($id)
 	{
 		$ret = array(
-			'ipblock' => 'Blokeeri IPd',
+			'ipblock' => t('Blokeeri IPd'),
 		);
 
 		$ob = obj($id);
@@ -1455,7 +1453,7 @@ class dronline extends class_base
 	function get_allow_ips($id)
 	{
 		$ret = array(
-			'ipblock' => 'N&auml;ita IPd',
+			'ipblock' => t('N&auml;ita IPd'),
 		);
 
 		$ob = obj($id);
@@ -1535,7 +1533,7 @@ class dronline extends class_base
 					'class' => 'awmenuedittabletext',
 					'content' => html::href(array(
 						'url' => 'javascript:save_as_obj()',
-						'caption' => 'Salvesta p&auml;ring'
+						'caption' => t('Salvesta p&auml;ring')
 					))
 				));
 			}
@@ -1731,7 +1729,7 @@ class dronline extends class_base
 			"method" => "POST",
 			"action" => aw_ini_get("baseurl")."/automatweb/orb.".aw_ini_get("ext"),
 			"content" => $t->draw().html::submit(array(
-				"value" => "Salvesta"
+				"value" => t("Salvesta")
 			)).$this->mk_reforb("submit_act_tbl", array("id" => $arr["id"]))
 		));
 	}
@@ -1762,18 +1760,18 @@ class dronline extends class_base
 		$t = new aw_table(array("layout" => "generic"));
 		$t->define_field(array(
 			"name" => "fld",
-			"caption" => "Kataloog"
+			"caption" => t("Kataloog")
 		));
 
 		$t->define_field(array(
 			"name" => "act",
-			"caption" => "Aktiivne",
+			"caption" => t("Aktiivne"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "sub",
-			"caption" => "k.a. alammen&uuml;&uuml;d",
+			"caption" => t("k.a. alammen&uuml;&uuml;d"),
 			"align" => "center"
 		));
 

@@ -163,7 +163,14 @@ class pot_scanner extends core
 		{
 			$this->scan_file_warn($class);
 		}
-		echo "finished with ".$this->warn_cnt." warnings \n\n";
+		if (!$this->warn_cnt)
+		{
+			echo "no translation warnings found!\n\n";
+		}
+		else
+		{
+			echo "finished with ".$this->warn_cnt." warnings \n\n";
+		}
 	}
 
 	function scan_file_warn($from_file)

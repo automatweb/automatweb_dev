@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.6 2005/03/21 15:46:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/html_popup.aw,v 1.7 2005/03/23 11:45:07 kristo Exp $
 
 /*
 	@classinfo relationmgr=yes syslog_type=ST_HTML_POPUP
@@ -78,7 +78,7 @@ class html_popup extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "oid",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -86,12 +86,12 @@ class html_popup extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 		));
 		$this->t->define_field(array(
 			"name" => "check",
-			"caption" => "k.a. alammenüüd",
+			"caption" => t("k.a. alammenüüd"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",

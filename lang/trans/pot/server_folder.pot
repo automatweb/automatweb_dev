@@ -1,0 +1,20 @@
+#: classes/contentmgmt/server_folder.aw:71
+msgid "server_folder::show_file(%s): the fid parameter does not contain a valid object id!"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:97
+msgid "server_folder::del_file(%s): the fid parameter does not contain a valid object id!"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:125
+msgid "server_folder::change_file(%s): the fid parameter does not contain a valid object id!"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:148
+msgid "server_folder::change_file(%s): the fid parameter does not contain a valid object id!"
+msgstr ""
+
+#: classes/contentmgmt/server_folder.aw:225
+msgid "server_folder::submit_addfile(%s): the id parameter does not contain a valid object id!"
+msgstr ""
+

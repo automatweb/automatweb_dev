@@ -1531,7 +1531,7 @@ class crm_company extends class_base
 		
 		$table->define_chooser(array(
 			"name" => "select",
-			"caption" => "X",
+			"caption" => t("X"),
 		));
 		
 		
@@ -1582,7 +1582,7 @@ class crm_company extends class_base
 		
 		$table->define_chooser(array(
 			"name" => "select",
-			"caption" => "X",
+			"caption" => t("X"),
 		));
 		
 		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_JOBS")) as $job)
@@ -4048,7 +4048,7 @@ class crm_company extends class_base
 		$table->define_chooser(array(
 			"name" => "select",
 			"field" => "select",
-			"caption" => "X",
+			"caption" => t("X"),
 		));
 		
 		$offer_inst = get_instance(CL_CRM_OFFER);

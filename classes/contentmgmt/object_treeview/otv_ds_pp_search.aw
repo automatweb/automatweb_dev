@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.6 2004/12/01 14:05:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.7 2005/03/23 11:45:07 kristo Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -93,21 +93,21 @@ class otv_ds_pp_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "prop",
-			"caption" => "Element"
+			"caption" => t("Element")
 		));
 		$t->define_field(array(
 			"name" => "in_form",
-			"caption" => "Otsitav",
+			"caption" => t("Otsitav"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "caption",
-			"caption" => "Tekst",
+			"caption" => t("Tekst"),
 			"align" => "center"
 		));
 	}
@@ -122,7 +122,7 @@ class otv_ds_pp_search extends class_base
 		$i = get_instance(CL_OTV_DS_POSTIPOISS);
 		$flds = $i->get_fields();
 
-		$flds["__fulltext"] = "T&auml;istekstiotsing";
+		$flds["__fulltext"] = t("T&auml;istekstiotsing");
 
 		foreach($flds as $fldid => $fldc)
 		{
@@ -156,36 +156,36 @@ class otv_ds_pp_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "prop",
-			"caption" => "Element"
+			"caption" => t("Element")
 		));
 		$t->define_field(array(
 			"name" => "in_tbl",
-			"caption" => "Tabelis",
+			"caption" => t("Tabelis"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "sortable",
-			"caption" => "Sorditav",
+			"caption" => t("Sorditav"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "defaultsort",
-			"caption" => "Vaikimisi sorteeritud",
+			"caption" => t("Vaikimisi sorteeritud"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "viewcol",
-			"caption" => "Vaatamise tulp",
+			"caption" => t("Vaatamise tulp"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "caption",
-			"caption" => "Tekst",
+			"caption" => t("Tekst"),
 			"align" => "center"
 		));
 	}
@@ -390,7 +390,7 @@ class otv_ds_pp_search extends class_base
 		{
 			error::raise(array(
 				"id" => "ERR_NO_PP",
-				"msg" => "otv_ds_pp_search: postipoisi andmeallikas on valimata!"
+				"msg" => t("otv_ds_pp_search: postipoisi andmeallikas on valimata!")
 			));
 		}
 		return "SELECT * FROM aw_otv_ds_pp_cache WHERE aw_pp_id = ".$o->prop("pp")." ".$ptss;
@@ -427,7 +427,7 @@ class otv_ds_pp_search extends class_base
 		}
 		$htmlc->add_property(array(
 			"name" => "search",
-			"caption" => "Otsi",
+			"caption" => t("Otsi"),
 			"type" => "submit",
 			"store" => "no"
 		));

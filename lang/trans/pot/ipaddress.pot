@@ -1,0 +1,4 @@
+#: classes/syslog/ipaddress.aw:134
+msgid "ipaddress::match(%s, %s): the second parameter must be a complete ip address, it can not be a mask!"
+msgstr ""
+

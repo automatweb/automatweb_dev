@@ -19,7 +19,7 @@ class msg_dispatch extends class_base
 	{
 		error::raise_if(!isset($arr["msg"]), array(
 			"id" => ERR_NO_MSG, 
-			"msg" => "msg_dispatch::post_message - no message posted!"
+			"msg" => t("msg_dispatch::post_message - no message posted!")
 		));
 
 		$handlers = $this->_get_handlers_for_message($arr["msg"]);
@@ -30,7 +30,7 @@ class msg_dispatch extends class_base
 			$inst = get_instance($handler["class"]);
 			error::raise_if(!method_exists($inst, $func), array(
 				"id" => ERR_NO_HANDLER_FUNC,
-				"msg" => "msg_dispatch::post_message - no handler function ($func) in class ($class) for message $arr[msg]!"
+				"msg" => sprintf(t("msg_dispatch::post_message - no handler function (%s) in class (%s) for message %s!"), $func, $class, $arr["msg"])
 			));
 
 			$inst->$func($arr["params"]);
@@ -47,12 +47,12 @@ class msg_dispatch extends class_base
 	{
 		error::raise_if(!isset($arr["msg"]), array(
 			"id" => ERR_NO_MSG, 
-			"msg" => "msg_dispatch::post_message - no message posted!"
+			"msg" => t("msg_dispatch::post_message - no message posted!")
 		));
 
 		error::raise_if(!isset($arr["param"]), array(
 			"id" => ERR_NO_MSG, 
-			"msg" => "msg_dispatch::post_message - no parameter for message posted!"
+			"msg" => t("msg_dispatch::post_message - no parameter for message posted!")
 		));
 
 		$handlers = $this->_get_handlers_for_message($arr["msg"]);
@@ -69,7 +69,7 @@ class msg_dispatch extends class_base
 				$inst = get_instance($handler["class"]);
 				error::raise_if(!method_exists($inst, $func), array(
 					"id" => ERR_NO_HANDLER_FUNC,
-					"msg" => "msg_dispatch::post_message - no handler function ($func) in class ($class) for message $arr[msg]!"
+					"msg" => sprintf(t("msg_dispatch::post_message - no handler function (%s) in class (%s) for message %s!"), $func, $class, $arr["msg"])
 				));
 				$inst->$func($arr["params"]);
 			}
@@ -84,7 +84,7 @@ class msg_dispatch extends class_base
 		$fc = $this->get_file(array("file" => $file));
 		error::raise_if($fc === false, array(
 			"id" => ERR_NO_SUCH_MESSAGE,
-			"msg" => "msg_dispatch::post_message - no such message ($msg) defined!"
+			"msg" => sprintf(t("msg_dispatch::post_message - no such message (%s) defined!"), $msg)
 		));
 
 		$handlers = new aw_array(aw_unserialize($fc));

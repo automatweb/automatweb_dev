@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.27 2005/03/17 11:11:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.28 2005/03/23 11:45:07 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -70,8 +70,8 @@ class otv_ds_obj extends class_base
 		{
 			case "sort_by":
 				$prop["options"] = array(
-					"objects.modified DESC" => "Objekti muutmise kuup&auml;eva j&auml;rgi",
-					"objects.jrk" => "Objektide j&auml;rjekorra j&auml;rgi"
+					"objects.modified DESC" => t("Objekti muutmise kuup&auml;eva j&auml;rgi"),
+					"objects.jrk" => t("Objektide j&auml;rjekorra j&auml;rgi")
 				);
 				break;
 		};
@@ -120,7 +120,7 @@ class otv_ds_obj extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "oid",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -128,19 +128,19 @@ class otv_ds_obj extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 		));
 		$this->t->define_field(array(
 			"name" => "check",
-			"caption" => "k.a. alammen&uuml;&uuml;d",
+			"caption" => t("k.a. alammen&uuml;&uuml;d"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
 		));
 		$this->t->define_field(array(
 			"name" => "ignoreself",
-			"caption" => "&auml;ra n&auml;ita peamen&uuml;&uuml;d",
+			"caption" => t("&auml;ra n&auml;ita peamen&uuml;&uuml;d"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -389,7 +389,7 @@ class otv_ds_obj extends class_base
 			}
 		}
 
-		$ret["jrk"] = "J&auml;rjekord";
+		$ret["jrk"] = t("J&auml;rjekord");
 		foreach($ob->connections_from(array("type" => "RELTYPE_TRANSFORM")) as $c)
 		{
 			$tr = $c->to();

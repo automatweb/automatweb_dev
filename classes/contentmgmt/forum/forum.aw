@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.2 2005/03/20 15:39:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.3 2005/03/23 11:45:07 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -192,7 +192,7 @@ class forum extends class_base
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -200,7 +200,7 @@ class forum extends class_base
 		));
 		$t->define_field(array(
 			"name" => "address",
-			"caption" => "Aadress",
+			"caption" => t("Aadress"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -208,7 +208,7 @@ class forum extends class_base
 		));
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => "Vali",
+			"caption" => t("Vali"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -2352,7 +2352,7 @@ topic");
 			case "preview":
 				$data["value"] = html::href(array(
 					"url" => $this->mk_my_orb("topics",array("id" => $arr["obj_inst"]->id())),
-					"caption" => "Näita",
+					"caption" => t("Näita"),
 				));
 
 				break;
@@ -2360,13 +2360,13 @@ topic");
 			case "export":
 				$data["value"] = html::href(array(
 					"url" => $this->mk_my_orb("export_xml",array("id" => $arr["obj_inst"]->id())),
-					"caption" => "Ekspordi XML",
+					"caption" => t("Ekspordi XML"),
 				));
 				break;
 
 			case "addresslist":
 				$data["value"] = html::href(array(
-					"caption" => "E-posti aadressid",
+					"caption" => t("E-posti aadressid"),
 					"url" => $this->mk_my_orb("notify_list",array("id" => $arr["obj_inst"]->id())),
 				));
 				break;

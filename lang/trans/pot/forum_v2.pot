@@ -2,7 +2,23 @@
 msgid "Teemade kaust on valimata"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:1380
+msgid "Teema"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1385
+msgid "Jäta välja"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1392
+msgid "k.a. alamkaustad"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:1551
 msgid "Uus teema"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:1588
+msgid "Lisa"
 msgstr ""
 

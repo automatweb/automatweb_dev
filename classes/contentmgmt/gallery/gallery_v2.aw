@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.55 2004/11/18 22:59:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.56 2005/03/23 11:45:07 kristo Exp $
 
 /*
 
@@ -145,7 +145,7 @@ class gallery_v2 extends class_base
 			$cid = $this->_get_conf_for_folder($pt);
 			if (!$cid)
 			{
-				$prop['value'] = "Sellele kataloogile pole konfiguratsiooni valitud!";
+				$prop['value'] = t("Sellele kataloogile pole konfiguratsiooni valitud!");
 			}
 			else
 			{
@@ -388,7 +388,7 @@ class gallery_v2 extends class_base
 				}
 				else
 				{
-					$this->raise_error(ERR_NO_FOLDER,"Sellist kataloogi pole serveris! ($meta[local_folder])", false, true);
+					$this->raise_error(ERR_NO_FOLDER,sprintf(t("Sellist kataloogi pole serveris! (%s)"), $meta["local_folder"]), false, true);
 				}
 				sort($files);
 			}

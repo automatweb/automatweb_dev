@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.58 2005/03/10 12:49:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.59 2005/03/23 11:45:07 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -920,7 +920,8 @@ class promo extends class_base
 				// nil the variables that were imported for promo boxes
 				// if we dont do that we can get unwanted copys of promo boxes
 				// in places we dont want them
-				$inst->vars(array("title" => "", "content" => "","url" => ""));
+				$inst->vars(array("title" => 
+					"", "content" => "","url" => ""));
 				exit_function("show_promo::".$o->name());
 			}
 		};

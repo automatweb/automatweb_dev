@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.64 2005/03/18 09:46:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.65 2005/03/23 11:45:07 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -387,17 +387,17 @@ class webform extends class_base
 
 				$tb->add_button(array(
 					"name" => "save",
-					"tooltip" => "Salvesta",
+					"tooltip" => t("Salvesta"),
 					"action" => "",
 					"img" => "save.gif",
 				));
 				
 				$tb->add_button(array(
 					"name" => "delete",
-					"tooltip" => "Kustuta valitud omadused",
+					"tooltip" => t("Kustuta valitud omadused"),
 					"url" => "javascript:document.changeform.subaction.value='delete';submit_changeform();",
 					"img" => "delete.gif",
-					"confirm" => "Oled kindel, et tahad antud omadused kustutada?",
+					"confirm" => t("Oled kindel, et tahad antud omadused kustutada?"),
 				));
 				break;
 				
@@ -602,7 +602,7 @@ class webform extends class_base
 		));
 		// so, we to reverse the property adding of cfgform also -- ahz
 		$cfgform->set_prop("subclass", $this->p_clid);
-		$cfgform->set_meta("cfg_groups", array("data" => array("caption" => "Andmed")));
+		$cfgform->set_meta("cfg_groups", array("data" => array("caption" => t("Andmed"))));
 		$cfgform->save();
 		$arr["obj_inst"]->connect(array(
 			"to" => $cfgform->id(),
@@ -1321,7 +1321,7 @@ class webform extends class_base
 		$props = array();
 		$props["error"] = array(
 			"name" => "m_style[error]",
-			"caption" => "Veateate stiil",
+			"caption" => t("Veateate stiil"),
 			"type" => "select",
 			"options" => $this->all_rels,
 			"selected" => $m_styles["error"],
@@ -1593,7 +1593,7 @@ class webform extends class_base
 			$els["submit"] = array(
 				"name" => "submit",
 				"type" => "submit",
-				"caption" => "Saada",
+				"caption" => t("Saada"),
 			);
 		}
 		$ftype = $arr["obj_inst"]->prop("form_type");
@@ -2006,7 +2006,7 @@ class webform extends class_base
 		$this->vars(array(
 			"text" => $rval,
 		));
-		return $this->parse()."<br />".html::href(array("url" => urldecode($arr["url"]), "caption" => "Liigu edasi &raquo;"));
+		return $this->parse()."<br />".html::href(array("url" => urldecode($arr["url"]), "caption" => t("Liigu edasi &raquo;")));
 		//return "valleraa, siin on vorm";
 	}
 }

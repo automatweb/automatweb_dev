@@ -1,20 +1,24 @@
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:95
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:90
 msgid "Impordi s&uuml;ndmused"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:99
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:94
 msgid "Impordi Kultuuriakna s&uuml;ndmused"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:168
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:163
 msgid "Parent"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:173
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:168
 msgid "XML v&auml;lja sisu"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:200
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:195
 msgid "XML v&auml;li"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:199
+msgid "Vormi v&auml;li"
 msgstr ""
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.27 2005/03/18 12:01:19 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.28 2005/03/23 11:45:08 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -348,7 +348,7 @@ class crm_offer extends class_base
 		$table->define_chooser(array(
 			"name" => "sel",
 		 	"field" => "package_id",
-		 	"caption" => "X",
+		 	"caption" => t("X"),
 		));
 		
 		
@@ -519,7 +519,7 @@ class crm_offer extends class_base
 		$table->define_chooser(array(
 			"name" => "select",
 			"field" => "product_id",
-			"caption" => "X",
+			"caption" => t("X"),
 			"align" => "center"
 		));
 		
@@ -658,7 +658,7 @@ class crm_offer extends class_base
 		$table->define_chooser(array(
 			"name" => "select",
 			"field" => "product_id",
-			"caption" => "X",
+			"caption" => t("X"),
 			"align" => "center"
 		));
 		

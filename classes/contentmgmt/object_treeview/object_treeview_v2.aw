@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.66 2005/03/20 14:22:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.67 2005/03/23 11:45:07 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -148,21 +148,21 @@
 
 class object_treeview_v2 extends class_base
 {
-	var $all_cols = array(
-		"icon" => "Ikoon",
-		"name" => "Nimi",
-		"size" => "Suurus",
-		"class_id" => "T&uuml;&uuml;p",
-		"modified" => "Muutmise kuup&auml;ev",
-		"modifiedby" => "Muutja",
-		"change" => "Muuda",
-		"select" => "Vali"
-	);
-
 	var $alphabet = array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "&Otilde;", "&Auml;", "&Ouml;", "&Uuml;");
 
 	function object_treeview_v2()
 	{
+		$this->all_cols = array(
+			"icon" => t("Ikoon"),
+			"name" => t("Nimi"),
+			"size" => t("Suurus"),
+			"class_id" => t("T&uuml;&uuml;p"),
+			"modified" => t("Muutmise kuup&auml;ev"),
+			"modifiedby" => t("Muutja"),
+			"change" => t("Muuda"),
+			"select" => t("Vali")
+		);
+
 		$this->init(array(
 			"tpldir" => "contentmgmt/object_treeview/object_treeview_v2",
 			"clid" => CL_OBJECT_TREEVIEW_V2
@@ -809,56 +809,56 @@ class object_treeview_v2 extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "show",
-			"caption" => "Kas n&auml;idata",
+			"caption" => t("Kas n&auml;idata"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "jrk",
-			"caption" => "Jrk",
+			"caption" => t("Jrk"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "sep_before",
-			"caption" => "Eraldaja enne",
+			"caption" => t("Eraldaja enne"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "text",
-			"caption" => "Tekst",
+			"caption" => t("Tekst"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "sep_after",
-			"caption" => "Eraldaja p&auml;rast",
+			"caption" => t("Eraldaja p&auml;rast"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "editable",
-			"caption" => "Muudetav",
+			"caption" => t("Muudetav"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "fields",
-			"caption" => "Milliste v&auml;ljade sisu n&auml;idata<br>Eraldaja&nbsp;&nbsp;|&nbsp;&nbsp;Vasak&nbsp;tekst&nbsp;&nbsp;|&nbsp;&nbsp;V&auml;li&nbsp;&nbsp;|&nbsp;&nbsp;Parem&nbsp;tekst",
+			"caption" => t("Milliste v&auml;ljade sisu n&auml;idata<br>Eraldaja&nbsp;&nbsp;|&nbsp;&nbsp;Vasak&nbsp;tekst&nbsp;&nbsp;|&nbsp;&nbsp;V&auml;li&nbsp;&nbsp;|&nbsp;&nbsp;Parem&nbsp;tekst"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -1142,7 +1142,7 @@ class object_treeview_v2 extends class_base
 				{
 					$table->define_field(array(
 						"name" => "col_".$i,
-						"caption" => "",
+						"caption" => t(""),
 					));
 				}
 				$folders[$_GET['tv_sel']]['name'] = "<strong>".$folders[$_GET['tv_sel']]['name']."</strong>";
@@ -1221,7 +1221,7 @@ class object_treeview_v2 extends class_base
 
 			$tb->add_menu_button(array(
 				"name" => "add",
-				"tooltip" => "Uus",
+				"tooltip" => t("Uus"),
 				"img" => "new.gif",
 			));
 
@@ -1259,7 +1259,7 @@ class object_treeview_v2 extends class_base
 		{
 			$tb->add_button(array(
 				"name" => "save",
-				"tooltip" => "Salvesta",
+				"tooltip" => t("Salvesta"),
 				"url" => "#",
 				"onClick" => "document.objlist.submit();return true;",
 				"img" => "save.gif"
@@ -1601,7 +1601,7 @@ class object_treeview_v2 extends class_base
 					"name" => "itemsorts[$idx][element]"
 				)),
 				"sby_ord" => html::select(array(
-					"options" => array("asc" => "Kasvav", "desc" => "Kahanev"),
+					"options" => array("asc" => t("Kasvav"), "desc" => t("Kahanev")),
 					"selected" => $sd["ord"],
 					"name" => "itemsorts[$idx][ord]"
 				)),
@@ -1622,7 +1622,7 @@ class object_treeview_v2 extends class_base
 				"name" => "itemsorts[$maxi][element]"
 			)),
 			"sby_ord" => html::select(array(
-				"options" => array("asc" => "Kasvav", "desc" => "Kahanev"),
+				"options" => array("asc" => t("Kasvav"), "desc" => t("Kahanev")),
 				"selected" => "",
 				"name" => "itemsorts[$maxi][ord]"
 			))
@@ -1650,19 +1650,19 @@ class object_treeview_v2 extends class_base
 	{
 		$t->define_field(array(
 			"name" => "sby",
-			"caption" => "Sorditav v&auml;li",
+			"caption" => t("Sorditav v&auml;li"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "sby_ord",
-			"caption" => "Kasvav / kahanev",
+			"caption" => t("Kasvav / kahanev"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "is_date",
-			"caption" => "Kuup&auml;ev tekstina?",
+			"caption" => t("Kuup&auml;ev tekstina?"),
 			"align" => "center"
 		));
 	}
@@ -1720,19 +1720,19 @@ class object_treeview_v2 extends class_base
 	{
 		$t->define_field(array(
 			"name" => "filter_field",
-			"caption" => "Filtreeritav v&auml;li",
+			"caption" => t("Filtreeritav v&auml;li"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "filter_value",
-			"caption" => "Filtreeritav v&auml;&auml;rtus",
+			"caption" => t("Filtreeritav v&auml;&auml;rtus"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "filter_strict",
-			"caption" => "Kas t&auml;pne?",
+			"caption" => t("Kas t&auml;pne?"),
 			"align" => "center",
 		));
 
@@ -2066,13 +2066,13 @@ class object_treeview_v2 extends class_base
 	{
 		$t->define_field(array(
 			"name" => "col",
-			"caption" => "Tulp",
+			"caption" => t("Tulp"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "tr",
-			"caption" => "Muundaja",
+			"caption" => t("Muundaja"),
 			"align" => "center"
 		));
 	}

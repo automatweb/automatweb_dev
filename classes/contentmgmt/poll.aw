@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.25 2005/03/17 19:18:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.26 2005/03/23 11:45:07 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -429,21 +429,21 @@ class poll extends class_base
 		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$this->t->define_field(array(
 			"name" => "uid",
-			"caption" => "UID",
+			"caption" => t("UID"),
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
 			"name" => "ip",
-			"caption" => "IP",
+			"caption" => t("IP"),
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
 			"name" => "date",
-			"caption" => "Kuup&auml;ev",
+			"caption" => t("Kuup&auml;ev"),
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
@@ -453,7 +453,7 @@ class poll extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "answer",
-			"caption" => "Vastus",
+			"caption" => t("Vastus"),
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
@@ -483,14 +483,14 @@ class poll extends class_base
 		$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 		$this->t->define_field(array(
 			"name" => "answer",
-			"caption" => "Vastus",
+			"caption" => t("Vastus"),
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
 		));
 		$this->t->define_field(array(
 			"name" => "clicks",
-			"caption" => "Klikke",
+			"caption" => t("Klikke"),
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
@@ -499,7 +499,7 @@ class poll extends class_base
 
 		$this->t->define_field(array(
 			"name" => "percent",
-			"caption" => "Protsent",
+			"caption" => t("Protsent"),
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
@@ -508,7 +508,7 @@ class poll extends class_base
 
 		$this->t->define_field(array(
 			"name" => "img",
-			"caption" => "",
+			"caption" => t(""),
 			"talign" => "center",
 			"align" => "left",
 			"sortable" => 0,
@@ -586,7 +586,7 @@ class poll extends class_base
 			$ret["answers[".$a_id."]"] = array(
 				"type" => "textbox",
 				"name" => "answers[".$a_id."]",
-				"caption" => "Vastus nr $idx",
+				"caption" => sprintf(t("Vastus nr %s"), $idx),
 				"value" => $a
 			);
 
@@ -598,7 +598,7 @@ class poll extends class_base
 		$ret["answers[".$last_id."]"] = array(
 			"type" => "textbox",
 			"name" => "answers[".$last_id."]",
-			"caption" => "Vastus nr $idx",
+			"caption" => sprintf(t("Vastus nr %s"), $idx),
 			"value" => ""
 		);
 
@@ -759,7 +759,7 @@ class poll extends class_base
 			$ret["splitter_".$lid] = array(
 				"type" => "text",
 				"name" => "splitter_".$lid,
-				"caption" => "",
+				"caption" => t(""),
 				"no_caption" => 1,
 				"value" => "<b>".$lname."</b>"
 			);
@@ -767,7 +767,7 @@ class poll extends class_base
 			$ret["question[$lid]"] = array(
 				"type" => "textbox",
 				"name" => "question[$lid]",
-				"caption" => "K&uuml;simus",
+				"caption" => t("K&uuml;simus"),
 				"value" => $names[$lid]
 			);
 
@@ -777,7 +777,7 @@ class poll extends class_base
 				$ret["answers[$lid][".$a_id."]"] = array(
 					"type" => "textbox",
 					"name" => "answers[$lid][".$a_id."]",
-					"caption" => "Vastus nr $idx ",
+					"caption" => sprintf(t("Vastus nr %s "), $idx),
 					"value" => $ansa[$lid][$a_id]
 				);
 			}

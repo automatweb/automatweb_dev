@@ -1,0 +1,56 @@
+#: classes/core/docgen/docgen_viewer.aw:70
+msgid "Open DocGen"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:98
+msgid "Classes"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:647
+msgid "Classes"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:716
+msgid "Classes"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:922
+msgid "K&otilde;ik klassid"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:928
+msgid "Dokumenteeritud klassid"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:934
+msgid "API klassid"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:940
+msgid "Eraldi dokumentatsioon"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:946
+msgid "Classbase tagid"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:952
+msgid "Uuenda API andmebaas"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:963
+msgid "Foorum"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:989
+msgid "Classes"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:1059
+msgid "Classes"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:1157
+msgid "Classes"
+msgstr ""
+

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2_search.aw,v 1.1 2005/03/17 11:11:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2_search.aw,v 1.2 2005/03/23 11:45:07 kristo Exp $
 // object_treeview_v2_search.aw - Objektinimekirja otsing 
 /*
 
@@ -150,25 +150,25 @@ class object_treeview_v2_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "property",
-			"caption" => "Omadus",
+			"caption" => t("Omadus"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "in_form",
-			"caption" => "N&auml;ita vormis",
+			"caption" => t("N&auml;ita vormis"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "text",
-			"caption" => "Tekst",
+			"caption" => t("Tekst"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"align" => "center",
 		));
 	}
@@ -187,7 +187,7 @@ class object_treeview_v2_search extends class_base
 			"hidden_cols" => true
 		));
 
-		$cl["__fulltext"] = "T&auml;istekstiotsing";
+		$cl["__fulltext"] = t("T&auml;istekstiotsing");
 
 		foreach($cl as $pn => $pc)
 		{
@@ -216,44 +216,44 @@ class object_treeview_v2_search extends class_base
 	{
 		$t->define_field(array(
 			"name" => "jrk",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"sortable" => 1,
 			"align" => "center",
 			"numeric" => 1
 		));
 		$t->define_field(array(
 			"name" => "el",
-			"caption" => "Element",
+			"caption" => t("Element"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "visible",
-			"caption" => "Tabelis",
+			"caption" => t("Tabelis"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "sortable",
-			"caption" => "Sorditav",
+			"caption" => t("Sorditav"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "view_col",
-			"caption" => "Vaata tulp",
+			"caption" => t("Vaata tulp"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "u_name",
-			"caption" => "Tulba pealkiri",
+			"caption" => t("Tulba pealkiri"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 		$t->define_field(array(
 			"name" => "ctr",
-			"caption" => "Kontroller",
+			"caption" => t("Kontroller"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -268,7 +268,7 @@ class object_treeview_v2_search extends class_base
 
 		$ctr_ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CTR")));
 		$ctrs = $ctr_ol->names();
-		$ctrs[0] = "--Vali--";
+		$ctrs[0] = t("--Vali--");
 
 		$tvi = get_instance(CL_OBJECT_TREEVIEW_V2);
 		$cl = $tvi->_get_col_list(array(
@@ -341,8 +341,8 @@ class object_treeview_v2_search extends class_base
 		$ret["s_submit"] = array(
 			"name" => "s_submit",
 			"type" => "submit",
-			"value" => "Otsi",
-			"caption" => "Otsi"
+			"value" => t("Otsi"),
+			"caption" => t("Otsi")
 		);
 		return $ret;
 	}

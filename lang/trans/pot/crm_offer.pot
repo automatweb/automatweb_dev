@@ -30,6 +30,10 @@ msgstr ""
 msgid "Hind"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:351
+msgid "X"
+msgstr ""
+
 #: classes/crm/crm_offer.aw:376
 msgid "Otsing"
 msgstr ""
@@ -70,6 +74,10 @@ msgstr ""
 msgid "Hind"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:522
+msgid "X"
+msgstr ""
+
 #: classes/crm/crm_offer.aw:596
 msgid "Algstaatus"
 msgstr ""
@@ -92,6 +100,10 @@ msgstr ""
 
 #: classes/crm/crm_offer.aw:652
 msgid "Hind"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:661
+msgid "X"
 msgstr ""
 
 #: classes/crm/crm_offer.aw:690

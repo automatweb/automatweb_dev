@@ -1,0 +1,52 @@
+#: classes/contentmgmt/poll.aw:432
+msgid "UID"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:439
+msgid "IP"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:446
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:456
+msgid "Vastus"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:486
+msgid "Vastus"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:493
+msgid "Klikke"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:502
+msgid "Protsent"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:511
+msgid ""
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:589
+msgid "Vastus nr %s"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:601
+msgid "Vastus nr %s"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:762
+msgid ""
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:770
+msgid "K&uuml;simus"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:780
+msgid "Vastus nr %s "
+msgstr ""
+

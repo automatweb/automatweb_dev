@@ -1,0 +1,16 @@
+#: classes/contentmgmt/object_treeview/otv_data_filter.aw:72
+msgid "Mis asendada"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_data_filter.aw:78
+msgid "Millega asendada"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_data_filter.aw:124
+msgid "T&auml;hekoodid, mis asendada"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_data_filter.aw:130
+msgid "T&auml;hekoodid, millega asendada"
+msgstr ""
+

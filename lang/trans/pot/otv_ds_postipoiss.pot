@@ -1,0 +1,20 @@
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:115
+msgid "Uuenda cache"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:137
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:147
+msgid "<b>Kataloogid</b>"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:158
+msgid "<b>Failid</b>"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:318
+msgid "the subject xml file (%s) does not exist!"
+msgstr ""
+

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.27 2005/03/07 17:11:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.28 2005/03/23 11:45:06 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -760,14 +760,14 @@ class calendar_view extends class_base
 
 			$rv = html::href(array(
 				"url" => aw_url_change_var("date",$range["prev"]),
-				"caption" => "&lt;&lt;",
+				"caption" => t("&lt;&lt;"),
 			));
 
 			$rv .= " &nbsp; " . locale::get_lc_date($range["start"],6) . "&nbsp; ";
 			
 			$rv .= html::href(array(
 				"url" => aw_url_change_var("date",$range["next"]),
-				"caption" => "&gt;&gt;",
+				"caption" => t("&gt;&gt;"),
 			));
 
 			$rv .= "<br>";

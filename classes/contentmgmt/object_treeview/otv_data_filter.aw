@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.3 2005/03/20 14:22:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.4 2005/03/23 11:45:07 kristo Exp $
 // otv_data_filter.aw - Andmeallika andmete muundaja 
 /*
 
@@ -69,13 +69,13 @@ class otv_data_filter extends class_base
 	{
 		$t->define_field(array(
 			"name" => "from",
-			"caption" => "Mis asendada",
+			"caption" => t("Mis asendada"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "to",
-			"caption" => "Millega asendada",
+			"caption" => t("Millega asendada"),
 			"align" => "center"
 		));
 	}
@@ -121,13 +121,13 @@ class otv_data_filter extends class_base
 	{
 		$t->define_field(array(
 			"name" => "from",
-			"caption" => "T&auml;hekoodid, mis asendada",
+			"caption" => t("T&auml;hekoodid, mis asendada"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "to",
-			"caption" => "T&auml;hekoodid, millega asendada",
+			"caption" => t("T&auml;hekoodid, millega asendada"),
 			"align" => "center"
 		));
 	}

@@ -1,0 +1,56 @@
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:96
+msgid "Element"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:100
+msgid "Otsitav"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:105
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:110
+msgid "Tekst"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:125
+msgid "T&auml;istekstiotsing"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:159
+msgid "Element"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:163
+msgid "Tabelis"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:168
+msgid "Sorditav"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:173
+msgid "Vaikimisi sorteeritud"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:178
+msgid "Vaatamise tulp"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:183
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:188
+msgid "Tekst"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:393
+msgid "otv_ds_pp_search: postipoisi andmeallikas on valimata!"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:430
+msgid "Otsi"
+msgstr ""
+

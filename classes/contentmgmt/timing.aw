@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.8 2004/12/27 08:49:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.9 2005/03/23 11:45:07 kristo Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -186,7 +186,7 @@ class timing extends class_base
 			"name" => "delete",
 			"tooltip" => t("Eemalda valitud objektid"),
 			"action" => "disconnect",
-			"confirm" => "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?",
+			"confirm" => t("Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"),
 			"img" => "delete.gif",
 		));
 	}

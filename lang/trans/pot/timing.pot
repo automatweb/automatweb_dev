@@ -2,6 +2,10 @@
 msgid "Eemalda valitud objektid"
 msgstr ""
 
+#: classes/contentmgmt/timing.aw:189
+msgid "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"
+msgstr ""
+
 #: classes/contentmgmt/timing.aw:199
 msgid "ID"
 msgstr ""

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.71 2005/03/22 08:30:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.72 2005/03/23 11:45:07 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1377,19 +1377,19 @@ class forum_v2 extends class_base
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Teema",
+			"caption" => t("Teema"),
 		));
 
 		$t->define_field(array(
 			"name" => "exclude",
-			"caption" => "Jäta välja",
+			"caption" => t("Jäta välja"),
 			"align" => "center",
 			"width" => 100,
 		));
 
 		$t->define_field(array(
 			"name" => "exclude_subs",
-			"caption" => "k.a. alamkaustad",
+			"caption" => t("k.a. alamkaustad"),
 			"align" => "center",
 			"width" => 100,
 		));
@@ -1585,7 +1585,7 @@ class forum_v2 extends class_base
 
                 $htmlc->add_property(array(
                         "name" => "sbt",
-                        "caption" => "Lisa",
+                        "caption" => t("Lisa"),
                         "type" => "submit",
                 ));
 

@@ -1,0 +1,32 @@
+#: classes/meta/metamgr.aw:140
+msgid "ID"
+msgstr ""
+
+#: classes/meta/metamgr.aw:145
+msgid "Nimi"
+msgstr ""
+
+#: classes/meta/metamgr.aw:152
+msgid "V‰‰rtus"
+msgstr ""
+
+#: classes/meta/metamgr.aw:159
+msgid "Jrk"
+msgstr ""
+
+#: classes/meta/metamgr.aw:315
+msgid "Salvesta"
+msgstr ""
+
+#: classes/meta/metamgr.aw:323
+msgid "Liiguta valitud omadused gruppi"
+msgstr ""
+
+#: classes/meta/metamgr.aw:378
+msgid "Kustuta valitud muutujad"
+msgstr ""
+
+#: classes/meta/metamgr.aw:379
+msgid "Kustuta valitud muutujad?"
+msgstr ""
+

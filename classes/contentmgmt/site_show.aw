@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.123 2005/03/20 15:39:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.124 2005/03/23 11:45:07 kristo Exp $
 
 /*
 
@@ -1581,7 +1581,7 @@ class site_show extends class_base
 		{
 			error::raise(array(
 				"id" => ERR_NO_COMPILED,
-				"msg" => "site_show::do_draw_menus(): no compiled filename set!"
+				"msg" => t("site_show::do_draw_menus(): no compiled filename set!")
 			));
 		}
 	
@@ -1661,7 +1661,7 @@ class site_show extends class_base
 					{
 						error::raise(array(
 							"id" => ERR_NO_SUBTPL_HANDLER,
-							"msg" => "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in ".$cldef["file"]
+							"msg" => sprintf(t("site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"), $cldef["file"])
 						));
 					}
 					$inst->on_get_subtemplate_content(array(
@@ -1835,7 +1835,7 @@ class site_show extends class_base
 			{
 				error::raise(array(
 					"id" => "ERR_JF",
-					"msg" => "site_show::make_final_vars(): need JOIN_FORM sub back!"
+					"msg" => t("site_show::make_final_vars(): need JOIN_FORM sub back!")
 				));
 			}
 
@@ -2363,12 +2363,12 @@ class site_show extends class_base
 				}
 				else
 				{
-					$this->raise_error(ERR_ACL_ERR,"Access denied and error redirects are defined.incorrectly. Please report this to the site administrator",1);
+					$this->raise_error(ERR_ACL_ERR,t("Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"),1);
 				};
 					
 			}
 		}
-		$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined! no can_view access for object $section",true);
+		$this->raise_error(ERR_MNEDIT_NOACL,sprintf(t("No ACL error messages defined! no can_view access for object %s"), $section),true);
 	}
 
 	function _init_path_vars(&$arr)

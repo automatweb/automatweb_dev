@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.44 2005/03/14 17:27:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.45 2005/03/23 11:45:07 kristo Exp $
 
 /*
 
@@ -89,19 +89,19 @@
 
 class object_treeview extends class_base
 {
-	var $all_cols = array(
-		"icon" => "Ikoon",
-		"name" => "Nimi",
-		"size" => "Suurus",
-		"class_id" => "T&uuml;&uuml;p",
-		"modified" => "Muutmise kuup&auml;ev",
-		"modifiedby" => "Muutja",
-		"change" => "Muuda",
-		"select" => "Vali"
-	);
-	
 	function object_treeview()
 	{
+		$this->all_cols = array(
+			"icon" => t("Ikoon"),
+			"name" => t("Nimi"),
+			"size" => t("Suurus"),
+			"class_id" => t("T&uuml;&uuml;p"),
+			"modified" => t("Muutmise kuup&auml;ev"),
+			"modifiedby" => t("Muutja"),
+			"change" => t("Muuda"),
+			"select" => t("Vali")
+		);
+
 		$this->init(array(
 			'tpldir' => 'contentmgmt/object_tree',
 			'clid' => CL_OBJECT_TREE
@@ -786,7 +786,7 @@ class object_treeview extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "oid",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -794,19 +794,19 @@ class object_treeview extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 		));
 		$this->t->define_field(array(
 			"name" => "check",
-			"caption" => "k.a. alammenüüd",
+			"caption" => t("k.a. alammenüüd"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
 		));
 		$this->t->define_field(array(
 			"name" => "ignoreself",
-			"caption" => "&auml;ra n&auml;ita peamen&uuml;&uuml;d",
+			"caption" => t("&auml;ra n&auml;ita peamen&uuml;&uuml;d"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -871,7 +871,7 @@ class object_treeview extends class_base
 		$tb = get_instance("vcl/toolbar");
 		$tb->add_menu_button(array(
 			"name" => "add",
-			"tooltip" => "Uus",
+			"tooltip" => t("Uus"),
 		));
 		if ($p_o->class_id() == CL_SERR_FOLDER)
 		{
@@ -899,9 +899,9 @@ class object_treeview extends class_base
 
 		$tb->add_button(array(
 			"name" => "del",
-			"tooltip" => "Kustuta",
+			"tooltip" => t("Kustuta"),
 			"url" => "#",
-			"onClick" => "if (confirm('Oled kindel et soovid objekte kustutada?')) { document.objlist.subact.value='delete';document.objlist.submit(); }",
+			"onClick" => "if (confirm('".t("Oled kindel et soovid objekte kustutada?")."')) { document.objlist.subact.value='delete';document.objlist.submit(); }",
 			"img" => "delete.gif",
 			"class" => "menuButton",
 		));
@@ -925,7 +925,7 @@ class object_treeview extends class_base
 	{
 		error::raise_if(!$arr["id"], array(
 			"id" => ERR_PARAM,
-			"msg" => "object_treeview::obj_delete(): no ibject id specified!"
+			"msg" => t("object_treeview::obj_delete(): no object id specified!")
 		));
 
 		$o = obj($arr["id"]);
@@ -1016,8 +1016,8 @@ class object_treeview extends class_base
 		if ($prop["name"] == "sort_by")
 		{
 			$prop["options"] = array(
-				"objects.modified DESC" => "Objekti muutmise kuup&auml;eva j&auml;rgi",
-				"objects.jrk" => "Objektide j&auml;rjekorra j&auml;rgi"
+				"objects.modified DESC" => t("Objekti muutmise kuup&auml;eva j&auml;rgi"),
+				"objects.jrk" => t("Objektide j&auml;rjekorra j&auml;rgi")
 			);
 		}
 		return PROP_OK;

@@ -70,3 +70,11 @@ msgstr ""
 msgid "Väljundvorm on valimata"
 msgstr ""
 
+#: classes/calendar/calendar_view.aw:763
+msgid "&lt;&lt;"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:770
+msgid "&gt;&gt;"
+msgstr ""
+

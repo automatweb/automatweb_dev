@@ -1,0 +1,24 @@
+#: classes/core/pkmgr/packagemgr_server.aw:30
+msgid "Lisa uus"
+msgstr ""
+
+#: classes/core/pkmgr/packagemgr_server.aw:37
+msgid "ID"
+msgstr ""
+
+#: classes/core/pkmgr/packagemgr_server.aw:42
+msgid "Nimi"
+msgstr ""
+
+#: classes/core/pkmgr/packagemgr_server.aw:47
+msgid "Viimane versioon"
+msgstr ""
+
+#: classes/core/pkmgr/packagemgr_server.aw:52
+msgid "Muuda"
+msgstr ""
+
+#: classes/core/pkmgr/packagemgr_server.aw:69
+msgid "Muuda"
+msgstr ""
+

@@ -310,7 +310,7 @@ class user extends class_base
 					html::href(array(
 					"url" => "#",
 					"onClick" => "gp();",
-					"caption" => "Genereeri parool"
+					"caption" => t("Genereeri parool")
 				));
 				break;
 
@@ -353,12 +353,12 @@ class user extends class_base
 				{
 					if ($this->db_fetch_field("SELECT uid FROM users WHERE uid = '".$prop["value"]."'", "uid") == $prop["value"])
 					{
-						$prop["error"] = "Selline kasutaja on juba olemas!";
+						$prop["error"] = t("Selline kasutaja on juba olemas!");
 						return PROP_FATAL_ERROR;
 					}
 					if (!is_valid("uid", $prop["value"]))
 					{
-						$prop["error"] = "Selline kasutajanimi pole lubatud!";
+						$prop["error"] = t("Selline kasutajanimi pole lubatud!");
 						return PROP_FATAL_ERROR;
 					}
 				}
@@ -394,16 +394,14 @@ class user extends class_base
 				{
 					if ($prop['value'] != $arr['request']['passwd'])
 					{
-						$prop["error"] = "Paroolid pole samad!";
+						$prop["error"] = t("Paroolid pole samad!");
 						return PROP_FATAL_ERROR;
-						//aw_session_set("status_msg", "Paroolid pole samad!");
 					}
 					else
 					if (!is_valid("password", $prop['value']))
 					{
-						$prop["error"] = "Parool sisaldab lubamatuid t&auml;hti v&otilde;i on liiga l&uuml;hike!";
+						$prop["error"] = t("Parool sisaldab lubamatuid t&auml;hti v&otilde;i on liiga l&uuml;hike!");
 						return PROP_FATAL_ERROR;
-						//aw_session_set("status_msg", "Parool sisaldab lubamatuid t&auml;hti!");
 					}
 					else
 					{
@@ -456,7 +454,7 @@ class user extends class_base
 					));
 					if ($ol->count() < 1)
 					{
-						$prop["error"] = "Sellist kasutajat pole!";
+						$prop["error"] = t("Sellist kasutajat pole!");
 						return PROP_FATAL_ERROR;
 					}
 				}
@@ -483,12 +481,12 @@ class user extends class_base
 			}
 			if ($gd["type"] == GRP_DYNAMIC)
 			{
-				$gd["type"] = "D&uuml;naamiline";
+				$gd["type"] = t("D&uuml;naamiline");
 				$gd["is_member"] = (isset($groups[$gid]) ? LC_YES : LC_NO);
 			}
 			else
 			{
-				$gd["type"] = "Tavaline";
+				$gd["type"] = t("Tavaline");
 				$gd["is_member"] = html::checkbox(array(
 					"name" => "member[$gid]",
 					"value" => 1,
@@ -643,19 +641,19 @@ class user extends class_base
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 		));
 
 		$t->define_field(array(
 			"name" => "is_member",
-			"caption" => "Liige?",
+			"caption" => t("Liige?"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "priority",
-			"caption" => "Prioriteet",
+			"caption" => t("Prioriteet"),
 			"sortable" => 1,
 			"numeric" => 1,
 			"align" => "center"
@@ -663,14 +661,14 @@ class user extends class_base
 		
 		$t->define_field(array(
 			"name" => "gcount",
-			"caption" => "Mitu liiget",
+			"caption" => t("Mitu liiget"),
 			"sortable" => 1,
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -678,7 +676,7 @@ class user extends class_base
 		$df = aw_ini_get("config.dateformats");
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
 			"sortable" => 1,
 			"type" => "time",
 			"format" => $df[2]
@@ -686,7 +684,7 @@ class user extends class_base
 
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => "T&uuml;&uuml;p",
+			"caption" => t("T&uuml;&uuml;p"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -898,7 +896,7 @@ class user extends class_base
 			};
 			$o = obj($row["oid"]);
 			$row["acl"] = html::href(array(
-				"caption" => "Muuda",
+				"caption" => t("Muuda"),
 				"url" => aw_url_change_var("edit_acl", $row["oid"])
 			));
 			$t->define_data($row);
@@ -932,7 +930,7 @@ class user extends class_base
 				'type' => 'text',
 				'store' => 'no',
 				'group' => 'objects',
-				'value' => 'Muuda objekti '.$o->name().' &otilde;igusi'
+				'value' => sprintf(t('Muuda objekti %s  &otilde;igusi'), $o->name())
 			);
 			$acls["edit_acl"] = array(
 				'name' => "edit_acl",
@@ -1164,11 +1162,11 @@ class user extends class_base
 		$df = aw_ini_get('config.dateformats');
 		$t->define_field(array(
 			'name' => 'rec',
-			'caption' => 'Nr',
+			'caption' => t('Nr'),
 		));
 		$t->define_field(array(
 			'name' => 'tm',
-			'caption' => 'Millal',
+			'caption' => t('Millal'),
 			'sortable' => 1,
 			'numeric' => 1,
 			'type' => 'time',
@@ -1177,40 +1175,40 @@ class user extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'uid',
-			'caption' => 'Kes',
+			'caption' => t('Kes'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'ip',
-			'caption' => 'IP',
+			'caption' => t('IP'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'type',
-			'caption' => 'T&uuml;&uuml;p',
+			'caption' => t('T&uuml;&uuml;p'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'act_id',
-			'caption' => 'Tegevus',
+			'caption' => t('Tegevus'),
 			'sortable' => 1,
 		));
 		if (aw_ini_get("syslog.has_site_id"))
 		{
 			$t->define_field(array(
 				'name' => 'site_id',
-				'caption' => 'Saidi ID',
+				'caption' => t('Saidi ID'),
 				'sortable' => 1,
 			));
 		}
 		$t->define_field(array(
 			'name' => 'oid',
-			'caption' => 'OID',
+			'caption' => t('OID'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'action',
-			'caption' => 'Mida',
+			'caption' => t('Mida'),
 			'sortable' => 1,
 		));
 		return $t;
@@ -1572,7 +1570,7 @@ class user extends class_base
 		extract($arr);
 		error::raise_if(empty($uid), array(
 			"id" => ERR_NO_UID,
-			"msg" => "users::add_user($arr): no uid specified"
+			"msg" => sprintf(t("users::add_user(%s): no uid specified"), $arr)
 		));
 
 		if (empty($password))
@@ -1644,17 +1642,17 @@ class user extends class_base
 		list($isd, $dat) = $this->_aclw_is_del($oid);
 		if ("del" == $isd)
 		{
-			return "Objekt on kustutatud. Pole &otilde;igusi!";
+			return t("Objekt on kustutatud. Pole &otilde;igusi!");
 		}
 		else
 		if ("not" == $isd)
 		{
-			return "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!";
+			return t("Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!");
 		}
 		else
 		if ("delp" == $isd)
 		{
-			return "Objekti &uuml;lemobjekt ($dat) on kustutatud. Pole &otilde;igusi!";
+			return sprintf(t("Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"), $dat);
 		}
 
 		// find the controlling acl - select all gids that user belongs to
@@ -1664,7 +1662,7 @@ class user extends class_base
 		$ca = $this->_aclw_get_controlling_acl($user, $oid);
 		if ($ca === false)
 		{
-			return "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult.";
+			return t("Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult.");
 		}
 
 		$o_str = "";
@@ -1695,11 +1693,12 @@ class user extends class_base
 		}
 
 		$g_o = obj($this->users->get_oid_for_gid($ca["gid"]));
-
-		return "Info objekti ".$ro_str." &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti ".$o_str." ja grupi ".html::href(array(
+		
+		$grpstr = html::href(array(
 			"url" => $this->mk_my_orb("change", array("id" => $g_o->id()), $g_o->class_id()),
 			"caption" => $g_o->path_str()
-		))." vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>".$this->_aclw_acl_string($ca["acl"]);
+		));
+		return sprintf(t("Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"), $ro_str, $o_str, $grpstr, $this->_aclw_acl_string($ca["acl"]));
 	}
 
 	function _aclw_is_del($oid)

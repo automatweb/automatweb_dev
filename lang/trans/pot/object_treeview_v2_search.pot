@@ -1,0 +1,60 @@
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:153
+msgid "Omadus"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:159
+msgid "N&auml;ita vormis"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:165
+msgid "Tekst"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:171
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:190
+msgid "T&auml;istekstiotsing"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:219
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:226
+msgid "Element"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:232
+msgid "Tabelis"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:238
+msgid "Sorditav"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:244
+msgid "Vaata tulp"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:250
+msgid "Tulba pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:256
+msgid "Kontroller"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:271
+msgid "--Vali--"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:344
+msgid "Otsi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:345
+msgid "Otsi"
+msgstr ""
+

@@ -55,7 +55,7 @@ class msg_scanner extends class_base
 				{
 					if (isset($recievers[trim($m[1])][$class]))
 					{
-						die("ERROR: function ".$recievers[trim($m[1])][$class]." already defined as message handler\n       for message $m[1], can not define several recievers\n       for one message in the same class!\n\n");
+						die(sprintf(t("ERROR: function %s already defined as message handler\n       for message %s, can not define several recievers\n       for one message in the same class!\n\n"), $recievers[trim($m[1])][$class], $m[1]));
 					}
 					$recievers[trim($m[1])][$class] = trim($m[2]);
 				}
@@ -67,7 +67,7 @@ class msg_scanner extends class_base
 				{
 					if (isset($recievers_param[trim($m[1])][$class][trim($m[2])]))
 					{
-						die("ERROR: function ".$recievers[trim($m[1])][$class][trim($m[2])]." already defined as message handler\n       for message $m[1] with param $m[2], can not define several recievers\n       for one message with same param in the same class!\n\n");
+						die(sprintf(t("ERROR: function %s already defined as message handler\n       for message %s with param %s, can not define several recievers\n       for one message with same param in the same class!\n\n"), $recievers[trim($m[1])][$class][trim($m[2])], $m[1], $m[2]));
 					}
 					$recievers_param[trim($m[1])][$class][trim($m[2])] = trim($m[3]);
 				}
@@ -87,7 +87,7 @@ class msg_scanner extends class_base
 				{
 					$mul = "es:";
 				}
-				echo "ERROR: message $msg is not defined, but recieved by class$mul $clstr!\n\n";
+				echo sprintf(t("ERROR: message %s is not defined, but recieved by class%s %s!\n\n"), $msg, $mul, $clstr);
 				die();
 			}
 
@@ -96,7 +96,7 @@ class msg_scanner extends class_base
 				$inst = get_instance($class);
 				if (!method_exists($inst, $handler))
 				{
-					echo "ERROR: class $class defines function $handler as message handler for message $msg,\n       but the function does not exist in that class!\n\n";
+					echo spriintf(t("ERROR: class %s defines function %s as message handler for message %s,\n       but the function does not exist in that class!\n\n"), $class, $handler, $msg);
 					echo dbg::process_backtrace(debug_backtrace());
 					die();
 				}
@@ -112,7 +112,7 @@ class msg_scanner extends class_base
 				{
 					$mul = "es:";
 				}
-				echo "ERROR: message $msg is not defined, but recieved by class$mul $clstr!\n\n";
+				echo sprintf(t("ERROR: message %s is not defined, but recieved by class%s %s!\n\n"), $msg, $mul, $clstr);
 				die();
 			}
 
@@ -123,7 +123,7 @@ class msg_scanner extends class_base
 					$inst = get_instance($class);
 					if (!method_exists($inst, $handler))
 					{
-						echo "ERROR: class $class defines function $handler as message handler for message $msg (with param $param),\n       but the function does not exist in that class!\n\n";
+						echo sprintf(f("ERROR: class %s defines function %s as message handler for message %s (with param %s),\n       but the function does not exist in that class!\n\n"), $class, $handler, $msg, $param);
 						echo dbg::process_backtrace(debug_backtrace());
 						die();
 					}
@@ -179,7 +179,7 @@ class msg_scanner extends class_base
 				{
 					if (!is_writable($fn))
 					{
-						die("ERROR: no write access to file $fn!\n\n");
+						die(sprintf(t("ERROR: no write access to file %s!\n\n"), $fn));
 					}
 
 					$fs[] = $fn;
@@ -188,14 +188,14 @@ class msg_scanner extends class_base
 		}
 		else
 		{
-			die("ERROR: folder $folder where message maps are stored, does not exist!\n\n");
+			die(sprintf(t("ERROR: folder %s where message maps are stored, does not exist!\n\n"), $folder));
 		}
 
 		foreach($fs as $fn)
 		{
 			if (!@unlink($fn))
 			{
-				die("ERROR: no write access to file $fn!\n\n");
+				die(sprintf(t("ERROR: no write access to file %s!\n\n"), $fn));
 			}
 		}
 	}

@@ -1,0 +1,12 @@
+#: classes/contentmgmt/html_popup.aw:81
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/html_popup.aw:89
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/html_popup.aw:94
+msgid "k.a. alammenüüd"
+msgstr ""
+

@@ -27,29 +27,29 @@ class packagemgr_server extends class_base
 		$tb = get_instance("vcl/toolbar");
 		$tb->add_button(array(
 			'name' => 'new',
-			'tooltip' => 'Lisa uus',
+			'tooltip' => t('Lisa uus'),
 			'url' => $this->mk_my_orb("new_package"),
 			'img' => 'new.gif'
 		));
 
 		$t = new aw_table(array("layout" => "generic"));
 		$t->define_field(array(
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"name" => "id",
 			"sortable" => 1
 		));
 		$t->define_field(array(
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"name" => "name",
 			"sortable" => 1
 		));
 		$t->define_field(array(
-			"caption" => "Viimane versioon",
+			"caption" => t("Viimane versioon"),
 			"name" => "latest_version",
 			"sortable" => 1
 		));
 		$t->define_field(array(
-			"caption" => "Muuda",
+			"caption" => t("Muuda"),
 			"name" => "change",
 		));
 
@@ -66,7 +66,7 @@ class packagemgr_server extends class_base
 		{
 			$row["change"] = html::href(array(
 				"url" => $this->mk_my_orb("change", array("id" => $row["id"])),
-				"caption" => "Muuda"
+				"caption" => t("Muuda")
 			));
 			$t->define_data($row);
 		}

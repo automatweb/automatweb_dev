@@ -1,0 +1,292 @@
+#: classes/syslog/dronline.aw:102
+msgid "Online"
+msgstr ""
+
+#: classes/syslog/dronline.aw:103
+msgid "Statistika aja l&otilde;ikes"
+msgstr ""
+
+#: classes/syslog/dronline.aw:104
+msgid "Statistika aadresside l&otilde;ikes"
+msgstr ""
+
+#: classes/syslog/dronline.aw:105
+msgid "Statistika objektide l&otilde;ikes"
+msgstr ""
+
+#: classes/syslog/dronline.aw:106
+msgid "IP Blokk"
+msgstr ""
+
+#: classes/syslog/dronline.aw:107
+msgid "M&auml;&auml;rangud"
+msgstr ""
+
+#: classes/syslog/dronline.aw:108
+msgid "Kataloogid"
+msgstr ""
+
+#: classes/syslog/dronline.aw:109
+msgid "Seostehaldur"
+msgstr ""
+
+#: classes/syslog/dronline.aw:117
+msgid "Cache tegemata"
+msgstr ""
+
+#: classes/syslog/dronline.aw:118
+msgid "Cache vananenud"
+msgstr ""
+
+#: classes/syslog/dronline.aw:119
+msgid "Cache valmis"
+msgstr ""
+
+#: classes/syslog/dronline.aw:120
+msgid "Cache uuendamisel"
+msgstr ""
+
+#: classes/syslog/dronline.aw:135
+msgid "T&auml;na"
+msgstr ""
+
+#: classes/syslog/dronline.aw:140
+msgid "Eile"
+msgstr ""
+
+#: classes/syslog/dronline.aw:145
+msgid "See n&auml;dal"
+msgstr ""
+
+#: classes/syslog/dronline.aw:150
+msgid "Viimased 2 n&auml;dalat"
+msgstr ""
+
+#: classes/syslog/dronline.aw:155
+msgid "See kuu"
+msgstr ""
+
+#: classes/syslog/dronline.aw:160
+msgid "Viimased 2 kuud"
+msgstr ""
+
+#: classes/syslog/dronline.aw:165
+msgid "Viimased pool aastat"
+msgstr ""
+
+#: classes/syslog/dronline.aw:170
+msgid "See aasta"
+msgstr ""
+
+#: classes/syslog/dronline.aw:175
+msgid "Viimased 2 aastat"
+msgstr ""
+
+#: classes/syslog/dronline.aw:307
+msgid "Nr"
+msgstr ""
+
+#: classes/syslog/dronline.aw:311
+msgid "Millal"
+msgstr ""
+
+#: classes/syslog/dronline.aw:320
+msgid "UID"
+msgstr ""
+
+#: classes/syslog/dronline.aw:325
+msgid "Kes"
+msgstr ""
+
+#: classes/syslog/dronline.aw:330
+msgid "IP"
+msgstr ""
+
+#: classes/syslog/dronline.aw:335
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/syslog/dronline.aw:340
+msgid "Tegevus"
+msgstr ""
+
+#: classes/syslog/dronline.aw:347
+msgid "Saidi ID"
+msgstr ""
+
+#: classes/syslog/dronline.aw:353
+msgid "OID"
+msgstr ""
+
+#: classes/syslog/dronline.aw:358
+msgid "Mida"
+msgstr ""
+
+#: classes/syslog/dronline.aw:455
+msgid "M&auml;&auml;ratud vahemik:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:466
+msgid "Alates:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:475
+msgid "Kuni:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:485
+msgid "Kasutaja:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:494
+msgid "IP:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:504
+msgid "Tegevuse filter:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:517
+msgid "Saidid:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:528
+msgid "Keeled:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:563
+msgid "Objektid:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:612
+msgid "T&uuml;&uuml;bid:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:621
+msgid "Tegevused:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:630
+msgid "Kombinatsioonid:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:645
+msgid "Blokeeritud IP'd:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:814
+msgid "Vahemik"
+msgstr ""
+
+#: classes/syslog/dronline.aw:824
+msgid "Mitu"
+msgstr ""
+
+#: classes/syslog/dronline.aw:831
+msgid "%"
+msgstr ""
+
+#: classes/syslog/dronline.aw:963
+msgid "#"
+msgstr ""
+
+#: classes/syslog/dronline.aw:971
+msgid "IP Aadress"
+msgstr ""
+
+#: classes/syslog/dronline.aw:978
+msgid "Mitu"
+msgstr ""
+
+#: classes/syslog/dronline.aw:984
+msgid "%"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1041
+msgid "Blokeeri"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1042
+msgid "Blokeeri"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1131
+msgid "#"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1139
+msgid "OID"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1147
+msgid "Nimi"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1155
+msgid "Detailid"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1162
+msgid "Mitu"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1168
+msgid "%"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1282
+msgid "Uuenda p&auml;ringute&nbsp;cache"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1358
+msgid "#"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1366
+msgid "Nimi"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1373
+msgid "Muudetud"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1382
+msgid "Kes Muutis"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1388
+msgid "Vaata"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1402
+msgid "Vaata"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1430
+msgid "Blokeeri IPd"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1456
+msgid "N&auml;ita IPd"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1536
+msgid "Salvesta p&auml;ring"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1732
+msgid "Salvesta"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1763
+msgid "Kataloog"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1768
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1774
+msgid "k.a. alammen&uuml;&uuml;d"
+msgstr ""
+

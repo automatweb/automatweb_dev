@@ -1,3 +1,7 @@
+#: classes/crm/crm_role_manager.aw:134
+msgid "Vali roll"
+msgstr ""
+
 #: classes/crm/crm_role_manager.aw:179
 msgid "Anna rollid"
 msgstr ""

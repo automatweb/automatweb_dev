@@ -1,0 +1,28 @@
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:73
+msgid "Objekti muutmise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:74
+msgid "Objektide j&auml;rjekorra j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:123
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:131
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:136
+msgid "k.a. alammen&uuml;&uuml;d"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:143
+msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:392
+msgid "J&auml;rjekord"
+msgstr ""
+

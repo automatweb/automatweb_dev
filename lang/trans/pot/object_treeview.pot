@@ -1,0 +1,72 @@
+#: classes/contentmgmt/object_treeview.aw:95
+msgid "Ikoon"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:96
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:97
+msgid "Suurus"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:98
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:99
+msgid "Muutmise kuup&auml;ev"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:100
+msgid "Muutja"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:101
+msgid "Muuda"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:102
+msgid "Vali"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:789
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:797
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:802
+msgid "k.a. alammenüüd"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:809
+msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:874
+msgid "Uus"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:902
+msgid "Kustuta"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:904
+msgid "Oled kindel et soovid objekte kustutada?"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:928
+msgid "object_treeview::obj_delete(): no object id specified!"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:1019
+msgid "Objekti muutmise kuup&auml;eva j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:1020
+msgid "Objektide j&auml;rjekorra j&auml;rgi"
+msgstr ""
+

@@ -90,6 +90,22 @@ msgstr ""
 msgid "Vormi alla"
 msgstr ""
 
+#: classes/contentmgmt/webform.aw:390
+msgid "Salvesta"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:397
+msgid "Kustuta valitud omadused"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:400
+msgid "Oled kindel, et tahad antud omadused kustutada?"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:605
+msgid "Andmed"
+msgstr ""
+
 #: classes/contentmgmt/webform.aw:812
 msgid "Otsi"
 msgstr ""
@@ -166,7 +182,19 @@ msgstr ""
 msgid "vertikaalne"
 msgstr ""
 
+#: classes/contentmgmt/webform.aw:1324
+msgid "Veateate stiil"
+msgstr ""
+
 #: classes/contentmgmt/webform.aw:1479
 msgid "Registreeru"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:1596
+msgid "Saada"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:2009
+msgid "Liigu edasi &raquo;"
 msgstr ""
 
