@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.40 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.41 2003/01/03 13:51:21 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -226,7 +226,7 @@ class table extends aw_template
 			"name" => $table_name,
 		));
 		$this->save_table($args,false);
-		$this->_log(ST_TABLE, SA_CHANGE, "changed configuration of table $table_name");
+		$this->_log(ST_AWTABLE, SA_CHANGE, "changed configuration of table $table_name");
 		return $this->mk_my_orb("configure",array("id" => $id));
 	}
 
@@ -471,7 +471,7 @@ class table extends aw_template
 		$this->load_table($arr["id"]);
 
 		$this->save_table($arr);
-		$this->_log(ST_TABLE, SA_CHANGE, "changed table $arr[table_name]");
+		$this->_log(ST_AWTABLE, SA_CHANGE, "changed table $arr[table_name]");
 		return $this->mk_orb("change", array("id" => $arr["id"]));
 	}
 
@@ -1175,7 +1175,7 @@ class table extends aw_template
 		}
 		$this->save_table($arr, false);
 
-		$this->_log(ST_TABLE, SA_CHANGE, "changed table $this->table_name");
+		$this->_log(ST_AWTABLE, SA_CHANGE, "changed table $this->table_name");
 		return $this->mk_orb("admin", array("id" => $id));
 	}
 
@@ -2322,7 +2322,7 @@ class table extends aw_template
 
 		$ob = $this->get_object($id);
 		$this->delete_object($id);
-		$this->_log(ST_TABLE, SA_DELETE, "deleted table $ob[name]");
+		$this->_log(ST_AWTABLE, SA_DELETE, "deleted table $ob[name]");
 		header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent),"menuedit"));
 	}
 
