@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.57 2002/01/24 04:36:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.58 2002/01/31 00:16:44 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -1341,7 +1341,7 @@ class planner extends calendar {
 			$cal_id = -1;
 		};
 		$end = strtotime("+1 week",$start) + 86399; //23h59m59s
-		$events = $this->get_events(array(
+		$events = $this->get_events2(array(
 				"start" => $start,
 				"end" => $end,
 				"parent" => $cal_id,
