@@ -1133,6 +1133,10 @@ class _int_object
 
 	function _int_load($oid)
 	{
+		if ($GLOBALS["OBJ_TRACE"])
+		{
+			echo "object::_int_load($oid) <br>";
+		}
 		if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
 		{
 			error::throw(array(
@@ -1212,6 +1216,10 @@ class _int_object
 
 	function _int_do_save()
 	{
+		if ($GLOBALS["OBJ_TRACE"])
+		{
+			echo "object::_int_do_save($oid) <br>";
+		}
 		// first, update modifier fields
 		
 		$this->_int_set_of_value("modified", time());
