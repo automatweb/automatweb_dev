@@ -1,7 +1,7 @@
 <?php
 ob_implicit_flush(true);
 
-function file_get_contents($name)
+function _file_get_contents($name)
 {
 	$f = @fopen($name, "r");
 	if (!$f)
@@ -51,7 +51,7 @@ function make_keys($arr)
 	exit(1);
 }*/
 
-chdir("../..");
+#chdir("../..");
 
 $stdin = fopen("php://stdin", "r");
 $stdo = fopen("php://stdout", "w");
@@ -118,7 +118,7 @@ echo "\n\nParsing and writing config/ini/classes.ini...\n";
 ////////////////////
 
 // read config/ini/classes.ini and find the largest class number in it
-$clsini = file_get_contents('config/ini/classes.ini');
+$clsini = _file_get_contents('config/ini/classes.ini');
 preg_match_all("/classes\[(\d+)\]\[def\]/",$clsini, $clid_mt);
 $clids = make_keys($clid_mt[1]);
 $new_clid = max($clids)+1;
@@ -161,7 +161,7 @@ echo "\n";
 echo "parsing and adding to config/ini/syslog.ini..\n";
 
 // read and find the biggest number
-$sysini = file_get_contents('config/ini/syslog.ini');
+$sysini = _file_get_contents('config/ini/syslog.ini');
 preg_match_all("/syslog\.types\[(\d+)\]\[def\]/",$sysini, $sys_mt);
 $sysids = make_keys($sys_mt[1]);
 $new_sysid = max($sysids)+1;
@@ -242,7 +242,7 @@ if ($class['folder'] != "")
 	}
 }
 
-$fc = str_replace("__classdef", $class['def'], file_get_contents("install/class_template/classes/base.aw"));
+$fc = str_replace("__classdef", $class['def'], _file_get_contents("install/class_template/classes/base.aw"));
 $fc = str_replace("__tplfolder", $tpnf, $fc);
 $fc = str_replace("__syslog_type", $class['syslog.type'], $fc);
 $fc = str_replace("__name", $class['name'], $fc);
@@ -250,7 +250,7 @@ file_put_contents("classes/$clnf",str_replace("__classname", $class['file'], $fc
 echo "created classes/$clnf...\n";
 
 $folder = $class['folder'] != "" ? "folder=\"".$class['folder']."\"" : "";
-$fc = str_replace("__classname", $class['file'], file_get_contents("install/class_template/xml/orb/base.xml"));
+$fc = str_replace("__classname", $class['file'], _file_get_contents("install/class_template/xml/orb/base.xml"));
 file_put_contents("xml/orb/".$class['file'].".xml",str_replace("__classfolder", $folder, $fc));
 echo "created xml/orb/".$class['file'].".xml...\n";
 
