@@ -30,25 +30,20 @@ while(list($k,$v) = each($alltimers)) {
 classload("languages");
 $t = new languages;
 
-$sf->vars(array("content" 				=> $content,
-								"site_title" 			=> $site_title,
-							  "time"         		=> sprintf("%0.4f",$time_used),
-								"menu"						=> $menustr,
-								"custom_css"		  => $custom_css,
-								"menubar"					=> $menubar,
-								"jsinclude"  			=> $js_include,
-								"qcount"					=> $qcount,
-						    "timers"				  => join(" | ",$timers_arr),
-								"charset"					=> $t->get_charset(),
-								"matches"					=> $preg_matches,
-								"replaces"				=> $preg_replaces));
+$vars = array(
+			"content"			=> $content,
+			"site_title"			=> $site_title,
+		 	"time"				=> sprintf("%0.4f",$time_used),
+			"menu"				=> $menustr,
+			"custom_css"			=> $custom_css,
+			"menubar"			=> $menubar,
+			"jsinclude"  			=> $js_include,
+			"qcount"				=> $qcount,
+		 	"timers"				=> join(" | ",$timers_arr),
+			"charset"				=> $t->get_charset(),
+			"matches"				=> $preg_matches,
+			"replaces"			=> $preg_replaces);
+$vars = array_merge($vars,$info);
+$sf->vars($vars);
 echo $sf->parse();
-
-// logime parsimiseks kulunud ajad baasi, töötaval saidil võib selle
-// vist isegi maha võtta
-// $sf->log_bench(array("qcount"		=> $qcount,
-//										 "qtime"		=> $q_time,
-//										 "total"		=> $time_used,
-//										 "tpload"		=> $tpl_l_time,
-//										 "tpparse"	=> $tpl_p_time)); 
 ?>
