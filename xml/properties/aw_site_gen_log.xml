@@ -13,9 +13,6 @@
             <syslog_type>ST_AW_SITE_GEN_LOG</syslog_type>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <view>
                   <caption>Vaata logi</caption>
             </view>
