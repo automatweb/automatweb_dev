@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.2 2002/09/26 16:23:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.3 2002/10/02 11:55:51 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -7,27 +7,44 @@ class toolbar extends aw_template
 	{
 		$this->init("toolbar");
 		$this->read_template("buttons.tpl");
+		$this->tb_content = "";
+		$this->vars(array(
+			"imgbase" => $this->cfg["baseurl"] . $args["imgbase"],
+		));
 	}
 
 	////
-	// !Generates a button with mouse-over effect
-	// url - what to do if the button is clicked
-	// name - name of the button (must be a valid identifier)
-	// tooltip - text of the tooltip
-	// img - url of the default image
-	// imgover - url of the mouse-over image
-	function gen_button($args = array())
+	// !Adds a button to the toolbar
+	function add_button($args = array())
 	{
 		$this->vars($args);
-		return $this->parse("button");
+		$this->tb_content .= $this->parse("smallbutton");
 	}
 
 	////
-	// !Generates a separator
-	function gen_separator($args = array())
+	// !Adds a separator to the toolbar
+	function add_separator($args = array())
 	{
 		$this->vars($args);
-		return $this->parse("separator");
+		$this->tb_content .= $this->parse("smallseparator");
+	}
+
+	////
+	// !Allows to add custom data to the boolar
+	function add_cdata($content)
+	{
+		$this->vars(array(
+			"data" => $content,
+		));
+		$this->tb_content .= $this->parse("cdata");
+	}
+
+	////
+	// !Returns the whole toolbar
+	function get_toolbar($args = array())
+	{
+		$retval = $this->parse("start") . $this->tb_content . $this->parse("end");
+		return $retval;
 	}
 
 };
