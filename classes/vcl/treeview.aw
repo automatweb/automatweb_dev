@@ -1,9 +1,10 @@
 <?php
-// $Id: treeview.aw,v 1.9 2003/03/13 14:29:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.10 2003/03/20 18:28:36 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
         @default group=general
+
         @property root type=select field=meta method=serialize
         @caption Root objekt
 
@@ -59,18 +60,6 @@ class treeview extends class_base
 		$root = $args["config"]["root"];
 		$this->urltemplate = isset($args["urltemplate"]) ? $args["urltemplate"] : "";
 		$this->config = $args["config"];
-
-		if (is_array($args["callback_modify_node"]))
-		{
-			$this->callback_node_obj = &$args["callback_modify_node"][0];
-			$this->callback_node_meth = $args["callback_modify_node"][1];
-			if (!method_exists($this->callback_node_obj,$this->callback_node_meth))
-			{
-				// I'm not too fond of the current raise_error stuff
-				// sue me.
-				die("treeview->generate(): invalid callback");
-			};
-		};
 
 		$rootobj = $this->get_object($root);
 		if (!$rootobj)	
@@ -203,12 +192,6 @@ class treeview extends class_base
 
 	function do_item_link($row)
 	{
-		if ($this->callback_node_obj)
-		{
-			$objref = &$this->callback_node_obj;
-			$metref = $this->callback_node_meth;
-			$objref->$metref(&$row);
-		};
 		if (isset($row["link"]) && $row["link"])
 		{
 			$url = $row["link"];
@@ -222,6 +205,72 @@ class treeview extends class_base
 			$url = $this->cfg["baseurl"] . "/" . $row["oid"];
 		};
 		return $url;
+	}
+
+	////
+	// !Creates a tree from an array (invokes itself recursively)
+	// parent(int) - current root node
+	// data(arr) - pointer to the array
+	function create_tree_from_array($args = array())
+	{
+		if (!is_array($args["data"][$args["parent"]]))
+		{
+			return;
+		};
+		$this->read_template("ftiens.tpl");
+		$tr = $this->_rec_tree_from_array(array(
+			//"parent" => $args["parent"],
+			"parent" => 1,
+			"data" => &$args["data"],
+		));
+		$this->vars(array(
+			"TREE" => $tr,
+			"root" => 1,
+			"rootname" => $args["data"][0][1]["name"],
+			"rooturl" => $args["data"][0][1]["link"],
+			"linktarget" => isset($args["linktarget"]) ? $args["linktarget"] : "",
+			"shownode" => isset($args["shownode"]) ? $args["shownode"] : "",
+		));
+		return $this->parse();
+	}
+
+
+	function _rec_tree_from_array($args = array())
+	{
+		$ret = "";
+		reset($args["data"][$args["parent"]]);
+		while (list($key,$row) = each($args["data"][$args["parent"]]))
+		{
+			if (isset($args["data"][$key]) && is_array($args["data"][$key]))
+			{
+				$sub = $this->_rec_tree_from_array(array(
+					"parent" => $key,
+					"data" => &$args["data"],
+				));
+			}
+			else
+			{
+				$sub = "";
+			};
+			
+			$this->vars(array(
+				"name" => $row["name"],
+				"id" => $key,
+				"parent" => $args["parent"],
+				"iconurl" => $row["icon_url"],
+				"url" => $row["link"],
+				"targetframe" => "right",
+			));
+			if ($sub == "")
+			{
+				$ret.=$this->parse("DOC");
+			}
+			else
+			{
+				$ret.=$this->parse("TREE").$sub;
+			}
+		};
+		return $ret;
 	}
 
 	////
