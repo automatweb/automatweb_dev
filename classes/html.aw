@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.25 2003/02/25 11:05:48 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.26 2003/03/06 19:57:16 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -12,35 +12,54 @@ class html extends aw_template
 	function select($args = array())
 	{
 		extract($args);
-		if (!$selected && $value)
+		$sz = $mz = $onc = "";
+		// things that make one go humm.. -- duke
+		if (empty($selected) && isset($value))
 		{
 			$selected = $value;
 		};
 
-		if ($size)
+		if (isset($size))
 		{
 			$sz = "size='$size' ";
 		};
 
-		if ($multiple)
+		if (isset($multiple))
 		{
 			$mz = "multiple ";
 			$name .= "[]";
 		};
+
 		if (is_array($selected))
 		{
-			$options = $this->mpicker($selected,$options);
+			$sel_array = $selected;
+		}
+		elseif ($selected)
+		{
+			$sel_array = array($selected);
 		}
 		else
 		{
-			$options = $this->picker($selected,$options);
+			$sel_array = array();
+		};
+		// hmhm. dunno, really. but it was in aw_template->mpicker -- duke
+		$sel_array = array_flip($sel_array);
+
+		$optstr = "";
+		if (isset($options) && is_array($options))
+		{
+			while(list($k,$v) = each($options))
+			{
+				$selected = isset($sel_array[$k]) ? " selected " : "";
+				$optstr .= "<option $selected value='$k'>$v</option>\n";
+			};
 		};
 
-		if ($onchange != '')
+		if (!empty($onchange))
 		{
 			$onc = 'onChange="'.$onchange.'"';
 		}
-		return "<select name='$name' id='$name' $sz $mz $onc>\n$options</select>\n";
+		return "<select name='$name' id='$name' $sz $mz $onc>\n$optstr</select>\n";
 	}
 
 	////
@@ -51,19 +70,13 @@ class html extends aw_template
 	function textbox($args = array())
 	{
 		extract($args);
-		$size = ($size) ? $size : 40;
+		$size = isset($size) ? $size : 40;
+		$maxlength = isset($maxlength) ? $maxlength : "";
 		$value = str_replace("\"" , "&quot;",$value);
 		return "<input type=\"text\" id=\"$name\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"/>\n";
 	}
 
 	
-	function test($args = array())
-	{
-		extract($args);
-		$size = ($size) ? $size : 40;
-		return "<input type='text' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
-	}
-
 	////
 	// !html textarea
 	// name(string)
@@ -74,9 +87,9 @@ class html extends aw_template
 	function textarea($args = array())
 	{
 		extract($args);
-		$cols = ($cols) ? $cols : 40;
-		$rows = ($rows) ? $rows : 5;
-		if ($richtext && (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") > 0) )
+		$cols = isset($cols) ? $cols : 40;
+		$rows = isset($rows) ? $rows : 5;
+		if (isset($richtext) && (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") > 0) )
 		{
 			$args["type"] = "richtext";
 			$args["width"] = $cols * 10;
@@ -86,7 +99,7 @@ class html extends aw_template
 		}
 		else
 		{
-			$wrap = ($wrap) ? $wrap : "soft";
+			$wrap = isset($wrap) ? $wrap : "soft";
 			$retval = "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap'>$value</textarea>\n";
 		};
 		return $retval;
@@ -101,16 +114,15 @@ class html extends aw_template
 	function iframe($args = array())
 	{
 		extract($args);
-		$width = ($width) ? $width : 300;
-		$height = ($height) ? $height : 200;
+		$width = isset($width) ? $width : 300;
+		$height = isset($height) ? $height : 200;
 		return "<iframe src='$src' name='$name' width='$width' height='$height'></iframe>\n";
 	}
 
 	function popup_objmgr($args = array())
 	{
 		extract($args);
-		//print_r($args);die;
-		if ($multiple)
+		if (isset($multiple))
 		{
 			$mz = "multiple ";
 			$name .= "[]";
@@ -160,7 +172,7 @@ class html extends aw_template
 	function password($args = array())
 	{
 		extract($args);
-		$size = ($size) ? $size : 40;
+		$size = isset($size) ? $size : 40;
 		return "<input type='password' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
 	}
 
@@ -198,15 +210,15 @@ class html extends aw_template
 	{
 		extract($args);
 		$checked = checked($checked);
-		if (!$value)
+		if (empty($value))
 		{
 			$value = 1;
 		};
-		if ($label)
+		if (isset($label))
 		{
 			$caption = $label;
 		};
-		if ($caption)
+		if (isset($caption))
 		{
 			$capt = " " . $caption;
 		};
@@ -278,11 +290,11 @@ class html extends aw_template
 	{
 		extract($args);
 		$ret = "<img src='$url'";
-		if ($width)
+		if (isset($width))
 		{
 			$ret.=" width='$width'";
 		}
-		if ($height)
+		if (isset($height))
 		{
 			$ret.=" height='$height'";
 		}
@@ -296,8 +308,8 @@ class html extends aw_template
 	function href($args = array())
 	{
 		extract($args);
-		$target = ($target) ? " target='$target' " : "";
-		$onClick = ($onClick) ? " onClick='$onClick' " : "";
+		$target = isset($target) ? " target='$target' " : "";
+		$onClick = isset($onClick) ? " onClick='$onClick' " : "";
 		return "<a href='$url' $target $onClick>$caption</a>";
 	}
 
