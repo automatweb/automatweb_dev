@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.2 2005/02/21 08:49:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.3 2005/03/18 16:04:35 ahti Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -10,12 +10,15 @@
 @caption Ekspordi kataloog
 
 
+@groupinfo ordermnager caption="Tellimused" submit=no
 @default group=ordermnager
 
+@property orders_toolbar type=toolbar no_caption=1
+@caption Tellimuste toolbar
 
-@property orders_table type=table  no_caption=1
+@property orders_table type=table no_caption=1
+@caption Tellimuste tabel
 
-@groupinfo ordermnager caption="Tellimused" submit=no
 
 */
 
@@ -41,41 +44,58 @@ class orders_manager extends class_base
 		switch($prop["name"])
 		{
 			case "orders_table":
-				$this->do_orderstable($arr);
-			break;
+				$this->do_orders_table($arr);
+				break;
+			
+			case "orders_toolbar":
+				$this->do_orders_toolbar($arr);
+				break;
 		};
 		return $retval;
 	}
 	
-	function do_orderstable($arr)
+	function do_orders_toolbar($arr)
 	{
-		$table = &$arr["prop"]["vcl_inst"];
-		
-		$table->define_field(array(
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta tellimusi"),
+			"action" => "delete_orders",
+			"confirm" => t("Oled kindel, et soovid valitud tellimused kustutada?"),
+		));
+	}
+	
+	function do_orders_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
 			"name" => "orderer",
 			"caption" => "Tellija"
 		));
-		
-		$table->define_field(array(
+		$t->define_field(array(
 			"name" => "date",
 			"caption" => "Kuupäev",
 			"sortable" => 1,
 			"type" => "time",
-			"format" => "H:i d-M",
+			"format" => "H:i d-m-y",
 			"width" => 80,
 			"align" => "center",
 		));
-		
-		
-		$table->define_field(array(
+		$t->define_field(array(
 			"name" => "view",
 			"caption" => "Vaata tellimust",
 			"width" => 80,
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
 		));
 		
 		$ol = new object_list(array(
 			"class_id" => CL_ORDERS_ORDER,
 			"order_completed" => 1,
+			"sort_by" => "objects.created DESC",
 		));
 		
 		foreach ($ol->arr() as $order)
@@ -85,15 +105,17 @@ class orders_manager extends class_base
 			{
 				$person_name = $person->prop("firstname")." ".$person->prop("lastname");
 			}
-			$table->define_data(array(
+			$t->define_data(array(
+				"oid" => $order->id(),
 				"orderer" => $person_name,
 				"date" => $order->created(),
 				"view" => html::href(array(
 					"caption" => "Vaata tellimust",
-					"url" => $this->mk_my_orb("change", array("id" => $order->id()), CL_ORDERS_ORDER)
+					"url" => $this->mk_my_orb("change", array("id" => $order->id(), "return_url" => get_ru()), CL_ORDERS_ORDER)
 				)),
 			));
 		}
+		$t->set_sortable(false);
 	}
 
 	/*
@@ -108,6 +130,36 @@ class orders_manager extends class_base
 		return $retval;
 	}	
 	*/
+	
+	/**
+
+		@attrib name=delete_orders
+
+		@param id required type=int acl=view
+		@param group optional
+		@param sel required
+	**/
+	function delete_orders($arr)
+	{
+		foreach(safe_array($arr["sel"]) as $sel)
+		{
+			if(is_oid($sel) && $this->can("delete", $sel))
+			{
+				$obj = obj($sel);
+				if($obj->class_id() == CL_ORDERS_ORDER)
+				{
+					foreach($obj->connections_from(array("type" => "RELTYPE_ORDER")) as $it)
+					{
+						$item = $it->to();
+						$item->delete();
+					}
+				}
+				$obj->delete();
+			}
+		}
+		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
+	}
+	
 
 	/** exports orders after the last batch to textfile
 

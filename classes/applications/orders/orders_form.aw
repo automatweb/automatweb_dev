@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.9 2005/03/08 13:27:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.10 2005/03/18 16:04:35 ahti Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -7,37 +7,56 @@
 
 @default table=objects
 @default group=general
-
-@property orderform type=relpicker field=meta reltype=RELTYPE_ORDERFORM method=serialize group=config
-@caption Tellimuse seadetevorm
-
-@property itemform type=relpicker field=meta reltype=RELTYPE_ITEMFORM method=serialize group=config
-@caption Tellimuse rea seadetevorm
-
-@property ordemail type=relpicker field=meta reltype=RELTYPE_MAIL method=serialize group=config
-@caption Mail tellijale
-
-
-@property thankudoc type=relpicker reltype=RELTYPE_THANKU field=meta method=serialize group=config
-@caption Dokument kuhu suunata peale esitamist
-
-@property postal_fee type=textbox field=meta method=serialize
-@caption Postikulu
-
-@property orders_post_to type=textbox field=meta method=serialize
-@caption Mail kuhu tellimus saata
-
-@property orders_to_mail type=checkbox field=meta method=serialize ch_value=1
-@caption Saada e-mail tellijale
-
-@property orders_post_from type=textbox field=meta method=serialize
-@caption Kliendile saatja(e-mail)
-
-@property ordering type=callback group=ordering no_caption=1 callback=do_order_form
-
-@default group=payment
 @default field=meta
 @default method=serialize
+
+
+@property postal_fee type=textbox
+@caption Postikulu
+
+@property orders_post_to type=textbox
+@caption Mail kuhu tellimus saata
+
+@property orders_to_mail type=checkbox ch_value=1
+@caption Saada e-mail tellijale
+
+@property orders_post_from type=textbox 
+@caption Kliendile saatja (e-mail)
+
+@property no_pdata_check type=checkbox ch_value=1
+@caption Kasutajaandmed isikust
+
+//@property order_center type=relpicker reltype=RELTYPE_ORDER_CENTER
+//@caption Tellimiskeskkond
+
+
+@groupinfo config caption=Seaded 
+@default group=config
+
+@property orderform type=relpicker reltype=RELTYPE_ORDERFORM
+@caption Tellimuse seadetevorm
+
+@property itemform type=relpicker reltype=RELTYPE_ITEMFORM
+@caption Tellimuse rea seadetevorm
+
+@property num_rows type=textbox size=6
+@caption Mitu rida saab korraga korvi lisada
+
+@property ordemail type=relpicker reltype=RELTYPE_MAIL
+@caption Mail tellijale
+
+@property thankudoc type=relpicker reltype=RELTYPE_THANKU
+@caption Dokument kuhu suunata peale esitamist
+
+
+
+@groupinfo ordering caption=Tellimine submit=no
+@property ordering type=callback group=ordering no_caption=1 callback=do_order_form
+
+
+
+@groupinfo payment caption=Makseviisid
+@default group=payment
 
 @property has_rent type=checkbox ch_value=1 
 @caption Saab maksta j&auml;relmaksuga
@@ -45,16 +64,16 @@
 @property rent_min_amt type=textbox size=6
 @caption J&auml;relmasu min. summa
 
-@property rent_min_amt_payment type=textbox size=6 field=meta method=serialize table=objects
+@property rent_min_amt_payment type=textbox size=6
 @caption &Uuml;he makse miinimumsumma
 
-@property rent_min_amt_payment_text type=textbox field=meta method=serialize table=objects
+@property rent_min_amt_payment_text type=textbox
 @caption Miinimumsumma veateade
 
-@property rent_max_amt_warn type=textbox size=6 field=meta method=serialize table=objects
+@property rent_max_amt_warn type=textbox size=6
 @caption J&auml;relmaksu maksimaalne summa
 
-@property rent_max_amt_warn_text type=textbox  field=meta method=serialize table=objects
+@property rent_max_amt_warn_text type=textbox
 @caption Maksimaalse summa &uuml;letamise hoiatus
 
 @property rent_item_types type=table 
@@ -69,15 +88,14 @@
 @reltype THANKU value=3 clid=CL_DOCUMENT
 @caption Dokument
 
-@reltype MAIL value=5 clid=CL_MESSAGE
-@caption Mail
-
 @reltype ADDORDER value=4 clid=CL_ORDERS_ITEM
 @caption Tellimuse lisa
 
-@groupinfo ordering caption=Tellimine submit=no
-@groupinfo config caption=Seaded 
-@groupinfo payment caption="Makseviisid"
+@reltype MAIL value=5 clid=CL_MESSAGE
+@caption Mail
+
+//@reltype ORDER_CENTER value=6 clid=CL_SHOP_ORDER_CENTER
+//@caption Tellimiskeskkond
 
 */
 class orders_form extends class_base
@@ -121,12 +139,10 @@ class orders_form extends class_base
 	**/
 	function delete_from_order($arr)
 	{
-		if($this->can("delete", $arr["id"]) && $this->can("view", $arr["id"]))
+		if(is_oid($arr["id"]) && $this->can("delete", $arr["id"]) && $this->can("view", $arr["id"]))
 		{
 			$obj = &obj($arr["id"]);
 			$obj->delete();
-			$obj->save();
-			$obj = &obj($arr["id"]);
 		}
 		return aw_ini_get("baseurl")."/".$_SESSION["orders_section"];
 	}
@@ -143,13 +159,13 @@ class orders_form extends class_base
 			$order->save();
 			$_SESSION["order_cart_id"] = $order->id();
 			$_SESSION["order_form_id"] = $arr["obj_inst"]->id();
-			if($conns = $arr["obj_inst"]->connections_from("RELTYPE_ADDORDER"))
+			if($conns = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ADDORDER")))
 			{
 				foreach ($conns as $conn)
 				{
 					$order->connect(array(
 						"to" => $conn->prop("to"),
-						"reltype" => 4
+						"reltype" => "RELTYPE_ADDORDER"
 					));
 				}
 			}
@@ -199,10 +215,9 @@ class orders_form extends class_base
 		@attrib name=change nologin=1 all_args=1
 	**/
 	function change($arr)
-	{	
-		
+	{
 		//If admin side then dont use templates
-		if(strstr($_SERVER['REQUEST_URI'],"/automatweb"))
+		if(strstr($_SERVER['REQUEST_URI'], "/automatweb"))
 		{
 			return parent::change($arr);
 		}
@@ -234,7 +249,7 @@ class orders_form extends class_base
 
 			$form_obj = &obj($_SESSION["order_form_id"]);
 		
-			if($conns = $form_obj->connections_from(array("type" => 4)))
+			if($conns = $form_obj->connections_from(array("type" => "RELTYPE_ADDORDER")))
 			{
 				foreach ($conns as $conn)
 				{
@@ -247,7 +262,8 @@ class orders_form extends class_base
 		}
 		else
 		{
-			$order = &obj($_SESSION["order_cart_id"]);
+			$form_obj = obj($_SESSION["order_form_id"]);
+			$order = obj($_SESSION["order_cart_id"]);
 		}
 		
 		$this->read_template("orders_form.tpl");
@@ -260,17 +276,23 @@ class orders_form extends class_base
 				"shop_table" => $this->get_cart_table(),
 			));
 		}
-		elseif ($_GET["group"] == "confirmpage")
+		elseif ($_GET["group"] == "confirmpage" || $arr["show_order"] == 1)
 		{
+			$vars = array("order" => $order);
+			if($form_obj->prop("no_pdata_check") == 1)
+			{
+				$vars["no_pdata_check"] = 1;
+			}
+			$vars = $vars + $arr;
 			$this->vars(array(
-				"show_confirm" => $this->get_confirm_persondata($order),
+				"show_confirm" => $this->get_confirm_persondata($vars),
 				"shop_table" => ($_SESSION["orders_form"]["payment"]["type"] == "rent" ? $this->get_rent_table() : $this->get_cart_table()),
 			));
 		}
 		else
 		{
 			$this->vars(array(
-				"forwardurl" => aw_url_change_var(array("group" => "persondata")),
+				"forwardurl" => aw_url_change_var(array("group" => ($form_obj->prop("no_pdata_check") == 1 ? "confirmpage" : "persondata"))),
 			));
 			$forward = $this->parse("forward_link");
 			$this->vars(array(
@@ -289,23 +311,35 @@ class orders_form extends class_base
 				));
 			}
 		}
-		return $this->parse();	
+		return $this->parse();
 	}
 	
 
-	function get_confirm_persondata($order)
+	function get_confirm_persondata($arr)
 	{
+		extract($arr);
 		$this->read_template("orders_confirm_persondata.tpl");
 
-		$person = current($order->connections_from(array(
-			"type" => 2 
-		)));
-		$person = $person->to();
+		if($no_pdata_check == 1)
+		{
+			if(aw_global_get("uid") != "")
+			{
+				$user = obj(aw_global_get("uid_oid"));
+				$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
+			}
+		}
+		else
+		{
+			$person = current($order->connections_from(array(
+				"type" => "RELTYPE_PERSON",
+			)));
+			$person = $person->to();
+		}
 		
 		if(!$person)
 		{
 			$this->read_template("orders_form.tpl");
-			return;			
+			return;
 		}
 		
 		if($person->prop("email"))
@@ -321,6 +355,7 @@ class orders_form extends class_base
 		}
 
 		$this->vars(array(
+			"person_name" => $person->name(),
 			"firstname" => $person->prop("firstname"),
 			"lastname" => $person->prop("lastname"),
 			"personal_id" => $person->prop("personal_id"),
@@ -338,6 +373,45 @@ class orders_form extends class_base
 			"birthday" => get_lc_date($person->prop("birthday"), 1),
 			"payment_type" => ($_SESSION["orders_form"]["payment"]["type"] == "cod" ? "Lunamaks" : "J&auml;relmaks"),
 		));
+		$add_props = array();
+		if(aw_global_get("uid") != "")
+		{
+			$user = obj(aw_global_get("uid_oid"));
+			if($user->is_connected_to(array(
+				"type" => "RELTYPE_PERSON",
+				"to" => $person->id(),
+			)))
+			{
+				foreach($user->properties() as $name => $val)
+				{
+					$add_props["user_data_$name"] = $val;
+				}
+			}
+		}
+		if($company = reset($person->connections_from(array("type" => "RELTYPE_WORK"))))
+		{
+			$com = $company->to();
+			foreach($com->properties() as $name => $val)
+			{
+				if($name == "email_id" && is_oid($val) && $this->can("view", $val))
+				{
+					$ob = obj($val);
+					$add_props["org_data_email_value"] = $ob->prop("mail");
+				}
+				elseif($name == "phone_id" && is_oid($val) && $this->can("view", $val))
+				{
+					$ob = obj($val);
+					$add_props["org_data_phone_value"] = $ob->name();
+				}
+				elseif($name == "contact" && is_oid($val) && $this->can("view", $val))
+				{
+					$ob = obj($val);
+					$add_props["org_data_address_value"] = $ob->name();
+				}
+				$add_props["org_data_$name"] = $val;
+			}
+		}
+		$this->vars($add_props);
 
 		if ($_SESSION["orders_form"]["payment"]["type"] == "rent")
 		{
@@ -353,11 +427,18 @@ class orders_form extends class_base
 				));
 			}
 		}
+		if($arr["show_order"] != 1)
+		{
+			$this->vars(array(
+				"CONF_BLOCK" => $this->parse("CONF_BLOCK"),
+				"SUBMIT_BLOCK" => $this->parse("SUBMIT_BLOCK"),
+			));
+		}
 
 		$retval = $this->parse();
 		$this->read_template("orders_form.tpl");
 
-		return 	$retval;
+		return $retval;
 	}
 	
 	function get_persondata_form($arr)	
@@ -497,64 +578,89 @@ class orders_form extends class_base
 	
 	function get_additems_form($arr)
 	{
+		$rval = "";
+		$obj_inst = obj($arr["id"]);
 		$this->read_template("orders_order_item.tpl");
-		$errors = $_SESSION["order_form_errors"]["items"];
-		
+		$num_rows = ((int)$obj_inst->prop("num_rows")) >= 1 ? (int)$obj_inst->prop("num_rows") : 1;
 		$add_change_caption = "Lisa tellimusse";
 		
 		if($_GET["editid"])
 		{
+			$num_rows = 1;
 			$obj = &obj($_GET["editid"]);
 			$_SESSION["order_eoid"] = $_GET["editid"];
 			
-			$values["name"] = $obj->prop("name");
-			$values["product_size"] = $obj->prop("product_size");
-			$values["product_color"] = $obj->prop("product_color");
-			$values["product_code"] = $obj->prop("product_code");
-			$values["product_count"] = $obj->prop("product_count");
-			$values["product_price"] = $obj->prop("product_price");
-			$values["product_page"] = $obj->prop("product_page");
-			$values["product_image"] = $obj->prop("product_image");
+			$values[0]["name"] = $obj->prop("name");
+			$values[0]["product_size"] = $obj->prop("product_size");
+			$values[0]["product_color"] = $obj->prop("product_color");
+			$values[0]["product_code"] = $obj->prop("product_code");
+			$values[0]["product_count"] = $obj->prop("product_count");
+			$values[0]["product_price"] = $obj->prop("product_price");
+			$values[0]["product_page"] = $obj->prop("product_page");
+			$values[0]["product_image"] = $obj->prop("product_image");
 			
 			$add_change_caption = "Salvesta muudatused";
 		}
 		else 
 		{
-			$values = $_SESSION["order_form_values"];
+			$values = safe_array($_SESSION["order_form_values"]);
 		}
+		$_tmp = $values;
 		
+		$errors = $_SESSION["order_form_errors"]["items"];
+		$_ertmp = $errors;
 		$this->vars(array(
 			"add_change_caption" => $add_change_caption,
 			"id" => $_SESSION["order_cart_id"],
-			"product_code_error" => $errors["product_code"]["msg"],
-			"product_code_value" => $values["product_code"],
-			
-			"product_name_error" => $errors["name"]["msg"],
-			"product_name_value" => $values["name"],
-			
-			"product_size_error" => $errors["product_size"]["msg"],
-			"product_size_value" => $values["product_size"],
-			
-			"product_color_error" => $errors["product_color"]["msg"],
-			"product_color_value" => $values["product_color"],
-			
-			"product_count_error" => $errors["product_count"]["msg"],
-			"product_count_value" => $values["product_count"],
-			
-			"product_price_error" => $errors["product_price"]["msg"],
-			"product_price_value" => $values["product_price"],
-			
-			"product_page_error" => $errors["product_page"]["msg"],
-			"product_page_value" => $values["product_page"],
-			
-			"product_image_error" => $errors["product_image"]["msg"],
-			"product_image_value" => $values["product_image"],
 		));
+		reset($values);
+		for($i = 0; $i < $num_rows; $i++)
+		{
+			if(list($key, $values) = @each($values))
+			{
+				$errors = $_ertmp[$key];
+			}
+			else
+			{
+				$values = array();
+				$errors = array();
+			}
+			$this->vars(array(
+				"num" => $i,
+				"product_code_error" => $errors["product_code"]["msg"],
+				"product_code_value" => $values["product_code"],
+				
+				"product_name_error" => $errors["name"]["msg"],
+				"product_name_value" => $values["name"],
+				
+				"product_size_error" => $errors["product_size"]["msg"],
+				"product_size_value" => $values["product_size"],
+				
+				"product_color_error" => $errors["product_color"]["msg"],
+				"product_color_value" => $values["product_color"],
+				
+				"product_count_error" => $errors["product_count"]["msg"],
+				"product_count_value" => $values["product_count"],
+				
+				"product_price_error" => $errors["product_price"]["msg"],
+				"product_price_value" => $values["product_price"],
+				
+				"product_page_error" => $errors["product_page"]["msg"],
+				"product_page_value" => $values["product_page"],
+				
+				"product_image_error" => $errors["product_image"]["msg"],
+				"product_image_value" => $values["product_image"],
+			));
+			
+			unset($_SESSION["order_form_errors"]["items"][$key]);
+			unset($_SESSION["order_form_values"][$key]);
+			$rval .= $this->parse("ELEMENT"); 
+		}
 		
-		unset($_SESSION["order_form_errors"]["items"]);
-		unset($_SESSION["order_form_values"]);
-		
-		$this->submerge = 1;
+		$this->vars(array(
+			"ELEMENT" => $rval,
+		));
+		//$this->submerge = 1;
 		$retval = $this->parse();
 		$this->read_template("orders_form.tpl");
 		$this->submerge = 1;
@@ -674,11 +780,9 @@ class orders_form extends class_base
 	{	
 		$order = &obj($_SESSION["order_cart_id"]);
 		$form = &obj($_SESSION["order_form_id"]);
-		$conns = $order->connections_from(array(
+		if(!$conns = $order->connections_from(array(
 			"type" => "RELTYPE_ORDER"
-		));
-		
-		if(!$conns)
+		)))
 		{
 			return;
 		}
@@ -709,6 +813,10 @@ class orders_form extends class_base
 				"product_page" => $item->prop("product_page"),
 				"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
 			));
+			if(!$_SESSION["show_order"])
+			{
+				$this->vars(array("CHANGE_BLOCK" => $this->parse("CHANGE_BLOCK")));
+			}
 			$retval.= $this->parse("shop_cart_table");
 			$totalsum = $totalsum + $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price"));
 		}

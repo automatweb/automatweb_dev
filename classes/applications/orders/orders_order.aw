@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.7 2005/03/08 13:27:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.8 2005/03/18 16:04:35 ahti Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -328,46 +328,56 @@ class orders_order extends class_base
 	function add_to_cart($arr)
 	{
 		//This solutions sucks, but cant find better one now
-		$submit_data = $arr["orders"];
-		$submit_data["class"] = "orders_item";
-		$submit_data["group"] = "general";
-		$submit_data["parent"] = $_SESSION["order_cart_id"];
-		
-		$oform = &obj($_SESSION["order_form_id"]);
-		$check["cfgform_id"] = $oform->prop("itemform");
-		$check["request"] = $submit_data;
-	
-		$errors = $this->validate_data($check);
-		
-		if(!$errors)
+		$submit_data_a = new aw_array($arr["orders"]);
+		foreach($submit_data_a->get() as $key => $submit_data)
 		{
-			$item = &obj($_SESSION["order_eoid"]);
-			$item->set_class_id(CL_ORDERS_ITEM);
-			$item->set_parent($_SESSION["order_cart_id"]);
-			$item->set_prop("name", $arr["orders"]["name"]);
-			$item->set_prop("product_code", $arr["orders"]["product_code"]);
-			$item->set_prop("product_color", $arr["orders"]["product_color"]);
-			$item->set_prop("product_size", $arr["orders"]["product_size"]);
-			$item->set_prop("product_count", $arr["orders"]["product_count"]);
-			$item->set_prop("product_price", $arr["orders"]["product_price"]);
-			$item->set_prop("product_image", $arr["orders"]["product_image"]);
-			$item->set_prop("product_page", $arr["orders"]["product_page"]);
-		
-			$item->save();
-			$conn = new connection();
+			$_tmp = $submit_data;
+			$submit_data["class"] = "orders_item";
+			$submit_data["group"] = "general";
+			$submit_data["parent"] = $_SESSION["order_cart_id"];
 			
-			$conn->load(array(
-				"from" => $_SESSION["order_cart_id"],
-				"to" => $item->id(),
-				"reltype" => 1,
-			));
-			$conn->save();
-			unset($_SESSION["order_eoid"]);
-		}
-		else
-		{
-			$_SESSION["order_form_errors"]["items"] = $errors;
-			$_SESSION["order_form_values"] = $arr["orders"];
+			$oform = &obj($_SESSION["order_form_id"]);
+			$check["cfgform_id"] = $oform->prop("itemform");
+			$check["request"] = $submit_data;
+			$errors = $this->validate_data($check);
+			if(!$errors && strlen(implode("", $_tmp)) > 0)
+			{
+				if(is_oid($_SESSION["order_eoid"]) && $this->can("view", $_SESSION["order_eoid"]))
+				{
+					$oid = $_SESSION["order_eoid"];
+				}
+				else
+				{
+					$oid = null;
+				}
+				$item = obj($oid);
+				$item->set_class_id(CL_ORDERS_ITEM);
+				$item->set_parent($_SESSION["order_cart_id"]);
+				$item->set_prop("name", $submit_data["name"]);
+				$item->set_prop("product_code", $submit_data["product_code"]);
+				$item->set_prop("product_color", $submit_data["product_color"]);
+				$item->set_prop("product_size", $submit_data["product_size"]);
+				$item->set_prop("product_count", $submit_data["product_count"]);
+				$item->set_prop("product_price", $submit_data["product_price"]);
+				$item->set_prop("product_image", $submit_data["product_image"]);
+				$item->set_prop("product_page", $submit_data["product_page"]);
+			
+				$item->save();
+				$conn = new connection();
+				
+				$conn->load(array(
+					"from" => $_SESSION["order_cart_id"],
+					"to" => $item->id(),
+					"reltype" => 1,
+				));
+				$conn->save();
+				unset($_SESSION["order_eoid"]);
+			}
+			else
+			{
+				$_SESSION["order_form_errors"]["items"][$key] = $errors;
+				$_SESSION["order_form_values"][$key] = $arr["orders"][$key];
+			}
 		}
 
 		return $this->mk_my_orb("change", array(
@@ -498,8 +508,30 @@ class orders_order extends class_base
 		
 		$form_inst = get_instance(CL_ORDERS_FORM);
 		$order = &obj($_SESSION["order_cart_id"]);
-		$person = $order->get_first_obj_by_reltype('RELTYPE_PERSON');
-		
+		$vars = array("order" => $order);
+		if($form->prop("no_pdata_check") == 1)
+		{
+			if(aw_global_get("uid") != "")
+			{
+				$user = obj(aw_global_get("uid_oid"));
+				$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
+			}
+			if(!$order->is_connected_to(array(
+				"type" => "RELTYPE_PERSON",
+				"to" => $person->id(),
+			)))
+			{
+				$order->connect(array(
+					"to" => $person->id(),
+					"reltype" => "RELTYPE_PERSON",
+				));
+			}
+			$vars["no_pdata_check"] = 1;
+		}
+		else
+		{
+			$person = $order->get_first_obj_by_reltype('RELTYPE_PERSON');
+		}
 		if($person && $person->prop("email"))
 		{
 			$person_email = &obj($person->prop("email"));
@@ -510,12 +542,14 @@ class orders_order extends class_base
 		$msg->set_prop("name", $form->name());
 		$msg->set_prop("html_mail", 1);
 			
-		
-		$content = $form_inst->get_confirm_persondata($order)."<br />".($_SESSION["orders_form"]["payment"]["type"] == "rent" ? $form_inst->get_rent_table() : $form_inst->get_cart_table());
+		$_SESSION["show_order"] = 1;
+		$vars["show_order"] = 1;
+		$content = $form_inst->get_confirm_persondata($vars)."<br />".($_SESSION["orders_form"]["payment"]["type"] == "rent" ? $form_inst->get_rent_table() : $form_inst->get_cart_table());
+		unset($_SESSION["show_order"]);
 		$msg->set_prop("message", $content);
 		
 		$msg->save();
-		$mail_inst = get_instance(CL_MESSAGE);	
+		$mail_inst = get_instance(CL_MESSAGE);
 		$mail_inst->send_message(array(
 			"id" => $msg->id(),
 		));
@@ -526,7 +560,18 @@ class orders_order extends class_base
 		$form = &obj($_SESSION["order_form_id"]);
 		$mail_obj = &obj($form->prop("ordemail"));
 		$order = &obj($_SESSION["order_cart_id"]);
-		$person = $order->get_first_obj_by_reltype('RELTYPE_PERSON');
+		if($form->prop("no_pdata_check") == 1)
+		{
+			if(aw_global_get("uid") != "")
+			{
+				$user = obj(aw_global_get("uid_oid"));
+				$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
+			}
+		}
+		else
+		{
+			$person = $order->get_first_obj_by_reltype('RELTYPE_PERSON');
+		}
 		if(!$person || !$person->prop("email"))
 		{
 			return;
@@ -797,6 +842,19 @@ class orders_order extends class_base
 			return $this->mk_my_orb("rent_step_2", array("id" => $arr["id"], "section" => $arr["section"]));
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "section" => $arr["section"], "group" => "confirmpage"), "orders_form");
+	}
+	
+	function request_execute($obj)
+	{
+		$form = get_instance(CL_ORDERS_FORM);
+		//$_SESSION["order_cart_id"] = $obj->id();
+		//$_SESSION["order_form_id"] = $obj->id();
+		$_SESSION["show_order"] = 1;
+		$val = $form->change(array("show_order" => 1));
+		unset($_SESSION["show_order"]);
+		//unset($_SESSION["order_form_id"]);
+		
+		return $val;
 	}
 }
 ?>
