@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.240 2004/03/18 11:32:09 duke Exp $
+// $Id: class_base.aw,v 2.241 2004/03/23 16:11:52 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -105,6 +105,7 @@ class class_base extends aw_template
 
 		$this->vcl_register = array(
 			"classificator" => "classificator",
+			"comments" => "vcl/comments",
 		);
 		parent::init($arg);
 	}
@@ -1676,6 +1677,32 @@ class class_base extends aw_template
 				continue;
 			};
 
+			// eventually all VCL components will have to implement their
+                        // own init_vcl_property method
+                        if ($this->vcl_register[$val["type"]])
+                        {
+                                $reginst = $this->vcl_register[$val["type"]];
+                                $ot = get_instance($reginst);
+                                if (is_callable(array($ot,"init_vcl_property")))
+                                {
+                                        $res = $ot->init_vcl_property(array(
+                                                "property" => &$val,
+                                                "clid" => $this->clid,
+                                                "obj_inst" => &$this->obj_inst,
+                                        ));
+
+                                        if (is_array($res))
+                                        {
+                                                foreach($res as $rkey => $rval)
+                                                {
+                                                        $this->convert_element(&$rval);
+                                                        $resprops[$rkey] = $rval;
+                                                };
+                                        };
+                                };
+
+                        }
+                        else
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
 				$meth = $val["callback"];
@@ -2619,14 +2646,17 @@ class class_base extends aw_template
 				$vcl_inst->process_releditor($argblock);
 			};
 
-			if ($property["type"] == "classificator")
-			{
-				$vcl_inst = get_instance("classificator");
-				$argblock["prop"] = $property;
-				$argblock["clid"] = $this->clid;
-				$vcl_inst->process_classificator($argblock);
-
-			};
+			if ($this->vcl_register[$property["type"]])
+                        {
+                                $reginst = $this->vcl_register[$property["type"]];
+                                $ot = get_instance($reginst);
+                                if (is_callable(array($ot,"process_vcl_property")))
+                                {
+                                        $argblock["prop"] = $property;
+                                        $argblock["clid"] = $this->clid;
+                                        $res = $ot->process_vcl_property($argblock);
+                                };
+                        };
 
 			if ($property["store"] == "no")
 			{
