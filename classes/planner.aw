@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.171 2004/02/12 11:15:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.172 2004/02/17 13:25:50 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -353,21 +353,23 @@ class planner extends class_base
 			// ignore projects, if there are no users connected to this calendar
 			if (sizeof($owners) == 0)
 			{
-				continue;
-			};
-
-			$user_ids = array();
-
-			foreach($owners as $owner)
+			}
+			else
 			{
-				$user_ids[] = $owner->prop("to");
-			};
 
-			$event_ids = $event_ids + $prj->get_events_from_projects(array(
-				"user_ids" => $user_ids,
-				"project_id" => aw_global_get("project"),
-				"type" => "my_projects",
-			));
+				$user_ids = array();
+
+				foreach($owners as $owner)
+				{
+					$user_ids[] = $owner->prop("to");
+				};
+
+				$event_ids = $event_ids + $prj->get_events_from_projects(array(
+					"user_ids" => $user_ids,
+					"project_id" => aw_global_get("project"),
+					"type" => "my_projects",
+				));
+			};
 		};
 		
 		$rv = array();
@@ -1134,6 +1136,13 @@ class planner extends class_base
 		{
 			return false;
 		};
+
+		if ($args["activegroup"] == "add_event" && $args["id"] == "add_event")
+		{
+			$link = &$args["link"];
+			$link = $this->mk_my_orb("change",$args["request"]);
+		};
+
 	}
 
 	////
