@@ -8,6 +8,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_USER, on_delete_alia
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 
+EMIT_MESSAGE(MSG_USER_CREATE);
+
 */
 
 /*
@@ -1324,6 +1326,14 @@ class user extends class_base
 					}
 				}
 
+				post_message_with_param(
+					MSG_USER_CREATE,
+					$this->clid,
+					array(
+						"user_oid" => $arr["obj_inst"]->id(),
+					)
+				);
+
 				// now, find the correct brother
 				if ($go_to)
 				{
@@ -1356,7 +1366,7 @@ class user extends class_base
 	function get_person_for_user($u)
 	{
 		$person_c = reset($u->connections_from(array(
-			"type" => 2 // RELTYPE_PERSON
+			"type" => "RELTYPE_PERSON",
 		)));
 
 		if (!$person_c)
@@ -1394,7 +1404,7 @@ class user extends class_base
 		{
 			$p_o = obj($person);
 			$org_c = reset($p_o->connections_from(array(
-				"type" => 6 // RELTYPE_WORK
+				"type" => "RELTYPE_WORK",
 			)));
 
 			if (!$org_c)
