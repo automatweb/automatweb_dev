@@ -71,6 +71,7 @@ class selection extends class_base
 
 	/*function callback_get_rel_types()
 	{
+		exit_function("selection::");
 		return array(
 			PILOT => 'pilootobjekt',
 		);
@@ -631,6 +632,7 @@ class selection extends class_base
 			$str = ' valim tühi, või objekte pole aktiivseks tehtud';
 		}
 		//$this->vars(array('object' => $str));
+		exit_function("selection::");
 		return $str;
 		//$this->parse();
 	}
