@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.15 2003/04/28 16:11:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.16 2003/06/13 11:41:59 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -65,12 +65,7 @@ class ml_member extends class_base
 					return PROP_IGNORE;
 				};
 				$conf_obj = $args["obj"]["meta"]["conf_obj"];
-				if (empty($conf_obj))
-				{
-					$data["error"] = "The configuration object for this list member has not been set (try deleting the member and recreting it, after making sure that the list has a configuration object set)!";
-					$retval = PROP_ERROR;
-				}
-				else
+				if (!empty($conf_obj))
 				{
 					$mlc_inst = get_instance("mailinglist/ml_list_conf");
 					$fl = $mlc_inst->get_forms_by_id($conf_obj);
@@ -101,6 +96,10 @@ class ml_member extends class_base
 						"l_sent" => $this->mk_my_orb("sent",array("id" => $args["obj"]["oid"],"lid" => $lid)),
 					));
 					$data["value"] = $this->parse();
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
 				};
 				break;
 		}
@@ -567,5 +566,15 @@ class ml_member extends class_base
 		}
 		return array($mailto,$memberdata);
 	}
+
+	function callback_pre_save($args)
+	{
+		$coredata = &$args["coredata"];
+		$formdata = $args["form_data"];
+		if (!empty($formdata["name"]) && !empty($formdata["mail"]))
+		{
+			$coredata["name"] = $formdata["name"] . " &lt;" .$formdata["mail"] . "&gt;";
+		};
+	}		
 };
 ?>
