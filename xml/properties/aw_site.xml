@@ -88,16 +88,6 @@
             <caption>Vali templatede kataloogid, mis uude saiti kopeerida</caption>
       </property>
       <property>
-            <name>tpls_are_linked</name>
-            <table>objects</table>
-            <group>templates</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Kas templated linkida, mitte kopeerida</caption>
-      </property>
-      <property>
             <name>select_imgcss_sites</name>
             <table>objects</table>
             <group>templates</group>

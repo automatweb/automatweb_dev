@@ -40,8 +40,8 @@
 @property select_tpl_folders type=select multiple=1 size=20 group=templates
 @caption Vali templatede kataloogid, mis uude saiti kopeerida
 
-@property tpls_are_linked type=checkbox ch_value=1 group=templates
-@caption Kas templated linkida, mitte kopeerida
+property tpls_are_linked type=checkbox ch_value=1 group=templates
+caption Kas templated linkida, mitte kopeerida
 
 @property select_imgcss_sites type=select group=templates
 @caption Vali sait, millelt v&otilde;tta css ja pildid
@@ -931,13 +931,11 @@ class aw_site extends class_base
 			$ip = gethostbyname($site['url']);
 			if ($ip == $site['url'])
 			{
-				$this->err_str = "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! ($site[url]) ";
-				return false;
+				$this->warning_str = "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! ($site[url]) ";
 			}
 			if ($ip != aw_ini_get("install.default_ip"))
 			{
 				$this->err_str = "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeen viitab valele IP aadressile! (vajalik = ".aw_ini_get("install.default_ip")." domeeni ip = $ip)";
-				return false;
 			}
 		}
 		else
