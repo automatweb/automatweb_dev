@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.21 2001/10/31 03:21:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.22 2001/11/06 10:03:32 cvs Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -786,7 +786,7 @@ class form_table extends form_base
 			{
 				$title = $cc["title"];
 			}
-			$xml.="<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\"";
+			$xml.="<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\" ";
 			if ($cc["sortable"])
 			{
 				$xml.=" sortable=\"1\" ";
