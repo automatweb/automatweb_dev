@@ -20,7 +20,7 @@
 
 		<action name="invoke">
 			<function name="invoke">
-				<required name="name"/>
+				<required name="id"/>
 			</function>
 		</action>
 
@@ -34,6 +34,10 @@
 		
 		<action name="import_struktuurid" nologin="1">
 			<function name="import_struktuurid"/>
+		</action>
+		
+		<action name="import_tootajad" nologin="1">
+			<function name="import_tootajad"/>
 		</action>
 		
 	</class>
