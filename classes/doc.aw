@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.37 2003/09/08 14:18:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.38 2003/09/16 12:20:08 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -97,12 +97,6 @@
 @property tm type=textbox size=20
 @caption Kuupäev
 
-@property referer type=textbox size=50 table=objects field=meta method=serialize
-@caption Ref
-
-@property refopt type=select table=objects store=no
-@caption Ref tüüp
-
 @property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1
 @caption 'Prindi' nupp
 
@@ -164,6 +158,8 @@
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
+
+@classinfo trans=1
 
 */
 
