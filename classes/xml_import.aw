@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.16 2003/06/10 15:04:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.17 2003/06/10 15:44:56 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -224,19 +224,13 @@ class xml_import extends class_base
 						$ylem_id = $val["attributes"]["id"];
 						$attr = $val["attributes"];		
 						$ylem_name = $this->convert_unicode($attr["nimetus"]);
+						$ylem_jrk = $val["attributes"]["jrk"];
 						$this->quote($osakond);
 					};
 				};
 
 				if ( ($val["type"] == "close"))
 				{
-					/*
-						print  "popping<br>";
-						print "<pre>";
-						print_r($val);
-						print "</pre>";
-					print "<b>popping</b><br>";
-						*/
 					$str_level--;
 					array_pop($ylem_list);
 					array_pop($ylem_ilist);
@@ -256,20 +250,9 @@ class xml_import extends class_base
 					$faks = $attr["faks"];
 					$jrk = $attr["jrk"];
 
-					/*
-					print "<pre>";
-					print_r($ylem_list);
-					print  "</pre>";
-					*/
 					$real_ylem_name = $ylem_list[sizeof($ylem_list) - 1];
 					$real_ylem_id = $ylem_ilist[sizeof($ylem_list) - 1];
 
-					/*if (preg_match("/vastutusala/",$nimetus))
-					{
-						$real_ylem_id = -1;
-					};
-					*/
-				
 					if (not($real_ylem_id))
 					{
 						if (preg_match("/teaduskond/",$nimetus))
@@ -305,8 +288,8 @@ class xml_import extends class_base
 						$t3sort = $t3taseme_id . $str_level . sprintf("%02d",$jrk) . $nimetus;
 					};
 						
-					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus,jrk,jrknimetus,3taseme_ylem_id,3taseme_sort)
-							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name','$jrk','$jrknimetus','$t3_ylem','$t3sort')";
+					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylem_jrk,ylemyksus,jrk,jrknimetus,3taseme_ylem_id,3taseme_sort)
+							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$ylem_jrk','$real_ylem_name','$jrk','$jrknimetus','$t3_ylem','$t3sort')";
 					$counter++;
 					if ($str_level == 3)
 					{
