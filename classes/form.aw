@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.55 2001/08/14 16:08:56 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.56 2001/08/16 11:06:43 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1918,6 +1918,7 @@ class form extends form_base
 				$this->raise_error("No forms selected as search targets!");
 			}
 
+			$this->search_form = $id;
 			// create the sql that searches from this form's entries
 			$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 AND objects.lang_id = ".$GLOBALS["lang_id"]." " ;
 			if (is_array($parent))
