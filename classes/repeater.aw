@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.2 2001/06/14 14:53:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.3 2001/06/18 13:19:25 duke Exp $
 class repeater {
 	////
 	// !Konstruktor.
@@ -119,6 +119,80 @@ class repeater {
 					$this->vector = $newvec;
 				};
 				break;
+			// kuud
+			case "3":
+				// siin kontekstis tähendab pwhen
+				// "Iga kuu nendel nädalatel"
+				// pwhen 2 on 
+				// "Iga kuu nendel päevadel"
+				if ($pwhen2)
+				{
+					$newvec = array();
+					$active_days = explode(",",$pwhen2);
+					foreach($this->vector as $numpair)
+					{
+						list($st,$et) = each($numpair);
+						$cnt = $this->get_day_diff($st,$et);
+						list($d1,$m1,$y1) = split("-","d-m-Y",$st);
+						for ($i = 0; $i <= $cnt; $i++)
+						{
+							$sx = mktime(0,0,0,$m1,$d1 + $i,$y1);
+							$newstart = ($st > $sx) ? $st : $sx;
+							$sy = mktime(23,59,59,$m1,$d1 + $i,$y1);
+							$daycode = date("j",$sx);
+							if (in_array($daycode,$active_days))
+							{
+								if ($sy > $st)
+								{
+									$newvec[] = array($newstart => $sy);
+								};
+							};
+						};
+									
+					}
+					$this->vector = $newvec;
+				}
+				break;
+
+			// nädalad
+			case "2":
+				$newvec = array();
+				// siin kontekstis tähendab pwhen seda, et märgitud oli 
+				// "Kordub iga nädala nendel päevadel:"
+				if ($pwhen)
+				{
+					$active_days = explode(",",$pwhen);
+					foreach($this->vector as $numpair)
+					{
+						list($st,$et) = each($numpair);
+						// I need to know what day of the week this is.
+						$cnt = $this->get_day_diff($st,$et);
+						list($d1,$m1,$y1) = split("-",date("d-m-Y",$st));
+						$wc = 0;
+						for ($i = 0; $i <= $cnt; $i++)
+						{
+							$sx = mktime(0,0,0,$m1,$d1 + $i,$y1);
+							$newstart = ($st > $sx) ? $st : $sx;
+							$sy = mktime(23,59,59,$m1,$d1 + $i,$y1);
+							$daycode = date("w",$sx);
+							if ($daycode == 0)
+							{
+								$daycode = 7;
+								$wc++;
+							};
+							if (in_array($daycode,$active_days))
+							{
+								if ($sy > $st)
+								{
+									$newvec[] = array($newstart => $sy);
+								};
+							};
+						};
+					};
+					$this->vector = $newvec;
+				}
+				break;
+
 
 			// päevad
 			case "1":
