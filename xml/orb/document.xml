@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="document">
-		<action name="new">
+		<action name="new" public="1">
 			<function name="add">
 				<arguments>
 					<required name="parent"/>
@@ -9,7 +9,7 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="change">
+		<action name="change" public="1">
 			<function name="change">
 				<arguments>
 					<required name="id"/>
