@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.33 2003/12/16 14:29:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.34 2003/12/16 15:35:15 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -374,6 +374,35 @@ class ml_list extends class_base
 			"url" => "javascript:document.changeform.action.value='delete_members';document.changeform.submit();",		
 			"img" => "delete.gif",
 		));		
+		$toolbar->add_separator();
+		$toolbar->add_cdata(html::href(array(
+			"url" => $this->mk_my_orb("export_members",array("id" => $arr["obj_inst"]->id(),"filename" => $arr["obj_inst"]->name() . " liikmed.txt")),
+			"caption" => "ekspordi liikmed",
+		)));
+	}
+
+	function export_members($arr)
+	{
+		$members = $this->get_members($arr["id"]);
+		$ml_member_inst = get_instance(CL_ML_MEMBER);
+
+		$ser = "";
+		foreach($members as $key => $val)
+		{
+			list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
+				"lid" => $arr["id"],
+				"member" => $val["oid"],
+			));
+			$ser .= $memberdata["name"];
+			$ser .= ",";
+			$ser .= $mailto;
+			$ser .= "\n";
+		};
+		header("Content-Type: text/plain");
+		header("Content-length: " . strlen($ser));
+		header("Content-Disposition: filename=liikmed.txt");
+		print $ser;
+		exit;
 	}
 
 	function gen_member_list($arr)
