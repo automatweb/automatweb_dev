@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.255 2004/05/14 09:03:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.256 2004/05/18 13:44:58 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -733,17 +733,21 @@ class document extends aw_template
 		// v6tame pealkirjast <p> maha
 		$doc["title"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["title"]);
 
-		if ($notitleimg != 1)
+		// only parse aliases if there might be something to parse
+		if (strpos($doc["title"],"#") !== false)
 		{
-			$doc["title"] = $this->parse_aliases(array(
-				"text"	=> $doc["title"],
-				"oid"	=> $doc["docid"],
-			));
-		}
-		else
-		{
-			$doc["title"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["title"]);
-		}
+			if ($notitleimg != 1)
+			{
+					$doc["title"] = $this->parse_aliases(array(
+						"text"	=> $doc["title"],
+						"oid"	=> $doc["docid"],
+					));
+			}
+			else
+			{
+				$doc["title"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["title"]);
+			}
+		};
 
 		// this is useless. do we use that code anywhere?
 		if (!(strpos($doc["content"], "#board_last5#") === false))
@@ -779,17 +783,26 @@ class document extends aw_template
 
 		if (!isset($text) || $text != "undef") 
 		{
-			$awt->start("phase721");
-			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
-			$awt->stop("phase721");
+			if (strpos($doc["content"],"#") !== false)
+			{
+				$awt->start("almgr-parse-oo-aliases");
+				$awt->count("almgr-parse-oo-aliases");
+				global $XX3;
+				if ($XX3)
+				{
+					arr($doc["content"]);
+				};	
+				$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
+				$awt->stop("almgr-parse-oo-aliases");
 		
-			$awt->start("phase722");
-			$doc["content"] = $this->parse_aliases(array(
-				"oid" => $docid,
-				"text" => $doc["content"],
-			));
+				$awt->start("phase722");
+				$doc["content"] = $this->parse_aliases(array(
+					"oid" => $docid,
+					"text" => $doc["content"],
+				));
 
-			$awt->stop("phase722");
+				$awt->stop("phase722");
+			};
 
 			// this damn ugly-ass hack is here because we need to be able to put the last search value
 			// from form_table to document title
@@ -831,45 +844,7 @@ class document extends aw_template
 		));
 
 		$awt->stop("phase7");
-		$awt->start("phase8");
 
-		////if ((!empty($doc["photos"]) || !empty($doc["author"])) && $this->cfg["link_authors"])
-
-		if ((!empty($doc["photos"]) || !empty($doc["author"])) && $this->cfg["link_authors"] && (is_oid($this->cfg["link_authors_section"]) || is_array($this->cfg["link_authors_section"])))
-		{
-			$authors_done = aw_global_get("authors_done");
-			if ($authors_done)
-			{
-				$author_list = aw_global_get("author_list");
-				aw_global_set("authors_done",1);
-			}
-			else
-			{
-				$ap_items = new aw_array($this->cfg["link_authors_section"]);
-				$author_list = array();
-
-				foreach($ap_items->get() as $ap_item)
-				{
-					$author_tree = new object_tree(array(
-						"parent" => $ap_item,
-						"class_id" => array(CL_MENU,CL_DOCUMENT),
-						"status" => STAT_ACTIVE, 
-					));
-					$al = $author_tree->to_list();
-					for($item =& $al->begin(); !$al->end(); $item =& $al->next())
-					{
-						if ($item->name() != "")
-						{
-							$author_list[$item->name()] = $item->id();
-						};
-					}
-				};
-				aw_global_set("authors_done",1);
-				aw_global_set("author_list",$author_list);
-			};
-		};
-
-		$awt->stop("phase8");
 
 		if ($doc["photos"])
 		{
@@ -877,15 +852,14 @@ class document extends aw_template
 			{
 
 				$authors = array();
-				$x = array();
-				foreach($author_list as $author_name => $author_doc_id)
-				{
-					if (stristr($author_name,$doc["author"]) !== false)
-					{
-						$x[$doc["photos"]] = $author_doc_id;
-					};
-
-				};
+				$olist = new object_list(array(
+					"parent" => $this->cfg["link_authors_section"],
+					"class_id" => array(CL_MENU,CL_DOCUMENT),
+					"status" => STAT_ACTIVE, 
+					"name" => $doc["photos"],
+				));
+				$author_names = $olist->names();
+				$x = array_flip($author_names);
 
 				// Nothing was found, craft a special array required by the following block of code
 				// (remains from ancient AW)
@@ -960,18 +934,14 @@ class document extends aw_template
 			if ($this->cfg["link_authors"] && isset($this->templates["ablock"])) 
 			{
 				$authors = array();
-				$x = array();
-
-				// XXX: does not work with multiple authors
-				$_al = new aw_array($author_list);
-				foreach($_al->get() as $author_name => $author_doc_id)
-				{
-					if (stristr($author_name,$doc["author"]) !== false)
-					{
-						$x[$doc["author"]] = $author_doc_id;
-					};
-
-				};
+				$olist = new object_list(array(
+					"parent" => $this->cfg["link_authors_section"],
+					"class_id" => array(CL_MENU,CL_DOCUMENT),
+					"status" => STAT_ACTIVE, 
+					"name" => $doc["author"],
+				));
+				$author_names = $olist->names();
+				$x = array_flip($author_names);
 
 				if (sizeof($x) == 0)
 				{
@@ -3271,19 +3241,6 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "pwd_remind",
 					));
-		
-		// eventsitega seonduv kamm
-		/*
-		$mp = $this->register_parser(array(
-					"reg" => "/(#)event_(.+?)(#)/i",
-					));
-
-		$this->register_sub_parser(array(
-					"class" => "events",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-		));
-		*/
 	}
 
 	function parse_alias($args = array())
@@ -3458,6 +3415,7 @@ class document extends aw_template
 		@attrib name=feedback params=name nologin="1" default="0"
 		
 		@param section required
+		@param e optional type=int
 		
 		@returns
 		
@@ -3471,6 +3429,12 @@ class document extends aw_template
 		$feedback = get_instance("feedback");
 		$inf = $this->fetch($section);
 		$this->read_template("feedback.tpl");
+		if ($e == 1)
+		{
+			$this->vars(array(
+				"ERROR" => $this->parse("ERROR")
+			));
+		}
 		$this->vars(array(
 			"uid" => aw_global_get("uid")
 		));
