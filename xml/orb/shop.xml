@@ -130,7 +130,7 @@
 		<action name="order_history">
 			<function name="admin_orders">
 				<arguments>
-					<optional name="filter_uid" default="1"/>
+					<define name="filter_uid" value="1"/>
 					<required name="id"/>
 				</arguments>
 			</function>
