@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.15 2003/11/09 22:24:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.16 2003/11/26 16:27:28 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -23,6 +23,9 @@
 
 	@property date type=text store=no
 	@caption Kuupäev
+	
+	@property html_mail type=checkbox ch_value=1 field=type method=bitmask ch_value=1024
+	@caption HTML kiri
 
 	@property message type=textarea cols=80 rows=40 
 	@caption Sisu
@@ -36,13 +39,13 @@
 	property aliasmgr type=aliasmgr store=no
 	caption Aliased
 
-	@property msgrid type=hidden 
+	@property msgrid type=hidden store=no
 	@caption Msgrid
 
-	@property msgid type=hidden
+	@property msgid type=hidden store=no
 	@caption Msgid
 
-	@property mailbox type=hidden
+	@property mailbox type=hidden store=no
 	@caption Mailbox
 
 	classinfo relationmgr=yes
@@ -75,6 +78,19 @@ class mail_message extends class_base
 
 	function callback_load_object($arr)
 	{
+		if (empty($arr["request"]["mailbox"]) && isset($arr["request"]["id"]))
+		{
+			$this->state = "show";
+			$msgobj = new object($arr["request"]["id"]);
+			$msgdata["to"] = $msgobj->prop("mto");
+			$msgdata["from"] = $msgobj->prop("mfrom");
+			$msgdata["subject"] = $msgobj->name();
+			$msgdata["content"] = $msgobj->prop("message");
+			$msgdata["date"] = $this->time2date($msgobj->modified());
+			$this->local = true;
+			$this->msgdata = $msgdata;
+			return false;
+		};
 		$msgr = get_instance("messenger/messenger_v2");
 		$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
                 $msgr->_connect_server(array(
@@ -123,6 +139,7 @@ class mail_message extends class_base
 			$msgdata["from"] = $msgrobj->prop("fromname");
 			$msgdata["subject"] = "Re: " . $msgdata["subject"];
 			$msgdata["content"] = "\n\n\n" . str_replace("\n","\n> ",$msgdata["content"]);
+			$this->act = "reply";
 		}
 		elseif ($this->act == "forward")
 		{
@@ -147,23 +164,24 @@ class mail_message extends class_base
 			$this->state = "show";
 		};
 
+		
+
 	}
 
 	function callback_save_object($arr)
 	{
 		if ($arr["request"]["subgroup"] == "send")
 		{
-			// send the bloody message already
-			$part1["type"]= "TEXT";
-                        $part1["subtype"]="PLAIN";
-                        $part1["charset"] = "ISO-8859-4";
-                        $part1["contents.data"] = $arr["request"]["message"];
+			$this->awm = get_instance("aw_mail");
 
-			$body = array();
-			$partnum = 1;
-			$body[$partnum] = $part1;
-			
-			$envelope = array();
+			// hurrah, but I do need a way to save this message to a local
+			// folder and can you please tell me just how the fuck am I supposed
+			// to do this?
+
+			// aha .. we just check whether this account has any local folders
+			// set to be used as outbox
+
+
 
 			$msgr = get_instance("messenger/messenger_v2");
 			$msgr->set_opt("use_mailbox",$arr["request"]["mailbox"]);
@@ -174,22 +192,82 @@ class mail_message extends class_base
 			$identities = $msgr->_get_identity_list(array(
 				"id" => $arr["request"]["msgrid"],	
 			));
+			
+			$msgrobj = new object($arr["request"]["msgrid"]);
+			$outbox = $msgrobj->prop("msg_outbox");
 
-                        $envelope["from"] = $identities[$arr["request"]["mfrom"]];
-                        $envelope["subject"] = $arr["request"]["name"];
-                        $envelope["date"] = date('r');
+			if (!empty($outbox))
+			{
+				$to_addr = $arr["request"]["mto"];
+				if (is_numeric($to_addr))
+				{
+					$target_obj = new object($to_addr);
+					if ($target_obj->prop("class_id") == CL_ML_LIST)
+					{
+                                		$lists = array(":" . $target_obj->prop("name"));
+						$to_addr = join(",",$lists);
+					};
+					$to_list = true;
+				};
+				$arr["request"]["mto"] = $to_addr;
+				$arr["request"]["parent"] = $outbox;
+				$arr["request"]["mfrom"] = $identities[$arr["request"]["mfrom"]];
+				$arr["request"]["rawdata"] = $arr["request"];
+				// this should create a message object in local filesystem
+				// wuhuhuhuuu
+				$this->process_data($arr["request"]);
 
-                        $msg = imap_mail_compose($envelope,$body);
+				if ($to_list)
+				{
+					$mllist=get_instance("mailinglist/ml_list");
+					//http://intranet.automatweb.com/automatweb/orb.aw?class=ml_list&action=change&group=mail_report&id=77477&mail_id=83464&cb_part=1&fxt=1
+					$route_back = $this->mk_my_orb("change",array("id" => $target_obj->id(),"mail_id" => $this->id,"group" => "mail_report","cb_part" => 1,"fxt" => 1),"ml_list");
+					//$route_back=$this->mk_my_orb("change",array("id" => $this->id,"group" => "message_view"));
+					aw_session_set("route_back",$route_back);
+					// scheduleerib kirjade saatmise
+					$url=$mllist->route_post_message(array("id" => $this->id, "targets" => $lists));
+					Header("Location: $url");
+					die();
+				};
+			};
+
+			$msg = $arr["request"]["message"];
+
+			if ($arr["request"]["html_mail"])
+                	{
+				$this->awm->create_message(array(
+					"froma" => $identities[$arr["request"]["mfrom"]],
+					"subject" => $arr["request"]["name"],
+					"to" => $arr["request"]["mto"],
+					//"cc" => $cc,
+					"body" => "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju",
+				));
+                        	$this->awm->htmlbodyattach(array("data"=>$msg));
+                	}
+			else
+			{
+				$this->awm->create_message(array(
+					"froma" => $arr["request"]["mfrom"],
+					"subject" => $arr["request"]["name"],
+					"to" => $arr["request"]["mto"],
+					//"cc" => $cc,
+					"body" => $msg,
+				));
+			};
+
+
+			$this->awm->gen_mail();
 
 			// but I do need to save the message in the Sent items folder!
 			$msgr->drv_inst->store_message(array(
                                 "from" => $identities[$arr["request"]["mfrom"]],
                                 "to" => $arr["request"]["mto"],
                                 "subject" => $arr["request"]["name"],
-                                "message" => $msg,
+                                "message" => $this->awm->bodytext,
                         ));
 
-                        mail($arr["request"]["mto"],$arr["request"]["name"],"",$msg);
+
+                        //mail($arr["request"]["mto"],$arr["request"]["name"],"",$msg);
 
 
 			print "saadetud<p>";
@@ -222,7 +300,32 @@ class mail_message extends class_base
 				break;
 
 			case "mto":
-				$data["value"] = htmlspecialchars($this->msgdata["to"]);
+				// check whether the messenger object has any connections to 
+				// a list object
+				$msgr = get_instance("messenger/messenger_v2");
+				$opts = array();
+				$msgrobj = new object($arr["request"]["msgrid"]);
+				$outbox = $msgrobj->prop("msg_outbox");
+
+				if (!empty($outbox))
+				{
+					$opts = $msgr->_gen_address_list(array(
+						"id" => $arr["request"]["msgrid"],
+					));
+
+
+					if (sizeof($opts) > 0)
+					{
+						$data["type"] = "select";
+						$data["options"] = $opts;
+						$data["size"] = 1;
+					}
+				}
+				else
+				{
+					$data["value"] = htmlspecialchars($this->msgdata["to"]);
+				};
+
 				if ($this->state == "show")
 				{
 					$data["type"] = "text";
@@ -260,7 +363,18 @@ class mail_message extends class_base
 			case "mailtoolbar":
 				// aga vaat sellega on nyyd niuke asi, et ta ei peaks salvestama ega
 				// midagi tegema .. ta peaks lihtsalt redirectima tagasi muutmisele. ..
+				if ($this->local)
+				{
+					$retval = PROP_IGNORE;
+				};
 				$this->gen_mail_toolbar(&$data);
+				break;
+
+			case "html_mail":
+				if ($this->state == "show")
+				{
+					$retval = PROP_IGNORE;
+				};
 				break;
 
 			case "attachments":
@@ -443,7 +557,7 @@ class mail_message extends class_base
 	function callback_get_identities($arr)
 	{
 		$rv = $arr["prop"];
-			
+
 		if ($this->state == "show")
 		{
 			$rv["value"] = htmlspecialchars($this->msgdata["from"]);

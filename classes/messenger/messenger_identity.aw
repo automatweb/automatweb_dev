@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_identity.aw,v 1.1 2003/10/31 13:46:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_identity.aw,v 1.2 2003/11/26 16:27:28 duke Exp $
 // messenger_identity.aw - Messengeri identiteet 
 /*
 
@@ -49,17 +49,18 @@ class messenger_identity extends class_base
 		return $retval;
 	}
 
-	/*
 	function set_property($arr = array())
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
                 {
+			case "status":
+				$data["value"] = STAT_ACTIVE;
+				break;
 
 		}
 		return $retval;
 	}	
-	*/
 }
 ?>

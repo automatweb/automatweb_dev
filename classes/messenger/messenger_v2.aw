@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.20 2003/11/09 22:15:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.21 2003/11/26 16:27:28 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -36,7 +36,7 @@ caption Identiteet
 @property treeview type=text parent=msg_cont group=main_view
 @caption Folderid
 
-@property message_list type=table no_caption=1 group=main_view parent=msg_cont store=no 
+@property message_list type=table no_caption=1 group=main_view parent=msg_cont 
 @caption Kirjad
 
 // muu mudru
@@ -214,7 +214,6 @@ class messenger_v2 extends class_base
 			$this->msgobj = new object($arr["msgr_id"]);
 			$conns = $this->msgobj->connections_from(array("type" => RELTYPE_MAIL_SOURCE));
 
-			
 			// right now it only deals with a single server.
 			$_sdat =$conns[0];
 			$sdat = new object($_sdat->to());
@@ -950,6 +949,21 @@ class messenger_v2 extends class_base
 		{
 			$obj = new object($conn->to());
 			$rv[$obj->id()] = $obj->prop("name") . " <" . $obj->prop("email") . ">";
+		};
+		return $rv;
+	}
+
+	function _gen_address_list($arr)
+	{
+		$msgrobj = new object($arr["id"]);
+		$rv = array();
+		$conns = $msgrobj->connections_from(array(
+			"type" => RELTYPE_ADDRESS,
+		));
+		foreach($conns as $conn)
+		{
+			$obj = new object($conn->to());
+			$rv[$obj->id()] = $obj->prop("name");
 		};
 		return $rv;
 	}
