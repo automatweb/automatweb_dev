@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.20 2003/01/09 23:05:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.21 2003/02/05 03:59:42 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -36,6 +36,7 @@ class calendar extends aw_template
 		$tpl 	= ($args["tpl"]) ? $args["tpl"] : "plain.tpl";
 		$misc   = (is_array($args["misc"])) ? $args["misc"] : array();
 		$marked = (is_array($args["marked"])) ? $args["marked"] : array();
+		$use_class = ($args["use_class"]) ? $args["use_class"] : "calendar";
 		$id = $args["id"];
 		$type = $args["type"];
 		$ctrl = $args["ctrl"];
@@ -101,23 +102,34 @@ class calendar extends aw_template
 					"contents" => "&nbsp;",
 				));
 			};
-				if ($marked[sprintf("%02d",$day)])
-				{
-					$markup = "<b>%s</b>";
-				}
-				elseif ($marked[sprintf("%02d%02d%04d",$day,$mon,$year)])
-				{
-					$markup_style = "caldayevent";
-				}
-				else
-				{
-					$markup_style = "calday";
-					$markup = "%s";
-				};
+			if ($marked[sprintf("%02d",$day)])
+			{
+				$markup = "<b>%s</b>";
+			}
+			elseif ($marked[sprintf("%02d%02d%04d",$day,$mon,$year)])
+			{
+				$markup_style = "caldayevent";
+			}
+			else
+			{
+				$markup_style = "calday";
+				$markup = "%s";
+			};
+
+			if ($args["day_orb_link"])
+			{
+				$dayorblink = $args["day_orb_link"];
+				$dayorblink .= "&date=$day-$mon-$year";
+			}
+			else
+			{
+				$dayorblink = $this->mk_my_orb("view",array("id" => $id,"ctrl" => $ctrl,"type" => "day","date" => "$day-$mon-$year"),$use_class); 
+			};
+
 			$this->vars(array(
 				"nday" => sprintf($markup,$day),
 				"daylink" => $this->mk_link($baselink + array("day" => sprintf("%02d",$day))),
-				"dayorblink" => $this->mk_my_orb("view",array("id" => $id,"ctrl" => $ctrl,"type" => "day","date" => "$day-$mon-$year")),
+				"dayorblink" => $dayorblink,
 				"day" => sprintf($markup,$day),
 				"markup_style" => $markup_style,
 			));
@@ -132,9 +144,18 @@ class calendar extends aw_template
 			if ($wday > ROLL_OVER)
 			{
 				// nädal lõppes, lisame selle kalendrisse
+				if ($args["week_orb_link"])
+				{
+					$weekorblink = $args["week_orb_link"];
+					$weekorblink .= "&date=$day-$mon-$year";
+				}
+				else
+				{
+					$weekorblink = $this->mk_my_orb("view",array("id" => $id,"ctrl" => $ctrl,"type" => "week","date" => "$day-$mon-$year"),$use_class);
+				};
 				$this->vars(array(
 					"cell" => $line,
-					"weekorblink" => $this->mk_my_orb("view",array("id" => $id,"ctrl" => $ctrl,"type" => "week","date" => "$day-$mon-$year")),
+					"weekorblink" => $weekorblink,
 				));
 				$month .= $this->parse("week");
 				$line = "";
@@ -166,8 +187,8 @@ class calendar extends aw_template
 			"caption" => $caption,
 			"prev" => $this->mk_link($misc + array("year" => $prevyear,"mon" => $prevmon)),
 			"next" => $this->mk_link($misc + array("year" => $nextyear,"mon" => $nextmon)),
-			"prevorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"ctrl" => $ctrl,"date" => "$act_day-$prevmon-$prevyear")),
-			"nextorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"ctrl" => $ctrl, "date" => "$act_day-$nextmon-$nextyear")),
+			"prevorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"ctrl" => $ctrl,"date" => "$act_day-$prevmon-$prevyear"),$use_class),
+			"nextorb" => $this->mk_my_orb("view",array("type" => $type,"id" => $id,"ctrl" => $ctrl, "date" => "$act_day-$nextmon-$nextyear",$use_class)),
 			"week" => $month,
 			"prefix" => $prefix,
 			"prevmon" => $prevmon,
