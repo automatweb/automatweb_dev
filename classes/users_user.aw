@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.60 2003/07/01 10:20:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.61 2003/07/02 15:23:50 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -338,9 +338,14 @@ class users_user extends aw_template
 		}
 
 		// now that we got the whether he can log in bit cleared, try to find an url to redirect to
-		// 1st try to find the group based url and if that fails, then the everyone's url and then just the baseurl.
+		// 1st is the url that was requested before the user was forced to login.
+		// 2nd try to find the group based url and if that fails, then the everyone's url and then just the baseurl.
 		// wow. is this graceful degradation or what!
-		$this->url = $this->find_group_login_redirect($uid);
+		$this->url = aw_global_get("request_uri_before_auth");
+		if (!$this->url)
+		{
+			$this->url = $this->find_group_login_redirect($uid);
+		};
 		if (!$this->url)
 		{
 			$this->url = $this->get_cval("after_login");
