@@ -307,7 +307,7 @@ class ml_list extends aw_template
 
 	////
 	//! Tagastab kõik formi elemendid id => name 
-	function get_all_varnames($id = false, $conf = false)
+	function get_all_varnames($id = false, $conf = false, $all_vars = true)
 	{
 		$ret = array();
 		$fb = get_instance("formgen/form_base");
@@ -327,7 +327,10 @@ class ml_list extends aw_template
 			$ml = $fb->get_form_elements(array("id" => $fid, "key" => "id", "all_data" => false));
 			foreach($ml as $k => $v)
 			{
-				$ret[$k] = $v;
+				if ($this->list_ob['meta']['vars'][$k] || $all_vars)
+				{
+					$ret[$k] = $v;
+				}
 			}
 		}
 		return $ret;
@@ -675,10 +678,15 @@ class ml_list extends aw_template
 		}
 	}
 
-	function get_list_id_by_name($name)
+	function get_list_ids_by_name($name)
 	{
-		$name = substr($name, 1);
-		$ret = $this->db_fetch_field("SELECT oid FROM objects WHERE class_id = ".CL_ML_LIST." AND status != 0 AND name = '".$name."'","oid");
+		$ret = array();
+		$lns = explode(",",$name);
+		foreach($lns as $ln)
+		{
+			$name = substr($ln, 1);
+			$ret[] = $this->db_fetch_field("SELECT oid FROM objects WHERE class_id = ".CL_ML_LIST." AND status != 0 AND name = '".$name."'","oid");
+		}
 		return $ret;
 	}
 
