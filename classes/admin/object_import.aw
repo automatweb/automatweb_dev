@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.26 2005/02/03 12:19:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.27 2005/03/03 12:58:42 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -599,7 +599,7 @@ class object_import extends class_base
 			$ds_o = obj($o->prop("ds"));
 			$ds_i = $ds_o->instance();
 			$data_rows = $ds_i->get_objects($ds_o);
-
+			
 			// read props
 			list($properties, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
 				"clid" => $class_id
