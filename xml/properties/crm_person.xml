@@ -2,285 +2,285 @@
 <properties>
       <property>
             <name>navtoolbar</name>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
+            <table>objects</table>
             <group>
                   <num_0>general</num_0>
                   <num_1>overview</num_1>
             </group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <editonly>1</editonly>
-            <table>objects</table>
             <field>navtoolbar</field>
       </property>
       <property>
             <name>name</name>
-            <type>text</type>
             <table>objects</table>
             <group>general</group>
+            <type>text</type>
             <field>name</field>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>firstname</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>15</size>
             <maxlength>50</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>firstname</field>
             <caption>Eesnimi</caption>
       </property>
       <property>
             <name>lastname</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>15</size>
             <maxlength>50</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>lastname</field>
             <caption>Perekonnanimi</caption>
       </property>
       <property>
             <name>title</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>5</size>
             <maxlength>10</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>title</field>
             <caption>Tiitel</caption>
       </property>
       <property>
             <name>gender</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>5</size>
             <maxlength>10</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>gender</field>
             <caption>Sugu</caption>
       </property>
       <property>
             <name>personal_id</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>13</size>
             <maxlength>11</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>personal_id</field>
             <caption>Isikukood</caption>
       </property>
       <property>
             <name>nickname</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>10</size>
             <maxlength>20</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>nickname</field>
             <caption>Hüüdnimi</caption>
       </property>
       <property>
             <name>birthday</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>10</size>
             <maxlength>20</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>birthday</field>
             <caption>Sünnipäev</caption>
       </property>
       <property>
             <name>social_status</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>20</size>
             <maxlength>20</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>social_status</field>
             <caption>Perekonnaseis</caption>
       </property>
       <property>
             <name>spouse</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>25</size>
             <maxlength>50</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>spouse</field>
             <caption>Abikaasa</caption>
       </property>
       <property>
             <name>children</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CHILDREN</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CHILDREN</reltype>
             <field>children</field>
             <caption>Lapsed</caption>
       </property>
       <property>
             <name>pictureurl</name>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
             <type>textbox</type>
             <size>40</size>
             <maxlength>200</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
             <field>pictureurl</field>
             <caption>Pildi/foto url</caption>
       </property>
       <property>
             <name>picture</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PICTURE</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PICTURE</reltype>
             <field>picture</field>
             <caption>Pilt/foto</caption>
       </property>
       <property>
             <name>work_contact</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_WORK</reltype>
             <table>kliendibaas_isik</table>
             <group>contact</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WORK</reltype>
             <field>work_contact</field>
             <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>rank</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
             <type>relpicker</type>
             <reltype>RELTYPE_RANK</reltype>
-            <table>kliendibaas_isik</table>
             <automatic>1</automatic>
-            <group>contact</group>
             <field>rank</field>
             <caption>Ametinimetus</caption>
       </property>
       <property>
             <name>personal_contact</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADDRESS</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS</reltype>
             <field>personal_contact</field>
             <caption>Kodused kontaktandmed</caption>
       </property>
       <property>
             <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <cols>40</cols>
             <rows>3</rows>
-            <table>objects</table>
             <field>comment</field>
-            <group>general</group>
             <caption>Kontaktandmed</caption>
       </property>
       <property>
             <name>email</name>
-            <type>relmanager</type>
             <table>objects</table>
+            <group>contact</group>
+            <type>relmanager</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>contact</group>
             <reltype>RELTYPE_EMAIL</reltype>
             <props>mail</props>
             <caption>Meiliaadressid</caption>
       </property>
       <property>
             <name>phone</name>
-            <type>relmanager</type>
             <table>objects</table>
+            <group>contact</group>
+            <type>relmanager</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>contact</group>
             <reltype>RELTYPE_PHONE</reltype>
             <props>name</props>
             <caption>Telefoninumbrid</caption>
       </property>
       <property>
             <name>url</name>
-            <type>relmanager</type>
             <table>objects</table>
+            <group>contact</group>
+            <type>relmanager</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>contact</group>
             <reltype>RELTYPE_URL</reltype>
             <props>url</props>
             <caption>Veebiaadressid</caption>
       </property>
       <property>
             <name>org_actions</name>
+            <table>kliendibaas_isik</table>
+            <group>all_actions</group>
             <type>calendar</type>
             <no_caption>1</no_caption>
-            <group>all_actions</group>
             <viewtype>relative</viewtype>
             <store>no</store>
-            <table>kliendibaas_isik</table>
             <field>org_actions</field>
             <caption>org_actions</caption>
       </property>
       <property>
             <name>org_calls</name>
+            <table>kliendibaas_isik</table>
+            <group>calls</group>
             <type>calendar</type>
             <no_caption>1</no_caption>
-            <group>calls</group>
             <viewtype>relative</viewtype>
             <store>no</store>
-            <table>kliendibaas_isik</table>
             <field>org_calls</field>
             <caption>Kõned</caption>
       </property>
       <property>
             <name>org_meetings</name>
+            <table>kliendibaas_isik</table>
+            <group>meetings</group>
             <type>calendar</type>
             <no_caption>1</no_caption>
-            <group>meetings</group>
             <viewtype>relative</viewtype>
             <store>no</store>
-            <table>kliendibaas_isik</table>
             <field>org_meetings</field>
             <caption>Kohtumised</caption>
       </property>
       <property>
             <name>org_tasks</name>
+            <table>kliendibaas_isik</table>
+            <group>tasks</group>
             <type>calendar</type>
             <no_caption>1</no_caption>
-            <group>tasks</group>
             <viewtype>relative</viewtype>
             <store>no</store>
-            <table>kliendibaas_isik</table>
             <field>org_tasks</field>
             <caption>Toimetused</caption>
       </property>
       <property>
             <name>forms</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_BACKFORMS</reltype>
             <table>objects</table>
             <group>forms</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BACKFORMS</reltype>
             <caption>tagasiside vormid</caption>
       </property>
       <property>
             <name>templates</name>
-            <type>select</type>
             <table>objects</table>
             <group>forms</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>templiidid</caption>
       </property>
       <property>
             <name>dokus</name>
-            <type>text</type>
-            <callback>show_isik</callback>
             <table>objects</table>
             <group>show</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <callback>show_isik</callback>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>

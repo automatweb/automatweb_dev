@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.1 2004/03/17 16:06:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.2 2004/03/24 11:00:19 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -32,8 +32,8 @@
 /////////// storage tab
 @groupinfo storage caption="Lasoseis"
 @groupinfo storage_storage parent=storage caption="Laoseis" submit=no
-@groupinfo storage_income parent=storage caption="Sissetulekud" submit=no
-@groupinfo storage_export parent=storage caption="V&auml;ljaminekud" submit=no
+@groupinfo storage_income parent=storage caption="Sissetulekud" 
+@groupinfo storage_export parent=storage caption="V&auml;ljaminekud"
 
 @property storage_list type=table store=no group=storage_storage no_caption=1
 @caption Laoseis
@@ -48,8 +48,19 @@
 @property storage_export type=table store=no group=storage_export no_caption=1
 @caption V&auml;ljaminekud
 
+////////// ordering tab
+@groupinfo order caption="Telli"
+@groupinfo order_unconfirmed parent=order caption="Kinnitamata"
+@groupinfo order_confirmed parent=order caption="Kinnitatud"
+
+@property order_unconfirmed_toolbar type=toolbar no_caption=1 group=order_unconfirmed store=no
+@property order_unconfirmed type=table store=no group=order_unconfirmed no_caption=1
+
+@property order_confirmed_toolbar type=toolbar no_caption=1 group=order_confirmed store=no
+@property order_confirmed type=table store=no group=order_confirmed no_caption=1
+
 ////////// reltypes
-@reltype CONFIG value=1 clid=CL_SHOP_CONFIG
+@reltype CONFIG value=1 clid=CL_SHOP_WAREHOUSE_CONFIG
 @caption konfiguratsioon
 
 @reltype PRODUCT value=2 clid=CL_SHOP_PRODUCT
@@ -63,6 +74,9 @@
 
 @reltype STORAGE_EXPORT value=4 clid=CL_SHOP_WAREHOUSE_EXPORT
 @caption lao v&auml;jaminek
+
+@reltype ORDER value=5 clid=CL_SHOP_ORDER
+@caption tellimus
 
 */
 
@@ -121,6 +135,22 @@ class shop_warehouse extends class_base
 			case "storage_export":
 				$this->do_storage_export_tbl($arr);
 				break;
+
+			case "order_unconfirmed_toolbar":
+				$this->mk_order_unconfirmed_toolbar($arr);
+				break;
+
+			case "order_unconfirmed":
+				$this->do_order_unconfirmed_tbl($arr);
+				break;
+
+			case "order_confirmed_toolbar":
+				$this->mk_order_confirmed_toolbar($arr);
+				break;
+
+			case "order_confirmed":
+				$this->do_order_confirmed_tbl($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -131,7 +161,17 @@ class shop_warehouse extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "storage_income":
+				$this->save_storage_inc_tbl($arr);
+				break;
 
+			case "storage_export":
+				$this->save_storage_exp_tbl($arr);
+				break;
+
+			case "order_unconfirmed":
+				$this->save_order_unconfirmed_tbl($arr);
+				break;
 		}
 		return $retval;
 	}	
@@ -249,6 +289,19 @@ class shop_warehouse extends class_base
 			{
 				$tp = "";
 			}
+
+			$get = "";
+			if ($o->prop("item_count") > 0)
+			{
+				$get = html::href(array(
+					"url" => $this->mk_my_orb("create_export", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $o->id()
+					)),
+					"caption" => "V&otilde;ta laost"
+				));
+			}
+
 			$tb->define_data(array(
 				"name" => $o->path_str(array("to" => $this->prod_fld)),
 				"cnt" => $o->prop("item_count"),
@@ -258,6 +311,14 @@ class shop_warehouse extends class_base
 						"id" => $o->id(),
 					), CL_SHOP_PRODUCT),
 					"caption" => "Muuda"
+				)),
+				"get" => $get,
+				"put" => html::href(array(
+					"url" => $this->mk_my_orb("create_reception", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $o->id()
+					)),
+					"caption" => "Vii lattu"
 				))
 			));
 		}
@@ -286,6 +347,18 @@ class shop_warehouse extends class_base
 			"caption" => "Kogus laos",
 			"align" => "center",
 			"type" => "int"
+		));
+
+		$t->define_field(array(
+			"name" => "get",
+			"caption" => "V&otilde;ta laost",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "put",
+			"caption" => "Vii lattu",
+			"align" => "center"
 		));
 
 		$t->define_field(array(
@@ -328,6 +401,11 @@ class shop_warehouse extends class_base
 			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on toodete t&uuml;&uuml;pide kataloog valimata!";
 			return false;
 		}
+		if (!$this->config->prop("order_fld"))
+		{
+			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellimuste kataloog valimata!";
+			return false;
+		}
 
 		$this->prod_fld = $this->config->prop("prod_fld");
 		$this->prod_tree_root = isset($_GET["tree_filter"]) ? $_GET["tree_filter"] : $this->config->prop("prod_fld");
@@ -338,6 +416,8 @@ class shop_warehouse extends class_base
 		$this->reception_fld = $this->config->prop("reception_fld");
 		$this->export_fld = $this->config->prop("export_fld");
 		$this->prod_type_fld = $this->config->prop("prod_type_fld");
+		$this->order_fld = $this->config->prop("order_fld");
+		$this->buyers_fld = $this->config->prop("buyers_fld");
 
 		return true;
 	}
@@ -403,7 +483,7 @@ class shop_warehouse extends class_base
 	{
 		classload("vcl/table");
 		$tb = new aw_table(array("layout" => "generic"));
-		$this->_init_prod_list_list_tbl($tb);
+		$this->_init_pkt_list_list_tbl($tb);
 
 		// get items 
 		$ot = new object_tree(array(
@@ -418,6 +498,19 @@ class shop_warehouse extends class_base
 			{
 				continue;
 			}
+
+			$get = "";
+			if ($o->prop("item_count") > 0)
+			{
+				$get = html::href(array(
+					"url" => $this->mk_my_orb("create_export", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $o->id()
+					)),
+					"caption" => "V&otilde;ta laost"
+				));
+			}
+
 			$tb->define_data(array(
 				"name" => $o->path_str(array("to" => $this->pkt_fld)),
 				"cnt" => $o->prop("item_count"),
@@ -426,6 +519,14 @@ class shop_warehouse extends class_base
 						"id" => $o->id(),
 					), CL_SHOP_PACKET),
 					"caption" => "Muuda"
+				)),
+				"get" => $get,
+				"put" => html::href(array(
+					"url" => $this->mk_my_orb("create_reception", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $o->id()
+					)),
+					"caption" => "Vii lattu"
 				))
 			));
 		}
@@ -447,6 +548,18 @@ class shop_warehouse extends class_base
 			"caption" => "Kogus laos",
 			"align" => "center",
 			"type" => "int"
+		));
+
+		$t->define_field(array(
+			"name" => "get",
+			"caption" => "V&otilde;ta laost",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "put",
+			"caption" => "Vii lattu",
+			"align" => "center"
 		));
 
 		$t->define_field(array(
@@ -480,10 +593,31 @@ class shop_warehouse extends class_base
 				}
 				$name = $i->path_str(array("to" => $this->config->prop("prod_fld")));
 			}
+
+			$get = "";
+			if ($i->prop("item_count") > 0)
+			{
+				$get = html::href(array(
+					"url" => $this->mk_my_orb("create_export", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $i->id()
+					)),
+					"caption" => "V&otilde;ta laost"
+				));
+			}
+
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"name" => $name,
 				"type" => $type,
 				"count" => $i->prop("item_count"),
+				"get" => $get,
+				"put" => html::href(array(
+					"url" => $this->mk_my_orb("create_reception", array(
+						"id" => $arr["obj_inst"]->id(),
+						"product" => $i->id()
+					)),
+					"caption" => "Vii lattu"
+				))
 			));
 		}
 
@@ -512,6 +646,19 @@ class shop_warehouse extends class_base
 			"type" => "int",
 			"align" => "center"
 		));
+
+		$t->define_field(array(
+			"name" => "get",
+			"caption" => "V&otilde;ta laost",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "put",
+			"caption" => "Vii lattu",
+			"align" => "center"
+		));
+
 	}
 
 	function do_storage_income_tbl(&$arr)
@@ -520,6 +667,20 @@ class shop_warehouse extends class_base
 
 		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_STORAGE_INCOME)) as $c)
 		{
+			$to = $c->to();
+
+			if ($to->prop("confirm"))
+			{
+				$stat = "Sissetulek kinnitatud";
+			}
+			else
+			{
+				$stat = html::checkbox(array(
+					"name" => "confirm[".$to->id()."]",
+					"value" => 1
+				));
+			}
+
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"name" => $c->prop("to.name"),
 				"view" => html::href(array(
@@ -529,7 +690,8 @@ class shop_warehouse extends class_base
 					), CL_SHOP_WAREHOUSE_RECEPTION)
 				)),
 				"modifiedby" => $c->prop("to.modifiedby"),
-				"modified" => $c->prop("to.modified")
+				"modified" => $c->prop("to.modified"),
+				"status" => $stat
 			));
 		}
 
@@ -542,6 +704,12 @@ class shop_warehouse extends class_base
 			"sortable" => 1,
 			"name" => "name",
 			"caption" => "Nimi"
+		));
+
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => "Staatus",
+			"align" => "center"
 		));
 
 		$t->define_field(array(
@@ -565,6 +733,21 @@ class shop_warehouse extends class_base
 			"caption" => "Vaata",
 			"align" => "center"
 		));
+	}
+
+	function save_storage_inc_tbl(&$arr)
+	{
+		$re = get_instance("applications/shop/shop_warehouse_reception");
+
+		$awa = new aw_array($arr["request"]["confirm"]);
+		foreach($awa->get() as $inc => $one)
+		{
+			if ($one == 1)
+			{
+				// confirm reception
+				$re->do_confirm(obj($inc));
+			}
+		}
 	}
 
 	function mk_storage_income_toolbar(&$data)
@@ -595,6 +778,20 @@ class shop_warehouse extends class_base
 
 		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_STORAGE_EXPORT)) as $c)
 		{
+			$to = $c->to();
+
+			if ($to->prop("confirm"))
+			{
+				$stat = "Sissetulek kinnitatud";
+			}
+			else
+			{
+				$stat = html::checkbox(array(
+					"name" => "confirm[".$to->id()."]",
+					"value" => 1
+				));
+			}
+
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"name" => $c->prop("to.name"),
 				"view" => html::href(array(
@@ -604,7 +801,8 @@ class shop_warehouse extends class_base
 					), CL_SHOP_WAREHOUSE_EXPORT)
 				)),
 				"modifiedby" => $c->prop("to.modifiedby"),
-				"modified" => $c->prop("to.modified")
+				"modified" => $c->prop("to.modified"),
+				"status" => $stat
 			));
 		}
 
@@ -617,6 +815,12 @@ class shop_warehouse extends class_base
 			"sortable" => 1,
 			"name" => "name",
 			"caption" => "Nimi"
+		));
+
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => "Staatus",
+			"align" => "center"
 		));
 
 		$t->define_field(array(
@@ -642,6 +846,21 @@ class shop_warehouse extends class_base
 		));
 	}
 
+	function save_storage_exp_tbl(&$arr)
+	{
+		$re = get_instance("applications/shop/shop_warehouse_export");
+
+		$awa = new aw_array($arr["request"]["confirm"]);
+		foreach($awa->get() as $inc => $one)
+		{
+			if ($one == 1)
+			{
+				// confirm export
+				$re->do_confirm(obj($inc));
+			}
+		}
+	}
+
 	function mk_storage_export_toolbar(&$data)
 	{
 		$tb =& $data["prop"]["toolbar"];
@@ -663,6 +882,303 @@ class shop_warehouse extends class_base
 		));
 	}
 
+	/** creates a new export object and attach a product to it, then redirect user to count entry
+	
+		@attrib name=create_export
+
+		@param id required type=int acl=view
+		@param product required type=int acl=view
+
+	**/
+	function create_export($arr)
+	{
+		extract($arr);
+		$o = obj($id);
+		$tmp = array(
+			"obj_inst" => $o
+		);
+		$this->_init_view($tmp);
+
+		$p = obj($product);
+
+		// create export object
+		$e = obj();
+		$e->set_parent($this->export_fld);
+		$e->set_class_id(CL_SHOP_WAREHOUSE_EXPORT);
+		$e->set_name("Lao v&auml;ljaminek: ".$p->name());
+		$e->save();
+
+		$e->connect(array(
+			"to" => $p->id(),
+			"reltype" => 1 // RELTYPE_PRODUCT
+		));
+
+		// also connect the export to warehouse
+		$o->connect(array(
+			"to" => $e,
+			"reltype" => 4 // RELTYPE_STORAGE_EXPORT
+		));
+
+		return $this->mk_my_orb("change", array(
+			"id" => $e->id(),
+			"group" => "export",
+			"return_url" => urlencode($this->mk_my_orb("change", array(
+				"id" => $o->id(),
+				"group" => "storage_export"
+			)))
+		), CL_SHOP_WAREHOUSE_EXPORT);
+	}
+
+	/** creates a new reception object and attach a product to it, then redirect user to count entry
+	
+		@attrib name=create_reception
+
+		@param id required type=int acl=view
+		@param product required type=int acl=view
+
+	**/
+	function create_reception($arr)
+	{
+		extract($arr);
+		$o = obj($id);
+		$tmp = array(
+			"obj_inst" => $o
+		);
+		$this->_init_view($tmp);
+
+		$p = obj($product);
+
+		// create export object
+		$e = obj();
+		$e->set_parent($this->reception_fld);
+		$e->set_class_id(CL_SHOP_WAREHOUSE_RECEPTION);
+		$e->set_name("Lao sissetulek: ".$p->name());
+		$e->save();
+
+		$e->connect(array(
+			"to" => $p->id(),
+			"reltype" => 1 // RELTYPE_PRODUCT
+		));
+
+		// also connect the reception to warehouse
+		$o->connect(array(
+			"to" => $e,
+			"reltype" => 3 // RELTYPE_STORAGE_INCOME
+		));
+
+		return $this->mk_my_orb("change", array(
+			"id" => $e->id(),
+			"group" => "income",
+			"return_url" => urlencode($this->mk_my_orb("change", array(
+				"id" => $o->id(),
+				"group" => "storage_income"
+			)))
+		), CL_SHOP_WAREHOUSE_RECEPTION);
+	}
+
+	function mk_order_unconfirmed_toolbar(&$data)
+	{
+		$tb =& $data["prop"]["toolbar"];
+
+		$tb->add_menu_button(array(
+			"name" => "create_order",
+			"tooltip" => "Uus tellimus"
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "create_order",
+			"text" => "Lisa tellimus",
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->order_fld,
+				"alias_to" => $data["obj_inst"]->id(),
+				"reltype" => RELTYPE_ORDER,
+				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+			), CL_SHOP_ORDER)
+		));
+	}
+
+	function do_order_unconfirmed_tbl(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_order_unconfirmed_tbl($t);
+
+		// list orders from order folder
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_ORDER,
+			"confirmed" => 0
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$m = $o->modifiedby();
+			$mb = $m->name();
+			if ($o->prop("orderer_person"))
+			{
+				$_person = obj($o->prop("orderer_person"));
+				$mb = $_person->name();
+			}
+
+			if ($o->prop("orderer_company"))
+			{
+				$_comp = obj($o->prop("orderer_company"));
+				$mb .= " / ".$_comp->name();
+			}
+
+			$t->define_data(array(
+				"name" => $o->name(),
+				"modifiedby" => $mb,
+				"modified" => $m->modified(),
+				"view" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $o->id()
+					), CL_SHOP_ORDER),
+					"caption" => "Vaata"
+				)),
+				"confirm" => html::checkbox(array(
+					"name" => "confirm[".$o->id()."]",
+					"value" => 1
+				)),
+				"price" => $o->prop("sum")
+			));
+		}
+	}
+
+	function _init_order_unconfirmed_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi"
+		));
+
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => "Hind",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "confirm",
+			"caption" => "Kinnita",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => "Kes",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => "Millal",
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => "Vaata",
+			"align" => "center"
+		));
+	}
+
+	function mk_order_confirmed_toolbar(&$data)
+	{
+		$tb =& $data["prop"]["toolbar"];
+
+		$tb->add_menu_button(array(
+			"name" => "create_order",
+			"tooltip" => "Uus tellimus"
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "create_order",
+			"text" => "Lisa tellimus",
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->order_fld,
+				"alias_to" => $data["obj_inst"]->id(),
+				"reltype" => RELTYPE_ORDER,
+				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+			), CL_SHOP_ORDER)
+		));
+	}
+
+	function do_order_confirmed_tbl(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_order_confirmed_tbl($t);
+
+		// list orders from order folder
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_ORDER,
+			"confirmed" => 1
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$m = $o->modifiedby();
+
+			$t->define_data(array(
+				"name" => $o->name(),
+				"modifiedby" => $m->name(),
+				"modified" => $m->modified(),
+				"view" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $o->id()
+					), CL_SHOP_ORDER),
+					"caption" => "Vaata"
+				)),
+				"price" => $o->prop("sum")
+			));
+		}
+	}
+
+	function _init_order_confirmed_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi"
+		));
+
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => "Hind",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => "Kes",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => "Millal",
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => "Vaata"
+		));
+	}
+
+	function save_order_unconfirmed_tbl(&$arr)
+	{
+		$re = get_instance("applications/shop/shop_order");
+
+		$awa = new aw_array($arr["request"]["confirm"]);
+		foreach($awa->get() as $inc => $one)
+		{
+			if ($one == 1)
+			{
+				// confirm reception
+				$re->do_confirm(obj($inc));
+			}
+		}
+	}
 
 	///////////////////////////////////////////////
 	// warehouse public interface functions      //

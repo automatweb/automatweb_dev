@@ -2,12 +2,12 @@
 <properties>
       <property>
             <name>conf</name>
-            <type>objpicker</type>
-            <clid>CL_DB_VIEW_CONF</clid>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>objpicker</type>
+            <clid>CL_DB_VIEW_CONF</clid>
             <caption>Vali konfiguratsioon</caption>
       </property>
 </properties>

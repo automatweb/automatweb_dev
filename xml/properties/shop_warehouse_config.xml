@@ -1,77 +1,85 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>root</name>
+            <name>prod_fld</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Root objekt</caption>
+            <caption>Toodete kataloog</caption>
       </property>
       <property>
-            <name>rootcaption</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Root objekti nimi</caption>
-      </property>
-      <property>
-            <name>icon_root</name>
+            <name>pkt_fld</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_ICON</reltype>
+            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Root objekti ikoon</caption>
+            <caption>Pakettide kataloog</caption>
       </property>
       <property>
-            <name>treetype</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Puu tüüp</caption>
-      </property>
-      <property>
-            <name>icon_folder_open</name>
+            <name>reception_fld</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_ICON</reltype>
+            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Lahtise kausta ikoon</caption>
+            <caption>Lao sissetulekute kataloog</caption>
       </property>
       <property>
-            <name>icon_folder_closed</name>
+            <name>export_fld</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_ICON</reltype>
+            <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kinnise kausta ikoon</caption>
+            <caption>Lao v&amp;auml;jaminekute kataloog</caption>
+      </property>
+      <property>
+            <name>prod_type_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lao toodete t&amp;uuml;&amp;uuml;bid</caption>
+      </property>
+      <property>
+            <name>order_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lao tellimuste kataloog</caption>
+      </property>
+      <property>
+            <name>buyers_fld</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lao tellijate kataloog</caption>
       </property>
       <classinfo>
+            <syslog_type>ST_SHOP_WAREHOUSE_CONFIG</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <reltypes>
             <FOLDER>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>root kataloog</caption>
+                  <caption>kataloog</caption>
             </FOLDER>
-            <ICON>
-                  <value>2</value>
-                  <clid>CL_ICON</clid>
-                  <caption>ikoon</caption>
-            </ICON>
       </reltypes>
 </properties>
 

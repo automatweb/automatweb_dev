@@ -2,11 +2,11 @@
 <properties>
       <property>
             <name>contents</name>
+            <table>objects</table>
+            <group>general</group>
             <type>callback</type>
             <callback>callback_get_contents</callback>
             <store>no</store>
-            <table>objects</table>
-            <group>general</group>
             <field>contents</field>
             <caption>Sisu</caption>
       </property>

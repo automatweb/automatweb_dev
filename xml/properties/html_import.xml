@@ -2,234 +2,234 @@
 <properties>
       <property>
             <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <field>comment</field>
             <cols>40</cols>
             <rows>3</rows>
-            <table>objects</table>
-            <group>general</group>
             <caption>Kommentaar</caption>
       </property>
       <property>
             <name>file_list</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>failid remote/local</caption>
       </property>
       <property>
             <name>source_path</name>
-            <type>textbox</type>
-            <size>50</size>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>50</size>
             <caption>kohalikud failid asuvad siin</caption>
       </property>
       <property>
             <name>files</name>
-            <type>textarea</type>
-            <cols>75</cols>
-            <rows>5</rows>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textarea</type>
+            <cols>75</cols>
+            <rows>5</rows>
             <caption>urlid/failid</caption>
       </property>
       <property>
             <name>example</name>
-            <type>textarea</type>
-            <cols>75</cols>
-            <rows>3</rows>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textarea</type>
+            <cols>75</cols>
+            <rows>3</rows>
             <caption>näitefailid töötlemiseks</caption>
       </property>
       <property>
             <name>single</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>tüüp</caption>
       </property>
       <property>
             <name>output</name>
-            <type>select</type>
             <table>objects</table>
             <group>output_conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>tüüp</caption>
       </property>
       <property>
             <name>mk_my_table</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>output_conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>sql tabeli nimi 'html_import_'</caption>
       </property>
       <property>
             <name>olemas</name>
-            <type>text</type>
             <table>objects</table>
             <group>output_conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>NB olemasolevad tabelid:</caption>
       </property>
       <property>
             <name>reset</name>
-            <type>button</type>
-            <editonly>1</editonly>
             <table>objects</table>
             <group>visual_conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>button</type>
+            <editonly>1</editonly>
             <caption>reset table</caption>
       </property>
       <property>
             <name>starts</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>visual_conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>hidden</caption>
       </property>
       <property>
             <name>match</name>
-            <type>textarea</type>
             <table>objects</table>
             <group>visual_conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textarea</type>
             <caption>faili unikaalne string siia:</caption>
       </property>
       <property>
             <name>testi</name>
-            <type>text</type>
             <table>objects</table>
             <group>visual_conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>testi</caption>
       </property>
       <property>
             <name>ruuls_setup</name>
-            <callback>visual_conf</callback>
             <table>objects</table>
             <group>visual_conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <callback>visual_conf</callback>
             <caption>ruuls setup</caption>
       </property>
       <property>
             <name>ruul</name>
-            <type>textarea</type>
             <table>objects</table>
             <group>visual_conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textarea</type>
       </property>
       <property>
             <name>making_sql</name>
-            <type>text</type>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>tabeli kokkupanek</caption>
       </property>
       <property>
             <name>show_create</name>
-            <type>text</type>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>selline tabel on olemas</caption>
       </property>
       <property>
             <name>show_create_table</name>
-            <type>text</type>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>selline tabel tehakse</caption>
       </property>
       <property>
             <name>add_id</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>lisa id veerg (id int primary key auto_increment)</caption>
       </property>
       <property>
             <name>create_link</name>
-            <type>text</type>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>loo tabel</caption>
       </property>
       <property>
             <name>drop_link</name>
-            <type>text</type>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>kustuta tabel</caption>
       </property>
       <property>
             <name>empty_link</name>
-            <type>text</type>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>tühjenda tabel</caption>
       </property>
       <property>
             <name>view_link</name>
-            <type>text</type>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>vaata tabelit</caption>
       </property>
       <property>
             <name>import_link</name>
-            <type>text</type>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>IMPORT</caption>
       </property>
       <property>
             <name>sql_ruul</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>sqlconf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>sql_ruul hidden</caption>
       </property>
       <groupinfo>

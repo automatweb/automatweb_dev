@@ -2,37 +2,37 @@
 <properties>
       <property>
             <name>folder</name>
+            <table>objects</table>
+            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <table>objects</table>
-            <group>general</group>
             <caption>Kataloog serveris kust failid v&amp;otilde;tta</caption>
       </property>
       <property>
             <name>chf_view_file</name>
-            <type>text</type>
-            <form>ch_file</form>
             <table>objects</table>
             <group>general</group>
+            <form>ch_file</form>
+            <type>text</type>
             <field>chf_view_file</field>
             <caption>Vaata faili</caption>
       </property>
       <property>
             <name>chf_file</name>
-            <type>fileupload</type>
-            <form>ch_file</form>
             <table>objects</table>
             <group>general</group>
+            <form>ch_file</form>
+            <type>fileupload</type>
             <field>chf_file</field>
             <caption>Uploadi fail</caption>
       </property>
       <property>
             <name>addf_file</name>
-            <type>fileupload</type>
-            <form>add_file</form>
             <table>objects</table>
             <group>general</group>
+            <form>add_file</form>
+            <type>fileupload</type>
             <field>addf_file</field>
             <caption>Uploadi fail</caption>
       </property>

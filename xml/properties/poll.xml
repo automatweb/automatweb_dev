@@ -18,36 +18,36 @@
       </property>
       <property>
             <name>in_archive</name>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
-            <group>general</group>
             <caption>Arhiivis</caption>
       </property>
       <property>
             <name>question</name>
+            <group>general</group>
             <type>textbox</type>
             <store>no</store>
-            <group>general</group>
             <field>question</field>
             <caption>K&amp;uuml;simus</caption>
       </property>
       <property>
             <name>answers</name>
+            <group>general</group>
             <type>callback</type>
             <callback>callback_get_answers</callback>
             <store>no</store>
             <editonly>1</editonly>
-            <group>general</group>
             <field>answers</field>
             <caption>Vastused</caption>
       </property>
       <property>
             <name>activity</name>
-            <type>table</type>
             <group>activity</group>
+            <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>activity</field>
@@ -55,8 +55,8 @@
       </property>
       <property>
             <name>translate</name>
-            <type>callback</type>
             <group>translate</group>
+            <type>callback</type>
             <callback>callback_get_translate</callback>
             <store>no</store>
             <field>translate</field>

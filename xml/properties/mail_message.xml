@@ -2,81 +2,82 @@
 <properties>
       <property>
             <name>edit_toolbar</name>
+            <group>general</group>
+            <table>messages</table>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <group>general</group>
-            <table>messages</table>
             <field>edit_toolbar</field>
             <caption>Kirja redigeerimise toolbar</caption>
       </property>
       <property>
             <name>uidl</name>
-            <type>hidden</type>
             <group>general</group>
             <table>messages</table>
+            <type>hidden</type>
             <field>uidl</field>
             <caption>UIDL</caption>
       </property>
       <property>
             <name>mfrom</name>
-            <type>select</type>
             <group>general</group>
             <table>messages</table>
+            <type>select</type>
             <field>mfrom</field>
             <caption>Kellelt</caption>
       </property>
       <property>
             <name>mto</name>
-            <type>textbox</type>
-            <size>80</size>
             <group>general</group>
             <table>messages</table>
+            <type>textbox</type>
+            <size>80</size>
             <field>mto</field>
             <caption>Kellele</caption>
       </property>
       <property>
             <name>cc</name>
+            <group>general</group>
+            <table>messages</table>
             <type>textbox</type>
             <field>mtargets1</field>
             <size>80</size>
-            <group>general</group>
-            <table>messages</table>
             <caption>Koopia</caption>
       </property>
       <property>
             <name>name</name>
+            <group>general</group>
+            <table>objects</table>
             <type>textbox</type>
             <size>80</size>
-            <table>objects</table>
-            <group>general</group>
             <field>name</field>
             <caption>Teema</caption>
       </property>
       <property>
             <name>html_mail</name>
+            <group>general</group>
+            <table>messages</table>
             <type>checkbox</type>
             <ch_value>1024</ch_value>
             <field>type</field>
             <method>bitmask</method>
-            <group>general</group>
-            <table>messages</table>
             <caption>HTML kiri</caption>
       </property>
       <property>
             <name>message</name>
+            <group>general</group>
+            <table>messages</table>
             <type>textarea</type>
             <cols>80</cols>
             <rows>40</rows>
-            <group>general</group>
-            <table>messages</table>
             <field>message</field>
             <caption>Sisu</caption>
       </property>
       <property>
             <name>attachments</name>
-            <type>relmanager</type>
+            <group>general</group>
             <table>objects</table>
+            <type>relmanager</type>
             <field>meta</field>
             <method>serialize</method>
             <reltype>RELTYPE_ATTACHMENT</reltype>
@@ -85,90 +86,89 @@
                   <num_1>file</num_1>
             </props>
             <chooser>no</chooser>
-            <group>general</group>
             <caption>Manused</caption>
       </property>
       <property>
             <name>msgrid</name>
+            <group>general</group>
+            <table>messages</table>
             <type>hidden</type>
             <store>no</store>
             <form>all</form>
-            <group>general</group>
-            <table>messages</table>
             <field>msgrid</field>
             <caption>Msgrid</caption>
       </property>
       <property>
             <name>msgid</name>
+            <group>general</group>
+            <table>messages</table>
             <type>hidden</type>
             <store>no</store>
             <form>all</form>
-            <group>general</group>
-            <table>messages</table>
             <field>msgid</field>
             <caption>Msgid</caption>
       </property>
       <property>
             <name>mailbox</name>
+            <group>general</group>
+            <table>messages</table>
             <type>hidden</type>
             <store>no</store>
             <form>all</form>
-            <group>general</group>
-            <table>messages</table>
             <field>mailbox</field>
             <caption>Mailbox</caption>
       </property>
       <property>
             <name>cb_part</name>
+            <group>general</group>
+            <table>messages</table>
             <type>hidden</type>
             <store>no</store>
             <form>all</form>
-            <group>general</group>
-            <table>messages</table>
             <field>cb_part</field>
             <caption>Cb part</caption>
       </property>
       <property>
             <name>view_toolbar</name>
+            <group>general</group>
+            <table>messages</table>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <form>showmsg</form>
-            <group>general</group>
-            <table>messages</table>
             <field>view_toolbar</field>
             <caption>Kirja vaatamise toolbar</caption>
       </property>
       <property>
             <name>msg_headers</name>
+            <group>general</group>
+            <table>messages</table>
             <type>text</type>
             <store>no</store>
             <form>showmsg</form>
             <no_caption>1</no_caption>
-            <group>general</group>
-            <table>messages</table>
             <field>msg_headers</field>
             <caption>Kirja päised</caption>
       </property>
       <property>
             <name>msg_content</name>
+            <group>general</group>
+            <table>messages</table>
             <type>text</type>
             <store>no</store>
             <form>showmsg</form>
             <no_caption>1</no_caption>
-            <group>general</group>
-            <table>messages</table>
             <field>msg_content</field>
             <caption>Kirja sisu</caption>
       </property>
       <property>
             <name>msg_attachments</name>
+            <group>general</group>
+            <table>messages</table>
             <type>text</type>
             <store>no</store>
             <form>showmsg</form>
             <no_caption>1</no_caption>
-            <group>general</group>
-            <table>messages</table>
             <field>msg_attachments</field>
             <caption>Manused</caption>
       </property>

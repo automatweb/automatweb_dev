@@ -2,13 +2,13 @@
 <properties>
       <property>
             <name>content</name>
-            <type>textarea</type>
-            <cols>40</cols>
-            <rows>15</rows>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>15</rows>
             <caption>Sisu</caption>
       </property>
       <classinfo>

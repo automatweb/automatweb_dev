@@ -2,54 +2,54 @@
 <properties>
       <property>
             <name>lang_code</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Keel</caption>
       </property>
       <property>
             <name>subclass</name>
-            <type>select</type>
-            <newonly>1</newonly>
             <table>objects</table>
             <group>general</group>
+            <type>select</type>
+            <newonly>1</newonly>
             <field>subclass</field>
             <caption>Klass</caption>
       </property>
       <property>
             <name>info</name>
-            <type>text</type>
-            <editonly>1</editonly>
-            <store>no</store>
+            <table>objects</table>
             <group>
                   <num_0>general</num_0>
                   <num_1>workbench</num_1>
             </group>
-            <table>objects</table>
+            <type>text</type>
+            <editonly>1</editonly>
+            <store>no</store>
             <field>info</field>
             <caption>Info </caption>
       </property>
       <property>
             <name>preview</name>
+            <table>objects</table>
+            <group>workbench</group>
             <type>callback</type>
             <callback>callback_get_preview_links</callback>
             <editonly>1</editonly>
             <store>no</store>
-            <group>workbench</group>
-            <table>objects</table>
             <field>preview</field>
             <caption>Eelvaade</caption>
       </property>
       <property>
             <name>workbench</name>
+            <table>objects</table>
+            <group>workbench</group>
             <type>callback</type>
             <callback>callback_gen_workbench</callback>
             <store>no</store>
-            <group>workbench</group>
             <no_caption>1</no_caption>
-            <table>objects</table>
             <field>workbench</field>
             <caption>Tõlkimine</caption>
       </property>

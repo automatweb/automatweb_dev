@@ -2,60 +2,60 @@
 <properties>
       <property>
             <name>top</name>
-            <type>textbox</type>
-            <size>5</size>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
             <caption>Mitu topis</caption>
       </property>
       <property>
             <name>top_type</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>J&amp;auml;rjestatakse</caption>
       </property>
       <property>
             <name>objects_from</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Millistele objektidele kehtib</caption>
       </property>
       <property>
             <name>objects_from_clid</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Vali klass</caption>
       </property>
       <property>
             <name>objects_from_folder</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_RATE_FOLDER</reltype>
-            <multiple>1</multiple>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RATE_FOLDER</reltype>
+            <multiple>1</multiple>
             <caption>Vali kataloogid</caption>
       </property>
       <property>
             <name>objects_from_oid</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_RATE_OID</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RATE_OID</reltype>
             <caption>Vali objekt</caption>
       </property>
       <classinfo>

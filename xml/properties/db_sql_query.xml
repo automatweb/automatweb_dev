@@ -2,23 +2,23 @@
 <properties>
       <property>
             <name>db_base</name>
-            <type>objpicker</type>
-            <clid>CL_DB_LOGIN</clid>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>objpicker</type>
+            <clid>CL_DB_LOGIN</clid>
             <caption>Andmebaas</caption>
       </property>
       <property>
             <name>sql</name>
-            <type>textarea</type>
-            <cols>50</cols>
-            <rows>5</rows>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textarea</type>
+            <cols>50</cols>
+            <rows>5</rows>
             <caption>SQL</caption>
       </property>
 </properties>

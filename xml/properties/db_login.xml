@@ -2,49 +2,49 @@
 <properties>
       <property>
             <name>db_server</name>
-            <type>objpicker</type>
-            <clid>CL_DB_SERVER_LOGIN</clid>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>objpicker</type>
+            <clid>CL_DB_SERVER_LOGIN</clid>
             <caption>Server</caption>
       </property>
       <property>
             <name>db_base</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Andmebaas</caption>
       </property>
       <property>
             <name>db_user</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Kasutajanimi</caption>
       </property>
       <property>
             <name>db_pass</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Parool</caption>
       </property>
       <property>
             <name>db_create_ifnexist</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Loo kui olemas pole</caption>
       </property>
 </properties>

@@ -1,0 +1,91 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>confirmed</name>
+            <table>aw_shop_orders</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>confirmed</field>
+            <caption>Kinnitatud</caption>
+      </property>
+      <property>
+            <name>orderer_person</name>
+            <table>aw_shop_orders</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PERSON</reltype>
+            <field>aw_orderer_person</field>
+            <caption>Tellija esindaja</caption>
+      </property>
+      <property>
+            <name>orderer_company</name>
+            <table>aw_shop_orders</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORG</reltype>
+            <field>aw_orderer_company</field>
+            <caption>Tellija</caption>
+      </property>
+      <property>
+            <name>items</name>
+            <table>objects</table>
+            <group>items</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>sum</name>
+            <table>aw_shop_orders</table>
+            <group>items</group>
+            <type>textbox</type>
+            <field>aw_sum</field>
+            <caption>Summa</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SHOP_ORDER</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <items>
+                  <caption>Tellimuse sisu</caption>
+            </items>
+      </groupinfo>
+      <tableinfo>
+            <aw_shop_orders>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_shop_orders>
+      </tableinfo>
+      <reltypes>
+            <PRODUCT>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_SHOP_PRODUCT</num_0>
+                        <num_1>CL_SHOP_PACKET</num_1>
+                  </clid>
+                  <caption>tellimuse toode</caption>
+            </PRODUCT>
+            <EXPORT>
+                  <value>2</value>
+                  <clid>CL_SHOP_WAREHOUSE_EXPORT</clid>
+                  <caption>lao v&amp;auml;ljaminek</caption>
+            </EXPORT>
+            <PERSON>
+                  <value>3</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>tellija esindaja</caption>
+            </PERSON>
+            <ORG>
+                  <value>4</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>tellija organisatsioon</caption>
+            </ORG>
+      </reltypes>
+</properties>
+

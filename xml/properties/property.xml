@@ -2,11 +2,11 @@
 <properties>
       <property>
             <name>test</name>
-            <type>textbox</type>
-            <size>40</size>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>40</size>
             <caption>Test</caption>
       </property>
       <classinfo>

@@ -2,213 +2,213 @@
 <properties>
       <property>
             <name>s_server</name>
-            <type>objpicker</type>
-            <clid>CL_AW_LOGIN</clid>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <type>objpicker</type>
+            <clid>CL_AW_LOGIN</clid>
             <caption>Server</caption>
       </property>
       <property>
             <name>s_name</name>
-            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>
                   <num_0>search</num_0>
                   <num_1>advanced</num_1>
                   <num_2>objsearch</num_2>
             </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>textbox</type>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>s_comment</name>
-            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>
                   <num_0>search</num_0>
                   <num_1>advanced</num_1>
                   <num_2>objsearch</num_2>
             </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>textbox</type>
             <caption>Kommentaar</caption>
       </property>
       <property>
             <name>s_class_id</name>
-            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>
                   <num_0>search</num_0>
                   <num_1>advanced</num_1>
                   <num_2>objsearch</num_2>
             </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>select</type>
             <caption>Tüüp</caption>
       </property>
       <property>
             <name>s_oid</name>
-            <type>textbox</type>
-            <size>5</size>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <type>textbox</type>
+            <size>5</size>
             <caption>OID</caption>
       </property>
       <property>
             <name>s_location</name>
-            <type>select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <type>select</type>
             <caption>Asukoht</caption>
       </property>
       <property>
             <name>s_lang_id</name>
-            <type>select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <type>select</type>
             <caption>Keel</caption>
       </property>
       <property>
             <name>s_search_bros</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Leia vendi</caption>
       </property>
       <property>
             <name>s_status</name>
-            <type>s_status</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>
                   <num_0>search</num_0>
                   <num_1>advanced</num_1>
                   <num_2>objsearch</num_2>
             </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>s_status</type>
             <caption>Staatus</caption>
       </property>
       <property>
             <name>s_createdby</name>
-            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>
                   <num_0>search</num_0>
                   <num_1>advanced</num_1>
                   <num_2>objsearch</num_2>
             </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>textbox</type>
             <caption>Looja</caption>
       </property>
       <property>
             <name>s_modifiedby</name>
-            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>
                   <num_0>search</num_0>
                   <num_1>advanced</num_1>
                   <num_2>objsearch</num_2>
             </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>textbox</type>
             <caption>Muutja</caption>
       </property>
       <property>
             <name>s_alias</name>
-            <type>textbox</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <type>textbox</type>
             <caption>Alias</caption>
       </property>
       <property>
             <name>s_period</name>
-            <type>select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <type>select</type>
             <caption>Periood</caption>
       </property>
       <property>
             <name>s_site_id</name>
-            <type>select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <type>select</type>
             <caption>Saidi ID</caption>
       </property>
       <property>
             <name>selection_manage_buttons</name>
-            <type>text</type>
-            <callback>selection_manage_bar</callback>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>
                   <num_0>advanced</num_0>
                   <num_1>search</num_1>
                   <num_2>results</num_2>
             </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>text</type>
+            <callback>selection_manage_bar</callback>
       </property>
       <property>
             <name>results</name>
-            <type>text</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>
                   <num_0>search</num_0>
                   <num_1>advanced</num_1>
                   <num_2>objsearch</num_2>
                   <num_3>results</num_3>
             </group>
+            <type>text</type>
             <callback>get_result_table</callback>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
       </property>
       <property>
             <name>objsearch</name>
-            <type>text</type>
-            <group>objsearch</group>
-            <callback>get_objsearch</callback>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>objsearch</group>
+            <type>text</type>
+            <callback>get_objsearch</callback>
       </property>
       <property>
             <name>active_selection_objects</name>
-            <type>text</type>
-            <callback>callback_obj_list</callback>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>selectione</group>
+            <type>text</type>
+            <callback>callback_obj_list</callback>
       </property>
       <property>
             <name>active_selection</name>
-            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <group>
                   <num_0>objsearch</num_0>
                   <num_1>advanced</num_1>
                   <num_2>selectione</num_2>
             </group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <type>textbox</type>
       </property>
       <groupinfo>
             <search>

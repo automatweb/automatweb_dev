@@ -2,17 +2,17 @@
 <properties>
       <property>
             <name>name</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
+            <type>textbox</type>
             <field>name</field>
             <caption>Number</caption>
       </property>
       <property>
             <name>comment</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
+            <type>textbox</type>
             <field>comment</field>
             <caption>Kommentaar</caption>
       </property>

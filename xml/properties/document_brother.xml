@@ -2,361 +2,361 @@
 <properties>
       <property>
             <name>navtoolbar</name>
+            <table>documents</table>
+            <group>general</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>documents</table>
-            <group>general</group>
             <field>navtoolbar</field>
             <caption>Toolbar</caption>
       </property>
       <property>
             <name>active</name>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>2</ch_value>
-            <table>objects</table>
             <field>status</field>
-            <group>general</group>
             <caption>Aktiivne</caption>
       </property>
       <property>
             <name>plugins</name>
+            <table>objects</table>
+            <group>general</group>
             <type>callback</type>
             <callback>callback_get_doc_plugins</callback>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>Pluginad</caption>
       </property>
       <property>
             <name>title</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textbox</type>
             <size>60</size>
             <trans>1</trans>
-            <table>documents</table>
-            <group>general</group>
             <field>title</field>
             <caption>Pealkiri</caption>
       </property>
       <property>
             <name>subtitle</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textbox</type>
             <size>60</size>
             <trans>1</trans>
-            <table>documents</table>
-            <group>general</group>
             <field>subtitle</field>
             <caption>Alapealkiri</caption>
       </property>
       <property>
             <name>author</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textbox</type>
             <size>60</size>
             <trans>1</trans>
-            <table>documents</table>
-            <group>general</group>
             <field>author</field>
             <caption>Autor</caption>
       </property>
       <property>
             <name>photos</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textbox</type>
             <size>60</size>
             <trans>1</trans>
-            <table>documents</table>
-            <group>general</group>
             <field>photos</field>
             <caption>Fotode autor</caption>
       </property>
       <property>
             <name>alias</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <size>60</size>
-            <table>objects</table>
             <field>alias</field>
-            <group>general</group>
             <caption>Alias</caption>
       </property>
       <property>
             <name>keywords</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textbox</type>
             <size>60</size>
             <trans>1</trans>
-            <table>documents</table>
-            <group>general</group>
             <field>keywords</field>
             <caption>Võtmesõnad</caption>
       </property>
       <property>
             <name>names</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textbox</type>
             <size>60</size>
             <trans>1</trans>
-            <table>documents</table>
-            <group>general</group>
             <field>names</field>
             <caption>Nimed</caption>
       </property>
       <property>
             <name>lead</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textarea</type>
             <richtext>1</richtext>
             <cols>60</cols>
             <rows>10</rows>
             <trans>1</trans>
-            <table>documents</table>
-            <group>general</group>
             <field>lead</field>
             <caption>Lead</caption>
       </property>
       <property>
             <name>content</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textarea</type>
             <richtext>1</richtext>
             <cols>60</cols>
             <rows>30</rows>
             <trans>1</trans>
-            <table>documents</table>
-            <group>general</group>
             <field>content</field>
             <caption>Sisu</caption>
       </property>
       <property>
             <name>moreinfo</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textarea</type>
             <richtext>1</richtext>
             <cols>60</cols>
             <rows>5</rows>
             <trans>1</trans>
-            <table>documents</table>
-            <group>general</group>
             <field>moreinfo</field>
             <caption>Lisainfo</caption>
       </property>
       <property>
             <name>link_text</name>
-            <type>textbox</type>
-            <size>60</size>
             <table>documents</table>
             <group>general</group>
+            <type>textbox</type>
+            <size>60</size>
             <field>link_text</field>
             <caption>URL</caption>
       </property>
       <property>
             <name>is_forum</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>documents</table>
             <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <field>is_forum</field>
             <caption>Foorum</caption>
       </property>
       <property>
             <name>showlead</name>
+            <table>documents</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <table>documents</table>
-            <group>general</group>
             <field>showlead</field>
             <caption>Näita leadi</caption>
       </property>
       <property>
             <name>show_modified</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>documents</table>
             <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <field>show_modified</field>
             <caption>Näita muutmise kuupäeva</caption>
       </property>
       <property>
             <name>no_right_pane</name>
+            <table>documents</table>
+            <group>settings</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>settings</group>
-            <table>documents</table>
             <field>no_right_pane</field>
             <caption>Ilma parema paanita</caption>
       </property>
       <property>
             <name>no_left_pane</name>
+            <table>documents</table>
+            <group>settings</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>settings</group>
-            <table>documents</table>
             <field>no_left_pane</field>
             <caption>Ilma vasaku paanita</caption>
       </property>
       <property>
             <name>title_clickable</name>
+            <table>documents</table>
+            <group>settings</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>settings</group>
-            <table>documents</table>
             <field>title_clickable</field>
             <caption>Pealkiri klikitav</caption>
       </property>
       <property>
             <name>clear_styles</name>
+            <table>documents</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
-            <table>documents</table>
-            <group>general</group>
             <field>clear_styles</field>
             <caption>Tühista stiilid</caption>
       </property>
       <property>
             <name>link_keywords</name>
+            <table>documents</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
-            <table>documents</table>
-            <group>general</group>
             <field>link_keywords</field>
             <caption>Lingi võtmesõnad</caption>
       </property>
       <property>
             <name>esilehel</name>
+            <table>documents</table>
+            <group>settings</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>settings</group>
-            <table>documents</table>
             <field>esilehel</field>
             <caption>Esilehel</caption>
       </property>
       <property>
             <name>frontpage_left</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>documents</table>
             <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <field>frontpage_left</field>
             <caption>Esilehel tulbas</caption>
       </property>
       <property>
             <name>dcache</name>
-            <type>checkbox</type>
-            <store>no</store>
             <table>documents</table>
             <group>general</group>
+            <type>checkbox</type>
+            <store>no</store>
             <field>dcache</field>
             <caption>Cache otsingu jaoks</caption>
       </property>
       <property>
             <name>dcache_content</name>
-            <type>hidden</type>
-            <field>dcache</field>
             <table>documents</table>
             <group>general</group>
+            <type>hidden</type>
+            <field>dcache</field>
       </property>
       <property>
             <name>rating</name>
-            <type>hidden</type>
             <table>documents</table>
             <group>general</group>
+            <type>hidden</type>
             <field>rating</field>
       </property>
       <property>
             <name>num_ratings</name>
-            <type>hidden</type>
             <table>documents</table>
             <group>general</group>
+            <type>hidden</type>
             <field>num_ratings</field>
       </property>
       <property>
             <name>show_title</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>documents</table>
             <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <field>show_title</field>
             <caption>Näita pealkirja</caption>
       </property>
       <property>
             <name>no_search</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>documents</table>
             <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <field>no_search</field>
             <caption>Jäta otsingust välja</caption>
       </property>
       <property>
             <name>cite</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textarea</type>
             <cols>60</cols>
             <rows>10</rows>
-            <table>documents</table>
-            <group>general</group>
             <field>cite</field>
             <caption>Tsitaat</caption>
       </property>
       <property>
             <name>tm</name>
-            <type>textbox</type>
-            <size>20</size>
             <table>documents</table>
             <group>general</group>
+            <type>textbox</type>
+            <size>20</size>
             <field>tm</field>
             <caption>Kuupäev</caption>
       </property>
       <property>
             <name>show_print</name>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <default>1</default>
-            <group>general</group>
             <caption>'Prindi' nupp</caption>
       </property>
       <property>
             <name>sections</name>
+            <table>documents</table>
+            <group>vennastamine</group>
             <type>select</type>
             <multiple>1</multiple>
             <size>20</size>
-            <group>vennastamine</group>
             <store>no</store>
-            <table>documents</table>
             <field>sections</field>
             <caption>Sektsioonid</caption>
       </property>
       <property>
             <name>aliasmgr</name>
+            <table>documents</table>
+            <group>relationmgr</group>
             <type>aliasmgr</type>
             <store>no</store>
             <editonly>1</editonly>
-            <group>relationmgr</group>
             <trans>1</trans>
-            <table>documents</table>
             <field>aliasmgr</field>
             <caption>Aliastehaldur</caption>
       </property>
       <property>
             <name>start</name>
-            <type>date_select</type>
             <table>planner</table>
             <group>calendar</group>
+            <type>date_select</type>
             <field>start</field>
             <caption>Algab (kp)</caption>
       </property>
       <property>
             <name>start1</name>
-            <type>datetime_select</type>
-            <field>start</field>
             <table>planner</table>
             <group>calendar</group>
+            <type>datetime_select</type>
+            <field>start</field>
             <caption>Algab </caption>
       </property>
       <property>
             <name>createdby</name>
             <table>objects</table>
-            <field>createdby</field>
             <group>general</group>
+            <field>createdby</field>
             <type>text</type>
             <caption>Kes tegi</caption>
       </property>
@@ -421,64 +421,64 @@
       </property>
       <property>
             <name>language</name>
-            <type>text</type>
-            <group>general</group>
-            <store>no</store>
             <table>documents</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
             <field>language</field>
             <caption>Keel</caption>
       </property>
       <property>
             <name>duration</name>
-            <type>time_select</type>
-            <field>end</field>
             <table>planner</table>
             <group>calendar</group>
+            <type>time_select</type>
+            <field>end</field>
             <caption>Kestab</caption>
       </property>
       <property>
             <name>doc_modified</name>
-            <type>hidden</type>
             <table>documents</table>
-            <field>modified</field>
             <group>general</group>
+            <type>hidden</type>
+            <field>modified</field>
             <caption>Dok. modified</caption>
       </property>
       <property>
             <name>link_calendars</name>
+            <table>documents</table>
+            <group>calendar</group>
             <type>callback</type>
             <store>no</store>
             <callback>callback_gen_link_calendars</callback>
-            <group>calendar</group>
-            <table>documents</table>
             <field>link_calendars</field>
             <caption>Vali kalendrid, millesse see sündmus veel salvestatakse.</caption>
       </property>
       <property>
             <name>calendar_relation</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Põhikalender</caption>
       </property>
       <property>
             <name>gen_static</name>
-            <type>checkbox</type>
-            <store>no</store>
             <table>documents</table>
             <group>general</group>
+            <type>checkbox</type>
+            <store>no</store>
             <field>gen_static</field>
             <caption>Genereeri staatiline</caption>
       </property>
       <property>
             <name>sbt</name>
+            <table>documents</table>
+            <group>general</group>
             <type>submit</type>
             <value>Salvesta</value>
             <store>no</store>
-            <table>documents</table>
-            <group>general</group>
             <field>sbt</field>
       </property>
       <classinfo>

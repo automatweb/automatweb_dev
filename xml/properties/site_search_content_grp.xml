@@ -2,22 +2,22 @@
 <properties>
       <property>
             <name>users_only</name>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Ainult sisse logitud kasutajatele</caption>
       </property>
       <property>
             <name>menus</name>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <store>no</store>
             <callback>callback_get_menus</callback>
             <editonly>1</editonly>
-            <table>objects</table>
-            <group>general</group>
             <field>menus</field>
             <caption>Vali men&amp;uuml;&amp;uuml;d</caption>
       </property>

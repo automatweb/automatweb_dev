@@ -2,65 +2,68 @@
 <properties>
       <property>
             <name>is_done</name>
-            <type>checkbox</type>
             <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
             <field>flags</field>
             <method>bitmask</method>
             <ch_value>8</ch_value>
-            <group>general</group>
             <caption>Tehtud</caption>
       </property>
       <property>
             <name>start1</name>
-            <type>datetime_select</type>
-            <field>start</field>
             <table>planner</table>
             <group>general</group>
+            <type>datetime_select</type>
+            <field>start</field>
             <caption>Algab </caption>
       </property>
       <property>
             <name>end</name>
-            <type>datetime_select</type>
             <table>planner</table>
             <group>general</group>
+            <type>datetime_select</type>
             <field>end</field>
             <caption>Lõpeb</caption>
       </property>
       <property>
             <name>content</name>
+            <table>documents</table>
+            <group>general</group>
             <type>textarea</type>
             <cols>60</cols>
             <rows>30</rows>
-            <table>documents</table>
-            <group>general</group>
             <field>content</field>
             <caption>Sisu</caption>
       </property>
       <property>
             <name>summary</name>
+            <table>planner</table>
+            <group>general</group>
             <type>textarea</type>
             <cols>60</cols>
             <rows>30</rows>
-            <table>planner</table>
             <field>description</field>
-            <group>general</group>
             <caption>Kokkuvõte</caption>
       </property>
       <property>
             <name>aliasmgr</name>
+            <table>objects</table>
+            <group>general</group>
             <type>aliasmgr</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
-            <group>general</group>
             <field>aliasmgr</field>
             <caption>Aliastehaldur</caption>
       </property>
       <property>
             <name>recurrence</name>
+            <table>objects</table>
+            <group>recurrence</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>releditor</type>
             <reltype>RELTYPE_RECURRENCE</reltype>
-            <group>recurrence</group>
             <rel_id>first</rel_id>
             <props>
                   <num_0>start</num_0>
@@ -73,32 +76,39 @@
                   <num_7>interval_yearly</num_7>
                   <num_8></num_8>
             </props>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Kordused</caption>
       </property>
       <property>
             <name>calendar_selector</name>
+            <table>objects</table>
+            <group>calendars</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <callback>cb_calendar_selector</callback>
             <store>no</store>
-            <group>calendars</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Kalendrid</caption>
       </property>
       <property>
             <name>project_selector</name>
+            <table>objects</table>
+            <group>projects</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <callback>cb_project_selector</callback>
             <store>no</store>
-            <group>projects</group>
+            <caption>Projektid</caption>
+      </property>
+      <property>
+            <name>comment_list</name>
             <table>objects</table>
+            <group>comments</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Projektid</caption>
+            <type>comments</type>
+            <no_caption>1</no_caption>
+            <caption>Kommentaarid</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_MEETING</syslog_type>
@@ -115,6 +125,9 @@
             <projects>
                   <caption>Projektid</caption>
             </projects>
+            <comments>
+                  <caption>Kommentaarid</caption>
+            </comments>
       </groupinfo>
       <tableinfo>
             <documents>

@@ -2,29 +2,27 @@
 <properties>
       <property>
             <name>config</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_WORKFLOW_CONFIG</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Konfiguratsioon</caption>
       </property>
       <property>
             <name>preview</name>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <editonly>1</editonly>
             <store>no</store>
-            <table>objects</table>
-            <group>general</group>
             <field>preview</field>
             <caption>Näita</caption>
       </property>
       <property>
             <name>id</name>
-            <type>hidden</type>
             <table>objects</table>
-            <field>oid</field>
             <group>
                   <num_0>show_actors</num_0>
                   <num_1>show_actions</num_1>
@@ -32,58 +30,60 @@
                   <num_3>show_processes</num_3>
             </group>
             <view>show</view>
+            <type>hidden</type>
+            <field>oid</field>
       </property>
       <property>
             <name>show_entities</name>
-            <type>callback</type>
-            <callback>callback_show_entities</callback>
-            <group>show_entities</group>
             <table>objects</table>
+            <group>show_entities</group>
             <view>show</view>
             <store>no</store>
+            <type>callback</type>
+            <callback>callback_show_entities</callback>
             <field>show_entities</field>
             <caption>Juhtumid</caption>
       </property>
       <property>
             <name>show_actions</name>
-            <type>callback</type>
-            <callback>callback_show_actions</callback>
-            <group>show_actions</group>
             <table>objects</table>
+            <group>show_actions</group>
             <view>show</view>
             <store>no</store>
+            <type>callback</type>
+            <callback>callback_show_actions</callback>
             <field>show_actions</field>
             <caption>Tegevused</caption>
       </property>
       <property>
             <name>show_processes</name>
-            <type>callback</type>
-            <callback>callback_show_processes</callback>
-            <group>show_processes</group>
             <table>objects</table>
+            <group>show_processes</group>
             <view>show</view>
             <store>no</store>
+            <type>callback</type>
+            <callback>callback_show_processes</callback>
             <field>show_processes</field>
             <caption>Protsessid</caption>
       </property>
       <property>
             <name>show_actors</name>
-            <type>callback</type>
-            <callback>callback_show_actors</callback>
-            <group>show_actors</group>
             <table>objects</table>
+            <group>show_actors</group>
             <view>show</view>
             <store>no</store>
+            <type>callback</type>
+            <callback>callback_show_actors</callback>
             <field>show_actors</field>
             <caption>Tegijad</caption>
       </property>
       <property>
             <name>show_documentation</name>
-            <type>text</type>
-            <group>show_documentation</group>
             <table>objects</table>
+            <group>show_documentation</group>
             <view>show</view>
             <store>no</store>
+            <type>text</type>
             <field>show_documentation</field>
             <caption>Juhendmaterjalid</caption>
       </property>

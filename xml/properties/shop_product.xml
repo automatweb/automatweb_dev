@@ -2,98 +2,98 @@
 <properties>
       <property>
             <name>item_count</name>
-            <type>hidden</type>
             <table>aw_shop_products</table>
-            <field>aw_count</field>
             <group>general</group>
+            <type>hidden</type>
+            <field>aw_count</field>
             <caption>Mitu laos</caption>
       </property>
       <property>
             <name>item_type</name>
-            <type>hidden</type>
             <table>aw_shop_products</table>
-            <field>aw_type_id</field>
             <group>general</group>
+            <type>hidden</type>
+            <field>aw_type_id</field>
             <caption>Toote t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>price</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>price</field>
             <group>general</group>
+            <type>textbox</type>
+            <field>price</field>
             <caption>Hind</caption>
       </property>
       <property>
             <name>user1</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>user1</field>
             <group>data</group>
+            <type>textbox</type>
+            <field>user1</field>
             <caption>User-defined 1</caption>
       </property>
       <property>
             <name>user2</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>user2</field>
             <group>data</group>
+            <type>textbox</type>
+            <field>user2</field>
             <caption>User-defined 2</caption>
       </property>
       <property>
             <name>user3</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>user3</field>
             <group>data</group>
+            <type>textbox</type>
+            <field>user3</field>
             <caption>User-defined 3</caption>
       </property>
       <property>
             <name>user4</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>user4</field>
             <group>data</group>
+            <type>textbox</type>
+            <field>user4</field>
             <caption>User-defined 4</caption>
       </property>
       <property>
             <name>user5</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>user5</field>
             <group>data</group>
+            <type>textbox</type>
+            <field>user5</field>
             <caption>User-defined 5</caption>
       </property>
       <property>
             <name>user6</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>user6</field>
             <group>data</group>
+            <type>textbox</type>
+            <field>user6</field>
             <caption>User-defined 6</caption>
       </property>
       <property>
             <name>user7</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>user7</field>
             <group>data</group>
+            <type>textbox</type>
+            <field>user7</field>
             <caption>User-defined 7</caption>
       </property>
       <property>
             <name>user8</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>user8</field>
             <group>data</group>
+            <type>textbox</type>
+            <field>user8</field>
             <caption>User-defined 8</caption>
       </property>
       <property>
             <name>user9</name>
-            <type>textbox</type>
             <table>aw_shop_products</table>
-            <field>user9</field>
             <group>data</group>
+            <type>textbox</type>
+            <field>user9</field>
             <caption>User-defined 9</caption>
       </property>
       <classinfo>

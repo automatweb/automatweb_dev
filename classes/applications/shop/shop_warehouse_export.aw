@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.1 2004/03/17 16:06:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.2 2004/03/24 11:00:19 kristo Exp $
 // shop_warehouse_export.aw - Lao v&auml;ljaminek 
 /*
 
@@ -17,6 +17,9 @@
 
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT,CL_SHOP_PACKET
 @caption v&auml;lja l&auml;inud toode
+
+@reltype ORDER value=2 clid=CL_SHOP_ORDER
+@caption tellimus
 
 */
 
@@ -65,7 +68,7 @@ class shop_warehouse_export extends class_base
 				if ($arr["obj_inst"]->prop("confirm") != 1 && $data["value"] == 1)
 				{
 					// confirm was clicked, do the actual add
-					$this->do_remove_from_product_counts($arr["obj_inst"]);
+					$this->do_confirm($arr["obj_inst"]);
 				}
 				break;
 		}
@@ -118,15 +121,23 @@ class shop_warehouse_export extends class_base
 		$arr["obj_inst"]->set_meta("exp_content", $arr["request"]["pd"]);
 	}
 
-	function do_remove_from_product_counts($o)
+	function do_confirm($o)
 	{
+		if ($o->prop("confirm") == 1)
+		{
+			// make sure we don't re-confirm receptions
+			return;
+		}
+
 		$pd = $o->meta("exp_content");
-		foreach($o->connections_from(array("type" => RELTYPE_PRODUCT)) as $c)
+		foreach($o->connections_from(array("type" => 1 /*RELTYPE_PRODUCT*/)) as $c)
 		{
 			$to = $c->to();
 			$to->set_prop("item_count", $to->prop("item_count") - $pd[$to->id()]);
 			$to->save();
 		}
+		$o->set_prop("confirm", 1);
+		$o->save();
 	}
 }
 ?>

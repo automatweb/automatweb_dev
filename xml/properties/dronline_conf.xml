@@ -2,189 +2,189 @@
 <properties>
       <property>
             <name>from</name>
-            <type>date_select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>date_select</type>
             <caption>Alates</caption>
       </property>
       <property>
             <name>to</name>
-            <type>date_select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>date_select</type>
             <caption>Kuni</caption>
       </property>
       <property>
             <name>user</name>
-            <type>select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>select</type>
             <caption>kasutaja</caption>
       </property>
       <property>
             <name>address</name>
-            <type>textbox</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>textbox</type>
             <caption>IP Aadress</caption>
       </property>
       <property>
             <name>email_uid</name>
-            <type>textbox</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>textbox</type>
             <caption>Listi UID</caption>
       </property>
       <property>
             <name>email_email</name>
-            <type>textbox</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>textbox</type>
             <caption>Listi email</caption>
       </property>
       <property>
             <name>textfilter</name>
-            <type>textbox</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>textbox</type>
             <caption>Mida tegi </caption>
       </property>
       <property>
             <name>numlines</name>
-            <type>textbox</type>
-            <size>4</size>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
             <caption>Mitu rida</caption>
       </property>
       <property>
             <name>sites</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>4</size>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>4</size>
             <caption>Saidid</caption>
       </property>
       <property>
             <name>languages</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>4</size>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>4</size>
             <caption>Keeled</caption>
       </property>
       <property>
             <name>use_filter</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Kas kasutada Tegevuste filtrit</caption>
       </property>
       <property>
             <name>filter_types</name>
-            <type>callback</type>
-            <callback>get_filter_types</callback>
-            <group>types</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>types</group>
+            <type>callback</type>
+            <callback>get_filter_types</callback>
             <caption>T&amp;uuml;&amp;uuml;bid</caption>
       </property>
       <property>
             <name>filter_actions</name>
-            <type>callback</type>
-            <callback>get_filter_actions</callback>
-            <group>actions</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>actions</group>
+            <type>callback</type>
+            <callback>get_filter_actions</callback>
             <caption>Tegevused</caption>
       </property>
       <property>
             <name>filter_combo</name>
-            <type>callback</type>
-            <callback>get_filter_combo</callback>
-            <group>combo</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>combo</group>
+            <type>callback</type>
+            <callback>get_filter_combo</callback>
             <caption>Tegevused</caption>
       </property>
       <property>
             <name>ip_save_folder</name>
-            <type>objpicker</type>
-            <clid>CL_MENU</clid>
-            <group>ipfilter</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>ipfilter</group>
+            <type>objpicker</type>
+            <clid>CL_MENU</clid>
             <caption>Kataloog, kuhu salvestatakse IP aadressid</caption>
       </property>
       <property>
             <name>ip_block_folders</name>
-            <type>objpicker</type>
-            <clid>CL_MENU</clid>
-            <multiple>1</multiple>
-            <group>ipfilter</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>ipfilter</group>
+            <type>objpicker</type>
+            <clid>CL_MENU</clid>
+            <multiple>1</multiple>
             <caption>Blokeeritavate aadresside kataloogid</caption>
       </property>
       <property>
             <name>ip_block_folders_subs</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <group>ipfilter</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>ipfilter</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Kas n&amp;auml;idata ka alamkataloogid</caption>
       </property>
       <property>
             <name>ip_allow_folders</name>
-            <type>objpicker</type>
-            <clid>CL_MENU</clid>
-            <multiple>1</multiple>
-            <group>ipfilter</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>ipfilter</group>
+            <type>objpicker</type>
+            <clid>CL_MENU</clid>
+            <multiple>1</multiple>
             <caption>N&amp;auml;idatavate aadresside kataloogid</caption>
       </property>
       <property>
             <name>ip_allow_folders_subs</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <group>ipfilter</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>ipfilter</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Kas n&amp;auml;idata ka alamkataloogid</caption>
       </property>
       <groupinfo>

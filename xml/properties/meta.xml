@@ -2,11 +2,11 @@
 <properties>
       <property>
             <name>ord</name>
+            <table>objects</table>
+            <group>general</group>
             <field>jrk</field>
             <type>textbox</type>
             <size>4</size>
-            <table>objects</table>
-            <group>general</group>
             <caption>Jrk.</caption>
       </property>
       <classinfo>

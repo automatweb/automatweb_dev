@@ -2,11 +2,11 @@
 <properties>
       <property>
             <name>event_list</name>
-            <type>calendar</type>
+            <table>objects</table>
             <group>event_list</group>
+            <type>calendar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>event_list</field>
             <caption>Sündmused</caption>
       </property>

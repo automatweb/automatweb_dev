@@ -164,9 +164,11 @@
                   <caption>Telli</caption>
             </order>
             <order_unconfirmed>
+                  <parent>order</parent>
                   <caption>Kinnitamata</caption>
             </order_unconfirmed>
             <order_confirmed>
+                  <parent>order</parent>
                   <caption>Kinnitatud</caption>
             </order_confirmed>
       </groupinfo>
@@ -203,6 +205,11 @@
                   <clid>CL_SHOP_WAREHOUSE_EXPORT</clid>
                   <caption>lao v&amp;auml;jaminek</caption>
             </STORAGE_EXPORT>
+            <ORDER>
+                  <value>5</value>
+                  <clid>CL_SHOP_ORDER</clid>
+                  <caption>tellimus</caption>
+            </ORDER>
       </reltypes>
 </properties>
 

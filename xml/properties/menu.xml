@@ -2,229 +2,229 @@
 <properties>
       <property>
             <name>alias</name>
+            <table>objects</table>
             <type>textbox</type>
             <group>general</group>
-            <table>objects</table>
             <field>alias</field>
             <caption>Alias</caption>
       </property>
       <property>
             <name>jrk</name>
+            <table>objects</table>
             <type>textbox</type>
             <size>4</size>
             <group>general</group>
-            <table>objects</table>
             <field>jrk</field>
             <caption>Jrk</caption>
       </property>
       <property>
             <name>target</name>
+            <table>menu</table>
             <type>checkbox</type>
             <group>general</group>
             <ch_value>1</ch_value>
             <search>1</search>
-            <table>menu</table>
             <field>target</field>
             <caption>Uues aknas</caption>
       </property>
       <property>
             <name>users_only</name>
+            <table>objects</table>
             <type>checkbox</type>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
             <ch_value>1</ch_value>
-            <table>objects</table>
             <caption>Ainult sisselogitud kasutajatele</caption>
       </property>
       <property>
             <name>color</name>
+            <table>objects</table>
             <type>colorpicker</type>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
-            <table>objects</table>
             <caption>Menüü värv</caption>
       </property>
       <property>
             <name>color2</name>
+            <table>objects</table>
             <type>colorpicker</type>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
-            <table>objects</table>
             <caption>Menüü värv 2</caption>
       </property>
       <property>
             <name>icon</name>
+            <table>objects</table>
             <type>icon</type>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
-            <table>objects</table>
             <caption>Ikoon</caption>
       </property>
       <property>
             <name>sort_by_name</name>
+            <table>objects</table>
             <type>checkbox</type>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
             <ch_value>1</ch_value>
-            <table>objects</table>
             <caption>Sorteeri nime järgi</caption>
       </property>
       <property>
             <name>aip_filename</name>
+            <table>objects</table>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
-            <table>objects</table>
             <caption>Failinimi</caption>
       </property>
       <property>
             <name>periodic</name>
+            <table>objects</table>
             <type>checkbox</type>
             <group>advanced</group>
             <ch_value>1</ch_value>
-            <table>objects</table>
             <field>periodic</field>
             <caption>Perioodiline</caption>
       </property>
       <property>
             <name>objtbl_conf</name>
+            <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_OBJ_TABLE_CONF</reltype>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
-            <table>objects</table>
             <caption>Objektitabeli konf</caption>
       </property>
       <property>
             <name>add_tree_conf</name>
+            <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_ADD_TREE_CONF</reltype>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
-            <table>objects</table>
             <caption>Objekti lisamise puu konff</caption>
       </property>
       <property>
             <name>cfgmanager</name>
+            <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_CFGFORM</reltype>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
-            <table>objects</table>
             <caption>Konfiguratsioonivorm</caption>
       </property>
       <property>
             <name>show_lead</name>
+            <table>objects</table>
             <type>checkbox</type>
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
             <ch_value>1</ch_value>
-            <table>objects</table>
             <caption>Näita ainult leadi</caption>
       </property>
       <property>
             <name>grkeywords</name>
+            <table>objects</table>
             <type>select</type>
             <size>10</size>
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
             <group>keywords</group>
-            <table>objects</table>
             <caption>AW Märksõnad</caption>
       </property>
       <property>
             <name>keywords</name>
+            <table>objects</table>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
             <group>keywords</group>
-            <table>objects</table>
             <caption>META keywords</caption>
       </property>
       <property>
             <name>description</name>
+            <table>objects</table>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
             <group>keywords</group>
-            <table>objects</table>
             <caption>META description</caption>
       </property>
       <property>
             <name>sections</name>
+            <table>objects</table>
             <type>table</type>
             <store>no</store>
             <group>brothers</group>
-            <table>objects</table>
             <field>sections</field>
             <caption>Vennad</caption>
       </property>
       <property>
             <name>images_from_menu</name>
+            <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_PICTURES_MENU</reltype>
             <group>presentation</group>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
             <caption>V&amp;otilde;ta pildid men&amp;uuml;&amp;uuml; alt</caption>
       </property>
       <property>
             <name>img_timing</name>
+            <table>objects</table>
             <type>textbox</type>
             <size>3</size>
             <field>meta</field>
             <method>serialize</method>
             <group>presentation</group>
-            <table>objects</table>
             <caption>Viivitus piltide vahel (sek.)</caption>
       </property>
       <property>
             <name>img_act</name>
+            <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_IMAGE</reltype>
             <field>meta</field>
             <method>serialize</method>
             <group>presentation</group>
-            <table>objects</table>
             <caption>Aktiivse menüü pilt</caption>
       </property>
       <property>
             <name>menu_images</name>
+            <table>objects</table>
             <type>table</type>
             <field>meta</field>
             <method>serialize</method>
             <group>presentation</group>
             <store>no</store>
-            <table>objects</table>
             <caption>Menüü pildid</caption>
       </property>
       <property>
             <name>sss</name>
+            <table>menu</table>
             <type>table</type>
             <store>no</store>
             <group>docs_from</group>
-            <table>menu</table>
             <field>sss</field>
             <caption>Menüüd, mille alt viimased dokumendid võetakse</caption>
       </property>
       <property>
             <name>pers</name>
+            <table>objects</table>
             <type>relpicker</type>
             <multiple>1</multiple>
             <size>5</size>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>docs_from</group>
@@ -233,9 +233,9 @@
       </property>
       <property>
             <name>all_pers</name>
+            <table>objects</table>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>docs_from</group>
@@ -243,20 +243,20 @@
       </property>
       <property>
             <name>docs_per_period</name>
+            <table>objects</table>
             <type>textbox</type>
             <size>3</size>
             <group>docs_from</group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <caption>Dokumente perioodist</caption>
       </property>
       <property>
             <name>seealso</name>
+            <table>menu</table>
             <type>table</type>
             <group>relations</group>
             <store>no</store>
-            <table>menu</table>
             <field>seealso</field>
             <caption>
             <![CDATA[Menüüd, mille all see menüü on "vaata lisaks" menüü]]>
@@ -265,251 +265,251 @@
       </property>
       <property>
             <name>seealso_order</name>
+            <table>objects</table>
             <type>textbox</type>
             <group>relations</group>
             <size>3</size>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <caption>Järjekorranumber (vaata lisaks)</caption>
       </property>
       <property>
             <name>link</name>
+            <table>menu</table>
             <type>textbox</type>
             <group>show</group>
-            <table>menu</table>
             <field>link</field>
             <caption>Menüü link</caption>
       </property>
       <property>
             <name>type</name>
+            <table>menu</table>
             <type>select</type>
             <group>general</group>
-            <table>menu</table>
             <field>type</field>
             <caption>Menüü tüüp</caption>
       </property>
       <property>
             <name>admin_feature</name>
+            <table>menu</table>
             <type>select</type>
             <group>general</group>
-            <table>menu</table>
             <field>admin_feature</field>
             <caption>Vali programm</caption>
       </property>
       <property>
             <name>pmethod_properties</name>
+            <table>menu</table>
             <type>callback</type>
             <callback>callback_get_pmethod_options</callback>
             <group>general</group>
             <store>no</store>
-            <table>menu</table>
             <field>pmethod_properties</field>
             <caption>Avaliku meetodi seaded</caption>
       </property>
       <property>
             <name>clickable</name>
+            <table>menu</table>
             <type>checkbox</type>
             <group>advanced</group>
             <ch_value>1</ch_value>
             <default>1</default>
-            <table>menu</table>
             <field>clickable</field>
             <caption>Klikitav</caption>
       </property>
       <property>
             <name>no_export</name>
+            <table>objects</table>
             <type>checkbox</type>
             <group>advanced</group>
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
             <caption>&amp;Auml;ra n&amp;auml;ita ekspordis</caption>
       </property>
       <property>
             <name>no_menus</name>
+            <table>menu</table>
             <type>checkbox</type>
             <group>advanced</group>
             <ch_value>1</ch_value>
-            <table>menu</table>
             <field>no_menus</field>
             <caption>Ilma menüüdeta</caption>
       </property>
       <property>
             <name>mid</name>
+            <table>menu</table>
             <type>checkbox</type>
             <group>advanced</group>
             <ch_value>1</ch_value>
-            <table>menu</table>
             <field>mid</field>
             <caption>Paremal</caption>
       </property>
       <property>
             <name>width</name>
+            <table>menu</table>
             <type>textbox</type>
             <size>5</size>
             <group>advanced</group>
-            <table>menu</table>
             <field>width</field>
             <caption>Laius</caption>
       </property>
       <property>
             <name>submenus_from_menu</name>
+            <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_SHOW_SUBFOLDERS_MENU</reltype>
             <group>advanced</group>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
             <caption>V&amp;otilde;ta alammen&amp;uuml;&amp;uuml;d men&amp;uuml;&amp;uuml; alt</caption>
       </property>
       <property>
             <name>show_layout</name>
+            <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_SHOW_AS_LAYOUT</reltype>
             <group>advanced</group>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
             <caption>Kasuta n&amp;auml;itamiseks layouti</caption>
       </property>
       <property>
             <name>show_object_tree</name>
+            <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_OBJ_TREE</reltype>
             <group>advanced</group>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
             <caption>Kasuta alammen&amp;uuml;&amp;uuml;de n&amp;auml;itamiseks objektide nimekirja</caption>
       </property>
       <property>
             <name>left_pane</name>
+            <table>menu</table>
+            <group>show</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <table>menu</table>
-            <group>show</group>
             <field>left_pane</field>
             <caption>Vasak paan</caption>
       </property>
       <property>
             <name>right_pane</name>
+            <table>menu</table>
+            <group>show</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <table>menu</table>
-            <group>show</group>
             <field>right_pane</field>
             <caption>Parem paan</caption>
       </property>
       <property>
             <name>tpl_dir</name>
             <table>objects</table>
+            <group>show</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>show</group>
             <caption>Template set </caption>
       </property>
       <property>
             <name>tpl_view</name>
-            <type>select</type>
             <table>menu</table>
             <group>show</group>
+            <type>select</type>
             <field>tpl_view</field>
             <caption>Template dokumendi näitamiseks (pikk)</caption>
       </property>
       <property>
             <name>tpl_lead</name>
-            <type>select</type>
             <table>menu</table>
             <group>show</group>
+            <type>select</type>
             <field>tpl_lead</field>
             <caption>Template dokumendi näitamiseks (lühike)</caption>
       </property>
       <property>
             <name>hide_noact</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>menu</table>
             <group>show</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <field>hide_noact</field>
             <caption>Peida ära, kui dokumente pole</caption>
       </property>
       <property>
             <name>ndocs</name>
+            <table>menu</table>
+            <group>docs_from</group>
             <type>textbox</type>
             <size>3</size>
-            <group>docs_from</group>
-            <table>menu</table>
             <field>ndocs</field>
             <caption>Mitu viimast dokumenti</caption>
       </property>
       <property>
             <name>show_periods</name>
+            <table>objects</table>
+            <group>show</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>show</group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <caption>Näita perioode</caption>
       </property>
       <property>
             <name>show_period_count</name>
+            <table>objects</table>
+            <group>show</group>
             <type>textbox</type>
             <size>4</size>
-            <group>show</group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <caption>Mitu viimast perioodi</caption>
       </property>
       <property>
             <name>export</name>
+            <table>menu</table>
+            <group>import_export</group>
             <type>callback</type>
             <callback>callback_get_export_options</callback>
-            <group>import_export</group>
             <store>no</store>
-            <table>menu</table>
             <field>export</field>
             <caption>Eksport</caption>
       </property>
       <property>
             <name>sort_by</name>
-            <type>select</type>
             <table>objects</table>
+            <group>show</group>
+            <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>show</group>
             <caption>Dokumente j&amp;auml;rjestatakse</caption>
       </property>
       <property>
             <name>sort_ord</name>
-            <type>select</type>
             <table>objects</table>
+            <group>show</group>
+            <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>show</group>
       </property>
       <property>
             <name>ip</name>
+            <table>menu</table>
+            <group>ip</group>
             <type>table</type>
             <store>no</store>
-            <group>ip</group>
             <no_caption>1</no_caption>
-            <table>menu</table>
             <field>ip</field>
       </property>
       <property>
             <name>frontpage</name>
-            <type>checkbox</type>
             <table>objects</table>
+            <group>advanced</group>
+            <type>checkbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>advanced</group>
             <ch_value>1</ch_value>
             <caption>Esilehel</caption>
       </property>

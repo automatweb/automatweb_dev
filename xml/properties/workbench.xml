@@ -2,10 +2,10 @@
 <properties>
       <property>
             <name>preview</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <group>general</group>
+            <type>text</type>
+            <store>no</store>
             <field>preview</field>
             <caption>Näita</caption>
       </property>

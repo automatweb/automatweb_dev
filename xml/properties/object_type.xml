@@ -2,42 +2,42 @@
 <properties>
       <property>
             <name>type</name>
-            <type>select</type>
-            <field>subclass</field>
             <table>objects</table>
             <group>general</group>
+            <type>select</type>
+            <field>subclass</field>
             <caption>Objektitüüp</caption>
       </property>
       <property>
             <name>use_cfgform</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_OBJECT_CFGFORM</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJECT_CFGFORM</reltype>
             <caption>Kasuta seadete vormi</caption>
       </property>
       <property>
             <name>configuration</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <callback>gen_config</callback>
             <store>no</store>
-            <group>settings</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Klassi konfiguratsioon</caption>
       </property>
       <property>
             <name>default_object</name>
-            <type>chooser</type>
-            <store>no</store>
-            <group>defobj</group>
-            <orient>vertical</orient>
             <table>objects</table>
+            <group>defobj</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>chooser</type>
+            <store>no</store>
+            <orient>vertical</orient>
             <caption>Vaikimisi objekt</caption>
       </property>
       <classinfo>

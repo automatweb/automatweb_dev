@@ -2,13 +2,13 @@
 <properties>
       <property>
             <name>folders</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>20</size>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>20</size>
             <caption>Root kataloogid</caption>
       </property>
 </properties>

@@ -2,71 +2,71 @@
 <properties>
       <property>
             <name>search_static</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Otsing staatilisse koopiasse</caption>
       </property>
       <property>
             <name>search_live</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Otsing aktiivsest saidist</caption>
       </property>
       <property>
             <name>default_grp</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SEARCH_GRP</reltype>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_GRP</reltype>
             <caption>Vaikimisi otsingu grupp</caption>
       </property>
       <property>
             <name>default_order</name>
-            <type>select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>select</type>
             <caption>Vaikimisi sorteeritakse tulemused</caption>
       </property>
       <property>
             <name>per_page</name>
-            <type>textbox</type>
-            <size>5</size>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
             <caption>Mitu tulemust lehel</caption>
       </property>
       <property>
             <name>static_gen_repeater</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_REPEATER</reltype>
-            <group>static</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>static</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REPEATER</reltype>
             <caption>Vali kordus, millega tehakse staatilist koopiat otsingu jaoks</caption>
       </property>
       <property>
             <name>static_gen_link</name>
-            <type>text</type>
-            <store>no</store>
-            <group>static</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>static</group>
+            <type>text</type>
+            <store>no</store>
             <caption>Staatilise genereerimise link</caption>
       </property>
       <classinfo>

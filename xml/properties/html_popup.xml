@@ -2,54 +2,54 @@
 <properties>
       <property>
             <name>show_obj</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_OBJ</reltype>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJ</reltype>
             <caption>Sisu </caption>
       </property>
       <property>
             <name>width</name>
-            <type>textbox</type>
-            <size>4</size>
-            <maxlength>4</maxlength>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
+            <maxlength>4</maxlength>
             <caption>Laius</caption>
       </property>
       <property>
             <name>height</name>
-            <type>textbox</type>
-            <size>4</size>
-            <maxlength>4</maxlength>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>textbox</type>
+            <size>4</size>
+            <maxlength>4</maxlength>
             <caption>Kõrgus</caption>
       </property>
       <property>
             <name>only_once</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Ainult &amp;uuml;he korra sessiooni jooksul</caption>
       </property>
       <property>
             <name>menus</name>
-            <type>text</type>
-            <callback>callback_get_menus</callback>
-            <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
             <group>general</group>
+            <type>text</type>
+            <callback>callback_get_menus</callback>
             <caption>Menüüd</caption>
       </property>
       <classinfo>

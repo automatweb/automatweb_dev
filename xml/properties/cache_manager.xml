@@ -2,53 +2,53 @@
 <properties>
       <property>
             <name>aliases</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>10</size>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>10</size>
             <caption>Vali aliased</caption>
       </property>
       <property>
             <name>delete</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Kas kustutame valitud</caption>
       </property>
       <property>
             <name>repeater_obj</name>
-            <type>objpicker</type>
-            <clid>CL_REPEATER_OBJ</clid>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>objpicker</type>
+            <clid>CL_REPEATER_OBJ</clid>
             <caption>Vali korduste objekt</caption>
       </property>
       <property>
             <name>del_cache</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Kas kordusel kustutatakse cache</caption>
       </property>
       <property>
             <name>regen_cache</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Kas kordusel tehakse uus cache</caption>
       </property>
 </properties>

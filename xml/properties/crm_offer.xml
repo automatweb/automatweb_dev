@@ -2,76 +2,76 @@
 <properties>
       <property>
             <name>start1</name>
-            <type>datetime_select</type>
-            <field>start</field>
             <table>planner</table>
             <group>general</group>
+            <field>start</field>
+            <type>datetime_select</type>
             <caption>Algab </caption>
       </property>
       <property>
             <name>duration</name>
-            <type>time_select</type>
-            <field>end</field>
             <table>planner</table>
             <group>general</group>
+            <field>end</field>
+            <type>time_select</type>
             <caption>Kestab</caption>
       </property>
       <property>
             <name>content</name>
+            <table>planner</table>
+            <group>general</group>
+            <field>description</field>
             <type>textarea</type>
             <cols>60</cols>
             <rows>30</rows>
-            <table>planner</table>
-            <field>description</field>
-            <group>general</group>
             <caption>Sisu</caption>
       </property>
       <property>
             <name>aliasmgr</name>
-            <type>aliasmgr</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
+            <type>aliasmgr</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Aliastehaldur</caption>
       </property>
       <property>
             <name>recurrence</name>
+            <table>objects</table>
+            <group>recurrence</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>releditor</type>
             <reltype>RELTYPE_RECURRENCE</reltype>
-            <group>recurrence</group>
             <rel_id>first</rel_id>
             <props>
                   <num_0>start</num_0>
                   <num_1>weekdays</num_1>
                   <num_2>end</num_2>
             </props>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Kordused</caption>
       </property>
       <property>
             <name>calendar_selector</name>
+            <table>objects</table>
+            <group>calendars</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <callback>cb_calendar_selector</callback>
             <store>no</store>
-            <group>calendars</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Kalendrid</caption>
       </property>
       <property>
             <name>project_selector</name>
+            <table>objects</table>
+            <group>projects</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <callback>cb_project_selector</callback>
             <store>no</store>
-            <group>projects</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Projektid</caption>
       </property>
       <classinfo>

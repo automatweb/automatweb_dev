@@ -2,11 +2,11 @@
 <properties>
       <property>
             <name>type</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Muudatuse t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <classinfo>

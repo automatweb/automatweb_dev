@@ -2,52 +2,52 @@
 <properties>
       <property>
             <name>background</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_BACKGROUND_IMAGE</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BACKGROUND_IMAGE</reltype>
             <caption>Taustapilt</caption>
       </property>
       <property>
             <name>bgcolor</name>
-            <type>colorpicker</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>colorpicker</type>
             <caption>Tausta värv</caption>
       </property>
       <property>
             <name>margin</name>
-            <type>textbox</type>
-            <size>4</size>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
             <caption>Servade laius</caption>
       </property>
       <property>
             <name>defayltstyle</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PAGESTYLE</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PAGESTYLE</reltype>
             <caption>Default stiil</caption>
       </property>
       <property>
             <name>preview</name>
-            <type>text</type>
-            <store>no</store>
-            <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
             <caption>Eelvaade</caption>
       </property>
       <classinfo>

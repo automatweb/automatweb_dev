@@ -2,36 +2,36 @@
 <properties>
       <property>
             <name>tegevusala</name>
-            <type>textbox</type>
-            <size>55</size>
             <table>kliendibaas_tegevusala</table>
             <group>general</group>
+            <type>textbox</type>
+            <size>55</size>
             <field>tegevusala</field>
             <caption>Tegevusala nimetus</caption>
       </property>
       <property>
             <name>tegevusala_en</name>
-            <type>textbox</type>
-            <size>55</size>
             <table>kliendibaas_tegevusala</table>
             <group>general</group>
+            <type>textbox</type>
+            <size>55</size>
             <field>tegevusala_en</field>
             <caption>Inglise keelne nimetus</caption>
       </property>
       <property>
             <name>comment</name>
-            <type>textarea</type>
-            <field>comment</field>
             <table>objects</table>
             <group>general</group>
+            <type>textarea</type>
+            <field>comment</field>
             <caption>Kirjeldus</caption>
       </property>
       <property>
             <name>kood</name>
-            <type>textbox</type>
-            <size>8</size>
             <table>kliendibaas_tegevusala</table>
             <group>general</group>
+            <type>textbox</type>
+            <size>8</size>
             <field>kood</field>
             <caption>Tegevusala kood</caption>
       </property>

@@ -2,21 +2,21 @@
 <properties>
       <property>
             <name>name</name>
-            <type>textbox</type>
-            <size>20</size>
             <table>objects</table>
             <group>general</group>
+            <type>textbox</type>
+            <size>20</size>
             <field>name</field>
             <caption>Maakonna nimetus</caption>
       </property>
       <property>
             <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <cols>40</cols>
             <rows>3</rows>
-            <table>objects</table>
             <field>comment</field>
-            <group>general</group>
             <caption>Kommentaar</caption>
       </property>
       <classinfo>

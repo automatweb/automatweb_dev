@@ -2,12 +2,12 @@
 <properties>
       <property>
             <name>rootmenu</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Juurkataloog</caption>
       </property>
       <classinfo>

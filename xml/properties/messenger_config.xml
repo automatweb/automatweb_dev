@@ -2,11 +2,11 @@
 <properties>
       <property>
             <name>msgs_on_page</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Kirju lehel</caption>
       </property>
       <classinfo>

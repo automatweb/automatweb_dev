@@ -2,31 +2,31 @@
 <properties>
       <property>
             <name>use_template</name>
-            <type>chooser</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>chooser</type>
             <caption>Vali template</caption>
       </property>
       <property>
             <name>default_view</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Vaade</caption>
       </property>
       <property>
             <name>show_events</name>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
             <table>objects</table>
             <group>show_events</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Sündmused</caption>
       </property>
       <classinfo>

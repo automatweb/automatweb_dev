@@ -2,38 +2,38 @@
 <properties>
       <property>
             <name>description</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Kirjeldus</caption>
       </property>
       <property>
             <name>entity_cfgform</name>
+            <table>aw_wf_entity_types</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ENT_CFGFORM</reltype>
             <field>aw_cfgform_id</field>
-            <table>aw_wf_entity_types</table>
-            <group>general</group>
             <caption>Konfivorm</caption>
       </property>
       <property>
             <name>entity_process</name>
+            <table>aw_wf_entity_types</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PROCESS</reltype>
             <field>aw_process_id</field>
-            <table>aw_wf_entity_types</table>
-            <group>general</group>
             <caption>Protsess</caption>
       </property>
       <property>
             <name>entity_actor</name>
+            <table>aw_wf_entity_types</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ACTOR</reltype>
             <field>aw_actor_id</field>
-            <table>aw_wf_entity_types</table>
-            <group>general</group>
             <caption>Tegija</caption>
       </property>
       <classinfo>

@@ -2,10 +2,10 @@
 <properties>
       <property>
             <name>comment</name>
+            <group>general</group>
             <type>textbox</type>
             <table>objects</table>
             <field>comment</field>
-            <group>general</group>
             <caption>Kurss saksa marga suhtes</caption>
       </property>
       <classinfo>

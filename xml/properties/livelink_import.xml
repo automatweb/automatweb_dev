@@ -2,62 +2,62 @@
 <properties>
       <property>
             <name>rootnode</name>
-            <type>textbox</type>
-            <size>40</size>
-            <maxlength>40</maxlength>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>40</size>
+            <maxlength>40</maxlength>
             <caption>Juurika ID (eralda komadega)</caption>
       </property>
       <property>
             <name>exception_node</name>
-            <type>textbox</type>
-            <size>40</size>
-            <maxlength>40</maxlength>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>40</size>
+            <maxlength>40</maxlength>
             <caption>Erandite ID (eralda komadega)</caption>
       </property>
       <property>
             <name>outdir</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Kataloog, kuhu failid kirjutada</caption>
       </property>
       <property>
             <name>fileprefix</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Prefiks tabelisse kirjutatavatele failinimedele</caption>
       </property>
       <property>
             <name>message</name>
-            <type>text</type>
-            <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <editonly>1</editonly>
             <caption>Objekti staatus</caption>
       </property>
       <property>
             <name>invoke</name>
-            <type>text</type>
-            <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <editonly>1</editonly>
             <caption>Käivita</caption>
       </property>
       <classinfo>

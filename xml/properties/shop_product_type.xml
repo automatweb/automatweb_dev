@@ -2,12 +2,12 @@
 <properties>
       <property>
             <name>sp_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_SP_CFGFORM</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Vorm, millega toodet sisestatakse</caption>
       </property>
       <classinfo>

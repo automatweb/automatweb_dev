@@ -2,122 +2,122 @@
 <properties>
       <property>
             <name>fromname</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Kellelt</caption>
       </property>
       <property>
             <name>config</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MAIL_CONFIG</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAIL_CONFIG</reltype>
             <caption>Konfiguratsioon</caption>
       </property>
       <property>
             <name>user_messenger</name>
-            <type>checkbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
             <caption>Kasutaja default messenger</caption>
       </property>
       <property>
             <name>mailbox</name>
-            <type>hidden</type>
-            <group>main_view</group>
             <table>objects</table>
+            <group>main_view</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>hidden</type>
             <caption>Mailbox ID (sys)</caption>
       </property>
       <property>
             <name>mail_toolbar</name>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <group>main_view</group>
-            <store>no</store>
             <table>objects</table>
+            <group>main_view</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Msg. toolbar</caption>
       </property>
       <property>
             <name>msg_cont</name>
-            <type>text</type>
-            <group>main_view</group>
-            <no_caption>1</no_caption>
-            <wrapchildren>1</wrapchildren>
             <table>objects</table>
+            <group>main_view</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <wrapchildren>1</wrapchildren>
             <caption>Konteiner</caption>
       </property>
       <property>
             <name>treeview</name>
-            <type>text</type>
-            <parent>msg_cont</parent>
-            <group>main_view</group>
             <table>objects</table>
+            <group>main_view</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <parent>msg_cont</parent>
             <caption>Folderid</caption>
       </property>
       <property>
             <name>message_list</name>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <group>main_view</group>
-            <parent>msg_cont</parent>
-            <store>no</store>
             <table>objects</table>
+            <group>main_view</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>msg_cont</parent>
+            <store>no</store>
             <caption>Kirjad</caption>
       </property>
       <property>
             <name>msg_outbox</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <caption>Outbox</caption>
       </property>
       <property>
             <name>msg_drafts</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
             <caption>Mustandite kataloog</caption>
       </property>
       <property>
             <name>autofilter_delay</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Filtrite käivitamise intervall</caption>
             <comment>Minutites</comment>
       </property>
       <property>
             <name>testfilters</name>
-            <type>text</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
             <caption>Testi filtreid</caption>
       </property>
       <classinfo>

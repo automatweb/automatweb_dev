@@ -2,189 +2,189 @@
 <properties>
       <property>
             <name>gid</name>
-            <field>gid</field>
-            <type>text</type>
             <table>groups</table>
             <group>general</group>
+            <field>gid</field>
+            <type>text</type>
             <caption>Grupi ID</caption>
       </property>
       <property>
             <name>name</name>
-            <field>name</field>
-            <type>textbox</type>
             <table>groups</table>
             <group>general</group>
+            <field>name</field>
+            <type>textbox</type>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>priority</name>
+            <table>groups</table>
+            <group>general</group>
             <field>priority</field>
             <type>textbox</type>
             <size>15</size>
-            <table>groups</table>
-            <group>general</group>
             <caption>Prioriteet</caption>
       </property>
       <property>
             <name>modified</name>
-            <type>text</type>
             <table>objects</table>
-            <field>modified</field>
             <group>general</group>
+            <type>text</type>
+            <field>modified</field>
             <caption>Muudetud</caption>
       </property>
       <property>
             <name>mmodifiedby</name>
+            <table>groups</table>
+            <group>general</group>
             <type>text</type>
             <store>no</store>
             <editonly>1</editonly>
-            <table>groups</table>
-            <group>general</group>
             <field>mmodifiedby</field>
             <caption>Kes muutis</caption>
       </property>
       <property>
             <name>created</name>
-            <type>text</type>
-            <field>created</field>
             <table>objects</table>
             <group>general</group>
+            <type>text</type>
+            <field>created</field>
             <caption>Loodud</caption>
       </property>
       <property>
             <name>mcreatedby</name>
+            <table>groups</table>
+            <group>general</group>
             <type>text</type>
             <store>no</store>
             <editonly>1</editonly>
-            <table>groups</table>
-            <group>general</group>
             <field>mcreatedby</field>
             <caption>Kes l&amp;otilde;i</caption>
       </property>
       <property>
             <name>type</name>
-            <type>select</type>
             <table>groups</table>
             <group>general</group>
+            <type>select</type>
             <field>type</field>
             <caption>T&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>search_form</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SEARCHFORM</reltype>
             <table>groups</table>
             <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCHFORM</reltype>
             <field>search_form</field>
             <caption>Otsinguvorm</caption>
       </property>
       <property>
             <name>admin_rootmenu2</name>
+            <table>objects</table>
+            <group>general</group>
             <type>callback</type>
             <callback>get_admin_rootmenus</callback>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Admin rootmen&amp;uuml;&amp;uuml;</caption>
       </property>
       <property>
             <name>grp_frontpage</name>
+            <table>objects</table>
+            <group>general</group>
             <type>callback</type>
             <callback>get_grp_frontpage</callback>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Esileht</caption>
       </property>
       <property>
             <name>can_admin_interface</name>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
-            <table>objects</table>
             <method>serialize</method>
-            <group>general</group>
             <caption>Kas saab administreerimiskeskkonda</caption>
       </property>
       <property>
             <name>default_acl</name>
+            <table>groups</table>
+            <group>general</group>
             <type>callback</type>
             <callback>callback_get_default_acl</callback>
             <store>no</store>
             <rel>1</rel>
-            <table>groups</table>
-            <group>general</group>
             <field>default_acl</field>
             <caption>Default ACL</caption>
       </property>
       <property>
             <name>data</name>
-            <type>text</type>
-            <group>dyn_search</group>
-            <no_caption>1</no_caption>
             <table>groups</table>
+            <group>dyn_search</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
             <field>data</field>
       </property>
       <property>
             <name>import</name>
+            <table>groups</table>
+            <group>import</group>
             <type>fileupload</type>
             <store>no</store>
-            <group>import</group>
-            <table>groups</table>
             <field>import</field>
             <caption>Impordi kasutajaid</caption>
       </property>
       <property>
             <name>import_desc</name>
+            <table>groups</table>
+            <group>import</group>
             <type>text</type>
             <store>no</store>
-            <group>import</group>
-            <table>groups</table>
             <field>import_desc</field>
       </property>
       <property>
             <name>roles</name>
+            <table>groups</table>
+            <group>roles</group>
             <type>text</type>
             <store>no</store>
-            <group>roles</group>
             <no_caption>1</no_caption>
-            <table>groups</table>
             <field>roles</field>
       </property>
       <property>
             <name>objects</name>
+            <table>groups</table>
+            <group>objects</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <table>groups</table>
-            <group>objects</group>
             <field>objects</field>
             <caption>Objektid</caption>
       </property>
       <property>
             <name>obj_acl</name>
+            <table>groups</table>
+            <group>objects</group>
             <type>callback</type>
             <callback>get_acls</callback>
             <store>no</store>
-            <table>groups</table>
-            <group>objects</group>
             <field>obj_acl</field>
       </property>
       <property>
             <name>gp_parent</name>
-            <type>hidden</type>
-            <field>parent</field>
             <table>groups</table>
             <group>objects</group>
+            <type>hidden</type>
+            <field>parent</field>
       </property>
       <property>
             <name>gp_gid</name>
-            <type>hidden</type>
-            <field>gid</field>
             <table>groups</table>
             <group>objects</group>
+            <type>hidden</type>
+            <field>gid</field>
       </property>
       <classinfo>
             <syslog_type>ST_GROUP</syslog_type>

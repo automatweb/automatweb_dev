@@ -2,31 +2,31 @@
 <properties>
       <property>
             <name>db_base</name>
-            <type>objpicker</type>
-            <clid>CL_DB_LOGIN</clid>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>objpicker</type>
+            <clid>CL_DB_LOGIN</clid>
             <caption>Andmebaas</caption>
       </property>
       <property>
             <name>db_table</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Tabel</caption>
       </property>
       <property>
             <name>per_page</name>
-            <type>textbox</type>
-            <size>5</size>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
             <caption>Mitu rida lehel</caption>
       </property>
 </properties>

@@ -2,75 +2,75 @@
 <properties>
       <property>
             <name>file</name>
-            <type>fileupload</type>
-            <store>no</store>
             <table>objects</table>
             <group>general</group>
+            <type>fileupload</type>
+            <store>no</store>
             <field>file</field>
             <caption>XML Fail</caption>
       </property>
       <property>
             <name>d_period</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_DOCIMP_PERIOD</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Periood</caption>
       </property>
       <property>
             <name>found</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <group>general</group>
+            <type>text</type>
+            <store>no</store>
             <field>found</field>
             <caption>Leitud dokumendid</caption>
       </property>
       <property>
             <name>do_import</name>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <store>no</store>
             <ch_value>1</ch_value>
-            <table>objects</table>
-            <group>general</group>
             <field>do_import</field>
             <caption>Impordi</caption>
       </property>
       <property>
             <name>location_tags</name>
+            <table>objects</table>
+            <group>settings</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>settings</group>
-            <table>objects</table>
             <caption>Asukohta m&amp;auml;&amp;auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)</caption>
       </property>
       <property>
             <name>field_tags</name>
+            <table>objects</table>
+            <group>settings</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>settings</group>
-            <table>objects</table>
             <caption>Sisuv&amp;auml;lju m&amp;auml;&amp;auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)</caption>
       </property>
       <property>
             <name>end_tag</name>
+            <table>objects</table>
+            <group>settings</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>settings</group>
-            <table>objects</table>
             <caption>dokumenti l&amp;otilde;petav tag</caption>
       </property>
       <property>
             <name>content_transform</name>
-            <type>generated</type>
-            <generator>generate_tag_fields</generator>
             <table>objects</table>
             <group>general</group>
+            <type>generated</type>
+            <generator>generate_tag_fields</generator>
             <field>content_transform</field>
       </property>
       <classinfo>

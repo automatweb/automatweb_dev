@@ -2,221 +2,221 @@
 <properties>
       <property>
             <name>conf_id</name>
-            <type>text</type>
-            <size>3</size>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <size>3</size>
             <caption>Konfiguratsioon:</caption>
       </property>
       <property>
             <name>reinit_layout</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Uuenda layout (kustutab k&amp;otilde;ik pildid!)</caption>
       </property>
       <property>
             <name>num_pages</name>
-            <type>textbox</type>
-            <size>3</size>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>3</size>
             <caption>Mitu lehte:</caption>
       </property>
       <property>
             <name>pg_1_content</name>
-            <type>text</type>
-            <group>page_1</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>page_1</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pg_2_content</name>
-            <type>text</type>
-            <group>page_2</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>page_2</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pg_3_content</name>
-            <type>text</type>
-            <group>page_3</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>page_3</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pg_4_content</name>
-            <type>text</type>
-            <group>page_4</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>page_4</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pg_5_content</name>
-            <type>text</type>
-            <group>page_5</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>page_5</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pg_6_content</name>
-            <type>text</type>
-            <group>page_6</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>page_6</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pg_7_content</name>
-            <type>text</type>
-            <group>page_7</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>page_7</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pg_8_content</name>
-            <type>text</type>
-            <group>page_8</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>page_8</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pg_9_content</name>
-            <type>text</type>
-            <group>page_9</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>page_9</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>preview</name>
-            <type>text</type>
-            <group>preview</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>preview</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>import_ftp</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Impordi FTP serverist</caption>
       </property>
       <property>
             <name>ftp_login</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FTP_LOGIN</reltype>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FTP_LOGIN</reltype>
             <caption>FTP Server</caption>
       </property>
       <property>
             <name>ftp_folder</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>FTP Serveri kataloog</caption>
       </property>
       <property>
             <name>import_local</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <default>1</default>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
             <caption>Impordi kataloogist</caption>
       </property>
       <property>
             <name>local_folder</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Kataloog</caption>
       </property>
       <property>
             <name>import_zip</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Impordi ZIP failist</caption>
       </property>
       <property>
             <name>zip_file</name>
-            <type>fileupload</type>
-            <store>no</store>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>fileupload</type>
+            <store>no</store>
             <caption>Uploadi ZIP fail</caption>
       </property>
       <property>
             <name>import_overwrite</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Importimisel kirjuta olemasolevad pildid &amp;uuml;le</caption>
       </property>
       <property>
             <name>import_add_pages</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Importimisel lisa vajadusel lehek&amp;uuml;lgi</caption>
       </property>
       <property>
             <name>do_import</name>
-            <type>submit</type>
-            <value>Impordi</value>
             <table>objects</table>
             <group>import</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>submit</type>
+            <value>Impordi</value>
       </property>
       <classinfo>
             <syslog_type>ST_GALLERY</syslog_type>

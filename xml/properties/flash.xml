@@ -2,40 +2,40 @@
 <properties>
       <property>
             <name>file</name>
-            <type>fileupload</type>
-            <field>meta</field>
             <table>objects</table>
             <group>general</group>
             <method>serialize</method>
+            <type>fileupload</type>
+            <field>meta</field>
             <caption>Vali fail</caption>
       </property>
       <property>
             <name>width</name>
-            <type>textbox</type>
-            <size>4</size>
-            <field>meta</field>
             <table>objects</table>
             <group>general</group>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <field>meta</field>
             <caption>Laius</caption>
       </property>
       <property>
             <name>height</name>
-            <type>textbox</type>
-            <size>4</size>
-            <field>meta</field>
             <table>objects</table>
             <group>general</group>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
+            <field>meta</field>
             <caption>Kõrgus</caption>
       </property>
       <property>
             <name>preview</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <group>general</group>
             <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
             <field>preview</field>
             <caption>Eelvaade</caption>
       </property>

@@ -2,40 +2,40 @@
 <properties>
       <property>
             <name>email</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>E-post</caption>
       </property>
       <property>
             <name>reply_to</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Reply To</caption>
       </property>
       <property>
             <name>organization</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Organisatsioon</caption>
       </property>
       <property>
             <name>signature</name>
-            <type>textarea</type>
-            <cols>40</cols>
-            <rows>5</rows>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>5</rows>
             <caption>Signatuur</caption>
       </property>
       <classinfo>

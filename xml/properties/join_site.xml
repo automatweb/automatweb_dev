@@ -2,114 +2,114 @@
 <properties>
       <property>
             <name>after_join_url</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>P&amp;auml;rast liitumist mine aadressile</caption>
       </property>
       <property>
             <name>obj_folder</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_OBJ_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Kataloog, kuhu salvestatakse objektid</caption>
       </property>
       <property>
             <name>autologin</name>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Kas kasutaja logitakse automaatselt sisse liitumisel</caption>
       </property>
       <property>
             <name>join_properties</name>
+            <table>objects</table>
+            <group>sel_props</group>
             <type>table</type>
             <store>no</store>
-            <group>sel_props</group>
-            <table>objects</table>
             <field>join_properties</field>
             <caption>Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad</caption>
       </property>
       <property>
             <name>join_sep_pages</name>
+            <table>objects</table>
+            <group>sel_props</group>
             <type>checkbox</type>
             <field>meta</field>
             <method>serialize</method>
             <ch_value>1</ch_value>
-            <group>sel_props</group>
-            <table>objects</table>
             <caption>Eraldi lehtedel</caption>
       </property>
       <property>
             <name>join_properties_pages</name>
+            <table>objects</table>
+            <group>mk_pages</group>
             <type>table</type>
             <store>no</store>
-            <group>mk_pages</group>
-            <table>objects</table>
             <field>join_properties_pages</field>
             <caption>Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad</caption>
       </property>
       <property>
             <name>join_properties_page_titles</name>
+            <table>objects</table>
+            <group>page_titles</group>
             <type>table</type>
             <store>no</store>
-            <group>page_titles</group>
-            <table>objects</table>
             <field>join_properties_page_titles</field>
             <caption>Liitumise Lehtede Pealkirjad</caption>
       </property>
       <property>
             <name>rules_show</name>
+            <table>objects</table>
+            <group>rules_show</group>
             <type>table</type>
             <store>no</store>
-            <group>rules_show</group>
-            <table>objects</table>
             <field>rules_show</field>
             <caption>Reeglid</caption>
       </property>
       <property>
             <name>rule_name</name>
-            <type>textbox</type>
-            <group>rules_add</group>
-            <store>no</store>
             <table>objects</table>
+            <group>rules_add</group>
+            <type>textbox</type>
+            <store>no</store>
             <field>rule_name</field>
             <caption>Reegli nimi</caption>
       </property>
       <property>
             <name>rules_add</name>
+            <table>objects</table>
+            <group>rules_add</group>
             <type>text</type>
             <store>no</store>
-            <group>rules_add</group>
-            <table>objects</table>
             <field>rules_add</field>
             <caption>Lisa Reegel</caption>
       </property>
       <property>
             <name>rule_to_grp</name>
+            <table>objects</table>
+            <group>rules_add</group>
             <type>objpicker</type>
             <clid>CL_GROUP</clid>
-            <group>rules_add</group>
             <store>no</store>
-            <table>objects</table>
             <field>rule_to_grp</field>
             <caption>Vali grupp, kuhu reegel kasutaja paneb</caption>
       </property>
       <property>
             <name>preview</name>
+            <table>objects</table>
+            <group>preview</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <group>preview</group>
-            <table>objects</table>
             <field>preview</field>
       </property>
       <classinfo>

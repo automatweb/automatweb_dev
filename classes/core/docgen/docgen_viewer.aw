@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.3 2004/03/09 18:24:04 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.4 2004/03/24 11:00:20 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -164,7 +164,7 @@ text-decoration: none;
 
 		$da = get_instance("core/docgen/docgen_analyzer");
 		$data = $da->analyze_file($file);
-
+echo dbg::dump($data);
 		foreach($data["classes"] as $class => $c_data)
 		{
 			$op .= $this->display_class($c_data, $file);
@@ -392,6 +392,7 @@ text-decoration: none;
 		$that = get_instance("core/docgen/docgen_analyzer");
 
 		// now, do extended classes. we do that by parsing all the extends classes
+		// which of course slows us to hell and beyond. these parses should be cached or something
 		do {
 			$level++;
 

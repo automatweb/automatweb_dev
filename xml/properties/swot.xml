@@ -2,63 +2,63 @@
 <properties>
       <property>
             <name>swot_folder</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SWOT_FOLDER</reltype>
-            <multiple>1</multiple>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SWOT_FOLDER</reltype>
+            <multiple>1</multiple>
             <caption>SWOT Objektide kataloogid</caption>
       </property>
       <property>
             <name>strengths</name>
-            <type>text</type>
-            <group>strengths</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>strengths</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
             <caption>Tugevused</caption>
       </property>
       <property>
             <name>weaknesses</name>
-            <type>text</type>
-            <group>weaknesses</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>weaknesses</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
             <caption>Nõrkused</caption>
       </property>
       <property>
             <name>opportunities</name>
-            <type>text</type>
-            <group>opportunities</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>opportunities</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
             <caption>Võimalused</caption>
       </property>
       <property>
             <name>threats</name>
-            <type>text</type>
-            <group>threats</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>threats</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
             <caption>Ohud</caption>
       </property>
       <property>
             <name>view</name>
-            <type>text</type>
-            <group>view</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>view</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
       </property>
       <classinfo>
             <syslog_type>ST_SWOT</syslog_type>

@@ -2,42 +2,42 @@
 <properties>
       <property>
             <name>name</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
+            <type>textbox</type>
             <field>name</field>
             <caption>Pealkiri</caption>
       </property>
       <property>
             <name>uname</name>
-            <type>textbox</type>
             <table>forum_comments</table>
             <group>general</group>
+            <type>textbox</type>
             <field>uname</field>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>uemail</name>
-            <type>textbox</type>
             <table>forum_comments</table>
             <group>general</group>
+            <type>textbox</type>
             <field>uemail</field>
             <caption>E-post</caption>
       </property>
       <property>
             <name>remember</name>
-            <type>checkbox</type>
-            <store>no</store>
             <table>forum_comments</table>
             <group>general</group>
+            <type>checkbox</type>
+            <store>no</store>
             <field>remember</field>
             <caption>Jäta nimi ja e-post meelde</caption>
       </property>
       <property>
             <name>commtext</name>
-            <type>textarea</type>
             <table>forum_comments</table>
             <group>general</group>
+            <type>textarea</type>
             <field>commtext</field>
             <caption>Kommentaar</caption>
       </property>

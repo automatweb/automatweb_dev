@@ -2,12 +2,12 @@
 <properties>
       <property>
             <name>choices</name>
-            <type>generated</type>
-            <callback>callback_get_choices</callback>
             <group>choices</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>generated</type>
+            <callback>callback_get_choices</callback>
             <caption>Variandid</caption>
       </property>
       <classinfo>

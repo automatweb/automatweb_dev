@@ -1279,5 +1279,46 @@ class user extends class_base
 			}
 		}
 	}
+
+	/** returns the oid of the CL_CRM_PERSON object that's attached to the current user
+	**/
+	function get_current_person()
+	{
+		if (aw_global_get("uid") == "")
+		{
+			return false;
+		}
+
+		$oid = $this->users->get_oid_for_uid(aw_global_get("uid"));
+		if (!$oid)
+		{
+			return false;
+		}
+
+		$u = obj($oid);
+
+		$person_c = reset($u->connections_from(array(
+			"type" => 2 // RELTYPE_PERSON
+		)));
+
+		return $person_c->prop("to");
+	}
+
+	/** returns the CL_CRM_COMPANY that is connected to the current logged in user
+	**/ 
+	function get_current_company()
+	{
+		$person = $this->get_current_person();
+		if ($person)
+		{
+			$p_o = obj($person);
+			$org_c = reset($p_o->connections_from(array(
+				"type" => 6 // RELTYPE_WORK
+			)));
+
+			return $org_c->prop("to");
+		}
+		return false;
+	}
 }
 ?>

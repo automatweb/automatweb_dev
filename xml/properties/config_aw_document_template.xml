@@ -2,40 +2,40 @@
 <properties>
       <property>
             <name>type</name>
-            <type>select</type>
             <table>template</table>
-            <field>type</field>
             <group>general</group>
+            <type>select</type>
+            <field>type</field>
             <caption>Template t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>filename</name>
-            <type>textbox</type>
             <table>template</table>
-            <field>filename</field>
             <group>general</group>
+            <type>textbox</type>
+            <field>filename</field>
             <caption>Template fail</caption>
       </property>
       <property>
             <name>t_id</name>
-            <type>hidden</type>
             <table>template</table>
-            <field>id</field>
             <group>general</group>
+            <type>hidden</type>
+            <field>id</field>
       </property>
       <property>
             <name>t_name</name>
-            <type>hidden</type>
             <table>template</table>
-            <field>name</field>
             <group>general</group>
+            <type>hidden</type>
+            <field>name</field>
       </property>
       <property>
             <name>t_site_id</name>
-            <type>hidden</type>
             <table>template</table>
-            <field>site_id</field>
             <group>general</group>
+            <type>hidden</type>
+            <field>site_id</field>
       </property>
       <classinfo>
             <syslog_type>ST_CONFIG_AW_DOCUMENT_TEMPLATE</syslog_type>

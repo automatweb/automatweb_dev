@@ -2,21 +2,21 @@
 <properties>
       <property>
             <name>showlink</name>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <store>no</store>
             <editonly>1</editonly>
-            <table>objects</table>
-            <group>general</group>
             <field>showlink</field>
             <caption>Näita</caption>
       </property>
       <property>
             <name>tpldata</name>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <store>no</store>
             <editonly>1</editonly>
-            <table>objects</table>
-            <group>general</group>
             <field>tpldata</field>
             <caption>alamtemplated</caption>
       </property>

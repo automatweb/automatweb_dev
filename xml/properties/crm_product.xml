@@ -2,36 +2,36 @@
 <properties>
       <property>
             <name>toode</name>
-            <type>textbox</type>
-            <size>40</size>
             <table>kliendibaas_toode</table>
             <group>general</group>
+            <type>textbox</type>
+            <size>40</size>
             <field>toode</field>
             <caption>Toote nimetus</caption>
       </property>
       <property>
             <name>toode_en</name>
-            <type>textbox</type>
-            <size>40</size>
             <table>kliendibaas_toode</table>
             <group>general</group>
+            <type>textbox</type>
+            <size>40</size>
             <field>toode_en</field>
             <caption>Inglise keelne tootenimetus</caption>
       </property>
       <property>
             <name>comment</name>
-            <type>textarea</type>
-            <field>comment</field>
             <table>objects</table>
             <group>general</group>
+            <type>textarea</type>
+            <field>comment</field>
             <caption>Kirjeldus</caption>
       </property>
       <property>
             <name>kood</name>
-            <type>textbox</type>
-            <size>8</size>
             <table>kliendibaas_toode</table>
             <group>general</group>
+            <type>textbox</type>
+            <size>8</size>
             <field>kood</field>
             <caption>Toote kood	</caption>
       </property>

@@ -2,26 +2,26 @@
 <properties>
       <property>
             <name>cookietable</name>
-            <type>table</type>
-            <store>no</store>
             <group>general</group>
             <form>monster</form>
+            <type>table</type>
+            <store>no</store>
             <field>cookietable</field>
             <caption>Olemasolevad cookied</caption>
       </property>
       <property>
             <name>new_name</name>
-            <type>textbox</type>
             <group>general</group>
             <form>monster</form>
+            <type>textbox</type>
             <field>new_name</field>
             <caption>Uue cookie nimi</caption>
       </property>
       <property>
             <name>new_value</name>
-            <type>textbox</type>
             <group>general</group>
             <form>monster</form>
+            <type>textbox</type>
             <field>new_value</field>
             <caption>Uue cookie v‰‰rtus</caption>
       </property>

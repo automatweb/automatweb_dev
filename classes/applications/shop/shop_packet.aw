@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.1 2004/03/17 16:06:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.2 2004/03/24 11:00:19 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -14,13 +14,14 @@
 @property separate_items type=checkbox ch_value=1 table=aw_shop_packets field=separate_items
 @caption Kas tooted on eraldi
 
+@property price type=textbox table=aw_shop_packets field=aw_price
+@caption Hind
 
 @groupinfo packet caption="Paketi sisu"
 
 @property packet group=packet field=meta method=serialize type=table no_caption=1
 
 @tableinfo aw_shop_packets index=aw_oid master_table=objects master_index=brother_of
-
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption paketi toode
 */
@@ -97,6 +98,11 @@ class shop_packet extends class_base
 	function save_packet_table(&$arr)
 	{
 		$arr["obj_inst"]->set_meta("packet_content", $arr["request"]["pd"]);
+	}
+
+	function get_price($o)
+	{
+		return $o->prop("price");
 	}
 }
 ?>

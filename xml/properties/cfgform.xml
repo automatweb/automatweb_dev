@@ -2,142 +2,142 @@
 <properties>
       <property>
             <name>subclass</name>
-            <type>select</type>
-            <newonly>1</newonly>
             <table>objects</table>
             <group>general</group>
+            <type>select</type>
+            <newonly>1</newonly>
             <field>subclass</field>
             <caption>Klass</caption>
       </property>
       <property>
             <name>ctype</name>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <editonly>1</editonly>
             <field>subclass</field>
-            <table>objects</table>
-            <group>general</group>
             <caption>Tüüp</caption>
       </property>
       <property>
             <name>xml_definition</name>
-            <type>fileupload</type>
-            <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>fileupload</type>
+            <editonly>1</editonly>
             <caption>Uploadi vormi fail</caption>
       </property>
       <property>
             <name>preview</name>
-            <type>text</type>
-            <store>no</store>
-            <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
             <caption>Definitsioon</caption>
       </property>
       <property>
             <name>classinfo_fixed_toolbar</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Fix. toolbar</caption>
       </property>
       <property>
             <name>classinfo_allow_rte</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Luba RTE kasutamist</caption>
       </property>
       <property>
             <name>classinfo_disable_relationmgr</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Ära kasuta seostehaldurit</caption>
       </property>
       <property>
             <name>edit_groups</name>
-            <type>callback</type>
-            <callback>callback_edit_groups</callback>
-            <group>groupdata</group>
             <table>objects</table>
+            <group>groupdata</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_edit_groups</callback>
             <caption>Muuda gruppe</caption>
       </property>
       <property>
             <name>navtoolbar</name>
-            <type>toolbar</type>
+            <table>objects</table>
             <group>layout</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <editonly>1</editonly>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Toolbar</caption>
       </property>
       <property>
             <name>layout</name>
+            <table>objects</table>
+            <group>layout</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <callback>callback_gen_layout</callback>
             <store>no</store>
-            <group>layout</group>
             <no_caption>1</no_caption>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Layout</caption>
       </property>
       <property>
             <name>availtoolbar</name>
-            <type>toolbar</type>
+            <table>objects</table>
             <group>avail</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <editonly>1</editonly>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Av. Toolbar</caption>
       </property>
       <property>
             <name>availprops</name>
+            <table>objects</table>
+            <group>avail</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>callback</type>
             <callback>callback_gen_avail_props</callback>
             <store>no</store>
-            <group>avail</group>
             <no_caption>1</no_caption>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Kõik omadused</caption>
       </property>
       <property>
             <name>subaction</name>
-            <type>hidden</type>
-            <store>no</store>
+            <table>objects</table>
             <group>
                   <num_0>layout</num_0>
                   <num_1>avail</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>hidden</type>
+            <store>no</store>
             <caption>Subaction (sys)</caption>
       </property>
       <classinfo>

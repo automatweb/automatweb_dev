@@ -2,255 +2,255 @@
 <properties>
       <property>
             <name>def_user_folder</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <rel>1</rel>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
             <caption>Liikmete kaust</caption>
       </property>
       <property>
             <name>sub_form_type</name>
-            <type>select</type>
-            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>select</type>
+            <rel>1</rel>
             <caption>Vormi tüüp</caption>
       </property>
       <property>
             <name>redir_obj</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_REDIR_OBJECT</reltype>
-            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REDIR_OBJECT</reltype>
+            <rel>1</rel>
             <caption>Dokument millele suunata</caption>
       </property>
       <property>
             <name>member_list_tb</name>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>member_list</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Listi staatuse toolbar</caption>
       </property>
       <property>
             <name>member_list</name>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>member_list</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Liikmed</caption>
       </property>
       <property>
             <name>confirm_subscribe</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>subscribing</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Liitumiseks on vaja kinnitust</caption>
       </property>
       <property>
             <name>confirm_subscribe_msg</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADM_MESSAGE</reltype>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>subscribing</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADM_MESSAGE</reltype>
             <caption>Liitumise kinnituseks saadetav kiri</caption>
       </property>
       <property>
             <name>import_textfile</name>
-            <type>fileupload</type>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>subscribing</group>
+            <type>fileupload</type>
+            <store>no</store>
             <caption>Impordi liikmed tekstifailist</caption>
       </property>
       <property>
             <name>mass_subscribe</name>
-            <type>textarea</type>
-            <rows>25</rows>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>subscribing</group>
+            <type>textarea</type>
+            <rows>25</rows>
+            <store>no</store>
             <caption>Massiline liitmine</caption>
       </property>
       <property>
             <name>confirm_unsubscribe</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>unsubscribing</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Lahkumiseks on vaja kinnitust</caption>
       </property>
       <property>
             <name>confirm_unsubscribe_msg</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADM_MESSAGE</reltype>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>unsubscribing</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADM_MESSAGE</reltype>
             <caption>Lahkumise kinnituseks saadetav kiri</caption>
       </property>
       <property>
             <name>delete_textfile</name>
-            <type>fileupload</type>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>unsubscribing</group>
+            <type>fileupload</type>
+            <store>no</store>
             <caption>Kustuta tekstifailis olevad aadressid</caption>
       </property>
       <property>
             <name>mass_unsubscribe</name>
-            <type>textarea</type>
-            <rows>25</rows>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>unsubscribing</group>
+            <type>textarea</type>
+            <rows>25</rows>
+            <store>no</store>
             <caption>Massiline kustutamine</caption>
       </property>
       <property>
             <name>list_status_tb</name>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>list_status</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Listi staatuse toolbar</caption>
       </property>
       <property>
             <name>list_status_table</name>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>list_status</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Listi staatus</caption>
       </property>
       <property>
             <name>write_mail</name>
-            <type>callback</type>
-            <callback>callback_gen_write_mail</callback>
-            <store>no</store>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>write_mail</group>
+            <type>callback</type>
+            <callback>callback_gen_write_mail</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Maili kirjutamine</caption>
       </property>
       <property>
             <name>mail_subject</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>mail_report</group>
+            <type>text</type>
+            <store>no</store>
             <caption>Teema</caption>
       </property>
       <property>
             <name>mail_percentage</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>mail_report</group>
+            <type>text</type>
+            <store>no</store>
             <caption>Saadetud</caption>
       </property>
       <property>
             <name>mail_start_date</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>mail_report</group>
+            <type>text</type>
+            <store>no</store>
             <caption>Saatmise algus</caption>
       </property>
       <property>
             <name>mail_last_batch</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>mail_report</group>
+            <type>text</type>
+            <store>no</store>
             <caption>Viimane batch saadeti</caption>
       </property>
       <property>
             <name>mail_report</name>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>mail_report</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Meili raport</caption>
       </property>
       <property>
             <name>show_mail_subject</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>show_mail</group>
+            <type>text</type>
+            <store>no</store>
             <caption>Teema</caption>
       </property>
       <property>
             <name>show_mail_from</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>show_mail</group>
+            <type>text</type>
+            <store>no</store>
             <caption>Kellelt</caption>
       </property>
       <property>
             <name>show_mail_message</name>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>show_mail</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Sisu</caption>
       </property>
       <classinfo>

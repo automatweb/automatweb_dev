@@ -2,20 +2,20 @@
 <properties>
       <property>
             <name>keel</name>
+            <table>objects</table>
+            <group>general</group>
             <type>classificator</type>
             <method>serialize</method>
             <field>meta</field>
-            <table>objects</table>
-            <group>general</group>
             <caption>Keel</caption>
       </property>
       <property>
             <name>tase</name>
+            <table>objects</table>
+            <group>general</group>
             <type>classificator</type>
             <method>serialize</method>
             <field>meta</field>
-            <table>objects</table>
-            <group>general</group>
             <caption>Tase</caption>
       </property>
       <classinfo>

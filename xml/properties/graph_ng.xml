@@ -2,126 +2,126 @@
 <properties>
       <property>
             <name>graph_type</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Graafiku t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>data_y</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>data</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Y telje v&amp;auml;&amp;auml;rtused</caption>
       </property>
       <property>
             <name>data_x</name>
-            <type>generated</type>
-            <generator>generator_x_values</generator>
             <table>objects</table>
             <group>data</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>generated</type>
+            <generator>generator_x_values</generator>
             <caption>X telje v&amp;auml;&amp;auml;rtused</caption>
       </property>
       <property>
             <name>data_cvs</name>
-            <type>fileupload</type>
             <table>objects</table>
             <group>data</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>fileupload</type>
             <caption>Uploadi CSV fail</caption>
       </property>
       <property>
             <name>data_cvs_sep</name>
-            <type>textbox</type>
-            <size>2</size>
             <table>objects</table>
             <group>data</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>2</size>
             <caption>CSV failis eraldaja</caption>
       </property>
       <property>
             <name>typeconf</name>
-            <type>generated</type>
-            <generator>prop_gen</generator>
-            <group>specific</group>
             <table>objects</table>
+            <group>specific</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>generated</type>
+            <generator>prop_gen</generator>
             <caption>Konf</caption>
       </property>
       <property>
             <name>title</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Pealkiri</caption>
       </property>
       <property>
             <name>title_color</name>
-            <type>colorpicker</type>
             <table>objects</table>
             <group>conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>colorpicker</type>
             <caption>Pealkirja v&amp;auml;rv</caption>
       </property>
       <property>
             <name>bg_color</name>
-            <type>colorpicker</type>
             <table>objects</table>
             <group>conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>colorpicker</type>
             <caption>Tausta v&amp;auml;rv</caption>
       </property>
       <property>
             <name>height</name>
-            <type>textbox</type>
-            <size>4</size>
             <table>objects</table>
             <group>conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
             <caption>Laius</caption>
       </property>
       <property>
             <name>int_height</name>
-            <type>textbox</type>
-            <size>4</size>
             <table>objects</table>
             <group>conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
             <caption>Sisemine k&amp;otilde;rgus</caption>
       </property>
       <property>
             <name>int_width</name>
-            <type>textbox</type>
-            <size>4</size>
             <table>objects</table>
             <group>conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>4</size>
             <caption>Sisemine laius</caption>
       </property>
       <property>
             <name>show_values</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
             <table>objects</table>
             <group>conf</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>N&amp;auml;itan v&amp;auml;&amp;auml;rtusi</caption>
       </property>
       <classinfo>

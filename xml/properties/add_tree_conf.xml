@@ -2,13 +2,13 @@
 <properties>
       <property>
             <name>sel</name>
-            <type>table</type>
-            <store>no</store>
-            <group>general</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <classinfo>
             <no_comment>1</no_comment>

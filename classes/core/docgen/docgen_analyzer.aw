@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.13 2004/03/15 16:55:13 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.14 2004/03/24 11:00:20 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -134,9 +134,9 @@ class docgen_analyzer extends class_base
 
 	function assert_fail($tok)
 	{
-		echo "assert_fail on token: ";
+		echo "assert_fail in file ".$this->cur_file." on token: ";
 		$this->dump_tok($tok);
-		echo dbg::process_backtrace(debug_backtrace(), 0);
+		echo dbg::process_backtrace(debug_backtrace(), -1);
 		die();
 	}
 
@@ -671,6 +671,13 @@ class docgen_analyzer extends class_base
 					$is_var = true;
 					$class = $cln[1].$this->do_read_funcall();
 					break;
+				
+				case "\"":
+					// string containing variables, read it
+					$class = "variable dependency! ";
+					$is_var = true;
+					$class .= $this->do_read_const_string();
+					break;
 
 				default:
 					$this->assert_fail($cln);
@@ -748,8 +755,9 @@ class docgen_analyzer extends class_base
 	function handle_variable_ref($v_tok)
 	{
 		return;
-		$tok = $this->get();
-		if ($tok[0] == T_OBJECT_OPERATOR)
+		$nxt = $this->get();
+		$this->dump_tok($nxt, false);
+		if ($nxt[0] == T_OBJECT_OPERATOR)
 		{
 			// after object operator (->), variable or function name, or "variable variable"
 			$fun_name = $this->get();
@@ -806,12 +814,32 @@ class docgen_analyzer extends class_base
 					$this->data["classes"][$this->current_class]["functions"][$this->current_function]["external_calls"][$fun_name[1]] = $calld;
 				}
 			}
-			else
+		}
+
+			if (true)
 			{
 				if (!is_array($nxt) && $nxt == "=")
 				{
 					// var assign, add to var track if we know type
 					$assign = $this->get();
+					if (!is_array($assign) && ($assign == "&" || $assign == "@"))
+					{
+						$assign = $this->get();
+					}
+
+					$cast_type = "";
+					if ($assign[0] == T_INT_CAST)
+					{
+						$cast_type = "int";
+						$assign = $this->get();
+					}
+					else
+					if (!is_array($assign) && $assign == "!")
+					{
+						$cast_type = "bool";
+						$assign = $this->get();
+					}
+
 					if ($assign[0] == T_ARRAY)
 					{
 						$vt = array(
@@ -851,7 +879,7 @@ class docgen_analyzer extends class_base
 							{
 								// probably a php funcall, set var track type as other
 								$vt = array(
-									"type" => "other",
+									"type" => ($cast_type != "" ? $cast_type : "other"),
 									"last_assign" => $this->get_line(),
 									"last_value" => "unknown",
 									"funcall" => $this->do_read_funcall()
@@ -885,7 +913,7 @@ class docgen_analyzer extends class_base
 
 							//die("ERROR!! unassigned var ref on file ".$this->cur_file." line = ".$this->get_line()." var = ".$this->dump_tok($assign));
 							$vt = array(
-								"type" => "other",
+								"type" => ($cast_type != "" ? $cast_type : "other"),
 								"last_assign" => $this->get_line(),
 								"last_value" => "unknown",
 								"var_ref" => $assign[1]
@@ -894,8 +922,13 @@ class docgen_analyzer extends class_base
 						}
 					}
 					else
-					if ($assign[0] == T_LNUMBER)
+					if ($assign[0] == T_LNUMBER || (!is_array($assign) && $assign=="-"))
 					{
+						if (!is_array($assign))
+						{
+							$assign = $this->get();
+							$assign[1] = -$assign[1];
+						}
 						// variable type number
 						$vt = array(
 							"type" => "number",
@@ -908,7 +941,20 @@ class docgen_analyzer extends class_base
 					if ($assign[0] == T_NEW)
 					{
 						$cln = $this->get();
-						$this->assert($cln, T_STRING);
+						// options: T_STRING (class name) || T_VARIABLE (variable containing class name)
+						if ($cln[0] == T_VARIABLE)
+						{
+							// TODO: try to read from var track var content 
+							$cln[1] = "";
+						}
+						else
+						if ($cln[0] == T_STRING)
+						{
+						}
+						else
+						{
+							$this->assert($cln, T_STRING);
+						}
 						// string is class name
 
 						$tmp = $this->get();
@@ -922,33 +968,35 @@ class docgen_analyzer extends class_base
 						// class instance, mark as object var
 						$vt = array(
 							"type" => "class",
-							"class" => $cln[1],
+							"class" => ($cln[1] == "" ? "unknown, variable ref" : $cln[1]),
 							"last_assign" => $this->get_line(),
-							"last_value" => $cln[1],
+							"last_value" => ($cln[1] == "" ? "unknown, variable ref" : $cln[1]),
 							"class_params" => $clp
 						);
 						$this->add_track_var($fun_name[1], $vt);
 					}
 					else
-					if ($assign[0] == T_ISSET)
+					if ($assign[0] == T_ISSET || (!is_array($assign) && $assign == "(") || $assign[0] == T_EMPTY)
 					{
 						// we're sorta fucked here, cause that's the start of a complex expression probably :(
-						echo "isset <Br>";
-						$tmp = $this->get();
-						$this->dump_tok($tmp, false);
-						$tmp = $this->get();
-						$this->dump_tok($tmp, false);
-						$tmp = $this->get();
-						$this->dump_tok($tmp, false);
+						$this->add_track_var($fun_name[1], $this->_try_parse_complex_expr());
+					}
+					else
+					if (!is_array($assign) && $assign == "\"")
+					{
+						$vt = array(
+							"type" => "string",
+							"last_assign" => $this->get_line(),
+							"last_value" => $this->do_read_const_string(),
+						);
+						$this->add_track_var($fun_name[1], $vt);
 					}
 					else
 					{
-						echo "oither <br>";
-						$this->dump_tok($assign, false);
+						$this->assert_fail($assign);
 					}
 				}
 			}
-		}
 	}
 
 	function get_track_var($varname)
@@ -956,6 +1004,10 @@ class docgen_analyzer extends class_base
 		// if in func, check local scope
 		if ($this->in_function)
 		{
+			if ($this->current_function == "_req_add_itypes")
+			{
+				echo "read track var $varname => ".dbg::dump($this->var_track_func_scope[$varname])." <br>";
+			}
 			return $this->var_track_func_scope[$varname];
 		}
 		return $this->var_track_glob_scope[$varname];
@@ -963,11 +1015,56 @@ class docgen_analyzer extends class_base
 
 	function add_track_var($varn, $vard)
 	{
-		if ($this->in_function)
+		if ($this->in_function) 
 		{
+			if ($this->current_function == "_req_add_itypes")
+			{
+				echo "added track var $varn => ".dbg::dump($vard)." <br>";
+			}
 			$this->var_track_func_scope[$varn] = $vard;
 		}
 		$this->var_track_glob_scope[$varn] = $vard;
+	}
+
+	function _try_parse_complex_expr()
+	{
+		// we are insode a complex expression. try to figure out if it is constant
+		// by type (since currently we only get here from finding the isset token 
+		// on variable assign, it probably is an array. 
+		// TODO: right. currently, just return unknown type
+		return array(
+			"type" => "other",
+			"last_assign" => $this->get_line(),
+			"last_value" => "unknown",
+		);
+	}
+
+	function do_read_const_string()
+	{
+		// skip fist " if not yet skipped
+		$tmp = $this->get();
+		if (!(!is_array($tmp) && $tmp == "\""))
+		{
+			$this->back();
+		}
+
+		// a simple count of "'s from here
+		$cnt = 1;
+		$tmp = 0;
+		while ($cnt > 0)
+		{
+			$tok = $this->get();
+			if ($tok == "\"")
+			{
+				$cnt --;
+			}
+
+			$tmp++;
+			if ($tmp > 1000)
+			{
+				die("horrible parse error!");
+			}
+		}
 	}
 }
 ?>

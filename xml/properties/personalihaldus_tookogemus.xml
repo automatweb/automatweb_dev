@@ -2,47 +2,47 @@
 <properties>
       <property>
             <name>asutus</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <method>serialize</method>
             <field>meta</field>
+            <type>textbox</type>
             <caption>Asutus</caption>
       </property>
       <property>
             <name>algus</name>
-            <type>date_select</type>
             <table>objects</table>
             <group>general</group>
             <method>serialize</method>
             <field>meta</field>
+            <type>date_select</type>
             <caption>Alates</caption>
       </property>
       <property>
             <name>kuni</name>
-            <type>date_select</type>
             <table>objects</table>
             <group>general</group>
             <method>serialize</method>
             <field>meta</field>
+            <type>date_select</type>
             <caption>Kuni</caption>
       </property>
       <property>
             <name>ametikoht</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
             <method>serialize</method>
             <field>meta</field>
+            <type>textbox</type>
             <caption>Ametikoht</caption>
       </property>
       <property>
             <name>tasks</name>
-            <type>textarea</type>
             <table>objects</table>
             <group>general</group>
             <method>serialize</method>
             <field>meta</field>
+            <type>textarea</type>
             <caption>T&amp;ouml;&amp;ouml;&amp;uuml;lesanded</caption>
       </property>
       <classinfo>

@@ -2,131 +2,153 @@
 <properties>
       <property>
             <name>rows</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textbox</type>
             <group>general</group>
             <size>3</size>
             <store>no</store>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Ridu</caption>
       </property>
       <property>
             <name>columns</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textbox</type>
             <group>general</group>
             <size>3</size>
             <store>no</store>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Tulpi</caption>
       </property>
       <property>
             <name>cell_style_folders</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CELLSTYLE_FOLDER</reltype>
             <group>settings</group>
             <multiple>1</multiple>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Stiilide kataloogid</caption>
       </property>
       <property>
             <name>grid</name>
-            <type>callback</type>
-            <group>layout</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>callback</type>
+            <group>layout</group>
             <caption>Tabel</caption>
       </property>
       <property>
             <name>grid_styles</name>
-            <type>callback</type>
-            <group>styles</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>callback</type>
+            <group>styles</group>
             <caption>Stiilid</caption>
       </property>
       <property>
             <name>table_style</name>
-            <type>select</type>
-            <group>settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
+            <group>settings</group>
             <caption>Tabeli stiil</caption>
       </property>
       <property>
-            <name>grid_aliases</name>
-            <type>callback</type>
-            <group>aliases</group>
+            <name>row_widths</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>callback</type>
+            <callback>get_row_widths</callback>
+            <group>settings</group>
+            <store>no</store>
+            <caption>Ridade laiused</caption>
+      </property>
+      <property>
+            <name>row_heights</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>get_row_heights</callback>
+            <group>settings</group>
+            <store>no</store>
+            <caption>Ridade k&amp;otilde;rgused</caption>
+      </property>
+      <property>
+            <name>grid_aliases</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <group>aliases</group>
             <caption>Aliased</caption>
       </property>
       <property>
             <name>grid_aliases_list</name>
-            <type>aliasmgr</type>
-            <group>aliases</group>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>aliasmgr</type>
+            <group>aliases</group>
+            <store>no</store>
             <caption>Aliaste manager</caption>
       </property>
       <property>
             <name>grid_preview</name>
-            <type>callback</type>
-            <group>preview</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>callback</type>
+            <group>preview</group>
             <caption>Eelvaade</caption>
       </property>
       <property>
             <name>import_file</name>
-            <type>fileupload</type>
-            <group>import</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>fileupload</type>
+            <group>import</group>
             <caption>Uploadi .csv fail</caption>
       </property>
       <property>
             <name>import_remove_empty</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <group>import</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>import</group>
             <caption>Kas eemaldame tühjad read lõpust</caption>
       </property>
       <property>
             <name>import_sep</name>
-            <type>textbox</type>
-            <size>1</size>
-            <group>import</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
+            <size>1</size>
+            <group>import</group>
             <caption>Mis märgiga on tulbad eraldatud?</caption>
       </property>
       <property>
             <name>show_in_folders</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SHOW_FOLDER</reltype>
             <multiple>1</multiple>
             <rel>1</rel>
             <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Millistes kataloogides n&amp;auml;idatakse</caption>
       </property>
       <classinfo>
@@ -145,7 +167,7 @@
                   <caption>Stiilid</caption>
             </styles>
             <aliases>
-                  <caption>Aliased</caption>
+                  <caption>Tabeli sisu</caption>
             </aliases>
             <import>
                   <caption>Import</caption>

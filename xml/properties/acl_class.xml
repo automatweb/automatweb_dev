@@ -2,53 +2,53 @@
 <properties>
       <property>
             <name>chain</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CHAIN</reltype>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CHAIN</reltype>
             <caption>Vali p&amp;auml;rg</caption>
       </property>
       <property>
             <name>role</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ROLE</reltype>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROLE</reltype>
             <caption>Vali roll</caption>
       </property>
       <property>
             <name>groups</name>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <reltype>RELTYPE_GROUP</reltype>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_GROUP</reltype>
             <caption>Vali grupid</caption>
       </property>
       <property>
             <name>priority</name>
-            <type>textbox</type>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
             <caption>Prioriteet</caption>
       </property>
       <property>
             <name>update_acl</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <store>no</store>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
             <caption>Uuenda ACL</caption>
       </property>
       <classinfo>

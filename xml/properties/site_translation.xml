@@ -2,6 +2,7 @@
 <properties>
       <property>
             <name>utr_toolbar</name>
+            <table>objects</table>
             <group>
                   <num_0>utr_day</num_0>
                   <num_1>utr_week</num_1>
@@ -12,12 +13,12 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <editonly>1</editonly>
-            <table>objects</table>
             <field>utr_toolbar</field>
             <caption>TB</caption>
       </property>
       <property>
             <name>tr_toolbar</name>
+            <table>objects</table>
             <group>
                   <num_0>tr_day</num_0>
                   <num_1>tr_week</num_1>
@@ -28,12 +29,12 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <editonly>1</editonly>
-            <table>objects</table>
             <field>tr_toolbar</field>
             <caption>TB</caption>
       </property>
       <property>
             <name>inp_toolbar</name>
+            <table>objects</table>
             <group>
                   <num_0>ipr_day</num_0>
                   <num_1>ipr_week</num_1>
@@ -44,50 +45,50 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <editonly>1</editonly>
-            <table>objects</table>
             <field>inp_toolbar</field>
             <caption>TB</caption>
       </property>
       <property>
             <name>baselang</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Baaskeel</caption>
       </property>
       <property>
             <name>targetlang</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Sihtkeel</caption>
       </property>
       <property>
             <name>targetlang_all</name>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Kas kasutada k&amp;otilde;iki keeli sihtkeelteks</caption>
       </property>
       <property>
             <name>translated_all_langs</name>
+            <table>objects</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Kas objekt ilmub T&amp;otilde;lgitud tabi alla ainult siis kui on t&amp;otilde;litud k&amp;otilde;kidesse keeltesse</caption>
       </property>
       <property>
             <name>translated</name>
+            <table>objects</table>
             <group>
                   <num_0>tr_day</num_0>
                   <num_1>tr_week</num_1>
@@ -97,12 +98,12 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <table>objects</table>
             <field>translated</field>
             <caption>Tõlgitud</caption>
       </property>
       <property>
             <name>untranslated</name>
+            <table>objects</table>
             <group>
                   <num_0>utr_day</num_0>
                   <num_1>utr_week</num_1>
@@ -112,12 +113,12 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <table>objects</table>
             <field>untranslated</field>
             <caption>Tõlkimata</caption>
       </property>
       <property>
             <name>in_progress</name>
+            <table>objects</table>
             <group>
                   <num_0>ipr_day</num_0>
                   <num_1>ipr_week</num_1>
@@ -127,7 +128,6 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <table>objects</table>
             <field>in_progress</field>
             <caption>T&amp;ouml;&amp;ouml;s</caption>
       </property>

@@ -2,11 +2,11 @@
 <properties>
       <property>
             <name>pri</name>
-            <callback>callback_get_pri_list</callback>
-            <group>pri</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <callback>callback_get_pri_list</callback>
+            <group>pri</group>
             <caption>Prioriteedid</caption>
       </property>
       <groupinfo>

@@ -2,39 +2,39 @@
 <properties>
       <property>
             <name>subclass</name>
-            <type>select</type>
-            <field>subclass</field>
             <table>objects</table>
+            <field>subclass</field>
             <group>general</group>
+            <type>select</type>
             <caption>Andmete tüüp</caption>
       </property>
       <property>
             <name>type</name>
-            <type>select</type>
             <table>objects</table>
             <field>meta</field>
             <group>general</group>
             <method>serialize</method>
+            <type>select</type>
             <caption>Source tüüp</caption>
       </property>
       <property>
             <name>fullpath</name>
-            <type>textbox</type>
-            <editonly>1</editonly>
             <table>objects</table>
             <field>meta</field>
             <group>general</group>
             <method>serialize</method>
+            <type>textbox</type>
+            <editonly>1</editonly>
             <caption>Faili asukoht</caption>
       </property>
       <property>
             <name>url</name>
-            <type>textbox</type>
-            <editonly>1</editonly>
             <table>objects</table>
             <field>meta</field>
             <group>general</group>
             <method>serialize</method>
+            <type>textbox</type>
+            <editonly>1</editonly>
             <caption>Faili url</caption>
       </property>
       <classinfo>

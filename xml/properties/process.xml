@@ -2,74 +2,74 @@
 <properties>
       <property>
             <name>ptype</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Protsessi tüüp</caption>
       </property>
       <property>
             <name>description</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Kirjeldus</caption>
       </property>
       <property>
             <name>goal</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Eesmärk</caption>
       </property>
       <property>
             <name>root_action</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ACTION</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>Juurtegevus</caption>
       </property>
       <property>
             <name>end_action</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ACTION</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>L&amp;otilde;pptegevus</caption>
       </property>
       <property>
             <name>transition_folder</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
-            <table>objects</table>
             <caption>J&amp;auml;rgnevuste kataloog</caption>
       </property>
       <property>
             <name>id</name>
-            <type>hidden</type>
             <table>objects</table>
-            <field>oid</field>
             <group>actions</group>
+            <type>hidden</type>
+            <field>oid</field>
       </property>
       <property>
             <name>action_list</name>
-            <type>text</type>
-            <group>actions</group>
-            <store>no</store>
             <table>objects</table>
+            <group>actions</group>
+            <type>text</type>
+            <store>no</store>
             <field>action_list</field>
             <caption>Tegevused</caption>
       </property>

@@ -2,63 +2,63 @@
 <properties>
       <property>
             <name>treeview_conf</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TREE_CONFIG</reltype>
-            <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TREE_CONFIG</reltype>
+            <editonly>1</editonly>
             <caption>Puu konfiguratsioon</caption>
       </property>
       <property>
             <name>actor_rootmenu</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ROOTMENU</reltype>
-            <group>config_actor</group>
             <table>objects</table>
+            <group>config_actor</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
             <caption>Tegijate juurmenüü</caption>
       </property>
       <property>
             <name>action_rootmenu</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ROOTMENU</reltype>
-            <group>config_action</group>
             <table>objects</table>
+            <group>config_action</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
             <caption>Tegevuste juurmenüü</caption>
       </property>
       <property>
             <name>entity_rootmenu</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ROOTMENU</reltype>
-            <group>config_entity</group>
             <table>objects</table>
+            <group>config_entity</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
             <caption>Juhtumite juurmenüü</caption>
       </property>
       <property>
             <name>entity_instance_rootmenu</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ROOTMENU</reltype>
-            <group>config_entity</group>
             <table>objects</table>
+            <group>config_entity</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
             <caption>Juhtumite sisestuste juurmenüü</caption>
       </property>
       <property>
             <name>process_rootmenu</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ROOTMENU</reltype>
-            <group>config_process</group>
             <table>objects</table>
+            <group>config_process</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ROOTMENU</reltype>
             <caption>Protsesside juurmenüü</caption>
       </property>
       <classinfo>

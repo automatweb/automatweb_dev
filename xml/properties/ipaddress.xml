@@ -2,10 +2,10 @@
 <properties>
       <property>
             <name>addr</name>
-            <type>textbox</type>
             <table>ipaddresses</table>
-            <field>ip</field>
             <group>general</group>
+            <type>textbox</type>
+            <field>ip</field>
             <caption>IP Aadress</caption>
       </property>
       <classinfo>

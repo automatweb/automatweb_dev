@@ -2,195 +2,195 @@
 <properties>
       <property>
             <name>selections</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SELECTIONS</reltype>
-            <group>general</group>
             <table>objects</table>
+            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SELECTIONS</reltype>
             <caption>Vaikimisi valim</caption>
       </property>
       <property>
             <name>orgtoolbar</name>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
+            <table>objects</table>
             <group>
                   <num_0>firmad</num_0>
                   <num_1>f2</num_1>
             </group>
-            <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Org. toolbar</caption>
       </property>
       <property>
             <name>search_form1</name>
-            <type>form</type>
-            <sclass>crm_org_search</sclass>
-            <sform>crm_search</sform>
             <table>objects</table>
             <group>f2</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>form</type>
+            <sclass>crm_org_search</sclass>
+            <sform>crm_search</sform>
             <caption>Compound search</caption>
       </property>
       <property>
             <name>manageri</name>
-            <type>text</type>
-            <callback>firma_manager</callback>
             <table>objects</table>
             <group>firmad</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <callback>firma_manager</callback>
             <caption>Firmade nimekiri</caption>
       </property>
       <property>
             <name>tegtoolbar</name>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1	</no_caption>
             <table>objects</table>
             <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1	</no_caption>
             <caption>Tegevusalade toolbar</caption>
       </property>
       <property>
             <name>sector_manager</name>
-            <type>callback</type>
-            <callback>callback_sector_manager</callback>
             <table>objects</table>
             <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_sector_manager</callback>
             <caption>Tegevusalade kataloog</caption>
       </property>
       <property>
             <name>dir_firma</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FIRMA_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FIRMA_CAT</reltype>
             <caption>Vaikimisi firmade kataloog</caption>
       </property>
       <property>
             <name>dir_isik</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ISIK_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ISIK_CAT</reltype>
             <caption>Vaikimisi töötajate kataloog</caption>
       </property>
       <property>
             <name>dir_address</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADDRESS_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS_CAT</reltype>
             <caption>Vaikimisi aadresside kataloog</caption>
       </property>
       <property>
             <name>dir_ettevotlusvorm</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ETTEVOTLUSVORM_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ETTEVOTLUSVORM_CAT</reltype>
             <caption>Vaikimisi õiguslike vormide kataloog</caption>
       </property>
       <property>
             <name>dir_linn</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_LINN_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LINN_CAT</reltype>
             <caption>Vaikimisi linnade kataloog</caption>
       </property>
       <property>
             <name>dir_maakond</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MAAKOND_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAAKOND_CAT</reltype>
             <caption>Vaikimisi maakondade kataloog</caption>
       </property>
       <property>
             <name>dir_tegevusala</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TEGEVUSALA_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TEGEVUSALA_CAT</reltype>
             <caption>Vaikimisi tegevusalade kataloog</caption>
       </property>
       <property>
             <name>dir_toode</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TOODE_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TOODE_CAT</reltype>
             <caption>Vaikimisi toodete kataloog</caption>
       </property>
       <property>
             <name>dir_default</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_GENERAL_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_GENERAL_CAT</reltype>
             <caption>Vaikimisi kataloog, kui mõni eelnevatest pole määratud, siis kasutatakse seda</caption>
       </property>
       <property>
             <name>flimit</name>
-            <type>select</type>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Kirjeid ühel lehel</caption>
       </property>
       <property>
             <name>default_kliendibaas</name>
-            <type>checkbox</type>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>checkbox</type>
             <caption>See on kasutaja default kliendibaas</caption>
       </property>
       <property>
             <name>addtoolbar</name>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <group>objects_manager</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>active_selection</name>
-            <type>textbox</type>
-            <group>firmad</group>
             <table>objects</table>
+            <group>firmad</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>textbox</type>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>

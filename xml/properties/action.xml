@@ -2,39 +2,39 @@
 <properties>
       <property>
             <name>name</name>
-            <type>textbox</type>
             <table>objects</table>
             <group>general</group>
+            <type>textbox</type>
             <field>name</field>
             <caption>Nimi</caption>
       </property>
       <property>
             <name>description</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Kirjeldus</caption>
       </property>
       <property>
             <name>goal</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Eesmärk</caption>
       </property>
       <property>
             <name>entity_actor</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <rel>1</rel>
             <reltype>RELTYPE_ACTOR</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Tegija</caption>
       </property>
       <classinfo>

@@ -2,9 +2,7 @@
 <properties>
       <property>
             <name>navtoolbar</name>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
+            <table>objects</table>
             <group>
                   <num_0>general</num_0>
                   <num_1>all_actions</num_1>
@@ -12,187 +10,191 @@
                   <num_3>tasks</num_3>
                   <num_4>calls</num_4>
             </group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <editonly>1</editonly>
-            <table>objects</table>
             <field>navtoolbar</field>
       </property>
       <property>
             <name>name</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <size>30</size>
             <maxlenght>255</maxlenght>
-            <table>objects</table>
-            <group>general</group>
             <field>name</field>
             <caption>Organisatsiooni nimi</caption>
       </property>
       <property>
             <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textarea</type>
             <cols>65</cols>
             <rows>3</rows>
-            <table>objects</table>
-            <group>general</group>
             <field>comment</field>
             <caption>Kommentaar</caption>
       </property>
       <property>
             <name>reg_nr</name>
+            <table>kliendibaas_firma</table>
+            <group>general</group>
             <type>textbox</type>
             <size>10</size>
             <maxlength>20</maxlength>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
             <field>reg_nr</field>
             <caption>Registri number</caption>
       </property>
       <property>
             <name>pohitegevus</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TEGEVUSALAD</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TEGEVUSALAD</reltype>
             <field>pohitegevus</field>
             <caption>Põhitegevus</caption>
       </property>
       <property>
             <name>ettevotlusvorm</name>
-            <type>objpicker</type>
-            <clid>CL_CRM_CORPFORM</clid>
             <table>kliendibaas_firma</table>
             <group>general</group>
+            <type>objpicker</type>
+            <clid>CL_CRM_CORPFORM</clid>
             <field>ettevotlusvorm</field>
             <caption>Õiguslik vorm</caption>
       </property>
       <property>
             <name>tooted</name>
+            <table>objects</table>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_TOOTED</reltype>
             <method>serialize</method>
             <field>meta</field>
-            <table>objects</table>
-            <group>general</group>
             <caption>Tooted</caption>
       </property>
       <property>
             <name>kaubamargid</name>
+            <table>kliendibaas_firma</table>
+            <group>general</group>
             <type>textarea</type>
             <cols>65</cols>
             <rows>3</rows>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
             <field>kaubamargid</field>
             <caption>Kaubamärgid</caption>
       </property>
       <property>
             <name>contact</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADDRESS</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS</reltype>
             <field>contact</field>
             <caption>Aadress</caption>
       </property>
       <property>
             <name>tegevuse_kirjeldus</name>
+            <table>kliendibaas_firma</table>
+            <group>general</group>
             <type>textarea</type>
             <cols>65</cols>
             <rows>3</rows>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
             <field>tegevuse_kirjeldus</field>
             <caption>Tegevuse kirjeldus</caption>
       </property>
       <property>
             <name>logo</name>
+            <table>objects</table>
+            <group>general</group>
             <type>textbox</type>
             <size>40</size>
             <method>serialize</method>
             <field>meta</field>
-            <table>objects</table>
-            <group>general</group>
             <caption>Organisatsiooni logo(url)</caption>
       </property>
       <property>
             <name>firmajuht</name>
+            <table>kliendibaas_firma</table>
+            <group>general</group>
             <type>chooser</type>
             <orient>vertical</orient>
-            <table>kliendibaas_firma</table>
             <editonly>1</editonly>
-            <group>general</group>
             <field>firmajuht</field>
             <caption>Organisatsiooni juht</caption>
       </property>
       <property>
             <name>human_resources</name>
-            <type>table</type>
-            <store>no</store>
             <table>objects</table>
             <group>humanres</group>
+            <type>table</type>
+            <store>no</store>
             <field>human_resources</field>
             <caption>Inimesed</caption>
       </property>
       <property>
             <name>addresslist</name>
-            <type>text</type>
-            <store>no</store>
             <table>objects</table>
             <group>contacts</group>
+            <type>text</type>
+            <store>no</store>
             <field>addresslist</field>
             <caption>Aadressid</caption>
       </property>
       <property>
             <name>phone_id</name>
-            <type>relmanager</type>
             <table>kliendibaas_firma</table>
+            <group>contacts</group>
+            <type>relmanager</type>
             <reltype>RELTYPE_PHONE</reltype>
             <props>name</props>
-            <group>contacts</group>
             <field>phone_id</field>
             <caption>Telefon</caption>
       </property>
       <property>
             <name>url_id</name>
-            <type>relmanager</type>
             <table>kliendibaas_firma</table>
+            <group>contacts</group>
+            <type>relmanager</type>
             <reltype>RELTYPE_URL</reltype>
             <props>name</props>
-            <group>contacts</group>
             <field>url_id</field>
             <caption>Veebiaadress</caption>
       </property>
       <property>
             <name>email_id</name>
-            <type>relmanager</type>
             <table>kliendibaas_firma</table>
+            <group>contacts</group>
+            <type>relmanager</type>
             <reltype>RELTYPE_EMAIL</reltype>
             <props>mail</props>
-            <group>contacts</group>
             <field>email_id</field>
             <caption>E-posti aadressid</caption>
       </property>
       <property>
             <name>telefax_id</name>
-            <type>relmanager</type>
             <table>kliendibaas_firma</table>
+            <group>contacts</group>
+            <type>relmanager</type>
             <reltype>RELTYPE_TELEFAX</reltype>
             <props>name</props>
-            <group>contacts</group>
             <field>telefax_id</field>
             <caption>Fax</caption>
       </property>
       <property>
             <name>tasks_call</name>
+            <table>objects</table>
+            <group>tasks_overview</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <table>objects</table>
-            <group>tasks_overview</group>
             <field>tasks_call</field>
             <caption>Kõned</caption>
       </property>
       <property>
             <name>org_add_call</name>
+            <table>objects</table>
+            <group>tasks_overview</group>
             <type>releditor</type>
             <reltype>RELTYPE_CALL</reltype>
             <props>
@@ -203,71 +205,69 @@
                   <num_4>content</num_4>
             </props>
             <store>no</store>
-            <table>objects</table>
-            <group>tasks_overview</group>
             <field>org_add_call</field>
             <caption>Lisa kõne</caption>
       </property>
       <property>
             <name>org_actions</name>
+            <table>objects</table>
+            <group>all_actions</group>
             <type>calendar</type>
             <no_caption>1</no_caption>
-            <group>all_actions</group>
             <viewtype>relative</viewtype>
             <store>no</store>
-            <table>objects</table>
             <field>org_actions</field>
             <caption>org_actions</caption>
       </property>
       <property>
             <name>org_calls</name>
+            <table>objects</table>
+            <group>calls</group>
             <type>calendar</type>
             <no_caption>1</no_caption>
-            <group>calls</group>
             <viewtype>relative</viewtype>
             <store>no</store>
-            <table>objects</table>
             <field>org_calls</field>
             <caption>Kõned</caption>
       </property>
       <property>
             <name>org_meetings</name>
+            <table>objects</table>
+            <group>meetings</group>
             <type>calendar</type>
             <no_caption>1</no_caption>
-            <group>meetings</group>
             <viewtype>relative</viewtype>
             <store>no</store>
-            <table>objects</table>
             <field>org_meetings</field>
             <caption>Kohtumised</caption>
       </property>
       <property>
             <name>org_tasks</name>
+            <table>objects</table>
+            <group>tasks</group>
             <type>calendar</type>
             <no_caption>1</no_caption>
-            <group>tasks</group>
             <viewtype>relative</viewtype>
             <store>no</store>
-            <table>objects</table>
             <field>org_tasks</field>
             <caption>Toimetused</caption>
       </property>
       <property>
             <name>jobsact</name>
+            <table>objects</table>
+            <group>jobsact</group>
             <type>table</type>
             <no_caption>1</no_caption>
-            <group>jobsact</group>
             <store>no</store>
-            <table>objects</table>
             <field>jobsact</field>
       </property>
       <property>
             <name>jobsnotact</name>
+            <table>objects</table>
+            <group>notact</group>
             <type>table</type>
             <no_caption>1</no_caption>
-            <group>notact</group>
             <store>no</store>
-            <table>objects</table>
             <field>jobsnotact</field>
       </property>
       <classinfo>

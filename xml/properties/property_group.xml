@@ -2,26 +2,26 @@
 <properties>
       <property>
             <name>rootmenu</name>
+            <table>objects</table>
             <type>objpicker</type>
             <clid>CL_MENU</clid>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
             <caption>Rootmenüü</caption>
       </property>
       <property>
             <name>subclass</name>
+            <table>objects</table>
             <type>generated</type>
             <generator>callback_get_class_list</generator>
             <field>subclass</field>
-            <table>objects</table>
             <caption>Klassid</caption>
       </property>
       <property>
             <name>generate</name>
+            <table>objects</table>
             <editonly>1</editonly>
             <type>text</type>
-            <table>objects</table>
             <field>generate</field>
             <caption>Genereeri objektid</caption>
       </property>

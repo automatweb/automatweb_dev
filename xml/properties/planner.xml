@@ -2,125 +2,125 @@
 <properties>
       <property>
             <name>default_view</name>
-            <type>select</type>
-            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general2</group>
+            <type>select</type>
+            <rel>1</rel>
             <caption>Aeg</caption>
       </property>
       <property>
             <name>day_start</name>
-            <type>time_select</type>
-            <group>time_settings</group>
-            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>time_settings</group>
+            <type>time_select</type>
+            <rel>1</rel>
             <caption>Päev algab</caption>
       </property>
       <property>
             <name>day_end</name>
-            <type>time_select</type>
-            <group>time_settings</group>
-            <rel>1</rel>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>time_settings</group>
+            <type>time_select</type>
+            <rel>1</rel>
             <caption>Päev lõpeb</caption>
       </property>
       <property>
             <name>navigator_visible</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <default>1</default>
-            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>advanced</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
             <caption>Näita navigaatorit</caption>
       </property>
       <property>
             <name>navigator_months</name>
-            <type>select</type>
-            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>advanced</group>
+            <type>select</type>
             <caption>Kuud navigaatoris</caption>
       </property>
       <property>
             <name>my_projects</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>advanced</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <caption>Näita projekte</caption>
       </property>
       <property>
             <name>event_folder</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_EVENT_FOLDER</reltype>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_FOLDER</reltype>
             <caption>Sündmuste kataloog</caption>
       </property>
       <property>
             <name>workdays</name>
-            <type>chooser</type>
-            <multiple>1</multiple>
-            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>advanced</group>
+            <type>chooser</type>
+            <multiple>1</multiple>
             <caption>Näidatavad päevad</caption>
       </property>
       <property>
             <name>navtoolbar</name>
-            <type>toolbar</type>
-            <group>views</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>views</group>
             <store>no</store>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <caption>Nav. toolbar</caption>
       </property>
       <property>
             <name>project</name>
-            <type>hidden</type>
-            <group>views</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>views</group>
             <store>no</store>
+            <type>hidden</type>
             <caption>Projekti ID</caption>
       </property>
       <property>
             <name>calendar_contents</name>
-            <type>calendar</type>
-            <group>views</group>
-            <no_caption>1</no_caption>
-            <viewtype>week</viewtype>
-            <store>no</store>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>views</group>
+            <store>no</store>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <viewtype>week</viewtype>
             <caption>Kalendri sisu</caption>
       </property>
       <property>
             <name>add_event</name>
-            <callback>callback_get_add_event</callback>
-            <group>add_event</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>add_event</group>
             <store>no</store>
+            <callback>callback_get_add_event</callback>
             <caption>Lisa sündmus</caption>
       </property>
       <classinfo>

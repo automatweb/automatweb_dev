@@ -2,30 +2,38 @@
 <properties>
       <property>
             <name>item_count</name>
-            <type>hidden</type>
             <table>aw_shop_packets</table>
-            <field>aw_count</field>
             <group>general</group>
+            <type>hidden</type>
+            <field>aw_count</field>
             <caption>Mitu laos</caption>
       </property>
       <property>
             <name>separate_items</name>
+            <table>aw_shop_packets</table>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <table>aw_shop_packets</table>
             <field>separate_items</field>
-            <group>general</group>
             <caption>Kas tooted on eraldi</caption>
       </property>
       <property>
+            <name>price</name>
+            <table>aw_shop_packets</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_price</field>
+            <caption>Hind</caption>
+      </property>
+      <property>
             <name>packet</name>
+            <table>objects</table>
             <group>packet</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
       </property>
       <classinfo>
             <syslog_type>ST_SHOP_PACKET</syslog_type>

@@ -2,20 +2,20 @@
 <properties>
       <property>
             <name>login_menus</name>
+            <table>objects</table>
+            <group>general</group>
             <type>callback</type>
             <callback>callback_get_login_menus</callback>
             <store>no</store>
-            <table>objects</table>
-            <group>general</group>
             <field>login_menus</field>
       </property>
       <property>
             <name>activity</name>
-            <type>table</type>
+            <table>objects</table>
             <group>activity</group>
+            <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
             <field>activity</field>
             <caption>Aktiivsus</caption>
       </property>

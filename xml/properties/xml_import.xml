@@ -2,30 +2,30 @@
 <properties>
       <property>
             <name>datasource</name>
+            <table>objects</table>
+            <group>general</group>
             <type>objpicker</type>
             <clid>CL_DATASOURCE</clid>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>XML datasource</caption>
       </property>
       <property>
             <name>import_function</name>
+            <table>objects</table>
+            <group>general</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
-            <group>general</group>
             <caption>Impordifunktsioon</caption>
       </property>
       <property>
             <name>run_import</name>
+            <table>objects</table>
+            <group>general</group>
             <type>text</type>
             <editonly>1</editonly>
             <store>no</store>
-            <table>objects</table>
-            <group>general</group>
             <field>run_import</field>
             <caption>Käivita import</caption>
       </property>

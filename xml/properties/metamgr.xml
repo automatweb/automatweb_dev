@@ -2,49 +2,49 @@
 <properties>
       <property>
             <name>mgrtoolbar</name>
+            <table>objects</table>
+            <group>manager</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <table>objects</table>
-            <group>manager</group>
             <field>mgrtoolbar</field>
             <caption>Toolbar</caption>
       </property>
       <property>
             <name>manager</name>
+            <table>objects</table>
+            <group>manager</group>
             <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <wrapchildren>1</wrapchildren>
-            <table>objects</table>
-            <group>manager</group>
             <field>manager</field>
             <caption>Manager</caption>
       </property>
       <property>
             <name>treeview</name>
+            <table>objects</table>
+            <group>manager</group>
             <type>text</type>
             <parent>manager</parent>
             <store>no</store>
-            <table>objects</table>
-            <group>manager</group>
             <field>treeview</field>
       </property>
       <property>
             <name>metalist</name>
+            <table>objects</table>
+            <group>manager</group>
             <type>table</type>
             <parent>manager</parent>
             <store>no</store>
-            <table>objects</table>
-            <group>manager</group>
             <field>metalist</field>
       </property>
       <property>
             <name>meta</name>
-            <type>hidden</type>
-            <store>no</store>
             <table>objects</table>
             <group>manager</group>
+            <type>hidden</type>
+            <store>no</store>
             <field>meta</field>
             <caption>Metainfo</caption>
       </property>

@@ -2,10 +2,10 @@
 <properties>
       <property>
             <name>status</name>
-            <type>status</type>
-            <field>status</field>
             <table>objects</table>
             <group>general</group>
+            <type>status</type>
+            <field>status</field>
             <caption>Staatus</caption>
       </property>
       <classinfo>
