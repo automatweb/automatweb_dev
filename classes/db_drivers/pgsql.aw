@@ -159,6 +159,21 @@ class pgsql
 		return $val;
 	}
 
+	//// 
+	// ! fetch all rows from db_query result
+	// qtext - if not set tries to fetch from previous db_query !!
+	function db_fetch_array($qtext='') 
+	{
+		if ($qtext)
+		{
+			$this->db_query($qtext);
+		}
+		while ($arr[]=$this->db_next())
+		{}
+		return $arr;
+	}
+
+
 	# need 2 funktsiooni oskavad käituda nii array-de kui ka stringidega
 	function quote(&$arr) 
 	{
@@ -237,6 +252,11 @@ class pgsql
 			$retval[] = pg_fetch_result($this->qID, $this->rec_count, $i);
 		}
 		return $retval;
+	}
+
+	function db_show_create_table($name)
+	{
+//		return $this->db_fetch_field('SHOW CREATE TABLE '.$name, 'Create Table');
 	}
 
 	////
