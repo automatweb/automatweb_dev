@@ -11,6 +11,16 @@
             <caption>Register, millest otsida</caption>
       </property>
       <property>
+            <name>per_page</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Mitu kirjet lehel</caption>
+      </property>
+      <property>
             <name>sform_frm</name>
             <table>objects</table>
             <group>mkfrm</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.4 2004/05/21 11:06:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.5 2004/05/27 08:42:38 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -19,6 +19,13 @@
 
 @property search_o type=relpicker reltype=RELTYPE_SEARCH field=meta method=serialize
 @caption Otsingu konfiguratsioon
+
+@property show_all type=checkbox ch_value=1 field=meta method=serialize
+@caption Kui pole valitud, n&auml;ita k&otilde;iki sisestusi
+
+@property per_page type=textbox size=5 field=meta method=serialize
+@caption Mitu kirjet lehel
+
 
 @groupinfo data caption=Andmed
 @default group=data
@@ -142,7 +149,8 @@ class register extends class_base
 					"parent" => $arr["obj_inst"]->prop("data_rootmenu"),
 					"return_url" => urlencode(aw_global_get("REQUEST_URI")),
 					"cfgform" => $cfid,
-					"set_register_id" => $arr["obj_inst"]->id()
+					"set_register_id" => $arr["obj_inst"]->id(),
+					"section" => aw_global_get("section")
 				), CL_REGISTER_DATA)
 			));
 		}
@@ -210,6 +218,13 @@ class register extends class_base
 			"register_id" => $arr["obj_inst"]->id()
 		);
 
+		if (!$arr["request"]["sortby"])
+		{
+			$arr["request"]["sortby"] = "name";
+		}
+
+		$filt["sort_by"] = $arr["request"]["sortby"]." ".$arr["request"]["sort_order"];
+
 		if (($dtf = $arr["obj_inst"]->prop("data_tree_field")))
 		{
 			if ($arr["request"]["treefilter"])
@@ -218,16 +233,36 @@ class register extends class_base
 				{
 					$filt[$dtf] = $arr["request"]["treefilter"];
 				}
+				$ol_cnt = new object_list($filt);
+
+				if (($ppg = $arr["obj_inst"]->prop("per_page")))
+				{
+					$filt["limit"] = ($arr["request"]["ft_page"] * $ppg).",".$ppg;
+				}
 				$ol = new object_list($filt);
 			}
 			else
 			{
 				$ol = new object_list();
+				$ol_cnt = new object_list();
 			}
 		}
 		else
 		{
-			$ol = new object_list($filt);
+			if ($arr["obj_inst"]->prop("show_all"))
+			{
+				$ol_cnt = new object_list($filt);
+				if (($ppg = $arr["obj_inst"]->prop("per_page")))
+				{
+					$filt["limit"] = ($arr["request"]["ft_page"] * $ppg).",".$ppg;
+				}
+				$ol = new object_list($filt);
+			}
+			else
+			{
+				$ol = new object_list();
+				$ol_cnt = new object_list();
+			}
 		}
 
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
@@ -242,9 +277,19 @@ class register extends class_base
 				"modifiedby" => $mby->name(),
 				"modified" => $o->modified(),
 				"change" => html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
+					"url" => $this->mk_my_orb("change", array("section" => aw_global_get("section"), "id" => $o->id()), $o->class_id()),
 					"caption" => "Muuda"
 				))
+			));
+		}
+
+		$t->sort_by();
+
+		if ($arr["obj_inst"]->prop("per_page"))
+		{
+			$t->pageselector_string = $t->draw_text_pageselector(array(
+				"d_row_cnt" => $ol_cnt->count(),
+				"records_per_page" => $arr["obj_inst"]->prop("per_page")
 			));
 		}
 	}
@@ -258,12 +303,35 @@ class register extends class_base
 	// !shows the register
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
+		$o = obj($arr["id"]);
+		$tb = get_instance("toolbar");
+		$this->do_data_toolbar(array(
+			"prop" => array(
+				"toolbar" => &$tb
+			),
+			"obj_inst" => $o
 		));
-		return $this->parse();
+
+		$html =  $tb->get_toolbar();
+
+		if ($o->prop("show_all"))
+		{
+			classload("vcl/table");
+			$t = new aw_table(array(
+				"layout" => "generic"
+			));
+		
+			$this->do_data_tbl(array(
+				"prop" => array(
+					"vcl_inst" => &$t
+				),
+				"obj_inst" => $o,
+				"request" => $GLOBALS
+			));
+			$html .=  $t->draw();
+		}
+	
+		return $html ;
 	}
 
 	function get_chooser_elements($o)

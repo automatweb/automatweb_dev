@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.3 2004/05/21 11:06:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.4 2004/05/27 08:42:38 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -12,6 +12,9 @@
 
 @property register type=relpicker reltype=RELTYPE_REGISTER 
 @caption Register, millest otsida
+
+@property per_page type=textbox size=5
+@caption Mitu kirjet lehel
 
 /////////
 @groupinfo mkfrm caption="Koosta otsinguvorm"
@@ -427,7 +430,8 @@ class register_search extends class_base
 				"name" => $this->fts_name,
 				"type" => "textbox",
 				"caption" => $fdata[$this->fts_name]["caption"],
-				"value" => $request["rsf"][$this->fts_name]
+				"value" => $request["rsf"][$this->fts_name],
+				"zee_shaa_helper" => 1
 			);
 		}
 
@@ -521,6 +525,10 @@ class register_search extends class_base
 			$tmp = array();
 			foreach($props as $pn => $pd)
 			{
+				if ($pn == "status" || $pn == "register_id")
+				{
+					continue;
+				}
 				$tmp[$pn] = "%".$request["rsf"][$this->fts_name]."%";
 			}
 
@@ -532,12 +540,18 @@ class register_search extends class_base
 
 
 		$ret = new object_list();
+		$ol_cnt = new object_list();
 		if (count($filter) > 2)
 		{
+			$ol_cnt = new object_list($filter);
+			if (($ppg = $o->prop("per_page")))
+			{
+				$filter["limit"] = ($request["ft_page"] * $ppg).",".$ppg;
+			}
 			$ret = new object_list($filter);
 		}
 
-		return $ret;
+		return array($ret, $ol_cnt);
 	}
 
 	function do_search_res_tbl($arr)
@@ -545,7 +559,7 @@ class register_search extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_search_res_tbl($t, $arr["obj_inst"]);
 
-		$ol = $this->get_search_results($arr["obj_inst"], $arr["request"]);
+		list($ol, $ol_cnt) = $this->get_search_results($arr["obj_inst"], $arr["request"]);
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$data = array();
@@ -569,6 +583,13 @@ class register_search extends class_base
 
 		$t->set_default_sortby("name");
 		$t->sort_by();
+		if ($arr["obj_inst"]->prop("per_page"))
+		{
+			$t->pageselector_string = $t->draw_text_pageselector(array(
+				"d_row_cnt" => $ol_cnt->count(),
+				"records_per_page" => $arr["obj_inst"]->prop("per_page")
+			));
+		}
 	}
 }
 ?>
