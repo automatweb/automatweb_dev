@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.44 2005/03/15 14:08:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.45 2005/03/16 10:58:01 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2664,6 +2664,68 @@ class mrp_workspace extends class_base
 		$t->sort_by();
 	}
 
+	function get_cur_printer_resources_desc($arr)
+	{
+		// get person
+		$u = get_instance(CL_USER);
+		$person = obj($u->get_current_person());
+
+		// get professions for person
+		$profs = new object_list($person->connections_from(array(
+			"type" => "RELTYPE_RANK"
+		)));
+
+		// if current person has no rank, return all resources
+		if (!$profs->count())
+		{
+			return "";
+		}
+
+		// get resource operators for professions
+		$ops = new object_list(array(
+			"profession" => $profs->ids(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_MRP_RESOURCE_OPERATOR
+		));
+
+		// get resources
+		$ret = array();
+		foreach($ops->arr() as $op)
+		{
+			if (is_oid($op->prop("resource")) && $this->can("view", $op->prop("resource")))
+			{
+				$reso = obj($op->prop("resource"));
+				$ret[] = $reso->name();
+			}
+		}
+
+		// if no resources are given, check if the current user should have
+		// all resources displayed, the department's resources displayed
+		// or none
+		$ws = $arr["ws"];
+
+		$all_res = $ws->meta("umgr_all_resources");
+		foreach($profs->arr() as $prof)
+		{
+			if ($all_res[$prof->id()] == 1)
+			{
+				return "K&otilde;ik ressursid";
+			}
+		}
+
+		$dept_res = $ws->meta("umgr_dept_resources");
+		foreach($profs->arr() as $prof)
+		{
+			if ($dept_res[$prof->id()] == 1)
+			{
+				return "Osakonna ressursid";
+			}
+		}
+
+		return join(", ", $ret);
+	}
+
 	function get_cur_printer_resources($arr)
 	{
 		// get person
@@ -2678,12 +2740,6 @@ class mrp_workspace extends class_base
 		// if current person has no rank, return all resources
 		if (!$profs->count())
 		{
-			/*$ol = new object_list(array(
-				"class_id" => CL_MRP_RESOURCE,
-				"lang_id" => array(),
-				"site_id" => array()
-			));
-			return $this->make_keys($ol->ids());*/
 			return array();
 		}
 
@@ -3094,7 +3150,7 @@ class mrp_workspace extends class_base
 		$hdr = "<span style=\"font-size: 18px; color: red;\">".$person->prop("name")." | ".html::href(array(
 				"url" => $this->mk_my_orb("logout", array(), "users"),
 				"caption" => t("Logi v&auml;lja")
-			))."  | </span>";
+			))."  | ".$this->get_cur_printer_resources_desc(array("ws" => obj(aw_ini_get("prisma.ws"))))." | </span>";
 
 		return $hdr;
 	}
