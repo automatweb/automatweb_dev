@@ -57,6 +57,15 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="get_attach">
+			<function name="get_attach">
+				<arguments>
+					<required name="msgid"/>
+					<required name="attnum"/>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="new_folder">
 			<function name="new_folder">
