@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.18 2004/11/09 15:54:27 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.19 2004/11/09 18:11:44 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -372,7 +372,17 @@ class site_search_content extends class_base
 		
 		if($arr["obj"]->prop("do_keyword_search"))
 		{
-			$ret = $ret + $this->search_keywords($str, $menus, $arr["obj"]);
+			$keyresults = $this->search_keywords($str, $menus, $arr["obj"]);
+			if($ret && $keyresults)
+			{
+				$ret = $ret + $keyresults;
+			}
+			elseif($keyresults)
+			{
+				$ret = $keyresults;
+			}
+				
+				
 		}
 		return $ret;
 	}
@@ -440,7 +450,7 @@ class site_search_content extends class_base
 			"oid" => $doc_ids,
 			"parent" => $menus,
 		));
-		
+		$ret = array();	
 		foreach ($ol->arr() as $obj)
 		{
 			$ret[] = array(
