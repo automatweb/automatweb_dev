@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.325 2004/06/15 08:54:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.326 2004/06/18 16:47:59 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -441,69 +441,57 @@ class menuedit extends aw_template
 
 				// yeah, well, /\W/ match is way too strict - I can't use blah.html as the alias for instance
 				// $this->quote(&$alias) will prevent doing any bad things in the sql - terryf
-				$prnt = 0;
-				$obj = true;
-				foreach($sections as $skey => $sval)
+				//$prnt = 0;
+
+				$candidates = array();
+				$last = array_pop($sections);
+						
+				// well, I think I have a better idea .. I'll start from the last item
+				// calculate all possible aliases and then select one
+				$flt = array(
+					"alias" => $last,
+					"status" => STAT_ACTIVE,
+					"site_id" => aw_ini_get("site_id"),
+					"lang_id" => array(),
+				);
+
+				$clist = new object_list($flt);
+
+				for($check_obj = $clist->begin(); !$clist->end(); $check_obj = $clist->next())
 				{
-					global $DBUG;
-					if ($DBUG)
+					// put it in correct order and remove the first element (object itself)
+					$path = array_reverse($check_obj->path());
+					$curr_id = $check_obj->id();
+					$candidates[$curr_id] = "";
+
+					$stop = false;
+
+					foreach($path as $path_obj)
 					{
-						print "checking $sval<br />";
-					}
-					if ($obj !== false)
-					{
-						// ok, ini option: menuedit.recursive_aliases  - if true, aliases are checked by parents
-						// vaatame, kas selle nimega aliast on?
-						$filter = array(
-							"alias" => $sval,
-							"status" => STAT_ACTIVE,
-							"site_id" => aw_ini_get("site_id"),
-							"lang_id" => array()
-						);
-						$ol = new object_list($filt);
-						if ($prnt)
+						if (!$stop)
 						{
-							$filter["parent"] = $prnt;
-						}
-
-						$ol = new object_list($filter);
-						if ($ol->count() == 0)
-						{
-							$obj = false;
-						}
-						else
-						{
-							$obj = $ol->begin();
-						}
-
-						// need to check one more thing, IF prnt = 0 then fetch the parent
-						// of this object and see whether it has an alias. if so, do not
-						// let him access this menu directly
-						if ($prnt == 0 && is_object($obj))
-						{
-							$pobj = obj($obj->parent());
-							if (strlen($pobj->alias()) > 0)
+							$alias = $path_obj->alias();
+							if (strlen($alias) > 0)
 							{
-								$obj = false;
-							}
-						};
-
-						if ($obj)
-						{
-							if ( ($prnt != 0) && ($obj->parent() != $prnt) )
-							{
-								$obj = false;
+								$candidates[$curr_id] = $alias . "/" . $candidates[$curr_id];
 							}
 							else
 							{
-								if (is_object($obj))
-								{
-									$prnt = $obj->id();
-								}
-							}
-						}
-					}
-				}
+								$stop = true;
+							};
+						};
+					};
+				};
+
+				foreach($candidates as $cand_id => $cand_path)
+				{
+					$path_for_obj = substr($cand_path,0,-1);
+					if ($path_for_obj == $section)
+					{
+						$obj = new object($cand_id);
+					};
+				};
+
 			}
 			else
 			{
