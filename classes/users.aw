@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.3 2001/05/18 18:46:59 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.4 2001/05/21 17:57:54 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -18,6 +18,67 @@ class users extends users_user
 		$this->db_init();
 		$this->tpl_init("automatweb/users");
 	}
+
+	// users tabelis on väli config, tyypi text, kuhu saab salvestada
+	// igasugu misc informatsiooni, mida pole vaja kiiresti kätte saada,
+	// aga mis on siiski oluline. Järgnevad 2 funktsiooni tegelevad
+	// selle handlemisega.
+	////
+	// !Loeb kasutaja konfiguratsiooni sisse
+	// uid - kasutaja
+	// key - key, mille sisu teada soovitakse
+	function get_user_config($args = array())
+	{
+		extract($args);
+		$udata = $this->_get_user_config($uid);
+		if (!$udata)
+		{
+			return false;
+		};
+		// yeah. me salvestame selle info xml-is
+		classload("xml");
+		$xml = new xml(array("ctag" => "config"));
+		$config = $xml->xml_unserialize(array(
+					"source" => $udata["config"],
+				));
+		return $config[$key];
+	}
+
+	function _get_user_config($uid)
+	{
+		$q = "SELECT config FROM users WHERE uid = '$uid'";
+		$this->db_query($q);
+		return $this->db_next();
+	}
+
+	////
+	// !Kirjutab kasutaja konfiguratsioonis mingi key yle
+	// uid - kasutaja
+	// key - võtme nimi
+	// value - key väärtus. intenger, string, array, whatever
+	function set_user_config($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		// loeme vana konfi sisse
+		$old = $this->_get_user_config($uid);
+		if (!$old)
+		{
+			return false;
+		};
+		classload("xml");
+		$xml = new xml(array("ctag" => "config"));
+		$config = $xml->xml_unserialize(array(
+					"source" => $old["config"],
+				));
+		$config[$key] = $value;
+		$newconfig = $xml->xml_serialize($config);
+		$this->quote($newconfig);
+		$q = "UPDATE users SET config = '$newconfig' WHERE uid = '$uid'";
+		$this->db_query($q);
+		return true;
+	}
+			
 
 	function gen_select_list($gid,$all,$pickable = true)
 	{
