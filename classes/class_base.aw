@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.354 2005/01/07 17:51:05 ahti Exp $
+// $Id: class_base.aw,v 2.355 2005/01/10 12:51:06 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2145,6 +2145,7 @@ class class_base extends aw_template
 		// need to cycle over the property nodes, do replacements
 		// where needed and then cycle over the result and generate
 		// the output
+
 
 		foreach($properties as $key => $val)
 		{

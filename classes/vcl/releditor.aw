@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.38 2004/12/14 10:12:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.39 2005/01/10 12:53:54 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -33,6 +33,7 @@ class releditor extends core
 		$xprops = array();
 
 		$errors = false;
+
 
 		// manager is a kind of small aliasmgr, it has a table, rows can be clicked
 		// 	to edit items, new items can be added, existing ones can be deleted
