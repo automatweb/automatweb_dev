@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.289 2004/07/13 12:06:33 duke Exp $
+// $Id: class_base.aw,v 2.290 2004/07/16 07:32:30 rtoomas Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -200,6 +200,8 @@ class class_base extends aw_template
 		$cb_values = aw_global_get("cb_values");
 
 		$has_errors = false;
+
+
 		if (!empty($cb_values))
 		{
 			$this->cb_values = $cb_values;
@@ -1631,7 +1633,6 @@ class class_base extends aw_template
 			return false;
 		};
 
-
 		if ($this->view == 1)
 		{
 			if ($val["type"] == "date_select")
@@ -2022,6 +2023,10 @@ class class_base extends aw_template
 
 		foreach($properties as $key => $val)
 		{
+			if ($val["name"] == "tabpanel" && $this->view)
+			{
+				continue;
+			};
 
 
 			if ($val["name"] == "tabpanel" && $this->view)
@@ -2342,7 +2347,8 @@ class class_base extends aw_template
 		return $resprops;
 	}
 
-	function process_properties($arr)
+	
+	/*function process_properties($arr)
 	{
 		// if name_prefix given, prefixes all element names with the value 
 		// e.g. if name_prefix => "emb" and there is a property named comment,
@@ -2376,7 +2382,7 @@ class class_base extends aw_template
 			}
 		}
 		return $resprops;
-	}
+	}*/
 
 	// wrappers for alias manager
 
@@ -2715,6 +2721,13 @@ class class_base extends aw_template
 		}
 		
 
+		if (method_exists($this->inst,"callback_on_load"))
+		{
+				$this->inst->callback_on_load(array(
+						"request" => $args,
+				));
+		};
+
 		// and this of course should handle both creating new objects and updating existing ones
 
 		$callback = method_exists($this->inst,"set_property");
@@ -2920,11 +2933,16 @@ class class_base extends aw_template
 				// value in the session. Is that a problem?
 			};
 
-			if ($status != PROP_IGNORE && "int" == $property["datatype"] && (is_numeric($property["value"]) === false))
+			if ($status == PROP_OK && "int" == $property["datatype"])
 			{
-				$status = PROP_ERROR;
-				$property["error"] = $property["name"] . " - siia saab sisestada ainult arvu!";
-			}
+				$val = $property["value"];
+				$val = str_replace(",",".",$val);
+				if (is_numeric($val) === false)
+				{
+					$status = PROP_ERROR;
+					$property["error"] = $property["name"] . " - siia saab sisestada ainult arvu!";
+				};
+			};
 
 			if (PROP_ERROR == $status)
 			{
