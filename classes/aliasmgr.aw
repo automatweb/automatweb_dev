@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.35 2002/06/26 11:21:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.36 2002/07/05 09:42:25 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -288,17 +288,28 @@ class aliasmgr extends aw_template
 				"field" => "id"
 		);
 
-		$this->defs["mingi"] = array(
+		$this->defs["chat_list"] = array(
 				"alias" => "z",
-				"title" => "mingi objekt",
-				"class" => "mingi",
-				"class_id" => CL_MINGI,
-				"generator" => "_mingi_aliases",
-				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url, "alias_to" => $this->id),"mingi"),
-				"chlink" => $this->mk_my_orb("change",array("return_url" => $return_url),"mingi"),
+				"title" => "Jutuka listiobjekt",
+				"class" => "chat_list",
+				"class_id" => CL_CHAT_LIST,
+				"generator" => "_CHAT_LIST_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url, "alias_to" => $this->id),"chat_list"),
+				"chlink" => $this->mk_my_orb("change",array("return_url" => $return_url),"chat_list"),
 				"field" => "id"
 		);
-
+/*
+		$this->defs["chat"] = array(
+				"alias" => "chat",
+				"title" => "Jutuka objekt",
+				"class" => "chat",
+				"class_id" => CL_CHAT,
+				"generator" => "_CHAT_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url, "alias_to" => $this->id),"chat"),
+				"chlink" => $this->mk_my_orb("change",array("return_url" => $return_url),"chat"),
+				"field" => "id"
+		);
+*/
 	}
 
 	////
@@ -653,8 +664,9 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		reset($links);
 		while (list(,$v) = each($links))
 		{	
+			$name = ($v["name"]) ? $v["name"] : "(nimetu)";
 			$url = $this->mk_my_orb("change", array("id" => $v["id"],"docid" => $id),"links");
-			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$link = sprintf("<a href='%s'>%s</a>",$url,$name);
 			$this->t->define_data(array(
 				"name"                => $link,
 				"description"             => $v["url"],
@@ -821,13 +833,13 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		};
 	}
 	
-	function _mingi_aliases($args = array())
+	function _CHAT_LIST_aliases($args = array())
 	{
-		$aliases = $this->get_aliases_for($this->id,CL_MINGI,$_sby, $s_link_order);
+		$aliases = $this->get_aliases_for($this->id, CL_CHAT_LIST,$_sby, $s_link_order);
 		reset($aliases);
 		while (list(,$v) = each($aliases))
 		{	
-			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => urlencode($this->return_url)),"mingi");
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"return_url" => urlencode($this->return_url)),"chat_list");
 			$mchain = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$v["url"] = $url;
 			$this->t->define_data(array(
@@ -1119,8 +1131,8 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$this->chlinks[$this->counter] = $args["url"];
 		$this->dellinks[$id] = $id;
 		$this->t->merge_data(array(
-			"modified"            => $this->time2date($v["modified"],2),
-			"modifiedby"          => $v["modifiedby"],
+			"modified"            => $this->time2date($args["modified"],2),
+			"modifiedby"          => $args["modifiedby"],
 			"title" => $this->defs[$this->def_id]["title"],
 			"check" => sprintf("<input type='checkbox' name='check' value='%d'>",$id),
 			"link" => sprintf("<input type='checkbox' name='link[%d]' value='1' %s>",$id,$this->aliaslinks[$id] ? "checked" : ""),
