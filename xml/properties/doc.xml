@@ -280,6 +280,15 @@
             <caption>Vali kalendrid, millesse see sündmus veel salvestatakse.</caption>
       </property>
       <property>
+            <name>main_calendar</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <table>objects</table>
+            <caption>Põhikalender</caption>
+      </property>
+      <property>
             <name>sbt</name>
             <type>submit</type>
             <value>Salvesta</value>
