@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.177 2003/12/02 15:27:30 duke Exp $
+// $Id: class_base.aw,v 2.178 2003/12/02 16:28:07 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -24,7 +24,7 @@
 	// translated objects have their own status fields .. they don't
 	// have to sync with the original .. allthu .. I do feel that
 	// we need to do this in a different way
-	@property status type=status trans=1 default=2
+	@property status type=status trans=1 default=1
 	@caption Aktiivne
 	@comment Kas objekt on aktiivne 
 
@@ -164,6 +164,13 @@ class class_base extends aw_template
 			$this->layout_mode = "fixed_toolbar";
 		}
 
+		// XXX: temporary -- duke
+		if ($args["fxt"])
+		{
+			$this->layout_mode = "fixed_toolbar";
+			$this->classinfo["hide_tabs"] = 1;
+		}
+
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => isset($args["group"]) ? $args["group"] : "",
@@ -174,6 +181,12 @@ class class_base extends aw_template
 				// gah, I'm really not that proud of this shit
 				"type" => ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"])) ? "toolbar" : "",
 		));
+		
+		if ($args["fxt"])
+		{
+			$this->classinfo["hide_tabs"] = 1;
+			$this->classinfo["hide_tabs_L2"] = 1;
+		}
 
 
 		$this->request = $args;
@@ -291,6 +304,7 @@ class class_base extends aw_template
 		};
 
 
+
 		// so now I have a list of properties along with their values,
 
 		// here be some magic to determine the correct output client
@@ -326,7 +340,7 @@ class class_base extends aw_template
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
 			"reltype" => $this->reltype,
 			"cfgform" => isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
-			"return_url" => isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
+			"return_url" => !empty($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
 			"subgroup" => $this->subgroup,
 		) + (isset($args["extraids"]) && is_array($args["extraids"]) ? array("extraids" => $args["extraids"]) : array());
 
@@ -499,6 +513,16 @@ class class_base extends aw_template
 			{
 				$this->cfgform_id = $_tmp["oid"];
 				$this->cfgform = $_tmp;
+			};
+
+			if ($_tmp["meta"]["classinfo_fixed_toolbar"] == 1)
+			{
+				$this->classinfo["fixed_toolbar"] = 1;
+			};
+			
+			if ($_tmp["meta"]["classinfo_allow_rte"] == 1)
+			{
+				$this->classinfo["allow_rte"] = 1;
 			};
 
 		}
@@ -690,7 +714,7 @@ class class_base extends aw_template
 		$classname = $this->cfg["classes"][$this->clid]["name"];
 
 		$name = $this->obj_inst->name();
-		$return_url = isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "";
+		$return_url = !empty($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "";
 		// XXX: pathi peaks htmlclient tegema
 		$title = isset($args["title"]) ? $args["title"] : "";
 		if ($this->id)
@@ -721,7 +745,7 @@ class class_base extends aw_template
 			));
 		};
 
-		if (isset($this->request["return_url"]))
+		if (!empty($this->request["return_url"]))
 		{
 			$parent = -1;
 			if (strpos($this->request["return_url"],"b1=1"))
@@ -872,7 +896,7 @@ class class_base extends aw_template
 		// .. which .. makes the group into a relation manager. eh? Or perhaps I should
 		// just go with the iframe layout thingie. This frees us from the unneccessary
 		// wrappers inside the class_base.
-		if (isset($this->classinfo["relationmgr"]) && $this->classinfo["relationmgr"] && empty($this->request["cb_view"]))
+		if (empty($this->request["cb_part"]) && isset($this->classinfo["relationmgr"]) && $this->classinfo["relationmgr"] && empty($this->request["cb_view"]))
 		{
 			$link = "";
 			if (isset($this->id))
@@ -1655,6 +1679,11 @@ class class_base extends aw_template
 			};
 		}
 
+		if (1 != $this->classinfo["allow_rte"])
+		{
+			$has_rte = false;
+		};
+
 		$properties = $resprops;
 
 
@@ -1761,25 +1790,29 @@ class class_base extends aw_template
 			}
 			else
 			{
-				if ($this->layout_mode == "fixed_toolbar" && $val["type"] == "toolbar")
+				if ($val["type"] == "toolbar")
 				{
-					foreach($this->groupinfo as $grp_id => $grp_data)
+					if ($this->layout_mode == "fixed_toolbar")
 					{
-						// disable all other buttons besides the general when
-						// adding a new object
-						if ($this->use_mode == "new" && $grp_id != $this->active_group)
+						foreach($this->groupinfo as $grp_id => $grp_data)
 						{
-							continue;
-						};
-						$val["toolbar"]->add_button(array(
-							"name" => "grp_" . $grp_id,
-							"img" => empty($grp_data["icon"]) ? "" : $grp_data["icon"] . ".gif",
-							"tooltip" => $grp_data["caption"],
-							"target" => "contentarea",
-							"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => 1)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => 1)),
-						));
-						
-					}
+							// disable all other buttons besides the general when
+							// adding a new object
+							if ($this->use_mode == "new" && $grp_id != $this->active_group)
+							{
+								continue;
+							};
+							$val["toolbar"]->add_button(array(
+								"name" => "grp_" . $grp_id,
+								"img" => empty($grp_data["icon"]) ? "" : $grp_data["icon"] . ".gif",
+								"tooltip" => $grp_data["caption"],
+								"target" => "contentarea",
+								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => 1)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => 1)),
+							));
+							
+						}
+					};
+					
 
 					if ($has_rte)
 					{
@@ -2635,6 +2668,7 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
+
 
 		// so now I have a list of properties along with their values,
 		// and some information about the layout - and I want to display
