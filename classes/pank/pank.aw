@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.2 2004/07/20 14:46:44 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.3 2004/07/22 11:19:01 rtoomas Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes
@@ -120,22 +120,97 @@ class pank extends class_base
 				$this->do_main_toolbar(&$arr);
 				break;
 			case 'main_company_projects_info':
-				if(is_oid($arr['request']['company']))
+				switch($arr['request']['main'])
 				{
-					$this->do_company_accounts_table($arr);
+					case 'projects':
+						if(is_oid($arr['request']['company']))
+						{
+							$this->do_company_projects_table($arr);
+						}				
+					break;
+					case 'events':
+						if(is_oid($arr['request']['project_id']))
+						{
+							$this->do_company_projects_events_table($arr);
+						}						
+					break;
+					case 'event_members':
+						if(is_oid($arr['request']['event_id']))
+						{
+							$this->do_company_projects_events_members_table($arr);	
+						}
+					break;
+					default :
+						return PROP_IGNORE;
+						break;
 				}
 				break;
 			case 'main_company_info':
-				if(is_oid($arr['request']['company']))
+				//näitame firma kontot
+				if($arr['request']['main']=='projects' && is_oid($arr['request']['company']))
 				{
-					$arr['company_id'] = $arr['request']['company'];
-					$this->do_company_info_table($arr);
+					$arr['parent'] = $arr['request']['company'];	
 				}
+				//näitame projekti kontot
+				else if($arr['request']['main'] == 'events' && is_oid($arr['request']['project_id']))
+				{
+					$arr['parent'] = $arr['request']['project_id'];
+				}
+				//näitame evendi kontot
+				else if($arr['request']['main'] == 'event_members' && is_oid($arr['request']['event_id']))
+				{
+					$arr['parent']= $arr['request']['event_id'];
+				}
+				//näitame isiku kontot
+				else if($arr['request']['main'] == 'member' && is_oid($arr['request']['person_id']))
+				{
+					$arr['parent'] = $arr['request']['person_id'];
+				}
+				//näitame lusikat
+				else
+				{
+					return PROP_IGNORE;
+				}
+				$this->do_objects_account_info_table($arr);
 				break;
 			case 'main_table':
-				if(is_oid($arr['request']['company']) || is_oid($arr['request']['project_id']))
+				if(
+					is_oid($arr['request']['company']) 
+						|| 
+					is_oid($arr['request']['project_id'])
+						||
+					is_oid($arr['request']['event_id'])
+						||
+					is_oid($arr['request']['person_id'])
+				)
 				{
 					$arr['parent'] = $arr['request']['project_id']?$arr['request']['project_id']:$arr['request']['company'];
+
+					if(is_oid($arr['request']['person_id']))
+					{
+						$arr['parent'] = $arr['request']['person_id'];
+						echo "näitame persooni ülekandeid<br>";
+					}
+					else if(is_oid($arr['request']['event_id']))
+					{
+						$arr['parent'] = $arr['request']['event_id'];
+						echo "näitame evendi ülekandeid<br>";
+					}
+					else if(is_oid($arr['request']['project_id']))
+					{
+						$arr['parent'] = $arr['request']['project_id'];
+						echo "näitame projekti ülekandeid<br>";
+					}
+					else if(is_oid($arr['request']['company']))
+					{
+						$arr['parent'] = $arr['request']['company'];
+						echo "näitame firma ülekandeid<br>";
+					}
+					else
+					{
+						return PROP_IGNORE;
+					}
+			
 					$this->do_transactions_table($arr);	
 				}
 				break;
@@ -240,7 +315,7 @@ class pank extends class_base
 		$tree = &$arr['prop']['vcl_inst'];
 		
 		$counter = 5;
-		$tree_node_info = array(
+		/*$tree_node_info = array(
 			'id' => 1,
 			'name' => 'Projektid',
 		);
@@ -249,9 +324,9 @@ class pank extends class_base
 		if($obj)
 		{
 			$this->do_main_tree_projects(&$tree, $obj, 1, &$counter);
-		}
+		}*/
 		
-		$tree_node_info = array(
+		/*$tree_node_info = array(
 			'id' => 2,
 			'name' => 'Tegijad',
 		);
@@ -262,13 +337,16 @@ class pank extends class_base
 			'name' => 'Tegevused',
 		);
 		$tree->add_item(0, $tree_node_info);
-		$tree_node_info = array(
+		*/
+
+		/*$tree_node_info = array(
 			'id' => 4,
 			'name' => 'Organisatsioonid',
 		);
-		$this->do_main_tree_orgs(&$tree, &$arr, 4, &$counter);
 		
-		$tree->add_item(0, $tree_node_info);
+		$tree->add_item(0, $tree_node_info);*/
+		
+		$this->do_main_tree_orgs(&$tree, &$arr, 0, &$counter);
 	}
 
 	function do_main_tree_projects($tree, $obj, $parent, $ids)
@@ -286,16 +364,76 @@ class pank extends class_base
 					'name' => $conn->prop('to.name'),
 					'iconurl' => icons::get_icon_url(CL_PROJECT),
 					'url' => aw_url_change_var(array(
-									'company' => $conn->prop('to'),
-									'return_url' => ''
-								))
+									'project_id' => $conn->prop('to'),
+									'return_url' => '',
+									'main' => 'events',
+									'event_id' => '',
+									'person_id' => '',
+								)),
 				);
 				$tree->add_item($parent, $tree_node_info);
+				$obj = $conn->to();
+				$this->do_main_tree_project_events(&$tree, &$obj, $ids-1, &$ids);
 			}
 		}
 		else
 		{
 			return null;
+		}
+	}
+
+	function do_main_tree_project_events($tree, $obj, $parent, $ids)
+	{
+		if($obj)
+		{
+			$conns = $obj->connections_from(array(
+							'type' => RELTYPE_PRJ_EVENT
+			));
+			classload('icons');
+			foreach($conns as $conn)
+			{
+				$tree_node_info = array(
+					'id' => $ids++,
+					'name' => $conn->prop('to.name'),
+					'iconurl' => icons::get_icon_url(CL_PROJECT),
+					'url' => aw_url_change_var(array(
+									'event_id' => $conn->prop('to'),
+									'person_id' => '',
+									'return_url' => '',
+									'main' => 'event_members',
+								)),
+				);
+				$tree->add_item($parent, $tree_node_info);
+				$obj = $conn->to();
+				$this->do_main_tree_event_participants(&$tree, $obj, $ids-1, &$ids);
+			}
+		}
+	}
+	
+	function do_main_tree_event_participants($tree, $obj, $parent, $ids)
+	{
+		if($obj)
+		{
+			$conns = $obj->connections_to(array(
+							'type' => 10, //crm_person.reltype_person_task
+			));
+
+			classload('icons');
+			foreach($conns as $conn)
+			{
+				$tree_node_info = array(
+					'id' => $ids++,
+					'name' => $conn->prop('from.name'),
+					'iconurl' => icons::get_icon_url(CL_PROJECT),
+					'url' => aw_url_change_var(array(
+									'person_id' => $conn->prop('from'),
+									'main' => 'member',
+									'return_url' => ''
+								)),
+				);
+				$tree->add_item($parent, $tree_node_info);
+				$obj = $conn->from();
+			}
 		}
 	}
 
@@ -317,7 +455,11 @@ class pank extends class_base
 					'iconurl' => icons::get_icon_url(CL_CRM_COMPANY),
 					'url' => aw_url_change_var(array(
 									'company'=>$obj->id(),
-									'return_url' => ''
+									'return_url' => '',
+									'project_id' => '',
+									'event_id' => '',
+									'person_id' => '',
+									'main' => 'projects',
 								)),
 				);
 				$tree->add_item($parent, $tree_node_info);
@@ -426,6 +568,7 @@ class pank extends class_base
 				$obj = new object();
 				$obj->set_class_id(CL_ACCOUNT);
 				$obj->set_parent($parent->id());
+				$obj->set_name($parent->name().' konto');
 				$obj->save();
 				return $obj;
 			}
@@ -447,6 +590,11 @@ class pank extends class_base
 		));
 
 		$table->define_field(array(
+			'name' => 'selgitus',
+			'caption' => 'Selgitus',
+		));
+		
+		$table->define_field(array(
 			'name' => 'sum',
 			'caption' => 'Summa',
 		));
@@ -460,10 +608,14 @@ class pank extends class_base
 		$parent = $this->get_account_for_obj($arr['parent']);
 
 		//let's list the accounts
+		obj_set_opt('no_cache',1);
 		$ol = new object_list(array(
 					'parent' => $parent->id(),
 					'class_id' => CL_TRANSACTION,
+					'is_completed' => 1,
+					'sort_by' => 'pank_transaction.time asc',
 		));
+		obj_set_opt('no_cache',0);
 	
 		$trans = get_instance('pank/transaction');
 
@@ -480,13 +632,14 @@ class pank extends class_base
 			$table->define_data(array(
 					'from' => $trans_info['from_obj']->name(),
 					'to' => $trans_info['to_obj']->name(),
-					'date' => $this->time2date($obj->prop('date')),
+					'selgitus' => $obj->name(),
+					'date' => $this->time2date($obj->prop('time'))." ".$obj->prop('time'),
 					'sum' => $obj->prop('sum'),
 			));
 		}
 	}
 	
-	function do_company_info_table($arr)
+	function do_objects_account_info_table($arr)
 	{
 		$table = &$arr['prop']['vcl_inst'];
 
@@ -503,7 +656,7 @@ class pank extends class_base
 			'type' => 'int',
 		));
 
-		$company = new object($arr['company_id']);
+		$company = new object($arr['parent']);
 
 		$account = $this->get_account_for_obj($company);
 
@@ -513,7 +666,7 @@ class pank extends class_base
 		));
 	}
 
-	function do_company_accounts_table($arr)
+	function do_company_projects_table($arr)
 	{
 		$table = &$arr['prop']['vcl_inst'];
 
@@ -569,6 +722,7 @@ class pank extends class_base
 											'url'=>aw_url_change_var(array(
 												'project_id' => $project->id(),
 												'account_id' => '',
+												'person_id' => '',
 												'return_url' => '',
 											)),
 											'caption'=>$project->name()
@@ -579,7 +733,6 @@ class pank extends class_base
 								."]' value='".$from_account->id()."'>",
 				'id' => $project_account->id(),
 			));
-			
 		}
 		
 		//now we have to get all the banking information for this company
@@ -625,5 +778,112 @@ class pank extends class_base
 		}
 	}
 
+	function do_company_projects_events_table($arr)
+	{
+		$table = &$arr['prop']['vcl_inst'];
+
+		$table->define_field(array(
+			'name' => 'event_name',
+			'caption' => 'Sündmus',
+		));
+
+		$table->define_field(array(
+			'name' => 'event_account',
+			'caption' => 'Konto'
+		));
+
+		$table->define_field(array(
+					'name' => 'saldo',
+					'caption' => 'Saldo',
+					'type' => int,
+		));
+
+		$table->define_chooser(array(
+					'name' => 'check',
+					'field' => 'id',
+					'caption' => 'X',
+		));
+	
+		$event_object = new object($arr['request']['project_id']);
+
+		$from_account = $this->get_account_for_obj(&$event_object);
+		
+		$conns = $event_object->connections_from(array(
+						'type' => RELTYPE_PRJ_EVENT
+		));
+
+		foreach($conns as $conn)
+		{
+			$event_account = $this->get_account_for_obj($conn->prop('to'));
+			$table->define_data(array(
+				'event_name' => html::href(array(
+					'url' => aw_url_change_var(array(
+							'event_id' => $conn->prop('to'),
+							'return_url' => '',
+					)),
+					'caption' => $conn->prop('to.name'),
+				)),
+				'event_account' => $event_account->prop('name')
+								."<input type='hidden' name='from_account[".$event_account->id()
+								."]' value='".$from_account->id()."'>",
+				'saldo' => $event_account->prop('account_balance'),
+				'id' => $event_account->id(),
+			));
+		}
+	}
+
+	function do_company_projects_events_members_table($arr)
+	{
+		$table = &$arr['prop']['vcl_inst'];
+
+		$table->define_field(array(
+			'name' => 'member_name',
+			'caption' => 'Liige',
+		));
+
+
+		$table->define_field(array(
+			'name' => 'member_account',
+			'caption' => 'Konto',
+		));
+
+		$table->define_field(array(
+					'name' => 'saldo',
+					'caption' => 'Saldo',
+					'type' => int,
+		));
+
+		$table->define_chooser(array(
+					'name' => 'check',
+					'field' => 'id',
+					'caption' => 'X',
+		));
+	
+		$obj = new object($arr['request']['event_id']);
+		$from_account = $this->get_account_for_obj(&$obj);
+		$conns = $obj->connections_to(array(
+							'type' => 10, //crm_person.reltype_person_task
+		));	
+
+		foreach($conns as $conn)
+		{
+			$obj = $this->get_account_for_obj($conn->from());
+			$table->define_data(array(
+				//'member_name' => $conn->prop('from.name'),
+				'member_name' => html::href(array(
+										'url' => aw_url_change_var(array(
+											'person_id' => $conn->prop('from'),
+											'return_url' => '',
+										)),
+										'caption' => $conn->prop('from.name'),
+									)),
+				'member_account' => $obj->prop('name')
+								."<input type='hidden' name='from_account[".$obj->id()
+								."]' value='".$from_account->id()."'>",
+				'saldo' => $obj->prop('account_balance'),
+				'id' => $obj->id(),
+			));
+		}
+	}
 }
 ?>

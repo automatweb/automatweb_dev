@@ -1,49 +1,45 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.2 2004/07/22 11:19:01 rtoomas Exp $
-// account.aw - Konto 
+// $Header: /home/cvs/automatweb_dev/classes/pank/tax.aw,v 1.1 2004/07/22 11:19:01 rtoomas Exp $
+// tax.aw - Maks 
 /*
-@tableinfo pank_account index=oid master_table=objects master_index=oid
-@classinfo syslog_type=ST_ACCOUNT relationmgr=yes
+
+@classinfo syslog_type=ST_TAX relationmgr=yes
 
 @default table=objects
 @default group=general
 
-@default table=pank_account
-
-@groupinfo account_overview caption="Konto ülevaade"
-@default group=account_overview
-
-@property account_balance type=textbox
-@caption Konto saldo
+@property jrk type=textbox
+@caption Järjekord
 
 */
 
-class account extends class_base
+class tax extends class_base
 {
-	function account()
+	function tax()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be, 
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
-			"tpldir" => "pank/account",
-			"clid" => CL_ACCOUNT
+			"tpldir" => "pank/tax/tax",
+			"clid" => CL_TAX
 		));
 	}
 
+	//////
+	// class_base classes usually need those, uncomment them if you want to use them
+
+	/*
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case 'name':
-				$ol = new object_list(array(
-								'class_id' => CL_PANK
-				));
-			break;
+
 		};
 		return $retval;
 	}
+	*/
 
 	/*
 	function set_property($arr = array())
