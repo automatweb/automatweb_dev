@@ -565,6 +565,11 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		if ($err_type == "ERR_IMAGE_FORMAT")
+		{
+			$send_mail = false;
+		}
+
 		if ($send_mail)
 		{		
 			send_mail("vead@struktuur.ee", $subj, $content,$head);
