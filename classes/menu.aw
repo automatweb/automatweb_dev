@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.16 2002/12/16 11:40:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.17 2002/12/17 19:21:10 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -12,7 +12,7 @@
 	@property color type=colorpicker field=meta method=serialize group=advanced
 	@caption Menüü värv
 
-	@property icon type=icon field=icon group=advanced
+	@property icon type=icon field=meta group=advanced
 	@caption Ikoon
 
 	@property sort_by_name type=checkbox field=meta method=serialize group=advanced
@@ -149,6 +149,15 @@
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
 	@classinfo corefields=name,comment,alias,status,jrk
+
+	@groupinfo general caption=Üldine default=1
+	@groupinfo advanced caption=Spetsiaal
+	@groupinfo keywords caption=Võtmesõnad
+	@groupinfo relations caption=Seosed
+	@groupinfo presentation caption=Presentatsioon
+	@groupinfo show caption=Näitamine
+
+	@tableinfo menu index=id master_table=objects master_index=oid
 */
 class menu extends aw_template
 {
@@ -367,6 +376,10 @@ class menu extends aw_template
 					"seealso" => $args["form_data"]["seealso"],
 					"seealso_order" => $args["form_data"]["seealso_order"],
 				));
+				$retval = PROP_IGNORE;
+				break;
+
+			case "icon":
 				$retval = PROP_IGNORE;
 				break;
 
