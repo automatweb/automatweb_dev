@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.26 2003/04/25 09:11:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.27 2003/04/25 09:21:47 duke Exp $
 // this is here so that orb will work...
 class periods extends aw_template
 {
@@ -291,6 +291,5 @@ class periods extends aw_template
 		};
 		return $retval;
 	}
-}
-
+};
 ?>
