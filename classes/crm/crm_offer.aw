@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.10 2004/08/26 14:08:09 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.11 2004/08/26 15:21:11 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -19,7 +19,6 @@ caption Tellija
 
 @property preformer_cap type=text field=meta method=serialize
 @caption Täitja
-
 
 @property salesman type=select field=meta method=serialize
 @caption Pakkumise koostaja
@@ -119,6 +118,9 @@ class crm_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "start1":
+				return PROP_IGNORE;
+			break;
 			case "orderer":
 				$org_inst = get_instance(CL_CRM_COMPANY);
 				if(!($arr["new"] == 1))
@@ -148,6 +150,10 @@ class crm_offer extends class_base
 				{	
 					$prop["value"] = $_GET["alias_to_org"];
 				}
+			break;
+			
+			case "start1":
+				//return PROP_IGNORE;
 			break;
 			
 			case "offer_history":
@@ -561,6 +567,29 @@ class crm_offer extends class_base
 			);
 			$arr["obj_inst"]->set_meta("statuslog", $status_data);
 		}
+	}
+	
+	function callback_post_save($arr)
+	{
+		$users = get_instance("users");
+		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+		// now I need to figure out the calendar that is connected to the user object
+		// XXX: why the fuck is it so hard to gain access to defined relation types from here?
+		$conns = $user->connections_to(array(
+			"type" => 8, //RELTYPE_CALENDAR_OWNERSHIP
+		));
+		if(count($conns))
+		{
+			$conn = current($conns);
+			$calender = &obj($conn->prop("from"));
+			$parent = $calender->prop("event_folder");
+			if($parent)
+			{
+				$arr["obj_inst"]->create_brother($parent);
+			}
+		}
+		$arr["obj_inst"]->set_prop("start1", $arr["obj_inst"]->created());
+		$arr["obj_inst"]->save();
 	}
 	
 	function do_offer_history(&$arr)
