@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.45 2004/08/30 09:32:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.46 2004/09/14 09:06:45 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1625,5 +1625,33 @@ class converters extends aw_template
 		}
 	}
 
+	/** converts files from db to fs
+	
+		@attrib name=conv_files_to_fs
+
+	**/
+	function conv_files_to_fs()
+	{
+		$this->db_query("SELECT * FROM files WHERE file IS NULL");
+		while ($row = $this->db_next())
+		{
+			if (strlen($row["content"]) > 0)
+			{
+				echo "putting file $row[id] to fs! <br>\n";
+				flush();
+				$f = get_instance("file");
+				$fs = $f->_put_fs(array(
+					"type" => $row["type"],
+					"content" => $row["content"]
+				));
+				$this->save_handle();
+				$this->db_query("UPDATE files SET file = '$fs' WHERE id = '$row[id]'");
+				echo "wrote as $fs <br>\n";
+				flush();
+				$this->restore_handle();
+			}
+		}
+		die("all done");
+	}
 };
 ?>

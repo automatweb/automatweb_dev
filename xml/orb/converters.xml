@@ -172,5 +172,12 @@
 			</function>
 		</action>
 
+		<action name="conv_files_to_fs" >
+			<function name="conv_files_to_fs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
