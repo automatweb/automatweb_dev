@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.129 2003/07/02 15:00:49 duke Exp $
+// $Id: class_base.aw,v 2.130 2003/07/04 13:40:29 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1855,11 +1855,13 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-			
+		
+			/*
 			if ($property["type"] == "callback")
 			{
 				continue;
 			};
+			*/
 
 
 			if (($type == "date_select") || ($type == "datetime_select"))
