@@ -56,8 +56,6 @@
 <!-- END SUB: SUBMIT -->
 </table>
 {VAR:reforb}
-</form>
-
 <script type="text/javascript">
 function submit_changeform()
 {
@@ -66,3 +64,4 @@ function submit_changeform()
 	document.changeform.submit();
 }
 </script>
+</form>
