@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.50 2005/01/27 14:18:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.51 2005/01/27 14:31:53 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1096,7 +1096,7 @@ class webform extends class_base
 				elseif($prpdata["type"] == "text")
 				{
 					$this->vars(array(
-						"prp_value" => "sadffgfdgdf",
+						"prp_value" => "",
 					));
 					$clf2 = $this->parse("clf2");
 				}
