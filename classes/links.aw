@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.60 2004/11/22 10:53:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.61 2004/11/23 13:19:52 kristo Exp $
 
 /*
 
@@ -405,6 +405,10 @@ class links extends class_base
 	// peab ehitama ka mehhanisimi spämmimise vältimiseks
 	function add_hit($id,$host,$uid) 
 	{
+		if (!aw_ini_get("links.use_hit_counter"))
+		{
+			return;
+		}
 		$o = obj($id);
 		aw_disable_acl();
 		obj_set_opt("no_full_flush", 1);
