@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.25 2005/01/22 12:16:09 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.26 2005/02/03 12:19:28 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -113,7 +113,7 @@ class object_import extends class_base
 				break;
 		
 			case "last_import_log":
-				$prop["value"] = join("<br>", $prop["value"]);
+				$prop["value"] = join("<br>", safe_array($prop["value"]));
 				break;
 
 			case "auto_import_status":
