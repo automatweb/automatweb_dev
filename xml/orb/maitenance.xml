@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="maitenance"  extends="class_base">
+		<action name="cache_clear">
+			<function name="cache_clear">
+				<arguments>
+					<optional name="clear"/>
+					<optional name="list"/>
+				</arguments>
+			</function>
+		</action>
+	
+	</class>
+</orb>
+		
