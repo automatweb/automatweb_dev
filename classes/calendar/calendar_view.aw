@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.15 2004/12/01 11:48:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.16 2004/12/13 12:47:38 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -62,7 +62,7 @@
 @reltype EVENT_SOURCE value=1 clid=CL_PLANNER,CL_DOCUMENT_ARCHIVE,CL_PROJECT
 @caption Võta sündmusi
 
-@reltype OUTPUT value=2 clid=CL_RELATION
+@reltype OUTPUT value=2 clid=CL_RELATION,CL_DOCUMENT
 @caption väljund
 	
 @reltype STYLE value=3 clid=CL_CSS
@@ -95,6 +95,7 @@ class calendar_view extends class_base
 					"futureevents" => t("Algavad sündmused"),
 					"weekview" => t("Nädala vaade"),
 					"last_events" => t("Järgmised sündmused"),
+					"grouped" => t("Grupeeri allika järgi"),
 				);
 				break;
 
@@ -172,10 +173,18 @@ class calendar_view extends class_base
 		{
 			$first = reset($out_conns);
 			$al_id = $first->prop("to");
-			// XXX: how do accomplish this with storage?
-			$q = "SELECT source,target FROM aliases WHERE relobj_id = '$al_id'";
-			$row = $this->db_fetch_row($q);
-			$target_doc = $row["source"];
+			$al_obj = new object($al_id);
+			if ($al_obj->class_id() != CL_RELATION)
+			{
+				$target_doc = $al_obj->id();
+			}
+			else
+			{
+				// XXX: how do accomplish this with storage?
+				$q = "SELECT source,target FROM aliases WHERE relobj_id = '$al_id'";
+				$row = $this->db_fetch_row($q);
+				$target_doc = $row["source"];
+			};
 		};
 
 
@@ -197,7 +206,8 @@ class calendar_view extends class_base
 			$to_o = $conn->to();
 			// so, how do I get events from that calendar now?
 			// no matter HOW, that function needs to accept range arguments
-			if ($to_o->class_id() == CL_PLANNER)
+			$clid = $to_o->class_id();
+			if ($clid == CL_PLANNER)
 			{
 				$pl = get_instance(CL_PLANNER);
 				$overview = $pl->get_event_list(array(
@@ -207,7 +217,7 @@ class calendar_view extends class_base
 				));
 			};
 
-			if ($to_o->class_id() == CL_DOCUMENT_ARCHIVE)
+			if ($clid == CL_DOCUMENT_ARCHIVE)
 			{
 				$da = get_instance(CL_DOCUMENT_ARCHIVE);
 				$overview = $da->get_days_with_events(array(
@@ -217,10 +227,20 @@ class calendar_view extends class_base
 				));
 			};
 
+			if ($clid == CL_PROJECT)
+			{
+				$pr = get_instance(CL_PROJECT);
+				$overview = $pr->get_event_overview(array(
+					"id" => $to_o->id(),
+					"start" => $arr["start"],
+					"end" => $arr["end"],
+				));
+			};
+
 			foreach($overview as $event)
 			{
 				$item["timestamp"] = $event["start"];
-				$item["url"] = $event["url"];
+				//$item["url"] = $event["url"];
 				if (!empty($item["url"]))
 				{
 					$item["url"] = aw_url_change_var("date",date("d-m-Y",$event["start"]),$item["url"]);
@@ -362,7 +382,7 @@ class calendar_view extends class_base
 		{
 			$this->obj_inst = new object($arr["alias"]["target"]);
 		};
-		
+
 		classload("vcl/calendar");
 
 		// figure out correct tpldir
@@ -375,6 +395,8 @@ class calendar_view extends class_base
 			"year" => "calendar/calendar_view/year",
 			"day" => "calendar/calendar_view/day",
 			"last_events" => "calendar/calendar_view/last_events", 
+			// BUG: this should be possible in ALL views
+			"grouped" => "calendar/calendar_view/day",
 		);
 
 		if ($use2dir[$use_template])
@@ -386,6 +408,7 @@ class calendar_view extends class_base
 		$vcal = new vcalendar(array(
 			"tpldir" => $tpldir,
 		));
+
 		if ($arr["event_template"])
 		{
 			$args["event_template"] = $arr["event_template"];
@@ -395,11 +418,12 @@ class calendar_view extends class_base
 			"container_template" => "intranet1.tpl",
 		);
 
-		if ("futureevents" != $this->obj_inst->prop("use_template"))
+		if ("futureevents" != $use_template)
 		{
 			$args["overview_func"] = array(&$this,"get_overview");
 			$args["overview_range"] = 1;
 		};
+
 
 		if (1 == $this->obj_inst->prop("show_days_with_events"))
 		{
@@ -439,6 +463,13 @@ class calendar_view extends class_base
 			$range_p["type"] = "last_events";
 		}
 
+		/*
+		if (aw_global_get("uid") == "duke")
+		{
+			$range_p["date"] = "19-11-2004";
+		};
+		*/
+
 		$range = $vcal->get_range($range_p);
 
 		if ($arr["start_from"])
@@ -450,12 +481,20 @@ class calendar_view extends class_base
 		// this cycle creates the "big" calendar, minicalendar is done in the 
 		// get_overview callback
 
+		// ookei .. ma saan template käest küsida kas mul on vaja grupeerida asju?
 		$exp_args = array(
 			"obj_inst" => &$this->obj_inst,
 			"cal_inst" => &$vcal,
 			"range" => $range,
 			"status" => $arr["status"],
 		);
+
+		if ("grouped" == $use_template && "day" == $viewtype)
+		{
+			// use_template on see mida kasutatakse ühe konkreetse sündmuse joonistamiseks
+			$args["container_template"] = "grouped.tpl";
+			//$arr["event_template"] = "groupitem.tpl";
+		};
 
 		$vcal->init_output(array("event_template" => $arr["event_template"]));
 
@@ -487,6 +526,8 @@ class calendar_view extends class_base
 			"minical_background",
 		);
 
+		// day viewd peab saama kuidagi grupeerida
+
 		$props = $this->obj_inst->properties();
 		foreach($style_props as $style_prop)
 		{
@@ -508,8 +549,71 @@ class calendar_view extends class_base
 			$args["tpl"] = "week.tpl";
 		};
 
+		$rv = $vcal->get_html($args);
 
-		return $vcal->get_html($args);
+		if ("grouped" == $use_template)
+		{
+			$conns = $this->obj_inst->connections_from(array(
+				"type" => RELTYPE_EVENT_SOURCE,
+			));
+
+			$rv = "";
+
+			$rv = html::href(array(
+				"url" => aw_url_change_var("date",$range["prev"]),
+				"caption" => "&lt;&lt;",
+			));
+
+			if (aw_global_get("uid") == "duke")
+			{
+				arr($range);
+			};
+
+			$rv .= " &nbsp; " . locale::get_lc_date($range["start"],6) . "&nbsp; ";
+			
+			$rv .= html::href(array(
+				"url" => aw_url_change_var("date",$range["next"]),
+				"caption" => "&gt;&gt;",
+			));
+
+			$rv .= "<br>";
+
+
+			foreach ($conns as $conn)
+			{
+				$to_o = $conn->to();
+
+				$events = $this->get_events_from_object(array(
+					"obj_inst" => $to_o,
+					"range" => $range,
+				));
+
+				$vcal->items = array();
+				
+				foreach($events as $event)
+				{
+					$data = $event;
+					$evt_obj = new object($event["id"]);
+					$data = $evt_obj->properties() + $data;
+					$data["name"] = $evt_obj->name();
+					$data["icon"] = "event_icon_url";
+					$vcal->add_item(array(
+						"timestamp" => $event["start"],
+						"data" => $data,
+					));
+				};
+				if (sizeof($events) > 0)
+				{
+					$rv .= $vcal->draw_day(array("caption" => $to_o->name()));
+				};
+
+					
+			};
+		};
+
+
+		return $rv;
 	}
+
 }
 ?>
