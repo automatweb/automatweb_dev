@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.306 2004/10/12 17:12:55 duke Exp $
+// $Id: class_base.aw,v 2.307 2004/10/14 11:59:25 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -114,8 +114,6 @@ class class_base extends aw_template
 			"treeview" => "vcl/treeview",
 			"toolbar" => "vcl/toolbar",
 			"translator" => "vcl/translator",
-			"project_selector" => "applications/groupware/vcl/project_selector",
-			"calendar_selector" => "applications/calendar/vcl/calendar_selector",
 			//"relationmgr" => "vcl/relationmgr",
 		);
 
@@ -424,7 +422,7 @@ class class_base extends aw_template
 			$new_uri = aw_url_change_var(array("cb_part" => 1));
 			$cli = get_instance("cfg/" . $this->output_client,array("layout_mode" => "fixed_toolbar"));
 			if ($args["no_rte"] == 1)
-                        {
+            {
                                 $new_uri .= "&no_rte=1";
                         };
 
@@ -450,7 +448,20 @@ class class_base extends aw_template
 				"form" => $args["form"],
 				"attr" => "template",
 			));
+			
 			$o_arr = array();
+			
+			// the magical check, that you are fully qualified to use a different templatemodel -- ahz
+			$tpls = str_replace(aw_ini_get("basedir")."/templates/", "", $this->inst->adm_template_dir);
+			$tplx = aw_ini_get("basedir")."/templates/".$tpls."/group_".$this->use_group.".tpl";
+			$tply = $this->inst->adm_template_dir."/grouptpl_default.tpl";
+			if($this->classinfo["tplmode"] == "groups" && file_exists($tplx) && file_exists($tply))
+			{
+				$o_arr["tplmode"] = "groups";
+				$o_arr["group"] = $this->use_group;
+				$o_arr["tpldir"] = $tpls;
+			}
+			
 			if (!empty($template))
 			{
 				$o_arr["template"] = $template;
@@ -1915,13 +1926,10 @@ class class_base extends aw_template
 				{
                                 	$ot = get_instance($reginst);
 				};
-
                                 if (is_callable(array($ot,"init_vcl_property")))
                                 {
                                         $res = $ot->init_vcl_property(array(
-						// property is deprecated, since all other places use just "prop"
                                                 "property" => &$val,
-						"prop" => &$val,
 						"id" => $this->id,
                                                 "clid" => $this->clid,
                                                 "obj_inst" => &$this->obj_inst,
@@ -3032,7 +3040,6 @@ class class_base extends aw_template
 			$type = $property["type"];
 
                         $argblock = array(
-				// prop is deprecated, use property instead
                                 "prop" => &$property,
 				"request" => &$rawdata,
                                 "new" => $new,

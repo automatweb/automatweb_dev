@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.74 2004/10/12 14:25:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.75 2004/10/14 11:59:25 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -21,6 +21,16 @@ class htmlclient extends aw_template
 		{
 			$this->set_layout_mode($arr["layout_mode"]);
 		};
+		//arr($tpl);
+		if($arr["tplmode"] == "groups")
+		{;
+			$this->tplmode = "groups";
+			$this->sub_tpl = new aw_template();
+			$this->sub_tpl->tpl_init($arr["tpldir"]);
+			$this->sub_tpl->read_template("group_".$arr["group"].".tpl");
+			$this->prop_style = 0;
+			$this->use_template = "grouptpl_default.tpl";
+		}
 		if (!empty($arr["template"]))
 		{
 			// apparently some places try to specify a template without an extension,
@@ -60,9 +70,18 @@ class htmlclient extends aw_template
 		$this->form_target = $target;
 		if (!empty($this->form_target))
 		{
-			$this->vars(array(
-				"form_target" => "target='" . $this->form_target . "' ",
-			));
+			if($this->tplmode == "group")
+			{
+				$this->sub_tpl->vars(array(
+					"form_target" => "target='" . $this->form_target . "' ",
+				));	
+			}
+			else
+			{
+				$this->vars(array(
+					"form_target" => "target='" . $this->form_target . "' ",
+				));
+			}
 		};
 	}
 
@@ -105,9 +124,18 @@ class htmlclient extends aw_template
 		$this->read_template($tpl);
 		$script = aw_global_get("SCRIPT_NAME");
 		//$handler = empty($script) ? "index" : "orb";
-		$this->vars(array(
-			"handler" => empty($script) ? "index" : "orb",
-		));
+		if($this->tplmode == "groups")
+		{
+			$this->sub_tpl->vars(array(
+				"handler" => empty($script) ? "index" : "orb",
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"handler" => empty($script) ? "index" : "orb",
+			));
+		}
 		$this->orb_vars = array();
 		$this->submit_done = false;
 		$this->proplist = array();
@@ -367,18 +395,17 @@ class htmlclient extends aw_template
 			$script = "";
 			if (!$colorpicker_script_done)
 			{
-				$script .= "<script type='text/javascript'>\n";
-				$script .= "var element = 0;\n";
-				$script .= "function set_color(clr) {\n";
-				$script .= "document.getElementById(element).value=clr;\n";
-				$script .= "}\n";
-
-				$script .= "function colorpicker(el) {\n";
-				$script .= "element = el;\n";
-				$script .= "aken=window.open('$cplink','colorpickerw','height=220,width=310');\n";
-				$script .= "aken.focus();\n";
-				$script .= "};\n";
-				$script .= "</script>";
+				$script .= "<script type='text/javascript'>\n".
+						"var element = 0;\n".
+						"function set_color(clr) {\n".
+						"document.getElementById(element).value=clr;\n".
+						"}\n".
+						"function colorpicker(el) {\n".
+						"element = el;\n".
+						"aken=window.open('$cplink','colorpickerw','height=220,width=310');\n".
+						"aken.focus();\n".
+						"};\n".
+						"</script>";
 				$colorpicker_script_done = 1;
 			};
 
@@ -419,25 +446,31 @@ class htmlclient extends aw_template
 				"title" => $args["comment"],
 				)) . substr($caption,1);
 		};
-
-		// I wanda mis kammi ma selle tmp-iga tegin
-		// different layout mode eh? well, it sucks!
-		if (is_object($this->tmp))
-		{
-			$this->tmp->vars(array(
+		$tpl_vars = array(
 				"caption" => $caption,
 				"element" => $this->draw_element($args),
-			));
-			$rv = $this->tmp->parse("LINE");
+		);
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		{
+			//echo "jee";
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($args["name"]);
 		}
 		else
 		{
-			$this->vars(array(
-				"caption" => $caption,
-				"element" => $this->draw_element($args),
-			));
-			$rv = $this->parse("LINE");
-		};
+			// I wanda mis kammi ma selle tmp-iga tegin
+			// different layout mode eh? well, it sucks!
+			if (is_object($this->tmp))
+			{
+				$this->tmp->vars($tpl_vars);
+				$rv = $this->tmp->parse("LINE");
+			}
+			else
+			{
+				$this->vars($tpl_vars);
+				$rv = $this->parse("LINE");
+			}
+		}
 		return $rv;
 	}
 
@@ -445,50 +478,117 @@ class htmlclient extends aw_template
 	// !Creates a submit button
 	function put_submit($arr)
 	{
-		$this->vars(array(
+		$name = "SUBMIT";
+		$tpl_vars = array(
 			"sbt_caption" => $arr["caption"] ? $arr["caption"] : "Salvesta",
 			"name" => $arr["name"] ? $arr["name"] : "",
-			'action' => $arr['action'] ? $arr['action']:"",
-		));
-		return $this->parse("SUBMIT");
+			"action" => $arr["action"] ? $arr["action"] : "",
+		);
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($name);
+		}
+		else
+		{
+			$this->vars($tpl_vars);
+			$rv = $this->parse($name);
+		}
+		return $rv;
 	}
 
 	function put_subitem($args)
 	{
-		$this->vars(array(
+		$tpl_vars = array(
 			"caption" => $args["caption"],
 			"element" => $this->draw_element($args),
-		));
+		);
 		// SUBITEM - element first, caption right next to it
 		// SUBITEM2 - caption first, element right next to it
 		$tpl = $args["type"] == "checkbox" ? "SUBITEM" : "SUBITEM2";
-		return $this->parse($tpl);
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($tpl))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($tpl);
+		}
+		else
+		{
+			$this->vars($tpl_vars);
+			$rv = $this->parse($tpl);
+		}
+		return $rv;
 	}
 
 	function put_header($args)
 	{
-		
-		$this->vars(array(
+		$name = "HEADER";
+		$tpl_vars = array(
 			"caption" => $args["caption"],
-		));
-		return $this->parse("HEADER");
+		);
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($name);
+		}
+		else
+		{
+			$this->vars($tpl_vars);
+			$rv = $this->parse($name);
+		}
+		return $rv;
 	}
 	
 	function put_header_subtitle($args)
 	{
-		$this->vars(array(
+		$name = "SUB_TITLE";
+		$tpl_vars = array(
 			"value" => !empty($args["value"]) ? $args["value"] : $args["caption"],
-		));
-		return $this->parse("SUB_TITLE");
+		);
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($name);
+		}
+		else
+		{
+			$this->vars($tpl_vars);
+			$rv = $this->parse($name);
+		}
+		return $rv;
 	}
 	
 	function put_content($args)
 	{
-		$this->vars(array(
+		$tpl_vars = array(
 			//"value" => $args["value"],
 			"value" => $this->draw_element($args),
-		));
-		return $this->parse("CONTENT");
+		);
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		{
+			$this->sub_tpl->vars($tpl_vars);
+			$rv = $this->sub_tpl->parse($args["name"]);
+		}
+		else
+		{
+			$this->vars($tpl_vars);
+			$rv = $this->parse("CONTENT");
+		}
+		return $rv;
+	}
+	
+	// returns the names of all the currently used properties,
+	// else returns empty array
+	function get_prop_names()
+	{
+		$rval = array();
+		if(is_array($this->proplist))
+		{
+			foreach($this->proplist as $key => $val)
+			{
+				$rval[] = $key;
+			}
+		}
+		return $rval;
 	}
 	
 	////
@@ -510,11 +610,22 @@ class htmlclient extends aw_template
 		else
 		if (empty($submit) || $submit !== "no")
 		{
-			// I need to figure out whether I have a relation manager
-			$this->vars(array(
+			$var_name = "SUBMIT";
+			$tpl_vars = array(
 				"sbt_caption" => "Salvesta",
-			));
-			$sbt = $this->parse("SUBMIT");
+			);
+			if($this->tplmode == "groups" && $this->sub_tpl->is_template($var_name))
+			{
+				$this->sub_tpl->vars($tpl_vars);
+				$sbt = $this->sub_tpl->parse($var_name);
+			}
+			else
+			{
+				// I need to figure out whether I have a relation manager
+				$this->vars($tpl_vars);
+				$sbt = $this->parse($var_name);
+			}
+			
 		};
 		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
 		unset($data["orb_class"]);
@@ -522,39 +633,70 @@ class htmlclient extends aw_template
 		$data = $data + $this->orb_vars;
 
 		$res = "";
-
 		if ($this->error)
 		{
 			$res .= $this->error;
 		};
 
 		// ach! vahi raiska .. siit see jama ju sisse tuleb!
-
+		$vars = array();
 		// proplist tehakse enne ja siis layout takka otsa .. and this will break a lot of things
 		// now how do I work this out?
-
 		if (sizeof($this->proplist) > 0)
 		{
 			foreach($this->proplist as $ki => $item)
 			{
-				if (!empty($item["error"]))
+				if($this->tplmode == "groups")
 				{
-					$this->vars(array(
-						"err_msg" => $item["error"],
-					));
-					$res .= $this->parse("PROP_ERR_MSG");
-				};
-				if (!empty($sbt) && $item["type"] == "aliasmgr")
+					if (!empty($item["error"]))
+					{
+						$var_name = "PROP_ERR_MSG";
+						$tpl_vars = array(
+							"err_msg" => $item["error"],
+						);
+						if($this->sub_tpl->is_template($var_name))
+						{
+							$this->sub_tpl->vars($tpl_vars);
+							$vars[$ki] .= $this->sub_tpl->parse($var_name);
+						}
+						else
+						{
+							$this->vars($tpl_vars);
+							$vars[$ki] .= $this->parse($var_name);
+						}
+					};
+					if (!empty($sbt) && $item["type"] == "aliasmgr")
+					{
+						$vars[$ki] .= $sbt;
+						unset($sbt);
+					};
+					// noh, aga ega siin ei ole midagi erilist .. kui ma satun gridi otsa,
+					// siis ma asendan selle gridi lihtsalt tema leiaudiga
+					$vars[$ki] .= $item["html"];
+				}
+				else
 				{
-					$res .= $sbt;
-					unset($sbt);
-				};
-				// noh, aga ega siin ei ole midagi erilist .. kui ma satun gridi otsa,
-				// siis ma asendan selle gridi lihtsalt tema leiaudiga
-				$res .= $item["html"];
+					if (!empty($item["error"]))
+					{
+						$this->vars(array(
+							"err_msg" => $item["error"],
+						));
+						$res .= $this->parse("PROP_ERR_MSG");
+					};
+					if (!empty($sbt) && $item["type"] == "aliasmgr")
+					{
+						$res .= $sbt;
+						unset($sbt);
+					};
+					// noh, aga ega siin ei ole midagi erilist .. kui ma satun gridi otsa,
+					// siis ma asendan selle gridi lihtsalt tema leiaudiga
+					$res .= $item["html"];
+				}
 			};
 		};
 
+		// i hope that people, who are using those grouptemplates, have decency not to use
+		// vbox, hbox and other thatkind of crap -- ahz
 		if (!empty($this->layoutinfo))
 		{
 			// first pass creates contents for all boxes
@@ -579,15 +721,15 @@ class htmlclient extends aw_template
 				// geezas christ, this thing is SO bad :(
 				if ($type == "vbox")
 				{
-					$tmp .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top><table border=0 cellspacing=0 cellpadding=0 width=100%>";
-					$tmp .= join("</table><table border=0 cellspacing=0 cellpadding=0 width=100%>",$val["items"]);
-					$tmp .= "</table></td></tr></table>";
+					$tmp .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top><table border=0 cellspacing=0 cellpadding=0 width=100%>".
+					join("</table><table border=0 cellspacing=0 cellpadding=0 width=100%>",$val["items"]).
+					"</table></td></tr></table>";
 				};
 				if ($type == "hbox")
 				{
-					$tmp .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top><table border=0 cellpadding=0 cellspacing=0>";
-					$tmp .= join("</table></td><td valign=top><table border=0 cellpadding=0 cellspacing=0>",$val["items"]);
-					$tmp .= "</table></td></tr></table>";
+					$tmp .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top><table border=0 cellpadding=0 cellspacing=0>".
+					join("</table></td><td valign=top><table border=0 cellpadding=0 cellspacing=0>",$val["items"]).
+					"</table></td></tr></table>";
 				};
 					
 				$this->layoutinfo[$val["parent"]]["items"][] = $tmp;
@@ -609,9 +751,9 @@ class htmlclient extends aw_template
 				// 2. vbox
 				if ($type == "vbox")
 				{
-					$res .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top>";
-					$res .= join("</td></tr><tr><td valign=top>",$val["items"]);
-					$res .= "</td></tr></table>";
+					$res .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top>".
+							join("</td></tr><tr><td valign=top>",$val["items"]).
+							"</td></tr></table>";
 				};
 				if ($type == "hbox")
 				{
@@ -633,9 +775,9 @@ class htmlclient extends aw_template
 					else
 					{
 						$width = (int)100 / sizeof($val["items"]);
-						$res .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top width='${width}%'>";
-						$res .= join("</td><td valign=top width='${width}%'>",$val["items"]);
-						$res .= "</td></tr></table>";
+						$res .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top width='${width}%'>".
+								join("</td><td valign=top width='${width}%'>",$val["items"]).
+								"</td></tr></table>";
 					}
 				};
 
@@ -745,18 +887,32 @@ class htmlclient extends aw_template
 			// aha, but I have to put the linefeeds into the thing if it has been created with the plain
 			// old editor.
 		}
-
-		$this->vars(array(
-			"submit_handler" => $submit_handler,
-			"method" => !empty($method) ? $method : "POST",
-			"content" => $res,
-			"reforb" => $this->mk_reforb($action,$data,$orb_class),
-			"SUBMIT" => $sbt,
-		));
-
+		
+		// let's hope that nobody uses that vbox and hbox spagetti with grouptemplates -- ahz
+		if($this->tplmode == "groups")
+		{
+			$vars = $vars + array(
+				"submit_handler" => $submit_handler,
+				"method" => !empty($method) ? $method : "POST",
+				"reforb" => $this->mk_reforb($action,$data,$orb_class),
+				"SUBMIT" => $sbt,
+			);
+			//arr($this->get_prop_names());
+			$this->sub_tpl->vars($vars);
+		}
+		else
+		{
+			$this->vars(array(
+				"submit_handler" => $submit_handler,
+				"method" => !empty($method) ? $method : "POST",
+				"content" => $res,
+				"reforb" => $this->mk_reforb($action,$data,$orb_class),
+				"SUBMIT" => $sbt,
+			));
+		}
 	}
 
-	function get_result($arr = array())	
+	function get_result($arr = array())
 	{
 		if ($this->layout_mode == "fixed_toolbar")
 		{
@@ -772,9 +928,17 @@ class htmlclient extends aw_template
 		}
 		else
 		{
+		
 			if (empty($arr["content"]))
 			{
-				$rv = $this->parse();
+				if($this->tplmode == "groups")
+				{
+					$rv = $this->sub_tpl->parse();
+				}
+				else
+				{
+					$rv = $this->parse();
+				}
 			}
 			else
 			{
@@ -799,7 +963,6 @@ class htmlclient extends aw_template
 			}
 			else
 			{
-
 				$tabs = $tp->get_tabpanel(array(
 					"content" => $rv,
 					"panels_only" => true,
@@ -832,10 +995,15 @@ class htmlclient extends aw_template
 				//$this->additional_content["top"] .= $tabs;
 			};
 		};
-				
-
+		
 		if ($this->form_layout == "boxed")
 		{
+			if($this->tplmode == "groups")
+			{
+				// now, when we have misleaded the htmlclient, we must safely
+				// lead him back to the right template directory -- ahz
+				$this->tpl_init("htmlclient");
+			}
 			$this->read_template("boxed.tpl");
 			$this->vars(array(
 				"top_content" => $this->additional_content["top"],
@@ -923,9 +1091,7 @@ class htmlclient extends aw_template
 					$retval .= html::button(array(
 						"value" => "ð",
 						"onclick" => "el=document.getElementById('${id}');el.value=el.value+'ð';el.focus();",
-					));
-
-					$retval .= html::button(array(
+					)) . html::button(array(
 						"value" => "þ",
 						"onclick" => "el=document.getElementById('${id}');el.value=el.value+'þ';el.focus();",
 					));
