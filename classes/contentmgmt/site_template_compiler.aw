@@ -202,15 +202,12 @@ class site_template_compiler extends aw_template
 							$this->menu_areas[$parent_area]["levels"][$parent_level]["child_tpls"][$parent_tpl2] = array(
 								"area" => $area,
 								"level" => $level,
-								"parts" => $parts
+								"parts" => $parts,
 							);
 						}
 					}
 				}
 
-				if ($found)
-				{
-				}
 				$this->menu_areas[$area]["levels"][$level]["inside_parent_menu_tpl"] |= $is_in_parent;
 			}
 		}
@@ -237,13 +234,13 @@ class site_template_compiler extends aw_template
 			// check if the no subitems tpl has any menu templates inside it
 			foreach($this->v2_name_map as $shname => $fqname)
 			{
-				if (strlen($fqname) > strlen($p_fqname))
-				{
-					if (substr($fqname, 0, strlen($p_fqname)) == $p_fqname)
+				//if (strlen($fqname) > strlen($p_fqname))
+				//{
+					if (strpos($fqname, $tpl) !== false)
 					{
 						$has_inside = true;
 					}
-				}
+				//}
 			}
 
 			$level = substr($parts[3], 1)+1;
