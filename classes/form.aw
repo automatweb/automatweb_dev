@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.103 2002/07/12 06:37:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.104 2002/07/12 18:20:56 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2341,6 +2341,7 @@ class form extends form_base
 				// hm - but - maybe we shouldn't do this - maybe the form also has some other relations that are 
 				// not selected as search forms - so their data will not get loaded. damn. ok, so we just do load_entry for the form
 				$show_form->reset();
+				$show_form->_init_vars();
 				$show_form->load_entry($row["entry_id"]);
 				$result.=$show_form->show(array("id" => $show_form->id,"entry_id" => $row["entry_id"], "op_id" => $show_form->output_id,"no_load_entry" => true, "no_load_op" => true));
 			}
