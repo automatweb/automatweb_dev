@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.20 2004/12/27 12:43:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.21 2005/01/06 13:17:54 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -7,14 +7,14 @@
 
 // also, all view related functions from CL_PLANNER will move over here
 
-@classinfo syslog_type=ST_CALENDAR_VIEW relationmgr=yes
+@classinfo syslog_type=ST_CALENDAR_VIEW relationmgr=yes no_status=1
 
 @default table=objects
 @default group=general
 @default field=meta
 @default method=serialize
 
-@property use_template type=chooser orient=vertical
+@property use_template type=select
 @caption Välimus
 
 @property num_next_events type=textbox size=5 
@@ -23,13 +23,15 @@
 @property default_view type=select 
 @caption Vaade
 
-@property show_current_events type=checkbox ch_value=1 
-@caption Aktiivse päeva sisu näitamine
+@property search_form type=relpicker reltype=RELTYPE_SEARCH
+@caption Otsinguvorm
 
 @property show_days_with_events type=checkbox ch_value=1
 @caption Näita ainult sündmustega päevi
 
+@groupinfo style caption=Stiilid
 @default group=style
+
 @property minical_day_with_events type=relpicker reltype=RELTYPE_STYLE
 @caption Sündmustega päev
 
@@ -51,13 +53,29 @@
 @property minical_background type=relpicker reltype=RELTYPE_STYLE
 @caption Taust
 
+@property table_header type=relpicker reltype=RELTYPE_STYLE
+@caption Tulemuste tabeli pealkiri
+
+@property table_frow type=relpicker reltype=RELTYPE_STYLE
+@caption Tulemuste tabeli esimene rida
+
+@property table_srow type=relpicker reltype=RELTYPE_STYLE
+@caption Tulemuste tabeli teine rida
+
+@groupinfo ftresults caption="Tulemuste seadistamine"
+@default group=ftresults
+
+@property month_navigator type=checkbox ch_value=1 default=1
+@caption Kuu navigaator
+
+@property result_table type=table 
+@caption Tulemuste tabel
+
+@groupinfo show_events caption=Sündmused submit=no
 @default group=show_events
 
 @property show_events type=calendar no_caption=1
 @caption Sündmused
-
-@groupinfo style caption=Stiilid
-@groupinfo show_events caption=Sündmused submit=no
 
 @reltype EVENT_SOURCE value=1 clid=CL_PLANNER,CL_DOCUMENT_ARCHIVE,CL_PROJECT
 @caption Võta sündmusi
@@ -67,6 +85,10 @@
 	
 @reltype STYLE value=3 clid=CL_CSS
 @caption Stiil
+
+@reltype SEARCH value=4 clid=CL_EVENT_SEARCH
+@caption Otsing
+
 */
 
 
@@ -119,6 +141,9 @@ class calendar_view extends class_base
 					return PROP_IGNORE;
 				}
 				break;
+			case "result_table":
+				$retval = $this->gen_result_table($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -126,41 +151,162 @@ class calendar_view extends class_base
 	// now to the meat .. I have to generate a list of events from our sources
 	// but first I have to get the calendar to work
 
-	/*
 	function set_property($arr = array())
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-
+			case "result_table":
+				$arr["obj_inst"]->set_meta("result_table", $arr["request"]["result_table"]);
+				break;
 		}
 		return $retval;
-	}	
-	*/
+	}
 
+	function gen_result_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$o = $arr["obj_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => t("Pealkiri"),
+		));
+
+		$t->define_field(array(
+			"name" => "active",
+			"caption" => t("Aktiivne"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("Jrk"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "props",
+			"caption" => t("Seaded"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "sep",
+			"caption" => t("Väljade eraldaja"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "fields",
+			"caption" => t("Lisaväljad"),
+		));
+		
+		$oldvals = $o->meta("result_table");
+
+		$tc = get_instance(CL_CFGFORM);
+		$cform_obj = new object($this->cfgform_id);
+		$use_output = $cform_obj->prop("use_output");
+
+		$prop_output = $arr["obj_inst"]->prop("use_output");
+		if(is_oid($prop_output))
+		{
+			$use_output = $prop_output;
+		}
+		elseif (!is_oid($use_output))
+		{
+			$arr["prop"]["error"] = t("Väljundvorm on valimata");
+			return PROP_ERROR;
+		};
+
+		$pname = $arr["prop"]["name"];
+
+
+		$props = $tc->get_props_from_cfgform(array("id" => $use_output));
+
+		$props["name"]["name"] = "name";
+		$names = array();
+		foreach($props as $prz)
+		{
+			$names[$prz["name"]] = $prz["name"];
+		}
+		foreach($props as $prop)
+		{
+			$sname = $prop["name"];
+			$prps = array(
+				"caption" => html::textbox(array(
+					"name" => "${pname}[${sname}][caption]",
+					"value" => empty($oldvals[$sname]["caption"]) ? $prop["caption"] : $oldvals[$sname]["caption"],
+					"size" => 20,
+				)),
+				"sep" => html::textbox(array(
+					"name" => "${pname}[${sname}][sep]",
+					"value" => $oldvals[$sname]["sep"],
+					"size" => 2,
+				)),
+				"name" => $prop["name"],
+				"active" => html::checkbox(array(
+					"name" => "${pname}[${sname}][active]",
+					"value" => 1,
+					"checked" => ($oldvals[$sname]["active"] == 1),
+				)),
+				"ord" => html::textbox(array(
+					"name" => "${pname}[${sname}][ord]",
+					"value" => $oldvals[$sname]["ord"],
+					"size" => 2,
+				)),
+			);
+			if($prop["type"] == "date_select" || $prop["type"] == "datetime_select")
+			{
+				$prps["props"] = html::textbox(array(
+					"name" => "${pname}[${sname}][props]",
+					"value" => $oldvals[$sname]["props"],
+					"size" => 15,
+				));
+			}
+			//arr($oldvals[$sname]["fields"]);
+			$nums = count($oldvals[$sname]["fields"]);
+			foreach(safe_array($oldvals[$sname]["fields"]) as $k => $v)
+			{
+				if(empty($v))
+				{
+					$nums--;
+				}
+			}
+			for($i = 0; $i <= $nums; $i++)
+			{
+				$prps["fields"] .= html::select(array(
+					"name" => "${pname}[${sname}][fields][$i]",
+					"options" => array(0 => "-- vali --") + $names,
+					"value" => $oldvals[$sname]["fields"][$i],
+				))."<br />";
+			}
+			$t->define_data($prps);
+		};
+		$t->set_sortable(false);
+	}
+	
 	function gen_calendar_contents($arr)
 	{
 		$args = array();
+		
 		$arr["prop"]["vcl_inst"]->configure(array(
 			//"tasklist_func" => array(&$this,"get_tasklist"),
 			"overview_func" => array(&$this,"get_overview"),
 			"overview_range" => 1,
 		));
-
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
 		));
 		$this->obj_inst = $arr["obj_inst"];
-
-
 		$this->_export_events(array(
 			"obj_inst" => &$this->obj_inst,
 			"cal_inst" => &$arr["prop"]["vcl_inst"],
 			"range" => $range,
 		));
-
 	}
 
 	function _get_output_doc($obj)
@@ -320,7 +466,6 @@ class calendar_view extends class_base
 					"first_image" => $first_image,
 					"project_media" => $project_media,
 				));
-
 				foreach($events as $event)
 				{
 					$data = $event;
