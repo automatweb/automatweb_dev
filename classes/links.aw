@@ -131,7 +131,7 @@ class links extends extlinks
 				}
 				else
 				{
-					$url = $baseurl."/".$index_file.$ext."/section=".$row["oid"];
+					$url = $baseurl."/".$index_file.".".$ext."/section=".$row["oid"];
 				}
 				$this->vars(array(
 					"name" => htmlentities($row["name"],ENT_QUOTES), 
