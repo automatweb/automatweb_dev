@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.11 2004/11/25 11:16:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.12 2004/11/29 10:22:21 ahti Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -422,7 +422,7 @@ class register_search extends class_base
 				"id" => $cff->id()
 			));
 
-			foreach($tmp as $k => $v)
+			foreach(safe_array($tmp) as $k => $v)
 			{
 				if ($v["name"] != "needs_translation" && $v["name"] != "is_translated")
 				{
