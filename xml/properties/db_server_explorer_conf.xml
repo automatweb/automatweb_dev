@@ -1,15 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>status</name>
-            <type>status</type>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Staatus</caption>
-      </property>
-      <property>
             <name>all_servers</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
