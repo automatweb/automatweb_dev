@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.79 2004/06/04 11:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.80 2004/06/07 15:54:53 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -321,7 +321,11 @@ class file extends class_base
 			{
 				$url = $this->get_url($alias["target"],$fi["name"]);
 			};
-			$replacement = "<a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
+			classload("icons");
+			$icon = icons::get_icon_url(CL_FILE,$fi["name"]);
+			$replacement = html::img(array(
+				"url" => $icon,
+			)) . " <a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
 		}
 		return $replacement;
 	}
