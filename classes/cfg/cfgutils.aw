@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.39 2004/03/17 11:35:55 duke Exp $
+// $Id: cfgutils.aw,v 1.40 2004/04/07 14:57:05 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -131,6 +131,7 @@ class cfgutils extends aw_template
 		$source = $this->get_file(array("file" => $fqfn));
 		$properties = array();
 
+
 		if ($source)
 		{
 			$parser = get_instance("xml/xml_path_parser");
@@ -138,10 +139,11 @@ class cfgutils extends aw_template
 
 			$parser->parse_file(array("fname" => "/xml/properties/$file" . ".xml"));
 
-			// how on earth do I invoke functions on 
-
+			// XXX: I hate this parser thingie
 			$properties = $parser->get_data("/properties/property");
 			$classinfo = $parser->get_data("/properties/classinfo");
+			$layoutinfo = $parser->get_data("/properties/layout");
+
 			$groupinfo = $parser->get_data("/properties/groupinfo");
 			$tableinfo = $parser->get_data("/properties/tableinfo");
 			$relinfo = $parser->get_data("/properties/reltypes");
@@ -158,6 +160,16 @@ class cfgutils extends aw_template
 			$groupinfo = $tmp;
 			
 			$this->classinfo = $classinfo[0];
+			$tmp = array();
+			if (is_array($layoutinfo[0]))
+			{
+				foreach($layoutinfo[0] as $key => $val)
+				{
+					$tmp[$key] = $this->normalize_text_nodes($val[0]);
+				};
+				$this->layoutinfo = $tmp;
+			};
+
 			if (isset($this->groupinfo) && is_array($this->groupinfo))
 			{
 				if (is_array($groupinfo))
@@ -286,6 +298,7 @@ class cfgutils extends aw_template
 				};
 			};
 		};
+
 
 		return $res;
 	}
@@ -484,6 +497,11 @@ class cfgutils extends aw_template
 	function get_classinfo()
 	{
 		return $this->classinfo;
+	}
+
+	function get_layoutinfo()
+	{
+		return $this->layoutinfo;
 	}
 
 	function get_relinfo()
