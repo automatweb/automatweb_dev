@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.24 2003/04/24 17:41:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.25 2003/05/08 10:55:57 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -883,7 +883,7 @@ class form_calendar extends form_base
 					$has_errors = true;
 					// where do we put the error message?
 					$err_el = ($relval["el_count"]) ? $relval["el_count"] : $row["el_start"];
-					$this->controller_errors[$err_el][] = "Not enough vacancies for this period! &nbsp;<br>On request only! Maximum amount '$max'";
+					$this->controller_errors[$err_el][] = "On request only!";
 				};
 			};
 			$this->restore_handle();
@@ -1117,9 +1117,14 @@ class form_calendar extends form_base
 
 		$lb_id_data = array();
 
+		// it's fcking easy, since that stuff is shown as text, it does
+		// _not_ come from the form and therefore this stuff will not work
+
+		// soo .. if that stuff is _not_ in the post_vars, then I need
+		// figure out it out from the existing entry
 		foreach($amount_els->get() as $el_with_value => $count_el_id)
 		{
-			$lb_id_data[$count_el_id] = $post_vars[$count_el_id];
+			$lb_id_data[$count_el_id] = isset($post_vars[$count_el_id]) ? $post_vars[$count_el_id] : $args["els"][$count_el_id]["value"];
 		}
 
 		foreach($amount_els->get() as $el_with_value => $count_el_id)
