@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.21 2002/10/09 09:48:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.22 2002/10/30 11:03:55 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs");
 lc_load("automatweb");
@@ -327,6 +327,10 @@ class orb extends aw_template
 							$extends = explode(",",$attribs["extends"]);
 							$orb_defs[$class]["_extends"] = $extends;
 						};
+						if ($attribs["folder"])
+						{
+							$orb_defs[$class]["folder"] = $attribs["folder"];
+						};
 					};
 				}
 				elseif ($tagtype == "close")
@@ -407,17 +411,39 @@ class orb extends aw_template
 
 	function try_load_class($class)
 	{
+		if (!file_exists($this->cfg["basedir"]."/xml/orb/$class.xml"))
+		{
+			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),$this->fatal,$this->silent);
+			bail_out();
+		}
+
+		$ret = $this->load_xml_orb_def($class);
+
+		// try and figure out the folder for this class 
+		$folder = "";
+
+		if ($ret[$class]["folder"])
+		{
+			$folder = $ret[$class]["folder"]."/";
+		}
+
 		// laeme selle klassi siis
-		classload($class);
+		classload($folder.$class);
 
 		if (!class_exists($class))
 		{
-			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),$this->fatal,$this->silent);
-		bail_out();
+			// try without folder for compatibility
+			classload($class);
+
+			if (!class_exists($class))
+			{
+				$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),$this->fatal,$this->silent);
+				bail_out();
+			}
 		};
 		
 		// FIXME: we should cache that def instead of parsing xml every time
-		return $this->load_xml_orb_def($class);
+		return $ret;
 
 	}
 }
