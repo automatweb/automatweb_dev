@@ -26,7 +26,7 @@
 
 				<table width="100%"  border="0" cellpadding="0" cellspacing="0">
 				<td class="caldayheadday">&nbsp;<a href="{VAR:dayorblink}">{VAR:hcell_weekday}</a></td>
-				<td class="caldayheaddate"><a href="{VAR:dayorblink}">{VAR:hcell_date}</a>&nbsp;</td>
+				<td class="caldayheaddate"><!--<a href="{VAR:dayorblink}">{VAR:hcell_date}</a>&nbsp;--></td>
 				</tr>
 				<tr><td colspan="2" class="caltableborderhele"><IMG SRC="images/blue/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td></tr></table>
 			
@@ -51,7 +51,7 @@
 				<!-- nested table gives a greater flexibility -->
 				<table width="100%" border="0" cellpadding="0" cellspacing="5">
 				<tR><td>
-
+				<div align="right" style="font-family: Verdana,serif; font-weight: bold; color: #CCC;">{VAR:daynum}</div>
 				{VAR:cell}
 				</td></tr></table>
 
