@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.102 2004/11/09 10:55:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.103 2004/11/22 10:45:59 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -211,10 +211,13 @@ class users_user extends aw_template
 		// HUZZAH!
 		
 		aw_disable_acl();
-			$user_obj = &obj(users::get_oid_for_uid($uid));
-			$logins = $user_obj->prop("logins") + 1;
+		$user_obj = &obj(users::get_oid_for_uid($uid));
+		$logins = $user_obj->prop("logins") + 1;
+		if ($logins < 2)
+		{
 			$user_obj->set_prop("logins", $logins);
 			$user_obj->save(); 
+		}
 		aw_restore_acl();
 		
 		$this->_log(ST_USERS, SA_LOGIN, $uid);
