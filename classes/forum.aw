@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.80 2003/08/18 10:44:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.81 2003/08/25 09:21:27 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1304,7 +1304,17 @@ topic");
 			$act = "show_threaded";
 		};
 
+		$alias = false;
 		if ($section)
+		{
+			$so = $this->get_object($section);
+			if ($so["class_id"] == CL_DOCUMENT || $so["class_id"] == CL_PERIODIC_SECTION)
+			{
+				$alias = true;
+			}
+		} 
+
+		if ($alias)
 		{
 			$retval =$this->mk_my_orb($act,array("board" => $board,"section" => $section,"_alias" => "forum","no_comments" => $args["no_comments"]));
 		}
