@@ -162,6 +162,22 @@ class image extends aw_template
 		return $url;
 	}
 
+	function parse_alias_list($arr)
+	{
+		extract($arr);
+		$ret = array();
+		foreach($aliases as $akey => $adat)
+		{
+			$ret[$akey] = $this->parse_alias(array(
+				"oid" => $oid,
+				"matches" => $adat["val"],
+				"alias" => $adat,
+				"tpls" => &$tpls
+			));
+		}
+		return $ret;
+	}
+
 	///
 	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse välja callbackina
 	function parse_alias($args = array())
@@ -350,7 +366,7 @@ class image extends aw_template
 	function show($arr)
 	{
 		extract($arr);
-		$rootdir = aw_ini_get("site_basedir");
+		$rootdir = $this->cfg["site_basedir"];
 		$f1 = substr($file,0,1);
 		$fname = $rootdir . "/img/$f1/" . $file;
 		if ($file) 
@@ -370,7 +386,7 @@ class image extends aw_template
 
 			if (!$passed)
 			{
-				$rootdir = aw_ini_get("site_basedir");
+				$rootdir = $this->cfg["site_basedir"];
 				$fname = $rootdir . "/files/$f1/" . $file;
 				if (is_file($fname) && is_readable($fname)) 
 				{
