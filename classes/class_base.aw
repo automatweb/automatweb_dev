@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.170 2003/11/10 21:41:17 duke Exp $
+// $Id: class_base.aw,v 2.171 2003/11/18 15:13:32 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -173,6 +173,7 @@ class class_base extends aw_template
 				// gah, I'm really not that proud of this shit
 				"type" => ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"])) ? "toolbar" : "",
 		));
+
 
 		$this->request = $args;
 
@@ -836,6 +837,7 @@ class class_base extends aw_template
 				"coredata" => $this->coredata,
 				"request" => $this->request,
 				"view" => &$val["view"],
+				"activegroup" => $activegroup,
 			);
 
 			$res = true;
@@ -1645,6 +1647,8 @@ class class_base extends aw_template
 		}
 
 		$properties = $resprops;
+
+
 		$resprops = array();
 
 		// need to cycle over the property nodes, do replacements
@@ -1682,7 +1686,7 @@ class class_base extends aw_template
 			};
 
 			$name = $val["name"];
-			if (is_array($val))
+			if (is_array($val) && $val["type"] != "callback")
 			{
 				$this->get_value(&$val);
 			};
@@ -1789,6 +1793,7 @@ class class_base extends aw_template
 				$resprops[$_field] = $val;
 			};
 		}
+
 
 	
 		// if name_prefix given, prefixes all element names with the value 
@@ -2229,10 +2234,12 @@ class class_base extends aw_template
 				continue;
 			};
 			// status has already been written out, no need to do this again
+			/*
 			if ($property["name"] == "status")
 			{
 				continue;
 			};
+			*/
 			// don't save or display un-translatable fields if we are editing a translated object
 			if (!$this->is_translated && $property["name"] == "is_translated")
 			{
@@ -2467,8 +2474,6 @@ class class_base extends aw_template
 		{
 			$this->obj_inst->set_meta("cb_nobreaks",$args["cb_nobreaks"]);
 		}
-
-
 
 		$this->obj_inst->save();
 
