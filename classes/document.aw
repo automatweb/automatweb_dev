@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.110 2002/07/23 12:52:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.111 2002/07/23 16:42:06 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -1339,6 +1339,10 @@ class document extends aw_template
 			$q = "UPDATE documents SET dcache = '$preview'  WHERE docid = '$id'";
 			$this->db_query($q);
 		};
+
+		// and if the user has checked the checkbox, we should generate the static pages for the document, the parent menu
+		// and all the document's brothers
+		$this->gen_static_doc($id);
 
 		$this->flush_cache();
 
@@ -3662,6 +3666,30 @@ class document extends aw_template
 		{
 			return $bu."/".$docid;
 		}
+	}
+
+	////
+	// !generates static pages fot the document ($id) , the document's parent menu and the documents brothers and menus
+	// uses the settings set in the general static site settings for generation
+	function gen_static_doc($id)
+	{
+		echo "genereerin staatilisi lehek&uuuml;lgi, oodake palun .... <br><br>\n\n";
+		echo "\n\r<br>";
+		echo "\n\r<br>";
+		flush();
+		$exp = get_instance("export");
+		$exp->init_settings();
+
+		$obj = $this->get_object($id);
+
+		// doc parent
+		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$obj["parent"], aw_global_get("lang_id"), true);
+
+		$exp->exp_reset();
+
+		// doc 
+		$exp->fetch_and_save_page($this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?section=".$id, aw_global_get("lang_id"), true);
+		die("<Br><br>Valmis, tagasi dokumendi muutmise juurde saab <a href='".$this->mk_my_orb("change", array("id" => $id))."'>siit</a>");
 	}
 };
 ?>
