@@ -1499,7 +1499,8 @@ class site_show extends class_base
 
 				if (not($err))
 				{
-					$_sec = aw_global_get("section");
+					//$_sec = aw_global_get("section");
+					$_sec = $_REQUEST["section"];
 					if ($_sec)
 					{
 						$values["section"] = $_sec;
