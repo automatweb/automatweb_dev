@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ml_queue" folder="mailinglist" extends="aw_template">
+	<class name="ml_queue" folder="applications/mailinglist" extends="aw_template">
 		<action name="submit_manager">
 			<function name="orb_submit_manager">
 				<arguments>

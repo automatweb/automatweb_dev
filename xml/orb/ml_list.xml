@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ml_list" folder="mailinglist" extends="class_base">
+	<class name="ml_list" folder="applications/mailinglist" extends="class_base">
 		<action name="post_message">
 			<function name="post_message">
 				<arguments>
