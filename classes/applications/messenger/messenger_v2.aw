@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.3 2004/11/18 23:25:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.4 2004/11/19 00:36:16 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -74,7 +74,7 @@ caption Identiteet
 @property s_results type=table no_caption=1
 @caption Tulemused
 
-@property rule_editor type=releditor reltype=RELTYPE_RULE mode=manager group=rules table_fields=id,rule_from,rule_subject props=rule_from,rule_subject,target_folder
+@property rule_editor type=releditor reltype=RELTYPE_RULE mode=manager group=rules table_fields=id,rule_from,rule_subject props=rule_from,rule_subject,target_folder,on_server
 @caption Reeglid
 
 @groupinfo main_view caption="Kirjad" submit=no 
@@ -731,6 +731,11 @@ class messenger_v2 extends class_base
 		foreach($conns as $item)
 		{
 			$filter_obj = new object($item->to());
+
+			if (1 == $filter_obj->prop("on_server"))
+			{
+				continue;
+			};
 
 			$from_rule = $filter_obj->prop("rule_from");
 			$subj_rule = $filter_obj->prop("rule_subject");
