@@ -33,7 +33,7 @@ class db_feedback extends aw_template
 		$this->quote($data);
 		extract($data);
 		$msg = "
-Dokument: http://aw.struktuur.ee/?section=$docid\n
+Dokument: ".aw_ini_get("baseurl")."/?section=$docid\n
 Pealkirjaga: $title\n
 \n
 Arvamust avaldas:\n
