@@ -273,13 +273,14 @@ class object_tree extends _int_obj_container_base
 	{
 		global $awt;
 		$awt->start("ds_search");
-		list($oids, $meta_filter, $acldata, $parentdata) = $GLOBALS["object_loader"]->ds->search($filter);
+		list($oids, $meta_filter, $acldata, $parentdata, $objdata) = $GLOBALS["object_loader"]->ds->search($filter);
 
 		// set acldata to memcache
 		if (is_array($acldata))
 		{
 			foreach($acldata as $a_oid => $a_dat)
 			{
+				$a_dat["status"] = $objdata[$a_oid]["status"];
 				$GLOBALS["__obj_sys_acl_memc"][$a_oid] = $a_dat;
 			}
 		}
