@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.50 2003/06/17 12:46:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.51 2003/06/19 09:57:34 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2058,7 +2058,15 @@ class form_element extends aw_template
 						// for search forms we must not submit the form, but instead set element value in url
 						if ($this->form->type == FTYPE_SEARCH)
 						{
-							$sos = "onChange=\"window.location = window.location + '&elvalues[".$this->get_el_name()."]=' + this.options[this.selectedIndex].value\"";
+							if (strpos(aw_global_get("REQUEST_URI"), "?") === false)
+							{
+								$_sep = "?";
+							}
+							else
+							{
+								$_sep = "&";
+							}
+							$sos = "onChange=\"window.location = window.location + '".$_sep."elvalues[".$this->get_el_name()."]=' + this.options[this.selectedIndex].value\"";
 						}
 						else
 						{
@@ -2280,6 +2288,8 @@ class form_element extends aw_template
 					$tb_type = "password";
 				}
 
+				$tb_val = $this->get_val($elvalues);
+
 				$aft = "";
 				if ($this->arr["subtype"] == "int" && $this->arr["up_down_button"])
 				{
@@ -2315,17 +2325,17 @@ class form_element extends aw_template
 				{
 					$html .= html::hidden(array(
 						'name' => $element_name,
-						'value' => htmlentities($this->get_val($elvalues))
+						'value' => htmlentities($tb_val)
 					));
 				}
 				else
 				if ($this->arr["show_as_text"])
 				{
-					$html .= $this->get_val($elvalues);
+					$html .= $tb_val;
 				}
 				else
 				{
-					$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />$aft\n";
+					$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlentities($tb_val))."\" />$aft\n";
 				}
 				break;
 
@@ -2631,6 +2641,12 @@ class form_element extends aw_template
 				break;
 		};
 
+		if ($this->arr['hidden'])
+		{
+			$text = "";
+			$info = "";
+		}
+
 		$sep_ver = "";
 		$sep_hor = "";
 		if ($this->arr["type"] != "")
@@ -2691,7 +2707,7 @@ class form_element extends aw_template
 		if ($this->arr["value_controller"] && (!$this->form->arr["sql_writer_writer"] || $do_val_ctrl)) 
 		{
 //			echo "entry = $this->entry <br>";
-			$val = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, $this);
+			$val = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, &$this);
 		}
 		else
 		// kui entry on laetud, siis voetakse see sealt.
