@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>type</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Objektitüüp</caption>
+      </property>
+</properties>
+
