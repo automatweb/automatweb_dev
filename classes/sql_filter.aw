@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.4 2001/11/20 13:19:05 kristo Exp $
 
 class sql_filter extends aw_template 
 {
@@ -84,6 +85,12 @@ class sql_filter extends aw_template
 		{
 			$this->set_filter($filter);
 		};
+		if ($GLOBALS["shit"])
+		{
+			echo("<textarea cols=80 rows=40>");
+			print_r($this->filter);
+			echo("</textarea>");
+		};
 		
 		$this->read_template("sql_filter.tpl");
 
@@ -138,14 +145,14 @@ class sql_filter extends aw_template
 			//echo("explode $realtable,$realfield =>$faketable.$fakefield<br>");//dbg
 			
 			$fakeval=$filter["p$i"]["val"];
-			
-			if (is_array($this->tables[$faketable]["fields"][$fakefield]["select"]))
+			if (is_array($this->tables[$faketable]["fields"][$fakefield]["select"]) &&
+				isset($this->tables[$faketable]["fields"][$fakefield]["select"][$fakeval]))
 			{
 				$fakeval=$this->tables[$faketable]["fields"][$fakefield]["select"][$fakeval];
 			};
 			
 
-			if ($is_change_part && $i==$change_part)
+			if ($is_change_part && ($i==$change_part))
 			{
 				//mida on vaja saada siis yhe filtri osa editimiseks?
 				//fake v2ljanime mis on siis default valitud selectis
@@ -161,11 +168,20 @@ class sql_filter extends aw_template
 					$selecteddate=$fakeval;
 				};
 				//echo("change_p_val=$change_p_val<br>");//dbg
+				$rclass="ftitle2";
+				
+			} else
+			{
+				$rclass="title";
 			};
 			//echo("join=".$filter["p$i"]["join"]."<br>");//dbg
+
 			$this->vars(array(
 				"tid" => $i,
+				"ignchecked" => $part["ign"]?"checked":"",
+				"rclass" => $rclass,
 				"join" => $this->joinnames[$filter["p$i"]["join"]],
+				"modifylink" => $this->mk_my_orb($reforb_edit_func,array_merge($reforb_arr,array("is_change_part"=>1,"change_part"=>$i)),$reforb_class),
 				"sql" => "$faketable.$fakefield"." ".$filter["p$i"]["op"]." '$fakeval'"
 				));
 			$tingimused.=$this->parse("tingimused");
@@ -206,10 +222,10 @@ class sql_filter extends aw_template
 				};
 			};
 
-			//echo("change_p_field=$change_p_field<br>");//dbg
-			//echo("change_p_fieldnum=$change_p_fieldnum<br>");//dbg
+			$addpars="";
 		} else
 		{
+			$addpars=$this->parse("addpars");
 			$lisa=$this->parse("LISA");
 			$c_opand=" checked ";
 			$c_opor="";
@@ -230,13 +246,14 @@ class sql_filter extends aw_template
 			"selectedexpr" =>$change_p_op,
 			"change_p_fieldnum" =>$change_p_fieldnum,
 			"LISA" => $lisa,
+			"addpars" => $addpars,
 			"MUUDA" => "",
 			"c_opand"=>$c_opand,
 			"c_opor" => $c_opor,
 			"buttoncaption"=>$buttoncaption,
 			"name" => $this->filter["name"],
 			"dedit" => $date_edit->gen_edit_form("dateval",$selecteddate),
-			"reforb" => $reforb,
+			"reforb" => $arr["reforb"] ? $arr["reforb"] : $this->mk_my_orb($reforb_func,$reforb_arr,$reforb_class),
 			));
 		
 		
@@ -248,7 +265,6 @@ class sql_filter extends aw_template
 	function do_submit_filter_edit($arr)
 	{
 		extract($arr);
-		//echo("saving it");
 		if (isset($filter))
 		{
 			$this->set_filter($filter);
@@ -260,10 +276,20 @@ class sql_filter extends aw_template
 			$newarr=array();
 			foreach ($j2rjekord as $vanajrk => $uusjrk)
 			{
-				//echo("mappinf $vanajrk to jrk $uusjrk<br>");//dbg
 				$newarr["p$uusjrk"]=$this->filter["p$vanajrk"];
 			};
 			$this->filter=array_merge($this->filter,$newarr);
+		};
+
+		for ($i=0; $i<$this->filter["nump"] ;$i++)
+		{
+			if ($ign[$i])
+			{
+				$this->filter["p$i"]["ign"]=1;
+			} else
+			{
+				$this->filter["p$i"]["ign"]="";
+			};
 		};
 		$this->filter["name"]=$name;
 		//echo("filter=<pre>");print_r($this->filter);echo("</pre>");//dbg
@@ -328,11 +354,26 @@ class sql_filter extends aw_template
 		{
 			$expr="=";
 		};
-		$newp=array(
-			"field" => $fie,
-			"op" => $expr,
-			"join" => $op,
-			"val" => $value);
+		if ($selt=="right")
+		{
+			$newp=array(
+				"field" => ")",
+				"join" => $expr);
+		} else
+		if ($selt=="left")
+		{
+			$newp=array(
+				"field" => "(",
+				"join" => $expr);
+		} else
+		{
+			$newp=array(
+				"field" => $fie,
+				"op" => $expr,
+				"join" => $op,
+				"val" => $value,
+				"type" => $type);
+		};
 
 		//echo("newp=<pre>");print_r($newp);echo("</pre>");//dbg
 		//echo("filter=<pre>");print_r($filter);echo("</pre>");//dbg
@@ -421,13 +462,11 @@ class sql_filter extends aw_template
 
 
 	//tagastab  WHERE osa queryst, mis vastab mingile filtrile
-	function filter_to_sql($arr=array())//noeval kas evalida @uid ja @t... ,fake kas kasutada fake välju
+	function filter_to_sql($arr=array())//noeval kas evalida @uid ja @t... ,fake kas kasutada fake välju, do_ign kas eemaldada tühjad ign flagiga osad
 	{
 		extract($arr);
-		//echo("filter to sql<br>");//dbg
 		if (isset($filter))
 		{
-			//echo("filter=<pre>");print_r($filter);echo("</pre>");//dbg
 			$this->set_filter($filter);
 		};
 
@@ -441,76 +480,86 @@ class sql_filter extends aw_template
 		for ($i=0; $i<(int)$fi["nump"]; $i++)
 		{
 			$f=$fi["p$i"];
-			// vaheta välja väärtused @uid ja @t+365d
-			if (!$noeval && substr($f["val"],0,2)=="@t")
+
+			$fjoin=$fake?$this->joinnames[$f["join"]]:$f["join"];
+			if ($f["field"]=="(")
 			{
-				switch (substr($f["val"],strlen($f["val"])-1,1))
-				{
-					default:
-					case "h": 
-						$mul=60*60;
-						break;
-					case "m":
-						$mul=60;
-						break;
-					case "d":
-						$mul=60*60*24;
-						break;
-				};
-				// ntx $t-24h tähendab 24 tundi tagasi ja $t+30m tähenab 30 minuti pärast
-				$q2='$val=time() '.substr($f["val"],2,1).((int)substr($f["val"],3,strlen($f["val"])-4)).'*'.$mul.";";
-				//echo("q2=$q2<br>");//dbg
-				eval($q2);
-				//echo("val=$val");//dbg
-			} elseif (!$noeval && $f["val"]=="@uid")
+				$w.=(!$w? $fake?"kus":"WHERE" : $fjoin )." left";
+				
+			} else
+			if ($f["field"]==")")
 			{
-				$val=UID;
+				$w.=" ) ";
 			} else
 			{
-				$val=strtr($f["val"],array("'"=>"\'"));
-			};
-
-			//Translate stuff into hopefully-(non-sql-capable-person)-readable form
-			$fakeval=$val;
-			$fakejoin=strtr($f["join"],$xlate);
-			list($realtable,$realfield)=explode(".",$f["field"]);
-			$this->used_tables[$realtable]=1;
-
-			$faketable=$realtable;
-			$fakefield=$realfield;
-			if ($fake)
-			{
-				
-			
-				$faketable=$this->reverse[$realtable]["fake"];
-				$fakefield=$this->reverse[$realtable]["fields"][$realfield]["fake"];
-				//echo("explode $realtable,$realfield =>$faketable.$fakefield<br>");//dbg
-				
-				if (is_array($this->tables[$faketable]["fields"][$fakefield]["select"]) &&
-					isset($this->tables[$faketable]["fields"][$fakefield]["select"][$fakeval]))
+				if ($do_ign && $f["ign"] && ($f["val"]=="" || !isset($f["val"]) || !$f["user_dta"]) )
 				{
-					$fakeval=$this->tables[$faketable]["fields"][$fakefield]["select"][$fakeval];
+					continue;
 				};
-				$fakejoin=$this->joinnames[$fakejoin];
-			};
-			if ($f["op"]=="LIKE")
-			{
-				$fakeval="%$fakeval%";
-			};
-			//done
-//mysql>vali parool seest maiesskuell.user kus noo ma tahaks nagu neid kus nimi oleks ikka veits pikem kui 5 märki või nii, noh!
-//ERROR 1064: You have an error in your SQL syntax near ...
+				// vaheta välja väärtused @uid ja @t+365d
+				if (!$noeval && substr($f["val"],0,2)=="@t")
+				{
+					switch (substr($f["val"],strlen($f["val"])-1,1))
+					{
+						default:
+						case "h": 
+							$mul=60*60;
+							break;
+						case "m":
+							$mul=60;
+							break;
+						case "d":
+							$mul=60*60*24;
+							break;
+					};
+					// ntx $t-24h tähendab 24 tundi tagasi ja $t+30m tähenab 30 minuti pärast
+					$q2='$val=time() '.substr($f["val"],2,1).((int)substr($f["val"],3,strlen($f["val"])-4)).'*'.$mul.";";
+					eval($q2);
+				} elseif (!$noeval && $f["val"]=="@uid")
+				{
+					$val=UID;
+				} else
+				{
+					$val=strtr($f["val"],array("'"=>"\'"));
+				};
 
-			// siin vaatab et kui v6rdlus on > < >= <= siis ei pane '' ymber valuele
-			if ($f["op"]=="LIKE" || $f["op"]=="=" ||$f["op"]=="!=")
-			{
-				$fakeval="'$fakeval'";
-			} else 
-			{
-				$fakeval+=0;
-			}
-			//echo($f["op"]." -- ".$fakeval);
-			$w.=" ".(!$w? $fake?"kus":"WHERE" : $fakejoin )." $faketable.$fakefield ".strtr($f["op"],$xlate)." $fakeval";
+				//Translate stuff into hopefully-(non-sql-capable-person)-readable form
+				$fakeval=$val;
+				$fakejoin=strtr($f["join"],$xlate);
+				list($realtable,$realfield)=explode(".",$f["field"]);
+				$this->used_tables[$realtable]=1;
+
+				$faketable=$realtable;
+				$fakefield=$realfield;
+				if ($fake)
+				{
+					$faketable=$this->reverse[$realtable]["fake"];
+					$fakefield=$this->reverse[$realtable]["fields"][$realfield]["fake"];
+					
+					if (is_array($this->tables[$faketable]["fields"][$fakefield]["select"]) &&
+						isset($this->tables[$faketable]["fields"][$fakefield]["select"][$fakeval]))
+					{
+						$fakeval=$this->tables[$faketable]["fields"][$fakefield]["select"][$fakeval];
+					};
+					$fakejoin=$this->joinnames[$fakejoin];
+				};
+				if ($f["op"]=="LIKE")
+				{
+					$fakeval="%$fakeval%";
+				};
+
+				// siin vaatab et kui v6rdlus on > < >= <= siis ei pane '' ymber valuele
+				// või kui on määratud masterarrays et ei panda siis ka ei panda
+				if (($f["op"]=="LIKE" || $f["op"]=="=" ||$f["op"]=="!=") && (!$f["noqm"]))
+				{
+					$fakeval="'$fakeval'";
+				} else 
+				if ($fakeval[0]!="@") //this stuff is for bugtrack @uid ja @t+24h et saaks teha näiteks et näita viimase nädala bugisid
+				{
+					$fakeval+=0;
+				}
+				$w.=" ".(!$w? $fake?"kus":"WHERE" : $fakejoin )." $faketable.$fakefield ".strtr($f["op"],$xlate)." $fakeval";
+			};
 		};
 		$this->used_tables=array_keys($this->used_tables);
 		return $w;

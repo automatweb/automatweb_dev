@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.7 2001/07/31 16:20:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.8 2001/11/20 13:19:05 kristo Exp $
 // sys.aw - various system related functions
 lc_load("syslog");
 global $orb_defs;
@@ -91,6 +91,7 @@ class sys extends aw_template
 			"aw.struktuur.ee" => "aw.struktuur.ee",
 			"idaviru.struktuur.ee" => "idaviru.struktuur.ee",
 			"awvibe.struktuur.ee" => "awvibe.struktuur.ee",
+			"horizon.struktuur.ee" => "horizon.struktuur.ee",
 		);
 		
 		$this->read_template("compare_db_step1.tpl");

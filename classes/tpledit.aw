@@ -328,6 +328,7 @@ class tpledit extends aw_template {
 		classload("archive");
 		$arc = new archive();
 
+
 		if (not($meta_obj))
 		{
 			// Objekti polnud, teeme uue
@@ -335,13 +336,11 @@ class tpledit extends aw_template {
 					"class_id" => CL_TEMPLATE,
 					"name" => $file,
 			));
-			// create archive
 			$arc->add(array("oid" => $oid));
 			$timestamp = 0;
 			$activate = 1;
-		}
-		else
-		{
+			$meta_obj["oid"] = $oid;
+		};
 			if ($activate)
 			{
 				// Uuendame olemasoleva objekti metainfot
@@ -377,8 +376,6 @@ class tpledit extends aw_template {
 			};
 
 			
-		}
-
 		if ($revision)
 		{
 			$do_update = $activate;
@@ -403,6 +400,7 @@ class tpledit extends aw_template {
 				"content" => stripslashes($source),
 			));
 		};
+		$this->_log("template", "changed template $fullpath");
 		return $this->mk_orb("edit",array("file" => $file,"revision" => $revision));
 	}
 

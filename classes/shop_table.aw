@@ -562,7 +562,7 @@ class shop_table extends shop_base
 				$to_add = 7-($diff % 7);
 				$cur_date = $from + ($to_add*24*3600);
 				$cur_date = ($cur_date < $it["per_from"] ? $it["per_from"] : $cur_date);
-				while (($cur_date + 24*3600*7) < $to)
+				while (($cur_date) < $to)
 				{
 					$data[$cur_date] = array("item_id" => $item_id, "period" => $cur_date, "num_sold" => 0);
 					$cur_date += 24*3600*7;

@@ -45,7 +45,8 @@ class bugtrack extends aw_template
 				"3" => "taasavatud",
 				"4" => "lahendatud",
 				"5" => "kinnitatud",
-				"6" => "suletud");
+				"6" => "suletud",
+				"7" => "hetkel tegelen");
 
 		$a=array_flip($this->statlist);
 		$this->stat4=$a["lahendatud"];
@@ -76,10 +77,14 @@ class bugtrack extends aw_template
 			"9" => "9 - kõrgeim");
 		
 		////
-		// !Kõikvõimalikud severity astmed, peavad olema igale itemi tyybile erinevad
-		// NB! see on nii kavalalt ?? sama numbrit ei tohi eri tekstiga eri tyybi alla panna
-		// sama tekst peab iga tyybi all olema sama nr, muidu oleks
-		// filtri tegemisel õudne jama
+		// !Kõikvõimalikud severity astmed
+		// Okei okei,see ei ole üldse kaval aga teistmoodi ei saa seda teha. lauri
+
+		// ?? sama numbrit ei tohi eri tekstiga eri tyybi alla panna
+		// sama tekst peab iga tyybi all olema sama nr
+
+		// Ühesõnaga -->  Erinevatele tekstidele peavad vastama erinevad numbrid ja
+		// samadele tekstidele peavad vastama samad numbrid
 		$this->sevlist[0] = array( //arendus
 			"0" => "Ettepanek",
 			"1" => "Elementaarne",
@@ -160,6 +165,21 @@ class bugtrack extends aw_template
 			"8" => "#FF9090",
 			"9" => "#FF8a8a"
 			);
+
+		
+		// prioriteetide värvid
+		$this->statcolor = array(
+			"0" => "#FFFFFF",
+			"1" => "#FFFFFF",
+			"2" => "#FFFFFF",
+			"3" => "#FFFFFF",
+			"4" => "#FFFFFF",
+			"5" => "#FFFFFF",
+			"6" => "#FFFFFF",
+			"7" => "#FF00FF",	//ma arvan et lilla sobib hästi ex
+			);
+
+		$this->m="";//menu workaround for client side
 	
 		$this->db_init();
 		$this->tpl_init("automatweb/bugtrack");
@@ -185,7 +205,8 @@ class bugtrack extends aw_template
 			"month" => "",
 			"year" => "",
 			"hour" => "",
-			"minute" => ""
+			"minute" => "",
+			"classid" => "small_button",
 			));
 		
 		$this->read_template("add.tpl");
@@ -195,20 +216,30 @@ class bugtrack extends aw_template
 		{
 			$this->vars(array(
 				"itype" => $k,
+				"ischecked" => $itypes?"":"checked",
 				"itypename" => $v
 				));
 			$itypes.=$this->parse("itypes");
 		};
 		$plist=array();
+		$plist[]="---- PROGRAMMID ----";
 		foreach ($GLOBALS["programs"] as $idx => $dta)
 		{
 			$plist[$dta["name"]]=$dta["name"];
 		};
+
+		$plist[]="----- KLASSID ------";
+
+		foreach ($GLOBALS["class_defs"] as $idx => $dta)
+		{
+			$plist[$dta["name"]]=$dta["name"];
+		};
+
 		$this->vars(array(
 			"uid" => UID,
 			"url" => "",
 			"now" => $this->time2date(),
-			"sendmail2_mail" => $GLOBALS["user_email"],
+			"sendmail2_mail" => $this->get_user_mail(UID),
 			"developerlist" => $this->multiple_option_list(array(),$this->get_userlist()),
 			"severitylist0" => $this->picker(0,$this->sevlist[0]),
 			"severitylist1" => $this->picker(0,$this->sevlist[1]),
@@ -218,7 +249,7 @@ class bugtrack extends aw_template
 			"prilist" => $this->picker(1,$this->prilist),
 			"time_fixed" => $date_edit->gen_edit_form("time_fixed",time()),
 			"reforb" => $this->mk_reforb("submit_new",array()),
-			"backlink" => $this->mk_my_orb("list",array()),
+			"backlink" => $this->mk_my_orb("list",array(),"",false,true),
 			"millekohta" => $this->picker("",$plist),
 			));
 		return $this->parse();
@@ -244,7 +275,7 @@ class bugtrack extends aw_template
 			$bugtr_filt=$setfilter;
 		};
 
-		// default vaade on oma bugid,järjestatud aja järgi
+		
 		if (!$bugtr_haslooked)
 		{
 			session_register("bugtr_haslooked");
@@ -272,6 +303,7 @@ class bugtrack extends aw_template
 			"action" => "list",
 			));
 		
+		$headerarray=array();
 		$filterz=$this->get_filters_by_groups();
 		foreach($filterz as $gid => $filters)
 		{
@@ -308,17 +340,18 @@ class bugtrack extends aw_template
 			$headerarray["_".$gid]="</a>".$this->parse("fgroup")."<a>";
 
 		};
+		
 
 		
 		
 		$headerarray=array_merge($headerarray,array(
-			$this->mk_my_orb("filters",array()) => "Filtrid",
+			$this->mk_my_orb("filters",array(),"",false,true) => "Filtrid",
 			));
 
 
 		if ($this->prog_acl("add", PRG_BUGTRACK))
 		{
-			$headerarray[$this->mk_my_orb("new",array())] = "Lisa uus";
+			$headerarray[$this->mk_my_orb("new",array(),"",false,true)] = "Lisa uus";
 		};
 
 		if ($this->prog_acl("admin", PRG_BUGTRACK))
@@ -328,6 +361,7 @@ class bugtrack extends aw_template
 		};
 
 		$t->define_header("BugTrack",$headerarray);
+		
 		$t->parse_xml_def($this->basedir . "/xml/bugtrack/bugtrack.xml");
 	
 		$filta=$this->sql_filter->filter_to_sql(array("filter"=>$this->get_filter($bugtr_filt)));
@@ -341,28 +375,36 @@ class bugtrack extends aw_template
 		$commentarr=$mb->get_count_all("bug_%");
 		$commentnewarr=$mb->get_count_new("bug_%");
 
-		$q = "SELECT * FROM bugtrack $filta ORDER BY pri DESC";
+		$q = "SELECT * FROM bugtrack $filta ORDER BY tm DESC";
 		//echo($q);//DBG
 		$this->db_query($q);
 			
 		while($row = $this->db_next())
 		{
 			$topic="bug_".$row["id"];
-			$cmnt= "<a href='javascript:remote(0,500,400,\"".$this->mk_my_orb("showcomments",array("id"=> $row["id"]))."\");'><font color='red'>".(int)(isset($commentnewarr[$topic])?$commentnewarr[$topic]:$commentarr[$topic])." / ".(int)$commentarr[$topic]."</font></a>";
+			$cmnt= "<a href='javascript:remote(0,500,400,\"".$this->mk_my_orb("showcomments",array("id"=> $row["id"]),"",false,true)."\");'><font color='red'>".(int)(isset($commentnewarr[$topic])?$commentnewarr[$topic]:$commentarr[$topic])." / ".(int)$commentarr[$topic]."</font></a>";
 
-			$row["title"]="<a href='".$this->mk_my_orb("edit",array("id" => $row["id"]))."'>".$row["title"]."</a>&nbsp(".$cmnt.")";
+			// et ilma pealkirjata bugisid saaks ka vaadata 06.okt.2001
+			if (!$row["title"])
+			{
+				$row["title"]="!pealkirjata!";
+			};
+			$row["title"]="<a href='".$this->mk_my_orb("edit",array("id" => $row["id"]),"",false,true)."'>".$row["title"]."</a>&nbsp(".$cmnt.")";
 						 
-			$row["status"]=$this->statlist[$row["status"]];
+			
 			$row["__pribgcolor"]=$this->pricolor[$row["pri"]];
+			$row["__statbgcolor"]=$this->statcolor[$row["status"]];
 			//$row["developer"]=join(",",$row["developer"]);
 			
 
 			$row["vali"]="<input type='checkbox' NAME='sel[]' value='".$row["id"]."'><input type='radio' NAME='sel1' value='".$row["id"]."' OnClick='sel1_=".$row["id"]."'>";
 			//tee üle läinud teist värvi
-			if ($row["timeready"]<time())
+			if ($row["timeready"]<time() && $row["status"]!=$this->stat4 && $row["status"]!=$this->stat6)
 			{
 				$row["__trbgcolor"]=$this->pricolor["9"];
 			};
+
+			$row["status"]=$this->statlist[$row["status"]];
 			$t->define_data($row);
 		};
 
@@ -379,8 +421,8 @@ class bugtrack extends aw_template
 			"filter" =>"",
 			"fgroup"=>"",
 			"l_delegate" => "orb.aw?class=bugtrack&action=delegate&type=popup"/*$this->mk_my_orb("delegate",array("type" => "popup"))*/,
-			"l_setfilter" => $this->mk_my_orb("list",array()),
-			"reforb" => $this->mk_reforb("list",array())
+			"l_setfilter" => $this->mk_my_orb("list",array(),"",false,true),
+			"reforb" => $this->mk_reforb("list",array(),"",false,true)
 			));
 		return $this->parse();;
 	}
@@ -419,6 +461,9 @@ class bugtrack extends aw_template
 	function orb_edit($arr)
 	{
 		extract($arr);
+		/*global $ln_dbg;
+		session_register("ln_dbg");
+		if ($ln_dbg) echo("ln_dbg set");*/
 		$bug = $this->get_bug($id);
 		if (!$this->prog_acl("admin", PRG_BUGTRACK)  && ($bug["uid"]!=UID || !UID))
 		{
@@ -432,30 +477,41 @@ class bugtrack extends aw_template
 			"month" => "",
 			"year" => "",
 			"hour" => "",
-			"minute" => ""
+			"minute" => "",
+			"classid" => "small_button",
 			));
 		$this->read_template("edit.tpl");
-		//echo("sev=".$bug["severity"]);//dbg
-		//echo("developer=<pre>");print_r(explode(",",$bug["developer"]));echo("</pre><br>");//dbg
+		
+		// Et see kes bugi sisestas saaks seda muuta
+		if (UID==$bug["uid"])
+		{
+			$this->vars(array(
+				"txt"=>$bug["text"],
+				));
+			$text=$this->parse("text");
+		} else
+		{
+			$text=format_text($bug["text"]);
+		};
 		$this->vars(array("uid" => $bug["uid"],
 			"iframesrc" => "/automatweb/comments.aw?section=bug_".$id."&forum_id=".$GLOBALS["bugtrack_forum"]."&type=flat",
 			"url" => $bug["url"],
 			"id"  => $bug["id"],
-			"pri" => $bug["pri"],
+			"prilist" => $this->picker($bug["pri"],$this->prilist),
 			"statuslist" => $this->picker($bug["status"],$this->statlist),
 			"severitylist" => $this->picker($bug["severity"],$this->totalsevlist),
 			"developerlist" => $this->multiple_option_list(array_flip(explode(",",$bug["developer"])),$this->get_userlist($bug["developer"])),
 			"resollist" => $this->picker($bug["resol"],$this->reslist),
 			"now" => $this->time2date($bug["tm"]),
 			"title" => $bug["title"],
-			"text" => format_text($bug["text"]),
+			"text" => $text,
 			"sendmail2_mail" => $bug["sendmail2_mail"],
 			"mails" => "", // ei näe eelmisi vaid saab JUURDE panna
-			"text_result" => format_text($bug["text_result"]),
+			"text_result" => $bug["text_result"],
 			"sendmail2"	=> ($bug["sendmail2"] == 1 ? "CHECKED" : ""),
 			"time_fixed" => $date_edit->gen_edit_form("time_fixed",$bug["timeready"]),
 			"reforb" => $this->mk_reforb("submit_edit",array("id" => $bug["id"], "ref" => "hmm??")),
-			"backlink" => $this->mk_my_orb("list",array())
+			"backlink" => $this->mk_my_orb("list",array(),"",false,true)
 			));
 		return $this->parse();
 	}
@@ -514,15 +570,16 @@ class bugtrack extends aw_template
 		// saada bugtrack@ 
 		if ($maildev)
 		{
-			$msg = UID." lisas ".$this->itypelist[$itype]." idee lehele $url, prioriteediga $pri\n $text";
-			@mail("bugtrack@struktuur.ee","Uus puuk: $baseurl $title",$msg,"From: bugtrack <bugtrack@struktuur.ee>");
+			$link="  ".$baseurl."/orb.aw?class=bugtrack&action=edit&id=".$req["id"]."  ";
+			$msg = stripslashes(UID." lisas ".$this->itypelist[$itype]." idee lehele $url, prioriteediga $pri\nArendaja:".$arr["developer"]."\n $text\n\n$link");
+			@mail("bugtrack@struktuur.ee","Uus ".$this->itypelist[$itype]."idee:  $baseurl $title ",$msg,"From: bugtrack <bugtrack@struktuur.ee>");
 		};
 
 		// logi 
 		$this->_log("bug","Lisas ".$this->itypelist[$itype]."idee $title");
 
-
-		return $this->mk_my_orb("list",array());
+		// mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = array())
+		return $this->mk_my_orb("edit",array("id"=> $req["id"]),"",false,true);
 		
 	}
 
@@ -532,33 +589,37 @@ class bugtrack extends aw_template
 	function send_fixed_mail($bug)
 	{
 		extract($bug);
+		
 		if ($status == $this->stat4)
 		{
-			//echo("send_fixed_mail");print_r($bug);//DBG
 			$this->read_template("mailmsg.tpl");
 					
 			$this->vars(array_merge($bug,array(
 				"thisuid"=>UID,
 				"timeready"=>date("H:i:s Y.m.d",$timeready),
 				"tm"=>date("H:i:s Y.m.d",$tm),
-				"status"=>$bt->statlist[$status],
-				"resol"=>$bt->reslist[$resol],
-				"severity"=>$bt->sevlist[$severity]
+				"status"=>$this->statlist[$status],
+				"resol"=>$this->reslist[$resol],
+				"itype" => $this->itypelist[$itype],
+				"severity"=>$this->sevlist[$severity]
 			)));
 		
-			$msg = $this->parse();
+			$msg=stripslashes($this->parse());
+			
 
-			$subject="Parandatud puuk: $site $title";
-			@mail("dev@struktuur.ee",$subject,$msg,"From: bugtrack <dev@struktuur.ee>");
-			if ($bug[sendmail2])
-				@mail($bug[sendmail2_mail],$subject,$msg,"From: bugtrack <dev@struktuur.ee>");
+			$subject=stripslashes("Parandatud puuk: $site $title");
+		
+			mail("bugtrack@struktuur.ee",$subject,$msg,"From: bugtrack <bugtrack@struktuur.ee>");
+		
+			if ($bug["sendmail2"])
+				@mail($bug["sendmail2_mail"],$subject,$msg,"From: bugtrack <bugtrack@struktuur.ee>");
 			
 			if ($bug["mails"]!="")
 			{
 				$mails=explode(",",$bug["mails"]);
 				for($i=0;$i<=count($mails);$i++)
 				{
-					@mail($mails[$i],$subject,$msg,"From: bugtrack <dev@struktuur.ee>");
+					@mail($mails[$i],$subject,$msg,"From: bugtrack <bugtrack@struktuur.ee>");
 				};
 			};
 		};
@@ -570,7 +631,9 @@ class bugtrack extends aw_template
 	function orb_submit_edit($arr)
 	{
 		global $baseurl;
+		
 		extract($arr);
+
 		$bug = $this->get_bug($id);
 		// enda pandud bugi saab kaa muuta
 		if (!$this->prog_acl("admin", PRG_BUGTRACK) && ($bug["uid"]!=UID || !UID))
@@ -607,15 +670,19 @@ class bugtrack extends aw_template
 		if ($bug["site"]!=$this->mastersite)
 			$this->q_update($arr);
 
-
+		
+		$wasntfixed=$bug["status"]==$this->stat4?0:1;
 		extract($bug=array_merge($bug,$arr));
 		
-		$this->send_fixed_mail($bug);
+		if ($wasntfixed)
+		{
+			$this->send_fixed_mail($bug);
+		};
 
 		// logi 
 		$this->_log("bug","Muutis bugi ".$bug["title"]);
-
-		return $this->mk_my_orb("list",array());
+		
+		return $this->mk_my_orb("edit",array("id" => $id),"",false,true);
 		
 	}
 
@@ -651,17 +718,20 @@ class bugtrack extends aw_template
 		// update kohalikus tabelis kui puuk ise pole masterist pandud
 		if ($bug["site"]!=$this->mastersite)
 			$this->q_update($arr);
-
+		
+		if ($bug["status"]!=$this->stat4)
 		$this->send_fixed_mail(array_merge($bug,$arr));
 
 		// logi 
 		$this->_log("bug","Määras bugi ".$bug["title"]." ".$developer."-le");
 
 		$GLOBALS["reforb"]=0;// ära redirecti siin midagi krt.
-		return "<script language=\"Javascript\">
-		window.opener.location=\"".$this->mk_my_orb("list",array())."\";
+		//echo "",," br";
+		die("<script language=\"Javascript\">
+		
+		window.opener.location=\"".$this->mk_my_orb("list",array(),"",false,true)."\";
 		window.close();
-		</script>";
+		</script>");
 	}
 
 
@@ -697,7 +767,7 @@ class bugtrack extends aw_template
 			};
 		};
 		
-		return $this->mk_my_orb("list",array());
+		return $this->mk_my_orb("list",array(),"",false,true);
 	}
 
 	// vajalikud queryd
@@ -764,7 +834,7 @@ class bugtrack extends aw_template
 	// !Teeb useritest array.
 	function get_userlist($sel="")
 	{
-		$this->db_query("SELECT users.uid FROM users,groupmembers where blocked != 1 AND groupmembers.gid=$this->devgroupid AND groupmembers.uid=users.uid");
+		$this->db_query("SELECT users.uid FROM users,groupmembers where blocked != 1 AND groupmembers.gid=$this->devgroupid AND groupmembers.uid=users.uid ORDER BY uid");
 		while ($row=$this->db_next())
 		{
 			$users[$row["uid"]]=$row["uid"];
@@ -796,16 +866,34 @@ class bugtrack extends aw_template
 	// filtrite stuff algab siit
 	// ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+	function __set_site_title($title)
+	{
+		$what="<a href='".$this->mk_my_orb("list",array(),"",false,true)."'>BugTrack</a>".$title;
+		if ((stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false))
+		{
+			$GLOBALS["site_title"]=$what;
+		} else
+		{
+			$this->m='<table border=0 width="100%" cellspacing=1 cellpadding=0 bgcolor="#FFFFFF"><tr><td align="left" class="header1">'.$what.'</td></tr></table>';
+		};
+	}
+
 	////
 	//! Näitab filtri muutmise akent
 	function orb_filter_edit($arr)
 	{
 		extract($arr);
-		$GLOBALS["site_title"]="<a href='".$this->mk_my_orb("list",array())."'>BugTrack</a>&nbsp;/&nbsp;<a href='".$this->mk_my_orb("filters",array())."'>Filtrid</a>&nbsp;/&nbsp;Muuda filtrit";
+		$this->__set_site_title("&nbsp;/&nbsp;<a href='".$this->mk_my_orb("filters",array(),"",false,true)."'>Filtrid</a>&nbsp;/&nbsp;Muuda filtrit");
 
-		return $this->sql_filter->do_filter_edit(array(
-			"filter"=>$this->get_filter($id),
-			"reforb"=>$this->mk_reforb("submit_filter_edit",array("id" => $id))
+		return $this->m.$this->sql_filter->do_filter_edit(array(
+			"is_change_part" => $arr["is_change_part"],
+			"change_part" => $arr["change_part"],
+			"filter" => $this->get_filter($id),
+			"reforb_func" => "submit_filter_edit",
+			"reforb_edit_func" => "filter_edit",
+			"reforb_class" => "bugtrack",
+			"reforb_arr" => array("id" => $id),
+			"reforb" => $this->mk_reforb("submit_filter_edit",array("id" => $id))
 			));
 	}
 
@@ -815,7 +903,7 @@ class bugtrack extends aw_template
 		extract($arr);
 		if (!is_array($sel) || !sizeof($sel))
 		{
-			return $this->mk_my_orb("filters",array());
+			return $this->mk_my_orb("filters",array(),"",false,true);
 		};
 		$this->__load_filters(1);
 		unset($this->bugtr_fgroups[$gid]["cut"]);
@@ -825,7 +913,7 @@ class bugtrack extends aw_template
 		};
 		$this->__save_filters(1);
 
-		return $this->mk_my_orb("filters",array());
+		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
 	// eemaldab cut olekus filtrid gruppidest ja lisab nad target gruppi
@@ -867,7 +955,7 @@ class bugtrack extends aw_template
 		};
 		$this->__save_filters(1);
 
-		return $this->mk_my_orb("filters",array());
+		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
 	function __load_filters($g=0)
@@ -904,7 +992,7 @@ class bugtrack extends aw_template
 		extract($arr);
 		if (!is_array($sel) || !sizeof($sel))
 		{
-			return $this->mk_my_orb("filters",array());
+			return $this->mk_my_orb("filters",array(),"",false,true);
 		};
 
 		$this->__load_filters(1);
@@ -929,7 +1017,7 @@ class bugtrack extends aw_template
 
 		$this->__save_filters(1);
 		
-		return $this->mk_my_orb("filters",array());
+		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
 	function orb_filters_down($arr)
@@ -962,7 +1050,7 @@ class bugtrack extends aw_template
 
 
 		$this->__save_filters(1);
-		return $this->mk_my_orb("filters",array());
+		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
 	function orb_submit_filter_edit($arr)
@@ -973,7 +1061,7 @@ class bugtrack extends aw_template
 		$this->bugtr_filters[$id]=$this->sql_filter->do_submit_filter_edit($arr);
 
 		$this->__save_filters(0);
-		return $this->mk_my_orb("filter_edit",array("id" => $id));
+		return $this->mk_my_orb("filter_edit",array("id" => $id),"",false,true);
 	}
 
 	function orb_filter_edit_down($arr)
@@ -995,13 +1083,81 @@ class bugtrack extends aw_template
 		$this->bugtr_filters[$id]=$this->sql_filter->do_filter_edit_move($arr);
 
 		$this->__save_filters(0);
-		return $this->mk_my_orb("filter_edit",array("id" => $id));
+		return $this->mk_my_orb("filter_edit",array("id" => $id),"",false,true);
+	}
+
+	function orb_filters_export($arr)
+	{
+		extract($arr);
+		$this->__load_filters(1);
+		
+		$export=array();
+		if (is_array($sel))
+		foreach ($sel as $i)
+		{
+			$export[]=$this->bugtr_filters[$i];
+		};
+		header("Content-type: x-automatweb/filter-export");
+		header('Content-disposition: root_access; filename="filters_export.txt"');
+		echo(serialize($export));
+		die();
+
+	}
+
+	function orb_filters_import($arr)
+	{
+		extract($arr);
+		$this->read_template("filters_import.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_filters_import",array("gid" => $gid)),
+		));
+
+		return $this->parse();
+	}
+
+	function orb_submit_filters_import($arr)
+	{
+		global $fail;
+		extract($arr);
+		if (!is_uploaded_file($fail))
+		{
+			die("Käi jala ega see pole miski o<piip>ia ega xx<piip>digitali tehtud eks");
+		};
+		$stuff=join("",file($fail));
+		$array=@unserialize($stuff);
+		if (!is_array($array))
+		{
+			die("Tühi fail või miski muu kala filtri importimisel");
+		};
+		$this->__load_filters(1);
+		/*echo("enne:<pre>");print_r($this->bugtr_filters);echo("</pre><br>");
+		echo("enne:<pre>");print_r($this->bugtr_fgroups);echo("</pre><br>");*/
+		foreach($array as $f)
+		{
+			$f["leia"]=1;
+			$this->bugtr_filters[]=$f;
+			$id=0;
+			// ehh see on miski imelik kood siin a ma ei oska paremat teha
+			foreach( $this->bugtr_filters as $nr => $g)
+			if ($g["leia"])
+			{
+				unset($this->bugtr_filters[$nr]["leia"]);
+				$id=$nr;
+				break;
+			};
+			$this->bugtr_fgroups[$gid]["p"][]=$id;
+		};
+		/*echo("pärast:<pre>");print_r($this->bugtr_filters);echo("</pre><br>");
+		echo("pärast:<pre>");print_r($this->bugtr_fgroups);echo("</pre><br>");*/
+		$this->__save_filters(1);
+		die("<script language='javascript'>window.close();</script>");
 	}
 
 	function orb_filters($arr)
 	{
 		$this->read_template("filters.tpl");
-		$GLOBALS["site_title"]="<a href='".$this->mk_my_orb("list",array())."'>BugTrack</a>&nbsp;/&nbsp;Filtrid";
+		$this->__set_site_title("&nbsp;/&nbsp;Filtrid");
+		//$GLOBALS["site_title"]="<a href='".$this->mk_my_orb("list",array())."'>BugTrack</a>;
 
 		$fparse="";
 		$filterz=$this->get_filters_by_groups();
@@ -1024,8 +1180,8 @@ class bugtrack extends aw_template
 					"fid"=> $filters[$i]["id"],
 					"gid" => $gid,
 					"bgcolor" => isset($cutarray_f[$filters[$i]["id"]])?"#EEEEEE":"#FFFFFF",
-					"l_edit" => $this->mk_my_orb("filter_edit",array()),
-					"fname" => $filters[$i]["name"],
+					"l_edit" => $this->mk_my_orb("filter_edit",array(),"",false,true),
+					"fname" => $filters[$i]["name"]?$filters[$i]["name"]:"!nimeta!",
 					"idx" => $i,
 					"sql" => $this->sql_filter->filter_to_sql(array(
 						"filter"=>$this->get_filter($filters[$i]["id"]),
@@ -1041,6 +1197,7 @@ class bugtrack extends aw_template
 				"gname" => $gname,
 				"kustutauus" => $gid ?"Kustuta" :"Uus",
 				"l_kustutauus" => $gid ?"filters_delgroup":"uus",
+				"l_import" => $this->mk_my_orb("filters_import",array("gid" => $gid)),
 				"gid" => $gid));
 			$fparse.=$this->parse("fgroup");
 		};
@@ -1049,7 +1206,7 @@ class bugtrack extends aw_template
 			"fgroup" => $fparse,
 			"reforb" => $this->mk_reforb("filters",array("gid"=>" ","gname"=>" ")),
 			));
-		return $this->parse();
+		return $this->m.$this->parse();
 	}
 
 	function orb_filter_edit_change_part($arr)
@@ -1057,10 +1214,10 @@ class bugtrack extends aw_template
 		extract($arr);
 		if (!is_array($sel))
 		{
-			return $this->mk_my_orb("change",array("id" => $id));
+			return $this->mk_my_orb("filter_edit",array("id" => $id),"",false,true);
 		};
 		$chgnum=$sel[0];
-		return $this->mk_my_orb("change",array("change_part"=> $chgnum,"is_change_part"=>1, "id" => $id));
+		return $this->mk_my_orb("filter_edit",array("change_part"=> $chgnum,"is_change_part"=>1, "id" => $id),"",false,true);
 	}
 
 	// filtrile yhe tingimuse lisamine
@@ -1073,7 +1230,7 @@ class bugtrack extends aw_template
 
 		$this->__save_filters(0);
 		
-		return $this->mk_my_orb("filter_edit",array("id" => $id));
+		return $this->mk_my_orb("filter_edit",array("id" => $id),"",false,true);
 	}
 
 	// filtrile yhe tingimuse kustutamine
@@ -1082,7 +1239,7 @@ class bugtrack extends aw_template
 		extract($arr);
 		if (!is_array($sel) || !sizeof($sel))
 		{
-			return $this->mk_my_orb("filter_edit",array("id" => $id));
+			return $this->mk_my_orb("filter_edit",array("id" => $id),"",false,true);
 		};
 		
 		$arr["filter"]=$this->get_filter($id);
@@ -1091,7 +1248,7 @@ class bugtrack extends aw_template
 
 		$this->__save_filters(0);
 		
-		return $this->mk_my_orb("filter_edit",array("id" => $id));
+		return $this->mk_my_orb("filter_edit",array("id" => $id),"",false,true);
 	}
 
 	function orb_filters_newgroup($arr)
@@ -1108,7 +1265,7 @@ class bugtrack extends aw_template
 
 		$this->__save_filters(1);
 
-		return $this->mk_my_orb("filters",array());
+		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
 	function orb_filters_delgroup($arr)
@@ -1120,6 +1277,7 @@ class bugtrack extends aw_template
 		{
 			$this->bugtr_fgroups=array();
 		};
+		
 		if (is_array($this->bugtr_fgroups[$gid]["p"]))
 			foreach($this->bugtr_fgroups[$gid]["p"] as $v)
 			{
@@ -1127,9 +1285,10 @@ class bugtrack extends aw_template
 			};
 
 		unset($this->bugtr_fgroups[$gid]);
-		$this->__save_filters();
+		
+		$this->__save_filters(1);
 
-		return $this->mk_my_orb("filters",array());
+		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
 	function orb_filters_rengroup($arr)
@@ -1145,7 +1304,7 @@ class bugtrack extends aw_template
 
 		$this->__save_filters(1);
 
-		return $this->mk_my_orb("filters",array());
+		return $this->mk_my_orb("filters",array(),"",false,true);
 	}
 
 	function orb_filters_new($arr)
@@ -1172,7 +1331,7 @@ class bugtrack extends aw_template
 		$this->bugtr_fgroups[$gid]["p"][]=$id;
 
 		$this->__save_filters(1);
-		return $this->mk_my_orb("filter_edit",array("id"=>$id));
+		return $this->mk_my_orb("filter_edit",array("id"=>$id),"",false,true);
 	}
 
 

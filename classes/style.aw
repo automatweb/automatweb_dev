@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.9 2001/10/02 10:05:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.10 2001/11/20 13:19:05 kristo Exp $
 lc_load("style");
 global $orb_defs;
 // hey I just thought of another thing! you can have several aliases for 1 function :) wooho!
@@ -46,6 +46,10 @@ $style_cache = array();
 
 		function get($id)
 		{
+			if (!$id)
+			{
+				return false;
+			}
 			$this->db_query("SELECT objects.*,styles.* FROM objects LEFT JOIN styles ON styles.id = objects.oid WHERE oid = $id ");
 			return $this->db_next();
 		}
@@ -206,6 +210,7 @@ $style_cache = array();
 
 			$this->db_query("UPDATE styles SET style = '$sts' WHERE id = $id");
 
+			$this->_log("style", "changed table $name");
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
 			return $this->mk_orb("change",array("parent" => $parent, "id" => $id));
 		}

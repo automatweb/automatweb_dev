@@ -14,7 +14,7 @@ class shop_menuedit extends menuedit
 		$this->menuedit();
 	}
 
-	function mk_path($oid,$text = "",$period = 0,$set = true)
+	function mk_path($oid,$text = "",$period = 0,$set = true,$cat_right = true)
 	{
 		global $ext;
 
@@ -23,7 +23,7 @@ class shop_menuedit extends menuedit
 		reset($ch);
 		while (list(,$row) = each($ch))
 		{
-			$path="<a target='list' href='".$this->mk_my_orb("categories_right", array("parent" => $row["oid"]),"shop_admin",false, true)."'>".strip_tags($row["name"])."</a> / ".$path;
+			$path="<a target='list' href='".$this->mk_my_orb($cat_right ? "categories_right" : "article_right", array("parent" => $row["oid"]),"shop_admin",false, true)."'>".strip_tags($row["name"])."</a> / ".$path;
 		}
 
 		if ($set)

@@ -20,7 +20,7 @@ class shop_admin extends shop_base
 		$this->read_template("shop_admin_frameset.tpl");
 		$this->vars(array(
 			"top_frame" => $this->mk_my_orb("show_top_frame",array("shop_id" => $shop_id),"shop_admin", false, true),
-			"bottom_frame" => "#"
+			"bottom_frame" => $this->mk_my_orb("system_general", array("shop_id" => $shop_id),"",false,true)
 		));
 		die($this->parse());
 	}
@@ -31,6 +31,10 @@ class shop_admin extends shop_base
 		$this->read_template("shop_top_frame.tpl");
 
 		global $ext;
+		if (!$menu_id)
+		{
+			$menu_id = 1;
+		}
 		$items = array(1 => "General settings", 2 => "Articles", 3 => "Orders", 4 => "Users");
 		foreach($items as $inum => $iname)
 		{
@@ -69,6 +73,7 @@ class shop_admin extends shop_base
 								 array("name" => "Passengers", "url" => $this->mk_my_orb("passengers", array("shop_id" => $shop_id),"shop_admin",false,true)),
 								 array("name" => "Detailed Passengers list", "url" => $this->mk_my_orb("passengers_detail", array("shop_id" => $shop_id),"shop_admin",false,true)),
 								 array("name" => "Statistics", "url" => $this->mk_my_orb("change", array("id" => "3443", "parent" => "3430"),"shop_stat", false, true)),
+								 array("name" => "Check bookings", "url" => $this->mk_my_orb("check_bookings", array("shop_id" => $shop_id),"shop_admin", false, true)),
 								),
 			4 => array(
 								 array("name" => "Add new user", "url" => "#"),
@@ -376,7 +381,7 @@ class shop_admin extends shop_base
 		$this->read_template("admin_article_frameset.tpl");
 		$this->vars(array(
 			"left_url" => $this->mk_my_orb("article_tree", array("shop_id" => $shop_id),"",false, true),
-			"right_url" => "#"
+			"right_url" => $this->mk_my_orb("blank", array(),"",false, true)
 		));
 		die($this->parse());
 	}
@@ -1032,6 +1037,77 @@ class shop_admin extends shop_base
 		$con->set_simple_config("show_items", $_its);
 
 		return $this->mk_my_orb("system_items", array("shop_id" => $shop_id),"",false,true);
+	}
+
+	function blank($arr)
+	{
+		return "&nbsp;";
+	}
+
+	function check_bookings($arr)
+	{
+		extract($arr);
+		$this->read_template("admin_check_bookings.tpl");
+
+		// first, build an array of all the people 
+		$orders = array();
+		$this->db_query("SELECT order2form_entries.*,orders.* FROM order2form_entries LEFT JOIN orders ON orders.id = order2form_entries.order_id ");
+		while ($row = $this->db_next())
+		{
+			$orders[$row["name"]][] = $row;
+		}
+
+		// now check if some people are in several orders and if those orders dates match
+		foreach($orders as $name => $_ods)
+		{
+			$_tmp = $_ods;
+			$match = false;
+			foreach($_ods as $row)
+			{
+				foreach($_tmp as $_row)
+				{
+					// now check if the orders min date is in the other orders period or if the max date is in the other orders period
+					// and also check if they are not the same order
+					if ($row["order_id"] != $_row["order_id"])
+					{
+						if ($_row["min_p"] >= $row["min_p"] && $_row["min_p"] <= $row["max_p"] && $_row["max_p"] >= $row["min_p"] && $_row["max_p"] <= $row["max_p"])
+						{
+							// we have a match
+							$match = true;
+						}
+					}
+				}
+			}
+
+			if ($match)
+			{
+				$tp = "";
+				$used_ods = array();
+				// print out all the bookings with this name in them
+				foreach($_ods as $row)
+				{
+					if ($used_ods[$row["order_id"]] != $row["order_id"])
+					{
+						$used_ods[$row["order_id"]] = $row["order_id"];
+						$this->vars(array(
+							"order_id" => $row["order_id"],
+							"name" => $row["name"],
+							"user" => $row["user"],
+							"from" => $this->time2date($row["min_p"], 3),
+							"to" => $this->time2date($row["max_p"], 3),
+							"view_order" => $this->mk_my_orb("view_order", array("shop" => $shop_id, "order_id" => $row["order_id"]),"shop",false,true)
+						));
+						$tp.=$this->parse("M_ORDER");
+					}
+				}
+				$this->vars(array(
+					"M_ORDER" => $tp
+				));
+				$tt.=$this->parse("OD");
+			}
+		}
+		$this->vars(array("OD" => $tt));
+		return $this->parse();
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.66 2001/11/15 13:10:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.67 2001/11/20 13:19:04 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -452,7 +452,7 @@ class core extends db_connector
 				"status","hits","lang_id","comment","last","modifiedby",
 				"jrk","period","alias","periodic","site_id","activate_at",
 				"deactivate_at","autoactivate","autodeactivate","brother_of",
-				"cache_dirty","metadata",
+				"cache_dirty","metadata","subclass"
 			);
 
 		// vahetame key=>value paarid ära

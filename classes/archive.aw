@@ -92,6 +92,7 @@ class archive extends aw_template {
 	// !Teeb objekti hetkeseisust koopia arhiivi
 	// argumendid
 	// oid(int) - objekti ID, millest koopia teha
+	// data(array) - väljad, mis on vaja andmebaasitabelisse salvestada
 	function commit($args = array())
 	{
 		if (not(defined("ARCHIVE")))
@@ -123,7 +124,23 @@ class archive extends aw_template {
 			"meta" => array("archive" => $arc),
 		));
 
-		return $timestamp;
+		if (is_array($data))
+		{
+			// siia salvestame vastavate väljade nimed ja sisu sisu
+			foreach($data as $key => $val)
+			{
+				$raw_value = strip_tags($val);
+				$this->quote($raw_value);
+
+				$q = "INSERT INTO archive (oid,version,name,contents,class_id)
+					VALUES ('$oid','$tstamp','$key','$raw_value','$class_id')";
+				$this->db_query($q);
+			};
+		};
+				
+
+		// we return the timestamp
+		return $tstamp;
 	}
 
 	////

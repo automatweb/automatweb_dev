@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.13 2001/11/15 13:10:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.14 2001/11/20 13:19:05 kristo Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -93,6 +93,11 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 			if ($this->table_loaded)
 				return;
 
+			if (not($id))
+			{
+				return;
+			}
+
 		$q = "select aw_tables.*, objects.*	from aw_tables 
 											LEFT JOIN objects on objects.oid = aw_tables.id 
 											where aw_tables.id = $id";
@@ -100,8 +105,8 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 			if (!($row = $this->db_next()))
 				$this->raise_error("no such table $id (tables.class->load_table)!", true);
 			
-			$this->is_filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"is_filter"));
-			$this->filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"filter"));
+			/*$this->is_filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"is_filter"));
+			$this->filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"filter"));*/
 
 			$this->arr = unserialize($row[contents]);
 
@@ -126,8 +131,17 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 				
 
 			$this->read_template("table_modify.tpl");
-
-			if ($this->is_filter)
+			session_register("is_filter$id");
+			session_register("filter$id");
+			
+			if ($arr["is_filter"])
+			{
+				$GLOBALS["is_filter$id"]=1;
+				$GLOBALS["filter$id"]=$filter;
+				
+			};
+			
+			if ($GLOBALS["is_filter$id"])
 			{
 				//echo("isfilter");//dbg
 				$col="";
@@ -143,7 +157,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 				$this->parse("LINE");
 				classload("search_filter");
 				$flt=new search_filter();
-				$flt->id=$this->filter;
+				$flt->id=$GLOBALS["filter$id"];
 				$flt->__load_data();
 
 				$blah="";
@@ -163,7 +177,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
 				$col="";
-				if ($this->is_filter)
+				if ($GLOBALS["is_filter$id"])
 				{
 					$this->vars(array("text" => $i+1,"BOX"=>"" ,"AREA"=>""));
 					$h_header=$this->parse("H_HEADER");
@@ -228,7 +242,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 		{
 			extract($arr);
 			$this->load_table($id);
-			if (!$this->is_filter)
+			if (!$GLOBALS["is_filter$id"])
 			{
 				$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
 			};
@@ -338,6 +352,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 			$this->arr[table_header] = $arr[table_header];
 			$this->upd_object(array("oid" => $arr[id], "name" => $arr[table_name]));
 			$this->save_table($arr);
+			$this->_log("table", "changed table $arr[table_name]");
 			return $this->mk_orb("change", array("id" => $arr[id]));
 		}
 
@@ -745,7 +760,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 		{
 			extract($arr);
 			$this->load_table($id);
-			if (!$this->is_filter)
+			if (!$GLOBALS["is_filter$id"])
 			{
 				$this->mk_path($this->table_parent,LC_TABLE_CHANGE_TABLE);
 			};
@@ -899,6 +914,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 				}
 			$this->save_table($arr, false);
 
+			$this->_log("table", "changed table $this->table_name");
 			return $this->mk_orb("admin", array("id" => $id));
 		}
 
@@ -1150,6 +1166,10 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 		{
 			extract($arr);
 			$this->load_table($id);
+			if ($GLOBALS["is_filter$id"])
+			{
+				$is_filter="1";
+			};
 
 			if ($this->arr[show_title])
 				$table = "<b><font size=\"+1\">".$this->table_name."</font></b><br>";
@@ -1218,7 +1238,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 					else
 						$cs .= "<td colspan=\"".$spans[colspan]."\" rowspan=\"".$spans[rowspan]."\">";
 
-					$celltxt=$this->is_filter?$this->filter_eval($cell["text"]):$cell["text"];
+					$celltxt=$is_filter?$this->filter_eval($cell["text"]):$cell["text"];
 					$cs.= $this->proc_text($celltxt);//siin evalida text lauri
 
 					if ($st)
@@ -1725,11 +1745,11 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 			
 			$this->id=$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_TABLE, "comment" => $comment));
 			$this->db_query("INSERT INTO aw_tables(id) VALUES($id)");
-			if ($is_filter)
+			/*if ($GLOBALS["is_filter$id"])
 			{
 				$this->set_object_metadata(array("oid"=>$id,"key"=>"is_filter","value"=>1));
 				$this->set_object_metadata(array("oid"=>$id,"key"=>"filter","value"=>$filter));
-			};
+			};*/
 
 			return $this->mk_orb("change", array("id" => $id));
 		}
@@ -1748,7 +1768,8 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 			return $txt;
 		}
 
-		// @desc: lisab tabla ja teeb doku juurde aliase ka
+		////
+		// lisab tabla ja teeb doku juurde aliase ka
 		function add_doc($arr)
 		{
 			extract($arr);
@@ -1759,7 +1780,8 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 			return $this->parse();
 		}
 
-		// @desc: saveb tabeli ja lisab aliase
+		////
+		// saveb tabeli ja lisab aliase
 		function submit_doc($arr)
 		{
 			$this->quote(&$arr);
@@ -1776,7 +1798,9 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 		{
 			extract($arr);
 
+			$ob = $this->get_object($id);
 			$this->delete_object($id);
+			$this->_log("table", "deleted table $ob[name]");
 			header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent),"menuedit"));
 		}
 

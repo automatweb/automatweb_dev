@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.41 2001/11/02 11:35:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.42 2001/11/20 13:19:05 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -1134,7 +1134,13 @@ class shop extends shop_base
 		// now we must also send an email to somebody notifying them of the new order.
 		// the email must contain all the info about the purchase, including all the
 		// items and their counts and also the order form data.
-		$mail = sprintf(LC_SHOP_HI_USER,$uid).get_ip().LC_SHOP_TIME.$this->time2date(time(),2).LC_SHOP_ORDERED_PRODUCT.$mail.LC_SHOP_TOTAL_PRICE.$t_price.LC_SHOP_BILL_NR.$ord_id;
+		$ch_text = "";
+		if ($canceled_order_id)
+		{
+			$ch_text = sprintf(LC_SHOP_CHANGED_ORDER,$canceled_order_id);
+		}
+
+		$mail = sprintf(LC_SHOP_HI_USER,$uid).get_ip().LC_SHOP_TIME.$this->time2date(time(),2).$ch_text.LC_SHOP_ORDERED_PRODUCT.$mail.LC_SHOP_TOTAL_PRICE.$t_price.LC_SHOP_BILL_NR.$ord_id;
 
 		$this->db_query("UPDATE orders SET t_price = '$t_price', name='$ename' WHERE id = $ord_id");
 		
@@ -2756,17 +2762,55 @@ class shop extends shop_base
 	function cancel_order($arr)
 	{
 		extract($arr);
+
+		// load the necessary stuff to show the order from the db
+		$this->db_query("SELECT * FROM order2item WHERE order_id = $order_id");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$it = $this->get_item($row["item_id"]);
+			$itt = $this->get_item_type($it["type_id"]);
+
+			// load it's cnt_form
+			$f = new form;
+			$f->load($it["cnt_form"] ? $it["cnt_form"] : $itt["cnt_form"]);
+			// now find all the rows that are selected in the entry from the shopping cart
+			$f->load_entry($row["cnt_entry"]);
+			$selrows = $this->get_selected_rows_in_form(&$f);
+			$mail.=LC_SHOP_ORDER_NAME.$it["name"]."\n";
+			$mail.=LC_SHOP_ORDER_TYPE;
+			$rowhtml = "";
+
+			if ($itt["has_voucher"])
+			{
+				$mail.="Hotel: ".($this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$it["parent"],"name"))."\n";
+			}
+			foreach($selrows as $rownum)
+			{
+				// here we must add the elements of row $rownum to the email we are assembling of the selected rows
+				$mail.=$f->mk_show_text_row($rownum)."\n";
+			}
+			$mail.="Hind: ".$row["price"]."\n";
+			if ($row["period"] > 1)
+			{
+				$mail.="Kuupäev: ".$this->time2date($row["period"], 5)."\n\n";
+			}
+			$this->restore_handle();
+		}
+
+
 		$order = $this->do_cancel_order($order_id);
 
 		$sh = $this->get($shop);
 
-		$mail = LC_SHOP_ORDER_USER.$GLOBALS["uid"].sprintf(LC_SHOP_ABOLISH_ORDER,$order_id);
-		$mail.= $this->time2date(time(),2);
+		$_mail = LC_SHOP_ORDER_USER.$GLOBALS["uid"].sprintf(LC_SHOP_ABOLISH_ORDER,$order_id);
+		$_mail.= $this->time2date(time(),2)."\n\n".$mail;
+		
 
 		$emails = explode(",",$sh["emails"]);
 		foreach($emails as $email)
 		{
-			mail($email,LC_SHOP_ORDER, $mail,"From: automatweb@automatweb.com\n");
+			mail($email,LC_SHOP_ORDER, $_mail,"From: automatweb@automatweb.com\n");
 		}
 
 		return $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.22 2001/10/30 16:14:04 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.23 2001/11/20 13:19:04 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -12,20 +12,25 @@ class msgboard extends aw_template
 		$this->tpl_init("msgboard");
 	}
 
+	////
+	//! submitib teemadele antud haaled
 	function submit_votes($args = array())
 	{
 		if ($GLOBALS["uid"] == "fubar")
 		{
+			// see, kes haaletada saab, peab olema konfigureeritav
 			$this->raise_error("sa pole sisse logitud ja ei saa h\xe4\xe4letada",true);
 		};
 		
-		classload("users");
-		$u = new users();
 		extract($args);
+
+		// this is stupid
 		global $HTTP_SESSION_VARS;
 		global $commentvotes;
 		$oldvotes = array();
 		$oldvotes = $HTTP_SESSION_VARS["commentvotes"];
+
+		// hinded pannakse objekti metadata juurde kirja
 		if (is_array($vote))
 		{
 			foreach($vote as $key => $val)
@@ -50,33 +55,39 @@ class msgboard extends aw_template
 		$commentvotes = $oldvotes;
 		session_register("commentvotes");
 		global $baseurl;
-		// this sucks, really
-//		header("Location: $baseurl/comments.aw?action=topics");
-//		exit;
 		return;
 	}	
 
+	////
+	// !Shows a page of comments
 	function show($id,$page,$forum_id = 0)
 	{
+		// id voib olla suvaline string. See tahendab ntx seda, et suht lihtne on
+		// ntx "hidden" topicuid tekitada
+		$this->quote(&$id);
 		global $msgboard_type,$aw_mb_last;
-		//if ($msgboard_type == "threaded" && $forum_id)	// the lotsa-pageviews version
-		// forum_id on defineerimata, kui klikkida artikli juures "Kommentaare" linki,
-		// hetkel on Eesti Naises aga tehtud ainult threaded template
+
 		if ($msgboard_type == "threaded")	// the lotsa-pageviews version
 			return $this->show_threaded($id, $page,$forum_id);
 
 		$aw_mb_last = unserialize(stripslashes($aw_mb_last));
 		$aw_mb_last[$id] = time();
+
 		// miks mitte sessiooni kasutada?
-		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
+		// sessiooni sees pomst ei saa seda inffi hoida, sest kasutaja valjalogimisel
+		// sessioon havitakase
+		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000,"/");
 
 		if ($msgboard_type == "flat")	// the wussy version
 			return $this->show_flat($id, $page,$forum_id);
 
-
-		$this->quote(&$id);
+		// so, if show_flat and show_treaded are separate functions, then I assume
+		// this rest of this function deals with nested comments. But shouldn't
+		// we make this a separate function as well? And really, this whole class
+		// should be converted to ORB
 
 		$this->db_query("SELECT * FROM comments WHERE board_id = '$id' ORDER BY time");
+
 		while ($row = $this->db_next())
 		{
 			$this->comments[$row["parent"]][] = $row;
@@ -84,7 +95,10 @@ class msgboard extends aw_template
 
 		$this->read_template("messages.tpl");
 		
-		$this->vars(array("forum_id" => $forum_id,"topic_id" => $id));
+		$this->vars(array(
+			"forum_id" => $forum_id,
+			"topic_id" => $id,
+		));
 
 		if ($this->is_template("TOPIC"))
 		{
@@ -645,6 +659,8 @@ class msgboard extends aw_template
 		$this->db_query("DELETE FROM comments WHERE id = $id");
 	}
 
+	////
+	// !Butafooria
 	function rename_topic($name,$id)
 	{
 		print "renaming forum $id to $name<br>";
@@ -732,7 +748,7 @@ class msgboard extends aw_template
 					"topic_id" => $row[oid],
 					"cnt" => ( $nc < 1 ? "0" : $nc),
 					"rate" => sprintf("%0.2f",$votedata["total"] / $votecount),
-					"lastmessage" => $this->time2date($lc,2)
+					"lastmessage" => ($lc) ? $this->time2date($lc,2) : "n/a",
 				));
 				 // priviligeerimata kasutajad ei nae kustuta linki. praegu kasutan menuediti oigusi selleks 
 				$dt = $this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "";
@@ -842,7 +858,7 @@ class msgboard extends aw_template
 	}
 
 	////
-	// !generates list of messafes that only includes message subject and sender, assumes messages are cached
+	// !generates list of messages that only includes message subject and sender, assumes messages are cached
 	function req_msgs_short($parent, &$msgcache,$img_prefix,$add, $center,$firstlevel = false)
 	{
 		if (!is_array($msgcache[$parent]))
@@ -948,6 +964,8 @@ class msgboard extends aw_template
 		return $l;
 	}
 
+	////
+	// !Kuvab uue topicu lisamise vormi
 	function add_topic($forum_id)
 	{
 		$this->read_template("add_topic.tpl");
@@ -958,6 +976,8 @@ class msgboard extends aw_template
 		return $this->parse();
 	}
 
+	////
+	// !Submitib uue topicu
 	function submit_topic($arr)
 	{
 		$this->quote(&$arr);
@@ -965,8 +985,15 @@ class msgboard extends aw_template
 
 		global $ext, $baseurl;
 
-		$tid = $this->new_object(array("parent" => $forum_id, "name" => $topic, "last" => $from, "comment" => $text,"class_id" => CL_MSGBOARD_TOPIC,"status" => 2));
-		// siin tuleb meili saata ka
+		$tid = $this->new_object(array(
+			"parent" => $forum_id,
+			"name" => $topic,
+			"last" => $from,
+			"comment" => $text,
+			"class_id" => CL_MSGBOARD_TOPIC,
+			"status" => 2,
+		));
+		// see peaks ka foorumi/topicu juurest konfitav olema
 		if (MSGBOARD_MAIL_TOPIC_TO != "")
 		{
 			mail(
@@ -977,6 +1004,8 @@ class msgboard extends aw_template
 		}
 	}
 
+	////
+	// !Eemaldab topicu
 	function delete_topic($id)
 	{
 		if ($GLOBALS["uid"] != "")

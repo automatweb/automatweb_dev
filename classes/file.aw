@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.17 2001/11/20 12:08:36 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.18 2001/11/20 13:19:04 kristo Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -14,9 +14,9 @@ class file extends aw_template
 		$this->tpl_init("file");
 		$this->db_init();
 		lc_load("definition");
-	global $lc_file;
-		{if (is_array($lc_file))
-		
+		global $lc_file;
+		if (is_array($lc_file))
+		{
 			$this->vars($lc_file);
 		}
 	}
@@ -53,9 +53,6 @@ class file extends aw_template
 				};
     
 				$replacement = $fi["content"];
-//				preg_match("/<body (.*)>(.*)<\/body>/imsU",$fi["content"],$map);
-				// return only the body of the file
-  //              		$replacement = str_replace("\n","",$map[2]);
 			}
 			else
 			{
@@ -76,7 +73,7 @@ class file extends aw_template
 				$comment = $fi["name"];
 			}
 			
-			$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=".$f["target"]."/".urlencode($fi[name])."'>$comment</a>";
+			$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=".$f["target"]."/".urlencode($fi["name"])."'>$comment</a>";
 		}
 		return $replacement;
 	}
@@ -239,19 +236,6 @@ class file extends aw_template
 	// !checks whether the directory needed for file storing exists and is writable
 	function check_environment($args = array())
 	{
-		// um, yeah, what is this doing here? - terryf 
-/*		$this->db_list_tables();
-		while($name = $this->db_next_table())
-		{
-			print "name = $name<br>";
-			$q = "SELECT * FROM $name LIMIT 1";
-			$this->db_query($q);
-			$fields = $this->db_get_fields();
-			print "<pre>";
-			print_r($fields);
-			print "</pre>";
-		};*/
-
 		$retval = "";
 		if (!defined("SITE_DIR"))
 		{
@@ -441,7 +425,12 @@ class file extends aw_template
 		$this->read_template("edit.tpl");
 		$fi = $this->get_file_by_id($id);
 		$this->mk_path($parent, LC_FILE_CHANGE_FILE);
-		$this->vars(array("reforb"	=> $this->mk_reforb("submit_change",array("id" => $id, "parent" => $parent,"doc" => $doc,"user" => $user)),"comment" => $fi[comment],"checked" => $fi[showal] ? "CHECKED" : "", "newwindow" => checked($fi[newwindow])));
+		$this->vars(array(
+			"reforb"	=> $this->mk_reforb("submit_change",array("id" => $id, "parent" => $parent,"doc" => $doc,"user" => $user)),
+			"comment" => $fi["comment"],
+			"checked" => checked($fi["showal"]), 
+			"newwindow" => checked($fi["newwindow"])
+		));
 		return $this->parse();
 	}
 
@@ -449,7 +438,6 @@ class file extends aw_template
 	// !Salvestab muudatused
 	function submit_change($arr)
 	{
-
 		// <terryf> failide tabelis on v2li
 		// <terryf> showal
 		// <terryf> mis n2itab et kas faili n2datakse kohe v6i ei
@@ -535,8 +523,8 @@ class file extends aw_template
 		$o = $this->db_next();
 		if ($o)
 		{
-			header("Content-type: ".$o[type]);
-			return $o[content];
+			header("Content-type: ".$o["type"]);
+			return $o["content"];
 		}
 	}
 

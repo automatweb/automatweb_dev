@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.2 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.3 2001/11/20 13:19:05 kristo Exp $
 // miski simpel klass rss-i väljastamiseks
 
 define(ITEM_TPL,"
@@ -42,16 +42,19 @@ class rdf {
 	{
 		global $baseurl;
 		global $ext;
-		extract($args);
-		$id = ($id) ? $id : $docid;
-		$description = ($description) ? $description : $lead;
-		$creator = $this->_convert($author);
-		$link = sprintf("%s/index.%s/section=%d",$baseurl,$ext,$id);
-		$title = $this->_convert($title);
-		$description = $this->_convert($description);
-		$publisher = $this->_convert($publisher);
-		$this->li .= sprintf("<rdf:li resource=\"%s\"/>\n",$link);
-		$this->items .= sprintf(ITEM_TPL,$link,$title,$link,$description,$creator,PUBLISHER); 
+		if (is_array($args))
+		{
+			extract($args);
+			$id = ($id) ? $id : $docid;
+			$description = ($description) ? $description : $lead;
+			$creator = $this->_convert($author);
+			$link = sprintf("%s/index.%s/section=%d",$baseurl,$ext,$id);
+			$title = $this->_convert($title);
+			$description = $this->_convert($description);
+			$publisher = $this->_convert($publisher);
+			$this->li .= sprintf("<rdf:li resource=\"%s\"/>\n",$link);
+			$this->items .= sprintf(ITEM_TPL,$link,$title,$link,$description,$creator,PUBLISHER); 
+		}
 	}
 
 

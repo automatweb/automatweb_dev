@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.5 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/replicator.aw,v 2.6 2001/11/20 13:19:05 kristo Exp $
 
 
 classload("connect");
@@ -121,8 +121,8 @@ class replicator_client extends db_connector
 		//echo "<br>query=$q<br>";//DBG
 		$ret=@file($q);
 
-//echo("<br>ret=".join("",$ret).",");print_r(unserialize(join("",$ret)));echo("<br>");//DBG
-//
+		//echo("<br>ret=".join("",$ret).",");print_r(unserialize(join("",$ret)));echo("<br>");//DBG
+
 		if (!is_array($ret))
 			return array("error"=>"httpquery failed ".urldecode($q));
 		return unserialize(join("",$ret));

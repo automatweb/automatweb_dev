@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.5 2001/11/15 13:10:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.6 2001/11/20 13:19:04 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -31,7 +31,7 @@
 
 // lisaks on kasutajatel olemas oma grupid, mille elemente saab jagada teiste kasutajatega, 
 // ja nii edasi ja nii tagasi
-
+lc_load("css");
 global $orb_defs;
 $orb_defs["css"] = "xml";
 
@@ -41,7 +41,10 @@ class css extends aw_template {
 		$this->db_init();
 		// kuidas ma seda edimisvormi alati automawebi juurest lugeda saan?
 		$this->tpl_init("css");
-
+		global $lc_css;
+		if (is_array($lc_css))
+		{
+			$this->vars($lc_css);}
 		// fondifamilyd, do not change the order
 		$this->font_families = array(
 				"0" => "Verdana,Helvetica,sans-serif",
@@ -115,8 +118,7 @@ class css extends aw_template {
 		$this->quote($args);
 		extract($args);
 		$id = $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => CL_CSS));
-		$url = $this->mk_orb("change",array("id" => $id));
-		return $url;
+		return $this->mk_orb("change",array("id" => $id));
 	}
 
 	////
@@ -375,11 +377,9 @@ class css extends aw_template {
 
 		if ( ($css_ginfo["parent"] == $rootmenu) || ($gid == 0) )
 		{
-			print "sys style<br>";
 		}
 		else
 		{
-			print "user style<br>";
 		};
 
 		$menu = $this->css_draw_menu(array(

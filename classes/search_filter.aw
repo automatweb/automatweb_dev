@@ -1,5 +1,5 @@
 <?php
-
+// ~1220 rida jama:)
 
 	global $orb_defs;
 	$orb_defs["search_filter"] ="xml";
@@ -54,14 +54,25 @@
 
 			$this->data=array(
 				"type" => $type,
-				"target_id" => $type=="form"?$target_id_f:$target_id_c,
 				"output_id" => 0,
 				"stat_id" => 0,
 				"stat_show" => 0,
 				"stat_data" => array(),
 				);
+			
+			// Nii nüüd tuleb vaatada kas keegi tahab otsida mitmest pärjast.
+			if (count($target_id_c)<2)
+			{
+				$this->data["target_id"]=$type=="form"?$target_id_f:$target_id_c[0];
+			} else
+			{
+				$this->data["target_id"]=serialize($target_id_c);
+				$this->data["multchain"]=1;
+			};
+			
 
-			$this->set_object_metadata(array("oid" => $id,"key" => "data","value"=> $this->data));
+			//$this->set_object_metadata(array("oid" => $id,"key" => "data","value"=> $this->data));
+			$this->obj_set_meta(array("oid"=>$id,"meta"=>array("data"=>$this->data)));
 			return $this->mk_my_orb("change",array("id" => $id,"parent" => $parent));
 		}
 
@@ -101,6 +112,10 @@
 			"filter"=>$this->filter,
 			"is_change_part"=>$is_change_part,
 			"change_part" => $change_part,
+			"reforb_func" => "submit_change",
+			"reforb_edit_func" => "change",
+			"reforb_class" => "search_filter",
+			"reforb_arr" => array("id" => $id),
 			"reforb"=>$this->mk_reforb("submit_change",array("id" => $id))
 			));
 			
@@ -108,17 +123,29 @@
 
 		function __load_data()
 		{
-			$this->data=$this->get_object_metadata(array("oid" => $this->id,"key" => "data"));
+			//$this->data=$this->get_object_metadata(array("oid" => $this->id,"key" => "data"));
+			$kala=$this->obj_get_meta(array("oid" => $this->id));
+			$this->data=$kala["data"];
+			//echo("loaddata<pre>");print_r($this->data);echo("</pre>");
 		}
 
 		function __save_data()
 		{
-			$this->set_object_metadata(array("oid" => $this->id,"key" => "data", "value" => $this->data));
+			//$this->set_object_metadata(array("oid" => $this->id,"key" => "data", "value" => $this->data));
+			$this->obj_set_meta(array("oid" => $this->id,"meta"=>array("data"=>$this->data)));
 		}
 
 		function __load_filter()
 		{
-			$this->filter=$this->get_object_metadata(array("oid" => $this->id,"key" => "filter"));
+			//$this->filter=$this->get_object_metadata(array("oid" => $this->id,"key" => "filter"));
+			$kala=$this->obj_get_meta(array("oid" => $this->id));
+			$this->filter=$kala["filter"];
+			if ($GLOBALS["shit"])
+			{
+				echo("<textarea cols=80 rows=40>");
+				print_r($this->filter);
+				echo("</textarea>");
+			};
 			if (!is_array($this->filter))
 			{
 				$this->filter=array();
@@ -128,7 +155,27 @@
 
 		function __save_filter()
 		{
-			$this->set_object_metadata(array("oid" => $this->id,"key" => "filter","value" => $this->filter));
+			//$this->set_object_metadata(array("oid" => $this->id,"key" => "filter","value" => $this->filter));
+			$arr=array("filter"=>$this->filter);
+			$this->obj_set_meta(array("oid" => $this->id,"meta" => $arr));
+		}
+
+		function convert_objects()
+		{
+			$this->get_objects_by_class(array("class"=>CL_SEARCH_FILTER));
+			while ($r = $this->db_next())
+			{
+				$this->save_handle();
+				$arr=$this->get_object_metadata(array("oid" => $r["oid"]));
+				echo("doing id".$r["oid"]."<br>");
+				if (is_array($arr))
+				{
+					$arr2=array("data"=>$arr["data"],"filter"=>$arr["filter"]);
+					$this->obj_set_meta(array("oid" => $r["oid"],"meta" => $arr2));
+				};
+				$this->restore_handle();
+			};
+			die("ehee");
 		}
 
 		function build_master_array()
@@ -155,10 +202,23 @@
 			} else
 			if ($this->data["type"]=="chain")
 			{
-				$this->db_query("SELECT form_id FROM form2chain WHERE chain_id='".(int)$this->data["target_id"]."'");
+				if ($this->data["multchain"])
+				{
+					$idin=join(",",unserialize($this->data["target_id"]));
+				} else
+				{
+					$idin=(int)$this->data["target_id"];
+				};
+				$this->db_query("SELECT form_id,chain_id FROM form2chain WHERE chain_id IN ($idin)");
 				while ($r= $this->db_next())
 				{
 					$formids[]=$r["form_id"];
+					// Okei, edaspidi kuskil läheb meil vaja teada et mis formid on mis pärgadest pärit
+					// Sest lõpuks peame tegema n otsingut järjest tegelikult kus n= count chain_ids
+					// Ja igas otsingus tuleb kasutada ainult selle pärjaga seotud tingimusi
+					// Kurat, see on nõme
+					// Ja maeitea mis siis veel on kui sama form on mitmes pärjas millest otsitakse.blah.
+					$form2chain[$r["form_id"]]=$r["chain_id"];
 				};
 			};
 			
@@ -173,19 +233,27 @@
 				$r=$this->db_next();
 				
 				$formname=str_replace(" ","_",$r["name"]);
-				/*$content=$this->content[$fid]=$this->__unserialize_fdata($r["content"]);
-				echo("<pre>build_master_array::content=");print_r($content);echo("</pre>");//dbg*/
 				$content=$this->form->get_form_elements(array("id" => $fid,"key" => "id"));
-				//echo("form title=$ftitle<br><pre>");print_r($content);echo("</pre>");//dbg
+				#echo("form title=$formname<br><pre>");print_r($content);echo("</pre>");//dbg
 
 				$arr=array();
-				$arr["real"]="form_".$fid."_entries";
+				// Kui on mitmest pärjast otsing siis paneme real table nime ette *chain_id* siis saab
+				// Selle järgi pärast filtreerida osasid kuna see liigub edasi filtri datasse
+	
+				if ($this->data["multchain"])
+				{
+					$arr["real"]="*".$form2chain[$fid]."*form_".$fid."_entries";
+				} else
+				{
+					$arr["real"]="form_".$fid."_entries";
+				};
+				
 				//echo("content=><pre>");print_r($content);echo("</pre><br>");//dbg
 				foreach($content as $f_id => $edata)
 				{
 					$fieldname=$edata["name"];
 					$create=1;
-					//echo("$fieldname=><pre>");print_r($edata);echo("</pre><br>");//dbg
+					if ($GLOBALS["dbg_cbox"]) {echo("$fieldname=><pre>");print_r($edata);echo("</pre><br>");};//dbg
 					switch ($edata["type"])
 					{
 						case "button"://Don't let these suckers in!
@@ -193,11 +261,21 @@
 							break;
 
 						case "radiobutton":
-							//paluks siia arraysse info ka rb. väärtuse kohta??
-							
+						
 							$arr["fields"][$edata["name"]]["type"]=0;//string
 							$arr["fields"][$edata["name"]]["select"][$edata["text"]]=$edata["text"];
+							$arr["fields"][$edata["name"]]["select"][" (X) "]=" (X) ";
+							$arr["fields"][$edata["name"]]["select"][" (-) "]=" (-) ";
+							$arr["fields"][$edata["name"]]["select"][""]="";
 							break;
+
+
+						case "checkbox":
+							$arr["fields"][$edata["name"]]["type"]=0;//string
+							$arr["fields"][$edata["name"]]["select"][$edata["text"]]=$edata["text"];
+							$arr["fields"][$edata["name"]]["select"]["(X) "]="(X) ";// kristo koodis on kala sees
+							$arr["fields"][$edata["name"]]["select"][" (-) "]=" (-) ";
+							$arr["fields"][$edata["name"]]["select"][""]="";
 
 						case "listbox":
 							$arr["fields"][$edata["name"]]["type"]=0;//string
@@ -211,6 +289,9 @@
 
 						case "date":
 							$arr["fields"][$edata["name"]]["type"]=2;//date
+							$arr["fields"][$edata["name"]]["real"]="el_$f_id";
+							$arr["fields"][$edata["name"]]["noqm"]=1;// ei pane väärtusele ' ümber
+							$create=0;
 							break;
 
 						default:
@@ -228,7 +309,7 @@
 				$this->master_array[$formname]=$arr;
 			};//of ($formids as $k => $fid)
 
-			//echo("<pre>");print_r($this->master_array);echo("</pre>");//dbg
+			//if ($GLOBALS["dbg_ft"]){echo("<pre>");print_r($this->master_array);echo("</pre>");};//dbg
 		}
 
 		function make_upper_menu($arr,$action)
@@ -254,6 +335,8 @@
 		}
 
 		// see on selline func mis kudagi petab 2ra kliendi
+		// See vist on obsolete kuna nüüd saab niigi otsinguformi filtriga siduda??
+		// -->
 		function orb_totally_fake_fulltext_search($arr)
 		{
 			extract($arr);
@@ -283,14 +366,23 @@
 			return $this->orb_search($arr);
 
 		}
+		// <--
+
+		function orb_stat_select_submit($arr)
+		{
+			extract($arr);
+			$this->id=$filter_id;
+			$this->__load_data();
+			$this->data["stat_id"]=$selected_table;
+			$this->data["stat_pix"]=(int)$this->data["stat_pix"];
+			$this->__save_data();
+			return $this->mk_my_orb("stat",array("id" => $filter_id));
+		}
 
 		function orb_stat_new_submit($arr)
 		{
 			extract($arr);
-			//echo("blah<pre>");print_r($arr);echo("</pre>");//dbg
 			$this->id=$filter_id;
-			$this->db_query("SELECT name,parent FROM objects WHERE oid='$this->id'");
-			$r=$this->db_next();
 			$this->__load_data();
 
 			classload("table");
@@ -301,14 +393,15 @@
 			$tbl->submit_add($arr);
 			$this->data["stat_id"]=$tbl->id;
 			//echo("id=".$tbl->id);
-			$this->data["stat_show"]=1;
-			$this->data["stat_pix"]=10;
+			//$this->data["stat_show"]=1;
+			$this->data["stat_pix"]=(int)$this->data["stat_pix"];
 
 			$this->__save_data();
 
 			return $this->mk_my_orb("stat",array("id" => $filter_id));
 		}
 
+		// Sellega valitakse statistika andmed ehk funktsioonid siis
 		function orb_statdata($arr)
 		{
 			extract($arr);
@@ -358,7 +451,13 @@
 				));
 
 			$this->mk_path($parent,"Filter");
-			return $this->make_upper_menu($arr,"statdata").$this->parse();
+			$legend=$this->_make_legend("Funktioonid:",array(
+				"sum"=>"summeerib väärtused tulbas",
+				"avg"=>"arvutab tulba väärtustest kesmise",
+				"min"=>"leiab väikseima väärtuse tulbas",
+				"max"=>"leiab suurima väärtuse tulbas",
+			));
+			return $this->make_upper_menu($arr,"statdata").$this->parse().$legend;
 		}
 
 		function orb_submit_statdata($arr)
@@ -368,6 +467,7 @@
 			$this->__load_data();
 			$this->data["stat_pix"]=$stat_pix;
 			$this->data["stat_show"]=$stat_show;
+			//echo("enne:<pre>");print_r($this->data);echo("</pre>");
 			if ($subaction=="addpart")
 			{
 				$arr2["func"]=$func;
@@ -405,7 +505,7 @@
 					unset($this->data["statdata"][$nr]);
 				};
 			};
-
+			//echo("<pre>");print_r($this->data);echo("</pre>");
 			$this->__save_data();
 			return $this->mk_my_orb("statdata",array("id"=>$id));
 		}
@@ -433,12 +533,30 @@
 					),"table")."' Style='width:100%;height:800;margin-left:-5;margin-top:0;' frameborder=0 id='ifr'></iframe></div>";
 			} else
 			{
-				// nõu komments
-				$parse="Tee uus stattabel:".$tbl->add(array("parent" => $parent,"name" => "stat_for_$name"));
+				// siia ka valik juba olemasoleva valimiseks
+				$parse2=$tbl->add(array("parent" => $parent,"name" => "stat_for_$name"));
+				
+				$parse2=preg_replace("/name='class' value='(.+?)'/","name='class' value='search_filter'",$parse2);
+				$parse2=preg_replace("/name='action' value='(.+?)'/","name='action' value='stat_new_submit'",$parse2);
+				$parse2=preg_replace("/<input type='hidden' name='reforb'/","<input type='hidden' name='filter_id' value='$id'><input type='hidden' name='reforb'",$parse2);
+				
 
-				$parse=preg_replace("/name='class' value='(.+?)'/","name='class' value='search_filter'",$parse);
-				$parse=preg_replace("/name='action' value='(.+?)'/","name='action' value='stat_new_submit'",$parse);
-				$parse=preg_replace("/<input type='hidden' name='reforb'/","<input type='hidden' name='filter_id' value='$id'><input type='hidden' name='reforb'",$parse);
+				$this->get_objects_by_class(array("class"=>CL_TABLE));
+				
+				$tables=array();
+				
+				while($data=$this->db_next())
+				{
+					$tables[$data["oid"]]=$data["name"]." (".$data["oid"].")";
+				};
+
+				$this->read_template("selstattable.tpl");
+				$this->vars(array(
+					"statsel"=>$this->picker("",$tables),
+					"newtable"=>$parse2,
+					"reforb"=> $this->mk_reforb("stat_select_submit",array("filter_id"=>$id)),
+					));
+				$parse=$this->parse();
 			};
 
 			$this->mk_path($parent,"Filter");
@@ -467,21 +585,16 @@
 			{
 				return $this->make_upper_menu($arr,"search")."Väljundi tabelit pole veel määratud, vajuta 'väljund' lingile!";
 			};
-			global $search_filter_m;
-			session_register("search_filter_m");
-			$sfm=unserialize($search_filter_m);
-			if /*(!is_array($sfm[$id]))*/ (1)//Kuna "enam-vähem" kõlab minumeelest ysna "jah" moodi siis otsib igakord uuesti
-			{
-				if (!$dont_load_filter)
-				$this->__load_filter();
-				
-				$this->build_master_array();
-				$this->sql_filter->set_data($this->master_array);
+			if (!$dont_load_filter)
+			$this->__load_filter();
+			
+			$this->build_master_array();
+			$this->sql_filter->set_data($this->master_array);
 
-				
-				$sfm[$id]=$this->perform_search();
-				$search_filter_m=serialize($sfm);
-			};
+			if ($arr["do_ign"])
+				$this->do_ign=1;
+
+			
 
 			//siin tuleb stuffi näidata
 			classload("form_table");
@@ -496,83 +609,109 @@
 
 			$stats=array();//statistika avaldiste väärtused
 			$num_rec_found=0;
+
+			//Nii kuidas teha asja nii et töötaks chainide korral, formide korral ja mitme chaini korral??
+			
 			if ($this->data["type"]=="chain")
 			{
 				// form_table rida 469
 				
-				$chain_id=$this->data["target_id"];
-				
-
-				$this->ft->load_chain($chain_id);
-
-				$eids = $sfm[$id];
-
-				$tbls = "";
-				$joins = "";
-				reset($this->ft->chain["forms"]);
-				list($fid,) = each($this->ft->chain["forms"]);
-				while(list($ch_fid,) = each($this->ft->chain["forms"]))
+				// kui on mitu chaini siis tuleb siin SEDA andmete näitamise osa korrata 1x iga chaini matchide jaoks
+				if ($GLOBALS["dbg_ft"]) echo "multchain=[".$this->data["multchain"]."]<br>";
+				if (!$this->data["multchain"])
 				{
-					if ($ch_fid != $fid)
-					{
-						$tbls.=",form_".$ch_fid."_entries.*";
-						$joins.=" LEFT JOIN form_".$ch_fid."_entries ON form_".$ch_fid."_entries.chain_id = form_".$fid."_entries.chain_id ";
-					}
-				}
-				
-				$eids = join(",", $eids);
-				if ($eids != "")
+					$chainids[]=$this->data["target_id"];//All is good & easy
+				} else
 				{
-					$q = "SELECT distinct(form_".$fid."_entries.id) as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id $joins WHERE objects.status != 0 AND form_".$fid."_entries.chain_id in ($eids)";
-					//echo "q = $q <br>";
-					$this->ft->db_query($q);
-					while ($row = $this->ft->db_next())
+					$chainids=unserialize($this->data["target_id"]);
+				};
+				// et asi puusse ei paneks kuna ka mitte millestki võib midagi otsida eksole
+				if (is_array($chainids))
+				foreach ($chainids as $chain_id) // This is THE loop
+				{
+					if ($GLOBALS["dbg_ft"]) echo "[searching in $chain_id]<br>";
+					$eids = $this->perform_search($this->data["multchain"]?$chain_id:array());// Limit conditions to chain $chain_id
+					
+					$this->ft->load_chain($chain_id);
+
+					if ($GLOBALS["dbg_ft"]) {echo "eids=", var_dump($eids), "<br>";};//dbg
+
+					$tbls = "";
+					$joins = "";
+					reset($this->ft->chain["forms"]);
+					list($fid,) = each($this->ft->chain["forms"]);
+					while(list($ch_fid,) = each($this->ft->chain["forms"]))
 					{
-						$num_rec_found++;
-						if ($this->data["stat_show"] && $this->data["stat_id"] && is_array($this->data["statdata"]))
+						if ($ch_fid != $fid)
 						{
-							foreach($this->data["statdata"] as $alias2 => $statd2)
+							$tbls.=",form_".$ch_fid."_entries.*";
+							$joins.=" LEFT JOIN form_".$ch_fid."_entries ON form_".$ch_fid."_entries.chain_id = form_".$fid."_entries.chain_id ";
+						}
+					}
+					
+					$eids = join(",", $eids);
+					// temporary workaround selle topelt entryte kala jaoks, kuigi see
+					// kuradi distinct() peaks hoopis seda tegema vist
+
+					$used_eids=array();
+					if ($eids != "")
+					{
+						$q = "SELECT distinct(form_".$fid."_entries.id) as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id $joins WHERE objects.status != 0 AND form_".$fid."_entries.chain_id in ($eids)";
+						 if ($GLOBALS["dbg_ft"]) echo "q = $q <br>";//dbg
+						$this->ft->db_query($q);
+						while ($row = $this->ft->db_next())
+						{
+							if ($used_eids[$row["chain_id"]])
+								continue;
+							$used_eids[$row["chain_id"]]=1;
+
+							if ($GLOBALS["dbg_ft"]) echo "nr= $num_rec_found eid = ", $row["entry_id"], " ch_eid = ", $row["chain_entry_id"], "<br>";//dbg
+							$num_rec_found++;
+							if ($this->data["stat_show"] && $this->data["stat_id"] && is_array($this->data["statdata"]))
 							{
-								
-								$v2=$row[$statd2["field"]];
-								//echo($statd2["field"]." = ".$v2."<br>");//dbg
-								switch($statd2["func"])
+								foreach($this->data["statdata"] as $alias2 => $statd2)
 								{
-									case "sum":
-										$stats[$alias2]["val"]+=$v2;
-										break;
-									case "min":
-										if ($stats[$alias2]["val"]=="")
-											$stats[$alias2]["val"]=$v2;
-										if ($v2<$stats[$alias2]["val"])
-											$stats[$alias2]["val"]=$v2;
-										break;
-									case "max":
-										if ($v2>$stats[$alias2]["val"])
-											$stats[$alias2]["val"]=$v2;
-										break;
-									case "avg":
-										$stats[$alias2]["sum"]+=$v2;
-										$stats[$alias2]["num"]++;
-										break;
+									
+									$v2=$row[$statd2["field"]];
+									//echo($statd2["field"]." = ".$v2."<br>");//dbg
+									switch($statd2["func"])
+									{
+										case "sum":
+											$stats[$alias2]["val"]+=$v2;
+											break;
+										case "min":
+											if ($stats[$alias2]["val"]=="")
+												$stats[$alias2]["val"]=$v2;
+											if ($v2<$stats[$alias2]["val"])
+												$stats[$alias2]["val"]=$v2;
+											break;
+										case "max":
+											if ($v2>$stats[$alias2]["val"])
+												$stats[$alias2]["val"]=$v2;
+											break;
+										case "avg":
+											$stats[$alias2]["sum"]+=$v2;
+											$stats[$alias2]["num"]++;
+											break;
+									};
 								};
 							};
+							// if ($GLOBALS["dbg_ft"]) echo "<pre>",var_dump($row),"</pre>" ;//dbg
+							$row["ev_change"] = "<a href='".$this->ft->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $row["chain_entry_id"]), "form_chain")."'>Muuda</a>";
+							$row["ev_view"] = "<a href='".$this->ft->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $row["entry_id"], "op_id" => $op_id,"section" => $section),"form")."'>Vaata</a>";		
+							$row["ev_delete"] = "<a href='".$this->ft->mk_my_orb(
+								"delete_entry", 
+									array(
+										"id" => $fid,
+										"entry_id" => $row["entry_id"], 
+										"after" => $this->ft->binhex($this->ft->mk_my_orb("show_user_entries", array("chain_id" => $chain_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
+									),
+								"form")."'>Kustuta</a>";
+							
+							$this->ft->row_data($row);
 						};
-						//echo("<pre>");print_r($row);echo("</pre>");//dbg
-						$row["ev_change"] = "<a href='".$this->ft->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $row["chain_entry_id"]), "form_chain")."'>Muuda</a>";
-						$row["ev_view"] = "<a href='".$this->ft->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $row["entry_id"], "op_id" => $op_id,"section" => $section),"form")."'>Vaata</a>";		
-						$row["ev_delete"] = "<a href='".$this->ft->mk_my_orb(
-							"delete_entry", 
-								array(
-									"id" => $fid,
-									"entry_id" => $row["entry_id"], 
-									"after" => $this->ft->binhex($this->ft->mk_my_orb("show_user_entries", array("chain_id" => $chain_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
-								),
-							"form")."'>Kustuta</a>";
-						//echo "eid = ", $row["entry_id"], " ch_eid = ", $row["chain_entry_id"], "<br>";
-						$this->ft->row_data($row);
-					}
-				}
+					};
+				}; // of foreach ($chainids as $chain_id)
 
 			} else
 			{
@@ -580,7 +719,7 @@
 				
 				$fid=$this->data["target_id"];
 				
-				$eids = $sfm[$id];
+				$eids = $this->perform_search();
 				$eids=join(",",$eids);
 				if ($eids != "")
 				{
@@ -633,7 +772,7 @@
 			};
 
 
-
+			// Siin on juba joonistatud nüüd see andmete osa siis
 
 			$this->ft->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
 
@@ -645,6 +784,7 @@
 				die();
 			};
 			$parse="";
+			// See siin on miskise ymber nurga fulltext searchi jaoks mis kaob varsti ära kui asi tööle hakkab
 			if ($j2ta_see_form_sinna_yles)
 			{
 				$parse.="<form action='orb.aw' method='get'>
@@ -677,8 +817,8 @@
 			{
 				$parse.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
 			}
-			$blah=$this->ft->t->draw();
-			$parse.=str_replace("<table>","",$blah);
+			$parse.=$this->ft->t->draw();
+			//$parse.=str_replace("<table>","",$blah);
 
 			if ($this->ft->table["submit_bottom"])
 			{
@@ -690,27 +830,23 @@
 			};
 
 			$parse.=$this->ft->mk_reforb("submit_table", array("return" => $this->ft->binhex($this->ft->mk_my_orb("show_entry", array("id" => $this->ft->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
-			
+
+			// Siin hakkab näitama statistika tabelit all
 			if ($this->data["stat_show"] && $this->data["stat_id"])
 			{
 				classload("table");
 				$tbl=new table();
-							// tee veel avg funktsioonid korda
+				// tee veel avg funktsioonid korda, sest neil tuleb lõpus summa / ridade arv
 				$tbl->fl_external=array();
-				if (is_array($this->data["statdata"]))
+
+				if (is_array($this->data["statdata"]))// Check for loony
 				foreach($this->data["statdata"] as $alias2 => $statd2)
 				{
-					switch($statd2["func"])
-					{
-						case "avg":
-
-							$stats[$alias2]["val"]=$stats[$alias2]["num"]?$stats[$alias2]["sum"]/$stats[$alias2]["num"]:0;
-							break;
-					};
-					//echo($alias2." = ".$stats[$alias2]["val"]."<br>");//dbg
+					if ($statd2["func"] == "avg")
+						$stats[$alias2]["val"]=$stats[$alias2]["num"]?$stats[$alias2]["sum"]/$stats[$alias2]["num"]:0;
 					$tbl->fl_external[$alias2]=$stats[$alias2]["val"];
 				};
-
+				// Tee eralduseks tabel vahele form tabelile ja stat tabelile
 				if ($this->data["stat_pix"])
 				{
 					$parse.="<table border=0 cellpadding=0 cellspacing=0 height='".$this->data["stat_pix"]."' Style='height:".$this->data["stat_pix"]."px'><tr><td></td></tr></table>";
@@ -731,11 +867,31 @@
 			$this->id=$id;
 			$this->__load_data();
 			//print_r($selected_forms);//dbg
+			if (!is_array($selected_forms))
+			{
+				$selected_forms=array();
+			};
 			$this->data["selected_forms"]=$this->binhex(serialize(array_flip($selected_forms)));
 			$this->__save_data();
 			return $this->mk_my_orb("output",array("id" => $id));
 		}
 
+		function orb_submit_select_fields($arr)
+		{
+			extract($arr);
+			$this->id=$id;
+			$this->__load_data();
+			//print_r($selected_forms);//dbg
+			if (!is_array($selected_fields))
+			{
+				$selected_fields=array();
+			};
+			$this->data["selected_fields"]=$this->binhex(serialize(array_flip($selected_fields)));
+			$this->__save_data();
+			return $this->mk_my_orb("output",array("id" => $id));
+		}
+		
+		// Jube! siin tuleb ymber teha kudagi
 		function orb_output($arr)
 		{
 			extract($arr);
@@ -759,70 +915,107 @@
 			// Kui pole veel formi tabelit tehtud siis tee valmis
 			if (!$this->data["output_id"])
 			{
-				//echo("type=".$this->data["type"]);//dbg
 				if ($this->data["selected_forms"] || $this->data["type"]!="chain")
 				{
-				
-					//echo("oki, hakkan uut tegema");//dbg
-					$this->data["selected_forms"]=unserialize($this->hexbin($this->data["selected_forms"]));
-					//echo("self=<pre>");print_r($this->data["selected_forms"]);echo("</pre>");//dbg
-					$num_cols=0;
-					$form_ids=array();
-					$names=array();
-					$columns=array();
-					$sortable=array();
-					if (is_array($this->master_array))
-					foreach($this->master_array as $faketname => $tdata)
+					//If we are in field selection phase
+					if (!$this->data["selected_fields"])
 					{
-						//echo("f=$faketname<br>");//dbg
-						if ($faketname &&  (isset($this->data["selected_forms"][$faketname]) || $this->data["type"]!="chain"))
+						$this->read_template("select_fields.tpl");
+						$field_arr=array();
+						foreach($this->master_array as $faketname => $fdata)
 						{
-							//echo("on olemas<br>");
-							
-							list($a_,$form_id,$b_)=explode("_",$tdata["real"]);
-							$form_ids[]=$form_id;
-							//echo("faketname=$faketname form_id=$form_id<br>");//dbg
-							if (is_array($tdata["fields"]))
-							foreach($tdata["fields"] as $fakefname => $fdata)
+							if ($faketname && is_array($fdata["fields"]))
 							{
-								//echo("field=$fakefname<br>");//dbg
-								list($a_,$fieldid)=explode("_",$fdata["real"]);
+								foreach($fdata["fields"] as $finame => $fidata)
+								{
+									$field_arr["$faketname.$finame"]="$faketname.$finame";
 
-								$names[$num_cols][1]=$fakefname;
-								$sortable[$num_cols]=1;
-								$columns[$num_cols][]=$fieldid;
-								$num_cols++;
+								};
+							};
+								
+						};
+						$this->vars(array(
+							"field_list"=> $this->multiple_option_list("",$field_arr),
+							"reforb" => $this->mk_reforb("submit_select_fields",array("id"=>$id)),
+							));
+						$this->mk_path($parent,"Filter");
+						return $this->make_upper_menu($arr,"output").$this->parse();
+						
+					} else
+					{
+
+				
+						//echo("oki, hakkan uut tegema");//dbg
+						$this->data["selected_forms"]=unserialize($this->hexbin($this->data["selected_forms"]));
+						//echo("self=<pre>");print_r($this->data["selected_forms"]);echo("</pre>");//dbg
+						$num_cols=0;
+						$form_ids=array();
+						$names=array();
+						$columns=array();
+						$sortable=array();
+						$this->data["selected_fields"]=unserialize($this->hexbin($this->data["selected_fields"]));
+
+						if (is_array($this->master_array))
+						foreach($this->master_array as $faketname => $tdata)
+						{
+							//echo("f=$faketname<br>");//dbg
+							if ($faketname &&  (isset($this->data["selected_forms"][$faketname]) || $this->data["type"]!="chain"))
+							{
+								//echo("on olemas<br>");
+								
+								list($a_,$form_id,$b_)=explode("_",$tdata["real"]);
+								$form_ids[]=$form_id;
+								//echo("faketname=$faketname form_id=$form_id<br>");//dbg
+								if (is_array($tdata["fields"]))
+								foreach($tdata["fields"] as $fakefname => $fdata)
+								{
+									// CHeck if the field is selected
+									
+									if (isset($this->data["selected_fields"]["$faketname.$fakefname"]))
+									{
+										//echo("field=$fakefname<br>");//dbg
+										list($a_,$fieldid)=explode("_",$fdata["real"]);
+
+										$names[$num_cols][1]=$fakefname;
+										$sortable[$num_cols]=1;
+										$columns[$num_cols][]=$fieldid;
+										$num_cols++;
+									}
+								};
 							};
 						};
+
+						$arr=array(
+							"name" => "output_for_$name",
+							"parent" => $parent,
+							"comment" => "$id_$name",
+							"num_cols" => $num_cols,
+							"forms" => $form_ids);
+						//echo("arr=<pre>");print_r($arr);echo("</pre>");//dbg
+						$this->ft->submit($arr);
+						$this->data["output_id"]=$this->ft->id;
+						// Get rid of this s.it
+						unset($this->data["selected_forms"]);
+						unset($this->data["selected_fields"]);
+						$this->__save_data();
+
+						//echo("second phase columns=<pre>");print_r($columns);echo("</pre>");//dbg
+						
+						$arr=array_merge($arr,array(
+							"id" => $this->data["output_id"],
+							"columns" => $columns,
+							"names" => $names,
+							"sortable" => $sortable,
+							));
+						//echo("arr=<pre>");print_r($arr);echo("</pre>");//dbg
+						$this->ft->submit($arr);
+						//echo("f table id=".$this->data["output_id"]);//dbg
 					};
-
-					$arr=array(
-						"name" => "output_for_$name",
-						"parent" => $parent,
-						"comment" => "$id_$name",
-						"num_cols" => $num_cols,
-						"forms" => $form_ids);
-					//echo("arr=<pre>");print_r($arr);echo("</pre>");//dbg
-					$this->ft->submit($arr);
-					$this->data["output_id"]=$this->ft->id;
-					$this->__save_data();
-
-					//echo("second phase columns=<pre>");print_r($columns);echo("</pre>");//dbg
-					
-					$arr=array_merge($arr,array(
-						"id" => $this->data["output_id"],
-						"columns" => $columns,
-						"names" => $names,
-						"sortable" => $sortable,
-						));
-					//echo("arr=<pre>");print_r($arr);echo("</pre>");//dbg
-					$this->ft->submit($arr);
-					//echo("f table id=".$this->data["output_id"]);//dbg
 				} else
 				{
 					//Vot siin tuleb nyyd valida formid, mida kasutada outputis
 					$this->read_template("select_forms.tpl");
-					$this->mk_path($parent,"<a href=\"".$this->mk_my_orb("change",array("id"=>$id))."\">Muuda filtrit</a> | Väljund | <a href=\"".$this->mk_my_orb("search",array("id"=>$id))."\">Otsi</a>");
+					//$this->mk_path($parent,"<a href=\"".$this->mk_my_orb("change",array("id"=>$id))."\">Muuda filtrit</a> | Väljund | <a href=\"".$this->mk_my_orb("search",array("id"=>$id))."\">Otsi</a>");
 					
 					$form_arr=array();
 					foreach($this->master_array as $faketname => $fdata)
@@ -834,7 +1027,8 @@
 						"form_list"=> $this->multiple_option_list("",$form_arr),
 						"reforb" => $this->mk_reforb("submit_select_forms",array("id"=>$id)),
 						));
-					return $this->parse();
+					$this->mk_path($parent,"Filter");
+					return $this->make_upper_menu($arr,"output").$this->parse();
 				};
 			}
 
@@ -859,29 +1053,70 @@
 		}
 
 		// selle jaoks peab olema tehtud build_master_array ja load_filter
-		function perform_search()
+		function perform_search($limit_to_chain=array())	//miski eleet nipp see array()
 		{
 			$this->matches=array();
+
 			//Okei, kõigepealt küsi sql filtri käest sql päringu where osa
-			$sqlw=$this->sql_filter->filter_to_sql(array("filter" => $this->filter));
+			// Ja limiteeri tingimused ise ära limit_to_chain kuna sqlfilter ei tohi teada midagi mingitest chainidest ega formidest
+			if (!is_array($limit_to_chain))
+			{
+				$ft=Array();
+				$numpee=0;
+				for ($pee=0;$pee<$this->filter["nump"];$pee++)
+				{
+					$vchain=explode("*",$this->filter["p$pee"]["field"]);
+					if ($GLOBALS["dbg_ft"]) {echo("vchain=<pre>");print_r($vchain);echo("</pre><br>");};
+
+					// count($vchain)<3 is for fulltextsearch field witch doesnt exist really
+					if ($vchain[1]==$limit_to_chain || count($vchain)<3)
+					{
+						$ft["p$numpee"]=$this->filter["p$pee"];
+						$ft["p$numpee"]["field"]=count($vchain)<3?$this->filter["p$pee"]["field"]:$vchain[2];//remove chain info
+						$numpee++;
+					};
+				};
+				$ft["nump"]=$numpee;
+				if ($GLOBALS["dbg_ft"]) {echo("!FILTERED!<pre>"); print_r($ft);echo("<pre>END LIMIT");};
+			} else
+			{
+				$ft=$this->filter;
+			};
+			$sqlw=$this->sql_filter->filter_to_sql(array(
+					"filter" => $ft,
+					"do_ign" => $this->do_ign?1:0
+				));
+			if ($GLOBALS["dbg_ft"]) echo "<textarea cols=100 rows=1>$sqlw</textarea><br>";
+			
 
 			//Nii, nüüd tuleb see täistekstotsing ringi vahetada
 			$fulltextsearch=array();
 			$used_tables=array();
 			//echo("master_Array=<pre>");print_r($this->master_array);echo("</pre>");//dbg
+
+			if ($GLOBALS["dbg_ft"]) {echo "limit_to_chain=",var_dump($limit_to_chain);};
 			if (is_array($this->master_array))
 			foreach ($this->master_array as $fakefname => $fdata)
 			{
 				if ($fakefname)
 				{
 					$realfname=$fdata["real"];
-					//echo("fakefname=$fakefname realfname=$realfname<br>");//dbg
-					$used_tables[$realfname]=1;
-
-					if (is_array($fdata["fields"]))
-					foreach ($fdata["fields"] as $fakeename => $edata)
+					if ($GLOBALS["dbg_ft"]) echo("realfname=$realfname fakefname=$fakefname<br>");
+					if ($realfname[0]=="*")
 					{
-						$fulltextsearch[]=$realfname.".".$edata["real"]." LIKE '%\\1%'";
+						$vdata=explode("*",$realfname);//remove chain info
+						$realfname=$vdata[2];
+					};
+					if (is_array($limit_to_chain) || $vdata[1]==$limit_to_chain)
+					{
+						if ($GLOBALS["dbg_ft"]) echo("fakefname=$fakefname realfname=$realfname<br>");//dbg
+						$used_tables[$realfname]=1;
+
+						if (is_array($fdata["fields"]))
+						foreach ($fdata["fields"] as $fakeename => $edata)
+						{
+							$fulltextsearch[]=$realfname.".".$edata["real"]." LIKE '%\\1%'";
+						};
 					};
 				};
 			};
@@ -909,13 +1144,15 @@
 				};
 				//$sql="SELECT form_chain_entries.id FROM form_chain_entries, ".join(",",array_keys($used_tables))." $sqlw AND form_chain_entries.chain_id='".$this->data["target_id"]."' AND ".join(" AND ",$jointofce);
 				$sqlw=$sqlw?$sqlw." AND ":" WHERE ";
-				$sql="SELECT DISTINCT(form_chain_entries.id) as id FROM form_chain_entries".join(" ",$leftjoin)." $sqlw form_chain_entries.chain_id='".$this->data["target_id"]."'";
-				//echo("sql=$sql<br>");//dbg
+				$targetchain=is_array($limit_to_chain)?$this->data["target_id"]:$limit_to_chain;
+				$sql="SELECT DISTINCT(form_chain_entries.id) as id FROM form_chain_entries".join(" ",$leftjoin)." $sqlw form_chain_entries.chain_id='$targetchain'";
+				
 			} else
 			{
-				$sql="SELECT id FROM ".join(",",array_keys($used_tables))." $sqlw";
-				//echo("sql=$sql<br>");//dbg
+				$sql="SELECT DISTINCT(id) FROM ".join(",",array_keys($used_tables))." $sqlw";
+				
 			};
+			if ($GLOBALS["dbg_ft"]) echo "<textarea cols=100 rows=10>$sql</textarea><br>";
 
 			$this->db_query($sql);
 			$matches=array();
@@ -923,7 +1160,7 @@
 			{
 				$matches[]=$r["id"];
 			};
-			//echo "<pre>", var_dump($matches),"</pre><br>";
+			if ($GLOBALS["dbg_ft"]) {echo "<pre>", var_dump($matches),"</pre><br>";};//dbg
 			return $matches;
 		}
 
@@ -960,10 +1197,6 @@
 		function orb_filter_edit_del($arr)
 		{
 			extract($arr);
-			if (!is_array($sel) || !sizeof($sel))
-			{
-				return $this->mk_my_orb("change",array("id" => $id));
-			};
 			$this->id=$id;
 			$arr["filter"]=$this->__load_filter();
 			
@@ -973,6 +1206,19 @@
 			$this->__save_filter();
 			
 			return $this->mk_my_orb("change",array("id" => $id));
+		}
+
+		function _make_legend($title,$content)
+		{
+			$a="<font face='Verdana,Arial,Helvetica,sans-serif' size='-1'><strong>$title</strong></font>".
+				"<table border=0 cellspacing=1 cellpadding=2 bgcolor='#CCCCCC'>";
+			if (is_array($content))
+			foreach($content as $key => $val)
+			{
+				$a.="<tr><td class='ftitle2'>$key</td><td class='fcaption2'>$val</td></tr>";
+			};
+			$a.="</table>";
+			return $a;
 		}
 
 

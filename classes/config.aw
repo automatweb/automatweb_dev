@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.25 2001/11/09 05:47:29 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.26 2001/11/20 13:19:04 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -1086,6 +1086,139 @@ class config extends db_config
 		$this->quote(&$ss);
 		$this->set_simple_config("login_grp_redirect", $ss);
 		return $this->mk_my_orb("grp_redirect", array());
+	}
+
+	////
+	// !generates the UI for adding aw sites to the server
+	function sites($arr)
+	{
+		extract($arr);
+		$this->read_template("add_site.tpl");
+
+		global $status_msg,$add_site_status;
+		if (is_array($add_site_status))
+		{
+			$this->vars($add_site_status);
+		}
+		session_unregister("add_site_status");
+		session_unregister("status_msg");
+
+		$this->vars(array(
+			"status_msg" => $status_msg,
+			"reforb" => $this->mk_reforb("submit_add_site")
+		));
+		return $this->parse();
+	}
+
+	////
+	// !creates the site and checks for errors
+	function submit_add_site($arr)
+	{
+		extract($arr);
+
+		global $AW_SITES_basefolder,$status_msg,$add_site_status;
+
+		umask(0);
+
+		$act = "";
+
+		$site_dir = $AW_SITES_basefolder."/".$site_folder;	
+		if (is_dir($site_dir))
+		{
+			$status_msg = "A folder with that name ($site_dir) already exists!";
+		}
+		else
+		if (!mkdir($site_dir,0777))
+		{
+			$status_msg = "Error creating folder $site_dir!";
+			$act.="Created folder $site_dir <br>";
+		}
+		else
+		if (!mkdir($site_dir."/img",0777))
+		{
+			$status_msg = "Error creating folder ".$site_dir."/img !";
+			$act.="Created folder $site_dir/img <br>";
+		}
+		else
+		if (!mkdir($site_dir."/pagecache",0777))
+		{
+			$status_msg = "Error creating folder ".$site_dir."/pagecache !";
+			$act.="Created folder $site_dir/pagecache <br>";
+		}
+		else
+		if (!mkdir($site_dir."/public",0777))
+		{
+			$status_msg = "Error creating folder ".$site_dir."/public !";
+			$act.="Created folder $site_dir/public <br>";
+		}
+		else
+		if (!mkdir($site_dir."/templates",0777))
+		{
+			$status_msg = "Error creating folder ".$site_dir."/templates !";
+			$act.="Created folder $site_dir/templates <br>";
+		}
+		else
+		{
+			// now create the apache vhost file
+			global $AW_SITES_vhost_folder,$AW_SITES_server_ip;
+			$fc = "<VirtualHost $AW_SITES_server_ip>\n";
+			$fc.= "Servername $site_url\n";
+			$fc.= "DocumentRoot ".$site_dir."/public\n";
+			$fc.= "ErrorLog /var/log/apache/aw.struktuur.ee/error_log\n";
+			$fc.= "CustomLog /var/log/apache/aw.struktuur.ee/access_log common\n";
+			$fc.= "</VirtualHost>\n";
+
+			$fp = fopen($AW_SITES_vhost_folder."/".$site_url,"w");
+			if (!$fp)
+			{
+				$status_msg = "Could not create apache VirtualHost file (".$AW_SITES_vhost_folder."/".$site_url.") ";
+			}
+			else
+			{
+				fwrite($fp,$fc);
+				fclose($fp);
+				$act.="Created apache VirtualHost file <br>";
+			}
+		}
+
+		if ($status_msg == "")
+		{
+			// creat the link to automatweb folder
+			global $AW_SITES_admin_dir;
+			symlink($AW_SITES_admin_dir,$site_dir."/public/automatweb");
+
+			// now copy all the files in the public folder to the new site from this site
+			global $site_basedir;
+			$di = opendir($site_basedir."/public");
+			while (($file = readdir($di)) && $status_msg == "")
+			{
+				$_file = $site_basedir."/public/".$file;
+				$dest = $site_dir."/public/".$file;
+				if (is_file($_file))
+				{
+					if (!copy($_file,$dest))
+					{
+						$status_msg = "Could not copy file $_file to $dest!";
+					}
+					else
+					{
+						$act.="Copied $_file to $dest <br>";
+					}
+				}
+			}
+		}
+
+		if ($status_msg != "")
+		{
+			session_register("status_msg","add_site_status");
+			$add_site_status = $arr;
+			return $this->mk_my_orb("sites");
+		}
+		else
+		{
+			echo $act."<br><br>Successfully created site $site_name in folder $site_dir <br>\n";
+			die();
+		}
 	}
 
 	////

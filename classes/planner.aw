@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.46 2001/10/24 19:57:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.47 2001/11/20 13:19:05 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -780,7 +780,6 @@ class planner extends calendar {
 	
 	function get_events($args = array())
 	{
-		print "getting events";
 		classload("repeater");
 		$repeater = new repeater();
 		extract($args);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.26 2001/11/20 08:42:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.27 2001/11/20 13:19:05 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -188,7 +188,7 @@ class users extends users_user
 
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
 	
-		$q = "SELECT groups.oid,groups.gid
+		$q = "SELECT groups.oid,groups.gid,objects.name
 			FROM groups
 			LEFT JOIN objects ON (objects.oid = groups.oid)
 			WHERE objects.status != 0 AND groups.type IN (".GRP_REGULAR.",".GRP_DYNAMIC.")";
@@ -1042,7 +1042,7 @@ class users extends users_user
 				{
 					foreach($jf as $joinform => $joinentry)
 					{
-						$ret.=$f->show(array("id" => $joinform,"entry_id" => $joinentry, "op_id" => $ops[$joinform],"no_html" => $nohtml));
+						$ret.=$f->show(array("id" => $joinform,"entry_id" => $joinentry, "op_id" => $ops[$joinform],"no_html" => $nohtml,"no_load_op" => $arr["no_load_op"]));
 					};
 				}
 			};
@@ -1094,7 +1094,10 @@ class users extends users_user
 		$mail = $c->get_simple_config("remind_pwd_mail");
 		$mail = str_replace("#parool#", $udata["password"],$mail);
 		$mail = str_replace("#kasutaja#", $username,$mail);
-		$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true,"user" => $username))),$mail);
+		$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true,"user" => $username,"no_load_op" => 1))),$mail);
+
+		#$mail = str_replace("\r","",$mail);
+		$mail = str_replace("\r\n","\n",$mail);
 
 		mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".MAIL_FROM);
 		$this->_log("user", "user $username was reminded of his/her password");

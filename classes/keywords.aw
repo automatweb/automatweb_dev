@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.34 2001/11/15 13:10:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.35 2001/11/20 13:19:04 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -8,7 +8,8 @@ classload("defs");
 define("ARR_LISTID", 1);
 define("ARR_KEYWORD", 2);
 
-class keywords extends aw_template {
+class keywords extends aw_template 
+{
 	function keywords($args = array())
 	{
 		$this->db_init();
@@ -507,7 +508,7 @@ class keywords extends aw_template {
 
 		global $strip_keyword_grps;
 
-		$q = "SELECT list_id,keyword FROM keywords ORDER BY keyword";
+		$q = "SELECT list_id,keyword,id FROM keywords ORDER BY keyword";
 		$this->db_query($q);
 		$resarray = array();
 		while($row = $this->db_next())
@@ -875,6 +876,137 @@ class keywords extends aw_template {
 			$retval = $this->parse();
 		};
 		return $retval;
+	}
+
+	////
+	// !uuendab menyyde all olevad keywordidega tehtud dokude vendi. 
+	// parameetrid:
+	// $menu_ids = array -	kui see on m22ratud, siis uuendatakse aint nende menyyde all olevaid doku vendi, 
+	//											kui pole siis k6ikide menyyde omi
+	// $doc_ids = array -		kui see on m22ratud, siis uuendatakse aint nende dokude vendi, kui pole, siis k6ikide dokude
+	function update_menu_keyword_bros($arr)
+	{
+		extract($arr);
+
+		if (!is_array($menu_ids))
+		{
+			$menu_ids = array();
+			$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_PSEUDO." AND status != 0");
+			while ($row = $this->db_next())
+			{
+				$menu_ids[] = $row["oid"];
+			}
+		}
+
+		if (!is_array($doc_ids))
+		{
+			$doc_ids = array();
+			$this->db_query("SELECT oid FROM objects WHERE (class_id = ".CL_DOCUMENT." OR class_id = ".CL_PERIODIC_SECTION.") AND status != 0");
+			while ($row = $this->db_next())
+			{
+				$doc_ids[] = $row["oid"];
+			}
+		}
+
+		$menuss = join(",",$menu_ids);
+		$docss = join(",",$doc_ids);
+
+
+		// select all the keywords for the menus
+		$kwds = array();
+		$this->db_query("SELECT * FROM keyword2menu WHERE menu_id IN ($menuss)");
+		while ($row = $this->db_next())
+		{
+			$kwds[$row["menu_id"]][] = $row["keyword_id"];
+		}
+
+		// fetch all the brother docs for all the menus that are created by this function
+		$bros = array();
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_BROTHER_DOCUMENT." AND parent IN ($menuss) AND status != 0 AND subclass = ".SC_BROTHER_DOC_KEYWORD." AND brother_of IN ($docss)");
+		while ($row = $this->db_next())
+		{
+			$bros[$row["parent"]][$row["brother_of"]] = $row;
+		}
+
+		classload("document");
+		$d = new document;
+
+		// now go through all the menus and for each menu check the brother documents that are created from keywords and
+		// delete/create them as necessary
+		foreach($menu_ids as $mid)
+		{
+			$m_bros = $bros[$mid];
+			$m_kwds = $kwds[$mid];
+
+			// if there are no brothers and no keywords, dont process this menu
+			if (!is_array($m_bros) && !is_array($m_kwds))
+			{
+				continue;
+			}
+
+			if (!is_array($m_bros))
+			{
+				$m_bros = array();
+			}
+
+			// figure out what docs must be brothered under this menu
+			if (!is_array($m_kwds))
+			{
+				$m_kwds = array();
+			}
+			$m_kwdsstr = join(",",$m_kwds);
+			$to_brother = array();
+			if ($m_kwdsstr != "")
+			{
+				$this->db_query("SELECT * FROM keywordrelations WHERE keyword_id IN ($m_kwdsstr) AND id IN ($docss)");
+				while ($row = $this->db_next())
+				{
+					$to_brother[$row["id"]] = $row["id"];
+				}
+			}
+
+			// now figure out the difference in what objects exist under the menu and what sould exist. 
+			// first the ones we need to add
+			foreach($to_brother as $did => $did)
+			{
+				if (!$m_bros[$did])
+				{
+					// it isn't there so we must add it
+					$d->create_bro(array("id" => $did, "parent" => $mid,"subclass" => SC_BROTHER_DOC_KEYWORD,"no_header" => true));
+				}
+			}
+
+			// now the ones we need to delete
+			foreach($m_bros as $o_did => $bdata)
+			{
+				if ($to_brother[$o_did] != $o_did)
+				{
+					$this->delete_object($bdata["oid"]);
+				}
+			}
+		}
+	}
+
+	////
+	// !returns an array of keywords suitable for feeding to a multiple select box
+	function get_keyword_picker()
+	{
+		$kwds = array();
+		$this->db_query("SELECT distinct(keyword) as keyword,objects.parent,objects.oid as oid FROM keywords LEFT JOIN objects ON objects.oid = keywords.oid");
+		while ($row = $this->db_next())
+		{
+			$kwds[$row["oid"]] = $row;
+		}
+		classload("objects");
+		$ob = new objects;
+		$menus = $ob->get_list();
+
+		$ret = array();
+		foreach($kwds as $kid => $kdata)
+		{
+			$ret[$kid] = $menus[$kdata["parent"]]."/".$kdata["keyword"];
+		}
+		return $ret;
 	}
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.72 2001/11/20 08:49:36 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.73 2001/11/20 13:19:04 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -136,11 +136,11 @@ class menuedit extends aw_template
 
 		// koostame array vajalikest parameetritest, mis identifitseerivad cachetava objekti
 		$cp = array();
-		$periodic = $this->is_periodic($section,0);
-		if ($periodic)
-		{
+//		$periodic = $this->is_periodic($section,0);
+//		if ($periodic)
+//		{
 			$cp[] = $GLOBALS["act_per_id"];
-		};
+//		};
 		if (isset($GLOBALS["page"]))
 		{
 			$cp[] = $GLOBALS["page"];
@@ -2280,6 +2280,7 @@ class menuedit extends aw_template
 			$inf = $class_defs[$row["class_id"]];
 
 			$target = "";
+
 			$change = $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $inf["file"]);
 			if ($row["class_id"] == CL_FILE)
 			{
@@ -2507,7 +2508,10 @@ class menuedit extends aw_template
 			$this->raise_error("menuedit->command_redirect($oid): Unknown class ".$row["class_id"],true);
 		
 		if (!$period)
+		{
 			$period = 0;
+		}
+
 		$url = $this->mk_orb("new", array("parent" => $parent, "period" => $period), $inf["file"]);
 		header("Location: $url");
 		die();		
@@ -2886,6 +2890,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$nn = "number = '$number',";
 			}
+
+			$this->save_menu_keywords($arr["grkeywords"],$id);
 
 			global $lang_id;
 			// teeme seealso korda.
@@ -3404,6 +3410,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}
 		$this->vars(array("M_IMG" => $ims));
 
+		// keyword list
+		classload("keywords");
+		$kwds = new keywords;
+		$all_kwds = $kwds->get_keyword_picker();
+		$kwd_list = $this->get_menu_keywords($id);
+
 		classload("shop");
 		$sh = new shop;
 		$shs = $sh->get_list();
@@ -3423,6 +3435,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$img2 = $meta["img_act_url"] != "" ? "<img src='".$meta["img_act_url"]."'>" : "";
 		global $template_sets;
 		$this->vars(array(
+			"grkeywords" => $this->multiple_option_list($kwd_list, $all_kwds),
 			"parent"			=> $row["parent"], 
 			"SA_ITEM"			=> $sal,
 			"image_act"		=> $img2,
@@ -5215,6 +5228,65 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$cache = new cache;
 		global $lang_id,$SITE_ID;
 		$cache->db_invalidate("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+	}
+
+	function get_menu_keywords($id)
+	{
+		$ret = array();
+		$this->db_query("SELECT * FROM keyword2menu WHERE menu_id = $id");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["keyword_id"]] = $row["keyword_id"];
+		}
+		return $ret;
+	}
+
+	function save_menu_keywords($keywords,$id)
+	{
+		$old_kwds = $this->get_menu_keywords($id);
+		if (is_array($keywords))
+		{
+			// check if the kwywords have actually changed - if not, we souldn't do this, as this can be quite time-consuming
+			$update = false;
+			foreach($keywords as $koid)
+			{
+				if ($old_kwds[$koid] != $koid)
+				{
+					$update = true;
+				}
+			}
+
+			if (count($old_kwds) != count($keywords))
+			{
+				$update = true;
+			}
+
+			if (!$update)
+			{
+				return;
+			}
+		}
+		else
+		{
+			if (count($old_kwds) < 1)
+			{
+				return;
+			}
+		}
+
+		$this->db_query("DELETE FROM keyword2menu WHERE menu_id = $id");
+
+		if (is_array($keywords))
+		{
+			foreach($keywords as $koid)
+			{
+				$this->db_query("INSERT INTO keyword2menu (menu_id,keyword_id) VALUES('$id','$koid')");
+			}
+		}
+
+		classload("keywords");
+		$kwd = new keywords;
+		$kwd->update_menu_keyword_bros(array("menu_ids" => array($id)));
 	}
 
 	function do_center_menu($oid)

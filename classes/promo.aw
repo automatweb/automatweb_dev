@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.9 2001/10/02 10:05:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.10 2001/11/20 13:19:05 kristo Exp $
 lc_load("promo");
 global $orb_defs;
 $orb_defs["promo"] = "xml";
@@ -134,6 +134,7 @@ class promo extends aw_template
 		{
 			$short_templates[$tpl["id"]] = $tpl["name"];
 		};
+
 
 		$no_title = $this->get_object_metadata(array("oid" => $id, "key" => "no_title"));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.93 2001/09/27 12:53:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.94 2001/11/20 13:19:04 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -1211,6 +1211,8 @@ class messenger extends menuedit_light
 		if (sizeof($internals) > 0)
 		{
 
+			$sentto=array();
+
 			classload("email");
 			$awe = new email();
 			foreach($internals as $internal)
@@ -1227,6 +1229,21 @@ class messenger extends menuedit_light
 						"list_id" => $row["oid"],
 						));
 					$this->restore_handle();
+					if (is_array($members))
+					foreach($members as $key => $membermail)
+					{
+						if (isset($sentto[$membermail]))
+						{
+							unset($members[$key]);
+							/*if ($GLOBALS["automatweb"]=="kalatehas")
+								echo("$internal denied mail $membermail [$key]<br>");*/
+						} else
+						{
+							$sentto[$membermail]=1;
+							/*if ($GLOBALS["automatweb"]=="kalatehas")
+								echo("$internal allowed mail $membermail [$key]<br>");*/
+						};
+					};
 					$to = join(",",$members);
 					$headers = "From: $udata[email]";
 					$subject = str_replace("\\","",$subject);
@@ -1935,7 +1952,8 @@ class messenger extends menuedit_light
 		$message = $msg["message"];
 		if ($msg["type"] & MSG_HTML)
 		{
-		} else
+		}
+		else
 		{
 	
 			$message = htmlspecialchars($message);
@@ -1944,6 +1962,8 @@ class messenger extends menuedit_light
 			$message = preg_replace("/(\n)/","<br>",$message);
 	
 		};
+
+		$message = quoted_printable_decode($message);
 		$message = preg_replace("/(http|https|ftp)(:\/\/\S+?)\s/si","<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $message);
 
 		

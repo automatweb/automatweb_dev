@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.1 2001/11/06 07:16:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/link_collection.aw,v 2.2 2001/11/20 13:19:04 kristo Exp $
 // link_collection.aw - Lingikogude haldus
 global $orb_defs;
+lc_load("linkcollection");
 $orb_defs["link_collection"] = "xml";
 
 class link_collection extends aw_template {
@@ -9,7 +10,11 @@ class link_collection extends aw_template {
 	{
 		$this->db_init();
 		$this->tpl_init("link_collection");
-
+		global $lc_linkcollection;
+		if (is_array($lc_linkcollection))
+		{
+			$this->vars($lc_linkcollection);
+		}
 	}
 
 	////

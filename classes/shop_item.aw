@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.23 2001/10/14 15:17:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.24 2001/11/20 13:19:05 kristo Exp $
 lc_load("shop");
 global $orb_defs;
 $orb_defs["shop_item"] = "xml";
@@ -9,7 +9,7 @@ define("PRICE_PER_2WEEK",2);
 
 define("PR_PER_PAGE" , 12);
 
-classload("shop_base");
+classload("shop_base","objects");
 class shop_item extends shop_base
 {
 	function shop_item()
@@ -71,6 +71,14 @@ class shop_item extends shop_base
 			$ret = $this->parse();
 		}
 		$this->read_template("admin_system_menu.tpl");
+
+		$o = $this->get_object($id);
+		classload("shop_menuedit");
+		$shm = new shop_menuedit;
+		$this->vars(array(
+			"path" => $shm->mk_path($o["parent"], "",0,true,false)
+		));
+
 		$menu_items = array(
 			"change" => array("name" => "General", "url" => $this->mk_my_orb("change", array("id" => $id), "",false,true)),
 			"change_categories" => array("name" => "Categories", "url" => $this->mk_my_orb("change_categories", array("id" => $id), "",false,true)),
@@ -78,7 +86,7 @@ class shop_item extends shop_base
 			"change_period" => array("name" => "Periodical prices", "url" => $this->mk_my_orb("set_per_prices", array("id" => $id), "",false,true)),
 			"change_per_items" => array("name" => "Periodical places", "url" => $this->mk_my_orb("set_per_places", array("id" => $id), "",false,true)),
 		);
-
+		
 		return $this->do_menu($menu_items).$ret;
 	}
 
