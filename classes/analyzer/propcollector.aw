@@ -117,6 +117,7 @@ class propcollector extends aw_template
 		$this->defaults = array();
 		$this->classinfo = array();
 		$this->groupinfo = array();
+		$this->tableinfo = array();
 	}
 
 	function add_property($name,$data)
