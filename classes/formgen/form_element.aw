@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.49 2003/06/09 10:10:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.50 2003/06/17 12:46:26 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2055,8 +2055,17 @@ class form_element extends aw_template
 					$sos = "";
 					if ($this->arr["submit_on_select"])
 					{
-						$sos = "onChange=\"fm_".$this->form->id.".submit()\"";
+						// for search forms we must not submit the form, but instead set element value in url
+						if ($this->form->type == FTYPE_SEARCH)
+						{
+							$sos = "onChange=\"window.location = window.location + '&elvalues[".$this->get_el_name()."]=' + this.options[this.selectedIndex].value\"";
+						}
+						else
+						{
+							$sos = "onChange=\"fm_".$this->form->id.".submit()\"";
+						}
 					}
+			
 					$html .="<select $disabled $sos $stat_check name='".$element_name."'";
 					if ($this->arr["lb_size"] > 1)
 					{
