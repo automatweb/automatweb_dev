@@ -1,4 +1,6 @@
 <?php
+// image.aw - image management
+// $header$
 
 classload("file","objects");
 
