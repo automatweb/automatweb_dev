@@ -1,0 +1,50 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="menu_alias">
+		<action name="add_alias">
+			<function name="change_alias">
+				<arguments>
+					<required name="parent" type="int"/>
+					<optional name="return_url"/>
+					<optional name="alias_to"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new">
+			<function name="change_alias">
+				<arguments>
+					<required name="parent" type="int"/>
+					<optional name="return_url"/>
+					<optional name="alias_to"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change">
+			<function name="change_alias">
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+
+		<action name="change_alias">
+			<function name="change_alias">
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_alias">
+			<function name="submit_alias">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
