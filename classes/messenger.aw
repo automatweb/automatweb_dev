@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.7 2001/05/23 03:20:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.8 2001/05/23 03:33:43 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -464,19 +464,8 @@ class messenger extends menuedit_light
 		$c = "";
 		$cnt = 0;
 
-		load_vcl("table");
-		$t = new aw_table(array(
-                        "prefix" => "msg" . $folder,
-                        "self" => $PHP_SELF,
-                        "imgurl" => $baseurl . "/automatweb/images",
-                ));
-                $t->set_header_attribs(array(
-                        "class" => "messenger",
-                        "action" => "folder",
-			"id" 	=> $folder,
-		));
-		$t->parse_xml_def($this->basedir . "/xml/messenger/mailbox.xml"); 
 		$onpage = $this->conf["msg_on_page"];
+		
 		if (is_array($msglist))
 		{
 			$pages = (int)(sizeof($msglist) / $onpage);
@@ -508,7 +497,8 @@ class messenger extends menuedit_light
 				$this->vars(array("pg" => $pg));
 				$cp .= $this->parse("page");
 			};
-				
+			
+			$c = "";
 
 			foreach($msglist as $key => $msg)
 			{
@@ -532,7 +522,8 @@ class messenger extends menuedit_light
 				$msg["subject"] = "$pref<a href='?class=messenger&action=show&id=$msg[id]'>" . $msg["subject"] . "</a>$suf";
 				$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
 				$msg["cnt"] = $cnt;
-				$t->define_data($msg);
+				$msg["tm"] = $this->time2date($row["tm"]);
+				$this->vars($msg);
 				//$this->vars(array(
 				//	"from"		=> $msg["modifiedby"],
 				//	"subject"	=> $msg["subject"],
@@ -542,13 +533,14 @@ class messenger extends menuedit_light
 				//	"status"	=> ($msg["status"]) ? "loetud" : "lugemata",
 				//));
 				//$c .= $this->parse("line");
+				$c .= $this->parse("line");
 			};
-			$t->sort_by(array("field" => $sortby));
-			$c = $t->draw();
+			#$t->sort_by(array("field" => $sortby));
+			#$c = $t->draw();
 		};
 
 		$this->vars(array(
-			"mailbox" => $t->draw(),
+			"line" => $c,
 			"folders_dropdown" => $this->picker($folder,$folder_list),
 			"active_folder" => $folder,
 			"message_count" => verbalize_number($cnt),
