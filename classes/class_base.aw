@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.214 2004/02/17 11:23:01 kristo Exp $
+// $Id: class_base.aw,v 2.215 2004/02/17 13:35:39 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -245,6 +245,7 @@ class class_base extends aw_template
 			$this->layout_mode = "fixed_toolbar";
 			$this->classinfo["hide_tabs"] = 1;
 		}
+
 
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
@@ -892,7 +893,6 @@ class class_base extends aw_template
 				$title = $name;
 			};
 			$parent = $this->obj_inst->parent();
-			//$parent = $this->coredata["parent"];
 		}
 		else
 		{
@@ -1723,6 +1723,7 @@ class class_base extends aw_template
 			$val["type"] = "select";
 			$filter = array(
 				"class_id" => constant($val["clid"]),
+				"lang_id" => array(),
 			);
 
 			if (isset($val["subclass"]))
