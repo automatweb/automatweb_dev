@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.46 2002/07/17 04:01:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.47 2002/07/18 10:48:22 kristo Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -139,16 +139,10 @@ class forum extends aw_template
 		load_vcl("table");	
 		$t = new aw_table(array(
 			"prefix" => "nforum",
-			"imgurl"    => $this->cfg["baseurl"]."/automatweb/images",
 			"tbgcolor" => "#C3D0DC",
 		));
 
 		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-		$t->set_header_attribs(array(
-			"id" => $id,
-			"class" => "forum",
-			"action" => "notify_list",
-		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
@@ -191,7 +185,7 @@ class forum extends aw_template
 			}
 		};
 
-		$t->sort_by(array("field" => $sortby));
+		$t->sort_by();
 
 		$this->vars(array(
 			"table" => $t->draw(),
