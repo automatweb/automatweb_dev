@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.27 2002/12/18 13:16:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.28 2002/12/20 14:40:52 duke Exp $
 
 /*
 
 @classinfo objtable=extlinks
 @classinfo objtable_index=id
+@tableinfo extlinks index=id master_table=objects master_index=oid
 
 @default group=general
 
