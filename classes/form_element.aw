@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.39 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.40 2001/11/27 17:38:48 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -357,11 +357,27 @@ class form_element extends aw_template
 						$tar[$tbl] = $tbl;
 					}
 				}
+
+				$num = -1;
+				if (is_array($this->arr["table"]))
+				{
+					foreach($this->arr["table"] as $num => $dat)
+					{
+						$this->vars(array(
+							"tables" => $this->picker($dat["table"], $tar),
+							"table_col" => $dat["col"],
+							"num" => $num
+						));
+						$_tbp.=$this->parse("TABLE_LB");
+					}
+				}
 				$this->vars(array(
-					"tables" => $this->picker($this->arr["table"], $tar),
-					"table_col" => $this->arr["table_col"]
+					"tables" => $this->picker("", $tar),
+					"table_col" => "",
+					"num" => ++$num
 				));
-				$this->vars(array("TABLE_LB" => $this->parse("TABLE_LB")));
+				$_tbp.=$this->parse("TABLE_LB");
+				$this->vars(array("TABLE_LB" => $_tbp));
 			}
 			$this->vars(array(
 				"LISTBOX_ITEMS"		=> $lb, 
@@ -394,11 +410,23 @@ class form_element extends aw_template
 		$var = $base."_ignore_text";
 		$this->arr["ignore_text"] = $$var;
 
-		$var = $base."_table";
-		$this->arr["table"] = $$var;
-
-		$var = $base."_tbl_col";
-		$this->arr["table_col"] = $$var;
+		$cnt =0;
+		if (is_array($this->arr["table"]))
+		{
+			$cnt = count($this->arr["table"]); 
+		}
+		$this->arr["table"] = array();
+		$num = 0;
+		for ($i = 0; $i < $cnt+1; $i++)
+		{
+			$var = $base."_table_".$i;
+			$var2 = $base."_tbl_col_".$i;
+			if ($$var != "")
+			{
+				$this->arr["table"][$num] = array("table" => $$var,"col" => $$var2);
+				$num++;
+			}
+		}
 
 		$var = $base."_act_from";
 		global $$var;
@@ -893,16 +921,18 @@ class form_element extends aw_template
 		{
 			$this->arr["text"] = $$var;
 			$this->dequote($this->arr["text"]);
-
-			$var = "element_".$this->id."_order";
-			global $$var;
-			$$var+=0;
-			if ($this->arr["ord"] != $$var)
-			{
-				$this->arr["ord"] = $$var;
-				$this->upd_object(array("oid" => $this->id, "jrk" => $$var));
-			}
 		};
+
+		$var = "element_".$this->id."_grp";
+		global $$var;
+		if ($this->arr["type"] == "checkbox")
+		{
+			$this->arr["ch_grp"] = $$var;
+		}
+		else
+		{
+			$this->arr["group"] = $$var;
+		}
 
 		$var = "element_".$this->id."_name";
 		global $$var;

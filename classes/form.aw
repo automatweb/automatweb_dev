@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.82 2001/11/22 16:42:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.83 2001/11/27 17:38:48 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -185,6 +185,7 @@ class form extends form_base
 						"element_id"			=> $v["id"],
 						"el_name"					=> ($v["name"] == "" ? "&nbsp;" : $v["name"]),
 						"el_type"					=> ($v["type"] == "" ? "&nbsp;" : $v["type"]),
+						"form_cell_grp"   => $v["group"],
 						"chpos" => $this->mk_my_orb("change_el_pos", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"],"el_id" => $v["id"]))
 					));
 					$el.=$this->parse("ELEMENT");
@@ -795,7 +796,8 @@ class form extends form_base
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
 			"tables" => $this->picker($this->arr["table"],$this->get_list_tables()),
-			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE))
+			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE)),
+			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 		));
 		$ns = "";
 		if ($this->type != 2)
