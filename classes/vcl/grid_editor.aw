@@ -178,24 +178,24 @@ class grid_editor extends class_base
 				}
 
 				$sh = $sv = $eu = $el = $er = $ed = "<img src='".$this->cfg["baseurl"]."/automatweb/images/trans.gif' width='8' height='8'>"; 
-				$sh = "<a href='javascript:split_hor($i,$a)'><img alt='" . LC_TABLE_DEVIDE_CELL_HOR . "' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_down.gif' border=0></a>";
-				$sv = "<a href='javascript:split_ver($i,$a)'><img alt='" . LC_TABLE_DEVIDE_CELL_VER . "' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_left.gif' border=0></a>";
+				$sh = "<a href='javascript:split_hor($i,$a)'><img alt='Jaga pooleks horisontaalselt' title='Jaga pooleks horisontaalselt' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_down.gif' border=0></a>";
+				$sv = "<a href='javascript:split_ver($i,$a)'><img alt='Jaga pooleks vertikaalselt' title='Jaga pooleks vertikaalselt' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_left.gif' border=0></a>";
 
 				if ($i != 0)
 				{
-					$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_UPPER_CELL . "' src='".$this->cfg["baseurl"]."/automatweb/images/up_r_arr.gif'></a>";
+					$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt='Kustuta &uuml;lemine cell' title='Kustuta &uuml;lemine cell' src='".$this->cfg["baseurl"]."/automatweb/images/up_r_arr.gif'></a>";
 				}
 				if ($a != 0)
 				{
-					$el = "<a href='javascript:exp_left($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_LEFT_CELL . "' src='".$this->cfg["baseurl"]."/automatweb/images/left_r_arr.gif'></a>";
+					$el = "<a href='javascript:exp_left($i,$a)'><img border=0 alt='Kustuta vasak cell' title='Kustuta vasak cell' src='".$this->cfg["baseurl"]."/automatweb/images/left_r_arr.gif'></a>";
 				}
 				if (($a+$spans["colspan"]) != $this->arr["cols"])
 				{
-					$er="<a href='javascript:exp_right($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_RIGHT_CELL . "' src='".$this->cfg["baseurl"]."/automatweb/images/right_r_arr.gif'></a>";
+					$er="<a href='javascript:exp_right($i,$a)'><img border=0 alt='Kustuta parem cell' title='Kustuta parem cell' src='".$this->cfg["baseurl"]."/automatweb/images/right_r_arr.gif'></a>";
 				}
 				if (($i+$spans["rowspan"]) != $this->arr["rows"])
 				{
-					$ed = "<a href='javascript:exp_down($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_LOWER_CELL . "' src='".$this->cfg["baseurl"]."/automatweb/images/down_r_arr.gif'></a>";
+					$ed = "<a href='javascript:exp_down($i,$a)'><img border=0 alt='Kustuta alumine cell' title='Kustuta alumine cell' src='".$this->cfg["baseurl"]."/automatweb/images/down_r_arr.gif'></a>";
 				}
 
 				$map = $this->arr["map"][$i][$a];
