@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.24 2004/10/05 13:20:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.25 2004/10/08 15:58:21 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -645,8 +645,8 @@ class vcalendar extends aw_template
 				"lc_month" => get_est_month(date("m",$i)),
 				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
                         	"date_and_time" => $dt . ". " . $mn2,
-				"day_name" => strtoupper(substr(get_lc_weekday($wn),0,1)),
-				"long_day_name" => ucfirst(get_lc_weekday($wn)),
+				"day_name" => locale::get_lc_weekday($wn,true),
+				"long_day_name" => locale::get_lc_weekday($wn),
                         	"date" => $dt . ". " . $mn,
 			));
 			$tpl = date("Ymd",$i) == $now ? "TODAY" : "DAY";
@@ -673,10 +673,15 @@ class vcalendar extends aw_template
 				$events_for_day .= $this->draw_event($event);
 			};
 		};
+		$i = $this->range["start"];
+		$dt = date("d",$i);
+		$mn = get_lc_month(date("m",$i));
 		$this->vars(array(
 			"EVENT" => $events_for_day,
 			"daynum" => date("j",$this->range["start"]),
 			"dayname" => date("F d, Y",$this->range["start"]),
+			"long_day_name" => locale::get_lc_weekday($this->range["wd"]),
+                       	"date" => $dt . ". " . $mn,
 		));
 		return $this->parse();
 	}
@@ -932,7 +937,8 @@ class vcalendar extends aw_template
 		{
 			$evt["link"] = $evt["url"];
 		};
-		
+	
+		// XXX: this should SO not be here
 		if ($this->evt_tpl->template_has_var("first_image"))
 		{
 			$evt_obj = new object($evt["id"]);
@@ -945,6 +951,10 @@ class vcalendar extends aw_template
 			if (is_object($first))
 			{
 				$img_url = $img->get_url_by_id($first->prop("to"));
+			}
+			else if (!empty($evt["project_image"]))
+			{
+				$img_url = $evt["project_image"];
 			};
 			$evt["first_image"] = $img_url;
 		};
