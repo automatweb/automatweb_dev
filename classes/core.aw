@@ -559,6 +559,12 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		// if error type is class not defined and get and post are empty, the orb.aw url was requested probably, no need ot send error
+		if ($err_type == 30 && count($_GET) == 0 && count($_POST) == 0)
+		{
+			$send_mail = false;
+		}
+
 		if ($send_mail)
 		{		
 			send_mail("vead@struktuur.ee", $subj, $content,$head);
