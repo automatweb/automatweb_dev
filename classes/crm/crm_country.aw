@@ -5,28 +5,22 @@
 	@default table=objects
 	@default group=general
 
+	@property name type=textbox size=20
+	@caption Riigi nimetus
+
 	@property comment type=textarea field=comment
 	@caption Kommentaar
 
 	@default table=kliendibaas_riik
 
-	@property name type=textbox size=20
-	@caption Riigi nimetus
-
 	@property name_en type=textbox size=20
 	@caption Nimetus inglise keeles
 
 	@property name_native type=textbox size=20
-	@caption Niemtus kohalikus keeles
+	@caption Nimetus kohalikus keeles
 
-//	@property languages type=textbox size=30
-//	@caption Keeled
+	@classinfo no_status=1
 
-//	@property lyhend type=textbox size=10
-//	@caption Lühend
-
-//	@property location type=textarea
-//	@caption Asukoha kirjeldus
 */
 
 /*
