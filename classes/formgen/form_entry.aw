@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.12 2002/09/09 12:29:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.1 2002/10/29 10:24:18 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -24,8 +24,7 @@ class form_entry extends aw_template
 		$o = $this->get_object($id);
 		$this->mk_path($o["parent"], LC_FORM_ENTRY_CHANGE_ENTRY);
 
-		classload("form");
-		$f = new form;
+		$f = get_instance("formgen/form");
 		return $f->gen_preview(array("id" => $fid, "entry_id" => $id));
 	}
 
@@ -120,7 +119,7 @@ class form_entry extends aw_template
 		$this->mk_path($al["parent"],"<a href='".$this->mk_my_orb("list_aliases", array("id" => $id),"aliasmgr")."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");
 		$this->read_template("alias_type.tpl");
 
-		$fb = new form_base;
+		$fb = get_instance("formgen/form_base");
 		$form = $fb->get_form_for_entry($alias);
 
 		$opl = $fb->get_op_list($form);
