@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.32 2003/11/28 11:38:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.33 2003/12/03 12:13:00 kristo Exp $
 
 /*
 
@@ -637,6 +637,7 @@ class gallery_v2 extends class_base
 		}
 
 		$img_n = "g_".$page."_".$row."_".$col."_tn";
+
 		$f = get_instance("image");
 		$this->_page_content[$row][$col]["tn"] = $f->add_upload_image(
 			$img_n, 
@@ -977,7 +978,9 @@ class gallery_v2 extends class_base
 			"link" => $link,
 			"img" => image::make_img_tag(image::check_url($pd['tn']['url'])),
 			"rating" => $this->rating->get_rating_for_object($pd['img']['id']),
-			"hits" => $this->hits[$pd['img']['id']]
+			"hits" => $this->hits[$pd['img']['id']],
+			"date" => $pd["date"],
+			"caption" => $pd["caption"]
 		));
 		return $tp->parse();
 	}
