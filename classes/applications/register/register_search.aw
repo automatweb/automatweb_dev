@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.19 2004/12/30 13:50:08 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.20 2005/01/06 07:45:21 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -642,7 +642,7 @@ class register_search extends class_base
 			foreach($props as $pn => $pd)
 			{
 				if ($pn == "status" || $pn == "register_id" || $f_props[$pn]["store"] == "no" || $f_props[$pn]["field"] == "meta"
-|| $f_props[$pn]["type"] == "submit")
+|| $f_props[$pn]["type"] == "submit" || !isset($f_props[$pn]))
 				{
 					continue;
 				}
