@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.23 2002/01/31 00:11:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.24 2002/02/12 10:46:38 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -112,10 +112,12 @@ class users_user extends aw_template
 	function login($params = array())
 	{
 		global $uid;
-		if ($params["uid"])
+		global $password;
+		global $HTTP_POST_VARS;
+		if ($HTTP_POST_VARS["uid"])
 		{
-			$uid		= $params["uid"];
-			$password	= $params["password"];
+			$uid		= $HTTP_POST_VARS["uid"];
+			$password	= $HTTP_POST_VARS["password"];
 			// need on selleks, et ei peaks global $REMOTE_ADDR tegema, vms
 			$ip		= $params["remote_ip"];
 			$host		= $params["remote_host"];
