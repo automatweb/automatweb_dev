@@ -10,13 +10,12 @@
       </property>
       <property>
             <name>folders</name>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_FOLDER</reltype>
+            <type>text</type>
+            <store>no</store>
+            <group>folders</group>
+            <callback>callback_get_menus</callback>
             <table>objects</table>
-            <group>general</group>
+            <field>folders</field>
             <caption>Kataloogid</caption>
       </property>
       <property>
@@ -54,9 +53,9 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
+            <folders>
+                  <caption>Menüüd</caption>
+            </folders>
             <clids>
                   <caption>Objektit&amp;uuml;&amp;uuml;bid</caption>
             </clids>

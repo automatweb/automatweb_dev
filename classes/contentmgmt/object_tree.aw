@@ -4,7 +4,7 @@
 
 @classinfo syslog_type=ST_OBJECT_TREE relationmgr=yes
 
-@groupinfo general caption=Üldine
+@groupinfo folders caption=Menüüd
 @groupinfo clids caption=Objektit&uuml;&uuml;bid
 
 @default table=objects
@@ -13,7 +13,7 @@
 @property status type=status field=status
 @caption Staatus
 
-@property folders type=relpicker multiple=1 field=meta method=serialize reltype=RELTYPE_FOLDER
+@property folders type=text store=no group=folders callback=callback_get_menus
 @caption Kataloogid
 
 @property show_folders type=checkbox ch_value=1 field=meta method=serialize
@@ -105,6 +105,24 @@ class object_tree extends class_base
 		extract($arr);
 		$ob = $this->get_object($id);
 
+		// make $ob['meta']['folders'] - gather all aliased menus there
+		$alias_reltype = new aw_array($ob["meta"]["alias_reltype"]);
+		$menu_ids = array_filter($alias_reltype->get(),create_function('$val','if ($val==RELTYPE_FOLDER) return true;'));
+		$ob['meta']['folders'] = $this->make_keys(array_keys($menu_ids));
+
+		// now, for all menus that have include_submenus defined, include submenus
+		$ar = new aw_array($ob['meta']['include_submenus']);
+		foreach($ar->get() as $mid)
+		{
+			$ob['meta']['folders'] += $this->make_keys(array_keys($this->get_objects_below(array(
+				"class" => CL_PSEUDO,
+				"parent" => $mid,
+				"status" => STAT_ACTIVE,
+				"full" => true,
+				"ret" => ARR_NAME
+			))));
+		}
+
 		$this->read_template('show.tpl');
 
 		// get all objects to show
@@ -121,7 +139,8 @@ class object_tree extends class_base
 				"show" => $this->cfg["baseurl"]."/".$oid,
 				"name" => $od['name'],
 				"type" => $this->cfg["classes"][$od["class_id"]]["name"],
-				"add_date" => $this->time2date($od["modified"], 2)
+				"add_date" => $this->time2date($od["modified"], 2),
+				"icon" => image::make_img_tag(icons::get_icon_url($od["class_id"], $od["name"]))
 			));
 			$this->parse("FILE");
 		}
@@ -248,7 +267,90 @@ class object_tree extends class_base
 				}
 			}
 		}
+		if ($prop["name"] == "folders")
+		{
+			$arr['metadata']["include_submenus"] = $arr["form_data"]["include_submenus"];
+		};
+
 		return PROP_OK;
+	}
+
+	function callback_get_menus($args = array())
+	{
+		$prop = $args["prop"];
+		$nodes = array();
+		$include_submenus = $args["obj"]["meta"]["include_submenus"];
+		// now I have to go through the process of setting up a generic table once again
+		load_vcl("table");
+		$this->t = new aw_table(array(
+			"prefix" => "ot_menus",
+			"layout" => "generic"
+		));
+		$this->t->define_field(array(
+			"name" => "oid",
+			"caption" => "ID",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+		));
+		$this->t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+		));
+		$this->t->define_field(array(
+			"name" => "check",
+			"caption" => "k.a. alammenüüd",
+			"talign" => "center",
+			"width" => 80,
+			"align" => "center",
+		));
+
+		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
+		// and from this array, I need to get the list of objects that
+		// have the reltype RELTYPE_FOLDER
+		if (is_array($alias_reltype))
+		{
+			$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_FOLDER) return true;'));
+		};
+
+		if (sizeof($menu_ids) > 0)
+		{
+			// now get those objects and put them into table
+			$q = sprintf("SELECT oid,name,status FROM objects
+					LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
+
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				// it shouldn't be too bad, cause get_object is cached.
+				// still, it sucks.
+				$this->save_handle();
+				$chain = array_reverse($this->get_obj_chain(array(
+					"oid" => $row["oid"],
+				)), true);
+				
+				$path = join("/",array_slice($chain,-3));
+				$this->restore_handle();
+				$this->t->define_data(array(
+					"oid" => $row["oid"],
+					"name" => $path . "/" . $row["name"],
+					"check" => html::checkbox(array(
+						"name" => "include_submenus[$row[oid]]",
+						"value" => $row["oid"],
+						"checked" => $include_submenus[$row["oid"]],
+					)),
+				));
+			};
+		};
+		
+		$nodes[$prop["name"]] = array(
+			"type" => "text",
+			"caption" => $prop["caption"],
+			"value" => $this->t->draw(),
+		);
+		return $nodes;
 	}
 }
 ?>
