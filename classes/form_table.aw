@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.51 2002/09/03 06:31:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.52 2002/09/04 07:34:35 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -65,9 +65,10 @@ class form_table extends form_base
 	// form_for_entry_id - optional - the id of the form that has the entries with the id that will be in the entry_id column
 	function start_table($id, $form_for_entry_id = 0)
 	{
+		$this->load_table($id);
+
 		load_vcl("table");
 		$this->t = new aw_table(array("prefix" => "fg_".$id));
-		$this->t->parse_xml_def_string($this->get_xml($id));
 
 		// this figures out which fields in the table are numeric and tells the vcl table component about their names
 		$this->set_numeric_fields_in_table();
@@ -76,6 +77,10 @@ class form_table extends form_base
 		// so this should be passed to this function if all rows are from the same form, or
 		// set before calling row_data
 		$this->form_for_entry_id = $form_for_entry_id;
+
+		// the columns that have data in them in any row get marked here, so we can honor 
+		// "don't show if empty" flag for columns
+		$this->table_not_empty_cols = array();
 
 		// figure out a unique name for the form that contains this table
 		$cnt = 1;
@@ -91,18 +96,20 @@ class form_table extends form_base
 		// initialize all the baskets that are to be used in this table
 		for ($i=0; $i < $this->table["cols"]; $i++)
 		{
-			$bid = $this->table["defs"][$i]["basket"];
-			if ($bid)
+			if (is_array($this->table["defs"][$i]["basket"]))
 			{
-				$this->baskets[$bid] =& get_instance("basket");
-				$this->baskets[$bid]->init_basket($bid);
+				foreach($this->table["defs"][$i]["basket"] as $fel => $bid)
+				{
+					$this->baskets[$bid] =& get_instance("basket");
+					$this->baskets[$bid]->init_basket($bid);
+				}
 			}
 		}
 
 		// all the price element's values in the table are accumulated in here
 		$this->pricel_sum = 0;
 
-		if ($GLOBALS["tbl_dbg"])
+		if ($GLOBALS["tbl_dbg"] || $GLOBALS["fg_tbl_dbg"])
 		{
 			echo "table id = $id <br>";
 		}
@@ -351,7 +358,7 @@ class form_table extends form_base
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
-			if (is_array($cc["els"]))
+			if (is_array($cc["els"]) && !$cc["not_active"])
 			{
 				// do this better. 
 				// first we compile the elements in the column together into one string and add their 
@@ -386,48 +393,84 @@ class form_table extends form_base
 						else
 						if ($elid == "formel")
 						{
-							if (!$cc["basket"])
+							if (!is_array($cc["basket"]))
 							{
 								$this->raise_error(ERR_FG_TBL_NOBASKET, "Column $col for form table $this->table_id has a count element selected, but no basket! You must also select a basket, where the ordered items will be stored!", true);
 							}
 							// bit of trickey here - this will get used in some next loop iteration to calculate price
-							$basketsonrow[] = $cc["basket"];
-
-							// now, if we have a controller set for this basket
-							$ctrl_ok = true;
-							if ($cc["basket_controller"])
+							foreach($cc["basket"] as $element_id => $bid)
 							{
-								// eval it. and if it returns false, then we must not show this basket's count element
-								// but in order to eval it, we must load the form for the current row
-								// and then the entry for the current row
-								$curfinst = $this->cache_get_form_instance($this->form_for_entry_id);
-								$curfinst->load_entry($dat["entry_id"]);
-								$ctrl_ok = $this->controller_instance->eval_controller($cc["basket_controller"], "", $curfinst);
-								$curfinst->unload_entry();
-							}
+								$basketsonrow[$bid] = $bid;
 
-							if ($ctrl_ok)
-							{
-								// this is the form where the count element will come from
-								$element_id = $cc["formel"];
-								$form_id = $cc["el_forms"][$element_id];
-								$form =& $this->cache_get_form_instance($form_id);
-								$form->set_form_html_name($this->get_html_name_for_tbl_form());
-								$el_ref = $form->get_element_by_id($element_id);
-								$bcount = $this->baskets[$cc["basket"]]->get_item_count(array("item_id" => $dat["entry_id"]));
-								$str .= $el_ref->gen_user_html_not(
-									"",
-									array($el_ref->get_el_name() => $bcount),
-									false,
-									"ftbl_el[$col][".$this->form_for_entry_id."][".$dat["entry_id"]."]",
-									$dat
-								);							
+								// now, if we have a controller set for this basket
+								$ctrl_ok = true;
+								if (is_array($cc["basket_controller"][$element_id]))
+								{
+									// eval it. and if it returns false, then we must not show this basket's count element
+									// but in order to eval it, we must load the form for the current row
+									// and then the entry for the current row
+									foreach($cc["basket_controller"][$element_id] as $ctrlid)
+									{
+										$curfinst = $this->cache_get_form_instance($this->form_for_entry_id);
+										$curfinst->load_entry($dat["entry_id"]);
+										$ctrl_ok = $this->controller_instance->eval_controller($ctrlid, "", $curfinst);
+										$curfinst->unload_entry();
+									}
+								}
+
+								if ($ctrl_ok)
+								{
+									// this is the form where the count element will come from
+									$form_id = $cc["el_forms"][$element_id];
+									$form =& $this->cache_get_form_instance($form_id);
+									$form->unload_entry();
+									$form->set_form_html_name($this->get_html_name_for_tbl_form());
+									$el_ref = $form->get_element_by_id($element_id);
+									$bcount = $this->baskets[$bid]->get_item_count(array("item_id" => $dat["entry_id"]));
+
+									$redir = $cc["basket_url"][$element_id];
+									if ($redir == "")
+									{
+										$redir = $this->ru;
+									}
+									$burl = $this->mk_my_orb("add_item", array(
+										"item_id" => $dat["entry_id"], 
+										"form_id" => $this->form_for_entry_id, 
+										"basket_id" => $bid,
+										"redir" => urlencode($redir),
+										"count" => $dat["ev_".$cc["basket_add_count_el"][$element_id]]
+									),"basket");
+									$el_ref->onclick = "window.location='".$burl."';return false;";
+
+									if (isset($cc["link_popup"]) && $cc["link_popup"])
+									{
+										$burl = sprintf("ft_popup('%s','popup',%d,%d,%d,%d,%d,%d);return false;",
+											$burl,
+											$cc["link_popup_scrollbars"],
+											!$cc["link_popup_fixed"],
+											$cc["link_popup_toolbar"],
+											$cc["link_popup_addressbar"],
+											$cc["link_popup_width"],
+											$cc["link_popup_height"]
+										);
+										$el_ref->onclick = $burl;
+									};
+
+									$str .= $el_ref->gen_user_html_not(
+										"",
+										array($el_ref->get_el_name() => $bcount),
+										false,
+										"ftbl_el[$col][".$this->form_for_entry_id."][".$dat["entry_id"]."]",
+										$dat
+									);
+								}
 							}
 						}
 						else
 						if ($elid == "formel_price")
 						{
-							$element_id = $cc["formel"];
+							reset($cc["formel"]);
+							list(,$element_id) = each($cc["formel"]);
 							$basket_count = 0;
 							foreach($basketsonrow as $bid)
 							{
@@ -471,6 +514,11 @@ class form_table extends form_base
 				if (isset($this->table["defs"][$col]["is_email"]))
 				{
 					$str = "<a href='mailto:".$str."'>".$str."</a>";
+				}
+
+				if (trim($str) != "")
+				{
+					$this->table_not_empty_cols[$col] = true;
 				}
 				$dat["ev_col_".$col] = $str;
 			}
@@ -541,13 +589,15 @@ class form_table extends form_base
 			// because we got to load it's value from the database...
 			if ($this->table["defs"][$i]["els"]["formel"] == "formel")
 			{
-				$element_id = $this->table["defs"][$i]["formel"];
-				$form_id = $this->table["defs"][$i]["el_forms"][$element_id];
-				$form =& $this->cache_get_form_instance($form_id);
-				$el_ref = $form->get_element_by_id($element_id);
-				if (($fid = $el_ref->get_up_down_count_el_form()))
+				foreach($this->table["defs"][$i]["formel"] as $element_id)
 				{
-					$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
+					$form_id = $this->table["defs"][$i]["el_forms"][$element_id];
+					$form =& $this->cache_get_form_instance($form_id);
+					$el_ref = $form->get_element_by_id($element_id);
+					if (($fid = $el_ref->get_up_down_count_el_form()))
+					{
+						$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
+					}
 				}
 			}
 		}
@@ -616,6 +666,9 @@ class form_table extends form_base
 			header("Location: ".$this->last_table_alias_url);
 			die();
 		}
+
+		// we do this here, so that we can avoid defining the cols that are marked as "don't show empty" and are empty
+		$this->t->parse_xml_def_string($this->get_xml());
 
 		if (is_array($this->table["defsort"]))
 		{
@@ -931,12 +984,15 @@ class form_table extends form_base
 				$title = "&lt;a href='javascript:void(0)' onClick='tb_selall()'&gt;".$title."&lt;/a&gt;";
 			}
 			
-			$xml.="<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\" ";
-			if ($cc["sortable"])
+			if ((!$cc["no_show_empty"] || $this->table_not_empty_cols[$col]) && !$cc["not_active"])
 			{
-				$xml.=" sortable=\"1\" ";
+				$xml.="<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\" ";
+				if ($cc["sortable"])
+				{
+					$xml.=" sortable=\"1\" ";
+				}
+				$xml.=" $numericattr />\n";
 			}
-			$xml.=" $numericattr />\n";
 		}
 		if ($GLOBALS["dbg_num"]) {echo("<textarea cols=80 rows=40>$xml</textarea>");};
 		return $xml.="\n</data></tabledef>";
@@ -1542,6 +1598,7 @@ class form_table extends form_base
 		$this->do_menu();
 
 		$els = $this->get_tbl_elements();
+		$els_nof = $this->get_tbl_elements(true);
 
 		$this->vars(array(
 			"num_cols" => $this->table["cols"],
@@ -1599,7 +1656,7 @@ class form_table extends form_base
 			if ($this->table["defs"][$col]["els"]["formel"] == "formel")
 			{
 				$this->vars(array(
-					"formels" => $this->picker($this->table["defs"][$col]["formel"], $this->get_tbl_elements(true))
+					"formels" => $this->mpicker($this->table["defs"][$col]["formel"], $els_nof)
 				));
 				$coldata[$col][7] = $this->parse("SEL_FORMEL");
 			}
@@ -1607,18 +1664,39 @@ class form_table extends form_base
 			if ($this->table["defs"][$col]["els"]["formel_price"] == "formel_price")
 			{
 				$this->vars(array(
-					"formels" => $this->picker($this->table["defs"][$col]["formel"], $this->get_tbl_elements(true))
+					"formels" => $this->mpicker($this->table["defs"][$col]["formel"], $els_nof)
 				));
 				$coldata[$col][7] = $this->parse("SEL_FORMEL");
 			}
 
 			if ($this->table["defs"][$col]["els"]["formel"] == "formel")
 			{
-				$this->vars(array(
-					"baskets" => $this->picker($this->table["defs"][$col]["basket"], $this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
-					"basket_controller" => $this->picker($this->table["defs"][$col]["basket_controller"], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true)))
-				));
-				$coldata[$col][8] = $this->parse("SEL_BASKET");
+				foreach($this->table["defs"][$col]["formel"] as $fel)
+				{
+					$this->vars(array(
+						"fel_name" => $els[$fel],
+						"fel_id" => $fel,
+						"baskets" => $this->picker($this->table["defs"][$col]["basket"][$fel], $this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
+						"basket_controller" => $this->mpicker($this->table["defs"][$col]["basket_controller"][$fel], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true))),
+						"basket_url" => $this->table["defs"][$col]["basket_url"][$fel],
+						"bcount_el" => $this->picker($this->table["defs"][$col]["basket_add_count_el"][$fel], $els_nof)
+					));
+
+					$issb = "";
+					if ($this->table["defs"][$col]["el_forms"][$fel])
+					{
+						$finst =& $this->cache_get_form_instance($this->table["defs"][$col]["el_forms"][$fel]);
+						$el_ref = $finst->get_element_by_id($fel);
+						if ($el_ref->get_type() == "button")
+						{
+							$issb = $this->parse("EL_IS_SUBMIT");
+						}
+					}
+					$this->vars(array(
+						"EL_IS_SUBMIT" => $issb
+					));
+					$coldata[$col][8] .= $this->parse("SEL_BASKET");
+				}
 			}
 
 			$l = "";
@@ -1658,7 +1736,8 @@ class form_table extends form_base
 			}
 
 			$this->vars(array(
-				"HAS_FTABLE_ALIASES" => ($has_ftable_aliases ? $this->parse("HAS_FTABLE_ALIASES") : "")
+				"HAS_FTABLE_ALIASES" => ($has_ftable_aliases ? $this->parse("HAS_FTABLE_ALIASES") : ""),
+				"col_not_active" => checked($this->table["defs"][$col]["not_active"])
 			));
 			$coldata[$col][9] = $this->parse("SEL_SETTINGS");
 
@@ -1667,7 +1746,8 @@ class form_table extends form_base
 				"col_email" => checked($this->table["defs"][$col]["is_email"]),
 				"col_clicksearch" => checked($this->table["defs"][$col]["clicksearch"]),
 				"col_link" => checked($this->table["defs"][$col]["link"]),
-				"col_link_popup" => checked($this->table["defs"][$col]["link_popup"])
+				"col_link_popup" => checked($this->table["defs"][$col]["link_popup"]),
+				"no_show_empty" => checked($this->table["defs"][$col]["no_show_empty"])
 			));
 			$coldata[$col][10] = $this->parse("SEL_SETINGS2");
 
@@ -1762,7 +1842,23 @@ class form_table extends form_base
 				// oh. did I say that already?
 				if ($elid == "formel" || $elid == "formel_price")
 				{
-					$this->table["defs"][$i]["el_forms"][$this->table["defs"][$i]["formel"]] = $els[$this->table["defs"][$i]["formel"]];
+					if (is_array($this->table["defs"][$i]["formel"]))
+					{
+						foreach($this->table["defs"][$i]["formel"] as $fel)
+						{
+							$this->table["defs"][$i]["el_forms"][$fel] = $els[$fel];
+							$this->table["defs"][$i]["basket_controller"][$fel] = $this->make_keys($cols[$i]["basket_controller"][$fel]);
+
+							if (($fid = $this->table["defs"][$i]["basket_add_count_el"][$fel]))
+							{
+								$ret[$fid][$this->table["defs"][$i]["basket_add_count_el"][$fel]] = $this->table["defs"][$i]["basket_add_count_el"][$fel];
+							}
+						}
+					}
+					else
+					{
+						$this->table["defs"][$i]["el_forms"][$this->table["defs"][$i]["formel"]] = $els[$this->table["defs"][$i]["formel"]];
+					}
 				}
 
 				// if the element was just added, default the damn thing to show and search
@@ -1774,6 +1870,7 @@ class form_table extends form_base
 			}
 			$this->table["defs"][$i]["grps"] = $this->make_keys($cols[$i]["grps"]);
 			$this->table["defs"][$i]["alias"] = $this->make_keys($cols[$i]["alias"]);
+			$this->table["defs"][$i]["formel"] = $this->make_keys($cols[$i]["formel"]);
 
 			foreach($this->table["defs"][$i]["alias"] as $aid)
 			{
@@ -2571,11 +2668,16 @@ class form_table extends form_base
 
 			foreach($ftbl_el as $col => $coldat)
 			{
-				$basket_id = $this->table["defs"][$col]["basket"];
-				if (!is_object($baskets[$basket_id]))
+				if (is_array($this->table["defs"][$col]["basket"]))
 				{
-					$baskets[$basket_id] =&get_instance("basket");
-					$baskets[$basket_id]->init_basket($basket_id);
+					foreach($this->table["defs"][$col]["basket"] as $ef => $basket_id)
+					{
+						if (!is_object($baskets[$basket_id]))
+						{
+							$baskets[$basket_id] =&get_instance("basket");
+							$baskets[$basket_id]->init_basket($basket_id);
+						}
+					}
 				}
 
 				foreach($coldat as $form_id => $form_data)
