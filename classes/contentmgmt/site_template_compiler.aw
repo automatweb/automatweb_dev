@@ -529,6 +529,8 @@ class site_template_compiler extends aw_template
 						"tpl" => $cur_tpl_fqn,
 						"has_image_tpl" => $ldat["has_image_tpl"],
 						"no_image_tpl" => $ldat["no_image_tpl"],
+						"a_parent" => $adat["parent"],
+						"level" => $level
 					)
 				);
 
@@ -879,6 +881,10 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"link\" => ".$inst_name."->".$fun_name."($o_name),\n";
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
 		$ret .= $this->_gi()."\"section\" => ".$o_name."->".$this->id_func."(),\n";
+		if ($arr["level"] > 1)
+		{
+			$ret .= $this->_gi()."\"parent_section\" => \$o_".$arr["a_parent"]."_".($arr["level"]-1)."->".$this->id_func."(),\n";
+		}
 		$ret .= $this->_gi()."\"colour\" => ".$o_name."->prop(\"color\"),\n";
 		$ret .= $this->_gi()."\"comment\" => ".$o_name."->comment(),\n";
 		$this->brace_level--;
