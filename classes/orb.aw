@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.20 2002/09/26 16:12:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.21 2002/10/09 09:48:55 kristo Exp $
 // tegeleb ORB requestide handlimisega
-classload("aw_template","defs","xml_support");
+classload("aw_template","defs");
 lc_load("automatweb");
 class orb extends aw_template 
 {
@@ -507,45 +507,52 @@ class new_orb extends orb
 			$required = $orb_defs[$class][$action]["required"];
 			$optional = $orb_defs[$class][$action]["optional"];
 			$defined = $orb_defs[$class][$action]["define"];
-			foreach($required as $key => $val)
+			if (is_array($required))
 			{
-				if (!isset($params[$key]))
+				foreach($required as $key => $val)
 				{
-					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$this->fatal,$this->silent);
-					bail_out();
-				};
-
-				$vartype = $orb_defs[$class][$action]["types"][$key];
-				if ($vartype == "int")
-				{
-					if (((string)($params[$key])) != ((string)((int)$params[$key])))
+					if (!isset($params[$key]))
 					{
-						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$this->fatal,$this->silent);
+						$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$this->fatal,$this->silent);
 						bail_out();
 					};
-				};
-				$ret[$key] = $params[$key];
-			};
- 
-			//optional arguments
-			foreach($optional as $key => $val)
-			{
-				$vartype = $orb_defs[$class][$action]["types"][$key];
-				if (isset($params[$key]))
-				{
-					if ( ($vartype == "int") && ($params[$key] != sprintf("%d",$vars[$key])) )
+
+					$vartype = $orb_defs[$class][$action]["types"][$key];
+					if ($vartype == "int")
 					{
-						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$this->fatal,$this->silent);
-						bail_out();
+						if (((string)($params[$key])) != ((string)((int)$params[$key])))
+						{
+							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$this->fatal,$this->silent);
+							bail_out();
+						};
 					};
 					$ret[$key] = $params[$key];
-				}
-				else
-				if (isset($orb_defs[$class][$action]["defaults"][$key]))
+				};
+			}
+			
+			//optional arguments
+			if (is_array($optional))
+			{
+				foreach($optional as $key => $val)
 				{
-					$ret[$key] = $orb_defs[$class][$action]["defaults"][$key];
-				}
-			};
+					$vartype = $orb_defs[$class][$action]["types"][$key];
+					if (isset($params[$key]))
+					{
+						if ( ($vartype == "int") && ($params[$key] != sprintf("%d",$vars[$key])) )
+						{
+							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$this->fatal,$this->silent);
+							bail_out();
+						};
+						$ret[$key] = $params[$key];
+					}
+					else
+					if (isset($orb_defs[$class][$action]["defaults"][$key]))
+					{
+						$ret[$key] = $orb_defs[$class][$action]["defaults"][$key];
+					}
+				};
+			}
+
 			if (is_array($defined))
 			{
 				$ret += $defined;
@@ -630,7 +637,7 @@ class new_orb extends orb
 		$orb_defs = $this->try_load_class($request["class"]);
 		$params = $this->check_method_params($orb_defs, $request["params"], $request["class"], $request["action"]);
 
-		$ret = $this->do_local_call($orb_defs[$request["class"]][$request["action"]]["function"], $request["class"], $request["params"]);
+		$ret = $this->do_local_call($orb_defs[$request["class"]][$request["action"]]["function"], $request["class"], $params);
 
 		return $inst->encode_return_data($ret);
 	}
