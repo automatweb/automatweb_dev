@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.187 2003/12/10 13:08:37 duke Exp $
+// $Id: class_base.aw,v 2.188 2003/12/10 14:28:16 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1745,6 +1745,11 @@ class class_base extends aw_template
 		foreach($properties as $key => $val)
 		{
 			if ($val["name"] == "status" && $this->classinfo["no_status"]["text"] == 1)
+			{
+				continue;
+			};
+			
+			if ($val["name"] == "comment" && $this->classinfo["no_comment"]["text"] == 1)
 			{
 				continue;
 			};
