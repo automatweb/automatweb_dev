@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.6 2001/07/31 13:24:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.7 2001/07/31 16:20:22 duke Exp $
 // sys.aw - various system related functions
 lc_load("syslog");
 global $orb_defs;
@@ -271,25 +271,53 @@ class sys extends aw_template
 						$flags = "";
 					};
 
+					$prim_key_added = false;
+
 					if ($og["type"])
 					{
+						// kui lokaalsel koopial on index ja remote pole,
+						// siis igal juhul lisame me lokaasele NOT NULL votme
+						if ($og["key"])
+						{
+							if (strpos($flags,"NOT NULL") === false)
+							{
+								$flags .= " NOT NULL";
+							};
+						};
 						$line = "ALTER TABLE $table CHANGE $key $key $dr[type] $flags";
 					}
 					else
 					{
-						if (not($orig[$table]))
+						if (in_array("auto_increment",$dr["flags"]))
 						{
-							$line = "CREATE table $table ($key $dr[type] $flags)";
-							$orig[$table] = 1;
+							$flags = str_replace("auto_increment","",$flags);
+							// primary keys NEED not null
+							if (not(in_array("NOT NULL",$dr["flags"])))
+							{	
+								$flags .= " NOT NULL";
+							};
+							$autoinc = ", PRIMARY KEY($key)";
+							$prim_key_added = true;
 						}
 						else
 						{
-							$line = "ALTER TABLE $table ADD $key $dr[type] $flags";
+							$autoinc = "";
+						};
+
+						if (not(is_array($orig[$table])))
+						{
+							$line = "CREATE table $table ($key $dr[type] $flags $autoinc)";
+							$orig[$table] = array();
+						}
+						else
+						{
+							$line = "ALTER TABLE $table ADD $key $dr[type] $flags $autoinc";
 						};
 					};
+
 					print "Q: $line<br>";
 					$this->db_query($line);
-					if ($dr["key"] == "PRI")
+					if ( ($dr["key"] == "PRI") && ($prim_key_added == false))
 					{
 						$line = "ALTER TABLE $table ADD PRIMARY KEY ($key)";
 					}
