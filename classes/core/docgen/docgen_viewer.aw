@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.16 2004/08/23 10:55:35 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.17 2004/11/02 12:20:28 duke Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -742,7 +742,7 @@ class docgen_viewer extends class_base
 		));
 
 		$str = preg_replace("/(#code#)(.+?)(#\/code#)/esm","\"<pre>\".htmlspecialchars(stripslashes('\$2')).\"</pre>\"",$str);
-		$str = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?'.'\$2'.'?'.'>'),true)",$str);
+		$str = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$str);
 
 		$tpl = get_instance("core/docgen/docgen_viewer");
 		$tpl->read_template("style.tpl");
