@@ -389,7 +389,7 @@
             <planner>
                   <index>id</index>
                   <master_table>objects</master_table>
-                  <master_index>oid</master_index>
+                  <master_index>brother_of</master_index>
             </planner>
       </tableinfo>
 </properties>

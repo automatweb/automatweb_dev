@@ -40,6 +40,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <search>1</search>
             <caption>Alt tekst</caption>
       </property>
       <property>
@@ -49,6 +50,7 @@
             <table>extlinks</table>
             <field>newwindow</field>
             <group>general</group>
+            <search>1</search>
             <caption>Uues aknas</caption>
       </property>
       <property>
@@ -68,6 +70,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>Javascript</group>
+            <search>1</search>
             <caption>Kasuta javascripti</caption>
       </property>
       <property>

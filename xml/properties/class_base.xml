@@ -6,7 +6,6 @@
             <group>general</group>
             <rel>1</rel>
             <table>objects</table>
-            <corefield>yes</corefield>
             <field>name</field>
             <caption>Nimi</caption>
       </property>
@@ -15,7 +14,6 @@
             <type>textbox</type>
             <group>general</group>
             <table>objects</table>
-            <corefield>yes</corefield>
             <field>comment</field>
             <caption>Kommentaar</caption>
       </property>
@@ -24,7 +22,6 @@
             <type>status</type>
             <group>general</group>
             <table>objects</table>
-            <corefield>yes</corefield>
             <field>status</field>
             <caption>Staatus</caption>
       </property>
