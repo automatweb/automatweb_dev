@@ -53,7 +53,6 @@
 @property bg_query_created type=text
 @caption Cache viimati muudetud
 
-@groupinfo general caption=&Uuml;ldine
 @groupinfo folders caption=Kataloogid
 
 @property folders type=table store=no group=folders

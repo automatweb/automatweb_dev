@@ -133,13 +133,24 @@
             <group>general</group>
             <caption>Cache viimati muudetud</caption>
       </property>
+      <property>
+            <name>folders</name>
+            <type>table</type>
+            <store>no</store>
+            <group>folders</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali kataloogid, mida filtris kasutada</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_DRONLINE</syslog_type>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
+            <folders>
+                  <caption>Kataloogid</caption>
+            </folders>
       </groupinfo>
       <tableinfo>
             <dronline_bg_status>
@@ -148,5 +159,12 @@
                   <master_index>id</master_index>
             </dronline_bg_status>
       </tableinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>filtri kataloog</caption>
+            </FOLDER>
+      </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.213 2004/02/16 13:25:40 duke Exp $
+// $Id: class_base.aw,v 2.214 2004/02/17 11:23:01 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2249,7 +2249,16 @@ class class_base extends aw_template
 			'rel_type_classes' => $rel_type_classes,//$this->get_rel_type_classes(),
 			"return_url" => !empty($return_url) ? $return_url : $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
 		));
-		return $this->gen_output(array("content" => $gen));
+
+
+		if ($args["no_op"] == 1)
+		{
+			return $gen;
+		}
+		else
+		{
+			return $this->gen_output(array("content" => $gen));
+		}
 	}
 
 	////"log.txt"
