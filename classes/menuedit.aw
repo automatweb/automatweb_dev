@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.135 2002/07/17 04:02:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.136 2002/07/17 05:10:39 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -5298,12 +5298,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 			classload("search_conf");
 			$t = new search_conf;
-			$def = $section;
+			$def = $GLOBALS["HTTP_GET_VARS"]["parent"] ? $GLOBALS["HTTP_GET_VARS"]["parent"] : $section;
 			$sl = $t->get_search_list(&$def);
 			$this->vars(array(
 				"search_sel" => $this->option_list($def,$sl),
 				"section" => $id,
-				"str" => $GLOBALS["HTTP_GET_VARS"]["str"]
+				"str" => htmlentities($GLOBALS["HTTP_GET_VARS"]["str"])
 			));
 			$this->vars(array("SEARCH_SEL" => $this->parse("SEARCH_SEL")));
 		}
