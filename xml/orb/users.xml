@@ -159,11 +159,12 @@
 			<function name="login">
 				<arguments>
 					<required name="uid" />
-					<required name="password" />
+					<optional name="password" />
 					<optional name="remote_ip" />
 					<optional name="reforb" />
 					<optional name="remote_host" />
 					<optional name="return" />
+					<optional name="hash" />
 				</arguments>
 			</function>
 		</action>

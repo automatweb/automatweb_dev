@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.131 2004/12/10 10:10:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.132 2004/12/10 14:23:58 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1584,11 +1584,12 @@ class users extends users_user
 		@attrib name=login params=name default="0" nologin="1" is_public="1" caption="Logi sisse"
 		
 		@param uid required
-		@param password required
+		@param password optional
 		@param remote_ip optional
 		@param reforb optional
 		@param remote_host optional
 		@param return optional
+		@param hash optional
 		
 		@returns
 		
@@ -1599,6 +1600,36 @@ class users extends users_user
 	**/
 	function login($arr)
 	{
+		// if hash is given and it is in the db
+		if (!empty($arr["hash"]))
+		{
+			$q = "
+				SELECT 
+					* 
+				FROM 
+					user_hashes 
+				WHERE 
+					hash = '$arr[hash]' AND
+					hash_time > ".time()." AND
+					uid = '$arr[uid]'
+			";
+			$row = $this->db_fetch_row($q);
+			if ($row["hash"] == $arr["hash"])
+			{
+				// do quick login
+				$_SESSION["uid"] = $arr["uid"];
+				aw_global_set("uid", $arr["uid"]);
+				aw_session_set("uid_oid", $this->get_oid_for_uid($arr["uid"]));
+				$this->request_startup();
+
+				// remove hash from usable hashes
+				$this->db_query("DELETE FROM user_hashes WHERE hash = '$arr[hash]'");
+
+				// remove stale hash table entries
+				$this->db_query("DELETE FROM user_hashes WHERE hash_time < ".(time() - 60*24*3600));
+				return;
+			}
+		}
 		return parent::login($arr);
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.28 2004/12/10 12:25:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.29 2004/12/10 14:23:58 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -33,7 +33,7 @@ class scheduler extends aw_template
 		if ($time)
 		{
 			$event_id = md5($event);
-			$this->evnt_add($time, $event, $uid, $password, 0, $event_id, $sessid);
+			$this->evnt_add($time, $event, $uid, $password, 0, $event_id, $sessid, $arr["auth_as_local_user"]);
 		}
 
 		if ($rep_id)
@@ -138,7 +138,7 @@ class scheduler extends aw_template
 		$this->close_session(true);
 	}
 
-	function evnt_add($time, $event, $uid = "", $password = "", $rep_id = 0, $event_id = "", $sessid ="")
+	function evnt_add($time, $event, $uid = "", $password = "", $rep_id = 0, $event_id = "", $sessid ="", $auth_as_local_user = false)
 	{
 		$this->open_session();
 		$found = false;
@@ -168,7 +168,7 @@ class scheduler extends aw_template
 		};
 
 		// (re)add the event to the queue
-		$this->repdata[] = array(
+		$repdata = array(
 			"time" => $time,
 			"event" => $event,
 			"event_id" => $event_id,
@@ -177,6 +177,21 @@ class scheduler extends aw_template
 			"rep_id" => $rep_id,
 			"sessid" => $sessid
 		);
+
+		if ($auth_as_local_user)
+		{
+			$uid = aw_global_get("uid");
+			$hash = gen_uniq_id();
+			$hash_time = $time + 24 * 3600 * 2;
+
+			// see if we have the user hashes table
+			$this->_check_hash_tbl();
+
+			$this->db_query("INSERT INTO user_hashes (uid,hash, hash_time) values('$uid','$hash','$hash_time')");
+			$repdata["uid"] = $uid;
+			$repdata["auth_hash"] = $hash;
+		}
+		$this->repdata[] = $repdata;
 
 		$this->close_session(true);
 	}
@@ -329,8 +344,20 @@ class scheduler extends aw_template
 		if ($evnt["uid"] && $evnt["password"])
 		{
 			// we must log in 
-			echo "logging in as $url $evnt[uid] $evnt[password] <br />";
-			$awt->login(array("host" => $url, "uid" => $evnt["uid"], "password" => $evnt["password"]));
+			$awt->login(array(
+				"host" => $url, 
+				"uid" => $evnt["uid"], 
+				"password" => $evnt["password"]
+			));
+		}
+		else
+		if ($evnt["uid"] && $evnt["auth_hash"])
+		{
+			$awt->login_hash(array(
+				"host" => $url, 
+				"uid" => $evnt["uid"], 
+				"hash" => $evnt["auth_hash"],
+			));
 		}
 
 		echo "do send req $url ",substr($ev_url,strlen("http://")+strlen($url))," <br />";
@@ -585,5 +612,13 @@ class scheduler extends aw_template
 	// record in the scheduler table. And that pretty much is it too
 	
 	//$this->add(array("event" => $link,"rep_id" => $id, "uid" => $obj["meta"]["login_uid"],"password" => $obj["meta"]["login_password"]));
+
+	function _check_hash_tbl()
+	{
+		if (!$this->db_table_exists("user_hashes"))
+		{
+			$this->db_query("CREATE TABLE user_hashes(uid varchar(100),hash char(32), hash_time int)");
+		}	
+	}
 }
 ?>

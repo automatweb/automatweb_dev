@@ -177,6 +177,48 @@ class http
 		}
 	}
 
+	function login_hash($args = array())
+	{
+		extract($args);
+		$cookie = $this->cookie;
+		$socket = get_instance("socket");
+		if (substr($host,0,7) == "http://")
+		{
+			$host = substr($host,7);
+		};
+		$socket->open(array(
+			"host" => $host,
+			"port" => 80,
+		));
+		
+		$request = "uid=$uid&hash=$hash&class=users&action=login";
+
+		$op = "GET /orb.".$this->cfg["ext"]."?$request HTTP/1.0\r\n";
+		$op .= "Host: $host\r\n";
+		$op .= "Cookie: automatweb=$cookie\r\n";
+		$op .= "Referer: http://$host/login.".$this->cfg["ext"]."\r\n\r\n";
+		if (!$silent)
+		{
+			print "<pre>";
+			echo "Logging in $host op = ",htmlentities($op),"\n";
+		}
+
+		$socket->write($op);
+		$ipd = "";
+		while($data = $socket->read())
+		{
+			$ipd .= $data;
+		};
+		$this->socket = $socket;
+
+		if (!$silent)
+		{
+			print "Succeeded? Server returned ".htmlentities($ipd)."\n";
+			print "</pre>";
+			flush();
+		}
+	}
+
 	function do_send_request($arr)
 	{
 		extract($arr);
