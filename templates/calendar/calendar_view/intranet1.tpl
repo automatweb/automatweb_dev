@@ -91,5 +91,3 @@ function mini_navigate()
 </td></tr></table>
 
 	{VAR:content}
-
-

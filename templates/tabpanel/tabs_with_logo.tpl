@@ -1,6 +1,8 @@
 {VAR:toolbar}
 
 
+
+<!-- SUB: tabs_L1 -->
 <style type="text/css">
 .tabpanelheaderstyle {
 	border-top: 1px solid #FFFFFF;
@@ -9,23 +11,22 @@
 	padding-left: 6px;
 	background-color: #E1E1E1;
 	background-repeat: no-repeat;
-	background-image: url('http://klient.struktuur.ee/personal/www/01/img/banner_bg_2.jpg');
+	background-image: url('{VAR:background_image}');
 	height: 68px;
 }
 </style>
-
-<!-- SUB: tabs_L1 -->
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
 
-<td valign="bottom" class="tabpanelheaderstyle">
+<td class="tabpanelheaderstyle" valign="bottom">
 
-<table border="0" cellspacing="0" cellpadding="0">
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
 <tr>
+<td width="15">&nbsp;</td>
 <td valign="bottom">
 
-<table border="0" cellpadding="0" cellspacing="0">
-<tr>
+	<table border="0" cellpadding="0" cellspacing="0">
+	<tr>
 
 
   <!-- SUB: tab_L1 -->
@@ -50,7 +51,8 @@
   </table>
 
 </td>
-<td><img src="http://klient.struktuur.ee/personal/www/01/img/logo.gif"></td>
+<td align="right" valign="top"><img src="{VAR:logo_image}"></td>
+<td width="15">&nbsp;</td>
 </tr>
 </table>
 </td>
@@ -103,31 +105,69 @@
 <!-- END SUB: tabs_L2 -->
 
 <!-- SUB: left_tabs_L1 -->
-<table border="1">
+<table width="178" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 
   <!-- SUB: left_tab_L1 -->
-  <tr>
-  <td>A: <a href="{VAR:link}">{VAR:caption}</a></td>
-  </tr>
+    <tr>
+      <td width="22" height="16" align="right"><img src="{VAR:baseurl}/img/link_arrow.gif" width="7" height="4"></td>
+      <td colspan="2" class="link11px" style="padding-left:7px;"><a href="{VAR:link}">{VAR:caption}</a></td>
+
+      </tr>
+
   <!-- END SUB: left_tab_L1 -->
 
-
   <!-- SUB: left_disabled_tab_L1 -->
-  <tr>
-  <td>B: <a href="{VAR:link}">{VAR:caption}</a></td>
-  </tr>
+    <tr>
+      <td width="22" height="16" align="right"><img src="{VAR:baseurl}/img/link_arrow.gif" width="7" height="4"></td>
+      <td colspan="2" class="link11px" style="padding-left:7px;">{VAR:caption}</td>
+
+      </tr>
   <!-- END SUB: left_disabled_tab_L1 -->
 
   <!-- SUB: left_sel_tab_L1 -->
-  <tr>
-  <td>C: <a href="{VAR:link}">{VAR:caption}</a></td>
-  </tr>
+    <tr>
+      <td width="22" height="16" align="right"><img src="{VAR:baseurl}/img/link_arrow.gif" width="7" height="4"></td>
+      <td colspan="2" class="link11px" style="padding-left:7px;"><a href="{VAR:link}"><strong>{VAR:caption}</strong></a></td>
+
+      </tr>
   <!-- END SUB: left_sel_tab_L1 -->
 
 </table>
 <!-- END SUB: left_tabs_L1 -->
 
+<!-- SUB: left_tabs_L2 -->
+<table width="178" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 
+  <!-- SUB: left_tab_L2 -->
+    <tr>
+      <td height="16">&nbsp;</td>
+
+      <td width="14" align="right"><img src="img/link_arrow_sm.gif" width="5" height="4"></td>
+      <td width="144" class="link11px" style="padding-left:7px;"><a href="{VAR:link}">{VAR:caption}</a></td>
+    </tr>
+
+  <!-- END SUB: left_tab_L2 -->
+
+  <!-- SUB: left_disabled_tab_L2 -->
+    <tr>
+      <td height="16">&nbsp;</td>
+
+      <td width="14" align="right"><img src="img/link_arrow_sm.gif" width="5" height="4"></td>
+      <td width="144" class="link11px" style="padding-left:7px;">{VAR:caption}</td>
+    </tr>
+  <!-- END SUB: left_disabled_tab_L2 -->
+
+  <!-- SUB: left_sel_tab_L2 -->
+    <tr>
+      <td height="16">&nbsp;</td>
+
+      <td width="14" align="right"><img src="img/link_arrow_sm.gif" width="5" height="4"></td>
+      <td width="144" class="link11px" style="padding-left:7px;"><a href="{VAR:link}"><strong>{VAR:caption}</strong></a></td>
+    </tr>
+  <!-- END SUB: left_sel_tab_L2 -->
+
+</table>
+<!-- END SUB: left_tabs_L2 -->
 
 <div class="aw04content" style="background-image: url('{VAR:baseurl}/automatweb/images/aw04/content_back2.gif')">
 {VAR:content}

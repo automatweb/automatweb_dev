@@ -93,30 +93,35 @@
 <!-- END SUB: tabs_L2 -->
 
 <!-- SUB: left_tabs_L1 -->
-<table border="1">
+<table width="178" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 
   <!-- SUB: left_tab_L1 -->
-  <tr>
-  <td>A: <a href="{VAR:link}">{VAR:caption}</a></td>
-  </tr>
+    <tr>
+      <td width="22" height="16" align="right"><img src="{VAR:baseurl}/img/link_arrow.gif" width="7" height="4"></td>
+      <td colspan="2" class="link11px" style="padding-left:7px;"><a href="{VAR:link}">{VAR:caption}</a></td>
+
+      </tr>
+
   <!-- END SUB: left_tab_L1 -->
 
-
   <!-- SUB: left_disabled_tab_L1 -->
-  <tr>
-  <td>B: <a href="{VAR:link}">{VAR:caption}</a></td>
-  </tr>
+    <tr>
+      <td width="22" height="16" align="right"><img src="{VAR:baseurl}/img/link_arrow.gif" width="7" height="4"></td>
+      <td colspan="2" class="link11px" style="padding-left:7px;">{VAR:caption}</td>
+
+      </tr>
   <!-- END SUB: left_disabled_tab_L1 -->
 
   <!-- SUB: left_sel_tab_L1 -->
-  <tr>
-  <td>C: <a href="{VAR:link}">{VAR:caption}</a></td>
-  </tr>
+    <tr>
+      <td width="22" height="16" align="right"><img src="{VAR:baseurl}/img/link_arrow.gif" width="7" height="4"></td>
+      <td colspan="2" class="link11px" style="padding-left:7px;"><a href="{VAR:link}"><strong>{VAR:caption}</strong></a></td>
+
+      </tr>
   <!-- END SUB: left_sel_tab_L1 -->
 
 </table>
 <!-- END SUB: left_tabs_L1 -->
-
 
 
 <div class="aw04content" style="background-image: url('{VAR:baseurl}/automatweb/images/aw04/content_back2.gif')">

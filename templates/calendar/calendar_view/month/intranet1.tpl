@@ -7,7 +7,6 @@
 	padding: 3px;
 	text-align: center;
 	color: #000;
-	background-color: #EFEFEF;
 
 }
 .minical_table a {
@@ -82,12 +81,7 @@
 }
 </style>
 
-<div class="minical_table">
-<a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {DATE:act_day_tm|m.Y}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a>
-</div>
-<table width="100%" cellpadding="0" cellspacing="0">
-<tr><td bgcolor="#EFEFEF">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr><td>
 	{VAR:overview}
 </td></tr></table>
-
-{VAR:content}
