@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.4 2004/12/02 13:26:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.5 2005/01/05 10:16:52 kristo Exp $
 
 /*
 
@@ -245,6 +245,10 @@ class classificator extends class_base
 		if($arr["sort_by"])
 		{
 			$vars["sort_by"] = $arr["sort_by"];
+		}
+		else
+		{
+			$vars["sort_by"] = "objects.jrk";
 		}
 		if($this->recursive == 1)
 		{
