@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.42 2004/03/15 13:28:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.43 2004/03/18 09:05:11 duke Exp $
 
 /*
 
@@ -647,7 +647,7 @@ class gallery_v2 extends class_base
 		// also upload images
 		$img_n = "g_".$page."_".$row."_".$col."_img";
 
-		if (trim($_FILES[$img_n]["type"]) == "application/pdf")
+		if (trim($_FILES[$img_n]["type"]) == "application/pdf" || ($old["img"]["is_file"] == 1 && $_FILES[$img_n]["tmp_file"] == ""))
 		{
 			$f = get_instance("file");
 			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
@@ -658,6 +658,7 @@ class gallery_v2 extends class_base
 			$this->_page_content[$row][$col]["img"]["is_file"] = 1;
 		}
 		else
+		if ($_FILES[$img_n]["tmp_name"] != "")
 		{
 			$f = get_instance("image");
 			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
@@ -975,6 +976,23 @@ class gallery_v2 extends class_base
 		
 		$w = $pd['img']['sz'][0];
 		$h = $pd['img']['sz'][1]+70;
+
+		if ($pd["img"]["is_file"])
+		{
+			$fi = get_instance("file");
+			$link = $fi->get_url($pd["img"]["id"],"sisu.pdf");
+		}
+		else
+		{
+			$link = $this->mk_my_orb("show_image", array(
+				"id" => $obj['oid'],
+				"page" => $page,
+				"row" => $row,
+				"col" => $col,
+				"img_id" => $pd['img']['id']
+			));
+		}
+
 		if (empty($w))
 		{
 			$w = 700;
