@@ -1,8 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.24 2002/07/18 10:40:54 kristo Exp $
-
-//
-// aw_table - generates the html for tables - you just have to feed it the data
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.25 2002/07/23 05:09:47 kristo Exp $
+// aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
 class aw_table
@@ -143,6 +141,7 @@ class aw_table
 	// field - optional, what to sort by. you really don't need to specify this, the table can manage it on it's own
 	// sorder - sorting order - asc/desc. you really don't need to specify this, the table can manage it on it's own
 	// rgroupby - an array of elements whose values will be grouped in the table
+	// vgroupby - array of elements that will be vertically grouped
 	function sort_by($params = array()) 
 	{
 		// see peaks olema array,
@@ -199,6 +198,7 @@ class aw_table
 
 		// grouping - whenever a value of one of these elements changes an extra row gets inserted into the table
 		$this->rgroupby = $params["rgroupby"];
+		$this->vgroupby = $params["vgroupby"];
 
 		// ok, all those if sentences are getting on my nerves - we will make sure that all sorting options
 		// after this point are always arrays
@@ -213,6 +213,20 @@ class aw_table
 
 		// switch back to estonian
 		setlocale(LC_COLLATE, $old_loc);
+
+		// now go over the data and make the rowspans for the vertical grouping elements
+		if (is_array($this->vgroupby))
+		{
+			$this->vgrowspans = array();
+			foreach($this->vgroupby as $_vgcol => $_vgel)
+			{
+				foreach($this->data as $row)
+				{
+					$val = $row[$_vgel];
+					$this->vgrowspans[$val]++;
+				}
+			}
+		}
 	}
 
 	////
@@ -228,7 +242,24 @@ class aw_table
 		// a number and the 3rd a text element - if we cat them together we lose the ability to do numerical comparisons..
 
 		$skip = false;
-		if (is_array($this->rgroupby))
+
+		if (is_array($this->vgroupby))
+		{
+			foreach($this->vgroupby as $_rgcol => $rgel)
+			{
+				$v1 = $a[$rgel];
+				$v2 = $b[$rgel];
+				$this->u_sorder = $this->sorder[$_rgcol];
+				$this->sort_flag = $this->nfields[$_rgcol] ? SORT_NUMERIC : SORT_REGULAR;
+				if ($v1 != $v2)
+				{
+					$skip = true;
+				}
+				break;
+			}
+		}
+
+		if (is_array($this->rgroupby) && !$skip)
 		{
 			foreach($this->rgroupby as $_rgcol => $rgel)
 			{
@@ -456,7 +487,6 @@ class aw_table
 
 				// rida algab
 				$tbl .= $this->opentag(array("name" => "tr"));
-				reset($this->rowdefs);
 				
 				// grpupeerimine
 				if (is_array($rgroupby))
@@ -473,10 +503,21 @@ class aw_table
 								"classid" => $this->group_style
 							));
 							$tbl.=$_a;
+							$lgrpvals[$rgel] = $_a;
+							// if we should display some other elements after the group element
+							// they will be passed in the $rgroupdat array
+							if (is_array($rgroupdat[$rgel]))
+							{
+								$tbl.=$rgroupby_sep[$rgel]["pre"];
+								foreach($rgroupdat[$rgel] as $rgdat)
+								{
+									$tbl.=$v[$rgdat["el"]].$rgdat["sep"];
+								}
+								$tbl.=$rgroupby_sep[$rgel]["after"];
+							}
 							$tbl.=$this->closetag(array(
 								"name" => "td"
 							));
-							$lgrpvals[$rgel] = $_a;
 							$tbl .= $this->closetag(array("name" => "tr"));
 							$tbl .= $this->opentag(array("name" => "tr"));
 						}
@@ -484,26 +525,54 @@ class aw_table
 				}
 
 				// tsükkel üle rowdefsi, et andmed oleksid oiges järjekorras
+				reset($this->rowdefs);
 				while(list($k1,$v1) = each($this->rowdefs)) 
 				{
+					$rowspan = 1;
+					$style = false;
+					if (is_array($this->vgroupby))
+					{
+						if (isset($this->vgroupby[$v1["name"]]))
+						{
+							// if this column is a part of vertical grouping, check if it's value has changed
+							// if it has, then set the new rowspan
+							// if not, then skip over this row
+							$_value = $v[$v1["name"]];
+							if (!isset($this->vgrouplastvals[$_value]))
+							{
+								$this->vgrouplastvals[$_value] = $_value;
+								$rowspan = $this->vgrowspans[$_value];
+								$style = $this->group_style;
+							}
+							else
+							{
+								continue;
+							}
+						}
+					}
+
 					// määrame ära staili
-					if ($this->sortby[$v1["name"]]) 
+					if (!$style)
 					{
-						$style = (($counter % 2) == 0) ? $this->selected2 : $this->selected1;
-						$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
-					} 
-					else 
-					{
-						$style = (($counter % 2) == 0) ? $this->style2 : $this->style1; 
-						$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
-					};
+						if ($this->sortby[$v1["name"]]) 
+						{
+							$style = (($counter % 2) == 0) ? $this->selected2 : $this->selected1;
+							$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
+						} 
+						else 
+						{
+							$style = (($counter % 2) == 0) ? $this->style2 : $this->style1; 
+							$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
+						};
+					}
 						
 					// moodustame celli
 					$cell_attribs = array(
 						"name"    => "td",
 						"classid" => $style,
 						"width" => $v1["width"],
-						"bgcolor" => $bgcolor
+						"bgcolor" => $bgcolor,
+						"rowspan" => $rowspan
 					);
 
 					if ($this->actionrows)
