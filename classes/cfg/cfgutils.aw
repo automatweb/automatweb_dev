@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.15 2003/03/28 17:29:07 duke Exp $
+// $Id: cfgutils.aw,v 1.16 2003/04/16 14:11:32 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -116,6 +116,7 @@ class cfgutils extends aw_template
 	// optionally also caches them
 	// file(string) - name of the class
 	// clid(int) - class_id
+	// filter(string) - filter the properties based on a attribute
 	function load_class_properties($args = array())
 	{
 		$this->_init_clist();
@@ -172,7 +173,17 @@ class cfgutils extends aw_template
 		{
 			$_tmp = $this->normalize_text_nodes($val);
 			$name = $_tmp["name"];
-			$res[$name] = $_tmp;
+			if (isset($filter))
+			{
+				if (isset($_tmp[$filter]))
+				{
+					$res[$name] = $_tmp;
+				};
+			}
+			else
+			{
+				$res[$name] = $_tmp;
+			};
 		};
 		return $res;
 	}
