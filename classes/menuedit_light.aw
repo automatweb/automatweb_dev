@@ -189,6 +189,7 @@ class menuedit_light extends aw_template
 						if ($_v_l != "")
 						{
 							$url = $_v_l;
+							$id = $url;
 						}
 					}
 
