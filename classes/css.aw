@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.41 2004/10/29 15:47:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.42 2004/10/29 16:37:25 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -193,11 +193,11 @@ class css extends class_base
 					break;
 
 				case "fgcolor":
-					$mask = "color: %s;\n";
+					$mask = "color: ".($val{0} == "#" ? "" : "#")."%s;\n";
 					break;
 
 				case "bgcolor":
-					$mask = "background-color: %s;\n";
+					$mask = "background-color: ".($val{0} == "#" ? "" : "#")."%s;\n";
 					break;
 
 				case "underline":
