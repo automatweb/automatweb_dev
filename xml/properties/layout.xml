@@ -151,6 +151,28 @@
             <group>general</group>
             <caption>Millistes kataloogides n&amp;auml;idatakse</caption>
       </property>
+      <property>
+            <name>header</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <group>hfoot</group>
+            <caption>Header</caption>
+      </property>
+      <property>
+            <name>footer</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <group>hfoot</group>
+            <caption>Footer</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_LAYOUT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -169,6 +191,9 @@
             <aliases>
                   <caption>Tabeli sisu</caption>
             </aliases>
+            <hfoot>
+                  <caption>Header ja footer</caption>
+            </hfoot>
             <import>
                   <caption>Import</caption>
             </import>

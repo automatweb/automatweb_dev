@@ -8,6 +8,7 @@
 @groupinfo layout caption=Tabel
 @groupinfo styles caption=Stiilid
 @groupinfo aliases caption="Tabeli sisu"
+@groupinfo hfoot caption="Header ja footer"
 @groupinfo import caption=Import
 @groupinfo preview caption=Eelvaade
 
@@ -59,6 +60,12 @@
 
 @property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 group=general
 @caption Millistes kataloogides n&auml;idatakse
+
+@property header type=textarea rows=10 cols=50 field=meta method=serialize group=hfoot
+@caption Header
+
+@property footer type=textarea rows=10 cols=50 field=meta method=serialize group=hfoot
+@caption Footer
 
 @reltype CELLSTYLE_FOLDER value=1 clid=CL_MENU
 @caption celli stiilide kataloog
@@ -112,6 +119,15 @@ class layout extends class_base
 		$grid['table_style'] = $ob->meta('table_style');
 
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
+
+		if ($ob->prop("header") != "")
+		{
+			$tmp = nl2br($ob->prop("header")).$tmp;
+		}
+		if ($ob->prop("footer") != "")
+		{
+			$tmp .= nl2br($ob->prop("footer"));
+		}
 		$d = get_instance("document");
 		$d->create_relative_links($tmp);
 		if (strpos($tmp, "<a") !== false)
