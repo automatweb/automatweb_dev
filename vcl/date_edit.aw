@@ -178,7 +178,7 @@ class date_edit
 					$step = ($this->minute_step) ? $this->minute_step : 1;
 					for ($i = 0; $i <= 59; $i = $i + $step) 
 					{
-						$retval .= sprintf("<option value='%s'%s>%02d</option>\n",$i,($i == $minute),$i);
+						$retval .= sprintf("<option value='%s'%s>%02d</option>\n",$i,selected($i == $minute),$i);
 					};
 					$retval .= "</select>\n";
 					break;
