@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.120 2003/06/10 16:25:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.121 2003/06/11 14:09:49 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -393,6 +393,7 @@ class planner extends class_base
 		$events = $this->_init_event_source(array(
 			"id" => $args["request"]["id"],
 			"type" => "day",
+			"date" => $args["request"]["date"],
 		));
 		$nodes[] = array(
 			"no_caption" => 1,
@@ -415,6 +416,7 @@ class planner extends class_base
 		$events = $this->_init_event_source(array(
 			"id" => $args["request"]["id"],
 			"type" => "week",
+			"date" => $args["request"]["date"],
 		));
 		$nodes[] = array(
 			"no_caption" => 1,
@@ -427,7 +429,7 @@ class planner extends class_base
 			)),
 		);
 		return $nodes;
-	}
+	} 
 
 	////
 	// !Month view	
@@ -2101,10 +2103,11 @@ class planner extends class_base
 
 				// draw header
 				$lcw = substr(get_lc_weekday($w),0,1);
+				$_days = array("P","E","T","K","N","R","L");
 				$this->vars(array(
 					"cellwidth" => $width . "%",
 					"hcell" => strtoupper($lcw) . " " . date("d-M",$thisday),
-					"hcell_weekday" => strtoupper($lcw),
+					"hcell_weekday" => $_days[date("w",$thisday)],
 					"hcell_weekday_en" => date("D",$thisday),
 					"day_message" => in_array($w,$workdays) ? $this->cfg["workday_message"] : $this->cfg["freeday_message"],
 					"daynum" => $d,
@@ -2205,9 +2208,10 @@ class planner extends class_base
 			$colors = new aw_array(array("#FFFF00","#FF9900","#FF3300","#99CCFF","#996600",
 								"#6600FF","#339999","#336600","#A04CBC","#DCD00C"));
 			$events = $this->events[$dx];
+
 			$step = 15*60; // pool tundi
 			$ref_matrix = array();
-			for ($i = $di["start"]; $i <= $di["end"]; $i = $i + $step)
+			for ($i = $di["start"]; $i < $di["end"]; $i = $i + $step)
 			{
 				$ref_matrix[$i] = array();
 				$color_arr[$i] = array();
@@ -2246,7 +2250,7 @@ class planner extends class_base
 						if (is_array($ref_matrix[$i]))
 						{
 							array_unshift($ref_matrix[$i],array(
-								"oid" => $val["oid"],
+								"oid" => $val["brother_of"],
 								"cont" => $cont,
 							));
 						};
@@ -2259,15 +2263,15 @@ class planner extends class_base
 						};
 						
 
-						$color_arr[$i][] = $val["oid"];
+						$color_arr[$i][] = $val["brother_of"];
 					};
 				
-					$events[$val["oid"]]["dpos"] = $dpos;
-					$events[$val["oid"]]["color"] = $color;
+					$events[$val["brother_of"]]["dpos"] = $dpos;
+					$events[$val["brother_of"]]["color"] = $color;
 
 				}
 			}
-
+			
 			// figure out the slot with most events
 			$max_items_per_slot = 0;
 			foreach($ref_matrix as $ts => $items)
@@ -2281,21 +2285,24 @@ class planner extends class_base
 			list($d,$m,$y) = explode("-",$dm);
 			$this->ts_daystart = mktime(0,0,0,$m,$d,$y) + ($this->conf["day_start"]["hour"] * 3600) + ($this->conf["day_start"]["minute"] * 60);
 			$this->ts_dayend = mktime(0,0,0,$m,$d,$y) + ($this->conf["day_end"]["hour"] * 3600) + ($this->conf["day_end"]["minute"] * 60);
+			$this->vars(array(
+				"color" => "#FFFFFF",
+			));
+
+			$empty_dcell = $this->parse("duration_cell");
+			// create an array of empty cells
+			$empty_arr = array();
+			for ($i = 1; $i <= $max_items_per_slot; $i++)
+			{
+				$empty_arr[$i] = $empty_dcell;
+			};
 
 			for ($ts = $this->ts_daystart; $ts <= $this->ts_dayend; $ts = $ts + $step)
 			{
 				$d_event = "";
-				$dslots = array();
-					
-				$this->vars(array(
-					"color" => "#FFFFFF",
-				));
+				$dslots = $empty_arr;
 
-				for ($i = 1; $i <= $max_items_per_slot; $i++)
-				{
-					$dslots[$i] = $this->parse("duration_cell");
-				};
-
+				// overwrite empty cells where needed
 				for ($i = $max_items_per_slot; $i > 0; $i--)
 				{
 					$tv = $color_arr[$ts][$i-1];
@@ -2310,7 +2317,7 @@ class planner extends class_base
 				};
 
 				$min = date("i",$ts);
-				$dch = ($min == 0) ? date("H:i",$ts) : "<small>$min</small>";
+				$dch = ($min == 0) ? date("H",$ts) . ":$min" : "<small>$min</small>";
 
 				$this->vars(array(
 					"dcellheader" => $dch,
