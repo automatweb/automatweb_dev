@@ -6,6 +6,14 @@
 				<arguments/>
 			</function>
 		</action>
+
+		<action name="submit_table" all_args="1">
+			<function name="submit_table">
+				<arguments>
+			</function>
+		</action>
 	</class>
+
+
 </orb>
 		
