@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.31 2004/04/12 14:07:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.32 2004/04/22 13:09:05 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -119,7 +119,7 @@ class promo extends class_base
 		{
 			case "promo_tpl":
 				$tm = get_instance("templatemgr");
-				$prop["options"] = $tm->template_picker(array(
+				$data["options"] = $tm->template_picker(array(
 					"folder" => "promo/doctemplates"
 				));
 				break;
@@ -434,7 +434,15 @@ class promo extends class_base
 		$alias = $args["alias"];
 		$ob =& obj($alias["target"]);
 
-		$this->read_template("default.tpl");
+		// if there is another promo dok template, then use that
+		if ($ob->prop("promo_tpl") != "")
+		{
+			$this->read_template("doctemplates/".$ob->prop("promo_tpl"));
+		}
+		else
+		{
+			$this->read_template("default.tpl");
+		}
 
 		$ss = get_instance("contentmgmt/site_show");
 		$def = new aw_array($ss->get_default_document(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.16 2004/04/12 12:59:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.17 2004/04/22 13:09:14 kristo Exp $
 
 class templatemgr extends aw_template
 {
@@ -193,7 +193,7 @@ class templatemgr extends aw_template
 	{
 		$fp_site = $this->cfg["site_tpldir"]."/".$arr["folder"];
 		$fp_adm = $this->cfg["basedir"]."/templates/".$arr["folder"];
-		$ret = array();
+		$ret = array("" => "");
 		if (is_dir($fp_site))
 		{
 			$dc = $this->get_directory(array(
