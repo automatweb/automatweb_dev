@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.58 2004/11/15 15:41:56 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.59 2004/11/16 13:43:28 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -391,6 +391,26 @@ class html extends aw_template
 		return "<a href='$url' $target $title $onClick>$caption</a>";
 	}
 
+	////
+	// 
+	//
+	//
+	function popup($arr = array())
+	{
+		extract($arr);
+		$arr["onClick"] = 'javascript:window.open("'.$url.'", "'.$target.
+		'", "toolbar='.($toolbar ? "yes" : "no").
+		",directories=".($directories ? "yes" : "no").
+		",status=".($status ? "yes" : "no").
+		",location=".($location ? "yes" : "no").
+		",resizable=".($resizable ? "yes" : "no").
+		",scrollbars=".($scrollbars ? "yes" : "no").
+		",menubar=".($menubar ? "yes" : "no").
+		",height=".($height ? $height : 400).
+		",width=".($width ? $width : 400).
+		'");return false;';
+		return html::href($arr);
+	}
 	////
 	// !html form,
 	// params:
