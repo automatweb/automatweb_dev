@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.12 2004/04/27 10:43:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.13 2004/04/27 10:52:46 duke Exp $
 
 class site_cache extends aw_template
 {
@@ -19,7 +19,7 @@ class site_cache extends aw_template
 		$log = get_instance("contentmgmt/site_logger");
 		$log->add($arr);
 
-		if (false && ($content = $this->get_cached_content($arr)))
+		if ($content = $this->get_cached_content($arr))
 		{
 			return $this->do_final_content_checks($content);
 		}
