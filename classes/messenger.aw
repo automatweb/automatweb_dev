@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.53 2001/06/04 07:39:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.54 2001/06/04 08:37:00 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -124,8 +124,25 @@ class messenger extends menuedit_light
 			$this->vars(array("id" => $parent[oid],"aid" => $attach));
 			$u = $this->parse("up");
 		};
-		$this->vars(array("line" => $c,"up" => $u,"name" => $object["name"],"oname" => $att["name"]));
+		$this->vars(array(
+				"line" => $c,
+				"up" => $u,
+				"name" => $object["name"],
+				"oname" => $att["name"],
+				"reforb" => $this->mk_reforb("store_attach",array("msg_id" => $msg_id,"attach" => $attach,"folder" => $id))));
 		print $this->parse();
+	}
+
+	////
+	// !Votab salvestatud attachi vastu
+	function store_attach($args = array())
+	{
+		extract($args);
+		classload("file");
+		$awf = new file();
+		$awf->cp(array("id" => $attach,"parent" => $folder));
+		print "<script language='Javascript'> window.close(); </script>";
+		exit;
 	}
 
 	////
