@@ -177,5 +177,17 @@
 ]]>
 </tag>
 
+<tag id='pun'>
+<![CDATA[
+<span class="textpun">\1</span>
+]]>
+</tag>
+
+<tag id='sin'>
+<![CDATA[
+<span class="textsin">\1</span>
+]]>
+</tag>
+
 
 </doctags>
