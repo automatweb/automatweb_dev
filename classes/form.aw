@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.67 2001/09/24 09:15:00 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.68 2001/09/27 11:51:23 cvs Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2084,35 +2084,35 @@ class form extends form_base
 						$query.= "AND ($qstr)";
 					}
 				}
-
-
-				// k2ime l2bi erinevad checkboxide grupid ja paneme gruppide vahele AND ja checkboxide vahele OR
-				$chqpts = array();
-				foreach($ch_q as $chgrp => $ch_ar)
-				{
-					$chqs = join(" OR ", $ch_ar);
-					if ($chqs !="")
-					{
-						$query.=" AND ($chqs)";
-					}
-				}
-
-				if ($query == "")
-				{
-					$query = "SELECT * FROM form_".$id."_entries";
-				}
-
-//				echo "q = $query <br>";
-				$matches = array();
-				$this->db_query($query);
-				while ($row = $this->db_next())
-				{
-					$matches[] = $row["id"];
-				}
-
-				$ret = $matches;
-				$this->form_search_only = true;
 			}
+
+
+			// k2ime l2bi erinevad checkboxide grupid ja paneme gruppide vahele AND ja checkboxide vahele OR
+			$chqpts = array();
+			foreach($ch_q as $chgrp => $ch_ar)
+			{
+				$chqs = join(" OR ", $ch_ar);
+				if ($chqs !="")
+				{
+					$query.=" AND ($chqs)";
+				}
+			}
+
+			if ($query == "")
+			{
+				$query = "SELECT * FROM form_".$id."_entries";
+			}
+
+//			echo "q = $query <br>";
+			$matches = array();
+			$this->db_query($query);
+			while ($row = $this->db_next())
+			{
+				$matches[] = $row["id"];
+			}
+
+			$ret = $matches;
+			$this->form_search_only = true;
 		}
 	
 		$awt->stop("form::search");
@@ -2318,7 +2318,7 @@ class form extends form_base
 			{
 				global $PHP_SELF,$REQUEST_URI;
 				$link = $REQUEST_URI . "&print=1";
-				$tbl = $tbl . "<div align=right><a href='$link' target='_new'>Prindi</a></div>";
+				$tbl = $tbl . "<div align=right><a href='$link' target='_new'><img src='/img/print.gif' border='0' title='Print'></a></div>";
 			}
 
 			if ($GLOBALS["SITE_ID"] == 14)
