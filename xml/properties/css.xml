@@ -56,15 +56,6 @@
             <caption>Suurus</caption>
       </property>
       <property>
-            <name>units</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Suuruse &amp;uuml;hikud</caption>
-      </property>
-      <property>
             <name>fgcolor</name>
             <group>general</group>
             <table>objects</table>
@@ -91,15 +82,6 @@
             <type>textbox</type>
             <size>5</size>
             <caption>Joone k&amp;otilde;rgus</caption>
-      </property>
-      <property>
-            <name>lhunits</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Joone k&amp;otilde;rguse &amp;uuml;hikud</caption>
       </property>
       <property>
             <name>border</name>
@@ -149,15 +131,6 @@
             <caption>Laius</caption>
       </property>
       <property>
-            <name>w_units</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Laiuse &amp;uuml;hikud</caption>
-      </property>
-      <property>
             <name>height</name>
             <group>general</group>
             <table>objects</table>
@@ -166,15 +139,6 @@
             <type>textbox</type>
             <size>5</size>
             <caption>K&amp;otilde;rgus</caption>
-      </property>
-      <property>
-            <name>h_units</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>K&amp;otilde;rguse &amp;uuml;hikud</caption>
       </property>
       <property>
             <name>a_style</name>
