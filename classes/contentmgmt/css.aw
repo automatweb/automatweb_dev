@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.5 2005/01/18 10:31:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.6 2005/03/18 12:08:14 ahti Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -131,7 +131,7 @@
 @caption css stiil
 */
 
-define("RELTYPE_CSS", 1);
+//define("RELTYPE_CSS", 1);
 
 class css extends class_base
 {
