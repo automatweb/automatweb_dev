@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.20 2003/05/07 13:43:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.21 2003/05/14 12:28:11 kristo Exp $
 
 /*
 
@@ -963,20 +963,23 @@ class gallery_v2 extends class_base
 			));
 		}
 
-		$sc = get_instance("contentmgmt/rate/rate_scale");
-		$scale = $sc->get_scale_for_obj($pd['img']['id']);
-		$rsi = "";
-		foreach($scale as $sci_val => $sci_name)
+		if (count($this->_get_rate_objs($obj)) > 0)
 		{
-			$this->vars(array(
-				"rate_link" => $this->mk_my_orb("rate", array(
-					"oid" => $pd['img']['id'],
-					"return_url" => urlencode($post_rate_url),
-					"rate" => $sci_val
-				), "rate"),
-				"scale_value" => $sci_name
-			));
-			$rsi.=$this->parse("RATING_SCALE_ITEM");
+			$sc = get_instance("contentmgmt/rate/rate_scale");
+			$scale = $sc->get_scale_for_obj($pd['img']['id']);
+			$rsi = "";
+			foreach($scale as $sci_val => $sci_name)
+			{
+				$this->vars(array(
+					"rate_link" => $this->mk_my_orb("rate", array(
+						"oid" => $pd['img']['id'],
+						"return_url" => urlencode($post_rate_url),
+						"rate" => $sci_val
+					), "rate"),
+					"scale_value" => $sci_name
+				));
+				$rsi.=$this->parse("RATING_SCALE_ITEM");
+			}
 		}
 		
 		$this->add_hit($pd['img']['id']);
