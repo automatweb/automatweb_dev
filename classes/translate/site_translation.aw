@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.7 2003/11/27 10:49:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.8 2003/12/03 12:15:15 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -88,13 +88,13 @@ class site_translation extends class_base
 			case "baselang":
 				$l = get_instance("languages");
 				$data["options"] = $l->get_list();
-				$data["value"] = $this->base_lang_code;
+				$data["value"] = $this->base_lang_id;
 				break;
 
 			case "targetlang":
 				$l = get_instance("languages");
 				$data["options"] = $l->get_list();
-				$data["value"] = $this->target_lang_code;
+				$data["value"] = $this->target_lang_id;
 				break;
 			
 			case "translated":
