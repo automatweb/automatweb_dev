@@ -242,6 +242,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="get_mail">
+			<function name="get_mail">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
