@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.19 2004/06/17 11:59:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.20 2004/08/11 10:29:41 rtoomas Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -499,7 +499,14 @@ class poll extends class_base
 
 		foreach($ansa as $ansa_id => $adat)
 		{
-			$pct = (100.0*$dat[$ansa_id]["cnt"]) / $t_clicks;
+			if($t_clicks)
+			{
+				$pct = (100.0*$dat[$ansa_id]["cnt"]) / $t_clicks;
+			}
+			else
+			{
+				$pct = 0;
+			}
 
 			$pr = floor(($pct)+0.5);
 
