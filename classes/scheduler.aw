@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.30 2005/02/04 11:14:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.31 2005/02/21 14:39:16 duke Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -155,7 +155,7 @@ class scheduler extends aw_template
 			{
 				if ($evnt["event"] == $event && $evnt["uid"] == $uid)
 				{
-					//unset($this->repdata[$key]);
+					unset($this->repdata[$key]);
 				}
 			}
 		}
