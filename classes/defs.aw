@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.18 2001/06/21 12:25:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.19 2001/07/02 00:24:07 kristo Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 
 ////
@@ -559,4 +559,9 @@ function is_email ($Address = "")
 
 	return true;
 };
+
+function is_admin()
+{
+		return (stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false);
+}
 ?>

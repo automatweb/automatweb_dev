@@ -11,7 +11,7 @@ document.write("<body bgcolor=#eeeeee><table border=\"0\" cellspacing=\"0\" cell
 				<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" width=100%>																		\
 		<form action='menuedit.{VAR:ext}' method='get' name='pfft'>																								\
 					<tr>																																																\
-						<td height=\"20\" colspan=\"11\" class=\"fgtitle_new\" align=center><span class=\"fgtitle_text\"><select class='small_button' name='period'>{VAR:periods}</select><a class='fgtitle_link' href='javascript:document.pfft.submit()'><font size=1 face=arial>&nbsp;V&auml;rskenda</font></a><input type='hidden' name='type' value='folders'></span>															\
+						<td height=\"20\" colspan=\"11\" class=\"fgtitle_new\" align=center><span class=\"fgtitle_text\"><select class='small_button' name='period'>{VAR:periods}</select><a class='fgtitle_link' href='javascript:document.pfft.submit()'><font size=1 face=arial>&nbsp;{VAR:LC_MENUEDIT_REFRESH}</font></a><input type='hidden' name='type' value='folders'></span>															\
 						</td>																																															\
 					</tr>																																																\
 				</form>																																																\

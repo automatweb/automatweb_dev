@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.18 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.19 2001/07/02 00:24:07 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -669,7 +669,7 @@ load_vcl("date_edit");
 				$html .= $this->entry;
 					
 			if ($this->arr["type"] == "radiobutton")
-				$html.=($this->entry == $this->id ? " Jah " : " Ei ");
+				$html.=($this->entry == $this->id ? " (X) " : " (-) ");
 					
 			if ($this->arr["type"] == "listbox")
 			{
@@ -686,7 +686,7 @@ load_vcl("date_edit");
 			}
 
 			if ($this->arr["type"] == "checkbox")
-				$html.=$this->entry == 1 ? "Jah " : " Ei ";
+				$html.=$this->entry == 1 ? "(X) " : " (-) ";
 					
 			if ($this->arr["type"] == "textbox")
 				$html .= $this->entry;
@@ -771,7 +771,7 @@ load_vcl("date_edit");
 			else
 			if ($this->arr["type"] == "radiobutton")
 			{
-				$html=($this->entry == $this->id ? " Jah " : " Ei ");
+				$html=($this->entry == $this->id ? " (X) " : " (-) ");
 			}
 			else		
 			if ($this->arr["type"] == "listbox")
@@ -792,7 +792,7 @@ load_vcl("date_edit");
 			else
 			if ($this->arr["type"] == "checkbox")
 			{
-				$html=$this->entry == 1 ? "Jah " : " Ei ";
+				$html=$this->entry == 1 ? "(X) " : " (-) ";
 			}
 			else
 			if ($this->arr["type"] == "textbox")

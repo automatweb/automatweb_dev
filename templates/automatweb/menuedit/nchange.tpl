@@ -32,7 +32,7 @@ function savemenu() {
 <a href="javascript:show_tab(3)"><B>{VAR:LC_MENUEDIT_MENU_AUTOMATIC}</b></a> |
 <a href="javascript:show_tab(9)"><b>{VAR:LC_MENUEDIT_MENU_LOOK_MORE}</b></a> | 
 <!-- SUB: CAN_BROTHER -->
-<a href="javascript:show_tab(4)"><b>{VAR:LC_MENUEDIT_MENU_BROTHERING}</b></a> |
+<a href="javascript:show_tab(4)"><b>{VAR:LC_MENUEDIT_BROTHERING}</b></a> |
 <!-- END SUB: CAN_BROTHER -->
 
 <!-- SUB: IS_LAST -->
@@ -57,7 +57,7 @@ function savemenu() {
 <td bgcolor="#CCCCCC">
 <table border=0 cellspacing=1 cellpadding=1 width=750>
 	<tr>
-		<td class="title">&nbsp;Objekt:&nbsp;</td>
+		<td class="title">&nbsp;{VAR:LC_MENUEDIT_OBJECT}:&nbsp;</td>
 		<td class="fgtext_g">&nbsp;<b>ID:</b>&nbsp;{VAR:id}</td>
 		<td class="fgtext_g" colspan=3>&nbsp;<b>{VAR:LC_MENUEDIT_CREATED}:</b>&nbsp;{VAR:createdby} @ {VAR:created}</td>
 		<td class="fgtext_g" colspan=3>&nbsp;<b>{VAR:LC_MENUEDIT_MODIFIED_BY}:</b>&nbsp;{VAR:modifiedby} {VAR:modified}</td>

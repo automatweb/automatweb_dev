@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.27 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.28 2001/07/02 00:24:07 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -805,12 +805,16 @@ $orb_defs["form"] = "xml";
 			return $l;
 		}
 
-		function delete_entry($entry_id)
+		////
+		// !delketes $entry_id of form $id and redirects to hexbin($after)
+		function delete_entry($arr)
 		{
-			$eacl = new acl;
-			$eacl->query($entry_id);
+			extract($arr);
 			$this->delete_object($entry_id);
 			$this->_log("form","Kustutas formi $this->name sisestuse $entry_id");
+			$after = $this->hexbin($after);
+			header("Location: ".$after);
+			die();
 		}
 
 		// laeb entry parajasti aktiivse (konstruktoriga määratud) vormi jaoks
@@ -1265,6 +1269,18 @@ $orb_defs["form"] = "xml";
 				$t->parse_xml_def_string($xml);
 				$t->set_header_attribs(array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id));
 
+				classload("objects");
+				$ob = new db_objects;
+				$li = $ob->get_list();
+				$movetoar = array();
+				if (is_array($ft->table["moveto"]))
+				{
+					foreach($ft->table["moveto"] as $mid)
+					{
+						$movetoar[$mid] = $li[$mid];
+					}
+				}
+				$movetoar["0"] = "  ";
 				$form = new form;
 				reset($matches);
 				while(list($fid,$v) = each($matches))
@@ -1273,9 +1289,24 @@ $orb_defs["form"] = "xml";
 					foreach($v as $eid)
 					{
 						$form->load_entry($eid);
+						$eobj = $this->get_object($eid);
+
 						$rds = array();
 						$rds["el_change"] = "<a href='".$this->mk_my_orb("change", array("id" => $eid), "form_entry")."'>Muuda</a>";
 						$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $eid, "op_id" => $this->arr["search_outputs"][$fid]))."'>Vaata</a>";
+						$rds["el_delete"] = "<a href='".$this->mk_my_orb(
+							"delete_entry", 
+								array(
+									"id" => $fid,
+									"entry_id" => $eid, 
+									"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))
+								)
+							)."'>Kustuta</a>";
+						$rds["el_created"] = $this->time2date($eobj["created"],2);
+						$rds["el_modified"] = $this->time2date($eobj["modified"],2);
+						$rds["el_createdby"] = $this->time2date($eobj["uid"],2);
+						$rds["el_active"] = "<input type='checkbox' name='active[".$fid."][".$eid."]' value='1' ".(checked($eobj["status"]==2))."><input type='hidden' name='old_active[".$fid."][".$eid."]' value='".$eobj["status"]."'>";
+						$rds["el_chpos"] = "<select name='chpos[".$fid."][".$eid."]>".$this->picker((in_array($eobj["parent"],$ft->table["moveto"]) ? $eobj["parent"] : 0),$movetoar)."</select><input type='hidden' name='old_pos[".$fid."][".$eid."]' value='".$eobj["parent"]."'>";
 						for ($row = 0; $row < $form->arr["rows"]; $row++)
 						{
 							for ($col = 0; $col < $form->arr["cols"]; $col++)
@@ -1292,7 +1323,29 @@ $orb_defs["form"] = "xml";
 					}
 				}
 				$t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
-				return $ft->get_css().$t->draw();
+				$tbl = $ft->get_css();
+				$tbl.="<form action='reforb.aw' method='POST'>\n";
+				if ($ft->table["submit_top"])
+				{
+					$tbl.="<input type='submit' value='".$ft->table["submit_text"]."'>";
+				}
+				if ($ft->table["user_button_top"])
+				{
+					$tbl.="&nbsp;<input type='submit' value='".$ft->table["user_button_text"]."' onClick=\"window.location='".$ft->table["user_button_url"]."';return false;\">";
+				}
+				$tbl.=$t->draw();
+
+				if ($ft->table["submit_bottom"])
+				{
+					$tbl.="<input type='submit' value='".$ft->table["submit_text"]."'>";
+				}
+				if ($ft->table["user_button_bottom"])
+				{
+					$tbl.="&nbsp;<input type='submit' value='".$ft->table["user_button_text"]."' onClick=\"window.location='".$ft->table["user_button_url"]."';return false;\">";
+				}
+				$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
+				$tbl.="</form>";
+				return $tbl;
 			}
 			else
 			{
@@ -1311,6 +1364,50 @@ $orb_defs["form"] = "xml";
 			}
 		
 			return $html;
+		}
+
+		////
+		// !this gets called when the user views search results as a table that has a submit button. 
+		// here we must change the activity / loactio of the form entries
+		function submit_table($arr)
+		{
+			extract($arr);
+			if (is_array($old_active))
+			{
+				foreach($old_active as $fid => $ear)
+				{
+					foreach($ear as $eid => $status)
+					{
+						if ($active[$fid][$eid] == 1 && $status == 1)	// new status active, old not active
+						{
+							// make obj active
+							$this->upd_object(array("oid" => $eid, "status" => 2));
+						}
+						else
+						if ($active[$fid][$eid] != 1 && $status == 2)	// new status not active, old active
+						{
+							// make not active
+							$this->upd_object(array("oid" => $eid, "status" => 1));
+						}
+					}
+				}
+			}
+
+			if (is_array($old_pos))
+			{
+				foreach($old_pos as $fid => $par)
+				{
+					foreach($par as $eid => $loc)
+					{
+						if ($chpos[$fid][$eid] != 0 && $loc != $chpos[$fid][$eid])	// location selected and changed
+						{
+							// change location
+							$this->upd_object(array("oid" => $eid, "parent" => $chpos[$fid][$eid]));
+						}
+					}
+				}
+			}
+			return $this->hexbin($return);
 		}
 
 		function html()

@@ -15,7 +15,7 @@ OpenWindow = window.open(url);
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width=100%>
 <tr>
 <td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Muuda" onClick="window.location.href='{VAR:change}';return false;"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="remote2('{VAR:weburl}');return false;"> <input type="submit" class='doc_button' value="Teised keeled" onClick="window.location.href='{VAR:lburl}';return false"> 
+<input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_CHANGE}" onClick="window.location.href='{VAR:change}';return false;"> <input class='doc_button' type="submit" value="{VAR:LC_DOCUMENT_PREVIEW}" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_SECTIONS}" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_TO_WEB}" onClick="remote2('{VAR:weburl}');return false;"> <input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_OTHER_LANG}" onClick="window.location.href='{VAR:lburl}';return false"> 
 </td>
 </tr>
 <tr>
@@ -28,7 +28,7 @@ OpenWindow = window.open(url);
 	</tr>
 	<tr>
 		<td class="title" width=10% nowrap>&nbsp;</td>
-		<td class="fgtext_g"><input type='submit' class='small_button' value='Salvesta'></td>
+		<td class="fgtext_g"><input type='submit' class='small_button' value='{VAR:LC_DOCUMENT_SAVE}'></td>
 	</tr>
 </table>
 {VAR:reforb}

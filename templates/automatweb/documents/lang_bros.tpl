@@ -15,7 +15,7 @@ OpenWindow = window.open(url);
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width=100%>
 <tr>
 <td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Muuda" onClick="window.location.href='{VAR:change}';return false;"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="remote2('{VAR:weburl}');return false;"> <input type="submit" class='doc_button' value="Teised keeled" onClick="window.location.href='{VAR:lburl}';return false"> 
+<input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_CHANGE}" onClick="window.location.href='{VAR:change}';return false;"> <input class='doc_button' type="submit" value="{VAR:LC_DOCUMENT_PREVIEW}" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_SECTIONS}" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_TO_WEB}" onClick="remote2('{VAR:weburl}');return false;"> <input type="submit" class='doc_button' value="Teised keeled" onClick="window.location.href='{VAR:lburl}';return false"> 
 </td>
 </tr>
 </table>
@@ -34,7 +34,7 @@ OpenWindow = window.open(url);
 	</tr>
 	<tr>
 		<td class="fform" colspan="2">
-		<input type="submit" value="Otsi">
+		<input type="submit" value="{VAR:LC_DOCUMENT_SEARCH}">
 		</td>
 	</tr>
 </table>
@@ -45,13 +45,13 @@ OpenWindow = window.open(url);
 <!-- SUB: MATCH -->
 	<tr>
 		<td class="fcaption2">{VAR:id}: {VAR:name}</td>
-		<td class="fform"><a href='{VAR:selurl}'>Vali see!</a></td>
+		<td class="fform"><a href='{VAR:selurl}'>{VAR:LC_DOCUMENT_PICK_THIS}!</a></td>
 	</tr>
 <!-- END SUB: MATCH -->
 <!-- SUB: MATCH_SEL -->
 	<tr>
 		<td bgcolor="#FFFFFF">{VAR:name}</td>
-		<td><a href='{VAR:selurl}'>Vali see!</a></td>
+		<td><a href='{VAR:selurl}'>{VAR:LC_DOCUMENT_PICK_THIS}!</a></td>
 	</tr>
 <!-- END SUB: MATCH_SEL -->
 </table>

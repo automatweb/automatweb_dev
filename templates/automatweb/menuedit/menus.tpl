@@ -42,7 +42,7 @@ function paste()
 <tr>
 <td height="15" colspan="11" class="fgtitle_new" background="images/uus_sinine.gif" >&nbsp;<b>{VAR:LC_MENUEDIT_MENU_CAPS}: 
 <!-- SUB: ADD_CAT -->
-<a href='{VAR:addmenu}' class="fgtitle_link">Lisa</a>
+<a href='{VAR:addmenu}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD}</a>
 <!-- END SUB: ADD_CAT -->
  | <a href='{VAR:addpromo}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD_PROMO_BOX}</a>
  | <a href='javascript:foo.submit()' class="fgtitle_link">{VAR:LC_MENUEDIT_SAVE}</a>

@@ -44,6 +44,13 @@ switch($type)
 		header("Location: languages.$ext");
 		break;
 
+	case "saveadmin":
+		$admin_lang = $adminlang;
+		$admin_lang_lc = $t->get_langid($admin_lang);
+		setcookie("admin_lang",$admin_lang,time()*24*3600*1000,"/");
+		setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
+		
+
 	default:
 		$title = "Keeled";
 		$content = $t->gen_list();

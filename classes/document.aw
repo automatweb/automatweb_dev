@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.30 2001/06/28 18:04:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.31 2001/07/02 00:24:07 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -18,6 +18,7 @@ session_register("s_graph_order");
 session_register("s_gallery_sortby");	
 session_register("s_gallery_order");
 
+lc_load("document");
 classload("msgboard","aw_style");
 // erinevad dokumentide muutmise templated.
 //  kui soovid uut lisada, siis paned selle kataloogi 
@@ -47,6 +48,12 @@ class document extends aw_template
 		$this->period = $period;
 		
 		$this->style_engine = new aw_style;
+		global $lc_document;
+		if (is_array($lc_document))
+		{
+			$this->vars($lc_document);
+		}
+			
 		global $basedir;
 
 		$xml_def = $this->get_file(array("file" => "$basedir/xml/documents/defaults.xml"));

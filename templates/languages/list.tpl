@@ -1,16 +1,18 @@
+<form action='languages.{VAR:ext}' method=get name='q'>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#CCCCCC">
 
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 	<tr>
-		<td height="15" colspan="11" class="fgtitle">&nbsp;<b>KEELED:&nbsp;<a href='languages.{VAR:ext}?type=add'>Lisa</a></b></td>
+		<td height="15" colspan="11" class="fgtitle">&nbsp;<b>KEELED:&nbsp;<a href='languages.{VAR:ext}?type=add'>Lisa</a> | <a href='javascript:document.q.submit()'>Salvesta</a></b></td>
 	</tr>
 	<tr>
 		<td align=center class="title">&nbsp;Nimi&nbsp;</td>
 		<td align=center class="title">&nbsp;Keele kood&nbsp;</td>
 		<td align=center class="title">&nbsp;Charset&nbsp;</td>
 		<td align=center class="title">&nbsp;Valitud&nbsp;</td>
+		<td align=center class="title">&nbsp;Admin&nbsp;</td>
 		<td align=center class="title">&nbsp;Aktiivne?&nbsp;</td>
 		<td align="center" colspan="2" class="title">&nbsp;Tegevus&nbsp;</td>
 	</tr>
@@ -31,6 +33,8 @@
 <td class="fgtext" align="center">&nbsp;Ei&nbsp;</td>
 <!-- END SUB: CSEL -->
 
+<td class="fgtext" align="center">&nbsp;<input type='radio' name='adminlang' value='{VAR:id}' {VAR:check}>&nbsp;</td>
+
 <!-- SUB: ACTIVE -->
 <td class="fgtext" align="center">&nbsp;<a href='languages.{VAR:ext}?type=set_nactive&id={VAR:id}'>Jah</a>&nbsp;</td>
 <!-- END SUB: ACTIVE -->
@@ -43,4 +47,5 @@
 <!-- END SUB: LINE -->
 </table>
 </td></tr></table>
-
+<input type='hidden' name='type' value='saveadmin'>
+</form>

@@ -34,7 +34,19 @@
 <td class="fform">Sorditud celli stiil 2:</td><td class="fform"><select name='content_sorted_style2'>{VAR:content_sorted_style2}</select></td>
 </tr>
 <tr>
-<td class="fform">Vali formid, millest elemente v&otilde;etakse:</td><td class="fform"><select name='forms[]' multiple>{VAR:forms}</select></td>
+<td class="fform">Vali formid, millest elemente v&otilde;etakse:</td><td class="fform"><select class='small_button' name='forms[]' multiple size=7>{VAR:forms}</select></td>
+</tr>
+<tr>
+<td class="fform">Vali kataloogid, kuhu saab sisestusi liigutada:</td><td class="fform"><select class='small_button' name='moveto[]' size=10 multiple>{VAR:moveto}</select></td>
+</tr>
+<tr>
+<td class="fform">Submit nupu asukoht:</td><td class="fform"><input type='checkbox' name='submit_top' value='1' {VAR:top_checked}> &uuml;leval <input type='checkbox' name='submit_bottom' value='1' {VAR:bottom_checked}> all </td>
+</tr>
+<tr>
+<td class="fform">Submit nupu tekst:</td><td class="fform"><input type='text' name='submit_text' value='{VAR:submit_text}'></td>
+</tr>
+<tr>
+<td class="fform">Lisa nupp:</td><td class="fform"><input type='checkbox' name='user_button_top' value='1' {VAR:user_button_top}> &uuml;leval <input type='checkbox' name='user_button_bottom' value='1' {VAR:user_button_bottom}> all &nbsp;Aadress:<input type='text' name='user_button_url' value='{VAR:user_button_url}'> Tekst:<input type='text' name='user_button_text' value='{VAR:user_button_text}'></td>
 </tr>
 <!-- SUB: CHANGE -->
 <tr>
@@ -51,6 +63,12 @@
 <td class="fform">Muutmine</td>
 <td class="fform">Vaatamine</td>
 <td class="fform">Special</td>
+<td class="fform">Kustuta</td>
+<td class="fform">Loodud</td>
+<td class="fform">Muudetud</td>
+<td class="fform">UID</td>
+<td class="fform">Aktiivsus</td>
+<td class="fform">Asukoha muutmine</td>
 <td class="fform">Tulba pealkiri</td>
 <td class="fform">Sorditav?</td>
 </tr>
@@ -66,6 +84,12 @@
 <td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='change' {VAR:change_checked}></td>
 <td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='view' {VAR:view_checked}></td>
 <td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='special' {VAR:special_checked}></td>
+<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='delete' {VAR:delete_checked}></td>
+<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='created' {VAR:created_checked}></td>
+<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='modified' {VAR:modified_checked}></td>
+<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='uid' {VAR:uid_checked}></td>
+<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='active' {VAR:active_checked}></td>
+<td align="center" class="fform"><input type='radio' name='columns[{VAR:column}]' value='chpos' {VAR:chpos_checked}></td>
 <td class="fform"><input type='text' class='small_button' name='names[{VAR:column}]' VALUE='{VAR:c_name}'></td>
 <td class="fform" align="center"><input type='checkbox' name='sortable[{VAR:column}]' VALUE='1' {VAR:sortable}></td>
 </tr>

@@ -1,4 +1,5 @@
 <?php
+
 class languages extends aw_template
 {
 	function languages()
@@ -11,6 +12,8 @@ class languages extends aw_template
 	{
 		$this->read_template("list.tpl");
 
+		global $admin_lang;
+
 		$this->db_query("SELECT * FROM languages WHERE status != 0");
 		while ($row = $this->db_next())
 		{
@@ -19,7 +22,14 @@ class languages extends aw_template
 
 			$sel = ($GLOBALS["lang_id"]) == $row["id"] ? $this->parse("SEL") : $this->parse("NSEL");
 
-			$this->vars(array("ACTIVE" => $ac, "NACTIVE" => "", "SEL" => $sel, "NSEL" => "","CSEL" => ""));
+			$this->vars(array(
+				"ACTIVE" => $ac, 
+				"NACTIVE" => "", 
+				"SEL" => $sel, 
+				"NSEL" => "",
+				"CSEL" => "",
+				"check" => checked($admin_lang == $row["id"])
+			));
 			$l.=$this->parse("LINE");
 		}
 		$this->vars(array("LINE" => $l));
@@ -120,6 +130,12 @@ class languages extends aw_template
 	{
 		$a = $this->fetch($GLOBALS["lang_id"]);
 		return $a["charset"];
+	}
+
+	function get_langid($id)
+	{
+		$a = $this->fetch($id);
+		return $a["acceptlang"];
 	}
 };
 ?>

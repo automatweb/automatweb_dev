@@ -2,7 +2,7 @@
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
 <td class="fcaption">
-Pealkiri:
+{VAR:LC_DOCUMENT_HEADLINE}:
 </td>
 <td class="fform">
 <input type="text" name="name" size="40">
@@ -10,7 +10,7 @@ Pealkiri:
 </tr>
 <tr>
 <td class="fcaption">
-Periood:
+{VAR:LC_DOCUMENT_PERIOD}:
 </td>
 <td class="fform">
 {VAR:pername}
@@ -18,13 +18,13 @@ Periood:
 </tr>
 <tr>
 <td class="fcaption">
-Sektsioon:
+{VAR:LC_DOCUMENT_SECTION}:
 </td>
 <td class="fform"><select name='parent'>{VAR:section}</select></td>
 </tr>
 <tr>
 <td class="fform" colspan="2" align="center">
-<input type="submit" value="Dokumendi muutmine &gt;&gt;">
+<input type="submit" value="{VAR:LC_DOCUMENT_EDITING} &gt;&gt;">
 <input type="hidden" name="action" value="editdoc">
 <input type="hidden" name="period" value="{VAR:period}">
 </td>

@@ -37,7 +37,7 @@
 //		name = eval("od_"+sel_oid);
 		url = "menuedit.{VAR:ext}?type=delete_menu&id="+sel_oid;
 
-		var answer=confirm('Oled kindel, et soovid kustutada menüüd ?')
+		var answer=confirm('Oled kindel, et soovid test kustutada menüüd ?')
 		if (answer)
 			setTimeout("s_submit(\""+url+"\")",1);
 	}

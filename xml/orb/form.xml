@@ -290,6 +290,24 @@
 			</function>
 		</action>
 
+		<action name="delete_entry">
+			<function name="delete_entry">
+				<arguments>
+					<required name="id"/>
+					<required name="entry_id"/>
+					<required name="after"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_table">
+			<function name="submit_table">
+				<arguments>
+					<required name="return"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

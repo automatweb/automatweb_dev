@@ -16,7 +16,7 @@ function ch_link()
 {
 	if (!sel_link)
 	{
-		alert('Vali link, mida muuta soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_LINK} {VAR:LC_DOCUMENT_WISH_CHANGE}!');
 		window.location="#";
 		return true;
 	}
@@ -29,7 +29,7 @@ function del_link()
 {
 	if (!sel_link)
 	{
-		alert('Vali link, mida kustutada soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_LINK} {VAR:LC_DOCUMENT_WISH_DELETE}!');
 		window.location="#";
 		return true;
 	}
@@ -44,7 +44,7 @@ function ch_image()
 {
 	if (!sel_image)
 	{
-		alert('Vali pilt, mida muuta soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_IMAGE} {VAR:LC_DOCUMENT_WISH_CHANGE}!');
 		window.location="#";
 		return true;
 	}
@@ -57,7 +57,7 @@ function del_image()
 {
 	if (!sel_image)
 	{
-		alert('Vali pilt, mida kustutada soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_IMAGE} {VAR:LC_DOCUMENT_WISH_DELETE}!');
 		window.location="#";
 		return true;
 	}
@@ -72,7 +72,7 @@ function ch_table()
 {
 	if (!sel_table)
 	{
-		alert('Vali tabel, mida muuta soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_TABLE} {VAR:LC_DOCUMENT_WISH_CHANGE}!');
 		window.location="#";
 		return true;
 	}
@@ -85,7 +85,7 @@ function del_table()
 {
 	if (!sel_table)
 	{
-		alert('Vali tabel, mille aliast kustutada soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_TABLE} {VAR:LC_DOCUMENT_WISH_DELETE}!');
 		window.location="#";
 		return true;
 	}
@@ -100,7 +100,7 @@ function ch_form()
 {
 	if (!sel_form)
 	{
-		alert('Vali form, mida muuta soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_FORM} {VAR:LC_DOCUMENT_WISH_CHANGE}!');
 		window.location="#";
 		return true;
 	}
@@ -113,7 +113,7 @@ function del_form()
 {
 	if (!sel_form)
 	{
-		alert('Vali form, mille aliast kustutada soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_FORM} {VAR:LC_DOCUMENT_WISH_DELETE}!');
 		window.location="#";
 		return true;
 	}
@@ -128,7 +128,7 @@ function ch_file()
 {
 	if (!sel_file)
 	{
-		alert('Vali fail, mida muuta soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_FILE} {VAR:LC_DOCUMENT_WISH_CHANGE}!');
 		window.location="#";
 		return true;
 	}
@@ -141,7 +141,7 @@ function del_file()
 {
 	if (!sel_file)
 	{
-		alert('Vali fail, mille aliast kustutada soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_FILE} {VAR:LC_DOCUMENT_WISH_DELETE}!');
 		window.location="#";
 		return true;
 	}
@@ -156,7 +156,7 @@ function ch_graph()
 {
 	if (!sel_graph)
 	{
-		alert('Vali graafik, mida muuta soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_GRAPH} {VAR:LC_DOCUMENT_WISH_CHANGE}!');
 		window.location="#";
 		return true;
 	}
@@ -169,7 +169,7 @@ function del_graph()
 {
 	if (!sel_graph)
 	{
-		alert('Vali graafik, mille aliast kustutada soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_GRAPH} {VAR:LC_DOCUMENT_WISH_DELETE}!');
 		window.location="#";
 		return true;
 	}
@@ -184,7 +184,7 @@ function ch_gallery()
 {
 	if (!sel_gallery)
 	{
-		alert('Vali galerii, mida muuta soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_GALLERY} {VAR:LC_DOCUMENT_WISH_CHANGE}!');
 		window.location="#";
 		return true;
 	}
@@ -197,7 +197,7 @@ function del_gallery()
 {
 	if (!sel_gallery)
 	{
-		alert('Vali galerii, mille aliast kustutada soovid!');
+		alert('{VAR:LC_DOCUMENT_CHOOSE} {VAR:LC_DOCUMENT_GALLERY} {VAR:LC_DOCUMENT_WISH_DELETE}!');
 		window.location="#";
 		return true;
 	}
@@ -212,7 +212,7 @@ function del_gallery()
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
 <td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> </td>
+<input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_SAVE}"> <input class='doc_button' type="submit" value="{VAR:LC_DOCUMENT_PREVIEW}" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_SECTIONS}" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_TO_WEB}" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> </td>
 </tr>
 <tr>
 <td class="hele_hall_taust" COLSPAN=2>
@@ -221,14 +221,14 @@ function del_gallery()
 		<td colspan=3><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
 	</tr>
 	<tr>
-		<td class="fcaption2_nt"><img src='{VAR:baseurl}/images/transa.gif' width=113 height=1 border=0><br><B>&nbsp;M‰‰rangud&nbsp;</b></td>
+		<td class="fcaption2_nt"><img src='{VAR:baseurl}/images/transa.gif' width=113 height=1 border=0><br><B>&nbsp;{VAR:LC_DOCUMENT_SETTINGS}&nbsp;</b></td>
 		<td class="fcaption2_nt" bgcolor="#CCCCCC"><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
 		<td class="fcaption2_nt">&nbsp;			
-			Aktiivne:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>
-	| N‰ita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
-	| N‰ita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
-	| Ilma vasaku paanita: <input type='checkbox' name='no_left_pane' value=1 {VAR:no_left_pane}>
-	| Ilma parema paanita: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>
+			{VAR:LC_DOCUMENT_ACTIVE}:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>
+	| {VAR:LC_DOCUMENT_SHOW_LEAD}: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
+	| {VAR:LC_DOCUMENT_SHOW_HEADLINE}: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
+	| {VAR:LC_DOCUMENT_NO_LEFT_PANE}: <input type='checkbox' name='no_left_pane' value=1 {VAR:no_left_pane}>
+	| {VAR:LC_DOCUMENT_NO_RIGHT_PANE}: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>
 		</td>
 	</tr>
 </table>
@@ -242,7 +242,7 @@ function doSubmit()
 }
 </script>
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;{VAR:LC_DOCUMENT_HEADLINE}&nbsp;</b></td>
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
 </tr>
 <tr>
@@ -252,7 +252,7 @@ function doSubmit()
 </td>
 </tr>
 <tr>
-<td class="hele_hall_taust" valign="top"><b>&nbsp;Sisu&nbsp;</b></td>
+<td class="hele_hall_taust" valign="top"><b>&nbsp;{VAR:LC_DOCUMENT_CONTENT}&nbsp;</b></td>
 <td class="hele_hall_taust">
 <textarea name="content" cols="100" rows="30" class='tekstikast'>{VAR:content}</textarea>
 </td>
@@ -261,7 +261,7 @@ function doSubmit()
 <!-- END SUB: NOT_IE -->
 <!-- SUB: IE -->
 <tr>
-<td class="hele_hall_taust" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="hele_hall_taust" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;{VAR:LC_DOCUMENT_HEADLINE}&nbsp;</b></td>
 <td class="hele_hall_taust">
 <br>
 <div id=idBox style="width: 100%;text-align: left; ;visibility: hidden, height:25;overflow:hidden;background:gainsboro" ID=htmlOnly valign="top">
@@ -302,25 +302,25 @@ function doSubmit()
 										<option value="Times New Roman,Times,Serif">Time
 										<option value="Courier, Monospace">Courier
 									</select>
-<select onchange="format('fontSize',this[this.selectedIndex].text);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF"><option>Suurus...<option>1<option>2<option>3<option>4<option>5<option>6<option>7</select>
+<select onchange="format('fontSize',this[this.selectedIndex].text);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF"><option>{VAR:LC_DOCUMENT_SIZE}...<option>1<option>2<option>3<option>4<option>5<option>6<option>7</select>
 <select onchange="format('forecolor',this[this.selectedIndex].style.color);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
-										<option selected>V&auml;rv...
-										<option style="color:black">must</option>
-										<option style="color:darkslategray">tumehall</option>
-										<option style="color:red">punane</option>
-										<option style="color:maroon">tumelilla</option>
-										<option style="color:lightpink">heleroosa</option>
-										<option style="color:purple">lilla</option>
-										<option style="color:blue">sinine</option>
-										<option style="color:darkblue">tumesinine</option>
-										<option style="color:teal">rohekassinine</option>
-										<option style="color:skyblue">taevasinine</option>
-										<option style="color:green">soheline</option>
-										<option style="color:seagreen">mereroheline</option>
-										<option style="color:olive">oliiv</option>
-										<option style="color:orange">oranz</option>
-										<option style="color:darkgoldenrod">tumekollane</option>
-										<option style="color:gray">hall</option>
+										<option selected>{VAR:LC_DOCUMENT_COLOR}...
+										<option style="color:black">{VAR:LC_DOCUMENT_COLOR_BLACK}</option>
+										<option style="color:darkslategray">{VAR:LC_DOCUMENT_COLOR_DARKSLATEGRAY}</option>
+										<option style="color:red">{VAR:LC_DOCUMENT_COLOR_RED}</option>
+										<option style="color:maroon">{VAR:LC_DOCUMENT_COLOR_MAROON}</option>
+										<option style="color:lightpink">{VAR:LC_DOCUMENT_COLOR_LIGHTPINK}</option>
+										<option style="color:purple">{VAR:LC_DOCUMENT_COLOR_PURPLE}</option>
+										<option style="color:blue">{VAR:LC_DOCUMENT_COLOR_BLUE}</option>
+										<option style="color:darkblue">{VAR:LC_DOCUMENT_COLOR_DARKBLUE}</option>
+										<option style="color:teal">{VAR:LC_DOCUMENT_COLOR_TEAL}</option>
+										<option style="color:skyblue">{VAR:LC_DOCUMENT_COLOR_SKYBLUE}</option>
+										<option style="color:green">{VAR:LC_DOCUMENT_COLOR_GREEN}</option>
+										<option style="color:seagreen">{VAR:LC_DOCUMENT_COLOR_SEAGREEN}</option>
+										<option style="color:olive">{VAR:LC_DOCUMENT_COLOR_OLIVE}</option>
+										<option style="color:orange">{VAR:LC_DOCUMENT_COLOR_ORANGE}</option>
+										<option style="color:darkgoldenrod">{VAR:LC_DOCUMENT_COLOR_DARKGOLDENROD}</option>
+										<option style="color:gray">{VAR:LC_DOCUMENT_COLOR_GRAY}</option>
 									</select>
 </div>
 <input type="hidden" name="title" value="{VAR:title}">
@@ -335,7 +335,7 @@ function doSubmit()
 </td>
 </tr>
 <tr>
-<td class="hele_hall_taust" valign="top"><b>&nbsp;Sisu&nbsp;</b></td>
+<td class="hele_hall_taust" valign="top"><b>&nbsp;{VAR:LC_DOCUMENT_CONTENT}&nbsp;</b></td>
 <td class="hele_hall_taust"><iframe onFocus="sel_el='cont_edit'" name="cont_edit" frameborder="1" width="600" height="400"></iframe>
 <input type='hidden' name='content' value="{VAR:content}">
 <input type='hidden' name='nobreaks' value='1'>
@@ -394,11 +394,11 @@ function format(what,opt)
 </script>
 <!-- END SUB: IE -->
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Vıtmesınad&nbsp;</b></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;{VAR:LC_DOCUMENT_KEYWORDS}&nbsp;</b></td>
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust" colspan=2><b>&nbsp;Objektid&nbsp;</b> <a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa uus &gt;&gt;&gt;</a><br>
+<td class="hele_hall_taust" colspan=2><b>&nbsp;{VAR:LC_DOCUMENT_OBJECTS}&nbsp;</b> <a href='pickobject.{VAR:ext}?docid={VAR:id}'>{VAR:LC_DOCUMENT_ADD_NEW} &gt;&gt;&gt;</a><br>
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
 	<tr>
 		<td><img src='{VAR:baseurl}/images/transa.gif' width=113 height=1 border=0></td>
@@ -409,23 +409,23 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Lingid</td>
+					<td class="title">{VAR:LC_DOCUMENT_LINKS}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=8><a href="{VAR:addlink}">Lisa uus</a> | <a href="javascript:ch_link()">Muuda</a> | <a href="javascript:del_link()">Kustuta</a></td>
+					<td class="title" colspan=8><a href="{VAR:addlink}">{VAR:LC_DOCUMENT_ADD_NEW}</a> | <a href="javascript:ch_link()">{VAR:LC_DOCUMENT_CHANGE}</a> | <a href="javascript:del_link()">{VAR:LC_DOCUMENT_DELETE}</a></td>
 				</tr>
 				<tr>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&link_sortby=name&link_order={VAR:link_order}'>Nimi {VAR:link_name_img}</a></td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&link_sortby=comment&link_order={VAR:link_order}'>Kirjeldus {VAR:link_comment_img}</a></td>
-					<td align="center" class="fcaption5_hele">Aadress</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&link_sortby=name&link_order={VAR:link_order}'>{VAR:LC_DOCUMENT_NAME} {VAR:link_name_img}</a></td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&link_sortby=comment&link_order={VAR:link_order}'>{VAR:LC_DOCUMENT_DESCRIPTION} {VAR:link_comment_img}</a></td>
+					<td align="center" class="fcaption5_hele">{VAR:LC_DOCUMENT_ADRESS}</td>
 					<td align="center" class="fcaption5_hele">Alias</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&link_sortby=modifiedby&link_order={VAR:link_order}'>Muutja {VAR:link_modifiedby_img}</a></td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&link_sortby=modified&link_order={VAR:link_order}'>Muudetud {VAR:link_modified_img}</a></td>
-					<td class="title" align="center" colspan=2>Vali</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&link_sortby=modifiedby&link_order={VAR:link_order}'>{VAR:LC_DOCUMENT_MODIFIED_BY} {VAR:link_modifiedby_img}</a></td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&link_sortby=modified&link_order={VAR:link_order}'>{VAR:LC_DOCUMENT_MODIFIED} {VAR:link_modified_img}</a></td>
+					<td class="title" align="center" colspan=2>{VAR:LC_DOCUMENT_CHOOSE}</td>
 				</tr>
 				<!-- SUB: LINK_LINE -->
 				<tr>
@@ -449,14 +449,14 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Lingid</td>
+					<td class="title">{VAR:LC_DOCUMENT_LINKS}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=8><a href="{VAR:addlink}">Lisa uus</a></td>
+					<td class="title" colspan=8><a href="{VAR:addlink}">{VAR:LC_DOCUMENT_ADD_NEW}</a></td>
 				</tr>
 			</table>
 		</tr>
@@ -471,22 +471,22 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Pildid</td>
+					<td class="title">{VAR:LC_DOCUMENT_IMAGES}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:add_img}">Lisa uus</a> | <a href="javascript:ch_image()">Muuda</a> | <a href="javascript:del_image();">Kustuta</a></td>
+					<td class="title" colspan=7><a href="{VAR:add_img}">{VAR:LC_DOCUMENT_ADD_NEW}</a> | <a href="javascript:ch_image()">{VAR:LC_DOCUMENT_CHANGE}</a> | <a href="javascript:del_image();">Kustuta</a></td>
 				</tr>
 				<tr>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=name&pic_order={VAR:pic_order}'>Nimi {VAR:pic_name_img}</a></td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=comment&pic_order={VAR:pic_order}'>Kirjeldus {VAR:pic_comment_img}</a></td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=name&pic_order={VAR:pic_order}'>{VAR:LC_DOCUMENT_NAME} {VAR:pic_name_img}</a></td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=comment&pic_order={VAR:pic_order}'>{VAR:LC_DOCUMENT_DESCRIPTION} {VAR:pic_comment_img}</a></td>
 					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=alias&pic_order={VAR:pic_order}'>Alias {VAR:pic_alias_img}</a></td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=modifiedby&pic_order={VAR:pic_order}'>Muutja {VAR:pic_modifiedby_img}</a></td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=modified&pic_order={VAR:pic_order}'>Muudetud {VAR:pic_modified_img}</a></td>
-					<td class="title" align="center" colspan=2>Vali</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=modifiedby&pic_order={VAR:pic_order}'>{VAR:LC_DOCUMENT_MODIFIED_BY} {VAR:pic_modifiedby_img}</a></td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&pic_sortby=modified&pic_order={VAR:pic_order}'>{VAR:LC_DOCUMENT_MODIFIED} {VAR:pic_modified_img}</a></td>
+					<td class="title" align="center" colspan=2>{VAR:LC_DOCUMENT_CHOOSE}</td>
 				</tr>
 				<!-- SUB: IMG_LINE -->
 				<tr>
@@ -509,14 +509,14 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Pildid</td>
+					<td class="title">{VAR:LC_DOCUMENT_IMAGES}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:add_img}">Lisa uus</a></td>
+					<td class="title" colspan=7><a href="{VAR:add_img}">{VAR:LC_DOCUMENT_ADD_NEW}</a></td>
 				</tr>
 			</table>
 		</tr>
@@ -531,22 +531,22 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Tabelid</td>
+					<td class="title">{VAR:LC_DOCUMENT_TABLES}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addtable}">Lisa uus</a> | <a href="javascript:ch_table()">Muuda</a> | <a href="javascript:del_table()">Kustuta</a></td>
+					<td class="title" colspan=7><a href="{VAR:addtable}">{VAR:LC_DOCUMENT_ADD_NEW}</a> | <a href="javascript:ch_table()">{VAR:LC_DOCUMENT_CHANGE}</a> | <a href="javascript:del_table()">{VAR:LC_DOCUMENT_DELETE}</a></td>
 				</tr>
 				<tr>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&table_sortby=name&table_order={VAR:table_order}'>Nimi {VAR:table_name_img}</a></td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&table_sortby=comment&table_order={VAR:table_order}'>Kirjeldus {VAR:table_comment_img}</a></td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&table_sortby=name&table_order={VAR:table_order}'>{VAR:LC_DOCUMENT_NAME} {VAR:table_name_img}</a></td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&table_sortby=comment&table_order={VAR:table_order}'>{VAR:LC_DOCUMENT_DESCRIPTION} {VAR:table_comment_img}</a></td>
 					<td align="center" class="fcaption5_hele">Alias</a></td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&table_sortby=modifiedby&table_order={VAR:table_order}'>Muutja {VAR:table_modifiedby_img}</a></td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&table_sortby=modified&table_order={VAR:table_order}'>Muudetud {VAR:table_modified_img}</a></td>
-					<td class="title" align="center" colspan=2>Vali</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&table_sortby=modifiedby&table_order={VAR:table_order}'>{VAR:LC_DOCUMENT_MODIFIED_BY} {VAR:table_modifiedby_img}</a></td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&table_sortby=modified&table_order={VAR:table_order}'>{VAR:LC_DOCUMENT_MODIFIED} {VAR:table_modified_img}</a></td>
+					<td class="title" align="center" colspan=2>{VAR:LC_DOCUMENT_CHOOSE}</td>
 				</tr>
 				<!-- SUB: TABLE_LINE -->
 				<tr>
@@ -569,14 +569,14 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Tabelid</td>
+					<td class="title">{VAR:LC_DOCUMENT_TABLES}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addtable}">Lisa uus</a></td>
+					<td class="title" colspan=7><a href="{VAR:addtable}">{VAR:LC_DOCUMENT_ADD_NEW}</a></td>
 				</tr>
 			</table>
 		</td>
@@ -591,22 +591,22 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Vormid</td>
+					<td class="title">{VAR:LC_DOCUMENT_FORMS}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addform}">Lisa uus</a> | <a href="javascript:ch_form()">Muuda</a> | <a href="javascript:del_form()">Kustuta</a></td>
+					<td class="title" colspan=7><a href="{VAR:addform}">{VAR:LC_DOCUMENT_ADD_NEW}</a> | <a href="javascript:ch_form()">{VAR:LC_DOCUMENT_CHANGE}</a> | <a href="javascript:del_form()">{VAR:LC_DOCUMENT_DELETE}</a></td>
 				</tr>
 				<tr>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&form_sortby=name&form_order={VAR:form_order}'>Nimi</a> {VAR:form_name_img}</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&form_sortby=comment&form_order={VAR:form_order}'>Kirjeldus</a> {VAR:form_comment_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&form_sortby=name&form_order={VAR:form_order}'>{VAR:LC_DOCUMENT_NAME}</a> {VAR:form_name_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&form_sortby=comment&form_order={VAR:form_order}'>{VAR:LC_DOCUMENT_DESCRIPTION}</a> {VAR:form_comment_img}</td>
 					<td align="center" class="fcaption5_hele">Alias</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&form_sortby=modifiedby&form_order={VAR:form_order}'>Muutja</a> {VAR:form_modifiedby_img}</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&form_sortby=modified&form_order={VAR:form_order}'>Muudetud</a> {VAR:form_modified_img}</td>
-					<td class="title" align="center" colspan=2>Vali</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&form_sortby=modifiedby&form_order={VAR:form_order}'>{VAR:LC_DOCUMENT_MODIFIED_BY}</a> {VAR:form_modifiedby_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&form_sortby=modified&form_order={VAR:form_order}'>{VAR:LC_DOCUMENT_MODIFIED}</a> {VAR:form_modified_img}</td>
+					<td class="title" align="center" colspan=2>{VAR:LC_DOCUMENT_CHOOSE}</td>
 				</tr>
 				<!-- SUB: FORM_LINE -->
 				<tr>
@@ -629,14 +629,14 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Vormid</td>
+					<td class="title">{VAR:LC_DOCUMENT_FORMS}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addform}">Lisa uus</a></td>
+					<td class="title" colspan=7><a href="{VAR:addform}">{VAR:LC_DOCUMENT_ADD_NEW}</a></td>
 				</tr>
 			</table>
 		</td>
@@ -651,22 +651,22 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Failid</td>
+					<td class="title">{VAR:LC_DOCUMENT_FILES}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addfile}">Lisa uus</a> | <a href="javascript:ch_file()">Muuda</a> | <a href="javascript:del_file()">Kustuta</a></td>
+					<td class="title" colspan=7><a href="{VAR:addfile}">{VAR:LC_DOCUMENT_ADD_NEW}</a> | <a href="javascript:ch_file()">{VAR:LC_DOCUMENT_CHANGE}</a> | <a href="javascript:del_file()">{VAR:LC_DOCUMENT_DELETE}</a></td>
 				</tr>
 				<tr>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&file_sortby=name&file_order={VAR:file_order}'>Nimi</a> {VAR:file_name_img}</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&file_sortby=comment&file_order={VAR:file_order}'>Kirjeldus</a> {VAR:file_comment_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&file_sortby=name&file_order={VAR:file_order}'>{VAR:LC_DOCUMENT_NAME}</a> {VAR:file_name_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&file_sortby=comment&file_order={VAR:file_order}'>{VAR:LC_DOCUMENT_DESCRIPTION}</a> {VAR:file_comment_img}</td>
 					<td align="center" class="fcaption5_hele">Alias</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&file_sortby=modifiedby&file_order={VAR:file_order}'>Muutja</a>, {VAR:file_modifiedby_img}</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&file_sortby=modified&file_order={VAR:file_order}'>Muudetud</a> {VAR:file_modified_img}</td>
-					<td class="title" align="center" colspan=2>Vali</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&file_sortby=modifiedby&file_order={VAR:file_order}'>{VAR:LC_DOCUMENT_MODIFIED_BY}</a>, {VAR:file_modifiedby_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&file_sortby=modified&file_order={VAR:file_order}'>{VAR:LC_DOCUMENT_MODIFIED}</a> {VAR:file_modified_img}</td>
+					<td class="title" align="center" colspan=2>{VAR:LC_DOCUMENT_CHOOSE}</td>
 				</tr>
 				<!-- SUB: FILE_LINE -->
 				<tr>
@@ -689,14 +689,14 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Failid</td>
+					<td class="title">{VAR:LC_DOCUMENT_FILES}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addfile}">Lisa uus</a></td>
+					<td class="title" colspan=7><a href="{VAR:addfile}">{VAR:LC_DOCUMENT_ADD_NEW}</a></td>
 				</tr>
 			</table>
 		</td>
@@ -711,22 +711,22 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Graafikud</td>
+					<td class="title">{VAR:LC_DOCUMENT_GRAPHS}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addgraph}">Lisa uus</a> | <a href="javascript:ch_graph()">Muuda</a> | <a href="javascript:del_graph()">Kustuta</a></td>
+					<td class="title" colspan=7><a href="{VAR:addgraph}">{VAR:LC_DOCUMENT_ADD_NEW}</a> | <a href="javascript:ch_graph()">{VAR:LC_DOCUMENT_CHANGE}</a> | <a href="javascript:del_graph()">{VAR:LC_DOCUMENT_DELETE}</a></td>
 				</tr>
 				<tr>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&graph_sortby=name&graph_order={VAR:graph_order}'>Nimi</a> {VAR:graph_name_img}</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&graph_sortby=comment&graph_order={VAR:graph_order}'>Kirjeldus</a> {VAR:graph_comment_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&graph_sortby=name&graph_order={VAR:graph_order}'>{VAR:LC_DOCUMENT_NAME}</a> {VAR:graph_name_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&graph_sortby=comment&graph_order={VAR:graph_order}'>{VAR:LC_DOCUMENT_DESCRIPTION}</a> {VAR:graph_comment_img}</td>
 					<td align="center" class="fcaption5_hele">Alias</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&graph_sortby=modifiedby&graph_order={VAR:graph_order}'>Muutja</a> {VAR:graph_modifiedby_img}</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&graph_sortby=modified&graph_order={VAR:graph_order}'>Muudetud</a> {VAR:graph_modified_img}</td>
-					<td class="title" align="center" colspan=2>Vali</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&graph_sortby=modifiedby&graph_order={VAR:graph_order}'>{VAR:LC_DOCUMENT_MODIFIED_BY}</a> {VAR:graph_modifiedby_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&graph_sortby=modified&graph_order={VAR:graph_order}'>{VAR:LC_DOCUMENT_MODIFIED}</a> {VAR:graph_modified_img}</td>
+					<td class="title" align="center" colspan=2>{VAR:LC_DOCUMENT_CHOOSE}</td>
 				</tr>
 				<!-- SUB: GRAPH_LINE -->
 				<tr>
@@ -749,14 +749,14 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Graafikud</td>
+					<td class="title">{VAR:LC_DOCUMENT_GRAPHS}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addgraph}">Lisa uus</a></td>
+					<td class="title" colspan=7><a href="{VAR:addgraph}">{VAR:LC_DOCUMENT_ADD_NEW}</a></td>
 				</tr>
 			</table>
 		</td>
@@ -771,22 +771,22 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Galeriid</td>
+					<td class="title">{VAR:LC_DOCUMENT_GALLERYS}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addgallery}">Lisa uus</a> | <a href="javascript:ch_gallery()">Muuda</a> | <a href="javascript:del_gallery()">Kustuta</a></td>
+					<td class="title" colspan=7><a href="{VAR:addgallery}">{VAR:LC_DOCUMENT_ADD_NEW}</a> | <a href="javascript:ch_gallery()">{VAR:LC_DOCUMENT_CHANGE}</a> | <a href="javascript:del_gallery()">{VAR:LC_DOCUMENT_DELETE}</a></td>
 				</tr>
 				<tr>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&gallery_sortby=name&gallery_order={VAR:gallery_order}'>Nimi</a> {VAR:gallery_name_img}</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&gallery_sortby=comment&gallery_order={VAR:gallery_order}'>Kirjeldus</a> {VAR:gallery_comment_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&gallery_sortby=name&gallery_order={VAR:gallery_order}'>{VAR:LC_DOCUMENT_NAME}</a> {VAR:gallery_name_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&gallery_sortby=comment&gallery_order={VAR:gallery_order}'>{VAR:LC_DOCUMENT_DESCRIPTION}</a> {VAR:gallery_comment_img}</td>
 					<td align="center" class="fcaption5_hele">Alias</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&gallery_sortby=modifiedby&gallery_order={VAR:gallery_order}'>Muutja</a> {VAR:gallery_modifiedby_img}</td>
-					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&gallery_sortby=modified&gallery_order={VAR:gallery_order}'>Muudetud</a> {VAR:gallery_modified_img}</td>
-					<td class="title" align="center" colspan=2>Vali</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&gallery_sortby=modifiedby&gallery_order={VAR:gallery_order}'>{VAR:LC_DOCUMENT_MODIFIED_BY}</a> {VAR:gallery_modifiedby_img}</td>
+					<td align="center" class="fcaption5_hele"><a href='{VAR:url}&gallery_sortby=modified&gallery_order={VAR:gallery_order}'>{VAR:LC_DOCUMENT_MODIFIED}</a> {VAR:gallery_modified_img}</td>
+					<td class="title" align="center" colspan=2>{VAR:LC_DOCUMENT_CHOOSE}</td>
 				</tr>
 				<!-- SUB: GALLERY_LINE -->
 				<tr>
@@ -809,14 +809,14 @@ function format(what,opt)
 		<td valign=top>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title">Galeriid</td>
+					<td class="title">{VAR:LC_DOCUMENT_GALLERYS}</td>
 				</tr>
 			</table>
 		</td>
 		<td>
 			<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC" width="100%">
 				<tr>
-					<td class="title" colspan=7><a href="{VAR:addgallery}">Lisa uus</a></td>
+					<td class="title" colspan=7><a href="{VAR:addgallery}">{VAR:LC_DOCUMENT_ADD_NEW}</a></td>
 				</tr>
 			</table>
 		</td>
@@ -827,7 +827,7 @@ function format(what,opt)
 </tr>
 <tr>
 <td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Salvesta"> <input class='doc_button' type="submit" value="Eelvaade" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="remote2('{VAR:weburl}')"> 
+<input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_SAVE}"> <input class='doc_button' type="submit" value="{VAR:LC_DOCUMENT_PREVIEW}" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_SECTIONS}" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="{VAR:LC_DOCUMENT_TO_WEB}" onClick="remote2('{VAR:weburl}')"> 
 </td>
 </tr>
 </table>

@@ -448,7 +448,8 @@ class shop extends shop_base
 						"item_link" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop_id, "section" => $section)),
 						"name" => $ar["name"],
 						"item" => $item,
-						"F_ROW" => $rowhtml
+						"F_ROW" => $rowhtml,
+						"item_parent" => ($itt["has_voucher"] ? $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$it["parent"],"name") : "")
 					));
 					$this->parse("ITEM");
 					$items = true;
@@ -824,7 +825,6 @@ class shop extends shop_base
 					$it = $this->get_item($item_id);
 					$itt = $this->get_item_type($it["type_id"]);
 					$this->db_query("INSERT INTO order2item(order_id,item_id,count,price,cnt_entry,period,item_type,item_type_order) VALUES($ord_id,$item_id,'".$ar["cnt"]."','".$ar["price"]."','".$ar["cnt_entry"]."','".$ar["period"]."','".$it["type_id"]."','".$it["jrk"]."')");
-					$t_p += (double)$ar["cnt"] * (double)$ar["price"];
 				}
 			}
 		}
@@ -841,7 +841,7 @@ class shop extends shop_base
 		// items and their counts and also the order form data.
 		$mail = "Tere!\n\n kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." tellis järgmised tooted: \n\n".$mail."\n\nKokku hind: ".$t_price;
 
-		$this->db_query("UPDATE orders SET t_price = '$t_p' WHERE id = $ord_id");
+		$this->db_query("UPDATE orders SET t_price = '$t_price' WHERE id = $ord_id");
 		
 		$mail.="\n\nTellija sisestas enda kohta järgmised andmed:\n\n";
 		foreach($order_forms["entries"] as $ar)
@@ -1207,7 +1207,7 @@ class shop extends shop_base
 		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / Tellimused");
 
 		$ss = "";
-		if ($filter_uid)
+		if ($filter_uid && !is_admin())
 		{
 			global $uid;
 			$ss = " AND user = '$uid' ";
@@ -1348,6 +1348,7 @@ class shop extends shop_base
 					$this->vars(array(
 						"item_link" => $this->mk_my_orb("change", array("id" => $item_id),"shop_item"),
 						"view_item" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop)),
+						"parent_name" => ($itt["has_voucher"] ? $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$it["parent"],"name") : ""),
 						"name" => $it["name"],
 						"F_ROW" => $rowhtml
 					));
@@ -1372,7 +1373,8 @@ class shop extends shop_base
 			"ip"	=> $order["ip"],
 			"inf_form" => $tx,
 			"bill" => $this->mk_my_orb("view_bill", array("shop" => $shop, "order_id" => $order_id, "section" => $section)),
-			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section, "page" => $page))
+			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop, "section" => $section, "page" => $page)),
+			"price" => $order["t_price"]
 		));
 		return $this->parse();
 	}
@@ -1764,11 +1766,13 @@ class shop extends shop_base
 					"view_voucher" => $this->mk_my_orb("view_voucher", array("order_id" => $order_id, "shop" => $shop, "section" => $section, "item_id" => $row["item_id"])),
 					"parent_name" => $parent_name
 				));
-				$this->parse("VOUCHER");
+				$vc.=$this->parse("VOUCHER");
+				$this->restore_handle();
 			}
 		}
 		$this->vars(array(
-			"to_list" => $this->mk_my_orb("order_history", array("id" => $shop, "order_id" => $order_id, "section" => $section))
+			"to_list" => $this->mk_my_orb("order_history", array("id" => $shop, "order_id" => $order_id, "section" => $section)),
+			"VOUCHER" => $vc
 		));
 		return $this->parse();
 	}

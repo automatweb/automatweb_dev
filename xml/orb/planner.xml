@@ -1,6 +1,21 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="planner">
+		<action name="todo">
+			<function name="todo">
+				<arguments>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_todo">
+			<function name="submit_todo">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="importfile">
 			<function name="importfile">
 				<arguments>
@@ -25,11 +40,21 @@
 			</function>
 		</action>
 
+		<action name="add_todo_menu">
+			<function name="add_todo_menu">
+				<arguments>
+					<required name="name"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="add_todo_item">
 			<function name="edit_todo_item">
 				<arguments>
 					<define name="op" value="add"/>
-					<required name="date"/>
+					<optional name="date"/>
+					<required name="parent"/>
 				</arguments>
 			</function>
 		</action>

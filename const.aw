@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.24 2001/06/29 01:07:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.25 2001/07/02 00:24:02 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -185,8 +185,12 @@ else
 	function lc_load($file)
 	{
 		global $basedir;
-		global $ext,$LC;
-		include_once("$basedir/lang/" . $LC . "/$file.$ext");
+		global $ext,$LC,$admin_lang_lc;
+		if (!$admin_lang_lc)
+		{
+			$admin_lang_lc = "et";
+		}
+		include_once("$basedir/lang/" . $admin_lang_lc . "/$file.$ext");
 	}
 
 	// loads localization constants from the site's $site_basedir

@@ -24,6 +24,8 @@ class form_table extends form_base
 
 		$css = $s->get_select(0,ST_CELL);
 
+		classload("objects");
+		$ob = new db_objects;
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
 			"forms" => $this->multiple_option_list(array(),$this->get_list(FTYPE_ENTRY)),
@@ -35,6 +37,7 @@ class form_table extends form_base
 			"content_style2" => $this->picker(0,$css),
 			"content_sorted_style1" => $this->picker(0,$css),
 			"content_sorted_style2" => $this->picker(0,$css),
+			"moveto" => $this->multiple_option_list($this->table["moveto"], $ob->get_list())
 		));
 		return $this->parse();
 	}
@@ -58,6 +61,15 @@ class form_table extends form_base
 					$this->table["defs"][$col]["sortable"] = $sortable[$col];
 				}
 			}
+
+			$this->table["moveto"] = array();
+			if (is_array($moveto))
+			{
+				foreach($moveto as $mfid)
+				{
+					$this->table["moveto"][$mfid] = $mfid;
+				}
+			}
 			$this->table["table_style"] = $tablestyle;
 			$this->table["header_normal"] = $header_normal;
 			$this->table["header_sortable"] = $header_sortable;
@@ -66,6 +78,13 @@ class form_table extends form_base
 			$this->table["content_style2"] = $content_style2;
 			$this->table["content_sorted_style1"] = $content_sorted_style1;
 			$this->table["content_sorted_style2"] = $content_sorted_style2;
+			$this->table["submit_text"] = $submit_text;
+			$this->table["submit_top"] = $submit_top;
+			$this->table["submit_bottom"] = $submit_bottom;
+			$this->table["user_button_top"] = $user_button_top;
+			$this->table["user_button_bottom"] = $user_button_bottom;
+			$this->table["user_button_text"] = $user_button_text;
+			$this->table["user_button_url"] = $user_button_url;
 			classload("xml");
 			$x = new xml;
 			$co = $x->xml_serialize($this->table);
@@ -132,13 +151,21 @@ class form_table extends form_base
 				"COL" => $c,
 				"change_checked" => checked($this->table["defs"][$col]["el"] == "change"),
 				"view_checked" => checked($this->table["defs"][$col]["el"] == "view"),
-				"special_checked" => checked($this->table["defs"][$col]["el"] == "special")
+				"special_checked" => checked($this->table["defs"][$col]["el"] == "special"),
+				"delete_checked" => checked($this->table["defs"][$col]["el"] == "delete"),
+				"uid_checked" => checked($this->table["defs"][$col]["el"] == "uid"),
+				"created_checked" => checked($this->table["defs"][$col]["el"] == "created"),
+				"modified_checked" => checked($this->table["defs"][$col]["el"] == "modified"),
+				"active_checked" => checked($this->table["defs"][$col]["el"] == "active"),
+				"chpos_checked" => checked($this->table["defs"][$col]["el"] == "chpos")
 			));
 			$this->parse("ROW");
 		}
 
 		classload("style");
 		$s = new style;
+		classload("objects");
+		$ob = new db_objects;
 		$css = $s->get_select(0,ST_CELL);
 		$this->vars(array(
 			"name" => $this->table_name,
@@ -155,6 +182,14 @@ class form_table extends form_base
 			"content_style2" => $this->picker($this->table["content_style2"],$css),
 			"content_sorted_style1" => $this->picker($this->table["content_sorted_style1"],$css),
 			"content_sorted_style2" => $this->picker($this->table["content_sorted_style2"],$css),
+			"moveto" => $this->multiple_option_list($this->table["moveto"], $ob->get_list()),
+			"top_checked" => checked($this->table["submit_top"]),
+			"bottom_checked" => checked($this->table["submit_bottom"]),
+			"submit_text" => $this->table["submit_text"],
+			"user_button_top" => checked($this->table["user_button_top"]),
+			"user_button_bottom" => checked($this->table["user_button_bottom"]),
+			"user_button_text" => $this->table["user_button_text"],
+			"user_button_url" => $this->table["user_button_url"]
 		));
 		return $this->parse();
 	}

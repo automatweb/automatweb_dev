@@ -1,13 +1,29 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.3 2001/06/05 11:55:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.4 2001/07/02 00:24:07 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
+lc_load("extlinks");
+
+
 class extlinks extends aw_template {
 
 	function extlinks($args = array())
 	{
 		$this->db_init();
 		$this->tpl_init();
+		
+		global $lc_extlinks;
+		if (is_array($lc_extlinks))
+		{
+			$this->vars($lc_extlinks);
+		}
+		
+		
+	
+
 	}
+	 
+	
+  
   // lisab lingi objekti och dokumendi juurde
 	function add_link($args) {
 	  extract($args);
@@ -19,6 +35,9 @@ class extlinks extends aw_template {
 						VALUES('$id','$oid','$url','$name','$hits','$newwindow','$desc','$type','$docid','$doclinkcollection')";
 		$this->db_query($q);
 		$this->_log("link","Lisas lingi $name");
+
+		
+
 	}
 
 	////
