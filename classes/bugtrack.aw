@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/bugtrack.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/bugtrack.aw,v 2.2 2001/05/19 23:25:20 duke Exp $
 // generic bugtracki klass
 global $orb_defs;
 $orb_defs["bugtrack"] = array(
@@ -170,7 +170,7 @@ EOT;
 				global $baseurl;
 			   mail("bugtrack@struktuur.ee","Uus puuk: $baseurl $title",$msg,"From: bugtrack <bugtrack@struktuur.ee>");
 		}
-		$this->log_action(UID,"bug","Lisas bugi $title");
+		$this->_log("bug","Lisas bugi $title");
 
 		//Siin salvestatakse uus bugi ka faili
 		$q = "SELECT MAX(id) AS id FROM bugtrack WHERE uid = '$uid'";
@@ -385,7 +385,7 @@ EOT;
 			WHERE id = '$id'";
 		$this->db_query($q);	
 		global $HTTP_HOST;
-		$this->log_action(UID,"bug","Muutis bugi $title");
+		$this->_log("bug","Muutis bugi $title");
 	}
 	////
 	// !Annab ühe bugi andmed
@@ -397,7 +397,7 @@ EOT;
 	function remove_bug($ar) {
 		extract($ar);
 		$buk = $this->get_bug($id);
-		$this->log_action(UID,"bug","Kustutas bugi ".$buk[title]);
+		$this->_log("bug","Kustutas bugi ".$buk[title]);
 		$this->dele_record("bugtrack","id",$id);
 		$refr= $this->mk_orb("lists",array("filt"=>"all"));
 		http_refresh(0,"$refr");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.1 2001/05/19 02:29:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.2 2001/05/19 23:29:41 duke Exp $
 // mailinglist saadetavate mailide klass
 
 	class email extends aw_template
@@ -92,13 +92,13 @@
 			{
 				$this->upd_object(array("oid" => $mail_id));
 				$this->db_query("UPDATE ml_mails SET mail_from = '$from', mail_from_name='$from_name', subj = '$subject' , contents='$contents' WHERE id = $mail_id");
-				$this->log_action($GLOBALS["uid"],"e-mail","Muutis meili $subject");
+				$this->_log("e-mail","Muutis meili $subject");
 			}
 			else
 			{
 				$mail_id = $this->new_object(array("parent" => $parent,"name" => "e-mail", "class_id" => CL_EMAIL));
 				$this->db_query ("INSERT INTO ml_mails VALUES($mail_id, '$from' , '$subject' , '$contents' , 0,'$from_name')");
-				$this->log_action($GLOBALS["uid"],"e-mail","Lisas meili $subject");
+				$this->_log("e-mail","Lisas meili $subject");
 			}
 
 			if ($link_addr != "")
@@ -111,7 +111,7 @@
 						$link_addr.="/";
 				}
 				$this->register_object($mail_id,$link_addr,CL_MAIL_LINK);
-				$this->log_action($GLOBALS["uid"],"e-mail","Lisas meilile $subject lingi $link_addr");
+				$this->_log("e-mail","Lisas meilile $subject lingi $link_addr");
 			}
 			return $mail_id;
 		}
@@ -152,7 +152,7 @@
 		{
 			$this->delete_object($id);
 			$subject = $this->db_fetch_field("SELECT subj FROM ml_mails WHERE id = $id","subj");
-			$this->log_action($GLOBALS["uid"],"e-mail","Kustutas meili $subject");
+			$this->_log("e-mail","Kustutas meili $subject");
 		}
 
 		function mail_preview($msg_id)
@@ -327,7 +327,7 @@
 
 			$this->db_query("INSERT INTO ml_sent VALUES($list_id, $id, ".time().")");
 			$this->db_query("UPDATE ml_mails SET sent = ".time()." WHERE id = $id");
-			$this->log_action($GLOBALS["uid"],"e-mail","Saatis meili $mail[subj]");
+			$this->_log("e-mail","Saatis meili $mail[subj]");
 		}
 		
 		function send_plain_mail($from, $to, $subj, $text)
