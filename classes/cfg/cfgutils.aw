@@ -35,20 +35,24 @@ class cfgutils extends aw_template
 	function has_properties($args = array())
 	{
 		$this->_init_clist();
-		if ($args["file"])
+		if ($args['file'])
 		{
-			$fname = $args["file"];
+			$fname = $args['file'];
 		}
-		elseif ($args["clid"])
+		elseif ($args['cldef'])
 		{
-			$fname = $this->clist[$args["clid"]];
+			$fname = $this->clist[constant($args['cldef'])];
+		}
+		elseif ($args['clid'])
+		{
+			$fname = $this->clist[$args['clid']];
 		};
 
 		$retval = false;
 		
 		if ($fname)
 		{
-			$retval = file_exists($this->fbasedir . $fname . ".xml");
+			$retval = file_exists($this->fbasedir . $fname . '.xml');
 		};
 
 		return $retval;
@@ -57,7 +61,12 @@ class cfgutils extends aw_template
 	function get_clid_by_file($args = array())
 	{
 		$this->_init_clist();
-		return array_search($args["file"],$this->clist);
+		return array_search($args['file'],$this->clist);
+	}
+
+	function get_clid_by_cldef($args = array())
+	{
+		return constant($args['cldef']);
 	}
 
 	////
@@ -84,18 +93,9 @@ class cfgutils extends aw_template
 	// optionally also caches them
 	// file(string) - name of the class
 	// clid(int) - class_id
-	function load_properties($args = array())
+	function load_class_properties($args = array())
 	{
                 extract($args);
-		if (!$file)
-		{
-			$file = $this->clist[$clid];
-		};
-                // full cavity search
-                if (preg_match("/\W/",$file))
-                {
-                        die("Invalid clid - $file<bR>");
-                };
                 // here be cache.
 		$fqfn = $this->fbasedir . $file . ".xml";
                 $source = $this->get_file(array("file" => $fqfn));
@@ -109,6 +109,23 @@ class cfgutils extends aw_template
 			$this->classinfo = $classinfo[0];
                 };
                 return $properties;
+	}
+
+	function load_properties($args = array())
+	{
+		extract($args);
+		$coreprops = $this->load_class_properties(array("file" => "core"));
+		if (!$file)
+		{
+			$file = $this->clist[$clid];
+		};
+                // full cavity search
+                if (preg_match("/\W/",$file))
+                {
+                        die("Invalid clid - $file<bR>");
+                };
+		$objprops = $this->load_class_properties(array("file" => $file));
+		return array_merge($coreprops,$objprops);
 	}
 
 	function get_classinfo()
