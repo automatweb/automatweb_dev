@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.4 2004/08/26 13:30:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.5 2004/08/26 13:47:51 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -685,6 +685,7 @@ class planner extends class_base
 			};
 		};
 
+
 		$res_props = array();
 			
 		// nii - aga kuidas ma lahenda probleemi sündmuste panemisest teise kalendrisse?
@@ -755,7 +756,7 @@ class planner extends class_base
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[action]","value" => "submit");
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[group]","value" => $emb_group);
 				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[clid]","value" => $clid);
-				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cfgform_id]","value" => $event_cfgform);
+				$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cfgform]","value" => $event_cfgform);
 				if ($this->event_id)
 				{
 					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);	
