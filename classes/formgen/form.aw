@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.54 2003/05/08 13:43:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.55 2003/05/08 14:03:07 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1259,42 +1259,51 @@ class form extends form_base
 		// minema. parent argument overraidib selle
 		$this->entry_parent = isset($parent) ? $parent : $this->arr["ff_folder"];
 
+		$this->controller_errors = array();
+
 		$new = ($entry_id) ? false : true;
+	
+		// check_calendar might want to alter those
+		$controllers_ok = true;
+		$controller_warnings_ok = true;
 
-			// if this form uses a calendar and is an event entry form, figure out
-			// whether the calendar it is trying to write to, have enough vacancies
-			if ($this->subtype & FSUBTYPE_EV_ENTRY)
+		// if this form uses a calendar and is an event entry form, figure out
+		// whether the calendar it is trying to write to, have enough vacancies
+		if ($this->subtype & FSUBTYPE_EV_ENTRY)
+		{
+			// check vacations and if found, update calendar->form relations
+			// set error messages otherwise
+			$fcal = get_instance("formgen/form_calendar");
+			$els = $this->get_form_elements(array(
+				"use_loaded" => true,
+				"key" => "id",
+			));
+
+			$errors = $fcal->check_calendar(array(
+				"id" => $id,
+				"post_vars" => $this->post_vars,//$this->entry,
+				"entry_id" => $entry_id,
+				"chain_entry_id" => $chain_entry_id,
+				"els" => $els,
+			));
+
+			// if any of the vacancy checks failed,
+			// merge the error messages into controller_errors
+			/*
+			if ($errors)
 			{
-				// check vacations and if found, update calendar->form relations
-				// set error messages otherwise
-				$fcal = get_instance("formgen/form_calendar");
-				$els = $this->get_form_elements(array(
-					"use_loaded" => true,
-					"key" => "id",
-				));
-
-				$errors = $fcal->check_calendar(array(
-					"id" => $id,
-					"post_vars" => $this->post_vars,//$this->entry,
-					"entry_id" => $entry_id,
-					"chain_entry_id" => $chain_entry_id,
-					"els" => $els,
-				));
-
-				// if any of the vacancy checks failed,
-				// merge the error messages into controller_errors
-				if ($errors)
+			*/
+				if (!is_array($this->controller_errors))
 				{
-					if (!is_array($this->controller_errors))
-					{
-						$this->controller_errors = array();
-					};
-					$this->controller_errors = $this->controller_errors + $fcal->get_controller_errors();
+					$this->controller_errors = array();
 				};
+				$this->controller_errors = $this->controller_errors + $fcal->get_controller_errors();
+			//};
 
-				$has_errors = $errors;
-				$has_cal_errors = $errors;
-			}
+			$has_errors = $errors;
+			$controller_warnings_ok = $fcal->fatal;
+			$has_cal_errors = $errors;
+		}
 
 		if (!$no_process_entry)
 		{
@@ -1323,8 +1332,6 @@ class form extends form_base
 				$this->entry[$dat["id"]] = $cval;
 			}
 		
-			$controllers_ok = true;
-			$controller_warnings_ok = true;
 			foreach($this->controller_queue as $ctrl)
 			{
 				if (!$ctrl["val"])
@@ -1483,7 +1490,7 @@ class form extends form_base
 			$_end = (int)$this->arr["cal_end"];
 			$_max = (int)$this->arr["cal_count"];
 			$_period_cnt = (int)$this->arr["cal_period"];
-			$q = "DELETE FROM calendar2timedef WHERE cal_id = '$id' AND entry_id = '$entry_id'";
+			$q = "DELETE FROM calendar2timedef WHERE cal_id = '$id' AND entry_id = '$eid'";
 			$this->db_query($q);
 			$relation = ($chain_entry_id) ? $chain_entry_id : $this->entry_id;
 			$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt,relation)

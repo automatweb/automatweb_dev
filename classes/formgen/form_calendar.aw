@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.25 2003/05/08 10:55:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.26 2003/05/08 14:03:08 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -444,9 +444,9 @@ class form_calendar extends form_base
 		$vac = $max - $sum - $req_items;
 		if ($GLOBALS["fg_dbg"]) 
 		{
-			print "id = $r_entry_id, max avail = $max, reserved = $sum, vac = $vac, requested = $req_items<br>";
-			print "$sum ruumi on broneeritud<br>";
-			print "$vac j‰‰ks j‰rgi<br>";
+			print "id = $r_entry_id, max avail = $max, reserved = $sum, vac = $vac, requested = $req_items<br>\n";
+			print "$sum ruumi on broneeritud<br>\n";
+			print "$vac j‰‰ks j‰rgi<br>\n";
 		}
 		return $vac;
 	}
@@ -626,6 +626,12 @@ class form_calendar extends form_base
 		$this->db_query($q);
 		$row2 = $this->db_next();
 		$max = (int)$row2["max"];
+
+	
+
+		/*print $q;
+		print "<br>";
+		*/
 		// and now, for each calendar figure out how many
 		// free spots does it have in the requested period.
 		// for this, I'll have to query the calendar2event table
@@ -646,7 +652,7 @@ class form_calendar extends form_base
 		$this->db_query($q);
 		$row2 = $this->db_next();
 		$sum = (int)$row2["sum"];
-		//print "max = $max, sum = $sum, req = $req_items<br>";
+		//print "max = $max, sum = $sum, req = $req_items<br>\n";
 		$vac = $max - $sum - $req_items;
 		$x = &$args;
 		$x["max"] = $max;
@@ -772,7 +778,9 @@ class form_calendar extends form_base
 
 	function check_calendar($args = array())
 	{
+		static $used_slots = 0;
 		extract($args);
+		$this->controller_errors = array();
 		$q = "SELECT * FROM calendar2forms
 				LEFT JOIN objects ON (calendar2forms.cal_id = objects.oid)
 				WHERE form_id = '$id'";
@@ -804,6 +812,7 @@ class form_calendar extends form_base
 						$req_items = 1;
 					};
 					$relrow["req_items"] = $req_items;
+					$relrow["el_allow_exceed"] = $row["el_allow_exceed"];
 					$lb_sel = $args["post_vars"][$relrow["el_relation"]];
 					if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))
 					{
@@ -865,25 +874,42 @@ class form_calendar extends form_base
 			foreach($rels as $relval)
 			{
 				$max = 0;
+				$used_slots = $used_slots + $relval["req_items"];
 				$vac = $this->get_vac_by_contr(array(
 						"start" => $args["post_vars"][$row["el_start"]],
 						"contr" => $cal_controller,
 						"cal_id" => $row["cal_id"],
 						"entry_id" => $args["entry_id"],
-						"req_items" => $relval["req_items"],
+						//"req_items" => $relval["req_items"],
+						"req_items" => $used_slots,
 						"txtid" => $relval["txtid"],
 						"rel" => $_rel,
 						"rel2" => $rel2,
 						"id" => $id,
 						"max" => &$max,
 				));
+
+
+				//print "max = $max, req_items = $relval[req_items], us = $used_slots, vac = $vac<br>";
+
 // vana veateade: $this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
+
 				if ($vac < 0)
 				{
-					$has_errors = true;
+					if (empty($relval["el_allow_exceed"]))
+					{
+						$has_errors = true;
+						$this->fatal = true;
+						$msg = "On request only!";
+					}
+					else
+					{
+						$this->fatal = false;
+						$msg = "On request only, but writing anyway!";
+					}
 					// where do we put the error message?
 					$err_el = ($relval["el_count"]) ? $relval["el_count"] : $row["el_start"];
-					$this->controller_errors[$err_el][] = "On request only!";
+					$this->controller_errors[$err_el][] = $msg;
 				};
 			};
 			$this->restore_handle();
@@ -1106,14 +1132,15 @@ class form_calendar extends form_base
 
 		$amount_els = new aw_array($arr["amount_el"]);
 		
+		$_oid = $args["id"];
+		$_eid = $args["entry_id"];
+		
 		$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid' AND relation = '$cal_relation'";
 		$this->db_query($q);
 
 		$period_type = ($arr["period_type"]) ? $arr["period_type"] : 1;
 		$release_type = ($arr["release_type"]) ? $arr["release_type"] : 1;
 	
-		$_oid = $args["id"];
-		$_eid = $args["entry_id"];
 
 		$lb_id_data = array();
 
@@ -1297,6 +1324,7 @@ class form_calendar extends form_base
                         //"cnt_type_el" => checked($item["count"] == 0),
                         //"cnt_type_cnt" => checked($item["count"] > 0),
 			"el_use_chain_entry_id" => checked($item["el_use_chain_entry_id"]),
+			"el_allow_exceed" => checked($item["el_allow_exceed"]),
                         "end_type_el" => checked($item["end"] == 0),
                         "end_type_shift" => checked($item["end"] > 0),
                         "end_mp" => $this->picker($end_mp,array(60 => "minut(it)",3600 => "tund(i)",86400 => "p‰ev(a)")),
@@ -1331,6 +1359,10 @@ class form_calendar extends form_base
 			if ($el_use_chain_entry_id)
 			{
 				$upd_fields["el_use_chain_entry_id"] = $el_use_chain_entry_id;
+			};
+			if ($el_allow_exceed)
+			{
+				$upd_fields["el_allow_exceed"] = $el_allow_exceed;
 			};
                         $q = sprintf("UPDATE calendar2forms SET %s WHERE id = '$id'",join(",",map2("%s=%s",$upd_fields)));
                 }
