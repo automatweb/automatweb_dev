@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.72 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.73 2003/10/21 18:59:43 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -575,6 +575,13 @@ class image extends class_base
 
 			case "file":
 			case "file2":
+				$fl = get_instance("file");
+				$envir = $fl->check_environment();
+				if (!empty($envir))
+				{
+					$prop["error"] = $envir;
+					$retval = PROP_ERROR;
+				};
 				$prop["value"] = "";
 				break;
 
@@ -585,6 +592,10 @@ class image extends class_base
 				{
 					$sz = getimagesize($fl);
 					$prop["value"] = ($prop["name"] == "cur_width") ? $sz[0] : $sz[1];
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
 				};
 				break;
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.62 2003/10/15 11:13:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.63 2003/10/21 18:59:43 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -94,9 +94,12 @@ class file extends class_base
 			case "filename":
 				classload("icons");
 				$name = $arr["obj_inst"]->prop("name");
-				$data["value"] = html::img(array(
-					"url" => icons::get_icon_url(CL_FILE,$name),
-				))." ".$name;
+				if (!empty($name))
+				{
+					$data["value"] = html::img(array(
+						"url" => icons::get_icon_url(CL_FILE,$name),
+					))." ".$name;
+				};
 				break;
 			case "view":
 				$fname = basename($arr["obj_inst"]->prop("file"));
@@ -118,6 +121,12 @@ class file extends class_base
 
 			case "file":
 				$data["value"] = "";
+				$envir = $this->check_environment();
+				if (!empty($envir))
+                                {
+                                        $data["error"] = $envir;
+                                        $retval = PROP_ERROR;
+                                };
 				break;
 
 		}
@@ -503,29 +512,34 @@ class file extends class_base
 		else
 		{
 			$dir = $this->cfg["site_basedir"] . "/files";
-			$preflist = array("0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f");
-			$dirlist[] = $dir;
-			foreach($preflist as $prefix)
+			if (!is_writable($dir))
 			{
-				$dirlist[] = $dir . "/" . $prefix;
+				$retval .= "failikataloog ei ole kirjutatav<br />";
 			};
 
-			foreach($dirlist as $dir)
+			// simply check whether every directory inside the files directory
+			// is writable by the user PHP is running as.
+
+			// I think we should give up using md5 as filename, it makes
+			// it awfully hard to locate files in the filesystem
+			if ($dh = opendir($dir))
 			{
-				if (!file_exists($dir))
+                        	while (false !== ($file = readdir($dh)))
 				{
-					$retval .= "Kataloog $dir puudub<br />";
-				}
-				elseif (!is_dir($dir))
-				{
-					$retval .= "$dir ei ole kataloog<br />";
-				}
-				elseif (!is_writable($dir))
-				{
-					$retval .= "$dir ei ole kirjutatav<br />";
+					// ignore thing with . in front of name
+					if (0 === strpos($file,"."))
+					{
+						continue;
+					};
+                                	$fn = $dir . "/" . $file;
+					if (is_dir($fn) && !is_writable($fn))
+					{
+						$retval .= "files/$file ei ole kirjutatav<br />";
+					};
 				};
-			};
-		};
+                        }
+                        closedir($dh);
+                };
 		return $retval;
 	}
 
