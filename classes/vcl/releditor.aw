@@ -86,8 +86,57 @@ class releditor extends aw_template
 		$clinst = get_instance($clid);
 
 		$emb = $arr["request"]["cba_emb"];
+		
+		$cfgu = get_instance("cfg/cfgutils");	
+		$props = $cfgu->load_properties(array(
+			"clid" => $clid,
+		));
+
+		$propname = $prop["name"];
+
+		$proplist = is_array($prop["props"]) ? $prop["props"] : array($prop["props"]);
+
+		$xproplist = array();
+		foreach($props as $item)
+                {
+                        if (in_array($item["name"],$proplist))
+                        {
+				if ($item["type"] == "fileupload")
+				{
+					$name = $item["name"];
+                                	$xproplist[$item["name"]] = $item;
+					$_fileinf = $_FILES["cba_emb"];
+					$filename = $_fileinf["name"][$name];
+					$filetype = $_fileinf["type"][$name];
+					$tmpname = $_fileinf["tmp_name"][$name];
+					// tundub, et polnud sellist faili, eh?
+					if (empty($tmpname))
+					{
+						return false;
+					};
+					$emb[$name] = array(
+						"tmp_name" => $tmpname,
+						"type" => $filetype,
+						"name" => $filename,
+					);
+				};
+
+                        };
+                };
+
+
 		$emb["group"] = "general";
 		$emb["parent"] = $obj->parent();
+
+		/*
+		foreach($emb as $key => $item)
+		{
+			print "k = $key<br>";
+			arr($item);
+
+
+		};
+		*/
 
 		$reltype = $arr["prop"]["reltype"];
 
