@@ -31,12 +31,15 @@
  
 // Definition of class Folder 
 // ***************************************************************** 
-function Folder(folderDescription, hreference, icon) //constructor 
+function Folder(folderDescription, hreference, icon, xID) //constructor 
 { 
   //constant data 
   this.desc = folderDescription 
   this.hreference = hreference 
-  this.id = -1   
+  if (xID)
+  {
+    this.xID = xID;
+  }
   this.navObj = 0  
   this.iconImg = 0  
   this.nodeImg = 0  
@@ -356,12 +359,16 @@ function iconImageSrc() {
 // Definition of class Item (a document or link inside a Folder) 
 // ************************************************************* 
  
-function Item(itemDescription, itemLink, target, iconurl) // Constructor 
+function Item(itemDescription, itemLink, target, iconurl, xID) // Constructor 
 { 
   // constant data 
   this.desc = itemDescription 
   this.link = itemLink    
   this.id = -1 //initialized in initalize() 
+  if (xID)
+  {
+    this.xID = xID;
+  }
   this.navObj = 0 //initialized in render() 
   this.iconImg = 0 //initialized in render() 
   if (iconurl)
@@ -708,13 +715,13 @@ function highlightObjLink(nodeObj) {
     SetCookie('highlightedTreeviewLink', nodeObj.getID());
 }
 
-function gFld(description, hreference, iconurl) 
+function gFld(description, hreference, iconurl, xID) 
 { 
-  folder = new Folder(description, hreference, iconurl) 
+  folder = new Folder(description, hreference, iconurl, xID) 
   return folder 
 } 
  
-function gLnk(optionFlags, description, linkData, iconurl) 
+function gLnk(optionFlags, description, linkData, iconurl, xID) 
 { 
   var fullLink = "";
   var targetFlag = "";
@@ -753,7 +760,7 @@ function gLnk(optionFlags, description, linkData, iconurl)
 
   fullLink = "'" + protocol + linkData + "' target=" + target
 
-  linkItem = new Item(description, protocol+linkData, target, iconurl)
+  linkItem = new Item(description, protocol+linkData, target, iconurl, xID)
   return linkItem 
 } 
 
@@ -831,6 +838,9 @@ function setInitialLayout() {
   
   if (!STARTALLOPEN && (browserVersion > 0) && PERSERVESTATE)
 		PersistentFolderOpening();
+
+  if (SHOWNODE)
+  		OpenFolders();
 }
 
 //Used with NS4 and STARTALLOPEN
@@ -948,6 +958,23 @@ function PersistentFolderOpening()
       }
     }
   }
+}
+
+function OpenFolders()
+{
+	if (SHOWNODE)
+	{
+		nodeObj = findObj(SHOWNODE)
+		if (nodeObj!=null) //may have been deleted
+			if (nodeObj.link)
+			{
+				nodeObj = nodeObj.parentObj;
+			}
+			if (nodeObj.setState) {
+				nodeObj.forceOpeningOfAncestorFolders()
+				clickOnNodeObj(nodeObj);
+			}
+	};
 }
 
 function storeAllNodesInClickCookie(treeNodeObj)
