@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo syslog_type=ST_DRONLINE
+@classinfo syslog_type=ST_DRONLINE relationmgr=yes
 
 @tableinfo dronline_bg_status index=id master_table=objects master_index=id
 
@@ -53,7 +53,14 @@
 @property bg_query_created type=text
 @caption Cache viimati muudetud
 
-@groupinfo general caption=Üldine
+@groupinfo general caption=&Uuml;ldine
+@groupinfo folders caption=Kataloogid
+
+@property folders type=table store=no group=folders
+@caption Vali kataloogid, mida filtris kasutada
+
+@reltype FOLDER value=1 clid=CL_MENU
+@caption filtri kataloog
 
 */
 
@@ -98,7 +105,9 @@ class dronline extends class_base
 			'ipblock' => 'IP Blokk',
 			'show_queries' => 'Salvestatud p&auml;ringud',
 			'general' => 'M&auml;&auml;rangud',
-			'tab_conf' => 'P&auml;ringud'
+			'tab_conf' => 'P&auml;ringud',
+			'folders' => "Kataloogid",
+			'aliasmgr' => "Seostehaldur",
 		);
 
 		$this->query_tabs = array(
@@ -502,7 +511,7 @@ class dronline extends class_base
 			$cd .= $this->parse("LINE");
 		}
 
-		if (count($mt['sites']) > 0 && aw_ini_get("syslog.has_site_id"))
+		if (is_array($mt["sites"]) && count($mt['sites']) > 0 && aw_ini_get("syslog.has_site_id"))
 		{
 			$sql[] = "syslog.site_id IN (".join(",",map("%s",$mt['sites'])).")";
 			$this->vars(array(
@@ -510,6 +519,42 @@ class dronline extends class_base
 				"value" => join(",",$mt['sites'])
 			));
 			$cd .= $this->parse("LINE");
+		}
+
+		// folder filter
+		if (is_array($ob["meta"]["folder_dat"]) && count($ob["meta"]["folder_dat"]) > 0)
+		{
+			$fflds = array();
+			foreach($ob["meta"]["folder_dat"] as $fid => $fopt)
+			{
+				if ($fopt["act"] == 1)
+				{
+					$fflds[] = $fid;
+					if ($fopt["sub"] == 1)
+					{
+						$ot = new object_tree(array(
+							"parent" => $fid,
+							"lang_id" => array(),
+							"site_id" => array()
+						));
+						$ol = $ot->to_list();
+						for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+						{
+							$fflds[] = $o->id();
+						}
+					}
+				}
+			}
+			array_unique($fflds);
+			if (count($fflds) > 0)
+			{
+				$sql[] = "syslog.oid IN (".join(",",$fflds).")";
+				$this->vars(array(
+					"desc" => "Objektid:",
+					"value" => join(",",$fflds)
+				));
+				$cd .= $this->parse("LINE");
+			}
 		}
 
 		// action filter
@@ -1658,6 +1703,89 @@ class dronline extends class_base
 		$droc->embedded = true;
 		aw_register_default_class_member('dronline_conf', 'embedded', true);
 		return $droc->change(array("id" => $tcid,"group" => $dro_c_tab));
+	}
+
+	function _do_aliasmgr($arr)
+	{
+		$arr["no_op"] = 1;
+		return $this->list_aliases($arr);
+	}
+
+	function _do_folders($arr)
+	{
+		$t = $this->_get_folders_table();
+		$o = obj($arr["id"]);
+		$fdat = $o->meta("folder_dat");
+
+		foreach($o->connections_from(array("type" => RELTYPE_FOLDER)) as $c)
+		{
+			$to = $c->to();
+			$t->define_data(array(
+				"fld" => $to->path_str(),
+				"act" => html::checkbox(array(
+					"name" => "act[".$to->id()."]",
+					"value" => 1,
+					"checked" => ($fdat[$to->id()]["act"])
+				)),
+				"sub" => html::checkbox(array(
+					"name" => "sub[".$to->id()."]",
+					"value" => 1,
+					"checked" => ($fdat[$to->id()]["sub"])
+				)),
+			));
+		}
+
+		return html::form(array(
+			"method" => "POST",
+			"action" => aw_ini_get("baseurl")."/automatweb/orb.".aw_ini_get("ext"),
+			"content" => $t->draw().html::submit(array(
+				"value" => "Salvesta"
+			)).$this->mk_reforb("submit_act_tbl", array("id" => $arr["id"]))
+		));
+	}
+
+	/** saves folder filter table content
+
+		@attrib name=submit_act_tbl
+
+	**/
+	function submit_act_tbl($arr)
+	{
+		$o = obj($arr["id"]);
+		$fd = array();
+		foreach($o->connections_from(array("type" => RELTYPE_FOLDER)) as $c)
+		{
+			$to = $c->to();
+			$fd[$to->id()]["act"] = $arr["act"][$to->id()];
+			$fd[$to->id()]["sub"] = $arr["sub"][$to->id()];
+		}
+		$o->set_meta("folder_dat", $fd);
+		$o->save();
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "folders", "dro_tab" => "folders"));
+	}
+
+	function _get_folders_table()
+	{
+		load_vcl("table");
+		$t = new aw_table(array("layout" => "generic"));
+		$t->define_field(array(
+			"name" => "fld",
+			"caption" => "Kataloog"
+		));
+
+		$t->define_field(array(
+			"name" => "act",
+			"caption" => "Aktiivne",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sub",
+			"caption" => "k.a. alammen&uuml;&uuml;d",
+			"align" => "center"
+		));
+
+		return $t;
 	}
 }
 ?>
