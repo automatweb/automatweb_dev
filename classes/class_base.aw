@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.165 2003/11/05 14:53:37 duke Exp $
+// $Id: class_base.aw,v 2.166 2003/11/06 12:53:46 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -276,6 +276,8 @@ class class_base extends aw_template
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
+
+		$this->inst->classinfo = $this->classinfo;
 
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
