@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.139 2004/06/09 13:04:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.140 2004/06/11 08:45:19 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -15,9 +15,15 @@ if (!defined("DEFS"))
 	{
 		$retval = str_replace(chr(195).chr(181), "&otilde;", $source);
 		$retval = str_replace(chr(195).chr(149), "&Otilde;", $retval);
+
 		$retval = str_replace(chr(195).chr(164), "&auml;", $retval);
+		$retval = str_replace(chr(195).chr(132), "&Auml;", $retval);
+
 		$retval = str_replace(chr(195).chr(188), "&uuml;", $retval);
+		$retval = str_replace(chr(195).chr(156), "&Uuml;", $retval);
+
 		$retval = str_replace(chr(195).chr(182), "&ouml;", $retval);
+		$retval = str_replace(chr(195).chr(150), "&Ouml;", $retval);
 
 
 		$retval = str_replace(chr(154), "&Scaron;", $retval);
