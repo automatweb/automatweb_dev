@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.9 2001/05/23 03:39:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.10 2001/05/23 03:53:42 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -518,6 +518,7 @@ class messenger extends menuedit_light
 					$suf = "</b>";
 				};
 				// kui status == true, siis on teade loetud
+				$msg["id"] = $msg["oid"];
 				$msg["color"] = ($msg["status"]) ? "#FFFFFF" : "#EEEEEE";
 				$msg["from"] = "$pref<a href='?class=messenger&action=do_search&field=modifiedby&value=$msg[modifiedby]&folders=$folder'>" . $msg["modifiedby"] . "</a>$suf";
 				$msg["subject"] = "$pref<a href='?class=messenger&action=show&id=$msg[id]'>" . $msg["subject"] . "</a>$suf";
@@ -536,6 +537,7 @@ class messenger extends menuedit_light
 			"message_count" => verbalize_number($cnt),
 			"folder_name" => $folder_name,
 			"page" => $cp,
+			"reforb" => $this->mk_reforb("move_msgs",array("aft" => $args["id"])),
 			"menu" => $menu,
 		));
 		return $this->parse();
@@ -1817,7 +1819,8 @@ class messenger extends menuedit_light
 			session_register("status_msg");
 		};
 		return $this->mk_site_orb(array(
-			"action" => "folders",
+			"action" => "folder",
+			"id" => $aft,
 		));
 	}
 
