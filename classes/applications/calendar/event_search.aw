@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.17 2005/01/18 15:25:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.18 2005/01/19 12:17:17 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -748,9 +748,9 @@ class event_search extends class_base
 					$search["parent"][] = $rn2;
 				}
 			}
-			if(is_oid($arr["event_id"]) && $this->can("view", $arr["event_id"]))
+			if(is_oid($arr["evt_id"]) && $this->can("view", $arr["evt_id"]))
 			{
-				$search["brother_of"] = $arr["event_id"];
+				$search["brother_of"] = $arr["evt_id"];
 			}
 			$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
 			$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
@@ -961,7 +961,7 @@ class event_search extends class_base
 						if($tabledef[$nms]["clickable"] == 1)
 						{
 							$v = html::href(array(
-								"url" => aw_ini_get("baseurl").aw_url_change_var(array("event_id" => $id)),
+								"url" => aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id)),
 								"caption" => $v,
 							));
 						}
