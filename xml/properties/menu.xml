@@ -539,5 +539,37 @@
                   <master_index>oid</master_index>
             </menu>
       </tableinfo>
+      <reltypes>
+            <PICTURES_MENU>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>vöta pildid menüült</caption>
+            </PICTURES_MENU>
+            <SHOW_SUBFOLDERS_MENU>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>võta alamkasutad menüült</caption>
+            </SHOW_SUBFOLDERS_MENU>
+            <SHOW_AS_CALENDAR>
+                  <value>3</value>
+                  <clid>CL_PLANNER</clid>
+                  <caption>võta objekte kalendrist</caption>
+            </SHOW_AS_CALENDAR>
+            <SHOW_AS_LAYOUT>
+                  <value>4</value>
+                  <clid>CL_LAYOUT</clid>
+                  <caption>kasuta saidi näitamisel layouti</caption>
+            </SHOW_AS_LAYOUT>
+            <SEEALSO>
+                  <value>5</value>
+                  <clid>CL_MENU</clid>
+                  <caption>vaata lisaks</caption>
+            </SEEALSO>
+            <IP>
+                  <value>6</value>
+                  <clid>CL_IPADDRESS</clid>
+                  <caption>IP aadress ligipääsu piiramiseks</caption>
+            </IP>
+      </reltypes>
 </properties>
 
