@@ -5,6 +5,7 @@ class site_logger extends core
 	function site_logger()
 	{
 		$this->init();
+		aw_config_init_class(&$this);
 	}
 
 	////
