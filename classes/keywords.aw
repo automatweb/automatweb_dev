@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.12 2001/05/21 21:42:15 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.13 2001/05/22 12:23:49 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -286,25 +286,46 @@ class keywords extends aw_template {
 	// $beg = only return keywords that begin with this
 	function get_all_keywords($args = array())
 	{
-		$blen = strlen($args["beg"]);
+		$beg = $args["beg"];	// the returned keywords must match this one on the beginning
+													// if it's an array then they must match any of them
+		$begar = array();
+		if (is_array($beg))
+		{
+			foreach($beg as $b)
+			{
+				$begar[$b] = strlen($b);
+			}
+		}
+		else
+		{
+			$begar[$beg] = strlen($beg);
+		}
 
 		$q = "SELECT list_id,keyword FROM keywords ORDER BY keyword";
 		$this->db_query($q);
 		$resarray = array();
 		while($row = $this->db_next())
 		{
-			if (substr($row["keyword"],0,$blen) != $args["beg"])
+			$match = false;
+			foreach($begar as $beg => $blen)
 			{
-				continue;
+				if (substr($row["keyword"],0,$blen) == $beg)
+				{
+					$match = true;
+					break;
+				}
 			}
 
-			if ($args["type"] == ARR_KEYWORD)
+			if ($match)
 			{
-				$resarray[$row["keyword"]] = $row["keyword"];
-			}
-			else
-			{
-				$resarray[$row["list_id"]] = $row["keyword"];
+				if ($args["type"] == ARR_KEYWORD)
+				{
+					$resarray[$row["keyword"]] = $row["keyword"];
+				}
+				else
+				{
+					$resarray[$row["list_id"]] = $row["keyword"];
+				}
 			}
 		};
 		return $resarray;
@@ -428,7 +449,5 @@ class keywords extends aw_template {
 		));
 		return $this->parse();
 	}
-		
-		
 };
 ?>
