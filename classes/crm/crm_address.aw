@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.9 2004/11/24 15:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.10 2005/01/19 17:53:11 duke Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -137,7 +137,10 @@ class crm_address extends class_base
 					};
 				}
 
-				$arr["obj_inst"]->set_name(join(", ",$name));
+				if (sizeof($name) > 0)
+				{
+					$arr["obj_inst"]->set_name(join(", ",$name));
+				};
 				$retval = PROP_IGNORE;
 				break;
 
