@@ -2,8 +2,8 @@
 <properties>
       <property>
             <name>config</name>
-            <type>objpicker</type>
-            <clid>CL_WORKFLOW_CONFIG</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WORKFLOW_CONFIG</reltype>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>
@@ -89,7 +89,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_WORKFLOW</syslog_type>
-            <relatiomgr>yes</relatiomgr>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
             <general>
@@ -119,5 +119,12 @@
       <views>
             <show>1</show>
       </views>
+      <reltypes>
+            <WORKFLOW_CONFIG>
+                  <clid>CL_WORKFLOW_CONFIG</clid>
+                  <value>1</value>
+                  <caption>Konfiguratsioon </caption>
+            </WORKFLOW_CONFIG>
+      </reltypes>
 </properties>
 

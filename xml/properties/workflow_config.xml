@@ -2,8 +2,8 @@
 <properties>
       <property>
             <name>treeview_conf</name>
-            <type>objpicker</type>
-            <clid>CL_TREEVIEW</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TREE_CONFIG</reltype>
             <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
@@ -53,6 +53,7 @@
       </property>
       <classinfo>
             <syslog_type>ST_WORKFLOW_CONFIG</syslog_type>
+            <no_status>1</no_status>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
@@ -60,17 +61,29 @@
                   <caption>Üldine</caption>
             </general>
             <config_actor>
-                  <caption>Tegijate_konf</caption>
+                  <caption>Tegijate seaded</caption>
             </config_actor>
             <config_action>
-                  <caption>Tegevuste_konf</caption>
+                  <caption>Tegevuste</caption>
             </config_action>
             <config_entity>
-                  <caption>Olemite_konf</caption>
+                  <caption>Olemite seaded</caption>
             </config_entity>
             <config_process>
-                  <caption>Protsesside_konf</caption>
+                  <caption>Protsesside seaded</caption>
             </config_process>
       </groupinfo>
+      <reltypes>
+            <ROOTMENU>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>juurmenüü</caption>
+            </ROOTMENU>
+            <TREE_CONFIG>
+                  <value>2</value>
+                  <clid>CL_TREEVIEW</clid>
+                  <caption>puu seaded</caption>
+            </TREE_CONFIG>
+      </reltypes>
 </properties>
 
