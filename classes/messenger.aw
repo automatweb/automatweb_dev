@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.81 2001/07/03 01:52:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.82 2001/07/03 04:28:38 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -406,7 +406,58 @@ class messenger extends menuedit_light
 
 		$x_from = ($page - 1) * $onpage;
 		$x_to = $x_from + $onpage;
+
+		load_vcl("table");
+		$t = new aw_table(array(
+				"prefix" => "mailbox",
+				"imgurl"    => $GLOBALS["baseurl"]."/img",
+				"tbgcolor" => "#C3D0DC",
+			));
+
+		$t->parse_xml_def($GLOBALS["basedir"]."/xml/messenger/table.xml");
+
+		$t->set_header_attribs(array(
+				"class" => "messenger",
+				"action" => "folder",
+				"id" => $folder,
+				"page" => $page,
+		));
+
+		$t->define_field(array(
+				"name" => "check",
+				"caption" => "<a href='#' onClick='toggle_all()'>X</a>",
+				"talign" => "center",
+				"nowrap" => "1",
+		));
+
+		$t->define_field(array(
+				"name" => "from",
+				"caption" => "Kellelt",
+				"talign" => "left",
+				"nowrap" => 1,
+				"sortable" => 1,
+		));
+	
+		global $baseurl;
+
+		$t->define_field(array(
+				"name" => "subject",
+				"caption" => "Teema",
+				"strformat" => "<a href='$baseurl/?class=messenger&action=show&id={VAR:id}'>%s</a>",
+				"talign" => "left",
+				"sortable" => 1,
+		));
 		
+		$t->define_field(array(
+				"name" => "when",
+				"caption" => "Aeg",
+				"talign" => "left",
+				"type" => "time",
+				"format" => "H:i d-M-Y",
+				"nowrap" => 1,
+				"sortable" => 1,
+		));
+
 		
 		if (is_array($msglist))
 		{
@@ -453,6 +504,7 @@ class messenger extends menuedit_light
 					{
 						$msg["subject"] = "(no subject)";
 					};
+
 					// kui status == true, siis on teade loetud
 					$msg["attach"] = ($msg["num_att"] > 0) ? $this->parse("attach") : "";
 					$msg["id"] = $msg["oid"];
@@ -483,9 +535,18 @@ class messenger extends menuedit_light
 					};
 					$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
 					$msg["cnt"] = $cnt;
+					$tm2 = $msg["tm"];
 					$msg["tm"] = $this->time2date($msg["tm"],1);
 					$this->vars($msg);
 					$c .= $this->parse("line");
+					$t->define_data(array(
+							"check" => sprintf("<input type='checkbox' name='check[%d]' value='1'>",$msg["id"]),
+							"from" => $msg["from"],
+							"subject" => $subject . $msg["attach"],
+							"when" => $tm2,
+							"bgcolor" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
+							"style" => ($msg["status"]) ? "textsmall" : "textsmallbold",
+						));
 				};
 				$cnt++;
 			};
@@ -496,6 +557,9 @@ class messenger extends menuedit_light
 		// active_folder - selle folderi ID
 		// $id - aktiivne folder
 		$pagelist = array();
+
+		print "sorting by $args[sortby]<br>";
+		$t->sort_by(array("field" => $args["sortby"]));
 
 		for ($i = 1; $i <= $pages; $i++)
 		{
@@ -509,6 +573,7 @@ class messenger extends menuedit_light
 			"active_folder" => $folder,
 			"message_count" => verbalize_number($cnt),
 			"pagelist" => $this->picker($page,$pagelist),
+			"table" => $t->draw(),
 			"folder_name" => $folder_name,
 			"prev" => $prev,
 			"next" => $next,
@@ -1423,12 +1488,15 @@ class messenger extends menuedit_light
 		$c = "";
 		foreach ($results as $id => $contents)
 		{
+			$subject = (isset($contents["subject"])) ? $this->MIME_decode($contents["subject"]) : "(no subject)";
+			$this->dequote($subject);
+			$this->dequote($subject);
 			$contents["tm"] = $this->time2date($contents["tm"],2);
 			$contents["from"] = $this->MIME_decode($contents["mfrom"]);
 			$contents["folder"] = $folder_list[$contents["parent"]];
 			$contents["fid"] = $contents["parent"];
 			$contents["mid"] = $contents["oid"];
-			$contents["subject"] = $this->MIME_decode($contents["subject"]);
+			$contents["subject"] = $subject;
 			$this->vars($contents);
 			$c .= $this->parse("line");
 		};
