@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.75 2003/07/08 11:58:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.76 2003/07/08 17:48:50 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -3877,7 +3877,24 @@ class form extends form_base
 
 		$row = unserialize($str);
 		// basically, we create a new object and insert the stuff in the array right back in it. 
-		$oid = $this->new_object(array("parent" => $parent, "name" => $row["name"], "class_id" => CL_FORM, "status" => $row["status"], "comment" => $row["comment"], "last" => $row["last"], "jrk" => $row["jrk"], "visible" => $row["visible"], "period" => $period, "alias" => $row["alias"], "periodic" => $row["periodic"], "doc_template" => $row["doc_template"], "activate_at" => $row["activate_at"], "deactivate_at" => $row["deactivate_at"], "autoactivate" => $row["autoactivate"], "autodeactivate" => $row["autodeactivate"], "brother_of" => $row["brother_of"]));
+		$oid = $this->new_object(array(
+			"parent" => $parent, 
+			"name" => $row["name"], 
+			"class_id" => CL_FORM, 
+			"status" => $row["status"], 
+			"comment" => $row["comment"], 
+			"last" => $row["last"], 
+			"jrk" => $row["jrk"], 
+			"visible" => $row["visible"], 
+			"period" => $period, 
+			"alias" => $row["alias"], 
+			"periodic" => $row["periodic"], 
+			"doc_template" => $row["doc_template"], 
+			"activate_at" => $row["activate_at"], 
+			"deactivate_at" => $row["deactivate_at"], 
+			"autoactivate" => $row["autoactivate"], 
+			"autodeactivate" => $row["autodeactivate"]
+		));
 
 		// same with the form. 
 		$this->quote(&$row);
