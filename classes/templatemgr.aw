@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.14 2004/03/16 10:23:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.15 2004/03/30 11:01:50 duke Exp $
 
 class templatemgr extends aw_template
 {
@@ -122,6 +122,10 @@ class templatemgr extends aw_template
         // until it finds a menu for which it is set
 	function get_long_template($section)
 	{
+		if (empty($section))
+		{
+			return "plain.tpl";
+		};
 		$obj = new object($section);
 		if ($obj->class_id() == CL_PERIODIC_SECTION || $obj->class_id() == CL_DOCUMENT)
 		{
