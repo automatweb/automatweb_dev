@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.121 2005/03/10 12:49:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.122 2005/03/15 10:41:16 kristo Exp $
 
 /*
 
@@ -2075,6 +2075,10 @@ class site_show extends class_base
 		if ($o->prop("link") != "")
 		{
 			$link = $o->prop("link");
+			if (is_numeric($link)) // link is without preceding / 
+			{
+				$link = obj_link($link);
+			}
 		}
 		else
 		{
