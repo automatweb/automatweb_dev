@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.11 2003/06/06 13:40:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.12 2003/06/06 14:17:34 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -640,7 +640,6 @@ class converters extends aw_template
 
 		echo "converting formgen tables! <br><br>\n";
 
-		$GLOBALS["DUKE"] = 1;
 		aw_global_set("__from_raise_error",1);
 
 		foreach($ol as $oid => $_d)
@@ -658,6 +657,18 @@ class converters extends aw_template
 				"name" => "deleted",
 				"col" => "deleted"
 			));
+
+			// now, also go oever all the entries and mark the deleted ones as deleted
+			$this->db_query("SELECT f.id as id , o.status as status FROM $tbl f left join objects o on o.oid = f.id");
+			while($row = $this->db_next())
+			{
+				if ($row["status"] < 1)
+				{					
+					$this->save_handle();
+					$this->db_query("UPDATE $tbl SET deleted = 1 WHERE id = $row[id]");
+					$this->restore_handle();
+				}
+			}
 		}
 		die();
 	}
