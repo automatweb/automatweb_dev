@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.283 2004/06/26 10:52:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.284 2004/06/28 14:59:01 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -635,7 +635,7 @@ class core extends acl_base
 		if ($arr["return_url"])
                 {
                         // override whatever there was in the URL with our value
-                        $arr["return_url"] = urlencode(aw_global_get("REQUEST_URI"));
+                        //$arr["return_url"] = urlencode(aw_global_get("REQUEST_URI"));
                 };
 
 		$this->process_orb_args("",$arr);
