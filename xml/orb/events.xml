@@ -18,6 +18,21 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="invite" nologin="1">
+			<function name="invite">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_invite" nologin="1">
+			<function name="submit_invite">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="delete">
 			<function name="event_delete">

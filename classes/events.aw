@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.3 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.4 2001/10/15 15:51:30 cvs Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -22,12 +22,12 @@ class events extends aw_template {
 		$this->styles = array(
 			"1" => "House",
 			"2" => "Hip-Hop",
-			"4" => "Rn-B",
+			"4" => "R'n'B",
 			"8" => "Techno",
 			"16" => "Electro",
 			"32" => "Trance",
-			"64" => "2Step",
-			"128" => "DN-B",
+			"64" => "2-Step",
+			"128" => "D'n'B",
 			"256" => "Jungle",
 			"512" => "Reggae",
 			"1024" => "Dub",
@@ -107,10 +107,12 @@ class events extends aw_template {
 		}
 		else
 		{
-			$_tmp = $cal->get_date_range(array("time" => time(),"type" => "day"));
+			$_tmp = $cal->get_date_range(array("time" => time(),"type" => "week"));
 			$start = $_tmp["start"];
 			$end = $_tmp["end"];
-			$limits = " AND events.start >= $start AND events.start <= $end";
+
+			// kristian tahtis et aint neid n2idatakse mis pole veel alanud
+			$limits = " AND events.start >= ".time()." AND events.start <= $end";
 		};
 
 		$this->read_template($template);
@@ -167,8 +169,8 @@ class events extends aw_template {
 				};
 			};
 
-			$artist = $row["artist1"] . "<br>";
-			$artist .= $row["artist2"] . "<br>";
+			$artist = $row["artist1"] . ", ";
+			$artist .= $row["artist2"] . ", ";
 			$artist .= $row["artist3"];
 
 			if (strlen($meta["url"]) > 3)
@@ -191,8 +193,8 @@ class events extends aw_template {
 
 			$this->vars(array(
 				"name" => $row["name"],
-				"date" => $this->time2date($row["start"],4),
-				"time" => $this->time2date($row["end"],4),
+				"date" => $this->time2date($row["start"],3),
+				"time" => $this->time2date($row["start"],10) . " - " . $this->time2date($row["end"],10),
 				"place" => $row["place"],
 				"change" => $change,
 				"brief" => $meta["brief"],
@@ -200,10 +202,33 @@ class events extends aw_template {
 				"artist" => $artist,
 				"ticket" => "",
 				"flyer" => $flyer,
+				"price_flyer" => ($meta["price_flyer"]) ? $meta["price_flyer"] . " /" : "",
+				"price_noflyer" => ($meta["price_noflyer"]) ? $meta["price_noflyer"] . " /" : "",
 				"agelimit" => $meta["agelimit"],
 				"link_detail" => $this->mk_my_orb("view",array("id" => $row["oid"])),
+				"free" => "",
+				"price" => "",
 
 			));
+
+			$subtplname = ($meta["free"]) ? "free": "price";
+			$subtpl = $this->parse($subtplname);
+			$this->vars(array(
+				$subtplname => $subtpl,
+			));
+
+			if ($meta["presale"])
+			{
+				$this->vars(array(
+				"presale" => $this->parse("presale"),
+				));
+			}
+			else
+			{
+				$this->vars(array(
+				"presale" => "",
+				));
+			}
 
 			if ($search)
 			{
@@ -326,14 +351,35 @@ class events extends aw_template {
 		if ($page == 1)
 		{
                 	$start = new date_edit("start");
-                	$start->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
+                	$start->configure(array("day" => 1,"month" => 2,"year" => 3));
 			$old_st = ($old["start"]) ? $old["start"] : time();
 			$start_ed = $start->gen_edit_form("start",$old_st);
                 
-			$end = new date_edit("end");
-	       	        $end->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
-			$old_et = ($old["end"]) ? $old["end"] : time();
-			$end_ed = $start->gen_edit_form("end",$old_et);
+			$time_start = new date_edit("end");
+	       	        $time_start->configure(array("hour" => 4,"minute" => 5));
+			$time_end = new date_edit("time_start");
+	       	        $time_end->configure(array("hour" => 4,"minute" => 5));
+	
+			if ($old["end"])	
+			{
+				// tegemist olemasoleva eventiga
+				$_daystart = $old["start"];
+				$_dayend = $old["end"];
+			}
+			else
+			{
+				// arvutame valja selle, millist kuupaeva naidata, kui uut eventit
+				// sisestatakse		
+				$_timestamp = time();
+
+				// lepime kokku, et by default algab yritus kell 19
+				$_daystart = $_timestamp - ($_timestamp % (24*3600)) + (17 * 3600);
+				// ja lopeb kell 23, which of course is not true most of the time
+				$_dayend = $_daystart + (4 * 3600);
+			};
+
+			$ts_start_ed = $time_start->gen_edit_form("ts_start_ed",$_daystart);
+			$ts_end_ed = $time_end->gen_edit_form("ts_end_ed",$_dayend);
 		};
 
 		if ($page == 4)
@@ -349,11 +395,12 @@ class events extends aw_template {
 			$end_ed = $end->gen_edit_form("t_end",$old_et);
 		};
 
-		
 
 		$this->vars(array(
 			"name" => $obj["name"],
 			"start" => $start_ed,
+			"ts_start_ed" => $ts_start_ed,
+			"ts_end_ed" => $ts_end_ed,
 			"end" => $end_ed,
 			"style" => $c,
 			"address" => $meta["address"],
@@ -415,11 +462,13 @@ class events extends aw_template {
 						"status" => 1,
 			));
 				
-			$st = mktime($start["hour"],$start["minute"],0,$start["month"],
+			$st = mktime($ts_start_ed["hour"],$ts_start_ed["minute"],0,$start["month"],
 							$start["day"],$start["year"]);
+
+			$_day = ($ts_end_ed["hour"] < 16) ? $start["day"]+1 : $start["day"];
 				
-			$et = mktime($end["hour"],$end["minute"],0,$end["month"],
-							$end["day"],$end["year"]);
+			$et = mktime($ts_end_ed["hour"],$ts_end_ed["minute"],0,$start["month"],
+							$_day,$start["year"]);
 
 			$q = "INSERT INTO events (id,city,start,end,place,artist1,artist2,artist3,organizer,style)
 				VALUES($id,'$city',$st,$et,'$place','$artist1','$artist2','$artist3','$organizer','$styl')";
@@ -455,12 +504,14 @@ class events extends aw_template {
 
 				$meta["address"] = $address;
 				$meta["brief"] = $brief;
+			
+				$st = mktime($ts_start_ed["hour"],$ts_start_ed["minute"],0,$start["month"],
+								$start["day"],$start["year"]);
 
-				$st = mktime($start["hour"],$start["minute"],0,$start["month"],
-							$start["day"],$start["year"]);
-				
-				$et = mktime($end["hour"],$end["minute"],0,$end["month"],
-							$end["day"],$end["year"]);
+				$_day = ($ts_end_ed["hour"] < 16) ? $start["day"]+1 : $start["day"];
+					
+				$et = mktime($ts_end_ed["hour"],$ts_end_ed["minute"],0,$start["month"],
+								$_day,$start["year"]);
 
 				$stl = 0;
 				if (is_array($style))
@@ -504,7 +555,6 @@ class events extends aw_template {
 			{
 
 				$st = mktime(0,0,0,$t_start["month"],$t_start["day"],$t_start["year"]);
-				$et = mktime(23,59,59,$t_end["month"],$t_end["day"],$t_end["year"]);
 				
 				$meta["price_flyer"] = $price_flyer;
 				$meta["price_noflyer"] = $price_noflyer;
@@ -512,7 +562,6 @@ class events extends aw_template {
 				$meta["presale"] = ($presale) ? 1 : 0;
 				$meta["places"] = $places;
 				$meta["t_start"] = $st;
-				$meta["t_end"] = $et;
 				$meta["free"] = ($free) ? 1 : 0;
 			};
 
@@ -520,18 +569,20 @@ class events extends aw_template {
 			{
 				$this->db_query($q);	
 			};
-
-			if ($activate)
-			{
-				// potential security breach possible
-				$this->db_query("UPDATE objects SET status = 2 WHERE oid = $id");
-			};
-
+			
 			$this->set_object_metadata(array(
 					"oid" => $id,
 					"key" => "meta",
 					"value" => $meta,
 			));
+
+			if ($activate)
+			{
+				// potential security breach possible
+				$this->db_query("UPDATE objects SET status = 2 WHERE oid = $id");
+				return $this->mk_my_orb("view",array("id" => $id));
+			};
+
 		}
 		$page++;
 		return $this->mk_my_orb("edit",array("page" => $page,"id" => $id));
@@ -541,14 +592,14 @@ class events extends aw_template {
 	{
 		load_vcl("date_edit");
                	$start = new date_edit("start");
-               	$start->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
+               	$start->configure(array("day" => 1,"month" => 2,"year" => 3));
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		$sx = mktime(0,0,0,$m,$d,$y);
 		$start_ed = $start->gen_edit_form("start",$sx);
                	$end = new date_edit("end");
 		list($d,$m,$y) = explode("-",date("d-m-Y",strtotime("+1 week")));
 		$ex = mktime(23,59,59,$m,$d,$y);
-               	$end->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
+               	$end->configure(array("day" => 1,"month" => 2,"year" => 3));
 		$end_ed = $start->gen_edit_form("end",$ex);
 		$this->read_template("search.tpl");
 		foreach($this->styles as $key => $val)
@@ -656,14 +707,48 @@ class events extends aw_template {
 					"date" => "$day-$mon-$year",
 					"type" => "day",
 				));
-				
+
+		$_timestamp = time();	
+		$ts1 = "$year-$mon";
+		$ts2 = date("Y-m",$_timestamp);
+		if ($ts1 == $ts2)
+		{
+			$_tmp = $cal->get_date_range(array("time" => time(),"type" => "month"));
+			$start = $_tmp["start"];
+			$end = $_tmp["end"];
+			$limits = " AND events.start >= $start AND events.start <= $end";
+			global $rootmenu;
+			$cl = CL_EVENT;
+			$q = "SELECT objects.*,events.* FROM objects
+				LEFT JOIN events ON (objects.oid = events.id)
+				WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
+				$limits	
+				ORDER BY events.start";
+
+			//print "<pre>";
+			//print $q;
+			//print "</pre>";
+			$this->db_query($q);
+			$marked = array();
+			while($row = $this->db_next())
+			{
+				$marked[date("d",$row["start"])] = 1;
+			};
+		}
+		else
+		{
+			$marked = array();
+		};
+					
 		$calendar = $cal->draw_month(array(
 					"year" => $year,
 					"mon" => $mon,
 					"day" => $day,
+					"marked" => $marked,
 					"misc" => array("section" => "events"),
 		));
-				
+	
+
 		$start = $range["start"];
 		$end = $range["end"];
 		return array($start,$end,$calendar);
@@ -744,6 +829,46 @@ class events extends aw_template {
 		return $this->mk_my_orb("my_events",array());
 	}
 
+	function invite($args = array())
+	{
+		$this->read_template("invite.tpl");
+		if (defined("UID"))
+		{
+			classload("users");
+			$u = new users();
+			$udata = $u->get_user_info(UID);
+		};
+		$this->vars(array(
+			"yname" => $udata["First Name: element"] . " " . $udata["Last Name: element"],
+			"ymail" => $udata["E-mail"],
+			"reforb" => $this->mk_reforb("submit_invite",array("id" => $id)),
+		));
+		return $this->parse();
+	}
+
+	function submit_invite($args = array())
+	{
+		extract($args);
+		classload("xml");
+		$xml = new xml(array("ctag" => "metadata"));
+		$cl = CL_EVENT;
+		$q = "SELECT objects.*,events.* FROM objects
+			LEFT JOIN events ON (objects.oid = events.id)
+			WHERE oid = '$id' AND class_id=$cl AND status = 2";
+		$this->db_query($q);
+		$event = $this->db_next();
+		$_tmp = $xml->xml_unserialize(array("source" => $event["metadata"]));
+		$meta = $_tmp["meta"];
+		$subject = "Invitation to $event[name]";
+		$to = sprintf("%s <%s>",$fname,$fmail);
+		$from = sprintf("%s <%s>",$yname,$ymail);
+		$msg = $meta["full"];
+		$msg = "$fname has invited you to $event[name], click the following link for more details: http://www.vibe.ee/?class=events&action=view&id=$id\n\n" . $msg;
+		mail($to,$subject,$msg,"From: $from");
+		print "<script language='javascript'>window.close()</script>";
+		exit;
+	}
+
 	function event_view($args = array())
 	{
 		extract($args);
@@ -755,7 +880,16 @@ class events extends aw_template {
 			WHERE oid = '$id' AND class_id=$cl AND status = 2";
 		$this->db_query($q);
 		$event = $this->db_next();
-		$this->read_template("details.tpl");
+		global $no_menus;
+		if ($no_menus)
+		{	
+			$tpl = "popup.tpl";
+		}
+		else
+		{
+			$tpl = "details.tpl";
+		};
+		$this->read_template($tpl);
 		$_tmp = $xml->xml_unserialize(array("source" => $event["metadata"]));
 		$meta = $_tmp["meta"];
 
@@ -771,9 +905,10 @@ class events extends aw_template {
 		$this->vars(array(
 			"style" => join(", ",$styles),
 			"name" => $event["name"],
-			"start" => $this->time2date($event["start"],4),
-			"end" => $this->time2date($event["end"],4),
+			"start" => $this->time2date($event["start"],3),
+			"end" => $this->time2date($event["start"],10) . " to " . $this->time2date($event["end"],10),
 			"place" => $event["place"],
+			"city" => $event["city"],
 			"address" => $meta["address"],
 			"full" => $meta["full"],
 			"artist1" => $event["artist1"],
@@ -787,12 +922,36 @@ class events extends aw_template {
 			"price_flyer" => $meta["price_flyer"],
 			"price_noflyer" => $meta["price_noflyer"],
 			"places" => $meta["places"],
-			"price" => $meta["price"],
+			"price" => ($meta["free"] != 1 ? $meta["price"] : ""),
 			"organizer" => $event["organizer"],
 			"contact" => $meta["contact"],
+			"flyer_url" => $meta["url"],
+			"poster" => $event["createdby"],
+			"till" => $this->time2date($meta["t_start"],3),
+			"printlink" => sprintf(" onClick='javascript:window.open(\"%s\",\"printevent\",\"toolbar=1,menubar=1,scrollbars=1,width=500,height=600\")' ",$this->mk_my_orb("view",array("id" => $id,"no_menus" => 1))),
+			"invlink" => sprintf(" onClick='javascript:window.open(\"%s\",\"sendevent\",\"toolbar=0,menubar=0,scrollbars=0,width=370,height=250\")' ",$this->mk_my_orb("invite",array("id" => $id,"no_menus" => 1))),
 		));
+		if ($meta["presale"])
+		{
+			$this->vars(array(
+				"presale" => $this->parse("presale"),
+			));
+		};
+		$subtplname = ($meta["free"]) ? "free" : "price";
+		$subtpl = $this->parse($subtplname);
+		$this->vars(array(
+			$subtplname => $subtpl,
+		));
+		if ($meta["url"])
+		{
+			$this->vars(array(
+				"flyerurl" => $this->parse("flyerurl"),
+			));	
+		};
 
-		return $this->parse();
+
+		$retval = $this->parse();
+		return $retval;
 	}
 };
 ?>
