@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.271 2004/06/25 18:38:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.272 2004/06/25 18:46:59 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -234,14 +234,6 @@ class core extends acl_base
 		$this->db_query($q);
 
 		$this->_log(ST_CORE, SA_CHANGE_ALIAS, "Muutis objekti $source aliast $target", $source);
-	}
-
-	////
-	// !deletes alias $target from object $source
-	function delete_alias($source,$target, $no_cache = false, $no_callback = false)
-	{
-		$q = "DELETE FROM aliases WHERE source = '$source' AND target = '$target'";
-		$this->db_query($q);
 	}
 
 	////

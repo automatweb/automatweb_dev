@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.17 2004/06/15 08:52:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.18 2004/06/25 18:46:59 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 /*
@@ -102,7 +102,9 @@ class object_chain extends aw_template
 			{
 				foreach($old_contents as $value)
 				{
-					$this->delete_alias($par_obj->id(),$value);
+					$par_obj->disconnect(array(
+						"from" => $value
+					));
 				}
 			};
 			$this->expl_chain(array("id" => $id,"parent" => $par_obj->id(),"objects" => $arr));
