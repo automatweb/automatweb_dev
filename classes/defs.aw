@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.37 2002/01/22 09:37:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.38 2002/01/22 10:00:05 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -369,7 +369,7 @@ function map($format,$array)
 	{
 		while(list(,$val) = each($array))
 		{
-			$retval[]= sprintf($format,$val);
+			$retval[]= sprintf($format,$val,$val,$val);
 		};
 	}
 	else
