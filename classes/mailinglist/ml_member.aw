@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.34 2004/09/02 13:24:26 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.35 2004/09/15 11:56:43 sven Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -92,10 +92,10 @@
 	@property udef_classificator5 type=classificator field=meta method=serialize
 	@caption Klassifikaator 5
 
-	@property udef_date1 type=date_select field=meta method=serialize year_from=1930
+	@property udef_date1 type=date_select field=meta method=serialize year_from=1930 default=-1
 	@caption Kuup&auml;ev 1
 	
-	@property udef_date2 type=date_select field=meta method=serialize year_from=1930
+	@property udef_date2 type=date_select field=meta method=serialize year_from=1930 default=-1
 	@caption Kuup&auml;ev 2
 	
 	@groupinfo udef_fields caption=Muud väljad 
