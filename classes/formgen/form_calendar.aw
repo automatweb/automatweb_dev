@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.27 2003/05/08 17:05:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.28 2003/06/04 14:05:00 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -1172,8 +1172,10 @@ class form_calendar extends form_base
 		
 		$_oid = $args["id"];
 		$_eid = $args["entry_id"];
-		
-		$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid' AND relation = '$cal_relation'";
+
+		$f_e_id = $args["post_vars"]["form_entry_id"];
+
+		$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid' AND relation = '$cal_relation' AND entry_id = '$f_e_id'";
 		$this->db_query($q);
 
 		$period_type = ($arr["period_type"]) ? $arr["period_type"] : 1;
