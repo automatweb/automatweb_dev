@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.9 2003/01/07 14:25:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.10 2003/06/04 19:22:35 kristo Exp $
 // acl.aw - Access Control Lists
 
 class acl extends aw_template 
@@ -35,115 +35,6 @@ class acl extends aw_template
 		};
 		return $fields;
 
-	}
-
-	////
-	// !Kuvab ACL-i muutmisvormi. Orb compatible
-	function gen_edit_form($args)
-	{
-		extract($args);
-		// hiljem tuleb siia ehitada mingi deeper voodoo oige faili valimiseks soltuvalt 
-		// objekti klassist
-		$xmldef = "site.xml";
-		$fname = $this->cfg["basedir"] .  "/xml/acl/" . $xmldef;
-		$fields = $this->get_acl_def(array(
-			"file" => $fname,
-		));
-		// andmed väljade kohta käes, nüüd kuvame vormi
-		// dump_struct($fields);
-		$bld = new aw_template;
-		$bld->tpl_init("automatweb/acl");
-		$bld->read_template("cells.tpl");
-
-		$this->read_template("editacl.tpl");
-
-		while(list($k,$v) = each($fields))
-		{
-			$bld->vars(array(
-				"colspan" => 1,
-				"align" => "left",
-				"content" => $v["caption"]
-			));
-			$c.= $bld->parse("title");
- 
-			if ($v["special"])
-			{
-				$this->vars(array(
-					"caption" => $v["caption"],
-					"help"    => $v["help"],
-					"key"     => $v["value"],
-				));
-				$help .= $this->parse("help");
-				$keys .= $this->parse("xfield");
-			};
-			$count++;
-		};
-		$this->vars(array(
-			"header" => $c,
-			"colspan" => $count+2,
-		));
-
-		$content = "";
-		$prar = $this->get_object_chain($oid,true);
-		reset($prar);
-		while (list(,$row) = each($prar))
-		{
-			$oid = $row["oid"];
-			$objstr = "";
-			$objar = $this->get_object_chain($oid,true);
-			reset($objar);
-			while (list(,$row) = each($objar))
-			{
-				$objstr=" / ".$row["name"].$objstr;
-			}
-			$objstr = substr($objstr,3);
-			$aclarr = $this->get_acl_groups_for_obj($oid);
-			while(list(,$arr) = each($aclarr))
-			{
-				reset($fields);
-				$c = "";
-				while(list($k,$v) = each($fields))
-				{
-					if ($v["special"] == "1")
-					{
-						$tpl = "check";
-						$bld->vars(array(
-							"gid"      => $arr["gid"],
-							"oid"      => $oid,
-							"key"      => $v["value"],
-							"checked"  => ($arr[$v["value"]] == $this->cfg["allowed"]) ? "checked" : ""
-						));
-						$c .= $bld->parse("check");
-					}
-					else
-					{
-						$bld->vars(array("content" => $arr[$v["value"]]));
-						$c .= $bld->parse("text");
-					}; // end if
-				};
- 
-				$this->vars(array(
-					"cline" => $c,
-					"name"  => $objstr,
-					"oid" => $oid,
-					"gid"   => $arr["gid"]
-				));
-				$content .= $this->parse("line");
-			};
-		}
-
-		$objdata = $this->get_object($args["oid"]);
-		// tean jah, et siia ei tohiks html-i panna. But would you PLEASE shut up?
-		$this->vars(array(
-			"line" => $content,
-			"help" => $help,
-			"object" => "<b>" . $objdata["name"] . " (" . $objdata["oid"] . ")</b> ",
-			"oid" => $objdata["oid"],
-			"xfield" => $keys,
-			"reforb" => $this->mk_reforb("submit_acl", array("oid" => $args["oid"],"user" => $user)),
-			"file"  => $def
-		));
-		return $this->parse();
 	}
 
 	////
@@ -189,14 +80,9 @@ class acl extends aw_template
 
 	////
 	// !Kuvab ACL muutmise vormi mingi objekti jaoks
-	// user - kas vormi kuvatakse saidi sees? (kodukataloogis)
-	function gen_acl_form($oid,$def = -1,$user = 0) 
+	function gen_acl_form($oid,$def = -1) 
 	{
-		if ($user == 1)
-		{
-			$fname = "site.xml";
-		}
-		elseif ($def == -1) 
+		if ($def == -1) 
 		{
 			$fname = "default.xml";
 		}
