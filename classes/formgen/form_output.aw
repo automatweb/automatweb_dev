@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.7 2003/02/10 14:08:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.8 2003/03/28 10:16:18 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -437,7 +437,7 @@ class form_output extends form_base
 		// vaja on arrayd el_id => el_name k6ikide elementide kohta, mis on selle v2ljundi juurde valitud formides
 		$elarr = $this->mk_elarr($id);
 
-//		 $this->debug_map_print();
+		// $this->debug_map_print();
 
 		// put all styles in this form in an array so they will be faster to use
 		$style = get_instance("style");
