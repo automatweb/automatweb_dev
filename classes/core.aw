@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.244 2004/02/11 11:57:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.245 2004/02/11 12:02:03 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -227,7 +227,7 @@ class core extends acl_base
 		$q_parts = array(); // siia sisse paneme päringu osad
 		while(list($k,$v) = each($params)) 
 		{
-			if ($k != "oid") 
+			if ($k != "oid" && $k != "no_flush") 
 			{
 				$q_parts[] = " $k = '$v' ";
 			};
