@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.36 2001/07/12 05:33:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.37 2001/07/12 23:27:01 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -143,9 +143,11 @@ class core extends db_connector
 	// !write to syslog. 
 	function _log($type,$action,$oid = 0)
 	{
+		global $HTTP_SERVER_VARS;
 		global $uid;
-		global $REMOTE_ADDR,$HTTP_X_FORWARDED_FOR;
-		$ip = $HTTP_X_FORWARDED_FOR;
+		$REMOTE_ADDR = $HTTP_SERVER_VARS["REMOTE_ADDR"];
+		// too insecure
+		//$ip = $HTTP_X_FORWARDED_FOR;
 		if (!is_ip($ip))
 		{
 			$ip = $REMOTE_ADDR;
@@ -214,6 +216,7 @@ class core extends db_connector
 			$q = "SELECT * FROM users WHERE uid = '$uid'";
 			$this->db_query($q);
 			$row = $this->db_next();
+			$row["password"] = "";
 			$users_cache[$uid] = $row;
 		}
 		else
@@ -225,12 +228,14 @@ class core extends db_connector
 			$retval = $row[$field];
 		}
 		else
-		if (isset($row))
 		{
-			// inbox defauldib kodukataloogile, kui seda m‰‰ratud pole
-			$inbox = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
-			$row["msg_inbox"] = $inbox;
-			$retval = $row;
+			if (isset($row))
+			{
+				// inbox defauldib kodukataloogile, kui seda m‰‰ratud pole
+				$inbox = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
+				$row["msg_inbox"] = $inbox;
+				$retval = $row;
+			};
 		};
 		return $row;	
 	}
