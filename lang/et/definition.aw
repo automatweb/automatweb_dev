@@ -620,4 +620,6 @@ define("LC_VARS_ADD_CAT","Lisas meili muutujate kategooria $name");
 define("LC_VARS_","Lisas stambi $name");
 define("LC_VARS_","Muutis meili muutujate kategooriat $name");
 
+define("LC_LOGIN_NAME","Nimi:");
+define("LC_LOGIN_PASS","Parool:");
 ?>
