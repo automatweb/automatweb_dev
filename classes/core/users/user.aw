@@ -1266,7 +1266,14 @@ class user extends class_base
 
 				//$arr["obj_inst"]->create_brother($aug_o->id());
 			}
-			
+				
+			post_message_with_param(
+				MSG_USER_CREATE,
+				$this->clid,
+				array(
+					"user_oid" => $arr["obj_inst"]->id(),
+				)
+			);
 
 			// now, we also must check if the user was added under a group
 			$parent = obj($arr["obj_inst"]->parent());
@@ -1326,13 +1333,6 @@ class user extends class_base
 					}
 				}
 
-				post_message_with_param(
-					MSG_USER_CREATE,
-					$this->clid,
-					array(
-						"user_oid" => $arr["obj_inst"]->id(),
-					)
-				);
 
 				// now, find the correct brother
 				if ($go_to)
