@@ -4,56 +4,56 @@ class date
 	function date()
 	{
 		$this->month = array("tammikuu", "helmikuu", "maaliskuu", "huhtikuu", "toukokuu", "kesäkuu", "heinäkuu", "elokuu", "syyskuu", "lokakuu", "marraskuu", "joulukuu");
-
 	}
-
 
 	function get_lc_date($timestamp, $format)
 	{
-		if ($timestamp==0)
+		if ($timestamp == 0)
 		{
-			$timestamp=time();
+			$timestamp = time();
 		}
 
 		$mname = $this->month[date("m", $timestamp)-1] . "ta";
 		
 		switch ($format)
-		
 		{
 			case 1:
-				$newdate=date("d.m.y", $timestamp);
-				return $newdate;
+				$rv = date("d.m.y", $timestamp);
+				break;
+				
 			case 2:
-			
-				$newdate=date("d.m.Y", $timestamp);
-				return $newdate;
+				$rv = date("d.m.Y", $timestamp);
+				break;
 				
 			case 3:
-				$newdate=date("d. ", $timestamp).$mname.date(" y",$timestamp);
-				return $newdate;
+				$rv = date("d. ", $timestamp).$mname.date(" y", $timestamp);
+				break;
 				
 			case 4:
-				$newdate=date("d. ", $timestamp).$mname.date(" Y",$timestamp);
-				return $newdate;
-			
+				$rv = date("d. ", $timestamp).$mname.date(" Y", $timestamp);
+				break;
+				
 			case 5:
-				$rv = date("d. ",$timestamp).$mname;
-				return $rv;
+				$rv = date("d. ", $timestamp).$mname;
+				break;
+				
+			case 7:
+				$rv = date("H:i j.m.Y", $timestamp);
+				break;
 		}
+		$return $rv;
 	}
 
 	function get_lc_weekday($num, $short = false)
 	{
-		$names = array("maanantai","tiistai","keskiviikko","torstai","perjantai","lauantai","sunnuntai");
+		$names = array("maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai", "sunnuntai");
 		$num--;
-		return $short ? substr($names[$num],0,2) : $names[$num];
+		return $short ? substr($names[$num], 0, 2) : $names[$num];
 	}
 	
 	function get_lc_month($num)
 	{
 		return $this->month[$num-1];
 	}
-	
-	
 }
 ?>
