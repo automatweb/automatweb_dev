@@ -24,5 +24,12 @@
 			</function>
 		</action>
 
+		<action name="convert_br">
+			<function name="convert_br">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
