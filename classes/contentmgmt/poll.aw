@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.3 2004/01/21 16:10:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.5 2004/02/10 12:58:46 duke Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -345,7 +345,7 @@ class poll extends class_base
 		}
 		else
 		{
-			return $this->gen_user_html($f["target"]);
+			return $this->gen_user_html($alias["target"]);
 		}
 	}
 
@@ -419,7 +419,9 @@ class poll extends class_base
 		$last_id = 0;
 		$idx = 0;
 
-		foreach($ansa[aw_global_get("lang_id")] as $a_id => $a)
+		$ans = new aw_array($ansa[aw_global_get("lang_id")]);
+
+		foreach($ans->get() as $a_id => $a)
 		{
 			$idx++;
 			$ret["answers[".$a_id."]"] = array(
