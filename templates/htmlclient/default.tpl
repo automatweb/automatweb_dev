@@ -50,7 +50,7 @@
 <tr>
 	<td class='chformleftcol' align='center' width='160'>&nbsp;</td>
 	<td class='chformrightcol'>
-		<input type='submit' value='Salvesta' class='small_button'>
+		<input type='submit' value='Salvesta' class='small_button' onClick='submit_changeform()'>
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
@@ -58,4 +58,11 @@
 {VAR:reforb}
 </form>
 
-
+<script type="text/javascript">
+function submit_changeform()
+{
+	//alert('submitting form');
+	{VAR:submit_handler}
+	document.changeform.submit();
+}
+</script>
