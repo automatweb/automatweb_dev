@@ -30,6 +30,19 @@
 ]]>
 </tag>
 
+<tag id='sub'>
+<![CDATA[
+<sub>\1</sub>
+]]>
+</tag>
+
+<tag id='sup'>
+<![CDATA[
+<sup>\1</sup>
+]]>
+</tag>
+
+
 <tag id='h3'>
 <![CDATA[
 <font face="Tahoma, Arial" size="3" color="#FFCC33"><b>\1</b></font>
