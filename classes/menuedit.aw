@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.261 2003/03/13 08:00:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.262 2003/03/13 08:20:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2689,8 +2689,8 @@ class menuedit extends aw_template
 			// it's already uncompressed, use it
 			$meta = $row["meta"];
 
-			// see on siis nädala parema paani leadide nï¿½tamine
-			// nme häkk. FIX ME.
+			// see on siis nä¤¡la parema paani leadide nï¿½tamine
+			// nme hä««. FIX ME.
 			if (isset($meta["show_lead"]) && $meta["show_lead"])
 			{
 				$activeperiod = aw_global_get("act_per_id");
@@ -5265,8 +5265,7 @@ class menuedit extends aw_template
 			}
 			else
 			{
-				//$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "parent" => $row["parent"]),$this->cfg["classes"][$row["class_id"]]["file"]);
-				$chlink = "javascript:go_view('".basename($this->cfg["classes"][$row["class_id"]]["file"])."',".$row["oid"].",".$row["parent"].")";
+				$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "parent" => $row["parent"]),$this->cfg["classes"][$row["class_id"]]["file"]);
 				$row["is_menu"] = 2;
 			}
 
