@@ -9,18 +9,26 @@ function setLink(li,title)
 <form action='reforb.{VAR:ext}' method=post name="b88" enctype="multipart/form-data">
 <input type="hidden" name="MAX_FILE_SIZE" VALUE="1000000">
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+<!-- SUB: AFTER_LOGIN -->
 <tr bgcolor="#C9EFEF">
-<td class="plain">Aadress, kuhu suunatakse p&auml;rast sisse logimist:</td>
-<td class="plain"><input type='text' name='after_login' value='{VAR:after_login}'><a href="#" onclick="sel_el=document.b88.after_login;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
+<td class="plain">Aadress, kuhu suunatakse p&auml;rast sisse logimist ({VAR:lang}):</td>
+<td class="plain"><input type='text' name='after_login_{VAR:lang_id}' value='{VAR:after_login}'><a href="#" onclick="sel_el=document.b88.after_login_{VAR:lang_id};remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
 </tr>
+<!-- END SUB: AFTER_LOGIN -->
+
+<!-- SUB: MUSTLOGIN -->
 <tr bgcolor="#C9EFEF">
-<td class="plain">Aadress, kuhu suunatakse kui on vaja sisse logida:</td>
-<td class="plain"><input type='text' name='mustlogin' value='{VAR:mustlogin}'><a href="#" onclick="sel_el=document.b88.mustlogin;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
+<td class="plain">Aadress, kuhu suunatakse kui on vaja sisse logida ({VAR:lang}):</td>
+<td class="plain"><input type='text' name='mustlogin_{VAR:lang_id}' value='{VAR:mustlogin}'><a href="#" onclick="sel_el=document.b88.mustlogin_{VAR:lang_id};remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
 </tr>
+<!-- END SUB: MUSTLOGIN -->
+
+<!-- SUB: ERROR_REDIRECT -->
 <tr bgcolor="#C9EFEF">
-<td class="plain">Aadress, kuhu suunatakse kui tuleb veateade:</td>
-<td class="plain"><input type='text' name='error_redirect' value='{VAR:error_redirect}'><a href="#" onclick="sel_el=document.b88.error_redirect;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
+<td class="plain">Aadress, kuhu suunatakse kui tuleb veateade ({VAR:lang}):</td>
+<td class="plain"><input type='text' name='error_redirect_{VAR:lang_id}' value='{VAR:error_redirect}'><a href="#" onclick="sel_el=document.b88.error_redirect_{VAR:lang_id};remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
 </tr>
+<!-- END SUB: ERROR_REDIRECT -->
 <tr bgcolor="#C9EFEF">
 <td class="plain">Vali kasutaja info form:</td>
 <td class="plain"><select name='user_info_form'>{VAR:forms}</select></td>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.64 2003/08/01 12:48:19 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.65 2003/08/08 13:10:34 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -348,7 +348,14 @@ class users_user extends aw_template
 		};
 		if (!$this->url)
 		{
-			$this->url = $this->get_cval("after_login");
+			$la = get_instance("languages");
+			$ld = $la->fetch(aw_global_get("lang_id"));
+
+			$this->url = $this->get_cval("after_login_".$ld["acceptlang"]);
+			if (!$this->url)
+			{
+				$this->url = $this->get_cval("after_login");
+			}
 		}
 		$this->url = (strlen($this->url) > 0) ? $this->url : ($return != "" ? $return : $this->cfg["baseurl"]);
 		$this->login_successful = true;

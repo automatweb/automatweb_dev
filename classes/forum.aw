@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.78 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.79 2003/08/08 13:10:34 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -424,7 +424,14 @@ class forum extends class_base
 		if ( $this->cfg["newtopic_logged_only"] && aw_global_get("uid") == "" )
 		{
 			$c = get_instance("config");
-			$doc = $c->get_simple_config("orb_err_mustlogin");
+			$la = get_instance("languages");
+			$ld = $la->fetch(aw_global_get("lang_id"));
+			$doc = $c->get_simple_config("orb_err_mustlogin_".$ld["acceptlang"]);
+			if (!$doc)
+			{
+				$doc = $c->get_simple_config("orb_err_mustlogin");
+			}
+
 			if ($doc != "")
 			{
 				header("Location: $doc");

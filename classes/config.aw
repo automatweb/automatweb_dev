@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.47 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.48 2003/08/08 13:10:34 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -285,16 +285,66 @@ class config extends db_config
 
 		$ob_i = get_instance("objects");
 		
+		$la = get_instance("languages");
+		$li = $la->get_list(array("all_data" => true));
+		$r_al = "";
+		foreach($li as $lid => $ld)
+		{
+			$tal = $this->get_simple_config("after_login_".$ld["acceptlang"]);
+			if (!$tal)
+			{
+				$tal = $al;
+			}
+			$this->vars(array(
+				"lang_id" => $ld["acceptlang"],
+				"lang" => $ld["name"],
+				"after_login" => $tal
+			));
+			$r_al .= $this->parse("AFTER_LOGIN");
+		}
+
+		$r_ml = "";
+		foreach($li as $lid => $ld)
+		{
+			$tml = $this->get_simple_config("orb_err_mustlogin_".$ld["acceptlang"]);
+			if (!$tml)
+			{
+				$tml = $doc;
+			}
+			$this->vars(array(
+				"lang_id" => $ld["acceptlang"],
+				"lang" => $ld["name"],
+				"mustlogin" => $tml
+			));
+			$r_ml .= $this->parse("MUSTLOGIN");
+		}
+
+		$r_el = "";
+		foreach($li as $lid => $ld)
+		{
+			$tml = $this->get_simple_config("error_redirect_".$ld["acceptlang"]);
+			if (!$tml)
+			{
+				$tml = $err;
+			}
+			$this->vars(array(
+				"lang_id" => $ld["acceptlang"],
+				"lang" => $ld["name"],
+				"error_redirect" => $tml
+			));
+			$r_el .= $this->parse("ERROR_REDIRECT");
+		}
+
 		$this->vars(array(
+			"AFTER_LOGIN" => $r_al,
 			"favicon" => "<img src='".$this->mk_my_orb("favicon", array(),"config", false,true)."'>",
-			"after_login" => $al,
 			"forms" => $this->picker($if,$fb->get_list(FTYPE_ENTRY,true)),
 			"ops" => $this->picker($op,$ops[$if]),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"bt_gid" => $this->picker($bt,$us->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
 			"bt_adm" => $this->picker($btadm,$us->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
-			"mustlogin" => $doc,
-			"error_redirect" => $err,
+			"MUSTLOGIN" => $r_ml,
+			"ERROR_REDIRECT" => $r_el,
 			"reforb" => $this->mk_reforb("submit_loginaddr"),
 			"autologin" => checked($al),
 			"cfgform_link" => $this->mk_my_orb("class_cfgforms",array()),
@@ -1345,11 +1395,28 @@ class config extends db_config
 	function submit_loaginaddr($arr)
 	{
 		extract($arr);
-		$this->set_simple_config("after_login",$after_login);
+		$la = get_instance("languages");
+		$li = $la->get_list(array("all_data" => true));
+		foreach($li as $lid => $ld)
+		{
+			$var = "after_login_".$ld["acceptlang"];
+			$this->set_simple_config($var, $$var);
+		}
 		$this->set_simple_config("user_info_form",$user_info_form);
 		$this->set_simple_config("user_info_op",$user_info_op);
-		$this->set_simple_config("orb_err_mustlogin",$mustlogin);
+
+		foreach($li as $lid => $ld)
+		{
+			$var = "mustlogin_".$ld["acceptlang"];
+			$this->set_simple_config("orb_err_mustlogin_".$ld["acceptlang"], $$var);
+		}
+
 		$this->set_simple_config("error_redirect",$error_redirect);
+		foreach($li as $lid => $ld)
+		{
+			$var = "error_redirect_".$ld["acceptlang"];
+			$this->set_simple_config($var, $$var);
+		}
 		$this->set_simple_config("bugtrack_developergid",$bt_gid);
 		$this->set_simple_config("bugtrack_admgid",$bt_adm);
 		$this->set_simple_config("useradd::autologin",$autologin);

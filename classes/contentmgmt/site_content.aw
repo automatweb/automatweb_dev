@@ -1929,7 +1929,13 @@ class site_content extends menuedit
 	function users_only_redir()
 	{
 		$dbc = get_instance("config");
-		$url = $dbc->get_simple_config("orb_err_mustlogin");
+		$la = get_instance("languages");
+		$ld = $la->fetch(aw_global_get("lang_id"));
+		$url = $c->get_simple_config("orb_err_mustlogin_".$ld["acceptlang"]);
+		if (!$url)
+		{
+			$url = $c->get_simple_config("orb_err_mustlogin");
+		}
 		aw_session_set("request_uri_before_auth",aw_global_get("REQUEST_URI"));
 		header("Location: ".$this->cfg["baseurl"]."/$url");
 		// exit from inside the class, yuck.
