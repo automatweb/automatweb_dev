@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>keyword</name>
+            <table>keywords</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>keyword</field>
+            <caption>Märksõna</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_KEYWORDS</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <status>no</status>
+            <no_status>1</no_status>
+      </classinfo>
+      <tableinfo>
+            <keywords>
+                  <index>id</index>
+                  <master_table>keywords</master_table>
+                  <master_index>brother_of</master_index>
+            </keywords>
+      </tableinfo>
+</properties>
+
