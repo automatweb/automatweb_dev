@@ -118,6 +118,7 @@ class propcollector extends aw_template
 		$this->classinfo = array();
 		$this->groupinfo = array();
 		$this->tableinfo = array();
+		$this->views = array();
 	}
 
 	function add_property($name,$data)
@@ -129,7 +130,16 @@ class propcollector extends aw_template
 			list($fname,$fvalue) = explode("=",$field);
 			if ($fname && $fvalue)
 			{
-				$fields[$fname] = $fvalue;
+				// try to split fvalue
+				$_split = explode(",",$fvalue);
+				if (sizeof($_split) > 1)
+				{
+					$fields[$fname] = $_split;
+				}
+				else
+				{
+					$fields[$fname] = $fvalue;
+				};
 			};
 		};
 		// add defaults as well
@@ -146,6 +156,19 @@ class propcollector extends aw_template
 		{
 			$fields["field"] = $fields["name"];
 		};
+
+		if ($fields["store"] == "no")
+		{
+			unset($fields["table"]);
+			unset($fields["method"]);
+			unset($fields["field"]);
+		}
+
+		if ($fields["view"] && !$this->views[$fields["view"]])
+		{
+			$this->views[$fields["view"]] = 1;
+		};
+
 		$this->properties[$name] = $fields;
 		$this->name = $name;
 
@@ -229,6 +252,11 @@ class propcollector extends aw_template
 			if (sizeof($this->tableinfo) > 0)
 			{
 				$arr["properties"]["tableinfo"] = $this->tableinfo;
+			};
+
+			if (sizeof($this->views) > 0)
+			{
+				$arr["properties"]["views"] = $this->views;
 			};
 
 			$res = $sr->xml_serialize($arr);
