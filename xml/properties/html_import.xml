@@ -233,10 +233,6 @@
             <caption>sql_ruul hidden</caption>
       </property>
       <groupinfo>
-            <general>
-                  <caption>üldine</caption>
-                  <default>1</default>
-            </general>
             <output_conf>
                   <caption>väljund</caption>
             </output_conf>
