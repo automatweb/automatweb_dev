@@ -5,12 +5,11 @@ $te = new aw_template;
 $te->tpl_init("");
 $te->read_template("login.tpl");
 
-$m = new menuedit(aw_ini_get("per_oid"));
+$m = get_instance("contentmgmt/site_cache");
 
 $si =&__get_site_instance();
 
-$content = $m->gen_site_html(array(
-	"section"  => $section,
+$content = $m->show(array(
 	"vars" => $si->on_page(),
 	"text" => $te->parse(),
 	"no_right_pane" => ($content) ? true : false,
