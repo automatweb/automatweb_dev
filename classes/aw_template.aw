@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.64 2004/09/04 18:06:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.65 2004/10/14 13:43:17 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -187,7 +187,7 @@ class aw_template extends core
 			else
 			{
 				// raise_error drops out, therefore $retval has no meaning here
-				$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_filename."' not found",true);
+				$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_dir."/".$name."' not found",true);
 			};
 		}
 		return $retval;
