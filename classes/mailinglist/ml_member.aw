@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.32 2004/08/04 10:59:46 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.33 2004/08/23 09:23:27 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -91,6 +91,12 @@
 	
 	@property udef_classificator5 type=classificator field=meta method=serialize
 	@caption Klassifikaator 5
+
+	@property udef_date1 type=date_select field=meta method=serialize
+	@caption Kuup&auml;ev 1
+	
+	@property udef_date2 type=date_select field=meta method=serialize
+	@caption Kuup&auml;ev 2
 	
 	@groupinfo udef_fields caption=Muud väljad 
 	

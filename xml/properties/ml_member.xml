@@ -246,6 +246,24 @@
             <method>serialize</method>
             <caption>Klassifikaator 5</caption>
       </property>
+      <property>
+            <name>udef_date1</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuup&amp;auml;ev 1</caption>
+      </property>
+      <property>
+            <name>udef_date2</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuup&amp;auml;ev 2</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST_MEMBER</syslog_type>
             <no_status>1</no_status>
