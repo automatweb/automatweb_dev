@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.1 2004/04/13 16:03:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.2 2004/04/13 16:05:26 duke Exp $
 // crm_section.aw - &Uuml;ksus 
 /*
 
@@ -15,7 +15,6 @@ class crm_section extends class_base
 	function crm_section()
 	{
 		$this->init(array(
-			"tpldir" => "crm/crm_section",
 			"clid" => CL_CRM_SECTION
 		));
 	}
