@@ -242,7 +242,7 @@ class icons extends aw_template
 
 	function get($id)
 	{
-		if (is_array(aw_cache_get("icon_cache",$id)))
+		if (function_exists("aw_cache_get") && is_array(aw_cache_get("icon_cache",$id)))
 		{
 			return aw_cache_get("icon_cache",$id);
 		}
