@@ -28,13 +28,13 @@ class object
 
 	function object($param = NULL)
 	{
-		if ($param != NULL)
+		if ($param != NULL && !is_array($param))
 		{
 			$this->load($param);
 		}
 		else
 		{
-			$this->oid = $GLOBALS["object_loader"]->new_object_temp_id();
+			$this->oid = $GLOBALS["object_loader"]->new_object_temp_id($param);
 		}
 	}
 
@@ -300,6 +300,11 @@ class object
 	function prop($param)
 	{
 		return $GLOBALS["objects"][$this->oid]->prop($param);
+	}
+
+	function get_property_list()
+	{
+		return $GLOBALS["objects"][$this->oid]->get_property_list();
 	}
 
 	function set_prop($key, $value)

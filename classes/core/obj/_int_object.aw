@@ -694,6 +694,11 @@ class _int_object
 		return $prev;
 	}
 
+	function get_property_list()
+	{
+		return $this->properties;
+	}
+
 	function prop($param)
 	{
 		return $this->obj["properties"][$param];
@@ -732,7 +737,7 @@ class _int_object
 
 	function merge($param)
 	{
-		if ($is_array($param))
+		if (!is_array($param))
 		{
 			error::throw(array(
 				"id" => ERR_MERGE,
@@ -746,7 +751,7 @@ class _int_object
 
 	function merge_prop($param)
 	{
-		if (is_array($param))
+		if (!is_array($param))
 		{
 			error::throw(array(
 				"id" => ERR_MERGE,

@@ -141,7 +141,7 @@ class _int_object_loader
 
 	////
 	// !returns temp id for new object
-	function new_object_temp_id()
+	function new_object_temp_id($param = NULL)
 	{
 		$cnt = 0;
 		$str = "new_object_temp_id_".$cnt;
@@ -150,8 +150,8 @@ class _int_object_loader
 			$cnt++;
 			$str = "new_object_temp_id_".$cnt;
 		}
-		$GLOBALS["objects"][$str] =& new _int_object();
-		echo "created new temp obj id! $str <br />";
+		$GLOBALS["objects"][$str] =& new _int_object($param);
+		//echo "created new temp obj id! $str <br />";
 		return $str;
 	}
 

@@ -1,0 +1,78 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>file</name>
+            <type>fileupload</type>
+            <store>no</store>
+            <table>objects</table>
+            <group>general</group>
+            <field>file</field>
+            <caption>XML Fail</caption>
+      </property>
+      <property>
+            <name>period</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PERIOD</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Periood</caption>
+      </property>
+      <property>
+            <name>found</name>
+            <type>text</type>
+            <store>no</store>
+            <table>objects</table>
+            <group>general</group>
+            <field>found</field>
+            <caption>Leitud dokumendid</caption>
+      </property>
+      <property>
+            <name>do_import</name>
+            <type>checkbox</type>
+            <store>no</store>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <field>do_import</field>
+            <caption>Impordi</caption>
+      </property>
+      <property>
+            <name>location_tags</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>settings</group>
+            <table>objects</table>
+            <caption>Asukohta m&amp;auml;&amp;auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)</caption>
+      </property>
+      <property>
+            <name>field_tags</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>settings</group>
+            <table>objects</table>
+            <caption>Sisuv&amp;auml;lju m&amp;auml;&amp;auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)</caption>
+      </property>
+      <property>
+            <name>end_tag</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>settings</group>
+            <table>objects</table>
+            <caption>dokumenti l&amp;otilde;petav tag</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_DOCUMENT_IMPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
+      </groupinfo>
+</properties>
+

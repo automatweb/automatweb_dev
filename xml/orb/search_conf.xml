@@ -12,8 +12,10 @@
 					<optional name="date_from"/>
 					<optional name="date_to"/>
 					<optional name="sstring"/>
+					<optional name="a2c_log"/>
 					<optional name="t2c_log"/>
 					<optional name="c2k_log"/>
+					<optional name="d2k_log"/>
 					<optional name="search"/>
 					<optional name="page"/>
 					<optional name="t_type"/>
@@ -21,6 +23,7 @@
 					<optional name="sortby"/>
 					<optional name="section"/>
 					<optional name="search_all"/>
+					<optional name="max_results"/>
 				</arguments>
 			</function>
 		</action>
