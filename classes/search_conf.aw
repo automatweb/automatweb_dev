@@ -102,7 +102,7 @@ class search_conf extends aw_template
 		}
 	}
 
-	function get_search_list()
+	function get_search_list(&$default)
 	{
 		$grps = $this->get_groups();
 		$ret = array();
@@ -110,9 +110,17 @@ class search_conf extends aw_template
 		{
 			if ($GLOBALS["uid"] != "" || $gdata["users_only"] != 1)
 			{
+				foreach($gdata["menus"] as $mn => $mn)
+				{
+					if ($mn == $default)
+					{
+						$def = $grpid;
+					}
+				}
 				$ret[$grpid] = $gdata["name"];
 			}
 		}
+		$default = $def;
 		return $ret;
 	}
 
@@ -136,7 +144,7 @@ class search_conf extends aw_template
 				$sel_keys = true;
 			}
 		}
-		$search_list = $this->get_search_list();
+		$search_list = $this->get_search_list(&$def);
 		$this->vars(array(
 			"search_sel" => $this->option_list($s_parent,$search_list),
 			"sstring_title" => $sstring_title,
@@ -304,7 +312,15 @@ class search_conf extends aw_template
 
 			// get all the parents under what the document can be
 			$p_arr = $this->get_parent_arr($s_parent);
-			$q_cons = "status = 2 AND parent IN (".join(",",$p_arr).") ";
+			$_tpstr = join(",",$p_arr);
+			if ($_tpstr != "")
+			{
+				$q_cons = "status = 2 AND parent IN (".$_tpstr.") ";
+			}
+			else
+			{
+				$q_cons = "status = 2  ";
+			}
 
 			if ($q_cons2 != "")
 			{
@@ -349,6 +365,8 @@ class search_conf extends aw_template
 
 	function do_log($search_list,$s_parent,$t_type,$sstring_title,$sstring,$t2c_log,$sel_keys,$keys,$c2k_log,$cnt)
 	{
+		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$sstring','$s_parent','$cnt','".$GLOBALS["REMOTE_ADDR"]."','".time()."')");
+
 		$sel_parent = $search_list[$s_parent];
 		if ($t_type == 1)
 		{
@@ -525,6 +543,10 @@ class search_conf extends aw_template
 		{
 			$ss = " AND objects.lang_id = ".$GLOBALS["lang_id"];
 		}
+
+		$search_groups = $this->get_groups();
+		$search_group = $search_groups[$parent];
+
 		$this->menucache = array();
 		$this->db_query("SELECT objects.oid as oid, objects.parent as parent,objects.last as last,objects.status as status
 										 FROM objects 
@@ -538,7 +560,10 @@ class search_conf extends aw_template
 		$this->marr = array();
 		// list of default documents
 		$this->darr = array();
-		$this->rec_list($parent);
+		foreach($search_group["menus"] as $parent => $parent)
+		{
+			$this->rec_list($parent);
+		}
 		return $this->marr;
 	}
 
@@ -609,7 +634,8 @@ class search_conf extends aw_template
 
 		$this->vars(array(
 			"add" => $this->mk_my_orb("change_grp", array("id" => $id)),
-			"LINE" => $l
+			"LINE" => $l,
+			"s_log" => $this->mk_my_orb("search_log", array())
 		));
 		return $this->parse();
 	}
@@ -725,6 +751,33 @@ class search_conf extends aw_template
 	{
 		$grps = $this->get_groups();
 		return $grps[$gp]["menus"];
+	}
+
+	function search_log($arr)
+	{
+		extract($arr);
+		$this->read_template("search_log.tpl");
+
+		$grps = $this->get_groups();
+
+		$this->db_query("SELECT * FROM searches");
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"time" => $this->time2date($row["tm"]),
+				"str" => $row["str"],
+				"s_parent" => $grps[$row["s_parent"]]["name"],
+				"numresults" => $row["numresults"],
+				"ip" => $row["ip"],
+			));
+			$l.=$this->parse("LINE");
+		}
+		$this->vars(array(
+			"add" => $this->mk_my_orb("change_grp", array("id" => $id)),
+			"LINE" => $l,
+			"s_log" => $this->mk_my_orb("search_log", array())
+		));
+		return $this->parse();
 	}
 }
 ?>
