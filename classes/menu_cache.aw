@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.17 2003/02/10 14:03:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.18 2003/02/11 18:32:50 duke Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -57,7 +57,7 @@ class menu_cache extends aw_template
     };
     if ($this->cfg["lang_menus"] == 1 && $ignore_lang == false)
     {
-			$aa .= sprintf(" AND (objects.lang_id='%d' OR menu.type = '%d') ",$lang_id,MN_CLIENT);
+			$aa .= sprintf(" AND (objects.lang_id='%d' OR menu.type IN (%d,%d)) ",$lang_id,MN_CLIENT,MN_PMETHOD);
     }
 
      $q = "SELECT objects.oid as oid, 
