@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.1 2004/05/12 13:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.2 2004/05/19 16:18:32 kristo Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 
@@ -26,8 +26,11 @@
 @property file_has_header type=checkbox ch_value=1
 @caption Esimesel real on pealkirjad
 
+@property file_separator type=textbox size=5
+@caption Eraldaja
 
-@reltype DS value=1 clid=CL_FILE,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_OBJ
+
+@reltype DS value=1 clid=CL_FILE,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_OBJ,CL_DB_TABLE_CONTENTS
 @caption andmed objektist
 
 */
@@ -49,22 +52,40 @@ class abstract_datasource extends class_base
 		switch($prop["name"])
 		{
 			case "file_has_header":
+			case "file_separator":
 				$dso = obj($arr["obj_inst"]->prop("ds"));
 				if ($dso->class_id() != CL_FILE)
 				{
 					$retval = PROP_IGNORE;
 				}
+
+				if ($prop["name"] == "file_separator" && $prop["value"] == "")
+				{
+					$prop["value"] = ",";
+				}
 				break;
 
 			case "row_cnt":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_INGORE;
+				}
 				$prop["value"] = count($this->get_objects($arr["obj_inst"]));
 				break;
 
 			case "name_field":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_INGORE;
+				}
 				$prop["options"] = $this->get_fields($arr["obj_inst"]);
 				break;
 
 			case "id_field":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_INGORE;
+				}
 				$prop["options"] = $this->get_fields($arr["obj_inst"]);
 				break;
 		};
@@ -110,11 +131,21 @@ class abstract_datasource extends class_base
 	**/
 	function get_fields($o)
 	{
+		if (!$o->prop("ds"))
+		{
+			return array();
+		}
 		// get the real datasource 
 		$ds_o = obj($o->prop("ds"));
 		$ds_i = $ds_o->instance();
 
-		return $ds_i->get_fields($ds_o);
+		$params = array();
+		if ($ds_o->class_id() == CL_FILE)
+		{
+			$params["separator"] = $o->prop("file_separator");
+		}
+
+		return $ds_i->get_fields($ds_o, $params);
 	}
 
 	/** returns an array of data rows
@@ -124,8 +155,18 @@ class abstract_datasource extends class_base
 	**/
 	function get_objects($o)
 	{
+		if (!$o->prop("ds"))
+		{
+			return array();
+		}
 		$ds_o = obj($o->prop("ds"));
 		$ds_i = $ds_o->instance();
+
+		$params = array();
+		if ($ds_o->class_id() == CL_FILE)
+		{
+			$params["separator"] = $o->prop("file_separator");
+		}
 
 		$ret = $ds_i->get_objects($ds_o);
 		if ($ds_o->class_id() == CL_FILE && $o->prop("file_has_header"))
@@ -139,6 +180,10 @@ class abstract_datasource extends class_base
 	**/
 	function get_folders($o)
 	{
+		if (!$o->prop("ds"))
+		{
+			return array();
+		}
 		$ds_o = obj($o->prop("ds"));
 		$ds_i = $ds_o->instance();
 

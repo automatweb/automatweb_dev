@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.3 2004/05/12 13:43:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.4 2004/05/19 16:18:32 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -101,6 +101,7 @@ class object_import extends class_base
 		{
 			case "props":
 				$arr["obj_inst"]->set_meta("isimp", $arr["request"]["isimp"]);
+				$arr["obj_inst"]->set_meta("userval", $arr["request"]["userval"]);
 				break;
 
 			case "connect_props":
@@ -132,6 +133,12 @@ class object_import extends class_base
 			"align" => "center"
 		));
 
+		$t->define_field(array(
+			"name" => "userval",
+			"caption" => "V&auml;&auml;rtus k&auml;sitsi",
+			"align" => "center"
+		));
+
 		$t->set_default_sortby("prop");
 	}
 
@@ -141,15 +148,25 @@ class object_import extends class_base
 		$this->_init_props_tbl($t);
 
 		$isimp = $arr["obj_inst"]->meta("isimp");
+		$userval = $arr["obj_inst"]->meta("userval");
 
 		foreach($this->get_props_from_obj($arr["obj_inst"]) as $pn => $pd)
 		{
+			if ($pn == "needs_translation" || $pn == "is_translated")
+			{
+				continue;
+			}
 			$t->define_data(array(
 				"prop" => $pd["caption"],
 				"isimp" => html::checkbox(array(
 					"name" => "isimp[$pn]",
 					"value" => 1,
 					"checked" => $isimp[$pn]
+				)),
+				"userval" => html::textbox(array(
+					"name" => "userval[$pn]",
+					"value" => $userval[$pn],
+					"size" => 5
 				))
 			));
 		}
@@ -218,7 +235,7 @@ class object_import extends class_base
 
 		foreach($this->get_props_from_obj($arr["obj_inst"]) as $pn => $pd)
 		{
-			if (!$isimp[$pn])
+			if (!$isimp[$pn] || $pn == "needs_translation" || $pn == "is_translated")
 			{
 				continue;
 			}
@@ -277,6 +294,7 @@ class object_import extends class_base
 			$type_o = obj($o->prop("object_type"));
 			$class_id = $type_o->prop("type");
 			$p2c = $o->meta("p2c");		
+			$userval = $o->meta("userval");		
 
 			$line_n = 0;
 
@@ -325,7 +343,23 @@ class object_import extends class_base
 				
 				foreach($p2c as $pn => $idx)
 				{
-					$dat->set_prop($pn, $line[$idx]);
+					if ($pn == "needs_translation" || $pn == "is_translated" || $idx == "dontimp")
+					{
+						continue;
+					}
+					$dat->set_prop($pn, convert_unicode($line[$idx]));
+				}
+
+				// also uservals
+				if (is_array($userval))
+				{
+					foreach($userval as $uv_pn => $uv_pv)
+					{
+						if ($uv_pv != "")
+						{
+							$dat->set_prop($uv_pn, $uv_pv);	
+						}
+					}
 				}
 
 				$dat->save();

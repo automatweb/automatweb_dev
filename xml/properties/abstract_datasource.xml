@@ -48,6 +48,16 @@
             <ch_value>1</ch_value>
             <caption>Esimesel real on pealkirjad</caption>
       </property>
+      <property>
+            <name>file_separator</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Eraldaja</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ABSTRACT_DATASOURCE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -59,6 +69,7 @@
                         <num_0>CL_FILE</num_0>
                         <num_1>CL_OTV_DS_POSTIPOISS</num_1>
                         <num_2>CL_OTV_DS_OBJ</num_2>
+                        <num_3>CL_DB_TABLE_CONTENTS</num_3>
                   </clid>
                   <caption>andmed objektist</caption>
             </DS>
