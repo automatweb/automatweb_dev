@@ -41,10 +41,11 @@
 			</function>
 		</action>
 		
-		<action name="get_popup_data" nologin="1">
+		<action name="get_popup_data" nologin="1" all_args="1">
 			<function name="get_popup_data">
 				<arguments>
 					<required name="id" type="int"/>
+					<optional name="addmenu" type="int"/>
 					<optional name="addmenu" type="int"/>
 				</arguments>
 			</function>
