@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.134 2002/12/06 13:59:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.135 2002/12/09 08:57:19 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -1479,29 +1479,6 @@ class core extends db_connector
 		return $result;
 	}
 
-	////
-	// !hmm .. miski kahtlane värk ... vbla polegi neid vaja?
-	// fetchib objekti last välja ja unserializeb selle
-	// 
-	// jah, vbla pole t6esti. kogu see aliaste asi tulex nac yle vaadata - terryf
-	function get_last($oid) 
-	{
-		$row = $this->get_object($oid);
-		return unserialize($row["last"]);
-	}
-
-	////
-	// !salvestab objekti last välja uue info
-	function set_last($oid,$field,$val) 
-	{
-		$old = $this->get_last($oid);
-		$old[$field] = $val;
-		$new = serialize($old);
-		$this->quote($new);
-		$q = "UPDATE objects SET last = '$new' WHERE oid = '$oid'";
-		$this->db_query($q);
-	}
-
 	//// 
 	// !Veateade
 	// $msg - teate tekst
@@ -2276,7 +2253,7 @@ class core extends db_connector
 			return false;
 		}
 
-		$t = get_instance($v["file"]);
+		$t = get_instance($v['alias_class'] != '' ? $v['alias_class'] : $v['file']);
 		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period));
 	}
 	
