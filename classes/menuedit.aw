@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.200 2003/01/07 17:03:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.201 2003/01/08 11:00:52 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -3787,6 +3787,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				if ($row["alias"] != "")
 				{
 					$tmp = array();
+					if (!is_array($this->menu_aliases))
+					{
+						$this->menu_aliases = array();
+					};
 					foreach($this->menu_aliases as $_al)
 					{
 						if ($_al != "n/a")
