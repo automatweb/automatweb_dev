@@ -200,5 +200,19 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="createpwd">
+			<function name="createpwd">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_createpwd">
+			<function name="submit_createpwd">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
