@@ -73,5 +73,12 @@
                   <caption>Üldine</caption>
             </general>
       </groupinfo>
+      <tableinfo>
+            <kliendibaas_contact>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_contact>
+      </tableinfo>
 </properties>
 

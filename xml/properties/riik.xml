@@ -66,36 +66,11 @@
             <objtable_index>oid</objtable_index>
       </classinfo>
       <tableinfo>
-            <kliendibaas_contact>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_contact>
-            <kliendibaas_ettevotlusvorm>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_ettevotlusvorm>
-            <kliendibaas_firma>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_firma>
-            <kliendibaas_isik>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_isik>
             <kliendibaas_linn>
                   <index>oid</index>
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </kliendibaas_linn>
-            <kliendibaas_maakond>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_maakond>
             <kliendibaas_riik>
                   <index>oid</index>
                   <master_table>objects</master_table>

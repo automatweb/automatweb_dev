@@ -3,7 +3,7 @@
       <property>
             <name>comment</name>
             <type>textarea</type>
-            <table>kliendibaas_riik</table>
+            <table>kliendibaas_linn</table>
             <group>general</group>
             <field>comment</field>
             <caption>Keeled</caption>
@@ -12,44 +12,24 @@
             <name>name</name>
             <type>textbox</type>
             <size>20</size>
-            <table>kliendibaas_riik</table>
+            <table>kliendibaas_linn</table>
             <group>general</group>
             <field>name</field>
-            <caption>Nimetus (tmp)</caption>
+            <caption>Nimetus</caption>
       </property>
       <property>
             <name>location</name>
             <type>textarea</type>
-            <table>kliendibaas_riik</table>
+            <table>kliendibaas_linn</table>
             <group>general</group>
             <field>location</field>
             <caption>Asukoha kirjeldus</caption>
       </property>
       <classinfo>
-            <objtable>kliendibaas_riik</objtable>
+            <objtable>kliendibaas_linn</objtable>
             <objtable_index>oid</objtable_index>
       </classinfo>
       <tableinfo>
-            <kliendibaas_contact>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_contact>
-            <kliendibaas_ettevotlusvorm>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_ettevotlusvorm>
-            <kliendibaas_firma>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_firma>
-            <kliendibaas_isik>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_isik>
             <kliendibaas_linn>
                   <index>oid</index>
                   <master_table>objects</master_table>

@@ -1,16 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>comment</name>
-            <type>textarea</type>
-            <field>comment</field>
-            <cols>40</cols>
-            <rows>3</rows>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Kommentaar</caption>
-      </property>
-      <property>
             <name>postiindeks</name>
             <type>textbox</type>
             <size>5</size>
@@ -91,73 +81,35 @@
             <caption>kodulehekülg</caption>
       </property>
       <property>
-            <name>linn</name>
-            <type>hidden</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>linn</field>
-      </property>
-      <property>
-            <name>maakond</name>
-            <type>hidden</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>maakond</field>
-      </property>
-      <property>
-            <name>riik</name>
-            <type>hidden</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>riik</field>
-      </property>
-      <property>
             <name>linn_c</name>
-            <type>button</type>
+            <type>text</type>
             <table>kliendibaas_contact</table>
             <group>general</group>
             <field>linn_c</field>
-            <caption>vali_linn</caption>
-      </property>
-      <property>
-            <name>linn_s</name>
-            <type>text</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>linn_s</field>
-            <caption>linn</caption>
+            <caption>vali linn/asula</caption>
       </property>
       <property>
             <name>maakond_c</name>
-            <type>button</type>
+            <type>text</type>
             <table>kliendibaas_contact</table>
             <group>general</group>
             <field>maakond_c</field>
-            <caption>vali_linn</caption>
-      </property>
-      <property>
-            <name>maakond_s</name>
-            <type>text</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>maakond_s</field>
-            <caption>maakond</caption>
+            <caption>vali_maakond</caption>
       </property>
       <property>
             <name>riik_c</name>
-            <type>button</type>
-            <table>kliendibaas_contact</table>
-            <group>general</group>
-            <field>riik_c</field>
-            <caption>vali_linn</caption>
-      </property>
-      <property>
-            <name>riik_s</name>
             <type>text</type>
             <table>kliendibaas_contact</table>
             <group>general</group>
-            <field>riik_s</field>
-            <caption>riik</caption>
+            <field>riik_c</field>
+            <caption>vali_riik</caption>
+      </property>
+      <property>
+            <name>more</name>
+            <type>text</type>
+            <table>kliendibaas_contact</table>
+            <group>general</group>
+            <field>more</field>
       </property>
       <property>
             <name>popups</name>
@@ -167,27 +119,39 @@
             <field>popups</field>
       </property>
       <property>
-            <name>more</name>
-            <type>text</type>
+            <name>linn</name>
+            <type>textbox</type>
             <table>kliendibaas_contact</table>
             <group>general</group>
-            <field>more</field>
+            <field>linn</field>
+            <caption>hidden linn</caption>
+      </property>
+      <property>
+            <name>maakond</name>
+            <type>textbox</type>
+            <table>kliendibaas_contact</table>
+            <group>general</group>
+            <field>maakond</field>
+            <caption>hidden mk</caption>
+      </property>
+      <property>
+            <name>riik</name>
+            <type>textbox</type>
+            <table>kliendibaas_contact</table>
+            <group>general</group>
+            <field>riik</field>
+            <caption>hidden rk</caption>
       </property>
       <classinfo>
             <objtable>kliendibaas_contact</objtable>
             <objtable_index>oid</objtable_index>
       </classinfo>
       <tableinfo>
-            <files>
-                  <index>id</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid	</master_index>
-            </files>
-            <images>
-                  <index>id</index>
+            <kliendibaas_contact>
+                  <index>oid</index>
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
-            </images>
+            </kliendibaas_contact>
       </tableinfo>
 </properties>
 

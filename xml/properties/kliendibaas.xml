@@ -4,41 +4,29 @@
             <name>comment</name>
             <type>textarea</type>
             <field>comment</field>
-            <cols>40</cols>
-            <rows>3</rows>
             <table>objects</table>
             <group>general</group>
             <caption>Kommentaar</caption>
       </property>
       <property>
-            <name>kataloogid</name>
-            <type>generated</type>
-            <generator>changi</generator>
-            <group>whee</group>
+            <name>asi</name>
+            <type>textarea</type>
             <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>toolbar</name>
-            <type>generated</type>
-            <generator>my_toolbar</generator>
-            <group>whee</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <group>general</group>
+            <field>asi</field>
+            <caption>asi</caption>
       </property>
       <tableinfo>
-            <files>
-                  <index>id</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid	</master_index>
-            </files>
-            <images>
-                  <index>id</index>
+            <kliendibaas_firma>
+                  <index>oid</index>
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
-            </images>
+            </kliendibaas_firma>
+            <kliendibaas_isik>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_isik>
       </tableinfo>
 </properties>
 

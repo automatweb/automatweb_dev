@@ -138,15 +138,16 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>pictureurl</field>
-            <caption>foto/pildi asukoht</caption>
+            <caption>foto/pildi url</caption>
       </property>
       <property>
             <name>picture</name>
-            <type>file</type>
+            <type>button</type>
+            <value>lisa</value>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>picture</field>
-            <caption>foto</caption>
+            <caption>pildiobjekt</caption>
       </property>
       <property>
             <name>work_contact_change</name>
@@ -157,24 +158,52 @@
             <caption>töökoha kontakt</caption>
       </property>
       <property>
-            <name>home_contact_change</name>
+            <name>work_contact</name>
+            <type>textbox</type>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
+            <field>work_contact</field>
+            <caption>töökoha kontakt hidden</caption>
+      </property>
+      <property>
+            <name>personal_contact_change</name>
             <type>text</type>
             <table>kliendibaas_isik</table>
             <group>general</group>
-            <field>home_contact_change</field>
+            <field>personal_contact_change</field>
             <caption>kodukoha kontakt</caption>
       </property>
       <property>
-            <name>more</name>
+            <name>personal_contact</name>
+            <type>textbox</type>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
+            <field>personal_contact</field>
+            <caption>kodukoha kontakt hidden</caption>
+      </property>
+      <property>
+            <name>popups</name>
             <type>text</type>
             <table>kliendibaas_isik</table>
             <group>general</group>
-            <field>more</field>
-            <caption>more</caption>
+            <field>popups</field>
+            <caption>popup</caption>
       </property>
       <classinfo>
             <objtable>kliendibaas_isik</objtable>
             <objtable_index>oid</objtable_index>
       </classinfo>
+      <tableinfo>
+            <kliendibaas_firma>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_firma>
+            <kliendibaas_isik>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </kliendibaas_isik>
+      </tableinfo>
 </properties>
 
