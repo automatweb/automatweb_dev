@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.16 2004/09/02 14:57:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.17 2004/11/16 11:16:37 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -702,5 +702,16 @@ class otv_ds_postipoiss extends class_base
 		echo "all done! <br>\n";
 		flush();
 	}
+
+	/** saves editable fields (given in $ef) to object $id, data is in $data
+
+		@attrib api=1
+
+		
+	**/
+	function update_object($ef, $id, $data)
+	{
+		return;
+	}	
 }
 ?>

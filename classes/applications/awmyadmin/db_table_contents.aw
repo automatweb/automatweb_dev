@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.3 2004/10/22 10:56:18 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.4 2004/11/16 11:16:37 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -413,6 +413,17 @@ class db_table_contents extends class_base
 	function check_acl()
 	{
 		return array();
+	}
+
+	/** saves editable fields (given in $ef) to object $id, data is in $data
+
+		@attrib api=1
+
+		
+	**/
+	function update_object($ef, $id, $data)
+	{
+		return;
 	}
 }
 ?>

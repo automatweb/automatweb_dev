@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.10 2004/10/27 12:03:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.11 2004/11/16 11:16:37 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -10,6 +10,12 @@
 
 @property show_notact type=checkbox ch_value=1 field=meta method=serialize
 @caption N&auml;ita mitteaktiivseid objekte
+
+@property show_notact_noclick type=checkbox ch_value=1 field=meta method=serialize
+@caption Mitteaktiivsed pole klikitavad
+
+@property file_show_comment type=checkbox ch_value=1 field=meta method=serialize
+@caption Failil nime asemel kommentaar
 
 @property sort_by type=select field=meta method=serialize
 @caption Objekte sorteeritakse
@@ -264,9 +270,12 @@ class otv_ds_obj extends class_base
 					"adder" => $adr->name(),
 					"modder" => $mdr->name(),
 					"icon" => image::make_img_tag(icons::get_icon_url($t->class_id(), $t->name())),
+					"jrk" => $t->ord()
 				);
 			}
 		}
+
+		uasort($ret, create_function('$a,$b', 'return ($a["jrk"] == $b["jrk"] ? 0 : ($a["jrk"] > $b["jrk"] ? 1 : -1));'));
 
 		return $ret;
 	}
@@ -295,6 +304,7 @@ class otv_ds_obj extends class_base
 			}
 		}
 		
+		$ret["jrk"] = "J&auml;rjekord";
 		return $ret;
 	}
 
@@ -426,12 +436,26 @@ class otv_ds_obj extends class_base
 				}			
 			}
 
+			if ($ob->prop("show_notact_noclick") && $t->status() == STAT_NOTACTIVE)
+			{
+				$url = "";
+			}
+
+			if ($t->class_id() == CL_FILE && $ob->prop("file_show_comment"))
+			{
+				$_name = parse_obj_name($t->comment());
+			}
+			else
+			{
+				$_name = parse_obj_name($t->name());
+			}
+
 			$adr = $t->createdby();
 			$mdr = $t->modifiedby();
 			$ret[$t->id()] = array(
 				"id" => $t->id(),
 				"parent" => $t->parent(),
-				"name" => parse_obj_name($t->name()),
+				"name" => $_name,
 				"url" => $url,
 				"target" => $target,
 				"comment" => $t->comment(),
@@ -451,6 +475,7 @@ class otv_ds_obj extends class_base
 						"border" => 0
 					))//"Muuda"
 				)),
+				"jrk" => $t->ord()
 			);
 
 			foreach($fields as $ff_n => $ff_d)
@@ -467,6 +492,17 @@ class otv_ds_obj extends class_base
 					}
 				}
 			}
+
+			if ($t->class_id() == CL_FILE && $ob->prop("file_show_comment"))
+			{
+				$_name = parse_obj_name($t->comment());
+			}
+			else
+			{
+				$_name = parse_obj_name($t->name());
+			}
+			$ret[$t->id()]["name"] = $_name;
+			$ret[$t->id()]["jrk"] = $t->ord();
 		}
 		return $ret;
 	}
@@ -512,6 +548,10 @@ class otv_ds_obj extends class_base
 		));
 		$c = reset($conns);
 
+		if (!$c)
+		{
+			return array(false, $ret);
+		}
 		return array($GLOBALS["tv_sel"] ? $GLOBALS["tv_sel"] : $c->prop("to"), $ret);
 	}
 
@@ -521,6 +561,41 @@ class otv_ds_obj extends class_base
 		{
 			$o = obj($oid);
 			$o->delete();
+		}
+	}
+
+	/** saves editable fields (given in $ef) to object $id, data is in $data
+
+		@attrib api=1
+
+		
+	**/
+	function update_object($ef, $id, $data)
+	{
+		$o = obj($id);
+		$mod = false;
+		foreach($ef as $fn => $tmp)
+		{
+			if ($fn == "jrk")
+			{
+				if ($data[$fn] != $o->ord())
+				{
+					$o->set_ord($data[$fn]);
+					$mod = true;
+				}
+			}
+			else
+			{
+				if ($o->prop($fn) != $data[$fn])
+				{
+					$o->set_prop($fn, $data[$fn]);
+					$mod = true;
+				}
+			}
+		}
+		if ($mod)
+		{
+			$o->save();
 		}
 	}
 }

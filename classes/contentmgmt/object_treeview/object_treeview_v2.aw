@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.19 2004/11/02 16:46:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.20 2004/11/16 11:16:37 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -60,7 +60,7 @@
 
 @groupinfo columns caption=Tulbad
 @default group=columns
-@property columns type=callback callback=callback_get_columns  
+@property columns type=table no_caption=1
 @caption Tulbad
 
 
@@ -121,6 +121,10 @@ class object_treeview_v2 extends class_base
 			case "only_selected_cols":
 				arr($prop);
 				break;
+
+ 			case "columns":
+				$this->_do_columns($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -136,6 +140,7 @@ class object_treeview_v2 extends class_base
 				$arr["obj_inst"]->set_meta("sel_columns", $arr["request"]["column"]);
 				$arr["obj_inst"]->set_meta("sel_columns_ord", $arr["request"]["column_ord"]);
 				$arr["obj_inst"]->set_meta("sel_columns_text", $arr["request"]["column_text"]);
+				$arr["obj_inst"]->set_meta("sel_columns_editable", $arr["request"]["column_edit"]);
 				break;
 
 			case "sortbl":
@@ -241,19 +246,15 @@ class object_treeview_v2 extends class_base
 
 		$col_list = $this->_get_col_list($ob);
 
-		enter_function("otv2::sort");
 		$tmp = new aw_array($ob->meta("itemsorts"));
 		$this->__is = $tmp->get();
 		usort($ol, array(&$this, "__is_sorter"));
-		exit_function("otv2::sort");
 
-		enter_function("otv2::ps");
 		// now do pages
 		if ($ob->prop("per_page"))
 		{
 			$this->do_pageselector($ol, $ob->prop("per_page"));
 		}
-		exit_function("otv2::ps");
 
 		$has_access_to = false;
 		$has_add_access = false;
@@ -266,10 +267,18 @@ class object_treeview_v2 extends class_base
 			$last_o = $odata;
 		}
 
+		$edit_columns = safe_array($ob->meta("sel_columns_editable"));
 		if (!$has_access_to)
 		{	
 			unset($col_list["change"]);
 			unset($col_list["select"]);
+
+			// also unset all edit columns
+			foreach($edit_columns as $coln => $_tmp)
+			{
+				unset($col_list[$coln]);
+			}
+			$edit_columns = array();
 		}
 
 		if ($last_o)
@@ -286,7 +295,8 @@ class object_treeview_v2 extends class_base
 			$c .= $this->_do_parse_file_line($odata, $d_inst, $d_o, array(
 				"tree_obj" => $ob, 
 				"sel_cols" => $sel_cols,
-				"col_list" => $col_list
+				"col_list" => $col_list,
+				"edit_columns" => $edit_columns
 			));
 		}
 
@@ -307,7 +317,9 @@ class object_treeview_v2 extends class_base
 			"reforb" => $this->mk_reforb("submit_show", array(
 				"return_url" => aw_global_get("REQUEST_URI"),
 				"subact" => "0",
-				"id" => $ob->id()
+				"id" => $ob->id(),
+				"edit_mode" => count($edit_columns),
+				"tv_sel" => $arr["tv_sel"]
 			))
 		));
 
@@ -347,46 +359,54 @@ class object_treeview_v2 extends class_base
 		return $res;
 	}
 
-	function callback_get_columns($arr)
+	function _init_cols_tbl(&$t)
 	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "show",
+			"caption" => "Kas n&auml;idata",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => "Jrk",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "text",
+			"caption" => "Tekst",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "editable",
+			"caption" => "Muudetav",
+			"sortable" => 1,
+			"align" => "center"
+		));
+	}
+
+	function _do_columns($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_cols_tbl($t);
+
 		$cols = $arr["obj_inst"]->meta("sel_columns");
 		$cols_ord = $arr["obj_inst"]->meta("sel_columns_ord");
 		$cols_text = $arr["obj_inst"]->meta("sel_columns_text");
-
-		$ret = array();
-		$ret[] = array(
-			"name" => "foo_foo",
-			"store" => "no",
-			"group" => "columns",
-			"items" => array(
-				array(
-					'name' => "aaa111",
-					'caption' => "",
-					'type' => 'text',
-					'store' => 'no',
-					'group' => 'columns',
-					'value' => "Kas n&auml;idata",
-				),
-				array(
-					'name' => "aaa112",
-					'caption' => "",
-					'type' => 'text',
-					'store' => 'no',
-					'group' => 'columns',
-					'value' => "Jrk",
-				),
-				array(
-					'name' => "aaa113",
-					'caption' => "",
-					'type' => 'text',
-					'store' => 'no',
-					'group' => 'columns',
-					'value' => "Tekst",
-				),
-			),
-			"caption" => $coln
-		);
-
+		$cols_edit = $arr["obj_inst"]->meta("sel_columns_editable");
+		
 		$cold = $this->_get_col_list($arr["obj_inst"]);
 
 		if (!is_array($cols_text))
@@ -396,60 +416,49 @@ class object_treeview_v2 extends class_base
 
 		foreach($cold as $colid => $coln)
 		{
-			$rt = "column[".$colid."]";
-			$rto = "column_ord[".$colid."]";
-			$rtt = "column_text[".$colid."]";
-
-			$items = array(
-				array(
-					'name' => $rt,
-					'caption' => "",
-					'type' => 'checkbox',
-					'ch_value' => 1,
-					'store' => 'no',
-					'group' => 'columns',
-					'value' => $cols[$colid],
-				),
-				array(
-					'name' => $rto,
-					'caption' => "",
-					'type' => 'textbox',
-					"size" => 5,
-					'store' => 'no',
-					'group' => 'columns',
-					'value' => $cols_ord[$colid],
-				)
-			);
+			$text = $editable = "";
 
 			if ($cols[$colid])
 			{
-				$items[] = array(
-					'name' => $rtt,
-					'caption' => "",
-					'type' => 'textbox',
+				$text = html::textbox(array(
+					"name" => "column_text[".$colid."]",
+					"value" => $cols_text[$colid],
+					"size" => 40
+				));
+
+				$editable = html::checkbox(array(
+					"name" => "column_edit[".$colid."]",
+					"value" => 1,
 					"size" => 40,
-					'store' => 'no',
-					'group' => 'columns',
-					'value' => $cols_text[$colid],
-				);
+					"checked" => $cols_edit[$colid]
+				));
 			}
 
-
-			$ret[] = array(
-				"name" => "foo_".$colid,
-				"store" => "no",
-				"group" => "columns",
-				"items" => $items,
-				"caption" => $coln
-			);
-
+			$t->define_data(array(
+				"name" => $coln,
+				"show" => html::checkbox(array(
+					"name" => "column[".$colid."]",
+					"value" => 1,
+					"checked" => ($cols[$colid])
+				)),
+				"jrk" => html::textbox(array(
+					"name" => "column_ord[".$colid."]",
+					"size" => 5,
+					"value" => $cols_ord[$colid],
+				)),
+				"text" => $text,
+				"editable" => $editable
+			));
 		}
-		return $ret;
+
+		$t->set_default_sortby("name");
+		$t->sort_by();
 	}
 
 	function _insert_row_styles($o)
 	{
 		$style = "textmiddle";
+		classload("layout/active_page_data");
 		if ($o->prop("line_css"))
 		{
 			$style = "st".$o->prop("line_css");
@@ -548,37 +557,66 @@ class object_treeview_v2 extends class_base
 		$ds_i = $ds_o->instance();
 		list($parent, $types) = $ds_i->get_add_types($ds_o);
 
-
-		$menu = "";
-		$classes = aw_ini_get("classes");
-		
 		$tb = get_instance("vcl/toolbar");
-		$tb->add_menu_button(array(
-			"name" => "add",
-			"tooltip" => "Uus",
-			"img" => "new.gif",
-		));
 
+		$has_b = false;
 
-		$ot = get_instance("admin/object_type");
-		foreach($types as $c_o)
+		if ($parent && count($types))
 		{
-			$tb->add_menu_item(array(
-				"parent" => "add",
-				"url" => $ot->get_add_url(array("id" => $c_o->id(), "parent" => $parent, "section" => $parent)),
-				"text" => $c_o->prop("name"),
+			$menu = "";
+			$classes = aw_ini_get("classes");
+		
+			$tb->add_menu_button(array(
+				"name" => "add",
+				"tooltip" => "Uus",
+				"img" => "new.gif",
+			));
+
+
+			$ot = get_instance("admin/object_type");
+			foreach($types as $c_o)
+			{
+				$tb->add_menu_item(array(
+					"parent" => "add",
+					"url" => $ot->get_add_url(array("id" => $c_o->id(), "parent" => $parent, "section" => $parent)),
+					"text" => $c_o->prop("name"),
+				));
+			}
+
+			$has_b = true;
+		}
+
+		$cols = $ob->meta("sel_columns");	
+		if ($cols["select"])
+		{
+			$tb->add_button(array(
+				"name" => "del",
+				"tooltip" => "Kustuta",
+				"url" => "javascript:void(0)",
+				"onClick" => "document.objlist.subact.value='delete';document.objlist.submit()",
+				"img" => "delete.gif",
+				"class" => "menuButton",
+			));
+			$has_b = true;
+		}
+
+		$edc = safe_array($ob->meta("sel_columns_editable"));
+		if (count($edc))
+		{
+			$tb->add_button(array(
+				"name" => "save",
+				"tooltip" => "Salvesta",
+				"url" => "javascript:void(0)",
+				"onClick" => "document.objlist.submit()",
+				"img" => "save.gif"
 			));
 		}
 
-		$tb->add_button(array(
-			"name" => "del",
-			"tooltip" => "Kustuta",
-			"url" => "#",
-			"onClick" => "document.objlist.subact.value='delete';document.objlist.submit()",
-			"img" => "delete.gif",
-			"class" => "menuButton",
-		));
-		return $tb->get_toolbar();
+		if ($has_b)
+		{
+			return $tb->get_toolbar();
+		}
+		return "";
 	}
 
 	function _do_parse_file_line($arr, $drv, $d_o, $parms)
@@ -594,9 +632,15 @@ class object_treeview_v2 extends class_base
 			$ld["target"] = "_blank";
 		}
 
+		$_name = html::href($ld);
+		if ($url == "")
+		{
+			$_name = $name;
+		}
+
 		$formatv = array(
 			"show" => $url,
-			"name" => html::href($ld),
+			"name" => $_name,
 			"oid" => $oid,
 			"target" => $target,
 			"sizeBytes" => $fileSizeBytes,
@@ -650,8 +694,17 @@ class object_treeview_v2 extends class_base
 		{
 			if ($sel_cols[$colid] == 1)
 			{
+				$content = (isset($formatv[$colid]) ? $formatv[$colid] : $arr[$colid]);
+				if ($edit_columns[$colid] == 1)
+				{
+					$content = html::textbox(array(
+						"name" => "objs[".$arr["id"]."][$colid]",
+						"value" => $content,
+						"size" => 5
+					));
+				}
 				$this->vars(array(
-					"content" => (isset($formatv[$colid]) ? $formatv[$colid] : $arr[$colid])
+					"content" => $content
 				));
 				$str .= $this->parse("COLUMN");
 			}
@@ -1074,6 +1127,10 @@ class object_treeview_v2 extends class_base
 	{
 		extract($arr);
 
+		$ob = obj($id);
+		$d_o = obj($ob->prop("ds"));
+		$d_inst = $d_o->instance();
+
 		if ($subact == "delete")
 		{
 			$tt = array();
@@ -1081,10 +1138,24 @@ class object_treeview_v2 extends class_base
 			$farr = $awa->get();
 
 			// get datasource 
-			$ob = obj($id);
-			$d_o = obj($ob->prop("ds"));
-			$d_inst = $d_o->instance();
 			$d_inst->do_delete_objects($d_o, $farr);
+		}
+
+		// if has editable columns, save them
+		if ($arr["edit_mode"] > 0)
+		{
+			$objs = safe_array($arr["objs"]);
+			$ef = safe_array($ob->meta("sel_columns_editable"));
+
+			$fld = $d_inst->get_folders($d_o);
+			$ol = $d_inst->get_objects($d_o, $fld, $arr["tv_sel"]); 
+			foreach($ol as $o)
+			{
+				if ($d_inst->check_acl("edit", $d_o, $o["id"]))
+				{
+					$d_inst->update_object($ef, $o["id"], $objs[$o["id"]]);
+				}
+			}
 		}
 
 		return $return_url;

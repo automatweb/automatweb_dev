@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.94 2004/11/09 17:43:47 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.95 2004/11/16 11:16:36 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -650,11 +650,12 @@ class file extends class_base
 		$id = (int)$id;
 		$fc = $this->get_file_by_id($id);
 
-		if ($fc["type"] == "")
+		$pi = pathinfo($fc["name"]);
+		$mimeregistry = get_instance("core/aw_mime_types");
+		$tmp = $mimeregistry->type_for_ext($pi["extension"]);
+		if ($tmp != "")
 		{
-			$pi = pathinfo($fc["name"]);
-			$mimeregistry = get_instance("core/aw_mime_types");
-			$fc["type"] = $mimeregistry->type_for_ext($pi["extension"]);
+			$fc["type"] = $tmp;
 		}
 		header("Content-type: ".$fc["type"]);
 		header("Cache-control: public");
@@ -901,6 +902,17 @@ class file extends class_base
 		$fn = basename($fn);
 		$path = aw_ini_get("site_basedir")."/files/".$fn{0}."/".$fn;
 		return @filesize($path);
+	}
+
+	/** saves editable fields (given in $ef) to object $id, data is in $data
+
+		@attrib api=1
+
+		
+	**/
+	function update_object($ef, $id, $data)
+	{
+		return;
 	}
 };
 ?>
