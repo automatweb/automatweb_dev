@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.159 2004/10/26 13:35:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.160 2004/10/28 09:48:40 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -92,6 +92,10 @@ if (!defined("DEFS"))
 
 	function send_mail($to,$subject,$msg,$headers="",$arguments="")
 	{
+		if (!is_email($to))
+		{
+			return;
+		}
 		if (empty($arguments))
 		{
 			$arguments = aw_ini_get("mail.arguments");
