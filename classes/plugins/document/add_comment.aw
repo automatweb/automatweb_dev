@@ -7,9 +7,15 @@ class add_comment extends aw_template
 		$this->init("");
 	}
 
-	function get_property()
+	function get_property($value)
 	{
-		print "getting property!";
+		return array(
+			"caption" => "Lisa kommentaar nähtav",
+			"type" => "checkbox",
+			"value" => $value,
+			"ch_value" => 1,
+			"name" => "plugins[" . get_class($this) . "]",
+		);
 	}
 
 
