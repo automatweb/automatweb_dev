@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.10 2004/08/03 10:52:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.11 2004/08/16 14:05:36 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -819,6 +819,8 @@ class join_site extends class_base
 		// if they are , then add the user and go to the after join page
 		if ($filled)
 		{
+			// disable the fucking acl. 
+			aw_disable_acl();
 			// check if the user can be added
 			
 			// get the uid and password
@@ -847,6 +849,8 @@ class join_site extends class_base
 
 				// apply rules on add
 				$this->apply_rules_on_data_change($this->get_rules_from_obj($obj), $u_oid->id());
+
+				aw_restore_acl();
 
 				// if the props say so, log the user in
 				if (true || $obj->prop("autologin"))
