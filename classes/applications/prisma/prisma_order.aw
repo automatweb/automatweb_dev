@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.4 2004/06/04 10:27:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.5 2004/06/09 08:11:48 kristo Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -918,12 +918,17 @@ class prisma_order extends class_base
 			{
 				// pred_num is index, not resid
 				$pred_id = array_search($pred_num, $order);
+				if (!$pred_id)
+				{
+					echo "no predicate with number $pred_num! <br>";
+					return;
+				}
 				//echo "pred_id for $pred_num = $pred_id <br>";
 
-				error::throw_if(!$pred_id, array(
-					"id" => "ERR_P_PREDICATE",
-					"msg" => "no predicate found for predicate number $pred_num <br>"
-				));
+				if (!$pred_id)
+				{
+					echo "no predicate found for predicate number $pred_num <br>";
+				}
 
 				$real_length = (((float)str_replace(",", ".", $length[$pred_id])) * 3600);
 				$buffer_len = (((float)str_replace(",", ".", $buffer[$pred_id])) * 3600);
