@@ -1,5 +1,5 @@
 <?php
-// $Id: ds_local_sql.aw,v 1.3 2002/12/02 11:18:57 kristo Exp $
+// $Id: ds_local_sql.aw,v 1.4 2002/12/19 15:52:30 duke Exp $
 // ds_local_sql - interface for the local SQL database
 class ds_local_sql extends aw_template
 {
@@ -13,20 +13,29 @@ class ds_local_sql extends aw_template
 	// !Retrieves an object
 	function ds_get_object($args = array())
 	{
-		if ($args["table"] && $args["idfield"])
+		extract($args);
+		$retval = false;
+		if ($table && $idfield && $id)
 		{
-			$retval = $this->get_record($args["table"],$args["idfield"],$args["id"]);
-		}
-		else
-		{
-			if (!$this->can("edit", $args["id"]))
+			$retval = $this->get_record($table,$idfield,$id,array_keys($fields));
+			$tmp = array();
+			foreach($retval as $key => $val)
 			{
-				$this->acl_error("edit", $args["id"]);
-			}
-
-			$args["oid"] = $args["id"];
-			$retval = $this->get_object($args);
-		};
+				if ($fields[$key] == "serialize")
+				{
+					if ($key == "metadata")
+					{
+						$key = "meta";
+					};
+					$tmp[$key] = aw_unserialize($val);
+				}
+				else
+				{
+					$tmp[$key] = $val;
+				};
+			};
+			$retval = $tmp;
+		}
 		return $retval;
 	}
 
@@ -61,9 +70,6 @@ class ds_local_sql extends aw_template
 	// how do I know whether the action was successful?
 	function ds_save_object($args = array(),$data = array())
 	{
-//                $fp = $this->cfg["basedir"];
-//                $fp .= "/files/stuff";
-
 
 		if ($args["table"] && $args["idfield"])
 		{
@@ -73,13 +79,6 @@ class ds_local_sql extends aw_template
 				"values" => $data,
 			));
 			
-//                        $ser = aw_serialize($data,SERIALIZE_XML);
-//                        $fname = $fp . "/" . "object-" . $args["id"] . ".xml";
-//                
-//                        $this->put_file(array(
-//                                "file" => $fname,
-//                                "content" => $ser,
-//                        ));
 		}
 		else
 		{
@@ -95,13 +94,6 @@ class ds_local_sql extends aw_template
 			$this->upd_object($data);
 			$retval = true;
 
-//                        $ser = aw_serialize($data,SERIALIZE_XML);
-//                        $fname = $fp . "/" . "core-" . $args["id"] . ".xml";
-//                        
-//                        $this->put_file(array(
-//                                "file" => $fname,
-//                                "content" => $ser,
-//                        ));
 		};
 	}
 
