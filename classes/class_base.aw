@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.376 2005/04/01 13:02:05 ahti Exp $
+// $Id: class_base.aw,v 2.377 2005/04/01 18:35:15 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -616,6 +616,7 @@ class class_base extends aw_template
 		{
 			$cli->view_mode = 1;
 		};
+
 
 		foreach($resprops as $val)
 		{
@@ -1870,6 +1871,8 @@ class class_base extends aw_template
 				$property["error"] = $this->cb_values[$property["name"]]["error"];
 			};
 		};
+
+		$nm = $property["name"];
 		
 		// if this is a new object and the property has a default value, use it
 		if (empty($this->id) && isset($property["default"]))
@@ -2167,6 +2170,7 @@ class class_base extends aw_template
 				$has_rte = true;
 			};
 		}
+
 
 		if (1 != $this->classinfo(array("name" => "allow_rte")))
 		{
@@ -3124,7 +3128,6 @@ class class_base extends aw_template
 		{
 			$properties = $this->get_property_group($filter);
 		};
-
 		if ($this->new && is_array($this->_cfg_props))
 		{
 			foreach($this->_cfg_props as $key => $val)
@@ -3195,10 +3198,14 @@ class class_base extends aw_template
 			
 			$xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
 
+			/* the following is bogus, storage takes care of default values anyway
+				but if something breaks by creation of new objects, then this
+				is probably the cause
 			if ($new && empty($xval) && !empty($property["default"]))
 			{
 				$xval = $property["default"];
 			};
+			*/
 
 			if (!empty($property["value"]))
 			{
@@ -3443,7 +3450,6 @@ class class_base extends aw_template
 					$pvalues[$name] += $property["ch_value"];
 				};     
 			};
-
 
 			if ($this->is_rel)
 			{
@@ -3747,7 +3753,7 @@ class class_base extends aw_template
 	// needs either clid or clfile
 	function get_property_group($arr)
 	{
-		// if the cfgmanager hasn't been defined, then try to load a default one -- ahz
+		// if the cfgmanager hasn't been defined, then try to load a default one --
 		if(!is_oid($this->inst->cfgmanager))
 		{
 			enter_function("class_base::load_def_cfgmanager");
@@ -3762,6 +3768,7 @@ class class_base extends aw_template
 			}
 			exit_function("class_base::load_def_cfgmanager");
 		}
+	
 		// load defaults (from the generated properties XML file) first
 
 		$filter = array();
@@ -4079,10 +4086,12 @@ class class_base extends aw_template
 
 			$propdata = array_merge($all_properties[$key],$val);
 			// XXX: cfgform defaults are supported for checkboxes only right now
-			if ($val["type"] == "checkbox" && empty($val["default"]))
+			if ($propdata["type"] == "checkbox" && empty($val["default"]))
 			{
 				unset($propdata["default"]);
 			};
+
+
 			$propgroups = $property_groups[$key];
 
 			if (!is_array($propgroups))
@@ -4196,7 +4205,7 @@ class class_base extends aw_template
 			"classinfo_disable_relationmgr" => "disable_relationmgr",
 		);
 		$rv = false;
-		if ($this->can("view", $id))
+		if (is_oid($id) && $this->can("view", $id))
 		{
 			$cfgform_obj = new object($id);
 			if ($cfgform_obj->class_id() != CL_CFGFORM)
