@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.42 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.43 2001/07/19 22:11:55 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -22,6 +22,7 @@ class planner extends calendar {
 		$this->date = ($date) ? $date : date("d-m-Y");
 		$this->tpl_init("planner");
 		$this->db_init();
+		lc_load("definition");
 	}
 
 	function todo($args = array())
@@ -715,6 +716,51 @@ class planner extends calendar {
 			"menubar" => $menubar,
 			"next" => $next));
 		return $this->parse();
+	}
+
+	////
+	// Copies the calendar object together with all repeaters.
+	// argumendid:
+	// id(int): vana kalendri id
+	// parent(int): kuhu kalender kopeerida
+
+	// oh god, this is sooo ugly
+	function cp($args = array())
+	{
+		$id = $args["id"];
+		// koigepealt kopeerime kalendri enda objekti
+		$old = $this->get_object($args["id"]);
+		$old["parent"] = $args["parent"];
+		$new_id = $this->new_object($old);
+		// now we need to copy the events (planner table)
+		$q = "SELECT * FROM objects WHERE parent = $id";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			$row["parent"] = $new_id;
+			$new_pid = $this->new_object($row);
+			$plx = $this->get_record("planner","id",$row["oid"]);
+			extract($plx);
+			$q = "INSERT INTO planner (id,uid,start,end,title,description,type,status,oid,
+				place,reminder,private,color,rep_type,rep_dur,rep_until)
+				VALUES ('$new_pid','$uid','$start','$end','$title','$description','$type',
+					'$status','$oid','$place','$reminder','$private','$color',
+					'$rep_type','$rep_dur','$rep_until')";
+			$this->db_query($q);
+			$q = "SELECT * FROM planner_repeaters WHERE eid = '$row[oid]'";
+			$this->db_query($q);
+			while($row2 = $this->db_next())
+			{
+				extract($row2);
+				$q = "INSERT INTO planner_repeaters (eid,type,start,end,skip,pwhen,cid,pwhen2)
+					VALUES ('$new_pid','$type','$start','$end','$skip','$pwhen','$cid','$pwhen2')";
+				$this->db_query($q);
+			};
+
+			$this->restore_handle();
+		}
+		return $new_id;
 	}
 
 	////
