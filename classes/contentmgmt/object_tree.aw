@@ -135,9 +135,31 @@ class object_tree extends class_base
 
 		foreach($ol as $oid => $od)
 		{
+			$target = "";
+			if ($od["class_id"] == CL_EXTLINK)
+			{
+				$li = get_instance("links");
+				list($url,$target,$caption) = $li->draw_link($oid);
+			}
+			else
+			if ($od["class_id"] == CL_FILE)
+			{
+				$fi = get_instance("file");
+				$fd = $fi->get_file_by_id($oid);
+				$url = $fi->get_url($oid,$fd["name"]);
+				if ($fd["newwindow"])
+				{
+					$target = "target=\"_blank\"";
+				}
+			}
+			else
+			{
+				$url = $this->cfg["baseurl"]."/".$oid;
+			}
 			$this->vars(array(
-				"show" => $this->cfg["baseurl"]."/".$oid,
+				"show" => $url,
 				"name" => $od['name'],
+				"target" => $target,
 				"type" => $this->cfg["classes"][$od["class_id"]]["name"],
 				"add_date" => $this->time2date($od["modified"], 2),
 				"icon" => image::make_img_tag(icons::get_icon_url($od["class_id"], $od["name"]))
@@ -169,6 +191,10 @@ class object_tree extends class_base
 			{
 				$parent = $GLOBALS["tv_sel"];
 			}
+		}
+		if (!is_array($ob['meta']['clids']) || count($ob['meta']['clids']) < 1)
+		{
+			return array();
 		}
 		return $this->list_objects(array(
 			"parent" => $parent,
