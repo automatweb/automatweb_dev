@@ -114,7 +114,7 @@ function toggle_all()
 </script>
 
 <!-- SUB: attach -->
-<img src="{VAR:baseurl}/img/attach.gif" width="6" height="12" border="0">
+<img src="{VAR:baseurl}/automatweb/images/attach.gif" width="6" height="12" border="0">
 <!-- END SUB: attach -->
 <table border="0" cellspacing="0" cellpadding="0" width="100%" bgcolor="#DDDDDD">
 <tr>

@@ -1,3 +1,5 @@
+Viimati muudetud: {VAR:modified} <Br>
+Muutja: {VAR:modifiedby}
 <br>
 <form action='reforb.{VAR:ext}' method=POST>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.112 2002/12/05 08:28:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.113 2002/12/11 12:46:17 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -60,6 +60,7 @@ class messenger extends menuedit_light
 				$this->object_id = $messenger_id;
 				$this->msg_inbox = $this->msg_obj["meta"]["msg_inbox"] ? $this->msg_obj["meta"]["msg_inbox"] : $this->msg_obj["parent"];
 				$this->rules = $this->msg_obj["meta"]["rules"];
+				$this->mk_path($this->msg_obj["parent"], "<a href='".$this->mk_my_orb("folder")."'>".$this->msg_obj["name"]."</a>");
 			}
 			else
 			{
@@ -219,7 +220,10 @@ class messenger extends menuedit_light
 
 		$basedir = $this->cfg["basedir"];
 		$this->read_template("logo.tpl");
-		$this->vars(array("title" => $title));
+		$this->vars(array(
+			"title" => $title,
+			"to_inbox" => $this->mk_my_orb("folder")
+		));
 		$logo = $this->parse();
 		load_vcl("xmlmenu");
 		$xm = new xmlmenu();

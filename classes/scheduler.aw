@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.6 2002/12/06 10:08:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.7 2002/12/11 12:46:18 duke Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -245,10 +245,6 @@ class scheduler extends aw_template
 			if (!$this->match($evnt, $e))
 			{
 				$newdat[] = $e;
-			}
-			else
-			{
-				echo "removing evnt $evnt[event] <br>";
 			}
 		}
 

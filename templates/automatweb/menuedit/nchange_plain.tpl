@@ -363,6 +363,10 @@ function savemenu() {
 		<tr class="aste05">
 		<td class="celltext" nowrap>&nbsp;Konfiguratsioonihaldur:&nbsp;</td>
 		<td class="celltext"><select name="cfgmanager">{VAR:cfgmanager}</select></td></tr>
+		
+		<tr class="aste05">
+		<td class="celltext" nowrap>&nbsp;Mitme dok. näitamise stiil:&nbsp;</td>
+		<td class="celltext"><select name="multi_doc_style">{VAR:multi_doc_style}</select></td></tr>
 
 		</table>
 

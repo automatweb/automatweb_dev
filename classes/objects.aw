@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.40 2002/12/02 18:54:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.41 2002/12/11 12:46:17 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -644,7 +644,7 @@ class objects extends db_objects
 				$curl = $this->mk_my_orb("view",array("type" => "week","id" => $ceid),"planner",false,true);
 				if (not($caption))
 				{
-					$caption = "Näita kalendrit";
+					$caption = "View calendar";
 				};
 				$replacement = "<a target='new' href='$curl'>$caption</a>";
 				/*

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.22 2002/12/02 17:57:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.23 2002/12/11 12:46:16 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 
 
@@ -35,6 +35,10 @@ class extlinks extends aw_template
 		extract($args);
 
 		list($url,$target,$caption) = $this->draw_link($alias["target"]);
+		if ($this->img)
+		{
+			$caption = $this->img;
+		};
 		$vars = array(
 			"url" => $url,
 			"caption" => $caption,
@@ -48,10 +52,6 @@ class extlinks extends aw_template
 		}
 		else
 		{
-			if ($this->img)
-			{
-				$caption = $this->img;
-			};
 			$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
 		};
 		return $replacement;
@@ -152,7 +152,7 @@ class extlinks extends aw_template
 		$q = "SELECT extlinks.*,objects.* FROM extlinks LEFT JOIN objects ON objects.oid = extlinks.id WHERE id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_fetch_row();
-		$meta = aw_unserialize($row["metadata"]);
+		$meta = aw_unserialize($row["meta"]);
 		$row = array_merge($row,$meta);
 		
 		if ($row["type"] == "int")

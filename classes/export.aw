@@ -292,7 +292,7 @@ class export extends aw_template
 			foreach($files as $fn => $fd)
 			{
 				$this->removed_files[] = $fn;
-				unlink($this->folder."/".$fn);
+				@unlink($this->folder."/".$fn);
 				// ignore folders!
 				$this->db_query("DELETE FROM export_filelist WHERE filename LIKE '%fn%'");
 				$this->db_query("DELETE FROM export_content WHERE filename LIKE '%$fn%'");
@@ -384,6 +384,7 @@ class export extends aw_template
 				);
 				$this->write_log();
 				unlink($_stfn);
+				unlink(aw_ini_get("server.tmpdir")."/exp_running.".$this->rule_id);
 				die();
 			}
 		}
@@ -670,6 +671,7 @@ class export extends aw_template
 				$ct = $mt[1];
 			}
 		}
+		$ct = trim($ct);
 
 		if (!isset($this->type2ext[$ct]))
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.60 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.61 2002/12/11 12:46:17 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -1351,6 +1351,10 @@ topic");
 			if ($act == "activate")
 			{
 				$stat = 2;
+			}
+			if ($act == "archive")
+			{
+				$stat = 1;
 			}
 			$to_delete = join(",",$check);
 			$q = "UPDATE objects SET status = $stat WHERE oid IN ($to_delete)";

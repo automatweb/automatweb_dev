@@ -373,6 +373,7 @@ class ml_queue extends aw_template
 	// siit võix debugi asjad välja korjata (kus on //dbg) kui asi kasutusse läheb
 	function process_queue($arr)
 	{
+		set_time_limit(0);
 		$sched = get_instance("scheduler");
 		$sched->add(array(
 			"event" => $this->mk_my_orb("process_queue", array(), "", false, true),
@@ -632,6 +633,12 @@ class ml_queue extends aw_template
 				}
 			}
 		}
+
+		if (aw_cache_get("ml_queue::send_message::mails::$mid::$lid", $mailto))
+		{
+			return;
+		}
+		aw_cache_set("ml_queue::send_message::mails::$mid::$lid", $mailto, true);
 
 		echo "yeah <br>";
 /*		if (!isset($this->f))

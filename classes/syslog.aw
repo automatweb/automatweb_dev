@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.21 2002/12/03 12:39:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.22 2002/12/11 12:46:18 duke Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -299,6 +299,10 @@ class db_syslog extends aw_template
 			list($addr,$ip) = inet::gethostbyaddr($row["ip"]);
 
 			preg_match("/(.*) \((.*)\) /",$row["action"],$mat);
+			if (!is_email($mat[2]))
+			{
+				$mat = array();
+			}
 			$action = str_replace($mat[1]." (".$mat[2].") ","",$row["action"]);
 		
 			if (!$blocked_ips[$ip])

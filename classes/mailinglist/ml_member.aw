@@ -38,6 +38,8 @@ class ml_member extends aw_template
 		));
 //		$rule_inst = get_instance("mailinglist/ml_rule");
 //		$rule_inst->exec_dynamic_rules();
+		$ml_inst = get_instance("mailinglist/ml_list");
+		$ml_inst->flush_member_cache();
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
@@ -104,6 +106,8 @@ class ml_member extends aw_template
 
 //		$rule=get_instance("mailinglist/ml_rule");
 //		$rule->check_entry(array($ob["meta"]["form_entries"][$fid]));
+		$ml_inst = get_instance("mailinglist/ml_list");
+		$ml_inst->flush_member_cache();
 
 		$this->_log("mlist","muutis liiget $namestr");
 		return $this->mk_my_orb("change",array("id" => $id,"fid" => $fid));
@@ -324,6 +328,8 @@ class ml_member extends aw_template
 		));
 
 		$this->update_member_name($id);
+		$ml_inst = get_instance("mailinglist/ml_list");
+		$ml_inst->flush_member_cache();
 		return $id;
 	}
 };

@@ -6,9 +6,9 @@ class obj_table_conf extends aw_template
 		"oid" => array("name" => "ID", "type" => "int", "sortable" => true),
 		"parent" => array("name" => "parent", "type" => "int", "sortable" => true),
 		"name" => array("name" => "Nimi", "type" => "text", "sortable" => true),
-		"createdby" => array("name" => "Loodud", "type" => "text", "sortable" => true),
+		"createdby" => array("name" => "Looja", "type" => "text", "sortable" => true),
 		"created" => array("name" => "Millal loodud", "type" => "time", "sortable" => true),
-		"modifiedby" => array("name" => "Muudetud", "type" => "text", "sortable" => true),
+		"modifiedby" => array("name" => "Muutja", "type" => "text", "sortable" => true),
 		"modified" => array("name" => "Millal muudetud", "type" => "time", "sortable" => true),
 		"class_id" => array("name" => "T&uuml;&uuml;p", "type" => "int", "sortable" => true),
 		"status" => array("name" => "Aktiivsus", "type" => "int"),
@@ -289,11 +289,14 @@ class obj_table_conf extends aw_template
 				reset($cldat["col"]);
 				list(,$clname) = each($cldat["col"]);
 
+				// XXX: make the align of fields configurable
+				$align = ($clname == "name") ? "left" : "center";
+
 				$row = array(
 					"name" => "col_".$clid,
 					"caption" => ($cldat["title"] == "" ? $clname : $cldat["title"]),
 					"talign" => "center",
-					"align" => "center",
+					"align" => $align,
 					"sortable" => $cldat["sortable"],
 					"numeric" => ($this->data[$clname]["type"] == "int" || $this->data[$clname]["type"] == "time"),
 				);

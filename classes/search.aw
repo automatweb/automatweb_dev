@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.15 2002/12/02 18:54:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.16 2002/12/11 12:46:18 duke Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
@@ -282,10 +282,24 @@ class search extends aw_template
 			// call it.
 			$caller_search = $this->search_callback(array("name" => "do_search","args" => $args));
 
+			global $XXX;
+			if ($XXX)
+			{
+				print "<pre>";
+				print_r($obj_list);
+				print "</pre>";
+			};
+
 			// if not, use our own (old?) search method
 			if ($caller_search === false)
 			{
 				$query = $this->search_callback(array("name" => "get_query","args" => $args,"parts" => $parts));
+
+				global $XXX;
+				if ($XXX)
+				{
+					print $query;
+				};
 
 				if ($query)
 				{

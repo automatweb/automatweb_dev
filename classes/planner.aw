@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.81 2002/12/02 12:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.82 2002/12/11 12:46:18 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 define(WEEK,DAY * 7);
@@ -20,14 +20,6 @@ class planner extends calendar
 		$this->init("planner");
 		lc_load("definition");
 		$this->lc_load("planner","lc_planner");
-		global $XXX;
-		if ($XXX)
-		{
-			global $lc_planner;
-			print "<pre>";
-			print_r($lc_planner);
-			print "</pre>";
-		};
 	}
 	
 	////
@@ -1563,7 +1555,30 @@ class planner extends calendar
 			{
 				$__ch = $this->ft->get_chains_for_form($row["form_id"]);
 				list($_ch,) = each($__ch);
-				$this->ft->row_data($row,$row["form_id"],$section,0,$_ch,$this->ctrl);
+				/*
+				print "ch = $_ch<br>";
+				print "cid = ";
+				print $row["chain_id"];
+				print "<br>";
+				*/
+				$mx = $this->get_object((int)$row[form_id]);
+				/*
+				print "<pre>";
+				print_r($mx["meta"]);
+				print "</pre>";
+				*/
+				$cx = $this->get_object((int)$_ch);
+
+				//if ($mx["meta"]["calendar_chain"])
+				if ($cx["flags"] & OBJ_HAS_CALENDAR)
+				{
+					$cctrl = $row["chain_id"];
+				}
+				else
+				{
+					$cctrl = $this->ctrl;
+				};
+				$this->ft->row_data($row,$row["form_id"],$section,0,$_ch,$cctrl);
 			}
 			$c .= $this->ft->finalize_table();
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.14 2002/12/03 13:37:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.15 2002/12/11 12:46:17 duke Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -86,6 +86,12 @@ class menu_cache extends aw_template
 		{
 			return false;
 		};	
+
+		global $DBY;
+		if ($DBY)
+		{
+			print $q;
+		}
 
 		while ($row = $this->db_next(true))
 		{

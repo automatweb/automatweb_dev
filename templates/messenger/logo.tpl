@@ -1,8 +1,8 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
-<tr><td align="left"><img src="{VAR:baseurl}/img/pealkiri_messenger.gif" align="" width="154" height="33" border="0" alt="Messenger"></td>
+<tr><td align="left"><a href='{VAR:to_inbox}'><img src="{VAR:baseurl}/automatweb/images/pealkiri_messenger.gif" align="" width="154" height="33" border="0" alt="Messenger"></a></td>
 
 <td align="right" class="textpealkiri">{VAR:title}</td>
 </tr></table>
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF">
-<tr><td bgcolor="#C8C8C8" align="left"><img src="{VAR:baseurl}/img/pealkiri_tyhi.gif" align="" width="54" height="4" border="0" alt=""></td></tr></table>
+<tr><td bgcolor="#C8C8C8" align="left"><img src="{VAR:baseurl}/automatweb/images/pealkiri_tyhi.gif" align="" width="54" height="4" border="0" alt=""></td></tr></table>

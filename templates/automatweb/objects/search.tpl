@@ -1,3 +1,11 @@
+<script language="javascript">
+function ddel()
+{
+	document.aa.elements["delete"].value=1;
+	document.aa.submit();
+	return true;
+}
+</script>
 <form method="POST" action="orb.{VAR:ext}" name="aa">
 <!--tabelraam-->
 <table width="100%" cellspacing="0" cellpadding="1">
@@ -18,8 +26,7 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 href="javascript:this.document.aa.submit();">Otsi / Salvesta</a>
 </td>
 <td>&nbsp;&nbsp;&nbsp;</td>
-<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="#" onClick="this.document.aa.delete.value=1;this.document.aa.submit();"
-onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="Kustuta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><br><a href="document.aa.delete.value=1;document.aa.submit();">Kustuta</a>
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:ddel()"><img name="delete" alt="Kustuta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><br><a href="javascript:ddel()">Kustuta</a>
 </td>
 </tr>
 </table>

@@ -192,6 +192,12 @@
 				<arguments/>
 			</function>
 		</action>
+		
+		<action name="convert_tm" all_args="1">
+			<function name="convert_tm">
+				<arguments/>
+			</function>
+		</action>
 
 		<action name="fetch">
 			<function name="fetch">

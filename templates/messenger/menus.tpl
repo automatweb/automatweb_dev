@@ -23,10 +23,10 @@
 	<!-- END SUB: level1_act -->
 </tr>
 </table>
-<img src="{VAR:baseurl}/img/trans.gif" align="" width="1" height="1" border="0" alt=""><br>
+<img src="{VAR:baseurl}/automatweb/images/trans.gif" align="" width="1" height="1" border="0" alt=""><br>
 <table border="0" cellspacing="0" cellpadding="2">
 <tr>
-	<td class="messengermenusub">&nbsp;&nbsp;<img src="{VAR:baseurl}/img/nool1.gif" align="" width="9" height="7" border="0" alt=""></td>
+	<td class="messengermenusub">&nbsp;&nbsp;<img src="{VAR:baseurl}/automatweb/images/nool1.gif" align="" width="9" height="7" border="0" alt=""></td>
 	<!-- SUB: level2 -->
 	<td class="messengermenusub">
 	&nbsp;&nbsp;<a href='{VAR:link}'>{VAR:caption}</a>&nbsp;&nbsp;
@@ -39,7 +39,7 @@
 	<!-- END SUB: level2_act -->
 </tr>
 </table>
-<img src="{VAR:baseurl}/img/trans.gif" align="" width="1" height="1" border="0" alt=""><br>
+<img src="{VAR:baseurl}/automatweb/images/trans.gif" align="" width="1" height="1" border="0" alt=""><br>
 <table border="0" cellspacing="0" cellpadding="2">
 <tr>
 	<!-- SUB: level3 -->

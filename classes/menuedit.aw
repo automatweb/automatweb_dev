@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.183 2002/12/05 11:02:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.184 2002/12/11 12:46:17 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -75,14 +75,14 @@ class menuedit extends aw_template
 			return $params["text"];
 		}
 
-
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
 		// aliasega, voi lopetab töö, kui miskit oli valesti
-		// $section = $this->check_section($params["section"]);
+		$section = $this->check_section($params["section"]);
 
 		// at this point $section is already numeric,
 		// we checked it in $this->request_startup()
 		$section = aw_global_get("section");
+
 
 		$obj = $this->get_object($section);
 		$meta = $obj["meta"];
@@ -145,7 +145,7 @@ class menuedit extends aw_template
 			{
 				$cache->set($section,$cp,$res);
 			};
-//                      echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
+      echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
 		}
 		else
 		{
@@ -412,7 +412,7 @@ class menuedit extends aw_template
 		$yah = $this->make_yah($this->path);
 		if ($this->site_title == "")
 		{
-			$this->site_title = $this->title_yah;
+			$this->site_title = strip_tags($this->title_yah);
 		}
 		$this->vars(array("YAH_LINK" => $yah));
 
@@ -554,7 +554,7 @@ class menuedit extends aw_template
 				"logged" => "",
 				"logged2" => "",
 				"logged3" => "",
-				"site_title" => $this->site_title
+				"site_title" => strip_tags($this->site_title),
 			));
 		}
 		else
@@ -621,7 +621,7 @@ class menuedit extends aw_template
 				"logged2" => $this->parse("logged2"),
 				"logged3" => $this->parse("logged3"),
 				"login" => "",
-				"site_title" => $this->site_title
+				"site_title" => strip_tags($this->site_title),
 			));
 		};
 		
@@ -5678,6 +5678,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$t = get_instance("image");
 				$idata = $t->get_image_by_id($obj["oid"]);
 				$this->replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+
 				if ($this->raw)
 				{
 					print $this->replacement;
@@ -6132,7 +6133,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->save_handle();
 				if ($this->cfg["classes"][$row["class_id"]]["file"] != "")
 				{
-					$inst = get_instance($this->cfg["classes"][$row["class_id"]]["file"]);
+					$inst = get_instance($this->cfg["classes"][$row["class_id"]]["alias_class"] != "" ? $this->cfg["classes"][$row["class_id"]]["alias_class"] : $this->cfg["classes"][$row["class_id"]]["file"]);
 					if (method_exists($inst, "delete_hook"))
 					{
 						$inst->delete_hook(array("oid" => $row["oid"]));

@@ -45,6 +45,13 @@
 			</function>
 		</action>
 
+		<action name="log">
+			<function name="orb_log">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

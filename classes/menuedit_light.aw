@@ -89,7 +89,7 @@ class menuedit_light extends aw_template
 		}
 		else
 		{
-			$q = sprintf("SELECT * FROM objects WHERE class_id = '%d' AND parent IN (%s) AND status != 0",
+			$q = sprintf("SELECT * FROM objects WHERE class_id = '%d' AND parent IN (%s) AND status = 2",
 					$this->class_id,
 					$plist);
 		};

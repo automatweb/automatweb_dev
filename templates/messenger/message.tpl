@@ -12,7 +12,7 @@ function show_attach(id) {
 {VAR:menu}
 
 
-<img src="{VAR:baseurl}/img/trans.gif" align="" width="1" height="2" border="0" alt="">
+<img src="{VAR:baseurl}/automatweb/img/trans.gif" align="" width="1" height="2" border="0" alt="">
 
 <table width="100%" border="0" cellspacing="0" cellpadding="2">
   <tr>

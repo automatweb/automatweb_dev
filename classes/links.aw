@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.24 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.25 2002/12/11 12:46:17 duke Exp $
 
 classload("extlinks");
 class links extends extlinks
@@ -88,7 +88,6 @@ class links extends extlinks
 		));
 
 		$active_until = ($link["link_image_check_active"]) ? $link["link_image_active_until"] : time() + (3 * 86400);
-
 
 		$ob = get_instance("objects");
 		$this->vars(array(

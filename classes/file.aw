@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.34 2002/12/05 11:02:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.35 2002/12/11 12:46:17 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -424,6 +424,7 @@ class file extends aw_template
 					"j_time" => $de->get_timestamp($j_time),
 					"show_framed" => $show_framed,
 				));
+				$this->pid = $pid;
 
 				// id on dokumendi ID, kui fail lisatakse doku juurde
 				// add_alias teeb voimalikus #fn# tagi kasutamise doku kuvamise juures
@@ -608,9 +609,10 @@ class file extends aw_template
 	// !returns file by id
 	function get_file_by_id($id) 
 	{
-		$row = $this->get_object($id);
+		$row = new aw_array($this->get_object($id));
 		$this->db_query("SELECT * FROM files WHERE id = $id");
-		$ret = $row + $this->db_next();
+		$ar = new aw_array($this->db_next());
+		$ret = $row->get() + $ar->get();
 
 		$ret["file"] = basename($ret["file"]);
 
@@ -642,7 +644,9 @@ class file extends aw_template
 
 	function get_url($id,$name)	
 	{
-		return $this->mk_my_orb("preview", array("id" => $id),"file", false,true,"/")."/".urlencode($name);
+		//$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true,"/")."/".urlencode($name);
+		$retval = $this->mk_my_orb("preview", array("id" => $id),"file", false,true);
+		return $retval;
 	}
 
 	////

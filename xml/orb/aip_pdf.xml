@@ -15,6 +15,53 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="log">
+			<function name="orb_log">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view_log">
+			<function name="view_log">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="configure">
+			<function name="configure">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_configure">
+			<function name="submit_configure">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="report">
+			<function name="report">
+				<arguments>
+					<optional name="changed"/>
+					<optional name="added"/>
+					<optional name="nochange"/>
+					<optional name="deleted"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_report">
+			<function name="submit_report">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

@@ -23,7 +23,7 @@
 <data>
 <field name="icon" caption="" align="center" talign="center" sortable="0" width="10" chgbgcolor="cutcopied"/>
 <field name="name" caption="Nimi" align="left" talign="center" sortable="1" chgbgcolor="cutcopied"/>
-<field name="jrk" caption="Jrk" align="center" width="10" talign="center" sortable="0" chgbgcolor="cutcopied"/>
+<field name="jrk" caption="Jrk" align="center" width="10" talign="center" sortable="0" chgbgcolor="cutcopied" numeric="yea"/>
 <field name="status" caption="Aktiivne" width="10" talign="center" align="center" chgbgcolor="cutcopied"/>
 <field name="modifiedby" caption="Muutja" width="50" align="center" talign="center" sortable="1" chgbgcolor="cutcopied"/>
 <field name="modified" caption="Muudetud" width="100" align="center" talign="center" type="time" format="d-M-y / H:i" sortable="1" numeric="yea" chgbgcolor="cutcopied"/>

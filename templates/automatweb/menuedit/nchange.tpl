@@ -766,8 +766,9 @@ SRC="{VAR:baseurl}/automatweb/images/blue/awtab-1_nurk.gif" WIDTH="10" HEIGHT="4
 		<td class="awtablerightcol"><select name="cfgmanager">{VAR:cfgmanager}</select></td>
 		</tr>
 
-
-
+		<tr>
+                <td class="awtableleftcol" nowrap>&nbsp;Mitme dok. näitamise stiil:&nbsp;</td>
+                <td class="awtablerightcol"><select name="multi_doc_style">{VAR:multi_doc_style}</select></td></tr>
 
 		<!--automaatsed tegevused-->
 

@@ -175,6 +175,7 @@
 					<optional name="extraids"/>
 					<optional name="reforb"/>
 					<optional name="load_entry_data"/>
+					<optional name="load_entry_data_form"/>
 					<optional name="load_chain_data"/>
 					<optional name="method"/>
 				</arguments>
