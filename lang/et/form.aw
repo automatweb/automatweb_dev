@@ -16,6 +16,8 @@ $lc_form["LC_FORMS_EMAIL"]="Email";
 $lc_form["LC_FORMS_AFTER_FILLING_FORM_IF"]="p&auml;rast formi t&auml;itmist, kui checkboxis";
 $lc_form["LC_FORMS_USER_WHOS_EMAIL"]="kasutaja, kelle e-mail on textboxis";
 $lc_form["LC_FORMS_AND_NAME_IN_CHECKBOX"]="ja nimi textboxis";
+$lc_form["LC_FORMS_IS_MARK_ADD_TO_LIST"]="on linnuke, lisa listi";
+
 $lc_form["LC_FORMS_NAME"]="Nimi";
 $lc_form["LC_FORMS_DISCRIPTION"]="Kirjeldus";
 $lc_form["LC_FORMS_ALL"]="K&otilde;ik";
