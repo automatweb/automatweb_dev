@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.2 2003/12/08 11:03:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.3 2003/12/08 12:56:27 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -806,7 +806,7 @@ class aw_table extends aw_template
 							if ($today == $thisdate)
 							{
 								// XX: make it translatable
-								$val = "täna";
+								$val = date("H:i",$val) . " täna";
 							}
 							else
 							{
@@ -883,13 +883,14 @@ class aw_table extends aw_template
 
 					if ($this->use_chooser)
 					{
-						$name = $this->chooser_config["name"] . "[" . $v[$this->chooser_config["field"]] . "]";
+						$chooser_value = $v[$this->chooser_config["field"]];
+						$name = $this->chooser_config["name"] . "[${chooser_value}]";
 						$onclick = "";
 						if ($this->chooser_hilight)
 						{
 							$onclick = " onClick=\"hilight(this,'${rowid}')\" ";
 						};
-						$tbl .= "<td align='center'><input type='checkbox' name='${name}' value=1 ${onclick}></td>";
+						$tbl .= "<td align='center'><input type='checkbox' name='${name}' value='${chooser_value}' ${onclick}></td>";
 					};
 					$tbl .= "</tr>\n";
 				};
