@@ -40,12 +40,13 @@
 											</select></td>
 										</tr>
 										<tr>
-											<td class="celltext">lingiks on vormisisestus</td>
-											<td class="celltext">
-											<input type=checkbox {VAR:vormisisestus} NAME='vormisisestus' value='1' class="formcheckbox">
+											<td class="celltext" colspan=2>
+											kataloogi link <br />
+											<input type='radio' name='is_formentry' value='1' {VAR:is_formentry}> on formisisestus, näidatakse vormi väljastust</br>
+											<input type='radio' name='is_formentry' value='0' {VAR:is_not_formentry}> on tavaline link alamenüüle ja näidatakse kataloogis olevaid linke
 											</td>
 										</tr>
-<!-- SUB: if_formisisestus -->
+<!-- SUB: vormisisestus -->
 										<tr>
 											<td class="celltext">vali form</td>
 											<td class="celltext">
@@ -54,21 +55,22 @@
 											</td>
 										</tr>
 										<tr>
-											<td class="celltext">vali formisisestus</td>
+											<td class="celltext">vali vormisisestus</td>
 											<td class="celltext">
+											otsinguvormi element
 											<select NAME='felement' class="formselect">{VAR:felement}
 											</select> 
-											== 
+											 täidetakse katloogi
 											<select NAME='vordle' class="formselect">{VAR:vordle}
-											</select> <br />
+											</select>-ga <br />
 
 											<select NAME='vstiil' class="formselect">
-											<option>väljundi stiilide valiku panen siia varsti
+											<option>väljundi stiilide valik?
 											</select>
 
 											</td>
 										</tr>
-<!-- END SUB: if_formisisestus -->
+<!-- END SUB: vormisisestus -->
 										<tr>
 											<td class="celltext">lingid avanevad uues aknas</td>
 											<td class="celltext">
@@ -87,6 +89,7 @@
 											<input type=checkbox {VAR:active_dirs} NAME='active_dirs' value='1' class="formcheckbox">
 											</td>
 										</tr>
+<!-- SU_B: lingid-->
 										<tr>
 											<td class="celltext">kuvada ainult aktiivsed lingid</td>
 											<td class="celltext">
@@ -98,18 +101,18 @@
 											<td class="celltext">
 												<table border=1>
 													<tr>
-														<td> attribuut</td><td> hüperlink</td><td>nähtav</td>
+														<td>attribuut</td><td>hüperlink</td>
 													</tr>
 													<!-- SUB: klikitav -->
 													<tr>
 														<td>{VAR:mis}</td>
-														<td><input type=checkbox name=klikitav[{VAR:mis}] value={VAR:mis} {VAR:kas_kliki}></td>
-														<td><input type=checkbox name=naidata[{VAR:mis}] value={VAR:mis} {VAR:kas_naita}></td>
+														<td><input type=checkbox name=klikitav[{VAR:mis}] value={VAR:mis} {VAR:is_hyper}></td>
 													<tr>
 													<!-- END SUB: klikitav -->											
 												</table>
 											</td>
 										</tr>
+<!-- E_ND SU_B: lingid-->
 										<tr>
 											<td class="celltext">vaikimisi kataloogid sorteerida </td>
 											<td class="celltext">
@@ -125,35 +128,38 @@
 										<tr>
 											<td class="celltext">vaikimisi on tasandis tulpasid</td>
 											<td class="celltext">
-											<select NAME='default_tulpi' class="formselect">{VAR:default_tulpi}
-											</select>
+											<input type=text NAME='default_tulpi' class="textselect" value="{VAR:default_tulpi}" size=4>
 											</td>
 										</tr>
 										<tr>
 											<td class="celltext" valign=top>tasandite ja tulpade konf</td>
 											<td class="celltext">
-											<select NAME='tasand' class="formselect">{VAR:tasandid}
-											</select> | 
-											<select NAME='tegevus' class="formselect">
-											<option>vali tegevus
-											<option value=lisa>lisa
-											<option value=kustuta>kustuta
-											</select><br />
+											lisa tasand nr
+											<input type=text NAME='add_level' class="formtext" size=4>
 											<table border=1>
 												<tr>
-												<td>tasand</td><td> tulpasid</td><td>kataloogid sorteeritakse</td><td>lingid sorteeritakse</td>
+												<td>tasandi nr</td><td> tulpasid</td><td>kataloogid sorteeritakse</td><td>lingid sorteeritakse</td><td>kustuta</td>
 												</tr>
-											<!-- SUB: tasandids -->
-											<tr><td>tasand nr. {VAR:tas}</td>
-											<td>
-											<select NAME='tulpi[{VAR:tas}]' class="formselect">{VAR:tulpi}</select></td>
-											<td>
-											<select NAME='sortby_dirs[{VAR:tas}]' class="formselect">{VAR:sortby_dirs}</select></td><td>
-											<select NAME='sortby_links[{VAR:tas}]' class="formselect">{VAR:sortby_links}</select></td>
+											<!-- SUB: levels -->
+												<tr>
+													<td> {VAR:tas} </td>
+													<td>
+														<!--<select NAME='tulpi[{VAR:tas}]' class="formselect">{VAR:tulpi}</select>-->
+														<input type=text NAME='tulpi[{VAR:tas}]' class="formtext" value={VAR:tulpi} size=4>
+													</td>
+													<td>
+														<select NAME='sortby_dirs[{VAR:tas}]' class="formselect">{VAR:sortby_dirs}</select>
+													</td>
+													<td>
+														<select NAME='sortby_links[{VAR:tas}]' class="formselect">{VAR:sortby_links}</select>
+													</td>
+													<td>
+														<input type=checkbox name=kustuta[{VAR:tas}] value=1>
+													</td>
 											</tr>
-											<!-- END SUB: tasandids -->
+											<!-- END SUB: levels -->
 											</table>
-											<br /><br /> {VAR:abix}
+											{VAR:abix}
 											</td>
 
 										</tr>
