@@ -28,6 +28,9 @@
             <caption>Staatus</caption>
             <comment>Kas objekt on aktiivne või mitte</comment>
       </property>
+      <classinfo>
+            <trans_id>TR_CLASS_BASE</trans_id>
+      </classinfo>
       <groupinfo>
             <general>
                   <caption>Üldine</caption>
