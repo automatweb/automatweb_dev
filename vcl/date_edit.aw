@@ -29,6 +29,15 @@ class date_edit {
 		$this->classid="";
 	}
 
+	////
+	// !Sets the layout of the date editor
+	// default is to show a select element
+	// set_layout(array("year" => "textbox")) makes it a textbox instead
+	function set_layout($args = array())
+	{
+		$this->layout = $args;
+	}
+
 	function configure($fields) {
 		// millised väljad ja millises järjekorras kuvame
 		// ja mida me nende captioniteks näitame
@@ -79,6 +88,10 @@ class date_edit {
 					};
 					$retval .= "</select>\n";
 					break;
+
+				case "year_textbox":
+					$retval .= sprintf("<input type='text' name='%s[year]' size='4' maxlength='4' value='$year'>\n",$this->varname);
+					break;
 					
 				case "month":
 					$retval .= sprintf("<select $clid name='%s[month]'>\n",$this->varname);
@@ -104,6 +117,10 @@ class date_edit {
 					};
 					$retval .= "</select>\n";
 					break;
+
+				case "month_textbox":
+					$retval .= sprintf("<input type='text' name='%s[month]' size='2' maxlength='2' value='$month'>\n",$this->varname);
+					break;
 					
 				case "day":
 					$retval .= sprintf("<select $clid name='%s[day]'>\n",$this->varname);
@@ -116,6 +133,10 @@ class date_edit {
 						$retval .= sprintf("<option value='%s'%s>%s</option>\n",$i,$sel,$i);
 					};
 					$retval .= "</select>\n";
+					break;
+				
+				case "day_textbox":
+					$retval .= sprintf("<input type='text' name='%s[day]' size='2' maxlength='2' value='$day'>\n",$this->varname);
 					break;
 
 				case "hour":
@@ -130,6 +151,10 @@ class date_edit {
 					};
 					$retval .= "</select> :\n";
 					break;
+				
+				case "hour_textbox":
+					$retval .= sprintf("<input type='text' name='%s[hour]' size='2' maxlength='2' value='$hour'>\n",$this->varname);
+					break;
 
 				case "minute":
 					$retval .= sprintf("<select $clid name='%s[minute]'>\n",$this->varname);
@@ -143,6 +168,10 @@ class date_edit {
 						$retval .= sprintf("<option value='%s'%s>%02d</option>\n",$i,$sel,$i);
 					};
 					$retval .= "</select>\n";
+					break;
+				
+				case "minute_textbox":
+					$retval .= sprintf("<input type='text' name='%s[minute]' size='2' maxlength='2' value='$minute'>\n",$this->varname);
 					break;
 			}; // end switch
 		}; // end while
