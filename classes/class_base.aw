@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.279 2004/06/14 14:32:43 kristo Exp $
+// $Id: class_base.aw,v 2.280 2004/06/22 14:36:39 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -109,6 +109,7 @@ class class_base extends aw_template
 			"table" => "vcl/table",
 			"relpicker" => "vcl/relpicker",
 			"tabpanel" => "vcl/tabpanel",
+			"reminder" => "vcl/reminder",
 			"popup_search" => "vcl/popup_search",
 			"treeview" => "vcl/treeview",
 		);
@@ -3386,13 +3387,13 @@ class class_base extends aw_template
 		{
 			$arr["clid"] = $this->clid;
 		};
-
 		// XXX: add some checks
 		$all_properties = $this->load_defaults(array(
 			"clid" => $arr["clid"],
 			"clfile" => $arr["clfile"],
 			"filter" => $filter,
 		));
+
 
 		// I could use a different approach here ... for example, if I'm saving then
 		// only the properties that should be saved should be returned. or not?
