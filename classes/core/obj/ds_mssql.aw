@@ -186,7 +186,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				}
 				else
 				{
-					$fields[] = $table.".".$prop["field"]." AS [".$prop["name"]."]";
+					$fields[] = "[".$table."].[".$prop["field"]."] AS [".$prop["name"]."]";
 				}
 			}
 
@@ -708,6 +708,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 		$this->alias_joins = array();
 
 		$this->joins = array();
+		$this->limit_skip = 0;
 
 		$where = $this->req_make_sql($params);
 
@@ -744,11 +745,16 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 		$ret = array();
 		if ($where != "")
 		{
-			$q = "SELECT objects.oid as oid,objects.name as name FROM objects WITH (nolock) $joins WHERE $where ".$this->sby." ".$this->limit;
+			$q = "SELECT ".$this->limit." objects.oid as oid,objects.name as name FROM objects WITH (nolock) $joins WHERE $where ".$this->sby;
 
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
+				if ($this->limit_skip > 0)
+				{
+					$this->limit_skip--;
+					continue;
+				}
 				$ret[$row["oid"]] = $row["name"];
 			}
 		}
@@ -811,7 +817,19 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 
 			if ("limit" == (string)($key))
 			{
-				$this->limit = " LIMIT $val ";
+				if (strpos($val, ",") !== false)
+				{
+					// range, like mysql says it - 5,10 means 6-15 - skip 5, return 10
+					// so for mysql we select TOP skip + return and then skip the first ones manually
+					list($this->limit_skip, $limit_return) = explode(",", trim($val));
+				}
+				else
+				{
+					// just limit, convert to TOP
+					$this->limit_skip = 0;
+					$limit_return = (int)trim($val);
+				}
+				$this->limit = " TOP $limit_return ";
 				continue;
 			}
 
