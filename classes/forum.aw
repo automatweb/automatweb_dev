@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.34 2002/01/11 00:08:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.35 2002/01/11 00:37:34 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -985,13 +985,19 @@ class forum extends aw_template
 		$cnt = $this->db_fetch_field("SELECT count(*) AS cnt 
 			FROM comments WHERE board_id = '$board'","cnt");
 		$this->mk_links(array("board" => $board));
+		
+		if (not($subj && preg_match("/Re:/i",$args["subj"])))
+		{
+			$subj = "Re: " . $subj;
+		};
+
 		$this->vars(array(
 			"cnt" => $cnt,
 			"num_comments" => $cnt,
 			"name" => $aw_mb_name,
 			"mail" => $aw_mb_mail,
 			"comment" => $args["comment"],
-			"subj" => ($args["subj"]) ? "Re: " . $args["subj"] : "",
+			"subj" => $subj,
 			"reply" => $reply,
 			"reforb" => $this->mk_reforb("submit_comment",array("board" => $board,"parent" => $parent,"section" => $section,"act" => $act)),
 		));
