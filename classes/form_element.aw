@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.37 2001/11/17 17:57:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.38 2001/11/17 18:14:50 duke Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -769,6 +769,9 @@ class form_element extends aw_template
 		{
 			$mue = $this->arr["lang_must_error"][$lang_id];
 		}
+
+		$mue = str_replace("\"","\\\"",$mue);
+
 		if (($this->arr["type"] == "textbox" || $this->arr["type"] == "textarea") && isset($this->arr["must_fill"]) && $this->arr["must_fill"] == 1)
 		{
 			$str = "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
