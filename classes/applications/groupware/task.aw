@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.10 2004/12/01 12:47:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.11 2004/12/08 07:30:24 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -202,6 +202,14 @@ class task extends class_base
 					'tooltip' => t('Salvesta'),
 					"action" => "save_participant_search_results"
 				));
+
+				$tb->add_button(array(
+					'name' => 'csv',
+					'img' => 'ftype_xls.gif',
+					'tooltip' => 'CSV',
+					"url" => aw_url_change_var("get_csv_file", 1)
+				));
+
 				$this->return_url=aw_global_get('REQUEST_URI');
 				break;
 			}
