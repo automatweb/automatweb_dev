@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.17 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.18 2004/03/09 15:38:06 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -35,8 +35,15 @@ class menu_tree extends class_base
 		switch($data["name"])
 		{
 			case "menus":
-				$ob = get_instance("objects");
-				$menus = $ob->get_list();
+				$ol = new object_list(array(
+					"class_id" => CL_MENU,
+					"status" => STAT_ACTIVE
+				));
+				$menus = array();
+				for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+				{
+					$menus[$o->id()] = $o->path_str();
+				}
 				$data["options"] = $menus;
 				break;
 
