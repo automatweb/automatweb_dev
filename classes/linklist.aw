@@ -669,7 +669,7 @@ class linklist extends aw_template
 					);
 
 					$tlp=$jrk?$jrk:((3%$t++)+1);
-					$items[$tlp].= $this->localparse($link_tpl,$link); //parse links
+					$items[$tlp].= localparse($link_tpl,$link); //parse links
 				}
 
 				if ($tulpa=1)
@@ -721,7 +721,7 @@ $this->css.=$css;
 						"jrk" => $jrk,
 					);
 
-					$items[$tlp].= $this->localparse($link_tpl,$link); //parse links
+					$items[$tlp].= localparse($link_tpl,$link); //parse links
 				}
 
 					$links=implode("",$items);

@@ -218,19 +218,19 @@ class image extends aw_template
  
 			if ($this->is_flash($idata["file"]))
 			{
-				$replacement = $this->localparse($tpls["image_flash"],$vars);
+				$replacement = localparse($tpls["image_flash"],$vars);
 			}
 			else
 			if ($idata["link"] != "")
 			{
 				if (isset($tpls["image_inplace_linked"]))
 				{
-					$replacement = $this->localparse($tpls["image_inplace_linked"],$vars);
+					$replacement = localparse($tpls["image_inplace_linked"],$vars);
 					$inplace = "image_inplace_linked";
 				}
 				else if (isset($tpls["image_linked"]))
 				{
-					$replacement = $this->localparse($tpls["image_linked"],$vars);
+					$replacement = localparse($tpls["image_linked"],$vars);
 				}
 				else
 				{
@@ -262,7 +262,7 @@ class image extends aw_template
 				};
 				if (isset($tpls[$tpl]))
 				{
-					$replacement = $this->localparse($tpls[$tpl],$vars);
+					$replacement = localparse($tpls[$tpl],$vars);
 				}
 				else
 				{

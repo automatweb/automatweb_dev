@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.62 2002/12/02 17:47:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.63 2002/12/02 17:57:44 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -21,9 +21,15 @@ if (!defined("DEFS"))
 		return preg_replace("/((\s|^)+)(\S+)@(\S+)/","\\2<a href='mailto:\\3@\\4'>\\3@\\4</a>", $src);
 	}
 
+	////
+	// !parses template source in $src, and replaces variables in it with variables from $vars
 	function localparse($src = "",$vars = array())
 	{
-		return preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
+		// kogu asendus tehakse ühe reaga
+		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
+		// mis eval-ist läbi lastakse. 
+		$src = preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
+		return preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
 	}
 
 	//// 

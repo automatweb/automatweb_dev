@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.29 2002/11/20 12:24:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.30 2002/12/02 17:57:44 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -219,26 +219,10 @@ class aw_template extends acl_base
 	}
 
 	////
-	// !see on nüüd pisike häkk. Nimelt saab selle funktsiooni abil parsida kusagilt mujalt sissetoodud
-	// templatekoodi (s.t. asendada selles olevad muutujanimed väärtustega).
-	// tpledit vajab seda
-	function localparse($src = "",$vars = array())
-	{
-		return preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
-	}
-		
-	////
 	// !This is where all the magic takes place
 	function parse($object = "MAIN") 
 	{
-		$src = $this->v2_templates[$this->v2_name_map[$object]];
-
-		// kogu asendus tehakse ühe reaga
-		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
-		// mis eval-ist läbi lastakse. 
-		$src = preg_replace("/{VAR:(.+?)}/e","\$this->vars[\"\\1\"]",$src);
-
-		$src = preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
+		$src = localparse($this->v2_templates[$this->v2_name_map[$object]], $this->vars);
 
 		// võtame selle maha ka
 		aw_session_del("status_msg", true);
