@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.11 2001/05/31 19:42:31 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.12 2001/05/31 21:25:46 cvs Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -2027,8 +2027,20 @@ $orb_defs["form"] = "xml";
 		// returns the entry in an array that you can feed to restore_entry to revert the saved entry to the old data
 		function get_entry($form_id,$entry_id)
 		{
+			$ret = array();
 			$this->db_query("SELECT * FROM form_".$form_id."_entries WHERE id = $entry_id");
-			return $this->db_next();
+			$row =  $this->db_next();
+			if ($row)
+			{
+				foreach($row as $k => $v)
+				{
+					if (substr($k,0,3) == "el_")
+					{
+						$ret[$k] = $v;
+					}
+				}
+			}
+			return $ret;
 		}
 
 		function restore_entry($form_id,$entry_id,$arr)

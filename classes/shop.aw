@@ -315,6 +315,8 @@ class shop extends aw_template
 				{
 					$it = $this->get_item($item_id);
 
+					$old_entry = $f->get_entry($it["cnt_form"],$ar["cnt_entry"]);
+
 					// process the entry
 					$f->process_entry(array(
 						"id" => $it["cnt_form"],
@@ -332,7 +334,82 @@ class shop extends aw_template
 						// this row's count must be added to this item's count in the shopping cart
 						$count+=$rowels["mitu"];
 					}
+
+					// nyyd tshekime et kas j2lle on vaba see item kyllalt palju
+					if ($it["has_max"] && $it["has_period"] && $it["has_objs"] && $count > 0)
+					{
+						// check if the user entered some dates in the form, if not, then show error message and go back.
+						$from = $f->get_element_value_by_name("Alates");
+						$to = $f->get_element_value_by_name("Kuni");
+
+						$free_items = array();
+						$free_item_count = 0;
+						classload("planner");
+						$pl = new planner;
+						// we must repeat this whole operation $count number of times too.
+						// so we must load the items one by one and check their calendars for events during the time specified in the form. 
+						$this->db_query("SELECT * FROM objects WHERE parent = $item_id AND class_id = ".CL_SHOP_ITEM." AND status != 0");
+						while ($row = $this->db_next())
+						{
+							// objekti last v2ljas on kalendri id
+							// vaatame ksa selle objekti kohta on eventeid valitud vahemikus
+							if (!$pl->get_events(array("start" => $from, "end" => $to,"parent" => $row["last"])))
+							{
+								// leidsime vaba itemi
+								$free_items[] = $row;
+								$free_item_count++;
+
+								// kui oleme leidnud kyllalt palju vabu itemeid, siis l6petame otsimise
+								if ($free_item_count == $count)
+								{
+									break;
+								}
+							}
+						}
+						if ($free_item_count < $count)
+						{
+							// pold vabu itemeid sel ajal
+							global $status_msg;
+							$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
+							session_register("status_msg");
+							// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
+							$f->restore_entry($it["cnt_form"],$ar["cnt_entry"],$old_entry);
+							return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
+						}
+					}
+
+					// now calc price
+					if ($it["price_eq"] == "")
+					{
+						$price = (double)$it["price"] * (double)$count;
+					}
+					else
+					{
+						// parsime price_eq'st v2lja formi elementide nimed ja asendame need numbritega ja siis laseme evali()'i peale
+						$f_kaup = new form;
+						$f_kaup->load($it["form_id"]);
+						$f_kaup->load_entry($it["entry_id"]);
+
+						$els = $this->parse_eq_variables($it["price_eq"]);
+
+						$eq = $it["price_eq"];
+						foreach($els as $elname)
+						{
+							if ($f->get_element_by_name($elname))
+							{
+								$elval = (int)$f->get_element_value_by_name($elname);
+							}
+							else
+							{
+								$elval = (int)$f_kaup->get_element_value_by_name($elname);
+							}
+							$eq = str_replace($elname,$elval,$eq);
+						}
+						eval("\$price = ".$eq.";");
+					}
+
 					$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
+					$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
 					$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
 					$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $ar["cnt_entry"];
 				}
