@@ -14,6 +14,16 @@
             <field>navtoolbar</field>
       </property>
       <property>
+            <name>friend_groups</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_FRIEND_GROUPS</reltype>
+            <store>no</store>
+            <field>friend_groups</field>
+            <caption>Sõbragrupid</caption>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general2</group>
@@ -663,6 +673,36 @@
                   </clid>
                   <caption>kirjelduse dokument</caption>
             </DESCRIPTION_DOC>
+            <FRIEND>
+                  <value>35</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Sõber</caption>
+            </FRIEND>
+            <FAVOURITE>
+                  <value>36</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Lemmik</caption>
+            </FAVOURITE>
+            <MATCH>
+                  <value>37</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Väljavalitu</caption>
+            </MATCH>
+            <BLOCKED>
+                  <value>38</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>blokeeritud</caption>
+            </BLOCKED>
+            <IGNORED>
+                  <value>39</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>ignoreeritud</caption>
+            </IGNORED>
+            <FRIEND_GROUPS>
+                  <value>40</value>
+                  <clid>CL_META</clid>
+                  <caption>Sõbragrupid</caption>
+            </FRIEND_GROUPS>
       </reltypes>
 </properties>
 

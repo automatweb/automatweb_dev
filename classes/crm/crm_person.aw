@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.64 2004/11/09 10:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.65 2004/11/11 13:16:36 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -16,6 +16,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @default group=general2
 
 @property navtoolbar type=toolbar store=no no_caption=1 group=general,overview editonly=1
+
+@property friend_groups type=classificator reltype=RELTYPE_FRIEND_GROUPS store=no group=general
+@caption Sõbragrupid
 
 @property name type=text
 @caption Nimi
@@ -337,6 +340,24 @@ caption CV
 
 @reltype DESCRIPTION_DOC value=34 clid=CL_DOCUMENT,CL_MENU
 @caption kirjelduse dokument
+
+@reltype FRIEND value=35 clid=CL_CRM_PERSON
+@caption Sõber
+
+@reltype FAVOURITE value=36 clid=CL_CRM_PERSON
+@caption Lemmik
+
+@reltype MATCH value=37 clid=CL_CRM_PERSON
+@caption Väljavalitu
+
+@reltype BLOCKED value=38 clid=CL_CRM_PERSON
+@caption blokeeritud
+
+@reltype IGNORED value=39 clid=CL_CRM_PERSON
+@caption ignoreeritud
+
+@reltype FRIEND_GROUPS value=40 clid=CL_META
+@caption Sõbragrupid
 
 */
 
