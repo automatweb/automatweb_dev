@@ -100,10 +100,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			if ($prop["method"] == "serialize")
 			{
+				/*
 				if ($prop['field'] == "meta")
 				{
 					$prop['field'] = "metadata";
 				}
+				*/
 				// metadata is unserialized in read_objprops
 				$ret[$prop["name"]] = $objdata[$prop["field"]][$prop["name"]];
 			}
