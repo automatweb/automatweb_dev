@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.9 2004/08/30 16:25:57 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.10 2004/08/30 16:49:36 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -428,7 +428,9 @@ class planner extends class_base
 			$di = get_date_range(array(
 				"date" => isset($arr["date"]) ? $arr["date"] : date("d-m-Y"),
 				"type" => $arr["type"],
+				"fullweeks" => 1,
 			));
+
 
 			$_start = $di["start"];
 			$_end = $di["end"];
@@ -553,8 +555,17 @@ class planner extends class_base
 			FROM planner
 			LEFT JOIN objects ON (planner.id = objects.brother_of)
 			WHERE planner.start >= '${_start}' AND
+			(planner.start <= '${_end}' OR planner.end IS NULL) AND
+			objects.status != 0";
+	
+		/*
+		$q = "SELECT objects.oid AS id,objects.brother_of,objects.name,planner.start,planner.end
+			FROM planner
+			LEFT JOIN objects ON (planner.id = objects.brother_of)
+			WHERE planner.start >= '${_start}' AND
 			(planner.end <= '${_end}' OR planner.end IS NULL) AND
 			objects.status != 0";
+		*/
 
 		// lyhidalt. planneri tabelis peaks kirjas olema. No, but it can't be there 
 		// I need to connect that god damn recurrence table into this fucking place.
@@ -1300,16 +1311,7 @@ class planner extends class_base
 			$clidlist = $this->event_entry_classes;
 			$tmp = aw_ini_get("classes");
 			foreach($clidlist as $clid)
-			{	//Show only if has configform
-				if(($clid == CL_CALENDAR_EVENT) && ($arr["obj_inst"]->get_first_conn_by_reltype("RELTYPE_EVENT_ENTRY") == false))
-				{
-					continue;
-				}
-				//Dont show at all
-				if($clid == CL_CRM_OFFER)
-				{
-					continue;
-				}
+			{
 				$toolbar->add_menu_item(array(
 					"parent" => "create_event",
 					"link" => $this->mk_my_orb("change",array(
@@ -1450,6 +1452,9 @@ class planner extends class_base
 
 		$viewtype = $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
 
+		// oi bljaad!
+		// think I need to add a attribute there that gives me a range from the starting monday to the ending sunday
+		// right?
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
