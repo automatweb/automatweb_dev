@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="gallery">
+	<class name="gallery" folder="contentmgmt/gallery">
 		<action name="new">
 			<function name="add">
 				<arguments>
