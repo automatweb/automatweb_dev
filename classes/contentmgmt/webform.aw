@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.25 2004/12/29 13:05:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.26 2004/12/29 14:34:54 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -233,9 +233,16 @@ class webform extends class_base
 	
 	function callback_mod_tab($arr)
 	{
-		if($arr["id"] == "show_entries" && $arr["obj_inst"]->prop("form_type") != CL_REGISTER_DATA)
+		if($arr["id"] == "show_entries")
 		{
-			return false;
+			if($arr["obj_inst"]->prop("form_type") == CL_REGISTER_DATA)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 	
@@ -258,21 +265,17 @@ class webform extends class_base
 		switch($prop["name"])
 		{
 			case "form_type_value":
-				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Registri andmed") : t("Sündmuse vorm");
+				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("Sündmuse vorm");
 				break;
 				
 			case "form_type":
 				$prop["options"] = array(
-					CL_REGISTER_DATA => t("Registri andmed"),
+					CL_REGISTER_DATA => t("Tavaline vorm"),
 					CL_CALENDAR_REGISTRATION_FORM => t("Sündmuse vorm"),
 				);
 				break;
 				
 			case "search":
-				if($arr["obj_inst"]->prop("form_type") != CL_REGISTER_DATA)
-				{
-					return PROP_IGNORE;
-				}
 				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
 				$s = get_instance(CL_REGISTER_SEARCH);
 				$prop["value"] = $s->show(array(
@@ -304,7 +307,7 @@ class webform extends class_base
 			case "def_name":
 			case "def_mail":
 			case "redirect":
-				if($arr["obj_inst"]->prop("form_type") == CL_CALENDAR_REGISTRATION_FORM)
+				if($arr["obj_inst"]->prop("form_type") != CL_REGISTER_DATA)
 				{
 					return PROP_IGNORE;
 				}	

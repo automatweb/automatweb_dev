@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.7 2004/12/20 11:00:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.8 2004/12/29 14:34:54 ahti Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -260,6 +260,7 @@ class object_export extends class_base
 
 	function do_export_table($arr)
 	{
+		$sep = $arr["obj_inst"]->prop("csv_separator");
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_exp_table($t, $arr["obj_inst"]);
 
