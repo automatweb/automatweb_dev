@@ -9,16 +9,6 @@
             <caption>Nimi</caption>
       </property>
       <property>
-            <name>email</name>
-            <type>textbox</type>
-            <store>no</store>
-            <editonly>1</editonly>
-            <table>kliendibaas_address</table>
-            <group>general</group>
-            <field>email</field>
-            <caption>Meiliaadress</caption>
-      </property>
-      <property>
             <name>aadress</name>
             <type>textbox</type>
             <size>50</size>
@@ -66,52 +56,6 @@
             <caption>Riik</caption>
       </property>
       <property>
-            <name>telefon</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TELEFON</reltype>
-            <table>kliendibaas_address</table>
-            <group>general</group>
-            <field>telefon</field>
-            <caption>Telefon</caption>
-      </property>
-      <property>
-            <name>mobiil</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MOBIIL</reltype>
-            <table>kliendibaas_address</table>
-            <group>general</group>
-            <field>mobiil</field>
-            <caption>Mobiiltelefon</caption>
-      </property>
-      <property>
-            <name>faks</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FAKS</reltype>
-            <table>kliendibaas_address</table>
-            <group>general</group>
-            <field>faks</field>
-            <caption>Faks</caption>
-      </property>
-      <property>
-            <name>piipar</name>
-            <type>textbox</type>
-            <size>20</size>
-            <maxlength>20</maxlength>
-            <table>kliendibaas_address</table>
-            <group>general</group>
-            <field>piipar</field>
-            <caption>Piipar</caption>
-      </property>
-      <property>
-            <name>kodulehekylg</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_WWW</reltype>
-            <table>kliendibaas_address</table>
-            <group>general</group>
-            <field>kodulehekylg</field>
-            <caption>Kodulehekülg</caption>
-      </property>
-      <property>
             <name>comment</name>
             <type>textarea</type>
             <cols>65</cols>
@@ -120,16 +64,6 @@
             <field>comment</field>
             <group>general</group>
             <caption>Kommentaar</caption>
-      </property>
-      <property>
-            <name>xmail</name>
-            <type>relmanager</type>
-            <table>kliendibaas_address</table>
-            <field>e_mail</field>
-            <group>settings</group>
-            <reltype>RELTYPE_EMAIL</reltype>
-            <props>mail</props>
-            <caption>Meiliaadressid</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -171,31 +105,6 @@
                   </clid>
                   <caption>Seosobjekt</caption>
             </BELONGTO>
-            <EMAIL>
-                  <value>5</value>
-                  <clid>CL_ML_MEMBER</clid>
-                  <caption>E-mail</caption>
-            </EMAIL>
-            <WWW>
-                  <value>6</value>
-                  <clid>CL_EXTLINK</clid>
-                  <caption>Koduleht</caption>
-            </WWW>
-            <TELEFON>
-                  <value>7</value>
-                  <clid>CL_CRM_PHONE</clid>
-                  <caption>Telefon</caption>
-            </TELEFON>
-            <MOBIIL>
-                  <value>8</value>
-                  <clid>CL_CRM_PHONE</clid>
-                  <caption>Mobiil</caption>
-            </MOBIIL>
-            <FAKS>
-                  <value>9</value>
-                  <clid>CL_CRM_PHONE</clid>
-                  <caption>Faks</caption>
-            </FAKS>
       </reltypes>
 </properties>
 
