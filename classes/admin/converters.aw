@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.48 2004/09/20 13:14:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.49 2004/10/08 15:59:02 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1597,30 +1597,28 @@ class converters extends aw_template
 	**/
 	function lang_new_convert($arr)
 	{
-		$tbl = $this->db_get_table("languages");
-		if (!isset($tbl["fields"]["oid"]))
-		{
-			$this->db_query("ALTER TABLE languages ADD oid int default 0");
-		}
-			
-		$this->db_query("SELECT * FROM languages WHERE oid < 1");
+		$this->db_query("SELECT * FROM languages WHERE oid < 1 ");
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
 			echo "keel ".$row["name"]." <br>";
+			$oid = $this->db_fetch_field("SELECT max(oid) as oid FROM objects", "oid")+1;
+
 			$this->db_query("INSERT INTO 
 				objects(
 					name,				status,			site_id,					lang_id,
 					createdby,			created,		modifiedby, 				modified,
-					class_id,			parent
+					class_id,			parent,			brother_of,					oid,
+					alias
 				)
 				VALUES(
 					'$row[name]',	2,				".aw_ini_get("site_id").",	".aw_global_get("lang_id").",
 					'".aw_global_get("uid")."',".time().",'".aw_global_get("uid")."',".time().",
-					".CL_LANGUAGE.",	$arr[parent]
+					".CL_LANGUAGE.",	$arr[parent],	$oid,	$oid,
+					''
 				)
 			");
-			$this->db_query("UPDATE languages SET oid = ".$this->db_last_insert_id()." WHERE id = ".$row["id"]);
+			$this->db_query("UPDATE languages SET oid = ".$oid." WHERE id = ".$row["id"]);
 			$this->restore_handle();
 		}
 	}
