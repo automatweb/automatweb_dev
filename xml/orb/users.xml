@@ -4,6 +4,8 @@
 		<action name="gen_list">
 			<function name="gen_list">
 				<optional name="page"/>
+				<optional name="s_uid"/>
+				<optional name="s_mail"/>
 			</function>
 		</action>
 		
