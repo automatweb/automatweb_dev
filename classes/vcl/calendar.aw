@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.5 2004/01/19 11:47:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.6 2004/01/28 16:59:08 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -18,10 +18,17 @@ class vcalendar extends aw_template
 	}
 
 	////
-	// !Initializes the calendar view
+	// !Configures the calendar view
 	// overview_func -> a function that is used to define the presence of the quick navigator
-	function initialize($arr = array())
+	function configure($arr = array())
 	{
+		if ($arr["tasklist_func"])
+		{
+			$this->tasklist_func = $arr["tasklist_func"];
+		};
+		// fact is, event list and overview should use different functions,
+		// cause they need different kinds of data. It should be faster with
+		// different functions
 		if ($arr["overview_func"])
 		{
 			$this->overview_func = $arr["overview_func"];
@@ -82,7 +89,8 @@ class vcalendar extends aw_template
 		$data["timestamp"] = $arr["timestamp"];
 		$this->items[$use_date][] = $data;
 		// this is used for relational view
-		if ($data["timestamp"] < $this->range["timestamp"])
+		//if ($data["timestamp"] < $this->range["timestamp"])
+		if ($data["timestamp"] < time())
 		{
 			$this->past[] = &$this->items[$use_date][sizeof($this->items[$use_date])-1];
 		}
@@ -109,42 +117,85 @@ class vcalendar extends aw_template
 		{
 			case "month":
 				$content = $this->draw_month();
-				$caption = date("F Y",$this->range["timestamp"]);
+				$caption = get_est_month(date("m",$this->range["timestamp"]));
+				$caption .= " ";
+				$caption .= date("Y",$this->range["timestamp"]);
 				break;
 
 			case "week":
 				$content = $this->draw_week();
-				$caption = date("d F",$this->range["start"]) . " - " . date("d F",$this->range["end"]);
+				$ms = get_est_month(date("m",$this->range["start"]));
+				$me = get_est_month(date("m",$this->range["end"]));
+				$caption = date("j. ",$this->range["start"]) . "$ms - " . date("j. ",$this->range["end"]) . " " . $me;
 				break;
 
 			case "relative":
 				$content = $this->draw_relative();
-				$caption = date("d",$this->range["timestamp"]) . ". " . get_est_month(date("m",$this->range["timestamp"]));
+				$caption = date("j. ",$this->range["timestamp"]) . get_est_month(date("m",$this->range["timestamp"]));
 				break;
 	
 			default:
 				$content = $this->draw_day();
-				$caption = date("d",$this->range["timestamp"]) . ". " . get_est_month(date("m",$this->range["timestamp"]));
+				$caption = date("j. ",$this->range["timestamp"]) . get_est_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
 		};
 		
 		classload("date_calc");
 		$m = date("m",$this->range["timestamp"]);
 		$y = date("Y",$this->range["timestamp"]);
-		$this->origrange = $this->range;
-		$m--;
 
 		$mn = "";
-		for ($i = 0; $i <= 2; $i++)
+		// this one draws overview months... teheheheeee
+		// if overview_func is not defined, then no overview thingie will be drawn
+		// it's that easy.
+		if ($this->overview_func)
 		{
-			$range = get_date_range(array(
-				"date" => sprintf("%d-%d-%d",1,$m+$i,$y),
+
+			// XX: i need a better way to calculate the range
+			$xs1 = get_date_range(array(
+				"date" => "1-" . $m-1 . "-$y",
 				"type" => "month",
 			));
-			$this->range = $range;
-			$mn .= $this->draw_s_month();
-		};
+			
+			$xs2 = get_date_range(array(
+				"date" => "1-" . $m+1 . "-$y",
+				"type" => "month",
+			));
 
-		$this->range = $this->origrange;
+			$ostart = $xs1["start"];
+			$oend = $xs2["end"];
+			
+			$inst = $this->overview_func[0];
+			$meth = $this->overview_func[1];
+			if (method_exists($inst,$meth))
+			{
+				$overview_items = $inst->$meth(array(
+					"start" => $ostart,
+					"end" => $oend,
+				));
+			};
+
+			if (is_array($overview_items))
+			{
+				foreach($overview_items as $tm => $tmp)
+				{
+					$this->add_overview_item(array("timestamp" => $tm));
+				};
+			};
+
+			// I need to figure out how many months should be shown.
+			// actually, it should be set from the configure item
+
+			// I also need to figure out which days to show, so that
+			// holidays will get be excluded
+			for ($i = -1; $i <= 1; $i++)
+			{
+				$range = get_date_range(array(
+					"date" => sprintf("%d-%d-%d",1,$m+$i,$y),
+					"type" => "month",
+				));
+				$mn .= $this->draw_s_month($range);
+			};
+		};
 
 		$this->read_template("container.tpl");
 		$types = array(
@@ -162,6 +213,39 @@ class vcalendar extends aw_template
 				"text" => $name,
 			));
 			$ts .= $this->parse(($type == $this->range["viewtype"]) ? "SEL_PAGE" : "PAGE");
+		};
+
+		$tasks = array();
+		if (isset($this->tasklist_func))
+		{
+			$inst = $this->tasklist_func[0];
+			$meth = $this->tasklist_func[1];
+			if (method_exists($inst,$meth))
+			{
+				$tasks = $inst->$meth();
+			};
+		};
+
+		$tstr = "";
+		foreach($tasks as $task)
+		{
+			$this->vars(array(
+				"task_url" => $task["url"],
+				"task_name" => $task["name"],
+			));
+			$tstr .= $this->parse("TASK");
+		};
+
+		if (!empty($tstr))
+		{
+			$this->vars(array(
+				"TASK" => $tstr,
+				"tasks_title" => "Toimetused",
+			));
+
+			$this->vars(array(
+				"TASKS" => $this->parse("TASKS"),
+			));
 		};
 
 		for ($i = 1; $i <= 12; $i++)
@@ -272,10 +356,18 @@ class vcalendar extends aw_template
 					$events_for_day .= $this->draw_event($event);
 				};
 			};
+			$wn = date("w",$i);
+			if ($wn == 0)
+			{
+				$wn = 7;
+			};
 			$this->vars(array(
 				"EVENT" => $events_for_day,
 				"daynum" => date("j",$i),
 				"dayname" => date("F d, Y",$i),
+				"lc_weekday" => get_lc_weekday($wn,$i),
+				"lc_month" => get_est_month(date("m",$i)),
+				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
 			));
 			$rv .= $this->parse("DAY");
 		};
@@ -374,7 +466,7 @@ class vcalendar extends aw_template
 
 	////
 	// XXX: this can and should be done without any templates. so it can be faster
-	function draw_s_month()
+	function draw_s_month($arr)
 	{
 		$this->read_template("mini2.tpl");
 		$rv = "";
@@ -382,23 +474,37 @@ class vcalendar extends aw_template
 		// the idea here is that drawing of month always starts from
 		// the first day of the week in which the month starts and ends
 		// on the last day of the week in which the month ends
-		$realstart = ($this->range["start"] - ($this->range["start_wd"] - 1) * 86400);
-		$realend = ($this->range["end"] + (7 - $this->range["end_wd"]) * 86400);
+		$realstart = ($arr["start"] - ($arr["start_wd"] - 1) * 86400);
+		$realend = ($arr["end"] + (7 - $arr["end_wd"]) * 86400);
+
+
+		$now = date("Ymd");
+
 
 		for ($j = $realstart; $j <= $realend; $j = $j + (7*86400))
 		{
 			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
 			{
 				$dstamp = date("Ymd",$i);
-				$events_for_day = "";
 				$style = ($this->overview_items[$dstamp]) ? "minical_cellact" : "minical_cell";
+				if (between($i,$arr["start"],$arr["end"]))
+				{
+					$tpl = "cell";
+					if ($now == date("Ymd",$i))
+					{
+						$style = "minical_cell_today";
+					};
+				}
+				else
+				{
+					$tpl = "cell_deact";
+				};
 				$this->vars(array(
-					"content" => $events_for_day,
 					"daynum" => date("j",$i),
 					"daycell_style" => $style,
 					"day_url" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
 				));
-				$rv .= $this->parse("cell");
+				$rv .= $this->parse($tpl);
 			};
 			$this->vars(array(
 				"cell" => $rv,
@@ -407,8 +513,8 @@ class vcalendar extends aw_template
 			$w .= $this->parse("line");
 		};
 		$this->vars(array(
-			"caption" => get_est_month(date("m",$this->range["timestamp"])),
-			"caption_url" => aw_url_change_var(array("viewtype" => "month","date" => date("d-m-Y",$this->range["timestamp"]))),
+			"caption" => get_est_month(date("m",$arr["timestamp"])) . " " . date("Y",$arr["timestamp"]),
+			"caption_url" => aw_url_change_var(array("viewtype" => "month","date" => date("d-m-Y",$arr["timestamp"]))),
 			"line" => $w,
 		));
 		return $this->parse();
