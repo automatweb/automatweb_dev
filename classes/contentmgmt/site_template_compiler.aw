@@ -73,6 +73,7 @@ class site_template_compiler extends aw_template
 		$this->tpl_init($path);
 
 		$this->read_template($tpl);
+		$this->tplhash = md5($path.$tpl);
 		$this->parse_template_parts();
 		$this->compile_template_parts();
 		$code =  "<?php\n".$this->generate_code()."?>";
@@ -770,6 +771,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"link\" => ".$inst_name."->".$fun_name."($o_name),\n";
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
 		$ret .= $this->_gi()."\"section\" => ".$o_name."->id(),\n";
+		$ret .= $this->_gi()."\"colour\" => ".$o_name."->prop(\"color\"),\n";
 		$ret .= $this->_gi()."\"comment\" => ".$o_name."->comment(),\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."));\n";
@@ -972,8 +974,8 @@ class site_template_compiler extends aw_template
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 		$this->brace_level--;
-				$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
+		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 
 		return $ret;
@@ -1132,7 +1134,7 @@ class site_template_compiler extends aw_template
 		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
 
 		$res = "";
-		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show_menu_area_cache_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_parent"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"),\$this->_helper_get_objlastmod())) == \"\")\n";
+		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_parent"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"),\$this->_helper_get_objlastmod())) == \"\")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 		return $res;
@@ -1149,7 +1151,7 @@ class site_template_compiler extends aw_template
 		$res .= $this->_gi()."if (".$cache_name.")\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
-		$res .= $this->_gi()."\$this->cache->file_set(\"site_show_menu_area_cache_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_parent"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"), ".$content_name.");\n";
+		$res .= $this->_gi()."\$this->cache->file_set(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_parent"]."_level_".$arr["level"]."_uid_\".aw_global_get(\"uid\"), ".$content_name.");\n";
 		$this->brace_level --;
 		$res .= $this->_gi()."}\n";
 		$this->brace_level --;
@@ -1180,12 +1182,22 @@ class site_template_compiler extends aw_template
 
 				$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_id\"] = \$tmp;\n";
 				$res .= $this->_gi()."\$tmp_o = obj(\$tmp);\n";
+				$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_colour\"] = \$tmp_o->prop(\"color\");\n";
 				$res .= $this->_gi()."\$tmp_im = \$tmp_o->meta(\"menu_images\");\n";
 				// insert image urls
 				$ni = aw_ini_get("menuedit.num_menu_images");
 				for($i = 0; $i < $ni; $i++)
 				{
+					$res .= $this->_gi()."if (\$tmp_im[$i][\"image_id\"])\n";
+					$res .= $this->_gi()."{\n";
+					$this->brace_level++;
+
+					$res .= $this->_gi()."\$tmp_im[$i][\"url\"] = \$this->image->get_url_by_id(\$tmp_im[$i][\"image_id\"]);\n";
+	
+					$this->brace_level--;
+					$res .= $this->_gi()."}\n";
 					$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_image_".$i."_url\"] = image::check_url(\$tmp_im[".$i."][\"url\"]);\n";
+					$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_image_".$i."\"] = image::make_img_tag(image::check_url(\$tmp_im[".$i."][\"url\"]));\n";
 				}
 				$this->brace_level--;
 				$res .= $this->_gi()."}\n";
@@ -1274,7 +1286,18 @@ class site_template_compiler extends aw_template
 
 		if ($arr["level"] == 1)
 		{
+			$ret .= $this->_gi()."if (\$this->can(\"view\", ".$arr["a_parent_p_fn"]."))\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
 			$ret .= $this->_gi()."\$parent_obj = new object(".$arr["a_parent_p_fn"].");\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+			$ret .= $this->_gi()."else\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$parent_obj = new object(aw_ini_get(\"rootmenu\"));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
 		}
 		else
 		{
@@ -1289,7 +1312,19 @@ class site_template_compiler extends aw_template
 			}
 			else
 			{
+				$ret .= $this->_gi()."if (\$this->can(\"view\", \$this->_helper_find_parent(".$arr["a_parent"].",".$arr["level"].")))\n";
+				$ret .= $this->_gi()."{\n";
+				$this->brace_level++;
+
 				$ret .= $this->_gi()."\$parent_obj = new object(\$this->_helper_find_parent(".$arr["a_parent"].",".$arr["level"]."));\n";
+				$this->brace_level--;
+				$ret .= $this->_gi()."}\n";
+				$ret .= $this->_gi()."else\n";
+				$ret .= $this->_gi()."{\n";
+				$this->brace_level++;
+				$ret .= $this->_gi()."\$parent_obj = new object(aw_ini_get(\"rootmenu\"));\n";
+				$this->brace_level--;
+				$ret .= $this->_gi()."}\n";
 			}
 		}
 

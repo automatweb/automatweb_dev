@@ -980,6 +980,11 @@ class site_show extends class_base
 					$ya .= $this->parse("YAH_LINK_END");
 				}
 				else
+				if ($this->is_template("YAH_LINK_REVERSE"))
+				{
+					$ya = $this->parse("YAH_LINK_REVERSE").$ya;
+				}
+				else
 				{
 					$ya .= $this->parse("YAH_LINK");
 				}
@@ -1024,7 +1029,8 @@ class site_show extends class_base
 		$this->vars(array(
 			"YAH_LINK" => $ya,
 			"YAH_LINK_END" => "",
-			"YAH_LINK_BEGIN" => ""
+			"YAH_LINK_BEGIN" => "",
+			"YAH_LINK_REVERSE" => ""
 		));
 
 		if ($ya != "")
@@ -1182,6 +1188,11 @@ class site_show extends class_base
 	// and we get here only if that returns true
 	function _helper_find_parent($a_parent, $level)
 	{
+		if (!$this->can("view", $a_parent))
+		{
+			$a_parent = aw_ini_get("rootmenu");
+		}
+
 		if ($level == 1)
 		{
 			return $a_parent;
@@ -1200,6 +1211,14 @@ class site_show extends class_base
 	// for the menu area beginning at $parent
 	function _helper_get_levels_in_path_for_area($parent)
 	{
+		// why is this here you ask? well, if the user has no access to the area rootmenu
+		// then the rootmenu will get rewritten to the group's rootmenu, therefore
+		// we need to rewrite it in the path checker functions as well
+		if (!$this->can("view", $parent))
+		{
+			$parent = aw_ini_get("rootmenu");
+		}
+
 		$pos = array_search($parent, $this->path_ids);
 		if ($pos === NULL || $pos === false)
 		{

@@ -539,7 +539,7 @@ class object_treeview extends class_base
 		{
 			$c_o = $c->to();
 			$this->vars(array(
-				"url" => $this->mk_my_orb("new", array("parent" => $parent, "section" => $parent), $classes[$c_o->prop("type")]["file"]),
+				"url" => $ot->get_add_url(array("id" => $c_o, "parent" => $parent, "section" => $parent)),
 				"caption" => $classes[$c_o->prop("type")]["name"]
 			));
 			$menu .= $this->parse("MENU_ITEM");
