@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.126 2002/08/21 09:55:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.127 2002/08/21 12:05:30 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1067,111 +1067,60 @@ class form extends form_base
 		$this->entry_parent = isset($parent) ? $parent : $this->arr["ff_folder"];
 
 
-		// do we have to validate this entry against a calendar?
-		// FIXME: this check should be in the form_calendar class
-		if ($this->xxxmeta["calendar_chain"])
+		// if this form uses a calendar and is an event entry form, figure out
+		// whether the calendar it is trying to write to, have enough vacancies
+		if ($this->arr["uses_calendar"] && ($this->subtype == FSUBTYPE_EV_ENTRY))
 		{
-			// we need to fetch the values of "start" and "end" and "count" elements, pass those to the
-			// form_calendar which then in turn will tell us whether that calendar has enough vacancies
-			// in the requested time slot
-			// actually I think should just be a special controller
+			// check vacations and if found, update calendar->form relations
+			// set error messages otherwise
 
-			// it has to be a separeate instance or we will lose the settings for current form
-			$qf = get_instance("form_base");
+			// we have to check each calendar separately
+			$q = "SELECT * FROM calendar2forms 
+					LEFT JOIN objects ON (calendar2forms.cal_id = objects.oid)
+					WHERE form_id = '$id'";
+			$this->db_query($q);
+			$has_vacancies = true;
+			$fch = get_instance("form_chain");
 
-			// that loads the target form too, so we can access it's properties
-			$els = $qf->get_form_elements(array("id" => $id));
-
-			foreach($els as $key => $el)
+			while($row = $this->db_next())
 			{
-				// start of requested time slot
-				if ( ($el["type"] == "date") && ($el["subtype"] == "from") )
+				// get the vacancy controller for the chain.
+				$fch->load_chain($row["cal_id"]);
+				$cal_controller = (int)$fch->chain["cal_controller"];
+
+				$_req_items = (int)$this->post_vars[$row["el_cnt"]];
+				if ($_req_items == 0)
 				{
-					$start_el = $el["id"];
+					$_req_items = 1;
 				};
 
-				// end of the requested time slot
-				if ( ($el["type"] == "date") && ($el["subtype"] == "to") )
-				{
-					$end_el = $el["id"];
-				};
-
-				// count 
-				if ( ($el["type"] == "textbox") && ($el["subtype"] == "count") )
-				{
-					$count_el = $el["id"];
-				};
-
-			}	
-
-			if ($qf->arr["event_start_el"])
-			{
-				$start_el = $qf->arr["event_start_el"];
-			};
-
-			$_start = $this->post_vars[$start_el];
-			$_end = $this->post_vars[$end_el];
-			$_range_start = mktime($_start["hour"],$_start["minute"],0,$_start["month"],$_start["day"],$_start["year"]);
-			$_range_end = mktime($_end["hour"],$_end["minute"],-1,$_end["month"],$_end["day"],$_end["year"]);
-
-			if ($_range_end == -1)
-			{
-				$_range_end = $_range_start + 3600;
-			};
-
-			$_count = (int)$this->post_vars[$count_el];
-
-			// default to 1, if not set or not int, this might be a mistake
-			// though
-			if ($count == 0)
-			{
-				$count = 1;
-			};
-	
-			/*
-			print "start = $range_start<br>";
-			print "end = $range_end<br>";
-			print "count = $count<br>";
-			*/
-
-			// and now for the easy part (hah!), ask the calendar to check whether there are enough vacancies in
-			// the required time window
-			$fc = get_instance("form_calendar");
-
-			$cal_id = ($this->post_vars["load_chain_data"]) ? $this->post_vars["load_chain_data"] : $chain_entry_id;
-
-			if ($entry_id)
-			{
-				$q = "SELECT cal_id FROM form_entries WHERE id = '$entry_id'";
+				$_start = (int)get_ts_from_arr($this->post_vars[$row["el_start"]]);
+				list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
+				$_end = mktime(23,59,59,$_m,$_d,$_y);
+				// figure out how manu vacancies this period can have
+				$this->save_handle();
+				$q = "SELECT SUM(max_items) AS max FROM calendar2timedef WHERE oid = '$cal_controller' AND start <= '$_end' AND end >= '$_start'";
 				$this->db_query($q);
-				$row = $this->db_next();
-				if ($row)
+				$row2 = $this->db_next();
+				$max = (int)$row2["max"];
+				// and now, for each calendar figure out how many
+				// free spots does it have in the requested period.
+				// for this, I'll have to query the calendar2event table
+				$q = "SELECT SUM(items) AS sum FROM calendar2event
+					LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
+					WHERE oid != '$entry_id' AND objects.status = 2 AND cal_id = '$row[cal_id]' AND form_id = '$id' AND start >= '$_start' AND end <= '$_end'";
+				$this->db_query($q);
+				$row2 = $this->db_next();
+				$sum = (int)$row2["sum"];
+				$vac = $max - $sum - $_req_items;
+				$this->restore_handle();
+				if ($vac < 0)
 				{
-					$cal_id = $row["cal_id"];
+					$has_errors = true;
+					$this->controller_errors[$row["el_cnt"]][] = "Calendar '$row[name]' does not have this many vacancies in the requested period.";
 				};
-			}
 
-			if ($no_vac_check)
-			{
-				$has_vacancies = true;
-			}
-			else
-			{
-				$has_vacancies = $fc->check_vacancies(array(
-					"id" => $cal_target,
-					"eid" => $cal_id,
-					"start" => $_range_start,
-					"end" => $_range_end,
-					"count" => $_count,
-					"eform" => $this->id,
-				));
 			};
-
-			if (not($has_vacancies))
-			{
-				$has_errors = true;
-				$this->controller_errors[$count_el][] = "The requested period does not have this many vacancies.";
-			}
 
 		}
 
@@ -1328,8 +1277,10 @@ class form extends form_base
 					$__rel = $this->post_vars[$row["el_relation"]];
 					preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 					$_rel = (int)$m[1];
-					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,items,relation)
-							VALUES ('$row[cal_id]','$eid','$_start','$_cnt','$_rel')";
+					list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
+					$_end = mktime(23,59,59,$_m,$_d,$_y);
+					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
+							VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
 					$this->db_query($q);
 				};
 			}

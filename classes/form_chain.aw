@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.26 2002/07/24 20:46:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.27 2002/08/21 12:05:30 duke Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -68,9 +68,9 @@ class form_chain extends form_base
 		$ct["show_reps"] = $show_reps;
 		$ct["rep_tbls"] = $rep_tbls;
 
-		$ct["has_calendar"] = $has_calendar;
+		//$ct["has_calendar"] = $has_calendar;
 		$ct["cal_controller"] = $cal_controller;
-		$ct["cal_entry_form"] = $cal_entry_form;
+		//$ct["cal_entry_form"] = $cal_entry_form;
 		
 		$this->chain = $ct;
 
@@ -78,16 +78,30 @@ class form_chain extends form_base
 		
 		$content = aw_serialize($ct,SERIALIZE_XML);
 		$this->quote(&$content);
+
+		$flags = ($has_calendar) ? OBJ_HAS_CALENDAR : 0;
 	
 		if ($id)
 		{
-			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
+				"comment" => $comment,
+				"flags" => $flags,
+			));
 			$this->db_query("UPDATE form_chains SET content = '$content' WHERE id = $id");
 
 		}
 		else
 		{
-			$id = $this->new_object(array("parent" => $parent, "name" => $name, "comment" => $comment, "status" => 2, "class_id" => CL_FORM_CHAIN));
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"name" => $name,
+				"comment" => $comment,
+				"status" => 2,
+				"class_id" => CL_FORM_CHAIN,
+				"flags" => $flags,
+			));
 			$this->db_query("INSERT INTO form_chains(id,content) VALUES($id,'$content')");
 			if ($alias_doc)
 			{
@@ -97,6 +111,7 @@ class form_chain extends form_base
 		}
 	
 		// notify form_calendar
+		/*
 		if ($cal_entry_form)
 		{
 			$fc = get_instance("form_calendar");
@@ -107,6 +122,7 @@ class form_chain extends form_base
 				"active" => $has_calendar,
 			));
 		}
+		*/
 
 		$this->db_query("DELETE FROM form2chain WHERE chain_id = $id");
 		if (is_array($forms))
@@ -116,7 +132,6 @@ class form_chain extends form_base
 				$this->db_query("INSERT INTO form2chain(form_id,chain_id,ord,rep) values($fid,$id,'".$ct["form_order"][$fid]."','".$rep[$fid]."')");
 			}
 		}
-		echo "endsubmit! <br>";
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
@@ -197,18 +212,24 @@ class form_chain extends form_base
 		$forms = $this->get_flist(array(
 			"type" => FTYPE_ENTRY,
 		));
-	
+
+		$cntforms = $this->get_flist(array(
+			"subtype" => FSUBTYPE_CAL_CONF,
+		));
+
 		// retrieve a list of forms that can be used for adding events
+		/*
 		$ev_entry_forms = $this->get_flist(array(
 			"type" => FTYPE_ENTRY,
 			"subtype" => FSUBTYPE_EV_ENTRY,
 		));
+		*/
 
 		// no form should be selected if the user has not made a choice
 		// yet, so we add a default choise to the front of both lists
 		$default = array("" => "-- Vali --");
 		$ch_forms = $default + $ch_forms;
-		$ev_entry_forms = $default + $ev_entry_forms;
+		//$ev_entry_forms = $default + $ev_entry_forms;
 
 		$this->vars(array(
 			"forms" => $this->multiple_option_list($this->chain["forms"],$forms),
@@ -230,10 +251,10 @@ class form_chain extends form_base
 			"after_redirect" => checked($this->chain["after_redirect"] == 1),
 			"after_redirect_url" => $this->chain["after_redirect_url"],
 			"folders" => $this->picker($this->chain["save_folder"],$ob->get_list()),
-			"has_calendar" => checked($this->chain["has_calendar"]),
+			"has_calendar" => checked($fc["flags"] && OBJ_HAS_CALENDAR),
 			//"cal_forms" => $this->picker($this->chain["cal_form"],$selected_forms),
-			"cal_controllers" => $this->picker($this->chain["cal_controller"],$ch_forms),
-			"cal_entry_forms" => $this->picker($this->chain["cal_entry_form"],$ev_entry_forms),
+			"cal_controllers" => $this->picker($this->chain["cal_controller"],$cntforms),
+			//"cal_entry_forms" => $this->picker($this->chain["cal_entry_form"],$ev_entry_forms),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 		));
 		return $this->parse();
@@ -377,6 +398,7 @@ class form_chain extends form_base
 		$f = new form;
 		$f->set_current_chain_entry($entry_id);
 		aw_global_set("current_chain_entry", $entry_id);
+		aw_global_set("current_chain",$id);
 		// FIXME: blah
 		global $load_chain_data;
 		$lcd = $load_chain_data;

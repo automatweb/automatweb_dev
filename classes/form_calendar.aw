@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.6 2002/07/25 23:55:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.7 2002/08/21 12:05:30 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -405,13 +405,9 @@ class form_calendar extends form_base
 
 		$ft_name = sprintf("form_%s_entries",$eform);
 
-		$q = sprintf("SELECT *,objects.name AS name FROM objects
-				LEFT JOIN calendar2event ON (objects.oid = calendar2event.entry_id)
-				LEFT JOIN form_entries ON (objects.oid = form_entries.id)
-				LEFT JOIN $ft_name ON (objects.oid = $ft_name.id)
-				WHERE calendar2event.cal_id = '$cal_id' AND objects.status = 2 AND (start >= %d) AND (end <= %d)",
-				$start,$end);
-
+		$q = "SELECT * FROM calendar2event
+			LEFT JOIN objects ON calendar2event.entry_id = objects.oid
+			WHERE cal_id = '$cal_id' AND relation = '$ctrl' AND start >= '$start' AND end <= '$end' AND objects.status = 2";
 		$this->db_query($q);
 		$events = array();
 		$this->raw_events = array();
@@ -421,6 +417,10 @@ class form_calendar extends form_base
 		{
 			$e_start = $row["start"];
 			$e_end = $row["end"];
+			if (!$e_end)
+			{
+				$e_end = $e_start + 86399;
+			};
 			$e_count = (int)$row["items"];
 
 			$dkey = date("dmY",$e_start);
@@ -579,10 +579,12 @@ class form_calendar extends form_base
 
 	////
 	// !updates calende time period definitons
-	function upd_timedef($args = array())
+	function upd_timedef_xxx($args = array())
 	{
 		extract($args);
 		// figure out which form element does what
+		// but that's obsolete, I already know 
+		// how it's done
 		foreach($els as $key => $el)
 		{
 			// start of the period
@@ -677,14 +679,21 @@ class form_calendar extends form_base
 		// XXX 3600
 		$timeshift = $pregap * 3600;
 
-		for ($i = ($start + $timeshift); $i <= $end; $i=$i+($shift * $timedef)+$timeshift)
+		if ($period_cnt < 1)
 		{
+			$period_cnt = 1;
+		};
+
+		//for ($i = ($start + $timeshift); $i <= $end; $i=$i+($shift * $timedef)+$timeshift)
+		for ($i = ($start); $i <= $end; $i=$i+($shift * $period_cnt))
+		{
+			flush();
 			// if it is in range, then ..
 			if ( ($i >= $start) && ($i <= $end) )
 			{
 				$blocks[] = array(
 					"start" => $i,
-					"end" => $i+($shift * $timedef) - 1,
+					"end" => $i+($shift) - 1,
 					"max" => $max_items,
 				);
 			};
@@ -792,20 +801,21 @@ class form_calendar extends form_base
 		$this->raw_events = array();
 		$this->raw_headers = array();
 
-		$this->load($eform);
-
-		if ($eid)
+		//$this->load($eform);
+		$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$start' AND end >= '$end' AND status = 2";
+		$this->db_query($q);
+		while($row = $this->db_next())
 		{
-			$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE cal_id = '$eid' AND start <= '$start' AND end >= '$end' AND status = 2";
-			$this->db_query($q);
-			while($row = $this->db_next())
-			{
-				$found = true;
-				$new_blocks = $this->_process_blocks($row);
-				$blocks = $blocks + $new_blocks;
-			}
+			$found = true;
+			$new_blocks = $this->_process_blocks($row);
+			$blocks = $blocks + $new_blocks;
+		}
 
-			$this->vector = array();
+		$this->vector = array();
+
+		if ($eform)
+		{
+			//$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eid' AND start <= '$start' AND end >= '$end' AND status = 2";
 
 			// get events in range and build an incremental vector of all events. for
 			// example, if we have 2 events, one from 10:00-13:00 and other from
@@ -821,7 +831,7 @@ class form_calendar extends form_base
 							"start" => $start,
 							"end" => $end,
 							"cal_id" => $eid,
-							"eform" => $eform,
+							"ctrl" => $ctrl,
 			));
 
 			// now we have all the ranges (if any) and events (if any)
