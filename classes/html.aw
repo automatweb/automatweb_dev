@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.51 2004/08/18 12:43:56 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.52 2004/08/18 13:15:46 sven Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -354,17 +354,33 @@ class html extends aw_template
 		return '<span class="'.$class.'">'.$content.'</span>';
 	}
 	
-	function get_change_url($oid, $params = false)
+	function get_change_url($oid, $params = array(), $caption = false)
 	{
 		$obj = &obj($oid);
 		$params["id"] = $obj->id();
-		$url = $this->mk_my_orb("change", $params, $obj->class_id());
-		return $url;
+		$retval = $this->mk_my_orb("change", $params, $obj->class_id());
+		if($caption)
+		{
+			$retval = html::href(array(
+				"url" => $retval,
+				"caption" => $caption
+			));
+		}
+		return $retval;
 	}
 	
-	function get_new_url($class_id, $params = array())
+	function get_new_url($class_id, $parent, $params = array(), $caption = false)
 	{
-		return $this->mk_my_orb("new", $params, $class_id);	
+		$params["parent"] = $parent;
+		$retval =  $this->mk_my_orb("new", $params, $class_id);
+		if($caption)
+		{
+			$retval = html::href(array(
+				"url" => $retval,
+				"caption" => $caption
+			));
+		}
+		return $retval;	
 	}
 };
 ?>
