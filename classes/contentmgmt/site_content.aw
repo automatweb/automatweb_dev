@@ -76,7 +76,7 @@ class site_content extends menuedit
 		$imc = get_instance("image");
 		$pers = get_instance("periods");
 		$_t = aw_global_get("act_period");
-		$imdata = $imc->get_image_by_id($_t["data"]["image"]);
+		$imdata = $imc->get_image_by_id($_t["data"]["image"]["id"]);
 		$this->vars(array(
 			"per_string" => $_t["name"],
 			"act_per_id" => $_t["id"],
