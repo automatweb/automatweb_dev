@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.289 2004/07/19 06:25:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.290 2004/08/16 12:30:29 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -712,7 +712,7 @@ class core extends acl_base
 		//XXX: watchout, on eau the following if block had a "false &&" part in it
 		//i just deleted that, but for further testing i'm writing this comment
 		//so i could find the place easily
-		if (!($class == "bugtrack" && $action="add_error"))
+		if (!($class == "bugtrack" && $action="add_error") && aw_ini_get("config.error_log_site") != "")
 		{
 			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
 			$socket = get_instance("socket");
