@@ -28,6 +28,8 @@ $LC = aw_global_get("LC");
 
 $awt = new aw_timer;
 
+__init_aw_session_track();
+
 $sf = new aw_template;
 $sf->db_init();
 $sf->tpl_init("automatweb");
