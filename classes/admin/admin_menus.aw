@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.64 2004/05/13 13:49:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.65 2004/05/21 07:27:48 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -893,7 +893,7 @@ class admin_menus extends aw_template
 		}
 		else
 		{
-			$ps = " AND (period = 0 OR period IS NULL)";
+			$ps = " AND (period = 0 OR period IS NULL OR class_id IN (".CL_USER."))";
 		};
 
 
