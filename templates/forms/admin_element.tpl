@@ -309,12 +309,19 @@ function toggle_file_link_newwin()
 <td class="fgtext" colspan="2">&nbsp;
 </td>
 </tr>
+<tr>
 <td class="fgtext">{VAR:LC_FORMS_DEFAULT_DATE}</td>
 <td class="fgtext" align="right">
 &nbsp;<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="rel" {VAR:date_rel_checked}> {VAR:C_FORMS_DATE_IN_ELEMENT} 
 <select name='{VAR:cell_id}_def_date_rel' class='small_button'>{VAR:date_rel_els}</select>&nbsp;&nbsp;&nbsp;&nbsp;
 <input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="now" {VAR:date_now_checked}> {VAR:LC_FORMS_TIME} </td>
 <td class="fgtext" colspan=2>pluss&nbsp;<input type="text" class="small_button" size="5" name="{VAR:cell_id}_def_date_num" value="{VAR:def_date_num}">&nbsp;<select name='{VAR:cell_id}_def_date_add_type' class="small_button">{VAR:add_types}</select>&nbsp;</td>
+</tr>
+<tr>
+<td class="fgtext">Visuaal</td>
+<td class="fgtext" colspan="3">
+<input type="checkbox" name="{VAR:cell_id}_visual_use_textbox" {VAR:visual_use_textbox}> Kasuta kuupäevade sisestamiseks tekstiboksi
+</td>
 </tr>
 <!-- END SUB: DATE_ITEMS -->
 
@@ -344,6 +351,12 @@ function toggle_file_link_newwin()
 <td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_link_text' VALUE='{VAR:link_text}'></td>
 <td class="fgtext">{VAR:LC_FORMS_DESCRIBE_TEXT}:</td>
 <td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_link_address' VALUE='{VAR:link_address}'></td>
+</tr>
+<tr>
+<td class="fgtext">Uues aknas:</td>
+<td class="fgtext"><input type='checkbox' NAME='{VAR:cell_id}_link_newwindow' VALUE='1' {VAR:link_newwindow}></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
 </tr>
 <!-- END SUB: HLINK_ITEMS -->
 

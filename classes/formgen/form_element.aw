@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.6 2002/11/13 11:35:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.8 2002/11/13 17:52:20 duke Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -178,7 +178,8 @@ class form_element extends aw_template
 				"search_separate_words"		=> checked($this->arr["search_separate_words"]),
 				"search_logical"					=> checked($this->arr["search_logical"]),
 				"search_separate_words_sep" => $this->arr["search_separate_words_sep"],
-				"search_field_in_set"			=> checked($this->arr["search_field_in_set"])
+				"search_field_in_set"			=> checked($this->arr["search_field_in_set"]),
+				"link_newwindow"					=> checked($this->arr["link_newwindow"])
 			));
 	
 			$this->vars(array(
@@ -685,6 +686,8 @@ class form_element extends aw_template
 					"hr_ord" => $this->arr["hour_ord"],
 					"minute_ord" => $this->arr["minute_ord"],
 					"second_ord" => $this->arr["second_ord"],
+					// use a textbox for entering dates
+					"visual_use_textbox" => checked($this->arr["visual_use_textbox"]),
 				));
 				$di = $this->parse("DATE_ITEMS");
 				$this->vars(array(
@@ -1164,6 +1167,8 @@ class form_element extends aw_template
 			$this->arr["clink_target"] = $$var;
 			$var=$base."_clink_no_orb";
 			$this->arr["clink_no_orb"] = $$var;
+			$var=$base.'_link_newwindow';
+			$this->arr['link_newwindow'] = $$var;
 		}
 
 		if ($this->arr["type"] == 'timeslice')
@@ -1212,6 +1217,8 @@ class form_element extends aw_template
 			$this->arr["minute_ord"] = $$var;
 			$var=$base."_second_ord";
 			$this->arr["second_ord"] = $$var;
+			$var=$base."_visual_use_textbox";
+			$this->arr["visual_use_textbox"] = $$var;
 		}
 
 		if ($this->arr["type"] == "submit" || $this->arr["type"] == "reset" || $this->arr["type"] == "button")
@@ -2269,69 +2276,81 @@ class form_element extends aw_template
 				break;
 
 			case "date":
-				load_vcl("date_edit");
-				$de = new date_edit(time());
-				$bits = array();
-				$has_some = false;
-				if ($this->arr["has_year"])
+				if ($this->arr["visual_use_textbox"])
 				{
-					$bits["year"] = $this->arr["year_ord"];
-					$has_some = true;
-				}
-				if ($this->arr["has_month"])
-				{
-					$bits["month"] = $this->arr["month_ord"];
-					$has_some = true;
-				}
-				if ($this->arr["has_day"])
-				{
-					$bits["day"] = $this->arr["day_ord"];
-					$has_some = true;
-				}
-				if ($this->arr["has_hr"])
-				{
-					$bits["hour"] = $this->arr["hour_ord"];
-					$has_some = true;
-				}
-				if ($this->arr["has_minute"])
-				{
-					$bits["minute"] = $this->arr["minute_ord"];
-					$has_some = true;
-				}
-				if ($this->arr["has_second"])
-				{
-					$bits["second"] = $this->arr["second_ord"];
-					$has_some = true;
-				}
-
-				uasort($bits,array($this,"_date_ord_cmp"));
-
-
-				if ($has_some)
-				{
-					$de->configure($bits);
+					$val = $this->get_val($elvalues);
+					if ($val)
+					{
+						$val = date("d/m/Y",$val);
+					};
+					$html .= "<input type='textbox' size='10' maxlength='10' name='" .$element_name . "' value='$val'>";
 				}
 				else
 				{
-					$de->configure(array(
-						"year" => "",
-						"month" => "",
-						"day" => ""
-					));
-				}
-				$fy = $this->arr["from_year"];
-				$ty = $this->arr["to_year"];
-				if ($this->arr["def_date_type"] == "now")
-				{
-					$def = time() + ($this->arr["def_date_num"] * $this->arr["def_date_add"]);
-				}
-				else
-				{
-					$def = time();
-				}
-//				echo "aentry_id = $this->entry_id , $this->entry <br>";
-				$vl = $this->get_val($elvalues);
-				$html .= $de->gen_edit_form($element_name, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
+					load_vcl("date_edit");
+					$de = new date_edit(time());
+					$bits = array();
+					$has_some = false;
+					if ($this->arr["has_year"])
+					{
+						$bits["year"] = $this->arr["year_ord"];
+						$has_some = true;
+					}
+					if ($this->arr["has_month"])
+					{
+						$bits["month"] = $this->arr["month_ord"];
+						$has_some = true;
+					}
+					if ($this->arr["has_day"])
+					{
+						$bits["day"] = $this->arr["day_ord"];
+						$has_some = true;
+					}
+					if ($this->arr["has_hr"])
+					{
+						$bits["hour"] = $this->arr["hour_ord"];
+						$has_some = true;
+					}
+					if ($this->arr["has_minute"])
+					{
+						$bits["minute"] = $this->arr["minute_ord"];
+						$has_some = true;
+					}
+					if ($this->arr["has_second"])
+					{
+						$bits["second"] = $this->arr["second_ord"];
+						$has_some = true;
+					}
+
+					uasort($bits,array($this,"_date_ord_cmp"));
+
+
+					if ($has_some)
+					{
+						$de->configure($bits);
+					}
+					else
+					{
+						$de->configure(array(
+							"year" => "",
+							"month" => "",
+							"day" => ""
+						));
+					}
+					$fy = $this->arr["from_year"];
+					$ty = $this->arr["to_year"];
+					if ($this->arr["def_date_type"] == "now")
+					{
+						$def = time() + ($this->arr["def_date_num"] * $this->arr["def_date_add"]);
+					}
+					else
+					{
+						$def = time();
+					}
+	//				echo "aentry_id = $this->entry_id , $this->entry <br>";
+					$vl = $this->get_val($elvalues);
+					$html .= $de->gen_edit_form($element_name, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
+				};
 				break;
 		};
 		
@@ -2553,6 +2572,12 @@ class form_element extends aw_template
 			{
 				// I don't get it
 				$var = $tm;
+			};
+
+			if ($this->arr["visual_use_textbox"])
+			{
+				list($d,$m,$y) = explode("/",$v);
+				$var = mktime(0,0,0,$m,$d,$y);
 			};
 		}
 		else
