@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.274 2004/06/03 13:11:47 duke Exp $
+// $Id: class_base.aw,v 2.275 2004/06/03 17:47:13 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -578,7 +578,8 @@ class class_base extends aw_template
 
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
-			$this->inst->callback_mod_reforb(&$argblock);
+			$this->inst->callback_mod_reforb(&$argblock,$this->request);
+
 		};
 
 		$submit_action = "submit";
@@ -1616,6 +1617,10 @@ class class_base extends aw_template
 
 		if ($this->view == 1)
 		{
+			if ($val["type"] == "date_select")
+			{
+				$val["value"] = get_lc_date($val["value"]);
+			};
 			$val["type"] = "text";
 		};
 
@@ -2841,7 +2846,7 @@ class class_base extends aw_template
 			if ($status != PROP_IGNORE && "int" == $property["datatype"] && (is_numeric($property["value"]) === false))
 			{
 				$status = PROP_ERROR;
-				$property["error"] = "Siia saab sisestada ainult arvu!";
+				$property["error"] = $property["name"] . " - siia saab sisestada ainult arvu!";
 			}
 
 			if (PROP_ERROR == $status)
