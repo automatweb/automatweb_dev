@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.29 2003/03/13 14:48:10 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.30 2003/03/13 16:14:08 axel Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -134,9 +134,9 @@ class html extends aw_template
 
 		if ($multiple)
 		{
-			if (is_array($options) && ($x = array_search(0,$options)))
+			if (isset($options[0]))
 			{
-				unset($options[$x]);
+				unset($options[0]);
 			}
 			$options = $this->mpicker($selected,$options);
 		}
