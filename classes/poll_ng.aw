@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.7 2004/02/11 09:26:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.8 2004/02/25 15:56:16 kristo Exp $
 
 /*
 
@@ -16,6 +16,8 @@
 
 @classinfo relationmgr=yes
 
+@reltype ANSWER value=1 clid=CL_DOCUMENT
+@caption polli vastus
 
 */
 class poll_ng extends class_base
@@ -23,53 +25,48 @@ class poll_ng extends class_base
 	function poll_ng()
 	{
 		$this->init(array(
-			  "clid" => CL_POLL_NG,
-		  ));
-	}
-
-	function callback_get_rel_types()
-	{
-		return array("1" => "polli vastus");
+			"clid" => CL_POLL_NG,
+		));
 	}
 
 	function callback_get_choices($args = array())
 	{
 		$this->t = new aw_table(array(
-                        "prefix" => "poll_choices",
-                ));
-                $this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-                $this->t->define_field(array(
-                        "name" => "id",
-                        "caption" => "ID",
-                        "talign" => "center",
-                        "align" => "center",
-                        "nowrap" => "1",
-                        "width" => "30",
-                ));
-                $this->t->define_field(array(
-                        "name" => "name",
-                        "caption" => "Nimi",
-                        "talign" => "center",
-                        "nowrap" => "1",
-                ));
-                $this->t->define_field(array(
-                        "name" => "clicks",
-                        "caption" => "Klikke",
-                        "talign" => "center",
-                        "align" => "center",
-                        "nowrap" => "1",
+			"prefix" => "poll_choices",
+			"layout" => "generic"
+		));
+		$this->t->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+		));
+		$this->t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+			"nowrap" => "1",
+		));
+		$this->t->define_field(array(
+			"name" => "clicks",
+			"caption" => "Klikke",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
 			"numeric" => 1,
-                ));
-                $this->t->define_field(array(
-                        "name" => "percent",
-                        "caption" => "Protsent",
-                        "talign" => "center",
-                        "align" => "center",
-                        "nowrap" => "1",
-                ));
+		));
+		$this->t->define_field(array(
+			"name" => "percent",
+			"caption" => "Protsent",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+		));
 	
 		$o = $args["obj_inst"];
-		foreach($o->connections_from(array("type" => 1)) as $c)
+		foreach($o->connections_from(array("type" => RELTYPE_ANSWER)) as $c)
 		{
 			$this->t->define_data(array(
 				"id" => $c->prop("to"),
@@ -108,7 +105,7 @@ class poll_ng extends class_base
 
 		$votes = $poll->meta("votes");
 
-		foreach($poll->connections_from(array("type" => 1)) as $c)
+		foreach($poll->connections_from(array("type" => RELTYPE_ANSWER)) as $c)
 		{
 			$retval .= sprintf("%d ",$votes[$c->prop("to")]);
 			$retval .= html::href(array(
@@ -141,8 +138,8 @@ class poll_ng extends class_base
 		extract($args);
 		// first we have to check whether there really is a relation between the object containing
 		// the alias and the actuall poll object  oid==poll
-		$relation = $this->db_fetch_field("SELECT id from aliases WHERE source = $oid AND target = $poll","id");
-		if (!$relation)
+		$tmp_o = obj($oid);
+		if (count($tmp_o->connections_from(array("to" => $poll))) < 1)
 		{
 			die ("there is no relation between those objects");
 		};
@@ -151,7 +148,7 @@ class poll_ng extends class_base
 
 		$pobj = obj($poll);
 		$conn = $pobj->connections_from(array(
-			"type" => 1,
+			"type" => RELTYPE_ANSWER,
 			"to" => $choice
 		));
 		if (count($conn) < 1)
@@ -170,6 +167,8 @@ class poll_ng extends class_base
 		{
 			$votes[$choice] = 1;
 		};
+
+		// acl will fuck us here :(
 		$this->upd_object(array(
 			"oid" => $poll,
 			"metadata" => array("votes" => $votes),
