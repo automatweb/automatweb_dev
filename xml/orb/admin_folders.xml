@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="admin_folders" folder="admin" default="1">
+		<action name="folders">
+			<function name="show_folders">
+				<arguments>
+					<optional name="period"/>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
