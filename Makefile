@@ -18,7 +18,7 @@ ini:
 	@echo "Generating AW ini file"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -d register_argc_argv=1 -q -f ./scripts/ini/mk_ini.aw ../../aw.ini.root > aw.ini; \
+		./scripts/php -n -d register_argc_argv=1 -f ./scripts/ini/mk_ini.aw aw.ini.root > aw.ini; \
 	else \
 		echo "Cmdline php not found, cannot compile ini file"; \
 	fi
@@ -27,9 +27,18 @@ properties:
 	@echo "Generating property definitions"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -d register_argc_argv=1 -q -f ./scripts/prop/collect.aw \
+		./scripts/php -n -d register_argc_argv=1 -f ./scripts/prop/collect.aw \
 	else \
 		echo "Cmdline php not found, cannot collect properties"; \
+	fi
+
+trans:
+	@echo "Generating translation templates"
+	@if test -e scripts/php; \
+		then \
+		./scripts/php -n -d register_argc_argv=1 -q -f ./scripts/trans_scanner.aw \
+	else \
+		echo "Cmdline php not found, cannot create translation templates"; \
 	fi
 
 msg:
