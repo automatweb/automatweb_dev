@@ -10,13 +10,6 @@
 			</function>
 		</action>
 
-		<action name="submit">
-			<function name="submit">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
 		<action name="change">
 			<function name="new_change_cols">
 				<arguments>
@@ -33,25 +26,6 @@
 			</function>
 		</action>
 		
-		<action name="del_col">
-			<function name="del_col">
-				<arguments>
-					<required name="id"/>
-					<required name="col"/>
-				</arguments>
-			</function>
-		</action>
-
-		
-		<action name="add_col">
-			<function name="add_col">
-				<arguments>
-					<required name="id"/>
-					<required name="after"/>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="show_user_entries">
 			<function name="show_user_entries">
 				<arguments>
