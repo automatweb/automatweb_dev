@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.6 2003/12/09 18:34:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.7 2004/01/06 13:46:17 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
@@ -7,7 +7,7 @@
 @default table=objects
 @default group=general
 
-@property navtoolbar type=toolbar store=no no_caption=1 group=general,overview editonly=1
+@property navtoolbar type=toolbar store=no no_caption=1 group=general,all_actions,meetings,tasks,calls editonly=1
 
 @property name type=textbox size=30 maxlenght=255 table=objects
 @caption Organisatsiooni nimi
@@ -39,14 +39,28 @@
 @property logo type=textbox size=40 method=serialize field=meta table=objects
 @caption Organisatsiooni logo(url)
 
-@property firmajuht type=chooser orient=vertical table=kliendibaas_firma 
+@property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
 @caption Organisatsiooni juht
 
 @default group=overview
-@groupinfo overview caption="Seotud tegevused"
 
-@property progress type=text callback=callback_org_actions store=no no_caption=1
+@property org_actions type=calendar no_caption=1 group=all_actions viewtype=relative
 @caption org_actions
+
+@property org_calls type=calendar no_caption=1 group=calls viewtype=relative
+@caption Kõned
+
+@property org_meetings type=calendar no_caption=1 group=meetings viewtype=relative
+@caption Kohtumised
+
+@property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
+@caption Toimetused
+
+@groupinfo overview caption="Seotud tegevused" 
+@groupinfo all_actions caption="Kõik" parent=overview submit=no
+@groupinfo calls caption="Kõned" parent=overview submit=no
+@groupinfo meetings caption="Kohtumised" parent=overview submit=no
+@groupinfo tasks caption="Toimetused" parent=overview submit=no
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -77,6 +91,9 @@
 
 @reltype CALL value=12 clid=CL_CRM_CALL
 @caption Kõne
+
+@reltype TASK value=13 clid=CL_TASK
+@caption Toimetus
 
 @classinfo no_status=1
 			
@@ -120,125 +137,130 @@ class crm_company extends class_base
 				$conns = $arr["obj_inst"]->connections_from(array(
 					"type" => RELTYPE_WORKERS,
 				));
-
 				foreach($conns as $conn)
 				{
 					$data["options"][$conn->prop("to")] = $conn->prop("to.name");
-
 				};
 				break;
 			
 			case "navtoolbar":
-				$this->firma_toolbar($arr);
+				$this->navtoolbar($arr);
+				break;
+
+			case "org_actions":
+			case "org_calls":
+			case "org_meetings":
+			case "org_tasks":
+				$this->do_org_actions(&$arr);
 				break;
 			
 		};
 		return $retval;
 	}
+
+	function callback_pre_edit($arr)
+	{
+		// initialize
+		$users = get_instance("users");
+		$this->cal_id = $users->get_user_config(array(
+			"uid" => aw_global_get("uid"),
+			"key" => "user_calendar",
+		));
+	}
 	
-	function set_property($arr)
+	function do_org_actions($arr)
 	{
-		$data = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($data["name"])
+		$ob = $arr["obj_inst"];
+		$args = array();
+		switch($arr["prop"]["name"])
 		{
+			case "org_calls":
+				$args["type"] = RELTYPE_CALL;
+				break;
+			
+			case "org_meetings":
+				$args["type"] = RELTYPE_KOHTUMINE;
+				break;
+			
+			case "org_tasks":
+				$args["type"] = RELTYPE_TASK;
+				break;
 		};
-		return $retval;
-	}	
+		$conns = $ob->connections_from($args);
+		$t = &$arr["prop"]["vcl_inst"];
 
-	function callback_org_actions($args)
-	{
-		/// XXX: I need to rewrite this and put in some more logical place
-		$ob = $args["obj_inst"];
-		$conns = $ob->connections_from();
+		$range = $arr["prop"]["vcl_inst"]->get_range(array(
+			"date" => $arr["request"]["date"],
+			"viewtype" => !empty($arr["request"]["viewtype"]) ? $arr["request"]["viewtype"] : $arr["prop"]["viewtype"],
+		));
+		$start = $range["start"];
+		$end = $range["end"];
 
-		$t = new aw_table(array(
-			'prefix' => 'org_actions',
-		));
-
-		$t->set_default_sortby('changed');//peaks otsima docust sündmuse kellaaja
-
-		$t->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
-
-		$t->define_field(array(
-			'name' => 'name',
-			'caption' => 'Nimi',
-			'sortable' => '1',
-		));
-		
-		$t->define_field(array(
-			'name' => 'type',
-			'caption' => 'Tüüp',
-			'sortable' => '1',
-		));
-		
-		$t->define_field(array(
-			'name' => 'moreinfo',
-			'caption' => 'lisainfo',
-			//'sortable' => '1',
-		));
-		
-		$t->define_field(array(
-			'name' => 'event_start',
-			'caption' => 'Sündmus algab',
-			'sortable' => '1',
-		));
-		$t->define_field(array(
-			'name' => 'event_end',
-			'caption' => 'Sündmus lõppeb',
-			'sortable' => '1',
-		));
-		$t->define_field(array(
-			'name' => 'createdby',
-			'caption' => 'Looja',
-			'sortable' => '1',
-		));
-		$t->define_field(array(
-			'name' => 'modifiedby',
-			'caption' => 'Muutja',
-			'sortable' => '1',
-		));
+		$overview_start = $range["overview_start"];
 
 		$classes = $this->cfg["classes"];
-	
+
+		$return_url = urlencode(aw_global_get("REQUEST_URI"));
+		$planner = get_instance(CL_PLANNER);
+
 		foreach($conns as $conn)
 		{
 			$item = new object($conn->prop("to"));
+			if ($item->prop("start1") < $overview_start)
+			{
+				continue;
+			};
 			
 			$cldat = $classes[$item->class_id()];
-			if (isset($cldat["alias"]))
+
+			if ($item->class_id() == CL_CRM_CALL)
 			{
-				if ($cldat["alias_class"])
+				if ($item->prop("is_done") == "")
 				{
-					$cldat["file"] = $cldat["alias_class"];
+					$icon = "call-todo.gif";
 				}
+				else
+				{
+					$icon = "call-done.gif";
+				};
 			}
+			else
+			{
+				$icon = "";
+			};
 		
-			// I need to filder the connections based on whether they write to calendar
+			// I need to filter the connections based on whether they write to calendar
 			// or not.
-			
-			$t->define_data(array(
-				'name' => html::href(array('caption' => $item->name(),'url' => $this->mk_my_orb('change', array('id' => $item->id()), $cldat["file"]))),
-				// oh geez. so that is how it's done
-				'type' => $cldat["name"],
-				'event_start' => date('Y-m-d H:i',$item->prop("start1")),
-				'event_end' => date('Y-m-d H:i',$item->prop("duration")),
-				'moreinfo' => $doc['moreinfo'],
-				'modifiedby' => $val['modifiedby'],
-				'createdby' => $val['createdby'],
+			$link = $planner->get_event_edit_link(array(
+				"cal_id" => $this->cal_id,
+				"event_id" => $item->id(),
+				"return_url" => $return_url,
 			));
+
+			if ($item->prop("start1") > $start)
+			{
+				$t->add_item(array(
+					"timestamp" => $item->prop("start1"),
+					"data" => array(
+						"name" => "<font color='gray'>" . $cldat["name"] . " </font><em>" . $item->name() . "</em>",
+						"link" => $link,
+						"modifiedby" => $item->prop("modifiedby"),
+						"icon" => $icon,
+					),
+				));
+			};
+
+			if ($item->prop("start1") > $overview_start)
+			{
+				$t->add_overview_item(array(
+					"timestamp" => $item->prop("start1"),
+				));
+			};
 		}
-		$t->sort_by();
-		
-		$nodes = array();
-		$nodes['actions'] = array(
-			'value' => $t->draw(),
-		);
-		return $nodes;	
 	}
 	
 	
-	function firma_toolbar(&$args)
+	function navtoolbar(&$args)
 	{
 		$toolbar = &$args["prop"]["toolbar"];
 		$users = get_instance("users");
@@ -247,11 +269,6 @@ class crm_company extends class_base
                         "uid" => aw_global_get("uid"),
                         "key" => "kliendibaas",
                 ));
-
-		$cal_id = $users->get_user_config(array(
-			"uid" => aw_global_get("uid"),
-			"key" => "user_calendar",
-		));
 
 		// hm, I dunno but there seems to be a conflict here. Because you set the folders
 		// through the crm_db class, which means that they can be different for each user
@@ -269,10 +286,10 @@ class crm_company extends class_base
 			$parents[RELTYPE_ETTEVOTLUSVORM] = $crm_db->prop("dir_ettevotlusvorm") == "" ? $default_dir : $crm_db->prop('dir_ettevotlusvorm');
 		};
 
-		if (!empty($cal_id))
+		if (!empty($this->cal_id))
 		{
-			$user_calendar = new object($cal_id);
-			$parents[RELTYPE_CALL] = $parents[RELTYPE_OFFER] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_DEAL] = $user_calendar->prop('event_folder');
+			$user_calendar = new object($this->cal_id);
+			$parents[RELTYPE_CALL] = $parents[RELTYPE_OFFER] = $parents[RELTYPE_KOHTUMINE] = $parents[RELTYPE_DEAL] = $parents[RELTYPE_TASK] = $user_calendar->prop('event_folder');
 		}
 
 		$toolbar->add_menu_button(array(
@@ -325,7 +342,7 @@ class crm_company extends class_base
 		// basically, I need to create a list of relation types that are of any
 		// interest to me and then get a list of all classes for those
 
-		$action = array(RELTYPE_OFFER,RELTYPE_DEAL,RELTYPE_KOHTUMINE,RELTYPE_CALL);
+		$action = array(RELTYPE_OFFER,RELTYPE_DEAL,RELTYPE_KOHTUMINE,RELTYPE_CALL,RELTYPE_TASK);
 
 		foreach($action as $key => $val)
 		{
@@ -353,7 +370,7 @@ class crm_company extends class_base
 					'alias_to_org' => $args['obj_inst']->id(),
 					'reltype_org' => $reltype,
 					'class' => 'planner',
-					'id' => $cal_id,
+					'id' => $this->cal_id,
 					'group' => 'add_event',
 					'clid' => $clid,
 					'action' => 'change',
@@ -373,12 +390,12 @@ class crm_company extends class_base
 			};
 		};
 			
-		if (!empty($cal_id))	
+		if (!empty($this->cal_id))	
 		{
 			$toolbar->add_button(array(
 				"name" => "user_calendar",
 				"tooltip" => "Kasutaja kalender",
-				"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
+				"url" => $this->mk_my_orb('change', array('id' => $this->cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
 				"onClick" => "",
 				"img" => "icon_cal_today.gif",
 				"class" => "menuButton",
