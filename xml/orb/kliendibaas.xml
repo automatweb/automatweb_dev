@@ -11,6 +11,28 @@
 				</arguments>
 			</function>
 		</action>
+		<action name="contact_makah">
+			<function name="contact_makah">
+				<arguments>
+					<optional name="tyyp"/>
+					<optional name="id"/>
+					<optional name="name"/>
+					<required name="do"/>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="isik_makah">
+			<function name="isik_makah">
+				<arguments>
+					<optional name="tyyp"/>
+					<optional name="id"/>
+					<optional name="name"/>
+					<required name="do"/>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
