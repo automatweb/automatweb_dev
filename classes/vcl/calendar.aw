@@ -1,7 +1,9 @@
 <?php
-class calendar extends aw_template
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.3 2004/01/06 16:52:32 duke Exp $
+// calendar.aw - VCL calendar
+class vcalendar extends aw_template
 {
-	function calendar()
+	function vcalendar()
 	{
 		$this->init(array(
 			"tpldir" => "calendar",
@@ -117,12 +119,12 @@ class calendar extends aw_template
 
 			case "relative":
 				$content = $this->draw_relative();
-				$caption = date("F d",$this->range["timestamp"]);
+				$caption = date("d",$this->range["timestamp"]) . ". " . get_est_month(date("m",$this->range["timestamp"]));
 				break;
 	
 			default:
 				$content = $this->draw_day();
-				$caption = date("F d",$this->range["timestamp"]);
+				$caption = date("d",$this->range["timestamp"]) . ". " . get_est_month(date("m",$this->range["timestamp"]));
 		};
 		
 		classload("date_calc");
@@ -154,6 +156,7 @@ class calendar extends aw_template
 		$ts = "";
 		foreach($types as $type => $name)
 		{
+			$link = aw_url_change_var("viewtype",$type);
 			$this->vars(array(
 				"link" => aw_url_change_var("viewtype",$type),
 				"text" => $name,
@@ -236,6 +239,7 @@ class calendar extends aw_template
 					"EVENT" => $events_for_day,
 					"daynum" => date("j",$i),
 					"dayname" => date("F d, Y",$i),
+					"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
 				));
 				$rv .= $this->parse("DAY");
 			};
@@ -403,7 +407,7 @@ class calendar extends aw_template
 			$w .= $this->parse("line");
 		};
 		$this->vars(array(
-			"caption" => date("F",$this->range["timestamp"]),
+			"caption" => get_est_month(date("m",$this->range["timestamp"])),
 			"caption_url" => aw_url_change_var(array("viewtype" => "month","date" => date("d-m-Y",$this->range["timestamp"]))),
 			"line" => $w,
 		));
@@ -412,11 +416,15 @@ class calendar extends aw_template
 
 	function draw_event($evt)
 	{
+		$m = date("m",$evt["timestamp"]);
 		$this->evt_tpl->vars(array(
 			"time" => date("H:i",$evt["timestamp"]),
 			"date" => date("d-m-Y H:i",$evt["timestamp"]),
+			"lc_date" => date("d",$evt["timestamp"]) . ". " . get_lc_month($m) . " " . date("Y",$evt["timestamp"]),
 			"name" => $evt["name"],
 			"link" => !empty($evt["link"]) ? $evt["link"] : "javascript:void(0)",
+			"modifiedby" => $evt["modifiedby"],
+			"iconurl" => !empty($evt["icon"]) ? "/automatweb/images/icons/" . $evt["icon"] : "/automatweb/images/trans.gif",
 		));
 		return $this->evt_tpl->parse();
 	}
