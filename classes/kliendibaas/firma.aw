@@ -25,6 +25,27 @@ class firma extends aw_template
 		$this->init("kliendibaas");
 	}
 
+/*
+	function create_firmajuht($arr)
+	{
+		extract($arr);
+		/*
+		$id = $this->new_object(array(
+			"name" => $name,
+			"parent" => $parent,
+			"class_id" => CL_ISIK,
+			"comment" => $comment,
+			"metadata" => array(),
+		));
+		$q="insert into kliendibaas_isik(oid,name)values('$id','$name')";
+		
+		$this->db_query($q);
+		*//*
+		return $id;
+	}
+*/
+
+
 	function change($arr)
 	{
 		extract($arr);
@@ -63,7 +84,6 @@ class firma extends aw_template
 
 		if ($id)
 		{
-
 			$toolbar->add_button(array(
 				"name" => "lisa",
 				"tooltip" => "lisa isik",
@@ -73,18 +93,29 @@ class firma extends aw_template
 			));
 
 			$q="select  t.* ,
-			t4.name as s_contact,		
+
+
+			t9.aadress as s_contact,
+			t10.name as s_contact2,
+			t11.name as s_contact3,
 			t1.tegevusala_et as s_pohitegevus,
 			t2.tegevusala_et as s_tegevusala,
 			concat(t6.firstname,' ', t6.lastname) as s_firmajuht,
 			t7.name as s_ettevotlusvorm
 			from kliendibaas_firma as t 
 			left join kliendibaas_ettevotlusvorm as t7 on t7.oid=t.ettevotlusvorm
-			left join kliendibaas_contact as t4 on t4.oid=t.contact
 			left join kliendibaas_tegevusala as t1 on t1.oid=t.pohitegevus
 			left join kliendibaas_tegevusala as t2 on t2.oid=t.tegevusala
 			left join kliendibaas_isik as t6 on t6.oid=t.firmajuht
-			where t.oid='$id'"; //where t*.status=2
+			left join kliendibaas_contact as t9 on t9.oid=t.contact
+			left join kliendibaas_linn as t10 on t10.oid=t9.linn
+			left join kliendibaas_riik as t11 on t11.oid=t9.riik
+			where t.oid='$id'"
+			; //where t*.status=2
+//			concat(t9.aadress,', ',t10.name) as s_contact,
+//			concat(t9.aadress,', ',t10.name,', ',t11.name) as s_contact,
+//			concat(t9.aadress,', ',t9.linn,', ',t9.riik) as s_contact,
+
 
 			$res=$this->db_query($q);
 			$res=$this->db_next();
@@ -109,7 +140,46 @@ class firma extends aw_template
 					$s_korvaltegevused.=$this->parse("s_korvaltegevus");
 				}
 			}
+			if (!$f_contact)
+			{
+				get_instance("kliendibaas/contact");
+				$f_contact=contact::new_contact(array(
+					"parent"=>$ob['parent'],
+					"comment"=>"",
+					"name"=>$f_firma_nimetus,
+					"contact" => array(
+						"name"=>$f_firma_nimetus,
+						),
+
+				));
+				$q='update kliendibaas_firma set contact='.$f_contact.' where oid='.$id;
+				$this->db_query($q);
+			}
+
+			$contact_change=$this->mk_my_orb("change",array("id" => $f_contact,"parent"=>$ob["parent"],"return_url" => urlencode($return_url)),contact);
+
+			if (!$f_firmajuht)
+			{
+				get_instance("kliendibaas/isik");
+	
+				$f_firmajuht = isik::new_isik(array(
+					"name" => $f_firma_nimetus.' - firmajuht',
+					"parent" => $ob['parent'],
+					"comment" => $f_firma_nimetus.' - firmajuht',
+					"isik" => array(
+						"name" => "nimi??",
+					),
+
+				));
+				$q='update kliendibaas_firma set firmajuht='.$f_firmajuht.' where oid='.$id;
+				$this->db_query($q);
+			}
+			$firmajuht_change=$this->mk_my_orb("change",array("id" => $f_firmajuht,"parent"=>$ob["parent"],"return_url" => urlencode($return_url)),isik);
+
 		}
+
+
+
 
 //get_instance("kliendibaas/contact");
 //classload("kliendibaas/contact");
@@ -127,11 +197,10 @@ class firma extends aw_template
 			"f_korvaltegevus"=>$f_korvaltegevus,
 			"f_ettevotlusvorm"=>$f_ettevotlusvorm,
 			"f_firma_nimetus"=>$f_firma_nimetus,
-
-			"f_contact"=>$this->mk_my_orb($f_contact?"change":"new",array("id" => $f_contact,"parent"=>$ob["parent"],"return_url" => urlencode($return_url)),contact),
-
-
-			"contact"=>$konn."jee",
+			"f_contact"=>$f_contact,
+			"contact_change"=>$contact_change,
+			"firmajuht_change"=>$firmajuht_change,
+			
 			"f_firmajuht"=>$f_firmajuht,
 			"f_sourcefile"=>$f_sourcefile,
 			"f_olek"=>$f_olek,
@@ -140,12 +209,13 @@ class firma extends aw_template
 			"s_tegevusala"=>$f_s_tegevusala,
 			"s_pohitegevus"=>$f_s_pohitegevus,
 			"s_ettevotlusvorm"=>$f_s_ettevotlusvorm,
-			"s_riik"=>$f_s_riik,
+			"s_contact"=>$f_s_contact.', '.$f_s_contact2.', '.$f_s_contact3,
+/*			"s_riik"=>$f_s_riik,
 			"s_linn"=>$f_s_linn,
 			"s_maakond"=>$f_s_maakond,
 			"s_firmajuht"=>$f_s_firmajuht,
 
-
+*/
 			"f_ettevotlusvorm_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "ettevotlusvorm", "return_url" => urlencode($return_url))),
 //change			"f_firmajuht_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "firmajuht", "return_url" => urlencode($return_url))),
 			"f_korvaltegevus_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "korvaltegevus", "return_url" => urlencode($return_url))),
@@ -270,7 +340,7 @@ $this->db_query($q);
 					$this->db_query($q);
 					while($row = $this->db_next()) 
 					{
-						$data[$row["oid"]] = $row["name"];
+						$data[$row["oid"]] = substr($row["name"],0,30).".";
 					};
 					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/isik");
 				}
@@ -281,7 +351,7 @@ $this->db_query($q);
 					$this->db_query($q);
 					while($row = $this->db_next()) 
 					{
-						$data[$row["oid"]] = $row["tegevusala_et"];
+						$data[$row["oid"]] = substr($row["tegevusala_et"],0,50);
 					};
 					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/tegevusala");
 				}
@@ -292,20 +362,9 @@ $this->db_query($q);
 					$this->db_query($q);
 					while($row = $this->db_next()) 
 					{
-						$data[$row["oid"]] = $row["tegevusala_et"];
+						$data[$row["oid"]] = substr($row["tegevusala_et"],0,50);
 					};
 					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/tegevusala");
-				}
-			break;
-			case "ettevotlusvorm":
-				{
-					$q="select t1.oid,t1.name from kliendibaas_ettevotlusvorm as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
-					$this->db_query($q);
-					while($row = $this->db_next()) 
-					{
-						$data[$row["oid"]] = $row["name"];
-					};
-					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/ettevotlusvorm");
 				}
 			break;
 			case "pohitegevus":
@@ -314,18 +373,29 @@ $this->db_query($q);
 					$this->db_query($q);
 					while($row = $this->db_next()) 
 					{
-						$data[$row["oid"]] = $row["tegevusala_et"];
+						$data[$row["oid"]] = substr($row["tegevusala_et"],0,50);
 					};
 					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/tegevusala");
 				}
 			break;
+			case "ettevotlusvorm":
+				{
+					$q="select t1.oid,t1.name from kliendibaas_ettevotlusvorm as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
 
+					$this->db_query($q);
+					while($row = $this->db_next()) 
+					{
+						$data[$row["oid"]] = $row["name"];
+					};
+					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/ettevotlusvorm");
+				}
+			break;
 
 			default: $data=array(1=>"nosource");
 
 		}
 
-
+		asort($data);
 
 		$options=$this->picker($selected,array(0=>" - ")+(array)$data);
 
