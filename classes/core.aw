@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.232 2003/11/05 13:26:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.233 2003/11/12 15:30:34 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1819,7 +1819,7 @@ class core extends acl_base
 					$u = $co->get_simple_config("error_redirect");
 				}
 
-				if ($u != "" && aw_global_get("uid") != "kix" && false)
+				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && !headers_sent())
 				{
 					header("Location: $u");
 					die();
@@ -1963,7 +1963,7 @@ class core extends acl_base
 		$this->orb_values["action"] = $fun;
 
 		// grr, I hate this, but I can optimize it later
-		$track_vars = array("cal","date","trid");
+		$track_vars = array("cal","date","trid","project");
 		foreach($track_vars as $tvar)
 		{
 			$tvar_val = aw_global_get($tvar);
@@ -1993,7 +1993,6 @@ class core extends acl_base
 			$this->use_empty = false;
 		};
 
-		// flatten is not the correct term!
 		$this->process_orb_args("",$arr);
 		$res = $this->cfg["baseurl"] . "/";
 		if ($force_admin || $in_admin)
@@ -2032,7 +2031,7 @@ class core extends acl_base
 		};
 		
 		// grr, I hate this, but I can optimize it later
-		$track_vars = array("cal","date","trid");
+		$track_vars = array("cal","date","trid","project");
 		foreach($track_vars as $tvar)
 		{
 			$tvar_val = aw_global_get($tvar);
