@@ -60,7 +60,13 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function read_connection($id)
 	{
-		return $this->contained->read_connection($id);
+		$res = $this->_get_cache("search_".$id, 0, "connection");
+		if (!is_array($res))
+		{
+			$res = $this->contained->read_connection($id);
+			$this->_set_cache("search_".$id, 0, $res, "connection");
+		}
+		return $res;
 	}
 
 	////
@@ -84,11 +90,13 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !returns all connections that match filter
 	function find_connections($arr)
 	{
-		$res = $this->_get_cache("search", 0, "connection");
-		if (!$res)
+		$query_hash = "search::".md5(serialize($arr));
+
+		$res = $this->_get_cache("search::".$query_hash, 0, "connection");
+		if (!is_array($res))
 		{
 			$res = $this->contained->find_connections($arr);
-			$this->_set_cache("search", 0, $res, "connection");
+			$this->_set_cache("search::".$query_hash, 0, $res, "connection");
 		}
 		return $res;
 	}
