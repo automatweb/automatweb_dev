@@ -819,16 +819,20 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$acld = ", objects.acldata as acldata, objects.parent as parent";
 			}
-			$q = "SELECT objects.oid as oid,objects.name as name,objects.parent as parent  $acld FROM $joins WHERE $where ".$this->sby." ".$this->limit;
+			$q = "SELECT objects.oid as oid,objects.name as name,objects.parent as parent, objects.brother_of as brother_of  $acld FROM $joins WHERE $where ".$this->sby." ".$this->limit;
 
 			$acldata = array();
 			$parentdata = array();
+			$objdata = array();
 
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$ret[$row["oid"]] = $row["name"];
 				$parentdata[$row["oid"]] = $row["parent"];
+				$objdata[$row["oid"]] = array(
+					"brother_of" => $row["brother_of"]
+				);
 				if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 				{
 					$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
@@ -866,7 +870,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 		}*/
-		return array($ret, $this->meta_filter, $acldata, $parentdata);
+		return array($ret, $this->meta_filter, $acldata, $parentdata, $objdata);
 	}
 
 	function delete_object($oid)
@@ -1064,6 +1068,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					{
 						$sql[] = $tf." $comparator ".$v_data." ";
 					}
+				}
+				else
+				if ($class_name == "obj_predicate_prop")
+				{
+					if ($val->prop == "id")
+					{
+						$tbl2 = "objects";
+						$fld2 = "oid";
+					}
+					else
+					{
+						$tbl2 = $this->properties[$val->prop]["table"];
+						$fld2 = $this->properties[$val->prop]["field"];
+					}
+					$sql[] = $tf." = ".$tbl2.".".$fld2." ";
 				}
 			}
 			else
