@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.48 2003/03/07 09:01:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.49 2003/03/13 16:25:29 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -827,7 +827,7 @@ class aw_table
 			{
 				$attribs["name"] = $v;
 			} 
-			elseif($v)
+			elseif(isset($v))
 			{
 				$attribs[$k] = $v;
 			};
@@ -839,7 +839,7 @@ class aw_table
 		{
 			foreach($attribs as $k => $v) 
 			{
-				if ($v)
+				if (isset($v))
 				{
 					if ($k == "nowrap")
 					{
