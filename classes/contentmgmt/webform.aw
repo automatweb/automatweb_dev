@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.23 2004/12/29 10:05:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.24 2004/12/29 12:50:46 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -258,7 +258,7 @@ class webform extends class_base
 		switch($prop["name"])
 		{
 			case "form_type_value":
-				$prop["value"] = $arr["obj_inst"]->prop("form_type") == CL_REGISTER_DATA ? t("Registri andmed") : t("Sündmuse vorm");
+				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Registri andmed") : t("Sündmuse vorm");
 				break;
 				
 			case "form_type":
