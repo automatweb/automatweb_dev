@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.118 2002/08/12 12:55:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.119 2002/08/16 11:35:04 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -74,7 +74,7 @@ class form extends form_base
 	function gen_grid($arr)
 	{
 		extract($arr);
-		$this->init($id,"grid.tpl",LC_FORM_CHANGE_FORM);
+		$this->if_init($id,"grid.tpl",LC_FORM_CHANGE_FORM);
 
 		for ($a=0; $a < $this->arr["cols"]; $a++)
 		{
@@ -239,7 +239,7 @@ class form extends form_base
 	function gen_all_elements($arr)
 	{
 		extract($arr);
-		$this->init($id, "all_elements.tpl", LC_FORM_ALL_ELEMENTS);
+		$this->if_init($id, "all_elements.tpl", LC_FORM_ALL_ELEMENTS);
 
 		$style = get_instance("style");
 		$stylesel = $style->get_select(0,ST_CELL,true);
@@ -422,6 +422,7 @@ class form extends form_base
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
 		$this->arr["event_display_table"] = $event_display_table;
 		$this->arr["event_start_el"] = $event_start_el;
+		$this->arr["has_calendar"] = $has_calendar;
 
 		$this->subtype = 0;
 
@@ -709,7 +710,7 @@ class form extends form_base
 	function gen_settings($arr)
 	{
 		extract($arr);
-		$this->init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
+		$this->if_init($id,"settings.tpl", LC_FORM_CHANGE_SETTINGS);
 
 		$t = get_instance("style");
 		$o = get_instance("objects");
@@ -767,6 +768,7 @@ class form extends form_base
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
 			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
 			"event_start_els" => $this->picker($this->arr["event_start_el"],$date_els),
+			"has_calendar" => checked($this->arr["has_calendar"]),
 		));
 
 		$ns = "";
@@ -792,7 +794,7 @@ class form extends form_base
 	function form_aliasmgr($args = array())
 	{
 		extract($args);
-		$this->init($id,"aliasmgr.tpl", $this->vars["LC_FORMS_ALIASMGR"]);
+		$this->if_init($id,"aliasmgr.tpl", $this->vars["LC_FORMS_ALIASMGR"]);
 		$this->vars(array(
 			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
 		));
@@ -1713,7 +1715,7 @@ class form extends form_base
 	function exp_cell_down($arr)
 	{
 		extract($arr);
-		$this->init($id);
+		$this->if_init($id);
 		$this->map_exp_down($this->arr["rows"], $this->arr["cols"], &$this->arr["map"],$row,$col);
 		$this->save();
 		$orb = $this->mk_orb("change", array("id" => $this->id));
@@ -1796,7 +1798,7 @@ class form extends form_base
 	function gen_search_sel($arr)
 	{
 		extract($arr);
-		$this->init($id, "search_sel.tpl", "Vali otsitavad formid");
+		$this->if_init($id, "search_sel.tpl", "Vali otsitavad formid");
 
 		$this->vars(array("LINE" => "")); $cnt=0;
 
@@ -3531,7 +3533,7 @@ class form extends form_base
 	function change_el_pos($arr)
 	{
 		extract($arr);
-		$this->init($id, "", "<a href='".$this->mk_orb("change", array("id" => $id)).LC_FORM_CHANGE_FORM_CHOOSE_EL_LOC);
+		$this->if_init($id, "", "<a href='".$this->mk_orb("change", array("id" => $id)).LC_FORM_CHANGE_FORM_CHOOSE_EL_LOC);
 		$el =&$this->get_element_by_id($el_id);
 		return $el->change_pos($arr,&$this);
 	}
@@ -3642,7 +3644,7 @@ class form extends form_base
 	function metainfo($arr)
 	{
 		extract($arr);
-		$this->init($id,"metainfo.tpl","Muutis formi $this->name metainfot");
+		$this->if_init($id,"metainfo.tpl","Muutis formi $this->name metainfot");
 		$row = $this->get_object($this->id);
 
 		$this->db_query("SELECT count(id) as cnt from form_entries where form_id = $this->id");
@@ -4034,7 +4036,7 @@ class form extends form_base
 	function set_folders($arr)
 	{
 		extract($arr);
-		$this->init($id,"settings_folders.tpl", LC_FORM_CHANGE_FOLDERS);
+		$this->if_init($id,"settings_folders.tpl", LC_FORM_CHANGE_FOLDERS);
 		
 		$o = get_instance("objects");
 		$_menulist = $o->get_list();
@@ -4180,7 +4182,7 @@ class form extends form_base
 	function translate($arr)
 	{
 		extract($arr);
-		$this->init($id,"translate.tpl","T&otilde;gi");
+		$this->if_init($id,"translate.tpl","T&otilde;gi");
 
 		$la = get_instance("languages");
 		$langs = $la->listall();
@@ -4624,7 +4626,7 @@ class form extends form_base
 	function tables($arr)
 	{
 		extract($arr);
-		$this->init($id,"admin_tables.tpl","Muuda tabeleid");
+		$this->if_init($id,"admin_tables.tpl","Muuda tabeleid");
 
 		$this->vars(array(
 			"status_msg" => aw_global_get("status_msg")
@@ -5001,7 +5003,7 @@ class form extends form_base
 	{
 		$page=(int)$page;
 		extract($arr);
-		$this->init($id, "filter_search_sel.tpl", "Vali kasutatav filter");
+		$this->if_init($id, "filter_search_sel.tpl", "Vali kasutatav filter");
 
 		$this->vars(array("LINE" => "")); $cnt=0;
 
@@ -5165,7 +5167,7 @@ class form extends form_base
 	function gen_calendar($args = array())
 	{
 		extract($args);
-		$this->init($id,"calendar.tpl", "Kalendrisätungid");
+		$this->if_init($id,"calendar.tpl", "Kalendrisätungid");
 		$period_types = array("hour" => "tund", "day" => "päev", "week" => "nädal", "month" => "kuu");
 		$deact_types = array("hour" => "tundi", "day" => "päeva", "week" => "nädalat", "month" => "kuud");
 

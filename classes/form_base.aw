@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.37 2002/08/06 11:12:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.38 2002/08/16 11:35:04 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -240,7 +240,8 @@ class form_base extends form_db_base
 	////
 	// !Loads form, template and generates description header
 	// usually called in the beginning of a UI generating function
-	function init($id, $tpl = "", $desc = "")
+	// initialize interface
+	function if_init($id, $tpl = "", $desc = "")
 	{
 		$this->load($id);
 		if ($tpl != "")
@@ -295,6 +296,7 @@ class form_base extends form_db_base
 			"translate" => $this->mk_my_orb("translate", array("id" => $this->id),"form"),
 			"tables" => $this->mk_my_orb("sel_tables", array("id" => $this->id),"form"),
 			"aliasmgr" => $this->mk_my_orb("form_aliasmgr", array("id" => $this->id),"form"),
+			"calendar" => $this->mk_my_orb("calendar",array("id" => $this->id),"form"),
 		));
 
 		if (in_array($action, array("change","show","all_elements","sel_search","sel_filter_search","form_aliasmgr")))
@@ -327,6 +329,11 @@ class form_base extends form_db_base
 		if ($this->arr["has_aliasmgr"])
 		{
 			$this->parse("HAS_ALIASMGR");
+		};
+		
+		if ($this->arr["has_calendar"])
+		{
+			$this->parse("HAS_CALENDAR");
 		};
 
 		$this->vars(array("FG_MENU" => $this->parse("FG_MENU")));
