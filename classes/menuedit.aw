@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.79 2002/01/03 10:00:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.80 2002/01/07 13:14:49 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -2688,6 +2688,10 @@ class menuedit extends aw_template
 					"keywords" => $arr["keywords"],
 					"description" => $arr["description"],
 					"color" => $arr["color"],
+					"template_type" => $template_type,
+					"ftpl_edit" => $ftpl_edit,
+					"ftpl_lead" => $ftpl_lead,
+					"ftpl_view" => $ftpl_view
 				),
 			));
 			
@@ -3396,7 +3400,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$bsar = array();
 		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER);
 		while ($arow = $this->db_next())
+		{
 			$bsar[$arow["parent"]] = $arow["parent"];
+		}
 
 		classload("objects");
 		$ob = new db_objects;
@@ -3458,6 +3464,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$sa = $meta["seealso_refs"];
 		$rsar = $sa[$GLOBALS["lang_id"]];
 
+		classload("form_base");
+		$fb = new form_base;
+		$flist = $fb->get_flist(array("type" => FTYPE_ENTRY));
+
 		$img2 = $meta["img_act_url"] != "" ? "<img src='".$meta["img_act_url"]."'>" : "";
 		global $template_sets;
 		$this->vars(array(
@@ -3517,10 +3527,44 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"img_timing" => $meta["img_timing"],
 			"keywords" => $meta["keywords"],
 			"description" => $meta["description"],
-			"pers" => $dbp->period_mlist(unserialize($row["pers"]))
+			"pers" => $dbp->period_mlist(unserialize($row["pers"])),
+			"ftpl_edit" => $this->picker($meta["ftpl_edit"],$flist),
+			"ftpl_view" => $this->picker($meta["ftpl_view"],$this->list_objects(array("class" => CL_FORM_OUTPUT))),
+			"ftpl_lead" => $this->picker($meta["ftpl_lead"],$this->list_objects(array("class" => CL_FORM_OUTPUT))),
+			"tpltype_form" => checked((int)$meta["template_type"] == TPLTYPE_FORM),
+			"tpltype_tpl" => checked((int)$meta["template_type"] == TPLTYPE_TPL),
+			"ftpl_edit_id" => (int)$meta["ftpl_edit"],
+			"ftpl_lead_id" => (int)$meta["ftpl_lead"],
+			"ftpl_view_id" => (int)$meta["ftpl_view"],
 		));
 
+		$op_list = $fb->get_op_list();
+		reset($flist);
+		while (list($id,) = each($flist))
+		{
+			if (!$form_id)
+			{
+				$form_id = $id;
+			}
+			$this->vars(array("form_id" => $id));
+			if (is_array($op_list[$id]))
+			{
+				reset($op_list[$id]);
+				$cnt = 0;
+				$fop = "";
+				while (list($op_id,$op_name) = each($op_list[$id]))
+				{
+					$this->vars(array("cnt" => $cnt, "op_id" => $op_id, "op_name" => $op_name));
+					$fop.=$this->parse("FORM_OP");
+					$cnt++;
+				}
+				$this->vars(array("FORM_OP" => $fop));
+				$fo.=$this->parse("FORM");
+			}
+		}
+
 		$this->vars(array(
+			"FORM" => $fo,
 			"CAN_BROTHER" => $row["class_id"] == CL_PSEUDO ? $this->parse("CAN_BROTHER") : "",
 			"IS_BROTHER" => $row["class_id"] == CL_PSEUDO ? "" : $this->parse("IS_BROTHER"),
 			"IS_SHOP"	=> ($row["is_shop"] ? $this->parse("IS_SHOP") : "")

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.71 2001/12/18 19:02:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.72 2002/01/07 13:14:34 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -206,7 +206,7 @@ class document extends aw_template
 		$this->db_query($q);
 	}
 
-	function fetch($docid,$field = "main") 
+	function fetch($docid) 
 	{
 		if ($this->period > 0) 
 		{
@@ -220,28 +220,6 @@ class document extends aw_template
 		$q = "SELECT objects.*, documents.* FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid $sufix";
 		$this->db_query($q);
 		$data = $this->db_next();
-
-/*		$q = "SELECT documents.*,
-			objects.*
-			FROM documents
-			LEFT JOIN objects ON
-			(documents.docid = objects.oid)
-			WHERE docid = '$docid' $sufix";
-		$this->db_query($q);
-		$data = $this->db_fetch_row();
-		if (!$data)
-		{
-			// tshekime kas oli hoopis vend 2kki
-			$oo = $this->get_object($docid);
-			$q = "SELECT documents.*,objects.*
-				FROM documents
-					LEFT JOIN objects ON
-					(documents.docid = objects.oid)
-				WHERE docid = '".$oo["brother_of"]."' $sufix";
-			$this->db_query($q);
-			$data = $this->db_fetch_row();
-			$data["brother_of"] = $oo["brother_of"];
-		}*/
 
 		if (gettype($data) == "array") 
 		{
@@ -322,11 +300,17 @@ class document extends aw_template
 		!isset($strip_img) ? $strip_img = 0 : "";
 		!isset($notitleimg) ? $notitleimg = 0 : "";
 		
-		global $classdir,$baseurl,$ext;
+		global $classdir,$baseurl,$ext,$awt;
+		$awt->start("document::gen_preview");
 
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 	
-
+		// check if the menu had a form selected as a template - the difference is that then the template is not a filename
+		// but a number
+		if (is_number($tpl))
+		{
+			return $this->do_form_show($params);
+		}
 
 		// küsime dokumendi kohta infot
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
@@ -507,9 +491,20 @@ class document extends aw_template
 				{
 					$txt = "<b>";
 				};
-				if ($doc["lead"] != "")
+				if ($doc["lead"] != "" && $doc["lead"] != "&nbsp;")
 				{
-					$txt .= $doc["lead"] . "<br>";
+					if (defined("LEAD_SPLITTER"))
+					{
+						$txt .= $doc["lead"] . LEAD_SPLITTER;
+					}
+					else
+					{
+						$txt .= $doc["lead"] . "<br>";
+					}
+				}
+				if (defined("NO_LEAD_SPLITTER"))
+				{
+					$txt.=NO_LEAD_SPLITTER;
 				}
 				if ($boldlead) 
 				{
@@ -519,6 +514,7 @@ class document extends aw_template
 				$doc["content"] = $txt;
 			};
 		};
+
 
 		// all the style magic is performed inside the style engine
 		$doc["content"] = $this->style_engine->parse_text($doc["content"]); 
@@ -647,6 +643,16 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 				));
+
+		// menyyd.
+		$this->register_sub_parser(array(
+                        "idx" => 2,
+                        "match" => "m",
+                        "class" => "menu",
+                        "reg_id" => $mp,
+                        "function" => "parse_alias",
+                ));
+
 		
 		// keywordide list. bijaatch!
 		$mp = $this->register_parser(array(
@@ -1050,6 +1056,7 @@ class document extends aw_template
  
 
 		$retval = $this->parse();
+		$awt->stop("document::gen_preview");
 		return $retval;
 	}
 
@@ -1360,6 +1367,16 @@ class document extends aw_template
 			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$GLOBALS["baseurl"],$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 		else
+		if ($SITE_ID == 9)
+		{
+			$text = "$from_name ($from) soovitab teil vaadata Struktuur Meedia saidile ".$GLOBALS["baseurl"].",\ntäpsemalt linki ".$GLOBALS["baseurl"]."/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
+
+			if ($copy != "")
+				$bcc = "\nCc: $copy ";
+
+			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$GLOBALS["baseurl"],$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+		}
+		else
 		if ($SITE_ID == 17)
 		{
 			$text = "$from_name ($from) soovitab teil vaadata Ida-Viru investeerimisportaali ".$GLOBALS["baseurl"].",\ntäpsemalt linki ".$GLOBALS["baseurl"]."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
@@ -1647,6 +1664,17 @@ class document extends aw_template
 			$id = $oob["brother_of"];
 		}
 
+		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
+		// menyy, mille juures on määratud edimistemplate
+		$_tpl = $this->get_edit_template($oob["parent"]);
+		if (is_number($_tpl))
+		{
+			$arr["template"] = $_tpl;
+			return $this->do_form_change($arr);
+		}
+
+		$this->read_template($_tpl);
+
 		// $version indicates that we should load an archived copy of this document
 		if ($version)
 		{
@@ -1660,7 +1688,7 @@ class document extends aw_template
 			$document = $this->fetch($id);
 			$addcap = "";
 		};
-		$this->mk_path($document["parent"],LC_DOCUMENT_CHANGE_DOC . $addcap,$document["period"]);
+		$this->mk_path($document["parent"],"<a href='/automatweb/orb.aw?class=document&action=change&id=$id'>" . LC_DOCUMENT_CHANGE_DOC . $addcap . "</a>",$document["period"]);
 		
 		// kui class_id on 1, siis jarelikult me muudame
 		// mingi sektsiooni defaulte
@@ -1672,11 +1700,6 @@ class document extends aw_template
 		{
 			$mcap = LC_DOCUMENT_DOC;
 		};
-
-		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
-		// menyy, mille juures on määratud edimistemplate
-		$_tpl = $this->get_edit_template($document["parent"]);
-		$this->read_template($_tpl);
 
 		// keelte valimise asjad
 		if ($this->is_template("DOC_BROS"))
@@ -2164,13 +2187,20 @@ class document extends aw_template
 	{
 		extract($arr);
 		$al = $this->get_object($alias);
+		$obj = $this->get_object($id);
 		if ($al["class_id"] == CL_FORM_ENTRY)	// form_entry
 		{
 			// we must let the user select whether he wants to view or edit the entry
 			$this->mk_path($al["parent"],"<a href='pickobject.$ext?docid=$docid&parent=".$al["parent"]."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");
 			return $this->select_alias($id, $alias);
 		} 
-		else 
+		elseif ($obj["class_id"] == CL_DOCUMENT)
+		{
+			classload("object_chain");
+			$oc = new object_chain();
+			$oc->expl_chain(array("id" => $alias,"parent" => $id));
+		}
+		else
 		{
 			$this->add_alias($id,$alias);
 			header("Location: ".$this->mk_orb("list_aliases",array("id" => $id),"aliasmgr"));
@@ -2836,6 +2866,9 @@ class document extends aw_template
 		$this->vars(array("PREVIOUS" => $prev,"NEXT" => $next,"PAGE" => $pg,"SEL_PAGE" => "","from" => $from));
 		$ps = $this->parse("PAGESELECTOR");
 		$this->vars(array("PAGESELECTOR" => $ps));
+
+		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$str','$parent','$cnt','".$GLOBALS["REMOTE_ADDR"]."','".time()."')");
+
 		return $this->parse();
 	}
 
@@ -3019,6 +3052,86 @@ class document extends aw_template
 		}
 		$this->vars(array("lchanged" => ""));
 		return $tp;
+	}
+
+	////
+	// !if the menu is set to have a form as document editing template, then we do the editing bit here
+	function do_form_change($arr)
+	{
+		extract($arr);
+		$this->read_template("edit_form.tpl");
+		$obj = $this->get_object($id);
+		$meta = $this->get_object_metadata(array(
+			"metadata" => $obj["metadata"]
+		));
+
+		$this->mk_path($obj["parent"],"Muuda dokumenti");
+
+		// mida me siis teeme? n2itame formi, mis seal muud ikka. formi entry id paneme doku metadatasse ntx. 
+
+		classload("form");
+		$f = new form;
+		$f->load($template);
+		$co = $f->gen_preview(array(
+			"entry_id" => $meta["entry_id"],
+			"tpl" => "show_noform.tpl"
+		));
+		$this->vars(array(
+			"id" => $id,
+			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
+			"content" => $co,
+			"menurl"		=> $this->mk_my_orb("sel_menus",array("id" => $id)),
+			"reforb" => $this->mk_reforb("save_form", array("id" => $id,"period" => $period))
+		));
+		return $this->parse();
+	}
+
+	function save_form($arr)
+	{
+		extract($arr);
+
+		$obj = $this->get_object($id);
+		$meta = $this->get_object_metadata(array(
+			"metadata" => $obj["meta"]
+		));
+
+		classload("form");
+		$f = new form;
+		$f->process_entry(array(
+			"id" => $this->get_edit_template($obj["parent"]),
+			"entry_id" => $meta["entry_id"],
+		));
+
+		$this->upd_object(array(
+			"oid" => $id,
+			"name" => $f->entry_name
+		));
+
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "entry_id",
+			"value" => $f->entry_id
+		));
+		return $this->mk_my_orb("change", array("id" => $id,"period" => $period));
+	}
+
+	function do_form_show($params)
+	{
+		extract($params);
+
+		$obj = $this->get_object($docid);
+		$meta = $this->get_object_metadata(array(
+			"metadata" => $obj["metadata"]
+		));
+
+		classload("form");
+		$f = new form;
+
+		return $f->show(array(
+			"id" => $f->get_form_for_entry($meta["entry_id"]),
+			"entry_id" => $meta["entry_id"],
+			"op_id" => $tpl
+		));
 	}
 };
 ?>
