@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.56 2004/06/08 13:45:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.57 2004/06/09 06:28:23 kristo Exp $
 
 /*
 
@@ -400,8 +400,8 @@ class links extends class_base
 	// peab ehitama ka mehhanisimi spämmimise vältimiseks
 	function add_hit($id,$host,$uid) 
 	{
-		/*$o = obj($id);
-		if ($o->can("edit"))
+		$o = obj($id);
+		/*if ($o->can("edit"))
 		{
 			$o->set_prop("hits", $o->prop("hits")+1);
 			// this would clear the entire site cache and nothing can possibly change from this, so I'm commenting this out.
