@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.10 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.11 2001/07/12 23:21:05 duke Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -155,7 +155,9 @@ class aw_template extends acl_base
 		$filename = $this->template_dir . "/$filename";
 		if (!($source = $this->get_file(array("file" => $filename))))
 		{
-			$this->raise_error("Template '$filename' not found",true);
+			global $tpldir;
+			$name = substr($filename,strlen($tpldir) + 1);
+			$this->raise_error("Template '$name' not found",true);
 		};
 		return $this->use_template($source);
 	}
