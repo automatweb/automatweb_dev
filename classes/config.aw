@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.24 2001/10/01 13:52:08 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.25 2001/11/09 05:47:29 cvs Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
 
-classload("aw_template");
+classload("aw_template","xml","objects");
 class db_config extends aw_template 
 {
 	function db_config() 
@@ -1086,6 +1086,60 @@ class config extends db_config
 		$this->quote(&$ss);
 		$this->set_simple_config("login_grp_redirect", $ss);
 		return $this->mk_my_orb("grp_redirect", array());
+	}
+
+	////
+	// !lets the user pick which folders to let the users move documents to
+	function docfolders($arr)
+	{
+		extract($arr);
+		$this->read_template("docfolders.tpl");
+
+		$df = $this->get_simple_config("docfolders");
+		$xml = new xml;
+		$_df = $xml->xml_unserialize(array("source" => $df));
+
+		$ndf = array();
+
+		foreach($_df as $dfid => $dfname)
+		{
+			$ndf[$dfid] = $dfid;
+		}
+
+		$ob = new objects;
+		$this->vars(array(
+			"folders" => $this->multiple_option_list($ndf,$ob->get_list(false,false,$GLOBALS["rootmenu"])),
+			"reforb" => $this->mk_reforb("submit_docfolders",array())
+		));
+		return $this->parse();
+	}
+
+	////
+	// !saves the user picked document moving folders
+	function submit_docfolders($arr)
+	{
+		extract($arr);
+
+		$ob = new objects;
+		$obl = $ob->get_list(false,false,$GLOBALS["rootmenu"]);
+
+		$_df = array();
+		if (is_array($docfolders))
+		{
+			foreach($docfolders as $dfid)
+			{
+				$_df[$dfid] = $obl[$dfid];
+			}
+		}
+
+		$xml = new xml;
+		$df = $xml->xml_serialize($_df);
+
+		$this->quote(&$df);
+
+		$this->set_simple_config("docfolders", $df);
+
+		return $this->mk_my_orb("docfolders");
 	}
 }
 ?>
