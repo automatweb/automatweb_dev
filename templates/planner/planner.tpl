@@ -242,7 +242,7 @@ background: #F8F9D5;
 
 
 
-<!-- other information-->
+<!-- other information
 <table width="241" border="0" cellpadding="0" cellspacing="0">
 <tr><td class="caltablebordertume" colspan="3"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td></tr>
 <tr class="calmonthback">
@@ -254,7 +254,7 @@ background: #F8F9D5;
 <tr><td colspan="3">
 
 </td></tr>
-</table>
+</table>-->
 
 
 
