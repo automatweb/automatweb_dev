@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.6 2004/04/22 12:17:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.7 2004/08/25 08:37:19 duke Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -145,8 +145,7 @@ class rte extends class_base
 			"target" => "_self",
 			"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
 		));
-
-               
+		
 	       	/*
                 $toolbar->add_separator();
 		$this->read_template("stylebox.tpl");
