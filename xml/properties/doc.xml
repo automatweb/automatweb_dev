@@ -11,15 +11,6 @@
             <caption>Toolbar</caption>
       </property>
       <property>
-            <name>active</name>
-            <type>checkbox</type>
-            <ch_value>2</ch_value>
-            <table>objects</table>
-            <field>status</field>
-            <group>general</group>
-            <caption>Aktiivne</caption>
-      </property>
-      <property>
             <name>plugins</name>
             <type>callback</type>
             <callback>callback_get_doc_plugins</callback>
