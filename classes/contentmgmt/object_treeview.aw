@@ -197,10 +197,10 @@ class object_treeview extends class_base
 				$cur_ids = $_ot->ids();
 			}
 
-			if (!$igns[$c_o->id()])
-			{
+//			if (!$igns[$c_o->id()])
+//			{
 				$cur_ids[] = $c_o->id();
-			}
+//			}
 
 			foreach($cur_ids as $c_id)
 			{
