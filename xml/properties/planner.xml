@@ -404,6 +404,11 @@
                   <clid>CL_USER</clid>
                   <caption>Omanik</caption>
             </CALENDAR_OWNERSHIP>
+            <OTHER_CALENDAR>
+                  <value>9</value>
+                  <clid>CL_PLANNER</clid>
+                  <caption>Teised</caption>
+            </OTHER_CALENDAR>
       </reltypes>
 </properties>
 
