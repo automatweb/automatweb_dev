@@ -2225,7 +2225,7 @@ class site_content extends menuedit
 		$cont = "";
 		// if $section is a periodic document then emulate the current period for it and show the document right away
 		$d->set_opt("parent",$section);
-		$tplmgr = get_instace("templatemgr");
+		$tplmgr = get_instance("templatemgr");
 		if ($obj->class_id() == CL_PERIODIC_SECTION || $obj->class_id() == CL_DOCUMENT) 
 		{
 			$template = $tplmgr->get_long_template($section);
