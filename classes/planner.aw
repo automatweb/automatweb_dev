@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.101 2003/04/01 16:41:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.102 2003/04/01 16:46:48 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -2402,7 +2402,7 @@ class planner extends class_base
 						$tpl = "content_cell_today_empty";
 					};
 					
-					if ($this->templates["content_cell_today"])
+					if ($this->templates["content_cell_today"] && ($this->day_event_count > 0))
 					{
 						$tpl = "content_cell_today";
 					};
