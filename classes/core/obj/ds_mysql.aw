@@ -39,22 +39,43 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function get_objdata($oid)
 	{
-		$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid AND status != 0");
-		if ($ret === false)
+		// I have to figure out right here whether this is a translation .. and if
+		// so, then we need to load the original object
+
+		// check whether there are any relations of type RELTYPE_TRANSLATION pointing
+		// to this object .. if so, find the original
+
+		// but before doing that I also need to check whether the object can be 
+		// translated at all .. or is translated .. or whether the translation
+		// has been confirmed ... and I can't do that before .. well.. I have 
+		// some kind of flag for that purpose
+		$orig = $this->db_fetch_row("SELECT source FROM aliases WHERE target = '$oid' AND reltype = " . RELTYPE_TRANSLATION);
+		$real_oid = $oid;
+		if (is_array($orig))
 		{
-			error::throw(array(
-				"id" => ERR_NO_OBJ,
-				"msg" => "object::load($oid): no such object!"
-			));
+			$this->real_oid = $orig["source"];
+			$this->transl_id = $oid;
+		}
+		else
+		{
+			$lang_id = aw_global_get("lang_id");
+			$q = sprintf("SELECT target FROM aliases
+					LEFT JOIN objects ON (aliases.target = objects.oid)
+					WHERE aliases.source = %d AND aliases.reltype = %d
+						AND objects.lang_id = %d AND status = %d",
+					$oid,RELTYPE_TRANSLATION,$lang_id,STAT_ACTIVE);
+			$res = $this->db_fetch_row($q);
+			$this->transl_id = is_array($res) ? $res["target"] : NULL;
+			$this->real_oid = $oid;
+
 		}
 
+		$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid");
 		$ret["meta"] = aw_unserialize($ret["metadata"]);
 		unset($ret["metadata"]);
+		
+		//print "original " . $this->real_oid . ", t = " . $this->transl_id . "<br>";
 
-		if ($ret["brother_of"] == 0)
-		{
-			$ret["brother_of"] = $ret["oid"];
-		}
 		return $ret;
 	}
 
@@ -73,7 +94,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// find all the tables that the properties are in
 		$tables = array();
 		$tbl2prop = array();
-		$objtblprops = array();
+
+		// fake it
+		$tableinfo["objects"] = array(
+			"index" => "oid",
+		);
+
+		$fields = array();
+
+		$xx = array();
+
 		foreach($properties as $prop => $data)
 		{
 			if ($data["store"] == "no")
@@ -84,88 +114,63 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($data["table"] == "")
 			{
 				$data["table"] = "objects";
-			}
+			}		
+			
+			if ($data["field"] == "meta")
+			{
+				$data["field"] = "metadata";
+			};
 
-			if ($data["table"] != "objects")
+			$tables[$data["table"]] = $data["table"];
+			$tbl2prop[$data["table"]][] = $data;
+
+			$index = $this->real_oid;
+			if (is_numeric($this->transl_id) && $data["trans"] == 1)
 			{
-				$tables[$data["table"]] = $data["table"];
-				if ($data["store"] != "no")
-				{
-					$tbl2prop[$data["table"]][] = $data;
-				}
-			}
-			else
-			{
-				$objtblprops[] = $data;
-			}
+				$index = $this->transl_id;
+			};
+
+
+			$xx[$data["table"]][$index][$data["field"]] = $data;
+
 		}
 
-		// import object table properties in the props array
-		foreach($objtblprops as $prop)
+		// and now I have to figure out how to load the translation as well .. if there is one
+		//foreach($tables as $table)
+		foreach($xx as $table => $block)
 		{
-			if ($prop["method"] == "serialize")
+			//echo "table = $table <br>";
+			foreach($block as $item_id => $fields)
 			{
-				/*
-				if ($prop['field'] == "meta")
+				if (count($fields) > 0)
 				{
-					$prop['field'] = "metadata";
-				}
-				*/
-				// metadata is unserialized in read_objprops
-				$ret[$prop["name"]] = $objdata[$prop["field"]][$prop["name"]];
-			}
-			else
-			if ($prop["method"] == "bitmask")
-			{
-				$ret[$prop["name"]] = ((int)$objdata[$prop["field"]]) & ((int)$prop["ch_value"]);
-			}
-			else
-			{
-				$ret[$prop["name"]] = $objdata[$prop["field"]];
-			}
-		}
-
-		// fix old broken databases where brother_of may be 0 for non-brother objects
-		$object_id = ($objdata["brother_of"] ? $objdata["brother_of"] : $objdata["oid"]);
-
-		// do a query for each table
-		foreach($tables as $table)
-		{
-			$fields = array();
-			foreach($tbl2prop[$table] as $prop)
-			{
-				if ($prop['field'] == "meta" && $prop["table"] == "objects")
-				{
-					$prop['field'] = "metadata";
-				}
-				$fields[] = $table.".".$prop["field"]." AS ".$prop["name"];
-			}
-
-			if (count($fields) > 0)
-			{
-				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$object_id."'";
-				//echo "q = $q <br />";
-				$data = $this->db_fetch_row($q);
-				if (is_array($data))
-				{
-					$ret += $data;
-				}
-
-				foreach($tbl2prop[$table] as $prop)
-				{
-					if ($prop["method"] == "serialize")
+					$q = "SELECT ".join(",", array_keys($fields))." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$item_id."'";
+					//echo "q = $q <br>";
+					$data = $this->db_fetch_row($q);
+					// put everything into return value ..
+					if (is_array($data))
 					{
-						if ($prop['field'] == "meta")
-						{
-							$prop['field'] = "metadata";
-						}
-
-						$unser = aw_unserialize($ret[$prop["field"]]);
-						$ret[$prop["name"]] = $unser[$prop["name"]];
+						$ret += $data;
 					}
 
+					// and then find serialized things and 
+					foreach($tbl2prop[$table] as $prop)
+					{
+						if ($prop["method"] == "serialize")
+						{
+							/*
+							print "hm?";
+							print "<pre>";
+							print_r($prop);
+							print_r($data);
+							print "</pre>";
+							*/
+							$tmp = aw_unserialize($data[$prop["field"]]);
+							$ret[$prop["name"]] = $tmp[$prop["name"]];
+						}
+					}
 				}
-			}
+			};
 		}
 		return $ret;
 	}
@@ -219,32 +224,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// now we need to create entries in all tables that are in properties as well.
 		$tbls = array();
-//echo "adding,  <br>";
 		foreach($properties as $prop => $data)
 		{
-	//		echo "rpop = $prop <br>";
-			if (empty($data["table"]))
-			{
-		//		echo "no table bail <br>";
-				continue;
-			}
-			
 			if ($data["table"] == "objects")
 			{
-			//	echo "objects table bail <br>";
 				continue;
 			}
 
 			if ($data["store"] != "no")
 			{
-				//echo "set table $data[table] <br>";
 				$tbls[$data["table"]]["index"] = $tableinfo[$data["table"]]["index"];
-				// check if the property has a value
-				if (isset($objdata["properties"][$prop]))
-				{
-					$tbls[$data["table"]]["defaults"][$data["field"]] = $objdata["properties"][$prop];
-				}
-				else
+				if ($data["default"] != "")
 				{
 					$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
 				}
@@ -286,14 +276,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		extract($arr);
 
-		$metadata = aw_serialize($objdata["meta"]);
+		$metadata = aw_serialize($objdata["metadata"]);
 		$this->quote(&$metadata);
 		$this->quote(&$objdata);
-
-		if ($objdata["brother_of"] == 0)
-		{
-			$objdata["brother_of"] = $objdata["oid"];
-		}
 
 		// first, save all object table fields.
 		$q = "UPDATE objects SET
@@ -313,17 +298,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			cachedirty = '1',
 			metadata = '".$metadata."',
 			subclass = '".$objdata["subclass"]."',
-			flags = '".$objdata["flags"]."',
-			brother_of = '".$objdata["brother_of"]."'
+			flags = '".$objdata["flags"]."'
 			
 			WHERE oid = '".$objdata["oid"]."'
 		";
-
 //		echo "q = <pre>". htmlentities($q)."</pre> <br />";
 		$this->db_query($q);
 
 		// now save all properties
-
 
 		// divide all properties into tables
 		$tbls = array();
@@ -341,13 +323,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($tbl == "objects")
 			{
 				$tableinfo[$tbl]["index"] = "oid";
-				$serfs["metadata"] = $objdata["meta"];
 			}
-			else
-			{
-				$serfs = array();
-			};
 			$seta = array();
+			$serfs = array();
 			foreach($tbld as $prop)
 			{
 				// this check is here, so that we won't overwrite default values, that are saved in create_new_object
@@ -355,38 +333,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if ($prop['method'] == "serialize")
 					{
-						if ($prop['field'] == "meta")
-						{
-							$prop['field'] = "metadata";
-						}
 						// since serialized properites can be several for each field, gather them together first
 						$serfs[$prop['field']][$prop['name']] = $propvalues[$prop['name']];
 					}
 					else
-					if ($prop['method'] == "bitmask")
 					{
-						$val = $propvalues[$prop["name"]];
-	
-						if (!isset($seta[$prop["field"]]))
-						{	
-							// jost objects.flags support for now
-							$seta[$prop["field"]] = $objdata["flags"];
-						}
-
-						// make mask for the flag - mask value is the previous field value with the
-						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]	
-						$mask = $seta[$prop["field"]] & (~((int)$prop["ch_value"]));
-						// add the value
-						$mask |= $val;
-						
-						$seta[$prop["field"]] = $mask;;
-					}
-					else
-					{
-						$str = $propvalues[$prop["name"]];
+						$str = $propvalues[$prop['name']];
 						$this->quote(&$str);
 	
-						$seta[$prop["field"]] = $str;
+						$seta[] = $prop["field"]." = '$str'";
 					}
 				}
 			}
@@ -395,13 +350,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$str = aw_serialize($dat);
 				$this->quote($str);
-				$seta[$field] = $str;
+				$seta[] = $field." = '$str'";
 			}
-			$sets = join(",",map2("%s = '%s'",$seta,0,true));
+			$sets = join(",", $seta);
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
-//				echo "q = <pre>". htmlentities($q)."</pre> <br />";
+				//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 				$this->db_query($q);
 			}
 		}
@@ -409,30 +364,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function read_connection($id)
 	{
-		return $this->db_fetch_row("
-			SELECT 
-				".$this->connection_query_fetch()."
-			FROM 
-				aliases a
-				LEFT JOIN objects o_s ON o_s.oid = a.source
-				LEFT JOIN objects o_t ON o_t.oid = a.target
-			WHERE 
-				id = $id
-		");
+		return $this->db_fetch_row("SELECT * FROM aliases WHERE id = $id");
 	}
 
 	function save_connection($data)
 	{
-		if (!$data["type"])
-		{
-			$data["type"] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '".$data["to"]."'", "class_id");
-		}
-
 		if ($data["id"])
 		{
 			$q = "UPDATE aliases SET 
-				source = '$data[from]',
-				target = '$data[to]',
+				source = '$data[source]',
+				target = '$data[target]',
 				type = '$data[type]',
 				data = '$data[data]',
 				idx = '$data[idx]',
@@ -445,17 +386,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 		else
 		{
-			if (!$data["idx"])
-			{
-				$q = "SELECT MAX(idx) as idx FROM aliases where source = '$data[from]' and type = '$data[type]'";
-				$data["idx"] = $this->db_fetch_field($q, "idx")+1;
-			}
 			$q = "INSERT INTO aliases (
 				source,						target,					type,					data,
 				idx,						cached,					relobj_id,				reltype,
 				pri
 			) VALUES(
-				'$data[from]',				'$data[to]',			'$data[type]',			'$data[data]',
+				'$data[source]',			'$data[target]',		'$data[type]',			'$data[data]',
 				'$data[idx]',				'$data[cached]',		'$data[relobj_id]',		'$data[reltype]',
 				'$data[pri]'
 			)";
@@ -471,39 +407,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->db_query("DELETE FROM aliases WHERE id = '$id'");
 	}
 
-	function connection_query_fetch()
-	{
-		return "a.id as `id`,
-				a.source as `from`,
-				a.target as `to`,
-				a.type as `type`,
-				a.data as `data`,
-				a.idx as `idx`,
-				a.cached as `cached`,
-				a.relobj_id as `relobj_id`,
-				a.reltype as `reltype`,
-				a.pri as pri,
-				o_t.lang_id as `to.lang_id`,
-				o_s.lang_id as `from.lang_id`,
-				o_t.flags as `to.flags`,
-				o_s.flags as `from.flags`,
-				o_t.modified as `to.modified`,
-				o_s.modified as `from.modified`,
-				o_t.modifiedby as `to.modifiedby`,
-				o_s.modifiedby as `from.modifiedby`,
-				o_t.name as `to.name`,
-				o_s.name as `from.name`,
-				o_t.class_id as `to.class_id`,
-				o_s.class_id as `from.class_id`
-		";
-	}
-
-	// arr - { [from], [to], [type], [class], [to.obj_table_field], [from.obj_table_field] }
+	// arr - { [from] , [to] }
 	function find_connections($arr)
 	{
 		$sql = "
 			SELECT 
-				".$this->connection_query_fetch()."
+				* 
 			FROM 
 				aliases a
 				LEFT JOIN objects o_s ON o_s.oid = a.source
@@ -512,59 +421,28 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_s.status != 0 AND
 				o_t.status != 0
 		";
-
 		if ($arr["from"])
 		{
-			$awa = new aw_array($arr["from"]);
-			$sql .= " AND source IN (".$awa->to_sql().") ";
+			$sql .= " AND source = '".$arr["from"]."' ";
 		}
-
 		if ($arr["to"])
 		{
-			$awa = new aw_array($arr["to"]);
-			$sql .= " AND target IN (".$awa->to_sql().") ";
+			$sql .= " AND target = '".$arr["to"]."' ";
 		}
-
 		if ($arr["type"])
 		{
-			$awa = new aw_array($arr["type"]);
-			$sql .= " AND reltype IN (".$awa->to_sql().") ";
+			$sql .= " AND reltype = '".$arr["type"]."' ";
 		}
-
 		if ($arr["class"])
 		{
-			$awa = new aw_array($arr["class"]);
-			$sql .= " AND type IN (".$awa->to_sql().") ";
+			$sql .= " AND type = '".$arr["class"]."' ";
 		}
-
-		foreach($arr as $k => $v)
-		{
-			if (substr($k, 0, 3) == "to.")
-			{
-				if (is_array($v))
-				{
-					$sql .= " AND o_t.".substr($k, 3)." IN (" . join(",",$v) . ") ";
-				}
-				else
-				{
-					$sql .= " AND o_t.".substr($k, 3)." = '$v' ";
-				};
-			}
-			if (substr($k, 0, 5) == "from.")
-			{
-				$sql .= " AND o_s.".substr($k, 5)." = '$v' ";
-			}
-		}
-
-		$sql .= " ORDER BY a.id ";
-
 		$this->db_query($sql);
 		$ret = array();
 		while ($row = $this->db_next())
 		{
-			$ret[$row["id"]] = $row;
+			$ret[] = $row;
 		}
-
 		return $ret;
 	}
 
@@ -573,174 +451,46 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	// if class id is present, properties can also be filtered, otherwise only object table fields
 	function search($params)
 	{
-		$this->used_tables = array();
-
-		$this->properties = array();
-		$this->tableinfo = array();
-
-		// load property defs and table defs
-		if (isset($params["class_id"]))
+		if ($params["class_id"] && !is_array($params["class_id"]))
 		{
-			$this->_do_add_class_id($params["class_id"]);
+			$classes = aw_ini_get("classes");
+			list($properties, $tableinfo) = $GLOBALS["object_loader"]->load_properties(array(
+				"file" => $classes[$params["class_id"]]["file"],
+				"clid" => $params["class_id"]
+			));
 		}
 
-		$this->stat = false;
-		$this->sby = "";
-		$this->limit = "";
+		$stat = false;
+		$where = array();
+		$sby = "";
 
-		$this->meta_filter = array();
-
-		$where = $this->req_make_sql($params);
-
-		if (!$this->stat)
-		{
-			$where .= ($where != "" ? " AND " : "")." objects.status != 0 ";
-		}
-
-		if (!isset($params["site_id"]))
-		{
-			$where .= ($where != "" ? " AND " : "")." objects.site_id = '".aw_ini_get("site_id")."' ";
-		}
-
-		if (!isset($params["lang_id"]))
-		{
-			$where .= ($where != "" ? " AND " : "")." objects.lang_id = '".aw_global_get("lang_id")."' ";
-		}
-
-		// make joins
-		$js = array();
-		foreach($this->used_tables as $tbl)
-		{
-			if ($tbl != "objects")
-			{
-				$js[] = " LEFT JOIN $tbl ON $tbl.".$this->tableinfo[$tbl]["index"]." = objects.brother_of ";
-			}
-		}
-		$joins = join("", $js);
-
-		$ret = array();
-		if ($where != "")
-		{
-			$q = "SELECT objects.oid FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
-//			echo "q = $q <br />";
-			$this->db_query($q);
-			while ($row = $this->db_next())
-			{
-				if ($this->can("view", $row["oid"]))
-				{
-					$ret[$row["oid"]] = $row["oid"];
-				}
-			}
-		}
-
-		if (count($this->meta_filter) > 0)
-		{
-			foreach($ret as $roid)
-			{
-				$add = true;
-				$_o = new object($roid);
-				foreach($this->meta_filter as $mf_k => $mf_v)
-				{
-					if ($_o->meta($mf_k) != $mf_v)
-					{
-						$add = false;
-					}
-				}
-
-				if (!$add)
-				{
-					unset($ret[$roid]);
-				}
-			}
-		}
-		return $ret;
-	}
-
-	function delete_object($oid)
-	{
-		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid = '$oid'");
-		$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
-		$this->db_query("DELETE FROM aliases WHERE source = '$oid'");
-	}
-
-	function object_exists($oid)
-	{
-		if (is_object($oid))
-		{
-			$oid = $oid->id();
-		}
-		$stat = $this->db_fetch_field("SELECT status FROM objects WHERE oid = '$oid'", "status");
-		return ($stat > 0);
-	}
-
-	function req_make_sql($params, $logic = "AND")
-	{
-		$sql = array();
 		foreach($params as $key => $val)
 		{
-			if ($val === NULL)
+			if ($key == "status")
 			{
-				continue;
+				$stat = true;
 			}
-
-			if ("sort_by" == (string)($key))
+			if ($key == "sort_by")
 			{
-				$this->sby = " ORDER BY $val ";
+				$sby = " ORDER BY $val ";
 				continue;
-			}
-
-			if ("limit" == (string)($key))
-			{
-				$this->limit = " LIMIT $val ";
-				continue;
-			}
-
-			if ("status" == (string)($key))
-			{
-				$this->stat = true;
 			}
 
 			$tbl = "objects";
 			$fld = $key;
-			if (isset($this->properties[$key]))
+			if (isset($properties[$key]))
 			{
-				$tbl = $this->properties[$key]["table"];
-				$fld = $this->properties[$key]["field"];
-				if ($fld == "meta")
-				{
-					$this->meta_filter[$key] = $val;
-					continue;
-				}
-				else
-				if ($this->properties[$key]["method"] == "serialize")
+				$tbl = $properties[$key]["table"];
+				$fld = $properties[$key]["field"];
+				if ($fld == "meta" || $properties[$key]["method"] == "serialize")
 				{
 					error::throw(array(
 						"id" => ERR_FIELD,
-						"msg" => "filter cannot contain properties ($key) that are in serialized fields other than metadata!"
+						"msg" => "filter cannot contain properties ($key) that are in metadata or serialized fields!"
 					));
 				}
 			}
 
-			$tf = $tbl.".".$fld;
-			$this->used_tables[$tbl] = $tbl;
-
-			if (($this->properties[$key]["method"] == "bitmask" || $key == "flags") && is_array($val))
-			{
-				$sql[] = $tf." & ".$val["mask"]." = ".$val["flags"];
-			}
-			else
-			if (is_object($val) && get_class($val) == "object_list_filter")
-			{
-				if (!empty($val->filter["non_filter_classes"]))
-				{
-					$this->_do_add_class_id($val->filter["non_filter_classes"], true);
-				}
-				if (isset($val->filter["logic"]))
-				{
-					$sql[] = "(".$this->req_make_sql($val->filter["conditions"], $val->filter["logic"]).")";
-				}
-			}
-			else
 			if (is_array($val) || (is_object($val) && get_class($val) == "aw_array"))
 			{
 				if (is_object($val))
@@ -752,112 +502,73 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if (strpos("%", $v) !== false)
 					{
-						$str[] = $tf." LIKE '".$v."'";
+						$str[] = $tbl.".".$fld." LIKE '".$v."'";
 					}
 					else
 					{
-						$str[] = $tf." = '".$v."'";
+						$str[] = $tbl.".".$fld." = '".$v."'";
 					}
 				}
 				$str = join(" OR ", $str);
 				if ($str != "")
 				{
-					$sql[] = " ( $str ) ";
+					$where[$tbl][] = " ( $str ) ";
 				}
 			}
 			else
 			{
-				if ($key == "modified" || $key == "flags")
+				// pass all arguments .. &, >, < or whatever the user wants to
+				if ($key == "flags" || $key == "modified")
 				{
-					// pass all arguments .. &, >, < or whatever the user wants to
-					$sql[] = $tf." ".$val;
+					$where[$tbl][] = $tbl.".".$fld." ".$val;
 				}
 				else
-				if (strpos($val,"%") !== false)
+				if (strpos("%", $val) !== false)
 				{
-					$sql[] = $tf." LIKE '".$val."'";
+					$where[$tbl][] = $tbl.".".$fld." LIKE '".$val."'";
 				}
 				else
 				{
-					$sql[] = $tf." = '".$val."'";
+					$where[$tbl][] = $tbl.".".$fld." = '".$val."'";
 				}
 			}
 		}
-		return join(" ".$logic." ", $sql);
-	}
 
-	function _do_add_class_id($clids, $add_table = false)
-	{
-		if (!is_array($clids))
+		if (!$stat)
 		{
-			$clids = array($clids);
+			$where["objects"][] = " objects.status != 0 ";
 		}
 
-		foreach($clids as $clid)
+		// make joins
+		$js = array();
+		$t_w = array();
+		foreach($where as $tbl => $flds)
 		{
-			if (!isset($GLOBALS["properties"][$clid]) || !isset($GLOBALS["tableinfo"][$clid]))
+			if ($tbl != "objects")
 			{
-				list($GLOBALS["properties"][$clid], $GLOBALS["tableinfo"][$clid]) = $GLOBALS["object_loader"]->load_properties(array(
-					"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
-					"clid" => $clid
-				));
+				$js[] = " LEFT JOIN $tbl ON $tbl.".$tableinfo[$tbl]["index"]." = objects.brother_of ";
 			}
-
-			$this->properties += $GLOBALS["properties"][$clid];
-			if (is_array($GLOBALS["tableinfo"][$clid]))
+			foreach($flds as $fld)
 			{
-				if ($add_table)
-				{
-					foreach($GLOBALS["tableinfo"][$clid] as $_tbl => $td)
-					{
-						$this->used_tables[$_tbl] = $_tbl;
-					}
-				}
-				$this->tableinfo += $GLOBALS["tableinfo"][$clid];
-			}
-			if (isset($this->tableinfo["documents"]))
-			{
-				$this->used_tables["documents"] = "documents";
+				$t_w[] = $fld;
 			}
 		}
-	}
+		$joins = join("", $js);
+		$where = join(" AND ", $t_w);
 
-	function create_brother($arr)
-	{
-		extract($arr);
+		$ret = array();
 
-		$metadata = aw_serialize($objdata["meta"]);
-		$this->quote($metadata);
-		$this->quote(&$objdata);
-
-		// create oid
-		$q = "
-			INSERT INTO objects (
-				parent,						class_id,						name,						createdby,
-				created,					modified,						status,						site_id,
-				hits,						lang_id,						comment,					modifiedby,
-				jrk,						period,							alias,						periodic,
-				cachedirty,					metadata,						subclass,					flags,
-				brother_of
-		) VALUES (
-				'".$parent."',				'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
-				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
-				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
-				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
-				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."',
-				'".$objdata["oid"]."'
-		)";
-		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
-		$this->db_query($q);
-		$oid = $this->db_last_insert_id();
-
-		// create all access for the creator
-		$this->create_obj_access($oid);
-
-		// hits
-		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
-
-		return $oid;
+		if ($where != "")
+		{
+			$q = "SELECT oid FROM objects $joins WHERE $where $sby";
+			//echo "q = $q <br />";
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$ret[$row["oid"]] = $row["oid"];
+			}
+		}
+		return $ret;
 	}
 }
 
