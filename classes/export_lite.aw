@@ -55,7 +55,7 @@ class export_lite extends aw_template
 		// we can just delete all other entries that were created by export
 		// but are not in the current list
 
-		$sql = "DELETE FROM static_content WHERE id NOT IN(".join(",", map("'%s'", array_values($this->hashes))).") AND created_by = 'export_lite'";
+		$sql = "DELETE FROM static_content WHERE id NOT IN(".join(",", map("'%s'", array_values($this->hashes))).") AND created_by = 'export_lite' AND site_id = '".aw_ini_get("site_id")."'";
 		$this->db_query($sql);
 		
 		echo "<br />all done. <br /><br />\n\n";
@@ -342,11 +342,13 @@ class export_lite extends aw_template
 			$q = "
 				INSERT INTO static_content(
 					id, 					content, 					modified, 					section, 
-					lang_id,				title,						url,						created_by
+					lang_id,				title,						url,						created_by,
+					site_id
 				) 
 				VALUES(
 					'$h_id',				'$fc',						'$modified',					'$cur_sec',
-					'$lang_id',				'$title',					'$url',						'export_lite'
+					'$lang_id',				'$title',					'$url',						'export_lite',
+					'".aw_ini_get("site_id")."'
 				)
 			";
 			$this->db_query($q);
