@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.343 2005/01/31 13:15:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.344 2005/02/16 09:39:39 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -296,19 +296,6 @@ class menuedit extends aw_template
 
 	function request_startup()
 	{
-		// moved here from syslog - it doesn't make sense to load assload of code to do only that
-
-		// well, syslog now records referers on alla pageviews, so this is obsolete, yes? - terryf
-		$referer = aw_global_get("HTTP_REFERER");
-		if (preg_match("/^(http:\/\/.+)\//i",$referer,$mt))
-		{
-			if ($mt[1] != aw_ini_get("baseurl"))
-			{
-				$this->_log(ST_REFERER, SA_ADD, $referer);
-				aw_session_set("referer",$mt[1]);
-			};
-		};
-		// end of move
 		$section = aw_global_get("section");
 		$realsect = $this->check_section($section);
 		$set_lang_id = false;
