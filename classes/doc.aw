@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.93 2004/12/07 16:32:22 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.94 2004/12/09 14:14:24 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -773,6 +773,11 @@ class doc extends class_base
 		{
 			$args["cb_part"] = $request["cb_part"];
 		};
+		if (!empty($request["no_rte"]))
+		{
+			$args["no_rte"] = 1;
+		};
+		
 	}
 
 	function callback_mod_reforb($args = array())
