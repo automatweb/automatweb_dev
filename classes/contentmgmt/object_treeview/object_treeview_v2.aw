@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.28 2004/12/08 10:32:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.29 2004/12/08 11:22:38 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -69,6 +69,9 @@
 
 @property header_css type=relpicker reltype=RELTYPE_CSS
 @caption Pealkirja stiil
+
+@property group_css type=relpicker reltype=RELTYPE_CSS
+@caption Grupeeriva rea stiil
 
 @property line_css type=relpicker reltype=RELTYPE_CSS
 @caption Rea stiil
@@ -748,7 +751,6 @@ class object_treeview_v2 extends class_base
 
 	function _insert_row_styles($o)
 	{
-	
 		$style = "textmiddle";
 		classload("layout/active_page_data");
 		if ($o->prop("line_css"))
@@ -762,6 +764,13 @@ class object_treeview_v2 extends class_base
 		{
 			$header_css = "st".$o->prop("header_css");
 			active_page_data::add_site_css_style($o->prop("header_css"));
+		}
+
+		$group_css = "textmiddle";
+		if ($o->prop("header_css"))
+		{
+			$group_css = "st".$o->prop("group_css");
+			active_page_data::add_site_css_style($o->prop("group_css"));
 		}
 
 		$header_bg = "#E0EFEF";
@@ -781,6 +790,7 @@ class object_treeview_v2 extends class_base
 		$this->vars(array(
 			"css_class" => $style,
 			"header_css_class" => $header_css,
+			"group_css_class" => $group_css,
 			"header_bgcolor" => $header_bg
 		));
 	}

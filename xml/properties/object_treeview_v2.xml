@@ -175,6 +175,16 @@
             <caption>Pealkirja stiil</caption>
       </property>
       <property>
+            <name>group_css</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <caption>Grupeeriva rea stiil</caption>
+      </property>
+      <property>
             <name>line_css</name>
             <table>objects</table>
             <group>styles</group>
