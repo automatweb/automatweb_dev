@@ -105,8 +105,10 @@ function apply_editor_style(doc,val,iframe)
 	doc.writeln(rte_styles);
 	doc.writeln("</style></head>");
 	//doc.writeln("<body style='border: 1px; margin: 1px;'>");
-	doc.writeln("<body class='text'>");
-	doc.write(val);
+	doc.write("<body class='text'>");
+	//doc.write(val);
+	// val = val.replace(/\r/,"");
+	doc.write(val.replace(/\r\n/gi,"<br>\r\n"));
 	doc.writeln("</body></html>");
 	doc.close();
 };
