@@ -4,15 +4,15 @@
 
 @classinfo syslog_type=ST_YAH_LINE
 
-@groupinfo general caption=Üldine
-
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
-@property separator type=textbox size=5 field=meta method=serialize
+@property separator type=textbox size=5
 @caption Eraldaja
 
-@property show_nosubs type=checkbox ch_value=1 field=meta method=serialize
+@property show_nosubs type=checkbox ch_value=1 
 @caption Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente
 
 */
@@ -39,7 +39,7 @@ class yah_line extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = new object($id);
 
 		$pd = get_instance("layout/active_page_data");
 		$path = $pd->get_active_path();
@@ -53,7 +53,7 @@ class yah_line extends class_base
 			if ($show)
 			{
 				$mn = $mc->get_cached_menu($oid);
-				$check_subs = ($mc->subs[$mn["oid"]] > 0) || $ob['meta']['show_nosubs'];
+				$check_subs = ($mc->subs[$mn["oid"]] > 0) || $ob->prop('show_nosubs') == 1);
 
 				if ($mn["clickable"] == 1 && $check_subs)
 				{
@@ -66,7 +66,7 @@ class yah_line extends class_base
 			}
 		}
 
-		return join($ob['meta']['separator'], map(' %s ',$names));
+		return join($ob->prop('separator'), map(' %s ',$names));
 	}
 }
 ?>
