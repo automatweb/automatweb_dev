@@ -1,23 +1,11 @@
 <?php
-// $Id: class_base.aw,v 2.9 2002/11/18 13:37:43 kristo Exp $
+// $Id: class_base.aw,v 2.10 2002/11/19 15:28:12 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
 
 	@property name type=textbox group=general
 	@caption Objekti nimi
-
-	@property comment type=textbox group=general
-	@caption Kommentaar
-
-	@property alias type=textbox group=general 
-	@caption Alias
-
-	@property status type=status group=general 
-	@caption Staatus
-
-	@property jrk type=textbox size=4 group=general
-	@caption Jrk
 
 	@property created type=date access=ro
 	@caption Loomise kuupäev
@@ -40,6 +28,7 @@
 	@property class_id type=class_id access=ro
 	@caption Klassi id
 */
+
 
 // some contants for internal use
 
@@ -78,7 +67,6 @@ class class_base extends aliasmgr
 		extract($args);
 		$this->_init_object(array("id" => $id,"parent" => $parent));
 
-		
 		$active = ($group) ? $group : "general";
 		$this->group = $active;
 
@@ -195,7 +183,7 @@ class class_base extends aliasmgr
 					"data" => array(
 						"id" => $id,
 						"group" => $group,
-						"orb_class" => $class,
+						"orb_class" => $this->cfg["classes"][$this->clid]["file"],
 						"parent" => $parent),
 		));
 
@@ -316,6 +304,10 @@ class class_base extends aliasmgr
 			$method = $property["method"];
 			$handler = $property["handler"];
 			$type = $property["type"];
+			if (($type == "select") && $property["multiple"])
+			{
+				$savedata[$name] = $this->make_keys($savedata[$name]);
+			};
 			if ($handler == "callback")
 			{
 				// how on earth to I get the values
@@ -357,6 +349,25 @@ class class_base extends aliasmgr
 		$this->upd_object($coredata);
 		$this->save_object(array("data" => $objdata));
 
+		$classname = get_class($this->orb_class);
+
+
+		$name = $this->coredata["name"];
+		
+		if (method_exists($this->inst,"callback_post_save"))
+		{
+			$this->inst->callback_post_save(array("id" => $this->id));
+		}
+		// logging
+		if ($this->new)
+		{
+			$this->_log($classname, "Lisas $classname objekti $name ($id)", $id);
+		}
+		else
+		{
+			$this->_log($classname, "Muutis $classname objekti $name ($id)", $id);
+		};
+
                 return $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
 	}
 
@@ -385,6 +396,11 @@ class class_base extends aliasmgr
                         // retrieve the object
 			// NB! get_object dies if the object does not have the 
 			// correct type
+			if (!$this->can("edit", $args["id"]))
+			{
+				$this->acl_error("edit", $args["id"]);
+			}
+			
                         $this->coredata = $this->get_object(array(
 				"oid" => $args["id"],
 				"class_id" => $this->clid,
@@ -401,6 +417,10 @@ class class_base extends aliasmgr
 		}
 		else
 		{
+			if (!$this->can("add", $args["parent"]))
+			{
+				$this->acl_error("add", $args["parent"]);
+			}
 			// object should only be saved under menus
 			// NB! get_object dies if the object does not have the 
 			// correct type
@@ -444,14 +464,15 @@ class class_base extends aliasmgr
 	function gen_output($args = array())
 	{
 		// XXX: figure out a way to do better titles
+		$classname = get_class($this->orb_class);
 		if ($this->id)
 		{
-			$title = "Muuda objekti";
+			$title = "Muuda $classname objekti";
 			$parent = $this->coredata["parent"];
 		}
 		else
 		{
-			$title = "Lisa objekt";
+			$title = "Lisa $classname objekt";
 			$parent = $this->parent;
 		};
 
@@ -541,7 +562,13 @@ class class_base extends aliasmgr
 	{
 		// load all properties
 		$cfgu = get_instance("cfg/cfgutils");
-		$all_props = $cfgu->load_properties(array("file" => basename($args["clfile"])));
+		$cfile = basename($args["clfile"]);
+		// XXX: temporary
+		if ($cfile == "document")
+		{
+			$cfile = "doc";
+		};
+		$all_props = $cfgu->load_properties(array("file" => $cfile));
 		$this->classinfo = $cfgu->get_classinfo();
 	
 		// I need names of all group and the contents of active group
@@ -758,7 +785,7 @@ class class_base extends aliasmgr
 		$this->read_template($tpl);
 	}
 
-	function _change_init($args, $classname, $tpl)
+	function _change_init($args, $classname, $tpl = "")
 	{
 		if (!$this->can("edit", $args["id"]))
 		{
@@ -774,7 +801,10 @@ class class_base extends aliasmgr
 		{
 			$this->mk_path($ob["parent"], "<a href='$self_url'>Muuda $classname</a>");
 		}
-		$this->read_template($tpl);
+		if ($tpl != "")
+		{
+			$this->read_template($tpl);
+		}
 		return $ob;
 	}
 };
