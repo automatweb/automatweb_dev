@@ -101,7 +101,8 @@ function savemenu() {
 		<td class="title">&nbsp;</td>
 		<td class="fgtext_g" >&nbsp;Vasak paan:&nbsp;<input type="checkbox" value=1 name="left_pane" {VAR:left_pane}></td>
 		<td class="fgtext_g">&nbsp;Parem paan:&nbsp;<input type="checkbox" value=1 name="right_pane" {VAR:right_pane}></td>
-		<td class="fgtext_g" colspan=20>Kaupu poes n&auml;idatakse &uuml;ksteise k&otilde;rval:&nbsp;<input type='checkbox' name='shop_parallel' value=1 {VAR:shop_parallel}></td>
+		<td class="fgtext_g" >Kaupu poes n&auml;idatakse &uuml;ksteise k&otilde;rval:&nbsp;<input type='checkbox' name='shop_parallel' value=1 {VAR:shop_parallel}></td>
+		<td class="fgtext_g" colspan=20>Poes ignoreeri kuhu edasi minna:&nbsp;<input type='checkbox' name='shop_ignoregoto' value=1 {VAR:shop_ignoregoto}></td>
 	</tr>
 	<tr>
 		<td class="title" valign="top">&nbsp;Kommentaar:&nbsp;</td>
