@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.9 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.10 2002/06/17 10:06:34 duke Exp $
 session_register("poll_clicked");
 class poll extends aw_template 
 {
@@ -157,13 +157,14 @@ class poll extends aw_template
 	{
 		$this->quote($arr);
 		extract($arr);
+		$lang_id = aw_global_get("lang_id");
 
 		if ($id)
 		{
 			$this->upd_object(array(
 				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
+				"name" => $name[$lang_id],
+				"comment" => $comment[$lang_id],
 			));
 
 			$this->set_object_metadata(array(
@@ -171,6 +172,20 @@ class poll extends aw_template
 				"key" => "answers",
 				"value" => $answer,
 			));
+
+			$this->set_object_metadata(array(
+                                "oid" => $id,
+                                "key" => "name",
+                                "value" => $name,
+                        ));
+			
+			$this->set_object_metadata(array(
+                                "oid" => $id,
+                                "key" => "comment",
+                                "value" => $comment,
+                        ));
+
+
 
 			if (is_array($answer[1]))
 			{
@@ -262,6 +277,8 @@ class poll extends aw_template
 
 		$poll = $this->get_obj_meta($id);
 		$meta_answers = $poll["meta"]["answers"];
+		$meta_name = $poll["meta"]["name"];
+		$meta_comment = $poll["meta"]["comment"];
 
 		//$questions = aw_unserialize($poll["questions"]);
 
@@ -309,8 +326,8 @@ class poll extends aw_template
 				$tmp .= $this->parse("QUESTION");
 			};
 			$this->vars(array(
-				"name" => $poll["name"],
-				"comment" => $poll["comment"],
+				"name" => $meta_name[$val["id"]],
+				"comment" => $meta_comment[$val["id"]],
 				"lang" => $val["name"],
 				"lang_id" => $val["id"],
 				"QUESTION" => $tmp,

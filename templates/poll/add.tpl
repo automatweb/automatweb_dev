@@ -50,13 +50,13 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 <td class="celltext">Keel:&nbsp;&nbsp;<b>{VAR:lang}</b></td>
 </tr>
 <tr>
-<td class="celltext">{VAR:LC_POLL_QUESTION}:<br><input size="40" type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
+<td class="celltext">{VAR:LC_POLL_QUESTION}:<br><input size="40" type='text' NAME='name[{VAR:lang_id}]' VALUE='{VAR:name}' class="formtext"></td>
 </tr>
 <tr>
 <td colspan="2">
 <table border='0' cellspacing='1' cellpadding='3' width='100%'>
 <tr>
-<td class="celltext" valign="top">{VAR:LC_POLL_COMMENTARY}:<br><textarea NAME='comment' cols=40 rows=5 class="formtext">{VAR:comment}</textarea></td>
+<td class="celltext" valign="top">{VAR:LC_POLL_COMMENTARY}:<br><textarea NAME='comment[{VAR:lang_id}]' cols=40 rows=5 class="formtext">{VAR:comment}</textarea></td>
 </tr>
 
 <!-- SUB: QUESTION -->
