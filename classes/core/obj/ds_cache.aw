@@ -69,6 +69,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function read_connection($id)
 	{
+		$this->conn_cache_is_cleared = false;
 		$res = $this->_get_cache("search_".$id, 0, "connection");
 		if (!is_array($res))
 		{
@@ -99,6 +100,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !returns all connections that match filter
 	function find_connections($arr)
 	{
+		$this->conn_cache_is_cleared = false;
 		$query_hash = md5(serialize($arr));
 		$res = $this->_get_cache("search-".$query_hash, 0, "connection");
 		if (!is_array($res))
@@ -119,6 +121,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function search($params)
 	{
+		$this->search_cache_is_cleared = false;
 		$tp = $params;
 		if (!isset($tp["lang_id"]))
 		{
@@ -207,19 +210,42 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		// if it is connection, then the next invalidate_regex will nuke it anyway
 		if ("connection" != $cfn)
 		{
-			//$this->cache->file_invalidate_regex($cfn."-search-(.*)-0");
-			$this->cache->file_invalidate_regex($cfn."-search-(.*)");
-			if ($GLOBALS["INTENSE_DUKE"] == 1)
+			// this flag is false by default. 
+			// now, when we clear the cache, we say that it is cleared
+			// and if another clear request comes in, before any searches are done
+			// we check the flag and don't clear the cache, because nothing will have been written to it
+			// the flag gets set whenever a search cache is created
+			if (!$this->search_cache_is_cleared)
 			{
-				echo "CLEAR CACHE file  ".$cfn."-search-(.*) got result <br>";
+				$this->cache->file_invalidate_regex($cfn."-search-(.*)");
+				$this->search_cache_is_cleared = true;
+				if ($GLOBALS["INTENSE_DUKE"] == 1)
+				{
+					echo "CLEAR CACHE file  ".$cfn."-search-(.*) got result <br>";
+				}
+			}
+			else
+			if ($GLOBALS["file_cache_log"])
+			{
+				fwrite($GLOBALS["file_cache_log"], date("d.m.Y H:i:s").": ds_cache::_clear_cache($oid, $cfn) - saved a cache clear from ".dbg::short_backtrace()."\n\n");
 			}
 		};
-		$this->cache->file_invalidate_regex("connection(.*)");
-		$this->cache->flush_cache();
+
+		if (!$this->conn_cache_is_cleared)
+		{
+			$this->conn_cache_is_cleared = true;
+			$this->cache->file_invalidate_regex("connection(.*)");
+			$this->cache->flush_cache();
 			if ($GLOBALS["INTENSE_DUKE"] == 1)
 			{
 				echo "CLEAR CACHE file  connection(.*) got result <br>";
 			}
+		}
+		else
+		if ($GLOBALS["file_cache_log"])
+		{
+			fwrite($GLOBALS["file_cache_log"], date("d.m.Y H:i:s").": ds_cache::_clear_cache($oid, $cfn) - saved a cache clear from ".dbg::short_backtrace()."\n\n");
+		}
 	}
 }
 ?>
