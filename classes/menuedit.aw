@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.24 2001/06/18 17:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.25 2001/06/18 18:46:40 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -12,7 +12,7 @@ session_register("cut_objects");
 session_register("copied_objects");
 
 lc_load("menuedit");
-classload("cache","validator","defs");
+classload("cache","defs");
 
 	class menuedit extends aw_template
 	{

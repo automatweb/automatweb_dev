@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.1 2001/06/18 17:24:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.2 2001/06/18 18:46:40 kristo Exp $
 // homedir.aw - Class for managing users home directory
+
+global $orb_defs;
+$orb_defs["homedir"] = "xml";
 
 class homedir extends users {
 	

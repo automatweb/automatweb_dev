@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.3 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.4 2001/06/18 18:46:40 kristo Exp $
 // table.aw - tabelite haldus
 
 global $orb_defs;
@@ -31,7 +31,8 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 													 "new"							=> array("function"	=> "add",								"params"	=> array("parent")),
 													 "add_doc"					=> array("function" => "add_doc",						"params"	=> array("id","parent")),
 													 "submit_doc"				=> array("function" => "submit_doc",				"params"	=> array("id","parent")),
-													 "delete"						=> array("function" => "delete",						"params"	=> array("id","parent"))
+													 "delete"						=> array("function" => "delete",						"params"	=> array("id","parent")),
+													 "submit_add"				=> array("function" => "submit_add",				"params"	=> array())
 													 );
 
 	classload("images");
@@ -113,7 +114,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 		{
 			extract($arr);
 			$this->load_table($id);
-			$this->mk_path($this->table_parent,"<a href='".$this->mk_orb("list",array("parent" => $this->table_parent),"tables")."'>Tabelid</a> / Muuda tabelit");
+			$this->mk_path($this->table_parent,"Muuda tabelit");
 
 			$this->read_template("table_modify.tpl");
 	
@@ -176,7 +177,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 		{
 			extract($arr);
 			$this->load_table($id);
-			$this->mk_path($this->table_parent,"<a href='".$this->mk_orb("list",array("parent" => $this->table_parent),"tables")."'>Tabelid</a> / Muuda tabelit");
+			$this->mk_path($this->table_parent,"Muuda tabelit");
 
 			$this->read_template("admin.tpl");
 	
@@ -689,7 +690,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 		{
 			extract($arr);
 			$this->load_table($id);
-			$this->mk_path($this->table_parent,"<a href='".$this->mk_orb("list",array("parent" => $this->table_parent),"tables")."'>Tabelid</a> / Muuda tabelit");
+			$this->mk_path($this->table_parent,"Muuda tabelit");
 
 			$this->read_template("styles.tpl");
 /*			echo "<table border=1>";
@@ -1476,9 +1477,22 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 
 		function add($arr)
 		{
-			classload("tables");
-			$t = new tables;
-			return $t->add_table($arr);
+			extract($arr);
+			$this->mk_path($parent,"Lisa tabel");
+			$this->read_template("table_add.tpl");
+		  $this->vars(array("reforb" => $this->mk_reforb("submit_add", array("parent" => $parent))));
+			return $this->parse();
+		}
+		
+		function submit_add($arr)
+		{
+			$this->quote(&$arr);
+			extract($arr);
+			
+			$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_TABLE, "comment" => $comment));
+			$this->db_query("INSERT INTO aw_tables(id) VALUES($id)");
+
+			return $this->mk_orb("change", array("id" => $id));
 		}
 
 		function proc_text($txt)
@@ -1488,11 +1502,10 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 				return "&nbsp;";
 			$txt = str_replace("  ", "&nbsp;&nbsp;", $txt);
 
-//			$txt = preg_replace("/(http|ftp):\/\/(\S*)/mi","<a target='_blank' href='\\1://\\2'>\\1://\\2</a>",$txt);
-
-//			$txt = preg_replace("/(\S*@\S*(\.\S*)+)/mi","<a href='mailto:\\1'>\\1</a>",$txt);
 			if ($txt == "")
+			{
 				$txt = "<img src='".$GLOBALS["baseurl"]."/images/transa.gif'>";
+			}
 			return $txt;
 		}
 

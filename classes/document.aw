@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.23 2001/06/15 11:54:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.24 2001/06/18 18:46:40 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -1412,7 +1412,6 @@ class document extends aw_template
 		$d_begin = $date - $sub_arr[date("w")]*24*3600;
 		$rdate = $d_begin+$num*24*3600;
 
-		classload("tvkavad");
 		$t = new tvkavad;
 		return $t->kanalid_list($rdate);
 	}

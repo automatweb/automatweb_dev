@@ -9,14 +9,6 @@ class db_syslog extends aw_template
 		$this->tpl_init("syslog");
 	}
 	
-	function last_entries($limit)
-	{
-		$q = "SELECT * FROM syslog 
-			ORDER BY syslog.tm DESC
-			LIMIT $limit";
-		$this->db_query($q);
-	}
-
 	function display_last_10()
 	{
 		// faking global muutujad?

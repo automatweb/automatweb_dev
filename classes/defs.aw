@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.10 2001/06/18 17:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.11 2001/06/18 18:46:40 kristo Exp $
 if (defined("DEFS_LOADED"))
 {
 }
@@ -562,7 +562,7 @@ function is_email ($address = "")
 		return false;
 	}
        
-	if( (!(strpos($User," ")===false) or !(strpos($Host," ")===false)) 
+	if( (!(strpos($User," ")===false) or !(strpos($Host," ")===false)) )
 	{
 		// whitespace sees
 		return false;
