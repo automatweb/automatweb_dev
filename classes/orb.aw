@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.29 2003/01/17 15:24:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.30 2003/01/20 18:42:40 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -231,25 +231,34 @@ class orb extends aw_template
 		return;
 	}
 
-	////
-	// !laeb XML failist orbi definitsiooni
 	function load_xml_orb_def($class)
 	{
-		$basedir = $this->cfg["basedir"];
-		// klassi definitsioon sisse
+		global $awt;
+		$awt->start("load_xml_orb_def");
+		$fc = get_instance("cache");
+		$fc->get_cached_file(array(
+			"fname" => "/xml/orb/$class.xml",
+			"unserializer" => array(&$this,"load_xml_orb_def_file"),
+			"loader" => array(&$this,"load_serialized_orb_def"),
+		));
+		$awt->stop("load_xml_orb_def");
+		return $this->_tmp;
+	}
 
-		if (not($xmldef))
-		{
-			$xmldef = $this->get_file(array(
-				"file" => "$basedir/xml/orb/$class.xml"
-			));
-		};
+	function load_serialized_orb_def($args = array())
+	{
+		$this->_tmp = $args["data"];
+	}
 
+	////
+	// !laeb XML failist orbi definitsiooni
+	function load_xml_orb_def_file($args = array())
+	{
 		// loome parseri
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
-		xml_parse_into_struct($parser,$xmldef,&$values,&$tags);
+		xml_parse_into_struct($parser,$args["content"],&$values,&$tags);
 		// R.I.P. parser
 		xml_parser_free($parser);
 	
@@ -370,7 +379,6 @@ class orb extends aw_template
 				};
 			};
 		}; // foreach
-
 		return $orb_defs;
 	} // function
 						
@@ -424,7 +432,7 @@ class orb extends aw_template
 		{
 			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),true,$this->silent);
 		}
-
+	
 		$ret = $this->load_xml_orb_def($class);
 
 		// try and figure out the folder for this class 
@@ -499,7 +507,7 @@ class new_orb extends orb
 		// get orb defs for the class
 		$orb_defs = $this->try_load_class($class);
 
-			// check parameters
+		// check params
 		$params = $this->check_method_params($orb_defs, $params, $class, $action);
 		$arr["params"] = $params;
 
@@ -578,7 +586,9 @@ class new_orb extends orb
 						$ret[$key] = $params[$key];
 					}
 					else
-					if (isset($orb_defs[$class][$action]["defaults"][$key]))
+					// note, there seems to be some bitrot here, isset breaks things
+		
+					if ($orb_defs[$class][$action]["defaults"][$key])
 					{
 						$ret[$key] = $orb_defs[$class][$action]["defaults"][$key];
 					}
