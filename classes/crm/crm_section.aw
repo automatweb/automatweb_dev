@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.2 2004/04/13 16:05:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.3 2004/06/17 14:33:21 duke Exp $
 // crm_section.aw - &Uuml;ksus 
 /*
 
@@ -21,9 +21,34 @@ class crm_section extends class_base
 
 	function get_folders_as_object_list($o, $level, $parent)
 	{
+		// I need all objects that target this one
+		// $o - is the sector object
+		$conns = $o->connections_to(array(
+			"from.class_id" => CL_CRM_PERSON,
+		));
 		$ol = new object_list();
-		//$ol->add(125818);
+		foreach($conns as $conn)
+		{
+			$ol->add($conn->prop("from"));
+		};
 		return $ol;
+	}
+
+	function make_menu_link($o)
+	{
+		// right, now I need to implement the proper code
+		// need to figure out the section!
+		$sect = $o->prop("sect");
+		return $this->mk_my_orb("show",array("id" => $o->id(),"section" => aw_global_get("section")),CL_CRM_PERSON);
+		//return aw_ini_get("baseurl") . "/" . $o->id() . "?oid=" . $sect;
+		/*
+		print "swching";
+		print "<pre>";
+		var_dump($o->name());
+		print "</pre>";
+		*/
+
+
 	}
 
 
