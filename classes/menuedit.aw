@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.216 2003/01/30 19:11:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.217 2003/01/31 13:26:02 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4371,7 +4371,8 @@ class menuedit extends aw_template
 	{
 		$si_parent = $sel_menu_id;
 		$imgs = false;
-		return false;
+// why the fuck did I put this in?!?!
+//		return false;
 		while ($sel_image == "" && $si_parent)
 		{
 			$sel_menu_meta = $this->mar[$si_parent]["meta"];
