@@ -1306,14 +1306,20 @@ class _int_object
 		}
 		foreach($data as $from_oid => $ihd)
 		{
-			if ($ihd["to_class"] == $this->obj["class_id"])
+			if (is_array($ihd))
 			{
-				if ($GLOBALS["object_loader"]->ds->can("edit", $from_oid))
+				foreach($ihd as $r_ihd)
 				{
-					$orig = obj($from_oid);
-					$this->obj["properties"][$ihd["to_prop"]] = $orig->prop($ihd["from_prop"]);
+					if ($r_ihd["to_class"] == $this->obj["class_id"] && (!is_array($r_ihd["only_to_objs"]) || count($r_ihd["only_to_objs"]) == 0))
+					{
+						if ($GLOBALS["object_loader"]->ds->can("edit", $from_oid))
+						{
+							$orig = obj($from_oid);
+							$this->obj["properties"][$r_ihd["to_prop"]] = $orig->prop($r_ihd["from_prop"]);
+						}
+					}
 				}
-			}
+			}		
 		}
 	}
 
@@ -1321,20 +1327,27 @@ class _int_object
 	{
 		if (isset($GLOBALS["object_loader"]->obj_inherit_props_conf[$this->obj["oid"]]))
 		{
-			$ihd = $GLOBALS["object_loader"]->obj_inherit_props_conf[$this->obj["oid"]];
-
-			$propv = $this->obj["properties"][$ihd["from_prop"]];
-			
-			// find all object os correct type
-			$ol = new object_list(array(
-				"class_id" => $ihd["to_class"],
-				"site_id" => array(),
-				"lang_id" => array()
-			));
-			foreach($ol->arr() as $o)
+			$tmp = safe_array($GLOBALS["object_loader"]->obj_inherit_props_conf[$this->obj["oid"]]);
+			foreach($tmp as $ihd)
 			{
-				$o->set_prop($ihd["to_prop"], $propv);
-				$o->save();
+				$propv = $this->obj["properties"][$ihd["from_prop"]];
+			
+				// find all object os correct type
+				$filt = array(
+					"class_id" => $ihd["to_class"],
+					"site_id" => array(),
+					"lang_id" => array()
+				);
+				if (is_array($ihd["only_to_objs"]) && count($ihd["only_to_objs"]) > 0)
+				{
+					$filt["oid"] = $ihd["only_to_objs"];
+				}
+				$ol = new object_list($filt);
+				foreach($ol->arr() as $o)
+				{
+					$o->set_prop($ihd["to_prop"], $propv);
+					$o->save();
+				}
 			}
 		}
 	}

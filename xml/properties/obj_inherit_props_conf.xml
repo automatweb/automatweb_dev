@@ -11,15 +11,6 @@
             <caption>Vali objekt, millelt p&amp;auml;rida</caption>
       </property>
       <property>
-            <name>inherit_from_prop</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Vali omadus, mida p&amp;auml;rida</caption>
-      </property>
-      <property>
             <name>inherit_to_class</name>
             <table>objects</table>
             <group>general</group>
@@ -29,13 +20,68 @@
             <caption>Vali klass, kuhu omadusi kirjutatakse</caption>
       </property>
       <property>
-            <name>inherit_to_prop</name>
+            <name>inherit_to_objs</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <caption>Vali omadus, kuhu omadusi kirjutatakse</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_INHERIT_TO</reltype>
+            <multiple>1</multiple>
+            <caption>Vali objektid kuhu p&amp;auml;rida</caption>
+      </property>
+      <property>
+            <name>ihf_tree</name>
+            <table>objects</table>
+            <group>ihf</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ihf_tree</parent>
+      </property>
+      <property>
+            <name>ihf_tbl</name>
+            <table>objects</table>
+            <group>ihf</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ihf_table</parent>
+      </property>
+      <property>
+            <name>ihf_tree_right</name>
+            <table>objects</table>
+            <group>ihf</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>ihf_tree_right</parent>
+      </property>
+      <property>
+            <name>if_ov_toolbar</name>
+            <table>objects</table>
+            <group>if_ov</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>if_ov_table</name>
+            <table>objects</table>
+            <group>if_ov</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <classinfo>
             <syslog_type>ST_OBJ_INHERIT_PROPS_CONF</syslog_type>
@@ -43,12 +89,51 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <ihf>
+                  <caption>P&amp;auml;ritavad omadused</caption>
+            </ihf>
+            <if_ov>
+                  <caption>Valitud p&amp;auml;rimised</caption>
+                  <submit>no</submit>
+            </if_ov>
+      </groupinfo>
       <reltypes>
             <INHERIT_FROM>
                   <value>1</value>
                   <clid>CL_MENU</clid>
                   <caption>p&amp;auml;ritav objekt</caption>
             </INHERIT_FROM>
+            <INHERIT_TO>
+                  <value>2</value>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_SWOT_THREAT</num_1>
+                  </clid>
+                  <caption>kirjutatav objekt</caption>
+            </INHERIT_TO>
       </reltypes>
+      <layout>
+            <ihf_main>
+                  <type>hbox</type>
+                  <group>ihf</group>
+                  <width>20%:60%:20%</width>
+            </ihf_main>
+            <ihf_tree>
+                  <type>vbox</type>
+                  <parent>ihf_main</parent>
+                  <group>ihf</group>
+            </ihf_tree>
+            <ihf_table>
+                  <type>vbox</type>
+                  <parent>ihf_main</parent>
+                  <group>ihf</group>
+            </ihf_table>
+            <ihf_tree_right>
+                  <type>vbox</type>
+                  <parent>ihf_main</parent>
+                  <group>ihf</group>
+            </ihf_tree_right>
+      </layout>
 </properties>
 
