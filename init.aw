@@ -193,7 +193,6 @@ function init_config($arr)
 			parse_config($file);
 		}
 
-
 		// and write to cache if file is specified
 		if ($cache_file)
 		{

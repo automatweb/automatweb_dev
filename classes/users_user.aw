@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.97 2004/10/18 15:37:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.98 2004/10/29 16:51:58 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -231,7 +231,7 @@ class users_user extends aw_template
 		};
 		
 		setcookie("nocache",1);
-		session_register("uid");
+		$_SESSION["uid"] = $uid;
 		aw_global_set("uid", $uid);
 		aw_session_set("uid_oid", $this->get_oid_for_uid($uid));
 
@@ -252,7 +252,7 @@ class users_user extends aw_template
 
 		// notify listeners
 		post_message("MSG_USER_LOGIN", array("uid" => $uid));
-		
+
 		// now that we got the whether he can log in bit cleared, try to find an url to redirect to
 		// 1st is the url that was requested before the user was forced to login.
 		// 2nd try to find the group based url and if that fails, then the everyone's url and then just the baseurl.
