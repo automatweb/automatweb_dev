@@ -129,6 +129,15 @@
             <caption>Millise v&amp;auml;lja v&amp;auml;&amp;auml;rtuse esit&amp;auml;he j&amp;auml;rgi filtreeritakse</caption>
       </property>
       <property>
+            <name>filter_by_char_order</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kuidas sorteerida</caption>
+      </property>
+      <property>
             <name>alphabet_in_lower_case</name>
             <table>objects</table>
             <group>showing</group>

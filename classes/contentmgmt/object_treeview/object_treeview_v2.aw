@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.40 2005/01/11 10:52:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.41 2005/01/11 14:04:56 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -52,6 +52,9 @@
 
 @property filter_by_char_field type=select 
 @caption Millise v&auml;lja v&auml;&auml;rtuse esit&auml;he j&auml;rgi filtreeritakse
+
+@property filter_by_char_order type=select
+@caption Kuidas sorteerida
 
 @property alphabet_in_lower_case type=checkbox ch_value=1 
 @caption T&auml;hestiku kuvamisel kasutada v&auml;iket&auml;hti 
@@ -168,6 +171,13 @@ class object_treeview_v2 extends class_base
 				break;
 			case "filter_by_char_field":
 				$prop['options'] = $col_list;
+				break;
+			case "filter_by_char_order":
+				$prop['options'] = array(
+					"" => "", 
+					"asc" => "A - Z",
+					"desc" => "Z - A",
+				);
 				break;
 			case "group_table":
 				$this->do_group_table($arr);
@@ -417,8 +427,22 @@ class object_treeview_v2 extends class_base
 			"o" => $ob,
 			"hidden_cols" => true,
 		));
-
-		$tmp = new aw_array($ob->meta("itemsorts"));
+// well, if char is present in the url, then sort only by 
+// the field which is set to be filtered according to char
+		$tmp_order = $ob->prop("filter_by_char_order");
+		if(!empty($_GET['char']) && !empty($tmp_order))
+		{
+			$tmp = new aw_array(array(
+				array(
+					"element" => $ob->prop("filter_by_char_field"),
+					"ord" => $tmp_order,
+				),
+			));
+		}
+		else
+		{
+			$tmp = new aw_array($ob->meta("itemsorts"));
+		}
 		$this->__is = $tmp->get();
 		usort($ol, array(&$this, "__is_sorter"));
 
