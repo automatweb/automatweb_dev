@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.5 2001/05/20 21:07:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.6 2001/05/20 22:03:19 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -81,8 +81,9 @@ class keywords extends aw_template {
 	function notify($args = array())
 	{
 		extract($args);
+		$gp = $this->get_object(KEYWORD_LISTS);
 		$doc = $this->get_object($id);
-		$q = "SELECT keywords.list_id AS list_id FROM keywords2objects
+		$q = "SELECT keywords.list_id AS list_id,keywords.keyword AS keyword  FROM keywords2objects
 			LEFT JOIN keywords ON (keywords2objects.keyword_id = keywords.id)
 			WHERE oid = $id";
 		$this->db_query($q);
@@ -96,6 +97,24 @@ class keywords extends aw_template {
 			$q = "SELECT * FROM objects WHERE oid = '$row[list_id]'";
 			$this->db_query($q);
 			$ml = $this->db_next();
+			// kui sellele listile pole default maili määratud
+			if (!$ml["last"])
+			{
+				// checkime, kas grandparentil on default list määratud
+				if ($gp["last"])
+				{
+					// oli. nyyd on meil default listi id käes. Tuleb ainult lugeda selle listi last
+					#$ml["last"] = $gp["last"];
+					$this->save_handle();
+					$rl = $this->get_object($gp["last"]);
+					$this->restore_handle();
+					if ($rl)
+					{
+						$ml["last"] = $rl["last"];
+					};
+
+				}
+			};
 			$q = "SELECT * FROM ml_mails WHERE id = '$ml[last]'";
 			$this->db_query($q);
 			$ml = $this->db_next();
@@ -109,6 +128,7 @@ class keywords extends aw_template {
 				$content = $ml["contents"];
 				$content = str_replace("#url#","$baseurl/index.aw?section=$id",$content);
 				$content = str_replace("#title#",$doc["name"],$content);
+				$content = str_replace("#keyword#",$row["keyword"],$content);
 				$email->mail_members(array(
 						"list_id" => $row["list_id"],
 						"name" => $ml["mail_from_name"],
