@@ -30,5 +30,25 @@
             <method>serialize</method>
             <caption>Kas kustutame valitud</caption>
       </property>
+      <property>
+            <name>repeater_obj</name>
+            <type>objpicker</type>
+            <clid>CL_REPEATER_OBJ</clid>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali korduste objekt</caption>
+      </property>
+      <property>
+            <name>cache_dowhat</name>
+            <type>radio</type>
+            <value>regen</value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kas kordusel tehakse uus cache</caption>
+      </property>
 </properties>
 
