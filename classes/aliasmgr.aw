@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.128 2003/12/04 19:52:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.129 2003/12/08 13:01:47 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -490,12 +490,12 @@ class aliasmgr extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 		));
-		$this->t->define_field(array(
-			"caption" => "<a href='javascript:void(0)' onClick='selall()'>Vali</a>",
-			"name" => "check",
-			"width" => 20,
-			"align" => "center",
-		));
+
+		$this->t->define_chooser(array(
+                        "name" => "check",
+                        "field" => "id",
+                ));
+
 	}
 
 	////
@@ -584,6 +584,7 @@ class aliasmgr extends aw_template
 				"created" => $alias->prop("to.created"),
 				"modifiedby" => $alias->prop("to.modifiedby"),
 				"modified" => $alias->prop("to.modified"),
+				"comment" => $alias->prop("to.comment")
 			);
 
 			$aclid = $alias->prop("to.class_id");
@@ -619,10 +620,8 @@ class aliasmgr extends aw_template
 
 			$adat["title"] = $classes[$aclid]["name"];
 
-			$adat["check"] = html::checkbox(array(
-				"name" => "check[" . $alias->prop("id") . "]",
-				"value" => $alias->prop("id"),
-			));
+			// for the chooser
+			$adat["id"] = $alias->prop("id");
 
 			$adat["name"] = html::href(array(
 				"url" => $ch,
