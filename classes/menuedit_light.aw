@@ -50,7 +50,7 @@ class menuedit_light extends aw_template {
 			{
 				$_root = $this->get_object($start_from);
 				// Override the default name
-				$_root["name"] = "Kodukataloog";
+				#$_root["name"] = "Kodukataloog";
 				$this->object_list[$_root[$this->threadby]][$start_from] = $_root;
 			}
 			reset($this->object_list);
