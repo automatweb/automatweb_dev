@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.271 2004/06/26 08:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.272 2004/06/26 10:52:41 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -70,7 +70,7 @@ class document extends aw_template
 			};
 		};
 		$period = (int)$period;
-		$row = $this->get_menu($parent);
+		$row = obj($parent);
 		$me = obj($parent);
 		$gm_subs = $me->meta("section_include_submenus");
 		$gm_c = $me->connections_from(array(
@@ -99,14 +99,14 @@ class document extends aw_template
 			}
 		}
 
-		if ($row["meta"]["all_pers"])
+		if ($row->meta("all_pers"))
 		{
 			$period_instance = get_instance("period");
 			$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
 		}
 		else
 		{
-			$periods = $row["meta"]["pers"];
+			$periods = $row->meta("pers");
 		}
 		
 		if (is_array($sections))
@@ -151,9 +151,9 @@ class document extends aw_template
 		// kui staatus on defineerimata, siis n?itame ainult aktiivseid dokumente
 		$v.= " AND objects.status = " . (($status == -1) ? 2 : $status);
 
-		if ($row["ndocs"] > 0)
+		if ($row->prop("ndocs") > 0)
 		{
-			$lm = "LIMIT ".$row["ndocs"];
+			$lm = "LIMIT ".$row->prop("ndocs");
 		};
 
 		if ($ordby == "")

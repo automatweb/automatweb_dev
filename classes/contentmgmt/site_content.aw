@@ -259,7 +259,8 @@ class site_content extends menuedit
 
 		if (!is_array($this->mar[$sel_menu_id]))
 		{
-			$this->mar[$sel_menu_id] = $this->get_menu($sel_menu_id);
+			$tmp = obj($sel_menu_id);
+			$this->mar[$sel_menu_id] = $tmp->fetch();
 		};
 
 		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.282 2004/06/26 10:03:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.283 2004/06/26 10:52:41 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -559,19 +559,10 @@ class core extends acl_base
 	// !prints an error message about the fact that the user has no access to do this
 	function acl_error($right, $oid)
 	{
-		if (func_num_args() == 2)
-		{
-			$right = func_get_arg(0);
-			$oid = func_get_arg(1);
-			printf(E_ACCESS_DENIED1,"CAN_".$right,$oid);
-			send_mail("vead@struktuur.ee", "ACL error saidil ".aw_ini_get("baseurl"), sprintf(E_ACCESS_DENIED1,"CAN_".$right,$oid));
-		}
-		else
-		{
-			printf(E_ACCESS_DENIED2);
-			send_mail("vead@struktuur.ee", "ACL error saidil ".aw_ini_get("baseurl"), sprintf(E_ACCESS_DENIED2));
-		};
-		die();
+		error::throw(array(
+			"id" => ERR_ACL,
+			"msg" => "ACL error saidil ".aw_ini_get("baseurl")." ".sprintf(E_ACCESS_DENIED1,"CAN_".$right,$oid)
+		));
 	}
 
 	////
@@ -583,7 +574,6 @@ class core extends acl_base
 	// crap, I hate this but I gotta do it - shoulda used array arguments or something -
 	// if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
 	// directly, without drawing menus and stuff
-
 	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&")
 	{
 		// resolve to name
@@ -1021,28 +1011,6 @@ class core extends acl_base
 		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period, "raw" => $arr["raw"]));
 	}
 	
-	////
-	// !Fetches and caches information about a menu
-	function get_menu($id)
-	{
-		if (aw_cache_get("gm_cache",$id))
-		{
-			return aw_cache_get("gm_cache",$id);
-		}
-		else
-		{
-			$q = "SELECT menu.*,objects.* FROM menu LEFT join objects on (menu.id = objects.oid) WHERE id = '$id'";
-			$this->db_query($q);
-			$row = $this->db_fetch_row();
-			if (is_array($row))
-			{
-				$row["meta"] = aw_unserialize($row["metadata"]);
-			}
-			aw_cache_set("gm_cache",$id,$row);
-			return $row;
-		};
-	}
-
 	////
 	// !this should be called from the constructor of each class
 	function init($args = false)
