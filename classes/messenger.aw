@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.114 2002/12/20 12:43:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.115 2002/12/23 10:57:50 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -2331,7 +2331,7 @@ class messenger extends menuedit_light
 					"msg_window" => checked($conf["msg_window"]),
 					"msg_quote_list" => $this->picker($conf["msg_quotechar"],array(">" => ">",":" => ":","}" => "}")),
 					"msg_default_pri" => $this->picker($conf["msg_default_pri"],$this->priorities),
-					"msg_cnt_att" => $this->picker($conf["msg_cnt_att"],array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5")),
+					"msg_cnt_att" => $this->picker($conf["msg_cnt_att"],array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5","10" => "10","15" => "15")),
 					"msg_move_read_folder" => $this->picker($conf["msg_move_read_folder"],$folder_list),
 					"msg_move_read" => checked($conf["msg_move_read"]),
 					"msg_hide_menubar" => checked($conf["msg_hide_menubar"]),
