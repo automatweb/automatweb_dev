@@ -618,11 +618,14 @@ class form_controller extends form_base
 
 	function save_controller($co)
 	{
-		$this->upd_object(array(
-			"oid" => $co["oid"],
-			"name" => $co["name"],
-			"metadata" => $co["meta"]
-		));
+		$o = obj($co["oid"]);
+		$o->set_name($co["name"]);
+		$awa = new aw_array($co["meta"]);
+		foreach($awa->get() as $k => $v)
+		{
+			$o->set_meta($k, $v);
+		}
+		$o->save();
 	}
 
 	function get_var_value($co,$var_name, &$form_ref)
