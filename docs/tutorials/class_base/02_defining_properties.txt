@@ -49,11 +49,12 @@ Used to define additional information about a group.
 </p><div class="variablelist"><dl><dt><a name="id2797630"></a><span class="term">caption</span></dt><dd><p><a name="id2797637"></a>Human readable name of the group</p></dd><dt><a name="id2797646"></a><span class="term">default</span></dt><dd><p><a name="id2797653"></a>Is this group the default?</p></dd><dt><a name="id2797663"></a><span class="term">parent</span></dt><dd><p><a name="id2797670"></a>if specified, this group will be nested (second level) inside the parent group</p></dd><dt><a name="id2797681"></a><span class="term">submit</span></dt><dd><p><a name="id2797688"></a>if specified, submit button will be omitted from this group</p></dd></dl></div><p>
 
 <div class="cmdsynopsis" id="id2797703"><a name="id2797703"></a><tt>@classinfo</tt>  {
-	 [relationmgr=yes] [trans=1] [syslog_type=<i><tt>ST_EXAMPLE</tt></i>] [no_status=1]
+	 [relationmgr=yes] [trans=1] [syslog_type=<i><tt>ST_EXAMPLE</tt></i>] [no_status=1] [no_comment=1]
 }</div>
 Used to define additional information about the class.
 </p><div class="variablelist"><dl><dt><a name="id2797772"></a><span class="term">relationmgr</span></dt><dd><p>Does this class use a relation manager? (Most classes do)</p></dd><dt><span class="term">trans</span></dt><dd><p><a name="id2797796"></a>Can the properties of this class be translated?</p></dd><dt><span class="term">syslog_type</span></dt><dd><p>Generated automagically, used when logging things</p></dd>
 <dt><span class="term">no_status</span></dt><dd>If specified, then the status property will be omitted from the form and the status of the object will always set to STAT_ACTIVE when saving</p></dd>
+<dt><span class="term">no_comment</span></dt><dd>If specified, then the comment property will be omitted from the form.</p></dd>
 </dl></div><p>
 <div class="cmdsynopsis" id="id2797829"><a name="id2797829"></a><tt>@tableinfo</tt>  {tablename} {master_table=tablename} {master_index=indexname}</div>
 
