@@ -279,6 +279,13 @@
             <group>calendar</group>
             <caption>Vali kalendrid, millesse see sündmus veel salvestatakse.</caption>
       </property>
+      <property>
+            <name>sbt</name>
+            <type>submit</type>
+            <value>Salvesta</value>
+            <store>no</store>
+            <group>general</group>
+      </property>
       <classinfo>
             <toolbar>yes</toolbar>
             <corefields>status</corefields>
