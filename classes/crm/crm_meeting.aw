@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.11 2004/07/05 13:21:15 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.12 2004/08/01 20:40:12 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -17,6 +17,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property end type=datetime_select table=planner 
 @caption Lõpeb
+
+@property whole_day type=checkbox ch_value=1 field=meta method=serialize
+@caption Kestab terve päeva
 
 @property content type=textarea cols=60 rows=30 table=documents
 @caption Sisu
@@ -61,9 +64,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @caption Kordus
 
 */
-
-// and now, all I have to do is to define a new property, that allows me to enter the recurrency information..
-// and that would be a releditor, my friend!
 
 class crm_meeting extends class_base
 {
@@ -147,6 +147,14 @@ class crm_meeting extends class_base
 			case "calendar_selector":
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_calendar_selector($arr);
+				break;
+			
+			case "whole_day":
+				list($m,$d,$y) = explode("-",date("m-d-Y"));
+				$daystart = mktime(9,0,0,$m,$d,$y);
+				$dayend = mktime(17,0,0,$m,$d,$y);
+				$arr["obj_inst"]->set_prop("start1",$daystart);
+				$arr["obj_inst"]->set_prop("end",$dayend);
 				break;
 		};
 		return $retval;
