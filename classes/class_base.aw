@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.209 2004/02/11 17:06:48 duke Exp $
+// $Id: class_base.aw,v 2.210 2004/02/11 21:33:37 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -215,6 +215,10 @@ class class_base extends aw_template
 				*/
 
 			};
+		}
+		else
+		{
+			$this->classinfo["no_yah"] = 1;
 		};
 
 		// yees, this means that other forms besides add and edit cannot use custom config forms
@@ -254,6 +258,7 @@ class class_base extends aw_template
 				"type" => ($this->layout_mode == "fixed_toolbar" && empty($args["cb_part"])) ? "toolbar" : "",
 		));
 
+
 		if (!empty($args["form"]) && isset($this->forminfo[$args["form"]]["onload"]))
 		{
 			$onload_method = $this->forminfo[$args["form"]]["onload"];
@@ -263,8 +268,8 @@ class class_base extends aw_template
 			}
 			else
 			{
-				print "this class does not have a $onload_method method<br>";
-				die();
+				//print "this class does not have a $onload_method method<br>";
+				//die();
 			};
 		};
 		
@@ -412,17 +417,6 @@ class class_base extends aw_template
 
 		foreach($resprops as $val)
 		{
-			global $XX4;
-			/// .. aaah. dammit. I need to implement the form thingie.
-			// don't you see? Then I can do different forms .. one for
-			// editint .. other for showing. Damn, that's going to be nice.
-
-			// that form would then be able to do different transformations
-			// with it's contents and stuff like that. Oh yes ..
-			if ($XX4)
-			{
-				$this->alter_property(&$val);
-			};
 			$cli->add_property($val);
 		};
 
@@ -454,8 +448,18 @@ class class_base extends aw_template
 			$this->inst->callback_mod_reforb(&$argblock);
 		};
 
+		if (isset($this->forminfo[$use_form]["onsubmit"]))
+		{
+			$submit_action = $this->forminfo[$use_form]["onsubmit"];
+			$argblock["orb_class"] = $this->clfile;
+		}
+		else
+		{
+			$submit_action = "submit";
+		};
+
 		$cli->finish_output(array(
-			"action" => "submit",
+			"action" => $submit_action,
 			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
 			"data" => $argblock,
 		));
@@ -749,6 +753,7 @@ class class_base extends aw_template
 			$orb_class = "doc";
 		};
 
+
 		$has_properties = $cfgu->has_properties(array("file" => $orb_class));
 		if (empty($has_properties))
 		{
@@ -772,12 +777,22 @@ class class_base extends aw_template
 			$clfile = "doc";
 		};
 
-		if (empty($clfile))
+		if (empty($clfile) && !$has_properties)
 		{
+
+		//if (empty($clfile))
+		//{
 			die("coult not identify object " . $this->clfile);
 		};
 
-		$this->clfile = $clfile;
+		if (empty($clfile))
+		{
+			$this->clfile = $orb_class;
+		}
+		else
+		{
+			$this->clfile = $clfile;
+		};
 		$this->clid = $clid;
 		
 		// get an instance of the class that handles this object type
@@ -1390,10 +1405,12 @@ class class_base extends aw_template
 			};
 			*/
 			$_all_props = $cfgu->load_properties(array(
+				"file" => empty($this->clid) ? $this->clfile : "",
 				"clid" => $this->clid,
 				"filter" => $filter,
 			));
 		};
+
 
 		if (!is_array($this->classinfo))
 		{
