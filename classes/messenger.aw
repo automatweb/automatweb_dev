@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.99 2002/07/18 10:44:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.100 2002/08/08 17:19:53 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -1307,6 +1307,7 @@ class messenger extends menuedit_light
 					$members = $awe->get_members(array(
 						"list_id" => $row["oid"],
 					));
+					$this->list_id = $row["oid"];
 					$this->restore_handle();
 					if (is_array($members))
 					foreach($members as $key => $membermail)
@@ -1473,9 +1474,16 @@ class messenger extends menuedit_light
 
 		if (is_array($alist) && sizeof($alist) > 0)
 		{
+			$awe = get_instance("email");
 			foreach($alist as $addr)
 			{
+				$member = $awe->get_member(array("list_id" => $this->list_id,"mail" => $addr));
 				$this->awm->set_header("To",$addr);
+				$this->awm->body_replace(array(
+							"#nimi#" => $member["name"],
+							"#email#" => $member["mail"],
+							"#kuupaev#" => $this->time2date(time(),2),
+				));
 				$this->awm->gen_mail();
 				//print ".";
 				flush();
