@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.42 2002/08/02 13:25:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.43 2002/08/26 10:18:11 duke Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -1161,6 +1161,15 @@ class users extends users_user
 		{
 			return LC_USERS_NOT_LOGGED_IN;
 		}
+	
+		if (not($fid))
+		{
+			$udata = $this->get_user();
+			$jfar = $this->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
+			$jfs = "";
+			reset($jfar);
+			list($fid,$name) = each($jfar);
+		};
 
 		$u = $this->fetch($id);
 		$fs = unserialize($u["join_form_entry"]);
@@ -1169,7 +1178,7 @@ class users extends users_user
 		return $t->gen_preview(array(
 			"id" => $fid, 
 			"entry_id" => $fs[$fid], 
-			"reforb" => $this->mk_reforb("save_udata", array("fid" => $fid,"user_id" => $id))
+			"reforb" => $this->mk_reforb("save_udata", array("fid" => $fid,"user_id" => $id,"section" => aw_global_get("section")))
 		));
 	}
 
@@ -1200,7 +1209,7 @@ class users extends users_user
 
 		$this->update_dyn_user($user_id);
 
-		return $this->mk_my_orb("udata", array("fid" => $fid));
+		return $this->mk_my_orb("udata", array("fid" => $fid,"section" => $section));
 	}
 
 	////
