@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.120 2002/08/16 11:58:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.121 2002/08/16 12:05:50 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -422,13 +422,10 @@ class form extends form_base
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
 		$this->arr["has_calendar"] = $has_calendar;
 
-		//$this->subtype = 0;
-
-		
-		if ($email_form_action)
+		if ( ($this->subtype == FSUBTYPE_EMAIL_ACTION) && !$form_email_action)
 		{
-			$this->subtype = FSUBTYPE_EMAIL_ACTION;
-		}
+			$this->subtype = 0
+		};
 
 		$old_namels = $this->arr["name_els"];
 		$this->arr["name_els"] = array();
