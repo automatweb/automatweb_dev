@@ -5,7 +5,7 @@
 		<action name="new">
 			<function name="add">
 				<arguments>
-					<required name="parent"/>
+					<required name="parent" acl="add"/>
 				</arguments>
 			</function>
 		</action>
@@ -73,7 +73,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>
@@ -96,7 +96,7 @@
 		<action name="admin_op">
 			<function name="admin">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>
@@ -104,7 +104,7 @@
 		<action name="add_n_rows">
 			<function name="add_n_rows">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="after"/>
 					<optional name="count"/>
 				</arguments>
@@ -114,7 +114,7 @@
 		<action name="add_n_cols">
 			<function name="add_n_cols">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="after"/>
 					<optional name="count"/>
 				</arguments>
@@ -124,7 +124,7 @@
 		<action name="ch_cell">
 			<function name="ch_cell">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<required name="row"/>
 					<required name="col"/>
 				</arguments>
@@ -134,7 +134,7 @@
 		<action name="submit_admin">
 			<function name="submit_admin">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>
@@ -149,7 +149,7 @@
 		<action name="add_col">
 			<function name="add_col">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="after"/>
 				</arguments>
 			</function>
@@ -158,7 +158,7 @@
 		<action name="del_col">
 			<function name="del_col">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="col"/>
 				</arguments>
 			</function>
@@ -167,7 +167,7 @@
 		<action name="add_row">
 			<function name="add_row">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="after"/>
 				</arguments>
 			</function>
@@ -176,7 +176,7 @@
 		<action name="del_row">
 			<function name="del_row">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="row"/>
 				</arguments>
 			</function>
@@ -185,7 +185,7 @@
 		<action name="exp_up">
 			<function name="exp_up">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="row"/>
 					<optional name="col"/>
 				</arguments>
@@ -195,7 +195,7 @@
 		<action name="exp_right">
 			<function name="exp_right">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="row"/>
 					<optional name="col"/>
 				</arguments>
@@ -205,7 +205,7 @@
 		<action name="exp_left">
 			<function name="exp_left">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="row"/>
 					<optional name="col"/>
 				</arguments>
@@ -215,7 +215,7 @@
 		<action name="exp_down">
 			<function name="exp_down">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="row"/>
 					<optional name="col"/>
 				</arguments>
@@ -225,7 +225,7 @@
 		<action name="split_cell_ver">
 			<function name="split_cell_ver">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="row"/>
 					<optional name="col"/>
 				</arguments>
@@ -235,7 +235,7 @@
 		<action name="split_cell_hor">
 			<function name="split_cell_hor">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<optional name="row"/>
 					<optional name="col"/>
 				</arguments>
@@ -245,7 +245,7 @@
 		<action name="add_element">
 			<function name="add_element">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<required name="row"/>
 					<required name="col"/>
 				</arguments>
@@ -255,7 +255,7 @@
 		<action name="translate">
 			<function name="translate">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>

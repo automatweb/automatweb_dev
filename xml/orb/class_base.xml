@@ -4,7 +4,7 @@
 		<action name="new" all_args="1">
 			<function name="add">
 				<arguments>
-					<required name="parent" type="int"/>
+					<required name="parent" type="int" acl="add"/>
 					<optional name="period"/>
 					<optional name="alias_to" type="int"/>
 					<optional name="return_url"/>
@@ -16,7 +16,7 @@
 		<action name="change" all_args="1">
 			<function name="change">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" acl="edit;view"/>
 					<optional name="group"/>
 					<optional name="period"/>
 					<optional name="alias_to" type="int"/>

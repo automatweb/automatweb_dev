@@ -4,7 +4,7 @@
 		<action name="new">
 			<function name="add">
 				<arguments>
-					<required name="parent" type="int"/>
+					<required name="parent" type="int" acl="add"/>
 					<optional name="return_url"/>
 				</arguments>
 			</function>
@@ -20,7 +20,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" acl="view;change"/>
 					<optional name="search"/>
 					<optional name="s_name" default="%"/>
 					<optional name="s_comment" default="%"/>

@@ -5,7 +5,7 @@
 		<action name="new">
 			<function name="orb_new">
 				<arguments>
-					<required name="parent"/>
+					<required name="parent" acl="add"/>
 				</arguments>
 			</function>
 		</action>
@@ -20,7 +20,7 @@
 		<action name="change">
 			<function name="orb_change">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="view;change"/>
 					<optional name="parent"/>
 				</arguments>
 			</function>

@@ -4,7 +4,7 @@
 		<action name="new">
 			<function name="add">
 				<arguments>
-					<required name="parent"/>
+					<required name="parent" acl="add"/>
 					<optional name="alias_doc"/>
 				</arguments>
 			</function>
@@ -13,7 +13,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>

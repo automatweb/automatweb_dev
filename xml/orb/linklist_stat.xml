@@ -15,7 +15,7 @@
 			<function name="change">
 				<arguments>
 					<optional name="parent"/>
-					<optional name="id"/>
+					<optional name="id" acl="edit;view"/>
 					<optional name="stat"/>
 					<optional name="sid"/>
 					<optional name="return_url"/>

@@ -37,7 +37,7 @@
 		<action name="change_action">
 			<function name="change_action">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 					<required name="aid"/>
 					<optional name="level"/>
 				</arguments>

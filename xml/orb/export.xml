@@ -32,7 +32,7 @@
 		<action name="new">
 			<function name="add_rule">
 				<arguments>
-					<required name="parent"/>
+					<required name="parent" acl="add"/>
 				</arguments>
 			</function>
 		</action>
@@ -40,7 +40,7 @@
 		<action name="change">
 			<function name="change_rule">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>

@@ -1,7 +1,8 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="form_table" folder="formgen" extends="form_base">
-		<action name="new" >
+	<class name="form_table" folder="formgen">
+
+		<action name="new">
 			<function name="new_add">
 				<arguments>
 					<required name="parent" acl="add"/>
@@ -9,22 +10,56 @@
 			</function>
 		</action>
 
-		<action name="new_submit_settings" >
+		<action name="change">
+			<function name="new_change_cols">
+				<arguments>
+					<required name="id" acl="edit;view"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="aliasmgr">
+			<function name="aliasmgr">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="show_user_entries">
+			<function name="show_user_entries">
+				<arguments>
+					<required name="table_id"/>
+					<optional name="form_id"/>
+					<optional name="chain_id"/>
+					<optional name="op_id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_new">
+			<function name="new_add">
+				<arguments>
+					<required name="parent" acl="add"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_submit_settings">
 			<function name="new_submit_settings">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="new_change_settings" >
-			<function name="new_change_settings">
+		<action name="new_submit_cols">
+			<function name="new_submit_cols">
 				<arguments>
-					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="new_change_cols">
 			<function name="new_change_cols">
 				<arguments>
 					<required name="id" acl="edit;view"/>
@@ -32,14 +67,15 @@
 			</function>
 		</action>
 
-		<action name="new_submit_cols" >
-			<function name="new_submit_cols">
+		<action name="new_change_settings">
+			<function name="new_change_settings">
 				<arguments>
+					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="new_change_styles" >
+		<action name="new_change_styles">
 			<function name="new_change_styles">
 				<arguments>
 					<required name="id" acl="edit;view"/>
@@ -47,14 +83,14 @@
 			</function>
 		</action>
 
-		<action name="new_submit_styles" >
+		<action name="new_submit_styles">
 			<function name="new_submit_styles">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="new_change_translate" >
+		<action name="new_change_translate">
 			<function name="new_change_translate">
 				<arguments>
 					<required name="id" acl="edit;view"/>
@@ -62,14 +98,14 @@
 			</function>
 		</action>
 
-		<action name="new_submit_translate" >
+		<action name="new_submit_translate">
 			<function name="new_submit_translate">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="new_change_aliasmgr" >
+		<action name="new_change_aliasmgr">
 			<function name="new_change_aliasmgr">
 				<arguments>
 					<required name="id" acl="edit;view"/>
@@ -77,7 +113,14 @@
 			</function>
 		</action>
 
-		<action name="change_grpsettings" >
+		<action name="new_submit_aliasmgr">
+			<function name="new_submit_aliasmgr">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_grpsettings">
 			<function name="change_grpsettings">
 				<arguments>
 					<required name="id" acl="edit;view"/>
@@ -85,7 +128,7 @@
 			</function>
 		</action>
 
-		<action name="submit_grpsettings" >
+		<action name="submit_grpsettings">
 			<function name="submit_grpsettings">
 				<arguments>
 				</arguments>
@@ -95,10 +138,11 @@
 		<action name="submit_table" nologin="1">
 			<function name="submit_table">
 				<arguments>
-					<required name="return" />
+					<required name="return"/>
 				</arguments>
 			</function>
 		</action>
 
 	</class>
 </orb>
+		

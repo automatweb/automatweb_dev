@@ -13,7 +13,7 @@
 		<action name="add_cat">
 			<function name="add_cat">
 				<arguments>
-					<required name="parent" type="int"/>
+					<required name="parent" type="int" acl="add"/>
 				</arguments>
 			</function>
 		</action>
@@ -21,7 +21,7 @@
 		<action name="change_cat">
 			<function name="change_cat">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>
@@ -29,7 +29,7 @@
 		<action name="delete_cat">
 			<function name="delete_cat">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" acl="delete"/>
 				</arguments>
 			</function>
 		</action>
@@ -49,7 +49,7 @@
 		<action name="change_stamp">
 			<function name="change_stamp">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" acl="view;edit"/>
 				</arguments>
 			</function>
 		</action>
@@ -61,7 +61,7 @@
 		<action name="delete_stamp">
 			<function name="delete_stamp">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" acl="delete"/>
 				</arguments>
 			</function>
 		</action>
@@ -69,7 +69,7 @@
 		<action name="new">
 			<function name="add_var">
 				<arguments>
-					<required name="parent"/>
+					<required name="parent" acl="add"/>
 				</arguments>
 			</function>
 		</action>
@@ -84,7 +84,7 @@
 		<action name="change">
 			<function name="change_var">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="change;view"/>
 				</arguments>
 			</function>
 		</action>
@@ -92,7 +92,7 @@
 		<action name="delete_var">
 			<function name="delete_var">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="delete"/>
 					<required name="parent"/>
 				</arguments>
 			</function>

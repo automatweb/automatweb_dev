@@ -5,7 +5,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="edit;view"/>
 				</arguments>
 			</function>
 		</action>
@@ -13,7 +13,7 @@
 		<action name="delete">
 			<function name="delete">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="delete"/>
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.36 2003/02/14 15:35:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.37 2003/02/25 18:24:41 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -115,6 +115,9 @@ class orb extends aw_template
 		{
 			$this->raise_error(ERR_ORB_CAUNDEF,sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),true,$silent);
 		};
+
+		// check acl
+		$this->do_orb_acl_checks($orb_defs[$class][$action], $vars);
 
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
@@ -400,6 +403,10 @@ class orb extends aw_template
 					$orb_defs[$class][$action][$tag][$attribs["name"]] = $val;
 					$orb_defs[$class][$action]["types"][$attribs["name"]] = $attribs["type"];
 					$orb_defs[$class][$action]["defaults"][$attribs["name"]] = $attribs["default"];
+					if ($attribs["acl"] != "")
+					{
+						$orb_defs[$class][$action]["acl"][$attribs["name"]] = $attribs["acl"];
+					}
 				};
 			};
 		}; // foreach
@@ -490,6 +497,28 @@ class orb extends aw_template
 		return $ret;
 
 	}
+
+	function do_orb_acl_checks($act, $vars)
+	{
+		if (is_array($act["acl"]))
+		{
+			foreach($act["acl"] as $varname => $varacl)
+			{
+				$varvalue = $vars[$varname];
+				if ($varvalue)
+				{
+					$aclarr = explode(";", $varacl);
+					foreach($aclarr as $aclid)
+					{
+						if (!$this->can($aclid, $varvalue))
+						{
+							$this->raise_error(ERR_ACL, "ORB: Parameter acl check failed for access $aclid for parameter $varname with value $varvalue!",false, true);
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 class new_orb extends orb
@@ -535,6 +564,8 @@ class new_orb extends orb
 		// check params
 		$params = $this->check_method_params($orb_defs, $params, $class, $action);
 		$arr["params"] = $params;
+
+		$this->do_orb_acl_checks($orb_defs[$class][$action], $params);
 
 		// do the call
 		if (!$method || $method == "local")

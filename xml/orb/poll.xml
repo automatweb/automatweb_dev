@@ -5,7 +5,7 @@
 		<action name="new">
 			<function name="add">
 				<arguments>
-					<optional name="parent" type="int"/>
+					<optional name="parent" type="int" acl="add"/>
 					<optional name="return_url"/>
 					<optional name="alias_to" type="int"/>
 				</arguments>
@@ -15,7 +15,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" acl="view;change"/>
 					<optional name="return_url"/>
 				</arguments>
 			</function>
@@ -24,7 +24,7 @@
 		<action name="delete">
 			<function name="delete">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" acl="delete"/>
 				</arguments>
 			</function>
 		</action>

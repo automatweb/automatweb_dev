@@ -4,7 +4,7 @@
 		<action name="new">
 			<function name="add">
 				<arguments>
-					<required name="parent"/>
+					<required name="parent" acl="add"/>
 					<optional name="alias_to"/>
 					<optional name="return_url"/>
 				</arguments>
@@ -21,7 +21,7 @@
 		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id"/>
+					<required name="id" acl="view;change"/>
 					<optional name="return_url"/>
 					<optional name="cycle"/>
 				</arguments>
