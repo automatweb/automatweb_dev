@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.7 2002/12/17 19:21:45 duke Exp $
+// $Id: cfgutils.aw,v 1.8 2002/12/19 18:06:54 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -176,6 +176,11 @@ class cfgutils extends aw_template
 	function get_classinfo()
 	{
 		return $this->classinfo;
+	}
+
+	function get_groupinfo()
+	{
+		return $this->groupinfo;
 	}
 
 
