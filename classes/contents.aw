@@ -22,6 +22,13 @@ class contents extends aw_template
 
 		$this->period = aw_global_get("act_per_id");
 
+		// this will not work if there are different menu areas for 
+		// different languages .e.g menuedit.menu_defs[1][YLEMINE] = 66
+		// menuedit.menu_defs[2][YLEMINE] = 88
+
+		// there are not many sites that use this feature .. actually
+		// I can't remember even one that uses it .. but I'm sure there
+ 		// is one.
 		$mareas = aw_ini_get("menuedit.menu_defs");
 	
 		$morder = aw_ini_get("contents.menu_order");
