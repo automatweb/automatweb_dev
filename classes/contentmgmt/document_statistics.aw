@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.15 2004/06/17 14:39:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.16 2004/10/29 19:06:25 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -537,7 +537,7 @@ class document_statistics extends class_base
 
 			foreach(explode(",", $o->prop("mail_to")) as $mail_to)
 			{
-				$awm = get_instance("aw_mail");
+				$awm = get_instance("protocols/mail/aw_mail");
 				$awm->create_message(array(
 					"froma" => "automatweb@am.ee",
 					"fromn" => "AutomatWeb",

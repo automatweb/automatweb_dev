@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.2 2004/10/29 16:14:58 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.3 2004/10/29 19:06:25 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -152,7 +152,7 @@ class mail_message extends class_base
 	// Retrieves a message object from storage and delivers it
 	function send_message($arr)
 	{
-		$this->awm = get_instance("aw_mail");
+		$this->awm = get_instance("protocols/mail/aw_mail");
 
 		$msgobj = new object($arr["id"]);
 
@@ -476,7 +476,7 @@ class mail_message extends class_base
 
 		}
 		
-		$awm = get_instance("aw_mail");
+		$awm = get_instance("protocols/mail/aw_mail");
 
 		$awm->create_message(array(
 			"froma" => $row["mfrom"],
@@ -643,7 +643,7 @@ class mail_message extends class_base
 			WHERE objects.oid = $oid";
 		$this->db_query($q);
 		$row = $this->db_next();
-		$awm = get_instance("aw_mail");
+		$awm = get_instance("protocols/mail/aw_mail");
 
 		$awm->create_message(array(
 			"froma" => $row["mfrom"],

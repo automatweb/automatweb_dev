@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.17 2004/10/22 15:00:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.18 2004/10/29 19:06:25 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -505,7 +505,7 @@ class shop_order extends class_base
 			{
 				$eml = $c->to();
 
-				$awm = get_instance("aw_mail");
+				$awm = get_instance("protocols/mail/aw_mail");
 				$awm->create_message(array(
 					"froma" => $mail_from_addr,
 					"fromn" => $mail_from_name,
@@ -539,7 +539,7 @@ class shop_order extends class_base
 			}
 
 		//echo "sent to $_send_to content = $html <br>";
-			$awm = get_instance("aw_mail");
+			$awm = get_instance("protocols/mail/aw_mail");
 			$awm->create_message(array(
 				"froma" => $mail_from_addr,
 				"fromn" => $mail_from_name,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.29 2004/10/14 13:36:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.30 2004/10/29 19:06:25 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -690,7 +690,7 @@ class form_actions extends form_base
 			$msg .= $f->show_text();
 		};
 
-		$this->awm = get_instance("aw_mail");
+		$this->awm = get_instance("protocols/mail/aw_mail");
 		if ($data["output"] > 0)
 		{
 			// we have to form a special html message
@@ -847,7 +847,7 @@ class form_actions extends form_base
 				$froma = "automatweb@automatweb.com";
 				$fromn = "AutomatWeb";
 			}
-			$awm = get_instance("aw_mail");
+			$awm = get_instance("protocols/mail/aw_mail");
 			$awm->create_message(array(
 				"froma" => $froma,
 				"fromn" => $fromn,
@@ -912,7 +912,7 @@ class form_actions extends form_base
 					$froma = "automatweb@automatweb.com";
 					$fromn = "AutomatWeb";
 				}
-				$awm = get_instance("aw_mail");
+				$awm = get_instance("protocols/mail/aw_mail");
 				$awm->create_message(array(
 					"froma" => $froma,
 					"fromn" => $fromn,

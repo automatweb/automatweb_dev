@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.29 2004/10/29 16:14:08 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.30 2004/10/29 19:06:25 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -440,7 +440,7 @@ class ml_queue extends aw_template
 			"event" => $this->mk_my_orb("process_queue", array(), "", false, true),
 			"time" => time()+120,	// every 2 minutes
 		));
-		$this->awm=get_instance("aw_mail");
+		$this->awm=get_instance("protocols/mail/aw_mail");
 		echo "adding scheduler ! <br />\n";
 		flush();
 		//decho("process_queue:<br />");//dbg

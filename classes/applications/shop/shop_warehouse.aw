@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.18 2004/10/22 15:00:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.19 2004/10/29 19:06:25 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2299,7 +2299,7 @@ class shop_warehouse extends class_base
 
 		$fromn = $cur_person->prop("name");
 
-		$awm = get_instance("aw_mail");
+		$awm = get_instance("protocols/mail/aw_mail");
 		$awm->create_message(array(
 			"froma" => $froma,
 			"fromn" => $fromn,
