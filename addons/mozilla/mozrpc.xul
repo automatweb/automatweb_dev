@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="Window"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        title="Testcase"
+        xmlns:html="http://www.w3.org/1999/xhtml">
+
+<script type="application/x-javascript">
+<![CDATA[
+
+function rpc_request()
+{
+	var request = document.implementation.createDocument("", "methodCall", null);
+	method = request.createElement("methodName");
+	value = document.createTextNode("man");
+	method.appendChild(value);
+
+	request.firstChild.appendChild(method);
+
+	params = request.createElement("params");
+	param = request.createElement("param");
+	value = request.createElement("value");
+	string = request.createElement("string");
+
+	var querystring = document.getElementById('word').value;
+	if (!querystring)
+	{
+		alert('Sisesta ka midagi..');
+		return false;
+	};
+	real = document.createTextNode(querystring);
+	string.appendChild(real);
+	value.appendChild(string);
+	param.appendChild(value);
+	params.appendChild(param);
+	
+	request.firstChild.appendChild(params);
+
+	var httpRequest = new XMLHttpRequest();
+	//httpRequest.open("POST", "http://bsd.ee/xmlrpc/vanaema2.php", false, null, null);
+	//httpRequest.open("POST", "http://linux.ee/tuxaator/RPC.php", false, null, null);
+	httpRequest.open("POST", "http://bsd.ee/xmlrpc/vanaema_exp.php", false, null, null);
+	httpRequest.send(request);
+	var response = httpRequest.responseText;
+	alert(response);
+	var parser = new DOMParser();
+	var doc = parser.parseFromString(response,"text/xml");
+	var res = doc.getElementsByTagName("string");
+	
+	document.getElementById('word').value = "";
+
+	if (res[0])
+	{
+		el = document.getElementById('result');
+		if (el.firstChild)
+		{
+			el.removeChild(el.firstChild);
+		};
+
+
+		res_str = document.createTextNode(querystring + " - " + res[0].firstChild.nodeValue);
+		el.appendChild(res_str);
+	};
+};
+
+
+]]></script>
+
+<keyset>
+	<key id="fetch" keycode="VK_RETURN" oncommand="rpc_request();"/>
+</keyset>
+<vbox>
+<hbox><textbox id="word" value=""/><button label="Fetch!" oncommand="rpc_request();"/></hbox>
+<html:div id="result" style="padding: 5px;"> </html:div>
+</vbox>
+<iframe width="100%" height="100px" src="">mingi kala</iframe>
+</window>
