@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.102 2003/04/01 16:46:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.103 2003/04/07 11:34:07 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -1413,7 +1413,13 @@ class planner extends class_base
 					$hour = $meta["repeaters{$i}"]["reptime"]["hour"];
 					$minute = $meta["repeaters{$i}"]["reptime"]["minute"];
 					list($d,$m,$y) = explode("-",date("d-m-Y",$start));
-					$row["start"] = mktime($hour,$minute,0,$m,$d,$y);
+					# start from the next day?
+					$_start = mktime($hour,$minute,0,$m,$d,$y);
+					if ($_start < time())
+					{	
+						$_start = mktime($hour,$minute,0,$m,$d+1,$y);
+					};
+					$row["start"] = $_start;
 				}
 				else
 				{
@@ -2014,7 +2020,7 @@ class planner extends class_base
 			"activelist" => array("xxx"),
 			"vars" => array("id" => $obj["parent"]),
 		));
-		$ce = get_instance("cal_event");
+		$ce = get_instance("calendar/cal_event");
 		$html = $ce->repeaters(array(
 			"id" => $id,
 			"cycle" => $cycle,
