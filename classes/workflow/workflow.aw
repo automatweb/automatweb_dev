@@ -225,7 +225,7 @@ class workflow extends class_base
 		{
 			$actor_tree_filter = new object_tree(array(
 				"parent" => $troot->id(),
-				"class_id" => CL_ACTOR
+				"class_id" => array(CL_MENU,CL_ACTOR)
 			));
 			$actor_list = $actor_tree_filter->to_list();
 		}
@@ -315,7 +315,7 @@ class workflow extends class_base
 		{
 			$action_tree_filter = new object_tree(array(
 				"parent" => $troot->id(),
-				"class_id" => CL_ACTION
+				"class_id" => array(CL_MENU,CL_ACTION)
 			));
 			$action_list = $action_tree_filter->to_list();
 		}
@@ -331,11 +331,18 @@ class workflow extends class_base
 		// to do that, we get all aliases that go TO the list of actions
 		$process_list = new object_list();
 
-		$con = new connection();
-		foreach($con->find(array("to" => $action_list->ids())) as $c)
+		$al = $action_list->ids();
+
+		if (count($al) > 0)
 		{
-			// now get the from , that's the process
-			$process_list->add($c["from"]);
+			$con = new connection();
+			foreach($con->find(array("to" => $al)) as $c)
+			{
+				echo "add $c[from] <br>\n";
+				flush();
+				// now get the from , that's the process
+				$process_list->add($c["from"]);
+			}
 		}
 
 		switch($_GET["sub_tab"])
@@ -804,7 +811,7 @@ class workflow extends class_base
 
 		$process_tree_filter = new object_tree(array(
 			"parent" => ($_GET["tree_filter"] ? $_GET["tree_filter"] : $this->process_rootmenu),
-			"class_id" => CL_PROCESS
+			"class_id" => array(CL_MENU,CL_PROCESS)
 		));
 		$process_list = $process_tree_filter->to_list();
 
@@ -1316,9 +1323,11 @@ class workflow extends class_base
 			}
 			else
 			{
+				// "<span class=\"reallysmall\">".   ."</span>"
 				$na = html::select(array(
 					"name" => "next_action[".$e->id()."]",
-					"options" => $nacts
+					"options" => $nacts,
+					"class" => "reallysmall"
 				));
 			}
 			$t->define_data(array(
