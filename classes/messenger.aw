@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.13 2001/05/23 06:06:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.14 2001/05/23 06:28:30 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -76,7 +76,11 @@ class msg_sql_driver extends db_connector
 		return $this->attaches[$id];
 	}
 
-	// liigutab mingi messi teise folderisse
+	////
+	// !liigutab mingi messi teise folderisse
+	// argumendid:
+	// folder(int) - kuhu teade liigutada
+	// id(int) - milline teade liigutada
 	function msg_move($args = array())
 	{
 		extract($args);
@@ -967,6 +971,15 @@ class messenger extends menuedit_light
 			"att" => $att,
 			"menu" => $menu,
 		));
+		// kui kasutaja soovib teateid liigutada, siis teeme seda nüüd
+		if ($this->msgconf["msg_move_read"])
+		{
+			$this->driver->msg_move(array(
+					"id" => $id,
+					"folder" => $this->msgconf["msg_move_read_folder"],
+			));
+		}
+
 		return $this->parse();
 	}
 	////
@@ -1016,15 +1029,15 @@ class messenger extends menuedit_light
 		};		
 
 		// mida teha "kustutatud" kirjadega
-		if (!isset($raw["ondelete"]))
+		if (!isset($raw["msg_ondelete"]))
 		{
-			$raw["ondelete"] = "delete";
+			$raw["msg_ondelete"] = "delete";
 		};
 
 		// küsida kirja saatmisel kinnitust
-		if (!isset($raw["confirm_send"]))
+		if (!isset($raw["msg_confirm_send"]))
 		{
-			$raw["confirm_send"] = 1;
+			$raw["msg_confirm_send"] = 1;
 		};
 
 		// draft folderi asukoht
@@ -1035,38 +1048,38 @@ class messenger extends menuedit_light
 		};
 
 		// default signa
-		if (!isset($raw["defsig"]))
+		if (!isset($raw["msg_defsig"]))
 		{
-			$raw["defsig"] = 0;
+			$raw["msg_defsig"] = 0;
 		};
 
 		// default prioriteet uue kirja kirjutamisel
-		if (!isset($raw["default_pri"]))
+		if (!isset($raw["msg_default_pri"]))
 		{
-			$raw["default_pri"] = 0;
+			$raw["msg_default_pri"] = 0;
 		};
 
 		// millist märki vaikimisi kvootimiseks kasutatakse
-		if (!isset($raw["quotechar"]))
+		if (!isset($raw["msg_quotechar"]))
 		{
-			$raw["quotechar"] = ">";
+			$raw["msg_quotechar"] = ">";
 		};
 
 		// vaikimisi signatuurieraldaja
-		if (!isset($raw["sigsep"]))
+		if (!isset($raw["msg_sigsep"]))
 		{
-			$raw["sigsep"] = "--";
+			$raw["msg_sigsep"] = "--";
 		};
 
 		// mitu attachi lisamise textboxi by default kuvatakse
-		if (!isset($raw["cnt_att"]))
+		if (!isset($raw["msg_cnt_att"]))
 		{
-			$raw["cnt_att"] = 3;
+			$raw["msg_cnt_att"] = 3;
 		};
 
-		if (!isset($raw["default_folder"]))
+		if (!isset($raw["msg_move_read"]))
 		{
-			$raw["default_folder"] = $this->user["msg_inbox"];
+			$raw["msg_move_read"] = $this->user["msg_move_read"];
 		};
 		
 		return $raw;
@@ -1175,6 +1188,8 @@ class messenger extends menuedit_light
 						"msg_default_pri" => $this->picker($conf["msg_default_pri"],array(0,1,2,3,4,5,6,7,8,9)),
 						"msg_sigsep" => $conf["msg_sigsep"],
 						"msg_cnt_att" => $this->picker($conf["msg_cnt_att"],array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5")),
+						"msg_move_read_folder" => $this->picker($conf["msg_move_read_folder"],$folder_list),
+						"msg_move_read" => ($conf["msg_move_read"]) ? "checked" : "",
 						"aftpage" => "general",
 						);
 				break;
@@ -1234,6 +1249,7 @@ class messenger extends menuedit_light
 		{
 			$this->msgconf["msg_store_sent"] = ($msg_store_sent) ? 1 : 0;
 			$this->msgconf["msg_confirm_send"] = ($msg_confirm_send) ? 1 : 0;
+			$this->msgconf["msg_move_read"] = ($msg_move_read) ? 1 : 0;
 		};
 		$users->set_user_config(array(
 						"uid" => UID,
