@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.53 2005/04/04 13:53:01 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.54 2005/04/06 07:27:47 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -794,18 +794,23 @@ class event_search extends class_base
 			$par2 = array();
 			if($search_p1 || $search_p2)
 			{
+				$all_projects1 = new object_list(array(
+					"parent" => $p_rn1,
+					"class_id" => array(CL_PROJECT, CL_PLANNER),
+				));
+				$par1 = $all_projects1->ids();
+				$all_projects2 = new object_list(array(
+					"parent" => $p_rn2,
+					"class_id" => array(CL_PROJECT, CL_PLANNER),
+				));
+				$par2 = $all_projects2->ids();
 				if (is_oid($arr["project1"]))
 				{
 					$search["parent"][] = $arr["project1"];
 				}
 				elseif($search_p1)
 				{
-					$all_projects1 = new object_list(array(
-						"parent" => $p_rn1,
-						"class_id" => array(CL_PROJECT, CL_PLANNER),
-					));
-					
-					$search["parent"] = $par1 = $all_projects1->ids();
+					$search["parent"] = $par1;
 				}
 				if (is_oid($arr["project2"]))
 				{
@@ -813,11 +818,7 @@ class event_search extends class_base
 				}
 				elseif($search_p2)
 				{
-					$all_projects2 = new object_list(array(
-						"parent" => $p_rn2,
-						"class_id" => array(CL_PROJECT, CL_PLANNER),
-					));
-					$parx2 = $par2 = $all_projects2->ids();
+					$parx2 = $par2;
 				}
 			}
 			elseif($rn1 || $rn2)
@@ -916,7 +917,6 @@ class event_search extends class_base
 			$clinf = aw_ini_get("classes");
 			$edata = array();
 			$ecount = array();
-			
 			if (sizeof($search["parent"]) != 0 || $search["oid"])
 			{
 				if($search["oid"])
@@ -1042,6 +1042,7 @@ class event_search extends class_base
 				$val = safe_array($val);
 				$valz = $val;
 				sort($valz);
+
 				$edata[$key]["projs"] = array_keys($val);
 				$edata[$key]["project_selector"] = implode(", ", $valz);
 			}
@@ -1060,12 +1061,17 @@ class event_search extends class_base
 				{
 					foreach($prj_ch1 as $ckey => $cval)
 					{
-						$xval = array_keys($cval);
-						foreach($eval["projs"] as $dkey)
+						$z = 0;
+						foreach($cval as $key => $xz)
 						{
-							foreach($xval as $xv)
+							$cval[$key] = $z; 
+							$z++;
+						}
+						foreach(safe_array($eval["projs"]) as $dkey)
+						{
+							foreach($cval as $xkey => $xv)
 							{
-								if($dkey == $xv)
+								if($dkey == $xkey)
 								{
 									$groups[$ckey][$ekey] = $eval + array("ord" => $xv);
 									break;
@@ -1090,10 +1096,7 @@ class event_search extends class_base
 						"block_caption" => $grps[$gkey],
 					));
 					$res .= $this->parse("BLOCK");
-					if(aw_global_get("uid") == "struktuur")
-					{
-						uasort($edata, array($this, "__sort_props_by_proj"));
-					}
+					uasort($edata, array($this, "__sort_props_by_proj"));
 				}
 				foreach($edata as $ekey => $eval)
 				{
