@@ -228,20 +228,10 @@
         </td>
 </tr>
 
-
-
 <tr>
-	<td class="text" align="left">Nõustun Otto kataloogi <a href="http://www.otto.ee/856" target="_blank"> tellimistingimustega</a></td>
-	<td>	
-		{VAR:udef_checkbox1}
-		<span class="textred11">
-			{VAR:udef_checkbox1_error}
-		</span>
-	</td>
-
-</tr>
-<tr>
-	<td colspan="2" class="text">Palume Teil täita * tähistatud väljad. Samuti palume Teil täita vähemalt üks telefoninumbri väli.</td>
+	<td colspan="2" class="text"><span class="textred11"><font color="red">{VAR:udef_checkbox1_error}</font></span><br>
+	 {VAR:udef_checkbox1} Olen tutvunud OTTO interneti-kataloogi <a href='http://www.otto.ee/856' target="_blank"> tellimistingimustega</a> ning nendega nõus. OTTO interneti-kataloogi  tellimistingimused on käesoleva tellimuse
+alusel sõlmitava ostu-müügilepingu lahutamatuks osaks tellimuse esitamise hetke redaktsioonis.<br>Palume Teil täita * tähistatud väljad. Samuti palume Teil täita vähemalt üks telefoninumbri väli.</td>
 </tr>
 <tr>
 	<td colspan="2" align="left">
