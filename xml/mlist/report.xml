@@ -2,7 +2,7 @@
 <tabledef>
 <data>
 <field name="member" caption="Kellele"/>
-<field name="tm" caption="Millal" talign="center" type="time" format="H:i d-M-y" sortable="1" numeric="yea"/>
+<field name="tm" caption="Millal" talign="center" type="time" format="H:i d-m-Y" sortable="1" numeric="yea"/>
 <field name="clicked" caption="Klikitud"/>
 </data>
 </tabledef>
