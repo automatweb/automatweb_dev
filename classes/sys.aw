@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.36 2004/10/08 15:21:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.37 2004/10/22 11:18:51 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -194,7 +194,7 @@ class sys extends aw_template
 			"koolitus.automatweb.com" => "koolitus.automatweb.com",
 			"sven.dev.struktuur.ee" => "sven.dev.struktuur.ee",
 			"otto.struktuur.ee" => "otto.struktuur.ee",
-
+			"rate.automatweb.com" => "rate.automatweb.com",
 		);
 		
 		$this->read_template("compare_db_step1.tpl");
@@ -655,6 +655,8 @@ class sys extends aw_template
 
 		echo "key cache hit rate: ".number_format((100 - (($data["Key_reads"]  / $data["Key_read_requests"]) * 100)),2)."%<br>";
 		echo "open tables: ".$data["Open_tables"]." vs opened tables: ".$data["Opened_tables"]." <br>";
+		echo "------------------AW <br>";
+		echo "class count = ".count(aw_ini_get("classes"))." <br>";
 		die();
 	}
 
