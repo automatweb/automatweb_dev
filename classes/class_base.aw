@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.352 2005/01/05 10:59:59 dragut Exp $
+// $Id: class_base.aw,v 2.353 2005/01/07 13:33:38 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -359,6 +359,11 @@ class class_base extends aw_template
 			};
 		}
 			
+		if (!aw_ini_get("config.object_translation"))
+		{
+			unset($properties["is_translated"]);
+			unset($properties["needs_translation"]);
+		}
 		// XXX: temporary -- duke
 		if ($args["fxt"])
 		{
