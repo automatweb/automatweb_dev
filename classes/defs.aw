@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.157 2004/10/19 13:44:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.158 2004/10/21 10:50:18 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -848,7 +848,7 @@ if (!defined("DEFS"))
 			return false;
 		};
 		$GLOBALS[$name] = $value;
-		session_register($name);
+		$_SESSION[$name] = $value;
 		aw_global_set($name,$value);
 	}
 
@@ -856,7 +856,7 @@ if (!defined("DEFS"))
 	// !deletes the variable $name from the session
 	function aw_session_del($name, $leave_global = false)
 	{
-		session_unregister($name);
+		unset($_SESSION[$name]);
 		if (!$leave_global)
 		{
 			aw_global_set($name, "");
