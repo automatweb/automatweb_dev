@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.37 2005/04/02 16:26:18 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.38 2005/04/02 19:04:41 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -53,8 +53,6 @@ ini_set ("max_execution_time", "90");
 
 class mrp_schedule extends class_base
 {
-	var $use_default_parameters = false;
-
 	# time() at the moment of starting scheduling (int)
 	var $scheduling_time;
 
@@ -87,6 +85,9 @@ class mrp_schedule extends class_base
 	# array (res_id => array (), ...)
 	var $resource_data = array ();
 
+	# scheduler parameters
+	var $use_default_parameters = false;
+
 	var $parameter_due_date_overdue_slope = 0.5;
 	var $parameter_due_date_overdue_intercept = 10;
 	var $parameter_due_date_decay = 0.05;
@@ -96,6 +97,7 @@ class mrp_schedule extends class_base
 	# importance of job start/job length in weighing available times for parallel threads (float)
 	var $parameter_start_priority = 1;
 	var $parameter_length_priority = 1;
+	# END scheduler parameters
 
 //!!! vbl teha ainult yks planeeritud t88de array ja seega siin absoluutsed ajad, mitte rel.
 	var $range_scale = array (//!!! tihedamalt, kogu planeeritava perioodi peale need piirkonnad teha vbl automaatselt.
@@ -468,7 +470,7 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("one job total", "start");
 /* timing */ timing ("reserve time & modify earliest start", "start");
-/* dbg */ if ($job["oid"] == 7720  ) {
+/* dbg */ if ($job["oid"] == 8572) {
 // /* dbg */ if ($job["resource"] == 6670  ) {
 /* dbg */ $this->mrpdbg=1;
 /* dbg */ }
@@ -712,7 +714,7 @@ class mrp_schedule extends class_base
 
 	function reserve_time ($resource_id, $start, $length)
 	{
-		$threads = $this->resource_data[$resource_id]["threads"];
+		$threads = (int) $this->resource_data[$resource_id]["threads"];
 		$available_times = array ();
 
 		do
@@ -720,12 +722,12 @@ class mrp_schedule extends class_base
 			$resource_tag = $resource_id . "-" . $threads;
 			$available_times[$resource_tag] = $this->get_available_time ($resource_tag, $start, $length);
 
-/* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "thread nr." . $threads. " reservation: ";
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "thread nr." . $threads. " restag:" . $resource_tag. " reservation (time,len,timerange): ";
 // /* dbg */ arr ($available_times[$resource_tag]);
-// /* dbg */ echo "reserved times: ";
+// /* dbg */ echo "reserved times this tag: ";
 // /* dbg */ arr ($this->reserved_times[$resource_tag]);
-/* dbg */ }
+// /* dbg */ }
 
 		}
 		while (--$threads);
@@ -741,10 +743,40 @@ class mrp_schedule extends class_base
 				$start = $available_time[0];
 				$length = $available_time[1];
 				$new_weight = ($start * $this->parameter_start_priority + $length * $this->parameter_length_priority) / 2;
-				$selected_resource_tag = ($weight === "NA") ? $resource_tag : (($new_weight < $weight) ? $resource_tag : $selected_resource_tag);
+
+				if ($weight === "NA")
+				{
+					$selected_resource_tag = $resource_tag;
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "weight=na. selected_resource_tag: " . $selected_resource_tag . "<br>";
+// /* dbg */ }
+
+				}
+				elseif ($new_weight < $weight)
+				{
+					$selected_resource_tag = $resource_tag;
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "new_weight<weight. selected_resource_tag: " . $selected_resource_tag . "<br>";
+// /* dbg */ }
+
+				}
+
 				$weight = ($weight === "NA") ? $new_weight : min ($weight, $new_weight);
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "new_weight: " . $new_weight . "<br>";
+// /* dbg */ echo "weight: " . $weight . "<br><br>";
+// /* dbg */ }
 			}
 		}
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "available_times: ";
+// /* dbg */ arr ($available_times);
+// /* dbg */ echo "selected_resource_tag: " . $selected_resource_tag;
+// /* dbg */ }
 
 		if (($weight === "NA") || ($selected_resource_tag === "NA"))
 		{
@@ -811,6 +843,7 @@ class mrp_schedule extends class_base
 // /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "reserved times: ";
 // /* dbg */ arr ($this->reserved_times[$resource_tag]);
+// /* dbg */ echo "reserved time: " . $reserved_time;
 // /* dbg */ }
 
 		$reserved_time = $this->schedule_start + $reserved_time;
@@ -905,6 +938,7 @@ class mrp_schedule extends class_base
 
 /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - d: ".$d." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
+// /* dbg */ echo "start1:". $start1." - length1:".$length1." - d: ".$d." - start:". $start ."-start2:".$start2 ."<br>";
 // /* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . "<br>";
 // /* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
 // /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.39 2005/04/02 16:26:18 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.40 2005/04/02 19:04:41 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -571,8 +571,8 @@ class mrp_resource extends class_base
 	{
 		$unavailable_dates = array ();
 		$dates = explode (";", $dates);
-		$pattern = 		"/([1-9]|\d{2})\s*\.\s*([1-9]|\d{2})\s*\,\s*(\d{1,2})\s*(\:\s*(\d{1,2})\s*)*\-" .
-								"\s*([1-9]|\d{2})\s*\.\s*([1-9]|\d{2})\s*\,\s*(\d{1,2})\s*(\:\s*(\d{1,2}))*/S";
+		$pattern = 		"/([1-9]|\d{2})\s*[\:\.\,\/]\s*([1-9]|\d{2})\s*[\:\.\,\/\|]\s*(\d{1,2})\s*([\:\.\,]\s*(\d{1,2})\s*)*\-" .
+								"\s*([1-9]|\d{2})\s*[\:\.\,\/]\s*([1-9]|\d{2})\s*[\:\.\,\/\|]\s*(\d{1,2})\s*([\:\.\,]\s*(\d{1,2}))*/S";
 		$period_start_year = date ("Y", $period_start);
 		$period_start_mon = date ("n", $period_start);
 		$period_start_day = date ("j", $period_start);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.55 2005/04/02 16:26:18 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.56 2005/04/02 19:04:41 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -947,10 +947,6 @@ class mrp_case extends class_base
 			"name" => "starttime",
 			"caption" => t("Töösse"),
 		));
-		$table->define_field(array(
-			"name" => "open",
-			"caption" => t("Ava"),
-		));
 		$table->define_chooser(array(
 			"name" => "selection",
 			"field" => "job_id",
@@ -1210,7 +1206,7 @@ class mrp_case extends class_base
 			if (in_array ($this_object->prop ("state"), $applicable_planning_states))
 			{
 				### post rescheduling msg
-				$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+				$workspace = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 
 				if ($workspace)
 				{
