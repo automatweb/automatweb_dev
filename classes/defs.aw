@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.24 2001/09/18 00:37:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.25 2001/10/14 13:45:35 cvs Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 if (!defined("DEFS"))
 {
@@ -577,5 +577,20 @@ function is_admin()
 {
 		return (stristr($GLOBALS["REQUEST_URI"],LC_DEFS_AUTOMATWEB)!=false);
 }
+
+////
+// !prints the message if $GLOBALS["DEBUG"] == 1, basically the same as core::dmsg, but with this you don't need to fiddle
+// around with sessions
+function dbg($msg)
+{
+	global $DEBUG;
+	if ($DEBUG == 1)
+	{
+		echo $msg;
+	}
+}
+
+
 };
+
 ?>
