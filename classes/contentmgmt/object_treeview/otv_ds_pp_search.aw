@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.3 2004/09/09 11:10:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.4 2004/10/07 21:30:47 kristo Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -354,6 +354,7 @@ class otv_ds_pp_search extends class_base
 			{
 				if ($req["__fulltext"] != "")
 				{
+					$req["__fulltext"] = $this->char_replace($req["__fulltext"]);
 					$npts = array();
 					$i = get_instance(CL_OTV_DS_POSTIPOISS);
 					$sf_tmp = $i->get_fields();
@@ -450,6 +451,20 @@ class otv_ds_pp_search extends class_base
 			
 		));
 		return $this->parse();
+	}
+	
+	function char_replace($str)
+	{
+		$str = str_replace(chr(228), "&auml;", $str);
+		$str = str_replace(chr(246), "&ouml;", $str);
+		$str = str_replace(chr(245), "&otilde;", $str);
+		$str = str_replace(chr(252), "&uuml;", $str);
+
+		$str = str_replace(chr(220), "&Uuml;", $str);
+		$str = str_replace(chr(213), "&Otilde;", $str);
+		$str = str_replace(chr(214), "&Ouml;", $str);
+		$str = str_replace(chr(196), "&Auml;", $str);
+		return $str;
 	}
 }
 ?>
