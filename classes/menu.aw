@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.59 2003/07/10 12:19:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.60 2003/07/14 14:46:46 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -31,7 +31,7 @@
 	@property color2 type=colorpicker field=meta method=serialize group=advanced
 	@caption Menüü värv 2
 
-	@property icon type=icon field=meta group=advanced
+	@property icon type=icon field=meta method=serialize group=advanced
 	@caption Ikoon
 
 	@property sort_by_name type=checkbox field=meta method=serialize group=advanced ch_value=1
