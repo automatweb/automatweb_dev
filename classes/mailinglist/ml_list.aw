@@ -490,7 +490,8 @@ class ml_list extends aw_template
 		load_vcl('date_edit');
 		unset($aid);
 		$total=0;
-		foreach($lists as $lid => $v)
+		$_lists = new aw_array($lists)
+		foreach($_lists->get() as $lid => $v)
 		{
 			foreach($v["c"] as $gid => $gname)
 			{
