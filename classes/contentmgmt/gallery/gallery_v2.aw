@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.35 2004/02/11 09:58:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.36 2004/02/11 09:59:13 duke Exp $
 
 /*
 
@@ -205,7 +205,7 @@ class gallery_v2 extends class_base
 		{
 			//$od = $this->get_object($parm['obj_inst']->id());
 			$pgnr = substr($id, 5);
-			if ($pgnr > $od->prop('num_pages')
+			if ($pgnr > $od->prop('num_pages'))
 			{
 				return false;
 			}
