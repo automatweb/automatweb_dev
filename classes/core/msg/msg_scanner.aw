@@ -45,7 +45,7 @@ class msg_scanner extends class_base
 			{
 				foreach($mt as $m)
 				{
-					$messages[] = trim($m[1]);
+					$messages[trim($m[1])] = trim($m[1]);
 				}
 			}
 
