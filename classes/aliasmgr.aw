@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.86 2003/04/16 13:00:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.87 2003/04/16 14:10:50 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -574,27 +574,10 @@ class aliasmgr extends aw_template
 
 			if ($alias["relobj_id"])
 			{
-				// this is where we will have to create different links
-				// due the lack of better ideas, I'll just check against
-				// recognized class_id-s right now
-				if ($alias["type"] == CL_ACTION)
-				{
-					$alias["reltype"] = html::href(array(
-						"url" => $this->mk_my_orb("edit_relation",array("id" => $alias["relobj_id"],"return_url" => $return_url),"action"),
-						"caption" => $this->reltypes[$reltype_id],
-					));
-
-				}
-				else
-				{
-					// create a clickable link to the relation object, if one is
-					// present. Basic functionality comes from the class_based
-					// but the class_base based class can override it of course
-					$alias["reltype"] = html::href(array(
-						"url" => $this->mk_my_orb("edit_relation",array("id" => $alias["relobj_id"],"return_url" => $return_url),$classes[$alias["type"]]["file"]),
-						"caption" => $this->reltypes[$reltype_id],
-					));
-				};
+				$alias["reltype"] = html::href(array(
+					"url" => $this->mk_my_orb("change",array("id" => $alias["relobj_id"],"return_url" => $return_url),"relation"),
+					"caption" => $this->reltypes[$reltype_id],
+				));
 			}
 			else
 			{

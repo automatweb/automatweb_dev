@@ -9,7 +9,7 @@
 @default table=objects
 @default group=general
 
-@property contents type=text store=no
+@property contents type=callback callback=callback_get_contents store=no
 @caption Sisu
 
 */
@@ -18,12 +18,46 @@ class relation extends class_base
 {
 	function relation()
 	{
-	    // if they exist at all. the default folder does not actually exist, 
-	    // it just points to where it should be, if it existed
 		$this->init(array(
-			'clid' => CL_RELATION
+			"clid" => CL_RELATION
 		));
 	}
+
+	function callback_get_contents($args = array())
+	{
+		$relobj = $this->get_object(array(
+			"oid" => $args["obj"]["oid"],
+			"clid" => $this->clid,
+		));
+		
+		$cldef = $this->cfg["classes"][$relobj["subclass"]];
+		$values = $relobj["meta"]["values"][$cldef["def"]];
+
+		$cfgu = get_instance("cfg/cfgutils");
+		$rel_properties = $cfgu->load_class_properties(array(
+			"clid" => $relobj["subclass"],
+			"filter" => "rel",
+		));
+
+		// cause get_instance does not work with subfolders
+		classload($cldef["file"]);
+		$clname = $cldef["file"];
+		$t = new $clname;
+
+		$t->init_class_base();
+
+		$t->values = $values;
+
+		$resprops = $t->parse_properties(array(
+			"properties" => &$rel_properties,
+		));
+
+		return $resprops;
+	}
+
+	// now I have an interesting dilemma, I have to show a different configuration form
+	// based on the subclass of the relation object. This means I need to be able to 
+	// go between the load object data of class_base
 
 	function get_property($args = array())
 	{
@@ -31,15 +65,51 @@ class relation extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "contents":
-				if (!is_array($args["obj"]["meta"]))
-				{
-					$data["error"] = "Seoseobjekt on tühi";
-				};
-				$retval = PROP_ERROR;
+			case "comment":
+			case "status":
+				$retval = PROP_IGNORE;
 				break;
-
 		};
+		return $retval;
+	}
+
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "contents":
+				$relobj = $this->get_object(array(
+					"oid" => $args["obj"]["oid"],
+					"clid" => $this->clid,
+				));
+
+				$cfgu = get_instance("cfg/cfgutils");
+				$rel_properties = $cfgu->load_class_properties(array(
+					"clid" => $relobj["subclass"],
+					"filter" => "rel",
+				));
+
+				$set_vals = array();
+
+				if (sizeof($rel_properties) > 0)
+				{
+					foreach($rel_properties as $key => $val)
+					{
+						$set_vals[$key] = $args["form_data"][$key];
+					};
+
+					$cldef = $this->cfg["classes"][$relobj["subclass"]];
+				};		
+
+				if (sizeof($set_vals) > 0)
+				{
+					$meta = &$args["metadata"];
+					$meta["values"][$cldef["def"]] = $set_vals;
+				};		
+				break;
+		}
 		return $retval;
 	}
 
