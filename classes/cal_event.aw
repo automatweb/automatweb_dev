@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.11 2002/02/07 03:18:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.12 2002/02/11 17:14:07 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -530,7 +530,6 @@ class cal_event extends aw_template {
 	function _process_day($args = array())
 	{
 		// every X days
-		// print "wd = $this->wd<br>";
 		if ($this->repeats["day"] == 1)
 		{
 			if ( ($this->daynum % $this->dayskip) == 0)
@@ -668,13 +667,16 @@ class cal_event extends aw_template {
 			{
 				$this->rep_count++;
 				//$ts = mktime(0,0,0,$month,$this->d,$year);
+				
 				// something weird is going on
-				$ts = mktime(23,59,59,1,$this->gdaynum,2001);
+				$ts = mktime(23,59,59,1,$this->gdaynum + 1,2001);
+				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
+				$ts = mktime(23,59,59,$this->start_month,$this->start_day + $this->daynum,$year);
 
 				// try to avoid duplicate repeaters
-				if (not(in_array($this->gdaynum,$this->reps)))
+				if (not(in_array($this->gdaynum + 1,$this->reps)))
 				{
-					$this->reps[] = $this->gdaynum;
+					$this->reps[] = $this->gdaynum + 1;
 				};
 				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
 				$this->found = false;
@@ -707,7 +709,6 @@ class cal_event extends aw_template {
 	function process_repeaters($args)
 	{
 		extract($args);
-
 		$repstart = mktime(0,0,0,$repstart["month"],$repstart["day"],$repstart["year"]);
 		$this->start = $repstart;
 		list($start_year,$start_wday) = explode("-",date("Y-w",$repstart));
@@ -763,15 +764,13 @@ class cal_event extends aw_template {
 		// if the user selected the every X year option, so we alter the skip accordingly
 		$yearskip = ($region4) ? $yearskip : 1;
 		
-
-
-		// we need four cycles inside each other, years, months, weeks, days
 		$last_year = 0;
 		$last_mon = 0;
 		$last_day = 0;
 
 		$this->from_scratch = true;
-		//print "start_year = $start_year, end_year = $end_year, yearskip = $yearskip<br>";
+
+		// cycle over all the years in the repeater cycle
 		for ($y = $start_year; $y <= $end_year; $y = $y + $yearskip)
 		{
 		
