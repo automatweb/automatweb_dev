@@ -189,6 +189,10 @@ class _int_object
 			{
 				$filter["to"] = $param["to"];
 			}
+			if (isset($param["sort_by"]))
+			{
+				$filter["sort_by"] = $param["sort_by"];
+			}
 			foreach($param as $k => $v)
 			{
 				if (substr($k, 0, 3) == "to.")
@@ -248,6 +252,10 @@ class _int_object
 			if (isset($param["from"]))
 			{
 				$filter["from"] = $param["from"];
+			}
+			if (isset($param["sort_by"]))
+			{
+				$filter["sort_by"] = $param["sort_by"];
 			}
 			foreach($param as $k => $v)
 			{
