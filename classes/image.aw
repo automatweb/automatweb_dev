@@ -56,7 +56,7 @@ class image extends aw_template
 			
 			$this->upd_object(array(
 				"oid" => $id,
-				"name" => $file_name,
+				"name" => $name,
 				"comment" => $comment,
 				"parent" => $parent
 			));
