@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.35 2002/09/30 06:57:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.1 2002/10/28 13:48:34 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -11,7 +11,7 @@
 // no public interface here. everything goes through form.aw
 // why? iizi. cause the element properies are saved in the form and therefore the form must always be loaded
 // so we have to go through form->load to get the cells' elements.
-
+classload("formgen/form_base");
 class form_cell extends form_base
 {
 	function form_cell()
