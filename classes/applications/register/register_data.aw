@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.8 2004/11/16 23:11:03 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.9 2004/11/23 12:30:49 sven Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -179,6 +179,22 @@
 
 @property usersubtitle5 type=text store=no group=data subtitle=1
 @caption Subtitle5
+
+
+@property usertext1 type=text store=no group=data
+@caption Usertext1
+
+@property usertext2 type=text store=no group=data
+@caption Usertext2
+
+@property usertext3 type=text store=no group=data
+@caption Usertext3
+
+@property usertext4 type=text store=no group=data
+@caption Usertext4
+
+@property usertext5 type=text store=no group=data
+@caption Usertext5
 
 @property usersubmit1 type=submit store=no
 @caption User-defined submit 1
