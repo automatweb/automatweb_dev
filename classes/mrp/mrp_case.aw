@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.9 2005/01/27 08:55:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.10 2005/01/27 08:58:36 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -323,7 +323,7 @@ class mrp_case extends class_base
 				break;
 		}
 
-		if ($arr["obj_inst"]->prop($prop["name"]) != $prop["value"])
+		if ($arr["obj_inst"]->prop($prop["name"]) != $prop["value"] && $prop["type"] == "textbox")
 		{
 			$this->mrp_log($arr["obj_inst"]->id(), NULL, "Projekti omaduse ".$prop["caption"]." v&auml;&auml;rtust muudeti ".$arr["obj_inst"]->prop($prop["name"])." => ".$prop["value"]);
 		}
@@ -409,6 +409,10 @@ class mrp_case extends class_base
 			break;
 		}
 
+		if (!$workspace)
+		{
+			$workspace = obj(aw_ini_get("prisma.ws"));
+		}
 		return $workspace;
 	}
 
