@@ -50,17 +50,23 @@ function selall()
 		<td bgcolor="{VAR:bgcolor}">
 		{VAR:clf_type}
 		</td>
-		<td bgcolor="{VAR:bgcolor}" colspan="3">
+		<td bgcolor="{VAR:bgcolor}" colspan="2">
 		<!-- SUB: ordering -->
 		Variantide paigutus:
 		{VAR:v_order}
 		<!-- END SUB: ordering -->
 		</td>
+		<td bgcolor="{VAR:bgcolor}">
+		Sorteeri omaduse järgi:
+		</td>
 	</tr>
 	<tr>
-		<td bgcolor="{VAR:bgcolor}" colspan="5">
+		<td bgcolor="{VAR:bgcolor}" colspan="4">
 		Uued variandid (eraldaja ;):
 		<input type="text" name="prp_metas[{VAR:prp_key}]" class="form_elem" style="width:300px">
+		</td>
+		<td bgcolor="{VAR:bgcolor}">
+		{VAR:sort_by}
 		</td>
 	</tr>
 	<tr>
@@ -101,6 +107,14 @@ function selall()
 	</tr>
 	<!-- END SUB: NE_SELECT -->
 	<!-- END SUB: CLF3 -->
+	<!-- SUB: CLF4 -->
+	<tr>
+		<td bgcolor="{VAR:bgcolor}">Vaikimisi kuupäev:</td>
+		<td bgcolor="{VAR:bgcolor}" colspan="4">
+		{VAR:time_select}
+		</td>
+	</tr>
+	<!-- END SUB: CLF4 -->
 	<!-- END SUB: property -->
 	</table>
 	</fieldset>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.58 2005/02/11 13:18:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.59 2005/02/14 13:26:46 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -507,7 +507,11 @@ class webform extends class_base
 			{
 				foreach($val as $key2 => $val2)
 				{
-					$prplist[$key][$key2] = $arr["request"]["prp_opts"][$key][$key2];
+					if($key2 == "defaultx" && is_array($val2))
+					{
+						$val2 = mktime(0, 0, 0, $val2["month"], $val2["day"], $val2["year"]);
+					}
+					$prplist[$key][$key2] = $val2;
 				}
 			}
 		}
@@ -533,9 +537,20 @@ class webform extends class_base
 				$e_prp_list = new object_list(array(
 					"parent" => $classificator[$key],
 					"class_id" => CL_META,
-					"status"=> STAT_ACTIVE,
+					"sort_by" => "objects.jrk DESC",
+					//"status" => STAT_ACTIVE,
 				));
+				if($e_prp_list->count() > 0)
+				{
+					$high = $e_prp_list->begin();
+					$highest = $high->ord() + 1;
+				}
+				else
+				{
+					$highest = 1;
+				}
 				$e_prps = $e_prp_list->names();
+				
 				foreach($prps as $prp)
 				{
 					$prp = trim($prp);
@@ -543,12 +558,15 @@ class webform extends class_base
 					{
 						continue;
 					}
+					$e_prps[] = $prp;
 					$no = obj();
 					$no->set_class_id(CL_META);
 					$no->set_status(STAT_ACTIVE);
 					$no->set_parent($classificator[$key]);
 					$no->set_name($prp);
+					$no->set_ord($highest);
 					$no->save();
+					$highest++;
 				}
 			}
 		}
@@ -1056,6 +1074,15 @@ class webform extends class_base
 			"checkboxes" => t("M&auml;rkeruut"),
 			"radiobuttons" => t("Raadionupp"),
 		);
+		$sort_opts = array(
+			"" => t("--vali--"),
+			"objects.jrk ASC" => t("Järjekord (kasvav)"),
+			"objects.jrk DESC" => t("Järjekord (kahanev)"),
+			"objects.name ASC" => t("Nimi (kasvav)"),
+			"objects.name DESC" => t("Nimi (kahanev)"),
+			"objects.created ASC" => t("Loomisaeg (kasvav)"),
+			"objects.created DESC" => t("Loomisaeg (kahanev)"),
+		);
 		$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$metamgr = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_METAMGR");
 		$clf_type = $object_type->meta("clf_type");
@@ -1070,7 +1097,7 @@ class webform extends class_base
 			$sc = "";
 			foreach($proplist as $property)
 			{
-				$clf1 = $clf2 = $clf3 = "";
+				$clf1 = $clf2 = $clf3 = $clf4 = "";
 				$cnt++;
 				$prpdata = $this->cfgform_i->all_props[$property["name"]];
 				if (!$prpdata)
@@ -1097,7 +1124,7 @@ class webform extends class_base
 						"parent" => $classificator[$prpdata["name"]],
 						"class_id" => CL_META,
 						"status" => STAT_ACTIVE,
-						"sort_by" => "objects.name DESC",
+						"sort_by" => $property["sort_by"],
 					));
 					$prp_metas = implode("; ", $metas->names());
 					$this->vars(array(
@@ -1111,6 +1138,11 @@ class webform extends class_base
 							"meta" => $classificator[$prpdata["name"]],
 						)),
 						"predefs" => $prp_metas,
+						"sort_by" => html::select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][sort_by]",
+							"options" => $sort_opts,
+							"selected" => $property["sort_by"],
+						)),
 					));
 					if(in_array($clf_type[$prpdata["name"]], $this->n_props))
 					{
@@ -1172,10 +1204,21 @@ class webform extends class_base
 					}
 					$clf3 = $this->parse("CLF3");
 				}
+				elseif($prpdata["type"] == "date_select")
+				{
+					$this->vars(array(
+						"time_select" => html::date_select(array(
+							"name" => "prp_opts[".$prpdata["name"]."][defaultx]",
+							"value" => $property["defaultx"] ? $property["defaultx"] : time(),
+						)),
+					));
+					$clf4 = $this->parse("CLF4");
+				}
 				$this->vars(array(
 					"CLF1" => $clf1,
 					"CLF2" => $clf2,
 					"CLF3" => $clf3,
+					"CLF4" => $clf4,
 				));
 				$sc .= $this->parse("property");
 			}
@@ -1183,7 +1226,7 @@ class webform extends class_base
 				"property" => $sc,
 			));
 			$c .= $this->parse("group");
-		};
+		}
 
 		$this->vars(array(
 			"group" => $c,
@@ -1458,10 +1501,18 @@ class webform extends class_base
 				$no_sbt = false;
 				continue;
 			}
-			elseif($pd["type"] == "reset")
+			elseif($pd["type"] == "reset" || $pd["type"] == "button")
 			{
 				$sbz[$pn] = $pd;
 				continue;
+			}
+			if($pd["type"] == "classificator")
+			{
+				$pd["sort_by"] = $all_props[$pn]["sort_by"];
+			}
+			if($pd["type"] == "date_select")
+			{
+				$pd["default"] = $all_props[$pn]["defaultx"];
 			}
 			$num = 0;
 			if (isset($errs[$pn]))
@@ -1681,12 +1732,12 @@ class webform extends class_base
 		$cfgform = $obj_inst->get_first_obj_by_reltype("RELTYPE_CFGFORM");
 		$register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER");
 		$prplist = safe_array($cfgform->meta("cfg_proplist"));
-		$cf = $cfgform->instance();
-		$props = $cf->get_props_from_cfgform(array("id" => $cfgform->id()));
+		//$cf = $cfgform->instance();
+		//$props = $cf->get_props_from_cfgform(array("id" => $cfgform->id()));
 		$register_data_i = get_instance(CL_REGISTER_DATA);
 		$register_data_i->init_class_base();
 		$is_valid = $register_data_i->validate_data(array(
-			"props" => $props,
+			//"props" => $props,
 			"request" => &$arr,
 			"cfgform_id" => $cfgform->id(), 
 		));

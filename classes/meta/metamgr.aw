@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.7 2005/01/19 14:55:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.8 2005/02/14 13:26:46 ahti Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see kõik pole
@@ -99,22 +99,20 @@ class metamgr extends class_base
 	{
 		$tree = get_instance("vcl/treeview");
 		$obj = $arr["obj_inst"];
-                $tree->start_tree(array(
-                        "type" => TREE_DHTML,
-                        "tree_id" => "metamgrtree", 
-                        "persist_state" => 1,
-                ));
-
-
-                $tree->add_item(0,array(
-                        "name" => $obj->name(),
-                        "id" => $obj->id(),
-                        "url" => $this->mk_my_orb("change",array(
-                                "id" => $obj->id(),
-                                "group" => $arr["prop"]["group"],
-                        )),
-                ));
-
+		$tree->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "metamgrtree", 
+			"persist_state" => 1,
+		));
+		$tree->add_item(0,array(
+			"name" => $obj->name(),
+			"id" => $obj->id(),
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $obj->id(),
+				"group" => $arr["prop"]["group"],
+			)),
+		));
+		
 		foreach($this->rw_tree as $parent => $items)
 		{
 			foreach($items as $obj_id => $ord)
@@ -185,6 +183,13 @@ class metamgr extends class_base
 			"parent" => $root_obj->id(),
 			"class_id" => CL_META,
 			"lang_id" => array(),
+			"sort_by" => "objects.jrk",
+		));
+		$t->define_data(array(
+			"id" => "new",
+			"is_new" => 1,
+			"name" => "",
+			"ord" => "",
 		));
 
 		for ($o = $olist->begin(); !$olist->end(); $o = $olist->next())
@@ -200,12 +205,6 @@ class metamgr extends class_base
 		};
 
 		// now add the textbox thingies to allow adding of new data
-		$t->define_data(array(
-			"id" => "new",
-			"is_new" => 1,
-			"name" => "",
-			"ord" => "",
-		));
 
 		$pathstr[] = html::href(array(
 			"url" => aw_url_change_var(array(
@@ -233,12 +232,15 @@ class metamgr extends class_base
 				};
 			};
 		};
+		$t->set_sortable(false);
 
 		$t->table_header = "<small>" . join(" &gt; ",$pathstr) . "</small>";
+		/*
 		$t->sort_by(array(
 			"field" => array("is_new","ord"),
 			"sorder" => array("ord" => "desc","is_new" => "desc"),
 		));
+		*/
 
 	}
 

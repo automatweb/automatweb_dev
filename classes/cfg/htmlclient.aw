@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.91 2005/02/07 14:23:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.92 2005/02/14 13:26:45 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -505,18 +505,20 @@ class htmlclient extends aw_template
 	// !Creates a submit button
 	function put_submit($arr)
 	{
+		arr($arr);
 		$name = "SUBMIT";
 		$tpl_vars = array(
 			"sbt_caption" => $arr["caption"] ? $arr["caption"] : "Salvesta",
 			"name" => $arr["name"] ? $arr["name"] : "",
 			"action" => $arr["action"] ? $arr["action"] : "",
-			"webform_content" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
+			"webform_element" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
+			"webform_caption" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : ""
 		);
 		if($arr["capt_ord"] == "right")
 		{
 			 $name .= strtoupper("_".$arr["capt_ord"]);
 		}
-		if($this->tplmode =="groups" && $this->sub_tpl->is_template($arr["name"]))
+		if($this->tplmode == "groups" && $this->sub_tpl->is_template($arr["name"]))
 		{
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($arr["name"]);

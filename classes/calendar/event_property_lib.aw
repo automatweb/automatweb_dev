@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.19 2005/01/25 11:00:01 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.20 2005/02/14 13:26:45 ahti Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -241,12 +241,13 @@ class event_property_lib extends aw_template
 		$fields = array();
 		$cff = get_instance("cfg/cfgform");
 		$clsfs = array();
+		//arr($datas);
 		foreach($datas as $d_c)
 		{
 			$to = $d_c->from();
 			$darr[$to->prop("person_id")] = $to;
 			
-			if (!$to->meta("cfgform_id"))
+			if (!is_oid($to->meta("cfgform_id")) || !$this->can("view", $to->meta("cfgform_id")))
 			{
 				$ps = $to->get_property_list();
 			}
@@ -256,7 +257,7 @@ class event_property_lib extends aw_template
 					"id" => $to->meta("cfgform_id")
 				));
 			}
-			foreach($to->properties() as $pn => $pv)
+			foreach($ps as $pn => $pv)
 			{
 				if (!isset($ps[$pn]))
 				{
