@@ -92,17 +92,6 @@
             <caption>Max. cell'e reas</caption>
       </property>
       <property>
-            <name>use_menubar</name>
-            <type>checkbox</type>
-            <group>special</group>
-            <rel>1</rel>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <ch_value>1</ch_value>
-            <caption>Kasuta menubari</caption>
-      </property>
-      <property>
             <name>user_calendar</name>
             <type>checkbox</type>
             <group>special</group>
