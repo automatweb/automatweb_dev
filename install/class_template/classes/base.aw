@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.11 2003/07/24 13:59:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.12 2003/07/25 15:46:21 duke Exp $
 // __classname.aw - __name 
 /*
 
@@ -7,9 +7,6 @@
 
 @default table=objects
 @default group=general
-
-@property status type=status field=status
-@caption Staatus
 
 */
 
