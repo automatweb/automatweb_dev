@@ -142,13 +142,17 @@ class image extends aw_template
 
 	function get_image_by_id($id)
 	{
-		$q = "SELECT objects.*,images.* FROM images
-			LEFT JOIN objects ON (objects.oid = images.id)
-			WHERE images.id = '$id'";
-		$this->db_query($q);
-		$row = $this->db_fetch_row();
-		$row["url"] = $this->get_url($row["file"]);
-		$row["meta"] = aw_unserialize($row["metadata"]);
+		if (!($row = aw_cache_get("get_image_by_id",$id)))
+		{
+			$q = "SELECT objects.*,images.* FROM images
+				LEFT JOIN objects ON (objects.oid = images.id)
+				WHERE images.id = '$id'";
+			$this->db_query($q);
+			$row = $this->db_fetch_row();
+			$row["url"] = $this->get_url($row["file"]);
+			$row["meta"] = aw_unserialize($row["metadata"]);
+			aw_cache_set("get_image_by_id", $id, $row);
+		}
 		return $row;
 	}
 
