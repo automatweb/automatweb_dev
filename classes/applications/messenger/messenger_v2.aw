@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.1 2004/06/25 19:28:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.2 2004/10/14 13:42:42 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -524,9 +524,9 @@ class messenger_v2 extends class_base
 		$this->_connect_server(array(
 			"msgr_id" => $arr["obj_inst"]->id(),
 		));
-		
+
 		$drafts = $this->msgobj->prop("msg_drafts");
-		$toolbar = &$arr["prop"]["toolbar"];
+		$toolbar = &$arr["prop"]["vcl_inst"];
 
 		$toolbar->add_button(array(
 			"name" => "newmessage",
@@ -537,7 +537,7 @@ class messenger_v2 extends class_base
 			),"mail_message",false,true) . "','msgr',800,600)",
 			"img" => "new.gif",
 		));
-
+		
 		$toolbar->add_separator();
 	
 		$_tmp = array("0" => "Vii kirjad");
