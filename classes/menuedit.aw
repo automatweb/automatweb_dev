@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.44 2001/08/08 06:12:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.45 2001/08/08 06:15:12 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3892,8 +3892,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"leadonly" => 1,
 					"section" => $section,
 					"strip_img" => $strip_img,
-					"no_strip_lead" => $GLOBALS["no_strip_lead"],
-					"tpls" => $tpls
+					"tpls" => $tpls,
+					"no_strip_lead" => $GLOBALS["no_strip_lead"]
 				));
 				$dk++;
 			} // while
@@ -4023,7 +4023,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				FROM objects 
 				LEFT JOIN menu ON menu.id = objects.oid
 				LEFT JOIN template ON template.id = menu.tpl_lead
-				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$GLOBALS["SITE_ID"]." OR objects.site_id is null)
+				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$GLOBALS["SITE_ID"]." OR objects.site_id is null) AND objects.lang_id = ".$GLOBALS["lang_id"]."
 				ORDER by jrk";
 		$this->db_query($q);
 		while ($row = $this->db_next())
