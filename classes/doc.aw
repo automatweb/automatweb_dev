@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.83 2004/10/18 13:51:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.84 2004/11/01 12:20:39 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -87,6 +87,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @property dcache type=checkbox store=no trans=1
 @caption Cache otsingu jaoks
+
+@property dcache_save type=checkbox ch_value=1 group=settings table=objects field=meta method=serialize trans=1
+@caption Cache otsingu jaoks (salvestub)
 
 @property dcache_content type=hidden field=dcache 
 @property rating type=hidden 
@@ -403,6 +406,16 @@ class doc extends class_base
 				};
 				break;
 
+			case "dcache_save":
+				if ($data["value"] == 1)
+				{
+					$dcx = get_instance("document");
+					$preview = $dcx->gen_preview(array("docid" => $args["obj_inst"]->id()));
+					$this->quote($preview);
+					$this->_preview = $preview;	
+				}
+				break;
+
 			case "gen_static":
 				if (!empty($data["value"]) && is_oid($args["obj_inst"]->id()))
 				{
@@ -478,6 +491,16 @@ class doc extends class_base
 		if (isset($this->_preview))
 		{
 			$obj_inst->set_meta("dcache",$this->_preview);
+			$res = trim(preg_replace("/<.*>/imsU", " ",$this->_preview));
+			$len = strlen($res);
+			for($i = 0; $i < $len; $i++)
+			{
+				if (ord($res{$i}) < 32)
+				{
+					$res{$i} = " ";
+				}
+			}
+			$obj_inst->set_prop("dcache_content", $res);
 		};
 		
 		if (isset($this->_modified))
