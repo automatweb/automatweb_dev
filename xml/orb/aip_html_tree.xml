@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="aip_html_tree" folder="" extends="class_base">
+	<class name="aip_html_tree" folder="aip" extends="class_base">
 		<action name="show" default="1" nologin="1">
 			<function name="show">
 				<arguments>
