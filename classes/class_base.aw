@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.108 2003/05/29 15:38:06 duke Exp $
+// $Id: class_base.aw,v 2.109 2003/06/02 13:13:07 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -231,7 +231,9 @@ class class_base extends aw_template
 			$orb_class = "doc";
 		};
 
-		$gdata = $this->groupinfo->get_at($this->activegroup);
+
+		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
+
 
 		$argblock = array(
 			"id" => $id,
@@ -449,7 +451,7 @@ class class_base extends aw_template
 				$name = $property["name"];
 
 				$savedata[$name] = ($property["value"]) ? $property["value"] : $xval;
-		
+
 				$table = isset($property["table"]) ? $property["table"] : "";
 				$field = $property["field"];
 				$method = $property["method"];
@@ -957,9 +959,6 @@ class class_base extends aw_template
 		
 		$this->tp = get_instance("vcl/tabpanel");
 
-		$grpnames = new aw_array($this->groupnames);
-		
-
 		// I need a way to let the client (the class using class_base to
 		// display the editing form) to add it's own tabs.
 
@@ -979,13 +978,20 @@ class class_base extends aw_template
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"return_url" => $return_url,
 		));
-			
+
+		// I'm not sure, why someone would want to do that, but it is possible to hide the tabs
 		if (empty($this->classinfo["hide_tabs"]))
 		{
 			$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
 
-			foreach($grpnames->get() as $key => $val)
+			foreach($this->groupinfo as $key => $val)
 			{
+				// we only want subgroups that are children of the currently active group
+				if (isset($val["parent"]) && $val["parent"] != $this->activegroup)
+				{
+					continue;
+				};		
+
 				if ($this->id)
 				{
 					$link_args->set_at("group",$key);
@@ -995,11 +1001,10 @@ class class_base extends aw_template
 				{
 					$link = ($activegroup == $key) ? "#" : "";
 				};
-				
 
 				$tabinfo = array(
 					"link" => &$link,
-					"caption" => &$val,
+					"caption" => &$val["caption"],
 					"id" => $key,
 					"tp" => &$this->tp,
 					"coredata" => $this->coredata,
@@ -1014,14 +1019,18 @@ class class_base extends aw_template
 				if ($res !== false)
 				{
 					$this->tp->add_tab(array(
+						"level" => empty($val["parent"]) ? 1 : 2,
 						"link" => $tabinfo["link"],
 						"caption" => $tabinfo["caption"],
-						"active" => ($key == $activegroup),
+						"active" => ($key == $activegroup) || ($key == $this->subgroup),
 					));
 				};
 			};
+		
 		};
 
+		// XX: I need a better way to handle relationmgr, it should probably be a special
+		// property type instead of being hardcoded
 		if (isset($this->classinfo["relationmgr"]) && empty($this->request["cb_view"]) && !$this->is_rel)
 		{
 			$link = "";
@@ -1139,7 +1148,8 @@ class class_base extends aw_template
 
 		// figure out which group is active
 		// it the group argument is a defined group, use that
-		if ( $args["group"] && $this->groupinfo->key_exists($args["group"]) )
+
+		if ( $args["group"] && !empty($this->groupinfo[$args["group"]]) )
 		{
 			$use_group = $args["group"];
 		}
@@ -1147,7 +1157,7 @@ class class_base extends aw_template
 		{
 			// otherwise try to figure out whether any of the groups
 			// has been set to default, if so, use it
-			foreach($this->groupinfo->get() as $gkey => $ginfo)
+			foreach($this->groupinfo as $gkey => $ginfo)
 			{
 				if (isset($ginfo["default"]))
 				{
@@ -1155,34 +1165,35 @@ class class_base extends aw_template
 				};
 			};
 		};
-
-		// and if nothing suitable was found, default to the "general" group
+		
+		// and if nothing suitable was found, use the first group from the list
 		if (empty($use_group))
 		{
-			if ($this->groupinfo->key_exists("general"))
-			{
-				$use_group = "general";
-			}
-			// otherwise, take the first group
-			else
-			{
-				list($use_group,) = $this->groupinfo->first();
-			};
+			reset($this->groupinfo);
+			list($use_group,) = each($this->groupinfo);
 		};
+
+		if (isset($this->grp_children[$use_group]))
+		{
+			list(,$use_group) = each($this->grp_children[$use_group]);
+		};
+
+
+		if (!empty($this->groupinfo[$use_group]["parent"]) && isset($this->groupinfo[$this->groupinfo[$use_group]["parent"]]))
+		{
+			$sub_group = $use_group;
+			$use_group = $this->groupinfo[$use_group]["parent"];
+		};
+
 
 		$this->activegroup = $use_group;
+		$this->subgroup = $sub_group;
 
-		// get the list of all groups
-		$groupnames = array();
-		foreach($this->groupinfo->get() as $key => $val)
-		{
-			$groupnames[$key] = $val["caption"];
-		};
-			
-		$this->groupnames = $groupnames;
+		// now I know the group
+		$property_list = array();
+
 		$this->cb_views = array();
 
-		$property_list = array();
 		$retval = $tables = $fields = $realfields = array();
 		if (!empty($this->id))
 		{
@@ -1200,24 +1211,25 @@ class class_base extends aw_template
 			{
 				$this->cb_views[$val["view"]] = 1;
 			};
-			// handle multiple groups
-			if (is_array($val["group"]))
+
+			// multiple groups for properties are supported too
+			$_tgr = new aw_array($val["group"]);
+			foreach($_tgr->get() as $_grp)
 			{
 				$tmp = $val;
-				foreach($val["group"] as $_group)
+				if (isset($sub_group) && $_grp == $sub_group)
 				{
-					$tmp["group"] = $_group;
-					if ($_group == $this->activegroup)
-					{
-						$property_list[$key] = $tmp;
-					};
+					$tmp["group"] = $this->activegroup;
+					$property_list[$key] = $tmp;
 				}
-			}
-			else
-			{
-				if ($val["group"] == $this->activegroup)
+				elseif (isset($sub_group) && $_grp == $this->activegroup && $sub_group == $this->grp_children[$this->activegroup][0])
 				{
-					$property_list[$key] = $val;
+					// remap to the first child group
+					$property_list[$key] = $tmp;
+				}
+				elseif (empty($sub_group) && $tmp["group"] == $this->activegroup)
+				{
+					$property_list[$key] = $tmp;
 				};
 			};
 			
@@ -1232,7 +1244,6 @@ class class_base extends aw_template
 					$tables[$val["table"]] = "";
 				};
 			};
-
 
 			$fval = $val["method"];
 			$_field = $val["field"];
@@ -1260,11 +1271,9 @@ class class_base extends aw_template
 			};
 		};
 
-
 		// I need to replace this with a better check if I want to be able
 		// to use config forms in other situations besides editing objects
 
-		
 		foreach($property_list as $key => $val)
 		{
 			$property = $this->all_props[$key];
@@ -1366,6 +1375,24 @@ class class_base extends aw_template
 		$this->all_props = array();
 
 		$tmp = empty($this->cfgform_id) ? $_all_props : $proplist;
+		
+		$tmp_grpinfo = $cfgu->get_groupinfo();
+		$this->grp_children = array();
+		
+		foreach($tmp_grpinfo as $key => $val)
+		{
+			// don't even try that
+			if (!empty($val["parent"]) && $val["parent"] != $key)
+			{
+				$this->grp_children[$val["parent"]][] = $key;
+			};
+						
+			// first default group is used
+			if (isset($val["default"]) && empty($this->default_group))
+			{
+				$this->default_group = $key;
+			};
+		};				
 
 		foreach($tmp as $k => $val)
 		{
@@ -1435,6 +1462,11 @@ class class_base extends aw_template
 				}
 				else
 				{
+					// subgroups count as children of the parent group as well
+					if (isset($tmp_grpinfo[$_grp]["parent"]))
+					{
+						$group_el_cnt[$tmp_grpinfo[$_grp]["parent"]] = 1;
+					};
 					$group_el_cnt[$_grp] = 1;
 				};
 			};
@@ -1459,7 +1491,8 @@ class class_base extends aw_template
 		}
 
 		$this->classinfo = $cfgu->get_classinfo();
-		$tmp_grpinfo = $cfgu->get_groupinfo();
+
+		// I need to make 2 passes.
 		$grpinfo = array();
 		if (is_array($tmp_grpinfo))
 		{
@@ -1467,23 +1500,31 @@ class class_base extends aw_template
 			{
 				if (in_array($key,array_keys($group_el_cnt)))
 				{
+					// skip the group, if it is not listed in the config form object
 					if (!empty($this->cfgform_id) && empty($grplist[$key]))
 					{
 						continue;
 					}
 					else
 					{
-						// grplist comes from CL_CFGFORM
+						// grplist comes from CL_CFGFORM and can be used
+						// to override the default settings
+
+						// XX: add a list of settings that can be overrided,
+						// allowing everything is probably not a good idea
 						if (is_array($grplist) && isset($grplist[$key]))
 						{
 							$val = array_merge($val,$grplist[$key]);
 						};
+
 						$grpinfo[$key] = $val;
+
 					};
 				};
 			};
 		};
-		$this->groupinfo = new aw_array($grpinfo);
+
+		$this->groupinfo = $grpinfo;
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 	}
 
