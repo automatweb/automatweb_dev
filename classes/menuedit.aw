@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.42 2001/07/31 09:15:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.43 2001/07/31 10:14:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -299,7 +299,7 @@ class menuedit extends aw_template
 		if ($text == "")
 		{
 			// sektsioon pole perioodiline
-			$this->vars(array("doc_content" => $this->show_documents($section,$docid)));
+			$this->vars(array("doc_content" => $this->show_documents($section,$docid,$template)));
 			if ( (is_array($this->blocks)) && (sizeof($this->blocks) > 0) )
 			{
 				while(list(,$blockdata) = each($this->blocks))
@@ -3754,7 +3754,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		return $cont;
 	}
 
-	function show_documents($section,$docid)
+	function show_documents($section,$docid,$template = "")
 	{
 		global $awt;
 		$awt->stop("show_documents()");
@@ -3772,6 +3772,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		// voiks paigutada saidi raami sisse. Related links .. voi nimekiri
 		// mingitest artiklis esinevatest asjadest. You name it.
 		$this->blocks = array();
+
+		$tpl = $template;
+				 
+		$template = $this->get_long_template($section);
+						  
+		$tpl = ($template) ? $template : $tpl;
 		
 
 		$template = $this->get_long_template($section);
@@ -3818,7 +3824,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"docid" => $docid,
 					"section" => $section,
 					"notitleimg" => 0,
-					"tpl" => $template
+					"tpl" => $tpl
 				));
 				if ($d->no_left_pane)
 				{

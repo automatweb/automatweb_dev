@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.48 2001/07/30 04:45:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.49 2001/07/31 10:14:51 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -386,6 +386,7 @@ class form extends form_base
 		$this->arr["try_fill"] = $try_fill;
 		$this->arr["show_table"] = $show_table;
 		$this->arr["table"] = $table;
+		$this->arr["tablestyle"] = $tablestyle;
 		$this->save();
 		return $this->mk_orb("table_settings", array("id" => $id));
 	}
@@ -648,6 +649,7 @@ class form extends form_base
 			"try_fill"						=> checked($this->arr["try_fill"]),
 			"show_table_checked" => checked($this->arr["show_table"]),
 			"tables" => $this->picker($this->arr["table"],$this->get_list_tables()),
+			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE))
 		));
 		$ns = "";
 		if ($this->type != 2)
@@ -783,20 +785,43 @@ class form extends form_base
 			"LINE"							=> $c,
 			"EXTRAIDS"					=> $ei,
 			"IMG_WRAP"					=> $ip, 
-			"form_border"				=> (isset($this->arr["border"]) && $this->arr["border"] != "" ? " BORDER='".$this->arr["border"]."'" : ""),
-			"form_bgcolor"			=> (isset($this->arr["bgcolor"]) && $this->arr["bgcolor"] !="" ? " BGCOLOR='".$this->arr["bgcolor"]."'" : ""),
-			"form_cellpadding"	=> (isset($this->arr["cellpadding"]) && $this->arr["cellpadding"] != "" ? " CELLPADDING='".$this->arr["cellpadding"]."'" : ""),
-			"form_cellspacing"	=> (isset($this->arr["cellspacing"]) && $this->arr["cellspacing"] != "" ? " CELLSPACING='".$this->arr["cellspacing"]."'" : ""),
-			"form_height"				=> (isset($this->arr["height"]) && $this->arr["height"] != "" ? " HEIGHT='".$this->arr["height"]."'" : ""),
-			"form_width"				=> (isset($this->arr["width"]) && $this->arr["width"] != "" ? " WIDTH='".$this->arr["width"]."'" : "" ),
-			"form_height"				=> (isset($this->arr["height"]) && $this->arr["height"] != "" ? " HEIGHT='".$this->arr["height"]."'" : "" ),
-			"form_vspace"				=> (isset($this->arr["vspace"]) && $this->arr["vspace"] != "" ? " VSPACE='".$this->arr["vspace"]."'" : ""),
-			"form_hspace"				=> (isset($this->arr["hspace"]) && $this->arr["hspace"] != "" ? " HSPACE='".$this->arr["hspace"]."'" : ""),
 			"form_action"				=> $form_action,
 			"submit_text"				=> isset($this->arr["submit_text"]) ? $this->arr["submit_text"] : "",
 			"reforb"						=> $reforb,
 			"checks"						=> $chk_js
 		));
+		if (isset($this->arr["tablestyle"]))
+		{
+			classload("style");
+			$st = new style;
+			$s = $st->get($this->arr["tablestyle"]);
+			$s = unserialize($s["style"]);
+			$this->vars(array(
+				"form_border"				=> (isset($s["border"]) && $s["border"] != "" ? " BORDER='".$s["border"]."'" : ""),
+				"form_bgcolor"			=> (isset($s["bgcolor"]) && $s["bgcolor"] !="" ? " BGCOLOR='".$s["bgcolor"]."'" : ""),
+				"form_cellpadding"	=> (isset($s["cellpadding"]) && $s["cellpadding"] != "" ? " CELLPADDING='".$s["cellpadding"]."'" : ""),
+				"form_cellspacing"	=> (isset($s["cellspacing"]) && $s["cellspacing"] != "" ? " CELLSPACING='".$s["cellspacing"]."'" : ""),
+				"form_height"				=> (isset($s["height"]) && $s["height"] != "" ? " HEIGHT='".$s["height"]."'" : ""),
+				"form_width"				=> (isset($s["width"]) && $s["width"] != "" ? " WIDTH='".$s["width"]."'" : "" ),
+				"form_height"				=> (isset($s["height"]) && $s["height"] != "" ? " HEIGHT='".$s["height"]."'" : "" ),
+				"form_vspace"				=> (isset($s["vspace"]) && $s["vspace"] != "" ? " VSPACE='".$s["vspace"]."'" : ""),
+				"form_hspace"				=> (isset($s["hspace"]) && $s["hspace"] != "" ? " HSPACE='".$s["hspace"]."'" : ""),
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"form_border"				=> (isset($this->arr["border"]) && $this->arr["border"] != "" ? " BORDER='".$this->arr["border"]."'" : ""),
+				"form_bgcolor"			=> (isset($this->arr["bgcolor"]) && $this->arr["bgcolor"] !="" ? " BGCOLOR='".$this->arr["bgcolor"]."'" : ""),
+				"form_cellpadding"	=> (isset($this->arr["cellpadding"]) && $this->arr["cellpadding"] != "" ? " CELLPADDING='".$this->arr["cellpadding"]."'" : ""),
+				"form_cellspacing"	=> (isset($this->arr["cellspacing"]) && $this->arr["cellspacing"] != "" ? " CELLSPACING='".$this->arr["cellspacing"]."'" : ""),
+				"form_height"				=> (isset($this->arr["height"]) && $this->arr["height"] != "" ? " HEIGHT='".$this->arr["height"]."'" : ""),
+				"form_width"				=> (isset($this->arr["width"]) && $this->arr["width"] != "" ? " WIDTH='".$this->arr["width"]."'" : "" ),
+				"form_height"				=> (isset($this->arr["height"]) && $this->arr["height"] != "" ? " HEIGHT='".$this->arr["height"]."'" : "" ),
+				"form_vspace"				=> (isset($this->arr["vspace"]) && $this->arr["vspace"] != "" ? " VSPACE='".$this->arr["vspace"]."'" : ""),
+				"form_hspace"				=> (isset($this->arr["hspace"]) && $this->arr["hspace"] != "" ? " HSPACE='".$this->arr["hspace"]."'" : ""),
+			));
+		}
 		$st = $this->parse();				
 		return $st;
 	}
@@ -1264,7 +1289,7 @@ class form extends form_base
 				$chtml= "";
 				for ($i=0; $i < $op_cell["el_count"]; $i++)
 				{
-					$el = false;
+/*					$el = false;
 					if (is_array($op_cell["elements"]))	// new op
 					{
 						$op_elid = $op_cell["elements"][$i]["id"];
@@ -1317,6 +1342,17 @@ class form extends form_base
 							}
 						}
 
+					}*/
+
+					// load the element from output
+					$el=new form_entry_element;
+					$el->load($op_cell["elements"][$i],&$this,$rcol,$rrow);
+					// if the element is linked, then fake the elements entry
+					if ($op_cell["elements"][$i]["linked_element"] && $op_far[$op_cell["elements"][$i]["linked_form"]] == $op_cell["elements"][$i]["linked_form"])
+					{
+						// now fake the correct id
+						$this->entry[$el->get_id()] = $this->entry[$op_cell["elements"][$i]["linked_element"]];
+						$el->set_entry($this->entry,$this->entry_id, &$this);
 					}
 
 					if ($el)
@@ -1606,6 +1642,7 @@ class form extends form_base
 			$query="SELECT ".(join(",",$formar))." FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id ".(join(" ",$joinar))."  WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL ";
 
 			// loop through all the elements of this form 
+			$ch_q = array();
 			reset($els);
 			while( list(,$el) = each($els))
 			{
@@ -1633,7 +1670,25 @@ class form extends form_base
 							//checkboxidest ocime aint siis kui nad on tshekitud
 							if ($el->get_value(true) == 1)
 							{
-								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
+//								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
+									$ch_q[] = " form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
+							}
+						}
+						else
+						if ($el->get_type() == "date")
+						{
+							if ($el->get_subtype() == "from")
+							{
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." <= ".$el->get_value().")";
+							}
+							else
+							if ($el->get_subtype() == "to")
+							{
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." >= ".$el->get_value().")";
+							}
+							else
+							{
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." = ".$el->get_value().")";
 							}
 						}
 						else
@@ -1644,14 +1699,19 @@ class form extends form_base
 				}
 			}
 	
-			
+			$chqs = join(" OR ", $ch_q);
+			if ($chqs !="")
+			{
+				$query.=" AND ($chqs)";
+			}
+
 			if ($query == "")
 			{
 				$query = "SELECT * FROM form_".$id."_entries";
 			}
 
 			$matches = array();
-//		echo "query = $query <br>\n";
+		echo "<!-- query = $query  --><br>\n";
 //		flush();
 			$this->db_query($query);
 			while ($row = $this->db_next())
@@ -1682,12 +1742,39 @@ class form extends form_base
 				}
 
 				// loop through all the elements of this form 
+				$ch_q = array();
 				reset($els);
 				while( list(,$el) = each($els))
 				{
 					if ($el->arr["linked_form"] == $id)	// and use only the elements that are members of the current form in the query
 					{
 						// oh la la
+						if ($el->get_type() == "checkbox")
+						{	
+							//checkboxidest ocime aint siis kui nad on tshekitud
+							if ($el->get_value(true) == 1)
+							{
+								$ch_q[] = " form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
+							}
+						}
+						else
+						if ($el->get_type() == "date")
+						{
+							if ($el->get_subtype() == "from")
+							{
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." <= ".$this->entry[$el->get_id()].")";
+							}
+							else
+							if ($el->get_subtype() == "to")
+							{
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." >= ".$this->entry[$el->get_id()].")";
+							}
+							else
+							{
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." = ".$this->entry[$el->get_id()].")";
+							}
+						}
+						else
 						if ($this->entry[$el->get_id()] != "")	
 						{
 							$query.= "AND ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
@@ -1695,6 +1782,11 @@ class form extends form_base
 					}
 				}
 
+				$chqs = join(" OR ", $ch_q);
+				if ($chqs !="")
+				{
+					$query.=" AND ($chqs)";
+				}
 				if ($query == "")
 				{
 					$query = "SELECT * FROM form_".$id."_entries";
@@ -1772,13 +1864,25 @@ class form extends form_base
 				{
 //					echo "q = SELECT form_".$fid."_entries.id as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries $joins WHERE form_".$fid."_entries.id in ($eids)\n<br>";
 //					flush();
-					$this->db_query("SELECT form_".$fid."_entries.id as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries $joins WHERE form_".$fid."_entries.id in ($eids)");
+					$this->db_query("SELECT form_".$fid."_entries.id as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.*,objects.* $tbls FROM form_".$fid."_entries LEFT JOIN objects on objects.oid = form_".$fid."_entries.id $joins WHERE form_".$fid."_entries.id in ($eids)");
 					$chenrties = array();
 //					echo "done\n<br>";
 	//				flush();
 					while ($row = $this->db_next())
 					{
-						$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $ch_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>Muuda</a>";
+						if ($row["chain_entry_id"])
+						{
+							// kui on p2rg, siis muudame p2rga
+							$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $ch_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>Muuda</a>";
+						}
+						else
+						{
+							// kui ei, siis formi
+							$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $fid,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>Muuda</a>";
+						}
+						$row["ev_created"] = $this->time2date($row["created"], 2);
+						$row["ev_uid"] = $row["modifiedby"];
+						$row["ev_modified"] = $this->time2date($row["modified"], 2);
 ///						$row["ev_change"] = "<a href='".$this->mk_my_orb("change", array("id" => $row["entry_id"]), "form_entry")."'>Muuda</a>";
 						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$fid],"section" => $section))."'>Vaata</a>";		
 						$row["ev_delete"] = "<a href='".$this->mk_my_orb(
