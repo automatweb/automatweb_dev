@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.21 2002/12/02 12:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.22 2002/12/03 11:19:40 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -417,7 +417,7 @@ class poll extends aw_template
 		{
 			$REMOTE_ADDR = aw_global_get("REMOTE_ADDR");
 			$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
-			if (!is_ip($ip))
+			if (!inet::is_ip($ip))
 			{
 				$ip = $REMOTE_ADDR;
 			}
@@ -668,7 +668,7 @@ class poll extends aw_template
 		while ($row = $this->db_next())
 		{
 			$row["answer"] = $ansa[$row["answer_id"]]["answer"];
-			list($row["ip"],) = aw_gethostbyaddr($row["ip"]);
+			list($row["ip"],) = inet::gethostbyaddr($row["ip"]);
 			$this->t->define_data($row);
 		}
 

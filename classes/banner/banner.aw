@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.2 2002/12/02 11:18:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.3 2002/12/03 11:19:41 kristo Exp $
 
 // act_type's:
 // 0 - always active
@@ -1515,7 +1515,7 @@ class banner extends aw_template
 		reset($his);
 		while (list(,$row) = each($his))
 		{
-			list($ip,) = aw_gethostbyaddr($row["ip"]);
+			list($ip,) = inet::gethostbyaddr($row["ip"]);
 			$this->vars(array(
 				"act" => ($row["view"] ? LC_LOOKED_BANNER : LC_KLIKKED_BANNER),
 				"time" => $this->time2date($row["tm"],2),

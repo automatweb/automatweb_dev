@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.128 2002/12/02 11:17:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.129 2002/12/03 11:19:39 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -244,7 +244,7 @@ class core extends db_connector
 
 		$REMOTE_ADDR = aw_global_get("REMOTE_ADDR");
 		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
-		if (!is_ip($ip))
+		if (!inet::is_ip($ip))
 		{
 			$ip = $REMOTE_ADDR;
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.19 2002/11/07 10:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.20 2002/12/03 11:19:40 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -296,7 +296,7 @@ class db_syslog extends aw_template
 		$content = "";
 		while($row = $this->db_next())
 		{
-			list($addr,$ip) = aw_gethostbyaddr($row["ip"]);
+			list($addr,$ip) = inet::gethostbyaddr($row["ip"]);
 
 			preg_match("/(.*) \((.*)\) /",$row["action"],$mat);
 			$action = str_replace($mat[1]." (".$mat[2].") ","",$row["action"]);
@@ -405,7 +405,7 @@ class syslog extends db_syslog
 				$store[] = $old[$k];
 			};
 		};
-		if (is_ip($new))
+		if (inet::is_ip($new))
 		{
 			$store[] = $new;
 		};
