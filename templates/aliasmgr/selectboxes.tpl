@@ -120,20 +120,20 @@ function DynamicOptionList_populate() {
 			targetSel.options[i].selected = true;
 			}
 		}
-if (document.forms['searchform'].elements['s[class_id][]'])
+if (document.forms['searchform'] && document.forms['searchform'].elements['s[class_id][]'])
 {
 
 GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id][]'], 'select')
 
 }
 
-if (document.forms['searchform'].elements['s[class_id]'])
+if (document.forms['searchform'] && document.forms['searchform'].elements['s[class_id]'])
 {
 GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id]'], 'textbox')
 }
 
 
-if (document.forms['searchform'].elements['s[reltype]'])
+if (document.forms['searchform'] && document.forms['searchform'].elements['s[reltype]'])
 {
 document.forms['searchform'].elements['s[reltype]'].value = document.forms[0].elements['reltype'].value;
 //alert(document.forms[0].elements['aselect'].value);
