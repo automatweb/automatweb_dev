@@ -35,6 +35,17 @@
             <caption>Autori meil</caption>
       </property>
       <property>
+            <name>locked</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teema lukus</caption>
+            <comment>Lukus teemale uusi kommentaare lisada ei saa</comment>
+      </property>
+      <property>
             <name>answers_to_mail</name>
             <table>objects</table>
             <group>general</group>
