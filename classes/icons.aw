@@ -476,7 +476,8 @@ class icons extends aw_template
 				$cnt++;
 			}
 		}
-		echo sprintf(LC_ICONS_IMPORTED_ICONS,$cnt,$this->mk_my_orb("icon_db"));
+		return $this->mk_my_orb("icon_db",array());
+//                echo sprintf(LC_ICONS_IMPORTED_ICONS,$cnt,$this->mk_my_orb("icon_db"));
 	}
 
 	////
