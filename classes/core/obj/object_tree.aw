@@ -256,9 +256,18 @@ class object_tree extends _int_obj_container_base
 			$o = new object($oid);
 			$this->tree[$o->parent()][$o->id()] = $o;
 
+			// why should this be in here, if it can be out there? --duke
+
+			/*
 			$filter["parent"] = $oid;
 			$this->_int_req_filter($filter);
+			*/
 		}
+		if (sizeof($oids) > 0)
+		{
+			$filter["parent"] = $oids;
+			$this->_int_req_filter($filter);
+		};
 	}
 
 	function _int_subtree($parent)

@@ -45,7 +45,8 @@ class _int_object_loader
 
 	function oid_for_alias($alias)
 	{
-		$this->quote($alias);
+		// there is no quote here -- duke
+		//$this->quote($alias);
 
 		if (substr($alias,-1) == "/")
 		{
@@ -287,8 +288,18 @@ class _int_object_loader
 		{
 			$arr["file"] = "doc";
 		}
-		$props = $this->cfgu->load_properties($arr);
-		return array($props, $this->cfgu->tableinfo);
+		// cfgu->load_properties is expensive, so we cache the results.
+		// why here? because it does a lot more than just load properties
+		// and it's a bit tricky to cache all that information there --duke
+		$cache_key = join("",$arr);
+		$rv = aw_cache_get("props",$cache_key);
+		if (empty($rv))
+		{
+			$props = $this->cfgu->load_properties($arr);
+			$rv = array($props, $this->cfgu->tableinfo);
+			aw_cache_set("props",$cache_key,$rv);
+		};
+		return $rv;
 	}
 
 	function object_exists($oid)
