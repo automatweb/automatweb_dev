@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.38 2004/06/11 08:52:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.39 2004/06/15 08:49:47 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -100,11 +100,9 @@ class converters extends aw_template
 
 			usort($imgar,array($this,"_menu_img_cmp"));
 
-			$this->set_object_metadata(array(
-				"oid" => $row["oid"],
-				"key" => "menu_images",
-				"value" => $imgar
-			));
+			$o = obj($row["oid"]);
+			$o->set_meta("menu_images", $imgar);
+			$o->save();
 
 			echo "menu $row[oid] <br />\n";
 			flush();
@@ -137,11 +135,8 @@ class converters extends aw_template
 			{
 				if (!empty($oldmeta["tpl_dir"]))
 				{
-					$oldmeta["tpl_dir"] = "";
-					$this->set_object_metadata(array(
-						"oid" => $row["id"],
-						"data" => $oldmeta,
-					));	
+					$tmp->set_meta("tpl_dir", "");
+					$tmp->save();
 				};
 			}
 			$this->restore_handle();
