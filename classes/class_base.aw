@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.237 2004/03/16 13:10:02 duke Exp $
+// $Id: class_base.aw,v 2.238 2004/03/17 13:46:39 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -426,10 +426,12 @@ class class_base extends aw_template
 		$this->inst->relinfo = $this->relinfo;
 		$awt->stop("shit");
 
+
 		$awt->start("parse-properties");
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
+
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
 
@@ -1703,6 +1705,8 @@ class class_base extends aw_template
 				$target_reltype = @constant($val["reltype"]);
 				$argblock["prop"]["reltype"] = $target_reltype;
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
+				
+				// init_rel_editor returns an array of properties to be embbeded
 				$relres = $val["vcl_inst"]->init_rel_editor($argblock);
 
 				if (is_array($relres))
@@ -2249,6 +2253,10 @@ class class_base extends aw_template
 	{
 		$this->init_class_base();
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
+		if (empty($args["subaction"]))
+		{
+			$args["subaction"] = "delete";
+		};
 		$retval = $almgr->submit_list($args);
 		if (method_exists($this->inst,"callback_on_submit_relation_list"))
 		{
