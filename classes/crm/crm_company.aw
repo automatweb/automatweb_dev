@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.29 2004/06/22 09:33:41 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.30 2004/06/22 09:52:08 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -310,9 +310,13 @@ class crm_company extends class_base
 			//iga alam item saab ühe võrra suurema väärtuse
 			//if the 'to.id' eq active_node then it should be bold
 			if($conn->prop('to')==$this->active_node)
+			{
 				$name='<b>'.$conn->prop('to.name').'</b>';
+			}
 			else
+			{
 				$name=$conn->prop('to.name');
+			}
 			$obj = $conn->to();
 
 			$tree_node_info = array(
@@ -419,7 +423,9 @@ class crm_company extends class_base
 					$name = '<b>'.'Üksused'.'</b>';
 				}
 				else
+				{
 					$name = 'Üksused';
+				}
 				$tree_inst->add_item(0,array("id"=>1,
 														'name'=>$name,
 														'url'=>aw_url_change_var(array('unit'=>'parent',
@@ -1439,14 +1445,16 @@ class crm_company extends class_base
 	**/
 	function submit_delete_relations($arr)
 	{
-		$mainObj = new Object($arr['id']);
+		$main_obj = new object($arr['id']);
 		
-		if((int)$arr['unit']){
-			$mainObj = new Object($arr['unit']);
+		if((int)$arr['unit'])
+		{
+			$main_obj = new object($arr['unit']);
 		}
 		
-		foreach($arr['check'] as $key=>$value){
-			$mainObj->disconnect(array('from'=>$value));
+		foreach($arr['check'] as $key=>$value)
+		{
+			$main_obj->disconnect(array('from'=>$value));
 		}
 
 		return $this->mk_my_orb('change',array(
@@ -1466,13 +1474,15 @@ class crm_company extends class_base
 	**/
 	function submit_delete_customer_relations($arr)
 	{
-		$mainObj = new Object($arr['id']);
+		$main_obj = new Object($arr['id']);
 		
-		if((int)$arr['category']){
-			$mainObj = new Object($arr['category']);
+		if((int)$arr['category'])
+		{
+			$main_obj = new Object($arr['category']);
 		}
-		foreach($arr['check'] as $key=>$value){
-			$mainObj->disconnect(array('from'=>$value));
+		foreach($arr['check'] as $key=>$value)
+		{
+			$main_obj->disconnect(array('from'=>$value));
 		}
 
 		return $this->mk_my_orb('change',array(
