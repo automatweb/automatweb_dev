@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.10 2004/06/07 14:11:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.11 2004/06/10 12:29:44 duke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
@@ -43,34 +43,34 @@
 	@groupinfo settings caption=Seaded
 
 	@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT
-	@caption Vaikimisi firmade kataloog
+	@caption Vaikimisi firmade kaust
 
 	@property dir_isik type=relpicker reltype=RELTYPE_ISIK_CAT
-	@caption Vaikimisi töötajate kataloog
+	@caption Vaikimisi töötajate kaust
 
 	@property dir_address type=relpicker reltype=RELTYPE_ADDRESS_CAT
-	@caption Vaikimisi aadresside kataloog
+	@caption Vaikimisi aadresside kaust
 
 	@property dir_ettevotlusvorm type=relpicker reltype=RELTYPE_ETTEVOTLUSVORM_CAT
-	@caption Vaikimisi õiguslike vormide kataloog
+	@caption Vaikimisi õiguslike vormide kaust
 
 	@property dir_linn type=relpicker reltype=RELTYPE_LINN_CAT
-	@caption Vaikimisi linnade kataloog
+	@caption Vaikimisi linnade kaust
 
 	@property dir_maakond type=relpicker reltype=RELTYPE_MAAKOND_CAT
-	@caption Vaikimisi maakondade kataloog
+	@caption Vaikimisi maakondade kaust
 
 //	@property dir_riik type=relpicker reltype=RELTYPE_RIIK_CAT
 //	@caption riikide kataloog(id)
 
 	@property dir_tegevusala type=relpicker reltype=RELTYPE_TEGEVUSALA_CAT
-	@caption Vaikimisi tegevusalade kataloog
+	@caption Vaikimisi tegevusalade kaust
 
 	@property dir_toode type=relpicker reltype=RELTYPE_TOODE_CAT
-	@caption Vaikimisi toodete kataloog
+	@caption Vaikimisi toodete kaust
 
 	@property dir_default type=relpicker reltype=RELTYPE_GENERAL_CAT
-	@caption Vaikimisi kataloog, kui mõni eelnevatest pole määratud, siis kasutatakse seda
+	@caption Vaikimisi kaust, kui mõni eelnevatest pole määratud, siis kasutatakse seda
 
 //	@property where_firm type=checkbox ch_value=on
 //	@caption näita ainult tegevusalasid, kus alal on ka ettevõtteid
@@ -81,10 +81,10 @@
 	@property default_kliendibaas type=checkbox 
 	@caption See on kasutaja default kliendibaas
 	
-	@default group=objects_manager
-	@groupinfo objects_manager caption=Objektide&nbsp;lisamine submit=no
+	default group=objects_manager
+	groupinfo objects_manager caption=Objektide&nbsp;lisamine submit=no
 
-	@property addtoolbar type=toolbar store=no no_caption=1
+	property addtoolbar type=toolbar store=no no_caption=1
 	
 	@property active_selection type=textbox group=firmad
 	
@@ -99,37 +99,37 @@
 @caption Valimid
 
 @reltype FIRMA_CAT value=2 clid=CL_MENU
-@caption Organisatsioonide kataloogid
+@caption Organisatsioonide kaust
 
 @reltype ISIK_CAT value=3 clid=CL_MENU
-@caption Töötajate kataloogid
+@caption Töötajate kaust
 
 @reltype ADDRESS_CAT value=4 clid=CL_MENU
-@caption Aadresside kataloogid
+@caption Aadresside kaust
 
 @reltype LINN_CAT value=5 clid=CL_MENU
-@caption Linnade kataloogid
+@caption Linnade kaust
 
 @reltype MAAKOND_CAT value=6 clid=CL_MENU
-@caption Maakondade kataloogid
+@caption Maakondade kaust
 
 @reltype RIIK_CAT value=7 clid=CL_MENU
-@caption Riikide kataloogid
+@caption Riikide kaust
 
 @reltype TEGEVUSALA_CAT value=8 clid=CL_MENU
-@caption Tegevusalade kataloogid
+@caption Tegevusalade kaust
 
 @reltype TOODE_CAT value=9 clid=CL_MENU
-@caption Toodete kataloogid
+@caption Toodete kataloogide kaust
 
 @reltype GENERAL_CAT value=10 clid=CL_MENU
-@caption Üldkataloog
+@caption Üldkaust
 
 @reltype CALENDAR value=11 clid=CL_PLANNER
 @caption Kalender
 
 @reltype ETTEVOTLUSVORM_CAT value=12 clid=CL_MENU
-@caption Õiguslike vormide kataloogid
+@caption Õiguslike vormide kaust
 
 @reltype FORMS  value=13 clid=CL_CFGFORM
 @caption Sisestusvormid
