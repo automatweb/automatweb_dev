@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.29 2004/01/22 16:37:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.30 2004/02/09 10:01:45 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1423,6 +1423,59 @@ class converters extends aw_template
 			}
 		}
 		die("all done! ");
+	}
+	
+	/**  
+		
+		@attrib name=convert_planner_owners 
+
+	**/
+	function convert_planner_owners($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_USER,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+
+		$uu = get_instance("users_user");
+
+		
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			if ($o->is_brother())
+			{
+				continue;
+			};
+			$o_uid = $uu->get_uid_for_oid($o->id());
+			if (empty($o_uid))
+			{
+				continue;
+			};
+			$ucal = $uu->get_user_config(array(
+				"uid" => $o_uid,
+				"key" => "user_calendar",
+			));
+			if (empty($ucal))
+			{
+				continue;
+			};
+			$calobj = new object($ucal);
+			$calobj->connect(array(
+				"to" => $o->id(),
+				"reltype" => 8, // RELTYPE_CALENDAR_OWNERSHIP
+			));
+			print "clid = " . $calobj->class_id();
+			print "name = ";
+			print $o->id();
+			print " ";
+			print "uid = ";
+			print $o_uid;
+			print " ";
+			print "ucal = ";
+			print $ucal;
+			print "<br>";
+		};
 	}
 };
 ?>
