@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.5 2003/09/11 13:26:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.6 2003/09/17 12:45:54 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -22,10 +22,13 @@
 
 	@property message type=textarea cols=80 rows=40 
 	@caption Sisu
-
+	
 	@property send type=submit value=Saada store=no 
 	@caption Saada
-	
+
+	@property aliasmgr type=aliasmgr store=no
+	@caption Aliased
+
 	@tableinfo messages index=id master_table=objects master_index=oid
 
 */
