@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.92 2004/05/12 13:43:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.93 2004/05/20 10:53:05 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -265,6 +265,51 @@ class menu extends class_base
 			"tpldir" => "automatweb/menu",
 			"clid" => CL_MENU,
 		));
+	}
+
+	/** Generate a form for adding or changing an object 
+		
+		@attrib name=new params=name all_args="1" is_public="1" caption="Lisa"
+		
+		@param parent optional type=int acl="add"
+		@param period optional
+		@param alias_to optional
+		@param return_url optional
+		@param reltype optional type=int
+
+		
+		@returns
+		
+		
+		@comment
+		id _always_ refers to the objects table. Always. If you want to load
+		any other data, then you'll need to use other field name
+
+	**/
+	function new_change($args)
+	{
+		return $this->change($args);
+	}
+
+	/**  
+		
+		@attrib name=change params=name all_args="1" is_public="1" caption="Muuda"
+		
+		@param id optional type=int acl="edit"
+		@param group optional
+		@param period optional
+		@param alias_to optional
+		@param return_url optional
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function change($args = array())
+	{
+		return parent::change($args);
 	}
 
 	function __callback_on_load($arr)
@@ -1101,5 +1146,6 @@ class menu extends class_base
 		}
 		return $ret;
 	}
+
 };
 ?>
