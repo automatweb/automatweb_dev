@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.154 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.155 2004/01/15 14:37:01 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -17,8 +17,8 @@
 	@property content_generator type=select rel=1 group=advanced
 	@caption Näitamisfunktsioon
 
-	@property event_cfgform type=relpicker reltype=RELTYPE_EVENT_ENTRY
-	@caption Def. sündmuse sisetamise vorm
+	property event_cfgform type=relpicker reltype=RELTYPE_EVENT_ENTRY
+	caption Def. sündmuse sisetamise vorm
 
 	@property day_start type=time_select group=time_settings rel=1
 	@caption Päev algab
@@ -262,6 +262,7 @@ class planner extends class_base
 			$data = &$args["prop"];
 			$retval = PROP_OK;
 			$form = &$args["form_data"];		
+
 			switch($data["name"])
 			{
 			case 'user_calendar':
@@ -282,16 +283,7 @@ class planner extends class_base
 				}
 
 			break;	
-		
-			case "event_cfgform":
-				// try and check the config form
-				$frm = $this->get_object($data["value"]);
-				if (!$frm["meta"]["cfg_proplist"])
-				{
-					$retval = PROP_IGNORE;
-				};
-				break;
-
+	
 			case "add_event":
 				$this->register_event_with_planner($args);
 				break;
@@ -375,6 +367,7 @@ class planner extends class_base
 			$project = aw_global_get("project");
 			$additional_ids = $prj->get_events_from_projects(array(
 				"project_id" => aw_global_get("project"),
+				"type" => "my_projects",
 			));
 		};
 
@@ -387,7 +380,7 @@ class planner extends class_base
 			if (empty($project))
 			{
 				$add = " OR objects.oid IN ( " . join(",",$additional_ids) . ")";
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE (objects.parent IN (%s) $add) AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) AND objects.status != 0",join(",",$folders));
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE (objects.parent IN (%s) $add)  AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) AND objects.status != 0",join(",",$folders));
 			}
 			else
 			{
@@ -398,7 +391,7 @@ class planner extends class_base
 		else
 		if (!empty($project))
 		{
-			$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = -1 AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) objects.status != 0";
+			$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = -1 AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) AND objects.status != 0";
 		}
 		else
 		{
@@ -435,31 +428,28 @@ class planner extends class_base
 				"group" => "add_event",
 				"event_id" => $row["oid"],
 			));
+			$eo = new object($row["oid"]);
 			if ($row["brother_of"] != $row["oid"])
 			{
 				$this->save_handle();
 				$real_obj = $this->get_object($row["brother_of"]);
+				if ($real_obj["status"] != 0)
+				{
+					$eo = $eo->get_original();
+				};
 				$row["name"] = $real_obj["name"];
 				$row["status"] = $real_obj["status"];
 				$row["flags"] = $real_obj["flags"];
 				$this->restore_handle();
 			};
-			if ($row["class_id"] == CL_CRM_CALL)
+			if ($row["class_id"] == CL_CRM_CALL || $row["class_id"] == CL_CRM_MEETING)
 			{
-				if ($row["flags"] == 8)
-				{
-					$row["name"] = html::img(array(
-						"url" => "/automatweb/images/icons/call-done.gif",
-						"border" => 0,
-					)) . $row["name"];
-				}
-				else
-				{
-					$row["name"] = html::img(array(
-						"url" => "/automatweb/images/icons/call-todo.gif",
-						"border" => 0,
-					)) . $row["name"];
-				};
+				$icon = icons::get_icon_url($eo);
+				$row["name"] = html::img(array(
+					"url" => $icon,
+					"border" => 0,
+				)) . $row["name"];
+
 			};
 
 
@@ -676,7 +666,7 @@ class planner extends class_base
 
 		// use the config form specified in the request url OR the default one from the
 		// planner configuration
-		$event_cfgform = empty($args["request"]["cfgform_id"]) ? $meta["event_cfgform"] : $args["request"]["cfgform_id"];
+		$event_cfgform = $args["request"]["cfgform_id"];
 		// are we editing an existing event?
 		if (!empty($args["request"]["event_id"]))
 		{
@@ -888,7 +878,8 @@ class planner extends class_base
 				$resprops[] = array("type" => "hidden","name" => "emb[cfgform]","value" => $event_cfgform);	
 			};
 
-		}
+		};
+		/*
 		else
 		{
 			$resprops[] = array(
@@ -896,6 +887,7 @@ class planner extends class_base
 				"value" => "Sündmusi ei saa lisada enne, kui oled valinud eventite sisestamise vormi",
 			);
 		};
+		*/
 
 		return $resprops;
 	}
@@ -2854,7 +2846,7 @@ class planner extends class_base
 			{
 				$toolbar->add_separator();
 
-				$prj_opts = array("" => "--filtreeri projekt järgi--");
+				$prj_opts = array("" => "--filtreeri projekti järgi--");
 
 				$users = get_instance("users");
 				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
