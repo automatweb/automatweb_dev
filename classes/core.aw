@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.21 2001/06/05 17:40:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.22 2001/06/07 22:35:18 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -807,11 +807,12 @@ class core extends db_connector
 	function get_objects_by_class($args = array())
 	{
 		extract($args);
-		$qualifier = ($parent) ? "AND parent = '$parent'" : "";
+		// kui parent on antud, siis moodustame sellest IN klausli
+		$pstr = ($parent) ? " AND parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
 		// see groyp by jaab mulle natuke segaks tekalt. oidid ju ei kordu eniveis, so what's the point?
 		$this->db_query("SELECT objects.*
 					FROM objects
-					WHERE class_id = $class AND status != 0 $qualifier
+					WHERE class_id = $class AND status != 0 $pstr
 					GROUP BY objects.oid");
 	}
 	
