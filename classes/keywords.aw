@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.23 2001/05/27 22:19:25 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.24 2001/05/28 00:39:28 cvs Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -188,6 +188,63 @@ class keywords extends aw_template {
 			$res = urldecode($gotourl);
 		}
 		return $res;
+	}
+	////
+	// !Handleb EBS stiilis huvideformist tulnud datat
+	function submit_interests2($args = array())
+	{
+		extract($args);
+		global $HTTP_REFERER;
+		if (!is_array($check))
+		{
+			return $HTTP_REFERER;
+		};
+		$inlist = join(",",map("'%d'",$check));
+		// niisiis on mul koigepealt vaja kindlaks teha millistest erinevatest kategooriatest votmesonu
+		// vormist tuli
+		$q = "SELECT * FROM keywords WHERE id IN ($inlist) GROUP BY category_id";
+		$this->db_query($q);
+		$catlist = array();
+		while($row = $this->db_next())
+		{
+			$catlist[$row["category_id"]] = $row["category_id"];
+		}
+		// Nyyd on vaja teada saada koikide kasutatud kategooriate nimed
+		$cat_inlist = join(",",map("'%d'",$catlist));
+		$q = "SELECT * FROM keywordcategories WHERE id IN($cat_inlist)";
+		$this->db_query($q);
+		$catnamelist = array();
+		while($row = $this->db_next())
+		{
+			$catnamelist[$row["id"]] = $row["name"];
+		};
+		// ja lopuks siis keywordide nimekiri
+		$q = "SELECT * FROM keywords WHERE id IN ($inlist) ORDER BY category_id,keyword";
+		$this->db_query($q);
+		$kw = array();
+		while($row = $this->db_next())
+		{
+			$kw[$row["category_id"]][] = $row["keyword"];
+		};
+
+		// ja nyyd koostame meili
+		$txt = "";
+		$txt .= "Nimi: $name\n";
+		$txt .= "Aadress: $email\n";
+		foreach($kw as $key => $val)
+		{
+			$txt .= "\n" . $catnamelist[$key] . "\n";
+			$txt .= str_repeat("-",strlen($catnamelist[$key])) . "\n";
+			foreach($val as $keyword)
+			{
+				$txt .= " - " . $keyword . "\n";
+			};
+		};
+		$from = sprintf("%s <%s>",$name,$email);
+		mail(KW_MAIL,KW_SUBJECT,$txt,"From: $from");
+		global $baseurl,$ext;
+		$retval = "$baseurl/index.$ext?section=$after";
+		return $retval;
 	}
 
 	////
@@ -532,6 +589,7 @@ class keywords extends aw_template {
 					"uid" => UID,
 					));
 		global $REQUEST_URI,$ext;
+		$udata = $this->_get_user_data();
 		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
 		$this->vars(array(
 				"name" => $name,
@@ -573,6 +631,70 @@ class keywords extends aw_template {
 				"reforb" => $this->mk_reforb("submit_interests",array("gotourl" => urlencode("/index.$ext?section=$section"))),
 			));
 		return $this->parse();
+	}
+
+	function show_categories($args = array())
+	{
+		extract($args);
+		$this->read_template("categories.tpl");
+		$q = "SELECT * FROM keywordcategories ORDER BY name";
+		$this->db_query($q);
+		$c = "";
+		while($row = $this->db_next())
+		{
+			$this->vars(array(
+					"id" => $row["id"],
+					"name" => $row["name"],	
+			));
+			$c .= $this->parse("line");
+		};
+		$this->vars(array("line" => $c,
+				  "reforb" => $this->mk_reforb("select_keywords",array("after" => $after))));
+		return $this->parse();
+	}
+
+	function select_keywords($args = array())
+	{
+		extract($args);
+		$this->read_template("pick_keywords.tpl");
+		print "after = $after<br>";
+		global $HTTP_REFERER;
+		$udata = $this->_get_user_data();
+		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
+		if (!is_array($category))
+		{
+			$retval = $HTTP_REFERER;
+		}
+		else
+		{
+			$c = "";
+			foreach($category as $key => $val)
+			{
+				$q = "SELECT * FROM keywordcategories WHERE id = '$val'";
+				$this->db_query($q);
+				$row = $this->db_next();
+				$this->vars(array("category" => $row["name"]));
+				$d = "";
+				$q = "SELECT * FROM keywords WHERE category_id = '$val' ORDER BY keyword";
+				$this->db_query($q);
+				while($row = $this->db_next())
+				{
+					$this->vars(array(
+							"keyword" => $row["keyword"],
+							"id" => $row["id"],
+					));
+					$d .= $this->parse("line.subline");
+				};
+				$this->vars(array("subline" => $d));
+				$c .= $this->parse("line");
+			}
+			$this->vars(array("line" => $c,
+					  "name" => $name,
+					  "reforb" => $this->mk_reforb("submit_interests2",array("after" => $after)),
+					  "email"=> $udata["Email"]));
+			$retval = $this->parse();
+		};
+		return $retval;
 	}
 };
 ?>
