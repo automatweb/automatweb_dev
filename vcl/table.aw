@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.69 2003/11/04 19:51:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.70 2003/12/03 15:05:49 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -9,6 +9,7 @@ class aw_table
 	// !contructor - paramaters:
 	// prefix - a symbolic name for the table so we could tell it apart from the others
 	// tbgcolor - default cell background color
+	var $scripts;
 	function aw_table($data = array())
 	{
 		if (file_exists(aw_ini_get("site_basedir")."/public/img/up.gif"))
@@ -29,7 +30,7 @@ class aw_table
 
 		$this->header_attribs = array();
 
-		// ridade v?rvid (och siis stiilid) muutuvad
+		// ridade värvid (och siis stiilid) muutuvad
 		// siin defineerime nad
 		$this->style1 = "#AAAAAA";
 		$this->style2 = "#CCCCCC";
@@ -42,7 +43,7 @@ class aw_table
 		$this->nfields = array();
 
 		// esimene kord andmeid sisestada?
-		// seda on vaja selleks, et m??rata default sort order.
+		// seda on vaja selleks, et määrata default sort order.
 		$this->first = true;
 		if (!empty($data["layout"]))
 		{
@@ -52,6 +53,33 @@ class aw_table
 		{
 			$this->parse_xml_def($data["xml_def"]);
 		};
+		$this->use_chooser = false;
+		$this->init_scripts();
+	}
+
+	function init_scripts()
+	{
+		$this->scripts = <<<EOT
+<script type="text/javascript">
+var chk_status = 1;
+
+function selall(element)
+{
+        element = element + '[';
+        len = document.changeform.elements.length;
+        for (i=0; i < len; i++)
+        {
+                if (document.changeform.elements[i].name.indexOf(element) != -1)
+                {
+                        document.changeform.elements[i].checked = chk_status;
+                        //window.status = "" + i + " / " + len;
+                }
+        }
+        chk_status = chk_status ? 0 : 1;
+}
+</script>
+EOT;
+
 	}
 
 	////
@@ -71,6 +99,7 @@ class aw_table
 
 	////
 	// !merge the given data with the last data entered
+	// XXX: does not seem to be used?
 	function merge_data($row)
 	{
 		$cnt = sizeof($this->data);
@@ -89,6 +118,14 @@ class aw_table
 	function define_action($row) 
 	{
 		$this->actions[] = $row;
+	}
+
+	////
+	// !Defines a chooser (a column of checkboxes
+	function define_chooser($arr)
+	{
+		$this->chooser_config = $arr;
+		$this->use_chooser = true;
 	}
 
 	////
@@ -479,6 +516,11 @@ class aw_table
 			}
 		}
 
+		if ($this->use_chooser)
+		{
+			$tbl .= $this->scripts;
+		}
+
 
 		// moodustame välimise raami alguse
 		if (is_array($this->frameattribs))
@@ -592,6 +634,18 @@ class aw_table
 				$tbl .= $this->closetag(array("name" => "td"));
 			};
 
+			if ($this->use_chooser)
+			{
+				$tbl .= $this->opentag(array(
+					"name" => "td",
+					"align" => "center",
+					"classid" => $this->header_normal,
+				));	
+				$name = $this->chooser_config["name"];
+				$tbl .= "<a href='javascript:selall(\"${name}\")'>X</a>";
+				$tbl .= $this->closetag(array("name" => "td"));
+			};
+
 			// header kinni
 			$tbl .= $this->closetag(array("name" => "tr"));
 		}
@@ -638,7 +692,7 @@ class aw_table
 				}
 				$tbl .= $tmp;
 
-				// ts?kkel ?le rowdefsi, et andmed oleksid oiges j?rjekorras
+				// tsükkel üle rowdefsi, et andmed oleksid oiges järjekorras
 				foreach($this->rowdefs as $k1 => $v1)
 				{
 					$rowspan = 1;
@@ -832,6 +886,12 @@ class aw_table
 					};
 
 					// rida lopeb
+
+					if ($this->use_chooser)
+					{
+						$name = $this->chooser_config["name"] . "[" . $v[$this->chooser_config["field"]] . "]";
+						$tbl .= "<td align='center'><input type='checkbox' name='$name' value=1></td>";
+					};
 					$tbl .= $this->closetag(array("name" => "tr"));
 				};
 			};
@@ -866,7 +926,7 @@ class aw_table
 		return strip_tags($new);
 	}
 
-	// tagastab csv andmed, kustuda v?lja draw asemel
+	// tagastab csv andmed, kustuda välja draw asemel
 	function get_csv_file()
 	{
 		$d=array();
