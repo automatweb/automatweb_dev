@@ -154,8 +154,9 @@ function awdelete()
 				&& name.indexOf("check") != -1
 				&& checked )
 			{
+				//ids[cnt] = value;
 				cnt++;
-				ids[cnt] = value;
+				ids[cnt] = cnt;
 			}
 		}
 	};
@@ -170,9 +171,8 @@ function awdelete()
 		{
 			dellink = dellink + ';' + dellinks[ids[i]];
 		};
-
 	}
-		
+	
 	if (cnt > 0)
 	{
 		if (confirm('Kustutada need ' + cnt + ' aliast?'))
