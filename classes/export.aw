@@ -1292,12 +1292,12 @@ class export extends aw_template
 			if (is_number($secid))
 			{
 				do {
-					$seco = $this->get_object($secid);
-					if ($seco["class_id"] != CL_PSEUDO)
+					$seco = new object($secid);
+					if ($seco->class_id() != CL_MENU)
 					{
-						$secid = $seco["parent"];
+						$secid = $seco->parent();
 					}
-				} while ($seco["class_id"] != CL_PSEUDO);
+				} while ($seco->class_id() != CL_MENU);
 
 				if ($this->loaded_rule["meta"]["menus"][$secid] == $secid)
 				{
