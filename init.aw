@@ -288,11 +288,6 @@ function lc_site_load($file,&$obj)
 //	enter_function("__global::lc_site_load",array());
 	$LC = aw_global_get("LC");
 	$fname = $GLOBALS["cfg"]["__default"]["site_basedir"]."/lang/".$LC."/$file.".$GLOBALS["cfg"]["__default"]["ext"];
-	global $DLC;
-	if ($DLC)
-	{
-		print "fn = $fname<br>";
-	};
 	@include_once($GLOBALS["cfg"]["__default"]["site_basedir"]."/lang/" . $LC . "/$file.".$GLOBALS["cfg"]["__default"]["ext"]);
 	if ($obj)
 	{
