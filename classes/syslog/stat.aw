@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.3 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.4 2004/10/24 18:53:39 kristo Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
 class db_stat extends aw_template
@@ -554,7 +554,7 @@ class stat extends db_stat
 	{
 		extract($arr);
 		global $gdata;
-		$awg = get_instance("aw_graph");
+		$awg = get_instance("syslog/aw_graph");
 		$awg->parse_xml_def("graph.xml");
 		$awg->import_data($gdata[$id]);
 		$awg->draw_graph();
@@ -623,7 +623,7 @@ class stat extends db_stat
 	{
 		extract($arr);
 		global $gd,$color;
-		$awg = get_instance("aw_graph");
+		$awg = get_instance("syslog/aw_graph");
 		$awg->parse_xml_def("cgraph.xml");
 		$awg->import_multi($gd);
 		$awg->import_color($color);
