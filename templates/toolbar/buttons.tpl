@@ -14,7 +14,18 @@
 <!-- END SUB: button -->
 
 <!-- SUB: menu_button -->
-	<td nowrap class="aw04toolbarbutton" valign="center" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+	<td nowrap class="aw04toolbarbutton" valign="center" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
+		<table cellpadding=0 cellspacing=0>
+			<tr>
+				<td>
+				<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"></a>
+				</td>
+				<td valign='bottom'>
+					<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+				</a>
+			</tr>
+		</table>
+	</td>
 <!-- END SUB: menu_button -->
 
 <!-- SUB: text_button -->
