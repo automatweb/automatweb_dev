@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.316 2005/02/03 11:43:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.317 2005/02/16 19:21:11 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -393,11 +393,14 @@ class document extends aw_template
 		//$doc["content"] = "<style>.styl1 {color: green; font-family: Verdana; font-weight: bold;} .styl2 {color: blue; font-size: 20px;} .styl3 {color: red; border: 1px solid blue;}</style>" . $doc["content"];
 		$params["vars"] = $doc["vars"];
 		$tpl = $doc["tpl"];
+
+		$trimmed_lead = trim($doc["lead"]);
 		
-		if (trim($doc["lead"]) == "<br>")
+		if ($trimmed_lead == "<br>" || empty($trimmed_lead))
 		{
 			$doc["lead"] = "";
 		}
+
 
 		//$meta = $doc["meta"];
 		if ($meta["show_last_changed"])
@@ -1246,7 +1249,7 @@ class document extends aw_template
 		}
 
 		$_date = $doc["doc_modified"] > 1 ? $doc["doc_modified"] : $doc["modified"];
-		$date_est = date("j", $_date).". ".get_lc_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est = date("j", $_date).". ".locale::get_lc_month(date("m", $_date))." ".date("Y", $_date);
 		$date_est_n = "";
 		if (trim($orig_doc_tm) != "")
 		{
