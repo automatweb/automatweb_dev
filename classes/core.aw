@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.206 2003/07/01 10:24:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.207 2003/07/10 12:22:08 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -842,17 +842,23 @@ class core extends db_connector
 
 	////
 	// !returns array of aliases pointing to object $oid
-	function get_aliases_of($oid) 
+	function get_aliases_of($args = array()) 
 	{
+		extract($args);
+		$rl = "";
+		if (!empty($reltype))
+		{
+			$rl = " AND reltype = $reltype ";
+		};
 		$q = "SELECT *,objects.name as name,objects.parent as parent FROM aliases
 			LEFT JOIN objects ON
 			(aliases.source = objects.oid)
-			WHERE target = '$oid' ORDER BY id";
+			WHERE target = '$oid' $rl ORDER BY id";
 		$this->db_query($q);
 		$aliases = array();
 		while($row = $this->db_next())
 		{
-			$aliases[]=array(
+			$aliases[$row["source"]]=array(
 				"type" => $row["type"],
 				"name" => $row["name"], 
 				"data" => $row["data"],
@@ -2332,6 +2338,20 @@ class core extends db_connector
 		{
 			$this->clid = $args["clid"];
 		}
+		if (is_array($args) && isset($args["trid"]))
+		{
+			$this->trid = $args["trid"];
+			if (!is_object($this->tr))
+			{
+				$this->tr = get_instance("translation");
+			}
+			$this->tr->load_catalog($this->trid);
+		}
+	}
+
+	function tr($arg)
+	{
+		return $this->tr->get($this->trid,$arg);
 	}
 
 	////
