@@ -812,7 +812,7 @@ class _int_object
 		$this->obj["meta"][$key] = $value;
 
 		// if any property is defined for metadata, we gots to sync from object to property
-		if (is_array($GLOBALS["properties"][$this->obj["class_id"]][$key]) && $GLOBALS["properties"][$this->obj["class_id"]]["field"] == "meta" && $GLOBALS["properties"][$this->obj["class_id"]][$key]["table"] == "objects")
+		if (is_array($GLOBALS["properties"][$this->obj["class_id"]][$key]) && $GLOBALS["properties"][$this->obj["class_id"]][$key]["field"] == "meta" && $GLOBALS["properties"][$this->obj["class_id"]][$key]["table"] == "objects")
 		{
 			$this->obj["properties"][$key] = $value;
 		}
