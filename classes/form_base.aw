@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.36 2002/07/24 20:47:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.37 2002/08/06 11:12:52 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -149,9 +149,13 @@ class form_base extends form_db_base
 					$this->arr["contents"][$row][$col]->get_els(&$ret);
 					foreach($ret as $el)
 					{
-						$el_tbls["els"][$el->get_id()]["table"] = $el->get_save_table();
-						$el_tbls["els"][$el->get_id()]["col"] = $el->get_save_col();
-						$el_tbls["els"][$el->get_id()]["col2"] = $el->get_save_col2();
+						// check if the element can be seen..
+						if (($arr = $this->get_spans($row, $col)))
+						{
+							$el_tbls["els"][$el->get_id()]["table"] = $el->get_save_table();
+							$el_tbls["els"][$el->get_id()]["col"] = $el->get_save_col();
+							$el_tbls["els"][$el->get_id()]["col2"] = $el->get_save_col2();
+						}
 
 						if ($this->arr["has_controllers"])
 						{
