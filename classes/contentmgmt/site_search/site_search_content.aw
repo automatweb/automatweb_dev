@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.3 2003/10/14 10:21:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.4 2003/11/17 14:15:45 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -329,13 +329,13 @@ class site_search_content extends class_base
 		$lut = array();
 		foreach($orig as $i)
 		{
-			$lut[$i["title"]] = 1;
+			$lut[strtolower(trim(strip_tags($i["title"])))] = 1;
 		}
 
 		$ret = $orig;
 		foreach($add as $item)
 		{
-			if (!isset($lut[$item["title"]]))
+			if (!isset($lut[strtolower(trim(strip_tags($item["title"])))]))
 			{
 				$ret[] = $item;
 			}
