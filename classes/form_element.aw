@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.71 2002/09/04 17:43:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.72 2002/09/05 07:30:40 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -2166,14 +2166,17 @@ class form_element extends aw_template
 					$orb = !($this->arr["clink_no_orb"]);
 					if ($cal_id)
 					{
-						// somehow I must be able to configure the appearance of this link (aw or not aw, orb or not orb)
 						$_link = $this->mk_my_orb("view",array("id" => $cal_id,"ctrl" => $ctrl),"planner",0,$orb);
 					}
 					else
 					{
 						$_link = "#";
 					};
-					$html .= "<a target='_blank' href='$_link'>$_text</a>";
+					if ($ctrl)
+					{
+						$html .= "<a target='_blank' href='$_link'>$_text</a>";
+					};
+
 				}
 				else
 				if ($this->arr["subtype"] != "show_op")
