@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.64 2003/01/26 23:25:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.65 2003/02/06 11:23:30 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -699,13 +699,17 @@ topic");
 		if ($no_comments)
 		{
 			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"threadedsubjects");
-			$this->read_template("subjects_threaded.tpl");
+			$tpl = "subjects_threaded.tpl";
 		}
 		else
 		{
 			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search"),"threadedcomments");
-			$this->read_template("messages_threaded.tpl");
+			$tpl = "messages_threaded.tpl";
 		};
+
+		$tpl = ($args["template"]) ? $args["template"] : $tpl;
+
+		$this->read_template($tpl);
 
 		$content = "";
 		$this->comm_count = 0;
