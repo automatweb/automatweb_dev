@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.15 2002/12/17 16:57:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.16 2002/12/17 18:00:28 axel Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -78,6 +78,20 @@ class html extends aw_template
 	}
 
 	////
+	// !html iframe
+	// name(string)
+	// width(string)
+	// height(integer)
+	// src(string)  - url
+	function iframe($args = array())
+	{
+		extract($args);
+		$width = ($width) ? $width : 300;
+		$height = ($height) ? $height : 200;
+		return "<iframe src='$src' name='$name' width='$width' height='$height'></iframe>\n";
+	}
+
+	////
 	// !html password input
 	// name(string)
 	// value(string)
@@ -113,7 +127,7 @@ class html extends aw_template
 		extract($args);
 		return "$value <input type='file' id='$name' name='$name'>\n";
 	}
-	
+
 	////
 	// !Checkbox
 	// name(string)
@@ -176,7 +190,7 @@ class html extends aw_template
 		$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$m,$d,$y);
 		return $selector->gen_edit_form($args["name"], $val);
 	}
-	
+
 	////
 	// !Date selector
 	function date_select($args = array())
