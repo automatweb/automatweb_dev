@@ -32,7 +32,7 @@
 												<br>
 												keeled:<input type=text NAME='riik[languages]' value='{VAR:languages}' size=25>
 												<br>
-												aukoht: <input type=text NAME='riik[location]' value='{VAR:location}' size=25>
+												asukoht: <input type=text NAME='riik[location]' value='{VAR:location}' size=25>
 												<br>
 												lühend: <input type=text NAME='riik[lyhend]' value='{VAR:lyhend}' size=5>
 												<br>

@@ -11,14 +11,17 @@
 			</function>
 		</action>
 
-		<action name="show">
-			<function name="show">
+		<action name="change">
+			<function name="change">
 				<arguments>
+					<optional name="delsub"/>
+					<optional name="parent"/>
+					<optional name="alias_to"/>
 					<optional name="id"/>
+					<optional name="return_url"/>
 				</arguments>
 			</function>
 		</action>
-
 		<action name="submit">
 			<function name="submit">
 				<arguments>
@@ -30,21 +33,11 @@
 			</function>
 		</action>
 
-		<action name="change">
-			<function name="change">
-				<arguments>
-					<optional name="parent"/>
-					<optional name="id"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="pop_select">
 			<function name="pop_select">
 				<arguments>
 					<required name="tyyp"/>
-					<required name="id"/>
+					<optional name="id"/>
 					<optional name="default"/>
 				</arguments>
 			</function>

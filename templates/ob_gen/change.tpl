@@ -61,7 +61,7 @@
 										</tr>
 										<tr>
 											<td class="celltext">
-												kasutatakse AW objektitabelit
+												kasutatakse AW sektitabelit
 											</td>
 											<td class="celltext">
 											<input type="checkbox" name="use_object" {VAR:use_object}>
@@ -71,7 +71,7 @@
 										<tr>
 											<td class="celltext">tehakse selle klassi objektid</td>
 											<td class="celltext">
-											<select name="create_object"  class="formselect">
+											<select name="class_id"  class="formselect">
 											{VAR:list_classes}
 											</select>
 											</td>

@@ -56,10 +56,10 @@ function pop_select(url)
 											<table border=0 class=celltext>
 											<tr>
 												<td width=25%>
-												name: <input class=formtext type=text NAME='contact[name]' value='{VAR:f_name}'>
+												kontakti nimetus: 
 												</td>
-											
 												<td>
+											<input class=formtext type=text NAME='contact[name]' value='{VAR:f_name}'>
 
 												tüüp: <select class=formselect NAME='contact[tyyp]'>{VAR:f_tyyp}</select>
 												</td>
@@ -124,7 +124,7 @@ function pop_select(url)
 												</td>
 											</tr>
 											</table>
-												kommentaarid: <textarea name="comment" rows=3 cols=40  class="formtext">{VAR:comment}</textarea>
+												kommentaarid:<br /> <textarea name="comment" rows=3 cols=40  class="formtext">{VAR:comment}</textarea>
 
 											</fieldset>
 											</td>

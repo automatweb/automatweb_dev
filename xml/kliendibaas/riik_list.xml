@@ -20,15 +20,6 @@
 </actions>
 
 <data>
-<field name="id" caption="id" align="center" talign="center" sortable="1" width="10" chgbgcolor="cutcopied"/>
-<field name="oid" caption="object" width="20" align="left" talign="center" sortable="1" chgbgcolor="cutcopied"/>
-<field name="name" caption="nimi" width="50" align="left" talign="center" sortable="1" chgbgcolor="cutcopied"/>
-<field name="name_native" caption="nimi (kohalik keel)" width="50" align="left" talign="center" sortable="1" chgbgcolor="cutcopied"/>
-<field name="name_en" caption="nimi (en)" width="50" align="left" talign="center" sortable="1" chgbgcolor="cutcopied"/>
-<field name="languages" caption="keled" align="center" width="15" talign="center" sortable="1" chgbgcolor="cutcopied"/>
-<field name="location" caption="asukoht" width="20" talign="center" align="center" sortable="1" chgbgcolor="cutcopied"/>
-<field name="lyhend" caption="lühend " width="10" align="center" talign="center" sortable="1" chgbgcolor="cutcopied"/>
-
 </data>
 
 </tabledef>

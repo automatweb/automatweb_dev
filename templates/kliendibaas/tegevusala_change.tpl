@@ -21,13 +21,13 @@
 										</tr>
 									</table>
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
-										<tr>
+<!--										<tr>
 											<td class="celltext" width=30%>tegevusala nimi</td>
 											<td class="celltext">
 												<input type='text' NAME='name' VALUE='{VAR:name}' class="formtext">
 											</td>
 										</tr>
-
+-->
 										<tr>
 											<td class="celltext" width=30%>kood: </td><td class="celltext">
 												<input type='text' NAME='kood' VALUE='{VAR:kood}' class="formtext">
@@ -51,13 +51,13 @@
 											<textarea name="kirjeldus" rows=3 cols=40  class="formtext">{VAR:kirjeldus}</textarea>
 											</td>
 										</tr>
-										<tr>
+	<!--									<tr>
 											<td class="celltext" width=30%>source: </td><td class="celltext">
 											{VAR:sourcefile}
 											</td>
 										</tr>
-
-
+-->
+<!--
 										<tr>
 											<td class="celltext" width=30%>vali kataloogid kus näidatakse......
 											</td>
@@ -67,7 +67,7 @@
 											</select>
 											</td>
 										</tr>
-
+-->
 									</table>
 								</td>
 							</tr>
