@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.87 2004/04/04 22:05:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.88 2004/04/06 15:17:02 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -304,8 +304,8 @@ class image extends class_base
 			}	
 		}
 		$retval = array(
-				"replacement" => $replacement,
-				"inplace" => $inplace,
+				"replacement" => trim($replacement),
+				"inplace" => trim($inplace),
 		);
 		return str_replace("\n", "", $retval);
 	}
