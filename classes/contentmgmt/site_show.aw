@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.115 2005/02/18 14:04:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.116 2005/02/23 07:26:57 kristo Exp $
 
 /*
 
@@ -2323,7 +2323,7 @@ class site_show extends class_base
 		$rv = $this->parse();
 
 
-		//$rv .= $this->build_popups();
+		$rv .= $this->build_popups();
 		return $rv;
 	}
 	
