@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.346 2004/12/27 11:34:34 kristo Exp $
+// $Id: class_base.aw,v 2.347 2004/12/27 13:32:44 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -645,9 +645,9 @@ class class_base extends aw_template
 		};
 
 		if ($args["no_rte"])
-                {
-                        $argblock["no_rte"] = 1;
-                };
+		{
+			$argblock["no_rte"] = 1;
+		};
 
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
@@ -783,9 +783,8 @@ class class_base extends aw_template
 
 		if ($form_data["no_rte"] == 1)
 		{
-                        $args["no_rte"] = 1;
-                };
-
+			$args["no_rte"] = 1;
+		};
 
 		if (!$save_ok)
 		{
@@ -2011,10 +2010,10 @@ class class_base extends aw_template
 			
 
 			// eventually all VCL components will have to implement their
-                        // own init_vcl_property method
-                        if ($this->vcl_register[$val["type"]] && empty($val["_parsed"]) && !is_object($val["vcl_inst"]) && empty($this->vcl_delayed_init[$val["type"]]))
-                        {
-                                $reginst = $this->vcl_register[$val["type"]];
+			// own init_vcl_property method
+			if ($this->vcl_register[$val["type"]] && empty($val["_parsed"]) && !is_object($val["vcl_inst"]) && empty($this->vcl_delayed_init[$val["type"]]))
+			{
+				$reginst = $this->vcl_register[$val["type"]];
 				if ($val["type"] == "table")
 				{
 					classload("vcl/table");
@@ -2022,39 +2021,34 @@ class class_base extends aw_template
 				}
 				else
 				{
-                                	$ot = get_instance($reginst);
+					$ot = get_instance($reginst);
 				};
-                                if (is_callable(array($ot,"init_vcl_property")))
-                                {
-                                        $res = $ot->init_vcl_property(array(
+				if (is_callable(array($ot,"init_vcl_property")))
+				{
+					$res = $ot->init_vcl_property(array(
 						"prop" => &$val,
 						// this is deprecated
 						"new" => $this->new,
 						"request" => $this->request,
-                                                "property" => &$val,
+						"property" => &$val,
 						"id" => $this->id,
-                                                "clid" => $this->clid,
-                                                "obj_inst" => &$this->obj_inst,
+						"clid" => $this->clid,
+						"obj_inst" => &$this->obj_inst,
 						"columns" => $this->columninfo,
 						"relinfo" => $this->relinfo,
 						"view" => $this->view,
-                                        ));
-
-
-
-                                        if (is_array($res))
-                                        {
-                                                foreach($res as $rkey => $rval)
-                                                {
-                                                        $this->convert_element(&$rval);
-                                                        $resprops[$rkey] = $rval;
-                                                };
-                                        };
-
-
-                                };
-
-                        }
+					));
+					
+					if (is_array($res))
+					{
+						foreach($res as $rkey => $rval)
+						{
+							$this->convert_element(&$rval);
+							$resprops[$rkey] = $rval;
+						};
+					};
+				};
+			}
 			elseif ($val["type"] == "form")
 			{
 				// I need a list of those bloody properties, eh?
@@ -2131,9 +2125,9 @@ class class_base extends aw_template
 
 
 		if ($this->no_rte)
-                {
-                        $has_rte = false;
-                };
+		{
+			$has_rte = false;
+		};
 		
 
 
@@ -2169,11 +2163,11 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-
-                        if ($val["type"] == "textarea" && $has_rte == false)
-                        {
-                                unset($val["richtext"]);
-                        };
+			
+			if ($val["type"] == "textarea" && $has_rte == false)
+			{
+				unset($val["richtext"]);
+			};
 
 				
 			if (isset($val["emb"]) && $val["emb"] == 1)
@@ -2780,8 +2774,8 @@ class class_base extends aw_template
 		$this->id = $args["oid"];
 
 		$realprops = $this->get_active_properties(array(
-				"clfile" => $this->clfile,
-				"all" => true,
+			"clfile" => $this->clfile,
+			"all" => true,
 		));
 
 		$this->obj_inst = new object($this->id);
@@ -2862,7 +2856,7 @@ class class_base extends aw_template
 			return false;
 		}
 		$obj = &obj($config_id);
-		return $obj->meta("controllers");		
+		return $obj->meta("controllers");
 	}
 
 	function get_all_view_controllers($config_id)
@@ -2880,7 +2874,7 @@ class class_base extends aw_template
 	// and returns something eatable
 
 	function validate_data($arr)
-	{	
+	{
 		//arr($arr);
 		if (empty($arr["props"]))
 		{
@@ -2897,7 +2891,7 @@ class class_base extends aw_template
 		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
-			$controllers = $this->get_all_controllers($arr["cfgform_id"]);	
+			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
 			$cf = get_instance("cfg/cfgform");
 			$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
 		};
@@ -3183,11 +3177,10 @@ class class_base extends aw_template
 		{
 			$name = $property["name"];
 			$type = $property["type"];
-
-                        $argblock = array(
-                                "prop" => &$property,
+			$argblock = array(
+				"prop" => &$property,
 				"request" => &$rawdata,
-                                "new" => $new,
+				"new" => $new,
 				"obj_inst" => &$this->obj_inst,
 				"relinfo" => $this->relinfo,
 			);
@@ -3302,14 +3295,14 @@ class class_base extends aw_template
 			// call process_vcl_property if set_property returns false
 
 			if ($this->vcl_register[$property["type"]])
-                        {
-                                $reginst = $this->vcl_register[$property["type"]];
-                                $ot = get_instance($reginst);
-                                if (is_callable(array($ot,"process_vcl_property")))
-                                {
-                                        $argblock["prop"] = $property;
-                                        $argblock["clid"] = $this->clid;
-                                        $res = $ot->process_vcl_property($argblock);
+			{
+				$reginst = $this->vcl_register[$property["type"]];
+				$ot = get_instance($reginst);
+				if (is_callable(array($ot,"process_vcl_property")))
+				{
+					$argblock["prop"] = $property;
+					$argblock["clid"] = $this->clid;
+					$res = $ot->process_vcl_property($argblock);
 			
 					if (PROP_ERROR == $res)
 					{
@@ -3318,8 +3311,8 @@ class class_base extends aw_template
 						$this->cb_values = $propvalues;
 						return false;
 					};
-                                };
-                        };
+				};
+			};
 
 			if ($property["store"] == "no")
 			{
