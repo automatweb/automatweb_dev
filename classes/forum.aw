@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.49 2002/08/22 21:51:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.50 2002/08/28 09:35:06 kristo Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -394,16 +394,16 @@ class forum extends aw_template
 		$captions = array(
 			"newtopic" => "Uus teema",
 			"addcomment" => "Uus küsimus",
-			"flat" => "Teemade nimekiri",
+			"flat" => "Teemad",
 			"configure" => "Konfigureeri",
 			"archive" => "Arhiiv",
-			"threadedsubjects" => "Ainult pealkirjad",
+			"threadedsubjects" => "Pealkirjad",
 			"mark_all_read" => "Kõik loetuks",
 			"search" => "Otsi",
 			//"no_response" => "Vastamata küsimused",
 			"details" => "Foorum",
 			"flatcomments" => "Aja järgi",
-			//"threadedcomments" => "Küsimused ja vastused",
+			"threadedcomments" => "Kommentaarid",
 		);
 
 		$retval .= "";
@@ -421,7 +421,6 @@ class forum extends aw_template
 					$this->vars(array(
 						"link" => $tabs[$val],
 						"caption" => $captions[$val],
-
 					));
 					$tpl = ($active == $val) ? "active_tab" : "tab";
 					$retval .= $this->parse($tpl);
@@ -783,7 +782,7 @@ topic");
 		}
 		else
 		{
-			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"threadedcomments");
+			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search"),"threadedcomments");
 			$this->read_template("messages_threaded.tpl");
 		};
 
@@ -813,6 +812,11 @@ topic");
 				$this->mark_comments = 1;
 				$this->content .= $this->display_comment($crow);
 			};
+			if (!$no_comments)
+			{
+				// if we are showing the threaded version with comments, then we oughta mark them read as well, souldn't we
+				$this->mark_comments = true;
+			}
 			$this->rec_comments($start_from);
 		};
 		$this->mk_links(array(
@@ -851,8 +855,15 @@ topic");
 		if ($cid)
 		{
 			$add_params = array("parent" => $cid,"subj" => $crow["subj"]);
-			setcookie("aw_mb_read",serialize($this->aw_mb_read),time()+24*3600*1000);
 		};
+		if (!$no_comments)
+		{
+			setcookie("aw_mb_read",serialize($this->aw_mb_read),time()+24*3600*1000,"/");
+		}
+
+		$aw_mb_last = unserialize(stripslashes($HTTP_COOKIE_VARS["aw_mb_last"]));
+		$aw_mb_last[$board] = time();
+		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000,"/");
 
 		return $this->parse() . $this->add_comment(array_merge(array("board" => $board,"parent" => $parent,"section" => $this->section,"act" => "show_threaded"),$add_params));
 	}
@@ -863,10 +874,35 @@ topic");
 		extract($args);
 		if (is_array($check))
 		{
-			$to_delete = join(",",$check);
-			$this->db_query("DELETE FROM comments WHERE id IN ($to_delete)");
+			// unfortunately, it's not so simple. 
+			// we gotta delete the comments below the to-be-deleted ones as well, so that 
+			// we can do the comment count quickly later
+			foreach($check as $delid)
+			{
+				$this->req_del_comments($delid);
+			}
+//			$to_delete = join(",",$check);
+//			$this->db_query("DELETE FROM comments WHERE id IN ($to_delete)");
 		};
 		return $this->mk_my_orb($act,array("board" => $board,"_alias" => "forum", "section" => $this->section));
+	}
+
+	function req_del_comments($parent)
+	{
+		if (!$parent)
+		{
+			return;
+		}
+
+		$this->save_handle();
+		$this->db_query("SELECT id FROM comments WHERE parent = '$parent'");
+		while ($row = $this->db_next())
+		{
+			$this->req_del_comments($row["id"]);
+		}
+
+		$this->db_query("DELETE FROM comments WHERE id = $parent");
+		$this->restore_handle();
 	}
 
 	function _draw_ratings($args = array(),$board_meta = array())
@@ -1146,7 +1182,15 @@ topic");
 			"key" => "notifylist",
 		));
 
-		if ( (strlen($name) > 3) && (strlen($comment) > 1) )
+		if ($parent)
+		{
+			$q = "SELECT * FROM comments WHERE id = '$parent'";
+			$this->db_query($q);
+			$row = $this->db_next();
+			$board = $row["board_id"];
+		};
+
+		if ( (strlen($name) > 2) && (strlen($comment) > 1) )
 		{
 			if (is_array($mx))
 			{
@@ -1162,13 +1206,6 @@ topic");
 			$email = strip_tags($email);
 			$comment = strip_tags($comment);
 			$subj = strip_tags($subj);
-			if ($parent)
-			{
-				$q = "SELECT * FROM comments WHERE id = '$parent'";
-				$this->db_query($q);
-				$row = $this->db_next();
-				$board = $row["board_id"];
-			};
 			$parent = (int)$parent;
 			$site_id = $this->cfg["site_id"];
 			$ip = aw_global_get("REMOTE_ADDR");
@@ -1234,13 +1271,13 @@ topic");
 		$this->from = $from;
 		$this->archive = $archive;
 		if ($archive)
-                {
-                        $act_tab = "archive";
-                }
-                else
-                {
-                        $act_tab = "flat";
-                };
+		{
+			$act_tab = "archive";
+		}
+		else
+		{
+			$act_tab = "flat";
+		};
 
 		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),$act_tab);
 		$this->topicsonpage = ($o["meta"]["topicsonpage"]) ? $o["meta"]["topicsonpage"] : 5;
@@ -1250,7 +1287,7 @@ topic");
 
 		global $HTTP_COOKIE_VARS;
 		$aw_mb_last = unserialize(stripslashes($HTTP_COOKIE_VARS["aw_mb_last"]));
-		$this->last_read = $aw_mb_last[$id];
+		$this->last_read = $aw_mb_last;
 		$this->now = time();
 
 		$this->use_orb_for_links = 1;
@@ -1299,7 +1336,7 @@ topic");
 		
 		global $HTTP_COOKIE_VARS;
 		$aw_mb_last = unserialize(stripslashes($HTTP_COOKIE_VARS["aw_mb_last"]));
-		$this->last_read = $aw_mb_last[$id];
+		$this->last_read = $aw_mb_last;
 
 		$this->cid = $args["cid"];
 		$content = $this->_draw_all_topics(array(
@@ -1327,8 +1364,13 @@ topic");
 		extract($args);
 		if (is_array($check))
 		{
+			$stat = 1;
+			if ($act == "delete")
+			{
+				$stat = 0;
+			}
 			$to_delete = join(",",$check);
-			$q = "UPDATE objects SET status = 1 WHERE oid IN ($to_delete)";
+			$q = "UPDATE objects SET status = $stat WHERE oid IN ($to_delete)";
 			$this->db_query($q);
 		};
 		return $this->mk_my_orb("topics",array("id" => $id,"section" => $section,"_alias" => "forum","section" => $section));
@@ -1608,10 +1650,10 @@ topic");
 		if ($DBUG)
 		{
 			print "<pre>";
-			print "ca = " . $this->last_read . "<br>";
+			print "ca = " . $this->last_read[$args["oid"]] . "<br>";
 			print "</pre>";
 		}
-		$mark = ($check_against > $this->last_read) ? $this->parse("NEW_MSGS") : "";
+		$mark = ($check_against > $this->last_read[$args["oid"]]) ? $this->parse("NEW_MSGS") : "";
 
 		$this->vars(array(
 			"del_topic" => $this->mk_my_orb("delete_topic", array("board" => $args["oid"],"forum_id" => $args["parent"])),
