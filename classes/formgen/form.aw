@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.26 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.27 2003/01/23 10:35:50 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -4872,7 +4872,7 @@ class form extends form_base
 				$this->vars(array(
 					"table_name" => $tbl,
 					"usr_table_name" => $this->get_fg_tblname($tbl),
-					"cols" => $this->picker($tbcol,$fields),
+					"cols" => $this->picker(trim($tbcol),$fields),
 					"rel_tbls" => $this->multiple_option_list($this->arr["save_tables_rels"][$tbl],$_tables)
 				));
 
