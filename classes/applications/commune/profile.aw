@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.5 2004/10/11 12:59:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.6 2004/11/01 14:58:00 ahti Exp $
 // profile.aw - Profiil 
 /*
 
@@ -10,9 +10,6 @@
 @default table=objects
 
 ------------------------- general -----------------------------------
-
-@property cfgmanager type=relpicker reltype=RELTYPE_CFG_MANAGER method=serialize field=meta
-@caption Seadete haldur
 
 @property avatar_image type=relpicker reltype=RELTYPE_AVATAR method=serialize field=meta
 @caption Avatar
@@ -64,45 +61,36 @@ explain aw_profiles;
 
 ------------------------- üldandmed -----------------------------------
 
-//@groupinfo settings_yldandmed caption="Üldandmed" parent=settings
+//@groupinfo settings_general caption="Üldandmed" parent=settings
+//@default group=settings_general
 
-//@property online type=text store=no group=settings_yldandmed
 @property online type=text store=no group=settings
 @caption Online
 
-//@property age type=text store=no group=settings_yldandmed
 @property age type=text store=no group=settings
 @caption Vanus
 
-//@property user_field1 type=date_select year_from=1918 year_to=2004 default=-1 group=settings_yldandmed
 @property user_field1 type=date_select year_from=1918 year_to=2004 default=-1 group=settings
 @caption Sünniaeg
 
-//@property user_check1 type=checkbox value=1 ch_value=1 group=settings_yldandmed
 @property user_check1 type=checkbox value=1 ch_value=1 group=settings
 @caption E-post varjatud
 
-//@property user_check2 type=checkbox value=1 ch_value=1 group=settings_yldandmed
 @property user_check2 type=checkbox value=1 ch_value=1 group=settings
 @caption Kinnine postkast
 
-//@property user_text1 type=textbox group=settings_yldandmed
 @property user_text1 type=textbox group=settings
 @caption Telefon
 
-//@property user_text2 type=textbox group=settings_yldandmed
 @property user_text2 type=textbox group=settings
 @caption ICQ
 
-//@property user_text3 type=textbox group=settings_yldandmed
 @property user_text3 type=textbox group=settings
 @caption MSN
 
-//@property user_blob1 type=textbox group=settings_yldandmed
 @property user_blob1 type=textbox group=settings
 @caption Lisainfo
 
-//@property user_blob2 type=textbox group=settings_yldandmed
 @property user_blob2 type=textbox group=settings
 @caption Lisainfo sõpradele
 
@@ -110,29 +98,24 @@ explain aw_profiles;
 
 ------------------------- välimus -----------------------------------
 
-//@groupinfo settings_valimus caption="Välimus" parent=settings
+//@groupinfo settings_outlook caption="Välimus" parent=settings
+//@default group=settings_outlook
 
-//@property height type=classificator reltype=RELTYPE_PRF_HEIGHT orient=vertical group=settings_valimus
 @property height type=classificator reltype=RELTYPE_PRF_HEIGHT orient=vertical group=settings
 @caption Kasv
 
-//@property weight type=classificator reltype=RELTYPE_PRF_WEIGHT orient=vertical group=settings_valimus
 @property weight type=classificator reltype=RELTYPE_PRF_WEIGHT orient=vertical group=settings
 @caption Kaal
 
-//@property eyes_color type=classificator reltype=RELTYPE_PRF_EYES_COLOR orient=vertical group=settings_valimus
 @property eyes_color type=classificator reltype=RELTYPE_PRF_EYES_COLOR orient=vertical group=settings
 @caption Silmade värv
 
-//@property hair_color type=classificator reltype=RELTYPE_PRF_HAIR_COLOR orient=vertical group=settings_valimus
 @property hair_color type=classificator reltype=RELTYPE_PRF_HAIR_COLOR orient=vertical group=settings
 @caption Juuksevärv
 
-//@property hair_type type=classificator reltype=RELTYPE_PRF_HAIR_TYPE orient=vertical group=settings_valimus
 @property hair_type type=classificator reltype=RELTYPE_PRF_HAIR_TYPE orient=vertical group=settings
 @caption Juuste tüüp
 
-//@property body_type type=classificator reltype=RELTYPE_PRF_BODY_TYPE orient=vertical group=settings_valimus
 @property body_type type=classificator reltype=RELTYPE_PRF_BODY_TYPE orient=vertical group=settings
 @caption Keha tüüp
 
@@ -140,9 +123,9 @@ explain aw_profiles;
 
 ------------------------- harrastused -----------------------------------
 
-//@groupinfo settings_harrastused caption="Harrastused" parent=settings
+//@groupinfo settings_hobbies caption="Harrastused" parent=settings
+//@default group=settings_hobbies
 
-//@property user_text5 type=textbox group=settings_harrastused
 @property user_text5 type=textbox group=settings
 @caption Koduleht
 
@@ -150,18 +133,15 @@ explain aw_profiles;
 
 ------------------------- harjumused -----------------------------------
 
-//@groupinfo settings_harjumused caption="Harjumused" parent=settings
+//@groupinfo settings_habits caption="Harjumused" parent=settings
+//@default group=settings_habits
 
-
-//@property sexual_orientation type=classificator reltype=RELTYPE_PRF_SEX_ORIENT orient=vertical group=settings_harjumused
 @property sexual_orientation type=classificator reltype=RELTYPE_PRF_SEX_ORIENT orient=vertical group=settings
 @caption Seksuaalne orientatsioon
 
-//@property alcohol type=classificator reltype=RELTYPE_PRF_ALCOHOL orient=vertical group=settings_harjumused 
 @property alcohol type=classificator reltype=RELTYPE_PRF_ALCOHOL orient=vertical group=settings
 @caption Alkoholi tarbimine
 
-//@property tobacco type=classificator reltype=RELTYPE_PRF_TOBACCO orient=vertical group=settings_harjumused
 @property tobacco type=classificator reltype=RELTYPE_PRF_TOBACCO orient=vertical group=settings
 @caption Tubaka tarbimine
 
@@ -169,17 +149,15 @@ explain aw_profiles;
 
 ------------------------- kool_too -----------------------------------
 
-//@groupinfo settings_kool_too caption="Kool/Töö" parent=settings
+//@groupinfo settings_occupation caption="Kool/Töö" parent=settings
+//@default group=settings_occupation
 
-//@property user_field2 type=classificator group=settings_kool_too
-@property user_field2 type=classificator group=settings
+@property user_field2 type=classificator group=settings orient=vertical 
 @caption Haridustase
 
-//@property occupation type=classificator table=objects field=meta method=serialize group=settings_kool_too
 @property occupation type=classificator table=objects field=meta method=serialize group=settings
 @caption Tegevusala
 
-//@property user_text4 type=textbox group=settings_kool_too
 @property user_text4 type=textbox group=settings
 @caption Elukutse
 
@@ -236,24 +214,24 @@ explain aw_profiles;
 @reltype IMAGE value=12 clid=CL_IMAGE
 @caption Pilt
 
-@reltype AVATAR value=20 clid=CL_IMAGE
+@reltype AVATAR value=26 clid=CL_IMAGE
 @caption Avatar
 
 ----------------------
 
 @reltype CFG_MANAGER value=15 clid=CL_CFGMANAGER
-@caption seadete haldur
+@caption Seadete haldur
 
 ----------------------
 
 @reltype FRIEND value=20 clid=CL_PROFILE
-@caption sõber
+@caption Sõber
 
 @reltype FAVOURITE value=21 clid=CL_PROFILE
-@caption lemmik
+@caption Lemmik
 
 @reltype MATCH value=23 clid=CL_PROFILE
-@caption väljavalitu
+@caption Väljavalitu
 
 @reltype FRIEND_GROUPS value=24 clid=CL_META
 @caption Sõbragrupid
@@ -265,41 +243,20 @@ class profile extends class_base
 {
 	function profile()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "profile/profile",
 			"clid" => CL_PROFILE
 		));
 	}
-		
 
 	function callback_on_load($arr)
 	{
-		//echo ' profile::callback_on_load ';
-		/*Array
-		(
-		    [request] => Array
-		        (
-		            [class] => profile
-		            [action] => change
-		            [id] => 1310
-		        )
-		)
-		*/
-		
-		
-		//profiili loomisel tuleb see seos ka tekitada
-		//võtab kommuunilt seose.. aga kuidas? - profiil ei ole kuidagi kommuuniga seotud
-		
-		//$this->cfgmanager = 701;
+		if($arr["cfgform"])
+		{
+			$this->cfgmanager = $arr["cfgform"];
+		}
 	}
 
-	function callback_pre_edit($arr)
-	{
-		//echo ' profile::callback_pre_edit ';
-	}
-	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -346,14 +303,10 @@ class profile extends class_base
 		{
 			if ($c_user_to_person = reset($person->connections_to(array("type" => 2))))
 			{
-				// siin on viga! prop("lastaction") ei vasta tõele - põhjus teadmata..
-				//debug:
-				/*get_lc_date
-				$users = get_instance("users");
-				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-				echo ($user->prop("lastaction")); //1088851544   03. juuli 04   WTF?!!
-				*/
-				
+				$user = obj(aw_global_get("uid_oid"));
+				$lastaction = $user->prop("lastaction");
+				$timeout = 600;
+				/*
 				$timeout = 600;
 				$user = $c_user_to_person->from();
 				$uid = $user->prop("uid");
@@ -365,12 +318,12 @@ class profile extends class_base
 				$row = $this->db_next();
 				$lastaction = $row["lastaction"];
 				//$online = $row["online"];
-				
+				*/
 				if ((time() - $lastaction) < $timeout)
 				{
-					return TRUE;
+					return true;
 				}
-				return FALSE;
+				return false;
 			}
 		}
 		return NULL;
@@ -578,31 +531,6 @@ class profile extends class_base
 
 		}
 		return $person;
-	}
-	
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
 	}
 }
 ?>

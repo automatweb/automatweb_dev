@@ -1,16 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>cfgmanager</name>
-            <group>general</group>
-            <table>objects</table>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CFG_MANAGER</reltype>
-            <method>serialize</method>
-            <field>meta</field>
-            <caption>Seadete haldur</caption>
-      </property>
-      <property>
             <name>avatar_image</name>
             <group>general</group>
             <table>objects</table>
@@ -233,6 +223,7 @@
             <group>settings</group>
             <table>aw_profiles</table>
             <type>classificator</type>
+            <orient>vertical</orient>
             <field>user_field2</field>
             <caption>Haridustase</caption>
       </property>
@@ -351,29 +342,29 @@
                   <caption>Pilt</caption>
             </IMAGE>
             <AVATAR>
-                  <value>20</value>
+                  <value>26</value>
                   <clid>CL_IMAGE</clid>
                   <caption>Avatar</caption>
             </AVATAR>
             <CFG_MANAGER>
                   <value>15</value>
                   <clid>CL_CFGMANAGER</clid>
-                  <caption>seadete haldur</caption>
+                  <caption>Seadete haldur</caption>
             </CFG_MANAGER>
             <FRIEND>
                   <value>20</value>
                   <clid>CL_PROFILE</clid>
-                  <caption>sõber</caption>
+                  <caption>Sõber</caption>
             </FRIEND>
             <FAVOURITE>
                   <value>21</value>
                   <clid>CL_PROFILE</clid>
-                  <caption>lemmik</caption>
+                  <caption>Lemmik</caption>
             </FAVOURITE>
             <MATCH>
                   <value>23</value>
                   <clid>CL_PROFILE</clid>
-                  <caption>väljavalitu</caption>
+                  <caption>Väljavalitu</caption>
             </MATCH>
             <FRIEND_GROUPS>
                   <value>24</value>
