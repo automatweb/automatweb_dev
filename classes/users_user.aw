@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.86 2004/05/06 12:26:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.87 2004/05/27 08:52:20 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1174,22 +1174,42 @@ class users_user extends aw_template
 
 	function get_gid_for_oid($oid)
 	{
-		return $this->db_fetch_field("SELECT gid FROM groups WHERE oid = '$oid'", "gid");
+		if (!($ret = aw_cache_get("get_gid_for_oid", $oid)))
+		{
+			$ret = $this->db_fetch_field("SELECT gid FROM groups WHERE oid = '$oid'", "gid");
+			aw_cache_set("get_gid_for_oid", $oid, $ret);
+		}
+		return $ret;
 	}
 
 	function get_oid_for_gid($gid)
 	{
-		return $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$gid'", "oid");
+		if (!($ret = aw_cache_get("get_oid_for_gid", $gid)))
+		{
+			$ret = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$gid'", "oid");
+			aw_cache_set("get_oid_for_gid", $gid, $ret);
+		}
+		return $ret;
 	}
 
 	function get_uid_for_oid($oid)
 	{
-		return $this->db_fetch_field("SELECT uid FROM users WHERE oid = '$oid'", "uid");
+		if (!($ret = aw_cache_get("get_uid_for_oid", $oid)))
+		{
+			$ret = $this->db_fetch_field("SELECT uid FROM users WHERE oid = '$oid'", "uid");
+			aw_cache_set("get_uid_for_oid", $oid, $ret);
+		}
+		return $ret;
 	}
 
 	function get_oid_for_uid($uid)
 	{
-		return $this->db_fetch_field("SELECT oid FROM users WHERE uid = '$uid'", "oid");
+		if (!($ret = aw_cache_get("get_oid_for_uid", $uid)))
+		{
+			$ret = $this->db_fetch_field("SELECT oid FROM users WHERE uid = '$uid'", "oid");
+			aw_cache_set("get_oid_for_uid", $uid, $ret);
+		}
+		return $ret;
 	}
 };
 ?>
