@@ -16,6 +16,7 @@ function toggle_javascript()
 			newwintoolbar.disabled = false;
 			newwinlocation.disabled = false;
 			newwinmenu.disabled = false;
+			newwinscroll.disabled = false;
 		};
 	}
 	else
@@ -27,6 +28,7 @@ function toggle_javascript()
 			newwintoolbar.disabled = true;
 			newwinlocation.disabled = true;
 			newwinmenu.disabled = true;
+			newwinscroll.disabled = true;
 		};
 	};
 };
@@ -68,7 +70,8 @@ function toggle_javascript()
 	<td class="fform">
 	Toolbar: <input type="checkbox" name="newwintoolbar" value=1 {VAR:newwintoolbar}> |
 	Address bar: <input type="checkbox" name="newwinlocation" value=1 {VAR:newwinlocation}> |
-	Menyyd: <input type="checkbox" name="newwinmenu" value=1 {VAR:newwinmenu}> 
+	Menyyd: <input type="checkbox" name="newwinmenu" value=1 {VAR:newwinmenu}> |
+	Scrollbar: <input type="checkbox" name="newwinscroll" value=1 {VAR:newwinscroll}> 
 
 </td>
 </tr>
