@@ -201,6 +201,12 @@ function toggle_file_link_newwin()
 <td class="fgtext">Andmete element:</td>
 <td class="fgtext"><select name="{VAR:cell_id}_lb_data_from_el">{VAR:lb_data_from_el}</select></td>
 </tr>
+<tr>
+	<td class="fgtext">Otsing alamstringist:</td>
+	<td class="fgtext"><input type="checkbox" value="1" name="{VAR:cell_id}_lb_search_like" {VAR:lb_search_like}></td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
 <!-- END SUB: LB_MUL_DS -->
 
 <!-- SUB: MULTIPLE_OPTS -->
@@ -497,6 +503,15 @@ function toggle_file_link_newwin()
 <td class="fgtext">&nbsp;</td>
 </tr>
 <!-- END SUB: CHECKBOX_ITEMS -->
+
+<!-- SUB: TEXTBOX_ITEMS -->
+<tr>
+<td class="fgtext">N&auml;ita tekstina:</td>
+<td class="fgtext"><input class='small_button' type='checkbox' NAME='{VAR:cell_id}_show_as_text' VALUE='1' {VAR:show_as_text}></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: TEXTBOX_ITEMS -->
 
 <!-- SUB: PRICE_ITEMS -->
 <tr>
