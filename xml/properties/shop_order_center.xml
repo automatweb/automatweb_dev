@@ -123,6 +123,33 @@
             <caption>Meili sisu (kui t&amp;uuml;hi, siis templatest)</caption>
       </property>
       <property>
+            <name>rent_min_amt</name>
+            <table>objects</table>
+            <group>payment</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>J&amp;auml;relmaksu min. summa</caption>
+      </property>
+      <property>
+            <name>rent_prop</name>
+            <table>objects</table>
+            <group>payment</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Elemendi</caption>
+      </property>
+      <property>
+            <name>rent_prop_val</name>
+            <table>objects</table>
+            <group>payment</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>v&amp;auml;&amp;auml;rtus j&amp;auml;relmaksuks</caption>
+      </property>
+      <property>
             <name>controller</name>
             <table>objects</table>
             <group>appear</group>
@@ -183,6 +210,9 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <payment>
+                  <caption>Makseviisid</caption>
+            </payment>
             <appear>
                   <caption>N&amp;auml;itamine</caption>
             </appear>

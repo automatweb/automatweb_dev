@@ -187,6 +187,39 @@
             <caption>Ilma detailvaate lisapiltideta lehed</caption>
       </property>
       <property>
+            <name>jm_clothes</name>
+            <table>objects</table>
+            <group>jm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <caption>R&amp;otilde;ivad</caption>
+      </property>
+      <property>
+            <name>jm_lasting</name>
+            <table>objects</table>
+            <group>jm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <caption>Kestvuskaubad</caption>
+      </property>
+      <property>
+            <name>jm_furniture</name>
+            <table>objects</table>
+            <group>jm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <caption>M&amp;ouml;&amp;ouml;bel</caption>
+      </property>
+      <property>
             <name>do_fixes</name>
             <table>objects</table>
             <group>post_import_fix</group>
@@ -220,6 +253,9 @@
             <views>
                   <caption>Vaated</caption>
             </views>
+            <jm>
+                  <caption>J&amp;auml;relmaks</caption>
+            </jm>
             <post_import_fix>
                   <caption>Parandused</caption>
             </post_import_fix>

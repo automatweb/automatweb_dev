@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.25 2005/01/18 10:51:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.26 2005/01/19 18:19:15 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -335,6 +335,15 @@ class shop_order_cart extends class_base
 			$_SESSION["cart"]["user_data"] = $GLOBALS["user_data"];
 		}
 
+		if (isset($arr["payment_method"]))
+		{
+			$_SESSION["cart"]["payment_method"] = $arr["payment_method"];
+		}
+		if (isset($arr["num_payments"]))
+		{
+			$_SESSION["cart"]["payment"]["num_payments"] = $arr["num_payments"];
+		}
+
 		// check cfgform controllers for user data
 		$cfgf = $oc->prop("data_form");
 		if ($cfgf && $arr["from"] != "confirm")
@@ -506,6 +515,11 @@ class shop_order_cart extends class_base
 			return $this->mk_my_orb("final_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"]));
 		}
 		else
+		if (!empty($arr["update_final_finish"]))
+		{
+			return $this->mk_my_orb("final_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"]));
+		}
+		else
 		if (!empty($arr["confirm_order"]))
 		{
 			// do confirm order and show user
@@ -524,7 +538,10 @@ class shop_order_cart extends class_base
 			}
 
 			aw_session_del("order.accept_cond");
-			$ordid = $this->do_create_order_from_cart($arr["oc"]);
+			$ordid = $this->do_create_order_from_cart($arr["oc"],NULL,array(
+				"payment" => $_SESSION["cart"]["payment"],
+				"payment_type" => $_SESSION["cart"]["payment_method"]
+			));
 			$this->start_order();
 			return $this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order");
 		}
@@ -763,6 +780,49 @@ class shop_order_cart extends class_base
 			"no_data" => (aw_global_get("uid") == "" ? true : false)
 		));
 
+		$do = false;
+		if ($this->is_template("RENT"))
+		{
+			$cr = "";
+			if ($prod_total > $oc->prop("rent_min_amt"))
+			{
+				$do = true;
+				if ($oc->prop("rent_prop") != "" && $oc->prop("rent_prop_val") != "")
+				{
+					if ($els[$oc->prop("rent_prop")]["value"] != $oc->prop("rent_prop_val"))
+					{
+
+						$do = false;
+					}
+				}
+			}
+			else
+			{
+				$do = false;	
+			}
+	
+			$this->vars(array(
+				"cod_selected" => checked($_SESSION["cart"]["payment_method"] == "cod" || !$do || $_SESSION["cart"]["payment_method"] == ""),
+				"rent_selected" => checked($_SESSION["cart"]["payment_method"] == "rent"),
+			));
+
+			if ($do)
+			{
+				$this->vars(array(
+					"can_rent" => $this->parse("can_rent")
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"no_can_rent" => $this->parse("no_can_rent")
+				));
+			}
+			$this->vars(array(
+				"RENT" => $this->parse("RENT")
+			));
+		}
+
 		if ($els["userdate1"])
 		{
 			$els["userdate1"]["year_from"] = 1930;
@@ -790,6 +850,10 @@ class shop_order_cart extends class_base
 		$htmlc->start_output();
 		foreach($els as $pn => $pd)
 		{
+			if ($pn == "user_data[uservar1]" && aw_ini_get("otto.import") && $prod_total > 1000)
+			{
+				$pd["onclick"] = "upd_rent(this)";
+			}
 			$htmlc->add_property($pd);
 		}
 		$htmlc->finish_output();
@@ -1019,6 +1083,155 @@ class shop_order_cart extends class_base
 			"not_logged" => $lln
 		));
 
+		$can_confirm = true;
+		if (($imp = aw_ini_get("otto.import")) && $_SESSION["cart"]["payment_method"] == "rent" && $this->is_template("HAS_RENT"))
+		{
+			$i = obj($imp);
+			$cl_pgs = $this->make_keys(explode(",", $i->prop("jm_clothes")));
+			$ls_pgs = $this->make_keys(explode(",", $i->prop("jm_lasting")));
+			$ft_pgs = $this->make_keys(explode(",", $i->prop("jm_furniture")));
+			$awa = new aw_array($_SESSION["cart"]["items"]);
+			foreach($awa->get() as $iid => $quant)
+			{
+				if ($quant < 1 || !$this->can("view", $iid))
+				{
+					continue;
+				}
+
+				$pr = obj($iid);
+				if ($pr->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+				{
+					$c = reset($pr->connections_to(array("from.class_id" => CL_SHOP_PRODUCT)));
+					$pr = $c->from();
+				}
+
+				$i = obj($iid);
+				$inst = $i->instance();
+				
+				$this->vars(array(
+					"prod_html" => $inst->do_draw_product(array(
+						"layout" => $layout,
+						"prod" => $i,
+						"quantity" => $quant,
+						"oc_obj" => $oc,
+						"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
+					))
+				));
+
+				if (get_class($inst) == "shop_product_packaging")
+				{
+					$pr_price = ($quant * $inst->get_prod_calc_price($i));
+				}
+				else
+				{
+					$pr_price = ($quant * $inst->get_price($i));
+				}
+
+				if ( $cl_pgs[$pr->parent()])
+				{
+					$cl_total += $pr_price;
+					$cl_str .= $this->parse("PROD");
+				}
+				else
+				if ($ft_pgs[$pr->parent()])
+				{
+					$ft_total += $pr_price;
+					$ft_str .= $this->parse("PROD");
+				}
+				else
+				if ($ls_pgs[$pr->parent()])
+				{
+					$ls_total += $pr_price;
+					$ls_str .= $this->parse("PROD");
+				}
+			}
+
+			$npc = max(2,$_SESSION["cart"]["payment"]["num_payments"]["clothes"]);
+			$cl_payment = ($cl_total+($cl_total*($npc)*1.25/100))/($npc+1);
+			$cl_tot_wr = ($cl_payment * ($npc+1));
+
+			$ft_npc = max(2,$_SESSION["cart"]["payment"]["num_payments"]["furniture"]);
+			$ft_first_payment = ($ft_total/5);
+			$ft_payment = ($ft_total-$ft_first_payment+(($ft_total-$ft_first_payment)*$ft_npc*1.25/100))/($ft_npc+1);
+			$ft_total_wr = $ft_payment * ($ft_npc+1) + $ft_first_payment;
+
+			$ls_npc = max(2,$_SESSION["cart"]["payment"]["num_payments"]["last"]);
+			$ls_payment = ($ls_total+($ls_total*($ls_npc)*1.25/100))/($ls_npc+1);
+			$ls_total_wr = ($ls_payment * ($ls_npc+1));
+
+			$this->vars(array(
+				"PROD_RENT_CLOTHES" => $cl_str,
+				"PROD_RENT_FURNITURE" => $ft_str,
+				"PROD_RENT_LAST" => $ls_str,
+				"total_clothes_price" => number_format($cl_total,2),
+				"num_payments_clothes" => $this->picker($npc, array("2" => "2 kuud","3" => "3 kuud", "4" => "4 kuud", "5" => "5 kuud", "6" => "6 kuud")),
+				"num_payments_clothes_show" => $npc+1,
+				"payment_clothes" => number_format($cl_payment,2),
+				"total_clothes_price_wr" => number_format($cl_tot_wr,2),
+				"total_furniture_price" => number_format($ft_total,2),
+				"first_payment_furniture" => number_format($ft_total/5,2),
+				"num_payments_furniture" => $this->picker($ft_npc, array("2" => "2 kuud","3" => "3 kuud", "4" => "4 kuud", "5" => "5 kuud", "6" => "6 kuud","7" => "7 kuud", "8" => "8 kuud", "9" => "9 kuud", "10" => "10 kuud", "11" => "11 kuud", "12" => "12 kuud")),
+				"num_payments_furniture_show" => $ft_npc+1,
+				"payment_furniture" => number_format($ft_payment,2),
+				"total_furniture_price_wr" => number_format($ft_total_wr,2),
+				"total_last_price" => number_format($ls_total,2),
+				"num_payments_last" => $this->picker($ls_npc, array("2" => "2 kuud","3" => "3 kuud", "4" => "4 kuud", "5" => "5 kuud", "6" => "6 kuud","7" => "7 kuud", "8" => "8 kuud", "9" => "9 kuud", "10" => "10 kuud", "11" => "11 kuud", "12" => "12 kuud")),
+				"num_payments_last_show" => $ls_npc+1,
+				"payment_last" => number_format($ls_payment,2),
+				"total_last_price_wr" => number_format($ls_total_wr,2),
+				"total_price_rent" => number_format($cl_tot_wr + $ft_total_wr + $ls_total_wr,2),
+				"total_price_rent_w_pst" => number_format($cl_tot_wr + $ft_total_wr + $ls_total_wr + $cart_o->prop("postal_price"),2),
+				"postal_price" => number_format($cart_o->prop("postal_price"))
+			));
+			if ($cl_tot_wr + $ft_total_wr + $ls_total_wr > 8000)
+			{
+				$this->vars(array(
+					"RENT_TOO_LARGE" => $this->parse("RENT_TOO_LARGE")
+				));
+			}
+			if ($cl_payment + $ft_payment + $ls_payment < 100)
+			{
+				$this->vars(array(
+					"RENT_TOO_SMALL" => $this->parse("RENT_TOO_SMALL")
+				));
+				$can_confirm = false;
+			}
+			if ($cl_tot_wr > 0)
+			{
+				$this->vars(array(
+					"HAS_PROD_RENT_CLOTHES" => $this->parse("HAS_PROD_RENT_CLOTHES"),
+				));
+			}
+			if ($ft_total_wr > 0)
+			{
+				$this->vars(array(
+					"HAS_PROD_RENT_FURNITURE" => $this->parse("HAS_PROD_RENT_FURNITURE"),
+				));
+			}
+			if ($ls_total_wr > 0)
+			{
+				$this->vars(array(
+					"HAS_PROD_RENT_LAST" => $this->parse("HAS_PROD_RENT_LAST"),
+				));
+			}
+			$this->vars(array(
+				"HAS_RENT" => $this->parse("HAS_RENT")
+			));
+			$str = "";
+		}
+		else
+		{
+			$this->vars(array(
+				"NO_RENT" => $this->parse("NO_RENT")
+			));
+		}
+
+		if ($can_confirm)
+		{
+			$this->vars(Array(
+				"CAN_CONFIRM" => $this->parse("CAN_CONFIRM")
+			));
+		}
 		return $this->parse();
 	}
 

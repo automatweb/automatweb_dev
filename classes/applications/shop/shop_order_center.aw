@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.18 2004/12/27 12:31:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.19 2005/01/19 18:19:15 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -48,6 +48,19 @@
 
 @property mail_cust_content type=textarea field=meta method=serialize table=objects rows=10 cols=80
 @caption Meili sisu (kui t&uuml;hi, siis templatest)
+
+@groupinfo payment caption="Makseviisid"
+@default group=payment
+
+@property rent_min_amt type=textbox field=meta method=serialize table=objects
+@caption J&auml;relmaksu min. summa
+
+@property rent_prop type=select  field=meta method=serialize table=objects
+@caption Elemendi
+
+@property rent_prop_val type=textbox  field=meta method=serialize table=objects
+@caption v&auml;&auml;rtus j&auml;relmaksuks
+
 
 @groupinfo appear caption="N&auml;itamine"
 @default group=appear
@@ -113,6 +126,23 @@ class shop_order_center extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "rent_prop":
+				$df = $arr["obj_inst"]->prop("data_form");
+				$opts = array();
+				if (is_oid($df) && $this->can("view", $df))
+				{
+					$cu = get_instance("cfg/cfgform");
+					$ps = $cu->get_props_from_cfgform(array(
+						"id" => $df
+					));
+					foreach($ps as $pn => $pd)
+					{
+						$opts[$pn] = $pd["caption"];
+					}
+				}
+				$prop["options"] = $opts;
+				break;
+
 			case "layoutbl":
 				if ($arr["obj_inst"]->prop("use_controller"))
 				{

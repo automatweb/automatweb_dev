@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.23 2005/01/18 10:51:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.24 2005/01/19 18:19:15 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -355,6 +355,8 @@ class shop_order extends class_base
 		$oi->set_meta("discount", $params["discount"]);
 		$oi->set_meta("prod_paging", $params["prod_paging"]);
 		$oi->set_meta("postal_price", $params["postal_price"]);
+		$oi->set_meta("payment", $params["payment"]);
+		$oi->set_meta("payment_type", $params["payment_type"]);
 
 		if ($this->order_center)
 		{
@@ -826,6 +828,173 @@ class shop_order extends class_base
 			"logged" => $ll,
 			"not_logged" => $lln
 		));
+
+		if (($imp = aw_ini_get("otto.import")) && $o->meta("payment_type") == "rent" && $this->is_template("HAS_RENT"))
+		{
+			$i = obj($imp);
+			$cl_pgs = $this->make_keys(explode(",", $i->prop("jm_clothes")));
+			$ls_pgs = $this->make_keys(explode(",", $i->prop("jm_lasting")));
+			$ft_pgs = $this->make_keys(explode(",", $i->prop("jm_furniture")));
+			foreach($prods as $prod)
+			{
+				$quant = $tp[$prod->id()];
+
+				$pr = $prod;
+				if ($pr->class_id() == CL_SHOP_PRODUCT_PACKAGING)
+				{
+					$c = reset($pr->connections_to(array("from.class_id" => CL_SHOP_PRODUCT)));
+					$pr = $c->from();
+				}
+
+				$product_info = reset($prod->connections_to(array(
+					"from.class_id" => CL_SHOP_PRODUCT,
+				)));
+
+				if (is_object($product_info))
+				{
+					$product_info = $product_info->from();
+				}
+
+				if (!is_object($product_info))
+				{
+					$product_info = $prod;
+				}
+
+				for( $i=1; $i<21; $i++)
+				{
+					$ui = $product_info->prop("user".$i);
+					$this->vars(array(
+						'user'.$i => $ui,
+						"packaging_user".$i => $prod->prop("user".$i),
+						"packaging_uservar".$i => $prod->prop_str("uservar".$i)
+					));
+				}
+
+				$product_info_i = $product_info->instance();
+				$cur_tot = $tp[$prod->id()] * $product_info_i->get_calc_price($product_info);
+				$prod_total += $cur_tot;
+				$this->vars(array(
+					"prod_name" => $product_info->name(),
+					"prod_price" => $product_info_i->get_price($product_info),
+					"prod_tot_price" => number_format($cur_tot, 2)
+				));
+
+				foreach(safe_array($ord_item_data[$prod->id()]) as $__nm => $__vl)
+				{
+					$this->vars(array(
+						"order_data_".$__nm => $__vl
+					));
+				}
+
+				$_pr = $inst->get_calc_price($prod);
+
+				$this->vars(array(
+					"name" => $prod->name(),
+					"p_name" => ($product_info ? $product_info->name() : $prod->name()),
+					"quant" => $tp[$prod->id()],
+					"price" => number_format($_pr,2),
+					"obj_tot_price" => number_format(((int)($tp[$prod->id()]) * $_pr), 2),
+					'order_data_color' => $ord_item_data[$prod->id()]['color'],
+					'order_data_size' => $ord_item_data[$prod->id()]['size'],
+					'order_data_price' => $ord_item_data[$prod->id()]['price'],
+				));
+
+				//$pr_price= ($_pr * $tp[$prod->id()]);
+
+				$p .= $this->parse("PROD");
+
+				if (get_class($inst) == "shop_product_packaging")
+				{
+					$pr_price = ($quant * $inst->get_prod_calc_price($prod));
+				}
+				else
+				{
+					$pr_price = ($quant * $inst->get_price($prod));
+				}
+
+				if ( $cl_pgs[$pr->parent()])
+				{
+					$cl_total += $pr_price;
+					$cl_str .= $this->parse("PROD");
+				}
+				else
+				if ($ft_pgs[$pr->parent()])
+				{
+					$ft_total += $pr_price;
+					$ft_str .= $this->parse("PROD");
+				}
+				else
+				if ($ls_pgs[$pr->parent()])
+				{
+					$ls_total += $pr_price;
+					$ls_str .= $this->parse("PROD");
+				}
+			}
+
+			$pmt = $o->meta("payment");
+			$npc = max(2,$pmt["num_payments"]["clothes"]);
+			$cl_payment = ($cl_total+($cl_total*($npc)*1.25/100))/($npc+1);
+			$cl_tot_wr = ($cl_payment * ($npc+1));
+
+			$ft_npc = max(2,$pmt["num_payments"]["furniture"]);
+			$ft_first_payment = ($ft_total/5);
+			$ft_payment = ($ft_total-$ft_first_payment+(($ft_total-$ft_first_payment)*$ft_npc*1.25/100))/($ft_npc+1);
+			$ft_total_wr = $ft_payment * ($ft_npc+1) + $ft_first_payment;
+
+			$ls_npc = max(2,$pmt["num_payments"]["last"]);
+			$ls_payment = ($ls_total+($ls_total*($ls_npc)*1.25/100))/($ls_npc+1);
+			$ls_total_wr = ($ls_payment * ($ls_npc+1));
+
+			$this->vars(array(
+				"PROD_RENT_CLOTHES" => $cl_str,
+				"PROD_RENT_FURNITURE" => $ft_str,
+				"PROD_RENT_LAST" => $ls_str,
+				"total_clothes_price" => number_format($cl_total,2),
+				"num_payments_clothes" => $npc+1,
+				"payment_clothes" => number_format($cl_payment,2),
+				"total_clothes_price_wr" => number_format($cl_tot_wr,2),
+				"total_furniture_price" => number_format($ft_total,2),
+				"first_payment_furniture" => number_format($ft_total/5,2),
+				"num_payments_furniture" => $ft_npc+1,
+				"payment_furniture" => number_format($ft_payment,2),
+				"total_furniture_price_wr" => number_format($ft_total_wr,2),
+				"total_last_price" => number_format($ls_total,2),
+				"num_payments_last" => $ls_npc+1,
+				"payment_last" => number_format($ls_payment,2),
+				"total_last_price_wr" => number_format($ls_total_wr,2),
+				"total_price_rent" => number_format($cl_tot_wr + $ft_total_wr + $ls_total_wr,2),
+				"total_price_rent_w_pst" => number_format($cl_tot_wr + $ft_total_wr + $ls_total_wr + $o->meta("postal_price"),2),
+				"postal_price" => number_format($o->meta("postal_price"))
+			));
+			if ($cl_tot_wr > 0)
+			{
+				$this->vars(array(
+					"HAS_PROD_RENT_CLOTHES" => $this->parse("HAS_PROD_RENT_CLOTHES"),
+				));
+			}
+			if ($ft_total_wr > 0)
+			{
+				$this->vars(array(
+					"HAS_PROD_RENT_FURNITURE" => $this->parse("HAS_PROD_RENT_FURNITURE"),
+				));
+			}
+			if ($ls_total_wr > 0)
+			{
+				$this->vars(array(
+					"HAS_PROD_RENT_LAST" => $this->parse("HAS_PROD_RENT_LAST"),
+				));
+			}
+			$this->vars(array(
+				"HAS_RENT" => $this->parse("HAS_RENT")
+			));
+			$str = "";
+		}
+		else
+		{
+			$this->vars(array(
+				"NO_RENT" => $this->parse("NO_RENT")
+			));
+		}
 
 		return $this->parse();
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.15 2004/12/27 12:32:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.16 2005/01/19 18:19:15 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -76,6 +76,16 @@
 @property force_no_side_view type=textbox table=objects field=meta method=serialize group=views
 @caption Ilma detailvaate lisapiltideta lehed
 
+@groupinfo jm caption="J&auml;relmaks"
+
+@property jm_clothes type=textarea rows=5 cols=50 table=objects field=meta method=serialize group=jm
+@caption R&otilde;ivad
+
+@property jm_lasting type=textarea rows=5 cols=50 table=objects field=meta method=serialize group=jm
+@caption Kestvuskaubad
+
+@property jm_furniture type=textarea rows=5 cols=50 table=objects field=meta method=serialize group=jm
+@caption M&ouml;&ouml;bel
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
