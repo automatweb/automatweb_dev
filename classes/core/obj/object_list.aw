@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.32 2004/08/19 11:46:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.33 2004/08/31 07:06:27 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -36,7 +36,6 @@ class object_list extends _int_obj_container_base
 		// check if param is an array of connection objects. if so, then get the object id's from that
 		if (is_array($param))
 		{
-
 			$tmp = reset($param);
 			if (is_object($tmp) && get_class($tmp) == "connection")
 			{

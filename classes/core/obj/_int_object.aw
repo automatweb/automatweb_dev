@@ -1427,14 +1427,37 @@ class _int_object
 
 	function _int_do_delete($oid)
 	{
-		post_message_with_param(
-			MSG_STORAGE_DELETE,
-			$this->obj["class_id"],
-			array(
-				"oid" => $this->obj["oid"]
-			)
-		);
-		$GLOBALS["object_loader"]->ds->delete_object($oid);
+		// load the object to see of its brother status
+		$obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
+
+		$todelete = array();		
+
+		// if this object is a brother to another object, just delete it.
+		if ($obj["brother_of"] != $oid)
+		{
+			$todelete[] = $oid;
+		}
+		// else, if this is an original object
+		else
+		{
+			// find all of its brothers and delete all of them. 
+			list($tmp) = $GLOBALS["object_loader"]->ds->search(array(
+				"brother_of" => $oid
+			));
+			$todelete = array_keys($tmp);
+		}
+
+		foreach($todelete as $oid)
+		{			
+			post_message_with_param(
+				MSG_STORAGE_DELETE,
+				$this->obj["class_id"],
+				array(
+					"oid" => $this->obj["oid"]
+				)
+			);
+			$GLOBALS["object_loader"]->ds->delete_object($oid);
+		}
 	}
 
 	function _int_create_brother($parent)
