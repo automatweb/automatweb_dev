@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.14 2002/12/06 16:41:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.15 2002/12/16 11:33:17 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -94,6 +94,9 @@
 	
 	@property no_menus type=checkbox group=advanced
 	@caption Ilma menüüdeta
+	
+	@property periodic type=checkbox group=advanced
+	@caption Perioodiline
 
 	@property target type=checkbox group=general
 	@caption Uues aknas
