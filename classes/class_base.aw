@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.242 2004/03/23 16:44:58 duke Exp $
+// $Id: class_base.aw,v 2.243 2004/03/29 11:16:51 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -514,13 +514,28 @@ class class_base extends aw_template
 			"form" => $use_form,
 			"attr" => "method",
 		));
-			
+
 		$method = "POST";
 		if (!empty($form_submit_method))
 		{
 			$method = "GET";
 		};
 
+		if (!empty($gdata["submit_method"]))
+		{
+			$method = "GET";
+			$submit_action = $args["action"];
+		};
+
+		if (!empty($gdata["submit_action"]))
+		{
+			$submit_action = $gdata["submit_action"];
+		}	
+
+		if ($method == "GET")
+		{
+			$argblock["no_reforb"] = 1;
+		};
 
 		$awt->start("final-bit");
 		$cli->finish_output(array(
@@ -3190,6 +3205,11 @@ class class_base extends aw_template
 		{
 			// ignore properties that are not defined in the defaults
 			if (!$all_properties[$key])
+			{
+				continue;
+			};
+
+			if ($val["display"] == "none")
 			{
 				continue;
 			};
