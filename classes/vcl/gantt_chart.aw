@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.3 2005/01/05 18:38:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.4 2005/02/07 13:18:37 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -16,6 +16,7 @@ class gantt_chart extends class_base
 {
 	var $data = array ();
 	var $rows = array ();
+	var $navigation = true;
 
 	function gantt_chart ()
 	{
@@ -60,10 +61,20 @@ class gantt_chart extends class_base
 		// $this->bar_anchors = $arr["bar_anchors"] ? "anchors" : "noanchors";
 
 		$this->scale_quotient = (count ($this->columns) * $this->column_length) / $this->chart_width;
+		$this->cell_length = ceil ($this->column_length / $this->scale_quotient);
+	}
+
+	// Configure chart navigation
+	// Arguments:
+	// bool show - if set to "false", navigation won't be shown, default is "true".
+	function configure_navigation ($arr)
+	{
+		$this->navigation = (bool) (empty ($arr["show"]) ? true : $arr["show"]);
 	}
 
 	// Adds one row.
 	// Arguments:
+	// string type - row type data|separator. default is data.
 	// string name - identifier for the row
 	// string title - title for the row
 	// string uri - uri for row title. Applies if row_anchors property is set to true for chart.
@@ -72,10 +83,12 @@ class gantt_chart extends class_base
 	{
 		$row_name = $arr["name"];
 		$row_title = $arr["title"];
+		$row_type = empty ($arr["type"]) ? "data" : $arr["type"];
 		$row_title_uri = empty ($arr["uri"]) ? false : $arr["uri"];
 		$row_title_uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
 		$this->rows[$row_name] = array (
+			"type" => $row_type,
 			"name" => $row_name,
 			"title" => $row_title,
 			"uri" => $row_title_uri,
@@ -143,6 +156,51 @@ class gantt_chart extends class_base
 		);
 		$style = $this->parse ();
 
+		### create navigation
+		// $navigation = "";
+
+		// if ($this->navigation)
+		// {
+			// $start = (int) ($arr["request"]["gantt_chart_start"] ? $arr["request"]["gantt_chart_start"] : time ());
+			// $columns = (int) ($arr["request"]["gantt_chart_length"] ? $arr["request"]["gantt_chart_length"] : 7);
+			// $start = ($columns == 7) ? $this->get_week_start ($start) : $start;
+			// $period_length = $columns * 86400;
+			// $length_nav = array ();
+			// $start_nav = array ();
+
+			// for ($days = 1; $days < 8; $days++)
+			// {
+				// if ($columns == $days)
+				// {
+					// $length_nav[] = $days;
+				// }
+				// else
+				// {
+					// $length_nav[] = html::href (array (
+						// "caption" => $days,
+						// "url" => aw_url_change_var ("gantt_chart_length", $days),
+					// ));
+				// }
+			// }
+
+			// $start_nav[] = html::href (array (
+				// "caption" => "Täna",
+				// "url" => aw_url_change_var ("gantt_chart_start", $this->get_week_start (time ())),
+			// ));
+
+			// $this->read_template ("navigation_" . $this->style . ".tpl");
+			// $this->vars = array (
+				// "rewind_uri" => aw_url_change_var ("gantt_chart_start", ($start - $hop_length * $period_length)),
+				// "prev_uri" => aw_url_change_var ("gantt_chart_start", ($start - $period_length)),
+				// "current_uri" => ,
+				// "next_uri" => aw_url_change_var ("gantt_chart_start", ($start + $period_length + 1)),
+				// "ffwd_uri" => aw_url_change_var ("gantt_chart_start", ($start + $hop_length * $period_length)),
+				// "hop_length" => ,
+				// "chart_id" => $this->chart_id,
+			// );
+			// $navigation = $this->parse ();
+		// }
+
 		### compose chart table
 		$row_switch = 0;
 		$bar_switch = 0;
@@ -157,6 +215,19 @@ class gantt_chart extends class_base
 			$cell_end = $this->start + $this->column_length;
 			$pointer = $this->start ;
 			$columns = count ($this->columns);
+
+			switch ($row["type"])
+			{
+				case "data":
+					break;
+
+				case "separator":
+					$this->vars (array (
+						"colspan" => $columns + 1,
+					));
+					$rows .= trim ($this->parse ("separator_row"));
+					continue;
+			}
 
 			while ($columns)
 			{
@@ -175,15 +246,8 @@ class gantt_chart extends class_base
 
 						if ($bar["start"] >= $cell_end)
 						{
-							### no bars in cell, fill with emptiness & go to next column
+							### no bars or no bars left in cell
 							array_unshift ($this->data[$row["name"]], $bar);
-							$pointer = $cell_end;
-							$content_length = $cell_end;
-							$this->vars (array (
-								"length" => ceil ($this->column_length / $this->scale_quotient),
-								"baseurl" => $this->cfg["baseurl"],
-							));
-							$cell_contents = trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_empty"));
 							break;
 						}
 					}
@@ -198,17 +262,18 @@ class gantt_chart extends class_base
 						$bar_type = $bar["hilight"] ? "hilighted" : $bar_switch;
 					}
 
-					### trim bars starting before chart start
+					### trim bars ending before chart start
 					if ($bar["start"] < $this->start)
 					{
 						if (($bar["start"] + $bar["length"]) > $this->start)
 						{
-							$bar_length = ($bar["start"] + $bar["length"]) - $this->start;
+							$bar["length"] = ($bar["start"] + $bar["length"]) - $this->start;
 							$bar["start"] = $this->start;
 						}
 						else
 						{
 							break;
+							continue;
 						}
 					}
 
@@ -232,8 +297,11 @@ class gantt_chart extends class_base
 							"baseurl" => $this->cfg["baseurl"],
 						));
 						$cell_contents .= trim ($this->parse ("MAIN.data_row" . $row_switch . ".data_cell.cell_contents.bar_empty"));
-						$content_length += ($bar["start"] - $pointer);
+						$pointer += $bar["start"];
+						$content_length += $length;
 					}
+
+// /* dbg */ if (strstr ($bar["title"], "job: 6978")){ arr ($bar); echo "[".date ("j/m/Y H.i", $bar["start"]) . "] - [".date ("j/m/Y H.i", $bar["start"] + $bar["length"]) . "]"; echo htmlentities ($row_contents);}
 
 					### parse bar
 					$length = ceil ($bar["length"] / $this->scale_quotient);
@@ -249,14 +317,14 @@ class gantt_chart extends class_base
 
 					### ...
 					$pointer = $bar["start"] + $bar["length"];
-					$content_length += $bar["length"];
+					$content_length += $length;
 					$bar_switch = $bar_switch ? 0 : 1;
 				}
 
 				### fill remaining empty space
-				if ($content_length < $cell_end)
+				if ($content_length < $this->cell_length)
 				{
-					$length = ceil (($cell_end - $pointer) / $this->scale_quotient);
+					$length = $this->cell_length - $content_length;
 					$this->vars (array (
 						"length" => $length,
 						"baseurl" => $this->cfg["baseurl"],

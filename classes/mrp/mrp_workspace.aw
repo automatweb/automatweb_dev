@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.15 2005/02/01 19:48:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.16 2005/02/07 13:18:36 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -865,7 +865,8 @@ class mrp_workspace extends class_base
 			"url" => $url_projects_done,
 		));
 
-		$tree->set_selected_item ($arr["request"]["mrp_tree_active_item"]);
+		$active_node = is_integer ($arr["request"]["mrp_tree_active_item"]) ? $arr["request"]["mrp_tree_active_item"] : 7;
+		$tree->set_selected_item ($active_node);
 		$arr["prop"]["value"] = $tree->finalize_tree ();
 	}
 
@@ -873,7 +874,7 @@ class mrp_workspace extends class_base
 	{
 		$table =& $arr["prop"]["vcl_inst"];
 		$this_object =& $arr["obj_inst"];
-		$list_request = $arr["request"]["mrp_projects_show"] ? $arr["request"]["mrp_projects_show"] : "overdue";
+		$list_request = $arr["request"]["mrp_projects_show"] ? $arr["request"]["mrp_projects_show"] : "planned";
 
 		$table->define_field (array (
 			"name" => "customer",
@@ -1026,7 +1027,7 @@ class mrp_workspace extends class_base
 					"project" => $project_id,
 				));
 				$last_job = $list->begin ();
-				$planned_date = is_object ($last_job) ? date (MRP_DATE_FORMAT, ($last_job->prop ("pre_buffer") + $last_job->prop ("length") + $last_job->prop ("post_buffer") + $last_job->prop ("starttime"))) : "-";
+				$planned_date = is_object ($last_job) ? date (MRP_DATE_FORMAT, ($last_job->prop ("planned_length") + $last_job->prop ("starttime"))) : "-";
 			}
 
 			### get project customer
@@ -1041,6 +1042,15 @@ class mrp_workspace extends class_base
 				case "planned_overdue":
 				case "overdue":
 				case "new":
+					$disabled = false;
+					$priority = html::textbox (array (
+					"name" => "mrp_project_priority-" . $project_id,
+					"size" => "2",
+					"value" => $project->prop ("priority"),
+					"disabled" => $disabled,
+					));
+					break;
+
 				case "planned":
 					$disabled = false;
 					$priority = html::textbox (array (
@@ -1049,6 +1059,9 @@ class mrp_workspace extends class_base
 					"value" => $project->prop ("priority"),
 					"disabled" => $disabled,
 					));
+
+					### hilight for planned overdue
+					$stat = ($project->prop ("due_date") < $planned_date) ? "<strong>!ylet2htaja</strong>" : "";
 					break;
 
 				case "all":
@@ -1064,7 +1077,7 @@ class mrp_workspace extends class_base
 					)
 				),
 				"customer" => $customer->name (),
-				"name" => $project->name (),
+				"name" => $stat . $project->name (),
 				"priority" => $priority,
 				"sales_priority" => $project->prop ("sales_priority"),
 				"starttime" => date (MRP_DATE_FORMAT, $project->prop ("starttime")),
@@ -1093,17 +1106,26 @@ class mrp_workspace extends class_base
 		));
 		$list = $resource_tree->to_list();
 		$list->filter (array (
-			"class_id" => CL_MRP_RESOURCE,
+			"class_id" => array (CL_MRP_RESOURCE, CL_MENU),
 		), true);
 
 		for ($resource =& $list->begin (); !$list->end (); $resource =& $list->next ())
 		{
 			$resource_id = $resource->id ();
-			$chart->add_row (array (
-				"name" => $resource_id,
-				"title" => $resource->name (),
-				"uri" => html::get_change_url ($resource_id)
-			));
+			if ($resource->class_id () == CL_MRP_RESOURCE)
+			{
+				$chart->add_row (array (
+					"name" => $resource_id,
+					"title" => $resource->name (),
+					"uri" => html::get_change_url ($resource_id)
+				));
+			}
+			else
+			{
+				$chart->add_row (array (
+					"type" => "separator",
+				));
+			}
 		}
 
 		### get job id-s for hilighted project if requested
@@ -1118,29 +1140,56 @@ class mrp_workspace extends class_base
 		}
 
 		### get jobs in requested range & add bars
-		$list = new object_list (array (
-			"class_id" => CL_MRP_JOB,
-			"parent" => $this_object->prop ("jobs_folder"),
-			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $range_start, $range_end),
-		));
+		// $list = new object_list (array (
+			// "class_id" => CL_MRP_JOB,
+			// "parent" => $this_object->prop ("jobs_folder"),
+			// "state" => new obj_predicate_not (MRP_STATUS_DELETED),
+			// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $range_start, $range_end),
+		// ));
+		$res = $this->db_fetch_array (
+			"SELECT `planned_length` FROM `mrp_job` ".
+			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
+			"`length` > 0 ".
+			"ORDER BY `planned_length` DESC ".
+			"LIMIT  1".
+		"");
+		$max_length = isset ($res[0]["planned_length"]) ? $res[0]["planned_length"] : 0;
 
-		for ($job =& $list->begin (); !$list->end (); $job =& $list->next ())
+		$jobs = $this->db_fetch_array (
+			"SELECT `oid` FROM `mrp_job` ".
+			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
+			"`length` > 0 AND ".
+			"`starttime` > " . ($range_start - $max_length) . " AND ".
+			"`starttime` < " . $range_end . " AND ".
+			"`resource` != 0 AND ".
+			"`resource` IS NOT NULL".
+		"");
+
+		foreach ($jobs as $job)
+		// for ($job =& $list->begin (); !$list->end (); $job =& $list->next ())
 		{
-			$length = $job->prop ("pre_buffer") + $job->prop ("length") + $job->prop ("post_buffer");
-			$resource_id = $job->prop ("resource");
-			$project_id = $job->prop ("project");
-			$start = $job->prop ("starttime");
-			$hilight = in_array ($job->id (), $hilighted_jobs) ? true : false;
+			// $length = $job->prop ("pre_buffer") + $job->prop ("length") + $job->prop ("post_buffer");
+			if ($this->can ("view", $job["oid"]))
+			{
+				$job = obj ($job["oid"]);
+				$length = $job->prop ("planned_length");
+				$resource_id = $job->prop ("resource");
+				$project_id = $job->prop ("project");
+				$start = $job->prop ("starttime");
+				$hilight = in_array ($job->id (), $hilighted_jobs) ? true : false;
 
-			$bar = array (
-				"row" => $resource_id,
-				"start" => $start,
-				"hilight" => $hilight,
-				"length" => $length,
-				"uri" => aw_url_change_var ("mrp_hilight", $project_id),
-				"title" => $job->name () . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")",
-			);
-			$chart->add_bar ($bar);
+				$bar = array (
+					"row" => $resource_id,
+					"start" => $start,
+					"hilight" => $hilight,
+					"length" => $length,
+					"uri" => aw_url_change_var ("mrp_hilight", $project_id),
+					"title" => $job->name () . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
+/* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
+				);
+
+				$chart->add_bar ($bar);
+			}
 		}
 
 		### config
@@ -1165,7 +1214,7 @@ class mrp_workspace extends class_base
 			$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
 			$chart->define_column (array (
 				"col" => ($i + 1),
-				"title" => $days[$day] . " - " .$date,
+				"title" => $days[$day] . " - " . $date,
 				"uri" => $uri,
 			));
 			$i++;

@@ -1,18 +1,23 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
+      <class>mrp/mrp_case</class>
+      <func>on_delete_case</func>
+      <param>CL_MRP_CASE</param>
+</num_0>
+<num_1>
       <class>mrp/mrp_job</class>
       <func>on_delete_job</func>
       <param>CL_MRP_JOB</param>
-</num_0>
-<num_1>
+</num_1>
+<num_2>
       <class>core/users/group</class>
       <func>on_delete_grp</func>
       <param>CL_GROUP</param>
-</num_1>
-<num_2>
+</num_2>
+<num_3>
       <class>core/users/user</class>
       <func>on_delete_user</func>
       <param>CL_USER</param>
-</num_2>
+</num_3>
 </xml>

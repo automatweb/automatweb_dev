@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.3 2005/02/07 12:58:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.4 2005/02/07 13:18:36 voldemar Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -173,6 +173,10 @@ class mrp_prisma_import extends class_base
 
 	function _get_conn()
 	{
+		if (!aw_ini_get("prisma.db_server"))
+		{
+			return NULL;
+		}
 		$db = new mysql;
 		$db->db_connect(aw_ini_get("prisma.db_server"),aw_ini_get("prisma.db_base"),aw_ini_get("prisma.db_user"),aw_ini_get("prisma.db_pass"));
 		return $db;
@@ -502,8 +506,10 @@ class mrp_prisma_import extends class_base
 				TellimuseNr = ".$o->prop("extern_id");
 
 		$db = $this->_get_conn();
-//echo "sql = $sql <br>";
-		$db->db_query($sql);
+		if ($db)
+		{
+			$db->db_query($sql);
+		}
 	}
 
 	function import_project($id)

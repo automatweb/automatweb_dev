@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.8 2005/02/01 19:48:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.9 2005/02/07 13:18:36 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -14,7 +14,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 @default table=mrp_job
 	@property length type=textbox
-	@caption Plaanitud kestus (h)
+	@caption Töö pikkus (h)
 
 	@property pre_buffer type=textbox
 	@caption Eelpuhveraeg (h)
@@ -36,6 +36,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 	@property starttime type=datetime_select
 	@caption Plaanitud töösseminekuaeg
+
+	@property planned_length type=text
+	@caption Planeeritud kestus (h)
 
 	@property state type=text
 	@caption Staatus
@@ -79,6 +82,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 CREATE TABLE `mrp_job` (
   `oid` int(11) NOT NULL default '0',
   `length` int(10) unsigned NOT NULL default '0',
+  `planned_length` int(10) unsigned NOT NULL default '0',
   `resource` int(11) unsigned default NULL,
   `exec_order` smallint(5) unsigned NOT NULL default '1',
   `project` int(11) unsigned default NULL,
@@ -135,9 +139,10 @@ class mrp_job extends class_base
 				break;
 
 			case "length":
+			case "planned_length":
 			case "pre_buffer":
 			case "post_buffer":
-				$prop["value"] = $prop["value"] / 3600;
+				$prop["value"] = round (($prop["value"] / 3600), 2);
 				break;
 
 			case "state":

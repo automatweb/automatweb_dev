@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.8 2005/02/01 19:48:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.9 2005/02/07 13:18:36 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -257,7 +257,7 @@ class mrp_resource extends class_base
 		$list = new object_list(array(
 			"class_id" => CL_MRP_JOB,
 			"resource" => $this_object->id (),
-			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, time (), mktime (23, 59, 59)),
+			// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, time (), mktime (23, 59, 59)),
 		));
 		$jobs = $list->arr ();
 
@@ -420,12 +420,12 @@ class mrp_resource extends class_base
 			{
 				case "1": //day
 					$interval = $recurrence->prop ("interval_daily");
-					$interval = ($interval ? $interval : 1) * 86400;
+					$interval = round (($interval ? $interval : 1) * 86400);
 					break;
 
 				case "2": //week
 					$interval = $recurrence->prop ("interval_weekly");
-					$interval = ($interval ? $interval : 1) * 86400 * 7;
+					$interval = round (($interval ? $interval : 1) * 86400 * 7);
 					break;
 
 				case "3": //month
@@ -434,13 +434,13 @@ class mrp_resource extends class_base
 
 				case "4": //year
 					$interval = $recurrence->prop ("interval_yearly");
-					$interval = ($interval ? $interval : 1) * 86400 * 365;
+					$interval = round (($interval ? $interval : 1) * 86400 * 365);
 					break;
 			}
 
 			$recurrent_unavailable_periods[] = array (
-				"length" => ($recurrence->prop ("length") * 3600),
-				"start" => $recurrence->prop ("start") + $recurrence->prop ("time") * 3600,
+				"length" => round ($recurrence->prop ("length") * 3600),
+				"start" => $recurrence->prop ("start") + round ($recurrence->prop ("time") * 3600),
 				"end" => $recurrence->prop ("end"),
 				"interval" => $interval,
 			);
@@ -455,12 +455,12 @@ class mrp_resource extends class_base
 			{
 				case "1": //day
 					$interval = $recurrence->prop ("interval_daily");
-					$interval = ($interval ? $interval : 1) * 86400;
+					$interval = round (($interval ? $interval : 1) * 86400);
 					break;
 
 				case "2": //week
 					$interval = $recurrence->prop ("interval_weekly");
-					$interval = ($interval ? $interval : 1) * 86400 * 7;
+					$interval = round (($interval ? $interval : 1) * 86400 * 7);
 					break;
 
 				case "3": //month
@@ -469,11 +469,11 @@ class mrp_resource extends class_base
 
 				case "4": //year
 					$interval = $recurrence->prop ("interval_yearly");
-					$interval = ($interval ? $interval : 1) * 86400 * 365;
+					$interval = round (($interval ? $interval : 1) * 86400 * 365);
 					break;
 			}
 
-			$recurrence_length = $recurrence->prop ("length") * 3600;
+			$recurrence_length = round ($recurrence->prop ("length") * 3600);
 			$start = $recurrence->prop ("start") + ($recurrence->prop ("time") * 3600) + $recurrence_length;
 			$length = $interval - $recurrence_length;
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.13 2005/02/07 12:56:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.14 2005/02/07 13:18:36 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -451,7 +451,8 @@ class mrp_case extends class_base
 		foreach ($connections as $connection)
 		{
 			$job = $connection->to ();
-			$length = $job->prop ("pre_buffer") + $job->prop ("length") + $job->prop ("post_buffer");
+			// $length = $job->prop ("pre_buffer") + $job->prop ("length") + $job->prop ("post_buffer");
+			$length = $job->prop ("planned_length");
 			$resource = $job->prop ("resource");
 			$project_length += $length;
 			$jobs[] = $job;
@@ -822,15 +823,15 @@ class mrp_case extends class_base
 							switch ($property)
 							{
 								case "length":
-									$job->set_prop ("length", (ceil ($value * 3600)));
+									$job->set_prop ("length", (round ($value * 3600)));
 									break;
 
 								case "pre_buffer":
-									$job->set_prop ("pre_buffer", (ceil ($value * 3600)));
+									$job->set_prop ("pre_buffer", (round ($value * 3600)));
 									break;
 
 								case "post_buffer":
-									$job->set_prop ("post_buffer", (ceil ($value * 3600)));
+									$job->set_prop ("post_buffer", (round ($value * 3600)));
 									break;
 							}
 							break;
