@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/reminder.aw,v 1.2 2004/08/25 08:36:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/reminder.aw,v 1.3 2005/03/18 12:07:45 ahti Exp $
 // reminder UI VCL component
 
 class reminder extends core
@@ -14,22 +14,18 @@ class reminder extends core
 	{
 		$prop = &$arr["property"];
 		$this->obj = $arr["obj_inst"];
-                
-		$users = get_instance("users");
-                $uid = aw_global_get("uid");
-                $user = new object($users->get_oid_for_uid($uid));
-                // always use id, even if it is a brother
-                $event_id = $arr["obj_inst"]->id();
-                // now figure out some kind of date
-
-                $rinst = get_instance(CL_CALENDAR_REMINDER);
-
-                $old_evt = $rinst->get_reminder_for(array(
-                        "event_id" => $event_id,
-                        "user_id" => $user->id(),
-                ));
-
-
+		$user = new object(aw_global_get("uid_oid"));
+		// always use id, even if it is a brother
+		$event_id = $arr["obj_inst"]->id();
+		// now figure out some kind of date
+		
+		$rinst = get_instance(CL_CALENDAR_REMINDER);
+		
+		$old_evt = $rinst->get_reminder_for(array(
+			"event_id" => $event_id,
+			"user_id" => $user->id(),
+		));
+		
 		$name = $prop["name"];
 		$email = $old_evt ? $old_evt->prop("email") : $user->prop("email");
 
@@ -88,8 +84,6 @@ class reminder extends core
 	{
 		$prop = $arr["prop"];
 		$rdata = $prop["value"];
-
-
 
 		// figure out user object id
 		$users = get_instance("users");
