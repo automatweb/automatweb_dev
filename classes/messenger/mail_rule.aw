@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_rule.aw,v 1.5 2004/02/25 15:46:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_rule.aw,v 1.6 2004/03/04 15:16:22 duke Exp $
 // mail_rule.aw - Maili ruul 
 /*
 @classinfo syslog_type=ST_MAIL_RULE relationmgr=yes
@@ -50,7 +50,7 @@ class mail_rule extends class_base
 					$tmp = $msgr->drv_inst->list_folders();
 					foreach($tmp as $item)
 					{
-						$this->folders[$item["name"]] = $item;
+						$this->folders[$item["fullname"]] = $item;
 					};
 				};
 			};
