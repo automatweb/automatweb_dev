@@ -1,0 +1,34 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>cookietable</name>
+            <type>table</type>
+            <store>no</store>
+            <group>general</group>
+            <form>monster</form>
+            <field>cookietable</field>
+            <caption>Olemasolevad cookied</caption>
+      </property>
+      <property>
+            <name>new_name</name>
+            <type>textbox</type>
+            <group>general</group>
+            <form>monster</form>
+            <field>new_name</field>
+            <caption>Uue cookie nimi</caption>
+      </property>
+      <property>
+            <name>new_value</name>
+            <type>textbox</type>
+            <group>general</group>
+            <form>monster</form>
+            <field>new_value</field>
+            <caption>Uue cookie v‰‰rtus</caption>
+      </property>
+      <forminfo>
+            <monster>
+                  <onsubmit>munch</onsubmit>
+            </monster>
+      </forminfo>
+</properties>
+
