@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.134 2002/08/29 03:17:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.135 2002/09/04 07:35:38 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2132,12 +2132,12 @@ class form extends form_base
 
 			foreach($restrict_search_el as $idx => $rel)
 			{
-	//			echo "searchong restrict $rel , el in sf = ",$l2r[$rel],"<br>";
 				$el =& $this->get_element_by_id($l2r[$rel]);
 
 				if (is_object($el) && is_object($this->arr["contents"][$el->get_row()][$el->get_col()]))
 				{
-					$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$rel],$restrict_search_val[$idx]);
+//					echo "set element in row ", $el->get_row()," col ",$el->get_col()," id ",$l2r[$rel]," to val ",$restrict_search_val[$idx]," <Br>";
+					$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$rel],$restrict_search_val[$idx],true);
 				}
 			}
 		}
