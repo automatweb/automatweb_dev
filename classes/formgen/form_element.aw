@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.26 2003/01/27 10:47:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.27 2003/01/27 14:07:05 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2661,6 +2661,7 @@ class form_element extends aw_template
 				{
 					aw_session_set("form_redir_after_submit_".$this->form->id, $this->arr["button_url"]);
 					$this->form->set_use_eid_once = true;
+					$this->form->go_to_after_submit = $this->arr["button_url"];
 				}
 			}
 			else

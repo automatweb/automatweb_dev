@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.4 2003/01/14 07:36:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.5 2003/01/27 14:07:05 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -671,6 +671,12 @@ class form_chain extends form_base
 		}
 		$ml_rule_inst = get_instance("mailinglist/ml_rule");
 		$ml_rule_inst->exec_dynamic_rules();
+
+		if ($f->go_to_after_submit != "")
+		{
+			return $f->go_to_after_submit;
+		}
+
 		return $url;
 	}
 
