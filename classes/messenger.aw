@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.48 2001/06/04 02:58:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.49 2001/06/04 03:14:05 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1231,8 +1231,9 @@ class messenger extends menuedit_light
 			$folders = array($folders => $folders);
 		};
 		$results = $this->driver->msg_search(array(
-					"field" => $field,
+					"fields" => array_keys($fields),
 					"value" => $value,
+					"connector" => $connector,
 					"folders" => array_keys($folders),
 		));
 		$this->read_template("searchresults.tpl");
@@ -1240,16 +1241,17 @@ class messenger extends menuedit_light
 		foreach ($results as $id => $contents)
 		{
 			$contents["tm"] = $this->time2date($contents["tm"],3);
-			$contents["from"] = $contents["mfrom"];
+			$contents["from"] = $this->MIME_decode($contents["mfrom"]);
 			$contents["folder"] = $folder_list[$contents["parent"]];
 			$contents["fid"] = $contents["parent"];
 			$contents["mid"] = $contents["oid"];
+			$contents["subject"] = $this->MIME_decode($contents["subject"]);
 			$this->vars($contents);
 			$c .= $this->parse("line");
 		};
 		$this->vars(array(
 				"line" => $c,
-				"field" => $field,
+				"fields" => join(",",array_keys($fields)),
 				"value" => $value,
 				"menu" => $menu,
 		));
