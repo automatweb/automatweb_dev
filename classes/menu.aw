@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.114 2004/11/30 20:49:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.115 2004/12/01 13:21:46 ahti Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -760,7 +760,7 @@ class menu extends class_base
 		);
 		$pclass = $arr["obj_inst"]->meta("pclass");
 		list($class_name, $tmp) = explode("/", $pclass);
-		if($class_name == "method" || $class_name == "commune")
+		if($class_name == "method" || $class_name == "commune" || $class_name == "community")
 		{
 			$class_id = clid_for_name($class_name);
 			$nodes[] = array(
@@ -771,7 +771,7 @@ class menu extends class_base
 				"options" => $this->get_pobjects($class_id),
 			);
 		}
-		if($class_name == "commune")
+		if($class_name == "commune" || $class_name == "community")
 		{
 			$nodes[] = array(
 				"type" => "select",
@@ -843,6 +843,8 @@ class menu extends class_base
 				if ($request["type"] != MN_PMETHOD)
 				{
 					$ob->set_meta("pclass","");
+					$ob->set_meta("pobject", "");
+					$ob->set_meta("pgroup", "");
 					$ob->set_meta("pm_url_admin","");
 					$ob->set_meta("pm_url_menus","");
 				};
@@ -885,11 +887,10 @@ class menu extends class_base
 
 			case "pmethod_properties":
 				$request = &$arr["request"];
-				list($class, $tmp) = explode("/",$request["pclass"]);
-				$ob->set_meta("pobject", (($class == "method" || $class == "commune") ? $request["pobject"] : ""));
-				$ob->set_meta("pgroup", ($class == "commune" ? $request["pgroup"] : ""));
-				$ob->set_meta("pclass",$request["pclass"]);
-				$ob->set_meta("pm_url_menus",$request["pm_url_menus"]);
+				$ob->set_meta("pclass", $request["pclass"]);
+				$ob->set_meta("pobject", $request["pobject"]);
+				$ob->set_meta("pgroup", $request["pgroup"]);
+				$ob->set_meta("pm_url_menus", $request["pm_url_menus"]);
 				$ob->set_meta("pm_url_admin",$request["pm_url_admin"]);
 				break;
 
