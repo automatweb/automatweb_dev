@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.35 2004/06/25 09:37:23 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.36 2004/06/25 12:51:28 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -59,18 +59,25 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @default group=contacts2
 
-@property contact_toolbar type=toolbar no_caption=1 store=no group=contacts2
+
+@layout hbox_toolbar type=hbox group=contacts2
+
+@property contact_toolbar type=toolbar no_caption=1 store=no parent=hbox_toolbar
 @caption "The Green Button"
 
-@property addresslist type=text store=no no_caption=1 group=contacts2 
+@layout hbox_others type=hbox group=contacts2
+
+@layout vbox_contacts_left type=vbox parent=hbox_others group=contacts2 width=30%
+
+@property addresslist type=text store=no no_caption=1 parent=vbox_contacts_left
 @caption Aadress
 
-@layout hbox1 type=hbox group=contacts2
-
-@property unit_listing_tree type=treeview no_caption=1 parent=hbox1
+@property unit_listing_tree type=treeview no_caption=1 parent=vbox_contacts_left
 @caption Puu
 
-@property human_resources type=table store=no no_caption=1 parent=hbox1
+@layout vbox_contacts_right type=vbox parent=hbox_others group=contacts2 width=70%
+
+@property human_resources type=table store=no no_caption=1 parent=vbox_contacts_right
 @caption Inimesed
 
 
