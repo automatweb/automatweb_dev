@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.44 2004/04/30 08:47:47 kristo Exp $
+// $Id: cfgutils.aw,v 1.45 2004/06/11 08:41:51 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -510,7 +510,7 @@ class cfgutils extends aw_template
 
 	function get_relinfo()
 	{
-		return $this->relinfo;
+		return is_array($this->relinfo) ? $this->relinfo : array();
 	}
 	
 	function get_forminfo()
