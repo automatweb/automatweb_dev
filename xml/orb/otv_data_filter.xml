@@ -3,4 +3,3 @@
 	<class name="otv_data_filter" folder="contentmgmt/object_treeview" extends="class_base">
 	</class>
 </orb>
-		

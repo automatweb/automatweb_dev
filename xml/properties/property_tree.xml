@@ -21,11 +21,67 @@
             <cols>40</cols>
             <caption>Demo sisu</caption>
       </property>
+      <property>
+            <name>ct_toolbar</name>
+            <table>objects</table>
+            <group>content</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>hbox1</parent>
+      </property>
+      <property>
+            <name>ct_tree</name>
+            <table>objects</table>
+            <group>content</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <parent>hbox2</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Puu</caption>
+      </property>
+      <property>
+            <name>ct_list</name>
+            <table>objects</table>
+            <group>content</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <parent>hbox2</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Tabel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TREE</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
       </classinfo>
+      <groupinfo>
+            <content>
+                  <caption>Sisu</caption>
+                  <submit>no</submit>
+            </content>
+      </groupinfo>
+      <layout>
+            <hbox1>
+                  <type>hbox</type>
+                  <group>content</group>
+            </hbox1>
+            <vbox1>
+                  <type>vbox</type>
+                  <group>content</group>
+            </vbox1>
+            <hbox2>
+                  <type>hbox</type>
+                  <group>content</group>
+                  <parent>vbox1</parent>
+            </hbox2>
+      </layout>
 </properties>
 

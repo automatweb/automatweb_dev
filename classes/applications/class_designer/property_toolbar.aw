@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.4 2005/03/11 16:31:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.5 2005/03/16 14:45:49 kristo Exp $
 // property_toolbar.aw - Toolbar 
 /*
 
@@ -13,7 +13,7 @@
 
 @default group=buttons
 
-@property buttons type=releditor reltype=RELTYPE_BUTTON table_fields=name,b_type props=name,b_type no_caption=1 mode=manager
+@property buttons type=releditor reltype=RELTYPE_BUTTON table_fields=ord,name,b_type props=ord,name,b_type no_caption=1 mode=manager table_edit_fields=ord
 
 @groupinfo buttons caption="Nupud"
 
@@ -61,7 +61,8 @@ class property_toolbar extends class_base
 		$t = get_instance("vcl/toolbar");
 		
 		$buttons = new object_list($el->connections_from(array(
-			"type" => RELTYPE_BUTTON
+			"type" => RELTYPE_BUTTON,
+			"sort_by" => "jrk"
 		)));
 		foreach($buttons->arr() as $b)
 		{
@@ -87,7 +88,8 @@ class property_toolbar extends class_base
 		);
 
 		$buttons = new object_list($el->connections_from(array(
-			"type" => RELTYPE_BUTTON
+			"type" => RELTYPE_BUTTON,
+			"sort_by" => "jrk"
 		)));
 		foreach($buttons->arr() as $b)
 		{

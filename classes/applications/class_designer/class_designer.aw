@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.5 2005/03/07 16:00:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.6 2005/03/16 14:45:49 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -446,7 +446,7 @@ class class_designer extends class_base
 		$o->set_meta("element_ords", $elo);
 		$o->save();
 
-		return $arr["return_url"];
+		return html::get_change_url($g->id(), array("return_url" => urlencode($arr["return_url"])));
 	}
 
 	/**
@@ -477,7 +477,7 @@ class class_designer extends class_base
 		$o->set_meta("element_ords", $elo);
 		$o->save();
 
-		return $arr["return_url"];
+		return html::get_change_url($g->id(), array("return_url" => urlencode($arr["return_url"])));
 	}
 
 	/**
@@ -512,7 +512,7 @@ class class_designer extends class_base
 		$o->set_meta("element_ords", $elo);
 		$o->save();
 
-		return $arr["return_url"];
+		return html::get_change_url($e->id(), array("return_url" => urlencode($arr["return_url"])));
 	}
 
 	/**

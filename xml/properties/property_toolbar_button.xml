@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>ord</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>jrk</field>
+            <caption>J&amp;auml;rjekord</caption>
+      </property>
+      <property>
             <name>b_type</name>
             <table>objects</table>
             <group>general</group>

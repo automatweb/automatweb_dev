@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar_button.aw,v 1.3 2005/03/07 16:00:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar_button.aw,v 1.4 2005/03/16 14:45:49 kristo Exp $
 // property_toolbar_button.aw - Taoolbari nupp 
 /*
 
@@ -7,6 +7,10 @@
 
 @default table=objects
 @default group=general
+
+@property ord type=textbox size=5 table=objects field=jrk
+@caption J&auml;rjekord
+
 @default field=meta
 @default method=serialize
 
