@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.38 2004/04/01 09:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.39 2004/04/06 15:42:55 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -26,9 +26,6 @@
 @property size type=textbox size=5
 @caption Suurus
 
-@property units type=select 
-@caption Suuruse &uuml;hikud
-
 @property fgcolor type=colorpicker
 @caption Teksti v&auml;rv
 
@@ -37,9 +34,6 @@
 
 @property lineheight type=textbox size=5
 @caption Joone k&otilde;rgus
-
-@property lhunits type=select 
-@caption Joone k&otilde;rguse &uuml;hikud
 
 @property border type=textbox size=5
 @caption Border width
@@ -56,14 +50,8 @@
 @property width type=textbox size=5
 @caption Laius
 
-@property w_units type=select 
-@caption Laiuse &uuml;hikud
-
 @property height type=textbox size=5
 @caption K&otilde;rgus
-
-@property h_units type=select 
-@caption K&otilde;rguse &uuml;hikud
 
 @property a_style type=relpicker reltype=RELTYPE_CSS
 @caption Lingi stiil
@@ -221,7 +209,7 @@ class css extends class_base
 					break;
 
 				case "lineheight":
-					$mask = "line-height: %s".$data["lhunits"].";\n";
+					$mask = "line-height: %spx\n";
 					break;
 
 				case "border":
@@ -237,11 +225,11 @@ class css extends class_base
 					break;
 				
 				case "width":
-					$mask = "width: %s".$data["w_units"].";\n";
+					$mask = "width: %spx;\n";
 					break;
 
 				case "height":
-					$mask = "height: %s".$data["h_units"].";\n";
+					$mask = "height: %spx;\n";
 					break;
 
 				default:
@@ -251,10 +239,10 @@ class css extends class_base
 
 			if ($key == "size")
 			{
-				$retval .= "\tfont-size: $val" . $data["units"] . ";\n";
+				$retval .= "\tfont-size: $val" . "px;\n";
 			}
 			else
-			if ($key != "units" && !$ign)
+			if (!$ign)
 			{
 				$retval .= sprintf("\t" . $mask,$val);
 			};
@@ -335,20 +323,6 @@ class css extends class_base
 					"top" => "&Uuml;leval",
 					"middle" => "Keskel",
 					"bottom" => "All"
-				);
-				break;
-
-			case "units":
-			case "lhunits":
-			case "w_units":
-			case "h_units":
-				$prop['options'] = array(
-					"px" => "pikslit",
-					"pt" => "punkti (1pt=1/72in)",
-					"in" => "tolli",
-					"em" => "ems (suhteline)",
-					"cm" => "sentimeetrit",
-					"mm" => "millimeetrit",
 				);
 				break;
 
