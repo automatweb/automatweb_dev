@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.3 2004/09/09 10:57:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.4 2004/09/14 09:31:22 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -23,26 +23,12 @@ class otto_prod_search extends class_base
 		array("Kodusisustus", array(144))	
 	);
 
-	var $search_fld_lat = array(
-		array("Sieviešu mode", array(135883)),
-		array("Viriešu mode", array(135836)),
-		array("Bernu un pusaudžu mode", array(135962)),
-		array("Apavi", array(135963)),
-		array("Sporta preces", array(135964)),
-		array("Majturiba", array(135965))
-	);
-
 	function otto_prod_search()
 	{
 		$this->init(array(
 			"tpldir" => "applications/shop/otto/otto_prod_search",
 			"clid" => CL_OTTO_PROD_SEARCH
 		));
-
-		if (aw_global_get("lang_id") == 6)
-		{
-			$this->search_fld = $this->search_fld_lat;
-		}
 	}
 
 	function get_property($arr)
@@ -135,20 +121,28 @@ class otto_prod_search extends class_base
 
 		$ol_cnt = new object_list($filter);
 
-		$names = $ol_cnt->names();
-		$tt = $used = array();
-		foreach($names as $n_id => $n_n)
-		{
-			if ($used[$n_n])
-			{
-				continue;
-			}
-			$used[$n_n] = $n_id;
-			$tt[] = $n_id;
-		}
+		// filter by name does NOT work. at all. must filter by image number. 
+		// so write some badass sql here
+		$q = "
+			SELECT 
+				o.brother_of as oid,pi.imnr as imnr
+			FROM 
+				aw_shop_products pr
+				LEFT JOIN otto_prod_img pi ON (pi.pcode = pr.user20 AND pi.nr = 1)
+				LEFT JOIN objects o ON pr.aw_oid = o.oid 
+			WHERE
+				o.status > 0 AND o.lang_id = ".aw_global_get("lang_id")." AND
+				pr.aw_oid IN (".join(",", $ol_cnt->ids()).") AND
+				pi.imnr IS NOT NULL
+			GROUP BY
+				pi.imnr
+		";
+		$this->db_query($q);
 		$ol_cnt = new object_list();
-		$ol_cnt->add($tt);
-
+		while ($row = $this->db_next())
+		{
+			$ol_cnt->add($row["oid"]);
+		}
 		$total = $ol_cnt->count();
 		$per_page = 10;
 		$page = $_GET["page"] ? $_GET["page"] : 0;
@@ -215,6 +209,8 @@ class otto_prod_search extends class_base
 			$ol = new object_list($filter);
 		}
 
+		$used_ims = array();
+
 		$prod = $ol->begin();
 		for ($r = 0; $r < 5; $r++)
 		{
@@ -229,13 +225,28 @@ class otto_prod_search extends class_base
 
 				$viewlink = $this->mk_my_orb("show_items", array(
 					"section" => $prod->parent(),
-					"id" => aw_ini_get("shop.prod_fld_path_oc"),
+					"id" => 614,
 					"page" => $prod->prop("user18"),
 					"oview" => 2,
 					"apid" => $prod->id()
 				), "shop_order_center");
 
-				$imnr = $this->db_fetch_field("SELECT imnr FROM otto_prod_img WHERE pcode = '".$prod->prop("user20")."' AND nr=1","imnr");
+				$imnr = $this->db_fetch_field("SELECT imnr FROM otto_prod_img WHERE pcode = '".$prod->prop("user20")."' AND nr = 1","imnr");
+				if (isset($used_ims[$imnr]))
+				{
+					$prod = $ol->next();
+					if ($i > 0)
+					{
+						$i--;
+					}
+					else
+					{
+						$i = 1; 
+						$r--;
+					}
+					continue;
+				}
+				$used_ims[$imnr] = 1;
 
 				//echo "addar $i $a ".$prod->id()."<br>";
 				if ($imnr != "")
@@ -276,7 +287,7 @@ class otto_prod_search extends class_base
 					"prod_desc" => $prod->prop("userta2"),
 					"prod_price" => $prod_i->get_price($prod),
 					"path" => $prod->path_str(array(
-						"to" => aw_ini_get("shop.prod_fld_path"),
+						"to" => 149,
 						"no_self" => 1,
 						"max_len" => 3
 					)),
