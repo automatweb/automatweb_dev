@@ -30,7 +30,8 @@ if (!aw_global_get("no_menus"))
 		"text" => $content,
 		"docid" => $docid,
 		"sub_callbacks" => $si->get_sub_callbacks(),
-		"type" => $type
+		"type" => $type,
+		"template" => $si->get_page_template()
 	));
 }
 

@@ -107,6 +107,11 @@ class site_base extends aw_template
 		}
 		return $m->show($arr);
 	}
+
+	function get_page_template()
+	{
+		return "main.tpl";
+	}
 }
 
 ?>
