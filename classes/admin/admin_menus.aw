@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.96 2005/03/14 17:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.97 2005/03/17 18:17:07 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -855,7 +855,7 @@ class admin_menus extends aw_template
 		else
 		{
 			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-			$this->otc_inst = get_instance("obj_table_conf");
+			$this->otc_inst = get_instance(CL_OBJ_TABLE_CONF);
 			$this->otc_inst->init_table($this->co_id, $this->t);
 		}
 	}

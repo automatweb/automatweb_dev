@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/obj_table_conf.aw,v 2.8 2005/03/02 13:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/obj_table_conf.aw,v 1.1 2005/03/17 18:17:07 kristo Exp $
 // obj_table_conf - Objekti tabeli conf 
 /*
 
@@ -74,10 +74,6 @@ class obj_table_conf extends class_base
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -108,7 +104,6 @@ class obj_table_conf extends class_base
 	
 	function get_options()
 	{
-		
 		$retval[] = "";
 		foreach ($this->data as $key => $value)
 		{
@@ -116,17 +111,6 @@ class obj_table_conf extends class_base
 		}
 		return $retval;
 	}
-	/*
-	function callb_ord($arr)
-	{
-		$fieldname = $arr["fieldname"];
-		
-		return html::textbox(array(
-				"name" => "col_info[$fieldname][ord]",
-				"value" => $arr['ord'],
-				"size" => 3
-		));
-	}*/
 	
 	function gen_proptable($arr)
 	{
@@ -142,9 +126,6 @@ class obj_table_conf extends class_base
 			"name" => "jrk",
 			"caption" => "Järjekord",
 			"sortable" => 1,
-			//"callback" => array(&$this, "callb_ord"),
-			//"numeric" => 1,
-			//"callb_pass_row" => true,	
 		));
 		
 		$table->define_field(array(
@@ -162,7 +143,6 @@ class obj_table_conf extends class_base
 			$i = 0;
 			foreach ($arr["obj_inst"]->meta("cols") as $col => $item)
 			{
-				//$fieldname = current($item['col']);
 				unset($selects);
 				foreach ($item['col'] as $fieldname)
 				{
@@ -237,7 +217,6 @@ class obj_table_conf extends class_base
 		}
 		if($arr["request"]["col_info"])
 		{
-			
 			//Fuck this sort... 
 			foreach ($arr["request"]["col_info"] as $key => $value)
 			{
