@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.52 2002/09/27 13:25:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.53 2002/10/15 20:33:51 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -237,7 +237,6 @@ class forum extends aw_template
 	function configure($arr)
 	{
 		extract($arr);
-		$this->read_template("add_forum.tpl");
 		// if parent is defined, then we are about to add a new forum,
 		if ($parent)
 		{
@@ -260,12 +259,43 @@ class forum extends aw_template
 		else
 		{
 			$obj = $this->get_object($id);
+			$this->id = $id;
 			$pobj = $this->get_object($obj["parent"]);
 			$title = "Muuda foorumit";
 			$this->mk_path($parent, $title);
 			$meta = $this->get_object_metadata(array("metadata" => $obj["metadata"]));
 		};
-	
+
+		$toolbar = get_instance("toolbar");
+
+		$content_url = $this->mk_my_orb("topics",array("id" => $id));
+		$rates_url = $this->mk_my_orb("change_rates",array("id" => $id));
+		$notify_url = $this->mk_my_orb("notify_list",array("id" => $id));
+
+		$content_link = "<a href='$content_url' class='fgtitle'>Foorumi sisu</a>";
+		$rates_link = "<a href='$rates_url' class='fgtitle'>Hinded</a>";
+		$notify_link = "<a href='$notify_url' class='fgtitle'>E-posti aadressid</a>";
+
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:document.changeform.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif",
+                ));
+
+		if ($this->id)
+		{
+			$toolbar->add_separator();
+			$toolbar->add_cdata($content_link);
+			$toolbar->add_separator();
+		
+			$toolbar->add_cdata($rates_link);
+			$toolbar->add_separator();
+		
+			$toolbar->add_cdata($notify_link);
+		};
+
 		if ($pobj["class_id"] == CL_DOCUMENT)
 		{
 			$this->mk_path($pobj["parent"],sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("list_aliases",array("id" => $parent),"aliasmgr"),$pobj["name"]) . " / $title");
@@ -276,30 +306,15 @@ class forum extends aw_template
 			$this->mk_path($pobj["oid"], $title);
 		};
 
-		$this->vars(array(
-			"content_link" => $this->mk_my_orb("topics",array("id" => $id)),
-			"rates_link" => $this->mk_my_orb("change_rates",array("id" => $id)),
-			"notify_link" => $this->mk_my_orb("notify_list",array("id" => $id)),
-			// oh god, this sucks, but alas .. positioned arguments suck too
-			"url" => str_replace("/automatweb","",$this->mk_my_orb("topics",array("id" => $id),"forum",false)),
+		$cfgform = get_instance("cfgform");
+		$reforb = $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent));
+		$xf = $cfgform->ch_form(array(
+				"clid" => &$this,
+				"obj" => $obj,
+				"reforb" => $reforb,
 		));
 
-		$url = ($id) ? $this->parse("URL") : "";
-
-		$this->vars(array(
-			"name" => $obj["name"],
-			"comment" => $obj["comment"],
-			"comments" => checked($meta["comments"]),
-			"template" => $this->picker($meta["template"],aw_ini_get("menuedit.template_sets")),
-			"onpage" => $this->picker($meta["onpage"],array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
-			"topicsonpage" => $this->picker($meta["topicsonpage"],array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
-			"rated" => checked($meta["rated"]),
-			"reforb" => $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent)),
-			"URL" => $url,
-			"EDIT" => $this->parse("EDIT"),
-		));
-		$this->parse("CHANGE");
-		return $this->parse();
+		return $toolbar->get_toolbar() . $xf;
 	}
 	
 	////
@@ -1959,6 +1974,62 @@ topic");
 		};
 
 		return $retval;
+	}
+
+	function get_properties($args = array())
+	{
+		$fields = array();
+		if ($this->id)
+		{
+			$url = $this->mk_my_orb("topics",array("id" => $this->id));
+			$fields["content_link"] = array(
+				"type" => "text",
+				"caption" => "URL",
+				"value" => "<a href='$url' target='_blank'>$url</a>",
+			);
+		};
+
+		$fields["comments"] = array(
+                        "type" => "checkbox",
+                        "caption" => "Kommenteeritav",
+			"checked" => $args["comments"],
+			"value" => 1,
+                        "store" => "meta",
+                );
+		
+		$fields["rated"] = array(
+                        "type" => "checkbox",
+                        "caption" => "Hinnatav",
+                        "checked" => $args["rated"],
+			"value" => 1,
+                        "store" => "meta",
+                );
+
+		$fields["template"] = array(
+                        "type" => "select",
+                        "options" => aw_ini_get("menuedit.template_sets"),
+                        "caption" => "Template",
+                        "selected" => $args["template"],
+                        "store" => "meta",
+                );
+
+		$fields["onpage"] = array(
+                        "type" => "select",
+                        "options" => array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30),
+                        "caption" => "Kommentaare lehel",
+                        "selected" => $args["onpage"],
+                        "store" => "meta",
+                );
+		
+		$fields["topicsonpage"] = array(
+                        "type" => "select",
+                        "options" => array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30),
+                        "caption" => "Teemasid lehel",
+                        "selected" => $args["topicsonpage"],
+                        "store" => "meta",
+                );
+
+		return $fields;
 	}
 }
 ?>
