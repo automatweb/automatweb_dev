@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/output/xml/rss.aw,v 1.1 2003/06/04 12:35:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/output/xml/rss.aw,v 1.2 2004/06/09 08:03:27 kristo Exp $
 // rss.aw - RSS feed generator
 
 define(ITEM_TPL,"
@@ -92,10 +92,10 @@ class rss extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
                 $parent = (int)$parent;
-		$obj = $this->get_object($parent);
+		$obj = obj($parent);
 		$this->link = "$baseurl/$parent";
 		$this->about = "$baseurl/index.$ext/section=$section/format=rss";
-		$this->title = aw_ini_get("stitle") . " / " . $obj["name"];
+		$this->title = aw_ini_get("stitle") . " / " . $obj->name();
                 $rootmenu = $this->cfg["rootmenu"];
 
 
@@ -113,9 +113,9 @@ class rss extends aw_template
 		if ($periodic)
                 {
                         // if $section is a periodic document then emulate the current period for it
-                        if ($obj["class_id"] == CL_PERIODIC_SECTION)
+                        if ($obj->class_id() == CL_PERIODIC_SECTION)
                         {
-                                $activeperiod = $obj["period"];
+                                $activeperiod = $obj->period();
                         }
                         else
                         {
