@@ -130,7 +130,17 @@
             <reltype>RELTYPE_CONTROLLER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>N&amp;auml;itamise kontroller</caption>
+            <caption>Vaikimisi n&amp;auml;itamise kontroller</caption>
+      </property>
+      <property>
+            <name>controller_tbl</name>
+            <table>objects</table>
+            <group>appear</group>
+            <type>callback</type>
+            <callback>callback_get_controller_tbl</callback>
+            <store>no</store>
+            <field>controller_tbl</field>
+            <caption>Kontrollerid kataloogidele</caption>
       </property>
       <property>
             <name>layoutbl</name>

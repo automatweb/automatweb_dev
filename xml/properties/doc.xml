@@ -620,12 +620,12 @@
       </tableinfo>
       <reltypes>
             <TIMING>
-                  <value>1</value>
+                  <value>20</value>
                   <clid>CL_TIMING</clid>
                   <caption>Aeg</caption>
             </TIMING>
             <REMINDER>
-                  <value>2</value>
+                  <value>21</value>
                   <clid>CL_REMINDER</clid>
                   <caption>Meeldetuletus</caption>
             </REMINDER>

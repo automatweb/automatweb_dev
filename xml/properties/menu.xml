@@ -713,6 +713,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>ikoon</caption>
             </ICON>
+            <TIMING>
+                  <value>20</value>
+                  <clid>CL_TIMING</clid>
+                  <caption>Aeg</caption>
+            </TIMING>
       </reltypes>
 </properties>
 
