@@ -1209,7 +1209,6 @@ class user extends class_base
 			$parent = obj($arr["obj_inst"]->parent());
 			if ($parent->class_id() == CL_GROUP)
 			{
-				aw_global_set("__in_post_message", 1);
 				// we have to move the object to a new loacation
 				$arr["obj_inst"]->set_parent(aw_ini_get("users.root_folder"));
 				$arr["obj_inst"]->save();
