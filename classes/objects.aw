@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.52 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.53 2003/12/03 12:05:50 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -775,12 +775,12 @@ class objects extends db_objects
 		$GLOBALS["cfg"]["__default"]["site_id"] = aw_global_get("real_site_id");
 
 		$m_db = get_instance("menu");
-		$menus = $m_db->export_menus(array(
+		$menus = array();/*$m_db->export_menus(array(
 			"id" => aw_ini_get("amenustart"),
 			"ex_menus" => array_keys($mnex),
 			"ret_data" => true,
 			"ex_icons" => 1
-		));
+		));*/
 
 		// reset to new site id
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
