@@ -65,6 +65,16 @@ function selall()
 		</td>
 	</tr>
 	<!-- END SUB: clf1 -->
+	<!-- SUB: clf2 -->
+	<tr>
+		<td bgcolor="{VAR:bgcolor}"'>
+		Tekst:
+		</td>
+		<td bgcolor="{VAR:bgcolor}" colspan="4">
+		<textarea name="prp_value[{VAR:prp_key}]" cols="60" rows="4">{VAR:prp_value}</textarea>
+		</td>
+	</tr>
+	<!-- END SUB: clf2 -->
 	<!-- END SUB: property -->
 	</table>
 	</fieldset>
