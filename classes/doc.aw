@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.9 2003/03/31 10:12:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.10 2003/04/01 16:42:08 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -475,15 +475,11 @@ class doc extends class_base
 		$bs = $this->_get_brother_documents($args["obj"]["oid"]);
 		$retval["caption"] = array(
 			"caption" => $args["prop"]["caption"],
+			"group" => $args["prop"]["group"],
 		);
 
 		foreach($this->get_planners_with_folders() as $row)
 		{
-			/*
-			print "<pre>";
-			print_r($row);
-			print "</pre>";
-			*/
 			$folderdat = $this->get_object($row["event_folder"]);
 			$retval["cal_" . $row["oid"]] = array(
 				"type" => "checkbox",
