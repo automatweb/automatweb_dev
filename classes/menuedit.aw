@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.208 2003/01/24 13:02:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.209 2003/01/24 13:42:39 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -806,6 +806,7 @@ class menuedit extends aw_template
 		{
 			return $GLOBALS["docid"];
 		}
+
 		if (!$section)
 		{
 			return 0;
@@ -883,10 +884,11 @@ class menuedit extends aw_template
 			}
 			else
 			{
-				$sections = unserialize($me_row["sss"]);
+				$sections = $me_row["meta"]["sss"];
 			};
 
 			$periods = $me_row["meta"]["pers"];
+
 
 			if (is_array($sections))
 			{
@@ -922,7 +924,7 @@ class menuedit extends aw_template
 			{
 				$ordby = "objects.jrk";
 			}
-			$q = "SELECT objects.oid as oid,objects.class_id AS class_id, objects.brother_of AS brother_of, documents.esilehel as esilehel FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".aw_global_get("lang_id").") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
+			$q = "SELECT objects.oid as oid,objects.class_id AS class_id, objects.brother_of AS brother_of, documents.esilehel as esilehel FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id in (7,29) AND objects.lang_id=".aw_global_get("lang_id").") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
@@ -4346,6 +4348,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	
 			// I need to  know that for the public method menus
 			$d->set_opt("cnt_documents",$d->num_rows());
+
 
 			if ($d->num_rows() > 1)		// the database driver sets this
 			{
