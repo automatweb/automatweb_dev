@@ -407,7 +407,7 @@ aste07
 
 <td class="celltext">&nbsp;<input type="radio" name="oid" value="{VAR:oid}"
 <!-- SUB: FE -->
-onClick="sel_type={VAR:class_id};sel_form={VAR:form_id};sel_entry={VAR:oid};mk_ops()"
+onClick="sel_type='{VAR:class_id}';sel_form='{VAR:form_id}';sel_entry='{VAR:oid}';mk_ops()"
 <!-- END SUB: FE -->
 <!-- SUB: NFE -->
 onClick="sel_type={VAR:class_id};cur_arr=0;sel_form=0;cl();"
