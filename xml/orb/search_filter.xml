@@ -1,0 +1,108 @@
+<?xml version='1.0'?>
+<orb>
+
+	<class name="search_filter">
+	
+		<action name="new">
+			<function name="orb_new">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_new">
+			<function name="orb_submit_new">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_change">
+			<function name="orb_submit_change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="orb_change">
+				<arguments>
+					<required name="id"/>
+					<optional name="parent"/>
+					<optional name="change_part"/>
+					<optional name="is_change_part"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="search">
+			<function name="orb_search">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="output">
+			<function name="orb_output">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="output_submit">
+			<function name="orb_output_submit">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit_add">
+			<function name="orb_filter_edit_add">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="filter_edit_del">
+			<function name="orb_filter_edit_del">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit_up">
+			<function name="orb_filter_edit_up">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit_down">
+			<function name="orb_filter_edit_down">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="filter_edit_change_part">
+			<function name="orb_filter_edit_change_part">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		
+		<action name="submit_select_forms">
+			<function name="orb_submit_select_forms">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+
+		</class>
+	</orb>
