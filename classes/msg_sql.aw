@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.6 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.7 2001/07/03 02:39:30 duke Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
 class msg_sql_driver extends core
 {
@@ -46,7 +46,7 @@ class msg_sql_driver extends core
 			FROM messages
 			LEFT JOIN objects ON (messages.id = objects.oid) 
 			WHERE parent IN ($s) AND ($qs)
-			ORDER BY parent";
+			ORDER BY tm DESC,parent";
 		$this->db_query($q);
 		$rows = array();
 		while($row = $this->db_next())
@@ -140,7 +140,7 @@ class msg_sql_driver extends core
 		$q = sprintf("SELECT objects.*,messages.* FROM objects
 			LEFT JOIN messages ON (objects.oid = messages.id)
 			WHERE class_id = %d AND parent = '$folder'
-			ORDER BY tm DESC",CL_MESSAGE);
+			ORDER BY objects.created DESC",CL_MESSAGE);
 		$this->db_query($q);
 		$res = array();
 		while($row = $this->db_next())
@@ -204,7 +204,14 @@ class msg_sql_driver extends core
 		extract($old);
 		if ($args["reply"])
 		{
-			$mtargets1 = $mfrom;
+			if ($reply_all)
+			{
+				$mtargets1 = $mfrom . "," . $mto;
+			}
+			else
+			{
+				$mtargets1 = $mfrom;
+			};
 			$mto = $mfrom;
 			$mfrom = "";
 			$subject = "Re: $subject";
@@ -228,6 +235,7 @@ class msg_sql_driver extends core
 			//$message = "\n\n$qchar" . $message;
 		};
 
+		$tm = time();
 		$q = "INSERT INTO messages (id,pri,reply,mtargets1,subject,tm,type,message,mto)
 			VALUES('$newid','$pri',0,'$mtargets1','$subject','$tm','$type','$message','$mto')";
 		$this->db_query($q);
