@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.147 2003/12/08 11:14:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.148 2003/12/08 12:00:03 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -2947,35 +2947,31 @@ class planner extends class_base
 	}
 	
 	////
+	// !Returns a list of planners that have event folders .. 
 	function get_planners_with_folders($args = array())
 	{
 		$retval = array();
 
-		$this->get_objects_by_class(array(
-			"class" => CL_PLANNER,
-			"active" => true,
-			"fields" => "oid,name,metadata",
-			"orderby" => "name",
+		$planners = new object_list(array(
+			"class_id" => CL_PLANNER,
+			"sort_by" => "name",
 		));
 
-		while($row = $this->db_next())
+		for($o = $planners->begin(); !$planners->end(); $o = $planners->next())
 		{
-
-			$row["meta"] = aw_unserialize($row["metadata"]);
-			// aight, this is where I could use $obj->get_property_value("xxx");
-			// but since I don't have it yet, this will do -- duke
-
-			// display only the calendars which have an event folder defined
-
-			if (!empty($row["meta"]["event_folder"]))
+			if ($o->prop("event_folder") != 0)
 			{
 				$retval[] = array(
-					"oid" => $row["oid"],
-					"name" => $row["name"],
-					"event_folder" => $row["meta"]["event_folder"],
+					"oid" => $o->id(),
+					"name" => $o->name(),
+					"event_folder" => $o->prop("event_folder"),
 				);
+
+
 			};
-		};		
+
+
+		};
 		return $retval;
 	}
 };
