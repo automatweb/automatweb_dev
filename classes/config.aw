@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.56 2004/03/09 15:39:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.57 2004/04/29 12:20:50 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -751,7 +751,7 @@ class config extends db_config
 		
 		$cs = aw_unserialize($this->get_simple_config("class_cfgforms"));
 
-		while (list($clid,$desc) = each($this->cfg["classes"]))
+		while (list($clid,$desc) = each(aw_ini_get("classes")))
 		{
 			if ($cfgu->has_properties(array("clid" => $clid)))
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.6 2004/03/17 17:12:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.7 2004/04/29 12:20:57 kristo Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -213,7 +213,7 @@ class object_type extends class_base
 	function get_type_picker()
 	{
 		$ret = array();
-		foreach($this->cfg["classes"] as $clid => $cldat)
+		foreach(aw_ini_get("classes") as $clid => $cldat)
 		{
 			if ($cldat["can_add"] == 1)
 			{
@@ -231,7 +231,8 @@ class object_type extends class_base
 	{
 		$o = new object($arr["id"]);
 
-		$clss = $this->cfg["classes"][$o->prop("type")]["file"];
+		$tmp = aw_ini_get("classes");
+		$clss = $tmp[$o->prop("type")]["file"];
 		if ($clss == "document")
 		{
 			$clss = "doc";

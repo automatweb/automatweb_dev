@@ -203,6 +203,7 @@ class doc_event extends core
 
 		$xstart = 0;
 		$ccounter = 0;
+		$tmp = aw_ini_get("classes");
 
 		while($row = $this->db_next())
 		{
@@ -257,7 +258,7 @@ class doc_event extends core
 			};
 
 			$gx = date("dmY",$row["start"]);
-			$fl = $this->cfg["classes"][$row["class_id"]]["file"];
+			$fl = $tmp[$row["class_id"]]["file"];
 			if ($fl == "document")
 			{
 				$row["caption"] = html::href(array(

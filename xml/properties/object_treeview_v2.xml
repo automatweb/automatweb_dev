@@ -1,0 +1,133 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>ds</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DATASOURCE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Andmed</caption>
+      </property>
+      <property>
+            <name>show_folders</name>
+            <table>objects</table>
+            <group>showing</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;auml;ita katalooge</caption>
+      </property>
+      <property>
+            <name>show_add</name>
+            <table>objects</table>
+            <group>showing</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;auml;ita toolbari</caption>
+      </property>
+      <property>
+            <name>tree_type</name>
+            <table>objects</table>
+            <group>showing</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <default>1</default>
+            <caption>Puu n&amp;auml;itamise meetod</caption>
+      </property>
+      <property>
+            <name>title_bgcolor</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>colorpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pealkirja taustav&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>even_bgcolor</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>colorpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Paaris rea taustav&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>odd_bgcolor</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>colorpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Paaritu rea taustav&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>header_css</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Pealkirja stiil</caption>
+      </property>
+      <property>
+            <name>line_css</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Rea stiil</caption>
+      </property>
+      <property>
+            <name>columns</name>
+            <table>objects</table>
+            <group>columns</group>
+            <type>callback</type>
+            <callback>callback_get_columns</callback>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tulbad</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_OBJECT_TREEVIEW_V2</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <showing>
+                  <caption>N&amp;auml;itamine</caption>
+            </showing>
+            <styles>
+                  <caption>Stiilid</caption>
+            </styles>
+            <columns>
+                  <caption>Tulbad</caption>
+            </columns>
+      </groupinfo>
+      <reltypes>
+            <DATASOURCE>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_OTV_DS_OBJ</num_0>
+                        <num_1>CL_OTV_DS_POSTIPOISS</num_1>
+                  </clid>
+                  <caption>andmed</caption>
+            </DATASOURCE>
+            <CSS>
+                  <value>2</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>css stiil</caption>
+            </CSS>
+      </reltypes>
+</properties>
+

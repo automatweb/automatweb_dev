@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.5 2004/01/13 16:24:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.6 2004/04/29 12:20:58 kristo Exp $
 
 /*
 	@default table=objects
@@ -1036,12 +1036,13 @@ class cal_event extends class_base
 			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby
 as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id IS NULL) AND ".join("AND",$se);
 			$this->db_query($q);
+			$tmp = aw_ini_get("classes");
 			while ($row = $this->db_next())
 			{
 				$this->vars(array(
 					"name" => $row["name"],
 					"id" => $row["oid"],
-					"type"  => $this->cfg["classes"][$row["class_id"]]["name"],
+					"type"  => $tmp[$row["class_id"]]["name"],
 					"created" => $this->time2date($row["created"],2),
 					"modified" => $this->time2date($row["modified"], 2),
 					"createdby" => $row["createdby"],

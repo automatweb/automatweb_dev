@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.146 2004/04/12 14:10:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.147 2004/04/29 12:20:50 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -46,7 +46,7 @@ class aliasmgr extends aw_template
 			}
 		}
 
-		$classes = $this->cfg["classes"];
+		$classes = aw_ini_get("classes");
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
@@ -303,7 +303,7 @@ class aliasmgr extends aw_template
 
 		$by_idx = $by_alias = array();
 
-		foreach($this->cfg["classes"] as $clid => $cldat)
+		foreach(aw_ini_get("classes") as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]) || isset($cldat["old_alias"]))
 			{
@@ -338,6 +338,7 @@ class aliasmgr extends aw_template
 		}
 
 		$cache_inst = get_instance("cache");
+		$classlist = aw_ini_get("classes");
 
 		// try to find aliases until we no longer find any. 
 		// why is this? well, to enable the user to add aliases bloody anywhere. like in files that are to be shown right away
@@ -381,7 +382,7 @@ class aliasmgr extends aw_template
 				foreach($toreplace as $clid => $claliases)
 				{
 					$emb_obj_name = "emb" . $clid;
-					$cldat = $this->cfg["classes"][$clid];
+					$cldat = $classlist[$clid];
 					$class_name = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
 
 					if ($class_name)
@@ -590,7 +591,7 @@ class aliasmgr extends aw_template
 		// this will be an array of class => name pairs for all object types that can be embedded
 		$aliases = array();
 		$types = array();
-		$classes = $this->cfg["classes"];
+		$classes = aw_ini_get("classes");
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
@@ -820,7 +821,7 @@ class aliasmgr extends aw_template
 
 		$this->typearr = array();
 
-		$classes = $this->cfg["classes"];
+		$classes = aw_ini_get("classes");
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
@@ -845,7 +846,7 @@ class aliasmgr extends aw_template
 
 		$this->classarr = array();
 
-		$classes = $this->cfg["classes"];
+		$classes = aw_ini_get("classes");
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
@@ -887,7 +888,7 @@ class aliasmgr extends aw_template
 			$filt = $adc->get_alias_filter($adc_id);
 		}
 
-		$classes = $this->cfg["classes"];
+		$classes = aw_ini_get("classes");
 		$arr = array();
 		foreach($rel_arr as $val)
 		{
@@ -911,9 +912,10 @@ class aliasmgr extends aw_template
 		$ret = array();
 
 		$o = obj($oid);
+		$tmp = aw_ini_get("classes");
 		foreach($o->connections_from() as $c)
 		{
-			list($astr) = explode(",",$this->cfg["classes"][$c->prop("to.class_id")]["alias"]);
+			list($astr) = explode(",",$tmp[$c->prop("to.class_id")]["alias"]);
 			$ret[$c->prop("id")] = "#".$astr.(++$cnts[$c->prop("to.class_id")])."#";
 		}
 		return $ret;
@@ -1005,7 +1007,7 @@ class aliasmgr extends aw_template
 
 		$choices = array();
 		$choices2 = array();
-		$classes = $this->cfg["classes"];
+		$classes = aw_ini_get("classes");
 		// generate a list of class => name pairs
 		foreach($classes as $clid => $cldat)
 		{
@@ -1034,14 +1036,15 @@ class aliasmgr extends aw_template
 
 		$hist = !is_array($hist) ? array() : $this->make_alias_classarr2($hist);
 
+		$tmp = aw_ini_get("classes");
 		$this->reltypes[RELTYPE_BROTHER] = "too vend";
 		$this->rel_type_classes[RELTYPE_BROTHER] = array(
-			CL_MENU => $this->cfg["classes"][CL_MENU]["name"]
+			CL_MENU => $tmp[CL_MENU]["name"]
 		);
 
 		$this->reltypes[RELTYPE_ACL] = "&otilde;igus";
 		$this->rel_type_classes[RELTYPE_ACL] = array(
-			CL_GROUP => $this->cfg["classes"][CL_GROUP]["name"]
+			CL_GROUP => $tmp[CL_GROUP]["name"]
 		);
 
 		foreach($this->reltypes as $k => $v)
@@ -1319,7 +1322,7 @@ HTM;
 	function get_clid_picker()
 	{
 		$ret = array();
-		foreach($this->cfg["classes"] as $clid => $cldat)
+		foreach(aw_ini_get("classes") as $clid => $cldat)
 		{
 			if ($cldat["name"] != "")
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.70 2004/03/25 00:27:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.71 2004/04/29 12:20:50 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -637,8 +637,9 @@ class doc extends class_base
 		$retval = array();
 		if (aw_ini_get("document.no_static_forms") == 0)
 		{
+			$tmp = aw_ini_get("classes");
 			$retval["doc_default"] = array(
-				"caption" => $this->cfg["classes"][CL_DOCUMENT]["name"],
+				"caption" => $tmp[CL_DOCUMENT]["name"],
 				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document"),
 			);
 		};

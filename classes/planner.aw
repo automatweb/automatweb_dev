@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.177 2004/03/09 18:24:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.178 2004/04/29 12:20:54 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -587,7 +587,8 @@ class planner extends class_base
 			{
 				// 1 - get an instance of that class, for this I need to 
 				aw_session_set('org_action',aw_global_get('REQUEST_URI'));
-				$clfile = $this->cfg["classes"][$clid]["file"];
+				$tmp = aw_ini_get("classes");
+				$clfile = $tmp[$clid]["file"];
 				$t = get_instance($clfile);
 				$t->init_class_base();
 				$emb_group = "general";
@@ -746,7 +747,8 @@ class planner extends class_base
 		$is_doc = false;
 		if (!empty($emb["clid"]))
 		{
-			$clfile = $this->cfg["classes"][$emb["clid"]]["file"];
+			$tmp = aw_ini_get("classes");
+			$clfile = $tmp[$emb["clid"]]["file"];
 			$t = get_instance($clfile);
 			$t->init_class_base();
 		}
@@ -1191,6 +1193,7 @@ class planner extends class_base
 
 			// now I need to figure out which other classes are valid for that relation type
 			$clidlist = $this->event_entry_classes;
+			$tmp = aw_ini_get("classes");
 			foreach($clidlist as $clid)
 			{
 				$toolbar->add_menu_item(array(
@@ -1200,7 +1203,7 @@ class planner extends class_base
 						"group" => "add_event",
 						"clid" => $clid,
 					)),
-					"text" => $this->cfg["classes"][$clid]["name"],
+					"text" => $tmp[$clid]["name"],
 				));
 			};
 

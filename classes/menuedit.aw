@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.318 2004/03/25 09:39:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.319 2004/04/29 12:20:52 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -423,8 +423,9 @@ class menuedit extends aw_template
 			$c->show_favicon(array());
 		}
 
+	
 		// sektsioon ei olnud numbriline
-		if (!is_number($section)) 
+		if (!is_oid($section))
 		{
 
 			if ($this->cfg['recursive_aliases'])

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.51 2004/04/28 21:23:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.52 2004/04/29 12:21:02 kristo Exp $
 
 /*
 
@@ -1460,7 +1460,7 @@ class site_show extends class_base
 	function exec_subtemplate_handlers($arr)
 	{
 		// go over all class defs and check if that class is the handler for any subtemplates
-		foreach($this->cfg["classes"] as $clid => $cldef)
+		foreach(aw_ini_get("classes") as $clid => $cldef)
 		{
 			if ($cldef["subtpl_handler"] != "")
 			{

@@ -38,7 +38,8 @@ class relation extends class_base
 		
 		$reldata = $this->db_fetch_row("SELECT target FROM aliases WHERE relobj_id = '$relobj[oid]'");
 
-		$cldef = $this->cfg["classes"][$relobj["subclass"]];
+		$tmp = aw_ini_get("classes");
+		$cldef = $tmp[$relobj["subclass"]];
 		$values = $relobj["meta"]["values"][$cldef["def"]];
 
 		$cfgu = get_instance("cfg/cfgutils");
@@ -107,7 +108,8 @@ class relation extends class_base
 						$set_vals[$key] = $args["form_data"][$key];
 					};
 
-					$cldef = $this->cfg["classes"][$relobj["subclass"]];
+					$tmp = aw_ini_get("classes");
+					$cldef = $tmp[$relobj["subclass"]];
 				};		
 
 				if (sizeof($set_vals) > 0)

@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.7 2004/02/16 09:54:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.8 2004/04/29 12:20:51 kristo Exp $
 
 /*
 	@classinfo relationmgr=yes
@@ -62,7 +62,7 @@ class html_popup extends class_base
 		if ($args["reltype"] == RELTYPE_OBJ)
 		{
 			$cls = array();
-			foreach($this->cfg["classes"] as $clid => $cl)
+			foreach(aw_ini_get("classes") as $clid => $cl)
 			{
 				if ($cl["alias"] != "")
 				{

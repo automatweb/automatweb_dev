@@ -13,6 +13,16 @@
             <caption>Liikmete kaust</caption>
       </property>
       <property>
+            <name>multiple_folders</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lase liitumisel folderit valida</caption>
+      </property>
+      <property>
             <name>sub_form_type</name>
             <table>objects</table>
             <field>meta</field>

@@ -156,6 +156,7 @@ class object_treeview extends class_base
 		$c = "";
 		$sel_cols = $ob->meta("sel_columns");
 
+		$classlist = aw_ini_get("classes");
 		foreach($ol as $oid)
 		{
 			$od = obj($oid);
@@ -229,7 +230,7 @@ class object_treeview extends class_base
 						"fileSizeKBytes" => $fileSizeKBytes,
 						"fileSizeMBytes" => $fileSizeMBytes,
 						"comment" => "",
-						"type" => $this->cfg["classes"][CL_FILE]["name"],
+						"type" => $classlist[CL_FILE]["name"],
 						"add_date" => $this->time2date(filemtime($fqfn), 2),
 						"mod_date" => $this->time2date(filemtime($fqfn), 2),
 						"adder" => $fowner["name"],
@@ -252,7 +253,7 @@ class object_treeview extends class_base
 			$act = "";
 			if ($this->can("edit", $od->id()))
 			{
-				$fl = $this->cfg["classes"][$od->class_id()]["file"];
+				$fl = $classlist[$od->class_id()]["file"];
 				if ($fl == "document")
 				{
 					$fl = "doc";
@@ -291,7 +292,7 @@ class object_treeview extends class_base
 				"fileSizeKBytes" => $fileSizeKBytes,
 				"fileSizeMBytes" => $fileSizeMBytes,
 				"comment" => $od->comment(),
-				"type" => $this->cfg["classes"][$od->class_id()]["name"],
+				"type" => $classlist[$od->class_id()]["name"],
 				"add_date" => $this->time2date($od->created(), 2),
 				"mod_date" => $this->time2date($od->modified(), 2),
 				"adder" => is_object($adder) ? $adder->name() : "",

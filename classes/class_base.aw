@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.263 2004/04/28 13:56:58 duke Exp $
+// $Id: class_base.aw,v 2.264 2004/04/29 12:20:50 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -89,7 +89,6 @@ class class_base extends aw_template
 	function class_base($args = array())
 	{
 		$this->init("");
-
 	}
 
 	function init($arg = array())
@@ -230,7 +229,7 @@ class class_base extends aw_template
 				{
 					// this is a relation!
 					$this->is_rel = true;
-					$def = $this->cfg["classes"][$this->clid]["def"];
+					$def = $this->_ct["def"];
 					$meta = $this->obj_inst->meta("values");
 					$this->values = $meta[$def];
 					$this->values["name"] = $this->obj_inst->name();
@@ -517,7 +516,7 @@ class class_base extends aw_template
 		};
 		$awt->stop("add-property");
 
-		$orb_class = $this->cfg["classes"][$this->clid]["file"];
+		$orb_class = $this->_ct[$this->clid]["file"];
 		if (empty($orb_class))
 		{
 			$orb_class = $this->clfile;
@@ -839,13 +838,14 @@ class class_base extends aw_template
 	// environment if so.
 	function init_class_base()
 	{
+		$_ct = $GLOBALS["cfg"]["__default"]["classes"];
 		// only classes which have defined properties
 		// can use class_base
 		
 		// create an instance of the class servicing the object ($this->inst)
 		// set $this->clid and $this->clfile
 		$cfgu = get_instance("cfg/cfgutils");
-		$orb_class = $this->cfg["classes"][$this->clid]["file"];
+		$orb_class = $_ct[$this->clid]["file"];
 		if (empty($orb_class) && is_object($this->orb_class))
 		{
 			$orb_class = get_class($this->orb_class);
@@ -872,7 +872,7 @@ class class_base extends aw_template
 		{
 			$clid = $this->orb_class->get_opt("clid");
 		};
-		$clfile = $this->cfg["classes"][$clid]["file"];
+		$clfile = $_ct[$clid]["file"];
 
 		// temporary - until we switch document editing back to new interface
 		if ($clid == 7)
@@ -895,6 +895,7 @@ class class_base extends aw_template
 			$this->clfile = $clfile;
 		};
 		$this->clid = $clid;
+		$this->_ct = $_ct;
 		
 		// get an instance of the class that handles this object type
 		// fuck me plenty! .. orb.aw sets $this->orb_class
@@ -913,7 +914,7 @@ class class_base extends aw_template
 
 	function gen_output($args = array())
 	{
-		$classname = $this->cfg["classes"][$this->clid]["name"];
+		$classname = $this->_ct[$this->clid]["name"];
 
 		if (is_object($this->obj_inst))
 		{
@@ -2900,7 +2901,7 @@ class class_base extends aw_template
 
 		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
 		{
-			$def = $this->cfg["classes"][$this->clid]["def"];
+			$def = $this->_ct[$this->clid]["def"];
 			$_tmp = $this->get_object($this->id);
 			$old = $_tmp["meta"]["values"];
 

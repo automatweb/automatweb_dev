@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.14 2004/03/09 13:35:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.15 2004/04/29 12:20:54 kristo Exp $
 // object_chain.aw - Objektipärjad
 
 /*
@@ -172,7 +172,7 @@ class object_chain extends aw_template
 		));
 
 		$tar = array(0 => "K&otilde;ik");
-		$class_defs = $this->cfg["classes"];
+		$class_defs = aw_ini_get("classes");
 		foreach($class_defs as $clid => $cldata)
 		{
 			$tar[$clid] = $cldata["name"];

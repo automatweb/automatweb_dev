@@ -1713,7 +1713,7 @@ class bugtrack extends aw_template
 		};
 
 		$plist[]="----- KLASSID ------";
-		foreach ($this->cfg["classes"] as $idx => $dta)
+		foreach (aw_ini_get("classes") as $idx => $dta)
 		{
 			$plist[$dta["name"]]=$dta["name"];
 		};

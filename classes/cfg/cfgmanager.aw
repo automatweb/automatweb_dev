@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.10 2004/03/31 14:13:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.11 2004/04/29 12:20:59 kristo Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 
@@ -110,11 +110,12 @@ class cfgmanager extends class_base
 			$by_subclass[$target->subclass()]++;
 		};
 		
+		$tmp = aw_ini_get("classes");
 		foreach($by_subclass as $subclid => $fubar)
 		{
 			$t->define_field(array(
 				"name" => "f_" . $subclid,
-				"caption" => $this->cfg["classes"][$subclid]["name"],
+				"caption" => $tmp[$subclid]["name"],
 				"callback" => array(&$this, "callb_form_picker"),
 				"callb_pass_row" => true,
 			));

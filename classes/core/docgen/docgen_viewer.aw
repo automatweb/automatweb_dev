@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.5 2004/04/26 10:47:47 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.6 2004/04/29 12:21:07 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -65,6 +65,7 @@ class docgen_viewer extends class_base
 			"tree_id" => "dcgclsss",
 			"persist_state" => true,
 			"root_name" => "Classes",
+			"url_target" => "list"
 		));
 
 		$this->ic = get_instance("icons");
@@ -72,7 +73,7 @@ class docgen_viewer extends class_base
 
 		$this->vars(array(
 			"list" => $tv->finalize_tree(array(
-				"rootnode" => $this->cfg["classdir"]
+				"rootnode" => $this->cfg["classdir"],
 			))
 		));
 
@@ -293,7 +294,7 @@ class docgen_viewer extends class_base
 		{
 			return CL_DOCUMENT;
 		}
-		foreach($this->cfg["classes"] as $clid => $cld)
+		foreach(aw_ini_get("classes") as $clid => $cld)
 		{
 			if (basename($cld["file"]) == basename($name))
 			{
@@ -304,10 +305,11 @@ class docgen_viewer extends class_base
 
 	function _get_clid_names($ar)
 	{
+		$tmp = aw_ini_get("classes");
 		$ara = array();
 		foreach($ar as $clid)
 		{
-			$ara[] = basename($this->cfg["classes"][$clid]["file"]);
+			$ara[] = basename($tmp[$clid]["file"]);
 		}
 
 		return join(",", $ara);
@@ -539,6 +541,7 @@ class docgen_viewer extends class_base
 			"tree_id" => "dcgdoclss",
 			"persist_state" => true,
 			"root_name" => "Classes",
+			"url_target" => "list"
 		));
 
 		$this->basedir = $this->cfg["basedir"]."/docs/classes";
@@ -546,7 +549,7 @@ class docgen_viewer extends class_base
 		$this->_req_mk_clfdoc_tree($tv, $this->basedir);
 
 		return $tv->finalize_tree(array(
-			"rootnode" => $this->basedir
+			"rootnode" => $this->basedir,
 		));
 	}
 
@@ -607,6 +610,7 @@ class docgen_viewer extends class_base
 			"tree_id" => "dcgdoclss",
 			"persist_state" => true,
 			"root_name" => "Classes",
+			"url_target" => "list"
 		));
 
 		$this->basedir = $this->cfg["basedir"]."/docs/tutorials";
@@ -614,7 +618,7 @@ class docgen_viewer extends class_base
 		$this->_req_mk_clfdoc_tree($tv, $this->basedir);
 
 		return $tv->finalize_tree(array(
-			"rootnode" => $this->basedir
+			"rootnode" => $this->basedir,
 		));
 	}
 

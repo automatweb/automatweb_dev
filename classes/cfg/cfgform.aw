@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.28 2004/03/31 14:13:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.29 2004/04/29 12:20:59 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -109,7 +109,8 @@ class cfgform extends class_base
 				$iu = html::img(array(
 					"url" => icons::get_icon_url($arr["obj_inst"]->prop("subclass"),""),
 				));
-				$data["value"] = $iu . " " . $this->cfg["classes"][$arr["obj_inst"]->prop("subclass")]["name"];
+				$tmp = aw_ini_get("classes");
+				$data["value"] = $iu . " " . $tmp[$arr["obj_inst"]->prop("subclass")]["name"];
 				break;
 
 			case "navtoolbar":
@@ -145,7 +146,8 @@ class cfgform extends class_base
                         "msg" => "this is not a valid config form"
                 )));
 
-		$fl = $this->cfg["classes"][$class_id]["file"];
+		$tmp = aw_ini_get("classes");
+		$fl = $tmp[$class_id]["file"];
 		if ($fl == "document")
 		{
 			$fl = "doc";
@@ -220,7 +222,8 @@ class cfgform extends class_base
 					}
 					else
 					{
-						$fname = $this->cfg["classes"][$subclass]["file"];
+						$tmp = aw_ini_get("classes");
+						$fname = $tmp[$subclass]["file"];
 						$def = join("",file(aw_ini_get("basedir") . "/xml/properties/class_base.xml"));
 						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
 						$this->cfg_proplist = $proplist;

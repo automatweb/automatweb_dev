@@ -1,0 +1,62 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>show_notact</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;auml;ita mitteaktiivseid objekte</caption>
+      </property>
+      <property>
+            <name>sort_by</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objekte sorteeritakse</caption>
+      </property>
+      <property>
+            <name>folders</name>
+            <table>objects</table>
+            <group>folders</group>
+            <type>table</type>
+            <store>no</store>
+            <callback>callback_get_menus</callback>
+            <editonly>1</editonly>
+            <field>folders</field>
+            <caption>Kataloogid</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_OTV_DS_OBJ</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <folders>
+                  <caption>Kataloogid</caption>
+            </folders>
+      </groupinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>kataloog</caption>
+            </FOLDER>
+            <ADD_TYPE>
+                  <value>2</value>
+                  <clid>CL_OBJECT_TYPE</clid>
+                  <caption>lisatav objektit&amp;uuml;&amp;uuml;p</caption>
+            </ADD_TYPE>
+            <SHOW_TYPE>
+                  <value>3</value>
+                  <clid>CL_OBJECT_TYPE</clid>
+                  <caption>n&amp;auml;idatav objektit&amp;uuml;&amp;uuml;p</caption>
+            </SHOW_TYPE>
+      </reltypes>
+</properties>
+

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.29 2004/02/25 16:36:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.30 2004/04/29 12:20:51 kristo Exp $
 
 class icons extends aw_template
 {
@@ -1033,8 +1033,8 @@ class icons extends aw_template
 		$fc = fread($d, filesize(aw_ini_get("basedir")."/automatweb/images/icon_aw.gif"));
 		fclose($d);
 
-		reset($this->cfg["classes"]);
-		while (list($clid,$desc) = each($this->cfg["classes"]))
+		reset(aw_ini_get("classes"));
+		while (list($clid,$desc) = each(aw_ini_get("classes")))
 		{
 			if ($il["content"][$clid]["imgurl"] == "")
 			{

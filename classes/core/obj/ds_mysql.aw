@@ -670,6 +670,35 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
+		// try this - get list of special objects fiest time around
+		// then if we later do a search-by-parent, let the class handle it
+		/*if (!is_array($GLOBALS["obj_fs_globals"]["container_objs"]))
+		{
+			$GLOBALS["obj_fs_globals"]["container_objs"] = array();
+			list($data) = $this->search(array("class_id" => CL_OTV_DS_POSTIPOISS));
+			foreach($data as $d_oid)
+			{
+				$GLOBALS["obj_fs_globals"]["container_objs"][$d_oid] = obj($d_oid);
+			}
+		}
+
+		if (!empty($params["parent"]) && !is_array($params["parent"]))
+		{
+		echo dbg::dump($GLOBALS["obj_fs_globals"]);
+			foreach($GLOBALS["obj_fs_globals"]["container_objs"] as $c_oid => $c_obj)
+			{
+				if ($c_obj->id() == $params["parent"])
+				{
+					$inst = $c_obj->instance();
+					$tmp = $inst->get_objects($c_obj);
+					foreach($tmp as $t_id => $t_dat)
+					{
+						$full_oid = $c_oid.":".$t_id;
+						$ret[$full_oid] = $full_oid;
+					}
+				}
+			}
+		}*/
 		return array($ret, $this->meta_filter);
 	}
 

@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.15 2004/04/26 10:47:47 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.16 2004/04/29 12:21:07 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -675,7 +675,8 @@ class docgen_analyzer extends class_base
 
 				case T_STRING:
 					// the string is the CL_ define
-					$class = $this->cfg["classes"][constant($cln[1])]["file"];
+					$tmp = aw_ini_get("classes");
+					$class = $tmp[constant($cln[1])]["file"];
 					break;
 
 				case T_VARIABLE:

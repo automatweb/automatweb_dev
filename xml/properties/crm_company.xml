@@ -179,7 +179,7 @@
             <reltype>RELTYPE_TELEFAX</reltype>
             <props>name</props>
             <field>telefax_id</field>
-            <caption>Fax</caption>
+            <caption>Faks</caption>
       </property>
       <property>
             <name>tasks_call</name>
@@ -470,7 +470,7 @@
             </TELEFAX>
             <JOBS>
                   <value>19</value>
-                  <clid>CL_JOB_OFFER</clid>
+                  <clid>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</clid>
                   <caption>T&amp;ouml;&amp;ouml;pakkumine</caption>
             </JOBS>
             <TOOPAKKUJA>

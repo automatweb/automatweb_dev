@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.260 2004/04/27 13:22:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.261 2004/04/29 12:20:50 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1174,6 +1174,8 @@ class core extends acl_base
 			$oid = $arg;
 		};
 
+		list($oid) = explode(":", $oid);
+
 		if (!$oid)
 		{
 			return false;
@@ -1630,7 +1632,7 @@ class core extends acl_base
 		// resolve to name
 		if (is_numeric($cl_name))
 		{
-			$cl_name = $this->cfg["classes"][$cl_name]["file"];
+			$cl_name = $GLOBALS["cfg"]["__default"]["classes"][$cl_name]["file"];
 		};
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
@@ -1980,7 +1982,8 @@ class core extends acl_base
 		extract($arr);
 		$obj = $this->get_object($oid);
 
-		$v = $this->cfg["classes"][$obj["class_id"]];
+		$tmp = aw_ini_get("classes");
+		$v = $tmp[$obj["class_id"]];
 		if (!is_array($v))
 		{
 			return false;
@@ -2029,8 +2032,9 @@ class core extends acl_base
 		}
 
 
+		$tmp = aw_ini_get("classes");
 		$s_class_id = $s["class_id"];
-		$v = $this->cfg["classes"][$s_class_id];
+		$v = $tmp[$s_class_id];
 		if (!is_array($v))
 		{
 			return false;

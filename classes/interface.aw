@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/interface.aw,v 2.3 2002/12/03 13:00:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/interface.aw,v 2.4 2004/04/29 12:20:51 kristo Exp $
 // interface.aw - class interface manager
 class interface extends aw_template
 {
@@ -27,13 +27,14 @@ class interface extends aw_template
 		// should be accessed with get_opt
 		$this->clid = array();
 
+		$tmp = aw_ini_get("classes");
 		foreach($values as $key => $val)
 		{
 			$attr = $val["attributes"];
 			if ( ($val["tag"] == "class") && ($val["type"] == "complete") )
 			{
 				$cid = constant($attr["cldef"]);
-				$attr["name"] = $this->cfg["classes"][$cid]["name"];
+				$attr["name"] = $tmp[$cid]["name"];
 				$attr["clid"] = $cid;
 				$retval[$attr["cldef"]][$attr["action"]] = $attr;
 			};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.134 2004/04/21 11:41:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.135 2004/04/29 12:20:50 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -254,6 +254,7 @@ if (!defined("DEFS"))
 	// !checks if the parameter is an oid
 	function is_oid($oid)
 	{
+		$oid = str_replace(":", "", str_replace("_", "", $oid));
 		return !empty($oid) && is_numeric($oid) && $oid > 0;
 	}
 

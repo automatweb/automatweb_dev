@@ -94,6 +94,7 @@ class _int_object_loader
 	{
 		if (is_oid($param))
 		{
+			list($param) = explode(":", $param);
 			return $param;
 		}
 		else
