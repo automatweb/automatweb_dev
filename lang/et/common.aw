@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/et/common.aw,v 1.4 2002/06/10 15:50:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/et/common.aw,v 1.5 2004/06/01 14:10:25 kristo Exp $
 // kuude nimed
 define("LC_M1","jaanuar");
 define("LC_M2","veebruar");
-define("LC_M3","märts");
+define("LC_M3","m&auml;rts");
 define("LC_M4","aprill");
 define("LC_M5","mai");
 define("LC_M6","juuni");
