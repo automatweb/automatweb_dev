@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.77 2002/09/30 10:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.78 2002/09/30 10:05:27 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -931,7 +931,10 @@ class form_element extends aw_template
 
 				$var = $base."_rel_element_show_order";
 				$this->arr["rel_el_ord"] = $$var;
-				asort($this->arr["rel_el_ord"]);
+				if (is_array($this->arr["rel_el_ord"]))
+				{
+					asort($this->arr["rel_el_ord"]);
+				}
 
 				$var = $base."_rel_element_show_sep";
 				$this->arr["rel_el_sep"] = $$var;
