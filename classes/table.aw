@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.42 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.43 2003/01/29 15:28:58 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -1186,7 +1186,16 @@ class table extends aw_template
 
 		$this->load_table($id);
 
-		$ro = $this->mk_reforb("submit_pickstyle", array("id" => $id, "row" => $row, "col" => $col));
+		$oarr = array("id" => $id);
+		if (isset($row))
+		{
+			$oarr["row"] = $row;
+		}
+		if (isset($col))
+		{
+			$oarr["col"] = $col;
+		}
+		$ro = $this->mk_reforb("submit_pickstyle", $oarr);
 		if (is_array($frow))
 		{
 			reset($frow);
