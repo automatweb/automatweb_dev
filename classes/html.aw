@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.20 2003/01/09 15:56:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.21 2003/01/16 16:43:50 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -8,6 +8,7 @@ class html extends aw_template
 	// name(string)
 	// options(array)
 	// selected(int)
+	// onchange(string)
 	function select($args = array())
 	{
 		extract($args);
@@ -34,7 +35,12 @@ class html extends aw_template
 		{
 			$options = $this->picker($selected,$options);
 		};
-		return "<select name='$name' id='$name' $sz $mz>\n$options</select>\n";
+
+		if ($onchange != '')
+		{
+			$onc = 'onChange="'.$onchange.'"';
+		}
+		return "<select name='$name' id='$name' $sz $mz $onc>\n$options</select>\n";
 	}
 
 	////
@@ -265,11 +271,20 @@ class html extends aw_template
 	// params:
 	// method - form method
 	// action - form action
+	// name - form name
 	// content - html to insert between form tags
 	function form($args = array())
 	{
 		extract($args);
 		return '<form action="'.$action.'" method="'.$method.'" name="'.$name.'">'.$content.'</form>';
+	}
+
+	////
+	// !html <span class='$class'>$content</span>
+	function span($args = array())
+	{
+		extract($args);
+		return '<span class="'.$class.'">'.$content.'</span>';
 	}
 };
 ?>
