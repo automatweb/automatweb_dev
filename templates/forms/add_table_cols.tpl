@@ -78,16 +78,29 @@
 											<!-- SUB: SEL_SETTINGS -->
 											Tulba m‰‰rangud:
 											<table border="0">
+												<tr>
+													<td class="celltext">Jrk.</td>
+													<td class="celltext">Sep.</td>
+													<td class="celltext">N&auml;ita</td>
+												</tr>
 												<!-- SUB: SEL_EL -->
 												<tr>
-													<td class="celltext" colspan="2">{VAR:el_name}</td>
+													<td class="celltext" colspan="4">{VAR:el_name}</td>
 												</tr>
 												<tr>
-													<td class="celltext">Jrk. <input class="formtext" type="text" name="cols[{VAR:col_id}][el_ord][{VAR:el_id}]" value="{VAR:el_ord}" size="3"></td>
-													<td class="celltext">Eraldaja <input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep][{VAR:el_id}]" value="{VAR:el_sep}" size="3"></td>
+													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_ord][{VAR:el_id}]" value="{VAR:el_ord}" size="2"></td>
+													<td class="celltext"><input class="formtext" type="text" name="cols[{VAR:col_id}][el_sep][{VAR:el_id}]" value="{VAR:el_sep}" size="2"></td>
+													<td class="celltext"><input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][el_show][{VAR:el_id}]" value="1" {VAR:el_show}></td>
 												</tr>
 												<!-- END SUB: SEL_EL -->
 											</table>
+											<!-- SUB: HAS_FTABLE_ALIASES -->
+											Otsing elementi<Br>
+											<select name="cols[{VAR:col_id}][search_el]" class="formselect"><option value=''>{VAR:search_el}</select> <Br>
+											Otsingu v&auml;&auml;rtus elemendist:<Br>
+											<select name="cols[{VAR:col_id}][search_map]" class="formselect"><option value=''>{VAR:search_map}</select>
+											<!-- END SUB: HAS_FTABLE_ALIASES -->
+
 											<!-- END SUB: SEL_SETTINGS -->
 
 											<!-- SUB: SEL_SETINGS2 -->

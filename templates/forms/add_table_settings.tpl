@@ -143,13 +143,33 @@
 														<tr>
 															<td class="celltext">Jrk:</td>
 															<td class="celltext">Element:</td>
-															<td class="celltext">Summeeri:</td>
+															<td class="celltext">Vertikaalne:</td>
+															<td class="celltext">Eraldaja enne</td>
+															<td class="celltext">Eraldaja p&auml;rast</td>
+															<td class="celltext">Muu info elemendid:</td>
+															<td class="celltext">Muu info eraldajad:</td>
+															<td class="celltext">Tulba pealkiri(vertikaalse grupi)</td>
+
 														</tr>
 														<!-- SUB: GRP2LINE -->
 														<tr>
 															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][ord]" value="{VAR:gp_ord}" size="4"></td>
 															<td class="celltext"><SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][el]"><option value=''>{VAR:els}</select></td>
-															<td class="celltext"><input type="checkbox" class="formcheck" name="rgrps[{VAR:grp_nr}][count]" value="1" {VAR:gp_count}></td>
+															<td class="celltext"><input type="checkbox" class="formcheck" name="rgrps[{VAR:grp_nr}][vertical]" value="1" {VAR:gp_vertical}></td>
+															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][pre_sep]" value="{VAR:pre_sep}" size="4"></td>
+															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][after_sep]" value="{VAR:after_sep}" size="4"></td>
+															<td class="celltext"><select class="formselect" name="rgrps[{VAR:grp_nr}][data_els][]" multiple size="10">{VAR:data_els}</select></td>
+															<td class="celltext">
+																<table border="0">
+																	<!-- SUB: DATEL -->
+																	<tr>
+																		<td class="celltext">{VAR:del_name}</td>
+																		<td class="celltext"><input type="text" name="rgrps[{VAR:grp_nr}][data_els_seps][{VAR:del}]" class="formtext" size="4" value="{VAR:del_sep}"></td>
+																	</tr>
+																	<!-- END SUB: DATEL -->
+																</table>
+															</td>
+															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][row_title]" value="{VAR:gp_row_title}" size="14"></td>
 														</tr>
 														<!-- END SUB: GRP2LINE -->
 													</table>
@@ -176,6 +196,34 @@
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[skip_one_liners]" value="1" {VAR:skip_one_liners}> Kui tabelis on ainult yks rida mis on lingitud, siis suuna sinna edasi</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[doc_title_is_search]" value="1" {VAR:doc_title_is_search}> Dokumendi pealkirjas viimane otsing</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[doc_title_is_yah]" value="1" {VAR:doc_title_is_yah}> Dokumendi pealkirjas YAH riba</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="text" class="formtext" name="settings[doc_title_is_yah_sep]" value="{VAR:doc_title_is_yah_sep}" size="3"> Dokumendi pealkirja yah eraldaja</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[show_second_table]" value="1" {VAR:show_second_table}> Tabeli all on teine tabel</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2">
+													<table border="0">
+														<tr>
+															<td class="celltext">Teise tabeli n&auml;itamisel kasutatavad aliased: </td>
+															<td class="celltext"><select class="formselect" multiple name="settings[show_second_table_aliases][]" size="10">{VAR:show_second_table_aliases}</select> </td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="celltext">Teise tabeli otsingu element: <select class="formselect" name="settings[show_second_table_search_el]"><option value="">{VAR:second_table_search_el}</select> </td>
+											</tr>
+											<tr>
+												<td colspan="2" class="celltext">Teise tabeli otsingu elemendi v&auml;&auml;rtus: <select class="formselect" name="settings[show_second_table_search_val_el]"><option value="">{VAR:second_table_search_val_el}</select> </td>
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2">
