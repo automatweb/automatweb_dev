@@ -6,7 +6,9 @@
 </td>
 <td class="header1" align="center">
 <!-- SUB: repeaters -->
-<a href="{VAR:rep_link}">Kordused</a>
+<a href="{VAR:rep_link}">Kordused 1</a>
+|
+<a href="{VAR:rep_link2}">Kordused 2</a>
 <!-- END SUB: repeaters -->
 &nbsp;
 </td>

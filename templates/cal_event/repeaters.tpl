@@ -361,7 +361,8 @@ function toggle_year()
 <a href="{VAR:change_link}">Muuda</a>
 </td>
 <td class="header1" align="center">
-&gt;Kordused&lt;
+&gt;Kordused&lt;<br>
+{VAR:stage1} | {VAR:stage2}
 </td>
 </tr>
 </table>
