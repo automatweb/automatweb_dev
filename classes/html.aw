@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.3 2002/10/31 12:20:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.4 2002/11/02 23:21:22 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -133,6 +133,12 @@ class html extends aw_template
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$m,$d,$y);
 		return $selector->gen_edit_form($args["name"], $val);
+	}
+
+	function img($args = array())
+	{
+		extract($args);
+		return "<img src='$url'>";
 	}
 
 };
