@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.32 2002/06/15 16:43:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.33 2002/06/25 18:20:04 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -69,6 +69,7 @@ class form_base extends form_db_base
 		$this->subtype = $row["subtype"];
 		$this->comment = $row["comment"];
 		$this->lang_id = $row["lang_id"];
+		$this->meta = aw_unserialize($row["metadata"]);
 		$this->entry_id = 0;
 
 		// FIXME: use aw_unserialize
@@ -196,7 +197,12 @@ class form_base extends form_db_base
 
 		$this->quote(&$contents);
 
-		$this->upd_object(array("oid" => $this->id,"name" => $this->name, "comment" => $this->comment));
+		$this->upd_object(array(
+			"oid" => $this->id,
+			"name" => $this->name,
+			"comment" => $this->comment,
+			"metadata" => $this->meta,
+		));
 		if (!$this->arr["cols"])
 		{
 			$this->arr["cols"] = 0;
@@ -205,6 +211,8 @@ class form_base extends form_db_base
 		{
 			$this->arr["rows"] = 0;
 		}
+		// set to 0 if not set already. 
+		$this->subtype = (int)$this->subtype;
 		$this->db_query("UPDATE forms SET content = '$contents', subtype = " . $this->subtype . ", rows = ".$this->arr["rows"]." , cols = ".$this->arr["cols"]." WHERE id = ".$this->id);
 		$this->_log("form",sprintf(LC_FORM_BASE_CHANGED_FORM,$this->name));
 	}
@@ -573,6 +581,7 @@ class form_base extends form_db_base
 	// addfolders(bool) - if true, folders are added to list of forms
 	// lang_id - if set, filters by lang id
 	// all_data - if set, all dafa of form is included
+	// sort - if set, the list will be sorted
 	function get_flist($args = array())
 	{
 		extract($args);
@@ -625,6 +634,10 @@ class form_base extends form_db_base
 			{
 				$ret[$row["oid"]] = $row["name"];
 			}
+		}
+		if ($sort)
+		{
+			asort($ret);
 		}
 		return $ret;
 	}
