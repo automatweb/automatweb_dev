@@ -30,6 +30,29 @@ function paste()
 	foo.action.value="paste";
 	foo.submit();
 }
+
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v3.0
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+
 // -->
 </script>
 
@@ -38,147 +61,125 @@ function paste()
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
 
 
+
+
+<!--tabelraam-->
+<table width="100%" cellspacing="0" cellpadding="1">
 <form action='reforb.{VAR:ext}' METHOD=POST NAME='foo'>
+<tr><td class="tableborder">
+
+	<!--tabelshadow-->
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+		<!--tabelsisu-->
+		<table width="100%" cellspacing="0" cellpadding="0">
+		<tr><td><td class="tableinside" height="29">
 
 
-<!--1-->
-<table border="0" cellspacing="0" cellpadding="0" width="100%">
-
-<tr>
-<td height="15" class="menuedittitle">
-<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="3" BORDER=0 ALT=""><br>
-	<!--begin buttonid-->
-
-
-
-	<!--2-->
-	<table border="0" cellpadding="0" cellspacing="0">
-	<tr>
-
-	<td height="15" class="menuedittitle" nowrap>
-	<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="3" BORDER=0 ALT=""><br>
-	&nbsp;<b><font color="#eeeeee">{VAR:LC_MENUEDIT_MENU_CAPS}:</font>&nbsp;
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr><td width="5"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
 
 
 
-	</td>
-	<td>
-	<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="3" BORDER=0 ALT=""><br>
-		<!--3-->
-		<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
 
-		<!-- SUB: ADD_CAT -->
-		<!--begin button trans-->
-		
-		
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_buttontrans-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td nowrap height="15" class="menueditbuttontrans" background="{VAR:baseurl}/automatweb/images/menuedit_buttontrans-taust.gif"><a href='{VAR:addmenu}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD}</a></td>
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_buttontrans-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td width="4"><IMG SRC="automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
-			<!--end button trans-->
-			
-		<!-- END SUB: ADD_CAT -->
-
-
-		
-			<!--begin button-->
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td nowrap height="15" class="menueditbutton"><a href='{VAR:addpromo}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD_PROMO_BOX}</a></td>
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
-			<!--end button-->
-
-
-			<!--begin button-->
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td nowrap height="15" class="menueditbutton"><a href='javascript:document.foo.submit()' class="fgtitle_link">{VAR:LC_MENUEDIT_SAVE}</a></td>
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
-			<!--end button-->
-
-
-			<!--begin button-->
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td nowrap height="15" class="menueditbutton"><a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_MENUEDIT_REFRESH}</a></td>
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
-			<!--end button-->
-
-
-
-			<!--begin button-->
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td nowrap height="15" class="menueditbutton"><a href='{VAR:import}' class="fgtitle_link">{VAR:LC_MENUEDIT_IMPORT}</a></td>
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
-			<!--end button-->
-
-
-			<!--begin button-->
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td nowrap height="15" class="menueditbutton"><a href='javascript:cut()' class="fgtitle_link">Cut</a></td>
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
-			<!--end button-->
-
-
- 
-
-			<!-- SUB: PASTE -->
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td nowrap height="15" class="menueditbutton"><a href='javascript:paste()' class="fgtitle_link">Paste</a></td>
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
-			<!-- END SUB: PASTE -->
-
-
-			<!--begin button-->
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-left.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td nowrap height="15" class="menueditbutton"><a href='javascript:del()' class="fgtitle_link">Delete</a></td>
-			<td width="6" height="15"><IMG SRC="{VAR:baseurl}/automatweb/images/menuedit_button-right.gif" WIDTH="6" HEIGHT="15" BORDER=0 ALT=""></td>
-			<td width="4"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""></td>
-			<!--end button-->
-
-
-
-		</tr>
-		</table>
-		<!--END 3-->
-
-
-	</tr>
-	</table>
-	<!--END 2-->
-
-
+<!-- SUB: ADD_CAT -->
+<td width="30" class="celltext">
+<b>
+{VAR:LC_MENUEDIT_MENU_CAPS}:&nbsp;
+</b>
 </td>
+<td width="25" valign="middle"><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="{VAR:addmenu}"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('new','','{VAR:baseurl}/automatweb/images/blue/awicons/new_over.gif',1)"><img
+name="new" alt="{VAR:LC_MENUEDIT_ADD}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/new.gif" width="25" height="25"></a></td>
+<!-- END SUB: ADD_CAT -->
 
-<td align=right class="menuedittitle">[<a target="list" href='languages.{VAR:ext}'><b><font
-size=2 color="#e0e7f0">{VAR:lang_name}</font></b></a>]&nbsp;&nbsp; <a
-href='orb.aw?action=list&class=bugtrack&filt=all'><font color="#e0e7f0">BugTrack</font></a>&nbsp;<a
-href='http://www.automatweb.com' target="_new"><img border=0 src='images/jessss1.gif'></a></td>
-</tr>
 
-<tr>
-<td colspan="3" class="menuedittitle">
-<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="5" BORDER=0 ALT=""><br>
+<!--ikoonid-->
+<td valign="bottom" class="celltext">
+<table border="0" cellpadding="0" cellspacing="0"><tr>
+
+<td><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="{VAR:addpromo}"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('promo','','{VAR:baseurl}/automatweb/images/blue/awicons/promo_over.gif',1)"><img
+name="promo" alt="{VAR:LC_MENUEDIT_ADD_PROMO_BOX}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/promo.gif" width="25" height="25"></a></td>
+
+
+<td><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:document.foo.submit()"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="{VAR:LC_MENUEDIT_SAVE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a></td>
+
+<td><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><img
+SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"></td>
+
+<td><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><!--import--><a href="{VAR:import}"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('import','','{VAR:baseurl}/automatweb/images/blue/awicons/import_over.gif',1)"><img
+name="import" alt="{VAR:LC_MENUEDIT_IMPORT}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/import.gif" width="25" height="25"></a></td>
+
+
+<td><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><!--cut--><a
+href="javascript:cut()"  onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('cut','','{VAR:baseurl}/automatweb/images/blue/awicons/cut_over.gif',1)"><img name="cut" alt="Cut" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/cut.gif" width="25" height="25"></a></td>
+
+<!-- SUB: PASTE -->
+<td><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:paste()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('paste','','{VAR:baseurl}/automatweb/images/blue/awicons/paste_over.gif',1)"><img name="paste" alt="Paste" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/paste.gif" width="25" height="25"></a></td>
+<!-- END SUB: PASTE -->
+
+<td><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="javascript:del()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="{VAR:LC_MENUEDIT_DELETE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a></td>
+
+
+<td><IMG
+SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><img
+SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"></td>
+
+<!--referesh-->
+<td><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="#" onClick='window.location.reload()' onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('refresh','','{VAR:baseurl}/automatweb/images/blue/awicons/refresh_over.gif',1)"><img name="refresh" alt="{VAR:LC_MENUEDIT_REFRESH}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/refresh.gif" width="25" height="25"></a></td>
+
+<!--bugtrack-->
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a
+href="orb.aw?action=list&class=bugtrack&filt=all" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('bugtrack','','{VAR:baseurl}/automatweb/images/blue/awicons/bugtrack_over.gif',1)"><img name="bugtrack" alt="Bugtrack" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/bugtrack.gif" width="25" height="25"></a></td>
+
+<td><IMG
+SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><img
+SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"></td>
+
+</tr></table>
 </td>
-</tr>
-
-
-<tr>
-<td colspan="2" class="menueditsaoledsiin">
-<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="3" BORDER=0 ALT=""><br>
-
-&nbsp;{VAR:yah}&nbsp;<br>
-
-<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="2" BORDER=0 ALT=""><br>
-</td>
-
+<td align="right" class="celltext">&nbsp;&nbsp;[ <a target="list" href='languages.{VAR:ext}'><b>{VAR:lang_name}</b></a> ]&nbsp;&nbsp;</td>
 </tr>
 </table>
-<!--END 1-->
+
+
+
+
+
+		</td></tr>
+		</table>
+
+	</td></tr>
+	</table>
+
+</td></tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -189,70 +190,70 @@ href='http://www.automatweb.com' target="_new"><img border=0 src='images/jessss1
 
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
-<td bgcolor="#CCCCCC">
+<td>
 
 
-<table border="0" cellspacing="1" cellpadding="0" width=100%>
-<tr>
-<td height="15" class="title">&nbsp;</td>
-<td height="15" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=name&order={VAR:order1}&period={VAR:period}'>{VAR:LC_MENUEDIT_NAME}</a>{VAR:sortedimg1}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=jrk&order={VAR:order2}&period={VAR:period}'>{VAR:LC_MENUEDIT_ORDER}</a>{VAR:sortedimg2}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=status&order={VAR:order5}&period={VAR:period}'>{VAR:LC_MENUEDIT_ACTIVE}</a>{VAR:sortedimg5}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=modifiedby&order={VAR:order3}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED_BY}</a>{VAR:sortedimg3}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=modified&order={VAR:order4}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED}</a>{VAR:sortedimg4}&nbsp;</td>
-<td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=periodic&order={VAR:order6}&period={VAR:period}'>{VAR:LC_MENUEDIT_PERIODIC}</a>{VAR:sortedimg6}&nbsp;</td>
-<td align="center" colspan="4" class="title">&nbsp;{VAR:LC_MENUEDIT_ACTION}&nbsp;</td>
-<td align="center" class="title"><b>&nbsp;{VAR:LC_MENUEDIT_CHOOSE}&nbsp;</b></td>
+<table border="0" cellspacing="1" cellpadding="2" width=100%>
+<tr class="aste05">
+<td width="1%" height="15" class="celltext">&nbsp;</td>
+<td width="40%" height="15" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=name&order={VAR:order1}&period={VAR:period}'>{VAR:LC_MENUEDIT_NAME}</a>{VAR:sortedimg1}&nbsp;</td>
+<td width="4%" align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=jrk&order={VAR:order2}&period={VAR:period}'>{VAR:LC_MENUEDIT_ORDER}</a>{VAR:sortedimg2}&nbsp;</td>
+<td width="6%" align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=status&order={VAR:order5}&period={VAR:period}'>{VAR:LC_MENUEDIT_ACTIVE}</a>{VAR:sortedimg5}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=modifiedby&order={VAR:order3}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED_BY}</a>{VAR:sortedimg3}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=modified&order={VAR:order4}&period={VAR:period}'>{VAR:LC_MENUEDIT_MODIFIED}</a>{VAR:sortedimg4}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=menus&sortby=periodic&order={VAR:order6}&period={VAR:period}'>{VAR:LC_MENUEDIT_PERIODIC}</a>{VAR:sortedimg6}&nbsp;</td>
+<td align="center" colspan="4" class="celltext">&nbsp;{VAR:LC_MENUEDIT_ACTION}&nbsp;</td>
+<td align="center" class="celltext"><b>&nbsp;{VAR:LC_MENUEDIT_CHOOSE}&nbsp;</b></td>
 </tr>
 <!-- SUB: CUT -->
-fgtext2
+aste03
 <!-- END SUB: CUT -->
 <!-- SUB: NORMAL -->
-fgtext
+aste07
 <!-- END SUB: NORMAL -->
 
 <!-- SUB: LINE -->
-<tr>
-<td height="15" class="{VAR:is_cut}" align=center>&nbsp;&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:menu_id}&period={VAR:period}' target='list'><img border=0 src='{VAR:imgref}'></a>&nbsp;</td>
-<td height="15" class="{VAR:is_cut}">&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:r_menu_id}&period={VAR:period}' target='list'>{VAR:name}</a>&nbsp;</td>
-<td class="{VAR:is_cut}" align=center>&nbsp;
+<tr class="{VAR:is_cut}">
+<td height="15" class="celltext" align=center><a href='menuedit_right.{VAR:ext}?parent={VAR:menu_id}&period={VAR:period}' target='list'><img border=0 src='{VAR:imgref}'></a></td>
+<td height="15" class="celltext">&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:r_menu_id}&period={VAR:period}' target='list'>{VAR:name}</a>&nbsp;</td>
+<td class="celltext" align=center>
 <!-- SUB: NFIRST -->
 <input class='small_button' type=text NAME='ord[{VAR:menu_id}]' VALUE='{VAR:menu_order}' SIZE=2 MAXLENGTH=3><input type='hidden' name='old_ord[{VAR:menu_id}]' value='{VAR:menu_order}'>
 <!-- END SUB: NFIRST -->
-&nbsp;</td>
-<td align="center" class="{VAR:is_cut}">&nbsp;
+</td>
+<td align="center" class="celltext">
 <!-- SUB: CAN_ACTIVE -->
 <input type='checkbox' NAME='act[{VAR:menu_id}]' {VAR:menu_active}><input type='hidden' NAME='old_act[{VAR:menu_id}]' VALUE='{VAR:menu_active2}'>
 <!-- END SUB: CAN_ACTIVE -->
-&nbsp;</td>
-<td align="center" class="{VAR:is_cut}" nowrap>&nbsp;{VAR:modifiedby}&nbsp;</td>
-<td align="center" class="{VAR:is_cut}" nowrap>&nbsp;{VAR:modified}&nbsp;</td>
-<td align="center" class="{VAR:is_cut}">&nbsp;
+</td>
+<td align="center" class="celltext" nowrap>{VAR:modifiedby}</td>
+<td align="center" class="celltext" nowrap>{VAR:modified}</td>
+<td align="center" class="celltext">
 <!-- SUB: PERIODIC -->
 <input type='checkbox' NAME='prd[{VAR:menu_id}]' {VAR:prd1}><input type='hidden' NAME='old_prd[{VAR:menu_id}]' VALUE='{VAR:prd2}'>
 <!-- END SUB: PERIODIC -->
-&nbsp;</td>
-<td class="fgtext2">&nbsp;
+</td>
+<td class="celltext" align="center">
 <!-- SUB: CAN_CHANGE -->
 <a href='{VAR:properties}'>{VAR:LC_MENUEDIT_PROPERTIES}</a>
 <!-- END SUB: CAN_CHANGE -->
-&nbsp;</td>
-<td class="fgtext2">&nbsp;
+</td>
+<td class="celltext" align="center">
 <!-- SUB: CAN_DELETE -->
 <a href="javascript:box2('{VAR:LC_MENUEDIT_SURE_DELETE_MENU}?','{VAR:delete}')">{VAR:LC_MENUEDIT_DELETE}</a>
 <!-- END SUB: CAN_DELETE -->
-&nbsp;</td>
-<td class="fgtext2">&nbsp;
+</td>
+<td class="celltext" align="center">
 <!-- SUB: CAN_SEL_PERIOD -->
 <a href="periods.{VAR:ext}?oid={VAR:menu_id}">{VAR:LC_MENUEDIT_PERIOD}</a>
 <!-- END SUB: CAN_SEL_PERIOD -->
-&nbsp;</td>
-<td class="fgtext2">&nbsp;
+</td>
+<td class="celltext" align="center">
 <!-- SUB: CAN_ACL -->
 <a href='editacl.{VAR:ext}?oid={VAR:r_menu_id}&file=menu.xml'>ACL</a>
 <!-- END SUB: CAN_ACL -->
-&nbsp;</td>
-<td class="title">&nbsp;<input type='checkbox' NAME='sel[{VAR:menu_id}]' VALUE=1>&nbsp;</td>
+</td>
+<td class="celltext"><input type='checkbox' NAME='sel[{VAR:menu_id}]' VALUE=1></td>
 </tr>
 <!-- END SUB: LINE -->
 </table>
