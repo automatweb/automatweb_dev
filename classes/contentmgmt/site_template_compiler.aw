@@ -880,7 +880,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"section\" => ".$o_name."->".$this->id_func."(),\n";
 		if ($arr["level"] > 1)
 		{
-			$ret .= $this->_gi()."\"parent_section\" => \$o_".$arr["a_parent"]."_".($arr["level"]-1)."->".$this->id_func."(),\n";
+			$ret .= $this->_gi()."\"parent_section\" => is_object(\$o_".$arr["a_parent"]."_".($arr["level"]-1).") ? \$o_".$arr["a_parent"]."_".($arr["level"]-1)."->".$this->id_func."() : ".$o_name."->parent(),\n";
 		}
 		$ret .= $this->_gi()."\"colour\" => ".$o_name."->prop(\"color\"),\n";
 		$ret .= $this->_gi()."\"comment\" => ".$o_name."->comment(),\n";
@@ -1644,6 +1644,10 @@ class site_template_compiler extends aw_template
 
 		$ret .= $this->_gi().$p_v_name." = true;\n";
 		$ret .= $this->_gi().$cache_name." = false;\n";
+
+		// we need to clear the previous level's cache here :(
+//		$res .= $this->_gi()."\$this->cache->file_invalidate(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".($arr["level"]-1)."_uid_\".aw_global_get(\"uid\").\"_period_\".aw_global_get(\"act_per_id\")\n";
+		
 
 		return $ret;
 	}
