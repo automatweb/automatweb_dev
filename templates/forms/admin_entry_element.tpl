@@ -50,6 +50,15 @@
 </tr>
 <!-- END SUB: TEXTAREA_ITEMS -->
 
+<!-- SUB: DATE_ITEMS -->
+<tr>
+<td class="fgtext">Mis aastast mis aastani:</td>
+<td class="fgtext">&nbsp;<input CLASS="small_button" SIZE=5 type='text' NAME='{VAR:cell_id}_from_year' VALUE='{VAR:from_year}'>&nbsp;-&nbsp;<input type=text CLASS="small_button"  SIZE=5 NAME='{VAR:cell_id}_to_year' VALUE='{VAR:to_year}'></td>
+<td valign=top class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: DATE_ITEMS -->
+
 <!-- SUB: FILE_ITEMS -->
 <tr>
 <td class="fgtext">Kuvamine:</td>

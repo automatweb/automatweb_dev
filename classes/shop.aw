@@ -234,6 +234,8 @@ class shop extends aw_template
 		$f = new form;
 		$images = new db_images;
 
+		$t_price = 0;
+
 		$items = false;
 		if (is_array($shopping_cart["items"]))
 		{
@@ -264,6 +266,7 @@ class shop extends aw_template
 						$rowhtml.=$this->parse("F_ROW");
 					}
 
+					$t_price += $ar["price"];
 					$this->vars(array(
 						"item_link" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop_id, "section" => $section)),
 						"name" => $ar["name"],
@@ -280,8 +283,8 @@ class shop extends aw_template
 			"section" => $section,
 			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section)),
 			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id)),
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section//$this->mk_my_orb("show", array("id" => $shop_id, "parent" => $section))
-			
+			"t_price" => $t_price,
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
 		));
 		if ($items)
 		{
@@ -447,12 +450,9 @@ class shop extends aw_template
 					// check the availability of the item
 					if ($it["has_max"] && $it["has_period"] && $it["has_objs"])
 					{
-						echo "item $item_id <br>";
 						$from = $f->get_element_value_by_name("Alates");
 						$to = $f->get_element_value_by_name("Kuni");
-						echo "from = ", $this->time2date($from,3)," to = ", $this->time2date($to,3)," <br>";
 						$count = $ar["cnt"];
-						echo "count = $count <br>";
 						$free_items = array();
 						$free_item_count = 0;
 						classload("planner");
@@ -462,7 +462,6 @@ class shop extends aw_template
 						$this->db_query("SELECT * FROM objects WHERE parent = $item_id AND class_id = ".CL_SHOP_ITEM." AND status != 0");
 						while ($row = $this->db_next())
 						{
-							echo "checking subs ,  id = ", $row["oid"], " <br>";
 							// objekti last v2ljas on kalendri id
 							// vaatame ksa selle objekti kohta on eventeid valitud vahemikus
 							if (!$pl->get_events(array("start" => $from, "end" => $to,"parent" => $row["last"])))
@@ -471,7 +470,6 @@ class shop extends aw_template
 								$free_items[] = $row;
 								$free_item_count++;
 
-								echo "sub free!<br>";
 								// kui oleme leidnud kyllalt palju vabu itemeid, siis l6petame otsimise
 								if ($free_item_count == $count)
 								{
@@ -481,7 +479,6 @@ class shop extends aw_template
 						}
 						if ($free_item_count < $count)
 						{
-							echo "not enuff availabale <br>";
 							// if no item is available, abort the order
 							global $status_msg;
 							$status_msg = sprintf(E_SHOP_ITEMS_ORDER_CHANGED,$it["name"]);
@@ -490,11 +487,9 @@ class shop extends aw_template
 						}
 						else
 						{
-							echo "found all necessary <br>";
 							// broneerime itemid
 							foreach($free_items as $row)
 							{
-								echo "bronning ",$row["oid"], " <br>";
 								// lisame itemi kalenddrisse evendi selle aja peale
 								$pl->add_event(array("parent" => $row["last"],"start" => $from, "end" => $to));
 							}
@@ -511,7 +506,8 @@ class shop extends aw_template
 						// here we must add the elements of row $rownum to the email we are assembling of the selected rows
 						$mail.=$f->mk_show_text_row($rownum)."\n";
 					}
-					$mail.="\n";
+					$mail.="\nHind: ".$ar["price"];
+					$t_price += $ar["price"];
 				}
 			}
 		}
@@ -552,7 +548,7 @@ class shop extends aw_template
 		// now we must also send an email to somebody notifying them of the new order.
 		// the email must contain all the info about the purchase, including all the
 		// items and their counts and also the order form data.
-		$mail = "Tere!\n\\ kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." tellis järgmised tooted: \n\n";
+		$mail = "Tere!\n\n kasutaja $uid (ip aadress: ".get_ip().") kell ".$this->time2date(time(),2)." tellis järgmised tooted: \n\n".$mail."\n\nKokku hind: ".$t_price;
 
 		$this->db_query("UPDATE orders SET t_price = '$t_p' WHERE id = $ord_id");
 		
@@ -784,7 +780,38 @@ class shop extends aw_template
 			// et keegi teine samal ajal ei saax seda sama aja peale bronnida a minu vaene v2ike pea ei v6ta seda praegusel hetkel
 		}
 
+		// calculate price
+		if ($it["price_eq"] == "")
+		{
+			$price = (double)$it["price"] * (double)$count;
+		}
+		else
+		{
+			// parsime price_eq'st v2lja formi elementide nimed ja asendame need numbritega ja siis laseme evali()'i peale
+			$f_kaup = new form;
+			$f_kaup->load($it["form_id"]);
+			$f_kaup->load_entry($it["entry_id"]);
+
+			$els = $this->parse_eq_variables($it["price_eq"]);
+
+			$eq = $it["price_eq"];
+			foreach($els as $elname)
+			{
+				if ($f->get_element_by_name($elname))
+				{
+					$elval = (int)$f->get_element_value_by_name($elname);
+				}
+				else
+				{
+					$elval = (int)$f_kaup->get_element_value_by_name($elname);
+				}
+				$eq = str_replace($elname,$elval,$eq);
+			}
+			eval("\$price = ".$eq.";");
+		}
+
 		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
+		$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
 		$GLOBALS["shopping_cart"]["items"][$item_id]["name"] = $it["name"];
 		$GLOBALS["shopping_cart"]["items"][$item_id]["cnt_entry"] = $entry_id;
 
@@ -970,6 +997,52 @@ class shop extends aw_template
 				$str = $sh["name"].$str;
 			}
 			$ret[$oid] = $str;
+		}
+		return $ret;
+	}
+
+	////
+	// !parses the equasion $str and returns an array of all variables used in the equasion
+	function parse_eq_variables($str)
+	{
+		$ret = array();
+		$len = strlen($str);
+		$in_var = false;
+
+		$varchars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","z","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0","_","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","ä","ö","ü","õ","Ö","Ä","Ü","Õ",":");
+
+		$varbeginchars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","z","u","v","w","x","y","z","_","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","ä","ö","ü","õ","Ö","Ä","Ü","Õ",":");
+
+		for ($i=0; $i < $len; $i++)
+		{
+			if ($in_var)
+			{
+				if (in_array($str[$i],$varchars))
+				{
+					// muutuja nimes oleme
+					$cur_var.=$str[$i];
+				}
+				else
+				{
+					// muutuja nimi l6ppes
+					$in_var = false;
+					$ret[] = $cur_var;
+					$cur_var = "";
+				}
+			}
+			else
+			{
+				if (in_array($str[$i],$varbeginchars))
+				{
+					// muutuja algas
+					$cur_var.=$str[$i];
+					$in_var = true;
+				}
+			}
+		}
+		if ($in_var)
+		{
+			$ret[] = $cur_var;
 		}
 		return $ret;
 	}

@@ -34,7 +34,8 @@ class date_edit {
 		$this->fields = $fields;
 	}
 
-	function gen_edit_form($varname,$timestamp) {
+	function gen_edit_form($varname,$timestamp,$range1 = 2001 , $range2 = 2004) 
+	{
 		if ($timestamp == "+24h") {
 			list($msec,$sec) = split(" ",microtime());
 			$timestamp = $sec + (60 * 60 * 24);
@@ -52,8 +53,6 @@ class date_edit {
 		while(list($k,$v) = each($this->fields)) {
 			switch($k) {
 				case "year":
-					$range1 = 2001;
-					$range2 = 2004;
 					$retval .= sprintf("<select name='%s[year]'>\n",$this->varname);
 					for ($i = $range1; $i <= $range2; $i++) {
 						$sel = ($i == $year) ? "selected" : "";

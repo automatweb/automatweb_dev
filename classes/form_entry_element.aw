@@ -152,17 +152,29 @@ load_vcl("date_edit");
 				$bt = $this->parse("BUTTON_ITEMS");
 			}
 
-			$this->vars(array("LISTBOX_ITEMS"		=> $lb, 
-												"MULTIPLE_ITEMS"	=> $mu, 
-												"TEXTAREA_ITEMS"	=> $ta,
-												"RADIO_ITEMS"			=> $gp,
-												"DEFAULT_TEXT"		=> $dt,
-												"CHECKBOX_ITEMS"	=> $dc,
-												"CAN_DELETE"			=> $cd,
-												"FILE_ITEMS"			=> $fi,
-												"HLINK_ITEMS"			=> $li,
-												"BUTTON_ITEMS"		=> $bt,
-												"PRICE_ITEMS"			=> $pc));
+			$di = "";
+			if ($this->arr["type"] == "date")
+			{
+				$this->vars(array(
+					"from_year" => $this->arr["from_year"],
+					"to_year" => $this->arr["to_year"]
+				));
+				$di = $this->parse("DATE_ITEMS");
+			}
+			$this->vars(array(
+				"LISTBOX_ITEMS"		=> $lb, 
+				"MULTIPLE_ITEMS"	=> $mu, 
+				"TEXTAREA_ITEMS"	=> $ta,
+				"RADIO_ITEMS"			=> $gp,
+				"DEFAULT_TEXT"		=> $dt,
+				"CHECKBOX_ITEMS"	=> $dc,
+				"CAN_DELETE"			=> $cd,
+				"FILE_ITEMS"			=> $fi,
+				"HLINK_ITEMS"			=> $li,
+				"BUTTON_ITEMS"		=> $bt,
+				"PRICE_ITEMS"			=> $pc,
+				"DATE_ITEMS"			=> $di
+			));
 			return $this->parse();
 		}
 
@@ -282,6 +294,14 @@ load_vcl("date_edit");
 				$this->arr[link_text] = $$var;
 				$var=$base."_link_address";
 				$this->arr[link_address] = $$var;
+			}
+
+			if ($this->arr["type"] == 'date')
+			{
+				$var=$base."_from_year";
+				$this->arr["from_year"] = $$var;
+				$var=$base."_to_year";
+				$this->arr["to_year"] = $$var;
 			}
 
 			if ($this->arr[type] == "submit" || $this->arr[type] == "reset")
@@ -425,7 +445,9 @@ load_vcl("date_edit");
 					"month" => "",
 					"day" => ""
 				));
-				$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : time()));
+				$fy = $this->arr["from_year"];
+				$ty = $this->arr["to_year"];
+				$html = $de->gen_edit_form($prefix.$elid, ($this->entry_id ? $this->entry : time()),($fy ? $fy : 2000),($ty ? $ty : 2005));
 			}
 
 			if ($this->arr["type"] == "")
