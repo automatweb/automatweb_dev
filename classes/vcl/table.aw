@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.19 2004/06/11 12:55:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.20 2004/06/17 13:52:57 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -564,7 +564,16 @@ class aw_table extends aw_template
 			$tmp["name"] = "table";
 			$tbl .= $this->opentag($tmp);
 			$tbl .= "<tr>\n";
-			$tbl .= $this->opentag(array("name" => "td","bgcolor" => $this->framebgcolor));
+			$tattr = array(
+				"name" => "td",
+				"bgcolor" => $this->framebgcolor,
+			);
+			if ($this->framebgclass != "")
+			{
+				$tattr["class"] = $this->framebgclass;
+				unset($tattr["bgcolor"]);
+			}
+			$tbl .= $this->opentag($tattr);
 		};
 
 		// moodustame tabeli alguse
@@ -1162,6 +1171,7 @@ class aw_table extends aw_template
 
 			case "framebgcolor":
 				$this->framebgcolor = isset($attrs["bgcolor"]) ? $attrs["bgcolor"] : "";
+				$this->framebgclass = isset($attrs["class"]) ? $attrs["class"] : "";
 				break;
 
 			case "titlebar":
