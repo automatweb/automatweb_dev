@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Vali kordused</title>
+<title>{VAR:LC_PLANNER_CHOOSE_REPLAYS}</title>
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
 <script language="JavaScript">
@@ -248,101 +248,101 @@ function store_n_close()
 <table border="1" cellspacing="1" cellpadding="2" width="100%">
 <tr>
 <td class="header1" valign="top">
-Päevad
+{VAR:LC_PLANNER_DAYS}
 </td>
 <td class="fgtitle" valign="top">
-<input type="radio" name="dayskiptype" value="1" checked">Iga päev
+<input type="radio" name="dayskiptype" value="1" checked">{VAR:LC_PLANNER_EVERY_DAY}
 </td>
 <td class="fgtitle" valign="top">
-<input type="radio" name="dayskiptype" value="2"> Iga <input type="text" name="dayskip" size="2" value="2"> päeva tagant
+<input type="radio" name="dayskiptype" value="2"> {VAR:LC_PLANNER_EVERY} <input type="text" name="dayskip" size="2" value="2"> {VAR:LC_PLANNER_AFTER_DAY}
 </td>
 <td class="fgtitle" valign="top">
-<input type="radio" name="dayskiptype" value="3"> Nendel päevadel
+<input type="radio" name="dayskiptype" value="3"> {VAR:LC_PLANNER_THOSE_DAYS}
 <br>
-<input type="checkbox" name="weekpwhen" value="1"> esmaspäev<br>
-<input type="checkbox" name="weekpwhen" value="2"> teisipäev<br>
-<input type="checkbox" name="weekpwhen" value="3"> kolmapäev<br>
-<input type="checkbox" name="weekpwhen" value="4"> neljapäev<br>
-<input type="checkbox" name="weekpwhen" value="5"> reede<br>
-<input type="checkbox" name="weekpwhen" value="6"> laupäev<br>
-<input type="checkbox" name="weekpwhen" value="7"> pühapäev<br>
+<input type="checkbox" name="weekpwhen" value="1"> {VAR:LC_PLANNER_MON}<br>
+<input type="checkbox" name="weekpwhen" value="2"> {VAR:LC_PLANNER_TUE}<br>
+<input type="checkbox" name="weekpwhen" value="3"> {VAR:LC_PLANNER_WEN}<br>
+<input type="checkbox" name="weekpwhen" value="4"> {VAR:LC_PLANNER_THU}<br>
+<input type="checkbox" name="weekpwhen" value="5"> {VAR:LC_PLANNER_FRI}<br>
+<input type="checkbox" name="weekpwhen" value="6"> {VAR:LC_PLANNER_SAT}<br>
+<input type="checkbox" name="weekpwhen" value="7"> {VAR:LC_PLANNER_SUN}<br>
 </td>
 </tr>
 <tr>
-<td class="header1" valign="top">Nädalad</td>
+<td class="header1" valign="top">{VAR:LC_PLANNER_WEEKS}</td>
 <td class="fgtitle" valign="top">
-<input type="radio" name="weekskiptype">Iga nädal<br>
+<input type="radio" name="weekskiptype">{VAR:LC_PLANNER_EVERY_WWEK}<br>
 </td>
 <td class="fgtitle" valign="top">
-<input type="radio" name="weekskiptype">Iga <input type="text" size="2" maxlength="2" name="weekskip" value="2"> nädala tagant.
+<input type="radio" name="weekskiptype">{VAR:LC_PLANNER_EVERY} <input type="text" size="2" maxlength="2" name="weekskip" value="2"> {VAR:LC_PLANNER_AFTER_WEEK}.
 </td>
 <td class="fgtitle" valign="top">
-<input type="radio" name="weekskiptype">kuu<br>
-<input type="checkbox" name="monpwhen" value="1">1. nädalal<br>
-<input type="checkbox" name="monpwhen" value="2">2. nädalal<br>
-<input type="checkbox" name="monpwhen" value="3">3. nädalal<br>
-<input type="checkbox" name="monpwhen" value="4">4. nädalal<br>
+<input type="radio" name="weekskiptype">{VAR:LC_PLANNER_MONTH}<br>
+<input type="checkbox" name="monpwhen" value="1">1. {VAR:LC_PLANNER_ON_WEEK}<br>
+<input type="checkbox" name="monpwhen" value="2">2. {VAR:LC_PLANNER_ON_WEEK}<br>
+<input type="checkbox" name="monpwhen" value="3">3. {VAR:LC_PLANNER_ON_WEEK}<br>
+<input type="checkbox" name="monpwhen" value="4">4. {VAR:LC_PLANNER_ON_WEEK}<br>
 </td>
 </tr>
 <tr>
 <td valign="top" class="header1" rowspan="2">
-Kuud
+{VAR:LC_PLANNER_MONTHS}
 </td>
 <td class="fgtitle" valign="top">
-<input type="radio" name="monskiptype">Iga kuu
+<input type="radio" name="monskiptype">{VAR:LC_PLANNER_EVERY_MONTH}
 </td>
 <td class="fgtitle" valign="top">
-<input type="radio" name="monskiptype">Iga <input type="text" size="2" name="monskip" maxlength="2" value="2"> kuu tagant.
+<input type="radio" name="monskiptype">{VAR:LC_PLANNER_EVERY} <input type="text" size="2" name="monskip" maxlength="2" value="2">{VAR:LC_PLANNER_AFTER_MONTH}.
 </td>
 <td class="fgtitle" valign="top">
-<input type="radio" name="monskiptype">Kuud<br>
-<input type="checkbox" name="yearpwhen" value="1">jaanuaris<br>
-<input type="checkbox" name="yearpwhen" value="2">veebruaris<br>
-<input type="checkbox" name="yearpwhen" value="3">märtsis<br>
-<input type="checkbox" name="yearpwhen" value="4">aprillis<br>
-<input type="checkbox" name="yearpwhen" value="5">mais<br>
-<input type="checkbox" name="yearpwhen" value="6">juunis<br>
-<input type="checkbox" name="yearpwhen" value="7">juulis<br>
-<input type="checkbox" name="yearpwhen" value="8">augustis<br>
-<input type="checkbox" name="yearpwhen" value="9">septembris<br>
-<input type="checkbox" name="yearpwhen" value="10">oktoobris<br>
-<input type="checkbox" name="yearpwhen" value="11">novembris<br>
-<input type="checkbox" name="yearpwhen" value="12">detsembris<br>
+<input type="radio" name="monskiptype">{VAR:LC_PLANNER_MONTHS}<br>
+<input type="checkbox" name="yearpwhen" value="1">{VAR:LC_PLANNER_JAN}<br>
+<input type="checkbox" name="yearpwhen" value="2">{VAR:LC_PLANNER_VEB}<br>
+<input type="checkbox" name="yearpwhen" value="3">{VAR:LC_PLANNER_MAR}<br>
+<input type="checkbox" name="yearpwhen" value="4">{VAR:LC_PLANNER_APR}<br>
+<input type="checkbox" name="yearpwhen" value="5">{VAR:LC_PLANNER_MAI}<br>
+<input type="checkbox" name="yearpwhen" value="6">{VAR:LC_PLANNER_JUN}<br>
+<input type="checkbox" name="yearpwhen" value="7">{VAR:LC_PLANNER_JUL}<br>
+<input type="checkbox" name="yearpwhen" value="8">{VAR:LC_PLANNER_AUG}<br>
+<input type="checkbox" name="yearpwhen" value="9">{VAR:LC_PLANNER_SEPT}<br>
+<input type="checkbox" name="yearpwhen" value="10">{VAR:LC_PLANNER_OKT}<br>
+<input type="checkbox" name="yearpwhen" value="11">{VAR:LC_PLANNER_NOV}<br>
+<input type="checkbox" name="yearpwhen" value="12">{VAR:LC_PLANNER_DETS}<br>
 </td>
 </tr>
 <tr>
-<td class="fgtitle" valign="top">Päevad kuus (eralda komadega)(ntx 3,17)</td>
+<td class="fgtitle" valign="top">{VAR:LC_PLANNER_DAYS_IN_MONTH}(ntx 3,17)</td>
 <td class="fgtitle" colspan="2"><input type="text" name="monpwhen2" value=""></td>
 </tr>
 <tr>
 <td valign="top" class="header1">
-Aastad
+{VAR:LC_PLANNER_YEARS}
 </td>
 <td class="fgtitle" valign="top">
-<input type="radio" class="fgtitle" name="yearskiptype"><b>Igal aastal</b><br>
+<input type="radio" class="fgtitle" name="yearskiptype"><b>{VAR:LC_PLANNER_EVERY_YEAR}</b><br>
 </td>
 <td class="fgtitle" valign="top" colspan="2">
-<input type="radio" class="fgtitle" name="yearskiptype">Iga <input name="yearskip" type="text" size="2" maxlength="2" value="2"> aasta tagant
+<input type="radio" class="fgtitle" name="yearskiptype">{VAR:LC_PLANNER_EVERY} <input name="yearskip" type="text" size="2" maxlength="2" value="2"> {VAR:LC_PLANNER_AFTER_YEAR}
 </td>
 </tr>
 <td valign="top" class="header1">
-<b>Kordub</b>
+<b>{VAR:LC_PLANNER_REPEATS}</b>
 </td>
 <td class="fgtitle">
-<input type="radio" name="repeat" value="1" checked>Igavesti
+<input type="radio" name="repeat" value="1" checked>{VAR:LC_PLANNER_FOREVER}
 </td>
 <td class="fgtitle" colspan="2">
 <input type="radio" name="repeat" value="2"><input type="text" name="rep_dur" size="2" maxlength="2" value="6">
 <select name="rep_type">
-<option value="1">päeva</option>
-<option value="2">nädalat</option>
-<option value="3">kuud</option>
-<option value="4">aastat</option>
+<option value="1">{VAR:LC_PLANNER_DAYS}</option>
+<option value="2">{VAR:LC_PLANNER_WWEEK}</option>
+<option value="3">{VAR:LC_PLANNER_MMONTH}</option>
+<option value="4">{VAR:LC_PLANNER_YYEAR}</option>
 </select>
 </td>
 </table>
 <hr size="1">
-<input type="button" value="Vali && Sulge aken" onClick="store_n_close()">
+<input type="button" value="{VAR:LC_PLANNER_CHOOSE_CLOSE}" onClick="store_n_close()">
 </form>
 <script language="Javascript">
 recall();

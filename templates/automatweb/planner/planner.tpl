@@ -25,7 +25,7 @@
 <td class="header1" align="center" colspan="5">
 <select name="month">{VAR:mlist}</select>
 <select name="year">{VAR:ylist}</select>
-<input type="submit" value="Näita">
+<input type="submit" value="{VAR:LC_PLANNER_SHOW}">
 {VAR:mreforb}
 </td>
 </tr>

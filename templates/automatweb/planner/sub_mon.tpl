@@ -17,7 +17,7 @@
 			<center><b><a href="?class=planner&action=change&disp=month&id={VAR:did}&date={VAR:date}">{VAR:dayname}</a></b>
 			<br>
 			<!-- SUB: showday -->
-			<a href="?class=planner&action=change&id={VAR:did}&date={VAR:date}">Näita päeva</a>
+			<a href="?class=planner&action=change&id={VAR:did}&date={VAR:date}">{VAR:LC_PLANNER_SHOW_DAY}</a>
 			<!-- END SUB: showday -->
 			</center>
 			<br>
@@ -30,7 +30,7 @@
 		</td>
 		<!-- END SUB: subline -->
 		<td class="fgtitle" align="center" valign="top">
-		<a href="?class=planner&action=change&disp=week&id={VAR:did}&date={VAR:date}">Näita nädalat</a>
+		<a href="?class=planner&action=change&disp=week&id={VAR:did}&date={VAR:date}">{VAR:LC_PLANNER_SHOW_WEEK}</a>
 		</td>
 		
 	</tr>

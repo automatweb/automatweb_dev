@@ -10,9 +10,9 @@
 <td colspan="2" class="header1">
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#FFFFFF">
 <tr>
-<td class="fgtitle"><strong>Algab</strong></td>
+<td class="fgtitle"><strong>{VAR:LC_PLANNER_STARTS}</strong></td>
 <td class="fgtitle"><select class="lefttab" name="shour">{VAR:shour}</select> t:<select class="lefttab" name="smin">{VAR:smin}</select>m</td>
-<td class="fgtitle"><strong>Kestab</strong></td>
+<td class="fgtitle"><strong>{VAR:LC_PLANNER_LASTS}</strong></td>
 <td class="fgtitle"><select class="lefttab" name="dhour">{VAR:dhour}</select> t:<select class="lefttab" name="dmin">{VAR:dmin}</select>m
 &nbsp;&nbsp;
 <input type="checkbox" name="repeater" value="1" {VAR:repcheck}>
@@ -22,15 +22,15 @@
 </td>
 </tr>
 <tr>
-<td class="fgtitle"><strong>Pealkiri</strong></td>
+<td class="fgtitle"><strong>{VAR:LC_PLANNER_TITLE}</strong></td>
 <td class="fgtitle"><input type="text" name="title" size="30" maxlength="60" value="{VAR:title}"></td>
 </tr>
 <tr>
-<td class="fgtitle"><strong>Koht</strong></td>
+<td class="fgtitle"><strong>{VAR:LC_PLANNER_PLACE}</strong></td>
 <td class="fgtitle"><input type="text" name="place" size="30" maxlength="60" value="{VAR:place}"></td>
 </tr>
 <tr>
-<td class="fgtitle"><strong>Värv</strong></td>
+<td class="fgtitle"><strong>{VAR:LC_PLANNER_COLOR}</strong></td>
 <td class="fgtitle"><select name="color">{VAR:color}</select></td>
 </tr>
 <!--
@@ -48,12 +48,12 @@
 </tr>
 -->
 <tr>
-<td class="fgtitle"><strong>Privaatne</strong></td>
+<td class="fgtitle"><strong>{VAR:LC_PLANNER_PRIVATE}</strong></td>
 <td class="fgtitle"><input type="checkbox" name="private" {VAR:private} value="1"></td>
 </tr>
 <tr>
 <td class="fgtitle" colspan="2">
-<strong>Sisu</strong><br>
+<strong>{VAR:LC_PLANNER_CONTENT}</strong><br>
 <textarea name="description" cols="60" rows="10" wrap="soft">
 {VAR:description}
 </textarea>
@@ -61,9 +61,9 @@
 </tr>
 <tr>
 <td class="fgtitle" align="center" colspan="2">
-<input type="submit" value="Salvesta">
+<input type="submit" value="{VAR:LC_PLANNER_SAVE}">
 <!-- SUB: delete -->
-<input type="submit" name="delete" value="Kustuta" onClick="if (confirm('Oled kindel?')) {document.event.submit()}">
+<input type="submit" name="delete" value="{VAR:LC_PLANNER_DELETE}" onClick="if (confirm('Oled kindel?')) {document.event.submit()}">
 <!-- END SUB: delete -->
 
 <input type="hidden" name="dayskip" value="{VAR:dayskip}">

@@ -15,7 +15,7 @@
 	<!-- SUB: line -->
 	<td width="15%" valign="top" bgcolor="{VAR:bgcolor}">
 		<small>
-		<a href="?class=planner&action=change&id={VAR:did}&date={VAR:date}">Näita päeva</a>
+		<a href="?class=planner&action=change&id={VAR:did}&date={VAR:date}">{VAR:LC_PLANNER_SHOW_DAY}</a>
 		<br>
 		<!-- SUB: event -->
 		<font color="{VAR:color}">
