@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.10 2002/09/04 07:34:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.11 2002/09/25 15:05:03 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -146,7 +146,7 @@ class menu_cache extends aw_template
 			// avoid writing to the menu cache if the queries didn't succeed,
 			// otherwise we are stuck with whatever (void most likely) lands
 			// in the cache until the cache is invalidated
-			$subsql = " (class_id = ".CL_DOCUMENT." OR class_id = ".CL_PERIODIC_SECTION.") AND objects.status = 2 AND objects.lang_id = ".$lang_id." AND objects.site_id = ".aw_ini_get("site_id");
+			$subsql = " (class_id = ".CL_DOCUMENT." OR class_id = ".CL_PERIODIC_SECTION.") AND objects.status = 2 AND objects.lang_id = ".$lang_id." AND objects.site_id = ".$this->cfg["site_id"];
 			if ( $this->_list_subs(array("where" => $subsql)) &&	$this->_list_menus(array("where" => $where,"lang_id" => $lang_id)) )
 			{
 				// make sure that we ust have to include this file and the menu cache will be read into
@@ -184,6 +184,20 @@ class menu_cache extends aw_template
 		if (!is_array($ret))
 		{
 			return array();
+		}
+		return $ret;
+	}
+
+	function get_menus_below($parent)
+	{
+		$ret = array();
+		if (is_array($this->mpr[$parent]))
+		{
+			foreach($this->mpr[$parent] as $oid => $dat)
+			{
+				$ret[$dat["oid"]] = $dat;
+				$ret += $this->get_menus_below($oid);
+			}
 		}
 		return $ret;
 	}
