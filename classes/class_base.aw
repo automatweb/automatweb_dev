@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.353 2005/01/07 13:33:38 kristo Exp $
+// $Id: class_base.aw,v 2.354 2005/01/07 17:51:05 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2939,6 +2939,7 @@ class class_base extends aw_template
 					);
 				};
 			};
+			
 			$rvs = array();
 			if($controllers[$key])
 			{
@@ -2947,7 +2948,7 @@ class class_base extends aw_template
 				{
 					$controller_id = $contr;
 					$prpdata["value"] = $val;
-					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], &$prpdata, &$arr["request"], $val);
+					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst);
 	
 					if ($controller_ret != PROP_OK)
 					{
