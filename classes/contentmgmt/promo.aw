@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.18 2003/11/11 13:50:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.19 2003/11/24 15:30:57 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -405,6 +405,10 @@ class promo extends class_base
 			"obj" => obj($alias["target"])
 		)));
 		$_ob = aw_ini_get("menuedit.document_list_order_by");
+		if ($ob->prop("sort_by"))
+		{
+			$_ob = $ob->prop("sort_by")." ".$ob->prop("sort_ord");
+		}
 		if (($_ob != "") && (sizeof($def->get()) > 0))
 		{
 			$ol = new object_list(array(
@@ -429,7 +433,7 @@ class promo extends class_base
 		$parms = array(
 			"leadonly" => 1,
 			"showlead" => 1,
-			"boldlead" => 1,
+			"boldlead" => $thid->cfg["boldlead"],
 			"no_strip_lead" => 1,
 		);
 
@@ -470,6 +474,12 @@ class promo extends class_base
 		{
 			$this->vars(array(
 				"SHOW_TITLE" => $this->parse("SHOW_TITLE")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"SHOW_TITLE" => ""
 			));
 		}
 		return $this->parse();
@@ -550,7 +560,7 @@ class promo extends class_base
 
 			$show_promo = false;
 			
-			$msec = $o->prop("section");
+			$msec = $o->meta("section");
 
 			if ($o->meta("all_menus"))
 			{
@@ -619,7 +629,7 @@ class promo extends class_base
 						"section" => $inst->sel_section,
 						"strip_img" => false,
 						"showlead" => 1,
-						"boldlead" => 1,
+						"boldlead" => $this->cfg["boldlead"],
 						"no_strip_lead" => 1,
 						"no_acl_checks" => aw_ini_get("menuedit.no_view_acl_checks"),
 					));
