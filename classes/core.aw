@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.98 2002/07/24 20:49:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.99 2002/07/29 10:27:55 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1736,7 +1736,7 @@ class core extends db_connector
 				$uo = "/orb.".$this->cfg["ext"].$qm;
 			}
 			// user side
-			if ($arr["_alias"])
+			if (isset($arr["_alias"]) && $arr["_alias"])
 			{
 				return $this->cfg["baseurl"].$uo.$sec."alias=$arr[_alias]".$separator."action=$fun".$separator."$urs";
 			}
