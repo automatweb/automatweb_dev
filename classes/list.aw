@@ -1,8 +1,5 @@
 <?php
-if (defined("MLIST_LOADED")) {
-} else {
-define(MLIST_LOADED,1);
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.1 2001/05/18 16:48:46 duke Exp $
 	class mlist extends aw_template
 	{
 		function mlist($id)
@@ -114,7 +111,7 @@ define(MLIST_LOADED,1);
 					$this->db_query("INSERT INTO ml_var_values VALUES($var_id, $user_id, '".$var_value."')");
 			}
 
-			$this->log_action($GLOBALS["uid"],"mlist","Lisas kasutaja $name listi $this->name");
+			$this->_log("mlist","Lisas kasutaja $name listi $this->name");
 			return $user_id;
 		}
 
@@ -148,7 +145,7 @@ define(MLIST_LOADED,1);
 							$this->db_query("INSERT INTO ml_var_values VALUES($var_id, $user_id, '".$$v."')");
 					}
 				}
-				$this->log_action($GLOBALS["uid"],"mlist","Muutis kasutajat $name listis $this->name");
+				$this->_log("mlist","Muutis kasutajat $name listis $this->name");
 			}
 			else
 			{
@@ -251,7 +248,7 @@ define(MLIST_LOADED,1);
 					if ($rows[$v] == 1)
 						$this->delete_object($v);
 
-				$this->log_action($GLOBALS["uid"],"mlist","Kustutas kasutaja listist $this->name");
+				$this->_log("mlist","Kustutas kasutaja listist $this->name");
 			}
 		}
 
@@ -341,7 +338,7 @@ define(MLIST_LOADED,1);
 				flush();
 				$this->db_add_user(array("name" => $name, "email" => $mail));
 			}			
-			$this->log_action($GLOBALS["uid"],"mlist","Importis kasutajaid listi $this->name");
+			$this->_log("mlist","Importis kasutajaid listi $this->name");
 		}
 
 		function change_vars($parent)
@@ -406,5 +403,4 @@ define(MLIST_LOADED,1);
 				echo $row[name],",",$row[mail],"\n";
 		}
 	};
-	}
 ?>
