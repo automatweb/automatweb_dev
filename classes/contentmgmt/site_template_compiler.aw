@@ -35,6 +35,8 @@ define("OP_GET_OBJ_TREE_LIST", 21);	// params { a_parent, level, a_parent_p_fn}
 
 define("OP_LIST_INIT", 22);	// params { a_parent, level, a_parent_p_fn}
 
+define("OP_HAS_LUGU", 23);	// params { a_parent, level, a_parent_p_fn}
+
 class site_template_compiler extends aw_template
 {
 	function site_template_compiler()
@@ -62,7 +64,8 @@ class site_template_compiler extends aw_template
 			19 => "OP_INSERT_SEL_IDS",
 			20 => "OP_IF_OBJ_TREE",
 			21 => "OP_GET_OBJ_TREE_LIST",
-			22 => "OP_LIST_INIT"
+			22 => "OP_LIST_INIT",
+			23 => "OP_HAS_LUGU",
 		);
 	}
 
@@ -134,6 +137,10 @@ class site_template_compiler extends aw_template
 			if ($this->is_parent_tpl("NO_IMAGE", $tpl))
 			{
 				$this->menu_areas[$area]["levels"][$level]["no_image_tpl"] = 1;
+			}
+			if ($this->is_parent_tpl("HAS_LUGU", $tpl))
+			{
+				$this->menu_areas[$area]["levels"][$level]["has_lugu"] = 1;
 			}
 
 			// figure out if the template was inside another menu template
@@ -532,6 +539,15 @@ class site_template_compiler extends aw_template
 					$this->no_top_level_code_for[$chd_area][$chd_lv] = true;
 				}
 
+				$this->ops[] = array(
+					"op" => OP_HAS_LUGU,
+					"params" => array(
+						"tpl" => $cur_tpl_fqn,
+						"has_image_tpl" => $ldat["has_image_tpl"],
+						"no_image_tpl" => $ldat["no_image_tpl"],
+					)
+				);
+				
 				$this->ops[] = array(
 					"op" => OP_SHOW_ITEM,
 					"params" => array(
@@ -1393,6 +1409,59 @@ class site_template_compiler extends aw_template
 		}
 
 		$ret .= $this->_gi().$cache_name." = true;\n";
+		return $ret;
+	}
+	
+	function _g_op_has_lugu($arr)
+	{
+		end($this->list_name_stack);
+		$dat = current($this->list_name_stack);
+		$o_name = $dat["o_name"];
+		
+		$ret = "";
+		
+		$ret .= $this->_gi()."\$has_lugu = \"\";\n";
+		$ret .= $this->_gi()."if (".$o_name."->meta(\"show_lead\") && (!aw_ini_get(\"menuedit.show_lead_in_menu_only_active\") || \$this->_helper_is_in_path(".$o_name."->id())))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$xdat = new object_list(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"parent\" => ".$o_name."->id(),\n";
+		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
+		$ret .= $this->_gi()."\"period\" => aw_global_get(\"act_per_id\"),\n";
+		$ret .= $this->_gi()."\"class_id\" => array(CL_PERIODIC_SECTION, CL_DOCUMENT),\n";
+		$ret .= $this->_gi()."\"sort_by\" => \"objects.jrk\",\n";
+		$ret .= $this->_gi()."\"limit\" => (int)aw_ini_get(\"menuedit.show_lead_in_menu_count\")\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."));\n";
+		$ret .= $this->_gi()."for(\$o =& \$xdat->begin(); !\$xdat->end(); \$o =& \$xdat->next())\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$done = \$this->doc->gen_preview(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"docid\" => \$o->id(), \n";
+		$ret .= $this->_gi()."\"tpl\" => \"nadal_film_side_lead.tpl\",\n";
+		$ret .= $this->_gi()."\"leadonly\" => 1, \n";
+		$ret .= $this->_gi()."\"section\" => ".$o_name."->id(),\n";
+		$ret .= $this->_gi()."\"strip_img\" => 0\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."));\n";
+		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"lugu\" => \$done\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."));\n";
+		$ret .= $this->_gi()."\$has_lugu .= \$this->parse(\"HAS_LUGU\");\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"HAS_LUGU\" => \$has_lugu\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."));\n";
+		
 		return $ret;
 	}
 }
