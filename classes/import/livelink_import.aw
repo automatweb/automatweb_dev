@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.22 2005/01/26 14:53:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.23 2005/01/28 14:06:32 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -58,8 +58,9 @@ class livelink_import extends class_base
 	// if import progress needs to be redirected to a file, then it can be done in this method
 	function log_progress($msg)
 	{
-		print $msg . "<br>";
-		$this->logdata .= $msg . "\n";
+		$tm = date("Y-m-d H:i:s");
+		print $tm . "\t" . $msg . "<br>";
+		$this->logdata .= $tm . "\t" . $msg . "\n";
 	}
 
 	function get_property($args)
