@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.78 2004/09/01 14:46:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.79 2004/09/09 11:10:54 kristo Exp $
 
 /*
 
@@ -560,7 +560,12 @@ class site_show extends class_base
 
 			if (is_array($sections) && ($sections[0] !== 0) && count($sections) > 0)
 			{
+				$nol = true;
 				$filter["parent"] = $sections;
+				if (aw_ini_get("config.use_last"))
+				{
+					$filter["no_last"] = new obj_predicate_not(1);
+				}
 			}
 			else
 			{
@@ -1452,7 +1457,12 @@ class site_show extends class_base
 		{
 			if (($last_mod = $this->cache->file_get("objlastmod")) === false)
 			{
-				$last_mod = $this->db_fetch_field("SELECT MAX(modified) as m FROM objects", "m");
+				$add = "";
+				if (aw_ini_get("site_show.objlastmod_only_menu"))
+				{
+					$add = " WHERE class_id = ".CL_MENU;
+				}
+				$last_mod = $this->db_fetch_field("SELECT MAX(modified) as m FROM objects".$add, "m");
 				$this->cache->file_set("objlastmod", $last_mod);
 			}
 			// also compiled menu template
@@ -1563,12 +1573,31 @@ class site_show extends class_base
 
 		if (!$promo_done)
 		{
-			$awt->start("after-mainc-promo");
-			$inst = get_instance("contentmgmt/promo");
-			$inst->on_get_subtemplate_content(array(
-				"inst" => &$this,
-			));
-			$awt->stop("after-mainc-promo");
+			// check if there are any promo templates, cause this call makes at least one query and this is faster
+			// also, we don't need to check for the default promo templates
+			// cause those are checked for earlier. 
+			$pa = aw_ini_get("promo.areas");
+			if (is_array($pa) && count($pa) > 0)
+			{
+				$has_tpl = false;
+				foreach($pa as $pid => $pd)
+				{
+					if ($this->is_template($pd["def"]."_PROMO"))
+					{
+						$has_tpl = true;
+					}
+				}
+
+				if ($has_tpl)
+				{
+					$awt->start("after-mainc-promo");
+					$inst = get_instance("contentmgmt/promo");
+					$inst->on_get_subtemplate_content(array(
+						"inst" => &$this,
+					));
+					$awt->stop("after-mainc-promo");
+				}
+			}
 		}
 	}
 
@@ -1632,7 +1661,7 @@ class site_show extends class_base
 		$site_title_yah = " / ". ($pcnt > 0 ? strip_tags($this->title_yah_arr[$pcnt-2])." / " : "").($pcnt > 1 ? strip_tags($this->title_yah_arr[$pcnt-1]) : "");
 
 		$adt = "";
-		if ($this->active_doc)
+		if (is_oid($this->active_doc) && $this->can("view", $this->active_doc))
 		{
 			$adt_o = obj($this->active_doc);
 			$adt = $adt_o->name();
@@ -1707,16 +1736,20 @@ class site_show extends class_base
 				"ADDDOCUMENT" => $cd,
 			));
 
-			// check menuedit access
-			if ($this->prog_acl("view", PRG_MENUEDIT))
+			// check if template exists, cause prog_acl makes some queries
+			if ($this->is_template("MENUEDIT_ACCESS"))
 			{
-				// so if this is the only document shown and the user has edit right
-				// to it, parse and show the CHANGEDOCUMENT sub
-				$this->vars(array("MENUEDIT_ACCESS" => $this->parse("MENUEDIT_ACCESS")));
-			}
-			else
-			{
-				$this->vars(array("MENUEDIT_ACCESS" => ""));
+				// check menuedit access
+				if ($this->prog_acl("view", PRG_MENUEDIT))
+				{
+					// so if this is the only document shown and the user has edit right
+					// to it, parse and show the CHANGEDOCUMENT sub
+					$this->vars(array("MENUEDIT_ACCESS" => $this->parse("MENUEDIT_ACCESS")));
+				}
+				else
+				{
+					$this->vars(array("MENUEDIT_ACCESS" => ""));
+				}
 			}
 
 			// god dammit, this sucks. aga ma ei oska seda kuidagi teisiti lahendada
