@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.6 2004/11/01 23:47:28 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.7 2004/11/02 13:30:43 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -153,12 +153,7 @@ class maja_xml_editor extends class_base
 			"name" => "xml_element",
 			"caption" => "xml elements",
 		));
-/*
-		$t->define_field(array(
-			"name" => "floor",
-			"caption" => "korrus",
-		));
-*/
+
 		$t->set_sortable(false);
 		
 //		$data_file_content = file_get_contents($arr['obj_inst']->prop("orig_xml_file"));
@@ -172,22 +167,7 @@ class maja_xml_editor extends class_base
 		}
 
 		$xml_file_content = parse_xml_def(array("xml" => $data_file_content));
-/*
-		$floors_arr = $xml_file_content[1]['korrus'];
-		$floors = array();
 
-		foreach($floors_arr as $floor)
-		{
-			array_push($floors, $xml_file_content[0][$floor]['attributes']['nimi']);
-// mnjah - loll lahendus - oleks võinud ju võtta
-// $xml_file_content[0][$floor]['attributes']['number']
-// ja oleks saanud selle  floors massiivi key-ks panna ja ühtlasi
-// oleks see ka selecti optioni key olnud ja poleks probleemi olnud
-// nullinda esimese korrusega - uh
-		}
-
-		$floors_flats_saved = $arr['obj_inst']->meta("floors");
-*/
 		foreach($xml_file_content[0] as $key => $value)
 		{
 			if($value['type'] == "open")
@@ -240,20 +220,7 @@ class maja_xml_editor extends class_base
 				}
 
 				$indent = str_repeat("&nbsp;", 5);
-/*
-				if($value['tag'] == "korter")
-				{
-					$floor_select = html::select(array(
-							"name" => "floors_flats[".$key."]",
-							"options" => $floors,
-							"selected" => $floors_flats_saved[$key],
-						));
-				}
-				else
-				{
-					$floor_select = "";
-				}
-*/
+
 				$t->define_data(array(
 					"xml_element" => $indent."&lt;".$value['tag'].$attributes."/&gt;",
 //					"floor" => $floor_select,
@@ -285,12 +252,9 @@ class maja_xml_editor extends class_base
 		$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
 		$db_table_contents_inst = get_instance(CL_DB_TABLE_CONTENTS);
 		$table_fields = $db_table_contents_inst->get_fields($db_table_contents_obj);
-//		$table_data = $db_table_contents_inst->get_objects($db_table_contents_obj);
-//		arr($table_fields);
-//		arr($arr);
 
 		
-// i'll unset some unneeded array members, which are 2 table field, which content
+// i'll unset some unneeded array members, which are 2 table fields, which content
 // has to come somewhere else
 		unset($table_fields['id'], $table_fields['maja_nimi']);
 
@@ -377,7 +341,7 @@ class maja_xml_editor extends class_base
 		}
 		$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
 		$db_table_name = $db_table_contents_obj->prop("db_table");
-//		arr($arr);
+
 
 		$flats = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$arr['obj_inst']->prop('house_name')."' ORDER BY korter ASC");
 
@@ -454,15 +418,13 @@ class maja_xml_editor extends class_base
 		$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
 		$db_table_name = $db_table_contents_obj->prop("db_table");
 
+		$db_tmp = $this->db_fetch_array("SELECT id,staatus,korter FROM ".$db_table_name." WHERE maja_nimi LIKE '%".$arr['obj_inst']->prop("house_name")."%'");
+
 		if ($arr['request']['group'] == "additional_info")
 		{
 
-			$db_tmp = $this->db_fetch_array("SELECT id,staatus,korter from ".$db_table_name);
-
 			foreach($arr['request']['row'] as $key => $value)
 			{
-//				echo $key." -- ".$value."<br>";
-//				arr($value);
 				$db_query = "UPDATE ".$db_table_name." SET ";
 				foreach($value as $k => $v)
 				{
@@ -566,15 +528,6 @@ class maja_xml_editor extends class_base
 				}
 			}
 
-// some DEBUGGING STUFF
-
-
-//			arr($sql_commands);
-
-// let's but the data in db table
-
-
-
 			$house_name = $arr['obj_inst']->prop("house_name");
 
 			$db_result = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
@@ -585,8 +538,6 @@ class maja_xml_editor extends class_base
 			{
 				$insert = true;
 			}
-
-			$db_tmp = $this->db_fetch_array("SELECT staatus, korter, id from ".$db_table_name);
 
 			foreach($sql_commands as $sql_command)
 			{
@@ -635,6 +586,7 @@ class maja_xml_editor extends class_base
 							}
 						}
 					}
+
 					$sql_query .= $sql_c_key."='".$sql_c_value."', ";
 				}
 
