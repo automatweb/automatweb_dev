@@ -165,6 +165,16 @@
             <caption>Ametinimetus</caption>
       </property>
       <property>
+            <name>sect</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SECTION</reltype>
+            <automatic>1</automatic>
+            <field>section</field>
+            <caption>Üksus</caption>
+      </property>
+      <property>
             <name>email</name>
             <table>objects</table>
             <group>contact</group>
@@ -390,6 +400,11 @@
                   <clid>CL_SHOP_ORDER</clid>
                   <caption>tellimus</caption>
             </ORDER>
+            <SECTION>
+                  <value>21</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Üksus</caption>
+            </SECTION>
       </reltypes>
 </properties>
 
