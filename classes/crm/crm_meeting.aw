@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.28 2005/03/24 10:02:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.29 2005/04/05 07:16:49 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -81,7 +81,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property task_toolbar type=toolbar no_caption=1 store=no group=participants
 @caption "Toolbar"
 
-@property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,
+@property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,interval_hourly,interval_minutely
 @caption Kordused
 
 @property calendar_selector type=calendar_selector store=no group=calendars
@@ -288,19 +288,6 @@ class crm_meeting extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		//the person who added the task will be a participant, whether he likes it
-		//or not
-		if($arr['new'])
-		{
-			//
-			$arr['obj_inst']->save();
-			$user = get_instance(CL_USER);
-			$person = new object($user->get_current_person());
-			$person->connect(array(
-				'reltype' => 'RELTYPE_PERSON_MEETING',
-				'to' => $arr['obj_inst'],
-			));
-		}
 		switch($data["name"])
 		{
 			case "other_selector":
@@ -311,9 +298,12 @@ class crm_meeting extends class_base
 			case "whole_day":
 				if ($data["value"])
 				{
-					list($m,$d,$y) = explode("-",date("m-d-Y"));
+					$start = $arr["obj_inst"]->prop("start1");
+
+					list($m,$d,$y) = explode("-",date("m-d-Y",$start));
 					$daystart = mktime(9,0,0,$m,$d,$y);
 					$dayend = mktime(17,0,0,$m,$d,$y);
+
 					$arr["obj_inst"]->set_prop("start1",$daystart);
 					$arr["obj_inst"]->set_prop("end",$dayend);
 				};
@@ -322,14 +312,29 @@ class crm_meeting extends class_base
 		return $retval;
 	}
 
+	function callback_post_save($arr)
+	{
+		if($arr['new'])
+		{
+			//
+			$user = get_instance(CL_USER);
+			$person = new object($user->get_current_person());
+			$person->connect(array(
+				'reltype' => 'RELTYPE_PERSON_MEETING',
+				'to' => $arr['obj_inst'],
+			));
+		}
+	}
+		
+
 	/**
-      @attrib name=submit_delete_participants_from_calendar
-      @param id required type=int acl=view
+	@attrib name=submit_delete_participants_from_calendar
+	@param id required type=int acl=view
 	  @param group optional
 	  @param check required
-   **/
-   function submit_delete_participants_from_calendar($arr)
-   {
+	**/
+	function submit_delete_participants_from_calendar($arr)
+	{
 		if(is_array($arr["check"]))
 		{
 			foreach($arr["check"] as $person_id)
@@ -353,8 +358,8 @@ class crm_meeting extends class_base
    }
 
 	/**
-      @attrib name=search_contacts
-   **/
+		@attrib name=search_contacts
+	**/
 	function search_contacts($arr)
 	{
 		return $this->mk_my_orb('change',array(
