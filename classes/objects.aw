@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.13 2001/07/04 23:01:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.14 2001/07/05 02:45:22 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -208,27 +208,33 @@ class db_objects extends aw_template
 			$se = array();
 			if ($s_name != "")
 			{
-				$se[] = " name LIKE '%".$s_name."%' ";
+				$se[] = " objects.name LIKE '%".$s_name."%' ";
 			}
 			if ($s_comment != "")
 			{
-				$se[] = " comment LIKE '%".$s_comment."%' ";
+				$se[] = " objects.comment LIKE '%".$s_comment."%' ";
 			}
 			if ($s_type > 0)
 			{
-				$se[] = " class_id = '".$s_type."' ";
+				$se[] = " objects.class_id = '".$s_type."' ";
 			}
 			else
 			{
-				$se[] = " class_id IN (".join(",",$this->typearr).") ";
+				$se[] = " objects.class_id IN (".join(",",$this->typearr).") ";
 			}
-			$this->db_query("SELECT name,oid,class_id FROM objects WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND ".join("AND",$se));
+			$this->db_query("SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND ".join("AND",$se));
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("name" => $row["name"], 
-													"id" => $row["oid"],
-													"type"	=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
-													"pickurl" => (in_array($row["class_id"],$this->typearr) ? "<a href='".$this->mk_orb("addalias",array("id" => $docid, "alias" => $row["oid"]),"document")."'>Võta see</a>" : "")));
+				$this->vars(array(
+					"name" => $row["name"], 
+					"id" => $row["oid"],
+					"type"	=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
+					"created" => $this->time2date($row["created"],2),
+					"modified" => $this->time2date($row["modified"], 2),
+					"createdby" => $row["createdby"],
+					"modifiedby" => $row["modifiedby"],
+					"parent_name" => $row["parent_name"],
+					"pickurl" => (in_array($row["class_id"],$this->typearr) ? "<a href='".$this->mk_orb("addalias",array("id" => $docid, "alias" => $row["oid"]),"document")."'>Võta see</a>" : "")));
 				$l.=$this->parse("LINE");
 			}
 			$this->vars(array("LINE" => $l));
