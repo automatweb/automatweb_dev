@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.143 2004/03/09 18:23:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.144 2004/03/17 13:44:21 duke Exp $
 
 class aliasmgr extends aw_template
 {
@@ -239,7 +239,15 @@ class aliasmgr extends aw_template
 				));
 			}
 		}
-		return $this->mk_my_orb("list_aliases",array("id" => $id,"return_url" => urlencode($return_url)),$this->use_class);
+		if (!empty($group))
+		{
+			$act = "change";
+		}
+		else
+		{
+			$act = "list_aliases";
+		};
+		return $this->mk_my_orb($act,array("id" => $id,"group" => $group,"return_url" => urlencode($return_url)),$this->use_class);
 	}
 		
 	////
