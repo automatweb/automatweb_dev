@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.35 2002/07/17 20:29:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.36 2002/07/18 10:51:05 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -25,6 +25,8 @@ class form_table extends form_base
 
 		$this->lang_id = aw_global_get("lang_id");
 		$this->buttons = array("save" => "Salvesta", "add" => "Lisa", "delete" => "Kustuta", "move" => "Liiguta");
+		$this->ru = aw_global_get("REQUEST_URI");
+		$this->image = get_instance("image");
 	}
 
 	////
@@ -470,17 +472,15 @@ class form_table extends form_base
 
 	////
 	// !starts the table data definition for table $id
-	// $header_attribs = an array of get items in the url, used to sort the table
-	function start_table($id,$header_attribs)
+	function start_table($id)
 	{
 		load_vcl("table");
-		$this->t = new aw_table(array(
-			"prefix" => "fg_".$id,
-			"self" => aw_global_get("PHP_SELF"),
-			"imgurl" => $this->cfg["baseurl"] . "/automatweb/images"
-		));
+		$this->t = new aw_table(array("prefix" => "fg_".$id));
 		$this->t->parse_xml_def_string($this->get_xml($id));
-		$this->t->set_header_attribs($header_attribs);
+		$this->set_numeric_fields_in_table();
+
+		// this is for no_show_oneliners 
+		$this->num_lines = 0;
 
 		// mark down the path
 		$old_sk = $GLOBALS["old_sk"];
@@ -499,17 +499,8 @@ class form_table extends form_base
 			$num = count($fg_table_sessions[$tbl_sk]);
 			if ($fg_table_sessions[$tbl_sk][$num-1] != aw_global_get("REQUEST_URI"))
 			{
-//				echo "adding for tbl sk $tbl_sk <br>";
 				$fg_table_sessions[$tbl_sk][] = aw_global_get("REQUEST_URI");
 			}
-			else
-			{
-//				echo "no add same <br>";
-			}
-		}
-		else
-		{
-//			echo "notblsk <br>";
 		}
 		aw_session_set("fg_table_sessions", $fg_table_sessions);
 	}
@@ -518,6 +509,7 @@ class form_table extends form_base
 	// !adds another row of data to the table
 	function row_data($dat,$form_id = 0,$section = 0 ,$op_id = 0,$chain_id = 0, $chain_entry_id = 0)
 	{
+		enter_function("form_table::row_data", array());
 		if ($form_id != 0)
 		{
 			// here also make the view and other links
@@ -656,10 +648,53 @@ class form_table extends form_base
 				{
 					if ($dat["ev_".$elid] != "")
 					{
-						// check if the column has an alias set, if it does then figure out the url for the alias
+						// check if the column has an alias set, if it does then figure out what the fuck are we supposed to do with it
+						if (is_array($cc["alias"]))
+						{
+							$link_started = false;
+							foreach($cc["alias"] as $aid)
+							{
+								// check if there are any form tables as aliases
+								// if we find any, let it start the link
+								$alias_data = $this->table["defs"][$col]["alias_data"][$aid];
+								if ($alias_data["class_id"] == CL_FORM_TABLE)
+								{
+									$str .= $this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section,$aid);
+									$link_started = true;
+								}
+							}
+
+							foreach($cc["alias"] as $aid)
+							{
+								// now find the image aliases and have them replace element content as they wish
+								$alias_data = $this->table["defs"][$col]["alias_data"][$aid];
+								if ($alias_data["class_id"] == CL_IMAGE)
+								{
+									$dat["ev_".$elid] = $this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section,$aid);
+								}
+							}
+
+							// now let the other aliases do their thing. whatever that will be. 
+							foreach($cc["alias"] as $aid)
+							{
+								$alias_data = $this->table["defs"][$col]["alias_data"][$aid];
+								if ($alias_data["class_id"] != CL_FORM_TABLE && $alias_data["class_id"] != CL_IMAGE)
+								{
+									$str.=$this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section,$aid);
+								}
+							}
+
+							// and if we started a table alias link, we end it here.
+							if ($link_started)
+							{
+								$str.=$dat["ev_".$elid]."</a>";
+							}
+							$str.=$this->table["defs"][$col]["el_sep"][$elid];
+						}
+						else
 						if ($cc["alias"])
 						{
-							$str .= $this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section).$this->table["defs"][$col]["el_sep"][$elid];
+							$str.=$this->get_alias_url($col, $dat["ev_".$elid], $elid,$dat,$section).$this->table["defs"][$col]["el_sep"][$elid];
 						}
 						else
 						if ($elid == "order")
@@ -687,6 +722,8 @@ class form_table extends form_base
 		}
 
 		$this->t->define_data($dat);
+		$this->num_lines++;
+		exit_function("form_table::row_data", array());
 	}
 
 	////
@@ -727,13 +764,12 @@ class form_table extends form_base
 			{
 				$_sby = "ev_".$this->table["defaultsort"];
 				$_so = "asc";
-				$_sn = ($this->table["defaultsort_type"] == "int");
 			}
 			if ($this->table["group"])
 			{
 				$_grpby = "ev_".$this->table["group"];
 			}
-			$this->t->sort_by(array("field" => $_sby,"sorder" => $_so,"sort_numeric" => $_sn,"group_by" => $_grpby));
+			$this->t->sort_by(array("field" => $_sby,"sorder" => $_so,"group_by" => $_grpby));
 			$css = $this->get_css();
 			$contents = $this->t->draw(array(
 				"rgroupby" => "ev_".$this->table["rgroup"]
@@ -754,7 +790,7 @@ class form_table extends form_base
 		}
 
 		global $section;
-		$this->start_table($table_id,array("class" => "form_table", "action" => "show_user_entries", "form_id" => $form_id, "chain_id" => $chain_id, "table_id" => $table_id,"section" => $section,"op_id" => $op_id));
+		$this->start_table($table_id);
 
 		$this->load_chain($chain_id);
 
@@ -799,7 +835,7 @@ class form_table extends form_base
 			}
 		}
 
-		$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+		$this->t->sort_by();
 		$tbl = $this->get_css();
 		$tbl.="<form action='reforb.aw' method='POST'>\n";
 		if ($this->table["submit_top"])
@@ -834,7 +870,7 @@ class form_table extends form_base
 		extract($arr);
 
 		global $section;
-		$this->start_table($table_id,array("class" => "form_table", "action" => "show_user_entries", "form_id" => $form_id, "chain_id" => $chain_id, "table_id" => $table_id,"section" => $section,"op_id" => $op_id));
+		$this->start_table($table_id);
 
 		// leiame k6ik sisestused mis on tehtud $uid poolt $form_id jaox.
 		$this->load($form_id);
@@ -855,7 +891,7 @@ class form_table extends form_base
 			$this->row_data($row);
 		}
 
-		$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+		$this->t->sort_by();
 		$tbl = $this->get_css();
 		$tbl.="<form action='reforb.aw' method='POST'>\n";
 		if ($this->table["submit_top"])
@@ -954,89 +990,49 @@ class form_table extends form_base
 	function finalize_table($arr = array())
 	{
 		extract($arr);
-		$_sby = array($GLOBALS["sortby"]);
-		$_so = $GLOBALS["sort_order"];
+
+		// check for that damn skip_one_liners thingie
+		if ($this->table["skip_one_liners"] && $this->num_lines < 2 && $this->last_table_alias_url != "")
+		{
+			// now we need to figure out the damn url. well. ok, since it is always the only one in the table
+			// we just remember the last one we made
+			header("Location: ".$this->last_table_alias_url);
+			die();
+		}
+
 		if (is_array($this->table["defsort"]))
 		{
+			$_sby = array();
+			$_sord = array();
 			foreach($this->table["defsort"] as $nr => $dat)
 			{
 				$cl = $this->get_col_for_el($dat["el"]);
-				if ($this->table["defsort_el_types"][$dat["el"]] == "int")
-				{
-					$_sn = true;
-				}
-				if ($cl === false)
-				{
-					$cl = "ev_".$dat["el"];
-				}
-				else
-				{
-					$cl = "ev_col_".$cl;
-				}
-				$_sby[] = $cl;
-				$_so = "asc";
+				$_sby["ev_col_".$cl] = "ev_".$dat["el"];
+				$_sord["ev_col_".$cl] = $dat["type"];
+				$_sord["ev_".$dat["el"]] = $dat["type"];
 			}
+			$this->t->set_default_sortby($_sby);
+			$this->t->set_default_sorder($_sord);
 		}
-
-		$_grpby = array();
-		$_coll_el = array();
-		$_coll_sep = array();
-/*		if (is_array($this->table["grps"]))
-		{
-			foreach($this->table["grps"] as $nr => $dat)
-			{
-				$_grpby[] = "ev_col_".$this->get_col_for_el($dat["gp_el"]);
-				if (isset($dat["collect_el"]))
-				{
-					$_coll_el[] = "ev_col_".$this->get_col_for_el($dat["collect_el"]);
-				}
-
-				if (isset($dat["sep"]))
-				{
-					$_coll_sep["ev_col_".$this->get_col_for_el($dat["collect_el"])] = $dat["sep"];
-				}
-
-				if (isset($dat["ord_el"]))
-				{
-					$_coll_ordel["ev_col_".$this->get_col_for_el($dat["collect_el"])] = $dat["ord_el"];
-				}
-			}
-		}
-		else
-		if ($this->table["group"])
-		{
-			$_grpby = "ev_".$this->table["group"];
-		}*/
 
 		$r_g = false;
 		if (is_array($this->table["rgrps"]))
 		{
 			foreach($this->table["rgrps"] as $nr => $dat)
 			{
-				$cl = "ev_".$dat["el"];
-				$r_g[$cl] = $cl;
+				$cl = $this->get_col_for_el($dat["el"]);
+				$r_g["ev_col_".$cl] = "ev_".$dat["el"];
 			}
 		}
+		$this->t->sort_by(array("rgroupby" => $r_g));
 
-		$this->t->sort_by(array(
-			"field" => $_sby,
-			"sorder" => $_so,
-			"group_by" => $_grpby,
-			"collect_el" => $_coll_el,
-			"collect_sep" => $_coll_sep,
-			"collect_ordel" => $_coll_ordel,
-			"sort_numeric" => $_sn,
-			"rgroupby" => $r_g
-		));
 		$tbl = $this->get_css();
-
 		$tbl.=$this->get_js();
 
 		if (!$no_form_tags)
 		{
 			$tbl.="<form action='reforb.".$this->cfg["ext"]."' method='POST' name='tb_".$this->table_id."'>\n";
 		}
-
 
 		if ($this->table["submit_top"])
 		{
@@ -1079,7 +1075,8 @@ class form_table extends form_base
 	}
 
 	////
-	// !returns the xml definition for table $id to be passed to the table generator. if no id specified, presumes table is loaded already
+	// !returns the xml definition for table $id to be passed to the table generator. if no id specified, 
+	// presumes table is loaded already
 	function get_xml($id = 0)
 	{
 		if ($id)
@@ -1098,23 +1095,17 @@ class form_table extends form_base
 				<content_style1_selected value=\"style_".$this->table["content_sorted_style1"]."\"/>
 				<content_style2_selected value=\"style_".$this->table["content_sorted_style2"]."\"/>
 				<group_style value=\"style_".$this->table["group_style"]."\"/>\n";
+		$xml.="<tableattribs ";
 
-		classload("style");
-		$s = new style;
 		if ($this->table["table_style"])
 		{
-				$xml.="<tableattribs ".$s->get_table_string($this->table["table_style"])."/>\n";
-		}
-		else
-		{
-				$xml.="<tableattribs />\n";
+			$s = get_instance("style");
+			$xml.=$s->get_table_string($this->table["table_style"]);
 		}
 		
-		$xml.="</definitions>
-			<data>\n";
+		$xml.=" />\n</definitions>\n<data>\n";
 		
 		$gidlist = aw_global_get("gidlist");
-
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
@@ -1127,33 +1118,21 @@ class form_table extends form_base
 					continue;
 				}
 			}
-/*			if (is_array($cc["el"]))
-			{
-				if (count($cc["el"]) == 1)
-				{
-					reset($cc["el"]);
-					list($eln,) = each($cc["el"]);
-				}
-				else
-				{
-					$eln = "col_".$col;
-				}
-			}
-			else
-			{
-				$eln = $cc["el"];
-			}*/
 			$eln = "col_".$col;
 			
-			$numericattr="";
-			if ($cc["show_int"])
+			$numericattr = "";
+			// we need to check if the first element in the column is numeric - if it is, then we must sort that col numerically
+			if (is_array($cc["els"]))
 			{
-				$numericattr=" numeric=\"1\" thousands_sep=\"".$cc["thousands_sep"]."\"";
-				if ($GLOBALS["dbg_num"]) echo("get_xml: set numericattr for el $eln<br>");
-			};
+				reset($cc["els"]);
+				list(,$elid) = each($cc["els"]);
+				if ($cc["el_types"][$elid] == "int")
+				{
+					$numericattr = " numeric=\"1\" thousands_sep=\"".$cc["thousands_sep"]."\"";
+				};
+			}
 			
 			$title = $cc["lang_title"][aw_global_get("lang_id")];
-
 			if (is_array($cc["els"]) && in_array("select", $cc["els"]))
 			{
 				$title = "&lt;a href='javascript:void(0)' onClick='tb_selall()'&gt;".$title."&lt;/a&gt;";
@@ -1182,7 +1161,7 @@ class form_table extends form_base
 
 		if ($this->table["header_normal"])
 		{
-			$op.= $s->get_css($this->table["header_normal"],$this->table["link_style"]);
+			$op.= $s->get_css($this->table["header_normal"],$this->table["header_link"]);
 		}
 		if ($this->table["group_style"])
 		{
@@ -1190,27 +1169,27 @@ class form_table extends form_base
 		}
 		if ($this->table["header_sortable"])
 		{
-			$op.= $s->get_css($this->table["header_sortable"],$this->table["link_style"]);
+			$op.= $s->get_css($this->table["header_sortable"],$this->table["header_sortable_link"]);
 		}
 		if ($this->table["header_sorted"])
 		{
-			$op.= $s->get_css($this->table["header_sorted"],$this->table["link_style"]);
+			$op.= $s->get_css($this->table["header_sorted"],$this->table["header_sortable_link"]);
 		}
 		if ($this->table["content_style1"])
 		{
-			$op.= $s->get_css($this->table["content_style1"],$this->table["link_style"]);
+			$op.= $s->get_css($this->table["content_style1"],$this->table["link_style1"]);
 		}
 		if ($this->table["content_style2"])
 		{
-			$op.= $s->get_css($this->table["content_style2"],$this->table["link_style"]);
+			$op.= $s->get_css($this->table["content_style2"],$this->table["link_style2"]);
 		}
 		if ($this->table["content_sorted_style1"])
 		{
-			$op.= $s->get_css($this->table["content_sorted_style1"],$this->table["link_style"]);
+			$op.= $s->get_css($this->table["content_sorted_style1"],$this->table["link_style1"]);
 		}
 		if ($this->table["content_sorted_style2"])
 		{
-			$op.= $s->get_css($this->table["content_sorted_style2"],$this->table["link_style"]);
+			$op.= $s->get_css($this->table["content_sorted_style2"],$this->table["link_style2"]);
 		}
 		$op.="</style>\n";
 		return $op;
@@ -1283,12 +1262,19 @@ class form_table extends form_base
 		return false;
 	}
 
-	function get_alias_url($col, $elval, $elid,$dat,$section)
+	function get_alias_url($col, $elval, $elid,$dat,$section ,$aid = -1)
 	{
-		$alias_data = $this->table["defs"][$col]["alias_data"];
+		if ($aid != -1)
+		{
+			$alias_data = $this->table["defs"][$col]["alias_data"][$aid];
+		}
+		else
+		{
+			$alias_data = $this->table["defs"][$col]["alias_data"];
+		}
 		if ($alias_data["class_id"] == CL_FORM_TABLE)
 		{
-			$ru = aw_global_get("REQUEST_URI");
+			$ru = $this->ru;
 			// new approach - restrict_* are now arrays - so that they remember previous levels as well
 			$ru = preg_replace("/use_table=[^&$]*/","",$ru);
 			$ru = preg_replace("/tbl_sk=[^&$]*/","",$ru);
@@ -1317,8 +1303,13 @@ class form_table extends form_base
 				}
 			}
 			$url.="&restrict_search_el[]=".$elid."&restrict_search_val[]=".urlencode($dat["ev_".$elid])."&tbl_sk=".$new_sk."&old_sk=".$GLOBALS["tbl_sk"];
-
-			return "<a href='".$url."'>".$elval."</a>";
+			$this->last_table_alias_url = $url;
+			$ret = "<a href='".$url."'>";
+			if ($aid == -1)
+			{
+				$ret.=$elval."</a>";
+			}
+			return $ret;
 		}
 		else
 		if ($alias_data["class_id"] == CL_FORM_OUTPUT)
@@ -1330,6 +1321,27 @@ class form_table extends form_base
 				"section" => $section
 			),"form");
 			return "<a href='".$url."'>".$elval."</a>";
+		}
+		else
+		if ($alias_data["class_id"] == CL_IMAGE)
+		{
+			$elval = $dat["ev_".$elid];
+			$imgdat = $this->image->get_image_by_id($alias_data["target"]);
+
+			switch($this->table["defs"][$col]["image_type"])
+			{
+				case "img":
+					$elval = "<img border='0' src='".$imgdat["url"]."'>";
+					break;
+
+				case "tximg":
+					$elval .= "<img border='0' src='".$imgdat["url"]."'>";
+					break;
+
+				case "imgtx":
+					$elval = "<img border='0' src='".$imgdat["url"]."'>".$elval;
+					break;
+			}
 		}
 		return $elval;
 	}
@@ -1425,6 +1437,11 @@ class form_table extends form_base
 		$this->table["print_button"] = $settings["print_button"];
 		$this->table["has_pages"] = $settings["has_pages"];
 		$this->table["has_pages_type"] = $settings["has_pages_type"];
+		$this->table["records_per_page"] = $settings["records_per_page"];
+		$this->table["has_pages_up"] = $settings["has_pages_up"];
+		$this->table["has_pages_down"] = $settings["has_pages_down"];
+		$this->table["page_sep_pixels"] = $settings["page_sep_pixels"];
+		$this->table["skip_one_liners"] = $settings["skip_one_liners"];
 		$this->table["user_entries"] = $settings["user_entries"];
 		$this->table["forms"] = $this->make_keys($settings["forms"]);
 		$this->table["languages"] = $this->make_keys($settings["languages"]);
@@ -1516,7 +1533,12 @@ class form_table extends form_base
 			"has_pages_text" => checked($this->table["has_pages_type"] == "text"),
 			"has_pages_lb" => checked($this->table["has_pages_type"] == "lb"),
 			"has_user_entries" => checked($this->table["user_entries"]),
+			"records_per_page" => $this->table["records_per_page"],
+			"page_sep_pixels" => $this->table["page_sep_pixels"],
+			"has_pages_up" => checked($this->table["has_pages_up"]),
+			"has_pages_down" => checked($this->table["has_pages_down"]),
 			"uee_grps" => $this->mpicker($this->table["user_entries_except_grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
+			"skip_one_liners" => checked($this->table["skip_one_liners"]),
 			"view_cols" => $this->mpicker($this->table["view_cols"], $els),
 			"change_cols" => $this->mpicker($this->table["change_cols"], $els),
 			"reforb" => $this->mk_reforb("new_submit_settings", array("id" => $id))
@@ -1712,7 +1734,7 @@ class form_table extends form_base
 			if ($this->table["has_aliasmgr"])
 			{
 				$this->vars(array(
-					"aliases" => $this->picker($this->table["defs"][$col]["alias"], $this->get_aliases_for_table())
+					"aliases" => $this->mpicker($this->table["defs"][$col]["alias"], $this->get_aliases_for_table())
 				));
 				$coldata[$col][3] = $this->parse("SEL_ALIAS");
 			}
@@ -1842,10 +1864,16 @@ class form_table extends form_base
 			foreach($this->table["defs"][$i]["els"] as $elid)
 			{
 				$this->table["defs"][$i]["el_forms"][$elid] = $els[$elid];
-				$this->table["defs"][$i]["el_types"][$elid] = $elsubtypes[$elid]["subtype"];
+				$this->table["defs"][$i]["el_types"][$elid] = $elsubtypes[$els[$elid]][$elid]["subtype"];
 			}
 			$this->table["defs"][$i]["grps"] = $this->make_keys($cols[$i]["grps"]);
-			$this->table["defs"][$i]["alias_data"] = $this->get_data_for_alias($cols[$i]["alias"]);
+			$this->table["defs"][$i]["alias"] = $this->make_keys($cols[$i]["alias"]);
+
+			foreach($this->table["defs"][$i]["alias"] as $aid)
+			{
+				$this->table["defs"][$i]["alias_data"][$aid] = $this->get_data_for_alias($aid);
+			}
+
 			// sort elements in col
 			$this->elsort_dat = $this->table["defs"][$i]["el_ord"];
 			uasort($this->table["defs"][$i]["els"], array($this, "elsort"));
@@ -1883,16 +1911,19 @@ class form_table extends form_base
 		$this->vars(array(
 			"tablestyles" => $this->picker($this->table["table_style"],$s->get_select(0,ST_TABLE,true)),
 			"header_normal" => $this->picker($this->table["header_normal"],$css),
+			"header_link" => $this->picker($this->table["header_link"], $css),
 			"header_sortable" => $this->picker($this->table["header_sortable"],$css),
-			"header_sorted" => $this->picker($this->table["header_sorted"],$css),
 			"header_sortable_link" => $this->picker($this->table["header_sortable_link"], $css),
+			"header_sorted" => $this->picker($this->table["header_sorted"],$css),
 			"content_style1" => $this->picker($this->table["content_style1"],$css),
 			"content_style2" => $this->picker($this->table["content_style2"],$css),
-			"link_style1" => $this->picker($this->table["link_style1"],$css),
-			"link_style2" => $this->picker($this->table["link_style2"],$css),
-			"group_style" => $this->picker($this->table["group_style"],$css),
 			"content_sorted_style1" => $this->picker($this->table["content_sorted_style1"],$css),
 			"content_sorted_style2" => $this->picker($this->table["content_sorted_style2"],$css),
+			"group_style" => $this->picker($this->table["group_style"],$css),
+			"group_link_style" => $this->picker($this->table["group_link_style"],$css),
+			"link_style1" => $this->picker($this->table["link_style1"],$css),
+			"link_style2" => $this->picker($this->table["link_style2"],$css),
+
 			"sum_style" => $this->picker($this->table["sum_style"],$css),
 			"reforb" => $this->mk_reforb("new_submit_styles", array("id" => $id))
 		));
@@ -2068,11 +2099,50 @@ class form_table extends form_base
 	function get_group_by_elements()
 	{
 		$ret = array();
-		foreach($this->table["grps"] as $nr => $dat)
+		if (is_array($this->table["grps"]))
 		{
-			$ret[$this->table["grps_forms"][$dat["gp_el"]]] = $dat["gp_el"];
+			foreach($this->table["grps"] as $nr => $dat)
+			{
+				$ret[$this->table["grps_forms"][$dat["gp_el"]]] = $dat["gp_el"];
+			}
 		}
 		return $ret;
+	}
+
+	function get_group_by_collect_elements()
+	{
+		$ret = array();
+		if (is_array($this->table["grps"]))
+		{
+			foreach($this->table["grps"] as $nr => $dat)
+			{
+				if (isset($dat["collect_el"]))
+				{
+					$ret[$dat["collect_el"]]["sep"] = $dat["sep"];
+					$ret[$dat["collect_el"]]["ord_el"] = $dat["ord_el"];
+				}
+			}
+		}
+		return $ret;
+	}
+
+	////
+	// !this sets the numeric status for each element in the form_table to the vcl table
+	function set_numeric_fields_in_table()
+	{
+		for ($i=0; $i < $this->table["cols"]; $i++)
+		{
+			if (is_array($this->table["defs"][$i]["els"]))
+			{
+				foreach($this->table["defs"][$i]["els"] as $elid)
+				{
+					if ($this->table["defs"][$i]["el_types"][$elid] == "int")
+					{
+						$this->t->set_numeric_field("ev_".$elid);
+					}
+				}
+			}
+		}
 	}
 }
 

@@ -444,7 +444,7 @@ class form_db_base extends aw_template
 //		echo "got sql join = $sql_join <br>";
 
 		// now get fetch data part
-		$sql_data = $this->get_sql_fetch_for_search($this->_joins,$this->arr["start_search_relations_from"],$used_els);
+		$sql_data = $this->get_sql_fetch_for_search($this->_joins,$this->arr["start_search_relations_from"],$used_els, $group_collect_els);
 	//		echo "got sql data = $sql_data <br>";
 
 		// this adds deleted object checking if the form entries have objects attached
@@ -646,9 +646,8 @@ class form_db_base extends aw_template
 	////
 	// !this creates the fetch data part of the query 
 	// it just loops over all the used elements, finds their database tables and gives them correct names
-	function get_sql_fetch_for_search($joins, $start_relations_from, $used_els)
+	function get_sql_fetch_for_search($joins, $start_relations_from, $used_els, $gp_coll_els = array())
 	{
-
 		$sql = "";
 		$usedtbls = array();
 		foreach($joins as $jdata)
@@ -696,11 +695,25 @@ class form_db_base extends aw_template
 						// if this element gets written to the current table, include it in the sql
 						if ($eltbls["col"] != "")
 						{
-							$sql.=", ".$tbl.".".$eltbls["col"]." AS ev_".$el;
+							if (isset($gp_coll_els[$el]))
+							{
+								$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col"].") AS ev_".$el;
+							}
+							else
+							{
+								$sql.=", ".$tbl.".".$eltbls["col"]." AS ev_".$el;
+							}
 						}
 						if ($eltbls["col2"] != "")
 						{
-							$sql.=", ".$tbl.".".$eltbls["col2"]." AS el_".$el;
+							if (isset($gp_coll_els[$el]))
+							{
+								$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eltbls["col2"].") AS el_".$el;
+							}
+							else
+							{
+								$sql.=", ".$tbl.".".$eltbls["col2"]." AS el_".$el;
+							}
 						}
 					}
 				}
@@ -747,11 +760,25 @@ class form_db_base extends aw_template
 							// if this element gets written to the current table, include it in the sql
 							if ($eldat["col"] != "")
 							{
-								$sql.=", ".$tbl.".".$eldat["col"]." AS ev_".$el;
+								if (isset($gp_coll_els[$el]))
+								{
+									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eldat["col"].") AS ev_".$el;
+								}
+								else
+								{
+									$sql.=", ".$tbl.".".$eldat["col"]." AS ev_".$el;
+								}
 							}
 							if ($eldat["col2"] != "")
 							{
-								$sql.=", ".$tbl.".".$eldat["col2"]." AS el_".$el;
+								if (isset($gp_coll_els[$el]))
+								{
+									$sql.=", stradd(\"".$gp_coll_els[$el]["sep"]."\",".$tbl.".".$eldat["col2"].") AS el_".$el;
+								}
+								else
+								{
+									$sql.=", ".$tbl.".".$eldat["col2"]." AS el_".$el;
+								}
 							}
 						}
 					}
@@ -1347,6 +1374,8 @@ class form_db_base extends aw_template
 			if ($fid)
 			{
 				$finst = $this->cache_get_form_eldat($fid);
+//				echo "fid = $fid <br>";
+//				echo "looking for el $elid els = <pre>",var_dump($finst["els"]),"</pre> <br>";
 				$gpb[] = $finst["els"][$elid]["table"].".".$finst["els"][$elid]["col"];
 			}
 		}

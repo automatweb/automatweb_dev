@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.106 2002/07/17 20:29:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.107 2002/07/18 10:51:05 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2163,6 +2163,7 @@ class form extends form_base
 	//  $no_form_tags - the <form> </form> tags will be omitted
 	function new_do_search($arr)
 	{
+		enter_function("form::new_do_search",array());
 		extract($arr);
 
 		// $this->arr["search_chain"] on selle chaini id, mille kalendreid ma arvestama pean
@@ -2172,14 +2173,11 @@ class form extends form_base
 		enter_function("form::new_do_search::load",array());
 		if ($id)
 		{
-//			echo "loading $id <br>";
 			$this->load($id);
 		}
 		if ($entry_id)
 		{
-//			echo "loading entry $entry_id <br>";
 			$this->load_entry($entry_id);
-//			echo "this->entry = <pre>", var_dump($this->entry),"</pre> <br>";
 		}
 		exit_function("form::new_do_search::load",array());
 
@@ -2221,23 +2219,16 @@ class form extends form_base
 				$use_table = $this->arr["table"];
 			}
 
-			$form_table->start_table($use_table,array(
-				"class" => "form", 
-				"action" => "show_entry", 
-				"id" => $this->id, 
-				"entry_id" => $this->entry_id, 
-				"op_id" => 1,
-				"section" => $section,
-				"use_table" => $use_table,
-				"restrict_search_el" => $restrict_search_el,
-				"restrict_search_val" => $restrict_search_val
-			));
+			$form_table->start_table($use_table);
 
 			$used_els = $form_table->get_used_elements();
 //			echo "used_els = <pre>", var_dump($used_els),"</pre> <br>";
 
 			$group_els = $form_table->get_group_by_elements();
 //			echo "group_els = <pre>", var_dump($group_els),"</pre> <br>";
+
+			$group_collect_els = $form_table->get_group_by_collect_elements();
+//			echo "group_cllect_els = <pre>", var_dump($group_collect_els),"</pre> <br>";
 		}
 		else
 		{
@@ -2252,7 +2243,8 @@ class form extends form_base
 //		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
 		$sql = $this->get_search_query(array(
 			"used_els" => $used_els,
-			"group_els" => $group_els
+			"group_els" => $group_els,
+			"group_collect_els" => $group_collect_els
 		));
 //		echo "sql = $sql <br>";
 		$result = "";
@@ -2380,6 +2372,7 @@ class form extends form_base
 		}
 		exit_function("form::new_do_search::finish_table",array());
 
+		exit_function("form::new_do_search",array());
 		return $result;
 	}
 
@@ -2846,17 +2839,7 @@ class form extends form_base
 			{
 				$use_table = $this->arr["table"];
 			}
-			$ft->start_table($use_table, array(
-				"class" => "form", 
-				"action" => "show_entry", 
-				"id" => $this->id, 
-				"entry_id" => $entry_id, 
-				"op_id" => $output_id,
-				"section" => $section,
-				"use_table" => $use_table,
-				"restrict_search_el" => $restrict_search_el,
-				"restrict_search_val" => $restrict_search_val
-			));
+			$ft->start_table($use_table);
 
 			// make an array of linked_element => this form element
 			$linked_els = $this->get_linked2real_element_array();
@@ -3031,7 +3014,7 @@ class form extends form_base
 			{
 				$_grpby = "ev_".$ft->table["group"];
 			}
-			$ft->t->sort_by(array("field" => $_sby,"sorder" => $_so,"group_by" => $_grpby,"sort_numeric" => $_sn));
+			$ft->t->sort_by(array("field" => $_sby,"sorder" => $_so,"group_by" => $_grpby));
 			$tbl = $ft->get_css();
 			$is_button_table = $ft->table["submit_top"] || $ft->table["user_button_top"] || $ft->table["submit_bottom"] || $ft->table["user_button_bottom"];
 			if ($is_button_table)
