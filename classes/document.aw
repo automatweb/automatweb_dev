@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.249 2004/04/06 11:32:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.250 2004/04/12 10:09:23 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -962,9 +962,10 @@ class document extends aw_template
 
 		$fr = "";
 
+
 		if (	$doc["is_forum"] &&
 			empty($print) && 
-			($this->template_has_var("num_comments") || $this->is_template("FORUM_ADD_SUB") || $this->is_template("FORUM_ADD_SUB_ALWAYS"))
+			($this->template_has_var("num_comments") || $this->is_template("FORUM_ADD_SUB") || $this->is_template("FORUM_ADD_SUB_ALWAYS") || $this->is_template("FORUM_ADD"))
 			
 	     	)
 		{
