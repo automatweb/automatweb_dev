@@ -90,7 +90,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_FOLDER</reltype>
-            <caption>Outbox</caption>
+            <caption>Saadetud kirjad</caption>
       </property>
       <property>
             <name>msg_drafts</name>
