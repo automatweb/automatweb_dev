@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.98 2004/11/07 12:18:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.99 2004/11/12 10:18:31 kristo Exp $
 
 /*
 
@@ -493,6 +493,8 @@ class site_show extends class_base
 
 		$get_inact = false;
 
+		$no_in_promo = false;
+
 		// no default, show list
 		if ($docid < 1)	
 		{
@@ -527,6 +529,7 @@ class site_show extends class_base
 				{
 					$sections = array($obj->id());
 				};
+				$no_in_promo = 1;
 			}
 			else
 			{
@@ -628,7 +631,7 @@ class site_show extends class_base
 			$filter["lang_id"] = aw_global_get("lang_id");
 			$filter["sort_by"] = $ordby;
 			$filter["site_id"] = array();
-			
+
 			if ($arr["all_langs"])
 			{
 				$filter["lang_id"] = array();
@@ -642,6 +645,10 @@ class site_show extends class_base
 			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
 			{
 				if ($o->site_id() != $rsid && !$o->is_brother())
+				{
+					continue;
+				}
+				if ($no_in_promo && $o->prop("no_show_in_promo") == 1)
 				{
 					continue;
 				}
@@ -1335,7 +1342,7 @@ class site_show extends class_base
 		foreach($ldat as $lc => $ld)
 		{
 			$name = $ld["name"];
-			$url = $this->cfg["baseurl"] . "/" . $lang2trans[$lc];
+			$url = $this->cfg["baseurl"] . "/" . $lang2trans[$lc]."?set_lang_id=".$ld["id"];
 
 			if (!$lang2trans[$lc])
 			{
