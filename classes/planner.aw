@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.83 2003/01/16 16:36:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.84 2003/02/05 03:56:21 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -8,52 +8,95 @@
 	@default field=meta
 	@default method=serialize
 	@default group=general
+	@classinfo relationmgr=yes 
 
-	@property default_view type=select 
+	@property default_view type=select group=advanced
 	@caption Default vaade
 
-	@property day_start type=time_select
+	@property event_cfgform type=objpicker clid=CL_CFGFORM subclass=CL_DOCUMENT
+	@caption Sündmuse lisamise vorm
+
+	@property day_start type=time_select 
 	@caption Päev algab
 
 	@property day_end type=time_select
 	@caption Päev lõpeb
 
-	@property tab_add_visible type=checkbox ch_value=1
+	@property tab_add_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Lisa event" nähtav
 
-	@property tab_day_visible type=checkbox ch_value=1
+	@property tab_day_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Päev" nähtav
 
-	@property tab_overview_visible type=checkbox ch_value=1
+	@property tab_overview_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Ülevaade" nähtav
 
-	@property tab_week_visible type=checkbox ch_value=1
+	@property tab_week_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Nädal" nähtav
 
-	@property tab_month_visible type=checkbox ch_value=1
+	@property tab_month_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Kuu" nähtav
 
-	@property navigator_visible type=checkbox ch_value=1
+	@property navigator_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption Näita navigaatorit
 
 	@property navigator_months type=select 
 	@caption Kuud navigaatoris
 
-	@property workdays type=generated generator=callback_get_workday_choices
+	@property event_folder type=select 
+	@caption Sündmuste kataloog
+
+	@property workdays callback=callback_get_workday_choices group=advanced
 	@caption Tööpäevad
 
-	@property preview type=text callback=callback_get_preview_link
+	@property preview type=text callback=callback_get_preview_link store=no editonly=1
 	@caption Eelvaade
+	
+	@groupinfo advanced caption=Seaded
 
-	@classinfo relationmgr=yes
+	// -- calendar view
+	@default view=show
+	
+	@property id type=hidden table=objects field=oid group=show_day,show_overview,show_week,show_month,add_event
+
+	@default store=no
+
+	@property show_day callback=callback_show_day group=show_day 
+	@caption Päev
+	
+	@property show_overview callback=callback_show_overview group=show_overview
+	@caption Ülevaade
+	
+	@property show_week callback=callback_show_week group=show_week
+	@caption Nädal
+	
+	@property show_month callback=callback_show_month group=show_month
+	@caption Kuu
+	
+	@property add_event callback=callback_get_add_event group=add_event 
+	@caption Lisa sündmus
+
+	@groupinfo show_day caption=Päev submit=no
+	@groupinfo show_overview caption=Ülevaade submit=no
+	@groupinfo show_week caption=Nädal submit=no
+	@groupinfo show_month caption=Kuu submit=no
+	@groupinfo add_event caption=Lisa_sündmus submit=no
 
 */
 
+// when and if I need to display an "add event" form inside another config form, I need to do this
+// in some weird way. query the properties of the embeddable object and put them where I want them
+// to be.
+
+// naff, naff. I need to create different views that contain different properties. That's something
+// I should have done a long time ago, so that I can create different planners
 define(WEEK,DAY * 7);
 define(REP_DAY,1);
 define(REP_WEEK,2);
 define(REP_MONTH,3);
 define(REP_YEAR,4);
+
+define(RELTYPE_SUMMARY_PANE,1);
 lc_load("calendar");
 // Klassi sees me kujutame koiki kuupäevi kujul dd-mm-YYYY (ehk d-m-Y date format)
 
@@ -83,8 +126,7 @@ class planner extends class_base
 	function callback_get_rel_types()
         {
                 return array(
-			"1" => "näita kokkuvõtte paanis",
-			"2" => "sündmused teistest kalendritest",
+			RELTYPE_SUMMARY_PANE => "näita kokkuvõtte paanis",
 		);
         }
 
@@ -101,7 +143,67 @@ class planner extends class_base
 			case "navigator_months":
 				$data["options"] = array("1" => "1","2" => "2");
 				break;
-			
+
+			case "event_folder":
+				$data["options"] = $this->get_menu_list();
+				break;
+		}
+		return $retval;
+	}
+
+	function set_property($args = array())
+	{
+                $data = &$args["prop"];
+                $retval = PROP_OK;
+                switch($data["name"])
+                {
+			case "event_cfgform":
+				// try and check the config form
+				$frm = $this->get_object($data["value"]);
+				if (!$frm["meta"]["xml_definition"])
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
+
+			case "add_event":
+				$obj = $this->get_object($args["obj"]["oid"]);
+				$event_cfgform = $obj["meta"]["event_cfgform"];
+				$frm = $this->get_object($event_cfgform);
+				$t = get_instance("doc");
+				$savedata = $t->process_form_data(array(
+					"content" => $frm["meta"]["xml_definition"],
+					"form_data" => $args["form_data"],
+					"group_by" => "table",
+				));
+				// this really-really should be handled by class_base
+				$event_id = $args["form_data"]["event_id"];
+				foreach($savedata as $table => $fields)
+				{
+					if ($table == "objects")
+					{
+						$fields["oid"] = $event_id;
+						if ($savedata["documents"]["title"])
+						{
+							$fields["name"] = $savedata["documents"]["title"];
+						};
+						$this->upd_object($fields);
+					}
+					else
+					{
+						$data = join(",",map2("%s='%s'",$fields));
+						if ($table == "documents")
+						{
+							$q = sprintf("UPDATE documents SET %s WHERE docid = %d",$data,$event_id);
+						}
+						else
+						{
+							$q = sprintf("UPDATE %s SET %s WHERE id = %d",$table,$data,$event_id);
+						};
+						$this->db_query($q);
+					};
+				};
+				break;
 		}
 		return $retval;
 	}
@@ -112,7 +214,7 @@ class planner extends class_base
 			"caption" => "Näita",
 			"type" => "text",
 			"value" => html::href(array(
-				"url" => $this->mk_my_orb("view",array("id" => $args["obj"]["oid"])),
+				"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"cb_view" => "show")),
 				"caption" => "Näita kalendrit",
 				"target" => "_blank",
 			)),
@@ -126,7 +228,6 @@ class planner extends class_base
 			"name" => "workdays",
 			"caption" => "Tööpäevad",
 		);
-		$obj = $this->get_object($args["oid"]);
 		$daynames = explode("|",LC_WEEKDAY);
 		for($i = 1; $i <= 7; $i++)
 		{
@@ -135,11 +236,207 @@ class planner extends class_base
 				"name" => "workdays[$i]",
 				"label" => $daynames[$i],
 				"ch_value" => 1,
-				"value" => $obj["meta"]["workdays"][$i],
+				"value" => $args["obj"]["meta"]["workdays"][$i],
 			);
 		};
 		$retval = array("workdays" => $tmp);
 		return $retval;
+	}
+
+	function _init_event_source($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($id);
+		$folder = $obj["meta"]["event_folder"];
+		$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.oid) WHERE objects.parent = '$folder'";
+		$this->db_query($q);
+		$events = array();
+		while($row = $this->db_next())
+		{
+			$gx = date("dmY",$row["start"]);
+			$row["link"] = $this->mk_my_orb("change",array("id" => $id,"group" => "add_event","cb_view" => "show","event_id" => $row["oid"]));
+			$events[$gx][] = $row;
+		};
+		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","cb_view" => "show"));
+		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week","cb_view" => "show"));
+		return $events;
+	}
+
+	////
+	// !Day view
+	// Basically, how they should work, is that I want to define a datasource
+	// for events (and also provide different callbacks for setting up the configuration)
+	// and then let those functions display thos events based on the datasource configuration
+	function callback_show_day($args = array())
+	{
+		$nodes = array();
+		$events = $this->_init_event_source(array(
+			"id" => $args["request"]["id"],
+		));
+		$nodes[] = array(
+			"no_caption" => 1,
+			"value" => $this->view(array(
+				"type" => "day",
+				"id" => $args["request"]["id"],
+				"date" => $args["request"]["date"],
+				"no_tabs" => 1,
+				"events" => $events,
+			)),
+		);
+		return $nodes;
+	}
+
+	////
+	// !Week-at-a-glance view	
+	function callback_show_overview($args = array())
+	{
+		$nodes = array();
+		$events = $this->_init_event_source(array(
+			"id" => $args["request"]["id"],
+		));
+		$nodes[] = array(
+			"no_caption" => 1,
+			"value" => $this->view(array(
+				"type" => "overview",
+				"id" => $args["request"]["id"],
+				"date" => $args["request"]["date"],
+				"no_tabs" => 1,
+				"events" => $events,
+			)),
+		);
+		return $nodes;
+	}
+
+	////
+	// !Week view	
+	function callback_show_week($args = array())
+	{
+		$nodes = array();
+		$events = $this->_init_event_source(array(
+			"id" => $args["request"]["id"],
+		));
+		$nodes[] = array(
+			"no_caption" => 1,
+			"value" => $this->view(array(
+				"type" => "week",
+				"id" => $args["request"]["id"],
+				"date" => $args["request"]["date"],
+				"no_tabs" => 1,
+				"events" => $events,
+			)),
+		);
+		return $nodes;
+	}
+
+	////
+	// !Month view	
+	function callback_show_month($args = array())
+	{
+		$nodes = array();
+		$events = $this->_init_event_source(array(
+			"id" => $args["request"]["id"],
+		));
+		$nodes[] = array(
+			"no_caption" => 1,
+			"value" => $this->view(array(
+				"type" => "month",
+				"id" => $args["request"]["id"],
+				"date" => $args["request"]["date"],
+				"no_tabs" => 1,
+				"events" => $events,
+			)),
+		);
+		return $nodes;
+	}
+
+	////
+	// !Displays the form for adding a new event
+	function callback_get_add_event($args = array())
+	{
+		$obj = $this->get_object($args["request"]["id"]);
+		$meta = $obj["meta"];
+		$event_cfgform = $meta["event_cfgform"];
+		$event_folder = $meta["event_folder"];
+
+		// I have to create the event object right away :(
+		$event_id = $args["request"]["event_id"];
+		if (!$event_id)
+		{
+			$new_id = $this->new_object(array(
+				"parent" => $event_folder,
+				"status" => 1,
+				"class_id" => CL_DOCUMENT,
+			));
+
+			// create those bloody records, but actually I should
+			// let class_base handle those. Oh well, for now this
+			// has to do.
+			$q = "INSERT INTO documents (docid) VALUES ('$new_id')";
+			$this->db_query($q);
+
+			$q = "INSERT INTO planner (id) VALUES ('$new_id')";
+			$this->db_query($q);
+
+			$event_id = $new_id;
+			$row = array();
+		}
+		else
+		{
+			$q = "SELECT * FROM planner LEFT JOIN documents ON (planner.id = documents.docid) LEFT JOIN objects ON (planner.id = objects.oid) WHERE planner.id = '$event_id'";
+			$this->db_query($q);
+			$row = $this->db_next();
+		};
+	
+		$this->event_id = $event_id;
+
+		if ($event_cfgform)
+		{
+			$frm = $this->get_object($event_cfgform);
+			// events are documents
+			$t = get_instance("doc");
+			$xprops = $t->get_properties_by_group(array(
+				"content" => $frm["meta"]["xml_definition"],
+				"group" => "general",
+				"values" => array("id" => $event_id) + $row,
+			));
+
+		}
+		else
+		{
+			$xprops[] = array(
+				"type" => "text",
+				"value" => "Sündmusi ei saa lisada enne, kui oled valinud eventite sisestamise vormi",
+			);
+		};
+
+		// but, before I can add a new event, I need to know where to put those new objects
+		return $xprops;
+	}
+
+	function callback_mod_reforb($args = array())
+	{
+		if ($this->event_id)
+		{
+			$args["event_id"] = $this->event_id;
+		};
+	}
+
+       function callback_mod_retval($args = array())
+       {
+                if ($args["form_data"]["event_id"])
+                {
+                        $form_data = &$args["form_data"];
+                        $args = &$args["args"];
+			$args["event_id"] = $form_data["event_id"];
+                };
+        }
+
+
+	function change_event($args = array())
+	{
+		print "<pre>";
+		print "inside change event<br>";
+		print "</pre>";
 	}
 
 	////
@@ -158,8 +455,8 @@ class planner extends class_base
     		$c = $this->calaliases[$matches[3] - 1];
 		$replacement = $this->object_list(array("id" => $c["target"],"type" => "day"));
 		return $replacement;
-
 	}
+
 
 	////
 	// !Joonistab menüü
@@ -198,53 +495,6 @@ class planner extends class_base
 		));
 	}
 
-	function _serialize_event($args = array())
-	{
-		extract($args);
-		$q = "SELECT * FROM planner WHERE id = '$id'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		$xml = get_instance("xml",array("ctag" => "event"));
-		$block = array(
-			"start" => $row["start"],
-			"end" => $row["end"],
-			"title" => $row["title"],
-			"description" => $row["description"],
-			"color" => $row["color"],
-			"place" => $row["place"],
-		);
-		$data = $xml->xml_serialize(array("data" => $block));
-		
-		if ($new)
-		{
-			$msng = get_instance("messenger");
-			$msg_id = $msng->init_message();
-		};
-		$awf = get_instance("file");
-		$name = ($row["title"]) ? $row["title"] : "event";
-		$awf->put(array(
-			"store" => "fs",
-			"filename" => "$name.xml",
-			"type" => "text/aw-event",
-			"content" => $data,
-			"parent" => $msg_id,
-		));
-	}
-
-	function export_event($args = array())
-	{
-		extract($args);
-
-		$args["new"] = true;
-		$this->_serialize_event($args);
-		
-		return $this->mk_site_orb(array(
-			"class" => "messenger",
-			"action" => "edit",
-			"id" => $msg_id,
-		));
-	}
-	
 	////
 	// !used to sort events by start date
 	function __x_sort($el1,$el2)
@@ -421,6 +671,11 @@ class planner extends class_base
 
 		}
 		else
+		if ($args["events"])
+		{
+			$events = $args["events"];
+		}
+		else
 		// otherwise just load the plain old event objects
 		{
 			$events = $this->get_events2(array(
@@ -545,6 +800,8 @@ class planner extends class_base
 					"type" => $type,
 					"marked" => $events,
 					"use_class" => "planner",
+					"day_orb_link" => $this->day_orb_link,
+					"week_orb_link" => $this->week_orb_link,
 					"ctrl" => $this->ctrl,
 					"tpl" =>  "small_month.tpl",
 			));
@@ -562,6 +819,8 @@ class planner extends class_base
 						"type" => $type,
 						"ctrl" => $this->ctrl,
 						"use_class" => "planner",
+						"day_orb_link" => $this->day_orb_link,
+						"week_orb_link" => $this->week_orb_link,
 						"tpl" =>  "small_month.tpl",
 				));
 			}
@@ -622,7 +881,14 @@ class planner extends class_base
 		));
 
 		$vars["content"] = $this->parse();
-                return $this->tp->get_tabpanel($vars);
+		if ($args["no_tabs"] == 1)
+		{
+			return $vars["content"];
+		}
+		else
+		{
+                	return $this->tp->get_tabpanel($vars);
+		};
 
 	}
 
@@ -1504,7 +1770,7 @@ class planner extends class_base
 	////
 	// !Since we need to show the planner tabs when adding an event we need to wrap
 	// those functions from cal_event here
-	function new_event($args = array())
+	function _new_event($args = array())
 	{
 		extract($args);
 		$menubar = $this->gen_menu(array(
@@ -1521,7 +1787,7 @@ class planner extends class_base
 		return $menubar . $html;
 	}
 	
-	function change_event($args = array())
+	function _change_event($args = array())
 	{
 		extract($args);
 		$obj = $this->get_object($id);
@@ -1832,13 +2098,16 @@ class planner extends class_base
 
 				list($day,$mon,$year) = explode("-",date("d-m-Y",$thisday));
 
+				$day_orb_link = ($this->day_orb_link) ? $this->day_orb_link : $this->mk_my_orb("view",array("id" => $this->id,"ctrl" => $this->ctrl, "type" => "day"));
+				$day_orb_link .= "&date=$day-$mon-$year";
+
 				// draw header
 				$this->vars(array(
 					"cellwidth" => $width . "%",
 					"hcell" => strtoupper(substr(get_lc_weekday($w),0,1)) . " " . date("d-M",$thisday),
 					"hcell_weekday" => strtoupper(substr(get_lc_weekday($w),0,1)),
 					"hcell_date" =>  date("d-M",$thisday),
-					"dayorblink" => $this->mk_my_orb("view",array("id" => $this->id,"ctrl" => $this->ctrl, "type" => "day","date" => "$day-$mon-$year")),
+					"dayorblink" => $day_orb_link,
 					"cell" => $c1,
 				));
 
