@@ -401,7 +401,7 @@ class user extends class_base
 					else
 					if (!is_valid("password", $prop['value']))
 					{
-						$prop["error"] = "Parool sisaldab lubamatuid t&auml;hti!";
+						$prop["error"] = "Parool sisaldab lubamatuid t&auml;hti v&otilde;i on liiga l&uuml;hike!";
 						return PROP_FATAL_ERROR;
 						//aw_session_set("status_msg", "Parool sisaldab lubamatuid t&auml;hti!");
 					}
