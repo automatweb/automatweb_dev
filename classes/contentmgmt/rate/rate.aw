@@ -344,6 +344,7 @@ class rate extends class_base
 			FROM 
 				objects 
 				LEFT JOIN ratings ON ratings.oid = objects.oid
+				LEFT JOIN g_img_rel ON objects.oid = g_img_rel.img_id
 				LEFT JOIN hits ON hits.oid = objects.oid
 				LEFT JOIN images ON images.id = objects.oid
 			WHERE

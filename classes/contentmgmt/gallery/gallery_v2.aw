@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.12 2003/04/10 12:13:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.13 2003/04/10 12:15:38 kristo Exp $
 
 /*
 
@@ -440,6 +440,7 @@ class gallery_v2 extends class_base
 //					echo "free page = $_pg row = $_row , col = $_col <br>";
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['img'] = $idata;
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['tn'] = $tn_idata;
+					$this->db_query("INSERT INTO g_img_rel(img_id, tn_id) VALUES('".$idata["id"]."','".$tn_idata["id"]."')");
 				}
 				$meta["do_import"] = "";
 				$this->upd_object(array(
@@ -575,6 +576,16 @@ class gallery_v2 extends class_base
 			$obj['meta']['image_folder'],
 			$old['tn']['id']
 		);
+
+		$d = $this->db_fetch_row("SELECT * FROM g_img_rel WHERE img_id = ".$this->_page_content[$row][$col]["img"]["id"]);
+		if (!is_array($d))
+		{
+			$this->db_query("INSERT INTO g_img_rel(img_id, tn_id) VALUES('".$this->_page_content[$row][$col]["img"]["id"]."','".$this->_page_content[$row][$col]["tn"]["id"]."')");
+		}
+		else
+		{
+			$this->db_query("UPDATE g_img_rel SET tn_id = '".$this->_page_content[$row][$col]["tn"]["id"]."' WHERE img_id = '".$this->_page_content[$row][$col]["img"]["id"]."'");
+		}
 
 		$del = $post_data['erase'][$page][$row][$col];
 		if ($del)
@@ -1176,6 +1187,11 @@ class gallery_v2 extends class_base
 			if ($ext == "png")
 			{
 				$img = imagecreatefrompng($tn);
+			}
+			else
+			if ($ext == "gif")
+			{
+				$img = imagecreatefromgif($tn);
 			}
 			else
 			{
