@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.8 2004/06/02 10:51:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.9 2004/10/05 09:17:44 kristo Exp $
 
 /*
 
@@ -147,6 +147,7 @@ class rate_scale extends class_base
 			return $this->_get_scale($rate);
 		}
 
+		return array();
 		$this->raise_error(ERR_RATE_NOT_FOUND, "rate::get_scale_for_obj($oid) - no rate for object is set!", true, false);
 	}
 
