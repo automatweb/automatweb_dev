@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.30 2003/11/04 15:03:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.31 2003/11/20 13:47:10 duke Exp $
 
 /*
 
@@ -73,9 +73,12 @@
 
 @property do_import type=submit field=meta method=serialize group=import value=Impordi
 
-*/
+@classinfo no_status=1
 
-define("RELATION_FTP_LOGIN", 1);
+@reltype FTP_LOGIN value=1 clid=CL_FTP_LOGIN
+@caption ftp login
+
+*/
 
 classload("image");
 class gallery_v2 extends class_base
@@ -1419,21 +1422,6 @@ class gallery_v2 extends class_base
 	{
 		$conf = get_instance("contentmgmt/gallery/gallery_conf");
 		return $conf->get_default_layout($this->_get_conf_for_folder($obj['parent']));
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELATION_FTP_LOGIN => "ftp login"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELATION_FTP_LOGIN)
-		{
-			return array(CL_FTP_LOGIN);
-		}
 	}
 
 	function get_contained_objects($arr)
