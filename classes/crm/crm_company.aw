@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.55 2004/07/13 07:48:03 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.56 2004/07/16 07:55:51 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -355,6 +355,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @reltype SELLER value=32 clid=CL_CRM_PERSON
 @caption Persoon, kes müüs
+
+@reltype PROJECT value=33 clid=CL_PROJECT
+@caption Projekt
 
 @classinfo no_status=1
 			
@@ -1993,7 +1996,8 @@ class crm_company extends class_base
 			"text" => $this->cfg["classes"][$this->clid]["name"],
 		));
 
-		$alist = array(RELTYPE_WORKERS,RELTYPE_ADDRESS,RELTYPE_JOBS);
+		//3 == crm_company.reltype_address=3 //
+		$alist = array(RELTYPE_WORKERS,3,RELTYPE_JOBS);
 
 		foreach($alist as $key => $val)
 		{
@@ -3403,6 +3407,34 @@ class crm_company extends class_base
 		{
 			$obj = new object($conn->prop('to'));
 			$this->get_customers_for_company(&$obj,&$data,true);
+		}
+	}
+
+	/*
+		arr
+			id - id of the company who's projects we wan't
+	*/
+	function get_all_projects_for_company($arr)
+	{
+		if(is_oid($arr['id']))
+		{
+			$company = new object($arr['id']);
+
+			$conns = $company->connections_from(array(
+							'type' => RELTYPE_PROJECT
+			));
+
+			$projects = array();
+		
+			foreach($conns as $conn)
+			{
+				$projects[$conn->prop('to')] = $conn->to();
+			}
+			return $projects;
+		}
+		else
+		{
+			return array();
 		}
 	}
 }
