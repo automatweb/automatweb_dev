@@ -71,5 +71,13 @@
 			</function>
 		</action>
 
+		<action name="exp_to_file">
+			<function name="exp_to_file">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

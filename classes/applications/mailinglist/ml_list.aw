@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.19 2005/02/01 13:10:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.20 2005/02/04 10:56:03 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -664,6 +664,20 @@ class ml_list extends class_base
 			case "show_mail_message":
 				$prop["value"] = $this->gen_ml_message_view($arr);
 				break;
+
+			case "expf_next_time":
+				$url = str_replace("automatweb/", "", $this->mk_my_orb("exp_to_file", array("id" => $arr["obj_inst"]->id())));
+				$sc = get_instance("scheduler");
+				$exp = safe_array($sc->find(array(
+					"event" => $url
+				)));
+				if (count($exp) == 0)
+				{
+					return PROP_IGNORE;
+				}
+				$event = reset($exp);
+				$prop["value"] = date("d.m.Y H:i", $event["time"]);
+				break;
 		}
 		return $retval;
 	}
@@ -1069,6 +1083,12 @@ class ml_list extends class_base
 				$ser .= "\n";
 			}
 		}
+
+		if ($arr["ret"] == true)
+		{
+			return $ser;
+		}
+
 		header("Content-Type: text/plain");
 		header("Content-length: " . strlen($ser));
 		header("Content-Disposition: filename=members.txt");
@@ -1969,15 +1989,68 @@ class ml_list extends class_base
 
 	function _add_expf_sched($o)
 	{
+		$sc = get_instance("scheduler");
+		$url = str_replace("automatweb/", "", $this->mk_my_orb("exp_to_file", array("id" => $o->id())));
+		$sc->remove(array(
+			"event" => $url
+		));
+
 		// get start of day
-		$time = time() % (24*3600);
+		$time = time() - (time() % (24*3600));
 
 		// get num of hours between exports
 		$numh = 24 / $o->prop("expf_num_per_day");
 
 		// get num secs
-		$nums = $numh ;
-		// make next time		
+		$nums = $numh * 3600;
+
+		// make next time
+		while( $time < time())
+		{
+			$time += $nums;
+		}
+
+		$sc->add(array(
+			"event" => $url,
+			"time" => $time
+		));
+	}
+
+	/** exports list members to textfile
+
+		@attrib name=exp_to_file
+
+		@param id required type=int acl=view
+	**/
+	function exp_to_file($arr)
+	{
+		$last_time = $this->get_cval("ml_list::exp_to_file::".$arr["id"]."::time");
+
+		$ser = $this->export_members(array(
+			"ret" => true,
+			"id" => $arr["id"],
+			"export_type" => ML_EXPORT_ALL,
+			"export_date" => $last_time
+		));
+
+		// get file name
+		$l = obj($arr["id"]);
+		$num = 0;
+		do {
+			$num++;
+			$fn = $l->prop("expf_path")."/".date("Y")."-".date("m")."-".date("d")."-".$num.".csv";
+		} while(file_exists($fn));
+
+		$this->put_file(array(
+			"file" => $fn,
+			"content" => $ser
+		));
+
+		$this->set_cval("ml_list::exp_to_file::time", $last_time);
+
+		// add to scheduler
+		$this->_add_expf_sched($l);
+		die("all done");
 	}
 }
 ?>
