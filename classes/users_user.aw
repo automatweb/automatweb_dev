@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.69 2003/11/04 12:18:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.70 2003/11/13 11:18:41 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -59,7 +59,7 @@ class users_user extends aw_template
 	function _get_user_config($uid)
 	{
 		$row = aw_cache_get("users_cache",$uid);
-		if (not(is_array($row)))
+		if (!(is_array($row)))
 		{
 			$q = "SELECT config FROM users WHERE uid = '$uid'";
 			$this->db_query($q);
@@ -813,6 +813,22 @@ class users_user extends aw_template
 		$this->create_obj_access($hfid,$uid);
 		// ja v6tame teistelt k6ik 6igused kodukataloomale 2ra
 		$this->deny_obj_access($hfid);
+
+		// set username to all "uid" fields in all filled join forms
+		$usjfe = new aw_array(aw_unserialize($join_form_entry));
+		foreach($usjfe->get() as $usfid => $usfeid)
+		{
+			if ($usfid && $usfeid)
+			{
+				$f = get_instance("formgen/form");
+				$f->load($usfid);
+				$f->load_entry($usfeid);
+				if (($el = $f->get_element_by_name("uid")))
+				{
+					$this->db_query("UPDATE form_".$usfid."_entries SET el_".$el->get_id()." = '$uid', ev_".$el->get_id()." = '$uid' WHERE id = '$usfeid'");
+				}
+			}
+		}
 
 		$this->_log(ST_USERS, SA_ADD, $uid);
 	}
