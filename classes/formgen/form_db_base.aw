@@ -412,7 +412,9 @@ class form_db_base extends aw_template
 
 		// also run all controller actions
 		$fact = get_instance("formgen/form_actions");
-		$fact->do_on_delete_actions(&$this, $entry_id);
+		$finst = get_instance("formgen/form");
+		$finst->load($id);
+		$fact->do_on_delete_actions(&$finst, $entry_id);
 	}
 
 	////
@@ -870,7 +872,8 @@ class form_db_base extends aw_template
 							}
 						}
 					}
-					foreach($elar as $el => $eldat)
+					$_t = new aw_array($elar);
+					foreach($_t->get() as $el => $eldat)
 					{
 						$s_t = form_db_base::mk_tblname($eldat["table"], $fid);
 						if ($s_t == $tbl && $tbl != "")
