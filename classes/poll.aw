@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.43 2003/10/08 15:27:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.44 2003/12/03 12:06:44 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -451,7 +451,7 @@ class poll extends aw_template
 			$this->read_any_template("poll.tpl");
 		}
 
-		if ($GLOBALS["answer_id"] && !$GLOBALS["class"])
+		if ($GLOBALS["answer_id"] && !$GLOBALS["class"] && $GLOBALS["poll_id"] == $id)
 		{
 			return $this->show($GLOBALS["poll_id"]);
 		}
@@ -483,11 +483,11 @@ class poll extends aw_template
 		{
 			if ($def)	 
 			{	 
-				$au = $this->mk_my_orb("show", array("poll_id" => $ap["oid"], "answer_id" => $k));
+				$au = $this->mk_my_orb("show", array("poll_id" => $ap["oid"], "answer_id" => $k, "section" => aw_global_get("section")));
 			}	 
 			else	 
 			{	 
-				$au = "/?section=".$section."&poll_id=".$ap["oid"]."&answer_id=".$k;	 
+				$au = "/?section=".$section."&poll_id=".$ap["oid"]."&answer_id=".$k."&section=".aw_global_get("section");	 
 			}
 			$this->dequote(&$v["answer"]);
 			$this->dequote(&$ap["meta"]["answers"][$lid][$k]);
@@ -513,7 +513,8 @@ class poll extends aw_template
 			"show_url" => str_replace("&", "&amp;", $au),
 			"section" => aw_global_get("section")
 		));
-		return $this->parse();
+		$str =  $this->parse();
+		return $str;
 	}
 
 	function add_click($aid)
@@ -554,7 +555,7 @@ class poll extends aw_template
 		}
 
 		global $answer_id;
-		if ($answer_id)
+		if ($answer_id && $GLOBALS["poll_id"] == $id)
 		{
 			$this->add_click($answer_id);
 		}
@@ -670,7 +671,7 @@ class poll extends aw_template
 		};
 	    $f = $this->pollaliases[$matches[3] - 1];
 		$poll_id = aw_global_get("poll_id");
-		if ($poll_id)
+		if ($poll_id == $f["target"])
 		{
 			return $this->show($f["target"]);
 		}
