@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.131 2002/08/24 12:42:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.132 2002/08/25 19:38:25 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -884,13 +884,17 @@ class form extends form_base
 						{
 							foreach($els as $el)
 							{
-								$this->set_element_value($el->get_id(), $lf_fm->entry[$lf_el->get_id()], false);
+								$usr_val = false;
+								if ($lf_el->get_type() == "textbox" && $el->get_type() == "listbox")
+								{
+									$usr_val = true;
+								}
+								$this->set_element_value($el->get_id(), $lf_fm->entry[$lf_el->get_id()], $usr_val);
 							}
 						}
 					}
 				}
 			}
-
 			if ($this->arr["try_fill"])
 			{
 				if (!isset($elvalues))
@@ -1066,7 +1070,6 @@ class form extends form_base
 		// minema. parent argument overraidib selle
 		$this->entry_parent = isset($parent) ? $parent : $this->arr["ff_folder"];
 
-
 		// if this form uses a calendar and is an event entry form, figure out
 		// whether the calendar it is trying to write to, have enough vacancies
 		if ($this->arr["uses_calendar"] && ($this->subtype == FSUBTYPE_EV_ENTRY))
@@ -1080,6 +1083,7 @@ class form extends form_base
 					WHERE form_id = '$id'";
 			$this->db_query($q);
 			$has_vacancies = true;
+			$has_cal_errors = false;
 			$fch = get_instance("form_chain");
 
 			while($row = $this->db_next())
@@ -1106,6 +1110,10 @@ class form extends form_base
 				$q = "SELECT * FROM form_relations WHERE el_to = $row[el_relation]";
 				$this->db_query($q);
 				$frel = $this->db_next();
+				if (!$frel)
+				{
+					$this->raise_error(ERR_FG_CAL_NORELEL, "No relation found in relation table for calendar relation element $row[el_relation]", true);
+				}
 				$q = sprintf("SELECT id,ev_%s AS name FROM form_%d_entries WHERE id = '%d'",
 						$frel["el_from"],$frel["form_from"],$_rel);
 				$this->db_query($q);
@@ -1126,6 +1134,7 @@ class form extends form_base
 				if ($vac < 0)
 				{
 					$has_errors = true;
+					$has_cal_errors = true;
 					$this->controller_errors[$row["el_cnt"]][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
 				};
 
@@ -1262,7 +1271,7 @@ class form extends form_base
 		
 		// if this form has anything to do with calendars, perform the necessary
 		// actions. If we got here, all checks have been passed.
-		if ($this->arr["uses_calendar"])
+		if (!$no_process_entry && $this->arr["uses_calendar"])
 		{
 			if ($this->subtype == FSUBTYPE_EV_ENTRY)
 			{
@@ -3376,6 +3385,19 @@ class form extends form_base
 							$elval["ver2"] = true;
 							$elval["linked_form"] = $base;
 							$elval["linked_element"] = $elid;
+
+							// if it's a relation element, then the element holds the id of the row in form_relations table
+							// we must create a new one here, because otherwise when we delete elements from the new form
+							// then the relations for the old element will also get deleted.
+							if ($elval["rel_table_id"])
+							{
+								$this->db_query("SELECT * FROM form_relations WHERE id = ".$elval["rel_table_id"]);
+								$dat = $this->db_next();
+								$this->db_query("INSERT INTO form_relations(form_from, form_to, el_from, el_to) 
+								VALUES('".$dat["form_from"]."','".$dat["form_to"]."','".$dat["el_from"]."','".$dat["el_to"]."')");
+								$elval["rel_table_id"] = $this->db_last_insert_id();
+							}
+
 							$this->arr["elements"][$row][$col][$newel] = $elval;
 //								echo "elval linked form = $base , real = ", $this->arr["elements"][$row][$col][$newel]["linked_form"]," <br>";
 							// save element props also
@@ -3472,9 +3494,10 @@ class form extends form_base
 	// Kui ma nyyd oieti aru saan, siis see eeldab muu hulgas ka seda, et on laetud mingi entry.
 	//
 	// nope, see ei eelda, get_element_value_by_name eeldab et miski entry on loaditud - terryf
-	// $type can be either RET_FIRST - returns the forst element or RET_ALL - returns all elements with the name
+	// $type can be either RET_FIRST - returns the first element or RET_ALL - returns all elements with the name
 	function get_element_by_name($name,$type = RET_FIRST)
 	{
+		$ret = array();
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
@@ -3488,7 +3511,6 @@ class form extends form_base
 					{
 						if ($type == RET_FIRST)
 						{
-
 							return $el;
 						}
 						else
@@ -3772,21 +3794,8 @@ class form extends form_base
 	// $user_val - if set $val is assumed to be user value and the element is set with a different function
 	function set_element_value($id,$val,$user_val = false)
 	{
-		$this->entry[$id] = $val;
-		for ($row=0; $row < $this->arr["rows"]; $row++)
-		{
-			for ($col=0; $col < $this->arr["cols"]; $col++)
-			{
-				if ($user_val)
-				{
-					$this->arr["contents"][$row][$col] -> set_element_entry($id,$val);
-				}
-				else
-				{
-					$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $this->entry_id);
-				}
-			};
-		};
+		$elref = $this->get_element_by_id($id);
+		$this->arr["contents"][$elref->get_row()][$elref->get_col()] -> set_element_entry($id,$val,$user_val);
 	}
 
 	////
