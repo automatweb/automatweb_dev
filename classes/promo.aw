@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.31 2003/06/04 10:37:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.32 2003/06/04 10:44:04 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -543,13 +543,13 @@ class promo extends class_base
 			$content .= $doc->gen_preview($_parms);
 		}
 
-		if ($ob['meta']['as_name'] && $ob["name"] == "")
+		if ($ob['meta']['as_name'] && $ob['meta']["caption"] == "")
 		{
-			$ob["name"] = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '".$ob['meta']['as_name']."'","name");
+			$ob["meta"]['caption'] = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '".$ob['meta']['as_name']."'","name");
 		}
 
 		$this->vars(array(
-			"title" => $ob["name"],
+			"title" => $ob['meta']["caption"],
 			"content" => $content,
 		));
 
