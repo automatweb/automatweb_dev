@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.21 2003/12/16 13:32:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.22 2004/01/05 14:20:17 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -34,7 +34,7 @@ class admin_folders extends aw_template
 		$aa = "";
 		if ($this->cfg["lang_menus"] == 1)
 		{
-			$aa.="AND (objects.lang_id=".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT.")";
+			$aa.="AND (objects.lang_id=".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT." OR menu.type = ".MN_ADMIN1.")";
 		}
 		/*
 		if (!empty($this->use_parent))
@@ -170,7 +170,10 @@ class admin_folders extends aw_template
 					$arr[$row["parent"]][] = $row;
 					if ($this->resolve_item(&$row))
 					{
-						$this->tree->add_item($row["parent"],$row);
+						if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
+						{
+							$this->tree->add_item($row["parent"],$row);
+						}
 					};
 					$mpr[] = $row["parent"];
 				}
@@ -197,7 +200,10 @@ class admin_folders extends aw_template
 					$arr[$this->cfg["admin_rootmenu2"]][] = $d_row;
 					if ($this->resolve_item(&$d_row))
 					{
-						$this->tree->add_item($this->cfg["admin_rootmenu2"],$d_row);
+						if ($this->can("view", $d_row["oid"]))
+						{
+							$this->tree->add_item($this->cfg["admin_rootmenu2"],$d_row);
+						}
 					};
 				}
 			}
@@ -447,6 +453,11 @@ class admin_folders extends aw_template
 		$ret = "";
 		while (list(,$row) = each($arr[$parent]))
 		{
+			if (!$this->can("view", $row["oid"]))
+			{
+				continue;
+			}
+
 			if ($row["status"] != STAT_ACTIVE)
 			{
 				continue;

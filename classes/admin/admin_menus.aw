@@ -1,10 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.41 2003/12/16 15:54:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.42 2004/01/05 14:20:17 kristo Exp $
 class admin_menus extends aw_template
 {
-	// this will be set to document id if only one document is shown, a document which can be edited
-	var $active_doc = false;
-
 	function admin_menus()
 	{
 		$this->init("automatweb/menuedit");
@@ -1400,7 +1397,7 @@ class admin_menus extends aw_template
 							$o = obj($oid);
 							if ($column == "jrk")
 							{
-								$o->set_ord($val);
+								$o->set_ord((int)$val);
 							}
 							else
 							{
