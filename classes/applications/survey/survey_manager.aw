@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.4 2004/10/28 11:32:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.5 2004/10/29 15:50:36 duke Exp $
 // survey_manager.aw - Ankeetide haldur 
 /*
 
@@ -212,6 +212,7 @@ class survey_manager extends class_base
 		$ol = new object_list($ol_args);
 
 
+		$return_url = urlencode(aw_global_get("REQUEST_URI"));
 		foreach($ol->arr() as $survey)
 		{
 			$id = $survey->id();
@@ -221,7 +222,7 @@ class survey_manager extends class_base
 				"id" => $id,
 				"modified" => $survey->modified(),
 				"edit" => html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $id),CL_SURVEY),
+					"url" => $this->mk_my_orb("change",array("id" => $id,"return_url" => $return_url),CL_SURVEY),
 					"caption" => "Vaata",
 				)),
 			);
@@ -262,6 +263,8 @@ class survey_manager extends class_base
 		$rv = "";
 		$csv = $arr["request"]["format"] == "csv";
 
+		$return_url = urlencode(aw_global_get("REQUEST_URI"));
+
 		foreach($ol->arr() as $survey)
 		{
 			$id = $survey->id();
@@ -285,7 +288,7 @@ class survey_manager extends class_base
 					"id" => $id,
 					"modified" => $survey->modified(),
 					"edit" => html::href(array(
-						"url" => $this->mk_my_orb("change",array("id" => $id),CL_SURVEY),
+						"url" => $this->mk_my_orb("change",array("id" => $id,"return_url" => $return_url),CL_SURVEY),
 						"caption" => "Vaata",
 					)),
 				);
@@ -493,6 +496,11 @@ class survey_manager extends class_base
 		};
 		
 		$t->define_field(array(
+			"name" => "remote_host",
+			"caption" => "Host",
+		));
+		
+		$t->define_field(array(
 			"name" => "created",
 			"caption" => "Loodud",
 			"type" => "time",
@@ -506,6 +514,9 @@ class survey_manager extends class_base
 			"caption" => "Vaata",
 			"align" => "center",
 		));
+
+		$t->set_default_sortby("created");
+		$t->set_default_sorder("desc");
 
 		return $xprops;
 	}
@@ -546,7 +557,7 @@ class survey_manager extends class_base
 		$name_parts = array();
 		foreach($name_fields as $name_field)
 		{
-			$name_parts[] = $survey_data[$name_field];
+			$name_parts[] = trim($survey_data[$name_field]);
 		};
 		$survey_name = join("-",$name_parts);
 
@@ -566,6 +577,7 @@ class survey_manager extends class_base
 		{
 			$survey_obj = new object($survey_id);
 			$survey_obj->set_name($survey_name);
+			$survey_obj->set_prop("remote_host",gethostbyaddr(get_ip()));
 			$survey_obj->save();
 			return $this->cfg["baseurl"] . "/" . $o->prop("redirect_to");
 
