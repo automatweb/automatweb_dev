@@ -148,7 +148,6 @@ class process extends workflow_common
 		// list all non-root actions
 		$actions = array();
 		foreach($conns as $conn)
-		//foreach($alias_reltype as $key => $val)
 		{
 			if ($conn->to() != $root_action->id())
 			{
