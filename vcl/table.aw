@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.17 2002/01/31 00:50:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.18 2002/02/07 08:04:23 kristo Exp $
 global $PHP_SELF;
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
@@ -189,12 +189,15 @@ class aw_table
 			// before peaks sisaldama sessiooni sisse salvestatud
 			// välja nime, mille järgi viimasel vaatamisel
 			// sorteeriti
-			if ($before) {
+			if ($before) 
+			{
 				$sortby = $before;
 				$sorder = $aw_tables[$sess_field_order];
-			} else {
-			// ja kui sessioonis ka midagi pole, siis votame
-			// defaulti
+			} 
+			else 
+			{
+				// ja kui sessioonis ka midagi pole, siis votame
+				// defaulti
 				$sortby = $this->default_order;
 				$sorder = $this->default_odir;
 			};
@@ -236,80 +239,87 @@ class aw_table
 
 		$this->sortby = $sortby;
 		$this->sorder = $sorder;
+		$this->groupby = $params["group_by"];
 		$aw_tables[$sess_field_key] = $this->sortby;
 		$aw_tables[$sess_field_order] = $sorder;
 		session_register("aw_tables");
 
-		// salvestame koik kasutatud keyd, et ei tekiks olukorda,
-		// kus, ühesuguste väärtustega elemendid kaduma lähevad
-	
-		$usedkeys = array();	
-		
-		while(list($k,$v) = each($this->data)) {
-			$key = $v[$sortby];
-			if ($usedkeys[$key] > 0) {
-				// seda keyd on juba kasutatud, lisame talle numbri
-				$usedkeys[$key]++;
-				$key .= $usedkeys[$key] + 1;
-		        } else {
-				$usedkeys[$key] = 1;	
-				$key .= "1";
-			};
-			$newdata[$key] = $v;
-		};
-
 		// sorteerime andmed
 		// uurime flagi v2lja
-		if ($this->nfields[$this->sortby]) {
-			$flag = SORT_NUMERIC;
-		} else {
-			$flag = SORT_REGULAR;
-		};
-
-		if ($sorder == "asc") 
+		if ($this->nfields[$this->sortby]) 
 		{
-			if ($flag == SORT_NUMERIC)
-			{
-				ksort($newdata,$flag);
-			}
-			else
-			{
-//				uksort($newdata,create_function('$a,$b','return strcasecmp($a,$b);'));
-				uksort($newdata,array($this,"__str_cmp"));
-			}
+			$this->sort_flag = SORT_NUMERIC;
 		} 
 		else 
 		{
-			if ($flag == SORT_NUMERIC)
+			$this->sort_flag = SORT_REGULAR;
+		};
+
+		if ($this->nfields[$this->groupby]) 
+		{
+			$this->g_sort_flag = SORT_NUMERIC;
+		} 
+		else 
+		{
+			$this->g_sort_flag = SORT_REGULAR;
+		};
+
+		usort($this->data,array($this,"sorter"));
+
+		$awt->stop("table::sort_by");
+	}
+
+
+	function sorter($a,$b)
+	{
+		if ($this->groupby != "")
+		{
+			$v1 = $a[$this->groupby];
+			$v2 = $b[$this->groupby];
+			$sort_flag = $this->g_sort_flag;
+			$sorder = "asc";
+		}
+		if ($v1 == $v2)
+		{
+			$v1 = $a[$this->sortby];
+			$v2 = $b[$this->sortby];
+			$sort_flag = $this->sort_flag;
+			$sorder = $this->sorder;
+		}
+
+		if ($sort_flag == SORT_NUMERIC)
+		{
+			if (((int)$v1) == ((int)$v2))
 			{
-				krsort($newdata,$flag);
+				return 0;
+			}
+
+			if ($sorder == "asc")
+			{
+				return ((int)$v1) > ((int)$v2) ? -1 : 1;
 			}
 			else
 			{
-//				uksort($newdata,create_function('$a,$b','return -strcasecmp($a,$b);'));
-				uksort($newdata,array($this,"__reverse_str_cmp"));
+				return ((int)$v1) < ((int)$v2) ? -1 : 1;
 			}
-		};
-		$this->data = $newdata;
-		$awt->stop("table::sort_by");
-	
+		}
+		else
+		{
+			$_a = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$v1);
+			$_b = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$v2);
+			$ret = strcasecmp($_a,$_b);
+			if ($sorder == "asc")
+			{
+				return $ret;
+			}
+			else
+			{
+				return -$ret;
+			}
+		}
 	}
 
-	function __str_cmp($a,$b)
-	{
-		$_a = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$a);
-		$_b = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$b);
-		return strcasecmp($_a,$_b);
-	}
-
-	function __reverse_str_cmp($a,$b)
-	{
-		$_a = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$a);
-		$_b = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$b);
-		return -strcasecmp($_a,$_b);
-	}
-
-	function draw() 
+	function draw($arr) 
 	{
 		// väljastab tabeli
 		if (!is_array($this->rowdefs)) 
@@ -317,6 +327,8 @@ class aw_table
 			print "Don't know what to do";
 			return;
 		};
+
+		extract($arr);
 
 		global $awt;
 		$awt->start("table::draw");
@@ -499,14 +511,17 @@ class aw_table
 		// header kinni
 		$tbl .= $this->closetag(array("name" => "tr"));
 
+		$lgrpval = "";
 		// koostame tabeli sisu
-		if (is_array($this->data)) {
+		if (is_array($this->data)) 
+		{
 			reset($this->data);
 
-			// tsükkel üle data, siia kuhugi peaks ka sorteerimine tulema
+			// tsükkel üle data
 			$counter = 0; // kasutame ridadele erineva värvi andmiseks
 			$cnt = 0;
-			while(list($k,$v) = each($this->data)) {
+			while(list($k,$v) = each($this->data)) 
+			{
 				$cnt++;
 				$counter++;
 
@@ -514,23 +529,47 @@ class aw_table
 				$tbl .= $this->opentag(array("name" => "tr"));
 				reset($this->rowdefs);
 				
-				// tsükkel üle rowdefsi, et andmed oleksid oiges järjekorras
-				while(list($k1,$v1) = each($this->rowdefs)) {
+				// grpupeerimine
+				if ($groupby != "" && $lgrpval != $v[$groupby])
+				{
+					// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
+					$tbl.=$this->opentag(array(
+						"name" => "td",
+						"colspan" => count($this->rowdefs),
+						"classid" => $this->group_style
+					));
+					$tbl.=$v[$groupby];
+					$tbl.=$this->closetag(array(
+						"name" => "td"
+					));
+					$lgrpval = $v[$groupby];
 
+					$tbl .= $this->closetag(array("name" => "tr"));
+					$tbl .= $this->opentag(array("name" => "tr"));
+				}
+
+				// tsükkel üle rowdefsi, et andmed oleksid oiges järjekorras
+				while(list($k1,$v1) = each($this->rowdefs)) 
+				{
 					// määrame ära staili
-					if ($this->sortby == $v1[name]) {
+					if ($this->sortby == $v1[name]) 
+					{
 						$style = (($counter % 2) == 0) ? $this->selected1 : $this->selected2;
 						$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
-					} else {
+					} 
+					else 
+					{
 						$style = (($counter % 2) == 0) ? $this->style1 : $this->style2; 
 						$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
 					};
 						
 					// moodustame celli
-					$cell_attribs = array("name"    => "td",
-							      "classid" => $style,
-							      "width" => $v1["width"],
-							      "bgcolor" => $bgcolor);
+					$cell_attribs = array(
+						"name"    => "td",
+						"classid" => $style,
+						"width" => $v1["width"],
+						"bgcolor" => $bgcolor
+					);
 
 					if ($this->actionrows)
 					{
@@ -544,33 +583,41 @@ class aw_table
 					};
 
 					
-					if ($v1["align"]) {
+					if ($v1["align"]) 
+					{
 						$cell_attribs["align"] = $v1["align"];
 					};
 
-					if ($v1["valign"]) {
+					if ($v1["valign"]) 
+					{
 						$cell_attribs["valign"] = $v1["valign"];
 					};
 
-					if ($v1["nowrap"]) {
+					if ($v1["nowrap"]) 
+					{
 						$cell_attribs["nowrap"] = "";
 					};
 
 	
-					if ($v["bgcolor"]) {
+					if ($v["bgcolor"]) 
+					{
 						$cell_attribs["bgcolor"] = $v["bgcolor"];
 					};
 
 					// this one overrides the definition given in the table header
-					if ($v["style"]) {
+					if ($v["style"]) 
+					{
 						$cell_attribs["classid"] = $v["style"];
 					};
 
 					$tbl .= $this->opentag($cell_attribs);
 
-					if ($v1["name"] == "rec") {
+					if ($v1["name"] == "rec") 
+					{
 						$val = $cnt;
-					} else {
+					} 
+					else 
+					{
 						if ($v1["strformat"])
 						{
 							$format = localparse($v1["strformat"],$v);
@@ -582,7 +629,8 @@ class aw_table
 						};
 					};
 
-					if ($v1["type"] == "time") {
+					if ($v1["type"] == "time") 
+					{
 						$val = date($v1["format"],$val);
 					};
 
@@ -613,9 +661,11 @@ class aw_table
 						// joonista ainult need actionid, mis siia ritta kuuluvad
 						if ($this->actionrows?( $arow==$av["row"] || ($arow==1 && !$av["row"]) ):1)
 						{
-							$tdtag=array("name"=>"td",
+							$tdtag=array(
+								"name"=>"td",
 								"classid" => ($av["style"]) ? $av["style"] : $style,
-								"align" => "center");
+								"align" => "center"
+							);
 
 							$av["cspan"]?$tdtag["colspan"]=$av["cspan"]:"";
 							$av["rspan"]?$tdtag["rowspan"]=$av["rspan"]:"";
@@ -630,8 +680,8 @@ class aw_table
 						};
 					};
 
-				// rida lopeb
-				$tbl .= $this->closetag(array("name" => "tr"));
+					// rida lopeb
+					$tbl .= $this->closetag(array("name" => "tr"));
 				};
 			};
 		};
@@ -639,7 +689,9 @@ class aw_table
 	
 		// tabel kinni
 		if (is_array($this->tableattribs))
+		{
 			$tbl .= $this->closetag(array("name" => "table"));
+		}
 
 		// raam kinni
 		if (is_array($this->frameattribs))
@@ -650,7 +702,9 @@ class aw_table
 		};
 		// vorm kinni
 		if ($this->alpha || $this->searchable)
+		{
 			$tbl .= $this->closetag(array("name" => "form"));
+		}
 
 		// tagastame selle käki
 		$awt->stop("table::draw");
@@ -832,6 +886,10 @@ class aw_table
 			// tavalise (mittesorteeritava) headeri stiil
 			case "header_normal":
 				$this->header_normal = $attrs["value"];
+				break;
+
+			case "group_style":
+				$this->group_style = $attrs["value"];
 				break;
 
 			// sorteeritava headeri stiil
