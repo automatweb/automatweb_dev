@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.255 2003/03/07 17:31:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.256 2003/03/11 15:09:45 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -207,6 +207,9 @@ class menuedit extends aw_template
 		$obj = $this->get_object($section);
 
 		classload("image");
+		// this checks whether the requested object belongs to any
+		// class that can be shown directly - if so, check_object
+		// puts the result into $this->replacement. dat kind of ugly -- duke
 		$this->check_object($obj);
 
 		if (not($text))
@@ -214,11 +217,8 @@ class menuedit extends aw_template
 			$text = $this->replacement;
 		};
 
-		// this should be replaced with calls to php_serialize, since it's faster
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $obj["metadata"],
-		));
-
+		$meta = $obj["meta"];
+		
 		////
 		// Kui ksiti infot RDF-is, siis tagastame vastava v�jundi
 		// hm. Ja tegelikult peaks selle leldse kuhugi mujale viima.
@@ -395,6 +395,17 @@ class menuedit extends aw_template
 			$this->vars(array("doc_content" => $docc));
 		} 
 		else 
+		// if the menu has any relations to planner objects, then we show
+		// that planner under this menu. 
+		// I will fix this later.. --duke
+		if (is_array($meta["aliases_by_class"]) && sizeof($meta["aliases_by_class"][CL_PLANNER]) > 0)
+		{
+			$pl = get_instance("planner");
+			$target = $meta["aliases_by_class"][CL_PLANNER][1]["id"];
+			$_tmp = $pl->view(array("id" => $target));
+			$this->vars(array("doc_content" => $_tmp));
+		}
+		else
 		if ($text == "")
 		{
 			// sektsioon pole perioodiline
