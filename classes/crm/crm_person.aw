@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.50 2004/07/13 07:48:03 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.51 2004/07/14 10:24:36 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -257,9 +257,8 @@ class crm_person extends class_base
 			case "lastname":
 				if ($form['firstname'] || $form['lastname'])
 				{
-					//$title = $form['title'] ? $form['title'].' ' : '';
 					$arr["obj_inst"]->set_name($form['firstname']." ".$form['lastname']);
-				}
+				}			
 			break;
 		};
 		return $retval;
@@ -359,7 +358,7 @@ class crm_person extends class_base
 				//i guess the list should be sorted
 				asort($drop_down_list);
 				$drop_down_list = array_reverse($drop_down_list,true);
-				$drop_down_list[] = '--vali--';
+				$drop_down_list[0] = '--vali--';
 				$drop_down_list = array_reverse($drop_down_list,true);
 				$data['options'] = &$drop_down_list;
 				break;
@@ -639,6 +638,7 @@ class crm_person extends class_base
 		$conns = $o->connections_from(array(
                         "type" => RELTYPE_RANK,
                 ));
+
 		foreach($conns as $conn)
 		{
 			$ranks[] = $conn->prop("to.name");
