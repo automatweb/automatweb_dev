@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.96 2002/02/19 00:38:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.97 2002/02/25 16:26:30 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -393,6 +393,7 @@ class menuedit extends aw_template
 
 		// gather information about all parent objects
 		$ch = $this->get_object_chain($this->sel_section);
+		
 
 		if (!isset($tpldir))
 		{
@@ -1307,13 +1308,13 @@ class menuedit extends aw_template
 			{
 				$ordby = "objects.jrk";
 			}
-			$q = "SELECT objects.oid as oid,documents.esilehel as esilehel FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
+			$q = "SELECT objects.oid as oid,objects.class_id AS class_id, objects.brother_of AS brother_of, documents.esilehel as esilehel FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				if (!($GLOBALS["no_fp_document"] && $row["esilehel"] == 1))
 				{
-					$docid[$cnt++] = $row["oid"];
+					$docid[$cnt++] = ($row["class_id"] == CL_DOCUMENT) ? $row["oid"] : $row["brother_of"];
 				}
 			}
 			if ($cnt > 1)
@@ -3042,7 +3043,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 							shop_parallel = '$shop_parallel',
 							shop_ignoregoto = '$shop_ignoregoto',
 							no_menus = '$no_menus',
-							right_pane = '$right_pane'
+							right_pane = '$right_pane',
+							type = '$type'
 							WHERE id = '$id'";
 			$this->db_query($q);
 		} 
@@ -3497,7 +3499,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$img2 = $meta["img_act_url"] != "" ? "<img src='".$meta["img_act_url"]."'>" : "";
 		global $template_sets;
 		$template_sets = array_merge(array("" => "kasuta parenti valikut"),$template_sets);
+
+		$types = array(
+			"69" => LC_MENUEDIT_CLIENT,
+			"70" => LC_MENUEDIT_SECTION,
+			"71" => LC_MENUEDIT_ADMINN_MENU,
+			"72" => LC_MENUEDIT_DOCUMENT,
+			"75" => LC_MENUEDIT_CATALOG
+		);
+
 		$this->vars(array(
+			"types" => $this->option_list($row["type"],$types),
 			"grkeywords" => $this->multiple_option_list($kwd_list, $all_kwds),
 			"parent"			=> $row["parent"], 
 			"SA_ITEM"			=> $sal,
@@ -4603,7 +4615,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
 	}
 
-	function make_menu_caches()
+	function make_menu_caches($where = "objects.status = 2")
 	{
 		global $awt,$lang_id,$SITE_ID;
 		$awt->start("menuedit::make_menu_caches");
@@ -4616,8 +4628,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// see laheb ja loeb kokku, mitu last mingil sektsioonil on
 			// salvestatakse $this->subs array sisse, key on objekti oidiman
 
-			$this->db_prep_listall("objects.status = 2");
-			$this->db_listall_lite("objects.status = 2");
+			$this->db_prep_listall($where);
+			$this->db_listall_lite($where);
 
 			while ($row = $this->db_next())
 			{
@@ -4632,13 +4644,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$cached["subs"] = $this->subs;
 
 			$cache = new cache();
-			$c_d = aw_serialize($cached,SERIALIZE_NATIVE);
+			$c_d = aw_serialize($cached,SERIALIZE_PHP);
 			$cache->file_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
 		}
 		else
 		{
 			// unserialize the cache
-			$cached = aw_unserialize($ms);
+			$cached = aw_unserialize($ms,1);
 			$this->mar = $cached["mar"];
 			$this->mpr = $cached["mpr"];
 			$this->subs = $cached["subs"];
