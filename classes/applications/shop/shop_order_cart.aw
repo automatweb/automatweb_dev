@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.4 2004/05/19 16:07:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.5 2004/05/27 08:51:27 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -65,10 +65,15 @@ class shop_order_cart extends class_base
 		$this->read_template("show.tpl");
 
 		$soce = new aw_array(aw_global_get("soc_err"));
+		$soce_arr = $soce->get();
 		foreach($soce->get() as $prid => $errmsg)
 		{
 			$this->vars(array(
-				"msg" => $errmsg
+				"msg" => $errmsg["msg"],
+				"prod_name" => $errmsg["prod_name"],
+				"prod_id" => $errmsg["prod_id"],
+				"must_order_num" => $errmsg["must_order_num"],
+				"ordered_num" => $errmsg["ordered_num"]
 			));
 			$err .= $this->parse("ERROR");
 		}
@@ -115,7 +120,7 @@ class shop_order_cart extends class_base
 
 		$this->vars(array(
 			"PROD" => $str,
-			"total" => $total,
+			"total" => number_format($total, 2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"]))
 		));
 
@@ -168,7 +173,15 @@ class shop_order_cart extends class_base
 					{
 						$soce = array();
 					}
-					$soce[$iid] = $i_o->name()." peab tellima ".$mon." kaupa, hetkel kokku $cc!";
+
+					$soce[$iid] = array(
+						"msg" => $i_o->name()." peab tellima ".$mon." kaupa, hetkel kokku $cc!",
+						"prod_name" => $i_o->name(),
+						"prod_id" => $i_o->id(),
+						"must_order_num" => $mon,
+						"ordered_num" => $cc,
+						"ordered_num_enter" => $quant
+					);
 					aw_session_set("soc_err", $soce);
 					$order_ok = false;
 				}

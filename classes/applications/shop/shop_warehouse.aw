@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.6 2004/05/13 12:00:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.7 2004/05/27 08:51:28 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -189,9 +189,23 @@ class shop_warehouse extends class_base
 			case "order_unconfirmed":
 				$this->save_order_unconfirmed_tbl($arr);
 				break;
+
+			case "products_list":
+				$this->do_del_prod($arr);
+				break;
 		}
 		return $retval;
 	}	
+
+	function do_del_prod($arr)
+	{
+		$awa = new aw_array($arr["request"]["sel"]);
+		foreach($awa->get() as $oid)
+		{
+			$o = obj($oid);
+			$o->delete();
+		}
+	}
 
 	function mk_prod_toolbar(&$data)
 	{
@@ -203,6 +217,13 @@ class shop_warehouse extends class_base
 		));
 
 		$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
+
+		$tb->add_button(array(
+			"name" => "del",
+			"img" => "delete.gif",
+			"tooltip" => "Kustuta valitud",
+			"url" => "javascript:document.changeform.submit()"
+		));
 	}
 
 	function _req_add_itypes(&$tb, $parent, &$data)
@@ -336,6 +357,10 @@ class shop_warehouse extends class_base
 						"product" => $o->id()
 					)),
 					"caption" => "Vii lattu"
+				)),
+				"del" => html::checkbox(array(
+					"name" => "sel[]",
+					"value" => $o->id()
 				))
 			));
 		}
@@ -381,6 +406,12 @@ class shop_warehouse extends class_base
 		$t->define_field(array(
 			"name" => "change",
 			"caption" => "Muuda",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "del",
+			"caption" => "Vali",
 			"align" => "center"
 		));
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.3 2004/05/19 16:07:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.4 2004/05/27 08:51:28 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -66,7 +66,11 @@ class shop_product_table_layout extends class_base
 		foreach($soce->get() as $prid => $errmsg)
 		{
 			$this->vars(array(
-				"msg" => $errmsg
+				"msg" => $errmsg["msg"],
+				"prod_name" => $errmsg["prod_name"],
+				"prod_id" => $errmsg["prod_id"],
+				"must_order_num" => $errmsg["must_order_num"],
+				"ordered_num" => $errmsg["ordered_num"]
 			));
 			$err .= $this->parse("ERROR");
 		}
