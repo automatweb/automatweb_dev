@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.72 2004/08/16 11:39:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.73 2004/08/17 06:27:21 kristo Exp $
 
 /*
 
@@ -591,17 +591,23 @@ class site_show extends class_base
 			$filter["class_id"] = array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT);
 			$filter["lang_id"] = aw_global_get("lang_id");
 			$filter["sort_by"] = $ordby;
-
+			$filter["site_id"] = array();
+			
 			if ($arr["all_langs"])
 			{
 				$filter["lang_id"] = array();
 			}
-
 			$documents = new object_list($filter);
 
+			$rsid = aw_ini_get("site_id");
+			
 			$tc = 0;
 			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
 			{
+				if ($o->site_id() != $rsid && !$o->is_brother())
+				{
+					continue;
+				}
 				if ($skipfirst > 0 && $tc < $skipfirst)
 				{
 					$tc++;
