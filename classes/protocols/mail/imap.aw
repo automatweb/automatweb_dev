@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.4 2003/09/17 12:47:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.5 2003/09/29 12:56:41 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -61,8 +61,10 @@ class imap extends class_base
 	{
 		$this->use_mailbox = "INBOX";
 
+		$ob = new object($arr["obj"][OID]);
+
 		$this->connect_server(array(
-			"id" => $arr["obj"][OID],
+			"obj_inst" => $ob,
 		));	
 	
 		$errors = imap_errors();
@@ -99,101 +101,172 @@ class imap extends class_base
 	}	
 	*/
 
+	////
+	// !Connects to server
+	
 	function connect_server($arr)
 	{
 		if (!$this->connected)
 		{
-			$obj = new object($arr["id"]);
+			$obj = $arr["obj_inst"];
+			$this->obj_id = $obj->id();
 
 			$server = $obj->prop("server");
 			$port = $obj->prop("port");
 			$user = $obj->prop("user");
 			$password = $obj->prop("password");
 
-			if ($obj->prop("use_ssl") == 1)
-			{
-				$mask = "{%s:%d/ssl/novalidate-cert}";
-			}
-			else
-			{
-				$mask = "{%s:%d}";
-			};
+			//  cert validating could probably be made an option later on
+			$mask = (1 == $obj->prop("use_ssl")) ? "{%s:%d/ssl/novalidate-cert}" : "{%s:%d}";
 
 			$this->servspec = sprintf($mask,$server,$port);
 			$this->mboxspec = $this->servspec . $this->use_mailbox;
 			$this->mbox = @imap_open($this->mboxspec, $user, $password);
+			$err = imap_errors();
+			if (is_array($err))
+			{
+				die(join("<br>",$err));
+			};
 			$this->connected = true;
 		}
+
+		// this is where we store _all_ folders for that account
+		$this->fldr_cache_id = "imapfld" . md5("imap-acc-folders".$this->servspec.$user.$this->obj_id);
+
+		// headers for a single mailbox
+		$this->mbox_cache_id = "imap" . md5("imap-".$this->obj_id.$this->mboxspec.$user);
+
+		// overview information for each folder. it's in separate file because it's kind
+		// of expensive (read slow) to scan over all the folders at once, so we do this
+		// when a folder is opened
+		$this->overview_cache_id = "imap" . md5("imap-over".$this->servspec.$user.$this->obj_id);
 	}
 
 	function list_folders($arr = array())
 	{
-		$list = imap_getmailboxes($this->mbox,$this->servspec,"*");
-                $res = array();
-                if (is_array($list))
-                {
-                        foreach($list as $item)
-                        {
-                                $key = $realname = substr($item->name,strlen($this->servspec));
-				$status = imap_status($this->mbox,$item->name,SA_ALL);
-                                $res[$key] = array(
-					"name" => ($status->unseen > 0) ? "<b>$realname</b>" : $realname,
-					"count" => ($status->unseen > 0) ? sprintf("<b>(%d)</b>",$status->unseen) : "",
-				);
-                        };
-                };
+		$cache = get_instance("cache");
+		if ($ser = $cache->file_get($this->fldr_cache_id))
+		{
+			$res = aw_unserialize($ser);
+
+		}
+		else
+		{
+			$list = imap_getmailboxes($this->mbox,$this->servspec,"*");
+			$res = array();
+			if (is_array($list))
+			{
+				foreach($list as $item)
+				{
+					$key = $realname = substr($item->name,strlen($this->servspec));
+					//$status = imap_status($this->mbox,$item->name,SA_ALL);
+					$res[$key] = array(
+						"name" => $realname,
+						//"count" => ($status->unseen > 0) ? sprintf("<b>(%d)</b>",$status->unseen) : "",
+					);
+				};
+			};
+			$cache->file_set($this->fldr_cache_id,aw_serialize($res));
+		};
 		return $res;
 	}
 
 	function get_folder_contents($arr)
 	{
+		$cache = get_instance("cache");
 		$mboxinf = imap_mailboxmsginfo($this->mbox);
+
+		$ovr = $this->_get_overview();
+		$last_check = $ovr[$this->mboxspec];
+		$new_check = $this->_get_ovr_checksum($mboxinf);
+
 		$count = $mboxinf->Nmsgs;
-
-		extract($arr);
-
 		$this->count = $count;
-		$sorted_array=imap_sort($this->mbox,SORTDATE,1,SE_UID);
 
-		// imap_ functions that deal with message uid-s accept
-		// ranges in form of start:end, where asterisk (*) can be used in place
-		// of the end specifier, in which case it marks all the message
-		// from the requested start uid to the end
+		// mailbox has changed, reload from server
+		if (1 || $last_check != $new_check)
+		{
+			// update ovr
 
-		// we do not pass * directly to the driver, instead we do our own math
-		// .. it will be behind the end of req_msgs, but we really don't
-		// have to care, because that's PHP
-		$endpoint = is_numeric($to) ? ($to - $from) + 1 : sizeof($sorted_array); 
+			$ovr[$this->mboxspec] = $new_check;
+			$this->_set_overview($ovr);
+			$mboxinf = imap_mailboxmsginfo($this->mbox);
 
-		$req_msgs = array_slice($sorted_array,$from-1,$endpoint);
+			$src = $cache->file_get($this->mbox_cache_id);
+			#$mbox_over = aw_unserialize($src);
 
-		// now I have the message ID-s exactly how I want them
-		// .. in correct order as values in the res array
-		$seq = join(",",$req_msgs);
+			if (!is_array($mbox_over["contents"]))
+			{
+				$mbox_over["contents"] = array();
+			};
 
-		// but imap_fetch_overview does not care about the order, so I have reorder the 
-		// the messages myself using the req_id array
-		$req_msgs = array_flip($req_msgs);
+			$mbox_over["modified"] = $fmod;
+			$mbox_over["count"] = $count;
 
-		$overview = imap_fetch_overview($this->mbox,$seq,FT_UID);
-		if (is_array($overview))
-                {
-                        foreach($overview as $key => $message)
-                        {
-                                $rkey = $message->uid;
-				$req_msgs[$rkey] = array(
-					"from" => $message->from,
-					"subject" => $this->_parse_subj($message->subject),
-                                        "date" => $message->date,
-                                        "size" => $message->size,
-                                        "seen" => $message->seen,
-                                        "answered" => $message->answered,
-                                        "recent" => $message->recent,
-                                );
-                        };
-                };
+			$fo = imap_sort($this->mbox,SORTDATE,0,SE_UID && SE_NOPREFETCH);
 
-		return $req_msgs;
+			$to_fetch = array_diff($fo,array_keys($mbox_over["contents"]));
+
+			$req_msgs = $mbox_over["contents"];
+
+			//$uidlist = join(",",$to_fetch);
+
+			if ($count > 0)
+			{
+				$overview = "";
+
+				foreach($to_fetch as $msg_uid)
+				{
+					//print "fetching message with uid $msg_uid<br>";
+					flush();
+					$overview = imap_fetch_overview($this->mbox,$msg_uid,FT_UID);
+					//print "fetch done, processing<br>";
+					flush();
+					$message = $overview[0];
+					$rkey = $message->uid;
+					$req_msgs[$rkey] = array(
+						"from" => $message->from,
+						"subject" => $this->_parse_subj($message->subject),
+						"date" => $message->date,
+						"tstamp" => strtotime($message->date),
+						"size" => $message->size,
+						"seen" => $message->seen,
+						"answered" => $message->answered,
+						"recent" => $message->recent,
+					);
+					//print ".";
+					flush();
+				};
+			};
+
+			uasort($req_msgs,array($this,"__date_sort"));
+
+			$mbox_over["contents"] = $req_msgs;
+			$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
+		}
+		else
+		{
+			$src = $cache->file_get($this->mbox_cache_id);
+			$mbox_over = aw_unserialize($src);
+		};
+
+		if (is_array($mbox_over["contents"]))
+		{
+			foreach(array_keys($mbox_over["contents"]) as $rkey => $ritem)
+			{
+				if (!between($rkey+1,$arr["from"],$arr["to"]))
+				{
+					unset($mbox_over["contents"][$rkey]);
+				};
+			}
+		};
+		$rv = $mbox_over["contents"];
+		return $rv;
+	}
+
+	function __date_sort($el1, $el2)
+	{
+		return (int)($el2["tstamp"] - $el1["tstamp"]);
 	}
 
 	function delete_msgs_from_folder($arr)
@@ -234,7 +307,9 @@ class imap extends class_base
 	{
 		$msgid = $arr["msgid"];
 		$msg_no = imap_msgno($this->mbox,$arr["msgid"]);
-		$hdrinfo = imap_headerinfo($this->mbox,$msg_no);
+		$hdrinfo = @imap_headerinfo($this->mbox,$msg_no);
+
+		// XXX: check whether the message was valid
 
 		$msgdata = array(
 			"from" => $hdrinfo->fromaddress,
@@ -244,7 +319,7 @@ class imap extends class_base
 			"date" => $hdrinfo->MailDate,
 		);
 		
-		$overview = imap_fetchstructure($this->mbox,$msgid,FT_UID);
+		$overview = @imap_fetchstructure($this->mbox,$msgid,FT_UID);
 
 		$rv = "";
 
@@ -421,5 +496,28 @@ class imap extends class_base
 		);
 	}
 
+	function _get_overview()
+	{
+		$this->overview_cache_id = "imap" . md5("imap-over".$this->id);
+		$cache = get_instance("cache");
+		$fl = $cache->file_get($this->overview_cache_id);
+		$ovr = array();
+		if ($fl)
+		{
+			$ovr = aw_unserialize($fl);
+		};
+		return $ovr;
+	}
+
+	function _set_overview($ovr)
+	{
+		$cache = get_instance("cache");
+		$cache->file_set($this->overview_cache_id,aw_serialize($ovr));
+	}
+
+	function _get_ovr_checksum($dat)
+	{
+		return md5($dat->Nmsgs . $dat->Size . "tambovihunt2");
+	}
 };
 ?>
