@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.127 2002/11/21 12:44:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.128 2002/11/24 21:13:28 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -3687,44 +3687,6 @@ class document extends aw_template
 			"table" => $results,
 		));
 		return $this->parse();
-	}
-
-	function get_properties($args = array())
-	{
-		$fields = array();
-		$fields["showlead"] = array(
-			"type" => "checkbox",
-			"caption" => "Näita leadi",
-			"value" => $args["showlead"],
-			"store" => "table",
-			"table" => "documents",
-			"idfield" => "docid",
-		);
-		$fields["title_clickable"] = array(
-			"type" => "checkbox",
-			"caption" => "Pealkiri klikitav",
-			"value" => $args["title_clickable"],
-			"store" => "table",
-			"table" => "documents",
-			"idfield" => "docid",
-		);
-		$fields["no_right_pane"] = array(
-			"type" => "checkbox",
-			"caption" => "Ilma parema paanita",
-			"value" => $args["no_right_pane"],
-			"store" => "table",
-			"table" => "documents",
-			"idfield" => "docid",
-		);
-		$fields["is_forum"] = array(
-			"type" => "checkbox",
-			"caption" => "Omab foorumit",
-			"value" => $args["is_forum"],
-			"store" => "table",
-			"table" => "documents",
-			"idfield" => "docid",
-		);
-		return $fields;
 	}
 };
 ?>
