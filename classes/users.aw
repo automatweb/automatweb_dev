@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.74 2003/01/09 17:23:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.75 2003/01/11 17:16:17 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1989,10 +1989,24 @@ class users extends users_user
 		return $this->login(array("uid" => $uid, "password" => $pass1));
 	}
 
+	function kill_user()
+	{
+		aw_session_set("uid","");
+		session_destroy();
+		header("Location: ".aw_ini_get("baseurl"));
+		die();
+	}
+
 	function request_startup()
 	{
 		if (($uid = aw_global_get("uid")) != "")
 		{
+			$_uid = $this->db_fetch_field("SELECT uid FROM users WHERE uid = '$uid' AND blocked != 1", "uid");
+			if ($_uid != $uid)
+			{
+				// if no such user exists, log the bastard out
+				$this->kill_user();
+			}
 			$gidlist = array();
 			$gidlist_pri = array();
 			$gl = $this->get_gids_by_uid($uid,true);
@@ -2000,6 +2014,11 @@ class users extends users_user
 			{
 				$gidlist[(int)$gid] = (int)$gd["gid"];
 				$gidlist_pri[(int)$gid] = (int)$gd["priority"];
+			}
+
+			if (count($gidlist) < 1)
+			{
+				$this->kill_user();
 			}
 			aw_global_set("gidlist", $gidlist);
 			aw_global_set("gidlist_pri", $gidlist_pri);

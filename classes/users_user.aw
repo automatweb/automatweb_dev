@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.47 2003/01/07 14:25:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.48 2003/01/11 17:16:17 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -254,6 +254,7 @@ class users_user extends aw_template
 			WHERE uid = '$uid'";
 		$this->db_query($q);
     aw_global_set("uid","");
+    aw_session_set("uid","");
 		$this->_log(ST_USERS, SA_LOGOUT ,USR_LOGGED_OUT);
 	}
 
@@ -774,8 +775,10 @@ class users_user extends aw_template
 			// check if the user is in the result set
 			$jfs = unserialize($user["join_form_entry"]);
 
+
 			$in = false;
 			$efid = $f->search_form;
+
 			while(list(,$v) = each($mt))
 			{
 				if ($jfs[$efid] == $v)
