@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.2 2004/08/24 13:01:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.3 2004/09/09 10:57:13 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -23,12 +23,26 @@ class otto_prod_search extends class_base
 		array("Kodusisustus", array(144))	
 	);
 
+	var $search_fld_lat = array(
+		array("Sieviešu mode", array(135883)),
+		array("Viriešu mode", array(135836)),
+		array("Bernu un pusaudu mode", array(135962)),
+		array("Apavi", array(135963)),
+		array("Sporta preces", array(135964)),
+		array("Majturiba", array(135965))
+	);
+
 	function otto_prod_search()
 	{
 		$this->init(array(
 			"tpldir" => "applications/shop/otto/otto_prod_search",
 			"clid" => CL_OTTO_PROD_SEARCH
 		));
+
+		if (aw_global_get("lang_id") == 6)
+		{
+			$this->search_fld = $this->search_fld_lat;
+		}
 	}
 
 	function get_property($arr)
@@ -215,13 +229,13 @@ class otto_prod_search extends class_base
 
 				$viewlink = $this->mk_my_orb("show_items", array(
 					"section" => $prod->parent(),
-					"id" => 614,
+					"id" => aw_ini_get("shop.prod_fld_path_oc"),
 					"page" => $prod->prop("user18"),
 					"oview" => 2,
 					"apid" => $prod->id()
 				), "shop_order_center");
 
-				$imnr = $this->db_fetch_field("SELECT imnr FROM otto_prod_img WHERE pcode = '".$prod->prop("user20")."'","imnr");
+				$imnr = $this->db_fetch_field("SELECT imnr FROM otto_prod_img WHERE pcode = '".$prod->prop("user20")."' AND nr=1","imnr");
 
 				//echo "addar $i $a ".$prod->id()."<br>";
 				if ($imnr != "")
@@ -262,7 +276,7 @@ class otto_prod_search extends class_base
 					"prod_desc" => $prod->prop("userta2"),
 					"prod_price" => $prod_i->get_price($prod),
 					"path" => $prod->path_str(array(
-						"to" => 149,
+						"to" => aw_ini_get("shop.prod_fld_path"),
 						"no_self" => 1,
 						"max_len" => 3
 					)),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.15 2004/09/03 15:56:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.16 2004/09/09 10:57:13 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -13,6 +13,9 @@
 
 @property postal_price type=textbox field=meta method=serialize size=5
 @caption Postikulu (liidetakse korvi hinnale)
+
+@property email_subj type=textbox field=meta method=serialize
+@caption Tellimuse e-maili subjekt
 
 @reltype PROD_LAYOUT value=1 clid=CL_SHOP_PRODUCT_LAYOUT
 @caption toote kujundus
@@ -191,6 +194,7 @@ class shop_order_cart extends class_base
 			"user_data_form" => $html,
 			"PROD" => $str,
 			"total" => number_format($total, 2),
+			"postal_price" => number_format($cart_o->prop("postal_price"),2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"]))
 		));
 
@@ -220,7 +224,6 @@ class shop_order_cart extends class_base
 		$this->vars(array(
 			"logged" => $ll,
 			"not_logged" => $lln,
-			"postal_price" => number_format($cart_o->prop("postal_price"))
 		));
 
 		return $this->parse();
@@ -405,6 +408,14 @@ class shop_order_cart extends class_base
 		if (!empty($arr["confirm_order"]))
 		{
 			// do confirm order and show user
+			// if cart is empty, redirect to front page
+			$awa = new aw_array($_SESSION["cart"]["items"]);
+			$tmp = $awa->get();
+			if (count($tmp) < 1)
+			{
+				return aw_ini_get("baseurl");
+			}
+
 			$ordid = $this->do_create_order_from_cart($arr["oc"]);
 			$this->start_order();
 			return $this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order");

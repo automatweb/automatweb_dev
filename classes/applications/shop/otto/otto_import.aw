@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.2 2004/09/03 15:56:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.3 2004/09/09 10:57:13 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -144,9 +144,9 @@ class otto_import extends class_base
 			$data = array_unique(explode(",", $this->get_file(array("file" => "/www/otto.struktuur.ee/ottids.txt"))));
 		}
 
-		if (!$fix_missing && file_exists("/www/otto.struktuur.ee/public/vv_pimg/status.txt"))
+		if (!$fix_missing && file_exists(aw_ini_get("site_basedir")."/files/status.txt"))
 		{
-			$skip_to = $this->get_file(array("file" => "/www/otto.struktuur.ee/public/vv_pimg/status.txt"));
+			$skip_to = $this->get_file(array("file" => aw_ini_get("site_basedir")."/files/status.txt"));
 			echo "restarting from product $skip_to <br>";
 		}
 		else
@@ -326,7 +326,7 @@ class otto_import extends class_base
 					}
 				}
 			}
-			$stat = fopen("/www/otto.struktuur.ee/public/vv_pimg/status.txt","w");
+			$stat = fopen(aw_ini_get("site_basedir")."/files/status.txt","w");
 		
 			fwrite($stat, $pcode);
 			fclose($stat);
@@ -381,7 +381,7 @@ class otto_import extends class_base
 		set_time_limit(0);
 		if ($o->prop("restart_pict_i"))
 		{
-			unlink("/www/otto.struktuur.ee/public/vv_pimg/status.txt");
+			unlink(aw_ini_get("site_basedir")."/files/status.txt");
 		}
 		if ($o->prop("do_pict_i"))
 		{
@@ -398,14 +398,14 @@ class otto_import extends class_base
 
 		if (file_exists($imp_stat_file))
 		{
-			$skip_to = $this->get_file(array("file" => "/www/otto.struktuur.ee/public/vv_pimg/status.txt"));
+			$skip_to = $this->get_file(array("file" => aw_ini_get("site_basedir")."/files/status.txt"));
 			echo "restarting from product $skip_to <br>";
 		}
 
 		$this->db_query("DELETE FROM otto_imp_t_prod");
 		$this->db_query("DELETE FROM otto_imp_t_codes");
 		$this->db_query("DELETE FROM otto_imp_t_prices");
-		$this->db_query("DELETE FROM otto_imp_t_p2p");
+		$this->db_query("DELETE FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get("lang_id"));
 
 		echo "from url ".$o->prop("folder_url")." read: <br>";
 
@@ -426,8 +426,8 @@ class otto_import extends class_base
 			foreach(explode(",",$row[1]) as $pg)
 			{
 				$this->db_query("
-					INSERT INTO otto_imp_t_p2p(pg,fld)
-					VALUES('$pg','$row[2]')
+					INSERT INTO otto_imp_t_p2p(pg,fld, lang_id)
+					VALUES('$pg','$row[2]','".aw_global_get("lang_id")."')
 				");
 				echo ".\n";
 				flush();
@@ -500,6 +500,7 @@ class otto_import extends class_base
 				}
 				$this->quote(&$row);
 				$row = $this->char_replacement($row);
+				$full_code = str_replace(" ","", $row[4]);
 				$row[4] = substr(str_replace(" ","", $row[4]), 0, 6);
 				$color = $row[3];
 				if ($row[2] != "")
@@ -507,8 +508,8 @@ class otto_import extends class_base
 					$color .= " (".$row[2].")";
 				}
 				$this->db_query("
-					INSERT INTO otto_imp_t_codes(pg,nr,size,color,code)
-					VALUES('$cur_pg','$row[1]','$row[2]','$color','$row[4]')
+					INSERT INTO otto_imp_t_codes(pg,nr,size,color,code, full_code)
+					VALUES('$cur_pg','$row[1]','$row[2]','$color','$row[4]','$full_code')
 				");
 				$num++;
 				if (!$row[4])
@@ -543,6 +544,12 @@ class otto_import extends class_base
 					$first = false;
 					continue;
 				}
+				$orow = $row;
+				if (count($row) == 5)
+				{
+					$row[5] = $row[4];
+					$row[4] = "";
+				}
 				$row = $this->char_replacement($row);
 				$this->quote(&$row);
 				$orig = $row[5];
@@ -559,7 +566,7 @@ class otto_import extends class_base
 				
 				if (!$row[5])
 				{
-					echo "ERROR ON LINE $num price = $row[5] <br>";
+					echo "ERROR ON LINE $num price = $row[5] (orig = $orig)<br>".dbg::dump($orow);
 					for ($i = 0; $i < strlen($orig); $i++)
 					{
 						echo "at pos ".$i." cahar = ".ord($orig{$i})." v = ".$orig{$i}." <br>";
@@ -570,7 +577,7 @@ class otto_import extends class_base
 			echo ".. got $num prices <br>\n";
 			flush();
 		}
-
+//die();
 		$this->db_query("SELECT * FROM otto_imp_t_codes");
 		while ($row = $this->db_next())
 		{
@@ -622,7 +629,8 @@ class otto_import extends class_base
 				p.c as c,
 				c.code as code,
 				c.color as color,
-				c.size as s_type
+				c.size as s_type,
+				c.full_code as full_code
 			FROM 
 				otto_imp_t_prod p
 				LEFT JOIN otto_imp_t_codes c ON (c.pg = p.pg AND c.nr = p.nr)
@@ -685,7 +693,7 @@ class otto_import extends class_base
 			}
 
 			// try find correct folder
-			$try_fld = $this->db_fetch_field("SELECT fld FROM otto_imp_t_p2p WHERE pg = '$row[pg]'", "fld");
+			$try_fld = $this->db_fetch_field("SELECT fld FROM otto_imp_t_p2p WHERE pg = '$row[pg]' and lang_id = ".aw_global_get("lang_id"), "fld");
 			if ($try_fld)
 			{
 				echo "found parent for prod as $try_fld <br>\n";
@@ -699,6 +707,7 @@ class otto_import extends class_base
 
 			$dat->set_name($row["title"]);
 			$dat->set_prop("userta2", $row["c"]);
+			$dat->set_prop("user16", $row["full_code"]);
 			$dat->set_prop("user17", $row["color"]);
 			$dat->set_prop("user18", $row["pg"]);
 			$dat->set_prop("user19", $row["nr"]);
@@ -720,11 +729,14 @@ class otto_import extends class_base
 
 			$lowest = 10000000;
 			// now, for each price, create packaging objects
+			echo "q = "."SELECT * FROM otto_imp_t_prices WHERE pg = $row[pg] AND nr = '$row[nr]' AND type = '".$orig_row["s_type"]."' <br>";
 			$this->db_query("SELECT * FROM otto_imp_t_prices WHERE pg = $row[pg] AND nr = '$row[nr]' AND type = '".$orig_row["s_type"]."'");
+			$sizes = false;
 			while ($row = $this->db_next())
 			{
 				// gotta split the sizes and do one packaging for each
 				$s_tmpc = explode(",", $row["size"]);
+				//echo "got price row , s_tmpc = ".dbg::dump($s_tmpc)." <br>";
 				$s_tmp = array();
 				foreach($s_tmpc as $tmpcc)
 				{
@@ -755,8 +767,10 @@ class otto_import extends class_base
 					}
 				}
 
+				//echo "final sizes are ".dbg::dump($s_tmp);	
 				foreach($s_tmp as $tmpcc)
 				{
+					$sizes = true;
 					$row["size"] = $tmpcc;
 					if (is_oid($pkgs[$row["price"]][$row["size"]]))
 					{
@@ -767,7 +781,7 @@ class otto_import extends class_base
 					{
 						echo "for prod ".$dat->name()." got NEW packaging ".$row["price"]." for type ".$orig_row["s_type"]." <bR>";
 						$pk = obj();
-						$pk->set_class_id(CL_SHOP_PRODUCT_PACKAGING);
+						$pk->set_class_id(CL_SHOP_PRODUCT_PACKAGING	);
 						$pk->set_parent($dat->id());
 						$pk->save();
 
@@ -802,8 +816,16 @@ class otto_import extends class_base
 			}
 
 			$dat->set_prop("price", $lowest);
+			if (!$sizes)
+			{
+				echo "no size, setting status to not active <br>";
+				$dat->set_status(STAT_NOTACTIVE);
+			}
+
 			$dat->save();
+
 			$this->restore_handle();
+
 
 			$stat = fopen($imp_stat_file,"w");
 			fwrite($stat, $orig_pcode);
@@ -907,6 +929,8 @@ class otto_import extends class_base
 
 		$this->fix_image_codes();
 
+		$this->fix_prices();
+
 		// clear cache
 		$cache = get_instance("maitenance");
 		$cache->cache_clear(array("clear" => 1));
@@ -922,8 +946,32 @@ class otto_import extends class_base
 
 	function char_replacement($str)
 	{
-		$needle = array('Î','Ï',chr(137));
-		$haystack = array(chr(158),chr(158),chr(154));
+		/* l2ti t2hed  
+		,
+		,chr(226)
+		,chr(238)
+		,chr(239)
+		,chr(231)
+		
+
+		Andmete allikaks oli:
+		Impordifail: http://terryf.struktuur.ee/str/otto/import/data/LAT.T004-11.txt
+		Tekst saidil (skrolli alla): http://otto-latvia.struktuur.ee/134393
+		kooditabel: http://www.science.co.il/Language/Character-Code.asp?s=1257
+		*/
+		if (aw_global_get("lang_id") == 6)
+		{
+			/*$needle = array('‰','Ç','¥','?','ï','?');
+			$haystack = array('š',chr(226),chr(238),chr(239),chr(231),chr(240));
+		*/
+			$needle = array(chr(137),chr(207),chr(199),chr(239),'?',chr(165),chr(183),chr(204),chr(191));
+			$haystack = array('ð','þ',chr(226),chr(231),chr(239),chr(238),chr(208),chr(219),chr(242));
+		}
+		else
+		{
+			$needle = array('Î','Ï',chr(137));
+			$haystack = array(chr(158),chr(158),chr(154));
+		}
 		if(is_array($str))
 		{
 			foreach($str as $key=>$value)
@@ -1026,7 +1074,79 @@ class otto_import extends class_base
 			}
 			$this->restore_handle();
 		}
-		die("all done! ");
+		echo ("all done! ");
+	}
+
+	/**
+
+		@attrib name=fix_prices
+
+	**/
+	function fix_prices()
+	{
+		$ol = new object_list(array("class_id" => CL_SHOP_PRODUCT_PACKAGING, "price" => 0));
+		foreach($ol->arr() as $o)
+		{
+			$c = reset($o->connections_to(array("type" => 2, "from.class_id" => CL_SHOP_PRODUCT)));
+			if (!$c)
+			{
+				die("unconnected packaging ".$o->id()."!!!");
+			}
+			$p = $c->from();
+			$pg = $p->prop("user18");
+			$nr = $p->prop("user19");
+			$size = $o->prop("user5");
+
+			$this->db_query("SELECT * FROM otto_imp_t_prices WHERE pg = '$pg' AND nr = '$nr'");
+			while ($row = $this->db_next())
+			{
+				// find the correct size
+				$sizes = $this->make_keys($this->_proc_size($row["size"]));
+				if (isset($sizes[$size]))
+				{
+					echo "found price $row[price] for packet ".$o->name()."! <br>";
+					$o->set_prop("price", $row["price"]);
+					$o->save();
+				}
+			}
+		}
+		echo "all done! <br>";	
+	}
+
+	function _proc_size($size)
+	{
+		$s_tmpc = explode(",", $size);
+		$s_tmp = array();
+		foreach($s_tmpc as $tmpcc)
+		{
+			// because the bloody csv files don't containt 100 106, that would mean 100,102,104,106, but they contain 100106
+			// so try to be intelligent and split those
+			if ($tmpcc > 100000)
+			{
+				$s_from = $tmpcc{0}.$tmpcc{1}.$tmpcc{2};
+				$s_to = $tmpcc{3}.$tmpcc{4}.$tmpcc{5};
+				for ($pup = $s_from; $pup <= $s_to; $pup+=2)
+				{
+					$s_tmp[] = $pup;
+				}
+			}
+			else
+			if ($tmpcc > 10000)
+			{
+				$s_from = $tmpcc{0}.$tmpcc{1};
+				$s_to = $tmpcc{2}.$tmpcc{3}.$tmpcc{4};
+				for ($pup = $s_from; $pup <= $s_to; $pup+=2)
+				{
+					$s_tmp[] = $pup;
+				}
+			}
+			else
+			{
+				$s_tmp[] = $tmpcc;
+			}
+		}
+
+		return $s_tmp;
 	}
 }
 

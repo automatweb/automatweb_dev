@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.12 2004/09/03 15:56:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.13 2004/09/09 10:57:13 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -458,6 +458,21 @@ class shop_order extends class_base
 		$oi->set_prop("sum", $sum);
 		$oi->save();
 
+		$email_subj = "Tellimus laost ".$this->order_warehouse->name();
+		
+		if ($this->can("view", $this->order_warehouse->prop("order_center")))
+		{
+			$order_center = obj($this->order_warehouse->prop("order_center"));
+			if ($this->can("view", $order_center->prop("cart")))
+			{
+				$cart_o = obj($order_center->prop("cart"));
+				if ($cart_o->prop("email_subj") != "")
+				{
+					$email_subj = $cart_o->prop("email_subj");
+				}
+			}
+		}
+
 		// also, if the warehouse has any e-mails, then generate html from the order and send it to those dudes
 		$emails = $this->order_warehouse->connections_from(array("type" => "RELTYPE_EMAIL"));
 		if (count($emails) > 0)
@@ -474,7 +489,7 @@ class shop_order extends class_base
 				$awm->create_message(array(
 					"froma" => "automatweb@automatweb.com",
 					"fromn" => str_replace("http://", "", aw_ini_get("baseurl")),
-					"subject" => "Tellimus laost ".$this->order_warehouse->name(),
+					"subject" => $email_subj,
 					"to" => $eml->prop("mail"),
 					"body" => strip_tags(str_replace("<br>", "\n",$html)),
 				));
@@ -499,7 +514,7 @@ class shop_order extends class_base
 			$awm->create_message(array(
 				"froma" => "automatweb@automatweb.com",
 				"fromn" => str_replace("http://", "", aw_ini_get("baseurl")),
-				"subject" => "Tellimus laost ".$this->order_warehouse->name(),
+				"subject" => $email_subj,
 				"to" => $_send_to,
 				"body" => strip_tags(str_replace("<br>", "\n",$html)),
 			));
