@@ -32,17 +32,6 @@ properties:
 		echo "Cmdline php not found, cannot collect properties"; \
 	fi
 
-awtrans:
-	@echo "Generating translation templates"
-	@if test -e scripts/php; \
-		then \
-		./scripts/php -n -d register_argc_argv=1 -q -f ./scripts/trans_scanner.aw \
-	else \
-		echo "Cmdline php not found, cannot create translation templates"; \
-	fi
-
-trans:	awtrans ini
-
 msg:
 	@echo "Generating message maps"
 	@if test -e scripts/php; \
