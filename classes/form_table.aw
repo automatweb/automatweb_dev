@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.53 2002/09/05 13:56:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.54 2002/09/05 14:24:16 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -23,7 +23,8 @@ class form_table extends form_base
 			"jrk" => "Jrk",
 			"cnt" => "Count",
 			"formel" => "Koguse element",
-			"formel_price" => "Hinna element"
+			"formel_price" => "Hinna element",
+			"entry_id" => "Sisestuse ID"
 		);
 
 		$this->lang_id = aw_global_get("lang_id");

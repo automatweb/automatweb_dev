@@ -1589,6 +1589,13 @@ class form_db_base extends aw_template
 					$gpb[] = form_db_base::mk_tblcol($finst["els"][$elid]["table"],$finst["els"][$elid]["col"],$fid);
 				}
 			}
+			else
+			{
+				if (in_array("entry_id", $fdat))
+				{
+					$gpb[] = "entry_id";
+				}
+			}
 		}
 
 		$ret = join(",", $gpb);
