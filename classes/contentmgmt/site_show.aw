@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.34 2004/02/18 14:38:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.35 2004/02/19 14:58:46 kristo Exp $
 
 /*
 
@@ -1087,7 +1087,12 @@ class site_show extends class_base
 		$langs = get_instance("languages");
 		$lar = $langs->listall();
 		$l = "";
-		
+
+		if (count($lar) < 2)
+		{
+			return "";
+		}		
+
 		foreach($lar as $row)
 		{
 			$this->vars(array(
