@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.35 2004/11/23 16:26:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.36 2004/12/03 12:19:25 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -152,6 +152,24 @@ class releditor extends core
 
 
 		#$this->all_props = $act_props;
+		$pcount = sizeof($props);
+		foreach($all_props as $key => $_prop)
+		{
+			//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
+			if ($all_props[$key])
+			//if (is_array($props) && in_array($key,$props))
+			{
+				$this->all_props[$key] = $_prop;
+				if (!empty($form_type) || $visual != "manager")
+				{
+					if (1 == $pcount)
+					{
+						$_prop["caption"] = $prop["caption"];
+					};
+					$act_props[$key] = $_prop;
+				};
+			};
+		};
 
 		if ($visual == "manager")
 		{
@@ -174,27 +192,6 @@ class releditor extends core
 				"subtitle" => 1,
 			);
 		};
-		
-		//if (!empty($form_type) || $visual != "manager")
-			$pcount = sizeof($props);
-		//{
-			foreach($all_props as $key => $_prop)
-			{
-				//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
-				if (is_array($props) && in_array($key,$props))
-				{
-					$this->all_props[$key] = $_prop;
-					if (!empty($form_type) || $visual != "manager")
-					{
-						if (1 == $pcount)
-						{
-							$_prop["caption"] = $prop["caption"];
-						};
-						$act_props[$key] = $_prop;
-					};
-				};
-			};
-		//};
 
 		$obj_inst = false;
 
