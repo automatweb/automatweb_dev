@@ -6,10 +6,13 @@ session_start();
 classload("timer","aw_template","defs","users","objects","languages");
 
 // there is no need to do aw_startup() here, it will probably do bad things anyway
+/*
 $u = new users;
 $u->request_startup();
 $l = new languages;
 $l->request_startup();
+*/
+aw_startup();
 
 $awt = new aw_timer;
 
