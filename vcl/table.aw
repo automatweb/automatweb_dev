@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.37 2002/11/12 15:33:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.38 2003/01/15 14:12:38 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -370,6 +370,8 @@ class aw_table
 			print "Don't know what to do";
 			return;
 		};
+
+		$this->do_rgroup_counts($arr['rgroupby']);
 
 		extract($arr);
 		$PHP_SELF = aw_global_get("PHP_SELF");
@@ -1131,15 +1133,17 @@ class aw_table
 					$this->lgrpvals[$rgel] = $_a;
 					// if we should display some other elements after the group element
 					// they will be passed in the $rgroupdat array
+					$val = "";
 					if (is_array($rgroupdat[$rgel]))
 					{
-						$tbl.=$rgroupby_sep[$rgel]["pre"];
+						$val .= $rgroupby_sep[$rgel]["pre"];
 						foreach($rgroupdat[$rgel] as $rgdat)
 						{
-							$tbl.=$v[$rgdat["el"]].$rgdat["sep"];
+							$val .= $v[$rgdat["el"]].$rgdat["sep"];
 						}
-						$tbl.=$rgroupby_sep[$rgel]["after"];
+						$val .= $rgroupby_sep[$rgel]["after"];
 					}
+					$tbl .= str_replace("[__jrk_replace__]",$this->rgroupcounts[$_a],$val);
 					$tbl.=$this->closetag(array("name" => "td"));
 					$tbl .= $this->closetag(array("name" => "tr"));
 
@@ -1154,6 +1158,25 @@ class aw_table
 			}
 		}
 		return $tbl;
+	}
+
+	////
+	// !this calculates how many elements are there in each rgroup and puts them in $this->rgroupcounts
+	function do_rgroup_counts($rgroupby)
+	{
+		if (!is_array($rgroupby))
+		{
+			return;
+		}
+
+		$this->rgroupcounts = array();
+		foreach($this->data as $row)
+		{
+			foreach($rgroupby as $rgel)
+			{
+				$this->rgroupcounts[$row[$rgel]] ++;
+			}
+		}
 	}
 };
 ?>
