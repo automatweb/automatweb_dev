@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.7 2001/07/04 23:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.8 2001/07/05 02:44:48 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -137,33 +137,7 @@ class form_output extends form_base
 		$op_id = $id;
 
 		// vaja on arrayd el_id => el_name k6ikide elementide kohta, mis on selle v2ljundi juurde valitud formides
-		$elarr = array("0" => "");
-		$op_forms = $this->get_op_forms($id);
-		$fidstring = join(",",$this->map2("%s",$op_forms));
-		if ($fidstring != "")
-		{
-			// make preview
-			$this->db_query("SELECT oid,form_id FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE class_id = ".CL_FORM_ENTRY." AND status != 0 AND form_entries.form_id IN ($fidstring)");
-			$row = $this->db_next();
-			if ($row)
-			{
-				$this->vars(array(
-					"preview" => $this->mk_orb("show_entry", array("id" => $row["form_id"], "op_id" => $op_id, "entry_id" => $row["oid"]),"form")
-				));
-				$this->vars(array("PREVIEW" => $this->parse("PREVIEW")));
-			}
-
-			$this->db_query(
-				"SELECT el_id, objects.name as name
-				 FROM element2form 
-					 LEFT JOIN objects ON objects.oid = element2form.el_id
-					WHERE form_id IN ($fidstring)"
-			);
-			while ($row = $this->db_next())
-			{
-				$elarr[$row["el_id"]] = $row["name"];
-			}
-		}
+		$elarr = $this->mk_elarr($id);
 
 //		 $this->debug_map_print();
 
@@ -228,7 +202,8 @@ class form_output extends form_base
 					"exp_down"	=> $this->mk_orb("exp_down", array("id" => $op_id, "col" => $col, "row" => $row)),
 					"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $id, "col" => $col, "row" => $row)),
 					"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $id, "col" => $col, "row" => $row)),
-					"stylesel" => $this->picker($cell["style"],$style_select)
+					"stylesel" => $this->picker($cell["style"],$style_select),
+					"ch_cell" => $this->mk_my_orb("ch_cell", array("id" => $id, "col" => $col, "row" => $row))
 				));
 
 				$sh = ""; $sv = "";
@@ -337,6 +312,41 @@ class form_output extends form_base
 		
 		$this->save_output($id);
 		return $this->mk_orb("admin_op", array("id" => $id));
+	}
+
+	function submit_admin_cell($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+
+		$cell = &$this->output[$row][$col];
+
+		$var = "stylesel_".$row."_".$col;
+		$cell["style"] = $$var;
+
+		for ($i=0; $i < $cell["el_count"]+1; $i++)
+		{
+			$var = "elsel_".$row."_".$col."_".$i;
+			$cell["els"][$i] = $$var;
+			$ls = $$var;
+		}
+		if ($ls != 0)
+		{
+			$cell["el_count"]++;
+		}
+		else
+		if ($cell["els"][$cell["el_count"]-1] == 0)
+		{
+			$cell["el_count"]--;
+		}
+
+		if ($cell["el_count"] < 0)
+		{
+			$cell["el_count"] = 0;
+		}
+		
+		$this->save_output($id);
+		return $this->mk_orb("ch_cell", array("id" => $id,"row" => $row, "col" => $col));
 	}
 
 	////
@@ -545,6 +555,75 @@ class form_output extends form_base
 		$orb = $this->mk_orb("admin_op", array("id" => $id));
 		header("Location: $orb");
 		return $orb;
+	}
+
+	function ch_cell($arr)
+	{
+		extract($arr);
+		$this->read_template("ch_op_cell.tpl");
+
+		$this->load_output($id);
+
+		$this->mk_path($this->parent,"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda v&auml;jundit</a> / <a href='".$this->mk_my_orb("admin_op",array("id" => $id))."'>Adminni</a> / Muuda celli");
+		$op_id = $id;
+
+		$elarr = $this->mk_elarr($id);
+
+		$cell = $this->output[$row][$col];
+
+		$element="";
+		for ($i=0; $i < $cell["el_count"]+1; $i++)
+		{
+			$this->vars(array(
+				"elsel" => $this->picker($cell["els"][$i],$elarr),
+				"element_id" => $row."_".$col."_".$i
+			));
+			$element.=$this->parse("ELEMENT");
+		}
+
+		$style = new style;
+		$style_select = $style->get_select(0,ST_CELL);
+
+		$this->vars(array(
+			"cell_id" => ($row."_".$col), 
+			"ELEMENT" => $element,
+			"stylesel" => $this->picker($cell["style"],$style_select),
+			"reforb"	=> $this->mk_reforb("submit_admin_cell", array("id" => $id, "row" => $row,"col" => $col))
+		));
+		return $this->parse();
+	}
+
+	function mk_elarr($id)
+	{
+		// vaja on arrayd el_id => el_name k6ikide elementide kohta, mis on selle v2ljundi juurde valitud formides
+		$elarr = array("0" => "");
+		$op_forms = $this->get_op_forms($id);
+		$fidstring = join(",",$this->map2("%s",$op_forms));
+		if ($fidstring != "")
+		{
+			// make preview
+			$this->db_query("SELECT oid,form_id FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE class_id = ".CL_FORM_ENTRY." AND status != 0 AND form_entries.form_id IN ($fidstring)");
+			$row = $this->db_next();
+			if ($row)
+			{
+				$this->vars(array(
+					"preview" => $this->mk_orb("show_entry", array("id" => $row["form_id"], "op_id" => $id, "entry_id" => $row["oid"]),"form")
+				));
+				$this->vars(array("PREVIEW" => $this->parse("PREVIEW")));
+			}
+
+			$this->db_query(
+				"SELECT el_id, objects.name as name
+				 FROM element2form 
+					 LEFT JOIN objects ON objects.oid = element2form.el_id
+					WHERE form_id IN ($fidstring)"
+			);
+			while ($row = $this->db_next())
+			{
+				$elarr[$row["el_id"]] = $row["name"];
+			}
+		}
+		return $elarr;
 	}
 }
 ?>
