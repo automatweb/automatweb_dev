@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.13 2004/05/17 13:43:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.14 2004/05/19 10:43:27 duke Exp $
 
 /*
 
@@ -71,6 +71,7 @@ class classificator extends class_base
 			"name" => $prop["name"],
 		));
 
+
 		$selected = false;
 		$connections = array();
 
@@ -78,6 +79,7 @@ class classificator extends class_base
 		{
 			if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 			{
+
 				$conns = $arr["obj_inst"]->connections_from(array(
 					"type" => constant($prop["reltype"]),
 				));
@@ -148,8 +150,11 @@ class classificator extends class_base
 
 		$oft = new object($ff);
 		$clf = $oft->meta("classificator");
+
 		$clf_type = $oft->meta("clf_type");
 		$use_type = $clf_type[$arr["name"]];
+
+		// XXX: implement some error checking
 
 		$ofto = new object($clf[$arr["name"]]);
 		$olx = new object_list(array(
@@ -226,6 +231,44 @@ class classificator extends class_base
 
 			// XXX: would be nice if connect would recognize symbolic reltypes
 			// and this belongs to some place else, don't you think so?
+	}
+
+	////
+	// !needs name and clid as arguments
+	function get_options_for($arr)
+	{
+		if (empty($arr["name"]))
+		{
+			return false;
+		};
+
+		if (empty($arr["clid"]))
+		{
+			return false;
+		};
+
+		$cfgu = get_instance("cfg/cfgutils");
+
+		$props = $cfgu->load_properties(array(
+			"clid" => $arr["clid"],
+			"filter" => array("name" => $arr["name"]),
+		));
+
+		$ot = get_instance(CL_OBJECT_TYPE);
+		$active_object_id = $ot->get_obj_for_class(array(
+			"clid" => $arr["clid"],
+		));
+
+		$c_obj = new object($active_object_id);
+		$clinf = $c_obj->meta("classificator");
+
+		$items = new object_list(array(
+			"parent" => $clinf[$arr["name"]],
+			"class_id" => CL_META,
+			"lang_id" => array(),
+		));
+
+		return $items->names();
 	}
 
 	////
