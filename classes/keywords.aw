@@ -1,9 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.9 2001/05/21 02:14:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.10 2001/05/21 16:28:32 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
 classload("defs");
+
+define("ARR_LISTID", 1);
+define("ARR_KEYWORD", 2);
+
 class keywords extends aw_template {
 	function keywords($args = array())
 	{
@@ -273,7 +277,8 @@ class keywords extends aw_template {
 
 	////
 	// !Tagastab koik registreeritud votmesonad
-	// argumendid: pole
+	// argumendid: type = ARR_LISTID - array index is list id, default
+	// type = ARR_KEYWORD - array index is keyword
 	function get_all_keywords($args = array())
 	{
 		$q = "SELECT list_id,keyword FROM keywords ORDER BY keyword";
@@ -281,7 +286,14 @@ class keywords extends aw_template {
 		$resarray = array();
 		while($row = $this->db_next())
 		{
-			$resarray[$row["list_id"]] = $row["keyword"];
+			if ($args["type"] == ARR_KEYWORD)
+			{
+				$resarray[$row["keyword"]] = $row["keyword"];
+			}
+			else
+			{
+				$resarray[$row["list_id"]] = $row["keyword"];
+			}
 		};
 		return $resarray;
 	}

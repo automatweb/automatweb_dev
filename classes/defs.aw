@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.2 2001/05/21 01:51:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.3 2001/05/21 16:28:32 kristo Exp $
 if (DEFS_LOADED == 1)
 {
 }
@@ -376,6 +376,12 @@ function gen_uniq_id($param = "")
 function checked($arg)
 {
 	return ($arg > 0) ? "checked" : "";
+}
+
+// for <select elements
+function selected($arg)
+{
+	return ($arg > 0) ? "SELECTED" : "";
 }
 
 // kontrollime, kas parameeter on kuupäev (kujul pp-kk-aaaa)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.3 2001/05/19 23:37:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.4 2001/05/21 16:28:32 kristo Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -816,6 +816,7 @@ class core extends db_connector
 	// the idea is this that it determines itself whether we go through the site (index.aw)
 	// or the orb (orb.aw) - for the admin interface
 	// you can force it to point to the admin interface
+	// this function also handles array arguments! 
 	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false)
 	{
 		global $ext;
@@ -823,7 +824,27 @@ class core extends db_connector
 		{
 			$cl_name = get_class($this);
 		}
-		$urs = join("&",$this->map2("%s=%s",$arr));
+
+		// handle arrays!
+		$ura = array();
+		foreach($arr as $k => $v)
+		{
+			if (is_array($v))
+			{
+				$stra = array();
+				foreach($v as $k2 => $v2)
+				{
+					$stra[] = $k."[$k2]=".$v2;
+				}
+				$str = join("&",$stra);
+			}
+			else
+			{
+				$str = $k."=".$v;
+			}
+			$ura[] = $str;
+		}
+		$urs = join("&",$ura);
 
 		// now figure out if we are in the admin interface. 
 		// how do we do that? easy :) we check the url for $baseurl/automatweb :)
