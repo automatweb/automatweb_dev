@@ -44,6 +44,11 @@
 </td>
 </tr>
 <tr>
+<td class="fform">Sulge aken nupp:</td><td class="fform">Kuvatud: <input type="checkbox" name="closewin" value="1" {VAR:closewin}>
+&nbsp;&nbsp;&nbsp;Tekst:<input type="text" name="closewin_value" value="{VAR:closewin_value}" size="20">
+</td>
+</tr>
+<tr>
 <td class="fform">{VAR:LC_FORMS_CHOOSE_FORMS_WHERE_ELEMENTS_TAKEN}:</td><td class="fform"><select class='small_button' name='forms[]' multiple size=7>{VAR:forms}</select></td>
 </tr>
 <tr>
