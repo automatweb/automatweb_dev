@@ -817,7 +817,7 @@ class dronline extends class_base
 		$tb = get_instance('toolbar');
 		$tb->add_cdata($this->parse());
 
-		$tb->add_end_cdata($this->get_tb_end_cdata($arr, $id));
+		$tb->add_cdata($this->get_tb_end_cdata($arr, $id),"right");
 
 		$ob = $this->get_object($id);
 		if ($arr['query'] != '' || $ob['meta']['lock_q'] == 1)
@@ -964,7 +964,7 @@ class dronline extends class_base
 			'img' => 'save.gif'
 		));
 
-		$tb->add_end_cdata($this->get_tb_end_cdata($arr, $id, 'blokk'));
+		$tb->add_cdata($this->get_tb_end_cdata($arr, $id, 'blokk'),"right");
 
 		$ob = $this->get_object($id);
 		if ($arr['query'] != '' || $ob['meta']['lock_q'] == 1)
@@ -1464,7 +1464,7 @@ class dronline extends class_base
 			return '';
 		}
 		$tb = get_instance('toolbar');
-		$tb->add_end_cdata($this->get_tb_end_cdata($arr, $id));
+		$tb->add_cdata($this->get_tb_end_cdata($arr, $id),"right");
 		return $tb->get_toolbar().$this->get_js();
 	}
 
