@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.32 2003/02/07 18:49:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.33 2003/02/07 19:00:38 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -3869,6 +3869,20 @@ class form extends form_base
 			}
 		}
 	}
+
+	////
+	// !returns the selected element of a form element
+	// right now works for listboxes only
+	function get_element_selection_id($id)
+	{
+		$el = $this->get_element_by_id($id);
+		if ($el)
+		{
+			$ev =  $el->get_selection_id($numeric);
+			return $ev;
+		}
+		return "";
+        }
 
 	////
 	// !sets the element value in the loaded entry to $val fort elements of type $type
