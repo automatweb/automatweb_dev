@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.138 2002/07/23 05:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.139 2002/07/23 12:52:44 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -181,7 +181,7 @@ class menuedit extends aw_template
 
 		foreach($HTTP_GET_VARS as $var => $val)
 		{
-			if ($var != "automatweb")	// just to make sure that each user does not get it's own copy
+			if ($var != "automatweb" && $var != "set_lang_id")	// just to make sure that each user does not get it's own copy
 			{
 				if (is_array($val))
 				{
@@ -2774,55 +2774,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 			$pers = serialize($par);
 			// pildi uploadimine
-			global $img_act,$img_act_type;
-			$tt2 = "";
-			if ($img_act != "none" && $img_act != "")
-			{
-				classload("images");
-				$t = new db_images;
-				$im = $t->_upload(array("filename" => $img_act, "file_type" => $img_act_type, "oid" => $id));
-				$img = $t->get_img_by_id($im["id"]);
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"data" => array(
-						"img_act_id" => $im["id"],
-						"img_act_url" => $img["url"],
-					),
-				));
-			}
-			if ($img2 != "none" && $img2 != "")
-			{
-				classload("images");
-				$t = new db_images;
-				$im = $t->_upload(array("filename" => $img2, "file_type" => $img2_type, "oid" => $id));
-				$img = $t->get_img_by_id($im["id"]);
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"data" => array(
-						"img2_id" => $im["id"],
-						"img2_url" => $img["url"],
-					),
-				));
-			}
-			if ($img3 != "none" && $img3 != "")
-			{
-				classload("images");
-				$t = new db_images;
-				$im = $t->_upload(array("filename" => $img3, "file_type" => $img3_type, "oid" => $id));
-				$img = $t->get_img_by_id($im["id"]);
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"data" => array(
-						"img3_id" => $im["id"],
-						"img3_url" => $img["url"],
-					),
-				));
-			}
+			$t = get_instance("image");
+			$ar = $t->add_upload_image("img_act", $id, $meta["img_act_id"]);
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"data" => array(
+					"img_act_id" => $ar["id"],
+					"img_act_url" => image::check_url($ar["url"]),
+				),
+			));
 
 			$num_menu_images = $this->cfg["num_menu_images"]; 
-
-			classload("images");
-			$t = new db_images;
 
 			$imgar = $meta["menu_images"];
 			for ($i=0; $i < $num_menu_images; $i++)
@@ -2833,17 +2795,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 				else
 				{
+					$ar = $t->add_upload_image("img".$i, $id, $imgar[$i]["id"]);
+					$imgar[$i]["id"] = $ar["id"];
+					$imgar[$i]["url"] = $ar["url"];
 					$imgar[$i]["ord"] = $img_ord[$i];
-					$var = "img".$i;
-					$var_t = "img".$i."_type";
-					global $$var, $$var_t;
-					if ($$var != "none" && $$var != "")
-					{
-						$im = $t->_upload(array("filename" => $$var, "file_type" => $$var_t, "oid" => $id));
-						$imgar[$i]["id"] = $im["id"];
-						$img = $t->get_img_by_id($im["id"]);
-						$imgar[$i]["url"] = $img["url"];
-					}
 				}
 			}
 
@@ -3420,8 +3375,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$pm = $this->parse("PMETHOD");
 		};
 
-		classload("images");
-		$t = new db_images;
 		$num_menu_images = $this->cfg["num_menu_images"];
 		$imgar = $meta["menu_images"];
 
@@ -3430,8 +3383,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$image = "";
 			if ($imgar[$i]["id"])
 			{
-				$img = $t->get_img_by_id($imgar[$i]["id"]);
-				$image = "<img src='".$img["url"]."'>";
+				$image = "<img src='".$imgar[$i]["url"]."'>";
 			}
 			$this->vars(array(
 				"nr" => $i,
@@ -5560,7 +5512,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$cnt = 0;
 			$imgar = array();
 
-			$t = new db_images;
+			$t = get_instance("image");
 			if ($row["img_id"])
 			{
 				$img = $t->get_img_by_id($row["img_id"]);

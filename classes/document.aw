@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.109 2002/07/23 05:25:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.110 2002/07/23 12:52:44 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -575,32 +575,17 @@ class document extends aw_template
 		}
 
 		// laeme vajalikud klassid
-		classload("images");
-		$img = new db_images;
-
 		// kui vaja on näidata ainult dokumendi leadi, siis see tehakse siin
  		if ($leadonly > -1) 
 		{
-			// we have some really stupid code here, me thinks
-			// stripime pildid välja. ja esimese pildi salvestame cachesse
-			// et seda mujalt kätte saaks
+			// stripime pildid välja. 
 			if ($strip_img) 
 			{
-				// otsime pilditage 
-		 		if (preg_match("/#p(\d+?)(v|k|p|)#/i",$doc["lead"],$match)) 
-				{
-					// asendame 
-					$idata = $img->get_img_by_oid($docid,$match[1]);
-					$this->li_cache[$docid] = $idata["url"];
-				} 
-				else 
-				{
-					// ei leidnud, asendame voimaliku pildi url-i transparent gif-iga
-					$this->vars(array("imurl" => "/images/trans.gif"));
-				};
 				// ja stripime leadist *koik* objektitagid välja.
+				$this->vars(array("imurl" => "/images/trans.gif"));
 				$doc["lead"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["lead"]);
 			};
+			// damn, that did NOT make any sense at all - terryf
 			$doc["content"] = $doc["lead"];
 		} 
 		else 
@@ -612,11 +597,8 @@ class document extends aw_template
 					if (preg_match("/#p(\d+?)(v|k|p|)#/i",$doc["lead"],$match)) 
 					{
 						// asendame 
-						$idata = $img->get_img_by_oid2($docid,$match[1]);
-						if (!$idata)
-						{
-							$idata = $img->get_img_by_oid($docid,$match[1]);
-						}
+						$img = get_instance("image");
+						$idata = $img->get_img_by_oid($docid,$match[1]);
 						$this->vars(array(
 							"imgref" => $idata["url"]
 						));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.53 2002/07/17 20:29:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.54 2002/07/23 12:52:44 kristo Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -104,7 +104,6 @@ class form_entry_element extends form_element
 
 	function gen_show_html()
 	{
-		$t = new db_images;
 		$lang_id = aw_global_get("lang_id");
 		$html = "";
 
@@ -300,7 +299,7 @@ class form_entry_element extends form_element
 			}
 			if ($this->arr["subtype"] == "order")
 			{
-				$loc = $this->mk_my_orb("show", array("id" => $this->arr["order_form"], "load_entry_data" => $this->form->entry_id,"section" => $GLOBALS["section"]),"form");
+				$loc = $this->mk_my_orb("show", array("id" => $this->arr["order_form"], "load_entry_data" => $this->form->entry_id,"section" => aw_global_get("section")),"form");
 				$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">";
 			}
 			else
@@ -312,8 +311,7 @@ class form_entry_element extends form_element
 
 		if ($this->arr["type"] == "alias")
 		{
-			classload("objects");
-			$obj = new objects();
+			$obj = get_instance("objects");
 			if ( ($this->arr["alias_type"] == 1) && (strlen($this->arr["alias_subtype"]) > 2) )
 			{
 				// we need to show the actual aliased object, not the one added to the output
@@ -414,9 +412,11 @@ class form_entry_element extends form_element
 			// we should use only one and perhaps it in the automatweb/images dir
 			// besides using transparent pixels for layout is SO 20st century
 			// but .. what the hell.
+			//
+			// ok, so now we use trans.gif from automatweb folder, not site folder. better now? - terryf
 			if ($this->arr["sep_pixels"] > 0)
 			{
-				$html.="<img src='$baseurl/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0 />";
+				$html.="<img src='$baseurl/automatweb/images/trans.gif' width=".$this->arr["sep_pixels"]." height=1 border=0 />";
 			}
 		}
 

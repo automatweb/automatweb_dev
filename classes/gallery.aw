@@ -1,7 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.26 2002/07/12 16:57:55 kristo Exp $
-classload("images");
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.27 2002/07/23 12:52:44 kristo Exp $
 
 class gallery extends aw_template
 {
@@ -259,64 +258,29 @@ class gallery extends aw_template
 		{
 			$page = 0;
 		}
-//		echo "load! \n<br>";
-//		flush();
 
 		for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
 		{
-//			echo "row $row ! \n<br>";
-//			flush();
 			for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 			{
-//				echo "col $col ! \n<br>";
-//				flush();
-				$t = new db_images;
-				$var = "tn_".$row."_".$col;
-				global $$var,${$var."_type"};
-				if ($$var != "none")
+				$t = get_instance("image");
+				$ar = $t->add_upload_image("tn_".$row."_".$col, $this->id, $this->arr[$page]["content"][$row][$col]["tn_id"]);
+				if (isset($ar["sz"]))
 				{
-					if ($this->arr[$page]["content"][$row][$col]["tn_id"] != 0)
-					{
-						$ar = $t->_replace(array("filename" => $$var,"file_type" => ${$var."_type"}, "poid" => $this->arr[$page]["content"][$row][$col]["tn_id"]));
-						$pid = $ar["id"];
-					}
-					else
-					{
-						$ar = $t->_upload(array("filename" => $$var,"file_type" => ${$var."_type"}, "oid" => $this->id));
-						$pid = $ar["id"];
-					}
-					$sz = getimagesize($$var);
-					$img = $t->get_img_by_id($pid);
-					$this->arr[$page]["content"][$row][$col]["tn_id"] = $img["id"];
-					$this->arr[$page]["content"][$row][$col]["tnurl"] = image::check_url($img["url"]);
-					$this->arr[$page]["content"][$row][$col]["tnxsize"] = $sz[0];
-					$this->arr[$page]["content"][$row][$col]["tnysize"] = $sz[1];
+					$this->arr[$page]["content"][$row][$col]["tn_id"] = $ar["id"];
+					$this->arr[$page]["content"][$row][$col]["tnurl"] = image::check_url($ar["url"]);
+					$this->arr[$page]["content"][$row][$col]["tnxsize"] = $ar["sz"][0];
+					$this->arr[$page]["content"][$row][$col]["tnysize"] = $ar["sz"][1];
 				}
 
-				$t = new db_images;
-				$var = "im_".$row."_".$col;
-				global $$var,${$var."_type"};
-
-				if ($$var != "none")
+				$ar = $t->add_upload_image("im_".$row."_".$col, $this->id, $this->arr[$page]["content"][$row][$col]["im_id"]);
+				if (isset($ar["sz"]))
 				{
-					if ($this->arr[$page]["content"][$row][$col]["im_id"] != 0)
-					{
-						$ar = $t->_replace(array("filename" => $$var,"file_type" => ${$var."_type"}, "poid" => $this->arr[$page]["content"][$row][$col]["im_id"]));
-						$pid = $ar["id"];
-					}
-					else
-					{
-						$ar = $t->_upload(array("filename" => $$var,"file_type" => ${$var."_type"}, "oid" => $this->id));
-						$pid = $ar["id"];
-					}
-					$sz = getimagesize($$var);
-					$img = $t->get_img_by_id($pid);
-					$this->arr[$page]["content"][$row][$col]["im_id"] = $img["id"];
-					$this->arr[$page]["content"][$row][$col]["bigurl"] = image::check_url($img["url"]);
-					$this->arr[$page]["content"][$row][$col]["xsize"] = $sz[0];
-					$this->arr[$page]["content"][$row][$col]["ysize"] = $sz[1];
+					$this->arr[$page]["content"][$row][$col]["im_id"] = $ar["id"];
+					$this->arr[$page]["content"][$row][$col]["bigurl"] = image::check_url($ar["url"]);
+					$this->arr[$page]["content"][$row][$col]["xsize"] = $ar["sz"][0];
+					$this->arr[$page]["content"][$row][$col]["ysize"] = $ar["sz"][1];
 				}
-
 
 				$var = "caption_".$row."_".$col;
 				global $$var;
@@ -383,11 +347,6 @@ class gallery extends aw_template
 		{
 			extract($page);	// via orb call
 			$this->load($id,$page);
-		}
-
-		if ($page < 1)
-		{
-			$page = 1;
 		}
 
 		if ($this->arr["is_automatic_slideshow"] == 1)
@@ -518,6 +477,10 @@ class gallery extends aw_template
 		}
     else
 		{
+			if ($page < 1)
+			{
+				$page = 1;
+			}
 			$this->read_template("show.tpl");
 
 			for ($row = 0; $row < $this->arr[$page-1]["rows"]; $row++)
@@ -539,7 +502,7 @@ class gallery extends aw_template
 							"id" => $this->id,
 							"col" => $col,
 							"row" => $row,
-							"page" => $page
+							"page" => $page-1
 						),"gallery", false,true,"/");
 						$url = "javascript:rremote(\"".$gurl."\",$xsize,$ysize)";
 						$target = "";

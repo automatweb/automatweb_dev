@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.33 2002/06/10 18:10:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.34 2002/07/23 12:52:44 kristo Exp $
 // table.aw - tabelite haldus
 
 
-classload("images");
 classload("style");
 class table extends aw_template
 {
@@ -37,6 +36,21 @@ class table extends aw_template
 		{
 			$align = "right";
 		}
+		// if oid is in the arguments check whether that object is attached to 
+		// this document and display it instead of document
+		$oid = aw_global_get("oid");
+		if ($oid)
+		{
+			$q = "SELECT * FROM aliases WHERE source = '$id' AND target = '$oid' AND type =" . CL_FILE;
+			$this->db_query($q);
+			$row = $this->db_next();
+			if ($row)
+			{
+				$fi = get_instance("file");
+				$fl = $fi->get_file_by_id($oid);
+				return $fl["content"];
+			};
+		}
 		$replacement = $this->show(array("id" => $alias["target"],"align" => $align));
 		return $replacement;
 	}
@@ -57,10 +71,18 @@ class table extends aw_template
 			"preview_url" => $this->mk_my_orb("view", array("id" => $this->id)),
 			"import_url" => $this->mk_my_orb("gen_import", array("id" => $this->id)),
 		);
+		if (file_exists($this->template_dir . "/navigation.tpl"))
+		{
+			$tpl = $this->template_dir . "/navigation.tpl";
+		}
+		else
+		{
+			$tpl = $this->adm_template_dir . "/navigation.tpl";
+		}
 		$retval = $xm->build_menu(array(
 			"vars"  => array_merge($vars,$links),
 			"xml"   => $basedir . "/xml/tablegen_menu.xml",
-			"tpl"   => $this->template_dir . "/navigation.tpl",
+			"tpl"   => $tpl,
 			"activelist" => $activelist,
 		));
 		return $retval;
@@ -1458,6 +1480,21 @@ class table extends aw_template
 	function show($arr)
 	{
 		extract($arr);
+		// if oid is in the arguments check whether that object is attached to 
+		// this document and display it instead of document
+		$oid = aw_global_get("oid");
+		if ($oid)
+		{
+			$q = "SELECT * FROM aliases WHERE source = '$id' AND target = '$oid' AND type =" . CL_FILE;
+			$this->db_query($q);
+			$row = $this->db_next();
+			if ($row)
+			{
+				$fi = get_instance("file");
+				$fl = $fi->get_file_by_id($oid);
+				return $fl["content"];
+			};
+		}
 		$this->load_table($id);
 		if ($GLOBALS["is_filter$id"])
 		{
