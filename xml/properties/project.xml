@@ -204,6 +204,16 @@
                   <clid>CL_IMAGE</clid>
                   <caption>Pilt</caption>
             </PRJ_IMAGE>
+            <ORDERER>
+                  <value>9</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>tellija</caption>
+            </ORDERER>
+            <IMPLEMENTOR>
+                  <value>10</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>teostaja</caption>
+            </IMPLEMENTOR>
       </reltypes>
 </properties>
 
