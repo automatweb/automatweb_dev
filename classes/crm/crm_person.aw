@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.74 2005/03/14 17:27:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.75 2005/03/16 12:10:11 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -655,7 +655,7 @@ class crm_person extends class_base
 				}
 				$data["value"] = html::get_change_url(
 					$tmp->id(),
-					array(),
+					array("return_url" => get_ru()),
 					$tmp->name()
 				);
 				break;

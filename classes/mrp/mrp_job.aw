@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.18 2005/03/15 14:08:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.19 2005/03/16 12:10:11 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -454,9 +454,9 @@ class mrp_job extends class_base
 			return ERROR;///!!! ...
 		}
 
-		// $project =& $this->get_project ($arr);
-		// $project->set_prop ("state", MRP_STATUS_ABORTED);
-		// $project->save ();
+		$project = obj($this_object->prop("project"));
+		$project->set_prop ("state", MRP_STATUS_ABORTED);
+		$project->save ();
 //!!! siin vist tuleks panna projektile ka abort aga ainult siis kui leidub t8id mis eeldavad antud t88 valmimist
 //!!! siin tuleb ka abordikommentaare n6uda kuidagi
 

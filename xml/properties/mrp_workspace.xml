@@ -636,6 +636,19 @@
             <caption>Skaala ajaühik</caption>
       </property>
       <property>
+            <name>printer_legend</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
+            </group>
+            <type>text</type>
+            <caption>Legend</caption>
+      </property>
+      <property>
             <name>printer_jobs</name>
             <table>objects</table>
             <field>meta</field>
@@ -648,19 +661,6 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-      </property>
-      <property>
-            <name>printer_legend</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-            </group>
-            <type>text</type>
-            <caption>Legend</caption>
       </property>
       <property>
             <name>pj_case_header</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.45 2005/03/16 10:58:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.46 2005/03/16 12:10:11 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -194,10 +194,11 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@caption Skaala ajaühik
 
 @default group=grp_printer_current,grp_printer_old,grp_printer_done
-	@property printer_jobs type=table no_caption=1
 
 	@property printer_legend type=text 
 	@caption Legend
+
+	@property printer_jobs type=table no_caption=1
 
 	// these are shown when a job is selected
 	@property pj_case_header type=text no_caption=1 store=no
