@@ -42,6 +42,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1
 @caption Asutatud
 
+@property priority type=textbox table=kliendibaas_firma 
+@caption Prioriteet
+
 ------ Üldine - Tegevused grupp -----
 @default group=org_sections
 
@@ -1079,21 +1082,7 @@ class crm_company extends class_base
 
 			case "customer_listing_tree":
 			{
-				$tree_inst = &$arr['prop']['vcl_inst'];	
-				$node_id = 0;
-				$this->active_node = (int)$arr['request']['category'];
-				$tree_inst->set_only_one_level_opened(1);
-
-				$this->generate_tree(array(
-							'tree_inst' => &$tree_inst,
-							'obj_inst' => $arr['obj_inst'],
-							'node_id' => &$node_id,
-							'conn_type' => 'RELTYPE_CATEGORY',
-							'skip' => array(CL_CRM_COMPANY),
-							'attrib' => 'category',
-							'leafs' => false,
-							'style' => 'nodetextbuttonlike',
-				));
+				$this->customer_listing_tree($arr);
 				break;
 			}
 			case "my_customers_listing_tree":
@@ -4965,6 +4954,25 @@ class crm_company extends class_base
 			'conn_type' => 'RELTYPE_SECTION',
 			'attrib' => 'unit',
 			'leafs' => true,
+		));
+	}
+
+	function customer_listing_tree($arr)
+	{
+		$tree_inst = &$arr['prop']['vcl_inst'];	
+		$node_id = 0;
+		$this->active_node = (int)$arr['request']['category'];
+		$tree_inst->set_only_one_level_opened(1);
+
+		$this->generate_tree(array(
+			'tree_inst' => &$tree_inst,
+			'obj_inst' => $arr['obj_inst'],
+			'node_id' => &$node_id,
+			'conn_type' => 'RELTYPE_CATEGORY',
+			'skip' => array(CL_CRM_COMPANY),
+			'attrib' => 'category',
+			'leafs' => false,
+			'style' => 'nodetextbuttonlike',
 		));
 	}
 }

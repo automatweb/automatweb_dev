@@ -85,6 +85,14 @@
             <caption>Asutatud</caption>
       </property>
       <property>
+            <name>priority</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <field>priority</field>
+            <caption>Prioriteet</caption>
+      </property>
+      <property>
             <name>kaubamargid</name>
             <table>kliendibaas_firma</table>
             <group>org_sections</group>

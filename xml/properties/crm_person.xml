@@ -62,6 +62,14 @@
             <caption>Isikukood</caption>
       </property>
       <property>
+            <name>ext_id</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>subclass</field>
+            <caption>Sidussüsteemi ID</caption>
+      </property>
+      <property>
             <name>gender</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
