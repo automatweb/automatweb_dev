@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.52 2002/10/04 12:20:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.53 2002/10/09 10:21:14 duke Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -2038,6 +2038,23 @@ class users extends users_user
 		}
 		die();
 //		return $this->mk_my_orb("gen_list");
+	}
+
+	////
+	// !Encrypts the passwords in the database with md5
+	// don't forget to turn on auth.md5_passwords after you do that,
+	// otherwise it will be impossible to log in.
+	function pwconv($args = array())
+	{
+		print "Encrypting passwords with MD5. This may take a few moments<br>";
+		flush();
+		$q = "UPDATE users SET password = md5(password)";
+		$this->db_query($q);
+		print "Done!<br> Don't forget to turn on auth.md5_passwords or you wont be able to log in anymore!";
+
+		// here be dragons .. or rather the code to set the
+		// variable in the site ini file
+
 	}
 }
 ?>
