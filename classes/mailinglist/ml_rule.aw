@@ -52,7 +52,7 @@ class ml_rule extends aw_template
 		
 		if (!isset($this->ml))
 		{
-			$this->ml = get_instance("ml_list");
+			$this->ml = get_instance("mailinglist/ml_list");
 		};
 		load_vcl("date_edit");
 		$date_edit = new date_edit(time());
@@ -462,7 +462,7 @@ class ml_rule extends aw_template
 				$t["ml_sent_mails"]=1;
 				if (!isset($this->ml))
 				{
-					$this->ml=get_instance("ml_list");
+					$this->ml=get_instance("mailinglist/ml_list");
 				};
 				$vn=$this->ml->get_all_varnames();
 				$vars=unserialize($r["trig_usedvars"]);
@@ -569,7 +569,7 @@ class ml_rule extends aw_template
 					case A_ADDLIST:
 						if (!isset($this->ml))
 						{
-							$this->ml=get_instance("ml_list");
+							$this->ml=get_instance("mailinglist/ml_list");
 						};
 						list($lid,$lgroup)=explode(":",$r["actionid"]);
 						$lid=(int)$lid;
@@ -582,7 +582,7 @@ class ml_rule extends aw_template
 						
 						if (!isset($this->ml))
 						{
-							$this->ml=get_instance("ml_list");
+							$this->ml=get_instance("mailinglist/ml_list");
 						};
 						list($lid,$lgroup)=explode(":",$r["actionid"]);
 						$lid=(int)$lid;
@@ -593,8 +593,7 @@ class ml_rule extends aw_template
 					case A_DELETE:
 						if (!isset($this->mlmember))
 						{
-							classload("ml_member");
-							$this->mlmember=get_instance("ml_member");
+							$this->mlmember=get_instance("mailinglist/ml_member");
 						};
 						$this->mlmember->orb_delete(array("id" => $mid,"_inner_call" => 1));
 						//echo("A_DELETE $mid<br>");//dbg
