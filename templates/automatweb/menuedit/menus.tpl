@@ -232,7 +232,7 @@ aste07
 <!-- SUB: LINE -->
 <tr class="{VAR:is_cut}">
 <td height="15" class="celltext" align=center><a href='menuedit_right.{VAR:ext}?parent={VAR:menu_id}&period={VAR:period}' target='list'><img border=0 src='{VAR:imgref}'></a></td>
-<td height="15" onMouseOver="this.style.backgroundColor='#A2BCCC'; this.style.cursor='hand';" onMouseOut="this.style.backgroundColor='#DBE8EE';" onclick="window.parent.parent.frames['list'].location.href='menuedit_right.{VAR:ext}?parent={VAR:r_menu_id}&period={VAR:period}'" class="celltext">&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:r_menu_id}&period={VAR:period}' target='list'>{VAR:name}</a>&nbsp;</td>
+<td height="15" onMouseOver="this.style.backgroundColor='#A2BCCC';" onMouseOut="this.style.backgroundColor='#DBE8EE';" class="celltext">&nbsp;<a href='menuedit_right.{VAR:ext}?parent={VAR:r_menu_id}&period={VAR:period}' target='list'>{VAR:name}</a>&nbsp;</td>
 <td class="celltext" align=center>
 <!-- SUB: NFIRST -->
 <input class='small_button' type=text NAME='ord[{VAR:menu_id}]' VALUE='{VAR:menu_order}' SIZE=3 MAXLENGTH=4><input type='hidden' name='old_ord[{VAR:menu_id}]' value='{VAR:menu_order}'>

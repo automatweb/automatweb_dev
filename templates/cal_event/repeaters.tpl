@@ -24,7 +24,7 @@ function ed_rep()
 		};
 		if (active == 0)
 		{
-			alert('Vali tsükkel, mida kustutada soovid');
+			alert('Vali tsükkel, mida muuta soovid');
 		}
 		else
 		{

@@ -304,7 +304,7 @@ aste07
 <tr class="{VAR:is_cut}">
 <td height="15" class="celltext"><img src="{VAR:icon}"></td>
 <!-- SUB: CAN_CHANGE -->
-<td height="15" class="celltext" onMouseOver="this.style.backgroundColor='#A2BCCC'; this.style.cursor='hand';" onMouseOut="this.style.backgroundColor='#DBE8EE';" onclick="window.location.href='{VAR:change}'">&nbsp;
+<td height="15" class="celltext" onMouseOver="this.style.backgroundColor='#A2BCCC';" onMouseOut="this.style.backgroundColor='#DBE8EE';">&nbsp;
 <a {VAR:target} href="{VAR:change}">{VAR:name}</a>
 &nbsp;</td>
 <!-- END SUB: CAN_CHANGE -->

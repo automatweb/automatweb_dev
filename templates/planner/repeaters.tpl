@@ -451,7 +451,7 @@ function toggle_year()
 <tr>
 <td colspan="3" valign="top" class="reptext">
 <input type="radio" name="rep" value="1" checked>{VAR:LC_PLANNER_REPEAT_UNTIL_SAID} (forever)<br>
-<input type="radio" name="rep" value="2">{VAR:LC_PLANNER_RESERVE}<input type="text" class="repform" value="6" name="repeats" size="2"> {VAR:LC_PLANNER_ORDER_TIME}<br>
+<input type="radio" name="rep" value="2">{VAR:LC_PLANNER_RESERVE}<input type="text" class="repform" value="{VAR:repeats}" name="repeats" size="2"> {VAR:LC_PLANNER_ORDER_TIME}<br>
 <input type="radio" name="rep" value="3">{VAR:LC_PLANNER_REPEAT_UNTIL}
 {VAR:repend}
 </td>

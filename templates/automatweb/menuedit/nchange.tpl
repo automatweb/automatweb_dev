@@ -286,7 +286,7 @@ function savemenu() {
 		href="javascript:savemenu()"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" WIDTH="25" HEIGHT="25" BORDER=0 ALT="SAVE"></a></td><td class="tableinside" valign="bottom">
 
 
-		<table cellspacing="0" cellpadding="0">
+		<table cellspacing="0" cellpadding="0" border="0">
 		<tr>
 	
 		
@@ -468,6 +468,10 @@ function savemenu() {
 			<td class="celltext" align="right">&nbsp;Alias:&nbsp;</td>
 			<td class="celltext"><input type='text' NAME='alias' VALUE='{VAR:alias}' size=35></td>
 		</tr>
+		<tr class="aste07">
+			<td class="celltext" align="right">&nbsp;T&uuml;&uuml;p:&nbsp;</td>
+			<td class="celltext"><select name='type'>{VAR:types}</select></td>
+		</tr>
 		<tr>
 			<td class="celltext" align="right">&nbsp;V&auml;rv:&nbsp;</td>
 			<td class="celltext"><input type='text' NAME='color' VALUE='{VAR:color}' size=7>&nbsp;<a href="#" onclick="varvivalik('color');"> Vali </a></td>
@@ -492,6 +496,10 @@ function savemenu() {
 		<tr class="aste07">
 			<td class="celltext"  align="right" valign="top">&nbsp;{VAR:LC_MENUEDIT_COMMENT}:&nbsp;</td>
 			<td class="celltext"><textarea NAME='comment' cols=30 rows=3>{VAR:comment}</textarea></td>
+		</tr>
+		<tr>
+			<td class="celltext" align="right">&nbsp;Failinimi:&nbsp;</td>
+			<td class="celltext"><input type='text' NAME='aip_filename' VALUE='{VAR:aip_filename}' size=7></td>
 		</tr>
 
 
