@@ -1,18 +1,28 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.4 2001/05/22 07:05:18 kristo Exp $
-class db_config extends aw_template {
-	function db_config() {
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.5 2001/05/22 07:23:48 kristo Exp $
+class db_config extends aw_template 
+{
+	function db_config() 
+	{
 		$this->db_init();
 		$this->tpl_init("automatweb/config");
 		$this->sub_merge = 1;
 	}
 	
-	function _get_config($ckey) {
+	function _get_config($ckey) 
+	{
 		$q = "SELECT content FROM config WHERE ckey = '$ckey'";
-		return $this->db_fetch_field($q,"content");
+		$ret = $this->db_fetch_field($q,"content");
+		if ($ret == false)
+		{
+			// no such key, so create it
+			$this->db_query("INSERT INTO config(ckey) VALUES('$ckey')");
+		}
+		return $ret;
 	}
 
-	function xml_start_element($parser,$name,$attrs) { 
+	function xml_start_element($parser,$name,$attrs) 
+	{ 
 		$temp = "";
 		if ($name == "FIELD") {
 			while(list($k,$v) = each($attrs)) {
@@ -22,15 +32,18 @@ class db_config extends aw_template {
 		};
 	}
 	
-	function xml_end_element($parser,$name) {
+	function xml_end_element($parser,$name) 
+	{
 	}
 
-	function get_config($ckey) {
+	function get_config($ckey) 
+	{
 		$content = rtrim($this->_get_config($ckey));
 		return $this->__get_config($content);
 	}
 	
-	function __get_config($content) {
+	function __get_config($content) 
+	{
 		$this->data = array();
 		$xml_parser = xml_parser_create();
 		xml_set_object($xml_parser,&$this);
@@ -43,7 +56,8 @@ class db_config extends aw_template {
 		return $this->data;
 	}
 
-	function _set_config($ckey,$content) {
+	function _set_config($ckey,$content) 
+	{
 		$this->quote($content);
 		$q = "UPDATE config
 			SET content = '$content'
