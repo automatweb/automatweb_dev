@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.3 2003/12/07 19:43:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.4 2004/01/09 10:30:21 kristo Exp $
 // document_import.aw - Dokumentide import 
 /*
 
@@ -104,7 +104,7 @@ class document_import extends class_base
 							@unlink($args["obj_inst"]->meta("temp_file"));
 						}
 						$args["obj_inst"]->set_meta("temp_file",$tf);
-						$args["obj_inst"]->set_meta("orig_filename") = $_FILES["file"]["name"];
+						$args["obj_inst"]->set_meta("orig_filename",$_FILES["file"]["name"]);
 					}
 					else
 					{
