@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.12 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.13 2001/07/17 20:54:23 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -30,6 +30,21 @@ class users extends users_user
 	// $data = $users->get_user_config(array(
 	//		"uid" => "duke",
 	//		"key" => "coolness_factor",));
+
+	function rpc_getuser($args = array())
+	{
+		$uid = $args[0];
+		$q = "SELECT * FROM users WHERE uid = '$uid'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		$block = array();
+		$block["uid"] = $row["uid"];
+		$block["email"] = $row["email"];
+		$block["logins"] = $row["logins"];
+		$block["created"] = $row["created"];
+		return $block;
+	}
+
 	function get_user_config($args = array())
 	{
 		extract($args);
@@ -455,7 +470,7 @@ class users extends users_user
 		$id = $this->new_object(array("parent" => $parent, "class_id" => CL_PSEUDO, "status" => 2, "name" => $name));
 		$this->db_query("INSERT INTO menu(id,type) values($id,".MN_HOME_FOLDER_SUB.")");
 		global $status_msg;
-		$status_msg = "Folder lisatud";
+		$status_msg = LC_USERS_FOLDER_ADDED;
 		session_register("status_msg");
 
 		return $this->mk_my_orb("gen_home_dir", array("id" => $parent));
@@ -538,7 +553,7 @@ class users extends users_user
 	function change_pwd($arr)
 	{
 		extract($arr);
-		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array())."'>Kasutajad</a>");
+		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array()).LC_USERS_USERS);
 		$u = $this->fetch($id);
 		$this->read_template("changepwd.tpl");
 		$this->vars(array("email" => $u[email],
@@ -563,7 +578,7 @@ class users extends users_user
 		extract($arr);
 		if ($arr[pwd] != $arr[pwd2])
 		{
-			return $this->mk_orb("change_pwd", array("id" => $id, "error" => "Parolid peavad oelma samad!"));
+			return $this->mk_orb("change_pwd", array("id" => $id, "error" => LC_USERS_PASSW_NOT_SAME));
 		}
 
 		if ($arr[pwd] != "")
@@ -682,37 +697,37 @@ class users extends users_user
 		$row = $this->db_next();
 		if ($row)
 		{
-			$add_state[error] = "<b><font color='red'>Selline kasutaja juba on, vali uus kasutajanimi.</font></b>";
+			$add_state[error] = "<b><font color='red'>LC_USERS_IS_ALREADY_USER</font></b>";
 			return false;
 		}
 
 		if (!is_valid("uid",$a_uid))
 		{
-			$add_state[error] = "<b><font color='red'>Kasutajanimes tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.</font></b>";
+			$add_state[error] = "<b><font color='red'>LC_USERS_USERNAME_COND</font></b>";
 			return false;
 		}
 
 		if ($pass != $pass2)
 		{
-			$add_state[error] = "<b><font color='red'>Paroolid ei kattu!</font></b>";
+			$add_state[error] = "<b><font color='red'>LC_USERS_PASSW_DONT_SAME</font></b>";
 			return false;
 		}
 
 		if (!is_valid("password", $pass))
 		{
-			$add_state[error] = "<b><font color='red'>Paroolis tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.</font></b>";
+			$add_state[error] = "<b><font color='red'>LC_USERS_PASSW_COND</font></b>";
 		return false;
 		}
 
 		if (strlen($a_uid) < 3)
 		{
-			$add_state[error] = "<b><font color='red'>Kasutajanimi peab olema v&auml;hemalt 3 t&auml;he pikkune.</font></b>";
+			$add_state[error] = "<b><font color='red'>LC_USERS_USERNAME_THREE_LETTERS</font></b>";
 			return false;
 		}
 
 		if (strlen($pass) < 3)
 		{
-			$add_state[error] = "<b><font color='red'>Parool peab olema v&auml;hemalt 3 t&auml;he pikkune.</font></b>";
+			$add_state[error] = "<b><font color='red'>LC_USERS_PASSW_THREE_LETTERS</font></b>";
 			return false;
 		}
 		$add_state[error] = "";
@@ -724,7 +739,7 @@ class users extends users_user
 	function add_user($arr)
 	{
 		extract($arr);
-		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array())."'>Kasutajad</a>");
+		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array()).LC_USERS_USERS);
 		// siin hoitaxe forme, mis kasutaja on selle sessiooni jooxul t2itnud.
 		global $session_filled_forms,$add_state;
 
@@ -875,7 +890,7 @@ class users extends users_user
 		$id = $GLOBALS["uid"];
 		if ($id == "")
 		{
-			return "Andmete muutmiseks peate olema sisse logitud!<br>";
+			return LC_USERS_NOT_LOGGED_IN;
 		}
 
 		// zero out formgen's user data cache
