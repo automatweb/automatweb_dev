@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.9 2002/08/29 03:11:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.10 2002/09/04 07:34:01 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -75,7 +75,10 @@ class menu_cache extends aw_template
 					FROM objects 
 						      LEFT JOIN menu ON menu.id = objects.oid
           WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")
-									AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
+									AND menu.type != ".MN_FORM_ELEMENT." 
+									AND menu.type != ".MN_HOME_FOLDER_SUB." 
+									AND menu.type != ".MN_HOME_FOLDER." 
+									AND $where $aa
           ORDER BY objects.parent, jrk,objects.created";
 
 //		echo "q = $q <br>";
