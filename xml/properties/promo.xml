@@ -151,7 +151,17 @@
             <type>table</type>
             <method>serialize</method>
             <store>no</store>
-            <caption>Vali menüüd, mille all kasti näidata</caption>
+            <caption>Vali men&amp;uuml;&amp;uuml;d, mille all kasti n&amp;auml;idata</caption>
+      </property>
+      <property>
+            <name>section_noshow</name>
+            <group>menus</group>
+            <table>objects</table>
+            <field>meta</field>
+            <type>table</type>
+            <method>serialize</method>
+            <store>no</store>
+            <caption>Vali men&amp;uuml;&amp;uuml;d, mille all kasti EI n&amp;auml;idata</caption>
       </property>
       <property>
             <name>last_menus</name>

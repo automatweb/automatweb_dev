@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.60 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.61 2005/03/29 12:58:26 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -55,7 +55,10 @@
 	@caption Näita igal pool
 
 	@property section type=table group=menus method=serialize store=no
-	@caption Vali menüüd, mille all kasti näidata
+	@caption Vali men&uuml;&uuml;d, mille all kasti n&auml;idata
+	
+	@property section_noshow type=table group=menus method=serialize store=no
+	@caption Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata
 	
 	@property last_menus type=table group=menus method=serialize store=no
 	@caption Vali menüüd, mille alt viimaseid dokumente võetakse
@@ -196,6 +199,10 @@ class promo extends class_base
 				$this->get_menus($arr);
 				break;
 
+			case "section_noshow":
+				$this->get_menus_noshow($arr);
+				break;
+
 			case "trans_all_langs":
 				if (!aw_ini_get("config.object_translation"))
 				{
@@ -221,6 +228,10 @@ class promo extends class_base
 		{
 			case "section":
 				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["request"]["include_submenus"]);
+				break;
+
+			case "section_noshow":
+				$arr["obj_inst"]->set_meta("section_no_include_submenus",$arr["request"]["include_no_submenus"]);
 				break;
 
 			case "ndocs":
@@ -276,6 +287,55 @@ class promo extends class_base
 					"name" => "include_submenus[".$c_o->id()."]",
 					"value" => $c_o->id(),
 					"checked" => $section_include_submenus[$c_o->id()],
+				)),
+			));
+		}
+	}
+
+	function get_menus_noshow($arr)
+	{
+		$obj = $arr["obj_inst"];
+		$section_no_include_submenus = $obj->meta("section_no_include_submenus");
+
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"talign" => "center",
+		));
+		$t->define_field(array(
+			"name" => "check",
+			"caption" => t("k.a. alammenüüd"),
+			"talign" => "center",
+			"width" => 80,
+			"align" => "center",
+		));
+
+		$conns = $obj->connections_from(array(
+			"type" => "RELTYPE_NO_SHOW_MENU"
+		));
+
+		foreach($conns as $c)
+		{
+			$c_o = $c->to();
+
+			$t->define_data(array(
+				"id" => $c_o->id(),
+				"name" => $c_o->path_str(array(
+					"max_len" => 3
+				)),
+				"check" => html::checkbox(array(
+					"name" => "include_no_submenus[".$c_o->id()."]",
+					"value" => $c_o->id(),
+					"checked" => $section_no_include_submenus[$c_o->id()],
 				)),
 			));
 		}
@@ -738,11 +798,25 @@ class promo extends class_base
 			}
 
 			// do ignore menus
+			$ign_subs = $o->meta("section_no_include_submenus");
 			foreach($o->connections_from(array("type" => "RELTYPE_NO_SHOW_MENU")) as $ignore_menu)
 			{
-				if ($inst->sel_section_real == $ignore_menu->prop("to"))
+				$ignore_menu_to = $ignore_menu->prop("to");
+				if ($inst->sel_section_real == $ignore_menu_to)
 				{
 					$show_promo = false;
+				}
+				else
+				if (isset($ign_subs[$ignore_menu_to]))
+				{
+					// get path for current menu and check if ignored menu is above it
+					foreach($inst->path_ids as $_path_id)
+					{
+						if ($_path_id == $ignore_menu_to)
+						{
+							$show_promo = false;
+						}
+					}
 				}
 			}
 
