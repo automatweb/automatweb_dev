@@ -4,6 +4,9 @@
 		<action name="create_group">
 			<function name="create_group">
 				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="group_parent" />
+					<required name="return_url" />
 				</arguments>
 			</function>
 		</action>
@@ -11,6 +14,9 @@
 		<action name="create_grid">
 			<function name="create_grid">
 				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="group_parent" />
+					<required name="return_url" />
 				</arguments>
 			</function>
 		</action>
@@ -18,6 +24,10 @@
 		<action name="create_element">
 			<function name="create_element">
 				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="element_type" />
+					<required name="group_parent" />
+					<required name="return_url" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.176 2005/02/17 10:27:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.177 2005/03/04 13:56:03 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -10,6 +10,16 @@ if (!defined("DEFS"))
 	define("SERIALIZE_NATIVE",3);
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
+
+	function get_ru()
+	{
+		return urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI"));
+	}
+
+	function post_ru()
+	{
+		return aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
+	}
 
 	function convert_unicode($source)
 	{

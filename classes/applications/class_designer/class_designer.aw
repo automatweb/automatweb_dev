@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.3 2005/03/03 15:20:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.4 2005/03/04 13:56:04 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -76,17 +76,21 @@ class class_designer extends class_base
 		));
 		
 		$this->elements = array(
-				CL_PROPERTY_TEXTBOX,CL_PROPERTY_CHOOSER,
-				CL_PROPERTY_CHECKBOX,CL_PROPERTY_TABLE,
-				CL_PROPERTY_TEXTAREA,CL_PROPERTY_SELECT,
-				CL_PROPERTY_TREE,CL_PROPERTY_TOOLBAR
-				);
+			CL_PROPERTY_TEXTBOX,CL_PROPERTY_CHOOSER,
+			CL_PROPERTY_CHECKBOX,CL_PROPERTY_TABLE,
+			CL_PROPERTY_TEXTAREA,CL_PROPERTY_SELECT,
+			CL_PROPERTY_TREE,CL_PROPERTY_TOOLBAR
+		);
+
+		$this->all_els = $this->elements;
+		$this->all_els[] = CL_PROPERTY_GROUP;
+		$this->all_els[] = CL_PROPERTY_GRID;
 	}
 
 	function callback_mod_reforb(&$arr)
 	{
-		$arr["return_url"] = aw_global_get("REQUEST_URI");
-		$arr["group_parent"] = $_GET["group_parent"];
+		$arr["return_url"] = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
+		$arr["group_parent"] = $_GET["group_parent"] ? $_GET["group_parent"] : $arr["id"];
 	}
 
 	function callback_pre_edit($arr)
@@ -205,7 +209,11 @@ class class_designer extends class_base
 
 		));
 		$el_list = $el_tree->to_list();
-		foreach($el_list->arr() as $el)
+		$ellist = $el_list->arr();
+		$this->__elord = $o->meta("element_ords");
+		usort($ellist, array(&$this, "__ellist_comp"));
+
+		foreach($ellist as $el)
 		{
 			$clid = $el->class_id();
 			$iconurl = "";
@@ -249,14 +257,22 @@ class class_designer extends class_base
 		$tb->add_menu_item(array(
 			"parent" => "new",
 			"text" => "Uus tab",
-			"link" => "javascript:create_group();",
+			"link" => $this->mk_my_orb("create_group", array(
+				"group_parent" => $this->group_parent, 
+				"return_url" => get_ru(),
+				"id" => $arr["obj_inst"]->id()
+			)),
 			"disabled" => !$this->can_add["group"],
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "new",
 			"text" => "Uus grid",
-			"link" => "javascript:create_grid();",
+			"link" => $this->mk_my_orb("create_grid", array(
+				"group_parent" => $this->group_parent, 
+				"return_url" => get_ru(),
+				"id" => $arr["obj_inst"]->id()
+			)),
 			"disabled" => !$this->can_add["grid"],
 		));
 
@@ -271,7 +287,12 @@ class class_designer extends class_base
 			$tb->add_menu_item(array(
 				"parent" => "new",
 				"text" => $clinf[$element]["name"],
-				"link" => "javascript:create_element($element);",
+				"link" => $this->mk_my_orb("create_element", array(
+					"element_type" => $element, 
+					"group_parent" => $this->group_parent, 
+					"return_url" => get_ru(),
+					"id" => $arr["obj_inst"]->id()
+				)),
 				"disabled" => !$this->can_add["element"],
 			));
 		};
@@ -356,6 +377,7 @@ class class_designer extends class_base
 
 		$elist = new object_list(array(
 			"parent" => $this->group_parent,
+			"class_id" => $this->all_els
 		));
 
 		$clinf = aw_ini_get("classes");
@@ -390,37 +412,50 @@ class class_designer extends class_base
 		};
 
 		$t->set_numeric_field("ord");
-
-		$t->sort_by(array(
-			"field" => array("ord", "created"),
-			"sorder" => array("ord" => "desc", "created" => "asc")
-		));
+		$t->set_default_sortby("ord");
+		$t->sort_by();
 	}
 
 	/** 
 		@attrib name=create_group
+
+		@param id required type=int acl=view
+		@param group_parent required
+		@param return_url required
+
 	**/
 	function create_group($arr)
 	{
 		//print "inside create_group<br>";
 		// group_parent on see mille alla teha
 		// tmp_name on uue grupi nimi ... so what could be easier
-		if (!empty($arr["tmp_name"]))
-		{
-			$g = new object();
-			$g->set_class_id(CL_PROPERTY_GROUP);
-			// XX: check whether we are allowed to add groups here
-			$g->set_parent($arr["group_parent"]);
-			$g->set_status(STAT_ACTIVE);
-			$g->set_name($arr["tmp_name"]);
-			$g->save();
-		};
-		$arr["action"] = "change";
-		return $this->finish_action($arr);
+		$g = new object();
+		$g->set_class_id(CL_PROPERTY_GROUP);
+		// XX: check whether we are allowed to add groups here
+		$g->set_parent($arr["group_parent"]);
+		$g->set_status(STAT_ACTIVE);
+
+		$ol = new object_list(array("class_id" => CL_PROPERTY_GROUP, "parent" => $arr["group_parent"]));
+
+		$g->set_name("Grupp ".($ol->count()+1));
+		$g->save();
+
+		$o = obj($arr["id"]);
+		$elo = safe_array($o->meta("element_ords"));
+		$elo[$g->id()] = count($elo) ? max(array_values($elo)) + 1 : 1;
+		$o->set_meta("element_ords", $elo);
+		$o->save();
+
+		return $arr["return_url"];
 	}
 
 	/**
 		@attrib name=create_grid
+
+		@param id required type=int acl=view
+		@param group_parent required
+		@param return_url required
+
 	**/
 	function create_grid($arr)
 	{
@@ -430,32 +465,53 @@ class class_designer extends class_base
 		// XX: check whether we are allowed to add grids here
 		$g->set_status(STAT_ACTIVE);
 		$g->set_prop("grid_type",0);
-		$g->set_name("vbox");
+
+		$ol = new object_list(array("class_id" => CL_PROPERTY_GRID, "parent" => $arr["group_parent"]));
+
+		$g->set_name("vbox ".($ol->count() + 1));
 		$g->save();
-		$arr["action"] = "change";
-		return $this->finish_action($arr);
+
+		$o = obj($arr["id"]);
+		$elo = safe_array($o->meta("element_ords"));
+		$elo[$g->id()] = count($elo) ? max(array_values($elo)) + 1 : 1;
+		$o->set_meta("element_ords", $elo);
+		$o->save();
+
+		return $arr["return_url"];
 	}
 
 	/**
 		@attrib name=create_element
+		
+		@param id required type=int acl=view
+		@param element_type required
+		@param group_parent required
+		@param return_url required
 	**/
 	function create_element($arr)
 	{
 		// XX: check whether we are allowed to add elements here
 		// parent on group_parent
 		// class_id on el_id
-		// name on tmp_name
 
 		// XX: check whether this is allowed class_id
-		if (!empty($arr["tmp_name"]))
-		{
-			$e = new object();
-			$e->set_class_id($arr["element_type"]);
-			$e->set_parent($arr["group_parent"]);
-			$e->set_status(STAT_ACTIVE);
-			$e->set_name($arr["tmp_name"]);
-			$e->save();
-		};
+		$e = new object();
+		$e->set_class_id($arr["element_type"]);
+		$e->set_parent($arr["group_parent"]);
+		$e->set_status(STAT_ACTIVE);
+
+		$ol = new object_list(array("class_id" => $arr["element_type"], "parent" => $arr["group_parent"]));
+		$cl = aw_ini_get("classes");
+
+		$e->set_name($cl[$arr["element_type"]]["name"]." ".($ol->count() + 1));
+		$e->save();
+
+		$o = obj($arr["id"]);
+		$elo = safe_array($o->meta("element_ords"));
+		$elo[$e->id()] = count($elo) ? max(array_values($elo)) + 1 : 1;
+		$o->set_meta("element_ords", $elo);
+		$o->save();
+
 		return $arr["return_url"];
 	}
 
