@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.147 2003/09/23 09:03:25 kristo Exp $
+// $Id: class_base.aw,v 2.148 2003/09/23 16:32:51 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -107,12 +107,16 @@ class class_base extends aw_template
 
 			$this->parent = $args["parent"];
 			$this->id = "";
+			$this->obj_inst = new object();
 			$this->reltype = isset($args["reltype"]) ? $args["reltype"] : "";
 		}
 		elseif (($args["action"] == "change") || ($args["action"] == "view"))
 		{
 			$this->id = $args["id"];
 			$obj = $this->get_object($this->id);
+
+			$this->obj_inst = new object($this->id);
+
 			$this->toolbar_type = ((isset($obj['meta']['use_menubar']) && ($obj['meta']['use_menubar'] == '1')) ? 'menubar' : 'tabs');
 			$this->parent = "";
 
@@ -143,19 +147,6 @@ class class_base extends aw_template
 				"rel" => $this->is_rel,
 		));
 
-		if (($args["action"] == "change") || ($args["action"] == "view"))
-		{
-			if ($this->classinfo["trans"]["text"] == 1)
-			{
-				$o_t = get_instance("translate/object_translation");
-				$t_list = $o_t->translation_list($this->id, true);
-				if (in_array($this->id, $t_list))
-				{
-					$this->is_translated = 1;
-				}
-			}
-		}
-
 		$this->request = $args;
 
 		if (!empty($this->id))
@@ -169,6 +160,7 @@ class class_base extends aw_template
 					"coredata" => &$this->coredata,
 					"data" => &$this->data,
 					"request" => $this->request,
+					"obj_inst" => &$this->obj_inst,
 				));
 
 			};
@@ -711,6 +703,16 @@ class class_base extends aw_template
 			else
 			{
 				$link = ($activegroup == $key) ? "#" : "";
+			};
+			
+			if (is_object($this->tr))
+			{
+				$grp_id = md5("group" . basename($this->clfile,".aw") . $key);
+				$commtrans = $this->tr->get_by_id($grp_id,"caption");
+				if (!empty($commtrans))
+				{
+					$val["caption"] = $commtrans;
+				};
 			};
 
 			$tabinfo = array(
@@ -1527,6 +1529,7 @@ class class_base extends aw_template
 			"objdata" => &$this->objdata,
 			"request" => isset($this->request) ? $this->request : "",
 			"data" => &$this->data,
+			"obj_inst" => &$this->obj_inst,
 		);
 
 		$this->cfgu = get_instance("cfg/cfgutils");
@@ -1592,17 +1595,13 @@ class class_base extends aw_template
 
 			if (is_object($this->tr))
 			{
-				$prop_id = md5($val["caption"]);
-				if (!empty($val["comment"]))
+				$prop_id = md5("prop" . basename($this->clfile,".aw") . $val["name"]);
+				$commtrans = $this->tr->get_by_id($prop_id,"comment");
+				if (!empty($commtrans))
 				{
-					$comm_id = md5($val["comment"]);
-					$commtrans = $this->tr->get_by_id($comm_id);
-					if (!empty($commtrans))
-					{
-						$val["comment"] = $commtrans;
-					};
+					$val["comment"] = $commtrans;
 				};
-				$trans = $this->tr->get_by_id($prop_id);
+				$trans = $this->tr->get_by_id($prop_id,"caption");
 				if (!empty($trans))
 				{
 					$val["caption"] = $trans;
