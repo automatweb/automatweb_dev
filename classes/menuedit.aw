@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.17 2001/06/04 12:03:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.18 2001/06/05 09:47:42 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -185,7 +185,7 @@ classload("cache","validator","defs");
 
 			// debuukimiseks
 			global $SITE_ID;
-	  	// impordime taimeriklassi
+			// impordime taimeriklassi
 			global $awt;
 			global $test;
 			global $baseurl;
@@ -221,8 +221,8 @@ classload("cache","validator","defs");
 			$this->read_template($template);
 
 			// laeme dokumentide klassi
-			classload("periods","documents");
-			$d = new db_documents();
+			classload("periods","document");
+			$d = new document();
 		  
 			// leiame, kas on tegemist perioodilise rubriigiga
  			$periodic = $this->is_periodic($section);
@@ -545,7 +545,7 @@ classload("cache","validator","defs");
 					{	
 						$awt->start("nn_parem");
 						// ja ongi nii.
-						$do = new db_documents;
+						$do = new document;
 						// KLUK KLUK
 
 						//$period = $per->rec_get_active_period($cur_menu[id]);
@@ -3503,7 +3503,7 @@ classload("cache","validator","defs");
 		global $awt;
 		$awt->start("show_periodic_documents()");
 
-		$d = new db_documents();
+		$d = new document();
 		$cont = "";
 		// if $section is a periodic document then emulate the current period for it and show the document right away
 		if ($obj["class_id"] == CL_PERIODIC_SECTION)
@@ -3559,8 +3559,8 @@ classload("cache","validator","defs");
 	{
 		global $awt;
 		$awt->stop("show_documents()");
-		classload("documents");
-		$d = new db_documents();
+		classload("document");
+		$d = new document();
 		// Vaatame, kas selle sektsiooni jaoks on "default" dokument
 		if ($docid < 1) 
 		{
@@ -3682,7 +3682,7 @@ classload("cache","validator","defs");
 		global $awt;
 		$awt->start("make_promo_boxes($section)");
 		// see jupp siin teeb promokastid
-		$doc = new db_documents;
+		$doc = new document;
 		$template = $this->get_lead_template($section);
 		$q = "SELECT objects.*, template.filename as filename,menu.link as link
 				FROM objects 
@@ -3856,13 +3856,13 @@ classload("cache","validator","defs");
 		$this->make_menu_caches();
 
 		// laeme dokumentide klassi
-		classload("periods","documents");
+		classload("periods","document");
 		
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
 
 		// loome sisu
-		$d = new db_documents();
+		$d = new document();
 		if ($periodic) 
 		{
 			// if $section is a periodic document then emulate the current period for it
