@@ -1348,7 +1348,11 @@ class user extends class_base
 		}
 
 		$u = obj($oid);
+		return $this->get_person_for_user($u);
+	}
 
+	function get_person_for_user($u)
+	{
 		$person_c = reset($u->connections_from(array(
 			"type" => 2 // RELTYPE_PERSON
 		)));
@@ -1360,9 +1364,9 @@ class user extends class_base
 			$p->set_class_id(CL_CRM_PERSON);
 			$p->set_parent($u->parent());
 			$p->set_name($this->users->get_user_config(array(
-				"uid" => aw_global_get("uid"),
+				"uid" => $u->prop("uid"),
 				"key" => "real_name",
-			))." ".aw_global_get("uid"));
+			))." ".$u->prop("uid"));
 			aw_disable_acl();
 			$p->save();
 			aw_restore_acl();
