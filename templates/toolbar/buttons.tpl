@@ -1,40 +1,45 @@
 <!-- SUB: start -->
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#EEEEEE" height="32" width="100%">
 	<tr>
-	<td width="1" background="{VAR:baseurl}/automatweb/images/awmenueditor_iconbar_back.gif"><div style="width:5px;height:32px" /></td>
-	<td height="32" background="{VAR:baseurl}/automatweb/images/awmenueditor_iconbar_back.gif" align="{VAR:align}">
-	<table border="0" cellpadding="0" cellspacing="0">
+	<td>
+	
+	<table border="0" cellpadding="0" cellspacing="0" bgcolor="#EEEEEE">
 	<tr>
 <!-- END SUB: start -->
 
 <!-- SUB: button -->
-	<td valign='middle'><a title="{VAR:tooltip}" alt="{VAR:tooltip}" href="{VAR:url}" target="{VAR:target}" class="{VAR:class}" onClick="{VAR:onClick}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('{VAR:name}','','{VAR:imgbase}/{VAR:imgover}',1)"><IMG name="{VAR:name}" SRC="{VAR:imgbase}/{VAR:img}" WIDTH="23" HEIGHT="22" BORDER=0 ALT="{VAR:tooltip}" title="{VAR:tooltip}" /></a></td>
-	<td><div style="width:5px;height:1px" /></td>
+	<td><span class="toolbarbutton" onMouseOver="this.className='toolbarbuttonhover'" onMouseOut="this.className='toolbarbutton'" onMouseDown="this.className='toolbarbuttondown'" onMouseUp="this.className='toolbarbuttonhover'"><a alt="{VAR:tooltip}" href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" title="{VAR:tooltip}" alt="{VAR:tooltip}" border="0"></a></span></td>
+
 <!-- END SUB: button -->
 
+<!-- SUB: text_button -->
+	<td nowrap="1"><span class="toolbarbutton" onMouseOver="this.className='toolbarbuttonhover'" onMouseOut="this.className='toolbarbutton'" onMouseDown="this.className='toolbarbuttondown'" onMouseUp="this.className='toolbarbuttonhover'"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none;">{VAR:tooltip}</a></span></td>
+
+<!-- END SUB: text_button -->
+
 <!-- SUB: separator -->
-	<td valign='middle'><div style="width:1px;height:22px;border-right:2px solid #ccbbbb;" /></td>
-	<td><div style="width:5px;height:1px" /></td>
+	<td style="margin-left: 2px; border-right: 1px dotted #999; width: 2px; height: 25px;">&nbsp;</td>
 <!-- END SUB: separator -->
 
 <!-- SUB: cdata -->
-	<td valign='middle'>{VAR:data}</td>
-	<td><div style="width:5px;height:1px" /></td>
+	<td>{VAR:data}</td>
 <!-- END SUB: cdata -->
 
 
 <!-- SUB: end -->
 	</tr>
-	</table>
-	</td>
+	        </table>
+		        </td>
 <!-- END SUB: end -->
 
 <!-- SUB: end_sep -->
-<td height="32" background="{VAR:baseurl}/automatweb/images/awmenueditor_iconbar_back.gif" align="right">
-	<table background="{VAR:baseurl}/automatweb/images/trans.gif" border="0" cellpadding="0" cellspacing="0">
-		<tr>
-			<td align="right">{VAR:data}</td>
-		</tr>
+<td align="right">
+	<table border="0" cellspacing="0" cellpadding="0">
+	<tr>
+	<td align="right" valign="center">
+			{VAR:data}
+	</td>
+	</tr>
 	</table>
 </td>
 <!-- END SUB: end_sep -->
@@ -44,3 +49,4 @@
 
 </table>
 <!-- END SUB: real_end -->
+
