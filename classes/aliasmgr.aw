@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.164 2004/11/29 13:18:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.165 2004/11/29 13:26:37 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -1374,7 +1374,7 @@ HTM;
 		// filtr
 		// check if there is an add tree conf for the current user
 		$adc = get_instance("admin/add_tree_conf");
-		if (($adc_id = $adc->get_current_conf()))
+		if (($adc_id = $adc->get_current_conf()) && is_array($this->rel_type_classes))
 		{
 			$tmp = array();
 
