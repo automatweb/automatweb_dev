@@ -53,6 +53,10 @@ function setLink(li,title)
 <td class="celltext"><select name="event_display_table">{VAR:event_display_tables}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Eventi alguse m‰‰rab element:</td>
+<td class="celltext"><select name="event_start_el">{VAR:event_start_els}</select></td>
+</tr>
+<tr class="aste01">
 <td class="celltext" colspan=2>{VAR:LC_FORMS_CAN_EMAIL_ACTION}: &nbsp;<input type='checkbox' name='email_form_action' value=1 {VAR:email_form_action}></td>
 </tr>
 <tr class="aste01">

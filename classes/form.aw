@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.111 2002/07/25 22:05:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.112 2002/07/25 22:52:21 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -421,6 +421,7 @@ class form extends form_base
 		$this->arr["sql_writer_writer"] = $sql_writer_writer;
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
 		$this->arr["event_display_table"] = $event_display_table;
+		$this->arr["event_start_el"] = $event_start_el;
 
 		if ($ev_entry_form)
 		{
@@ -712,6 +713,15 @@ class form extends form_base
 		$o = get_instance("objects");
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
+		$els = $this->get_all_elements(array("type" => 1));
+		$date_els = array("0" => "Vali üks");
+		foreach($els as $key => $val)
+		{
+			if ($val["type"] == "date")
+			{
+				$date_els[$key] = $val["name"];
+			};
+		};
 
 		$ft = get_instance("form_table");
 
@@ -754,6 +764,7 @@ class form extends form_base
 			"forms" => $this->picker($this->arr["sql_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
 			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
+			"event_start_els" => $this->picker($this->arr["event_start_el"],$date_els),
 		));
 
 		$ns = "";
