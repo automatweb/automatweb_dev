@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/syslog.aw,v 1.5 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/syslog.aw,v 1.6 2004/02/25 16:06:22 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -177,14 +177,17 @@ class db_syslog extends aw_template
 			}
 		};
 
-		$u = get_instance("users_user");
-		$u->listall();
-		// umh?
+		$ol = new object_list(array(
+			"class_id" => CL_USER,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
 		$users = array("" => "");
-		while ($ur = $u->db_next())
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$users[$ur["uid"]] = $ur["uid"];
+			$users[$o->prop("uid")] = $o->prop("uid");
 		}
+
 		$this->vars(array("user" => $this->option_list($syslog_params["user"],$users)));
 
 		if ($syslog_params["user"])
