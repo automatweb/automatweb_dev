@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.12 2001/12/18 00:07:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.13 2002/01/31 00:17:33 kristo Exp $
 // tegeleb ORB requestide handlimisega
-classload("aw_template","defs");
+classload("aw_template","defs","xml_support");
 lc_load("automatweb");
 class orb extends aw_template {
 	////
@@ -67,7 +67,6 @@ class orb extends aw_template {
 
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
 
-
 		if ((!defined("UID")) && (!isset($orb_defs[$class][$action]["nologin"])))
 		{
 			classload("config");
@@ -93,10 +92,6 @@ class orb extends aw_template {
 		};
 
 
-
-		// loome õige objekti
-		$t = new $class;
- 
 		// leiame actionile vastava funktsiooni
 		$fun = $orb_defs[$class][$action]; 
 		
@@ -110,6 +105,7 @@ class orb extends aw_template {
 
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
+			$t = new $class;
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
@@ -117,8 +113,18 @@ class orb extends aw_template {
 				bail_out();
 			}
  
-			// reforbi funktsioon peab tagastama aadressi, kuhu edasi minna
-			$url = $t->$fname($vars);
+			if ($orb_defs[$class][$action]["xmlrpc"] == 1)
+			{
+				$url = $this->do_orb_xmlrpc_call($orb_defs[$class][$action]["server"],$class,$action,$vars);
+			}
+			else
+			{
+				// loome õige objekti
+				$t = new $class;
+
+				// reforbi funktsioon peab tagastama aadressi, kuhu edasi minna
+				$url = $t->$fname($vars);
+			}
  
 			// ja tagasi main programmi
 			$this->data = $url;
@@ -208,19 +214,28 @@ class orb extends aw_template {
 				}
 			};
 		};
- 
-		// ja kutsume funktsiooni v2lja
-		$fname = $fun["function"];
-		if (!method_exists($t,$fname))
-		{
-		        $this->raise_error(sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
-		};
-		
+
 		if ($user)
 		{
 			$params["user"] = 1;
 		};
-		$content = $t->$fname($params);
+
+		if ($orb_defs[$class][$action]["xmlrpc"] == 1)
+		{
+			$content = $this->do_orb_xmlrpc_call($orb_defs[$class][$action]["server"],$class,$action,$params);
+		}
+		else
+		{
+			$t = new $class;
+			// ja kutsume funktsiooni v2lja
+			$fname = $fun["function"];
+			if (!method_exists($t,$fname))
+			{
+				$this->raise_error(sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
+			};
+		
+			$content = $t->$fname($params);
+		}
 		$this->data = $content;
 		// kui klass teeb enda sisse $info nimelise array, ja kirjutab sinna mingit teksti, siis
 		// see votab nad sealt välja ja caller saab get_info funktsiooni kaudu kätte kogu vajaliku info.
@@ -307,12 +322,29 @@ class orb extends aw_template {
 						// default values for optional arguments
 						$orb_defs[$class][$action]["defaults"] = array();
 
+						if (!isset($attribs["xmlrpc"]))
+						{
+							$orb_defs[$class][$action]["xmlrpc"] = $xmlrpc_defs["xmlrpc"];
+						}
+
+						if (!isset($attribs["xmlrpc"]))
+						{
+							$orb_defs[$class][$action]["server"] = $xmlrpc_defs["server"];
+						}
+
 						// default action
 						if (isset($attribs["default"]) && $attribs["default"])
 						{
 							$orb_defs[$class]["default"] = $action;
 						};
-					};
+					}
+					else
+					if ($tag == "class")
+					{
+						// klassi defauldid. kui funktsiooni juures pole, pannakse need
+						$xmlrpc_defs["xmlrpc"] = $attribs["xmlrpc"];
+						$xmlrpc_defs["server"] = $attribs["server"];
+					}
 				}
 				elseif ($tagtype == "close")
 				{
@@ -353,6 +385,11 @@ class orb extends aw_template {
 	function get_info()
 	{
 		return $this->info;
+	}
+
+	function do_orb_xmlrpc_call($server,$class,$action,$params)
+	{
+		rpc_create_struct($params);
 	}
 }
 ?>
