@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.106 2005/01/28 09:05:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.107 2005/01/28 13:59:48 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -124,7 +124,7 @@ class users_user extends aw_template
 		if (($last_touch + 60) < $t)
 		{
 			$q = "UPDATE users SET lastaction = '$t' WHERE uid = '$user'";
-			$this->db_query($q);
+			//$this->db_query($q);
 			aw_session_set("last_touch",$t);
 		};
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.134 2004/12/31 10:02:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.135 2005/01/28 13:59:48 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1254,12 +1254,12 @@ class users extends users_user
 	{
 		if (($uid = aw_global_get("uid")) != "")
 		{
-			$_uid = $this->db_fetch_field("SELECT uid FROM users WHERE uid = '$uid' AND blocked != 1", "uid");
+			/*$_uid = $this->db_fetch_field("SELECT uid FROM users WHERE uid = '$uid' AND blocked != 1", "uid");
 			if ($_uid != $uid)
 			{
 				// if no such user exists, log the bastard out
 				$this->kill_user();
-			}
+			}*/
 
 			$this->create_gidlists($uid);
 			$gidlist = aw_global_get("gidlist");
@@ -1315,16 +1315,30 @@ class users extends users_user
 			// if not, then create a group for them under the groups folder
 			// now the only problem is how do I identify the group. 
 			// that's gonna be a problem, but I guess the only way is the config table.
-			$nlg = $this->get_cval("non_logged_in_users_group");
-			if (!$nlg && ($grpp = aw_ini_get("groups.tree_root")))
-			{
-				aw_disable_acl();
-				$nlg = $this->addgroup(0, "Sisse logimata kasutajad", GRP_REGULAR, 0, 1, 0, $grpp);
-				aw_restore_acl();
-				$this->set_cval("non_logged_in_users_group", $nlg);
-			}
 
-			$gd = $this->fetchgroup($nlg);
+			if (empty($_SESSION["non_logged_in_users_group"]) || !is_array($_SESSION["non_logged_in_users_group"]))
+			{
+				$nlg = $this->get_cval("non_logged_in_users_group");
+				if (!$nlg && ($grpp = aw_ini_get("groups.tree_root")))
+				{
+					aw_disable_acl();
+					$nlg = $this->addgroup(0, "Sisse logimata kasutajad", GRP_REGULAR, 0, 1, 0, $grpp);
+					aw_restore_acl();
+					$this->set_cval("non_logged_in_users_group", $nlg);
+				}
+
+				$gd = $this->fetchgroup($nlg);
+
+				$_SESSION["non_logged_in_users_group"] = array(
+					"nlg" => $nlg,
+					"gd" => $gd
+				);
+			}
+			else
+			{
+				$nlg = $_SESSION["non_logged_in_users_group"]["nlg"];
+				$gd = $_SESSION["non_logged_in_users_group"]["gd"];
+			}
 
 			$gidlist = array($nlg => $nlg);
 			$gidlist_pri = array($nlg => $gd["priority"]);
@@ -1448,7 +1462,7 @@ class users extends users_user
 		),"users",0,0)));
 	}
 
-	function on_site_init(&$dbi, $site, &$ini_opts)
+	function on_site_init(&$dbi, $site, &$ini_opts, &$log, &$osi_vars)
 	{
 		if ($site['site_obj']['use_existing_database'])
 		{
@@ -1484,6 +1498,21 @@ class users extends users_user
 			$admg = $this->addgroup(0,"Administraatorid", GRP_REGULAR,0,10000,0,$ini_opts["groups.tree_root"]);
 			echo "Administraatorid <br>\n";
 			flush();
+
+			$nlg = $this->addgroup(0, "Sisse logimata kasutajad", GRP_REGULAR, 0, 1, 0, $ini_opts["groups.tree_root"]);
+			$this->set_cval("non_logged_in_users_group", $nlg);
+
+			// deny access from aw_obj_priv
+			$o = obj($osi_vars["aw_obj_priv"]);
+			$o->connect(array(
+				"to" => $this->get_oid_for_gid($nlg),
+				"reltype" => RELTYPE_ACL
+			));
+			$this->save_acl($o->id(), $nlg, array());
+
+			echo "Sisse logimata kasutajad <br>\n";
+			flush();
+
 
 			// give admins access to admin interface
 

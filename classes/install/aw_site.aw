@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.33 2005/01/18 10:47:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.34 2005/01/28 13:59:59 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes
@@ -440,6 +440,19 @@ class aw_site extends class_base
 		$ini_opts['site_basedir'] = $site['docroot'];
 
 		$this->_do_add_folder($site['docroot']."/files", &$log);
+
+		$this->_do_add_folder($site['docroot']."/lang", &$log);
+		$si = get_instance("install/su_exec");
+		$si->add_cmd("copy -r ".$this->cfg["basedir"]."/install/site_template/lang/* ".$site['docroot']."/lang/");
+		$si->add_cmd("find ".$site['docroot']."/lang/ -type f -exec chmod 666 {} \;");
+		$si->add_cmd("find ".$site['docroot']."/lang/ -type d -exec chmod 777 {} \;");
+		$si->exec();
+		$log->add_line(array(
+			"uid" => "System",
+			"msg" => "Kopeeris default keelefailid",
+			"comment" => "",
+			"result" => "OK"
+		));
 
 		$this->_do_add_folder($site['docroot']."/pagecache", &$log);
 		$ini_opts['cache.page_cache'] = "\${site_basedir}/pagecache";
@@ -932,7 +945,7 @@ class aw_site extends class_base
 			{
 				$this->warning_str = "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! ($site[url]) ";
 			}
-			if (false && $ip != aw_ini_get("install.default_ip"))
+			if ($ip != aw_ini_get("install.default_ip"))
 			{
 				$this->err_str = "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeen viitab valele IP aadressile! (vajalik = ".aw_ini_get("install.default_ip")." domeeni ip = $ip)";
 			}

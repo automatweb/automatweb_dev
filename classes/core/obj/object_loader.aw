@@ -380,6 +380,7 @@ class _int_object_loader extends core
 
 		$old = $ds->dc[$ds->default_cid];
 		$ds->dc[$ds->default_cid] = $new_conn;
+		$this->dc[$ds->default_cid] = $new_conn;
 		return $old; 
 	}
 

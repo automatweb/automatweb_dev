@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.51 2005/01/12 20:08:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.52 2005/01/28 13:59:46 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1597,7 +1597,7 @@ class converters extends aw_template
 	**/
 	function lang_new_convert($arr)
 	{
-		$this->db_query("SELECT * FROM languages WHERE oid < 1 ");
+		$this->db_query("SELECT * FROM languages WHERE oid < 1 or oid is null");
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();

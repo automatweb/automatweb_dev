@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.14 2005/01/19 13:34:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.15 2005/01/28 13:59:43 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -271,10 +271,9 @@ class language extends class_base
 
 	function on_site_init(&$dbi, &$site, &$ini_opts, &$log, &$osi_vars)
 	{
-		if ($site['site_obj']['use_existing_templates'])
-		{
-			return;
-		}
+		echo "convert langs to new ! <br>\n";
+		flush();
+
 		$conv = get_instance("admin/converters");
 		$conv->dc = $dbi->dc;
 		$conv->lang_new_convert(array(

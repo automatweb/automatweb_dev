@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.35 2005/01/18 11:33:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.36 2005/01/28 13:59:59 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1271,6 +1271,35 @@ class site_search_content extends class_base
 		}
 
 		return $content_s;
+	}
+
+	function on_site_init(&$dbi, &$site, &$ini_opts, &$log, &$osi_vars)
+	{
+		$conv = get_instance("admin/converters");
+		$conv->dc = $dbi->dc;
+
+		// connect rootmenu to search grp
+		$grp = obj($osi_vars["search_grp"]);
+		$rootmenu = obj($ini_opts["frontpage"]);
+
+		$grp->connect(array(
+			"to" => $rootmenu->id(),
+			"reltype" => 1
+		));
+		$grp->set_meta("section_include_submenus", array($rootmenu->id() => $rootmenu->id()));
+		$grp->save();
+
+		// connect search grp to search
+		$s = obj($osi_vars["search_obj"]);
+		$s->connect(array(
+			"to" => $grp->id(),
+			"reltype" => 2
+		));
+
+		// set opts
+		$s->set_meta("default_grp", $grp->id());
+		$s->save();
+
 	}
 }
 ?>

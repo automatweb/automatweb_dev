@@ -3,6 +3,22 @@
 <!-- begin header menu -->
 <table width="660" border="0" cellpadding="5" cellspacing="0">
 <tr>
+	<td class="menuheader">
+		<!-- SUB SEARCH_SEL -->
+		<table border="0" cellspacing="0" cellpadding="0">
+		<form method="get" action="{VAR:baseurl}/index.{VAR:ext}" name="search">
+			<tr>
+			<td>
+				<input type="text" size="17" class="formtext" name="str" value="  Otsing" onFocus="if(this.value=='  Otsing')this.value = ''" onblur="if(this.value=='')this.value='  Otsing';"></td>
+				<td><input type="image" value="submit" src="{VAR:baseurl}/img/icon_search.gif" WIDTH="26" HEIGHT="20" BORDER="0" title="Otsi" ALT="Otsi"></td>
+			</tr>
+			<input type="hidden" name="class" value="site_search_content">
+			<input type="hidden" name="action" value="do_search">
+			<input type="hidden" name="id" value="41">
+		</form>
+		</table>
+<!-- END SUB SEARCH_SEL -->
+	</td>
   <td class="menuheader">
 
 

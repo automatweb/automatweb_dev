@@ -38,7 +38,7 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 							obj { class_id=CL_MENU, parent=${e_me}, name="Logi v&auml;lja", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/logout"}
 
 		# AW objektide menyy
-		$aw_obj = obj { class_id=CL_MENU, parent=${klient}, jrk="3", name="AW Objektid", type=MN_CLIENT, status=STAT_ACTIVE }
+		$aw_obj = obj { class_id=CL_MENU, parent=${klient}, jrk="3", name="Avalikud AW Objektid", type=MN_CLIENT, status=STAT_ACTIVE }
 			$users = obj { class_id=CL_MENU, parent=${parent}, name="Kasutajad", type=MN_CLIENT, status=STAT_ACTIVE }
 				#obj { class_id=CL_USER, parent=${users}, name=${default_user}, uid=${default_user}, password=${default_user_pwd}, status=STAT_ACTIVE }
 
@@ -62,10 +62,16 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 				$loginm = obj { class_id=CL_MENU, parent=${mn_conf}, name="Login men&uuml;&uuml;", type=MN_CLIENT, status=STAT_ACTIVE }
 					obj { class_id=CL_CONFIG_LOGIN_MENUS, status=STAT_ACTIVE, parent=${loginm}, name="Login men&uuml;&uuml;" }
 
+				$search_fld = obj { class_id=CL_MENU, parent=${mn_conf}, name="Otsing", type=MN_CLIENT, status=STAT_ACTIVE }
+					$search_grp = obj { class_id=CL_SITE_SEARCH_CONTENT_GRP, parent=${search_fld}, name="Kogu sait", status=STAT_ACTIVE }
+					$search_obj = obj { class_id=CL_SITE_SEARCH_CONTENT, parent=${search_fld}, name="Saidi sisu otsing", status=STAT_ACTIVE, search_live=1, per_page=20, default_order=1, default_search_opt=1 }
+
 		# adminni proged. - config only. could be none soon
 		$admin_root = obj { class_id=CL_MENU, parent=${klient}, jrk="1", name="AutomatWeb" type=MN_ADMIN1, status=STAT_ACTIVE }
 			obj { class_id=CL_MENU, parent=${admin_root}, name="Config" type=MN_ADMIN1, admin_feature=PRG_CONFIG, status=STAT_ACTIVE }
 				
+
+		$aw_obj_priv = obj { class_id=CL_MENU, parent=${klient}, jrk="3", name="Piiratud ligip&auml;&auml;suga AW Objektid", type=MN_CLIENT, status=STAT_ACTIVE }
 
 ini { site_rootmenu=${site_root} }
 
