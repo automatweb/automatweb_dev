@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.38 2005/02/11 08:11:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.39 2005/02/17 12:13:52 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -816,7 +816,7 @@ class aw_table extends aw_template
 						"classid" => $style,
 						"width" => isset($v1["width"]) ? $v1["width"] : "",
 						"rowspan" => ($rowspan > 1) ? $rowspan : 0,
-						"style" => ((isset($v1["chgbgcolor"]) && isset($v[$v1["chgbgcolor"]])) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
+						"style" => ((!empty($v1["chgbgcolor"]) && !empty($v[$v1["chgbgcolor"]])) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
 						"align" => isset($v1["align"]) ? $v1["align"] : "",
 						"valign" => isset($v1["valign"]) ? $v1["valign"] : "",
 						"nowrap" => isset($v1["nowrap"]) ? 1 : "",
@@ -958,7 +958,7 @@ class aw_table extends aw_template
 							$onclick = " onClick=\"hilight(this,'${rowid}')\" ";
 						};
 						$stl = "";
-						if (!empty($this->chooser_config["chgbgcolor"]))
+						if (!empty($this->chooser_config["chgbgcolor"]) && !empty($v[$this->chooser_config["chgbgcolor"]]))
 						{
 							$stl =  "style=\"background:".$v[$this->chooser_config["chgbgcolor"]]."\"";
 						}

@@ -131,6 +131,138 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>sp_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_proj</group>
+            <type>textbox</type>
+            <caption>Number</caption>
+      </property>
+      <property>
+            <name>sp_comment</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_proj</group>
+            <type>textbox</type>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>sp_starttime</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_proj</group>
+            <type>datetime_select</type>
+            <caption>Alustamisaeg (meterjalide saabumine)</caption>
+      </property>
+      <property>
+            <name>sp_due_date</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_proj</group>
+            <type>datetime_select</type>
+            <caption>T&amp;aml;htaeg</caption>
+      </property>
+      <property>
+            <name>sp_customer</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_proj</group>
+            <type>textbox</type>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>sp_submit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_proj</group>
+            <type>submit</type>
+            <value>Otsi</value>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>sp_result</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_proj</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cs_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_cust</group>
+            <type>textbox</type>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>cs_firmajuht</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_cust</group>
+            <type>textbox</type>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
+            <name>cs_contact</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_cust</group>
+            <type>textbox</type>
+            <caption>Aadress</caption>
+      </property>
+      <property>
+            <name>cs_phone</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_cust</group>
+            <type>textbox</type>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>cs_reg_nr</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_cust</group>
+            <type>textbox</type>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>cs_submit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_cust</group>
+            <type>submit</type>
+            <value>Otsi</value>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>cs_result</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_search_cust</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>resources_toolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -488,7 +620,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -498,7 +633,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -508,7 +646,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -519,7 +660,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
@@ -531,7 +675,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -542,7 +689,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Algus</caption>
@@ -552,7 +702,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Plaanitud kestus (h)</caption>
@@ -562,7 +715,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Ressurss</caption>
@@ -572,7 +728,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Projekt</caption>
@@ -582,7 +741,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Staatus</caption>
@@ -592,7 +754,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
@@ -603,7 +768,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Formaat</caption>
@@ -613,7 +781,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Sisu lk arv</caption>
@@ -623,7 +794,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Kaane lk arv</caption>
@@ -633,7 +807,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Sisu v&amp;auml;rvid</caption>
@@ -643,7 +820,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Sisu v&amp;auml;rvid Notes</caption>
@@ -653,7 +833,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Sisu lakk/muu</caption>
@@ -663,7 +846,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Kaane v&amp;auml;rvid</caption>
@@ -673,7 +859,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Kaane v&amp;auml;rvid Notes</caption>
@@ -683,7 +872,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Kaane lakk/muu</caption>
@@ -693,7 +885,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Sisu paber</caption>
@@ -703,7 +898,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Kaane paber</caption>
@@ -713,7 +911,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Tr&amp;uuml;kiarv</caption>
@@ -723,7 +924,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Tr&amp;uuml;kise ehitus</caption>
@@ -733,7 +937,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Kromalin</caption>
@@ -743,7 +950,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Makett</caption>
@@ -753,7 +963,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>N&amp;auml;idis</caption>
@@ -763,7 +976,10 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_printer</group>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+            </group>
             <type>text</type>
             <store>no</store>
             <caption>Plaate</caption>
@@ -780,6 +996,19 @@
             <grp_projects>
                   <caption>Projektid</caption>
             </grp_projects>
+            <grp_search>
+                  <caption>Otsing</caption>
+            </grp_search>
+            <grp_search_proj>
+                  <caption>Otsi projekte</caption>
+                  <submit_method>get</submit_method>
+                  <parent>grp_search</parent>
+            </grp_search_proj>
+            <grp_search_cust>
+                  <caption>Otsi kliente</caption>
+                  <submit_method>get</submit_method>
+                  <parent>grp_search</parent>
+            </grp_search_cust>
             <grp_schedule>
                   <caption>Kalender</caption>
                   <submit>no</submit>
@@ -788,6 +1017,16 @@
                   <caption>Operaatori vaade</caption>
                   <submit>no</submit>
             </grp_printer>
+            <grp_printer_current>
+                  <caption>Jooksvad t&amp;ouml;&amp;ouml;d</caption>
+                  <parent>grp_printer</parent>
+                  <submit>no</submit>
+            </grp_printer_current>
+            <grp_printer_old>
+                  <caption>Tegemata asjad</caption>
+                  <parent>grp_printer</parent>
+                  <submit>no</submit>
+            </grp_printer_old>
             <grp_settings>
                   <caption>Seaded</caption>
             </grp_settings>

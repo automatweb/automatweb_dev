@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.17 2004/10/29 16:06:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.18 2005/02/17 12:13:55 kristo Exp $
 
 ////
 // !get_date_range
@@ -282,6 +282,13 @@ function get_week_start()
 function get_month_start()
 {
 	return mktime(0,0,0, date("m"), 1, date("Y"));
+}
+
+/** returns the timestamp for 00:00 today
+**/
+function get_day_start()
+{
+	return mktime(0,0,0, date("m"), date("d"), date("Y"));
 }
 
 /** returns true if the given timespans ($a_from, $a_to) - ($b_from - $b_to) overlap

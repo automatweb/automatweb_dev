@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.19 2005/01/21 13:09:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.20 2005/02/17 12:13:57 kristo Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -16,6 +16,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @property ext_id type=textbox size=4 field=subclass
 @caption Sidussüsteemi ID
+
+@property grp_crea type=chooser store=no multiple=1
+@caption Kas teen grupid ja kasutajad
 
 @property has_group type=checkbox ch_value=1 field=meta method=serialize
 @caption Kas tehakse kasutajagrupp
@@ -84,21 +87,31 @@ class crm_section extends class_base
 	}
 
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	/*
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "has_group":
+			case "has_group_subs":
+			case "has_group_subs_prof":
+				return PROP_IGNORE;
+				break;
+	
+			case "grp_crea":
+				$prop["options"] = array(
+					"has_group" => "sellele &uuml;ksusele",
+					"has_group_subs" => "alam&uuml;ksustele",
+					"has_group_subs_prof" => "ametinimetustele"
+				);
+				$prop["value"]["has_group"] = $arr["obj_inst"]->prop("has_group");
+				$prop["value"]["has_group_subs"] = $arr["obj_inst"]->prop("has_group_subs");
+				$prop["value"]["has_group_subs_prof"] = $arr["obj_inst"]->prop("has_group_subs_prof");
+				break;
 		};
 		return $retval;
 	}
-	*/
 
 	function set_property($arr = array())
 	{
@@ -106,7 +119,17 @@ class crm_section extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "has_group":
+			case "has_group_subs":
+			case "has_group_subs_prof":
+				return PROP_IGNORE;
+				break;
 
+			case "grp_crea":
+				$arr["obj_inst"]->set_prop("has_group", isset($prop["value"]["has_group"]) ? 1 : 0);
+				$arr["obj_inst"]->set_prop("has_group_subs", isset($prop["value"]["has_group_subs"]) ? 1 : 0);
+				$arr["obj_inst"]->set_prop("has_group_subs_prof", isset($prop["value"]["has_group_subs_prof"]) ? 1 : 0);
+				break;
 		}
 		return $retval;
 	}	

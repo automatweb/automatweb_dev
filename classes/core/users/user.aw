@@ -1476,10 +1476,29 @@ class user extends class_base
 			$p = obj();
 			$p->set_class_id(CL_CRM_PERSON);
 			$p->set_parent($u->parent());
-			$p->set_name($this->users->get_user_config(array(
+
+			$rn = $this->users->get_user_config(array(
 				"uid" => $u->prop("uid"),
 				"key" => "real_name",
-			))." ".$u->prop("uid"));
+			));
+
+			$uid = $u->prop("uid");
+
+			$p_n = ($rn != "" ? $rn : $uid);
+			$p->set_name($p_n);
+
+			if ($rn != "")
+			{
+				list($fn, $ln) = explode(" ", $rn);
+			}			
+			else
+			{
+				list($fn, $ln) = explode(".", $uid);
+			}
+
+			$p->set_prop("firstname", $fn);
+			$p->set_prop("lastname", $ln);
+
 			aw_disable_acl();
 			$p->save();
 			aw_restore_acl();

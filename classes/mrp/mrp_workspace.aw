@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.33 2005/02/17 10:27:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.34 2005/02/17 12:13:56 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -7,8 +7,15 @@
 
 @groupinfo grp_customers caption="Kliendid" submit=no
 @groupinfo grp_projects caption="Projektid"
+@groupinfo grp_search caption="Otsing"
+	@groupinfo grp_search_proj caption="Otsi projekte" submit_method=get parent=grp_search
+	@groupinfo grp_search_cust caption="Otsi kliente" submit_method=get parent=grp_search
+
 @groupinfo grp_schedule caption="Kalender" submit=no
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
+	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
+	@groupinfo grp_printer_old caption="Tegemata asjad" parent=grp_printer submit=no
+
 @groupinfo grp_settings caption="Seaded"
 	@groupinfo grp_settings_def caption="Seaded" parent=grp_settings
 	@groupinfo grp_settings_salesman caption="M&uuml;&uuml;gimehe seaded" parent=grp_settings
@@ -46,6 +53,47 @@
 
 	@property legend type=text store=no no_caption=1
 
+@default group=grp_search_proj
+	@property sp_name type=textbox
+	@caption Number
+
+	@property sp_comment type=textbox
+	@caption Kirjeldus
+
+	@property sp_starttime type=datetime_select
+	@caption Alustamisaeg (meterjalide saabumine)
+
+	@property sp_due_date type=datetime_select
+	@caption T&aml;htaeg
+
+	@property sp_customer type=textbox
+	@caption Klient
+
+	@property sp_submit type=submit value=Otsi
+	@caption Otsi
+
+	@property sp_result type=table no_caption=1
+
+@default group=grp_search_cust
+	@property cs_name type=textbox
+	@caption Nimi
+
+	@property cs_firmajuht type=textbox
+	@caption Kontaktisik
+
+	@property cs_contact type=textbox
+	@caption Aadress
+
+	@property cs_phone type=textbox
+	@caption Telefon
+
+	@property cs_reg_nr type=textbox
+	@caption Kood
+
+	@property cs_submit type=submit value=Otsi
+	@caption Otsi
+
+	@property cs_result type=table no_caption=1
 
 @default group=grp_resources
 	@property resources_toolbar type=toolbar store=no no_caption=1 parent=box
@@ -136,7 +184,7 @@
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
-@default group=grp_printer
+@default group=grp_printer_current,grp_printer_old
 	@property printer_jobs type=table no_caption=1
 
 	// these are shown when a job is selected
@@ -520,6 +568,30 @@ class mrp_workspace extends class_base
 					return PROP_IGNORE;
 				}
 				$this->_printer_jobs($arr);
+				break;
+
+			case "sp_name":
+			case "sp_comment":
+			case "sp_customer":
+			case "cs_name":
+			case "cs_firmajuht":
+			case "cs_contact":
+			case "cs_phone":
+			case "cs_reg_nr":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+
+			case "sp_starttime":
+			case "sp_due_date":
+				$prop["value"] = date_edit::get_timestamp($arr["request"][$prop["name"]]);
+				break;
+
+			case "sp_result":
+				$this->_sp_result($arr);
+				break;
+
+			case "cs_result":
+				$this->_cs_result($arr);
 				break;
 		}
 		return $retval;
@@ -1013,7 +1085,14 @@ class mrp_workspace extends class_base
 	{
 		$table =& $arr["prop"]["vcl_inst"];
 		$this_object =& $arr["obj_inst"];
-		$list_request = $arr["request"]["mrp_projects_show"] ? $arr["request"]["mrp_projects_show"] : "planned";
+		if (isset($arr["list_request"]))
+		{
+			$list_request = $arr["list_request"];
+		}
+		else
+		{
+			$list_request = $arr["request"]["mrp_projects_show"] ? $arr["request"]["mrp_projects_show"] : "planned";
+		}
 
 		$table->define_field (array (
 			"name" => "customer",
@@ -1087,11 +1166,13 @@ class mrp_workspace extends class_base
 			"caption" => "Ava",
 		));
 
-		$table->define_chooser(array(
-			"name" => "selection",
-			"field" => "project_id",
-		));
-
+		if ($list_request != "search")
+		{
+			$table->define_chooser(array(
+				"name" => "selection",
+				"field" => "project_id",
+			));
+		}
 		$table->set_default_sortby ("modified");
 		$table->set_default_sorder ("desc");
 		$table->draw_text_pageselector (array (
@@ -1169,6 +1250,10 @@ class mrp_workspace extends class_base
 					"parent" => $this_object->prop ("projects_folder"),
 					// "createdby" => aw_global_get('uid'),
 				));
+				break;
+
+			case "search":
+				$list = $arr["search_res"];
 				break;
 		}
 
@@ -1611,7 +1696,11 @@ class mrp_workspace extends class_base
 	{
 		$arr['unit'] = $_GET["unit"];
 		$arr['category'] = $_GET["category"];
-		$arr['return_url'] = urlencode(aw_global_get('REQUEST_URI'));
+		if ($_GET["group"] != "grp_search_proj" && $_GET["group"] != "grp_search_cust")
+		{
+			$arr['return_url'] = urlencode(aw_global_get('REQUEST_URI'));
+		}
+
 		$arr['cat'] = $_GET["cat"];
 		$arr['pj_job'] = $_GET["pj_job"];
 		$arr['mrp_tree_active_item'] = $_GET["mrp_tree_active_item"];
@@ -2220,9 +2309,12 @@ class mrp_workspace extends class_base
 			"ws" => $arr["obj_inst"]
 		));
 		
+		classload("date_calc");
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
 			"limit" => 30,
+			"minstart" => ($arr["request"]["group"] == "grp_printer_current" ? get_day_start() : NULL),
+			"maxend" => ($arr["request"]["group"] == "grp_printer_current" ? NULL : get_day_start()),
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -2383,14 +2475,24 @@ class mrp_workspace extends class_base
 		{
 			return array();
 		}
-		$jobs = new object_list(array(
+		if (empty($arr["minstart"]))
+		{
+			$arr["minstart"] = 100;
+		}
+		$filt = array(
 			"resource" => $arr["resources"],
 			"limit" => $arr["limit"],
 			"class_id" => CL_MRP_JOB,
 			"site_id" => array(),
 			"lang_id" => array(),
-			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER, 100)
-		));
+			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["minstart"])
+		);
+
+		if ($arr["maxend"] > 100 )
+		{
+			$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, 100, $arr["maxend"]);
+		}
+		$jobs = new object_list($filt);
 		$ret = array();
 		foreach($jobs->arr() as $o)
 		{
@@ -2644,6 +2746,77 @@ class mrp_workspace extends class_base
 			))."  | </span>";
 
 		return $hdr;
+	}
+
+	function _sp_result($arr)
+	{
+		if (empty($arr["request"]["MAX_FILE_SIZE"]))
+		{
+			$results = new object_list();
+		}
+		else
+		{
+			$filt = array(
+				"class_id" => CL_MRP_CASE,
+				"name" => "%".$arr["request"]["sp_name"]."%",
+				"comment" => "%".$arr["request"]["sp_comment"]."%",
+				"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, date_edit::get_timestamp($arr["request"]["sp_starttime"])),
+				"due_date" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, date_edit::get_timestamp($arr["request"]["sp_due_date"])),
+			);
+			if ($arr["request"]["sp_customer"] != "")
+			{
+				$filt["CL_MRP_CASE.customer.name"] = "%".$arr["request"]["sp_customer"]."%";
+			}
+			$results = new object_list($filt);
+		}
+		
+		$arr["list_request"] = "search";
+		$arr["search_res"] = $results;
+		$this->create_projects_list($arr);
+	}
+
+	function _cs_result($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_cust_list_t($t);
+
+		if (empty($arr["request"]["MAX_FILE_SIZE"]))
+		{
+			$results = new object_list();
+		}
+		else
+		{
+			$filt = array(
+				"class_id" => CL_CRM_COMPANY,
+				"name" => "%".$arr["request"]["cs_name"]."%",
+				"reg_nr" => "%".$arr["request"]["cs_reg_nr"]."%",
+			);
+			if ($arr["request"]["cs_firmajuht"] != "")
+			{
+				$filt["CL_CRM_COMPANY.firmajuht.name"] = "%".$arr["request"]["cs_firmajuht"]."%";
+			}
+			if ($arr["request"]["cs_contact"] != "")
+			{
+				$filt["CL_CRM_COMPANY.contact.name"] = "%".$arr["request"]["cs_contact"]."%";
+			}
+			if ($arr["request"]["cs_phone"] != "")
+			{
+				$filt["CL_CRM_COMPANY.phone.name"] = "%".$arr["request"]["cs_phone"]."%";
+			}
+			$results = new object_list($filt);
+		}
+
+		foreach($results->arr() as $cust)
+		{
+			$t->define_data(array(
+				"name" => html::get_change_url($cust->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $cust->name()),
+				"address" => $cust->prop_str("contact"),
+				"phone" => $cust->prop_str("phone_id"),
+				"email" => $cust->prop_str("email_id"),
+				"oid" => $cust->id(),
+				"priority" => $cust->prop("priority")
+			));
+		}
 	}
 }
 

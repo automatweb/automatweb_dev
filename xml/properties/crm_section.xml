@@ -19,6 +19,16 @@
             <caption>Sidussüsteemi ID</caption>
       </property>
       <property>
+            <name>grp_crea</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>chooser</type>
+            <store>no</store>
+            <multiple>1</multiple>
+            <field>grp_crea</field>
+            <caption>Kas teen grupid ja kasutajad</caption>
+      </property>
+      <property>
             <name>has_group</name>
             <table>objects</table>
             <group>general</group>
