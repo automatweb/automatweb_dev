@@ -1,0 +1,56 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>backgroundcolor</name>
+            <type>colorpicker</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Taustavärv</caption>
+      </property>
+      <property>
+            <name>backgroundimage</name>
+            <type>relpicker</type>
+            <reltype>BACKGROUNDIMAGE</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Taustapilt</caption>
+      </property>
+      <property>
+            <name>backgroundtextcolor</name>
+            <type>colorpicker</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tausta tekstivärv</caption>
+      </property>
+      <property>
+            <name>startdesktop</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+
