@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.251 2004/04/15 07:06:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.252 2004/04/30 09:08:31 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1023,15 +1023,14 @@ class document extends aw_template
 
 		if (($this->template_has_var("parent_id") || $this->template_has_var("parent_name") || $this->template_has_var("menu_image") || $this->template_has_var("menu_addr")) && $doc["parent"])
 		{
-			$mcache = get_instance("menu_cache");
-			$mn = $mcache->get_cached_menu($doc["parent"]);
+			/*$mcache = get_instance("menu_cache");
+			$mn = $mcache->get_cached_menu($doc["parent"]);*/
+			$p_o = obj($doc["parent"]);
 			$this->vars(array(
-				"parent_name" => $mn["name"],
+				"parent_name" => $p_o->name(),
 				"parent_id" => $doc["parent"],
-				// mn is only defined, if get_cached_menu is invoked
-				// so I move those over here
-				"menu_image" => image::check_url($mn["img_url"]),
-				"menu_addr"	=> $mn["link"],
+				"menu_image" => image::check_url($p_o->meta("img_url")),
+				"menu_addr"	=> $p_o->prop("link"),
 			));
 		}
 
@@ -1213,7 +1212,7 @@ class document extends aw_template
 		{
 			die($retval);
 		}
-		
+
 		return $retval;
 	}
 
