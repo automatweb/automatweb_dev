@@ -30,7 +30,7 @@
 		<action name="change" public="1">
 			<function name="change">
 				<arguments>
-					<required name="id"/>
+					<optional name="id"/>
 				</arguments>
 			</function>
 		</action>
