@@ -787,6 +787,13 @@ switch($action)
 		header("Location: config.$ext?type=icon_db");
 		break;
 
+	case "submit_loaginaddr":
+		classload("config");
+		$t = new db_config;
+		$t->submit_loaginaddr($HTTP_POST_VARS);
+		header("Location: config.$ext");
+		break;
+
 	default:
 		include("sorry.aw");
 	};	

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.7 2001/05/22 08:00:56 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.8 2001/05/28 08:07:32 kristo Exp $
 class db_config extends aw_template 
 {
 	function db_config() 
@@ -123,14 +123,12 @@ class db_config extends aw_template
 	{
 		$this->mk_path(0,"Saidi config");
 		$this->read_template("config.tpl");
+	
+		$al = $this->get_simple_config("after_login");
 
-		$uadd_id = $this->get_simple_config("user_add_form");
-		$uadd = $this->get_object($uadd_id);
-
-		$usearch_id = $this->get_simple_config("user_search_form");
-		$usearch = $this->get_object($usearch_id);
-
-		$this->vars(array("join_form_name" => $uadd[name], "search_form_name" => $usearch[name]));
+		$this->vars(array(
+			"after_login" => $al
+		));
 		return $this->parse();
 	}
 
@@ -878,6 +876,12 @@ class db_config extends aw_template
 				$this->db_query($q);
 			}
 		}
+	}
+
+	function submit_loaginaddr($arr)
+	{
+		extract($arr);
+		$this->set_simple_config("after_login",$after_login);
 	}
 };
 ?>
