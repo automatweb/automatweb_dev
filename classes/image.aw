@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.130 2005/01/24 15:46:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.131 2005/01/28 08:42:50 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1218,6 +1218,16 @@ class image extends class_base
 	{
 
 
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "resize" || $arr["id"] == "resize_big")
+		{
+			$cv = get_instance("core/converters/image_convert");
+			return $cv->can_convert();
+		}
+		return true;
 	}
 }
 ?>

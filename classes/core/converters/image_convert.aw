@@ -13,6 +13,46 @@ class image_convert extends class_base
 	{
 		$this->init();
 
+		$driver = $this->_get_driver();
+
+		if ($driver == "")
+		{
+			$this->raise_error(ERR_IMAGE_DRIVER, "image_covert: could not detect any supported imagehandlers!");
+		}
+
+		$driver = "_int_image_convert_driver_".$driver;
+
+		error::throw_if(!class_exists($driver), array(
+			"id" => "ERR_IMAGE_DRIVER",
+			"msg" => "image_covert: could not detect any supported imagehandlers!"
+		));
+
+		$this->driver = new $driver;
+		$this->dirver->ref =& $this;
+	}
+
+	// this is here, because the authors of the php gd module are stupid idiots.
+	// there is *NO* safe way of telling which version of gd is installed for all 4.x versions of php
+	// except for this.
+	function my_gd_info() 
+	{
+		ob_start();
+		eval("phpinfo();");
+		$info = ob_get_contents();
+		ob_end_clean();
+
+		foreach(explode("\n", $info) as $line)
+		{
+			if(strpos($line, "GD Version")!==false)
+			{
+				$ret = trim(str_replace("GD Version", "", strip_tags($line)));
+			}
+		}
+		return $ret;
+	}
+
+	function _get_driver()
+	{
 		$driver = "";
 
 		// detect if gd is available
@@ -50,35 +90,12 @@ class image_convert extends class_base
 			}
 		}
 
-		if ($driver == "")
-		{
-			$this->raise_error(ERR_IMAGE_DRIVER, "image_covert: could not detect any supported imagehandlers!");
-		}
-
-		$driver = "_int_image_convert_driver_".$driver;
-
-		$this->driver = new $driver;
-		$this->dirver->ref =& $this;
+		return $driver;
 	}
 
-	// this is here, because the authors of the php gd module are stupid idiots.
-	// there is *NO* safe way of telling which version of gd is installed for all 4.x versions of php
-	// except for this.
-	function my_gd_info() 
+	function can_convert()
 	{
-		ob_start();
-		eval("phpinfo();");
-		$info = ob_get_contents();
-		ob_end_clean();
-
-		foreach(explode("\n", $info) as $line)
-		{
-			if(strpos($line, "GD Version")!==false)
-			{
-				$ret = trim(str_replace("GD Version", "", strip_tags($line)));
-			}
-		}
-		return $ret;
+		return $this->_get_driver() != "" ? true : false;
 	}
 	
 	function load_from_string($str)
