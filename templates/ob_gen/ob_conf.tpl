@@ -20,71 +20,60 @@
 											</td>
 										</tr>
 									</table>
-									<br>
-
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
 										<tr>
 											<td class="celltext">
-											<table class="celltext" border=1>
-											<tr>
-												<th>välja nimi andmetabelis<br>
-													{VAR:tab}
-												</th>
-											
-												<th>välja nimi <br>objektitabelis</th>
-												<th>välja nimi <br>objecti tabeli metas</th>
-												<th>välja nimi sisutabelis</th>
-												<th>võta tabelist oid</th>
-												<th>unikaalne<br>
-													<small>
-													kui välja sisu kordub<br>siis duplikaate ei looda
-													</small>
-												</th>
-											</tr>
-											{VAR:list_fields}
-											<!-- SUB: fields -->
-											<tr><td>{VAR:field_name} </td>
-											<td>
-<!--												<input value="{VAR:object}" type="text" name="object[{VAR:field_name}]" size=8 class="formtext">-->
-												<select name='object[{VAR:field_name}]'  class="formselect">
-												{VAR:object_fields}
-												</select>
-											</td>
-											<td><input value="{VAR:object_meta}" type="text" name="object_meta[{VAR:field_name}]" size=8 class="formtext"></td>
+											{VAR:ob_conf_table}
 
-											<td>
-												<select name="extra_table_data[{VAR:field_name}]"  class="formselect">
-													{VAR:extra_table_data}
-												</select>
-											</td>
-											<td>
-												<input {VAR:dejoin} type="checkbox" name="dejoin[{VAR:field_name}]">
-												<!-- SUB: dejoini -->
-												<select name="dejoin_table[{VAR:field_name}]" class="formselect">
+											<!-- SUB: object -->
+											<select name='object[{VAR:field_name}]'  class="formselect">
+											{VAR:object_fields}
+											</select>
+											<input {VAR:dejoin_object} type="checkbox" name="dejoin[object][{VAR:field_name}]" title="leia id teisest tabelist">
+											{VAR:dejoin_object_conf}
+											<!-- END SUB: object -->
+
+											<!-- SUB: meta -->
+											<input value="{VAR:object_meta}" type="text" name="meta[{VAR:field_name}]" size=8 class="formtext">
+											<input {VAR:dejoin_meta} type="checkbox" name="dejoin[meta][{VAR:field_name}]" title="leia id teisest tabelist">
+											{VAR:dejoin_meta_conf}
+											<!-- END SUB: meta -->
+
+											<!-- SUB: sisu -->
+											<select name="sisu[{VAR:field_name}]"  class="formselect">
+												{VAR:sisu_table_data}
+											</select>
+											<input {VAR:dejoin_sisu} type="checkbox" name="dejoin[sisu][{VAR:field_name}]" title="leia id teisest tabelist">
+											{VAR:dejoin_sisu_conf}
+											<!-- END SUB: sisu -->
+																						
+											<!-- SUB: dejoin -->
+												<br>
+												<select name="dejoin_table[{VAR:what}][{VAR:field_name}]" class="formselect" title="sellest tabelist">
 													{VAR:dejoin_tables}
 												</select>
-												<select name="dejoin_field[{VAR:field_name}]" class="formselect">
+												<select name="dejoin_field[{VAR:what}][{VAR:field_name}]" class="formselect" title="see veerg">
 													{VAR:dejoin_fields}
 												</select>
-												<!-- END SUB: dejoini -->
-											</td>
-											<td><input {VAR:unique} type="checkbox" name="unique[{VAR:field_name}]"></td>
-											<td></td>
-											</tr>
-											<!-- END SUB: fields -->
-											</table>
-											
+											<!-- END SUB: dejoin -->
+
+											<!-- SUB: remember -->
+												<input {VAR:remember} type="checkbox" name="remember[{VAR:what}][{VAR:field_name}]">
+												<small>remember join result</small>
+											<!-- END SUB: remember -->
+
+											<!-- SUB: unique -->
+											<input {VAR:unique} type="checkbox" name="unique[{VAR:field_name}]">
+											<!-- END SUB: unique -->
 											</td>
 										</tr>											
 										<tr>
-											<td class="celltext"><a href="{VAR:genereeri}" target=_blank>GENEREERI OBJEKTID</a>
+											<td class="celltext">
+												<a href="{VAR:genereeri}" target=_blank>GENEREERI TERVEST ANDMETABELIST OBJEKTID</a><br />
+												<a href="{VAR:genereeri5}" target=_blank>GENEREERI ANDMETABELIST 5 esimest OBJEKTI</a><br />
 											</td>
 										</tr>
-										
-
-
 									</table>
-
 								</td>
 							</tr>
 						</table>

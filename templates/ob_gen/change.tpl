@@ -39,9 +39,10 @@
 											<td class="celltext">andmed võetakse tabelist</td>
 											<td class="celltext">
 											
-											<select name="pick_table"  class="formselect">
-											{VAR:list_tables}
-											</select><br>
+											<select name="source_table"  class="formselect">
+											{VAR:source_tables}
+											</select>
+											<br>
 											korraga loe tabelist 
 													<select name="limit" class="formselect">
 													{VAR:chunks}
@@ -49,7 +50,24 @@
 													<small> seda selleks et "select * from table" ei loeks kogu tabelit mällu, <br>
 													vaid pannakse limit ja loetakse korraga ainult näiteks sada kirjet "limit 100, 200", "limit 200, 300" ... </small>
 											</td>
-										</tr>											
+										</tr>
+										<tr>
+											<td class="celltext">
+												(ruulid milliseid kirjeid võtta)
+											</td>
+											<td class="celltext">
+												.........................
+											</td>
+										</tr>
+										<tr>
+											<td class="celltext">
+												kasutatakse AW objektitabelit
+											</td>
+											<td class="celltext">
+											<input type="checkbox" name="use_object" {VAR:use_object}>
+											</td>
+										</tr>
+										<!-- SUB: object -->
 										<tr>
 											<td class="celltext">tehakse selle klassi objektid</td>
 											<td class="celltext">
@@ -58,31 +76,12 @@
 											</select>
 											</td>
 										</tr>
-
-										<tr>
-											<td class="celltext">loodava objekti sisutabel</td>
-											<td class="celltext">
-											<select name="extra_table"  class="formselect">
-											{VAR:extra_table}
-											</select>
-											</td>
-										</tr>
-
-
-
 										<tr>
 											<td class="celltext">uute objektide aktiivsus vaikimisi</td>
 											<td class="celltext">
 											<select name="status" class="formselect">
 											{VAR:status}
 											</select>
-											</td>
-										</tr>
-										<tr>
-											<td class="celltext"></td>
-											<td class="celltext">
-											
-
 											</td>
 										</tr>
 										<tr>
@@ -93,13 +92,26 @@
 											</select>
 											</td>
 										</tr>
+										<!-- END SUB: object -->
 										<tr>
-											<td class="celltext"></td>
-											<td class="celltext"><a href="{VAR:genereeri}" target=_blank>GENEREERI OBJEKTID</a>
+											<td class="celltext">
+												kasutatakse {VAR:if_object} sisutabelit
+											</td>
+											<td class="celltext">
+												<input type="checkbox" name="use_sisu" {VAR:use_sisu}>
 											</td>
 										</tr>
+										<!-- SUB: sisu -->
+										<tr>
+											<td class="celltext">loodava objekti sisutabel</td>
+											<td class="celltext">
+											<select name="sisu_table"  class="formselect">
+											{VAR:sisu_table}
+											</select>
+											</td>
+										</tr>
+										<!-- END SUB: sisu -->
 									</table>
-
 								</td>
 							</tr>
 						</table>
