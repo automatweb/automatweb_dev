@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.27 2002/11/12 18:01:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.28 2002/11/17 13:33:10 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -311,4 +311,5 @@ class aw_template extends acl_base
 	}
 };
 
+classload("class_base");
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.7 2002/11/15 21:19:42 duke Exp $
+// $Id: class_base.aw,v 2.8 2002/11/17 13:33:10 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -698,7 +698,7 @@ class class_base extends aliasmgr
 
 		$gen = $almgr->new_list_aliases(array(
 			"id" => $id,
-			"return_url" => $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class)),
+			"return_url" => $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
 		));
 		return $this->gen_output(array("content" => $gen));
 	}
@@ -725,7 +725,57 @@ class class_base extends aliasmgr
 	}	
 
 
-	
+	//////////////////////////////////////////////////////////////////////
+	// 
+	// init functions for classes that do not use automatic form generator
+	//
+	//////////////////////////////////////////////////////////////////////
 
+	////
+	// !initializes the add function UI
+	// params:
+	// $args - the arguments to the add function
+	// $classname - the name that will be used in the path
+	// $tpl - the template to read
+	function _add_init($args, $classname, $tpl)
+	{
+		// check if we can add objects under the parent menu
+		if (!$this->can("add", $args["parent"]))	
+		{
+			$this->acl_error("add", $args["parent"]);
+		}
+		// make the path
+		$self_url = aw_global_get("REQUEST_URI");
+		if ($args["return_url"] != "")
+		{
+			// if return url is set, we must make the path point to the url gievn
+			$this->mk_path(0,"<a href='$args[return_url]'>Tagasi</a> / <a href='$self_url'>Lisa $classname</a>");
+		}
+		else
+		{
+			$this->mk_path($parent,"<a href='$self_url'>Lisa $classname</a>");
+		}
+		$this->read_template($tpl);
+	}
+
+	function _change_init($args, $classname, $tpl)
+	{
+		if (!$this->can("edit", $args["id"]))
+		{
+			$this->acl_error("edit", $args["id"]);
+		}
+		$ob = $this->get_object($args["id"]);
+		$self_url = aw_global_get("REQUEST_URI");
+		if ($args["return_url"] != "")
+		{
+			$this->mk_path(0,"<a href='$args[return_url]'>Tagasi</a> / <a href='$self_url'>Muuda $classname</a>");
+		}
+		else
+		{
+			$this->mk_path($ob["parent"], "<a href='$self_url'>Muuda $classname</a>");
+		}
+		$this->read_template($tpl);
+		return $ob;
+	}
 };
 ?>
