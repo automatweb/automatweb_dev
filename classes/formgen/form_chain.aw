@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.6 2003/01/27 14:09:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.7 2003/02/10 14:06:38 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -474,6 +474,8 @@ class form_chain extends form_base
 		}
 
 		aw_global_set("proc_chain_entry_id", $chain_entry_id);
+		aw_global_set("current_chain_entry", $chain_entry_id);
+		aw_global_set("current_chain",$id);
 
 		// then we must let formgen process the form entry and then add the entry to the chain. 
 
