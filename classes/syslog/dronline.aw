@@ -5,6 +5,7 @@
 @default table=objects
 @default field=meta
 @default method=serialize
+@default group=general
 
 @property status type=status field=status
 @caption Staatus
@@ -20,6 +21,8 @@
 
 @property to type=date_select 
 @caption Kuni
+
+@groupinfo general caption=Üldine
 
 */
 
@@ -198,6 +201,16 @@ class dronline extends class_base
 			'sortable' => 1,
 		));
 		$t->define_field(array(
+			'name' => 'type',
+			'caption' => 'T&uuml;&uuml;p',
+			'sortable' => 1,
+		));
+		$t->define_field(array(
+			'name' => 'act_id',
+			'caption' => 'Tegevus',
+			'sortable' => 1,
+		));
+		$t->define_field(array(
 			'name' => 'action',
 			'caption' => 'Mida',
 			'sortable' => 1,
@@ -213,10 +226,16 @@ class dronline extends class_base
 			$whc = $this->get_where_clause($id);
 		}
 
-		$q = "SELECT * FROM syslog ".$whc." ORDER BY tm DESC LIMIT ".$this->get_limit_clause($id);
+		$ts = aw_ini_get('syslog.types');
+		$as = aw_ini_get('syslog.actions');
+
+		$q = "SELECT * FROM syslog ".$whc." ORDER BY tm DESC ".$this->get_limit_clause($id);
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
+			$row['type'] = $ts[$row['type']]['name'];
+			$row['act_id'] = $as[$row['act_id']]['name'];
+			list($row['ip'],) = inet::gethostbyaddr($row['ip']);
 			$t->define_data($row);
 		}
 
@@ -270,17 +289,45 @@ class dronline extends class_base
 		// action filter
 		if ($mt['use_filter'])
 		{
-			$tin = new aw_array();
+			$tsql = array();
+
+			$tin = array();
+			$ain = array();
+			$cin = array();
 			// now figure out all the checked vars in the filter
 			foreach($mt as $k => $v)
 			{
-				if (substr($k,0,4) == 'slt_' && $v == 1)
+				if (substr($k,0,4) == 'slt_' && $v == 1) // syslog.type
 				{
-					$tin->set('\''.substr($k,4).'\'');
+					$tin[] = '\''.substr($k,4).'\'';
+				}
+				else
+				if (substr($k,0,4) == 'sla_' && $v == 1)	// syslog.action
+				{
+					$ain[] = '\''.substr($k,4).'\'';
+				}
+				else
+				if (substr($k,0,4) == 'slc_' && $v == 1)	// syslog action&type combo
+				{
+					$_t = explode('_',$k);
+					$cin[] = '( type = \''.$_t[1].'\' AND action = \''.$_t[2].'\' )';
 				}
 			}
 
-			$sql[] = 'type IN ('.$tin->to_sql().')';
+			if (count($tin) > 0)
+			{
+				$tsql[] = 'type IN ('.join(',',$tin).')';
+			}
+			if (count($ain) > 0)
+			{
+				$tsql[] = 'act_id IN ('.join(',',$ain).')';
+			}
+			if (count($cin) > 0)
+			{
+				$tsql[] = '('.join(' OR ',$cin).')';
+			}
+
+			$sql[] = '('.join(' OR ',$tsql).')';
 		}
 
 		// blocked ips
@@ -309,7 +356,12 @@ class dronline extends class_base
 			$conf_o['meta']['numlines'] = $ob['meta']['numlines'];
 		}
 
-		return $conf_o['meta']['numlines'];
+		$ret = $conf_o['meta']['numlines'];
+		if ($ret != '')
+		{
+			$ret = ' LIMIT '.$ret;
+		}
+		return $ret;
 	}
 
 	function _do_ipblock($arr)
@@ -396,7 +448,7 @@ class dronline extends class_base
 				".$this->get_where_clause($id)."
 				GROUP BY tm1
 				ORDER BY tm ASC
-				LIMIT ".$this->get_limit_clause($id);
+				".$this->get_limit_clause($id);
 		$this->db_query($q);
 		$max = 1;
 		$dat = array();
@@ -488,7 +540,7 @@ class dronline extends class_base
 				".$this->get_where_clause($id)."
 				GROUP BY ip
 				ORDER BY cnt DESC
-				LIMIT ".$this->get_limit_clause($id);
+				".$this->get_limit_clause($id);
 		$this->db_query($q);
 		$max = 1;
 		$dat = array();
@@ -618,7 +670,7 @@ class dronline extends class_base
 				WHERE syslog.oid IS NOT NULL AND syslog.oid > 0 ".$this->get_where_clause($id,' AND ')."
 				GROUP BY oid
 				ORDER BY cnt DESC
-				LIMIT ".$this->get_limit_clause($id);
+				".$this->get_limit_clause($id);
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{

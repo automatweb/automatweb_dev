@@ -6,6 +6,7 @@
             <field>status</field>
             <table>objects</table>
             <method>serialize</method>
+            <group>general</group>
             <caption>Staatus</caption>
       </property>
       <property>
@@ -14,6 +15,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Alates</caption>
       </property>
       <property>
@@ -22,6 +24,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Kuni</caption>
       </property>
       <property>
@@ -30,6 +33,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>kasutaja</caption>
       </property>
       <property>
@@ -38,6 +42,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>IP Aadress</caption>
       </property>
       <property>
@@ -46,6 +51,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Listi UID</caption>
       </property>
       <property>
@@ -54,6 +60,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Listi email</caption>
       </property>
       <property>
@@ -62,6 +69,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Mida tegi </caption>
       </property>
       <property>
@@ -71,6 +79,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Mitu rida</caption>
       </property>
       <property>
@@ -80,23 +89,53 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <caption>Kas kasutada Tegevuste filtrit</caption>
       </property>
       <property>
-            <name>filter</name>
+            <name>filter_types</name>
             <type>generated</type>
-            <generator>get_filter</generator>
-            <group>Tegevused</group>
+            <generator>get_filter_types</generator>
+            <group>types</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Filter</caption>
+            <caption>T&amp;uuml;&amp;uuml;bid</caption>
+      </property>
+      <property>
+            <name>filter_actions</name>
+            <type>generated</type>
+            <generator>get_filter_actions</generator>
+            <group>actions</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tegevused</caption>
+      </property>
+      <property>
+            <name>filter_combo</name>
+            <type>generated</type>
+            <generator>get_filter_combo</generator>
+            <group>combo</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tegevused</caption>
       </property>
       <groupinfo>
             <general>
                   <caption>Üldine</caption>
                   <default>1</default>
             </general>
+            <dates>
+                  <caption>Ajad</caption>
+            </dates>
+            <Javascript>
+                  <caption>Javascript</caption>
+            </Javascript>
+            <Pilt>
+                  <caption>Pilt</caption>
+            </Pilt>
             <advanced>
                   <caption>Spetsiaal</caption>
             </advanced>
@@ -112,8 +151,38 @@
             <show>
                   <caption>Näitamine</caption>
             </show>
+            <menus>
+                  <caption>Menüüd</caption>
+            </menus>
+            <preview>
+                  <caption>Eelvaade</caption>
+            </preview>
+            <types>
+                  <caption>T&amp;uuml;&amp;uuml;bid</caption>
+            </types>
+            <actions>
+                  <caption>Tegevused</caption>
+            </actions>
+            <combo>
+                  <caption>Kombineeritud</caption>
+            </combo>
       </groupinfo>
       <tableinfo>
+            <files>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid	</master_index>
+            </files>
+            <images>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </images>
+            <extlinks>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </extlinks>
             <menu>
                   <index>id</index>
                   <master_table>objects</master_table>

@@ -5,6 +5,8 @@
 @default table=objects
 @default field=meta
 @default method=serialize
+@default group=general
+
 
 @property status type=status field=status
 @caption Staatus
@@ -36,8 +38,19 @@
 @property use_filter type=checkbox ch_value=1
 @caption Kas kasutada Tegevuste filtrit
 
-@property filter type=generated generator=get_filter group=Tegevused
-@caption Filter
+@property filter_types type=generated generator=get_filter_types group=types
+@caption T&uuml;&uuml;bid
+
+@property filter_actions type=generated generator=get_filter_actions group=actions
+@caption Tegevused
+
+@property filter_combo type=generated generator=get_filter_combo group=combo
+@caption Tegevused
+
+@groupinfo general caption=Üldine
+@groupinfo types caption=T&uuml;&uuml;bid
+@groupinfo actions caption=Tegevused
+@groupinfo combo caption=Kombineeritud
 
 */
 
@@ -101,24 +114,85 @@ class dronline_conf extends class_base
 		return PROP_OK;
 	}
 
-	function get_filter()
+	function get_filter_types()
 	{
 		$acts = array();
-		$this->db_query("SELECT distinct(type) as type FROM syslog");
-		while ($row = $this->db_next())
+		$tps = aw_ini_get("syslog.types");
+		foreach($tps as $tpid => $tpd)
 		{
-			$rt = 'slt_'.$row['type'];
+			$rt = 'slt_'.$tpid;
 
 			$acts[$rt] = array(
 				'name' => $rt,
-				'caption' => $row['type'],
+				'caption' => $tpd['name'],
 				'type' => 'checkbox',
 				'ch_value' => 1,
 				'table' => 'objects',
 				'field' => 'meta',
 				'method' => 'serialize',
-				'group' => 'Tegevused'
+				'group' => 'types'
 			);
+		}
+
+		return $acts;
+	}
+
+	function get_filter_actions()
+	{
+		$acts = array();
+		$tps = aw_ini_get("syslog.actions");
+		foreach($tps as $tpid => $tpd)
+		{
+			$rt = 'sla_'.$tpid;
+
+			$acts[$rt] = array(
+				'name' => $rt,
+				'caption' => $tpd['name'],
+				'type' => 'checkbox',
+				'ch_value' => 1,
+				'table' => 'objects',
+				'field' => 'meta',
+				'method' => 'serialize',
+				'group' => 'actions'
+			);
+		}
+
+		return $acts;
+	}
+
+	function get_filter_combo()
+	{
+		$acts = array();
+		$tps = aw_ini_get("syslog.types");
+		$acts = aw_ini_get("syslog.actions");
+		foreach($tps as $tpid => $tpd)
+		{
+			// add type separator
+			$rt = 'slc_sep_'.$tpid;
+			$acts[$rt] = array(
+				'name' => $rt,
+				'caption' => "<b>".$tpd['name']."</b>",
+				'group' => 'combo'
+			);
+			foreach($acts as $acid => $acd)
+			{
+				// check if this action applies for this type
+				$tlist = explode(",", $acd['types']);
+				if (in_array($tpid, $tlist))
+				{
+					$rt = 'slc_'.$tpid.'_'.$acid;
+					$acts[$rt] = array(
+						'name' => $rt,
+						'caption' => $acd['name'],
+						'type' => 'checkbox',
+						'ch_value' => 1,
+						'table' => 'objects',
+						'field' => 'meta',
+						'method' => 'serialize',
+						'group' => 'combo'
+					);
+				}
+			}
 		}
 
 		return $acts;
