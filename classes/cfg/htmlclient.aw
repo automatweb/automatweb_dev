@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.32 2003/07/21 14:48:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.33 2003/09/09 12:05:39 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -30,6 +30,8 @@ class htmlclient extends aw_template
 	{
 		// if value is array, then try to interpret
 		// it as a list of elements.
+
+		// but actually, settings parets should take place in class_base itself
 		if (isset($args["items"]) && is_array($args["items"]))
 		{
 			$res = "";
@@ -193,7 +195,7 @@ class htmlclient extends aw_template
 	}
 
 	////
-	// !hmm, I should use templates instead of generating all that HTML shit
+	// !Creates a normal line
 	function put_line($args)
 	{
 		$caption = $args["caption"];
@@ -263,6 +265,7 @@ class htmlclient extends aw_template
 			"reforb" => $this->mk_reforb($action,$data,$orb_class),
 			"SUBMIT" => $sbt,
 		));
+
 	}
 
 	function get_result()	
@@ -310,6 +313,7 @@ class htmlclient extends aw_template
 					"label" => isset($arr["label"]) ? $arr["label"] : "",
 					"name" => $arr["name"],
 					"value" => isset($arr["ch_value"]) ? $arr["ch_value"] : "",
+					"caption" => $arr["caption"],
 					"checked" => isset($arr["value"]) && isset($arr["ch_value"]) && ($arr["value"] == $arr["ch_value"])
 				));
 				break;
