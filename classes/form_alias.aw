@@ -94,13 +94,7 @@ class form_alias extends form_base
 								"type" => CL_FORM_ENTRY,
 							));
 		};
-		$f = $this->entryaliases[$matches[3] - 1];
-		if (!$f["target"])
-		{
-			return "";
-		}
-
-		$alias_data = unserialize($f["data"]);
+		$alias_data = unserialize($alias["data"]);
 
 		$fo = new form;
 
@@ -108,7 +102,7 @@ class form_alias extends form_base
 		{
 			$replacement = $fo->show(array(
 				"id" => $alias_data["form_id"],
-				"entry_id" => $f["target"],
+				"entry_id" => $alias["target"],
 				"op_id" => $alias_data["output"]
 			));
 		}
@@ -116,7 +110,7 @@ class form_alias extends form_base
 		{
 			$replacement = $fo->gen_preview(array(
 				"id" => $alias_data["form_id"],
-				"entry_id" => $f["target"],
+				"entry_id" => $alias["target"],
 			));
 		}
 

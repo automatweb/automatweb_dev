@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.13 2002/01/30 00:10:02 duke Exp $
+// form_chain.aw - form chains
 lc_load("form");
 global $orb_defs;
 $orb_defs["form_chain"] = "xml";
@@ -189,16 +191,8 @@ class form_chain extends form_base
 	function parse_alias($args = array())
 	{
 		extract($args);
-		if (!is_array($this->formaliases))
-		{
-			$this->aliases = $this->get_aliases(array(
-				"oid" => $oid,
-				"type" => array(CL_FORM_CHAIN)
-			));
-		};
-		$f = $this->aliases[$matches[3] - 1];
 		global $section;
-		$ar = array("id" => $f["target"], "section" => $section);
+		$ar = array("id" => $alias["target"], "section" => $section);
 
 		if ($GLOBALS["form_id"])
 		{
@@ -465,7 +459,8 @@ class form_chain extends form_base
 	{
 		extract($arr);
 
-/*		$e = $this->get_chain_entry($entry_id);
+		/*
+		$e = $this->get_chain_entry($entry_id);
 		foreach($e as $fid => $fentry_id)
 		{
 			$this->delete_object($fentry_id);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.21 2001/11/29 22:14:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.22 2002/01/30 00:10:02 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -26,20 +26,12 @@ class file extends aw_template
 	function parse_alias($args = array())
 	{
 		extract($args);
-		if (!is_array($this->filealiases))
-		{
-			$this->filealiases = $this->get_aliases(array(
-								"oid" => $oid,
-								"type" => CL_FILE,
-							));
-		};
-		$f = $this->filealiases[$matches[3] - 1];
-		if (!$f["target"])
+		if (!$alias["target"])
 		{
 			return "";
 		}
 
-		$fi = $this->get_file_by_id($f["target"]);
+		$fi = $this->get_file_by_id($alias["target"]);
 		if ($fi["showal"] == 1)
 		{
 			// n2itame kohe
@@ -387,6 +379,9 @@ class file extends aw_template
 
 				// messengeri külge attachitud fail
 				"messenger" => $this->mk_site_orb(array("class" => "messenger","action" => "edit","id" => $msg_id)),
+
+				// saidi poole pealt uploaditi kodukataloogi fail
+				"site" => $this->mk_site_orb(array("class" => "homedir","action" => "gen_home_dir","id" => $parent)),
 			);
 
 			if ($id)
@@ -394,6 +389,11 @@ class file extends aw_template
 				// $user argument tähendab, et request tuli saidi seest
 				// ja vastavalt sellele suuname kliendi ringi
 				$retval = ($user) ? $orb_urls["user"] : $orb_urls["awdoc"];
+			}
+			else
+			if (strpos($GLOBALS["REQUEST_URI"],"automatweb") === false)
+			{
+				$retval = $orb_urls["site"];
 			}
 			elseif ($msg_id)
 			{

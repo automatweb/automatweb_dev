@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.81 2002/01/29 15:41:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.82 2002/01/30 00:10:02 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -335,9 +335,6 @@ class document extends aw_template
 
 		$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
 		
-/*		$doc["lead"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["lead"]);
-		$doc["content"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["content"]);*/
-			
 		if ($meta["show_last_changed"])
 		{
 			$doc["content"] .= "<p><font size=1><i>Viimati muudetud:&nbsp;&nbsp;</i>" . $this->time2date($doc["modified"],4) . "</font>";
@@ -422,7 +419,6 @@ class document extends aw_template
 		{
 			$doc["content"] = preg_replace("/<P>(.*)<\/P>/", "\\1",$doc["content"]);
 		}
-
 
 		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
 		if (!(strpos($doc["content"], "#telekava_") === false))
@@ -548,7 +544,6 @@ class document extends aw_template
 			};
 		};
 
-
 		// all the style magic is performed inside the style engine
 		$doc["content"] = $this->style_engine->parse_text($doc["content"]); 
 		
@@ -556,12 +551,15 @@ class document extends aw_template
 		// sellel real on midagi pistmist WYSIWYG edimisvormiga
 		$doc["content"] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc["content"]); 
 
+		$this->docid = $docid;
+		$this->source = $doc["content"];
+
 		$this->register_parsers();
 
 
 
 		// linkide parsimine
-		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/",$doc["content"],$matches))
+		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/U",$doc["content"],$matches))
 		{
 			$doc["content"] = str_replace($matches[0],"<a href='#" . $matches[2] . "'>$matches[4]</a>",$doc["content"]);
 		};
@@ -633,10 +631,15 @@ class document extends aw_template
 		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
 		if (!isset($text) || $text != "undef") 
 		{
-			$doc["content"] = $this->parse_aliases(array(
-							"text"	=> $doc["content"],
-							"oid"	=> $doc["docid"],
-					));
+			//$doc["content"] = $this->parse_aliases(array(
+			//				"text"	=> $doc["content"],
+			//				"oid"	=> $doc["docid"],
+			//		));
+			
+			classload("aliasmgr");
+			$al = new aliasmgr();
+			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates));
+			$this->vars($al->get_vars());
 		}; 
 
 		if (!$doc["nobreaks"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
@@ -3002,6 +3005,12 @@ class document extends aw_template
 
 	function register_parsers()
 	{
+		global $DUKE;
+
+		if ($DUKE)
+		{
+		};
+
 		$mp = $this->register_parser(array(
 					"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
 					));
@@ -3014,6 +3023,15 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 					"templates" => array("image","image_linked","image_inplace","image_flash"),
+				));
+		// välised lingid
+		// pildid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "d",
+					"class" => "document",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
 				));
 		// välised lingid
 		$this->register_sub_parser(array(
@@ -3044,13 +3062,13 @@ class document extends aw_template
 				));
 		
 		// pollid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "k",
-					"class" => "poll",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
+		//$this->register_sub_parser(array(
+		//			"idx" => 2,
+		//			"match" => "k",
+		//			"class" => "poll",
+		//			"reg_id" => $mp,
+		//			"function" => "parse_alias",
+		//		));
 		
 		// failid
 		$this->register_sub_parser(array(
@@ -3131,6 +3149,15 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 				));
+		
+		// kalendrid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "k",
+					"class" => "planner",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
 
 		// menyyd.
 		$this->register_sub_parser(array(
@@ -3193,6 +3220,23 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 		));
+	}
+
+	function parse_alias($args = array())
+	{
+		extract($args);
+		$d = $alias;
+		if ($meta[$d["target"]])
+		{
+			$replacement = "<a href='/?class=objects&action=show&id=$d[target]'>$d[name]</a>";
+		}
+		else
+		{
+			$replacement = $this->gen_preview(array("docid" => $d["target"]));
+		};
+		return $replacement;
+
+
 	}
 };
 ?>
