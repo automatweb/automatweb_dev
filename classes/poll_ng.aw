@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.10 2005/03/02 13:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.11 2005/03/18 11:40:54 ahti Exp $
 
 /*
 
@@ -66,7 +66,7 @@ class poll_ng extends class_base
 		));
 	
 		$o = $args["obj_inst"];
-		foreach($o->connections_from(array("type" => RELTYPE_ANSWER)) as $c)
+		foreach($o->connections_from(array("type" => "RELTYPE_ANSWER")) as $c)
 		{
 			$this->t->define_data(array(
 				"id" => $c->prop("to"),
@@ -105,7 +105,7 @@ class poll_ng extends class_base
 
 		$votes = $poll->meta("votes");
 
-		foreach($poll->connections_from(array("type" => RELTYPE_ANSWER)) as $c)
+		foreach($poll->connections_from(array("type" => "RELTYPE_ANSWER")) as $c)
 		{
 			$retval .= sprintf("%d ",$votes[$c->prop("to")]);
 			$retval .= html::href(array(
@@ -148,7 +148,7 @@ class poll_ng extends class_base
 
 		$pobj = obj($poll);
 		$conn = $pobj->connections_from(array(
-			"type" => RELTYPE_ANSWER,
+			"type" => "RELTYPE_ANSWER",
 			"to" => $choice
 		));
 		if (count($conn) < 1)
