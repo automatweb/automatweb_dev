@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.147 2003/01/23 08:39:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.148 2003/01/23 09:25:05 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2469,5 +2469,40 @@ class core extends db_connector
 		asort($ret);
 		return $ret;
 	}
-};
+
+        function obj_get_meta($args = array())
+        {
+                extract($args);
+                classload("php");
+                if (not($oid) && (strlen($meta) == 0))
+                {
+                        return false;
+                };
+                $php_ser = new php_serializer();
+                if ($args["oid"])
+                {
+                        $q = "SELECT meta FROM objects WHERE oid = $oid";
+                        $this->db_query($q);
+                        $row = $this->db_next();
+                        $meta = $row["meta"];
+                }
+                else
+                {
+                        $meta = $args["meta"];
+                };
+                $retval = $php_ser->php_unserialize($meta);
+                return $retval;
+        }
+
+
+        function obj_set_meta($args = array())
+        {
+                extract($args);
+                $old = $this->obj_get_meta(array("oid" => $oid));
+                $old = array_merge($old,$args["meta"]);
+                $ser = aw_serialize($old);
+                $this->quote($ser);
+                $q = "UPDATE objects SET meta = '$ser' WHERE oid = $oid";
+                $this->db_query($q);
+        }};
 ?>
