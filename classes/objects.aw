@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.20 2001/10/22 05:09:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.21 2001/11/02 12:05:00 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -656,8 +656,9 @@ class objects extends db_objects
 		// just in case if any menus were deleted or changed - I thought it would be too expensive to put checks in 
 		// core::delete_object and core::upd_object to check if menus were changed and then flush the cache 
 		// - yeah, that would be a lot safer, but is it really necessary?
+		global $lang_id,$SITE_ID;
 		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+		$cache->db_invalidate("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
 
 		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"]));
 	}

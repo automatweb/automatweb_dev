@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.2 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.3 2001/11/02 12:05:00 kristo Exp $
 class php_serializer 
 {
 	function php_serialize($arr)
@@ -25,8 +25,9 @@ class php_serializer
 			else
 			{
 				$v = str_replace("\"","\\\\\"",$v);
-				$v = str_replace("\n","\\n",$v);
-				$v = str_replace("\r","\\r",$v);
+				$v = str_replace("\n","\\\n",$v);
+				$v = str_replace("\r","\\\r",$v);
+				$v = str_replace("\$","\\\\\$",$v);
 				$v = "\"$v\"";
 			}
 			$k = str_replace("\"","\\\"",$k);

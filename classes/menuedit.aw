@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.63 2001/11/01 11:14:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.64 2001/11/02 12:05:00 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -90,8 +90,9 @@ class menuedit extends aw_template
 		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,MN_HOME_FOLDER_SUB);
 		$this->db_query($q);
 		$this->_log("menuedit",sprintf(LC_MENUEDIT_ADDED_HOMECAT_FOLDER,$args[name]));
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+
+		$this->invalidate_menu_cache();
+
 		return $newoid;
 
 	}
@@ -107,8 +108,7 @@ class menuedit extends aw_template
 		}
 
 		$this->delete_object($parent);
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+		$this->invalidate_menu_cache();
 	}
 
 // parameetrid:
@@ -2490,8 +2490,7 @@ class menuedit extends aw_template
 		$this->quote(&$arr);
 		extract($arr);
 
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+		$this->invalidate_menu_cache();
 
 		// stripime aliasest tyhikud v2lja
 		str_replace(" ","",$alias);
@@ -2891,8 +2890,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function submit_order($arr)
 	{
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+		$this->invalidate_menu_cache();
 
 		$obj = $this->get_object($arr["parent"]);
 		$ar = unserialize($obj["last"]);
@@ -3157,8 +3155,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
 		$this->_log("menuedit",sprintf(LC_MENUEDIT_ERASED_MENU,$name));
 
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+		$this->invalidate_menu_cache();
 
 		header("Location: ".$this->mk_orb("menu_list", array("parent" => $arr["parent"])));
 	}
@@ -3398,8 +3395,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->restore_handle();
 		}
 
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+		$this->invalidate_menu_cache();
 	}
 
 	////
@@ -4070,8 +4066,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$this->req_import_menus($i_p, &$menus, $parent);
 
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+		$this->invalidate_menu_cache();
 
 		header("Location: ".$GLOBALS["baseurl"]."/automatweb/".$this->mk_orb("menu_list", array("parent" => $parent)));
 		return $this->mk_orb("menu_list", array("parent" => $parent));
@@ -4206,8 +4201,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		}
 
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+		$this->invalidate_menu_cache();
 
 		$GLOBALS["copied_objects"] = array();
 		if ($from_menu)
@@ -4241,12 +4235,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function make_menu_caches()
 	{
-		global $awt;
+		global $awt,$lang_id,$SITE_ID;
 		$awt->start("menuedit::make_menu_caches");
-//		$cache = new cache();
-//		$ms = $cache->db_get("menuedit::menu_cache");
-//		if (!$ms)
-//		{
+		$cache = new cache();
+		$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+		if (!$ms)
+		{
 			// make one big array for the whole menu
 			$this->mar = array();
 			// see laheb ja loeb kokku, mitu last mingil sektsioonil on
@@ -4263,17 +4257,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->dmsg(array_keys($this->mpr));
 
 			// write the data to the cache
-/*			$cached = array();
+			$cached = array();
 			$cached["mar"] = $this->mar;
 			$cached["mpr"] = $this->mpr;
 			$cached["subs"] = $this->subs;
 
-	//		$cache = new cache();
-//			$ms = $cache->db_get("menuedit::menu_cache");
+			$cache = new cache();
+			$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
 			$php = new php_serializer();
-			$c_d = $php->php_serialize($cached);*/
-	//		$cache->db_set("menuedit::menu_cache",$c_d);
-/*		}
+			$c_d = $php->php_serialize($cached);
+			$cache->db_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
+		}
 		else
 		{
 			// unserialize the cache
@@ -4282,7 +4276,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->mar = $cached["mar"];
 			$this->mpr = $cached["mpr"];
 			$this->subs = $cached["subs"];
-		}*/
+		}
 		$awt->stop("menuedit::make_menu_caches");
 	}
 
@@ -4913,8 +4907,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		}
 
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache");
+		$this->invalidate_menu_cache();
 
 		return "menuedit.".$GLOBALS["ext"]."?parent=".$parent."&type=menus&period=".$period;
 	}
@@ -5083,6 +5076,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"sel_menu_id" => $sel_menu_id,
 			"sel_menu_timing" => $sel_menu_meta["img_timing"] ? $sel_menu_meta["img_timing"] : 4 
 		));
+	}
+
+	function invalidate_menu_cache()
+	{
+		$cache = new cache;
+		global $lang_id,$SITE_ID;
+		$cache->db_invalidate("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
 	}
 }
 ?>
