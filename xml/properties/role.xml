@@ -35,7 +35,7 @@
             <table>objects</table>
             <type>text</type>
             <store>no</store>
-            <no-caption>1</no-caption>
+            <no_caption>1</no_caption>
             <field>save_acl_sep</field>
             <caption></caption>
       </property>

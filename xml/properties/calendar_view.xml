@@ -139,6 +139,7 @@
                   <clid>
                         <num_0>CL_PLANNER</num_0>
                         <num_1>CL_DOCUMENT_ARCHIVE</num_1>
+                        <num_2>CL_PROJECT</num_2>
                   </clid>
                   <caption>Võta sündmusi</caption>
             </EVENT_SOURCE>
