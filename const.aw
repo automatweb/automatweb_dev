@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.19 2001/06/14 08:47:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.20 2001/06/18 19:16:07 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -367,7 +367,6 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_USER_GROUP => array("name" => "Kasutaja","file" => "users","can_add" => 0),
 			CL_FILE => array("name" => "Fail","file" => "file","can_add" => 1),
 			CL_GUESTBOOK => array("name" => "Guestbook","file" => "guestbook","can_add" => 1),
-			CL_PROMO => array("name" => "Promo kast", "file" => "promo", "can_add" => 1),
 			CL_CALENDAR => array("name" => "Kalender","file" => "planner","can_add" => 1),
 			CL_BANNER => array("name" => "Banner", "file" => "banner", "can_add" => 1),
 			CL_BANNER_CLIENT => array("name" => "Banneri asukoht", "file" => "banner_client", "can_add" => 1),
