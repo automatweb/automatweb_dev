@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.56 2003/11/19 13:36:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.57 2003/11/26 15:37:55 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -126,16 +126,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property user2 table=documents group=general type=textarea rows=2 cols=60
 @caption Kasutaja defineeritud 2
 
-@property user3 table=documents group=general type=textarea rows=2 cols=60
+@property user3 table=documents group=general type=textbox 
 @caption Kasutaja defineeritud 3
 
-@property user4 table=documents group=general type=textarea rows=2 cols=60
+@property user4 table=documents group=general type=textbox
 @caption Kasutaja defineeritud 4
 
-@property user5 table=documents group=general type=textarea rows=2 cols=60
+@property user5 table=documents group=general type=textbox
 @caption Kasutaja defineeritud 5
 
-@property user6 table=documents group=general type=textarea rows=5 cols=60
+@property user6 table=documents group=general type=textbox
 @caption Kasutaja defineeritud 6
 
 @property language type=text group=general type=text store=no
@@ -429,10 +429,7 @@ class doc extends class_base
 	{
 		// map title to name
 		$obj_inst = &$args["obj_inst"];
-		if (!empty($args["form_data"]["title"]))
-		{
-			$obj_inst->set_name($args["form_data"]["title"]);
-		};
+		$obj_inst->set_name($args["request"]["title"]);
 		
 		if (isset($this->_preview))
 		{
