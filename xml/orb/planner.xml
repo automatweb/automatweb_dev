@@ -25,7 +25,7 @@
 		<action name="addevent">
 			<function name="adm_event">
 				<arguments>
-					<required name="parent"/>
+					<optional name="parent"/>
 					<required name="date"/>
 					<define name="op" value="add"/>
 				</arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.12 2001/05/17 13:02:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.13 2001/05/17 14:11:45 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -71,7 +71,7 @@ class planner extends calendar {
 			"day" => "?class=planner&date=$date",
 			"week" => "?class=planner&action=show_week&date=$date",
 			"month" => "?class=planner&action=show_month&date=$date",
-			"new" => "?class=planner&action=add_event&parent=$id&date=$date",
+			"new" => "?class=planner&action=addevent&date=$date",
 		);
 		$args["menu"] = $menu;
 		return $this->change($args);
@@ -603,7 +603,7 @@ class planner extends calendar {
 			"disp"	=> $disp,
 			"id" => $id,
 			"content" => $content,
-			"mreforb" => $this->mk_reforb("redir",array("day" => $d,"disp" => $disp,"id" => $id)),
+			"mreforb" => $this->mk_reforb("redir",array("day" => $d,"disp" => $disp,"id" => $id,"ctype" => $ctype)),
 			"mlist" => $this->picker($m,$mlist),
 			"ylist" => $this->picker($y,$ylist),
 			"prev" => $prev,
@@ -613,8 +613,15 @@ class planner extends calendar {
 
 	function adm_event($args = array())
 	{
-		$this->tpl_init("automatweb/planner");
 		extract($args);
+		if ($parent)
+		{
+			$this->tpl_init("automatweb/planner");
+		}
+		else
+		{
+			$this->tpl_init("planner");
+		};
 		$this->read_template("event.tpl");
 		if ($op == "edit")
 		{
@@ -903,12 +910,19 @@ class planner extends calendar {
 			$day = $max_day;
 		};
 		$date = "$day-$month-$year";
-		$retval = $this->mk_orb("change",array(
-						"date" => $date,
-						"id" => $id,
-						"disp" => $disp,
-						)
-				);
+		$parms = array();
+		$parms["date"] = $date;
+		if ($ctype == "oid")
+		{
+			$params["id"] = $id;
+			$params["disp"] = $disp;
+			$action = "change";
+		}
+		else
+		{
+			$action = $disp;
+		};
+		$retval = $this->mk_orb($action,$params);
 		return $retval;
 
 	}
