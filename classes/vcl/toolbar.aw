@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.4 2004/10/25 14:34:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.5 2004/10/26 06:49:00 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -85,8 +85,14 @@ class toolbar extends aw_template
 
 	function build_menus()
 	{
+		static $init_done = false;
 		foreach($this->menus as $parent => $menudata)
 		{
+			if (false == $init_done)
+			{
+				$this->custom_data .= $this->parse("MENU_HEADER");
+				$init_done = true;
+			};
 			$this->vars(array(
 				"MENU_ITEM" => $menudata,
 				"id" => $parent,
