@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:52 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:57:10 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,87 +10,43 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/class_list.aw:prop_name
+#: classes/core/proxy_classes/class_list.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr ""
 
-#: classes/core/class_list.aw:prop_name_comment
+#: classes/core/proxy_classes/class_list.aw:prop_name_comment
 msgid "Omaduse Nimi (name) kommentaar"
 msgstr ""
 
-#: classes/core/class_list.aw:prop_name_help
+#: classes/core/proxy_classes/class_list.aw:prop_name_help
 msgid "Omaduse Nimi (name) help"
 msgstr ""
 
-#: classes/core/class_list.aw:prop_comment
+#: classes/core/proxy_classes/class_list.aw:prop_comment
 msgid "Omaduse Kommentaar (comment) caption"
 msgstr ""
 
-#: classes/core/class_list.aw:prop_comment_comment
+#: classes/core/proxy_classes/class_list.aw:prop_comment_comment
 msgid "Omaduse Kommentaar (comment) kommentaar"
 msgstr ""
 
-#: classes/core/class_list.aw:prop_comment_help
+#: classes/core/proxy_classes/class_list.aw:prop_comment_help
 msgid "Omaduse Kommentaar (comment) help"
 msgstr ""
 
-#: classes/core/class_list.aw:prop_status
+#: classes/core/proxy_classes/class_list.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
 msgstr ""
 
-#: classes/core/class_list.aw:prop_status_comment
+#: classes/core/proxy_classes/class_list.aw:prop_status_comment
 msgid "Omaduse Aktiivne (status) kommentaar"
 msgstr ""
 
-#: classes/core/class_list.aw:prop_status_help
+#: classes/core/proxy_classes/class_list.aw:prop_status_help
 msgid "Omaduse Aktiivne (status) help"
 msgstr ""
 
-#: classes/core/class_list.aw:group_general
+#: classes/core/proxy_classes/class_list.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/core/class_list.aw:117
-msgid "id"
-msgstr ""
-
-#: classes/core/class_list.aw:123
-msgid "def"
-msgstr ""
-
-#: classes/core/class_list.aw:128
-msgid "name"
-msgstr ""
-
-#: classes/core/class_list.aw:133
-msgid "file"
-msgstr ""
-
-#: classes/core/class_list.aw:138
-msgid "can_add"
-msgstr ""
-
-#: classes/core/class_list.aw:143
-msgid "parents"
-msgstr ""
-
-#: classes/core/class_list.aw:148
-msgid "alias"
-msgstr ""
-
-#: classes/core/class_list.aw:153
-msgid "alias_class"
-msgstr ""
-
-#: classes/core/class_list.aw:158
-msgid "old_alias"
-msgstr ""
-
-#: classes/core/class_list.aw:163
-msgid "is_remoted"
-msgstr ""
-
-#: classes/core/class_list.aw:168
-msgid "subtpl_handler"
 msgstr ""
 

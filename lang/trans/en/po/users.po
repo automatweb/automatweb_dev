@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:45 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 12:26:16 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,28 +9,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: :308
+# :308
+#: classes/users.aw:308
 msgid "Parool on edukalt vahetatud"
 msgstr ""
 
-#: :1066
+# :1066
+#: classes/users.aw:1066
 msgid "Vigane kasutajanimi"
 msgstr ""
 
-#: :1078
+# :1078
+#: classes/users.aw:1078
 msgid "Sellist kasutajat pole registreeritud"
 msgstr ""
 
-#: :1092
+# :1092
+#: classes/users.aw:1092
 msgid "Sellist võtit pole väljastatud"
 msgstr ""
 
-#: :1107
+# :1107
+#: classes/users.aw:1107
 msgid "See võti on juba aegunud"
 msgstr ""
 
-#: :1107
+# :1107
+#: classes/users.aw:1107
 msgid "Telli uusi v&otilde;ti"
 msgstr ""
-

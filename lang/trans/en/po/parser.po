@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:40 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 12:26:18 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,24 +9,33 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: :174
-msgid "class count = %s <br />\nfunction count = %s <br />\nMaximum brace depth = %s \n<br />max level in file %s on line %s <br />\n"
+# :174
+#: classes/core/docgen/parser.aw:174
+msgid ""
+"class count = %s <br />\n"
+"function count = %s <br />\n"
+"Maximum brace depth = %s \n"
+"<br />max level in file %s on line %s <br />\n"
 msgstr ""
 
-#: :327
+# :327
+#: classes/core/docgen/parser.aw:327
 msgid "error - end of file after class in line %s <br />"
 msgstr ""
 
-#: :584
-msgid "error in p_get_string (line: %s , pos = %s ) , called without string start <br />\n"
+# :584
+#: classes/core/docgen/parser.aw:584
+msgid ""
+"error in p_get_string (line: %s , pos = %s ) , called without string start "
+"<br />\n"
 msgstr ""
 
-#: :610
+# :610
+#: classes/core/docgen/parser.aw:610
 msgid "error in line %s file ended with open string! <br />\n"
 msgstr ""
 
-#: :661 :715
+# :661 :715
+#: classes/core/docgen/parser.aw:661 classes/core/docgen/parser.aw:715
 msgid "copy of %s to %s failed, stopping <br />\n"
 msgstr ""
-

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:45 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 12:26:15 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,23 +10,23 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :218
+#: classes/users_user.aw:218
 msgid "uid is empty!"
 msgstr ""
 
-#: :226
+#: classes/users_user.aw:226
 msgid "oid for uid is empty uid = '%s'!"
 msgstr ""
 
-#: :234
+#: classes/users_user.aw:234
 msgid "user object is not user object!!!! %s clid = %s"
 msgstr ""
 
-#: :242
+#: classes/users_user.aw:242
 msgid "user object is of wrong type! %s props = %s"
 msgstr ""
 
-#: :1086
+#: classes/users_user.aw:1086
 msgid "Error in group hierarchy, count of 100 exceeded! probably offending group - %s"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:52 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 12:26:16 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,12 +9,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: :115
+# :115
+#: classes/table.aw:115
 msgid "no such table %s (tables.class->load_table)!"
 msgstr ""
 
-#: :2472
+# :2472
+#: classes/table.aw:2472
 msgid "table->import: No file uploaded!"
 msgstr ""
-

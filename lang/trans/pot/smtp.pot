@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:51 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 12:26:16 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,35 +10,35 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :18
+#: classes/smtp.aw:18
 msgid "smtp: error, something wrong with server"
 msgstr ""
 
-#: :24
+#: classes/smtp.aw:24
 msgid "smtp: error '%s' after HELO %s"
 msgstr ""
 
-#: :30
+#: classes/smtp.aw:30
 msgid "smtp: error '%s' after MAIL FROM:<%s>"
 msgstr ""
 
-#: :36
+#: classes/smtp.aw:36
 msgid "smtp: error '%s' after RCPT TO:<%s>"
 msgstr ""
 
-#: :42
+#: classes/smtp.aw:42
 msgid "smtp: error '%s' after DATA"
 msgstr ""
 
-#: :60
+#: classes/smtp.aw:60
 msgid "smtp: error '%s' after message"
 msgstr ""
 
-#: :66
+#: classes/smtp.aw:66
 msgid "smtp: error '%s' after QUIT"
 msgstr ""
 
-#: :77
+#: classes/smtp.aw:77
 msgid "smtp: error connecting, %s , %s"
 msgstr ""
 

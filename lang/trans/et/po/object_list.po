@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:41 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 12:26:19 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,60 +9,79 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: :28
+# :28
+#: classes/core/obj/object_list.aw:28
 msgid "object_list::filter(): parameter must be an array!"
 msgstr ""
 
-#: :36
+# :36
+#: classes/core/obj/object_list.aw:36
 msgid "objct_list::filter(): oid parameter cannot be an empty array!"
 msgstr ""
 
-#: :94
+# :94
+#: classes/core/obj/object_list.aw:94
 msgid "object_list::sort_by(): argument must be an array!"
 msgstr ""
 
-#: :102
+# :102
+#: classes/core/obj/object_list.aw:102
 msgid "object_list::sort_by(): prop argument must be present!"
 msgstr ""
 
-#: :115
-msgid "object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance!"
+# :115
+#: classes/core/obj/object_list.aw:115
+msgid ""
+"object_list::sort_by_cb(): if parameter is an array, the first entry must be "
+"an object instance!"
 msgstr ""
 
-#: :120
-msgid "object_list::sort_by_cb(): if parameter is an array, the first entry must be an object instance and the second a method name from that object!"
+# :120
+#: classes/core/obj/object_list.aw:120
+msgid ""
+"object_list::sort_by_cb(): if parameter is an array, the first entry must be "
+"an object instance and the second a method name from that object!"
 msgstr ""
 
-#: :127
+# :127
+#: classes/core/obj/object_list.aw:127
 msgid "object_list::sort_by_cb(%s): no function %s exists!"
 msgstr ""
 
-#: :176
+# :176
+#: classes/core/obj/object_list.aw:176
 msgid "object_list::foreach_o(): parameter must be an array"
 msgstr ""
 
-#: :198
-msgid "object_list::foreach_o(): %s is not a member function of the object class!"
+# :198
+#: classes/core/obj/object_list.aw:198
+msgid ""
+"object_list::foreach_o(): %s is not a member function of the object class!"
 msgstr ""
 
-#: :228
+# :228
+#: classes/core/obj/object_list.aw:228
 msgid "object_list::foreach_cb(): parameter must be an array!"
 msgstr ""
 
-#: :238
-msgid "object_list::foreach_cb(): callback method %s does not exist in class %s!"
+# :238
+#: classes/core/obj/object_list.aw:238
+msgid ""
+"object_list::foreach_cb(): callback method %s does not exist in class %s!"
 msgstr ""
 
-#: :247
+# :247
+#: classes/core/obj/object_list.aw:247
 msgid "object_list::foreach_cb(): callback function %s does not exist!"
 msgstr ""
 
-#: :293
+# :293
+#: classes/core/obj/object_list.aw:293
 msgid "object_list::from_arr(): parameter must be an array!"
 msgstr ""
 
-#: :394
-msgid "object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"
+# :394
+#: classes/core/obj/object_list.aw:394
+msgid ""
+"object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"
 msgstr ""
-

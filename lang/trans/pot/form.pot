@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:42 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 12:26:21 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,31 +10,31 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :2291
+#: classes/formgen/form.aw:2291
 msgid "Sessioonist lugemise formi pole valitud v&auml;ljundile %s "
 msgstr ""
 
-#: :3065
+#: classes/formgen/form.aw:3065
 msgid "No table selected for showing search results for form %s!"
 msgstr ""
 
-#: :3414
+#: classes/formgen/form.aw:3414
 msgid "form->search(%s): no forms selected as search targets!"
 msgstr ""
 
-#: :3602
+#: classes/formgen/form.aw:3602
 msgid "No forms selected as search targets!"
 msgstr ""
 
-#: :3808
+#: classes/formgen/form.aw:3808
 msgid "No table selected for showing data!"
 msgstr ""
 
-#: :3856
+#: classes/formgen/form.aw:3856
 msgid "Tulemuste kuvamise tabelis pole yhtegi elementi!"
 msgstr ""
 
-#: :4763
+#: classes/formgen/form.aw:4763
 msgid "form->metainfo(): weird error!"
 msgstr ""
 

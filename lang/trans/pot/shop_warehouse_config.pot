@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:12 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:57:09 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -107,15 +107,27 @@ msgid "Omaduse Lao toodete t&uuml;&uuml;bid (prod_type_fld) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_type_cfgform
-msgid "Omaduse Lao toodete t&uuml;&uuml;pide lisamise vormi seadete vorm (prod_type_cfgform) caption"
+msgid "Omaduse Lao tootet&uuml;&uuml;pide lisamise vormi seadete vorm (prod_type_cfgform) caption"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_type_cfgform_comment
-msgid "Omaduse Lao toodete t&uuml;&uuml;pide lisamise vormi seadete vorm (prod_type_cfgform) kommentaar"
+msgid "Omaduse Lao tootet&uuml;&uuml;pide lisamise vormi seadete vorm (prod_type_cfgform) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_type_cfgform_help
-msgid "Omaduse Lao toodete t&uuml;&uuml;pide lisamise vormi seadete vorm (prod_type_cfgform) help"
+msgid "Omaduse Lao tootet&uuml;&uuml;pide lisamise vormi seadete vorm (prod_type_cfgform) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prod_conf_folder
+msgid "Omaduse Toodete lisaobjektide seadetevormide kataloog (prod_conf_folder) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prod_conf_folder_comment
+msgid "Omaduse Toodete lisaobjektide seadetevormide kataloog (prod_conf_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_prod_conf_folder_help
+msgid "Omaduse Toodete lisaobjektide seadetevormide kataloog (prod_conf_folder) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_order_fld

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:22:49 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:57:10 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -47,48 +47,4 @@ msgstr ""
 
 # classes/core/proxy_classes/class_list.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/core/class_list.aw:117
-msgid "id"
-msgstr ""
-
-#: classes/core/class_list.aw:123
-msgid "def"
-msgstr ""
-
-#: classes/core/class_list.aw:128
-msgid "name"
-msgstr ""
-
-#: classes/core/class_list.aw:133
-msgid "file"
-msgstr ""
-
-#: classes/core/class_list.aw:138
-msgid "can_add"
-msgstr ""
-
-#: classes/core/class_list.aw:143
-msgid "parents"
-msgstr ""
-
-#: classes/core/class_list.aw:148
-msgid "alias"
-msgstr ""
-
-#: classes/core/class_list.aw:153
-msgid "alias_class"
-msgstr ""
-
-#: classes/core/class_list.aw:158
-msgid "old_alias"
-msgstr ""
-
-#: classes/core/class_list.aw:163
-msgid "is_remoted"
-msgstr ""
-
-#: classes/core/class_list.aw:168
-msgid "subtpl_handler"
 msgstr ""

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:41 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 12:26:17 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,36 +9,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: :42
+# :42
+#: classes/cfg/cfgobject.aw:42
 msgid "Lisa"
 msgstr ""
 
-#: :73 :395
+# :73 :395
+#: classes/cfg/cfgobject.aw:73 classes/cfg/cfgobject.aw:395
 msgid "Muuda konfiobjekti"
 msgstr ""
 
-#: :78 :400
+# :78 :400
+#: classes/cfg/cfgobject.aw:78 classes/cfg/cfgobject.aw:400
 msgid "Salvesta"
 msgstr ""
 
-#: :84
+# :84
+#: classes/cfg/cfgobject.aw:84
 msgid "Vali objektid"
 msgstr ""
 
-#: :356
+# :356
+#: classes/cfg/cfgobject.aw:356
 msgid "Rakenda"
 msgstr ""
 
-#: :361
+# :361
+#: classes/cfg/cfgobject.aw:361
 msgid "Vali konfiguratsiooniobjektid"
 msgstr ""
 
-#: :407
+# :407
+#: classes/cfg/cfgobject.aw:407
 msgid "Otsi"
 msgstr ""
 
-#: :414
+# :414
+#: classes/cfg/cfgobject.aw:414
 msgid "Muuda"
 msgstr ""
-
