@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.33 2003/11/13 12:58:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.34 2003/11/13 13:39:24 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1380,7 +1380,7 @@ class admin_menus extends aw_template
 		if (is_array($sel))
 		{
 			$ol = new object_list(array(
-				"oid" => $sel
+				"oid" => array_keys($sel)
 			));
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
