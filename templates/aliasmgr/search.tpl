@@ -24,7 +24,8 @@
 		</td>
 
 <!--ikoonid-->
-<td valign="bottom">
+<td valign="bottom"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="javascript:redir()" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('new','','{VAR:baseurl}/automatweb/images/blue/awicons/new_over.gif',1)"><img name="new" alt="{VAR:LC_ALIASMGR_ADD}" title="{VAR:LC_ALIASMGR_ADD}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/new.gif" width="25" height="25"></a>
+
 {VAR:buttons}
 </td>
 </tr>
@@ -48,31 +49,22 @@ function aw_save()
 {
 	cnt = 0;
 	res = "";
-	
-	if (document.searchform.check.length)
+	len = document.searchform.check.length;
+	for (i = 0; i < len; i++)
 	{
-		len = document.searchform.check.length;
-		for (i = 0; i < len; i++)
+		if (document.searchform.check[i].checked)
 		{
-			if (document.searchform.check[i].checked)
+			if (cnt == 0)
 			{
-				if (cnt == 0)
-				{
-					res = document.searchform.check[i].value;
-				}
-				else
-				{
-					res = res + "," + document.searchform.check[i].value;
-				}
-				cnt++;
-			};
+				res = document.searchform.check[i].value;
+			}
+			else
+			{
+				res = res + "," + document.searchform.check[i].value;
+			}
+			cnt++;
 		};
-	}
-	else
-	{
-		res = document.searchform.check.value;
 	};
-
 	if (res.length > 0)
 	{
 		link = '{VAR:saveurl}&alias=' + res;
@@ -83,34 +75,4 @@ function aw_save()
 		alert('Ühtegi objekti pole valitud!');
 	};
 }
-
-function redir()
-{
-	with(document.foo)
-	{
-		if (aselect.selectedIndex == 0)
-		{
-			alert('Vali alias!');
-		}
-		else
-		{
-			cl = aselect.options[aselect.selectedIndex].value;
-			window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}";
-		};
-	};
-};
 </script>
-</form>
-<form method="GET" name="searchform" action="reforb.{VAR:ext}">
-{VAR:form}
-<table border=0 cellspacing=1 cellpadding=2>
-<tr>
-	<td class="celltext" colspan="2" align="center">
-	{VAR:reforb}
-	<input type="submit" value="Otsi">
-	</td>
-</tr>
-</table>
-{VAR:table}
-<input type="button" onClick="javascript:aw_save()" value="Tekita aliased">
-</form>
