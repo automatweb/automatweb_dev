@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.25 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.26 2001/06/16 12:43:03 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -425,6 +425,45 @@ class core extends db_connector
 		$this->db_query($q);
 		// see on siis see vinge funktsioon
 		$this->flush_cache();
+	}
+
+	////
+	// !Tagastab koik mingist nodest allpool olevad objektid
+	// seda on mugav kasutada, kui tegemist on suhteliselt
+	// vaikse osaga kogu objektihierarhiast, ntx kodukataloog
+	// parent(int) - millisest nodest alustame?
+	// class(int) - milline klass meid huvitab?
+	function get_objects_below($args = array())
+	{
+		extract($args);
+		$groups = array();
+		$this->get_objects_by_class(array(
+					"parent" => $parent,
+					"class" => $class,
+			));
+			
+		while($row = $this->db_next())
+		{
+			$groups[$row["oid"]] = $row;
+		};
+		return $groups;
+	}
+
+	function indent_array($arr,$level)
+	{
+		static $indent = 0;
+		static $flatlist = array();
+		$indent++;
+		while(list($key,$val) = each($arr[$level]))
+		{
+			$flatlist[$key] = str_repeat("&nbsp;",$indent*3) . $val;
+			if (is_array($arr[$key]))
+			{
+				$this->indent_array($arr,$key);
+			};
+		};
+		$indent--;
+		return $flatlist;
 	}
 
 	////
