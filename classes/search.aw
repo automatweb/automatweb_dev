@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.50 2003/10/30 18:16:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.51 2003/12/03 12:10:30 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -400,7 +400,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					case "name":
 						if ($val)
 						{
-							$parts["name"] = " name LIKE '%$val%' ";
+							$parts["name"] = " name LIKE '%".str_replace("'", "\\'", $val)."%' ";
 							$partcount++;
 						};
 						break;
@@ -687,6 +687,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields = array();
 		}
+
 
 		$this->search_callback(array("name" => "get_fields","fields" => &$fields,"args" => $args));
 
