@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.285 2004/06/28 19:50:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.286 2004/07/16 10:30:17 rtoomas Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -71,6 +71,11 @@ class core extends acl_base
 	//   $this->_log(ST_DOCUMENT, SA_ADD, "Added document $name", $docid);
 	function _log($type,$action,$text,$oid = 0)
 	{
+		if(aw_ini_get('logging_disabled'))
+		{
+			return;
+		}
+
 		if (empty($this->dc))
 		{
 			print "SYSLOG: $text\n";
@@ -109,8 +114,18 @@ class core extends acl_base
 				$fields[] = "lang_id";
 				$values[] = aw_global_get("lang_id");
 			};
+			
+			/*
+				It seems that mssql doesn't support insert delayd syntax.
+				We're on the safe side as long as AWs running on
+				MSSQL have used the aw.ini directive logging_disabled.
+				Im sure a more permanent fix will surface one day.
+			*/
+			
+			//$q = sprintf("INSERT INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
+			//if (false && !$this->db_query($q,false))
 			$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
-			if (!$this->db_query($q,false))
+			if (!$this->db_query($q,false))			
 			{
 				die("cannot write to syslog: " . $this->db_last_error["error_string"]);
 			};
@@ -193,7 +208,370 @@ class core extends acl_base
 			echo "clear_cache oid = $oid fname = $fname , dat = ".dbg::dump($dat)." <br>";
 		}
 		$q = "UPDATE objects SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
+		//XXX the following query was commented out on eau, have to watch out for this one
+
 		$this->db_query($q);
+	}
+
+	////
+	// !lisab objektile aliase
+	// source on see objekt, mille juurde lingitakse
+	// target on see, mida lingitakse
+	// aliaste tabelisse paigutame ka klassi id, nii
+	// peaks hiljem olema voimalik natuke kiirust gainida
+
+	// positioned arguments suck, add_alias is the Right Way to do this,
+	// but I will leave this in place just in case someone still
+	// needs it.
+	function add_alias($source,$target,$extra = "")
+	{
+		return $this->addalias(array(
+			"id" => $source,
+			"alias" => $target,
+			"extra" => $extra,
+		));
+	}
+
+	////
+	// !$arr must contain 
+	// id = alias id
+	// target = alias target
+	// and may contain 
+	// extra = data to write to alias table
+	function change_alias($arr) 
+	{
+		extract($arr);
+		$target_data = $this->get_object($target);
+
+		$source = $this->db_fetch_field("SELECT source FROM aliases WHERE id = '$id'", "source");
+
+		$q = "UPDATE aliases SET target = '$target' , type = '$target_data[class_id]' , data = '$extra' 
+					WHERE id = '$id'";
+
+		$this->db_query($q);
+
+		$this->_log(ST_CORE, SA_CHANGE_ALIAS, "Muutis objekti $source aliast $target", $source);
+	}
+
+	////
+	// !deletes alias $target from object $source
+	function delete_alias($source,$target, $no_cache = false, $no_callback = false)
+	{
+		$q = "DELETE FROM aliases WHERE source = '$source' AND target = '$target'";
+		$this->db_query($q);
+	}
+
+
+	////
+	// !returns array of aliases pointing to object $oid
+	function get_aliases_of($args = array()) 
+	{
+		extract($args);
+		if (!$oid)
+		{
+			return;
+		}
+		$rl = "";
+		if (!empty($reltype))
+		{
+			$rl = " AND reltype = $reltype ";
+		};
+		if (!empty($lang_id))
+		{
+			$ll = " AND lang_id = $lang_id ";
+		};
+		$q = "SELECT *,objects.name as name,objects.parent as parent FROM aliases
+			LEFT JOIN objects ON
+			(aliases.source = objects.oid)
+			WHERE target = '$oid' $rl $ll ORDER BY id";
+		$this->db_query($q);
+		$aliases = array();
+		while($row = $this->db_next())
+		{
+			$aliases[$row["source"]]=array(
+				"type" => $row["type"],
+				"name" => $row["name"], 
+				"data" => $row["data"],
+				"id" => $row["source"],
+				"parent" => $row["parent"]);
+		};
+		return $aliases;
+	}
+
+	////
+	// !Deletes all aliases for $oid
+	function delete_aliases_of($oid)
+	{
+		$this->db_query("DELETE FROM aliases WHERE source = $oid");
+	}
+
+	////
+	// !the base version of per-class alias adding
+	// a class can override this, to implement adding aliases differently
+	// for instance - when adding an alias to form_entry it lets you pick the output
+	// with which the entry is shown. 
+	// but basically what this function needs to do, is to call core::add_alias($id,$alias)
+	// and finally redirect the user to $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr")
+	// parameters:
+	//   id - the id of the object where the alias will be attached
+	//   alias - the id of the object to attach as an alias
+	//   relobj_id - reference to the relation object
+	//   reltype - type of the relation
+	//   no_cache - if true, cache is not updated
+	//   add_obj_type_history - if set, save object type in session for use in aliasmgr obj type listbox
+	function addalias($arr)
+	{
+		//arr($arr);
+		extract($arr);
+
+		$extra = ($arr["extra"]) ? $arr["extra"] : "";
+
+		$target_data = $this->get_object($alias);
+
+		$idx = $this->db_fetch_field("SELECT MAX(idx) as idx FROM aliases WHERE source = '$id' AND type =  '$target_data[class_id]'","idx");
+		if ($idx === "")
+		{
+			$idx = 1;
+		}
+		else
+		{
+			$idx++;
+		}
+
+		$relobj_id = (int)$arr["relobj_id"];
+		$reltype = (int)$arr["reltype"];
+		$q = "INSERT INTO aliases (source,target,type,data,idx,relobj_id,reltype)
+			VALUES('$id','$alias','$target_data[class_id]','$extra','$idx','$relobj_id','$reltype')";
+
+		$cl = $target_data['class_id'];
+
+		// aliasmgr object type history
+		if (isset($add_obj_type_history))
+		{		
+			if (is_array($hist = aw_global_get('aliasmgr_obj_history')))
+			{
+				$hist[time()] = $cl;
+				array_unique($hist);
+				krsort($hist);
+				while(count($hist) > 10)
+				{
+					array_pop($hist);
+				}
+			}
+			else
+			{
+				$hist = array(time() => $cl);
+			}
+
+			aw_session_set('aliasmgr_obj_history',$hist);
+
+			$usr = get_instance('users_user');
+
+			$usr->set_user_config(array(
+				'uid' => aw_global_get('uid'),
+				'key' => 'aliasmgr_obj_history',
+				'value' => $hist
+			));
+		}
+
+		$this->db_query($q);
+
+		$ret = $this->db_last_insert_id();
+
+		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $id aliase $alias", $id);
+
+		return $ret;
+	}
+
+	////
+	// !Registreerib uue aliasteparseri
+	// argumendid:
+	// class(string) - klassi nimi, passed to classload. May be empty
+	// function(string) - function to be called for this alias. May be empty.
+	// reg(string) - regulaaravaldis, samal kujul nagu preg_replace esimene argument
+
+	// aw shit, siin ei saa ju rekursiivseid aliaseid kasutada. Hm .. aga kas neid
+	// siis yldse kusagil kasutatakse? No ikka .. tabelis voib olla pilt.
+
+	function register_parser($args = array())
+	{
+		// esimesel kasutamisel loome uue nö dummy objekti, mille sisse
+		// edaspidi registreerime koikide parserite callback meetodid
+		if (!isset($this->parsers) || !is_object($this->parsers))
+		{
+			$this->parsers = get_instance("dummy");
+			// siia paneme erinevad regulaaravaldised
+			$this->parsers->reglist = array();
+		};
+
+		extract($args);
+
+		if (isset($class) && isset($function) && $class && $function)
+		{
+			if (!is_object($this->parsers->$class))
+			{
+				$this->parsers->$class = get_instance($class);
+			};
+		
+			$block = array(
+				"reg" => $reg,
+				"class" => $class,
+				"parserchain" => array(),
+				"function" => $function,
+			);
+		}
+		else
+		{
+			// kui klassi ja funktsiooni polnud defineeritud, siis järelikult
+			// soovitakse siia alla registreerida nö. sub_parsereid.
+			$block = array(
+				"reg" => $reg,
+				"parserchain" => array(),
+			);
+		};
+		$this->parsers->reglist[] = $block;
+		
+	
+		// tagastab äsja registreeritud parseriobjekti ID nimekirjas
+		return sizeof($this->parsers->reglist) - 1;
+	}
+
+	////
+	// !Registreerib alamparseri
+	// argumendid:
+	// idx(int) - millise $match array elemendi peale erutuda
+	// match(string) - mis peaks elemendi väärtuses olema, et see välja kutsuks
+	// reg_id(int) - millise master parseri juurde see registreerida
+	// class(string) - klass
+	// function(string) - funktsiooni nimi
+	function register_sub_parser($args = array())
+	{
+		extract($args);	
+		if (!isset($this->parsers->$class) || !is_object($this->parsers->$class))
+		{
+			$this->parsers->$class = get_instance($class);
+		};
+
+		$block = array(
+			"idx" => isset($idx) ? $idx : 0,
+			"match" => isset($match) ? $match : 0,
+			"class" => $class,
+			"function" => $function,
+			"reset" => isset($reset) ? $reset : "",
+			"templates" => isset($templates) ? $templates : array(),
+		);
+
+		$this->parsers->reglist[$reg_id]["parserchain"][] = $block;
+	}
+
+	////
+	// !Parsib mingi tekstibloki kasutates selleks register_parser ja register_sub_parser funktsioonide abil
+	// registreeritud parsereid
+	// argumendid:
+	// text(string) - tekstiblokk
+	// oid(int) - objekti id, mille juurde see kuulub
+	function parse_aliases($args = array())
+	{
+		$this->blocks = array();
+		extract($args);
+		$o = obj($oid);
+		$meta = $o->meta();
+
+		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
+		// esimese tsükliga kutsume parserite reset funktioonud välja. If any.
+		if (!is_array($this->parsers->reglist))
+		{
+			return;
+		}
+		foreach($this->parsers->reglist as $pkey => $parser)
+		{
+			if (sizeof($parser["parserchain"] > 0))
+			{
+				foreach($parser["parserchain"] as $skey => $sval)
+				{
+					$cls = $sval["class"];
+					$res = $sval["reset"];
+					if ($sval["reset"])
+					{
+						$this->parsers->$cls->$res();
+					};
+				};
+			};
+		}
+
+		foreach($this->parsers->reglist as $pkey => $parser)
+		{
+			// itereerime seni, kuni see äsjaleitud regulaaravaldis enam ei matchi.
+			$cnt = 0;
+			while(preg_match($parser["reg"],$text,$matches))
+			{
+				$cnt++;
+				if ($cnt > 50)
+				{
+					return;
+				};
+				// siia tuleb tekitada mingi if lause, mis 
+				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja välja
+				if (sizeof($parser["parserchain"] > 0))
+				{
+					foreach($parser["parserchain"] as $skey => $sval)
+					{
+						$inplace = false;
+						if (($matches[$sval["idx"]] == $sval["match"]) || (!$sval["idx"]))
+						{
+							$cls = $sval["class"];
+							$fun = $sval["function"];
+							$tpls = array();
+
+							foreach($sval["templates"] as $tpl)
+							{
+								$tpls[$tpl] = $this->templates[$tpl];
+							};
+
+							$params = array(
+								"oid" => $oid,
+								"idx" => $sval["idx"],
+								"matches" => $matches,
+								"tpls" => $tpls,
+								"meta" => $meta,
+							);
+
+							$repl = $this->parsers->$cls->$fun($params);
+							
+							if (is_array($repl))
+							{
+								$replacement = $repl["replacement"];
+								$inplace = $repl["inplace"];
+							}
+							else
+							{
+								$replacement = $repl;
+							};
+
+							if (is_array($this->parsers->$cls->blocks))
+							{
+								$this->blocks = $this->blocks + $this->parsers->$cls->blocks;
+							};
+						
+							if ($inplace)
+							{
+								$this->vars(array($inplace => $replacement));	
+								$inplace = false;
+								$text = preg_replace($parser["reg"],"",$text,1);
+							}
+							else
+							{
+								$text = preg_replace($parser["reg"],$replacement,$text,1);
+							};
+							$replacement = "";
+						};
+					};
+				};
+			};
+		};
+		return $text;
+=======
+>>>>>>> 2.285
 	}
 
 	////
@@ -213,6 +591,15 @@ class core extends acl_base
 	// $silent - logida viga, aga jätkata tööd
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0)
 	{
+		if(aw_ini_get('raise_error.no_email'))
+		{
+			$send_mail = false;	
+		}
+		else
+		{
+			$send_mail = true;
+		}
+
 		if (aw_global_get("__from_raise_error") > 0)
 		{
 			return false;
@@ -234,6 +621,9 @@ class core extends acl_base
 			$msg .= dbg::process_backtrace(debug_backtrace());
 		}
 
+
+		//XXX die($msg) was here
+		
 		// meilime veateate listi ka
 		$subj = "Viga saidil ".$this->cfg["baseurl"];
 
@@ -281,6 +671,8 @@ class core extends acl_base
 			};
 		}
 
+
+
 		// try to find the user's email;
 		$head = "";
 		if (($uid = aw_global_get("uid")) != "")
@@ -299,7 +691,6 @@ class core extends acl_base
 			$head="From: automatweb@automatweb.com\n";
 		};
 
-		$send_mail = true;
 
 		if ($err_type == 30 && strpos($HTTP_SERVER_VARS["HTTP_USER_AGENT"], "Microsoft-WebDAV-MiniRedir") !== false)
 		{
@@ -323,6 +714,9 @@ class core extends acl_base
 		// we replicate by POST request, cause this thing can be too long for a GET request
 		global $class,$action;
 
+		//XXX: watchout, on eau the following if block had a "false &&" part in it
+		//i just deleted that, but for further testing i'm writing this comment
+		//so i could find the place easily
 		if (!($class == "bugtrack" && $action="add_error"))
 		{
 			// kui viga tuli bugi replikeerimisel, siis 2rme satu l6pmatusse tsyklisse
@@ -708,8 +1102,11 @@ class core extends acl_base
 		{
 			$this->raise_error(ERR_CORE_NOP_OPEN_FILE,"Couldn't open file '$file' for writing",true);
 		};
-		fwrite($fh,$arr["content"]);
-		fclose($fh);
+		else
+		{
+			fwrite($fh,$arr["content"]);
+			fclose($fh);
+		}
 		// actually this should return a boolean value and an error message should
 		// be stored somewhere inside the class.
 		return true;
