@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.5 2004/03/25 13:48:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.6 2004/03/25 13:51:17 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -83,6 +83,7 @@ class document_statistics extends class_base
 					"caption" => "Vaatamisi",
 					"align" => "center",
 					"type" => "int",
+					"numeric" => 1,
 					"sortable" => 1
 				));
 
