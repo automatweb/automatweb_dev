@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.24 2003/07/04 14:01:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.25 2003/07/04 14:08:47 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -178,22 +178,6 @@ class css extends class_base
 		// stiilidega.
 		$udata = $this->get_user();
 		$this->rootmenu = $udata["home_folder"];
-	}
-
-	////
-	// !Joonistab Editori menüü
-	function css_draw_menu($args = array())
-	{
-		extract($args);
-		load_vcl("xmlmenu");
-		$xm = new xmlmenu();
-		$retval = $xm->build_menu(array(
-			"vars" => array_merge($vars,array("ext" => $this->cfg["ext"])),
-			"xml" => $this->cfg["basedir"] . "/xml/css_editor.xml",
-			"tpl" => $this->template_dir . "/menus.tpl",
-			"activelist" => $activelist,
-		));
-		return $retval;
 	}
 
 	////
