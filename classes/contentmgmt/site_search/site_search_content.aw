@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.14 2004/07/23 09:13:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.15 2004/07/30 11:06:12 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -27,8 +27,11 @@
 @property per_page type=textbox size=5
 @caption Mitu tulemust lehel
 
-@property static_gen_repeater type=relpicker reltype=RELTYPE_REPEATER group=static
-@caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
+property static_gen_repeater type=relpicker reltype=RELTYPE_REPEATER group=static
+caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
+
+@property reledit type=releditor group=static reltype=RELTYPE_REPEATER use_form=emb rel_id=first
+@caption Seos
 
 @property static_gen_link type=text store=no group=static
 @caption Staatilise genereerimise link
@@ -104,6 +107,31 @@ class site_search_content extends class_base
 						"event" => $this->mk_my_orb("generate_static", array("id" => $args["obj_inst"]->id())),
 					));
 				}
+				break;
+
+			case "reledit":
+				$val = $data["value"];
+				$d = $val["start"]["day"];
+				$m = $val["start"]["month"];
+				$y = $val["start"]["year"];
+
+				$time = $val["time"];
+				list($hour,$min) = explode(":",$time);
+				if ($hour && $min)
+				{
+					$stamp = mktime($hour,$min,0,$m,$d,$y);
+					
+				}
+				else
+				{
+					$stamp = mktime(4,0,0,$m,$d,$y);
+				};
+				// set it to scheduler
+				$sc = get_instance("scheduler");
+				$sc->add(array(
+					"event" => $this->mk_my_orb("generate_static", array("id" => $args["obj_inst"]->id())),
+					"time" => $stamp,
+				));
 				break;
 		}
 		return $retval;
