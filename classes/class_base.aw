@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.150 2003/09/24 16:32:28 duke Exp $
+// $Id: class_base.aw,v 2.151 2003/09/29 14:20:30 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1202,7 +1202,7 @@ class class_base extends aw_template
 			}
 			
 			// if it is a translated object, then don't show properties that can't be translated
-			if ($this->is_translated && $val["trans"] != 1 && $val["name"] != "needs_translation" && $val["name"] != "is_translated")
+			if ($this->is_translated && $val["trans"] != 1 && $val["name"] != "is_translated")
 			{
 				continue;
 			};
@@ -1976,13 +1976,20 @@ class class_base extends aw_template
 		if (empty($id))
 		{
 			$period = aw_global_get("period");
-			$id = $this->ds->ds_new_object(array(),array(
-				"parent" => $parent,
-				"class_id" => $this->clid,
-				"status" => !empty($status) ? $status : 1,
-				"period" => $period,
-				"lang_id" => isset($rawdata["lang_id"]) ? $rawdata["lang_id"] : false,
-			));
+			$o = new object;
+			$o->set_class_id($this->clid);
+			$o->set_parent($parent);
+			$o->set_status(!empty($status) ? $status : 1);
+			if ($period)
+			{
+				$o->set_period($period);
+			}
+			if (isset($rawdata["lang_id"]))
+			{
+				$o->set_lang_id($rawdata["lang_id"]);
+			}
+			$o->save();
+			$id = $o->id();
 			aw_session_set("added_object",$id);//axel häkkis
 			
 			if ($alias_to || $rawdata["alias_to"])
