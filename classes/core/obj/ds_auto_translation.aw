@@ -40,7 +40,9 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			$objdata = $req_od;
 
 			// mark in cache that this is the original object for the translation
-			$this->objdata[$conns[0]["from"]]["type"] = OBJ_TRANS_ORIG;
+			reset($conns);
+			list(,$f_c) = each($conns);
+			$this->objdata[$f_c["from"]]["type"] = OBJ_TRANS_ORIG;
 			
 
 			if ($objdata["lang_id"] == $lang_id)
@@ -49,14 +51,14 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 				// mark the translated object in the cache and link back to original
 				$this->objdata[$oid]["type"] = OBJ_TRANS_TRANSLATED;
-				$this->objdata[$oid]["trans_orig"] = $conns[0]["from"];
+				$this->objdata[$oid]["trans_orig"] = $f_c["from"];
 
 				return $objdata;
 			}
 			// this is not the corret language object. get the original and try to find
 			// a related translation object that has the correct lang_id
 			$conns2 = $this->contained->find_connections(array(
-				"from" => $conns[0]["from"],
+				"from" => $f_c["from"],
 				"type" => RELTYPE_TRANSLATION,
 				"to.lang_id" => $lang_id
 			));
@@ -72,14 +74,17 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			if (count($conns2) == 1)
 			{
 				// mark the found translation connection in the cache
-				$this->objdata[$conns[0]["from"]]["trans_rels"][$lang_id] = $conns2[0]["to"];
+				$this->objdata[$f_c["from"]]["trans_rels"][$lang_id] = $conns2[0]["to"];
+
+				reset($conns2);
+				list(, $f_c2) = each($conns2);
 
 				// mark the translated object in the cache and link back to original
-				$this->objdata[$conns2[0]["to"]]["type"] = OBJ_TRANS_TRANSLATED;
-				$this->objdata[$conns2[0]["to"]]["trans_orig"] = $conns[0]["from"];
+				$this->objdata[$f_c2["to"]]["type"] = OBJ_TRANS_TRANSLATED;
+				$this->objdata[$f_c2["to"]]["trans_orig"] = $f_c["from"];
 
-				// the correct object is in $conns2[0]["to"]
-				$ret = $this->contained->get_objdata($conns2[0]["to"]);
+				// the correct object is in $f_c2["to"]
+				$ret = $this->contained->get_objdata($f_c2["to"]);
 				$ret["lang_id"] = $req_od["lang_id"];
 				$ret["meta"] = $req_od["meta"];
 				// just the bit about OBJ_IS_TRANSLATED
@@ -90,7 +95,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			else
 			{
 				// no connections, return the untranslated object
-				$ret = $this->contained->get_objdata($conns[0]["from"]);
+				$ret = $this->contained->get_objdata($f_c["from"]);
 				$ret["lang_id"] = $req_od["lang_id"];
 				$ret["meta"] = $req_od["meta"];
 				$ret["flags"] = $ret["flags"] & (~OBJ_IS_TRANSLATED);	// first unset it
@@ -119,6 +124,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 	{
 		extract($arr);
 		
+		//echo "readp for $objdata[oid] <Br>";
 		$oid = $objdata["oid"];
 		if ($this->objdata[$oid]["type"] == OBJ_TRANS_TRANSLATED)
 		{

@@ -121,7 +121,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			$tp["site_id"] = aw_ini_get("site_id");
 		}
 		$query_hash = "search::".md5(serialize($tp));
-		
+
 		$ret = $this->_get_cache($query_hash, 0);
 		if (is_array($ret))
 		{

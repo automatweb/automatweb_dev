@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.11 2003/12/04 10:03:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.12 2004/01/21 10:07:20 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -359,7 +359,9 @@ class form_entry_element extends form_element
 				$conn = $o->connections_from();
 				if (sizeof($conn) > 0)
 				{
-					$html = $obj->show(array("id" => $conn[0]->prop("to")));
+					reset($conn);
+					list(,$f_c) = each($conn);
+					$html = $obj->show(array("id" => $f_c->prop("to")));
 				}
 				else
 				{

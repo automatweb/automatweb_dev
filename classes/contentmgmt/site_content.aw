@@ -7,6 +7,7 @@ class site_content extends menuedit
 		$this->init(array(
 			"tpldir" => "automatweb/menuedit",
 		));
+		$this->image = get_instance("image");
 	}
 
 	////
@@ -2141,6 +2142,11 @@ class site_content extends menuedit
 			$smi = "";
 			foreach($imgar as $nr => $dat)
 			{
+				if ($dat["image_id"])
+				{
+					$dat["url"] = $this->image->get_url_by_id($dat["image_id"]);
+				}
+
 				if ($smi == "")
 				{
 					$sel_image = "<img name='sel_menu_image' src='".image::check_url($dat["url"])."' border='0'>";
@@ -2673,7 +2679,9 @@ class site_content extends menuedit
 			{
 				// if it has connections pointing to it, then it is, so get the translations from the original
 				// we need to do this, because the previous query must ever only return 0 or 1 connections
-				$obj = obj($conn[0]->prop("from"));
+				reset($conn);
+				list(,$f_conn) = each($conn);
+				$obj = obj($f_conn->prop("from"));
 				$conn = $obj->connections_from(array(
 					"type" => RELTYPE_TRANSLATION
 				));

@@ -252,7 +252,10 @@ class object_tree extends _int_obj_container_base
 
 	function _int_req_filter($filter)
 	{
+		global $awt;
+		$awt->start("ds_search");
 		$oids = $GLOBALS["object_loader"]->ds->search($filter);
+		$awt->stop("ds_search");
 		foreach($oids as $oid)
 		{
 			$o = new object($oid);

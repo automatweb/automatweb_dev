@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.63 2003/12/04 10:03:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.64 2004/01/21 10:07:20 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2372,7 +2372,8 @@ class form_element extends aw_template
 				{
 					$o = obj($this->arr["id"]);
 					$conn = $o->connections_from();
-					$c = $conn[0];
+					reset($conn);
+					list(,$c) = each($conn);
 
 					$def = $defs[$this->arr["alias_subtype"]];
 

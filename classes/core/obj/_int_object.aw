@@ -154,14 +154,16 @@ class _int_object
 				"from" => $this->obj["oid"],
 				"to" => $oid,
 			));
-			if (!$conn_id[0]["id"])
+			if (count($conn_id) < 1)
 			{
 				error::throw(array(
 					"id" => ERR_CONNECTION,
 					"msg" => "object::disconnect(): could not find connection to object $oid from object ".$this->obj["oid"]
 				));
 			}
-			$c->load($conn_id[0]["id"]);
+			reset($conn_id);
+			list(, $f_c) = each($conn_id);
+			$c->load($f_c["id"]);
 			$c->delete();
 		}
 	}
