@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.52 2003/04/25 13:02:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.53 2003/05/08 10:25:03 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -960,6 +960,7 @@ class form extends form_base
 		else
 		{
 			enter_function("form::load_chain_data");
+			$tb_els = array();
 			if ($load_entry_data)
 			{
 				if ($load_entry_data_form)
@@ -977,6 +978,10 @@ class form extends form_base
 				foreach($lf_els as $lf_el)
 				{
 					$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
+					if ($lf_el->get_type() == "textbox")
+					{
+						$tb_els[$lf_el->get_el_name()] = true;
+					}
 				}
 			}
 			if ($load_chain_data)
@@ -1000,6 +1005,10 @@ class form extends form_base
 					foreach($lf_els as $lf_el)
 					{
 						$elvalues[$lf_el->get_el_name()] = $lf_fm->entry[$lf_el->get_id()];
+					if ($lf_el->get_type() == "textbox")
+					{
+						$tb_els[$lf_el->get_el_name()] = true;
+					}
 					}
 					exit_function("form::load_chain_data::iter");
 				}
@@ -1024,9 +1033,15 @@ class form extends form_base
 						for($idx = 0; $idx < $this->arr["contents"][$row][$col]->cnt; $idx++)
 						{
 							$el =& $this->arr["contents"][$row][$col]->arr[$idx];
-							if (isset($elvalues[$el->get_el_name()]))
+							$eln = $el->get_el_name();
+							if (isset($elvalues[$eln]))
 							{
-								$this->arr["contents"][$row][$col]->arr[$idx]->set_value($elvalues[$el->get_el_name()], false);
+								$user_data = false;
+								if ($tb_els[$eln] && $el->get_type() == "listbox")
+								{
+									$user_data = true;
+								}
+								$this->arr["contents"][$row][$col]->arr[$idx]->set_value($elvalues[$eln], $user_data);
 							}
 						}
 					}
