@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.4 2003/07/22 12:41:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.5 2003/08/19 15:54:33 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -366,7 +366,7 @@ class promo extends class_base
 			$this->upd_object(array(
 				"oid" => $args["object"]["oid"],
 				"metadata" => array(
-					"alias_reltype" => $alias_reltype,
+					//"alias_reltype" => $alias_reltype,
 					"uses_relationmgr" => 1,
 				),
 			));
@@ -398,13 +398,15 @@ class promo extends class_base
 		$new_alias_reltype = array();
 		foreach($oldaliases as $alias)
 		{
-			if ($alias_reltype[$alias["target"]] == RELTYPE_ASSIGNED_MENU)
+			//if ($alias_reltype[$alias["target"]] == RELTYPE_ASSIGNED_MENU)
+			if ($alias["reltype"] == RELTYPE_ASSIGNED_MENU)
 			{
 				$section[$alias["target"]] = $alias["target"];
 				$new_alias_reltype[$alias["target"]] = RELTYPE_ASSIGNED_MENU;
 			};
 			
-			if ($alias_reltype[$alias["target"]] == RELTYPE_DOC_SOURCE)
+			//if ($alias_reltype[$alias["target"]] == RELTYPE_DOC_SOURCE)
+			if ($alias["reltype"] == RELTYPE_DOC_SOURCE)
 			{
 				$last_menus[$alias["target"]] = $alias["target"];
 				$new_alias_reltype[$alias["target"]] = RELTYPE_DOC_SOURCE;
@@ -527,9 +529,11 @@ class promo extends class_base
 			$ob->set_meta('caption',$as_n_o->name());
 		}
 
+		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		$this->vars(array(
 			"title" => $ob->meta("caption"),
 			"content" => $content,
+			"align" => $align[$args["matches"][4]],
 		));
 
 		if (!$ob->meta('no_title'))

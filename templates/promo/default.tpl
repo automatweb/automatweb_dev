@@ -1,3 +1,6 @@
+<table border="0" cellpadding="0" cellspacing="0" {VAR:align}>
+<tr>
+<td>
 <table border="1">
 <!-- SUB: SHOW_TITLE -->
 <Tr>
@@ -11,3 +14,6 @@
 </tr>
 </table>
 
+</td>
+</tr>
+</table>
