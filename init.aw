@@ -28,7 +28,7 @@ function aw_ini_get($var)
 function parse_config($file)
 {
 	$fd = file($file);
-	foreach($fd as $line)
+	foreach($fd as $k => $line)
 	{
 		// ok, parse line
 		// 1st, strip comments
@@ -112,7 +112,6 @@ function init_config($arr)
 
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_s = $sec + $micro;
-
 	$is_cached = false;
 	// bloody catch22 situation. It would be nice to get the name of
 	// the cache directory from the initialization file, but we are 
@@ -128,7 +127,7 @@ function init_config($arr)
 			if (is_array($ini_files))
 			{
 				$is_cached = true;
-				foreach($ini_files as $file)
+				foreach($ini_files as $k => $file)
 				{
 					if (filemtime($file) >= $cache_timestamp)
 					{
@@ -187,8 +186,7 @@ function init_config($arr)
 		// now, baseurl
 		$baseurl = "http://".$GLOBALS["HTTP_SERVER_VARS"]["HTTP_HOST"];
 		$GLOBALS["cfg"]["__default"]["baseurl"] = $baseurl;
-
-		foreach($ini_files as $file)
+		foreach($ini_files as $k => $file)
 		{
 			parse_config($file);
 		}
