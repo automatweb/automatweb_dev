@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.14 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.15 2001/09/14 13:29:08 cvs Exp $
 lc_load("mailinglist");
 class mlist extends aw_template
 {
@@ -129,6 +129,10 @@ class mlist extends aw_template
 	function db_add_user($data, $vars = "")
 	{
 		extract($data);
+		if (strlen($email < 4))
+		{
+			return false;
+		};
 
 		$this->db_query("SELECT * FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE parent=$this->id AND status != 0 AND mail='$email'");
 		if (($row = $this->db_next()))
@@ -202,9 +206,6 @@ class mlist extends aw_template
 	// name (string) -
 	// email (string) -
 	// lists (array of int) - listide id-d, kuhu kasutaja liita
-
-	// FIXME: peab tegema ka objektid igale listikasutajale. Maksimaalselt tuleks ära
-	// kasutada olemasolevaid objekte - just kustutamisel.
 	function add_user_to_lists($args = array())
 	{	
 		$this->quote($args);
