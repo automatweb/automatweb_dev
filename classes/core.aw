@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.170 2003/03/27 15:32:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.171 2003/03/28 10:25:30 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -244,7 +244,7 @@ class core extends db_connector
 	// parameters:
 	//   oid - the object to delete
 	//   class_id - optional, if specified, then the object's class id must match it, otherwise it is not deleted
-	function delete_object($oid,$class_id = false)
+	function delete_object($oid,$class_id = false, $flush = true)
 	{
 		if (!$oid)
 		{
@@ -271,7 +271,10 @@ class core extends db_connector
 			WHERE $where";
 		$this->db_query($q);
 		aw_cache_set("objcache",$oid,"");
-		$this->flush_cache();
+		if ($flush)
+		{
+			$this->flush_cache();
+		}
 	}
 
 
@@ -1607,13 +1610,13 @@ class core extends db_connector
 			{
 				$co = get_instance("config");
 				$u = $co->get_simple_config("error_redirect");
+				//flush();
+				//die("<br><b>AW_ERROR: $msg</b><br>");
 				if ($u != "" && aw_global_get("uid") != "kix")
 				{
 					header("Location: $u");
 					die();
 				}
-				flush();
-				die("<br><b>AW_ERROR: $msg</b><br>");
 			}
 		};
 		aw_global_set("__from_raise_error",0);
@@ -2288,7 +2291,7 @@ class core extends db_connector
 		{
 			$admin_lang_lc = $lang_id;
 		};
-
+			
 		if (!$admin_lang_lc)
 		{
 			$admin_lang_lc = "et";
