@@ -45,11 +45,28 @@ class basket_order extends basket
 			$t_price += $order["meta"]["prices"][$iid] * $icnt;
 		}
 
+		if (!$ob["meta"]["order_form_op"])
+		{
+			$this->raise_error(ERR_BASKET_NO_OOP, "No output selectes for order form - can't send HTML mail!", false, true);
+		}
+		else
+		{
+			$finst = get_instance("form");
+			$finst->load($ob["meta"]["order_form"]);
+			$htmlmail = $finst->show(array(
+				"id" => $ob["meta"]["order_form"],
+				"entry_id" => $order["meta"]["of_entry"],
+				"op_id" => $ob["meta"]["order_form_op"]
+			));
+			$htmlmail.="<br><br>".$this->_draw_basket_ft($ob, $order["meta"]);
+		}
+
 		$this->vars(array(
 			"ITEM" => $its,
 			"t_count" => $t_count,
 			"t_price" => $t_price,
-			"another" => $this->mk_my_orb("another", $arr)
+			"another" => $this->mk_my_orb("another", $arr),
+			"content" => $htmlmail
 		));
 		return $this->parse();
 	}

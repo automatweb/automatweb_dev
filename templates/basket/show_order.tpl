@@ -12,9 +12,9 @@
 <td class="celltext">{VAR:time}</td>
 </tr>
 <tr>
-<td colspan="2" class="celltext">Tellimisformi sisestus:</td>
+<td colspan="2" class="celltext">{VAR:content}</td>
 </tr>
-<tr>
+<!--<tr>
 <td colspan="2" class="celltext"><pre>{VAR:of_entry}</pre></td>
 </tr>
 <tr>
@@ -45,7 +45,7 @@
 			</tr>
 		</table>
 	</td>
-</tr>
+</tr>-->
 </table>
 
 <a href='{VAR:another}'>Alusta uut tellimust selle p&otilde;hjalt</a>
