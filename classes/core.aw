@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.118 2002/11/04 20:27:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.119 2002/11/04 20:48:36 duke Exp $
 // core.aw - Core functions
 
 // Core properties - common for all classes
@@ -2517,6 +2517,50 @@ class core extends db_connector
 		return $ret;
 	}
 
+	function add($args = array())
+	{
+		extract($args);
+		$this->check_class();
+		
+		$cfg = get_instance("cfg/cfgmanager");
+                return $cfg->change(array(
+                        "class_id" => $this->clid,
+                        "parent" => $parent,
+			"orb_class" => get_class($this),
+                ));
+
+	}
+
+	function change($args = array())
+	{ 
+		extract($args);
+		$this->check_class();
+		$cfg = get_instance("cfg/cfgmanager");
+		return $cfg->change(array(
+			"id" => $id,
+			"orb_class" => get_class($this),
+		));
+	}
+
+	function submit($args = array())
+	{
+		$this->check_class();
+		$cfg = get_instance("cfg/cfgmanager");
+		return $cfg->submit($args);
+	}
+
+	////
+	// !This decides whether to perform the requested action or not
+	// acl checks for example
+	function check_class()
+	{
+		if (!$this->clid)
+		{
+			die("this class does not have a registered clid");
+		};
+	}
+
+	// this is dead.
 	function get_obj_properties($args = array())
 	{
 
