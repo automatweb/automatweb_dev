@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.9 2005/02/17 12:21:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.10 2005/02/17 13:14:43 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -580,6 +580,7 @@ class mrp_prisma_import extends class_base
 			//$o->set_parent($co->prop("projects_folder"));
 			$o->set_parent(1256);
 			$o->set_prop("extern_id", $id);
+			$o->set_prop("state", 1); // MRP_STATUS_NEW
 			if ($t)
 			{
 				$o->set_prop("customer", $t->id());
