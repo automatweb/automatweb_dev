@@ -20,15 +20,13 @@ class site_cache extends aw_template
 
 		if (($content = $this->get_cached_content($arr)))
 		{
-			return $content;
+			return $this->do_final_content_checks($content);
 		}
-
-
 
 		$inst = get_instance("contentmgmt/site_show");
 		$content = $inst->show($arr);
 		$this->set_cached_content($arr, $content);
-		return $content;
+		return $this->do_final_content_checks($content);
 	}
 
 	////
@@ -116,6 +114,16 @@ class site_cache extends aw_template
 		}
 		
 		return $cp;
+	}
+
+	function do_final_content_checks($res)
+	{
+		$banner_defs = new aw_array(aw_ini_get("menuedit.banners"));
+		foreach($banner_defs->get() as $name => $gid)
+		{
+			$res = str_replace("[ss".$gid."]",gen_uniq_id(),$res);
+		}
+		return $res;
 	}
 }
 ?>
