@@ -857,10 +857,18 @@ class hiireKuular implements MouseListener
  
 	public void crash() 
 	{ 
-		System.out.println("Crash");                                                                                                                                                         	 
+		System.out.println("Crash"); 
+		try 
+		{                                                                                                                                                                                                               
+			yield();
+			interrupt();                                                                                                                                                                                                 	 
+		}                                                                                                                                                                                                              	 
+		catch(java.lang.NoSuchMethodError e)                                                                                                                                                                           	 
+		{                                                                                                                                                                                                              	 
+			System.out.println("Lõim recall lõpetas töö");                                                                                                                                                             	 
 		    
 			//if(topp.getComponentCount()<2)
-			/*if(refresh==null)
+			if(refresh==null)
 			{//pole juba nuppu, millegi pärast teeb 2 korda			                                                                                                                                               	 
 				try                                                                                                                                                                                                	 
 				{                                                                                                                                                                                                  	 
@@ -882,17 +890,24 @@ class hiireKuular implements MouseListener
 				{                                                                                                                                                                                                  	 
 					System.out.println("!!!Ei saanud ikooni kätte "+e);                                                                                                                                            	 
 				}                                                                                                                                                                                                  	 
-			}//if*/           																																																			
+			}//if           																																																			
 
-			/*if(boss.getComponentCount()==1)                                                                                                                                                                             	 
+			if(boss.getComponentCount()==1)                                                                                                                                                                             	 
 			{                                                                                                                                                                                                          	                                                                                                                                                         	                                                                                                                                                                                                                
 				boss.add(topp,"North");
 				boss.doLayout();                                                                                                                                                                                       	 
 				topp.doLayout();   
 			}//if                                                                                                                                                                                                      	 
 			
-			 System.gc();
-			destroy(); 	 
+			try 
+			{ 
+				destroy(); 
+			} 
+			catch(java.lang.NoSuchMethodError ee) 
+			{ 
+			} 
+		}//catch                                                                                                                                                                                                              	 
+		System.gc(); 
 	} 
  
  
@@ -1364,7 +1379,7 @@ System.out.println("Leidsin muudetud: "+folder.label+" alluvaid="+folder.alluvai
 		}//while 		
 		crash(); 
 	} 
-}*/ 
+} */ 
   
  
  
@@ -1608,8 +1623,21 @@ class tirija extends Thread
 		 
 		//System.out.println("Lõim tirija lõpetas töö");
 		//sisse.flush();
-		System.gc(); 
-		destroy(); 
+		try 
+		{ 
+			interrupt(); 
+		} 
+		catch(java.lang.SecurityException ee) 
+		{ 
+			try 
+			{ 
+				destroy(); 
+			} 
+			catch(java.lang.NoSuchMethodError e) 
+			{ 
+				System.gc(); 
+			} 
+		} 
 	} 
 } 
  
@@ -1687,7 +1715,21 @@ public class menuTree extends Applet
 	{ 
 		if (recall!=null)
 		{
-			recall.destroy(); 
+			try 
+			{ 
+				recall.yield();
+				recall.interrupt(); 
+			} 
+			catch(java.lang.SecurityException ee) 
+			{ 
+				try 
+				{ 
+					recall.destroy(); 
+				} 
+				catch(java.lang.NoSuchMethodError e) 
+				{ 
+				} 
+			}
 		}//tirija!=null
  
 		if(s!=null) 
@@ -1704,7 +1746,21 @@ public class menuTree extends Applet
 		 
 		if (tirija!=null)
 		{
-			tirija.destroy(); 
+			try 
+			{ 
+				tirija.yield();
+				tirija.interrupt(); 
+			} 
+			catch(java.lang.SecurityException ee) 
+			{ 
+				try 
+				{ 
+					tirija.destroy(); 
+				} 
+				catch(java.lang.NoSuchMethodError e) 
+				{ 
+				} 
+			}
 		}//tirija!=null 
 		removeAll();
 		System.gc(); 
@@ -1985,7 +2041,7 @@ public class menuTree extends Applet
 				{//ei saanud deemoniga ühendust 
 					System.out.println("Ei suutnud deemoniga ühendust saada: "+e); 
 
-					/*try  
+					try  
 					{  
 						if(refresh==null)
 						{
@@ -2111,17 +2167,28 @@ public class menuTree extends Applet
 
 		if (tirija!=null)
 		{
-			tirija.destroy(); 
+			try 
+			{ 
+				tirija.yield();
+				tirija.interrupt(); 
+			} 
+			catch(java.lang.SecurityException ee) 
+			{ 
+				try 
+				{ 
+					tirija.destroy(); 
+				} 
+				catch(java.lang.NoSuchMethodError e) 
+				{ 
+					System.gc(); 
+				} 
+			}
 		}//tirija!=null
 		tirija=new tirija(this); 
 		tirija.start();
 
 		/*if(s!=null) 
 		{ 
-			if (recall!=null)
-			{
-				recall.destroy(); 
-			}
 			recall=new recall(this); 
 			recall.start(); 
 		}*/

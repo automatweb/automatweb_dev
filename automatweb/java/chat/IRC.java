@@ -4215,7 +4215,8 @@ class action extends Thread
 		{
 			server=server2.getText();
 			status.append("Ühendan...\n",status.textColor,status.jutt,status.buffer);
-			s=new Socket(host,port);
+			//s=new Socket(host,port);
+			s=new Socket("media.elkdata.ee",10001);
 			toserver=new PrintStream(s.getOutputStream());
 			fromserver=new BufferedReader(new InputStreamReader(s.getInputStream()));
 		

@@ -2146,12 +2146,11 @@ public class menuThread2 extends Applet
  
 				try  
 				{  
-					
-					URL urll=new URL("http://aw.struktuur.ee/automatweb/images/blue/awicons/refresh.gif");  
+					URL urll=new URL(this.getParameter("url")+"/automatweb/images/blue/awicons/refresh.gif");  
 					refresh=new pilt(this.getImage(urll)); 
 					refresh.setSize(25,25); 
 					refresh.icon1=refresh.icon; 
-					urll=new URL("http://aw.struktuur.ee/automatweb/images/blue/awicons/refresh_over.gif");  
+					urll=new URL(this.getParameter("url")+"/automatweb/images/blue/awicons/refresh_over.gif");  
 					refresh.icon2=this.getImage(urll); 
 					nupp.add(refresh); 
 					refresh.addMouseListener(new refreshKuular(refresh,this)); 
@@ -2178,17 +2177,17 @@ public class menuThread2 extends Applet
 				catch(Exception e) 
 				{//ei saanud deemoniga ühendust 
 					System.out.println("Ei suutnud deemoniga ühendust saada: "+e); 
-					 
+					/* 
 					nupp=new Panel(); 
 					nupp.setLayout(new FlowLayout(FlowLayout.LEFT)); 
 					 
 					try  
 					{  
-						URL urll=new URL("http://aw.struktuur.ee/automatweb/images/blue/awicons/refresh.gif");  
+						URL urll=new URL(this.getParameter("url")+"/automatweb/images/blue/awicons/refresh.gif");  
 						refresh=new pilt(this.getImage(urll)); 
 						refresh.setSize(25,25); 
 						refresh.icon1=refresh.icon; 
-						urll=new URL("http://aw.struktuur.ee/automatweb/images/blue/awicons/refresh_over.gif");  
+						urll=new URL(this.getParameter("url")+"/automatweb/images/blue/awicons/refresh_over.gif");  
 						refresh.icon2=this.getImage(urll); 
 						nupp.add(refresh); 
 						refresh.addMouseListener(new refreshKuular(refresh,this)); 
@@ -2200,7 +2199,7 @@ public class menuThread2 extends Applet
 					catch(Exception ee)  
 					{  
 						System.out.println("!!!Ei saanud ikooni kätte "+e); 
-					} 
+					} */
 				} 
 			}//else 
 			 
