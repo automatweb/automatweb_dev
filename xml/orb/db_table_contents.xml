@@ -1,38 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="db_table_contents" folder="awmyadmin" extends="class_base">
-		<action name="change" >
-			<function name="change">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="content" >
-			<function name="content">
-				<arguments>
-					<required name="id" />
-					<optional name="page" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="admin_content" >
-			<function name="admin_content">
-				<arguments>
-					<required name="id" />
-					<optional name="page" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_admin_content" >
-			<function name="submit_admin_content">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
+	<class name="db_table_contents" folder="applications/awmyadmin" extends="class_base">
 	</class>
 </orb>

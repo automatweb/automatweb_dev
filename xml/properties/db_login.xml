@@ -6,8 +6,9 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>objpicker</type>
-            <clid>CL_DB_SERVER_LOGIN</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SERVER_LOGIN</reltype>
+            <automatic>1</automatic>
             <caption>Server</caption>
       </property>
       <property>
@@ -47,5 +48,18 @@
             <ch_value>1</ch_value>
             <caption>Loo kui olemas pole</caption>
       </property>
+      <classinfo>
+            <syslog_type>ST_DB_LOGIN</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <reltypes>
+            <SERVER_LOGIN>
+                  <value>1</value>
+                  <clid>CL_DB_SERVER_LOGIN</clid>
+                  <caption>db serveri login</caption>
+            </SERVER_LOGIN>
+      </reltypes>
 </properties>
 

@@ -36,14 +36,11 @@
             <type>select</type>
             <caption>Andmebaasi driver</caption>
       </property>
-      <property>
-            <name>test_lb</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Testi listbox</caption>
-      </property>
+      <classinfo>
+            <syslog_type>ST_DB_SERVER_LOGIN</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
 </properties>
 

@@ -6,9 +6,56 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>objpicker</type>
-            <clid>CL_DB_VIEW_CONF</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONF</reltype>
+            <automatic>1</automatic>
             <caption>Vali konfiguratsioon</caption>
       </property>
+      <property>
+            <name>tree</name>
+            <table>objects</table>
+            <group>explorer</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>fs</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>content</name>
+            <table>objects</table>
+            <group>explorer</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>fs</parent>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_DB_SERVER_EXPLORER</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <explorer>
+                  <caption>Explorer</caption>
+            </explorer>
+      </groupinfo>
+      <reltypes>
+            <CONF>
+                  <value>1</value>
+                  <clid>CL_DB_VIEW_CONF</clid>
+                  <caption>konfiguratsioon</caption>
+            </CONF>
+      </reltypes>
+      <layout>
+            <fs>
+                  <type>hbox</type>
+                  <group>explorer</group>
+            </fs>
+      </layout>
 </properties>
 

@@ -42,5 +42,11 @@
             <size>10</size>
             <caption>Andmebaasid, mida n&amp;auml;idatakse</caption>
       </property>
+      <classinfo>
+            <syslog_type>ST_DB_SERVER_EXPLORER_CONF</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
 </properties>
 
