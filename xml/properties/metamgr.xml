@@ -40,6 +40,15 @@
             <field>metalist</field>
       </property>
       <property>
+            <name>mupload</name>
+            <table>objects</table>
+            <group>manager</group>
+            <type>fileupload</type>
+            <store>no</store>
+            <field>mupload</field>
+            <caption>Vali muutujatega fail</caption>
+      </property>
+      <property>
             <name>meta</name>
             <table>objects</table>
             <group>manager</group>
