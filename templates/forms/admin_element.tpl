@@ -215,6 +215,12 @@ function toggle_file_link_newwin()
 
 <!-- SUB: LISTBOX_SORT -->
 <tr>
+<td class="fgtext">Listboksi valik submitib formi:</td>
+<td class="fgtext"><input class="small_button" type='checkbox' NAME='{VAR:cell_id}_submit_on_select' value='1' {VAR:submit_on_select}></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<tr>
 <td class="fgtext">{VAR:LC_FORMS_SORTING}:</td>
 <td class="fgtext"><input class="small_button" type='checkbox' NAME='{VAR:cell_id}_sort_order' value='1' {VAR:sort_by_order}>&nbsp;{VAR:LC_FORMS_BY_ORDER} <input type='checkbox' NAME='{VAR:cell_id}_sort_alpha' VALUE='1'  {VAR:sort_by_alpha}>&nbsp;{VAR:LC_FORMS_BY_ALPHABET}</td>
 <td class="fgtext">{VAR:LC_FORMS_IMPORT}:</td>
@@ -704,6 +710,12 @@ function toggle_file_link_newwin()
 <td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_logical' VALUE='1' {VAR:search_logical}></td>
 <td class="fgtext">Otsing FIELD_IN_SET:</td>
 <td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_search_field_in_set' VALUE='1' {VAR:search_field_in_set}></td>
+</tr>
+<tr>
+<td class="fgtext">Loogiline lause enne sisestust:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_search_logical_prepend' VALUE='{VAR:search_logical_prepend}'></td>
+<td class="fgtext">Loogiline lause p&auml;rast sisestust:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_search_logical_append' VALUE='{VAR:search_logical_append}'></td>
 </tr>
 <!-- END SUB: SEARCH_PROPS -->
 

@@ -40,7 +40,7 @@
 <!-- END SUB: CHANGE -->
 <tr>
 	<td class="fform">Valem:</td>
-	<td class="fform"><textarea cols="50" rows="5" NAME='eq'>{VAR:eq}</textarea></td>
+	<td class="fform"><textarea cols="80" rows="50" NAME='eq'>{VAR:eq}</textarea></td>
 </tr>
 <!-- SUB: LANG -->
 <tr>

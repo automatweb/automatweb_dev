@@ -1112,15 +1112,75 @@ class form_db_base extends aw_template
 						else
 						if ($el->arr["search_logical"])
 						{
+							$value = $el->arr["search_logical_prepend"]." ".$value." ".$el->arr["search_logical_append"];
+//							echo "val= $value <br>";
 							// here we try to parse the damn text entered in the element
 							// let's try and do NOT / AND / OR / () here
 							$qstr = "";
 							$pics = explode(" ",$value);
-							foreach($pics as $pic)
+//							echo "pics = <pre>", htmlentities(var_dump($pics)),"</pre> <br>";
+							reset($pics);
+							while (list(,$pic) = each($pics))
+//							foreach($pics as $pic)
 							{
 //								echo "pic = $pic <br>";
+								if ($pic == "")
+								{
+									continue;
+								}
 								$is_null = false;
 								$is_not_null = false;
+								$npic = "";
+								if ($pic == ">")
+								{
+									while ($npic == "")
+									{
+										list(,$npic) = each($pics);
+									}
+									$qstr .=" $elname2 > $npic ";
+									continue;
+								}
+								else
+								if ($pic == "<")
+								{
+									while ($npic == "")
+									{
+										list(,$npic) = each($pics);
+									}
+									$qstr .=" $elname2 < $npic ";
+									continue;
+								}
+								else
+								if ($pic == ">=")
+								{
+									while ($npic == "")
+									{
+										list(,$npic) = each($pics);
+									}
+									$qstr .=" $elname2 >= $npic ";
+									continue;
+								}
+								else
+								if ($pic == "<=")
+								{
+									while ($npic == "")
+									{
+										list(,$npic) = each($pics);
+									}
+									$qstr .=" $elname2 <= $npic ";
+									continue;
+								}
+								else
+								if ($pic == "!=")
+								{
+									while ($npic == "")
+									{
+										list(,$npic) = each($pics);
+									}
+									$qstr .=" $elname2 != $npic ";
+									continue;
+								}
+								else
 								if ($pic == "AND")
 								{
 									$qstr .= " AND ";
@@ -1637,6 +1697,7 @@ class form_db_base extends aw_template
 	// user_entries_only - if set, only entries that were created by the current user are returned
 	// chain_entries_only - if set, only chain entries are returned
 	// limit_chain_id - if set, only entries with that chain id are returned
+	// gefe_add_empty - if set, first element is empty element
 	function get_entries_for_element($args)
 	{
 		extract($args);
@@ -1696,7 +1757,15 @@ class form_db_base extends aw_template
 		}*/
 
 		$cnt=0;
-		$result = array();
+		if ($gefe_add_empty)
+		{
+			$result = array("0" => "");
+			$cnt = 1;
+		}
+		else
+		{
+			$result = array();
+		}
 
 		$this->db_query($q);
 		while($row = $this->db_next())

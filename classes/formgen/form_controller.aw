@@ -210,6 +210,10 @@ class form_controller extends form_base
 		{
 			return true;	// don't remove this, otherwise all controller checks will fail withut a controller
 		}
+		$this->form_ref =& $form_ref;
+		$this->el_ref =& $el_ref;
+		$this->entry = $entry;
+
 		$co = $this->load_controller($id);
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
@@ -284,6 +288,10 @@ class form_controller extends form_base
 			}
 		}
 
+		// load controllers
+		$eq = preg_replace("/{load:(\d*)}/e","\$this->_load_ctrl_eq(\\1)",$eq);
+
+		
 		// and finally init all non-initialized vars to zero to avoid parse errors
 		$eq = preg_replace("/(\[[-a-zA-Z0-9 _:\(\)]*\])/","0",$eq);
 
@@ -650,6 +658,14 @@ class form_controller extends form_base
 	{
 		$co = $this->load_controller($id);
 		return $co["meta"]["warn_only_entry_controller"];
+	}
+
+	////
+	// !loads controller, replaces vars - thevars are taken from the current controller, not the linked controller scope
+	function _load_ctrl_eq($id)
+	{
+		$co = $this->load_controller($id);
+		return $this->replace_vars($co,$co["meta"]["eq"],true,$this->form_ref, $this->el_ref, $this->entry);
 	}
 }
 

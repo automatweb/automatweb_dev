@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.32 2003/02/26 15:59:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.33 2003/03/03 16:24:08 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -187,7 +187,9 @@ class form_element extends aw_template
 				"search_logical"					=> checked($this->arr["search_logical"]),
 				"search_separate_words_sep" => $this->arr["search_separate_words_sep"],
 				"search_field_in_set"			=> checked($this->arr["search_field_in_set"]),
-				"link_newwindow"					=> checked($this->arr["link_newwindow"])
+				"link_newwindow"					=> checked($this->arr["link_newwindow"]),
+				"search_logical_append" => $this->arr["search_logical_append"],
+				"search_logical_prepend" => $this->arr["search_logical_prepend"]
 			));
 
 			$this->vars(array(
@@ -284,6 +286,7 @@ class form_element extends aw_template
 					"must_error" => $this->arr["must_error"],
 					"lb_size" => $this->arr["lb_size"],
 					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["listbox"]),
+					"submit_on_select" => checked($this->arr["submit_on_select"])
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
@@ -847,6 +850,14 @@ class form_element extends aw_template
 		global $$var;
 		$this->arr["search_logical"] = $$var;
 
+		$var = $base."_search_logical_prepend";
+		global $$var;
+		$this->arr["search_logical_prepend"] = $$var;
+
+		$var = $base."_search_logical_append";
+		global $$var;
+		$this->arr["search_logical_append"] = $$var;
+
 		$var = $base."_search_field_in_set";
 		global $$var;
 		$this->arr["search_field_in_set"] = $$var;
@@ -937,6 +948,9 @@ class form_element extends aw_template
 
 			$var = $base."_lb_size";
 			$this->arr["lb_size"] = $$var;
+
+			$var = $base."_submit_on_select";
+			$this->arr["submit_on_select"] = $$var;
 
 			$var = $base."_lb_item_controllers";
 			$this->arr["lb_item_controllers"] = $this->make_keys($$var);
@@ -1984,6 +1998,10 @@ class form_element extends aw_template
 				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
 				{
 					$rel = true;
+					if ($this->form->type == FTYPE_ENTRY)
+					{
+						$this->arr["gefe_add_empty"] = true;
+					}
 					$this->make_relation_listbox_content();
 				}
 				else
@@ -1991,7 +2009,7 @@ class form_element extends aw_template
 				{
 					$opts = array(
 						"rel_form" => $this->arr["lb_data_from_form"],
-						"rel_element" => $this->arr["lb_data_from_form"],
+						"rel_element" => $this->arr["lb_data_from_el"],
 						"sort_by_alpha" => $this->arr["sort_by_alpha"],
 						"rel_unique" => $this->arr["rel_unique"],
 						"ret_ids" => true,
@@ -2006,7 +2024,12 @@ class form_element extends aw_template
 
 				if (!$this->arr['hidden'])
 				{
-					$html .="<select $disabled $stat_check name='".$element_name."'";
+					$sos = "";
+					if ($this->arr["submit_on_select"])
+					{
+						$sos = "onChange=\"fm_".$this->form->id.".submit()\"";
+					}
+					$html .="<select $disabled $sos $stat_check name='".$element_name."'";
 					if ($this->arr["lb_size"] > 1)
 					{
 						$html.=" size=\"".$this->arr["lb_size"]."\"";
