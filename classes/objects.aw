@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.57 2004/02/03 16:31:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.58 2004/02/12 11:48:03 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -790,10 +790,6 @@ class objects extends db_objects
 			//echo "got client id as $client_id <br />\n";
 			flush();
 		}
-
-
-		// since no access is given (can't figure out how to do that :( ) we should grant all privileges to everyone by default
-		//$dbi->db_query("INSERT INTO acl(gid,oid,acl) VALUES(1,$client_id, 9223372036854775807)");
 	}
 
 	/**  

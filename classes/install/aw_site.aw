@@ -28,7 +28,7 @@
 @property select_db type=select group=db
 @caption Vali andmebaas
 
-@property select_parent_folder type=select
+@property select_parent_folder type=select group=db
 @caption Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse
 
 @property use_existing_templates type=checkbox ch_value=1 group=templates
@@ -39,6 +39,9 @@
 
 @property select_tpl_folders type=select multiple=1 size=20 group=templates
 @caption Vali templatede kataloogid, mis uude saiti kopeerida
+
+@property tpls_are_linked type=checkbox ch_value=1 group=templates
+@caption Kas templated linkida, mitte kopeerida
 
 @property select_imgcss_sites type=select group=templates
 @caption Vali sait, millelt v&otilde;tta css ja pildid
@@ -52,9 +55,10 @@
 @property site_warnmsg type=text
 @caption Hoiatused:
 
+@reltype LAYOUT value=1 clid=CL_LAYOUT
+@caption saidi layout
 */
 
-define("RELATION_LAYOUT",1);
 
 class aw_site extends class_base
 {
@@ -150,7 +154,7 @@ class aw_site extends class_base
 						"class" => "objects",
 						"action" => "get_list",
 						"params" => array(
-							"rootobj" => 0
+							"rootobj" => 1
 						),
 						"method" => "xmlrpc",
 						"server" => $serv,
@@ -227,8 +231,8 @@ class aw_site extends class_base
 				break;
 
 			case "select_tpl_folders":
-				$isar = is_array($arr['obj']['meta']['select_tpl_sites']) && count($arr['obj']['meta']['select_tpl_sites']) > 0;
-				if ($arr['obj']['meta']['use_existing_templates'] != 1 || !$isar)
+				$isar = is_array($arr['obj_inst']->meta('select_tpl_sites')) && count($arr['obj_inst']->meta('select_tpl_sites')) > 0;
+				if ($arr['obj_inst']->meta('use_existing_templates') != 1 || !$isar || $arr['obj_inst']->meta('tpls_are_linked') == 1)
 				{
 					return PROP_IGNORE;
 				}
@@ -377,8 +381,11 @@ class aw_site extends class_base
 
 		$this->_do_add_folder($site['docroot']."/public", &$log);
 
-		$this->_do_add_folder($site['docroot']."/templates", &$log);
-		$ini_opts['tpldir'] = "\${site_basedir}/templates";
+		if (!$site["site_obj"]["tpls_are_linked"])
+		{
+			$this->_do_add_folder($site['docroot']."/templates", &$log);
+			$ini_opts['tpldir'] = "\${site_basedir}/templates";
+		}
 
 		// now copy base templates to the just-created templates folder
 		$si = get_instance("install/su_exec");
@@ -531,24 +538,30 @@ class aw_site extends class_base
 			$inst = get_instance($class);
 			if (method_exists($inst, "on_site_init"))
 			{
-				flush();
-				if ($class != "users")
-				{
-					$inst->on_site_init($dbi, $site, $ini_opts, $log);
-				}
+				$inst->on_site_init($dbi, $site, $ini_opts, $log);
 			}
 		}
 
-		// start it all. create the root object. the father. the ROOT of all things - both good and evil. may life treat it well. 
-		// farewell, my darling! go, and flourish!
-		$dbi->db_query("INSERT INTO objects(oid, name, class_id, parent, status) values(1,'root',1,0,2)");
-		$dbi->db_query("INSERT INTO menu(id, type) values(1,".MN_CLIENT.")");
+		if (!$site['site_obj']['use_existing_database'])
+		{
+			// start it all. create the root object. the father. the ROOT of all things - both good and evil. may life treat it well. 
+			// farewell, my darling! go, and flourish!
+			$dbi->db_query("INSERT INTO objects(oid, name, class_id, parent, status) values(1,'root',1,0,2)");
+			$dbi->db_query("INSERT INTO menu(id, type) values(1,".MN_CLIENT.")");
+			$_root_o = 1;
+			$script = $this->cfg["basedir"]."/scripts/install/object_scripts/simple.ojs";
+		}
+		else
+		{
+			$_root_o = $site['site_obj']['select_parent_folder'];
+			$script = $this->cfg["basedir"]."/scripts/install/object_scripts/existing_db.ojs";
+		}
 
 		$osi = get_instance("install/object_script_interpreter");
 		$osi->exec_file(array(
-			"file" => $this->cfg["basedir"]."/scripts/install/object_scripts/simple.ojs",
+			"file" => $script,
 			"vars" => array(
-				"parent" => 1,
+				"parent" => $_root_o,
 				"url" => $site["url"],
 				"default_user" => $site["site_obj"]["default_user"],
 				"default_user_pwd" => md5($site["site_obj"]["default_user_pwd"]),
@@ -557,52 +570,61 @@ class aw_site extends class_base
 		$ini_opts += $osi->_get_ini_settings();
 		$osi_vars = $osi->_get_sym_table();
 
-		$inst = get_instance("users");
-		$inst->on_site_init($dbi, $site, $ini_opts, $log);
-
-		$inst = get_instance("admin/config/config_login_menus");
-		$inst->on_site_init($dbi, $site, $ini_opts, $log, $osi_vars);
-
-		$inst = get_instance("accessmgr");
-		$inst->on_site_init($dbi, $site, $ini_opts, $log, $osi_vars);
-
-
-		$dbi->db_query("UPDATE objects SET lang_id = 1");
-		$dbi->db_query("UPDATE objects SET parent = ".$ini_opts["groups.tree_root"]." WHERE class_id = ".CL_GROUP);
-
-		// acl
-		$acls = array(
-			"can_edit" => 1,
-			"can_add" => 1,
-			"can_admin" => 1,
-			"can_delete" => 1,
-			"can_view" => 1
-		);
-		$dbi->db_query("select gid FROM groups WHERE type = 0 AND gid != ".$ini_opts["groups.all_users_grp"]);
-		while ($row = $dbi->db_next())
+		$clss = aw_ini_get("install.init_classes_after");
+		foreach($clss as $class)
 		{
-			$dbi->save_handle();
-			// access to root menu
-			$dbi->add_acl_group_to_obj($row["gid"], $ini_opts["admin_rootmenu2"]);
-			$dbi->save_acl($ini_opts["admin_rootmenu2"], $row["gid"], $acls);
+			$inst = get_instance($class);
+			if (method_exists($inst, "on_site_init"))
+			{
+				$inst->on_site_init($dbi, $site, $ini_opts, $log, $osi_vars);
+			}
+		}
 
-			// access to users folder
-			$dbi->add_acl_group_to_obj($row["gid"], $osi_vars["users"]);
-			$dbi->save_acl($osi_vars["users"], $row["gid"], $acls);
+		if (!$site['site_obj']['use_existing_database'])
+		{
+			$dbi->db_query("UPDATE objects SET lang_id = 1");
+			$dbi->db_query("UPDATE objects SET parent = ".$ini_opts["groups.tree_root"]." WHERE class_id = ".CL_GROUP);
 
-			$dbi->restore_handle();
+			// acl
+			$acls = array(
+				"can_edit" => 1,
+				"can_add" => 1,
+				"can_admin" => 1,
+				"can_delete" => 1,
+				"can_view" => 1
+			);
+			$dbi->db_query("select gid FROM groups WHERE type = 0 AND gid != ".$ini_opts["groups.all_users_grp"]);
+			while ($row = $dbi->db_next())
+			{
+				$dbi->save_handle();
+				// access to root menu
+				$dbi->add_acl_group_to_obj($row["gid"], $ini_opts["admin_rootmenu2"]);
+				$dbi->save_acl($ini_opts["admin_rootmenu2"], $row["gid"], $acls);
+
+				// access to users folder
+				$dbi->add_acl_group_to_obj($row["gid"], $osi_vars["users"]);
+				$dbi->save_acl($osi_vars["users"], $row["gid"], $acls);
+
+				$dbi->restore_handle();
+			}
 		}
 
 		// now, create the menus based on subs in main.tpl
 		$this->_do_create_menus_from_template($dbi, $site, $ini_opts, $log, $osi_vars);		
 
-			// fix user object names
-		$dbi->db_query("SELECT uid,oid FROM users");
-		while ($row = $dbi->db_next())
+		if (!$site['site_obj']['use_existing_database'])
 		{
-			$dbi->save_handle();
-			$dbi->db_query("UPDATE objects SET name = '$row[uid]' WHERE brother_of = '$row[oid]'");
-			$dbi->restore_handle();
+			// fix user object names
+			$dbi->db_query("SELECT uid,oid FROM users");
+			while ($row = $dbi->db_next())
+			{
+				$dbi->save_handle();
+				$dbi->db_query("UPDATE objects SET name = '$row[uid]' WHERE brother_of = '$row[oid]'");
+				$dbi->restore_handle();
+			}
+
+			$dbi->db_query("UPDATE objects SET site_id = ".$ini_opts["site_id"]);
+			$dbi->db_query("UPDATE objects SET createdby = '".$site["site_obj"]["default_user"]."', modifiedby = '".$site["site_obj"]["default_user"]."'");
 		}
 
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
@@ -738,7 +760,7 @@ class aw_site extends class_base
 				return false;
 			}
 			else
-			if (!is_array($site['site_obj']['select_tpl_folders']) || count($site['site_obj']['select_tpl_folders']) < 1)
+			if (!$site["site_obj"]["tpls_are_linked"] && (!is_array($site['site_obj']['select_tpl_folders']) || count($site['site_obj']['select_tpl_folders']) < 1))
 			{
 				$this->err_str = "Kataloogid, kust templatesid kopeerida on valimata! ";
 				return false;
@@ -936,6 +958,11 @@ class aw_site extends class_base
 
 		$ini_opts["document.no_static_forms"] = 1;
 
+		if ($ini_opts["tpldir"] == "")
+		{
+			$ini_opts["tpldir"] = "\${site_basedir}/templates";
+		}
+
 		$fc = join("\n", map2('%s = %s', $ini_opts));
 		$this->put_file(array(
 			'file' => $tmpnam,
@@ -1044,7 +1071,8 @@ class aw_site extends class_base
 				"server" => $sn,
 				"params" => array(
 					"vals" => array(
-						"site_basedir"
+						"site_basedir",
+						"tpldir"
 					)
 				),
 				"no_errors" => true
@@ -1052,30 +1080,47 @@ class aw_site extends class_base
 
 			if (is_array($_t))
 			{
-				foreach($_t as $base_folder)
+				foreach($_t as $n => $base_folder)
 				{
-					$fmap[] = $base_folder;
+					if ($n == "site_basedir")
+					{
+						$fmap[] = $base_folder;
+					}
+					else
+					if ($n == "tpldir")
+					{
+						$template_folder = $base_folder;
+					}
 				}
 			}
 		}
+
 		$sue = get_instance("install/su_exec");
-		foreach($site['site_obj']['select_tpl_folders'] as $from_fld)
+		if ($site["site_obj"]["tpls_are_linked"] == 1)
 		{
-			//echo "from_fld = $from_fld <br>";
-			$to_fld = $from_fld;
-			foreach($fmap as $base)
+			$sue->add_cmd("ln -s $template_folder ".$site['docroot']."/templates");
+			$ini_opts['tpldir'] = "\${site_basedir}/templates";
+		}
+		else
+		{
+			foreach($site['site_obj']['select_tpl_folders'] as $from_fld)
 			{
-				$to_fld = str_replace($base, "", $to_fld);
+				//echo "from_fld = $from_fld <br>";
+				$to_fld = $from_fld;
+				foreach($fmap as $base)
+				{
+					$to_fld = str_replace($base, "", $to_fld);
+				}
+
+				$to_fld = $site['docroot']."/".$to_fld;
+				//echo "got to_fld as $to_fld <br>";
+
+				$sue->add_cmd("mkdir $to_fld");
+				$sue->add_cmd("copy $from_fld/*tpl $to_fld/");
+				//echo "added cmd mkdir $to_fld <br />\n";
+				//echo "addes cmd copy $from_fld/*tpl $to_fld/ <br />\n";
+				flush();
 			}
-
-			$to_fld = $site['docroot']."/".$to_fld;
-			//echo "got to_fld as $to_fld <br>";
-
-			$sue->add_cmd("mkdir $to_fld");
-			$sue->add_cmd("copy $from_fld/*tpl $to_fld/");
-			//echo "added cmd mkdir $to_fld <br />\n";
-			//echo "addes cmd copy $from_fld/*tpl $to_fld/ <br />\n";
-			flush();
 		}
 
 		// also, if selected, copy images and css files.
@@ -1117,21 +1162,6 @@ class aw_site extends class_base
 		$sue->exec();
 	}
 
-	function callback_get_rel_types()
-	{
-		return array(
-			RELATION_LAYOUT => "saidi layout"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELATION_LAYOUT)
-		{
-			return array(CL_LAYOUT);
-		}
-	}
-
 	function _do_create_menus_from_template(&$dbi, &$site, &$ini_opts, &$log, &$osi_vars)
 	{
 		// get main.tpl
@@ -1161,9 +1191,11 @@ class aw_site extends class_base
 				// this gets special treatment
 				continue;
 			}
-			
-			$astr = substr($area, 0,1).strtolower(substr($area, 1));
-			
+
+			$astr = strtoupper(substr($area, 0,1)).strtolower(substr($area, 1));
+			$astr = str_replace("6", "&otilde;", $astr);
+			$astr = str_replace("y", "&uuml;", $astr);
+			$astr = str_replace("Y", "&Uuml;", $astr);
 
 			// create root
 			$o = obj();

@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>lang_status</name>
+            <table>languages</table>
+            <type>status</type>
+            <field>status</field>
+            <group>general</group>
+            <caption>Aktiivne</caption>
+      </property>
+      <property>
             <name>lang_name</name>
             <table>languages</table>
             <type>textbox</type>
@@ -9,20 +17,21 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>lang_sel_lang</name>
+            <type>select</type>
+            <store>no</store>
+            <table>objects</table>
+            <group>general</group>
+            <field>lang_sel_lang</field>
+            <caption>Keel</caption>
+      </property>
+      <property>
             <name>lang_charset</name>
             <table>languages</table>
             <type>select</type>
             <field>charset</field>
             <group>general</group>
             <caption>Charset</caption>
-      </property>
-      <property>
-            <name>lang_status</name>
-            <table>languages</table>
-            <type>status</type>
-            <field>status</field>
-            <group>general</group>
-            <caption>Aktiivne</caption>
       </property>
       <property>
             <name>lang_acceptlang</name>
@@ -39,7 +48,15 @@
             <multiple>1</multiple>
             <field>site_id</field>
             <group>general</group>
-            <caption>Saidid</caption>
+            <caption>Saidid kus keel on valitav</caption>
+      </property>
+      <property>
+            <name>lang_id</name>
+            <table>languages</table>
+            <type>hidden</type>
+            <field>id</field>
+            <group>general</group>
+            <caption>Keele ID</caption>
       </property>
       <property>
             <name>lang_trans_msg</name>
@@ -72,12 +89,27 @@
             <group>general</group>
             <caption>Aktiivse keele pilt</caption>
       </property>
+      <property>
+            <name>langs</name>
+            <type>table</type>
+            <group>langs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <table>objects</table>
+            <caption>Keeled</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_LANGUAGE</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
       </classinfo>
+      <groupinfo>
+            <langs>
+                  <caption>K&amp;otilde;ik keeled</caption>
+            </langs>
+      </groupinfo>
       <tableinfo>
             <languages>
                   <index>oid</index>

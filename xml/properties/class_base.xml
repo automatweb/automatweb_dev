@@ -59,5 +59,13 @@
                   <icon>edit</icon>
             </general>
       </groupinfo>
+      <forminfo>
+            <add>
+                  <onload>init_storage_object</onload>
+            </add>
+            <edit>
+                  <onload>load_storage_object</onload>
+            </edit>
+      </forminfo>
 </properties>
 

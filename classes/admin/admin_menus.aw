@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.50 2004/02/10 15:26:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.51 2004/02/12 11:48:03 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -958,7 +958,7 @@ class admin_menus extends aw_template
 		$lim = "LIMIT ".($ft_page * $per_page).",".$per_page;
 
 		$where = "objects.parent = '$parent' AND
-				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id IN(".CL_PERIOD .",".CL_USER.",".CL_GROUP.",".CL_MSGBOARD_TOPIC."))
+				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id IN(".CL_PERIOD .",".CL_USER.",".CL_GROUP.",".CL_MSGBOARD_TOPIC.",".CL_LANGUAGE."))
 				 AND
 				status != 0
 				$cls $ps ";

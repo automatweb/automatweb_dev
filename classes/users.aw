@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.105 2004/02/11 11:57:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.106 2004/02/12 11:48:03 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2463,37 +2463,27 @@ class users extends users_user
 					"vals" => array(
 						"groups.tree_root",
 						"groups.all_users_grp",
+						"auth.md5_passwords",
 					)
 				)
 			));
 			//echo "users::on_site_init got opts = <pre>", var_dump($opts),"</pre> <br />";
 			$ini_opts["groups.tree_root"] = $opts["groups.tree_root"];
 			$ini_opts["groups.all_users_grp"] = $opts["groups.all_users_grp"];
+			$ini_opts["auth.md5_passwords"] = $opts["auth.md5_passwords"];
 		}
 		else
 		{
 			// create default group
 			$this->dc = $dbi->dc;
 
-			$aug = $this->addgroup(
-				0,
-				"K&otilde;ik kasutajad", 
-				GRP_REGULAR,
-				0,
-				1000,
-				0,
-				$ini_opts["groups.tree_root"]
-			);
-			$admg = $this->addgroup(
-				0,
-				"Administraatorid", 
-				GRP_REGULAR,
-				0,
-				10000,
-				0,
-				$ini_opts["groups.tree_root"]
-			);
+			$aug = $this->addgroup(0,"K&otilde;ik kasutajad", GRP_REGULAR,0,1000,0,$ini_opts["groups.tree_root"]);
 			$ini_opts["groups.all_users_grp"] = $aug;
+
+			$admg = $this->addgroup(0,"Administraatorid", GRP_REGULAR,0,10000,0,$ini_opts["groups.tree_root"]);
+			$this->addgroup(0,"Toimetajad", GRP_REGULAR,0,5000,0,$ini_opts["groups.tree_root"]);
+			$this->addgroup(0,"Kliendid", GRP_REGULAR,0,2500,0,$ini_opts["groups.tree_root"]);
+			$this->addgroup(0,"Partnerid", GRP_REGULAR,0,3000,0,$ini_opts["groups.tree_root"]);
 
 			// create default user
 			$this->add(array(
@@ -2505,18 +2495,12 @@ class users extends users_user
 			));
 
 			// add user to admin group
-			$this->add_users_to_group_rec(
-				$admg,
-				array($site["site_obj"]["default_user"]),
-				true,
-				true,
-				false
-			);
+			$this->add_users_to_group_rec($admg,array($site["site_obj"]["default_user"]),true,true,false);
 
 			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->get_oid_for_gid($admg));
 			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->get_oid_for_gid($aug));
+			$ini_opts["auth.md5_passwords"] = 1;
 		}
-		$ini_opts["auth.md5_passwords"] = 1;
 	}
 
 	function _install_create_g_u_o_rel($u_oid, $g_oid)

@@ -35,9 +35,6 @@
             <method>serialize</method>
       </property>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <tconfig>
                   <caption>visio</caption>
             </tconfig>

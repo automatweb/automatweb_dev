@@ -1,6 +1,5 @@
 # menyyd on root/klient/$url
-$root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, status=STAT_ACTIVE}
-	$klient = obj { class_id=CL_MENU, parent=${root}, name=${url}, type=MN_CLIENT, status=STAT_ACTIVE }
+	$klient = obj { class_id=CL_MENU, parent=${parent}, name=${url}, type=MN_CLIENT, status=STAT_ACTIVE }
 		$site_root = obj { class_id=CL_MENU, parent=${klient}, jrk="2", name=${url}, type=MN_CLIENT, status=STAT_ACTIVE }
 
 
@@ -30,34 +29,20 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 						$e_work = obj { class_id=CL_MENU, parent=${logged_editors}, jrk="1", name="Administreeri", status=STAT_ACTIVE, type=MN_CONTENT,  }
 
 							obj { class_id=CL_MENU, parent=${e_work}, name="Automatweb", jrk="1", status=STAT_ACTIVE, type=MN_CONTENT, link="/automatweb/" }
-							obj { class_id=CL_MENU, parent=${e_work}, name="Lisa Dokument", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/new", meta.pm_url_admin=1}
+							obj { class_id=CL_MENU, parent=${e_work}, name="Lisa Dokument", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/new", meta.pm_url_admin=1 }
 							obj { class_id=CL_MENU, parent=${e_work}, name="Muuda Dokumenti", jrk="3", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/change", meta.pm_url_admin=1 }
 
 						$e_me = obj { class_id=CL_MENU, parent=${logged_editors}, jrk="2", name="Minu tegevused", status=STAT_ACTIVE, type=MN_CONTENT }
-							obj { class_id=CL_MENU, parent=${e_me}, name="Muuda Parooli", jrk="1", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/change_pwd"}
-							obj { class_id=CL_MENU, parent=${e_me}, name="Logi v&auml;lja", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/logout"}
+							obj { class_id=CL_MENU, parent=${me}, name="Muuda Parooli", jrk="1", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/change_pwd"}
+							obj { class_id=CL_MENU, parent=${me}, name="Logi v&auml;lja", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/logout"}
 
 		# AW objektide menyy
 		$aw_obj = obj { class_id=CL_MENU, parent=${klient}, jrk="3", name="AW Objektid", type=MN_CLIENT, status=STAT_ACTIVE }
-			$users = obj { class_id=CL_MENU, parent=${parent}, name="Kasutajad", type=MN_CLIENT, status=STAT_ACTIVE }
-				#obj { class_id=CL_USER, parent=${users}, name=${default_user}, uid=${default_user}, password=${default_user_pwd}, status=STAT_ACTIVE }
-
-			# grupid - k6ik kasutajad, administraatorid
-			$grps = obj { class_id=CL_MENU, parent=${aw_obj}, name="Grupid", type=MN_CLIENT, status=STAT_ACTIVE }
-				#$all_users = obj { class_id=CL_GROUP, parent=${grps} name="K&otilde;ik kasutajad", status=STAT_ACTIVE }
 
 			$cont = obj { class_id=CL_MENU, parent=${aw_obj}, name="Konteinerid", type=MN_CLIENT, status=STAT_ACTIVE }
 
 			# siia peaks tulema 
 			$mn_conf = obj { class_id=CL_MENU, parent=${aw_obj}, name="Seaded", type=MN_CLIENT, status=STAT_ACTIVE }
-
-				$langs = obj { class_id=CL_MENU, parent=${mn_conf}, name="Keeled", type=MN_CLIENT, status=STAT_ACTIVE }
-
-				$dokforms = obj { class_id=CL_MENU, parent=${mn_conf}, name="Dokumendi vormid", type=MN_CLIENT, status=STAT_ACTIVE }
-
-				$doktpl = obj { class_id=CL_MENU, parent=${mn_conf}, name="Dokumendi templiidid", type=MN_CLIENT, status=STAT_ACTIVE }
-					obj { class_id=CL_CONFIG_AW_DOCUMENT_TEMPLATE, parent=${doktpl}, name="Tavaline pikk dokument", t_name="Tavaline pikk dokument", type=2, filename="plain.tpl", status=STAT_ACTIVE }
-					obj { class_id=CL_CONFIG_AW_DOCUMENT_TEMPLATE, parent=${doktpl}, name="Tavaline lead", t_name="Tavaline lead", type=1, filename="lead.tpl", status=STAT_ACTIVE }
 
 				$loginm = obj { class_id=CL_MENU, parent=${mn_conf}, name="Login men&uuml;&uuml;", type=MN_CLIENT, status=STAT_ACTIVE }
 					obj { class_id=CL_CONFIG_LOGIN_MENUS, status=STAT_ACTIVE, parent=${loginm}, name="Login men&uuml;&uuml;" }
@@ -67,7 +52,6 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 			obj { class_id=CL_MENU, parent=${admin_root}, name="Keeled" type=MN_ADMIN1, admin_feature=PRG_LANG, status=STAT_ACTIVE }
 			obj { class_id=CL_MENU, parent=${admin_root}, name="Programmide ACL" type=MN_ADMIN1, admin_feature=PRG_ACCESSMGR, status=STAT_ACTIVE }
 			obj { class_id=CL_MENU, parent=${admin_root}, name="Config" type=MN_ADMIN1, admin_feature=PRG_CONFIG, status=STAT_ACTIVE }
-				
 
 ini { site_rootmenu=${site_root} }
 
@@ -79,12 +63,6 @@ ini { per_oid=${site_root} }
 
 ini { menuedit.menu_defs[${logged}]="LOGGED" }
 
-ini { users.rootmenu=${users} }
-
-ini { groups.tree_root=${grps} }
-
-# ini { groups.all_users_grp=${all_users} }
+ini { admin_rootmenu2=${klient} }
 
 ini { amenustart=${admin_root} }
-
-ini { admin_rootmenu2=${klient} }

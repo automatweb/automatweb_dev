@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.15 2004/02/03 16:31:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.16 2004/02/12 11:48:03 kristo Exp $
 
 class accessmgr extends aw_template
 {
@@ -83,6 +83,10 @@ class accessmgr extends aw_template
 
 	function on_site_init(&$dbi, &$site, &$ini_opts, &$log, &$osi_vars)
 	{
+		if ($site['site_obj']['use_existing_templates'])
+		{
+			return;
+		}
 		$this->dc = $dbi->dc;
 		$this->_do_init_accessmgr();
 		$s = aw_serialize($this->ar);
