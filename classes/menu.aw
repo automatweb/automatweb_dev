@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.30 2003/01/30 12:30:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.31 2003/02/01 13:36:21 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -217,15 +217,12 @@ class menu extends class_base
 				break;
 			
 			case "sections":
-				$ob = get_instance("objects");
-				$data["options"] = $ob->get_list(false,true);
-				$m = get_instance("menuedit");
-				$data["selected"] = $m->get_brothers($args["obj"]["oid"]);
+				$data["options"] = $this->get_menu_list(false,true);
+				$data["selected"] = $this->get_brothers($args["obj"]["oid"]);
 				break;
 			
 			case "sss":
-				$ob = get_instance("objects");
-				$data["options"] = $ob->get_list();
+				$data["options"] = $this->get_menu_list();
 				break;
 
 			case "pers":
@@ -235,9 +232,8 @@ class menu extends class_base
 
 			case "grkeywords":
 				$kwds = get_instance("keywords");
-				$m = get_instance("menuedit");
 				$data["options"] = $kwds->get_keyword_picker();
-				$data["selected"] = $m->get_menu_keywords($args["obj"]["oid"]);
+				$data["selected"] = $this->get_menu_keywords($args["obj"]["oid"]);
 				break;
 
 			case "seealso":
@@ -247,8 +243,7 @@ class menu extends class_base
 				// selle menyy all seealso on et n2itamisel kiirelt teada saax
 				$sa = $args["obj"]["meta"]["seealso_refs"];
 				$rsar = $sa[aw_global_get("lang_id")];
-				$ob = get_instance("objects");
-				$data["options"] = $ob->get_list();
+				$data["options"] = $this->get_menu_list();
 				$data["value"] = $rsar;
 				break;
 
@@ -261,7 +256,7 @@ class menu extends class_base
 				else
 				{
 					$m = get_instance("menuedit");
-					if ($args[objdata]["admin_feature"])
+					if ($args["objdata"]["admin_feature"])
 					{
 						$icon = "<img src='" . $m->get_feature_icon_url($args["objdata"]["admin_feature"]) . "'>";
 					}
@@ -278,10 +273,10 @@ class menu extends class_base
 				break;
 
 			case "admin_feature":
+				// only show the program selector, if the menu has the correct type
 				if ($args["objdata"]["type"] == MN_ADMIN1)
 				{
-					$m = get_instance("menuedit");
-					$data["options"] = array("0" => "--vali--") + $m->get_feature_sel();
+					$data["options"] = $this->get_feature_sel();				
 				}
 				else
 				{
@@ -290,10 +285,10 @@ class menu extends class_base
 				break;	
 
 			case "pclass":
+				// only show the public method selector, if the menu has the correct type
 				if ($args["objdata"]["type"] == MN_PMETHOD)
 				{
-					$m = get_instance("menuedit");
-					$data["options"] = $m->get_pmethod_sel();
+					$data["options"] = $this->get_pmethod_sel();
 				}
 				else
 				{
@@ -420,8 +415,7 @@ class menu extends class_base
 			// grkeywords just triggers an action, nothing should
 			// be saved into the objects table
 			case "grkeywords":
-				$m = get_instance("menuedit");
-				$m->save_menu_keywords($data["value"],$args["obj"]["oid"]);
+				$this->save_menu_keywords($data["value"],$args["obj"]["oid"]);
 				$retval = PROP_IGNORE;
 				break;
 
@@ -815,5 +809,109 @@ class menu extends class_base
 		}
 		$menus[$db["parent"]][] = $ret;
 	}
+
+	////
+	// !tagastab array adminni featuuridest, mida sobib ette s88ta aw_template->picker funxioonile
+	function get_feature_sel()
+	{
+		$ret = array("0" => "--vali--");
+		reset($this->cfg["programs"]);
+		while (list($id,$v) = each($this->cfg["programs"]))
+		{
+			// only show stuff with names
+			if ($v["name"])
+			{
+				$ret[$id] = $v["name"];
+			};
+		}
+		return $ret;
+	}
+
+	////
+	// !Tagastab nimekirja avalikest meetodidest. Arvatavasti tuleb see anyway ymber kirjutada,
+	// sest kui neid meetodeid saab olema palju, siis on neid sitt selectist valida
+	function get_pmethod_sel()
+	{
+		$aw_orb = get_instance("aw_orb");
+		return array("0" => "--vali--") + $aw_orb->get_public_classes();
+	}
+
+	function get_menu_keywords($id)
+	{
+		$ret = array();
+		$id = (int)$id;
+		$this->db_query("SELECT * FROM keyword2menu WHERE menu_id = $id");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["keyword_id"]] = $row["keyword_id"];
+		}
+		return $ret;
+        }
+
+	function save_menu_keywords($keywords,$id)
+	{
+		$old_kwds = $this->get_menu_keywords($id);
+		if (is_array($keywords))
+		{
+			// check if the kwywords have actually changed - if not, we souldn't do this, as this
+			// can be quite time-consuming
+			$update = false;
+			foreach($keywords as $koid)
+			{
+				if ($old_kwds[$koid] != $koid)
+				{
+					$update = true;
+				}
+			}
+
+			if (count($old_kwds) != count($keywords))
+			{
+				$update = true;
+			}
+
+			if (!$update)
+			{
+				return;
+			}
+		}
+		else
+		{
+			if (count($old_kwds) < 1)
+			{
+				return;
+			}
+		}
+		$this->db_query("DELETE FROM keyword2menu WHERE menu_id = $id");
+	
+		if (is_array($keywords))
+		{
+			$has_kwd_rels = 1;
+			foreach($keywords as $koid)
+			{
+				$this->db_query("INSERT INTO keyword2menu (menu_id,keyword_id) VALUES('$id','$koid')");
+			}
+		}
+		else
+		{
+			$has_kwd_rels = 0;
+		};
+
+		$this->upd_object(array(
+			"oid" => $id,
+			"metadata" => array("has_kwd_rels" => $has_kwd_rels),
+		));
+	}
+
+	function get_brothers($id)
+	{
+		$bsar = array();
+		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER);
+		while ($arow = $this->db_next())
+		{
+			$bsar[$arow["parent"]] = $arow["parent"];
+		}
+		return $bsar;
+        }
+
 };
 ?>
