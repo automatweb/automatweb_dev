@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.3 2001/06/21 05:36:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.4 2001/06/21 07:36:53 kristo Exp $
 if (!defined("AW_TABLE_LOADED"))
 {
 define("AW_TABLE_LOADED",1);
@@ -112,9 +112,11 @@ class aw_table {
 		$sess_field_order = $this->prefix . "_sorder";
 		$before = $aw_tables[$sess_field_key];
 
+
 		// määrame sorteerimisjärjekorra
 
-		if (!$params[field]) {
+		if (!$params[field]) 
+		{
 			// kui sorteerimisjärjekorda polnud määratud, siis
 
 			// before peaks sisaldama sessiooni sisse salvestatud
@@ -130,27 +132,40 @@ class aw_table {
 				$sorder = $this->default_odir;
 			};
 			// sorteerime kasvavas järjestuses
-		} else {
+		} 
+		else 
+		if ($params["sorder"] == "")
+		{
 			// sorteerimisjärjekord anti ka kaasa, nyyd vaatame
 			// kumba pidi sorteerida
 
 			// kui enne ja nyyd on samad, siis peaks vist
 			// sorteerimisjärjekorda muutma
-			if ($params[field] == $before) {
-
+			if ($params["field"] == $before) 
+			{
 				// vaatame nyyd sessiooni salvestatud sorteerimisjärjekorda,
 				// ja pöörame selle ümber
-				if ($aw_tables[$sess_field_order] == "asc") {
+				if ($aw_tables[$sess_field_order] == "asc") 
+				{
 					$sorder = "desc";
-				} else {
+				}
+				else 
+				{
 					$sorder = "asc";
 				};
-			} else {
+			} 
+			else 
+			{
 				$sorder = "asc";
 			};
 
-			$sortby = $params[field];
-		};
+			$sortby = $params["field"];
+		}
+		else
+		{
+			$sorder = $params["sorder"];
+			$sortby = $params["field"];
+		}
 
 		$this->sortby = $sortby;
 		$this->sorder = $sorder;
@@ -332,7 +347,16 @@ class aw_table {
 				if (($v["name"] == $this->sortby) && ($this->sorder == "desc")) {
 					$sufix = $this->up_arr;
 				};
-				$tbl .= "<b><a href='$PHP_SELF?".$this->header_att_string."&"."sortby=$v[name]'>$v[caption] $sufix</a></b>";
+				if ($this->sorder == "desc")
+				{
+					$so = "asc";
+				}
+				else
+				{
+					$so = "desc";
+				}
+
+				$tbl .= "<b><a href='$PHP_SELF?".$this->header_att_string."&"."sortby=$v[name]&sort_order=$so'>$v[caption] $sufix</a></b>";
 			} else {
 				$tbl .= $v["caption"];
 			};
