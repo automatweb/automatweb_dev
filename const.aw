@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.15 2001/06/07 17:48:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.16 2001/06/13 03:34:45 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -318,6 +318,8 @@ define(CL_SHOP_STATS,62); // poodide statistika vaatamine k2ib selle kaudu
 
 define(CL_CONTACT_GROUP,63); // kontaktigrupp
 
+define(CL_SHOP_ITEM_TYPE,64); // poe kaupa tyyp
+
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
 // nimekiri k6ikidest klassidest ikoonide jaox
@@ -361,7 +363,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_BANNER_BUYER => array("name" => "Banneri klient", "file" => "banner_buyer", "can_add" => 1),
 			CL_BANNER_SITE => array("name" => "Banneri sait", "file" => "banner_site", "can_add" => 1),
 			CL_MESSAGE => array("name" => "Message", "file" => "messenger", "can_add" => 0),
-			CL_SHOP_STATS => array("name" => "Poe statistika", "file" => "shop_stat", "can_add" => 1)
+			CL_SHOP_STATS => array("name" => "Poe statistika", "file" => "shop_stat", "can_add" => 1),
+			CL_SHOP_ITEM_TYPE => array("name" => "Kauba t&uuml;&uuml;p", "file" => "item_type", "can_add" => 1)
 );
 // kliendid. 
 // hierarhia esimene element on root
@@ -443,6 +446,7 @@ define(PRG_BANNER_USERS,39);
 define(PRG_BANNER_PROFILES,40);
 define(PRG_EKOMAR,41);
 define(PRG_KEYWORD,42);
+define(PRG_CONF_JOIN_MAIL,43);
 
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
@@ -490,6 +494,7 @@ PRG_BANNER_USERS			=> array("name" => MN_BANNER_USERS,"url" => "orb.aw?class=ban
 PRG_BANNER_PROFILES		=> array("name" => MN_BANNER_PROFILES,"url" => "orb.aw?class=banner&action=show_profiles"),
 PRG_EKOMAR						=> array("name" => MN_EKOMAR,            "url" => "orb.$ext?class=ekomar&action=list_files"),
 PRG_KEYWORD						=> array("name" => MN_KEYWORD,					"url" => "orb.aw?class=keywords&action=list"),
+PRG_CONF_JOIN_MAIL		=> array("name" => MN_JOIN_MAIL,				"url" => "orb.aw?class=config&action=join_mail"),
 );
 
 // formide tyybid
