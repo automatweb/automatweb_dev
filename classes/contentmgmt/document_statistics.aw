@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.2 2004/03/25 09:40:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.3 2004/03/25 12:44:09 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -16,6 +16,24 @@
 
 @property stats type=table store=no
 @caption TOP
+
+@groupinfo folders caption="Kataloogid ja perioodid"
+@default group=folders
+
+@property folders type=table store=no 
+@caption Kataloogid
+
+@property periods type=table store=no 
+@caption Perioodid
+
+@property period_type type=select field=meta method=serialize
+@caption Milliseid perioode kasutada
+
+@reltype SHOW_FOLDER value=1 clid=CL_MENU
+@caption kataloog
+
+@reltype SHOW_PERIOD value=2 clid=CL_PERIOD
+@caption periood
 
 */
 
@@ -35,11 +53,25 @@ class document_statistics extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "timespan":
+				$data["options"] = array(
+					"day" => "P&auml;ev",
+					"week" => "N&auml;dal",
+					"mon" => "Kuu"
+				);
+				break;
+
+			case "period_type":
+				$data["options"] = array(
+					"rel" => "Seostatud perioodid",
+					"all" => "K&otilde;ik perioodid",
+					"not" => "Mitteperioodilised",
+					"act" => "Aktiivne periood"
+				);
+				break;
+
 			case "stats":
-				$st = $this->get_stat_arr(array(
-					"timespan" => $arr["obj_inst"]->prop("timespan"),
-					"count" => $arr["obj_inst"]->prop("count"),
-				));
+				$st = $this->get_stat_arr($arr["obj_inst"]);
 				
 				$data["vcl_inst"]->define_field(array(
 					"name" => "docid",
@@ -65,6 +97,14 @@ class document_statistics extends class_base
 				$data["vcl_inst"]->set_default_sortby("hits");
 				$data["vcl_inst"]->set_default_sorder("desc");
 				break;
+
+			case "folders":
+				$this->do_folders_table($arr);
+				break;
+
+			case "periods":
+				$this->do_periods_table($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -75,10 +115,69 @@ class document_statistics extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-
+			case "folders":
+				$arr["obj_inst"]->set_meta("subs", $arr["request"]["subs"]);
+				break;
 		}
 		return $retval;
 	}	
+
+	function _init_folders_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Kataloog"
+		));
+
+		$t->define_field(array(
+			"name" => "subs",
+			"caption" => "K.A. Alamkataloogid",
+			"align" => "center"
+		));
+	}
+
+	function do_folders_table(&$arr)
+	{
+		$t =&$arr["prop"]["vcl_inst"];
+		$this->_init_folders_table($t);
+
+		$subs = $arr["obj_inst"]->meta("subs");
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_SHOW_FOLDER)) as $c)
+		{
+			$o = $c->to();
+			$t->define_data(array(
+				"name" => $o->path_str(),
+				"subs" => html::checkbox(array(
+					"name" => "subs[".$o->id()."]",
+					"value" => 1,
+					"checked" => ($subs[$o->id()] == 1)
+				))
+			));
+		}
+	}
+
+	function _init_periods_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Periood"
+		));
+	}
+
+	function do_periods_table(&$arr)
+	{
+		$t =&$arr["prop"]["vcl_inst"];
+		$this->_init_periods_table($t);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_SHOW_PERIOD)) as $c)
+		{
+			$o = $c->to();
+			$t->define_data(array(
+				"name" => $o->path_str(),
+			));
+		}
+	}
 
 	function parse_alias($arr)
 	{
@@ -184,18 +283,16 @@ class document_statistics extends class_base
 
 	/** returns an array of statistics for document views
 
-		@param timespan required
-
-		@param count required type=int
-
 		@comment
 
 			returns an array of document id => hit count 
-			for the top $count documents in the timespan
+			taking into account the display statistics from the object passed as a parameter
 	**/
-	function get_stat_arr($arr)
+	function get_stat_arr($obj)
 	{
-		extract($arr);
+		$timespan = $obj->prop("timespan");
+		$count = $obj->prop("count");
+
 		$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d").".txt";
 		$fc = explode("\n", $this->get_file(array("file" => $fp)));
 

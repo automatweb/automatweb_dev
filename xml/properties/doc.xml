@@ -165,6 +165,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <trans>1</trans>
+            <default>1</default>
             <field>show_modified</field>
             <caption>Näita muutmise kuupäeva</caption>
       </property>
