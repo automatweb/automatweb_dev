@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.27 2001/06/19 20:09:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.28 2001/06/20 00:45:42 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -451,16 +451,34 @@ class planner extends calendar {
 		classload("repeater");
 		$repeater = new repeater();
 		extract($args);
-		$selector = ($uid) ? "planner.uid = '$uid'" : "objects.parent = '$parent'";
-		$eselect = ($event) ? "AND planner.oid = '$event'" : "";
+		if ($uid)
+		{
+			$selector = " AND planner.uid = '$uid'";
+		}
+		elseif ($parent)
+		{
+			$selector = " AND objects.parent = '$parent'";
+		};
+		
+		if (!$end)
+		{
+			$end = mktime(23,59,59,12,31,2002);
+		};
+
+		if ($type)
+		{
+			$tp = " AND planner.type = $type ";
+		};
+
+		$eselect = ($event) ? "AND planner.id = '$event'" : "";
 		$limit = ($limit) ? $limit : 999999;
 		$retval = array();
 		$reps = array();
 		$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE objects.status = 2 AND $selector $eselect
+			WHERE objects.status = 2 $selector $eselect $tp
 				AND ((start >= '$start' AND start <= '$end') OR (rep_until >= '$start'))
-				ORDER BY start $l";
+				ORDER BY start";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -501,7 +519,7 @@ class planner extends calendar {
 					{
 						$retval[$index][] = $row;
 					}
-					if ( ($cnt >= $size) || ($cnt > $limit) )
+					if ( ($cnt >= $size) || ($cnt >= $limit) )
 					{
 						$continue = false;
 					};
