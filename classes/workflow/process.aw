@@ -605,16 +605,13 @@ class process extends class_base
 			else
 			if ($actid == $this->end_action_id)
 			{
-				$tot = ceil(count($acts) / $per_row);
-				$grid[$tot][0] = array(
-					"id" => $actid,
-					"n" => $actn
-				);
+				$l_actn = $actn;
 			}
 			else
 			{
 				$row = (int)($idx / $per_row);
 				$col = $idx % $per_row;
+				$max_row = max($row, $max_row);
 
 				$grid[$row][$col] = array(
 					"id" => $actid,
@@ -622,6 +619,14 @@ class process extends class_base
 				);
 				$idx++;
 			}
+		}
+
+		if ($this->end_action_id)
+		{
+			$grid[$max_row+1][0] = array(
+				"id" => $this->end_action_id,
+				"n" => $l_actn
+			);
 		}
 	}
 
