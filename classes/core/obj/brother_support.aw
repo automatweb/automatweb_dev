@@ -12,9 +12,9 @@ class brother_support
 {
 	function on_delete_alias($arr)
 	{
-		// now, get the alias. if it has reltype of 10000, then get the object it points TO
+		// now, get the alias. if it has reltype of RELTYPE_BROTHER, then get the object it points TO
 		// then find any brothers of the object the relation comes from and delete them
-		if ($arr["connection"]->prop("reltype") == 10000)
+		if ($arr["connection"]->prop("reltype") == RELTYPE_BROTHER)
 		{
 			$ol = new object_list(array(
 				"parent" => $arr["connection"]->prop("to"),
@@ -29,9 +29,9 @@ class brother_support
 
 	function on_add_alias($arr)
 	{
-		// now, get the alias. if it has reltype of 10000, then add a brother below the folder
+		// now, get the alias. if it has reltype of RELTYPE_BROTHER, then add a brother below the folder
 		// the connection points to
-		if ($arr["connection"]->prop("reltype") == 10000)
+		if ($arr["connection"]->prop("reltype") == RELTYPE_PROTHER)
 		{
 			$to = $arr["connection"]->to();
 			$from = $arr["connection"]->from();
