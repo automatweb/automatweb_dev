@@ -134,8 +134,7 @@ class search_conf extends aw_template
 			$this->vars(array("baseurl" => $bs));
 		}
 
-		classload("keywords");
-		$k = new keywords;
+		$k = get_instance("keywords");
 
 		$keys = array();
 		$sel_keys = false;
@@ -176,6 +175,32 @@ class search_conf extends aw_template
 
 		if ($search && ($sstring_title != "" || $sstring != ""))
 		{
+			// if we should be actually searching from a form, let formgen work it's magick
+			$grps = $this->get_groups();
+			if ($grps[$s_parent]["search_form"])
+			{
+				// do form search
+				$finst = get_instance("form");
+				// we must load the form before we can set element values
+				$finst->load($grps[$s_parent]["search_form"]);
+
+				$s_q = $sstring != "" ? $sstring : $sstring_title;
+			
+				// set the search elements values
+				foreach($grps[$s_parent]["search_elements"] as $el)
+				{
+					$finst->set_element_value($el, $s_q, true);
+				}
+
+				$this->vars(array(
+					"SEARCH" => $finst->new_do_search(array(
+						"section" => $section,
+					))
+				));
+
+				return $this->parse();
+			}
+
 			// and here we do the actual searching bit!
 
 			// assemble the search criteria sql
@@ -699,25 +724,35 @@ class search_conf extends aw_template
 	function change_grp($arr)
 	{
 		extract($arr);
-		$grps = $this->get_groups();
 		$this->read_template("change_grp.tpl");
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("change", array())."'>Gruppide nimekiri</a> / Muuda gruppi");
+		$grps = $this->get_groups();
 
-		classload("objects");
-		$o = new objects;
-		$ml = $o->get_list();
+		$o = get_instance("objects");
+
+		$f = get_instance("form");
+		$flist = $f->get_flist(array(
+			"type" => FTYPE_SEARCH, 
+			"addempty" => true, 
+			"addfolders" => true,
+			"sort" => true
+		));
+
+		$els = $f->get_elements_for_forms(array($grps[$id]["search_form"]));
 
 		$this->vars(array(
 			"name" => $grps[$id]["name"],
 			"ord" => $grps[$id]["ord"],
 			"id" => $id,
-			"menus" => $this->multiple_option_list($grps[$id]["menus"],$ml),
+			"menus" => $this->multiple_option_list($grps[$id]["menus"],$o->get_list()),
 			"no_usersonly" => checked($grps[$id]["no_usersonly"] == 1),
 			"users_only" => checked($grps[$id]["users_only"] == 1),
 			"min_len" => $grps[$id]["min_len"],
 			"max_len" => $grps[$id]["max_len"],
 			"empty_no_docs" => checked($grps[$id]["empty_search"] < 2),
 			"empty_all_docs" => checked($grps[$id]["empty_search"] == 2),
+			"search_forms" => $this->picker($grps[$id]["search_form"], $flist),
+			"search_elements" => $this->mpicker($grps[$id]["search_elements"], $els),
 			"reforb" => $this->mk_reforb("submit_change_grp", array("id" => $id))
 		));
 		return $this->parse();
@@ -736,14 +771,9 @@ class search_conf extends aw_template
 		$grps[$id]["min_len"] = $min_len;
 		$grps[$id]["max_len"] = $max_len;
 		$grps[$id]["empty_search"] = $empty_search;
-		$grps[$id]["menus"] = array();
-		if (is_array($menus))
-		{
-			foreach ($menus as $mid)
-			{
-				$grps[$id]["menus"][$mid] = $mid;
-			}
-		}
+		$grps[$id]["menus"] = $this->make_keys($menus);
+		$grps[$id]["search_form"] = $search_form;
+		$grps[$id]["search_elements"] = $this->make_keys($search_elements);
 		
 		$this->save_grps($grps);
 
@@ -781,8 +811,7 @@ class search_conf extends aw_template
 
 	function get_groups($no_strip = false)
 	{
-		classload("cache");
-		$cache = new cache();
+		$cache = get_instance("cache");
 		$cs = $cache->file_get("search_groups::".$this->cfg["site_id"]);
 		if ($cs)
 		{
@@ -790,12 +819,8 @@ class search_conf extends aw_template
 		}
 		else
 		{
-			classload("config");
-			$c = new config;
-			$dat = $c->get_simple_config("search_grps");
-			classload("xml");
-			$x = new xml;
-			$ret = $x->xml_unserialize(array("source" => $dat));
+			$dat = $this->get_cval("search_grps");
+			$ret = aw_unserialize($dat);
 			$cache->file_set("search_groups::".$this->cfg["site_id"],aw_serialize($ret));
 		};
 
@@ -807,6 +832,7 @@ class search_conf extends aw_template
 		{
 			$r = $ret[$this->cfg["site_id"]][aw_global_get("lang_id")];
 		}
+
 		if (!is_array($r))
 		{
 			return array();

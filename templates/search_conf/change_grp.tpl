@@ -69,8 +69,34 @@ name="save" alt="{VAR:LC_SEARCH_CONF_ADD}" border="0" SRC="{VAR:baseurl}/automat
 <td class="celltext">&nbsp;<input type="checkbox" name="users_only" value="1" {VAR:users_only}>&nbsp;</td>
 </tr>
 <tr>
+<td class="celltext">&nbsp;Min. märke:&nbsp;</td>
+<td class="celltext">&nbsp;<input type="text" name="min_len" value="{VAR:min_len}" size="3" maxlength="3">&nbsp;</td>
+</tr>
+<tr>
+<td class="celltext">&nbsp;Max. märke:&nbsp;</td>
+<td class="celltext">&nbsp;<input type="text" name="max_len" value="{VAR:max_len}" size="3" maxlength="3">&nbsp;</td>
+</tr>
+<tr>
+<td class="celltext">&nbsp;Mida teha tühja otsinguga:&nbsp;</td>
+<td class="celltext">
+<input type="radio" name="empty_search" value="1" {VAR:empty_no_docs}>&nbsp;
+Ära näita ühtegi dokumenti:
+<br>
+<input type="radio" name="empty_search" value="2" {VAR:empty_all_docs}>&nbsp;
+Näita kõiki dokumente:
+</td>
+</tr>
+<tr>
 <td class="celltext" valign="top">&nbsp;{VAR:LC_SEARCH_CONF_MENUS}:&nbsp;</td>
 <td class="celltext">&nbsp;<select class='small_button' size=20 name='menus[]' multiple>{VAR:menus}</select>&nbsp;</td>
+</tr>
+<tr>
+<td class="celltext" valign="top">&nbsp;Otsing formi:&nbsp;</td>
+<td class="celltext">&nbsp;<select class='formselect' name='search_form'>{VAR:search_forms}</select>&nbsp;</td>
+</tr>
+<tr>
+<td class="celltext" valign="top">&nbsp;Otsingu elemendid:&nbsp;</td>
+<td class="celltext">&nbsp;<select class='formselect' multiple name='search_elements[]' size="10">{VAR:search_elements}</select>&nbsp;</td>
 </tr>
 </table>
 </td>

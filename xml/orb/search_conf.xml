@@ -16,6 +16,7 @@
 					<optional name="t_type"/>
 					<optional name="c_type"/>
 					<optional name="sortby"/>
+					<optional name="section"/>
 				</arguments>
 			</function>
 		</action>
