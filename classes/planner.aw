@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.28 2001/06/20 00:45:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.29 2001/06/20 02:58:48 duke Exp $
 // fuck, this is such a mess
 // planner.aw - p‰evaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -76,6 +76,64 @@ class planner extends calendar {
 		return $this->mk_orb("change",array("id" => $id));
 	}
 
+	function edit_todo_item($args = array())
+	{
+		extract($args);
+		$ftitle = ($op == "add") ? "Lisa TODO" : "Muuda TODO-d";
+		$this->read_template("edit_todo.tpl");
+		if ($id)
+		{
+			$q = "SELECT * FROM planner WHERE id = '$id'";
+			$this->db_query($q);
+			$row = $this->db_next();
+		}
+		else
+		{
+			$row = array();
+		};
+		$this->vars(array(
+			"ftitle" => $ftitle,
+			"title" => $row["title"],
+			"description" => $row["description"],
+			"reforb" => $this->mk_reforb("submit_todo_item",array("id" => $id,"date" => $date)),
+		));
+		return $this->parse();
+	}
+
+	function submit_todo_item($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		global $udata;
+		if ($id)
+		{
+			$q = "UPDATE planner 
+				SET title = '$title',
+					description = '$description'
+				WHERE id = '$id'";
+		}
+		else
+		{
+			
+			$id = $this->new_object(array(
+					"name" => "$title",
+					"parent" => $udata["home_folder"],
+					"class_id" => CL_CAL_EVENT,
+				));
+		
+			list($d,$m,$y) = split("-",$date);
+			$start = mktime(0,0,0,$m,$d,$y);
+			$q = "INSERT INTO planner (id,title,description,start,type)
+				VALUES ($id,'$title','$description',$start,1)";
+		};
+		$this->db_query($q);
+		global $status_msg;
+		$status_msg = "TODO on salvestatud";
+		session_register("status_msg");
+		return $this->mk_site_orb(array("date" => $date));
+	}
+				
+
 
 	function user_planner($args = array())
 	{
@@ -138,7 +196,6 @@ class planner extends calendar {
 		$xdate = $d . $m . $y;
 
 		$this->mk_path($object["parent"],CAL_CH_TITLE);
-
 
 		if (!$disp)
 		{
@@ -391,7 +448,26 @@ class planner extends calendar {
 						$c .= $this->parse("line");
 					};
 				};
+
+				// todo list
+				$q = "SELECT * FROM planner WHERE ((start >= $di[start]) AND (start <= $di[end])) AND type = 1";
+				$this->db_query($q);
+				$tc = "";
+				$cnt = 0;
+				while($row = $this->db_next())
+				{
+					$cnt++;
+					$this->vars(array(
+						"id" => $row["id"],
+						"title" => $row["title"],
+						"content" => (strlen($row["description"]) > 30) ? substr($row["description"],0,30) . "..." : $row["description"],
+						"num" => $cnt,
+					));
+					$tc .= $this->parse("todoline");
+				};
 				$this->vars(array("line" => $c,
+						"date" => $date,
+						"todoline" => $tc,
 						"total" => $cnt));
 				$content = $this->parse();
 				break;
@@ -432,6 +508,7 @@ class planner extends calendar {
 			"mlist" => $this->picker($m,$mlist),
 			"ylist" => $this->picker($y,$ylist),
 			"prev" => $prev,
+			"date" => $date,
 			"menubar" => $menubar,
 			"next" => $next));
 		return $this->parse();
@@ -462,13 +539,15 @@ class planner extends calendar {
 		
 		if (!$end)
 		{
+			// note, the repeater parser is horribly ineffective with repeaters
+			// that span over a long time period.
 			$end = mktime(23,59,59,12,31,2002);
 		};
 
-		if ($type)
-		{
-			$tp = " AND planner.type = $type ";
-		};
+		// defaultima n‰itma lihtsalt tavalisi eventeid (neid millel type on NULL)
+		// tekalt, ma kardan, et sellega voib tekkida probleeme, kui me AW-d
+		// mone teise DB peale portima hakkame.
+		$tp = ($type) ? " AND planner.type = $type " : " AND planner.type = NULL ";
 
 		$eselect = ($event) ? "AND planner.id = '$event'" : "";
 		$limit = ($limit) ? $limit : 999999;
@@ -541,14 +620,6 @@ class planner extends calendar {
 		
 		return (sizeof($retval) > 0) ? $retval : false;
 	}
-
-	/*
-		tyyp on 4 (year) ja pwhen on m‰‰ratud, siis peame selle v‰lja
-		lahti parsima
-
-
-
-	*/
 
 	// aga voib-olla luua nende vahemike kujutamiseks hoopis eraldi objekt?
 	function parse_repeater($args = array())
