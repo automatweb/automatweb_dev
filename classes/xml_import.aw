@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.20 2003/11/06 15:22:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.21 2003/11/07 18:54:01 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -369,6 +369,7 @@ class xml_import extends class_base
 				$pritel = $t_attr["pritel"];
 				$tootajad_view = array();
 				$amt_data = array();
+				$ruum_data = array();
 			}
 
 			if ( ($token["tag"] == "amet") && ($token["type"] == "complete") )
@@ -379,6 +380,7 @@ class xml_import extends class_base
 				$ysid = $attr["ysid"];
 				$eriala = $this->convert_unicode($attr["eriala"]);
 				$markus = $this->convert_unicode($attr["markus"]);
+				$koht = "";
 				if (strlen($attr["koht"]) > 0)
 				{	
 					$koht = $this->convert_unicode($attr["koht"]);
@@ -412,7 +414,27 @@ class xml_import extends class_base
 						'$markus','$tid','$eriala','$attr[tel]','$koht','$koormus_view','$ysid','$st_id')";
 				print $q;
 				$this->db_query($q);
-				$amt_data[$st_id][] = $pikknimi;
+				// first check, whether we have anything already
+				if (!empty($amt_data[$st_id][$attr["jrk"]]))
+				{
+					$amt_data[$st_id][$attr["jrk"]] .= ", " . $pikknimi;
+				}
+				else
+				{
+					$amt_data[$st_id][$attr["jrk"]] = $pikknimi;
+				};
+	
+				if (!empty($koht))
+				{
+					if (!empty($ruum_data[$st_id][$attr["jrk"]]))
+					{
+						$ruum_data[$st_id][$attr["jrk"]] .= ", " . $koht;
+					}
+					else
+					{
+						$ruum_data[$st_id][$attr["jrk"]] = $koht;
+					};
+				};
 				$tootajad_view[$attr[struktuur]][] = array(
 					"tootaja_id" => $tid,
 					"info" => $eriala . $nimi . $koormus_view,
@@ -468,17 +490,13 @@ class xml_import extends class_base
 				foreach($amt_data as $str_id => $items)
                                 {
                                         $q = "";
+					ksort($items);
+					list($low_id,) = each($items);
                                         if (sizeof($items) > 0)
                                         {
                                                 $amts = join(", ",$items);
-                                                $q = "UPDATE ut_ametid SET nimi_pikk = '$amts' WHERE st_id = '$str_id'";
+                                                $q = "UPDATE ut_ametid SET nimi_pikk = '$amts',jrk='$low_id' WHERE st_id = '$str_id'";
                                         }
-                                        /*
-                                        elseif (sizeof($items) == 1)
-                                        {
-                                                $q = "UPDATE ut_ametid SET nimi_pikk = nimi WHERE st_id = '$str_id'";
-                                        };
-                                        */
                                         if (!empty($q))
                                         {
                                                 print $q;
@@ -486,6 +504,30 @@ class xml_import extends class_base
                                                 $this->db_query($q);
                                         };
                                 };
+			
+				if (is_array($ruum_data))
+				{	
+					foreach($ruum_data as $str_id => $items)
+					{
+						$q = "";
+						//ksort($items);
+						//list($low_id,) = each($items);
+						if (sizeof($items) > 0)
+						{
+							$amts = join(", ",$items);
+							if (strlen($amts) > 0)
+							{
+								$q = "UPDATE ut_ametid SET koht = '$amts' WHERE st_id = '$str_id'";
+							};
+						}
+						if (!empty($q))
+						{
+							print $q;
+							print "<br />";
+							$this->db_query($q);
+						};
+					};
+				};
 
 
 				if (is_array($tootajad_view))
@@ -510,9 +552,11 @@ class xml_import extends class_base
 								$tmp = $items[0];
 								$info = $ruum = array();
 								array_walk($items,create_function('$val,$key,$info','$info[] = $val["info"];'),&$info);
-								array_walk($items,create_function('$val,$key,$ruum','if (strlen($val["ruum"]) > 0) { $ruum[] = $val["ruum"];};'),&$ruum);
+								array_walk($items,create_function('$val,$key,$ruum','if (strlen($val["ruum"])) { $ruum[] = $val["ruum"];};'),&$ruum);
 								$tmp["info"] = join(", ",$info);
+								$ruum = array_unique($ruum);
 								$tmp["ruum"] = join(", ",$ruum);
+								//$tmp["ruum"] = $ruum;
 								$fieldnames = join(",",array_keys($tmp));
 								$fieldvalues = join(",",map("'%s'",array_values($tmp)));
 								$q = "INSERT INTO tootajad_view ($fieldnames) VALUES ($fieldvalues)";
