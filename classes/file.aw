@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.91 2004/10/05 09:23:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.92 2004/10/08 15:27:00 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -185,6 +185,10 @@ class file extends class_base
 
 					$str = $proto_inst->get($data["value"]);
 					preg_match("/<title>(.*)<\/title>/isU", $str, $mt);
+					if ($mt[1] == "")
+					{
+						$mt[1] = basename($data["value"]);
+					}
 					$arr["obj_inst"]->set_name($mt[1]);
 				}
 				break;
@@ -248,15 +252,14 @@ class file extends class_base
 		return $retval;
 	}
 
-	function callback_pre_save($arr)
+	function callback_post_save($arr)
 	{
 		// overwrite the name if new file is uploaded
-		/*
-		if (isset($this->file_name))
+		/*if (isset($this->file_name))
 		{
-			$arr["obj_inst"]->set_prop("name",$this->file_name);
-		};
-		*/
+			$arr["obj_inst"]->set_name($this->file_name);
+			$arr["obj_inst"]->save();
+		};*/
 	}
 
 	////
