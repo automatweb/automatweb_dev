@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.13 2004/05/12 13:29:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.14 2004/08/30 15:36:31 duke Exp $
 
 ////
 // !get_date_range
@@ -92,6 +92,13 @@ function get_date_range($args = array())
 		case "month":
 			$start_ts = mktime(0,0,0,$m,1,$y);
 			$end_ts = mktime(23,59,59,$m+1,0,$y);
+
+			// special flag - fullweeks, if set we return dates from
+			// the first monday of the month to the last sunday of the month
+
+			
+
+			
 			// siin on next ja prev-i arvutamine monevorra special
 			// kui päev on suurem, kui järgmises kuus päevi kokku
 			// järgmise kuu viimase päeva. Sama kehtib eelmise kohta
@@ -193,11 +200,30 @@ function get_date_range($args = array())
 
 	};
 
+	$start_wd = convert_wday(date("w",$start_ts));
+	$end_wd = convert_wday(date("w",$end_ts));
+
+	if ($args["fullweeks"] == 1)
+	{
+		if ($start_wd > 1)
+		{
+			$tambov = $start_wd - 1;
+			$start_ts = $start_ts - ($tambov * 86400);
+		};
+
+		if ($end_wd < 7)
+		{
+			$tambov = 7 - $end_wd;
+			$end_ts = $end_ts + ($tambov * 86400);
+		};
+
+	};
+
 	$arr = array(
 		"start" => $start_ts,
 		"end" => $end_ts,
-		"start_wd" => convert_wday(date("w",$start_ts)),
-		"end_wd" => convert_wday(date("w",$end_ts)),
+		"start_wd" => $start_wd,
+		"end_wd" => $end_wd,
 		"m" => $m,
 		"y" => $y,
 		"wd" => convert_wday(date("w",$timestamp)),
