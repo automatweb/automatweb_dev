@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.51 2001/06/04 03:48:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.52 2001/06/04 05:22:55 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -926,13 +926,17 @@ class messenger extends menuedit_light
 			{
 				$froma = $this->msgconf["msg_pop3servers"][$args["identity"]]["address"];
 				$fromn = $this->msgconf["msg_pop3servers"][$args["identity"]]["name1"] . " " . $this->msgconf["msg_pop3servers"][$args["identity"]]["surname"];
+				if (!$froma)
+				{
+					print "E-mail address for this account has not been set. Cannot send any messages before you do that";
+					exit;
+				}
 			}
 			else
 			{
 				$froma = $udata["email"];
 				$fromn = "";
 			};
-			
 			$awm->create_message(array(
 					"froma" => $froma,
 					"fromn" => $fromn,
@@ -1836,6 +1840,12 @@ class messenger extends menuedit_light
 		$pop3conf = $this->msgconf["msg_pop3servers"];
 		$c = "";
 		$accdata = array();
+		classload("users");
+		$users = new users();
+		$rules = $users->get_user_config(array(
+						"uid" => UID,
+						"key" => "rules",
+		));
 		if (is_array($pop3conf))
 		{
 			foreach($pop3conf as $accid => $cvalues)
@@ -1884,6 +1894,7 @@ class messenger extends menuedit_light
 						"server" => $acc["server"],
 						"uid" => $acc["uid"],
 						"password" => $acc["password"],
+						"rules" => $rules,
 						"uidls" => $uidls,
 						"parent" => $parent,
 					));
@@ -1908,7 +1919,7 @@ class messenger extends menuedit_light
 		$pop3 = new pop3();
 		$awm = new aw_mail();
 		$awf = new file();
-		$msgs = $pop3->get_messages($server,$uid,$password,false,$uidls);
+		$msgs = $pop3->get_messages($server,$uid,$password,false,$uidls,$rules);
 
 		$c = 0;
 		if (is_array($msgs))
@@ -1924,10 +1935,28 @@ class messenger extends menuedit_light
 							));
 
 				$body = $awm->get_part(array("part" => "body"));
-				$subject = $body["headers"]["Subject"];
+				// siin checkime ruule:
+				$subject = $this->MIME_decode($body["headers"]["Subject"]);
+				$from = $this->MIME_decode($body["headers"]["From"]);
+				$mfrom = $from;
+				$content = $this->MIME_decode($body["body"]);
+				$processing = true;
+				$deliver_to = $parent;
+				if (is_array($rules))
+				{
+					foreach($rules as $rkey => $rval)
+					{
+						$field = $rval["field"];
+						if (!(strpos($$field,$rval["rule"]) === false) && $processing )
+						{
+							$deliver_to = $rval["folder"];
+							$processing = false;
+						};
+					};
+				};
 				$this->quote($subject);
 				$oid = $this->new_object(array(
-						"parent" => $parent,
+						"parent" => $deliver_to,
 						"name" => $subject,
 						"class_id" => CL_MESSAGE),false);
 				
@@ -1952,10 +1981,8 @@ class messenger extends menuedit_light
 		
 				$uidl = trim($data["uidl"]);
 				// registreerime vastse teate
-				$subject = $body["headers"]["Subject"];
-				$from = $body["headers"]["From"];
-				$to = $body["headers"]["To"];
-				$content = $body["body"];
+				//$subject = $body["headers"]["Subject"];
+				$to = $this->MIME_decode($body["headers"]["To"]);
 				$tm = strtotime($body["headers"]["Date"]);
 				$header = join("\n",map2("%s: %s",$body["headers"]));
 				$this->quote($subject);
@@ -1990,28 +2017,26 @@ class messenger extends menuedit_light
 				"subject" => "Teema",
 				"message" => "Sisu",
 		);
+		classload("users");
+		$users = new users();
+		$rules = $users->get_user_config(array(
+						"uid" => UID,
+						"key" => "rules",
+		));
 		$folders = $this->_folder_list();
-		$q = "SELECT * FROM msg_rules WHERE uid = '" . UID . "'";
-		$this->db_query($q);
 		$this->read_template("rules.tpl");
-		$c = "";
-		while($row = $this->db_next())
+		if (is_array($rules))
 		{
-			if ($row["delivery"] == "mail")
+			foreach($rules as $key => $val)
 			{
-				$endpoint = $row["addr"];
-			}
-			else
-			{
-				$endpoint = "Folder: " . $folders[$row["folder"]];
+				$this->vars(array(
+					"field" => $fields[$val["field"]],
+					"endpoint" => $folders[$val["folder"]],
+					"rule" => $val["rule"],
+					"id" => $key,
+				));
+				$c .= $this->parse("line");
 			};
-			$this->vars(array(
-				"field" => $fields[$row["field"]],
-				"endpoint" => $endpoint,
-				"rule" => $row["rule"],
-				"id" => $row["id"],
-			));
-			$c .= $this->parse("line");
 		};
 		$this->vars(array(
 			"line" => $c,
@@ -2062,13 +2087,17 @@ class messenger extends menuedit_light
 		));
 		$this->read_template("newrule.tpl");
 		$delivery = "fldr";
-		if ($id)
+		classload("users");
+		$users = new users();
+		$oldrules = $users->get_user_config(array(
+						"uid" => UID,
+						"key" => "rules",
+		));
+		if (isset($id))
 		{
 			$title = "Muuda reeglit";
 			$btn_cap = "Salvesta";
-			$q = "SELECT * FROM msg_rules WHERE id = '$id' AND uid = '" . UID . "'";
-			$this->db_query($q);
-			$row = $this->db_next();
+			$row = $oldrules[$id];
 			if (!$row)
 			{
 				print "no such rule";
@@ -2109,21 +2138,37 @@ class messenger extends menuedit_light
 		global $status_msg;
 		$this->quote($args);
 		extract($args);
-		if ($id)
+		classload("users");
+		$users = new users();
+		$oldrules = $users->get_user_config(array(
+						"uid" => UID,
+						"key" => "rules",
+		));
+		if (isset($id))
 		{
-			$q = "UPDATE msg_rules SET field = '$field', rule='$rule',folder='$folder',
-				addr = '$addr',delivery = '$delivery'
-				WHERE id = '$id'";
+			$keyblock = array(
+					"field" => $field,
+					"rule" => $rule,
+					"folder" => $folder,
+			);
+			$oldrules[$id] = $keyblock;
 			$status_msg = "Reegel salvestatud";
 		}
 		else
 		{
-			$uid = UID;
-			$q = "INSERT INTO msg_rules (uid,field,rule,folder,addr,delivery)
-				VALUES ('$uid','$field','$rule','$folder','$addr','$delivery')";
+			$keyblock = array(
+					"field" => $field,
+					"rule" => $rule,
+					"folder" => $folder,
+			);
+			$oldrules[] = $keyblock;
 			$status_msg = "Reegel lisatud";
 		};
-		$this->db_query($q);
+		$users->set_user_config(array(
+						"uid" => UID,
+						"key" => "rules",
+						"value" => $oldrules,
+		));
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
 			"action" => "rules",
