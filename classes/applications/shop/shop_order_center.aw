@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.16 2004/12/01 14:04:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.17 2004/12/09 11:03:06 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -53,7 +53,10 @@
 @default group=appear
 
 @property controller type=relpicker reltype=RELTYPE_CONTROLLER table=objects field=meta method=serialize
-@caption N&auml;itamise kontroller
+@caption Vaikimisi n&auml;itamise kontroller
+
+@property controller_tbl type=callback callback=callback_get_controller_tbl store=no
+@caption Kontrollerid kataloogidele
 
 @property layoutbl type=table store=no
 @caption Toodete layout
@@ -133,6 +136,13 @@ class shop_order_center extends class_base
 				}
 				break;			
 
+			case "controller_tbl":
+				if (!$arr["obj_inst"]->prop("use_controller"))
+				{
+					return PROP_IGNORE;
+				}
+				break;			
+
 			case "data_form_person":
 			case "data_form_company":
 			case "data_form_discount":
@@ -181,6 +191,10 @@ class shop_order_center extends class_base
 
 			case "orgfieldmap":
 				$arr["obj_inst"]->set_meta("org_pmap", $arr["request"]["pmap"]);
+				break;
+
+			case "controller_tbl":
+				$this->save_ctr_t($arr);
 				break;
 		}
 		return $retval;
@@ -251,28 +265,7 @@ class shop_order_center extends class_base
 		$wh = get_instance("applications/shop/shop_warehouse");
 
 		$o = $arr["obj_inst"];
-		
-		if (!$o->prop("warehouse"))
-		{
-			return;
-		}
-		$wh = obj($o->prop("warehouse"));
-
-		if (!$wh->prop("conf"))
-		{
-			return;
-		}
-		$conf = obj($wh->prop("conf"));
-		
-		if (!$conf->prop("pkt_fld"))
-		{
-			return;
-		}
-
-		$ot = new object_tree(array(
-			"parent" => $conf->prop("pkt_fld"),
-			"class_id" => CL_MENU,
-		));
+		$this->_get_folder_ot_from_o($o);
 
 		$this->_oinst = &$o;
 
@@ -293,8 +286,24 @@ class shop_order_center extends class_base
 			$this->itemlayout_items[$c->prop("to")] = $c->prop("to.name");
 		}
 
+		if (!$o->prop("warehouse"))
+		{
+			return new object_list();
+		}
+		$wh = obj($o->prop("warehouse"));
+
+		if (!$wh->prop("conf"))
+		{
+			return new object_list();
+		}
+		$conf = obj($wh->prop("conf"));
 		$o = obj($conf->prop("pkt_fld"));
 		$this->layoutbl_ot_cb($o, $t);
+
+		$ot = new object_tree(array(
+			"class_id" => CL_MENU,
+			"parent" => $o->id(),
+		));
 
 		$ot->foreach_cb(array(
 			"func" => array(&$this, "layoutbl_ot_cb"),
@@ -477,16 +486,34 @@ class shop_order_center extends class_base
 		enter_function("shop_order_center::show_items");
 		extract($arr);
 		$soc = obj($arr["id"]);
-		if ($soc->prop("use_controller") && is_oid($soc->prop("controller")))
+		if ($soc->prop("use_controller") )
 		{
-			$fc = get_instance(CL_FORM_CONTROLLER);
-			enter_function("shop_order_center::show_items::controller");
-			$html = $fc->eval_controller($soc->prop("controller"), array(
-				"soc" => $soc
-			));
-			exit_function("shop_order_center::show_items::controller");
-			exit_function("shop_order_center::show_items");
-			return $html; 
+			$ctr = $soc->prop("controller");
+
+			// see if this folder has a special controller
+			$vals = safe_array($soc->meta("fld_controllers"));
+			$so = obj($arr["section"]);
+			$path = $so->path();
+
+			foreach($path as $po)
+			{
+				if (!empty($vals[$po->id()]))
+				{
+					$ctr = $vals[$po->id()];
+				}
+			}
+			
+			if (is_oid($ctr) && $this->can("view", $ctr))
+			{
+				enter_function("shop_order_center::show_items::controller");
+				$fc = get_instance(CL_FORM_CONTROLLER);
+				$html = $fc->eval_controller($ctr, array(
+					"soc" => $soc
+				));
+				exit_function("shop_order_center::show_items::controller");
+				exit_function("shop_order_center::show_items");
+				return $html; 
+			}
 		}
 
 		$wh_id = $soc->prop("warehouse");
@@ -957,6 +984,72 @@ class shop_order_center extends class_base
 			return 0;
 		}
 		return $data[$oc->prop("data_form_discount")];
+	}
+
+	function callback_get_controller_tbl($arr)
+	{
+		if (!$arr["obj_inst"]->prop("use_controller"))
+		{
+			return array();
+		}
+		$ret = array();
+		$ot = $this->_get_folder_ot_from_o($arr["obj_inst"]);
+		$ol = $ot->to_list();
+
+		$opts = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CONTROLLER")));
+		$opts = array("" => t("--vali--")) + $opts->names();
+		$vals = $arr["obj_inst"]->meta("fld_controllers");
+		foreach($ol->arr() as $o)
+		{
+			$nm = "fld_".$o->id();
+			$ret[$nm] = array(
+				"name" => $nm,
+				"type" => "select",
+				"options" => $opts,
+				"value" => $vals[$o->id()],
+				"caption" => $o->path_str()
+			);
+		}
+		return $ret;
+	}
+
+	function _get_folder_ot_from_o($o)
+	{
+		if (!$o->prop("warehouse"))
+		{
+			return;
+		}
+		$wh = obj($o->prop("warehouse"));
+
+		if (!$wh->prop("conf"))
+		{
+			return;
+		}
+		$conf = obj($wh->prop("conf"));
+		
+		if (!$conf->prop("pkt_fld"))
+		{
+			return;
+		}
+
+		$ot = new object_tree(array(
+			"parent" => $conf->prop("pkt_fld"),
+			"class_id" => CL_MENU,
+		));
+		return $ot;
+	}
+
+	function save_ctr_t($arr)
+	{
+		$vals = array();
+		foreach(safe_array($arr["request"]) as $k => $v)
+		{
+			if (substr($k, 0, 4) == 'fld_')
+			{
+				$vals[substr($k, 4)] = $v;
+			}
+		}
+		$arr["obj_inst"]->set_meta("fld_controllers", $vals);
 	}
 }
 ?>
