@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.121 2002/10/30 15:34:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.122 2002/11/06 11:23:20 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -183,7 +183,7 @@ class document extends aw_template
 
 		if ($ordby == "")
 		{
-			$ordby = "objects.jrk";
+			$ordby = "objects.period DESC, objects.jrk ASC, objects.modified DESC";
 		}
 		$q = "SELECT documents.lead AS lead,
 			documents.docid AS docid,
@@ -249,11 +249,10 @@ class document extends aw_template
 	// in the current period, if a menu is not specified
 	function gen_rss_feed($args = array())
 	{
-		classload("rdf");
 		$baseurl = $this->cfg["baseurl"];
 		$stitle = $this->cfg["stitle"]; 
 		$ext = $this->cfg["ext"];
-		$rdf = new rdf(array(
+		$rdf = get_instance("rdf",array(
 			"about" => "$baseurl/index.$ext/format=rss",
 			"link" => "$baseurl/index.$ext",
 			"title" => $stitle,
@@ -532,8 +531,7 @@ class document extends aw_template
 		// so we need another way to determine whether this document belongs to the active
 		// period
 
-		classload("periods");
-		$db_periods = new db_periods($this->cfg["per_oid"]);
+		$db_periods = get_instance("periods",$this->cfg["per_oid"]);
 		$act_per = $db_periods->get_active_period($this->cfg["per_oid"]);
 		$this->title = $doc["title"];
 
@@ -787,8 +785,7 @@ class document extends aw_template
 		};
 
 		/*
-		classload("msgboard");
-		$t = new msgboard;
+		$t = get_instance("msgboard");
 		$nc = $t->get_num_comments($doc["docid"]);
 		$nc = $nc < 1 ? "0" : $nc;
 		$doc["content"] = str_replace("#kommentaaride arv#",$nc,$doc["content"]);
@@ -940,6 +937,7 @@ class document extends aw_template
 			// switch back to estonian
 			setlocale(LC_CTYPE, $old_loc);
 		}
+		classload("image");
 		$this->vars(array(
 			"title"	=> $title,
 			"menu_image" => image::check_url($mn["img_url"]),
@@ -1045,6 +1043,7 @@ class document extends aw_template
 				"text/html" => "html",
 				"image/gif" => "gif",
  			);
+			classload("file");
 			reset($aliases);
 			while (list(,$ar) = each($aliases))
 			{
@@ -1480,7 +1479,7 @@ class document extends aw_template
 		$d_begin = $date - $sub_arr[date("w")]*24*3600;
 		$rdate = $d_begin+$num*24*3600;
 
-		$t = new tvkavad;
+		$t = get_instance("tvkavad");
 		return $t->kanalid_list($rdate);
 	}
 
@@ -1778,8 +1777,7 @@ class document extends aw_template
 		}
 
 // this will seriously fuck up shit, because document.lang_id will override objects.lang_id :(
-//		classload("languages");
-//		$l = new languages;
+//		$l = get_instance("languages");
 //		$l->set_active($document["lang_id"],true);
 
 		$alilist = array();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.120 2002/11/04 21:24:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.121 2002/11/06 11:22:00 duke Exp $
 // core.aw - Core functions
 
 // Core properties - common for all classes
@@ -586,7 +586,9 @@ class core extends db_connector
 		};
 
 		$params["modifiedby"] = aw_global_get("uid");
-		$params["modified"] = time();
+		// allow overwriting of the modified field. This SHOULD be temporary
+		// but right this is the fastest way to make AM not suck.
+		$params["modified"] = ($params["modified"]) ? $params["modified"] : time();
 		$params["cachedirty"] = 1;
 		if ($params["metadata"])
 		{
@@ -659,7 +661,7 @@ class core extends db_connector
 			"status" => $status,
 			"orderby" => $orderby,
 		));
-			
+
 		while($row = $this->db_next())
 		{
 			if ($ret == ARR_NAME)
@@ -1247,6 +1249,12 @@ class core extends db_connector
 		if ($no_cache)
 		{
 			$_t = $this->get_record("objects","oid",$oid);
+			if ($_t["brother_of"] != $_t["oid"])
+			{
+				// brother object, so we gots to read the real objets metadata
+				$_tt = $this->get_record("objects","oid",$_t["brother_of"]);
+				$_t["metadata"] = $_tt["metadata"];
+			}
 			if ($unserialize_meta && $_t)
 			{
 				$_t["meta"] = aw_unserialize($_t["metadata"]);
@@ -1257,6 +1265,12 @@ class core extends db_connector
 			if (!($_t = aw_cache_get("objcache",$oid)))
 			{
 				$_t = $this->get_record("objects","oid",$oid);
+				if ($_t["brother_of"] != $_t["oid"] && $_t["brother_of"])
+				{
+					// brother object, so we gots to read the real objets metadata
+					$_tt = $this->get_record("objects","oid",$_t["brother_of"]);
+					$_t["metadata"] = $_tt["metadata"];
+				}
 				if ($unserialize_meta && $_t)
 				{
 					$_t["meta"] = aw_unserialize($_t["metadata"]);
@@ -1437,6 +1451,12 @@ class core extends db_connector
 			$ret = array();
 		}
 		$this->save_handle();
+		global $XXX;
+		if ($XXX)
+		{
+			print "travitt";
+			flush();
+		};
 		$this->get_objects_by_class($arr);
 		while ($row = $this->db_next())
 		{
@@ -1450,6 +1470,12 @@ class core extends db_connector
 			}
 		}
 		$this->restore_handle();
+		global $XXX;
+		if ($XXX)
+		{
+			print "blergh";
+			flush();
+		};
 		return $ret;
 	}
 
