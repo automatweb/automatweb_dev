@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.22 2003/01/24 12:59:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.23 2003/01/24 13:15:13 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -63,7 +63,7 @@
 	// and now stuff that goes into menu table
 	@default table=menu
 
-	@property sss type=select multiple=1 size=15 method=serialize group=relations
+	@property sss type=select multiple=1 size=15 table=objects field=meta method=serialize group=relations
 	@caption Menüüd, mille alt viimased dokumendid võetakse
 	
 	@property pers type=select multiple=1 size=15 table=objects field=meta method=serialize group=relations
