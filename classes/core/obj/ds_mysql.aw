@@ -528,35 +528,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		$this->used_tables = array();
 
+		$this->properties = array();
+		$this->tableinfo = array();
+
 		// load property defs and table defs
 		if (isset($params["class_id"]))
 		{
-			$clids = $params["class_id"];
-			if (!is_array($params["class_id"]))
-			{
-				$clids = array($clids);
-			}
-
-			$classes = aw_ini_get("classes");
-			$this->properties = array();
-			$this->tableinfo = array();
-
-			foreach($clids as $clid)
-			{
-				list($tmp, $tmp2) = $GLOBALS["object_loader"]->load_properties(array(
-					"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
-					"clid" => $clid
-				));
-				$this->properties += $tmp;
-				if (is_array($tmp2))
-				{
-					$this->tableinfo += $tmp2;
-				}
-				if (isset($this->tableinfo["documents"]))
-				{
-					$this->used_tables["documents"] = "documents";
-				}
-			}
+			$this->_do_add_class_id($params["class_id"]);
 		}
 
 		$this->stat = false;
@@ -658,15 +636,20 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 
+			$tf = $tbl.".".$fld;
 			$this->used_tables[$tbl] = $tbl;
 
 			if (($this->properties[$key]["method"] == "bitmask" || $key == "flags") && is_array($val))
 			{
-				$sql[] = $tbl.".".$fld." & ".$val["mask"]." = ".$val["flags"];
+				$sql[] = $tf." & ".$val["mask"]." = ".$val["flags"];
 			}
 			else
 			if (is_object($val) && get_class($val) == "object_list_filter")
 			{
+				if (!empty($val->filter["non_filter_classes"]))
+				{
+					$this->_do_add_class_id($val->filter["non_filter_classes"]);
+				}
 				$sql[] = "(".$this->req_make_sql($val->filter["conditions"], $val->filter["logic"]).")";
 			}
 			else
@@ -681,11 +664,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if (strpos("%", $v) !== false)
 					{
-						$str[] = $tbl.".".$fld." LIKE '".$v."'";
+						$str[] = $tf." LIKE '".$v."'";
 					}
 					else
 					{
-						$str[] = $tbl.".".$fld." = '".$v."'";
+						$str[] = $tf." = '".$v."'";
 					}
 				}
 				$str = join(" OR ", $str);
@@ -699,20 +682,45 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				if ($key == "modified" || $key == "flags")
 				{
 					// pass all arguments .. &, >, < or whatever the user wants to
-					$sql[] = $tbl.".".$fld." ".$val;
+					$sql[] = $tf." ".$val;
 				}
 				else
 				if (strpos($val,"%") !== false)
 				{
-					$sql[] = $tbl.".".$fld." LIKE '".$val."'";
+					$sql[] = $tf." LIKE '".$val."'";
 				}
 				else
 				{
-					$sql[] = $tbl.".".$fld." = '".$val."'";
+					$sql[] = $tf." = '".$val."'";
 				}
 			}
 		}
 		return join(" ".$logic." ", $sql);
+	}
+
+	function _do_add_class_id($clids)
+	{
+		if (!is_array($clids))
+		{
+			$clids = array($clids);
+		}
+
+		foreach($clids as $clid)
+		{
+			list($tmp, $tmp2) = $GLOBALS["object_loader"]->load_properties(array(
+				"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
+				"clid" => $clid
+			));
+			$this->properties += $tmp;
+			if (is_array($tmp2))
+			{
+				$this->tableinfo += $tmp2;
+			}
+			if (isset($this->tableinfo["documents"]))
+			{
+				$this->used_tables["documents"] = "documents";
+			}
+		}
 	}
 
 	function create_brother($arr)
