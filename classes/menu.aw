@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.97 2004/06/25 21:37:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.98 2004/07/08 12:35:20 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -180,10 +180,13 @@
 	@property export type=callback callback=callback_get_export_options group=import_export store=no
 	@caption Eksport
 
-	@property sort_by type=select table=objects field=meta method=serialize group=show
-	@caption Dokumente j&auml;rjestatakse
+	@property sorter type=table group=show
+	@caption Dokumentide järjestamine
 
-	@property sort_ord type=select table=objects field=meta method=serialize group=show
+	property sort_by type=select table=objects field=meta method=serialize group=show
+	caption Dokumente j&auml;rjestatakse
+
+	property sort_ord type=select table=objects field=meta method=serialize group=show
 
 	@property ip type=table store=no group=ip no_caption=1
 
@@ -400,6 +403,77 @@ class menu extends class_base
 					$retval = PROP_IGNORE;
 				};
 				break;	
+
+			case "sorter":
+				// okey, how do I do this?
+				// by default I show only one line ....
+				// if something gets selected, then I'll add another..
+				// salvestame metainfosse
+				$sort_fields = new aw_array($arr["obj_inst"]->meta("sort_fields"));
+				$sort_order = new aw_array($arr["obj_inst"]->meta("sort_order"));
+				$t = &$data["vcl_inst"];
+				$t->define_field(array(
+					"name" => "fubar",
+				));
+				$t->define_field(array(
+					"name" => "field",
+					"caption" => "Väli",
+				));
+				$t->define_field(array(
+					"name" => "order",
+					"caption" => "Järjekord",
+				));
+
+				$fields = array(
+					'' => "",
+					'objects.jrk' => "J&auml;rjekorra j&auml;rgi",
+					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
+					'objects.modified' => "Muutmise kuup&auml;eva j&auml;rgi",
+					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi",
+					'planner.start' => "Kalendris valitud aja j&auml;rgi",
+				);
+
+				$orders = array(
+					'DESC' => "Suurem (uuem) enne",
+					'ASC' => "V&auml;iksem (vanem) enne",
+				);
+
+				$idx = 1;
+
+				$morder = $arr["obj_inst"]->meta("sort_order");
+
+				foreach($sort_fields->get() as $key => $val)
+				{
+					$t->define_data(array(
+						"fubar" => $idx,
+						"field" => html::select(array(
+							"name" => "sort_fields[$idx]",
+							"options" => $fields,
+							"value" => $val,
+						)),
+
+						"order" => html::select(array(
+							"name" => "sort_order[$idx]",
+							"options" => $orders,
+							"value" => $morder[$key],
+						)),
+					));
+					$idx++;
+				}
+
+				$t->define_data(array(
+					"fubar" => $idx,
+					"field" => html::select(array(
+						"name" => "sort_fields[$idx]",
+						"options" => $fields,
+					)),
+					"order" => html::select(array(
+						"name" => "sort_order[$idx]",
+						"options" => $orders,
+					)),
+				));
+				$t->sort_by(array("field" => "fubar","sorder" => "desc"));
+				break;
 
 			case "sort_by":
 				$data['options'] = array(
@@ -747,6 +821,25 @@ class menu extends class_base
 				};
 				break;
 
+			case "sorter":
+				$request = &$arr["request"];
+				$save_fields = array();
+				$save_orders = array();
+				$fields = new aw_array($request["sort_fields"]);
+				$str = array();
+				foreach($fields->get() as $key => $val)
+				{
+					if ($val)
+					{
+						$save_fields[] = $val;
+						$str[] = $val . " " . $request["sort_order"][$key];
+						$save_orders[] = $request["sort_order"][$key];
+					};
+				};
+				$ob->set_meta("sort_fields",$save_fields);
+				$ob->set_meta("sort_order",$save_orders);
+				$ob->set_meta("sort_by",join(",",$str));
+				break;
 
 			case "pmethod_properties":
 				$request = &$arr["request"];
