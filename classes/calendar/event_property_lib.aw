@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.3 2004/05/20 08:14:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.4 2004/06/09 08:11:27 kristo Exp $
 // Shared functionality for event classes
 class event_property_lib extends core
 {
@@ -119,8 +119,6 @@ class event_property_lib extends core
 		{
 			//if ($row["event_folder"] != $arr["obj_inst"]->parent())
 			//{
-				$folderdat = $this->get_object($row["event_folder"]);
-
 				$all_props["link_calendars_" . $row["oid"]] = array(
 					"type" => "checkbox",
 					"name" => "link_calendars" . "[" .$row["oid"] . "]",
