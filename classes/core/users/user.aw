@@ -1733,8 +1733,38 @@ class user extends class_base
 	{
 		print "changing tha password, eh?";
 		// I need to return a class_base generated form
-
-
+	}
+	
+	//This returns object list of group objects that $uid belongs to
+	function get_groups_for_user($uid)
+	{
+		if(!is_valid("uid", $uid))
+		{
+			return array();
+		}
+		
+		$user_obj = &obj(users::get_oid_for_uid($uid));
+		$grups_list = new object_list(
+			$user_obj->connections_from(array(
+				"type" => "RELTYPE_GRP",
+			))
+		);
+		return $grups_list;
+	}
+	
+	//This returns group object whith highest priority $uid belongs to
+	function get_highest_pri_grp_for_user($uid)
+	{
+		$groups = &$this->get_groups_for_user($uid);
+		if(!$groups)
+		{
+			return false;
+		}
+		$groups->sort_by(array(
+        	"prop" => "priority",
+        	"order" => "desc"
+    	));
+    	return $groups->begin();
 	}
 
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.98 2004/10/29 16:51:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.99 2004/11/04 10:40:23 sven Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -138,6 +138,8 @@ class users_user extends aw_template
 		};
 	}
 
+	
+	
 	////
 	// !Logib kasutaja sisse
 	function login($params = array())
@@ -169,7 +171,7 @@ class users_user extends aw_template
 			$load_user = false;
 			$do_auth = false;
 		};
-
+		
 		$auth = get_instance(CL_AUTH_CONFIG);
 		if ($do_auth && ($auth_id = $auth->has_config()))
 		{
@@ -215,15 +217,23 @@ class users_user extends aw_template
 			exit;
 		};
 		
+		//If user logs on first time and there is setting in .ini file then he/she must chane password before login is compleated
+		if($this->require_password_change($uid) && $this->is_first_login($uid) && !$auth_id)
+		{ 
+			Header("Location: ".$this->mk_my_orb("change_password_not_logged", array("uid" => $uid), "users"));
+			exit;		
+		}
+	
 		// njah. Mitte ei taha. Aga midagi yle ka ei jaa. Logime vaese bastardi sisse
 		// HUZZAH!
-		$q = "UPDATE users
-					SET	logins = logins+1,
-					ip = '$ip',
-					lastaction = $t,
-					online = 1
-					WHERE uid = '$uid'";
-		$this->db_query($q);
+		
+		aw_disable_acl();
+			$user_obj = &obj(users::get_oid_for_uid($uid));
+			$logins = $user_obj->prop("logins") + 1;
+			$user_obj->set_prop("logins", $logins);
+			$user_obj->save(); 
+		aw_restore_acl();
+		
 		$this->_log(ST_USERS, SA_LOGIN, $uid);
 		if (aw_ini_get("TAFKAP"))
 		{
@@ -283,6 +293,25 @@ class users_user extends aw_template
 		return $this->url;
 	}
 
+	function require_password_change($uid)
+	{
+		$user_inst = get_instance(CL_USER);
+		$gid_obj = $user_inst->get_highest_pri_grp_for_user($uid);
+		if($gid_obj->prop("require_change_pass"))
+		{
+			return true;
+		}
+	}
+	
+	function is_first_login($uid)
+	{
+		$user = &obj(users::get_oid_for_uid($uid));
+		if(!$user->prop("logins"))
+		{
+			return true;
+		}	
+	}
+	
 	////
 	// !Logib kasutaja valja
 	function logout($uid) 

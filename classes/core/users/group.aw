@@ -66,6 +66,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @property can_admin_interface type=checkbox ch_value=1 field=meta table=objects method=serialize
 @caption Kas saab administreerimiskeskkonda
 
+
+@property require_change_pass type=checkbox ch_value=1 field=meta table=objects method=serialize
+@caption Nõua parooli vahetust esimesel logimisel
+
 @property default_acl type=callback callback=callback_get_default_acl store=no rel=1
 @caption Default ACL
 

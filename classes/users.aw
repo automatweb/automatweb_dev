@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.127 2004/10/30 16:08:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.128 2004/11/04 10:40:22 sven Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -140,7 +140,98 @@ class users extends users_user
 		));
 		return $this->parse();
 	}
-
+	
+	/**	
+		@attrib name=change_password_not_logged nologin=1 all_args=1 is_public="1"
+	**/
+	function change_password_not_logged($arr)
+	{
+		$this->read_template("changepwdnotlogged.tpl");
+		$this->vars(array(
+			"username" => $arr['uid'],
+			"error" => $arr["error"],
+		));
+		return $this->parse();
+	}
+	
+	
+	/**	
+		@attrib name=submit_change_password_not_logged nologin=1 is_public="1"
+		@param username optional
+		@param old_pass optional
+		@param new_pass optional
+		@param new_pass_repeat optional
+	**/
+	function submit_change_password_not_logged($arr)
+	{
+		extract($arr);
+		if(!$username || !$old_pass || !$new_pass || !$new_pass_repeat)
+		{
+			$error = "Kõik väljad peavad olema täidetud";
+		}
+		elseif($new_pass != $new_pass_repeat)
+		{
+			$error = "Uus parool ja parooli kordus ei ole samad";
+		}
+		elseif($new_pass == $old_pass)
+		{
+			$error =  "Te ei tohi panna uuesti sama vana parooli";
+		}
+		elseif(!is_valid("password", $old_pass))
+		{
+			$error = "Vigane v&otilde;i vale parool";
+		}
+		
+		elseif(!is_valid("uid", $username))
+		{
+			$error =  "Vigane kasutajanimimi $uid";
+		}
+		else
+		{
+			$auth = get_instance(CL_AUTH_SERVER_LOCAL);
+			list($success, $error) = $auth->check_auth(NULL, array(
+				"uid" =>  $username,
+				"password" => $old_pass
+			));
+			if(!$success)
+			{
+				$error = "Vana parool on vale";
+			}
+		}
+		
+		if($error)
+		{
+			return $this->mk_my_orb("change_password_not_logged", array(
+				"error" => $error,
+				"uid" => $username,
+			), "users");
+			die();
+		}
+		elseif ($success)
+		{
+			//sellepärast ,et me teda uuesti parooli muutmisele ei saadaks paneme talle ühe logini kirja
+			//$q = "UPDATE users SET logins = logins+1 WHERE uid = '$username'";
+			
+			aw_disable_acl();
+				$user_obj = &obj(users::get_oid_for_uid($username));
+				$logins = $user_obj->prop("logins") + 1;
+				$user_obj->set_prop("logins", $logins);
+				$user_obj->save(); 
+			aw_restore_acl();
+			
+			$this->login(array(
+				"uid" => $username,
+				"password" => $old_pass,
+			));
+			$this->submit_change_pwd(array(
+				"pwd" => $new_pass,
+				"pwd2" => $new_pass_repeat,
+				"id" => aw_global_get("uid"),
+			));
+		}
+		
+	}
+	
 	/** saves the uses changed password 
 		
 		@attrib name=submit_change_pwd params=name default="0"
