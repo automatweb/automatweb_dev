@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.5 2003/05/12 17:22:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.6 2003/05/13 11:27:30 duke Exp $
 define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
@@ -82,14 +82,6 @@ class admin_folders extends aw_template
 
 	function gen_folders($period)
 	{
-		$tableinfo = $this->db_get_table("periods");
-		if (!$tableinfo["fields"]["obj_id"])
-		{
-			$url = $this->mk_my_orb("convert_periods",array(),"converters");
-			$msg = "<a href='$url'>click here to convert periods</a> and then reload this frame";
-			die($msg);
-
-		}
 
 		$this->read_template("folders.tpl");
 
@@ -159,13 +151,6 @@ class admin_folders extends aw_template
 		if ($this->cfg["per_oid"])
 		{
 			// temp workaround
-			$tableinfo = $this->db_get_table("periods");
-			$parent = $args["parent"];
-			if (!$tableinfo["fields"]["obj_id"])
-			{
-
-
-			};
 			$tb = get_instance("toolbar");
 			$dbp = get_instance("period",$this->cfg["per_oid"]);
 			$act_per_id = $dbp->get_active_period();
