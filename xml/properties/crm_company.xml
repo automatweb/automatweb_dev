@@ -171,22 +171,22 @@
             </CHILD_ORG>
             <WORKERS>
                   <value>8</value>
-                  <clid>CL_ISIK</clid>
+                  <clid>CL_CRM_PERSON</clid>
                   <caption>Töötajad</caption>
             </WORKERS>
             <PAKKUMINE>
                   <value>9</value>
-                  <clid>CL_PAKKUMINE</clid>
+                  <clid>CL_CRM_OFFER</clid>
                   <caption>Pakkumine</caption>
             </PAKKUMINE>
             <TEHING>
                   <value>10</value>
-                  <clid>CL_TEHING</clid>
+                  <clid>CL_CRL_DEAL</clid>
                   <caption>Tehing</caption>
             </TEHING>
             <KOHTUMINE>
                   <value>11</value>
-                  <clid>CL_KOHTUMINE</clid>
+                  <clid>CL_CRM_MEETING</clid>
                   <caption>Kohtumine</caption>
             </KOHTUMINE>
             <CALL>

@@ -130,5 +130,55 @@
                   <master_index>oid</master_index>
             </kliendibaas_address>
       </tableinfo>
+      <reltypes>
+            <LINN>
+                  <value>1</value>
+                  <clid>CL_CRM_CITY</clid>
+                  <caption>Linn</caption>
+            </LINN>
+            <RIIK>
+                  <value>2</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Riik</caption>
+            </RIIK>
+            <MAAKOND>
+                  <value>3</value>
+                  <clid>CL_CRM_COUNTY</clid>
+                  <caption>Maakond</caption>
+            </MAAKOND>
+            <BELONGTO>
+                  <value>4</value>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
+                  <caption>Seosobjekt</caption>
+            </BELONGTO>
+            <EMAIL>
+                  <value>5</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>E-mail</caption>
+            </EMAIL>
+            <WWW>
+                  <value>6</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>Koduleht</caption>
+            </WWW>
+            <TELEFON>
+                  <value>7</value>
+                  <clid>CL_PHONE</clid>
+                  <caption>Telefon</caption>
+            </TELEFON>
+            <MOBIIL>
+                  <value>8</value>
+                  <clid>CL_PHONE</clid>
+                  <caption>Mobiil</caption>
+            </MOBIIL>
+            <FAKS>
+                  <value>9</value>
+                  <clid>CL_PHONE</clid>
+                  <caption>Faks</caption>
+            </FAKS>
+      </reltypes>
 </properties>
 

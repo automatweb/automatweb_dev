@@ -9,6 +9,7 @@
                   <num_0>general</num_0>
                   <num_1>overview</num_1>
             </group>
+            <editonly>1</editonly>
             <table>objects</table>
             <field>navtoolbar</field>
       </property>
@@ -228,9 +229,6 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine	</caption>
-            </general>
             <overview>
                   <caption>Seotud tegevused</caption>
             </overview>
@@ -249,5 +247,47 @@
                   <master_index>oid</master_index>
             </kliendibaas_isik>
       </tableinfo>
+      <reltypes>
+            <ADDRESS>
+                  <value>1</value>
+                  <clid>CL_ADDRESS</clid>
+                  <caption>aadressid</caption>
+            </ADDRESS>
+            <PICTURE>
+                  <value>3</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt</caption>
+            </PICTURE>
+            <BACKFORMS>
+                  <value>4</value>
+                  <clid>CL_PILOT</clid>
+                  <caption>tagasiside vorm</caption>
+            </BACKFORMS>
+            <CHILDREN>
+                  <value>5</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>lapsed</caption>
+            </CHILDREN>
+            <WORK>
+                  <value>6</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>töökoht</caption>
+            </WORK>
+            <RANK>
+                  <value>7</value>
+                  <clid>CL_AMET</clid>
+                  <caption>ametinimetus</caption>
+            </RANK>
+            <ISIK_KOHTUMINE>
+                  <value>8</value>
+                  <clid>CL_CRM_MEETING</clid>
+                  <caption>kohtumine</caption>
+            </ISIK_KOHTUMINE>
+            <ISIK_KONE>
+                  <value>9</value>
+                  <clid>CL_CRM_CALL</clid>
+                  <caption>kõne</caption>
+            </ISIK_KONE>
+      </reltypes>
 </properties>
 

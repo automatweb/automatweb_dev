@@ -4,5 +4,17 @@
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <SUBPROJECT>
+                  <clid>CL_PROJECT</clid>
+                  <value>1</value>
+                  <caption>alamprojekt</caption>
+            </SUBPROJECT>
+            <PARTICIPANT>
+                  <clid>CL_USER</clid>
+                  <value>2</value>
+                  <caption>kasutaja</caption>
+            </PARTICIPANT>
+      </reltypes>
 </properties>
 

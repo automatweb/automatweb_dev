@@ -322,5 +322,67 @@
                   <caption>Valimid</caption>
             </selectione>
       </groupinfo>
+      <reltypes>
+            <SELECTIONS>
+                  <value>1</value>
+                  <clid>CL_CRM_SELECTION</clid>
+                  <caption>Valimid</caption>
+            </SELECTIONS>
+            <FIRMA_CAT>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Organisatsioonide kataloogid</caption>
+            </FIRMA_CAT>
+            <ISIK_CAT>
+                  <value>3</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Töötajate kataloogid</caption>
+            </ISIK_CAT>
+            <ADDRESS_CAT>
+                  <value>4</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Aadresside kataloogid</caption>
+            </ADDRESS_CAT>
+            <LINN_CAT>
+                  <value>5</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Linnade kataloogid</caption>
+            </LINN_CAT>
+            <MAAKOND_CAT>
+                  <value>6</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Maakondade kataloogid</caption>
+            </MAAKOND_CAT>
+            <RIIK_CAT>
+                  <value>7</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Tegevusalade kataloogid</caption>
+            </RIIK_CAT>
+            <TOODE_CAT>
+                  <value>9</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Toodete kataloogid</caption>
+            </TOODE_CAT>
+            <GENERAL_CAT>
+                  <value>10</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Üldkataloog</caption>
+            </GENERAL_CAT>
+            <CALENDAR>
+                  <value>11</value>
+                  <clid>CL_PLANNER</clid>
+                  <caption>Kalender</caption>
+            </CALENDAR>
+            <ETTEVOTLUSVORM_CAT>
+                  <value>12</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Õiguslike vormide kataloogid</caption>
+            </ETTEVOTLUSVORM_CAT>
+            <RELTYPE_FORMS>
+                  <value>13</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Sisestusvormid</caption>
+            </RELTYPE_FORMS>
+      </reltypes>
 </properties>
 

@@ -349,10 +349,6 @@
             </add_event>
       </groupinfo>
       <reltypes>
-            <SUMMARY_PANE>
-                  <value>1</value>
-                  <caption>Näita kokkuvõtte paanis</caption>
-            </SUMMARY_PANE>
             <EVENT_SOURCE>
                   <value>2</value>
                   <clid>CL_PLANNER</clid>

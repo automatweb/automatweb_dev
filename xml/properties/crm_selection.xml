@@ -57,5 +57,17 @@
                   <caption>Näita</caption>
             </shou>
       </groupinfo>
+      <reltypes>
+            <BACKFORMS2>
+                  <value>1</value>
+                  <clid>CL_PILOT</clid>
+                  <caption>Tagasisidevorm</caption>
+            </BACKFORMS2>
+            <RELATED_SELECTIONS>
+                  <value>2</value>
+                  <clid>CL_CRM_SELECTION</clid>
+                  <caption>Seotud valimid</caption>
+            </RELATED_SELECTIONS>
+      </reltypes>
 </properties>
 

@@ -60,5 +60,12 @@
                   <caption>Objektit&amp;uuml;&amp;uuml;bid</caption>
             </clids>
       </groupinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>kataloog</caption>
+            </FOLDER>
+      </reltypes>
 </properties>
 
