@@ -159,7 +159,11 @@
 															Sortimise:<br>
 															<SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][sort_el]"><option value=''>{VAR:sort_els}</select><br>
 															Sortimise j&auml;rjekord:<br>
-															<SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][sort_order]">{VAR:sort_order}</select>
+															<SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][sort_order]">{VAR:sort_order}</select><br>
+															Otsingu v&auml;&auml;rtus:<br>
+															<SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][search_val_el]"><option value=''>{VAR:search_val_els}</select><br>
+															Otsing elementi:<br>
+															<SELECT CLASS="formselect" name="rgrps[{VAR:grp_nr}][search_to_el]"><option value=''>{VAR:search_to_els}</select><br>
 															</td>
 															<td class="celltext"><input type="checkbox" class="formcheck" name="rgrps[{VAR:grp_nr}][vertical]" value="1" {VAR:gp_vertical}></td>
 															<td class="celltext"><input type="text" class="formtext" name="rgrps[{VAR:grp_nr}][pre_sep]" value="{VAR:pre_sep}" size="4"></td>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.45 2002/08/02 13:31:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.46 2002/08/02 14:36:48 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -1092,6 +1092,9 @@ class form_table extends form_base
 					"sort_order" => $this->picker($dat["sort_order"], array("asc" => "Asc", "desc" => "Desc")),
 					"gp_vertical" => checked($dat["vertical"] == 1),
 					"data_els" => $this->mpicker($dat["data_els"], $els),
+					"search_val_els" => $this->picker($dat["search_val_el"], $els),
+					"search_to_els" => $this->picker($dat["search_to_el"], $els),
+					"data_els" => $this->mpicker($dat["data_els"], $els),
 					"pre_sep" => $dat["pre_sep"],
 					"after_sep" => $dat["after_sep"],
 				));
@@ -1783,12 +1786,12 @@ class form_table extends form_base
 		// as well, because it would make a whole lotta sense that way
 		if (is_array($this->table["rgrps"]) && !$this->table["no_grpels_in_restrict"])
 		{
-			echo "addrgrpvals <br>";
 			foreach($this->table["rgrps"] as $nr => $_dat)
 			{
-				echo "nr = $nr , el = ",$_dat["el"]," val = ",urlencode($row_data["ev_".$_dat["el"]]),"<br>";
-				$url .= "&restrict_search_el[]=".$_dat["el"];
-				$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$_dat["el"]]);
+				$search_el = $_dat["search_to_el"] ? $_dat["search_to_el"] : $_dat["el"];
+				$search_val = $_dat["search_val_el"] ? $_dat["search_val_el"] : $_dat["el"];
+				$url .= "&restrict_search_el[]=".$search_el;
+				$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$search_val]);
 				$url .= "&restrict_search_yah[]=".urlencode($row_data["ev_".$_dat["el"]]);
 			}
 		}
