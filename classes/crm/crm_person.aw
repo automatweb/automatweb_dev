@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.2 2003/11/20 21:21:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.3 2003/12/01 14:26:34 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
@@ -225,8 +225,6 @@ class crm_person extends class_base
 	{
 		$toolbar = &$args["prop"]["toolbar"];
 
-		$this->read_template('../firma/js_popup_menu.tpl');
-
 		$users = get_instance("users");
 		$crm_db_id = $users->get_user_config(array(
 			"uid" => aw_global_get("uid"),
@@ -259,6 +257,12 @@ class crm_person extends class_base
 		$alist = array(
 			array('caption' => 'Organisatsioon','class' => 'crm_company', 'reltype' => RELTYPE_WORK),
 		);
+		
+		$toolbar->add_menu_button(array(
+			"name" => "add_relation",
+			"tooltip" => "Uus",
+		));
+			
 
 		$menudata = '';
 		if (is_array($alist))
@@ -267,17 +271,18 @@ class crm_person extends class_base
 			{
 				if (!$parents[$val['reltype']])
 				{
-					$this->vars(array(
-						'alt' => 'Kalender määramata',
+					$toolbar->add_menu_item(array(
+						"parent" => "add_relation",
+						"title" => "Kalender määramata",
 						'text' => 'Lisa '.$val['caption'],
 					));
-					$menudata .= $this->parse("MENU_ITEM_DISABLED");
 				}
 				else
 				{
 					// see on nyyd sihuke link, mis lisab uue objekti
 					// ja seostab selle olemasolevaga. grr.
-					$this->vars(array(
+					$toolbar->add_menu_item(array(
+						"parent" => "add_relation",
 						'link' => $this->mk_my_orb('new',array(
 							'alias_to' => $args['obj_inst']->id(),
 							'reltype' => $val['reltype'],
@@ -287,25 +292,9 @@ class crm_person extends class_base
 						)),
 						'text' => 'Lisa '.$val['caption'],
 					));
-					$menudata .= $this->parse("MENU_ITEM");	
 				}
 			};
-			
-			$this->vars(array(
-				"MENU_ITEM" => $menudata,
-				"id" => "add_relation",
-			));
-			$addbutton = $this->parse();
-			$toolbar->add_cdata($addbutton);
-			$toolbar->add_button(array(
-				"name" => "add_item_button",
-				"tooltip" => "Uus",
-				"url" => "",
-				"onClick" => "return buttonClick(event, 'add_relation');",
-				"img" => "new.gif",
-				"class" => "menuButton",
-			));
-			
+		
 		};
 		
 		
@@ -321,6 +310,11 @@ class crm_person extends class_base
 			),
 		);
 
+		$toolbar->add_menu_button(array(
+			"name" => "add_event",
+			"tooltip" => "Uus",
+		));
+
 		$menudata = '';
 		if (is_array($action))
 		{
@@ -328,15 +322,16 @@ class crm_person extends class_base
 			{
 				if (!$parents[$val['reltype']])
 				{
-					$this->vars(array(
+					$toolbar->add_menu_item(array(
+						"parent" => "add_event",
 						'title' => 'Kalender määramata',
 						'text' => 'Lisa '.$this->cfg["classes"][$val["clid"]]["name"],
 					));
-					$menudata .= $this->parse("MENU_ITEM_DISABLED");
 				}
 				else
 				{
-					$this->vars(array(
+					$toolbar->add_menu_item(array(
+						"parent" => "add_event",
 						'link' => $this->mk_my_orb('new',array(
 							'alias_to_org' => $args["obj_inst"]->id(),
 							'reltype_org' => $val['reltype'],
@@ -351,24 +346,8 @@ class crm_person extends class_base
 						)),
 						'text' => 'Lisa '.$this->cfg["classes"][$val["clid"]]["name"],
 					));
-					$menudata .= $this->parse("MENU_ITEM");
 				}
 			};
-
-			$this->vars(array(
-				"MENU_ITEM" => $menudata,
-				"id" => "add_event",
-			));
-			$eventbutton = $this->parse();
-			$toolbar->add_cdata($eventbutton);
-			$toolbar->add_button(array(
-				"name" => "add_event_button",
-				"tooltip" => "Uus",
-				"url" => "",
-				"onClick" => "return buttonClick(event, 'add_event');",
-				"img" => "new.gif",
-				"class" => "menuButton",
-			));
 
 			if (!empty($cal_id))
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.3 2003/11/20 21:21:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.4 2003/12/01 14:26:34 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
@@ -289,10 +289,7 @@ class crm_company extends class_base
 	
 	function firma_toolbar(&$args)
 	{
-
 		$toolbar = &$args["prop"]["toolbar"];
-		$menu_cdata = '';
-		$this->read_template('js_popup_menu.tpl');
 		$users = get_instance("users");
 
                 $crm_db_id = $users->get_user_config(array(
@@ -333,8 +330,24 @@ class crm_company extends class_base
 			array('caption' => 'Õiguslik vorm','clid' => CL_CRM_CORPFORM, 'reltype' => RELTYPE_ETTEVOTLUSVORM),
 		);
 		
+		$toolbar->add_menu_button(array(
+			"name" => "main_menu",
+			"tooltip" => "Uus",
+		));
+
+		$toolbar->add_sub_menu(array(
+			"parent" => "main_menu",
+			"name" => "calendar_sub",
+			"text" => "Lisa kalendrisse..",
+		));
 		
-		$menudata = '';
+		$toolbar->add_sub_menu(array(
+			"parent" => "main_menu",
+			"name" => "firma_sub",
+			"text" => "Lisa organisatsioonile..",
+		));
+
+
 		if (is_array($alist))
 		{
 			foreach($alist as $key => $val)
@@ -342,15 +355,16 @@ class crm_company extends class_base
 				$classinf = $this->cfg["classes"][$val["clid"]];
 				if (!$parents[$val['reltype']])
 				{
-					$this->vars(array(
-						'title' => 'Kalender määramata',
+					$toolbar->add_menu_item(array(
+						"parent" => "calendar_sub",
 						'text' => 'Lisa '.$classinf["name"],
+						"disabled" => true,
 					));
-					$menudata .= $this->parse("MENU_ITEM_DISABLED");
 				}
 				else
 				{
-					$this->vars(array(
+					$toolbar->add_menu_item(array(
+						"parent" => "calendar_sub",
 						'link' => $this->mk_my_orb('new',array(
 							'alias_to' => $args['obj_inst']->id(),
 							'reltype' => $val['reltype'],
@@ -364,15 +378,8 @@ class crm_company extends class_base
 						)),
 						'text' => 'Lisa '.$classinf["name"],
 					));
-					$menudata .= $this->parse("MENU_ITEM");	
 				}
 			};
-
-			$this->vars(array(
-				"MENU_ITEM" => $menudata,
-				"id" => "firma_sub",
-			));
-			$menu_cdata .= $this->parse();
 		};
 
 		$action = array(
@@ -390,15 +397,16 @@ class crm_company extends class_base
 				$classinf = $this->cfg["classes"][$val["clid"]];
 				if (!$parents[$val['reltype']])
 				{
-					$this->vars(array(
+					$toolbar->add_menu_item(array(
+						'parent' => "firma_sub",
 						'title' => 'Kalender või kalendri sündmuste kataloog määramata',
 						'text' => 'Lisa '.$classinf["name"],
 					));
-					$menudata .= $this->parse("MENU_ITEM_DISABLED");
 				}
 				else
 				{
-					$this->vars(array(
+					$toolbar->add_menu_item(array(
+						"parent" => "firma_sub",
 						'link' => $this->mk_my_orb('new',array(
 							'alias_to_org' => $args['obj_inst']->id(),
 							'reltype_org' => $val['reltype'],
@@ -413,44 +421,10 @@ class crm_company extends class_base
 						)),
 						'text' => 'Lisa '.$classinf["name"],
 					));
-					$menudata .= $this->parse("MENU_ITEM");
 				}
 			};
-			$this->vars(array(
-				"MENU_ITEM" => $menudata,
-				"id" => "calendar_sub",
-			));
-			$menu_cdata .= $this->parse();
 		};
 			
-		
-		$menudata = '';
-		$this->vars(array(
-			'sub_menu_id' => 'calendar_sub',
-			'text' => 'Lisa kalendrisse...',
-		));
-		$menudata .= $this->parse("MENU_ITEM_SUB");	
-		$this->vars(array(
-			'sub_menu_id' => 'firma_sub',
-			'text' => 'Lisa organisatsioonile...',
-		));
-		$menudata .= $this->parse("MENU_ITEM_SUB");	
-		$this->vars(array(
-			'MENU_ITEM' => '',
-			"MENU_ITEM_SUB" => $menudata,
-			"id" => "mainmenu",
-		));
-		$menu_cdata = $this->parse().$menu_cdata;
-		
-		$toolbar->add_button(array(
-			"name" => "add_item_button",
-			"tooltip" => "Uus",
-			"url" => "",
-			"onClick" => "return buttonClick(event, 'mainmenu');",
-			"img" => "new.gif",
-			"class" => "menuButton",
-		));
-	
 		if (!empty($cal_id))	
 		{
 			$toolbar->add_button(array(
@@ -463,8 +437,6 @@ class crm_company extends class_base
 			));
 		}
 		
-		$toolbar->add_cdata($menu_cdata);
-
 	}
 
 

@@ -102,19 +102,6 @@ class crm_selection extends class_base
 				$retval = PROP_IGNORE;
 			break;
 
-			/*case 'selections':
-				if (isset($data['value']) && is_array($data['value']))
-				{
-				//$data['value']=(array)$data['value'];
-					array_unshift($data['value'],$args['obj'][OID]);
-				}
-				else
-				{
-					$data['value'][$args['obj'][OID]]=$args['obj'][OID];
-//				$data['value'] = array_unique($data['value']);
-				}
-
-			break;*/
 		}
 		return  $retval;
 	}
@@ -557,24 +544,6 @@ $ins = get_instance($data['class_file']);
 		return ($a[$this->sortby] > $b[$this->sortby]) ? +1 : -1;
 	}
 
-/*
-	function speciffic_object_show()
-	{
-
-		$ob = $this->get_object($args['id']);
-
-		//$ = get_instance($);
-		arr($this->cfg[$ob['class_id']]['file'],1);
-		$inst = get_instance($this->cfg[$ob['class_id']]['file']);
-
-		if (method_exists($inst,'show'))
-			return $inst->show $args['id']
-		else
-			return $this->show $args['id']
-	}
-*/
-
-
 	function show($args)
 	{
 
@@ -698,108 +667,6 @@ $ins = get_instance($data['class_file']);
 		}
 		return localparse($this->sel_tpl, $args['obj']);
 	}
-
-
-/*
-	function show($args)
-	{
-
-		if (isset($args['id']))
-		{
-			$args['obj'][OID] = $args['id'];
-		}
-
-		$obj = $this->get_object($args['obj'][OID]);
-		//if (!isset($obj['meta']['output_as']))
-		//{
-		//	return 'valimi väljundi tüüp määramata';
-		//}
-		//arr($arr);
-		$arr = $this->get_selection($args['obj'][OID],'active');
-//		if (!strval($obj['meta']['output_as']))
-//		{
-		$tpl = 'templs/default.tpl';
-//		}
-//		elseif($obj['meta']['output_as'] == 'templates')
-//		{
-//		}
-///		elseif($obj['meta']['output_as'] == 'aw_table')
-//		{
-//		}
-//		elseif($obj['meta']['output_as'] == 'object_show')
-//		{
-//		}
-
-//			if (isset($obj['meta']['templates']))
-//			{
-//				$tpl = 'templs/'.$obj['meta']['templates'];
-//			}
-//			else
-//			{
-//
-//			}
-//		}
-		$str = '';
-		$this->read_template($tpl);
-
-		if (is_array($arr))
-		{
-			//sorteerime jrk järgi
-			$this->sortby = 'jrk';
-			uasort($arr, array ($this, 'cmp_obj'));
-			foreach ($arr as $key => $val)
-			{
-//				if ($cb['get_data'] && method_exists($this,$cb['get_data']))
-//				{
-//					$data = call_user_func (array($this,$cb['get_data']), $val['object']);
-//				}
-//				else
-//				{//arr($this->cfg,1);
-
-
-
-
-
-					$data = $this->get_object($val['object']);
-//					$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ? $this->cfg['classes'][$data['class_id']]['alias_class'] : $this->cfg['classes'][$data['class_id']]['file'];
-//$str .= $data['name'];
-					//switch($meta){}
-
-					if (!isset($inst))
-					{
-						$inst = get_instance($data['class_file']);
-					}
-
-					if (method_exists($inst,'show_in_selection'))
-					{
-						$str .= $inst->show_in_selection(array('id' =>$val['object'],'obj' => $data));
-					}
-					else
-					{
-						$str .= $this->show_in_selection(array('id' =>$val['object'],'obj' => $data));
-					}
-					$data['pilot'] = html::href(array('caption' => 'tagasiside', 'url' =>
-					$this->mk_my_orb('form',array('id' => $data[OID],),'pilot_object'),
-					));
-					$this->vars($data);
-
-
-					$str .= $this->parse('object');
-//				}
-			}
-		}
-		else
-		{
-			$str = ' valim tühi, või objekte pole aktiivseks tehtud';
-		}
-		$this->vars(array('object' => $str));
-		return //$str;
-		$this->parse();
-	}
-*/
-
-
-
 
 	function set_property($args = array())
 	{
