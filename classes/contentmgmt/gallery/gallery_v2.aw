@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.49 2004/06/11 08:40:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.50 2004/06/14 09:11:06 kristo Exp $
 
 /*
 
@@ -330,6 +330,7 @@ class gallery_v2 extends class_base
 	{
 		$ob = obj($arr["id"]);
 		$meta = $ob->meta();
+		$ometa = $meta;
 
 		if ($meta['do_import'] != "" && $arr["request"]["group"] == "import")
 		{
@@ -350,6 +351,8 @@ class gallery_v2 extends class_base
 				$op = shell_exec($cmd);
 				$meta["import_local"] = 1;
 				$meta["local_folder"] = $tn;
+				$ometa["import_local"] = 1;
+				$ometa["local_folder"] = $tn;
 				chmod($tn, 0777);
 			}
 
@@ -404,14 +407,14 @@ class gallery_v2 extends class_base
 				echo "Leidsin pildi $file <br />\n";
 				flush();
 
-				if ($meta["import_ftp"] == 1)
+				if ($ometa["import_ftp"] == 1)
 				{
-					$fc = $ftp->get($meta["ftp_folder"]."/".$file);
+					$fc = $ftp->get($ometa["ftp_folder"]."/".$file);
 				}
 				else
-				if ($meta["import_local"] == 1)
+				if ($ometa["import_local"] == 1)
 				{
-					$fc = $this->get_file(array("file" => $meta['local_folder']."/".$file));
+					$fc = $this->get_file(array("file" => $ometa['local_folder']."/".$file));
 				}
 			
 				$img = get_instance("core/converters/image_convert");
@@ -419,6 +422,7 @@ class gallery_v2 extends class_base
 
 				// get image size
 				list($i_width, $i_height) = $img->size();
+				echo "loaded from string , iw = $i_width , ih = $i_height <br>";
 
 				$xydata = $this->_get_xydata(array(
 					"i_width" => $i_width,
