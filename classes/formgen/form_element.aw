@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.18 2002/12/09 16:32:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.19 2002/12/10 13:26:48 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2757,7 +2757,7 @@ class form_element extends aw_template
 				break;
 
 			case "date":
-				$html = $this->get_date_value();
+				$html = $this->get_date_value($numeric);
 				break;
 
 			case "price":
@@ -3194,10 +3194,15 @@ class form_element extends aw_template
 		unset($this->arr["value_controller"]);
 	}
 
-	function get_date_value()
+	function get_date_value($numeric = false)
 	{
 		if ($this->arr["subtype"] == "created")
 		{
+			if ($numeric)
+			{
+				return $this->form->entry_created;
+			}
+			else
 			if ($this->arr["date_format"] == "")
 			{
 				$html.=$this->time2date($this->form->entry_created,2);
@@ -3209,6 +3214,27 @@ class form_element extends aw_template
 		}
 		else
 		{
+			if ($numeric)
+			{
+				if (!$this->entry)
+				{
+					$vl = $this->get_val();
+					if ($this->arr["def_date_type"] == "now")
+					{
+						$def = time() + ($this->arr["def_date_num"] * $this->arr["def_date_add"]);
+					}
+					else
+					{
+						$def = time();
+					}
+					return $vl ? $vl : $def;
+				}
+				else
+				{
+					return $this->entry;
+				}
+			}
+			else
 			if ($this->arr["date_format"] == "")
 			{
 				$html.=$this->time2date($this->entry,5);
