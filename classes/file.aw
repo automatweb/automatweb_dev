@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.81 2004/06/18 16:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.82 2004/06/21 11:20:40 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -321,11 +321,38 @@ class file extends class_base
 			{
 				$url = $this->get_url($alias["target"],$fi["name"]);
 			};
+
 			classload("icons");
 			$icon = icons::get_icon_url(CL_FILE,$fi["name"]);
-			$replacement = html::img(array(
-				"url" => $icon,
-			)) . " <a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
+
+			if ($tpls["file_inplace"] != "")
+			{
+				$replacement = localparse($tpls["file_inplace"], array(
+					"file_url" => $url,
+					"file_name" => $comment,
+					"file_icon" => $icon
+				));
+				$ret = array(
+					"replacement" => $replacement,
+					"inplace" => "file_inplace"
+				);
+				return $ret;
+			}
+			else
+			if ($tpls["file"] != "")
+			{
+				$replacement = localparse($tpls["file"], array(
+					"file_url" => $url,
+					"file_name" => $comment,
+					"file_icon" => $icon
+				));
+			}
+			else
+			{
+				$replacement = html::img(array(
+					"url" => $icon,
+				)) . " <a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
+			}
 		}
 		return $replacement;
 	}
