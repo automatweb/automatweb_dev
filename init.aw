@@ -13,7 +13,7 @@ class _config_dummy {};
 
 function aw_ini_get($var)
 {
-	enter_function("__global::aw_ini_get",array());
+//	enter_function("__global::aw_ini_get",array());
 	if (($pos = strpos($var,".")) !== false)
 	{
 		$class = substr($var,0,$pos);
@@ -23,7 +23,7 @@ function aw_ini_get($var)
 	{
 		$class = "__default";
 	}
-	exit_function("__global::aw_ini_get");
+//	exit_function("__global::aw_ini_get");
 	return $GLOBALS["cfg"][$class][$var];
 }
 
@@ -196,6 +196,12 @@ function init_config($arr)
 		{
 			define($prd["def"], $prid);
 		}
+
+		// and here do the defs for errors
+		foreach($GLOBALS["cfg"]["__default"]["errors"] as $erid => $erd)
+		{
+			define($erd["def"], $erid);
+		}
 	};
 }
 
@@ -280,7 +286,7 @@ function classload($args)
 
 function get_instance($class,$args = array())
 {
-//	enter_function("__global::get_instance",array());
+	enter_function("__global::get_instance",array());
 	$classdir = $GLOBALS["cfg"]["__default"]["classdir"];
 	$ext = $GLOBALS["cfg"]["__default"]["ext"];
 
@@ -290,7 +296,7 @@ function get_instance($class,$args = array())
 	preg_match("/(\w*)$/",$class,$m);
 	$lib = $m[1];
 
-	if (not($instance))
+	if (not(is_object($instance)))
 	{
 		include_once($classdir."/".str_replace(".","", $class).".".$ext);
 		if (class_exists($lib))
@@ -321,7 +327,7 @@ function get_instance($class,$args = array())
 		}
 	}
 
-//	exit_function("__global::get_instance",array());
+	exit_function("__global::get_instance",array());
 	return $instance;
 }
 
