@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.2 2004/05/24 11:13:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.3 2004/06/17 14:32:33 duke Exp $
 // survey.aw - Ankeet 
 /*
 
@@ -75,6 +75,15 @@
 
 @property utext5 type=textbox
 @caption Utext5
+
+@property utext6 type=textbox
+@caption Utext6
+
+@property utext7 type=textbox
+@caption utext7
+
+@property utext8 type=textbox
+@caption utext8
 
 @reltype OWNER value=1 clid=CL_USER
 @caption Omanik

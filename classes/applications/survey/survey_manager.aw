@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.1 2004/05/24 11:13:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.2 2004/06/17 14:32:33 duke Exp $
 // survey_manager.aw - Ankeetide haldur 
 /*
 
@@ -23,8 +23,14 @@
 @property filled_surveys type=table store=no no_caption=1
 @caption Täidetud ankeedid
 
+@property sweepstake1 type=table group=sweepstake
+@caption Paarid
+
+property sweepstake2 type=table group=sweepstake
+caption Koodikataloog
 
 @groupinfo filled_surveys caption="Täidetud ankeedid" submit=no
+@groupinfo sweepstake caption="Loosimine"
 
 @reltype SURVEY_FOLDER value=1 clid=CL_MENU
 @caption Kataloog
@@ -60,8 +66,109 @@ class survey_manager extends class_base
 				$this->make_result_table($arr);
 				break;
 
+			case "sweepstake1":
+				$this->make_p_table($arr);
+				break;
+
+			case "sweepstake2":
+				return PROP_IGNORE;
+				break;
+
 		};
 		return $retval;
+	}
+	
+	function make_p_table($arr)
+	{
+		$arr["prop"]["vcl_inst"]->define_field(array(
+			"name" => "p1",
+			"caption" => "Autoportaal",
+		));
+		
+		$arr["prop"]["vcl_inst"]->define_field(array(
+			"name" => "p2",
+			"caption" => "Koodikataloog",
+		));
+
+		$p1 = array(758,1582,666,401,681,829,573);
+		$p2 = array(727,557,951,696,890,527);
+
+		shuffle($p1);
+		shuffle($p2);
+
+		for ($i = 0; $i <= 5; $i++)
+		{
+			$o1 = new object($p1[$i]);
+			$o2 = new object($p2[$i]);
+			$arr["prop"]["vcl_inst"]->define_data(array(
+				"p1" => $o1->name(),
+				"p2" => $o2->name(),
+			));
+		};
+
+		$o1 = new object($p1[6]);
+			
+		$arr["prop"]["vcl_inst"]->define_data(array(
+			"p1" => $o1->name(),
+			"p2" => " mitte kedagi :(",
+		));
+	}
+
+	function make_s_table($arr)
+	{
+		
+		$arr["prop"]["vcl_inst"]->define_field(array(
+			"name" => "id",
+			"caption" => "ID",
+		));
+		
+		$arr["prop"]["vcl_inst"]->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+		));
+		$arr["prop"]["vcl_inst"]->define_field(array(
+			"name" => "email",
+			"caption" => "E-post",
+		));
+		if ($arr["prop"]["name"] == "sweepstake1")
+		{
+			$start = 0;
+			$end = $this->size;
+		}
+		else
+		{
+			$start = $this->size+1;
+			$end = sizeof($this->map)-1;
+		};
+		
+		for ($i = $start; $i <= $end; $i++)
+		{
+			$ox = new object($this->map[$this->people[$i]]);
+			$arr["prop"]["vcl_inst"]->define_data(array(
+				"id" => $ox->id(),
+				"name" => $ox->name(),
+				"email" => $ox->prop("utext5"),
+			));
+
+			//$arr["vcl_inst"]->define_data(array(
+			//	"id" =>
+
+		};
+
+
+	}
+
+	function callback_pre_edit($arr)
+	{
+		$ol = new object_list(array(
+			"parent" => $arr["obj_inst"]->prop("survey_folder"),
+			"class_id" => CL_SURVEY,
+		));
+		$people = $ol->names();
+		$this->map = array_flip($people);
+		shuffle($people);
+		$this->people = $people;
+		$this->size = (int)(sizeof($this->people) / 2);
 	}
 
 	function make_result_table($arr)
@@ -80,12 +187,26 @@ class survey_manager extends class_base
 			"sortable" => 1,
 		));
 		$t->define_field(array(
+			"name" => "utext7",
+			"caption" => "Tavatelefon",
+		));	
+		$t->define_field(array(
+			"name" => "utext6",
+			"caption" => "Mobiil",
+		));	
+		$t->define_field(array(
+			"name" => "utext3",
+			"caption" => "Vanus",
+		));	
+		/*
+		$t->define_field(array(
 			"name" => "modified",
 			"caption" => "Muudetud",
 			"type" => "time",
 			"format" => "H:i d-M-y",
 			"sortable" => 1,
 		));
+		*/
 		$t->define_field(array(
 			"name" => "edit",
 			"caption" => "Vaata",
@@ -105,8 +226,11 @@ class survey_manager extends class_base
 				"modified" => $o->modified(),
 				"edit" => html::href(array(
 					"url" => $this->mk_my_orb("change",array("id" => $o->id()),CL_SURVEY),
-					"caption" => "Muuda",
+					"caption" => "Vaata",
 				)),
+				"utext7" => $o->prop("utext7"),
+				"utext6" => $o->prop("utext6"),
+				"utext3" => $o->prop("utext3"),
 			));
 		};
 
@@ -124,7 +248,6 @@ class survey_manager extends class_base
 		return $retval;
 	}	
 	*/
-
 
 	function parse_alias($arr)
 	{
