@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.71 2004/11/05 13:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.72 2004/11/12 12:16:49 ahti Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -446,7 +446,6 @@ class orb extends aw_template
 					$$tag = "";
 				};
 			};
- 
 			// kui leidsime argumenti määrava tag-i, siis ...
 			if (in_array($tag,$argtypes))
 			{
@@ -466,7 +465,10 @@ class orb extends aw_template
 					{
 						$orb_defs[$class][$action]["types"][$attribs["name"]] = $attribs["type"];
 					};
-
+					if(isset($attribs["class_id"]))
+					{
+						$orb_defs[$class][$action]["class_ids"][$attribs["name"]] = explode(",", $attribs["class_id"]);
+					}
 					if (isset($attribs["default"]))
 					{
 						$orb_defs[$class][$action]["defaults"][$attribs["name"]] = $attribs["default"];
@@ -477,7 +479,7 @@ class orb extends aw_template
 					}
 				};
 			};
-		}; // foreach
+		}; // foreach;
 		return $orb_defs;
 	} // function
 						
@@ -586,9 +588,30 @@ class orb extends aw_template
 					$aclarr = explode(";", $varacl);
 					foreach($aclarr as $aclid)
 					{
-						if (!$this->can($aclid, (int)$varvalue))
+						$varvalue = (int)$varvalue;
+						if (!$this->can($aclid, $varvalue))
 						{
 							$this->raise_error(ERR_ACL, "ORB:Teil puudub $aclid-&otilde;igus objektile id-ga $varvalue!",true, false);
+						}
+						if(is_array($act["class_ids"][$varname]))
+						{
+							$true = false;
+							$obj = obj($varvalue);
+							foreach($act["class_ids"][$varname] as $val)
+							{
+								if($obj->class_id() == constant($val))
+								{
+									$true = true;
+									break;
+								}
+							}
+							if(!$true)
+							{
+								error::throw(array(
+									"id" => "ERR_ORB_WRONG_CLASS",
+									"msg" => $vars["class"]."::".$vars["action"].": class id of argument ".$varname." is not ".implode(" or ", $act["class_ids"][$varname]),
+								));
+							}
 						}
 					}
 				}
@@ -986,7 +1009,7 @@ class orb extends aw_template
 				$meth["values"]["mid"] = $obj;
 			}
 		}
-		if($id == "commune")
+		if($id == "commune" || $id == "community")
 		{
 			if($obj)
 			{

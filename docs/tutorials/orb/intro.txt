@@ -65,6 +65,9 @@ example:
 example:
 @param oid required acl="view;edit"
 
+- class_id- if present, it is assumed that this argument containt an object's id ant that the object is of that class. several classes can be defined separated by commas. works only when acl is defined.
+example:
+@param oid required acl="view;edit" class_id=CL_FOO,CL_BAR
 
 
 When the "make orb" command is entered, the docgen_analyzer class generates the orb xml definition files from all modified classes.
@@ -153,7 +156,7 @@ Attributes for the required/optional/define tags:
 <B>name</b> - <I>required</i>, the name of the parameter. 
 <B>type</b> - <I>optional</i>, the type of the argument. Currently only "int" type is defined. If the type of the argument does not match the type defined, error is displayed. 
 <B>acl</b> - <I>optional</i>, if set, must contain a semicolon separated list of access levels that the current user must have to the object whose oid is in the parameter. 
-
+<b>class_id</b> - <i>optional</i>, if set, must contain a comma separated list of class id's that the argument must match. works only with acl parameter.
 
 <font size="+1"><b>How are parameters passed to the function?</b></font>
 

@@ -3,7 +3,7 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_orb_gen.aw,v 1.4 2004/10/29 19:10:26 duke Exp $
+	@cvs $Id: docgen_orb_gen.aw,v 1.5 2004/11/12 12:16:56 ahti Exp $
 
 	@comment 
 	generates orb defs, based on information from docgen_analyzer
@@ -70,6 +70,11 @@ class docgen_orb_gen extends class_base
 					if (isset($p_dat["type"]) && $p_dat["type"] != "")
 					{
 						$x_p["type"] = $p_dat["type"];
+					}
+					
+					if(isset($p_dat["class_id"]) && $p_dat["class_id"] != "")
+					{
+						$x_p["class_id"] = $p_dat["class_id"];
 					}
 
 					if (isset($p_dat["acl"]) && $p_dat["acl"] != "")
@@ -209,6 +214,11 @@ class docgen_orb_gen extends class_base
 					{
 						$x_p[] = "type=\"".$p_dat["type"]."\"";
 					}
+					
+					if(isset($p_dat["class_id"]) && $d_dat["class_id"] != "")
+					{
+						$x_p[] = "class_id=\"".$p_dat["class_id"]."\"";
+					}
 
 					if (isset($p_dat["acl"]) && $p_dat["acl"] != "")
 					{
@@ -265,10 +275,9 @@ class docgen_orb_gen extends class_base
 				{
 					continue;
 				}
-
 				foreach($cld["classes"] as $class => $cldat)
 				{
-					if (	is_array($cldat["functions"]) &&
+					if (is_array($cldat["functions"]) &&
 						$class != "" &&
 						// so what the ull does this check do?
 						strtolower($class) == strtolower(basename($file, ".aw"))
