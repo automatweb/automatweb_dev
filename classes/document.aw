@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.135 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.136 2002/12/30 14:47:00 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -535,6 +535,7 @@ class document extends aw_template
 
 		$db_periods = get_instance("periods",$this->cfg["per_oid"]);
 		$act_per = $db_periods->get_active_period($this->cfg["per_oid"]);
+		$this->dequote(&$doc["title"]);
 		$this->title = $doc["title"];
 
 		//if (aw_global_get("in_archive"))
