@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.32 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.33 2002/06/10 18:10:06 kristo Exp $
 // table.aw - tabelite haldus
 
 
@@ -1475,7 +1475,10 @@ class table extends aw_template
 		$num_fcols = 0; 
 		$num_frows = 0;
 
-		$header = $this->proc_text($this->arr["table_header"]);
+		if ($this->arr["table_header"] != "")
+		{
+			$header = $this->proc_text($this->arr["table_header"]);
+		}
 		if ($header != "")
 		{
 			if ($this->arr["table_style"])
@@ -1597,7 +1600,10 @@ class table extends aw_template
 		}
 		$table.=$rs."</table>";
 
-		$footer = $this->proc_text($this->arr["table_footer"]);
+		if ($this->arr["table_footer"] != "")
+		{
+			$footer = $this->proc_text($this->arr["table_footer"]);		
+		}
 		if ($this->meta["last_changed"])
 		{
 			$footer .= "<br><small><i>Muudetud: <span align='right'>" . $this->time2date($this->obj_data["modified"],4) . "</span></i></small>";
