@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.3 2004/04/06 12:12:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.4 2004/04/29 10:14:12 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -38,6 +38,12 @@
 
 @property minical_day_deactive type=relpicker reltype=RELTYPE_STYLE
 @caption Deaktiivne päev
+
+@property minical_title type=relpicker reltype=RELTYPE_STYLE
+@caption Pealkiri
+
+@property minical_background type=relpicker reltype=RELTYPE_STYLE
+@caption Taust
 
 @default group=show_events
 
@@ -241,14 +247,15 @@ class calendar_view extends class_base
 					"id" => $to_o->id(),
 					"range" => $range,
 				));	
+
 			};
-			$arr["cal_inst"]->xxx = "yyyy";
 
 			foreach($events as $event)
 			{
 				$arr["cal_inst"]->add_item(array(
 					"timestamp" => $event["start"],
 					"data" => array(
+						"id" => $event["id"],
 						"name" => $event["name"],
 						"icon" => $event["event_icon_url"],
 						"link" => $event["link"],
@@ -305,10 +312,56 @@ class calendar_view extends class_base
 			"range" => $range,
 		));
 
+		classload("layout/active_page_data");
+
+		$style = array();
+
+		// XXX: fuck this
+
+		if ($this->obj_inst->prop("minical_day_with_events") != "")
+		{
+			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_with_events"));
+			$style["minical_day_with_events"] = "st" . $this->obj_inst->prop("minical_day_with_events");
+		};
+		
+		if ($this->obj_inst->prop("minical_day_without_events") != "")
+		{
+			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_without_events"));
+			$style["minical_day_without_events"] = "st" . $this->obj_inst->prop("minical_day_without_events");
+		};
+		
+		if ($this->obj_inst->prop("minical_day_today") != "")
+		{
+			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_today"));
+			$style["minical_day_today"] = "st" . $this->obj_inst->prop("minical_day_today");
+		};
+		
+		if ($this->obj_inst->prop("minical_day_active") != "")
+		{
+			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_active"));
+			$style["minical_day_active"] = "st" . $this->obj_inst->prop("minical_day_active");
+		};
+		
+		if ($this->obj_inst->prop("minical_day_deactive") != "")
+		{
+			active_page_data::add_site_css_style($this->obj_inst->prop("minical_day_deactive"));
+			$style["minical_day_deactive"] = "st" . $this->obj_inst->prop("minical_day_deactive");
+		};
+		
+		if ($this->obj_inst->prop("minical_title") != "")
+		{
+			active_page_data::add_site_css_style($this->obj_inst->prop("minical_title"));
+			$style["minical_title"] = "st" . $this->obj_inst->prop("minical_title");
+		};
+
+		if ($this->obj_inst->prop("minical_background") != "")
+		{
+			active_page_data::add_site_css_style($this->obj_inst->prop("minical_background"));
+			$style["minical_background"] = "st" . $this->obj_inst->prop("minical_background");
+		};
+
 		return $vcal->get_html(array(
-			"style" => array(
-				"minical_day_with_events" => "styl1",
-			),
+			"style" => $style,
 		));
 	}
 }
