@@ -1,0 +1,6 @@
+Te kasutate ARCO jaoks loodud internetipõhist suhtlus vahendit blah blah blah
+
+Automaatselt logiti teid teie töötajate kanalile, kus te saate teiste inimestega vestelda.
+Vaadake ka abi faili...
+
+Menüüst 'Käsud' valides 'Saadaval' teete ennast nähtavaks klientidele ja neil avaneb võimalus teiega privaat vestlusesse asuda.
