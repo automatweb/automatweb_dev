@@ -1,6 +1,7 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-<td height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; padding-left:10px;" colspan="2"><a href="#kommentaar"><img src="{VAR:baseurl}/automatweb/images/forum_add_comment.gif" align="absmiddle" border="0" alt="Lisa kommentaar"></a> <a href="#kommentaar">Lisa kommentaar</a>
+<td height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; padding-left:10px;" colspan="2">
+<a href="#kommentaar"><img src="{VAR:baseurl}/automatweb/images/forum_add_comment.gif" align="absmiddle" border="0" alt="" />Lisa kommentaar</a>
 </td>
 </tr>
 <tr>
@@ -8,12 +9,14 @@
 <strong>{VAR:path}</strong>
 </td>
 <td nowrap class="{VAR:style_caption}">
+<!-- SUB: PAGER -->
 <!-- SUB: active_page -->
  <strong>[ {VAR:num} ]</strong>
 <!-- END SUB: active_page -->
 <!-- SUB: page -->
  <a href="{VAR:url}">{VAR:num}</a> 
 <!-- END SUB: page -->
+<!-- END SUB: PAGER -->
 </td>
 </tr>
 </table>
@@ -26,9 +29,20 @@
 <!-- SUB: COMMENT -->
 <tr>
 	<td align="center" width="20%" class="{VAR:style_comment_time}"><div class="{VAR:style_comment_user}">{VAR:uname}</div><div class="">{VAR:date}</div></td>
-	<td valign="top" class="{VAR:style_comment_text}"><strong>{VAR:name}</strong><p>{VAR:commtext}</td>
+	<td valign="top" class="{VAR:style_comment_text}">
+		<!-- SUB: ADMIN_BLOCK -->
+		<div align="right">
+		<strong>IP: {VAR:ip}</strong><br />
+		<input type="checkbox" name="del[]" value="{VAR:id}" />
+		</div>
+		<!-- END SUB: ADMIN_BLOCK -->
+	<strong>{VAR:name}</strong><p>{VAR:commtext}
+	</td>
 </tr>
 <!-- END SUB: COMMENT -->
 </table>
-
-
+<!-- SUB: DELETE_ACTION -->
+<div align="right">
+<input type="button" name="delete_comments" value="Kustuta valitud kommentaarid" onClick="if(confirm('Kustutada?')){document.changeform.action.value='delete_comments';document.changeform.submit();};"/>
+</div>
+<!-- END SUB: DELETE_ACTION -->
