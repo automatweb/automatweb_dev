@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/currency.aw,v 2.5 2002/01/16 21:12:13 duke Exp $
+// currency.aw - Currency management
 lc_load("currency");	
 global $orb_defs;
 $orb_defs["currency"] = "xml";
