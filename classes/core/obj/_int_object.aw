@@ -1193,7 +1193,7 @@ class _int_object
 		}
 	}
 
-	function _int_path()
+	function _int_path($param)
 	{
 		$ret = array();
 		$parent = $this->id();
