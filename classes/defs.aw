@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.145 2004/08/23 10:52:54 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.146 2004/08/30 10:11:29 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1238,6 +1238,17 @@ if (!defined("DEFS"))
 	function do_nothing()
 	{
 	
+	}
+	
+	/** returns the parameter or an array if the parameter is not an array
+	**/
+	function safe_array($var)
+	{
+		if (is_array($var)) 
+		{
+			return $var;
+		}
+		return array();
 	}
 };
 ?>
