@@ -3,7 +3,6 @@
 
 //@classinfo syslog_type=
 //@classinfo relationmgr=yes
-@groupinfo general caption=Üldine
 
 @default table=objects
 @default group=general
@@ -145,46 +144,6 @@ class pilot_object extends class_base
 
 
 	////////////////////////////////////
-	// object persistance functions - used when copying/pasting object
-	// if the object does not support copy/paste, don't define these functions
-	////////////////////////////////////
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
 
@@ -198,21 +157,6 @@ class pilot_object extends class_base
 		return $this->show(array('id' => $alias['target']));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	/*function show($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-
-		$this->read_template('show.tpl');
-
-		$this->vars(array(
-			'name' => $ob['name']
-		));
-
-		return $this->parse();
-	*/
 	
 	function obj_parse($val)
 	{

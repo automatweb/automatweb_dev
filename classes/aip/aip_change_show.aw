@@ -1,10 +1,8 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/aip/Attic/aip_change_show.aw,v 1.3 2004/02/11 21:51:14 duke Exp $
 /*
 
 @classinfo syslog_type=ST_AIP_CHANGE_SHOW
-
-@groupinfo general caption=Üldine
 
 @default table=objects
 @default group=general
@@ -19,44 +17,8 @@ class aip_change_show extends class_base
 	function aip_change_show()
 	{
 		$this->init(array(
-			'tpldir' => 'aip/aip_change_show',
 			'clid' => CL_AIP_CHANGE_SHOW
 		));
-	}
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
 	}
 
 	////
@@ -74,11 +36,11 @@ class aip_change_show extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = new object($id);
 
 		$ac = get_instance("aip_change");
 		return $ac->show_files(array(
-			"type" => $ob['meta']['type']
+			"type" => $ob->prop('type'),
 		));
 	}
 
