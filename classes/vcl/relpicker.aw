@@ -23,7 +23,13 @@ class relpicker extends  core
                         $reltype = $prop["reltype"];
                 };
 
+		if (is_array($prop["options"]))
+		{
+                        $val["type"] = "select";
+                        $val["options"] = $prop["options"];
 
+		}
+		else
                 // if automatic is set, then create a list of all properties of that type
                 if (isset($prop["automatic"]))
                 {
