@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.235 2004/02/11 11:31:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.236 2004/02/12 11:11:21 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1588,7 +1588,7 @@ class document extends aw_template
 					$vlist[] = "'1'";
 					break;
 				case "tm":
-					$vlist[] = "'".date("d/m/y")."'";
+					$vlist[] = "'".date("d.m.Y")."'";
 					break;
 				case "no_right_pane":
 					if ($this->cfg["site_id"] == 9)
