@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.4 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.5 2002/06/26 11:12:38 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -46,7 +46,8 @@ class menu_cache extends aw_template
 	{
 		$where = ($args["where"]) ? $args["where"] : "objects.status != 0";
 		$ignore = ($args["ignore"]) ? $args["ignore"] : false;
-		$ignore_lang = ($args["lang_ignore"]) ? $args["lang_ingore"] : false;
+		$ignore_lang = ($args["lang_ignore"]) ? $args["lang_ignore"] : false;
+		$lang_id = $args["lang_id"] ? $args["lang_id"] : aw_global_get("lang_id");
 
 		if (!$ignore)
 		{
@@ -55,7 +56,7 @@ class menu_cache extends aw_template
     };
     if ($this->cfg["lang_menus"] == 1 && $ignore_lang == false)
     {
-			$aa .= sprintf(" AND (objects.lang_id='%d' OR menu.type = '%d') ",aw_global_get("lang_id"),MN_CLIENT);
+			$aa .= sprintf(" AND (objects.lang_id='%d' OR menu.type = '%d') ",$lang_id,MN_CLIENT);
     }
 
      $q = "SELECT objects.oid as oid, 
@@ -100,18 +101,31 @@ class menu_cache extends aw_template
 	function make_caches($args = array())
 	{
 		classload("cache");
+		extract($args);
+
 		$cache = new cache();
 		$where = ($args["where"]) ? $args["where"] : " class_id = 1 AND objects.status = 2";
-		$lang_id = aw_global_get("lang_id");
+		if (!$lang_id)
+		{
+			$lang_id = aw_global_get("lang_id");
+		}
 		$SITE_ID = $this->cfg["site_id"];
 		$filename = "menuedit::menu_cache::lang::" . $lang_id . "::site_id::" . $SITE_ID;
 		$fn = aw_ini_get("cache.page_cache")."/".$filename;
-		$this->mar = array();
-		$this->mpr = array();
-		$this->subs = array();
+		if ($this->loaded_cache != $filename)
+		{
+			// argh. lets NOT clear the menu cache if we are not going to reload it !
+			$this->mar = array();
+			$this->mpr = array();
+			$this->subs = array();
+		}
 		if (file_exists($fn))
 		{
-			include($fn);
+			if ($this->loaded_cache != $filename)
+			{
+				include($fn);
+				$this->loaded_cache = $filename;
+			}
 		}
 		else
     {
@@ -119,7 +133,8 @@ class menu_cache extends aw_template
 			// avoid writing to the menu cache if the queries didn't succeed,
 			// otherwise we are stuck with whatever (void most likely) lands
 			// in the cache until the cache is invalidated
-			if ( $this->_list_subs(array("where" => $where)) &&	$this->_list_menus(array("where" => $where)) )
+			$subsql = " class_id = ".CL_DOCUMENT." AND objects.status = 2 AND objects.lang_id = ".$lang_id." AND objects.site_id = ".aw_ini_get("site_id");
+			if ( $this->_list_subs(array("where" => $subsql)) &&	$this->_list_menus(array("where" => $where,"lang_id" => $lang_id)) )
 			{
 				// make sure that we ust have to include this file and the menu cache will be read into
 				// the correct member arrays
