@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.90 2004/05/06 12:21:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.91 2004/05/12 13:51:47 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -647,6 +647,7 @@ class image extends class_base
 		switch ($prop["name"])
 		{
 			case "file":
+				$set = false;
 				global $file,$file_type;
 				if (is_uploaded_file($file))
 				{
@@ -656,6 +657,7 @@ class image extends class_base
 						"content" => $this->get_file(array("file" => $file)),
 					));
 					$prop["value"] = $fl;
+					$set = true;
 				}
 				// XXX: this is not the correct way to detect this
 				elseif (!empty($prop["value"]["type"]))
@@ -666,6 +668,7 @@ class image extends class_base
 						"content" => base64_decode($prop["value"]["contents"]),
 					));
 					$prop["value"] = $fl;
+					$set = true;
 				}
 				else
 				{
