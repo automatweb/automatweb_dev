@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.6 2001/12/05 21:55:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.7 2001/12/06 00:26:05 duke Exp $
 
 // yup, this class is really braindead at the moment and mostly a copy of
 // the current alias manager inside the document class, but I will optimize
@@ -485,12 +485,12 @@ class aliasmgr extends aw_template {
 			foreach($forums as $key => $val)
 			{
 				$fcc++;
-				$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("edit_properties",array("id" => $val["oid"]),"forum"),$val["name"]);
+				$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $val["oid"]),"forum"),$val["name"]);
 				$this->t->define_data(array(
 					"name" => $link,
 					"comment" => $val["comment"],
 					"alias" => "#o$fcc#",
-					"edlink" => $this->mk_my_orb("edit_properties",array("id" => $val["oid"]),"forum"),
+					"edlink" => $this->mk_my_orb("change",array("id" => $val["oid"]),"forum"),
 					"modified" => $this->time2date($val["modified"],2),
 					"modifiedby" => $val["modifiedby"],
 				));
