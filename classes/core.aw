@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.103 2002/08/24 18:28:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.104 2002/08/24 18:30:09 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1311,9 +1311,18 @@ class core extends db_connector
 	////
 	// !tagastab array oid => name matchinud objektidest
 	// parameetrid on samad, mis get_objects_by_class funxioonil
+	// lisaks:
+	// addempty - if true, empty element is inserted
 	function list_objects($arr)
 	{
-		$ret = array();
+		if ($arr["addempty"])
+		{
+			$ret = array("" => "");
+		}
+		else
+		{
+			$ret = array();
+		}
 		$this->save_handle();
 		$this->get_objects_by_class($arr);
 		while ($row = $this->db_next())
