@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.168 2004/02/09 10:21:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.169 2004/02/09 10:59:49 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -322,7 +322,26 @@ class planner extends class_base
 		{
 			$project = aw_global_get("project");
 			$prj = get_instance(CL_PROJECT);
+			// this is wrong, I need to figure out the users this calendar belongs to
+			$owners = $obj->connections_from(array(
+				"type" => RELTYPE_CALENDAR_OWNERSHIP,
+			));
+
+			// ignore projects, if there are no users connected to this calendar
+			if (sizeof($owners) == 0)
+			{
+				continue;
+			};
+
+			$user_ids = array();
+
+			foreach($owners as $owner)
+			{
+				$user_ids[] = $owner->prop("to");
+			};
+
 			$event_ids = $event_ids + $prj->get_events_from_projects(array(
+				"user_ids" => $user_ids,
 				"project_id" => aw_global_get("project"),
 				"type" => "my_projects",
 			));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.9 2004/02/03 10:40:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.10 2004/02/09 10:59:50 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -117,7 +117,6 @@ class project extends class_base
 	function get_events_from_projects($arr = array())
 	{
 		$ev_ids = array();
-		//if (empty($arr["project_id"]))
 		if (!empty($arr["project_id"]))
 		{
 			$ev_ids = $this->get_events_for_project(array("project_id" => $arr["project_id"]));
@@ -129,8 +128,10 @@ class project extends class_base
 			$users = get_instance("users");
 			if (aw_global_get("uid"))
 			{
-				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-				$conns = $user->connections_to(array(
+				$user_obj = new object($arr["user_ids"][0]);
+				// this is wrong, I need to figure out the users, that this calendar belongs to
+				//$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+				$conns = $user_obj->connections_to(array(
 					"from.class_id" => CL_PROJECT,
 				));
 				$ev_ids = array();
@@ -175,7 +176,6 @@ class project extends class_base
 		$args = array(
 			"type" => RELTYPE_PRJ_EVENT,
 		);
-
 
 		if (!empty($arr["class_id"]))
 		{
