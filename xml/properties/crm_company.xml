@@ -37,7 +37,7 @@
             <name>reg_nr</name>
             <type>textbox</type>
             <size>10</size>
-            <maxlenght>20</maxlenght>
+            <maxlength>20</maxlength>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>reg_nr</field>
@@ -112,7 +112,8 @@
       </property>
       <property>
             <name>firmajuht</name>
-            <type>text</type>
+            <type>chooser</type>
+            <orient>vertical</orient>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>firmajuht</field>
