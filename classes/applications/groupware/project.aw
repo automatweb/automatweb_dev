@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.19 2004/12/08 12:23:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.20 2004/12/09 19:31:40 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -219,20 +219,6 @@ class project extends class_base
 		return $retval;
 	}
 
-	function set_property($arr)
-	{
-		$data = &$arr["prop"];
-		$retval = PROP_OK;
-
-		switch($data["name"])
-		{
-			case "add_event":
-				$this->register_event_with_planner($arr);
-				break;
-		}
-		return $retval;
-	}
-	
 
 	function set_property($arr = array())
 	{
@@ -253,6 +239,10 @@ class project extends class_base
 				{
 					$this->do_write_times_to_cal($arr);
 				}
+				break;
+			
+			case "add_event":
+				$this->register_event_with_planner($arr);
 				break;
 
 			case "priority":
@@ -746,13 +736,13 @@ class project extends class_base
 		// now i have a list of all projects .. I need to figure out which menus connect to those projects
 		$web_pages = $project_images = array();
 		$c = new connection();
+		obj_set_opt("no_auto_translation",1);
 
 		$conns = $c->find(array(
 			"from" => $projects,
 			"type" => RELTYPE_ORIGINAL,
 		));
 
-		obj_set_opt("no_auto_translation",1);
 		foreach($conns as $conn)
 		{
 			$from = $conn["from"];
@@ -778,6 +768,12 @@ class project extends class_base
 		foreach($conns as $conn)
 		{
 			$web_pages[$conn["to"]] = $conn["from"];
+		};
+
+		global $XX5;
+		if ($XX5)
+		{
+			arr($events);
 		};
 
 		if (1 == $arr["project_media"])
@@ -821,11 +817,14 @@ class project extends class_base
 				$project_images[$conn["from"]] = $t_img->get_url_by_id($conn["to"]);
 			};
 
-			foreach($ids as $id)
+			if (is_array($ids))
 			{
-				$fx = $id;
-				$fxo = new object($fx);
-				$project_images[$fxo->id()] = $project_images[$fx];
+				foreach($ids as $id)
+				{
+					$fx = $id;
+					$fxo = new object($fx);
+					$project_images[$fxo->id()] = $project_images[$fx];
+				};
 			};
 
 		};
@@ -929,7 +928,6 @@ class project extends class_base
 			exit_function("find-parent");
 
 		};
-
 
 		return $events;
 	}
