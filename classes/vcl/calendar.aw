@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.29 2004/10/29 16:00:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.30 2004/11/03 14:34:09 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1021,9 +1021,8 @@ class vcalendar extends aw_template
 			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
 			"COMMENT" => "",
 			"comment" => $evt["comment"],
-			"day_name" => substr(get_lc_weekday(date("w",$evt["start1"])),0,1),
+			"day_name" => strtoupper(substr(get_lc_weekday(date("w",$evt["start1"])),0,1)),
                         "date_and_time" => $dt . ". " . $mn,
-
 		));
 
 
