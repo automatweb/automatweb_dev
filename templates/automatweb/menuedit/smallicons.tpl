@@ -1,9 +1,9 @@
 <!-- SUB: ICON -->
 <table style="width:170px;position:relative;float:left;overflow:hidden;padding: 0px 5px 0px 3px;">
 <tr>
-<td class="awmenuedittabletext" style="width:20px;">
+<td class="awmenuedittabletext" style="width:20px;height:25px">
 <a href="{VAR:chlink}">
-<img alt="{VAR:caption}" src="{VAR:icon_url}" height="20" border="0" /></a>
+<img alt="{VAR:caption}" src="{VAR:icon_url}" border="0" /></a>
 </td>
 <td class="awmenuedittabletext">
 <a href="{VAR:chlink}">
