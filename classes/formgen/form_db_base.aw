@@ -1908,7 +1908,7 @@ class form_db_base extends aw_template
 		}
 
 		$order_by = "";
-		if ($sort_by_alpha)
+		if ($sort_by_alpha && $rel_el != "")
 		{
 			$order_by = " ORDER BY $rel_el ";
 		}
@@ -2134,7 +2134,7 @@ class form_db_base extends aw_template
 			return " ";
 		}
 		
-		$str = " ORDER BY ";
+		$str = "";
 		$first = true;
 		foreach($sort_by as $nr => $el)
 		{
@@ -2155,6 +2155,10 @@ class form_db_base extends aw_template
 			}
 		}
 
+		if ($str != "")
+		{
+			return " ORDER BY ".$str;
+		}
 		return $str;
 	}
 }
