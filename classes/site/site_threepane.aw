@@ -1,29 +1,38 @@
 <?php
-// $Id: site_threepane.aw,v 1.8 2003/09/17 15:11:42 kristo Exp $
+// $Id: site_threepane.aw,v 1.9 2003/12/03 11:10:32 duke Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
 	@default group=general
+	@default field=meta
+	@default method=serialize
 
-	@property frameset type=objpicker clid=CL_FRAMESET field=meta method=serialize
+	@property frameset type=relpicker reltype=RELTYPE_SITE_FRAMESET
 	@caption Frameseti objekt
 
-	@property treeview type=objpicker clid=CL_TREEVIEW field=meta method=serialize
+	@property treeview type=relpicker reltype=RELTYPE_SITE_TREEVIEW
 	@caption Puu objekt
 
-	@property logo type=relpicker clid=CL_IMAGE field=meta method=serialize
+	@property logo type=relpicker reltype=RELTYPE_SITE_LOGO
 	@caption Logo
 
-	@xproperty logo type=imgupload field=meta method=serialize
-	@xcaption Logo
-
-	@property info type=generated generator=callback_get_info field=meta method=serialize
+	@property info type=generated generator=callback_get_info 
 	@caption Metainfo
 
-	@property preview editonly=1 type=text field=meta method=serialize
+	@property preview editonly=1 type=text 
 	@caption Näita
 
 	@classinfo relationmgr=yes
+
+	@reltype SITE_FRAMESET value=1 clid=CL_FRAMESET
+	@caption Frameset
+
+	@reltype SITE_TREEVIEW value=2 clid=CL_TREEVIEW
+	@caption Puu seadistused
+
+	@reltype SITE_LOGO value=3 clid=CL_IMAGE
+	@caption Logo
+	
 
 */
 class site_threepane extends class_base
@@ -36,18 +45,21 @@ class site_threepane extends class_base
 		));
 	}
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "preview":
-				classload("html");
-				$id = $args["obj"]["oid"];
+				$id = $arr["obj_inst"]->id();
 				// no need to check whether id exists, since this only called
 				// for existing objects
-				$data["value"] = html::href(array("url" => $this->cfg["baseurl"] . "/orb.aw?class=site_threepane&action=show&id=$id","caption" => "Näita saiti","target" => "_blank"));
+				$data["value"] = html::href(array(
+					"url" => $this->cfg["baseurl"] . "/orb.aw?class=site_threepane&action=show&id=$id",
+					"caption" => "Näita saiti",
+					"target" => "_blank",
+				));
 				$retval = PROP_IGNORE;
 				break;
 		};
@@ -57,27 +69,25 @@ class site_threepane extends class_base
 	function show($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object(array(
-			"oid" => $id,
-			"class_id" => CL_SITE_THREEPANE,
-		));
+		$obj = new object($id);
 
-		$fr = get_instance("vcl/frameset");
-		$frdata = $this->get_object($obj["meta"]["frameset"]);
-		$frmeta = $frdata["meta"];
+		$fr = get_instance(CL_FRAMESET);
+		$frdata = $obj->prop("frameset");
 
+		$frobject = new object($obj->prop("frameset"));
+		$frmeta = $frobject->meta();
+		
 		// first: load and generate the frameset
 		switch($type)
 		{
 			case "top":
 				$this->read_template("top.tpl");
-				classload("html");
-				$img = get_instance("image");
-				$imgdata = $img->get_image_by_id($obj["meta"]["logo"]);
+				$img = get_instance(CL_IMAGE);
+				$imgdata = $img->get_image_by_id($obj->prop("logo"));
 				$this->vars(array(
 					"logo" => html::img(array("url" => $imgdata["url"])),
 				));
-				$info = $obj["meta"]["info"];
+				$info = $obj->prop("info");
 				$max = sizeof($info["name"]);
 				$vars = array();
 				for ($i = 0; $i < $max; $i++)
@@ -99,7 +109,7 @@ class site_threepane extends class_base
 				$treeview = get_instance("vcl/treeview");
 				$styl = $frmeta["framedata"]["right"]["style"];
 				$content = $treeview->show(array(
-						"id" => $obj["meta"]["treeview"],
+						"id" => $obj->prop("treeview"),
 						"urltemplate" => "/orb.aw?class=page&action=show&id=$styl&section=%s",
 				));
 				$htmlpage = get_instance("vcl/page");
@@ -125,19 +135,17 @@ class site_threepane extends class_base
 				$tv = get_instance("vcl/treeview");
 				$styl = $frmeta["framedata"]["right"]["style"];
 				$tv->urltemplate = "/orb.aw?class=page&action=show&id=$styl&section=%s";
-				$treeobj_id = $this->get_object($obj["meta"]["treeview"]);
-				$treeobj = $this->get_object($treeobj_id);
-				$rootobj_id = $treeobj["meta"]["root"];
-				$rootobj = $this->get_object($rootobj_id);
+				$treeobj = new object($obj->prop("treeview"));
+				$rootobj = new object($treeobj->prop("root"));
 				$sources = array(
 					"top" => $this->mk_my_orb("show",array("id" => $id,"type" => "top")),
 					"left" => $this->mk_my_orb("show",array("id" => $id,"type" => "left")),
 					"right" => $tv->do_item_link($rootobj),
 				);
 				$res = $fr->show(array(
-						"id" => $obj["meta"]["frameset"],
+						"id" => $obj->prop("frameset"),
 						"sources" => $sources,
-						"title" => $obj["name"],
+						"title" => $obj->name(),
 				));
 				print $res;
 				exit;
