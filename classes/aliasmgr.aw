@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.55 2002/11/07 10:52:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.56 2002/11/08 15:00:48 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -27,69 +27,15 @@ class aliasmgr extends aw_template
 		$search = get_instance("search");
 		$args["clid"] = "aliasmgr";
 		$form = $search->show($args);
+		$this->search = &$search;
 
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
-		
-		// generate a list of class => name pairs
-		$aliases = array();
-		$classes = $this->cfg["classes"];
-		foreach($classes as $clid => $cldat)
-		{
-			if (isset($cldat["alias"]))
-			{
-				$aliases[$cldat["file"]] = $cldat["name"];
-			}
-		}
-
-		$this->vars(array(
-			"aliases" => $this->picker(-1,$aliases),
-		));
-
-		$toolbar->add_cdata($this->parse("aliaslist"));
-
-		$toolbar->add_button(array(
-			"name" => "new",
-			"tooltip" => "Lisa uus objekt",
-			"url" => "javascript:redir()",
-			"imgover" => "new_over.gif",
-			"img" => "new.gif",
-		));
-		
-		$toolbar->add_button(array(
-			"name" => "search",
-			"tooltip" => "Otsi",
-			"url" => "javascript:document.searchform.submit();",
-			"imgover" => "search_over.gif",
-			"img" => "search.gif",
-		));
-
-		$toolbar->add_separator();
-		
-		$toolbar->add_button(array(
-			"name" => "refresh",
-			"tooltip" => "Reload",
-			"url" => "javascript:window.location.reload()",
-			"imgover" => "refresh_over.gif",
-			"img" => "refresh.gif",
-		));
-
-		if ($search->get_opt("rescounter") > 0)
-		{
-			$toolbar->add_button(array(
-				"name" => "save",
-				"tooltip" => "Tee valitud objektidele aliased",
-				"url" => "javascript:aw_save()",
-				"imgover" => "save_over.gif",
-				"img" => "save.gif",
-			));
-		};
 		$id = $args["docid"];
 		$obj = $this->get_object($id);
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("search",array("no_reforb" => 1, "search" => 1, "docid" => $docid)),
 			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"])),
-			"toolbar" => $toolbar->get_toolbar(),
+			"toolbar" => $this->mk_toolbar(),
 			"form" => $form,
 			"table" => $search->get_results(),
 		));
@@ -418,6 +364,7 @@ class aliasmgr extends aw_template
 		extract($args);
 		$this->read_template("lists_new.tpl");
 		$obj = $this->get_object($id);
+		$this->id = $id;
 
 		// init vcl table to $this->t and define columns
 		$this->_init_la_tbl();
@@ -484,8 +431,9 @@ class aliasmgr extends aw_template
 			"aliases" => $this->picker("",$aliases),
 			"reforb" => $this->mk_reforb("submit_list",array("id" => $id)),
 			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
+			"toolbar" => $this->mk_toolbar(),
 		));
-			
+
 		return $this->parse();
 	}
 
@@ -598,6 +546,103 @@ class aliasmgr extends aw_template
 				"value" => $_aliases,
 			));
     };
+	}
+
+	////
+	// !Search and list share the same toolbar
+	function mk_toolbar()
+	{
+		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
+		
+		// generate a list of class => name pairs
+		$aliases = array("0" => "--vali--");
+		$classes = $this->cfg["classes"];
+		get_instance("html");
+		foreach($classes as $clid => $cldat)
+		{
+			if (isset($cldat["alias"]))
+			{
+				$aliases[$cldat["file"]] = $cldat["name"];
+			}
+		}
+
+		$aliases = html::select(array("options" => $aliases,"name" => "aselect"));
+
+		$toolbar->add_cdata($aliases);
+
+		$toolbar->add_button(array(
+			"name" => "new",
+			"tooltip" => "Lisa uus objekt",
+			"url" => "javascript:redir()",
+			"imgover" => "new_over.gif",
+			"img" => "new.gif",
+		));
+
+		if (is_object($this->search))
+		{
+			$toolbar->add_button(array(
+				"name" => "search",
+				"tooltip" => "Otsi",
+				"url" => "javascript:document.searchform.submit();",
+				"imgover" => "search_over.gif",
+				"img" => "search.gif",
+			));
+		}
+		else
+		{
+			$toolbar->add_button(array(
+				"name" => "search",
+				"tooltip" => "Otsi",
+				"url" => $this->mk_my_orb("search",array("docid" => $this->id),"aliasmgr"),
+				"imgover" => "search_over.gif",
+				"img" => "search.gif",
+			));
+		};
+
+		$toolbar->add_separator();
+		
+		$toolbar->add_button(array(
+			"name" => "refresh",
+			"tooltip" => "Reload",
+			"url" => "javascript:window.location.reload()",
+			"imgover" => "refresh_over.gif",
+			"img" => "refresh.gif",
+		));
+
+		if (is_object($this->search))
+		{
+			if ($this->search->get_opt("rescounter") > 0)
+			{
+				$toolbar->add_button(array(
+					"name" => "save",
+					"tooltip" => "Tee valitud objektidele aliased",
+					"url" => "javascript:aw_save()",
+					"imgover" => "save_over.gif",
+					"img" => "save.gif",
+				));
+			};
+		}
+		else
+		{
+			$toolbar->add_button(array(
+				"name" => "save",
+				"tooltip" => "Salvesta",
+				"url" => "javascript:saveform()",
+				"imgover" => "save_over.gif",
+				"img" => "save.gif",
+			));
+			
+			$toolbar->add_button(array(
+				"name" => "delete",
+				"tooltip" => "Kustuta valitud objektid",
+				"url" => "javascript:awdelete()",
+				"imgover" => "delete_over.gif",
+				"img" => "delete.gif",
+			));
+		};
+			
+
+		return $toolbar->get_toolbar();
 	}
 }
 ?>
