@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.157 2003/02/21 12:47:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.158 2003/02/25 12:01:16 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -323,6 +323,8 @@ class core extends db_connector
 	//					"key" => "notes"));
 	function get_object_metadata($args = array())
 	{
+		$args["oid"] = isset($args["oid"]) ? $args["oid"] : false;
+		$args["no_cache"] = isset($args["no_cache"]) ? $args["no_cache"] : false;
 		extract($args);
 		// if metadata is defined in the arguments, we will not read
 		// the object into memory.
@@ -339,9 +341,16 @@ class core extends db_connector
 		$metadata = aw_unserialize($metadata);
 		
 		// if key is defined, return only that part of the metainfo
-		if ($key)
+		if (isset($key) && $key)
 		{	
-			$metadata = $metadata[$key];
+			if (is_array($metadata) && isset($metadata[$key]))
+			{
+				$metadata = $metadata[$key];
+			}
+			else
+			{
+				$metadata = false;
+			}
 		}
 		// otherwise the whole thing
 		return $metadata;
@@ -2404,7 +2413,10 @@ class core extends db_connector
 											ORDER BY objects.parent,jrk");
 		while ($row = $this->db_next())
 		{
-			$ret[$row["parent"]][] = $row;
+			if ($this->can("view", $row['oid']))
+			{
+				$ret[$row["parent"]][] = $row;
+			}
 		}
 
 		$tt = array();
