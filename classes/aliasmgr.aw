@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.5 2001/12/05 14:03:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.6 2001/12/05 21:55:50 duke Exp $
 
 // yup, this class is really braindead at the moment and mostly a copy of
 // the current alias manager inside the document class, but I will optimize
@@ -550,7 +550,9 @@ class aliasmgr extends aw_template {
 			"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
 		));
 
-		$this->contents .= $this->parse("table");
+		$tpl = ($this->t->rows() == 0) ? "empty" : "table";
+
+		$this->contents .= $this->parse($tpl);
 	}
 
 	function _common_parts($args = array())
