@@ -30,6 +30,15 @@
             <caption>Kas kasutaja logitakse automaatselt sisse liitumisel</caption>
       </property>
       <property>
+            <name>classes</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>table</type>
+            <store>no</store>
+            <field>classes</field>
+            <caption>Vali klassid</caption>
+      </property>
+      <property>
             <name>join_properties</name>
             <table>objects</table>
             <group>sel_props</group>
@@ -97,8 +106,8 @@
             <name>rule_to_grp</name>
             <table>objects</table>
             <group>rules_add</group>
-            <type>objpicker</type>
-            <clid>CL_GROUP</clid>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RULE_GRP</reltype>
             <store>no</store>
             <field>rule_to_grp</field>
             <caption>Vali grupp, kuhu reegel kasutaja paneb</caption>
@@ -119,6 +128,9 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <classes>
+                  <caption>Klassid</caption>
+            </classes>
             <props>
                   <caption>Vormid</caption>
             </props>
@@ -165,6 +177,11 @@
                   <clid>CL_MENU</clid>
                   <caption>objektide kataloog</caption>
             </OBJ_FOLDER>
+            <RULE_GRP>
+                  <value>4</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>reegli grupp</caption>
+            </RULE_GRP>
       </reltypes>
 </properties>
 

@@ -86,6 +86,26 @@
             <caption>Tegevusvaldkondade kaust</caption>
       </property>
       <property>
+            <name>join_obj_worker</name>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_JOIN_OBJ</reltype>
+            <method>serialize</method>
+            <field>meta</field>
+            <group>settings</group>
+            <caption>T&amp;ouml;&amp;ouml;taja liitumisvorm</caption>
+      </property>
+      <property>
+            <name>join_obj_offerer</name>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_JOIN_OBJ</reltype>
+            <method>serialize</method>
+            <field>meta</field>
+            <group>settings</group>
+            <caption>T&amp;ouml;&amp;ouml;pakkuja liitumisvorm</caption>
+      </property>
+      <property>
             <name>jobtable</name>
             <table>objects</table>
             <type>table</type>
@@ -219,6 +239,24 @@
             <group>my_candits</group>
             <no_caption>1</no_caption>
             <field>my_personal_toolbar_mycandits</field>
+      </property>
+      <property>
+            <name>my_join_worker</name>
+            <table>objects</table>
+            <type>callback</type>
+            <group>my_join_worker</group>
+            <callback>callback_get_join_worker</callback>
+            <store>no</store>
+            <field>my_join_worker</field>
+      </property>
+      <property>
+            <name>my_join_offerer</name>
+            <table>objects</table>
+            <type>callback</type>
+            <group>my_join_offerer</group>
+            <callback>callback_get_join_offerer</callback>
+            <store>no</store>
+            <field>my_join_offerer</field>
       </property>
       <property>
             <name>mycvs</name>
@@ -366,14 +404,26 @@
             <store>no</store>
             <field>org_bookmarks</field>
       </property>
+      <property>
+            <name>locations</name>
+            <table>objects</table>
+            <type>callback</type>
+            <callback>callback_get_locations</callback>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Asukohad</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PERSONALIKESKKOND</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <layout>boxed</layout>
       </classinfo>
       <groupinfo>
             <my_profile>
                   <caption>Minu profiil</caption>
+                  <default>1</default>
             </my_profile>
             <org_profile>
                   <caption>Organisatsiooni profiil</caption>
@@ -417,6 +467,17 @@
                   <submit>no</submit>
                   <parent>tootsijad</parent>
             </cv_nimekiri>
+            <my_join>
+                  <caption>Liitu kasutajaks</caption>
+            </my_join>
+            <my_join_worker>
+                  <caption>T&amp;ouml;&amp;ouml;otsija</caption>
+                  <parent>my_join</parent>
+            </my_join_worker>
+            <my_join_offerer>
+                  <caption>T&amp;ouml;&amp;ouml;pakkuja</caption>
+                  <parent>my_join</parent>
+            </my_join_offerer>
             <mycvs>
                   <caption>Minu CV-d</caption>
                   <parent>my_profile</parent>
@@ -450,6 +511,9 @@
                   <caption>Organisatsiooni andmed</caption>
                   <parent>org_profile</parent>
             </org_info>
+            <settings>
+                  <caption>Seadistused</caption>
+            </settings>
             <setings>
                   <caption>Seaded</caption>
                   <parent>all_setings</parent>
@@ -476,6 +540,20 @@
                   <clid>CL_META</clid>
                   <caption>Tegevusvaldkonnad</caption>
             </VALDKONNAD>
+            <JOIN_OBJ>
+                  <value>21</value>
+                  <clid>CL_JOIN_SITE</clid>
+                  <caption>liitumisvorm</caption>
+            </JOIN_OBJ>
+            <CONTENT>
+                  <value>22</value>
+                  <clid>
+                        <num_0>CL_MENU_AREA</num_0>
+                        <num_1>CL_POLL</num_1>
+                        <num_2>CL_PROMO</num_2>
+                  </clid>
+                  <caption>Sisuelement</caption>
+            </CONTENT>
       </reltypes>
 </properties>
 

@@ -1,11 +1,11 @@
 <?
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.7 2004/04/15 15:19:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalikeskkond.aw,v 1.8 2004/04/21 14:52:13 kristo Exp $
 // personalikeskkond.aw - Personalikeskkond 
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONALIKESKKOND, on_connect_manager_to_keskkond)
 
-@classinfo syslog_type=ST_PERSONALIKESKKOND relationmgr=yes no_status=1
+@classinfo syslog_type=ST_PERSONALIKESKKOND relationmgr=yes no_status=1 layout=boxed
 @default table=objects
 
 //////////////////////////RELATIONS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
@@ -24,6 +24,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONALIKESKKOND, on_c
 
 @reltype JOIN_OBJ value=21 clid=CL_JOIN_SITE
 @caption liitumisvorm
+
+@reltype CONTENT value=22 clid=CL_MENU_AREA,CL_POLL,CL_PROMO
+@caption Sisuelement
 
 //////////////////////////TOOLBARS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
@@ -47,6 +50,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONALIKESKKOND, on_c
 
 @property tegevusvaldkonnad type=relpicker reltype=RELTYPE_VALDKONNAD method=serialize field=meta group=setings
 @caption Tegevusvaldkondade kaust
+
+@property join_obj_worker type=relpicker reltype=RELTYPE_JOIN_OBJ method=serialize field=meta group=settings
+@caption T&ouml;&ouml;taja liitumisvorm
+
+@property join_obj_offerer type=relpicker reltype=RELTYPE_JOIN_OBJ method=serialize field=meta group=settings
+@caption T&ouml;&ouml;pakkuja liitumisvorm
+
 
 ///////////////////////////TABLES\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
@@ -76,20 +86,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONALIKESKKOND, on_c
 @property treeview type=text parent=manager store=no group=toopakkumised_cats
 @property catjoblist type=table parent=manager store=no group=toopakkumised_cats
 
-@layout hbox1 type=hbox group=mycvs
-@layout vbox1 type=vbox group=mycvs parent=hbox1
-@layout vbox2 type=vbox group=mycvs parent=hbox1
-
 /////////////////////////MINU PROFIIL TÖÖOTSIJA\\\\\\\\\\\\\\\\\\\\\\\
-@property my_personal_toolbar type=toolbar group=mycvs no_caption=1 parent=vbox2
+@property my_personal_toolbar type=toolbar group=mycvs no_caption=1 
 @property my_personal_toolbar_mycandits type=toolbar group=my_candits no_caption=1
 
 
-@property my_join type=callback group=my_join callback=callback_get_join
+@property my_join_worker type=callback group=my_join_worker callback=callback_get_join_worker store=no
+@property my_join_offerer type=callback group=my_join_offerer callback=callback_get_join_offerer store=no
 
-@property mycvs type=table group=mycvs no_caption=1 parent=vbox2
+@property mycvs type=table group=mycvs no_caption=1 
 @property my_candits type=table group=my_candits no_caption=1
-@property my_personal_info type=table group=mycvs no_caption=1 parent=vbox2
+@property my_personal_info type=table group=mycvs no_caption=1 
 ________________________________________________________________
 @property my_personal_info_username type=text group=my_personal_info store=no
 @caption Kasutajanimi
@@ -106,11 +113,8 @@ ________________________________________________________________
 @property my_personal_info_id type=textbox group=my_personal_info store=no
 @caption Isikukood
 
-@property my_default_cv type=select group=mycvs parent=vbox2
+@property my_default_cv type=select group=mycvs 
 @caption Minu cv vaikimisi
-
-@property container1 type=container content=menu_area group=mycvs parent=vbox1
-@caption Shalla lalla
 
 @property my_personal_info_password type=textbox group=my_personal_info store=no
 @caption Parool
@@ -126,6 +130,9 @@ ________________________________________________________________
 @property org_bookmarks type=table group=org_bookmarks no_caption=1
 ________________________________________________________________________
 
+/////////////////////////SETTINGS\\\\\\\\\\\\\\\\\\\\\\\
+@property locations type=callback callback=callback_get_locations group=settings field=meta method=serialize
+@caption Asukohad
 
 ///////////////////////////TAB PROPS\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
 
@@ -145,7 +152,10 @@ ________________________________________________________________________
 @groupinfo cv_nimekiri caption="CV nimekiri" submit=no parent=tootsijad
 
 
-@groupinfo my_join caption="Liitu kasutajaks" parent=my_profile
+@groupinfo my_join caption="Liitu kasutajaks" 
+@groupinfo my_join_worker caption="T&ouml;&ouml;otsija" parent=my_join
+@groupinfo my_join_offerer caption="T&ouml;&ouml;pakkuja" parent=my_join
+
 @groupinfo mycvs caption="Minu CV-d" parent=my_profile submit=no
 @groupinfo my_candits caption="Kandideerin" parent=my_profile submit=no
 @groupinfo my_personal_info caption="Minu andmed" parent=my_profile
@@ -157,6 +167,8 @@ ________________________________________________________________________
 
 @groupinfo org_jobs_candits caption="Kandideerijad" parent=org_profile submit=no
 @groupinfo org_info caption="Organisatsiooni andmed" parent=org_profile
+
+@groupinfo settings caption="Seadistused"
 
 
 @group all_setings caption="Kaustade seaded"
@@ -1534,7 +1546,7 @@ class personalikeskkond extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		
+
 		switch($data["name"])
         {	
 			case "my_personal_info_firstname":
@@ -1554,12 +1566,12 @@ class personalikeskkond extends class_base
 				$this->my_profile->save();
 			break;
 
-			case "my_join":
-				$c = reset($arr["obj_inst"]->connections_from(array("type" => 21 /* RELTYPE_JOIN_OBJ */)));
-				if ($c)
+			case "my_join_offerer":
+				$j_oid = $arr["obj_inst"]->prop("join_obj_offerer");
+				if ($j_oid)
 				{
 					$tmp = $arr["request"];
-					$tmp["id"] = $c->prop("to");
+					$tmp["id"] = $j_oid;
 					if (!empty($arr["request"]["join_butt"]))
 					{
 						$ji = get_instance("contentmgmt/join/join_site");
@@ -1572,6 +1584,30 @@ class personalikeskkond extends class_base
 					}
 					else
 					if (!empty($arr["request"]["upd_butt"]))
+					{
+						$ji = get_instance("contentmgmt/join/join_site");
+						$ji->submit_update_form($tmp);
+					}
+				}
+				break;
+
+			case "my_join_worker":
+				$j_oid = $arr["obj_inst"]->prop("join_obj_worker");
+				if ($j_oid)
+				{
+					$tmp = $arr["request"];
+					$tmp["id"] = $j_oid;
+					if (aw_global_get("uid") == "")
+					{
+						$ji = get_instance("contentmgmt/join/join_site");
+						$url = $ji->submit_join_form($tmp);
+						if ($url != "")
+						{
+							header("Location: $url");
+							die();
+						}
+					}
+					else
 					{
 						$ji = get_instance("contentmgmt/join/join_site");
 						$ji->submit_update_form($tmp);
@@ -1592,15 +1628,18 @@ class personalikeskkond extends class_base
 		return $this->change($v_arr);
 	}
 	
-	function callback_get_join($arr)
+	function callback_get_join_worker($arr)
 	{
-		$c = reset($arr["obj_inst"]->connections_from(array("type" => 21 /* RELTYPE_JOIN_OBJ */)));
-		if ($c)
+		aw_global_set("no_cache", 1);
+		$j_oid = $arr["obj_inst"]->prop("join_obj_worker");
+		if ($j_oid)
 		{
-			$join = $c->to();
+			$join = obj($j_oid);
 	
 			$ji = get_instance("contentmgmt/join/join_site");
-			$pps = $ji->get_elements_from_obj($join);
+			$pps = $ji->get_elements_from_obj($join, array(
+				"err_return_url" => aw_ini_get("baseurl").aw_global_get("REQUEST_URI")
+			));
 			if (aw_global_get("uid") == "")
 			{	
 				$pps["join_butt"] = array(
@@ -1620,6 +1659,146 @@ class personalikeskkond extends class_base
 			return $pps;
 		}
 		return array();
+	}
+
+	function callback_get_join_offerer($arr)
+	{
+		$j_oid = $arr["obj_inst"]->prop("join_obj_offerer");
+		if ($j_oid)
+		{
+			$join = obj($j_oid);
+	
+			$ji = get_instance("contentmgmt/join/join_site");
+			$pps = $ji->get_elements_from_obj($join,aw_global_get("REQUEST_URI"));
+			if (aw_global_get("uid") == "")
+			{	
+				$pps["join_butt"] = array(
+					"name" => "join_butt",
+					"type" => "submit",
+					"caption" => "Liitu!"
+				);
+			}
+			else
+			{
+				$pps["upd_butt"] = array(
+					"name" => "upd_butt",
+					"type" => "submit",
+					"caption" => "Uuenda andmed!"
+				);
+			}
+			return $pps;
+		}
+		return array();
+	}
+
+	function callback_get_locations($arr)
+	{
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_CONTENT,
+		));
+
+		$old = $arr["obj_inst"]->meta("locations");
+
+		$rv = array();
+		foreach($conns as $conn)
+		{
+			$target = $conn->to();
+			$name = $target->name();
+			$id = $target->id();
+			$rv["title_" . $id] = array(
+				"caption" => "Objekt",
+				"type" => "text",
+				"name" => "title_" . $id,
+				"value" => $name,
+			);
+
+			$rv["location_" . $id] = array(
+				"caption" => "Asukoht",
+				"type" => "chooser",
+				"name" => "locations[" . $id . "]",
+				"options" => array("top" => "üleval","left" => "vasakul","right" => "paremal","bottom" => "all"),
+				"value" => $old[$id],
+			);
+		};
+
+		return $rv;
+	}
+
+	function get_content_elements($arr)
+	{
+		$obj_inst = $arr["obj_inst"];
+		$els = $obj_inst->connections_from(array(
+			"type" => RELTYPE_CONTENT,
+		));
+		$locations = $obj_inst->meta("locations");
+		$rv = array();
+
+		foreach($els as $el)
+		{
+			$to = $el->prop("to");
+			if ($locations[$to])
+			{
+                                //$rv[$to] = $locations[$to];
+                                $to_obj = $el->to();
+                                $ct = "";
+                                if (CL_PROMO == $to_obj->class_id())
+                                {
+                                        $clinst = get_instance(CL_PROMO);
+                                        $ct = $clinst->parse_alias(array(
+                                                "alias" => array(
+                                                        "target" => $to,
+                                                ),
+                                        ));
+                                };
+				if (CL_MENU_AREA == $to_obj->class_id())
+				{
+					$ss = get_instance("contentmgmt/site_show");
+					$rf = $to_obj->prop("root_folder");
+					$ct = $ss->do_show_menu_template(array(
+						"template" => "menus.tpl",
+						"mdefs" => array(
+							$rf => "YLEMINE"
+						)
+                               		 ));
+				};
+
+				if (CL_POLL == $to_obj->class_id())
+				{
+					$clinst = get_instance(CL_POLL);
+					$ct = $clinst->gen_user_html($to);
+				};
+                                $rv[$locations[$to]] .=  $ct;
+                        };
+
+                        // now, how do I get that thing?
+                };
+		return $rv;
+	}
+
+	/** provide public access to submit
+
+		@attrib name=submit nologin=1
+
+
+	**/
+	function submit($arr)
+	{
+		return parent::submit($arr);
+	}
+
+	// this makes it possible to access that object directly with http://site/id
+	function request_execute($arr)
+	{
+		$args = $_REQUEST;
+		$done = aw_global_get("pk_been_here");
+		if ($done)
+		{
+			return false;
+		};
+		aw_global_set("pk_been_here",1);
+		$args["id"] = $arr->id();
+		$rv = $this->change($args);
+		return $rv;
 	}
 }
 ?>

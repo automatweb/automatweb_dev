@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.3 2004/04/15 15:19:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.4 2004/04/21 14:52:13 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -16,6 +16,11 @@
 
 @property autologin type=checkbox ch_value=1 field=meta method=serialize 
 @caption Kas kasutaja logitakse automaatselt sisse liitumisel
+
+@groupinfo classes caption="Klassid"
+
+@property classes type=table store=no
+@caption Vali klassid
 
 @groupinfo props caption="Vormid"
 
@@ -50,7 +55,7 @@
 @property rules_add type=text store=no group=rules_add
 @caption Lisa Reegel
 
-@property rule_to_grp type=objpicker clid=CL_GROUP group=rules_add store=no
+@property rule_to_grp type=relpicker reltype=RELTYPE_RULE_GRP group=rules_add store=no
 @caption Vali grupp, kuhu reegel kasutaja paneb
 
 @groupinfo preview caption="Eelvaade"
@@ -65,6 +70,9 @@
 
 @reltype OBJ_FOLDER value=3 clid=CL_MENU
 @caption objektide kataloog
+
+@reltype RULE_GRP value=4 clid=CL_GROUP
+@caption reegli grupp
 
 */
 
@@ -81,7 +89,8 @@ class join_site extends class_base
 			"checkbox" => 1,
 			"textbox" => 1,
 			"datetime" => 1,
-			"password" => 1
+			"password" => 1,
+			"relmanager" => 1
 		);
 	}
 
@@ -116,6 +125,7 @@ class join_site extends class_base
 			case "rules_add":
 				$data["value"] = $this->_do_add_rule($arr);
 				break;
+
 		};
 		return $retval;
 	}
@@ -575,7 +585,7 @@ class join_site extends class_base
 				}
 				$htmlc->add_property($xprop);
 			}
-		
+
 			$htmlc->finish_output(array());
 
 			$html .= $htmlc->get_result(array(
@@ -683,7 +693,6 @@ class join_site extends class_base
 			}
 		}
 		
-
 		// if they are , then add the user and go to the after join page
 		if ($filled)
 		{
@@ -702,18 +711,19 @@ class join_site extends class_base
 				$join_done = true;
 
 				// add the user
-				$us->add(array(
-					"uid" => $n_uid, 
+				$cu = get_instance("core/users/user");
+				$u_oid = $cu->add_user(array(
+					"uid" => $n_uid,
+					"email" => $n_email,
 					"password" => $n_pass,
-					"email" => $n_email, 
 					"join_grp" => $obj->id()
 				));
 	
 				// also, create all the objects and do the relations and crap
-				$this->_do_create_data_objects($arr, $us->last_user_oid);
+				$this->_do_create_data_objects($arr, $u_oid->id());
 
 				// apply rules on add
-				$this->apply_rules_on_data_change($this->get_rules_from_obj($obj), $us->last_user_oid);
+				$this->apply_rules_on_data_change($this->get_rules_from_obj($obj), $u_oid->id());
 
 				// if the props say so, log the user in
 				if ($obj->prop("autologin"))
@@ -742,16 +752,29 @@ class join_site extends class_base
 		}
 
 		aw_session_set("join_err", $nf);
+		if ($arr["err_return_url"])
+		{
+			return $arr["err_return_url"];
+		}
+
 		return aw_ini_get("baseurl")."/".$arr["section"];
 	}
 
 	function _do_create_data_objects($arr, $u_oid)
 	{
+		// in here we gots to assume the identity of the to-be-created user
+		// so that the user will get all access to the correct objects
+		// we can't do this with create_obj_access, because we can't access relation objects
+		$u_o = obj($u_oid);
+		aw_switch_user(array(
+			"uid" => $u_o->prop("uid")
+		));
+
 		$obj = obj($arr["id"]);
 
-		$u_o = obj($u_oid);
 
 		$change = false;
+		$sessd = aw_global_get("site_join_status");
 		$awa = new aw_array($sessd["typo_".CL_USER]);
 		foreach($awa->get() as $pn => $pv)
 		{
@@ -776,16 +799,32 @@ class join_site extends class_base
 			$person->set_prop($pn, $pv);
 		}
 		$p_id = $person->save();
-		$this->create_obj_access($p_id, $u_o->prop("uid"));
 
 		$u_o->connect(array(
 			"to" => $p_id,
 			"reltype" => 2 // RELTYPE_PERSON from core/users/user
 		));
 
+
+		$com = obj();
+		$com->set_class_id(CL_CRM_COMPANY);
+		$com->set_parent($obj->prop("obj_folder"));
+		$com->set_name($sessd["typo_".CL_CRM_COMPANY]["name"]);
+		$awa = new aw_array($sessd["typo_".CL_CRM_COMPANY]);
+		foreach($awa->get() as $pn => $pv)
+		{
+			$com->set_prop($pn, $pv);
+		}
+		$c_id = $com->save();
+
+		$person->connect(array(
+			"to" => $c_id,
+			"reltype" => 6 // RELTYPE_WORK from crm/crm_person
+		));
+
 		foreach($this->_get_clids($obj) as $clid)
 		{
-			if ($clid == CL_CRM_PERSON || $clid == CL_USER)
+			if ($clid == CL_CRM_PERSON || $clid == CL_USER || $clid == CL_CRM_COMPANY)
 			{
 				continue;
 			}
@@ -817,11 +856,13 @@ class join_site extends class_base
 				));
 			}
 		}
+
+		aw_restore_user();
 	}
 
 	function _get_clids($ob)
 	{
-		$ret = array(CL_USER,CL_CRM_PERSON);
+		$ret = array(CL_USER,CL_CRM_PERSON, CL_CRM_COMPANY);
 		foreach($ob->connections_from(array("type" => RELTYPE_JOIN_CLASS)) as $c)
 		{
 			$cfgf = $c->to();
@@ -854,16 +895,19 @@ class join_site extends class_base
 
 	function get_rules_from_obj($o)
 	{
+		aw_disable_acl();
 		$ret = array();
-		foreach($o->connections_from(array("type" => RELTYPE_JOIN_RULE)) as $c)
+		foreach($o->connections_from(array("to.class_id" => CL_JOIN_SITE_RULE /* RELTYPE_JOIN_RULE */)) as $c)
 		{
 			$ret[$c->prop("to")] = $c->prop("to");
 		}
+		aw_restore_acl();
 		return $ret;
 	}
 
 	function apply_rules_on_data_change($rules, $u_oid)
 	{
+		aw_disable_acl();
 		$user = obj($u_oid);
 
 		$ri = get_instance("contentmgmt/join/join_site_rule");
@@ -878,13 +922,20 @@ class join_site extends class_base
 				$gi->add_user_to_group($user, obj($rule->prop("rule_to_grp")));
 			}
 		}
+		aw_restore_acl();
 	}
 
-	function get_elements_from_obj($ob)
+	/**
+		$params can contain:
+			- err_return_url - if set, errored inputs go to that
+	**/
+	function get_elements_from_obj($ob, $params)
 	{
 		$visible = $ob->meta("visible");
 		$required = $ob->meta("required");
 		$propn = $ob->meta("propn");
+
+		$je = aw_global_get("join_err");
 
 		$cfgu = get_instance("cfg/cfgutils");
 
@@ -894,6 +945,9 @@ class join_site extends class_base
 			$u_o = obj($us->get_oid_for_uid(aw_global_get("uid")));
 		}		
 
+		$sessd = aw_global_get("site_join_status");
+
+		$tp = array();
 		$clss = array();
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
@@ -943,21 +997,64 @@ class join_site extends class_base
 				}
 			}
 
-			$tp = array();
 			foreach($props as $pid => $prop)
 			{	
 				if ($visible[$clid][$prop["name"]])
 				{
+					$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
+
+					if ($clid == CL_USER && $oldn == "uid_entry")
+					{
+						if ($je["gen"] != "")
+						{
+							$tp["err_".$clid."_".$oldn] = array(
+								"name" => "err_".$clid."_".$oldn,
+								"type" => "text",
+								"no_caption" => 1,
+								"value" => "<font color='#FF0000'>".$je["gen"]."</font>"
+							);
+						}
+					}
+					if ($je["prop"][$clid][$pid])
+					{
+						$tp["err_".$clid."_".$oldn] = array(
+							"name" => "err_".$clid."_".$oldn,
+							"type" => "text",
+							"no_caption" => 1,
+							"value" => "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
+						);
+					}
 					// set value in property
 					if ($data_o)
 					{
 						$prop["value"] = $data_o->prop($pid);
 					}
+					else
+					{
+						// try to read from sess data
+						$wn = "typo_".$clid;
+						$cf_sd = $sessd[$wn];
+						$prop["value"] = $cf_sd[$oldn];
+					}
+
+					$pid = "typo_".$clid."[".$oldn."]";
+					$prop["name"] = $pid;
 					$tp[$pid] = $prop;
 				}
 			}
 		}
 
+		if ($params["err_return_url"] != "")
+		{
+			$tp["err_return_url"] = array(
+				"name" => "err_return_url",
+				"type" => "hidden",
+				"store" => "no",
+				"value" => $params["err_return_url"]
+			);
+		}
+
+		aw_session_set("join_err", false);
 		return $tp;
 	}
 
@@ -977,6 +1074,9 @@ class join_site extends class_base
 
 	function _do_update_data_objects($ob, $u_o, $data)
 	{
+		$visible = $ob->meta("visible");
+		$cfgu = get_instance("cfg/cfgutils");
+
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
 		{
@@ -1032,7 +1132,10 @@ class join_site extends class_base
 				{	
 					if ($visible[$clid][$prop["name"]])
 					{
-						$data_o->set_prop($pid, $data[$pid]);
+						$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
+						$wn = "typo_".$clid;
+						$cf_sd = $data[$wn];
+						$data_o->set_prop($pid, $cf_sd[$oldn]);
 					}
 				}
 

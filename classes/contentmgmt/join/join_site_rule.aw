@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.1 2004/03/05 12:11:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.2 2004/04/21 14:52:13 kristo Exp $
 // join_site_rule.aw - Liitumise Reegel 
 /*
 
@@ -123,6 +123,10 @@ class join_site_rule extends class_base
 						$propn = "uid";
 					}
 
+					if ($propv == "%")
+					{
+					}
+					else
 					if (strpos($propv, "%") !== false)
 					{
 						if (strpos($data->prop($propn), str_replace("%", "", $propv)) === false)
