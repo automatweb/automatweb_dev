@@ -53,8 +53,17 @@ class event extends aw_template
 		{
 			$ev_link = $this->mk_my_orb("change",array("id" => $e["id"],"date" => $this->date),"cal_event");
 		};
+		
+		if ($this->actlink)
+		{
+			$ev_link = $this->mk_my_orb("change",array("parent" => $parent,"date" => $date,"id" => $e["id"],"return_url" => urlencode($this->actlink)),"cal_event");
+		};
+
+		$e["title"] = $e["name"];
+		$e["description"] = $e["comment"];
 
 		$this->vars(array(
+			"caption" => $e["caption"],
 			"color" => $e["color"],
 			"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
 			"event_link" => ($e["link"]) ? $e["link"] : $ev_link,
