@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.119 2003/06/10 15:41:54 duke Exp $
+// $Id: class_base.aw,v 2.120 2003/06/10 16:25:38 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -916,7 +916,6 @@ class class_base extends aw_template
 			};
 		};
 
-
 		$this->tables = $tables;
 		$this->fields = $fields;
 		$this->realfields = isset($realfields) ? $realfields : NULL;
@@ -938,12 +937,13 @@ class class_base extends aw_template
 			// load a list of properties and groups in the config form
 			$proplist = $this->cfgform["meta"]["cfg_proplist"];
 			$grplist = $this->cfgform["meta"]["cfg_groups"];
+
 		}
 
 		$cfgu = get_instance("cfg/cfgutils");
-		
+
 		// content comes from the config form
-		if ($args["content"])
+		if (!empty($args["content"]))
 		{
 			$_all_props = $cfgu->parse_definition(array(
 				"content" => $args["content"],
@@ -1064,9 +1064,9 @@ class class_base extends aw_template
 				else
 				{
 					// subgroups count as children of the parent group as well
-					if (isset($tmp_grpinfo[$_grp]["parent"]))
+					if (isset($grplist[$_grp]["parent"]))
 					{
-						$group_el_cnt[$tmp_grpinfo[$_grp]["parent"]] = 1;
+						$group_el_cnt[$grplist[$_grp]["parent"]] = 1;
 					};
 					$group_el_cnt[$_grp] = 1;
 				};
@@ -1125,7 +1125,7 @@ class class_base extends aw_template
 
 		$this->groupinfo = $grpinfo;
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
-	
+
 		return $this->all_props;
 	}
 
@@ -1752,6 +1752,11 @@ class class_base extends aw_template
 			};
 
 			if ($property["store"] == "no")
+			{
+				continue;
+			};
+			
+			if ($property["type"] == "callback")
 			{
 				continue;
 			};
