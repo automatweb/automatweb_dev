@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.18 2001/12/20 11:07:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.19 2002/01/07 17:30:29 kristo Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -188,7 +188,11 @@ class gallery extends aw_template
 					"link" => $cell["link"]
 				));
 				$b = $cell["bigurl"] != "" ? $this->parse("BIG") : "";
-				$this->vars(array("BIG" => $b));
+				$h = $cell["tnurl"] != "" ? $this->parse("HAS_IMG") : "";
+				$this->vars(array(
+					"BIG" => $b,
+					"HAS_IMG" => $h
+				));
 				$c.=$this->parse("CELL");
 			}
 			$this->vars(array("CELL" => $c));
