@@ -1,10 +1,12 @@
+<dl class="news"><dt>T&auml;itke enda kohta andmed:</dt></dl>
+
 <form action="{VAR:baseurl}/reforb.{VAR:ext}" method="POST">
-<table border="1">
+<table border="0" cellpadding="2" cellspacing="0">
 	<tr>
-		<td colspan="2">{VAR:person} {VAR:person_rank} {VAR:person_mail} {VAR:person_phone}</td>
+		<td colspan="2"><b>{VAR:person} {VAR:person_rank} {VAR:person_mail} {VAR:person_phone} {VAR:person_address}</b></td>
 	<tr>
 	<tr>
-		<td colspan="2">{VAR:date} {VAR:time_from} - {VAR:time_to}</td>
+		<td colspan="2"><b>{VAR:date} {VAR:time_from} - {VAR:time_to}</b></td>
 	</tr>
 	<!-- SUB: FAIL_first_name -->
 	<tr>
@@ -12,8 +14,8 @@
 	</tr>
 	<!-- END SUB: FAIL_first_name -->
 	<tr>
-		<td>Eesnimi:</td>
-		<td><input type="text" name="reg[first_name]" value="{VAR:first_name}"></td>
+		<td width="100">* Eesnimi:</td>
+		<td><input class="Input" type="text" name="reg[first_name]" value="{VAR:first_name}"></td>
 	</tr>
 	<!-- SUB: FAIL_last_name -->
 	<tr>
@@ -21,8 +23,8 @@
 	</tr>
 	<!-- END SUB: FAIL_last_name -->
 	<tr>
-		<td>Perekonnanimi:</td>
-		<td><input type="text" name="reg[last_name]" value="{VAR:last_name}"></td>
+		<td width="100">* Perekonnanimi:</td>
+		<td><input type="text" class="Input" name="reg[last_name]" value="{VAR:last_name}"></td>
 	</tr>
 
 	<!-- SUB: FAIL_phone -->
@@ -31,8 +33,8 @@
 	</tr>
 	<!-- END SUB: FAIL_phone -->
 	<tr>
-		<td>Telefon:</td>
-		<td><input type="text" name="reg[phone]" value="{VAR:phone}"></td>
+		<td width="100">* Telefon:</td>
+		<td><input type="text" class="Input" name="reg[phone]" value="{VAR:phone}"></td>
 	</tr>
 	<!-- SUB: FAIL_email -->
 	<tr>
@@ -40,8 +42,8 @@
 	</tr>
 	<!-- END SUB: FAIL_email -->
 	<tr>
-		<td>E-mail:</td>
-		<td><input type="text" name="reg[email]" value="{VAR:email}"></td>
+		<td width="100">* E-mail:</td>
+		<td><input type="text" class="Input" name="reg[email]" value="{VAR:email}"></td>
 	</tr>
 
 	<!-- SUB: FAIL_code -->
@@ -50,17 +52,17 @@
 	</tr>
 	<!-- END SUB: FAIL_code -->
 	<tr>
-		<td>Isikukood:</td>
-		<td><input type="text" name="reg[code]" value="{VAR:code}"></td>
+		<td width="100">* Isikukood:</td>
+		<td><input type="text" class="Input" name="reg[code]" value="{VAR:code}"></td>
 	</tr>
 	<tr>
 		<td colspan="2">Sisu:</td>
 	</tr>
 	<tr>
-		<td colspan="2"><textarea name="reg[content]" rows="10" cols="50">{VAR:content}</textarea></td>
+		<td colspan="2"><textarea class="Input" name="reg[content]" rows="10" cols="50">{VAR:content}</textarea></td>
 	</tr>
 	<tr>
-		<td colspan="2"><input type="submit" value="Registreeru"></td>
+		<td colspan="2"><input class="Input" type="submit" value="Registreeru"></td>
 	</tr>
 </table>
 {VAR:reforb}

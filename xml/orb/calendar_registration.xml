@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="calendar_registration" folder="applications/calendar" extends="class_base">
-		<action name="register_to_event" >
+		<action name="register_to_event" nologin="1">
 			<function name="register_to_event">
 				<arguments>
 					<required name="id" type="int" acl="view"/>
@@ -14,14 +14,14 @@
 			</function>
 		</action>
 
-		<action name="submit_register_event" >
+		<action name="submit_register_event" nologin="1">
 			<function name="submit_register_event">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="register_confirm" >
+		<action name="register_confirm" nologin="1">
 			<function name="register_confirm">
 				<arguments>
 					<required name="id" type="int" acl="view"/>

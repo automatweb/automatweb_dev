@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.2 2004/10/08 01:32:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.3 2004/10/08 15:55:33 kristo Exp $
 // calendar_registration.aw - Kalendri sündmusele registreerumine 
 /*
 
@@ -62,6 +62,7 @@ class calendar_registration extends class_base
 					#name# - kalendri omaniku nimi<br>
 					#phone# - kalendri omaniku telefon<br>
 					#email# - kalendri omaniku e-mail<br>
+					#addr# - kalendri omaniku aadress<br>
 					#date# - kohtumise kuup&auml;ev<br>
 					#time_from# - kohtumise alguskellaaeg<br>
 					#time_to# - kohtumise k&otilde;ppkellaaeg<br>";
@@ -91,31 +92,13 @@ class calendar_registration extends class_base
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
-		$person = get_instance(CL_CRM_PERSON);
-
 		$from = time();
 		$to = mktime(0,0,0,date("m")+1, 1, date("Y"));
 
 		foreach($ob->connections_from(array("type" => "RELTYPE_CALENDAR")) as $c)
 		{
 			$cal = $c->to();
-			$owner_user = $cal->get_first_obj_by_reltype(8 /* CL_PLANNER.RELTYPE_CALENDAR_OWNERSHIP */);
-			$pdata = array();
-			if ($owner_user)
-			{
-				$owner_person = $owner_user->get_first_obj_by_reltype(2 /* CL_USER.RELTYPE_PERSON */);
-
-				$pdata = $person->fetch_person_by_id(array(
-					"id" => $owner_person->id()
-				));
-			}
-
-			$this->vars(array(
-				"person" => $pdata["name"],
-				"person_mail" => $pdata["email"],
-				"person_phone" => $pdata["phone"],
-				"person_rank" => $pdata["rank"]
-			));
+			$this->_insert_pdata($cal);
 
 			$events = "";
 
@@ -153,7 +136,7 @@ class calendar_registration extends class_base
 				{
 					$this->vars(array(
 						"reg_link" => $this->mk_my_orb("register_to_event", array("id" => $ob->id(), "cal" => $cal->id(), "event" => $event->id(), "section" => aw_global_get("section"))),
-						"date" => get_lc_date($event->prop("start")),
+						"date" => get_lc_date($event->prop("start"),LC_DATE_FORMAT_LONG_FULLYEAR),
 						"time_from" => date("H:i", $event->prop("start")),
 						"time_to" => date("H:i", $event->prop("end"))
 					));
@@ -163,7 +146,7 @@ class calendar_registration extends class_base
 				{
 					$this->vars(array(
 						"reg_link" => $this->mk_my_orb("register_to_event", array("id" => $ob->id(), "cal" => $cal->id(), "event" => $event->id(), "section" => aw_global_get("section"))),
-						"date" => get_lc_date($event->prop("start1")),
+						"date" => get_lc_date($event->prop("start1"),LC_DATE_FORMAT_LONG_FULLYEAR),
 						"time_from" => date("H:i", $event->prop("start1")),
 						"time_to" => date("H:i", $event->prop("end"))
 					));
@@ -186,7 +169,7 @@ class calendar_registration extends class_base
 
 	/**
 
-		@attrib name=register_to_event
+		@attrib name=register_to_event nologin="1"
 
 		@param id required type=int acl=view
 		@param cal required type=int acl=view
@@ -205,18 +188,9 @@ class calendar_registration extends class_base
 
 		$cal = obj($arr["cal"]);
 		$event = obj($arr["event"]);
-		$owner_user = $cal->get_first_obj_by_reltype(8 /* CL_PLANNER.RELTYPE_CALENDAR_OWNERSHIP */);
-		$owner_person = $owner_user->get_first_obj_by_reltype(2 /* CL_USER.RELTYPE_PERSON */);
-
-		$pdata = $person->fetch_person_by_id(array(
-			"id" => $owner_person->id()
-		));
+		$this->_insert_pdata($cal);
 
 		$this->vars(array(
-			"person" => $pdata["name"],
-			"person_mail" => $pdata["email"],
-			"person_phone" => $pdata["phone"],
-			"person_rank" => $pdata["rank"],
 			"date" => get_lc_date($event->prop("start")),
 			"time_from" => date("H:i", $event->prop("start")),
 			"time_to" => date("H:i", $event->prop("end")),
@@ -247,7 +221,7 @@ class calendar_registration extends class_base
 
 	/**
 
-		@attrib name=submit_register_event
+		@attrib name=submit_register_event nologin="1"
 
 	**/
 	function submit_register_event($arr)
@@ -270,10 +244,21 @@ class calendar_registration extends class_base
 				$pass = false;
 				$fail_fld[] = $req_f;
 			}
+			else
+			if ($req_f == "code")
+			{
+				// personal code is 3780607xxxx
+				if (strlen(trim($arr["reg"][$req_f])) != 11)
+				{
+					$pass = false;
+					$fail_fld[] = $req_f;
+				}
+			}
 		}
 
 		if (!$pass)
 		{
+			aw_session_set("no_cache", 1);
 			return $this->mk_my_orb("register_to_event",array(
 				"id" => $arr["id"],
 				"cal" => $arr["cal"],
@@ -330,7 +315,7 @@ class calendar_registration extends class_base
 
 	/**
 
-		@attrib name=register_confirm
+		@attrib name=register_confirm nologin="1"
 
 		@param id required type=int acl=view
 		@param cal required type=int acl=view
@@ -345,18 +330,9 @@ class calendar_registration extends class_base
 		
 		$cal = obj($arr["cal"]);
 		$event = obj($arr["event"]);
-		$owner_user = $cal->get_first_obj_by_reltype(8 /* CL_PLANNER.RELTYPE_CALENDAR_OWNERSHIP */);
-		$owner_person = $owner_user->get_first_obj_by_reltype(2 /* CL_USER.RELTYPE_PERSON */);
 
-		$pdata = $person->fetch_person_by_id(array(
-			"id" => $owner_person->id()
-		));
-
+		$this->_insert_pdata($cal);
 		$this->vars(array(
-			"person" => $pdata["name"],
-			"person_mail" => $pdata["email"],
-			"person_phone" => $pdata["phone"],
-			"person_rank" => $pdata["rank"],
 			"date" => get_lc_date($event->prop("start1")),
 			"time_from" => date("H:i", $event->prop("start1")),
 			"time_to" => date("H:i", $event->prop("end")),
@@ -390,8 +366,9 @@ class calendar_registration extends class_base
 				"#name#" => $pdata["name"],
 				"#phone#" => $pdata["phone"],
 				"#email#" => $pdata["email"],
-				"#date#" => get_lc_date($event->prop("start")),
-				"#time_from#" => date("H:i", $event->prop("start")),
+				"#addr#" => $pdata["address"],
+				"#date#" => get_lc_date($event->prop("start1")),
+				"#time_from#" => date("H:i", $event->prop("start1")),
 				"#time_to#" => date("H:i", $event->prop("end"))
 			);
 
@@ -421,6 +398,7 @@ class calendar_registration extends class_base
 			"personal_id" => $arr["reg"]["code"]
 		));
 
+		aw_disable_acl();
 		if ($ol->count() == 0)
 		{
 			$u = get_instance(CL_USER);
@@ -452,7 +430,31 @@ class calendar_registration extends class_base
 			"to" => $o->id(),
 			"reltype" => 8 // CRM_PERSON.RELTYPE_PERSON_MEETING
 		));
+		aw_restore_acl();
 
+	}
+
+	function _insert_pdata($cal)
+	{
+		$person = get_instance(CL_CRM_PERSON);
+		$owner_user = $cal->get_first_obj_by_reltype(8 /* CL_PLANNER.RELTYPE_CALENDAR_OWNERSHIP */);
+		$pdata = array();
+		if ($owner_user)
+		{
+			$owner_person = $owner_user->get_first_obj_by_reltype(2 /* CL_USER.RELTYPE_PERSON */);
+
+			$pdata = $person->fetch_person_by_id(array(
+				"id" => $owner_person->id()
+			));
+		}
+
+		$this->vars(array(
+			"person" => $pdata["name"],
+			"person_mail" => $pdata["email"],
+			"person_phone" => $pdata["phone"],
+			"person_rank" => $pdata["rank"],
+			"person_address" => $pdata["address"]
+		));
 	}
 }
 ?>
