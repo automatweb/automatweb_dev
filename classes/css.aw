@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.8 2002/01/23 14:51:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.9 2002/01/31 00:25:43 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -592,7 +592,7 @@ class css extends aw_template {
 			$this->in_gen = true;
 			if ($data["a_style"])
 			{
-				$retval.=$this->_gen_css_style($name." a",$this->get_cached_style_data($data["a_style"]));
+				$retval.=$this->_gen_css_style($name." a:link",$this->get_cached_style_data($data["a_style"]));
 			}
 			if ($data["a_hover_style"])
 			{
