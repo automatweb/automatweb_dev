@@ -4,13 +4,14 @@ class site_list extends class_base
 {
 	function site_list()
 	{
-		$this->init();
+		$this->init("automatweb/site_list");
 		$this->check_db();
 	}
 
 	function orb_list($arr)
 	{
 		extract($arr);
+		$this->mk_path(0,"AW Saitide list");
 
 		load_vcl('table');
 		$t = new aw_table(array('prefix' => 'site_list'));
@@ -47,7 +48,12 @@ class site_list extends class_base
 			'caption' => 'Koodi versioon',
 			'sortable' => 1,
 		));
+		$t->define_field(array(
+			'name' => 'change',
+			'caption' => 'Muuda',
+		));
 
+		$cnt = $cnt_used = 0; 
 		$this->db_query("
 			SELECT aw_site_list.*, aw_server_list.name as server_name 
 			FROM aw_site_list
@@ -60,19 +66,100 @@ class site_list extends class_base
 				'url' => $row['url'],
 				'caption' => $row['url']
 			));
+			$row["change"] = html::href(array(
+				'url' => $this->mk_my_orb("change_site", array("id" => $row["id"])),
+				'caption' => "Muuda"
+			));
+			if ($row["site_used"])
+			{
+				$cnt_used ++;
+			}
+
+			$row["site_used"] = $row["site_used"] == 1 ? "Jah" : "Ei";
 			$t->define_data($row);
+			$cnt++;
 		}
 
 		$t->set_default_sortby('id');
 		$t->set_default_sorder('asc');
 		$t->sort_by();
 		
+		$str = $t->draw();
+
+		$str .= "Kokku $cnt saiti<Br>\n";
+		$str .= "Kasutusel $cnt_used saiti <br>\n";
+		$str .= "Serverite kaupa: <br>\n";
+		$str .= $this->_get_server_stats();
+		$str .= "Koodiversioonide kaupa: <br>\n";
+		$str .= $this->_get_cver_stats();
+
+		return $str;
+	}
+
+	function _get_server_stats()
+	{
+		load_vcl('table');
+		$t = new aw_table(array('prefix' => 'site_list_bs'));
+		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => 'Server',
+			'sortable' => 1,
+		));
+		$t->define_field(array(
+			'name' => 'cnt',
+			'caption' => 'Mitu',
+			'sortable' => 1,
+			'numeric' => 1
+		));
+
+		$this->db_query("SELECT s.name as name, count(*) as cnt FROM aw_site_list l left join aw_server_list s on s.id = l.server_id WHERE site_used = 1 GROUP BY l.server_id order by cnt desc");
+		while($row = $this->db_next())
+		{
+			$t->define_data($row);
+		}
+		$t->set_default_sortby("cnt");
+		$t->set_default_sorder("desc");
+		$t->sort_by();
+
+		return $t->draw();
+	}
+
+	function _get_cver_stats()
+	{
+		load_vcl('table');
+		$t = new aw_table(array('prefix' => 'site_list_cv'));
+		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => 'Koodiversioon',
+			'sortable' => 1,
+		));
+		$t->define_field(array(
+			'name' => 'cnt',
+			'caption' => 'Mitu',
+			'sortable' => 1,
+			'numeric' => 1
+		));
+
+		$this->db_query("SELECT l.code_branch as name, count(*) as cnt FROM aw_site_list l WHERE site_used = 1 GROUP BY l.code_branch order by cnt desc");
+		while($row = $this->db_next())
+		{
+			$t->define_data($row);
+		}
+		$t->set_default_sortby("cnt");
+		$t->set_default_sorder("desc");
+		$t->sort_by();
+
 		return $t->draw();
 	}
 
 	function orb_server_list($arr)
 	{
 		extract($arr);
+		$this->mk_path(0,"AW Serverite list");
 
 		load_vcl('table');
 		$t = new aw_table(array('prefix' => 'server_list'));
@@ -97,9 +184,18 @@ class site_list extends class_base
 			'sortable' => 1,
 		));
 
+		$t->define_field(array(
+			'name' => 'change',
+			'caption' => 'Muuda',
+		));
+
 		$this->db_query("SELECT * FROM aw_server_list");
 		while ($row = $this->db_next())
 		{
+			$row["change"] = html::href(array(
+				'url' => $this->mk_my_orb("change_server", array("id" => $row["id"])),
+				'caption' => "Muuda"
+			));
 			$t->define_data($row);
 		}
 
@@ -273,6 +369,17 @@ class site_list extends class_base
 		return $ret;
 	}
 
+	function server_picker()
+	{
+		$res = array();
+		$ret = $this->orb_get_server_list(array());
+		foreach($ret as $id => $dat)
+		{
+			$res[$id] = $dat["name"];
+		}
+		return $res;
+	}
+
 	function orb_get_server_list($arr)
 	{
 		extract($arr);
@@ -373,6 +480,68 @@ class site_list extends class_base
 	{
 		extract($arr);
 		return $this->db_fetch_row("SELECT * FROM aw_site_list WHERE id = '$site_id'");
+	}
+
+	////
+	// !returns all data that we have on the server
+	// parameters:
+	//   server_id - the id of the server whose data is returned
+	function get_server_data($arr)
+	{
+		extract($arr);
+		return $this->db_fetch_row("SELECT * FROM aw_server_list WHERE id = '$server_id'");
+	}
+
+	function change_site($arr)
+	{
+		extract($arr);
+		$this->mk_path(0, html::href(array(
+			'url' => $this->mk_my_orb("site_list"),
+			'caption' => "AW Saitide list"
+		))." / Muuda saiti ");
+		$this->read_template("change.tpl");
+		$sd = $this->get_site_data(array("site_id" => $id));
+		$this->vars($sd);
+		$this->vars(array(
+			"server_id" => $this->picker($sd["server_id"], $this->server_picker()),
+			"site_used" => checked($sd["site_used"]),
+			"reforb" => $this->mk_reforb("submit_change_site", array("id" => $id))
+		));
+		return $this->parse();
+	}
+
+	function submit_change_site($arr)
+	{
+		extract($arr);
+
+		$this->db_query("UPDATE aw_site_list SET name = '$name', url = '$url', server_id = '$server_id', site_used = '$site_used', code_branch = '$code_branch' where id = '$id'");
+
+		return $this->mk_my_orb("change_site", array("id" => $id));
+	}
+
+	function change_server($arr)
+	{
+		extract($arr);
+		$this->mk_path(0, html::href(array(
+			'url' => $this->mk_my_orb("server_list"),
+			'caption' => "AW Serverite list"
+		))." / Muuda serverit ");
+		$this->read_template("change_server.tpl");
+		$sd = $this->get_server_data(array("server_id" => $id));
+		$this->vars($sd);
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_change_server", array("id" => $id))
+		));
+		return $this->parse();
+	}
+
+	function submit_change_server($arr)
+	{
+		extract($arr);
+
+		$this->db_query("UPDATE aw_server_list SET name = '$name', ip = '$ip', comment = '$comment' where id = '$id'");
+
+		return $this->mk_my_orb("change_server", array("id" => $id));
 	}
 }
 ?>

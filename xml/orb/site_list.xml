@@ -49,6 +49,28 @@
 				<required name="site_id"/>
 			</function>
 		</action>
+
+		<action name="change_site">
+			<function name="change_site">
+				<required name="id" type="int"/>
+			</function>
+		</action>
+
+		<action name="submit_change_site">
+			<function name="submit_change_site">
+			</function>
+		</action>
+
+		<action name="change_server">
+			<function name="change_server">
+				<required name="id" type="int"/>
+			</function>
+		</action>
+
+		<action name="submit_change_server">
+			<function name="submit_change_server">
+			</function>
+		</action>
 	</class>
 </orb>
 		
