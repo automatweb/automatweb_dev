@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.14 2002/08/29 03:19:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.15 2002/09/26 16:22:48 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -557,6 +557,10 @@ class css extends aw_template
 				case "lineheight":
 					$mask = "line-height: %s ".$data["lhunits"].";\n";
 					break;
+
+				case "border":
+					$mask = "border-width: %spx;\n";
+					break;
 				
 				default:
 					$ign = true;
@@ -726,6 +730,8 @@ class css extends aw_template
 			"a_hover_style" => $this->picker($css_data["a_hover_style"], $stlist),
 			"a_visited_style" => $this->picker($css_data["a_visited_style"], $stlist),
 			"a_active_style" => $this->picker($css_data["a_active_style"], $stlist),
+			"border" => $css_data["border"],
+			"bordercolor" => $css_data["bordercolor"],
 		));
 		return $this->parse();
 	}
@@ -753,6 +759,8 @@ class css extends aw_template
 		$block["a_hover_style"] = $args["a_hover_style"];
 		$block["a_visited_style"] = $args["a_visited_style"];
 		$block["a_active_style"] = $args["a_active_style"];
+		$block["border"] = $args["border"];
+		$block["bordercolor"] = $args["bordercolor"];
 
 		$oid = $args["oid"];
 		$gid = $args["gid"];
@@ -836,4 +844,5 @@ class css extends aw_template
 		$this->read_template("colorpicker.tpl");
 		die($this->parse());
 	}
+
 };
