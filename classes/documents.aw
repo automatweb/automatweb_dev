@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.2 2001/05/19 23:34:13 duke Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -283,7 +284,7 @@ class db_documents extends aw_template
 		$this->db_query($q);
 		$q = "DELETE FROM objects WHERE oid = '$docid'";
 		$this->db_query($q);
-		$this->log_action(UID,"document"," kustutas objekti $docid");
+		$this->_log("document"," kustutas objekti $docid");
 	}
 
 	// see on lihtsalt wrapper backwards compatibility jaoks
