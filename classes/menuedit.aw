@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.176 2002/11/26 18:35:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.177 2002/11/27 08:30:02 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -4644,7 +4644,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			$tbld = aw_global_get("fg_table_sessions");
 			$ar = new aw_array($tbld[$GLOBALS["tbl_sk"]]);
-			foreach($ag->get() as $url)
+			foreach($ar->get() as $url)
 			{
 				preg_match_all("/restrict_search_yah\[\]=([^&$]*)/",$url,$mt);
 				$this->vars(array(
