@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.46 2003/06/18 16:02:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.47 2003/07/14 14:46:09 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
-classload("acl_base");
+classload("core");
 
-class aw_template extends acl_base
+class aw_template extends core
 {
 	function init($args = array())
 	{

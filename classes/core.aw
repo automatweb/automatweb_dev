@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.208 2003/07/10 12:31:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.209 2003/07/14 14:46:09 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -16,8 +16,8 @@ define("STAT_DELETED", 0);
 define("STAT_NOTACTIVE", 1);
 define("STAT_ACTIVE", 2);
 
-classload("db");
-class core extends db_connector
+classload("acl_base");
+class core extends acl_base
 {
 	var $errmsg;		
 
@@ -1803,14 +1803,6 @@ class core extends db_connector
 		die();
 	}
 
-	////
-	// !returns the default group for the user
-	function get_user_group($uid)
-	{
-		$this->db_query("SELECT * FROM groups WHERE type=1 AND name='$uid'");
-		return $this->db_next();
-	}
-
 	function req_mk_my_orb_part($k,$v, $sep)
 	{
 		$stra = array();
@@ -2529,12 +2521,12 @@ class core extends db_connector
 		if (!is_array($arr[$parent]))
 		{
 			return;
-    		}
+		}
 		$this->_mkah_used[$parent] = true;
 
-    		reset($arr[$parent]);
-    		while (list(,$v) = each($arr[$parent]))
-    		{
+		reset($arr[$parent]);
+		while (list(,$v) = each($arr[$parent]))
+		{
 			$name = $prefix == "" ? $v["name"] : $prefix."/".$v["name"];
 			$ret[$v["oid"]] = $name;
 			if (!$this->_mkah_used[$v["oid"]])

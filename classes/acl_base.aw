@@ -1,13 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.38 2003/06/26 15:30:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.39 2003/07/14 14:46:09 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
 
 lc_load("definition");
 
-classload("core");
-class acl_base extends core
+classload("db");
+class acl_base extends db_connector
 {
 	function sql_unpack_string()
 	{
@@ -295,6 +295,7 @@ class acl_base extends core
 		// stuff all the objects in the cache, because the next query will not 
 		// get a list of objects if they don't have their acl specified
 		$q = "SELECT objects.oid as oid, objects.parent as parent FROM objects $js WHERE ($where)";
+		//echo "q = $q <br>";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
@@ -311,7 +312,7 @@ class acl_base extends core
 										 ORDER BY acl.oid";
 										 //OR isnull(acl.oid)	// seems we don't need these, cause every object is owned by somebody
 										 //OR  isnull(acl.gid)// and therefore will have a record in the acl table. 
-	//	 echo "query: '$q'<br>";
+//		echo "query: '$q'<br>";
 
 		$this->db_query($q);
 		$currobj = array(); 
@@ -570,6 +571,19 @@ class acl_base extends core
 			$ret[] = $row;
 		}
 		return $ret;
+	}
+
+	function init($args = NULL)
+	{
+		parent::init($args);
+	}
+
+	////
+	// !returns the default group for the user
+	function get_user_group($uid)
+	{
+		$this->db_query("SELECT * FROM groups WHERE type=1 AND name='$uid'");
+		return $this->db_next();
 	}
 }
 ?>
