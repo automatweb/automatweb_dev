@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.267 2004/06/21 18:36:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.268 2004/06/25 18:13:31 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -64,59 +64,6 @@ class core extends acl_base
 	// object handling functions - add, change, delete
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 
-	////
-	// !updates the given fields in the object
-	// parameters:
-	//   oid - required, id of the object to update
-	//   any object table field - optional
-	// all parameters must be quoted when entering this function
-	function upd_object($params) 
-	{
-		if (empty($params["oid"]))
-		{
-			$this->raise_error(ERR_CORE_NO_OID, "core::upd_object() - called without an oid!", true, false);
-		};
-
-		if (isset($params["parent"]) && $params["oid"] == $params["parent"])
-		{
-			$this->raise_error(ERR_CORE_NO_OID,"core::upd_object() - object can't be it's own parent",true, false);
-		};
-
-/*		if (!$this->can('edit', $params['oid']) || aw_global_get("uid") == "")
-		{
-			$this->raise_error(ERR_ACL_ERR, "core::upd_object() - no can_edit access for $params[oid]!", true, false);
-		}*/
-
-		$params["modifiedby"] = aw_global_get("uid");
-		// allow overwriting of the modified field. This SHOULD be temporary
-		// but right this is the fastest way to make AM not suck.
-		$params["modified"] = isset($params["modified"]) ? $params["modified"] : time();
-		$params["cachedirty"] = 1;
-		if (isset($params["metadata"]))
-		{
-			$this->dequote(&$params['metadata']);
-			$params["metadata"] = $this->set_object_metadata(array(
-				"oid" => $params["oid"],
-				"data" => $params["metadata"],
-				"no_write" => 1,
-			));
-			$params['metadata'] = aw_serialize($params['metadata']);
-			$this->quote(&$params['metadata']);
-		};
-		$q_parts = array(); // siia sisse paneme päringu osad
-		while(list($k,$v) = each($params)) 
-		{
-			if ($k != "oid" && $k != "no_flush") 
-			{
-				$q_parts[] = " $k = '$v' ";
-			};
-		};
-		$q = " UPDATE objects SET " . join(",",$q_parts) . " WHERE oid = $params[oid] ";
-
-		$this->db_query($q);
-		aw_cache_set("objcache",$params["oid"],"");
-		$this->flush_cache();
-	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	// Objekti metadata handlemine. Seda hoitakse objects tabelis metadata väljas serializetud kujul.

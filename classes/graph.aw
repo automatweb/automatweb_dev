@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.14 2004/06/18 16:20:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.15 2004/06/25 18:13:31 kristo Exp $
 // graph.aw - graafikute haldamine
 
 define("TYPE_PIE",0);
@@ -778,7 +778,8 @@ class graph extends aw_template
 	function save_userdata($ar)
 	{
 		extract($ar);
-		$this->upd_object(array("oid" => $id));
+		$tmp = obj($id);
+		$tmp->save();
 		$dt=$this->quote(serialize($arr));
 		$q="UPDATE graphs SET data = '$dt' WHERE id=$id";
 		$this->db_query($q);
@@ -840,7 +841,10 @@ class graph extends aw_template
 	function save_meta($ar)
 	{
 		extract($ar);
-		$this->upd_object(array("oid" => $id, "name" => $name, "comment" =>  $comment));
+		$tmp = obj($id);
+		$tmp->set_name($name);
+		$tmp->set_comment($comment);
+		$tmp->save();
 		return $this->mk_orb("meta",array("id"=>$id));
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.92 2004/06/18 16:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.93 2004/06/25 18:13:31 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1414,9 +1414,8 @@ topic");
 				VALUES ('$parent','$board','$name','$email','$comment','$subj',
 						$t,'$site_id', '$ip')";
 			};
-			$this->upd_object(array(
-				"oid" => $board,
-			));
+			$tmp = obj($board);
+			$tmp->save();
 
 			$this->db_query($q);
 
@@ -2241,18 +2240,14 @@ topic");
 	function save_topic($arr)
 	{
 		extract($arr);
-		$this->upd_object(array(
-			"oid" => $board,
-			"name" => $topic,
-			// would like to convert it, but the the fsck do I do with last?
-			"last" => $from,
-			"comment" => $comment
-		));
 
 		aw_disable_acl();
 		$o = obj($board);
 		$o->set_meta("author_email", $email);
+		$o->set_name($topic);
+		$o->set_comment($comment);
 		$o->save();
+		aw_restore_acl();
 
 		$pobj = new object($forum_id);
 		if ($pobj->class_id() == CL_DOCUMENT)

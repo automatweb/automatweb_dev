@@ -367,12 +367,14 @@ class basket extends aw_template
 		$basket["of_entry"] = $finst->entry_id;
 		$basket["basket_id"] = $id;
 		$basket["t_price"] = $t_price;
-		$this->upd_object(array(
-			"oid" => $order_id,
-			"name" => $finst->entry_name,
-			"metadata" => $basket,
-			"subclass" => $id					// save the basket id there so that we can query for it later
-		));
+		$tmp = obj($order_id);
+		$tmp->set_name($finst->entry_name);
+		foreach($basket as $k => $v)
+		{
+			$tmp->set_meta($k, $v);
+		}
+		$tmp->set_subcass($id);
+		$tmp->save();
 
 		// write order to db
 		$vurl = $this->mk_my_orb("change", array("id" => $order_id), "basket_order");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.33 2004/06/15 08:53:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.34 2004/06/25 18:13:31 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -309,10 +309,10 @@ class msgboard extends aw_template
 			// if it is under a topic object, update the topic objects modified date if the configuration says so.
 			if ($GLOBALS["msgboard_topic_order_by_last_message"] && is_number($section))
 			{
-				$t_ob = $this->get_object($section);
-				if ($t_ob["class_id"] == CL_MSGBOARD_TOPIC)
+				$t_ob = obj($section);
+				if ($t_ob->class_id() == CL_MSGBOARD_TOPIC)
 				{
-					$this->upd_object(array("oid" => $section));
+					$t_ob->save();
 				}
 			}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.40 2004/06/18 17:24:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.41 2004/06/25 18:13:30 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -210,11 +210,15 @@ class converters extends aw_template
 				$q = "UPDATE menu SET sss = '' WHERE id = '$row[oid]'";
 				$this->db_query($q);
 
-				$this->upd_object(array(
-					"oid" => $row["oid"],
-					"comment" => $comment,
-					"metadata" => $meta,
-				));
+				aw_disable_acl();
+				$tmp = obj($row["oid"]);
+				$tmp->set_comment($comment);
+				$awa = new aw_array($meta);
+				foreach($awa->get() as $k => $v)
+				{
+					$tmp->set_meta($k, $v);
+				}
+				$tmp->save();
 			};
 			print "<pre>";
 			print_r($meta);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.55 2004/06/15 08:50:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.56 2004/06/25 18:13:31 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -580,7 +580,8 @@ class table extends aw_template
 		$q = "UPDATE aw_tables SET contents = '$str' WHERE id = ".$this->table_id;
 		$this->db_query($q);
 					
-		$this->upd_object(array("oid" => $this->table_id));
+		$tmp = obj($this->table_id);
+		$tmp->save();
 	}
 		
 	function save_table_settings($ar)
@@ -597,7 +598,10 @@ class table extends aw_template
 		$this->arr["def_style"] = $def_style;
 
 		$str=serialize($this->arr);
-		$this->upd_object(array("oid" => $this->table_id, "name" => $name, "comment" =>  $comment));
+		$tmp = obj($this->table_id);
+		$tmp->set_name($name);
+		$tmp->set_comment($comment);
+		$tmp->save();
 		
 		$this->db_query("UPDATE aw_tables SET contents = '$str' WHERE id = ".$this->table_id);
 	}

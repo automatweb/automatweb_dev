@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.8 2004/02/25 15:56:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.9 2004/06/25 18:13:31 kristo Exp $
 
 /*
 
@@ -169,10 +169,9 @@ class poll_ng extends class_base
 		};
 
 		// acl will fuck us here :(
-		$this->upd_object(array(
-			"oid" => $poll,
-			"metadata" => array("votes" => $votes),
-		));
+		$tmp = obj($poll);
+		$tmp->set_meta("votes",$votes);
+		$tmp->save();
 		return $this->cfg["baseurl"] . "/$section";
 	}
 };

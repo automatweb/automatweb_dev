@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.94 2004/06/11 08:44:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.95 2004/06/25 18:13:31 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -951,10 +951,9 @@ class menu extends class_base
 			$has_kwd_rels = 0;
 		};
 
-		$this->upd_object(array(
-			"oid" => $id,
-			"metadata" => array("has_kwd_rels" => $has_kwd_rels),
-		));
+		$tmp = obj($id);
+		$tmp->set_meta("has_kwd_rels",$has_kwd_rels);
+		$tmp->save();
 	}
 
 

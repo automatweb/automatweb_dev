@@ -50,9 +50,9 @@ $this->something(array(
 ));
 
 
-$this->upd_object(array(
+$this->that(array(
 	'oid' => $this->object_id,
-	'metadata' => array(
+	'data' => array(
 		'conf' => $conf,
 		'msgconf' => $this->msgconf
 	)

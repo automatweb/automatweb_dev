@@ -394,25 +394,6 @@ class menu_gen extends class_base
 				$made[$name]=array('oid' => $key,'name' => $name);
 			}
 		}
-/*
-		if ($meta['deal_excisting'] || $meta['gen_and_deal'])
-		{
-			foreach($objects as $key => $val)
-			{
-				if ($val['class_id'] == CL_PSEUDO)
-				{
-					continue;
-				}
-				$where_to=$this->assign_catalog($val,$made,$meta['group_by'],$meta['gen_rest_into']); //object,available catalogs,grouping
-				echo "{$val['name']} - $key >> $where_to<br />";
-				if ($where_to)
-				{
-					$this->upd_object(array('oid'=>$key,'parent'=>$where_to));
-					set_time_out(20);
-				}
-			}
-		}
-*/
 		die();
 	}
 }

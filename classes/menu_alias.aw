@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.8 2004/06/15 08:57:09 kristo Exp $
+// $Id: menu_alias.aw,v 2.9 2004/06/25 18:13:31 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -105,15 +105,11 @@ class menu_alias extends aw_template
 		extract($args);
 		if ($id)
 		{
-			$target = $this->get_object($menu);
-			$name = $target["name"];
-			$comment = $target["comment"];
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-				"last" => $menu,
-			));
+			$target = obj($menu);
+			$tmp = obj($id);
+			$tmp->set_name($target->name());
+			$tmp->set_comment($target->comment());
+			$tmp->save();
 		}
 		else
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.267 2004/06/19 20:08:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.268 2004/06/25 18:13:31 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1581,6 +1581,7 @@ class document extends aw_template
 			$data["name"] = $data["title"];
 		};
 
+		$tmp = obj($id);
 		$oq_parts["oid"] = $id;
 
 		while(list($fcap,$fname) = each($obj_known_fields)) 
@@ -1588,11 +1589,14 @@ class document extends aw_template
 			if ($data[$fname]) 
 			{
 				$oq_parts[$fname] = $data[$fname];
+				$fn = "set_".$fname;
+				$tmp->$fn($data[$fname]);
 			};
 		};
 
 		if (not(preg_match("/\W/",$data["alias"])))
 		{
+			$tmp->set_alias($data["alias"]);
 			$oq_parts["alias"] = $data["alias"];
 		};
 
@@ -1605,13 +1609,12 @@ class document extends aw_template
 		// nih, updateme objekti metadata ka 2ra.
 		foreach($this->metafields as $m_name => $m_key)
 		{
+			$tmp->set_meta($m_key,$data[$m_key]); 
 			$metadata[$m_key] = $data[$m_key];
 		}
 
 		$metadata["plugins"] = $data["plugins"];
 		$oq_parts["metadata"] = $metadata;
-
-		$this->upd_object($oq_parts);
 
 		// uuendame vennastatud dokude nimed ka
 		if ($old["brother_of"])
