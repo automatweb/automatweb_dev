@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.136 2002/07/17 05:10:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.137 2002/07/17 20:27:29 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1035,6 +1035,16 @@ class menuedit extends aw_template
 		{
 			$names[] = $this->menu_chain[$val]["name"];
 		};
+
+		if ($GLOBALS["tbl_sk"] != "")
+		{
+			$tbld = aw_global_get("fg_table_sessions");
+			foreach($tbld[$GLOBALS["tbl_sk"]] as $url)
+			{
+				preg_match("/restrict_search_val=([^&$]*)/",$url,$mt);
+				$names[] = urldecode($mt[1]);
+			}
+		}
 
 		$log = join(" / ",$names);
 		$this->do_syslog_core($log,$section);
@@ -4979,14 +4989,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		if ($GLOBALS["tbl_sk"] != "")
 		{
 			$tbld = aw_global_get("fg_table_sessions");
+//			echo "truu <pre>", var_dump($tbld[$GLOBALS["tbl_sk"]]),"</pre><br>";
 			foreach($tbld[$GLOBALS["tbl_sk"]] as $url)
 			{
-				preg_match("/restrict_search_val=([^&$]*)/",$url,$mt);
+//				echo "url = $url <br>";
+				preg_match_all("/restrict_search_val\[\]=([^&$]*)/",$url,$mt);
 				$this->vars(array(
 					"link" => $url,
-					"text" => urldecode($mt[1])
+					"text" => urldecode($mt[1][count($mt[1])-1])
 				));
-				$ya.=$this->parse("YAH_LINK");
+				if (urldecode($mt[1][count($mt[1])-1]) != "")
+				{
+					$ya.=$this->parse("YAH_LINK");
+				}
 			}
 		}
 		return $ya;
