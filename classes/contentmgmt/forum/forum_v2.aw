@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.39 2004/09/09 20:33:59 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.40 2004/10/26 18:51:35 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1029,14 +1029,14 @@ class forum_v2 extends class_base
 
 	function callback_gen_add_topic($args = array())
 	{
-		$t = get_instance("contentmgmt/forum/forum_topic");
+		$t = get_instance(CL_MSGBOARD_TOPIC);
 		$t->init_class_base();
 		$emb_group = "general";
 		if ($this->event_id && $args["request"]["cb_group"])
 		{
 			$emb_group = $args["request"]["cb_group"];
 		};
-		$all_props = $t->get_active_properties(array(
+		$all_props = $t->get_property_group(array(
 			"group" => $emb_group,
 		));
 
@@ -1055,7 +1055,7 @@ class forum_v2 extends class_base
 	
 	function callback_gen_add_comment($args = array())
 	{
-		$t = get_instance("contentmgmt/forum/forum_comment");
+		$t = get_instance(CL_COMMENT);
 		$t->init_class_base();
 		$emb_group = "general";
 		if ($this->event_id && $args["request"]["cb_group"])
@@ -1063,7 +1063,7 @@ class forum_v2 extends class_base
 			$emb_group = $args["request"]["cb_group"];
 		};
 
-		$all_props = $t->get_active_properties(array(
+		$all_props = $t->get_property_group(array(
 			"group" => $emb_group,
 		));
 		
@@ -1109,10 +1109,11 @@ class forum_v2 extends class_base
 				"class_id" => CL_MSGBOARD_TOPIC,
 				"status" => STAT_ACTIVE,
 			));	
-			for ($topic = $topic_list->begin(); !$topic_list->end(); $topic = $topic_list->next())
+			foreach ($topic_list->arr() as $topic)
 			{
-				$topic_count[$topic->parent()]++;
-				$tlist[$topic->parent()][] = $topic->id();
+				$parent = $topic->parent();
+				$topic_count[$parent]++;
+				$tlist[$parent][] = $topic->id();
 			};
 		};
 		return array($topic_count,$tlist);
@@ -1204,16 +1205,17 @@ class forum_v2 extends class_base
 		$litems = $this->ot->level($arr["parent"]);
 		foreach($litems as $item)
 		{
+			$id = $item->id();
 			$this->vars(array(
 				"caption" => $item->name(),
-				"id" => $item->id(),
+				"id" => $id,
 				"spacer" => str_repeat("&nbsp;",$level*3),
-				"exclude" => checked($this->exclude[$item->id()]),
-				"exclude_subs" => checked($this->exclude_subs[$item->id()]),
+				"exclude" => checked($this->exclude[$id]),
+				"exclude_subs" => checked($this->exclude_subs[$id]),
 			));
 			$this->rv .= $this->parse("ITEM");
 			$level++;
-			$this->_do_rec_topic(array("parent" => $item->id()));
+			$this->_do_rec_topic(array("parent" => $id));
 			$level--;
 		};
 	}
