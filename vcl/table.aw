@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.38 2003/01/15 14:12:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.39 2003/01/27 18:27:19 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -572,11 +572,12 @@ class aw_table
 					}
 						
 					// moodustame celli
+					$rowspan = $this->actionrows ? $this->actionrows : $rowspan;
 					$tbl .= $this->opentag(array(
 						"name"    => "td",
 						"classid" => $style,
 						"width" => $v1["width"],
-						"rowspan" => ($this->actionrows ? $this->actionrows : $rowspan),
+						"rowspan" => ($rowspan > 1) ? $rowspan : 0,
 						"style" => (($v1["chgbgcolor"] && $v[$v1["chgbgcolor"]]) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
 						"align" => ($v1["align"] ? $v1["align"] : ""),
 						"valign" => ($v1["valign"] ? $v1["valign"] : ""),
@@ -773,7 +774,7 @@ class aw_table
 			{
 				$attribs["name"] = $v;
 			} 
-			else 
+			elseif($v)
 			{
 				$attribs[$k] = $v;
 			};
