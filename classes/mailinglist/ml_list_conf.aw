@@ -1,197 +1,236 @@
 <?php
+/*
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+	@default group=general
+	
+	@property user_form type=select multiple=1 size=10
+	@caption Kasutaja lisamise vorm
 
-class ml_list_conf extends aw_template
+	@property user_search_form type=select
+	@caption Kasutaja otsimise vorm
+
+	@property folders type=select multiple=1 size=20
+	@caption Root kataloogid
+
+	@property form_jrk type=callback callback=callback_gen_form_jrk_list editonly=1
+	@caption Vormide järjekord listi liikme lisamisel
+
+	@property name_els type=callback callback=callback_gen_name_list editonly=1
+	@caption Vali elemendid, mille väärtus pannakse listi liikme objekti nimeks
+
+	@property mailto_el type=select editonly=1
+	@caption Element, kus on meiliaadress
+
+*/
+
+class ml_list_conf extends class_base
 {
 	function ml_list_conf()
 	{
-		$this->init("mailinglist/ml_list_conf");
-	}
-
-	////
-	// !called, when adding a new object 
-	// parameters:
-	//    parent - the folder under which to add the object
-	//    return_url - optional, if set, the "back" link should point to it
-	//    alias_to - optional, if set, after adding the object an alias to the object with oid alias_to should be created
-	function add($arr)
-	{
-		extract($arr);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa ml_list_conf");
-		}
-		else
-		{
-			$this->mk_path($parent,"Lisa ml_list_conf");
-		}
-		$this->read_template("change.tpl");
-
-		$finst = get_instance("formgen/form");
-		$tb = get_instance("toolbar");
-		$tb->add_button(array(
-			"name" => "save",
-			"tooltip" => "Salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif"
+		$this->init(array(
+			"tpldir" => "mailinglist/ml_list_conf",
+			"clid" => CL_ML_LIST_CONF,
 		));
 
-		$this->vars(array(
-			"toolbar" => $tb->get_toolbar(),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url)),
-			"forms" => $this->mpicker(array(), $finst->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true))),
-			"search_forms" => $this->picker(0, $finst->get_flist(array("type" => FTYPE_SEARCH, "addempty" => true, "addfolders" => true, "sort" => true))),
-			"folders" => $this->mpicker(array(), $this->get_menu_list())
-		));
-		return $this->parse();
+		$this->finst = get_instance("formgen/form");
 	}
 
-	////
-	// !this gets called when the user submits the object's form
-	// parameters:
-	//    id - if set, object will be changed, if not set, new object will be created
-	function submit($arr)
+	function get_property($args = array())
 	{
-		extract($arr);
-		if ($id)
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
 		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
-			));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_ML_LIST_CONF
-			));
-		}
+			case "user_form":
+				$data["options"] = $this->finst->get_flist(array(
+					"type" => FTYPE_ENTRY,
+					 "addempty" => true,
+					 "addfolders" => true,
+					 "sort" => true,
+				));
+				break;
+			
+			case "user_search_form":
+				$data["options"] = $this->finst->get_flist(array(
+					"type" => FTYPE_SEARCH,
+					"addempty" => true,
+					"addfolders" => true,
+					"sort" => true,
+				));
+				break;
 
-		$user_form = $this->make_keys($user_form);
-		if ($mailto_el)
-		{
-			foreach($user_form as $ufid)
-			{
-				$finst = get_instance("formgen/form");
-				$finst->load($ufid);
-				if (is_object($finst->get_element_by_id($mailto_el)))
+			case "folders":
+				$data["options"] = $this->get_menu_list();
+				break;
+
+			case "mailto_el":
+				$data["options"] = $this->_get_user_form_elements($args["obj"]["meta"]["user_form"]);
+				break;
+
+
+		}
+		return $retval;
+	}
+
+	function set_property($args = array())
+	{
+                $data = &$args["prop"];
+                $retval = PROP_OK;
+                switch($data["name"])
+                {
+			case "name_els":
+				$metadata = &$args["metadata"];
+				$metadata["name_els_ord"] = $args["form_data"]["name_els_ord"];
+				$metadata["name_els_post"] = $args["form_data"]["name_els_post"];
+				break;
+
+			case "mailto_el":
+				$mailto_el = $args["prop"]["value"];
+				$mailto_el_form = "";
+				foreach($args["form_data"]["user_form"] as $ufid)
 				{
-					$mailto_el_form = $ufid;
-					break;
+					$this->finst->load($ufid);
+					if (is_object($this->finst->get_element_by_id($mailto_el)))
+					{
+						$mailto_el_form = $ufid;
+						break;
+					}
+				}
+				if ($mailto_el_form)
+				{
+					$metadata = &$args["metadata"];
+					$metadata["mailto_el_form"] = $mailto_el_form;
+				};
+				break;
+
+		};
+		return $retval;
+	}
+
+
+
+	////
+	// !Since at least 2 different properties need this, I made it a separate function
+	// $arr - the contents of $obj["meta"]["user_form"]
+	function _get_user_form_elements($arr)
+	{
+		if (!is_array($this->user_form_elements))
+		{
+			$this->user_form_elements = array();
+			$ar = new aw_array($arr);
+			foreach($ar->get() as $fid)
+			{
+				$ml = $this->finst->get_form_elements(array(
+					"id" => $fid,
+					"key" => "id",
+					"all_data" => false,
+				));
+
+				foreach($ml as $k => $v)
+				{
+					$this->user_form_elements[$k] = $v;
 				}
 			}
-		}
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => array(
-				"user_form" => $user_form,
-				"user_search_form" => $user_search_form,
-				"folders" => $this->make_keys($folder),
-				"name_els" => $this->make_keys($name_els),
-				"form_jrk" => $jrk,
-				"mailto_el" => $mailto_el,
-				"mailto_el_form" => $mailto_el_form,
-				"name_els_ord" => $name_els_ord,
-				"name_els_post" => $name_els_post,
-			)
-		));
-
-		if ($alias_to)
-		{
-			$this->add_alias($alias_to, $id);
-		}
-
-		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
+		};
+		return $this->user_form_elements;
 	}
 
-	////
-	// !this gets called when the user clicks on change object 
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
-	function change($arr)
+	function callback_gen_form_jrk_list($args = array())
 	{
-		extract($arr);
-		$ob = $this->get_object($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda ml_list_conf");
-		}
-		else
-		{
-			$this->mk_path($ob["parent"], "Muuda ml_list_conf");
-		}
-		$this->read_template("change.tpl");
-	
-		$finst = get_instance("formgen/form");
-		$flist = $finst->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true));
-		$s_flist = $finst->get_flist(array("type" => FTYPE_SEARCH, "addempty" => true, "addfolders" => true, "sort" => true));
-
-		$elements = array();
-
-		$f = "";
-		$ar = new aw_array($ob["meta"]["user_form"]);
+		$flist = $this->finst->get_flist(array(
+			"type" => FTYPE_ENTRY,
+			"addempty" => true,
+			"addfolders" => true,
+			"sort" => true,
+		));
+		// yah, I know this is not very portable (to other output clients)
+		// but right now I have no means to create those rather simple tables
+		$this->read_template("pieces.tpl");
+		$retval = array();
+		$ar = new aw_array($args["obj"]["meta"]["user_form"]);
+		$clist = "";
 		foreach($ar->get() as $fid)
 		{
-			$ml = $finst->get_form_elements(array("id" => $fid, "key" => "id", "all_data" => false));
-			foreach($ml as $k => $v)
-			{
-				$elements[$k] = $v;
-			}
-
 			$this->vars(array(
 				"form" => $flist[$fid],
-				"form_id" => $fid, 
-				"jrk" => $ob["meta"]["form_jrk"][$fid]
+				"jrkbox" => html::textbox(array(
+					"name" => "form_jrk[$fid]",
+					"value" => $args["obj"]["meta"]["form_jrk"][$fid],
+					"size" => 2,
+					"maxlength" => 2,
+				)),
 			));
-			$f.=$this->parse("FORM");
-		}
+			$clist .= $this->parse("FORM");
+		};
 
-		$e = "";
-		foreach($elements as $elid => $eln)
+		$this->vars(array(
+			"FORM" => $clist,
+		));
+
+		$tmp = array(
+			"type" => "text",
+			"caption" => $args["prop"]["caption"],
+			"group" => $args["prop"]["group"],
+			"value" => $this->parse("FORMS"),
+		);
+		return array($args["prop"]["name"] => $tmp);
+	}
+	
+	function callback_gen_name_list($args = array())
+	{
+		$clist = "";
+		$this->read_template("pieces.tpl");
+		$meta = $args["obj"]["meta"];
+		foreach($this->_get_user_form_elements($meta["user_form"]) as $elid => $eln)
 		{
+			$ordbox = $sepbox = "";
+			if (isset($meta["name_els"][$elid]))
+			{
+				$ordbox = html::textbox(array(
+					"name" => "name_els_ord[$elid]",
+					"value" => $meta["name_els_ord"][$elid],
+					"size" => 5,
+					"maxlength" => 5,
+				));
+
+				$sepbox = html::textbox(array(
+					"name" => "name_els_post[$elid]",
+					"value" => $meta["name_els_post"][$elid],
+					"size" => 5,
+					"maxlength" => 5,
+				));
+
+				
+			};
+
+			$checkbox = html::checkbox(array(
+				"name" => "name_els[$elid]",
+				"value" => $elid,
+				"checked" => isset($meta["name_els"][$elid]),
+			));
+
 			$this->vars(array(
 				"elname" => $eln,
 				"elid" => $elid,
-				"is_name_el" => checked($ob["meta"]["name_els"][$elid]),
-				"ord" => $ob['meta']['name_els_ord'][$elid],
-				"post" => $ob['meta']['name_els_post'][$elid]
+				"is_name_el" => checked($meta["name_els"][$elid]),
+				"checkbox" => $checkbox,
+				"ordbox" => $ordbox,
+				"sepbox" => $sepbox,
 			));
-			$this->vars(array(
-				"EL_ORD" => ($ob["meta"]["name_els"][$elid] ? $this->parse("EL_ORD") : ""),
-				"EL_SEP" => ($ob["meta"]["name_els"][$elid] ? $this->parse("EL_SEP") : "")
-			));
-			$e.= $this->parse("ELEMENT");
+			$clist .= $this->parse("ELEMENT");
 		}
 		$this->vars(array(
-			"FORM" => $f,
-			"ELEMENT" => $e,
-			"mailto_el" => $this->picker($ob["meta"]["mailto_el"], $elements)
+			"ELEMENT" => $clist,
 		));
-
-		$tb = get_instance("toolbar");
-		$tb->add_button(array(
-			"name" => "save",
-			"tooltip" => "Salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif"
-		));
-
-		$this->vars(array(
-			"toolbar" => $tb->get_toolbar(),
-			"CHANGE" => $this->parse("CHANGE"),
-			"name" => $ob["name"],
-			"forms" => $this->mpicker($ob["meta"]["user_form"], $flist),
-			"search_forms" => $this->picker($ob["meta"]["user_search_form"], $s_flist),
-			"folders" => $this->mpicker($ob["meta"]["folders"], $this->get_menu_list()),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
-		));
-
-		return $this->parse();
+		$tmp = array(
+			"type" => "text",
+			"caption" => $args["prop"]["caption"],
+			"group" => $args["prop"]["group"],
+			"value" => $this->parse("ELEMENTS"),
+		);
+		return array($args["prop"]["name"] => $tmp);
 	}
 
 	////
