@@ -13,8 +13,8 @@ class mail_protector
 		}
 		</script>
 		";
-		$repl = "<script language=\"javascript\">aw_proteml(\"\\1\",\"\\2\");</script><noscript>\\1<img src='".aw_ini_get("baseurl")."/automatweb/images/at.png' alt='@' style='vertical-align: middle;'/>\\2</noscript>";
-		$str = preg_replace("/[\s|^|>]([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/",$repl, $str);
+		$repl = "\\1<script language=\"javascript\">aw_proteml(\"\\2\",\"\\3\");</script><noscript>\\2<img src='".aw_ini_get("baseurl")."/automatweb/images/at.png' alt='@' style='vertical-align: middle;'/>\\3</noscript>";
+		$str = preg_replace("/([\s|^|>])([-.a-zA-Z0-9_]*)@([-.a-zA-Z0-9_]*)/",$repl, $str);
 		return $str;
 	}
 }
