@@ -19,6 +19,7 @@ class xmlrpc extends aw_template
 			echo "sending request = <pre>", htmlspecialchars($xml),"</pre> <br>";
 		}
 
+		$this->no_errors = $arr["no_errors"];
 		$resp = $this->send_request(array(
 			"server" => $arr["remote_host"],
 			"port" => 80,
@@ -76,7 +77,14 @@ class xmlrpc extends aw_template
 		$err = xml_get_error_code($parser);
 		if ($err)
 		{
-			$this->raise_error(ERR_XML_PARSER_ERROR,"Viga XML-RPC p2ringu vastuse dekodeerimisel: ".xml_error_string($err)."!", true,false);
+			if ($this->no_errors)
+			{
+				return false;
+			}
+			else
+			{
+				$this->raise_error(ERR_XML_PARSER_ERROR,"Viga XML-RPC p2ringu vastuse dekodeerimisel: ".xml_error_string($err)."!", true,false);
+			}
 		}
 		xml_parser_free($parser); 
 
