@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.3 2003/05/07 12:01:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.4 2003/05/12 17:01:45 duke Exp $
 define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
@@ -150,7 +150,7 @@ class admin_folders extends aw_template
 		if ($this->cfg["per_oid"])
 		{
 			$tb = get_instance("toolbar");
-			$dbp = get_instance("periods",$this->cfg["per_oid"]);
+			$dbp = get_instance("period",$this->cfg["per_oid"]);
 			$act_per_id = $dbp->get_active_period();
 			$dbp->clist();
 			$pl = array();
@@ -174,11 +174,11 @@ class admin_folders extends aw_template
 				{
 					if ($pl[$i]["id"] == $act_per_id)
 					{
-						$ar[$pl[$i]["id"]] = $pl[$i]["description"].MN_ACTIVE;
+						$ar[$pl[$i]["id"]] = $pl[$i]["name"].MN_ACTIVE;
 					}
 					else
 					{
-						$ar[$pl[$i]["id"]] = $pl[$i]["description"];
+						$ar[$pl[$i]["id"]] = $pl[$i]["name"];
 					}
 				}
 			}
