@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.13 2004/10/28 09:37:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.14 2004/11/04 10:27:56 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -512,10 +512,14 @@ class cb_search extends class_base
 					$row = $o->properties();
 					foreach($classfps as $classfp)
 					{
-						if (is_oid($row[$classfp]))
+						if (is_oid($row[$classfp]) && $this->can("view", $row[$classfp]))
 						{
 							$tmp = obj($row[$classfp]);
 							$row[$classfp] = $tmp->name();
+						}
+						else
+						{
+							$row[$classfp] = "";
 						}
 					}
 
