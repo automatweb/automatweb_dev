@@ -667,6 +667,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		if ($where != "")
 		{
 			$q = "SELECT objects.oid as oid,objects.name as name FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
+
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
