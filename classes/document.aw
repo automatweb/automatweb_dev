@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.73 2002/01/07 13:52:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.74 2002/01/08 02:08:02 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -1880,7 +1880,7 @@ class document extends aw_template
 		$arc = new archive();
 		$t = new aw_table(array(
 					"prefix" => "mailbox",
-					"imgurl"    => $GLOBALS["baseurl"]."/img",
+					"imgurl"    => $GLOBALS["baseurl"]."/images",
           "tbgcolor" => "#C3D0DC",
 				));
 
@@ -2202,7 +2202,7 @@ class document extends aw_template
 			$this->mk_path($al["parent"],"<a href='pickobject.$ext?docid=$docid&parent=".$al["parent"]."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");
 			return $this->select_alias($id, $alias);
 		} 
-		elseif ($obj["class_id"] == CL_DOCUMENT)
+		elseif ($al["class_id"] == CL_OBJECT_CHAIN)
 		{
 			classload("object_chain");
 			$oc = new object_chain();
