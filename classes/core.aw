@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.107 2002/09/09 15:42:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.108 2002/09/19 15:12:52 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -255,7 +255,7 @@ class core extends db_connector
 		if (aw_ini_get("syslog.has_site_id") == 1)
 		{
 			$fields[] = "site_id";
-      $values[] = aw_ini_get("site_id");
+      $values[] = $this->cfg["site_id"];
 		};
 		$q = sprintf("INSERT DELAYED INTO syslog (%s) VALUES (%s)",join(",",$fields),join(",",map("'%s'",$values)));
 
@@ -349,12 +349,12 @@ class core extends db_connector
 	{
 		if ($format != 0)
 		{
-			$dateformats = aw_ini_get("config.dateformats");
+			$dateformats = $this->cfg["config"]["dateformats"];
 			$dateformat = $dateformats[$format];
 		}
 		else
 		{
-			$dateformat = aw_ini_get("config.default_dateformat");
+			$dateformat = $this->cfg["config"]["default_dateformat"];
 		}
 
 		return ($timestamp) ? date($dateformat,$timestamp) : date($dateformat);
@@ -375,12 +375,6 @@ class core extends db_connector
 		{
 			return false;
 		};
-		/*
-		if (aw_ini_get("lang_menus") == 1)
-		{
-			$ss = " AND lang_id = ".aw_global_get("lang_id");
-		};
-		*/
 		if ($parent)
 		{
 			$ps = " AND parent = $parent ";
@@ -433,7 +427,7 @@ class core extends db_connector
 			"created" => time(),
 			"modifiedby" => aw_global_get("uid"),
 			"modified" => time(),
-			"site_id" => aw_ini_get("site_id"),
+			"site_id" => $this->cfg["site_id"],
 		);
 
 		if (!$arr["lang_id"])
@@ -514,16 +508,6 @@ class core extends db_connector
 			WHERE $where";
 		$this->_log("OBJECT",sprintf(LC_CORE_TO_ERASED,$oid));
 		$this->db_query($q);
-
-		//magistrali korral võtan javaga yhendust
-		if (aw_ini_get("acl.use_server") == 1)
-		{
-			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
-			//teatan, et user kustutati saidilt 
-			$str="6 12 blah ".$oid."\n";
-			fputs($acl_server_socket,$str);
-			fclose($acl_server_socket);
-		}
 	}
 
 	///
@@ -1403,7 +1387,7 @@ class core extends db_connector
 
 		$this->_log("error",$msg);	
 		// meilime veateate listi ka
-		$subj = "Viga saidil ".aw_ini_get("baseurl");
+		$subj = "Viga saidil ".$this->cfg["baseurl"];
 		header("X-AW-Error: 1");
 		$content = "\nVeateade: ".$msg;
 		$content.= "\nKood: ".$err_type;
@@ -1412,7 +1396,7 @@ class core extends db_connector
 		$content.= "lang_id = ".aw_global_get("lang_id")."\n";
 		$content.= "uid = ".aw_global_get("uid")."\n";
 		$content.= "section = ".$GLOBALS["section"]."\n";
-		$content.= "url = ".aw_ini_get("baseurl").aw_global_get("REQUEST_URI")."\n-----------------------\n";
+		$content.= "url = ".$this->cfg["baseurl"].aw_global_get("REQUEST_URI")."\n-----------------------\n";
 		global $HTTP_COOKIE_VARS;
 		foreach($HTTP_COOKIE_VARS as $k => $v)
 		{
@@ -1793,7 +1777,7 @@ class core extends db_connector
 		}
 		else
 		{
-			$url = "orb.".aw_ini_get("ext")."?class=$cl_name&action=$fun&$urs";
+			$url = "orb.".$this->cfg["ext"]."?class=$cl_name&action=$fun&$urs";
 		};
 			
 		return $url;
@@ -1812,7 +1796,7 @@ class core extends db_connector
 			$args["class"] = get_class($this);
 		};
 		$arguments = join("&",$this->map2("%s=%s",$args));
-		$retval = aw_ini_get("baseurl") . "/?" . $arguments;
+		$retval = $this->cfg["baseurl"] . "/?" . $arguments;
 		return $retval;
 	}
 
@@ -1864,14 +1848,14 @@ class core extends db_connector
 		$use = true;
 		while (list(,$row) = each($ch))
 		{
-			if ($row["oid"] == aw_ini_get("admin_rootmenu2"))
+			if ($row["oid"] == $this->cfg["admin_rootmenu2"])
 			{
 				$use = false;
 			}
 			if ($use)
 			{
 				$name = ($row["name"]) ? $row["name"] : "(nimetu)";
-				$path="<a href='".$this->mk_my_orb("obj_list", array("parent" => $row["oid"],"period" => $period),"menuedit")."'>".$name."</a> / ".$path;
+				$path="<a href='".$this->mk_my_orb("right_frame", array("parent" => $row["oid"],"period" => $period),"menuedit")."'>".$name."</a> / ".$path;
 			}
 		}
 
@@ -1908,7 +1892,7 @@ class core extends db_connector
 			$use = true;
 			while (list(,$row) = each($ch))
 			{
-				if ($row["oid"] == aw_ini_get("admin_rootmenu2"))
+				if ($row["oid"] == $this->cfg["admin_rootmenu2"])
 				{
 					$use = false;
 				}
@@ -2150,7 +2134,7 @@ class core extends db_connector
 		}
 
 		// for better debugging
-		$fullpath = aw_ini_get("basedir")."/lang/" . $admin_lang_lc . "/$file.".aw_ini_get("ext");
+		$fullpath = $this->cfg["basedir"]."/lang/" . $admin_lang_lc . "/$file.".$this->cfg["ext"];
 		@include_once($fullpath);
 
 		if (is_array($GLOBALS[$arr_name]))
