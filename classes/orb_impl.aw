@@ -12,7 +12,12 @@ if (!is_array($_POST))
 	$_POST = $HTTP_POST_VARS;
 };
 
-$vars = array_merge($_GET,$_POST,$AW_GET_VARS);
+//$vars = array_merge($_GET,$_POST,$AW_GET_VARS);
+if (!is_array($AW_GET_VARS))
+{
+	$AW_GET_VARS = array();
+};
+$vars = $_GET + $_POST + $AW_GET_VARS;
 
 $class = $vars["class"];
 $action = $vars["action"];
