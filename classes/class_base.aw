@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.363 2005/02/14 10:25:38 kristo Exp $
+// $Id: class_base.aw,v 2.364 2005/02/15 09:42:00 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2919,8 +2919,8 @@ class class_base extends aw_template
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
 			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
-			$cf = get_instance("cfg/cfgform");
-			$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
+			//$cf = get_instance("cfg/cfgform");
+			//$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
 		};
 		
 		$res = array();
@@ -3122,7 +3122,6 @@ class class_base extends aw_template
 		$tmp = array();
 
 		$this->stop_processing = false;
-
 		// first, gather all the values.
 		foreach($properties as $key => $property)
 		{
@@ -3215,7 +3214,7 @@ class class_base extends aw_template
 			$controllers = $this->get_all_controllers($args["cfgform"]);
 		}
 		*/
-		
+
 		// now do the real job.
 		foreach($realprops as $key => $property)
 		{
@@ -4020,7 +4019,7 @@ class class_base extends aw_template
 			$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
 			$property_groups[$key] = $propgroups;
 		};
-
+//$tmp = array();
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
@@ -4074,11 +4073,9 @@ class class_base extends aw_template
 
 			// shouldn't I do some kind of overriding?
 			$tmp[$key] = $propdata;
-
 		};
 
 		$this->use_group = $use_group;
-
 		return $tmp;
 
 
