@@ -10,9 +10,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property show type=text field=meta method=serialize group=view no_caption=1
 
 */
