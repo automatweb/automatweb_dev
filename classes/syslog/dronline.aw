@@ -156,7 +156,7 @@ class dronline extends class_base
 
 		$tbp->add_tab(array(
 			'active' => ($dro_tab == 'dronline' ? true : false),
-			'caption' => 'DR. Online',
+			'caption' => 'Online',
 			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'dronline')))
 		));
 
