@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.4 2001/05/30 01:53:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.5 2001/05/30 02:49:59 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -58,6 +58,29 @@ class file extends aw_template
 					"content" => $args["content"],
 			));
 		return $file;
+	}
+
+	////
+	// !Votab faili andmebaasist ja näitab seda kasutajale
+	// argumendid:
+	// id(int) - faili id
+	function get($args = array())
+	{
+		extract($args);
+		$q = "SELECT * FROM files WHERE id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		$fname = $row["file"];
+		$prefix = substr($fname,0,1);
+		$file = SITE_DIR . "/files/" . $prefix . "/" . "$fname";
+		$contents = $this->get_file(array(
+						"file" => $file,
+			));
+		$retval = array(
+				"type" => $row["type"],
+				"file" => $contents,
+			);
+		return $retval;
 	}
 
 	////
