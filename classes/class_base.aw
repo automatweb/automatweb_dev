@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.131 2003/07/08 09:28:45 axel Exp $
+// $Id: class_base.aw,v 2.132 2003/07/08 10:29:04 axel Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1566,6 +1566,8 @@ class class_base extends aw_template
 		$this->request = $args;
 
 		$this->id = $args["id"];
+		$obj = $this->get_object($this->id);
+		$this->toolbar_type = ((isset($obj['meta']['use_menubar']) && ($obj['meta']['use_menubar'] == '1')) ? 'menubar' : 'tabs');
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
@@ -1608,7 +1610,11 @@ class class_base extends aw_template
 			"id" => $args["id"],
 		));
 		$this->request = $args;
-		
+
+		$obj = $this->get_object($args["id"]);
+		$this->toolbar_type = ((isset($obj['meta']['use_menubar']) && ($obj['meta']['use_menubar'] == '1')) ? 'menubar' : 'tabs');
+
+
 		$reltypes = $this->get_rel_types();
 		
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
