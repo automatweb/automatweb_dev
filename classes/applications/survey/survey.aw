@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.3 2004/06/17 14:32:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey.aw,v 1.4 2004/10/28 11:34:04 duke Exp $
 // survey.aw - Ankeet 
 /*
 
@@ -85,6 +85,9 @@
 @property utext8 type=textbox
 @caption utext8
 
+@property sbt type=submit 
+@caption Submit
+
 @reltype OWNER value=1 clid=CL_USER
 @caption Omanik
 
@@ -121,10 +124,10 @@ class survey extends class_base
 	}
 	*/
 
-	/*
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
+		//$retval = PROP_FATAL_ERROR;
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
@@ -132,26 +135,25 @@ class survey extends class_base
 		}
 		return $retval;
 	}	
-	*/
 	
 	function callback_pre_save($arr)
 	{
 		// create a name for the object
 		// XXX: make it configurable which fields make up the object name
-		$newname = $arr["request"]["utext1"] . " " . $arr["request"]["utext2"];
-		$arr["obj_inst"]->set_name($newname);
+		//$newname = $arr["request"]["utext1"] . " " . $arr["request"]["utext2"];
+		//$arr["obj_inst"]->set_name($newname);
 	}
 
 	function callback_mod_retval($arr)
 	{
-		$arr["args"]["goto"] = aw_ini_get("baseurl") . "/" . $arr["args"]["redirect_to"];
+		//$arr["args"]["goto"] = aw_ini_get("baseurl") . "/" . $arr["args"]["redirect_to"];
 	}
 
 	function callback_post_save($arr)
 	{
+		/*
 		$users = get_instance("users");
 		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-		// connect to the user, if this was a new survey
 		if ($arr["new"])
 		{
 			$arr["obj_inst"]->connect(array(
@@ -159,6 +161,7 @@ class survey extends class_base
 				"reltype" => RELTYPE_OWNER,
 			));
 		};
+		*/
 
 	}
 
