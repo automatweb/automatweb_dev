@@ -200,5 +200,22 @@
                   <master_index>oid</master_index>
             </menu>
       </tableinfo>
+      <reltypes>
+            <ASSIGNED_MENU>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>näita menüü juures</caption>
+            </ASSIGNED_MENU>
+            <DOC_SOURCE>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>võta dokumente selle menüü alt</caption>
+            </DOC_SOURCE>
+            <IMAGE>
+                  <value>3</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt</caption>
+            </IMAGE>
+      </reltypes>
 </properties>
 
