@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.4 2002/11/07 23:03:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.5 2002/12/03 13:00:32 kristo Exp $
 // aw_orb.aw - new and improved ORB
 
 class aw_orb extends aw_template
@@ -152,7 +152,7 @@ class aw_orb extends aw_template
 		}
 		else
 		{
-			$contents = get_file(array("file" => $src_f));
+			$contents = $this->get_file(array("file" => $src_f));
 			$cb_class = $unserializer[0];
 			$cb_method = $unserializer[1];
 			$cb_arg = $unserializer[2];

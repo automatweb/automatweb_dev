@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.67 2002/12/03 12:52:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.68 2002/12/03 13:00:32 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -268,36 +268,6 @@ if (!defined("DEFS"))
 			{
 				$retval[] = sprintf($format,$array);
 			};
-		};
-		return $retval;
-	}
-
-	function jerk_alert($contents) 
-	{
-		$to = "log@struktuur.ee";
-		$subject = "Jerk alert!";
-		$headers = "From: AK veebiserver <nobody@heaven.eestiajakirjad.ee>";
-		mail($to,$subject,$contents,$headers);
-	};
-
-	////
-	// !hiljem voib siia turvakontrolli kylge ehitada
-	function get_file($arr)
-	{
-		if (!$arr["file"])
-		{
-			die("defs->get_file was called without filename");
-		};
-
-		if (!($fh = @fopen($arr["file"],"r")))
-		{
-			$retval = false;
-			die("Couldn't open file '$arr[file]'");
-		}
-		else
-		{
-			$retval = fread($fh,filesize($arr["file"])); // SLURP
-			fclose($fh);
 		};
 		return $retval;
 	}

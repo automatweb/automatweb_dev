@@ -1,8 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.7 2002/12/02 17:57:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.8 2002/12/03 13:00:34 kristo Exp $
 // xmlmenu.aw - xml-i ja aw_template abil menüüde genereerimise skript
 classload("defs");
-class xmlmenu {
+class xmlmenu
+{
 	// konstruktor
 	// argumendid
 	// xmldef(text) - menüü definitsioon, XML-is
@@ -56,11 +57,11 @@ class xmlmenu {
 	function load_from_files($args = array())
 	{
 		extract($args);
-		$menudef = get_file(array(
+		$menudef = $this->tpl->get_file(array(
 			"file" => $xml,
 		));
 
-		$template = get_file(array(
+		$template = $this->tpl->get_file(array(
 			"file" => $tpl,
 		));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/interface.aw,v 2.2 2002/11/07 10:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/interface.aw,v 2.3 2002/12/03 13:00:32 kristo Exp $
 // interface.aw - class interface manager
 class interface extends aw_template
 {
@@ -13,7 +13,7 @@ class interface extends aw_template
 	function get_if($args = array())
 	{
 		extract($args);
-		$source = get_file(array("file" => $this->cfg["basedir"] . "/xml/interfaces/$name.xml"));
+		$source = $this->get_file(array("file" => $this->cfg["basedir"] . "/xml/interfaces/$name.xml"));
 		if (not($source))
 		{
 			$this->raise_error(ERR_CORE_NOFILE,"Cannot find interface $name",true);
