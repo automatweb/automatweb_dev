@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.60 2003/07/14 14:46:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.61 2003/07/17 15:46:17 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -855,8 +855,8 @@ class menu extends class_base
 	// sest kui neid meetodeid saab olema palju, siis on neid sitt selectist valida
 	function get_pmethod_sel()
 	{
-		$aw_orb = get_instance("aw_orb");
-		return array("0" => "--vali--") + $aw_orb->get_classes_by_interface(array("interface" => "public"));
+		$orb = get_instance("orb");
+		return array("0" => "--vali--") + $orb->get_classes_by_interface(array("interface" => "public"));
 	}
 
 	function get_menu_keywords($id)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.126 2003/07/08 09:19:58 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.127 2003/07/17 15:46:17 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -236,8 +236,8 @@ class planner extends class_base
 				break;
 
 			case "content_generator":
-				$awo = get_instance("aw_orb");
-				$tmp = array("0" => "näita kalendri sisu") + $awo->get_classes_by_interface(array("interface" => "content"));
+				$orb = get_instance("orb");
+				$tmp = array("0" => "näita kalendri sisu") + $orb->get_classes_by_interface(array("interface" => "content"));
 				$data["options"] = $tmp;
 				break;
 
