@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.80 2002/01/07 13:14:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.82 2002/01/23 15:07:07 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -235,8 +235,8 @@ class menuedit extends aw_template
 		global $awt;
 		$awt->start("sh");
 
-		global $lang_id;
-		$lang_code = ($lang_id == 2) ? "en" : "et";
+		global $lang_id,$LC;
+		$lang_code = $LC;
 		$this->vars(array(
 			"lang_code" => $lang_code,
 		));
@@ -475,7 +475,7 @@ class menuedit extends aw_template
 		if ($periodic && $text == "") 
 		{
 			$docc = $this->show_periodic_documents($section,$obj);
-			if ($this->mar[$sel_menu_id]["no_menus"] == 1)
+			if ($this->mar[$sel_menu_id]["no_menus"] == 1 || ($params["print"]) )
 			{
 				// this tells site index.aw not to show the index.tpl
 				// shrug, erki wants it that way
@@ -697,7 +697,7 @@ class menuedit extends aw_template
 									// kasutame 
 									// a)aliast, kui see on olemas
 									// b)sektsiooni id-d 
-									$link .= ($mrow["alias"] != "") ? $mrow["alias"] : "index." . $ext . "/section=" . $mrow["oid"];
+									$link .= ($mrow["alias"] != "") ? $mrow["alias"] : $mrow["oid"];
 								}
 								// hiljem voib-olla tekib tahtmine siia mingeid muid targeteid lisada?
 								$href_target = "_new";
@@ -759,7 +759,7 @@ class menuedit extends aw_template
 					else
 					{
 						$link = $GLOBALS["baseurl"] . "/";
-						$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
+						$link .= ($row["alias"] != "") ? $row["alias"] : $row["oid"];
 					}
 					// hiljem voib-olla tekib tahtmine siia mingeid muid targeteid lisada?
 					$href_target = "_new";
@@ -827,7 +827,7 @@ class menuedit extends aw_template
 						{
 							if (!($row["ndocs"] > 0 && $cnt > $row["ndocs"]))
 							{
-								$this->vars(array("link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$drow["oid"], 
+								$this->vars(array("link" => $GLOBALS["baseurl"]."/".$drow["oid"], 
 																	"title" => $drow["name"]));
 								$dl.=$this->parse("DOC_LINK");
 							}
@@ -918,7 +918,7 @@ class menuedit extends aw_template
 
 		$this->make_banners();
 
-		$cd = ($this->can("edit",$section) && $this->active_doc && $GLOBALS["uid"] != "") ? $this->parse("CHANGEDOCUMENT") : "";
+		$cd = ($this->can("edit",$section) && $this->active_doc && $GLOBALS["uid"] != "" && $this->prog_acl("view", PRG_MENUEDIT)) ? $this->parse("CHANGEDOCUMENT") : "";
 		global $sstring;
 		$this->vars(array(
 			"ss" => $this->gen_uniq_id(),		// bannerite jaox
@@ -2352,7 +2352,7 @@ class menuedit extends aw_template
 				"type"				=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
 				"change"			=> $change,
 				"checked"			=> checked($default_doc == $row["oid"]),
-				"link"				=> $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$row["oid"]));
+				"link"				=> $GLOBALS["baseurl"]."/".$row["oid"]));
 			if (!$def_found)
 			{
 				$def_found = $default_doc == $row["oid"] ? true : false;
@@ -3479,7 +3479,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"seealso_order" => $meta["seealso_order"],
 			"color" => $meta["color"],
 			"ADMIN_FEATURE"	=> $af,
-			"name"				=> $row["name"], 
+			"name"				=> htmlentities($row["name"]), 
 			"number"			=> $row["number"],
 			"comment"			=> $row["comment"], 
 			"links"				=> checked($row["links"]), 
@@ -3668,7 +3668,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		while ($v = $this->_pop("yaha"))
 		{
-			$url = $baseurl."/index.".$ext."/section=".$v["oid"];
+			$url = $baseurl."/".$v["oid"];
 			$this->vars(array("url" => $url, "name" => $v["name"], "oid" => $v["oid"]));
 			if ($y == "")
 			{
@@ -3687,7 +3687,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			reset($this->mpr[$parent]);
 			while (list(,$ar) = each($this->mpr[$parent]))
 			{
-				$url = $baseurl."/index.".$ext."/section=".$ar["oid"];
+				$url = $baseurl."/".$ar["oid"];
 				$this->vars(array("url" => $url, "name" => $ar["name"], "oid"=>$ar["oid"]));
 				$c.= $this->parse("SECTIONS_COL");
 
@@ -3761,7 +3761,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 		}
 		
-
 		// make the subtemplate names for this and the next level
 		$mn = "MENU_".$name."_L".$this->level."_ITEM";
 		$mn2 = "MENU_".$name."_L".($this->level+1)."_ITEM";
@@ -3820,11 +3819,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// mitte teha jarjest uusi valju juurde - duke
 			// 
 			// ok, point taken. nyt kasutatakse seda objekti metadatat ka ntx sellex et selektitud menyy pildi urli salvestada. - terryf
-			$awt->start("get_meta");
 			$meta = $this->get_object_metadata(array(
 					"metadata" => $row["metadata"],
 			));
-			$awt->stop("get_meta");
 
 			// see on siis nädala parema paani leadide näitamine
 			// nõme häkk. FIX ME.
@@ -3890,7 +3887,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->vars(array(
 					"sel_menu_".$name."_L".$this->level."_cnt" => $cnt,
 					"sel_menu_".$name."_L".$this->level."_name" => $row["name"],
-					"sel_menu_".$name."_L".$this->level."_id" => $row["oid"]
+					"sel_menu_".$name."_L".$this->level."_id" => $row["oid"],
+					"sel_menu_".$name."_L".$this->level."_color" => $meta["color"],
+					"sel_menu_".$name."_L".$this->level."_comment" => $row["comment"]
 				));
 			}
 
@@ -3974,7 +3973,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			else
 			{
 				$link = $baseurl."/";
-				$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
+				if (defined("LONG_SECTION_URL"))
+				{
+					$link .= "?section=";
+					$link .= ($row["alias"] != "") ? $row["alias"] : $row["oid"];
+				}
+				else
+				{
+					$link .= ($row["alias"] != "") ? $row["alias"] : $row["oid"];
+				};
 			}
 
 			$target = ($row["target"] == 1) ? sprintf("target='%s'","_new") : "";
@@ -4018,6 +4025,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 						"menu_image_".$_i => "<img src='".$imgar[$_i]["url"]."'>",
 						"menu_image_".$_i."_url" => $imgar[$_i]["url"]
 					));
+					if (in_array($row["oid"], $path))
+					{
+						$this->vars(array(
+							"sel_menu_".$name."_L".$this->level."_image_".$_i."_url" => $imgar[$_i]["url"],
+							"sel_menu_".$name."_L".$this->level."_image_".$_i => "<img src='".$imgar[$_i]["url"]."'>",
+						));
+					}
 					$has_image = true;
 				}
 			}
@@ -4206,7 +4220,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				else
 				{
 					$link = $baseurl."/";
-					$link .= ($samenu["alias"] != "") ? $samenu["alias"] : "index." . $ext . "/section=" . $samenu["oid"];
+					$link .= ($samenu["alias"] != "") ? $samenu["alias"] :  $samenu["oid"];
 				}
 
 				$meta = $this->get_object_metadata(array(
@@ -4464,7 +4478,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			reset($cut_objects);
 			while (list(,$oid) = each($cut_objects))
 			{
-				$this->upd_object(array("oid" => $oid, "parent" => $parent));
+				$this->upd_object(array("oid" => $oid, "parent" => $parent,"period" => $period));
 			}
 		}
 		$GLOBALS["cut_objects"] = array();
@@ -4826,7 +4840,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			if ($show)
 			{
-				$link = "/index.".$GLOBALS["ext"]."/section=".$this->mar[$path[$i+1]]["oid"];
+				$link = "/".$this->mar[$path[$i+1]]["oid"];
 				if ($this->mar[$path[$i+1]]["link"] != "")
 				{
 					$link = $this->mar[$path[$i+1]]["link"];
@@ -4880,12 +4894,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$GLOBALS["SITE_ID"]." OR objects.site_id is null) $lai
 				ORDER by jrk";
 		$this->db_query($q);
-		$awt->start("promo-cycle");
 		while ($row = $this->db_next())
 		{
-			$awt->start("get-promo-meta");
 			$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
-			$awt->stop("get-promo-meta");
 
 			global $gidlist;
 			$found = false;
@@ -4924,6 +4935,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				else
 				{
 					$pr_c.=$doc->gen_preview(array("docid" => $docid, "tpl" => $row["filename"],"leadonly" => $leadonly, "section" => $section, 	"strip_img" => false,"showlead" => 1, "boldlead" => 0,"no_strip_lead" => 1));
+						
+						
 				}
 
 				global $DEBUG;
@@ -4956,7 +4969,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				{
 					$use_tpl = "UP_PROMO";
 				}
-				elseif ($ar["right"] == 1)
+				else
+				if ($ar["right"] == 1)
 				{
 					$use_tpl = "RIGHT_PROMO";
 				}
@@ -5006,11 +5020,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				{
 					if ($this->is_template("UP_PROMO".$ap))
 					{
-						$right_promo .= $this->parse("UP_PROMO".$ap);
+						$up_promo .= $this->parse("UP_PROMO".$ap);
 					}
 					else
 					{
-						$right_promo .= $this->parse("UP_PROMO");
+						$up_promo .= $this->parse("UP_PROMO");
 					}
 				}
 				else
@@ -5018,11 +5032,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				{
 					if ($this->is_template("DOWN_PROMO".$ap))
 					{
-						$right_promo .= $this->parse("DOWN_PROMO".$ap);
+						$down_promo .= $this->parse("DOWN_PROMO".$ap);
 					}
 					else
 					{
-						$right_promo .= $this->parse("DOWN_PROMO");
+						$down_promo .= $this->parse("DOWN_PROMO");
 					}
 				}
 				else
@@ -5044,11 +5058,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		};
 
-		$awt->stop("promo-cycle");
-
 		$this->vars(array(
 			"LEFT_PROMO" => $left_promo,
 			"RIGHT_PROMO" => $right_promo,
+			"UP_PROMO" => $up_promo,
+			"DOWN_PROMO" => $down_promo,
 			"SCROLL_PROMO" => $scroll_promo,
 		));
 		$awt->stop("menuedit::make_promo_boxes");
@@ -5057,6 +5071,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function make_poll()
 	{
 		global $awt;
+		global $lang_id;
+		global $SITE_ID;
+		if ( ($lang_id == 3) && ($SITE_ID == 667) )
+		{
+			 return "";
+		};
+
 		$awt->start("menuedit::make_poll");
 		if ($this->is_template("POLL"))
 		{
@@ -5531,7 +5552,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 						}
 						else
 						{
-							$link = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$mprow["oid"];
+							$link = $GLOBALS["baseurl"]."/".$mprow["oid"];
 						}
 						$this->vars(array(
 							"link" => $link,

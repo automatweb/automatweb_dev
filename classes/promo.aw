@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.12 2001/12/17 23:59:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.13 2002/01/23 15:05:48 kristo Exp $
 lc_load("promo");
 global $orb_defs;
 $orb_defs["promo"] = "xml";
@@ -69,10 +69,15 @@ class promo extends aw_template
 		$sets = array(
 			"section" => $a,
 			"right" => ($right == 1 ? 1 : 0), 
+			"up" => ($right == 2 ? 1 : 0), 
+			"down" => ($right == 3 ? 1 : 0), 
 			"scroll" => ($right == 'scroll' ? 1 : 0),
 			"tpl_lead" => $tpl_lead, 
-			"tpl_edit" => $tpl_edit
+			"tpl_edit" => $tpl_edit,
+			"comment" => $comment,
 		);
+
+		$com = serialize($sets);
 
 		if ($id)
 		{
@@ -87,7 +92,7 @@ class promo extends aw_template
 				"parent" => $parent,
 				"name" => $title,
 				"class_id" => CL_PROMO,
-				"comment" => serialize($sets),
+				"comment" => $com,
 				"last" => 1,
 			));
 			$this->db_query("INSERT INTO menu (id,link,type,is_l3,tpl_lead,tpl_edit,ndocs,sss) VALUES($id,'$link',".MN_PROMO_BOX.",0,'$tpl_lead','$tpl_edit','$num_last','".serialize($this->make_keys($last_menus))."')");
@@ -158,9 +163,12 @@ class promo extends aw_template
 			"section"	=> $ob->multiple_option_list($sets["section"],$menu),
 			"all_menus"	=> checked($row["comment"] == "all_menus"),
 			"right_sel"	=> ($sets["right"] == 1 ? "CHECKED" : ""),
-			"left_sel" => ( ($sets["right"] != 1) && not($sets["scroll"]) ) ? "CHECKED" : "",
+			"up_sel"	=> ($sets["up"] == 1 ? "CHECKED" : ""),
+			"down_sel"	=> ($sets["down"] == 1 ? "CHECKED" : ""),
+			"left_sel" => ( ($sets["right"] != 1) && not($sets["scroll"]) && not($sets["up"]) && not($sets["down"])) ? "CHECKED" : "",
 			"scroll_sel" => checked($sets["scroll"]),
 			"link" => $rw["link"],
+			"comment" => $sets["comment"],
 			"link_caption" => $link_caption,
 			"tpl_edit" => $this->option_list($rw["tpl_edit"],$edit_templates),
 			"tpl_lead" => $this->option_list($rw["tpl_lead"],$short_templates),
