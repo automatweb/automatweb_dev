@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.9 2004/06/25 18:13:31 kristo Exp $
+// $Id: menu_alias.aw,v 2.10 2004/06/25 21:36:28 duke Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -70,12 +70,12 @@ class menu_alias extends aw_template
 		$this->read_template("change_alias.tpl");
 		if ($id)
 		{
-			$obj = $this->get_object($id);
+			$obj = new object($id);
 			$title = "Muuda menüü linki";
 		}
 		else
 		{
-			$obj = array();
+			$obj = new object();
 			$title = "Lisa menüü link";
 		};
 		$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / $title");
@@ -83,7 +83,7 @@ class menu_alias extends aw_template
 		$olist = $dbo->get_list();
 
 		$this->vars(array(
-			"menu" => $this->picker($obj["last"],$olist),
+			"menu" => $this->picker($obj->last(),$olist),
 			"reforb" => $this->mk_reforb("submit_alias",array("id" => $id,"parent" => $parent, "return_url" => $return_url, "alias_to" => $alias_to)),
 		));
 		return $this->parse();
@@ -126,9 +126,9 @@ class menu_alias extends aw_template
 	function create_menu_alias($args = array())
 	{
 		extract($args);
-		$target = $this->get_object($menu);
-		$name = $target["name"];
-		$comment = $target["comment"];
+		$target = new object($menu);
+		$name = $target->name();
+		$comment = $target->comment();
 
 		$o = obj();
 		$o->set_parent($parent);
@@ -145,14 +145,7 @@ class menu_alias extends aw_template
 	function parse_alias($args = array())
 	{
 		extract($args);
-		if (!is_array($this->mcaliases))
-		{
-			$this->mcaliases = $this->get_aliases(array(
-				"oid" => $oid,
-				"type" => CL_PSEUDO,
-			));
-		};
-		$f = $this->mcaliases[$matches[3] - 1];
+		$f = $alias;
 		if (!$f["target"])
 		{
 			return "";
