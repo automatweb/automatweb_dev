@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.106 2004/12/01 14:05:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.107 2004/12/10 10:08:14 kristo Exp $
 
 /*
 
@@ -305,6 +305,10 @@ class site_show extends class_base
 			$deny = true;
 			foreach($allowed as $ipid => $t)
 			{
+				if (!is_oid($ipid) || !$this->can("view", $ipid))
+				{
+					continue;
+				}
 				$ipo = obj($ipid);
 
 				if ($ipa->match($ipo->prop("addr"), $cur_ip))
@@ -328,6 +332,10 @@ class site_show extends class_base
 			$deny = false;
 			foreach($denied as $ipid => $t)
 			{
+				if (!is_oid($ipid) || !$this->can("view", $ipid))
+				{
+					continue;
+				}
 				$ipo = obj($ipid);
 
 				if ($ipa->match($ipo->prop("addr"), $cur_ip))
@@ -1042,10 +1050,12 @@ class site_show extends class_base
 
 	////
 	// !build "you are here" links from the path
-	 function make_yah()
+	function make_yah()
 	{
+		$path = $this->path;
+
 		$ya = "";
-		$cnt = count($this->path);
+		$cnt = count($path);
 
 		$this->title_yah = "";
 		$alias_path = array();
@@ -1064,7 +1074,7 @@ class site_show extends class_base
 				$alias_path = array();
 			}
 
-			$ref = $this->path[$i];
+			$ref = $path[$i];
 
 			if ($ref->alias())
 			{
@@ -1116,7 +1126,7 @@ class site_show extends class_base
 				"ysection" => $ref->id()
 			));
 
-			if ($ref->prop("clickable") == 1 && $show)
+			if (($ref->prop("clickable") == 1 || $ref->class_id() == CL_SHOP_PRODUCT) && $show)
 			{
 				if ($this->is_template("YAH_LINK_BEGIN") && $ya == "")
 				{
@@ -1908,7 +1918,6 @@ class site_show extends class_base
 			{
 				continue;
 			}
-			$url = $this->mk_my_orb("show", array("id" => $o->meta("show_obj"), "no_menus" => 1), "objects");
 
 			$sh = false;
 			foreach($o->connections_from(array("type" => "RELTYPE_FOLDER")) as $c)
@@ -2324,7 +2333,7 @@ class site_show extends class_base
 
 		$clss = aw_ini_get("classes");
 
-		if ($this->section_obj->class_id() && isset($clss[$this->section_obj->class_id()]))
+		if ($this->section_obj->class_id() && isset($clss[$this->section_obj->class_id()]) && !$_GET["class"])
 		{
 			$obj_inst = $this->section_obj->instance();
 			if (method_exists($obj_inst, "request_execute"))
