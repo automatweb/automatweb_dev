@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.46 2001/07/29 18:37:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.47 2001/07/30 18:36:40 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -61,14 +61,15 @@ class core extends db_connector
 		extract($args);
 		// if metadata is defined in the arguments, we will not read
 		// the object into memory.
-		if ($args["metadata"])
+		if ($oid)
 		{
-			$odata["metadata"] = $args["metadata"];
+			$odata = $this->_get_object_metadata($oid);
 		}
 		else
 		{
-			$odata = $this->_get_object_metadata($oid);
+			$odata["metadata"] = $args["metadata"];
 		};
+
 		if (!$odata)
 		{
 			return false;
@@ -820,6 +821,10 @@ class core extends db_connector
 							{
 								$replacement = $repl["replacement"];
 								$inplace = $repl["inplace"];
+							}
+							else
+							{
+								$replacement = $repl;
 							};
 
 							if (is_array($this->parsers->$cls->blocks))
