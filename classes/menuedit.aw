@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.119 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.120 2002/06/13 23:02:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -159,6 +159,10 @@ class menuedit extends aw_template
 		{
 			$cp[] = $GLOBALS["type"];
 		}
+		if (isset($GLOBALS["lcb"]))
+		{
+			$cp[] = $GLOBALS["lcb"];
+		}
 
 		$cp[] = aw_global_get("lang_id");
 
@@ -230,6 +234,11 @@ class menuedit extends aw_template
 	{
 		extract($params);	
 		$template = isset($template) && $template != "" ? $template : "main.tpl";
+		global $DBG;
+		if ($DBG)
+		{
+			print "tpl = $template<br>";
+		}
 		$docid = isset($docid) ? $docid : 0;
 
 		// impordime taimeriklassi
@@ -689,7 +698,7 @@ class menuedit extends aw_template
 			$sufix = "";
 		};
 		$q = "SELECT objects.parent AS parent,count(*) as subs
-						FROM objects WHERE $where $sufix
+						FROM objects WHERE $where $sufix AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_BROTHER_DOCUMENT.")
 						GROUP BY parent";
 		$this->subs = array();
 		$this->db_query($q);
@@ -4667,12 +4676,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 						$linktext = join("/",$alias_path);
 					};
 
-					$link = "/".$linktext;
+					$link = $this->cfg["baseurl"]."/".$linktext;
 				}
 				else
 				{
 					$use_aliases = false;
-					$link = "/".$this->mar[$path[$i+1]]["oid"];
+					$link = $this->cfg["baseurl"]."/".$this->mar[$path[$i+1]]["oid"];
 				};
 
 				if ($this->mar[$path[$i+1]]["link"] != "")
@@ -4686,7 +4695,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"ysection" => $this->mar[$path[$i+1]]["oid"]
 				));
 
-				if ($this->mar[$path[$i+1]]["clickable"] == 1)
+				if ($this->mar[$path[$i+1]]["clickable"] == 1 && ($this->subs[$this->mar[$path[$i+1]]["oid"]] > 0))
 				{
 					$ya.=$this->parse("YAH_LINK");
 					$this->title_yah.=" / ".$this->mar[$path[$i+1]]["name"];
