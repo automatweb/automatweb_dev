@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.67 2005/03/30 09:50:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.68 2005/03/30 10:08:40 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -14,9 +14,9 @@
 @groupinfo grp_schedule caption="Kalender" submit=no
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
 	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
-	@groupinfo grp_printer_old caption="Tegemata asjad" parent=grp_printer submit=no
-	@groupinfo grp_printer_done caption="Tehtud asjad" parent=grp_printer submit=no
-	@groupinfo grp_printer_aborted caption="Katkestatud asjad" parent=grp_printer submit=no
+	@groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
+	@groupinfo grp_printer_done caption="Tehtud t&ouml;&ouml;d" parent=grp_printer submit=no
+	@groupinfo grp_printer_aborted caption="Katkestatud t&ouml;&ouml;d" parent=grp_printer submit=no
 
 @groupinfo grp_settings caption="Seaded"
 	@groupinfo grp_settings_def caption="Seaded" parent=grp_settings

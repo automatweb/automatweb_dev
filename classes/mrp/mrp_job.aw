@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.39 2005/03/30 09:50:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.40 2005/03/30 10:08:40 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -263,7 +263,7 @@ class mrp_job extends class_base
 		switch($prop["name"])
 		{
 			case "advised_starttime":
-				if ($resource->property("type") != MRP_RESOURCE_SUBCONTRACTOR)
+				if ($resource->prop("type") != MRP_RESOURCE_SUBCONTRACTOR)
 				{
 					return PROP_IGNORE;
 				}

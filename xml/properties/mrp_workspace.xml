@@ -1155,17 +1155,17 @@
                   <submit>no</submit>
             </grp_printer_current>
             <grp_printer_old>
-                  <caption>Tegemata asjad</caption>
+                  <caption>Tegemata t&amp;ouml;&amp;ouml;d</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_old>
             <grp_printer_done>
-                  <caption>Tehtud asjad</caption>
+                  <caption>Tehtud t&amp;ouml;&amp;ouml;d</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_done>
             <grp_printer_aborted>
-                  <caption>Katkestatud asjad</caption>
+                  <caption>Katkestatud t&amp;ouml;&amp;ouml;d</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_aborted>
