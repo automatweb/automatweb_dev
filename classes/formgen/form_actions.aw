@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.10 2003/02/13 15:39:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.11 2003/02/18 14:08:25 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -423,6 +423,28 @@ class form_actions extends form_base
 			$data = aw_unserialize($row["data"]);
 
 			$this->$fname($form, $data, $entry_id);
+			$this->restore_handle();
+		}
+	}
+
+	////
+	// !ececutes form actions, gets called after form submit
+	// params:
+	// form - reference to the calling form
+	// entry_id - submitted form entry id
+	function do_on_delete_actions(&$form, $entry_id)
+	{
+		$this->db_query("SELECT * FROM form_actions LEFT JOIN objects ON objects.oid = form_actions.id WHERE form_id = ".$form->get_id()." AND objects.status != 0");
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			$fname = $this->actiontype2func[$row["type"]]["execute"];
+			$data = aw_unserialize($row["data"]);
+
+			if ($row["type"] == "after_submit_controller")
+			{
+				$this->$fname($form, $data, $entry_id);
+			}
 			$this->restore_handle();
 		}
 	}
