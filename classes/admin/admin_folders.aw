@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.36 2004/11/19 08:09:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.37 2004/11/19 11:30:34 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -373,11 +373,14 @@ class admin_folders extends aw_template
 			$iconurl = icons::get_feature_icon_url($arr["admin_feature"]);
 		};
 
-		$row_o = obj($arr["oid"]);
-		if (is_oid($row_o->meta("sel_icon")) && $this->can("view", $row_o->meta("sel_icon")))
+		if (is_oid($arr["oid"]) && $this->can("view", $arr["oid"]))
 		{
-			$im = get_instance(CL_IMAGE);
-			$iconurl = $im->get_url_by_id($row_o->meta("sel_icon"));
+			$row_o = obj($arr["oid"]);
+			if (is_oid($row_o->meta("sel_icon")) && $this->can("view", $row_o->meta("sel_icon")))
+			{
+				$im = get_instance(CL_IMAGE);
+				$iconurl = $im->get_url_by_id($row_o->meta("sel_icon"));
+			}
 		}
 
 		// if all else fails ..
