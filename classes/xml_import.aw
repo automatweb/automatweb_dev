@@ -1,30 +1,57 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.3 2002/07/16 19:54:42 duke Exp $
 class xml_import extends aw_template
 {
 
 	function xml_import($args = array())
 	{
 		$this->init("xml_import");
+		$this->methods = array(
+			"import_tudengid" => "import_tudengid",
+			"import_struktuurid" => "import_struktuurid",
+			"import_tootajad" => "import_tootajad",
+			"import_oppekava" => "import_oppekava",
+		);
 	}
 
 	////
 	// !Displays form for adding new or modifying an existing XML import objekt
 	function change($args = array())
 	{
+		extract($args);
 		$this->read_template("change.tpl");
+		$datasources = array();
+		$this->get_objects_by_class(array(
+				"class" => CL_DATASOURCE,
+		));
+
+		while($row = $this->db_next())
+		{
+			$datasources[$row["oid"]] = $row["name"];
+		}
+
 		if ($parent)
 		{
 			$caption = "Lisa uus XML import objekt";
 			$prnt = $parent;
+			$meta = array();
 		}
 		else
 		{
 			$caption = "Muuda XML import objekti";
 			$obj = $this->get_object($id);
+			$meta = $obj["meta"];
 			$prnt = $obj["parent"];
 		};
 
 		$this->mk_path($prnt,$caption);
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit",array("id" => $id,"parent" => $parent)),
+			"name" => $obj["name"],
+			"datasources" => $this->picker($meta["datasource"],$datasources),
+			"run_import" => $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1),
+			"import_functions" => $this->picker($meta["import_function"],$this->methods),
+		));
 		return $this->parse();
 	}
 
@@ -32,18 +59,84 @@ class xml_import extends aw_template
 	// !Adds new or submits changes to an existing XML import objekt
 	function submit($args = array())
 	{
+		$this->quote($args);
+		extract($args);
+		if ($parent)
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_XML_IMPORT,
+				"name" => $name,
+				"status" => 2,
+			));
+			$this->_log("xml_import","Lisas XML import objekti nimega '$name'",$id);
+		}
+		else
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
+			));
+			$this->_log("xml_import","Muutis XML import objekti nimega '$name'",$id);
+		};
 
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"data" => array(
+				"datasource" => $datasource,
+				"import_function" => $import_function,
+			),
+		));
+
+		return $this->mk_my_orb("change",array("id" => $id));
+
+	}
+
+	function invoke($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($id);
+		if (not($obj))
+		{
+			return false;
+		};
+
+		if ($obj["class_id"] != CL_XML_IMPORT)
+		{
+			return false;
+		};
+
+		print "Retrieving data:<br>";
+		flush();
+		// retrieve data
+		$ds = get_instance("datasource");
+		$src_data = $ds->retrieve(array("id" => $obj["meta"]["datasource"]));
+		print "Got " . strlen($src_data) . " bytes of data<br>";
+		flush();
+		print "<pre>";
+		print htmlspecialchars($src_data);
+		print "</pre>";
+		print "Invoking import function<br>";
+		flush();
+		$method = $obj["meta"]["import_function"];
+		$this->$method(array("source" => $src_data));
+		print "Finished!!!<bR>";
+		flush();
+		exit;
 	}
 
 	function import_tudengid($args = array())
 	{
-		$contents = join("",file("/home/duke/tudengid.xml"));
+		//o$contents = join("",file("/home/duke/tudengid.xml"));
+		$contents = $args["source"];
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
 		// R.I.P. parser
 		xml_parser_free($parser);
+		$q = "DELETE FROM ut_tudengid";
+		$this->db_query($q);
 		foreach($values as $key => $val)
 		{
 			if ( ($val["tag"]  == "tudeng") && $val["type"] == "complete" )
@@ -72,13 +165,16 @@ class xml_import extends aw_template
 	
 	function import_struktuurid($args = array())
 	{
-		$contents = join("",file("/home/duke/struktuurid.xml"));
+		$contents = $args["source"];
+		//$contents = join("",file("/home/duke/struktuurid.xml"));
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
 		// R.I.P. parser
 		xml_parser_free($parser);
+		$q = "DELETE FROM ut_struktuurid";
+		$this->db_query($q);
 		foreach($values as $key => $val)
 		{
 			if ($val["tag"] == "struktuur")
@@ -88,6 +184,7 @@ class xml_import extends aw_template
 					if ($val["level"] == 2)
 					{
 						$osakond = $this->convert_unicode($val["attributes"]["nimetus"]);
+						$ylem_id = $val["attributes"]["id"];
 						$this->quote($osakond);
 					};
 				};
@@ -105,8 +202,8 @@ class xml_import extends aw_template
 					$telefon = $attr["telefon"];
 					$faks = $attr["faks"];
 
-					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond)
-							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond')";
+					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id)
+							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$ylem_id')";
 					print $q;
 					$this->db_query($q);
 					print "<br>";
@@ -117,13 +214,18 @@ class xml_import extends aw_template
 	
 	function import_tootajad($args = array())
 	{
-		$contents = join("",file("/home/duke/tootajad.xml"));
+		$contents = $args["source"];
+		//$contents = join("",file("/home/duke/tootajad.xml"));
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
 		// R.I.P. parser
 		xml_parser_free($parser);
+		$q = "DELETE FROM ut_tootajad";
+		$this->db_query($q);
+		$q = "DELETE FROM ut_ametid";
+		$this->db_query($q);
 		foreach($values as $token)
 		{
 			if ( ($token["tag"] == "tootaja") && ($token["type"] == "open") )
@@ -175,29 +277,32 @@ class xml_import extends aw_template
 	
 	function import_oppekava($args = array())
 	{
-		$contents = join("",file("/home/duke/oppekavad.xml"));
+		$contents = $args["source"];
+		//$contents = join("",file("/home/duke/oppekavad.xml"));
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
 		// R.I.P. parser
 		xml_parser_free($parser);
+		$q = "DELETE FROM ut_oppekavad";
+		$this->db_query($q);
 		foreach($values as $key => $val)
 		{
-			if ( $val["type"] == "complete" )
+			if ( ($val["tag"] == "oppekava")  && ($val["type"] == "complete") )
 			{
 				$attr = $val["attributes"];		
-				$nimetus = $attr["nimetus"];
+				$nimetus = $this->convert_unicode($attr["nimetus"]);
 				$id = $attr["id"];
 				$kood = $attr["kood"];
+				$this->quote($nimetus);
+				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus)
+					VALUES('$id','$kood','$nimetus')";
+				print $q;
+				print "<br>";
+				$this->db_query($q);
 			};
 
-			$this->quote($nimetus);
-			$q = "INSERT INTO ut_oppekavad (id,kood,nimetus)
-				VALUES('$id','$kood','$nimetus')";
-			print $q;
-			print "<br>";
-			$this->db_query($q);
 
 
 		}
