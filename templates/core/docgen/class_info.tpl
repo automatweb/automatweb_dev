@@ -9,6 +9,7 @@ text-decoration: none;
 .text a {color: #058AC1; text-decoration:underline;}
 .text a:hover {color: #000000; text-decoration:underline;}
 </style>
+<a href="{VAR:view_class}">class source</a>
 
 <table border="0" width="100%" cellpadding="2" cellspacing="0">
 <tr>
