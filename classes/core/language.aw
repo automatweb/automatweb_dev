@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.5 2004/02/25 15:56:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.6 2004/04/07 06:54:04 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -189,6 +189,10 @@ class language extends class_base
 	{
 		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop("lang_name"));
 		$arr["obj_inst"]->set_prop("lang_site_id", join(",", array_keys(is_array($prop["value"]) ? $arr["obj_inst"]->prop("lang_site_id") : array())));
+	}
+
+	function callback_post_save()
+	{
 		$l = get_instance("admin/admin_languages");	
 		$l->init_cache(true);
 	}
