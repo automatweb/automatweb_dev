@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.79 2004/06/28 09:51:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.80 2004/06/30 08:53:58 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -70,7 +70,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property no_left_pane type=checkbox ch_value=1 group=settings trans=1
 @caption Ilma vasaku paanita
 
-@property title_clickable type=checkbox ch_value=1 group=settings trans=1
+@property title_clickable type=checkbox ch_value=1 group=settings trans=1 default=1
 @caption Pealkiri klikitav
 
 @property clear_styles type=checkbox ch_value=1 store=no trans=1
@@ -195,11 +195,42 @@ class doc extends class_base
 		switch($data["name"])
 		{
 			case "lead":
-				$data["value"] = htmlspecialchars($data["value"]);
+				$val = $data["value"];
+				if ($data["richtext"] == 1)
+				{
+					/*
+					$nlcount = substr_count($val,"\n");
+					$brcount = substr_count($val,"<br>");
+					if ($nlcount > 3 && $brcount == 0)
+					{
+						$data["value"] = nl2br($data["value"]);
+					};
+					*/
+				}
+				else
+				{
+					//$data["value"] = htmlspecialchars($data["value"]);
+				};
 				break;
 
 			case "content":
 				$data["value"] = htmlspecialchars($data["value"]);
+				$val = $data["value"];
+				if ($data["richtext"] == 1)
+				{
+					/*
+					$nlcount = substr_count($val,"\n");
+					$brcount = substr_count($val,"<br>");
+					if ($nlcount > 3 && $brcount == 0)
+					{
+						$data["value"] = nl2br($data["value"]);
+					};
+					*/
+				}
+				else
+				{
+					//$data["value"] = htmlspecialchars($data["value"]);
+				};
 				break;
 
 			case "name":
