@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.25 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.26 2004/01/06 12:03:13 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -74,7 +74,7 @@ class menu_cache extends aw_template
 									menu.*,
 									objects.periodic AS periodic
 					FROM objects 
-						      LEFT JOIN menu ON menu.id = objects.oid
+						      LEFT JOIN menu ON menu.id = objects.brother_of
           WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")
 									AND menu.type != ".MN_FORM_ELEMENT." 
 									AND menu.type != ".MN_HOME_FOLDER_SUB." 
