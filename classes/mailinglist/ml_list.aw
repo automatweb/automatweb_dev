@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.45 2004/02/25 15:45:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.46 2004/03/25 16:39:57 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -584,6 +584,13 @@ class ml_list extends class_base
 		)));
 	}
 
+	/** Exports list members as a plain text file
+		@attrib name=export_members
+		@param id required type=int 
+		@param filename optional
+
+
+	**/
 	function export_members($arr)
 	{
 		$members = $this->get_members($arr["id"]);
@@ -752,6 +759,7 @@ class ml_list extends class_base
 	{
 		$ret = array();
 		$list_obj = new object($id);
+
 
 		$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0",$list_obj->prop("def_user_folder"),CL_ML_MEMBER);
 
