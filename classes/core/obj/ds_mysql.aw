@@ -967,7 +967,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			if (($this->properties[$key]["method"] == "bitmask" || $key == "flags") && is_array($val))
 			{
-				$sql[] = $tf." & ".$val["mask"]." = ".$val["flags"];
+				$sql[] = $tf." & ".$val["mask"]." = ".((int)$val["flags"]);
 			}
 			else
 			if (is_object($val))
