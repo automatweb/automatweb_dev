@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.2 2002/05/08 12:46:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.3 2002/06/26 11:26:44 duke Exp $
 // menu_tree.aw - menüüpuu
 class menu_tree extends aw_template
 {
@@ -95,6 +95,7 @@ class menu_tree extends aw_template
 		$obj = $this->get_obj_meta($alias["target"]);
 		$menus = $obj["meta"]["menus"];
 		$folder_list = array();
+		// FIXME: this should use menu cache 
 		if (is_array($menus))
 		{
 			classload("menuedit_light");
