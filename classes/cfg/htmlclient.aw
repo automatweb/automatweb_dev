@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.51 2004/03/02 15:22:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.52 2004/03/05 16:35:05 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -428,12 +428,12 @@ class htmlclient extends aw_template
 			foreach($this->rtes as $rte)
 			{
 				$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+				$data["cb_nobreaks[${rte}]"] = 1;
 			};
 
 			$submit_handler = $txt;
 			// aha, but I have to put the linefeeds into the thing if it has been created with the plain
 			// old editor.
-			$data["cb_nobreaks[${rte}]"] = 1;
 		}
 
 		$this->vars(array(
