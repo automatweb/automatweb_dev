@@ -1148,7 +1148,12 @@ class grid_editor extends class_base
 					$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\">";
 				}
 
-				$cs .= str_replace("\n", "<br/>", $this->arr["aliases"][$map["row"]][$map["col"]]);
+				$tmp = trim(str_replace("\n", "<br/>", $this->arr["aliases"][$map["row"]][$map["col"]]));
+				if ($tmp === "")
+				{
+					$tmp = "<img src='".aw_ini_get("baseurl")."/automatweb/images/transparent.gif' width='1' height='1'>";
+				}
+				$cs .= $tmp;
 
 				if ($st)
 				{
