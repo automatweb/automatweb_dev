@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.29 2004/12/03 12:55:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.30 2004/12/06 12:18:44 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -156,6 +156,7 @@ class site_search_content extends class_base
 		));
 
 		$meta = $o->meta();
+		$def = $o->meta("default_grp");
 
 		$multi = $o->prop("multi_groups");
 
@@ -177,7 +178,7 @@ class site_search_content extends class_base
 				$act = html::checkbox(array(
 					"name" => "defaultgrp[${cid}]",
 					"value" => $cid,
-					"checked" => $meta["defaultgrp"][$cid],
+					"checked" => ($def == $cid),
 				));
 			}
 			else
@@ -185,7 +186,7 @@ class site_search_content extends class_base
 				$act = html::radiobutton(array(
 					"name" => "defaultgrp",
 					"value" => $cid,
-					"checked" => $meta["defaultgrp"][$cid],
+					"checked" => ($def == $cid),
 				));
 			};
 
@@ -216,7 +217,7 @@ class site_search_content extends class_base
 		{
 			case "grpcfg":
 				$o->set_meta("grpcfg",$prop["value"]);
-				$o->set_meta("defaultgrp",$arr["request"]["defaultgrp"]);
+				$o->set_meta("default_grp",$arr["request"]["defaultgrp"]);
 				break;
 
 			case "static_gen_repeater":
@@ -475,6 +476,7 @@ class site_search_content extends class_base
 				d.lead as lead,
 				d.content as content,
 				d.tm as tm,
+				d.modified as doc_modified,
 				o.site_id as site_id,
 				d.user1 as user1,
 				d.user4 as user4 
@@ -507,6 +509,7 @@ class site_search_content extends class_base
 				"content" => $row["content"],
 				"lead" => $row["lead"],
 				"tm" => $row["tm"],
+				"doc_modified" => $row["doc_modified"],
 				"user1" => $row["user1"],
 				"user4" => $row["user4"],
 				"target" => ($row["site_id"] != $this->site_id ? "target=\"_blank\"" : "")
@@ -564,6 +567,10 @@ class site_search_content extends class_base
 		}
 		
 		$classes = $obj->prop("keyword_search_classes");
+		if (!is_array($classes) || count($classes) == 0)
+		{
+			return;
+		}
 		$keyword_to_file_conns = new connection();
 		
 		$keyword_to_file_conns = $keyword_to_file_conns->find(array(
@@ -621,9 +628,11 @@ class site_search_content extends class_base
 			$ret[] = array(
 				"url" => $this->cfg["baseurl"]."/".$obj->id(),
 				"title" => $obj->name(),
-				"modified" => $obj->modified("modified"),
+				"modified" => $obj->modified(),
 				"content" => $obj->prop("content"),
 				"lead" => $obj->prop("lead"),
+				"tm" => $obj->prop("tm"),
+				"doc_modified" => $obj->prop("doc_modified")
 			);
 		}
 		return $ret;
@@ -687,16 +696,22 @@ class site_search_content extends class_base
 
 	function _sort_time($a, $b)
 	{
-		if ($a["modified"] == $b["modified"]) 
+		$af = $a["doc_modified"] > 1 ? "doc_modified" : "modified";
+		$bf = $b["doc_modified"] > 1 ? "doc_modified" : "modified";
+
+		if ($a[$af] == $b[$bf]) 
 		{
         	return 0;
 		}
-		return ($a["modified"] > $b["modified"]) ? -1 : 1;
+		return ($a[$af] > $b[$bf]) ? -1 : 1;
 	}
 	
 	function _sort_time_asc($a, $b)
 	{
-		return $a["modified"] - $b["modified"];
+		$af = $a["tm"] > 1 ? "tm" : "modified";
+		$bf = $b["tm"] > 1 ? "tm" : "modified";
+
+		return $a[$af] - $b[$bf];
 	}
 
 	function _sort_content($a, $b)

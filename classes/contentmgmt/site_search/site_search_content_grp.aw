@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.13 2004/12/03 13:02:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.14 2004/12/06 12:18:45 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -180,24 +180,25 @@ class site_search_content_grp extends class_base
 				$ret[$m] = $m;
 			}
 		}
-
+		
 		// if no user is logged on, then filter the list by "users_only"
 		if (aw_global_get("uid") == "")
 		{
 			$ol = new object_list(array(
-				"class_id" => CL_MENU,
+				"class_id" => array(CL_MENU, CL_PROMO),
 				"oid" => $ret,
+				"site_id" => array(),
+				"lang_id"  => array()
 			));
 			$ret = array();
 			foreach($ol->arr() as $o)
 			{
 				if (!$o->prop("users_only"))
 				{
-					$ret[] = $o->id();
+					$ret[$o->id()] = $o->id();
 				}
 			}
 		}
-
 		return $ret;
 	}
 	
