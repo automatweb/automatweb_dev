@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.21 2002/02/18 13:45:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.22 2002/02/26 11:44:41 duke Exp $
 lc_load("mailinglist");
 class mlist extends aw_template
 {
@@ -523,5 +523,74 @@ class mlist extends aw_template
 		else
 			return false;
 	}
+
+	function checkit()
+	{
+		$this->read_template("checkit.tpl");
+
+		// teeme listide nimekirja.
+		$lar = array();
+		$this->db_query("SELECT oid,name FROM objects WHERE class_id = 15 AND status != 0");
+		while ($row = $this->db_next()) 
+		{
+			$lar[$row[oid]] = $row[name];
+		}
+
+		// mailide nimekirja. whee. loeme aga terve baasi korraga m2llu, mis ikka juhtub :p
+		$mails =array();
+		$this->db_query("SELECT objects.*,ml_mails.* FROM objects LEFT JOIN ml_mails ON ml_mails.id = objects.oid WHERE class_id = 20 AND status != 0");
+		while ($row = $this->db_next()) 
+		{
+			$mails[$row[parent]] = $row[sent];
+		}
+
+		$this->vars(array("blid" => $this->id));
+
+		// see küsib järjest kõiki käsiloleva listi liikmeid
+		$this->db_query("SELECT objects.oid as oid, objects.name as name,ml_users.mail as mail,ml_users.is_cut as is_cut, ml_users.is_copied as is_copied FROM objects
+			LEFT JOIN ml_users ON ml_users.id = objects.oid
+			WHERE objects.parent = $this->id AND objects.status != 0 AND objects.class_id = 17
+			GROUP BY objects.oid");
+
+
+		while ($row = $this->db_next())
+		{
+			$this->save_handle(); 
+
+			$ls = "";
+			// iga liikme jaoks küsime infot selle kohta, millistest listides ta veel on
+			$q = "SELECT objects.parent as list_id,objects.oid as oid FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE mail='".$row["mail"]."' AND objects.status != 0";
+			$this->db_query($q);
+			while ($us = $this->db_next())
+			{
+				if ($lar[$us[list_id]] && $us[list_id] != $this->id)
+				{
+					$this->vars(array("list_id" => $us[list_id], "list_name" => $lar[$us[list_id]],
+					"user_id" => $us[oid],
+					"mail_sent" => ($mails[$us[list_id]] ? "Jah" : "Ei"),
+					"mail_when" => ($mails[$us[list_id]] ? $this->time2date($mails[$us[list_id]],2) : "")
+					));
+					$ls.=$this->parse("LIST");
+				}
+			}
+			$this->vars(array("user_name" => $row[name], "user_mail" => $row[mail], "LIST" => $ls));
+			$hl = "";
+			if ($ls != "")
+			{
+				$hl = $this->parse("HAS_LIST");
+			}
+			$this->vars(array("HAS_LIST" => $hl, "list_id" => $this->id, "user_id" => $row["oid"]));
+			$l.=$this->parse("LINE");
+			$this->restore_handle();
+			}
+		$this->vars(array("LINE" => $l));
+		return $this->parse();
+	}
+
+	function del_user($id)
+	{
+		$this->delete_object($id);
+	}
+
 };
 ?>
