@@ -14,15 +14,7 @@ class aip_file extends file
 	{
 		extract($arr);
 		$this->mk_path($parent,LC_FILE_ADD_FILE);
-		// kui messenger argument on seatud, siis submit_add peaks tagasi messengeri minema
-		if ($msg_id)
-		{
-			$tpl = "attach.tpl";
-		}
-		else
-		{
-			$tpl = ($arr["tpl"]) ? $arr["tpl"] : "upload.tpl";
-		};
+		$tpl = ($arr["tpl"]) ? $arr["tpl"] : "upload.tpl";
 
 		$this->read_template($tpl);
 
@@ -173,47 +165,28 @@ class aip_file extends file
 				"file" => $file,
 			));
 
-			if ($msg_id)
+			load_vcl("date_edit");
+			$de = new date_edit("act_time");
+
+			$pid = $this->save_file(array(
+				"parent" => $parent,
+				"name" => $file_name,
+				"comment" => $comment,
+				"content" => $fc,
+				"showal" => $show,
+				"type" => $file_type,
+				"newwindow" => $newwindow,
+				"j_time" => $de->get_timestamp($j_time)
+			));
+
+			$this->db_query("INSERT INTO aip_files(id,filename,tm,menu_id) VALUES($pid,'$file_name','".time()."','$parent')");
+			die("inserted !! $file_name <br>");
+			// id on dokumendi ID, kui fail lisatakse doku juurde
+			// add_alias teeb voimalikus #fn# tagi kasutamise doku kuvamise juures
+			if ($id)
 			{
-				classload("messenger");
-				$messenger = new messenger();
-				$row = array();
-				$row["type"] = $file_type;
-				$row["content"] = $fc;
-				$row["class_id"] = CL_FILE;
-				$row["name"] = $file_name;
-				$ser = serialize($row);
-				$this->quote($ser);
-				$messenger->attach_serialized_object(array(
-					"msg_id" => $msg_id,
-					"data" => $ser,
-				));
+				$this->add_alias($id,$pid);
 			}
-			else
-			{
-				load_vcl("date_edit");
-				$de = new date_edit("act_time");
-
-				$pid = $this->save_file(array(
-					"parent" => $parent,
-					"name" => $file_name,
-					"comment" => $comment,
-					"content" => $fc,
-					"showal" => $show,
-					"type" => $file_type,
-					"newwindow" => $newwindow,
-					"j_time" => $de->get_timestamp($j_time)
-				));
-
-				$this->db_query("INSERT INTO aip_files(id,filename,tm,menu_id) VALUES($pid,'$file_name','".time()."','$parent')");
-				die("inserted !! $file_name <br>");
-				// id on dokumendi ID, kui fail lisatakse doku juurde
-				// add_alias teeb voimalikus #fn# tagi kasutamise doku kuvamise juures
-				if ($id)
-				{
-					$this->add_alias($id,$pid);
-				}
-			};
 
 			// defineerime voimalikud orb-i väärtused siin ära
 
@@ -228,11 +201,6 @@ class aip_file extends file
 				// menueditist lisati fail
 				"awfile" => $this->mk_my_orb("obj_list", array("parent" => $parent), "menuedit"),
 
-				// messengeri külge attachitud fail
-				"messenger" => $this->mk_site_orb(array("class" => "messenger","action" => "edit","id" => $msg_id)),
-
-				// saidi poole pealt uploaditi kodukataloogi fail
-				"site" => $this->mk_site_orb(array("class" => "homedir","action" => "gen_home_dir","id" => $parent)),
 			);
 
 			if ($return_url != "")
@@ -250,10 +218,6 @@ class aip_file extends file
 			if (strpos(aw_global_get("REQUEST_URI"),"automatweb") === false)
 			{
 				$retval = $orb_urls["site"];
-			}
-			elseif ($msg_id)
-			{
-				$retval = $orb_urls["messenger"];
 			}
 			else
 			{
