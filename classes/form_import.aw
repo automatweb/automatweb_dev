@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.15 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.16 2002/08/02 13:33:26 kristo Exp $
 
 class form_import extends form_base
 {
@@ -187,10 +187,12 @@ class form_import extends form_base
 						$entry_name = $ar[$el[$elid]];
 					}
 					$this->quote(&$elvalue);
+					$elval2 = $ar[$el[$elid]];
+					$this->quote(&$elval2);
 					$rowels[] = "el_".$elid;
 					$rowels[] = "ev_" . $elid;
 					$rowvals[] = "'".$elvalue."'";
-					$rowvals[] = "'".$ar[$el[$elid]]."'";
+					$rowvals[] = "'".$elval2."'";
 					$entry[$elid] = $elvalue;
 				}
 				else
@@ -388,6 +390,7 @@ class form_import extends form_base
 						{
 							$entry_name = $elvalue;
 						}
+						$this->quote(&$elvalue);
 						$rowels[] = "el_".$elid;
 						$rowvals[] = "'".$elvalue."'";
 
