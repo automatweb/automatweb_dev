@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.15 2002/12/30 13:16:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.16 2003/01/03 13:53:08 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -448,6 +448,7 @@ class form extends form_base
 		$this->arr["sql_writer_writer"] = $sql_writer_writer;
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
 		$this->arr["search_act_lang_only"] = $search_act_lang_only;
+		$this->arr["hide_empty_rows"] = $hide_empty_rows;
 
 		$this->subtype = 0;
 		if ($email_form_action)
@@ -806,6 +807,7 @@ class form extends form_base
 			"forms" => $this->picker($this->arr["sql_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
 			"search_act_lang_only" => checked($this->arr["search_act_lang_only"]),
+			"hide_empty_rows" => checked($this->arr["hide_empty_rows"]),
 		));
 
 		$ns = "";
@@ -1025,15 +1027,18 @@ class form extends form_base
 		for ($i=0; $i < $this->arr["rows"]; $i++)
 		{
 			$html=$this->mk_row_html($i,$prefix,$elvalues,$no_submit);
-			$this->vars(array("COL" => $html));
-			$c.=$this->parse("LINE");
-
-			if ($this->type == FTYPE_ENTRY)
+			if (!($html === "" && $this->arr["hide_empty_rows"] == 1))
 			{
-				// generate all entry checking html
-				for ($a = 0; $a < $this->arr["cols"]; $a++)
+				$this->vars(array("COL" => $html));
+				$c.=$this->parse("LINE");
+
+				if ($this->type == FTYPE_ENTRY)
 				{
-					$chk_js .= $this->arr["contents"][$i][$a]->gen_check_html();
+					// generate all entry checking html
+					for ($a = 0; $a < $this->arr["cols"]; $a++)
+					{
+						$chk_js .= $this->arr["contents"][$i][$a]->gen_check_html();
+					}
 				}
 			}
 		}
@@ -1114,7 +1119,11 @@ class form extends form_base
 				$ds = isset($this->arr["def_style"]) ? $this->arr["def_style"] : 0;
 				if (is_object($this->arr["contents"][$arr["r_row"]][$arr["r_col"]]))
 				{
-					$html.=$this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($ds,$arr["colspan"], $arr["rowspan"],$prefix,$elvalues,$no_submit);
+					$_html = $this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->gen_user_html_not($ds,$arr["colspan"], $arr["rowspan"],$prefix,$elvalues,$no_submit);
+					if ($_html !== -1)
+					{
+						$html .= $_html;
+					}
 				}
 			}
 		}

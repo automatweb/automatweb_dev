@@ -127,6 +127,10 @@ function setLink(li,title)
 <td colspan=2 class="celltext"><select class="formselect2" NAME='entry_name_el[]' multiple>{VAR:els}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Kas peita t&uuml;hjad read:</td>
+<td class="celltext"><input type="checkbox" name="hide_empty_rows" value="1" {VAR:hide_empty_rows}></td>
+</tr>
+<tr class="aste01">
 <td></td>
 <td class="celltext"><input class='formbutton' type='submit' NAME='save_form_settings' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </table>

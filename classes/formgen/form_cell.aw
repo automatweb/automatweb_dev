@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.3 2003/01/03 13:53:08 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -317,6 +317,7 @@ class form_cell extends form_base
 	{
 		$c = "";
 		$cs = "";
+		$has_els = false;
 		for ($i = 0; $i < $this->cnt; $i++)
 		{
 			// here we must check the show element controllers
@@ -339,6 +340,7 @@ class form_cell extends form_base
 			if ($controllers_ok)
 			{
 				$c .= $this->arr[$i]->gen_user_html_not($prefix,$elvalues,$no_submit);
+				$has_els = true;
 			}
 			else
 			{
@@ -346,8 +348,14 @@ class form_cell extends form_base
 				if ($erstr != "")
 				{
 					$c .= "<font color='red' size='2'>".$erstr."</font>";
+					$has_els = true;
 				}
 			}
+		}
+
+		if ($has_els == false && $this->form->arr["hide_empty_rows"] == 1)
+		{
+			return -1;
 		}
 
 		if ($c == "")
