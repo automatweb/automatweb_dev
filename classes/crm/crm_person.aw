@@ -1,6 +1,10 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.7 2004/01/19 12:35:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.8 2004/01/22 17:36:39 duke Exp $
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_person)
+
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 
@@ -172,13 +176,13 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype RANK value=7 clid=CL_CRM_PROFESSION
 @caption ametinimetus
 
-@reltype MEETING value=8 clid=CL_CRM_MEETING
+@reltype PERSON_MEETING value=8 clid=CL_CRM_MEETING
 @caption kohtumine
 
-@reltype CALL value=9 clid=CL_CRM_CALL
+@reltype PERSON_CALL value=9 clid=CL_CRM_CALL
 @caption kõne
 
-@reltype TASK value=10 clid=CL_TASK
+@reltype PERSON_TASK value=10 clid=CL_TASK
 @caption toimetus
 
 @reltype EMAIL value=11 clid=CL_ML_MEMBER
@@ -403,7 +407,7 @@ class crm_person extends class_base
 		if (!empty($cal_id))
 		{
 			$user_calendar = new object($cal_id);
-			$parents[RELTYPE_ISIK_KONE] = $parents[RELTYPE_ISIK_KOHTUMINE] = $user_calendar->prop('event_folder');
+			$parents[RELTYPE_PERSON_CALL] = $parents[RELTYPE_PERSON_MEETING] = $user_calendar->prop('event_folder');
 		}
 
 		/*
@@ -457,11 +461,11 @@ class crm_person extends class_base
 
 		$action = array(
 			array(
-				"reltype" => RELTYPE_ISIK_KOHTUMINE,
+				"reltype" => RELTYPE_PERSON_MEETING,
 				"clid" => CL_CRM_MEETING,
 			),
 			array(
-				"reltype" => RELTYPE_ISIK_KONE,
+				"reltype" => RELTYPE_PERSON_CALL,
 				"clid" => CL_CRM_CALL,
 			),
 		);
@@ -858,15 +862,15 @@ class crm_person extends class_base
 		switch($arr["prop"]["name"])
 		{
 			case "org_calls":
-				$args["type"] = RELTYPE_CALL;
+				$args["type"] = RELTYPE_PERSON_CALL;
 				break;
 			
 			case "org_meetings":
-				$args["type"] = RELTYPE_MEETING;
+				$args["type"] = RELTYPE_PERSON_MEETING;
 				break;
 			
 			case "org_tasks":
-				$args["type"] = RELTYPE_TASK;
+				$args["type"] = RELTYPE_PERSON_TASK;
 				break;
 		};
 		$conns = $ob->connections_from($args);
@@ -935,6 +939,36 @@ class crm_person extends class_base
 			};
 		}
 	}
+
+	// Invoked when a connection is created from organization to person
+	// .. this will then create the opposite connection.
+        function on_connect_org_to_person($arr)
+        {
+                $conn = $arr["connection"];
+                $target_obj = $conn->to();
+                if ($target_obj->class_id() == CL_CRM_PERSON)
+                {
+                        $target_obj->connect(array(
+                                "to" => $conn->prop("from"),
+                                "reltype" => 6,
+                        ));
+                };
+        }
+
+        // Invoked when a connection from organization to person is removed
+        // .. this will then remove the opposite connection as well
+        function on_disconnect_org_from_person($arr)
+        {
+                $conn = $arr["connection"];
+                $target_obj = $conn->to();
+                if ($target_obj->class_id() == CL_CRM_PERSON)
+                {
+                        $target_obj->disconnect(array(
+                                "from" => $conn->prop("from"),
+                        ));
+                };
+        }
+
 
 }
 ?>

@@ -1,6 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.10 2004/01/16 12:20:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.11 2004/01/22 17:36:39 duke Exp $
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_org)
+HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
+
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
 
@@ -110,9 +115,6 @@ caption Õiguslik vorm
 
 @reltype TASK value=13 clid=CL_TASK
 @caption Toimetus
-
-@reltype TASK value=14 clid=CL_TASK
-@caption toimetus
 
 @reltype EMAIL value=15 clid=CL_ML_MEMBER
 @caption E-post
@@ -464,7 +466,71 @@ class crm_company extends class_base
 			};
 		}
 	}
-	
+
+	// Invoked when a connection is created from person to organization
+	// .. this will then create the opposite connection.
+	function on_connect_person_to_org($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_COMPANY)
+		{
+			$target_obj->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => 8,
+			));
+		};
+	}
+
+	// Invoked when a connection from person to organization is removed
+	// .. this will then remove the opposite connection as well
+	function on_disconnect_person_from_org($arr)
+	{
+		$conn = $arr["connection"];
+		$target_obj = $conn->to();
+		if ($target_obj->class_id() == CL_CRM_COMPANY)
+		{
+			$target_obj->disconnect(array(
+				"from" => $conn->prop("from"),
+			));
+		};
+	}
+
+	// If an event is added to a person, then this method
+	// makes that event appear in any organization
+	// calendars that the person has a "workplace" connection
+	// with.
+        function on_add_event_to_person($arr)
+        {
+                $event_obj = new object($arr["event_id"]);
+                $typemap = array(
+			CL_CRM_MEETING => 11,
+                        CL_CRM_CALL => 12,
+			CL_TASK => 13,
+                );
+
+                $reltype = $typemap[$event_obj->class_id()];
+                if (empty($reltype))
+                {
+                        return false;
+                };
+
+                $per_obj = new object($arr["source_id"]);
+
+                $conns = $per_obj->connections_to(array(
+                        "type" => 8,
+                ));
+
+                foreach($conns as $conn)
+                {
+                        $org_obj = $conn->from();
+                        $org_obj->connect(array(
+                                "to" => $arr["event_id"],
+                                "reltype" => $reltype,
+                        ));
+                }
+        }
+
 	
 	function navtoolbar(&$args)
 	{
@@ -609,6 +675,7 @@ class crm_company extends class_base
 		}
 		
 	}
+
 
 
 }
