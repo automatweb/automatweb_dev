@@ -1,24 +1,11 @@
-if [ "$1" == "" ] || [ "$2" == "" ]
+if [ -f ../../scripts/php ]
 then
-	echo "usage: mk_class new_class_name new_class_def"
-	echo "	new_class_name: the name of the class and the file of the class"
-	echo "	new_class_def: the class def in ini file (CL_BLAH)"
-else
-
-	if [ -f ../../classes/$1.aw ]
+	if [ -f ../../scripts/mk_class/mk_class.aw ]
 	then
-		echo "class with name $1 already exists!"
+		../../scripts/php -d register_argc_argv=1 -q -f ../../scripts/mk_class/mk_class.aw $1 $2 $3
 	else
-		echo "making class $1..."
-		sed -e "s/__classdef/$2/" classes/base.aw > /tmp/tmpclass
-		sed -e "s/__classname/$1/" /tmp/tmpclass > ../../classes/$1.aw
-		rm /tmp/tmpclass
-		echo "created classes/$1.aw"
-		sed -e "s/__classname/$1/" xml/orb/base.xml > ../../xml/orb/$1.xml
-		echo "created xml/orb/$1.xml"
-		mkdir ../../templates/$1
-		sed -e "s/__classname/$1/" templates/base/change.tpl > ../../templates/$1/change.tpl
-		sed -e "s/__classname/$1/" templates/base/show.tpl > ../../templates/$1/show.tpl
-		echo "copied templates to templates/$1/change.tpl and templates/$1/show.tpl"
+		echo "could not find class making script AWROOT/scripts/mk_class/mk_class.aw"
 	fi
+else
+	echo "could not find cli php as AWROOT/scripts/php "
 fi
