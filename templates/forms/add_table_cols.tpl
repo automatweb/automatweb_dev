@@ -64,6 +64,11 @@
 											Vali tellimise url:<Br>
 											<input type="text" class="formtext" name="cols[{VAR:col_id}][order_form]" value="{VAR:order_form}">
 											<!-- END SUB: SEL_ORDER_FORM -->
+									
+											<!-- SUB: IS_TYPE_TEXT -->
+											Tekst:<Br>
+											<input type="text" class="formtext" name="cols[{VAR:col_id}][is_type_text]" value="{VAR:is_type_text}">
+											<!-- END SUB: IS_TYPE_TEXT -->
 
 											<!-- SUB: SEL_ALIAS -->
 											Vali alias:<Br>
@@ -141,6 +146,8 @@
 											<input type="checkbox" name="cols[{VAR:col_id}][no_show_empty]" value="1" {VAR:no_show_empty}> &Auml;ra n&auml;ita t&uuml;hjalt <br>
 											Vali tulba kontrollerid:<br>
 											<select name="cols[{VAR:col_id}][controllers][]" multiple class="formselect">{VAR:controllers}</select><Br>
+
+											<input type="checkbox" name="cols[{VAR:col_id}][link_new_window]" value="1" {VAR:col_link_new_window}> Uues aknas <br><br>
 
 											<input type="checkbox" name="cols[{VAR:col_id}][link_popup]" value="1" {VAR:col_link_popup}> Popup aken <br>
 											Erineva stiiliga: <input class="formcheck" type="checkbox" name="cols[{VAR:col_id}][has_col_style]" value="1" {VAR:has_col_style}><Br>
