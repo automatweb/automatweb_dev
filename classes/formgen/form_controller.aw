@@ -403,7 +403,7 @@ class form_controller extends form_base
 		}
 
 		// now import all current form element values as well
-		if (is_object($form_ref) && method_exists($el_ref, "get_all_els"))
+		if (is_object($form_ref) && method_exists($form_ref, "get_all_els"))
 		{
 			$els = $form_ref->get_all_els();
 			foreach($els as $el)
