@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.27 2001/05/27 00:14:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.28 2001/05/27 01:14:08 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -90,13 +90,13 @@ class msg_sql_driver extends db_connector
 	{
 		if (is_array($args["id"]) && (sizeof($args["id"]) > 0))
 		{
-			$idl = join(',',$args["id"]);
+			$idl = join(',',map("'%d'",$args["id"]));
 		}
 		else
 		{
-			$idl = $args["id"];
+			$idl = sprintf("'%d'",$args["id"]);
 		};
-		$q = sprintf("UPDATE objects SET parent = %d WHERE oid IN ('%s')",$args["folder"],$idl);
+		$q = sprintf("UPDATE objects SET parent = %d WHERE oid IN (%s)",$args["folder"],$idl);
 		$this->db_query($q);
 	}
 
@@ -106,18 +106,21 @@ class msg_sql_driver extends db_connector
 	// argumendid:
 	// parent(int)(optional) - kui defineeritud, siis viiakse teade ka uude folderisse
 	// id(int voi array) - teate id, voi id-de array
-	function msg_mark_as_read($args = array())
+	// status(int)(optional) - teate staatus. kui defineerimata, siis märgime loetuks
+	// aga samas saab selle abil seada ka koiki teisi tulevikus tekkida voivaid staatuskoode
+	function msg_mark($args = array())
 	{
+		$status = (isset($args["status"])) ? $args["status"] : MSG_STATUS_READ;
 		if (is_array($args["id"]) && (sizeof($args["id"]) > 0))
 		{
-			$idl = join(',',$args["id"]);
+			$idl = join(',',map("'%d'",$args["id"]));
 		}
 		else
 		{
-			$idl = $args["id"];
+			$idl = sprintf("'%d'",$args["id"]);
 		};
 
-		$q = sprintf("UPDATE messages SET status = %d WHERE id IN ('%s')",MSG_STATUS_READ,$idl);
+		$q = sprintf("UPDATE messages SET status = %d WHERE id IN (%s)",$status,$idl);
 		$this->db_query($q);
 
 		if ($args["parent"])
@@ -173,7 +176,7 @@ class msg_sql_driver extends db_connector
 		extract($args);
 		$q = "SELECT count(*) AS cnt FROM objects
 			LEFT JOIN messages ON (objects.oid = messages.id)
-			WHERE class_id = " . CL_MESSAGE . " and parent = $folder and messages.status = 0";
+			WHERE class_id = " . CL_MESSAGE . " and parent = $folder and messages.status = " . MSG_STATUS_UNREAD;
 		$this->db_query($q);
 		$row = $this->db_next();
 		return $row["cnt"];
@@ -596,6 +599,7 @@ class messenger extends menuedit_light
 			};
 		};
 
+		// active_folder - selle folderi ID
 		$this->vars(array(
 			"line" => $c,
 			"folders_dropdown" => $this->picker($id,$folder_list),
@@ -603,10 +607,79 @@ class messenger extends menuedit_light
 			"message_count" => verbalize_number($cnt),
 			"folder_name" => $folder_name,
 			"page" => $cp,
-			"reforb" => $this->mk_reforb("move_msgs",array("aft" => $args["id"])),
+			"reforb" => $this->mk_reforb("mailbox_op",array("active_folder" => $args["id"])),
 			"menu" => $menu,
 		));
 		return $this->parse();
+	}
+	
+	////
+	// !Teeb mailboxi peal mingi eelnevalt operatsiooni (ntx liigutab teateid, kustutab, vmt.)
+	// argumendid
+	// check(array) - märgistatud teadete ID-d
+	// op(string) - hetkel on defineeritud 3 (delete, mark_as_read, move_to)
+	function mailbox_op($args = array())
+	{
+		extract($args);
+		global $status_msg;
+		if (!is_array($check))
+		{
+			$status_msg = "Ühtegi teadet polnud märgistatud, seega ei tehtud midagi";
+		}
+		else
+		{
+			$cnt = sizeof($check);
+			// now, since all driver function expect message id-s as _values_ of id argument,
+			// and since we get from the form has the id-s as keys, we need to "reverse" the array
+			$rcheck = array_keys($check);
+			switch($op)
+			{
+				// kustutamine on lihtsalt Trash folderisse liigutamine
+				case "delete":
+					$moveto = $this->conf["msg_trash"];
+					$this->driver->msg_move(array(
+								"id" => $rcheck,
+								"folder" => $moveto,
+								));
+					$status_msg = "$cnt teadet kustutati";
+					break;
+
+				case "move_to":
+					$this->driver->msg_move(array(	
+								"id" => $rcheck,
+								"folder" => $folder,
+								));
+					$status_msg = "$cnt teadet viidi teise folderisse";
+					break;
+
+				case "mark_as_read":
+					$moveto = ($this->msgconf["msg_move_read"]) ? $this->msgconf["msg_move_read_folder"] : "";
+					$this->driver->msg_mark(array(
+								"id" => $rcheck,
+								"folder" => $moveto,
+								));
+					$status_msg = "$cnt teadet märgiti loetuks";
+					break;
+
+				case "mark_as_new":
+					$this->driver->msg_mark(array(
+								"id" => $rcheck,
+								"status" => MSG_STATUS_UNREAD,
+								));
+					$status_msg = "$cnt teadet märgiti uueks";
+					break;
+
+				default:
+					$status_msg = "Tundmatu operatsioonikood - $op";
+			}
+		};
+		session_register("status_msg");
+
+		// Ja avame jälle selle folderi, mida me enne vaatasime
+		return $this->mk_site_orb(array(
+			"action" => "folder",
+			"id" => $active_folder,
+		));
 	}
 	
 	//// 
@@ -1100,7 +1173,7 @@ class messenger extends menuedit_light
 
 		// kui kasutaja soovib teateid liigutada, siis teeme seda nüüd
 		$moveto = ($this->msgconf["msg_move_read"]) ? $this->msgconf["msg_move_read_folder"] : "";
-		$this->driver->msg_mark_as_read(array(
+		$this->driver->msg_mark(array(
 						"id" => $id,
 						"parent" => $moveto,
 					));
@@ -1974,31 +2047,6 @@ class messenger extends menuedit_light
 		));
 	}
 	
-	////
-	// !Liigutab teateid
-	function move_msgs($args = array())
-	{
-		extract($args);
-		$cnt = 0;
-		global $status_msg;
-		if (is_array($check))
-		{
-			while(list($k,) = each($check))
-			{
-				$cnt++;
-				$this->driver->msg_move(array(
-					"id" => $k,
-					"folder" => $folder,
-				));
-			};
-			$status_msg = "$cnt teadet viidud teise folderisse<br>";
-			session_register("status_msg");
-		};
-		return $this->mk_site_orb(array(
-			"action" => "folder",
-			"id" => $aft,
-		));
-	}
 
 	//// 
 	// !Kustutab teated
