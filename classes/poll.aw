@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.37 2003/05/12 09:27:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.38 2003/05/21 11:25:20 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -384,7 +384,7 @@ class poll extends aw_template
 			$percent = ($sum == 0) ? 0 : $v["clicks"]*100/$sum;
 			$this->vars(array(
 				"answer_id" => $aid, 
-				"answer" => $v["answer"],
+				"answer" => htmlspecialchars($v["answer"]),
 				"clicks" => (int)$v["clicks"],
 				"percent" => sprintf("%0.02f",$percent),
 			));
