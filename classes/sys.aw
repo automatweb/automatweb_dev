@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.0 2001/05/30 00:29:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.1 2001/05/30 03:35:32 duke Exp $
 // system.aw - various system related functions
 global $orb_defs;
-$orb_defs["system"] = "xml";
+$orb_defs["sys"] = "xml";
 
 class sys {
 	function sys($args = array())
@@ -20,6 +20,7 @@ class sys {
 		$messages = "";
 		foreach($modules as $module)
 		{
+			classload($module);
 			$t = new $module;
 			$_msg = $t->check_environment();
 			if ($_msg)
@@ -38,6 +39,7 @@ class sys {
 		{
 			print "Everything seems to be ok!";
 		};
+		exit;
 	}
 };
 ?>
