@@ -1,5 +1,13 @@
 <?php 
 
+/*
+
+this message will get called whenever an object is deleted and the class_id as the message type parameter
+and the object's id as the "oid" parameter
+EMIT_MESSAGE(MSG_STORAGE_DELETE)
+
+*/
+
 
 class _int_object 
 {
@@ -1216,6 +1224,13 @@ class _int_object
 
 	function _int_do_delete($oid)
 	{
+		post_message_with_param(
+			MSG_STORAGE_DELETE,
+			$this->obj["class_id"],
+			array(
+				"oid" => $this->obj["oid"]
+			)
+		);
 		$GLOBALS["object_loader"]->ds->delete_object($oid);
 	}
 

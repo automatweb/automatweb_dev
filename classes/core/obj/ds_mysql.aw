@@ -536,6 +536,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$ret[] = $row;
 		}
+
+		if ($filter["sort_by"] != "")
+		{
+			usort($ret, create_function('$a,$b', 'return strcmp($a->prop("'.$filter["sort_by"].'"), $b->prop("'.$filter["sort_by"].'"));'));
+		}
 		return $ret;
 	}
 
