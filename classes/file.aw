@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.35 2002/12/11 12:46:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.36 2002/12/18 20:14:50 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -17,15 +17,122 @@
 // we use db storage of filesystem storage for files
 //
 
-class file extends aw_template
+/*
+	@default table=files
+	@default group=general
+
+	@property file type=fileupload 
+	@caption Vali fail
+
+	@property comment type=textbox table=objects field=comment
+	@caption Faili allkiri
+
+	@property showal type=checkbox ch_value=1
+	@caption Näita kohe
+
+	@property newwindow type=checkbox ch_value=1
+	@caption Uues aknas
+
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+	
+	@property show_framed type=checkbox ch_value=1
+	@caption Näita saidi raamis
+
+	@property view type=text editonly=1
+	@caption Näita faili
+
+	@property j_time type=date_select 
+	@caption Jõustumise kuupäev
+
+	@property act_date type=date_select
+	@caption Avaldamise kuupäev
+
+	@classinfo objtable=files
+	@classinfo objtable_index=id
+
+	@groupinfo general caption=Üldine default=1
+        @groupinfo dates caption=Ajad
+
+	@tableinfo files index=id master_table=objects master_index=oid	
+
+	// miski is_aip globaases skoobis on faili salvestamisel oluline
+
+*/
+
+
+class file extends class_base
 {
 	////
 	// !Konstruktor
 	function file()
 	{
-		$this->init("file");
+		$this->init(array(
+			"clid" => CL_FILE,
+			"tpldir" => "file",
+		));
 		lc_load("definition");
 		$this->lc_load("file","lc_file");
+	}
+
+	function get_property($args = array())
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case "view":
+				$data["value"] = html::href(array(
+					"url" => $this->mk_my_orb("preview",array("id" => $args["obj"]["oid"])),
+					"caption" => "Näita",
+					"target" => "_blank",
+				));
+				break;
+
+			case "file":
+				$data["value"] = "";
+				break;
+
+		}
+		return $retval;
+	}
+
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$form_data = &$args["form_data"];
+		global $file, $file_type,$file_name;
+		if ($data["name"] == "file")
+		{
+			if (is_uploaded_file($file))
+			{
+				// fail sisse
+				$fc = $this->get_file(array(
+					"file" => $file,
+				));
+		
+				if ($fc != "")
+				{
+					// stick the file in the filesystem
+					$fs = $this->_put_fs(array(
+						"type" => $file_type,
+						"content" => $fc,
+					));
+
+					$form_data["file"] = $fs;
+				};
+		
+				/*	
+				if ($is_aip)
+				{
+					$this->db_query("INSERT INTO aip_files (filename, tm, menu_id, id) VALUES('$file_name','".time()."','".$parent."','$pid')");
+				}
+				*/
+			};
+		};
+		// cause everything is alreay handled here
+		return PROP_OK;
 	}
 
 	////
@@ -319,288 +426,6 @@ class file extends aw_template
 					$retval .= "$dir ei ole kirjutatav<br>";
 				};
 			};
-		};
-		return $retval;
-	}
-
-	////
-	// !Kuvab faili lisamise vormi
-	function add($arr)
-	{
-		extract($arr);
-		if ($return_url)
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / ".LC_FILE_ADD_FILE);
-		}
-		else
-		{
-			$this->mk_path($parent,LC_FILE_ADD_FILE);
-		}
-
-		// kui messenger argument on seatud, siis submit_add peaks tagasi messengeri minema
-		if ($msg_id)
-		{
-			$tpl = "attach.tpl";
-		}
-		else
-		{
-			$tpl = ($arr["tpl"]) ? $arr["tpl"] : "upload.tpl";
-		};
-
-		$this->read_template($tpl);
-
-		load_vcl("date_edit");
-		$de = new date_edit("act_time");
-		$de->configure(array(
-			"year" => 1,
-			"month" => 1,
-			"day" => 1,
-			"hour" => 1,
-			"minute" => 1,
-			"classid" => "formselect"
-		));
-
-		$this->vars(array(
-			"act_date" => $de->gen_edit_form("act_time", time()),
-			"j_date" => $de->gen_edit_form("j_time", time()),
-			"reforb" => $this->mk_reforb("submit_add", array(
-				"id" => $id,
-				"msg_id" => $msg_id,
-				"parent" => $parent,
-				"return_url" => $return_url,
-				"user" => $user,
-				"alias_to" => $alias_to,
-				"is_aip" => $GLOBALS["is_aip"]
-			)),
-		));
-		return $this->parse();
-	}
-
-	////
-	// !Lisab faili lisamisvormist tulnud info pohjal
-	function submit_add($arr)
-	{
-		extract($arr);
-		// $file, $file_type ja $file_name on special muutujad,
-		// mis tekitatakse php poolt faili uploadimisel
-		global $file, $file_type,$file_name;
-
-		if (is_uploaded_file($file))
-		{
-			// fail sisse
-			$fc = $this->get_file(array(
-				"file" => $file,
-			));
-
-			// fuck this sucks
-			if ($msg_id)
-			{
-				$messenger = get_instance("messenger");
-				$row = array();
-				$row["type"] = $file_type;
-				$row["content"] = $fc;
-				$row["class_id"] = CL_FILE;
-				$row["name"] = $file_name;
-				$ser = serialize($row);
-				$this->quote($ser);
-				$messenger->attach_serialized_object(array(
-					"msg_id" => $msg_id,
-					"data" => $ser,
-				));
-			}
-			else
-			{
-				load_vcl("date_edit");
-				$de = new date_edit("act_time");
-
-				$pid = $this->save_file(array(
-					"parent" => $parent,
-					"name" => $file_name,
-					"comment" => $comment,
-					"content" => $fc,
-					"showal" => $show,
-					"type" => $file_type,
-					"newwindow" => $newwindow,
-					"j_time" => $de->get_timestamp($j_time),
-					"show_framed" => $show_framed,
-				));
-				$this->pid = $pid;
-
-				// id on dokumendi ID, kui fail lisatakse doku juurde
-				// add_alias teeb voimalikus #fn# tagi kasutamise doku kuvamise juures
-				if ($id)
-				{
-					$this->add_alias($id,$pid);
-				}
-				if ($alias_to)
-				{
-					$this->add_alias($alias_to,$pid);
-				}
-				$this->_log("fail","Lisas faili $file_name ($pid)");
-			};
-
-			// ok, I hate mysqlf for doing this, but I can't do it any other way, sorry :(
-			if ($is_aip)
-			{
-				$this->db_query("INSERT INTO aip_files (filename, tm, menu_id, id) VALUES('$file_name','".time()."','".$parent."','$pid')");
-			}
-
-			// defineerime voimalikud orb-i väärtused siin ära
-
-			// parent on menüü
-			// fsck. What If I want to add a file from somewhere else?
-			// or any other object? We need a better solution for this.
-			$orb_urls = array(
-				// saidi seest lisati doku juurde fail
-				//"user" => $this->mk_site_orb(array("class" => "document","action" => "change","id" => $id)),
-				"user" => $this->mk_my_orb("list_aliases", array("id" => $id), "aliasmgr",false,1),
-
-				// aw-st lisati doku juurde fail
-				"awdoc" => $this->mk_my_orb("list_aliases", array("id" => $id), "aliasmgr"),
-
-				// menueditist lisati fail
-				"awfile" => $this->mk_my_orb("obj_list", array("parent" => $parent), "menuedit"),
-
-				// messengeri külge attachitud fail
-				"messenger" => $this->mk_site_orb(array("class" => "messenger","action" => "edit","id" => $msg_id)),
-
-				// saidi poole pealt uploaditi kodukataloogi fail
-				//"site" => $this->mk_site_orb(array("class" => "homedir","action" => "gen_home_dir","id" => $parent)),
-				//"site" => $this->mk_site_orb(array("class" => "manager","action" => "browse","id" => $parent)),
-				"site" => $this->mk_my_orb("browse",array("parent" => $parent),"manager",false,1),
-			);
-
-			if ($return_url != "")
-			{
-				$retval = $return_url;
-			}
-			else
-			if ($id)
-			{
-				// $user argument tähendab, et request tuli saidi seest
-				// ja vastavalt sellele suuname kliendi ringi
-				$retval = ($user) ? $orb_urls["user"] : $orb_urls["awdoc"];
-			}
-			else
-			if (strpos(aw_global_get("REQUEST_URI"),"automatweb") === false)
-			{
-				$retval = $orb_urls["site"];
-			}
-			elseif ($msg_id)
-			{
-				$retval = $orb_urls["messenger"];
-			}
-			else
-			{
-				$retval = $orb_urls["awfile"];
-			}
-		} 
-		else 
-		{
-			// Sellist faili polnud. Voi tekkis mingi teine viga
-			print LC_FILE_SOME_IS_WRONG;
-			$retval = array();
-		};
-		return $retval;
-	}
-
-	////
-	// !Muudab faili
-	function change($arr)
-	{
-		extract($arr);
-		$this->read_template("edit.tpl");
-		$fi = $this->get_file_by_id($id);
-		$this->mk_path($parent, LC_FILE_CHANGE_FILE);
-
-		load_vcl("date_edit");
-		$de = new date_edit("act_time");
-		$de->configure(array(
-			"year" => 1,
-			"month" => 1,
-			"day" => 1,
-			"hour" => 1,
-			"minute" => 1,
-			"classid" => "formselect"
-		));
-
-		$this->vars(array(
-			"reforb"	=> $this->mk_reforb("submit_change",array("id" => $id, "parent" => $parent,"doc" => $doc,"user" => $user,"return_url" => $return_url)),
-			"act_date" => $de->gen_edit_form("act_time", $fi["meta"]["act_time"]),
-			"j_date" => $de->gen_edit_form("j_time", $fi["meta"]["j_time"]),
-			"comment" => $fi["comment"],
-			"checked" => checked($fi["showal"]), 
-			"show_framed" => checked($fi["meta"]["show_framed"]),
-			"newwindow" => checked($fi["newwindow"])
-		));
-		return $this->parse();
-	}
-
-	////
-	// !Salvestab muudatused
-	function submit_change($arr)
-	{
-		extract($arr);
-		global $file, $file_type,$file_name;
-
-		load_vcl("date_edit");
-		$de = new date_edit("act_time");
-
-		if (!is_uploaded_file($file)) 
-		{
-			// uut failinime ei määratud, muudame infot
-			$this->save_file(array(
-				"file_id" => $id,
-				"comment" => $comment,
-				"showal" => $show,
-				"newwindow" => $newwindow,
-				"show_framed" => $show_framed,
-				"act_time" => $de->get_timestamp($act_time),
-				"j_time" => $de->get_timestamp($j_time)
-			));
-			$this->_log("fail","Muutis faili $id andmeid");
-		}
-		else
-		{
-			$pid = $this->save_file(array(
-				"file_id" => $id,
-				"name" => $file_name,
-				"comment" => $comment,
-				"content" => $this->get_file(array("file" => $file)),
-				"showal" => $show,
-				"type" => $file_type,
-				"newwindow" => $newwindow,
-				"act_time" => $de->get_timestamp($act_time),
-				"j_time" => $de->get_timestamp($j_time),
-				"show_framed" => $show_framed,
-			));
-			$this->_log("fail","Muutis faili $pid");
-		}
-
-		// Probleemikoht. Mis siis, kui ma tahan monda teise kohta minna peale submitti?
-		$obj = $this->get_object($id);
-		$parent = $obj["parent"];
-		if ($return_url != "")
-		{
-			$retval = $return_url;
-		}
-		else
-		if ($doc)
-		{
-			$retval = $this->mk_my_orb("change", array("id" => $doc),"document");
-		}
-		else
-		{
-			if ($GLOBALS["user"])
-			{
-				//$retval = $this->mk_my_orb("gen_home_dir", array("id" => $parent),"users");
-				$retval = $this->mk_my_orb("browse", array("id" => $parent),"manager",false,1);
-			}
-			else
-			{
-				//$retval = $this->mk_my_orb("obj_list", array("parent" => $parent),"menuedit");
-				$retval = $this->mk_my_orb("change",array("id" => $id));
-			}
 		};
 		return $retval;
 	}

@@ -1,0 +1,96 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>file</name>
+            <type>fileupload</type>
+            <table>files</table>
+            <group>general</group>
+            <field>file</field>
+            <caption>Vali fail</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>comment</field>
+            <group>general</group>
+            <caption>Faili allkiri</caption>
+      </property>
+      <property>
+            <name>showal</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>files</table>
+            <group>general</group>
+            <field>showal</field>
+            <caption>Näita kohe</caption>
+      </property>
+      <property>
+            <name>newwindow</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>files</table>
+            <group>general</group>
+            <field>newwindow</field>
+            <caption>Uues aknas</caption>
+      </property>
+      <property>
+            <name>show_framed</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Näita saidi raamis</caption>
+      </property>
+      <property>
+            <name>view</name>
+            <type>text</type>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Näita faili</caption>
+      </property>
+      <property>
+            <name>j_time</name>
+            <type>date_select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Jõustumise kuupäev</caption>
+      </property>
+      <property>
+            <name>act_date</name>
+            <type>date_select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Avaldamise kuupäev</caption>
+      </property>
+      <classinfo>
+            <objtable>files</objtable>
+            <objtable_index>id</objtable_index>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+                  <default>1</default>
+            </general>
+            <dates>
+                  <caption>Ajad</caption>
+            </dates>
+      </groupinfo>
+      <tableinfo>
+            <files>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid	</master_index>
+            </files>
+      </tableinfo>
+</properties>
+
