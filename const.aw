@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.64 2002/06/13 23:11:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.65 2002/07/11 20:59:35 duke Exp $
 
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -17,11 +17,6 @@ if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
 
 if ($pi) 
 {
-	// uh, why do you use sprintf to do string->int conversion? I mean, it's GOTTA be wayyy slower than $i = (int)$str;
-
-	// I think type-cast had problems in some situations, but right now I can't really reproduce any of those
-	$section = (int)substr($pi,1);
-
 	// if $pi contains & or = 
 	if (preg_match("/[&|=]/",$pi)) 
 	{
@@ -29,17 +24,33 @@ if ($pi)
 		// replace ? and / with & in $pi and output the result to HTTP_GET_VARS
 		// why so?
 		parse_str(str_replace("?","&",str_replace("/","&",$pi)),$HTTP_GET_VARS);
-//		echo "$QUERY_STRING , $PATH_INFO , pi = $pi  str = ",str_replace("?","&",str_replace("/","&",$pi))," <br>";
+//		echo "gv = <pre>", var_dump($HTTP_GET_VARS),"</pre> <br>";
 		extract($HTTP_GET_VARS);
 	} 
-	else 
-	{
-		$section = substr($pi,1);
-	};
 
-	// this here adds support for links like http://bla/index.aw/section=291/lcb=117
+	if (($_pos = strpos($pi, "section=")) === false)
+	{
+		// ok, we need to check if section is followed by = then it is not really the section but 
+		// for instance index.aw/set_lang_id=1
+		// we check for that like this:
+		// if there are no / or ? chars before = then we don't prepend
+
+		$qpos = strpos($pi, "?");
+		$slpos = strpos($pi, "/");
+		$eqpos = strpos($pi, "=");
+		$qpos = $qpos ? $qpos : 20000000;
+		$slpos = $slpos ? $slpos : 20000000;
+
+		if (!$eqpos || ($eqpos > $qpos || $slpos > $qpos))
+		{
+			// if no section is in url, we assume that it is the first part of the url and so prepend section = to it
+			$pi = str_replace("?", "&", "section=".substr($pi, 1));
+		}
+	}
+
 	if (($_pos = strpos($pi, "section=")) !== false)
 	{
+		// this here adds support for links like http://bla/index.aw/section=291/lcb=117
 		$t_pi = substr($pi, $_pos+strlen("section="));
 		if (($_eqp = strpos($t_pi, "="))!== false)
 		{
@@ -82,6 +93,8 @@ if ($pi)
 		}
 	}
 };
+
+// siin oli aw_global_set("section",$section); mida EI TOHI siin olla
 
 // support for crypted urls
 if (isset($__udat))
@@ -135,7 +148,8 @@ define("MN_HOME_FOLDER",74);
 define("MN_HOME_FOLDER_SUB",75);
 // formi element, mis on samas ka menyy
 define("MN_FORM_ELEMENT",76);
-
+// public method
+define("MN_PMETHOD",77);
 
 // formide tyybid
 define("FTYPE_ENTRY",1);
@@ -146,6 +160,17 @@ define("FTYPE_CONFIG",5);
 
 // formide alamtyybid
 define("FSUBTYPE_JOIN",1);
+
+
+// subtype voiks bitmask olla tegelikult
+
+// kas seda vormi saab kasutada eventite sisestamiseks
+// mingisse kalendrisse?
+define("FSUBTYPE_EV_ENTRY",2);
+
+// kas seda vormi saab kasutada vormi baasil e-maili
+// actionite tegemiseks?
+define("FSUBTYPE_EMAIL_ACTION",4);
 
 // objektide subclassid - objects.subclass sees juusimiseks
 
