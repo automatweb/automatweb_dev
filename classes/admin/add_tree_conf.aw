@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.14 2004/04/30 08:48:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.15 2004/09/24 11:02:35 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -114,7 +114,7 @@ class add_tree_conf extends class_base
 			$tmp = aw_ini_get("classes");
 			foreach($tmp as $cl_id => $cld)
 			{
-				if (!$cld["can_add"] || !isset($cld["parents"]))
+				if (!isset($cld["parents"]))
 				{
 					continue;
 				}
