@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.32 2003/02/28 14:08:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.33 2003/03/28 10:24:35 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -251,6 +251,7 @@ class poll extends aw_template
 			{
 				foreach($answer[$lang_id] as $aid => $la)
 				{
+					$la = str_replace("'","\\'", $la);
 					if ($aid == 0 && (strlen($la) > 0))
 					{
 						$this->db_query("INSERT INTO poll_answers(answer,poll_id) values('$la','$id')");
@@ -460,6 +461,14 @@ class poll extends aw_template
 		reset($ans);
 		while (list($k,$v) = each($ans))
 		{
+/*			if ($def)	 
+			{	 
+				$au = $this->mk_my_orb("show", array("poll_id" => $ap["oid"], "answer_id" => $k));
+			}	 
+			else	 
+			{	 
+				$au = "/?section=".$section."&poll_id=".$ap["oid"]."&answer_id=".$k;	 
+			}*/
 			$au = $this->mk_my_orb("show", array("poll_id" => $ap["oid"], "answer_id" => $k));
 			$this->vars(array(
 				"answer_id" => $k, 
@@ -627,9 +636,9 @@ class poll extends aw_template
 				"type" => CL_POLL,
 			));
 			$this->pollaliasoid = $oid;
-    };
-    $f = $this->pollaliases[$matches[3] - 1];
-		global $poll_id;
+		};
+	    $f = $this->pollaliases[$matches[3] - 1];
+		$poll_id = aw_global_get("poll_id");
 		if ($poll_id)
 		{
 			return $this->show($f["target"]);
