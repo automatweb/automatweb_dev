@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.45 2001/07/28 12:14:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.46 2001/07/29 18:37:39 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -764,6 +764,7 @@ class core extends db_connector
 		$this->blocks = array();
 		$awt->start("parse_aliases");
 		extract($args);
+
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
 		// esimese tsükliga kutsume parserite reset funktioonud välja. If any.
 		foreach($this->parsers->reglist as $pkey => $parser)
@@ -789,17 +790,18 @@ class core extends db_connector
 			{
 				// siia tuleb tekitada mingi if lause, mis 
 				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja välja
-				#$replacement = "";
 				if (sizeof($parser["parserchain"] > 0))
 				{
 					foreach($parser["parserchain"] as $skey => $sval)
 					{
+
 						$inplace = false;
 						if (($matches[$sval["idx"]] == $sval["match"]) || (!$sval["idx"]))
 						{
 							$cls = $sval["class"];
 							$fun = $sval["function"];
 							$tpls = array();
+
 							foreach($sval["templates"] as $tpl)
 							{
 								$tpls[$tpl] = $this->templates[$tpl];
@@ -812,30 +814,33 @@ class core extends db_connector
 								"tpls" => $tpls,
 							);
 
-							$replacement = $this->parsers->$cls->$fun($params);
-							if (is_array($replacement))
+							$repl = $this->parsers->$cls->$fun($params);
+							
+							if (is_array($repl))
 							{
-								$replacement = $replacement["replacement"];
-								$inplace = $replacement["inplace"];
+								$replacement = $repl["replacement"];
+								$inplace = $repl["inplace"];
 							};
 
 							if (is_array($this->parsers->$cls->blocks))
 							{
 								$this->blocks = $this->blocks + $this->parsers->$cls->blocks;
 							};
+						
+							if ($inplace)
+							{
+								$this->vars(array($inplace => $replacement));	
+								$inplace = false;
+								$text = preg_replace("/$matches[0]/","",$text);
+							}
+							else
+							{
+								$text = preg_replace("/$matches[0]/",$replacement,$text);
+							};
+							$replacement = "";
 						};
 					};
 				};
-				if ($inplace)
-				{
-					$this->vars(array($inplace => $replacement));	
-					$text = preg_replace("/$matches[0]/","",$text);
-				}
-				else
-				{
-					$text = preg_replace("/$matches[0]/",$replacement,$text);
-				};
-				$replacement = "";
 			};
 		};
 		$awt->stop("parse_aliases");

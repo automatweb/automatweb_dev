@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.12 2001/07/16 14:35:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.13 2001/07/29 18:37:40 duke Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -44,7 +44,7 @@ class images extends aw_template
 			}
 			else
 			{
-				if ($this->templates["image_inplace"])
+				if ($tpls["image_inplace"])
 				{
 					$tpl = "image_inplace";
 					$inplace = $tpl;
