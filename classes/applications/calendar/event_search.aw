@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.25 2005/01/24 13:42:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.26 2005/01/25 09:09:38 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -756,7 +756,9 @@ class event_search extends class_base
 			}
 			if(is_oid($arr["evt_id"]) && $this->can("view", $arr["evt_id"]))
 			{
-				$search = array("brother_of" => $arr["evt_id"]);
+				$obj = obj($arr["evt_id"]);
+				$orig = $obj->get_original();
+				$search = array("oid" => $orig->id());
 			}
 			$clinf = aw_ini_get("classes");
 			$edata = array();
@@ -765,9 +767,9 @@ class event_search extends class_base
 			// it would be a nice habbit to always commment my own code,
 			// but then again, these magical bugs have miraculous ability to come into
 			// makes tasklist, so why bother :) ok ok, i really should...
-			if (sizeof($search["parent"]) != 0 || $search["brother_of"])
+			if (sizeof($search["parent"]) != 0 || $search["oid"])
 			{
-				if($search["brother_of"])
+				if($search["oid"])
 				{
 					$ol = new object_list($search);
 				}
@@ -798,7 +800,7 @@ class event_search extends class_base
 					}
 				}
 				
-				$this->read_template(($search["brother_of"] ? "show_event.tpl" : "search_results.tpl"));
+				$this->read_template(($search["oid"] ? "show_event.tpl" : "search_results.tpl"));
 				$tabledef = $ob->meta("result_table");
 				uasort($tabledef, array($this, "__sort_props_by_ord"));
 				$cdat = "";
@@ -816,30 +818,20 @@ class event_search extends class_base
 						));
 						$cdat .= $this->parse("COLHEADER");
 						$col_count++;
-					};
+					}
 					$this->vars(array(
 						"COLHEADER" => $cdat,
 						"col_count" => $col_count,
 					));
-				};
-				// vï¿½ siis .. nï¿½data ainult eventeid, mis on mï¿½ema valitud parenti all?
-				//arr($ol);
+				}
 				$origs = array();
 				foreach($ol->arr() as $res)
 				{
-					$pr = new object($res->parent());
-					// see on project
-					// aga mitte orig_name vaid .. HAHA. bljaad raisk
-					$orig_id = $res->brother_of();
-					
+					$orig_id = $res->id();
 					$origs[] = $orig_id;
-					//print "oid = " . $res->id() . "<br>";
-					$mpr = $pr->parent();
-					//print "parent = " . $pr->name() . "/" . $pr->id() . "<br>";
-					$mo = new object($mpr);
-					//print "mpr = " . $mo->id() . "/" . $mo->name() . "<br>";
-					//print "n = " . $res->name() . "<br>";
-					// iga sndmuse kohta ma pean vaatama kas ta on mind huvitava projekti all vï¿½ mitte?
+					/*
+					$pr = new object($res->parent());
+					$mo = new object($pr->parent());
 					$parent1 = $parent2 = "";
 					if (in_array($pr->id(), $par1))
 					{
@@ -857,34 +849,19 @@ class event_search extends class_base
 							$edata[$orig_id]["parent2"] = $parent2;
 						};
 					};
-					$orig = $res->get_original();
-					if (!$edata[$orig_id])
-					{
-						$bros = new object_list(array(
-							"brother_of" => $orig_id,
-						));
-						$prjx = array();
-						foreach($bros->arr() as $bro)
-						{
-							$prjx[] = $bro->prop("project_selector");
-						}
-						//arr($orig->properties());
-						//$edata[$orig_id] = $orig->properties();
+					*/
 						
-						 $edata[$orig_id] = array(
-							"event_id" => $orig->id(),
-							"event" => $orig->name(),
-							"parent1" => $parent1,
-							"parent2" => $parent2,
-							"place" => $pr->name(),
-							"parent" => $mo->name(),
-							"project_selector" => "n/a",
-							"date" => date("d-m-Y", $res->prop("start1")),
-						);
-						$edata[$orig_id] = array_merge($edata[$orig_id], $orig->properties());
-						$edata[$orig_id]["project_selector"] = implode(", ", $prjx);
-					};
-					//arr($orig->properties());
+					$edata[$orig_id] = array(
+						"event_id" => $res->id(),
+						"event" => $res->name(),
+						//"parent1" => $parent1,
+						//"parent2" => $parent2,
+						//"place" => $pr->name(),
+						//"parent" => $mo->name(),
+						"project_selector" => "n/a",
+						"date" => date("d-m-Y", $res->prop("start1")),
+					);
+					$edata[$orig_id] = array_merge($edata[$orig_id], $res->properties());
 					$ecount[$orig_id]++;
 				};
 			};
@@ -896,24 +873,46 @@ class event_search extends class_base
 				));
 				$blist = $fls->arr();
 			}
-			enter_function("event_search::search_speed");
 			$pr1 = $formconfig["project1"]["rootnode"];
+			$dats = array();
 			foreach($blist as $b_o)
 			{
 				if (!is_oid($b_o->parent()) || !$this->can("view", $b_o->parent()))
 				{
 					continue;
 				}
-				$p2 = new object($b_o->parent());
-				if ($p2->parent() == $pr1)
+				$orig = $b_o->brother_of();
+				if ($edata[$orig])
 				{
-					$orig = $b_o->brother_of();
-					if ($edata[$orig])
+					if(in_array($b_o->parent(), $par2))
 					{
-						$edata[$orig]["project_selector"] = $p2->name();
-					};
-				};
-			};
+						continue;
+					}
+					$p2 = new object($b_o->parent());
+					$nm = $p2->name();
+					if ($p2->class_id() == CL_MENU)
+					{
+						continue;
+						/*
+						if(!$cal = reset($p2->connections_to(array(
+							"from.class_id" => CL_PLANNER,
+							"type" => 6, //EVENT_FOLDER
+						))))
+						{
+							
+						}
+						$nm = $cal->prop("from.name");
+						*/
+					}
+					$dats[$orig][] = $nm;
+				}
+			}
+			foreach($dats as $key => $val)
+			{
+				$val = safe_array($val);
+				sort($val);
+				$edata[$key]["project_selector"] = implode(", ", $val);
+			}
 			exit_function("event_search::search_speed");
 			$res = "";
 			
@@ -1017,7 +1016,7 @@ class event_search extends class_base
 				$this->vars(array(
 					"num" => $i % 2 ? 1 : 2,
 				));
-				if($search["brother_of"])
+				if($search["oid"])
 				{
 					$this->vars(array(
 						"fulltext_name" => $tabledef[$nmx]["caption"],
@@ -1167,7 +1166,7 @@ class event_search extends class_base
 		$html = $htmlc->get_result(array(
 			"form_only" => 1
 		));
-		return $search["brother_of"] ? $result : $html;
+		return $search["oid"] ? $result : $html;
 
 		// kuupva numbrid on lihtsalt selectid
 	}
