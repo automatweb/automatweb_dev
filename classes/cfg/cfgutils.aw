@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.34 2004/01/13 14:12:20 duke Exp $
+// $Id: cfgutils.aw,v 1.36 2004/02/04 13:26:24 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -145,7 +145,7 @@ class cfgutils extends aw_template
 			$groupinfo = $parser->get_data("/properties/groupinfo");
 			$tableinfo = $parser->get_data("/properties/tableinfo");
 			$relinfo = $parser->get_data("/properties/reltypes");
-			
+			$forminfo = $parser->get_data("/properties/forminfo");
 			$tmp = array();
 			if (is_array($groupinfo[0]))
 			{	
@@ -162,7 +162,6 @@ class cfgutils extends aw_template
 			{
 				if (is_array($groupinfo))
 				{
-					//$this->groupinfo = $this->groupinfo + $groupinfo;
 					$this->groupinfo = array_merge($this->groupinfo,$groupinfo);
 				};
 			}
@@ -170,8 +169,20 @@ class cfgutils extends aw_template
 			{
 				$this->groupinfo = $groupinfo;
 			};
+			$tmp = array();
+			if (is_array($forminfo[0]))
+			{	
+				foreach($forminfo[0] as $key => $val)
+				{
+					$tmp[$key] = $this->normalize_text_nodes($val[0]);
+
+				};
+				$this->forminfo = $tmp;
+			};
+			
 			$this->tableinfo = $tableinfo[0];
 			$tmp = array();
+
 			if (is_array($relinfo[0]))
 			{
 				foreach($relinfo[0] as $key => $val)
@@ -443,6 +454,11 @@ class cfgutils extends aw_template
 	function get_relinfo()
 	{
 		return $this->relinfo;
+	}
+	
+	function get_forminfo()
+	{
+		return $this->forminfo;
 	}
 
 	function get_groupinfo()
