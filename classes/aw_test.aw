@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.8 2004/02/27 13:04:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.9 2004/06/17 13:58:55 kristo Exp $
 // aw_test.aw - AW remote control
 
 /*
@@ -153,6 +153,12 @@ class aw_test extends class_base
 			"port" => 80,
 		));
 		
+		if ($args["sessid"] != "")
+		{
+			$this->cookie = $args["sessid"];
+			return;
+		}
+
 		$op = "HEAD / HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cache-control: no-cache\r\n";
