@@ -97,9 +97,7 @@ target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
 	-->
 	T&uuml;hista stiilid:	<input type='checkbox' name="clear_styles" value=1><br>
 
-	<!--
 	&nbsp;&nbsp;Lingi võtmesõnad:	<input type='checkbox' name="link_keywords" value=1>&nbsp;&nbsp;&nbsp;
-	-->
 	Arhiveeri:	<input type='checkbox' name="archive" value=1>&nbsp;&nbsp;&nbsp;
 	<!--
 	Esilehel:	<input type='checkbox' name="esilehel" value=1 {VAR:esilehel}>&nbsp;&nbsp;&nbsp;
