@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.147 2002/09/30 06:58:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.148 2002/09/30 11:00:46 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -66,6 +66,19 @@ class form extends form_base
 		return $replacement;
 	}
 
+	function debug_map_print()
+	{
+		echo "<table border=1>";
+		for ($r=0; $r < $this->arr["rows"]; $r++)
+		{
+			echo "<tr>";
+			for ($c=0; $c < $this->arr["cols"]; $c++)
+				echo "<td>(", $this->arr["map"][$r][$c]["row"], ",",$this->arr["map"][$r][$c]["col"],")</td>";
+			echo "</tr>";
+		}
+		echo "</table>";
+	}
+
 	////
 	// !Generates form admin interface
 	// $arr[id] - form id, required
@@ -75,6 +88,8 @@ class form extends form_base
 	{
 		extract($arr);
 		$this->if_init($id,"grid.tpl",LC_FORM_CHANGE_FORM);
+
+//		$this->debug_map_print();
 
 		for ($a=0; $a < $this->arr["cols"]; $a++)
 		{

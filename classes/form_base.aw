@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.48 2002/09/17 11:52:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.49 2002/09/30 11:00:46 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -139,6 +139,8 @@ class form_base extends form_db_base
 		{
 			for ($row = 0; $row < $this->arr["rows"]; $row++)
 			{
+				$this->arr["map"][$row][$col]["row"] = (int)$this->arr["map"][$row][$col]["row"];
+				$this->arr["map"][$row][$col]["col"] = (int)$this->arr["map"][$row][$col]["col"];
 				// if we are adding rows/columns, then those objects might not be initialized yet
 				if (is_object($this) && is_object($this->arr["contents"][$row][$col]))
 				{
