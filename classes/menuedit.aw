@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.113 2002/03/13 14:15:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.114 2002/03/14 11:32:14 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -583,9 +583,9 @@ class menuedit extends aw_template
 			{
 				$this->vars(array("MENUEDIT_ACCESS" => ""));
 			}
-			$logged = $this->parse("logged");
+
 			$this->vars(array(
-				"logged" => $logged, 
+				"logged" => $this->parse("logged"), 
 				"logged1" => $this->parse("logged1"),
 				"logged2" => $this->parse("logged2"),
 				"logged3" => $this->parse("logged3"),
@@ -1918,7 +1918,7 @@ class menuedit extends aw_template
 
 			$target = "";
 
-			$change = $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $inf["file"]);
+			$change = $this->mk_orb("change", array("id" => $row["docid"], "parent" => $row["parent"]), $inf["file"]);
 			if ($row["class_id"] == CL_FILE)
 			{
 				if ($filearr[$row["oid"]]["newwindow"] == 1)
@@ -4368,6 +4368,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 						"boldlead" => 1,
 						"tpl" => $template));
 			$this->vars(array("docid" => $section));
+			$this->active_doc = $section;
 			$PRINTANDSEND = $this->parse("PRINTANDSEND");
 		}
 		else
@@ -4415,6 +4416,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 							"boldlead" => 1,
 							"tpl" => $template));
 				$this->vars(array("docid" => $row["docid"]));
+				$this->active_doc = $row["docid"];
 				$PRINTANDSEND = $this->parse("PRINTANDSEND");
 			}
 		}
