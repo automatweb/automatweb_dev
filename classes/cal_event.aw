@@ -1,9 +1,8 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.3 2002/01/17 01:15:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.4 2002/01/18 00:03:46 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
-define("TIMEBASE",mktime(0,0,0,1,1,2001));
 
 class cal_event extends aw_template {
 	function cal_event($args = array())
@@ -59,13 +58,21 @@ class cal_event extends aw_template {
                 $h_list = range(0,23);
                 // nimekiri minutitest
                 $m_list = array("0" => "00", "15" => "15", "30" => "30", "45" => "45");
+		if ($args["oid"])
+		{
+			$obj = $this->get_object($args["oid"]);
+		};
+		$types = array("linki objektile","objekti ennast");
 		$this->vars(array(
 			"start" => $start_ed,
 			"shour" => $this->picker($shour,$h_list),
 			"smin" => $this->picker($smin,$m_list),
 			"calendars" => $this->picker($args["folder"],$calendars),
+			"showtype" => $this->picker($args["meta"]["showtype"],$types),
 			"dhour" => $this->picker($dhour,$h_list),
 			"dmin" => $this->picker($dmin,$m_list),
+			"object" => $obj["name"],
+			"obj_icon" => get_icon_url($obj["class_id"],""),
 			"color" => $this->picker($args["color"],$colors),
 			"calendar_url" => $this->mk_my_orb("view",array("id" => $args["folder"]),"planner"),
 			"icon_url" => get_icon_url(CL_CALENDAR,""),
@@ -77,9 +84,19 @@ class cal_event extends aw_template {
 	function add($args = array())
 	{
 		extract($args);
+		$par_obj = $this->get_object($parent);
 		$this->read_template("edit.tpl");
 		$this->mk_path($parent,"Lisa kalendrisündmus");
-		$this->_fill_event_form(array("folder" => $args["folder"]));
+		if ($date)
+		{
+			list($d,$m,$y) = explode("-",$date);
+			$start = mktime(9,0,0,$m,$d,$y);
+		}
+		else
+		{
+			$start = time();
+		};
+		$this->_fill_event_form(array("folder" => $args["folder"],"start" => $start));
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit",array("parent" => $parent)),
 		));
@@ -99,11 +116,18 @@ class cal_event extends aw_template {
 
 		if ($parent)
 		{
+			$par_obj = $this->get_object($parent);
+			$parent_class = $par_obj["class_id"];
 			$id = $this->new_object(array(
 				"parent" => $parent,
 				"name" => $title,
 				"class_id" => CL_CAL_EVENT,
 				"status" => 2,
+			));
+
+			$this->upd_object(array(
+				"oid" => $id,
+				"metadata" => array("repcheck" => $repcheck,"showtype" => $showtype),
 			));
 
 			$q = "INSERT INTO planner
@@ -115,14 +139,17 @@ class cal_event extends aw_template {
 		{
 			if ($repcheck)
 			{
-				$mt = array("repcheck" => $repcheck);
+				$mt = array("repcheck" => $repcheck,"showtype" => $showtype);
 			}
 			else
 			{
 				// if the repcheck checkbox was unchecked then we need 
 				// to zero out all the information about repeaters
-				$mt = array("repcheck" => $repcheck,"repeaters" => array());
+				$mt = array("repcheck" => $repcheck,"repeaters" => array(),"showtype" => $showtype);
 			}
+			$obj = $this->get_object($id);
+			$par_obj = $this->get_object($obj["parent"]);
+			$parent_class = $par_obj["class_id"];
 			$this->upd_object(array(
 				"oid" => $id,
 				"name" => $title,
@@ -140,7 +167,27 @@ class cal_event extends aw_template {
 				WHERE id = '$id'";
 			$this->db_query($q);
 		}
-		return $this->mk_my_orb("change",array("id" => $id));
+
+		if ($parent_class == CL_CALENDAR)
+		{
+			$clid = "planner";
+			$act = ($object) ? "event_object_search" : "change_event";
+		}
+		else
+		{
+			$clid = "cal_event";
+			$act = ($object) ? "search" : "change";
+		};
+		// we saved the event, and now we can go and check whether and how
+		// to add an object
+		if ($object)
+		{
+			return $this->mk_my_orb($act,array("id" => $id),$clid);
+		}
+		else
+		{
+			return $this->mk_my_orb($act,array("id" => $id),$clid);
+		};
 	}
 
 	////
@@ -149,15 +196,28 @@ class cal_event extends aw_template {
 	{
 		extract($args);
 		$object = $this->get_obj_meta($id);
+		$par_obj = $this->get_object($object["parent"]);
 		$meta = $object["meta"];
-		$this->mk_path($object["parent"],"Muuda kalendrisündmust");
 		$q = "SELECT *,planner.* FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE objects.oid = '$id'";
 		$this->db_query($q);
 		$row = $this->db_next();
 		$this->read_template("edit.tpl");
+		$row["meta"] = $meta;
 		$this->_fill_event_form($row);
+		$cal_link = sprintf("<a href='%s'><img border='0' src='%s'>Kalender</a>",$this->vars["calendar_url"],$this->vars["icon_url"]);
+		$this->mk_path($object["parent"],"$cal_link | Muuda kalendrisündmust");
+
+		if ($par_obj["class_id"] == CL_CALENDAR)
+		{
+			$rep_link = $this->mk_my_orb("event_repeaters",array("id" => $id),"planner");
+		}
+		else
+		{
+			$rep_link = $this->mk_my_orb("repeaters",array("id" => $id));
+		};
+
 		$this->vars(array(
-			"rep_link" => $this->mk_my_orb("repeaters",array("id" => $id)),
+			"rep_link" => $rep_link,
 		));
 
 		$this->vars(array(
@@ -178,15 +238,10 @@ class cal_event extends aw_template {
 	{
 		extract($args);
 
-		$par_obj = $this->get_object($id);
-		//$stamps = array();
-		//$q = "SELECT * FROM planner WHERE id = '$id'";
-		//$this->db_query($q);
-		//$stamps = $this->db_next();
-		//$xaa = aw_unserialize($stamps["repeaters"]);
+		$obj = $this->get_object($id);
+		$par_obj = $this->get_object($obj["parent"]);
 
-		$grand_parent = $this->get_object($par_obj["parent"]);
-		$this->mk_path($grand_parent["parent"],"Muuda eventit");
+		$this->mk_path($par_obj["parent"],"Muuda eventit");
 		$meta = $this->get_object_metadata(array("oid" => $id,"key" => "repeaters"));
 
 		// what's that?
@@ -204,11 +259,21 @@ class cal_event extends aw_template {
 		$repend = new date_edit("start");
 		$repend->configure(array("day" => 1,"month" => 2,"year" => 3));
 		$repend_ed= $repend->gen_edit_form("repend",strtotime("+1 week"));
+		
+		if ($par_obj["class_id"] == CL_CALENDAR)
+		{
+			$rep_link = $this->mk_my_orb("change_event",array("id" => $id),"planner");
+		}
+		else
+		{
+			$rep_link = $this->mk_my_orb("change",array("id" => $id));
+		};
+
 		// oh, I know, this is sooo ugly
 		$this->vars(array(
 				"region1" => checked($meta["region1"]),
 				"dayskip" => ($meta["dayskip"] > 0) ? $meta["dayskip"] : 1,
-				"change_link" => $this->mk_my_orb("change",array("id" => $id)),
+				"change_link" => $rep_link,
 				"day1" => checked($meta["day"] == 1),
 				"day2" => checked($meta["day"] == 2),
 				"day3" => checked($meta["day"] == 3),
@@ -238,7 +303,7 @@ class cal_event extends aw_template {
 				"region4" => checked($meta["region4"]),
 				"yearskip" => ($meta["yearskip"] > 0) ? $meta["yearskip"] : 1,
 				"menubar" => $menubar,
-				"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id)),
+				"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id),"cal_event"),
 		));
 		return $this->parse();
 	}
@@ -248,6 +313,9 @@ class cal_event extends aw_template {
 		extract($args);
 		// store them inside the object so we can use them elsewhere
 		$this->repeats = $args;
+		$obj = $this->get_object($id);
+		$par_obj = $this->get_object($obj["parent"]);
+		$parent_class = $par_obj["class_id"];
 		$this->set_object_metadata(array(
 			"oid" => $id,
 			"overwrite" => 1,
@@ -264,7 +332,14 @@ class cal_event extends aw_template {
 		$this->quote($reps);
 		$q = "UPDATE planner SET rep_until = '$rep_end', repeaters = '$reps' WHERE id = '$id'";
 		$this->db_query($q);
-		return $this->mk_my_orb("repeaters",array("id" => $id));
+		if ($parent_class == CL_CALENDAR)
+		{
+			return $this->mk_my_orb("event_repeaters",array("id" => $id),"planner");
+		}
+		else
+		{
+			return $this->mk_my_orb("repeaters",array("id" => $id));
+		};
 	}
 	
 	////
@@ -338,10 +413,24 @@ class cal_event extends aw_template {
 
 		$this->found = false;
 
-		for ($this->d = 1; $this->d <= $dm; $this->d++)
+		$sd = ($month == $this->start_month) ? $this->start_day : 1;
+
+		$this_is = mktime(0,0,0,$month,1,$year);
+		if ($this_is < $this->start)
+		{
+			//print "skipping the start<br>";
+			$sd = $this->start_day;
+		}
+		else
+		{
+			$sd = 1;
+		};
+		$sd = 1;
+
+		for ($this->d = $sd; $this->d <= $dm; $this->d++)
 		{
 			$this->daynum++;
-			
+
 			if ($this->repeats["region1"])
 			{
 				$this->_process_day();
@@ -396,10 +485,13 @@ class cal_event extends aw_template {
 		// I also have to know the week day of the event
 		extract($args);
 		$start = $event["start"];
+		$this->start = $start;
 		list($start_year,$start_wday) = explode("-",date("Y-w",$start));
 
+		list($sx_m,$sx_d) = explode("-",date("m-d",$start));
+		$this->start_day = $sx_d;
+		$this->start_month = $sx_m;
 
-		
 		// then, we have to find out the time where the repeaters end
 		switch($rep)
 		{
@@ -425,7 +517,8 @@ class cal_event extends aw_template {
 		list($_d,$_m,$_y) = explode("-",$end_date);
 		$rep_end = mktime(23,59,59,$_m,$_d,$_y);
 		classload("date_calc");
-		$ddiff = get_day_diff(TIMEBASE,$start);
+		$timebase = mktime(0,0,0,1,1,2001);
+		$ddiff = get_day_diff($timebase,$start);
 		$this->gdaynum = $ddiff;
 
 
@@ -459,6 +552,8 @@ class cal_event extends aw_template {
 		//print "start_year = $start_year, end_year = $end_year, yearskip = $yearskip<br>";
 		for ($y = $start_year; $y <= $end_year; $y = $y + $yearskip)
 		{
+
+			$this->year = $y;
 			if ( ($y - 1) != $last_year)
 			{
 				$this->from_scratch = true;
@@ -484,7 +579,13 @@ class cal_event extends aw_template {
 				$last_mon = $m;
 		
 				//print "<i>Processing:</i> $m/$y<br>";
-				$this->_process_month(array("month" => $m,"year" => $y));
+				if ( ($y == start_year) && ($m < $sx_m) )
+				{
+
+				}
+				{
+					$this->_process_month(array("month" => $m,"year" => $y));
+				};
 				$this->from_scratch = false;
 				//print "<br>";
 
@@ -494,5 +595,111 @@ class cal_event extends aw_template {
 		}
 		return $rep_end;
 	}		
+	
+	////
+	// !Allows to search for objects to include in the document
+	// intended to replace pickobject.aw
+	function search($args = array())
+	{
+		extract($args);
+		classload("aliasmgr");
+		$amgr = new aliasmgr;
+		$amgr->_init_aliases();
+		$this->defs = $amgr->defs;
+		$this->read_template("search_doc.tpl");
+		$obj = $this->get_object($id);
+		$par_obj = $this->get_object($obj["parent"]);
+		$parent_class = $par_obj["class_id"];
+		global $s_name, $s_comment,$s_type,$SITE_ID;
+		if ($parent_class == CL_CALENDAR)
+		{
+			$back_link = $this->mk_my_orb("change_event",array("id" => $id),"planner");
+		}
+		else
+		{
+			$back_link = $this->mk_my_orb("change",array("id" => $id));
+		};
+		$this->mk_path(0,"<a href='$back_link'>Tagasi</a> | <b>Otsi objekti</b>");
+                if ($s_name != "" || $s_comment != "" || $s_type > 0)
+                {
+			$se = array();
+			if ($s_name != "")
+			{
+				$se[] = " objects.name LIKE '%".$s_name."%' ";
+			}
+			if ($s_comment != "")
+			{
+				//$se[] = " objects.comment LIKE '%".$s_comment."%' ";
+			}
+			if ($s_type > 0)
+			{
+				$se[] = " objects.class_id = '".$s_type."' ";
+			}
+			else
+			{
+				$se[] = " objects.class_id IN (".join(",",$this->typearr).") ";
+			}
+
+			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby
+as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND ".join("AND",$se);
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$this->vars(array(
+					"name" => $row["name"],
+					"id" => $row["oid"],
+					"type"  => $GLOBALS["class_defs"][$row["class_id"]]["name"],
+					"created" => $this->time2date($row["created"],2),
+					"modified" => $this->time2date($row["modified"], 2),
+					"createdby" => $row["createdby"],
+					"modifiedby" => $row["modifiedby"],
+					"parent_name" => $row["parent_name"],
+					"pick_url" => $this->mk_orb("addalias",array("id" => $id, "alias" => $row["oid"]),"cal_event"),
+				));
+				$l.=$this->parse("LINE");
+			}
+			$this->vars(array("LINE" => $l));
+		}
+		else
+		{
+			$s_name = "%";
+			$s_comment = "%";
+			$s_type = 0;
+		}
+
+		$tar = array(0 => LC_OBJECTS_ALL);
+		foreach($this->defs as $key => $val)
+		{
+			$clid = $val["class_id"];
+			$tar[$clid] = $GLOBALS["class_defs"][$clid]["name"];
+		}
+		$this->vars(array("id" => $id,
+				"class" => ($parent_class == CL_CALENDAR) ? "planner" : "cal_event",
+				"action" => ($parent_class == CL_CALENDAR) ? "event_object_search" : "search",
+				"s_name"  => $s_name,
+				"s_type"  => $s_type,
+				"s_comment" => $s_comment,
+				"pick_link" => $this->mk_my_orb("pick",array("id" => $id)),
+				"types" => $this->picker($s_type, $tar)));
+		return $this->parse();
+	}	
+
+	function addalias($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$obj = $this->get_object($id);
+		$par_obj = $this->get_object($obj["parent"]);
+		$q = "UPDATE planner SET oid = '$alias' WHERE id = '$id'";
+		$this->db_query($q);
+		if ($par_obj["class_id"] == CL_CALENDAR)
+		{
+			return $this->mk_my_orb("change_event",array("id" => $id),"planner");
+		}
+		else
+		{
+			return $this->mk_my_orb("change",array("id" => $id));
+		};
+	}
 };
 ?>
