@@ -49,7 +49,7 @@
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
-					<required name="id"/>
+					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
