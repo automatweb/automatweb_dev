@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.31 2004/06/15 08:57:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.32 2004/10/28 11:21:02 kristo Exp $
 
 class icons extends aw_template
 {
@@ -1127,7 +1127,8 @@ class icons extends aw_template
 		}
 
 		$ar = aw_unserialize($c->get_simple_config("program_icons"));
-		foreach($this->cfg["programs"] as $prid => $pd)
+		$prog = aw_ini_get("programs");
+		foreach($prog as $prid => $pd)
 		{
 			if (!$ar[$prid]["id"])
 			{

@@ -1707,7 +1707,8 @@ class bugtrack extends aw_template
 	{
 		$plist=array();
 		$plist[]="---- PROGRAMMID ----";
-		foreach ($this->cfg["programs"] as $idx => $dta)
+		$prog = aw_ini_get("programs");
+		foreach ($prog as $idx => $dta)
 		{
 			$plist[$dta["name"]]=$dta["name"];
 		};

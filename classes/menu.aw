@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.107 2004/10/22 15:01:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.108 2004/10/28 11:21:02 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1017,8 +1017,9 @@ class menu extends class_base
 	function get_feature_sel()
 	{
 		$ret = array("0" => "--vali--");
-		reset($this->cfg["programs"]);
-		while (list($id,$v) = each($this->cfg["programs"]))
+		$prog = aw_ini_get("programs");
+		reset($prog);
+		while (list($id,$v) = each($prog))
 		{
 			// only show stuff with names
 			if ($v["name"])

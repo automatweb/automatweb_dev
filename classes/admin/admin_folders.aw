@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.32 2004/09/23 10:21:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.33 2004/10/28 11:21:04 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -382,11 +382,13 @@ class admin_folders extends aw_template
 		*/
 		$arr["iconurl"] = $iconurl;
 
+		$prog = aw_ini_get("programs");
+
 		if (empty($arr["linkxxx"]))
 		{
 			if ($arr["admin_feature"])
 			{
-				$arr["url"] = $this->cfg["programs"][$arr["admin_feature"]]["url"];
+				$arr["url"] = $prog[$arr["admin_feature"]]["url"];
 			}
 			else
 			{
@@ -462,6 +464,8 @@ class admin_folders extends aw_template
 		$ext = $this->cfg["ext"];
 		$baseurl = $this->cfg["baseurl"];
 
+		$prog = aw_ini_get("programs");
+
 		reset($arr[$parent]);
 		$ret = "";
 		while (list(,$row) = each($arr[$parent]))
@@ -488,7 +492,7 @@ class admin_folders extends aw_template
 			}
 			
 			// ignore programs with no program url
-			if (empty($row["link"]) && $row["admin_feature"] && empty($this->cfg["programs"][$row["admin_feature"]]["url"]))
+			if (empty($row["link"]) && $row["admin_feature"] && empty($prog[$row["admin_feature"]]["url"]))
 			{
 				continue;
 			};
@@ -508,7 +512,7 @@ class admin_folders extends aw_template
 				"name" => $row["name"],
 				"parent" => $px,
 				"iconurl" => $iconurl,
-				"url" => !empty($row["link"]) ? $row["link"] : ($row["admin_feature"] ? $this->cfg["programs"][$row["admin_feature"]]["url"]: $blank),
+				"url" => !empty($row["link"]) ? $row["link"] : ($row["admin_feature"] ? $prog[$row["admin_feature"]]["url"]: $blank),
 			));
 		}
 		return $ret;
