@@ -140,12 +140,14 @@ function awchange()
 		with(document.aform.elements[i])
 		{
 			if (type == "checkbox" 
-				&& name.indexOf("check") != -1
-				&& checked )
+				&& name.indexOf("check") != -1)
 			{
-				cnt++;
-				chk = value;
-			}	
+				if (checked)
+				{
+					cnt++;
+					chk = value;
+				}	
+			}
 		}
 	};
 	if (cnt == 1)
