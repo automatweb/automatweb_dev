@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.75 2001/12/05 13:35:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.76 2001/12/18 00:09:10 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -380,28 +380,30 @@ class menuedit extends aw_template
 		// gather information about all parent objects
 		$ch = $this->get_object_chain($this->sel_section);
 
-		$tpldir = "";
-
-		if (is_array($ch))
+		if (!isset($tpldir))
 		{
-			foreach($ch as $key => $val)
+			$tpldir = "";
+
+			if (is_array($ch))
 			{
-				$tpldir = $this->get_object_metadata(array(
-								"metadata" => $val["metadata"],
-								"key" => "tpl_dir",
-				));
-
-				if ($tpldir)
+				foreach($ch as $key => $val)
 				{
-					// uh. suck. anyways, this whole gen_site_html should be split
-					// up into smaller easier to follow functions. Parts of it are
-					// already of course
-					break;
-				};
+					$tpldir = $this->get_object_metadata(array(
+									"metadata" => $val["metadata"],
+									"key" => "tpl_dir",
+					));
 
-			}
-		};
-		
+					if ($tpldir)
+					{
+						// uh. suck. anyways, this whole gen_site_html should be split
+						// up into smaller easier to follow functions. Parts of it are
+						// already of course
+						break;
+					};
+
+				}
+			};
+		}		
 
 		if ($tpldir)
 		{
@@ -451,13 +453,13 @@ class menuedit extends aw_template
 		}
 
 		// loome sisu
-		if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section) && $text == "")
-		{
+		//if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section) && $text == "")
+		//{
 			// tshekime et kas 2kki on selle menyy all lingikogu. kui on, siis joonistame selle.
-			$this->vars(array("doc_content" => $this->do_link_collection($section)));
-			$this->read_template($template);
-		}
-		else
+		//	$this->vars(array("doc_content" => $this->do_link_collection($section)));
+		//	$this->read_template($template);
+		//}
+		//else
 		if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0) && $text == "")
 		{
 			// tshekime et kas 2kki on selle menyy all pood. kui on, siis joonistame selle.
@@ -843,7 +845,7 @@ class menuedit extends aw_template
 						$period = $periods->get_active_period(188);
 						if ($this->subs[$row["oid"]] > 0) {
 							$did = $do->db_fetch_field("SELECT docid FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE objects.period = '$period' AND documents.yleval_paremal = 1 AND objects.status = 2 AND objects.parent = ".$row["oid"]." AND objects.lang_id=".$GLOBALS["lang_id"],"docid");
-							$done = $do->gen_preview(array("docid" => $did, "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row["oid"], 	"strip_img" => 1));
+							$done = $do->gen_preview(array("docid" => $did, "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row["oid"], 	"strip_img" => 0));
 							$this->vars(array("lugu" => $done));
 							$outputs[$mn] .= $this->parse($mn.$ap);
 						};
@@ -1276,11 +1278,14 @@ class menuedit extends aw_template
 			{
 				$ordby = "objects.jrk";
 			}
-			$q = "SELECT objects.oid FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
+			$q = "SELECT objects.oid as oid,documents.esilehel as esilehel FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id = 7 AND objects.lang_id=".$GLOBALS["lang_id"].") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
-				$docid[$cnt++] = $row["oid"];
+				if (!($GLOBALS["no_fp_document"] && $row["esilehel"] == 1))
+				{
+					$docid[$cnt++] = $row["oid"];
+				}
 			}
 			if ($cnt > 1)
 			{
@@ -1922,6 +1927,7 @@ class menuedit extends aw_template
 
 		$this->read_template("menus.tpl");
 
+		$this->mk_path($parent,"");
 		$this->vars(array(
 			"parent" => $parent,
 			"addmenu" => $this->mk_orb("new", array("parent" => $parent)),
@@ -2151,13 +2157,6 @@ class menuedit extends aw_template
 
 		$mtype = $this->db_fetch_field("SELECT type FROM menu WHERE id = $parent", "type");
 		
-/*		if ($mtype == MN_ML_LIST)
-		{
-			classload("ml_list");
-			$ml=new ml_list();
-			return $ml->gen_list_folder($parent);
-		}*/
-
 		$pobj = $this->get_object($parent);
 		
 		// the default document for the menu is in menu[last][$lang_id]
@@ -2181,11 +2180,15 @@ class menuedit extends aw_template
 
 		global $sortby;
 		if ($sortby == "")
+		{
 			$sortby = "jrk";
+		}
 
 		global $order,$baseurl;
 		if ($order == "")
+		{
 			$order = "ASC";
+		}
 
 		$types = array();
 		global $class_defs;
@@ -2286,6 +2289,11 @@ class menuedit extends aw_template
 		$l = "";
 		while ($row = $this->db_next())
 		{
+			if (!$this->can("view", $row["oid"]))
+			{
+				continue;
+			}
+
 			$total++;
 			$this->dequote(&$row["name"]);
 			$inf = $class_defs[$row["class_id"]];
@@ -2331,15 +2339,27 @@ class menuedit extends aw_template
 			{
 				$def_found = $default_doc == $row["oid"] ? true : false;
 			}
+
+			$can_change = "";
+			$can_view = "";
+			if ($this->can("edit", $row["oid"]))
+			{
+				$can_change = $this->parse("CAN_CHANGE");
+			}
+			else
+			{
+				$can_view = $this->parse("CAN_VIEW");
+			}
 			$this->vars(array(
 				"NFIRST" => $this->can("order",$row["oid"]) ? $this->parse("NFIRST") : "",
 				"CAN_ACTIVE" => $this->can("active",$row["oid"]) ? $this->parse("CAN_ACTIVE") : "",
 				"FE"			=> $row["class_id"] == CL_FORM_ENTRY ? $this->parse("FE") : $this->parse("NFE"),
+				"CAN_CHANGE" => $can_change,
+				"CAN_VIEW" => $can_view
 			));
 
 			if ($row["class_id"] == CL_FORM_ENTRY)
 			{
-//					$fentries[] = $row["oid"];
 				$ffound = true;
 			}
 			$l.=$this->parse("LINE");
@@ -3723,7 +3743,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$awt->stop("menuedit::req_draw_menu");
 			return 0;
 		}
-		$this->vars(array($mn => ""));
+		$this->vars(array(
+			$mn => ""
+		));
 
 		$no_mid = false;
 		// go over the menus on this level
@@ -3778,7 +3800,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					continue;
 				};
 
-				$done = $this->doc->gen_preview(array("docid" => $xdat["oid"], "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row["oid"],    "strip_img" => 1));
+				$done = $this->doc->gen_preview(array("docid" => $xdat["oid"], "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row["oid"],    "strip_img" => 0));
 
 				$this->vars(array("lugu" => $done));
 				
@@ -3846,6 +3868,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 
+			if ($this->is_parent_tpl("MENU_".$name."_L".($this->level+1)."_ITEM2","MENU_".$name."_L".($this->level)."_ITEM_N2"))
+			{
+				$this->vars(array(
+					"MENU_".$name."_L".($this->level+1)."_ITEM2" => "",
+				));
+			}
+
 			$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
 			
 			if ($cnt == $total && $this->is_template($mn."_END"))
@@ -3856,8 +3885,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$ap.="_BEGIN";	// first one of this level menus
 			};
-			
-
 			
 			$this_selected = false;
 			if (in_array($row["oid"],$path) && $row["clickable"] == 1)
@@ -3894,6 +3921,92 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$ap = "";	
 			};
 
+			if ($row["brother_of"])
+			{
+				$row = $this->mar[$row["brother_of"]];
+			}
+
+			if ($row["link"] != "")
+			{
+				$link = $row["link"];
+			}
+			else
+			{
+				$link = $baseurl."/";
+				$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
+			}
+
+			$target = ($row["target"] == 1) ? sprintf("target='%s'","_new") : "";
+
+			$imgurl2 = "";
+			if ($this_selected)
+			{
+				if ($meta["img_act_url"] != "")
+				{
+					$imgurl = $meta["img_act_url"];
+				}
+				else
+				{
+					$imgurl = $row["img_url"];
+				}
+				$imgurl2 = $imgurl;
+			}
+			else
+			{
+				$imgurl = $row["img_url"];
+			}
+
+			if ($imgurl != "")
+			{
+				$imgurl = preg_replace("/^http:\/\/.*\//","/",$imgurl);
+				$imgurl = sprintf("<img src='%s' border='0'>",$imgurl);
+			}
+			else
+			{
+				$imgurl = "";
+			};
+
+			global $num_menu_images;
+			$has_image = false;
+			$imgar = $meta["menu_images"];
+			for ($_i=0; $_i < $num_menu_images; $_i++)
+			{
+				if ($imgar[$_i]["url"] != "")
+				{
+					$this->vars(array(
+						"menu_image_".$_i => "<img src='".$imgar[$_i]["url"]."'>",
+						"menu_image_".$_i."_url" => $imgar[$_i]["url"]
+					));
+					$has_image = true;
+				}
+			}
+
+			$this->vars(array(
+				"text" 		=> $row["name"],
+				"link" 		=> $link,
+				"comment" 	=> $row["comment"],
+				"section"	=> $row["oid"],
+				"target" 	=> $target,
+				"image"		=> $imgurl,
+				"cnt" => $cnt,
+				"sel_image_url" => $imgurl2
+			));
+
+			if ($has_image)
+			{
+				$this->vars(array(
+					"HAS_IMAGE" => $this->parse($mn.$ap.".HAS_IMAGE"),
+					"NO_IMAGE" => ""
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"HAS_IMAGE" => "",
+					"NO_IMAGE" => $this->parse($mn.$ap.".NO_IMAGE")
+				));
+			}
+
 			if (isset($this->mpr[$row["oid"]]) && is_array($this->mpr[$row["oid"]]))
 			{
 				$hs = $this->parse("HAS_SUBITEMS_".$name);
@@ -3915,71 +4028,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"NO_SUBITEMS_".$name."_L".$this->level => ""
 			));
 
-			if ($row["brother_of"])
-			{
-				$row = $this->mar[$row["brother_of"]];
-			}
 
-			if ($row["link"] != "")
-			{
-				$link = $row["link"];
-			}
-			else
-			{
-				$link = $baseurl."/";
-				$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
-			}
-
-			$target = ($row["target"] == 1) ? sprintf("target='%s'","_new") : "";
-
-			if ($this_selected)
-			{
-				if ($meta["img_act_url"] != "")
-				{
-					$imgurl = $meta["img_act_url"];
-				}
-				else
-				{
-					$imgurl = $row["img_url"];
-				}
-			}
-			else
-			{
-				$imgurl = $row["img_url"];
-			}
-			if ($imgurl != "")
-			{
-				$imgurl = preg_replace("/^http:\/\/.*\//","/",$imgurl);
-				$imgurl = sprintf("<img src='%s' border='0'>",$imgurl);
-			}
-			else
-			{
-				$imgurl = "";
-			};
-
-			global $num_menu_images;
-			$imgar = $meta["menu_images"];
-			for ($_i=0; $_i < $num_menu_images; $_i++)
-			{
-				if ($imgar[$_i]["url"] != "")
-				{
-					$this->vars(array(
-						"menu_image_".$_i => "<img src='".$imgar[$_i]["url"]."'>",
-						"menu_image_".$_i."_url" => $imgar[$_i]["url"]
-					));
-				}
-			}
-
-			$this->vars(array(
-				"text" 		=> $row["name"],
-				"link" 		=> $link,
-				"comment" 	=> $row["comment"],
-				"section"	=> $row["oid"],
-				"target" 	=> $target,
-				"image"		=> $imgurl,
-				"cnt" => $cnt
-			));
-	
 			// ok, menyyd ei n2idata juhul, kui ta pole selektitud ja template MENU_BLAH_L5666_ITEM_SELONLY on defineeritud
 			$istplso = $this->is_template($mn."_SELONLY");
 			$issel = $this->sel_section != $row["parent"];
@@ -4008,7 +4057,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					$l.=$this->parse($mn.$ap);
 				}
 			}
-			$this->vars(array($mn.$ap => ""));
+			$this->vars(array(
+				$mn.$ap => "",
+			));
 
 			if (!$no_mid)
 			{
@@ -4020,7 +4071,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$l2.=$this->parse($mn."2".$ap);
 				$this->vars(array($mn."2".$ap => ""));
 				$second = true;
+			}
 
+			if ($this->is_template($mn."_N2") && $this->sel_section == $row["parent"])
+			{
+				$l2.=$this->parse($mn."_N2".$ap);
+				$this->vars(array($mn."_N2".$ap => ""));
+				$second_n = true;
 			}
 
 			// ok, here's the tricky bit
@@ -4030,7 +4087,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			// it will get this item's parsed submenus below it. 
 			if ($parent_tpl)
 			{
-				$this->vars(array("MENU_".$name."_L".($this->level+1)."_ITEM" => ""));
+				$this->vars(array(
+					"MENU_".$name."_L".($this->level+1)."_ITEM" => "",
+				));
 			}
 			$cnt++;
 		}
@@ -4046,6 +4105,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		if ($second)
 		{
 			$this->vars(array($mn."2" => $l2));
+		}
+		if ($second_n)
+		{
+			$this->vars(array($mn."_N2" => $l2));
 		}
 		$this->level--;
 		$awt->stop("menuedit::req_draw_menu");
@@ -4416,16 +4479,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$cached["subs"] = $this->subs;
 
 			$cache = new cache();
-			$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
-			$php = new php_serializer();
-			$c_d = $php->php_serialize($cached);
+			$c_d = aw_serialize($cached,SERIALIZE_NATIVE);
 			$cache->db_set("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID,$c_d);
 		}
 		else
 		{
 			// unserialize the cache
-			$php = new php_serializer();
-			$cached = $php->php_unserialize($ms);
+			$cached = aw_unserialize($ms);
 			$this->mar = $cached["mar"];
 			$this->mpr = $cached["mpr"];
 			$this->subs = $cached["subs"];
@@ -4630,8 +4690,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				{
 					$this->right_pane = false;
 				}
+				$this->vars(array(
+					"docid" => $docid,
+					"section" => $section,
+				));
 				$PRINTANDSEND = $this->parse("PRINTANDSEND");
 				$this->vars(array(
+					"section" => $section,
 					"docid" => $docid,
 					"PRINTANDSEND" => $PRINTANDSEND
 				));
@@ -4756,9 +4821,28 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
+			$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
+
+			global $gidlist;
+			$found = false;
+			if (!is_array($meta["groups"]) || count($meta["groups"]) < 1)
+			{
+				$found = true;
+			}
+			else
+			{
+				foreach($meta["groups"] as $gid)
+				{
+					if ($gidlist[$gid] == $gid)
+					{
+						$found = true;
+					}
+				}
+			}
+
 			$doc->doc_count = 0;
 			$ar = unserialize($row["comment"]);
-			if ((isset($ar["section"][$section]) && $ar["section"][$section]) || ($row["comment"] == "all_menus" && $row["site_id"] == $GLOBALS["SITE_ID"]))
+			if (((isset($ar["section"][$section]) && $ar["section"][$section]) || ($row["comment"] == "all_menus" && $row["site_id"] == $GLOBALS["SITE_ID"])) && $found)
 			{
 				// visible. so show it
 				$this->save_handle();
@@ -4784,9 +4868,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					print $pr_c;
 				};
 
-
-				$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
-				$this->vars(array("title" => $row["name"], "content" => $pr_c,"url" => $row["link"]));
+				$this->vars(array(
+					"title" => $row["name"], 
+					"content" => $pr_c,
+					"url" => $row["link"],
+					"link_caption" => $meta["link_caption"]
+				));
 
 				if ($meta["no_title"] != 1)
 				{
