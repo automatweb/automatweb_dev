@@ -9,11 +9,96 @@
             <type>select</type>
             <caption>Nupu t&amp;uuml;&amp;uuml;p</caption>
       </property>
+      <property>
+            <name>but_action</name>
+            <table>objects</table>
+            <group>but_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Action</caption>
+      </property>
+      <property>
+            <name>but_tooltip</name>
+            <table>objects</table>
+            <group>but_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Tooltip</caption>
+      </property>
+      <property>
+            <name>but_img</name>
+            <table>objects</table>
+            <group>but_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Pilt</caption>
+      </property>
+      <property>
+            <name>men_toolbar</name>
+            <table>objects</table>
+            <group>men_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>hbox1</parent>
+      </property>
+      <property>
+            <name>men_tree</name>
+            <table>objects</table>
+            <group>men_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <parent>hbox2</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>men_list</name>
+            <table>objects</table>
+            <group>men_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>hbox2</parent>
+            <store>no</store>
+      </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TOOLBAR_BUTTON</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <but_props>
+                  <caption>Nupu m&amp;auml;&amp;auml;rangud</caption>
+            </but_props>
+            <men_props>
+                  <caption>Nupu m&amp;auml;&amp;auml;rangud</caption>
+                  <submit>no</submit>
+            </men_props>
+      </groupinfo>
+      <layout>
+            <hbox1>
+                  <type>hbox</type>
+                  <group>men_props</group>
+            </hbox1>
+            <vbox1>
+                  <type>vbox</type>
+                  <group>men_props</group>
+            </vbox1>
+            <hbox2>
+                  <type>hbox</type>
+                  <group>men_props</group>
+                  <parent>vbox1</parent>
+                  <width>30%:70%</width>
+            </hbox2>
+      </layout>
 </properties>
 

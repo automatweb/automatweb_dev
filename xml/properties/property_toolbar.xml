@@ -13,6 +13,7 @@
                   <num_1>b_type</num_1>
             </props>
             <no_caption>1</no_caption>
+            <mode>manager</mode>
             <store>no</store>
       </property>
       <classinfo>

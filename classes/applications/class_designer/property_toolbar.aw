@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.1 2005/03/03 15:20:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.2 2005/03/03 18:03:57 kristo Exp $
 // property_toolbar.aw - Toolbar 
 /*
 
@@ -13,7 +13,7 @@
 
 @default group=buttons
 
-	@property buttons type=releditor reltype=RELTYPE_BUTTON props=name,b_type no_caption=1
+	@property buttons type=releditor reltype=RELTYPE_BUTTON props=name,b_type no_caption=1 mode=manager
 
 @groupinfo buttons caption="Nupud"
 
@@ -38,7 +38,9 @@ class property_toolbar extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "buttons":
+				$prop["direct_links"] = 1;
+				break;
 		};
 		return $retval;
 	}
@@ -53,5 +55,23 @@ class property_toolbar extends class_base
 		}
 		return $retval;
 	}	
+
+	function get_visualizer_prop($el, &$propdata)
+	{
+		$t = get_instance("vcl/toolbar");
+		
+		$buttons = new object_list($el->connections_from(array(
+			"type" => RELTYPE_BUTTON
+		)));
+		foreach($buttons->arr() as $b)
+		{
+			$i = $b->instance();
+			$i->get_button($b, $t);
+		}
+
+		$propdata["type"] = "text";
+		$propdata["value"] = $t->get_toolbar();
+		$propdata["no_caption"] = 1;
+	}
 }
 ?>
