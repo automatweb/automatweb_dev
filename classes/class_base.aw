@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.203 2004/02/04 13:22:50 duke Exp $
+// $Id: class_base.aw,v 2.204 2004/02/04 14:19:53 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -100,7 +100,7 @@ class class_base extends aw_template
 		
 		@attrib name=new params=name all_args="1" default="0"
 		
-		@param parent optional type=int acl="edit"
+		@param parent optional type=int acl="add"
 		@param period optional
 		@param alias_to optional
 		@param return_url optional
@@ -208,7 +208,6 @@ class class_base extends aw_template
 			"meta" => $this->obj_inst->meta(),
 			"args" => $args,
 		));
-
 
 		$this->validate_cfgform($cfgform_id);
 
@@ -687,8 +686,14 @@ class class_base extends aw_template
 			$retval = $args["args"]["cfgform"];
 		};
 
+
 		if (($args["args"]["action"] == "change") && !empty($args["meta"]["cfgform_id"]))
 		{
+			global $XX5;
+			if ($XX5)
+			{
+				print "bwahah";
+			};
 			$retval = $args["meta"]["cfgform_id"];
 		};
 		return $retval;

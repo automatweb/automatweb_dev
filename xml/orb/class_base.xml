@@ -4,7 +4,7 @@
 		<action name="new" all_args="1">
 			<function name="new_change">
 				<arguments>
-					<optional name="parent" type="int" acl="edit"/>
+					<optional name="parent" type="int" acl="add"/>
 					<optional name="period" />
 					<optional name="alias_to" />
 					<optional name="return_url" />
