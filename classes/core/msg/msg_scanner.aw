@@ -97,6 +97,7 @@ class msg_scanner extends class_base
 				if (!method_exists($inst, $handler))
 				{
 					echo "ERROR: class $class defines function $handler as message handler for message $msg,\n       but the function does not exist in that class!\n\n";
+					echo dbg::process_backtrace(debug_backtrace());
 					die();
 				}
 			}
@@ -123,6 +124,7 @@ class msg_scanner extends class_base
 					if (!method_exists($inst, $handler))
 					{
 						echo "ERROR: class $class defines function $handler as message handler for message $msg (with param $param),\n       but the function does not exist in that class!\n\n";
+						echo dbg::process_backtrace(debug_backtrace());
 						die();
 					}
 				}
