@@ -20,7 +20,6 @@
       <reltypes>
             <OBJECT>
                   <value>1</value>
-                  <clid>CL_ALL</clid>
                   <caption>objekt</caption>
             </OBJECT>
       </reltypes>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.41 2005/03/18 09:43:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.42 2005/03/22 09:21:48 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -550,6 +550,13 @@ class site_search_content extends class_base
 		{
 			$lim = " LIMIT ".((int)$arr["opts"]["limit"]);
 		}
+
+		$stat = " o.status = 2 AND ";
+		if ($arr["opts"]["search_notactive"] == 1)
+		{
+			$stat = " o.status > 0 AND ";
+		}
+
 		$this->quote($str);
 		$sql = "
 			SELECT 
@@ -576,8 +583,9 @@ class site_search_content extends class_base
 					".$this->_get_sstring($str, $opts["str"], "d.dcache")."
 				) AND 
 				o.parent IN (".$ams->to_sql().") AND
-				o.status = 2 AND
+				$stat
 				o.lang_id = '".aw_global_get("lang_id")."' AND
+				d.no_search != 1 AND
 				o.class_id IN (".CL_DOCUMENT.",".CL_BROTHER_DOCUMENT.",".CL_PERIODIC_SECTION.") 
 				$mod 
 				$mod2
@@ -756,6 +764,8 @@ class site_search_content extends class_base
 
 		if (1 == $obj->prop("search_live"))
 		{
+			$opts["search_notactive"] = $g->prop("search_notactive");
+
 			$ret = $this->merge_result_sets($ret, $this->fetch_live_search_results(array(
 				"menus" => $ms,
 				"str" => $str,

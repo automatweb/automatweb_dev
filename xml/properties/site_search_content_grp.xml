@@ -20,6 +20,16 @@
             <field>menus</field>
             <caption>Vali men&amp;uuml;&amp;uuml;d</caption>
       </property>
+      <property>
+            <name>seach_notactive</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Otsi ka mitteaktiivsetest dokumentidest</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SITE_SEARCH_CONTENT_GRP</syslog_type>
             <relationmgr>yes</relationmgr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.17 2005/03/18 12:23:19 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.18 2005/03/22 09:21:48 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -13,6 +13,9 @@
 
 @property menus type=table editonly=1
 @caption Vali men&uuml;&uuml;d
+
+@property seach_notactive type=checkbox ch_value=1 field=meta method=serialize
+@caption Otsi ka mitteaktiivsetest dokumentidest
 
 @reltype SEARCH_LOCATION value=1 clid=CL_MENU
 @caption Otsingu lähtekoht
