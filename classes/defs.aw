@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.152 2004/10/05 17:15:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.153 2004/10/07 21:35:02 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1021,6 +1021,16 @@ if (!defined("DEFS"))
 			$ret = ob_get_contents();
 			ob_end_clean();
 			return $ret;
+		}
+
+		function str_dbg($str)
+		{
+			echo "str = $str <br>";
+			for($i = 0; $i < strlen($str); $i++)
+			{
+				echo "at pos $i: ".$str{$i}." nr = ".ord($str{$i})." <br>";
+			}
+			echo "---<br>";
 		}
 
 		////
