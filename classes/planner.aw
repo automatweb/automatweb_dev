@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.33 2001/06/22 03:13:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.34 2001/06/26 23:42:46 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -1730,22 +1730,23 @@ class planner extends calendar {
 		
 		$c = "";
 		
-		$today = date("d-m-Y");
+		$today = date("dmY");
 
 		// Joonistame nädala
 		for ($i = 0; $i <= 6; $i++)
 		{
 			$current = $start + ($i * 60 * 60 * 24);
 			$current_long = date("dmY",$current);
+			$subtpl = "line";
 			if ($today == $current_long)
 			{
 				if ($short)
 				{
-					$bgcolor = "#669966";
+					$subtpl = "line";
 				}
 				else
 				{
-					$bgcolor = "#eeeeee";
+					$subtpl = "line2";
 				};
 			}
 			else
@@ -1762,7 +1763,6 @@ class planner extends calendar {
 			};
 			$this->vars(array(
 				"day" => date("d-m",$current) . $sufix,
-				"bgcolor" => $bgcolor,
 				"day2" => date("d",$current) . "." . get_lc_month(date("m",$current)),
 				"wday" => get_lc_weekday($i+1),
 				"sufix" => $sufix,
@@ -1770,7 +1770,7 @@ class planner extends calendar {
 				"contents" => $contents[date("d",$current)],
 				"events" => sizeof($events[$current_long]),
 			));
-			$c .= $this->parse("line");
+			$c .= $this->parse($subtpl);
 		};
 		$this->vars(array(
 			"line" => $c,
