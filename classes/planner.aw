@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.73 2002/08/23 22:38:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.74 2002/09/04 08:14:30 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -89,7 +89,7 @@ class planner extends calendar
 		$confobjects = array();
 		while($row = $this->db_next())
 		{
-			$confobjects[$row["oid"]] = $row["name"];
+			$confobjects[$row["oid"]] = ($row["name"]) ? $row["name"] : "nimetu ($row[oid])";
 		}
 		$this->read_template("change.tpl");
 		$this->mk_path($object["parent"],$prefix . "Muuda kalendrit");
@@ -458,7 +458,7 @@ class planner extends calendar
 					};
 					$this->vars(array(
 						"event" => $c1,
-						"head" => get_lc_weekday($ri),
+						"head" => strtoupper(substr(get_lc_weekday($ri),0,1)),
 						"did" => $args["id"],
 						"hid" => $args["id"],
 						"date" => date("d-m-Y",$thisday),
