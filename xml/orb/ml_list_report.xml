@@ -23,6 +23,7 @@
 				<arguments>
 					<required name="id" acl="edit;view"/>
 					<optional name="return_url"/>
+					<optional name="mail_id"/>
 				</arguments>
 			</function>
 		</action>
