@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.3 2003/07/18 10:23:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.4 2003/07/22 12:41:50 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -476,16 +476,17 @@ class promo extends class_base
 		}
 
 		$_ob = aw_ini_get("menuedit.document_list_order_by");
-		if ($_ob != "")
+		if (($_ob != "") && (sizeof($def->get()) > 0))
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_DOCUMENT,
-				"oid" => $def,
+				"oid" => $def->get(),
 				"sort_by" => $_ob,
 			));
 			
 			$def = new aw_array($ol->ids());
 		}
+
 
 		$ndocs = $ob->prop("ndocs");
 		if ($ndocs)
