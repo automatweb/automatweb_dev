@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.73 2003/01/07 11:11:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.74 2003/01/09 17:23:25 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -7,6 +7,7 @@ session_register("add_state");
 define("PER_PAGE", 20);
 
 classload("users_user");
+load_vcl('date_edit');
 class users extends users_user
 {
 	function users()
@@ -1831,7 +1832,7 @@ class users extends users_user
 
 			$email = $this->cfg["webmaster_mail"];
 
-			$msg = "Tere $row[uid]\n\nTeie isikliku parooli vahetamiseks kodulehel $host tuleb teil klikkida lingil\n\n$churl\n\nLingile klikkides avanab Teile parooli muutmise leht. Soovitame parool välja vahetada!\n\nProbleemide korral saatke email $email.\n\nKõike paremat soovides,\n$host";
+			$msg = "Tere $row[uid]\n\nTeie isikliku parooli vahetamiseks kodulehel $host tuleb teil klikkida lingil\n\n$churl\n\nLingile klikkides avanab Teile parooli muutmise leht. \n\nProbleemide korral saatke e-mail $email.\n\nKõike paremat soovides,\n$host";
 			$from = sprintf("%s <%s>",$this->cfg["webmaster_name"],$this->cfg["webmaster_mail"]);
 			mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: $from");
 			aw_session_set("status_msg","Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br>Täname!<br>");
