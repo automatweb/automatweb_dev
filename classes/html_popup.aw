@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.10 2004/07/09 11:26:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.11 2004/08/19 07:54:28 kristo Exp $
 
 /*
 	@classinfo relationmgr=yes
@@ -30,7 +30,7 @@
 	@caption sisu objekt
 
 	@reltype FOLDER value=1 clid=CL_MENU
-	@caption sisu objekt
+	@caption kataloog
 
 
 */
