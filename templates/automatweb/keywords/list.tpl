@@ -20,7 +20,7 @@
 <td align="center" class="fgtext">&nbsp;{VAR:doc_count}&nbsp;</td>
 <td align="center" class="fgtext">&nbsp;{VAR:people_count}&nbsp;</td>
 </tr>
-<!-- END SUB: line -->
+<!-- END SUB: LINE -->
 </table>
 </td>
 </tr>
