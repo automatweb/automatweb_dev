@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/xulclient.aw,v 1.1 2003/12/14 15:23:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/xulclient.aw,v 1.2 2004/03/31 15:00:26 duke Exp $
 // xulclient - generates XUL for configuration forms
 
 class xulclient extends aw_template
@@ -14,6 +14,8 @@ class xulclient extends aw_template
 		{
 			$this->set_layout_mode($arr["layout_mode"]);
 		};
+		$this->tabs = array();
+		$this->tabstring = "";
 		$this->group_style = "";
 		$this->start_output();
 	}
@@ -27,6 +29,12 @@ class xulclient extends aw_template
 				"form_target" => "target='" . $this->form_target . "' ",
 			));
 		};
+	}
+
+	function add_tab($arr)
+	{
+		$this->vars($arr);
+		$this->tabstring .= $this->parse("TAB");
 	}
 
 	function set_layout_mode($mode)
@@ -472,6 +480,9 @@ class xulclient extends aw_template
 		else
 		{
 			header("Content-Type: application/vnd.mozilla.xul+xml");
+			$this->vars(array(
+				"TAB" => $this->tabstring,
+			));
 			print $this->parse();
 			exit;
 		};
