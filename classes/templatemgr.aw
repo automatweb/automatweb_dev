@@ -78,7 +78,15 @@ class templatemgr extends aw_template
 		));
 
 		return $this->parse();
-	}
+ 	}
+
+	function orb_delete($arr)
+	{
+		extract($arr);
+		$q = "DELETE FROM template WHERE id = '$id'";
+		$this->db_query($q);
+		return $this->mk_my_orb("list");
+ 	}
 
 	////
 	// !Retrieves a list of templates

@@ -29,6 +29,7 @@
 		<action name="delete">
 			<function name="orb_delete">
 				<arguments>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>
