@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.10 2005/03/18 16:04:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.11 2005/03/21 12:00:12 ahti Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -722,16 +722,17 @@ class orders_form extends class_base
 		foreach($cats as $cat => $items)
 		{
 			$item_in_cat = "";
+			$tot_price = 0;
 			foreach($items as $item)
 			{
 				$this->_insert_item_inf($item);
 
+				$tot_price += $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price"));
 				$item_in_cat .= $this->parse("ITEM_IN_CAT");
 			}
 
 			$dat = $inf[(int)$_SESSION["orders_form"]["payment"]["itypes"][$item->id()]];
 
-			$tot_price = $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price"));
 			$prepayment = (($tot_price / 100.0) * (float)$inf[$cat]["prepayment"]);
 			$num_payments = max($_SESSION["orders_form"]["payment"]["lengths"][$item->id()], $dat["min_mons"]);
 

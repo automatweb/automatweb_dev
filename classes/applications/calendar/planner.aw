@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.49 2005/03/18 13:34:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.50 2005/03/21 12:00:12 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -268,7 +268,7 @@ class planner extends class_base
 		// XXX: why the fuck is it so hard to gain access to defined relation types from here?
 		$x = $user->connections_to();
 		$conns = $user->connections_to(array(
-			"type" => "RELTYPE_CALENDAR_OWNERSHIP",
+			"type" => 8 //"RELTYPE_CALENDAR_OWNERSHIP",
 		));
 		if (sizeof($conns) == 0)
 		{

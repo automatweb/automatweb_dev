@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.8 2005/03/18 16:04:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.9 2005/03/21 12:00:12 ahti Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -328,6 +328,19 @@ class orders_order extends class_base
 	function add_to_cart($arr)
 	{
 		//This solutions sucks, but cant find better one now
+		$arr["orders"] = safe_array($arr["orders"]);
+		$num = false;
+		foreach(safe_array($arr["orders"]) as $key => $val)
+		{
+			if(is_numeric($key))
+			{
+				$num = true;
+			}
+		}
+		if(!$num)
+		{
+			$arr["orders"] = array($arr["orders"]);
+		}
 		$submit_data_a = new aw_array($arr["orders"]);
 		foreach($submit_data_a->get() as $key => $submit_data)
 		{
