@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.65 2003/08/26 09:21:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.66 2003/08/26 09:29:10 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -33,6 +33,9 @@
 
 	@property newwindow type=checkbox ch_value=1 table=images field=newwindow
 	@caption Uues aknas
+
+	@property no_print type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption &Auml;ra n&auml;ita print-vaates
 
 	@groupinfo img2 caption="Suur pilt"
 	@groupinfo resize caption="Muuda suurust"
@@ -148,6 +151,10 @@ class image extends class_base
 			$idata = $this->get_image_by_id($f["target"]);
 		}
 
+		if ($GLOBALS["print"] == 1 && $idata["meta"]["no_print"] == 1)
+		{
+			return "";
+		}
 
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
@@ -193,7 +200,7 @@ class image extends class_base
 			else
 			if ($idata["link"] != "")
 			{
-		//		echo "has link! <br />";
+		//		echo "has link! <br>";
 				if ($idata["big_url"] != "" && isset($tpls["image_big_linked"]))
 				{
 					$replacement = localparse($tpls["image_big_linked"],$vars);
@@ -214,7 +221,7 @@ class image extends class_base
 				{
 					if ($idata["comment"] != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a><br />%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a><br>%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
 					}
 					else
 					{
@@ -261,7 +268,7 @@ class image extends class_base
 					}
 					if (!empty($idata["comment"]))
 					{
-						$replacement .= "<br />".$idata["comment"];
+						$replacement .= "<BR>".$idata["comment"];
 					};
 					//$replacement .= "</td></tr></table>";
 				};
@@ -553,7 +560,7 @@ class image extends class_base
 				if ($imd['file'] != '')
 				{
 					$sz = getimagesize($imd['file']);
-					$prop['value'] = "Laius: ".$sz[0]." <br />K&otilde;rgus: ".$sz[1]." <br />";
+					$prop['value'] = "Laius: ".$sz[0]." <br>K&otilde;rgus: ".$sz[1]." <br>";
 				};
 				break;
 		};

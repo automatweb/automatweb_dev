@@ -86,6 +86,16 @@
             <caption>Uues aknas</caption>
       </property>
       <property>
+            <name>no_print</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>&amp;Auml;ra n&amp;auml;ita print-vaates</caption>
+      </property>
+      <property>
             <name>cur_data</name>
             <type>text</type>
             <group>resize</group>
