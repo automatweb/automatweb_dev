@@ -128,6 +128,12 @@ class search_conf extends aw_template
 		extract($arr);
 		$this->read_template("search.tpl");
 
+		if (($bs = aw_ini_get("search.baseurl")) != "")
+		{
+			$this->cfg["baseurl"] = $bs;
+			$this->vars(array("baseurl" => $bs));
+		}
+
 		classload("keywords");
 		$k = new keywords;
 
@@ -342,14 +348,51 @@ class search_conf extends aw_template
 
 			$ap = $this->do_sorting($arr);
 
+			$mned = get_instance("menuedit");
+			$mc = get_instance("menu_cache");
+			$mc->make_caches();
+
 			$this->db_query("SELECT objects.*,documents.* FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE $q_cons $ap LIMIT ".($page*PER_PAGE).",".PER_PAGE);
 			while ($row = $this->db_next())
 			{
 				$co = strip_tags($row["content"]);
 				$co = preg_replace("/#(.*)#/","",substr($co,0,strpos($co,"\n")));
 
+				$sec = $row["docid"];
+				if ($mc->subs[$row["parent"]] == 1)
+				{
+					// we need to push all parent menus aliases to menuedit::menu_aliases for make_menu_link to work
+					$mrow = $mc->get_cached_menu($row["parent"]);
+					$mpr = $mrow["parent"];
+					$mned->menu_aliases = array();
+
+					while ($mpr > 0 && $mpr != $this->cfg["rootmenu"])
+					{
+						$mrow = $mc->get_cached_menu($mpr);
+						if ($mrow["alias"] != "")
+						{
+							array_push($mned->menu_aliases,$mrow["alias"]);
+						}
+						$mpr = $mrow["parent"];
+					}
+					$mr = $mc->get_cached_menu($row["parent"]);
+					if (!is_array($mr))
+					{
+						$mr = array();
+					}
+					$sec = $mned->make_menu_link($mr);
+				}
+
+				if (aw_ini_get("search.rewrite_urls"))
+				{
+					$exp = get_instance("export");
+					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
+					$sec = $exp->rewrite_link($sec);
+					$sec = aw_ini_get("baseurl")."/".$exp->get_hash_for_url($sec,aw_global_get("lang_id"));
+				}
+
 				$this->vars(array(
-					"section" => $row["docid"],
+					"section" => $sec,
 					"title" => $row["title"],
 					"modified" => $row["tm"] != "" ? $row["tm"] : $this->time2date($row["modified"],2),
 					"content" => $co

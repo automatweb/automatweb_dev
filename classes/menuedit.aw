@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.121 2002/06/18 23:51:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.122 2002/06/26 11:10:37 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -317,7 +317,8 @@ class menuedit extends aw_template
 		$sel_menu_id = $this->sel_section;
 
 		$this->vars(array(
-			"sel_menu_id" => $sel_menu_id
+			"sel_menu_id" => $sel_menu_id,
+			"se_lang_id" => aw_global_get("lang_id")
 		));
 
 		// build the menu chain for the requested section, this simplifies at least 
@@ -818,7 +819,9 @@ class menuedit extends aw_template
 			return 0;
 		}
 
-		$obj = $this->get_object($section);	// if it is a document, use this one. 
+		$obj = $this->get_object($section);
+	
+		// if it is a document, use this one. 
 		if ($obj["class_id"] == CL_DOCUMENT)
 		{
 			return $section;
@@ -832,8 +835,9 @@ class menuedit extends aw_template
 		$docid = $obj["last"];
 		$ar = unserialize($docid);
 
-		if (is_array($ar))	// kuna on vaja mitme keele jaox default dokke seivida, siis uues versioonis pannaxe siia array
-												// aga backward compatibility jaox tshekime, et 2kki see on integer ikkagi
+		// kuna on vaja mitme keele jaox default dokke seivida, siis uues versioonis pannaxe
+		// siia array aga backward compatibility jaox tshekime, et 2kki see on integer ikkagi
+		if (is_array($ar))
 		{
 			$docid = $ar[aw_global_get("lang_id")];
 		}
@@ -1499,6 +1503,7 @@ class menuedit extends aw_template
 		$this->java_branches[$oid] = array("oid" => $oid, "subcnt" => $subcnt, "name" => $name, "url" => $url, "iconurl" => $iconurl);
 	}		
 
+	// see oli siin java puu sees perioodide testimise jaoks
 	function get_periods()
 	{
 		printf("%d\t%s\t%d\n",1,"jaanuar",0);
@@ -1606,7 +1611,8 @@ class menuedit extends aw_template
 		reset($grar);
 		while (list($gid,$row) = each($grar))
 		{
-			// we must convert the parent member so that it actually points to the parent OBJECT not the parent group
+			// we must convert the parent member so that it actually points to
+			// the parent OBJECT not the parent group
 			$puta = isset($row["parent"]) ? $row["parent"] : 0;
 			$row["parent"] = isset($grar[$puta]["oid"]) ? $grar[$puta]["oid"] : 0;
 
@@ -4035,6 +4041,38 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					$link .= $row["oid"];
 				};
 			};
+		}
+
+		// this here bullshit is so that the static ut site will work
+		// basically, rewrite_links is set if we are doing searching or some other non-static action
+		// it is set in site_header.aw
+		// and we need to make all links go to the static site
+		// and this is where the magic happens
+		// also in document::do_search and search_conf::search
+		if (aw_global_get("rewrite_links"))
+		{
+			$exp = get_instance("export");
+			if (!$exp->is_external($link))
+			{
+				$_link = $link;
+				if (strpos($link, $this->cfg["baseurl"]) === false)
+				{
+					$link = $this->cfg["baseurl"].$link;
+				}
+				$exp->fn_type = aw_ini_get("search.rewrite_url_type");
+				$link = $exp->rewrite_link($link);
+				if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
+				{
+					$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
+					$_tl = $link;
+					$link = aw_ini_get("baseurl")."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
+//					echo "made hash for link $_tl = $link <br>";
+				}
+				else
+				{
+					$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
+				}
+			}
 		}
 		return $link;
 	}

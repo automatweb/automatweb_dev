@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.98 2002/06/18 23:51:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.99 2002/06/26 11:10:37 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -87,7 +87,7 @@ class document extends aw_template
 		);
 
 		// nini. siia paneme nyt kirja v2ljad, mis dokumendi metadata juures kirjas on
-		$this->metafields = array("show_print","show_last_changed","referer","refopt");
+		$this->metafields = array("show_print","show_last_changed","show_real_pos","referer","refopt");
 
 		// for referer checks
 		$this->refopts = array("Ignoreeri","Näita","Ära näita");
@@ -388,8 +388,10 @@ class document extends aw_template
 		
 		$this->tpl_init("automatweb/documents");
 		
-		$this->no_right_pane = $doc["no_right_pane"];	// see on sellex et kui on laiem doku, siis menyyeditor tshekib
-		$this->no_left_pane = $doc["no_left_pane"];		// neid muutujaid ja j2tab paani 2ra kui tshekitud on.
+		// see on sellex et kui on laiem doku, siis menyyeditor tshekib
+		// neid muutujaid ja j2tab paani 2ra kui tshekitud on.
+		$this->no_right_pane = $doc["no_right_pane"];
+		$this->no_left_pane = $doc["no_left_pane"];
 
 		// kui tpls anti ette, siis loeme template sealt,
 		// muidu failist.
@@ -2560,6 +2562,11 @@ class document extends aw_template
 
 		$this->read_template("search.tpl");
 
+		if (($bs = aw_ini_get("search.baseurl")) != "")
+		{
+			$this->cfg["baseurl"] = $bs;
+			$this->vars(array("baseurl" => $bs));
+		}
 		// genereerime listi koikidest menyydest, samasugune kood on ka
 		// mujal olemas, kas ei voiks seda kuidagi yhtlustada?
 
@@ -2710,8 +2717,11 @@ class document extends aw_template
 			$docidstr = " OR documents.docid IN (" . join(",",$docids) . ")";
 		};
 
+		$mc = get_instance("menu_cache");
+		$mc->make_caches();
+
 		$plist = join(",",$parent_list);
-		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified 
+		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
 										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%') AND objects.status = 2 AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
@@ -2719,7 +2729,7 @@ class document extends aw_template
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			if (not($this->can("view",$row["docid"])))
+			if (not($this->can("view",$row["docid"])) || !is_array($mc->get_cached_menu($row["parent"])))
 			{
 				continue;
 			};
@@ -2741,7 +2751,15 @@ class document extends aw_template
 			// to hell with html in titles
 			$row["title"] = strip_tags($row["title"]);
 			$title = ($row["title"]) ? $row["title"] : "(nimetu)";
-			$docarr[] = array("matches" => $c, "title" => $title,"section" => $row["docid"],"content" => $co,"modified" => $this->time2date($row["modified"],5),"tm" => $row["tm"]);
+			$docarr[] = array(
+				"matches" => $c, 
+				"title" => $title,
+				"section" => $row["docid"],
+				"content" => $co,
+				"modified" => $this->time2date($row["modified"],5),
+				"tm" => $row["tm"],
+				"parent" => $row["parent"]
+			);
 			$cnt++;
 			
 		}
@@ -2779,6 +2797,8 @@ class document extends aw_template
 
 		$per_page = 10;
 
+		$mned = get_instance("menuedit");
+		
 		$num = 0;
 		reset($docarr);
 		while (list(,$v) = each($docarr))
@@ -2793,11 +2813,49 @@ class document extends aw_template
 				{
 					$sstr = substr(($v["matches"]*100) / $max_count,0,4);
 				}
+
+
+				$sec = $v["section"];
+				if ($mc->subs[$v["parent"]] == 1)
+				{
+//.					echo "vparent = $v[parent] <br>";
+					// we need to push all parent menus aliases to menuedit::menu_aliases for make_menu_link to work
+					$mrow = $mc->get_cached_menu($v["parent"]);
+					$mpr = $mrow["parent"];
+					$mned->menu_aliases = array();
+
+//					echo "mpr = $mpr sec = $sec mrow = <pre>", var_dump($mrow),"</pre> root= ",$this->cfg["rootmenu"],"<br>";
+					while ($mpr > 0 && $mpr != $this->cfg["rootmenu"])
+					{
+						$mrow = $mc->get_cached_menu($mpr);
+						if ($mrow["alias"] != "")
+						{
+							array_push($mned->menu_aliases,$mrow["alias"]);
+						}
+						$mpr = $mrow["parent"];
+//						echo "mpr = $mpr <br>";
+					}
+					$mr = $mc->get_cached_menu($v["parent"]);
+					if (!is_array($mr))
+					{
+						$mr = array();
+					}
+					$sec = $mned->make_menu_link($mr);
+				}
+
+				if (aw_ini_get("search.rewrite_urls"))
+				{
+					$exp = get_instance("export");
+					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
+					$sec = $exp->rewrite_link($sec);
+					$sec = aw_ini_get("baseurl")."/".$exp->get_hash_for_url($sec,aw_global_get("lang_id"));
+				}
+
 				$this->vars(array("title"			=> strip_tags($v["title"]),
 													"percent"		=> $sstr,
 													"content"		=> preg_replace("/#(.*)#/","",$v["content"]),
 													"modified"	=> $v["tm"] == "" ? $v["modified"] : $v["tm"],
-													"section"		=> $v["section"]));
+													"section"		=> $sec));
 				$r.= $this->parse("MATCH");
 			}
 			$num++;
