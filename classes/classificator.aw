@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.27 2004/10/21 16:08:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.28 2004/10/26 14:42:25 duke Exp $
 
 /*
 
@@ -75,11 +75,19 @@ class classificator extends class_base
 		{
 			$this->recursive = 1;
 		}
-		list($choices,$name,$use_type) = $this->get_choices(array(
+
+		$ch_args = array(
 			"clid" => $arr["clid"],
 			"name" => $prop["name"],
 			"obj_inst" => $arr["obj_inst"],
-		));
+		);
+
+		if (is_oid($prop["object_type_id"]))
+		{
+			$ch_args["object_type_id"] = $prop["object_type_id"];
+		};
+		
+		list($choices,$name,$use_type) = $this->get_choices($ch_args);
 
 		$selected = false;
 		$connections = array();
@@ -185,9 +193,16 @@ class classificator extends class_base
 		// needs $property name
 
 		$ot = get_instance(CL_OBJECT_TYPE);
-		$ff = $ot->get_obj_for_class(array(
-			"clid" => $arr["clid"],
-		));
+		if (isset($arr["object_type_id"]))
+		{
+			$ff = $arr["object_type_id"];
+		}
+		else
+		{
+			$ff = $ot->get_obj_for_class(array(
+				"clid" => $arr["clid"],
+			));
+		};
 		//if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->meta("object_type"))) 
 		{
@@ -333,19 +348,26 @@ class classificator extends class_base
 			"filter" => array("name" => $arr["name"]),
 		));
 
-		$ot = get_instance(CL_OBJECT_TYPE);
-		$active_object_id = $ot->get_obj_for_class(array(
-			"clid" => $arr["clid"],
-		));
-		
-		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		if (is_oid($arr["object_type"]))
 		{
-			$custom_ff = $arr["obj_inst"]->meta("object_type");
-			if (is_oid($custom_ff))
+			$active_object_id = $arr["object_type"];
+		}
+		else
+		{
+			$ot = get_instance(CL_OBJECT_TYPE);
+			$active_object_id = $ot->get_obj_for_class(array(
+				"clid" => $arr["clid"],
+			));
+		
+			if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 			{
-				$active_object_id = $custom_ff;
+				$custom_ff = $arr["obj_inst"]->meta("object_type");
+				if (is_oid($custom_ff))
+				{
+					$active_object_id = $custom_ff;
+				};
 			};
-		};
+		}
 
 		$c_obj = new object($active_object_id);
 		$clinf = $c_obj->meta("classificator");
