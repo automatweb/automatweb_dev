@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.79 2003/03/05 13:03:59 duke Exp $
+// $Id: class_base.aw,v 2.80 2003/03/05 17:03:16 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -36,6 +36,18 @@ define('PROP_ERROR',3);
 // something went very very wrong,
 // notify the user and DO NOT display the form/save the object
 define('PROP_FATAL_ERROR',4);
+
+// reltypes starting from id-s with 100 are reserved and should not be used
+// anywhere else
+
+// a special type for relations - link. This can be used to create links
+// between objects - defining "link" is left to the owning class of the
+// object. Basically it's just like "alias" but the alias textbox is 
+// _not_ show in the relation manager
+define('RELTYPE_LINK',100);
+
+// link to the config form that was used to create the object
+define('RELTYPE_CFGFORM',101);
 
 classload("aliasmgr");
 class class_base extends aliasmgr
@@ -209,7 +221,7 @@ class class_base extends aliasmgr
 		$cli = get_instance("cfg/" . $this->output_client);
 
 
-		if (is_array($this->layout))
+		if (isset($this->layout) && is_array($this->layout))
 		{
 			foreach($this->layout as $key => $val)
 			{
@@ -241,13 +253,13 @@ class class_base extends aliasmgr
 			"id" => $id,
 			"group" => $group,
 			"orb_class" => $orb_class,
-			"parent" => $parent,
-			"period" => $period,
+			"parent" => isset($parent) ? $parent : "",
+			"period" => isset($period) ? $period : "",
 			"cb_view" => $cb_view,
-			"alias_to" => $this->request["alias_to"],
-			"return_url" => urlencode($this->request["return_url"]),
-			"subgroup" => $this->request["subgroup"],
-		) + (is_array($extraids) ? array('extraids' => $extraids) : array());
+			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
+			"return_url" => isset($this->request["return_url"]) ? urlencode($this->request["return_url"]) : "",
+			"subgroup" => isset($this->request["subgroup"]) ? $this->request["subgroup"] : "",
+		) + (isset($extraids) && is_array($extraids) ? array('extraids' => $extraids) : array());
 
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
@@ -260,16 +272,16 @@ class class_base extends aliasmgr
 			"data" => $argblock,
 		));
 
-		if (!$content)
+		if (!isset($content))
 		{
 			$content = $cli->get_result();
 		};
 
 
 		return $this->gen_output(array(
-			"parent" => $parent,
-			"content" => $content,
-			"cb_view" => $args["cb_view"],
+			"parent" => isset($parent) ? $parent : "",
+			"content" => isset($content) ? $content : "",
+			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
 	}
 
@@ -781,7 +793,7 @@ class class_base extends aliasmgr
 		$classname = get_class($this->orb_class);
 
 		// XXX: pathi peab htmlclient tegema
-		$title = $args["title"];
+		$title = isset($args["title"]) ? $args["title"] : "";
 		if ($this->id)
 		{
 			if (!$title)
@@ -809,7 +821,7 @@ class class_base extends aliasmgr
 			));
 		};
 
-		if ($this->request["return_url"])
+		if (isset($this->request["return_url"]))
 		{
 			$parent = -1;
 			$title = html::href(array(
@@ -828,10 +840,10 @@ class class_base extends aliasmgr
 		// I need a way to let the client (the class using class_base to
 		// display the editing form) to add it's own tabs.
 
-		$activegroup = ($this->activegroup) ? $this->activegroup : $this->group;
-		$activegroup = ($this->action) ? $this->action : $activegroup;
+		$activegroup = isset($this->activegroup) ? $this->activegroup : $this->group;
+		$activegroup = isset($this->action) ? $this->action : $activegroup;
 
-		$orb_action = $args["orb_action"];
+		$orb_action = isset($args["orb_action"]) ? $args["orb_action"] : "";
 
 		if (!$orb_action)
 		{
@@ -849,7 +861,7 @@ class class_base extends aliasmgr
 				$link = ($activegroup == $key) ? "#" : "";
 			};
 
-			if (!$this->classinfo["hide_tabs"])
+			if (!isset($this->classinfo["hide_tabs"]))
 			{
 				$tabinfo = array(
 					"link" => &$link,
@@ -875,18 +887,23 @@ class class_base extends aliasmgr
 			};
 		};
 		
-		if ($this->id && $this->classinfo["relationmgr"] && !$this->request["cb_view"])
+		if (isset($this->classinfo["relationmgr"]) && !$this->request["cb_view"])
 		{
-			$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),get_class($this->orb_class));
+			$link = "";
+			if (isset($this->id))
+			{
+				$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),get_class($this->orb_class));
+			};
 			$this->tp->add_tab(array(
 				"link" => $link,
 				"caption" => "Seostehaldur",
 				"active" => ( ($this->action == "list_aliases") || ($this->action == "search_aliases") ),
+				"disabled" => !isset($this->id),
 			));
 		};
 
 		$vars = array();
-		if ($this->classinfo["toolbar"])
+		if (isset($this->classinfo["toolbar"]))
 		{
 			$this->gen_toolbar();
 			$vars = array(
@@ -1331,6 +1348,7 @@ class class_base extends aliasmgr
 				"parent" => $this->parent,
 				'return_url' => 'plaa',
 				),'popup_objmgr');
+
 		};
 
 
@@ -1991,6 +2009,9 @@ class class_base extends aliasmgr
 			"oid" => $args["id"],
 			"class_id" => CL_RELATION,
 		));
+
+
+		$source = $this->get_object($row["source"]);
 		
 		$def = $this->cfg["classes"][$this->clid]["def"];
 		$this->values = $obj["meta"]["values"][$def];
