@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.19 2004/05/21 11:09:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.20 2004/08/19 08:03:36 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -21,7 +21,7 @@ class mysql
 	function db_connect($server,$base,$username,$password) 
 	{
 		global $DEBUG;
-		$this->dbh = mysql_pconnect($server,$username,$password);
+		$this->dbh = mysql_connect($server,$username,$password);
 		if (!$this->dbh) 
 		{
 			echo "Can't connect to database";
