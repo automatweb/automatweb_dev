@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.9 2001/12/12 21:58:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.10 2001/12/12 22:39:23 duke Exp $
 
 // yup, this class is really braindead at the moment and mostly a copy of
 // the current alias manager inside the document class, but I will optimize
@@ -45,6 +45,7 @@ class aliasmgr extends aw_template {
 				"title" => "Lingid",
 				"table" => "extlink",
 				"generator" => "_link_aliases",
+				"class_id" => CL_EXTLINK,
 				"addlink" => $this->mk_my_orb("new", array("docid" => $this->id, "parent" => $this->parent),"links"),
 				"chlink" => $this->mk_my_orb("change",array("parent" => $this->id),"links"),
 				"dellink" => $this->mk_my_orb("delete",array("parent" => $this->id),"links"),
@@ -56,6 +57,7 @@ class aliasmgr extends aw_template {
 				"title" => "Pildid",
 				"table" => "image",
 				"generator" => "_image_aliases",
+				"class_id" => CL_IMAGE,
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"image"),
 				"chlink" => "#",
 		);
@@ -65,6 +67,7 @@ class aliasmgr extends aw_template {
 				"title" => "Tabelid",
 				"table" => "table",
 				"generator" => "_table_aliases",
+				"class_id" => CL_TABLE,
 				"addlink" => $this->mk_my_orb("add_doc", array("id" => $this->id, "parent" => $this->parent),"table"),
 				"chlink" => $this->mk_my_orb("change",array(),"table"),
 				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
@@ -75,6 +78,7 @@ class aliasmgr extends aw_template {
 				"alias" => "f",
 				"title" => "Vormid",
 				"table" => "form",
+				"class_id" => CL_FORM,
 				"generator" => "_form_aliases",
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form"),
 				"chlink" => $this->mk_my_orb("change",array(),"form"),
@@ -86,6 +90,7 @@ class aliasmgr extends aw_template {
 				"alias" => "v",
 				"title" => "Failid",
 				"table" => "file",
+				"class_id" => CL_FILE,
 				"generator" => "_file_aliases",
 				"addlink" => $this->mk_my_orb("new",array("id" => $this->id, "parent" => $this->parent),"file"),
 				"chlink" => $this->mk_my_orb("change",array("doc" => $this->id),"file"),
@@ -97,6 +102,7 @@ class aliasmgr extends aw_template {
 				"alias" => "g",
 				"title" => "Graafikud",
 				"table" => "graph",
+				"class_id" => CL_GRAPH,
 				"generator" => "_graph_aliases",
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"graph"),
 				"chlink" => $this->mk_my_orb("change",array("doc" => $this->id),"graph"),
@@ -109,6 +115,7 @@ class aliasmgr extends aw_template {
 				"title" => "Galeriid",
 				"table" => "gallery",
 				"generator" => "_gallery_aliases",
+				"class_id" => CL_GALLERY,
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"gallery"),
 				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
 				"chlink" => "#",
@@ -119,6 +126,7 @@ class aliasmgr extends aw_template {
 				"title" => "Vormipärjad",
 				"table" => "formchain",
 				"generator" => "_form_chain_aliases",
+				"class_id" => CL_FORM_CHAIN,
 				"addlink" =>  $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form_chain"),
 				"chlink" => $this->mk_my_orb("change",array(),"form_chain"),
 				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
@@ -129,6 +137,7 @@ class aliasmgr extends aw_template {
 				"alias" => "x",
 				"title" => "Lingikogu oksad",
 				"table" => "link_collection",
+				"class_id" => CL_LINK_COLLECTION,
 				"generator" => "_link_collection_aliases",
 				"addlink" => $this->mk_orb("pick_collection",array("parent" => $this->id),"link_collection"),
 				"chlink" => $this->mk_orb("pick_branch",array("parent" => $this->id),"link_collection"),
@@ -139,6 +148,7 @@ class aliasmgr extends aw_template {
 				"alias" => "o",
 				"title" => "Foorumid",
 				"table" => "forum",
+				"class_id" => CL_FORUM,
 				"generator" => "_forum_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id),"forum"),
 				"chlink" => "#",
@@ -151,6 +161,7 @@ class aliasmgr extends aw_template {
 				"title" => "Formi sisetus",
 				"table" => "form_entries",
 				"generator" => "_form_entry_aliases",
+				"class_id" => CL_FORM_ENTRY,
 				"addlink" => $this->mk_my_orb("new_entry_alias",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"form_alias"),
 				"chlink" => "#",
 		);
@@ -160,6 +171,7 @@ class aliasmgr extends aw_template {
 				"title" => "Menüüpärjad",
 				"table" => "menu_chains",
 				"generator" => "_menu_chain_aliases",
+				"class_id" => CL_FORM_ENTRY,
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu_chain"),
 				"chlink" => $this->mk_my_orb("change",array(),"menu_chain"),
 				"field" => "id"
@@ -169,6 +181,7 @@ class aliasmgr extends aw_template {
 				"alias" => "q",
 				"title" => "Pulloudid",
 				"table" => "pullout",
+				"class_id" => CL_PULLOUT,
 				"generator" => "_pullout_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"pullout"),
 				"chlink" => $this->mk_my_orb("change",array(),"pullout"),
@@ -205,6 +218,15 @@ class aliasmgr extends aw_template {
 			"action" => "list_aliases",
 		));
 		$this->t->define_field(array(
+			"name" => "icon",
+			"caption" => "",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+			//"sortable" => 1,
+                ));
+		$this->t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
@@ -213,7 +235,7 @@ class aliasmgr extends aw_template {
                 ));
 		$this->t->define_field(array(
 			"name" => "description",
-			"caption" => "Kirjeldus",
+			"caption" => "Muu info",
 			"talign" => "center",
 			"nowrap" => "1",
 			//"sortable" => 1,
@@ -246,6 +268,7 @@ class aliasmgr extends aw_template {
 		$aliases = array();
 		$cnt = 0;
 		$targets = "";
+
 		foreach($this->defs as $key => $val)
 		{
 			$cnt++;
@@ -256,7 +279,11 @@ class aliasmgr extends aw_template {
 			$targets .= $this->parse("target_def");
 			$aliases[$cnt] = $val["title"];
 
+			$this->def_id = $key;
+
+			$this->_initialize($key);
 			$this->$val["generator"]();
+			$this->_finalize($key);
 		};
 
 		$this->vars(array(
@@ -272,33 +299,9 @@ class aliasmgr extends aw_template {
 	// 
 	// Every alias class has its own subroutine to draw the according table
 	//
-	/////
-	// !This one handles all the images
-	function _img_aliases($args = array())
-	{
-		classload("images");
-		$img = new db_images;
-		$this->_initialize($this->defs["image"]);
-		$img->list_by_object($this->id,0);
-		while($row = $img->db_next())
-		{
-			$link = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $row["oid"]),"images"),$row["name"]);
-
-			$this->t->define_data(array(
-				"name" => $link,
-				"alias" => sprintf("#p%d#",$row["idx"]),
-				"comment" => $row["comment"],
-				"modified"    => $this->time2date($row["modified"],2),
-				"modifiedby" => $row["modifiedby"],
-			));
-			$this->_common_parts($row);
-		}
-		$this->_finalize($this->defs["image"]);
-	}
 
 	function _link_aliases($args = array())
 	{
-		$this->_initialize($this->defs["links"]);
 		$links = $this->get_aliases_for($this->id,CL_EXTLINK,$_sby, $s_link_order,array("extlinks" => "extlinks.id = objects.oid"));
 		reset($links);
 		$lc = 0;
@@ -315,12 +318,10 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		};
-		$this->_finalize($this->defs["links"]);
 	}
 	
 	function _menu_chain_aliases($args = array())
 	{
-		$this->_initialize($this->defs["menu_chains"]);
 		$menu_chains = $this->get_aliases_for($this->id,CL_MENU_CHAIN,$_sby, $s_link_order);
 		reset($menu_chains);
 		$mc = 0;
@@ -337,12 +338,10 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		};
-		$this->_finalize($this->defs["menu_chains"]);
 	}
 	
 	function _pullout_aliases($args = array())
 	{
-		$this->_initialize($this->defs["pullouts"]);
 		$menu_chains = $this->get_aliases_for($this->id,CL_PULLOUT,$_sby, $s_link_order);
 		reset($menu_chains);
 		$mc = 0;
@@ -359,12 +358,10 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		};
-		$this->_finalize($this->defs["pullouts"]);
 	}
 	
 	function _form_aliases($args = array())
 	{
-		$this->_initialize($this->defs["forms"]);	
 		$forms = $this->get_aliases_for($this->id,CL_FORM,$s_form_sortby, $s_form_order);
 		$fc = 0;
 		reset($forms);
@@ -381,13 +378,11 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		};
-		$this->_finalize($this->defs["forms"]);
 	}
 
 	function _file_aliases($args = array())
 	{
 
-		$this->_initialize($this->defs["files"]);
 		$files = $this->get_aliases_for($this->id,CL_FILE,$s_file_sortby, $s_file_order);
 		$fic = 0;
 		reset($files);
@@ -404,12 +399,10 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		}
-		$this->_finalize($this->defs["files"]);
 	}
 
 	function _image_aliases($args = array())
 	{
-		$this->_initialize($this->defs["image"]);
 		$files = $this->get_aliases_for($this->id,CL_IMAGE,$s_image_sortby, $s_image_order);
 		$fic = 0;
 		reset($files);
@@ -427,12 +420,10 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		}
-		$this->_finalize($this->defs["image"]);
 	}
 
 	function _table_aliases($args = array())
 	{
-		$this->_initialize($this->defs["tables"]);
 		$tables = $this->get_aliases_for($this->id,CL_TABLE,$x,$y);
 		$tc = 0;
 		while (list(,$v) = each($tables))
@@ -448,12 +439,10 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		}
-		$this->_finalize($this->defs["tables"]);
 	}
 
 	function _form_chain_aliases($args = array())
 	{
-		$this->_initialize($this->defs["form_chains"]);
 		$ffl = "";
 		$chains = $this->get_aliases_for($this->id,CL_FORM_CHAIN,$s_chain_sortby, $s_chain_order);
 		$cc = 0;
@@ -471,12 +460,10 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		};
-		$this->_finalize($this->defs["form_chains"]);
 	}
 
 	function _gallery_aliases($args = array())
 	{
-		$this->_initialize($this->defs["galleries"]);
 		$galleries = $this->get_aliases_for($this->id,CL_GALLERY,$s_gallery_sortby, $s_gallery_order);
 		$galc = 0;
 		reset($galleries);
@@ -493,12 +480,10 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		}
-		$this->_finalize($this->defs["galleries"]);
 	}
 
 	function _form_entry_aliases($args = array())
 	{
-		$this->_initialize($this->defs["form_entry"]);
 		$fes = $this->get_aliases_for($this->id,CL_FORM_ENTRY,$s_fe_sortby, $s_fe_order);
 		$fec = 0;
 		reset($fes);
@@ -515,13 +500,11 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		}
-		$this->_finalize($this->defs["form_entry"]);
 	}
 
 
 	function _link_collection_aliases($args = array())
 	{
-		$this->_initialize($this->defs["link_collections"]);
 		$link_collections = $this->get_aliases_for($this->id,CL_LINK_COLLECTION,0,0);
 		$lcoll = "";
 
@@ -545,12 +528,10 @@ class aliasmgr extends aw_template {
 				$this->_common_parts($val);
 			}
 		}
-		$this->_finalize($this->defs["link_collections"]);
 	}
 	
 	function _forum_aliases($args = array())
 	{
-		$this->_initialize($this->defs["forums"]);
 		$forums = $this->get_aliases_for($this->id,CL_FORUM,0,0);
 		$lcoll = "";
 
@@ -579,12 +560,10 @@ class aliasmgr extends aw_template {
 				$this->_common_parts($val);
 			};
 		};
-		$this->_finalize($this->defs["forums"]);
 	}
 
 	function _graph_aliases($args = array())
 	{
-		$this->_initialize($this->defs["graphs"]);
 		$graphs = $this->get_aliases_for($this->id,CL_GRAPH,$s_graph_sortby, $s_graph_order);
 		$gc = 0;
 		reset($graphs);
@@ -601,21 +580,19 @@ class aliasmgr extends aw_template {
 			));
 			$this->_common_parts($v);
 		};
-		$this->_finalize($this->defs["graphs"]);
 	}
 	
-	function _initialize($args = array())
+	function _initialize($id)
 	{
 		$this->t->reset_data();
-		$this->t->set_attribs(array("prefix" => $args["table"]));
-		$this->t->set_header_attribs(array("table" => $args["table"]));
+		$this->t->set_attribs(array("prefix" => $this->defs[$id]["table"]));
+		$this->t->set_header_attribs(array("table" => $this->defs[$id]["table"]));
 		$this->vars(array(
-			"add_link" => $args["addlink"],
+			"add_link" => $this->defs[$id]["addlink"],
 		));
-		$this->attribs = $args;
 	}
 
-	function _finalize($args = array())
+	function _finalize($id)
 	{
 		if ($this->table == $this->attribs["table"])
 		{
@@ -625,10 +602,10 @@ class aliasmgr extends aw_template {
 
 		$this->vars(array(
 			"contents" => $this->t->draw(),
-			"title" => $this->attribs["title"],
-			"type" => $this->attribs["table"],
-			"chlink" => $this->attribs["chlink"],
-			"field" => $this->attribs["field"],
+			"title" => $this->defs[$id]["title"],
+			"type" => $this->defs[$id]["table"],
+			"chlink" => $this->defs[$d]["chlink"],
+			"field" => $this->defs[$id]["field"],
 			"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
 		));
 
@@ -643,6 +620,7 @@ class aliasmgr extends aw_template {
 		$id = ($args["id"]) ? $args["id"] : $args["oid"];
 		$this->t->merge_data(array(
 			"check" => sprintf("<input type='checkbox' name='c_%s' value='%d'>",$this->attribs["table"],$id),
+			"icon"	=> sprintf("<img src='%s'>",get_icon_url($this->defs[$this->def_id]["class_id"],"")),
 		));
 	}
 };
