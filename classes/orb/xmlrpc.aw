@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.12 2003/10/21 18:28:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.13 2003/12/14 15:19:46 duke Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -264,7 +264,14 @@ class xmlrpc extends aw_template
 			{
 				$in_value = false;
 				$tmp = $this->req_decode_xml($values);
-				$result["params"][$name] = $tmp["params"];
+				if (empty($name))
+				{
+					$result["params"] = $tmp["params"];
+				}
+				else
+				{
+					$result["params"][$name] = $tmp["params"];
+				};
 			};
 
 			if (($token["tag"] == "base64") && ($token["type"] == "complete"))
