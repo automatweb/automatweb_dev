@@ -384,7 +384,7 @@
             <documents>
                   <index>docid</index>
                   <master_table>objects</master_table>
-                  <master_index>oid</master_index>
+                  <master_index>brother_of</master_index>
             </documents>
             <planner>
                   <index>id</index>
