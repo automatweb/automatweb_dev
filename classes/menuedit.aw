@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.307 2003/12/22 15:36:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.308 2003/12/23 09:52:20 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -450,12 +450,17 @@ class menuedit extends aw_template
 					{
 						// ok, ini option: menuedit.recursive_aliases  - if true, aliases are checked by parents
 						// vaatame, kas selle nimega aliast on?
-						$ol = new object_list(array(
+						$filter = array(
 							"alias" => $sval,
-							"parent" => $prnt,
 							"status" => STAT_ACTIVE,
 							"site_id" => aw_ini_get("site_id")
-						));
+						);
+						if ($prnt)
+						{
+							$filter["parent"] = $prnt;
+						}
+
+						$ol = new object_list($filter);
 						if ($ol->count() == 0)
 						{
 							$obj = false;
