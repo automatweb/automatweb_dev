@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.6 2001/05/20 22:03:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.7 2001/05/20 23:48:53 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -87,11 +87,21 @@ class keywords extends aw_template {
 			LEFT JOIN keywords ON (keywords2objects.keyword_id = keywords.id)
 			WHERE oid = $id";
 		$this->db_query($q);
+		$lx = array();
+		$kwa = array();
+		$kw = "";
+		while($row = $this->db_next())
+		{
+			$lx[] = $row;
+			$kwa[] = $row["keyword"];
+		};
+		$kw = join(",",$kwa);
 		classload("email");
 		$email = new email();
 		$this->info["site_header"] = "<a href='orb.aw?class=document&action=change&id=$id'>Dokument</a>";
 		global $baseurl;
-		while($row = $this->db_next())
+		foreach($lx as $row)
+		//while($row = $this->db_next())
 		{
 			$this->save_handle();
 			$q = "SELECT * FROM objects WHERE oid = '$row[list_id]'";
@@ -128,13 +138,14 @@ class keywords extends aw_template {
 				$content = $ml["contents"];
 				$content = str_replace("#url#","$baseurl/index.aw?section=$id",$content);
 				$content = str_replace("#title#",$doc["name"],$content);
-				$content = str_replace("#keyword#",$row["keyword"],$content);
+				$content = str_replace("#keyword#",$kw,$content);
 				$email->mail_members(array(
 						"list_id" => $row["list_id"],
 						"name" => $ml["mail_from_name"],
 						"from" => $ml["mail_from"],
 						"subject" => $ml["subj"],
 						"content" => $content,
+						"cache"   => 1,
 				));
 			};
 		};
