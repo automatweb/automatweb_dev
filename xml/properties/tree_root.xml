@@ -13,5 +13,12 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <ROOT>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>juurmenüü</caption>
+            </ROOT>
+      </reltypes>
 </properties>
 
