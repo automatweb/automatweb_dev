@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.57 2003/04/15 15:04:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.58 2003/06/26 15:32:34 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -396,6 +396,24 @@ class aw_table
 		$this->titlebar_under_groups = isset($arr["titlebar_under_groups"]) ? $arr["titlebar_under_groups"] : "";
 		$tbl = "";
 
+		if (isset($pageselector) && $pageselector != "")
+		{
+			switch($pageselector)
+			{
+				case "text":
+					$tbl .= $this->draw_text_pageselector(array(
+						"records_per_page" => $records_per_page
+					));
+					break;
+				case "lb":
+				default:
+					$tbl .= $this->draw_lb_pageselector(array(
+						"records_per_page" => $records_per_page
+					));
+			}
+		}
+
+
 		// moodustame välimise raami alguse
 		if (is_array($this->frameattribs))
 		{
@@ -513,6 +531,11 @@ class aw_table
 		}
 
 		$this->lgrpvals = array();
+
+		if (!isset($act_page))
+		{
+			$act_page = $GLOBALS["ft_page"];
+		}
 
 		// koostame tabeli sisu
 		if (is_array($this->data)) 
@@ -1261,5 +1284,84 @@ class aw_table
 			}
 		}
 	}
+
+	////
+	// !draws a listbox pageselector. 
+	// parameters:
+	//	style - id of the css style to apply to the page
+	//	records_per_page - number of records on each page
+	function draw_lb_pageselector($arr)
+	{
+		extract($arr);
+		$cl = "";
+		if ($style)
+		{
+			$cl = "class=\"style_".$style."\"";
+		}
+		$ru = preg_replace("/ft_page=\d*/", "", aw_global_get("REQUEST_URI"));
+		$sep = "&";
+		if (strpos($ru, "?") === false)
+		{
+			$sep = "?";
+		}
+		$ru = $ru.$sep;
+		$ru = preg_replace("/\&{2,}/","&",$ru);
+
+		$pgsel = "<select $cl name=\"ft_page\" onChange=\"window.location='".$ru."ft_page='+this.options[this.selectedIndex].value\">";
+
+		$num_pages = $this->d_row_cnt / $records_per_page;
+		for ($i = 0; $i < $num_pages; $i++)
+		{
+			$from = $i*$records_per_page+1;
+			$to = min(($i+1)*$records_per_page, $this->d_row_cnt);
+			$sel = "";
+			if ($GLOBALS["ft_page"] == $i)
+			{
+				$sel = "selected";
+			}
+			$pgsel.= "<option $sel value='".$i."'>".$from." - ".$to;
+		}
+		$pgsel.="</select>";
+		return $pgsel;
+	}
+
+	function draw_text_pageselector($arr)
+	{
+		extract($arr);
+		$ru = preg_replace("/ft_page=\d*/", "", aw_global_get("REQUEST_URI"));
+		$sep = "&";
+		if (strpos($ru, "?") === false)
+		{
+			$sep = "?";
+		}
+		$ru = $ru.$sep;
+		$ru = preg_replace("/\&{2,}/","&",$ru);
+		$cl = "";
+		if ($style)
+		{
+			$cl = "class=\"style_".$style."\"";
+		}
+		$num_pages = $this->d_row_cnt / $records_per_page;
+		for ($i = 0; $i < $num_pages; $i++)
+		{
+			$from = $i*$records_per_page+1;
+			$to = min(($i+1)*$records_per_page, $this->d_row_cnt);
+			$url = $ru."ft_page=".$i;
+			if ($GLOBALS["ft_page"] == $i)
+			{
+				$pgsel.="<span $cl>".$from." - ".$to."</span>";
+			}
+			else
+			{
+				$pgsel.="<span $cl><a href='$url'>".$from." - ".$to."</a></span>";
+			}
+			if ($i < ($num_pages - 1))
+			{
+				$pgsel.= " | ";
+			}
+		}
+		return $pgsel;
+	}
+
 };
 ?>
