@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.8 2004/04/28 13:54:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.9 2004/05/06 12:32:46 duke Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -20,8 +20,9 @@ class relmanager extends aw_template
 	function init_rel_manager($arr)
 	{
 		$prop = $arr["prop"];
+		$arr["prop"]["_done"] = 1;
 		$obj = $arr["obj_inst"];
-		
+
 		load_vcl("table");
 		$this->t = new aw_table(array(
 			"layout" => "generic",
@@ -38,11 +39,32 @@ class relmanager extends aw_template
 			return false;
 		};
 
+		if (!is_oid($obj->id()))
+		{
+			return false;
+		};
+
+		$params = array(
+			"type" => $prop["reltype"],
+		);
+
+		if (!empty($prop["clid"]))
+		{
+			$params["class"] = $prop["clid"][0];
+		};
+
 		// XXX: should multiple classes be supported?
+		$conns = $obj->connections_from($params);
+
+		// alright, I need an alternative way to figure this thing out
+
+		/*
 		$conns = $obj->connections_from(array(
 			"type" => $prop["reltype"],
 			"class" => $prop["clid"][0],
 		));	
+		*/
+
 
 		$rv = array();
 
