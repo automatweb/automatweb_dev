@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.288 2004/07/09 12:19:57 duke Exp $
+// $Id: class_base.aw,v 2.289 2004/07/13 12:06:33 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -381,6 +381,8 @@ class class_base extends aw_template
 
 				if (is_array($fstat) && !empty($fstat["error"]))
 				{
+					// callback_pre_edit can block saving if it wants to
+					// do not mix this with property error codes
 					$properties = array();
 					$properties["error"] = array(
 						"type" => "text",
@@ -395,7 +397,7 @@ class class_base extends aw_template
 
 		$lm = $this->classinfo(array("name" => "fixed_toolbar"));
 
-		// turn of submit button, if the toolbar is being shown
+		// turn off submit button, if the toolbar is being shown
 		if (!empty($lm))
 		{
 			$gdata["submit"] = "no";
@@ -1118,16 +1120,15 @@ class class_base extends aw_template
 
 				if ($res !== false)
 				{
-					// so, how do I figure out
-					//$this->tp->add_tab(array(
-					$active = !empty($val["active"]) || ($key == $this->subgroup);
+					$active = !empty($val["active"]);
+					// why exactly is that thing good?
 					if ($this->no_active_tab)
 					{
 						$active = false;
 					};
 					$this->cli->add_tab(array(
 						"id" => $tabinfo["id"],
-						"level" => empty($val["parent"]) ? 1 : 2,
+						"level" => $val["level"],
 						"parent" => $val["parent"],
 						"link" => $tabinfo["link"],
 						"caption" => $tabinfo["caption"],
@@ -2421,7 +2422,6 @@ class class_base extends aw_template
 		));
 
 		$this->use_group = "list_aliases";
-		$this->parent_group = "";
 
 		$reltypes = $this->get_rel_types();
 
@@ -2511,7 +2511,6 @@ class class_base extends aw_template
 		));
 		
 		$this->use_group = "list_aliases";
-		$this->parent_group = "";
 
 		$reltypes = $this->get_rel_types();
 
@@ -3560,11 +3559,45 @@ class class_base extends aw_template
 
 		// I need group and caption from each one
 
+		// alright, I need to do this in a better way. perhaps like the way it was done in the tree
+
+		$default_group = false;
+
+		$this->grpmap = array();
+		$this->active_groups = array();
+
+		// now, how do I make sure what level a group has?
+		foreach($this->groupinfo as $gkey => $ginfo)
+		{
+
+			// I need some kind of additional array, thats what I need!
+			$parent = 0;
+			if ($ginfo["parent"])
+			{
+				$parent = $ginfo["parent"];
+			};
+
+			// how DO i calculate it?
+			if ($parent == 0 and sizeof($this->grpmap[0]) == 0)
+			{
+				// take the very first first level group
+				$default_group = $gkey;
+			};
+			if ($ginfo["default"])
+			{
+				$default_group = $gkey;
+			};
+			
+			$this->grpmap[$parent][$gkey] = $ginfo;
+		};
+
+		// what the fuck do I need first_subgrp for?
 		$first_subgrp = array();
 		$groupmap = $rgroupmap = array();
 
 		foreach($this->groupinfo as $gkey => $ginfo)
 		{
+			// so, if it is not empty and then some .. gees... what the fuck am I doing here?
 			if (!empty($ginfo["parent"]) && empty($first_subgrp[$ginfo["parent"]]))
 			{
 				$first_subgrp[$ginfo["parent"]] = $gkey;
@@ -3577,55 +3610,48 @@ class class_base extends aw_template
 			};
 		}
 
-		/// XXX: group remapping is NOT done!
-
-		// that is all nice and perty .. but. I also need to take into account the
-		// fact that .. how the hell do I put properties into those dynamic groups?
-
 		// the very default group comes from arr
+		// groupinfo contains a flat list of all groups
+		// I need to figure out which group should I actually be using
+		// if there is one in the url and it actually exists, then use it
 		if (isset($this->groupinfo[$arr["group"]]))
 		{
 			$use_group = $arr["group"];
 		}
 		else
 		{
-			// use first group as default
-			reset($this->groupinfo);
-			list($use_group,) = each($this->groupinfo);
+			$use_group = $default_group;
+		};
+			
+		$this->active_groups[] = $use_group;
+		// but .. if this is the case and the group is a first level group then I should
+		// right in this place calculate the correct group as well
+		$current_group = $use_group;
 
-			// maybe some other group is set a default? scan them;
-			// latter default overwrites former, otherwise it would
-			// not be possible for a class to override the default group
-			foreach($this->groupinfo as $gkey => $ginfo)
-			{
-				if (isset($ginfo["default"]))
-				{
-					$use_group = $gkey;
-				};
-			};
+		while (isset($this->grpmap[$use_group]))
+		{
+			// good lord, but that is some really good code here!
+			reset($this->grpmap[$use_group]);
+			list($use_group,) = each($this->grpmap[$use_group]);
+			$this->active_groups[] = $use_group;
 		};
 
-		// I need to detect whether a group has children groups. If it has, then all
-		// properties that belong to this group will have to be remapped to the
-		// first subgroup
+		$grpinfo = $this->groupinfo[$use_group];
+		// and climb back down again, e.g. make sure we always have _all_ active groups 
+		// (active meaning in the path) 
+		while(isset($grpinfo["parent"]) && isset($this->groupinfo[$grpinfo["parent"]]))
+		{
+			if (!in_array($grpinfo["parent"],$this->active_groups))
+			{
+				$this->active_groups[] = $grpinfo["parent"];
+			};
+			$grpinfo = $this->groupinfo[$grpinfo["parent"]];
+		};
 
 		$this->use_group = $use_group;
-
-		if ($rgroupmap[$use_group])
-		{
-			$this->parent_group = $rgroupmap[$use_group];
-		}
-		elseif (isset($groupmap[$use_group][0]))
-		{
-			$this->parent_group = $use_group;
-			$use_group = $groupmap[$use_group][0];
-
-		};
+		$this->grp_path = array();
 
 		$this->prop_by_group = array();
-
-		// I need to create a remap map for groups .. but that is only a comfortability 
-		// feature. I don't really _need_ to do this.
 		$tmp = array();
 
 		$property_groups = array();
@@ -3645,25 +3671,20 @@ class class_base extends aw_template
 				continue;
 			};
 
+			// defaults from class, cfgform can override things
+			// XXX: should I implement some kind of safety checks here?
 			$propdata = array_merge($all_properties[$key],$val);
 
-
-			if (is_array($first_subgrp) && !is_array($propdata["group"]) && $first_subgrp[$propdata["group"]])
-			{
-				$val["group"] = $first_subgrp[$propdata["group"]];
-			};
-			
 			// deal with properties belonging to multiple groups
 			$propgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);
 
-			// make it appear in parent group too	
-			if (is_array($first_subgrp) && !is_array($propdata["group"]) && $first_subgrp[$propdata["group"]])
-			{
-				$propgroups[] = $propdata["group"];
-			};
-
 			$x_tmp = $propgroups;
 
+			// ah, I alright .. propgroups decides whether a group is shown
+			// and I need to know that information for each group in my path
+
+			// now, what do I do with groups that are more than one level deep .. well, I guess
+			// I'm just ignoring those for now
 			foreach($x_tmp as $pkey)
 			{
 				if ($rgroupmap[$pkey])
@@ -3675,34 +3696,6 @@ class class_base extends aw_template
 			$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
 			$property_groups[$key] = $propgroups;
 		};
-
-		// now - if the requested group is empty, then set the active group to the next
-		// possible group. I do this by scanning $this->groupinfo
-		if (	!isset($this->prop_by_group[$use_group]) &&
-			( (!empty($this->parent_group) && empty($this->prop_by_group[$this->parent_group])) || empty($this->parent_group)))
-		{
-			$found = false;
-			foreach($this->groupinfo as $_key => $_val)
-			{
-				if (!$found && isset($this->prop_by_group[$_key]))
-				{
-					$found = true;
-					$use_group = $_key;
-					if ($rgroupmap[$use_group])
-					{
-						$this->parent_group = $rgroupmap[$use_group];
-					}
-					elseif (isset($groupmap[$use_group][0]))
-					{
-						$this->parent_group = $use_group;
-						$use_group = $groupmap[$use_group][0];
-
-					};
-					$this->use_group = $use_group;
-				};
-			};
-		};
-
 
 		foreach($cfg_props as $key => $val)
 		{
@@ -3966,36 +3959,60 @@ class class_base extends aw_template
 	function get_visible_groups()
 	{
 		$rv = array();
-		foreach($this->groupinfo as $gkey => $gval)
+		// the rationale is this .. all first level groups are always visible
+		$visible_groups = array();
+		foreach($this->grpmap[0] as $gkey => $gval)
+		{
+			$visible_groups[] = $gkey;
+		};
+
+		foreach($this->active_groups as $act_group)
+		{
+			if (isset($this->grpmap[$act_group]))
+			{
+				foreach($this->grpmap[$act_group] as $gkey => $gval)
+				{
+					$visible_groups[] = $gkey;
+				};
+			};
+		}
+
+		$rv = array();
+		foreach($visible_groups as $vgr)
 		{
 			// remove groups with no properties. CL_RELATION is one of the big 
 			// users of this
-			if (!isset($this->prop_by_group[$gkey]))
-			{
-				// this skips all second level groups, right ..
-				//if (!empty($gval["parent"]))
-				//{
-					continue;
-				//};
-			};
-
-			// skip all second level groups that are not children of the currently used group
-			// alltho some output clients might actually want all groups and all properties
-			if (!empty($gval["parent"]) && $gval["parent"] != $this->parent_group)
+			if (!isset($this->prop_by_group[$vgr]))
 			{
 				continue;
 			};
-			if ($gkey == $this->use_group)
+
+			$gval = $this->groupinfo[$vgr];
+			if (empty($gval["parent"]))
+			{
+				$gval["level"] = 1;
+			}
+			else
+			{
+				$par_count = 1;
+				$gdat = $this->groupinfo[$vgr];
+				while($gdat["parent"])
+				{
+					$par_count++;
+					$gdat = $this->groupinfo[$gdat["parent"]];
+				};
+				$gval["level"] = $par_count;
+
+			}
+			
+			if (in_array($vgr,$this->active_groups))
 			{
 				$gval["active"] = 1;
 			};
 
-			if ($gkey == $this->parent_group)
-			{
-				$gval["active"] = 1;
-			};
-			$rv[$gkey] = $gval;
+			$rv[$vgr] = $gval;
 		};
+
 		return $rv;
 	}
 
