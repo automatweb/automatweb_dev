@@ -1,149 +1,97 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/priority.aw,v 2.4 2003/01/26 22:24:10 duke Exp $
+// priority.aw - prioriteedi objekt
+/*
+	@default table=objects
+	@default field=meta
+	@default method=serialize
 
-class priority extends aw_template
+	@property pri callback=callback_get_pri_list group=pri
+	@caption Prioriteedid
+
+	@groupinfo pri caption=Prioriteedid
+*/
+
+class priority extends class_base
 {
 	function priority()
 	{
-		$this->init("priority");
+		$this->init(array(
+			"tpldir" => "priority",
+			"clid" => CL_PRIORITY,
+		));
 	}
 
-	////
-	// !called, when adding a new object 
-	// parameters:
-	//    parent - the folder under which to add the object
-	//    return_url - optional, if set, the "back" link should point to it
-	//    alias_to - optional, if set, after adding the object an alias to the object with oid alias_to should be created
-	function add($arr)
+	function callback_get_pri_list($args = array())
 	{
-		extract($arr);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa priority");
-		}
-		else
-		{
-			$this->mk_path($parent,"Lisa priority");
-		}
-		$this->read_template("change.tpl");
-
+		$obj = $this->get_object($args["obj"]["oid"]);
+		$nodes = array();
 		$uu = get_instance("users_user");
+		$grouplist = $uu->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
+		$prilist = new aw_array($obj["meta"]["pri"]);
+		$max = 0;
+		$idx = 0;
+		foreach($prilist->get() as $key => $val)
+		{
+			$idx++;
+			if ($key > $max)
+			{
+				$max = $key;
+			};
+			$nodes[] = $this->_gen_pri_line($idx,$key,$val,&$grouplist);
+		};
+		// add a new empty line for adding new group/priority pair
+		$max++;
+		$idx++;
+		$nodes[] = $this->_gen_pri_line($idx,$max,array(),&$grouplist);
 
-		$this->vars(array(
-			"id" => 1, 
-			"grps" => $this->picker(0,$uu->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
-			"pri" => 0
-		));
-
-		$this->vars(array(
-			"GROUP" => $this->parse("GROUP"),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url))
-		));
-		return $this->parse();
+		return $nodes;
 	}
 
-	////
-	// !this gets called when the user submits the object's form
-	// parameters:
-	//    id - if set, object will be changed, if not set, new object will be created
-	function submit($arr)
+	function _gen_pri_line($idx,$key,$val,&$grouplist)
 	{
-		extract($arr);
-		if ($id)
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name
-			));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"name" => $name,
-				"class_id" => CL_PRIORITY
-			));
-		}
+		$tmp = array();
+		$tmp["caption"] = $idx;
+		$tmp["items"][] = array(
+				"name" => "grps[$key][grp]",
+				"type" => "select",
+				"options" => $grouplist,
+				"selected" => $val["grp"],
+		);
+		$tmp["items"][] = array(
+				"name" => "grps[$key][pri]",
+				"type" => "textbox",
+				"size" => 6,
+				"maxlength" => 6,
+				"value" => $val["pri"],
+		);
+		return $tmp;
+	}
 
-		if ($alias_to)
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$form_data = &$args["form_data"];
+		$retval = PROP_OK;
+		switch($data["name"])
 		{
-			$this->add_alias($alias_to, $id);
-		}
-
-		$pr = array();
-		if (is_array($grps))
-		{
-			foreach($grps as $g_id => $g_data)
-			{
-				if ($g_data["grp"])
+			case "pri":
+				$grps = $args["form_data"]["grps"];
+				if (is_array($grps))
 				{
-					$pr[$g_id] = $g_data;
+					foreach($grps as $g_id => $g_data)
+					{
+						if ($g_data["pri"])
+						{
+							$pr[$g_id] = $g_data;
+						}
+					}
 				}
-			}
-		}
 
-		uasort($pr, create_function('$a,$b','if ($a["pri"] > $b["pri"]) { return 1; } if ($a["pri"] < $b["pri"]) { return -1; } return 0;'));
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "pri",
-			"value" => $pr
-		));
-
-		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
-	}
-
-	////
-	// !this gets called when the user clicks on change object 
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
-	function change($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda priority");
-		}
-		else
-		{
-			$this->mk_path($ob["parent"], "Muuda priority");
-		}
-		$this->read_template("change.tpl");
-	
-		$uu = get_instance("users_user");
-		$grps = $uu->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)));
-		$mxpr = $mxid = 0;
-		$gr = "";
-		if (is_array($ob["meta"]["pri"]))
-		{
-			foreach($ob["meta"]["pri"] as $g_id => $g_data)
-			{
-				$this->vars(array(
-					"id" => $g_id,
-					"grps" => $this->picker($g_data["grp"],$grps),
-					"pri" => $g_data["pri"]
-				));
-				$gr.=$this->parse("GROUP");
-				$mxpr = max($mxpr, $g_data["pri"]);
-				$mxid = max($mxid, $g_id);
-			}
-		}
-
-		$this->vars(array(
-			"id" => $mxid+1,
-			"grps" => $this->picker(0,$grps),
-			"pri" => $mxpri+1
-		));
-		$gr.=$this->parse("GROUP");
-
-		$this->vars(array(
-			"GROUP" => $gr,
-			"name" => $ob["name"],
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
-		));
-
-		return $this->parse();
+				uasort($pr, create_function('$a,$b','if ($a["pri"] > $b["pri"]) { return 1; } if ($a["pri"] < $b["pri"]) { return -1; } return 0;'));
+				$form_data["pri"] = $pr;
+		};
+		return $retval;
 	}
 
 	////////////////////////////////////
