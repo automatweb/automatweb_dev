@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.44 2003/11/20 13:48:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.45 2003/11/25 08:45:43 kristo Exp $
 
 /*
 
@@ -139,21 +139,23 @@ class links extends class_base
 				{
 					$url = $this->cfg["baseurl"]."/".$o->id();
 				}
-				$name = strip_tags($row["name"]);
+				$name = strip_tags($o->name());
 				$name = str_replace("'","",$name);
 
 				$row["pick"] = html::href(array(
-					"url" => 'javascript:ss("'.$url.'","'.$row["name"].'")',
+					"url" => 'javascript:ss("'.$url.'","'.$o->name().'")',
 					"caption" => "Vali see"
 				));
 				$row["name"] = html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $row["oid"])),
-					"caption" => $row["name"]
+					"url" => $this->mk_my_orb("change", array("id" => $o->id())),
+					"caption" => $o->name()
 				));
-				$o = obj($row["oid"]);
 				$row["parent"] = $o->path_str(array(
 					"max_len" => 4
 				));
+				$_tmp = $o->createdby();
+				$row["createdby"] = $_tmp->name();
+				$row["modified"] = $o->modified();
 				$t->define_data($row);
 								
 			}
