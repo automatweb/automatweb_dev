@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.10 2003/07/18 16:16:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.11 2003/07/24 13:59:53 duke Exp $
 // __classname.aw - __name 
 /*
 
@@ -18,11 +18,11 @@ class __classname extends class_base
 	function __classname()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be, 
-	    // if they exist at all. the default folder does not actually exist, 
-	    // it just points to where it should be, if it existed
+		// if they exist at all. the default folder does not actually exist, 
+		// it just points to where it should be, if it existed
 		$this->init(array(
-			'tpldir' => '__tplfolder',
-			'clid' => __classdef
+			"tpldir" => "__tplfolder",
+			"clid" => __classdef
 		));
 	}
 
@@ -37,7 +37,7 @@ class __classname extends class_base
 	function parse_alias($args)
 	{
 		extract($args);
-		return $this->show(array('id' => $alias['target']));
+		return $this->show(array("id" => $alias["target"]));
 	}
 
 	////
@@ -45,12 +45,12 @@ class __classname extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = new object($id);
 
-		$this->read_template('show.tpl');
+		$this->read_template("show.tpl");
 
 		$this->vars(array(
-			'name' => $ob['name']
+			"name" => $ob->prop("name"),
 		));
 
 		return $this->parse();
