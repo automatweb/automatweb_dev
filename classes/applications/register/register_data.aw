@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.10 2004/11/23 14:24:24 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.11 2004/11/23 14:32:52 sven Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -182,22 +182,21 @@
 
 @property udefhidden1 type=hidden field=meta method=serialize group=general
 @property udefhidden2 type=hidden field=meta method=serialize group=general
-@property udefhidden3 type=hidden field=meta method=serialize group=general
+@property udefhidden3 type=hidden field=meta method=serialize group=general	
 
-
-@property usertext1 type=text store=no group=data
+@property usertext1 type=text store=no group=data table=objects
 @caption Usertext1
 
-@property usertext2 type=text store=no group=data
+@property usertext2 type=text store=no group=data table=objects
 @caption Usertext2
 
-@property usertext3 type=text store=no group=data
+@property usertext3 type=text store=no group=data table=objects
 @caption Usertext3
 
-@property usertext4 type=text store=no group=data
+@property usertext4 type=text store=no group=data table=objects
 @caption Usertext4
 
-@property usertext5 type=text store=no group=data
+@property usertext5 type=text store=no group=data table=objects
 @caption Usertext5
 
 @property usersubmit1 type=submit store=no
