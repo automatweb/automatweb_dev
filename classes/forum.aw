@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.15 2001/11/15 12:10:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.16 2001/11/15 14:06:36 cvs Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -453,7 +453,7 @@ class forum extends aw_template
 		$this->mk_path($o["parent"], "Muuda foorumit");
 		global $template_sets;
 		$this->vars(array(
-			"content_link" => $this->mk_my_orb("change",array("id" => $id)),
+			"content_link" => $this->mk_my_orb("show",array("board" => $id)),
 		));
 		$this->vars(array(
 			"name" => $o["name"],
