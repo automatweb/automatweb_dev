@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.66 2001/09/18 00:37:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.67 2001/09/24 09:15:00 cvs Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2311,6 +2311,15 @@ class form extends form_base
 			$tbl.="</form>";
 			$awt->stop("form::do_search::finish_table");
 			$awt->stop("form::do_search");
+
+			global $print;
+
+			if ( ($ft->table["print_button"]) && (not($print)) )
+			{
+				global $PHP_SELF,$REQUEST_URI;
+				$link = $REQUEST_URI . "&print=1";
+				$tbl = $tbl . "<div align=right><a href='$link' target='_new'>Prindi</a></div>";
+			}
 
 			if ($GLOBALS["SITE_ID"] == 14)
 			{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.17 2001/09/18 00:22:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.18 2001/09/24 09:15:00 cvs Exp $
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
 lc_load("form");
@@ -121,6 +121,7 @@ class form_table extends form_base
 			$this->table["new_win_y"] = $new_win_y;
 			$this->table["new_win_scroll"] = $new_win_scroll;
 			$this->table["new_win_fixedsize"] = $new_win_fixedsize;
+			$this->table["print_button"] = $print_button;
 			$this->save_table(array("id" => $id, "num_cols" => $num_cols));
 		}
 		else
@@ -245,6 +246,7 @@ class form_table extends form_base
 			"new_win_y" => ($this->table["new_win_y"]) ? $this->table["new_win_y"] : 100,
 			"new_win_scroll" => checked($this->table["new_win_scroll"]),
 			"new_win_fixedsize" => checked($this->table["new_win_fixedsize"]),
+			"print_button" => checked($this->table["print_button"]),
 			"view_new_win" => checked($this->table["view_new_win"]),
 			"header_normal" => $this->picker($this->table["header_normal"],$css),
 			"header_sortable" => $this->picker($this->table["header_sortable"],$css),
