@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.53 2004/02/25 16:30:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.54 2004/02/25 16:34:01 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -314,35 +314,6 @@ class config extends db_config
 		$this->quote(&$ss);
 		$this->set_simple_config("login_grp_redirect_".aw_global_get("LC"), $ss);
 		return $this->mk_my_orb("grp_redirect", array());
-	}
-
-	/**  
-		
-		@attrib name=menu_icon params=name default="0"
-		
-		@param id required
-		@param icon_id required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function set_menu_icon($arr)
-	{
-		extract($arr);
-
-		$af = $this->db_fetch_field("SELECT admin_feature FROM menu WHERE id = $id","admin_feature");
-		if ($af)
-		{
-			$this->set_program_icon(array("id" => $af,"icon_id" => $icon_id));
-		}
-		$this->db_query("UPDATE menu SET icon_id = $icon_id WHERE id = $id");
-		$obj = $this->get_object($id);
-		header("Location: ".$t->mk_orb("change", array("id" => $id, "parent" => $obj["parent"])));
-		die();
-
 	}
 
 	/**  
