@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.33 2004/12/10 14:57:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.34 2004/12/11 02:52:49 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -26,6 +26,9 @@
 @property show_link_new_win type=checkbox ch_value=1
 @caption Vaata link uues aknas
 
+@property hide_content_table_by_default type=checkbox ch_value=1
+@caption Vaikimisi &auml;ra n&auml;ita sisu tabelit
+
 @property tree_type type=chooser default=1
 @caption Puu n&auml;itamise meetod
 
@@ -47,11 +50,11 @@
 @property group_in_table type=select
 @caption Millise v&auml;lja j&auml;rgi tabel grupeerida
 
-@property filter_by_char_field type=select
+@property filter_by_char_field type=select 
 @caption Millise v&auml;lja v&auml;&auml;rtuse esit&auml;he j&auml;rgi filtreeritakse
 
-@property hide_content_table_by_default type=checkbox ch_value=1
-@caption Vaikimisi &auml;ra n&auml;ita sisu tabelit
+@property alphabet_in_lower_case type=checkbox ch_value=1 
+@caption T&auml;hestiku kuvamisel kasutada v&auml;iket&auml;hti 
 
 @groupinfo styles caption="Stiilid"
 @default group=styles
@@ -106,7 +109,7 @@ class object_treeview_v2 extends class_base
 		"select" => "Vali"
 	);
 
-	var $alphabet = array("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "&otilde;", "&auml;", "&ouml;", "&uuml;");
+	var $alphabet = array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "&Otilde;", "&Auml;", "&Ouml;", "&Uuml;");
 
 	function object_treeview_v2()
 	{
@@ -255,7 +258,6 @@ class object_treeview_v2 extends class_base
 		$ob = obj($id);
 
 		$this->read_template('show.tpl');
-
 		// init driver
 		$d_o = obj($ob->prop("ds"));
 		$d_inst = $d_o->instance();
@@ -350,7 +352,7 @@ class object_treeview_v2 extends class_base
 				if(!empty($_GET['char']))
 				{
 					$f = strtolower($ol_value[$ob->meta("filter_by_char_field")]);
-					if((strlen($_GET['char']) == 1) && ($f{0} != $_GET['char']))
+					if((strlen($_GET['char']) == 1) && ($f{0} != strtolower($_GET['char'])))
 					{
 						unset($ol[$ol_key]);
 					}
@@ -508,6 +510,10 @@ class object_treeview_v2 extends class_base
 				if(!empty($_GET['char']) && $character == $_GET['char'])
 				{
 					$character_value = "<strong>".$character."</strong>";
+				}
+				if($ob->prop("alphabet_in_lower_case"))
+				{
+					$character_value = strtolower($character_value);
 				}
 				$this->vars(array(
 					"char" => $character_value,
