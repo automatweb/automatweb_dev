@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.46 2004/10/27 11:24:51 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.47 2004/11/22 13:00:35 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -154,6 +154,8 @@ class forum_v2 extends class_base
 			"tpldir" => "forum",
 			"clid" => CL_FORUM_V2,
 		));
+
+		lc_site_load("forum",&$this);
 	}
 
 	function get_property($arr)
