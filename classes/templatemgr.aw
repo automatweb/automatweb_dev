@@ -111,7 +111,7 @@ class templatemgr extends aw_template
 	{
 		extract($arr);
 		$this->tplfolder_list = array(
-			$this->cfg["tpldir"] => str_replace($this->cfg["site_basedir"],$this->cfg["stitle"], $this->cfg["tpldir"])
+			$this->cfg["tpldir"] => $this->cfg["tpldir"]//str_replace($this->cfg["site_basedir"],$this->cfg["stitle"], $this->cfg["tpldir"])
 		);
 		$this->_req_tplfolders($this->cfg["tpldir"]);
 		return $this->tplfolder_list;
@@ -131,7 +131,7 @@ class templatemgr extends aw_template
 					{
 						$cnt++;
 						$this->_req_tplfolders($cf);
-						$this->tplfolder_list[$cf] = str_replace($this->cfg["site_basedir"],$this->cfg["stitle"], $cf);
+						$this->tplfolder_list[$cf] = $cf;//str_replace($this->cfg["site_basedir"],$this->cfg["stitle"], $cf);
 					}
 				}
 			}  
