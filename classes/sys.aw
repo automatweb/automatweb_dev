@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.26 2004/02/25 16:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.27 2004/02/26 15:28:32 duke Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -168,7 +168,7 @@ class sys extends aw_template
 
 	/**  
 		
-		@attrib name=dbsync params=name nologin="1" default="0"
+		@attrib name=dbsync params=name default="0"
 		
 		
 		@returns
@@ -200,7 +200,7 @@ class sys extends aw_template
 
 	/** Võrdleb kahte gen_db_sync poolt genereeritud andmebaasi definitsiooni 
 		
-		@attrib name=db_compare_dbs params=name nologin="1" default="0"
+		@attrib name=db_compare_dbs params=name default="0"
 		
 		
 		@returns
