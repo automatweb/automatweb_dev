@@ -1,18 +1,22 @@
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}">
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript">
+
 var feeding_node;
 
-function toggle_children(objref) {
-        elemID = objref.getAttribute("attachedsection");
-        thisElem = document.getElementById(elemID);
+var show_one_active = {VAR:only_one_level_opened};
+var active_level = 1;
+
+function toggle_children(objref,menu_level) {
+	elemID = objref.getAttribute("attachedsection");
+	thisElem = document.getElementById(elemID);
 	data_loaded = thisElem.getAttribute("data_loaded");
-        thisDisp = thisElem.style.display;
-        icon = document.getElementById("icon-"+elemID);
+	thisDisp = thisElem.style.display;
+	icon = document.getElementById("icon-"+elemID);
 	iconfld = document.getElementById("iconfld-"+elemID);
 
-        if (thisDisp == 'none')
-        {
+	if (thisDisp == 'none')
+	{
 		if (get_branch_func != "" && data_loaded == "false")
 		{
 			thisElem.innerHTML = '<span style="color: #CCC; margin-left: 20px;">loading....</span>';
@@ -20,9 +24,11 @@ function toggle_children(objref) {
 			feeding_node = elemID;
 			fetch_node(elemID);
 		};
-                thisElem.style.display = 'block';
-                if (icon)
-                        icon.innerHTML = tree_collapseMeHTML;
+		
+		thisElem.style.display = 'block';
+
+		if (icon)
+			icon.innerHTML = tree_collapseMeHTML;
 		if (iconfld.src == tree_closed_fld_icon)
 			iconfld.src = tree_open_fld_icon;
 
@@ -34,25 +40,30 @@ function toggle_children(objref) {
 				set_cookie(tree_id,open_nodes.join('^'));
 			};
 		};
-        }
-        else
-        {
-                thisElem.style.display = 'none';
-                if (icon)
-                        icon.innerHTML = tree_expandMeHTML;
+		
+		if(show_one_active && menu_level==active_level)
+		{
+			close_all_nodes(1,objref);
+		}
+	}
+	else
+	{
+		thisElem.style.display = 'none';
+		if (icon)
+			icon.innerHTML = tree_expandMeHTML;
 		if (iconfld.src == tree_open_fld_icon)
 			iconfld.src = tree_closed_fld_icon;
 
 		if (persist_state)
 		{
 			if (aw_in_array(elemID,open_nodes))
-			{
-				open_nodes = aw_remove_arr_el(elemID,open_nodes);
-				set_cookie(tree_id,open_nodes.join('^'));
-			}
+				{
+					open_nodes = aw_remove_arr_el(elemID,open_nodes);
+					set_cookie(tree_id,open_nodes.join('^'));
+				}
 		}
-        }
-        return false;
+	}
+	return false;
 }
 
 function onload_handler(arg)
@@ -82,6 +93,24 @@ function fetch_node(node)
 
 }
 
+   var attached_sections = Array();
+
+   function close_all_nodes(level, skip)
+   {
+      var i;
+      for(i in attached_sections[level])
+      {		
+         elem = document.getElementById(attached_sections[level][i]+"treenode");
+			elemId = elem.getAttribute('attachedsection');
+         //if(document.getElementById(elemId).style.display'block')
+			if(elem!=skip && document.getElementById(elemId).style.display!="none")
+         {
+            toggle_children(elem);
+         }
+      }
+   }
+
+
 // would be nice to have those generated for me
 
 // so, how do I call javascript for those
@@ -108,6 +137,14 @@ open_nodes = new Array({VAR:open_nodes});
 	vertical-align: middle;
 }
 
+.nodetextbuttonlike {
+	color: black;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 14px;
+	text-decoration: none;
+	vertical-align: middle;
+}
+
 .nodetext a {
 	color: black;
 }
@@ -119,7 +156,14 @@ open_nodes = new Array({VAR:open_nodes});
 <!-- END SUB: HAS_ROOT -->
 <!-- hästi tore oleks, kui ma saaks need folderite ikoonid kuidagi automaatselt lisada -->
 <!-- SUB: TREE_NODE -->
-<div class="nodetext"><a attachedsection="{VAR:id}" onClick="toggle_children(this);return false;" href="javascript:void();"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}">{VAR:name}</a>
+<script language='JavaScript1.2'>
+   if(attached_sections[{VAR:menu_level}]==undefined)
+   {
+      attached_sections[{VAR:menu_level}] = new Array();
+   }
+   attached_sections[{VAR:menu_level}][{VAR:id}] = {VAR:id};
+</script>
+<div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children(this,{VAR:menu_level});return false;" href="javascript:void();"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}">{VAR:name}</a>
 <!-- SUB: SUB_NODES -->
 <div id="{VAR:id}" data_loaded="{VAR:data_loaded}" style="padding-left: 16px; display: {VAR:display}; ">
 <!-- SUB: SINGLE_NODE -->
