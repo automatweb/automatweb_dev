@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.88 2002/01/28 16:21:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.89 2002/01/31 00:19:28 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -357,8 +357,9 @@ class menuedit extends aw_template
 			{
 				if (!is_array($this->mar[$uo_parent]) && $uo_parent)
 				{
-					$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $uo_parent");
-					$this->mar[$uo_parent] = $this->db_next();
+					//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $uo_parent");
+					//$this->mar[$uo_parent] = $this->db_next();
+					$this->mar[$uo_parent] = $this->get_menu($uo_parent);
 				}
 				$uo_meta = $this->get_object_metadata(array(
 					"metadata" => $this->mar[$uo_parent]["metadata"],
@@ -1045,8 +1046,8 @@ class menuedit extends aw_template
 	{
 		global $awt;
 		$awt->start("menuedit::is_periodic");
-		$q = "SELECT periodic FROM menu WHERE id = '$section'";
-		$periodic = $this->db_fetch_field($q,"periodic");
+		$mn = $this->get_menu($section);
+		$periodic = $mn["periodic"];
 		// menyysektsioon ei ole perioodiline. Well, vaatame 
 		// siis, kas ehk dokument ise on?
 		if (!$periodic && $checkobj == 1) {
@@ -1261,8 +1262,7 @@ class menuedit extends aw_template
 		// ei olnud defaulti, peaks vist .. näitama nimekirja? 
 		if ($docid < 1)	
 		{
-			$this->db_query("SELECT * FROM menu WHERE id = $section");
-			$me_row = $this->db_next();
+			$me_row = $this->get_menu($section);
 			$sections = unserialize($me_row["sss"]);
 			$periods = unserialize($me_row["pers"]);
 			
@@ -2603,9 +2603,7 @@ class menuedit extends aw_template
 		global $ext;
 		$this->mk_path($parent,LC_MENUEDIT_ADD);
 		$this->read_template("nadd.tpl");
-		$q = "SELECT * FROM menu WHERE id = '$parent'";
-		$this->db_query($q);
-		$par_info = $this->db_fetch_row();
+		$par_info = $this->get_menu($parent);
 		if ((($parent == 29) && $GLOBALS["SITE_ID"] < 100)) 
 		#if ((($parent == 1) || ($parent == 29) && $GLOBALS["SITE_ID"] < 100)) 
 		{
@@ -4225,8 +4223,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				{
 					// the menu was not loaded. load it.
 					$this->save_handle();
-					$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $said");
-					$samenu = $this->db_next();
+					//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $said");
+					//$samenu = $this->db_next();
+					$samenu = $this->get_menu($said);
 					$this->mar[$said] = $samenu;
 					$this->restore_handle();
 				}
@@ -4619,8 +4618,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$cnt++;
 			if (!is_array($this->mar[$p]))
 			{
-				$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE oid = $p");
-				$this->mar[$p] = $this->db_next();
+				//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE oid = $p");
+				$this->mar[$p] = $this->get_menu($p);
 			}
 
 			if (isset($this->mar[$p]["is_shop"]) && $this->mar[$p]["is_shop"] == 1)
