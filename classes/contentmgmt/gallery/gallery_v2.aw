@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.47 2004/06/02 12:59:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.48 2004/06/07 09:32:41 kristo Exp $
 
 /*
 
@@ -720,7 +720,7 @@ class gallery_v2 extends class_base
 		$pages = array();
 		$ps_back = "";
 		$ps_fwd = "";
-		$num_pages = $ob['meta']['num_pages'];
+		$num_pages = $ob->meta('num_pages');
 
 		$sp = 1;
 		$p2rp = array();
@@ -788,16 +788,17 @@ class gallery_v2 extends class_base
 
 		if (empty($ob))
 		{		
-			$ob = $this->get_object($oid);
+			$ob = obj($oid);
 		}
 
-		if ($page < 1 || $page > $ob['meta']['num_pages'])
+		if ($page < 1 || $page > $ob->meta('num_pages'))
 		{
 			$page = 1;
 		}
 
-		$c = $ob['meta']['page_data'][$page]['content'];
-		$l = $ob['meta']['page_data'][$page]['layout'];
+		$pd = $ob->meta("page_data");
+		$c = $pd[$page]['content'];
+		$l = $pd[$page]['layout'];
 
 		$this->read_any_template("show_v2.tpl");
 		
@@ -835,7 +836,8 @@ class gallery_v2 extends class_base
 		// now all images 
 
 		// get all hit counts for all images, so that we won't do a query for each image
-		$pd = $ob['meta']['page_data'][$page]['content'];
+		$tmp = $ob->meta("page_data");
+		$pd = $tmp[$page]['content'];
 		$this->hits = $this->_get_hit_counts($pd);
 
 		$li = get_instance("vcl/grid_editor");
@@ -850,7 +852,7 @@ class gallery_v2 extends class_base
 				"cell_content_callback" => array(&$this, "_get_show_cell_content", array("obj" => $ob, "page" => $page)),
 				"ignore_empty" => true
 			)),
-			"name" => $ob['name']
+			"name" => $ob->name()
 		));
 
 		if (!$this->has_images)
@@ -873,9 +875,10 @@ class gallery_v2 extends class_base
 		$used = array();
 
 		// reorder images as per order
-		for($_page = 1; $_page <= $ob['meta']['num_pages']; $_page++)
+		for($_page = 1; $_page <= $ob->meta('num_pages'); $_page++)
 		{
-			$pd_l = $ob['meta']['page_data'][$_page]['layout'];
+			$tmp = $ob->meta("page_data");
+			$pd_l = $tmp[$_page]['layout'];
 			$newd[$_page]['layout'] = $pd_l;
 			for($row = 0; $row < $pd_l['rows']; $row++)
 			{
@@ -899,7 +902,7 @@ class gallery_v2 extends class_base
 			}
 		}
 
-		$ob['meta']['page_data'] = $newd;
+		$ob->set_meta('page_data',$newd);
 	}
 
 	function _find_image($id, $ob)
@@ -909,10 +912,11 @@ class gallery_v2 extends class_base
 			return false;
 		}
 
-		for($page = 1; $page <= $ob['meta']['num_pages']; $page++)
+		for($page = 1; $page <= $ob->meta('num_pages'); $page++)
 		{
-			$pd_l = $ob['meta']['page_data'][$page]['layout'];
-			$pd = $ob['meta']['page_data'][$page]['content'];
+			$tmp = $ob->meta("page_data");
+			$pd_l = $tmp[$page]['layout'];
+			$pd = $tmp[$page]['content'];
 			for($row = 0; $row < $pd_l['rows']; $row++)
 			{
 				for ($col = 0; $col < $pd_l['cols']; $col++)
@@ -934,10 +938,11 @@ class gallery_v2 extends class_base
 
 	function _find_next_unused($used, $ob)
 	{
-		for($page = 1; $page <= $ob['meta']['num_pages']; $page++)
+		for($page = 1; $page <= $ob->meta('num_pages'); $page++)
 		{
-			$pd_l = $ob['meta']['page_data'][$page]['layout'];
-			$pd = $ob['meta']['page_data'][$page]['content'];
+			$tmp = $ob->meta("page_data");
+			$pd_l = $tmp[$page]['layout'];
+			$pd = $tmp[$page]['content'];
 			for($row = 0; $row < $pd_l['rows']; $row++)
 			{
 				for ($col = 0; $col < $pd_l['cols']; $col++)
@@ -958,7 +963,8 @@ class gallery_v2 extends class_base
 		$obj = $params['obj'];
 		$page = $params['page'];
 
-		$pd = $obj['meta']['page_data'][$page]['content'][$row][$col];
+		$tmp = $obj->meta("page_data");
+		$pd = $tmp[$page]['content'][$row][$col];
 
 		if (!$pd['img']['id'])
 		{
@@ -976,7 +982,7 @@ class gallery_v2 extends class_base
 		else
 		{
 			$link = $this->mk_my_orb("show_image", array(
-				"id" => $obj['oid'],
+				"id" => $obj->id(),
 				"page" => $page,
 				"row" => $row,
 				"col" => $col,
@@ -1001,7 +1007,7 @@ class gallery_v2 extends class_base
 		else
 		{
 			$link = $this->mk_my_orb("show_image", array(
-				"id" => $obj['oid'],
+				"id" => $obj->id(),
 				"page" => $page,
 				"row" => $row,
 				"col" => $col,
@@ -1031,7 +1037,7 @@ class gallery_v2 extends class_base
 		$ret = array();
 
 		$cf = get_instance("contentmgmt/gallery/gallery_conf");
-		$ros = new aw_array($cf->get_rate_objects($this->_get_conf_for_folder($obj['parent'])));
+		$ros = new aw_array($cf->get_rate_objects($this->_get_conf_for_folder($obj->parent())));
 
 		$this->db_query("SELECT oid,name FROM objects WHERE oid IN(".$ros->to_sql().")");
 		while ($row = $this->db_next())
@@ -1061,14 +1067,15 @@ class gallery_v2 extends class_base
 	{
 		extract($arr);
 		
-		$ob = $this->get_object($id);
+		$ob = obj($id);
 		if ($img_id)
 		{
 			$pd = $this->_find_image($img_id, $ob);
 		}
 		else
 		{
-			$pd = $ob['meta']['page_data'][$page]['content'][$row][$col];
+			$tmp = $ob->meta("page_data");
+			$pd = $tmp[$page]['content'][$row][$col];
 		}
 
 		$this->read_any_template("show_v2_image.tpl");
@@ -1076,15 +1083,16 @@ class gallery_v2 extends class_base
 		$p_page = $n_page = $page;
 		$p_row = $n_row = $row; 
 		$p_col = $n_col = $col;
+		$tmp = $ob->meta("page_data");
 		do {
 			list($p_page, $p_row, $p_col) = $this->_get_prev_img($ob, $p_page, $p_row, $p_col);
-		} while ($p_page > 0 && (!$ob['meta']['page_data'][$p_page]['content'][$p_row][$p_col]['img']['id']));
+		} while ($p_page > 0 && (!$tmp[$p_page]['content'][$p_row][$p_col]['img']['id']));
 
 		do {
 			list($n_page, $n_row, $n_col) = $this->_get_next_img($ob, $n_page, $n_row, $n_col);
-		} while ($n_page <= $ob['meta']['num_pages'] && (!$ob['meta']['page_data'][$n_page]['content'][$n_row][$n_col]['img']['id']));
+		} while ($n_page <= $ob->meta('num_pages') && (!$tmp[$n_page]['content'][$n_row][$n_col]['img']['id']));
 
-		if ($n_page > $ob['meta']['num_pages'])
+		if ($n_page > $ob->meta('num_pages'))
 		{
 			$post_rate_url = $this->mk_my_orb("show_image", array(
 				"id" => $id, 
@@ -1134,13 +1142,13 @@ class gallery_v2 extends class_base
 			"image" => image::make_img_tag(image::check_url($pd['img']['url'])),
 			"views" => (int)$this->db_fetch_field("SELECT hits FROM hits WHERE oid = '".$pd['img']['id']."'", "hits"),
 			"RATING_SCALE_ITEM" => $rsi,
-			"name" => $ob['name'],
+			"name" => $ob->name(),
 			"prev_image_url" => $this->mk_my_orb("show_image", array("id" => $id, "page" => $p_page, "row" => $p_row , "col" => $p_col)),
 			"next_image_url" => $this->mk_my_orb("show_image", array("id" => $id, "page" => $n_page, "row" => $n_row , "col" => $n_col)),
 			"imgcaption" => $pd['caption']
 		));
 
-		if ($n_page <= $ob['meta']['num_pages'])
+		if ($n_page <= $ob->meta('num_pages'))
 		{
 			$this->vars(array(
 				"HAS_NEXT_IMAGE" => $this->parse("HAS_NEXT_IMAGE")
@@ -1409,10 +1417,11 @@ class gallery_v2 extends class_base
 	function _get_prev_img($ob, $page, $row, $col)
 	{
 		$p_col = $col - 1;
+		$tmp = $ob->meta("page_data");
 		if ($p_col < 0)
 		{
 			$p_row = $row - 1;
-			$p_col = $ob['meta']['page_data'][$page]['layout']['cols']-1;
+			$p_col = $tmp[$page]['layout']['cols']-1;
 		}
 		else
 		{
@@ -1422,8 +1431,8 @@ class gallery_v2 extends class_base
 		if ($p_row < 0)
 		{
 			$p_page = $page-1;
-			$p_row = $ob['meta']['page_data'][$p_page]['layout']['rows']-1;
-			$p_col = $ob['meta']['page_data'][$p_page]['layout']['cols']-1;
+			$p_row = $tmp[$p_page]['layout']['rows']-1;
+			$p_col = $tmp[$p_page]['layout']['cols']-1;
 		}
 		else
 		{
@@ -1436,7 +1445,8 @@ class gallery_v2 extends class_base
 	function _get_next_img($ob, $page, $row, $col)
 	{
 		$n_col = $col + 1;
-		if ($n_col >= $ob['meta']['page_data'][$page]['layout']['cols'])
+		$tmp = $ob->meta("page_data");
+		if ($n_col >= $tmp[$page]['layout']['cols'])
 		{
 			$n_row = $row+1;
 			$n_col = 0;
@@ -1446,7 +1456,7 @@ class gallery_v2 extends class_base
 			$n_row = $row;
 		}
 
-		if ($n_row >= $ob['meta']['page_data'][$page]['layout']['rows'])
+		if ($n_row >= $tmp[$page]['layout']['rows'])
 		{
 			$n_page = $page+1;
 			$n_row = 0;
@@ -1514,9 +1524,10 @@ class gallery_v2 extends class_base
 
 	function _page_has_images($ob, $page)
 	{
-		$rows = $ob['meta']['page_data'][$page]['layout']["rows"];
-		$cols = $ob['meta']['page_data'][$page]['layout']["cols"];
-		$pd = $ob['meta']['page_data'][$page]['content'];
+		$tmp = $ob->meta("page_data");
+		$rows = $tmp[$page]['layout']["rows"];
+		$cols = $tmp[$page]['layout']["cols"];
+		$pd = $tmp[$page]['content'];
  
 		for ($row = 0; $row < $rows; $row++)
 		{
@@ -1551,9 +1562,9 @@ class gallery_v2 extends class_base
 		extract($arr);
 		$ret = array();
 
-		$ob = $this->get_object($oid);
+		$ob = obj($oid);
 
-		$_pd = new aw_array($ob['meta']['page_data']);
+		$_pd = new aw_array($ob->meta('page_data'));
 		foreach($_pd->get() as $page => $pd)
 		{
 			$_ct = new aw_array($pd['content']);
@@ -1632,11 +1643,10 @@ class gallery_v2 extends class_base
 		{
 			return false;
 		};
-		$target = $this->get_object($args["id"]);
-		$glv = $this->get_object($tgt);
+		$glv = obj($tgt);
 
 		$this->img = get_instance("image");
-		$c_oid = $glv['oid'];
+		$c_oid = $glv->id();
 		$retval = "";
 		if (empty($c_oid))
 		{

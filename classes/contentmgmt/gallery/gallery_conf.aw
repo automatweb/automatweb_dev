@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.8 2004/05/20 11:47:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.9 2004/06/07 09:32:41 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
@@ -217,6 +217,12 @@ class gallery_conf extends class_base
 				break;
 
 			case "logo_img":
+				if ($arr["obj_inst"]->prop("insert_logo") != 1)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "logo_corner":
 				$prop["options"] = array(
 					CORNER_LEFT_TOP => "&Uuml;lemine vasak",
@@ -234,6 +240,12 @@ class gallery_conf extends class_base
 				break;
 
 			case "tn_logo_img":
+				if ($arr["obj_inst"]->prop("tn_insert_logo") != 1)
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "tn_logo_corner":
 				$prop["options"] = array(
 					CORNER_LEFT_TOP => "&Uuml;lemine vasak",

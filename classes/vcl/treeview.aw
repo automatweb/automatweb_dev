@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.28 2004/05/19 11:02:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.29 2004/06/07 09:32:57 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -151,18 +151,16 @@ class treeview extends class_base
 	
 	function rec_tree($parent)
 	{
-		$_objlist = $this->get_objects_by_class(array(
+		$ol = new object_list(array(
 			"parent" => $parent,
-			"class" => $this->clidlist,
+			"class_id" => $this->clidlist
 		));
-		
-		while ($row = $this->db_next())
+		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
+			$row = $o->fetch();
 			$row["name"] = str_replace("\"","&quot;", $row["name"]);
 			$this->arr[$row["parent"]][] = $row;
-			$this->save_handle();
 			$this->rec_tree($row["oid"]);
-			$this->restore_handle();
 		}
 
 		return;
