@@ -33,12 +33,11 @@
 			</function>
 		</action>
 
-		<action name="addcomment" nologin="1">
+		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
 					<required name="board" type="int"/>
 					<optional name="section" />
-					<define name="addcomment" value="1"/>
 				</arguments>
 			</function>
 		</action>
@@ -81,6 +80,14 @@
 		<action name="submit_comment" nologin="1">
 			<function name="submit_comment">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="export_xml" >
+			<function name="export_xml">
+				<arguments>
+					<required name="id" />
 				</arguments>
 			</function>
 		</action>
