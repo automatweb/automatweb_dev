@@ -118,6 +118,7 @@ class rate_scale extends class_base
 				break;
 
 			case "rate_clid":
+				classload("aliasmgr");
 				$prop['options'] = aliasmgr::get_clid_picker();
 				break;
 		}
