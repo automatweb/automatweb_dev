@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.31 2001/05/27 04:54:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.32 2001/05/27 16:58:47 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -853,7 +853,7 @@ class messenger extends menuedit_light
 		
 		// signatuur loppu
 		$message = $args["message"];
-		$message .= "\n--\n" . $this->msgconf["msg_signatures"][$args["signature"]];
+		$message .= "\n--\n" . $this->msgconf["msg_signatures"][$args["signature"]]["signature"];
 		
 		if ($etargets)
 		{
@@ -862,8 +862,8 @@ class messenger extends menuedit_light
 			$awm = new aw_mail();
 			if ($identity != "default")
 			{
-				$froma = $this->msgconf["msg_identities"]["email"];
-				$fromn = $this->msgconf["msg_identities"]["name"] . " " . $this->msgconf["msg_identities"]["surname"];
+				$froma = $this->msgconf["msg_identities"][$args["identity"]]["email"];
+				$fromn = $this->msgconf["msg_identities"][$args["identity"]]["name"] . " " . $this->msgconf["msg_identities"][$args["identity"]]["surname"];
 			}
 			else
 			{
