@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.45 2005/01/20 09:18:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.46 2005/01/21 11:41:55 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1130,6 +1130,8 @@ class webform extends class_base
 			$objs = new object_list(array(
 				"parent" => $folder_id,
 				"class_id" => constant("CL_".$vars[$prop]["obj"]),
+				"site_id" => array(),
+				"lang_id" => array(),
 			));
 			$this->all_rels = $this->all_rels + $objs->names();
 		}
@@ -1348,6 +1350,7 @@ class webform extends class_base
 		$els = $cfgform_i->get_props_from_ot($arr);
 		$cfgform = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CFGFORM");
 		$sel_styles = safe_array($arr["obj_inst"]->meta("styles"));
+		$m_styles = safe_array($arr["obj_inst"]->meta("m_styles"));
 		$errs = safe_array($arr["errors"]);
 		$all_props = safe_array($cfgform->meta("cfg_proplist"));
 		$ret = array();
@@ -1360,11 +1363,12 @@ class webform extends class_base
 			}
 			if (isset($errs[$pn]))
 			{
+
 				$ret[$pn."_err"] = array(
 					"name" => $pn."_err",
 					"type" => "text",
 					"store" => "no",
-					"value" => '<font color="red" class="'.$sel_styles["error"].'">'.$errs[$pn]["msg"].'</font>',
+					"value" => '<font color="red" class="st'.$m_styles["error"].'">'.$errs[$pn]["msg"].'</font>',
 					"no_caption" => 1,
 				);
 			}
