@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.7 2002/12/11 12:46:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.8 2003/01/16 16:45:23 kristo Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -203,9 +203,10 @@ class scheduler extends aw_template
 			return;
 		}
 
-		$evnt["event"] = str_replace("/automatweb","",$evnt["event"]);
+		$evnt["event"];
+		$ev_url = str_replace("/automatweb","",$evnt["event"]);
 
-		preg_match("/^http:\/\/(.*)\//U",$evnt["event"], $mt);
+		preg_match("/^http:\/\/(.*)\//U",$ev_url, $mt);
 		$url = $mt[1];
 
 		echo "url = $url <br>";
@@ -219,8 +220,8 @@ class scheduler extends aw_template
 			$awt->login(array("host" => $url, "uid" => $evnt["uid"], "password" => $evnt["password"]));
 		}
 
-		echo "do send req $url ",substr($evnt["event"],strlen("http://")+strlen($url))," <br>";
-		$req = $awt->do_send_request(array("host" => $url, "req" => substr($evnt["event"],strlen("http://")+strlen($url))));
+		echo "do send req $url ",substr($ev_url,strlen("http://")+strlen($url))," <br>";
+		$req = $awt->do_send_request(array("host" => $url, "req" => substr($ev_url,strlen("http://")+strlen($url))));
 
 		if ($evnt["uid"] && $evnt["password"])
 		{
