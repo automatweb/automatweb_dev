@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.67 2004/03/17 11:36:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.68 2004/03/17 11:42:31 kristo Exp $
 
 lc_load("definition");
 
@@ -14,10 +14,10 @@ class acl_base extends db_connector
 		// of course, now that we only have 5 acl settings, we don't have to do this in the db no more. 
 		// anyone wanna rewrite it? ;) - terryf
 		$qstr = array();
-		if (!is_array($this->cfg["acl"]["ids"]))
-		{
-			$this->cfg["acl"]["ids"] = aw_ini_get("acl.ids");
-		}
+                if (!is_array($this->cfg["acl"]["ids"]))
+                {
+                        $this->cfg["acl"]["ids"] = aw_ini_get("acl.ids");
+                }
 
 		reset($this->cfg["acl"]["ids"]);
 		while (list($bitpos, $name) = each($this->cfg["acl"]["ids"]))
@@ -252,6 +252,12 @@ class acl_base extends db_connector
 		}
 
 		$this->restore_handle();
+	
+		// if the max_acl does not contain view and no user is logged, return default
+		if (!isset($max_acl["can_view"]) && aw_global_get("uid") == "")
+		{
+			return $GLOBALS["cfg"]["acl"]["default"];
+		}
 
 		// and now return the highest found
 		return $max_acl;
