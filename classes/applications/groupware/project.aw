@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.25 2004/12/16 15:13:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.26 2005/01/10 12:55:10 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -175,7 +175,6 @@ class project extends class_base
 		return $retval;
 	}
 
-
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -184,6 +183,38 @@ class project extends class_base
 		{
 			case "add_event":
 				$this->register_event_with_planner($arr);
+				break;
+
+			case "sel_resources":
+				$this->save_sel_resources($arr);
+				break;
+
+			case "resources";
+				$this->do_save_resources($arr);
+				break;
+
+			case "confirm":
+				if ($prop["value"] == 1)
+				{
+					$this->do_write_times_to_cal($arr);
+				}
+				break;
+
+			case "priority":
+				if ($prop["value"] != $arr["obj_inst"]->prop("priority") && is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("confirm"))
+				{
+					// write priority to all events from this
+					$evids = new aw_array($arr["obj_inst"]->meta("event_ids"));
+					foreach($evids->get() as $evid)
+					{
+						$evo = obj($evid);
+						$evo->set_meta("task_priority", $prop["value"]);
+						$evo->save();
+					}
+
+					// also, recalc times
+					$this->do_write_times_to_cal($arr);
+				}
 				break;
 		}
 		return $retval;
