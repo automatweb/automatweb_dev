@@ -23,26 +23,6 @@
             <caption>Erandite ID (eralda komadega)</caption>
       </property>
       <property>
-            <name>ll_username</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <size>40</size>
-            <caption>Livelink kasutaja</caption>
-      </property>
-      <property>
-            <name>ll_password</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>password</type>
-            <size>40</size>
-            <caption>Livelink parool</caption>
-      </property>
-      <property>
             <name>outdir</name>
             <table>objects</table>
             <group>general</group>
@@ -80,8 +60,43 @@
             <editonly>1</editonly>
             <caption>Käivita</caption>
       </property>
+      <property>
+            <name>ll_username</name>
+            <table>objects</table>
+            <group>auth</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>40</size>
+            <caption>Livelink kasutaja</caption>
+      </property>
+      <property>
+            <name>ll_password</name>
+            <table>objects</table>
+            <group>auth</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>password</type>
+            <size>40</size>
+            <caption>Livelink parool</caption>
+      </property>
+      <property>
+            <name>ll_http_auth</name>
+            <table>objects</table>
+            <group>auth</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>HTTP autoriseerimisel samad kasutaja/parool</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_LIVELINK_IMPORT</syslog_type>
       </classinfo>
+      <groupinfo>
+            <auth>
+                  <caption>Autoriseerimine</caption>
+            </auth>
+      </groupinfo>
 </properties>
 
