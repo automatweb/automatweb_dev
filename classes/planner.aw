@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.128 2003/07/22 16:04:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.129 2003/07/23 13:12:11 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -2020,7 +2020,8 @@ class planner extends class_base
 			};
 
 			$size = sizeof($this->conf["workdays"]);
-			if ($size == 0)
+
+			if (($size == 0) || !is_array($this->conf["workdays"]))
 			{
 				$size = 7;
 			};
