@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.73 2003/07/01 11:07:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.74 2003/07/07 15:03:03 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -5718,11 +5718,6 @@ class form extends form_base
 
 		if ($this->arr["sql_writer"] && $this->arr["sql_writer_form"])
 		{
-			$tf = get_instance("formgen/form");
-			$search_res = "<br>".$tf->gen_preview(array(
-				"id" => $this->arr["sql_writer_form"],
-				"tpl" => "show_noform.tpl",
-			));
 			$no_tags = true;
 		}
 
@@ -5754,6 +5749,15 @@ class form extends form_base
 			{
 				$search_res = "<form action='reforb.".$this->cfg["ext"]."' method='POST' name='tb_".$this->arr["table"]."'>".$search_res;
 			}
+		}
+
+		if ($this->arr["sql_writer"] && $this->arr["sql_writer_form"])
+		{
+			$tf = get_instance("formgen/form");
+			$search_res .= "<br>".$tf->gen_preview(array(
+				"id" => $this->arr["sql_writer_form"],
+				"tpl" => "show_noform.tpl",
+			));
 		}
 
 		if ($this->arr["show_s_res_as_forms"])
