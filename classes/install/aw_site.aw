@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.35 2005/02/07 15:48:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.36 2005/03/03 12:55:38 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -678,7 +678,7 @@ class aw_site extends class_base
 				"can_delete" => 1,
 				"can_view" => 1
 			);
-			$dbi->db_query("select gid FROM groups WHERE type = 0 AND gid != ".$ini_opts["groups.all_users_grp"]);
+			$dbi->db_query("select gid,oid FROM groups WHERE type = 0 AND gid != ".$ini_opts["groups.all_users_grp"]);
 			while ($row = $dbi->db_next())
 			{
 				echo "gid = $row[gid] <br>\n";
@@ -689,9 +689,27 @@ class aw_site extends class_base
 				$dbi->add_acl_group_to_obj($row["gid"], $ini_opts["admin_rootmenu2"]);
 				$dbi->save_acl($ini_opts["admin_rootmenu2"], $row["gid"], $acls);
 
+				// also, acl rel
+				aw_disable_messages();
+				$go = obj($ini_opts["admin_rootmenu2"]);
+				$go->connect(array(
+					"to" => $row["oid"],
+					"reltype" => RELTYPE_ACL
+				));
+				aw_restore_messages();
+
 				// access to users folder
 				$dbi->add_acl_group_to_obj($row["gid"], $osi_vars["users"]);
 				$dbi->save_acl($osi_vars["users"], $row["gid"], $acls);
+
+				// also, acl rel
+				aw_disable_messages();
+				$go = obj($osi_vars["users"]);
+				$go->connect(array(
+					"to" => $row["oid"],
+					"reltype" => RELTYPE_ACL
+				));
+				aw_restore_messages();
 
 				$dbi->restore_handle();
 			}
@@ -1313,6 +1331,19 @@ class aw_site extends class_base
 			$astr = str_replace("6", "&otilde;", $astr);
 			$astr = str_replace("y", "&uuml;", $astr);
 			$astr = str_replace("Y", "&Uuml;", $astr);
+			if ($astr == "P&otilde;hi")
+			{
+				$fn = $astr."men&uuml;&uuml;";
+			}
+			else
+			if ($astr == "Footer")
+			{
+				$fn = "Jalus";
+			}
+			else
+			{
+				$fn = $astr." men&uuml;&uuml;";
+			}
 
 			// create root
 			$o = obj();
@@ -1320,7 +1351,7 @@ class aw_site extends class_base
 			$o->set_parent($osi_vars["site_root"]);
 			$o->set_status(STAT_ACTIVE);
 			$o->set_prop("type", MN_CLIENT);
-			$o->set_name($astr." men&uuml;&uuml;");
+			$o->set_name($fn);
 			$o->save();
 
 			$pt = $o->id();
