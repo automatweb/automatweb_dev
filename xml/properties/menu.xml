@@ -245,7 +245,7 @@
       <property>
             <name>admin_feature</name>
             <type>select</type>
-            <group>advanced</group>
+            <group>general</group>
             <table>menu</table>
             <field>admin_feature</field>
             <caption>Vali programm</caption>
@@ -256,7 +256,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>advanced</group>
+            <group>general</group>
             <caption>Vali meetod</caption>
       </property>
       <property>
@@ -265,7 +265,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>advanced</group>
+            <group>general</group>
             <ch_value>1</ch_value>
             <caption>Meetod viitab adminni</caption>
       </property>
@@ -275,7 +275,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>advanced</group>
+            <group>general</group>
             <ch_value>1</ch_value>
             <caption>Meetodi väljundi kuvamisel menüüde näitamine</caption>
       </property>
