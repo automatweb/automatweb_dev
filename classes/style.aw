@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.17 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.18 2002/12/23 10:33:36 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -225,9 +225,6 @@ class style extends aw_template
 	function get_table_string($id)
 	{
 		$st = $this->mk_cache($id);
-
-		if ($st["type"] != ST_TABLE)
-			$this->raise_error(ERR_STYLE_WTYPE,"style->get_table_string($id): Style is not for tables!");
 
 		if ($st["bgcolor"] != "")
 		{
