@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.37 2001/05/30 02:23:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.38 2001/05/30 02:50:33 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -349,6 +349,7 @@ class messenger extends menuedit_light
 		return $retval;
 	}
 
+
 	////
 	// !Kutsutakse välja gen_msg_menu seest, ning kutsub iseennast rekursiivselt välja
 	function _gen_msg_menu($menudefs = array())
@@ -376,6 +377,32 @@ class messenger extends menuedit_light
 				$this->level++;
 				$this->_gen_msg_menu($val["sublinks"]);
 				$this->level--;
+			};
+		};
+	}
+
+	////
+	// !Pritsib attachi kasutajale välja
+	// argumendid:
+	// msgid(int) - kirja id
+	// attnum(int) - attachi number selle kirja juures
+	function get_attach($args = array())
+	{
+		extract($args);
+		$q = "SELECT * FROM objects WHERE parent = '$msgid'";
+		$this->db_query($q);
+		$c = 0;
+		while($row = $this->db_next())
+		{
+			$c++;
+			if ($c == $attnum)
+			{
+				classload("file");
+				$awf = new file();
+				$fdata = $awf->get(array("id" => $row["oid"]));
+				header("Content-Type: $fdata[type]");
+				print $fdata["file"];
+				exit;
 			};
 		};
 	}
@@ -1219,6 +1246,7 @@ class messenger extends menuedit_light
 			$c++;
 			$this->vars(array(
 					"cnt" => $c,
+					"msgid" => $args["id"],
 					"icon" => get_icon_url($row["class_id"],""),
 					"name" => $row["name"],
 				));
@@ -1269,6 +1297,7 @@ class messenger extends menuedit_light
 			"mtargets2" => $msg["mtargets2"],
 			"id" => $msg["id"],
 			"msg_id" => $id,
+			"msgid" => $msg["id"],
 			"status" => $msg["status"],
 			"message" => $message,
 			"msg_font" => ($this->msgconf["msg_font"]) ? $this->msgconf["msg_font"] : "Courier",
