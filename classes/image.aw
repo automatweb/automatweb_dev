@@ -2,8 +2,6 @@
 // image.aw - image management
 // $header$
 
-classload("file","objects");
-
 class image extends aw_template
 {
 	function image()
@@ -24,7 +22,7 @@ class image extends aw_template
 			$this->mk_path($parent,"Lisa pilt");
 		}
 
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$this->vars(array(
 			"parents" => $this->picker($parent, $ob->get_list()),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"return_url" => $return_url,"alias_to" => $alias_to))
@@ -37,7 +35,7 @@ class image extends aw_template
 		$this->quote($arr);
 		extract($arr);
 
-		$_fi = new file;
+		$_fi = get_instance("file");
 		global $file,$file_name,$file_type;
 		if ($id)
 		{
@@ -132,7 +130,7 @@ class image extends aw_template
 			$ima = "<img src='".$img["url"]."'>";
 		}
 
-		$ob = new objects;
+		$ob = get_instance("objects");
 		$this->vars(array(
 			"parents" => $this->picker($obj["parent"],$ob->get_list()),
 			"name" => $obj["name"],
@@ -323,7 +321,7 @@ class image extends aw_template
 		$img_id = (int)$img_id;
 
 		global $HTTP_POST_FILES;
-		$_fi = new file;
+		$_fi = get_instance("file");
 		if ($HTTP_POST_FILES[$name]['tmp_name'] != "" && $HTTP_POST_FILES[$name]['tmp_name'] != "none")
 		{
 			if (!$img_id)
