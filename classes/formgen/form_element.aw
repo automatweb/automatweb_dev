@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.75 2004/10/19 11:11:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.76 2004/11/05 13:49:56 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2379,6 +2379,7 @@ class form_element extends aw_template
 				}
 
 				$tb_val = $this->get_val($elvalues);
+
 				if ($this->arr["subtype"] == "int")
 				{
 					$cursums = aw_global_get("fg_element_sums");
