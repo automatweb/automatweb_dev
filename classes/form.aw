@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.115 2002/08/01 15:21:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.116 2002/08/02 13:34:21 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -4009,7 +4009,7 @@ class form extends form_base
 		{
 			$this->save_handle();
 			$cc = $x->xml_unserialize(array("source" => $row["content"]));
-			foreach($cc["forms"] as $fid => $fid)
+			foreach($cc["forms"] as $fid)
 			{
 				$this->db_query("INSERT INTO form2chain(form_id,chain_id,ord) values($fid,".$row["id"].",'".$cc["form_order"][$fid]."')");
 			}
@@ -4147,7 +4147,7 @@ class form extends form_base
 		$ret = array();
 		if (is_array($this->arr["relation_forms"]))
 		{
-			foreach ($this->arr["relation_forms"] as $fid => $fid)
+			foreach ($this->arr["relation_forms"] as $fid)
 			{
 				$o = $this->get_object($fid);
 				$ret[$fid] = $o["name"];
@@ -4717,7 +4717,7 @@ class form extends form_base
 					$ret = "";
 					if (is_array($this->arr["save_tables_rels"][$tbl]))
 					{
-						foreach($this->arr["save_tables_rels"][$tbl] as $_tb => $_tb)
+						foreach($this->arr["save_tables_rels"][$tbl] as $_tb)
 						{
 							$ta = $this->db_get_table($_tb);
 							$fields2 = array("" => "");
@@ -4945,7 +4945,7 @@ class form extends form_base
 		$this->chain_dep_depth++;
 
 		// now go through all the other relations recursively
-		foreach($_tmp as $r_tbl => $r_tbl)
+		foreach($_tmp as $r_tbl)
 		{
 			$this->req_chain_dep($r_tbl);
 		}
@@ -4971,7 +4971,7 @@ class form extends form_base
 			return true;
 		}
 
-		foreach($_tmp as $r_tbl => $r_tbl)
+		foreach($_tmp as $r_tbl)
 		{
 			if (!$this->req_cyclic_dep($r_tbl))
 			{
