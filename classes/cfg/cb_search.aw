@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.8 2004/08/19 07:57:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.9 2004/08/30 09:31:36 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -134,6 +134,12 @@ class cb_search extends class_base
 		));	
 
 		$t->define_field(array(
+			"name" => "search_mult",
+			"caption" => "Otsing komaga eraldatud",
+			"align" => "center",
+		));	
+
+		$t->define_field(array(
 			"name" => "caption",
 			"caption" => "Tekst",
 			"align" => "center",
@@ -170,6 +176,11 @@ class cb_search extends class_base
 					"name" => "form_dat[$clid][$pn][visible]",
 					"value" => 1,
 					"checked" => ($form_dat[$clid][$pn]["visible"] == 1)
+				)),
+				"search_mult" => html::checkbox(array(
+					"name" => "form_dat[$clid][$pn][search_mult]",
+					"value" => 1,
+					"checked" => ($form_dat[$clid][$pn]["search_mult"] == 1)
 				)),
 				"caption" => html::textbox(array(
 					"name" => "form_dat[$clid][$pn][caption]",
@@ -374,6 +385,14 @@ class cb_search extends class_base
 				$classfps[$f_pn] = $f_pn;
 			}
 		}
+		$price_props = array();
+		foreach($this->__tdata as $td_p => $td_d)
+		{
+			if ($td_d["is_price"])
+			{
+				$price_props[$td_p] = $td_p;
+			}
+		}
 
 		// now do the actual bloody search
 		foreach($this->search_data as $clid => $data)
@@ -392,6 +411,11 @@ class cb_search extends class_base
 					if ($this->in_form[$key]["type"] == "classificator")
 					{
 						$sdata[$key] = $val;
+					}
+					else
+					if ($this->form_dat[$clid][$key]["search_mult"])
+					{
+						$sdata[$key] = map('%%%s%%', explode(",", $val));
 					}
 					else
 					{
@@ -416,6 +440,7 @@ class cb_search extends class_base
 				}
 
 				$olist_cnt = new object_list($sdata);
+
 				if ($data["per_page"])
 				{
 					$sdata["limit"] = ($arr["request"]["ft_page"] * $data["per_page"]).",".$data["per_page"];
@@ -436,6 +461,11 @@ class cb_search extends class_base
 							$tmp = obj($row[$classfp]);
 							$row[$classfp] = $tmp->name();
 						}
+					}
+
+					foreach($price_props as $p_pn)
+					{
+						$row[$p_pn] = number_format($row[$p_pn], 2);
 					}
 					$vparms = array("id" => $o->id());
 					if ($arr["obj_inst"]->prop("view_cf"))
@@ -622,6 +652,12 @@ class cb_search extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
+			"name" => "is_price",
+			"caption" => "Hind",
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "sortable",
 			"caption" => "Sorditav",
 			"sortable" => 1,
@@ -700,6 +736,11 @@ class cb_search extends class_base
 					"name" => "tdata[$pn][sortable]",
 					"value" => 1,
 					"checked" => ($tdata[$pn]["sortable"] == 1)
+				)),
+				"is_price" => html::checkbox(array(
+					"name" => "tdata[$pn][is_price]",
+					"value" => 1,
+					"checked" => ($tdata[$pn]["is_price"] == 1)
 				)),
 				"defaultsort" => $defs,
 				"view_col" => $vc,
