@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.37 2002/11/01 14:34:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.38 2002/11/02 23:28:56 duke Exp $
 
 class db_config extends aw_template 
 {
@@ -723,22 +723,14 @@ class config extends db_config
 				
 		$options = $this->list_objects(array("class" => CL_CFGFORM, "addempty" => true));
 		classload("html");
+
+		$cfgu = get_instance("cfg/cfgutils");
 		
 		$cs = aw_unserialize($this->get_simple_config("class_cfgforms"));
 
 		while (list($clid,$desc) = each($this->cfg["classes"]))
 		{
-			// now I have to check whether this class has any property files
-			// or not.
-			if (strpos($desc["file"],"/"))
-			{
-				$fl = substr(strrchr($desc["file"],"/"),1);
-			}
-			else
-			{
-				$fl = $desc["file"];
-			};
-			if ($fl && file_exists($this->cfg["basedir"] . "/xml/properties/$fl.xml"))
+			if ($cfgu->has_properties(array("clid" => $clid)))
 			{
 				$t->define_data(array(
 					"name" => $desc["name"],
