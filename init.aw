@@ -449,7 +449,7 @@ function aw_startup()
 	$l = get_instance("languages");
 	$l->request_startup();
 
-	global $LC;
+	$LC = aw_global_get("LC");
 
 	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["__default"]["ext"]);
 	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/common.".$GLOBALS["cfg"]["__default"]["ext"]);
