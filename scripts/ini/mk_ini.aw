@@ -131,6 +131,9 @@ if ($_SERVER["argc"] < 1 || !file_exists($_SERVER["argv"][1]))
 	exit(1);
 }
 
+$basedir = dirname($_SERVER["argv"][1]);
+$GLOBALS["cfg"]["__default"]["basedir"] = $basedir;
+
 $res = parse_config($_SERVER["argv"][1]);
 if ($res === false)
 {

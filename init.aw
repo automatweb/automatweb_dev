@@ -151,10 +151,20 @@ function init_config($arr)
 	{
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_s = $sec + $micro;
+		$rootini = false;
 		foreach($ini_files as $file)
 		{
+			if ($rootini == false)
+			{
+				// now deduce the aw path from the rootini file path
+				$rootini = $file;
+				$basedir = dirname($file);
+				$GLOBALS["cfg"]["__default"]["basedir"] = $basedir;
+			}
 			parse_config($file);
 		}
+
+
 		// and write to cache if file is specified
 		if ($cache_file)
 		{
