@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.3 2005/03/10 15:28:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.4 2005/03/11 20:03:47 duke Exp $
 // property_table.aw - Tabel 
 /*
 
@@ -340,10 +340,10 @@ class property_table extends class_base
 			{
 				$rv .= "\t\t\t" . '"parent" => "' . $el->prop_str("c_parent") . '",' . "\n";
 			}
-			$rv .= "\t\t" . ');' . "\n";
+			$rv .= "\t\t" . '));' . "\n";
 			
 		};
-		$rv .= "\t};\n\n";
+		$rv .= "\t}\n\n";
 		return $rv;
 	}
 
