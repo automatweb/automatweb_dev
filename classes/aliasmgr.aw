@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.7 2001/12/06 00:26:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.8 2001/12/11 12:46:29 duke Exp $
 
 // yup, this class is really braindead at the moment and mostly a copy of
 // the current alias manager inside the document class, but I will optimize
@@ -126,6 +126,7 @@ class aliasmgr extends aw_template {
 		);
 
 		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $this->id) ) );
+		
 		$this->defs["image"] = array(
 				"alias" => "p",
 				"title" => "Image",
@@ -134,13 +135,21 @@ class aliasmgr extends aw_template {
 				"chlink" => "#",
 		);
 
-		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $this->id) ) );
 		$this->defs["form_entry"] = array(
 				"alias" => "r",
 				"title" => "Formi sisetus",
 				"table" => "form_entries",
 				"addlink" => $this->mk_my_orb("new_entry_alias",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"form_alias"),
 				"chlink" => "#",
+		);
+		
+		$this->defs["menu_chains"] = array(
+				"alias" => "m",
+				"title" => "Menüüpärjad",
+				"table" => "menu_chains",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu_chain"),
+				"chlink" => $this->mk_my_orb("change",array(),"menu_chain"),
+				"field" => "id"
 		);
 	}
 
@@ -222,6 +231,7 @@ class aliasmgr extends aw_template {
 		$this->_graph_aliases();
 		$this->_gallery_aliases();
 		$this->_form_entry_aliases();
+		$this->_menu_chain_aliases();
 		$this->vars(array(
 			"table" => $this->contents,
 			"id" => $this->id,
@@ -278,6 +288,28 @@ class aliasmgr extends aw_template {
 			$this->_common_parts($v);
 		};
 		$this->_finalize($this->defs["links"]);
+	}
+	
+	function _menu_chain_aliases($args = array())
+	{
+		$this->_initialize($this->defs["menu_chains"]);
+		$menu_chains = $this->get_aliases_for($this->id,CL_MENU_CHAIN,$_sby, $s_link_order);
+		reset($menu_chains);
+		$mc = 0;
+		while (list(,$v) = each($menu_chains))
+		{	
+			$mc++;
+			$mchain = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change", array("id" => $v["id"]),"menu_chain"),$v["name"]);
+			$this->t->define_data(array(
+				"name"                => $mchain,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"address"             => $v["url"],
+				"alias"               => "#m".$mc."#",	
+			));
+			$this->_common_parts($v);
+		};
+		$this->_finalize($this->defs["menu_chains"]);
 	}
 	
 	function _form_aliases($args = array())
