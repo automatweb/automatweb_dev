@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.218 2003/01/31 18:12:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.219 2003/02/01 13:34:47 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1005,13 +1005,6 @@ class menuedit extends aw_template
 		}
 		else
 		{
-		global $XXX;
-		if ($XXX)
-		{
-			print "<pre>";
-			var_dump($realsect);
-			print "</pre>";
-		};
 			$_obj = $this->get_object($realsect);
 			$set_lang_id = $_obj["lang_id"];
 		};
@@ -1950,11 +1943,6 @@ class menuedit extends aw_template
 
 		//$this->db_listall("objects.status = 2 AND objects.parent = '$parent' AND menu.type = ".MN_ADMIN1." AND objects.lang_id = ".aw_global_get("lang_id"),true,true);
 		$this->db_listall("objects.status = 2 AND objects.parent = '$parent' AND menu.type = ".MN_ADMIN1,true,true);
-		global $XXX;
-		if ($XXX)
-		{
-			print "prnt = $parent<br>";
-		};
 		$ext = $this->cfg["ext"];
 		$blank = $this->mk_my_orb("blank");
 		while ($row = $this->db_next())
@@ -2259,29 +2247,6 @@ class menuedit extends aw_template
 	}
 
 	////
-	// !tagastab array adminni featuuridest, mida sobib ette s88ta aw_template->picker funxioonile
-	function get_feature_sel()
-	{
-		$ret = array();
-		reset($this->cfg["programs"]);
-		while (list($id,$v) = each($this->cfg["programs"]))
-		{
-			$ret[$id] = $v["name"];
-		}
-
-		return $ret;
-	}
-
-	////
-	// !Tagastab nimekirja avalikest meetodidest. Arvatavasti tuleb see anyway ymber kirjutada,
-	// sest kui neid meetodeid saab olema palju, siis on neid sitt selectist valida
-	function get_pmethod_sel()
-	{
-		$aw_orb = get_instance("aw_orb");
-		return array("0" => "--choose--") + $aw_orb->get_public_classes();
-	}
-
-	////
 	// !Tagastab nimekirja erinevatest menüütüüpidest
 	function get_type_sel()
 	{
@@ -2289,12 +2254,12 @@ class menuedit extends aw_template
 			"70" => LC_MENUEDIT_SECTION,
 			"69" => LC_MENUEDIT_CLIENT,
 			"71" => LC_MENUEDIT_ADMINN_MENU,
-			//"72" => LC_MENUEDIT_DOCUMENT,
 			"75" => LC_MENUEDIT_CATALOG,
 			"77" => LC_MENUEDIT_PMETHOD,
 		);
 	}
 
+	// shouldn't this be somewhere else? --duke
 	function create_homes()
 	{
 		$upd = array();
@@ -4236,8 +4201,8 @@ class menuedit extends aw_template
 			{
 				$htmlf.="&aw_uid=".$uid;
 			}
-      $f = fopen($htmlf,"r");
-      $fc = fread($f,100000);
+			$f = fopen($htmlf,"r");
+			$fc = fread($f,100000);
 			fclose($f);
 
 			$fc = str_replace("[ss]","[ss".$gid."]",$fc);
@@ -4471,75 +4436,6 @@ class menuedit extends aw_template
 				}
 			}
 			$this->restore_handle();
-		}
-	}
-
-	function get_menu_keywords($id)
-	{
-		$ret = array();
-		$id = (int)$id;
-		$this->db_query("SELECT * FROM keyword2menu WHERE menu_id = $id");
-		while ($row = $this->db_next())
-		{
-			$ret[$row["keyword_id"]] = $row["keyword_id"];
-		}
-		return $ret;
-	}
-
-	function save_menu_keywords($keywords,$id)
-	{
-		$old_kwds = $this->get_menu_keywords($id);
-		if (is_array($keywords))
-		{
-			// check if the kwywords have actually changed - if not, we souldn't do this, as this can be quite time-consuming
-			$update = false;
-			foreach($keywords as $koid)
-			{
-				if ($old_kwds[$koid] != $koid)
-				{
-					$update = true;
-				}
-			}
-
-			if (count($old_kwds) != count($keywords))
-			{
-				$update = true;
-			}
-
-			if (!$update)
-			{
-				return;
-			}
-		}
-		else
-		{
-			if (count($old_kwds) < 1)
-			{
-				return;
-			}
-		}
-
-		$this->db_query("DELETE FROM keyword2menu WHERE menu_id = $id");
-
-		if (is_array($keywords))
-		{
-			foreach($keywords as $koid)
-			{
-				$this->db_query("INSERT INTO keyword2menu (menu_id,keyword_id) VALUES('$id','$koid')");
-			}
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "has_kwd_rels",
-				"value" => 1
-			));
-		}
-		else
-		{
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "has_kwd_rels",
-				"value" => 0
-			));
 		}
 	}
 
@@ -5614,17 +5510,6 @@ class menuedit extends aw_template
 			}
 		}
 		return true;
-	}
-
-	function get_brothers($id)
-	{
-		$bsar = array();
-		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER);
-		while ($arow = $this->db_next())
-		{
-			$bsar[$arow["parent"]] = $arow["parent"];
-		}
-		return $bsar;
 	}
 
 }
