@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.88 2002/02/07 08:04:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.89 2002/02/18 13:17:49 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1420,8 +1420,12 @@ class form extends form_base
 					if ($op_cell["elements"][$i]["linked_element"] && $op_far[$op_cell["elements"][$i]["linked_form"]] == $op_cell["elements"][$i]["linked_form"])
 					{
 						// now fake the correct id
-						$this->entry[$el->get_id()] = $this->entry[$op_cell["elements"][$i]["linked_element"]];
-						$el->set_entry($this->entry,$this->entry_id);
+						// ok, we have to make a backup of $this->entry - because we just might overwrite important entries in it
+						// if the element id's in the output are the same as the element id's in the linked form
+
+						$_entry = array();
+						$_entry[$el->get_id()] = $this->entry[$op_cell["elements"][$i]["linked_element"]];
+						$el->set_entry($_entry,$this->entry_id);
 					}
 					$awt->stop("form::show::cycle::new_element");
 
@@ -2646,6 +2650,8 @@ class form extends form_base
 			$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 
 			$tbl.="</form>";
+
+//			$tbl = create_links($tbl);
 			$awt->stop("form::do_search::finish_table");
 			$awt->stop("form::do_search");
 
