@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.6 2004/11/01 10:41:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.7 2004/11/26 14:02:52 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -68,6 +68,8 @@ class auth_config extends class_base
 			case "activity":
 				$ol = new object_list(array(
 					"class_id" => CL_AUTH_CONFIG,
+					"lang_id" => array(),
+					"site_id" => array()
 				));
 				for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 				{
@@ -100,7 +102,9 @@ class auth_config extends class_base
 		$table->parse_xml_def("activity_list");
 
 		$pl = new object_list(array(
-			"class_id" => CL_AUTH_CONFIG
+			"class_id" => CL_AUTH_CONFIG,
+			"site_id" => array(),
+			"lang_id" => array()
 		));	
 		for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
 		{
@@ -184,6 +188,7 @@ class auth_config extends class_base
 				"flags" => OBJ_FLAG_IS_SELECTED
 			),
 			"lang_id" => array(),
+			"site_id" => array()
 		));
 		if ($ol->count())
 		{
