@@ -1,10 +1,9 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site_gen_log.aw,v 1.3 2004/02/17 20:23:58 duke Exp $
 /*
 
 @classinfo syslog_type=ST_AW_SITE_GEN_LOG
 
-@groupinfo general caption=Üldine
 @groupinfo view caption="Vaata logi"
 
 @default table=objects
@@ -13,13 +12,11 @@
 @property show type=text field=meta method=serialize group=view no_caption=1
 
 */
-
 class aw_site_gen_log extends class_base
 {
 	function aw_site_gen_log()
 	{
 		$this->init(array(
-			'tpldir' => 'install/aw_site_gen_log',
 			'clid' => CL_AW_SITE_GEN_LOG
 		));
 	}
@@ -34,12 +31,10 @@ class aw_site_gen_log extends class_base
 		return $this->show(array('id' => $alias['target']));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = new object($id);
 
 		$t = new aw_table(array("layout" => "generic"));
 
@@ -78,8 +73,8 @@ class aw_site_gen_log extends class_base
 			"caption" => "Kommentaar",
 			"sortable" => 1
 		));
-	
-		$ar = new aw_array($ob['meta']['log']);
+
+		$ar = new aw_array($ob->meta('log'));
 		foreach($ar->get() as $idx => $row)
 		{
 			$row["id"] = $idx;
@@ -104,12 +99,11 @@ class aw_site_gen_log extends class_base
 			$this->raise_error(ERR_SG_NO_PARENT, "Saidi logi alustemisele ei antud parent menyy idd!", false, true);
 		}
 
-		$this->cur_log_id = $this->new_object(array(
-			"parent" => $parent,
-			"name" => $name,
-			"class_id" => $this->clid,
-			"status" => 2
-		));
+		$this->cur_log_obj = new object;
+		$this->cur_log_obj->set_class_id($this->clid);
+		$this->cur_log_obj->set_parent($parent);
+		$this->cur_log_obj->set_name($name);
+		$this->cur_log_obj->set_status(STAT_ACTIVE);
 
 		$this->log_entries = array();
 	}
@@ -130,22 +124,20 @@ class aw_site_gen_log extends class_base
 
 	function finish_log()
 	{
-		if (!$this->cur_log_id)
+		if (!$this->cur_log_obj)
 		{
 			$this->raise_error(ERR_NO_LOG, "Logimist pole alustatud!", false, true);
 		}
-		$this->set_object_metadata(array(
-			"oid" => $this->cur_log_id,
-			"key" => "log",
-			"value" => $this->log_entries
-		));
+
+		$this->cur_log_obj->set_meta("log",$this->log_entries);
+		$this->cur_log_obj->save();
 	}
 
 	function get_property($arr)
 	{
 		if ($arr['prop']['name'] == "show")
 		{
-			$arr['prop']['value'] = $this->show(array("id" => $arr['obj']['oid']));
+			$arr['prop']['value'] = $this->show(array("id" => $arr['obj_inst']->id()));
 		}
 		return PROP_OK;
 	}
