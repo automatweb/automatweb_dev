@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.44 2004/05/20 11:47:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.45 2004/05/20 12:00:09 kristo Exp $
 
 /*
 
@@ -329,7 +329,7 @@ class gallery_v2 extends class_base
 		$ob = $this->get_object($arr["id"]);
 		$meta = $ob['meta'];
 
-		if ($meta['do_import'] != "")
+		if ($meta['do_import'] != "" || ($meta["import_zip"] && $meta["up_zip_file"]))
 		{
 			set_time_limit(0);
 			if ($meta['import_overwrite'] == 1)
@@ -337,6 +337,7 @@ class gallery_v2 extends class_base
 				$this->_clear_images(&$meta);
 			}
 
+			echo "impo! <br>";
 			if ($meta["import_zip"] == 1)
 			{
 				// un_zip_file was set in set_property
