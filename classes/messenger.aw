@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.29 2001/05/27 02:55:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.30 2001/05/27 04:13:59 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1309,9 +1309,6 @@ class messenger extends menuedit_light
 
 	////
 	// !Kuvab konfigureerimisvormi (oigemini vastava lehe sellelt)
-	// FIXME: for some weird reason tundub mulle, et seda funktsiooni kutsutakse
-	// iga konfimislehe jaoks mitu korda. Praegu pole aega fixida, märkus
-	// tulevikuks
 	function configure($args = array())
 	{
 		extract($args);
@@ -1395,6 +1392,27 @@ class messenger extends menuedit_light
 						"aftpage" => "accounts");
 				break;
 
+			case "identities":
+				$tpl = "identities.tpl";
+				$this->read_template($tpl);
+				$c = "";
+				$idconf = $this->msgconf["msg_identities"];
+				if (is_array($idconf))
+				{
+					foreach($idconf as $idid => $idval)
+					{
+						$this->vars(array(
+								"id" => $idid,
+								"name" => $idval["name"],
+								"surname" => $idval["surname"],
+								"email" => $idval["email"],
+						));
+						$c .= $this->parse("line");
+					};
+				};
+				$vars = array("line" => $c);
+				break;
+
 			default:
 				$tpl = "conf_general.tpl";
 				$conf = $this->msgconf;
@@ -1428,7 +1446,9 @@ class messenger extends menuedit_light
 		));
 		return $this->parse();
 	}
-	
+
+	////
+	// !Submitib eelmisest vormist tulnud data
 	function submit_configure($args = array())
 	{
 		// loeme vana konffi sisse
@@ -1480,8 +1500,76 @@ class messenger extends menuedit_light
 		return $ret;
 		
 	}
-	
 
+	////
+	// !Kuvab uue identiteedi lisamis- voi olemasoleva muutmisvormi
+	function edit_identity($args = array())
+	{
+		$menu = $this->gen_msg_menu(array(
+				"activelist" => array("configure","identities"),
+				));
+		$this->read_template("edit_identity.tpl");
+		extract($args);
+		if (isset($id))
+		{
+			$vars = $this->msgconf["msg_identities"][$id];
+			$title = "Muuda identiteeti";
+			$this->vars($vars);
+		}
+		else
+		{
+			$title = "Uus identiteet";
+		};
+		$this->vars(array(
+				"menu" => $menu,
+				"title" => $title,
+				"reforb" => $this->mk_reforb("submit_identity",array("id" => $id)),
+			));
+		return $this->parse();
+	}
+
+	////
+	// !Submitib identiteedi lisamis- või muutmisvormist tulnud info
+	function submit_identity($args = array())
+	{
+		$idlist = $this->msgconf["msg_identities"];
+		if (!is_array($idlist))
+		{
+			$idlist = array();
+		};
+		$datablock = array(
+				"name" => $args["name"],
+				"surname" => $args["surname"],
+				"email" => $args["email"],
+			);
+		if (isset($args["id"]))
+		{
+			$idlist[$args["id"]] = $datablock;
+		}
+		else
+		{
+			$idlist[] = $datablock;
+		};
+		$this->msgconf["msg_identities"] = $idlist;
+		classload("users");
+		$users = new users();
+		$users->set_user_config(array(
+						"uid" => UID,
+						"key" => "messenger",
+						"value" => $this->msgconf,
+					));
+		global $status_msg;
+		$status_msg = (isset($args["id"])) ? "Identiteet on salvestatud" : "Identiteet on lisatud";
+		session_register("status_msg");
+		$ref = $this->mk_site_orb(array(
+				"action" => "configure",
+				"page" => "identities",
+		));
+		return $ref;
+	}
+		
+	
+	// see on old style kood ja kuulub varsti korvaldamisele
 	function _submit_configure($args = array())
 	{
 		// blargh. bad thing on see, et selle funktsiooni peab taiesti ymber
