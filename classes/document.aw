@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.196 2003/06/12 14:29:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.197 2003/06/12 15:08:14 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1208,7 +1208,7 @@ class document extends aw_template
 			$clearable_fields = array("content","lead","title");
 			foreach($clearable_fields as $_field)
 			{
-				$data[$_field] = strip_tags($data[$_field], "<b>,<i>,<u>,<p>,<ul><li><ol>");
+				$data[$_field] = strip_tags($data[$_field], "<b><i><u><p><P><em><ul><li><ol><strong>");
 			};
 		}
 
