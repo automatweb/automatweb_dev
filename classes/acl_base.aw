@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.42 2003/08/27 13:47:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.43 2003/10/15 12:39:32 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -262,10 +262,39 @@ class acl_base extends db_connector
 			return true;
 		}
 
-		//if (!($max_acl = aw_session_cache_get("__aw_acl_cache", $oid)))
-		//{
-			$max_acl = $this->can_aw($access,$oid);
-		//}
+		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
+		{
+			// try for file cache
+			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/acl::cache::".$oid."::uid::".$GLOBALS["__aw_globals"]["uid"];
+			if (file_exists($fqfn))
+			{
+//				echo "acl cache hit file $oid ($fqfn) <br>";
+				include($fqfn);
+				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+			}
+			else
+			{
+				$max_acl = $this->can_aw($access,$oid);
+
+				$str = "<?php\n";
+				$str .= aw_serialize($max_acl, SERIALIZE_PHP_FILE, array("arr_name" => "max_acl"));
+				$str .= "?>";
+				
+				$fp = fopen($fqfn, "w");
+				flock($fp, LOCK_EX);
+				fwrite($fp, $str);
+				flock($fp, LOCK_UN);
+				fclose($fp);
+//				$this->put_file(array("file" => $fqfn, "content" => $str));
+
+				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+//				echo "acl cache miss, set file to $fqfn <br>";
+			}
+		}
+/*		else
+		{
+			echo "acl cache hit memory $oid <Br>";
+		}*/
 
 		$access="can_".$access;
 		return $max_acl[$access];

@@ -96,7 +96,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	{
 		$query_hash = "search::".md5(serialize($params));
 		
-		$ret = $this->_get_cache($query_hash, $oid);
+		$ret = $this->_get_cache($query_hash, 0);
 		if (is_array($ret))
 		{
 			return $ret;
@@ -104,7 +104,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		else
 		{
 			$ret = $this->contained->search($params);
-			$this->_set_cache($query_hash, $oid, $ret);
+			$this->_set_cache($query_hash, 0, $ret);
 			return $ret;
 		}
 	}
@@ -139,7 +139,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			$this->cache->file_invalidate("objcache::$func::$oid");
 		}
-		$this->cache->file_invalidate_regex("objcache::search::(.*)");
+		$this->cache->file_invalidate_regex("objcache::search::(.*)::0");
 	}
 }
 ?>
