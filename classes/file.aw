@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.86 2004/07/21 12:42:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.87 2004/07/21 14:31:28 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -41,7 +41,7 @@
 
 	@property newwindow type=checkbox ch_value=1 group=settings
 	@caption Uues aknas
-
+	
 	@default table=objects
 	@default field=meta
 	@default method=serialize
@@ -54,6 +54,7 @@
 
 	@property act_date type=date_select group=dates
 	@caption Avaldamise kuupäev
+
 
 	@groupinfo settings caption=Seadistused
     	@groupinfo dates caption=Ajad
@@ -99,35 +100,39 @@ class file extends class_base
 
 				$fname = basename($arr["obj_inst"]->prop("file"));
 				$file = $this->cfg["site_basedir"]."/files/".$fname[0]."/".$fname;
-				$size = @filesize($file);
-				if ($size > 1024)
+				$data["value"] = "fail puudub";
+				if (is_file($file))
 				{
-					$filesize = number_format($size / 1024, 2)."kb";
-				}
-				else
-				if ($size > (1024*1024))
-				{
-					$filesize = number_format($size / (1024*1024), 2)."mb";
-				}
-				else
-				{
-					$filesize = $size." b";
-				}
+					$size = @filesize($file);
+					if ($size > 1024)
+					{
+						$filesize = number_format($size / 1024, 2)."kb";
+					}
+					else
+					if ($size > (1024*1024))
+					{
+						$filesize = number_format($size / (1024*1024), 2)."mb";
+					}
+					else
+					{
+						$filesize = $size." b";
+					}
 
-				$name = $arr["obj_inst"]->prop("name");
-				if (empty($name))
-				{
-					$name = $arr["obj_inst"]->prop("file");
-				}
+					$name = $arr["obj_inst"]->prop("name");
+					if (empty($name))
+					{
+						$name = $arr["obj_inst"]->prop("file");
+					}
 
-				$data["value"] = html::href(array(
-					"url" => $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name()),
-					"caption" => html::img(array(
-						"url" => icons::get_icon_url(CL_FILE,$name),
-						"border" => "0"
-						))." ".$name.", ".$filesize,
-					"target" => "_blank",
-				));
+					$data["value"] = html::href(array(
+						"url" => $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name()),
+						"caption" => html::img(array(
+							"url" => icons::get_icon_url(CL_FILE,$name),
+							"border" => "0"
+							))." ".$name.", ".$filesize,
+						"target" => "_blank",
+					));
+				};
 				break;
 
 			case "file":
@@ -619,19 +624,6 @@ class file extends class_base
 			$mimeregistry = get_instance("core/aw_mime_types");
 			$fc["type"] = $mimeregistry->type_for_ext($pi["extension"]);
 		}
-		global $XX3;
-		if ($XX3)
-		{
-			print strlen($fc["content"]);
-			print " / ";
-			$c = $fc["content"];
-			print md5($c);
-			/*
-			print "<pre>";
-			print_r($fc);
-			print "</pre>";
-			*/
-		};
 		header("Content-type: ".$fc["type"]);
 		header("Cache-control: public");
 		//header("Content-Disposition: inline; filename=\"$fc[name]\"");
@@ -733,12 +725,11 @@ class file extends class_base
 			$fd = obj($file_id);
 		}
 
-		global $HTTP_POST_FILES;
-		$tmp_name = $HTTP_POST_FILES[$name]['tmp_name'];
+		$tmp_name = $_FILES[$name]['tmp_name'];
 		if (is_uploaded_file($tmp_name))
 		{
-			$type = $HTTP_POST_FILES[$name]['type'];
-			$fname = $HTTP_POST_FILES[$name]["name"];
+			$type = $_FILES[$name]['type'];
+			$fname = $_FILES[$name]["name"];
 
 			// if a new file was uploaded, we can forget about the previous one 
 			if ($fd->class_id() != CL_FILE)
