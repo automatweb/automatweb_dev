@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.13 2004/12/01 11:19:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.14 2004/12/02 16:08:43 dragut Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -20,6 +20,9 @@
 @property sort_by type=select field=meta method=serialize
 @caption Objekte sorteeritakse
 
+@property use_meta_as_folders type=checkbox ch_value=1 field=meta method=serialize
+@caption Kasuta kaustade puu joonistamiseks muutujaid
+
 @property show_via_cfgform type=relpicker reltype=RELTYPE_SHOW_CFGFORM field=meta method=serialize
 @caption Objekti vaatamine l&auml;bi seadete vormi
 
@@ -28,7 +31,7 @@
 @caption Kataloogid
 
 @reltype FOLDER value=1 clid=CL_MENU
-@caption objektide asukoht
+@caption kataloog
 
 @reltype ADD_TYPE value=2 clid=CL_OBJECT_TYPE
 @caption lisatav objektit&uuml;&uuml;p
@@ -38,11 +41,14 @@
 
 @reltype SHOW_CFGFORM value=4 clid=CL_CFGFORM
 @caption v&auml;ljundi seadete vorm
+
+@reltype META value=6 clid=CL_META
+@caption Muutuja
 */
 
 class otv_ds_obj extends class_base
 {
-	function otv_ds_obj() 
+	function otv_ds_obj()
 	{
 		$this->init(array(
 			"tpldir" => "contentmgmt/object_treeview/otv_ds_obj",
@@ -93,7 +99,7 @@ class otv_ds_obj extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_get_menus($args = array())
 	{
@@ -121,7 +127,7 @@ class otv_ds_obj extends class_base
 		));
 		$this->t->define_field(array(
 			"name" => "check",
-			"caption" => "k.a. alammen梟d",
+			"caption" => "k.a. alammen&uuml;&uuml;d",
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -137,9 +143,22 @@ class otv_ds_obj extends class_base
 		$include_submenus = $args["obj_inst"]->meta("include_submenus");
 		$ignoreself = $args["obj_inst"]->meta("ignoreself");
 
+		$opts = array();
+		$use_meta_as_folders = $args['obj_inst']->prop("use_meta_as_folders");
+		if(empty($use_meta_as_folders))
+		{
+			$opts['reltype'] = RELTYPE_FOLDER;
+			$opts['class'] = CL_MENU;
+		}
+		else
+		{
+			$opts['reltype'] = RELTYPE_META;
+			$opts['class'] = CL_META;
+		}
+
 
 		$conns = $args["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_FOLDER
+			"type" => $opts['reltype'],
 		));
 
 		foreach($conns as $conn)
@@ -147,7 +166,7 @@ class otv_ds_obj extends class_base
 			$c_o = $conn->to();
 
 			$chk = "";
-			if ($c_o->class_id() == CL_MENU)
+			if ($c_o->class_id() == $opts['class'])
 			{
 				$chk = html::checkbox(array(
 					"name" => "include_submenus[".$c_o->id()."]",
@@ -169,7 +188,7 @@ class otv_ds_obj extends class_base
 				)),
 			));
 		};
-		
+
 		$nodes[$prop["name"]] = array(
 			"type" => "text",
 			"caption" => $prop["caption"],
@@ -204,36 +223,72 @@ class otv_ds_obj extends class_base
 	**/
 	function get_folders($ob)
 	{
+
 		if (!is_oid($ob->id()))
 		{
 			return;
 		}
+/*
+	some notes to implement here
 
-		// go over all related menus and add subtree id's together if the user has so said. 
+	esiteks, ilmselt piisab sellest, kui panna siin alguses mingitesse muutujatesse vastavalt kas
+	tegemist on RELTYPE_META v천i RELTYPE_FOLDER-ga ja samuti ka klassi konstandid
+	samuti tuleb 채ra teha siin see, et kas n채idata alammen체체sid ja kas peamen체체d n채idata
+	v천i mitte
+
+	siis ilmselt saab tv_sel muutuja abil vastavas grupis olevaid kontakte n채itama hakata
+	ja kui mingi kontakt kuskil grupis ei ole, siis n채idatakse neid siis kui mingit gruppi valitud
+	ei ole
+
+	siis teha 채ra see alam체ksuste grupeerimine, see l채heb juba otv k체lge ja pidi nii ehk naa
+	needed thing olema, nii et universaalsus is the key
+
+	ilmselt saab seda kuidagi fieldide sorteerimise ja selle abil teha, ei tohiks 체lem채채ra keeruline
+	olla kui ma teada saan kuidagi kuidas erinev tabelirida kuskile teatud tingimuse alusel vahele torgata
+	eks seda homme hommikul k체sib.
+	
+*/
+		// go over all related menus and add subtree id's together if the user has so said.
 		$ret = array();
-		
+
 		$sub = $ob->meta("include_submenus");
-   		$igns = $ob->meta("ignoreself");
+		$igns = $ob->meta("ignoreself");
 
 		classload("icons", "image");
-																		
+
+
+		$opts = array();
+		$use_meta_as_folders = $ob->prop("use_meta_as_folders");
+		if(empty($use_meta_as_folders))
+		{
+			$opts['reltype'] = RELTYPE_FOLDER;
+			$opts['class'] = CL_MENU;
+		}
+		else
+		{
+			$opts['reltype'] = RELTYPE_META;
+			$opts['class'] = CL_META;
+		}
+
 		$conns = $ob->connections_from(array(
-			"type" => RELTYPE_FOLDER
+//				"type" => RELTYPE_FOLDER
+			"type" => $opts['reltype'],
 		));
 		foreach($conns as $conn)
 		{
 			$c_o = $conn->to();
-			if (!isset($this->first_folder))
+				if (!isset($this->first_folder))
 			{
 				$this->first_folder = $c_o->id();
 			}
-			
+
 			$cur_ids = array();
 
 			if ($sub[$c_o->id()])
 			{
 				$_ot = new object_tree(array(
-					"class_id" => CL_MENU,
+//				"class_id" => CL_MENU,
+					"class_id" => $opts['class'],
 					"parent" => $c_o->id(),
 					"status" => STAT_ACTIVE,
 					"lang_id" => array(),
@@ -303,7 +358,7 @@ class otv_ds_obj extends class_base
 				}
 			}
 		}
-		
+
 		$ret["jrk"] = "J&auml;rjekord";
 		return $ret;
 	}
@@ -313,7 +368,10 @@ class otv_ds_obj extends class_base
 		$ret = array();
 
 		// if the folder is specified in the url, then show that
-		if ($GLOBALS["tv_sel"])
+		// if use_meta_as_folders option is set, then ignore tv_sel here
+		$use_meta_as_folders = $ob->prop("use_meta_as_folders");
+
+		if ($GLOBALS["tv_sel"] && empty($use_meta_as_folders))
 		{
 			$parent = $GLOBALS["tv_sel"];
 		}
@@ -322,6 +380,7 @@ class otv_ds_obj extends class_base
 		// then get files in all selected folders
 		if (!$ob->meta('show_folders'))
 		{
+
 			$con = $ob->connections_from(array(
 				"type" => RELTYPE_FOLDER
 			));
@@ -331,6 +390,7 @@ class otv_ds_obj extends class_base
 			{
 				$parent[$c->prop("to")] = $c->prop("to");
 			}
+
 		}
 
 		if (!is_oid($ob->id()))
@@ -369,6 +429,7 @@ class otv_ds_obj extends class_base
 		$awa = new aw_array($parent);
 		if (count($awa->get()) < 1)
 		{
+
 			$parent = $this->first_folder;
 		}
 
@@ -406,7 +467,7 @@ class otv_ds_obj extends class_base
 			{
 				$fi = get_instance("file");
 				$url = $fi->get_url($t->id(),$t->name());
-			
+
 				if ($fd["newwindow"])
 				{
 					$target = "target=\"_blank\"";
@@ -418,7 +479,7 @@ class otv_ds_obj extends class_base
 			else
 			if ($t->class_id() == CL_MENU)
 			{
-				$url = aw_url_change_var("tv_sel", $t->id()); 
+				$url = aw_url_change_var("tv_sel", $t->id());
 			}
 			else
 			{
@@ -433,7 +494,7 @@ class otv_ds_obj extends class_base
 				else
 				{
 					$url = $this->cfg["baseurl"]."/".$t->id();
-				}			
+				}
 			}
 
 			if ($ob->prop("show_notact_noclick") && $t->status() == STAT_NOTACTIVE)
@@ -568,7 +629,7 @@ class otv_ds_obj extends class_base
 
 		@attrib api=1
 
-		
+
 	**/
 	function update_object($ef, $id, $data)
 	{
