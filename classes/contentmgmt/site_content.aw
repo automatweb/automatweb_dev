@@ -266,6 +266,10 @@ class site_content extends menuedit
 		{
 			$this->site_title = strip_tags($this->title_yah);
 		}
+		if ($yah != "")
+		{
+			$this->vars(array("HAS_YAH" => $this->parse("HAS_YAH")));
+		}
 		$this->vars(array("YAH_LINK" => $yah));
 
 		// language selecta
