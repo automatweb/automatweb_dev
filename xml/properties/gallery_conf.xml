@@ -41,6 +41,16 @@
             <caption>Piltide asukoht</caption>
       </property>
       <property>
+            <name>def_layout</name>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELATION_LAYOUT</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Default layout:</caption>
+      </property>
+      <property>
             <name>img_vert</name>
             <field>meta</field>
             <method>serialize</method>
@@ -244,7 +254,7 @@
             <method>serialize</method>
             <group>logo</group>
             <table>objects</table>
-            <caption>Kas suurele pildile kleepida logo</caption>
+            <caption>Kas suurele pildile kleepida lisapilt</caption>
       </property>
       <property>
             <name>logo_img</name>
@@ -254,7 +264,7 @@
             <group>logo</group>
             <reltype>RELTYPE_LOGO</reltype>
             <table>objects</table>
-            <caption>Logo pilt</caption>
+            <caption>Lisapilt</caption>
       </property>
       <property>
             <name>logo_corner</name>
@@ -293,7 +303,7 @@
             <method>serialize</method>
             <group>logo</group>
             <table>objects</table>
-            <caption>Logo l&amp;auml;bipaistvus, 0-100 (0 -0 t&amp;auml;iesti l&amp;auml;bipaistev)</caption>
+            <caption>Lisapildi l&amp;auml;bipaistvus, 0-100 (0 -0 t&amp;auml;iesti l&amp;auml;bipaistev)</caption>
       </property>
       <property>
             <name>logo_text</name>
@@ -302,7 +312,7 @@
             <method>serialize</method>
             <group>logo</group>
             <table>objects</table>
-            <caption>Logo tekst (%nimi% asendatakse galerii nimega)</caption>
+            <caption>Lisapildi tekst (%nimi% asendatakse galerii nimega)</caption>
       </property>
       <property>
             <name>tn_insert_logo</name>
@@ -312,7 +322,7 @@
             <method>serialize</method>
             <group>logo</group>
             <table>objects</table>
-            <caption>Kas v&amp;auml;ikesele pildile kleepida logo</caption>
+            <caption>Kas v&amp;auml;ikesele pildile kleepida lisapilt</caption>
       </property>
       <property>
             <name>tn_logo_img</name>
@@ -322,7 +332,7 @@
             <group>logo</group>
             <reltype>RELTYPE_LOGO</reltype>
             <table>objects</table>
-            <caption>Logo pilt</caption>
+            <caption>Lisapilt</caption>
       </property>
       <property>
             <name>tn_logo_corner</name>
@@ -361,7 +371,7 @@
             <method>serialize</method>
             <group>logo</group>
             <table>objects</table>
-            <caption>Logo l&amp;auml;bipaistvus, 1-100 (1-t&amp;auml;iesti l&amp;auml;bipaistev)</caption>
+            <caption>Lisapildi l&amp;auml;bipaistvus, 1-100 (1-t&amp;auml;iesti l&amp;auml;bipaistev)</caption>
       </property>
       <property>
             <name>tn_logo_text</name>
@@ -370,7 +380,7 @@
             <method>serialize</method>
             <group>logo</group>
             <table>objects</table>
-            <caption>Logo tekst (%nimi% asendatakse galerii nimega)</caption>
+            <caption>Lisapildi tekst (%nimi% asendatakse galerii nimega)</caption>
       </property>
       <classinfo>
             <syslog_type>ST_GALLERY_CONF</syslog_type>
@@ -384,7 +394,7 @@
                   <caption>Piltide&amp;nbsp;suurused</caption>
             </imgsize>
             <logo>
-                  <caption>Logo</caption>
+                  <caption>Lisapilt</caption>
             </logo>
       </groupinfo>
 </properties>

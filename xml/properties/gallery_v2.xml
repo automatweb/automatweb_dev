@@ -19,6 +19,16 @@
             <caption>Konfiguratsioon:</caption>
       </property>
       <property>
+            <name>reinit_layout</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Uuenda layout (kustutab k&amp;otilde;ik pildid!)</caption>
+      </property>
+      <property>
             <name>num_pages</name>
             <type>textbox</type>
             <size>3</size>
@@ -27,16 +37,6 @@
             <table>objects</table>
             <group>general</group>
             <caption>Mitu lehte:</caption>
-      </property>
-      <property>
-            <name>def_layout</name>
-            <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELATION_LAYOUT</reltype>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Default layout:</caption>
       </property>
       <property>
             <name>pg_1_content</name>
@@ -139,31 +139,14 @@
             <caption>Impordi FTP serverist</caption>
       </property>
       <property>
-            <name>ftp_host</name>
-            <type>textbox</type>
+            <name>ftp_login</name>
+            <type>relpicker</type>
             <field>meta</field>
             <method>serialize</method>
             <group>import</group>
+            <reltype>RELATION_FTP_LOGIN</reltype>
             <table>objects</table>
             <caption>FTP Server</caption>
-      </property>
-      <property>
-            <name>ftp_user</name>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>import</group>
-            <table>objects</table>
-            <caption>FTP Kasutaja</caption>
-      </property>
-      <property>
-            <name>ftp_pass</name>
-            <type>password</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>import</group>
-            <table>objects</table>
-            <caption>FTP Parool</caption>
       </property>
       <property>
             <name>ftp_folder</name>

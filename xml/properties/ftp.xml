@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>server</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Server</caption>
+      </property>
+      <property>
+            <name>username</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kasutajanimi</caption>
+      </property>
+      <property>
+            <name>password</name>
+            <type>password</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Parool</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_FTP_LOGIN</syslog_type>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+

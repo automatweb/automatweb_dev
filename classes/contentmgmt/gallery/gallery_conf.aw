@@ -6,7 +6,7 @@
 
 @groupinfo general caption=Üldine
 @groupinfo imgsize caption=Piltide&nbsp;suurused
-@groupinfo logo caption=Logo
+@groupinfo logo caption=Lisapilt
 
 @default table=objects
 @default group=general
@@ -22,6 +22,9 @@
 
 @property images_folder type=relpicker field=meta method=serialize reltype=RELTYPE_IMAGES_FOLDER
 @caption Piltide asukoht
+
+@property def_layout type=relpicker field=meta method=serialize reltype=RELATION_LAYOUT
+@caption Default layout:
 
 @property img_vert field=meta method=serialize group=imgsize
 @caption Kui pilt on k&otilde;rgem kui laiem
@@ -84,10 +87,10 @@
 @caption Suure pildi k&otilde;rgus
 
 @property insert_logo type=checkbox ch_value=1 field=meta method=serialize group=logo
-@caption Kas suurele pildile kleepida logo
+@caption Kas suurele pildile kleepida lisapilt
 
 @property logo_img type=relpicker field=meta method=serialize group=logo reltype=RELTYPE_LOGO
-@caption Logo pilt
+@caption Lisapilt
 
 @property logo_corner type=select field=meta method=serialize group=logo
 @caption Mis nurgas
@@ -99,16 +102,16 @@
 @caption Mitu pikslit horisontaalsest servast
 
 @property logo_transparency type=textbox size=5 field=meta method=serialize group=logo
-@caption Logo l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;bipaistev)
+@caption Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;bipaistev)
 
 @property logo_text type=textbox field=meta method=serialize group=logo
-@caption Logo tekst (%nimi% asendatakse galerii nimega)
+@caption Lisapildi tekst (%nimi% asendatakse galerii nimega)
 
 @property tn_insert_logo type=checkbox ch_value=1 field=meta method=serialize group=logo
-@caption Kas v&auml;ikesele pildile kleepida logo
+@caption Kas v&auml;ikesele pildile kleepida lisapilt
 
 @property tn_logo_img type=relpicker field=meta method=serialize group=logo reltype=RELTYPE_LOGO
-@caption Logo pilt
+@caption Lisapilt
 
 @property tn_logo_corner type=select field=meta method=serialize group=logo
 @caption Mis nurgas
@@ -120,10 +123,10 @@
 @caption Mitu pikslit horisontaalsest servast
 
 @property tn_logo_transparency type=textbox size=5 field=meta method=serialize group=logo
-@caption Logo l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev)
+@caption Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev)
 
 @property tn_logo_text type=textbox field=meta method=serialize group=logo
-@caption Logo tekst (%nimi% asendatakse galerii nimega)
+@caption Lisapildi tekst (%nimi% asendatakse galerii nimega)
 
 
 */
@@ -132,6 +135,7 @@ define("RELTYPE_FOLDER", 1);
 define("RELTYPE_RATE", 2);
 define("RELTYPE_IMAGES_FOLDER", 3);
 define("RELTYPE_LOGO", 4);
+define("RELATION_LAYOUT",5);
 
 define("CORNER_LEFT_TOP", 1);
 define("CORNER_LEFT_BOTTOM", 2);
@@ -188,7 +192,8 @@ class gallery_conf extends class_base
 			RELTYPE_RATE => "hindamisobjektid",
 			RELTYPE_FOLDER => "hallatav kataloog",
 			RELTYPE_IMAGES_FOLDER => "galerii piltide kataloog",
-			RELTYPE_LOGO => "logo pilt"
+			RELTYPE_LOGO => "logo pilt",
+			RELATION_LAYOUT => "galerii lehe layout"
 		);
 	}
 
@@ -209,6 +214,10 @@ class gallery_conf extends class_base
 		if ($args["reltype"] == RELTYPE_LOGO)
 		{
 			return array(CL_IMAGE);
+		}
+		if ($args["reltype"] == RELATION_LAYOUT)
+		{
+			return array(CL_LAYOUT);
 		}
 	}
 
@@ -296,6 +305,12 @@ class gallery_conf extends class_base
 				break;
 		}
 		return PROP_OK;
+	}
+
+	function get_default_layout($id)
+	{
+		$obj = $this->get_object($id);
+		return $obj['meta']['def_layout'];
 	}
 }
 ?>

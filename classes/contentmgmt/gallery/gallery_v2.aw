@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.7 2003/03/28 15:13:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.8 2003/03/28 17:42:23 kristo Exp $
 
 /*
 
@@ -29,11 +29,11 @@
 @property conf_id type=text size=3 field=meta method=serialize
 @caption Konfiguratsioon:
 
+@property reinit_layout type=checkbox ch_value=1 field=meta method=serialize
+@caption Uuenda layout (kustutab k&otilde;ik pildid!)
+
 @property num_pages type=textbox size=3 field=meta method=serialize
 @caption Mitu lehte:
-
-@property def_layout type=relpicker field=meta method=serialize reltype=RELATION_LAYOUT
-@caption Default layout:
 
 @property pg_1_content type=text field=meta method=serialize group=page_1 no_caption=1
 @property pg_2_content type=text field=meta method=serialize group=page_2 no_caption=1
@@ -50,14 +50,8 @@
 @property import_ftp type=checkbox ch_value=1 field=meta method=serialize group=import
 @caption Impordi FTP serverist
 
-@property ftp_host type=textbox field=meta method=serialize group=import
+@property ftp_login type=relpicker field=meta method=serialize group=import reltype=RELATION_FTP_LOGIN
 @caption FTP Server
-
-@property ftp_user type=textbox field=meta method=serialize group=import
-@caption FTP Kasutaja
-
-@property ftp_pass type=password field=meta method=serialize group=import
-@caption FTP Parool
 
 @property ftp_folder type=textbox field=meta method=serialize group=import
 @caption FTP Serveri kataloog
@@ -78,7 +72,7 @@
 
 */
 
-define("RELATION_LAYOUT",1);
+define("RELATION_FTP_LOGIN", 1);
 
 classload("image");
 class gallery_v2 extends class_base
@@ -175,21 +169,6 @@ class gallery_v2 extends class_base
 		return false;
 	}
 
-	function callback_get_rel_types()
-	{
-		return array(
-			RELATION_LAYOUT => "layout",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELATION_LAYOUT)
-		{
-			return array(CL_LAYOUT);
-		}
-	}
-
 	function callback_mod_tab($parm)
 	{
 		$id = $parm['id'];
@@ -211,11 +190,11 @@ class gallery_v2 extends class_base
 		$obj = $this->get_object($oid);
 		
 		$page_data = $obj['meta']['page_data'][$page]['layout'];
-		if (!$page_data && $obj['meta']['def_layout'])
+		if (!$page_data && ($def_layout = $this->_get_default_layout($obj)))
 		{
 			// this the first time this page is edited, so get the default layout for it
 			$l = get_instance("layout");
-			$page_data = $l->get_layout($obj['meta']['def_layout']);
+			$page_data = $l->get_layout($def_layout);
 		}
 		
 		$ge = get_instance("vcl/grid_editor");
@@ -270,11 +249,11 @@ class gallery_v2 extends class_base
 			$page_number = (int)substr($prop['name'], 3, 1);
 
 			$page_data = $obj['meta']['page_data'][$page_number]['layout'];
-			if (!$page_data && $obj['meta']['def_layout'])
+			if (!$page_data && ($def_layout = $this->_get_default_layout($obj)))
 			{
 				// this the first time this page is edited, so get the default layout for it
 				$l = get_instance("layout");
-				$page_data = $l->get_layout($obj['meta']['def_layout']);
+				$page_data = $l->get_layout($def_layout);
 			}
 
 			$this->_page_content = $obj['meta']['page_data'][$page_number]['content'];
@@ -290,6 +269,12 @@ class gallery_v2 extends class_base
 			);
 			$obj['meta']['page_data'][$page_number]['content'] = $this->_page_content;
 			$arr['metadata'] = $obj['meta'];
+		}
+		if ($prop['name'] == "reinit_layout")
+		{
+			$obj['meta']['page_data'] = array();
+			$arr['metadata']['page_data'] = array();
+			$prop['value'] = 0;
 		}
 		return PROP_OK;
 	}
@@ -430,13 +415,13 @@ class gallery_v2 extends class_base
 				));
 
 				// and now we need to add the image to the first empty slot
-				$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col);
+				$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col, $ob);
 //				echo "r = ".dbg::dump($r)." <br>";
-				if ($r == false && $meta['import_add_pages'] == 1)
+				if ($r === false && $meta['import_add_pages'] == 1)
 				{
 					// add page to the end
-					$this->_add_page(&$meta);
-					$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col);
+					$this->_add_page(&$meta, $ob);
+					$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col, $ob);
 //					echo "r after add page = ".dbg::dump($r)." <br>";
 				}
 
@@ -465,16 +450,16 @@ class gallery_v2 extends class_base
 		}
 	}
 
-	function _add_page(&$meta)
+	function _add_page(&$meta, $ob)
 	{
 		$l = get_instance("layout");
-		$page_data = $l->get_layout($meta['def_layout']);
+		$page_data = $l->get_layout($this->_get_default_layout($ob));
 
 		$meta['num_pages']++;
 		$meta['page_data'][$meta['num_pages']]['layout'] = $page_data;
 	}
 
-	function _get_next_free_pos(&$meta, $page, $row, $col)
+	function _get_next_free_pos(&$meta, $page, $row, $col, $ob)
 	{
 		// ok, we start from the pos, and scan left->right and up->down and then pages, until we find a place
 		// that is empty
@@ -490,7 +475,7 @@ class gallery_v2 extends class_base
 			{
 				// insert default layout
 				$l = get_instance("layout");
-				$meta['page_data'][$_page]['layout'] = $l->get_layout($meta['def_layout']);
+				$meta['page_data'][$_page]['layout'] = $l->get_layout($this->_get_default_layout($ob));
 			}
 
 //			echo "scanning .. page $_page , rows = ".$meta['page_data'][$_page]['layout']['rows']." <br>";
@@ -1255,6 +1240,27 @@ class gallery_v2 extends class_base
 		}
 
 		return false;
+	}
+
+	function _get_default_layout($obj)
+	{
+		$conf = get_instance("contentmgmt/gallery/gallery_conf");
+		return $conf->get_default_layout($this->_get_conf_for_folder($obj['parent']));
+	}
+
+	function callback_get_rel_types()
+	{
+		return array(
+			RELATION_FTP_LOGIN => "ftp login"
+		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		if ($args["reltype"] == RELATION_FTP_LOGIN)
+		{
+			return array(CL_FTP_LOGIN);
+		}
 	}
 }
 ?>
