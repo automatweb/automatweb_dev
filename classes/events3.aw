@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.3 2001/11/15 13:10:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events3.aw,v 2.4 2002/01/21 13:05:18 duke Exp $
 // events.aw - the sucky sucky version of the PIKK calendar
 
 //  kalendri vaated teemade kaupa:
@@ -29,6 +29,10 @@ class events3 extends aw_template {
 			"6" => "Maksukalender",
 			"7" => "PIKK kalender",
 			"8" => "Koolituskalender",
+			"9" => "Konverentsid",
+			"10" => "Koosolekud",
+			"11" => "Kohtumised",
+			"12" => "Seminarid",
 		);
 
 		$this->places = array(
@@ -40,7 +44,7 @@ class events3 extends aw_template {
 			"6" => "Lääne-Virumaa",
 			"7" => "Läänemaa",
 			"8" => "Põlvamaa",
-			"9" => "Pärnumaa",
+			"16" => "Pärnumaa",
 			"9" => "Raplamaa",
 			"11" => "Saaremaa",
 			"12" => "Tartumaa",
@@ -80,7 +84,21 @@ class events3 extends aw_template {
                	$start = new date_edit("start");
 		$start->set("minute_step",30);
                	$start->configure(array("day" => 1,"month" => 2,"year" => 3,"hour" => 4,"minute" => 5));
-		$old_st = ($old["start"]) ? $old["start"] : time();
+		classload("calendar");
+		$cal = new calendar();
+		if ($old["start"])
+		{
+			$old_st = $old["start"];
+		}
+		else
+		{
+			$tmp = $cal->get_date_range(array(
+				"type" => "day",
+				"time" => time(),
+			));
+			$old_st = $tmp["start"];
+		};
+
 		$start_ed = $start->gen_edit_form("start",$old_st);
 
 		$this->vars(array(
@@ -109,6 +127,10 @@ class events3 extends aw_template {
 		$this->quote($args);
 		extract($args);
 		// it's a new event. Register it.
+		if ($clone)
+		{
+			unset($id);
+		};
 		if (not($id))
 		{
 			global $rootmenu;
@@ -124,6 +146,7 @@ class events3 extends aw_template {
 							$start["day"],$start["year"]);
 
 
+			$additional = substr($additional,0,400);
 			$q = "INSERT INTO events3 (id,type,start,place,location,info,organizer,contact,additional,ticket)
 				VALUES ('$id','$type','$st','$place','$location','$info','$organizer','$contact','$additional','$ticket')";
 
@@ -179,14 +202,21 @@ class events3 extends aw_template {
 
 		if ($mon && $year)
 		{
+			$mname = get_lc_month($mon);
 			if (not($day))
 			{
-				$day = date("d");
+				$_tmp = $cal->get_date_range(array("time" => mktime(0,0,0,$mon,1,$year),"type" => "month"));
+				$limits = " AND events3.start >= $_tmp[start] AND events3.start <= $_tmp[end] ";
+				$this->vars(array("tdate" => $mname . " " . date("Y",$_tmp["start"])));
+			}
+			else
+			{
+				$start = mktime(0,0,0,$mon,$day,$year);
+				$end = mktime(23,59,59,$mon,$day,$year);
+				$limits = " AND events3.start >= $start AND events3.start <= $end";
+				$this->vars(array("tdate" => date("d.$mname Y",$start)));
+				$this->vars(array("tdate" => date("d",$start) . "." . $mname . " " . date("Y",$start)));
 			};
-			$start = mktime(0,0,0,$mon,$day,$year);
-			$end = mktime(23,59,59,$mon,$day,$year);
-			$limits = " AND events3.start >= $start AND events3.start <= $end";
-			$this->vars(array("date" => date("d-m-Y",$start)));
 		}
 		elseif ($op == "view")
 		{
@@ -223,9 +253,12 @@ class events3 extends aw_template {
 			$_tmp = $cal->get_date_range(array("time" => time(),"type" => "week"));
 			$start = $_tmp["start"];
 			$end = $_tmp["end"];
+			$this->vars(array("tdate" => "järgmised 20"));
+			$template = "veryshort.tpl";
 
 			// kristian tahtis et aint neid n2idatakse mis pole veel alanud
-			$limits = " AND events3.start >= ".time()." AND events3.start <= $end";
+			$limits = " AND events3.start >= ".time();
+			$limits2 = " LIMIT 20 ";
 		};
 
 		$this->read_template($template);
@@ -236,16 +269,26 @@ class events3 extends aw_template {
 			LEFT JOIN events3 ON (objects.oid = events3.id)
 			WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
 			$limits	
-			ORDER BY events3.start";
+			ORDER BY events3.start $limits2";
 
-		//print "<pre>";
-		//print $q;
-		//print "</pre>";
+		print "<!--";
+		print $q;
+		print "-->";
+
+		#print "<pre>";
+		#print $q;
+		#print "</pre>";
 		$this->db_query($q);
 
 		while($row = $this->db_next())
 		{
 			$cnt++;
+			if ($op == "view")
+			{
+				$mname = get_lc_month(date("m",$row["start"]));
+				$tdate = sprintf("%d.%s %d",date("d",$row["start"]),$mname,date("Y",$row["start"]));
+				$this->vars(array("tdate" => $tdate));
+			};
 			
 			$c .= $this->_draw_event($row);
 		};
@@ -315,23 +358,47 @@ class events3 extends aw_template {
 		{
 			$change = "";
 		};
+	
+		$short_time = date("H:i",$row["start"]);
+
+		$mname = get_lc_month(date("m",$row["start"]));
 
 		$this->vars(array(
 			"name" => $row["name"],
 			"start" => $this->time2date($row["start"],3),
 			"location" => $row["location"],
 			"place" => $this->places[$row["place"]],
+			"type" => $this->types[$row["type"]],
 			"info" => $row["info"],
 			"organizer" => $row["organizer"],
 			"time" => $this->time2date($row["start"],4),
+			"date" => sprintf("%d.%s %d",date("d",$row["start"]),$mname,date("Y",$row["start"])),
 			"shorttime" => date("H:i",$row["start"]),
 			"contact" => $row["contact"],
+			"id" => $row["oid"],
 			"additional" => $row["additional"],
 			"ticket" => $row["ticket"],
 			"link_detail" => $this->mk_my_orb("view",array("id" => $row["oid"])),
 			"admin" => $change,
 
 		));
+
+		if ($short_time != "00:00")
+		{
+			$this->vars(array("has_time" => $this->parse("has_time")));
+		};
+
+	
+		$this->vars(array(
+			"price" => "",
+			"price1" => "",
+		));	
+
+		if ($row["ticket"])
+		{
+			$this->vars(array("price" => $this->parse("price")));
+			$this->vars(array("price1" => $this->parse("price1")));
+		};
 
 		return $this->parse("line");
 	}
@@ -361,6 +428,7 @@ class events3 extends aw_template {
 			"type" => $this->picker($type,array_merge(array("0" => "kõik"),$this->types)),
 			"place" => $this->picker($place,array_merge(array("0" => "kõik"),$this->places)),
 			"start" => $start_ed,
+			"location" => $location,
 			"end" => $end_ed,
 			"reforb" => $this->mk_reforb("do_search",array()),
 		));
@@ -376,11 +444,13 @@ class events3 extends aw_template {
 		$cl = CL_EVENT;
 		$type_search = ($type != 0) ? " AND events3.type = '$type' " : "";
 		$place_search = ($place != 0) ? " AND events3.place = '$place' " : "";
+
+		$loc_search = ($location != "") ? " AND events3.location LIKE '%$location%' " : "";
 		$this->read_template("search_results.tpl");
 		$q = "SELECT objects.*,events3.* FROM objects
 			LEFT JOIN events3 ON (objects.oid = events3.id)
 			WHERE objects.parent = $rootmenu AND class_id=$cl AND status = 2
-			AND start >= '$st' AND start <= '$et' $type_search $place_search
+			AND start >= '$st' AND start <= '$et' $type_search $place_search $loc_search
 			ORDER BY events3.start";
 		$this->db_query($q);
 		$cnt = 0;
@@ -394,7 +464,7 @@ class events3 extends aw_template {
 			"cnt" => $cnt,
 			"date" => (int)$cnt,
 		));
-		return $this->parse() . $this->event_search(array("st" => $st,"et" => $et,"type" => $type, "place" => $place));
+		return $this->parse() . $this->event_search(array("st" => $st,"et" => $et,"type" => $type, "place" => $place, "location" => $location));
 	}
 
 	////
@@ -440,11 +510,13 @@ class events3 extends aw_template {
 		$_timestamp = time();	
 		$ts1 = "$year-$mon";
 		$ts2 = date("Y-m",$_timestamp);
-		if ($ts1 == $ts2)
-		{
+//		if ($ts1 == $ts2)
+/*		{
 			$_tmp = $cal->get_date_range(array("time" => time(),"type" => "month"));
 			$start = $_tmp["start"];
-			$end = $_tmp["end"];
+			$end = $_tmp["end"];*/
+			$start = mktime(0,0,0,$mon,1,$year);
+			$end = mktime(0,0,0,$mon+1,0,$year);
 			$limits = " AND events3.start >= $start AND events3.start <= $end";
 			global $rootmenu;
 			$cl = CL_EVENT;
@@ -454,26 +526,24 @@ class events3 extends aw_template {
 				$limits	
 				ORDER BY events3.start";
 
-			//print "<pre>";
-			//print $q;
-			//print "</pre>";
 			$this->db_query($q);
 			$marked = array();
 			while($row = $this->db_next())
 			{
 				$marked[date("d",$row["start"])] = 1;
 			};
-		}
+/*		}
 		else
 		{
 			$marked = array();
-		};
+		};*/
 					
 		$calendar = $cal->draw_month(array(
 					"year" => $year,
 					"mon" => $mon,
 					"day" => $day,
 					"marked" => $marked,
+					"titlelink" => $this->mk_link(array("section" => "events","year" => $year,"mon" => $mon)),
 					"misc" => array("section" => "events"),
 		));
 	
