@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.38 2002/09/04 17:52:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.39 2002/10/16 13:49:57 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -393,6 +393,10 @@ class users_user extends aw_template
 		$pg = $this->fetchgroup($parent);
 
 		$t = time();
+		if (!$pg["oid"])
+		{
+			$pg["oid"] = aw_ini_get("groups.tree_root");
+		}
 		$oid = $this->new_object(array("name" => $gname, "class_id" => CL_GROUP, "status" => 2, "parent" => $pg["oid"]));
 
 		$q = "INSERT INTO groups (name,created,createdby,modified,modifiedby,type,data,parent,priority,oid,search_form)
