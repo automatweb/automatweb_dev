@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.88 2004/02/25 15:53:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.89 2004/06/07 07:32:20 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -14,6 +14,9 @@ if (is_array($_SERVER))
 	extract($_SERVER);
 };
 
+$PATH_INFO = preg_replace("/\?automatweb=[^&]*/","", $PATH_INFO);
+$QUERY_STRING = preg_replace("/\?automatweb=[^&]*/","", $QUERY_STRING);
+
 if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
 {
 	$pi = $PATH_INFO;
@@ -23,7 +26,6 @@ if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
 	$pi .= "?".$QUERY_STRING;
 };
 
-$pi = preg_replace("/\?automatweb=[^&]*/","", $pi);
 $_SERVER["REQUEST_URI"] = preg_replace("/\?automatweb=[^&]*/","", $_SERVER["REQUEST_URI"]);
 
 if ($pi) 
