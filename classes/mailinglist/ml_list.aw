@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.23 2003/04/11 16:37:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.24 2003/04/23 16:04:19 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -12,6 +12,9 @@
 
 	@property sub_form_type type=select rel=1
 	@caption Vormi tüüp
+
+	@property redir_obj type=relpicker reltype=RELTYPE_REDIR_OBJECT rel=1
+	@caption Dokument millele suunata
 
 	@property user_form_conf type=objpicker clid=CL_ML_LIST_CONF
 	@caption Vali konfiguratsioon
@@ -34,6 +37,7 @@
 	
 */
 define("RELTYPE_MEMBER_PARENT",1);
+define("RELTYPE_REDIR_OBJECT",2);
 
 
 class ml_list extends class_base
@@ -54,8 +58,26 @@ class ml_list extends class_base
         {
                 return array(
                         RELTYPE_MEMBER_PARENT => "listi liikmete kataloog",
+			RELTYPE_REDIR_OBJECT => "ümbersuunamine",
                 );
         }
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		$retval = false;
+		switch($args["reltype"])
+		{
+			case RELTYPE_MEMBER_PARENT:
+				$retval = array(CL_PSEUDO);
+				break;
+
+			case RELTYPE_REDIR_OBJECT:
+				$retval = array(CL_DOCUMENT);
+				break;
+		};
+		return $retval;
+	}
+
 
 
 	function get_property($args = array())
@@ -704,13 +726,29 @@ class ml_list extends class_base
 	function add_member_to_list($arr)
 	{
 		extract($arr);
+		global $awt;
+		if (aw_global_get("uid") == "kix")
+		{
+			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+			flush();
+		}
 		$this->load_list($lid);
+		if (aw_global_get("uid") == "kix")
+		{
+			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+			flush();
+		}
 		$folder = $this->list_ob["meta"]["def_user_folder"];
 
 //		echo "try add user for list $lid base on $mid <br>";
 
 		// check if this member exists in this list already
 		$members = $this->get_members($lid);
+		if (aw_global_get("uid") == "kix")
+		{
+			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+			flush();
+		}
 //		echo "members for list eq ".join(",", array_keys($members))." checking new member $mid<br>";
 		$found = false;
 		foreach($members as $_mmid => $mdat)
@@ -727,6 +765,11 @@ class ml_list extends class_base
 			}
 		}
 		$mdat = $this->get_object($mid);
+		if (aw_global_get("uid") == "kix")
+		{
+			echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+			flush();
+		}
 
 		if (!$found)
 		{
@@ -737,8 +780,18 @@ class ml_list extends class_base
 				"brother_of" => ($mdat["brother_of"] ? $mdat["brother_of"] : $mdat["oid"])
 			));
 //			echo "not found, adding $mdat[name] <Br>";
+			if (aw_global_get("uid") == "kix")
+			{
+				echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+				flush();
+			}
 			$mlm = get_instance("mailinglist/ml_member");
 			$mlm->update_member_name($id);
+			if (aw_global_get("uid") == "kix")
+			{
+				echo "amtl, line = ".__LINE__." ".$awt->get("fg")."<br>\n";
+				flush();
+			}
 		}
 	}
 
@@ -842,11 +895,24 @@ class ml_list extends class_base
 	function parse_alias($args = array())
 	{
 		$tobj = $this->get_object($args["alias"]["target"]);
-		$tpl = ($tobj["meta"]["sub_form_type"] == 0) ? "subscribe.tpl" : "unsubscribe.tpl";
+		$sub_form_type = $tobj["meta"]["sub_form_type"];
+		if (!empty($args["alias"]["relobj_id"]))
+		{
+			$relobj = $this->get_object($args["alias"]["relobj_id"]);
+			if (!empty($relobj["meta"]["values"]["CL_ML_LIST"]["sub_form_type"]))
+			{
+				$sub_form_type = $relobj["meta"]["values"]["CL_ML_LIST"]["sub_form_type"];
+			};
+		}
+		$tpl = ($sub_form_type == 0) ? "subscribe.tpl" : "unsubscribe.tpl";
 		$this->read_template($tpl);
 		$this->vars(array(
 			"listname" => $tobj["name"],
-			"reforb" => $this->mk_reforb("subscribe",array("id" => $args["alias"]["target"],"section" => aw_global_get("section"))),
+			"reforb" => $this->mk_reforb("subscribe",array(
+				"id" => $args["alias"]["target"],
+				"rel_id" => $relobj["oid"],
+				"section" => aw_global_get("section"),
+			)),
 		));
 		return $this->parse();
 
@@ -855,6 +921,16 @@ class ml_list extends class_base
 	function subscribe($args = array())
 	{
 		$list_id = $args["id"];
+		$rel_id = $args["rel_id"];
+		$rx = $this->db_fetch_row("SELECT * FROM aliases WHERE target = '$list_id' AND relobj_id = '$rel_id'");
+		if (empty($rx))
+		{
+			die("miskit on mäda");
+		};
+		$list_obj = $this->get_object(array(
+			"oid" => $list_id,
+			"clid" => $this->clid,
+		));
 		if ($args["op"] == 1)
 		{
 			$ml_member = get_instance("mailinglist/ml_member");
@@ -872,7 +948,21 @@ class ml_list extends class_base
 				"list_id" => $args["id"],
 			));	
 		};
-		return $retval;
+		$relobj = $this->get_object(array(
+			"oid" => $rel_id,
+			"clid" => CL_RELATION,
+		));
+
+		$mx = $relobj["meta"]["values"]["CL_ML_LIST"];
+		if (!empty($mx["redir_obj"]))
+		{
+			$retval = $mx["redir_obj"];
+		}
+		elseif (!empty($list_obj["meta"]["redir_obj"]))
+		{
+			$retval = $list_obj["meta"]["redir_obj"];
+		}
+		return $this->cfg["baseurl"] . "/" . $retval;
 			
 	}
 };
