@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.55 2001/11/09 22:45:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.56 2001/11/12 22:45:53 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -1190,7 +1190,7 @@ class document extends aw_template
 		// logime aktsioone
 		$this->_log("document","muutis dokumenti <a href='".$GLOBALS["baseurl"]."/automatweb/".$this->mk_orb("change", array("id" => $id))."'>'".$data["title"]."'</a>");
 
-		return $this->mk_my_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id,"section" => $data["section"]));
 	}
 
 	function select_alias($docid, $entry_id)
@@ -1370,11 +1370,23 @@ class document extends aw_template
 			$period = 0;
 			$pername = "staatiline";
 		};
-		$this->vars(array("section" => $section,
-				  "period"  => $period,
-				  "parent"  => $parent,
-				  "pername" => $pername,
-					"reforb"	=> $this->mk_reforb("submit_add", array("parent" => $parent, "period" => $period, "user" => $user))));
+
+		$conf = new config;
+		$df = $conf->get_simple_config("docfolders");
+		if ($df != "")
+		{
+			$xml = new xml;
+			$_df = $xml->xml_unserialize(array("source" => $df));
+		}
+
+		$this->vars(array(
+			"section" => $section,
+			"period"  => $period,
+			"parent"  => $parent,
+			"pername" => $pername,
+			"reforb"	=> $this->mk_reforb("submit_add", array("parent" => $parent, "period" => $period, "user" => $user)),
+			"docfolders" => $this->picker($parent,$_df)
+		));
 		return $this->parse();
 	}
 
@@ -1382,6 +1394,10 @@ class document extends aw_template
 	{
 		$this->quote(&$arr);
 		extract($arr);
+		if ($docfolder)
+		{
+			$parent = $docfolder;
+		}
 		if ($period) 
 		{
 			$data["class_id"] = CL_PERIODIC_SECTION;
@@ -1425,6 +1441,12 @@ class document extends aw_template
 				case "title_clickable":
 					$vlist[] = "'1'";
 					break;
+				case "showlead":
+					$vlist[] = "'1'";
+					break;
+				case "tm":
+					$vlist[] = "'".date("d/m/y")."'";
+					break;
 				case "no_right_pane":
 					if ($GLOBALS["SITE_ID"] == 9)
 					{
@@ -1460,7 +1482,7 @@ class document extends aw_template
 		global $baseurl;
 		// hmpf, imho voiks see veidi globaalsem kontroll olla, kui
 		// ainult siin, selles yhes funktsioonid
-		if (!$this->prog_acl("view",PRG_MENUEDIT))
+		if (!$this->prog_acl("view",PRG_MENUEDIT) && !$this->prog_acl("view",PRG_DOCEDIT))
 		{
 			header("Location: $baseurl");
 			exit;
@@ -1524,8 +1546,10 @@ class document extends aw_template
 		$GLOBALS["lang_id"] = $document["lang_id"];
 
 		$alilist = array();
-		$jrk = array("-10" => "-10", 
-								"-9" => "-9", 
+		$jrk = array(
+			"Jrk" => "Jrk",
+			"-10" => "-10", 
+			"-9" => "-9", 
 			"-8" => "-8", 
 			"-7" => "-7", 
 			"-6" => "-6",
@@ -1571,7 +1595,7 @@ class document extends aw_template
 			$xml = new xml;
 			$_df = $xml->xml_unserialize(array("source" => $df));
 			$this->vars(array(
-				"docfolders" => $this->picker($document["parent"],$_df)
+				"docfolders" => $this->picker($oob["parent"],$_df)
 			));
 		}
 
@@ -1608,7 +1632,7 @@ class document extends aw_template
 											"tm"			=> trim($document["tm"]),
 											"subtitle"			=> trim($document["subtitle"]),
 											"link_text" => trim($document["link_text"]),
-											"reforb"	=> $this->mk_reforb("save", array("id" => $id)),
+											"reforb"	=> $this->mk_reforb("save", array("id" => $id,"section" => $section)),
 											"id" => $id,
 											"docid" => $id,
 											"previewlink" => $previewlink,
@@ -3003,28 +3027,46 @@ class document extends aw_template
 
 	function list_user_docs($arr)
 	{
+		extract($arr);
 		$this->read_template("user_docs.tpl");
 
 		$ob = new objects;
 		$obl = $ob->get_list(false,false,$GLOBALS["rootmenu"]);
+		$conf = new config;
+		$df = $conf->get_simple_config("docfolders");
+		if ($df != "")
+		{
+			$xml = new xml;
+			$_df = $xml->xml_unserialize(array("source" => $df));
+		}
 
-		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_DOCUMENT." AND status != 0 AND createdby ='".$GLOBALS["uid"]."'");
+		if (!$parent)
+		{
+			reset($_df);
+			list($parent,$parent) = each($_df);
+		}
+
+		$_df = array(0 => "Vaata / Liiguta") + $_df;
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_DOCUMENT." AND status != 0 AND parent = '$parent'");
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
 				"name" => $row["name"],
 				"created" => $this->time2date($row["created"],3),
-				"active" => checked($row["status"]),
-				"change" => $this->mk_my_orb("change", array("id" => $row["oid"])),
+				"active" => checked($row["status"] == 2),
+				"status" => $row["status"],
+				"change" => $this->mk_my_orb("change", array("id" => $row["oid"],"section" => $GLOBALS["doc_edit_section"])),
 				"parent_name" => $obl[$row["parent"]],
-				"docid" => $row["oid"]
+				"docid" => $row["oid"],
+				"ord" => $row["jrk"]
 			));
 			$rd = $this->parse("ROW");
 		}
 
 		$this->vars(array(
 			"ROW" => $rd,
-			"reforb" => $this->mk_reforb("submit_user_docs",array())
+			"reforb" => $this->mk_reforb("submit_user_docs",array("section" => $GLOBALS["section"])),
+			"docfolders" => $this->picker(0,$_df)
 		));
 
 		return $this->parse();
@@ -3034,14 +3076,36 @@ class document extends aw_template
 	{
 		extract($arr);
 
-		if (is_array($act))
+		if (is_array($old_act) && $save != "")
 		{
-			foreach($act as $docid => $stat)
+			foreach($old_act as $docid => $stat)
 			{
-				$this->upd_object(array("oid" => $docid, "status" => ($stat == 1 ? 2 : 1)));
+				$this->upd_object(array("oid" => $docid, "status" => ($act[$docid] == 1 ? 2 : 1)));
 			}
 		}
 
+<<<<<<< document.aw
+		if (is_array($ord) && $save != "")
+		{
+			foreach($ord as $docid => $_ord)
+			{
+				$this->upd_object(array("oid" => $docid, "jrk" => $_ord));
+			}
+		}
+
+		if (is_array($sel) && $move != "")
+		{
+			foreach($sel as $docid => $one)
+			{
+				if ($one == 1)
+				{
+					$this->upd_object(array("oid" => $docid, "parent" => $parent));
+				}
+			}
+		}
+		return $this->mk_my_orb("list_user_docs",array("parent" => $parent,"section" => $section));
+	}
+=======
 		return $this->mk_my_orb("list_user_docs");
 	}
 
