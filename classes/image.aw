@@ -452,5 +452,14 @@ class image extends aw_template
 		}
 		return $url;
 	}
+
+	////
+	// !returns an <img tag that refers to the image 
+	// $url - the url of the image in the >img tag
+	// $alt - alt text for the image
+	function make_img_tag($url, $alt = "")
+	{
+		return "<img src=\"$url\" alt=\"$alt\">";
+	}
 }
 ?>
