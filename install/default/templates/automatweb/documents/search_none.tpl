@@ -1,1 +1,0 @@
-<div class="textTahoma">Leiti <b>0</b> dokumenti, kuna puudub otsitav s&otilde;na.</div>
