@@ -28,7 +28,8 @@ class export extends aw_template
 			"application/pdf" => "pdf",
 			"application/x-javascript" => "js",
 			"application/zip" => "zip",
-			"application/msword" => "doc"
+			"application/msword" => "doc",
+			"application/pdf" => "pdf"
 		);
 		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?section=20&set_lang_id=2"] = "english";
 		$this->hash2url[2][$this->cfg["baseurl"]."/index.aw?set_lang_id=2"] = "english";
@@ -1068,6 +1069,7 @@ class export extends aw_template
 				$mn = str_replace("Ä", "A", $mn);
 				$mn = str_replace("Õ", "O", $mn);
 				$mn = str_replace("Ü", "U", $mn);
+				$mn = str_replace(chr(166),"z", $mn);
 				$mn = strip_tags($mn);
 
 				if ($mn != "")
