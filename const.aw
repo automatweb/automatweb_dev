@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.3 2001/05/21 21:19:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.4 2001/05/21 21:41:42 cvs Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -84,7 +84,7 @@ if (empty($admin_rootmenu2))
 // kui saidi const.aw ei defineeri seda, siis määrame default väärtuse
 if (empty($basedir))
 {
-	$basedir = "/www/automatweb_dev/public"; 								// the root of all evil ;)
+	$basedir = "/www/apache/domains/sam.elkdata.com/htdocs/automatweb_dev"; 								// the root of all evil ;)
 };
 // keemia. Kui oleme saidi adminnis sees, siis votame
 // templated siit
