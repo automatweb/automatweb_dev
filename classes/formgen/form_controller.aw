@@ -51,6 +51,7 @@ class form_controller extends form_base
 			$co["meta"]["errmsg"] = $errmsg;
 			$co["meta"]["show_errors_showctl"] = $show_errors_showctl;
 			$co["meta"]["warn_only_entry_controller"] = $warn_only_entry_controller;
+			$co["meta"]["no_var_replace"] = $no_var_replace;
 			$this->save_controller($co);
 		}
 		else
@@ -66,7 +67,8 @@ class form_controller extends form_base
 					"errmsg" => $errmsg,
 					"vars" => array(),
 					"show_errors_showctl" => $show_errors_showctl,
-					"warn_only_entry_controller" => $warn_only_entry_controller
+					"warn_only_entry_controller" => $warn_only_entry_controller,
+					"no_var_replace" => $no_var_replace
 				)
 			));
 		}
@@ -126,7 +128,8 @@ class form_controller extends form_base
 			"eq" => $co["meta"]["eq"],
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"show_errors" => checked($co["meta"]["show_errors_showctl"]),
-			"warn_only_entry_controller" => checked($co["meta"]["warn_only_entry_controller"])
+			"warn_only_entry_controller" => checked($co["meta"]["warn_only_entry_controller"]),
+			"no_var_replace" => checked($co['meta']['no_var_replace'])
 		));
 
 		$this->vars(array(
@@ -224,6 +227,11 @@ class form_controller extends form_base
 	// !this imports all the variable values to equasion $eq
 	function replace_vars($co,$eq,$add_quotes,$form_ref = false, $el_ref = false, $el_value = "")
 	{
+		if ($co['meta']['no_var_replace'] == 1)
+		{
+			return $eq;
+		}
+
 		if (is_array($co["meta"]["vars"]))
 		{
 			foreach($co["meta"]["vars"] as $var => $vd)

@@ -60,6 +60,9 @@
 </tr>
 <!-- END SUB: CHANGE2 -->
 <tr>
+	<td class="fform" colspan="2">&Auml;ra asenda kontrolleris muutujaid: <input type='checkbox' name='no_var_replace' value='1' {VAR:no_var_replace}></td>
+</tr>
+<tr>
 <td class="fform" colspan=2><input class='small_button' type='submit' VALUE='Salvesta'></td>
 </tr>
 </table>
