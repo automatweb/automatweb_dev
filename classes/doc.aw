@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.66 2004/03/09 12:23:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.67 2004/03/09 15:38:39 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -514,6 +514,11 @@ class doc extends class_base
 
 	function callback_get_doc_plugins($args = array())
 	{
+		if (!is_object($args["obj_inst"]))
+		{
+			return false;
+		};
+
                 $plugins = $this->parse_long_template(array(
                         "parent"=> $args["obj_inst"]->parent(),
                         "template_dir" => $this->template_dir,
