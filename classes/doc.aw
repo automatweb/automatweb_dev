@@ -1,11 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.92 2004/12/01 17:39:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.93 2004/12/07 16:32:22 ahti Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
-
 
 @classinfo trans=1 no_comment=1 relationmgr=yes
 
@@ -188,6 +187,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
+
+@reltype TIMING value=1 clid=CL_TIMING
+@caption Aeg
+
+@reltype REMINDER value=2 clid=CL_REMINDER
+@caption Meeldetuletus
 
 */
 
