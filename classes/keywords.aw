@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.57 2004/11/15 16:50:10 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.58 2005/01/10 15:30:01 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -53,22 +53,16 @@ class keywords extends class_base
 	function show_documents($id)
 	{
 		extract($id);
-		/*$conn = new connection();
-		$conns = $conn->find(array(
-			"from.class_id" => CL_DOCUMENT,
-			"to" => $id,
-		));*/
 		$obj = &obj($id);
 		$conns = $obj->connections_from(array("type" => "RELTYPE_KEYWORD"));
 		
+		$si = get_instance("install/site_list");
 		if($conns)
 		{
-			
 			$docs = new object_list($conns);
 			
 			if($docs->count() > 0)
 			{
-				
 				$docarr = &$docs->arr();
 				//Well if we have only one document linked with keyword, no point to show complete list
 				if($docs->count() == 1)
@@ -81,11 +75,16 @@ class keywords extends class_base
 				//$this->submerge = 1;
 				foreach ($docarr as $doc)
 				{
+					$burl = $si->get_url_for_site($doc->site_id());
 					$this->vars(array(
 						"date" => get_lc_date($doc->prop("modified")),
 						"title" => $doc->prop("title"),
 						"author" => $doc->prop("author"),
 						"id" => $doc->id(),
+						"lead" => $doc->prop("lead")."<br>",
+						"link" => $burl."/".$doc->id(),
+						"target" => ($doc->site_id() != $this->cfg["site_id"]) ? " target=\"_blank\" " : "",
+						"site_url" => $burl
 					));
 					$line.= $this->parse("LINE");			
 				}
@@ -101,93 +100,6 @@ class keywords extends class_base
 		return $retval;
 	}
 	
-	/** Kuvab keywordi lisamise vormi 
-		
-		@attrib name=new params=name default="0"
-		
-		@param parent required acl="add"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	/*function add($args = array())
-	{
-		extract($args);
-		$this->read_template("change.tpl");
-		$this->mk_path($parent,"Lisa võtmesõna");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit",array("parent" => $parent,"add" => 1)),
-		));
-		return $this->parse();
-	}*/
-
-	/** Kuvab keywordi muutmise vormi 
-		
-		@attrib name=change params=name default="0"
-		
-		@param id required acl="edit;view"
-		
-		@returns
-		
-		
-		@comment
-
-	**//*
-	function change($args = array())
-	{
-		extract($args);
-		$this->read_template("change.tpl");
-		$obj = new object($id);
-		$this->mk_path($obj->parent(),"Muuda võtmesõma");
-		$kw = $this->db_fetch_field("SELECT keyword FROM keywords WHERE oid = '$id'","keyword");
-		$this->vars(array(
-			"keyword" => $kw,
-			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
-		));
-		return $this->parse();
-	}*/
-
-	/** Submitib keywordi 
-		
-		@attrib name=submit params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**//*
-	function submit($args = array())
-	{
-		extract($args);
-		if ($add)
-		{
-			$o = obj();
-			$o->set_parent($parent);
-			$o->set_class_id(CL_KEYWORD);
-			$o->set_status(STAT_ACTIVE);
-			$o->set_name($keyword);
-			$id = $o->save();
-			$q = "INSERT INTO keywords (keyword,oid,type) VALUES ('$keyword','$id','1')";
-			$this->db_query($q);
-		}
-		else
-		{
-			$o = obj($id);
-			$o->set_name($keyword);
-			$o->save();
-			$q = "UPDATE keywords SET 
-				keyword = '$keyword'
-				WHERE oid = '$id'";
-			$this->db_query($q);
-		}
-		return $this->mk_my_orb("change",array("id" => $id));
-	}
-	*/
 	////
 	// Uuendab dokuga lingitud keywordide nimekrija
 	function update_relations($args = array())

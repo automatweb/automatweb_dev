@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.310 2004/12/27 12:44:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.311 2005/01/10 15:30:00 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -4267,36 +4267,44 @@ class document extends aw_template
 	//This could be bloody slow
 	function parse_keywords(&$content)
 	{
-		$cleaned = strip_tags($content);
+		$cleaned = str_replace(".", " ", str_replace("&nbsp;", "", strip_tags($content)));
 		$content_arr = preg_split('/[\s|\.|,]+/', $cleaned);		
 		$content_arr2 = $content_arr;	
 		
 		for($i=0; $i<count($content_arr); $i++)
 		{
-			$content_arr[$i] = "%$content_arr[$i]%";
+			$str = trim($content_arr[$i]);
+			if ($str != "")
+			{
+				$content_arr[$i] = "%".$str."%";
+			}
 		}
-		
-			
+
 		//Lets find keywords in document
 		$keywords = new object_list(array(
 			"class_id" => CL_KEYWORD,
 			"keyword" => $content_arr,
+			"site_id" => array()
 		));
 		
 		foreach ($keywords->arr() as $keyword)
-                {
-                        $keys_arr[$keyword->id()] = strtolower($keyword->prop("keyword")); //$keyword->id();
-                }
+		{
+			$keys_arr[strtolower($keyword->prop("keyword"))] = $keyword->id(); 
+		}
 
 		if(!$keys_arr)
 		{
 			return;
 		}
 
+		
 		for($i=0; $i<count($content_arr2); $i++)
 		{
-			if($keyid = array_search(strtolower($content_arr2[$i]), $keys_arr))
+			$kw = strtolower($content_arr2[$i]);
+			if (isset($keys_arr[$kw]))
 			{
+				$keyid = $keys_arr[$kw];
+
 				$href = html::href(array(
 					"caption" => $content_arr2[$i],
 					"url" => $this->mk_my_orb("show_documents", array(
@@ -4304,7 +4312,7 @@ class document extends aw_template
 						"section" => aw_global_get("section"),	
 					), CL_KEYWORD),
 				));
-				$content = str_replace($content_arr2[$i], $href, $content);	
+				$content = preg_replace("/([>|\s|\.|,|\&]+)(".preg_quote($content_arr2[$i]).")([\s|\.|,|\&|<]+)/imsU", "\\1".$href."\\3", $content);	
 			}
 		}
 		return $content;	

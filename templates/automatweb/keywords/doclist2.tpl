@@ -1,28 +1,26 @@
-<b>Dokumendid, m&auml;rks&ouml;aga '{VAR:keyword}'</b>
-<br /><br />
+
 <table cellspacing="0" cellpadding="0" width="100%">
-<!--
-<tr>
-	<td>&nbsp;Pealkiri&nbsp;</td>
-	<td>&nbsp;Autor&nbsp;</td>
-	<td class="textdate">&nbsp;Kuupäev&nbsp;</td>
-</tr>
--->
-
+<tr><td>
 <!-- SUB: LINE -->
-<tr>
-        <td>&nbsp;<a style="font-size: 140%; font-weight: bold; text-decoration: none; color: black;"  href="{VAR:id}">{VAR:title}</a>&nbsp;</td>
-        <td>&nbsp;{VAR:author}&nbsp;</td>
-</tr>
-<tr>
-        <td class="textdate" >&nbsp;{VAR:date}&nbsp;</td>
-        <td></td>
+<table border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+<td>
+<div style="margin: 0px; padding-top: 10px;">
+<a style="font-size: 140%; font-weight: bold; text-decoration: underline; color: black;" {VAR:target} href="{VAR:link}">{VAR:title}</a><br>
+<span class="textdate">{VAR:date} / {VAR:link}
+</span>
+</div>
+</td></tr>
+<tr><td>
+<div style="margin: 0px; padding: 10px 0px 0px;">
+{VAR:lead}
+</div>
 
+
+</td>
 </tr>
-<tr>
-<td colspan="2">
-        {VAR:lead}<br />
-</tr>
+</tbody></table>
+
 <!-- END SUB: LINE -->
-
+</td></tr>
 </table>
