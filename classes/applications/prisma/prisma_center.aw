@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.3 2004/06/02 10:36:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_center.aw,v 1.4 2004/06/04 10:27:53 kristo Exp $
 // prisma_center.aw -  
 /*
 
@@ -18,6 +18,12 @@
 @property show_entities type=callback callback=callback_show_entities group=center store=no
 @caption Tr&uuml;&uuml;kised
 
+@groupinfo jobs caption="T&auml;nased t&ouml;&ouml;d" 
+@default group=jobs
+
+@property jobs type=table store=no no_caption=1
+
+
 @groupinfo ovw caption="&Uuml;levaade" submit=no
 @default group=ovw
 
@@ -31,6 +37,11 @@
 @default group=ovw_week
 
 @property owv_week type=text store=no no_caption=1
+
+@groupinfo ovw_lines caption="Jooned" submit=no parent=ovw
+@default group=ovw_lines
+
+@property owv_lines type=text store=no no_caption=1
 
 
 
@@ -74,6 +85,13 @@ class prisma_center extends class_base
 			case "owv_week":
 				$prop["value"] = $this->get_overview_week($arr["obj_inst"]);
 				break;
+
+			case "owv_lines":
+				$prop["value"] = $this->get_overview_lines($arr["obj_inst"]);
+				break;
+
+			case "jobs":
+				$this->do_jobs_table($arr);
 		};
 		return $retval;
 	}
@@ -96,6 +114,9 @@ class prisma_center extends class_base
 					$this->process_entities($arr);
 				}
 				break;
+
+			case "jobs":
+				$this->do_save_resources($arr);
 		}
 		return $retval;
 	}	
@@ -564,7 +585,7 @@ class prisma_center extends class_base
 					}
 					$job = html::href(array(
 						"url" => $this->mk_my_orb("change", array("id" => $tmp->meta("job_id")), CL_PRISMA_ORDER),
-						"caption" => $job
+						"caption" => $job."<br>".date("H:i", $tmp->prop("start1"))." - ".date("H:i", $tmp->prop("end")),
 					));
 				}
 				else
@@ -704,6 +725,424 @@ class prisma_center extends class_base
 			$ret = reset($this->c_p);
 		}
 		return $ret;
+	}
+
+	function get_overview_lines($o)
+	{
+		$this->read_template("overview_lines.tpl");
+
+		// get all resources 
+		$resource_list = new object_list(array(
+			"class_id" => CL_WORKFLOW_RESOURCE,
+			"sort_by" => "objects.jrk"
+		));
+
+
+		$j_b_r = array();
+		$pr_by_event = array();
+		for($o = $resource_list->begin(); !$resource_list->end(); $o = $resource_list->next())
+		{
+			$j_b_r[$o->id()] = array();
+			$res_i = $o->instance();
+			foreach($res_i->get_events_for_resource(array("id" => $o->id())) as $evid)
+			{
+				$tmp = obj($evid);
+				$j_b_r[$o->id()][] = $tmp;
+				$job_o = obj($tmp->meta("job_id"));
+				$processing = $job_o->meta("processing");
+				if ($processing[$o->id()] == 1)
+				{
+					$pr_by_event[$evid] = 1;
+				}
+			}
+		}
+
+		$colors = array();
+
+		$res = "";
+		$resource_list = new object_list(array(
+			"class_id" => CL_WORKFLOW_RESOURCE,
+			"sort_by" => "objects.jrk"
+		));
+		for($o = $resource_list->begin(); !$resource_list->end(); $o = $resource_list->next())
+		{
+			$this->vars(array(
+				"res_name" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $o->id(), "group" => "calendar"), $o->class_id()),
+					"caption" => $o->name(),
+				)),
+				"r_date" => date("d.m.Y", time())
+			));
+
+			$shown = array();
+			$hour = "";
+			// get events for resource 
+			$times = array(); // one entry for each hour
+			$res_i = $o->instance();
+			$tsp = mktime(0,0,date("m"), date("d"), date("Y"));
+			foreach($res_i->get_events_for_resource(array("id" => $o->id())) as $evid)
+			{
+				$evo = obj($evid);
+				if (!isset($colors[$evo->name()]))
+				{
+					$colors[$evo->name()] = $this->get_rand_color();
+				}
+				$start = $evo->prop("start1");
+				$end = $evo->prop("end");
+				$n_hr = (($end - $start) / 3600);
+				for($i = 0; $i < $n_hr; $i++)
+				{
+					$tmp = $start + ($i * 3600);
+					// round to the beginning if the hour
+					$tmp -= $tmp % 3600;
+					$times[$tmp] = $evo;
+				}
+			}
+
+			for($i = 0; $i < 96; $i++)
+			{
+				$tsp = time() - (time() % (24*3600)) + ($i*(3600/4));
+				$tmp = $this->get_job_for_time($tsp, $j_b_r[$o->id()]);
+				$col = "#FFFFFF";
+				if (is_object($tmp))
+				{
+					$job = $tmp->name();
+					$col = ($colors[$job] ? $colors[$job]  : "#FFFFFF");
+					if ($pr_by_event[$tmp->id()])
+					{
+						$col = "#FF0000";
+					}
+					$job = html::href(array(
+						"url" => $this->mk_my_orb("change", array("id" => $tmp->meta("job_id")), CL_PRISMA_ORDER),
+						"caption" => $job."<br>".date("H:i", $tmp->prop("start1"))." - ".date("H:i", $tmp->prop("end")),
+					));
+				}
+				else
+				{
+					$job = " - ";
+				}
+
+				$this->vars(array(
+					"time" => date("H:i", $tsp),
+					"event" => ($shown[$job] ? "" : $job),
+					"color" => $col,
+				));
+				$hour .= $this->parse("HOUR");
+				$shown[$job] = true;
+			}
+
+			$this->vars(Array(
+				"HOUR" => $hour
+			));
+			$res .= $this->parse("RESOURCE");
+		}
+
+		$hh = "";
+		for($i = 0; $i < (96/4); $i++)
+		{
+			$tsp = time() - (time() % (24*3600)) + ($i*(3600/1));
+			$this->vars(array(
+				"tm" => date("H:i", $tsp)
+			));
+			$hh .= $this->parse("HOUR_HEAD");
+		}
+
+		$jbs = "";
+		$css = new aw_array($colors);
+		foreach($css->get() as $job_name => $job_c)
+		{
+			$this->vars(array(
+				"job_name" => $job_name,
+				"job_col" => $job_c
+			));
+			$jbs .= $this->parse("JOB");
+		}
+
+		$this->vars(array(
+			"JOB" => $jbs,
+			"HOUR_HEAD" => $hh,
+			"RESOURCE" => $res
+		));
+
+		return $this->parse();
+	}
+
+	function _init_jobs_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "job",
+			"caption" => "T&ouml;&ouml;",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => "Rea number",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "pred",
+			"caption" => "Eeldustegevused",
+			"align" => "left"
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Ressurss",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => "Millal t&ouml;&ouml;sse l&auml;heb",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "length",
+			"caption" => "Kaua kestab",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "buffer",
+			"caption" => "Puhveraeg",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "ready",
+			"caption" => "Millal valmis",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "processing",
+			"caption" => "T&ouml;&ouml;s",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "done",
+			"caption" => "Valmis",
+			"align" => "center"
+		));
+
+/*		$t->define_field(array(
+			"name" => "current",
+			"caption" => "Praegune ressursi tegevus",
+			"align" => "center",
+		));*/
+	}
+
+
+	function do_jobs_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_jobs_table($t);
+		$t->set_sortable(false);
+
+		$ol = new object_list(array(
+			"class_id" => CL_WORKFLOW_ENTITY_INSTANCE
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+		
+			$this->do_jobs_table_part(array(
+				"obj_inst" => obj($o->prop("obj_id")),
+				"table" => &$t
+			));
+		}
+	}
+
+	function do_jobs_table_part($arr)
+	{
+		$t =& $arr["table"];
+
+		$order = $arr["obj_inst"]->meta("order");
+		$pred = $arr["obj_inst"]->meta("pred");
+		$length = $arr["obj_inst"]->meta("length");
+		$buffer = $arr["obj_inst"]->meta("buffer");
+		$processing = $arr["obj_inst"]->meta("processing");
+		//echo dbg::dump($processing);
+		$done = $arr["obj_inst"]->meta("done");
+
+		load_vcl("date_edit");
+		$de = new date_edit();
+		$de->configure(array(
+			"day" => "",
+			"month" => "",
+			"year" => "",
+			"hour" => "",
+			"minute" => ""
+		));
+
+		if (!is_array($order))
+		{
+			$order = array();
+		}
+		$ord_change = false;
+		$that = get_instance("applications/prisma/prisma_order");
+		$srl = $that->_get_sel_resource_list($arr["obj_inst"]);
+		foreach($srl as $resid)
+		{
+			if (!$length[$resid])
+			{
+				$length[$resid] = 1; // default to 1h
+			}
+			if (!$order[$resid])
+			{
+				if (count($order) < 1)
+				{
+					$order[$resid] = 1;
+				}
+				else
+				{
+					$order[$resid] = max(array_values($order)) + 1; 
+				}
+				$ord_change = true;
+			}
+		}
+
+
+		$event_ids = $arr["obj_inst"]->meta("event_ids");
+		$this->cur_priority = $arr["obj_inst"]->prop("priority");
+
+		foreach($srl as $resid)
+		{
+			if ($event_ids[$resid])
+			{
+				$tmp = obj($event_ids[$resid]);
+				$this->times_by_resource[$resid] = $tmp->prop("start1");
+			}
+		}
+
+		foreach($srl as $resid)
+		{
+			$reso = obj($resid);
+
+			$processing_str = "";
+			//echo "for $resid event = ".$event_ids[$resid]." proc = ".$processing[$resid]." done = ".$done[$resid]." <br>";
+			if ($event_ids[$resid] && !$processing[$resid] && !$done[$resid])
+			{
+				// also check preds 
+				$ps_preds_ok = $that->do_check_ps_preds($resid, $pred, $processing, $order);
+				
+				if ($ps_preds_ok)
+				{
+					$processing_str = html::checkbox(array(
+						"name" => "processing[".$arr["obj_inst"]->id()."][$resid]",
+						"value" => 1,
+						"checked" => ($processing[$resid] == 1)
+					));
+				}
+			}
+
+			if ($processing_str == "")
+			{
+				$processing_str = html::hidden(array(
+					"name" => "processing[".$arr["obj_inst"]->id()."][$resid]",
+					"value" => $processing[$resid],
+				));
+				if ($processing[$resid] == 1)
+				{
+					$processing_str .= "Jah";
+				}
+			}
+
+			$done_str = "";
+			if ($event_ids[$resid] && $processing[$resid] && !$done[$resid])
+			{
+				$done_str = html::checkbox(array(
+					"name" => "done[".$arr["obj_inst"]->id()."][$resid]",
+					"value" => 1,
+					"checked" => ($done[$resid] == 1)
+				));
+			}
+
+			if ($done_str == "")
+			{
+				$done_str = html::hidden(array(
+					"name" => "done[".$arr["obj_inst"]->id()."][$resid]",
+					"value" => $done[$resid],
+				));
+				if ($done[$resid] == 1)
+				{
+					$done_str .= "Jah";
+				}
+			}
+
+			$time = date("d.m.Y H:i", $this->times_by_resource[$resid]);
+			$ready = date("d.m.Y H:i", $this->times_by_resource[$resid] + (3600 * ((float)str_replace(",", ".", $length[$resid]))));
+
+			$cur = "";
+			// get current event from resource calendar
+			$res_i = $reso->instance();
+			if (($curevent = $res_i->get_current_event($reso, time())))
+			{
+				$cur = $curevent->name();
+			}
+
+
+			if (!$order[$resid])
+			{
+				$order[$resid] = ++$cur_cnt;
+			}			
+			$t->define_data(array(
+				"job" => $arr["obj_inst"]->name(),
+				"name" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $resid, "group" => "calendar"), CL_WORKFLOW_RESOURCE),
+					"caption" => $reso->name()
+				)),
+				"time" => $time,
+				"ready" => $ready,
+				"order" => $order[$resid],
+				"pred" => $pred[$resid],
+				"length" => $length[$resid]." tundi",
+				"buffer" => ((int)$buffer[$resid])." tundi",
+				"processing" => $processing_str,
+				"done" => $done_str,
+				"current" => $cur
+			));
+		}
+	}
+	
+	function do_save_resources($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_WORKFLOW_ENTITY_INSTANCE
+		));
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$obj_inst = obj($o->prop("obj_id"));
+
+			$evids = $obj_inst->meta("event_ids");
+
+			// if processing is checked then mark the events as not-moveable
+			$newproc = new aw_array($arr["request"]["processing"][$obj_inst->id()]);
+			$curproc = $obj_inst->meta("processing");
+			foreach($newproc->get() as $resid => $one)
+			{
+				if ($one != 1)
+				{
+					continue;
+				}
+				if (!$curproc[$resid])
+				{
+					// DING!
+					$ev = obj($evids[$resid]);
+					$ev->set_meta("no_move", 1);
+					$ev->set_meta("task_priority", 2000000000);
+					$ev->save();
+					//echo "set event ".$ev->id()." as nomove! <br>";
+				}
+			}
+
+			$obj_inst->set_meta("processing", $arr["request"]["processing"][$obj_inst->id()]);
+			$obj_inst->set_meta("done", $arr["request"]["done"][$obj_inst->id()]);
+			$obj_inst->save();
+		}
 	}
 }
 ?>

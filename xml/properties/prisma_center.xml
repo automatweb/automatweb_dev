@@ -21,6 +21,15 @@
             <caption>Tr&amp;uuml;&amp;uuml;kised</caption>
       </property>
       <property>
+            <name>jobs</name>
+            <table>objects</table>
+            <group>jobs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>jobs</field>
+      </property>
+      <property>
             <name>owv_day</name>
             <table>objects</table>
             <group>ovw_day</group>
@@ -38,6 +47,15 @@
             <no_caption>1</no_caption>
             <field>owv_week</field>
       </property>
+      <property>
+            <name>owv_lines</name>
+            <table>objects</table>
+            <group>ovw_lines</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>owv_lines</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PRISMA_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -48,6 +66,9 @@
             <center>
                   <caption>Keskus</caption>
             </center>
+            <jobs>
+                  <caption>T&amp;auml;nased t&amp;ouml;&amp;ouml;d</caption>
+            </jobs>
             <ovw>
                   <caption>&amp;Uuml;levaade</caption>
                   <submit>no</submit>
@@ -62,6 +83,11 @@
                   <submit>no</submit>
                   <parent>ovw</parent>
             </ovw_week>
+            <ovw_lines>
+                  <caption>Jooned</caption>
+                  <submit>no</submit>
+                  <parent>ovw</parent>
+            </ovw_lines>
       </groupinfo>
       <reltypes>
             <WORKFLOW_CONFIG>

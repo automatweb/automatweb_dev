@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_resource.aw,v 1.1 2004/05/12 13:29:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_resource.aw,v 1.2 2004/06/04 10:27:54 kristo Exp $
 // workflow_resource.aw - Ressurss 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property is_subcontract type=checkbox ch_value=1 field=meta method=serialize
+@caption allhange
 
 @groupinfo overview caption="&Uuml;levaade" submit=no
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.3 2004/06/02 10:36:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.4 2004/06/04 10:27:53 kristo Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -15,6 +15,9 @@
 
 @property name type=textbox table=objects field=name 
 @caption Nimi
+
+@property number type=textbox table=objects field=meta method=serialize size=6
+@caption T&ouml;&ouml; number
 
 @property amount type=textbox size=5 field=aw_amount
 @caption Tr&uuml;kiarv
@@ -41,7 +44,7 @@
 
 @property resources type=table group=resources no_caption=1
 
-@property confirm type=checkbox ch_value=1 group=resources store=no
+@property confirm type=checkbox ch_value=1 group=resources field=meta method=serialize table=objects
 @caption Kinnita ajad
 
 @groupinfo work caption="T&ouml;&ouml;de seis"
@@ -241,6 +244,7 @@ class prisma_order extends class_base
 		$lds = $this->get_events_for_order(array(
 			"id" => $arr["obj_inst"]->id(),
 		));
+
 		if (sizeof($lds) > 0)
 		{
 			$ol = new object_list(array(
@@ -253,10 +257,17 @@ class prisma_order extends class_base
 			for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
 			{
 				$clinf = $this->cfg["classes"][$o->class_id()];
+
+				$j_id = $o->meta("job_id");
+				$j_o = obj($j_id);
+				$j_evids = $j_o->meta("event_ids");
+				$j_resid = array_search($o->id(), $j_evids);
+				$j_reso = obj($j_resid);
+
 				$t->add_item(array(
 					"timestamp" => $o->prop("start1"),
 					"data" => array(
-						"name" => " - ".date("H:i", $o->prop("end")).": ".$o->prop("name"),
+						"name" => " - ".date("H:i", $o->prop("end")).": ".$o->prop("name")." (".$j_reso->name().")",
 						"icon" => "", //icons::get_icon_url($o),
 						"link" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
 					),
@@ -291,7 +302,7 @@ class prisma_order extends class_base
 	{
 		$t->define_field(array(
 			"name" => "order",
-			"caption" => "J&auml;jekord",
+			"caption" => "Rea number",
 			"align" => "left"
 		));
 
@@ -304,6 +315,12 @@ class prisma_order extends class_base
 		$t->define_field(array(
 			"name" => "time",
 			"caption" => "Millal t&ouml;&ouml;sse l&auml;heb",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "ready",
+			"caption" => "Millal valmis",
 			"align" => "center"
 		));
 
@@ -346,7 +363,6 @@ class prisma_order extends class_base
 		}
 
 
-		$lut = $this->get_lut_by_pri($order, $length);
 		$event_ids = $arr["obj_inst"]->meta("event_ids");
 		$this->cur_priority = $arr["obj_inst"]->prop("priority");
 
@@ -383,7 +399,8 @@ class prisma_order extends class_base
 				continue;
 			}
 
-			$time = date("d.m.Y H:i", $this->times_by_resource[$resid])." - ".date("d.m.Y H:i", $this->times_by_resource[$resid] + (3600 * $length[$resid]));
+			$time = date("d.m.Y H:i", $this->times_by_resource[$resid]);
+			$ready = date("d.m.Y H:i", $this->times_by_resource[$resid] + (3600.0 * (str_replace(",", ".", $length[$resid]))));
 
 			$t->define_data(array(
 				"name" => html::href(array(
@@ -391,6 +408,7 @@ class prisma_order extends class_base
 					"caption" => $reso->name()
 				)),
 				"time" => $time,
+				"ready" => $ready,
 				"order" => $order[$resid],
 				"length" => $length[$resid]." tundi",
 				"status" => $status,
@@ -409,21 +427,36 @@ class prisma_order extends class_base
 		}
 
 		$event_ids = $arr["obj_inst"]->meta("event_ids");
-		$length = $arr["obj_inst"]->meta("length");
+		$length = $arr["request"]["length"]; //$arr["obj_inst"]->meta("length");
+		$buffer = $arr["request"]["buffer"]; //$arr["obj_inst"]->meta("buffer");
 
 		load_vcl("date_edit");
 		$de = new date_edit();
 
 		foreach($arr["request"]["time"] as $resid => $time_d)
 		{
+			//echo "time_d ".dbg::dump($time_d)." <br>";
 			$ts = $de->get_timestamp($time_d);
+			//echo "got ts ".date("d.m.Y H:i", $ts)." <br>";
+
 			$reso = obj($resid);
+			$end = $ts + (((float)str_replace(",", ".", $length[$resid])) * 3600);
 
 			if ($event_ids[$resid])
 			{
 				$ev = obj($event_ids[$resid]);
+
+				$dat_by_resid[$resid] = array(
+					"start" => $ev->prop("start1"),
+					"end" => $ev->prop("end"),
+					"buffer" => $ev->meta("buffer"),
+					"pred" => $ev->meta("pred")
+				);
+
 				$ev->set_prop("start1", $ts);
-				$ev->set_prop("end", $ts + ($length[$resid] * 3600));
+				$ev->set_prop("end", $end);
+				$ev->set_meta("buffer", $buffer[$resid]);
+				$ev->set_meta("pred", $arr["request"]["pred"][$resid]);
 				$ev->set_meta("task_priority", $arr["obj_inst"]->prop("priority"));
 				$ev->set_meta("job_id", $arr["obj_inst"]->id());
 				$ev->save();
@@ -431,12 +464,21 @@ class prisma_order extends class_base
 			else
 			{
 				// add an event
+				$dat_by_resid[$resid] = array(
+					"start" => 0,
+					"end" => 0,
+					"buffer" => 0,
+					"pred" => 0
+				);
+
 				$ev = obj();
 				$ev->set_parent($resid);
 				$ev->set_class_id(CL_CRM_MEETING);
 				$ev->set_name($arr["obj_inst"]->name());
 				$ev->set_prop("start1", $ts);
-				$ev->set_prop("end", $ts + ($length[$resid] * 3600));
+				$ev->set_prop("end", $end);
+				$ev->set_meta("pred", $arr["request"]["pred"][$resid]);
+				$ev->set_meta("buffer", $buffer[$resid]);
 				$ev->set_meta("task_priority", $arr["obj_inst"]->prop("priority"));
 				$ev->set_meta("job_id", $arr["obj_inst"]->id());
 				$ev->save();
@@ -451,14 +493,24 @@ class prisma_order extends class_base
 
 			// ach! if there are events during the one added with lower priority (if higer priority we fucked up earlier) 
 			// then we must move all of them to a later date. 
-			//echo "to add event to calendar, do move events lower, new event = ".date("d.m.Y H:i",$ts)." - ".date("d.m.Y H:i",$ts + ($length[$resid] * 3600))." <br>";
+			//echo "to add event to calendar, do move events lower, new event = ".date("d.m.Y H:i",$ts)." - ".date("d.m.Y H:i",$ts + (((float)str_replace(",", ".", $length[$resid])) * 3600))." <br>";
 		}
 
 		$arr["obj_inst"]->set_meta("event_ids", $event_ids);
 
+		// change the times as the user wanted
 		foreach($event_ids as $resid => $evid)
 		{
-			$this->do_move_events_lower($arr["obj_inst"], $resid,$event_ids[$resid]);
+			if (!$this->do_reschedule(obj($evid), $dat_by_resid[$resid]))
+			{
+				break;
+			}
+		}
+
+		// resolve event overlaps that happened after the changes the user wanted are made
+		foreach($event_ids as $resid => $evid)
+		{
+			$this->resolve_event_conflicts($resid);
 		}
 	}
 
@@ -488,6 +540,7 @@ class prisma_order extends class_base
 
 		$arr["obj_inst"]->set_meta("pred", $arr["request"]["pred"]);
 		$arr["obj_inst"]->set_meta("length", $arr["request"]["length"]);
+		$arr["obj_inst"]->set_meta("buffer", $arr["request"]["buffer"]);
 		$arr["obj_inst"]->set_meta("processing", $arr["request"]["processing"]);
 		//echo "set processing as ".dbg::dump($arr["request"]["processing"])." <br>";
 		$arr["obj_inst"]->set_meta("done", $arr["request"]["done"]);
@@ -497,7 +550,7 @@ class prisma_order extends class_base
 	{
 		$t->define_field(array(
 			"name" => "order",
-			"caption" => "J&auml;jekord",
+			"caption" => "Rea number",
 			"align" => "center"
 		));
 
@@ -526,6 +579,18 @@ class prisma_order extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "buffer",
+			"caption" => "Puhveraeg",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "ready",
+			"caption" => "Millal valmis",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "processing",
 			"caption" => "T&ouml;&ouml;s",
 			"align" => "center"
@@ -537,11 +602,11 @@ class prisma_order extends class_base
 			"align" => "center"
 		));
 
-		$t->define_field(array(
+/*		$t->define_field(array(
 			"name" => "current",
 			"caption" => "Praegune ressursi tegevus",
 			"align" => "center",
-		));
+		));*/
 	}
 
 
@@ -554,6 +619,7 @@ class prisma_order extends class_base
 		$order = $arr["obj_inst"]->meta("order");
 		$pred = $arr["obj_inst"]->meta("pred");
 		$length = $arr["obj_inst"]->meta("length");
+		$buffer = $arr["obj_inst"]->meta("buffer");
 		$processing = $arr["obj_inst"]->meta("processing");
 		//echo dbg::dump($processing);
 		$done = $arr["obj_inst"]->meta("done");
@@ -600,7 +666,6 @@ class prisma_order extends class_base
 		}
 
 
-		$lut = $this->get_lut_by_pri($order, $length);
 		$event_ids = $arr["obj_inst"]->meta("event_ids");
 		$this->cur_priority = $arr["obj_inst"]->prop("priority");
 
@@ -613,36 +678,9 @@ class prisma_order extends class_base
 			}
 			else
 			{
-				$reso = obj($resid);
-				$res_i = $reso->instance();
-
-				$params = array(
-					"o" => $reso,
-					"length" => $length[$resid] * 3600,
-					"ignore_events" => $event_ids,
-					"priority" => $this->cur_priority
-				);
-
-				if ($pred[$resid] != "")
-				{
-					$max_t = 0;
-					foreach(explode(",", $pred[$resid]) as $pred_num)
-					{
-						// pred_num is index, not resid
-						$pred_id = array_search($pred_num, $order);
-						$max_t = max($max_t, $this->req_get_time_for_resource($pred_id, $length, $order, $lut, $event_ids, $pred) + ($length[$pred_id] * 3600));
-					}
-					$params["min_time"] = $max_t;
-				}
-	
-				$ts = $res_i->get_next_avail_time_for_resource($params);
-				$this->times_by_resource[$resid] = $ts;
+				$this->req_get_time_for_resource($resid, $length, $order, $event_ids, $pred, $buffer);
 			}
 		}
-/*		foreach($this->times_by_resource as $resid => $ts)
-		{
-			echo "resid = ".$resid." ts = ".date("d.m.Y H:i", $ts)." <br>";
-		}*/
 
 		foreach($srl as $resid)
 		{
@@ -652,18 +690,29 @@ class prisma_order extends class_base
 			//echo "for $resid event = ".$event_ids[$resid]." proc = ".$processing[$resid]." done = ".$done[$resid]." <br>";
 			if ($event_ids[$resid] && !$processing[$resid] && !$done[$resid])
 			{
-				$processing_str = html::checkbox(array(
-					"name" => "processing[$resid]",
-					"value" => 1,
-					"checked" => ($processing[$resid] == 1)
-				));
+				// also check preds 
+				$ps_preds_ok = $this->do_check_ps_preds($resid, $pred, $processing, $order);
+				
+				if ($ps_preds_ok)
+				{
+					$processing_str = html::checkbox(array(
+						"name" => "processing[$resid]",
+						"value" => 1,
+						"checked" => ($processing[$resid] == 1)
+					));
+				}
 			}
-			else
+
+			if ($processing_str == "")
 			{
 				$processing_str = html::hidden(array(
 					"name" => "processing[$resid]",
 					"value" => $processing[$resid],
 				));
+				if ($processing[$resid] == 1)
+				{
+					$processing_str .= "Jah";
+				}
 			}
 
 			$done_str = "";
@@ -675,18 +724,25 @@ class prisma_order extends class_base
 					"checked" => ($done[$resid] == 1)
 				));
 			}
-			else
+
+			if ($done_str == "")
 			{
 				$done_str = html::hidden(array(
 					"name" => "done[$resid]",
 					"value" => $done[$resid],
 				));
+				if ($done[$resid] == 1)
+				{
+					$done_str .= "Jah";
+				}
 			}
 
-			$time = $de->gen_edit_form("time[$resid]", $this->times_by_resource[$resid], 2004, 2008, true)." - ".date("d.m.Y H:i", $this->times_by_resource[$resid] + (3600 * $length[$resid]));
+			$time = $de->gen_edit_form("time[$resid]", $this->times_by_resource[$resid], 2004, 2008, true);
+			$ready = date("d.m.Y H:i", $this->times_by_resource[$resid] + (3600 * ((float)str_replace(",",".",$length[$resid]))));
 			if ($event_ids[$resid] && $processing[$resid])
 			{
-				$time = date("d.m.Y H:i", $this->times_by_resource[$resid])." - ".date("d.m.Y H:i", $this->times_by_resource[$resid] + (3600 * $length[$resid]));
+				$time = date("d.m.Y H:i", $this->times_by_resource[$resid]);
+				$ready = date("d.m.Y H:i", $this->times_by_resource[$resid] + (3600 * ((float)str_replace(",", ".", $length[$resid]))));
 			}
 
 			$cur = "";
@@ -708,16 +764,22 @@ class prisma_order extends class_base
 					"caption" => $reso->name()
 				)),
 				"time" => $time,
+				"ready" => $ready,
 				"order" => $order[$resid],
 				"pred" => html::textbox(array(
 					"name" => "pred[$resid]",
-					"size" => 5,
+					"size" => 3,
 					"value" => $pred[$resid]
 				)),
 				"length" => html::textbox(array(
 					"name" => "length[$resid]",
-					"size" => 5,
+					"size" => 3,
 					"value" => $length[$resid]
+				))." tundi",
+				"buffer" => html::textbox(array(
+					"name" => "buffer[$resid]",
+					"size" => 3,
+					"value" => $buffer[$resid]
 				))." tundi",
 				"processing" => $processing_str,
 				"done" => $done_str,
@@ -822,139 +884,149 @@ class prisma_order extends class_base
 		return $tmp->name();
 	}
 
-	function get_lut_by_pri($order, $length)
-	{
-		$lut = array();
-		$awa = new aw_array($order);
-		foreach($awa->get() as $t_resid => $ov)
-		{
-			if (isset($lut[$ov]))
-			{
-				// if there already is a priority then check length and the longer one wins
-				$prev_len = $length[$lut[$ov]];
-				$cur_len = $length[$t_resid];
-				if ($cur_len > $prev_len)
-				{
-					$lut[$ov] = $t_resid;
-				}
-			}
-			else
-			{
-				$lut[$ov] = $t_resid;
-			}
-		}
-		return $lut;
-	}
-
-	function req_get_time_for_resource($resid, $length, $order, $lut, $event_ids, $pred)
+	function req_get_time_for_resource($resid, $length, $order, $event_ids, $pred, $buffer, $min_time = NULL)
 	{
 		$reso = obj($resid);
+		//echo "enter rgt for resource ".$reso->name()." <br>";
 		$res_i = $reso->instance();
 
+		$real_length = (((float)str_replace(",", ".", $length[$resid])) * 3600);
+			
 		$params = array(
 			"o" => $reso,
-			"length" => $length[$resid] * 3600,
+			"length" => $real_length,
 			"ignore_events" => $event_ids,
 			"priority" => $this->cur_priority
 		);
 
+		$max_t = 0;
+
+		if ($min_time != NULL)
+		{
+			$max_t = $min_time;
+			$this->min_times_by_resource[$resid] = $max_t;
+		}
+
+		if ($this->min_times_by_resource[$resid])
+		{
+			$max_t = $this->min_times_by_resource[$resid];
+		}
+
 		if ($pred[$resid] != "")
 		{
-			$max_t = 0;
 			foreach(explode(",", $pred[$resid]) as $pred_num)
 			{
 				// pred_num is index, not resid
 				$pred_id = array_search($pred_num, $order);
 				//echo "pred_id for $pred_num = $pred_id <br>";
-				$max_t = max($max_t, $this->req_get_time_for_resource($pred_id, $length, $order, $lut, $event_ids, $pred) + ($length[$pred_id] * 3600));
-				//echo "got max_t for $resid predecessor $pred_num : ".date("d.m.Y H:i", $max_t)." <br>";
+
+				error::throw_if(!$pred_id, array(
+					"id" => "ERR_P_PREDICATE",
+					"msg" => "no predicate found for predicate number $pred_num <br>"
+				));
+
+				$real_length = (((float)str_replace(",", ".", $length[$pred_id])) * 3600);
+				$buffer_len = (((float)str_replace(",", ".", $buffer[$pred_id])) * 3600);
+
+				// min time is prev predicate time + prev predicate buffer time
+				$rgtfr = $this->req_get_time_for_resource($pred_id, $length, $order, $event_ids, $pred, $buffer);
+				$max_t = max($max_t, $rgtfr + $real_length + $buffer_len);
+				//echo "fir predicate $pred_id (num = $pred_num) buffer len = $buffer_len real len = $real_length rgtfr = ".date("d.m.Y H:i", $rgtfr)."<br>";
 			}
+				//echo "got min_t for $resid as ".date("d.m.Y H:i", $max_t)." <br>";
+		}
+
+		if ($max_t)
+		{
 			$params["min_time"] = $max_t;
 		}
 
 		$ts = $res_i->get_next_avail_time_for_resource($params);
+		//echo "final ts for resource ".$reso->name()." = ".date("d.m.Y H:i", $ts)." <br>";
 		$this->times_by_resource[$resid] = $ts;
 		return $ts;
 	}
 
-	function do_move_events_lower($o, $resid, $cur_event_id = false)
+	function do_reschedule($overlap, $event_data)
 	{
-		classload("date_calc");
-		// get all events for that timespan
-		$reso = obj($resid);
-		$res_i = $reso->instance();
-
-		$order = $o->meta("order");
-		$length = $o->meta("length");
-		$lut = $this->get_lut_by_pri($order, $length);
-
-		// while $moves
-		$moves = true;
-		while ($moves)
+		// must not assume that the event needs to be moved. 
+		// check if the user has changed event data
+		// event_data - start, length, buffer, pred
+		if ($event_data["start"] == $overlap->prop("start1") &&
+			$event_data["end"] == $overlap->prop("end") &&
+			$event_data["buffer"] == $overlap->meta("buffer") &&
+			$event_data["pred"] == $overlap->meta("pred")
+		)
 		{
-			$moves = false;
-			$evids = $res_i->get_events_for_resource(array(
-				"id" => $resid
-			));
-
-			//	if overlapping-events-exist
-			//		get first overlap
-			$overlap = $this->get_first_overlapping_event($evids);
-			//echo "check for overlap in ".dbg::dump($evids)." got res = ".dbg::dump($overlap)." <br>";
-			if ($overlap)
-			{
-				$overlap_len = $overlap->prop("end") - $overlap->prop("start1");
-
-				// find the job and resource for the overlap event. 
-				$job_id = $overlap->meta("job_id");
-				$job_o = obj($job_id);
-				$j_events = $job_o->meta("event_ids");
-				$j_length = $job_o->meta("length");
-				$j_order = $job_o->meta("order");
-				$j_lut = $this->get_lut_by_pri($j_order, $j_length);
-				$j_pred = $job_o->meta("pred");
-				//echo "pred = ".dbg::dump($j_pred)." order = ".dbg::dump($j_order)." for $job_id meta = ".dbg::dump($job_o->meta())."<br>";
-				$overlap_resid = array_search($overlap->id(), $j_events);
-/*				if (!$overlap_resid)
-				{
-					continue;
-				}*/
-//				echo "overlap_resid = $overlap_resid , overlap id = ".$overlap->id()." j_evs = ".dbg::dump($j_events)." <br>";
-
-
-				//		find first avail time
-				$this->cur_priority = $overlap->meta("task_priority");
-				$this->times_by_resource = array();
-				$ts = $this->req_get_time_for_resource($overlap_resid, $j_length, $j_order, $j_lut, array($overlap->id() => $overlap->id()), $j_pred);
-				//echo "got new ts as ".date("d.m.Y H:i", $ts)." len = $overlap_len <br>";
-				$overlap->set_prop("start1", $ts);
-				$overlap->set_prop("end", $ts + $overlap_len);
-				$overlap->save();
-
-				//		move = true
-				$moves = true;
-
-				// also, calc the timestamps for all the other events for the job that the first event was in and move them forward.
-				foreach($j_events as $j_resid => $j_evid)
-				{
-					if ($j_evid == $overlap->id())
-					{
-						continue;
-					}
-
-					$ts = $this->req_get_time_for_resource($j_resid, $j_length, $j_order, $j_lut, array($j_evid => $j_evid), $j_pred);
-					$j_evo = obj($j_evid);
-					if ($ts > $j_evo->prop("start1"))
-					{
-						$j_len = $j_evo->prop("end") - $j_evo->prop("start1");
-						$j_evo->set_prop("start1", $ts);
-						$j_evo->set_prop("end", $ts + $j_len);
-						$j_evo->save();
-					}
-				}
-			}
-			// end while
+			//return true;
 		}
+
+		//echo "no match ".$overlap->id()." ed = ".date("d.m.Y H:i", $event_data["start"])." start1 = ".date("d.m.Y H:i", $overlap->prop("start1"))." end = ".$overlap->prop("end")." buffer = ".$overlap->meta("buffer")." pred = ".$overlap->meta("pred")."<br>";
+
+		$overlap_len = $overlap->prop("end") - $overlap->prop("start1");
+
+		// find the job and resource for the overlap event. 
+		$job_id = $overlap->meta("job_id");
+		$job_o = obj($job_id);
+		$j_events = $job_o->meta("event_ids");
+		$j_length = $job_o->meta("length");
+		$j_order = $job_o->meta("order");
+		$j_pred = $job_o->meta("pred");
+		$j_buffer = $job_o->meta("buffer");
+		$overlap_resid = array_search($overlap->id(), $j_events);
+
+		//echo "overlap_resid = $overlap_resid , overlap id = ".$overlap->id()." j_evs = ".dbg::dump($j_events)." <br>";
+
+
+		//		find first avail time
+		$this->cur_priority = $overlap->meta("task_priority");
+		$this->times_by_resource = array();
+
+		// in event ids, the vents for all the resources for the job must be given
+		$j_events_keys = $this->make_keys(array_values($j_events));
+
+		//echo "glob date = ".date("d.m.Y H:i:s", $event_data["start"])." evdate = ".date("d.m.Y H:i:s", $overlap->prop("start1"))." <br>";
+		$ts = $this->req_get_time_for_resource($overlap_resid, $j_length, $j_order, $j_events_keys, $j_pred, $j_buffer, $overlap->prop("start1"));
+
+		$res_obj = obj($overlap_resid);
+		//echo "for resource ".$res_obj->name()." previous start was ".date("d.m.Y H:i", $overlap->prop("start1"))." end was ".date("d.m.Y H:i", $overlap->prop("end"))."<br>";
+		$overlap->set_prop("start1", $ts);
+		$overlap->set_prop("end", $ts + $overlap_len);
+
+		//echo "for resource ".$res_obj->name()." got new start ".date("d.m.Y H:i", $overlap->prop("start1"))." end ".date("d.m.Y H:i", $overlap->prop("end"))."<br>";
+		$overlap->save();
+
+		//		move = true
+		$moves = true;
+
+		// also, calc the timestamps for all the other events for the job that the first event was in and move them forward.
+		foreach($j_events as $j_resid => $j_evid)
+		{
+			if ($j_evid == $overlap->id())
+			{
+				continue;
+			}
+
+			$this->times_by_resource = array();
+			$ts = $this->req_get_time_for_resource($j_resid, $j_length, $j_order, $j_events_keys, $j_pred, $j_buffer);
+			$j_evo = obj($j_evid);
+			//if ($ts > $j_evo->prop("start1"))
+			//{
+				$j_len = $j_evo->prop("end") - $j_evo->prop("start1");
+
+				$res_obj = obj($j_resid);
+				//echo "for resource ".$res_obj->name()." previous start was ".date("d.m.Y H:i", $j_evo->prop("start1"))." end was ".date("d.m.Y H:i", $j_evo->prop("end"))."<br>";
+
+				$j_evo->set_prop("start1", $ts);
+				$j_evo->set_prop("end", $ts + $j_len);
+
+				//echo "for resource ".$res_obj->name()." got new start ".date("d.m.Y H:i", $j_evo->prop("start1"))." end ".date("d.m.Y H:i", $j_evo->prop("end"))."<br>";
+
+				$j_evo->save();
+			//}
+		}
+
+		return true;
 	}
 
 	function get_first_overlapping_event($evids)
@@ -993,7 +1065,9 @@ class prisma_order extends class_base
 					continue;
 				}
 
-				if (timespans_overlap($event->prop("start1"), $event->prop("end"), $event2->prop("start1"), $event2->prop("end")))
+				$ev1_end = $event->prop("end"); // + (((float)str_replace(",", ".", $event->meta("buffer"))) * 3600);
+				$ev2_end = $event2->prop("end"); // + (((float)str_replace(",", ".", $event2->meta("buffer"))) * 3600);
+				if (timespans_overlap($event->prop("start1"), $ev1_end, $event2->prop("start1"), $ev2_end))
 				{
 					//echo "overlap for ".$event2->id()." with ".$event->id()." (".date("d.m.Y H:i", $event2->prop("start1"))." - ".date("d.m.Y H:i", $event2->prop("end"))." vs ".date("d.m.Y H:i", $event->prop("start1"))." - ".date("d.m.Y H:i", $event->prop("end")).")<br>";
 					// return the one with the lower priority
@@ -1007,6 +1081,96 @@ class prisma_order extends class_base
 		}
 
 		return false;
+	}
+
+
+	function resolve_event_conflicts($resid)
+	{
+		classload("date_calc");
+		// get all events for that timespan
+		$reso = obj($resid);
+		$res_i = $reso->instance();
+
+		// while $moves
+		$moves = true;
+		while ($moves)
+		{
+			$moves = false;
+			$evids = $res_i->get_events_for_resource(array(
+				"id" => $resid
+			));
+
+			//        if overlapping-events-exist
+			//                get first overlap
+			$overlap = $this->get_first_overlapping_event($evids);
+			//echo "check for overlap in ".dbg::dump($evids)." got res = ".dbg::dump($overlap)." <br>";
+			if ($overlap)
+			{
+				$overlap_len = $overlap->prop("end") - $overlap->prop("start1");
+
+				// find the job and resource for the overlap event. 
+				$job_id = $overlap->meta("job_id");
+				$job_o = obj($job_id);
+				$j_events = $job_o->meta("event_ids");
+				$j_length = $job_o->meta("length");
+				$j_order = $job_o->meta("order");
+				$j_pred = $job_o->meta("pred");
+				$j_buffer = $job_o->meta("buffer");
+				$overlap_resid = array_search($overlap->id(), $j_events);
+
+				$j_events_keys = $this->make_keys(array_values($j_events));
+
+				// find first avail time
+				$this->cur_priority = $overlap->meta("task_priority");
+				$this->times_by_resource = array();
+				$ts = $this->req_get_time_for_resource($overlap_resid, $j_length, $j_order, $j_events_keys, $j_pred, $j_buffer);
+				//echo "got new ts as ".date("d.m.Y H:i", $ts)." len = $overlap_len <br>";
+				$overlap->set_prop("start1", $ts);
+				$overlap->set_prop("end", $ts + $overlap_len);
+				$overlap->save();
+
+				//                move = true
+				$moves = true;
+
+				// also, calc the timestamps for all the other events for the job that the first event was in and move them forward.
+				foreach($j_events as $j_resid => $j_evid)
+				{
+					if ($j_evid == $overlap->id())
+					{
+						continue;
+					}
+
+					$ts = $this->req_get_time_for_resource($j_resid, $j_length, $j_order, $j_events_keys, $j_pred, $j_buffer);
+					$j_evo = obj($j_evid);
+					//if ($ts > $j_evo->prop("start1"))
+					//{
+						$j_len = $j_evo->prop("end") - $j_evo->prop("start1");
+						$j_evo->set_prop("start1", $ts);
+						$j_evo->set_prop("end", $ts + $j_len);
+						$j_evo->save();
+					//}
+				}
+			}
+			// end while
+		}
+	}
+
+	function do_check_ps_preds($resid, $pred, $processing, $order)
+	{
+		if ($pred[$resid] == "")
+		{
+			return true;
+		}
+
+		$ret = true;
+		foreach(explode(",", $pred[$resid]) as $pred_num)
+		{
+			$pred_id = array_search($pred_num, $order);
+			$ret &= ($processing[$pred_id] == 1);
+			$ret &= $this->do_check_ps_preds($pred_id, $pred, $processing, $order);
+		}
+
+		return $ret;
 	}
 }
 ?>

@@ -9,6 +9,16 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>number</name>
+            <table>objects</table>
+            <group>generalinf</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>6</size>
+            <caption>T&amp;ouml;&amp;ouml; number</caption>
+      </property>
+      <property>
             <name>amount</name>
             <table>aw_prisma_orders</table>
             <group>generalinf</group>
@@ -76,12 +86,12 @@
       </property>
       <property>
             <name>confirm</name>
-            <table>aw_prisma_orders</table>
+            <table>objects</table>
             <group>resources</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <store>no</store>
-            <field>confirm</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Kinnita ajad</caption>
       </property>
       <property>
