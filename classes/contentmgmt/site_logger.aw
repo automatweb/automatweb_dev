@@ -41,7 +41,7 @@ class site_logger extends core
 				preg_match("/restrict_search_val=([^&$]*)/",$url,$mt);
 				$names[] = urldecode($mt[1]);
 			}
-			$path_str .= "/".join("/".$names);
+			$path_str .= "/".join("/",$names);
 		}
 
 		// evil e-mail link tracking code
