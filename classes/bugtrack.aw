@@ -430,7 +430,7 @@ class bugtrack extends aw_template
 			$this->vars(array(
 				"m_uid" => $row["uid"],
 				"m_date" => $this->time2date($row["tm"],2),
-				"m_text" => format_text($row["comment"])
+				"m_text" => create_links(format_text($row["comment"]))
 			));
 			$l.=$this->parse("COMMENT");
 		}
@@ -451,7 +451,7 @@ class bugtrack extends aw_template
 			"time_fixed" => $date_edit->gen_edit_form("time_fixed",$bug["timeready"]),
 			"time_fixed_v" => $this->time2date($bug["timeready"],2),
 			"title" => $bug["title"],
-			"m_text" => format_text($bug["text"]),
+			"m_text" => create_links(format_text($bug["text"])),
 			"hours" => $bug["hours"],
 			"statuses" => $this->picker($bug["status"],$this->statlist),
 			"COMMENT" => $l,
