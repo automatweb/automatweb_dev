@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.20 2004/07/20 13:40:37 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.21 2004/09/10 12:07:36 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -186,6 +186,7 @@ class vcalendar extends aw_template
 		};
 
 		$this->evt_tpl = get_instance("aw_template");
+
 		$this->evt_tpl->tpl_init($this->cal_tpl_dir);
 		$tpl = $this->range["viewtype"] == "relative" ? "sub_event2.tpl" : "sub_event.tpl";
 		$this->evt_tpl->read_template($tpl);
@@ -805,6 +806,30 @@ class vcalendar extends aw_template
 		{
 			$evt["link"] = $evt["url"];
 		};
+		
+		if ($this->evt_tpl->template_has_var("first_image"))
+		{
+			$evt_obj = new object($evt["id"]);
+			$pic_conns = $evt_obj->connections_from(array(
+				"type" => "RELTYPE_PICTURE",
+			));
+			$first = reset($pic_conns);
+			$img_url = "/img/trans.gif";
+			$img = get_instance(CL_IMAGE);
+			if (is_object($first))
+			{
+				$img_url = $img->get_url_by_id($first->prop("to"));
+			};
+			$evt["first_image"] = $img_url;
+		};
+
+		$this->evt_tpl->vars($evt);
+
+		$dt = date("d",$evt["start1"]);
+                $mn = get_lc_month(date("m",$evt["start1"]));
+                $mn .= " " . date("H:i",$evt["start1"]);
+
+		
 		$this->evt_tpl->vars(array(
 			"time" => date("H:i",$evt["timestamp"]),
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
@@ -816,8 +841,12 @@ class vcalendar extends aw_template
 			"modifiedby" => $evt["modifiedby"],
 			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
 			"COMMENT" => "",
-			'comment' => $evt['comment'],
+			"comment" => $evt["comment"],
+			"day_name" => strtoupper(substr(get_lc_weekday(date("w",$evt["start1"])),0,1)),
+                        "date_and_time" => $dt . ". " . $mn,
+
 		));
+
 
 		if (!empty($evt["comment"]))
 		{
