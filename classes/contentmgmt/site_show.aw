@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.99 2004/11/12 10:18:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.100 2004/11/15 17:15:18 kristo Exp $
 
 /*
 
@@ -637,6 +637,10 @@ class site_show extends class_base
 				$filter["lang_id"] = array();
 			}
 
+			if ($no_in_promo)
+			{
+				$filter["no_show_in_promo"] = new obj_predicate_not(1);
+			}
 			$documents = new object_list($filter);
 
 			$rsid = aw_ini_get("site_id");
@@ -645,10 +649,6 @@ class site_show extends class_base
 			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
 			{
 				if ($o->site_id() != $rsid && !$o->is_brother())
-				{
-					continue;
-				}
-				if ($no_in_promo && $o->prop("no_show_in_promo") == 1)
 				{
 					continue;
 				}
