@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.189 2003/05/14 11:18:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.190 2003/05/14 11:36:22 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -302,7 +302,8 @@ class core extends db_connector
 		{
 			$ps = " AND parent = $parent ";
 		};
-		$q = "SELECT * FROM objects	WHERE alias = '$alias' AND status = 2 $ps $ss";
+		$site_id = aw_ini_get("site_id");
+		$q = "SELECT * FROM objects WHERE alias = '$alias' AND site_id = '$site_id' AND status = 2 $ps";
 		$res = $this->db_fetch_row($q);
 		// also unserialize metadata
 		if ($res)
