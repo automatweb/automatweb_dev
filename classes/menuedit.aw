@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.131 2002/07/16 19:22:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.132 2002/07/17 00:05:31 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -5641,7 +5641,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function invalidate_menu_cache($ar)
 	{
 		$cache = new cache;
-		$cache->file_invalidate("menuedit::menu_cache::lang::".aw_global_get("lang_id")."::site_id::".$this->cfg["site_id"]);
+
 		// here we gots to invalidate the objects::get_list cache as well, cause it also contains menus
 		// but that's gonna be a bit harder, cause it might be in a zillion different files and we must unlink
 		// all of them. so scan the damn folder for all those files
@@ -5650,6 +5650,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		  while (($file = readdir($dir)) !== false) 
 			{
 				if (substr($file,0,strlen("objects::get_list::")) == "objects::get_list::")
+				{
+					$cache->file_invalidate($file);
+				}
+				else
+				if (substr($file,0,strlen("menuedit::menu_cache::lang::".aw_global_get("lang_id")."::site_id::".$this->cfg["site_id"])) == "menuedit::menu_cache::lang::".aw_global_get("lang_id")."::site_id::".$this->cfg["site_id"])
 				{
 					$cache->file_invalidate($file);
 				}
