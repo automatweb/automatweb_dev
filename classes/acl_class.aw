@@ -69,7 +69,7 @@ class acl_class extends aw_template
 				"role" => $role,
 				"chain" => $chain,
 				"groups" => $groups,
-			);
+			)
 		));
 
 		$ags = array();
