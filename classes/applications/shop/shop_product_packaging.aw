@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.12 2004/12/27 12:31:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.13 2005/01/18 10:51:25 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -325,6 +325,10 @@ class shop_product_packaging extends class_base
 				"NO_URL_IN_DATA" => $l_inst->parse("NO_URL_IN_DATA")
 			));
 		}
+
+		$l_inst->vars(array(
+			"logged" => (aw_global_get("uid") == "" ? "" : $l_inst->parse("logged"))
+		));
 
 		return $l_inst->parse();
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.22 2004/12/27 12:31:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.23 2005/01/18 10:51:25 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -652,6 +652,7 @@ class shop_order extends class_base
 				'order_data_color' => $ord_item_data[$prod->id()]['color'],
 				'order_data_size' => $ord_item_data[$prod->id()]['size'],
 				'order_data_price' => $ord_item_data[$prod->id()]['price'],
+				"logged" => (aw_global_get("uid") == "" ? "" : $this->parse("logged"))
 			));
 
 			$total += ($pr * $tp[$prod->id()]);
@@ -717,6 +718,7 @@ class shop_order extends class_base
 				}
 			}
 
+			$vars["logged"] = $this->parse("logged");
 			$this->vars($vars);
 		}
 

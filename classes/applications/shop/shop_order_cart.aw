@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.24 2004/12/27 12:31:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.25 2005/01/18 10:51:25 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -206,6 +206,7 @@ class shop_order_cart extends class_base
 				}
 			}
 
+			$vars["logged"] = $this->parse("logged");
 			$this->vars($vars);
 		}
 
@@ -823,6 +824,7 @@ class shop_order_cart extends class_base
 					$vars[$prefix.$opk] = $opv;
 				}
 			}
+			$vars["logged"] = $this->parse("logged");
 			$this->vars($vars);
 		}
 
