@@ -95,7 +95,7 @@ class relationmgr extends aw_template
 			{
 				foreach($val as $key2 => $val2)
 				{
-					if($adc->can_access_class($adc, $val2))
+					if($atc->can_access_class($adc, $val2))
 					{
 						$tmp[$key][$key2] = $val2;
 					}
