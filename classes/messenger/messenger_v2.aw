@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.7 2003/09/29 13:21:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.8 2003/10/23 15:58:46 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -19,7 +19,8 @@ caption Identiteet
 @property config type=relpicker reltype=RELTYPE_MAIL_CONFIG
 @caption Konfiguratsioon
 
-
+@property user_messenger type=checkbox 
+@caption Kasutaja default messenger
 
 @property mailbox type=hidden group=main_view
 @caption Mailbox ID (sys)
@@ -105,12 +106,43 @@ class messenger_v2 extends class_base
 		$this->outbox = "INBOX.Sent-mail";
 	}
 
+	function my_messages($arr)
+	{
+		$users = get_instance("users");
+		$obj_id = $users->get_user_config(array(
+				"uid" => aw_global_get("uid"),
+				"key" => "user_messenger"));
+
+		if (empty($obj_id))
+		{
+			return "kulla mees, sa pole omale default messengeri ju valinud?";
+		};
+		$arr["id"] = $obj_id;
+		$arr["group"] = "main_view";
+		return $this->change($arr);
+
+
+	}
+
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "user_messenger":
+				$users = get_instance("users");
+				$obj_id = $arr["obj_inst"]->id();
+				if ($obj_id == $users->get_user_config(array(
+                                                "uid" => aw_global_get("uid"),
+                                                "key" => "user_messenger")))
+                                {
+                                        $data['checked'] = true;
+
+                                }
+                                $data['ch_value'] = $obj_id;
+				break;
+
 			case "message_list":
 				if (empty($arr["request"]["msgid"]))
 				{
@@ -189,6 +221,26 @@ class messenger_v2 extends class_base
 			case "autofilter_delay":
 				$this->schedule_filtering($arr);
 				break;
+
+			case "user_messenger":
+				$users = get_instance("users");
+				$kb = $users->get_user_config(array(
+                                        "uid" => aw_global_get("uid"),
+                                        "key" => "user_messenger",
+                                ));
+				$obj_id = $arr["obj_inst"]->id();
+                                if(($kb == $obj_id) || ($kb == ''))
+                                {
+                                        $users->set_user_config(array(
+                                                "uid" => aw_global_get("uid"),
+                                                "key" => "user_messenger",
+                                                "value" => $data["value"],
+                                        ));
+                                }
+				break;
+
+                        break;
+
 
 			case "foldername":
 				// intercept it, create the folder .. and then do what?
@@ -1207,6 +1259,11 @@ class messenger_v2 extends class_base
 
 		$req_grp = $arr["request"]["group"];
 
+		if ($arr["id"] == "msg_view" && $req_grp != "main_view")
+		{
+			return false;
+		};
+		
 		if ($arr["id"] == "msg_view" && $req_grp != "msg_view")
 		{
 			return false;
