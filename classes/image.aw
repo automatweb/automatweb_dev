@@ -1,30 +1,37 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.41 2003/02/03 16:15:49 duke Exp $
 // image.aw - image management
-// $header$
-
 /*
+	@default group=general
 
-@default group=general
+	@property file type=fileupload
+	@caption Pilt
 
-@property file type=fileupload
-@caption Pilt
+	@property file_show type=text store=no
+	@caption Eelvaade 
 
-@property file_show type=text
-@caption 
+	@property file2 type=fileupload group=img2 table=objects field=meta method=serialize 
+	@caption Suur pilt
 
-@property comment table=objects field=comment type=textbox
-@caption Pildi allkiri
+	@property file_show2 type=text group=img2 store=no
+	@caption Eelvaade
 
-@property alt type=textbox table=objects field=meta method=serialize
-@caption Alt
+	@property comment table=objects field=comment type=textbox
+	@caption Pildi allkiri
 
-@property link type=textbox table=images field=link
-@caption Link
+	@property alt type=textbox table=objects field=meta method=serialize
+	@caption Alt
 
-@property newwindow type=checkbox ch_value=1 table=images field=newwindow
-@caption Uues aknas
-	
-@tableinfo images index=id master_table=objects master_index=oid	
+	@property link type=textbox table=images field=link
+	@caption Link
+
+	@property newwindow type=checkbox ch_value=1 table=images field=newwindow
+	@caption Uues aknas
+
+	@groupinfo img2 caption=Suur_pilt
+	@classinfo syslog_type=ST_IMAGE
+		
+	@tableinfo images index=id master_table=objects master_index=oid	
 
 */
 class image extends class_base
@@ -420,6 +427,25 @@ class image extends class_base
 					$retval = PROP_IGNORE;
 				};
 				break;
+			
+			case "file_show2":
+				if ($arr["obj"]["oid"])
+				{
+					$url = $this->get_url($arr["obj"]["meta"]["file2"]);
+					if ($url != '')
+					{
+						$prop['value'] = html::img(array('url' => $url));
+					};
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
+
+			case "file2":
+				$prop["value"] = "";
+				break;
 		};
 
 		return $retval;
@@ -437,6 +463,21 @@ class image extends class_base
 			if (is_uploaded_file($file))
 			{
 				$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $this->get_file(array("file" => $file))));
+				$prop["value"] = $fl;
+			}
+			else
+			{
+				$retval = PROP_IGNORE;
+			};
+		}
+		else
+		if ($prop['name'] == 'file2')
+		{
+			global $file2,$file_type2;
+			$_fi = get_instance("file");
+			if (is_uploaded_file($file2))
+			{
+				$fl = $_fi->_put_fs(array("type" => $file_type2, "content" => $this->get_file(array("file" => $file2))));
 				$prop["value"] = $fl;
 			}
 			else
