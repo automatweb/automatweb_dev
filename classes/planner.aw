@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.183 2004/06/11 09:14:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.184 2004/06/15 08:51:24 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1075,29 +1075,10 @@ class planner extends class_base
 	function delete_repeater($args = array())
 	{
 		extract($args);
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "repeaters" . $cycle,
-			"delete_key" => true,
-		));
-
+		$o = obj($id);
+		$o->set_meta("repeaters" . $cycle, NULL);
+		$o->save();
 		return $this->mk_my_orb("event_repeaters",array("id" => $id));
-	}
-
-	function bron_add_event($args = array())
-	{
-		extract($args);
-		$id = $this->new_object(array(
-			"class_id" => CL_CAL_EVENT,
-			"parent" => $parent,
-			"name" => $title,
-		),true);
-
-		$q = "INSERT INTO planner
-			(id,uid,start,end,title,place,description)
-			VALUES ('$id','$uid','$start','$end','$title','$place','$description')";
-		$this->db_query($q);
-		return $id;
 	}
 
 	function gen_navtoolbar(&$arr)
