@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.66 2005/02/01 15:01:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.67 2005/03/03 13:01:51 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -374,9 +374,15 @@ class config extends db_config
 			$r_el .= $this->parse("ERROR_REDIRECT");
 		}
 
+		$fvi = "";
+		if ($this->get_simple_config("favicon") != "")
+		{
+			$fvi = "<img src='".$this->mk_my_orb("favicon", array(),"config", false,true)."'>";
+		}
+
 		$this->vars(array(
 			"AFTER_LOGIN" => $r_al,
-			"favicon" => "<img src='".$this->mk_my_orb("favicon", array(),"config", false,true)."'>",
+			"favicon" => $fvi,
 			"forms" => $this->picker($if,$fb->get_list(FTYPE_ENTRY,true)),
 			"ops" => $this->picker($op,$ops[$if]),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
@@ -384,7 +390,6 @@ class config extends db_config
 			"ERROR_REDIRECT" => $r_el,
 			"reforb" => $this->mk_reforb("submit_loginaddr"),
 			"autologin" => checked($al),
-			"cfgform_link" => $this->mk_my_orb("class_cfgforms",array()),
 			"ipp" => $this->picker($ipp, $ob_i->get_list())
 		));
 		return $this->parse();
