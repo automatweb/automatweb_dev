@@ -157,13 +157,22 @@ class class_visualizer extends aw_template
 						$t->define_field($celldata);
 					};
 					$propdata["vcl_inst"] = $t;
-				};
+				}
+				else
 				if ($clid == CL_PROPERTY_CHOOSER)
 				{
 					$propdata["multiple"] = $el->prop("multiple");
 					$propdata["orient"] = $el->prop("orient") == 1 ? "vertical" : "";
 					$propdata["options"] = explode("\n",$el->prop("options"));
-				};
+				}
+				else
+				{
+					$ti = get_instance($clid);
+					if (method_exists($ti, "get_visualizer_prop"))
+					{
+						$ti->get_visualizer_prop($el, $propdata);
+					}
+				}
 				$cli->add_property($propdata);
 			};
 		};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.1 2005/02/28 10:45:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.2 2005/03/03 13:39:22 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -69,6 +69,7 @@ class class_designer extends class_base
 				CL_PROPERTY_TEXTBOX,CL_PROPERTY_CHOOSER,
 				CL_PROPERTY_CHECKBOX,CL_PROPERTY_TABLE,
 				CL_PROPERTY_TEXTAREA,CL_PROPERTY_SELECT,
+				CL_PROPERTY_TREE
 				);
 	}
 
@@ -243,7 +244,9 @@ class class_designer extends class_base
 			"disabled" => !$this->can_add["grid"],
 		));
 
-		$tb->add_menu_separator();
+		$tb->add_menu_separator(array(
+			"parent" => "new"
+		));
 
 
 		$clinf = aw_ini_get("classes");
@@ -361,19 +364,17 @@ class class_designer extends class_base
 				)),
 				"edit" => html::href(array(
 					"caption" => "Muuda",
-					"url" => $this->mk_my_orb("change",array("id" => $el_id),$el_clid),
+					"url" => $this->mk_my_orb("change",array("id" => $el_id, "return_url" => urlencode(aw_global_get("REQUEST_URI"))),$el_clid),
 				)),
 			));
 		};
 
 		$t->set_numeric_field("ord");
 
-                $t->sort_by(array(
-                        "field" => array("ord", "created"),
-                        "sorder" => array("ord" => "desc", "created" => "asc")
-                ));
-
-
+		$t->sort_by(array(
+			"field" => array("ord", "created"),
+			"sorder" => array("ord" => "desc", "created" => "asc")
+		));
 	}
 
 	/** 

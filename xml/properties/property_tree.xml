@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>no_caption</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ilma tekstita</caption>
+      </property>
+      <property>
+            <name>demo_content</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>6</rows>
+            <cols>40</cols>
+            <caption>Demo sisu</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROPERTY_TREE</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+</properties>
+
