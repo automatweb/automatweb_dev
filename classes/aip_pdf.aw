@@ -13,6 +13,7 @@ class aip_pdf extends aw_template
 {
 	function aip_pdf()
 	{
+		enter_function("aip_pdf::aip_pdf",array());
 		$this->init("aip_pdf");
 
 		$this->statuses = array(
@@ -21,22 +22,17 @@ class aip_pdf extends aw_template
 			FILE_STAT_DELETED => "<font color='red'>Kustutatud</font>",
 			FILE_STAT_SAME => "Ei ole muudetud"
 		);
+		exit_function("aip_pdf::aip_pdf");
 	}
 
 	function mk_header()
 	{
-		$this->tpl = new aw_template;
-		$this->tpl->tpl_init("aip_pdf");
-		$this->tpl->db_init();
-		$this->tpl->read_template("header.tpl");
-		$this->tpl->vars(array(
-			"menu_import" => $this->cfg["baseurl"]."/vv_aip.aw?section=".$this->section."&action=importmenus"
-		));
-		return $this->tpl->parse();
+		return make_toolbar($this->section, &$this, "javascript:document.q.submit()", true);
 	}
 
 	function listfiles($arr)
 	{
+		enter_function("aip_pdf::listfiles",array());
 		extract($arr);
 		$this->read_template("file_list.tpl");
 
@@ -76,7 +72,8 @@ class aip_pdf extends aw_template
 						$this->vars(array(
 							"file" => $fn,
 							"action" => "Failile vastavat kataloogi ei leitud, loome uue (".$this->get_new_folder_name_for_file($fn).")",
-							"action_id" => $aid
+							"action_id" => $aid,
+							"checked" => checked(false)
 						));
 						$actions[$aid] = array("action" => CREATE_FOLDER,"file" => $fn);
 						$a.=$this->parse("CHANGE");
@@ -85,7 +82,8 @@ class aip_pdf extends aw_template
 					$this->vars(array(
 						"file" => $fn,
 						"action" => "Fail lisati, lisame systeemi",
-						"action_id" => $aid
+						"action_id" => $aid,
+						"checked" => checked(true)
 					));
 					$actions[$aid] = array("action" => CREATE_FILE,"file" => $fn);
 					$a.=$this->parse("CHANGE");
@@ -98,7 +96,8 @@ class aip_pdf extends aw_template
 					$this->vars(array(
 						"file" => $fn,
 						"action" => "Fail uuendati, arhiveerime vana ja uuendame faili AW's",
-						"action_id" => $aid
+						"action_id" => $aid,
+						"checked" => checked(true)
 					));
 					$actions[$aid] = array("action" => UPDATE_FILE,"file" => $fn);
 					$a.=$this->parse("CHANGE");
@@ -111,7 +110,8 @@ class aip_pdf extends aw_template
 					$this->vars(array(
 						"file" => $fn,
 						"action" => "Fail kustutati, kustutame AW'st",
-						"action_id" => $aid
+						"action_id" => $aid,
+						"checked" => checked(true)
 					));
 					$actions[$aid] = array("action" => DELETE_FILE,"file" => $fn);
 					$a.=$this->parse("CHANGE");
@@ -127,13 +127,16 @@ class aip_pdf extends aw_template
 			"header" => $this->mk_header(),
 			"folder" => $folder,
 			"folders" => $this->picker($parent,$ob->get_list()),
-			"reforb" => $this->mk_reforb("submit_list", array("section" => $section))
+			"reforb" => $this->mk_reforb("submit_list", array("section" => $section)),
+			"rootmenu" => get_root()
 		));
+		exit_function("aip_pdf::listfiles");
 		return $this->parse();
 	}
 
 	function submit_list($arr)
 	{
+		enter_function("aip_pdf::submit_list",array());
 		extract($arr);
 
 		set_time_limit(0);
@@ -144,7 +147,8 @@ class aip_pdf extends aw_template
 
 		// here we do the actions that are selected.
 		global $actions;
-	
+
+		$data = "";
 		if (is_array($sactions) && $do_actions == 1)
 		{
 			foreach($sactions as $aid)
@@ -153,9 +157,11 @@ class aip_pdf extends aw_template
 				// and possibly fuck up the order or something. 
 				$act = $actions[$aid];
 				echo "processing action type ",$act["action"]," for file ",$act["file"]," <br>";
+				$data.= "processing action type ".$act["action"]." for file ".$act["file"]." <br>";
 				if ($act["action"] == CREATE_FOLDER)
 				{
 					echo "createfolder <br>";
+					$data .= "createfolder <br>";
 					classload("menuedit");
 					$m = new menuedit;
 					// create new menu
@@ -166,6 +172,7 @@ class aip_pdf extends aw_template
 					if (!($par = $this->find_parent_for_file($nar[0],$parent,strlen($nar[0]))))
 					{
 						echo "no parent for $nar[0] creating under $parent <br>";
+						$data .= "no parent for $nar[0] creating under $parent <br>";
 						// no 1st level menu,create it
 						$par = $m->add_new_menu(array(
 							"name" => $nar[0],
@@ -182,6 +189,7 @@ class aip_pdf extends aw_template
 					if (!($par2 = $this->find_parent_for_file($nar[0]." ".$nar[1],$par,strlen($nar[0]." ".$nar[1]))))
 					{
 						echo "no parent for $nar[1] creating under $par <br>";
+						$data .= "no parent for $nar[1] creating under $par <br>";
 						// no 2nd level menu,create it
 						$par2 = $m->add_new_menu(array(
 							"name" => $nar[1],
@@ -199,6 +207,7 @@ class aip_pdf extends aw_template
 					if (!($par3 = $this->find_parent_for_file($nar[0]." ".$nar[1].".".$nar[2],$par2,strlen($nar[0]." ".$nar[1].".".$nar[2]))))
 					{
 						echo "no parent for $nar[2] creating under $par2 <br>";
+						$data .= "no parent for $nar[2] creating under $par2 <br>";
 						// no 3rd level menu,create it
 						$par3 = $m->add_new_menu(array(
 							"name" => $nar[2],
@@ -253,11 +262,12 @@ class aip_pdf extends aw_template
 				if ($act["action"] == UPDATE_FILE)
 				{
 					// find file id
-					$id = $this->db_fetch_field("SELECT id FROM aip_files WHERE name = '".$act["file"]."'","id");
+					$id = $this->db_fetch_field("SELECT id FROM aip_files WHERE filename = '".$act["file"]."'","id");
 
 					if (!$id)
 					{
 						echo "<font color=red>ERROR: no such file $act[file] <br>";
+						$data .= "<font color=red>ERROR: no such file $act[file] <br>";
 					}
 					else
 					{
@@ -296,11 +306,17 @@ class aip_pdf extends aw_template
 				flush();
 			}
 		}
-		return $this->mk_my_orb("listfiles", array("section" => $section),"",false,true);
+		exit_function("aip_pdf::submit_list");
+
+		// add log entry for pdf upload
+		$this->quote(&$data);
+		$this->db_query("INSERT INTO aip_pdf_log (createdby, created, content) VALUES('".aw_global_get("uid")."','".time()."','$data')");
+		die("<a href='".$this->mk_my_orb("listfiles", array("section" => $section),"",false,true)."'>Tagasi</a>");
 	}
 
 	function get_file_data($parent)
 	{
+		enter_function("aip_pdf::get_file_data",array());
 		$this->mk_menu_cache();
 		$menus = array();
 		$this->get_menus_below($parent,$menus);
@@ -321,6 +337,7 @@ class aip_pdf extends aw_template
 				$this->restore_handle();
 			}
 		}
+		exit_function("aip_pdf::get_file_data");
 		return $ret;
 	}
 
@@ -328,6 +345,7 @@ class aip_pdf extends aw_template
 	// !creates the list of files and checks each file's status and returns them in an array
 	function mk_file_list($folder,$parent)
 	{
+		enter_function("aip_pdf::mk_file_list",array());
 		$fd = $this->get_file_data($parent);
 		clearstatcache();
 		if ($dir = @opendir($folder)) 
@@ -365,28 +383,35 @@ class aip_pdf extends aw_template
 				$ret[$fn] = FILE_STAT_DELETED;
 			}
 		}
+		exit_function("aip_pdf::mk_file_list");
 		return $ret;
 	}
 
 	function flush_menu_cache()
 	{
+		enter_function("aip_pdf::flush_menu_cache",array());
 		$this->mpr = false;
+		exit_function("aip_pdf::flush_menu_cache");
 	}
 
 	function mk_menu_cache()
 	{
+		enter_function("aip_pdf::mk_menu_cache",array());
 		if (!is_array($this->mpr))
 		{
-			classload("menuedit");
+			$this->_list_menus(array("where" => "objects.status != 0","lang_id" => aw_global_get("lang_id")));
+/*			classload("menuedit");
 			$m = new menuedit;
 			$m->make_menu_caches("objects.status != 0");
 			$this->mpr = $m->mpr;
-			$this->mar = $m->mar;
+			$this->mar = $m->mar;*/
 		}
+		exit_function("aip_pdf::mk_menu_cache");
 	}
 
 	function get_menus_below($parent,&$ar)
 	{
+		enter_function("aip_pdf::get_menus_below",array());
 		if (is_array($this->mpr[$parent]))
 		{
 			foreach($this->mpr[$parent] as $row)
@@ -395,12 +420,14 @@ class aip_pdf extends aw_template
 				$this->get_menus_below($row["oid"],$ar);
 			}
 		}
+		exit_function("aip_pdf::get_menus_below");
 	}
 
 	////
 	// !here we must split ehe filename in parts and figure out under what folder to store the damn thing. 
 	function find_parent_for_file($f,$parent,$min_len)
 	{
+		enter_function("aip_pdf::find_parent_for_file",array());
 		$this->mk_menu_cache();
 		$ar = array();
 		$this->get_menus_below($parent,$ar);
@@ -426,6 +453,7 @@ class aip_pdf extends aw_template
 			if ($meta["aip_filename"] == $_tn)
 			{
 				// ok, we found the menu for this file. return it.
+		exit_function("aip_pdf::find_parent_for_file");
 				return $mid;
 			}
 
@@ -484,30 +512,157 @@ class aip_pdf extends aw_template
 
 		if ($max_chars >= $min_len)
 		{
+		exit_function("aip_pdf::find_parent_for_file");
 			return $max_menu;
 		}
 		else
 		{
+		exit_function("aip_pdf::find_parent_for_file");
 			return false;
 		}
+		exit_function("aip_pdf::find_parent_for_file");
 	}
 
 	function get_new_folder_name_for_file($fn)
 	{
+		enter_function("aip_pdf::get_new_folder_name_for_file",array());
 		list($n,$pt) = explode(" ",$fn);
 		list($pt1,$ptn) = explode(".",$pt);
 		list($pt2,$t) = explode("-",$ptn);
+		exit_function("aip_pdf::get_new_folder_name_for_file");
 		return $n."/".$pt1."/".$pt2;
 	}
 
 	function split_filename($name)
 	{
+		enter_function("aip_pdf::split_filename",array());
 		list($n,$pt) = explode(" ",$name);
 		list($pt1,$ptn) = explode(".",$pt);
 		list($pt2,$t) = explode("-",$ptn);
 		$t = (int)$t;
 		$ret =  array(0 => $n,1 => $pt1, 2 => $pt2,3 => $t);
+		exit_function("aip_pdf::split_filename");
 		return $ret;
+	}
+
+	function orb_log($arr)
+	{
+		extract($arr);
+		$this->read_template("log.tpl");
+
+		$mid = $this->db_fetch_field("SELECT max(id) as id FROM aip_pdf_log","id");
+
+		$this->db_query("SELECT * FROM aip_pdf_log ORDER BY created ASC");
+		while($row = $this->db_next())
+		{
+			$this->vars(array(
+				"created" => $this->time2date($row["created"], 2),
+				"createdby" => $row["createdby"],
+				"act" => ($row["id"] == $mid ? "Aktuaalne" : ""),
+				"ajalugu" => $this->mk_my_orb("view_log", array("id" => $row["id"]), "", false, true)
+			));
+			$l .= $this->parse("LINE");
+		}
+		$this->section = get_root();
+		$this->vars(array(
+			"LINE" => $l,
+			"rootmenu" => get_root(),
+			"toolbar" => $this->mk_header()
+		));
+		return $this->parse();
+	}
+
+	function view_log($arr)
+	{
+		extract($arr);
+		$row = $this->db_fetch_row("SELECT * FROM aip_pdf_log WHERE id = $id");
+		$this->read_template("view_log.tpl");
+
+		$mid = $this->db_fetch_field("SELECT max(id) as id FROM aip_pdf_log","id");
+		$this->section = get_root();
+		$this->vars(array(
+			"created" => $this->time2date($row["created"], 2),
+			"createdby" => $row["createdby"],
+			"act" => ($row["id"] == $mid ? "Aktuaalne" : ""),
+			"ajalugu" => $row["log"],
+			"rootmenu" => get_root(),
+			"toolbar" => $this->mk_header()
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Reads in all the menus
+	function _list_menus($args = array())
+	{
+		$where = ($args["where"]) ? $args["where"] : "objects.status != 0";
+		$ignore = ($args["ignore"]) ? $args["ignore"] : false;
+		$ignore_lang = ($args["lang_ignore"]) ? $args["lang_ignore"] : false;
+		$lang_id = $args["lang_id"] ? $args["lang_id"] : aw_global_get("lang_id");
+
+		if (!$ignore)
+		{
+			// loeme sisse koik objektid
+			$aa = sprintf(" AND objects.site_id = '%d' ",$this->cfg["site_id"]);
+    };
+    if ($this->cfg["lang_menus"] == 1 && $ignore_lang == false)
+    {
+			$aa .= sprintf(" AND (objects.lang_id='%d' OR menu.type = '%d') ",$lang_id,MN_CLIENT);
+    }
+
+     $q = "SELECT objects.oid as oid, 
+									objects.parent AS parent,
+									objects.name AS name,
+									objects.last AS last,
+									objects.jrk AS jrk,
+									objects.alias AS alias,
+									objects.status AS status,
+									objects.brother_of AS brother_of,
+									objects.metadata AS metadata,
+									objects.class_id AS class_id,
+									objects.comment AS comment,
+									menu.*
+					FROM objects 
+						      LEFT JOIN menu ON menu.id = objects.oid
+          WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")
+									AND menu.type != ".MN_FORM_ELEMENT." 
+									AND $where $aa
+          ORDER BY objects.parent, jrk,objects.created";
+
+//		echo "q = $q <br>";
+		if (not($this->db_query($q,false)))
+		{
+			return false;
+		};	
+
+		global $DBY;
+		if ($DBY)
+		{
+			print $q;
+		}
+
+		while ($row = $this->db_next(true))
+		{
+			// some places need raw metadata, others benefit from reading
+			// the already uncompressed metainfo from the cache
+			$row["meta"] = aw_unserialize($row["metadata"]);
+			$row["mtype"] = $row["type"];
+
+			// we need to do this, cause if the name contains quotes, then in the db they will be \\\" , then
+			// when php reads them from the db they will be \\"
+			// and when aw reads them from php (in db_next) they will be turned into \"
+			// so here we need to do another dequote
+			// how do they get like that? dunno. - terryf
+			$this->dequote(&$row["name"]);
+			// Maybe this means that some people come with knives after me sometimes,
+			// but I'm pretty sure that we do not need to save unpacked metadata
+			// in the cache, since it's available in $row[meta] anyway
+			unset($row["metadata"]);
+			$this->mpr[$row["parent"]][] = $row;
+			$this->mar[$row["oid"]] = $row;
+		}
+
+		return true;
 	}
 }
 
