@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.76 2001/10/31 03:21:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.77 2001/11/01 21:21:57 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1165,7 +1165,7 @@ class form extends form_base
 	}
 
 	////
-	// !once upon a time a wanderer posed the question:
+	// !once upon a time a wanderer(duuk) posed the question:
 	//
 	// what exactly does this code do?
 	//
@@ -2433,11 +2433,17 @@ class form extends form_base
 					$joss = join(" ",$joins);
 					$chenrties = array();
 					$q = "SELECT form_chain_entries.id as chain_entry_id,uid as modifiedby, tm as created, tm as modified  $jss FROM form_chain_entries $joss WHERE form_chain_entries.id in ($eids)";
-	//				echo "q = $q <br>";
+//					echo "q = $q <br>";
 					$this->db_query($q);
 					$cnt = 0;
+					$used_ids = array();
 					while ($row = $this->db_next())
 					{
+						if ($used_ids[$row["chain_entry_id"]])
+						{
+							continue;
+						}
+						$used_ids[$row["chain_entry_id"]]=1;
 						if ($this->can("view",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
 						{
 							$cnt++;
