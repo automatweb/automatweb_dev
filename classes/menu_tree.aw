@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.21 2004/06/15 08:37:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.22 2004/06/15 09:00:09 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -188,7 +188,7 @@ class menu_tree extends class_base
 	
 		$nsuo = (aw_global_get("uid") == "" && aw_ini_get("menuedit.no_show_users_only"));
 
-		$ol = new object_list(array(
+		$filt = array(
 			"class_id" => CL_MENU,
 			"parent" => $parents,
 			"status" => STAT_ACTIVE,
@@ -200,7 +200,13 @@ class menu_tree extends class_base
 				)
 			)),
 			"sort_by" => "objects.jrk"
-		));
+		);
+
+		if (aw_global_get("uid") == "")
+		{
+			$filt["users_only"] = 0;
+		}
+		$ol = new object_list($filt);
 		$_parents = array();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
