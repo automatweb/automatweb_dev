@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.4 2004/10/26 04:52:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.5 2004/10/26 05:38:41 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -597,6 +597,17 @@ class maja_xml_editor extends class_base
 				}
 				foreach($sql_command as $sql_c_key => $sql_c_value)
 				{
+
+// check if the status is changed, if it is changed, then it is updated in staatus2 field also
+					if($sql_c_key == "staatus" && !$insert)
+					{
+						$staatus_from_db = $this->db_fetch_array("SELECT staatus FROM ".$db_table_name." WHERE korter='".$sql_command['korter']."'");
+						if($staatus_from_db[0]['staatus'] != $sql_c_value)
+						{
+							$sql_query .= "staatus2='".$sql_c_value."', ";
+							
+						}
+					}
 					$sql_query .= $sql_c_key."='".$sql_c_value."', ";
 				}
 
