@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.70 2001/11/18 16:20:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.71 2001/11/20 08:14:51 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -224,6 +224,11 @@ class menuedit extends aw_template
 		global $test;
 		global $baseurl;
 
+		global $lang_id;
+		$lang_code = ($lang_id == 2) ? "en" : "et";
+		$this->vars(array(
+			"lang_code" => $lang_code,
+		));
 		
 		$obj = $this->get_object($section);
 
@@ -3785,6 +3790,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if ($this->sel_section == $row["oid"] && $this->is_template("MENU_".$name."_SEEALSO_ITEM"))
 			{
 				$this->do_seealso_items($row,$name);
+				// center menus as used in www.stat.ee 
+				if (!$this->active_doc)
+				{
+					$this->do_center_menu($row["oid"]);
+				}
 			}
 
 			if (in_array($row["oid"], $path))
@@ -3837,7 +3847,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 
 			$is_mid = false;
-			if ($row["mid"] == 1 && !in_array($row["parent"],$path))
+/*			if ($row["mid"] == 1 && !in_array($row["parent"],$path))
 			{
 				// keskel olevad menyyd peavad ignoreerima seda et neid igaljuhul n2idatakse
 				$no_mid = true;
@@ -3847,7 +3857,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$ap.="_MID";		// menu in center
 				$is_mid = true;
-			};
+			};*/
 
 			if ($this->is_template($mn.$ap."_NOSUB") && $n == 0)
 			{
@@ -5192,6 +5202,43 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$cache = new cache;
 		global $lang_id,$SITE_ID;
 		$cache->db_invalidate("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+	}
+
+	function do_center_menu($oid)
+	{
+		$mpar = $this->mpr[$oid];
+		if (is_array($mpar))
+		{
+			foreach($mpar as $mprow)
+			{
+				if ($mprow["mid"])
+				{
+					if ($this->has_sub_dox($mprow["oid"]))
+					{
+						if ($mprow["link"] != "")
+						{
+							$link = $mprow["link"];
+						}
+						else
+						if ($mprow["alias"] != "")
+						{
+							$link = $mprow["alias"];
+						}
+						else
+						{
+							$link = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$mprow["oid"];
+						}
+						$this->vars(array(
+							"link" => $link,
+							"target" => ($mprow["target"] ? "target=\"_blank\"" : ""),
+							"text" => str_replace("&nbsp;"," ",strip_tags($mprow["name"]))
+						));
+						$mmd.=$this->parse("CENTER_MENU");
+					}
+				}
+			}
+			$this->vars(array("CENTER_MENU" => $mmd));
+		}
 	}
 }
 ?>
