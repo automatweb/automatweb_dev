@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.43 2002/09/09 12:47:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.44 2002/09/09 15:42:13 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -75,6 +75,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		}
 
 		$this->make_alias_classarr();
+		asort($this->classarr);
 		$this->vars(array(
 			"docid" => $docid,
 			"s_name"  => $s_name,
@@ -97,17 +98,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			"value" => $link,
 			"overwrite" => 1,
 		));
-		$_aliases = $this->get_oo_aliases(array("oid" => $id));
-
-		// paneme aliases kirja
-    if (is_array($_aliases))
-		{
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "aliases",
-				"value" => $_aliases,
-			));
-	  };
+		$this->cache_oo_aliases($id);
 		return $this->mk_my_orb("list_aliases",array("id" => $id));
 	}
 		
@@ -178,8 +169,12 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$by_alias = array();
 		foreach($this->cfg["classes"] as $clid => $cldat)
 		{
-			$by_alias[$cldat["alias"]]["file"] = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
-			$by_alias[$cldat["alias"]]["class_id"] = $clid;
+			$li = explode(",", $cldat["alias"]);
+			foreach($li as $lv)
+			{
+				$by_alias[$lv]["file"] = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
+				$by_alias[$lv]["class_id"] = $clid;
+			}
 		}
 
 		preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
@@ -395,7 +390,8 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		foreach($alist as $alias)
 		{
 			$aclid = $alias["class_id"];
-			$astr = sprintf("#%s%d#",$classes[$aclid]["alias"],++$this->acounter[$aclid]);
+			list($astr) = explode(",",$classes[$aclid]["alias"]);
+			$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
 			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
 			$chlinks[$alias["target"]] = $ch;
 
@@ -504,9 +500,27 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		$aliases = $this->get_aliases_for($oid);
 		foreach($aliases as $ad)
 		{
-			$ret[$ad["id"]] = "#".$this->cfg["classes"][$ad["class_id"]]["alias"].(++$cnts[$ad["class_id"]])."#";
+			list($astr) = explode(",",$this->cfg["classes"][$ad["class_id"]]["alias"]);
+			$ret[$ad["id"]] = "#".$astr.(++$cnts[$ad["class_id"]])."#";
 		}
 		return $ret;
+	}
+
+	////
+	// !updates the alias list cache for object $oid
+	function cache_oo_aliases($oid)
+	{
+		$_aliases = $this->cache_oo_aliases(array("oid" => $oid));
+
+		// paneme aliases kirja
+    if (is_array($_aliases))
+		{
+			$this->set_object_metadata(array(
+				"oid" => $oid,
+				"key" => "aliases",
+				"value" => $_aliases,
+			));
+    };
 	}
 }
 ?>

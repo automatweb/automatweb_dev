@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.106 2002/09/09 12:30:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.107 2002/09/09 15:42:13 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -681,20 +681,9 @@ class core extends db_connector
 			VALUES('$source','$target','$target_data[class_id]','$extra','$idx')";
 
 		$this->db_query($q);
-		classload("aliasmgr");
-		$aliasmgr = new aliasmgr();
-		$_aliases = $aliasmgr->get_oo_aliases(array("oid" => $source));
+		$aliasmgr = get_instance("aliasmgr");
+		$aliasmgr->cache_oo_aliases($source);
 
-
-		// paneme aliases kirja
-                if (is_array($_aliases))
-		{
-			$this->set_object_metadata(array(
-				"oid" => $source,
-				"key" => "aliases",
-				"value" => $_aliases,
-			));
-                };
 		$this->_log("alias",sprintf(LC_CORE_ADD_TO_OBJECT,$source));
 	}
 
@@ -715,20 +704,9 @@ class core extends db_connector
 					WHERE id = '$id'";
 
 		$this->db_query($q);
-		classload("aliasmgr");
-		$aliasmgr = new aliasmgr();
-		$_aliases = $aliasmgr->get_oo_aliases(array("oid" => $source));
+		$aliasmgr = get_instance("aliasmgr");
+		$_aliases = $aliasmgr->cache_oo_aliases(array("oid" => $source));
 
-
-		// paneme aliases kirja
-    if (is_array($_aliases))
-		{
-			$this->set_object_metadata(array(
-				"oid" => $source,
-				"key" => "aliases",
-				"value" => $_aliases,
-			));
-    };
 		$this->_log("alias",sprintf(LC_CORE_ADD_TO_OBJECT,$source));
 	}
 
@@ -738,6 +716,8 @@ class core extends db_connector
 	{
 		$q = "DELETE FROM aliases WHERE source = '$source' AND target = '$target'";
 		$this->db_query($q);
+		$ainst = get_instance("aliasmgr");
+		$ainst->cache_oo_aliases($source);
 	}
 
 	////
@@ -831,6 +811,23 @@ class core extends db_connector
 	function delete_aliases_of($oid)
 	{
 		$this->db_query("DELETE FROM aliases WHERE source = $oid");
+	}
+
+	////
+	// !the base version of per-class alias adding
+	// a class can override this, to implement adding aliases differently
+	// for instance - when adding an alias to form_entry it lets you pick the output
+	// with which the entry is shown. 
+	// but basically what this function needs to do, is to call core::add_alias($id,$alias)
+	// and finally redirect the user to $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr")
+	// parameters:
+	//   id - the id of the object where the alias will be attached
+	//   alias - the id of the object to attach as an alias
+	function addalias($arr)
+	{
+		extract($arr);
+		$this->add_alias($id,$alias);
+		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
 	}
 
 	////
@@ -2188,23 +2185,6 @@ class core extends db_connector
 			"SEL_ITEM" => ""
 		));
 		return $this->parse();
-	}
-
-	////
-	// !the base version of per-class alias adding
-	// a class can override this, to implement adding aliases differently
-	// for instance - when adding an alias to form_entry it lets you pick the output
-	// with which the entry is shown. 
-	// but basically what this function needs to do, is to call core::add_alias($id,$alias)
-	// and finally redirect the user to $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr")
-	// parameters:
-	//   id - the id of the object where the alias will be attached
-	//   alias - the id of the object to attach as an alias
-	function addalias($arr)
-	{
-		extract($arr);
-		$this->add_alias($id,$alias);
-		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
 	}
 };
 ?>
