@@ -80,6 +80,17 @@
             <method>serialize</method>
             <caption>Lao otsinguvorm</caption>
       </property>
+      <property>
+            <name>manager_cos</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MANAGER_CO</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <multiple>1</multiple>
+            <caption>Lao otsinguvorm</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE_CONFIG</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -95,6 +106,11 @@
                   <clid>CL_CB_SEARCH</clid>
                   <caption>otsinguvorm</caption>
             </SEARCH_FORM>
+            <MANAGER_CO>
+                  <value>3</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>haldaja firma</caption>
+            </MANAGER_CO>
       </reltypes>
 </properties>
 

@@ -28,6 +28,26 @@
             <caption>Tellija</caption>
       </property>
       <property>
+            <name>seller_person</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PERSON</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>M&amp;uuml;ja esindaja</caption>
+      </property>
+      <property>
+            <name>seller_company</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORG</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>M&amp;uuml;ja</caption>
+      </property>
+      <property>
             <name>oc</name>
             <table>aw_shop_orders</table>
             <group>general</group>
