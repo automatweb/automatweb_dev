@@ -8,8 +8,8 @@
 @groupinfo chpwd caption="Muuda parooli"
 @groupinfo roles caption=Rollid
 @groupinfo objects caption="Objektid ja &Otilde;igused"
-	@groupinfo objects_own caption="Enda tehtud" parent=objects
-	@groupinfo objects_other caption="Teiste tehtud" parent=objects
+@groupinfo objects_own caption="Enda tehtud" parent=objects
+@groupinfo objects_other caption="Teiste tehtud" parent=objects
 @groupinfo roles caption="Rollid"
 @groupinfo groups caption=Grupid
 @groupinfo jdata caption="Liitumise info"
@@ -49,6 +49,12 @@
 
 @property admin_lang store=no type=select
 @caption Admin lang.
+
+@property base_lang type=select field=meta method=serialize table=objects
+@caption Baaskeel
+
+@property target_lang type=select field=meta method=serialize table=objects
+@caption Sihtkeel
 
 @property act_from store=no type=date_select
 @caption Aktiivne alates
@@ -168,6 +174,12 @@ class user extends class_base
 			
 			case "created":
 				$prop['value'] = $this->time2date($prop['value'],2);
+				break;
+
+			case "base_lang":
+			case "target_lang":
+				$l = get_instance("languages");
+				$prop["options"] = $l->get_list();
 				break;
 
 			case "admin_lang":
