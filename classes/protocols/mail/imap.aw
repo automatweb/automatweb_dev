@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.17 2004/02/11 17:18:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.18 2004/03/04 15:17:07 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -166,6 +166,7 @@ class imap extends class_base
 						"name" => $realname,
 						"int_name" => str_replace("&","*",substr($item->name,strlen($this->servspec))),
 						"realname" => strpos($realname,".") === false ? $realname : substr($realname, strrpos($realname, '.') + 1),
+						"fullname" => substr($item->name,strlen($this->servspec)),
 						//"count" => ($status->unseen > 0) ? sprintf("<b>(%d)</b>",$status->unseen) : "",
 					);
 				};
@@ -299,7 +300,7 @@ class imap extends class_base
 		$rv = "";
 		$ids = join(",",$arr["id"]);
 		$to = $arr["to"];
-		if (!imap_mail_move($this->mbox,join(",",$arr["id"]),$arr["to"],CP_UID))
+		if (!imap_mail_move($this->mbox,join(",",$arr["id"]),$to,CP_UID))
 		{
 			$err = imap_last_error();
 			var_dump($err);
