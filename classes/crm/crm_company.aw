@@ -19,6 +19,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property comment type=textarea cols=65 rows=3 table=objects
 @caption Kommentaar
 
+@property extern_id type=hidden table=kliendibaas_firma field=extern_id 
+
 @property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma
 @caption Registri number
 

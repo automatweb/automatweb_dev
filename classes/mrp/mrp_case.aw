@@ -1,12 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.2 2004/12/08 12:23:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.3 2005/01/13 19:47:14 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 
 @classinfo syslog_type=ST_MRP_CASE relationmgr=yes
 
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
 
+@groupinfo grp_case_data caption="Projekti andmed"
 @groupinfo grp_case_details caption="Projekti kirjeldus"
 @groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_workflow caption="Ressursid ja töövoog"
@@ -15,9 +18,12 @@
 
 
 @default group=general
+	@property name type=textbox table=objects field=name
+	@caption Projekti nr.
+
 @default table=mrp_case
 	@property starttime type=datetime_select
-	@caption Alustamisaeg
+	@caption Alustamisaeg (materjalide saabumine)
 
 	@property due_date type=datetime_select
 	@caption Valmimistähtaeg
@@ -31,13 +37,92 @@
 	@property state type=text
 	@caption Staatus
 
+	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER table=mrp_case
+	@caption Klient
+
+	@property extern_id type=hidden 
+
 @default table=objects
 @default field=meta
 @default method=serialize
 	// @property number_of_jobs type=textbox store=no newonly=1 size=3
 	// @caption Tööde arv
 
+	@property planned_date type=text store=no editonly=1
+	@caption Planeeritud valmimisaeg
+
 	@property available_resources type=hidden no_caption=1
+
+@default group=grp_case_data
+
+	@property format type=textbox 
+	@caption Formaat
+
+	@property sisu_lk_arv type=textbox 
+	@caption Sisu lk arv
+
+	@property kaane_lk_arv type=textbox
+	@caption Kaane lk arv
+
+	@property sisu_varvid type=textbox
+	@caption Sisu v&auml;rvid
+
+	@property sisu_varvid_notes type=textbox
+	@caption Sisu v&auml;rvid Notes
+
+	@property sisu_lakk_muu type=textbox
+	@caption Sisu lakk/muu
+
+	@property kaane_varvid type=textbox
+	@caption Kaane v&auml;rvid
+
+	@property kaane_varvid_notes type=textbox
+	@caption Kaane v&auml;rvid Notes
+
+	@property kaane_lakk_muu type=textbox
+	@caption Kaane lakk/muu
+
+	@property sisu_paber type=textbox
+	@caption Sisu paber
+
+	@property kaane_paber type=textbox
+	@caption Kaane paber
+
+	@property trykiarv type=textbox
+	@caption Tr&uuml;kiarv
+
+	@property trykise_ehitus type=textbox
+	@caption Tr&uuml;kise ehitus
+
+	@property kromaliin type=textbox
+	@caption Kromalin
+
+	@property makett type=textbox
+	@caption Makett
+
+	@property naidis type=textbox
+	@caption N&auml;idis
+
+	@property plaate type=textbox
+	@caption Plaate
+
+	@property transport type=textbox
+	@caption Transport
+
+	@property soodustus type=textbox
+	@caption Soodustus
+
+	@property markused type=textbox
+	@caption M&auml;rkused
+
+	@property allahindlus type=textbox
+	@caption Allahindlus
+
+	@property vahendustasu type=textbox
+	@caption Vahendustasu
+
+	@property myygi_hind type=textbox
+	@caption M&uuml;&uuml;gi hind
 
 
 @default group=grp_case_details
@@ -135,6 +220,9 @@ define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
 
+### misc
+define ("MRP_DATE_FORMAT", "j/m/Y H.i");
+
 class mrp_case extends class_base
 {
 	function mrp_case()
@@ -167,6 +255,25 @@ class mrp_case extends class_base
 					MRP_STATUS_OVERDUE => "Üle tähtaja",
 				);
 				$prop["value"] = $states[$prop["value"]] ? $states[$prop["value"]] : "Määramata";
+				break;
+
+			case "planned_date":
+				$date = $prop["value"] ? date (MRP_DATE_FORMAT, $prop["value"]) : "Planeerimata";
+				$prop["value"] = $date;
+				break;
+
+			case "due_date":
+				if ($arr["new"])
+				{
+					$prop["value"] = mktime (18, 00, 00);
+				}
+				break;
+
+			case "starttime":
+				if ($arr["new"])
+				{
+					$prop["value"] = mktime (18, 00, 00);
+				}
 				break;
 
 			case "schedule_chart":
@@ -264,9 +371,12 @@ class mrp_case extends class_base
 
 				foreach ($new_resources as $resource_id)
 				{
+					$arr["mrp_new_job_resource"] = $resource_id;
 					$this->add_job ($arr);
 				}
 			}
+
+			$this->correct_job_order ($arr);
 
 			### make changes to used resources
 			$this_object->set_prop ("available_resources", $arr["request"]["mrp_resourcetree_data"]);
@@ -290,7 +400,7 @@ class mrp_case extends class_base
 
 		foreach ($connections as $connection)
 		{
-			$workspace = $connection->to();
+			$workspace = $connection->to ();
 			break;
 		}
 
@@ -304,22 +414,25 @@ class mrp_case extends class_base
 
 		### get  project jobs
 		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$project_start = 100000000000000000;
 		$project_length = 0;
 		$jobs = array ();
 		$project_resources = array ();
 
 		foreach ($connections as $connection)
 		{
-			$job = $connection->to();
+			$job = $connection->to ();
 			$length = $job->prop ("length") + $job->prop ("buffer");
 			$resource = $job->prop ("resource");
 			$project_length += $length;
 			$jobs[] = $job;
 			$project_resources[] = $resource;
+			$starttime = $job->prop ("starttime");
+			$project_start = ($starttime < $project_start) ? $starttime : $project_start;
 
 			$bar = array (
 				"row" => $resource,
-				"start" => $job->prop ("starttime"),
+				"start" => $starttime,
 				"length" => $length,
 				"title" => $job->name (),
 				"hilight" => true,
@@ -327,11 +440,12 @@ class mrp_case extends class_base
 			$chart->add_bar ($bar);
 		}
 
+		$project_start = ($project_start == 100000000000000000) ? $this_object->prop ("starttime") : $project_start;
 		$project_resources = array_unique ($project_resources);
 
 		$chart->configure_chart (array (
 			"chart_id" => "project_schedule_chart",
-			"start" => $this_object->prop ("starttime"),
+			"start" => $project_start,
 			"end" => $this_object->prop("due_date"),
 			"cells" => 1,
 			"cell_size" => $project_length,
@@ -339,11 +453,15 @@ class mrp_case extends class_base
 
 		foreach ($project_resources as $resource_id)
 		{
+			if (!$this->can("view", $resource_id))
+			{
+				continue;
+			}
 			$resource = obj ($resource_id);
 			$chart->add_row (array (
 				"name" => $resource_id,
 				"title" => $resource->name (),
-				"uri" => html::get_change_url($resource_id)
+				"uri" => html::get_change_url ($resource_id)
 			));
 		}
 
@@ -430,16 +548,16 @@ class mrp_case extends class_base
 			"caption" => "Nimi",
 		));
 		$table->define_field(array(
+			"name" => "resource",
+			"caption" => "Ressurss",
+		));
+		$table->define_field(array(
 			"name" => "length",
 			"caption" => "Pikkus (h)",
 		));
 		$table->define_field(array(
 			"name" => "buffer",
 			"caption" => "Puhver (h)",
-		));
-		$table->define_field(array(
-			"name" => "resource",
-			"caption" => "Ressurss",
 		));
 		$table->define_field(array(
 			"name" => "status",
@@ -480,7 +598,7 @@ class mrp_case extends class_base
 
 		foreach ($connections as $connection)
 		{
-			$job = $connection->to();
+			$job = $connection->to ();
 			$job_id = $job->id ();
 			$selected_resource = NULL;
 			$status = $job->prop ("job_status");
@@ -609,7 +727,7 @@ class mrp_case extends class_base
 					)
 				),
 				"exec_order" => $job->prop ("exec_order"),
-				"starttime" => date ("j/m/Y H.i", $job->prop ("starttime")),
+				"starttime" => date (MRP_DATE_FORMAT, $job->prop ("starttime")),
 				"status" => $status,
 				"job_id" => $job_id,
 			));
@@ -619,10 +737,16 @@ class mrp_case extends class_base
 	function save_workflow_data ($arr)
 	{
 		$this_object = $arr["obj_inst"];
-		$jobs = array ();
 		$orders = array ();
-		$order_changed = false;
 		$errors = false;
+		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$jobs = array ();
+
+		foreach ($connections as $connection)
+		{
+			$job = $connection->to ();
+			$jobs[$job->prop ("exec_order")] = $job->id ();
+		}
 
 		foreach ($arr["request"] as $name => $value)
 		{
@@ -640,10 +764,6 @@ class mrp_case extends class_base
 					{
 						break;
 					}
-					else
-					{
-						$order_changed = true;
-					}
 
 					switch ($property)
 					{
@@ -652,37 +772,48 @@ class mrp_case extends class_base
 							break;
 
 						case "prerequisites":
+							### translate prerequisites from execution orders to object id-s
 							$prerequisites = $job->prop ("prerequisites");
+							$prerequisites = explode (",", $prerequisites);
+							$prerequisites_translated = array ();
+
+							foreach ($prerequisites as $oid)
+							{
+								if (is_oid ($oid))
+								{
+									$prerequisite_job = obj ($oid);
+									$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
+								}
+								else
+								{
+									$errors = "Viga "; ///!!!mingi veateade teha? mida siin edasi teha?
+								}
+							}
+
+							$prerequisites = implode (",", $prerequisites_translated);
 
 							if ($value != $prerequisites)
 							{
 								$prerequisites_userdata = explode (",", $value);
 								$prerequisites = array ();
-								$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
-								$jobs = array ();
 
-								foreach ($connections as $connection)
+								foreach ($prerequisites_userdata as $prerequisite)
 								{
-									$job = $connection->to ();
-									$jobs[$job->prop ("exec_order")] = $job->id ();
-								}
-
-								foreach ($prerequisites_userdata as $value)
-								{
-									///!!! otsida t88objektide oid-d siia??
-									///!!! kontrollida kas sellised jrk nr-d on olemas?
-									settype ($value, "integer");
-									$job_id = $jobs[$value];
+									settype ($prerequisite, "integer");
+									$job_id = $jobs[$prerequisite];
 
 									if (is_oid ($job_id))
 									{
 										$prerequisites[] = $job_id;
 									}
+									else
+									{
+										$errors .= "Viga. "; ///!!!
+									}
 								}
 
 								$prerequisites = implode (",", $prerequisites);
 								$job->set_prop ("prerequisites", $prerequisites);
-								$this->correct_job_order ($arr);
 							}
 							break;
 
@@ -737,19 +868,14 @@ class mrp_case extends class_base
 				}
 				else
 				{
-					$errors .= "Viga";
+					$errors .= "Viga";///!!!
 				}
 			}
 		}
 
-		if ($order_changed)
-		{
-			$this->correct_job_order ($arr);
-		}
-
 		if ($errors)
 		{
-			return PROP_ERROR;
+			return PROP_FATAL_ERROR;
 		}
 		else
 		{
@@ -757,8 +883,13 @@ class mrp_case extends class_base
 		}
 	}
 
-	function correct_job_order ($arr)
+	function correct_job_order ($arr = array ())
 	{
+		$prerequisite_index = array ();
+		$job_index = array ();
+		$prerequisites = array ();
+		$jobs = array ();
+
 		if (is_oid ($arr["id"]))
 		{
 			$this_object = obj ($arr["id"]);
@@ -770,48 +901,73 @@ class mrp_case extends class_base
 		}
 
 		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
-		$this->prerequisite_index = array ();
-		$this->job_index = array ();
-		$this->jobs = array ();
 
 		foreach ($connections as $connection)
 		{
 			$job = $connection->to ();
-			$prerequisites = explode (",", $job->prop ("prerequisites"));
+			$job_id = $job->id ();
+			$job_index[] = $job_id;
+			$job_prerequisites = explode (",", $job->prop ("prerequisites"));
+			$prerequisite_index[$job_id] = $job_prerequisites;
 
-			foreach ($prerequisites as $prerequisite)
+			foreach ($job_prerequisites as $prerequisite)
 			{
-				$this->prerequisite_index[] = $prerequisite ? $prerequisite : "x";
-				$this->job_index[] = $job->id ();
+				$prerequisites[] = (int) $prerequisite;
 			}
 		}
 
-		$prerequisite = "x";
-		$this->order_jobs ($prerequisite);
-		$i = 0;
+		$prerequisites = array_unique ($prerequisites);
+		$last_job = array_diff ($job_index, $prerequisites);
+		$last_job_id = reset ($last_job);
 
-		foreach ($this->jobs as $job_id)
+		if (!$last_job_id)
 		{
-			if (!is_oid($job_id))
-			{
-				continue;
-			}
-			$i++;
-			$job = obj ($job_id);
-			$job->set_prop ("exec_order", $i);
-			$job->save ();
+			veryseriouserror;///!!!
 		}
-	}
-
-	function order_jobs ($prerequisite)
-	{
-		$keys = array_keys ($this->prerequisite_index, $prerequisite);
-
-		foreach ($keys as $key)
+		else
 		{
-			$this->jobs[] = $job_index[$key];
-			$prerequisite = $job_index[$key];
-			$this->order_jobs ($prerequisite);
+			$jobs[] = $last_job_id;
+			$pointer = 0;
+		}
+
+		while (1)
+		{
+			if (array_key_exists ($pointer, $jobs))
+			{
+				$job_id = $jobs[$pointer];
+				$pointer++;
+			}
+			else
+			{
+				break;
+			}
+
+			$prerequisites = $prerequisite_index[$job_id];
+
+			foreach ($prerequisites as $job_id)
+			{
+				if ((!in_array ($job_id, $jobs)) and $job_id)
+				{
+					$jobs[] = $job_id;
+				}
+			}
+		}
+
+		krsort ($jobs);
+		$job_count = count ($jobs);
+
+		foreach ($jobs as $key => $job_id)
+		{
+			if (is_oid($job_id))
+			{
+				$job = obj ($job_id);
+				$job->set_prop ("exec_order", ($job_count - $key));
+				$job->save ();
+			}
+			else
+			{
+				veryseriouserror;///!!!
+			}
 		}
 	}
 
@@ -838,25 +994,55 @@ class mrp_case extends class_base
 		$this_object =& $arr["obj_inst"];
 		$workspace =& $this->get_current_workspace ($arr);
 		$connections = $this_object->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$resource_id = $arr["mrp_new_job_resource"];
 		$job_number = (count ($connections) + 1);
-		$name = "Töö " . $job_number;
+
+		if (is_oid ($resource_id))
+		{
+			$resource = obj ($resource_id);
+			$name = $this_object->name () . " - " . $resource->name ();
+		}
+		else
+		{
+			$resource = false;
+			$name = $this_object->name () . " - ...";
+		}
 
 		if (!($jobs_folder = $workspace->prop ("jobs_folder")))
 		{
 			return false;//!!! veateade teha?
 		}
 
+		$list = new object_list (array (
+			"class_id" => CL_MRP_JOB,
+			"exec_order" => ($job_number - 1),
+			"parent" => $jobs_folder,
+			"project" => $this_object->id (),
+		));
+		$prerequisite_job = $list->begin ();
+		$prerequisite = is_object ($prerequisite_job) ? $prerequisite_job->id () : "";
+
 		$job =& new object (array (
 		   "name" => $name,
 		   "parent" => $jobs_folder,
 		   // "class_id" => CL_MRP_JOB,
 		));
-		$job->set_class_id(CL_MRP_JOB);
+		$job->set_class_id (CL_MRP_JOB);
 		$job->set_prop ("state", MRP_STATUS_NEW);
 		$job->set_prop ("exec_order", $job_number);
-		$job->set_prop ("prerequisites", ($job_number - 1));
+		$job->set_prop ("prerequisites", $prerequisite);
 		$job->set_prop ("project", $this_object->id ());
+		$job->set_prop ("resource", $resource_id);
 		$job->save ();
+
+		if ($resource)
+		{
+			$job->connect (array (
+				"to" => $resource,
+				"reltype" => RELTYPE_MRP_RESOURCE,
+			));
+		}
+
 		$job->connect (array (
 			"to" => $this_object,
 			"reltype" => RELTYPE_MRP_PROJECT,
@@ -905,6 +1091,13 @@ class mrp_case extends class_base
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case"); echo $return_url;
 		return $return_url;
+	}
+
+	function on_save_case($arr)
+	{
+		// save data to prisma server
+		$i = get_instance(CL_MRP_PRISMA_IMPORT);
+		$i->write_proj($arr["oid"]);
 	}
 }
 

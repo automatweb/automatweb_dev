@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.4 2004/11/24 15:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.5 2005/01/13 19:47:15 kristo Exp $
 // crm_category.aw - Kategooria 
 /*
 
@@ -10,6 +10,8 @@
 
 @property img_upload type=releditor reltype=RELTYPE_IMAGE props=file,file_show
 @caption Pilt
+
+@property extern_id type=hidden field=meta method=serialize 
 
 //@property jrk type=textbox size=4
 //@caption Järk

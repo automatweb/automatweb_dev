@@ -49,6 +49,22 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>customer</name>
+            <group>general</group>
+            <table>mrp_case</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MRP_CUSTOMER</reltype>
+            <field>customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>extern_id</name>
+            <group>general</group>
+            <table>mrp_case</table>
+            <type>hidden</type>
+            <field>extern_id</field>
+      </property>
+      <property>
             <name>planned_date</name>
             <group>general</group>
             <table>objects</table>
@@ -67,6 +83,213 @@
             <method>serialize</method>
             <type>hidden</type>
             <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>format</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Formaat</caption>
+      </property>
+      <property>
+            <name>sisu_lk_arv</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Sisu lk arv</caption>
+      </property>
+      <property>
+            <name>kaane_lk_arv</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kaane lk arv</caption>
+      </property>
+      <property>
+            <name>sisu_varvid</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Sisu v&amp;auml;rvid</caption>
+      </property>
+      <property>
+            <name>sisu_varvid_notes</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Sisu v&amp;auml;rvid Notes</caption>
+      </property>
+      <property>
+            <name>sisu_lakk_muu</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Sisu lakk/muu</caption>
+      </property>
+      <property>
+            <name>kaane_varvid</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kaane v&amp;auml;rvid</caption>
+      </property>
+      <property>
+            <name>kaane_varvid_notes</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kaane v&amp;auml;rvid Notes</caption>
+      </property>
+      <property>
+            <name>kaane_lakk_muu</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kaane lakk/muu</caption>
+      </property>
+      <property>
+            <name>sisu_paber</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Sisu paber</caption>
+      </property>
+      <property>
+            <name>kaane_paber</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kaane paber</caption>
+      </property>
+      <property>
+            <name>trykiarv</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Tr&amp;uuml;kiarv</caption>
+      </property>
+      <property>
+            <name>trykise_ehitus</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Tr&amp;uuml;kise ehitus</caption>
+      </property>
+      <property>
+            <name>kromaliin</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kromalin</caption>
+      </property>
+      <property>
+            <name>makett</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Makett</caption>
+      </property>
+      <property>
+            <name>naidis</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>N&amp;auml;idis</caption>
+      </property>
+      <property>
+            <name>plaate</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Plaate</caption>
+      </property>
+      <property>
+            <name>transport</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Transport</caption>
+      </property>
+      <property>
+            <name>soodustus</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Soodustus</caption>
+      </property>
+      <property>
+            <name>markused</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>M&amp;auml;rkused</caption>
+      </property>
+      <property>
+            <name>allahindlus</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Allahindlus</caption>
+      </property>
+      <property>
+            <name>vahendustasu</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Vahendustasu</caption>
+      </property>
+      <property>
+            <name>myygi_hind</name>
+            <group>grp_case_data</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>M&amp;uuml;&amp;uuml;gi hind</caption>
       </property>
       <property>
             <name>case_description</name>
@@ -210,6 +433,9 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <grp_case_data>
+                  <caption>Projekti andmed</caption>
+            </grp_case_data>
             <grp_case_details>
                   <caption>Projekti kirjeldus</caption>
             </grp_case_details>

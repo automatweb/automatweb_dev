@@ -1,16 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.5 2005/01/07 08:40:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.6 2005/01/13 19:47:14 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
 @classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes
 
-@groupinfo grp_customers caption="Kliendid"
-@groupinfo grp_projects caption="Projektid"
-@groupinfo grp_resources caption="Ressursid"
-@groupinfo grp_schedule caption="Kalender"
-@groupinfo grp_users caption="Kasutajad"
-	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_users
+@groupinfo grp_customers caption="Kliendid" submit=no
+@groupinfo grp_projects caption="Projektid" submit=no
+@groupinfo grp_resources caption="Ressursid" submit=no
+@groupinfo grp_schedule caption="Kalender" submit=no
+@groupinfo grp_users caption="Kasutajad" 
+	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_users submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_users submit=no
 
 @groupinfo grp_settings caption="Seaded"
@@ -33,8 +33,9 @@
 	@property box type=text no_caption=1 store=no group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
 	@property vsplitbox type=text no_caption=1 store=no wrapchildren=1 group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
 	@property customers_toolbar type=toolbar store=no no_caption=1 parent=box
-	@property customers_list_tree type=text store=no no_caption=1 parent=vsplitbox
+	@property customers_tree type=treeview store=no no_caption=1 parent=vsplitbox
 	@property customers_list type=table store=no no_caption=1 parent=vsplitbox
+	@property customers_list_proj type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_projects
@@ -44,9 +45,9 @@
 
 
 @default group=grp_resources
-	@property resource_list_toolbar type=toolbar store=no no_caption=1 parent=box
-	@property resource_tree type=text store=no no_caption=1 parent=vsplitbox
-	@property resource_list type=table store=no no_caption=1 parent=vsplitbox
+	@property resources_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property resources_tree type=text store=no no_caption=1 parent=vsplitbox
+	@property resources_list type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_schedule
@@ -200,7 +201,10 @@ class mrp_workspace extends class_base
 				$this->create_customers_tree ($arr);
 				break;
 			case "customers_list":
-				$this->create_customers_list ($arr);
+				return $this->create_customers_list ($arr);
+				break;
+			case "customers_list_proj":
+				return $this->create_customers_list_proj ($arr);
 				break;
 
 			### schedule tab
@@ -1283,6 +1287,266 @@ class mrp_workspace extends class_base
 
 		// cleverly return
 		return $arr["return_url"];
+	}
+
+	function create_customers_toolbar($arr)
+	{
+		$co = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		if (!$co)
+		{
+			return;
+		}
+
+		$t =& $arr["prop"]["vcl_inst"];
+		
+		$t->add_menu_button(array(
+			"name" => "add_menu",
+			"tooltip" => t("Uus"),
+		));
+
+		$t->add_menu_item(array(
+			"parent" => "add_menu",
+			"text" => t('Lisa kategooria'),
+			"link" => html::get_new_url(CL_CRM_CATEGORY, $co->id(), array(
+				"alias_to" => ($arr["request"]["cat"] ? $arr["request"]["cat"] : $co->id()),
+				"reltype" => ($arr["request"]["cat"] ? 2 : 30),
+				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+			)),
+		));
+		
+		if (false && is_oid($arr["request"]["cat"]))
+		{
+			$t->add_menu_item(array(
+				"parent" => "add_menu",
+				"text" => t('Lisa klient'),
+				"link" => html::get_new_url(CL_CRM_COMPANY, $co->id(), array(
+					"alias_to" => ($arr["request"]["cat"] ? $arr["request"]["cat"] : $co->id()),
+					"reltype" => 3,
+					"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+				))
+			));
+		}
+		
+
+		/*$t->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Kustuta"),
+			"img" => "delete.gif",
+			"action" => "delete_customers"
+		));*/
+	}
+
+	function create_customers_tree($arr)
+	{
+		$co = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+		if (!$co)
+		{
+			return;
+		}
+
+		$t =& $arr["prop"]["vcl_inst"];
+		classload("icons");
+		
+		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
+		{
+			$nm = $c->prop("to.name");
+		
+			$t->add_item(0, array(
+				"id" => $c->prop("to"),
+				"name" => ($_GET["cat"] == $c->prop("to") ? "<b>".$nm."</b>" : $nm),
+				"url" => aw_url_change_var("cat", $c->prop("to")),
+			));
+			$this->_req_create_customers_tree($c->to(), $t);
+		}
+	}
+
+	function _req_create_customers_tree($co, &$t)
+	{
+		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
+		{
+			$nm = $c->prop("to.name");
+			$t->add_item($co->id(), array(
+				"id" => $c->prop("to"),
+				"name" => ($_GET["cat"] == $c->prop("to") ? "<b>".$nm."</b>" : $nm),
+				"url" => aw_url_change_var("cat", $c->prop("to")),
+			));
+			$this->_req_create_customers_tree($c->to(), $t);
+		}
+
+		foreach($co->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		{
+			$to = $c->to();
+			$nm = $c->prop("to.name");
+			$t->add_item($co->id(), array(
+				"id" => $c->prop("to"),
+				"name" => ($_GET["cust"] == $c->prop("to") ? "<b>".$nm."</b>" : $nm),
+				"url" => aw_url_change_var("cust", $c->prop("to")),
+				"iconurl" => icons::get_icon_url($to->class_id())
+			));
+		}
+	}
+
+	function _init_cust_list_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "address",
+			"caption" => "Aadress",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => "Telefon",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => "E-mail",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "priority",
+			"caption" => "Prioriteet",
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"name" => "select",
+			"field" => "oid"
+		));
+	}
+
+	function create_customers_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		if (!is_oid($arr["request"]["cust"]) && is_oid($arr["request"]["cat"]))
+		{
+			$this->_init_cust_list_t($t);
+
+			// get customers from cat
+			$cat = obj($arr["request"]["cat"]);
+			foreach($cat->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+			{
+				$addr = "";
+
+				$cust = $c->to();
+
+				$t->define_data(array(
+					"name" => html::get_change_url($c->prop("to"), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->prop("to.name")),
+					"address" => $cust->prop_str("contact"),
+					"phone" => $cust->prop_str("phone_id"),
+					"email" => $cust->prop_str("email_id"),
+					"oid" => $cust->id(),
+					"priority" => $cust->prop("priority")
+				));
+			}
+			return PROP_OK;
+		}
+		return PROP_IGNORE;
+	}
+
+	function _init_cust_list_proj_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Number",
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => "Kommentaar",
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "start",
+			"caption" => "Algus",
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "end",
+			"caption" => "T&auml;htaeg",
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "planned",
+			"caption" => "Planeeritud",
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+	}
+
+	function create_customers_list_proj($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		if (is_oid($arr["request"]["cust"]))
+		{
+			$this->_init_cust_list_proj_t($t);
+			
+			$cust = obj($arr["request"]["cust"]);
+			$ol = new object_list(array(
+				"class_id" => CL_MRP_CASE,
+				"customer" => $cust->id()
+			));
+			foreach($ol->arr() as $case)
+			{
+				$t->define_data(array(
+					"name" => html::get_change_url($case->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $case->name()),
+					"comment" => $case->comment(),
+					"start" => $case->prop("starttime"),
+					"end" => $case->prop("due_date"),
+					"planned" => $case->prop("planned_date")
+				));
+			}
+			$t->set_default_sortby("name");
+			$t->sort_by();
+			return PROP_OK;
+		}
+		return PROP_IGNORE;
+	}
+
+	/** imports given project from prisma db
+
+		@attrib name=import_project 
+
+		@param id required type=int
+
+	**/
+	function import_project($arr)
+	{
+		$i = get_instance(CL_MRP_PRISMA_IMPORT);
+		$id = $i->import_project($arr["id"]);
+
+		header("Location: ".html::get_change_url($id));
+		die();
 	}
 }
 

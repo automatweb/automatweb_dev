@@ -43,5 +43,13 @@
 			</function>
 		</action>
 
+		<action name="import_project">
+			<function name="import_project">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
