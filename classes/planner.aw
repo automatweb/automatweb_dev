@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.10 2001/05/17 11:48:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.11 2001/05/17 12:36:23 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -53,15 +53,52 @@ class planner extends calendar {
 
 	function user_planner($args = array())
 	{
+		extract($args);
 		$this->tpl_init("planner");
-		$args["act"] = "show";
+		$args["act"] = "user";
+		$ids = "uid=" . UID;
+		$args["ids"] = $ids;
+		$args["ctype"] = "uid";
+		if (!$date)
+		{
+			$date = date("d-m-Y");
+		};
+		// menüü def
+		$args["date"] = $date;
+		$menu = array(
+			"today" => "?class=planner",
+			"overview" => "?class=planner&action=overview&date=$date",
+			"day" => "?class=planner&date=$date",
+			"week" => "?class=planner&action=show_week&date=$date",
+			"month" => "?class=planner&action=show_month&date=$date",
+			"new" => "?class=planner&action=add_event&parent=$id&date=$date",
+		);
+		$args["menu"] = $menu;
 		return $this->change($args);
 	}
 
 	function admin_planner($args = array())
 	{
+		extract($args);
 		$this->tpl_init("automatweb/planner");
 		$args["act"] = "change";
+		$args["ids"] = "id=" . $args["id"];
+		$args["ctype"] = "oid";
+		$args["date"] = $date;
+		if (!$date)
+		{
+			$date = date("d-m-Y");
+		};
+		// menüü def
+		$menu = array(
+			"today" => "?class=planner&action=$act&$ids",
+			"overview" => "?class=planner&action=$act&disp=overview&$ids&date=$date",
+			"day" => "?class=planner&action=$act&$ids&date=$date",
+			"week" => "?class=planner&action=$act&disp=week&$ids&date=$date",
+			"month" => "?class=planner&action=$act&disp=month&$ids&date=$date",
+			"new" => "?class=planner&action=addevent&parent=$id&date=$date",
+		);
+		$args["menu"] = $menu;
 		return $this->change($args);
 	}
 	
@@ -75,10 +112,6 @@ class planner extends calendar {
 		extract($args);
 		$object = $this->get_object($id);
 
-		if (!$date)
-		{
-			$date = date("d-m-Y");
-		};
 			
 		list($d,$m,$y) = split("-",$date);
 		
@@ -87,15 +120,6 @@ class planner extends calendar {
 
 		$this->mk_path($object["parent"],CAL_CH_TITLE);
 
-		// menüü def
-		$menu = array(
-			"today" => "?class=planner&action=$act&id=$id",
-			"overview" => "?class=planner&action=$act&disp=overview&id=$id&date=$date",
-			"day" => "?class=planner&action=$act&id=$id&date=$date",
-			"week" => "?class=planner&action=$act&disp=week&id=$id&date=$date",
-			"month" => "?class=planner&action=$act&disp=month&id=$id&date=$date",
-			"new" => "?class=planner&action=addevent&parent=$id&date=$date",
-		);
 
 		$titles = array(
 			"week" => CAL_WEEK,
@@ -149,9 +173,17 @@ class planner extends calendar {
 
 		$events = array();
 		$events2 = array();
+		if ($ctype == "oid")
+		{
+			$supp = "parent = '$id'";
+		}
+		else
+		{
+			$supp = "uid = '$uid'";
+		};
 		$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE parent = '$id'  AND objects.status = 2 AND ((start >= '$di[start]' AND start <= '$di[end]') $rinlist) 
+			WHERE $supp  AND objects.status = 2 AND ((start >= '$di[start]' AND start <= '$di[end]') $rinlist) 
 			ORDER BY start";
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -546,9 +578,14 @@ class planner extends calendar {
 			"2002" => "2002",
 			"2003" => "2003",
 			"2004" => "2004",
+			"2005" => "2005",
+			"2006" => "2006",
+			"2007" => "2007",
+			"2008" => "2008",
 		);
 		$mlist = explode("|",LC_MONTH);
 		unset($mlist[0]);
+		print "caption = $caption<br>";
 		$this->vars(array(
 			"menudef" => $menudef,
 			"caption" => $caption,
