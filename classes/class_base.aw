@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.215 2004/02/17 13:35:39 duke Exp $
+// $Id: class_base.aw,v 2.216 2004/02/17 14:41:53 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -283,20 +283,22 @@ class class_base extends aw_template
 
 		$this->request = $args;
 
-		// XX: arrr
+		// XXX: what the fuck does this cycle do anyway?
 		foreach($this->groupinfo as $key => $val)
 		{
+			// ignore groups with no properties
 			if (empty($this->props_by_group[$key]))
 			{
-				// ignore groups with no properties
 				continue;
 
 			}
-			// we only want subgroups that are children of the currently active group
-			if (isset($val["parent"]) && isset($this->classinfo["hide_tabs_L2"])) //"hide_tabs_L2" kas seda kasutatakse kuskil??
+
+			//"hide_tabs_L2" kas seda kasutatakse kuskil??
+			if (isset($val["parent"]) && isset($this->classinfo["hide_tabs_L2"]))
 			{
 				continue;
 			}
+			// ignore subgroups that are not children of the currently active group
 			elseif (isset($val["parent"]) && $val["parent"] != $this->activegroup)
 			{
 				continue;
@@ -318,7 +320,6 @@ class class_base extends aw_template
 			{
 				$this->inst->callback_pre_edit(array(
 					"id" => $this->id,
-					"data" => &$this->data,
 					"request" => $this->request,
 					"obj_inst" => &$this->obj_inst,
 				));
@@ -326,11 +327,6 @@ class class_base extends aw_template
 			};
 		};
 		
-		// here be some magic to determine the correct output client
-		// this means we could create a TTY client for AW :)
-		// actually I'm thinking of native clients and XML-RPC
-		// output client is probably the first that should be
-		// implemented.
 		$gdata = isset($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->activegroup];
 
 
@@ -359,12 +355,16 @@ class class_base extends aw_template
 		}
 		else
 		{
+			// here be some magic to determine the correct output client
+			// this means we could create a TTY client for AW :)
+			// actually I'm thinking of native clients and XML-RPC
+			// output client is probably the first that should be
+			// implemented.
 			$cli = get_instance("cfg/" . $this->output_client);
 			if ($this->layout_mode == "fixed_toolbar")
 			{
 				if ($this->use_mode == "new")
 				{
-					// nii, kuidas kuradi moodi ma nüüd selle vormi targeti teada saan?
 					$cli->set_form_target("_parent");
 				};
 			};
@@ -402,17 +402,14 @@ class class_base extends aw_template
 
 		// so now I have a list of properties along with their values,
 
-		// here be some magic to determine the correct output client
-		// this means we could create a TTY client for AW :)
-		// actually I'm thinking of native clients and XML-RPC
-		// output client is probably the first that should be
-		// implemented.
-
 		// and, if we are in that other layout mode, then we should probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?
-
 		if ($has_errors)
 		{
+			// give the output client a chance to display a message stating
+			// that there were errors in entered data. Individual error 
+			// messages will be next to their respective properties, this
+			// is just the 
 			$cli->show_error();
 		}
 
@@ -449,18 +446,23 @@ class class_base extends aw_template
 			$this->inst->callback_mod_reforb(&$argblock);
 		};
 
+		$submit_action = "submit";
+
 		if (isset($this->forminfo[$use_form]["onsubmit"]))
 		{
 			$submit_action = $this->forminfo[$use_form]["onsubmit"];
 			$argblock["orb_class"] = $this->clfile;
 		}
-		else
+
+		$method = "POST";
+		// forminfo can override form post method
+		if (isset($this->forminfo[$use_form]["method"]))
 		{
-			$submit_action = "submit";
+			$method = "GET";
 		};
 
 		$cli->finish_output(array(
-			"method" => isset($this->forminfo[$use_form]["method"]) ? "GET" : "",
+			"method" => $method,
 			"action" => $submit_action,
 			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
 			"data" => $argblock,
@@ -745,9 +747,14 @@ class class_base extends aw_template
 		// set $this->clid and $this->clfile
 		$cfgu = get_instance("cfg/cfgutils");
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
-		if (empty($orb_class))
+		if (empty($orb_class) && is_object($this->orb_class))
 		{
 			$orb_class = get_class($this->orb_class);
+		};
+
+		if (empty($orb_class) && is_string($this->orb_class))
+		{
+			$orb_class = $this->orb_class;
 		};
 
 		if ($orb_class == "document")
@@ -767,7 +774,7 @@ class class_base extends aw_template
 		$this->ds = get_instance("datasource/" . $this->ds_name);
 
 		$clid = $this->clid;
-		if (empty($clid))
+		if (empty($clid) && method_exists($this->orb_class,"get_opt"))
 		{
 			$clid = $this->orb_class->get_opt("clid");
 		};
@@ -807,7 +814,7 @@ class class_base extends aw_template
 		// nothing breaks
 		else
 		{
-			$this->inst = get_instance($clfile);
+			$this->inst = get_instance($this->clfile);
 		};
 	}
 
@@ -819,8 +826,6 @@ class class_base extends aw_template
 		{
 			return false;
 		};
-
-		$this->_obj = new object($args["id"]);
 
 		foreach($this->tables as $key => $val)
 		{
@@ -1761,6 +1766,9 @@ class class_base extends aw_template
 	// !Figures out the value for property
 	function get_value(&$property)
 	{
+		// cb_values comes from session and is set, if the previous process_request
+		// run encounterend any PROP_ERRORS, this takes care of displaying the
+		// error messages in correct places
 		if (is_array($this->cb_values) && !empty($this->cb_values[$property["name"]]["value"]))
 		{
 			$property["value"] = $this->cb_values[$property["name"]]["value"];
@@ -1769,8 +1777,10 @@ class class_base extends aw_template
 				$property["error"] = $this->cb_values[$property["name"]]["error"];
 			};
 		};
-		$field = trim(($property["field"]) ? $property["field"] : $property["name"]);
-		$table = isset($property["table"]) ? $property["table"] : "";
+
+		// this was implemented for BDG, because I needed to allow the user to 
+		// choose one connected image to be used as the flyer for an event.
+		// would be nice to get rid of this.
 		if ($property["type"] == "relpicker" && isset($property["pri"]))
 		{
 			$realclid = constant($property["clid"]);
@@ -1779,16 +1789,19 @@ class class_base extends aw_template
 			$property["value"] = $this->db_fetch_field($q,"target");
 		}
 		else
+		// if this is a new object and the property has a default value, use it
 		if (empty($this->id) && isset($property["default"]))
 		{
 			$property["value"] = $property["default"];
 		}
 		else
+		// current time for datetime_select properties for new objects
 		if (empty($this->id) && $property["type"] == "datetime_select")
 		{
 			$property["value"] = time();
 		}
 		else
+		// this values thingie is a hack
 		if (isset($this->values) && is_array($this->values))
 		{
 			if (isset($this->values[$property["name"]]))
@@ -1797,18 +1810,14 @@ class class_base extends aw_template
 			};
 		}
 		else
-		if (($property["trans"] == 0) && is_object($this->_obj) && $this->_obj->prop($property["name"]) != NULL)
+		if ( 	/*($property["trans"] == 0) &&*/
+			empty($property["emb"]) &&
+			is_object($this->obj_inst) &&
+			$this->obj_inst->is_property($property["name"]) && 
+			$this->obj_inst->prop($property["name"]) != NULL )
 		{
-			$property["value"] = $this->_obj->prop($property["name"]);
+			$property["value"] = $this->obj_inst->prop($property["name"]);
 		}
-		else
-		{
-			// so, how do I figure out whether a property exists?
-			if (empty($property["emb"]) && is_object($this->obj_inst) && $this->obj_inst->is_property($property["name"]))
-			{
-				$property["value"] = $this->obj_inst->prop($property["name"]);
-			};
-		};
 		
 		if ($property["method"] == "bitmask")
 		{
@@ -1861,6 +1870,8 @@ class class_base extends aw_template
 
 		$remap_children = false;
 
+		// hm, perhaps I should create a list of classes to be initialized then?
+
 		// First we resolve all callback properties, so that get_property calls will
 		// be valid for those as well
 		$has_rte = false;
@@ -1904,6 +1915,73 @@ class class_base extends aw_template
 				};
 
 			}
+			elseif ($val["type"] == "form")
+			{
+				// I need a list of those bloody properties, eh?
+				// how?
+				$filter = array("form" => $val["sform"]);
+				$cfgu = get_instance("cfg/cfgutils");
+
+				// oh, but that is wrong .. I need to query the class somehow
+				// and not read properties directly. They properties _need_
+				// to come through that classes get_property and whatever else
+				// calls
+
+				// so .. I need to load the class instance, invoke get_property 
+				// calls on it .. and then get the results and inject those
+				// into my output stream. Uh, that's going to be hard.
+
+				$_all_props = $cfgu->load_properties(array(
+					"file" => $val["sclass"],
+					"filter" => $filter,
+				));
+
+				// and how I get the class_instance?
+				$clx_name = "crm/" . $val["sclass"];
+				$clx_inst = get_instance($clx_name);
+
+				/*
+				print "<pre>";
+				print_r($this->request);
+				print "</pre>";
+				*/
+
+				$clx_inst->orb_class = $clx_name;
+				$clx_inst->init_class_base();
+
+				/*
+				$_all_props = $clx_inst->get_active_properties(array(
+					"file" => $val["sclass"],
+					"form" => $val["sform"],
+				));
+				*/
+
+				// this needs to change the form method, urk, urk
+				$clx_inst->request = $this->request[$val["name"]];
+
+				$xprops = $clx_inst->parse_properties(array(
+					"properties" => $_all_props,
+					"name_prefix" => $val["name"],
+				));
+
+				foreach($xprops as $rkey => $rprop)
+				{
+					$rprop["emb"] = 1;
+					$resprops[$rkey] = $rprop;
+				};
+
+
+				/*
+				foreach($_all_props as $rkey => $rval)
+				{
+					// noo ei lähe see värk nii, no ei lähe!
+					//$argblock["prop"] = $rval;
+					//$clx_inst->get_property(&$argblock);
+					//$resprops[$rkey] = $argblock["prop"];
+					$resprops[$rkey] = $rval;
+				};
+				*/
+			}
 			else
 			{
 				$resprops[$key] = $val;
@@ -1937,6 +2015,7 @@ class class_base extends aw_template
 
 		foreach($properties as $key => $val)
 		{
+			// XXX: need to get rid of that "text" index
 			if ($val["name"] == "status" && $this->classinfo["no_status"]["text"] == 1)
 			{
 				continue;
@@ -1968,7 +2047,7 @@ class class_base extends aw_template
 					classload("vcl/relmanager");
 					$val["vcl_inst"] = new relmanager();
 				};
-				
+
 				if (($val["type"] == "table") && !is_object($val["vcl_inst"]))
 				{
 					load_vcl("table");
