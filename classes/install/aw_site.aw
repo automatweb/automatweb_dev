@@ -312,7 +312,7 @@ class aw_site extends class_base
 		$site['vhost_file'] = aw_ini_get('install.vhost_folder').$ob['meta']['site_url'];
 		$site['server_ip'] = aw_ini_get('install.default_ip');
 		$site['admin_folder'] = aw_ini_get('install.admin_folder');
-		$site['db_name'] = $ob['meta']['site_url'];
+		$site['db_name'] = str_replace(".","",$ob['meta']['site_url']);
 		$site['db_pwd'] = generate_password();
 		return $site;
 	}
