@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.30 2004/06/16 07:45:47 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.31 2004/06/17 11:29:12 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -56,6 +56,9 @@ caption Pildi/foto url
 
 @property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first use_form=emb 
 @caption Pilt/foto
+
+//@property profession type=select store=no edit_only=1
+//@caption Ametinimetus
 
 @property notes type=textarea cols=60 rows=10 group=description
 @caption Vabas vormis tekst
@@ -185,7 +188,7 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype CHILDREN value=5 clid=CL_CRM_PERSON
 @caption lapsed
 
-@reltype WORK value=6 clid=CL_CRM_COMPANY
+@reltype WORK value=6 clid=CL_CRM_COMPANY,CL_CRM_UNIT
 @caption töökoht
 
 @reltype RANK value=7 clid=CL_CRM_PROFESSION
@@ -224,7 +227,6 @@ caption Andmed
 @reltype SECTION value=21 clid=CL_CRM_SECTION
 @caption Üksus
 
-
 */
 
 class crm_person extends class_base
@@ -245,6 +247,26 @@ class crm_person extends class_base
 		
 		switch($data["name"])
 		{
+			case 'profession':
+				/*if((int)$form['profession'])
+				{
+					//kontrollin, kas juba antud persoonil on mõne ametinimetuse juurde seos
+					$conns = $arr['obj_inst']->connections_from(array(
+						'type'=>RELTYPE_PROFESSION
+					));
+					//kui on, siis kustutan ära, sest kavatsen lisada uue
+					foreach($conns as $conn)
+					{
+						$conn->delete();
+						//$arr['obj_inst']->disconnect(array('from'=>$conn->prop('to')));
+					}
+					echo $form['profession'];
+					$arr['obj_inst']->connect(array(
+						'to'=>$form['profession'],
+						'reltype'=>RELTYPE_PROFESSION
+					));
+				}*/
+				break;
 			case "lastname":
 				if ($form['firstname'] || $form['lastname'])
 				{
@@ -264,6 +286,56 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case 'rank' :
+			{
+				/*
+				//let's list the professions the organization/unit is associated with
+				$drop_down_list = array();
+				//connections from person->organization
+				$conns = $arr['obj_inst']->connections_from(array(
+					'type'=>'RELTYPE_WORK'
+				));
+				$tmp_conns = $arr['obj_inst']->connections_from(array(
+					'type'=>'RELTYPE_MEMBER'
+				));
+				$conns = array_merge($conns,$tmp_conns);
+				foreach($conns as $conn)
+				{
+					$tmp_obj = new object($conn->prop('to'));
+					//connections from organization->profession
+					$conns2 = $tmp_obj->connections_from(array(
+								'type'=>'RELTYPE_PROFESSION_COMP'
+					));
+					foreach($conns2 as $conn2)
+					{
+						$tmp = new object($conn2->prop('to'));
+						if($conn2->prop('type')==CL_CRM_PROFESSION)
+						{
+							$drop_down_list[$tmp->id()] = $tmp->prop('name');
+						}
+					}
+				}
+				$data['options'] = $drop_down_list;
+				//determine the selected item
+				$conns = $arr['obj_inst']->connections_from(array(
+					'type'=>'RELTYPE_PROFESSION'
+				));
+				if(sizeof($conns))
+				{
+					$selected='';
+					$conn = array_pop($conns);
+					foreach($drop_down_list as $key=>$value)
+					{
+						if($key==$conn->prop('to'))
+						{
+							$selected=$key;
+							break;
+						}
+					}
+					$data['value'] = $selected;
+				}*/
+				break;
+			}
 			case "title":
 				$data["options"] = array("Härra","Proua","Preili");
 				break;
