@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.127 2003/07/01 15:14:42 duke Exp $
+// $Id: class_base.aw,v 2.128 2003/07/02 12:06:47 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1456,6 +1456,7 @@ class class_base extends aw_template
 			elseif ($val["type"] == "hidden")
 			{
 				// do nothing
+				$resprops[$name] = $val;
 			}
 			else
 			{
@@ -1474,6 +1475,33 @@ class class_base extends aw_template
 				};
 				$resprops[$_field] = $val;
 			};
+		}
+
+		// if name_prefix given, prefixes all element names with the value 
+		// e.g. if name_prefix => "emb" and there is a property named comment,
+		// then the result will be name => emb[comment], this simplifies 
+		// processing of embedded config forms
+		if ($args["name_prefix"])
+		{
+			$tmp = $resprops;
+			$resprops = array();
+			foreach($tmp as $key => $el)
+			{
+				$bracket = strpos($el["name"],"[");
+				if ($bracket > 0)
+				{
+					$pre = substr($el["name"],0,$bracket);
+					$aft = substr($el["name"],$bracket);
+					$newname = $args["name_prefix"] . "[$pre]" . $aft;
+				}
+				else
+				{
+					$newname = $args["name_prefix"] . "[" . $el["name"] . "]";
+				};
+				$el["name"] = $newname;
+				// just to get an hopefully unique name .. 
+				$resprops[$args["name_prefix"] . "_" . $key] = $el;
+			}
 		}
 		return $resprops;
 	}
