@@ -1,9 +1,9 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/group</class>
-      <func>on_add_alias_for_group</func>
-      <param>CL_GROUP</param>
+      <class>object_chain</class>
+      <func>on_add_alias</func>
+      <param>CL_OBJECT_CHAIN</param>
 </num_0>
 <num_1>
       <class>applications/personnel_management/personnel_management_job_offer</class>
@@ -16,13 +16,23 @@
       <param>CL_CAL_EVENT</param>
 </num_2>
 <num_3>
+      <class>contentmgmt/reminder</class>
+      <func>on_connect_obj</func>
+      <param>CL_DOCUMENT</param>
+</num_3>
+<num_4>
+      <class>contentmgmt/timing</class>
+      <func>on_connect_obj</func>
+      <param>CL_DOCUMENT</param>
+</num_4>
+<num_5>
+      <class>core/users/group</class>
+      <func>on_add_alias_for_group</func>
+      <param>CL_GROUP</param>
+</num_5>
+<num_6>
       <class>formgen/form_entry</class>
       <func>on_add_alias</func>
       <param>CL_FORM_ENTRY</param>
-</num_3>
-<num_4>
-      <class>object_chain</class>
-      <func>on_add_alias</func>
-      <param>CL_OBJECT_CHAIN</param>
-</num_4>
+</num_6>
 </xml>
