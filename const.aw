@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.14 2001/06/05 17:40:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.15 2001/06/07 17:48:48 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -315,6 +315,8 @@ define(CL_CALENDAR,59); // kalendri objekt
 define(CL_SHOP,60); // pood. w00t!
 define(CL_SHOP_ITEM,61); // kaup. poes. duh. 
 define(CL_SHOP_STATS,62); // poodide statistika vaatamine k2ib selle kaudu
+
+define(CL_CONTACT_GROUP,63); // kontaktigrupp
 
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
