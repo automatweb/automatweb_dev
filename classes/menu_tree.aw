@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.11 2003/05/21 15:34:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.12 2003/06/20 13:32:50 duke Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -269,7 +269,7 @@ class menu_tree extends class_base
 
 			if ($v["link"] != "")
 			{
-				$url = $_v_l;
+				$url = $v["link"];
 				$id = $url;
 			}
 
