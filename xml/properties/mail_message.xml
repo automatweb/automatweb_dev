@@ -46,6 +46,15 @@
             <caption>Teema</caption>
       </property>
       <property>
+            <name>date</name>
+            <type>text</type>
+            <store>no</store>
+            <group>general</group>
+            <table>messages</table>
+            <field>date</field>
+            <caption>Kuupäev</caption>
+      </property>
+      <property>
             <name>message</name>
             <type>textarea</type>
             <cols>80</cols>
