@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.294 2004/08/30 10:50:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.295 2004/09/07 07:25:29 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -165,6 +165,11 @@ class core extends acl_base
 		if ($oid !== NULL)
 		{
 			$hoid = " AND oid = '$oid'";
+		}
+
+		if ($oid == NULL && aw_ini_get("cache.simple_site"))
+		{
+			$oid = aw_global_get("section");
 		}
 		$q = "UPDATE objects SET cachedirty = 1, cachedata = '' where status != 0 ".$hoid;
 		$this->db_query($q);
@@ -704,6 +709,11 @@ class core extends acl_base
 			{
 				$send_mail = false;
 			}
+		}
+
+		if ($err_type == 83 && aw_ini_get("site_id") == 543 && strpos($content, "main_esi") !== false)
+		{
+			$send_mail = false;
 		}
 
 		if ($send_mail)
