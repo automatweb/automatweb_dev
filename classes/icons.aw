@@ -776,7 +776,7 @@ class icons extends aw_template
 			return aw_ini_get("icons.server")."/ftype_".$extt.".gif";
 		}
 		else
-		if ($clid == "promo_box" || $clid == "brother" || $clid == "conf_icon_other" || $clid == "conf_icon_programs" || $clid == "conf_icon_classes" || $clid == "conf_icon_ftypes" || $clid == "conf_icons" || $clid == "conf_jf" || $clid == "conf_users" || $clid == "conf_icon_import" || $clid == "conf_icon_db" || $clid == "homefolder" || $clid == "shared_folders" || $clid == "hf_groups" || $clid == "bugtrack" )
+		if ($clid == "promo_box" || $clid == "brother" || $clid == "conf_icon_other" || $clid == "conf_icon_programs" || $clid == "conf_icon_classes" || $clid == "conf_icon_ftypes" || $clid == "conf_icons" || $clid == "conf_jf" || $clid == "conf_users" || $clid == "conf_icon_import" || $clid == "conf_icon_db" || $clid == "homefolder" || $clid == "hf_groups" || $clid == "bugtrack" )
 		{
 			return aw_ini_get("icons.server")."/iother_".$clid.".gif";
 		}
@@ -933,30 +933,6 @@ class icons extends aw_template
 		{
 			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_homefolder.gif <br />";
 			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_homefolder.gif", "w");
-			if (!$f)
-			{
-				echo "can!t open ya bassstardooo!! $clid<br />";
-			}
-			$ic = $this->get($v["id"]);
-			fwrite($f, $ic["file"]);
-			fclose($f);
-		}
-
-		$v = $ar["shared_folders"];
-		if (!$v["id"])
-		{
-			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif", "w");
-			if (!$f)
-			{
-				echo "can!t open ya bassstardooo!! $clid<br />";
-			}
-			fwrite($f, $fc);
-			fclose($f);
-		}
-		else
-		{
-			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif <br />";
-			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif", "w");
 			if (!$f)
 			{
 				echo "can!t open ya bassstardooo!! $clid<br />";
