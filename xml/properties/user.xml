@@ -24,6 +24,7 @@
             <group>general</group>
             <field>logins</field>
             <type>text</type>
+            <store>yes</store>
             <caption>Logins</caption>
       </property>
       <property>

@@ -42,7 +42,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @property uid_entry store=no type=textbox group=general 
 @caption User ID
 
-@property logins field=logins type=text
+@property logins field=logins type=text store=yes 
 @caption Logins
 
 @property online store=no type=text
