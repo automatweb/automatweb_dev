@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.58 2004/06/21 18:36:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.59 2004/06/25 19:03:41 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1041,17 +1041,20 @@ class form_table extends form_base
 			$search_form = $this->get_opt("current_search_form");
 			if (is_array($this->table["show_second_table_aliases"]))
 			{
+				$tmp = obj($this->table_id);
 				foreach($this->table["show_second_table_aliases"] as $aid)
 				{
-					$alias_data = $this->get_data_for_alias($aid);
-					if ($alias_data["class_id"] == CL_FORM_TABLE)
+					$c = reset($tmp->connections_from(array(
+						"to" => $aid
+					)));
+					if ($c->prop("to.class_id") == CL_FORM_TABLE)
 					{
-						$use_table = $alias_data["target"];
+						$use_table = $c->prop("to");
 					}
 					else
-					if ($alias_data["class_id"] == CL_FORM)
+					if ($c->prop("to.class_id") == CL_FORM)
 					{
-						$search_form = $alias_data["target"];
+						$search_form = $c->prop("to");
 					}
 				}
 			}
@@ -1457,20 +1460,19 @@ class form_table extends form_base
 
 	function get_data_for_alias($aid)
 	{
-		if (!($all_aliases = aw_cache_get("form_table::galiases", $this->table_id)))
-		{
-			$all_aliases = $this->get_aliases_for($this->table_id);
-			aw_cache_set("form_table::galiases", $this->table_id, $all_aliases);
-		}
+		$tmp = obj($this->table_id);
+		$c = reset($tmp->connections_from(array(
+			"to" => $aid
+		)));
 
-		foreach($all_aliases as $ad)
+		if (!$c)
 		{
-			if ($ad["real_id"] == $aid)
-			{
-				return $ad; 
-			}
+			return false;
 		}
-		return false;
+		return array(
+			"class_id" => $c->prop("to.class_id"),
+			"target" => $c->prop("to")
+		);
 	}
 
 	function get_js()
@@ -3187,11 +3189,14 @@ class form_table extends form_base
 			$als = $this->get_aliases_for_table();
 			foreach($arr as $aid)
 			{
-				$alias_data = $this->get_data_for_alias($aid);
-				if ($alias_data["class_id"] == CL_FORM_OUTPUT)
+				$tmp = obj($this->table_id);
+				$c = reset($tmp->connections_from(array(
+					"to" => $aid
+				)));
+				if ($c->prop("to.class_id") == CL_FORM_OUTPUT)
 				{
 					// if it is a form output alias then show the output with the data the user clicked on last
-					$tbl .= $this->do_parse_ftbl_alias($alias_data["target"]);
+					$tbl .= $this->do_parse_ftbl_alias($c->prop("to"));
 				}
 				else
 				{

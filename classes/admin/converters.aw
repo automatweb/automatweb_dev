@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.41 2004/06/25 18:13:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.42 2004/06/25 19:03:40 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -514,28 +514,6 @@ class converters extends aw_template
 		while($row = $this->db_next())
 		{
 			$this->save_handle();
-			if ($row["type"] == GRP_DYNAMIC)
-			{
-				$found = false;
-				$aliases = $this->get_aliases_for($row["oid"]);
-				foreach($aliases as $alias)
-				{
-					if ($alias["id"] == $row["search_form"])
-					{
-						$found = true;
-					}
-				}
-		
-				if (!$found)
-				{
-					// we must add an alias to the group object for the search form
-					$this->addalias(array(
-						"id" => $row["oid"],
-						"alias" => $row["search_form"],
-						"reltype" => 1
-					));
-				}
-			}
 			$sql = "UPDATE objects SET parent = $rootmenu WHERE oid = $row[oid]";
 			$this->db_query($sql);
 			echo "grupp: $row[gid] , oid = $row[oid] <br />\n";
@@ -639,28 +617,6 @@ class converters extends aw_template
 		while($row = $this->db_next())
 		{
 			$this->save_handle();
-			if ($row["type"] == GRP_DYNAMIC)
-			{
-				$found = false;
-				$aliases = $this->get_aliases_for($row["oid"]);
-				foreach($aliases as $alias)
-				{
-					if ($alias["id"] == $row["search_form"])
-					{
-						$found = true;
-					}
-				}
-		
-				if (!$found)
-				{
-					// we must add an alias to the group object for the search form
-					$this->addalias(array(
-						"id" => $row["oid"],
-						"alias" => $row["search_form"],
-						"reltype" => 1
-					));
-				}
-			}
 			$sql = "UPDATE objects SET parent = $poid WHERE oid = $row[oid]";
 			$this->db_query($sql);
 			echo "grupp $row[gid] <br />\n";
