@@ -35,9 +35,4 @@
       <func>on_connect_section_to_person</func>
       <param>CL_CRM_SECTION</param>
 </num_6>
-<num_7>
-      <class>personalihaldus/personalikeskkond</class>
-      <func>on_connect_manager_to_keskkond</func>
-      <param>CL_PERSONALIKESKKOND</param>
-</num_7>
 </xml>
