@@ -1,10 +1,11 @@
 <?php
-// $Id: doc.aw,v 2.3 2002/12/18 13:16:45 kristo Exp $
+// $Id: doc.aw,v 2.4 2003/02/03 12:19:31 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
 
 @default table=documents
+@default group=general
 
 @property title type=textbox size=60
 @caption Pealkiri
@@ -49,10 +50,10 @@
 @property title_clickable type=checkbox ch_value=1
 @caption Pealkiri klikitav
 
-@property clear_styles type=checkbox ch_value=1
+@property clear_styles type=checkbox ch_value=1 store=no
 @caption Tühista stiilid
 
-@property link_keywords type=checkbox ch_value=1
+@property link_keywords type=checkbox ch_value=1 store=no
 @caption Lingi võtmesõnad
 
 @property esilehel type=checkbox ch_value=1
@@ -79,21 +80,24 @@
 @property referer type=textbox size=50 table=objects field=meta method=serialize
 @caption Ref
 
-@property refopt type=select
+@property refopt type=select table=objects store=no
 @caption Ref tüüp
 
-@property sections type=select multiple=1 size=20 group=vennastamine
+@property sections type=select multiple=1 size=20 group=vennastamine store=no
 @caption Sektsioonid
 
-@property aliasmgr type=aliasmgr
+@property aliasmgr type=aliasmgr field=meta method=serialize table=objects
 @caption Aliastehaldur
 
+@property cal_event callback=callback_get_event_editor store=no group=calendar
+@caption Kalendrisündmus
+
+@groupinfo calendar caption=Kalender
+
+@tableinfo documents index=docid master_table=objects master_index=oid
+
 @classinfo toolbar=yes
-@classinfo objtable=documents
-@classinfo objtable_index=docid
-@classinfo relationmgr=yes
 @classinfo corefields=status
-@classinfo hide_tabs=yes
 
 */
 
@@ -124,6 +128,7 @@ class doc extends class_base
 			case "refopt":
 				$data["options"] = array("Ignoreeri","Näita","Ära näita");
 				break;
+
 		};
 		return $retval;
 	}
@@ -140,6 +145,13 @@ class doc extends class_base
 					"sections" => $args["form_data"]["sections"],
 				));
 				break;
+			
+			case "cal_event":
+				$this->create_event(array(
+					"id" => $args["obj"]["oid"],
+					"form_data" => $args["form_data"],
+				));
+				$retval = PROP_IGNORE;
 
 		};
 		return $retval;
@@ -190,13 +202,7 @@ class doc extends class_base
                         "imgover" => "lists_over.gif",
                         "img" => "lists.gif",
                 ));
-//                $toolbar->add_button(array(
-//                        "name" => "archive",
-//                        "tooltip" => "Arhiiv",
-//                        "url" => "#",
-//                        "imgover" => "archive_over.gif",
-//                        "img" => "archive.gif",
-//                ));
+
 		$toolbar->add_button(array(
                         "name" => "preview",
                         "tooltip" => "Eelvaade",
@@ -205,6 +211,46 @@ class doc extends class_base
                         "imgover" => "preview_over.gif",
                         "img" => "preview.gif",
                 ));
+	}
+
+	function callback_get_event_editor($args = array())
+	{
+		$nodes = array();
+		$id = $args["obj"]["oid"];
+		$event_data = $this->get_record("planner","id",$id,array("start","end"));
+		$def = get_instance("calendar/cal_event");
+
+		$xprops = $def->get_properties_by_group(array(
+			"classonly" => true,
+			"values" => $event_data,
+			"group" => "general",
+		));
+
+		$nodes = array_merge($nodes,$xprops);
+		return $nodes;
+	}
+
+	function create_event($args = array())
+	{
+		$ref = get_instance("calendar/cal_event");
+		$form_data = $args["form_data"];
+		$form_data["group"] = "general";
+		$form_data["classonly"] = true;
+		$savedata = $ref->process_form_data($form_data);
+		// it's rather easy from this point forward, I just have to check whether there exists a record for this
+		// object in the planner table, if so, I need to update it, if not, I need to delete it.
+		$id = $args["id"];
+		$old = $this->get_record("planner","id",$id,array("id"));
+		if (!$old)
+		{
+			// create new record
+			$q = "INSERT INTO planner (id,start,end) VALUES ('$id','$savedata[start]','$savedata[end]')";
+		}
+		else
+		{
+			$q = "UPDATE planner SET start = '$savedata[start]', end = '$savedata[end]' WHERE id = '$id'";
+		};
+		$this->db_query($q);
 	}
 
 	function show($args = array())
