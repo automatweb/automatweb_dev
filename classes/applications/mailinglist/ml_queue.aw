@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.10 2005/01/21 10:13:42 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.11 2005/01/21 10:15:33 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -632,19 +632,7 @@ class ml_queue extends aw_template
 		$def_user_folder = $list_obj->prop("def_user_folder");
 		// 2) retrieves a list of mailing list users
 		$source_obj = &obj($def_user_folder);
-		if($source_obj->class_id() == CL_GROUP or $source_obj->class_id() == CL_USER)
-		{
-			$member_list = $ml_list_inst->get_members_ol($list_obj);
-		}
-		elseif($source_obj->class_id() == CL_MENU)
-		{
-			$member_list = new object_list(array(
-				"class_id" => CL_ML_MEMBER,
-				"parent" => $def_user_folder,
-				"lang_id" => array(),
-				"site_id" => array(),
-			));
-		}
+		$member_list = $ml_list_inst->get_members_ol($list_obj);
 		$this->read_template("send_mail.tpl");
 		// 3) calls preprocess_one_message for each one
 		set_time_limit(0);
