@@ -12,6 +12,14 @@
 </td>
 </tr>
 <tr>
+<td height="15" class="fgtext">&nbsp;Minu kalender:&nbsp;</td>
+<td height="15" class="fgtext">&nbsp;
+<select name="calendar">
+{VAR:calendar}
+</select>
+</td>
+</tr>
+<tr>
 <td height="15" class="fgtext">&nbsp;Default currency:&nbsp;</td>
 <td height="15" class="fgtext">&nbsp;
 <!-- SUB: CUR -->
