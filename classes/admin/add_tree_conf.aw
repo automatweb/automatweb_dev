@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.20 2004/10/28 11:11:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.21 2004/11/19 16:10:24 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -307,6 +307,7 @@ class add_tree_conf extends class_base
 			}
 		}
 
+		$ret[CL_MENU] = CL_MENU;
 		return $ret;
 	}
 
