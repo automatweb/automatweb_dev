@@ -44,6 +44,10 @@ function doSubmit()
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
 </tr>
 <tr>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Kuup&auml;ev:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="tm" size="12" value="{VAR:tm}"></td>
+</tr>
+<tr>
 <td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
 </tr>
@@ -71,8 +75,26 @@ function doSubmit()
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="photos" size="80" value="{VAR:photos}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Kuup&auml;ev:&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="tm" size="12" value="{VAR:tm}"></td>
+</tr>
+<tr>
+<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="hele_hall_taust"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
+</tr>
+<tr>
+<td class="hele_hall_taust" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
 <td class="hele_hall_taust">
+<textarea name="lead" cols="100" rows="5" class='tekstikast'>{VAR:lead}</textarea>
+</td>
+</tr>
+<tr>
+<td class="hele_hall_taust" valign="top"><b>&nbsp;Sisu&nbsp;</b></td>
+<td class="hele_hall_taust">
+
+
+
+
 <br>
 <div id=idBox style="width: 100%;text-align: left; ;visibility: hidden, height:25;overflow:hidden;background:gainsboro" ID=htmlOnly valign="top">
 	<script>
@@ -128,20 +150,14 @@ function doSubmit()
 
 									</select>
 </div>
-<input type="hidden" name="title" value="{VAR:title}">
-<iframe name="title_edit" onFocus="sel_el='title_edit'" frameborder="1" width="600" height="50"></iframe>
-</td>
-</tr>
-<tr>
-<td class="hele_hall_taust" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
-<td class="hele_hall_taust">
-<iframe name="lead_edit" onFocus="sel_el='lead_edit'" frameborder="1" width="600" height="100"></iframe>
-<input type='hidden' name="lead" value="{VAR:lead}">
-</td>
-</tr>
-<tr>
-<td class="hele_hall_taust" valign="top"><b>&nbsp;Sisu&nbsp;</b></td>
-<td class="hele_hall_taust"><iframe onFocus="sel_el='cont_edit'" name="cont_edit" frameborder="1" width="600" height="400"></iframe>
+
+
+
+
+
+
+
+<iframe onFocus="sel_el='cont_edit'" name="cont_edit" frameborder="1" width="600" height="400"></iframe>
 <input type='hidden' name='content' value="{VAR:content}">
 <input type='hidden' name='nobreaks' value='1'>
 <script for=window event=onload>
