@@ -30,6 +30,8 @@ class export extends aw_template
 			"application/zip" => "zip",
 			"application/msword" => "doc"
 		);
+		$this->hash2url[2]["http://editwww.ut.ee/index.aw?section=20&set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww.ut.ee/index.aw?set_lang_id=2"] = "english";
 	}
 
 	function orb_export($arr)
@@ -67,7 +69,7 @@ class export extends aw_template
 			$fn_type = 3;
 		}
 
-		$fr = aw_unserialize($this->get_cval("export::rule_folders"));
+		$fr = aw_unserialize($this->get_cval("export::rule_folders".aw_global_get("lang_id")));
 		$o = get_instance("objects");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_export"),
@@ -109,7 +111,8 @@ class export extends aw_template
 		$c->set_simple_config("export::public_symlink_name",$public_symlink_name);
 		$str = aw_serialize($this->make_keys($rule_folders));
 		$this->quote(&$str);
-		$c->set_simple_config("export::rule_folders",$str);
+
+		$c->set_simple_config("export::rule_folders".aw_global_get("lang_id"),$str);
 
 		$sched = get_instance("scheduler");
 		$sched->remove(array(
@@ -200,7 +203,7 @@ class export extends aw_template
 			$this->load_rule($rule_id);
 		}
 
-		// ok, this is the complicated bit. 
+		// ok, this is the complicated bit.
 		// so, how do we do this? first. forget the time limit, this is gonna take a while.
 		set_time_limit(0);
 		ignore_user_abort(true);
@@ -225,7 +228,7 @@ class export extends aw_template
 			$this->fetch_and_save_page($this->cfg["baseurl"]."/?set_lang_id=".aw_global_get("lang_id"),aw_global_get("lang_id"));
 		}
 
-		// now fetch the empty template page. 
+		// now fetch the empty template page.
 		$this->fetch_and_save_page(
 			$this->cfg["baseurl"]."/?section=66666666&set_lang_id=".aw_global_get("lang_id"),
 			aw_global_get("lang_id"),
@@ -292,7 +295,7 @@ class export extends aw_template
 			foreach($files as $fn => $fd)
 			{
 				$this->removed_files[] = $fn;
-				@unlink($this->folder."/".$fn);
+				unlink($this->folder."/".$fn);
 				// ignore folders!
 				$this->db_query("DELETE FROM export_filelist WHERE filename LIKE '%fn%'");
 				$this->db_query("DELETE FROM export_content WHERE filename LIKE '%$fn%'");
@@ -384,7 +387,6 @@ class export extends aw_template
 				);
 				$this->write_log();
 				unlink($_stfn);
-				unlink(aw_ini_get("server.tmpdir")."/exp_running.".$this->rule_id);
 				die();
 			}
 		}
@@ -397,7 +399,7 @@ class export extends aw_template
 
 		$url = $this->rewrite_link($url);
 		$_url = $url;
-//		echo "fetch_and_save_page($url, $lang_id) <br>";
+		//echo "fetch_and_save_page($url, $lang_id) <br>";
 		if ($url == "")
 		{
 			echo "<p><Br>VIGA, tyhi url! </b><Br>";
@@ -671,7 +673,6 @@ class export extends aw_template
 				$ct = $mt[1];
 			}
 		}
-		$ct = trim($ct);
 
 		if (!isset($this->type2ext[$ct]))
 		{
@@ -836,7 +837,7 @@ class export extends aw_template
 		$this->read_template("add_rule.tpl");
 		$this->mk_path($parent,"Lisa");
 		$o = get_instance("objects");
-		$fr = aw_unserialize($this->get_cval("export::rule_folders"));
+		$fr = aw_unserialize($this->get_cval("export::rule_folders".aw_global_get("lang_id")));
 		$lst = $o->get_list();
 		$ls = array();
 		foreach($fr as $mnid)
@@ -912,7 +913,7 @@ class export extends aw_template
 		$this->mk_path($this->loaded_rule["parent"],"Muuda ekspordi ruuli");
 		$this->read_template("add_rule.tpl");
 		$o = get_instance("objects");
-		$fr = aw_unserialize($this->get_cval("export::rule_folders"));
+		$fr = aw_unserialize($this->get_cval("export::rule_folders".aw_global_get("lang_id")));
 		$lst = $o->get_list();
 		$ls = array();
 		foreach($fr as $mnid)
@@ -942,7 +943,7 @@ class export extends aw_template
 		}
 
 		$this->menu_cache->make_caches(array("lang_id" => $lang_id));
-//		echo "get_hash_for_url($url, $lang_id)<br>";
+		//echo "get_hash_for_url($url, $lang_id)<br>";
 		$fpurls = array(
 			$this->cfg["baseurl"]."/?set_lang_id=1&automatweb=aw_export",
 			$this->cfg["baseurl"]."/index.".$this->cfg["ext"]."?set_lang_id=1&automatweb=aw_export",
@@ -1055,14 +1056,14 @@ class export extends aw_template
 				{
 					$mn = substr($mn,0,strlen($mn)-1);
 				}
-				$mn = str_replace("õ", "o", $mn);
-				$mn = str_replace("ä", "a", $mn);
-				$mn = str_replace("ö", "o", $mn);
-				$mn = str_replace("ü", "u", $mn);
-				$mn = str_replace("Õ", "O", $mn);
-				$mn = str_replace("Ä", "A", $mn);
-				$mn = str_replace("Ö", "O", $mn);
-				$mn = str_replace("Ü", "U", $mn);
+				$mn = str_replace("Ãµ", "o", $mn);
+				$mn = str_replace("Ã¤", "a", $mn);
+				$mn = str_replace("Ã¶", "o", $mn);
+				$mn = str_replace("Ã¼", "u", $mn);
+				$mn = str_replace("Ã–", "O", $mn);
+				$mn = str_replace("Ã„", "A", $mn);
+				$mn = str_replace("Ã•", "O", $mn);
+				$mn = str_replace("Ãœ", "U", $mn);
 				$mn = strip_tags($mn);
 
 				if ($mn != "")
@@ -1239,6 +1240,8 @@ class export extends aw_template
 		$this->hash2url = array();
 		$this->ftn_used = array();
 		$this->fta_used = array();
+		$this->hash2url[2]["http://editwww.ut.ee/index.aw?section=20&set_lang_id=2"] = "english";
+		$this->hash2url[2]["http://editwww.ut.ee/index.aw?set_lang_id=2"] = "english";
 	}
 	
 	////
@@ -1863,6 +1866,12 @@ class export extends aw_template
 			$this->db_query("INSERT INTO export_log(start, finish, rule_id, log,added_files,removed_files,changed_files,globals) 
 				VALUES('$this->start_time','".time()."','$this->rule_id','$lg','$lg_a','$lg_r','$lg_c','$lg_g')");
 		}
+	}
+	
+	function kix_test()
+	{
+		$this->init_settings();
+		$this->fetch_and_save_page("http://editwww.ut.ee/index.aw?set_lang_id=2", 2, true);
 	}
 }
 ?>
