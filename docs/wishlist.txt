@@ -18,3 +18,7 @@ Miks see hea on?
 
 Miks see hea on?
 	Selge arusaam programmeerija, mis seoseid ta loob/kustutab.
+
+
+-- 
+klass folder, millel on meetodid get_objects / get_sub_folders jne, et ei peaks igalepoole pikka object_list'i filtrit kirjutama kui foldereid tahad.
