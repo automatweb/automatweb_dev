@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.23 2003/11/05 15:04:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.24 2003/11/18 15:35:59 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -52,9 +52,13 @@
 
 	@classinfo relationmgr=yes
 
+	@reltype PROP_GROUP value=1 clid=CL_MENU
+	@caption omaduste kataloog
+
+	@reltype ELEMENT value=2 clid=CL_RTE
+	@caption element
+
 */
-define(RELTYPE_PROP_GROUP,1);
-define(RELTYPE_ELEMENT,2);
 class cfgform extends class_base
 {
 	function cfgform($arr = array())
@@ -63,30 +67,6 @@ class cfgform extends class_base
 			"clid" => CL_CFGFORM,
 			"tpldir" => "cfgform",
 		));
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_PROP_GROUP => "omaduste kataloog",
-			RELTYPE_ELEMENT => "element",
-                );
-        }
-
-	function callback_get_classes_for_relation($arr)
-        {
-		$retval = false;
-		switch($arr["reltype"])
-		{
-                        case RELTYPE_PROP_GROUP:
-                                $retval = array(CL_MENU);
-                                break;
-
-			case RELTYPE_ELEMENT:
-				$retval = array(CL_RTE);
-				break;
-		}
-		return $retval;
 	}
 
 	function get_property($arr)
@@ -215,13 +195,28 @@ class cfgform extends class_base
 					// now that's the tricky part ... this thingsbum overrides
 					// all the settings in the document config form
 					$this->_init_properties($subclass);
+					$cfgu = get_instance("cfg/cfgutils");
 					if ($subclass == CL_DOCUMENT)
 					{
-						$cfgu = get_instance("cfg/cfgutils");
 						$def = join("",file(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml"));
 						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
 						$this->cfg_proplist = $proplist;
 						$this->cfg_groups = $grplist;
+					}
+					else
+					{
+						$fname = $this->cfg["classes"][$subclass]["file"];
+						$def = join("",file(aw_ini_get("basedir") . "/xml/properties/class_base.xml"));
+						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+						$this->cfg_proplist = $proplist;
+						$this->cfg_groups = $grplist;
+						$def = join("",file(aw_ini_get("basedir") . "/xml/properties/$fname.xml"));
+						list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+						// nono. It needs to fucking merge those things with classbase 
+						$this->cfg_proplist = $this->cfg_proplist + $proplist;
+						$this->cfg_groups = $this->cfg_groups + $grplist;
+
+
 					};
 				};
 				break;
@@ -296,6 +291,7 @@ class cfgform extends class_base
 				};
 			};
 		};
+
 
 		if (is_array($this->prplist))
 		{
@@ -683,19 +679,9 @@ class cfgform extends class_base
 				{
 					$grplist[$key]["grpstyle"] = $styl;
 				};
-				//print "key = $key<br>";
-				//print "cap " . $arr["form_data"]["grpcaption"][$key] . "<br>";
-				//print "gstyl " . $arr["form_data"]["grpstyle"][$key] . "<br>";
-				//$grplist[$key]["caption"] = $val;
 			};
 		};
 		$this->cfg_groups = $grplist;
-		/*
-		print "<pre>";
-		print_r($arr["form_data"]);
-		print "</pre>";
-		exit;
-		*/
 	}
 };
 ?>
