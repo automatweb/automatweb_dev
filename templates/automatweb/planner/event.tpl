@@ -1,4 +1,4 @@
-<form method="POST" action="reforb.{VAR:ext}" name="event">
+<form method="POST" action="index.{VAR:ext}" name="event">
 <table border="0" cellspacing="1" cellpadding="1" bgcolor="#ffffff">
 <tr>
 <td colspan="2" class="header1" align="center">
