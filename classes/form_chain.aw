@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.24 2002/07/23 05:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.25 2002/07/24 12:17:38 kristo Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -394,6 +394,7 @@ class form_chain extends form_base
 				"chain_entry_id" => $entry_id,
 				"form_entry_id" => $form_entry_id,
 				"load_chain_data" => $load_chain_data, 
+				"from_alias" => $from_alias
 			))
 		));
 
@@ -568,7 +569,7 @@ class form_chain extends form_base
 		}
 
 		// has something to do with embedding
-		if ($section && $GLOBALS["class"] == "")
+		if (($section && $GLOBALS["class"] == "") || ($section && $from_alias))
 		{
 			$url = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$section."/form_id=".$form_id."/entry_id=".$chain_entry_id;
 		}
