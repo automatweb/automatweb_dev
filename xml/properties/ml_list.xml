@@ -191,6 +191,17 @@
             <caption>Listi staatus</caption>
       </property>
       <property>
+            <name>mail_toolbar</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Maili toolbar</caption>
+      </property>
+      <property>
             <name>write_mail</name>
             <table>objects</table>
             <field>meta</field>
@@ -349,6 +360,11 @@
                   <clid>CL_MESSAGE</clid>
                   <caption>administratiivne teade </caption>
             </ADM_MESSAGE>
+            <TEMPLATE>
+                  <value>4</value>
+                  <clid>CL_MESSAGE_TEMPLATE</clid>
+                  <caption>kirja template</caption>
+            </TEMPLATE>
       </reltypes>
 </properties>
 

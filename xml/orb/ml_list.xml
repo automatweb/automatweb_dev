@@ -26,6 +26,15 @@
 			</function>
 		</action>
 
+		<action name="msg_preview" >
+			<function name="msg_preview">
+				<arguments>
+					<required name="id" type="int"/>
+					<required name="msg_id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="export_members" >
 			<function name="export_members">
 				<arguments>
