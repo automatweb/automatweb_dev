@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.247 2004/03/24 14:41:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.248 2004/03/26 10:06:15 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -352,7 +352,7 @@ class document extends aw_template
 			// augh .. backwards compatiblity is a fucking bitch
 			// that parse_document thingie expects $doc _array_ .. and wants
 			// to modify it .. and allah only knows where this is used ...
-			global $awt;
+			$si->parse_document(&$doc);
 			if (!$si->can_show_document(&$doc))
 			{
 				return "";
@@ -1126,16 +1126,16 @@ class document extends aw_template
 			$this->vars(array("HAS_CHANNEL" => $this->parse("HAS_CHANNEL")));
 		}
 
-		global $awt;
-		$awt->start("tsah");
 
 		$this->vars(array(
-			"SHOW_TITLE" 	=> ($doc["show_title"] == 1) ? $this->parse("SHOW_TITLE") : "",
+			"SHOW_TITLE" 	=> ($doc["show_title"] == 1 && $doc["title"] != "") ? $this->parse("SHOW_TITLE") : "",
+			"SHOW_TITLE2" 	=> ($doc["show_title"] == 1 && $doc["title"] != "") ? $this->parse("SHOW_TITLE2") : "",
 			"EDIT" 		=> ($this->prog_acl("view",PRG_MENUEDIT)) ? $this->parse("EDIT") : "",
 			"SHOW_MODIFIED" => ($doc["show_modified"]) ? $this->parse("SHOW_MODIFIED") : "",
 			"COPYRIGHT"	=> ($doc["copyright"]) ? $this->parse("COPYRIGHT") : "",
 			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : "")
 			));
+
 
 		// keeleseosed
 		if ($this->is_template("LANG_BRO"))
@@ -1169,10 +1169,13 @@ class document extends aw_template
 			
 			$this->vars(array("LANG_BRO" => $langs));
 		}; // keeleseosed
+		global $awt;
+		$awt->start("tsah");
 
 		$this->do_subtpl_handlers($doc_o);
 		
 		$this->do_plugins($doc_o);
+		$awt->stop("tsah");
 
 		$retval = $this->parse();
 
