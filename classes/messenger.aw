@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.68 2001/06/21 14:27:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.69 2001/06/21 16:52:26 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -686,6 +686,8 @@ class messenger extends menuedit_light
 		$gl = "";
 		$garr = "";
 		$gd = 0;
+
+
 	
 		foreach($grps as $oid => $name)
 		{
@@ -713,13 +715,35 @@ class messenger extends menuedit_light
 			$gl = "";
 			$g .= $this->parse("group");
 		};
-		$dummy = array("0" => "Kõik");
+	
+		// listid
+		$this->get_objects_by_class(array(
+					"class" => CL_MAILINGLIST,
+				));
+		$gd = 0;
+		$larr = "";
+		while($row = $this->db_next())
+		{
+			$this->vars(array(
+					"name" => $row["name"],
+					"gd" => $gd,
+				));
+			$gd++;
+			$larr .= $this->parse("larr");
+		};
+		$this->vars(array("larr" => $larr));
+		$g .= $this->parse("group");
+
+
+		$dummy = array("0" => "Kõik","1" => "Listid");
 		$this->vars(array(
 				"groups" => $this->picker(-1,$dummy + $this->flatlist),
 				"group" => $g,
 				"garr" => $garr,
 				"hf" => $udata["home_folder"],
 			));
+		
+		
 		print $this->parse();
 	}
 
@@ -831,7 +855,10 @@ class messenger extends menuedit_light
 		$idlist = array();
 		while(list($k,) = each($flist))
 		{
-			$idlist[] = $k;
+			if (is_number($k))
+			{
+				$idlist[] = $k;
+			};
 		};
 
 		if (sizeof($idlist) > 0)
@@ -1227,7 +1254,7 @@ class messenger extends menuedit_light
 		else
 		{
 			$defsig = $this->conf["defsig"];
-			$defident = 0;
+			$defident = $this->msgconf["msg_default_account"];
 		};
 
 		// loome nimekirja signatuuridest
