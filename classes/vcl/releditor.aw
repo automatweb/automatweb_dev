@@ -1,14 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.20 2004/06/17 14:33:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.21 2004/06/18 10:23:46 duke Exp $
 /*
-	Displays a form for editing an connection
+	Displays a form for editing one connection
+	or alternatively provides an interface to edit
+	multiple connections
 */
 
-class releditor extends aw_template 
+class releditor extends core
 {
 	function releditor()
 	{
-		$this->tpl_init();
+		$this->init();
 	}
 
 	function init_rel_editor($arr)
@@ -124,15 +126,17 @@ class releditor extends aw_template
 		// but not needed, if I'm going to add a button only
 		if ($visual == "manager")
 		{
-			if (!empty($arr["request"][$this->elname]))
-			{
+			//if (!empty($arr["request"][$this->elname]))
+			//{
 				$all_props = $t->get_property_group($filter);
-			};
+			//};
 		}
 		else
 		{
 			$all_props = $t->get_property_group($filter);
 		};
+
+		$this->all_props = $all_props;
 		
 		$act_props = array();
 
@@ -203,11 +207,15 @@ class releditor extends aw_template
 
 		$use_form = $prop["use_form"];
 
-		foreach($all_props as $key => $prop)
+
+		if (!empty($form_type) || $visual != "manager")
 		{
-			if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
+			foreach($all_props as $key => $prop)
 			{
-				$act_props[$key] = $prop;
+				if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
+				{
+					$act_props[$key] = $prop;
+				};
 			};
 		};
 
@@ -312,15 +320,33 @@ class releditor extends aw_template
 			"layout" => "generic",
 		));
 
-		$awt->define_field(array(
-			"name" => "id",
-			"caption" => "ID",
-		));
+		$fdata = array();
 
-		$awt->define_field(array(
-			"name" => "name",
-			"caption" => "Nimi",
-		));
+
+		if (is_array($arr["prop"]["table_fields"]))
+		{
+			foreach($arr["prop"]["table_fields"] as $table_field)
+			{
+				$awt->define_field(array(
+					"name" => $table_field,
+					"caption" => $this->all_props[$table_field]["caption"],
+				));
+
+				$fdata[$table_field] = $table_field;
+			};
+		}
+		else
+		{
+			$awt->define_field(array(
+				"name" => "id",
+				"caption" => "ID",
+			));
+
+			$awt->define_field(array(
+				"name" => "name",
+				"caption" => "Nimi",
+			));
+		};
 
 		$awt->define_field(array(
 			"name" => "edit",
@@ -352,7 +378,8 @@ class releditor extends aw_template
 			{
 				$url = aw_url_change_var(array($this->elname => $conn->prop("to")));
 			};
-			$awt->define_data(array(
+			$target = $conn->to();
+			$rowdata = array(
 				"id" => $conn->prop("to"),
 				"conn_id" => $conn->id(),
 				"name" => $conn->prop("to.name"),
@@ -361,7 +388,9 @@ class releditor extends aw_template
 					"url" => $url,
 				)),
 				"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
-			));
+			);
+			$rowdata = $rowdata + $target->properties();
+			$awt->define_data($rowdata);
 		};
 
 		$rv = array(
