@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.63 2001/09/11 06:39:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.64 2001/09/11 10:24:56 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1797,6 +1797,7 @@ class form extends form_base
 		// laeb täidetud vormi andmed sisse
 		$this->load_entry($entry_id);
 
+
 		// gather all the elements of this form in an array
 		$els = array();
 		for ($row=0; $row < $this->arr["rows"]; $row++)
@@ -1817,7 +1818,6 @@ class form extends form_base
 		reset($this->arr["search_from"]);
 		$this->cached_results = array();
 
-		$is_chain = false;
 		if ($this->arr["formsonly"] != 1)
 		{
 			if ($this->arr["se_chain"])
@@ -1911,7 +1911,30 @@ class form extends form_base
 						}
 						else
 						{
-							$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
+							$value = $el->get_value();
+							$elname = sprintf("form_%s_entries.ev_%s",
+											$el->arr["linked_form"],
+											$el->arr["linked_element"]);
+							// now split it at the spaces
+							if (preg_match("/\"(.*)\"/",$value,$matches))
+							{
+								$qstr = " $elname LIKE '%$matches[1]%' ";
+							}
+							else
+							{
+								$pieces = explode(" ",$value);
+								if (is_array($pieces))
+								{
+									$qstr = join (" OR ",map("$elname LIKE '%%%s%%'",$pieces));
+								}
+								else
+								{
+									$qstr = " $elname LIKE '%$value%' ";
+								};
+							};
+
+							$query.= "AND ($qstr)";
+							//$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
 						}
 						if ($el->arr["linked_form"] != $mid)
 						{
@@ -2000,23 +2023,20 @@ class form extends form_base
 							$ch_q[$el->get_ch_grp()][] = " form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
 						}
 					}
-					else
-					if ($el->get_type() == "radiobutton")
+					else if ($el->get_type() == "radiobutton")
 					{
 						if ($el->get_value(true) == 1)
 						{
 							$query.="AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." LIKE '%".$el->get_value()."%')";
 						}
 					}
-					else
-					if ($el->get_type() == "date")
+					else if ($el->get_type() == "date")
 					{
 						if ($el->get_subtype() == "from")
 						{
 							$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." >= ".$this->entry[$el->get_id()].")";
 						}
-						else
-						if ($el->get_subtype() == "to")
+						else if ($el->get_subtype() == "to")
 						{
 							$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." <= ".$this->entry[$el->get_id()].")";
 						}
@@ -2025,17 +2045,36 @@ class form extends form_base
 							$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." = ".$this->entry[$el->get_id()].")";
 						}
 					}
-					else
-					if ($el->get_type() == "radiobutton")
+					else if ($el->get_type() == "radiobutton")
 					{
 						// blah
 					}
-					else
-					if ($el->get_value() != "")	
+					else if ($el->get_value() != "")	
 					{
-						$query.= "AND ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
+						$value = $el->get_value();
+						$elname = sprintf("ev_%s",$el->arr["linked_element"]);
+						// now split it at the spaces
+						if (preg_match("/\"(.*)\"/",$value,$matches))
+						{
+							$qstr = " $elname LIKE '%$matches[1]%' ";
+						}
+						else
+						{
+							$pieces = explode(" ",$value);
+							if (is_array($pieces))
+							{
+								$qstr = join (" OR ",map("$elname LIKE '%%%s%%'",$pieces));
+							}
+							else
+							{
+								$qstr = " $elname LIKE '%$value%' ";
+							};
+						};
+
+						$query.= "AND ($qstr)";
 					}
 				}
+
 
 				// k2ime l2bi erinevad checkboxide grupid ja paneme gruppide vahele AND ja checkboxide vahele OR
 				$chqpts = array();
@@ -2114,7 +2153,6 @@ class form extends form_base
 					}
 					$chenrties = array();
 					$q = "SELECT objects.modifiedby as modifiedby,objects.modified as modified,objects.created as created,form_".$form_id."_entries.id as entry_id $jss FROM form_".$form_id."_entries LEFT JOIN objects ON objects.oid = form_".$form_id."_entries.id WHERE form_".$form_id."_entries.id in ($eids) AND objects.status != 0";
-	//				echo "q = $q <br>";
 					$this->db_query($q);
 					$cnt = 0;
 					while ($row = $this->db_next())
