@@ -1,8 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.4 2004/06/17 13:28:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.5 2004/07/05 13:16:00 sven Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_job_save)
+//HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_job_save)
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_connect_to_sector)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_connect_from_sector)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_disconnect_job_from_section)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_disconnect_section_from_job)
 
 @classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_OFFER relationmgr=yes no_yah=1
 
@@ -11,108 +16,121 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, o
 
 @tableinfo personnel_management_job index=oid master_table=objects master_index=oid
 
-@property name type=textbox table=objects field=name group=info_about_job
+
+@property profession type=select table=personnel_management_job
 @caption Ametikoht
 
-@property navtoolbar type=toolbar no_caption=1 store=no group=kandideerinud
-
-@property toosisu type=textarea field=about_job table=personnel_management_job  group=info_about_job
-@caption Töö kirjeldus
-
-@property noudmised type=textarea field=requirements table=personnel_management_job  group=info_about_job
-@caption N&otilde;udmised kandidaadile
-
-@property asukoht type=relpicker reltype=RELTYPE_LINN automatic=1 method=serialize field=meta table=objects  group=info_about_job
-@caption Asukoht
-
-@property deadline type=date_select table=personnel_management_job group=info_about_job
+@property deadline type=date_select table=personnel_management_job
 @caption Konkursi tähtaeg
 
-@property tegevusvaldkond type=classificator field=meta method=serialize multiple=1 table=objects store=connect group=info_about_job reltype=RELTYPE_TEGEVUSVALDKOND orient=vertical
-@caption Tegevusvaldkond
+@property beginning type=date_select table=personnel_management_job
+@caption Konkursi algusaeg
 
-@property cvfail type=text subtitle=1 group=info_about_job_file store=no
-@caption Tööpakkumine failina.
+///*
+//@property name type=textbox table=objects field=name group=info_about_job
+//@caption Ametikoht
+//
+//@property navtoolbar type=toolbar no_caption=1 store=no group=kandideerinud
+//
+//@property toosisu type=textarea field=about_job table=personnel_management_job  group=info_about_job
+//@caption Töö kirjeldus
+//
+//@property noudmised type=textarea field=requirements table=personnel_management_job  group=info_about_job
+//@caption N&otilde;udmised kandidaadile
+//
+//@property asukoht type=relpicker reltype=RELTYPE_LINN automatic=1 method=serialize field=meta table=objects  group=info_about_job
+//@caption Asukoht
+//
+//@property deadline type=date_select table=personnel_management_job group=info_about_job
+//@caption Konkursi tähtaeg
+//
+//@property tegevusvaldkond type=classificator field=meta method=serialize multiple=1 table=objects store=connect group=info_about_job reltype=RELTYPE_TEGEVUSVALDKOND orient=vertical
+//@caption Tegevusvaldkond
+//
+//@property cvfail type=text subtitle=1 group=info_about_job_file store=no
+//@caption Tööpakkumine failina.
+//
+//@property cv_file_rel type=releditor reltype=RELTYPE_JOBFILE props=file group=info_about_job_file no_caption=1 field=meta method=serialize 
+//@property cv_file_del type=toolbar group=info_about_job_file no_caption=1
+//
+//@property candits type=table group=kandideerinud no_caption=1
+//@caption Kandideerijad
+//
+//
+//----------------MINU KANDIDATUUR---------------------
+//@property kandideerin type=chooser field=meta method=serialize store=no group=minu_kandidatuur edit_links=1
+//@caption Vali cv kandideerimiseks
+//
+//@property kaaskiri type=textarea store=no
+//@caption Kaaskiri
+//------------------------------------------------------
+//
+//
+//@property statistika type=table no_caption=1 group=statistika
+//
+//property email type=relmanager reltype=RELTYPE_EMAIL props=name group=info_about_job field=meta method=serialize
+//caption E-mail
+//
+//property phone type=relmanager reltype=RELTYPE_PHONE props=name group=info_about_job field=meta method=serialize
+//caption Telefon
+//
+//@property job_from type=date_select year_to=2010 field=meta method=serialize group=info_about_job
+//@caption Tööleasumise aeg
+//
+//@property job_nr type=textbox size=3 field=meta method=serialize group=info_about_job
+//@caption Ametikohtade arv
+//
+//@property contact_person type=textarea field=meta method=serialize group=info_about_job
+//@caption Kontaktisik ja kontaktandmed 
+//
+//@property tookoormused type=classificator field=meta method=serialize multiple=1 table=objects store=connect group=info_about_job reltype=RELTYPE_WORKLOAD orient=vertical
+//@caption Töökoormused
+//
+//@property is_public type=checkbox field=meta method=serialize group=info_about_job ch_value=1
+//@caption Avalik konkurss
+//
+//@property praktika type=classificator field=meta mehtod=serialize group=info_about_job reltype=RELTYPE_PRACTICE orient=vertical store=connect
+//@caption  Liik
+//
+//@reltype WORKLOAD value=1 clid=CL_META
+//@caption Töökoormused
+//
+//@reltype EMAIL value=2 clid=CL_ML_MEMBER
+//@caption E-post
+//
+//@reltype PHONE value=3 clid=CL_CRM_PHONE
+//@caption Telefon
+//
+//@reltype LINN value=4 clid=CL_CRM_CITY
+//@caption Linn
+//
+//@reltype KANDIDAAT value=5 clid=CL_CV
+//@caption Kandidaat
+//
+//@reltype TEGEVUSVALDKOND value=6 clid=CL_META
+//@caption Tegevusvaldkond
+//
+//@reltype JOBFILE value=7 clid=CL_FILE
+//@caption Tööpakkumine failina
+//
+//@reltype PRACTICE value=8 clid=CL_META
+//@caption Tööliik
+//--------------------- TÖÖPAKKUMISE VAADE ------------------------------
+//@property job_view_tb type=toolbar no_caption = 1 group=job_view no_caption=1
+//@property job_view type=text no_caption=1 store=no wrapchildren=1 group=job_view
+//
+//--------------------TABS------------------------------------------------
+//@groupinfo info_about_job caption="Tööpakkumine" parent=info_about_job_main
+//@groupinfo info_about_job_main caption="Tööpakkumine"
+//@groupinfo info_about_job_file caption="Tööpakkumine failina" parent=info_about_job_main
+//
+//@groupinfo job_view caption="Vaata Tööpakkumist" submit=no
+//@groupinfo minu_kandidatuur caption="Minu kandidatuur"
+//@groupinfo kandideerinud caption="Kandideerijad" submit=no
+//@groupinfo statistika caption="Statistika" submit=no
 
-@property cv_file_rel type=releditor reltype=RELTYPE_JOBFILE props=file group=info_about_job_file no_caption=1 field=meta method=serialize 
-@property cv_file_del type=toolbar group=info_about_job_file no_caption=1
-
-@property candits type=table group=kandideerinud no_caption=1
-@caption Kandideerijad
-
-
-----------------MINU KANDIDATUUR---------------------
-@property kandideerin type=chooser field=meta method=serialize store=no group=minu_kandidatuur edit_links=1
-@caption Vali cv kandideerimiseks
-
-@property kaaskiri type=textarea store=no
-@caption Kaaskiri
-------------------------------------------------------
-
-
-@property statistika type=table no_caption=1 group=statistika
-
-property email type=relmanager reltype=RELTYPE_EMAIL props=name group=info_about_job field=meta method=serialize
-caption E-mail
-
-property phone type=relmanager reltype=RELTYPE_PHONE props=name group=info_about_job field=meta method=serialize
-caption Telefon
-
-@property job_from type=date_select year_to=2010 field=meta method=serialize group=info_about_job
-@caption Tööleasumise aeg
-
-@property job_nr type=textbox size=3 field=meta method=serialize group=info_about_job
-@caption Ametikohtade arv
-
-@property contact_person type=textarea field=meta method=serialize group=info_about_job
-@caption Kontaktisik ja kontaktandmed 
-
-@property tookoormused type=classificator field=meta method=serialize multiple=1 table=objects store=connect group=info_about_job reltype=RELTYPE_WORKLOAD orient=vertical
-@caption Töökoormused
-
-@property is_public type=checkbox field=meta method=serialize group=info_about_job ch_value=1
-@caption Avalik konkurss
-
-@property praktika type=classificator field=meta mehtod=serialize group=info_about_job reltype=RELTYPE_PRACTICE orient=vertical store=connect
-@caption  Liik
-
-@reltype WORKLOAD value=1 clid=CL_META
-@caption Töökoormused
-
-@reltype EMAIL value=2 clid=CL_ML_MEMBER
-@caption E-post
-
-@reltype PHONE value=3 clid=CL_CRM_PHONE
-@caption Telefon
-
-@reltype LINN value=4 clid=CL_CRM_CITY
-@caption Linn
-
-@reltype KANDIDAAT value=5 clid=CL_CV
-@caption Kandidaat
-
-@reltype TEGEVUSVALDKOND value=6 clid=CL_META
-@caption Tegevusvaldkond
-
-@reltype JOBFILE value=7 clid=CL_FILE
-@caption Tööpakkumine failina
-
-@reltype PRACTICE value=8 clid=CL_META
-@caption Tööliik
---------------------- TÖÖPAKKUMISE VAADE ------------------------------
-@property job_view_tb type=toolbar no_caption = 1 group=job_view no_caption=1
-@property job_view type=text no_caption=1 store=no wrapchildren=1 group=job_view
-
---------------------TABS------------------------------------------------
-@groupinfo info_about_job caption="Tööpakkumine" parent=info_about_job_main
-@groupinfo info_about_job_main caption="Tööpakkumine"
-@groupinfo info_about_job_file caption="Tööpakkumine failina" parent=info_about_job_main
-
-@groupinfo job_view caption="Vaata Tööpakkumist" submit=no
-@groupinfo minu_kandidatuur caption="Minu kandidatuur"
-@groupinfo kandideerinud caption="Kandideerijad" submit=no
-@groupinfo statistika caption="Statistika" submit=no
-
+@reltype SECTION value=9 clid=CL_CRM_SECTION
+@caption Üksus
 */
 
 class personnel_management_job_offer extends class_base
@@ -127,21 +145,82 @@ class personnel_management_job_offer extends class_base
 			"tpldir" => "applications/personnel_management/personnel_management_job_offer",
 			"clid" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER
 		));
-
+		
 		if (!aw_global_get("no_db_connection"))
 		{
 			$personalikeskkond = get_instance("applications/personnel_management/personnel_management");
 			$this->my_profile = $personalikeskkond->my_profile;
 		}
 	}
-
+	
+	
 	function callback_on_load($arr)
 	{
 		$this->cfgmanager = aw_ini_get("personnel_management.configform_manager");
 	}
+	
 
+	function on_connect_from_sector($arr)
+	{
+		$old_conn = $arr["connection"];	
+		if($old_conn->prop("reltype") == 9)
+		{
+			$conn = new connection();
+			$conn->change(array(
+				"from" => $old_conn->prop("to"), 
+				"to" => $old_conn->prop("from"), 
+				"reltype" => 4
+			));
+		}
+	}
+	
+	//This function is called by message and creates reverse relations between job and section
+	function on_connect_to_sector($arr)
+	{
+		$old_conn = $arr["connection"];	
+		if($old_conn->prop("reltype") == 4)
+		{
+			$conn = new connection();
+			$conn->change(array(
+				"from" => $old_conn->prop("to"), 
+				"to" => $old_conn->prop("from"), 
+				"reltype" => 9
+			));
+		}
+	}
 
-
+	function on_disconnect_job_from_section($arr)
+	{
+		$deleted_connection = $arr["connection"];
+		$target_obj = $deleted_connection->to();
+		
+		if($target_obj->class_id() == CL_CRM_SECTION)
+		{
+			if($target_obj->is_connected_to(array('to'=>$deleted_connection->prop('from'))))
+			{
+				$target_obj->disconnect(array(
+					"from" => $deleted_connection->prop("from"),
+				));
+			}
+		}
+	}
+	
+	function on_disconnect_section_from_job($arr)
+	{
+		$deleted_connection = $arr["connection"];
+		$target_obj = $deleted_connection->to();
+		
+		if($target_obj->class_id() == CL_PERSONNEL_MANAGEMENT_JOB_OFFER)
+		{
+			if($target_obj->is_connected_to(array('to'=>$deleted_connection->prop('from'))))
+			{
+				$target_obj->disconnect(array(
+					"from" => $deleted_connection->prop("from"),
+				));
+			}
+		}
+	}
+	
 	function on_job_save($arr)
 	{
 		$job_obj = &obj($arr["oid"]);
@@ -179,6 +258,73 @@ class personnel_management_job_offer extends class_base
 	}
 
 	function get_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		
+		switch($prop["name"])
+		{
+			case "deadline":
+				$prop["year_from"] = date("Y", time());
+				$prop["year_to"] = date("Y", time()) + 10;
+			break;
+			
+			case "beginning":
+				$prop["year_from"] = date("Y", time());
+				$prop["year_to"] = date("Y", time()) + 10;
+			break;
+			
+			case "profession":
+				//Natc segane loogika :)
+				$section_obj = get_instance(CL_CRM_SECTION);
+				
+				if($arr["obj_inst"]->id())
+				{
+					$section = current($arr['obj_inst']->connections_from(array('type' => 9)));
+					if(is_object($section))
+					{	
+						$section = $section->to();
+					}
+					else
+					{
+						$org = current($arr["obj_inst"]->connections_to(array("from.class_id" => CL_CRM_COMPANY)));
+						if(is_object($org))
+						{
+							$professions = $section_obj->get_all_org_proffessions($org->prop("from"));
+						}
+					}
+				}
+				elseif ($arr["request"]["unit"])
+				{
+					$section = &obj($arr["request"]["unit"]);
+				}
+				elseif ($arr["request"]["cat"])
+				{	
+					$professions = $section_obj->get_all_org_proffessions($arr["request"]["org"]);
+				}
+				else 
+				{
+					return PROP_IGNORE;
+				}
+				
+				if($section)
+				{
+					$section_obj = get_instance(CL_CRM_SECTION);
+					$professions = $section_obj->get_professions($section->id(), true);			
+				}
+					
+				$prop["options"] = $professions;
+				
+				if($arr["request"]["cat"])
+				{
+					$prop["value"] = $arr["request"]["cat"];
+				}
+			break;	
+		}
+		return $retval;
+	}
+	
+/*	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
@@ -274,7 +420,7 @@ class personnel_management_job_offer extends class_base
 		};
 		return $retval;
 	}
-	
+	*/
 	function do_candits_table($arr)
 	{
 		
@@ -387,9 +533,24 @@ class personnel_management_job_offer extends class_base
 			"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id(), "oid" => $arr["obj_inst"]->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
 		));
 	}
-
 	
 	function set_property($arr = array())
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "profession":/*
+				if($arr["request"]["cat"])
+				{
+					$prop["value"] = $arr["request"]["cat"];
+				}*/
+			break;
+		}
+		return $retval;
+	}
+	
+	/*function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
@@ -405,7 +566,7 @@ class personnel_management_job_offer extends class_base
 		}
 		return $retval;
 	}
-
+	*/
 	function do_save_candits_table($arr)
 	{
 		if (!is_array($arr["request"]["hinne"]))

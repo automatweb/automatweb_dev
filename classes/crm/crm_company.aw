@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.45 2004/07/02 12:10:47 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.46 2004/07/05 13:13:13 sven Exp $
 /*
+//on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
 //on_disconnect_person_from_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_org)
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disconnect_section_from_org)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @classinfo relationmgr=yes
@@ -72,7 +72,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @layout vbox_contacts_left type=vbox parent=hbox_others group=contacts2
 
-@property unit_listing_tree type=treeview no_caption=1 store=no parent=vbox_contacts_left
+@property unit_listing_tree type=treeview no_caption=1 store=no parent=vbox_contacts_left 
 @caption Puu
 
 @layout vbox_contacts_right type=vbox parent=hbox_others group=contacts2
@@ -137,15 +137,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
 @caption Toimetused
 
-@property t1 type=text subtitle=1 group=jobs store=no
-@caption Aktiivsed
+//@property t1 type=text subtitle=1 group=jobs store=no
+//@caption Aktiivsed
 
-@property jobsact type=table no_caption=1 group=jobs
+//@property jobsact type=table no_caption=1 group=jobs
 
-@property t2 type=text subtitle=1 group=jobs store=no
-@caption Mitteaktiivsed
+//@property t2 type=text subtitle=1 group=jobs store=no
+//@caption Mitteaktiivsed
 
-@property jobsnotact type=table no_caption=1 group=jobs
+//@property jobsnotact type=table no_caption=1 group=jobs
+
+-------------- PERSONALI PROPERTID ---------------
+
+@layout personal_toolbar type=hbox group=personal_offers
+@layout personal_tree_table type=hbox group=personal_offers width=20%:80%
+@layout personal_hbox_tree type=vbox group=personal_offers parent=personal_tree_table
+@layout personal_hbox_table type=vbox group=personal_offers parent=personal_tree_table
+
+@property personal_offers_toolbar type=toolbar group=personal_offers store=no no_caption=1 parent=personal_toolbar
+@property unit_listing_tree_personal type=treeview no_caption=1 store=no parent=personal_hbox_tree group=personal_offers,personal_candits
+@property personal_offers_table type=table group=personal_offers no_caption=1 parent=personal_hbox_table
+---------------------------------------------------
 
 // disabled until the functionality is coded
 //@property org_toolbar type=toolbar group=customers store=no no_caption=1
@@ -217,8 +229,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @groupinfo meetings caption="Kohtumised" parent=overview submit=no
 @groupinfo tasks caption="Toimetused" parent=overview submit=no
 @groupinfo tasks_overview caption="Ülevaade" parent=overview
-@groupinfo personal caption="Personal"
-@groupinfo jobs caption="Tööpakkumised" parent=personal
+
 @groupinfo relorg caption="Kliendid"
 @groupinfo customers caption="Kliendid" parent=relorg submit=no
 @groupinfo my_customers caption="kliendid" parent=relorg submit=no
@@ -226,6 +237,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @groupinfo partners caption="Partnerid" parent=relorg
 @groupinfo fpartners caption="Tulevased partnerid" parent=relorg
 @groupinfo competitors caption="Konkurendid" parent=relorg
+
+@groupinfo personal caption="Värbamine"
+@groupinfo personal_offers caption="Tööpakkumised" parent=personal submit=no
+@groupinfo personal_candits caption="Kandideerijad" parent=personal submit=no
+
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -334,7 +350,6 @@ class crm_company extends class_base
 {
 	var $unit=0;
 	var $active_node = 0;
-	var $active_profession = 0;
 	var $group_not_shown = true;
 	var $data = null;
 	//bad name, it is in the meaning of
@@ -434,7 +449,8 @@ class crm_company extends class_base
 	
 		$conns = $obj->connections_from(array(
 			'type'=>$type1,
-			'sort_by' => 'to.jrk',
+			'sort_by' => 'from.jrk',
+			'sort_dir' => 'asc',
 		));
 		$conns = $conns;
 		//parent nodes'id actually
@@ -446,10 +462,13 @@ class crm_company extends class_base
 				continue;
 			//iga alam item saab ühe võrra suurema väärtuse
 			//if the 'to.id' eq active_node then it should be bold
-			$name=$conn->prop('to.name');
 			if($conn->prop('to')==$this->active_node)
 			{
-				$name='<b>'.$name.'</b>';
+				$name='<b>'.$conn->prop('to.name').'</b>';
+			}
+			else
+			{
+				$name=$conn->prop('to.name');
 			}
 			$tmp_obj = $conn->to();
 			
@@ -512,11 +531,6 @@ class crm_company extends class_base
 		{
 			$tmp_obj = new object($prof_conn->to());
 			$name = strlen($tmp_obj->prop('name_in_plural'))?$tmp_obj->prop('name_in_plural'):$tmp_obj->prop('name');
-			if($tmp_obj->id()==$this->active_profession)
-			{
-				$name = '<b>'.$name.'</b>';
-			}
-
 			$url = array();
 			$url = aw_url_change_var(array('cat'=>$prof_conn->prop('to'),$key=>$value));
 			$tree->add_item($this_level_id,
@@ -706,10 +720,17 @@ class crm_company extends class_base
 				$tree_inst = &$arr['prop']['vcl_inst'];
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['unit'];
-				$this->active_profession = (int)$arr['request']['cat'];
 				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
 				break;
 			}
+			
+			case "unit_listing_tree_personal":
+				$tree_inst = &$arr['prop']['vcl_inst'];
+				$node_id = 0;
+				$this->active_node = (int)$arr['request']['unit'];
+				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
+			break;
+
 			case "customer_listing_tree":
 			{
 				$tree_inst = &$arr['prop']['vcl_inst'];	
@@ -805,14 +826,23 @@ class crm_company extends class_base
 
 			case "addresslist":
 				$this->do_addresslist($arr);
-				break;
+			break;
+			
+			case "personal_offers_toolbar":
+				$this->do_personal_offers_toolbar(&$data["toolbar"], &$arr);
+			break;
+			
+			case "personal_offers_table":
+				$this->personal_offers_table($arr);
+			break;
+			/*
 			case "jobsact":
 				$this->do_jobslist($arr);
 				break;
 			case "jobsnotact":
 				$this->do_jobs_notact_list($arr);
 				break;
-			
+			*/
 		};
 		return $retval;
 	}
@@ -827,7 +857,6 @@ class crm_company extends class_base
 			//contact_search_code
 			//contact_search_sex
 		}
-		return PROP_OK;
 	}
 
 	function callback_pre_edit($arr)
@@ -839,7 +868,116 @@ class crm_company extends class_base
 		));
 	}
 	
-	function do_jobs_notact_list($arr)
+	function personal_offers_table($arr)
+	{
+		$table = &$arr["prop"]["vcl_inst"];
+	
+		$table->define_field(array(
+			"name" => "osakond",
+			"caption" => "Osakond",
+			"sortable" => "1",
+		));
+		
+		$table->define_field(array(
+			"name" => "ametinimi",
+			"caption" => "Ametinimi",
+			"sortable" => "1",
+		));
+		
+		$table->define_field(array(
+			"name" => "kehtiv_alates",
+			"caption" => "Kehtiv alates",
+			"sortable" => "1",
+			"width" => 80,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.y",
+			"align" => "center",
+		));
+		
+		$table->define_field(array(
+			"name" => "kehtiv_kuni",
+			"caption" => "Kehtiv kuni",
+			"sortable" => "1",
+			"width" => 80,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.y",
+			"align" => "center",
+		));
+		
+		$table->define_chooser(array(
+			"name" => "select",
+			"field" => "job_id",
+			"caption" => "X",
+			"width" => 20,
+			"align" => "center"
+		));
+		
+		$section_cl = get_instance(CL_CRM_SECTION);	
+		
+		if(is_oid($arr['request']['unit']))
+		{
+			$jobs_ids = $section_cl->get_section_job_ids_recrusive($arr['request']['unit']);
+		}
+		else
+		{
+			$jobs_ids = $section_cl->get_all_org_job_ids($arr["obj_inst"]->id());
+			$professions = $section_cl->get_all_org_proffessions($arr["obj_inst"]->id(), true);
+			/*
+			foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_SECTION)) as $conn)
+			{	
+				$professions_temp = $section_cl->get_professions($conn->prop("to"), true);		
+				foreach ($professions_temp as $key=>$value)
+				{
+					$professions[$key] = $value;
+				}
+			}*/
+		}
+
+			
+		if(!$jobs_ids)
+		{
+			return;
+		}
+
+		$job_obj_list = new object_list(array(
+			"oid" => array_keys($jobs_ids),
+			"profession" => $arr["request"]["cat"],
+			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER
+		));
+		
+		foreach ($job_obj_list->arr() as $job)
+		{
+			if($arr['request']['unit'])
+			{
+				$professions = $section_cl->get_professions($arr['request']['unit'], true);
+			}
+			
+			if(!$professions[$job->prop("profession")])
+			{
+				$professin_cap = "Määramata";
+			}
+			else
+			{
+				$professin_cap = $professions[$job->prop("profession")];					
+			}
+			
+			$table->define_data(array(
+				"osakond" => $jobs_ids[$job->id()],
+				"kehtiv_kuni" => $job->prop("deadline"),
+				"ametinimi" => html::href(array(
+					"caption" => $professin_cap,
+					"url" => $this->mk_my_orb("change", array("id" =>$job->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
+				)),
+				"kehtiv_alates" => $job->prop("beginning"),
+				"job_id" => $job->id(),
+			));				
+		}
+		
+	}
+	
+	/*function do_jobs_notact_list($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
 		
@@ -938,7 +1076,7 @@ class crm_company extends class_base
 		}
 		
 	}
-
+*/
 	function do_contact_search($arr)
 	{
 		$table = &$arr['prop']['vcl_inst'];
@@ -1354,13 +1492,13 @@ class crm_company extends class_base
 			};
 		}
 	}
-
+	
 	function get_overview($arr = array())
 	{
 		return $this->overview;
 	}
 
-	// Invoked when a connection is created from person to organization
+	// Invoked when a connection is created from person to organization || section
 	// .. this will then create the opposite connection.
 	function on_connect_person_to_org($arr)
 	{
@@ -1372,6 +1510,14 @@ class crm_company extends class_base
 				"to" => $conn->prop("from"),
 				"reltype" => $this->crm_company_reltype_workers,
 			));
+		}
+		else if($target_obj->class_id() == CL_CRM_SECTION)
+		{
+			$target_obj->connect(array(
+				"to" => $conn->prop("from"),
+				"reltype" => $this->crm_section_reltype_workers,
+			));
+		
 		}
 	}
 
@@ -1402,20 +1548,25 @@ class crm_company extends class_base
 				"from" => $conn->prop("from"),
 			));
 		}
-	}
-
-	// Invoked when a connection from section to organization is removed
-	// .. this will then remove the opposite connection as well
-	function on_disconnect_section_from_org($arr)
-	{
-		$conn = $arr["connection"];
-		$target_obj = $conn->to();
-		if ($target_obj->class_id() == CL_CRM_COMPANY)
+		else if($target_obj->class_id() == CL_CRM_SECTION)
 		{
-			$target_obj->disconnect(array(
-				"from" => $conn->prop("from"),
-			));
+			//$target_obj->disconnect(array(
+			//	"from" => $conn->prop("from"),
+			//));
 		}
+	}
+		
+	/**
+		@attrib name=delete_selected_jobs
+	**/
+	function delete_selected_jobs($arr)
+	{
+		foreach ($arr["select"] as $deleted_obj_id)
+		{
+			$deleted_obj = &obj($deleted_obj_id);
+			$deleted_obj->delete();	
+		}
+		return $arr["return_url"];
 	}
 	
 	/**
@@ -1980,7 +2131,7 @@ class crm_company extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr['unit'] = $this->unit;
-		//$arr['return_url'] = aw_global_get('REQUEST_URI');
+		$arr['return_url'] = aw_global_get('REQUEST_URI');
 	}
 
 	function callback_mod_retval($arr)
@@ -2174,7 +2325,48 @@ class crm_company extends class_base
 			));
 		}
 	}
+	
+	function do_personal_offers_toolbar($toolbar, $arr)
+	{
+		$toolbar->add_menu_button(array(
+			'name'=>'add_item',
+			'tooltip'=>'Uus'
+		));
+		
+		$toolbar->add_button(array(
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => 'Kustuta valitud tööpakkumised',
+			'action' => 'delete_selected_jobs',
+			'confirm' => "Kas oled kindel et soovid valitud tööpakkumised kustudada?"
+		));
 
+		if($arr["request"]["cat"] && $arr["request"]["unit"])
+		{
+			$alias_to =  $arr["request"]["unit"];
+			$reltype = 4;
+		}
+		else
+		{
+			$alias_to = $arr["obj_inst"]->id();
+			$reltype = 19;
+		}
+		
+		$toolbar->add_menu_item(array(
+				'parent'=>'add_item',
+				'text'=>'Tööpakkumine',
+				'link'=>$this->mk_my_orb('new',array(
+					'parent'=>$arr['obj_inst']->id(),
+					'alias_to'=>$alias_to,
+					'reltype'=> $reltype,
+					'return_url'=>urlencode(aw_global_get('REQUEST_URI')),
+					'cat' => $arr["request"]["cat"],
+					'unit' => $arr["request"]["unit"],
+					'org' => $arr['obj_inst']->id(),
+				), CL_PERSONNEL_MANAGEMENT_JOB_OFFER)
+		));
+	}
+	
 	function do_customer_search_results($arr)
 	{
 		$tf = &$arr["prop"]["vcl_inst"];
@@ -2353,8 +2545,7 @@ class crm_company extends class_base
 					'CL_CRM_PERSON.RELTYPE_PHONE.name' => '%'
 				));
 		arr($ol);
-		//die();
-		*/
+		die();*/
 
 		$ol = new object_list($search_params);
 		//$ol = new object_list(array('class_id' => CL_CRM_PERSON,'firstname'=>'toomas','lastname'=>'koobas'));
@@ -2396,23 +2587,23 @@ class crm_company extends class_base
 	{
 		foreach($arr['check'] as $key=>$value)
 		{
-			$obj = new object($value);
+			$obj = null;
 			$reltype = 0;
-			$target = 0;
-			if(is_oid($arr['unit']))
+			if($arr['unit'])
 			{
-				$reltype = 21; //crm_person.reltype_section
-				$target = $arr['unit'];
+				$obj = new object($arr['unit']);
+				$reltype = 2; //crm_section.workers
 			}
 			else
 			{
-				$reltype = 6; //crm_person.reltype_work
-				$target = $arr['id'];
+				$obj = new object($arr['id']);
+				$reltype = 8; //crm_company.workers	
 			}
+			
 			$obj->connect(array(
-					'to'=>$target,
-					'reltype'=>$reltype,
-			));
+					'to' => $value,
+					'reltype' => $reltype 
+					));
 		}
 		return $this->mk_my_orb('change',array(
 								'id' => $arr['id'],

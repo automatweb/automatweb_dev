@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.9 2004/07/05 06:14:56 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.10 2004/07/05 13:14:31 sven Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -93,7 +93,59 @@ class crm_section extends class_base
 		}
 		return $retval;
 	}	
-
+	
+	function get_all_org_job_ids($org_oid)
+	{
+		$obj = &obj($org_oid);
+		foreach ($obj->connections_from(array("type" => 19)) as $job)
+		{
+			$job_ids[$job->prop("to")] = ""; 
+		}
+		
+		foreach ($obj->connections_from(array("type" => 28)) as $sector)
+		{
+			$jobs_ids_temp = $this->get_section_job_ids_recrusive($sector->prop("to"));
+			$professions_temp = $this->get_professions($sector->prop("to"), true);
+			
+		
+			if(is_array($jobs_ids_temp))
+			{
+				foreach ($jobs_ids_temp as $key=>$value)
+				{
+					$job_ids[$key] = $value; 
+				}
+					
+				foreach ($professions_temp as $key=>$value)
+				{
+					$professions[$key] = $value;
+				}
+			}
+		}
+		return  $job_ids;
+	}
+	
+	function get_all_org_proffessions($org_id, $recrusive=false)
+	{
+		$obj = &obj($org_id);
+		foreach ($obj->connections_from(array("type" => RELTYPE_PROFESSIONS)) as $prof_conn)
+		{
+			$rtrn[$prof_conn->prop('to')] = $prof_conn->prop('to.name');
+		}
+		
+		if($recrusive)
+		{
+			foreach ($obj->connections_from(array("type" => 28)) as $sector)
+			{
+				$temp = $this->get_professions($sector->prop("to"), true);
+				foreach ($temp as $key=>$value)
+				{
+					$rtrn[$key] = $value;
+				}
+			}
+		}
+		return $rtrn;
+	}
+	
 	/*
 		$id - object id
 	*/

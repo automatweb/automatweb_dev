@@ -1,256 +1,34 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>name</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>textbox</type>
-            <field>name</field>
+            <name>profession</name>
+            <table>personnel_management_job</table>
+            <group>general</group>
+            <type>select</type>
+            <field>profession</field>
             <caption>Ametikoht</caption>
-      </property>
-      <property>
-            <name>navtoolbar</name>
-            <table>objects</table>
-            <group>kandideerinud</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>navtoolbar</field>
-      </property>
-      <property>
-            <name>toosisu</name>
-            <table>personnel_management_job</table>
-            <group>info_about_job</group>
-            <type>textarea</type>
-            <field>about_job</field>
-            <caption>Töö kirjeldus</caption>
-      </property>
-      <property>
-            <name>noudmised</name>
-            <table>personnel_management_job</table>
-            <group>info_about_job</group>
-            <type>textarea</type>
-            <field>requirements</field>
-            <caption>N&amp;otilde;udmised kandidaadile</caption>
-      </property>
-      <property>
-            <name>asukoht</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_LINN</reltype>
-            <automatic>1</automatic>
-            <method>serialize</method>
-            <field>meta</field>
-            <caption>Asukoht</caption>
       </property>
       <property>
             <name>deadline</name>
             <table>personnel_management_job</table>
-            <group>info_about_job</group>
+            <group>general</group>
             <type>date_select</type>
             <field>deadline</field>
             <caption>Konkursi tähtaeg</caption>
       </property>
       <property>
-            <name>tegevusvaldkond</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>classificator</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <multiple>1</multiple>
-            <store>connect</store>
-            <reltype>RELTYPE_TEGEVUSVALDKOND</reltype>
-            <orient>vertical</orient>
-            <caption>Tegevusvaldkond</caption>
-      </property>
-      <property>
-            <name>cvfail</name>
-            <table>objects</table>
-            <group>info_about_job_file</group>
-            <type>text</type>
-            <subtitle>1</subtitle>
-            <store>no</store>
-            <field>cvfail</field>
-            <caption>Tööpakkumine failina.</caption>
-      </property>
-      <property>
-            <name>cv_file_rel</name>
-            <table>objects</table>
-            <group>info_about_job_file</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_JOBFILE</reltype>
-            <props>file</props>
-            <no_caption>1</no_caption>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>no</store>
-      </property>
-      <property>
-            <name>cv_file_del</name>
-            <table>objects</table>
-            <group>info_about_job_file</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>cv_file_del</field>
-      </property>
-      <property>
-            <name>candits</name>
-            <table>objects</table>
-            <group>kandideerinud</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>candits</field>
-            <caption>Kandideerijad</caption>
-      </property>
-      <property>
-            <name>kandideerin</name>
-            <table>objects</table>
-            <group>minu_kandidatuur</group>
-            <type>chooser</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>no</store>
-            <edit_links>1</edit_links>
-            <caption>Vali cv kandideerimiseks</caption>
-      </property>
-      <property>
-            <name>kaaskiri</name>
-            <table>objects</table>
+            <name>beginning</name>
+            <table>personnel_management_job</table>
             <group>general</group>
-            <type>textarea</type>
-            <store>no</store>
-            <field>kaaskiri</field>
-            <caption>Kaaskiri</caption>
-      </property>
-      <property>
-            <name>statistika</name>
-            <table>objects</table>
-            <group>statistika</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>statistika</field>
-      </property>
-      <property>
-            <name>job_from</name>
-            <table>objects</table>
-            <group>info_about_job</group>
             <type>date_select</type>
-            <year_to>2010</year_to>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Tööleasumise aeg</caption>
-      </property>
-      <property>
-            <name>job_nr</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>textbox</type>
-            <size>3</size>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Ametikohtade arv</caption>
-      </property>
-      <property>
-            <name>contact_person</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>textarea</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kontaktisik ja kontaktandmed </caption>
-      </property>
-      <property>
-            <name>tookoormused</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>classificator</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <multiple>1</multiple>
-            <store>connect</store>
-            <reltype>RELTYPE_WORKLOAD</reltype>
-            <orient>vertical</orient>
-            <caption>Töökoormused</caption>
-      </property>
-      <property>
-            <name>is_public</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>checkbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <ch_value>1</ch_value>
-            <caption>Avalik konkurss</caption>
-      </property>
-      <property>
-            <name>praktika</name>
-            <table>objects</table>
-            <group>info_about_job</group>
-            <type>classificator</type>
-            <field>meta</field>
-            <mehtod>serialize</mehtod>
-            <reltype>RELTYPE_PRACTICE</reltype>
-            <orient>vertical</orient>
-            <store>connect</store>
-            <caption> Liik</caption>
-      </property>
-      <property>
-            <name>job_view_tb</name>
-            <table>objects</table>
-            <group>job_view</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>job_view_tb</field>
-      </property>
-      <property>
-            <name>job_view</name>
-            <table>objects</table>
-            <group>job_view</group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <wrapchildren>1</wrapchildren>
-            <field>job_view</field>
+            <field>beginning</field>
+            <caption>Konkursi algusaeg</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_yah>1</no_yah>
       </classinfo>
-      <groupinfo>
-            <info_about_job>
-                  <caption>Tööpakkumine</caption>
-                  <parent>info_about_job_main</parent>
-            </info_about_job>
-            <info_about_job_main>
-                  <caption>Tööpakkumine</caption>
-            </info_about_job_main>
-            <info_about_job_file>
-                  <caption>Tööpakkumine failina</caption>
-                  <parent>info_about_job_main</parent>
-            </info_about_job_file>
-            <job_view>
-                  <caption>Vaata Tööpakkumist</caption>
-                  <submit>no</submit>
-            </job_view>
-            <minu_kandidatuur>
-                  <caption>Minu kandidatuur</caption>
-            </minu_kandidatuur>
-            <kandideerinud>
-                  <caption>Kandideerijad</caption>
-                  <submit>no</submit>
-            </kandideerinud>
-            <statistika>
-                  <caption>Statistika</caption>
-                  <submit>no</submit>
-            </statistika>
-      </groupinfo>
       <tableinfo>
             <personnel_management_job>
                   <index>oid</index>
@@ -259,46 +37,11 @@
             </personnel_management_job>
       </tableinfo>
       <reltypes>
-            <WORKLOAD>
-                  <value>1</value>
-                  <clid>CL_META</clid>
-                  <caption>Töökoormused</caption>
-            </WORKLOAD>
-            <EMAIL>
-                  <value>2</value>
-                  <clid>CL_ML_MEMBER</clid>
-                  <caption>E-post</caption>
-            </EMAIL>
-            <PHONE>
-                  <value>3</value>
-                  <clid>CL_CRM_PHONE</clid>
-                  <caption>Telefon</caption>
-            </PHONE>
-            <LINN>
-                  <value>4</value>
-                  <clid>CL_CRM_CITY</clid>
-                  <caption>Linn</caption>
-            </LINN>
-            <KANDIDAAT>
-                  <value>5</value>
-                  <clid>CL_CV</clid>
-                  <caption>Kandidaat</caption>
-            </KANDIDAAT>
-            <TEGEVUSVALDKOND>
-                  <value>6</value>
-                  <clid>CL_META</clid>
-                  <caption>Tegevusvaldkond</caption>
-            </TEGEVUSVALDKOND>
-            <JOBFILE>
-                  <value>7</value>
-                  <clid>CL_FILE</clid>
-                  <caption>Tööpakkumine failina</caption>
-            </JOBFILE>
-            <PRACTICE>
-                  <value>8</value>
-                  <clid>CL_META</clid>
-                  <caption>Tööliik</caption>
-            </PRACTICE>
+            <SECTION>
+                  <value>9</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Üksus</caption>
+            </SECTION>
       </reltypes>
 </properties>
 

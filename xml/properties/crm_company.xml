@@ -355,42 +355,37 @@
             <caption>Toimetused</caption>
       </property>
       <property>
-            <name>t1</name>
+            <name>personal_offers_toolbar</name>
             <table>objects</table>
-            <group>jobs</group>
-            <type>text</type>
-            <subtitle>1</subtitle>
+            <group>personal_offers</group>
+            <type>toolbar</type>
             <store>no</store>
-            <field>t1</field>
-            <caption>Aktiivsed</caption>
+            <no_caption>1</no_caption>
+            <parent>personal_toolbar</parent>
+            <field>personal_offers_toolbar</field>
       </property>
       <property>
-            <name>jobsact</name>
+            <name>unit_listing_tree_personal</name>
             <table>objects</table>
-            <group>jobs</group>
-            <type>table</type>
+            <group>
+                  <num_0>personal_offers</num_0>
+                  <num_1>personal_candits</num_1>
+            </group>
+            <type>treeview</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>jobsact</field>
+            <parent>personal_hbox_tree</parent>
+            <field>unit_listing_tree_personal</field>
       </property>
       <property>
-            <name>t2</name>
+            <name>personal_offers_table</name>
             <table>objects</table>
-            <group>jobs</group>
-            <type>text</type>
-            <subtitle>1</subtitle>
-            <store>no</store>
-            <field>t2</field>
-            <caption>Mitteaktiivsed</caption>
-      </property>
-      <property>
-            <name>jobsnotact</name>
-            <table>objects</table>
-            <group>jobs</group>
+            <group>personal_offers</group>
             <type>table</type>
             <no_caption>1</no_caption>
+            <parent>personal_hbox_table</parent>
             <store>no</store>
-            <field>jobsnotact</field>
+            <field>personal_offers_table</field>
       </property>
       <property>
             <name>customer_toolbar</name>
@@ -587,13 +582,6 @@
                   <caption>Ülevaade</caption>
                   <parent>overview</parent>
             </tasks_overview>
-            <personal>
-                  <caption>Personal</caption>
-            </personal>
-            <jobs>
-                  <caption>Tööpakkumised</caption>
-                  <parent>personal</parent>
-            </jobs>
             <relorg>
                   <caption>Kliendid</caption>
             </relorg>
@@ -623,6 +611,19 @@
                   <caption>Konkurendid</caption>
                   <parent>relorg</parent>
             </competitors>
+            <personal>
+                  <caption>Värbamine</caption>
+            </personal>
+            <personal_offers>
+                  <caption>Tööpakkumised</caption>
+                  <parent>personal</parent>
+                  <submit>no</submit>
+            </personal_offers>
+            <personal_candits>
+                  <caption>Kandideerijad</caption>
+                  <parent>personal</parent>
+                  <submit>no</submit>
+            </personal_candits>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -788,6 +789,25 @@
                   <parent>hbox_others</parent>
                   <group>contacts2</group>
             </vbox_contacts_right>
+            <personal_toolbar>
+                  <type>hbox</type>
+                  <group>personal_offers</group>
+            </personal_toolbar>
+            <personal_tree_table>
+                  <type>hbox</type>
+                  <group>personal_offers</group>
+                  <width>20%:80%</width>
+            </personal_tree_table>
+            <personal_hbox_tree>
+                  <type>vbox</type>
+                  <group>personal_offers</group>
+                  <parent>personal_tree_table</parent>
+            </personal_hbox_tree>
+            <personal_hbox_table>
+                  <type>vbox</type>
+                  <group>personal_offers</group>
+                  <parent>personal_tree_table</parent>
+            </personal_hbox_table>
             <customer_hbox_toolbar>
                   <type>hbox</type>
                   <group>customers</group>
