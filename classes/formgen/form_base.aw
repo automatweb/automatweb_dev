@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.14 2003/04/25 13:02:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.15 2003/05/08 10:24:23 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -767,9 +767,10 @@ class form_base extends form_db_base
 		if ($no_show)
 		{
 			// get the show only forms from the chain and kick those entries out
-			$ct = $this->db_fetch_field("SELECT content FROM form_chains WHERE id = ".$this->get_chain_for_chain_entry($entry_id),"content");
+			$ct = $this->db_fetch_field("SELECT content FROM form_chains WHERE id = '".$this->get_chain_for_chain_entry($entry_id)."'","content");
 			$c = aw_unserialize($ct);
-			foreach($ct["no_load"] as $n_fid => $one)
+			$_ar = new aw_array($c["no_load"]);
+			foreach($_ar->get() as $n_fid => $one)
 			{
 				if ($one == 1)
 				{
