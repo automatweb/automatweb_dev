@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.72 2003/01/02 15:33:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.73 2003/01/07 11:11:57 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1887,11 +1887,11 @@ class users extends users_user
 		));
 
 		// default expiration time is 1 hour (3600 seconds)
-		if (($ts + 3600) < time())
+		if (($ts + (3600*24*400)) < time())
 		{
 			$this->read_adm_template("hash_results.tpl");
 			$this->vars(array(
-				"msg" => "See võti on juba aegunud",
+				"msg" => "See võti on juba aegunud <a href='".$this->mk_my_orb('send_hash')."'>Telli uusi v&otilde;ti</a>"
 			));
 			return $this->parse();
 		}
