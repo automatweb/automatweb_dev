@@ -23,10 +23,12 @@
 	<property>
 		<name>lead</name>
 		<group>general</group>
+		<richtext>1</richtext>
 		<caption>Sissejuhatus</caption>
 	</property>
 	<property>
 		<name>content</name>
+		<richtext>1</richtext>
 		<group>general</group>
 		<richtext>1</richtext>
 		<caption>Sisu</caption>
@@ -35,6 +37,7 @@
 		<name>moreinfo</name>
 		<group>general</group>
 		<caption>Toimetamata</caption>
+		<richtext>1</richtext>
 		<rows>20</rows>
 	</property>
 	<property>
@@ -57,24 +60,24 @@
 		<group>settings</group>
 		<caption>Esilehel</caption>
 	</property>
-	<property>
-		<name>aliasmgr</name>
-		<group>relationmgr</group>
-		<caption></caption>
-		<group>general</group>
-	</property>
 
 	<groupinfo>
 		<general>
 			<caption>Üldine</caption>
+			<icon>edit</icon>
 		</general>
 		<settings>
 			<caption>Seadistused</caption>
+			<icon>settings</icon>
 		</settings>
 		<relationmgr>
-			<caption>Ses. haldur</caption>
+			<caption>Seostehaldur</caption>
+			<icon>connectionmanager</icon>
 		</relationmgr>
 	</groupinfo>
 
+	<classinfo>
+		<fixed_toolbar>1</fixed_toolbar>
+	</classinfo>
 
 </properties>
