@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.1 2004/05/17 14:15:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.2 2004/05/19 15:17:30 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -59,14 +59,26 @@ class register_search extends class_base
 		switch($prop["name"])
 		{
 			case "sform_frm":
+				if (!$arr["obj_inst"]->prop("register"))
+				{
+					return PROP_IGNORE;
+				}
 				$this->do_sform_frm_tbl($arr);
 				break;
 
 			case "sform_tbl":
+				if (!$arr["obj_inst"]->prop("register"))
+				{
+					return PROP_IGNORE;
+				}
 				$this->do_sform_tbl_tbl($arr);
 				break;
 
 			case "search_res":
+				if (!$arr["obj_inst"]->prop("register"))
+				{
+					return PROP_IGNORE;
+				}
 				$this->do_search_res_tbl($arr);
 				break;
 		};
@@ -262,6 +274,10 @@ class register_search extends class_base
 		));
 		$table = $t->draw();
 		
+		if ($arr["no_form"])
+		{
+			return $html."<br>".$table;
+		}
 
 		$this->read_template("show.tpl");
 		$this->vars(array(

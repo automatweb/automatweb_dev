@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.2 2004/05/19 11:02:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.3 2004/05/19 15:17:30 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -17,9 +17,11 @@
 @property data_tree_field type=select field=meta method=serialize
 @caption Andmete puu struktuuri v&auml;li
 
+@property search_o type=relpicker reltype=RELTYPE_SEARCH field=meta method=serialize
+@caption Otsingu konfiguratsioon
+
 @groupinfo data caption=Andmed
 @default group=data
-
 
 @property data_tb type=toolbar store=no no_caption=1
 
@@ -29,11 +31,19 @@
 @property data type=table store=no no_caption=1 parent=datalt
 
 
+@groupinfo search caption="Otsing" submit_method=get submit=no
+@default group=search
+
+@property search type=text store=no no_caption=1
+
 @reltype CFGFORM value=1 clid=CL_CFGFORM
 @caption andmete seadete vorm
 
 @reltype MENU value=2 clid=CL_MENU
 @caption andmete kataloog
+
+@reltype SEARCH value=3 clid=CL_REGISTER_SEARCH
+@caption registri otsing
 */
 
 class register extends class_base
@@ -70,6 +80,21 @@ class register extends class_base
 					return PROP_IGNORE;
 				}
 				$prop["value"] = $this->get_data_tree($arr["obj_inst"]);
+				break;
+
+			case "search":
+				if (!$arr["obj_inst"]->prop("search_o"))
+				{
+					$prop["value"] = "Otsingu konfiguratsioon valimatta!";
+				}
+				else
+				{
+					$s = get_instance(CL_REGISTER_SEARCH);
+					$prop["value"] = $s->show(array(
+						"id" => $arr["obj_inst"]->prop("search_o"),
+						"no_form" => 1
+					));
+				}
 				break;
 		};
 		return $retval;
