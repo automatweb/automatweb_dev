@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.215 2003/01/30 16:11:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.216 2003/01/30 19:11:21 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -791,6 +791,7 @@ class menuedit extends aw_template
 			$obj = $this->get_object($obj["brother_of"]);
 		}
 
+
 		// if any keywords for the menu are set, we must show all the documents that match those keywords under the menu
 		if ($obj["meta"]["has_kwd_rels"])
 		{
@@ -831,6 +832,7 @@ class menuedit extends aw_template
 			}
 		}
 
+
 		// ei olnud defaulti, peaks vist .. näitama nimekirja? 
 		if ($docid < 1)	
 		{
@@ -846,7 +848,7 @@ class menuedit extends aw_template
 
 			if ($me_row["class_id"] == CL_PROMO)
 			{
-				if (is_array($me_row["meta"]["last_menus"]) && ($me_row["meta"]["last_menus"][0] != 0))
+				if (is_array($me_row["meta"]["last_menus"]) && ($me_row["meta"]["last_menus"][0] !== 0))
 				{
 					$sections = $me_row["meta"]["last_menus"];
 				}
@@ -863,7 +865,7 @@ class menuedit extends aw_template
 			$periods = $me_row["meta"]["pers"];
 
 
-			if (is_array($sections) && $sections[0])
+			if (is_array($sections) && ($sections[0] !== 0))
 			{
 				$pstr = join(",",$sections);
 				if ($pstr != "")
@@ -3925,7 +3927,7 @@ class menuedit extends aw_template
 				WHERE objects.status = 2 AND objects.class_id = 22 AND (objects.site_id = ".$this->cfg["site_id"]." OR objects.site_id is null) $lai
 				ORDER by jrk";
 		$this->db_query($q);
-				$promos = array();
+		$promos = array();
 		$gidlist = aw_global_get("gidlist");
 		while ($row = $this->db_next())
 		{
@@ -3955,7 +3957,38 @@ class menuedit extends aw_template
 
 			$doc->doc_count = 0;
 
-			if ( (isset($meta["section"][$section]) && ($meta["section"][$section]) || $meta["all_menus"]) && $found)
+			$show_promo = false;
+
+			if ($meta["all_menus"])
+			{
+				$show_promo = true;
+			}
+			else
+			if (isset($meta["section"][$section]) && $meta["section"][$section])
+			{
+				$show_promo = true;
+			}
+			else
+			if ( is_array($meta["section_include_submenus"]) && in_array($section,$this->path) )
+			{
+				// here we need to check, whether any of the parent menus for
+				// this menu has been assigned a promo box and has been told
+				// that it should be shown in all submenus as well
+				$intersect = array_intersect($this->path,$meta["section_include_submenus"]);
+				if (sizeof($intersect) > 0)
+				{
+					$show_promo = true;
+				};
+			};
+
+			if ($found == false)
+			{
+				$show_promo = false;
+			};
+			
+			// this line decides, whether we should show this promo box here or not.
+			// now, how do I figure out whether the promo box is actually in my path?
+			if ($show_promo)
 			{
 				// visible. so show it
 				$this->save_handle();
@@ -4041,8 +4074,6 @@ class menuedit extends aw_template
 					$ap.="_BEGIN";
 					$this->used_promo_tpls[$use_tpl] = 1;
 				}
-
-
 
 				if ($this->is_template($use_tpl . $ap))
 				{
