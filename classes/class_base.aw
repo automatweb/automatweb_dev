@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.61 2003/01/30 15:26:26 duke Exp $
+// $Id: class_base.aw,v 2.62 2003/01/30 16:29:47 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1569,12 +1569,24 @@ class class_base extends aliasmgr
 
 	function submit_list($args = array())
 	{
+		$retval = parent::submit_list($args);
 		$this->init_class_base();
-		if (method_exists($this->inst,"callback_submit_relation_list"))
+		if (method_exists($this->inst,"callback_on_submit_relation_list"))
 		{
-			$this->inst->callback_submit_relation_list($args);
+			$this->inst->callback_on_submit_relation_list($args);
 		};
-		return parent::submit_list($args);
+		return $retval;
+	}
+	
+	function orb_addalias($args = array())
+	{
+		$retval = parent::orb_addalias($args);
+		$this->init_class_base();
+		if (method_exists($this->inst,"callback_on_addalias"))
+		{
+			$this->inst->callback_on_addalias($args);
+		};
+		return $retval;
 	}
 
 
