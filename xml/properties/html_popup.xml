@@ -11,6 +11,16 @@
             <caption>Sisu </caption>
       </property>
       <property>
+            <name>popup_type</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kasuta layerit</caption>
+      </property>
+      <property>
             <name>width</name>
             <table>objects</table>
             <field>meta</field>
