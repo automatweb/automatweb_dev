@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.67 2004/03/09 15:38:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.68 2004/03/12 11:29:19 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -663,14 +663,14 @@ class doc extends class_base
 
 	function callback_mod_retval($args = array())
 	{
-		$form_data = &$args["form_data"];
+		$request = &$args["request"];
 		$new = $args["new"];
 		$args = &$args["args"];
 		// if this is a new object, then the form is posted with the _top target
 		// this ensures that the top toolbar will be updated as well
-		if (!$new && $form_data["cb_part"])
+		if (!$new && $request["cb_part"])
 		{
-			$args["cb_part"] = $form_data["cb_part"];
+			$args["cb_part"] = $request["cb_part"];
 		};
 	}
 
