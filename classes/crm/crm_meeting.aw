@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.25 2005/01/21 13:22:18 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.26 2005/01/25 11:00:02 ahti Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -199,6 +199,7 @@ class crm_meeting extends class_base
 					'img' => 'delete.gif',
 					'tooltip' => t('Kustuta valitud'),
 					'action' => 'submit_delete_participants_from_calendar',
+					"confirm" => t("Oled kindel, et tahad valitud osalejad eemaldada?"),
 				));
 
 				$tb->add_separator();

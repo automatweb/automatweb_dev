@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.18 2005/01/12 12:51:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.19 2005/01/25 11:00:01 ahti Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -13,7 +13,7 @@ class event_property_lib extends aw_template
 	// your basic view, shows calendars from left to right
 	function calendar_others($arr)
 	{
-		$event_obj  = $arr["obj_inst"];
+		$event_obj = $arr["obj_inst"];
 		$brlist = new object_list(array(
 			"brother_of" => $event_obj->id(),
 		));
@@ -372,7 +372,13 @@ class event_property_lib extends aw_template
 			$table->sort_by();
 			die($table->draw());
 		}
-		return array('tabel'=> array('type'=>'table','vcl_inst'=>&$table,'no_caption' => 1));
+		return array(
+			"tabel" => array(
+				"type" => "table", 
+				"vcl_inst" => &$table,
+				"no_caption" => 1,
+			),
+		);
 	}
 
 };
