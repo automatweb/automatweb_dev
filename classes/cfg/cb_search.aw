@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.25 2005/03/18 08:20:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.26 2005/03/21 12:08:23 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -308,11 +308,6 @@ class cb_search extends class_base
 
 			$item["ord"] = $fd[$item["clid"]][$iname]["jrk"];
 
-			if ($item["type"] == "classificator")
-			{
-				$this->mod_chooser_prop($res, $iname, $item["clid"], $arr["obj_inst"]);
-			}
-			else
 			if ($item["type"] == "relpicker" || $item["type"] == "relmanager")
 			{
 				// get all conns from that class with that reltype
@@ -330,6 +325,11 @@ class cb_search extends class_base
 			}
 
 			$res[$iname] = $item;
+
+			if ($item["type"] == "classificator")
+			{
+				$this->mod_chooser_prop($res, $iname, $item["clid"], $arr["obj_inst"]);
+			}
 		};
 
 		uasort($res, create_function('$a,$b','if ($a["ord"] == $b["ord"] ) { return 0; } else { return $a["ord"] > $b["ord"] ? 1 : -1; }'));
