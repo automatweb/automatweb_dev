@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.132 2005/01/28 09:42:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.133 2005/02/02 13:13:01 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -805,6 +805,13 @@ class image extends class_base
 				}
 				break;
 
+			case "file2_del":
+				if ($prop["value"] == 1)
+				{
+					$arr["obj_inst"]->set_prop("file2","");
+				};
+				break;
+
 			case "do_resize":
 				$this->do_resize = true;
 				break;
@@ -878,11 +885,9 @@ class image extends class_base
 		$file = $arr['file'];
 
 		$img = get_instance("core/converters/image_convert");
-		if ($im[$file]{0} != "/")
-		{
-			$im[$file] = $this->cfg["site_basedir"]."/files/".$im[$file]{0}."/".$im[$file];
-		}
-		$img->load_from_file($im[$file]);
+		$fn = basename($im[$file]);
+		$fn = $this->cfg["site_basedir"]."/files/".$fn{0}."/".$fn;
+		$img->load_from_file($fn);
 
 		list($i_width, $i_height) = $img->size();
 
@@ -945,7 +950,7 @@ class image extends class_base
 		$img->resize_simple($width, $height);
 
 		$this->put_file(array(
-			'file' => $im[$file],
+			'file' => $fn,
 			"content" => $img->get(IMAGE_JPEG)
 		));
 
