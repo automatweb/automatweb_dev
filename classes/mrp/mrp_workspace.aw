@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.11 2005/01/26 14:51:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.12 2005/01/27 08:35:14 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -125,6 +125,90 @@
 
 	@property printer_jobs type=table no_caption=1
 
+	// these are shown when a job is selected
+	@property pj_toolbar type=toolbar store=no
+	@caption Muuda staatust
+
+	@property pj_change_comment type=textarea rows=5 cols=50 store=no
+	@caption Kommentaar
+
+	@property pj_title_job_data type=text store=no subtitle=1
+	@caption T&ouml;&ouml; andmed
+
+	@property pj_starttime type=text store=no
+	@caption Algus
+
+	@property pj_length type=text store=no
+	@caption Plaanitud kestus (h)
+
+	@property pj_pre_buffer type=text store=no
+	@caption Eelpuhveraeg (h)
+
+	@property pj_post_buffer type=text store=no
+	@caption Järelpuhveraeg (h)
+
+	@property pj_resource type=text store=no
+	@caption Ressurss
+
+	@property pj_project type=text store=no
+	@caption Projekt
+	
+	@property pj_state type=text store=no
+	@caption Staatus
+
+	@property pjp_title_proj_data type=text store=no subtitle=1
+	@caption Projekti andmed
+
+	@property pjp_format type=text store=no
+	@caption Formaat
+
+	@property pjp_sisu_lk_arv type=text store=no
+	@caption Sisu lk arv
+
+	@property pjp_kaane_lk_arv type=text store=no
+	@caption Kaane lk arv
+
+	@property pjp_sisu_varvid type=text store=no
+	@caption Sisu v&auml;rvid
+
+	@property pjp_sisu_varvid_notes type=text store=no
+	@caption Sisu v&auml;rvid Notes
+
+	@property pjp_sisu_lakk_muu type=text store=no
+	@caption Sisu lakk/muu
+
+	@property pjp_kaane_varvid type=text store=no
+	@caption Kaane v&auml;rvid
+
+	@property pjp_kaane_varvid_notes type=text store=no
+	@caption Kaane v&auml;rvid Notes
+
+	@property pjp_kaane_lakk_muu type=text store=no
+	@caption Kaane lakk/muu
+
+	@property pjp_sisu_paber type=text store=no
+	@caption Sisu paber
+
+	@property pjp_kaane_paber type=text store=no
+	@caption Kaane paber
+
+	@property pjp_trykiarv type=text store=no
+	@caption Tr&uuml;kiarv
+
+	@property pjp_trykise_ehitus type=text store=no
+	@caption Tr&uuml;kise ehitus
+
+	@property pjp_kromaliin type=text store=no
+	@caption Kromalin
+
+	@property pjp_makett type=text store=no
+	@caption Makett
+
+	@property pjp_naidis type=text store=no
+	@caption N&auml;idis
+
+	@property pjp_plaate type=text store=no
+	@caption Plaate
 
 // --------------- RELATION TYPES ---------------------
 
@@ -174,6 +258,71 @@ class mrp_workspace extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object = $arr["obj_inst"];
+
+		if (substr($prop["name"], 0, 3) == "pjp")
+		{
+			if (!$arr["request"]["pj_job"])
+			{
+				return PROP_IGNORE;
+			}
+			// get prop from project
+			if ($prop["subtitle"] != 1)
+			{
+				$job = obj($arr["request"]["pj_job"]);
+				$proj = obj($job->prop("project"));
+				$prop["value"] = $proj->prop(substr($prop["name"], 4));
+				if ($prop["value"] == "")
+				{
+					$prop["value"] = "&nbsp;";
+				}
+			}
+		}
+
+		if (substr($prop["name"], 0, 3) == "pj_")
+		{
+			if (!$arr["request"]["pj_job"])
+			{
+				return PROP_IGNORE;
+			}
+			// get prop from job
+			if ($prop["subtitle"] != 1)
+			{
+				$job = obj($arr["request"]["pj_job"]);
+				$rpn = substr($prop["name"], 3);
+				switch($rpn)
+				{
+					case "toolbar":
+						$this->_do_pj_toolbar($arr, $job);
+						return PROP_OK;
+					
+					case "project":
+					case "resource":
+						$tmp = obj($job->prop($rpn));
+						$prop["value"] = html::get_change_url(
+							$tmp->id(), 
+							array(
+								"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+							),
+							$tmp->name()
+						);
+						break;
+				
+					case "state":
+						$j = get_instance(CL_MRP_JOB);
+						$prop["value"] = $j->states[$job->prop($rpn)];
+						break;
+
+					default:
+						$prop["value"] = $job->prop($rpn);
+						break;
+				}
+
+				if ($prop["value"] == "")
+				{
+					$prop["value"] = "&nbsp;";
+				}
+			}
+		}
 
 		switch($prop["name"])
 		{
@@ -279,6 +428,10 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs":
+				if ($arr["request"]["pj_job"])
+				{
+					return PROP_IGNORE;
+				}
 				$this->_printer_jobs($arr);
 				break;
 		}
@@ -1086,6 +1239,7 @@ class mrp_workspace extends class_base
 		$arr['category'] = $_GET["category"];
 		$arr['return_url'] = urlencode(aw_global_get('REQUEST_URI'));
 		$arr['cat'] = $_GET["cat"];
+		$arr['pj_job'] = $_GET["pj_job"];
 	}
 
 	/** cuts the selected person objects
@@ -1664,11 +1818,10 @@ class mrp_workspace extends class_base
 				"tm" => $job->prop("starttime"),
 				"tm_end" => $job->prop("starttime") + $job->prop("length"),
 				"length" => $len,
-				"job" => html::get_change_url($job->id(), array(
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-					),
-					t("Ava")
-				),
+				"job" => html::href(array(
+					"caption" => t("Ava"),
+					"url" => aw_url_change_var("pj_job", $job->id())
+				)),
 				"resource" => html::get_change_url($res->id(), array(
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					),
@@ -1810,6 +1963,92 @@ class mrp_workspace extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	function _do_pj_toolbar($arr, $job)
+	{
+		$tmp = $arr["obj_inst"];
+		$arr["obj_inst"] = $job;
+		$j = get_instance(CL_MRP_JOB);
+		$j->create_job_toolbar($arr);
+
+		$arr["obj_inst"] = $tmp;
+	}
+
+	/**
+		@attrib name=start
+		@param id required type=int
+	**/
+	function start ($arr)
+	{
+		$tmp = $arr;
+		$j = get_instance(CL_MRP_JOB);
+		$arr["id"] = $arr["pj_job"];
+		$j->start($arr);
+
+		$job = obj($arr["id"]);
+		$this->mrp_log($job->prop("project"), $job->id(), "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$j->states[$job->prop("state")], $arr["pj_change_comment"]);
+
+		return $this->mk_my_orb("change", array(
+			"id" => $tmp["id"],
+			"group" => "grp_printer",
+			"pj_job" => $tmp["pj_job"]
+		));
+	}
+
+	/**
+		@attrib name=done
+		@param id required type=int
+	**/
+	function done ($arr)
+	{
+		$tmp = $arr;
+		$j = get_instance(CL_MRP_JOB);
+		$arr["id"] = $arr["pj_job"];
+		$j->done($arr);
+
+		$job = obj($arr["id"]);
+		$this->mrp_log($job->prop("project"), $job->id(), "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$j->states[$job->prop("state")], $arr["pj_change_comment"]);
+		
+		return $this->mk_my_orb("change", array(
+			"id" => $tmp["id"],
+			"group" => "grp_printer",
+			"pj_job" => $tmp["pj_job"]
+		));
+	}
+
+	/**
+		@attrib name=abort
+		@param id required type=int
+	**/
+	function abort ($arr)
+	{
+		$tmp = $arr;
+		$j = get_instance(CL_MRP_JOB);
+		$arr["id"] = $arr["pj_job"];
+		$j->abort($arr);
+
+		$job = obj($arr["id"]);
+		$this->mrp_log($job->prop("project"), $job->id(), "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$j->states[$job->prop("state")], $arr["pj_change_comment"]);
+		
+		return $this->mk_my_orb("change", array(
+			"id" => $tmp["id"],
+			"group" => "grp_printer",
+			"pj_job" => $tmp["pj_job"]
+		));
+	}
+
+	function mrp_log($proj, $job, $msg, $comment = '')
+	{
+		$this->db_query("
+			INSERT INTO
+				mrp_log(
+					project_id,job_id,uid,tm,message,comment
+				)
+				values(
+					".((int)$proj).",".((int)$job).",'".aw_global_get("uid")."',".time().",'$msg','$comment'
+				)
+		");
 	}
 }
 

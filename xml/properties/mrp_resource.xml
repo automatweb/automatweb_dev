@@ -11,6 +11,15 @@
             <caption>Kategooria</caption>
       </property>
       <property>
+            <name>type</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>select</type>
+            <caption>Tüüp</caption>
+      </property>
+      <property>
             <name>resource_calendar</name>
             <table>objects</table>
             <field>meta</field>
@@ -67,29 +76,28 @@
             <method>serialize</method>
             <group>grp_resource_settings</group>
             <type>textbox</type>
-            <caption>
-            <![CDATA["Päevapuhver" (h)]]>
-            </caption>
+            <default>4</default>
+            <caption>Päeva üldpuhver (h)</caption>
       </property>
       <property>
-            <name>unavailable_recur</name>
+            <name>work_hrs_recur</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_unavailable</group>
+            <group>grp_resource_unavailable_work</group>
             <type>releditor</type>
-            <reltype>RELTYPE_RECUR</reltype>
+            <reltype>RELTYPE_RECUR_WRK</reltype>
             <use_form>emb</use_form>
             <mode>manager</mode>
             <store>no</store>
-            <caption>Kinnised ajad</caption>
+            <caption>T&amp;ouml;&amp;ouml;ajad</caption>
       </property>
       <property>
             <name>unavailable_weekends</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_unavailable</group>
+            <group>grp_resource_unavailable_una</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Ei t&amp;ouml;&amp;ouml;ta n&amp;auml;dalavahetustel</caption>
@@ -99,11 +107,24 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>grp_resource_unavailable</group>
+            <group>grp_resource_unavailable_una</group>
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
             <caption>Kinnised p&amp;auml;evad (formaat: p&amp;auml;ev.kuu p&amp;auml;ev.kuu)</caption>
+      </property>
+      <property>
+            <name>unavailable_recur</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_unavailable_una</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_RECUR</reltype>
+            <use_form>emb</use_form>
+            <mode>manager</mode>
+            <store>no</store>
+            <caption>Kinnised ajad</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_RESOURCE</syslog_type>
@@ -122,6 +143,14 @@
             <grp_resource_unavailable>
                   <caption>Kinnised ajad</caption>
             </grp_resource_unavailable>
+            <grp_resource_unavailable_work>
+                  <caption>T&amp;ouml;&amp;ouml;ajad</caption>
+                  <parent>grp_resource_unavailable</parent>
+            </grp_resource_unavailable_work>
+            <grp_resource_unavailable_una>
+                  <caption>Kinnised ajad</caption>
+                  <parent>grp_resource_unavailable</parent>
+            </grp_resource_unavailable_una>
       </groupinfo>
       <reltypes>
             <MRP_OPERATOR>
@@ -144,6 +173,11 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECUR>
+            <RECUR_WRK>
+                  <value>5</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>T&amp;ouml;&amp;ouml;aja kordus</caption>
+            </RECUR_WRK>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.7 2005/01/26 14:51:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.8 2005/01/27 08:35:14 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1127,6 +1127,13 @@ class mrp_case extends class_base
 
 		$t->define_field(array(
 			"name" => "message",
+			"caption" => t("sisu"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "comment",
 			"caption" => t("Kommentaar"),
 			"align" => "center",
 			"sortable" => 1
@@ -1138,10 +1145,11 @@ class mrp_case extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_log_t($t);
 
-		$this->db_query("SELECT tm,objects.name as job_id, uid,message FROM mrp_log left join objects on objects.oid = mrp_log.job_id  WHERE project_id = ".$arr["obj_inst"]->id()." ORDER BY tm");
+		$this->db_query("SELECT tm,objects.name as job_id, uid,message,mrp_log.comment as comment FROM mrp_log left join objects on objects.oid = mrp_log.job_id  WHERE project_id = ".$arr["obj_inst"]->id()." ORDER BY tm");
 		while ($row = $this->db_next())
 		{
 			$row["message"] = nl2br($row["message"]);
+			$row["comment"] = nl2br($row["comment"]);
 			$t->define_data($row);
 		}
 		$t->set_default_sortby("tm");

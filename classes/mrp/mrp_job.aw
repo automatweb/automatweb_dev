@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.5 2005/01/26 14:51:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.6 2005/01/27 08:35:13 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -119,6 +119,14 @@ class mrp_job extends class_base
 			"tpldir" => "mrp/mrp_job",
 			"clid" => CL_MRP_JOB,
 		));
+
+		$this->states = array (
+			MRP_STATUS_NEW => "Uus",
+			MRP_STATUS_PLANNED => "Töösse planeeritud",
+			MRP_STATUS_INPROGRESS => "Töös",
+			MRP_STATUS_ABORTED => "Katkestatud",
+			MRP_STATUS_DONE => "Valmis",
+		);
 	}
 
 	function get_property ($arr)
@@ -141,14 +149,7 @@ class mrp_job extends class_base
 				break;
 
 			case "state":
-				$states = array (
-					MRP_STATUS_NEW => "Uus",
-					MRP_STATUS_PLANNED => "Töösse planeeritud",
-					MRP_STATUS_INPROGRESS => "Töös",
-					MRP_STATUS_ABORTED => "Katkestatud",
-					MRP_STATUS_DONE => "Valmis",
-				);
-				$prop["value"] = $states[$prop["value"]] ? $states[$prop["value"]] : "Määramata";
+				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : "Määramata";
 				break;
 
 			case "job_toolbar":
@@ -239,7 +240,7 @@ class mrp_job extends class_base
 		{
 			$toolbar->add_button(array(
 				"name" => "start",
-				"img" => "start.gif",
+				//"img" => "new.gif",
 				"tooltip" => "Alusta",
 				"action" => "start",
 			));
@@ -249,14 +250,14 @@ class mrp_job extends class_base
 		{
 			$toolbar->add_button(array(
 				"name" => "done",
-				"img" => "done.gif",
+				//"img" => "done.gif",
 				"tooltip" => "Valmis",
 				"action" => "done",
 			));
 
 			$toolbar->add_button(array(
 				"name" => "abort",
-				"img" => "abort.gif",
+				//"img" => "abort.gif",
 				"tooltip" => "Katkesta",
 				"action" => "abort",
 			));
