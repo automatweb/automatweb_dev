@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.22 2003/04/24 09:54:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.23 2003/06/04 13:38:40 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -631,6 +631,10 @@ class css extends class_base
 
 				case "fweight":
 					$mask = "font-weight: %s;\n";
+					break;
+				
+				case "bold":
+					$mask = "font-weight: bold;\n";
 					break;
 				
 				case "fgcolor":
