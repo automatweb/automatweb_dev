@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.135 2002/09/04 07:35:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.136 2002/09/04 08:14:10 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -420,14 +420,22 @@ class form extends form_base
 		$this->arr["show_form_with_results"] = $show_form_with_results;
 		$this->arr["sql_writer_writer"] = $sql_writer_writer;
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
-		$this->arr["uses_calendar"] = $uses_calendar;
 
-		if ( ($this->subtype == FSUBTYPE_EMAIL_ACTION) && !$form_email_action)
+		$this->subtype = 0;
+		if ($email_form_action)
 		{
-			$this->subtype = 0;
+			$this->subtype += FSUBTYPE_EMAIL_ACTION;
 		};
 
-		$old_namels = $this->arr["name_els"];
+		$this->subtype += $calendar_role;
+
+		$this->flags = 0;
+		if ($has_calendar)
+		{
+			$this->flags += OBJ_HAS_CALENDAR;
+		};
+
+
 		$this->arr["name_els"] = array();
 		if (is_array($entry_name_el))
 		{
@@ -709,7 +717,36 @@ class form extends form_base
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
 
+		// Why such an obsession with bit masks instead of just using
+		// $this->arr["something"]? 
+		// Because I need a fast way (and that means directly in the SQL
+		// clause) to figure out the type of the form -- duke
+
+		$keys = array(0,FSUBTYPE_EV_ENTRY,FSUBTYPE_CAL_CONF,FSUBTYPE_CAL_SEARCH,FSUBTYPE_CAL_CONF2);
+		foreach($keys as $_role)
+		{
+			if ((int)$this->subtype & $_role)
+			{
+				$sel_role = $_role;
+			};
+		};
+
+		// let form_base->do_menu know that it needs to draw the calendar tab
+		if ($sel_role)
+		{
+			$this->uses_calendar = true;
+		};
+
+		$roles = array(
+			"0" => "Puudub",
+			FSUBTYPE_EV_ENTRY => "Eventite sisestamine",
+			FSUBTYPE_CAL_CONF => "Ajavahemike sisestamine",
+			FSUBTYPE_CAL_CONF2 => "Kalendri defineerimine",
+			FSUBTYPE_CAL_SEARCH => "Otsing",
+		);
+
 		$this->vars(array(
+			"roles"		=> $this->picker($sel_role,$roles),
 			"allow_html"	=> checked($this->arr["allow_html"]),
 			"def_style"	=> $this->picker($this->arr["def_style"],$t->get_select(0,ST_CELL)),
 			"after_submit_link"	=> $this->arr["after_submit_link"],
@@ -723,18 +760,18 @@ class form extends form_base
 			"check_status"	=> checked($this->arr["check_status"]),
 			"has_aliasmgr"	=> checked($this->arr["has_aliasmgr"]),
 			"has_controllers"	=> checked($this->arr["has_controllers"]),
-			"email_form_action" => checked($this->subtype == FSUBTYPE_EMAIL_ACTION),
+			"email_form_action" => checked($this->subtype & FSUBTYPE_EMAIL_ACTION),
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
 			"tables" => $this->picker($this->arr["table"],$this->list_objects(array("class" => CL_FORM_TABLE))),
 			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE)),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
+			"has_calendar" => checked($this->flags & OBJ_HAS_CALENDAR),
 			"sql_writer" => checked($this->arr["sql_writer"]),
 			"sql_writer_writer" => checked($this->arr["sql_writer_writer"]),
 			"sql_writer_writer_forms" => $this->picker($this->arr["sql_writer_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"forms" => $this->picker($this->arr["sql_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
-			"uses_calendar" => checked($this->arr["uses_calendar"]),
 		));
 
 		$ns = "";
@@ -1074,7 +1111,7 @@ class form extends form_base
 
 		// if this form uses a calendar and is an event entry form, figure out
 		// whether the calendar it is trying to write to, have enough vacancies
-		if ($this->arr["uses_calendar"] && ($this->subtype == FSUBTYPE_EV_ENTRY))
+		if ($this->subtype & FSUBTYPE_EV_ENTRY)
 		{
 			// check vacations and if found, update calendar->form relations
 			// set error messages otherwise
@@ -1273,70 +1310,78 @@ class form extends form_base
 		
 		// if this form has anything to do with calendars, perform the necessary
 		// actions. If we got here, all checks have been passed.
-		if (!$no_process_entry && $this->arr["uses_calendar"])
+		if (!$no_process_entry && ($this->subtype & FSUBTYPE_EV_ENTRY))
 		{
-			if ($this->subtype == FSUBTYPE_EV_ENTRY)
-			{
-				// reap the old relations, we are creating new ones anyway
-				$q = "DELETE FROM calendar2event WHERE entry_id = '$eid'";
-				$this->db_query($q);
+			// reap the old relations, we are creating new ones anyway
+			$q = "DELETE FROM calendar2event WHERE entry_id = '$eid'";
+			$this->db_query($q);
 
-				// cycle over all the forms that this event entry form
-				// has been assigned to and write new relations for those
-				$q = "SELECT * FROM calendar2forms WHERE form_id = '$id'";
-				$this->db_query($q);
-				while($row = $this->db_next())
+			// cycle over all the forms that this event entry form
+			// has been assigned to and write new relations for those
+			$q = "SELECT * FROM calendar2forms WHERE form_id = '$id'";
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$_cnt = (int)$this->post_vars[$row["el_cnt"]];
+				// default to 1. Is this correct?
+				if ($_cnt == 0)
 				{
-					$_cnt = (int)$this->post_vars[$row["el_cnt"]];
-					// default to 1. Is this correct?
-					if ($_cnt == 0)
-					{
-						$_cnt = 1;
-					};
-					$_start = (int)get_ts_from_arr($this->post_vars[$row["el_start"]]);
-					$_end = (int)get_ts_from_arr($this->post_vars[$row["el_end"]]);
-					$__rel = $this->post_vars[$row["el_relation"]];
-					preg_match("/lbopt_(\d+?)$/",$__rel,$m);
-					$_rel = (int)$m[1];
-					list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
-					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
-							VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
-					$this->db_query($q);
+					$_cnt = 1;
 				};
-			}
-			elseif ($this->subtype = FSUBTYPE_CAL_CONF)
-			{
-				$fc = get_instance("form_calendar");
-				$_start = get_ts_from_arr($this->post_vars[$this->arr["el_event_start"]]);
-				$_end = get_ts_from_arr($this->post_vars[$this->arr["el_event_end"]]) + 86399;
-				$_cnt = $this->post_vars[$this->arr["el_event_count"]];
-				$_types = array(
-					"hour" => "1",
-					"day" => "2",
-				);
-				$_period = $this->post_vars[$this->arr["el_event_period"] . "_count"];
-				$_release = $this->post_vars[$this->arr["el_event_release"] . "_count"];
-				$_pertype = $_types[$this->post_vars[$this->arr["el_event_period"] . "_type"]];
-				$_reltype = $_types[$this->post_vars[$this->arr["el_event_release"] . "_type"]];
-				$_oid = $this->id;
-				$_eid = $this->entry_id;
-				
-				$cal_id = (int)$cal_id;
-				$cal_relation = (int)$cal_relation;
-
-				$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid' AND relation = '$cal_relation'";
-				$this->db_query($q);
-
-				$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,start,end,max_items,period,period_cnt,
-							release,release_cnt,entry_id) VALUES 
-							('$_oid','$cal_relation','$cal_id','$_start','$_end','$_cnt','$_pertype','$_period','$_reltype',
-							'$_release','$_eid')";
-
+				$_start = (int)get_ts_from_arr($this->post_vars[$row["el_start"]]);
+				$_end = (int)get_ts_from_arr($this->post_vars[$row["el_end"]]);
+				$__rel = $this->post_vars[$row["el_relation"]];
+				preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+				$_rel = (int)$m[1];
+				list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
+				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
+					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
 				$this->db_query($q);
 			};
 		}
+		elseif ($this->subtype & FSUBTYPE_CAL_CONF)
+		{
+			$fc = get_instance("form_calendar");
+			$_start = get_ts_from_arr($this->post_vars[$this->arr["el_event_start"]]);
+			$_end = get_ts_from_arr($this->post_vars[$this->arr["el_event_end"]]) + 86399;
+			$_cnt = $this->post_vars[$this->arr["el_event_count"]];
+			$_types = array(
+				"hour" => "1",
+				"day" => "2",
+			);
+			$_period = $this->post_vars[$this->arr["el_event_period"] . "_count"];
+			$_release = $this->post_vars[$this->arr["el_event_release"] . "_count"];
+			$_pertype = $_types[$this->post_vars[$this->arr["el_event_period"] . "_type"]];
+			$_reltype = $_types[$this->post_vars[$this->arr["el_event_release"] . "_type"]];
+			$_oid = $this->id;
+			$_eid = $this->entry_id;
+			
+			$cal_id = (int)$cal_id;
+			$cal_relation = (int)$cal_relation;
 
+			$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid' AND relation = '$cal_relation'";
+			$this->db_query($q);
 
+			$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,start,end,max_items,period,period_cnt,
+						release,release_cnt,entry_id) VALUES 
+						('$_oid','$cal_relation','$cal_id','$_start','$_end','$_cnt','$_pertype','$_period','$_reltype',
+						'$_release','$_eid')";
+
+			$this->db_query($q);
+		}
+		elseif ($this->subtype & FSUBTYPE_CAL_CONF2)
+		{
+			$id = $this->id;
+			$_start = (int)$this->arr["cal_start"];
+			$_end = (int)$this->arr["cal_end"];
+			$_max = (int)$this->arr["cal_count"];
+			$_period_cnt = (int)$this->arr["cal_period"];
+			$q = "DELETE FROM calendar2timedef WHERE cal_id = '$id'";
+			$this->db_query($q);
+			$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt)
+				VALUES ('$id','$id','$entry_id','$_start','$_end','$max','2','$_period_cnt')";
+			$this->db_query($q);
+		};
 
 		$fact = get_instance("form_actions");
 		$fact->do_actions(&$this, $this->entry_id);
@@ -2201,8 +2246,9 @@ class form extends form_base
 		{
 			$fc = get_instance("form_chain");
 			$chain = $fc->load_chain($this->arr["search_chain"]);
+			// check whether the chain and the form both use a calendar
 			$has_calendar = $chain["flags"] & OBJ_HAS_CALENDAR;
-			if (!$this->arr["uses_calendar"])
+			if (!($this->subtype & FSUBTYPE_CAL_SEARCH))
 			{
 				$has_calendar = false;
 			};
@@ -5287,10 +5333,10 @@ class form extends form_base
 
 		$lines = "";
 
-		if ($this->subtype == FSUBTYPE_EV_ENTRY)
+		if ($this->subtype & FSUBTYPE_EV_ENTRY)
 		{
 			$ft = get_instance("form_table");
-			$tables = $ft->get_form_tables_for_form($form_id);
+			$tables = $ft->get_form_tables_for_form($id);
 
 			$q = "SELECT *,objects.name AS name FROM calendar2forms
 				LEFT JOIN objects ON (calendar2forms.cal_id = objects.oid)
@@ -5313,15 +5359,40 @@ class form extends form_base
 				$lines .= $this->parse("LINE");
 			};
 		}
+		elseif ($this->subtype & FSUBTYPE_CAL_CONF2)
+		{
+			load_vcl("date_edit");
+			$de = new date_edit(0);
+			$de->configure(array(
+				"year" => "",
+				"month" => "",
+				"day" => "",
+			));
 
-		$roles = array(
-			"0" => "Tavaline",
-			FSUBTYPE_EV_ENTRY => "Eventite sisestamine",
-			FSUBTYPE_CAL_CONF => "Ajavahemike defineerimine",
-		);
+			if ($this->arr["cal_start"])
+			{
+				$start = $this->arr["cal_start"];
+				$end = $this->arr["cal_end"] + 1;
+			}
+			else
+			{
+				list($_d,$_m,$_y) = explode("-",date("d-m-Y"));
+				$start = mktime(0,0,0,$_m,$_d,$_y);
+				$end = $start + 86400;
+			};
+
+			$this->vars(array(
+				"start" => $de->gen_edit_form("start",$start,2000,2037),
+				"end" => $de->gen_edit_form("end",$end,2000,2037),
+				"count" => $this->arr["cal_count"],
+				"period" => $this->arr["cal_period"],
+			));
+			$this->parse("DEFINE2");
+		};
+
 		
 		$this->vars(array(
-			"roles" => $this->picker($this->subtype,$roles),
+			//"roles" => $this->picker($this->subtype,$roles),
 			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
 			"event_start_els" => $this->picker($this->arr["event_start_el"],$date_els),
 			"start_disabled" => disabled(sizeof($els_start) == 1),
@@ -5350,7 +5421,6 @@ class form extends form_base
 				break;
 
 			default:
-				$this->parse("GENERAL");
 		};
 		
 		return $this->do_menu_return();				
@@ -5370,7 +5440,20 @@ class form extends form_base
 		$this->arr["el_event_period"] = $el_event_period;
 		$this->arr["el_event_release"] = $el_event_release;
 
-		$this->subtype = $calendar_role;
+		if ($this->subtype  & FSUBTYPE_CAL_CONF2)
+		{
+			$_start = (int)get_ts_from_arr($args["start"]);
+			$_end = (int)get_ts_from_arr($args["end"]) - 1;
+			$_count = (int)$args["count"];
+			$_period = (int)$args["period"];
+
+			$this->arr["cal_start"] = $_start;
+			$this->arr["cal_end"] = $_end;
+			$this->arr["cal_count"] = $_count;
+			$this->arr["cal_period"] = $_period;
+		};
+		//print "start = $_start, end = $_end, count = $_count, period = $_period<br>";
+
 		$this->save();
 		return $this->mk_my_orb("calendar",array("id" => $id));
 
@@ -5394,7 +5477,7 @@ class form extends form_base
 		};
 
 		$this->get_objects_by_class(array(
-			"class" => CL_FORM_CHAIN,
+			"class" => array(CL_FORM,CL_FORM_CHAIN),
 			"active" => true,
 			"flags" => OBJ_HAS_CALENDAR,
 		));
