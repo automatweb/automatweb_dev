@@ -1,5 +1,5 @@
 <?php
-// $Id: treeview.aw,v 1.7 2003/03/05 15:21:30 duke Exp $
+// $Id: treeview.aw,v 1.8 2003/03/06 14:07:53 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -57,7 +57,7 @@ class treeview extends class_base
 		// generates the tree
 		extract($args);
 		$root = $args["config"]["root"];
-		$this->urltemplate = $args["urltemplate"];
+		$this->urltemplate = isset($args["urltemplate"]) ? $args["urltemplate"] : "";
 		$this->config = $args["config"];
 
 		if (is_array($args["callback_modify_node"]))
@@ -77,13 +77,16 @@ class treeview extends class_base
 		{
 			return "invalid root object";
 		};
-		$type = $obj["meta"]["treetype"];
-		if (!$type)
+		if (isset($obj["meta"]["treetype"]))
+		{
+			$type = $obj["meta"]["treetype"];
+		}
+		else
 		{
 			$type = "dhtml";
 		};
 		$this->read_template("ftiens.tpl");
-		$arr = array();
+		$this->arr = array();
 		
 		$this->clidlist = (is_array($args["config"]["clid"])) ? $args["config"]["clid"] : CL_PSEUDO; 
 
@@ -109,6 +112,7 @@ class treeview extends class_base
 			"DOC" => "",
 			"root" => $root,
 			"linktarget" => isset($args["linktarget"]) ? $args["linktarget"] : "",
+			"shownode" => isset($args["shownode"]) ? $args["shownode"] : "",
 			"rootname" => ($obj["meta"]["rootcaption"]) ? $obj["meta"]["rootcaption"] : $rootobj["name"],
 			"rooturl" => $this->do_item_link($rootobj),
 			"icon_root" => ($obj["meta"]["icon_root"])? $this->mk_my_orb("show",array("id" => $obj["meta"]["icon_root"]),"icons") : "/automatweb/images/aw_ikoon.gif",
@@ -167,7 +171,7 @@ class treeview extends class_base
 			// kui pole, siis tshekime et kas n2idatakse perioodilisi dokke
 			// kui n2idatakse ja menyy on perioodiline, siis n2itame menyyd
 			// kui pole perioodiline siis ei n2ita
-			if (is_array($this->arr[$row["oid"]]))
+			if (isset($this->arr[$row["oid"]]) && is_array($this->arr[$row["oid"]]))
 			{
 				$sub = $this->generate_tree($row["oid"]);;
 			}
@@ -205,7 +209,7 @@ class treeview extends class_base
 			$metref = $this->callback_node_meth;
 			$objref->$metref(&$row);
 		};
-		if ($row["link"])
+		if (isset($row["link"]) && $row["link"])
 		{
 			$url = $row["link"];
 		}
