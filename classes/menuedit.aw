@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.299 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.300 2003/08/13 15:55:20 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -170,7 +170,7 @@ class menuedit extends aw_template
 		}
 
 		// make sure that the banner random id's are different each time around, even when the site is cached.
-		$banner_defs = $this->cfg["banners"];
+		$banner_defs = aw_ini_get("menuedit.banners");
 		if (is_array($banner_defs))
 		{
 			//reset($banner_defs);
