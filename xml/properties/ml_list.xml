@@ -23,6 +23,16 @@
             <caption>Lase liitumisel kausta valida</caption>
       </property>
       <property>
+            <name>msg_folder</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MSG_FOLDER</reltype>
+            <caption>Kirjade asukoht</caption>
+      </property>
+      <property>
             <name>sub_form_type</name>
             <table>objects</table>
             <field>meta</field>
@@ -214,6 +224,28 @@
             <caption>Listi staatus</caption>
       </property>
       <property>
+            <name>unsent_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>unsent</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Listi staatuse toolbar</caption>
+      </property>
+      <property>
+            <name>unsent_table</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>unsent</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Listi staatus</caption>
+      </property>
+      <property>
             <name>mail_toolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -352,6 +384,11 @@
                   <parent>raports</parent>
                   <submit>no</submit>
             </list_status>
+            <unsent>
+                  <caption>Saatmata kirjad</caption>
+                  <parent>raports</parent>
+                  <submit>no</submit>
+            </unsent>
             <write_mail>
                   <caption>Saada kiri</caption>
                   <parent>raports</parent>
@@ -397,6 +434,11 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>Listi liikme seadetevorm</caption>
             </MEMBER_CONFIG>
+            <MSG_FOLDER>
+                  <value>6</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kirjade kaust</caption>
+            </MSG_FOLDER>
       </reltypes>
 </properties>
 
