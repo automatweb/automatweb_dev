@@ -10,6 +10,9 @@
 @default group=general
 @default form=rate
 
+@property check type=callback callback=callback_check no_caption=1
+@caption Kontrollib asju
+
 @property rate type=chooser store=no
 @caption Hinda
 
@@ -186,6 +189,10 @@ class image_rate extends class_base
 			{
 				$true = true;
 			}
+			else
+			{
+				$this->inst->no_picture = true;
+			}
 		}
 		$rt = get_instance(CL_RATE);
 		$this->inst->profile_data = obj($row["prof_id"]);
@@ -198,6 +205,10 @@ class image_rate extends class_base
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
+		if($prop["name"] == "first1" && $this->no_picture)
+		{
+			return PROP_OK;
+		}
 		if($this->no_picture)
 		{
 			return PROP_IGNORE;
@@ -324,7 +335,18 @@ class image_rate extends class_base
 		};
 		return PROP_OK;
 	}
-
-
+	
+	function callback_check($arr)
+	{
+		if($this->no_picture)
+		{
+			return array("one" => array(
+				"name" => "first1",
+				"type" => "text",
+				"no_caption" => 1,
+				"value" => "Ei õnnestunud pilti kuvada.",
+			));
+		}
+	}
 };
 ?>
