@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="messenger_v2" folder="messenger" extends="class_base">
+	</class>
+</orb>
+		
