@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.66 2003/02/03 15:43:08 duke Exp $
+// $Id: class_base.aw,v 2.67 2003/02/05 03:55:43 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -75,15 +75,18 @@ class class_base extends aliasmgr
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => $args["group"],
+				"cb_view" => $args["cb_view"],
 		));
 		
 		$this->request = $args;
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
+
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
+		
 		
 		$cli = get_instance("cfg/" . $this->output_client);
 
@@ -127,6 +130,7 @@ class class_base extends aliasmgr
 			"id" => $id,
 			"group" => $group,
 			"orb_class" => $orb_class,
+			"cb_view" => $args["cb_view"],
 			"parent" => $parent,
 			"period" => $period,
 			"alias_to" => $this->request["alias_to"],
@@ -150,6 +154,7 @@ class class_base extends aliasmgr
 		return $this->gen_output(array(
 			"parent" => $parent,
 			"content" => $content,
+			"cb_view" => $args["cb_view"],
 		));
 	}
 
@@ -167,12 +172,13 @@ class class_base extends aliasmgr
 		extract($args);
 
 		$this->id = $id;
-		
+
 		// get a list of active properties for this object
 		// I need an easy way to turn off individual properties
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => $args["group"],
+				"cb_view" => $args["cb_view"],
 		));
 
 		$this->load_obj_data(array("id" => $this->id));
@@ -180,14 +186,18 @@ class class_base extends aliasmgr
 		if (method_exists($this->inst,"callback_pre_edit"))
 		{
 			$this->inst->callback_pre_edit(array(
-				"object" => $this->coredata,
+				"id" => $this->id,
+				"object" => &$this->coredata,
 			));
 		};
+
+		$obj = $this->get_object($this->id);
 
 		$this->request = $args;
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
+
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
@@ -238,6 +248,7 @@ class class_base extends aliasmgr
 			"orb_class" => $orb_class,
 			"parent" => $parent,
 			"period" => $period,
+			"cb_view" => $cb_view,
 			"alias_to" => $this->request["alias_to"],
 			"return_url" => urlencode($this->request["return_url"]),
 		) + (is_array($extraids) ? array('extraids' => $extraids) : array());
@@ -262,6 +273,7 @@ class class_base extends aliasmgr
 		return $this->gen_output(array(
 			"parent" => $parent,
 			"content" => $content,
+			"cb_view" => $args["cb_view"],
 		));
 	}
 
@@ -282,6 +294,7 @@ class class_base extends aliasmgr
 		$realprops = $this->get_active_properties(array(
 			"clfile" => $this->clfile,
 			"group" => $args["group"],
+			"cb_view" => $args["cb_view"],
 		));
 
 		// now, in embedded cases, we don't want to create any objects,
@@ -501,8 +514,9 @@ class class_base extends aliasmgr
 			"id" => $id,
 			"group" => $group,
 			"period" => aw_global_get("period"),
-			"alias_to" => $args["alias_to"],
-			"return_url" => $args["return_url"],
+			"alias_to" => $form_data["alias_to"],
+			"return_url" => $form_data["return_url"],
+			"cb_view" => $form_data["cb_view"],
 		) + (is_array($extraids) ? $extraids : array());
 
 		$action = "change";
@@ -514,6 +528,7 @@ class class_base extends aliasmgr
 			$this->inst->callback_mod_retval(array(
 				"action" => &$action,
 				"args" => &$args,
+				"form_data" => &$form_data,
 				"orb_class" => &$orb_class,
 			));
 		};
@@ -556,11 +571,19 @@ class class_base extends aliasmgr
 			"classonly" => $args["classonly"],
 			"clfile" => $this->clfile,
 			"group" => $args["group"],
+			"content" => $args["content"],
 		));
 
+		if (isset($args["group_by"]))
+		{
+			// right now this is the only group option I support anyway
+			$group_by = "table";
+		};
+
 		$savedata = array();
-		$form_data = $args;
-		
+
+		$form_data = $args["form_data"];
+
 		load_vcl('date_edit');
 
 		foreach($realprops as $property)
@@ -576,26 +599,37 @@ class class_base extends aliasmgr
 			
 			$name = $property["name"];
 
-			$savedata[$name] = $xval;
+			$val = $xval;
 		
 			$table = $property["table"];
 			$field = $property["field"];
 			$method = $property["method"];
 			$type = $property["type"];
-			if (($type == "text") || ($type == "callback"))
+			if (($type == "text") || ($type == "callback") || ($property["store"] == "no"))
 			{
 				continue;
 			};
 			if ($type == "date_select")
 			{
 				// turn the array into a timestamp
-				$savedata[$name] = date_edit::get_timestamp($savedata[$name]);
+				$val = date_edit::get_timestamp($val);
 			};
 			if (($type == "select") && $property["multiple"])
 			{
-				$savedata[$name] = $this->make_keys($savedata[$name]);
+				$val = $this->make_keys($savedata[$name]);
+			};
+
+			if (isset($group_by))
+			{
+				$savedata[$property[$group_by]][$name] = $val;
+			}
+			else
+			{
+				$savedata[$name] = $val;
 			};
 		};
+		// yah, but it would be rather nice, if I could let this same function
+		// handle the saving as well
 		return $savedata;
 	}
 
@@ -664,6 +698,7 @@ class class_base extends aliasmgr
 	function load_obj_data($args = array())
 	{	
 		// load the object data, if there is anything to load at all
+		// but if no tables are defined, then it seems we don't load anything at all
 		foreach($this->tables as $key => $val)
 		{
 			// that we already got
@@ -770,7 +805,7 @@ class class_base extends aliasmgr
 		{
 			if ($this->id)
 			{
-				$link = $this->mk_my_orb($orb_action,array("id" => $this->id,"group" => $key),get_class($this->orb_class));
+				$link = $this->mk_my_orb($orb_action,array("id" => $this->id,"group" => $key,"cb_view" => $args["cb_view"]),get_class($this->orb_class));
 			}
 			else
 			{
@@ -803,7 +838,7 @@ class class_base extends aliasmgr
 			};
 		};
 		
-		if ($this->id && $this->classinfo["relationmgr"])
+		if ($this->id && $this->classinfo["relationmgr"] && !$this->request["cb_view"])
 		{
 			$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),get_class($this->orb_class));
 			$this->tp->add_tab(array(
@@ -894,7 +929,10 @@ class class_base extends aliasmgr
 		// we do need to load them all
 		$this->get_all_properties(array(
 			"classonly" => $args["classonly"],
+			"cb_view" => $args["cb_view"],
+			"content" => $args["content"],
 		));
+
 
 		// figure out which group is active
 		// it the group argument is a defined group, use that
@@ -915,15 +953,22 @@ class class_base extends aliasmgr
 			};
 		};
 
-
 		// and if nothing suitable was found, default to the "general" group
 		if (!$use_group)
 		{
-			$use_group = "general";
+			if ($this->groupinfo->key_exists("general"))
+			{
+				$use_group = "general";
+			}
+			// otherwise, take the first group
+			else
+			{
+				list($use_group,) = $this->groupinfo->first();
+			};
 		};
 
 		$this->activegroup = $use_group;
-		
+
 		// get the list of all groups
 		$groupnames = array();
 		foreach($this->groupinfo->get() as $key => $val)
@@ -932,9 +977,16 @@ class class_base extends aliasmgr
 		};
 			
 		$this->groupnames = $groupnames;
+		$this->cb_views = array();
+
+		$property_list = array();
 
 		foreach($this->all_props as $key => $val)
 		{
+			if ($val["view"] && !$this->cb_views[$val["view"]])
+			{
+				$this->cb_views[$val["view"]] = 1;
+			};
 			// handle multiple groups
 			if (is_array($val["group"]))
 			{
@@ -1101,6 +1153,13 @@ class class_base extends aliasmgr
 	{
 		// load all properties for the current class
 		$cfgu = get_instance("cfg/cfgutils");
+		if ($args["content"])
+		{
+			$_all_props = $cfgu->parse_definition(array(
+				"content" => $args["content"],
+			));
+		}
+		else
 		if ($args["classonly"])
 		{
 			$_all_props = $cfgu->load_class_properties(array(
@@ -1119,10 +1178,49 @@ class class_base extends aliasmgr
 			'request' => $this->request,
 		);
 
+		// 1) generate a list of all views
+		$this->cb_views = array();
+		// 2) then count the elements in all group using those which match the active group
+		$group_el_cnt = array();
+		// 3) skip empty groups
+
+		$cb_view = $args["cb_view"];
+
 		// ok, first add all the generated props to the props array 
 		$this->all_props = array();
 		foreach($_all_props as $k => $val)
 		{
+			if ($val["view"])
+			{
+				$this->cb_views[$val["view"]] = 1;
+			};
+
+			// list only the properties in the requested view
+			if ($val["view"] != $args["cb_view"])
+			{
+				continue;
+			};
+	
+			$argblock = array(
+				"id" => $this->id,
+				"obj" => &$this->coredata,
+                                "objdata" => &$this->objdata,
+			);
+
+			// generated elements count as one for this purpose
+			$_grplist = explode(",",$val["group"]);
+			foreach($_grplist as $_grp)
+			{
+				if ($group_el_cnt[$_grp])
+				{
+					$group_el_cnt[$_grp]++;
+				}
+				else
+				{
+					$group_el_cnt[$_grp] = 1;
+				};
+			};
+
 			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
 			{
 				$meth = $val["generator"];
@@ -1141,8 +1239,21 @@ class class_base extends aliasmgr
 				$this->all_props[$k] = $val;
 			}
 		}
+
 		$this->classinfo = $cfgu->get_classinfo();
-		$this->groupinfo = new aw_array($cfgu->get_groupinfo());
+		$tmp_grpinfo = $cfgu->get_groupinfo();
+		$grpinfo = array();
+		if (is_array($tmp_grpinfo))
+		{
+			foreach($tmp_grpinfo as $key => $val)
+			{
+				if (in_array($key,array_keys($group_el_cnt)))
+				{	
+					$grpinfo[$key] = $val;
+				};
+			};
+		};
+		$this->groupinfo = new aw_array($grpinfo);
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 	}
 	
@@ -1271,7 +1382,10 @@ class class_base extends aliasmgr
 		else
 		if (is_array($this->values))
 		{
-			$property["value"] = $this->values[$property["name"]];
+			if (isset($this->values[$property["name"]]))
+			{
+				$property["value"] = $this->values[$property["name"]];
+			};
 		}
 		else
 		{
@@ -1687,6 +1801,7 @@ class class_base extends aliasmgr
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => $args["group"],
+				"cb_view" => $args["cb_view"],
 		));
 		
 		$this->load_obj_data(array("id" => $this->id));
@@ -1734,12 +1849,18 @@ class class_base extends aliasmgr
 		$realprops = $this->get_active_properties(array(
 				"classonly" => $args["classonly"],
 				"clfile" => $this->clfile,
+				"content" => $args["content"],
 				"group" => $args["group"],
 		));
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
 		$this->values = &$args["values"];
+
+		if ($this->values["id"])
+		{
+			$this->id = $this->values["id"];
+		};
 
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
