@@ -96,7 +96,7 @@ class dronline_conf extends class_base
 		if ($prop['name'] == 'user')
 		{
 			$ui = get_instance('users');
-			$prop['value'] = $ui->get_user_picker();
+			$prop['options'] = $ui->get_user_picker(array('add_empty' => true));
 		}
 		return PROP_OK;
 	}

@@ -23,6 +23,11 @@
 
 */
 
+define(RNG_HOUR, 1);
+define(RNG_DAY, 2);
+define(RNG_MONTH, 3);
+define(RNG_YEAR, 4);
+
 class dronline extends class_base
 {
 	function dronline()
@@ -31,6 +36,13 @@ class dronline extends class_base
 			'tpldir' => 'syslog/dronline',
 			'clid' => CL_DRONLINE
 		));
+
+		$this->timespans = array(
+			RNG_HOUR => array('sql' => "date_format(from_unixtime(tm),'%m%d%y%H')", 'df' => 'd-M-Y / H:00'),
+			RNG_DAY => array('sql' => "date_format(from_unixtime(tm),'%m%d%y')", 'df' => 'd-M-Y'),
+			RNG_MONTH => array('sql' => "date_format(from_unixtime(tm),'%m%y')", 'df' => 'M-Y'),
+			RNG_YEAR => array('sql' => "date_format(from_unixtime(tm),'%y')", 'df' => 'Y')
+		);
 	}
 
 	////
@@ -97,12 +109,22 @@ class dronline extends class_base
 	function change($arr)
 	{
 		extract($arr);
-		$ret = parent::change($arr);
-		
 		if ($dro_tab == '')
 		{
 			$dro_tab = 'dronline';
 		}
+		if (!$cur_range)
+		{
+			$cur_range = RNG_DAY;
+			unset($arr['cur_range']);
+		}
+
+		$arr['extraids'] = array(
+			'dro_tab' => $dro_tab,
+			'cur_range' => $cur_range
+		);
+		$ret = parent::change($arr);
+
 		unset($arr['class']);
 		unset($arr['action']);
 
@@ -116,7 +138,7 @@ class dronline extends class_base
 		$tbp->add_tab(array(
 			'active' => ($dro_tab == 'stat_time'  ? true : false),
 			'caption' => 'Statistika aja l&otilde;ikes',
-			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'stat_time')))
+			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'stat_time','cur_range' => $cur_range)))
 		));
 
 		$tbp->add_tab(array(
@@ -181,8 +203,17 @@ class dronline extends class_base
 			'sortable' => 1,
 		));
 
-		$q = "SELECT * FROM syslog ".$this->get_where_clause($id)." ORDER BY tm DESC LIMIT ".$this->get_limit_clause($id);
-		echo "q = $q <Br>";
+		if ($show_oid)
+		{
+			$whc = $this->get_where_clause($id,' AND ');
+			$whc = " WHERE syslog.oid = '$show_oid' ".$whc;
+		}
+		else
+		{
+			$whc = $this->get_where_clause($id);
+		}
+
+		$q = "SELECT * FROM syslog ".$whc." ORDER BY tm DESC LIMIT ".$this->get_limit_clause($id);
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
@@ -190,11 +221,12 @@ class dronline extends class_base
 		}
 
 		$t->set_default_sortby('tm');
+		$t->set_default_sorder('DESC');
 		$t->sort_by();
 		return $t->draw();
 	}
 
-	function get_where_clause($oid, $prep = 'WHERE')
+	function get_where_clause($oid, $prep = ' WHERE ')
 	{
 		$ob = $this->get_object($oid);
 		$conf_o = $this->get_object($ob['meta']['conf']);
@@ -233,6 +265,29 @@ class dronline extends class_base
 		if ($mt['textfilter'] != '')
 		{
 			$sql[] = 'action LIKE \'%'.$mt['textfilter'].'%\'';
+		}
+
+		// action filter
+		if ($mt['use_filter'])
+		{
+			$tin = new aw_array();
+			// now figure out all the checked vars in the filter
+			foreach($mt as $k => $v)
+			{
+				if (substr($k,0,4) == 'slt_' && $v == 1)
+				{
+					$tin->set('\''.substr($k,4).'\'');
+				}
+			}
+
+			$sql[] = 'type IN ('.$tin->to_sql().')';
+		}
+
+		// blocked ips
+		$bip = aw_unserialize($this->get_cval('blockedip'));
+		if (is_array($bip) && count($bip) > 0)
+		{
+			$sql[] = 'ip NOT IN ('.join(',',map('\'%s\'',$bip)).')';
 		}
 
 		$ret =  join(" AND ", $sql);
@@ -317,32 +372,69 @@ class dronline extends class_base
 			'sortable' => 1,
 			'type' => 'time',
 			'numeric' => 1,
-			'format' => $df[3],
-			'nowrap' => 1
+			'format' => $this->timespans[$cur_range]['df'],
+			'nowrap' => 1,
+			'width' => '20%'
 		));
 		$t->define_field(array(
 			'name' => 'cnt',
 			'caption' => 'Mitu',
 			'sortable' => 1,
 			'numeric' => 1,
+			'width' => '10%'
+		));
+		$t->define_field(array(
+			'name' => 'bar',
+			'caption' => '%',
+			'sortable' => 0,
 		));
 
-		$q = "SELECT count(*) as cnt,date_format(from_unixtime(tm),'%m%d%y') as tm1, tm 
+		$tmsp = $this->timespans[$cur_range]['sql'];
+
+		$q = "SELECT count(*) as cnt,$tmsp as tm1, tm 
 				FROM syslog
 				".$this->get_where_clause($id)."
 				GROUP BY tm1
 				ORDER BY tm ASC
 				LIMIT ".$this->get_limit_clause($id);
-		echo "q = $q <br>";
 		$this->db_query($q);
+		$max = 1;
+		$dat = array();
 		while($row = $this->db_next())
 		{
+			$max = max($row['cnt'], $max);
+			$dat[] = $row;
+		}
+
+		foreach($dat as $row)
+		{
+			$pr = floor((($row['cnt'] / $max) * 100.0)+0.5);
+			$row['bar'] = html::img(array(
+				'url' => $this->cfg['baseurl'].'/automatweb/images/bar.gif',
+				'height' => 5,
+				'width' => ($pr == 0 ? '1' : $pr.'%')
+			));
 			$t->define_data($row);
 		}
-//		$t->set_default_sortby('cnt');
-//		$t->set_default_sorder('desc');
-//		$t->sort_by();
-		return $t->draw();
+		$t->set_default_sortby('tm');
+		$t->sort_by();
+		$tbl = $t->draw();
+
+		unset($arr['cur_range']);		
+		$this->read_template('sel_range.tpl');
+		$this->vars(array(
+			'ranges' => $this->picker($cur_range, array(
+				RNG_HOUR => 'Tundide l&otilde;ikes', 
+				RNG_DAY => 'P&auml;evade l&otilde;ikes',
+				RNG_MONTH => 'Kuude l&otilde;ikes',
+				RNG_YEAR => 'Aastate l&otilde;ikes'
+			)),
+			'reforb' => $this->mk_reforb('change', $arr + array('no_reforb' => 1))
+		));
+
+		$tb = get_instance('toolbar');
+		$tb->add_cdata($this->parse());
+		return $tb->get_toolbar().$tbl;
 	}
 
 	function _do_stat_addr($arr)
@@ -364,16 +456,31 @@ class dronline extends class_base
 		));
 
 		$t->define_field(array(
+			'name' => 'sel',
+			'caption' => 'Blokeeri',
+			'sortable' => 0,
+			'nowrap' => 1,
+			'width' => '1',
+			'align' => 'center'
+		));
+
+		$t->define_field(array(
 			'name' => 'ip',
 			'caption' => 'IP Aadress',
-			'sortable' => 1,
-			'nowrap' => 1
+			'sortable' => 0,
+			'nowrap' => 1,
+			'width' => 1
 		));
 		$t->define_field(array(
 			'name' => 'cnt',
 			'caption' => 'Mitu',
 			'sortable' => 1,
 			'numeric' => 1,
+		));
+		$t->define_field(array(
+			'name' => 'bar',
+			'caption' => '%',
+			'sortable' => 0,
 		));
 
 		$q = "SELECT count(*) as cnt,ip 
@@ -382,22 +489,84 @@ class dronline extends class_base
 				GROUP BY ip
 				ORDER BY cnt DESC
 				LIMIT ".$this->get_limit_clause($id);
-		echo "q = $q <br>";
 		$this->db_query($q);
+		$max = 1;
+		$dat = array();
 		while($row = $this->db_next())
 		{
+			$max = max($row['cnt'], $max);
+			$dat[] = $row;
+		}
+
+		foreach($dat as $row)
+		{
+			$pr = floor((($row['cnt'] / $max) * 100.0)+0.5);
+			$row['bar'] = html::img(array(
+				'url' => $this->cfg['baseurl'].'/automatweb/images/bar.gif',
+				'height' => 5,
+				'width' => ($pr == 0 ? '1' : $pr.'%')
+			));
+
+			$row['sel'] = html::checkbox(array(
+				'name' => 'block[]',
+				'value' => $row['ip']
+			));
+			
 			list($row['ip'],) = inet::gethostbyaddr($row['ip']);
+			$row['ip'] = html::href(array(
+				'url' => '#',
+				'onClick' => 'javascript:window.open("http://'.$row['ip'].'")',
+				'caption' => $row['ip']
+			));
+
 			$t->define_data($row);
 		}
-//		$t->set_default_sortby('cnt');
-//		$t->set_default_sorder('desc');
-//		$t->sort_by();
-		return $t->draw();
+		$t->set_default_sortby('cnt');
+		$t->set_default_sorder('desc');
+		$t->sort_by();
+		$tbl = $t->draw();
+
+		$tb = get_instance('toolbar');
+		
+		$tb->add_button(array(
+			'name' => 'Blokeeri',
+			'tooltip' => 'Blokeeri',
+			'url' => 'javascript:document.blokk.submit()',
+			'imgover' => 'save_over.gif',
+			'img' => 'save.gif'
+		));
+
+		$ret = html::form(array(
+			'action' => 'reforb.'.$this->cfg['ext'],
+			'method' => 'POST',
+			'name' => 'blokk',
+			'content' => $tb->get_toolbar().$tbl.$this->mk_reforb('submit_block', $arr)
+		));
+		return $ret;
+	}
+
+	function _do_stat_obj_show_oid($arr)
+	{
+		$tb = get_instance('toolbar');
+		$tarr = $arr;
+		unset($tarr['show_oid']);
+
+		$tb->add_cdata(html::href(array(
+			'url' => $this->mk_my_orb('change', $tarr),
+			'caption' => '<span class="awmenuedittabletext">Tagasi objektide statistikasse</span>'
+		)));
+
+		return $tb->get_toolbar().$this->_do_dronline($arr);
 	}
 
 	function _do_stat_obj($arr)
 	{
 		extract($arr);
+
+		if ($show_oid)
+		{
+			return $this->_do_stat_obj_show_oid($arr);
+		}
 
 		load_vcl('table');
 		$t = new aw_table(array('prefix' => 'dronline'));
@@ -417,7 +586,8 @@ class dronline extends class_base
 			'name' => 'oid',
 			'caption' => 'OID',
 			'sortable' => 1,
-			'nowrap' => 1
+			'nowrap' => 1,
+			'width' => 1
 		));
 
 		$t->define_field(array(
@@ -426,10 +596,20 @@ class dronline extends class_base
 			'sortable' => 1,
 		));
 		$t->define_field(array(
+			'name' => 'oppnar',
+			'caption' => 'Detailid',
+			'sortable' => 0,
+		));
+		$t->define_field(array(
 			'name' => 'cnt',
 			'caption' => 'Mitu',
 			'sortable' => 1,
 			'numeric' => 1,
+		));
+		$t->define_field(array(
+			'name' => 'bar',
+			'caption' => '%',
+			'sortable' => 0,
 		));
 
 		$q = "SELECT count(*) as cnt,ip, objects.name as name,syslog.oid AS oid
@@ -439,16 +619,69 @@ class dronline extends class_base
 				GROUP BY oid
 				ORDER BY cnt DESC
 				LIMIT ".$this->get_limit_clause($id);
-		echo "q = $q <br>";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
+			$max = max($row['cnt'], $max);
+			$dat[] = $row;
+		}
+
+		foreach($dat as $row)
+		{
+			$pr = floor((($row['cnt'] / $max) * 100.0)+0.5);
+			$row['bar'] = html::img(array(
+				'url' => $this->cfg['baseurl'].'/automatweb/images/bar.gif',
+				'height' => 5,
+				'width' => ($pr == 0 ? '1' : $pr.'%')
+			));
+
+			$row['name'] = ' '.html::href(array(
+				'url' => $this->cfg['baseurl'].'/'.$row['oid'],
+				'caption' => $row['name'],
+				'target' => '_blank'
+			));
+	
+			$arr['show_oid'] = $row['oid'];
+
+			$row['oppnar'] = html::href(array(
+				'url' => $this->mk_my_orb('change', $arr),
+				'caption' => 'Detailid'
+			));
 			$t->define_data($row);
 		}
-//		$t->set_default_sortby('cnt');
-//		$t->set_default_sorder('desc');
-//		$t->sort_by();
+		$t->set_default_sortby('cnt');
+		$t->set_default_sorder('desc');
+		$t->sort_by();
 		return $t->draw();
+	}
+
+	function submit_block($arr)
+	{
+		extract($arr);
+
+		$old = aw_unserialize($this->get_cval("blockedip"));
+		if (!is_array($old))
+		{
+			$old = array();
+		}
+		$_sel = new aw_array($block);
+		foreach($_sel->get() as $v)
+		{
+			if (!in_array($v, $old) && inet::is_ip($v))
+			{
+				$old[] = $v;
+			}
+		}
+
+		$old_s = serialize($old);
+		$this->quote($old_s);
+		$this->set_cval('blockedip', $old_s);
+		
+		unset($arr['block']);
+		unset($arr['reforb']);
+		unset($arr['class']);
+		unset($arr['action']);
+		return $this->mk_my_orb('change', $arr);
 	}
 }
 ?>

@@ -5,6 +5,11 @@
 			<function name="saveblock">
 			</function>
 		</action>
+
+		<action name="submit_block">
+			<function name="submit_block">
+			</function>
+		</action>
 	</class>
 </orb>
 		
