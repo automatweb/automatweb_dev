@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.68 2003/01/07 15:26:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.69 2003/01/17 14:48:26 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -26,6 +26,7 @@ class aliasmgr extends aw_template
 		extract($args);
 		$this->read_template("search.tpl");
 		$search = get_instance("search");
+		$reltypes[0] = "alias";
 		$reltypes = new aw_array($reltypes);
 		$this->reltypes = $reltypes->get();
 		$args["clid"] = "aliasmgr";
@@ -423,7 +424,8 @@ class aliasmgr extends aw_template
 		$this->read_template("lists_new.tpl");
 		$obj = $this->get_object($id);
 		$this->id = $id;
-
+	
+		$reltypes[0] = "alias";
 		$reltypes = new aw_array($reltypes);
 		$this->reltypes = $reltypes->get();
 
@@ -481,7 +483,7 @@ class aliasmgr extends aw_template
 			$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
 			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
 			$chlinks[$alias["target"]] = $ch;
-			$reltype_id = $obj["meta"]["alias_reltype"][$alias["target"]];
+			$reltype_id = (int)$obj["meta"]["alias_reltype"][$alias["target"]];
 
 			$alias["icon"] = sprintf("<img src='%s'>",icons::get_icon_url($aclid,""));
 			// it has a meaning only for embedded aliases
