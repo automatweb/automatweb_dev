@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.38 2004/03/01 15:10:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.39 2004/03/02 12:22:09 kristo Exp $
 
 /*
 
@@ -527,20 +527,13 @@ class site_show extends class_base
 					$sections[$gm_id] = $gm_id;
 					if ($gm_subs[$gm_id])
 					{
-						  $ot = new object_tree(array(
-								 "class_id" => CL_MENU,
-								 "parent" => $gm_id,
-								 "status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
-								 "sort_by" => "objects.parent"
-						  ));
-						  $sections = $ot->ids();
-						  /*
-						$_sm_list = $this->get_menu_list(false, false, $gm_id);
-						foreach($_sm_list as $_sm_i => $ttt)
-						{
-							$sections[$_sm_i] = $_sm_i;
-						}
-						*/
+						$ot = new object_tree(array(
+							"class_id" => CL_MENU,
+							"parent" => $gm_id,
+							"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
+							"sort_by" => "objects.parent"
+						));
+						$sections += $ot->ids();
 					}
 				}
 			};
@@ -602,10 +595,12 @@ class site_show extends class_base
 
 			$documents = new object_list($filter);
 
+			$tc = 0;
 			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
 			{
-				if ($skipfirst > 0 && $cnt < $skipfirst)
+				if ($skipfirst > 0 && $tc < $skipfirst)
 				{
+					$tc++;
 					continue;
 				}
 
