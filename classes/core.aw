@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.69 2001/11/20 16:20:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.70 2001/12/06 01:10:03 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -1298,7 +1298,7 @@ class core extends db_connector
 			classload("config");
 			$co = new config;
 			$u = $co->get_simple_config("error_redirect");
-			if ($u != "")
+			if ($u != "" && $GLOBALS["uid"] != "kix")
 			{
 				header("Location: $u");
 				die();
@@ -1448,17 +1448,20 @@ class core extends db_connector
 			}
 			else
 			{
-				$str = $k."=".$v;
+				$str = ($v) ? $k."=".$v : "";
 			}
 
-			if ($k != "section")
+			if ($str)
 			{
-				$ura[] = $str;
-			}
-			else
-			{
-				$section = $v;
-			}
+				if ($k != "section")
+				{
+					$ura[] = $str;
+				}
+				else
+				{
+					$section = $v;
+				}
+			};
 		}
 		$urs = join("&",$ura);
 
@@ -1622,7 +1625,8 @@ class core extends db_connector
 			}
 			if ($use)
 			{
-				$path="<a href='menuedit.$ext?parent=".$row["oid"]."&type=objects&period=".$period."'>".$row["name"]."</a> / ".$path;
+				$name = ($row["name"]) ? $row["name"] : "(nimetu)";
+				$path="<a href='menuedit.$ext?parent=".$row["oid"]."&type=objects&period=".$period."'>".$name."</a> / ".$path;
 			}
 		}
 
