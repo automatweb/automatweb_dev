@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.21 2005/02/07 14:21:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.22 2005/02/17 11:34:59 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -408,7 +408,7 @@ class ml_list extends class_base
 		));
 		$fld = $list_obj->prop("def_user_folder");
 		$members = $this->get_all_members($fld);
-		if(in_array($args["mail"], $members) || empty($args["mail"]))
+		if(in_array($args["mail"], $members) || in_array($args["email"], $members) || empty($args["mail"]))
 		{
 			$allow = false;
 			$erx["XXX"]["msg"] = t("Sellise aadressiga inimene on juba listiga liitunud");
@@ -436,7 +436,7 @@ class ml_list extends class_base
 		$udef_fields["checkboxes"] = $args["udef_checkbox"];
 		$udef_fields["classificators"] = $args["udef_classificator"];
 		$udef_fields["date1"] = $args["udef_date1"];
-		if ($allow)
+		if ($allow === true)
 		{
 			if ($args["op"] == 1)
 			{
