@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.14 2001/05/23 06:28:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.15 2001/05/23 06:39:08 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -468,7 +468,20 @@ class messenger extends menuedit_light
 		$c = "";
 		$cnt = 0;
 
-		$onpage = $this->conf["msg_on_page"];
+		$onpage = $this->msgconf["msg_on_page"];
+		if (!$page)
+		{
+			$page = 1;
+		};
+
+		if (!$onpage)
+		{
+			$onpage = 20;
+		};
+
+		$x_from = ($page - 1) * $onpage;
+		$x_to = $x_from + $onpage;
+		
 		
 		if (is_array($msglist))
 		{
@@ -503,34 +516,28 @@ class messenger extends menuedit_light
 			};
 			
 			$c = "";
+			$cnt = 0;
 
 			foreach($msglist as $key => $msg)
 			{
-				if (!$msg["subject"])
+				if (($cnt >= $x_from) && ($cnt <= $x_to))
 				{
-					$msg["subject"] = "(no subject)";
+					if (!$msg["subject"])
+					{
+						$msg["subject"] = "(no subject)";
+					};
+					// kui status == true, siis on teade loetud
+					$msg["id"] = $msg["oid"];
+					$msg["color"] = ($msg["status"]) ? "#FFFFFF" : "#EEEEEE";
+					$msg["from"] = "$pref<a href='?class=messenger&action=do_search&field=modifiedby&value=$msg[modifiedby]&folders=$folder'>" . $msg["modifiedby"] . "</a>$suf";
+					$msg["subject"] = "$pref<a href='?class=messenger&action=show&id=$msg[id]'>" . $msg["subject"] . "</a>$suf";
+					$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
+					$msg["cnt"] = $cnt;
+					$msg["tm"] = $this->time2date($row["tm"]);
+					$this->vars($msg);
+					$c .= $this->parse("line");
 				};
 				$cnt++;
-				if ($msg["status"])
-				{
-					$pref = "";
-					$suf = "";
-				}
-				else
-				{
-					$pref = "<b>";
-					$suf = "</b>";
-				};
-				// kui status == true, siis on teade loetud
-				$msg["id"] = $msg["oid"];
-				$msg["color"] = ($msg["status"]) ? "#FFFFFF" : "#EEEEEE";
-				$msg["from"] = "$pref<a href='?class=messenger&action=do_search&field=modifiedby&value=$msg[modifiedby]&folders=$folder'>" . $msg["modifiedby"] . "</a>$suf";
-				$msg["subject"] = "$pref<a href='?class=messenger&action=show&id=$msg[id]'>" . $msg["subject"] . "</a>$suf";
-				$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
-				$msg["cnt"] = $cnt;
-				$msg["tm"] = $this->time2date($row["tm"]);
-				$this->vars($msg);
-				$c .= $this->parse("line");
 			};
 		};
 
