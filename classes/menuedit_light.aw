@@ -173,12 +173,12 @@ class menuedit_light extends aw_template
 					};
 					if ($v["alias"] && sizeof($this->alias_stack) == $this->level)
 					{
-						  $obj_id = join("/",$this->alias_stack);
-						  $obj_id .= "/" . $v["alias"];
+						  $id = join("/",$this->alias_stack);
+						  $id .= "/" . $v["alias"];
 					}
 					else
 					{
-						$obj_id = $id;
+						$id = $id;
 					};
 
 					$this->vars(array(
