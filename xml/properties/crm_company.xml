@@ -290,26 +290,6 @@
             <store>no</store>
             <field>jobsnotact</field>
       </property>
-      <property>
-            <name>org_toolbar</name>
-            <table>objects</table>
-            <group>customers</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>org_toolbar</field>
-            <caption>Org. toolbar</caption>
-      </property>
-      <property>
-            <name>customer</name>
-            <table>objects</table>
-            <group>customers</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>customer</field>
-            <caption>Kliendid</caption>
-      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
