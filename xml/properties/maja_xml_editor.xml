@@ -21,6 +21,46 @@
             <caption>Uus xml fail</caption>
       </property>
       <property>
+            <name>db_table_contents</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DB_TABLE_CONTENTS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Andmebaasitabeli sisu objekt</caption>
+      </property>
+      <property>
+            <name>house_name</name>
+            <table>objects</table>
+            <group>db_saving_settings</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Maja nimi/aadress</caption>
+      </property>
+      <property>
+            <name>xml_to_db__connections</name>
+            <table>objects</table>
+            <group>db_saving_settings</group>
+            <type>table</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>XML ja DB v&amp;auml;ljade vahelised seosed</caption>
+      </property>
+      <property>
+            <name>additional_info_table</name>
+            <table>objects</table>
+            <group>additional_info</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>additional_info_table</field>
+            <caption>Additional info</caption>
+      </property>
+      <property>
             <name>xml_content</name>
             <table>objects</table>
             <group>content_change</group>
@@ -37,9 +77,22 @@
             <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
+            <db_saving_settings>
+                  <caption>Baasi salvestamise seaded</caption>
+            </db_saving_settings>
+            <additional_info>
+                  <caption>Lisainfo korterite tabeli jaoks</caption>
+            </additional_info>
             <content_change>
-                  <caption>Muutmine</caption>
+                  <caption>XML-i muutmine</caption>
             </content_change>
       </groupinfo>
+      <reltypes>
+            <DB_TABLE_CONTENTS>
+                  <value>1</value>
+                  <clid>CL_DB_TABLE_CONTENTS</clid>
+                  <caption>Andmebaasitabeli sisu objekt</caption>
+            </DB_TABLE_CONTENTS>
+      </reltypes>
 </properties>
 

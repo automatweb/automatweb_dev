@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.3 2004/10/22 00:25:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.4 2004/10/26 04:52:05 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -25,6 +25,12 @@
 
 @property xml_to_db__connections type=table field=meta method=serialize no_caption=1
 @caption XML ja DB v&auml;ljade vahelised seosed
+
+@groupinfo additional_info caption="Lisainfo korterite tabeli jaoks"
+@default group=additional_info
+
+@property additional_info_table type=table no_caption=1
+@caption Additional info
 
 @groupinfo content_change caption="XML-i muutmine"
 @default group=content_change
@@ -59,11 +65,14 @@ class maja_xml_editor extends class_base
 		switch($prop["name"])
 		{
 			case "xml_content":
-			    $this->create_content_table($arr);
+				$this->create_content_table($arr);
 				break;
 				
 			case "xml_to_db__connections":
 				$this->create_xml_to_db_connections_table($arr);
+				break;
+			case "additional_info_table":
+				$this->create_additional_info_table($arr);
 				break;
 		};
 		return $retval;
@@ -82,7 +91,7 @@ class maja_xml_editor extends class_base
 				$arr['obj_inst']->set_meta("xml_to_db_conns", $arr['request']['xml_to_db_values']);
 				break;
 			case "house_name":
-			//Here I'll check if house_name has changed, casue when it is
+			//Here I'll check if house_name has changed, cause when it is
 			//I have to change it in database too
 
 				$old_house_name = $arr['obj_inst']->meta("house_name");
@@ -130,6 +139,12 @@ class maja_xml_editor extends class_base
 		return $this->parse();
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+//
+// creating XML editor table
+//
+////////////////////////////////////////////////////////////////////////////////
+
 	function create_content_table($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
@@ -138,16 +153,15 @@ class maja_xml_editor extends class_base
 			"name" => "xml_element",
 			"caption" => "xml elements",
 		));
-
+/*
 		$t->define_field(array(
 			"name" => "floor",
 			"caption" => "korrus",
 		));
-		
+*/
 		$t->set_sortable(false);
 		
 //		$data_file_content = file_get_contents($arr['obj_inst']->prop("orig_xml_file"));
-		
 		$data_file_content = $this->get_file(array(
 				"file" => $arr['obj_inst']->prop("orig_xml_file"),
 			));
@@ -158,16 +172,22 @@ class maja_xml_editor extends class_base
 		}
 
 		$xml_file_content = parse_xml_def(array("xml" => $data_file_content));
+/*
 		$floors_arr = $xml_file_content[1]['korrus'];
 		$floors = array();
 
 		foreach($floors_arr as $floor)
 		{
 			array_push($floors, $xml_file_content[0][$floor]['attributes']['nimi']);
+// mnjah - loll lahendus - oleks võinud ju võtta
+// $xml_file_content[0][$floor]['attributes']['number']
+// ja oleks saanud selle  floors massiivi key-ks panna ja ühtlasi
+// oleks see ka selecti optioni key olnud ja poleks probleemi olnud
+// nullinda esimese korrusega - uh
 		}
 
 		$floors_flats_saved = $arr['obj_inst']->meta("floors");
-		
+*/
 		foreach($xml_file_content[0] as $key => $value)
 		{
 			if($value['type'] == "open")
@@ -201,11 +221,11 @@ class maja_xml_editor extends class_base
 					foreach($value['attributes'] as $attribute_key => $attribute_value)
 					{
 						$textfield_size = 10;
-						if(strcmp($attribute_key, "korterinr") == 0 || strcmp($attribute_key, "number") == 0 || strcmp($attribute_key, "tubadearv") == 0 || strcmp($attribute_key, "pindala") == 0)
+						if(($attribute_key == "korterinr") || ($attribute_key == "number") || ($attribute_key == "tubadearv") || ($attribute_key == "pindala"))
 						{
 							$textfield_size = 5;
 						}
-						if(strcmp($attribute_key, "plaan") == 0)
+						if($attribute_key == "plaan")
 						{
 							$textfield_size = 25;
 						}
@@ -220,7 +240,7 @@ class maja_xml_editor extends class_base
 				}
 
 				$indent = str_repeat("&nbsp;", 5);
-
+/*
 				if($value['tag'] == "korter")
 				{
 					$floor_select = html::select(array(
@@ -233,10 +253,10 @@ class maja_xml_editor extends class_base
 				{
 					$floor_select = "";
 				}
-
+*/
 				$t->define_data(array(
 					"xml_element" => $indent."&lt;".$value['tag'].$attributes."/&gt;",
-					"floor" => $floor_select,
+//					"floor" => $floor_select,
 				));
 			}
 			
@@ -251,12 +271,9 @@ class maja_xml_editor extends class_base
 	}
 ////////////////////////////////////////////////////////////////////////////////
 //
-// RISTTABELI TEKITAMINE
+// creating XML to DB connections table
 //
 ////////////////////////////////////////////////////////////////////////////////
-
-
-
 	function create_xml_to_db_connections_table($arr)
 	{
 	
@@ -273,7 +290,7 @@ class maja_xml_editor extends class_base
 //		arr($arr);
 
 		
-// i'll unset some unneeded array members, whisch are 2 table field, which content
+// i'll unset some unneeded array members, which are 2 table field, which content
 // has to come somewhere else
 		unset($table_fields['id'], $table_fields['maja_nimi']);
 
@@ -299,7 +316,8 @@ class maja_xml_editor extends class_base
 
 		$xml_file_content = parse_xml_def(array("xml" => $data_file_content));
 		
-// here I'll take the first <korter> elements attributes and assume that this is all
+// here I'll take the first <korter> elements attributes and assume that all the
+// other <korter> elements have the same attributes
 		$korter_el_attribs = array_keys($xml_file_content[0][1]['attributes']);
 		
 		$xml_to_db_values = $arr['obj_inst']->meta("xml_to_db_conns");
@@ -330,17 +348,137 @@ class maja_xml_editor extends class_base
 		$t->set_sortable(false);
 	}
 
+////////////////////////////////////////////////////////////////////////////////
+//
+// creating additional info table
+//
+////////////////////////////////////////////////////////////////////////////////
+	function create_additional_info_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$fields = array(
+			"flat_nr" => "Korteri nr.",
+			"korrus" => "Korruse nr.",
+			"korrus_nimi" => "Korruse nimi",
+			"staatus2" => "Alternatiivne staatus",
+			"panipaik" => "Panipaik",
+			"terrass" => "Terrass",
+			"korteriomand" => "Korteriomand",
+			"parklakoht" => "Parklakoht",
+		);
+		foreach($fields as $field_key => $field_value)
+		{
+			$t->define_field(array(
+				"name" => $field_key,
+				"caption" => $field_value,
+				"align" => "center",
+			));
+		}
+		$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
+		$db_table_name = $db_table_contents_obj->prop("db_table");
+//		arr($arr);
+
+		$flats = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$arr['obj_inst']->prop('house_name')."' ORDER BY korter ASC");
+
+		foreach($flats as $flat)
+		{
+/*
+
+// not sure if it is going to work and don't have time right now to
+// fool around it :(
+			$row = array("flat_nr" => $flat['korter']);
+			foreach($fields as $field_key => $field_value)
+			{
+				if($field_key != "flat_nr")
+				{
+					$row[$field_key] = html::textbox(array(
+						"name" => "row[".$flat['id']."][".$field_key."]",
+						"value" =>
+					));
+				}
+				
+			}
+*/
+			$t->define_data(array(
+				"flat_nr" => $flat['korter'],
+				
+				"korrus" => html::textbox(array(
+						"name" => "row[".$flat['id']."][korrus]",
+						"value" => $flat['korrus'],
+						"size" => "5",
+					)),
+				"korrus_nimi" => html::textbox(array(
+						"name" => "row[".$flat['id']."][korrus_nimi]",
+						"value" => $flat['korrus_nimi'],
+						"size" => 10,
+					)),
+				"staatus2" => html::textbox(array(
+						"name" => "row[".$flat['id']."][staatus2]",
+						"value" => $flat['staatus2'],
+						"size" => 15,
+					)),
+				"panipaik" => html::textbox(array(
+						"name" => "row[".$flat['id']."][panipaik]",
+						"value" => $flat['panipaik'],
+						"size" => 5,
+					)),
+				"terrass" => html::textbox(array(
+						"name" => "row[".$flat['id']."][terrass]",
+						"value" => $flat['terrass'],
+						"size" => 5,
+					)),
+				"korteriomand" => html::textbox(array(
+						"name" => "row[".$flat['id']."][korteriomand]",
+						"value" => $flat['korteriomand'],
+						"size" => 5,
+					)),
+				"parklakoht" => html::textbox(array(
+						"name" => "row[".$flat['id']."][parklakoht]",
+						"value" => $flat['parklakoht'],
+						"size" => 10,
+					)),
+			));
+		}
+
+		$t->set_sortable(false);
+	}
+
 	function callback_pre_save($arr)
 	{
-		if (strcmp($arr['request']['group'], "db_saving_settings") == 0)
+
+		$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
+		$db_table_name = $db_table_contents_obj->prop("db_table");
+
+		if ($arr['request']['group'] == "additional_info")
 		{
 
+
+			foreach($arr['request']['row'] as $key => $value)
+			{
+//				echo $key." -- ".$value."<br>";
+//				arr($value);
+				$db_query = "UPDATE ".$db_table_name." SET ";
+				foreach($value as $k => $v)
+				{
+					if($k == "staatus2" && empty($v))
+					{
+						$staatus_from_xml = $this->db_fetch_array("SELECT staatus FROM ".$db_table_name." WHERE id=".$key);
+						$v = $staatus_from_xml[0]['staatus'];
+					}
+					$db_query .= $k."='".$v."', ";
+				}
+				$db_query = substr($db_query, 0, (strlen($db_query)-2));
+				$this->db_query($db_query." WHERE id=".$key);
+			}
 
 		}
 	
-		if (strcmp($arr['request']['group'], "content_change") == 0)
+		if ($arr['request']['group'] == "content_change")
 		{
-			$data_file_content = file_get_contents($arr['obj_inst']->prop("orig_xml_file"));
+//			$data_file_content = file_get_contents($arr['obj_inst']->prop("orig_xml_file"));
+			$data_file_content = $this->get_file(array(
+				"file" => $arr['obj_inst']->prop("orig_xml_file"),
+			));
 
 			$xml_file_content = parse_xml_def(array("xml" => $data_file_content));
 
@@ -362,20 +500,23 @@ class maja_xml_editor extends class_base
 
 // some preparations for updating the db table
 			$sql_commands = array();
-			$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
-			$db_table_name = $db_table_contents_obj->prop("db_table");
-			$saved_floors = $arr['obj_inst']->meta("floors");
+
+// moved the next 2 lines at the beginning of the function
+//			$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
+//			$db_table_name = $db_table_contents_obj->prop("db_table");
+			
+//			$saved_floors = $arr['obj_inst']->meta("floors");
 			$xml_to_db_conns = $arr['obj_inst']->meta("xml_to_db_conns");
 			
 			foreach($xml_file_content[0] as $key => $value)
 			{
-				if(strcmp($value['type'], "open") == 0)
+				if($value['type'] == "open")
 				{
 					$result .= "<".$value['tag'].$attribs.">\n";
 				
 				}
 
-				if(strcmp($value['type'], "complete") == 0)
+				if($value['type'] == "complete")
 				{
 					$attributes = "";
 
@@ -389,7 +530,7 @@ class maja_xml_editor extends class_base
 							if($value['tag'] == "korter" && $xml_to_db_conns[$attribute_key] != "empty")
 							{
 								$sql_command[$xml_to_db_conns[$attribute_key]] = $attribute_value;
-								$sql_command['korrus'] = $saved_floors[$key];
+//								$sql_command['korrus'] = $saved_floors[$key];
 							}
 						}
 					}
@@ -402,7 +543,7 @@ class maja_xml_editor extends class_base
 					}
 				}
 
-				if(strcmp($value['type'], "close") == 0)
+				if($value['type'] == "close")
 				{
 					$result .= "</".$value['tag'].">\n";
 				}
@@ -425,18 +566,52 @@ class maja_xml_editor extends class_base
 
 			$house_name = $arr['obj_inst']->prop("house_name");
 
-			$this->db_query("DELETE FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
+//			$this->db_query("DELETE FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
+
+			$db_result = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
+//			$db_result = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='blah'");
+
+//			arr($db_result);
+//----------------------------------------------------------
+// ok, siin tuleks ilmselt siiski baasist olemas olevad vastava
+// tänava kirjed välja võtta ja siis kokku panna natuke täiuslikum
+// insert VÕI update - juhul kui baasist midagi ei tule siis
+// ilmselt insert
+//----------------------------------------------------------
+			$insert = false;
+
+			if(empty($db_result))
+			{
+				$insert = true;
+			}
 
 			foreach($sql_commands as $sql_command)
 			{
-				$sql_insert = "INSERT INTO ".$db_table_name." SET maja_nimi='".$house_name."', ";
+				if($insert)
+				{
+					$sql_query = "INSERT INTO ".$db_table_name." SET maja_nimi='".$house_name."', ";
+				}
+				else
+				{
+					$sql_query = "UPDATE ".$db_table_name." SET ";
+				}
 				foreach($sql_command as $sql_c_key => $sql_c_value)
 				{
-					$sql_insert .= $sql_c_key."='".$sql_c_value."', ";
+					$sql_query .= $sql_c_key."='".$sql_c_value."', ";
 				}
 
-				$sql_insert = substr($sql_insert, 0, (strlen($sql_insert)-2));
-				$this->db_query($sql_insert);
+				$sql_query = substr($sql_query, 0, (strlen($sql_query)-2));
+				
+				if($insert)
+				{
+					$this->db_query($sql_query);
+//					echo $sql_query."<br>";
+				}
+				else
+				{
+					$this->db_query($sql_query." WHERE maja_nimi='".$house_name."' AND korter='".$sql_command['korter']."'");
+//					echo $sql_query." WHERE maja_nimi='".$house_name."' AND korter='".$sql_command['korter']."'<br>";
+				}
 			}
 			
 //			$this->db_query();
@@ -446,13 +621,13 @@ class maja_xml_editor extends class_base
 
 			if(!$file_handle = fopen($arr['obj_inst']->prop("new_xml_file"), "w"))
 			{
-				echo "Couldn't open the file (".$arr['obj_inst']->prop("new_xml_file").") to write";
+				die("Couldn't open the file (".$arr['obj_inst']->prop("new_xml_file").") to write");
 			}
 
 
 			if(fwrite($file_handle, $result) === FALSE)
 			{
-				echo "Cannot write to this file: ".$arr['obj_inst']->prop("new_xml_file");
+				die("Cannot write to this file: ".$arr['obj_inst']->prop("new_xml_file"));
 			}
 
 			fclose($file_handle);
