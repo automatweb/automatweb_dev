@@ -103,6 +103,7 @@ function apply_editor_style(doc,val)
 	doc.writeln("</style></head>");
 	//doc.writeln("<body style='border: 1px; margin: 1px;'>");
 	doc.writeln("<body class='text'>");
+	//doc.write(val.replace(/\n/g,'<br>'));
 	doc.write(val);
 	doc.writeln("</body></html>");
 	doc.close();
