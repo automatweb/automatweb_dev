@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.234 2003/02/19 16:22:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.235 2003/02/19 16:24:48 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -30,7 +30,7 @@ class menuedit extends aw_template
 	// skip_invalidate   
 	function add_new_menu($args = array())   
 	{   
-		// ja eeldame, et meil on vähemalt parent ja name olemas.   
+		// ja eeldame, et meil on vï¿½emalt parent ja name olemas.   
 		$this->quote($args["name"]);   
 		$newoid = $this->new_object(array(   
 			"name" => $args["name"],   
@@ -85,7 +85,7 @@ class menuedit extends aw_template
 		}
 
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
-		// aliasega, voi lopetab töö, kui miskit oli valesti
+		// aliasega, voi lopetab t, kui miskit oli valesti
 		$section = $this->check_section($params["section"]);
 
 
@@ -186,10 +186,10 @@ class menuedit extends aw_template
 	////
 	// !da thing. draws the site 
 	// params: section, text, docid, strip_img, template, format, vars, no_left_pane, no_right_pane
-	// niisiis. vars array peaks sisaldama mingeid pre-parsed html tükke,
-	// mis võivad tulla ntx kusagilt orbi klassi seest vtm.
+	// niisiis. vars array peaks sisaldama mingeid pre-parsed html tkke,
+	// mis vivad tulla ntx kusagilt orbi klassi seest vtm.
 	// array keydeks peaksid olema variabled template sees, mis siis asendatakse
-	// oma väärtustega
+	// oma vï¿½rtustega
 	function _gen_site_html($params)
 	{
 		extract($params);	
@@ -218,8 +218,8 @@ class menuedit extends aw_template
 		));
 
 		////
-		// Kui küsiti infot RDF-is, siis tagastame vastava väljundi
-		// hm. Ja tegelikult peaks selle üleüldse kuhugi mujale viima.
+		// Kui ksiti infot RDF-is, siis tagastame vastava vï¿½jundi
+		// hm. Ja tegelikult peaks selle leldse kuhugi mujale viima.
 		if (isset($format) && $format == "rss")
 		{
 			die($this->do_rdf($section,$obj,$format,$docid));
@@ -896,7 +896,7 @@ class menuedit extends aw_template
 		}
 
 
-		// ei olnud defaulti, peaks vist .. näitama nimekirja? 
+		// ei olnud defaulti, peaks vist .. nï¿½tama nimekirja? 
 		if ($docid < 1)	
 		{
 			// avoid unneccessary query if the menu is already in the cache
@@ -1094,7 +1094,7 @@ class menuedit extends aw_template
 	{
 		$frontpage = $this->cfg["frontpage"];
 
-		// kui sektsiooni viimane märk on "-", paneme selle objekti sees püsti
+		// kui sektsiooni viimane mï¿½k on "-", paneme selle objekti sees psti
 		// raw flagi
 
 		if (substr($section,-1) == "-")
@@ -1227,7 +1227,7 @@ class menuedit extends aw_template
 		} 
 		else 
 		{
-			// mingi kontroll, et kui sektsioon ei eksisteeri, siis näitame esilehte
+			// mingi kontroll, et kui sektsioon ei eksisteeri, siis nï¿½tame esilehte
 			if (!(($section > 0) && ($this->get_object($section)))) 
 			{
 				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section), $section);
@@ -1849,7 +1849,7 @@ class menuedit extends aw_template
 
 		// grupid
 
-		// sisumenüüd.
+		// sisumend.
 		$this->_gen_menu_branch($args);
 
 		// kodukataloog, kui oleme esimesel tasemel
@@ -2311,7 +2311,7 @@ class menuedit extends aw_template
 	}
 
 	////
-	// !Tagastab nimekirja erinevatest menüütüüpidest
+	// !Tagastab nimekirja erinevatest mentpidest
 	function get_type_sel()
 	{
 		return array(
@@ -2515,15 +2515,15 @@ class menuedit extends aw_template
 			// je, I know, this will kind of slow down things
 			// hmhm. taimisin seda vibe esilehel - 0.05 sek. niiet mitte oluliselt. - terryf
 			// kuigi, seda siin funxioonis kasutatakse aint n2dala vasaku paani tegemisex exole. ja see v6ix ikka n2dala koodis olla. 
-			// njah, praegu ainult nädalas. Aga idee on selles, et metainfo välja kasutad ka muu info salvestamiseks,
+			// njah, praegu ainult nï¿½alas. Aga idee on selles, et metainfo vï¿½ja kasutad ka muu info salvestamiseks,
 			// mitte teha jarjest uusi valju juurde - duke
 			// 
 			// ok, point taken. nyt kasutatakse seda objekti metadatat ka ntx sellex et selektitud menyy pildi urli salvestada. - terryf
 			// it's already uncompressed, use it
 			$meta = $row["meta"];
 
-			// see on siis nädala parema paani leadide näitamine
-			// nõme häkk. FIX ME.
+			// see on siis nï¿½ala parema paani leadide nï¿½tamine
+			// nme hï¿½k. FIX ME.
 			if ($meta["show_lead"])
 			{
 				$activeperiod = aw_global_get("act_per_id");
@@ -2546,7 +2546,7 @@ class menuedit extends aw_template
 
 			if ($check_acl)
 			{
-				// sellele menüüle pole oigusi, me ei näita seda
+				// sellele menle pole oigusi, me ei nï¿½ta seda
 				if (not($this->can("view",$row["oid"])))
 				{
 					continue;
@@ -5438,16 +5438,19 @@ class menuedit extends aw_template
 			while ($row = $this->db_next())
 			{
 				$this->save_handle();
-				if ($this->cfg["classes"][$row["class_id"]]["file"] != "")
+				if ($this->can("delete", $row["oid"]))
 				{
-					$inst = get_instance($this->cfg["classes"][$row["class_id"]]["alias_class"] != "" ? $this->cfg["classes"][$row["class_id"]]["alias_class"] : $this->cfg["classes"][$row["class_id"]]["file"]);
-					if (method_exists($inst, "delete_hook"))
+					if ($this->cfg["classes"][$row["class_id"]]["file"] != "")
 					{
-						$inst->delete_hook(array("oid" => $row["oid"]));
+						$inst = get_instance($this->cfg["classes"][$row["class_id"]]["alias_class"] != "" ? $this->cfg["classes"][$row["class_id"]]["alias_class"] : $this->cfg["classes"][$row["class_id"]]["file"]);
+						if (method_exists($inst, "delete_hook"))
+						{
+							$inst->delete_hook(array("oid" => $row["oid"]));
+						}
 					}
+					$this->delete_object($row["oid"]);
+					$upd[] = $row["oid"];
 				}
-				$this->delete_object($row["oid"]);
-				$upd[] = $row["oid"];
 				$this->restore_handle();
 			}
 		}
