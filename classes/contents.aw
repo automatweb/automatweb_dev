@@ -23,9 +23,14 @@ class contents extends aw_template
 		$this->period = aw_global_get("act_per_id");
 
 		$mareas = aw_ini_get("menuedit.menu_defs");
+	
+		$morder = aw_ini_get("contents.menu_order");
 
-		foreach($mareas as $pid => $an)
+		//foreach($mareas as $pid => $an)
+		foreach($morder as $order => $mname)
 		{
+			// now find the id from the menu_defs 
+			$pid = array_search($mname, $mareas);
 			$this->req_menus($pid);
 		}
 
