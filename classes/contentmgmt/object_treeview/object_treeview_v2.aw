@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.24 2004/11/29 13:21:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.25 2004/12/02 16:00:47 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -11,51 +11,60 @@
 @default method=serialize
 
 
-@property ds type=relpicker reltype=RELTYPE_DATASOURCE 
+@property ds type=relpicker reltype=RELTYPE_DATASOURCE
 @caption Andmed
 
 
 @groupinfo showing caption="N&auml;itamine"
 @default group=showing
-@property show_folders type=checkbox ch_value=1 
+@property show_folders type=checkbox ch_value=1
 @caption N&auml;ita katalooge
 
-@property show_add type=checkbox ch_value=1 
+@property show_add type=checkbox ch_value=1
 @caption N&auml;ita toolbari
 
-@property show_link_new_win type=checkbox ch_value=1 
+@property show_link_new_win type=checkbox ch_value=1
 @caption Vaata link uues aknas
 
-@property tree_type type=chooser default=1 
+@property tree_type type=chooser default=1
 @caption Puu n&auml;itamise meetod
 
-@property per_page type=textbox size=5 
+@property per_page type=textbox size=5
 @caption Mitu rida lehel
 
 @property show_hidden_cols type=checkbox ch_value=1  default=1
 @caption N&auml;ita peidetud tulpasid?
 
-@property sortbl type=table store=no 
+@property sortbl type=table store=no
 @caption Andmete sorteerimine
 
-@property filter_table type=table store=no 
+@property filter_table type=table store=no
 @caption Andmete filtreerimine
+
+@property group_by_folder type=select
+@caption Kaustade j&auml;rgi grupeeritav v&auml;li
+
+@property group_in_table type=select
+@caption Millise v&auml;lja j&auml;rgi tabel grupeerida
 
 @groupinfo styles caption="Stiilid"
 @default group=styles
-@property title_bgcolor type=colorpicker 
+@property title_bgcolor type=colorpicker
 @caption Pealkirja taustav&auml;rv
 
-@property even_bgcolor type=colorpicker  
+@property even_bgcolor type=colorpicker
 @caption Paaris rea taustav&auml;rv
 
-@property odd_bgcolor type=colorpicker 
+@property odd_bgcolor type=colorpicker
 @caption Paaritu rea taustav&auml;rv
 
-@property header_css type=relpicker reltype=RELTYPE_CSS  
+@property group_header_bgcolor type=colorpicker
+@caption Grupeeriva rea taustav&auml;rv
+
+@property header_css type=relpicker reltype=RELTYPE_CSS
 @caption Pealkirja stiil
 
-@property line_css type=relpicker reltype=RELTYPE_CSS 
+@property line_css type=relpicker reltype=RELTYPE_CSS
 @caption Rea stiil
 
 @groupinfo columns caption=Tulbad
@@ -97,6 +106,15 @@ class object_treeview_v2 extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+
+
+		$col_list = $this->_get_col_list(array(
+			"o" => $arr['obj_inst'],
+			"hidden_cols" => ($arr['obj_inst']->prop("show_hidden_cols") == 1) ? true : false,
+		));
+
+		$col_list = array_merge(array("" => ""), $col_list);
+
 		switch($prop["name"])
 		{
 			case "tree_type":
@@ -113,12 +131,30 @@ class object_treeview_v2 extends class_base
 			case "filter_table":
 				$this->do_filter_table($arr);
 				break;
+			case "group_by_folder":
+////
+// here i should check, if AW object list uses meta objects to draw
+// folders or not. If it doesn't, i think theres nothing to do with that
+// property so just hide it.
+				$ds_obj = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_DATASOURCE");
 
+				if(($ds_obj->class_id() == CL_OTV_DS_OBJ) && ($ds_obj->prop("use_meta_as_folders") == 1))
+				{
+					$prop['options'] = $col_list;
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+			case "group_in_table":
+				$prop['options'] = $col_list;
+				break;
+			case "group_table":
+				$this->do_group_table($arr);
+				break;
 			case "access":
 				$this->do_access_tbl($arr);
-				break;
-			case "only_selected_cols":
-				arr($prop);
 				break;
 
 			case "columns":
@@ -132,7 +168,7 @@ class object_treeview_v2 extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		
+
 		switch($prop["name"])
 		{
 			case "columns":
@@ -140,8 +176,8 @@ class object_treeview_v2 extends class_base
 				$arr["obj_inst"]->set_meta("sel_columns_ord", $arr["request"]["column_ord"]);
 				$arr["obj_inst"]->set_meta("sel_columns_text", $arr["request"]["column_text"]);
 				$arr["obj_inst"]->set_meta("sel_columns_editable", $arr["request"]["column_edit"]);
+////
 // don't save empty fields
-//				arr($arr["request"]["column_fields"]);
 				$valid_column_fields = array();
 
 				foreach(safe_array($arr["request"]["column_fields"]) as $key => $value)
@@ -150,9 +186,7 @@ class object_treeview_v2 extends class_base
 					{
 						if(empty($v['field']))
 						{
-//							arr($v['field']);
 							unset($value[$k]);
-//							array_push(safe_array($valid_column_fields[$key]), $v);
 						}
 					}
 					if(!empty($value))
@@ -160,7 +194,6 @@ class object_treeview_v2 extends class_base
 						$valid_column_fields[$key] = $value;
 					}
 				}
-//				arr($valid_column_fields);
 				$arr["obj_inst"]->set_meta("sel_columns_fields", $valid_column_fields);
 				break;
 
@@ -171,9 +204,13 @@ class object_treeview_v2 extends class_base
 			case "filter_table":
 				$this->do_save_filter_table($arr);
 				break;
+
+			case "group_table":
+				$arr['obj_inst']->set_meta("saved_groups", $arr['request']['group_field']);
+				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function parse_alias($arr)
 	{
@@ -181,11 +218,11 @@ class object_treeview_v2 extends class_base
 	}
 
 	/**
-		
+
 		@attrib name=show nologin=1
 
 		@param id required type=int acl=view
-		@param tv_sel optional type=int 
+		@param tv_sel optional type=int
 	**/
 	function show($arr)
 	{
@@ -209,7 +246,7 @@ class object_treeview_v2 extends class_base
 		$fld = $d_inst->get_folders($d_o);
 
 		// get all objects to show
-		$ol = $d_inst->get_objects($d_o, $fld, $GLOBALS["tv_sel"]); 
+		$ol = $d_inst->get_objects($d_o, $fld, $GLOBALS["tv_sel"]);
 
 		// make folders
 		$this->vars(array(
@@ -234,40 +271,61 @@ class object_treeview_v2 extends class_base
 		// do some filtering in $ol
 		$filters = $ob->meta("saved_filters");
 
-		if (is_array($filters) && count($filters) > 0)
+		if ((is_array($filters) && count($filters) > 0) || !empty($GLOBALS['tv_sel']))
 		{
-			$ol_result = array();
-			foreach($ol as $ol_item)
+
+//			$ol_result = array();
+			foreach($ol as $ol_key => $ol_value)
 			{
 				foreach(safe_array($filters) as $filter)
 				{
 					if($filter['is_strict'] == 1)
 					{
-						if($ol_item[$filter['field']] == $filter['value'])
+						if($ol_value[$filter['field']] != $filter['value'])
 						{
-							array_push($ol_result, $ol_item);
+//							array_push($ol_result, $ol_item);
+
+							unset($ol[$ol_key]);
+
 							break;
 						}
 					}
 					else
 					{
-						if(strpos(strtolower($ol_item[$filter['field']]), strtolower($filter['value'])) !== false)
+						if(strpos(strtolower($ol_value[$filter['field']]), strtolower($filter['value'])) === false)
 						{
-							array_push($ol_result, $ol_item);
+//							array_push($ol_result, $ol_item);
+							unset($ol[$ol_key]);
 							break;
 						}
 					}
 				}
+
+// if meta data fields are used as folders, then i need to do some
+// some filtering according to $GLOBALS['tv_sel']
+				if($d_o->prop("use_meta_as_folders") == 1)
+				{
+					if(!empty($GLOBALS['tv_sel']) && ($fld[$GLOBALS['tv_sel']]['name'] != $ol_value[$ob->meta("group_by_folder")]))
+					{
+						unset($ol[$ol_key]);
+					}
+				}
 			}
 
-			$ol = $ol_result;
+//			$ol = $ol_result;
 		}
+
+// some filtering according to url parameter. Only needed if folders are
+// meta data groups
+
+
 
 //		arr($ol);
 //		arr($ob->meta("sel_columns_fields"));
 //		arr($ob->meta("saved_filters"));
 
-// if there are set some ds fields to be displayed in one table field
+
+// if there are set some datasource fields to be displayed in one table field
 
 		$sel_columns_fields = new aw_array($ob->meta("sel_columns_fields"));
 
@@ -303,13 +361,16 @@ class object_treeview_v2 extends class_base
 			$ol = $ol_result;
 		}
 
-		
+
 
 		$this->cnt = 0;
 		$c = "";
 		$sel_cols = $ob->meta("sel_columns");
 
-		$col_list = $this->_get_col_list($ob);
+		$col_list = $this->_get_col_list(array(
+			"o" => $ob,
+			"hidden_cols" => true,
+		));
 
 		$tmp = new aw_array($ob->meta("itemsorts"));
 		$this->__is = $tmp->get();
@@ -324,7 +385,7 @@ class object_treeview_v2 extends class_base
 		$has_access_to = false;
 		$has_add_access = false;
 		foreach($ol as $odata)
-		{	
+		{
 			if ($d_inst->check_acl("edit", $d_o, $odata["id"]))
 			{
 				$has_access_to = true;
@@ -334,7 +395,7 @@ class object_treeview_v2 extends class_base
 
 		$edit_columns = safe_array($ob->meta("sel_columns_editable"));
 		if (!$has_access_to)
-		{	
+		{
 			unset($col_list["change"]);
 			unset($col_list["select"]);
 
@@ -354,17 +415,37 @@ class object_treeview_v2 extends class_base
 			}
 		}
 
-
+		$group_field = $ob->prop("group_in_table");
+		$group_name = "";
+		$sel_cols_count = count($sel_cols);
 		foreach($ol as $odata)
 		{
+//			echo $group_name." :: ".$odata[$group_field]." :: ".$group_field."<br>";
+			if($group_name != $odata[$group_field])
+			{
+				$this->vars(array("content" => $odata[$ob->prop("group_in_table")]));
+				$this->vars(array("cols_count" => $sel_cols_count));
+				$c .= $this->parse("FILE_GROUP");
+			}
+
 			$c .= $this->_do_parse_file_line($odata, $d_inst, $d_o, array(
-				"tree_obj" => $ob, 
+				"tree_obj" => $ob,
 				"sel_cols" => $sel_cols,
 				"col_list" => $col_list,
 				"edit_columns" => $edit_columns
 			));
+			$group_name = $odata[$group_field];
+		}
+/*
+		$ajutine_muutuja = "";
+		for($muutuja=0; $muutuja<10; $muutuja++)
+		{
+			$this->vars(array("muutuja" => $muutuja));
+			$ajutine_muutuja .= $this->parse("FILE_GROUP");
 		}
 
+		$this->vars(array("FILE_GROUP" => $ajutine_muutuja));
+*/
 		$tb = "";
 		$no_tb = "";
 		if ($ob->prop("show_add"))
@@ -375,6 +456,7 @@ class object_treeview_v2 extends class_base
 		{
 			$no_tb = $this->parse("HEADER_NO_TOOLBAR");
 		}
+
 		$this->vars(array(
 			"FILE" => $c,
 			"HEADER_HAS_TOOLBAR" => $tb,
@@ -411,6 +493,7 @@ class object_treeview_v2 extends class_base
 				$h_str .= $this->parse("HEADER");
 			}
 		}
+
 		$this->vars(array(
 			"HEADER" => $h_str
 		));
@@ -480,7 +563,10 @@ class object_treeview_v2 extends class_base
 		$cols_edit = $arr["obj_inst"]->meta("sel_columns_editable");
 		$cols_fields = $arr["obj_inst"]->meta("sel_columns_fields");
 
-		$cold = $this->_get_col_list($arr["obj_inst"]);
+		$cold = $this->_get_col_list(array(
+			"o" => $arr["obj_inst"],
+			"hidden_cols" => true,
+		));
 
 		if (!is_array($cols_text))
 		{
@@ -647,7 +733,7 @@ class object_treeview_v2 extends class_base
 	{
 		if (!$ob->meta('show_folders'))
 		{
-			return;
+		//	return;
 		}
 
 		classload("icons");
@@ -664,6 +750,7 @@ class object_treeview_v2 extends class_base
 		// now, insert all folders defined
 		foreach($folders as $fld)
 		{
+
 			$tv->add_item($fld["parent"], array(
 				"id" => $fld["id"],
 				"name" => $fld["name"],
@@ -682,7 +769,7 @@ class object_treeview_v2 extends class_base
 		{
 			$pms["rootnode"] = aw_global_get("section");
 		}*/
-		
+
 		return $tv->finalize_tree($pms);
 	}
 
@@ -701,7 +788,7 @@ class object_treeview_v2 extends class_base
 		{
 			$menu = "";
 			$classes = aw_ini_get("classes");
-		
+
 			$tb->add_menu_button(array(
 				"name" => "add",
 				"tooltip" => "Uus",
@@ -722,7 +809,7 @@ class object_treeview_v2 extends class_base
 			$has_b = true;
 		}
 
-		$cols = $ob->meta("sel_columns");	
+		$cols = $ob->meta("sel_columns");
 		if ($cols["select"])
 		{
 			$tb->add_button(array(
@@ -774,7 +861,6 @@ class object_treeview_v2 extends class_base
 		{
 			$_name = $name;
 		}
-
 		$formatv = array(
 			"show" => $url,
 			"name" => $_name,
@@ -846,17 +932,26 @@ class object_treeview_v2 extends class_base
 				$str .= $this->parse("COLUMN");
 			}
 		}
-		
+
 		$this->cnt++;
 
 		$this->vars(array(
 			"COLUMN" => $str
-		));		
+		));
 		return $this->parse("FILE");
 	}
 
-	function _get_col_list($o)
+	///
+	// !Get columns list
+	//  o(Object)
+	//  hidden_cols(bool) - true, if hidden cols should be returned
+	//
+	function _get_col_list($params = array())
 	{
+		extract($params);
+
+		$tmp = $o->meta("sel_columns");
+
 		$cold = $this->all_cols;
 		if ($o->prop("ds"))
 		{
@@ -867,6 +962,17 @@ class object_treeview_v2 extends class_base
 				foreach($ds_i->get_fields($dso) as $fn => $fs)
 				{
 					$cold[$fn] = $fs;
+				}
+			}
+		}
+
+		foreach($cold as $col_key => $col_val)
+		{
+			if(!$hidden_cols)
+			{
+				if($tmp[$col_key] != 1)
+				{
+					unset($cold[$col_key]);
 				}
 			}
 		}
@@ -889,7 +995,7 @@ class object_treeview_v2 extends class_base
 	function get_folders_as_object_list($object, $level, $parent_o)
 	{
 		$this->tree_ob = $object;
-	
+
 		$ol = new object_list();
 
 		$d_o = obj($this->tree_ob->prop("ds"));
@@ -949,12 +1055,19 @@ class object_treeview_v2 extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sortbl($t);
 
-		$cols = $this->_get_col_list($arr["obj_inst"]);
-		$tmp = $arr["obj_inst"]->meta("sel_columns");
-		$elements = array("" => "");
-
+		$cols = $this->_get_col_list(array(
+			"o" => $arr["obj_inst"],
+			"hidden_cols" => ($arr['obj_inst']->prop("show_hidden_cols") == 1) ? true : false,
+		));
+//		$tmp = $arr["obj_inst"]->meta("sel_columns");
+		$elements = array_merge(array("" => "") + $cols);
+//		foreach($cols as $colid => $coln)
+//		{
+//			$elements[$colid] = $coln;
+//		}
+//		$elements = array_merge($elements + $cols)
 //		arr($arr['obj_inst']->prop("only_visible_cols"));
-
+/*
 		foreach($cols as $colid => $coln)
 		{
 			if($arr['obj_inst']->prop("show_hidden_cols") == 1)
@@ -970,7 +1083,7 @@ class object_treeview_v2 extends class_base
 			}
 		}
 		
-		
+*/		
 		$maxi = 0;
 		$is = new aw_array($arr["obj_inst"]->meta("itemsorts"));
 		foreach($is->get() as $idx => $sd)
@@ -1097,32 +1210,40 @@ class object_treeview_v2 extends class_base
 		}
 	}
 
+	function _init_filter_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "filter_field",
+			"caption" => "Filtreeritav v&auml;li",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "filter_value",
+			"caption" => "Filtreeritav v&auml;&auml;rtus",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "filter_strict",
+			"caption" => "Kas t&auml;pne?",
+			"align" => "center",
+		));
+
+	}
+
 	function do_filter_table(&$arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_filter_table($t);
 
-		$all_cols = $this->_get_col_list($arr["obj_inst"]);
-		$tmp = $arr["obj_inst"]->meta("sel_columns");
-		$cols = array("" => "");
-		foreach($all_cols as $col_id => $col_name)
-		{
-			if($arr['obj_inst']->prop("show_hidden_cols") == 1)
-			{
-				$cols[$col_id] = $col_name;
-			}
-			else
-			{
-				if (1 == $tmp[$col_id])
-				{
-					$cols[$col_id] = $col_name;
-				}
-			}
-		}
-
+		$all_cols = $this->_get_col_list(array(
+			"o" => $arr["obj_inst"],
+			"hidden_cols" => ($arr['obj_inst']->prop("show_hidden_cols") == 1) ? true : false,
+		));
+//		$tmp = $arr["obj_inst"]->meta("sel_columns");
+		$cols = array_merge(array("" => "") + $all_cols);
 		$saved_filters = new aw_array($arr['obj_inst']->meta("saved_filters"));
-
-
 
 		$max_id = 0;
 		foreach($saved_filters->get() as $id => $filter_data)
@@ -1178,28 +1299,6 @@ class object_treeview_v2 extends class_base
 		$arr['obj_inst']->set_meta("saved_filters", $valid_filters);
 	}
 
-	function _init_filter_table(&$t)
-	{
-		$t->define_field(array(
-			"name" => "filter_field",
-			"caption" => "Filtreeritav v&auml;li",
-			"align" => "center",
-		));
-
-		$t->define_field(array(
-			"name" => "filter_value",
-			"caption" => "Filtreeritav v&auml;&auml;rtus",
-			"align" => "center",
-		));
-
-		$t->define_field(array(
-			"name" => "filter_strict",
-			"caption" => "Kas t&auml;pne?",
-			"align" => "center",
-		));
-
-	}
-
 	function do_pageselector(&$list, $per_page)
 	{
 		$page = $GLOBALS["page"];
@@ -1245,8 +1344,8 @@ class object_treeview_v2 extends class_base
 		));
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=submit_show params=name default="0"
 
 		@param id required type=int acl=view
@@ -1274,7 +1373,7 @@ class object_treeview_v2 extends class_base
 			$awa = new aw_array($sel);
 			$farr = $awa->get();
 
-			// get datasource 
+			// get datasource
 			$d_inst->do_delete_objects($d_o, $farr);
 		}
 
@@ -1285,7 +1384,7 @@ class object_treeview_v2 extends class_base
 			$ef = safe_array($ob->meta("sel_columns_editable"));
 
 			$fld = $d_inst->get_folders($d_o);
-			$ol = $d_inst->get_objects($d_o, $fld, $arr["tv_sel"]); 
+			$ol = $d_inst->get_objects($d_o, $fld, $arr["tv_sel"]);
 			foreach($ol as $o)
 			{
 				if ($d_inst->check_acl("edit", $d_o, $o["id"]))
