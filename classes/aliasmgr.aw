@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.114 2003/07/09 17:28:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.115 2003/07/10 12:03:45 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -886,15 +886,12 @@ class aliasmgr extends aw_template
 	// !updates the alias list cache for object $oid
 	function cache_oo_aliases($oid)
 	{
-		$_aliases = $this->get_oo_aliases(array("oid" => $oid));
-
 		// paneme aliases kirja
-		if (is_array($_aliases) && $oid)
+		if (!empty($oid))
 		{
 			$this->upd_object(array(
 				"oid" => $oid,
 				"metadata" => array(
-					"aliases_by_class" => $_aliases,
 					"aliases" => "",
 					"alias_reltype" => $this->alias_rel_type,
 				),
