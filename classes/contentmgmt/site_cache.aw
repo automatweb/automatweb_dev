@@ -118,12 +118,7 @@ class site_cache extends aw_template
 
 	function do_final_content_checks($res)
 	{
-		$banner_defs = new aw_array(aw_ini_get("menuedit.banners"));
-		foreach($banner_defs->get() as $name => $gid)
-		{
-			$res = str_replace("[ss".$gid."]",gen_uniq_id(),$res);
-		}
-		return $res;
+		return preg_replace("/\[ss(\d+)\]/e","md5(time().\$_SERVER[\"REMOTE_ADDR\"].\"\\1\")",$res);
 	}
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 if (empty($_COOKIE["nocache"]))
 {
-        session_cache_limiter("public");
+        //session_cache_limiter("public");
 };
 
 session_name("automatweb");

@@ -3,4 +3,3 @@
 	<class name="agri_stat_report" folder="applications/agri" extends="class_base">
 	</class>
 </orb>
-		
