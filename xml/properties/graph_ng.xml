@@ -128,9 +128,6 @@
             <syslog_type>ST_GRAPH_NG</syslog_type>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <data>
                   <caption>Andmed</caption>
             </data>

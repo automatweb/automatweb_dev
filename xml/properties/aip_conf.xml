@@ -14,10 +14,12 @@
             <syslog_type>ST_AIP_CONF</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
+      <reltypes>
+            <CHANGE_FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Muudatuste kataloog</caption>
+            </CHANGE_FOLDER>
+      </reltypes>
 </properties>
 

@@ -12,10 +12,5 @@
       <classinfo>
             <syslog_type>ST_AIP_CHANGE_SHOW</syslog_type>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
 </properties>
 
