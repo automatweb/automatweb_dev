@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.28 2004/06/22 09:22:26 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.29 2004/06/22 09:33:41 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -274,8 +274,8 @@ CREATE TABLE `kliendibaas_firma` (
 class crm_company extends class_base
 {
 	var $unit=0;
-	var $activeNode = 0;
-	var $groupNotShown = true;
+	var $active_node = 0;
+	var $group_not_shown = true;
 
 	function crm_company()
 	{
@@ -308,8 +308,8 @@ class crm_company extends class_base
 			if(in_array($conn->prop('type'),$skip))
 				continue;
 			//iga alam item saab ühe võrra suurema väärtuse
-			//if the 'to.id' eq activeNode then it should be bold
-			if($conn->prop('to')==$this->activeNode)
+			//if the 'to.id' eq active_node then it should be bold
+			if($conn->prop('to')==$this->active_node)
 				$name='<b>'.$conn->prop('to.name').'</b>';
 			else
 				$name=$conn->prop('to.name');
@@ -378,9 +378,9 @@ class crm_company extends class_base
 		//damn, but this "if" will execute the number of propertys
 		//under my_customers times. I'll think of smthing, better yet, i'll ask duke
 		//just joking, will have a class variable 
-		if($arr['request']['group']=='my_customers' && $this->groupNotShown)
+		if($arr['request']['group']=='my_customers' && $this->group_not_shown)
 		{
-			$this->groupNotShown = false;
+			$this->group_not_shown = false;
 			$name = aw_global_get('uid').' kliendid';
 			//tsekime kas kasutajal on isik objekt üldse tehtud ja seotud endaga
 			//eeldan, et kasutaja existeerib :)
@@ -426,7 +426,7 @@ class crm_company extends class_base
 																									'cat'=>''))
 				));
 				$node_id = 1;
-				$this->activeNode = (int)$arr['request']['unit'];
+				$this->active_node = (int)$arr['request']['unit'];
 				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,RELTYPE_SECTION,array(),'unit',true);
 				break;
 			}
@@ -447,7 +447,7 @@ class crm_company extends class_base
 																									'cat'=>''))
 				));
 				$node_id = 1;
-				$this->activeNode = (int)$arr['request']['category'];
+				$this->active_node = (int)$arr['request']['category'];
 				$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
 													RELTYPE_CATEGORY,array(CL_CRM_COMPANY),'category',false);
 				break;
