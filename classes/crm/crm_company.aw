@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.76 2004/08/31 16:19:03 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.77 2004/09/02 14:49:00 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -1938,6 +1938,16 @@ class crm_company extends class_base
 			"clid" => $this->relinfo[$args["type"]]["clid"],
 		));
 
+		$ol = new object_list(array(
+			"orderer" => $arr["obj_inst"]->id(),
+			"class_id" => CL_CRM_OFFER,
+		));
+		
+		foreach ($ol->arr() as $tmp)
+		{
+			$evts[$tmp->id()] = $tmp->id();	
+		}
+		
 		$this->overview = array();
 		classload("icons");
 
@@ -3947,6 +3957,7 @@ class crm_company extends class_base
 		get_instance("icons");
 		$tree = &$arr["prop"]["vcl_inst"];
 		$node_id = 0;
+		$this->active_node = (int)$arr['request']['category'];
 		$this->generate_tree(array(
 				'tree_inst' => &$tree,
 				'obj_inst' => $arr['obj_inst'],
@@ -4139,8 +4150,59 @@ class crm_company extends class_base
 			'tooltip' => 'Kustuta valitud objektid',
 			'action' => 'delete_selected_objects',
 		));
+		
+		$tb->add_button(array(
+			'name' => 'cut',
+			'img' => 'cut.gif',
+			'tooltip' => 'Cut',
+			'action' => 'cut',
+		));
+		
+		if($_SESSION["crm_cut"])
+		{
+			$tb->add_button(array(
+				'name' => 'paste',
+				'img' => 'paste.gif',
+				'tooltip' => 'Paste',
+				'url' => $this->mk_my_orb("paste", array(
+					"parent" => $arr["request"]["parent"],
+					"id" => $arr["obj_inst"]->id(),
+					"group" => $arr["request"]["group"],
+						), CL_CRM_COMPANY),//'paste',
+				'disabled' => 'true',
+			));
+		}
 	}
-
+/**	
+	@attrib name=cut
+**/
+	function cut($arr)
+	{
+		$_SESSION["crm_cut"] = $arr["select"];
+		return $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"group" => $arr["group"]), CL_CRM_COMPANY);
+	}
+	
+/**	
+	@attrib name=paste all_args=1
+**/
+	function paste($arr)
+	{	
+		foreach ($_SESSION["crm_cut"] as $oid)
+		{
+			$obj = &obj($oid);
+			$obj->set_parent($arr["parent"]);
+			$obj->save();
+		}
+		unset($_SESSION["crm_cut"]);
+		return $this->mk_my_orb("change", array(
+				"id" => $arr["id"], 
+				"group" => $arr["group"],
+				"parent" => $arr["parent"],
+			), CL_CRM_COMPANY);
+	}
+	
 	function do_objects_listing_tree($arr)
 	{
 		classload("icons");
