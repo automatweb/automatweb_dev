@@ -80,7 +80,7 @@
             <type>checkbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <group>advanced</group>
+            <group>show</group>
             <ch_value>1</ch_value>
             <caption>Sorteeri nime järgi</caption>
       </property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.104 2004/09/24 09:39:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.105 2004/10/04 12:12:12 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -32,7 +32,7 @@
 	@property icon type=icon field=meta method=serialize group=advanced
 	@caption Ikoon
 
-	@property sort_by_name type=checkbox field=meta method=serialize group=advanced ch_value=1
+	@property sort_by_name type=checkbox field=meta method=serialize group=show ch_value=1
 	@caption Sorteeri nime järgi
 
 	@property aip_filename type=textbox field=meta method=serialize group=advanced
@@ -1255,12 +1255,12 @@ class menu extends class_base
 		}
 		$target = $f;
 
-		if (!$this->can("view", $target["oid"]))
+		if (!$this->can("view", $target["to"]))
 		{
 			return "";
 		}
 
-		$o = obj($target["oid"]);
+		$o = obj($target["to"]);
 
 		if ($o->prop("link") != "")
 		{
@@ -1268,7 +1268,7 @@ class menu extends class_base
 		}	
 		else
 		{
-			$link = $this->cfg["baseurl"]."/".$target["oid"];
+			$link = $this->cfg["baseurl"]."/".$target["to"];
 		}
 
 		$ltarget = "";
@@ -1277,7 +1277,7 @@ class menu extends class_base
 			$ltarget = "target='_blank'";
 		}
 
-		if (aw_global_get("section") == $target["oid"])
+		if (aw_global_get("section") == $target["to"])
 		{
 			$ret = sprintf("<a $ltarget class=\"sisutekst-sel\" href='$link'>%s</a>",$target["name"]);
 		}
