@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.64 2003/06/09 08:29:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.65 2003/06/17 13:00:17 duke Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -455,6 +455,7 @@ class form extends form_base
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
 		$this->arr["search_act_lang_only"] = $search_act_lang_only;
 		$this->arr["hide_empty_rows"] = $hide_empty_rows;
+		$this->arr["calendar_controller"] = $calendar_controller;
 
 		if ($is_translatable && !$this->arr["is_translatable"])
 		{
@@ -838,6 +839,7 @@ class form extends form_base
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
 			"tables" => $this->picker($this->arr["table"],$this->list_objects(array("class" => CL_FORM_TABLE))),
+			"calendar_controllers" => $this->picker($this->arr["calendar_controller"],$this->list_objects(array("class" => CL_FORM_CONTROLLER))),
 			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE)),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"has_calendar" => checked($this->flags & OBJ_HAS_CALENDAR),
@@ -899,7 +901,7 @@ class form extends form_base
 	{
 		set_time_limit(0);
 		$arr["prefix"] = isset($arr["prefix"]) ? $arr["prefix"] : false;
-		$arr["elvalues"] = isset($arr["elvalues"]) ?  $arr["elvalues"] : false ;
+		$arr["elvalues"] = isset($arr["elvalues"]) ?  $arr["elvalues"] : (isset($GLOBALS["elvalues"]) ? $GLOBALS["elvalues"] : false) ;
 		$arr["no_submit"] = isset($arr["no_submit"]) ? $arr["no_submit"]  : false;
 		extract($arr);
 

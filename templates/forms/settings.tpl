@@ -62,6 +62,10 @@ function setLink(li,title)
 <td class="celltext"><input type='checkbox' name='has_calendar' value=1 {VAR:has_calendar}></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Kalendri vea kontroller:</td>
+<td class="celltext"><select name='calendar_controller'>{VAR:calendar_controllers}</select></td>
+</tr>
+<tr class="aste01">
 <td class="celltext" colspan=2>{VAR:LC_FORMS_CAN_EMAIL_ACTION}: &nbsp;<input type='checkbox' name='email_form_action' value=1 {VAR:email_form_action}></td>
 </tr>
 <tr class="aste01">
