@@ -1,5 +1,5 @@
 <script language="javascript">
-function setLink(li)
+function setLink(li,title)
 {
 	document.b88.url.value=li;
 }

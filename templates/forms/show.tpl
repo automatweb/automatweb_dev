@@ -1,4 +1,21 @@
-<form action='{VAR:form_action}' METHOD=post enctype='multipart/form-data'>
+<script language="javascript">
+var e_{VAR:form_id}_elname="",e_{VAR:form_id}_elname2="";
+function setLink(li,title)
+{
+	for(i=0; i < document.fm_{VAR:form_id}.elements.length; i++)
+	{
+		if (document.fm_{VAR:form_id}.elements[i].name == e_{VAR:form_id}_elname)
+		{
+			document.fm_{VAR:form_id}.elements[i].value = title;
+		}
+		if (document.fm_{VAR:form_id}.elements[i].name == e_{VAR:form_id}_elname2)
+		{
+			document.fm_{VAR:form_id}.elements[i].value = li;
+		}
+	}
+}
+</script>
+<form name='fm_{VAR:form_id}' action='{VAR:form_action}' METHOD=post enctype='multipart/form-data'>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='10000000'>
 
 <!-- SUB: IMG_WRAP -->

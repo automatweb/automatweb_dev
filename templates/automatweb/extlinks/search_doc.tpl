@@ -1,7 +1,7 @@
 <script language="javascript">
-function ss(li)
+function ss(li,title)
 {
-	window.opener.setLink(li);
+	window.opener.setLink(li,title);
 	window.close();
 }
 </script>
@@ -24,7 +24,7 @@ function ss(li)
 <!-- SUB: LINE -->
 <tr>
 	<td class="fcaption2"><a target="_blank" href='{VAR:baseurl}/{VAR:index_file}.{VAR:ext}?section={VAR:id}'>{VAR:name}</a></td>
-	<td class="fform"><a href='javascript:ss("{VAR:baseurl}/{VAR:index_file}.{VAR:ext}/section={VAR:id}")'>Vali see</a></td>
+	<td class="fform"><a href='javascript:ss("{VAR:baseurl}/{VAR:index_file}.{VAR:ext}/section={VAR:id}","{VAR:name}")'>Vali see</a></td>
 </tr>
 <!-- END SUB: LINE -->
 </table>
