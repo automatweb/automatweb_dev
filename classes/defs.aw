@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.130 2004/03/31 10:37:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.131 2004/04/01 13:09:32 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -115,14 +115,17 @@ if (!defined("DEFS"))
 
 	////
 	// !adds or changes a variable in the current url
-	function aw_url_change_var($arg1, $arg2 = false)
+	function aw_url_change_var($arg1, $arg2 = false, $url = false)
 	{
 		$arg_list = func_get_args();
-		if (sizeof($arg_list) == 2)
+		if (sizeof($arg_list) > 1)
 		{
 			$arg_list[0] = array($arg1 => $arg2);
 		}
-		$url = aw_global_get("REQUEST_URI");
+		if (!$url)
+		{
+			$url = aw_global_get("REQUEST_URI");
+		};
 		foreach($arg_list[0] as $arg1 => $arg2)
 		{
 			// remove old
