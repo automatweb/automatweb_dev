@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.135 2004/01/13 16:24:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.136 2004/01/15 13:43:55 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -645,6 +645,8 @@ class aliasmgr extends aw_template
 				"comment" => $alias->prop("to.comment")
 			);
 
+			$target_obj = $alias->to();
+
 			$aclid = $alias->prop("to.class_id");
 
 			// yuck. I wish the static document editing forms were gone already
@@ -659,7 +661,7 @@ class aliasmgr extends aw_template
 			$reltype_id = $alias->prop("reltype");
 
 			$adat["icon"] = html::img(array(
-				"url" => icons::get_icon_url($aclid,$alias->prop("to.name")),
+				"url" => icons::get_icon_url($target_obj),
 			));
 
 			// it has a meaning only for embedded aliases
