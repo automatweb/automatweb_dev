@@ -18,6 +18,7 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
+            <default>2</default>
             <caption>Tulpi</caption>
       </property>
       <property>
@@ -30,11 +31,25 @@
             <method>serialize</method>
             <caption>ridu</caption>
       </property>
+      <property>
+            <name>zip_file</name>
+            <table>objects</table>
+            <group>import</group>
+            <type>fileupload</type>
+            <store>no</store>
+            <field>zip_file</field>
+            <caption>Uploadi ZIP fail</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MINI_GALLERY</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <import>
+                  <caption>Import</caption>
+            </import>
+      </groupinfo>
       <reltypes>
             <IMG_FOLDER>
                   <value>1</value>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.8 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.9 2005/04/04 08:44:02 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -11,11 +11,17 @@
 @property folder type=relpicker reltype=RELTYPE_IMG_FOLDER field=meta method=serialize
 @caption Piltide kataloog
 
-@property cols type=textbox size=5 field=meta method=serialize
+@property cols type=textbox size=5 field=meta method=serialize default=2
 @caption Tulpi
 
 @property rows type=textbox size=5 field=meta method=serialize
 @caption ridu
+
+@groupinfo import caption="Import"
+@default group=import
+
+	@property zip_file type=fileupload store=no
+	@caption Uploadi ZIP fail
 
 @reltype IMG_FOLDER value=1 clid=CL_MENU
 @caption piltide kataloog
@@ -37,7 +43,6 @@ class mini_gallery extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
 		};
 		return $retval;
 	}
@@ -48,7 +53,13 @@ class mini_gallery extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "zip_file":
+				global $zip_file;
+				if (is_uploaded_file($zip_file))
+				{
+					$this->_do_zip_import($arr["obj_inst"], $zip_file);
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -146,6 +157,57 @@ class mini_gallery extends class_base
 		));
 
 		return $this->parse();
+	}
+
+	function _do_zip_import($o, $zip)
+	{
+		$zf = escapeshellarg($zip);
+		$zip = aw_ini_get("server.unzip_path");
+		$tn = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
+		mkdir($tn,0777);
+		$cmd = $zip." -d $tn $zf";
+		$op = shell_exec($cmd);
+
+
+		$files = array();
+		if ($dir = @opendir($tn)) 
+		{
+			while (($file = readdir($dir)) !== false) 
+			{
+				if (!($file == "." || $file == ".."))
+				{
+					$files[] = $file;
+				}
+			}  
+			closedir($dir);
+		}
+
+		$imgi = get_instance(CL_IMAGE);
+		$fi = get_instance(CL_FILE);
+		foreach($files as $file)
+		{
+			$fp = $tn."/".$file;
+
+			$img = obj();
+			$img->set_class_id(CL_IMAGE);
+			$img->set_parent($o->prop("folder"));
+			$img->set_status(STAT_ACTIVE);
+			$img->set_name($file);
+			
+			$fl = $fi->_put_fs(array(
+				"type" => substr($file, strrpos(".", $file)),
+				"content" => $this->get_file(array("file" => $fp))
+			));
+			$img->set_prop("file", $fl);
+
+			$img->save();
+
+			$imgi->do_apply_gal_conf($img);
+
+			@unlink($fp);
+		}
+
+		@rmdir($tn);
 	}
 }
 ?>
