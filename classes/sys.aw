@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.41 2004/11/22 11:36:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.42 2004/11/23 13:17:38 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -745,7 +745,7 @@ class sys extends aw_template
 			$num = 0;
 			foreach($avg_page_times as $url => $time)
 			{
-				echo "page $url took $time seconds on average <br>";
+				echo "page $url took $time seconds on average (count = ".$urls[$url].")<br>";
 				if (++$num > 20)
 				{
 					break;
