@@ -437,13 +437,6 @@
             <caption>Genereeri staatiline</caption>
       </property>
       <property>
-            <name>nobreaks</name>
-            <type>hidden</type>
-            <table>documents</table>
-            <group>general</group>
-            <field>nobreaks</field>
-      </property>
-      <property>
             <name>sbt</name>
             <type>submit</type>
             <value>Salvesta</value>

@@ -5,6 +5,7 @@
             <field>uid</field>
             <type>text</type>
             <group>general</group>
+            <editonly>1</editonly>
             <table>users</table>
             <caption>User ID</caption>
       </property>

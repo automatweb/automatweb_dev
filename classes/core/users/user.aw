@@ -29,10 +29,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @default table=users
 @default group=general
 
-@property uid field=uid type=text group=general
+@property uid field=uid type=text group=general editonly=1
 @caption User ID
 
-@property uid_entry store=no type=textbox group=general
+@property uid_entry store=no type=textbox group=general 
 @caption User ID
 
 @property logins field=logins type=text
@@ -169,12 +169,12 @@ class user extends class_base
 				}
 				break;
 
-			case "uid": 
+/*			case "uid": 
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
 					return PROP_IGNORE;
 				}
-				break;
+				break;*/
 
 			case "name":
 				if (!is_oid($arr["obj_inst"]->id()))
