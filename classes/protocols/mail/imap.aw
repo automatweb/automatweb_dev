@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.20 2004/05/06 12:03:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.21 2004/10/08 15:53:30 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -22,7 +22,7 @@
 @property password type=password
 @caption Parool
 
-@property use_ssl type=checkbox value=1 ch_value=1 default=1
+@property use_ssl type=checkbox ch_value=1 default=1
 @caption Kasuta SSL-i
 
 @property test type=text group=test
@@ -123,7 +123,7 @@ class imap extends class_base
 			$this->servspec = sprintf($mask,$server,$port);
 			$mbox = str_replace("*","&",$this->use_mailbox);
 			$this->mboxspec = $this->servspec . $mbox;
-			$this->mbox = @imap_open($this->mboxspec, $user, $password);
+			$this->mbox = imap_open($this->mboxspec, $user, $password);
 			$err = imap_errors();
 			if (is_array($err))
 			{
