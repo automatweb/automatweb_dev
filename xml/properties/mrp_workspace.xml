@@ -623,6 +623,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>table</type>
             <no_caption>1</no_caption>
@@ -636,6 +637,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <no_caption>1</no_caption>
@@ -649,6 +651,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>toolbar</type>
             <store>no</store>
@@ -663,6 +666,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>textarea</type>
             <rows>5</rows>
@@ -678,6 +682,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -692,6 +697,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -705,6 +711,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -718,6 +725,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -731,6 +739,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -744,6 +753,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -757,6 +767,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -771,6 +782,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -784,6 +796,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -797,6 +810,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -810,6 +824,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -823,6 +838,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -836,6 +852,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -849,6 +866,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -862,6 +880,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -875,6 +894,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -888,6 +908,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -901,6 +922,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -914,6 +936,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -927,6 +950,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -940,6 +964,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -953,6 +978,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -966,6 +992,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -979,6 +1006,7 @@
             <group>
                   <num_0>grp_printer_current</num_0>
                   <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1027,6 +1055,11 @@
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_old>
+            <grp_printer_done>
+                  <caption>Tehtud asjad</caption>
+                  <parent>grp_printer</parent>
+                  <submit>no</submit>
+            </grp_printer_done>
             <grp_settings>
                   <caption>Seaded</caption>
             </grp_settings>

@@ -76,6 +76,16 @@
             <field>extern_id</field>
       </property>
       <property>
+            <name>do_abort</name>
+            <group>grp_general</group>
+            <table>objects</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>L&amp;otilde;peta</caption>
+      </property>
+      <property>
             <name>planned_date</name>
             <group>grp_general</group>
             <table>objects</table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.27 2005/02/18 14:37:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.28 2005/02/28 09:31:08 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -48,6 +48,9 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Klient
 
 	@property extern_id type=hidden
+
+	@property do_abort type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption L&otilde;peta
 
 @default table=objects
 @default field=meta
@@ -314,6 +317,13 @@ class mrp_case extends class_base
 			case "log":
 				$this->_do_log($arr);
 				break;
+
+			case "do_abort":
+				if ($arr["obj_inst"]->prop("state") == MRP_STATUS_DONE || $arr["obj_inst"]->prop("state") == MRP_STATUS_NEW)
+				{
+					return PROP_IGNORE;
+				}
+				break;
 		}
 
 		return $retval;
@@ -443,6 +453,23 @@ class mrp_case extends class_base
 			}
 
 			$this->order_jobs ($arr);
+		}
+
+		if ($arr["obj_inst"]->prop("do_abort") == 1)
+		{
+			// kill project - mark as done && all jobs as well
+			$arr["obj_inst"]->set_prop("state", MRP_STATUS_DONE);
+			$arr["obj_inst"]->save();
+			
+			$jl = new object_list(array(
+				"class_id" => CL_MRP_JOB,
+				"project" => $arr["obj_inst"]->id()
+			));
+			foreach($jl->arr() as $jo)
+			{
+				$jo->set_prop("state", MRP_STATUS_DONE);
+				$jo->save();
+			}
 		}
 	}
 

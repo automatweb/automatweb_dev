@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.13 2005/02/18 14:37:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.14 2005/02/28 09:31:08 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -48,6 +48,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 	@property state type=text
 	@caption Staatus
+
+	@property sub_state type=hidden
 
 @default field=meta
 @default method=serialize
@@ -115,6 +117,9 @@ define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
 define ("MRP_STATUS_DELETED", 8);
+
+### sub states 
+define ("MRP_SUBSTATUS_PAUSED", 9);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -268,8 +273,36 @@ class mrp_job extends class_base
 				"name" => "abort",
 				//"img" => "abort.gif",
 				"tooltip" => "Katkesta",
-				"action" => "abort",
+				//"action" => "abort",
+				"url" => "#",
+				"onClick" => "if (document.changeform.pj_change_comment.value.replace(/\\s+/, '') != '') { submit_changeform('abort') } else { alert('Kommentaar peab olema t&auml;idetud!'); }"
 			));
+
+			if ($this_object->prop("sub_state") != MRP_SUBSTATUS_PAUSED)
+			{
+				$toolbar->add_button(array(
+					"name" => "pause",
+					//"img" => "pause.gif",
+					"tooltip" => "Paus",
+					"action" => "pause",
+				));
+
+				$toolbar->add_button(array(
+					"name" => "end_shift",
+					//"img" => "end_shift.gif",
+					"tooltip" => "Vahetuse l&otilde;pp",
+					"action" => "end_shift",
+				));
+			}
+			else
+			{
+				$toolbar->add_button(array(
+					"name" => "scontinue",
+					//"img" => "continue.gif",
+					"tooltip" => "J&auml;tka",
+					"action" => "scontinue",
+				));
+			}
 		}
 	}
 
@@ -389,6 +422,76 @@ class mrp_job extends class_base
 		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 	}
 
+/**
+	@attrib name=pause
+	@param id required type=int
+**/
+	function pause($arr)
+	{
+		if (is_oid ($arr["id"]))
+		{
+			$this_object = obj ($arr["id"]);
+		}
+		else
+		{
+			return ERROR;///!!! ...
+		}
+
+		$this_object->set_prop ("sub_state", MRP_SUBSTATUS_PAUSED);
+		$this_object->save ();
+
+		$ws = get_instance(CL_MRP_WORKSPACE);
+		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("sub_state")], $arr["pj_change_comment"]);
+	}
+
+/**
+	@attrib name=scontinue
+	@param id required type=int
+**/
+	function scontinue($arr)
+	{
+		if (is_oid ($arr["id"]))
+		{
+			$this_object = obj ($arr["id"]);
+		}
+		else
+		{
+			return ERROR;///!!! ...
+		}
+
+		$this_object->set_prop ("sub_state", 0);
+		$this_object->save ();
+
+		$ws = get_instance(CL_MRP_WORKSPACE);
+		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("sub_state")], $arr["pj_change_comment"]);
+	}
+
+/**
+	@attrib name=end_shift
+	@param id required type=int
+**/
+	function end_shift($arr)
+	{
+		if (is_oid ($arr["id"]))
+		{
+			$this_object = obj ($arr["id"]);
+		}
+		else
+		{
+			return ERROR;///!!! ...
+		}
+
+		$this_object->set_prop ("sub_state", MRP_SUBSTATUS_PAUSED);
+		$this_object->save ();
+
+		$ws = get_instance(CL_MRP_WORKSPACE);
+		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti Vahetuse l&otilde;pp", $arr["pj_change_comment"]);
+		
+		// log out user
+		$u = get_instance("users");
+		$u->orb_logout();
+	}
+
 	function on_delete_job ($arr)
 	{
 		$job_id = (int) $arr["oid"];
@@ -398,6 +501,11 @@ class mrp_job extends class_base
 
 		### get project for deleted job
 		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
+
+		if (!$project)
+		{
+			return;
+		}
 
 		### set successive jobs' prerequisites equal to deleted job's prerequisites
 		$prerequisites = explode (",", $job->prop ("prerequisites"));

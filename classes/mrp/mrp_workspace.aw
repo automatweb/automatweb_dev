@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.36 2005/02/22 10:52:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.37 2005/02/28 09:31:08 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -15,6 +15,7 @@
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
 	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
 	@groupinfo grp_printer_old caption="Tegemata asjad" parent=grp_printer submit=no
+	@groupinfo grp_printer_done caption="Tehtud asjad" parent=grp_printer submit=no
 
 @groupinfo grp_settings caption="Seaded"
 	@groupinfo grp_settings_def caption="Seaded" parent=grp_settings
@@ -184,7 +185,7 @@
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
-@default group=grp_printer_current,grp_printer_old
+@default group=grp_printer_current,grp_printer_old,grp_printer_done
 	@property printer_jobs type=table no_caption=1
 
 	// these are shown when a job is selected
@@ -980,6 +981,12 @@ class mrp_workspace extends class_base
 			"mrp_projects_show" => "done",
 			"mrp_tree_active_item" => 6,
 		), "mrp_workspace");
+		$url_projects_aborted = $this->mk_my_orb("change", array(
+			"id" => $this_object->id (),
+			"group" => "grp_projects",
+			"mrp_projects_show" => "aborted",
+			"mrp_tree_active_item" => 8,
+		), "mrp_workspace");
 
 ///!!! appdeitida need count listid table listide j2rgi
 		$list = new object_list (array (
@@ -1027,6 +1034,14 @@ class mrp_workspace extends class_base
 		));
 		$count_projects_done = $list->count ();
 
+		$list = new object_list (array (
+			"class_id" => CL_MRP_CASE,
+			"state" => MRP_STATUS_ABORTED,
+			"parent" => $this_object->prop ("projects_folder"),
+			// "createdby" => aw_global_get('uid'),
+		));
+		$count_projects_aborted = $list->count ();
+
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree (array (
 				"type" => TREE_DHTML,
@@ -1068,6 +1083,12 @@ class mrp_workspace extends class_base
 			"name" => "Valmis" . "(" . $count_projects_done . ")",
 			"id" => 6,
 			"url" => $url_projects_done,
+		));
+
+		$tree->add_item (0, array (
+			"name" => "Katkestatud" . "(" . $count_projects_aborted . ")",
+			"id" => 8,
+			"url" => $url_projects_aborted,
 		));
 
 		$tree->add_item (0, array (
@@ -1133,6 +1154,7 @@ class mrp_workspace extends class_base
 			case "overdue":
 			case "new":
 			case "planned":
+			case "aborted":
 				$table->define_field(array( //!!! teha sortableks, arvestada et prioriteet on float. v6imalus: <span style="display: none;">$priority</span><input ... value="$priority">. jama: sorter teeb integeriks kui numeric field
 					"name" => "priority",
 					"chgbgcolor" => "bgcolour_overdue",
@@ -1168,10 +1190,10 @@ class mrp_workspace extends class_base
 
 		if ($list_request != "search")
 		{
-		$table->define_chooser(array(
-			"name" => "selection",
-			"field" => "project_id",
-		));
+			$table->define_chooser(array(
+				"name" => "selection",
+				"field" => "project_id",
+			));
 		}
 		$table->set_default_sortby ("modified");
 		$table->set_default_sorder ("desc");
@@ -1219,9 +1241,17 @@ class mrp_workspace extends class_base
 					//// "createdby" => aw_global_get('uid'),
 				// ));
 				// echo dbg::dump($this->get_proj_overdue($this_object));
-				$list = new object_list (array (
-					"oid" => $this->get_proj_overdue($this_object)
-				));
+				$od = $this->get_proj_overdue($this_object);
+				if (count($od) == 0)
+				{
+					$list = new object_list();
+				}
+				else
+				{
+					$list = new object_list (array (
+						"oid" => $od
+					));
+				}
 				break;
 
 			case "overdue":
@@ -1247,6 +1277,15 @@ class mrp_workspace extends class_base
 				$list = new object_list (array (
 					"class_id" => CL_MRP_CASE,
 					"state" => MRP_STATUS_DONE,
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+				break;
+
+			case "aborted":
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => MRP_STATUS_ABORTED,
 					"parent" => $this_object->prop ("projects_folder"),
 					// "createdby" => aw_global_get('uid'),
 				));
@@ -1717,7 +1756,7 @@ class mrp_workspace extends class_base
 		$arr['pj_job'] = $_GET["pj_job"];
 		$arr['mrp_tree_active_item'] = $_GET["mrp_tree_active_item"];
 
-		if (is_oid($_GET["pj_job"]) || $_GET["group"] == "grp_printer")
+		if (true || is_oid($_GET["pj_job"]) || $_GET["group"] == "grp_printer")
 		{
 			aw_register_header_text_cb(array(&$this, "make_aw_header"));
 		}
@@ -2327,6 +2366,7 @@ class mrp_workspace extends class_base
 			"limit" => 30,
 			"minstart" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? get_day_start() : NULL),
 			"maxend" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? NULL : get_day_start()),
+			"onlydone" => ($arr["request"]["group"] == "grp_printer_done" ? true : false)
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -2501,8 +2541,14 @@ class mrp_workspace extends class_base
 			"class_id" => CL_MRP_JOB,
 			"site_id" => array(),
 			"lang_id" => array(),
-			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["minstart"])
+			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["minstart"]),
+//			"status" => new obj_predicate_not(MRP_STATUS_DONE)
 		);
+
+		if ($arr["onlydone"])
+		{
+			$filt["status"] = MRP_STATUS_DONE;
+		}
 
 		if ($arr["maxend"] > 100 )
 		{
@@ -2633,6 +2679,60 @@ class mrp_workspace extends class_base
 		$j = get_instance(CL_MRP_JOB);
 		$arr["id"] = $arr["pj_job"];
 		$j->abort($arr);
+
+		return $this->mk_my_orb("change", array(
+			"id" => $tmp["id"],
+			"group" => "grp_printer",
+			"pj_job" => $tmp["pj_job"]
+		));
+	}
+
+	/**
+		@attrib name=pause
+		@param id required type=int
+	**/
+	function pause ($arr)
+	{
+		$tmp = $arr;
+		$j = get_instance(CL_MRP_JOB);
+		$arr["id"] = $arr["pj_job"];
+		$j->pause($arr);
+
+		return $this->mk_my_orb("change", array(
+			"id" => $tmp["id"],
+			"group" => "grp_printer",
+			"pj_job" => $tmp["pj_job"]
+		));
+	}
+
+	/**
+		@attrib name=scontinue
+		@param id required type=int
+	**/
+	function scontinue ($arr)
+	{
+		$tmp = $arr;
+		$j = get_instance(CL_MRP_JOB);
+		$arr["id"] = $arr["pj_job"];
+		$j->scontinue($arr);
+
+		return $this->mk_my_orb("change", array(
+			"id" => $tmp["id"],
+			"group" => "grp_printer",
+			"pj_job" => $tmp["pj_job"]
+		));
+	}
+
+	/**
+		@attrib name=end_shift
+		@param id required type=int
+	**/
+	function end_shift ($arr)
+	{
+		$tmp = $arr;
+		$j = get_instance(CL_MRP_JOB);
+		$arr["id"] = $arr["pj_job"];
+		$j->end_shift($arr);
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],

@@ -88,6 +88,13 @@
             <field>state</field>
             <caption>Staatus</caption>
       </property>
+      <property>
+            <name>sub_state</name>
+            <group>data</group>
+            <table>mrp_job</table>
+            <type>hidden</type>
+            <field>sub_state</field>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_JOB</syslog_type>
             <relationmgr>yes</relationmgr>

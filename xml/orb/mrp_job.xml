@@ -25,5 +25,29 @@
 			</function>
 		</action>
 
+		<action name="pause">
+			<function name="pause">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="scontinue">
+			<function name="scontinue">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="end_shift">
+			<function name="end_shift">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
