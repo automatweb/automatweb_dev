@@ -38,10 +38,21 @@ class export_lite extends aw_template
 	{
 		$this->fn_type = FN_TYPE_HASH;
 		$this->hashes = array();
+		$this->lock_file = aw_ini_get("server.tmpdir")."/export_lite_".aw_ini_get("site_id");
 	}
 
 	function do_crawl()
 	{
+		$this->lock_file = aw_ini_get("server.tmpdir")."/export_lite_".aw_ini_get("site_id");
+		if (file_exists($this->lock_file))
+		{
+			$mt = filemtime($this->lock_file);
+			if ((time() - $mt) < 600)
+			{
+				die("eksport juba k&auml;ib!");
+			}
+			unlink($this->lock_file);
+		}
 		$this->init_settings();
 
 		// ok, this is the complicated bit.
@@ -65,6 +76,7 @@ class export_lite extends aw_template
 		$sql = "DELETE FROM static_content WHERE id NOT IN(".join(",", map("'%s'", array_values($this->hashes))).") AND created_by = 'export_lite' AND site_id = '".aw_ini_get("site_id")."'";
 		$this->db_query($sql);
 
+		unlink($this->lock_file);
 		// ut fix
 		if (aw_ini_get("site_id") == 900)
 		{
@@ -84,7 +96,7 @@ class export_lite extends aw_template
 			echo "found stop flag! <br>";
 			die();
 		}
-
+		touch($this->lock_file);
 		$url = $this->rewrite_link($url);
 //		echo "rewrote link to $url <br>";
 
