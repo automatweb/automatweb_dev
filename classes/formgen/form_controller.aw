@@ -109,9 +109,10 @@ class form_controller extends form_base
 						$ref.=".".$ed["name"];
 					}
 				}
+				$__false = false;
 				$this->vars(array(
 					"var_name" => $var,
-					"var_value" => $this->get_var_value($co,$var),
+					"var_value" => $this->get_var_value($co,$var, $__false),
 					"ref" => $ref,
 					"del_var" => $this->mk_my_orb("del_var", array("id" => $id, "var_name" => $var)),
 					"ch_var" => $this->mk_my_orb("change_var", array("id" => $id, "var_name" => $var))
@@ -277,7 +278,7 @@ class form_controller extends form_base
 				if (strpos($eq,"[".$var."]") !== false)
 				{
 //					echo "included <br>";
-					$val = str_replace("\"", "\\\"", $this->get_var_value($co, $var));
+					$val = str_replace("\"", "\\\"", $this->get_var_value($co, $var, &$form_ref));
 //					echo "val = $val <br>";
 					if ($add_quotes)
 					{
@@ -473,7 +474,7 @@ class form_controller extends form_base
 		));
 	}
 
-	function get_var_value($co,$var_name)
+	function get_var_value($co,$var_name, &$form_ref)
 	{
 		enter_function("form_controller::get_var_value");
 		$fid = $co["meta"]["vars"][$var_name]["form_id"];
@@ -551,13 +552,22 @@ class form_controller extends form_base
 				// figure out the current chain entry and load it
 				// i hope that does the right thing
 				$chent = aw_global_get("current_chain_entry");
-				if ($chent)
+				if ($chent || (is_object($form_ref) && $o_fid == $form_ref->id))
 				{
-					$chd = $this->get_chain_entry($chent, true);
-					$entry_id = $chd[$o_fid];
-//					echo "got entry id in THIS chain as $entry_id <br>";
-					// now read the related form's entry id, then get the chain entry id from that
-					$rel_eid = $this->db_fetch_field("SELECT el_".$o_elid." as val FROM form_".$o_fid."_entries WHERE id = '$entry_id'", "val");
+					// check if the form that the relation element is in, is the current form
+					// if so, then read it directly from the shown entry
+					if (is_object($form_ref) && $o_fid == $form_ref->id)
+					{
+						$rel_eid = $form_ref->get_element_value($o_elid, true);
+					}
+					else
+					{
+						$chd = $this->get_chain_entry($chent, true);
+						$entry_id = $chd[$o_fid];
+//						echo "got entry id in THIS chain as $entry_id <br>";
+						// now read the related form's entry id, then get the chain entry id from that
+						$rel_eid = $this->db_fetch_field("SELECT el_".$o_elid." as val FROM form_".$o_fid."_entries WHERE id = '$entry_id'", "val");
+					}
 					// get the chain entry and find the corect form entry from that
 					list($_tmp, $_tmp2, $_tmp_lbopt, $rel_eid) = explode("_", $rel_eid);
 //					echo "got rel_eid as $rel_eid , fid = $fid<br>";
