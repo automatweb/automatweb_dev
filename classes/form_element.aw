@@ -1,5 +1,5 @@
 <?php
-
+lc_load("form");
 global $orb_defs;
 $orb_defs["form_element"] = 
 array("change"	=> array("function"	=> "change",	"params"	=> array("id")));
@@ -11,15 +11,22 @@ class form_element extends aw_template
 		$this->db_init();
 
 		$this->eltypes = array(
-			"textbox" => array("admin_func" => "admin_textbox", "save_func" => "save_textbox", "show_func" => "show_textbox"),
-			"listbox"
+			"textbox" => array("admin_func" => "admin_textbox", "save_func" => "save_textbox", "show_func" => "show_textbox", "listbox")
 		);
+
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);
+		}
 	}
 
 	////
 	// !Loads the element from the array from inside the form
 	function load(&$arr,&$form,$col,$row)
 	{
+		// this looks horribly ineffective to me? repeat all the form data inside each element?
+		// the language constants, the remaining crap. HOLY CRAP.
 		$this->form = &$form;
 		$this->arr = $arr;
 		$this->id = $arr["id"];
@@ -550,7 +557,31 @@ class form_element extends aw_template
 		};
 	}
 
-	function get_text()		{	return $this->arr["text"]; }
+	function get_lang_text($lid = -1)		
+	{	
+		if ($lid == -1)
+		{
+			$lid = $GLOBALS["lang_id"];
+		}
+		if ($this->form->lang_id == $lid)
+		{
+			return $this->arr["text"];
+		}
+		else
+		{
+			return $this->arr["lang_text"][$lid];
+		}
+	}
+
+	function set_lang_text($lid,$txt)
+	{
+		$this->arr["lang_text"][$lid] = $txt;
+	}
+
+	function get_text()		
+	{	
+		return $this->arr["text"]; 
+	}
 	function get_el_name()		{	return $this->arr["name"]; }
 	function get_style()	{	return $this->arr["style"]; }
 	function get_type()		{	return $this->arr["type"]; }
@@ -665,6 +696,7 @@ class form_element extends aw_template
 
 		// also remove the column for this element from the form
 		$this->db_query("ALTER TABLE form_".$this->fid."_entries DROP el_".$this->id);
+		$this->db_query("ALTER TABLE form_".$this->fid."_entries DROP ev_".$this->id);
 	}
 
 	function gen_action_html()
@@ -896,7 +928,7 @@ class form_element extends aw_template
 				break;
 
 			case "file":
-				$html = "<input type='file' NAME='".$prefix.$elid."'>";
+				$html = "<input type='file' NAME='".$prefix.$elid."' value=''>";
 				break;
 
 			// yuck
@@ -1077,70 +1109,66 @@ class form_element extends aw_template
 	// !returns the elements value in the currently loaded entry in a form that can be presented to the user
 	function get_value($numeric = false)
 	{
-		if ($this->arr["type"] == "textarea")
+		switch($this->arr["type"])
 		{
-			$html=trim($this->entry);
-		}
-		else
-		if ($this->arr["type"] == "radiobutton")
-		{
-			if (!$numeric)
-			{
-				$html=($this->entry == $this->id ? " (X) " : " (-) ");
-			}
-			else
-			{
-				$html=($this->entry == $this->id ? 1 : 0);
-			}
-		}
-		else		
-		if ($this->arr["type"] == "listbox")
-		{
-			$sp = split("_", $this->entry, 10);
-			$html=$this->arr["listbox_items"][$sp[3]];
-		}
-		else
-		if ($this->arr["type"] == "multiple")
-		{
-			$ec=explode(",",$this->entry);
-			reset($ec);
-			while (list(, $v) = each($ec))
-			{
-				$html=($this->arr["multiple_items"][$v]." ");
-			}
-		}
-		else
-		if ($this->arr["type"] == "checkbox")
-		{
-			if (!$numeric)
-			{
-				$html=$this->entry == 1 ? "(X) " : " (-) ";
-			}
-			else
-			{
-				$html = $this->entry;
-			}
-		}
-		else
-		if ($this->arr["type"] == "textbox")
-		{
-			$html=trim($this->entry);
-		}
-		else
-		if ($this->arr["type"] == "date")
-		{
-			$html=$this->time2date($this->entry,5);
-		}
-		else
-		if ($this->arr["type"] == "price")
-		{
-			$html=trim($this->entry);
-		}
-		else
-		if ($this->arr["type"] == "link")
-		{
-			$html=$this->entry["address"];
-		}
+			case "textarea":
+				$html = trim($this->entry);
+				break;
+
+			case "radiobutton":
+				if (!$numeric)
+				{
+					$html = ($this->entry == $this->id ? " (X) " : " (-) ");
+				}
+				else
+				{
+					$html = ($this->entry == $this->id ? 1 : 0);
+				}
+				break;
+
+			case "listbox":
+				$sp = split("_", $this->entry, 10);
+				$html = $this->arr["listbox_items"][$sp[3]];
+				break;
+
+			case "multiple":
+				$ec=explode(",",$this->entry);
+				reset($ec);
+				while (list(, $v) = each($ec))
+				{
+					$html .= ($this->arr["multiple_items"][$v]." ");
+				}
+				break;
+
+			case "checkbox":
+				if (!$numeric)
+				{
+					$html = $this->entry == 1 ? "(X) " : " (-) ";
+				}
+				else
+				{
+					$html = $this->entry;
+				}
+				break;
+
+			case "textbox":
+				$html = trim($this->entry);
+				break;
+
+			case "date:":
+				// FIXME: kui mingil hetkel kasutaja kuupäeva formaat muutub
+				// konfitavaks, siis muuda ka siit ära
+				$html = $this->time2date($this->entry,5);
+				break;
+
+			case "price":
+				$html = trim($this->entry);
+				break;
+
+			case "link":
+				$html = $this->entry["address"];
+				break;
+		};
 		return $html;
 	}
 
