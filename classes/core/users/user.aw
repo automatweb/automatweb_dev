@@ -806,26 +806,23 @@ class user extends class_base
 		extract($arr);
 		$row = aw_unserialize($str);
 		$row['parent'] = $parent;
+		
+		$old_oid = $row["oid"];
+		$u = obj($old_oid);
 
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-	
-		if ($id)
+		// get the parent group
+		$n = obj($parent);
+		$path = $n->path();
+		foreach(array_reverse($path) as $p_i)
 		{
-			// also, update group membership
-			// new gid
-			$n_gid = $this->db_fetch_field("SELECT gid FROM groups WHERE oid = $parent", "gid");
-
-			// get the user
-			$uid = $this->db_fetch_field("SELECT uid FROM users WHERE oid = $row[brother_of]", "uid");
-
-			if ($n_gid)
+			if ($p_i->class_id() == CL_GROUP)
 			{
-				$this->users->add_users_to_group_rec($n_gid, array($uid));
+				$g = get_instance("core/users/group");
+				$g->add_user_to_group($u, $p_i);
+				return 0;
 			}
-			return true;
 		}
-		return false;
+		return -1;
 	}
 
 	function _get_roles($uid)
@@ -1537,32 +1534,66 @@ class user extends class_base
 
 	function _aclw_get_controlling_acl($user, $oid)
 	{
-		$this->db_query("
-			SELECT 
-				groups.gid as gid, 
-				groups.priority as pri
-			FROM 
-				groupmembers 
-				LEFT JOIN groups ON groupmembers.gid = groups.gid
-			WHERE
-				groupmembers.uid = '$user'
-			ORDER BY groups.priority DESC
-		");
-		while ($row = $this->db_next())
+		if ($uid == "")
 		{
-			$this->save_handle();
-			$parent = $oid;
-			while ($parent)
+			$nlg = $this->get_cval("non_logged_in_users_group");
+			$this->db_query("
+				SELECT 
+					groups.gid as gid, 
+					groups.priority as pri
+				FROM 
+					groupmembers 
+					LEFT JOIN groups ON groupmembers.gid = groups.gid
+				WHERE
+					groups.gid = '$nlg'
+				ORDER BY groups.priority DESC
+			");
+			while ($row = $this->db_next())
 			{
-				$adat = $this->db_fetch_row("SELECT * FROM acl WHERE oid = '$parent' AND gid = '$row[gid]'");
-				if (is_array($adat))
+				$this->save_handle();
+				$parent = $oid;
+				while ($parent)
 				{
-					return $adat;
+					$adat = $this->db_fetch_row("SELECT * FROM acl WHERE oid = '$parent' AND gid = '$row[gid]'");
+					if (is_array($adat))
+					{
+						return $adat;
+					}
+	
+					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = '$parent'", "parent");
 				}
-
-				$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = '$parent'", "parent");
+				$this->restore_handle();
 			}
-			$this->restore_handle();
+		}
+		else
+		{
+			$this->db_query("
+				SELECT 
+					groups.gid as gid, 
+					groups.priority as pri
+				FROM 
+					groupmembers 
+					LEFT JOIN groups ON groupmembers.gid = groups.gid
+				WHERE
+					groupmembers.uid = '$user'
+				ORDER BY groups.priority DESC
+			");
+			while ($row = $this->db_next())
+			{
+				$this->save_handle();
+				$parent = $oid;
+				while ($parent)
+				{
+					$adat = $this->db_fetch_row("SELECT * FROM acl WHERE oid = '$parent' AND gid = '$row[gid]'");
+					if (is_array($adat))
+					{
+						return $adat;
+					}
+	
+					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = '$parent'", "parent");
+				}
+				$this->restore_handle();
+			}
 		}
 
 		return false;

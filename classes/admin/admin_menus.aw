@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.61 2004/04/14 10:32:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.62 2004/04/19 09:37:39 kristo Exp $
+
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -593,17 +594,21 @@ class admin_menus extends aw_template
 		aw_session_set("cut_objects",array());
 
 		$conns = $obj_id_map = array();
+		$msgs = array();
 		if (is_array($copied_objects))
 		{
 			reset($copied_objects);
 			while (list($oid,$str) = each($copied_objects))
 			{
 				$id = $this->unserialize(array("str" => $str, "parent" => $parent, "period" => $period));
-				$obj_id_map[$oid] = $id;
-				if (is_array($str["connections"]))
+				if (is_oid($id))
 				{
-					$conns[$id] = $str["connections"];
-				};
+					$obj_id_map[$oid] = $id;
+					if (is_array($str["connections"]))
+					{
+						$conns[$id] = $str["connections"];
+					};
+				}
 			}
 		}
 
