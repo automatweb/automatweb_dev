@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.13 2003/09/25 13:58:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.14 2003/09/26 09:51:35 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -285,7 +285,7 @@ class treeview extends class_base
 	//   root_name - root menu name
 	//   root_url - root menu url
 	//   root_icon - root menu icon
-	//	type - either TREE_HTML or TREE_JS , defaults to TREE_JS
+	//	type - TREE_HTML|TREE_JS|TREE_DHTML , defaults to TREE_JS
 	function start_tree($arr)
 	{
 		$this->items = array();
@@ -313,6 +313,11 @@ class treeview extends class_base
 		$this->selected_item = $id;
 	}
 
+	function node_has_children($id)
+	{
+		return is_array($this->items[$id]) && sizeof($this->items[$id]) > 0;
+	}
+
 	////
 	// !draws the tree
 	// rootnode - from which node should drawing start (defaults to 0)
@@ -326,6 +331,10 @@ class treeview extends class_base
 			return $this->html_finalize_tree();
 		}
 
+		if ($this->tree_type == TREE_DHTML)
+		{
+			return $this->dhtml_finalize_tree();
+		}
 
 		$this->read_template("ftiens.tpl");
 		// objektipuu
@@ -335,6 +344,7 @@ class treeview extends class_base
 			"DOC" => "",
 			"root" => $this->rootnode,
 			"rootname" => $this->tree_dat["root_name"],
+			"linktarget" => $this->tree_dat["url_target"],
 			"rooturl" => $this->tree_dat["root_url"],
 			"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
 		));
@@ -352,6 +362,10 @@ class treeview extends class_base
 		foreach($this->items[$parent] as $row)
 		{
 			$sub = $this->req_finalize_tree($row['id']);
+			if (isset($row["iconurl"]))
+			{
+				$row["icon"] = $row["iconurl"];
+			};
 			$this->vars(array(
 				'name' => $row['name'],
 				'id' => $row['id'],
@@ -382,6 +396,80 @@ class treeview extends class_base
 			"colspan" => 10
 		));
 		return $this->parse("TREE_BEGIN").join("\n", $ml).$this->parse("TREE_END");
+	}
+
+	function dhtml_finalize_tree()
+	{
+		$level = 0;
+		$this->rv = "";
+		$this->read_template("dhtml_tree.tpl");
+
+		$this->vars(array("target" => $this->tree_dat["url_target"]));
+		$rv = $this->draw_dhtml_tree($this->rootnode);
+
+		$this->vars(array(
+			"TREE_NODE" => $rv,
+			"rootname" => $this->tree_dat["root_name"],
+			"rooturl" => $this->tree_dat["root_url"],
+			"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
+		));
+
+		return $this->parse();
+
+
+	}
+
+	function draw_dhtml_tree($parent)
+	{
+		$data = $this->items[$parent];
+		if (!is_array($data))
+		{
+			return "";
+		};
+		$this->level++;
+		$result = "";
+		foreach($data as $item)
+		{
+			$subres = $this->draw_dhtml_tree($item["id"]);
+
+			$this->vars(array(
+				"name" => $item["name"],
+				"idx" => $item["id"],
+				"idy" => $item["id"],
+				"idz" => $item["id"],
+				"iconurl" => $item["iconurl"],
+				"url" => $item["url"],
+				"spacer" => str_repeat("    ",$this->level),
+			));
+
+			if (empty($subres))
+			{
+				// fill them with emptyness
+				$this->vars(array(
+					"SUB_NODES" => "",
+				));
+
+				$tpl = "SINGLE_NODE";
+			}
+			else
+			{
+				$this->vars(array(
+					"SINGLE_NODE" => $subres,
+				));
+				$tmp = $this->parse("SUB_NODES");
+				$this->vars(array(
+					"SUB_NODES" => $tmp,
+				));
+
+				$tpl = "TREE_NODE";
+			};
+
+			$result .= $this->parse($tpl);
+					
+		}
+		$this->level--;
+		return $result;
+
 	}
 
 	function draw_html_tree($parent, &$ml)
