@@ -168,6 +168,11 @@ class icons extends aw_template
 		}
 
 		$ic = $this->get($id);
+		if (!is_array($ic))
+		{
+			header("Content-type: image/gif");
+			readfile($GLOBALS["baseurl"]."/images/icon_aw.gif");
+		}
 		header("Content-type: ".$ic["file_type"]);
 		echo $ic["file"];
 	}
