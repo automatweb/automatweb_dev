@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.26 2005/01/28 11:25:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.27 2005/02/21 08:51:12 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -642,15 +642,12 @@ class mysql
 	// logs the query, if user has a cookie named log_query
 	function log_query($msg)
 	{
-		$uid = aw_global_get("uid");
-		$logfile = "/www/log/mysql-" . $uid . ".log";
-
 		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["log_query"]))
 		{
+			$uid = aw_global_get("uid");
+			$logfile = "/www/log/mysql-" . $uid . ".log";
 			$fp = fopen($logfile,"a");
-			flock($fp, LOCK_EX);
 			fwrite($fp,$msg . "\n\n-----------------------------------\n\n");
-			flock($fp, LOCK_UN);
 			fclose($fp);
 		}
 	}
