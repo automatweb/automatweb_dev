@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.148 2002/08/21 11:21:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.149 2002/08/29 03:11:22 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -312,6 +312,7 @@ class menuedit extends aw_template
 		$_t = aw_global_get("act_period");
 		$this->vars(array(
 			"per_string" => $_t["description"],
+			"act_per_id" => $_t["id"]
 		));
 
 		// check whether access to that menu is denied by ACL and if so
@@ -409,6 +410,7 @@ class menuedit extends aw_template
 		// here we must find the menu image, if it is not specified for this menu,
 		//then use the parent's and so on.
 		$this->do_menu_images($sel_menu_id);
+
 
 		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne
 		$this->vars(array(
@@ -617,7 +619,9 @@ class menuedit extends aw_template
 		  "date" => $this->time2date(time(), 2),
 		  "date2" => $this->time2date(time(), 8),
 			"IS_FRONTPAGE" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE") : ""),
-			"IS_FRONTPAGE2" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE2") : "")
+			"IS_FRONTPAGE2" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE2") : ""),
+			"IS_NOT_FRONTPAGE" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE") : ""),
+			"IS_NOT_FRONTPAGE2" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
 		));
 
 		// what's that for?
@@ -3775,7 +3779,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		// find out how many menus do we have so we know when to use
 		// the _END moficator
 		$total = sizeof($this->mpr[$parent]) - 1;
-
 		while (list(,$row) = each($this->mpr[$parent]))
 		{
 			$bro = false;
@@ -3840,7 +3843,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				continue;
 			}
-
 
 			if ($row["hide_noact"] || $this->cfg["all_menus_makdp"] == true)
 			{
@@ -4170,10 +4172,18 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					if ($is_mid)
 					{
 						$l_mid.=$this->parse($mn.$ap);
+						if ($GLOBALS["DBUG"] == 1)
+						{
+							echo "parse is_mid $mn $ap <br>";
+						}
 					}
 					else
 					{
 						$l.=$this->parse($mn.$ap);
+						if ($GLOBALS["DBUG"] == 1)
+						{
+							echo "parse $mn $ap <br>";
+						}
 					}
 				}
 			}
@@ -4274,6 +4284,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				};
 				if (not($err))
 				{
+					$_sec = aw_global_get("section");
+					if ($_sec)
+					{
+						$values["section"] = $_sec;
+					};
 					$link = $this->mk_my_orb($_act,$values,$_cl,$row["meta"]["pm_url_admin"],!$row["meta"]["pm_url_menus"]);
 				}
 				else
@@ -4823,6 +4838,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			));
 			$this->vars(array("docid" => $section));
 			$this->active_doc = $section;
+			$d->set_opt("shown_document",$section);
 			$PRINTANDSEND = $this->parse("PRINTANDSEND");
 		}
 		else
