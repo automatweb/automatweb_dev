@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/Attic/form_rpc.aw,v 1.1 2002/10/29 10:06:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/Attic/form_rpc.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 // form_rpc.aw - RPC functions for formgen
 classload("formgen/form");
 class form_rpc extends form 
@@ -191,8 +191,7 @@ class form_rpc extends form
 		$eid = $args[0];
 		$alias = $args[1];
  
-		classload("form_entry");
-		$form_entry = get_instance("form_entry");
+		$form_entry = get_instance("formgen/form_entry");
 		$block = $form_entry->get_entry(array("eid" => $eid));
 
 		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;

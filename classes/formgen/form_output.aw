@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.1 2002/10/29 10:09:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -641,7 +641,7 @@ class form_output extends form_base
 					$cell["elements"][$i]["text"] = $texts[$row][$col][$i];
 					if ($cell["elements"][$i]["name"] != $names[$row][$col][$i])
 					{
-						$fe = new form_entry_element;
+						$fe = get_instance("formgen/form_entry_element");
 						$fe->do_change_name($names[$row][$col][$i], $cell["elements"][$i]["id"]);
 						$cell["elements"][$i]["name"] = $names[$row][$col][$i];
 					}
@@ -693,7 +693,7 @@ class form_output extends form_base
 
 		for ($i=0; $i < $cell["el_count"]; $i++)
 		{
-			$el = new form_search_element;
+			$el = get_instance("formgen/form_search_element");
 			$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 
 			if ($el->save(&$arr) == false)
@@ -934,7 +934,7 @@ class form_output extends form_base
 		$cell = &$this->output[$row][$col];
 		for ($i=0; $i < $cell["el_count"]; $i++)
 		{
-			$el = new form_search_element;
+			$el = get_instance("formgen/form_search_element");
 			$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 			$this->vars(array(
 				"element" => $el->gen_admin_html(),
@@ -1121,7 +1121,7 @@ class form_output extends form_base
 			{
 				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
 				{
-					$el=new form_entry_element;
+					$el=get_instance("formgen/form_entry_element");
 					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 
 					$lcol = "";
@@ -1147,7 +1147,7 @@ class form_output extends form_base
 			{
 				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
 				{
-					$el=new form_entry_element;
+					$el=get_instance("formgen/form_entry_element");
 					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 					if ($el->get_type() == "listbox")
 					{
@@ -1187,7 +1187,7 @@ class form_output extends form_base
 			{
 				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
 				{
-					$el=new form_entry_element;
+					$el=get_instance("formgen/form_entry_element");
 					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 					if ($el->get_type() == "multiple")
 					{
@@ -1227,7 +1227,7 @@ class form_output extends form_base
 			{
 				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
 				{
-					$el=new form_entry_element;
+					$el=get_instance("formgen/form_entry_element");
 					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 					$lcol3 = "";
 					foreach($langs as $lar)
@@ -1260,7 +1260,7 @@ class form_output extends form_base
 			{
 				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
 				{
-					$el=new form_entry_element;
+					$el=get_instance("formgen/form_entry_element");
 					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 					if ($el->get_type() == "textbox" || $el->get_type() == "textarea")
 					{
@@ -1296,7 +1296,7 @@ class form_output extends form_base
 			{
 				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
 				{
-					$el=new form_entry_element;
+					$el=get_instance("formgen/form_entry_element");
 					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 					$lcol5 = "";
 					foreach($langs as $lar)
@@ -1329,7 +1329,7 @@ class form_output extends form_base
 			{
 				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
 				{
-					$el=new form_entry_element;
+					$el=get_instance("formgen/form_entry_element");
 					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 					if ($el->get_type() == "button")
 					{
@@ -1388,7 +1388,7 @@ class form_output extends form_base
 			{
 				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
 				{
-					$el=new form_entry_element;
+					$el=get_instance("formgen/form_entry_element");
 					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
 					foreach($langs as $lar)
 					{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.1 2002/10/28 12:56:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -18,7 +18,7 @@ define("RET_FIRST", 1);
 // it returns all elements with the name, return type is array
 define("RET_ALL", 2);
 
-classload("formgen/form_base","form_element","form_entry_element","form_search_element","form_cell");
+classload("formgen/form_base","formgen/form_cell", "image");
 class form extends form_base
 {
 	function form()
@@ -43,7 +43,7 @@ class form extends form_base
 
 		if (!$this->controller_instance)
 		{
-			$this->controller_instance = get_instance("form_controller");
+			$this->controller_instance = get_instance("formgen/form_controller");
 		}
 		$this->style_instance = get_instance("style");
 	}
@@ -445,6 +445,7 @@ class form extends form_base
 		$this->arr["show_form_with_results"] = $show_form_with_results;
 		$this->arr["sql_writer_writer"] = $sql_writer_writer;
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
+		$this->arr["search_act_lang_only"] = $search_act_lang_only;
 
 		$this->subtype = 0;
 		if ($email_form_action)
@@ -797,6 +798,7 @@ class form extends form_base
 			"sql_writer_writer_forms" => $this->picker($this->arr["sql_writer_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"forms" => $this->picker($this->arr["sql_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
+			"search_act_lang_only" => checked($this->arr["search_act_lang_only"]),
 		));
 
 		$ns = "";
@@ -1630,7 +1632,7 @@ class form extends form_base
 				for ($i=0; $i < $op_cell["el_count"]; $i++)
 				{
 					// load the element from output
-					$el=new form_entry_element;
+					$el=get_instance("formgen/form_entry_element");
 					$el->load($op_cell["elements"][$i],&$this,$rcol,$rrow);
 
 					// if the element is linked, then fake the elements entry
@@ -2208,7 +2210,7 @@ class form extends form_base
 
 		enter_function("form::new_do_search::init_table",array());
 		$show_form = get_instance("formgen/form");	// if showing results as outputs, this will be used
-		$form_table = get_instance("form_table"); // if showing results as a form_table, this will be used
+		$form_table = get_instance("formgen/form_table"); // if showing results as a form_table, this will be used
 
 		$used_els = array();
 		$group_els = array();
@@ -2269,7 +2271,7 @@ class form extends form_base
 
 		if ($this->arr["search_chain"])
 		{
-			$fc = get_instance("form_chain");
+			$fc = get_instance("formgen/form_chain");
 			$chain = $fc->load_chain($this->arr["search_chain"]);
 			// check whether the chain and the form both use a calendar
 			$has_calendar = $chain["flags"] & OBJ_HAS_CALENDAR;
@@ -2939,8 +2941,8 @@ class form extends form_base
 				$this->raise_error(ERR_FG_NOTABLE,"No table selected for showing data!",true);
 			}
 
-			classload("form_table");
-			$ft = get_instance("form_table");
+			classload("formgen/form_table");
+			$ft = get_instance("formgen/form_table");
 			// This stuff is here for the numeric element type. -->
 			/*
 			$els = array();
@@ -4722,13 +4724,12 @@ class form extends form_base
 			$f->save();
 		}
 
-		classload("form_output");
 		$this->db_query("SELECT oid FROM objects WHERE class_id = ".CL_FORM_OUTPUT." AND status != 0");
 		while ($row = $this->db_next())
 		{
 			echo "form_op $row[oid] \n<br>";
 			flush();
-			$f = get_instance("form_output");
+			$f = get_instance("formgen/form_output");
 			$f->load_output($row["oid"]);
 			$f->save_output($row["oid"]);
 		}
@@ -5341,7 +5342,7 @@ class form extends form_base
 
 		if ($this->subtype & FSUBTYPE_EV_ENTRY)
 		{
-			$ft = get_instance("form_table");
+			$ft = get_instance("formgen/form_table");
 			$tables = $ft->get_form_tables_for_form($id);
 
 			$q = "SELECT *,objects.name AS name FROM calendar2forms
@@ -5519,7 +5520,7 @@ class form extends form_base
 			};
 		};
 		
-		$ft = get_instance("form_table");
+		$ft = get_instance("formgen/form_table");
 		$tables = $tables + $ft->get_form_tables_for_form($form_id);
 
 		if ($item["end"] > 0)

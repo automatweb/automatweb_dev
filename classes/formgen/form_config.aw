@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_config.aw,v 1.1 2002/10/28 13:59:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_config.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 // form_config.aw - FormGen configuration
 
 classload("formgen/form_base");
@@ -22,7 +22,7 @@ class form_config extends form_base
 		$typs = aw_unserialize($_typs);
 		$styps = aw_unserialize($_styps);
 
-		$fo = get_instance("form_element");
+		$fo = get_instance("formgen/form_element");
 		$atyps = $fo->get_all_types();
 		$astyps = $fo->get_all_subtypes();
 
@@ -78,7 +78,7 @@ class form_config extends form_base
 		extract($arr);
 		$co = get_instance("config");
 
-		$fo = get_instance("form_element");
+		$fo = get_instance("formgen/form_element");
 		$all_types = $fo->get_all_types();
 		$all_subtypes = $fo->get_all_subtypes();
 

@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_search_element.aw,v 1.1 2002/10/29 10:05:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_search_element.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 
-classload("form_element");
+classload("formgen/form_element");
 class form_search_element extends form_element
 {
 	function form_search_element()

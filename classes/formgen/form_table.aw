@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.1 2002/10/28 13:54:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -33,7 +33,7 @@ class form_table extends form_base
 		$this->ru = aw_global_get("REQUEST_URI");
 		$this->image = get_instance("image");
 		$this->uid = aw_global_get("uid");
-		$this->controller_instance = get_instance("form_controller");
+		$this->controller_instance = get_instance("formgen/form_controller");
 	}
 
 	////
@@ -886,7 +886,7 @@ class form_table extends form_base
 					}
 				}
 			}
-			$form = new form;
+			$form = get_instance("formgen/form");
 			// here we must find the value for the element($this->table["show_second_table_search_val_el"]) that was on the row
 			// we clicked on
 			// we do that like this - we add the entry_id and form_id of the row to the search url

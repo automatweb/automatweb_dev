@@ -533,7 +533,7 @@ class form_db_base extends aw_template
 
 		if (!is_object(($finst =& aw_cache_get("cache_get_form_instance", $fid))))
 		{
-			$finst = new form;
+			$finst = get_instance("formgen/form");
 			$finst->load($fid);
 			aw_cache_set("cache_get_form_instance", $fid, &$finst);
 		}
@@ -1668,6 +1668,10 @@ class form_db_base extends aw_template
 				$query.=" AND ";
 			}
 			$query.=" objects.status != 0 ";
+			if ($this->arr["search_act_lang_only"])
+			{
+				$query.=" AND objects.lang_id = '".aw_global_get("lang_id")."'";
+			}
 		}
 		if ($query != "")
 		{

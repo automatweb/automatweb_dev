@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.1 2002/10/28 13:02:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -687,7 +687,7 @@ class form_calendar extends form_base
 		$this->db_query($q);
 		$has_vacancies = true;
 		$has_errors = false;
-		$fch = get_instance("form_chain");
+		$fch = get_instance("formgen/form_chain");
 		while($row = $this->db_next())
 		{
 			// get the vacancy controller for the chain.

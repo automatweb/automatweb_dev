@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.1 2002/10/28 13:48:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -33,21 +33,21 @@ class form_cell extends form_base
 		switch($type)
 		{
 			case FTYPE_ENTRY:
-				$t = "form_entry_element";
+				$t = "formgen/form_entry_element";
 				break;
 			case FTYPE_SEARCH:
-				$t = "form_search_element";
+				$t = "formgen/form_search_element";
 				break;
 			case FTYPE_FILTER_SEARCH:
-				$t = "form_filter_search_element";
+				$t = "formgen/form_filter_search_element";
 				break;
 			case FTYPE_CONFIG:
-				$t = "form_entry_element";
+				$t = "formgen/form_entry_element";
 				break;
 			default:
 				$this->raise_error(ERR_FG_ETYPE,"form_cell->mk_element($type) , error in type!",true);
 		}
-		$this->arr[$this->cnt] =& new $t;
+		$this->arr[$this->cnt] =& get_instance($t);
 		$this->arr[$this->cnt]->load(&$r, &$this->form, $this->col, $this->row);
 		$this->cnt++;
 	}

@@ -133,9 +133,8 @@ class form_filter_search_element extends form_search_element
 		// muidu tuleks siin teha
 		// return ((form_entry_element)$this)->gen_show_html();
 		// aga oi jah, php-s vist polegi vtablet ja veel vähem mingeid typecaste.
-		classload("form_entry_element");
 		//return ((form_entry_element)$this)->gen_show_html();
-		$el=new form_entry_element();
+		$el=get_instance("formgen/form_entry_element");
 		$el->id=$this->id;
 		$el->parent=$this->parent;
 		$el->form=&$this->form;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.1 2002/10/29 10:30:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -126,6 +126,7 @@ class form_element extends aw_template
 
 	function do_core_admin()
 	{
+		load_vcl("date_edit");
 		$de = new date_edit(0);
 		$de->configure(array(
 			"year" => "",

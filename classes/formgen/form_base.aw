@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.1 2002/10/28 13:01:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -85,7 +85,7 @@ class form_base extends form_db_base
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
-				$this->arr["contents"][$row][$col] = new form_cell();		
+				$this->arr["contents"][$row][$col] = get_instance("formgen/form_cell");		
 				$this->arr["contents"][$row][$col] -> load(&$this,$row,$col);
 			}
 		}
@@ -972,7 +972,7 @@ class form_base extends form_db_base
 	{
 		if (!$this->controller_instance)
 		{
-			$this->controller_instance = new form_controller;
+			$this->controller_instance = get_instance("formgen/form_controller");
 		}
 
 		if (!($ret = aw_global_get("form_controllers_cache".$add_empty)))
