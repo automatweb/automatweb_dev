@@ -1,7 +1,7 @@
 <?php
-// $Id: class_base.aw,v 2.330 2004/12/01 14:37:42 ahti Exp $
+// $Id: class_base.aw,v 2.331 2004/12/02 12:27:24 duke Exp $
 // the root of all good.
-// <<<<<
+// 
 // ------------------------------------------------------------------
 // Do not be writink any HTML in this class, it defeats half
 // of the purpose of this class. If you really absolutely
@@ -29,13 +29,13 @@
 	@comment Kas objekt on aktiivne 
 
 	@property needs_translation type=checkbox field=flags method=bitmask ch_value=2 // OBJ_NEEDS_TRANSLATION
-	@caption Vajab t&otilde;lget
+	@caption Vajab tõlget
 
 	// see peaks olemas olema ainult siis, kui sellel objekt on _actually_ mingi asja tõlge
 	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 trans=1 // OBJ_IS_TRANSLATED
-	@caption T&otilde;lge kinnitatud
+	@caption Tõlge kinnitatud
 
-	@groupinfo general caption=&Uuml;ldine default=1 icon=edit
+	@groupinfo general caption=Üldine default=1 icon=edit
 
 	@forminfo add onload=init_storage_object 
 	@forminfo edit onload=load_storage_object
@@ -294,6 +294,7 @@ class class_base extends aw_template
 			));
 		};
 
+
 		$this->use_form = $use_form;
 
 		//$cfgform_id = $args["cfgform"];
@@ -357,16 +358,10 @@ class class_base extends aw_template
 			};
 		}
 			
-		if (!aw_ini_get("config.object_translation"))
-		{
-			unset($properties["is_translated"]);
-			unset($properties["needs_translation"]);
-		}
 		// XXX: temporary -- duke
 		if ($args["fxt"])
 		{
 			$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
-			$this->set_classinfo(array("name" => "relationmgr","value" => 0));
 		}
 
 		if (!empty($args["form"]))
@@ -1865,14 +1860,10 @@ class class_base extends aw_template
 		{
 			if($value)
 			{
-				$values = is_array($value) ? $value : array($value);
-				foreach($values as $value)
+				$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
+				if($retval == PROP_IGNORE)
 				{
-					$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
-					if($retval == PROP_IGNORE)
-					{
-						unset($properties[$key]);
-					}
+					unset($properties[$key]);
 				}
 			}
 		}
@@ -2900,30 +2891,26 @@ class class_base extends aw_template
 					);
 				};
 			};
+			
 			if($controllers[$key])
 			{
-				$controller = is_array($controllers[$key]) ? $controllers[$key] : array($controllers[$key]);
-				foreach($controller as $controller_id)
-				{
-					$prpdata["value"] = $val;
-					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"], $val);
+				$controller_id = $controllers[$key];
+				$prpdata["value"] = $val;
+				$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"], $val);
 
-					if ($controller_ret != PROP_OK)
-					{
-						$ctrl_obj = new object($controller_id);
-						$errmsg = $ctrl_obj->prop("errmsg");
-						if (empty($errmsg))
-						{
-							$errmsg = "Entry was blocked by a controller, but no error message is available";
-						};
-						$errmsg = str_replace("%caption", $prpdata["caption"], $errmsg);
-						$res[$key]["msg"][] = $errmsg;
-					};
-				}
-				if(count($res[$key]["msg"]) > 0)
+				if ($controller_ret != PROP_OK)
 				{
-					$res[$key]["msg"] = implode("<br />\n", $res[$key]["msg"]);
-				}
+					$ctrl_obj = new object($controller_id);
+					$errmsg = $ctrl_obj->prop("errmsg");
+					if (empty($errmsg))
+					{
+						$errmsg = "Entry was blocked by a controller, but no error message is available";
+					};
+					$errmsg = str_replace("%caption", $prpdata["caption"], $errmsg);
+					$res[$key] = array(
+						"msg" => $errmsg,
+					);
+				};
 			}
 		};
 		return $res;
@@ -4090,7 +4077,7 @@ class class_base extends aw_template
 			$cfgform_obj = new object($id);
 			if ($cfgform_obj->class_id() != CL_CFGFORM)
 			{
-				error::raise(array(
+				error::throw(array(
 					"msg" => "$id is not a valid configuration form!",
 					"fatal" => true,
 				));
@@ -4309,6 +4296,16 @@ class class_base extends aw_template
 			"id" => $arr["id"],
 			"section" => $arr["section"],
 		));
+	}
+
+	/** helper method to generate return url if PROP_FATAL_ERROR occured
+
+	**/
+	function abort_action($arr)
+	{
+		// this maybe be called for a not logged in user for an embedded object
+		aw_session_set("no_cache", 1);
+		return aw_global_get("HTTP_REFERER");
 	}
 
 };
