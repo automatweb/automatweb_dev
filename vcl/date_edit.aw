@@ -12,6 +12,11 @@ class date_edit {
 		$this->init($varname,$timestamp);
 	}
 
+	function set($field,$value)
+	{
+		$this->$field = $value;
+	}
+
 	function init($varname,$timestamp)
 	{
 		$this->varname = $varname;
@@ -132,7 +137,8 @@ class date_edit {
 					{
 						$retval.= "<option value='0'>---</option>\n";
 					}
-					for ($i = 0; $i <= 59; $i = $i + 1) {
+					$step = ($this->minute_step) ? $this->minute_step : 1;
+					for ($i = 0; $i <= 59; $i = $i + $step) {
 						$sel = ($i == $minute) ? "selected" : "";
 						$retval .= sprintf("<option value='%s'%s>%02d</option>\n",$i,$sel,$i);
 					};
