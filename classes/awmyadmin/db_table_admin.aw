@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/awmyadmin/Attic/db_table_admin.aw,v 1.8 2004/03/25 21:59:17 duke Exp $
 
 /*
 
@@ -58,7 +59,7 @@ class db_table_admin extends class_base
 
 	/**  
 		
-		@attrib name=admin params=name default="0"
+		@attrib name=admin params=name 
 		
 		@param id required
 		
@@ -91,7 +92,7 @@ class db_table_admin extends class_base
 
 	/**  
 		
-		@attrib name=admin_col params=name default="0"
+		@attrib name=admin_col params=name 
 		
 		@param id required
 		@param field optional
@@ -129,7 +130,6 @@ class db_table_admin extends class_base
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
 			'url' => 'javascript:document.add.submit()',
-			'imgover' => 'save_over.gif',
 			'img' => 'save.gif'
 		));
 		$this->vars(array(
@@ -147,7 +147,7 @@ class db_table_admin extends class_base
 
 	/**  
 		
-		@attrib name=submit_admin params=name default="0"
+		@attrib name=submit_admin params=name 
 		
 		
 		@returns
@@ -177,7 +177,7 @@ class db_table_admin extends class_base
 
 	/**  
 		
-		@attrib name=submit_admin_col params=name default="0"
+		@attrib name=submit_admin_col params=name 
 		
 		
 		@returns
@@ -222,7 +222,7 @@ class db_table_admin extends class_base
 
 	/**  
 		
-		@attrib name=admin_indexes params=name default="0"
+		@attrib name=admin_indexes params=name 
 		
 		@param id required
 		
@@ -282,14 +282,12 @@ class db_table_admin extends class_base
 			'name' => 'new',
 			'tooltip' => 'Lisa',
 			'url' => $this->mk_my_orb('admin_index', array('id' => $id)),
-			'imgover' => 'new_over.gif',
 			'img' => 'new.gif'
 		));
 		$tb->add_button(array(
 			'name' => 'delete',
 			'tooltip' => 'Kustuta',
 			'url' => 'javascript:del()',
-			'imgover' => 'delete_over.gif',
 			'img' => 'delete.gif'
 		));
 
@@ -318,7 +316,7 @@ class db_table_admin extends class_base
 
 	/**  
 		
-		@attrib name=submit_admin_indexes params=name default="0"
+		@attrib name=submit_admin_indexes params=name 
 		
 		
 		@returns
@@ -348,7 +346,7 @@ class db_table_admin extends class_base
 
 	/**  
 		
-		@attrib name=admin_index params=name default="0"
+		@attrib name=admin_index params=name 
 		
 		@param id required
 		@param index optional
@@ -396,7 +394,6 @@ class db_table_admin extends class_base
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
 			'url' => 'javascript:document.add.submit()',
-			'imgover' => 'save_over.gif',
 			'img' => 'save.gif'
 		));
 		$this->vars(array(
@@ -410,7 +407,7 @@ class db_table_admin extends class_base
 
 	/**  
 		
-		@attrib name=submit_admin_index params=name default="0"
+		@attrib name=submit_admin_index params=name 
 		
 		
 		@returns
@@ -487,14 +484,12 @@ class db_table_admin extends class_base
 			'name' => 'new',
 			'tooltip' => 'Lisa',
 			'url' => $that->mk_my_orb('admin_col', array('id' => $id)),
-			'imgover' => 'new_over.gif',
 			'img' => 'new.gif'
 		));
 		$tb->add_button(array(
 			'name' => 'delete',
 			'tooltip' => 'Kustuta',
 			'url' => 'javascript:del()',
-			'imgover' => 'delete_over.gif',
 			'img' => 'delete.gif'
 		));
 

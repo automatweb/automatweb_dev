@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/awmyadmin/Attic/db_table_contents.aw,v 1.8 2004/03/25 21:59:17 duke Exp $
 
 /*
 
@@ -54,7 +55,7 @@ class db_table_contents extends class_base
 
 	/**  
 		
-		@attrib name=change params=name default="0"
+		@attrib name=change params=name 
 		
 		@param id required
 		
@@ -88,7 +89,7 @@ class db_table_contents extends class_base
 
 	/**  
 		
-		@attrib name=content params=name default="0"
+		@attrib name=content params=name 
 		
 		@param id required
 		@param page optional
@@ -163,7 +164,7 @@ class db_table_contents extends class_base
 
 	/**  
 		
-		@attrib name=admin_content params=name default="0"
+		@attrib name=admin_content params=name 
 		
 		@param id required
 		@param page optional
@@ -261,14 +262,12 @@ class db_table_contents extends class_base
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
 			'url' => 'javascript:document.add.submit()',
-			'imgover' => 'save_over.gif',
 			'img' => 'save.gif'
 		));
 		$tb->add_button(array(
 			'name' => 'delete',
 			'tooltip' => 'Kustuta',
 			'url' => 'javascript:ddel()',
-			'imgover' => 'delete_over.gif',
 			'img' => 'delete.gif'
 		));
 
@@ -320,7 +319,7 @@ class db_table_contents extends class_base
 
 	/**  
 		
-		@attrib name=submit_admin_content params=name default="0"
+		@attrib name=submit_admin_content params=name 
 		
 		
 		@returns

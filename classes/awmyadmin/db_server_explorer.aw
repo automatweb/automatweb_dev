@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/awmyadmin/Attic/db_server_explorer.aw,v 1.8 2004/03/25 21:59:17 duke Exp $
 
 /*
 
@@ -25,7 +26,7 @@ class db_server_explorer extends class_base
 
 	/**  
 		
-		@attrib name=submit params=name default="0"
+		@attrib name=submit params=name 
 		
 		
 		@returns
@@ -49,7 +50,7 @@ class db_server_explorer extends class_base
 
 	/** this gets called when the user clicks on change object 
 		
-		@attrib name=change params=name default="0"
+		@attrib name=change params=name 
 		
 		@param id required
 		@param return_url optional
@@ -76,7 +77,7 @@ class db_server_explorer extends class_base
 
 	/**  
 		
-		@attrib name=tree params=name default="0"
+		@attrib name=tree params=name 
 		
 		@param id required
 		
@@ -148,7 +149,7 @@ class db_server_explorer extends class_base
 
 	/**  
 		
-		@attrib name=show_server params=name default="0"
+		@attrib name=show_server params=name 
 		
 		@param id required
 		@param server_id required
@@ -232,7 +233,7 @@ class db_server_explorer extends class_base
 
 	/**  
 		
-		@attrib name=show_database params=name default="0"
+		@attrib name=show_database params=name 
 		
 		@param id required
 		@param server_id required
@@ -306,7 +307,7 @@ class db_server_explorer extends class_base
 
 	/**  
 		
-		@attrib name=show_table params=name default="0"
+		@attrib name=show_table params=name 
 		
 		@param id required type=int
 		@param table required
@@ -323,7 +324,7 @@ class db_server_explorer extends class_base
 	**/
 	/**  
 		
-		@attrib name=admin_col params=name default="0"
+		@attrib name=admin_col params=name 
 		
 		@param id required type=int
 		@param table required
@@ -341,7 +342,7 @@ class db_server_explorer extends class_base
 	**/
 	/**  
 		
-		@attrib name=admin_indexes params=name default="0"
+		@attrib name=admin_indexes params=name 
 		
 		@param id required type=int
 		@param table required
@@ -358,7 +359,7 @@ class db_server_explorer extends class_base
 	**/
 	/**  
 		
-		@attrib name=admin_index params=name default="0"
+		@attrib name=admin_index params=name 
 		
 		@param id required type=int
 		@param table required
@@ -494,14 +495,12 @@ class db_server_explorer extends class_base
 			'name' => 'new',
 			'tooltip' => 'Lisa',
 			'url' => $this->mk_my_orb('admin_col', $arr),
-			'imgover' => 'new_over.gif',
 			'img' => 'new.gif'
 		));
 		$tb->add_button(array(
 			'name' => 'delete',
 			'tooltip' => 'Kustuta',
 			'url' => 'javascript:del()',
-			'imgover' => 'delete_over.gif',
 			'img' => 'delete.gif'
 		));
 
@@ -540,7 +539,6 @@ class db_server_explorer extends class_base
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
 			'url' => 'javascript:document.add.submit()',
-			'imgover' => 'save_over.gif',
 			'img' => 'save.gif'
 		));
 
@@ -569,7 +567,6 @@ class db_server_explorer extends class_base
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
 			'url' => 'javascript:document.add.submit()',
-			'imgover' => 'save_over.gif',
 			'img' => 'save.gif'
 		));
 		unset($arr['type']);
@@ -589,7 +586,7 @@ class db_server_explorer extends class_base
 
 	/**  
 		
-		@attrib name=submit_admin_col params=name default="0"
+		@attrib name=submit_admin_col params=name 
 		
 		
 		@returns
@@ -640,7 +637,7 @@ class db_server_explorer extends class_base
 
 	/**  
 		
-		@attrib name=submit_admin params=name default="0"
+		@attrib name=submit_admin params=name 
 		
 		
 		@returns
@@ -713,14 +710,12 @@ class db_server_explorer extends class_base
 			'name' => 'new',
 			'tooltip' => 'Lisa',
 			'url' => $this->mk_my_orb('admin_index', $arr),
-			'imgover' => 'new_over.gif',
 			'img' => 'new.gif'
 		));
 		$tb->add_button(array(
 			'name' => 'delete',
 			'tooltip' => 'Kustuta',
 			'url' => 'javascript:del()',
-			'imgover' => 'delete_over.gif',
 			'img' => 'delete.gif'
 		));
 
@@ -758,7 +753,6 @@ class db_server_explorer extends class_base
 			'name' => 'save',
 			'tooltip' => 'Salvesta',
 			'url' => 'javascript:document.add.submit()',
-			'imgover' => 'save_over.gif',
 			'img' => 'save.gif'
 		));
 		$arr['index'] = $index;
@@ -773,7 +767,7 @@ class db_server_explorer extends class_base
 
 	/**  
 		
-		@attrib name=submit_admin_indexes params=name default="0"
+		@attrib name=submit_admin_indexes params=name 
 		
 		
 		@returns
@@ -808,7 +802,7 @@ class db_server_explorer extends class_base
 
 	/**  
 		
-		@attrib name=submit_admin_index params=name default="0"
+		@attrib name=submit_admin_index params=name 
 		
 		
 		@returns

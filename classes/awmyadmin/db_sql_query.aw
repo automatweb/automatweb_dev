@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/awmyadmin/Attic/db_sql_query.aw,v 1.6 2004/03/25 21:59:17 duke Exp $
 /*
 
 	@default table=objects
@@ -20,14 +21,13 @@ class db_sql_query extends class_base
 	{
 		$this->class_base();
 		$this->init(array(
-			'tpldir' => 'awmyadmin/db_sql_query',
 			'clid' => CL_DB_SQL_QUERY
 		));
 	}
 
 	/**  
 		
-		@attrib name=change params=name all_args="1" default="0"
+		@attrib name=change params=name all_args="1" 
 		
 		@param id required
 		@param group optional
