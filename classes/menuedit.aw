@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.74 2001/11/28 17:00:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.75 2001/12/05 13:35:03 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -133,6 +133,15 @@ class menuedit extends aw_template
 		// aliasega, voi lopetab töö, kui miskit oli valesti
 		$section = $this->check_section($params["section"]);
 		$params["section"] = $section;
+
+		global $format,$act_per_id;
+		if ($format == "rss")
+		{
+			classload("document");
+			$d = new document();
+			$d->gen_rss_feed(array("period" => $act_per_id,"parent" => $section));
+
+                };
 
 		// koostame array vajalikest parameetritest, mis identifitseerivad cachetava objekti
 		$cp = array();
@@ -990,7 +999,7 @@ class menuedit extends aw_template
 			$this->li_cache = $d->li_cache;
 		}
 
-		$q = "SELECT * FROM objects WHERE class_id = " . CL_HTML_POPUP;
+		$q = "SELECT * FROM objects WHERE status = 2 AND class_id = " . CL_HTML_POPUP;
 		$this->db_query($q);
 		$popups = "";
 		while($row = $this->db_next())
@@ -1411,8 +1420,8 @@ class menuedit extends aw_template
 		}
 		else
 		{
-			global $HTTP_HOST;
-			if ($HTTP_HOST == "www.hermann.ee")
+			global $SITE_ID;
+			if ($SITE_ID == 88)
 			{
 				$this->read_template("folders_no_periods.tpl");
 			}
@@ -2137,6 +2146,8 @@ class menuedit extends aw_template
 
 		global $awt;
 		$awt->start("menuedit::gen_list_objs");
+
+		$this->mk_path($parent, "");
 
 		$mtype = $this->db_fetch_field("SELECT type FROM menu WHERE id = $parent", "type");
 		
