@@ -54,8 +54,12 @@ function setLink(li,title)
 <td class="celltext"><input type='checkbox' name='has_controllers' value=1 {VAR:has_controllers}></td>
 </tr>
 <tr class="aste01">
-<td class="celltext">Kasutab kalenderit:</td>
-<td class="celltext"><input type='checkbox' name='uses_calendar' value=1 {VAR:uses_calendar}></td>
+<td class="celltext">Side kalendriga:</td>
+<td class="celltext"><select name="calendar_role">{VAR:roles}></select></td>
+</tr>
+<tr class="aste01">
+<td class="celltext">Vormi sisestustel on kalender:</td>
+<td class="celltext"><input type='checkbox' name='has_calendar' value=1 {VAR:has_calendar}></td>
 </tr>
 <tr class="aste01">
 <td class="celltext" colspan=2>{VAR:LC_FORMS_CAN_EMAIL_ACTION}: &nbsp;<input type='checkbox' name='email_form_action' value=1 {VAR:email_form_action}></td>

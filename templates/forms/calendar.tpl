@@ -1,9 +1,11 @@
 <form action='reforb.{VAR:ext}' method=post name=ffrm>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+<!--
 <tr class="aste01">
 <td class="celltext">Vormi roll</td>
 <td class="celltext"><select name="calendar_role">{VAR:roles}</select></td>
 </tr>
+-->
 <!-- SUB: GENERAL -->
 <tr class="aste01">
 <td class="celltext" colspan=2><strong>Valige selle vormi roll!</strong></td>
@@ -71,6 +73,27 @@
 <td class="celltext"><select name="el_event_release" class="formselect2" {VAR:release_disabled}>{VAR:els_release}</select></td>
 </tr>
 <!-- END SUB: DEFINE -->
+<!-- SUB: DEFINE2 -->
+<tr class="aste01">
+<td class="celltext" colspan=2><strong>Kalendri defineerimine</strong></td>
+</tr>
+<tr class="aste01">
+<td class="celltext">Alguskuupäev:</td>
+<td class="celltext">{VAR:start}</td>
+</tr>
+<tr class="aste01">
+<td class="celltext">Lõpukuupäev:</td>
+<td class="celltext">{VAR:end}</td>
+</tr>
+<tr class="aste01">
+<td class="celltext">Kogus:</td>
+<td class="celltext"><input type="text" name="count" size="4" value="{VAR:count}"></td>
+</tr>
+<tr class="aste01">
+<td class="celltext">Perioodi pikkus:</td>
+<td class="celltext"><input type="text" name="period" size="4" value="{VAR:period}"><select><option>päev</option></select></td>
+</tr>
+<!-- END SUB: DEFINE2 -->
 <tr class="aste01">
 <td class="celltext" colspan=2><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
