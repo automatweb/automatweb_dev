@@ -9,7 +9,7 @@
 	@property test type=popup_objmgr multiple=1 height=550 width=650
 	@caption dfghdf1
 
-	@property test2 type=popup_objmgr
+	@property test2 type=popup_objmgr clid=CL_MAAKOND change=1
 	@caption dfghdf2
 
 	@property searching callback=search
@@ -24,6 +24,8 @@ class popup_objmgr extends class_base
 		extract($args);
 		//print_r($args);
 		$this->multiples = $multiple;
+		$this->force_clid = $force_clid;
+
 //		$this->check_name = $check_name;
 
 		$this->read_template("search.tpl");
@@ -39,26 +41,44 @@ class popup_objmgr extends class_base
 		$this->id = $id;
 		$obj = $this->get_object($id);
 
+
+				$return_url='javascript:document.location="'.
+					$this->mk_my_orb('instant_get',array('id' => $args['obj']['oid']),'popup_objmgr').
+				'instant_get=" + encodeURI(document.location.href);';
+
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("search",array(
 				'multiple' => $multiple,
 				"no_reforb" => 1,
 				"search" => 1,
 				"id" => $id,
-				"reltype" => $reltype
+				"reltype" => $reltype,
+				'force_clid' => $force_clid,
+				'return_url' => $return_url,
+//				'clid' => $clid,
 			)),
 			"toolbar" => $this->mk_toolbar(),
 			"form" => $form,
 			"table" => $search->get_results(),
 			'parent' => $parent,
-			'return_url' => $return_url,
+//			'return_url' =>$return_url,
 		));
 		$results = $search->get_results();
 
 		return $this->parse();
 	}
 
+	function instant_get($args)
+	{
+		extract($args);
+arr($args,1);
+//		echo $instant_get;
 
+		$this->read_template('instant_get.tpl');
+
+
+		return $this->parse();
+	}
 
 	function mk_toolbar()
 	{
@@ -98,7 +118,7 @@ class popup_objmgr extends class_base
 			"imgover" => "search_over.gif",
 			"img" => "search.gif",
 		));
-		
+
 		$toolbar->add_button(array(
 			"name" => "send_val",
 			"tooltip" => "Vali",
@@ -107,57 +127,72 @@ class popup_objmgr extends class_base
 			"img" => "import.gif",
 		));
 
-
 		return $toolbar->get_toolbar();
 	}
 
 	function search_callback_popup_get(&$row,$args)
 	{
 		$name=$this->check_name?$this->check_name:'sel';
-
-
 //		print_r($args);die();
-
 		if (!$args['multiple'])
 		{
-			$row["change"] = html::radiobutton(array('name' => $name, 'value' => $row['oid']));
-			$row["change"].= html::hidden(array('name' => 'selval['.$row['oid'].']', 'value' => htmlentities($row['name'])));
+			$row['change'] = html::radiobutton(array('name' => $name, 'value' => $row['oid']));
+			$row['change'].= html::hidden(array('name' => 'selval['.$row['oid'].']', 'value' => htmlentities($row['name'])));
 		}
 		else
 		{
-			$row["change"] = html::checkbox(array('name' => $name, 'value' => $row['oid']));
-			$row["change"].= html::hidden(array('name' => 'selval['.$row['oid'].']', 'value' => htmlentities($row['name'])));
+			$row['change'] = html::checkbox(array('name' => $name, 'value' => $row['oid']));
+			$row['change'].= html::hidden(array('name' => 'selval['.$row['oid'].']', 'value' => htmlentities($row['name'])));
 		}
 
 	}
-
-/*	function search_callback_modify_data($row,$args)
-	{
-//		$row["change"] = "<input type='checkbox' name='check' value='$row[oid]'>";
-//		$row["change"] = "<input type='radio' name='check' value='$row[oid]'>";
-
-		if(defined('USE_RADIO'))
-		{
-			$row["change"] = html::radiobutton(array('name' => 'sel', 'value' => $row['oid']));
-		}
-		else
-		{
-			$row["change"] = html::checkbox(array('name' => 'sel', 'value' => $row['oid']));
-		}
-	}
-*/
 
 
 	function search_callback_get_fields(&$fields,$args)
 	{
 		$fields = array();
-		$fields["special"] = "n/a";
-		$fields["class_id"] = array(
-			"type" => "select",
-			"caption" => "Klass",
-			"options" => array($args["s"]["class_id"] => $args["s"]["class_id"]),
-			"selected" => $args["s"]["class_id"],
-		);
+		$fields['special'] = 'n/a';
+//		$fields['class_id'] = 'n/a';
+		$fields['server'] = 'n/a';
+		$fields['site_id'] = 'n/a';
+		$fields['period'] = 'n/a';
+		$fields['lang_id'] = 'n/a';
+
+		if (!$args['force_clid'])
+		{
+			$classes = $this->cfg["classes"];
+		//print_r($classes);
+			foreach($classes as $clid => $cldat)
+			{
+				if (isset($cldat["alias"]))
+				{
+//				$fil = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
+//				preg_match("/(\w*)$/",$fil,$m);
+//				$lib = $m[1];
+				// indent the names
+//				$choices[$lib] = $cldat["name"];
+					$choices[$clid] = $cldat["name"];
+				}
+			}
+			asort($choices);
+			$fields["class_id"] = array(
+				"type" => "select",
+				"caption" => "Klass",
+				"options" => $choices,
+//			"selected" => $args['force_clid'],
+			);
+		}
+		else
+		{
+
+			$fields["class_id"] = array(
+				"type" => "select",
+				'multiple' => 1,
+				"caption" => "Klass",
+				"options" => array($args['force_clid'] => $this->cfg["classes"][$args['force_clid']]['name']),
+				"selected" => $args['force_clid'],
+			);
+		}
 	}
 
 
