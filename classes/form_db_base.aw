@@ -1427,6 +1427,7 @@ class form_db_base extends aw_template
 
 			$f_dat = $this->cache_get_form_eldat($fid);
 			$t_dat = $this->cache_get_form_eldat($n_fid);
+//			echo "eldat = $n_fid = <pre>", var_dump($t_dat),"</pre> <br>";
 		
 			$f_el = $f_dat["els"][$this->form_rel_tree[$fid][$n_fid]["el_from"]];
 			$t_el = $t_dat["els"][$this->form_rel_tree[$fid][$n_fid]["el_to"]];
@@ -1524,11 +1525,8 @@ class form_db_base extends aw_template
 			}
 			if ($chain_entries_only)
 			{
-				$where = " AND ".$rel_tbl.".chain_id IS NOT NULL ";
-			}
-			if ($limit_chain_id)
-			{
-				$where = " AND ".$rel_tbl.".chain_id = '$limit_chain_id' ";
+				$where .= " AND ".$rel_tbl.".chain_id IS NOT NULL ";
+				$where .= " AND ".$rel_tbl.".chain_id = '$limit_chain_id' ";
 			}
 		}
 
