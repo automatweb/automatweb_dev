@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.3 2002/03/19 14:39:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.1 2003/04/23 07:14:09 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -121,101 +121,6 @@ class converters extends aw_template
 			}
 			$this->restore_handle();
 		}
-	}
-	
-	function promo_convert($args = array())
-	{
-		$q = sprintf("SELECT oid,name,comment,metadata,menu.sss FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE class_id = %d AND site_id = %d",CL_PROMO,aw_ini_get("site_id"));
-		$this->db_query($q);
-		// so, basically, if I load a CL_PROMO object and discover that it's
-		// comment field is serialized - I will have to convert all promo
-		// boxes in the system.
-
-		// menu.sss tuleb ka unserialiseerida, saadud asjad annavad meile
-		// last_menus sisu
-
-		// so, how on earth do i make a callback into this class
-
-		$convert = false;
-
-		while($row = $this->db_next())
-		{
-			print "doing $row[oid]<br>";
-			$this->save_handle();
-			$meta_add = aw_unserialize($row["comment"]);
-			$last_menus = aw_unserialize($row["sss"]);
-			$meta = aw_unserialize($row["metadata"]);
-			if (is_array($last_menus) || is_array($meta_add))
-			{
-				$convert = true;
-			};
-			$meta["last_menus"] = $last_menus;
-			$meta["section"] = $meta_add["section"];
-			if ($meta_add["right"])
-			{
-				$meta["type"] = 1;
-			}
-			elseif ($meta_add["up"])
-			{
-				$meta["type"] = 2;
-			}
-			elseif ($meta_add["down"])
-			{
-				$meta["type"] = 3;
-			}
-			elseif ($meta_add["scroll"])
-			{
-				$meta["type"] = "scroll";
-			}
-			else
-			{
-				$meta["type"] = 0;
-			};
-			$meta["all_menus"] = $meta_add["all_menus"];
-			$comment = $meta_add["comment"];
-			// reset sss field of menu table
-			if ($convert)
-			{
-				$q = "UPDATE menu SET sss = '' WHERE id = '$row[oid]'";
-				$this->db_query($q);
-
-				$this->upd_object(array(
-					"oid" => $row["oid"],
-					"comment" => $comment,
-					"metadata" => $meta,
-				));
-			};
-			print "<pre>";
-			print_r($meta);
-			print "</pre>";
-			$this->restore_handle();
-			print "done<br>";
-			sleep(1);
-			flush();
-		};
-	}
-	
-	function convert_aliases()
-	{
-		$q = "SELECT target,source,type,relobj_id FROM aliases LEFT JOIN objects ON (aliases.relobj_id = objects.oid) WHERE objects.class_id = 179 AND relobj_id != 0";
-		$this->db_query($q);
-		$updates = array();
-		while($row = $this->db_next())
-		{
-			$updates[] = "UPDATE objects SET subclass = $row[type] WHERE oid = $row[relobj_id]";
-		};
-		if (is_array($updates))
-		{
-			foreach($updates as $q)
-			{
-				print $q;
-				print "<br>";
-				flush();
-				$this->db_query($q);
-				sleep(1);
-			};
-		};			
-		print "all done!<br>";
 	}
 };
 ?>
