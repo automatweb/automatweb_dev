@@ -1,7 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.158 2004/01/27 17:15:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.159 2004/01/28 16:59:47 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
+/*
+
+EMIT_MESSAGE(MSG_EVENT_ADD);
+
+*/
 
 /*
 
@@ -73,20 +78,23 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 
 	@default store=no
 
-	@property navtoolbar type=toolbar group=show_day,show_week,show_month no_caption=1
+	@property navtoolbar type=toolbar group=views no_caption=1
 	@caption Nav. toolbar
 
-	@property project type=hidden group=show_day,show_week,show_month
+	@property project type=hidden group=views
 	@caption Projekti ID
+	
+	@property calendar_contents type=calendar group=views no_caption=1
+	@caption Kalendri sisu
 
-	@property show_day callback=callback_show_day group=show_day 
-	@caption Päev
+	property show_day callback=callback_show_day group=show_day 
+	caption Päev
 	
-	@property show_week callback=callback_show_week group=show_week
-	@caption Nädal
+	property show_week callback=callback_show_week group=show_week
+	caption Nädal
 	
-	@property show_month callback=callback_show_month group=show_month
-	@caption Kuu
+	property show_month callback=callback_show_month group=show_month
+	caption Kuu
 	
 	@property add_event callback=callback_get_add_event group=add_event 
 	@caption Lisa sündmus
@@ -94,10 +102,10 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 	@groupinfo general caption=Seaded
 	@groupinfo general2 caption=Üldine parent=general
 	@groupinfo advanced caption=Sisuseaded parent=general
-	@groupinfo views caption=Vaated
-	@groupinfo show_day caption=Päev submit=no parent=views
-	@groupinfo show_week caption=Nädal submit=no parent=views
-	@groupinfo show_month caption=Kuu submit=no default=1 parent=views
+	@groupinfo views caption=Sündmused submit=no
+	groupinfo show_day caption=Päev submit=no parent=views
+	groupinfo show_week caption=Nädal submit=no parent=views
+	groupinfo show_month caption=Kuu submit=no default=1 parent=views
 	@groupinfo time_settings caption=Ajaseaded parent=general
 	@groupinfo special caption=Spetsiaalne parent=general
 	@groupinfo add_event caption="Muuda sündmust"
@@ -250,6 +258,10 @@ class planner extends class_base
 					"disp_day2.tpl" => "Päev",
 				);
 				break;
+	
+			case "calendar_contents":
+				$this->gen_calendar_contents($arr);
+				break;
 
 		}
 		return $retval;
@@ -282,6 +294,128 @@ class planner extends class_base
 
 		}
 		return $retval;
+	}
+
+	////
+	// !Returns an array of event id, start and end times in requested range
+	// required arguments
+	// id - calendar object
+	function get_event_list($arr)
+	{
+		$obj = new object($arr["id"]);
+
+		$folders = $event_ids = array();
+
+		if ($obj->prop("event_folder") != "")
+		{
+			$folders[] = $obj->prop("event_folder");
+		};
+
+		if (empty($arr["start"]))
+		{
+			$di = get_date_range(array(
+				"date" => isset($arr["date"]) ? $arr["date"] : date("d-m-Y"),
+				"type" => $arr["type"],
+			));
+
+			$_start = $di["start"];
+			$_end = $di["end"];
+		}
+		else
+		{
+			$_start = $arr["start"];
+			$end = $arr["end"];
+		};
+		
+		// generate a list of folders from which to take events
+		// both calendars and projects have "event_folder"'s
+		$folderlist = $obj->connections_from(array(
+			"type" => RELTYPE_EVENT_SOURCE,
+		));
+
+		foreach($folderlist as $conn)
+		{
+			$_tmp = $conn->to();
+			if ($_tmp->prop("event_folder") != "")
+			{
+				$folders[] = $_tmp->prop("event_folder");
+			};
+		};
+		
+		// also include events from any projects that are connected to this calender
+		// if the user wants so
+		if ($obj->prop("my_projects") == 1)
+		{
+			$project = aw_global_get("project");
+			$prj = get_instance(CL_PROJECT);
+			$event_ids = $event_ids + $prj->get_events_from_projects(array(
+				"project_id" => aw_global_get("project"),
+				"type" => "my_projects",
+			));
+		};
+		
+		$rv = array();
+		// a project is selected, but no events in range? Just return
+		// an empty array!
+		if ($project && sizeof($event_ids) == 0)
+		{
+			return $rv;
+		};
+
+		$eidstr = $parstr = "";
+		if (sizeof($event_ids) > 0)
+		{
+			$eidstr = " objects.oid IN (" . join(",",$event_ids) . ")";
+			if ($project)
+			{
+				$eidstr = " AND" . $eidstr;
+			}
+			else
+			{
+				$eidstr = " OR" . $eidstr;
+			};
+		};
+
+		if (sizeof($folders) > 0)
+		{
+			$parstr = " AND objects.parent IN (" . join(",",$folders) . ")";
+		};
+
+
+		// that is the basic query
+		// I need to add different things to it
+		$q = "SELECT objects.oid AS id,objects.name,planner.start,planner.end
+			FROM planner
+			LEFT JOIN objects ON (planner.id = objects.brother_of)
+			WHERE planner.start >= '${_start}' AND
+			(planner.end <= '${_end}' OR planner.end IS NULL) AND
+			objects.status != 0";
+
+		// I could probably optimize this even further by not processing folders,
+		// if events from a projects were requested.
+
+
+		// if events from a project were requested, then include events
+		// from that projects only - id's are in event_ids array()
+		if ($project)
+		{
+			$q .= $eidstr;
+		}
+		// include events from all folders and all projects
+		else
+		{
+			$q .= $parstr . $eidstr;
+		}
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$rv[] = array(
+				"id" => $row["id"],
+				"start" => $row["start"],
+				"end" => $row["end"],
+			);
+		};
+		return $rv;
 	}
 
 	// this is called from calendar "properties"
@@ -334,72 +468,19 @@ class planner extends class_base
 		$_end = $di["end"];
 
 
-
-		// generate a list of folders from which to take events
-		$cal_conns = $obj->connections_from(array(
-			"type" => RELTYPE_EVENT_SOURCE,
-		));
-
-		$folders = array($folder);
-		foreach($cal_conns as $conn)
-		{
-			$_tmp = new object($conn->prop("to"));
-			$folders[] = $_tmp->prop("event_folder");
-		};
-
-
-		// also include events from any projects that are connected to this calender
-		// if the user wants so
-		if ($obj->prop("my_projects") == 1)
-		{
-			$project = aw_global_get("project");
-			$additional_ids = $prj->get_events_from_projects(array(
-				"project_id" => aw_global_get("project"),
-				"type" => "my_projects",
-			));
-		};
-
-		// ok, what the fuck is going on here?
-
-		// holy cow, can't I limit that stuff somehow? I really don't need to read _all_ the events do I?
-		// XXX: convert to object_list. For this I need to make sure I get all the users of "events" array
-		if (sizeof($additional_ids) > 0)
-		{
-			if (empty($project))
-			{
-				$add = " OR objects.oid IN ( " . join(",",$additional_ids) . ")";
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE (objects.parent IN (%s) $add)  AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) AND objects.status != 0",join(",",$folders));
-			}
-			else
-			{
-				$add = " AND objects.oid IN ( " . join(",",$additional_ids) . ")";
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.status != 0 $add AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL)");
-			};
-		}
-		else
-		if (!empty($project))
-		{
-			$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = -1 AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) AND objects.status != 0";
-		}
-		else
-		{
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND planner.start >= '${_start}' AND (planner.end <= '${_end}' OR planner.end IS NULL) AND objects.status != 0",join(",",$folders));
-
-
-		};
-
-		$this->db_query($q);
-		$events = array();
+		$events = $this->get_event_list($args);
 		$reflist = array();
 		// now, if a project has been requested from the URL, I need to do additional filtering for each object
 
 		// we sure pass around a LOT of data
 		$this->events_done = true;
-		while($row = $this->db_next())
+		$rv = array();
+		foreach($events as $event)
 		{
-			$gx = date("dmY",$row["start"]);
-			$row["meta"] = aw_unserialize($row["metadata"]);
-			unset($row["metadata"]);
+			// fuck me. plenty of places expect different data from me .. until I'm
+			// sure that nothing breaks, I can't remove this
+			$row = $event + $this->get_object($event["id"]);
+			$gx = date("dmY",$event["start"]);
 			if ($this->content_gen_class)
 			{
 				$this->save_handle();
@@ -407,16 +488,17 @@ class planner extends class_base
 						"class" => $this->content_gen_class,
 						"action" => $this->content_gen_method,
 						"params" => array(
-							"id" => $row["oid"],
+							"id" => $event["id"],
 						),
 					));
 				$this->restore_handle();
 			}
-			$row["link"] = $this->mk_my_orb("change",array(
-				"id" => $id,
-				"group" => "add_event",
-				"event_id" => $row["oid"],
+
+			$row["link"] = $this->get_event_edit_link(array(
+				"cal_id" => $this->id,
+				"event_id" => $event["id"],
 			));
+
 			$eo = new object($row["oid"]);
 			if ($row["brother_of"] != $row["oid"])
 			{
@@ -431,28 +513,17 @@ class planner extends class_base
 				$row["flags"] = $real_obj["flags"];
 				$this->restore_handle();
 			};
-			if ($row["class_id"] == CL_CRM_CALL || $row["class_id"] == CL_CRM_MEETING)
-			{
-				$icon = icons::get_icon_url($eo);
-				$row["name"] = html::img(array(
-					"url" => $icon,
-					"border" => 0,
-				)) . $row["name"];
-
-			};
-
-
 
 			if ($row["status"] != 0)
 			{
-				$row["event_icon_url"] = icons::get_icon_url($row["class_id"]);
-				$events[$gx][$row["brother_of"]] = $row;
-				$reflist[] = &$events[$gx][$row["brother_of"]];
+				$row["event_icon_url"] = icons::get_icon_url($eo);
+				$rv[$gx][$row["brother_of"]] = $row;
+				$reflist[] = &$rv[$gx][$row["brother_of"]];
 			};
 		};
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day"));
 		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week"));
-		return isset($args["flatlist"]) ? $reflist : $events;
+		return isset($args["flatlist"]) ? $reflist : $rv;
 	}
 
 	////
@@ -1052,8 +1123,10 @@ class planner extends class_base
 		// äkki ma saan seda nii teha, et isiku juures üldse sündmust ei salvestata,
 		// vaid broadcastitakse vastav message .. ja siis kalender tekitab selle sündmuse?
 
-		preg_match('/alias_to_org=(\w*)/', $gl, $o);
-		preg_match('/reltype_org=(\w*)/', $gl, $r);
+
+		preg_match('/alias_to_org=(\w*)&/', $gl, $o);
+		preg_match('/reltype_org=(\w*)&/', $gl, $r);
+
 		if (is_numeric($o[1]) && is_numeric($r[1]))
 		{
 			$org_obj = new object($o[1]);
@@ -1072,6 +1145,11 @@ class planner extends class_base
 				)
 			);
 		}
+
+
+
+
+		
 		return PROP_OK;
 	}
 
@@ -1560,6 +1638,7 @@ class planner extends class_base
 				"id" => $id,
 				"ctrl" => $ctrl,
 			));
+
 		};
 
 		$this->vars(array(
@@ -2959,5 +3038,92 @@ class planner extends class_base
 		));
 
 	}
+
+	function gen_calendar_contents($arr)
+	{
+		// I need another function that configures the calendar. somehow. in some way
+		$arr["prop"]["vcl_inst"]->configure(array(
+			"tasklist_func" => array(&$this,"get_tasklist"),
+			"overview_func" => array(&$this,"get_overview"),
+		));
+
+		$range = $arr["prop"]["vcl_inst"]->get_range(array(
+			"date" => $arr["request"]["date"],
+			"viewtype" => $arr["request"]["viewtype"],
+		));
+
+		// that is all nice and well. But I also need a separate function for 
+		// overview
+		$events = $this->_init_event_source(array(
+			"id" => $arr["request"]["id"],
+			"type" => $range["viewtype"],
+			"flatlist" => 1,
+			"date" => date("d-m-Y",$range["timestamp"]),
+		));
+
+		foreach($events as $event)
+		{
+			$arr["prop"]["vcl_inst"]->add_item(array(
+				"timestamp" => $event["start"],
+				"data" => array(
+					"name" => $event["name"],
+					"icon" => $event["event_icon_url"],
+					"link" => $event["link"],
+				),
+			));
+		};
+
+		// set it, so the callback functions can use it
+		$this->calendar_inst = $arr["obj_inst"];
+
+	}
+
+	function get_overview($arr = array())
+	{
+		$events = $this->get_event_list(array(
+			"id" => $this->calendar_inst->id(),
+			"start" => $arr["start"],
+			"end" => $arr["end"],
+		));
+		$rv = array();
+		foreach($events as $event)
+		{
+			$rv[$event["start"]] = 1;
+		};
+		return $rv;
+	}
+
+	function get_tasklist($arr = array())
+	{
+		$tasklist = new object_list(array(
+			"class_id" => CL_TASK,
+			"parent" => $this->calendar_inst->prop("event_folder"),
+			"status" => STAT_ACTIVE,
+		));
+
+		$rv = array();
+
+		foreach($tasklist->arr() as $task)
+		{
+			if ($task->is_brother())
+			{
+				$task = $task->get_original();
+				if ($task->status() != STAT_ACTIVE)
+				{
+					continue;
+				};
+			};
+
+			$rv[] = array(
+				"name" => $task->prop("name"),
+				"url" => $this->get_event_edit_link(array(
+					"cal_id" => $this->calendar_inst->id(),
+					"event_id" => $task->id(),
+				)),
+			);
+		};
+		return $rv;
+	}
+
 };
 ?>
