@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.14 2001/06/05 17:44:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.15 2001/06/05 19:14:08 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -333,27 +333,43 @@ class document extends aw_template
 		// s22stap yhe p2ringu.
 		$doc 		= $params["doc"]; 
 		
-		global $classdir;
-		global $ext;
-	
+		global $classdir,$baseurl,$ext,$awt;
+
+		$awt->count("db_documents->gen_preview()");
+		$awt->start("doc_gen_preview");
+
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
+
+		$awt->start("gen_preview1");
 	
 		// küsime dokumendi kohta infot
 		// muide docid on kindlasti numbriline, aliaseid kasutatakse ainult
 		// menueditis.
-		$doc = $this->fetch($docid);
+		if (!is_array($doc))
+		{
+			$doc = $this->fetch($docid);
+			$docid=$doc["docid"];
+		}
 
+	
+		if (!is_array($doc))
+		{
+			$doc = $this->fetch($docid);
+			$docid = $doc["docid"];
+		];
 		if (!$doc)
 		{
 			// objekti polnud, bail out
 			return false;
 		};
 		
+		$awt->start("db_documents->gen_preview()::starter");
+		$this->tpl_reset();
+		$this->tpl_init("automatweb/documents");
+		
 		$this->no_right_pane = $doc["no_right_pane"];	// see on sellex et kui on laiem doku, siis menyyeditor tshekib
 		$this->no_left_pane = $doc["no_left_pane"];		// neid muutujaid ja j2tab paani 2ra kui tshekitud on.
 
-		$this->tpl_reset();
-		$this->tpl_init("automatweb/documents");
 
 		// kui tpls anti ette, siis loeme template sealt,
 		// muidu failist.
@@ -365,6 +381,13 @@ class document extends aw_template
 			$this->read_template($tpl);
 		};
 		$this->vars(array("imurl" => "/images/trans.gif"));
+
+		// load localization settings and put them in the template
+		lc_site_load("document");
+		if (is_array($GLOBALS["lc_doc"]))
+		{
+			$this->vars($GLOBALS["lc_doc"]);
+		 }
 		// leiame kategooria cache jaoks
 		// vastavalt sellele kas kysiti leadi voi kogu asja
 		
@@ -379,33 +402,31 @@ class document extends aw_template
 		// laeme vajalikud klassid
 		classload("acl","styles","form","table","extlinks","images","gallery");
 
-		$extlinks = new extlinks;
-		$extlinks->db_init();
 		$tbl = new table;
-
 		$img = new db_images;
-		list($aliases,$idx) = $this->get_aliases(array(
-						"oid" => $docid,
-				));
-		$formlist = array();
-		$fc = 0;
-
 		$retval = "";
-
 		$used = array();
+
+		$awt->stop("db_documents->gen_preview()::starter");
+		$awt->start("db_documents->gen_preview()::leadonly_bit");
 
 		// kui vaja on näidata ainult dokumendi leadi, siis see tehakse siin
  		if ($leadonly > -1) 
 		{
+			// we have some really stupid code here, me thinks
 			// stripime pildid välja. ja esimese pildi salvestame cachesse
 			// et seda mujalt kätte saaks
 			if ($strip_img) {
+				// otsime pilditage 
 		 		if (preg_match("/#p(\d+?)(v|k|p|)#/i",$doc[lead],$match)) {
+					// asendame 
 					$idata = $img->get_img_by_oid($docid,$match[1]);
 					$this->li_cache[$docid] = $idata[url];
 				} else {
+					// ei leidnud, asendame voimaliku pildi url-i transparent gif-iga
 					$this->vars(array("imurl" => "/images/trans.gif"));
 				};
+				// ja stripime leadist *koik* objektitagid välja.
 				$doc[lead] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc[lead]);
 			};
 			$doc[content] = "$doc[lead]<br>";
@@ -425,9 +446,14 @@ class document extends aw_template
 				$doc[content] = $txt;
 			};
 		};
+		$awt->stop("db_documents->gen_preview()::leadonly_bit");
 
 		// all the style magic is performed inside the style engine
 		$doc["content"] = $this->style_engine->parse_text($doc["content"]); 
+		
+		$doc[content] = preg_replace("/<loe_edasi>(.*)<\/loe_edasi>/isU","<a href='$baseurl/index.$ext/section=$docid'>\\1</a>",$doc[content]);
+		// sellel real on midagi pistmist WYSIWYG edimisvormiga
+		$doc[content] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc[content]); 
 
 		$mp = $this->register_parser(array(
 					"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
@@ -496,14 +522,6 @@ class document extends aw_template
 					"function" => "parse_alias",
 				));
 
-
-	
-		
-		global $baseurl,$ext;
-
-
-		$doc[content] = preg_replace("/<loe_edasi>(.*)<\/loe_edasi>/isU","<a href='$baseurl/index.$ext/section=$docid'>\\1</a>",$doc[content]);
-
 		if ($notitleimg != 1)
 		{
 			$doc["title"] = $this->parse_aliases(array(
@@ -522,8 +540,6 @@ class document extends aw_template
 			$doc[content] = str_replace("#board_last5#",$mb->mk_last5(),$doc[content]);
 		}
 
-		$doc[content] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc[content]);
-		
 		// noja, mis fucking "undef" see siin on?
 		if ($text != "undef") {
 			$doc["content"] = $this->parse_aliases(array(
@@ -533,19 +549,10 @@ class document extends aw_template
 
 		}; 
 
-		// see on ka eri kuradi fun asi siin
-		if ($docid == 64 || $docid == 65) 
-		{
-			$doc[content] = str_replace("\r\n\r\n","<br>",$doc[content]);
-		} 
-		else 
-		{
-			if (!$doc["nobreaks"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
+		if (!$doc["nobreaks"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 			{
 				$doc[content] = str_replace("\r\n","<br>",$doc[content]);
 			}
-		};
-
 		
 		$doc[content] = str_replace("\n","",$doc[content]);
 //		
@@ -633,9 +640,56 @@ class document extends aw_template
 		$doc[content] = str_replace("<kommentaaride arv>",$nc,$doc[content]);
 
 		$doc[content] = preg_replace("/<kommentaar>(.*)<\/kommentaar>/isU","<a class=\"links\" href='$baseurl/comments.$ext?section=$docid'>\\1</a>",$doc[content]);
+
+	// <mail to="bla@ee">lahe tyyp</mail>
+    $doc[content] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc[content]);
 		
 		$doc[content] = str_replace("#current_time#",$this->time2date(time(),2),$doc[content]);
+
+	classload("users");
+	if (!(strpos($doc[content],"#liitumisform") === false))
+	{
+		preg_match("/#liitumisform info=\"(.*)\"#/",$doc[content], $maat);
+ 
+      // siin tuleb n2idata kasutaja liitumisformi, kuhu saab passwordi ja staffi kribada.
+      // aga aint sel juhul, kui kasutaja on enne t2itnud k6ik miski grupi formid.
+		$dbu = new users;
+		$doc[content] = preg_replace("/#liitumisform info=\"(.*)\"#/",$dbu->get_join_form($maat[1]),$doc[content]);
+	}
 				
+	// keywordide list. bijaatch!
+	if (!(strpos($doc["content"],"#huvid_form") === false))
+	{
+		preg_match("/#huvid_form algus=\"(.*)\" go=\"(.*)\"#/",$doc["content"], $maat);
+ 
+			classload("keywords");
+			$kw = new keywords;
+			$t_int_form = $kw->show_interests_form($maat[1],$maat[2]);
+ 
+			$doc["content"] = preg_replace("/#huvid_form algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
+		}
+ 
+		if (!(strpos($doc["content"],"#huvid_check") === false))
+		{
+			preg_match("/#huvid_check algus=\"(.*)\" go=\"(.*)\"#/",$doc["content"], $maat);
+			classload("keywords");
+			$kw = new keywords;
+			$t_int_form = $kw->show_interests_form2(array(
+							"beg" => $maat[1],
+							"section" => $maat[2],
+				));
+			$doc["content"] = preg_replace("/#huvid_check algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
+    }
+ 
+		if (!(strpos($doc["content"],"#huvid_kategooriad") === false))
+		{
+			preg_match("/#huvid_kategooriad go=\"(.*)\"#/",$doc["content"], $maat);
+			classload("keywords");
+			$kw = new keywords;
+			$blah = $kw->show_categories(array("after" => $maat[1]));
+			$doc["content"] = preg_replace("/#huvid_kategooriad go=\"(.*)\"#/",$blah,$doc["content"]);
+		}
+
 	if ($doc[author]) {
 	  if (DOC_LINK_AUTHORS && ($this->templates[ablock])) {
 		// YYY
@@ -696,8 +750,11 @@ class document extends aw_template
 		if ($doc[lead_comments]==1)
 			$lc = $this->parse("lead_comments");
 
-		$this->db_query("SELECT * FROM menu WHERE id = ".$doc[parent]);
-		$mn = $this->db_next();
+		if ($doc[parent])
+		{
+			$this->db_query("SELECT * FROM menu WHERE id = ".$doc[parent]);
+			$mn = $this->db_next();
+		}
 
 		$title = $doc[title];
 		$this->vars(array("title"    => $title,
@@ -719,11 +776,118 @@ class document extends aw_template
 					"LANG" => $langs,
 					"SEL_LANG" => "",
 					"menu_addr"	=> $mn[link],
-					"lead_br"	=> $doc[lead] != "" ? "<br>" : ""));
+					"lead_br"	=> $doc[lead] != "" ? "<br>" : "",
+					"doc_count" => $this->doc_count++,
+					"title_target" => $doc["newwindow"] ? "target=\"_blank\"" : "",
+					"title_link"  => ($doc["link_text"] != "" ? $doc["link_text"] : $GLOBALS["doc_file"]."section=".$docid),
+
+));
 		$this->ignore("image");
 
 		if ($leadonly > -1 && $doc[title_clickable])
 			$this->vars(array("TITLE_LINK_BEGIN" => $this->parse("TITLE_LINK_BEGIN"), "TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));
+
+		if ($this->prog_acl("view", PRG_MENUEDIT))
+		{
+			$this->vars(array("EDIT" => $this->parse("EDIT")));
+		}
+
+		$sht= "";
+    if ($doc["show_title"] == 1)
+    {
+      $sht = $this->parse("SHOW_TITLE");
+    }
+    $this->vars(array("SHOW_TITLE" => $sht));
+ 
+    // keeleseosed
+		if ($this->is_template("LANG_BRO"))
+		{
+			$lab = unserialize($doc["lang_brothers"]);
+			$langs = "";
+			if (!is_array($larr))
+			{
+				classload("languages");
+				$l = new languages;
+				$larr = $l->listall();
+				reset($larr);
+				while (list(,$v) = each($larr))
+				{
+					if ($lab[$v["id"]])
+					{
+						$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"],"section" => $lab[$v["id"]]));
+						if ($GLOBALS["lang_id"] == $v["id"])
+						{
+							$langs.=$this->parse("SLANG_BRO");
+						}
+						else
+						{
+							$langs.=$this->parse("LANG_BRO");
+							// tshekime et kui sellel dokul pole m22ratud muutmise kuup2eva, siis vaatame kas m6nel seotud dokul on
+						// ja kui on, siis kasutame seda
+						if ($tm == "")
+						{
+							$tm = $this->db_fetch_field("SELECT tm FROM documents WHERE
+docid = ".$lab[$v["id"]],"tm");
+						}
+            }
+          }
+        }
+        $this->vars(array("LANG_BRO" => $langs));
+      }
+    }
+		
+		$tm = $doc["tm"];
+		if ($tm == "")
+		{
+			$tm = $this->time2date($doc["modified"],8);
+		}
+
+		if ($doc["show_modified"])
+		{
+			$this->vars(array("SHOW_MODIFIED" => $this->parse("SHOW_MODIFIED")));
+		}
+
+		// failide ikoonid kui on template olemas, namely www.stat.ee jaox
+ 		if ($this->is_template("FILE"))
+		{
+			$ftypearr = array(
+				"application/pdf" => "pdf",
+				"text/richtext" => "rtf",
+				"application/msword" => "doc",
+				"application/vnd.ms-excel" => "xls",
+				"text/html" => "html",
+				"image/gif" => "gif",
+      			);
+			 reset($aliases);
+			while (list(,$ar) = each($aliases))
+			{
+				if ($ar["type"] == CL_FILE)
+				{
+					$this->db_query("SELECT objects.name as name, files.type AS type,objects.comment as comment FROM objects LEFT JOIN files ON files.id = objects.oid WHERE objects.oid = ".$ar["target"]);
+					$fif = $this->db_next();
+ 
+					$im = $ftypearr[$fif["type"]];
+					if ($im != "" && $im != "html")
+					{
+						$this->vars(array(
+							"url" => $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$ar["target"]."/".urlencode($fif["name"]),
+							"im" => $im == "" ? "fil" : $im
+						));
+ 
+						$fff.=$this->parse("FILE");
+					}
+				}
+			}
+			$this->vars(array("FILE" => $fff));
+		}
+ 
+		$cr = "";
+		if ($doc["copyright"])
+		{
+			$cr = $this->parse("COPYRIGHT");
+		}
+		
+		$this->vars(array("COPYRIGHT" => $cr));
 
 		$retval = $this->parse();
 		$this->reset;
@@ -2428,6 +2592,17 @@ class document extends aw_template
 			$this->add_alias($id,$arow["target"], $arow["data"]);
 		}
 		return true;
+	}
+	
+	function ekomar_form($id)
+	{
+		$tt = new aw_template();
+		$tt->sub_merge = 1;
+		$tt->tpl_init("automatweb/documents");
+		$tt->read_template("ekomar_form.tpl");
+		$tt->vars(array("section" => $GLOBALS["section"],"notfound" => $id));
+		$r = $tt->parse();
+		return $r;
 	}
 };
 ?>
