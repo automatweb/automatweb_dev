@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.8 2004/03/18 16:18:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.9 2004/03/24 13:46:52 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -22,6 +22,10 @@ class releditor extends aw_template
 		$clid = $arr["prop"]["clid"][0];
 
 		$props = $arr["prop"]["props"];
+		if (!is_array($props) && !empty($props))
+		{
+			$props = array($props);
+		};
 		$xprops = array();
 
 		$errors = false;
