@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.41 2004/03/12 11:57:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.42 2004/03/15 13:28:57 kristo Exp $
 
 /*
 
@@ -190,7 +190,8 @@ class gallery_v2 extends class_base
 		$rv = false;
 		foreach($oc as $dat)
 		{
-			if (($mnid = $this->db_fetch_field("SELECT conf_id FROM gallery_conf2menu WHERE menu_id = '$dat[oid]'","conf_id")))
+			$q = "SELECT conf_id FROM gallery_conf2menu LEFT JOIN objects ON objects.oid = gallery_conf2menu.conf_id WHERE menu_id = '$dat[oid]' AND objects.status != 0";
+			if (($mnid = $this->db_fetch_field($q,"conf_id")))
 			{
 				$rv = $mnid;
 			}
