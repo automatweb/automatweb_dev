@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.160 2003/10/30 16:49:47 duke Exp $
+// $Id: class_base.aw,v 2.161 2003/10/30 18:11:43 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -720,6 +720,7 @@ class class_base extends aw_template
 				"link" => &$link,
 				"caption" => &$val["caption"],
 				"id" => $key,
+				"obj_inst" => &$this->obj_inst,
 				"tp" => &$this->tp,
 				"coredata" => $this->coredata,
 				"request" => $this->request,
