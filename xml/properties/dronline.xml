@@ -46,41 +46,29 @@
             <group>general</group>
             <caption>Kuni</caption>
       </property>
+      <property>
+            <name>save_as_obj</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Salvesta p&amp;auml;ring log objektiks</caption>
+      </property>
+      <property>
+            <name>save_as_obj_name</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Log objekti nimi</caption>
+      </property>
       <groupinfo>
             <general>
                   <caption>Üldine</caption>
-                  <default>1</default>
             </general>
-            <dates>
-                  <caption>Ajad</caption>
-            </dates>
-            <Javascript>
-                  <caption>Javascript</caption>
-            </Javascript>
-            <Pilt>
-                  <caption>Pilt</caption>
-            </Pilt>
-            <advanced>
-                  <caption>Spetsiaal</caption>
-            </advanced>
-            <keywords>
-                  <caption>Võtmesõnad</caption>
-            </keywords>
-            <relations>
-                  <caption>Seosed</caption>
-            </relations>
-            <presentation>
-                  <caption>Presentatsioon</caption>
-            </presentation>
-            <show>
-                  <caption>Näitamine</caption>
-            </show>
-            <menus>
-                  <caption>Menüüd</caption>
-            </menus>
-            <preview>
-                  <caption>Eelvaade</caption>
-            </preview>
       </groupinfo>
       <tableinfo>
             <files>

@@ -22,6 +22,12 @@
 @property to type=date_select 
 @caption Kuni
 
+@property save_as_obj type=checkbox ch_value=1
+@caption Salvesta p&auml;ring log objektiks
+
+@property save_as_obj_name type=textbox
+@caption Log objekti nimi
+
 @groupinfo general caption=Üldine
 
 */
@@ -128,6 +134,13 @@ class dronline extends class_base
 		);
 		$ret = parent::change($arr);
 
+		// if no conf object has been set yet, return the change form
+		$ob = $this->get_object($id);
+		if (!$ob['meta']['conf'])
+		{
+			return $ret;
+		}
+
 		unset($arr['class']);
 		unset($arr['action']);
 
@@ -160,6 +173,12 @@ class dronline extends class_base
 			'active' => ($dro_tab == 'ipblock'  ? true : false),
 			'caption' => 'IP Blokk',
 			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'ipblock')))
+		));
+
+		$tbp->add_tab(array(
+			'active' => ($dro_tab == 'show_queries'  ? true : false),
+			'caption' => 'Salvestatud p&auml;ringud',
+			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'show_queries')))
 		));
 
 		$fn = '_do_'.$dro_tab;
@@ -216,20 +235,32 @@ class dronline extends class_base
 			'sortable' => 1,
 		));
 
-		if ($show_oid)
-		{
-			$whc = $this->get_where_clause($id,' AND ');
-			$whc = " WHERE syslog.oid = '$show_oid' ".$whc;
-		}
-		else
-		{
-			$whc = $this->get_where_clause($id);
-		}
-
 		$ts = aw_ini_get('syslog.types');
 		$as = aw_ini_get('syslog.actions');
 
-		$q = "SELECT * FROM syslog ".$whc." ORDER BY tm DESC ".$this->get_limit_clause($id);
+		if ($query != '')
+		{
+			$q = $query;
+		}
+		else
+		{
+			if ($show_oid)
+			{
+				$whc = $this->get_where_clause($id,' AND ');
+				$whc = " WHERE syslog.oid = '$show_oid' ".$whc;
+			}
+			else
+			{
+				$whc = $this->get_where_clause($id);
+			}
+
+			$q = "SELECT * FROM syslog ".$whc." ORDER BY tm DESC ".$this->get_limit_clause($id);
+			if ($ret_query)
+			{
+				return $q;
+			}
+		}
+
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
@@ -283,7 +314,8 @@ class dronline extends class_base
 		}
 		if ($mt['textfilter'] != '')
 		{
-			$sql[] = 'action LIKE \'%'.$mt['textfilter'].'%\'';
+			$tfl = explode(',', $mt['textfilter']);
+			$sql[] = '('.join(' OR ', map('action LIKE \'%%%s%%\'', $tfl)).')';
 		}
 
 		// action filter
@@ -443,12 +475,25 @@ class dronline extends class_base
 
 		$tmsp = $this->timespans[$cur_range]['sql'];
 
-		$q = "SELECT count(*) as cnt,$tmsp as tm1, tm 
-				FROM syslog
-				".$this->get_where_clause($id)."
-				GROUP BY tm1
-				ORDER BY tm ASC
-				".$this->get_limit_clause($id);
+		if ($query != '')
+		{
+			$q = $query;
+		}
+		else
+		{
+			$q = "SELECT count(*) as cnt,$tmsp as tm1, tm 
+					FROM syslog
+					".$this->get_where_clause($id)."
+					GROUP BY tm1
+					ORDER BY tm ASC
+					".$this->get_limit_clause($id);
+		}
+
+		if ($ret_query)
+		{
+			return $q;
+		}
+
 		$this->db_query($q);
 		$max = 1;
 		$dat = array();
@@ -471,6 +516,12 @@ class dronline extends class_base
 		$t->set_default_sortby('tm');
 		$t->sort_by();
 		$tbl = $t->draw();
+		
+		if ($query != '')
+		{
+			// if we are showing from a static query, we can't change it anyway
+			return $tbl;
+		}
 
 		unset($arr['cur_range']);		
 		$this->read_template('sel_range.tpl');
@@ -535,12 +586,25 @@ class dronline extends class_base
 			'sortable' => 0,
 		));
 
-		$q = "SELECT count(*) as cnt,ip 
-				FROM syslog
-				".$this->get_where_clause($id)."
-				GROUP BY ip
-				ORDER BY cnt DESC
-				".$this->get_limit_clause($id);
+		if ($query != '')
+		{
+			$q = $query;
+		}
+		else
+		{
+			$q = "SELECT count(*) as cnt,ip 
+					FROM syslog
+					".$this->get_where_clause($id)."
+					GROUP BY ip
+					ORDER BY cnt DESC
+					".$this->get_limit_clause($id);
+		}
+
+		if ($ret_query)
+		{
+			return $q;
+		}
+
 		$this->db_query($q);
 		$max = 1;
 		$dat = array();
@@ -664,13 +728,26 @@ class dronline extends class_base
 			'sortable' => 0,
 		));
 
-		$q = "SELECT count(*) as cnt,ip, objects.name as name,syslog.oid AS oid
-				FROM syslog
-					LEFT JOIN objects ON objects.oid = syslog.oid
-				WHERE syslog.oid IS NOT NULL AND syslog.oid > 0 ".$this->get_where_clause($id,' AND ')."
-				GROUP BY oid
-				ORDER BY cnt DESC
-				".$this->get_limit_clause($id);
+		if ($query != '')
+		{
+			$q = $query;
+		}
+		else
+		{
+			$q = "SELECT count(*) as cnt,ip, objects.name as name,syslog.oid AS oid
+					FROM syslog
+						LEFT JOIN objects ON objects.oid = syslog.oid
+					WHERE syslog.oid IS NOT NULL AND syslog.oid > 0 ".$this->get_where_clause($id,' AND ')."
+					GROUP BY oid
+					ORDER BY cnt DESC
+					".$this->get_limit_clause($id);
+		}
+
+		if ($ret_query)
+		{
+			return $q;
+		}
+
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -734,6 +811,137 @@ class dronline extends class_base
 		unset($arr['class']);
 		unset($arr['action']);
 		return $this->mk_my_orb('change', $arr);
+	}
+
+	function get_property(&$arr)
+	{
+		$prop = &$arr['prop'];
+		$req = $arr['request'];
+		if ($prop['name'] == 'save_as_obj')
+		{
+			$prop['value'] = 0;
+			$fl = true;
+		}
+		else
+		if ($prop['name'] == 'save_as_obj_name')
+		{
+			$prop['value'] = '';
+			$fl = true;
+		}
+
+		if (in_array($req['dro_tab'],array('ipblock','show_queries')) && $fl)
+		{
+			return PROP_IGNORE;
+		}
+
+		return PROP_OK;
+	}
+
+	function set_property(&$arr)
+	{
+		$prop = &$arr['prop'];
+		if ($prop['name'] == 'save_as_obj')
+		{
+			if ($arr['form_data']['save_as_obj'] == 1)
+			{
+				// do_save_as_log_obj
+				$param = $arr['form_data'];
+				$param+=$arr['form_data']['extraids'];
+				$param['ret_query'] = true;
+				$fn = '_do_'.$arr['form_data']['extraids']['dro_tab'];
+
+				$q = $this->$fn($param);
+				$this->quote(&$q);
+
+				$nid = $this->new_object(array(
+					'name' => $arr['form_data']['save_as_obj_name'],
+					'class_id' => CL_DRONLINE_LOG,
+					'parent' => $arr['obj']['parent'],
+					'metadata' => array(
+						'dro_type' => $arr['form_data']['extraids']['dro_tab'],
+						'cur_range' => $arr['form_data']['extraids']['cur_range'],
+						'query' => $q
+					)
+				));
+			}
+
+			$prop['value'] = 0;
+			return PROP_IGNORE;
+		}
+		else
+		if ($prop['name'] == 'save_as_obj_name')
+		{
+			$prop['value'] = '';
+			return PROP_IGNORE;
+		}
+		return PROP_OK;
+	}
+
+	function _do_show_queries($arr)
+	{
+		extract($arr);
+		
+		load_vcl('table');
+		$t = new aw_table(array('prefix' => 'dronline'));
+		$t->parse_xml_def($this->cfg['basedir'] . '/xml/generic_table.xml');
+
+		$t->define_field(array(
+			'name' => 'oid',
+			'caption' => '#',
+			'sortable' => 1,
+			'numeric' => 1,
+			'nowrap' => 1
+		));
+
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => 'Nimi',
+			'sortable' => 1,
+		));
+
+		$df = aw_ini_get('config.dateformats');
+		$t->define_field(array(
+			'name' => 'modified',
+			'caption' => 'Muudetud',
+			'sortable' => 1,
+			'numeric' => 1,
+			'type' => 'time',
+			'format' => $df[2]
+		));
+
+		$t->define_field(array(
+			'name' => 'modifiedby',
+			'caption' => 'Kes Muutis',
+			'sortable' => 1,
+		));
+
+		$t->define_field(array(
+			'name' => 'view',
+			'caption' => 'Vaata',
+		));
+
+		$ol = $this->list_objects(array(
+			'class' => CL_DRONLINE_LOG,
+			'return' => ARR_ALL
+		));
+
+		foreach($ol as $oid => $od)
+		{
+			$tarr = $arr;
+			$tarr['show_log_obj'] = $od['oid'];
+
+			$od['view'] = html::href(array(
+				'url' => $this->mk_my_orb('change', array('id' => $od['oid']), 'dronline_log'),
+				'caption' => 'Vaata',
+				'target' => '_blank'
+			));
+			
+			$t->define_data($od);
+		}
+
+		$t->set_default_sortby('name');
+		$t->sort_by();
+		return $t->draw();
 	}
 }
 ?>

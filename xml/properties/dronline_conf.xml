@@ -125,38 +125,7 @@
       <groupinfo>
             <general>
                   <caption>Üldine</caption>
-                  <default>1</default>
             </general>
-            <dates>
-                  <caption>Ajad</caption>
-            </dates>
-            <Javascript>
-                  <caption>Javascript</caption>
-            </Javascript>
-            <Pilt>
-                  <caption>Pilt</caption>
-            </Pilt>
-            <advanced>
-                  <caption>Spetsiaal</caption>
-            </advanced>
-            <keywords>
-                  <caption>Võtmesõnad</caption>
-            </keywords>
-            <relations>
-                  <caption>Seosed</caption>
-            </relations>
-            <presentation>
-                  <caption>Presentatsioon</caption>
-            </presentation>
-            <show>
-                  <caption>Näitamine</caption>
-            </show>
-            <menus>
-                  <caption>Menüüd</caption>
-            </menus>
-            <preview>
-                  <caption>Eelvaade</caption>
-            </preview>
             <types>
                   <caption>T&amp;uuml;&amp;uuml;bid</caption>
             </types>
