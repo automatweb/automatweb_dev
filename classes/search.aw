@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.20 2003/01/31 00:31:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.22 2003/03/12 14:49:24 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -23,10 +23,10 @@
 	@property s_oid type=textbox size=5
 	@caption OID
 
-	@property s_location type=select 
+	@property s_location type=select
 	@caption Asukoht
 
-	@property s_lang_id type=select 
+	@property s_lang_id type=select
 	@caption Keel
 
 	@property s_status type=s_status group=search,advanced,objsearch
@@ -38,7 +38,7 @@
 	@property s_modifiedby type=textbox group=search,advanced,objsearch
 	@caption Muutja
 
-	@property s_alias type=textbox 
+	@property s_alias type=textbox
 	@caption Alias
 
 	@property s_period type=select
@@ -47,19 +47,66 @@
 	@property s_site_id type=select
 	@caption Saidi ID
 
-	@property results type=text group=results callback=get_result_table
-	@caption Tulemused
+/////valimi nupud lisamiseks
+	@property selection_manage_buttons type=text callback=selection_manage_bar group=advanced
+
+	@property results type=text group=search,advanced,objsearch,results callback=get_result_table
 
 	@property objsearch type=text group=objsearch callback=get_objsearch
 
-	@groupinfo search caption=Lihtne_otsing 
+	@groupinfo search caption=Lihtne_otsing
 	@groupinfo advanced caption=Advanced_otsing
 	@groupinfo objsearch caption=Objektiotsing
 	@groupinfo results caption=Tulemused submit=no
 
+//////////////valimite kraam////////////////////////////////////////////////////////////////////////////
+
+	@default group=selectione
+	@groupinfo selectione caption=valimid submit=no
+
+	@property active_selection_objects type=text callback=callback_obj_list
+
+	@property selections type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects width=600 group=general
+	@caption majanda valimeid
+
+	@property active_selection type=textbox group=objsearch,advanced,selectione
+	
+
 */
 class search extends class_base
 {
+
+//// valim///
+/* ühesõnaga valimi klassiga näitame valimeid ja manageerime neid
+põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
+*/
+	function callback_obj_list($args)
+	{
+		classload('kliendibaas/selection');
+
+		$arg2['obj']['oid'] = $args['obj']['meta']['active_selection'];
+		$arg2['obj']['parent'] = $args['obj']['parent'];
+		$arg2['obj']['meta']['active_selection'] = $args['obj']['meta']['active_selection'];
+		$arg2['obj']['meta']['selections'] = $args['obj']['meta']['selections'];
+		return $this->selection_object->obj_list($arg2);
+	}
+
+	function selection_manage_bar($args = array())
+	{
+		$nodes = array();
+		$nodes['toolbar'] = array(
+			'value' => $this->selection_object->mk_toolbar(array(
+				'arr' =>$this->selection['meta']['selections'],
+				'parent' => $this->selection['parent'],
+				'selected' => $this->selection['meta']['active_selection'],
+				'align' => 'right',
+				'show_buttons' => array('add','change'),
+			))
+		);
+		return $nodes;
+	}
+//// end:valim///
+
 	function search($args = array())
 	{
 		$this->init(array(
@@ -73,8 +120,24 @@ class search extends class_base
 	{
 		$data = &$args["prop"];
                 $retval = PROP_OK;
-                switch($data["name"])
+
+		//// valim///
+		/* loome valimi instansi kui seda juba tehtud pole */
+		if (!is_object($this->selection_object) && method_exists($this,'callback_obj_list'))
+		{
+			classload('kliendibaas/selection');
+			$this->selection_object = new selection();
+			$this->selection = $args['obj'];
+		}
+
+		switch($data["name"])
                 {
+			//// valim///
+			/* ühesõnaga see on hidden element, meil on vaja et ta metas salvestuks */
+			case 'active_selection':
+				$retval=PROP_IGNORE;
+				break;
+
 			case "s_class_id":
 				$data["options"] = $this->_get_s_class_id();
 				break;
@@ -101,8 +164,7 @@ class search extends class_base
 					$sites[$row["site_id"]] = $row["site_id"];
 				}
 				$data["options"] = $sites;
-				break;	
-
+				break;
 		}
 		return $retval;
 	}
@@ -116,7 +178,7 @@ class search extends class_base
                 $_all_props = $cfgu->load_properties(array(
                         "clid" => $obj["meta"]["s_class_id"],
                 ));
-		
+
 		$retval = array();
 		$item = array(
 			"caption" => "Objektitüübi omadused",
@@ -275,7 +337,7 @@ class search extends class_base
 		{
 			$this->read_template("full.tpl");
 			$parent = (int)$parent;
-			
+
 
 			$url = $this->mk_my_orb("search",array("parent" => $parent));
 			$this->parent = $parent;
@@ -289,11 +351,7 @@ class search extends class_base
 		{
 			$obj_list = $this->_get_s_parent($args);
 			load_vcl("table");
-			$this->t = new aw_table(array(
-				"prefix" => "search",
-			));
-
-			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+			$this->t = new aw_table();
 
 			$this->_init_os_tbl();
 
@@ -301,6 +359,7 @@ class search extends class_base
 			$partcount = 0;
 			foreach($real_fields as $key => $val)
 			{
+				$_part = "";
 				switch ($key)
 				{
 					case "name":
@@ -322,14 +381,21 @@ class search extends class_base
 					case "location":
 						if ($val == 0)
 						{
-							$_part = sprintf(" parent IN (%s) ",join(",",array_filter(array_keys($obj_list),create_function('$v','return $v ? true : false;'))));
+							$tmp = join(",",array_filter(array_keys($obj_list),create_function('$v','return $v ? true : false;')));
+							if (!empty($tmp))
+							{
+								$_part = " parent IN ($tmp) ";
+							};
 						}
 						else
 						{
 							$_part = " parent = '$val' ";
 							$partcount++;
 						};
-						$parts["location"] = $_part;
+						if (!empty($_part))
+						{
+							$parts["location"] = $_part;
+						};
 						break;
 
 					case "createdby":
@@ -678,9 +744,11 @@ class search extends class_base
 		{
 			$reforb = $this->mk_reforb("search",array("no_reforb" => 1,"search" => 1,"obj" => $args["obj"],"docid" => $docid, "parent" => $parent));
 		}
+		
+
 		$this->vars(array(
 			"table" => $table,
-			"toolbar" => (is_object($toolbar)) ? $toolbar->get_toolbar() : "",
+			"toolbar" => ((is_object($toolbar)) ? $toolbar->get_toolbar() : ''),
 			"reforb" => $reforb
 		));
 
@@ -697,7 +765,7 @@ class search extends class_base
 			$link = "<a href=\"$url\" class=\"fgtext\">Moodusta objektigrupp</a>";
 
                         $args["toolbar"]->add_cdata($link);
-			
+
 		};
 	}
 
@@ -712,7 +780,7 @@ class search extends class_base
 		// 1 - put the fields into array, so that I can fetch
 		// the names of the search fields and remember the values OR
 		// 2 - put the names of the search fields into an array
-		// s[name] .. and so on, so that I can access them by 
+		// s[name] .. and so on, so that I can access them by
 		// accessing the s array. I like the latter a lot more.
 
 		if (!$fields["obj_name"] && $this->is_object_search)
@@ -895,7 +963,7 @@ class search extends class_base
 		));
 		$retval = $this->parse("redir_target");
 		$this->vars(array(
-			"redir_target" => "",
+			"redir_target" => '',
 		));
 		return $retval;
 	}
@@ -981,7 +1049,7 @@ class search extends class_base
 		
 		$this->t->define_field(array(
 			"name" => "change",
-			"caption" => "<a href='javascript:search_selall()'>Vali</a>",
+			"caption" => "<a href='javascript:selall(\"sel\")'>Vali</a>",
 			"align" => "center",
 			"talign" => "center",
 		));
@@ -1077,7 +1145,7 @@ class search extends class_base
 					$cut_objects[$oid] = $oid;
 				}
 			}
-      aw_session_set("cut_objects",$cut_objects);
+			aw_session_set("cut_objects",$cut_objects);
 		}
 		elseif($subaction == "copy" || ($subaction == "cut" && $s["server"]))
 		{
@@ -1115,8 +1183,8 @@ class search extends class_base
 			// aga kuidas otsing kirja panna?
 			$id = $this->new_object(array(
 				"parent" => $parent,
-        "name" => $grpname,
-        "class_id" => CL_OBJECT_CHAIN,
+				"name" => $grpname,
+				"class_id" => CL_OBJECT_CHAIN,
 				"metadata" => array("objs" => $sel,"s" => $s),
 			));
 		}
@@ -1127,7 +1195,7 @@ class search extends class_base
 		};
 
 		unset($args["class"]);
-		unset($args["action"]);	
+		unset($args["action"]);
 		unset($args["subaction"]);
 		unset($args["sel"]);
 		unset($args["reforb"]);
@@ -1355,7 +1423,7 @@ class search extends class_base
 			{
 				// if there are any object fields then I need to create the big badass query
 				// for property table now
-				$join = "";
+				$join = '';
 
 				if (is_array($obj_data) && (sizeof($obj_data) > 0))
 				{
@@ -1456,7 +1524,6 @@ class search extends class_base
 			if ($format == "vcl")
 			{
 				$this->t->sort_by(array("field" => $sortby));
-
 				$this->table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
 				$this->table .= $this->t->draw();
 				$this->table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
@@ -1471,7 +1538,7 @@ class search extends class_base
 			$this->has_results = 1;
 		};
 	}
-	
+
 	function view($args = array())
 	{
 		extract($args);
