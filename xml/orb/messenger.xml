@@ -1,10 +1,25 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="messenger">
+		<action name="importcontact">
+			<function name="importcontact">
+				<arguments>
+					<required name="addr"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="contacts">
 			<function name="contacts">
 				<arguments>
 					<optional name="folder"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_contact_list">
+			<function name="submit_contact_list">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
