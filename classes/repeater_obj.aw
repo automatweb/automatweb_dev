@@ -16,7 +16,7 @@ class repeater_obj extends cal_event
 	// default toolbar includes only one button - save button
 	function mk_toolbar()
 	{
-		$tb = get_instance('toolbar');
+		$tb = get_instance('vcl/toolbar');
 		
 		$tb->add_button(array(
 			'name' => 'save',
