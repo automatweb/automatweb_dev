@@ -15,31 +15,31 @@ class smtp extends aw_template
 
 		if (!$this->get_status($this->read_response()))
 		{
-			$this->raise_error(ERR_SMTP_WSERVER,"smtp: error, something wrong with server", false);
+			$this->raise_error(ERR_SMTP_WSERVER,t("smtp: error, something wrong with server"), false);
 		}
 
 		$this->send_command("HELO ".aw_global_get("SERVER_NAME"));
 		if (!$this->get_status($err = $this->read_response()))
 		{
-			$this->raise_error(ERR_SMTP_HELO,"smtp: error '$err' after HELO ".aw_global_get("SERVER_NAME"), false);
+			$this->raise_error(ERR_SMTP_HELO,sprintf(t("smtp: error '%s' after HELO %s"), $err, aw_global_get("SERVER_NAME")), false);
 		}
 
 		$this->send_command("MAIL FROM:<$from>");
 		if (!$this->get_status($err = $this->read_response()))
 		{
-			$this->raise_error(ERR_SMTP_MFROM,"smtp: error '$err' after MAIL FROM:<$from>", false);
+			$this->raise_error(ERR_SMTP_MFROM,sprintf(t("smtp: error '%s' after MAIL FROM:<%s>"), $err, $from), false);
 		}
 
 		$this->send_command("RCPT TO:<$to>");
 		if (!$this->get_status($err = $this->read_response()))
 		{
-			$this->raise_error(ERR_SMTP_RCPT,"smtp: error '$err' after RCPT TO:<$to>", false);
+			$this->raise_error(ERR_SMTP_RCPT,sprintf(t("smtp: error '%s' after RCPT TO:<%s>"), $err, $to), false);
 		}
 
 		$this->send_command("DATA");
 		if (!$this->get_status($err = $this->read_response()))
 		{
-			$this->raise_error(ERR_SMTP_DATA,"smtp: error '$err' after DATA", false);
+			$this->raise_error(ERR_SMTP_DATA,sprintf(t("smtp: error '%s' after DATA"), $err), false);
 		}
 		
 		$larr = explode("\n", $msg);
@@ -57,13 +57,13 @@ class smtp extends aw_template
 		$this->send_command(".");
 		if (!$this->get_status($err = $this->read_response()))
 		{
-			$this->raise_error(ERR_SMTP_MSG,"smtp: error '$err' after message", false);
+			$this->raise_error(ERR_SMTP_MSG,sprintf(t("smtp: error '%s' after message"), $err), false);
 		}
 
 		$this->send_command("QUIT");
 		if (!$this->get_status($err = $this->read_response()))
 		{
-			$this->raise_error(ERR_SMTP_QUIT,"smtp: error '$err' after QUIT", false);
+			$this->raise_error(ERR_SMTP_QUIT,sprintf(t("smtp: error '%s' after QUIT"), $err), false);
 		}
 
 		return true;
@@ -74,7 +74,7 @@ class smtp extends aw_template
 		$this->fp = fsockopen($server, 25, &$errno, &$errstr, 20);
 		if (!$this->fp)
 		{
-			$this->raise_error(ERR_SMTP_CONNECT,"smtp: error connecting, $errno , $errstr",false);
+			$this->raise_error(ERR_SMTP_CONNECT,sprintf(t("smtp: error connecting, %s , %s"), $errno, $errstr),false);
 			return false;
 		}
 		return true;

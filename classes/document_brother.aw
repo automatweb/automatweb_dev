@@ -219,29 +219,29 @@ class document_brother extends document
 			));
 			$t->define_field(array(
 				"name" => "name",
-				"caption" => "Nimetus",
+				"caption" => t("Nimetus"),
 				"sortable" => 1
 			));
 			$t->define_field(array(
 				"name" => "parent",
-				"caption" => "Asukoht",
+				"caption" => t("Asukoht"),
 				"sortable" => 1
 			));
 			$t->define_field(array(
 				"name" => "createdby",
-				"caption" => "Looja",
+				"caption" => t("Looja"),
 				"sortable" => 1
 			));
 			$t->define_field(array(
 				"name" => "modified",
-				"caption" => "Viimati muudetud",
+				"caption" => t("Viimati muudetud"),
 				"type" => "time",
 				"format" => "d.m.Y / H:i",
 				"sortable" => 1
 			));
 			$t->define_field(array(
 				"name" => "pick",
-				"caption" => "Vali see",
+				"caption" => t("Vali see"),
 			));
 			$se = array();
 			if ($s_name != "")
@@ -281,7 +281,7 @@ class document_brother extends document
 				));
 				$row["pick"] = html::href(array(
 					"url" => $this->mk_my_orb("create_bro", array("parent" => $parent, "id" => $row["oid"], "s_name" => $s_name, "s_content" => $s_content,"period" => $period)),
-					"caption" => "Vali see"
+					"caption" => t("Vali see")
 				));
 				$o = obj($row["oid"]);
 				$row["parent"] = $o->path_str(array(

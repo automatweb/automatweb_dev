@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:44 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:28 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -110,23 +110,39 @@ msgstr ""
 msgid "Millal"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:108
-msgid "Muuda"
+#: classes/crm/crm_offer_mgr.aw:109
+msgid "T&uuml;&uuml;ppakkumine?"
 msgstr ""
 
 #: classes/crm/crm_offer_mgr.aw:154
+msgid "Eemalda t&uuml;&uuml;ppakkumistest"
+msgstr ""
+
+#: classes/crm/crm_offer_mgr.aw:162
+msgid "Tee t&uuml;&uuml;ppakkumiseks"
+msgstr ""
+
+#: classes/crm/crm_offer_mgr.aw:174
 msgid "K&otilde;ik pakkumised"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:182
+#: classes/crm/crm_offer_mgr.aw:192
+msgid "Lisa"
+msgstr ""
+
+#: classes/crm/crm_offer_mgr.aw:208
 msgid "Lisa pakkumine"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:189
+#: classes/crm/crm_offer_mgr.aw:217
+msgid "T&uuml;ppakkumised"
+msgstr ""
+
+#: classes/crm/crm_offer_mgr.aw:239
 msgid "Kustuta valitud tellimused"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:190
+#: classes/crm/crm_offer_mgr.aw:240
 msgid "Oled kindel et soovid valitud tellimused kustutada?"
 msgstr ""
 

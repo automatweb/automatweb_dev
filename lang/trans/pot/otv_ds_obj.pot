@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:33 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:23 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -198,7 +198,7 @@ msgstr ""
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:392
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:390
 msgid "J&auml;rjekord"
 msgstr ""
 

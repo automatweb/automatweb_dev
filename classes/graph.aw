@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.15 2004/06/25 18:13:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.16 2005/04/05 08:54:04 kristo Exp $
 // graph.aw - graafikute haldamine
 
 define("TYPE_PIE",0);
@@ -75,7 +75,7 @@ class graph extends aw_template
 			case TYPE_PIE:
 				//default setup ja data
 				$setup=array(
-					"title" => "Tiitel",
+					"title" => t("Tiitel"),
 					"title_col" => "000000",
 					"bgcolor" => "aabbaa",
 					"width" => "300",
@@ -339,7 +339,7 @@ class graph extends aw_template
 		extract($ar);
 //			echo $id;echo $datasrc;echo $ycount;die;
 		$setup=array(
-			"title" => "Tiitel",
+			"title" => t("Tiitel"),
 			"title_col" => "000000",
 			"back_col" => "aabbaa",
 			"width" => "300",
@@ -389,7 +389,7 @@ class graph extends aw_template
 			$this->vars(array(
 				"name" => "$name",
 				"oid" => "$id",
-				"title" => "$setup[title]",
+				"title" => $setup["title"],
 				"title_col" => "$setup[title_col]",
 				"back_col" => "$setup[back_col]",
 				"width" => "$setup[width]",

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:34 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:44 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -46,6 +46,18 @@ msgstr ""
 msgid "Omaduse Aktiivne (status) help"
 msgstr ""
 
+#: classes/applications/class_designer/class_designer.aw:prop_is_registered
+msgid "Omaduse Klass on registreeritud (is_registered) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_is_registered_comment
+msgid "Omaduse Klass on registreeritud (is_registered) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_is_registered_help
+msgid "Omaduse Klass on registreeritud (is_registered) help"
+msgstr ""
+
 #: classes/applications/class_designer/class_designer.aw:prop_visualize
 msgid "Omaduse  (visualize) caption"
 msgstr ""
@@ -56,6 +68,54 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_visualize_help
 msgid "Omaduse  (visualize) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_reg_class_id
+msgid "Omaduse CLID (reg_class_id) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_reg_class_id_comment
+msgid "Omaduse CLID (reg_class_id) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_reg_class_id_help
+msgid "Omaduse CLID (reg_class_id) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_object_name
+msgid "Omaduse Objekti nime omadus (object_name) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_object_name_comment
+msgid "Omaduse Objekti nime omadus (object_name) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_object_name_help
+msgid "Omaduse Objekti nime omadus (object_name) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_can_add
+msgid "Omaduse Saab lisada (can_add) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_can_add_comment
+msgid "Omaduse Saab lisada (can_add) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_can_add_help
+msgid "Omaduse Saab lisada (can_add) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_class_folder
+msgid "Omaduse classfolder (class_folder) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_class_folder_comment
+msgid "Omaduse classfolder (class_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_class_folder_help
+msgid "Omaduse classfolder (class_folder) help"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_relationmgr

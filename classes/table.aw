@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.60 2005/03/24 10:14:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.61 2005/04/05 08:54:04 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -112,7 +112,7 @@ class table extends aw_template
 		$this->db_query($q);
 		if (!($row = $this->db_next()))
 		{
-			$this->raise_error(ERR_TBL_NO_TBL,"no such table $id (tables.class->load_table)!", true);
+			$this->raise_error(ERR_TBL_NO_TBL,sprintf(t("no such table %s (tables.class->load_table)!"), $id), true);
 		}
 		
 		$this->meta = aw_unserialize($row["metadata"]);
@@ -2469,7 +2469,7 @@ class table extends aw_template
 
 		if ($fail == "none")
 		{
-			$this->raise_error(ERR_TBL_IMPORT_NOFILE,"table->import: No file uploaded!",true);
+			$this->raise_error(ERR_TBL_IMPORT_NOFILE,t("table->import: No file uploaded!"),true);
 		}
 
 		$this->load_table($arr["id"]);

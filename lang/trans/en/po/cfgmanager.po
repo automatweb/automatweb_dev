@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:06:59 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:32 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,76 +9,86 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/cfg/cfgmanager.aw:prop_name
+# classes/cfg/cfgmanager.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_name_comment
+# classes/cfg/cfgmanager.aw:prop_name_comment
 msgid "Omaduse Nimi (name) kommentaar"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_name_help
+# classes/cfg/cfgmanager.aw:prop_name_help
 msgid "Omaduse Nimi (name) help"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_comment
+# classes/cfg/cfgmanager.aw:prop_comment
 msgid "Omaduse Kommentaar (comment) caption"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_comment_comment
+# classes/cfg/cfgmanager.aw:prop_comment_comment
 msgid "Omaduse Kommentaar (comment) kommentaar"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_comment_help
+# classes/cfg/cfgmanager.aw:prop_comment_help
 msgid "Omaduse Kommentaar (comment) help"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_status
+# classes/cfg/cfgmanager.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_status_comment
+# classes/cfg/cfgmanager.aw:prop_status_comment
 msgid "Omaduse Aktiivne (status) kommentaar"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_status_help
+# classes/cfg/cfgmanager.aw:prop_status_help
 msgid "Omaduse Aktiivne (status) help"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_config
+# classes/cfg/cfgmanager.aw:prop_def_cfgmanager
+msgid "Omaduse Default seadete haldur (def_cfgmanager) caption"
+msgstr ""
+
+# classes/cfg/cfgmanager.aw:prop_def_cfgmanager_comment
+msgid "Omaduse Default seadete haldur (def_cfgmanager) kommentaar"
+msgstr ""
+
+# classes/cfg/cfgmanager.aw:prop_def_cfgmanager_help
+msgid "Omaduse Default seadete haldur (def_cfgmanager) help"
+msgstr ""
+
+# classes/cfg/cfgmanager.aw:prop_config
 msgid "Omaduse Tabel (config) caption"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_config_comment
+# classes/cfg/cfgmanager.aw:prop_config_comment
 msgid "Omaduse Tabel (config) kommentaar"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:prop_config_help
+# classes/cfg/cfgmanager.aw:prop_config_help
 msgid "Omaduse Tabel (config) help"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:group_general
+# classes/cfg/cfgmanager.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:group_config
+# classes/cfg/cfgmanager.aw:group_config
 msgid "Grupi Seaded (config) pealkiri"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:rel_RELTYPE_C_GROUP
+# classes/cfg/cfgmanager.aw:rel_RELTYPE_C_GROUP
 msgid "Seose Grupp (RELTYPE_C_GROUP) tekst"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:rel_RELTYPE_C_CFGFORM
+# classes/cfg/cfgmanager.aw:rel_RELTYPE_C_CFGFORM
 msgid "Seose Seadete vorm (RELTYPE_C_CFGFORM) tekst"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:70
+#: classes/cfg/cfgmanager.aw:74
 msgid "Grupp"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:76
+#: classes/cfg/cfgmanager.aw:80
 msgid "Seadete vorm"
 msgstr ""
-

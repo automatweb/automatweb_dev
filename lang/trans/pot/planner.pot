@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:28 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -578,27 +578,27 @@ msgstr ""
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2317
+#: classes/applications/calendar/planner.aw:2318
 msgid "Tulemuste tabel"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2328
+#: classes/applications/calendar/planner.aw:2329
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2334
+#: classes/applications/calendar/planner.aw:2335
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2340
+#: classes/applications/calendar/planner.aw:2341
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2346
+#: classes/applications/calendar/planner.aw:2347
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2352
+#: classes/applications/calendar/planner.aw:2353
 msgid "Organisatsioon"
 msgstr ""
 

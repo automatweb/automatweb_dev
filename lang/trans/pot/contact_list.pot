@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:26 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -118,23 +118,23 @@ msgstr ""
 msgid "Oled kindel, et tahad valitud eemaldada?"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:163
+#: classes/applications/quickmessage/contact_list.aw:164
 msgid "ID"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:167
+#: classes/applications/quickmessage/contact_list.aw:168
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:171
+#: classes/applications/quickmessage/contact_list.aw:172
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:175
+#: classes/applications/quickmessage/contact_list.aw:176
 msgid ""
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:220
+#: classes/applications/quickmessage/contact_list.aw:221
 msgid "Saada sõnum"
 msgstr ""
 

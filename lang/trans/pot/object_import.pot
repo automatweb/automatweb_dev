@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:37 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:45 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -414,27 +414,27 @@ msgstr ""
 msgid "unset keys <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:953
+#: classes/admin/object_import.aw:954
 msgid "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:954
+#: classes/admin/object_import.aw:955
 msgid "VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"
 msgstr ""
 
-#: classes/admin/object_import.aw:960
+#: classes/admin/object_import.aw:961
 msgid "delete object %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:966
+#: classes/admin/object_import.aw:967
 msgid "delete done. <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:968
+#: classes/admin/object_import.aw:969
 msgid "Edukalt kustutatud %s objekti!"
 msgstr ""
 
-#: classes/admin/object_import.aw:1006
+#: classes/admin/object_import.aw:1007
 msgid "Importi alustati "
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:29 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:20 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -214,19 +214,19 @@ msgstr ""
 msgid "Protsess on l&otilde;ppenud!"
 msgstr ""
 
-#: classes/workflow/workflow.aw:1218
+#: classes/workflow/workflow.aw:1214
 msgid "Juhtumid"
 msgstr ""
 
-#: classes/workflow/workflow.aw:1219
+#: classes/workflow/workflow.aw:1215
 msgid "Protsessid"
 msgstr ""
 
-#: classes/workflow/workflow.aw:1220
+#: classes/workflow/workflow.aw:1216
 msgid "Tegevused"
 msgstr ""
 
-#: classes/workflow/workflow.aw:1221
+#: classes/workflow/workflow.aw:1217
 msgid "Tegijad"
 msgstr ""
 

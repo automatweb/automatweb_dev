@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:46 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:52 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -42,11 +42,11 @@ msgstr ""
 msgid "Muutmise aeg"
 msgstr ""
 
-#: classes/sys.aw:782
+#: classes/sys.aw:781
 msgid "all done!! database seems to be relatively ok!"
 msgstr ""
 
-#: classes/sys.aw:842
+#: classes/sys.aw:841
 msgid "All done"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:31 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:21 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -190,15 +190,15 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2355
+#: classes/contentmgmt/forum/forum.aw:2352
 msgid "Näita"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2363
+#: classes/contentmgmt/forum/forum.aw:2360
 msgid "Ekspordi XML"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum.aw:2369
+#: classes/contentmgmt/forum/forum.aw:2366
 msgid "E-posti aadressid"
 msgstr ""
 

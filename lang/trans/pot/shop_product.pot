@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:09 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:36 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -782,10 +782,6 @@ msgstr ""
 msgid "Grupi Lingid (lnk) pealkiri"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:group_daat
-msgid "Grupi daat (daat) pealkiri"
-msgstr ""
-
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
@@ -826,7 +822,7 @@ msgstr ""
 msgid "Seose link (RELTYPE_LNK) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:460
+#: classes/applications/shop/shop_product.aw:459
 msgid "shop_product::draw(): no layout set!"
 msgstr ""
 

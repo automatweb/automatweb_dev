@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:48 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:29 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -546,127 +546,127 @@ msgstr ""
 msgid "Seose FG profiil (RELTYPE_FG_PROFILE) tekst"
 msgstr ""
 
-#: classes/core/users/user.aw:298
+#: classes/core/users/user.aw:299
 msgid "Genereeri parool"
 msgstr ""
 
-#: classes/core/users/user.aw:341
+#: classes/core/users/user.aw:342
 msgid "Selline kasutaja on juba olemas!"
 msgstr ""
 
-#: classes/core/users/user.aw:346
+#: classes/core/users/user.aw:347
 msgid "Selline kasutajanimi pole lubatud!"
 msgstr ""
 
-#: classes/core/users/user.aw:382
+#: classes/core/users/user.aw:383
 msgid "Paroolid pole samad!"
 msgstr ""
 
-#: classes/core/users/user.aw:388
+#: classes/core/users/user.aw:389
 msgid "Parool sisaldab lubamatuid t&auml;hti v&otilde;i on liiga l&uuml;hike!"
 msgstr ""
 
-#: classes/core/users/user.aw:442
+#: classes/core/users/user.aw:443
 msgid "Sellist kasutajat pole!"
 msgstr ""
 
-#: classes/core/users/user.aw:469
+#: classes/core/users/user.aw:470
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/user.aw:474
+#: classes/core/users/user.aw:475
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/user.aw:629
+#: classes/core/users/user.aw:630
 msgid "Nimi"
 msgstr ""
 
-#: classes/core/users/user.aw:635
+#: classes/core/users/user.aw:636
 msgid "Liige?"
 msgstr ""
 
-#: classes/core/users/user.aw:641
+#: classes/core/users/user.aw:642
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/core/users/user.aw:649
+#: classes/core/users/user.aw:650
 msgid "Mitu liiget"
 msgstr ""
 
-#: classes/core/users/user.aw:656
+#: classes/core/users/user.aw:657
 msgid "Muutja"
 msgstr ""
 
-#: classes/core/users/user.aw:664
+#: classes/core/users/user.aw:665
 msgid "Muudetud"
 msgstr ""
 
-#: classes/core/users/user.aw:672 classes/core/users/user.aw:1163
+#: classes/core/users/user.aw:673 classes/core/users/user.aw:1164
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/core/users/user.aw:874
+#: classes/core/users/user.aw:875
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/user.aw:908
+#: classes/core/users/user.aw:909
 msgid "Muuda objekti %s  &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/user.aw:1140
+#: classes/core/users/user.aw:1141
 msgid "Nr"
 msgstr ""
 
-#: classes/core/users/user.aw:1144
+#: classes/core/users/user.aw:1145
 msgid "Millal"
 msgstr ""
 
-#: classes/core/users/user.aw:1153
+#: classes/core/users/user.aw:1154
 msgid "Kes"
 msgstr ""
 
-#: classes/core/users/user.aw:1158
+#: classes/core/users/user.aw:1159
 msgid "IP"
 msgstr ""
 
-#: classes/core/users/user.aw:1168
+#: classes/core/users/user.aw:1169
 msgid "Tegevus"
 msgstr ""
 
-#: classes/core/users/user.aw:1175
+#: classes/core/users/user.aw:1176
 msgid "Saidi ID"
 msgstr ""
 
-#: classes/core/users/user.aw:1181
+#: classes/core/users/user.aw:1182
 msgid "OID"
 msgstr ""
 
-#: classes/core/users/user.aw:1186
+#: classes/core/users/user.aw:1187
 msgid "Mida"
 msgstr ""
 
-#: classes/core/users/user.aw:1548
+#: classes/core/users/user.aw:1549
 msgid "users::add_user(%s): no uid specified"
 msgstr ""
 
-#: classes/core/users/user.aw:1620
+#: classes/core/users/user.aw:1621
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1625
+#: classes/core/users/user.aw:1626
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1630
+#: classes/core/users/user.aw:1631
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1640
+#: classes/core/users/user.aw:1641
 msgid "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult."
 msgstr ""
 
-#: classes/core/users/user.aw:1676
+#: classes/core/users/user.aw:1677
 msgid "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
 msgstr ""
 

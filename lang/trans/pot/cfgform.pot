@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:54 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:32 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -370,115 +370,115 @@ msgstr ""
 msgid "Väärtus"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:282
+#: classes/cfg/cfgform.aw:286
 msgid "Süsteemi default"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:289
+#: classes/cfg/cfgform.aw:293
 msgid "Nimi"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:294
+#: classes/cfg/cfgform.aw:298
 msgid "Grupp"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:331
+#: classes/cfg/cfgform.aw:335
 msgid "Ära kasuta vormi"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:364
+#: classes/cfg/cfgform.aw:368
 msgid "this is not a valid config form - class_id not specified"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:733 classes/cfg/cfgform.aw:812 classes/cfg/cfgform.aw:1207
+#: classes/cfg/cfgform.aw:737 classes/cfg/cfgform.aw:816 classes/cfg/cfgform.aw:1211
 msgid "Salvesta"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:740
+#: classes/cfg/cfgform.aw:744
 msgid "Kustuta valitud omadused"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:747
+#: classes/cfg/cfgform.aw:751
 msgid "<small>Liiguta omadused gruppi:</small>"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:758
+#: classes/cfg/cfgform.aw:762
 msgid "Ühtegi gruppi pole veel!"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:768
+#: classes/cfg/cfgform.aw:772
 msgid "Liiguta"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:775
+#: classes/cfg/cfgform.aw:779
 msgid "<small>Lisa grupp:</small>"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:783
+#: classes/cfg/cfgform.aw:787
 msgid "Lisa grupp"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:949
+#: classes/cfg/cfgform.aw:953
 msgid "vaikestiil"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:950
+#: classes/cfg/cfgform.aw:954
 msgid "pealkiri yleval, sisu all"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:959
+#: classes/cfg/cfgform.aw:963
 msgid "gdata"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:971
+#: classes/cfg/cfgform.aw:975
 msgid "ab"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1200
+#: classes/cfg/cfgform.aw:1204
 msgid "T&ouml;&ouml;riistariba"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1201
+#: classes/cfg/cfgform.aw:1205
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1202
+#: classes/cfg/cfgform.aw:1206
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1203
+#: classes/cfg/cfgform.aw:1207
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1204
+#: classes/cfg/cfgform.aw:1208
 msgid "Sissejuhatus"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1205
+#: classes/cfg/cfgform.aw:1209
 msgid "Sisu"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1206
+#: classes/cfg/cfgform.aw:1210
 msgid "Toimetamata"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1208
+#: classes/cfg/cfgform.aw:1212
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1211
+#: classes/cfg/cfgform.aw:1215
 msgid "N&auml;ita pealkirja"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1212
+#: classes/cfg/cfgform.aw:1216
 msgid "N&auml;ita sissejuhatust"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1213
+#: classes/cfg/cfgform.aw:1217
 msgid "N&auml;ita prindi nuppu"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1214
+#: classes/cfg/cfgform.aw:1218
 msgid "Pealkiri klikitav"
 msgstr ""
 

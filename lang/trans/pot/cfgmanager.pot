@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:54 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:32 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -46,6 +46,18 @@ msgstr ""
 msgid "Omaduse Aktiivne (status) help"
 msgstr ""
 
+#: classes/cfg/cfgmanager.aw:prop_def_cfgmanager
+msgid "Omaduse Default seadete haldur (def_cfgmanager) caption"
+msgstr ""
+
+#: classes/cfg/cfgmanager.aw:prop_def_cfgmanager_comment
+msgid "Omaduse Default seadete haldur (def_cfgmanager) kommentaar"
+msgstr ""
+
+#: classes/cfg/cfgmanager.aw:prop_def_cfgmanager_help
+msgid "Omaduse Default seadete haldur (def_cfgmanager) help"
+msgstr ""
+
 #: classes/cfg/cfgmanager.aw:prop_config
 msgid "Omaduse Tabel (config) caption"
 msgstr ""
@@ -74,11 +86,11 @@ msgstr ""
 msgid "Seose Seadete vorm (RELTYPE_C_CFGFORM) tekst"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:70
+#: classes/cfg/cfgmanager.aw:74
 msgid "Grupp"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:76
+#: classes/cfg/cfgmanager.aw:80
 msgid "Seadete vorm"
 msgstr ""
 

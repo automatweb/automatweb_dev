@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:30 +0300\n"
+"POT-Creation-Date: Mon,  4 Apr 2005 14:20:21 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -518,23 +518,23 @@ msgstr ""
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1380
+#: classes/contentmgmt/forum/forum_v2.aw:1378
 msgid "Teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1385
+#: classes/contentmgmt/forum/forum_v2.aw:1383
 msgid "Jäta välja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1392
+#: classes/contentmgmt/forum/forum_v2.aw:1390
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1551
+#: classes/contentmgmt/forum/forum_v2.aw:1549
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1588
+#: classes/contentmgmt/forum/forum_v2.aw:1586
 msgid "Lisa"
 msgstr ""
 
