@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.138 2004/01/28 15:34:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.139 2004/02/04 13:47:28 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -938,10 +938,16 @@ class aliasmgr extends aw_template
 		{
 			foreach($idx_by_id as $id => $idx)
 			{
-				$c = new connection($id);
-				$c->change(array(
-					"idx" => $idx
-				));
+				if ($id)
+				{
+					$c = new connection($id);
+					if ($c->prop("from") && $c->prop("to"))
+					{
+						$c->change(array(
+							"idx" => $idx
+						));
+					}
+				}
 			};
 		};
 	}
