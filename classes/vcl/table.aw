@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.41 2005/03/10 15:28:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.42 2005/03/11 11:35:40 ahti Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1556,109 +1556,45 @@ class aw_table extends aw_template
 		));
 		return $this->parse();
 	}
-
-};
-
-// this is needed to make this work with get_instance
-class vcl_table extends aw_table
-{
-	function vcl_table($arr = array())
+	
+	function _get_sh_count_by_parent($parent)
 	{
-		return $this->aw_table($arr);
+		$ret = 0;
+		foreach($this->rowdefs as $rd)
+		{
+			if ($rd["parent"] == $parent)
+			{
+				$tmp = $this->_get_sh_count_by_parent($rd["name"]);
+				if ($tmp == 0)
+				{
+					$ret++;
+				}
+				else
+				{
+					$ret += $tmp;
+				}
+			}
+		}
+		return $ret;
 	}
 	
-	function init_vcl_property($arr)
+	function _get_max_level_cnt($parent)
 	{
-		// I need access to class information!
-		$pr = &$arr["property"];
-		if (!is_object($pr["vcl_inst"]))
+		$this->_gml++;
+		if ($this->_gml > $this->_max_gml)
 		{
-			$this->set_layout("generic");
-			if (is_array($arr["columns"]) && sizeof($arr["columns"]) > 0)
-			{
-				foreach($arr["columns"] as $ckey => $cval)
-				{
-					if ($cval["table"] != $pr["name"])
-					{
-						continue;
-					};
-					$this->define_field(array(
-						"name" => $ckey,
-						"caption" => $cval["caption"],
-						"sortable" => $cval["sortable"],
-					));
-				};
-			};
-			$pr["vcl_inst"] = $this;
-		};
-		return array($pr["name"] => $pr);
-	}
-
-	function get_html()
-	{
-		$this->sort_by();
-		$rv = $this->draw();
-		return $rv;
-	}
-
-	/** assumes that table columns are defined - iterates over object_list passed and reads correct props from it
-
-		@comment
-			$args can contain:
-				
-				change_col - column name with change link to object
-	**/
-	function data_from_ol($ol, $args = array())
-	{
-		$clss = aw_ini_get("classes");
-
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-		{
-			$data = array("oid" => $o->id());
-			foreach($this->rowdefs as $k => $v)
-			{
-				if ($v["name"] == "oid")
-				{
-					$val = $o->id();
-				}
-				else
-				if ($v["name"] == "createdby")
-				{
-					$tmp = $o->createdby();
-					$val = $tmp->name();
-				}
-				else
-				if ($v["name"] == "modifiedby")
-				{
-					$tmp = $o->modifiedby();
-					$val = $tmp->name();
-				}
-				else
-				if ($v["name"] == "class_id")
-				{
-					$val = $clss[$o->class_id()]["name"];
-				}
-				else
-				{
-					$val = $o->prop_str($v["name"]);
-				}
-
-				if (isset($args["change_col"]) && $args["change_col"] == $v["name"])
-				{
-					$val = html::get_change_url($o->id(), array(), $val);
-				}
-				$data[$v["name"]] = $val;
-			}			
-
-			if ($this->use_chooser)
-			{
-				$data[$this->chooser_config["field"]] = $o->id();
-			}
-
-			$this->define_data($data);
+			$this->_max_gml = $this->_gml;
 		}
+		foreach($this->rowdefs as $rd)
+		{
+			if ($rd["parent"] == $parent)
+			{
+				$this->_get_max_level_cnt($rd["name"]);
+			}
+		}
+		$this->_gml--;
 	}
-
+	
 	function _req_draw_header($parent)
 	{
 		$this->_sh_req_level++;
@@ -1790,43 +1726,106 @@ class vcl_table extends aw_table
 		$this->_sh_req_level--;
 		return $tbl.$tbl2;
 	}
+};
 
-	function _get_sh_count_by_parent($parent)
+// this is needed to make this work with get_instance
+class vcl_table extends aw_table
+{
+	function vcl_table($arr = array())
 	{
-		$ret = 0;
-		foreach($this->rowdefs as $rd)
+		return $this->aw_table($arr);
+	}
+	
+	function init_vcl_property($arr)
+	{
+		// I need access to class information!
+		$pr = &$arr["property"];
+		if (!is_object($pr["vcl_inst"]))
 		{
-			if ($rd["parent"] == $parent)
+			$this->set_layout("generic");
+			if (is_array($arr["columns"]) && sizeof($arr["columns"]) > 0)
 			{
-				$tmp = $this->_get_sh_count_by_parent($rd["name"]);
-				if ($tmp == 0)
+				foreach($arr["columns"] as $ckey => $cval)
 				{
-					$ret++;
+					if ($cval["table"] != $pr["name"])
+					{
+						continue;
+					};
+					$this->define_field(array(
+						"name" => $ckey,
+						"caption" => $cval["caption"],
+						"sortable" => $cval["sortable"],
+					));
+				};
+			};
+			$pr["vcl_inst"] = $this;
+		};
+		return array($pr["name"] => $pr);
+	}
+
+	function get_html()
+	{
+		$this->sort_by();
+		$rv = $this->draw();
+		return $rv;
+	}
+
+	/** assumes that table columns are defined - iterates over object_list passed and reads correct props from it
+
+		@comment
+			$args can contain:
+				
+				change_col - column name with change link to object
+	**/
+	function data_from_ol($ol, $args = array())
+	{
+		$clss = aw_ini_get("classes");
+
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$data = array("oid" => $o->id());
+			foreach($this->rowdefs as $k => $v)
+			{
+				if ($v["name"] == "oid")
+				{
+					$val = $o->id();
+				}
+				else
+				if ($v["name"] == "createdby")
+				{
+					$tmp = $o->createdby();
+					$val = $tmp->name();
+				}
+				else
+				if ($v["name"] == "modifiedby")
+				{
+					$tmp = $o->modifiedby();
+					$val = $tmp->name();
+				}
+				else
+				if ($v["name"] == "class_id")
+				{
+					$val = $clss[$o->class_id()]["name"];
 				}
 				else
 				{
-					$ret += $tmp;
+					$val = $o->prop_str($v["name"]);
 				}
-			}
-		}
-		return $ret;
-	}
 
-	function _get_max_level_cnt($parent)
-	{
-		$this->_gml++;
-		if ($this->_gml > $this->_max_gml)
-		{
-			$this->_max_gml = $this->_gml;
-		}
-		foreach($this->rowdefs as $rd)
-		{
-			if ($rd["parent"] == $parent)
+				if (isset($args["change_col"]) && $args["change_col"] == $v["name"])
+				{
+					$val = html::get_change_url($o->id(), array(), $val);
+				}
+				$data[$v["name"]] = $val;
+			}			
+
+			if ($this->use_chooser)
 			{
-				$this->_get_max_level_cnt($rd["name"]);
+				$data[$this->chooser_config["field"]] = $o->id();
 			}
+
+			$this->define_data($data);
 		}
-		$this->_gml--;
 	}
 };
 ?>
