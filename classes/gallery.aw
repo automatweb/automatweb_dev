@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.8 2001/08/15 12:40:22 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.9 2001/08/15 15:23:34 cvs Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -259,30 +259,42 @@ class gallery extends aw_template
 		extract($arr);
 		$this->load($id,$page);
 
+		if ($page < 1)
+		{
+			$page = 0;
+		}
+//		echo "submit ! id = $id , page = $page <br>";
+//		echo "gal = <pre>", var_dump($this->arr), "</pre> <br>";
 		global $page;
 		for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
 		{
+//			echo "row $row <br>";
 			for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 			{
 				$t = new db_images;
 				$var = "tn_".$row."_".$col;
 				global $$var,${$var."_type"};
-
+//				echo "row = $row , col = $col var = ", $$var , "<br>";
 				if ($$var != "none")
 				{
+//					echo "new img! <br>";
 					if ($this->arr[$page]["content"][$row][$col]["tn_id"] != 0)
 					{
+//						echo "change <br>";
 						$ar = $t->_replace(array("filename" => $$var,"file_type" => ${$var."_type"}, "poid" => $this->arr[$page]["content"][$row][$col]["tn_id"]));
 						$pid = $ar["id"];
 					}
 					else
 					{
+//						echo "upload! <br>";
 						$ar = $t->_upload(array("filename" => $$var,"file_type" => ${$var."_type"}, "oid" => $this->id));
 						$pid = $ar["id"];
+//						echo "pid = $pid <br>";
 					}
 					$img = $t->get_img_by_id($pid);
 					$this->arr[$page]["content"][$row][$col]["tn_id"] = $img["id"];
 					$this->arr[$page]["content"][$row][$col]["tnurl"] = $img["url"];
+//					echo "tnid = $img[id] , tnurl = $img[url] <br>";
 				}
 
 				$t = new db_images;
@@ -364,7 +376,8 @@ class gallery extends aw_template
 			global $col, $row;
 			$this->read_template("show_pic.tpl");
 			$cell = $this->arr[$page]["content"][$row][$col];
-			$this->vars(array("bigurl" => $cell["bigurl"], "caption" => $cell["caption"], "date" => $cell["date"]));
+			$bigurl = preg_replace("/^http:\/\/.*\//","/",$cell["bigurl"]);
+			$this->vars(array("bigurl" => $bigurl, "caption" => $cell["caption"], "date" => $cell["date"]));
 		}
 		else
 		{
@@ -391,7 +404,6 @@ class gallery extends aw_template
 
 					// strip the beginning of a posible absolute url
 					$tnurl = preg_replace("/^http:\/\/.*\//","/",$cell["tnurl"]);
-					print $tnurl;
 					$this->vars(array(
 						"tnurl" => $tnurl, 
 						"caption" => $cell["caption"], 
