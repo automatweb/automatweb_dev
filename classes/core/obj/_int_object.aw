@@ -914,6 +914,7 @@ class _int_object
 			{
 				$this->obj["meta"][$GLOBALS["properties"][$this->obj["class_id"]][$key]["name"]] = $val;
 			}
+			else
 			if ($GLOBALS["properties"][$this->obj["class_id"]][$key]["method"] == "bitmask")
 			{
 				// it's flags, sync to that
