@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.18 2004/10/18 08:46:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.19 2004/10/22 10:25:13 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -264,6 +264,7 @@ class add_tree_conf extends class_base
 		$ret = array();
 
 		$clss = aw_ini_get("classes");
+		$grps = aw_ini_get("classfolders");
 
 		foreach($r as $clid => $one)
 		{
@@ -275,7 +276,22 @@ class add_tree_conf extends class_base
 				$show = false;
 				foreach($grp as $g)
 				{
-					if ($v["fld"][$g])
+					// must check group parents as well :(
+					$has_grp = $v["fld"][$g];
+					if ($has_grp)
+					{
+						while ($g)
+						{
+							if (!$v["fld"][$g])
+							{
+								$has_grp = false;
+								break;
+							}
+							$g = $grps[$g]["parent"];
+						}
+					}
+
+					if ($has_grp)
 					{
 						$show = true;
 					}
@@ -301,6 +317,7 @@ class add_tree_conf extends class_base
 	**/
 	function can_access_class($atc, $class)
 	{
+		$grps = aw_ini_get("classfolders");
 		$us = $atc->meta("usable");
 		
 		$class_id = false;
@@ -322,7 +339,6 @@ class add_tree_conf extends class_base
 			}
 		}
 
-
 		if (!$class_id)
 		{
 			return true;
@@ -338,7 +354,22 @@ class add_tree_conf extends class_base
 			$show = false;
 			foreach($grp as $g)
 			{
-				if ($v["fld"][$g])
+				// must check group parents as well :(
+				$has_grp = $v["fld"][$g];
+				if ($has_grp)
+				{
+					while ($g)
+					{
+						if (!$v["fld"][$g])
+						{
+							$has_grp = false;
+							break;
+						}
+						$g = $grps[$g]["parent"];
+					}
+				}
+
+				if ($has_grp)
 				{
 					$show = true;
 				}
