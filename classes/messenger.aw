@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.12 2001/05/23 05:36:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.13 2001/05/23 06:06:25 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1435,26 +1435,30 @@ class messenger extends menuedit_light
 
 	////
 	// !Fetchib maili default pop3 serverist
+	// argumetns
+	// account(int)(optional) - accounti id. millest meili tirida
 	function get_mail($args = array())
 	{
-		classload("users");
-		$users = new users();
-		$pop3conf = $users->get_user_config(array(
-						"uid" => UID,
-						"key" => "pop3servers",
-					));
+		extract($args);
+		$pop3conf = $this->msgconf["msg_pop3servers"];
 		$c = "";
 		$accdata = array();
 		if (is_array($pop3conf))
 		{
 			foreach($pop3conf as $accid => $cvalues)
 			{
-				if ($cvalues["default"])
+				if ($account == $accid)
 				{
-					$accdata = $cvalues;
+					$accdata[] = $cvalues;
+				}
+				elseif ($cvalues["default"])
+				{
+					$accdata[] = $cvalues;
 				};
 			};
 		};
+
+		// teeme kasutaja inboxi asukoha kindlaks
 		$q = "SELECT msg_inbox FROM users WHERE uid = '" . UID . "'";
 		$this->db_query($q);
 		$row = $this->db_next();
@@ -1465,26 +1469,57 @@ class messenger extends menuedit_light
 			exit;
 		};
 
-		$inbox = $row["msg_inbox"];
+		$parent = $row["msg_inbox"];
 
 		// tekitame uidl-ide nimekirja
 		$uidls = array();
-		$q = "SELECT uidl FROM messages WHERE folder = '$inbox'";
+		$q = "SELECT uidl FROM messages WHERE folder = '$parent'";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
 			$uidls[] = $row["uidl"];
 		};
 		#print "getting mail from " . $accdata["server"];
+		global $status_msg;
+		$acc_count = 0;
+		$msg_count = 0;
+		foreach($accdata as $acc)
+		{
+			$acc_count++;
+			$msg_count += $this->_get_pop3_messages(array(
+						"server" => $acc["server"],
+						"uid" => $acc["uid"],
+						"password" => $acc["password"],
+						"uidls" => $uidls,
+						"parent" => $parent,
+					));
+		};
+		$status_msg = "Received $msg_count messages from $acc_count accounts";
+		session_register("status_msg");
+		return $this->mk_my_orb("folder",array());
+	}
+
+	////
+	// !Fetchib mingist serverist kirjad ja salvestab need aw objektidena
+	// argumendid
+	// server(string) - serveri nimi
+	// uid(string) - kasutaja
+	// password(string) - parool
+	// parent(int) - objekt, mille parentina uued kirjad registreeritakse
+	// uilds(array) - uidl-ide nimekiri.
+	function _get_pop3_messages($args = array())
+	{
+		extract($args);
 		classload("pop3");
 		$pop3 = new pop3();
-		$msgs = $pop3->get_messages($accdata["server"],$accdata["uid"],$accdata["password"],false,$uidls);
+		$msgs = $pop3->get_messages($server,$uid,$password,false,$uidls);
 
-
+		$c = 0;
 		if (is_array($msgs))
 		{
 			foreach($msgs as $data)
 			{
+				$c++;
 				// siin peab olema mingi tsykkel, mis leiab kirjale ntx "Subject" välja
 				$msglines = explode("\n",$data["msg"]);
 				$header = "";
@@ -1536,18 +1571,18 @@ class messenger extends menuedit_light
 				$this->quote($content);
 				$this->quote($header);
 				$oid = $this->new_object(array(
-						"parent" => $inbox,
+						"parent" => $parent,
 						"name" => $subject,
 						"class_id" => CL_MESSAGE),false);
 				// tyypi 2 on välised kirjad. as simpel as that.
 				$q = "INSERT INTO messages (id,pri,mfrom,mto,folder,subject,tm,type,uidl,message,headers)
-					VALUES('$oid','0','$from','$to','$inbox','$subject','$tm','2','$uidl','$content','$header')";
+					VALUES('$oid','0','$from','$to','$parent','$subject','$tm','2','$uidl','$content','$header')";
 				$this->db_query($q);
 
 
 			};
 		};
-		return $this->mk_my_orb("folder",array());
+		return $c;
 	}
 
 
