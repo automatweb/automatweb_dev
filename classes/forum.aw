@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.29 2001/12/14 12:22:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.30 2001/12/14 12:45:45 cvs Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -396,7 +396,7 @@ class forum extends aw_template
 		));
 		while($row = $this->db_next())
 		{
-			$this->comments[$row["parent"]][] = $row;
+			$this->_comments[$row["parent"]][] = $row;
 		};
 		$this->rec_comments(0);
 		$this->vars(array(
@@ -436,13 +436,25 @@ class forum extends aw_template
 		$board_obj = $this->get_object($row["board_id"]);
 		$forum_obj = $this->get_object($board_obj["parent"]);
 		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
+		$this->mk_links(array("board" => $board_obj["oid"],"id" => $board_obj["parent"]));
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
 		if ($row)
 		{
 			$this->read_template("messages.tpl");
+			$this->vars(array(
+				"topic" => $board_obj["name"],
+				"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
+				"created" => $this->time2date($board_obj["created"],2),
+				"rate" => sprintf("%0.2f",$board_obj["rate"]),
+				"text" => nl2br(create_links($board_obj["comment"])),
+			));
 			$content = $this->display_comment($row);
 		}
-		return $content . $this->add_comment(array("parent" => $parent,"section" => $section));
+		$this->vars(array(
+			"message" => $content,
+			"TOPIC" => $this->parse("TOPIC"),
+		));
+		return $this->parse() . $this->add_comment(array("parent" => $parent,"section" => $section));
 	}
 
 	////
