@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.84 2001/12/18 00:09:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.85 2001/12/31 10:57:59 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2252,17 +2252,20 @@ class form extends form_base
 					}
 					else if ($el->get_type() == "date")
 					{
-						if ($el->get_subtype() == "from")
+						if ($el->get_subtype() == "from" && $this->entry[$el->get_id()] > 1)
 						{
 							$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." >= ".$this->entry[$el->get_id()].")";
 						}
-						else if ($el->get_subtype() == "to")
+						else if ($el->get_subtype() == "to" && $this->entry[$el->get_id()] > 1)
 						{
 							$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." <= ".$this->entry[$el->get_id()].")";
 						}
 						else
 						{
-							$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." = ".$this->entry[$el->get_id()].")";
+							if ($this->entry[$el->get_id()] > 1)
+							{
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.el_".$el->arr["linked_element"]." = ".$this->entry[$el->get_id()].")";
+							}
 						}
 					}
 					else if ($el->get_type() == "radiobutton")
