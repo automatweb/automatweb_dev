@@ -1,5 +1,5 @@
 <table border="0" cellspacing="1" cellpadding="2">
-<form method="POST" action="/index.{VAR:ext}">
+<form name=login method="POST" action="/index.{VAR:ext}">
 <tr>
 <td colspan="2">
 <b>Selle ressursi kasutamiseks peate olema sisse logitud</b>
@@ -19,12 +19,14 @@
 </td>
 <td>
 	<input type="password" name="password" size="40"">
-	<img src='http://www.automatweb.com/img/logo_black.gif' height=1 width=1 onload="document.forms[0].elements['uid'].focus()">
 </td>
 </tr>
 <td colspan="2" align="center">
 {VAR:reforb}
 <input type="submit" value="Logi sisse">
+<script language="Javascript">
+	document.login.uid.focus();
+</script>
 </td>
 </tr>
 </form>
