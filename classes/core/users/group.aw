@@ -71,6 +71,10 @@
 @reltype ACL value=3 clid=CL_ACL
 @caption acl
 
+@reltype ADMIN_ROOT value=4 clid=CL_MENU
+@caption rootmen&uuml;&uuml;
+
+
 */
 
 class group extends class_base
