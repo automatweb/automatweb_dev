@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.305 2004/12/10 10:11:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.306 2004/12/14 10:22:52 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -480,6 +480,7 @@ class document extends aw_template
 				$this->vars(array(
 					"docid" => $docid,
 					"printlink" => $link,
+					"tv_sel" => $GLOBALS["tv_sel"]
 				));
 				#aw_global_set("no_menus",1);
 				$_tmp = $this->parse("PRINTANDSEND");
@@ -1302,7 +1303,7 @@ class document extends aw_template
 			"user5" => $doc["user5"],
 			"user6" => $doc["user6"],
 			"obj_modified" => (is_object($doc_o) ? $doc_o->modified() : ""),
-			"sel_menu_id" => $doc_o->parent()
+			"sel_menu_id" => $doc_o->parent(),
 		));
 
 		for($i = 1;  $i < 7; $i++)
