@@ -85,23 +85,31 @@ class relationmgr extends aw_template
 		$filt = false;
 		if (($adc_id = $atc->get_current_conf()))
 		{
+			$adc = obj($adc_id);
 			$filt = $atc->get_alias_filter($adc_id);
 		}
 		if($filt)
 		{
-			$tmp = $this->rel_classes;
+			$tmp = array();
 			foreach($tmp as $key => $val)
 			{
 				foreach($val as $key2 => $val2)
 				{
-					if(array_key_exists($key2, $filt))
+					if($adc->can_access_class($adc, $val2))
 					{
-						unset($this->clids[$key2]);
-						unset($tmp[$key][$key2]);
+						$tmp[$key][$key2] = $val2;
 					}
 				}
-			} 
+			}
 			$this->true_rel_classes = $tmp;
+			$tmp = array();
+			foreach($this->clids as $key => $val)
+			{
+				if (array_key_exists($key, $filt))
+				{
+					$tmp[$key] = $val;
+				}
+			}
 		}
 		else
 		{
