@@ -1,10 +1,10 @@
 <table border="1" cellspacing="1" cellpadding="1">
 <tr>
-<td align="center"><strong><a href="{VAR:self}?year={VAR:prevyear}&mon={VAR:prevmon}{VAR:add}">&lt;&lt;</a></strong></td>
+<td align="center"><strong><a href="{VAR:self}?{VAR:prefix}&year={VAR:prevyear}&mon={VAR:prevmon}{VAR:add}">&lt;&lt;</a></strong></td>
 <td colspan="5" align="center">
 <strong><a href="{VAR:self}?year={VAR:year}&mon={VAR:mon}{VAR:add}">{VAR:caption}</a></strong>
 </td>
-<td align="center"><strong><a href="{VAR:self}?year={VAR:nextyear}&mon={VAR:nextmon}{VAR:add}">&gt;&gt;</a></strong></td>
+<td align="center"><strong><a href="{VAR:self}?{VAR:prefix}&year={VAR:nextyear}&mon={VAR:nextmon}{VAR:add}">&gt;&gt;</a></strong></td>
 </tr>
 <!-- SUB: week -->
 <tr>
