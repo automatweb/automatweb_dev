@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/method.aw,v 1.5 2005/03/14 17:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/method.aw,v 1.1 2005/03/17 18:30:25 kristo Exp $
 // method.aw - Klassi meetod
 /*
 
