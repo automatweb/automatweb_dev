@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.23 2002/12/19 15:51:51 duke Exp $
+// $Id: class_base.aw,v 2.24 2002/12/19 17:17:40 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -147,7 +147,7 @@ class class_base extends aliasmgr
 		// create an instance of the datasource ($this->ds)
 		// set $this->clid and $this->clfile (Do I need the latter at all?)
 		$this->init_class_base();
-		
+
 		extract($args);
 
 		$this->id = $id;
@@ -198,6 +198,13 @@ class class_base extends aliasmgr
 				$this->parent = $tmp["parent"];
 				$this->coredata = $tmp;
 			};
+		};
+
+		if (method_exists($this->inst,"callback_pre_edit"))
+		{
+			$this->inst->callback_pre_edit(array(
+				"object" => $this->coredata,
+			));
 		};
 
 		// parse the properties - resolve generated properties and
@@ -602,7 +609,7 @@ class class_base extends aliasmgr
 			}
 			else
 			{
-				$link = "#";
+				$link = ($activegroup == $key) ? "#" : "";
 			};
 
 			if (!$this->classinfo["hide_tabs"])
@@ -714,7 +721,7 @@ class class_base extends aliasmgr
 
 		// loads all properties for this class
 		$this->classinfo = $cfgu->get_classinfo();
-		$groupinfo = new aw_array($cfgu->get_opt("groupinfo"));
+		$groupinfo = new aw_array($cfgu->get_groupinfo());
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 
 		if ($args["group"] && $bygroup[$args["group"]])
@@ -842,7 +849,7 @@ class class_base extends aliasmgr
 		}
 
 		// now, cycle over all the properties and do all necessary filtering
-		foreach($groupinfo as $key => $val)
+		foreach($groupinfo->get() as $key => $val)
 		{
 			$groupnames[$key] = $val["caption"];
 		};
