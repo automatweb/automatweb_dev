@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.1 2004/10/12 14:05:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.2 2004/10/12 17:12:16 duke Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -21,13 +21,17 @@ class project_selector extends core
 		));
 
 		$prjlist = array();
-		for($o =& $olist->begin(); !$olist->end(); $o =& $olist->next())
+		foreach($olist->arr() as $o)
 		{
 			$xlist[$o->parent()] = 1;
 		};
 
 		$all_props = array();
 		$prop = $arr["prop"];
+
+		$propname = $prop["name"];
+
+		print $propname;
 
 
 		// väga lahe - nüüd tuleb veel grupeerimine teha
@@ -40,32 +44,36 @@ class project_selector extends core
 			$by_parent = array();
 			$first = true;
 
-			for($o =& $olist->begin(); !$olist->end(); $o =& $olist->next())
+			foreach($olist->arr() as $o)
 			{
 				$pr = new object($o->parent());
+				$id = $o->id();
+				
 				if ($first)
 				{
-					$first_project = $o->id();
+					$first_project = $id;
 					$first = false;
 				};
 
 				// aah, but that IS the bloody problem .. I can't enter events in that way
 
 				// now how do I get that grouping shit to work?
-				$all_props["prj_" . $o->id()] = array(
+				$all_props["${propname}${id}"] = array(
 					"type" => "checkbox",
-					"name" => "prj" . "[" .$o->id() . "]",
+					"name" => "${propname}[${id}]",
 					"caption" => html::href(array(
-						"url" => $this->mk_my_orb("change",array("id" => $o->id()),CL_PROJECT),
+						"url" => $this->mk_my_orb("change",array("id" => $id),CL_PROJECT),
 						"caption" => "<font color='black'>" . $o->name() . "</font>",
 					)),
-					"ch_value" => $xlist[$o->id()],
+					"ch_value" => $xlist[$id],
 					"value" => 1,
 				);
 
 			};
+			/*
 			$pr = get_instance(CL_PROJECT);
 			$pr->_recurse_projects(0,$first_project);
+			*/
 
 		}
 		else
@@ -83,14 +91,15 @@ class project_selector extends core
 
 			foreach($conns as $conn)
 			{
-				$all_props["prj_" . $conn->prop("from")] = array(
+				$from = $conn->prop("from");
+				$all_props["${propname}${from}"] = array(
 					"type" => "checkbox",
-					"name" => "prj" . "[" .$conn->prop("from") . "]",
+					"name" => "${propname}[${from}]",
 					"caption" => html::href(array(
-						"url" => $this->mk_my_orb("change",array("id" => $conn->prop("from")),"project"),
+						"url" => $this->mk_my_orb("change",array("id" => $from),CL_PROJECT),
 						"caption" => "<font color='black'>" . $conn->prop("from.name") . "</font>",
 					)),
-					"ch_value" => $xlist[$conn->prop("from")],
+					"ch_value" => $xlist[$from],
 					"value" => 1,
 				);
 			};
@@ -134,9 +143,9 @@ class project_selector extends core
 		$awt->stop("retr-project-connections");
 
 		$new_ones = array();
-		if (is_array($arr["request"]["prj"]))
+		if (is_array($arr["prop"]["value"]))
 		{
-			$new_ones = $arr["request"]["prj"];
+			$new_ones = $arr["prop"]["value"];
 		};
 
 		unset($new_ones[$event_obj->parent()]);
