@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.65 2003/10/14 10:20:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.66 2003/10/28 12:30:17 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -204,6 +204,7 @@ class aw_table
 			}
 		}
 
+	
 		// we should mark this down only when we have clicked on a link and thus changed something from the default
 		// what's the difference? well - if the defaults change and this is written a reload does not change things
 		//
@@ -408,6 +409,8 @@ class aw_table
 		{
 			$_a = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v1));
 			$_b = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v2));
+			$_a = strip_tags($_a);
+			$_b = strip_tags($_b);
 			$ret = strcoll($_a, $_b);
 			if ($GLOBALS["vcl_sort_dbg"] == 1)
 			{
