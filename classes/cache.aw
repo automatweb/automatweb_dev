@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.13 2002/11/27 14:11:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.14 2003/01/20 16:02:55 duke Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -68,12 +68,6 @@ class cache extends core
 			if (is_array($this->metaref) && (in_array($this->referer,$this->metaref)) )
 			{
 				$fname .= "-" . substr($this->referer,7);
-			}
-
-			global $DBG;
-			if ($DBG)
-			{
-				var_dump(in_array($this->referer,$this->metaref));
 			}
 
 			if (strlen($fname) > 100)
@@ -158,9 +152,102 @@ class cache extends core
 		}
 	}
 
+	// fname = fully qualified file name minus basedir
+	// unserializer = reference in form of array("classname","function") to the unserializer function
+	function get_cached_file($args = array())
+	{
+		extract($args);
+
+		// now calculate fqfn
+		// XXX: is stripping dots good enough?
+		$pathinfo = pathinfo($args["fname"]);
+		$dirname = str_replace(".","",$pathinfo["dirname"]);
+
+		$fqfn = $this->cfg["basedir"] . $dirname . "/" . $pathinfo["basename"];
+
+		if (is_file($fqfn) && is_readable($fqfn))
+		{
+			// figure out the cache id for the file
+			// xml/properties/search.xml becomes properties_search.cache
+			// xml/orb/search.xml becomes orb_search.cache
+			$prefix = substr($dirname,strrpos($dirname,"/")+1);
+			if (strlen($prefix) == 0)
+			{
+				// could not calculate a valid cache_id, bail out
+				return false;
+			};
+			$cache_id = $prefix . "_" . $pathinfo["basename"] . ".cache";
+		}
+		else
+		{
+			// no source file, bail out
+
+			// an idea to consider, perhaps we _should_ have a way to 
+			// work only with serialized files? 
+			return false;
+		};
+
+		$cachedir = $this->cfg["page_cache"];
+
+		$cachefile = $cachedir . "/" . $cache_id;
+		
+		if (!is_writable($cachedir))
+		{
+			// cannot write cache, bail out
+			// OTOH this is not a fatal error, we can still work without cache
+			return false;
+		}
+
+		// now get mtime for both files, source and cache
+		$source_mtime = @filemtime($fqfn);
+		$cache_mtime = @filemtime($cachefile);
+
+		if ($source_mtime > $cache_mtime)
+		{
+			//print "need to reparse<br>";
+			// 1) get an instance of the unserializer class,
+			$clobj = &$args["unserializer"][0];
+			$clmeth = $unserializer[1];
+			if (is_object($clobj) && method_exists($clobj,$clmeth))
+			{
+				// 2) get the contents of the source file
+				$contents = $this->get_file(array("file" => $fqfn));
+				// 3) pass them to unserializer
+				$result = $clobj->$clmeth(array("content" => $contents));
+			};
+			$ser_res = aw_serialize($result,SERIALIZE_PHP);
+			$this->put_file(array(
+				"file" => $cachefile,
+				"content" => $ser_res,
+			));
+			// Now I somehow need to retrieve the results of unserialization
+			// and write them out to the file
+			// 4) aquire reference to results
+		}
+		else
+		{
+			// 1) get the contents of cached file
+			// 2) awunserialize the data
+			$src = $this->get_file(array(
+				"file" => $cachefile,
+			));
+			
+			$clobj = &$args["loader"][0];
+			$clmeth = $loader[1];
+			if (is_object($clobj) && method_exists($clobj,$clmeth))
+			{
+				$clobj->$clmeth(array("data" => aw_unserialize($src)));
+			};
+		};
+
+	}
+
 	////
 	// invalidates all cache files that match pcre regex $regex
 	// returns the number of caches that were invalidated
+
+	// this can be really dangerous, we don't check whether the file is actually
+	// in the correct directory. 
 	function file_invalidate_regex($regex)
 	{
 		$cnt = 0;
