@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.15 2004/08/28 12:13:23 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.16 2004/08/28 14:34:53 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -459,55 +459,33 @@ class crm_offer extends class_base
 				break;
 				
 			case "salesman":
-				if(!$arr["new"] == 1)
+				if($data["value"])
 				{
-			
-					foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SALESMAN")) as $conn)
-					{ 
-						$arr["obj_inst"]->disconnect(array(
-							"from" => $conn->prop("to"),
-							"reltype" => RELTYPE_SALESMAN,
-						));
-					}
+					$arr["obj_inst"]->connect(array(
+						"to" => $data["value"],
+						"reltype" => RELTYPE_SALESMAN,
+					));
 				}
-				$arr["obj_inst"]->connect(array(
-					"to" => $data["value"],
-					"reltype" => RELTYPE_SALESMAN,
-				));
 			break;
 			
 			case "orderer":
-				if(!$arr["new"] == 1)
+				if($data["value"])
 				{
-					foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ORDERER")) as $conn)
-					{ 
-						$arr["obj_inst"]->disconnect(array(
-							"from" => $conn->prop("to"),
-							"reltype" => RELTYPE_ORDERER,
-						));
-					}
+					$arr["obj_inst"]->connect(array(
+						"to" => $data["value"],
+						"reltype" => RELTYPE_ORDERER,
+					));
 				}
-				$arr["obj_inst"]->connect(array(
-					"to" => $data["value"],
-					"reltype" => RELTYPE_ORDERER,
-				));
 			break;
 			
 			case "preformer":
-				if(!$arr["new"] == 1)
+				if($data["value"])
 				{
-					foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PREFORMER")) as $conn)
-					{ 
-						$arr["obj_inst"]->disconnect(array(
-							"from" => $conn->prop("to"),
-							"reltype" => RELTYPE_PREFORMER,
-						));
-					}
+					$arr["obj_inst"]->connect(array(
+						"to" => $data["value"],
+						"reltype" => RELTYPE_PREFORMER,
+					));
 				}
-				$arr["obj_inst"]->connect(array(
-					"to" => $data["value"],
-					"reltype" => RELTYPE_PREFORMER,
-				));
 			break;
 		};
 		return $retval;
