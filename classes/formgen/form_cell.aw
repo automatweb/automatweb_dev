@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.9 2003/05/14 14:36:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.10 2003/07/17 12:27:01 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -322,6 +322,7 @@ class form_cell extends form_base
 		$c = "";
 		$cs = "";
 		$has_els = false;
+		$has_nothidden = false;
 		for ($i = 0; $i < $this->cnt; $i++)
 		{
 			// here we must check the show element controllers
@@ -343,6 +344,10 @@ class form_cell extends form_base
 
 			if ($controllers_ok)
 			{
+				if (!$this->arr[$i]->arr["hidden"])
+				{
+					$has_nothidden = true;
+				}
 				$c .= $this->arr[$i]->gen_user_html_not($prefix,$elvalues,$no_submit);
 				$has_els = true;
 			}
@@ -360,6 +365,12 @@ class form_cell extends form_base
 		if ($has_els == false && $this->form->arr["hide_empty_rows"] == 1)
 		{
 			return -1;
+		}
+
+		if (!$has_nothidden)
+		{
+			$this->form->gen_preview_append .= $c;
+			return "";
 		}
 
 		if ($c == "")
@@ -438,6 +449,7 @@ class form_cell extends form_base
 				if ($res !== true)
 				{
 					$shctrlok = false;
+					//echo "show controller $ctlid failed for element ".$this->arr[$i]->get_id()." <br>";
 				}
 			}
 			if ($shctrlok)
