@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.20 2003/06/04 16:47:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.21 2003/06/06 13:07:41 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -95,7 +95,7 @@
 @property sections type=select multiple=1 size=20 group=vennastamine store=no
 @caption Sektsioonid
 
-@property aliasmgr type=aliasmgr store=no editonly=1
+@property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr
 @caption Aliastehaldur
 
 @property start type=date_select table=planner group=calendar
@@ -121,6 +121,7 @@
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
 @groupinfo settings caption=Seadistused
+@groupinfo relationmgr caption=Seostehaldur submit=no
 
 @tableinfo documents index=docid master_table=objects master_index=oid
 @tableinfo planner index=id master_table=objects master_index=oid
@@ -146,7 +147,6 @@ class doc extends class_base
 		{
 			case "name":
 			case "comment":
-			case "status":
 				$retval = PROP_IGNORE;
 				break;
 
