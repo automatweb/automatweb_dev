@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.8 2004/09/24 09:28:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.9 2004/10/08 16:02:01 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -27,6 +27,10 @@
 @property use_template type=select field=meta method=serialize
 @caption Välimus
 
+@default group=prj_image
+@property prj_image type=releditor reltype=RELTYPE_PRJ_IMAGE use_form=emb rel_id=first field=meta method=serialize
+@caption Pilt
+
 @default group=event_list
 
 @property event_toolbar type=toolbar no_caption=1
@@ -48,6 +52,7 @@
 
 @groupinfo general2 parent=general caption="Üldine"
 @groupinfo web_settings parent=general caption="Veebiseadistused"
+@groupinfo prj_image parent=general caption="Pilt"
 @groupinfo event_list caption="Sündmused" submit=no
 @groupinfo add_event caption="Muuda sündmust"
 @groupinfo files caption="Failid"
@@ -73,6 +78,9 @@
 
 @reltype PRJ_DOCUMENT value=7 clid=CL_DOCUMENT
 @caption Kirjeldus
+
+@reltype PRJ_IMAGE value=8 clid=CL_IMAGE
+@caption Pilt
 
 */
 
@@ -181,26 +189,21 @@ class project extends class_base
 
 		for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
 		{
+			if ($o->id() != $o->brother_of())
+			{
+				// this will break things, but makes estonia work for now
+				continue;
+			};
+
+
 			$clinf = $this->cfg["classes"][$o->class_id()];
+
 			$link = $this->mk_my_orb("change",array(
 				"id" => $o->id(),
 				"return_url" => urlencode(aw_global_get("REQUEST_URI")),
 			),$o->class_id());
-			/*
-			$link = html::get_change_url(array(
-				"oid" => $o->id(),
-				"params" => array(
-					"return_url" => aw_global_get("REQUEST_URI"),
-				),
-			));
-			*/
-			/*
-			$link = $this->mk_my_orb("change",array(
-				"id" => $arr["obj_inst"]->id(),
-				"event_id" => $o->id(),
-				"group" => "add_event",
-			),$this->clid);
-			*/
+
+
 			$t->add_item(array(
 				"timestamp" => $o->prop("start1"),
 				"data" => array(
@@ -315,14 +318,30 @@ class project extends class_base
 		return $ev_id_list;
 	}
 
-	// nii, see asi tuleb nüüd ringi teha nii, et ta toetaks subprojecte ka
+	/**
+		@attrib name=wtf
+	**/
+	function wtf($arr)
+	{
+		$id = 3190;
+		$o = new object($id);
+		arr($o->properties());
+		$conns = $o->connections_from(array(
+			//"type" => "RELTYPE_PRJ_DOCUMENT",
+			"type" => 7,
+			"to.lang_id" => aw_global_get("lang_id"),
+		));
+		arr($conns);
+		die();
+	}
 
 	function get_events($arr)
 	{
-		// okey, I need a generic function that should be able to return events from the range I am
-		// interested in
 		extract($arr);
-	
+
+		// ooo fuck .. see ju keerab mul kõik perse!
+		// events will ALWAYS be placed under the original project object. translations are just that ..
+		// translations .. they do not contain other objects
 		$o = new object($arr["id"]);
 		$orig_conns = $o->connections_from(array(
 			"type" => 103,
@@ -333,16 +352,15 @@ class project extends class_base
 			$first = reset($orig_conns);
 			$arr["id"] = $first->prop("to");
 		};
-		
+
 		$parents = array($arr["id"]);
 
-	
 		if (1 != $o->prop("skip_subproject_events"))
 		{
 			$this->used = array();
-			obj_set_opt("no_auto_translation", 1);
+			#obj_set_opt("no_auto_translation", 1);
 			$this->_recurse_projects(0,$arr["id"]);
-			obj_set_opt("no_auto_translation", 0);
+			#obj_set_opt("no_auto_translation", 0);
 		};
 
 		if (is_array($this->prj_map))
@@ -382,18 +400,31 @@ class project extends class_base
 		{
 			$stat_str = "objects.status = " . $arr["status"];
 		};
+		// mulle tundub et ma pean siis lugema kõiki objekte sõltumata lang_id-st
+		/*
 		$q = "SELECT objects.oid AS id,objects.parent,objects.class_id,objects.brother_of,objects.name,planner.start,planner.end
                         FROM planner
                         LEFT JOIN objects ON (planner.id = objects.brother_of)
                         WHERE planner.start >= '${_start}' AND
                         (planner.end <= '${_end}' OR planner.end IS NULL) AND
                         $stat_str AND parent IN (${parent}) AND lang_id = ${lang_id} $limit";
-		//dbg::p1($q);
+		*/		
+		$q = "SELECT objects.oid AS id,objects.parent,objects.class_id,objects.brother_of,objects.name,planner.start,planner.end
+			FROM planner
+			LEFT JOIN objects ON (planner.id = objects.brother_of)
+			WHERE planner.start >= '${_start}' AND
+			(planner.end <= '${_end}' OR planner.end IS NULL) AND
+			$stat_str AND parent IN (${parent}) $limit";
+
+		dbg::p1($q);
 		$this->db_query($q);
 		$events = array();
 		$pl = get_instance(CL_PLANNER);
 		$projects = array();
+		obj_set_opt("no_auto_translation", 0);
+		$lang_id = aw_global_get("lang_id");
 		// weblingi jaoks on vaja küsida connectioneid selle projekti juurde!
+		$active_lang_only = aw_ini_get("project.act_lang_only");
 		while($row = $this->db_next())
 		{
 			// now figure out which project this thing belongs to?
@@ -407,25 +438,83 @@ class project extends class_base
 			$e_obj = new object($row["brother_of"]);
 			//$e_obj = new object($row["id"]);
 			// XXX: can this code be made optional?
+			$pr_obj = new object($e_obj->parent());
+			$project_name = $pr_obj->name();
+
+
+			// check whether this project has an attached image
+			if ($active_lang_only == 1 && $pr_obj->lang_id() != $lang_id)
+			{
+				global $XX5;
+				if ($XX5)
+				{
+					print $pr_obj->id();
+					arr($pr_obj->properties());
+					arr($row);
+				};
+				dbg::p1("skipping " . $row["name"]);
+				dbg::p1("skipping " . $row["id"]);
+				continue;
+			}
+			else
+			{
+				dbg::p1("not skipping" . $row["id"]);
+			};
+
+
+
+			obj_set_opt("no_auto_translation",1);
+			$fx = $pr_obj->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
+			if ($fx)
+			{
+				$pr_obj = $fx;
+			};
+			obj_set_opt("no_auto_translation",0);
 			$conns = $pr_obj->connections_to(array(
 				"type" => 17, // RELTYPE_CONTENT_FROM
+				"from.lang_id" => aw_global_get("lang_id"),
 			));
+
+
 			$first = reset($conns);
 			if (is_object($first))
 			{
-				$web_page_id = $first->prop("from");
+				$from = $first->from();
+				//$web_page_id = $first->prop("from");
+				$web_page_id = $from->id();
 			};
+			
+
+			$pr_image = $pr_obj->get_first_obj_by_reltype(RELTYPE_PRJ_IMAGE);
+
+			if ($pr_image)
+			{
+				$inst = $pr_image->instance();
+				$row["project_image"] = $inst->get_url_by_id($pr_image->id());
+			};
+
+
+			//dbg::p1("event name is " . $e_obj->name());
+			//dbg::p1("event id is " .$e_obj->id());
 			// aga üks event ei saa ju ometi topelt olla?
+
+			// kas eventi objektil ei peaks ka mitte originaali sisse lugema?
+
+			// milline on seos objektide 3906 ja 3921 vahel
 
 			// siia tuleb see zhanrite asi ka panna nüüd?
 			$events[$e_obj->brother_of()] = array(
 				"start" => $row["start"],
 				"name" => $e_obj->name(),
 				"parent" => $e_obj->parent(),
-				//"name" => $row["name"],
-				//"id" => $row["id"],
+				"lang_id" => $e_obj->lang_id(),
 				"id" => $e_obj->id(),
+				"project_image" => $row["project_image"],
+				"original_id" => $row["brother_of"],
 				"project_weblink" => aw_ini_get("baseurl") . "/" . $web_page_id,
+				"project_day_url" => aw_ini_get("baseurl") . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$row["start"]),
+				"project_name" => $project_name,
+				"project_name_ucase" => strtoupper($project_name),
 				"link" => $this->mk_my_orb("change",array(
 					"id" => $e_obj->id(),
 				),$row["class_id"],true,true),
@@ -433,64 +522,137 @@ class project extends class_base
 			$ids[$row["brother_of"]] = $row["brother_of"];
 		};
 
+		// kurat, kuidas saab üks project tree ehitamine NII raske olla :(
+
 		// ma arvan et siia tuleks teha üks lisaflag, sest järgnev arvutus on suhteliselt
 		// expensive ja seda on vaja ainult estonias
 		if (sizeof($events) > 0)
 		{
-			// vaja on leida ka igale eventile kõik vennad
-		
 			$mpr = $this->get_master_project($o,$level);
 			$this->prj_level = 1;
 
-			//dbg::p1("level = " . $level);
-
-			// seega .. kui on tegemist child projektiga, siis on mul tarvis see leida
-	
 			$this->prj_levels[$mpr->id()] = $this->prj_level;
 			$this->prj_level++;
-		
-			$this->_recurse_projects(0,$mpr->id());
+	
+			$this->used = array();
+			//$this->_recurse_projects(0,$mpr->id());
 			$prj_levels = $this->prj_levels;
 
 
+			$this->_recurse_projects2($mpr->id());
+
+			//obj_set_opt("no_auto_translation",1);
 			$ol = new object_list(array(
 				//"brother_of" => array_keys($events),
 				"brother_of" => $ids,
+				"lang_id" => array(),
 			));
+			//obj_set_opt("no_auto_translation",0);
 
 			// nii .. aga ma ei küsi alamprojektidest sündmusi .. või tegelikult küsin .. aga
 			// ma pean teadma mis projektides see värk asub
-			
+
 			$byp = array();
 
-			// kuidas kurat ma panen selle kirja? :(
-
-			// ma tean iga sündmuse kohta mis projektides ta asub ...
-			// nüüd on mul vaja teada mitmendal tasemel mingi projekt asub
+			$parent_strings = array();
 
 			foreach($ol->arr() as $brot)
 			{
-				//dbg::p1("object is " . $brot->name());
-				//dbg::p1("object id is  " . $brot->id());
 				$prnt = new object($brot->parent());
-				$prj_level = $prj_levels[$brot->parent()];
-				// I have prnt, how do I figure out which level it is?
+				$prnt_name = $prnt->name();
+				obj_set_opt("no_auto_translation",1);
+				$fx = $prnt->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
+				if ($fx)
+				{
+					$prnt = $fx;
+				};
+
+				$prj_level = $this->_ptree[$prnt->id()];
+				//$prj_level++;
+
+				$fx = $brot->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
+				if ($fx)
+				{
+					$brot = $fx;
+				};
+				
+				obj_set_opt("no_auto_translation",0);
 
 				// vasakult paremale 2 ja siis 1
 				//dbg::p1("parent is " . $prnt->id() . " " . $prnt->name());
-				//dbg::p1("prj level is " . $prj_levels[$brot->parent()]);
-				//$bof = $brot->brother_of();
 				$bof = $brot->brother_of();
-				if ($events[$bof])
+				//dbg::p1("id is " . $brot->id());
+				//dbg::p1("bof is " . $bof);
+
+				//if ($events[$bof])
+				//{
+					// siin on see häda, et uus kirjutab vanema üle .. aga ma ei taha et ta
+					// seda teeks .. MIKS siin üldse mingi ülekirjutus toimub?
+					$pix = "parent_" . $prj_level . "_name";
+					//dbg::p1("pix is $pix and " . $prnt->name());
+					$parent_strings[$bof][$pix] = $prnt_name;
+				//};
+			};
+
+
+			$c = new connection();
+			$conns = $c->find(array(
+				"from.class_id" => CL_STAGING,
+				"type" => 2,
+			));
+
+			$links = array();
+			foreach($conns as $conn)
+			{
+				$links[$conn["to"]] = $conn["from"];
+			};
+
+			$conns = $c->find(array(
+				"from.class_id" => CL_STAGING,
+				"type" => 102,
+			));
+
+			$t_links = array();
+
+			foreach($conns as $conn)
+			{
+				$links[$conn["to"]] = $conn["from"];
+				$t_links[$conn["to"]] = $conn["from"];
+			};
+				
+			obj_set_opt("no_auto_translation",0);
+
+
+			foreach($events as $key => $event)
+			{
+				$check = $key;
+				if ($links[$check])
 				{
-					$events[$bof]["parent_" . $prj_level . "_name"] = $prnt->name();
-					dbg::p1("assigning " . $prnt->name());
+					$check = $links[$check];
+				};
+				$evt = new object($event["id"]);
+				$evt_brother = $evt->brother_of();
+				if ($parent_strings[$check])
+				{
+					$events[$key] = array_merge($events[$key],$parent_strings[$check]);
+				}
+				elseif ($parent_strings[$event["original_id"]])
+				{
+					$events[$key] = array_merge($events[$key],$parent_strings[$event["original_id"]]);
+				}
+				else
+				{
 				};
 			};
 		};
 
 		// niisiis - mul on reverse funktsiooni vaja .. või vähemalt mingit trikki saamaks teada 
 		// kust projektist üks konkreetne sündmus tuli
+		global $XX5;
+		if ($XX5)
+		{
+			arr($t_links);
+		};
 		
 		return $events;
 	}
@@ -512,7 +674,7 @@ class project extends class_base
 	// event_id - id of the event
 	function disconnect_event($arr)
 	{
-		print "disconnecting " . $arr["event_id"];
+		//print "disconnecting " . $arr["event_id"];
 		#$evt_obj = new object($arr["event_id"]);
 		#$evt_obj->delete();
 		// deleting is broken now until I can figure out something
@@ -760,6 +922,93 @@ class project extends class_base
 
 	}
 
+	function _recurse_projects2($parent)
+	{
+		obj_set_opt("no_auto_translation",1);
+		$prx = new object($parent);
+		$fx = $prx->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
+		if ($fx)
+		{
+			$prx = $fx;
+		};
+
+		$parent = $prx->id();
+
+		// nüüd on vaja need asjad üksteise sisse paigutada
+		// kuidas?
+
+		// võib-olla leiaks lihtsalt connectionid
+		$c = new connection();
+		$conns = $c->find(array(
+			"from.class_id" => CL_PROJECT,
+			"to.class_id" => CL_PROJECT,
+			"type" => 1,
+		));
+
+		// miks ma ei saa KÕIKI vajalikke objekte kätte?
+
+		// see annab mulle misasjad?
+
+		// no aga kurat see justkui annaks mulle seosed originaalide vahel ju?
+		// miks see minu süsteem ei tööta?
+
+		$subs = array();
+		foreach($conns as $conn)
+		{
+			$o1 = new object($conn["from"]);
+			$o2 = new object($conn["to"]);
+			//print "o1 = " . $o1->id() . "<br>";
+			//print "o1name = " . $o1->name() . "<br>";
+			$subs[$conn["from"]][$conn["to"]] = $conn["to"];
+			$subs[$o1->id()][$o2->id()] = $o2->id();
+		};
+		obj_set_opt("no_auto_translation",0);
+
+		$this->subs = $subs;
+
+		$this->_ptree = array();
+		$this->level = 0;
+
+		$this->_finalize_tree($parent);
+		
+		obj_set_opt("no_auto_translation",0);
+
+	}
+
+	function _finalize_tree($parent)
+	{
+		if (!$this->subs[$parent])
+		{
+			/*
+			global $XX9;
+			if ($XX9)
+			{
+				print "$parent has no sub<br>";
+			};
+			*/
+			return false;
+		}
+		$this->_ptree[$parent] = $this->level;
+
+		$this->level++;
+
+		foreach($this->subs[$parent] as $item)
+		{
+			$this->_finalize_tree($item);
+
+			/*
+			global $XX9;
+			if ($XX9)
+			{
+				print "setting $item to " . $this->level . "<br>";
+			};
+			*/
+			$this->_ptree[$item] = $this->level;
+		};
+
+		$this->level--;
+	}
+
 	// seega .. alustades ühest projektist leiame kõik selle projekti alamprojektid
 	// ma pean siis iga projekti kohta leidma et millisel tasemel ta on.
 
@@ -768,35 +1017,79 @@ class project extends class_base
 	// it should create a list of connections starting from those projects
 	function _recurse_projects($parent,$prj_id)
 	{
+		#obj_set_opt("no_auto_translation", 1);
+		if ($this->used[$parent])
+		{
+			return false;
+		};
+		//dbg::p1("111 recursing from " . $prj_id);
+		//flush();
 		$prj_obj = new object($prj_id);
+		//dbg::p1("111 recursing from " . $prj_obj->name() . " / " . $prj_obj->id());
+		//flush();
+
+		/*
+		$trans_conns = $prj_obj->connections_from(array(
+			"type" => RELTYPE_ORIGINAL,
+		));
+
+		if (sizeof($trans_conns) > 0)
+		{
+			$first = reset($trans_conns);
+			$prj_obj = new object($first->prop("to"));
+
+		};
+		*/
+
+		//dbg::p1("recursing from " . $prj_obj->name());
+
+
 		$prj_conns = $prj_obj->connections_from(array(
 			"type" => "RELTYPE_SUBPROJECT",
 		));
+			global $XX8;
+			if ($XX8)
+			{
+				print "<pre>";
+				print_r($prj_conns);
+				print "</pre>";
+			};
 
 
 		foreach($prj_conns as $prj_conn)
 		{
+			/*
 			global $XX5;
 			if ($XX5)
 			{
 				print "<h2>";
 				print $prj_conn->prop("from.name");
 				print " - ";
+				print $prj_conn->prop("from");
+				print " - ";
 				print $prj_conn->prop("to.name");
+				print " - ";
+				print $prj_conn->prop("to");
 				print "</h2>";
 			};
+			*/
 			$subprj_id = $prj_conn->prop("to");
+			dbg::p1("setting subprj_id to " . $subprj_id);
 			$to = $prj_conn->to();
-			$this->used[$subprj_id] = $subprj_id;
 			$this->prj_map[$parent][$subprj_id] = $subprj_id;
 			$this->r_prj_map[$subprj_id] = $prj_id;
 			$this->prj_levels[$subprj_id] = $this->prj_level;
 			$this->prj_level++;
-			$this->_recurse_projects($subprj_id,$subprj_id);
+			//if (!$this->used[$subprj_id])
+			//{
+				$this->used[$subprj_id] = $subprj_id;
+				$this->_recurse_projects($subprj_id,$subprj_id);
+			//};
 			$this->prj_level--;
 		}
 		
 
+		#obj_set_opt("no_auto_translation", 0);
 
 	}
 	
@@ -1065,15 +1358,12 @@ class project extends class_base
 	function request_execute($o)
 	{
 		$rv = "";
-		if ($o->prop("project_navigator") == 1)
-		{
-			// XXX: make that option do something
-			//$rv .= "here be navigator<p>";
-		};
-
 		$prj_id = $o->id();
 
 		$prj_obj = $o;
+
+		$obj = $o;
+
 
 		$orig_conns = $o->connections_from(array(
 			"type" => 103,
@@ -1086,302 +1376,9 @@ class project extends class_base
 			$prj_obj = $first->to();
 		};
 
-		// a project can be a subproject of another project which in turn
-		// can be a subproject of a third project and so on.
-
-		// the following code tries to figure out the very first project
-		// in that chain - the one that is not a subproject of any other
-		// projects
-		$o2 = $o;
-		$tmp = $o;
-		$obj = $o;
-
-		$level = 0;
-		$parent_selections = array();
-
-		// riight .. now how do I filter that thing?
-
-		while ($o2 != false)
-		{
-			$level++;
-			$sp = $o->connections_to(array(
-				"type" => 1, // SUBPROJECT
-				"from.class_id" => CL_PROJECT,
-			));
-			$first = reset($sp);
-			if (is_object($first))
-			{
-				$o2 = $first->from();
-				array_unshift($parent_selections,$o2->id());
-			}
-			else
-			{
-				$o2 = false;
-			};
-			$tmp = $o;
-			$o = $o2;
-		};
-
-		$super_project = $tmp;
-
-		$project_tree = array();
-
-		$project_tree[1] = $this->_get_subprojects(array(
-			"from" => array($super_project->id()),
-		));
-		
-
-		$project_tree[2] = $this->_get_subprojects(array(
-			"from" => $project_tree[1],
-		));
-
-		$project_tree[3] = $this->_get_subprojects(array(
-			"from" => $project_tree[2],
-		));
-
-		global $XX5;
-		if ($XX5)
-		{
-			arr($project_tree);
-		};
-
-		$all = $project_tree[1] + $project_tree[2] + $project_tree[3];
-		
-		$conn = new connection();
-		$conns = $conn->find(array(
-			"to" => $all,
-			"from.lang_id" => aw_global_get("lang_id"),
-			"from.class_id" => CL_MENU,
-			"type" => RELTYPE_CONTENT_FROM,
-		));
-
-		$valid = array();
-
-		$sel_prj = array();
-		$sel_prj[1] = $_REQUEST["prj1"];
-		$sel_prj[2] = $_REQUEST["prj2"];
-
-		foreach($conns as $connection)
-		{
-			$to_id = $connection["to"];
-			$from_id = $connection["from"];
-			$has_webpage[$to_id] = $from_id;
-		};
-
-		// has_webpage - key is a project id, value is a menu id
-
-		
-		$names = array();
-		if (sizeof($has_webpage) > 0)
-		{
-			$name_list = new object_list(array(
-				"oid" => $has_webpage,
-			));
-			$names = $name_list->names();
-		};
-
-		$step = 0;
-		if ($project_tree[1][$prj_id])
-		{
-			$step = 1;
-		}
-		else
-		if ($project_tree[2][$prj_id])
-		{
-			$step = 2;
-		}
-		else
-		if ($project_tree[3][$prj_id])
-		{
-			$step = 3;
-		};
-
-		$ng[1] = array();
-		$ng[2] = array();
-		$ng[3] = array();
-
-		$p_used = 0;
-
-		// leiame selle parenti
-		$filtered = array();
-
-		$events_from = false;
-
-		if ($step == 1)
-		{
-			$sel[1] = $has_webpage[$prj_id];
-			$sel[2] = $has_webpage[$sel_prj[1]];
-			$sel[3] = $has_webpage[$sel_prj[2]];
-
-			$events_from = $prj_id;
-			if ($sel_prj[1])
-			{
-				$events_from = $sel_prj[1];
-			};
-
-			if ($sel_prj[2])
-			{
-				$events_from = $sel_prj[2];
-			};
-
-			$items[1] = $project_tree[1];
-			$filtered = array(2,3);
-
-			$items[2] = $this->_get_subprojects(array(
-				"from" => $prj_id,
-			));
-
-			$items[3] = $this->_get_subprojects(array(
-				"from" => isset($sel_prj[1]) ? $sel_prj[1] : $items[2],
-			));
-
-			$sect_id = aw_url_change_var(array(
-				"prj1" => "",
-				"prj2" => "",
-			));
-
-			//$ng[1][$sect_id] = $this->vars["lc_project_tree_level1"];
-			$ng[2][$sect_id] = $this->vars["lc_project_tree_level2"];
-
-			$sect_id = aw_url_change_var(array(
-				"prj2" => "",
-			));
-
-			$ng[3][$sect_id] = $this->vars["lc_project_tree_level3"];
-
-
-		};
-
-		if ($step == 2)
-		{
-			$items[1] = $project_tree[1];
-			$items[2] = $project_tree[2];
-			$filtered = array(3);
-			$items[3] = $this->_get_subprojects(array(
-				"from" => $prj_id,
-			));
-			
-			$sect_id = aw_url_change_var(array(
-				"prj1" => "",
-				"prj2" => "",
-			));
-
-			$ng[1][$sect_id] = $this->vars["lc_project_tree_level1"];
-
-			// ja teisel polegi - sest sealt ei saa välja liikuda. vaat nii
-			$sect_id = aw_url_change_var(array(
-				"prj2" => "",
-			));
-
-			$ng[3][$sect_id] = $this->vars["lc_project_tree_level3"];
-			
-			$events_from = $prj_id;
-			if ($sel_prj[2])
-			{
-				$events_from = $sel_prj[2];
-			};
-			
-			$sel[2] = $has_webpage[$prj_id];
-			$sel[3] = $has_webpage[$sel_prj[2]];
-		};
-
-		if ($step == 3 || $step == 0)
-		{
-			$items[1] = $project_tree[1];
-			$items[2] = $project_tree[2];
-			$items[3] = $project_tree[3];
-			
-			$sect_id = aw_url_change_var(array(
-				"prj1" => "",
-				"prj2" => "",
-			));
-
-			$ng[1][$sect_id] = $this->vars["lc_project_tree_level1"];
-			$ng[2][$sect_id] = $this->vars["lc_project_tree_level2"];
-
-			$sel[3] = $has_webpage[$prj_id];
-
-			$events_from = $prj_id;
-			if ($step == 0)
-			{
-				$ng[3][$sect_id] = $this->vars["lc_project_tree_level3"];
-				$filtered = array(1,2,3);
-				if ($sel_prj[1])
-				{
-					$events_from = $sel_prj[1];
-				};
-				if ($sel_prj[2])
-				{
-					$events_from = $sel_prj[2];
-				};
-				if ($sel_prj[3])
-				{
-					$events_from = $sel_prj[3];
-				};
-				$sel[1] = $has_webpage[$sel_prj[1]];
-				$sel[2] = $has_webpage[$sel_prj[2]];
-				$sel[3] = $has_webpage[$sel_prj[3]];
-			};
-
-		};
-
-		// ja kuidagi oleks vaja seda koodi normaliseerida ka
-		for ($i = 1; $i <= 3; $i++)
-		{
-			if ($i != $step)
-			{
-				$p_used++;
-			};
-
-
-			foreach($items[$i] as $project_item)
-			{
-				//dbg::p1("project item is " . $project_item);
-				if ($has_webpage[$project_item])
-				{
-					$webpage = $has_webpage[$project_item];
-					$idx = false;
-					if (in_array($i,$filtered))
-					{
-						$idx = aw_url_change_var("prj" . $p_used . "" ,$project_item);
-						/*
-						if ($i == 2 && $step != 0)
-						{
-							$idx = aw_url_change_var("prj2","",$idx);
-						};
-						*/
-						//$idx = aw_url_change_var("prj" . $i,"",$idx);
-					}
-					else
-					{
-						$idx = "/" . $webpage;
-					};
-
-					if ($idx)
-					{
-						if ($webpage == $sel[$i])
-						{
-							$sel[$i] = $idx;
-						};
-						$ng[$i][$idx] = $names[$webpage];
-					};
-				}
-				else
-				{
-					$x1 = new object($project_item);
-					//dbg::p1("skipping cause " . $x1->name() . " has no web page");
-				};
-			};
-		};
-
-		// mida munni ma selle mängukava lehega teen, ah?
 
 		$this->read_template("show.tpl");
-		$this->vars(array(
-			"projects1" => $this->picker($sel[1],$ng[1]),
-			"projects2" => $this->picker($sel[2],$ng[2]),
-			"projects3" => $this->picker($sel[3],$ng[3]),
-		));
+
 
 		$cal_view = get_instance(CL_CALENDAR_VIEW);
 
@@ -1430,12 +1427,9 @@ class project extends class_base
 		};
 
 		$project_obj = $obj;
-		if ($events_from)
-		{
-			$project_obj = new object($events_from);
-		};
 
 		// no need for that .. I just get the type from url
+
 		$caldata = $cal_view->parse_alias(array(
 			"obj_inst" => $project_obj,
 			"use_template" => $use_template,
@@ -1464,6 +1458,16 @@ class project extends class_base
 			"type" => "RELTYPE_PRJ_DOCUMENT",
 			"to.lang_id" => aw_global_get("lang_id"),
 		));
+		global $XX10;
+		if ($XX10)
+		{
+			print "prid = " . $prj_obj->id();
+			print "<br>";
+			print "conns = ";
+			arr($conns);
+			print "conns finished<br>";
+		};
+
 		$description = "";
 		if (is_array($conns))
 		{
@@ -1546,6 +1550,32 @@ class project extends class_base
 		$level = 0;
 		$parent_selections = array();
 
+		global $XX9;
+		if ($XX9)
+		{
+			print "mpr is " . $o->id();
+		};
+		
+		obj_set_opt("no_auto_translation",1);
+		$trans_conns = $o2->connections_from(array(
+			"type" => RELTYPE_ORIGINAL,
+		));
+
+
+		if (sizeof($trans_conns) > 0)
+		{
+			$first = reset($trans_conns);
+			$o2 = new object($first->prop("to"));
+		};
+		
+		global $XX9;
+		if ($XX9)
+		{
+			print "mpr is now" . $o2->id() . "<br>";
+
+		}
+
+
 		// riight .. now how do I filter that thing?
 
 		while ($o2 != false)
@@ -1555,6 +1585,12 @@ class project extends class_base
 				"type" => 1, // SUBPROJECT
 				"from.class_id" => CL_PROJECT,
 			));
+			global $XX9;
+			if ($XX9)
+			{
+				print "sp = ";
+				arr($sp);
+			};
 			$first = reset($sp);
 			if (is_object($first))
 			{
@@ -1568,6 +1604,7 @@ class project extends class_base
 			$tmp = $o;
 			$o = $o2;
 		};
+		obj_set_opt("no_auto_translation",0);
 
 		return $tmp;
 	}
