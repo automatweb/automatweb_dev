@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.9 2003/10/31 13:46:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.10 2003/11/04 14:00:16 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -113,6 +113,8 @@ class mail_message extends class_base
 			$msgdata["subject"] = "Fwd: " . $msgdata["subject"];
 			$msgdata["content"] = "\n\n\n" . $hdr . str_replace("\n","\n> ",$msgdata["content"]);
 		};
+
+		aw_global_set("title_action",$msgdata["subject"]);
 		
 		$this->msgdata = $msgdata;
 
@@ -202,7 +204,7 @@ class mail_message extends class_base
 				$data["value"] = htmlspecialchars($this->msgdata["content"]);
 				if ($this->state == "show")
 				{
-					$data["value"] = nl2br($data["value"]);
+					$data["value"] = nl2br(create_links($data["value"]));
 					$data["type"] = "text";
 				};
 				break;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.15 2003/11/04 13:11:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.16 2003/11/04 14:00:16 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -297,6 +297,9 @@ class messenger_v2 extends class_base
 				$fromline = $message["from"];
 			};
 
+			// this should be unique enough
+			$wname = "msgr" . $key;
+
 				
 			$t->define_data(array(
 				"mark" => html::checkbox(array(
@@ -310,7 +313,7 @@ class messenger_v2 extends class_base
 							"msgid" => $key,
 							"mailbox" => $this->use_mailbox,
 							"subgroup" => "show",
-					),"mail_message") . "\",\"msgr\",800,600)",
+					),"mail_message") . "\",\"$wname\",800,600)",
 					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
 				)),
 				"date" => $message["tstamp"],
