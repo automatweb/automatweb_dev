@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.13 2003/11/04 13:49:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.14 2003/11/08 06:07:21 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -313,11 +313,20 @@ class imap extends class_base
 
 	function fetch_message($arr)
 	{
+		// XXX: check whether the message was valid
 		$msgid = $arr["msgid"];
 		$msg_no = imap_msgno($this->mbox,$arr["msgid"]);
 		$hdrinfo = @imap_headerinfo($this->mbox,$msg_no);
+			
+		// I should mark the message as "read" in the cache as well	
+			
+		$cache = get_instance("cache");
+		$src = $cache->file_get($this->mbox_cache_id);
+		$mbox_over = aw_unserialize($src);
 
-		// XXX: check whether the message was valid
+		$mbox_over["contents"][$arr["msgid"]]["seen"] = 1;
+		$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
+
 
 		$msgdata = array(
 			"from" => $this->MIME_decode($hdrinfo->fromaddress),
