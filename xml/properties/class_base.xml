@@ -4,6 +4,7 @@
             <name>name</name>
             <type>textbox</type>
             <group>general</group>
+            <rel>1</rel>
             <table>objects</table>
             <corefield>yes</corefield>
             <field>name</field>
