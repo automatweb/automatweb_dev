@@ -112,24 +112,51 @@ class ml_list_report extends aw_template
 		$t = new aw_table(array(
 			"prefix" => "ml_list_report",
 		));
-		$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/report.xml");
-		$q = "
-			SELECT m_objects.name as member, l_objects.name as lid, tm, subject, id
-			FROM ml_sent_mails 
-			LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member 
-			LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
-			WHERE lid IN (".join(",", $ob["meta"]["lists"]).")
-		";
-		$this->db_query($q);
-		while ($row = $this->db_next())
+		if (!$mail_id)
 		{
-			$row["member"] = "<a href='".$this->mk_my_orb("show_mail", array("id" => $id, "mail_id" => $row["id"]))."'>".$row["member"]."</a>";
-			$t->define_data($row);
+			$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/report_mails.xml");
+			$q = "
+				SELECT m_objects.name as member, l_objects.name as lid, tm, subject, id, mail
+				FROM ml_sent_mails 
+				LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member 
+				LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
+				WHERE lid IN (".join(",", $ob["meta"]["lists"]).")
+				GROUP BY mail
+			";
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$row['subject'] = html::href(array(
+					'url' => $this->mk_my_orb("change", array("id" => $id,"mail_id" => $row['mail'])),
+					'caption' => $row['subject']
+				));
+				$t->define_data($row);
+			}
+			$t->sort_by();
+			$rt = $t->draw();
 		}
-		$t->sort_by();
+		else
+		{
+			$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/report.xml");
+			$q = "
+				SELECT m_objects.name as member, l_objects.name as lid, tm, subject, id
+				FROM ml_sent_mails 
+				LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member 
+				LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
+				WHERE lid IN (".join(",", $ob["meta"]["lists"]).") AND mail = '$mail_id'
+			";
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$row["member"] = "<a href='".$this->mk_my_orb("show_mail", array("id" => $id, "mail_id" => $row["id"]))."'>".$row["member"]."</a>";
+				$t->define_data($row);
+			}
+			$t->sort_by();
+			$rt = $t->draw();
+		}
 
 		$this->vars(array(
-			"res_tbl" => $t->draw(),
+			"res_tbl" => $rt,
 			"toolbar" => $tb->get_toolbar(),
 			"lists" => $this->mpicker($ob["meta"]["lists"], $this->list_objects(array("class" => CL_ML_LIST))),
 			"name" => $ob["name"],
