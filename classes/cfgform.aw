@@ -1,11 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cfgform.aw,v 2.2 2002/10/15 20:32:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cfgform.aw,v 2.3 2002/10/18 11:30:10 duke Exp $
 // cfgform.aw - configuration form
 class cfgform extends aw_template
 {
 	function cfgform($args = array())
 	{
 		$this->init("cfgform");
+
+		// styles used to draw the change form
+		// these should probably come from ini file or smth.
+		$this->leftcolstyle = "chformleftcol";
+		$this->rightcolstyle = "chformrightcol";
 	}
 
 	////
@@ -137,6 +142,15 @@ class cfgform extends aw_template
 		return $c;
 	}
 
+	////
+	// !Use this instead of ch_form
+	function change_properties($args = array())
+	{
+		$args["no_filter"] = 1;
+		return $this->ch_form($args);
+	}
+	
+
 	function ch_form($args = array())
 	{
 		extract($args);
@@ -145,63 +159,215 @@ class cfgform extends aw_template
 			// get lost!
 			return false;
 		};
+		
+		$this->obj = $obj;
+		$this->clid = $clid;
+		$this->parent = $parent;
+		$this->reforb = $reforb;
+		$this->no_filter = $no_filter;
+		$this->submit = $submit;
 
 		$odata = array_merge($obj,$obj["meta"]);
-		
-		$props = $this->get_obj_properties($odata);
+		$this->odata = $odata;
 
+		// get the generic properties
+		$props = $this->get_obj_properties($odata);
 
 		if (method_exists($clid,"get_properties"))
 		{
+			// the thing is - you can override the generic fields
+			// in your get_properties - if for some weird reason
+			// you'd want to do that.
 			$props = array_merge($props,$clid->get_properties($odata));
 		};
 
-		$tb = sprintf("<form action='reforb.%s' method='post' name='changeform'>",aw_ini_get("ext"));
-		$tb .= "\n<table border='0' cellspacing='1' cellpadding='1' bgcolor='#CCCCCC'>\n";
+		$this->create_path();
+		$this->start_form();
+		$this->html = get_instance("html");
 
-		$html = get_instance("html");
+		$this->filter_properties = $this->get_visible_properties();
 
-		$this->obj = $obj;
+		$this->level = 0;
+		$this->path = array();
+		$this->req_draw_properties($props);
 
-		/*
-		print "<pre>";
-		print_r($obj);
-		print "</pre>";
-		*/
-		// I need to figure out the bloody current value for the item
-		// for this I need to parse over the properties
+		$this->end_form();
 
-		// now I have to draw the bloody change form
-		foreach($props as $key => $val)
+		return $this->tb;
+	}
+
+	////
+	// !This will cycle over the results of get_properties, doing
+	// callbacks in the progress, if needed
+	function req_draw_properties($block = array())
+	{
+		$this->level++;
+		foreach($block as $key => $val)
 		{
-			$tb .= "<tr>\n";
-			$tb .= "<td class='hele_hall_taust' width='250'>";
-			$tb .= $val["caption"];
-			$tb .= "</td>";
+			if ($this->level > 1)
+			{
+				array_push($this->path,"[" . $key . "]");
+			};
 
-			$tb .= "<td class='fgtext'>";
-			$val["name"] = $key;
-			$tb .= $html->draw($val);
-			$tb .= "</td>";
-			$tb .= "</tr>\n";
+			if ($this->level == 1)
+			{
+				$this->name = $key;
+			};
+
+			if (is_array($val))
+			{
+				// we do not show the element
+				$show = false;
+				// unless now filtering was explicitly requested
+				if ($this->no_filter)
+				{
+					$show = true;
+				}
+				// or we are in a nested deeped than 1 level
+				elseif ($this->level > 1)
+				{
+					$show = true;
+				}
+				// or this property is marked as private - and therefore
+				// is alway shown
+				elseif ($val["private"])
+				{
+					$show = true;
+				}
+				// or the variable is in the whitelist
+				elseif ($this->filter_properties[$key])
+				{
+					$show = true;
+				};
+
+				if ($show)
+				{
+					$val["name"] = $this->name . join("",$this->path);
+					$this->draw_property($val);
+				};
+
+			}
+			elseif (gettype($val) == "string")
+			{
+				if (method_exists($this->clid,$val))
+				{
+					$props = new aw_array($this->clid->$val($this->odata));
+					$this->req_draw_properties($props->get());
+				};
+			};
+		
+			if ($this->level > 1)
+			{
+				array_pop($this->path);
+			};
 		};
+		$this->level--;
+	}
+	
+	// !That was all nice and good .. but I also need means to do the save queries
+	// for me instead of leaving that up to the caller.
+	function submit_properties()
+	{
 
+
+	}
+
+	function start_form()
+	{
+		$this->tb = sprintf("<form action='reforb.%s' method='post' name='changeform'>",aw_ini_get("ext"));
+		$this->tb .= "\n<table border='0' cellspacing='1' cellpadding='1' bgcolor='#CCCCCC'>\n";
+	}
+
+	function end_form()
+	{
 		// and should we also add a submit button to the end?
 		// or deal with the save function using a toolbar?
 
-		if ($submit)
+		if ($this->submit)
 		{
-			$tb .= "<tr><td class='hele_hall_taust' colspan='2' align='center'>";
-			$tb .= "<input type='submit' value='Salvesta' class='small_button'>";
-			$tb .= "</td></tr>";
+			$this->tb .= "<tr><td class='chformleftcol' colspan='2' align='center'>";
+			$this->tb .= "<input type='submit' value='Salvesta' class='small_button'>";
+			$this->tb .= "</td></tr>";
 		};
 
-		$tb .= "\n</table>\n";
-		$tb .= $reforb;
-		$tb .= "</form>\n";
-
-		return $tb;
+		$this->tb .= "\n</table>\n";
+		$this->tb .= $this->reforb;
+		$this->tb .= "</form>\n";
 	}
+
+	////
+	// !Draw a single line in the editing form.
+	function draw_property($data)
+	{
+		$this->tb .= "<tr>";
+		$this->tb .= "<td class='" . $this->leftcolstyle . "' width='150'>";
+		$this->tb .= $data["caption"];
+		$this->tb .= "</td>";
+
+		$this->tb .= "<td class='" . $this->rightcolstyle . "'>";
+		$this->tb .= $this->html->draw($data);
+		$this->tb .= "</td>";
+		$this->tb .= "</tr>\n";
+	}
+
+	////
+	// !Creates the YAH line - if possible
+	function create_path()
+	{
+		if (method_exists($this->clid,"get_metainfo"))
+		{
+			if (is_array($this->obj))
+			{
+				$title = $this->clid->get_metainfo("title_change");
+				if (strlen($title) == 0)
+				{
+					// default title
+					$title = "Muuda objekti";
+				};
+				$path_parent = $this->obj["parent"];
+			}
+			elseif ($this->parent)
+			{
+				$title = $this->clid->get_metainfo("title_add");
+				if (strlen($title) == 0)
+				{
+					// default title
+					$title = "Lisa objekt";
+				};
+				$path_parent = $this->parent;
+			};
+
+			$this->mk_path($path_parent,$title);
+		};
+	}
+		
+	function get_visible_properties()
+	{
+		$result = false;
+		if ($this->obj["parent"])
+		{
+			$par = $this->get_menu($this->obj["parent"]);
+			if ($par["meta"]["cfgmanager"])
+			{
+				$cfgmanager = get_instance("cfgmanager");
+				$cfgo = $cfgmanager->get_active_cfg_object($par["meta"]["cfgmanager"]);
+				$co = $this->get_object($cfgo);
+
+				// need to get the alphanumeric id for this class
+				$cp = $this->get_class_picker(array("field" => "file"));
+				$aid = $cp[$this->obj["class_id"]];
+				// this should now contain a list of properties for this object type
+				$result = $co["meta"]["properties"][$aid];
+				/*
+				print "<pre>";
+				print_r($filter_properties);
+				print "</pre>";
+				*/
+			}
+		};
+		return $result;
+	}
+
 
 };
 ?>
