@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.24 2002/02/12 10:46:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.25 2002/02/12 14:01:58 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -172,7 +172,14 @@ class users_user extends aw_template
 	
 		if (is_array($udata))
 		{
-			if ($password == $udata["password"])
+			if (defined("MD5_PASSWORDS"))
+			{
+				if (md5($password) == $udata["password"])
+				{
+					$success = true;
+				};
+			}
+			elseif ($password == $udata["password"])
 			{
 				$success = true;
 			}
@@ -410,8 +417,16 @@ class users_user extends aw_template
 
 		reset($data);
 		while (list($k,$v) = each($data))
+		{
 			if ($k != "uid")
+			{
+				if ($k == "password")
+				{
+					$v = md5($v);
+				};
 				$sets[] = " $k = '$v' ";
+			}
+		};
 		$sets = join(",", $sets);
 
 		$q = "UPDATE users SET $sets WHERE uid = '".$data[uid]."'";
