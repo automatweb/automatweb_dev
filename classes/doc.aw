@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.25 2003/06/18 15:44:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.26 2003/06/18 16:59:53 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -46,7 +46,7 @@
 @property is_forum type=checkbox ch_value=1
 @caption Foorum
 
-@property showlead type=checkbox ch_value=1
+@property showlead type=checkbox ch_value=1 default=1
 @caption Näita leadi
 
 @property show_modified type=checkbox ch_value=1
