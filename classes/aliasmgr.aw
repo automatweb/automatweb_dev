@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.64 2002/11/27 14:10:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.65 2002/11/27 14:14:14 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -709,7 +709,6 @@ class aliasmgr extends aw_template
 			$key = 'alias_cache::source::'.$adata['source'].'::target::'.$adata['target'].'::urlhash::'.$this->url_hash;
 			if (($replacement = $cache_inst->file_get($key)) !== false)
 			{
-				echo "read cache $key <br>";
 				return $replacement;
 			}
 		}
@@ -743,7 +742,6 @@ class aliasmgr extends aw_template
 				}
 
 				$key = 'alias_cache::source::'.$adata['source'].'::target::'.$adata['target'].'::urlhash::'.$this->url_hash;
-				echo "wrote cache $key <br>";
 				$cache_inst->file_set($key,$replacement);
 			}
 		}
