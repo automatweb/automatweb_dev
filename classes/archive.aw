@@ -39,8 +39,6 @@ class archive extends aw_template {
 			$this->raise_error("Archive directory is not writable",true);
 		};
 
-		print "archive class initialized<br>";
-	
 	}
 
 	////
@@ -76,7 +74,6 @@ class archive extends aw_template {
 
 		// create the actual directory.
 		@mkdir($this->arc_dir . $path . "/" . $oid,0700);
-		print_r($parts);
 	}
 
 	////
@@ -88,12 +85,10 @@ class archive extends aw_template {
 		extract($args);
 		$this->_calc_path($args);
 		$tstamp = time();
-		$shaa = "test123";
 		$fname = $this->fullpath . "/$tstamp";
-		print "fname = $fname<br>";
 		$this->put_file(array(
 			"file" => $fname,
-			"content" => $shaa,
+			"content" => $args["content"],
 		));
 	}
 	
