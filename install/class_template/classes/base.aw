@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.15 2003/10/05 21:37:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.16 2004/03/26 12:15:19 kristo Exp $
 // __classname.aw - __name 
 /*
 
@@ -28,9 +28,9 @@ class __classname extends class_base
 	/*
 	function get_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
 
 		};
@@ -41,10 +41,10 @@ class __classname extends class_base
 	/*
 	function set_property($arr = array())
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
-                {
+		switch($prop["name"])
+		{
 
 		}
 		return $retval;
