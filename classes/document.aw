@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.2 2001/05/18 14:04:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.3 2001/05/18 14:09:45 duke Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // definnerime orbi funktsioonid
 global $orb_defs;
@@ -1532,22 +1532,22 @@ class document extends aw_template
 		// keelte valimise asjad
 		if ($this->is_template("DOC_BROS"))
 		{
-			$lang_brothers = unserialize($document[lang_brothers]);
+			$lang_brothers = unserialize($document["lang_brothers"]);
 			classload("languages");
 			$t = new languages;
 			$ar = $t->listall();
 			reset($ar);
 			while (list(,$v) = each($ar))
 			{
-				if ($v[id] != $document[lang_id])
+				if ($v["id"] != $document["lang_id"])
 				{
 					if ($lang_brothers[$v[id]])
 					{
-						$this->db_query("SELECT documents.title,documents.docid FROM documents WHERE documents.docid = ".$lang_brothers[$v[id]]);
+						$this->db_query("SELECT documents.title,documents.docid FROM documents WHERE documents.docid = ".$lang_brothers[$v["id"]]);
 						$row = $this->db_next();
-						$this->vars(array("lang_name" => $v[name], 
-															"chbrourl"	=> $this->mk_my_orb("change", array("id" => $row[docid])),
-															"bro_name"	=> $row[title]));
+						$this->vars(array("lang_name" => $v["name"], 
+															"chbrourl"	=> $this->mk_my_orb("change", array("id" => $row["docid"])),
+															"bro_name"	=> $row["title"]));
 						$db.=$this->parse("DOC_BROS");
 					}
 				}
@@ -1555,7 +1555,7 @@ class document extends aw_template
 			$this->vars(array("DOC_BROS" => $db));
 		}
 
-		$GLOBALS["lang_id"] = $document[lang_id];
+		$GLOBALS["lang_id"] = $document["lang_id"];
 		$alilist = array();
 		$jrk = array("1" => "1", "2" => "2", "3" => "3",  "4" => "4", "5"  => "5",
 								 "6" => "6", "7" => "7", "8" => "8",  "9" => "9", "10" => "10");
@@ -1591,6 +1591,11 @@ class document extends aw_template
 		));
 		// see sordib ja teeb aliaste nimekirja. ja see ei meeldi mulle. but what can ye do, eh?
 		$this->mk_alias_lists($id);
+		classload("keywords");
+		$kw = new keywords();
+		$keywords = $kw->get_keywords(array(
+									"oid" => $id,
+		));
 
     $this->vars(array("title" => str_replace("\"","&quot;",$document["title"]),
 											"jrk1"  => $this->picker($document["jrk1"],$jrk),
@@ -1607,6 +1612,7 @@ class document extends aw_template
 											"copyright" => ($document["copyright"] == 1) ? "checked" : "",
 											"lead_comments" => ($document["lead_comments"] == 1) ? "checked" : "",
 											"show_title" => ($document["show_title"] == 1) ? "checked" : "",
+											"keywords" => $keywords,
 											"title_clickable" => checked($document["title_clickable"]),
 											"newwindow" => checked($document["newwindow"]),
 											"author"  => $document["author"],
