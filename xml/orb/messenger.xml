@@ -206,8 +206,8 @@
 			</function>
 		</action>
 
-		<action name="move_msgs">
-			<function name="move_msgs">
+		<action name="mailbox_op">
+			<function name="mailbox_op">
 				<arguments>
 				</arguments>
 			</function>
