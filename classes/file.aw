@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.18 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.19 2001/11/20 17:52:17 cvs Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -111,18 +111,20 @@ class file extends aw_template
 	// returns the name of the file that the data was saved in
 	function _put_fs($args = array())
 	{
+		global $site_basedir;
 		// find the extension for the file
 		list($major,$minor) = explode("/",$args["type"]);
 
+		// why the fuck id SITE_DIR better than $site_basedir?
 		// first, we need to find a path to put the file
 		$filename = $this->gen_uniq_id();
 		$prefix = substr($filename,0,1);
-		if (!is_dir(SITE_DIR . "/files/" . $prefix))
+		if (!is_dir($site_basedir . "/files/" . $prefix))
 		{
-			mkdir(SITE_DIR . "/files/" . $prefix,0777);
+			mkdir($site_basedir . "/files/" . $prefix,0777);
 		}
 
-		$file = SITE_DIR . "/files/" . $prefix . "/" . "$filename.$minor";
+		$file = $site_basedir . "/files/" . $prefix . "/" . "$filename.$minor";
 		$this->put_file(array(
 					"file" => $file,
 					"content" => $args["content"],
