@@ -64,6 +64,7 @@ function navigate_to()
 <table width="100%" border="0" cellpadding="3" cellspacing="0">
 <tr>
 <td align="right" style="font-size: 10px;">
+<a href="{VAR:today_url}">Täna</a>
 <!-- SUB: PAGE -->
 <a href="{VAR:link}">{VAR:text}</a> 
 <!-- END SUB: PAGE -->
@@ -78,17 +79,19 @@ function navigate_to()
 <a href="{VAR:prevlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_left.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&lt;&lt;"></a> {VAR:caption}  <a href="{VAR:nextlink}"><img SRC="{VAR:baseurl}/automatweb/images/blue/cal_nool_right.gif" WIDTH="19" HEIGHT="8" BORDER=0 ALT="&gt;&gt;"></a></td>
 </tr>
 </table>
-<table border="0" cellspacing="0" cellpadding="0">
+<table border="0" cellspacing="0" cellpadding="2">
 <tr>
-<td rowspan="3" valign="top" width="90%">
+<td rowspan="1" valign="top" width="90%">
 {VAR:content}
 </td>
 <td valign="top" width="10%">
 {VAR:overview}
+<!--
 </td>
 </tr>
 <tr>
 <td align="center" valign="top" width="10%">
+-->
 <form id='naviform' style='display: inline'>
 <select id='navi_month' name='month'>
 {VAR:mnames}
@@ -97,13 +100,14 @@ function navigate_to()
 {VAR:years}
 </select>
 <input type="button" value="Go!" onClick='navigate_to()'>
-<a href="{VAR:today_url}">Täna</a>
 </form>
 </center>
+<!--
 </td>
 </tr>
 <tr>
 <td valign="top" width="10%">
+-->
 <!-- SUB: TASKS -->
 <span style="font-size: 10px;">
 <center><b>{VAR:tasks_title}</b></center>
