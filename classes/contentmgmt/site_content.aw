@@ -2958,6 +2958,7 @@ class site_content extends menuedit
 				$ordby = "objects.jrk";
 			}
 
+
 			$no_fp_document = aw_ini_get("menuedit.no_fp_document");
 			if (!isset($no_fp_document))
 			{
