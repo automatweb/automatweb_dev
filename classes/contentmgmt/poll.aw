@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.7 2004/02/26 10:24:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.8 2004/02/26 10:25:19 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -164,10 +164,6 @@ class poll extends class_base
 			}
 			if (isset($v["answer"]))
 			{
-				if (aw_global_get("uid") == "kix")
-				{
-					echo dbg::dump($v["answer"]);
-				}
 				$this->dequote($v);
 			}
 
