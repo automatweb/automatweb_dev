@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.205 2003/06/26 14:12:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.206 2003/07/01 10:24:56 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1468,13 +1468,6 @@ class core extends db_connector
 	// add_folders - if true, then folder names are added to objects
 	function list_objects($arr)
 	{
-		// cache
-		$c_str = "core::list_objects_cache::".serialize($arr);
-		if (is_array(($ret = aw_global_get($c_str))))
-		{
-			return $ret;
-		}
-
 		if (isset($arr["addempty"]))
 		{
 			$ret = array("" => "");
@@ -1486,15 +1479,19 @@ class core extends db_connector
 		$this->save_handle();
 		$this->get_objects_by_class($arr);
 		$parens = array();
-		while ($row = $this->db_next())
+		if (isset($arr["return"]) && $arr["return"] == ARR_ALL)
 		{
-			$parens[$row['oid']] = $row['parent'];
-			if (isset($arr["return"]) && $arr["return"] == ARR_ALL)
+			while ($row = $this->db_next())
 			{
+				$parens[$row['oid']] = $row['parent'];
 				$ret[$row["oid"]] = $row;
 			}
-			else
+		}
+		else
+		{
+			while ($row = $this->db_next())
 			{
+				$parens[$row['oid']] = $row['parent'];
 				$ret[$row["oid"]] = $row["name"];
 			}
 		}
@@ -1523,7 +1520,6 @@ class core extends db_connector
 		}
 
 		$this->restore_handle();
-		aw_global_set($c_str, $ret);
 		return $ret;
 	}
 
