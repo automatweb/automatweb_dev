@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.64 2002/12/02 18:54:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.65 2002/12/03 11:18:01 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -73,8 +73,7 @@ if (!defined("DEFS"))
 	function get_lc_month($id)
 	{
 		$mnames = explode("|",LC_MONTH);
-		$id = (int)$id;
-		return $mnames[$id];
+		return $mnames[(int)$id];
 	}
 
 	////
@@ -85,6 +84,10 @@ if (!defined("DEFS"))
 		return $daynames[$id];
 	}
 
+	////
+	// !creates html linebreaks in text
+	// the difference with nl2br is, that nl2br inserts html tags before linebreaks
+	// but this replaces linebreaks with html tags
 	function format_text($text)
 	{
 		$text = str_replace("\n\n","<p>",$text);
@@ -93,47 +96,36 @@ if (!defined("DEFS"))
 	}
 
 	////
-	// !väljastab refresh headeri koos muude vajalike tilullidega
-	function http_refresh($delay,$url)
-	{
-		header("Refresh: $delay;url=$url");
-		print "\n\n";
-		exit;
-	}
-
-	////
-	// !kasutamine
-	// if (is_valid("password",$pass_entered_in_a_form))
+	// !checks if the string $string is a valid $set
+	// the currently supported sets are password and uid
+	// usage: if (is_valid("password",$pass_entered_in_a_form))
 	function is_valid($set,$string)
 	{
 		$sets = array(
-			"password" 	=> array(
-				"content" 	=> "1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM",
-				"min"		=> 4,
-				"max"		=> 32),
-			"uid"		=> array(
-				"content"	=> "1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM",
-				"min"		=> 3,
-				"max"		=> 30)
+			'password' => array(
+				'content' => '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM',
+				'min' => 4,
+				'max' => 32),
+			'uid'	=> array(
+				'content'	=> '1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM',
+				'min' => 3,
+				'max' => 30)
 			);
 		// defineerimata character set, bail out	
-		if (!$sets["$set"])
+		if (!isset($sets[$set]))
 		{
 			return false;
 		};
-		$checkagainst = $sets["$set"]["content"];
-		$valid = true;
-		$i = 0;
-		while( ($i < strlen($string) && (!($valid === false))))
+		$len = strlen($string);
+		if ($len < $sets[$set]['min'] || $len > $sets[$set]['max'])
 		{
-			$valid = !(strpos($checkagainst,$string[$i]) === false);
-			if (!$valid)
-			{
-				return false;
-			}
-			$i++;
-		};
-		return $valid;
+			return false;
+		}
+		if (strspn($string,$sets[$set]['content']) != $len)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	////
@@ -147,60 +139,6 @@ if (!defined("DEFS"))
 		}
 		return false;
 	}
-
-	////
-	// !resolvib ip aadressiks. cacheb kiiruse huvides tulemusi
-	// voib kasutada ntx syslogi juures
-	function aw_gethostbyaddr($addr)
-	{
-		// *wink terryf*, kena regexp mis?
-		// idee on selles, et parsib lahti ntx syslogis olevad
-		// aadressid kujul host.ee / 1.2.3.4
-		if (preg_match("/^(.*?)\s*?\/\s+?([0-9\.]+?)$/",$addr,$parts))
-		{
-			$addr = $parts[2];
-		};
-		if (!aw_cache_get("solved",$addr))
-		{
-			aw_cache_set("solved",$addr,gethostbyaddr($addr));
-		};
-		// tagastab 2 elemendiga array, esimene on lahendatud 
-		// nimi, teine aadress, mis ette anti voi stringist välja
-		// parsiti
-		return array(aw_cache_get("solved",$addr),$addr);
-	};
-
-	////
-	// !kontrollime, kas parameeter on ikka IP aadress
-	function is_ip($addr)
-	{
-		// match 1 to 3 digits
-		$oct = "(\d{1,3}?)";
-		$valid = preg_match("/^$oct\.$oct\.$oct\.$oct$/",$addr,$parts);
-		// kontrollime, ega ei ole tegemist bcast aadressiga
-		if (isset($parts[4]) && ( ($parts[4] == 0) || ($parts[4] == 255) ))
-		{
-			// ongi.
-			$valid = false;
-		};
-
-		if (isset($parts[1]) && $parts[1] == 0) 
-		{
-			$valid = false;
-		};
-
-		if ($valid) 
-		{
-			// kontrollime, kas koik oktetid on ikka lubatud vahemikus
-			for ($i = 1; $i <= 4; $i++)
-			{
-				if ( ($parts[$i] < 0) || ($parts[$i] > 255) ) {
-					$valid = false;
-				};
-			};
-		};
-		return $valid;
-	};
 
 	////
 	// !Genereerib md5 hashi kas parameetrist voi suvalisest arvust.
@@ -384,7 +322,7 @@ if (!defined("DEFS"))
 	function get_ip()
 	{
 		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
-		if (!is_ip($ip))
+		if (!inet::is_ip($ip))
 		{
 			$ip = aw_global_get("REMOTE_ADDR");
 		}
@@ -726,6 +664,67 @@ if (!defined("DEFS"))
 		$members = aw_cache_get("__aw_default_class_members", $class);
 		$members[$member] = $value;
 		aw_cache_set("__aw_default_class_members", $class, $members);
+	}
+
+	////
+	// !all network functions go in here, all must be static
+	class inet
+	{
+		////
+		// !resolvib ip aadressiks. cacheb kiiruse huvides tulemusi
+		// voib kasutada ntx syslogi juures
+		// tagastab 2 elemendiga array, esimene on lahendatud 
+		// nimi, teine aadress, mis ette anti voi stringist välja
+		// parsiti
+		function gethostbyaddr($addr)
+		{
+			// *wink terryf*, kena regexp mis?
+			// idee on selles, et parsib lahti ntx syslogis olevad
+			// aadressid kujul host.ee / 1.2.3.4
+			if (preg_match("/^(.*?)\s*?\/\s+?([0-9\.]+?)$/",$addr,$parts))
+			{
+				$addr = $parts[2];
+			};
+			if (!($ret = aw_cache_get("solved",$addr)))
+			{
+				$ret = gethostbyaddr($addr);
+				aw_cache_set("solved",$addr,$ret);
+			};
+			return array($ret,$addr);
+		}
+
+		////
+		// !kontrollime, kas parameeter on ikka IP aadress
+		function is_ip($addr)
+		{
+			// match 1 to 3 digits
+			$oct = "(\d{1,3}?)";
+			$valid = preg_match("/^$oct\.$oct\.$oct\.$oct$/",$addr,$parts);
+			// kontrollime, ega ei ole tegemist bcast aadressiga
+			if (isset($parts[4]) && ( ($parts[4] == 0) || ($parts[4] == 255) ))
+			{
+				// ongi.
+				$valid = false;
+			};
+
+			if (isset($parts[1]) && $parts[1] == 0) 
+			{
+				$valid = false;
+			};
+
+			if ($valid) 
+			{
+				// kontrollime, kas koik oktetid on ikka lubatud vahemikus
+				for ($i = 1; $i <= 4; $i++)
+				{
+					if ( ($parts[$i] < 0) || ($parts[$i] > 255) ) 
+					{
+						$valid = false;
+					};
+				};
+			};
+			return $valid;
+		}
 	}
 };
 
