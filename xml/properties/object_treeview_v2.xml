@@ -159,8 +159,7 @@
                         <num_0>CL_OTV_DS_OBJ</num_0>
                         <num_1>CL_OTV_DS_POSTIPOISS</num_1>
                         <num_2>CL_OTV_DS_ROADINFO</num_2>
-                        <num_3>CL_OTV_DS_MYSQL</num_3>
-                        <num_4>CL_DB_TABLE_CONTENTS</num_4>
+                        <num_3>CL_DB_TABLE_CONTENTS</num_3>
                   </clid>
                   <caption>andmed</caption>
             </DATASOURCE>
