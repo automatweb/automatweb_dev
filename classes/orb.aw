@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.35 2003/02/13 14:44:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.36 2003/02/14 15:35:12 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -150,7 +150,25 @@ class orb extends aw_template
 		// orb on defineeritud XML-i kaudu
 		if (isset($orb_defs[$class][$action]["all_args"]) && $orb_defs[$class][$action]["all_args"] == true)
 		{
-			$params = $GLOBALS["HTTP_GET_VARS"];
+			$_params = $GLOBALS["HTTP_GET_VARS"];
+			$required = $orb_defs[$class][$action]["required"];
+			// first check, whether all required arguments are set
+			foreach($required as $key => $val)
+			{
+				if (!isset($_params[$key]))
+				{
+					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$silent);
+				};
+			};
+			foreach($_params as $key => $val)
+			{
+				$this->validate_value(array(
+					"type" => $orb_defs[$class][$action]["types"][$key],
+					"name" => $key,
+					"value" => $val,
+				));
+				$params[$key] = $val;
+			};
 		}
 		else
 		{
@@ -164,28 +182,26 @@ class orb extends aw_template
 				{
 					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),true,$silent);
 				};
+				
+				$this->validate_value(array(
+					"type" => $orb_defs[$class][$action]["types"][$key],
+					"name" => $key,
+					"value" => $vars[$key],
+				));
 
-				$vartype = $orb_defs[$class][$action]["types"][$key];
-				if ($vartype == "int")
-				{
-					if ($vars[$key] != sprintf("%d",$vars[$key]))
-					{
-						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),true,$silent);
-					};
-				};
 				$params[$key] = $vars[$key];
 			};
  
 			//optional arguments
 			foreach($optional as $key => $val)
 			{
-				$vartype = $orb_defs[$class][$action]["types"][$key];
 				if (isset($vars[$key]))
 				{
-					if ( ($vartype == "int") && ($vars[$key] != sprintf("%d",$vars[$key])) )
-					{
-						$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),true,$silent);
-					};
+					$this->validate_value(array(
+						"type" => $orb_defs[$class][$action]["types"][$key],
+						"name" => $key,
+						"value" => $vars[$key],
+					));
 					$params[$key] = $vars[$key];
 				}
 				else
@@ -229,6 +245,17 @@ class orb extends aw_template
 			$this->info = $t->info;
 		};
 		return;
+	}
+
+	function validate_value($args = array())
+	{
+		if ($args["type"] == "int")
+		{
+			if (!is_numeric($args["value"]))
+			{
+				$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$args["name"]),true,$this->silent);
+			};
+		};
 	}
 
 	function load_xml_orb_def($class)
