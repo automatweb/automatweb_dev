@@ -230,7 +230,7 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-		dbg::p2("controller id $id: evaling $eq , res = $res<br>");
+		dbg::p2("controller id $id: evaling $eq , res = $res<br><br>");
 		@eval($eq);
 		if (!$contr_finish)
 		{
@@ -263,6 +263,7 @@ class form_controller extends form_base
 				$eq = str_replace("[el.".$mtk."]",$mtv,$eq);
 			}
 		}
+		$eq = preg_replace("/(\[el\.[-a-zA-Z0-9 _:\(\)\.]*\])/","0",$eq);
 
 		if ($co['meta']['no_var_replace'] == 1)
 		{
