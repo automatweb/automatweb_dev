@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.31 2003/11/20 13:47:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.32 2003/11/28 11:38:23 kristo Exp $
 
 /*
 
@@ -278,12 +278,12 @@ class gallery_v2 extends class_base
 				)
 			);
 			$obj['meta']['page_data'][$page_number]['content'] = $this->_page_content;
-			$arr['metadata'] = $obj['meta'];
+			$arr['obj_inst']->set_meta("page_data", $obj['meta']['page_data']);
 		}
 		if ($prop['name'] == "reinit_layout" && $prop["value"] == 1)
 		{
 			$obj['meta']['page_data'] = array();
-			$arr['metadata']['page_data'] = array();
+			$arr['obj_inst']->set_meta('page_data', array());
 			$prop['value'] = 0;
 		}
 		if ($prop["name"] == "zip_file")
@@ -614,12 +614,28 @@ class gallery_v2 extends class_base
 	
 		// also upload images
 		$img_n = "g_".$page."_".$row."_".$col."_img";
-		$f = get_instance("image");
-		$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
-			$img_n, 
-			$obj['meta']['image_folder'],
-			$old['img']['id']
-		);
+
+		if (trim($_FILES[$img_n]["type"]) == "application/pdf")
+		{
+			$f = get_instance("file");
+			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
+				$img_n, 
+				$obj['meta']['image_folder'],
+				$old['img']['id']
+			);
+			$this->_page_content[$row][$col]["img"]["is_file"] = 1;
+		}
+		else
+		{
+			$f = get_instance("image");
+			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
+				$img_n, 
+				$obj['meta']['image_folder'],
+				$old['img']['id']
+			);
+			$this->_page_content[$row][$col]["img"]["is_file"] = 0;
+		}
+
 		$img_n = "g_".$page."_".$row."_".$col."_tn";
 		$f = get_instance("image");
 		$this->_page_content[$row][$col]["tn"] = $f->add_upload_image(
@@ -927,21 +943,29 @@ class gallery_v2 extends class_base
 		$w = $pd['img']['sz'][0];
 		$h = $pd['img']['sz'][1]+70;
 		if (empty($w))
-                {
-                        $w = 700;
-                };
-                if ($h == 70)
-                {
-                        $h = 600;
-                };
+		{
+			$w = 700;
+		};
+		if ($h == 70)
+		{
+			$h = 600;
+		};
 
-		$link = $this->mk_my_orb("show_image", array(
-			"id" => $obj['oid'],
-			"page" => $page,
-			"row" => $row,
-			"col" => $col,
-			"img_id" => $pd['img']['id']
-		));
+		if ($pd["img"]["is_file"])
+		{
+			$fi = get_instance("file");
+			$link = $fi->get_url($pd["img"]["id"],"sisu.pdf");
+		}
+		else
+		{
+			$link = $this->mk_my_orb("show_image", array(
+				"id" => $obj['oid'],
+				"page" => $page,
+				"row" => $row,
+				"col" => $col,
+				"img_id" => $pd['img']['id']
+			));
+		}
 		$this->has_images = true;
 
 		$tp = new aw_template;
