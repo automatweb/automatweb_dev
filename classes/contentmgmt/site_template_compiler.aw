@@ -1461,11 +1461,11 @@ class site_template_compiler extends aw_template
 					$has_vars = true;
 				}
 
-				$imres = "";
 				// insert image urls
 				$ni = aw_ini_get("menuedit.num_menu_images");
 				for($i = 0; $i < $ni; $i++)
 				{
+					$imres = "";
 					$varname1 = "sel_menu_".$area."_L".$level."_image_".$i."_url";
 					$varname2 = "sel_menu_".$area."_L".$level."_image_".$i;
 
