@@ -114,7 +114,6 @@ function aw_sel_chb(form,elname)
 	len = form.elements.length;
 	for(i = 0; i < len; i++)
 	{
-
 		if (form.elements[i].name.indexOf(elname) != -1)
 		{
 			form.elements[i].checked = chs;

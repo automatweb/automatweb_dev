@@ -14,6 +14,7 @@ class site_cache extends aw_template
 			$arr["template"] = "main.tpl";
 		}
 
+
 		$log = get_instance("contentmgmt/site_logger");
 		$log->add($arr);
 
@@ -21,6 +22,7 @@ class site_cache extends aw_template
 		{
 			return $content;
 		}
+
 
 
 		$inst = get_instance("contentmgmt/site_show");

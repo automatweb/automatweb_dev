@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.5 2004/01/13 16:24:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.6 2004/03/25 09:47:11 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -38,6 +38,7 @@ class form_entry extends aw_template
 	{
 		extract($arr);
 		$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = $id", "form_id");
+
 
 		$o = $this->get_object($id);
 		$this->mk_path($o["parent"], LC_FORM_ENTRY_CHANGE_ENTRY);
