@@ -11,7 +11,7 @@
 	@default table=kliendibaas_tegevusala
 
 	@property kood type=textbox size=8
-	@caption Toote kood
+	@caption Tegevusala kood
 
 	@property tegevusala type=textbox size=40
 	@caption Tegevusala
@@ -20,7 +20,7 @@
 	@caption Tegevusala (i.k.)
 
 	@property kirjeldus type=textarea
-	@caption Toote kirjeldus
+	@caption Tegevusala kirjeldus
 
 	@classinfo objtable=kliendibaas_tegevusala
 	@classinfo objtable_index=oid
