@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.15 2001/11/20 14:34:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.16 2001/11/29 22:09:17 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -203,7 +203,7 @@ $orb_defs["table"] ="xml";
 			reset($ar);
 			while (list(,$v) = each($ar))
 			{
-				$this->vars(array("url" => $this->mk_orb("change", array("id" => $v[id],"parent" => $v[parent]),"document"),"title" => $v[name]));
+				$this->vars(array("url" => $this->mk_orb("list_aliases", array("id" => $v[id],),"aliasmgr"),"title" => $v["name"]));
 				$this->parse("ALIAS_LINK");
 			}
 			return $this->parse();
