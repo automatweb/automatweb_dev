@@ -706,10 +706,20 @@ class form_db_base extends aw_template
 					}
 					// other tables get joined - making sure we don't accidentally join them several times
 					$__t = $this->get_rtbl_from_tbl($jdata["to_tbl"]);
-					if ($__t != "" && $jdata["from_tbl"] != "" && $jdata["from_el"] != "")
+					if ($__t != "")
 					{
-						$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
-						$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
+						// now check exclusion list
+						$__tfid = $this->table2form_map[$jdata["from_tbl"]];
+						$__t2fid = $this->table2form_map[$jdata["to_tbl"]];
+						if (!($this->do_not_fetch[$__tfid] == $__tfid || $this->do_not_fetch[$__t2fid] == $__t2fid) || $jdata["to_tbl"] == "objects")
+						{
+							$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
+							$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
+						}
+						else
+						{
+							$this->do_not_fetch[$__t2fid] = $__t2fid;
+						}
 					}
 				}
 			}
@@ -744,6 +754,10 @@ class form_db_base extends aw_template
 			{
 				$usedtbls[$tbl] = 1;
 				$fid = $this->table2form_map[$tbl];
+				if ($this->do_not_fetch[$fid] == $fid)
+				{
+					continue;
+				}
 				$form = $this->cache_get_form_eldat($fid);
 
 				if ($sql == "")
@@ -819,6 +833,10 @@ class form_db_base extends aw_template
 			{
 				$usedtbls[$tbl] = 1;
 				$fid = $this->table2form_map[$tbl];
+				if ($this->do_not_fetch[$fid] == $fid)
+				{
+					continue;
+				}
 				if ($fid)
 				{
 					$form = $this->cache_get_form_eldat($fid);
@@ -1565,12 +1583,20 @@ class form_db_base extends aw_template
 
 //			echo "from table = ", $f_el["table"]," from el = ", $f_el["col"]," to table = ", $t_el["table"]," to col = ",$t_el["col"]," <br>";
 			// and mark down the join
-			$this->_joins[] = array(
-				"from_tbl" => $from_tbl, 
-				"from_el" =>  $from_el,
-				"to_tbl" => $to_tbl,
-				"to_el" => $to_el
-			);
+			if ($from_tbl == "" && $from_el == "")
+			{
+				// if the join is broken, mark it for the fetch data part not to fetch from the joined form
+				$this->do_not_fetch[$n_fid] = $n_fid;
+			}
+			else
+			{
+				$this->_joins[] = array(
+					"from_tbl" => $from_tbl, 
+					"from_el" =>  $from_el,
+					"to_tbl" => $to_tbl,
+					"to_el" => $to_el
+				);
+			}
 
 			if ($f_el)
 			{
