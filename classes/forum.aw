@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.57 2002/11/07 12:35:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.58 2002/11/07 12:57:35 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -388,6 +388,7 @@ class forum extends aw_template
 			return "";
 		};
 
+
 		$id = $this->forum_id;
 		$board = $this->board;
 		$from = $this->from;
@@ -396,7 +397,7 @@ class forum extends aw_template
 		{
 			array_push($args,"configure");
 		};
-
+		
 		$tabs = array(
 			"newtopic" => $this->mk_my_orb("add_topic",array("id" => $id,"_alias" => "forum","section" => $this->section)),
 			"configure" => $this->mk_my_orb("configure",array("id" => $id,"_alias" => "forum","section" => $this->section)),
@@ -432,8 +433,13 @@ class forum extends aw_template
 
 		$retval .= "";
 		$this->read_template("tabs.tpl");
+		$hide_tabs_if_forum_is_doc = array("flat","addcomment","search","details");
 		foreach($args as $key => $val)
 		{
+			if ( (in_array($val,$hide_tabs_if_forum_is_doc)) && ($board == $this->section))
+			{
+				continue;
+			};
 			if ( ($val == "newtopic") && $this->cfg["newtopic_logged_only"] == 1 && aw_global_get("uid") == "" )
 			{
 				// suck
