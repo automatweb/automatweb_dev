@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.4 2004/06/22 09:19:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.5 2004/06/30 09:22:31 rtoomas Exp $
 // crm_section.aw - Üksus
 /*
 
@@ -8,14 +8,14 @@
 @default table=objects
 @default group=general
 
-@reltype SUBSECTION value=1 clid=CL_CRM_SECTION
+@reltype SECTION value=1 clid=CL_CRM_SECTION
 @caption Alamüksus
 
-@reltype MEMBER value=2 clid=CL_CRM_PERSON
+@reltype WORKERS value=2 clid=CL_CRM_PERSON
 @caption Liige
 
 @reltype PROFESSIONS value=3 clid=CL_CRM_PROFESSION
-@caption Üksuse võimalikud ametid
+@caption Roll
 
 */
 
@@ -56,8 +56,6 @@ class crm_section extends class_base
 		var_dump($o->name());
 		print "</pre>";
 		*/
-
-
 	}
 
 
@@ -77,7 +75,6 @@ class crm_section extends class_base
 	}
 	*/
 
-	/*
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -88,6 +85,22 @@ class crm_section extends class_base
 		}
 		return $retval;
 	}	
+
+	/*
+		$id - object id
 	*/
+	function get_professions($id)
+	{
+		$obj = new object($id);
+		$rtrn = array();
+		$conns = $obj->connections_from(array(
+					'type' => 'RELTYPE_PROFESSIONS'
+		));
+		foreach($conns as $conn)
+		{
+			$rtrn[$conn->prop('to')] = $conn->prop('to.name');
+		}
+		return $rtrn;
+	}
 }
 ?>

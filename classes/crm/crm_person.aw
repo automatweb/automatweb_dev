@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.37 2004/06/29 10:04:59 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.38 2004/06/30 09:22:31 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -57,7 +57,7 @@ caption Msn/yahoo/aol/icq
 property pictureurl type=textbox size=40 maxlength=200
 caption Pildi/foto url
 
-@property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first use_form=emb 
+@property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first props=file 
 @caption Pilt/foto
 
 //@property profession type=select store=no edit_only=1
@@ -287,7 +287,7 @@ class crm_person extends class_base
 				));
 				//connections from person->section
 				$tmp_conns = $arr['obj_inst']->connections_to(array(
-					'type'=>RELTYPE_MEMBER
+					'type'=>RELTYPE_MEMBER //@todo have to change to textual
 				));
 				//section overrulez org, maybe person can be a member of a section and company?
 				//we'll see
@@ -571,6 +571,23 @@ class crm_person extends class_base
 		return $nodes;
 	}
 
+	/*
+		id - oid of the user	
+	*/
+	function get_person_by_user_id($id)
+	{
+		$obj = new object($id);
+		$conns = $obj->connections_from(array(
+						'type'=>'RELTYPE_PERSON'
+					));
+		if(sizeof($conns))
+		{
+			$conn = current($conns);
+			return $conn->prop('to');
+		}
+		return null;
+	}
+
 	function fetch_person_by_id($arr)
 	{
 		// how do I figure out the _last_ action done with a person?
@@ -585,7 +602,7 @@ class crm_person extends class_base
 		$o = new object($arr["id"]);
 		$cal_id = $arr["cal_id"];
 
-		$phones = $emails = $urls = $ranks = $ranks_arr = array();
+		$phones = $emails = $urls = $ranks = $ranks_arr = $sections_arr = array();
 
 		$tasks = $o->connections_from(array(
 			"type" => array(9,10),
@@ -625,15 +642,22 @@ class crm_person extends class_base
 			$to_obj = $conn->to();
 			$emails[] = $to_obj->prop("mail");
 		};
+
 		$conns = $o->connections_from(array(
                         "type" => RELTYPE_RANK,
                 ));
 		foreach($conns as $conn)
 		{
-			echo "<!-- a".$conn->prop('to.name')." -->";
 			$ranks[] = $conn->prop("to.name");
 			$ranks_arr[$conn->prop('to')] = $conn->prop('to.name');
 		};
+		$conns = $o->connections_from(array(
+							'type' => 'RELTYPE_SECTION'
+					));
+		foreach($conns as $conn)
+		{	
+			$sections_arr[$conn->prop('to')] = $conn->prop('to.name');
+		}
 
 		$rv = array(
 			'name' => $o->prop('firstname').' '.$o->prop('lastname'),
@@ -644,6 +668,7 @@ class crm_person extends class_base
 			"email" => join(", ",$emails),
 			"rank" => join(", ",$ranks),
 			'ranks_arr' => $ranks_arr,
+			'sections_arr' => $sections_arr,
 			"add_task_url" => $this->mk_my_orb("change",array(
 				"id" => $cal_id,
 				"group" => "add_event",
@@ -1120,7 +1145,7 @@ class crm_person extends class_base
 		{
 			$target_obj->connect(array(
 				'to' => $conn->prop('from'),
-				'reltype' => RELTYPE_MEMBER
+				'reltype' => 2 //@todo have to change to textual
 			));
 		}
 		
