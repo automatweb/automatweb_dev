@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.1 2001/05/18 15:31:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.2 2001/05/18 15:40:44 duke Exp $
 
 	global $orb_defs;
 	$orb_defs["lists"] = array(
@@ -43,16 +43,35 @@
 			if ($id)
 			{
 				$this->upd_object(array("name" => $name, "comment" => $comment, "oid" => $id));
-				$this->log_action($GLOBALS["uid"],"mlist","Muutis listi $name");
+				$this->_log("mlist","Muutis listi $name");
 			}
 			else
 			{
-				$id = $this->register_object($parent,$name, CL_MAILINGLIST,$comment);
-				$this->log_action($GLOBALS["uid"],"mlist","Lisas listi $name");
+				$id = $this->create_list($arr);
+				$this->_log("mlist","Lisas listi $name");
 			}
-	
-			return "list.aw?type=change_list&id=$id";
+			global $ext;	
+			return "list.$ext?type=change_list&id=$id";
 		}
+
+		////
+		// !registreerib uue listi
+		// argumendid:
+		// parent - objekt, mille alla uus list teha
+		// name - nimi
+		// comment - duh
+		function create_list($args = array())
+		{
+			extract($args);
+			$id = $this->new_object(array(
+						"class_id" => CL_MAILINGLIST,
+						"name" => $name,
+						"comment" => $comment,
+						"parent" => $parent,
+					));
+			return $id;
+		}
+			
 
 		function change_list($ar)
 		{
@@ -90,7 +109,7 @@
 			}
 			$this->delete_object($id);
 			$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-			$this->log_action($GLOBALS["uid"],"mlist","Kustutas listi $name");
+			$this->_log("mlist","Kustutas listi $name");
 			if (is_array($ar))
 			{
 				header("Location:orb.aw?class=menuedit&action=obj_list&parent=$parent");
@@ -248,12 +267,12 @@
 			if ($id)
 			{
 				$this->update_object($id, $name, 2, $comment);
-				$this->log_action($GLOBALS["uid"],"mlist","Muutis kategooriat $name");
+				$this->_log("mlist","Muutis kategooriat $name");
 			}
 			else
 			{
 				$id = $this->register_object($parent, $name, CL_MAILINGLIST_CATEGORY, $comment);
-				$this->log_action($GLOBALS["uid"],"mlist","Lisas kategooria $name");
+				$this->_log("mlist","Lisas kategooria $name");
 			}
 
 			return $parent;
