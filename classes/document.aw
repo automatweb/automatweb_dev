@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.225 2003/12/12 17:31:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.226 2003/12/15 13:10:57 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2387,6 +2387,26 @@ class document extends aw_template
 			{
 				continue;
 			};
+
+			if (aw_global_get("uid") == "" && $search_group["no_usersonly"] == 1)
+			{
+				// check the object 
+				$o = obj($row["docid"]);
+				$uson = false;
+				foreach($o->path() as $p_o)
+				{
+					if ($p_o->class_id() == CL_MENU && $p_o->prop("users_only"))
+					{
+						$uson = true;
+					}
+				}
+
+				if ($uson)
+				{
+					continue;
+				}
+			}
+
 			// find number of matches in document for search string, for calculating percentage
 			// if match is found in title, then multiply number by 5, to emphasize importance
 			
