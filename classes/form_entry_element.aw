@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.54 2002/07/23 12:52:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.55 2002/07/24 20:36:44 kristo Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -114,10 +114,8 @@ class form_entry_element extends form_element
 
 		if ($this->arr["type"] == "textarea")
 		{
-			$this->entry .= " ";
-			$src = ($this->form->allow_html) ? $this->entry : htmlspecialchars($this->entry);
-			$src = preg_replace("/((http(s?):\/\/)|(www\.))(.+?)\s/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
-			$src = preg_replace("/(\S*?\@.*\.\w*)/i","<a href=\"mailto:$1\">$1</a>",$src);
+			$src = ($this->form->arr["allow_html"]) ? $this->entry : htmlspecialchars($this->entry);
+			$src = create_links($src);
 			$html = str_replace("\n","<br>",$src);
 		}
 				
@@ -183,10 +181,8 @@ class form_entry_element extends form_element
 				
 		if ($this->arr["type"] == "textbox")
 		{
-			$this->entry .= " ";
-			$src = ($this->form->allow_html) ? $this->entry : htmlspecialchars($this->entry);
-			$src = preg_replace("/((http(s?):\/\/)|(www\.))(.+?)\s/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
-			$src = preg_replace("/(\S*?\@.*)\s/i","<a href=\"mailto:$1\">$1</a>",$src);
+			$src = ($this->form->arr["allow_html"]) ? $this->entry : htmlspecialchars($this->entry);
+			$src = create_links($src);
 			if ($this->arr["subtype"] == "int" && $this->arr["thousands_sep"] != "" && $src != " ")
 			{
 				// insert separator every after every 3 chars, starting from the end. 
@@ -414,6 +410,7 @@ class form_entry_element extends form_element
 			// but .. what the hell.
 			//
 			// ok, so now we use trans.gif from automatweb folder, not site folder. better now? - terryf
+			// yeah. with this. But there are lots of other places which use different transparent gifs, those should be fixed too.  --duke
 			if ($this->arr["sep_pixels"] > 0)
 			{
 				$html.="<img src='$baseurl/automatweb/images/trans.gif' width=".$this->arr["sep_pixels"]." height=1 border=0 />";
