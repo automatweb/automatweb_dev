@@ -490,7 +490,7 @@ class site_show extends class_base
 						if ($lm_sub[$_sm])
 						{
 							// include submenus in document sources
-							$_sm_list = $this->get_menu_list(false, false, $_sm);
+							$_sm_list = $this->get_menu_list(false, false, $_sm, true);
 							foreach($_sm_list as $_sm_i => $ttt)
 							{
 								$sections[$_sm_i] = $_sm_i;
