@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.8 2003/01/13 16:51:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.9 2003/01/13 21:42:52 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -389,13 +389,6 @@ class form_calendar extends form_base
 	{
 		extract($args);	
 		$id = (int)$id;
-		/*
-		print "check_vacs()<br>";
-		print "<pre>";
-		print_r($args);
-		print "</pre>";
-		print "<br>";
-		*/
 
 		if (is_array($entry_id))
 		{
@@ -406,18 +399,9 @@ class form_calendar extends form_base
 			$r_entry_id = $entry_id;
 		};
 		
-		/*
-		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
-			 WHERE oid = '$contr' 
-				AND relation IN ($r_entry_id) AND start <= '$end' AND end >= '$start'";
-		*/
 		$q = "SELECT MIN(max_items) AS max FROM calendar2timedef
 			 WHERE oid = '$contr' 
 				AND relation IN ($r_entry_id) AND start <= '$end' AND end >= '$start'";
-
-		/*
-		print "start = $start, end = $end<br>";
-		*/
 
 		$this->db_query($q);
 		$row2 = $this->db_next();
@@ -977,6 +961,17 @@ class form_calendar extends form_base
 		$_oid = $args["id"];
 		$_eid = $args["entry_id"];
 
+		$lb_id_data = array();
+
+		foreach($amount_els->get() as $el_with_value => $count_el_id)
+		{
+			$selected = $post_vars[$count_el_id];
+			if (preg_match("/^element_\d*_lbopt_(\d*)$/",$selected,$m))
+			{
+				$lb_id_data[$count_el_id] = $args["els"][$count_el_id]["lb_items"][$m[1]];
+			};
+                }
+
 		foreach($amount_els->get() as $el_with_value => $count_el_id)
 		{
 		
@@ -1009,10 +1004,11 @@ class form_calendar extends form_base
 
 			if ($_cnt > 0)
 			{
+				$txtid = $lb_id_data[$count_el_id];
 				$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,start,end,
-					max_items,period,period_cnt, release,release_cnt,entry_id,count_el_id)
+					max_items,period,period_cnt, release,release_cnt,entry_id,txtid)
 					VALUES ('$_oid','$cal_relation','$cal_id','$_start','$_end','$_cnt',
-					'$_pertype','$_period','$_reltype', '$_release','$_eid','$count_el_id')";
+					'$_pertype','$_period','$_reltype', '$_release','$_eid','$txtid')";
 				$this->db_query($q);
 			};
 		};

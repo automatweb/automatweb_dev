@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.19 2003/01/13 14:40:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.20 2003/01/13 21:42:52 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1372,7 +1372,10 @@ class form extends form_base
 		elseif ($this->subtype & FSUBTYPE_CAL_CONF)
 		{
 			$fc = get_instance("formgen/form_calendar");
-			// this is where we have to check the types
+			$els = $this->get_form_elements(array(
+                                "use_loaded" => true,
+                                "key" => "id",
+                        ));
 			$fc->fg_update_cal_conf(array(
 				"post_vars" => &$this->post_vars,
 				"arr" => &$this->arr,
@@ -1380,6 +1383,7 @@ class form extends form_base
 				"entry_id" => &$this->entry_id,
 				"cal_id" => &$cal_id,
 				"cal_relation" => &$cal_relation,
+				"els" => $els,
 			));
 		}
 		elseif ($this->subtype & FSUBTYPE_CAL_CONF2)
