@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.40 2003/01/17 16:16:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.41 2003/02/01 21:58:48 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -447,12 +447,17 @@ class file extends class_base
 
 		$ret["file"] = basename($ret["file"]);
 
+
 		if ($ret["file"] != "")
 		{
 			// file saved in filesystem - fetch it
 			$file = $this->cfg["site_basedir"]."/files/".$ret["file"][0]."/".$ret["file"];
 			$ret["content"] = $this->get_file(array("file" => $file));
 		}
+		else
+		{
+			$this->dequote($ret["content"]);
+		};
 		return $ret;
 	}
 
