@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.70 2001/12/06 01:10:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.71 2001/12/12 18:31:01 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -76,11 +76,7 @@ class core extends db_connector
 		};
 
 		// load, and parse the information
-		classload("xml");
-		$xml = new xml(array("ctag" => "metadata"));
-		$metadata = $xml->xml_unserialize(array(
-					"source" => $odata["metadata"],
-		));
+		$metadata = aw_unserialize($odata["metadata"]);
 		
 		// if key is defined, return only that part of the metainfo
 		if ($args["key"])
@@ -118,39 +114,36 @@ class core extends db_connector
 	{
 		$this->quote($args);
 		extract($args);
-		// loeme vana metadata sisse
-		if ($args["metadata"])
-		{
-			$old["metadata"] = $args["metadata"];
-		}
-		else
-		{
-			$old = $this->_get_object_metadata($oid);
-		};
-		if (!$old)
+
+		$old = $this->_get_object_metadata($oid);
+
+		// no such object? bail out
+		if (not($old))
 		{
 			return false;
 		};
-		classload("xml");
-		$xml = new xml(array("ctag" => "metadata"));
-		$metadata = $xml->xml_unserialize(array(
-					"source" => $old["metadata"],
-		));
+	
+		$metadata = aw_unserialize($old["metadata"]);
 
-		$metadata[$key] = $value;
-		$newmeta = $xml->xml_serialize($metadata);
-
-		if ($args["metadata"])
+		if (is_array($data))
 		{
-			$retval = $newmeta;
+			$metadata = array_merge($metadata,$data);
+		}
+		elseif ($key)
+		{
+			$metadata[$key] = $value;
 		}
 		else
 		{
-			$this->quote($newmeta);
-			$q = "UPDATE objects SET metadata = '$newmeta' WHERE oid = '$oid'";
-			$this->db_query($q);
-			$retval = true;
+			// nothing to do, return
+			return false;
 		};
+
+		$newmeta = aw_serialize($metadata,SERIALIZE_PHP);
+
+		$this->quote($newmeta);
+		$q = "UPDATE objects SET metadata = '$newmeta' WHERE oid = '$oid'";
+		$this->db_query($q);
 		return $retval;
 	}
 
@@ -1410,6 +1403,7 @@ class core extends db_connector
 	// crap, I hate this but I gotta do it - shoulda used array arguments or something -
 	// if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
 	// directly, without drawing menus and stuff
+	// this function has became such a spaghetti, that it really should be rewritten. --duke
 	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = array())
 	{
 		global $ext;
@@ -1448,7 +1442,15 @@ class core extends db_connector
 			}
 			else
 			{
-				$str = ($v) ? $k."=".$v : "";
+				# this gets special handling
+				if ( ($k == "_alias") || (strlen($v) == 0) )
+				{
+					$str = "";
+				}
+				else
+				{
+					$str = $k."=".$v;
+				};
 			}
 
 			if ($str)
@@ -1463,6 +1465,11 @@ class core extends db_connector
 				}
 			};
 		}
+		/*
+		print "<pre>";
+		print_r($ura);
+		print "</pre>";
+		*/
 		$urs = join("&",$ura);
 
 		$sec = "";
@@ -1488,7 +1495,14 @@ class core extends db_connector
 				$uo = "/orb.$ext?";
 			}
 			// user side
-			return $GLOBALS["baseurl"].$uo.$sec."class=$cl_name&action=$fun&$urs";
+			if ($arr["_alias"])
+			{
+				return $GLOBALS["baseurl"].$uo.$sec."alias=$arr[_alias]&action=$fun&$urs";
+			}
+			else
+			{
+				return $GLOBALS["baseurl"].$uo.$sec."class=$cl_name&action=$fun&$urs";
+			};
 		}
 	}
 
