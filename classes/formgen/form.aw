@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.6 2002/11/14 10:15:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.7 2002/11/26 12:26:55 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -3859,7 +3859,13 @@ class form extends form_base
 	function set_element_value($id,$val,$user_val = false)
 	{
 		$elref = $this->get_element_by_id($id);
-		$this->arr["contents"][$elref->get_row()][$elref->get_col()] -> set_element_entry($id,$val,$user_val);
+		if (is_object($elref))
+		{
+			if (is_object($this->arr["contents"][$elref->get_row()][$elref->get_col()]))
+			{
+				$this->arr["contents"][$elref->get_row()][$elref->get_col()] -> set_element_entry($id,$val,$user_val);
+			}
+		}
 	}
 
 	////
