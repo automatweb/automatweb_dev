@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.24 2004/10/13 11:01:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.25 2004/11/24 15:13:00 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -121,12 +121,17 @@ class crm_offer extends class_base
 			"clid" => CL_CRM_OFFER
 		));
 		$this->u_i = get_instance("core/users/user");
-		$this->statuses =  array("Koostamisel", "Saadetud", "Esitletud", "Tagasilükatud", "Positiivelt lõppenud");		
+		$this->statuses =  array(
+			t("Koostamisel"), 
+			t("Saadetud"), 
+			t("Esitletud"), 
+			t("Tagasilükatud"), 
+			t("Positiivelt lõppenud")
+		);		
 	}
 
 	function get_property($arr)
 	{
-		
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		
@@ -254,7 +259,7 @@ class crm_offer extends class_base
 		$toolbar->add_button(array(
 			'name' => 'save',
 			'img' => 'save.gif',
-			'tooltip' => 'Salvesta valitud paketid pakkumisse',
+			'tooltip' => t('Salvesta valitud paketid pakkumisse'),
 			'action' => 'connect_selected_packages_to_offer',
 		));	
 	}
@@ -277,7 +282,9 @@ class crm_offer extends class_base
 		return  $this->mk_my_orb("change", array(
 			"id" => $id,
 			"group" => $group,
-			), CL_CRM_OFFER);
+			), 
+			CL_CRM_OFFER
+		);
 	}
 	
 	function get_packages_total_sum($obj_id)
@@ -324,13 +331,13 @@ class crm_offer extends class_base
 		
 		$table->define_field(array(
 			"name" => "package",
-		 	"caption" => "Pakett",
+		 	"caption" => t("Pakett"),
 			"sortable" => 1,
 		));
 		 
 		$table->define_field(array(
 			"name" => "price",
-		 	"caption" => "Hind",
+		 	"caption" => t("Hind"),
 		 	"sortable" => 1,
 		 	"align" => "center",
 		 	"width" => 50,
@@ -364,19 +371,19 @@ class crm_offer extends class_base
 				"name" => "package_search_label", 
 				"type" => "text", 
 				"subtitle" => 1,
-				"caption" => "Otsing",
+				"caption" => t("Otsing"),
 			);
 			
 			$retval["search_package_name"] = array(
 				"name" => "search_package_name",
 				"type" => "textbox",
-				"caption" => "Nimetus",
+				"caption" => t("Nimetus"),
 			);
 			
 			$retval[] = array(
 				"name" => "search_offer_submit",
 				"type" => "submit",
-				"caption" => "Otsi",
+				"caption" => t("Otsi"),
 				"action" => "get_search_packets_url", //"get_search_offers_url",
 			);	
 			return $retval;
@@ -387,7 +394,7 @@ class crm_offer extends class_base
 				"name" => "package_search_label", 
 				"type" => "text", 
 				"subtitle" => 1,
-				"caption" => "Otsingutulemused",
+				"caption" => t("Otsingutulemused"),
 			);	
 			return $retval;
 		}
@@ -412,15 +419,15 @@ class crm_offer extends class_base
 		$tb->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => 'Kustuta valitud paketid',
+			'tooltip' => t('Kustuta valitud paketid'),
 			'action' => 'delete_selected_packages',
-			'confirm' => "Soovid kustutada valitud paketid?"
+			'confirm' => t("Soovid kustutada valitud paketid?")
 		));
 		
 		$tb->add_button(array(
 			'name' => 'search',
 			'img' => 'search.gif',
-			'tooltip' => 'Otsi pakette',
+			'tooltip' => t('Otsi pakette'),
 			'url' => aw_url_change_var(array("search" => 1)),
 		));
 		
@@ -429,7 +436,7 @@ class crm_offer extends class_base
 			$tb->add_button(array(
 				'name' => 'save',
 				'img' => 'save.gif',
-				'tooltip' => 'Liida paketid pakkumisse',
+				'tooltip' => t('Liida paketid pakkumisse'),
 				'action' => 'connect_selected_packages_to_offer',
 			));
 		}	
@@ -498,12 +505,12 @@ class crm_offer extends class_base
 		$table = &$arr["prop"]["vcl_inst"];
 		$table->define_field(array(
 			"name" => "product",
-			"caption" => "Toode",
+			"caption" => t("Toode"),
 			"sortable" => "1",
 		));
 		$table->define_field(array(
 			"name" => "price",
-			"caption" => "Hind",
+			"caption" => t("Hind"),
 			"sortable" => "1",
 		));
 		
@@ -584,25 +591,25 @@ class crm_offer extends class_base
 		$table = &$arr["prop"]["vcl_inst"];
 		$table->define_field(array(
 			"name" => "prev",
-			"caption" => "Algstaatus",
+			"caption" => t("Algstaatus"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "next",
-			"caption" => "Lõppstaatus",
+			"caption" => t("Lõppstaatus"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "time",
-			"caption" => "Muutuse aeg",
+			"caption" => t("Muutuse aeg"),
 			"sortable" => "1",
 		));
 	
 		$table->define_field(array(
 			"name" => "who",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 			"sortable" => "1",
 		));
 		
@@ -633,14 +640,14 @@ class crm_offer extends class_base
 		$table = &$arr["prop"]["vcl_inst"];
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => "Pakett",
+			"caption" => t("Pakett"),
 			"sortable" => "1",
 			"width" => "90%"
 		));
 		
 		$table->define_field(array(
 			"name" => "price",
-			"caption" => "Hind",
+			"caption" => t("Hind"),
 			"sortable" => "1",
 			"width" => "5%",
 			"align" => "center",
@@ -678,7 +685,7 @@ class crm_offer extends class_base
 		}
 		
 		$table->define_data(array(
-			"name" => "<b>Kokku</b>",
+			"name" => "<b>".t("Kokku")."</b>",
 			"price" => "<b>".$this->get_packages_total_sum($arr["obj_inst"]->id())."</b>",
 		));
 	}

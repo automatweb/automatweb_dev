@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.12 2004/10/27 12:03:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.13 2004/11/24 15:13:00 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
@@ -187,13 +187,13 @@ class crm_db extends class_base
 
 			case 'default_kliendibaas':
 				$this->users = get_instance("users");
-                                $obj_id = $args["obj_inst"]->id();
+				$obj_id = $args["obj_inst"]->id();
 
-                                $data['value'] = $this->users->get_user_config(array(
-                                        "uid" => aw_global_get("uid"),
-                                        "key" => "kliendibaas",
-                                ));
-                                $data['ch_value'] = $args["obj_inst"]->id();
+				$data['value'] = $this->users->get_user_config(array(
+					"uid" => aw_global_get("uid"),
+					"key" => "kliendibaas",
+				));
+				$data['ch_value'] = $args["obj_inst"]->id();
 				break;
 
 			
@@ -264,11 +264,11 @@ class crm_db extends class_base
 		{
 			case 'default_kliendibaas':
 				$users = get_instance("users");
-                                $users->set_user_config(array(
-                                        "uid" => aw_global_get("uid"),
-                                        "key" => "kliendibaas",
-                                        "value" => $data["value"],
-                                ));
+				$users->set_user_config(array(
+					"uid" => aw_global_get("uid"),
+					"key" => "kliendibaas",
+					"value" => $data["value"],
+				));
 				break;
 
 		};
@@ -279,7 +279,6 @@ class crm_db extends class_base
 	// !sector manager
 	function callback_sector_manager($args)
 	{
-	
 		$obj = $args["obj_inst"];
 		$tase = $args['request']['tase'] ? $args['request']['tase'] : 1;
 		$kood = $args['request']['kood'] ? $args['request']['kood'] : '0';
@@ -341,17 +340,17 @@ class crm_db extends class_base
 
 		$t->define_field(array(
 			'name' => 'tegevusala',
-			'caption' => 'Tegevusala',
+			'caption' => t('Tegevusala'),
 		));
 
 		$t->define_field(array(
 			'name' => 'fcount',
-			'caption' => 'Organisatsioone',
+			'caption' => t('Organisatsioone'),
 		));
 		
 		$t->define_field(array(
 			'name' => 'check',
-			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
+			'caption' => "<a href='javascript:selall(\"sel\")'>".t("Vali")."</a>",
 			'width'=> 15,
 		));
 		
@@ -503,10 +502,14 @@ class crm_db extends class_base
 		}
 
 		if (count($parents) == 1)
+		{
 			return '='.$parents[0];
+		}
 
 		if (count($parents) > 1)
+		{
 			return ' in ('.implode(',',$parents).') ';
+		}
 
 		return '<>0';
 	}
@@ -714,66 +717,66 @@ class crm_db extends class_base
 
 		$tf->define_field(array(
 			'name' => 'fname',
-			'caption' => 'Organisatsioon',
+			'caption' => t('Organisatsioon'),
 			'sortable' => '1',
 		));
 		
 		$tf->define_field(array(
 			'name' => 'reg_nr',
-			'caption' => 'Reg nr.',
+			'caption' => t('Reg nr.'),
 			'sortable' => '1',
 		));
 		
 		$tf->define_field(array(
 			'name' => 'pohitegevus',
-			'caption' => 'Põhitegevus',
+			'caption' => t('Põhitegevus'),
 			'sortable' => '1',
 		));
 		
 		$tf->define_field(array(
 			'name' => 'ettevotlusvorm',
-			'caption' => 'Õiguslik vorm',
+			'caption' => t('Õiguslik vorm'),
 			'sortable' => '1',
 		));
 		
 		$tf->define_field(array(
 			'name' => 'address',
-			'caption' => 'Aadress',
+			'caption' => t('Aadress'),
 			'sortable' => '1',
 		));
 		
 		$tf->define_field(array(
 			'name' => 'linn',
-			'caption' => 'Linn/Vald/Alev',
+			'caption' => t('Linn/Vald/Alev'),
 			'sortable' => '1',
 		));
 		
 		$tf->define_field(array(
 			'name' => 'maakond',
-			'caption' => 'Maakond',
+			'caption' => t('Maakond'),
 			'sortable' => '1',
 		));		
 		
 		$tf->define_field(array(
 			'name' => 'e_mail',
-			'caption' => 'E-post',
+			'caption' => t('E-post'),
 			'sortable' => '1',
 		));
 		
 		$tf->define_field(array(
 			'name' => 'kodulehekylg',
-			'caption' => 'Kodulehekülg',
+			'caption' => t('Kodulehekülg'),
 			'sortable' => '1',
 		));
 		$tf->define_field(array(
 			'name' => 'telefon',
-			'caption' => 'Telefon',
+			'caption' => t('Telefon'),
 			'sortable' => '1',
 		));
 		
 		$tf->define_field(array(
 			'name' => 'firmajuht',
-			'caption' => 'Organisatsiooni juht',
+			'caption' => t('Organisatsiooni juht'),
 			'sortable' => '1',
 		));
 
@@ -812,7 +815,7 @@ class crm_db extends class_base
 
 			$toolbar->add_menu_button(array(
 				"name" => "create_event",
-				"tooltip" => "Uus",
+				"tooltip" => t("Uus"),
 			));
 
 			$alist = array(
@@ -830,8 +833,8 @@ class crm_db extends class_base
 					{
 						$toolbar->add_menu_item(array(
 							"parent" => "create_event",
-							'title' => 'Kaust määramata',
-							'text' => 'Lisa '.$classinf["name"],
+							'title' => t('Kaust määramata'),
+							'text' => sprintf(t('Lisa %s'),$classinf["name"]),
 							'disabled' => true,
 						));
 					}
@@ -844,7 +847,7 @@ class crm_db extends class_base
 								'parent' => $parents[$val['clid']],
 								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 							)),
-							'text' => 'Lisa '.$classinf["name"],
+							'text' => sprintf(t('Lisa %s'),$classinf["name"]),
 						));
 					}
 				};
@@ -854,25 +857,25 @@ class crm_db extends class_base
 			$cal_id = $users->get_user_config(array(
 				"uid" => aw_global_get("uid"),
 				"key" => "user_calendar",
-                	));
+			));
 			
 			if (!empty($cal_id))	
 			{
 				$toolbar->add_button(array(
 					"name" => "user_calendar",
-					"tooltip" => "Kasutaja kalender",
+					"tooltip" => t("Kasutaja kalender"),
 					"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
 					"onClick" => "",
 					"img" => "icon_cal_today.gif",
 					"class" => "menuButton",
 				));
 			}
-                }
+		}
 
 		$toolbar->add_separator();
 		$toolbar->add_menu_button(array(
 			"name" => "go_navigate",
-			"tooltip" => "Ava valim",
+			"tooltip" => t("Ava valim"),
 			"img" => "iother_shared_folders.gif",
 		));
 
@@ -880,9 +883,9 @@ class crm_db extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Kustuta",
+			"tooltip" => t("Kustuta"),
 			"action" => "delete_organizations",
-			"confirm" => "Kustutada valitud organisatsioonid?",
+			"confirm" => t("Kustutada valitud organisatsioonid?"),
 			"img" => "delete.gif",
 		));
 		
@@ -892,7 +895,7 @@ class crm_db extends class_base
 		));
 
 		$ops = array();
-		$ops[0] = "-- vali valim --";
+		$ops[0] = t("-- vali valim --");
 
 		foreach($conns as $conn)
 		{
@@ -904,11 +907,11 @@ class crm_db extends class_base
 			));
 		};
 
-                $str .= html::select(array(
-                        "name" => "add_to_selection",
-                        "options" => $ops,
-                        "selected" => $selected,
-                ));
+		$str .= html::select(array(
+			"name" => "add_to_selection",
+			"options" => $ops,
+			"selected" => $selected,
+		));
 
 		$toolbar->add_separator(array(
 			"side" => "right",
@@ -916,9 +919,9 @@ class crm_db extends class_base
 		$toolbar->add_cdata($str,"right");
 		$toolbar->add_button(array(
 			"name" => "go_add",
-			"tooltip" => "Lisa valitud valimisse",
+			"tooltip" => t("Lisa valitud valimisse"),
 			"action" => "copy_to_selection",
-			"confirm" => "Paiguta valitud organisatsioonid sellesse valimisse?",
+			"confirm" => t("Paiguta valitud organisatsioonid sellesse valimisse?"),
 			"img" => "import.gif",
 			"side" => "right",
 		));
@@ -931,16 +934,16 @@ class crm_db extends class_base
 	{
 		$toolbar = &$args["prop"]["toolbar"];                
 		if (empty($args["new"]))
-                {
+		{
 			$crm_db = $args["obj_inst"];
 			
 			$par = array("firma","isik","toode","tegevusala","linn","maakond",
 				"amet","ettevotlusvorm","aadress");
 			
 			$toolbar->add_menu_button(array(
-                                "name" => "add_item",
-                                "tooltip" => "Lisa uus objekt",
-                        ));
+				"name" => "add_item",
+				"tooltip" => t("Lisa uus objekt"),
+			));
 
 			foreach($par as $val)
 			{
@@ -971,8 +974,8 @@ class crm_db extends class_base
 					{
 						$toolbar->add_menu_item(array(
 							"parent" => "add_item",
-							'title' => $classinf['name'].' kaust määramata',
-							'text' => 'Lisa '.$classinf['name'],
+							'title' => sprintf(t('%s kaust määramata'), $classinf['name']),
+							'text' => sprintf(t('Lisa %s'),$classinf['name']),
 							"disabled" => true,
 						));
 						$menudata .= $this->parse("MENU_ITEM_DISABLED");
@@ -992,8 +995,7 @@ class crm_db extends class_base
 					}
 				};
 			};
-                }
-	
+		}
 	}	
 	
 	////
@@ -1013,7 +1015,7 @@ class crm_db extends class_base
 
 			$toolbar->add_menu_button(array(
 				"name" => "add_item",
-				"tooltip" => "Lisa",
+				"tooltip" => t("Lisa"),
 			));
 
 			$menudata = '';
@@ -1028,8 +1030,8 @@ class crm_db extends class_base
 					{
 						$toolbar->add_menu_item(array(
 							"parent" => "add_item",
-							'title' => 'Kaust määramata',
-							'text' => 'Lisa '.$classinf["name"],
+							'title' => t('Kaust määramata'),
+							'text' => sprintf(t('Lisa %s'),$classinf["name"]),
 							'disabled' => true,
 						));
 					}
@@ -1042,7 +1044,7 @@ class crm_db extends class_base
 								'parent' => $parents[$val['clid']],
 								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 							)),
-							'text' => 'Lisa '.$classinf['name'],
+							'text' => sprintf(t('Lisa %s'),$classinf['name']),
 						));
 					}
 				};
@@ -1052,13 +1054,13 @@ class crm_db extends class_base
 			$cal_id = $users->get_user_config(array(
 				"uid" => aw_global_get("uid"),
 				"key" => "user_calendar",
-                	));
+			));
 
 			if (!empty($cal_id))
 			{
 				$toolbar->add_button(array(
 					"name" => "user_calendar",
-					"tooltip" => "Kasutaja kalender",
+					"tooltip" => t("Kasutaja kalender"),
 					"url" => $this->mk_my_orb('change', array('id' => $cal_id),'planner'),
 					"onClick" => "",
 					"img" => "icon_cal_today.gif",
@@ -1082,12 +1084,12 @@ class crm_db extends class_base
 
 		$REQUEST_URI = aw_global_get("REQUEST_URI");
 
-		$ops[0] = '- lisa uude valimisse -';
-                $str .= html::select(array(
-                        'name' => 'add_to_selection',
-                        'options' => $ops,
-                        'selected' => $selected,
-                ));
+		$ops[0] = t('- lisa uude valimisse -');
+		$str .= html::select(array(
+			'name' => 'add_to_selection',
+			'options' => $ops,
+			'selected' => $selected,
+		));
 
 		$toolbar->add_separator(array(
 			"side" => "right",
@@ -1099,7 +1101,7 @@ class crm_db extends class_base
 
 		$toolbar->add_button(array(
 			"name" => 'go_add',
-			"tooltip" => "Lisa valitud valimisse",
+			"tooltip" => t("Lisa valitud valimisse"),
 			"url" => "javascript:void(0);",
 			"img" => "import.gif",
 			"side" => "right",
@@ -1109,7 +1111,7 @@ class crm_db extends class_base
 		$str = "";
 		$toolbar->add_button(array(
 			"name" => 'change_it',
-			"tooltip" => 'Muuda valimit',
+			"tooltip" => t('Muuda valimit'),
 			"url" => "javascript:void(0);",
 			"img" => "edit.gif",
 			"side" => "right",
@@ -1117,7 +1119,7 @@ class crm_db extends class_base
 		));
 
 		$str .= html::hidden(array('name' => 'new_selection_name'));
-                $str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/selection/go_add_to_selection.script'));
+		$str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/selection/go_add_to_selection.script'));
 		$toolbar->add_cdata($str);
 	}
 

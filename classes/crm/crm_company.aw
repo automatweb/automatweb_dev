@@ -633,7 +633,9 @@ class crm_company extends class_base
 		{
 			//$skip in action
 			if(in_array($conn->prop('type'),$skip))
+			{
 				continue;
+			}
 			//iga alam item saab ühe võrra suurema väärtuse
 			//if the 'to.id' eq active_node then it should be bold
 			$name = $conn->prop('to.name');
@@ -652,9 +654,9 @@ class crm_company extends class_base
 				'id'=>++$node_id,
 				'name'=>$name,
 				'url'=>aw_url_change_var(array(
-							$attrib=>$conn->prop('to'),
-							'cat'=>'',
-							'org_id' => '',
+					$attrib=>$conn->prop('to'),
+					'cat'=>'',
+					'org_id' => '',
 				)),
 				'oid' => $conn->prop('to'),
 			);
@@ -664,8 +666,8 @@ class crm_company extends class_base
 			//get all the company for the current leaf
 			$blah = $conn->to();
 			$conns_tmp = $blah->connections_from(array(
-								'type'=>$customer_reltype
-							));
+				'type'=>$customer_reltype
+			));
 			$oids = array();
 			foreach($conns_tmp as $conn_tmp)
 			{
@@ -749,11 +751,13 @@ class crm_company extends class_base
 			$url = array();
 			$url = aw_url_change_var(array('cat'=>$prof_conn->prop('to'),$key=>$value));
 			$tree->add_item($this_level_id,
-						array('id'=>++$node_id,
-								'name'=>$name,
-								'iconurl'=>'images/scl.gif',
-								'url'=>$url
-						));
+				array(
+					'id' => ++$node_id,
+					'name' => $name,
+					'iconurl' =>' images/scl.gif',
+					'url'=>$url
+				)
+			);
 		}	
 	}
 	
@@ -799,18 +803,18 @@ class crm_company extends class_base
 				if(sizeof($data['options'])>1)
 				{
 					$url = $this->mk_my_orb('change',array(
-								'id' => max(array_keys($data['options'])),
+						'id' => max(array_keys($data['options'])),
 					),CL_CRM_ADDRESS);
 				}
 				else
 				{
 					$url = $this->mk_my_orb('new',array(
-								'alias_to' => $arr['obj_inst']->id(),
-								'parent' => $arr['obj_inst']->id(),
-								'reltype' => 3, //crm_company.reltype_address
+						'alias_to' => $arr['obj_inst']->id(),
+						'parent' => $arr['obj_inst']->id(),
+						'reltype' => 3, //crm_company.reltype_address
 					),CL_CRM_ADDRESS);
 				}
-				$data['caption'] .= '<br><a href="'.$url.'">Muuda</a>';
+				$data['caption'] .= '<br><a href="'.$url.'">'.t("Muuda").'</a>';
 			break;
 			case "year_founded":
 				if(!$data["value"])
@@ -874,9 +878,10 @@ class crm_company extends class_base
 				if($this->show_customer_search)
 				{
 					$obj = new object($arr['request']['id']);					
-					$data['options'] = array('all'=>'Otsi kogu süsteemist',
-														'company' => 'Otsi '.$obj->prop('name').' klientide hulgast',
-														'person' => 'Otsi '.$this->users_person->prop('name').' klientide hulgast');
+					$data['options'] = array('all'=> t('Otsi kogu süsteemist'),
+						'company' => sprintf(t('Otsi %s klientide hulgast'), $obj->prop('name')),
+						'person' => sprintf(t('Otsi %s klientide hulgast'), $this->users_person->prop('name'))
+					);
 					if(in_array($arr['request']['customer_search_only'],array_keys($data['options'])))
 					{
 						$data['value'] = $arr['request']['customer_search_only'];
@@ -966,7 +971,7 @@ class crm_company extends class_base
 
 			//START OF OFFERERS
 			case 'offers_listing_toolbar':
-					$this->do_offers_listing_toolbar($arr);
+				$this->do_offers_listing_toolbar($arr);
 			break;
 			
 			case 'offers_listing_tree':
@@ -1074,7 +1079,7 @@ class crm_company extends class_base
 				$tree_inst = &$arr['prop']['vcl_inst'];
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['unit'];
-				//$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,'RELTYPE_SECTION',array(),'unit',true);
+
 				$this->generate_tree(array(
 							'tree_inst' => &$tree_inst,
 							'obj_inst' => $arr['obj_inst'],
@@ -1091,8 +1096,7 @@ class crm_company extends class_base
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['category'];
 				$tree_inst->set_only_one_level_opened(1);
-				/*$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
-													'RELTYPE_CATEGORY',array(CL_CRM_COMPANY),'category',false,'nodetextbuttonlike');*/
+
 				$this->generate_tree(array(
 							'tree_inst' => &$tree_inst,
 							'obj_inst' => $arr['obj_inst'],
@@ -1110,8 +1114,7 @@ class crm_company extends class_base
 				$tree_inst = &$arr['prop']['vcl_inst'];	
 				$node_id = 0;
 				$this->active_node = (int)$arr['request']['category'];
-				//$this->generate_tree(&$tree_inst,$arr['obj_inst'],&$node_id,
-				//									'RELTYPE_CATEGORY',array(CL_CRM_COMPANY),'category',false,'nodetextbuttonlike');
+
 				$this->generate_tree(array(
 							'tree_inst' => &$tree_inst,
 							'obj_inst' => $arr['obj_inst'],
@@ -1128,9 +1131,9 @@ class crm_company extends class_base
 				$my_data = array();
 				$us = get_instance(CL_USER);
 				$person = obj($us->get_current_person());
-				$conns=$person->connections_from(array(
-							'type' => 22,//crm_person.reltype_CLIENT_IM_HANDLING
-							));
+				$conns = $person->connections_from(array(
+					'type' => 22,//crm_person.reltype_CLIENT_IM_HANDLING
+				));
 				
 				foreach($conns as $conn)
 				{
@@ -1146,10 +1149,10 @@ class crm_company extends class_base
 					'sort_by' => 'objects.jrk, objects.name',
 				));
 				$elements = array();
-				$elements[0] = '--vali--';
+				$elements[0] = t('--vali--');
 				for($o=$ol->begin();!$ol->end();$o=$ol->next())
 				{
-					if($o->id()==$data['value'])
+					if($o->id() == $data['value'])
 					{
 						$arr['prop']['value'] = $o->id();
 					}
@@ -1188,8 +1191,8 @@ class crm_company extends class_base
 				$us = get_instance(CL_USER);
 				$person = obj($us->get_current_person());
 				$conns = $person->connections_from(array(
-								'type'=>22, //crm_person.reltype_CLIENT_IM_HANDLING
-							));
+					'type'=>22, //crm_person.reltype_CLIENT_IM_HANDLING
+				));
 				$filter = array();
 				foreach($conns as $conn)
 				{
@@ -1203,6 +1206,7 @@ class crm_company extends class_base
 				$vcl_inst->add_button(array(
 					"name" => "delete",
 					"img" => "delete.gif",
+					"caption" => t('Kustuta')
 				));
 				break;
 
@@ -1268,6 +1272,7 @@ class crm_company extends class_base
 			case "personal_candidates_table":
 				$this->do_personal_candidates_table($arr);	
 			break;
+
 			// Begin of org objects
 			case "objects_listing_toolbar":
 				$this->do_objects_listing_toolbar($arr);
@@ -1363,25 +1368,25 @@ class crm_company extends class_base
 	
 		$table->define_field(array(
 			"name" => "osakond",
-			"caption" => "Osakond",
+			"caption" => t("Osakond"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "ametinimi",
-			"caption" => "Ametinimi",
+			"caption" => t("Ametinimi"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "comments",
-			"caption" => "Kommentaar",
+			"caption" => t("Kommentaar"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "kehtiv_alates",
-			"caption" => "Kehtiv alates",
+			"caption" => t("Kehtiv alates"),
 			"sortable" => "1",
 			"width" => 80,
 			"type" => "time",
@@ -1392,7 +1397,7 @@ class crm_company extends class_base
 		
 		$table->define_field(array(
 			"name" => "kehtiv_kuni",
-			"caption" => "Kehtiv kuni",
+			"caption" => t("Kehtiv kuni"),
 			"sortable" => "1",
 			"width" => 80,
 			"type" => "time",
@@ -1404,7 +1409,7 @@ class crm_company extends class_base
 		$table->define_chooser(array(
 			"name" => "select",
 			"field" => "job_id",
-			"caption" => "X",
+			"caption" => t("X"),
 			"width" => 20,
 			"align" => "center"
 		));
@@ -1441,7 +1446,7 @@ class crm_company extends class_base
 			
 			if(!$professions[$job->prop("profession")])
 			{
-				$professin_cap = "Määramata";
+				$professin_cap = t("Määramata");
 			}
 			else
 			{
@@ -1469,19 +1474,19 @@ class crm_company extends class_base
 		
 		$table->define_field(array(
 			"name" => "person_name",
-			"caption" => "Kandideerija nimi",
+			"caption" => t("Kandideerija nimi"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "ametikoht",
-			"caption" => "Ametikoht",
+			"caption" => t("Ametikoht"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "osakond",
-			"caption" => "Osakond",
+			"caption" => t("Osakond"),
 			"sortable" => "1",
 		));
 	
@@ -1530,19 +1535,19 @@ class crm_company extends class_base
 		
 		$table->define_field(array(
 			"name" => "ametikoht",
-			"caption" => "Ametikoht",
+			"caption" => t("Ametikoht"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "deadline",
-			"caption" => "Tähtaeg",
+			"caption" => t("Tähtaeg"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "kandideerijad",
-			"caption" => "Kandidaadid",
+			"caption" => t("Kandidaadid"),
 			"sortable" => "1",
 		));
 		
@@ -1566,7 +1571,7 @@ class crm_company extends class_base
 					"deadline" => get_lc_date($job->prop("deadline"), LC_DATE_FORMAT_LONG_FULLYEAR),
 					"kandideerijad" => html::href(array(
 						"url" => $this->mk_my_orb("change", array("id" => $job->id(), "group" => "kandideerinud"), "job_offer"),
-						"caption" => "Vaata kandidaate",
+						"caption" => t("Vaata kandidaate"),
 					)), 
 				));
 			}
@@ -1580,20 +1585,20 @@ class crm_company extends class_base
 		
 		$table->define_field(array(
 			"name" => "ametikoht",
-			"caption" => "Ametikoht",
+			"caption" => t("Ametikoht"),
 			"sortable" => "1",
 			"width" => "200",
 		));
 		
 		$table->define_field(array(
 			"name" => "deadline",
-			"caption" => "Tähtaeg",
+			"caption" => t("Tähtaeg"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "kandideerijad",
-			"caption" => "Kandidaadid",
+			"caption" => t("Kandidaadid"),
 			"sortable" => "1",
 		));
 		
@@ -1612,11 +1617,11 @@ class crm_company extends class_base
 					"ametikoht" => html::href(array(
 						"caption" => $job->name(),
 						"url" => $this->mk_my_orb("change", array("id" => $job->id()), "job_offer"),
-				)),
+					)),
 					"deadline" => get_lc_date($job->prop("deadline"), LC_DATE_FORMAT_LONG_FULLYEAR),
 					"kandideerijad" => html::href(array(
 						"url" => $this->mk_my_orb("change", array("id" => $job->id(), "group" => "kandideerinud"), "job_offer"),
-						"caption" => "Vaata kandidaate",
+						"caption" => t("Vaata kandidaate"),
 					)), 
 				));
 			}
@@ -1633,7 +1638,7 @@ class crm_company extends class_base
 	{
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => 'Nimi',
+			'caption' => t('Nimi'),
 			'sortable' => '1',
 			"chgbgcolor" => "cutcopied",
 			'callback' => array(&$this, 'callb_human_name'),
@@ -1642,25 +1647,25 @@ class crm_company extends class_base
 		$t->define_field(array(
         	'name' => 'phone',
 			"chgbgcolor" => "cutcopied",
-			'caption' => 'Telefon',
+			'caption' => t('Telefon'),
 			'sortable' => '1',
 		));
 		$t->define_field(array(
 			'name' => 'email',
 			"chgbgcolor" => "cutcopied",
-			'caption' => 'E-post',
+			'caption' => t('E-post'),
 			'sortable' => '1',
 		));
 		$t->define_field(array(
 			'name' => 'section',
 			"chgbgcolor" => "cutcopied",
-			'caption' => 'Üksus',
+			'caption' => t('Üksus'),
 			'sortable' => '1',
 		));
 		$t->define_field(array(
 			'name' => 'rank',
 			"chgbgcolor" => "cutcopied",
-			'caption' => 'Ametinimetus',
+			'caption' => t('Ametinimetus'),
             'sortable' => '1',
 		));
 
@@ -1812,7 +1817,7 @@ class crm_company extends class_base
 				{
 					$tmp_obj = new object($key);
 					$conns=$tmp_obj->connections_from(array(
-								'type' => 1,
+						'type' => 1,
 					));
 					$tmp_arr = array();
 					foreach($conns as $conn)
@@ -1866,15 +1871,15 @@ class crm_company extends class_base
 				if ($cal_id)
 				{
 					$tdata["new_task"] = html::href(array(
-						"caption" => "Uus toimetus",
+						"caption" => t("Uus toimetus"),
 						"url" => $pdat["add_task_url"],
 					));
 					$tdata["new_call"] = html::href(array(
-						"caption" => "Uus kõne",
+						"caption" => t("Uus kõne"),
 						"url" => $pdat["add_call_url"],
 					));
 					$tdata["new_meeting"] = html::href(array(
-						"caption" => "Uus kohtumine",
+						"caption" => t("Uus kohtumine"),
 						"url" => $pdat["add_meeting_url"],
 					));
 				};
@@ -2215,10 +2220,11 @@ class crm_company extends class_base
 			$deleted_obj->delete();	
 		}
 		return $this->mk_my_orb("change", array(
-				"id" => $arr["id"], 
-				"group" => $arr["group"], 
-				"org_id" => $arr["offers_current_org_id"]),
-				$arr["class"]);
+			"id" => $arr["id"], 
+			"group" => $arr["group"], 
+			"org_id" => $arr["offers_current_org_id"]),
+			$arr["class"]
+		);
 	}
 	
 	/**
@@ -2240,14 +2246,15 @@ class crm_company extends class_base
 	function search_for_contacts($arr)
 	{
 		return $this->mk_my_orb(
-					'change',array(
-						'id' => $arr['id'],
-						'group' => $arr['group'],
-						'contact_search' => true,
-						'unit' => $arr['unit'],
-						'cat' => $arr['cat'],
-						),
-					'crm_company');
+			'change',array(
+				'id' => $arr['id'],
+				'group' => $arr['group'],
+				'contact_search' => true,
+				'unit' => $arr['unit'],
+				'cat' => $arr['cat'],
+			),
+			'crm_company'
+		);
 	}
 	
 	/**
@@ -2256,15 +2263,16 @@ class crm_company extends class_base
 	function search_for_customers($arr)
 	{
 		return $this->mk_my_orb(
-					'change',array(
-						'id' => $arr['id'],
-						'group' => $arr['group'],
-						'customer_search' => 1,
-						'unit' => $arr['unit'],
-						'category' => $arr['category'],
-						'no_results' => 1
-						),
-					'crm_company');
+			'change',array(
+				'id' => $arr['id'],
+				'group' => $arr['group'],
+				'customer_search' => 1,
+				'unit' => $arr['unit'],
+				'category' => $arr['category'],
+				'no_results' => 1
+			),
+			'crm_company'
+		);
 	}
 
 	/**
@@ -2292,7 +2300,9 @@ class crm_company extends class_base
 	function submit_new_action_to_person($arr)
 	{
 		if(!is_array($arr['check']))
+		{
 			return;
+		}
 
 		$us = get_instance(CL_USER);
 		$person = new object($us->get_current_person());
@@ -2300,7 +2310,9 @@ class crm_company extends class_base
 
 		$prsn = get_instance(CL_CRM_PERSON);
 		$pl = get_instance(CL_PLANNER);
-		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
+		$cal_id = $pl->get_calendar_for_user(array(
+			'uid' => aw_global_get('uid')
+		));
 		$alias_to_org_arr = array();
 		$fake_alias = 0;
 		
@@ -2309,14 +2321,14 @@ class crm_company extends class_base
 		$fake_alias = current($arr['check']);
 
 		$url = $this->mk_my_orb('change',array(
-				'id'=>$cal_id,
-				'group'=>'add_event',
-				'alias_to_org'=>$fake_alias,
-				'reltype_org'=> $arr['reltype'],
-				'clid'=> $arr['clid'],
-				'alias_to_org_arr'=>urlencode(serialize($arr['check'])),
-				//'person_id'=>$person,
-			),'planner');
+			'id'=>$cal_id,
+			'group'=>'add_event',
+			'alias_to_org'=>$fake_alias,
+			'reltype_org'=> $arr['reltype'],
+			'clid'=> $arr['clid'],
+			'alias_to_org_arr'=>urlencode(serialize($arr['check'])),
+			//'person_id'=>$person,
+		),'planner');
 		header('Location: '.$url);	
 		die();
 	}
@@ -2329,29 +2341,29 @@ class crm_company extends class_base
 	{
 		$event_obj = new object($arr["event_id"]);
 		$typemap = array(
-				CL_CRM_MEETING => 11,
-				CL_CRM_CALL => 12,
-				CL_TASK => 13,
+			CL_CRM_MEETING => 11,
+			CL_CRM_CALL => 12,
+			CL_TASK => 13,
 		);
 
 		$reltype = $typemap[$event_obj->class_id()];
 		if (empty($reltype))
 		{
-				return false;
+			return false;
 		};
 
 		$per_obj = new object($arr["source_id"]);
 
 		$conns = $per_obj->connections_to(array(
-				"type" => 8, //RELTYPE_WORKERS
+			"type" => 8, //RELTYPE_WORKERS
 		));
 
 		foreach($conns as $conn)
 		{
 			$org_obj = $conn->from();
 			$org_obj->connect(array(
-					  "to" => $arr["event_id"],
-					  "reltype" => $reltype,
+				"to" => $arr["event_id"],
+				"reltype" => $reltype,
 			));
 		}
 	}
@@ -2364,10 +2376,10 @@ class crm_company extends class_base
 		$toolbar = &$args["prop"]["toolbar"];
 		$users = get_instance("users");
 
-                $crm_db_id = $users->get_user_config(array(
-                        "uid" => aw_global_get("uid"),
-                        "key" => "kliendibaas",
-                ));
+		$crm_db_id = $users->get_user_config(array(
+			"uid" => aw_global_get("uid"),
+			"key" => "kliendibaas",
+		));
 
 		// hm, I dunno but there seems to be a conflict here. Because you set the folders
 		// through the crm_db class, which means that they can be different for each user
@@ -2393,7 +2405,7 @@ class crm_company extends class_base
 
 		$toolbar->add_menu_button(array(
 			"name" => "main_menu",
-			"tooltip" => "Uus",
+			"tooltip" => t("Uus"),
 		));
 
 		$toolbar->add_sub_menu(array(
@@ -2431,9 +2443,9 @@ class crm_company extends class_base
 					$disabled = $has_parent ? false : true;
 					$toolbar->add_menu_item(array(
 						"parent" => "firma_sub",
-						"text" => 'Lisa '.$classinf["name"],
+						"text" => sprintf(t('Lisa %s'), $classinf["name"]),
 						"link" => $has_parent ? $url : "",
-						"title" => $has_parent ? "" : "Kataloog määramata",
+						"title" => $has_parent ? "" : t("Kataloog määramata"),
 						"disabled" => $has_parent ? false : true,
 					));
 				};
@@ -2487,8 +2499,8 @@ class crm_company extends class_base
 					$disabled = $has_parent ? false : true;
 					$toolbar->add_menu_item(array(
 						"parent" => "calendar_sub",
-						"title" => $has_parent ? "" : "Kalender või kalendri sündmuste kataloog määramata",
-						"text" => "Lisa ".$classinf["name"],
+						"title" => $has_parent ? "" : t("Kalender või kalendri sündmuste kataloog määramata"),
+						"text" => sprintf(t("Lisa %s"),$classinf["name"]),
 						"disabled" => $has_parent ? false : true,
 						"link" => $has_parent ? $url : "",
 					));
@@ -2500,17 +2512,23 @@ class crm_company extends class_base
 		$my_org_id = $ui->get_current_company();
 		$toolbar->add_menu_item(array(
 			"parent" => "calendar_sub",
-			"title" => "Lisa pakkumine",
-			"text" => "Lisa pakkumine",
-			"link" => $this->mk_my_orb("new", array("alias_to_org" => $args["obj_inst"]->id(), "alias_to" => $my_org_id), CL_CRM_OFFER),
+			"title" => t("Lisa pakkumine"),
+			"text" => t("Lisa pakkumine"),
+			"link" => $this->mk_my_orb("new", array(
+				"alias_to_org" => $args["obj_inst"]->id(), 
+				"alias_to" => $my_org_id
+			), CL_CRM_OFFER),
 		));
 		
 		if (!empty($this->cal_id))	
 		{
 			$toolbar->add_button(array(
 				"name" => "user_calendar",
-				"tooltip" => "Kasutaja kalender",
-				"url" => $this->mk_my_orb('change', array('id' => $this->cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
+				"tooltip" => t("Kasutaja kalender"),
+				"url" => $this->mk_my_orb('change', array(
+						'id' => $this->cal_id,
+						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+					),'planner'),
 				"onClick" => "",
 				"img" => "icon_cal_today.gif",
 				"class" => "menuButton",
@@ -2558,54 +2576,54 @@ class crm_company extends class_base
 	{
 		$tf->define_field(array(
 			"name" => "name",
-			"caption" => "Organisatsioon",
+			"caption" => t("Organisatsioon"),
 			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 			"name" => "pohitegevus",
-			"caption" => "Põhitegevus",
+			"caption" => t("Põhitegevus"),
 			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 			"name" => "corpform",
-			"caption" => "Õiguslik vorm",
+			"caption" => t("Õiguslik vorm"),
 			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 			"name" => "address",
-			"caption" => "Aadress",
+			"caption" => t("Aadress"),
 			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 			"name" => "email",
-			"caption" => "E-post",
+			"caption" => t("E-post"),
 			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 			"name" => "url",
-			"caption" => "WWW",
+			"caption" => t("WWW"),
 			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 			"name" => "phone",
-			"caption" => 'Telefon',
+			"caption" => t('Telefon'),
 		));
 
 		$tf->define_field(array(
 			"name" => "ceo",
-			"caption" => "Juht",
+			"caption" => t("Juht"),
 			"sortable" => 1,
 		));
 		
 		$tf->define_field(array(
 			"name" => "rollid",
-			"caption" => "Rollid",
+			"caption" => t("Rollid"),
 			"sortable" => 0,
 		));
 
@@ -2723,7 +2741,7 @@ class crm_company extends class_base
 
 			$roles .= ($roles != "" ? "<br>" : "" ).html::popup(array(
 				"url" => $role_url,
-				'caption' => 'Rollid',
+				'caption' => t('Rollid'),
 				"width" => 800,
 				"height" => 600,
 				"scrollbars" => "auto"
@@ -2803,8 +2821,8 @@ class crm_company extends class_base
 					)))
 				{
 					$this->users_person->disconnect(array(
-								'from' => $from,
-								'type' => 22,
+						'from' => $from,
+						'type' => 22,
 					));
 				}
 
@@ -2814,18 +2832,18 @@ class crm_company extends class_base
 					)))
 				{
 					$this->users_person->disconnect(array(
-								'from' => $from,
-								'type' => 23
+						'from' => $from,
+						'type' => 23
 					));
 				}
 			}
 		}
 
 		return $this->mk_my_orb('change',array(
-						'id' => $arr['id'],
-						'group' => 'my_customers',
-						'category' => $arr['category']
-					));
+			'id' => $arr['id'],
+			'group' => 'my_customers',
+			'category' => $arr['category']
+		));
 	}
 
 	/**
@@ -2837,11 +2855,12 @@ class crm_company extends class_base
 	function submit_delete_customer_relations($arr)
 	{
 		$url = $this->mk_my_orb('change',array(
-							'id' => $arr['id'],
-							'group'=>'relorg',
-							'category'=>$arr['category']),
-						CL_CRM_COMPANY
-					);
+				'id' => $arr['id'],
+				'group'=>'relorg',
+				'category'=>$arr['category']
+			),
+			CL_CRM_COMPANY
+		);
 		if(!is_array($arr['check']))
 		{
 			return $url;
@@ -2944,9 +2963,8 @@ class crm_company extends class_base
 		}
 
 		$new_company = new object(array(
-								'parent' => $parent,
-								'class_id'=>CL_CRM_COMPANY
-							));
+			'parent' => $parent,
+		));
 		$new_company->set_class_id(CL_CRM_COMPANY);
 		$new_company->save();
 		if(strlen(trim($arr['customer_search_name'])))
@@ -2991,9 +3009,9 @@ class crm_company extends class_base
 			//atleast for now
 			
 			$ol = new object_list(array(
-							'class_id' => CL_CRM_COUNTY,
-							'name'	=> $arr['customer_search_county'],
-					));
+				'class_id' => CL_CRM_COUNTY,
+				'name'	=> $arr['customer_search_county'],
+			));
 			if(sizeof($ol->ids()))
 			{
 				list(,$county) = each($ol->ids());
@@ -3006,9 +3024,9 @@ class crm_company extends class_base
 		if(strlen(trim($arr['customer_search_city'])))
 		{
 			$ol = new object_list(array(
-							'class_id' => CL_CRM_CITY,
-							'name' => $arr['customer_search_city'],
-					));
+				'class_id' => CL_CRM_CITY,
+				'name' => $arr['customer_search_city'],
+			));
 			
 			if(sizeof($ol->ids()))
 			{
@@ -3029,8 +3047,8 @@ class crm_company extends class_base
 		if($has_address)
 		{
 			$address = new object(array(
-									'parent' => $new_company->id(),
-								));
+				'parent' => $new_company->id(),
+			));
 			$address->set_class_id(CL_CRM_ADDRESS);
 			if($street)
 			{
@@ -3042,9 +3060,9 @@ class crm_company extends class_base
 			{
 				//loome seose
 				$address->connect(array(
-								'to' => $county,
-								'reltype' => 'RELTYPE_MAAKOND'
-							));
+					'to' => $county,
+					'reltype' => 'RELTYPE_MAAKOND'
+				));
 				//kinnitame seose
 				$address->set_prop('maakond',$county);
 			}
@@ -3053,9 +3071,9 @@ class crm_company extends class_base
 			{
 				//loome seose
 				$address->connect(array(
-								'to' => $city,
-								'reltype' => 'RELTYPE_LINN'
-							));
+					'to' => $city,
+					'reltype' => 'RELTYPE_LINN'
+				));
 				//kinnitame seose
 				$address->set_prop('linn',$city);
 			}
@@ -3063,17 +3081,18 @@ class crm_company extends class_base
 			$address->save();
 			//kinnitame aadressi kompaniiga
 			$new_company->connect(array(
-								'to' => $address->id(),
-								'reltype' => 3, //crm_company.reltype_address
-								));
+				'to' => $address->id(),
+				'reltype' => 3, //crm_company.reltype_address
+			));
 		}
 		$new_company->save();
 
 		//have to direct the user to the just created company
 		$url = $this->mk_my_orb('change',array(
-								'id' => $new_company->id(),
-							),
-							'crm_company');
+				'id' => $new_company->id(),
+			),
+			'crm_company'
+		);
 		header('Location: '.$url);
 		die();
 	}
@@ -3122,8 +3141,8 @@ class crm_company extends class_base
 	function do_contact_toolbar($tb,$arr)
 	{
 		$tb->add_menu_button(array(
-				'name'=>'add_item',
-				'tooltip'=>'Uus'
+			'name'=>'add_item',
+			'tooltip'=> t('Uus')
 		));
 		
 		$alias_to = $arr['obj_inst']->id();
@@ -3133,58 +3152,49 @@ class crm_company extends class_base
 			$alias_to = $arr['request']['unit'];
 		}
 
-		/*$tb->add_menu_item(array(
-				'parent'=>'add_item',
-				'text'=>'Töötaja',
-				'link'=>$this->mk_my_orb('new',array(
-					'parent'=>$arr['obj_inst']->id(),
-					'alias_to'=>$alias_to,//$arr['obj_inst']->id(),
-					'reltype'=>$this->reltype_workers,
-					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
-				),'crm_person')
-				
-		));*/
 		$tb->add_menu_item(array(
-				'parent'=>'add_item',
-				'text'=>'Töötaja',
-				'link'=>aw_url_change_var(array(
-						'action' => 'create_new_person',
-						'parent' => $arr['obj_inst']->id(),
-						'alias_to' => $alias_to,
-						'reltype' => $this->reltype_workers,
-						'return_url' => urlencode(aw_global_get('REQUEST_URI'))
-				))
+			'parent'=>'add_item',
+			'text'=> t('Töötaja'),
+			'link'=>aw_url_change_var(array(
+				'action' => 'create_new_person',
+				'parent' => $arr['obj_inst']->id(),
+				'alias_to' => $alias_to,
+				'reltype' => $this->reltype_workers,
+				'return_url' => urlencode(aw_global_get('REQUEST_URI'))
+			))
 		));
 		
 		$tb->add_menu_item(array(
-				'parent'=>'add_item',
-				'text'=>'Üksus',
-				'link'=>$this->mk_my_orb('new',array(
+			'parent'=>'add_item',
+			'text' => t('Üksus'),
+			'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
 					'reltype'=> $this->reltype_section,
 					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
-					),
-					'crm_section')
+				),
+				'crm_section'
+			)
 		));
 		
 		$tb->add_menu_item(array(
-				'parent'=>'add_item',
-				'text'=>'Ametinimetus',
-				'link'=>$this->mk_my_orb('new',array(
+			'parent'=>'add_item',
+			'text' => t('Ametinimetus'),
+			'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
 					'reltype'=> $this->reltype_professions,
 					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
-					),
-					'crm_profession')
+				),
+				'crm_profession'
+			)
 		));
 	
 		//delete button
 		$tb->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => 'Kustuta valitud',
+			'tooltip' => t('Kustuta valitud'),
 			'action' => 'submit_delete_relations',
 		));
 	
@@ -3192,7 +3202,7 @@ class crm_company extends class_base
 		$tb->add_button(array(
 			'name' => 'Kõne',
 			'img' => 'class_223.gif',
-			'tooltip' => 'Tee kõne',
+			'tooltip' => t('Tee kõne'),
 			'action' => 'submit_new_call'
 		));
 
@@ -3200,7 +3210,7 @@ class crm_company extends class_base
 		$tb->add_button(array(
 			'name' => 'Kohtumine',
 			'img' => 'class_224.gif',
-			'tooltip' => 'Uus kohtumine',
+			'tooltip' => t('Uus kohtumine'),
 			'action' => 'submit_new_meeting'
 		));
 
@@ -3208,7 +3218,7 @@ class crm_company extends class_base
 		$tb->add_button(array(
 			'name' => 'Toimetus',
 			'img' => 'class_244.gif',
-			'tooltip' => 'Uus toimetus',
+			'tooltip' => t('Uus toimetus'),
 			'action' => 'submit_new_task'
 		));
 
@@ -3217,7 +3227,7 @@ class crm_company extends class_base
 		$tb->add_button(array(
 			'name' => 'Search',
 			'img' => 'search.gif',
-			'tooltip' => 'Otsi',
+			'tooltip' => t('Otsi'),
 			'action' => 'search_for_contacts'
 		));
 
@@ -3226,7 +3236,7 @@ class crm_company extends class_base
 			$tb->add_button(array(
 				'name' => 'Save',
 				'img' => 'save.gif',
-				'tooltip' => 'Salvesta',
+				'tooltip' => t('Salvesta'),
 				'action' => 'save_search_results'
 			));
 		}
@@ -3236,14 +3246,14 @@ class crm_company extends class_base
 		$tb->add_button(array(
 			"name" => "cut",
 			"img" => "cut.gif",
-			"tooltip" => "L&otilde;ika",
+			"tooltip" => t("L&otilde;ika"),
 			"action" => "cut_p",
 		));
 
 		$tb->add_button(array(
 			"name" => "copy",
 			"img" => "copy.gif",
-			"tooltip" => "Kopeeri",
+			"tooltip" => t("Kopeeri"),
 			"action" => "copy_p",
 		));
 
@@ -3252,7 +3262,7 @@ class crm_company extends class_base
 			$tb->add_button(array(
 				"name" => "paste",
 				"img" => "paste.gif",
-				"tooltip" => "Kleebi",
+				"tooltip" => t("Kleebi"),
 				"action" => "paste_p",
 			));
 		}
@@ -3264,7 +3274,7 @@ class crm_company extends class_base
 		$tb->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => 'Kustuta valitud',
+			'tooltip' => t('Kustuta valitud'),
 			'action' => 'submit_delete_my_customers_relations',
 		));
 	}
@@ -3272,8 +3282,8 @@ class crm_company extends class_base
 	function do_customer_toolbar($tb, $arr)
 	{
 		$tb->add_menu_button(array(
-				'name'=>'add_item',
-				'tooltip'=>'Uus'
+			'name'=>'add_item',
+			'tooltip'=> t('Uus')
 		));
 
 		$alias_to = $arr['obj_inst']->id();
@@ -3287,21 +3297,23 @@ class crm_company extends class_base
 		}
 
 		$tb->add_menu_item(array(
-				'parent'=>'add_item',
-				'text'=>'Kategooria',
-				'link'=>$this->mk_my_orb('new',array(
+			'parent'=>'add_item',
+			'text' => t('Kategooria'),
+			'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
 					'reltype'=>$this->reltype_category,
 					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
-				),'crm_category')
+				),
+				'crm_category'
+			)
 				
 		));
 		//delete button
 		$tb->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => 'Kustuta valitud',
+			'tooltip' => t('Kustuta valitud'),
 			'action' => 'submit_delete_customer_relations',
 		));
 
@@ -3310,7 +3322,7 @@ class crm_company extends class_base
 		$tb->add_button(array(
 			'name' => 'Search',
 			'img' => 'search.gif',
-			'tooltip' => 'Otsi',
+			'tooltip' => t('Otsi'),
 			'action' => 'search_for_customers'
 		));
 		
@@ -3319,7 +3331,7 @@ class crm_company extends class_base
 			$tb->add_button(array(
 				'name' => 'Save',
 				'img' => 'save.gif',
-				'tooltip' => 'Salvesta',
+				'tooltip' => t('Salvesta'),
 				'action' => 'save_customer_search_results'
 			));
 		}
@@ -3330,7 +3342,7 @@ class crm_company extends class_base
 		$toolbar->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => 'Kustuta valitud tööpakkumised',
+			'tooltip' => t('Kustuta valitud tööpakkumised'),
 		));
 	}
 	
@@ -3338,15 +3350,15 @@ class crm_company extends class_base
 	{
 		$toolbar->add_menu_button(array(
 			'name'=>'add_item',
-			'tooltip'=>'Uus'
+			'tooltip'=>t('Uus')
 		));
 		
 		$toolbar->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => 'Kustuta valitud tööpakkumised',
+			'tooltip' => t('Kustuta valitud tööpakkumised'),
 			'action' => 'delete_selected_objects',
-			'confirm' => "Kas oled kindel et soovid valitud tööpakkumised kustudada?"
+			'confirm' => t("Kas oled kindel et soovid valitud tööpakkumised kustudada?")
 		));
 
 		if($arr["request"]["cat"] && $arr["request"]["unit"])
@@ -3362,7 +3374,7 @@ class crm_company extends class_base
 		
 		$toolbar->add_menu_item(array(
 				'parent'=>'add_item',
-				'text'=>'Tööpakkumine',
+				'text'=> t('Tööpakkumine'),
 				'link'=>$this->mk_my_orb('new',array(
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
@@ -3387,48 +3399,48 @@ class crm_company extends class_base
 		$tf = &$arr["prop"]["vcl_inst"];
 		$tf->define_field(array(
 				"name" => "name",
-				"caption" => "Organisatsioon",
+				"caption" => t("Organisatsioon"),
 				"sortable" => 1,
 		));
 
 		$tf->define_field(array(
 				"name" => "corpform",
-				"caption" => "Õiguslik vorm",
+				"caption" => t("Õiguslik vorm"),
 				"sortable" => 1,
 		));
 
 		$tf->define_field(array(
-				"name" => "address",
-				"caption" => "Aadress",
-				"sortable" => 1,
+			"name" => "address",
+			"caption" => t("Aadress"),
+			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
-				"name" => "email",
-				"caption" => "E-post",
-				"sortable" => 1,
+			"name" => "email",
+			"caption" => t("E-post"),
+			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
-				"name" => "url",
-				"caption" => "WWW",
-				"sortable" => 1,
+			"name" => "url",
+			"caption" => t("WWW"),
+			"sortable" => 1,
 		));
 		$tf->define_field(array(
-				"name" => "phone",
-				"caption" => 'Telefon',
-				"sortable" => 1,
+			"name" => "phone",
+			"caption" => t('Telefon'),
+			"sortable" => 1,
 		));
 
 		$tf->define_field(array(
-				"name" => "ceo",
-				"caption" => "Juht",
-				"sortable" => 1,
+			"name" => "ceo",
+			"caption" => t("Juht"),
+			"sortable" => 1,
 		));
 
 		$tf->define_chooser(array(
-                        "field" => "id",
-                        "name" => "sel",
+			"field" => "id",
+			"name" => "sel",
 		));
 
 		$count = 0;
@@ -3582,10 +3594,10 @@ class crm_company extends class_base
 		if(sizeof($xfilter['maakond']))
 		{
 			$county_list = new object_list(array(
-										'class_id' => CL_CRM_COUNTY,
-										'limit' => 100,
-										'name' => $xfilter['maakond']
-								));
+				'class_id' => CL_CRM_COUNTY,
+				'limit' => 100,
+				'name' => $xfilter['maakond']
+			));
 			if(sizeof($county_list->ids()))
 			{
 				$addr_xfilter['maakond'] = $county_list->ids();
@@ -3661,8 +3673,8 @@ class crm_company extends class_base
 				//genereerin listi persooni kõikidest firmadest
 				$person = new object($person);
 				$conns=$person->connections_from(array(
-							'type' => 22,//crm_person.reltype_CLIENT_IM_HANDLING
-							));
+					'type' => 22,//crm_person.reltype_CLIENT_IM_HANDLING
+				));
 				foreach($conns as $conn)
 				{
 					$xfilter['oid'][$conn->prop('to')] = $conn->prop('to');
@@ -3692,12 +3704,13 @@ class crm_company extends class_base
 	{
 		//i'll try the search from crm_org_search.aw
 		$searchable_fields = array('customer_search_name' => 'name',
-											'customer_search_reg' => 'reg_nr',
-											'customer_search_address'=> 'address',
-											'customer_search_city' => 'linn',
-											'customer_search_county' => 'maakond',
-											'customer_search_field' => 'pohitegevus',
-											'customer_search_leader' => 'firmajuht');
+			'customer_search_reg' => 'reg_nr',
+			'customer_search_address'=> 'address',
+			'customer_search_city' => 'linn',
+			'customer_search_county' => 'maakond',
+			'customer_search_field' => 'pohitegevus',
+			'customer_search_leader' => 'firmajuht'
+		);
 
 		$search_params = array('class_id'=>CL_CRM_COMPANY,'limit'=>100,'sort_by'=>'name');
 
@@ -3739,38 +3752,42 @@ class crm_company extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
-                        'name' => 'name',
-                        'caption' => 'Nimi',
-                        'sortable' => '1',
+			'name' => 'name',
+			'caption' => t('Nimi'),
+			'sortable' => '1',
 			'callback' => array(&$this, 'callb_human_name'),
 			'callb_pass_row' => true,
-                ));
+		));
 		$t->define_field(array(
-                        'name' => 'phone',
-                        'caption' => 'Telefon',
-                        'sortable' => '1',
-                ));
+			'name' => 'phone',
+			'caption' => t('Telefon'),
+			'sortable' => '1',
+		));
 		$t->define_field(array(
-                        'name' => 'email',
-                        'caption' => 'E-post',
-                        'sortable' => '1',
-                ));
+			'name' => 'email',
+			'caption' => t('E-post'),
+			'sortable' => '1',
+		));
 		$t->define_field(array(
-								'name' => 'section',
-								'caption' => 'Üksus',
-								'sortable' => '1',
-					));
+			'name' => 'section',
+			'caption' => t('Üksus'),
+			'sortable' => '1',
+		));
 		$t->define_field(array(
-                        'name' => 'rank',
-                        'caption' => 'Ametinimetus',
-                        'sortable' => '1',
-                ));
+			'name' => 'rank',
+			'caption' => t('Ametinimetus'),
+			'sortable' => '1',
+		));
 		$t->define_chooser(array(
 			'name'=>'check',
 			'field'=>'id',
 		));
 
-		$search_params = array('class_id'=>CL_CRM_PERSON,'limit'=>50,'sort_by'=>'name');
+		$search_params = array(
+			'class_id' => CL_CRM_PERSON,
+			'limit' => 50,
+			'sort_by'=>'name'
+		);
 
 		if($arr['request']['contact_search_firstname'])
 		{
@@ -3795,7 +3812,6 @@ class crm_company extends class_base
 
 		$ol = new object_list($search_params);
 
-		//$ol = new object_list(array('class_id' => CL_CRM_PERSON,'firstname'=>'toomas','lastname'=>'koobas'));
 		$pl = get_instance(CL_PLANNER);
 		$person = get_instance("crm/crm_person");
 		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
@@ -3803,20 +3819,20 @@ class crm_company extends class_base
 		for($o=$ol->begin();!$ol->end();$o=$ol->next())
 		{
 			$person_data = $person->fetch_person_by_id(array(
-									'id' => $o->id(),
-									'cal_id' => $calid
-								));
+				'id' => $o->id(),
+				'cal_id' => $calid
+			));
 			$t->define_data(array(
-					"name" => $o->prop('name'),
-					"id" => $o->id(),
-					"phone" => $person_data['phone'],
-					"rank" => $person_data["rank"],
-					'section' => $person_data['section'],
-					"email" => html::href(array(
-						"url" => "mailto:" . $person_data['email'],
-						"caption" => $person_data['email'],
-					)),
-				));
+				"name" => $o->prop('name'),
+				"id" => $o->id(),
+				"phone" => $person_data['phone'],
+				"rank" => $person_data["rank"],
+				'section' => $person_data['section'],
+				"email" => html::href(array(
+					"url" => "mailto:" . $person_data['email'],
+					"caption" => $person_data['email'],
+				)),
+			));
 		}
 	}
 	
@@ -3844,16 +3860,18 @@ class crm_company extends class_base
 			foreach($arr['sel'] as $key=>$value)
 			{
 				$from->connect(array(
-								'to'=>$value,
-								'reltype'=>$reltype,
+					'to'=>$value,
+					'reltype'=>$reltype,
 				));
 			}
 		}
 		return $this->mk_my_orb('change',array(
-								'id' => $arr['id'],
-								'category' => $arr['category'],
-								'group' => $arr['group'],
-							),$arr['class']);
+				'id' => $arr['id'],
+				'category' => $arr['category'],
+				'group' => $arr['group'],
+			),
+			$arr['class']
+		);
 	}
 
 	/**
@@ -3877,8 +3895,8 @@ class crm_company extends class_base
 			}
 			
 			$obj->connect(array(
-					'to' => $value,
-					'reltype' => $reltype 
+				'to' => $value,
+				'reltype' => $reltype 
 			));
 
 			$person = new object($value);
@@ -3893,10 +3911,12 @@ class crm_company extends class_base
 		}
 
 		return $this->mk_my_orb('change',array(
-								'id' => $arr['id'],
-								'unit' => $arr['unit'],
-								'group' => $arr['group'],
-							),$arr['class']);
+				'id' => $arr['id'],
+				'unit' => $arr['unit'],
+				'group' => $arr['group'],
+			),
+			$arr['class']
+		);
 	}
 
 	//goes through all the relations and builds a set of id into $data
@@ -3953,7 +3973,7 @@ class crm_company extends class_base
 			$company = new object($arr['id']);
 
 			$conns = $company->connections_from(array(
-							'type' => RELTYPE_PROJECT
+				'type' => RELTYPE_PROJECT
 			));
 
 			$projects = array();
@@ -3978,7 +3998,7 @@ class crm_company extends class_base
 		{
 			$table->define_field(array(
 				"name" => "org",
-				"caption" => "Organisatsioon",
+				"caption" => t("Organisatsioon"),
 				"sortable" => "1",
 				"align" => "center",
 			));
@@ -3986,21 +4006,21 @@ class crm_company extends class_base
 		
 		$table->define_field(array(
 			"name" => "offer_name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => "1",
 			"align" => "center",
 		));
 		
 		$table->define_field(array(
 			"name" => "salesman",
-			"caption" => "Koostaja",
+			"caption" => t("Koostaja"),
 			"sortable" => "1",
 			"align" => "center",
 		));
 		
 		$table->define_field(array(
 			"name" => "offer_made",
-			"caption" => "Lisatud",
+			"caption" => t("Lisatud"),
 			"sortable" => "1",
 			"type" => "time",
 			"numeric" => 1,
@@ -4010,14 +4030,14 @@ class crm_company extends class_base
 		
 		$table->define_field(array(
 			"name" => "offer_sum",
-			"caption" => "Summa",
+			"caption" => t("Summa"),
 			"sortable" => "1",
 			"align" => "center",
 		));
 		
 		$table->define_field(array(
 			"name" => "offer_status",
-			"caption" => "Staatus",
+			"caption" => t("Staatus"),
 			"sortable" => "1",
 			"align" => "center",
 		));
@@ -4070,7 +4090,13 @@ class crm_company extends class_base
 		{
 			if($offers->count() > 0)
 			{
-				$statuses = array("Koostamisel", "Saadetud", "Esitletud", "Tagasilükatud", "Positiivelt lõppenud");
+				$statuses = array(
+					t("Koostamisel"), 
+					t("Saadetud"), 
+					t("Esitletud"), 
+					t("Tagasilükatud"), 
+					t("Positiivelt lõppenud")
+				);
 				foreach ($offers->arr() as $offer)
 				{
 					//Do not list brother offers
@@ -4139,20 +4165,20 @@ class crm_company extends class_base
 		$node_id = 0;
 		$this->active_node = (int)$arr['request']['category'];
 		$this->generate_tree(array(
-				'tree_inst' => &$tree,
-				'obj_inst' => $arr['obj_inst'],
-				'node_id' => &$node_id,
-				'conn_type' => 'RELTYPE_CATEGORY',
-				'attrib' => 'category',
-				'leafs' => "do_offer_tree_leafs",
-				'style' => 'nodetextbuttonlike',
-				'parent2chmap' => $parents
+			'tree_inst' => &$tree,
+			'obj_inst' => $arr['obj_inst'],
+			'node_id' => &$node_id,
+			'conn_type' => 'RELTYPE_CATEGORY',
+			'attrib' => 'category',
+			'leafs' => "do_offer_tree_leafs",
+			'style' => 'nodetextbuttonlike',
+			'parent2chmap' => $parents
 		));
 		
 		$node_id++;
 		$tree->add_item(0, array(
 			'id' => $node_id,
-			'name' => 'Kõik organisatsioonid',
+			'name' => t('Kõik organisatsioonid'),
 			'url' => '',
 		));
 		
@@ -4182,7 +4208,6 @@ class crm_company extends class_base
 	
 	function get_all_org_customer_categories($obj)
 	{
-		
 		static $retval;
 		$conns = $obj->connections_from(array(
 			"type" => "RELTYPE_CATEGORY",
@@ -4220,7 +4245,7 @@ class crm_company extends class_base
 		
 		$tb->add_menu_button(array(
 			'name'=>'add_item',
-			'tooltip'=>'Uus'
+			'tooltip'=> t('Uus')
 		));
 		
 		$params = array(
@@ -4234,7 +4259,7 @@ class crm_company extends class_base
 		$tb->add_menu_item(array(
 				'disabled' => $arr['request']['org_id']? false : true,
 				'parent'=>'add_item',
-				'text'=>'Pakkumine',
+				'text'=>t('Pakkumine'),
 				'url' => html::get_new_url(CL_CRM_OFFER, $arr['obj_inst']->id(), $params),
 		));
 		
@@ -4242,7 +4267,8 @@ class crm_company extends class_base
 			"name" => "delete",
 			"img" => "delete.gif",
 			"action" => "delete_selected_objects",
-			"confirm" => "Kas oled kindel, et soovid valitud pakkumise(d) kustutada?"
+			"confirm" => t("Kas oled kindel, et soovid valitud pakkumise(d) kustutada?"),
+			"tooltip" => t("Kustuta")
 		));
 	}	
 
@@ -4282,7 +4308,7 @@ class crm_company extends class_base
 		{
 			$person_class = get_instance('crm/crm_person');
 			$work_contact = $person_class->get_work_contacts(array(
-									'obj_inst' => &$person,
+				'obj_inst' => &$person,
 			));
 			list($work_contact,) = each($work_contact);
 		}
@@ -4297,7 +4323,7 @@ class crm_company extends class_base
 				
 		$tb->add_menu_button(array(
 			'name'=>'add_item',
-			'tooltip'=>'Uus'
+			'tooltip'=>t('Uus')
 		));
 				
 		//Add classes
@@ -4334,14 +4360,14 @@ class crm_company extends class_base
 		$tb->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => 'Kustuta valitud objektid',
+			'tooltip' => t('Kustuta valitud objektid'),
 			'action' => 'delete_selected_objects',
 		));
 		
 		$tb->add_button(array(
 			'name' => 'cut',
 			'img' => 'cut.gif',
-			'tooltip' => 'Cut',
+			'tooltip' => t('Cut'),
 			'action' => 'cut',
 		));
 		
@@ -4350,7 +4376,7 @@ class crm_company extends class_base
 			$tb->add_button(array(
 				'name' => 'paste',
 				'img' => 'paste.gif',
-				'tooltip' => 'Paste',
+				'tooltip' => t('Paste'),
 				'url' => $this->mk_my_orb("paste", array(
 					"parent" => $arr["request"]["parent"],
 					"id" => $arr["obj_inst"]->id(),
@@ -4360,9 +4386,10 @@ class crm_company extends class_base
 			));
 		}
 	}
-/**	
-	@attrib name=cut
-**/
+
+	/**	
+		@attrib name=cut
+	**/
 	function cut($arr)
 	{
 		$_SESSION["crm_cut"] = $arr["select"];
@@ -4371,9 +4398,9 @@ class crm_company extends class_base
 			"group" => $arr["group"]), CL_CRM_COMPANY);
 	}
 	
-/**	
-	@attrib name=paste all_args=1
-**/
+	/**	
+		@attrib name=paste all_args=1
+	**/
 	function paste($arr)
 	{	
 		foreach ($_SESSION["crm_cut"] as $oid)
@@ -4387,7 +4414,9 @@ class crm_company extends class_base
 				"id" => $arr["id"], 
 				"group" => $arr["group"],
 				"parent" => $arr["parent"],
-			), CL_CRM_COMPANY);
+			), 
+			CL_CRM_COMPANY
+		);
 	}
 	
 	function do_objects_listing_tree($arr)
@@ -4428,13 +4457,13 @@ class crm_company extends class_base
 			
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => "1",
 		));
 		
 		$table->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
 			"sortable" => "1",
 			"type" => "time",
 			"numeric" => 1,
@@ -4444,7 +4473,7 @@ class crm_company extends class_base
 		
 		$table->define_field(array(
 			"name" => "class_id",
-			"caption" => "Tüüp",
+			"caption" => t("Tüüp"),
 			"sortable" => "1",
 			"callback" => array(&$this, "get_class_name"),
 		));
@@ -4480,9 +4509,9 @@ class crm_company extends class_base
 			$table->define_data(array(
 				"class_id" => $item->class_id(),
 				"name" => html::href(array(
-						"url" => html::get_change_url($item->id()),
-						"caption" => $item->name(),
-						)),
+					"url" => html::get_change_url($item->id()),
+					"caption" => $item->name(),
+				)),
 				"modified" => get_lc_date($item->modified()),
 				"select" => $item->id(),
 				"icon" => html::img(array(
@@ -4513,8 +4542,8 @@ class crm_company extends class_base
 			$obj->set_parent($arr['obj_inst']->id());
 			$obj->save();
 			$arr['obj_inst']->connect(array(
-					'to' => $obj->id(),
-					'reltype' => 'RELTYPE_CUSTOMER',
+				'to' => $obj->id(),
+				'reltype' => 'RELTYPE_CUSTOMER',
 			));
 			
 			return $obj;
@@ -4573,7 +4602,6 @@ class crm_company extends class_base
 		
 		foreach ($ol->arr() as $project)
 		{
-			
 			$participants = $project->connections_from(array(
 				"type" => "RELTYPE_PARTICIPANT",
 			));
@@ -4602,7 +4630,7 @@ class crm_company extends class_base
 
 			$roles .= ($roles != "" ? "<br>" : "" ).html::popup(array(
 				"url" => $role_url,
-				'caption' => 'Rollid',
+				'caption' => t('Rollid'),
 				"width" => 800,
 				"height" => 600,
 				"scrollbars" => "auto"
@@ -4621,25 +4649,25 @@ class crm_company extends class_base
 	{
 		$table->define_field(array(
 			"name" => "project_name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,
 		));
 		
 		$table->define_field(array(
 			"name" => "project_participants",
-			"caption" => "Osalejad",
+			"caption" => t("Osalejad"),
 			"sortable" => 1,
 		));
 		
 		$table->define_field(array(
 			"name" => "project_created",
-			"caption" => "Loodud",
+			"caption" => t("Loodud"),
 			"sortable" => 1,
 		));
 
 		$table->define_field(array(
 			"name" => "roles",
-			"caption" => "Rollid",
+			"caption" => t("Rollid"),
 			"sortable" => 0,
 		));
 	}

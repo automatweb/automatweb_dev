@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.19 2004/10/28 09:44:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.20 2004/11/24 15:13:00 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -181,7 +181,7 @@ class crm_meeting extends class_base
 				$tb->add_button(array(
 					'name' => 'del',
 					'img' => 'delete.gif',
-					'tooltip' => 'Kustuta valitud',
+					'tooltip' => t('Kustuta valitud'),
 					'action' => 'submit_delete_participants_from_calendar',
 				));
 
@@ -190,7 +190,7 @@ class crm_meeting extends class_base
 				$tb->add_button(array(
 					'name' => 'Search',
 					'img' => 'search.gif',
-					'tooltip' => 'Otsi',
+					'tooltip' => t('Otsi'),
 					'url' => aw_url_change_var(array(
 						'show_search' => 1,
 					)),
@@ -199,7 +199,7 @@ class crm_meeting extends class_base
 				$tb->add_button(array(
 					'name' => 'save',
 					'img' => 'save.gif',
-					'tooltip' => 'Salvesta',
+					'tooltip' => t('Salvesta'),
 					"action" => "save_participant_search_results"
 				));
 
@@ -304,13 +304,13 @@ class crm_meeting extends class_base
 	function search_contacts($arr)
 	{
 		return $this->mk_my_orb('change',array(
-						'id' => $arr['id'],
-						'group' => $arr['group'],
-						'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
-						'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
-						'search_contact_code' => urlencode($arr['search_contact_code']),
-					),
-					$arr['class']
+				'id' => $arr['id'],
+				'group' => $arr['group'],
+				'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
+				'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
+				'search_contact_code' => urlencode($arr['search_contact_code']),
+			),
+			$arr['class']
 		);
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.20 2004/11/23 10:35:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.21 2004/11/24 15:13:00 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -119,8 +119,8 @@ class crm_call extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
-      switch($data['name'])
-      {
+		switch($data['name'])
+		{
 			case 'info_on_object':
 				$crm_person = get_instance('crm/crm_person');
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
@@ -204,7 +204,7 @@ class crm_call extends class_base
 				$tb->add_button(array(
 					'name' => 'del',
 					'img' => 'delete.gif',
-					'tooltip' => 'Kustuta valitud',
+					'tooltip' => t('Kustuta valitud'),
 					'action' => 'submit_delete_participants_from_calendar',
 				));
 
@@ -213,7 +213,7 @@ class crm_call extends class_base
 				$tb->add_button(array(
 					'name' => 'Search',
 					'img' => 'search.gif',
-					'tooltip' => 'Otsi',
+					'tooltip' => t('Otsi'),
 					'url' => aw_url_change_var(array(
 						'show_search' => 1,
 					)),
@@ -222,7 +222,7 @@ class crm_call extends class_base
 				$tb->add_button(array(
 					'name' => 'save',
 					'img' => 'save.gif',
-					'tooltip' => 'Salvesta',
+					'tooltip' => t('Salvesta'),
 					"action" => "save_participant_search_results"
 				));
 				$this->return_url=aw_global_get('REQUEST_URI');

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.7 2004/10/29 16:13:29 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.8 2004/11/24 15:13:00 kristo Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -64,8 +64,6 @@ class crm_section_webside extends class_base
 {
 	function crm_section_webside()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "crm/crm_section_webside",
 			"clid" => CL_CRM_SECTION_WEBSIDE
@@ -73,10 +71,6 @@ class crm_section_webside extends class_base
 		$this->submerge=1;
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -107,8 +101,8 @@ class crm_section_webside extends class_base
 			
 			case "view":
 				$prop["options"] = array(
-					0 => "Piltidega vaade",
-					1 => "Tabelina",
+					0 => t("Piltidega vaade"),
+					1 => t("Tabelina"),
 				);
 			break;
 			case "cols":
@@ -124,9 +118,9 @@ class crm_section_webside extends class_base
 	function callb_ord($arr)
 	{
 		return html::textbox(array(
-				"name" => "ord[".$arr['person_id']."]",
-				"value" => $arr['ord'],
-				"size" => 3
+			"name" => "ord[".$arr['person_id']."]",
+			"value" => $arr['ord'],
+			"size" => 3
 		));
 	}
 	
@@ -138,13 +132,13 @@ class crm_section_webside extends class_base
 
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1,	
 		));
 		
 		$table->define_field(array(
 			"name" => "ord",
-			"caption" => "Järjekord",
+			"caption" => t("Järjekord"),
 			"sortable" => 1,
 			"callback" => array(&$this, "callb_ord"),
 			"numeric" => 1,
@@ -304,29 +298,11 @@ class crm_section_webside extends class_base
 		}
 	}
 	
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 	
-	/*function sort_workers($workers)
-	{
-		$low_val = 10000000;
-		foreach ($workers as $worker)
-		{
-			
-		}
-	}*/
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
 		$ob = &obj($arr["id"]);

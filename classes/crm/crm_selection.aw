@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.16 2004/10/27 12:03:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.17 2004/11/24 15:13:00 kristo Exp $
 /*
 @classinfo relationmgr=yes
 @default table=objects
@@ -142,7 +142,7 @@ class crm_selection extends class_base
 
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => 'nimi',
+			'caption' => t('nimi'),
 			'sortable' => '1',
 			'callback' => array(&$this, 'callb_name'),
 			'callb_pass_row' => true,
@@ -150,7 +150,7 @@ class crm_selection extends class_base
 
 		$t->define_field(array(
 			'name' => 'jrk',
-			'caption' => 'jrk',
+			'caption' => t('jrk'),
 			'width' => '20',
 			'sortable' => '1',
 			'numeric' => 1,
@@ -167,13 +167,13 @@ class crm_selection extends class_base
 
 		$t->define_field(array(
 			'name' => 'class_id',
-			'caption' => 'tüüp',
+			'caption' => t('tüüp'),
 			'sortable' => '1',
 		));
 
 		$t->define_field(array(
 			'name' => 'comment',
-			'caption' => 'kommentaar',
+			'caption' => t('kommentaar'),
 		));
 
 		$t->define_chooser(array(
@@ -275,7 +275,7 @@ class crm_selection extends class_base
 			$target_selection = $arr["target_selection"];
 			$target_obj = new object($target_selection);
 
-			print "Objektide kopeerimine valimisse " . $target_obj->name() . "<bR>";
+			print t("Objektide kopeerimine valimisse " . $target_obj->name() . "<bR>");
 
 			foreach($arr["sel"] as $key => $val)
 			{
@@ -305,7 +305,7 @@ class crm_selection extends class_base
 			$target_selection = $arr["target_selection"];
 			$target_obj = new object($target_selection);
 
-			print "Objektide liigutamine valimisse " . $target_obj->name() . "<bR>";
+			print t("Objektide liigutamine valimisse " . $target_obj->name() . "<bR>");
 
 			$source_ids = array();
 
@@ -458,7 +458,7 @@ class crm_selection extends class_base
 
 		$toolbar->add_button(array(
 			"name" => 'go_move',
-			"tooltip" => "Liiguta",
+			"tooltip" => t("Liiguta"),
 			"action" => "move_objects",
 			"img" => "import.gif",
 		));
@@ -466,13 +466,13 @@ class crm_selection extends class_base
 		$toolbar->add_button(array(
 			"name" => 'go_copy',
 			"img" => "copy.gif",
-			"tooltip" => "Kopeeri",
+			"tooltip" => t("Kopeeri"),
 			"action" => "copy_objects",
 		));
 
 		$toolbar->add_button(array(
 			"name" => "navigate",
-			"tooltip" => 'aktiveeri',
+			"tooltip" => t('aktiveeri'),
 			"img" => "edit.gif",
 			"action" => "navigate",
 		));
@@ -481,15 +481,15 @@ class crm_selection extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "save",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"action" => "save_selection",
 			"img" => "save.gif",
 		));
 
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Kustuta valitud objektid valimist",
-			"confirm" => "Kustutada valitud objektid sellest valimist?",
+			"tooltip" => t("Kustuta valitud objektid valimist"),
+			"confirm" => t("Kustutada valitud objektid sellest valimist?"),
 			"img" => "delete.gif",
 			"action" => "delete_from_selection",
 		));
@@ -574,7 +574,7 @@ class crm_selection extends class_base
 		$arr = $this->get_selection($obj->id(),"active");
 		if ("" == $obj->prop("template"))
 		{
-			return 'templiit määramata';
+			return t('templiit määramata');
 		}
 
 		$this->tpl_init($this->tpldir . "/selection/templs");
@@ -614,7 +614,7 @@ class crm_selection extends class_base
 		}
 		else
 		{
-			$str = ' valim tühi, või objekte pole aktiivseks tehtud';
+			$str = t(' valim tühi, või objekte pole aktiivseks tehtud');
 		}
 		return $str;
 	}

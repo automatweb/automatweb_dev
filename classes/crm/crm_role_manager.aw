@@ -103,7 +103,7 @@ class crm_role_manager extends class_base
 		}
 		else
 		{
-			$filt["client"] = $r["to_org"];
+			//$filt["client"] = $r["to_org"];
 		}
 
 		$persons = array();
@@ -133,7 +133,7 @@ class crm_role_manager extends class_base
 		$t = get_instance("vcl/toolbar");
 		$t->add_button(array(
 			"name" => "save",
-			"tooltip" => "Anna rollid",
+			"tooltip" => t("Anna rollid"),
 			"img" => "save.gif",
 			"url" => "javascript:rolf.submit()"
 		));
@@ -212,13 +212,13 @@ class crm_role_manager extends class_base
 
 		$t->add_tab(array(
 			"active" => !$r["list"],
-			"caption" => "Vali",
+			"caption" => t("Vali"),
 			"link" => aw_url_change_var("list", NULL)
 		));
 
 		$t->add_tab(array(
 			"active" => $r["list"],
-			"caption" => "Halda",
+			"caption" => t("Halda"),
 			"link" => aw_url_change_var("list", 1)
 		));
 
@@ -232,7 +232,7 @@ class crm_role_manager extends class_base
 		$t = get_instance("vcl/toolbar");
 		$t->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Kustuta",
+			"tooltip" => t("Kustuta"),
 			"img" => "delete.gif",
 			"url" => "javascript:rolf.submit()"
 		));
@@ -246,31 +246,31 @@ class crm_role_manager extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "phone",
-			"caption" => "Telefon",
+			"caption" => t("Telefon"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "email",
-			"caption" => "E-post",
+			"caption" => t("E-post"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "unit",
-			"caption" => "&Uuml;ksus",
+			"caption" => t("&Uuml;ksus"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "role",
-			"caption" => "Ametinimetus",
+			"caption" => t("Ametinimetus"),
 			"sortable" => 1
 		));
 

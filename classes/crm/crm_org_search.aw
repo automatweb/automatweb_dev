@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.10 2004/10/14 13:36:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.11 2004/11/24 15:13:00 kristo Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 
@@ -89,56 +89,50 @@ class crm_org_search extends class_base
 		$awt->start("crm-org-search");
 		$tf = &$arr["prop"]["vcl_inst"];
 		$tf->define_field(array(
-                        "name" => "name",
-                        "caption" => "Organisatsioon",
-                        "sortable" => 1,
-                ));
+			"name" => "name",
+			"caption" => t("Organisatsioon"),
+			"sortable" => 1,
+		));
 
-                /*$tf->define_field(array(
-                        "name" => "pohitegevus",
-                        "caption" => "Põhitegevus",
-                        "sortable" => 1,
-                ));*/
+		$tf->define_field(array(
+			"name" => "corpform",
+			"caption" => t("Õiguslik vorm"),
+			"sortable" => 1,
+		));
 
-                $tf->define_field(array(
-                        "name" => "corpform",
-                        "caption" => "Õiguslik vorm",
-                        "sortable" => 1,
-                ));
-
-                $tf->define_field(array(
-                        "name" => "address",
-                        "caption" => "Aadress",
-                        "sortable" => 1,
-                ));
+		$tf->define_field(array(
+			"name" => "address",
+			"caption" => t("Aadress"),
+			"sortable" => 1,
+		));
 	
-                $tf->define_field(array(
-                        "name" => "email",
-                        "caption" => "E-post",
-                        "sortable" => 1,
-                ));
+		$tf->define_field(array(
+			"name" => "email",
+			"caption" => t("E-post"),
+			"sortable" => 1,
+		));
 
-                $tf->define_field(array(
-                        "name" => "url",
-                        "caption" => "WWW",
-                        "sortable" => 1,
-                ));
-                $tf->define_field(array(
-                        "name" => "phone",
-                        "caption" => 'Telefon',
-                        "sortable" => 1,
-                ));
+		$tf->define_field(array(
+			"name" => "url",
+			"caption" => t("WWW"),
+			"sortable" => 1,
+		));
+		$tf->define_field(array(
+			"name" => "phone",
+			"caption" => t('Telefon'),
+			"sortable" => 1,
+		));
 
-                $tf->define_field(array(
-                        "name" => "ceo",
-                        "caption" => "Juht",
-                        "sortable" => 1,
-                ));
+		$tf->define_field(array(
+			"name" => "ceo",
+			"caption" => t("Juht"),
+			"sortable" => 1,
+		));
 
 		$tf->define_chooser(array(
-                        "field" => "id",
-                        "name" => "sel",
-                ));
+			"field" => "id",
+			"name" => "sel",
+		));
 
 
 		if (!$this->valid_search && !sizeof($xfilter))
@@ -212,10 +206,10 @@ class crm_org_search extends class_base
 		if(sizeof($xfilter['linn']))
 		{
 			$city_list = new object_list(array(
-									'class_id'=>CL_CRM_CITY,
-									'limit' => 1000,
-									'name' => $xfilter['linn'],
-							));
+				'class_id'=>CL_CRM_CITY,
+				'limit' => 1000,
+				'name' => $xfilter['linn'],
+			));
 			if(sizeof($city_list->ids()))
 			{
 				$addr_xfilter['linn'] = $city_list->ids();
@@ -230,10 +224,10 @@ class crm_org_search extends class_base
 		if(sizeof($xfilter['maakond']))
 		{
 			$county_list = new object_list(array(
-										'class_id' => CL_CRM_COUNTY,
-										'limit' => 1000,
-										'name' => $xfilter['maakond']
-								));
+				'class_id' => CL_CRM_COUNTY,
+				'limit' => 1000,
+				'name' => $xfilter['maakond']
+			));
 			if(sizeof($county_list->ids()))
 			{
 				$addr_xfilter['maakond'] = $county_list->ids();
@@ -378,7 +372,7 @@ class crm_org_search extends class_base
 
 		if ($count == 0)
 		{
-			$tf->set_header("Otsing ei leidnud ühtegi objekti");
+			$tf->set_header(t("Otsing ei leidnud ühtegi objekti"));
 		};
 		$awt->stop("cmr-org-search");
 	}

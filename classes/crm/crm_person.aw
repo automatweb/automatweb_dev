@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.66 2004/11/19 11:55:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.67 2004/11/24 15:13:00 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -385,10 +385,10 @@ class crm_person extends class_base
 				{
 					$arr["obj_inst"]->set_name($form['firstname']." ".$form['lastname']);
 				}			
-			break;
+				break;
 			case 'rank':
 				
-			break;	
+				break;	
 			
 		
 		};
@@ -413,9 +413,9 @@ class crm_person extends class_base
 				//a bit differently?
 				$company = $this->get_work_contacts($arr);
 				$data['options'] = $company;
-				$data['options'][0] = '--vali--';
+				$data['options'][0] = t('--vali--');
 				$data['options'] = array_reverse($data['options'], true);
-			break;
+				break;
 			case 'rank' :
 			{
 				//let's list the professions the organization/unit is associated with
@@ -436,7 +436,7 @@ class crm_person extends class_base
 						$tmp_obj = new object($conn->prop('from'));
 						//connections from organization||section->profession
 						$conns2 = $tmp_obj->connections_from(array(
-									'type'=>'RELTYPE_PROFESSIONS'
+							'type'=>'RELTYPE_PROFESSIONS'
 						));
 						foreach($conns2 as $conn2)
 						{
@@ -447,8 +447,8 @@ class crm_person extends class_base
 				else
 				{
 					$ol = new object_list(array(
-									'class_id' => CL_CRM_PROFESSION
-								));
+						'class_id' => CL_CRM_PROFESSION
+					));
 
 					for($o=$ol->begin();!$ol->end();$o=$ol->next())
 					{
@@ -456,73 +456,33 @@ class crm_person extends class_base
 					}
 				}
 
-				/*if(sizeof($drop_down_list))
-					{
-					//determine the selected item
-					//maybe the selected profession doesn't come from the section/org the
-					//person is member of? for backward compatibility i'll show the profession
-					//the user is already member of | this case might happen if
-					//new system is used on old data
-					$conns = $arr['obj_inst']->connections_from(array(
-						'type'=>'RELTYPE_RANK'
-					));
-					if(sizeof($conns) && is_array($arr['prop']['options']))
-					{
-						$tmp = current($conns);
-						//loop the options
-						foreach($arr['prop']['options'] as $key=>$value)
-						{
-							//match!
-							if($key==$tmp->prop('to'))
-							{
-								//add item, if not already present
-								if(!array_key_exists($key,$drop_down_list))
-								{
-									$drop_down_list[$key] = $tmp->prop('to.name');
-								}
-							}
-						}
-					}
-					//find the selected item in array and mark it as selected
-					if(sizeof($conns))
-					{
-						$selected='';
-						$conn = current($conns);
-						foreach($drop_down_list as $key=>$value)
-						{
-							if($key==$conn->prop('to'))
-							{
-								$selected=$key;
-								break;
-							}
-						}
-						$data['value'] = $selected;
-					}
-				}
-				else
-				{
-					//echo ei ole persooni üxsusel mitte ühtegi ametit
-				}
-				*/
 				asort($drop_down_list);
 				$drop_down_list = array_reverse($drop_down_list,true);
-				$drop_down_list[0] = '--vali--';
+				$drop_down_list[0] = t('--vali--');
 				$drop_down_list = array_reverse($drop_down_list,true);
 				$data['options'] = &$drop_down_list;
 				break;
 			}
 			case "title":
-				$data["options"] = array("Härra","Proua","Preili");
+				$data["options"] = array(
+					t("Härra"),
+					t("Proua"),
+					t("Preili")
+				);
 				break;
 
 			case "social_status":
-				$data["options"] = array(3 => "Vallaline", 1 => "Abielus", 2 => "Vabaabielus");
+				$data["options"] = array(
+					3 => t("Vallaline"), 
+					1 => t("Abielus"), 	
+					2 => t("Vabaabielus")
+				);
 				break;
 
 			case "templates":
 				$data["options"] = array(
-					"1" => "Pilt, kontakt, artiklid",
-					"2" => "kontakt",
+					"1" => t("Pilt, kontakt, artiklid"),
+					"2" => t("kontakt"),
 				);
 				break;
 
@@ -536,70 +496,53 @@ class crm_person extends class_base
 
 			case "gender":
 				$data["options"] = array(
-					"1" => "mees",
-					"2" => "naine",
+					"1" => t("mees"),
+					"2" => t("naine"),
 				);
 				break;
 
 			case "email":
-				/*
-				$personal_contact = $arr["obj_inst"]->prop("personal_contact");
-				if ($personal_contact)
-				{
-					$pc = new object($personal_contact);
-					$addr = new object($pc->prop("primary_mail"));
-					$data["value"] = $addr->prop("mail");
-				};
-				*/
 				break;
 				
 
 			case "org_actions":
-                        case "org_calls":
-                        case "org_meetings":
-                        case "org_tasks":
-                                $this->do_org_actions(&$arr);
-                                break;
+			case "org_calls":
+			case "org_meetings":
+			case "org_tasks":
+				$this->do_org_actions(&$arr);
+				break;
                                 
 			case "skills_listing_tree":
 				$this->do_person_skills_tree($arr);
 			break;
 			
 			case "picture":
-				//$data["rel_id"] = "52960";
 				break;
 				
 			case "skills_toolbar":
 				$this->do_cv_skills_toolbar(&$data["toolbar"], $arr);
-			break;
-			
+				break;
+				
 			case "skills_table":
-				/*switch ($arr["request"]["skill"])
-				{
-					case "driving_licenses":
-						
-					break;
-				}*/
-			break;
+				break;
 				
 			case "juhiload":
 				if(!($arr["request"]["skill"]=="driving_licenses"))
 				{
 					return PROP_IGNORE;
 				}
-			break;
+				break;
 			
 			case "submit_driving_licenses":
 				if(!($arr["request"]["skill"]=="driving_licenses"))
 				{
 					return PROP_IGNORE;
 				}
-			
-			break;
+				break;
 			
 			case "language_list":	
 				return PROP_IGNORE;
-			break;
+				break;
 			
 			case "language_skills_table":
 				if($arr["request"]["skill"] =="languages")
@@ -610,7 +553,7 @@ class crm_person extends class_base
 				{
 					return PROP_IGNORE;
 				}
-			break;
+				break;
 			
 			case "tookogemused_edit":
 			
@@ -623,23 +566,23 @@ class crm_person extends class_base
 					return PROP_IGNORE;
 				}
 				
-			break;
+				break;
 			
 			case "language_levels":
 				return PROP_IGNORE;
-			break;
+				break;
 			
 			case "previous_jobs_table":
 				$this->do_jobs_table($arr);
-			break;
+				break;
 			
 			case "previous_jobs_tb":
 				$this->do_previous_jobs_tb($arr);
-			break;
+				break;
 			
 			case "education_tb":
 				$this->do_education_tb($arr);
-			break;
+				break;
 			
 			case "basic_education_edit":
 				if($arr["request"]["etype"]=="basic_edu")
@@ -651,7 +594,7 @@ class crm_person extends class_base
 					return PROP_IGNORE;
 				}	
 			
-			break;
+				break;
 			
 			case "vocational_education_edit":
 				if($arr["request"]["etype"]=="voc_edu")
@@ -662,7 +605,7 @@ class crm_person extends class_base
 				{
 					return PROP_IGNORE;
 				}	
-			break;
+				break;
 			
 			case "higher_education_edit":
 				if($arr["request"]["etype"]=="higher_edu")
@@ -673,7 +616,7 @@ class crm_person extends class_base
 				{
 					return PROP_IGNORE;
 				}	
-			break;
+				break;
 			
 			case "secondary_education_edit":
 				if($arr["request"]["etype"]=="secondary_edu")
@@ -684,11 +627,11 @@ class crm_person extends class_base
 				{
 					return PROP_IGNORE;
 				}
-			break;
-			
+				break;
+				
 			case "education_table":
 				$this->do_education_table($arr);
-			break;
+				break;
 			
 			case "programming_skills":
 				
@@ -696,7 +639,7 @@ class crm_person extends class_base
 				{
 					return PROP_IGNORE;
 				}
-			break;
+				break;
 
 			case "password":
 				if ($this->has_user($arr["obj_inst"]))
@@ -757,12 +700,12 @@ class crm_person extends class_base
 		/*
 
 		$alist = array(
-			array('caption' => 'Organisatsioon','class' => 'crm_company', 'reltype' => RELTYPE_WORK),
+			array('caption' => t('Organisatsioon'),'class' => 'crm_company', 'reltype' => RELTYPE_WORK),
 		);
 		
 		$toolbar->add_menu_button(array(
 			"name" => "add_relation",
-			"tooltip" => "Uus",
+			"tooltip" => t("Uus"),
 		));
 			
 
@@ -775,8 +718,8 @@ class crm_person extends class_base
 				{
 					$toolbar->add_menu_item(array(
 						"parent" => "add_relation",
-						"title" => "Kalender määramata",
-						'text' => 'Lisa '.$val['caption'],
+						"title" => t("Kalender määramata"),
+						'text' => sprintf(t('Lisa %s'),$val['caption']),
 						'disabled' => true,
 					));
 				}
@@ -793,7 +736,7 @@ class crm_person extends class_base
 							'parent' => $parents[$val['reltype']],
 							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 						)),
-						'text' => 'Lisa '.$val['caption'],
+						'text' => sprintf(t('Lisa %s'),$val['caption']),
 					));
 				}
 			};
@@ -816,7 +759,7 @@ class crm_person extends class_base
 
 		$toolbar->add_menu_button(array(
 			"name" => "add_event",
-			"tooltip" => "Uus",
+			"tooltip" => t("Uus"),
 		));
 
 		$menudata = '';
@@ -829,8 +772,8 @@ class crm_person extends class_base
 				{
 					$toolbar->add_menu_item(array(
 						"parent" => "add_event",
-						'title' => 'Kalender määramata',
-						'text' => 'Lisa '.$clss[$val["clid"]]["name"],
+						'title' => t('Kalender määramata'),
+						'text' => sprintf(t('Lisa %s'),$clss[$val["clid"]]["name"]),
 						'disabled' => true,
 					));
 				}
@@ -850,7 +793,7 @@ class crm_person extends class_base
 							'parent' => $parents[$val['reltype']],///?
 							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 						)),
-						'text' => 'Lisa '.$clss[$val["clid"]]["name"],
+						'text' => sprintf(t('Lisa '),$clss[$val["clid"]]["name"]),
 					));
 				}
 			};
@@ -859,7 +802,7 @@ class crm_person extends class_base
 			{
 				$toolbar->add_button(array(
 					"name" => "user_calendar",
-					"tooltip" => "Kasutaja kalender",
+					"tooltip" => t("Kasutaja kalender"),
 					"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
 					"onClick" => "",
 					"img" => "icon_cal_today.gif",
@@ -1054,9 +997,9 @@ class crm_person extends class_base
 
 	/** shows a person
 
-	@attrib name=show
+		@attrib name=show
 
-	@param id required
+		@param id required
 
 	**/
 	function show($arr)
@@ -1100,7 +1043,9 @@ class crm_person extends class_base
 			foreach($forms as $val)
 			{
 				if (!$val)
+				{
 					continue;
+				}
 
 				$form = new object($val);
 				$fb.= html::href(array(
@@ -1524,24 +1469,20 @@ class crm_person extends class_base
 	{
 		$toolbar->add_menu_button(array(
 			'name'=>'add_item',
-			'tooltip'=>'Uus'
+			'tooltip'=>t('Uus')
 		));
 		
 		$toolbar->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
-			'tooltip' => 'Kustuta valitud tööpakkumised',
+			'tooltip' => t('Kustuta valitud tööpakkumised'),
 		));
 		
 		$toolbar->add_button(array(
 			'name' => 'save',
 			'img' => 'save.gif',
-			'tooltip' => 'Salvesta',
+			'tooltip' => t('Salvesta'),
 			'action' => 'submit',
-			/*'url' => $this->mk_my_orb("change", array(
-				"id" => $arr["obj_inst"]->id(), 
-				"group" => $arr["request"]["group"], 
-				"skill" => $arr["request"]["skill"]), CL_CRM_PERSON)*/
 		));
 		
 	}
@@ -1552,19 +1493,19 @@ class crm_person extends class_base
 	
 		$tree->add_item(0,array(
     		"id" => 1,
-    		"name" => "Arvutioskused",
+    		"name" => t("Arvutioskused"),
     		"url" => $this->mk_my_orb("do_something",array()),
 		));
 		
 		$tree->add_item(1,array(
     		"id" => 2,
-    		"name" => "Rakendused",
+    		"name" => t("Rakendused"),
     		"url" => $this->mk_my_orb("do_something",array()),
 		));
 		
 		$tree->add_item(1,array(
     		"id" => 3,
-    		"name" => "Programmeerimine",
+    		"name" => t("Programmeerimine"),
     		"url" => $this->mk_my_orb("change", array(
     			"id" => $arr['obj_inst']->id(), 
     			"group" => $arr['request']['group'],
@@ -1574,17 +1515,17 @@ class crm_person extends class_base
 		
 		$tree->add_item(1,array(
     		"id" => 4,
-    		"name" => "Muu",
+    		"name" => t("Muu"),
     		"url" => $this->mk_my_orb("do_something",array()),
 		));
 		
 		if($arr["request"]["skill"] == "languages")
 		{
-			$lang_capt = "<b>Keeled</b>";
+			$lang_capt = t("<b>Keeled</b>");
 		}
 		else
 		{
-			$lang_capt = "Keeled";
+			$lang_capt = t("Keeled");
 		}
 		
 		$tree->add_item(0, array(
@@ -1599,7 +1540,7 @@ class crm_person extends class_base
 		
 		$tree->add_item(0, array(
     		"id" => 6,
-    		"name" => "Juhiload",
+    		"name" => t("Juhiload"),
     		"url" => $this->mk_my_orb("change", array(
     			"id" => $arr['obj_inst']->id(), 
     			"group" => $arr['request']['group'],
@@ -1617,7 +1558,7 @@ class crm_person extends class_base
 		$tb->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
-			"tooltip" => "Lisa uus töökogemus",
+			"tooltip" => t("Lisa uus töökogemus"),
 			"url" => $this->mk_my_orb("change", array(
 				"group" => $arr["request"]["group"],
 				"id" => $arr["obj_inst"]->id(),
@@ -1628,15 +1569,15 @@ class crm_person extends class_base
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta töökogemused",
+			"tooltip" => t("Kustuta töökogemused"),
 			"action" => "delete_objects",
-			"confirm" => "Oled kindel, et kustutada?",
+			"confirm" => t("Oled kindel, et kustutada?"),
 		));
 
 		$tb->add_button(array(
 			"name" => "edit",
 			"img" => "edit.gif",
-			"tooltip" => "Muuda tkogemust",
+			"tooltip" => t("Muuda tkogemust"),
 			"action" => "edit_something",
 		));
 		
@@ -1644,7 +1585,7 @@ class crm_person extends class_base
 		$tb->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
-			"tooltip" => "Salvesta",
+			"tooltip" => t("Salvesta"),
 			"action" => "submit",
 		));
 	}
@@ -1655,25 +1596,25 @@ class crm_person extends class_base
 
 		$table->define_field(array(
 			"name" => "asutus",
-			"caption" => "Asutus",
+			"caption" => t("Asutus"),
 			"sortable" => 1
 		));
 
 		$table->define_field(array(
 			"name" => "ametikoht",
-			"caption" => "Ametikoht",
+			"caption" => t("Ametikoht"),
 			"sortable" => 1
 		));
 
 		$table->define_field(array(
 			"name" => "alates",
-			"caption" => "Alates",
+			"caption" => t("Alates"),
 			"sortable" => 1
 		));
 
 		$table->define_field(array(
 			"name" => "kuni",
-			"caption" => "Kuni",
+			"caption" => t("Kuni"),
 			"sortable" => 1
 		));
 
@@ -1715,11 +1656,6 @@ class crm_person extends class_base
 			$obj = $conn->to();
 			$obj->delete();
 		}
-		/*
-		$ol = new object_list(array(
-			"oid" => $arr["sel"],
-		));
-		$ol->delete();*/
 		return  $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), CL_CRM_PERSON); 
 	}
 	
@@ -1768,20 +1704,20 @@ class crm_person extends class_base
 		
 		$tb->add_menu_button(array(
 			'name'=>'new',
-			'tooltip'=>'Hariduse lisamine'
+			'tooltip'=>t('Hariduse lisamine')
 		));
 	
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"tooltip" => "Kustuta haridus",
+			"tooltip" => t("Kustuta haridus"),
 			"action" => "delete_objects",
-			"confirm" => "Oled kindel, et kustutada?",
+			"confirm" => t("Oled kindel, et kustutada?"),
 		));
 
 		$tb->add_menu_item(array(
 				'parent'=>'new',
-				'text'=>'Põhiharidus',
+				'text'=>t('Põhiharidus'),
 				'link'=> $this->mk_my_orb('change' ,array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["request"]["group"],
@@ -1792,7 +1728,7 @@ class crm_person extends class_base
 			
 		$tb->add_menu_item(array(
 				'parent'=>'new',
-				'text'=>'Keskharidus',
+				'text'=>t('Keskharidus'),
 				'link'=> $this->mk_my_orb('change' ,array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["request"]["group"],
@@ -1802,7 +1738,7 @@ class crm_person extends class_base
 		
 		$tb->add_menu_item(array(
 				'parent'=>'new',
-				'text'=>'Kõrgharidus',
+				'text'=>t('Kõrgharidus'),
 				'link'=>$this->mk_my_orb('change' ,array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["request"]["group"],
@@ -1812,7 +1748,7 @@ class crm_person extends class_base
 	
 		$tb->add_menu_item(array(
 				'parent'=>'new',
-				'text'=>'Kutseharidus',
+				'text'=>t('Kutseharidus'),
 				'link'=>$this->mk_my_orb('change' ,array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["request"]["group"],
@@ -1827,13 +1763,13 @@ class crm_person extends class_base
 		
 		$table->define_field(array(
 			"name" => "school",
-			"caption" => "Kool",
+			"caption" => t("Kool"),
 			"sortable" => 1,
 		));
 		
 		$table->define_field(array(
 			"name" => "date_from",
-			"caption" => "Alates",
+			"caption" => t("Alates"),
 			"sortable" => 1,
 			"type" => "time",
 			"numeric" => 1,
@@ -1843,7 +1779,7 @@ class crm_person extends class_base
 		
 		$table->define_field(array(
 			"name" => "date_to",
-			"caption" => "Kuni",
+			"caption" => t("Kuni"),
 			"type" => "time",
 			"numeric" => 1,
 			"format" => "d.m.y",
@@ -1853,13 +1789,13 @@ class crm_person extends class_base
 		
 		$table->define_field(array(
 			"name" => "etype",
-			"caption" => "Haridusliik",	
+			"caption" => t("Haridusliik"),	
 			"sortable" => 1,
 		));
 		
 		$table->define_field(array(
 			"name" => "profession",
-			"caption" => "Eriala",
+			"caption" => t("Eriala"),
 			"sortable" => 1
 		));
 		
@@ -1905,7 +1841,7 @@ class crm_person extends class_base
 					)),
 				"date_to" => $s_edu->prop("date_to"),
 				"date_from" => $s_edu->prop("date_from"),
-				"etype" => "Keskharidus",
+				"etype" => t("Keskharidus"),
 				"sel" => $s_edu_conn->id(),
 			));
 		}
@@ -1926,7 +1862,7 @@ class crm_person extends class_base
 				"date_to" => $h_edu->prop("date_to"),
 				"date_from" => $h_edu->prop("date_from"),
 				"profession" => $h_edu->prop("profession"),
-				"etype" => "Kõrgharidus",
+				"etype" => t("Kõrgharidus"),
 				"sel" => $h_edu_conn->id(),
 			));
 		}
@@ -1947,7 +1883,7 @@ class crm_person extends class_base
 				"date_to" => $v_edu->prop("date_to"),
 				"date_from" => $v_edu->prop("date_from"),
 				"profession" => $v_edu->prop("profession"),
-				"etype" => "Kutseharidus",
+				"etype" => t("Kutseharidus"),
 				"sel" => $v_edu_conn->id(),
 			));
 		}
@@ -1972,30 +1908,30 @@ class crm_person extends class_base
 		
 		$table->define_field(array(
 			"name" => "language",
-			"caption" => "Keel",
+			"caption" => t("Keel"),
 		));
 		
 		$table->define_field(array(
 			"name" => "speaking",
-			"caption" => "Rääkimine",
+			"caption" => t("Rääkimine"),
 			"align" => "center",
 		));
 		
 		$table->define_field(array(
 			"name" => "writing",
-			"caption" => "Kirjutamine",
+			"caption" => t("Kirjutamine"),
 			"align" => "center",
 		));
 		
 		$table->define_field(array(
 			"name" => "understanding",
-			"caption" => "Arusaamine",
+			"caption" => t("Arusaamine"),
 			"align" => "center",
 		));
 		
 		$table->define_field(array(
 			"name" => "kogemusi",
-			"caption" => "Mitu aastat kogemusi",
+			"caption" => t("Mitu aastat kogemusi"),
 			"align" => "center",
 		));
 
@@ -2083,7 +2019,7 @@ class crm_person extends class_base
 		$rtrn = array();
 
 		$conns = $arr['obj_inst']->connections_from(array(
-						'type' => 'RELTYPE_WORK'
+			'type' => 'RELTYPE_WORK'
 		));
 
 		foreach($conns as $conn)
@@ -2092,7 +2028,7 @@ class crm_person extends class_base
 		}
 
 		$conns = $arr['obj_inst']->connections_from(array(
-						'type' => 'RELTYPE_SECTION'
+			'type' => 'RELTYPE_SECTION'
 		));
 
 		foreach($conns as $conn)
@@ -2109,7 +2045,7 @@ class crm_person extends class_base
 		if($obj->class_id()==CL_CRM_SECTION)
 		{
 			$conns = $obj->connections_to(array(
-							'type' => 28 //crm_company.section
+				'type' => 28 //crm_company.section
 			));
 
 			foreach($conns as $conn)
@@ -2120,7 +2056,7 @@ class crm_person extends class_base
 	
 		//getting the sections
 		$conns = $obj->connections_to(array(
-						'type' => 1, //crm_section.section
+			'type' => 1, //crm_section.section
 		));
 		foreach($conns as $conn)
 		{
