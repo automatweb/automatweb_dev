@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.1 2001/05/17 09:38:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.2 2001/05/17 10:14:23 duke Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -856,6 +856,7 @@ class messenger extends menuedit_light
 			{
 				$oid = $this->new_object(array(
 					"parent" => $folder,
+					"name" => $args["subject"],
 					"class_id" => CL_MESSAGE),false);
 				$args["mtargets1"] = $mtargets;
 				$args["mtargets2"] = $mtargets2;
