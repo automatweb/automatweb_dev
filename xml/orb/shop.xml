@@ -53,9 +53,10 @@
 			<function name="order">
 				<arguments>
 					<required name="shop_id"/>
-					<required name="section"/>
+					<optional name="section"/>
 					<optional name="num"/>
 					<optional name="first"/>
+					<optional name="eid"/>
 				</arguments>
 			</function>
 		</action>
@@ -119,6 +120,18 @@
 			<function name="admin_orders">
 				<arguments>
 					<required name="id"/>
+					<optional name="page"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="admin_item_orders">
+			<function name="admin_item_orders">
+				<arguments>
+					<required name="id"/>
+					<optional name="period"/>
+					<optional name="page"/>
+					<required name="item_id"/>
 				</arguments>
 			</function>
 		</action>
