@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.10 2004/03/09 15:34:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.11 2004/05/06 11:55:39 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -226,6 +226,14 @@ class site_search_content extends class_base
 	//	menus - the menus to search under
 	function fetch_static_search_results($arr)
 	{
+		// rewrite fucked-up letters
+		$arr["str"] = str_replace(chr(0xb4), "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace(chr(0xb8), "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace(chr(0x9e), "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace(chr(0x8e), "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace("%9E", "&#0352;", $arr["str"]);
+		$arr["str"] = str_replace("%8E", "&#0352;", $arr["str"]);
+		
 		extract($arr);
 	
 		$ret = array();
@@ -674,6 +682,7 @@ class site_search_content extends class_base
 		{
 			$arr["page"] = 0;
 		}
+		
 		return $arr;
 	}
 
