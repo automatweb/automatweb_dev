@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.252 2003/03/06 23:54:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.253 2003/03/06 23:55:17 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -5136,7 +5136,6 @@ class menuedit extends aw_template
 
 	function new_right_frame($arr)
 	{
-		error_reporting(E_ALL);
 		extract($arr);
 		if (!$this->prog_acl("view", PRG_MENUEDIT))
 		{
