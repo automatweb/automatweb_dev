@@ -315,6 +315,11 @@ class _int_object
 		return $this->_int_can($param);
 	}
 
+	function is_property($param)
+	{
+		return $this->_int_is_property($param);
+	}
+
 	function parent()
 	{
 		return $this->obj["parent"];
