@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.10 2001/07/12 23:08:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.11 2001/07/30 01:08:12 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -177,6 +177,7 @@ class users_user extends aw_template
 			$this->send_alert($msg);
 			$this->_log("auth",$msg);
 			session_unregister("uid");
+			$uid = "";
 		};
 
 		if ($success)
@@ -206,7 +207,7 @@ class users_user extends aw_template
 		{
 			session_register("uid");
 		};
-
+		
 		if ($params["reforb"])
 		{
 			classload("config");
