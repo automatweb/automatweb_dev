@@ -155,15 +155,6 @@
             <field>import_desc</field>
       </property>
       <property>
-            <name>roles</name>
-            <table>groups</table>
-            <group>roles</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>roles</field>
-      </property>
-      <property>
             <name>objects</name>
             <table>groups</table>
             <group>objects</group>
@@ -210,9 +201,6 @@
             <import>
                   <caption>Import</caption>
             </import>
-            <roles>
-                  <caption>Rollid</caption>
-            </roles>
             <objects>
                   <caption>Objektid ja &amp;Otilde;igused</caption>
             </objects>

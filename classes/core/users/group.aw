@@ -22,7 +22,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 
 @groupinfo dyn_search caption=Otsing submit=no
 @groupinfo import caption=Import
-@groupinfo roles caption=Rollid
 @groupinfo objects caption="Objektid ja &Otilde;igused"
 
 @tableinfo groups index=oid master_table=objects master_index=oid
@@ -79,8 +78,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @caption Impordi kasutajaid
 
 @property import_desc type=text store=no group=import
-
-@property roles type=text store=no group=roles no_caption=1
 
 @default group=objects
 
@@ -185,10 +182,6 @@ class group extends class_base
 					GRP_REGULAR => 'Tavaline',
 					GRP_DYNAMIC => "D&uuml;naamiline"
 				);
-				break;
-
-			case "roles":
-				$prop['value'] = $this->_get_roles($this->db_fetch_field("SELECT gid FROM groups WHERE oid = ".$arr["obj_inst"]->id(),"gid"));
 				break;
 
 			case "objects":
@@ -384,77 +377,6 @@ class group extends class_base
 		{
 			$arr["args"]["edit_acl"] = $arr["request"]["edit_acl"];
 		}
-	}
-
-	function _get_roles($gid)
-	{
-		$roles = array();
-
-		$acl = get_instance(CL_ACL);
-		$acls = $acl->get_acls_for_group($gid);
-		foreach($acls as $acl_oid)
-		{
-			$roles[] = $acl->get_roles_for_acl($acl_oid);
-		}
-
-		$t =& $this->_init_roles_table();
-
-		
-		foreach(array_unique($roles) as $role)
-		{
-			$r_o = obj($role);
-			$mb = $r_o->modifiedby();
-			$tmp = array(
-				"name" => html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $role), "role"),
-					"caption" => $r_o->name()
-				)),
-				"modifiedby" => $mb->name(),
-				"modified" => $r_o->modified(),
-				"del" => html::href(array(
-					'url' => $this->mk_my_orb("remove_role_from_group", array("role_id" => $role, "gid" => $gid)),
-					'caption' => "Eelmalda"
-				))
-			);
-			$t->define_data($r_o);
-		}
-		$t->set_default_sortby("name");
-		$t->sort_by();
-		return $t->draw();
-	}
-
-	function &_init_roles_table()
-	{
-		load_vcl("table");
-		$t = new aw_table(array("layout" => "generic"));
-
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => "Nimi",
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "modifiedby",
-			"caption" => "Muutja",
-			"sortable" => 1,
-			"align" => "center"
-		));
-
-		$df = aw_ini_get("config.dateformats");
-		$t->define_field(array(
-			"name" => "modified",
-			"caption" => "Muudetud",
-			"sortable" => 1,
-			"type" => "time",
-			"format" => $df[2]
-		));
-
-		$t->define_field(array(
-			"name" => "del",
-			"caption" => "Eelmalda",
-		));
-
-		return $t;
 	}
 
 	function _get_objects($gid)
