@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.3 2004/10/08 01:32:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.4 2004/10/22 15:01:04 kristo Exp $
 // config_aw_document_template.aw - Dokumendi Template 
 /*
 
@@ -58,6 +58,11 @@ class config_aw_document_template extends class_base
 		{
 			case "t_name":
 				$data["value"] = $arr["request"]["name"];
+				break;
+
+			case "t_id":
+			case "t_site_id":
+				$prop["value"] = (int)$prop["value"];
 				break;
 		}
 		return $retval;
