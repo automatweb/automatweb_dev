@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.15 2002/11/26 17:41:40 duke Exp $
+// $Id: class_base.aw,v 2.16 2002/11/26 17:51:17 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -68,8 +68,13 @@ class class_base extends aliasmgr
 	function class_base($args = array())
 	{
 		$this->init("");
+	}
+
+	function init($arg)
+	{
 		$this->output_client = "htmlclient";
 		$this->ds_name = "ds_local_sql";
+		parent::init($arg);
 	}
 
 	////
