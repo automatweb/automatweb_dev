@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.2 2004/06/26 10:15:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.3 2004/10/25 12:45:02 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -68,6 +68,11 @@ class toolbar extends aw_template
 		$this->vars($arr);
 		$tpl = isset($arr["disabled"]) && $arr["disabled"] ? "MENU_ITEM_DISABLED" : "MENU_ITEM";
 		$this->menus[$arr["parent"]] .= $this->parse($tpl);
+	}
+
+	function add_menu_separator($arr)
+	{
+		$this->menus[$arr["parent"]] .= $this->parse("MENU_SEPARATOR");
 	}
 
 	function add_sub_menu($arr)
