@@ -166,7 +166,7 @@ class search_conf extends aw_template
 			"reforb"	=> $this->mk_reforb("search", array("reforb" => 0,"search" => 1))
 		));
 
-		if ($search)
+		if ($search && ($sstring_title != "" || $sstring != ""))
 		{
 			// and here we do the actual searching bit!
 
