@@ -344,6 +344,7 @@ class export extends aw_template
 			}
 			$cmd = aw_ini_get("server.zip_path")." -r ".aw_ini_get("server.tmpdir")."/aw_zip_temp.zip *";
 			$res = `$cmd`;
+			echo "res = <pre>$res</pre> <br>";
 
 			// check if the file already exists
 			$oid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = $aw_zip_folder AND status != 0 AND lang_id = ".aw_global_get("lang_id")." AND class_id = ".CL_FILE." AND name = '$aw_zip_fname'", "oid");
@@ -728,6 +729,8 @@ class export extends aw_template
 				$ct = $mt[1];
 			}
 		}
+
+		$ct = strtolower(trim($ct));
 
 		if (!isset($this->type2ext[$ct]))
 		{
@@ -1316,9 +1319,23 @@ class export extends aw_template
 		}
 		$port = ($mt[1] ? $mt[1] : 80);
 
-		$req  = "GET $url HTTP/1.0\r\n";
+		if (strpos($url, " ")!== false)
+		{
+			$url = str_replace(" ","+", $url);
+		}
+	
+		// we gots to change / AFTER ? to %2F
+		$qmp = strpos($url, "?");
+		if ($qmp !== false)
+		{
+			$url = substr($url, 0, $qmp).str_replace("/", "%2F", substr($url, $qmp));
+			echo "quoted url = ".htmlspecialchars($url)." <br>";
+		}
+	
+		$req  = "GET ".$url." HTTP/1.0\r\n";
 		$req .= "Host: ".$host.($port != 80 ? ":".$port : "")."\r\n";
 		$req .= "Cookie: automatweb=".$this->cookie."\r\n";
+		$req .= "User-Agent: AW-EXPORT\r\n";
 		$req .= "\r\n";
 		classload("socket");
 		$socket = new socket(array(
