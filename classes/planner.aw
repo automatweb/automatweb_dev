@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.159 2004/01/28 16:59:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.160 2004/01/29 14:30:12 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -384,7 +384,7 @@ class planner extends class_base
 
 		// that is the basic query
 		// I need to add different things to it
-		$q = "SELECT objects.oid AS id,objects.name,planner.start,planner.end
+		$q = "SELECT objects.oid AS id,objects.brother_of,objects.name,planner.start,planner.end
 			FROM planner
 			LEFT JOIN objects ON (planner.id = objects.brother_of)
 			WHERE planner.start >= '${_start}' AND
@@ -409,7 +409,7 @@ class planner extends class_base
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			$rv[] = array(
+			$rv[$row["brother_of"]] = array(
 				"id" => $row["id"],
 				"start" => $row["start"],
 				"end" => $row["end"],
@@ -521,8 +521,8 @@ class planner extends class_base
 				$reflist[] = &$rv[$gx][$row["brother_of"]];
 			};
 		};
-		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day"));
-		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week"));
+		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "day"));
+		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "week"));
 		return isset($args["flatlist"]) ? $reflist : $rv;
 	}
 
@@ -2920,7 +2920,7 @@ class planner extends class_base
 			$toolbar->add_button(array(
 				"name" => "today",
 				"tooltip" => "Täna",
-				"url" => $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","date" => $dt)),
+				"url" => $this->mk_my_orb("change",array("id" => $id,"group" => "views","viewtype" => "day","date" => $dt)) . "#today",
 				"img" => "icon_cal_today.gif",
 				"class" => "menuButton",
 			));
@@ -3098,7 +3098,11 @@ class planner extends class_base
 		$tasklist = new object_list(array(
 			"class_id" => CL_TASK,
 			"parent" => $this->calendar_inst->prop("event_folder"),
-			"status" => STAT_ACTIVE,
+			"flags" => array(
+				"mask" => OBJ_IS_DONE,
+				"flags" => 0,
+			),
+			
 		));
 
 		$rv = array();
