@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.116 2003/12/17 15:34:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.117 2004/01/28 15:33:56 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -159,7 +159,7 @@ if (!defined("DEFS"))
 		// "e" regexpi lõpus tähendab seda, et teist parameetrit käsitletakse php koodina,
 		// mis eval-ist läbi lastakse. 
 		$src = @preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
-		$src = @preg_replace("/{DATE:(.+?)\|(.+?)}/e","(is_numeric(\$vars[\"\\1\"]) ? date(\"\\2\",\$vars[\"\\1\"]) : \$vars[\"\\1\"])",$src);
+		$src = @preg_replace("/{DATE:(.+?)\|(.+?)}/e","((is_numeric(\$vars[\"\\1\"]) && \$vars[\"\\1\"] > 1 )? date(\"\\2\",\$vars[\"\\1\"]) : \"\")",$src);
 		return @preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
 	}
 
@@ -203,6 +203,10 @@ if (!defined("DEFS"))
 	// !tagastab lokaliseeritud kuunime numbri järgi
 	function get_lc_month($id)
 	{
+		if (aw_global_get("LC") == "et")
+		{
+			return get_est_month($id);
+		}
 		$mnames = explode("|",LC_MONTH);
 		return $mnames[(int)$id];
 	}
