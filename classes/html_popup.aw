@@ -1,6 +1,6 @@
 <?php
 // html_popup.aw - a class to deal with javascript popups
-// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.0 2001/10/19 19:52:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/html_popup.aw,v 2.1 2001/10/22 22:28:08 duke Exp $
 global $orb_defs;
 $orb_defs["html_popup"] = "xml";
 class html_popup extends aw_template {
@@ -76,7 +76,7 @@ class html_popup extends aw_template {
 		{
 			$meta["menus"] = array();
 		};
-		this->vars(array(
+		$this->vars(array(
 			"name" => $obj["name"],
 			"url" => $meta["url"],
 			"menus" => $ob->multiple_option_list(array_flip($meta["menus"]),$menu),
