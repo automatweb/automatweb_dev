@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.118 2003/03/28 10:24:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.119 2003/04/24 07:47:34 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("definition");
@@ -3225,5 +3225,19 @@ class messenger extends menuedit_light
 	{
 		return $this->msgconf["msg_pop3servers"][$ident]["name1"]." ".$this->msgconf["msg_pop3servers"][$ident]["surname"];
 	}
+
+	////
+	// !tagastab objekti nime ja class_id jargi
+	function get_object_by_name($args = array())
+	{
+		extract($args);
+		if ($class_id)
+		{
+			$part2 = " AND class_id = '$class_id'";
+		};
+		$q = "SELECT * FROM objects WHERE name = '$name' $part2 ORDER BY modified DESC";
+		$this->db_query($q);
+	}
+	
 };
 ?>

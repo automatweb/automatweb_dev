@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.42 2003/03/13 14:13:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.43 2003/04/24 07:47:34 duke Exp $
 // aw_template.aw - Templatemootor
+
 
 classload("acl_base");
 class aw_template extends acl_base

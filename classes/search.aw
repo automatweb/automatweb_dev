@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.26 2003/04/21 10:47:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.27 2003/04/24 07:47:34 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -956,7 +956,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	// generates contents for the class picker drop-down menu
 	function _get_s_class_id()
 	{
-		$tar = array(0 => LC_OBJECTS_ALL) + $this->get_class_picker();
+		$tar = array(0 => LC_OBJECTS_ALL) + get_class_picker();
 		return $tar;
 	}
 

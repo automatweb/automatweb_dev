@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.3 2002/12/02 11:18:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.4 2003/04/24 07:47:35 duke Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -74,7 +74,7 @@ class cfgobject extends aw_template
 		
 		// generate lists of objects
 		$o = array();
-		$cx = $this->get_class_picker(array("field" => "file"));
+		$cx = get_class_picker(array("field" => "file"));
 		if (is_array($obj["meta"]["objects"]))
 		{
 			$oids = join(",",$obj["meta"]["objects"]);
@@ -99,7 +99,7 @@ class cfgobject extends aw_template
 		if ($cfgformid)
 		{
 			$html = get_instance("html");
-			$cp = $this->get_class_picker(array("index" => "file"));
+			$cp = get_class_picker(array("index" => "file"));
 			$cfgform = $this->get_object($cfgformid);
 			$cfgproperties = new aw_array($cfgform["meta"]["properties"]);
 			// cycle over all the properties this configuration form has

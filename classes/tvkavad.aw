@@ -153,8 +153,30 @@ class tvkavad extends aw_template
 		return $this->parse();
 	}
 
-	function kanalid_list($date)
+	function kanalid_list($content)
 	{
+
+		$paevad = array("0" => "#telekava_neljapaev#", "1" => "#telekava_reede#", "2" => "#telekava_laupaev#", "3" => "#telekava_pyhapaev#", "4" => "#telekava_esmaspaev#", "5" => "#telekava_teisipaev#", "6" => "#telekava_kolmapaev#");
+		reset($paevad);
+                while (list($num, $v) = each($paevad))
+                {
+			if (strpos($content,$v) === false)
+			{
+				continue;
+			}
+			else
+			{
+				break;
+			}
+                }
+
+		// arvutame v2lja, et millal oli eelmine neljap2ev
+		$sub_arr = array("0" => "3", "1" => "4", "2" => "5", "3" => "6", "4" => "0", "5" => "1", "6" => "2");
+		$date = mktime(0,0,0,date("m"),date("d"),date("Y"));
+
+		$d_begin = $date - $sub_arr[date("w")]*24*3600;
+		$date = $d_begin+$num*24*3600;
+	
 		$this->read_template("kanalid_list.tpl");
 		$this->db_query("SELECT * FROM tv_kanalid");
 		while ($row = $this->db_next())

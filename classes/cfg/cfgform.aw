@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.11 2003/03/31 10:08:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.12 2003/04/24 07:47:35 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -135,7 +135,7 @@ class cfgform extends class_base
 
 		$cx = get_instance("cfg/cfgutils");
 		$class_list = new aw_array($cx->get_classes_with_properties());
-		$cp = $this->get_class_picker(array("field" => "def"));
+		$cp = get_class_picker(array("field" => "def"));
 		$nodes = array();
 		$nodes[] = array("caption" => "Klassid");
 		foreach($class_list->get() as $key => $val)

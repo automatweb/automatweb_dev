@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.90 2003/04/16 16:31:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.91 2003/04/24 07:47:34 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -10,6 +10,45 @@ if (!defined("DEFS"))
 	define("SERIALIZE_NATIVE",3);
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
+	
+	////
+	// !returns an array of all classes defined in the system, index is class id, value is class name and path
+	//  addempty - if true, empty element in front
+	function get_class_picker($arr = array())
+	{
+		extract($arr);
+		$cls = aw_ini_get("classes");
+		$clfs = aw_ini_get("classfolders");
+
+		$ret = array();
+		if ($addempty)
+		{
+			$ret = array(0 => "");
+		}
+
+		$field = ($field) ? $field : "name";
+
+		foreach($cls as $clid => $cld)
+		{
+
+			// what field? it's file
+			//if (isset($cld['field']) && ($cld['field'] != ""))
+			if (isset($cld['file']) && ($cld['file'] != ""))
+			{
+				$clname = $cld[$field];
+				if (isset($index))
+				{
+					$ret[$cld[$index]] = $clname;
+				}
+				else
+				{
+					$ret[$clid] = $clname;
+				};
+			}
+		}
+		asort($ret);
+		return $ret;
+	}
 
 	////
 	// !adds or changes a variable in the current url

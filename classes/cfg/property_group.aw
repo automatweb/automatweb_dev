@@ -35,7 +35,7 @@ class property_group extends aw_template
 
 		$cx = get_instance("cfg/cfgutils");
 		$class_list = new aw_array($cx->get_classes_with_properties());
-		$cp = $this->get_class_picker(array("field" => "def"));
+		$cp = get_class_picker(array("field" => "def"));
 		$nodes = array();
 		$nodes[] = array("caption" => "Klassid");
 		foreach($class_list->get() as $key => $val)

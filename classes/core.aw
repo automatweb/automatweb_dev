@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.179 2003/04/21 08:02:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.181 2003/04/24 07:47:34 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -626,22 +626,6 @@ class core extends db_connector
 		return $groups;
 	}
 
-	function indent_array($arr,$level)
-	{
-		static $indent = 0;
-		static $flatlist = array();
-		$indent++;
-		while(list($key,$val) = each($arr[$level]))
-		{
-			$flatlist[$key] = str_repeat("&nbsp;",$indent*3) . $val;
-			if (is_array($arr[$key]))
-			{
-				$this->indent_array($arr,$key);
-			};
-		};
-		$indent--;
-		return $flatlist;
-	}
 
 	////
 	// !returns true if object $oid 's cahe dirty flag is set
@@ -1270,33 +1254,9 @@ class core extends db_connector
 	// Tagastab objekti ja tema lahtiparsitud metainfo
 	function get_obj_meta($oid)
 	{
-		$object = $this->get_object($oid);
-		if (is_array($object))
-		{
-			$meta = $this->get_object_metadata(array(
-				"oid" => $oid,
-				"metadata" => $object["metadata"],
-			));
-
-			$object["meta"] = $meta;
-		};
-		return $object;
+		return $this->get_object($oid);
 	}
 			
-
-	////
-	// !tagastab objekti nime ja class_id jargi
-	function get_object_by_name($args = array())
-	{
-		extract($args);
-		if ($class_id)
-		{
-			$part2 = " AND class_id = '$class_id'";
-		};
-		$q = "SELECT * FROM objects WHERE name = '$name' $part2 ORDER BY modified DESC";
-		$this->db_query($q);
-	}
-
 	////
 	// !tagastab mingisse kindlasse klassi kuuluvad objektid
 	// hiljem voib seda funktsiooni täiendada nii, et ta joinib kylge ka igale klassile vastava tabeli
@@ -1450,7 +1410,12 @@ class core extends db_connector
 			{
 				if ($oid)
 				{
-					$_tret[$oid] = $ml[$parens[$oid]]."/".$name;
+					$fullname = $ml[$parens[$oid]]."/".$name;
+					if (isset($arr["truncate_names"]) && strlen($fullname) > 60)
+					{
+						$fullname = substr($fullname,0,20) . "..." . substr($fullname,-30);
+					};
+					$_tret[$oid] = $fullname;
 				}
 				else
 				{
@@ -1477,20 +1442,6 @@ class core extends db_connector
 					WHERE class_id = $class AND status != 0 AND parent = '$parent'");
 		$row = $this->db_next();
 		return $row["cnt"];
-	}
-
-	////
-	// !miski lame funktsioon. Aga praegu paremini ei oska. templateeditor pruugib seda
-	function get_objects_by_parent($parent)
-	{
-		$q = "SELECT * FROM objects WHERE parent = '$parent'";
-		$this->db_query($q);
-		$result = array();
-		while($row = $this->db_next())
-		{
-			$result[] = $row;
-		};
-		return $result;
 	}
 
 	//// 
@@ -1669,6 +1620,10 @@ class core extends db_connector
 				$section = $row["parent"];
 			} while ($template == "" && $section > 1);
 			aw_cache_set("lead_template_cache",$section,$template);
+		}
+		if ($template == "")
+		{
+			$template = "lead.tpl";
 		}
 		return $template;
 	}
@@ -1891,31 +1846,7 @@ class core extends db_connector
 	// well, kasuttakse, aga tegelt ei tohiks. ysnaga, DEPRECATEED - terryf
 	function mk_orb($fun,$arr, $cl_name = "",$user = "")
 	{
-		if ($cl_name == "")
-		{
-			$cl_name = get_class($this);
-		}
-
-		$urs = join("&",map2("%s=%s",$arr));
-
-		if ($user)
-		{
-			if (strpos(aw_ini_get("users.homedir"),"?") === false)
-			{
-				$sep = "?";
-			}
-			else
-			{
-				$sep = "&";
-			}
-			$url = aw_ini_get("users.homedir").$sep."id=" . $arr["parent"];
-		}
-		else
-		{
-			$url = "orb.".$this->cfg["ext"]."?class=$cl_name&action=$fun&$urs";
-		};
-			
-		return $url;
+		return $this->mk_my_orb($fun,$arr,$cl_name);
 	}
 
 	////
@@ -2507,55 +2438,6 @@ class core extends db_connector
 		return $ob->do_method_call($arr);
 	}
 
-	////
-	// !returns an array of all classes defined in the system, index is class id, value is class name and path
-	//  addempty - if true, empty element in front
-	function get_class_picker($arr = array())
-	{
-		extract($arr);
-		$cls = $this->cfg["classes"];
-		$clfs = $this->cfg["classfolders"];
-
-		$ret = array();
-		if ($addempty)
-		{
-			$ret = array(0 => "");
-		}
-
-		$field = ($field) ? $field : "name";
-
-		foreach($cls as $clid => $cld)
-		{
-
-			// what field? it's file
-			//if (isset($cld['field']) && ($cld['field'] != ""))
-			if (isset($cld['file']) && ($cld['file'] != ""))
-			{
-				$clname = $cld[$field];
-				/*
-				if ($cld["parents"] != "")
-				{
-					list($prnt) = explode(",",$cld["parents"]);
-					while($prnt)
-					{
-						$clname = $clfs[$prnt]["name"]."/".$clname;
-						$prnt =$clfs[$prnt]["parent"];
-					}
-				}
-				*/
-				if (isset($index))
-				{
-					$ret[$cld[$index]] = $clname;
-				}
-				else
-				{
-					$ret[$clid] = $clname;
-				};
-			}
-		}
-		asort($ret);
-		return $ret;
-	}
 
         function obj_get_meta($args = array())
         {

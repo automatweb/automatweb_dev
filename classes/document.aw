@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.171 2003/04/23 13:57:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.172 2003/04/24 07:47:34 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -103,16 +103,6 @@ class document extends aw_template
 	function set_period($period)
 	{
 		$this->period = $period;	
-	}
-
-	// listib kik dokumendid
-	// iseenesest kahtlane funktsioon, imho ei l�e seda vaja
-	function listall()
-	{
-		$q = "SELECT *, objects.parent as parent FROM documents
-			LEFT JOIN objects ON
-			(documents.docid = objects.oid)";
-		$this->db_query($q);
 	}
 
 	////
@@ -519,7 +509,8 @@ class document extends aw_template
 		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
 		if (!(strpos($doc["content"], "#telekava_") === false))
 		{
-			return $this->telekava_doc($doc["content"]);
+			$t = get_instance("tvkavad");
+			return $t->kanalid_list($doc["content"]);
 		}
 
 		// ut 6pilaste tabel
@@ -1563,8 +1554,6 @@ class document extends aw_template
 		$d_begin = $date - $sub_arr[date("w")]*24*3600;
 		$rdate = $d_begin+$num*24*3600;
 
-		$t = get_instance("tvkavad");
-		return $t->kanalid_list($rdate);
 	}
 
 	function brother($id)

@@ -669,5 +669,22 @@ class contacts extends aw_template
 		
 		print $this->parse();
 	}
+	
+	function indent_array($arr,$level)
+	{
+		static $indent = 0;
+		static $flatlist = array();
+		$indent++;
+		while(list($key,$val) = each($arr[$level]))
+		{
+			$flatlist[$key] = str_repeat("&nbsp;",$indent*3) . $val;
+			if (is_array($arr[$key]))
+			{
+				$this->indent_array($arr,$key);
+			};
+		};
+		$indent--;
+		return $flatlist;
+	}
 };
 ?>
