@@ -564,9 +564,16 @@ class ml_list extends aw_template
 		return $ret;
 	}
 
-	function flush_member_cache($id)
+	function flush_member_cache($id = false)
 	{
-		aw_cache_set("ml_list::get_members", $id, false);
+        if ($id === false)
+        {
+          aw_cache_flush("ml_list::get_members");
+        }
+        else
+        {
+          aw_cache_set("ml_list::get_members", $id, false);
+        }
 	}
 
 	function get_members($id)
