@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.81 2004/10/08 15:59:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.82 2004/10/14 13:48:47 sven Exp $
 
 class admin_menus extends aw_template
 {
@@ -778,7 +778,41 @@ class admin_menus extends aw_template
 			}
 		}
 	}
-
+	
+	//This returns config obj id for my group
+	function get_co_id(&$obj)
+	{
+		$conf_obj = &obj($obj->meta("objtbl_conf"));
+		$conn = new connection();
+		
+		$mygidlist = aw_global_get("gidlist_pri_oid");
+		$mygidlist = array_flip($mygidlist);
+		
+		
+		$all_conns = $conn->find(array(
+			"from" => $conf_obj->id(),
+			"type" => 1, 
+		));
+		if(!$all_conns)
+		{
+			return $conf_obj = &obj($obj->meta("objtbl_conf"));
+		}
+		
+		$conns = $conn->find(array(
+			"from" => $conf_obj->id(),
+			"to" => $mygidlist,
+			"type" => 1, 
+		));
+		if($conns)
+		{
+			return $conf_obj->id();
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
 	function setup_rf_table($parent)
 	{
 		load_vcl("table");
@@ -793,7 +827,9 @@ class admin_menus extends aw_template
 		{
 			if ($o->meta("objtbl_conf"))
 			{
-				$this->co_id = $o->meta("objtbl_conf");
+				$this->co_id = $this->get_co_id($o);
+				//This is for showing config objects per group
+				//$this->co_id = $o->meta("objtbl_conf");
 			}
 		}
 
@@ -809,6 +845,8 @@ class admin_menus extends aw_template
 		}
 	}
 
+	
+	
 	function cache_right_frame($arr)
 	{
 		$params = $arr;
