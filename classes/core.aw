@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.261 2004/04/29 12:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.262 2004/05/19 15:47:59 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -619,11 +619,19 @@ class core extends acl_base
 
 		if ($fname == "")
 		{
+			if ($GLOBALS["INTENSE_CACHE"] == 1)
+			{
+				echo "cache_dirty no fname , ret = ".$row["cachedirty"]." <br>";
+			}
 			return ($row["cachedirty"] == 1) ? true : false;
 		}
 		else
 		{
 			$dat = aw_unserialize($row["cachedata"]);
+			if ($GLOBALS["INTENSE_CACHE"] == 1)
+			{
+				echo "cache_dirty oid = $oid fname = $fname , dat = ".dbg::dump($dat)." retv = ".dbg::dump(!$dat[$fname])." <br>";
+			}
 			return !$dat[$fname];
 		}
 	}
@@ -640,6 +648,10 @@ class core extends acl_base
 		}
 		$ds = aw_serialize($dat);
 		$this->quote($ds);
+			if ($GLOBALS["INTENSE_CACHE"] == 1)
+			{
+				echo "clear_cache oid = $oid fname = $fname , dat = ".dbg::dump($dat)." <br>";
+			}
 		$q = "UPDATE objects SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
 		$this->db_query($q);
 	}
@@ -1826,7 +1838,7 @@ class core extends acl_base
 						"parent" => $obj->id(),
 						"period" => $period,
 					),"admin_menus"),
-					"caption" => $name,
+					"caption" => strip_tags($name),
 				)) . " / " . $path;
 			};
 		}			
@@ -1870,7 +1882,10 @@ class core extends acl_base
 		}
 		else
 		{
-			$retval = fread($fh,filesize($arr["file"])); // SLURP
+			if (($fs = filesize($arr["file"])) > 0)
+			{
+				$retval = fread($fh,$fs); // SLURP
+			}
 			fclose($fh);
 		};
 		return $retval;
@@ -2139,7 +2154,7 @@ class core extends acl_base
 	// (see on muiltiple select boxide jaoks abix)
 
 	// rootobj - mis objektist alustame
-	function get_menu_list($ignore_langmenus = false,$empty = false,$rootobj = -1, $onlyact = -1) 
+	function get_menu_list($ignore_langmenus = false,$empty = false,$rootobj = -1, $onlyact = -1, $make_path = true) 
 	{
 		enter_function("core::get_menu_list");
 		$admin_rootmenu = $this->cfg["admin_rootmenu2"];
@@ -2174,11 +2189,15 @@ class core extends acl_base
 		{
 			$this->tt[] = "";
 		}
-		$ot->foreach_cb(array(
-			"save" => false,
-			"func" => array(&$this, "_get_menu_list_cb"),
-			"param" => ""
-		));
+
+		if ($make_path)
+		{
+			$ot->foreach_cb(array(
+				"save" => false,
+				"func" => array(&$this, "_get_menu_list_cb"),
+				"param" => ""
+			));
+		};
 
 		exit_function("core::get_menu_list");
 		return $this->tt;
