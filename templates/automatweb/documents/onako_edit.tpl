@@ -1,26 +1,87 @@
 <form method="POST" action="reforb.{VAR:ext}" name="doc" onSubmit="doSubmit();return true;">
-<br>
-<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
+
+
+
+<!--tabelraam-->
+<table width="100%" cellspacing="0" cellpadding="1">
+<tr><td class="tableborder">
+
+	<!--tabelshadow-->
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+		<!--tabelsisu-->
+		<table width="100%" cellspacing="0" cellpadding="0">
+		<tr><td><td class="tableinside">
+
+
+<table border="0" cellpadding="0" cellspacing="2">
+
 <tr>
-<td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Save"> <input class='doc_button' type="submit" value="Preview" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sections" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Web" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> <input type="button" class="doc_button" value="Notify mailinglists" onClick="if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}"</td>
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:doSubmit();this.document.doc.submit();" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
+href="javascript:doSubmit();this.document.doc.submit();" >Salvesta</a></td>
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:menurl}"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('brothering','','{VAR:baseurl}/automatweb/images/blue/awicons/brothering_over.gif',1)"><img name="brothering" alt="Vennastamine" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/brothering.gif" width="25" height="25"></a><br><a
+href="{VAR:menurl}">Vennastamine</a></td>
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="#" onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('lists','','{VAR:baseurl}/automatweb/images/blue/awicons/lists_over.gif',1)"><img name="lists" alt="Teavita liste" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/lists.gif" width="25" height="25"></a><br><a href="#"
+onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}">Teavita liste</a></td>
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+
+
+
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('preview','','{VAR:baseurl}/automatweb/images/blue/awicons/preview_over.gif',1)"><img name="preview" alt="Eelvaade" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/preview.gif" width="25" height="25"></a><br><a
+target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+
+</table>
+
+
+		</td>
+		</tr>
+		</table>
+
+
+	</td>
+	</tr>
+	</table>
+
+</td>
 </tr>
+</table>
+
+
+<table border=0 cellspacing=1 cellpadding=2 >
+<!--<tr>
+<td class="celltext" colspan="2">
+<input type="submit" class='doc_button' value="Salvesta">
+<input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;">
+<input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;">
+<input type="button" class="doc_button" value="Teavita liste" onClick="if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}">
+
+</td>
+</tr>-->
 <tr>
-<td class="hele_hall_taust" COLSPAN=2>
+<td  COLSPAN=2>
 <table border=0 cellpadding=0 cellspacing=0>
 	<tr>
 		<td colspan=3><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
 	</tr>
 	<tr>
-		<td class="fcaption2_nt"><img src='{VAR:baseurl}/images/transa.gif' width=113 height=1 border=0><br><B>&nbsp;Settings&nbsp;</b></td>
-		<td class="fcaption2_nt" bgcolor="#CCCCCC"><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
-		<td class="fcaption2_nt">&nbsp;			
-			Active:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>
-	| Show lead: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
-	| Show headline: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
-	| 'Print' button: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>
-	| Show change date: <input type='checkbox' name='show_last_changed' value=1 {VAR:show_last_changed}>
-	| Forum: <input type='checkbox' name='is_forum' value=1 {VAR:is_forum}>
+		<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=113 height=1 border=0><br><B>&nbsp;M‰‰rangud&nbsp;</b></td>
+		<td class="celltext" bgcolor="#CCCCCC"><img src='{VAR:baseurl}/images/transa.gif' width=1 height=10 border=0></td>
+		<td class="celltext">&nbsp;			
+			Aktiivne:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>&nbsp;&nbsp;&nbsp;
+			N‰ita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>&nbsp;&nbsp;&nbsp;
+			N‰ita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>&nbsp;&nbsp;&nbsp;
+			'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>&nbsp;&nbsp;&nbsp;
+			Muutmise kuupaev dokumendi sees: <input type='checkbox' name='show_last_changed' value=1 {VAR:show_last_changed}>&nbsp;&nbsp;&nbsp;
+			<!--| Forum: <input type='checkbox' name='is_forum' value=1 {VAR:is_forum}>-->
 		</td>
 	</tr>
 </table>
@@ -34,26 +95,26 @@ function doSubmit()
 }
 </script>
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Source:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Allikas:&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Date:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="tm" size="10" value="{VAR:tm}"></td>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Kuup&auml;ev:&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="tm" size="10" value="{VAR:tm}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Headline&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="title" size="80" value="{VAR:title}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
-<td class="hele_hall_taust">
+<td class="celltext" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
+<td class="celltext">
 <textarea name="lead" cols="100" rows="5" class='tekstikast'>{VAR:lead}</textarea>
 </td>
 </tr>
 <tr>
-<td class="hele_hall_taust" valign="top"><b>&nbsp;Content&nbsp;</b></td>
-<td class="hele_hall_taust">
+<td class="celltext" valign="top"><b>&nbsp;Sisu&nbsp;</b></td>
+<td class="celltext">
 <textarea name="content" cols="100" rows="30" class='tekstikast'>{VAR:content}</textarea>
 </td>
 </tr>
@@ -61,16 +122,16 @@ function doSubmit()
 <!-- END SUB: NOT_IE -->
 <!-- SUB: IE -->
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Source:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Allikas:&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="author" size="80" value="{VAR:author}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Date:&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="tm" size="30" value="{VAR:tm}"></td>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Kuup&auml;ev:&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="tm" size="30" value="{VAR:tm}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Headline&nbsp;</b></td>
-<td class="hele_hall_taust">
+<td class="celltext" valign="top"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Pealkiri&nbsp;</b></td>
+<td class="celltext">
 <br>
 <div id=idBox style="width: 100%;text-align: left; ;visibility: hidden, height:25;overflow:hidden;background:gainsboro" ID=htmlOnly valign="top">
 	<script>
@@ -111,9 +172,9 @@ function doSubmit()
 										<option value="Times New Roman,Times,Serif">Time
 										<option value="Courier, Monospace">Courier
 									</select>
-<select onchange="format('fontSize',this[this.selectedIndex].text);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF"><option>Size...<option>1<option>2<option>3<option>4<option>5<option>6<option>7</select>
+<select onchange="format('fontSize',this[this.selectedIndex].text);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF"><option>Suurus...<option>1<option>2<option>3<option>4<option>5<option>6<option>7</select>
 <select onchange="format('forecolor',this[this.selectedIndex].style.color);this.selectedIndex=0" STYLE="font:8pt verdana,arial,sans-serif;background:#FFFFFF">
-										<option selected>Color...
+										<option selected>V&auml;rv...
 										<option style="color:black">must</option>
 										<option style="color:#FF9900">domina</option>
 										<option style="color:darkslategray">tumehall</option>
@@ -138,15 +199,15 @@ function doSubmit()
 </td>
 </tr>
 <tr>
-<td class="hele_hall_taust" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
-<td class="hele_hall_taust">
+<td class="celltext" valign="top"><b>&nbsp;Lead&nbsp;</b></td>
+<td class="celltext">
 <iframe name="lead_edit" onFocus="sel_el='lead_edit'" frameborder="1" width="600" height="100"></iframe>
 <input type='hidden' name="lead" value="{VAR:lead}">
 </td>
 </tr>
 <tr>
-<td class="hele_hall_taust" valign="top"><b>&nbsp;Content&nbsp;</b></td>
-<td class="hele_hall_taust"><iframe onFocus="sel_el='cont_edit'" name="cont_edit" frameborder="1" width="600" height="400"></iframe>
+<td class="celltext" valign="top"><b>&nbsp;Sisu&nbsp;</b></td>
+<td class="celltext"><iframe onFocus="sel_el='cont_edit'" name="cont_edit" frameborder="1" width="600" height="400"></iframe>
 <input type='hidden' name='content' value="{VAR:content}">
 <input type='hidden' name='nobreaks' value='1'>
 <script for=window event=onload>
@@ -204,24 +265,71 @@ function format(what,opt)
 </script>
 <!-- END SUB: IE -->
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Vıtmesınad&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
+<td class="celltext"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Vıtmesınad&nbsp;</b></td>
+<td class="celltext"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
 </tr>
+<!--<tr>
+<td class="celltext" colspan="2">
+<input type="submit" class='doc_button' value="Salvesta"><input type="submit" class='doc_button' value="Sektsioonid" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Webile" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> <input type="button" class="doc_button" value="Teavita liste" onClick="if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}"</td>
+</td>
+</tr>-->
+</table>
+
+<!--tabelraam-->
+<table width="100%" cellspacing="0" cellpadding="1">
+<tr><td class="tableborder">
+
+	<!--tabelshadow-->
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+		<!--tabelsisu-->
+		<table width="100%" cellspacing="0" cellpadding="0">
+		<tr><td><td class="tableinside">
+
+
+<table border="0" cellpadding="0" cellspacing="2">
+
 <tr>
-<td class="hele_hall_taust"><img src='{VAR:baseurl}/images/transa.gif' width=110 height=1><Br><B>&nbsp;Ref&nbsp;</b></td>
-<td class="hele_hall_taust"><input class='tekstikast' type="text" name="referer" size="60" value="{VAR:referer}">
-<select name="refopt">
-{VAR:refopts}
-</select>
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:doSubmit();this.document.doc.submit();" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
+href="javascript:doSubmit();this.document.doc.submit();" >Salvesta</a></td>
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+
+
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="{VAR:menurl}"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('brothering','','{VAR:baseurl}/automatweb/images/blue/awicons/brothering_over.gif',1)"><img name="brothering" alt="Vennastamine" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/brothering.gif" width="25" height="25"></a><br><a
+href="{VAR:menurl}">Vennastamine</a></td>
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="#" onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('lists','','{VAR:baseurl}/automatweb/images/blue/awicons/lists_over.gif',1)"><img name="lists" alt="Teavita liste" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/lists.gif" width="25" height="25"></a><br><a href="#"
+onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}">Teavita liste</a></td>
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+
+
+
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}" 
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('preview','','{VAR:baseurl}/automatweb/images/blue/awicons/preview_over.gif',1)"><img name="preview" alt="Eelvaade" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/preview.gif" width="25" height="25"></a><br><a
+target="_blank" href="{VAR:baseurl}/index.aw?section={VAR:id}">Eelvaade</a></td>
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="10" HEIGHT="2" BORDER=0 ALT=""></td>
+
+</table>
+
+
+		</td>
+		</tr>
+		</table>
+
+
+	</td>
+	</tr>
+	</table>
 
 </td>
 </tr>
-<tr>
-<td class="hele_hall_taust" colspan="2">
-<input type="submit" class='doc_button' value="Save"> <input class='doc_button' type="submit" value="Preview" onClick="window.location.href='{VAR:preview}';return false;"> <input type="submit" class='doc_button' value="Sections" onClick="window.location.href='{VAR:menurl}';return false;"> <input type="submit" class='doc_button' value="Web" onClick="window.open('{VAR:baseurl}/index.{VAR:ext}?section={VAR:id}');return false;"> <input type="button" class="doc_button" value="Notify mailinglists" onClick="if (confirm('Teavitada liste?')) { window.location.href='{VAR:self}?class=keywords&action=notify&id={VAR:docid}';}"</td>
-</td>
-</tr>
 </table>
+
+
 {VAR:reforb}
 </form>
 <iframe width="100%" height="800" frameborder="0" src="{VAR:aliasmgr_link}">
