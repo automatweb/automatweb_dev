@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.148 2003/01/24 15:02:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.149 2003/02/03 15:15:12 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -15,11 +15,6 @@
 // ahja veel. template sees peab olema vahemalt 1 sisuv2li ja docid.
 // naiteks voib vaadata ylaltoodud kataloomas asuvad ed_short.tpl faili.
 
-// perioodihaldus.
-// link mingi objekti (voi siis selle parenti) perioodide juurde on
-// http://site/automatweb/periods.aw?oid=foo
-
-// oid siis mingi menyysektsoonid ID. DUH.
 class document extends aw_template
 {
 	function document($period = 0)
@@ -694,6 +689,34 @@ class document extends aw_template
 			$li->init();
 			$li->read_template("login.tpl");
 			$doc['content'] = str_replace("#login#", $li->parse(), $doc['content']);
+		}		
+	
+		// if you put #reg# inside document, then not logged in users only see the document
+		// up to that alias, the rest of the text starting from this alias is replaced
+		// with a login box	
+		if (strpos($doc['content'], "#reg#") !== false)
+		{
+			$uid = aw_global_get("uid");
+			var_dump($uid);
+			if (aw_global_get("uid"))
+			{
+				$doc["content"] = str_replace("#reg#","",$doc["content"]);
+			}
+			else
+			{
+				$li = get_instance("aw_template");
+				$li->init("automatweb/documents");
+				$li->read_template("reg.tpl");
+				$li->vars(array(
+					"reforb" => $this->mk_reforb("login",array(),"auth"),
+				));
+			
+				global $request_uri_before_auth;
+				$request_uri_before_auth = aw_global_get("REQUEST_URI");
+				session_register("request_uri_before_auth");
+
+				$doc['content'] = preg_replace("/#reg#(.*)$/s", $li->parse(), $doc['content']);
+			};
 		}		
 
 		// create keyword links unless we are in print mode, since you cant click
