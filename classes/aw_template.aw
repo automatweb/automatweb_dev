@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.44 2003/05/15 15:24:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.45 2003/05/19 15:45:43 duke Exp $
 // aw_template.aw - Templatemootor
 
 
 classload("acl_base");
+
 class aw_template extends acl_base
 {
 	function init($args = array())
@@ -26,37 +27,23 @@ class aw_template extends acl_base
 			aw_config_init_class(&$this);
 		}
 
-
 		$this->REQUEST_URI = aw_global_get("REQUEST_URI");
-		$this->PHP_SELF = aw_global_get("PHP_SELF");
 
 		$this->template_dir = $this->cfg["tpldir"] . "/$basedir";
 		$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
 		$this->site_template_dir = $this->cfg["site_tpldir"]."/".$basedir;
 		
-		// I'm trying to fix the breakage of links class
-		// it does $this->extlinks() first, which loads the localizations
-		// and calls tpl_init as well, and then does $this->init,
-		// which in turn calls tpl_init again and makes us lose
-		// all the data that came from extlinks
-		if (isset($this->init_done) && $this->init_done == 1)
-		{
-			return false;
-		}
-
 		$this->vars = array();
 		$this->sub_merge = 0;
 
 		$this->_init_vars();
-
-		$this->init_done = 1;
 	}
 
 	function _init_vars()
 	{
 		// this comes from session.
 		$this->vars = array(
-			"self" => $this->PHP_SELF,
+			"self" => aw_global_get("PHP_SELF"),
 			"ext"  => $this->cfg["ext"],
 			// not very random really
 			"rand" => time(),
@@ -394,6 +381,6 @@ class aw_template extends acl_base
 		return $res;
 	}
 };
+classload("class_base","html");
 
-classload('class_base','html');
 ?>
