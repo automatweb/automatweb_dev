@@ -38,6 +38,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="delete_keywords">
+			<function name="delete_keywords">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
