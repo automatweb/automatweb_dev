@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.98 2004/06/15 08:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.99 2004/06/19 10:12:26 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -582,6 +582,7 @@ class form extends form_base
 	{
 		extract($arr);
 
+		$style_obj = obj();
 		if ($setstyle)
 		{
 			$style_obj = obj($setstyle);
