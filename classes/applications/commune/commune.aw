@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.11 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.12 2005/04/01 11:52:22 kristo Exp $
 // commune.aw - Kommuun
 /*
 
@@ -1398,11 +1398,12 @@ class commune extends class_base
 				"caption" => t(""),
 			);
 		}
+		$u = get_instance("users");
 		foreach($t->data as $id => $data)
 		{
 			//arr($data);
 			$obj = obj($data["oid"]);
-			$creator = $obj->createdby();
+			$creator = obj($u->get_oid_for_uid($obj->createdby()));
 			$t->data[$id]["flist"] = html::href(array(
 				"caption" => t("lisa sõbraks"),
 				"url" => $this->mk_comm_orb(array(
@@ -1509,7 +1510,7 @@ class commune extends class_base
 				"order" => "desc",
 			));
 			// saves as a s**tload on travelling -- ahz
-			if($tcreator->name == aw_global_get("uid"))
+			if($tcreator == aw_global_get("uid"))
 			{
 				if($comments->count() == 0)
 				{
@@ -1540,7 +1541,7 @@ class commune extends class_base
 				foreach($comments->arr() as $comment)
 				{
 					$ccreator = $comment->createdby();
-					if($ccreator->name() == aw_global_get("uid"))
+					if($ccreator == aw_global_get("uid"))
 					{
 						$needed_topics[$topic->id()] = array(
 							"count" => $comments->count(),
@@ -1641,7 +1642,7 @@ class commune extends class_base
 							"group" => "friend_details",
 							"profile" => $obj->id(),
 						)),
-						"caption" => $creator->name(),
+						"caption" => $creator,
 					)),
 					"email" => html::href(array(
 						"url" => "mailto:".$person->prop("email"),
@@ -1649,7 +1650,7 @@ class commune extends class_base
 					)),
 					"sendmessage" => html::href(array(
 						"url" => $this->mk_comm_orb(array(
-							"cuser" => $creator->name(),
+							"cuser" => $creator,
 							"group" => "newmessage",
 						)),
 						"caption" => t("Saada sõnum"),
@@ -1674,7 +1675,7 @@ class commune extends class_base
 							"group" => "friend_details",
 							"profile" => $obj->id(),
 						)),
-						"caption" => $creator->name(),
+						"caption" => $creator,
 					)),
 					"email" => html::href(array(
 						"url" => "mailto:".$person->prop("email"),
@@ -1682,7 +1683,7 @@ class commune extends class_base
 					)),
 					"sendmessage" => html::href(array(
 						"url" => $this->mk_comm_orb(array(
-							"cuser" => $creator->name(),
+							"cuser" => $creator,
 							"group" => "newmessage",
 						)),
 						"caption" => t("Saada sõnum"),
@@ -1814,11 +1815,12 @@ class commune extends class_base
 			"records_per_page" => 25, // rows per page
 			"d_row_cnt" => count($clist->arr()), // total rows 
 		));
+		$u = get_instance("users");
 		foreach($clist->arr() as $comment)
 		{
 			//arr($this->get_active_profile());
 			//arr($comment->createdby());
-			$creator_prof = obj($comment->createdby());
+			$creator_prof = obj($u->get_oid_for_uid($comment->createdby()));
 			$creator = $creator_prof->get_first_obj_by_reltype("RELTYPE_PERSON");
 			$prof = $creator->get_first_obj_by_reltype("RELTYPE_PROFILE");
 			$t->define_data(array(
@@ -2199,11 +2201,12 @@ class commune extends class_base
 			"class_id" => CL_COMMENT,
 			"sort_by" => "created",
 		));
+		$u = get_instance("users");
 		foreach($clist->arr() as $comment)
 		{
 			//arr($this->get_active_profile());
 			//arr($comment->createdby());
-			$creator_prof = obj($comment->createdby());
+			$creator_prof = obj($u->get_oid_for_uid($comment->createdby()));
 			$creator = $creator_prof->get_first_obj_by_reltype("RELTYPE_PERSON");
 			$prof = $creator->get_first_obj_by_reltype("RELTYPE_PROFILE");
 			$t->define_data(array(
@@ -3569,7 +3572,8 @@ class commune extends class_base
 		));
 		arr($cons);
 		*/
-		if ($user = obj($pers_o->createdby()))
+		$u = get_instance("users");
+		if ($user = obj($u->get_oid_for_uid($pers_o->createdby())))
 		{
 			return $user;
 		}

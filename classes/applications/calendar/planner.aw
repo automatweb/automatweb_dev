@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.53 2005/03/29 14:35:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.54 2005/04/01 11:52:22 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2108,6 +2108,7 @@ class planner extends class_base
 		get_instance("core/icons");
 		
 		$user_inst = get_instance(CL_USER);		
+		$users_i = get_instance("users");
 		foreach ($data->arr() as $result)
 		{	
 		
@@ -2136,7 +2137,7 @@ class planner extends class_base
 				$iconurl = str_replace(".gif", "_done.gif", $iconurl);
 			}
 			
-			$author_user = &obj($result->createdby());
+			$author_user = &obj($users_i->get_oid_for_uid($result->createdby()));
 			$author_person_id = $user_inst->get_person_for_user($author_user);
 			$author_person_obj = &obj($author_person_id);
 			

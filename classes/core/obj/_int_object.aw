@@ -680,33 +680,7 @@ class _int_object
 
 	function createdby()
 	{
-		// mkay. l8r, when we start saving the user oid in this field, this will be lots faster and better. 
-		// right now, the sucky version:
-		$uid = $this->obj["createdby"];
-		if (!$uid)
-		{
-			return obj();
-		}
-
-		$ui = get_instance("users");
-		$oid = $ui->get_oid_for_uid($uid);
-		if (!$oid)
-		{
-			return obj();
-			error::raise(array(
-				"id" => ERR_USER_NO_OID,
-				"msg" => sprintf(t("object::createdby(): the user %s, who created the current object (%s), has no object!"), $uid, $this->obj["oid"])
-			));
-		}
-		if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
-		{
-			return new object();
-		}
-
-		aw_disable_acl();
-		$ret = new object($oid);
-		aw_restore_acl();
-		return $ret;
+		return $this->obj["createdby"];
 	}
 
 	function created()

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.4 2004/12/07 13:49:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/rate_moderation.aw,v 1.5 2005/04/01 11:52:22 kristo Exp $
 // rate_moderation.aw - Hindamise modereerimine 
 /*
 
@@ -149,7 +149,7 @@ class rate_moderation extends class_base
 		$array = array(
 			0 => t("Ei muuda"),
 			STAT_ACTIVE => t("Aktiveeri"),
-			STAT_NOTACTIVE => t("Lükka tagasi",)
+			STAT_NOTACTIVE => t("Lükka tagasi")
 		);
 		aw_session_set($pcs, $this->make_keys($imgs->ids()));
 		aw_session_set($tm, time());
@@ -185,7 +185,7 @@ class rate_moderation extends class_base
 						"group" => "friend_details",
 						"profile" => is_object($profile) ? $profile->prop("from") : "",
 					))),
-					"caption" => $user->name(),
+					"caption" => $user,
 					"toolbar" => true,
 					"directories" => true,
 					"status" => true,
@@ -272,6 +272,7 @@ class rate_moderation extends class_base
 			{
 				$disp = true;
 			}
+			$u = get_instance("users");
 			foreach($arr["sel"] as $id => $stat)
 			{
 				if(is_oid($id) && $this->can("view", $id))
@@ -280,7 +281,7 @@ class rate_moderation extends class_base
 					{
 						$pname = "pacpt";
 						$img = obj($id);
-						$user = $img->createdby();
+						$user = obj($u->get_oid_for_uid($img->createdby()));
 						$person = $user->get_first_obj_by_reltype("RELTYPE_PERSON");
 						$props = $person->meta("message_conditions");
 						if($disp && ($props[$pname][0] == true || $props[$pname][1] == true))
@@ -290,7 +291,7 @@ class rate_moderation extends class_base
 								"msg1" => $props[$pname][0],
 								"msg2" => $props[$pname][1],
 								"commune" => obj($commune),
-								"to" => $img->createdby(),
+								"to" => $user,
 								"prop" => $pname,
 								//"message" => "",
 							));

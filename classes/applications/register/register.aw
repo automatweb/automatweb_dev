@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.18 2005/03/23 10:31:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.19 2005/04/01 11:52:22 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -311,7 +311,7 @@ class register extends class_base
 			$t->define_data(array(
 				"oid" => $o->id(),
 				"name" => $o->name(),
-				"createdby" => $cby->name(),
+				"createdby" => $cby,
 				"created" => $o->created(),
 				"modifiedby" => $mby->name(),
 				"modified" => $o->modified(),

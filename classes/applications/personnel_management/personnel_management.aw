@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.8 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.9 2005/04/01 11:52:22 kristo Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -512,7 +512,8 @@ class personnel_management extends class_base
 			{
 				// $date is for the cv , not the current person
 
-				$creator = $default_cv_obj->createdby();
+				$u = get_instance("users");
+				$creator = obj($u->get_oid_for_uid($default_cv_obj->createdby()));
 				$_person_o = obj($user_inst->get_person_for_user($creator));
 				if ($_person_o->prop("birthday") < 100)
 				{

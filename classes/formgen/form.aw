@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.116 2005/03/24 10:01:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.117 2005/04/01 11:52:21 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -4767,7 +4767,7 @@ class form extends form_base
 		$mby = $row->modifiedby();
 		$this->vars(array(
 			"created" => $this->time2date($row->created(),2), 
-			"created_by" => $cby->name(),
+			"created_by" => $cby,
 			"modified" => $this->time2date($row->modified(),2),
 			"modified_by" => $mby->name(),
 			"views" => 1,

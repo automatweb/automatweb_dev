@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.6 2005/03/22 17:04:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.7 2005/04/01 11:52:22 kristo Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -111,6 +111,7 @@ class contact_list extends class_base
 		//arr($arr["obj_inst"]);
 		$contacts = array();
 		$owner = &$arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_LIST_OWNER");
+		$u = get_instance("users");
 		if(is_object($owner))
 		{
 			// now, first we sort out the things we need -- ahz
@@ -124,7 +125,7 @@ class contact_list extends class_base
 			{
 				$a_person = $cont->to();
 				$a_profile = $a_person->get_first_obj_by_reltype("RELTYPE_PROFILE");
-				$a_user = $a_person->createdby();
+				$a_user = obj($u->get_oid_for_uid($a_person->createdby()));
 				$contacts[$a_user->id()] = array(
 					"id" => $a_person->id(),
 					"name" => $a_user->name(),
@@ -141,7 +142,7 @@ class contact_list extends class_base
 		foreach($persons as $pers)
 		{
 			$b_person = $pers->to();
-			$b_user = $b_person->createdby();
+			$b_user = obj($u->get_oid_for_uid($b_person->createdby()));
 			$b_profile = $b_person->get_first_obj_by_reltype("RELTYPE_PROFILE");
 			$contacts[] = array(
 				"id" => $b_user->id(),

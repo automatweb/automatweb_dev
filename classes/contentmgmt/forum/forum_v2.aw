@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.72 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.73 2005/04/01 11:52:21 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -853,8 +853,6 @@ class forum_v2 extends class_base
 				continue;
 			}
 			
-			$creator = $subtopic_obj->createdby();
-
 			if ($last)
 			{
 				$last["created"] = $this->time2date($last["created"],2);

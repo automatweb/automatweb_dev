@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.4 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.5 2005/04/01 11:52:21 kristo Exp $
 
 /*
 
@@ -172,8 +172,7 @@ class links extends class_base
 				$row["parent"] = $o->path_str(array(
 					"max_len" => 4
 				));
-				$_tmp = $o->createdby();
-				$row["createdby"] = $_tmp->name();
+				$row["createdby"] = $o->createdby();
 				$row["modified"] = $o->modified();
 				$t->define_data($row);
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.29 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.30 2005/04/01 11:52:22 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -306,7 +306,6 @@ class otv_ds_obj extends class_base
 				{
 					$pt = $t->parent();
 				}
-				$adr = $t->createdby();
 				$mdr = $t->modifiedby();
 				$ret[$t->id()] = array(
 					"id" => $t->id(),
@@ -315,7 +314,7 @@ class otv_ds_obj extends class_base
 					"comment" => $t->comment(),
 					"add_date" => $t->created(),
 					"mod_date" => $t->modified(),
-					"adder" => $adr->name(),
+					"adder" => $t->createdby(),
 					"modder" => $mdr->name(),
 					"icon" => image::make_img_tag(icons::get_icon_url($t->class_id(), $t->name())),
 					"jrk" => $t->ord()
@@ -611,7 +610,6 @@ class otv_ds_obj extends class_base
 				$_name = parse_obj_name($t->name());
 			}
 
-			$adr = $t->createdby();
 			$mdr = $t->modifiedby();
 			$ret[$t->id()] = array(
 				"id" => $t->id(),
@@ -623,7 +621,7 @@ class otv_ds_obj extends class_base
 				"type" => $classlist[$t->class_id()]["name"],
 				"add_date" => $t->created(),
 				"mod_date" => $t->modified(),
-				"adder" => $adr->name(),
+				"adder" => $t->createdby(),
 				"modder" => $mdr->name(),
 				"icon" => image::make_img_tag(icons::get_icon_url($t->class_id(), $t->name())),
 				"fileSizeBytes" => $fileSizeBytes,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.2 2005/03/21 11:16:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.3 2005/04/01 11:52:21 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class objects extends core
 {
@@ -91,7 +91,7 @@ class objects extends core
 				"class_id" => $o->class_id(),
 				"created" => $o->created(),
 				"modified" => $o->modified(),
-				"createdby" => $c_o->name(),
+				"createdby" => $c_o,
 				"modifiedby" => $m_o->name(),
 				"lang_id" => $o->lang(),
 				"path_str" => htmlspecialchars($o->path_str()),

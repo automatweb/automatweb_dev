@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.3 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.4 2005/04/01 11:52:21 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -637,14 +637,13 @@ topic");
 
 		$comment = stripslashes($board_obj->comment());
 		$comment = str_replace("'","",$comment);
-		$createdby = $board_obj->createdby();
 		$this->vars(array(
 			"topic" => $board_obj["name"],
 			"from" => $author,
 			"email" => $board_obj["meta"]["author_email"],
 			"created" => $this->time2date($board_obj["created"],2),
 			"topic" => $board_obj->name(),
-			"from" => ($board_obj->last() != "") ? $board_obj->last() : $createdby->name(),
+			"from" => ($board_obj->last() != "") ? $board_obj->last() : $board_obj->createdby(),
 			"email" => $board_obj->meta("author_email"),
 			"created" => $this->time2date($board_obj->created(),2),
 			"rated" => $rated,
@@ -876,7 +875,6 @@ topic");
 			$author = ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"];
 		};
 
-		$createdby = $board_obj->createdby();
 
 		$this->vars(array(
 			"TABS" => $tabs,
@@ -887,7 +885,7 @@ topic");
 			"email" => $board_obj["meta"]["author_email"],
 			"created" => $this->time2date($board_obj["created"],2),
 			"topic" => $board_obj->name(),
-			"from" => ($board_obj->last() != "") ? $board_obj->last() : $createdby->name(),
+			"from" => ($board_obj->last() != "") ? $board_obj->last() : $board_obj->createdby(),
 			"email" => $board_obj->meta("author_email"),
 			"created" => $this->time2date($board_obj->created(),2),
 			"rated" => $rated,
@@ -1143,11 +1141,10 @@ topic");
 		$tabs = $this->tabs(array("addcomment","threadedcomments","threadedsubjects","no_response","search","details"),"addcomment");
 		 if ($row)
 		{
-			$createdby = $board_obj->createdby();
 			$this->read_template("messages.tpl");
 			$this->vars(array(
 				"topic" => $board_obj->name(),
-				"from" => ($board_obj->last() != "") ? $board_obj->last() : $createdby->name(),
+				"from" => ($board_obj->last() != "") ? $board_obj->last() : $board_obj->createdby(),
 				"created" => $this->time2date($board_obj->created(),2),
 				"rate" => sprintf("%0.2f",$board_obj->meta("rate")),
 				"text" => nl2br(create_links($board_obj->comment())),

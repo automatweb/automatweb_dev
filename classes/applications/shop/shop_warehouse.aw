@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.27 2005/03/30 13:01:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.28 2005/04/01 11:52:22 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2199,6 +2199,26 @@ class shop_warehouse extends class_base
 	///////////////////////////////////////////////
 	// warehouse public interface functions      //
 	///////////////////////////////////////////////
+
+	/** returns an object_tree of warehouse folders
+
+		@attrib param=name
+
+		@param id required
+
+	**/
+	function get_packet_folder_list($arr)
+	{
+		$o = obj($arr["id"]);
+		$config = obj($o->prop("conf"));
+		$ot = new object_tree(array(
+			"parent" => $config->prop("pkt_fld"),
+			"class_id" => CL_MENU,
+			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
+			"sort_by" => "objects.jrk"
+		));
+		return array(obj($config->prop("pkt_fld")), $ot);
+	}	
 
 	/** returns a list of packets in the warehouse $id, optionally under folder $parent
 

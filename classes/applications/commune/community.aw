@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.7 2005/03/22 17:04:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.8 2005/04/01 11:52:22 kristo Exp $
 // community.aw - Kogukond 
 /*
 
@@ -308,7 +308,8 @@ class community extends class_base
 		$moderators = &$arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_".$type,
 		));
-		$tmp = $arr["obj_inst"]->createdby();
+		$u = get_instance("users");
+		$tmp = obj($u->get_oid_for_uid($arr["obj_inst"]->createdby()));
 		foreach($moderators as $mod)
 		{
 			if($tmp->id() != $mod->prop("to"))
