@@ -14,6 +14,13 @@ function setLink(li,title)
 		}
 	}
 }
+
+function check_submit()
+{
+	{VAR:checks}
+
+	return true;
+}
 </script>
 <form name='fm_{VAR:form_id}' action='{VAR:form_action}' METHOD=post enctype='multipart/form-data'>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='10000000'>

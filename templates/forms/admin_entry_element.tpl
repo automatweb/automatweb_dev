@@ -99,6 +99,12 @@
 <td class="fgtext">Pikkus:</td>
 <td class="fgtext"><input type='text' CLASS="small_button" SIZE=3 NAME='{VAR:cell_id}_length' VALUE='{VAR:length}'></td>
 </tr>
+<tr>
+<td class="fgtext">Peab olema t&auml;idetud:</td>
+<td class="fgtext"><input type='checkbox' CLASS="small_button" NAME='{VAR:cell_id}_must_fill' VALUE='1' {VAR:must_fill_checked}></td>
+<td class="fgtext">Veateade:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_must_error' VALUE='{VAR:must_error}'></td>
+</tr>
 <!-- END SUB: DEFAULT_TEXT -->
 
 <!-- SUB: BUTTON_ITEMS -->

@@ -127,9 +127,13 @@
 		{
 			v = "form_"+sf+"_el_"+i+"_text";
 			if (eval("typeof("+v+")") != "undefined")
+			{
 				eval("el.options[i].text="+v);
+			}
 			else
+			{
 				el.options[i].text="";
+			}
 
 			v= "form_"+sf+"_el_"+i+"_value";
 			if (eval("typeof("+v+")") != "undefined")
