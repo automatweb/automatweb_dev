@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.25 2002/07/17 07:47:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.26 2002/08/16 22:02:28 duke Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -275,6 +275,15 @@ class aw_template extends acl_base
 		$this->v2_parent_map[$cur_name] = $parent_name;
 		while (list(,$line) = each($this->v2_arr))
 		{
+			// this check allows us to avoid a LOT of preg_match calls,
+			// those are probably expensive. I don't care what the profiler
+			// says, just think about how a regexp engine works. Simple
+			// string comparing is ALWAYS faster. --duke
+			if (strpos($line,"<!--") === false)
+			{
+				$cur_src.=$line;
+			}
+			else
 			if (preg_match("/<!-- SUB: (.*) -->/",$line, $mt))
 			{
 				// start new subtemplate
