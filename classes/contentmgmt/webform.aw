@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.36 2005/01/06 15:30:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.37 2005/01/06 15:52:32 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1302,20 +1302,33 @@ class webform extends class_base
 				}
 			}
 		}
-		$rval = $this->draw_cfgform_from_ot(array(
-			"ot" => $object_type->id(),
-			"reforb" => array(
-				"class" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? "webform" : "calendar_registration_form_conf",
-				"return_url" => $section,
-				"id" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? $arr["id"] : $ef_id,
-			),
-			"errors" => $errors,
-			"values" => $values,
-			"obj_inst" => $obj_inst,
-			"action" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? "save_form_data" : "submit_register",
-		));
-		aw_session_del("wf_errors");
-		aw_session_del("wf_data");
+		if ($arr["link"] == 1 && $_GET["show"] != 1 && is_oid($ef_id))
+		{
+			$this->vars(array(
+				"reg_form" => html::href(array(
+					"url" => aw_url_change_var("show", 1),
+					"caption" => ($form_conf->prop("link_caption") != "" ? $form_conf->prop("link_caption") : t("Registreeru"))
+				))
+			));
+			$rval = $this->parse();
+		}
+		else
+		{
+			$rval = $this->draw_cfgform_from_ot(array(
+				"ot" => $object_type->id(),
+				"reforb" => array(
+					"class" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? "webform" : "calendar_registration_form_conf",
+					"return_url" => $section,
+					"id" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? $arr["id"] : $ef_id,
+				),
+				"errors" => $errors,
+				"values" => $values,
+				"obj_inst" => $obj_inst,
+				"action" => $ftype != CL_CALENDAR_REGISTRATION_FORM ? "save_form_data" : "submit_register",
+			));
+			aw_session_del("wf_errors");
+			aw_session_del("wf_data");
+		}
 		return $rval;
 	}
 	
