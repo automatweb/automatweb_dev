@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.30 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.31 2002/06/11 14:31:51 kristo Exp $
 
 classload("aw_template","xml","objects","languages","icons");
 class db_config extends aw_template 
@@ -366,9 +366,18 @@ class db_config extends aw_template
 		}
 	}
 
-	function set_class_icon($arr)
+	function set_class_icon($arr,$p2 = false)
 	{
-		extract($arr);
+		if (is_array($arr))
+		{
+			extract($arr);
+		}
+		else
+		{
+			$id = $arr;
+			$icon_id = $p2;
+		}
+
 		classload("icons");
 		$t = new icons;
 		$ic = $t->get($icon_id);
