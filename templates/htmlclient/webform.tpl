@@ -47,22 +47,12 @@
 	</td>
 </tr>
 <!-- END SUB: LINE_BOTTOM -->
-<!-- SUB: LINE_LEFT -->
-<tr>
-	<td class='{VAR:webform_caption}'>
-	{VAR:caption}
-	</td>
-	<td class='{VAR:webform_element}'>
-	{VAR:element}
-	</td>
-</tr>
-<!-- END SUB: LINE_LEFT -->
 <!-- SUB: LINE_RIGHT -->
 <tr>
-	<td class='{VAR:webform_element}'>
+	<td class='{VAR:webform_caption}'>
 	{VAR:element}
 	</td>
-	<td class='{VAR:webform_caption}'>
+	<td class='{VAR:webform_element}'>
 	{VAR:caption}
 	</td>
 </tr>
