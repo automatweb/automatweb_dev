@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/Attic/pickobject.aw,v 2.3 2001/12/18 00:18:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/Attic/pickobject.aw,v 2.4 2002/01/07 18:53:13 kristo Exp $
 // Obsolete?
 // no, but .. use the ORB, Luke, use the ORB
 include("const.aw");
@@ -27,11 +27,11 @@ if ($docid)
 	};
 	if ($type == "search")
 	{
-		$content = $ob->search_objs($docid);	
+		$content = $ob->gen_pickable_list($parent,$docid,$mstring);	
 	}
 	else
 	{
-		$content = $ob->gen_pickable_list($parent,$docid,$mstring);	
+		$content = $ob->search_objs($docid);	
 	}
 	$title = "Dokumendid &gt; '<a href='".$ob->mk_orb("change",array("id" => $docid),"document")."'>".$docdata[title]."</a>' &gt; Lisa objekt";
 	$menu[] = $mstring;
