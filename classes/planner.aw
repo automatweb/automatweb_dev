@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.167 2004/02/03 15:42:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.168 2004/02/09 10:21:02 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -47,9 +47,6 @@ EMIT_MESSAGE(MSG_EVENT_ADD);
 
 	@property items_on_line type=textbox size=4 group=special rel=1
 	@caption Max. cell'e reas
-
-	@property user_calendar type=checkbox group=special rel=1 table=objects field=meta method=serialize
-	@caption Kasutaja default kalender
 
 	@property event_direction type=chooser group=advanced rel=1
 	@caption Suund
@@ -125,6 +122,9 @@ define("REP_YEAR",4);
 @reltype EVENT_ENTRY value=7 clid=CL_CFGFORM,CL_CRM_CALL
 @caption sündmuse sisestamise vorm
 
+@reltype CALENDAR_OWNERSHIP value=8 clid=CL_USER
+@caption Omanik
+
 */
 
 define("CAL_SHOW_DAY",1);
@@ -173,15 +173,21 @@ class planner extends class_base
 	**/
 	function my_calendar($arr)
 	{
+		$this->init_class_base();
 		$users = get_instance("users");
-		$obj_id = $users->get_user_config(array(
-				"uid" => aw_global_get("uid"),
-				"key" => "user_calendar"));
-
-		if (empty($obj_id))
+		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+		// now I need to figure out the calendar that is connected to the user object
+		// XXX: why the fuck is it so hard to gain access to defined relation types from here?
+		$conns = $user->connections_to(array(
+			"type" => 8, //RELTYPE_CALENDAR_OWNERSHIP
+		));
+		if (sizeof($conns) == 0)
 		{
-			return "kulla mees, sa pole omale default kalendrit ju valinud?";
+			return sprintf("Kasutajal '%s' puudub default kalender",aw_global_get("uid"));
 		};
+		list(,$conn) = each($conns);
+		$obj_id = $conn->prop("from");
+
 		$arr["id"] = $obj_id;
 		$arr["action"] = "change";
 		$arr["group"] = "views";
@@ -194,17 +200,6 @@ class planner extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "user_calendar":
-				$users = get_instance("users");
-				$obj_id = $arr["obj_inst"]->id();
-
-				$data["value"] = $users->get_user_config(array(
-					"uid" => aw_global_get("uid"),
-					"key" => "user_calendar",
-				));
-				$data["ch_value"] = $arr["obj_inst"]->id();
-				break;
-
 			case "default_view":
 				$data["options"] = $this->viewtypes;
 				break;
@@ -262,15 +257,6 @@ class planner extends class_base
 
 		switch($data["name"])
 		{
-			case "user_calendar":
-				$users = get_instance("users");
-				$users->set_user_config(array(
-					"uid" => aw_global_get("uid"),
-					"key" => "user_calendar",
-					"value" => $data["value"],
-				));
-				break;	
-	
 			case "add_event":
 				$this->register_event_with_planner($arr);
 				break;
