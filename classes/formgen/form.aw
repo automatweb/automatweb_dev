@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.80 2003/07/15 12:37:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.81 2003/07/17 12:24:21 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1135,6 +1135,8 @@ class form extends form_base
 		$ei = $this->parse("EXTRAIDS");
 		$this->vars(array("var_name" => "return_url", "var_value" => aw_global_get("REQUEST_URI")));
 		$ei .= $this->parse("EXTRAIDS");
+
+		$ei .= $this->gen_preview_append;
 
 		if (isset($extraids) && is_array($extraids))
 		{
@@ -5850,31 +5852,42 @@ class form extends form_base
 		$writer_entry_id = $wrf->entry_id;
 
 		// load the form whose entries we will change
-		$ef = get_instance("formgen/form");
-		$ef->load($wrf->arr["sql_writer_writer_form"]);
 //		echo "load to write form ",$wrf->arr["sql_writer_writer_form"]," <br>";
 
 		$wrf = get_instance("formgen/form");
 		$wrf->load($this->arr["sql_writer_form"]);
 		$wrf->load_entry($writer_entry_id);
 
-//		echo "wrf->entry = <pre>", var_dump($wrf->entry),"</pre> <br>";
+		$wrf->ef = get_instance("formgen/form");
+		$wrf->ef->load($wrf->arr["sql_writer_writer_form"]);
+
 		// now we must load all selected entries
 		// and for each
 		// calculate the value in the writer form based on the entered elements value and let controllers process it
 		// and then save the entry
 		foreach($seids as $seid)
 		{
-//			echo "entry $seid <br>";
 			aw_global_set("current_writer_entry", $seid);
 			$changeset = array();
 
-/*			$wrf->entry = array();
-			$wrf->load_entry($writer_entry_id);*/
 			$wrf_els = $wrf->get_all_els();
+
+			$wrf->ef->load_entry($seid);
+
 			foreach($wrf_els as $el)
 			{
-				if (($wrt_to_el = $el->get_writer_element()))
+				$wrt_to_el = $el->get_writer_element();
+				$wrt_to_el_ref = $wrf->ef->get_element_by_id($wrt_to_el);
+				if (is_object($wrt_to_el_ref))
+				{
+					aw_global_set("writer_current_element_prev_value", $wrt_to_el_ref->get_value());
+				}
+				else
+				{
+					aw_global_set("writer_current_element_prev_value", false);
+				}
+
+				if ($wrt_to_el)
 				{
 					$wrt_el_val = $el->get_val(array(),true);
 
@@ -5882,18 +5895,12 @@ class form extends form_base
 				}
 			}
 
-			$ef->load_entry($seid);
 			foreach($changeset as $ch_el => $ch_el_val)
 			{
-				$chelinst =& $ef->get_element_by_id($ch_el);
-/*				if (aw_global_get("uid") == "erkihotel")
-				{
-					echo "changing element $ch_el value to $ch_el_val , prev value = ", $chelinst->get_val()," <br>";
-				}*/
-				$ef->set_element_value($ch_el, $ch_el_val, true);
-				$ef->entry[$ch_el] = $ch_el_val;
+				$wrf->ef->set_element_value($ch_el, $ch_el_val, true);
+				$wrf->ef->entry[$ch_el] = $ch_el_val;
 			}
-			$ef->process_entry(array(
+			$wrf->ef->process_entry(array(
 				"id" => $wrf->arr["sql_writer_writer_form"],
 				"entry_id" => $seid, 
 				"no_load_form" => true,
