@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.163 2003/03/05 12:58:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.164 2003/03/05 16:48:19 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1313,7 +1313,7 @@ class core extends db_connector
 		extract($args);
 		// kui parent on antud, siis moodustame sellest IN klausli
 		$sqlparts = array();
-		if (is_array($parent))
+		if (isset($parent) && is_array($parent))
 		{
 			$prtstr = join(",",map("'%s'",$parent));
 			if ($prtstr != "")
@@ -1322,36 +1322,36 @@ class core extends db_connector
 			}
 		}
 		else
-		if ($parent)
+		if (isset($parent) && $parent)
 		{
 			$sqlparts[] = "parent = $parent";
 		}
 
-		if ($status)
+		if (isset($status) && $status)
 		{
 			$sqlparts[] = " status = '$status' ";
 		}
 		else
 		{
-			$sqlparts[] = ($active) ? "status = 2 " : "status != 0 ";
+			$sqlparts[] = isset($active) ? "status = 2 " : "status != 0 ";
 		};
 
-		if ($subclass)
+		if (isset($subclass) && $subclass)
 		{
 			$sqlparts[] = "subclass = '$subclass' ";
 		}
 
-		if ($flags)
+		if (isset($flags) && $flags)
 		{
 			$sqlparts[] = "flags = '$flags' ";
 		}
 		
-		if ($name != "")
+		if (isset($name) && $name != "")
 		{
 			$sqlparts[] = "name LIKE '%$name%' ";
 		}
 
-		if ($lang_id)
+		if (isset($lang_id) && $lang_id)
 		{
 			if ($class == CL_PSEUDO)
 			{
@@ -1379,7 +1379,7 @@ class core extends db_connector
 			$where = " WHERE ".$where;
 		}
 
-		$ostr = ($orderby) ? " ORDER BY $orderby " : "";
+		$ostr = isset($orderby) ? " ORDER BY $orderby " : "";
 		// kui tegemist on menüüdega, siis joinime kylge ka menu tabeli
 		if ($cl === CL_PSEUDO)
 		{
@@ -1390,11 +1390,6 @@ class core extends db_connector
 			$q = "SELECT objects.* FROM objects $where $ostr";
 		};
 
-		global $DBX;
-		if ($DBX)
-		{
-			print $q;
-		}
 		$this->db_query($q);
 	}
 
@@ -1418,7 +1413,7 @@ class core extends db_connector
 	// return - if ARR_ALL, all data about objects is returned, else only name
 	function list_objects($arr)
 	{
-		if ($arr["addempty"])
+		if (isset($arr["addempty"]))
 		{
 			$ret = array("" => "");
 		}
@@ -1432,7 +1427,7 @@ class core extends db_connector
 		while ($row = $this->db_next())
 		{
 			$parens[$row['oid']] = $row['parent'];
-			if ($arr["return"] == ARR_ALL)
+			if (isset($arr["return"]) && $arr["return"] == ARR_ALL)
 			{
 				$ret[$row["oid"]] = $row;
 			}
