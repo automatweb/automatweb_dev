@@ -1,0 +1,52 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>type</name>
+            <type>select</type>
+            <table>template</table>
+            <field>type</field>
+            <group>general</group>
+            <caption>Template t&amp;uuml;&amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>filename</name>
+            <type>textbox</type>
+            <table>template</table>
+            <field>filename</field>
+            <group>general</group>
+            <caption>Template fail</caption>
+      </property>
+      <property>
+            <name>t_id</name>
+            <type>hidden</type>
+            <table>template</table>
+            <field>id</field>
+            <group>general</group>
+      </property>
+      <property>
+            <name>t_name</name>
+            <type>hidden</type>
+            <table>template</table>
+            <field>name</field>
+            <group>general</group>
+      </property>
+      <property>
+            <name>t_site_id</name>
+            <type>hidden</type>
+            <table>template</table>
+            <field>site_id</field>
+            <group>general</group>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CONFIG_AW_DOCUMENT_TEMPLATE</syslog_type>
+            <no_status>1</no_status>
+      </classinfo>
+      <tableinfo>
+            <template>
+                  <index>obj_id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </template>
+      </tableinfo>
+</properties>
+

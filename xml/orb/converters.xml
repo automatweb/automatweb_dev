@@ -80,6 +80,13 @@
 				</arguments>		
 			</function>
 		</action>
+		<action name="convert_doc_templates" nologin="1">
+			<function name="convert_doc_templates">
+				<arguments>
+					<required name="parent"/>
+				</arguments>		
+			</function>
+		</action>
 	</class>
 </orb>
 		

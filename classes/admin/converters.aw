@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.25 2003/12/04 16:37:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.26 2003/12/18 12:49:23 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -973,6 +973,35 @@ class converters extends aw_template
 		}
 
 		die("all done!");
+	}
+
+	function convert_doc_templates($arr)
+	{
+		$parent = $arr["parent"];
+
+		// check for oid column.
+		$tbl = $this->db_get_table("template");
+		if (!isset($tbl["fields"]["obj_id"]))
+		{
+			$this->db_query("ALTER TABLE template ADD obj_id int default 0");
+		}
+		$this->db_query("SELECT * FROM template WHERE obj_id = 0 OR obj_id IS NULL");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_CONFIG_AW_DOCUMENT_TEMPLATE,
+				"status" => 2,
+				"name" => $row["name"]
+			));
+
+			$this->db_query("UPDATE template SET obj_id = '$id' WHERE id = '$row[id]'");
+
+			echo "template $row[name] <br>";
+			$this->restore_handle();
+		}
 	}
 };
 ?>
