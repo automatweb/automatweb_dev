@@ -10,7 +10,7 @@
 <!-- SUB: level1_act -->
 <td class="messengermenu" bgcolor="#f1f1f1" align="center">
 <b>
-{VAR:caption}
+<a href="{VAR:link}"><font color="black">{VAR:caption}</font></a>
 </b>
 </td>
 <!-- END SUB: level1_act -->
