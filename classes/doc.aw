@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.8 2003/03/28 18:27:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.9 2003/03/31 10:12:33 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -103,6 +103,8 @@
 
 @property link_calendars type=callback store=no callback=callback_gen_link_calendars group=calendar
 @caption Vali kalendrid, millesse see sündmus veel salvestatakse.
+
+@property sbt type=submit value=Salvesta store=no 
 
 @groupinfo calendar caption=Kalender
 
@@ -223,14 +225,17 @@ class doc extends class_base
                 ));
 		*/
 
-		$toolbar->add_button(array(
-                        "name" => "preview",
-                        "tooltip" => "Eelvaade",
-			"target" => "_blank",
-                        "url" => aw_global_get("baseurl") . "/" . $args["id"],
-                        "imgover" => "preview_over.gif",
-                        "img" => "preview.gif",
-                ));
+		if (!empty($args["id"]))
+		{
+			$toolbar->add_button(array(
+				"name" => "preview",
+				"tooltip" => "Eelvaade",
+				"target" => "_blank",
+				"url" => aw_global_get("baseurl") . "/" . $args["id"],
+				"imgover" => "preview_over.gif",
+				"img" => "preview.gif",
+			));
+		};
 	}
 
 	function callback_get_event_editor($args = array())
@@ -496,23 +501,40 @@ class doc extends class_base
 	{
 		// first, get rid of all brothers
 		$event_id = $args["obj"]["oid"];
-		// eeh, ei taha kirvega anda, aga praegu ei viitsi paremini ka teha
-		$q = "DELETE FROM objects WHERE brother_of = '$event_id' AND class_id = " .  CL_BROTHER_DOCUMENT;
-		$this->db_query($q);
+		
+		$bs = $this->_get_brother_documents($event_id);
+		$to_delete = $bs;
 
-		foreach($this->get_planners_with_folders() as $row)
+		if (is_array($args["prop"]["value"]))
 		{
-			// kui vend on olemas, aga sellist eventfolderit pole, siis peab ta kustutama
-			if (is_array($args["prop"]["value"]) && in_array($row["oid"],$args["prop"]["value"]))
+			foreach($this->get_planners_with_folders() as $row)
 			{
-				$this->new_object(array(
-					"parent" => $row["event_folder"],
-					"class_id" => CL_BROTHER_DOCUMENT,
-					"status" => STAT_ACTIVE,
-					"brother_of" => $event_id,
-				));
+				// kui vend on olemas, aga sellist eventfolderit pole, siis peab ta kustutama
+				if (in_array($row["oid"],$args["prop"]["value"]))
+				{
+					if (empty($bs[$row["event_folder"]]))
+					{
+						$this->new_object(array(
+							"parent" => $row["event_folder"],
+							"class_id" => CL_BROTHER_DOCUMENT,
+							"status" => STAT_ACTIVE,
+							"brother_of" => $event_id,
+						));
+					};
+					unset($to_delete[$row["event_folder"]]);
+				};
 			};
 		};
+
+		if (sizeof($to_delete) > 0)
+		{
+			$q = sprintf("DELETE FROM objects WHERE
+					brother_of = '$event_id' AND
+					parent IN (%s) AND 
+					class_id = %d",join(",",array_keys($to_delete)),CL_BROTHER_DOCUMENT);
+			$this->db_query($q);
+		};
+
 	}
 
 };
