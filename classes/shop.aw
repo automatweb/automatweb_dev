@@ -52,6 +52,9 @@ class shop extends shop_base
 		$fb = new form_base;
 		$fl = $fb->get_list(FORM_ENTRY);
 
+		classload("currency");
+		$cu = new currency;
+
 		$eq = $this->listall_eqs(false);
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
@@ -59,7 +62,8 @@ class shop extends shop_base
 			"of" => $this->multiple_option_list(0,$fl),
 			"forms" => $this->picker(0,$fl),
 			"commission_eq" => $this->picker(0, $eq),
-			"nump_eq" => $this->picker(0, $eq)
+			"nump_eq" => $this->picker(0, $eq),
+			"def_cur" => $this->picker(0,$cu->get_list())
 		));
 		return $this->parse();
 	}
@@ -115,6 +119,9 @@ class shop extends shop_base
 			}
 		}
 
+		classload("currency");
+		$cu = new currency;
+
 		$eq = $this->listall_eqs(false);
 		$this->vars(array(
 			"name" => $oba["name"],
@@ -133,7 +140,8 @@ class shop extends shop_base
 			"o_op_id_voucher" => $oba["owner_form_op_voucher"],
 			"o_op_id_issued" => $oba["owner_form_op_issued"],
 			"commission_eq" => $this->picker($oba["commission_eq"], $eq),
-			"nump_eq" => $this->picker($oba["nump_eq"], $eq)
+			"nump_eq" => $this->picker($oba["nump_eq"], $eq),
+			"def_cur" => $this->picker($oba["def_cur"],$cu->get_list())
 		));
 		if ($oba["owner_form"])
 		{
@@ -184,12 +192,12 @@ class shop extends shop_base
 				$ss = ", owner_form_entry = '' ";
 			}
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
-			$this->db_query("UPDATE shop SET root_menu = $root, emails='$emails',owner_form = '$owner_form',owner_form_op = '$owner_form_op',owner_form_op_voucher = '$owner_form_op_voucher',owner_form_op_issued = '$owner_form_op_issued',commission_eq ='$commission_eq',nump_eq = '$nump_eq' $ss WHERE id = $id");
+			$this->db_query("UPDATE shop SET root_menu = $root, emails='$emails',owner_form = '$owner_form',owner_form_op = '$owner_form_op',owner_form_op_voucher = '$owner_form_op_voucher',owner_form_op_issued = '$owner_form_op_issued',commission_eq ='$commission_eq',nump_eq = '$nump_eq',def_cur='$def_cur' $ss WHERE id = $id");
 		}
 		else
 		{
 			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_SHOP, "status" => 1, "name" => $name, "comment" => $comment));
-			$this->db_query("INSERT INTO shop(id,root_menu,emails,owner_form,owner_form_op,commission_eq,nump_eq) VALUES($id,'$root','$emails','$owner_form','$owner_form_op','$commission_eq','$nump_eq')");
+			$this->db_query("INSERT INTO shop(id,root_menu,emails,owner_form,owner_form_op,commission_eq,nump_eq,def_cur) VALUES($id,'$root','$emails','$owner_form','$owner_form_op','$commission_eq','$nump_eq','$def_cur')");
 		}
 
 		// update order_forms
@@ -344,6 +352,20 @@ class shop extends shop_base
 	}
 
 	////
+	// !returns the currently active currency
+	function get_act_cur($shop)
+	{
+		classload("users");
+		$u = new users;
+		$ucur = $u->get_user_config(array("uid" => $GLOBALS["uid"], "key" => "user_currency"));
+		if (!$ucur)
+		{
+			$ucur = $shop["def_cur"];
+		}
+		return $ucur;
+	}
+
+	////
 	// !shows the shop $id on the user side, items under category $parent
 	function show($arr)
 	{
@@ -364,6 +386,8 @@ class shop extends shop_base
 		}
 
 
+		$shop = $this->get($id);
+
 		global $shopping_cart;
 		$section = $this->do_shop_menus($id,$section);
 
@@ -377,6 +401,8 @@ class shop extends shop_base
 		$q = "SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $section AND class_id = ".CL_SHOP_ITEM." AND status = 2";
 		$this->db_query($q);
 
+		$ucur = $this->get_act_cur($shop);
+
 		$c = "";
 		while ($row = $this->db_next())
 		{
@@ -387,10 +413,11 @@ class shop extends shop_base
 			}
 			$itt = $ityp->get_item_type($row["type_id"]);
 
-			$it_price = $this->get_list_price($row["oid"],$row["price"]);
+			$it_price = $this->get_list_price($row["oid"],$row["price"],$shop);
 			$this->restore_handle();
 
 			$f = new form;
+			$f->set_active_currency($ucur);
 			$f->load($itt["form_id"]);
 			$f->load_entry($row["entry_id"]);
 			$f->set_element_value_by_type("price",$it_price);
@@ -433,6 +460,9 @@ class shop extends shop_base
 		$f = new form;
 
 		$t_price = 0;
+	
+		$shop = $this->get($shop_id);
+		$ucur = $this->get_act_cur($shop);
 
 		$items = false;
 		if (is_array($shopping_cart["items"]))
@@ -443,6 +473,7 @@ class shop extends shop_base
 				if ($ar["cnt"] > 0)
 				{
 					$f = new form;
+					$f->set_active_currency($ucur);
 					// now here we must show the name of the item followed by
 					// the rows from the cnt_form for that item that have selectrow checked
 					// so, get the item
@@ -465,7 +496,7 @@ class shop extends shop_base
 						$rowhtml.=$this->parse("F_ROW");
 					}
 	
-					$el_price = $this->get_list_price($item_id, $it["price"]);
+					$el_price = $this->get_list_price($item_id, $it["price"],$shop);
 
 					if ($ar["period"])
 					{
@@ -545,6 +576,8 @@ class shop extends shop_base
 		classload("form");
 		$f = new form;
 
+		$shop_o = $this->get($shop_id);
+
 		global $shopping_cart;
 		if (is_array($shopping_cart["items"]))
 		{
@@ -600,7 +633,7 @@ class shop extends shop_base
 						}
 
 						// now calc price
-						$price = $this->calc_price($itt,$it,$count,$f);
+						$price = $this->calc_price($itt,$it,$count,$f,$shop_o);
 
 						$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
 						$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
@@ -624,7 +657,7 @@ class shop extends shop_base
 	////
 	// !calculates the price for item $it of type $itt , count of items is $count and the form filled for the order is loaded in $f
 	// uses the equasion specified in $itt and if none is specified, the price specified in form $f or the item's form that is loaded
-	function calc_price($itt,$it,$count,$f)
+	function calc_price($itt,$it,$count,$f,$shop)
 	{
 		$eq = $this->get_eq($it["price_eq"] ? $it["price_eq"] : $itt["eq_id"]);
 
@@ -638,7 +671,7 @@ class shop extends shop_base
 			// now check if any price alterations fall in this timespan
 		}
 
-		$el_price = $this->get_list_price($it["oid"], $it["price"]);
+		$el_price = $this->get_list_price($it["oid"], $it["price"],$shop);
 		if ($eq["comment"] == "")
 		{
 			$price = (double)$el_price * (double)$count;
@@ -1051,13 +1084,17 @@ class shop extends shop_base
 		global $shopping_cart,$ext;
 		$f = new form;
 
+		$shop_o = $this->get($shop);
+		$ucur = $this->get_act_cur($shop_o);
+		$f->set_active_currency($ucur);
+
 		// ok, now, if $parallel is set then we must show several items side by side, but 
 		// that only makes sense for isems that has_periods and !has_objs and has_max
 		if ($item_id)
 		{
 			$row = $this->get_item($item_id,true);
 			$itt = $this->get_item_type($row["type_id"]);
-			$el_price = $this->get_list_price($row["oid"], $row["price"]);
+			$el_price = $this->get_list_price($row["oid"], $row["price"],$shop_o);
 		}
 
 		//($row["has_period"] && !$row["has_objs"] && $row["has_max"]) || 
@@ -1097,6 +1134,7 @@ class shop extends shop_base
 				if (is_array($reps))
 				{
 					$f = new form;
+					$f->set_active_currency($ucur);
 					$f->load($itt["form_id"]);
 					$f->load_entry($row["entry_id"]);
 					foreach($reps as $time => $evnt)
@@ -1181,6 +1219,8 @@ class shop extends shop_base
 			$period[$item_id] = 1;
 		}
 
+		$shop_o = $this->get($shop);
+
 		foreach($period as $item_id => $iperiod)
 		{
 			$it = $this->get_item($item_id,true);
@@ -1239,7 +1279,7 @@ class shop extends shop_base
 			// et keegi teine samal ajal ei saax seda sama aja peale bronnida a minu vaene v2ike pea ei v6ta seda praegusel hetkel
 
 			// calculate price
-			$price = $this->calc_price($itt,$it,$count,$f);
+			$price = $this->calc_price($itt,$it,$count,$f,$shop_o);
 		
 			$GLOBALS["shopping_cart"]["items"][$item_id]["cnt"] = $count;
 			$GLOBALS["shopping_cart"]["items"][$item_id]["price"] = $price;
@@ -2091,7 +2131,7 @@ class shop extends shop_base
 		die($this->parse());
 	}
 
-	function get_list_price($item_id,$def)
+	function get_list_price($item_id,$def,$shop)
 	{
 		if (!is_array($GLOBALS["shopping_cart"]["items"]))
 		{
@@ -2124,6 +2164,10 @@ class shop extends shop_base
 			return $def;
 		}
 
+		classload("users");
+		$u = new users;
+		$u_cur = $u->get_user_config(array("uid" => $GLOBALS["uid"], "key" => "user_currency"));
+
 		$this->save_handle();
 		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $item_id AND tfrom <= $start AND tto >= $end ");
 		while ($row = $this->db_next())
@@ -2134,7 +2178,14 @@ class shop extends shop_base
 				$tp = unserialize($pp_week);
 				if (is_array($tp))
 				{
-					$pp_week = $tp["2346"];
+					if ($u_cur)
+					{
+						$pp_week = $tp[$u_cur];
+					}
+					else
+					{
+						$pp_week = $tp[$shop["def_cur"]];
+					}
 				}
 			}
 			else
@@ -2144,7 +2195,14 @@ class shop extends shop_base
 				$tp = unserialize($pp_2week);
 				if (is_array($tp))
 				{
-					$pp_2week = $tp["2346"];
+					if ($u_cur)
+					{
+						$pp_2week = $tp[$u_cur];
+					}
+					else
+					{
+						$pp_2week = $tp[$shop["def_cur"]];
+					}
 				}
 			}
 		}
