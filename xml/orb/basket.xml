@@ -27,7 +27,7 @@
 			</function>
 		</action>
 
-		<action name="show">
+		<action name="show" nologin="1">
 			<function name="draw_basket">
 				<arguments>
 					<required name="id"/>
@@ -35,9 +35,21 @@
 			</function>
 		</action>
 
-		<action name="finalize_order">
+		<action name="finalize_order" nologin="1">
 			<function name="finalize_order">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_item" nologin="1">
+			<function name="orb_add_item">
+				<arguments>
+					<required name="basket_id" type="int"/>
+					<required name="item_id" type="int"/>
+					<required name="form_id" type="int"/>
+					<required name="redir" />
+					<optional name="count"/>
 				</arguments>
 			</function>
 		</action>
