@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.57 2004/07/19 13:57:46 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.58 2004/07/19 14:01:08 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -2466,8 +2466,8 @@ class crm_company extends class_base
 	{
 		$arr['unit'] = $this->unit;
 		$arr['category'] = $this->category;
+		$arr['return_url'] = urlencode(aw_global_get('REQUEST_URI'));
 		$arr['cat'] = $this->cat;
-		$arr['return_url'] = aw_global_get('REQUEST_URI');
 	}
 
 	/**
