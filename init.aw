@@ -201,10 +201,7 @@ function init_config($arr)
 			{
 				die("pagecache is not writable, cannot continue!");
 			};
-			flock($f, LOCK_EX);
 			fwrite($f,$str);
-			fflush($f);
-			flock($f, LOCK_UN);
 			fclose($f);
 		}
 //		list($micro,$sec) = split(" ",microtime());
