@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.12 2001/05/31 21:25:46 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.13 2001/05/31 21:26:59 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -795,7 +795,7 @@ $orb_defs["form"] = "xml";
 
 			if ($this->arr["name_el"])
 			{
-				$this->upd_object(array("oid" => $entry_id, "name" => $this->entry[$this->arr["name_el"]]));
+				$this->upd_object(array("oid" => $entry_id, "name" => $this->entry[$this->arr["name_el"]],"comment" => ""));
 			}
 			$en = serialize($this->entry);
 			if ($new)
