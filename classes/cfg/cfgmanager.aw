@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.2 2002/11/01 18:03:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.3 2002/11/02 23:07:28 duke Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 class cfgmanager extends aw_template
@@ -39,6 +39,7 @@ class cfgmanager extends aw_template
 		$cs = aw_unserialize($cfg->get_simple_config("class_cfgforms"));
 
 		$filter = (int)$cs[$this->coredata["class_id"]];
+		$filter = 0;
 
 		$cfgu = get_instance("cfg/cfgutils");
 		
@@ -64,26 +65,20 @@ class cfgmanager extends aw_template
 
 		$realprops = array_merge($coreprops,$objprops);
 
-		// now we have all the properties - draw the form
-		// XXX: arrrr, get rid of that.
-		// replace it with generic check whether there are any groups
-		if ($clfile == "menuedit")
+		$this->group_magic(&$realprops,$group);
+		$grpnames = new aw_array($this->groupnames);
+		// XXX: what if it is not a menu?
+		$this->objdata = $this->get_menu($id);
+		$active = ($group) ? $group : "general";
+		foreach($grpnames->get() as $key => $val)
 		{
-			$toolbar = get_instance("toolbar");
-			$this->group_magic(&$realprops,$group);
-			$grpnames = $this->groupnames;
-			$this->objdata = $this->get_menu($id);
-			$active = ($group) ? $group : "general";
-			foreach($grpnames as $key => $val)
-			{
-				$link = $this->mk_my_orb("change",array("id" => $id,"group" => $key));
-				$tp->add_tab(array(
-					"link" => $link,
-					"caption" => $key,
-					"active" => ($key == $active),
-				));
-			};
-		}
+			$link = $this->mk_my_orb("change",array("id" => $id,"group" => $key));
+			$tp->add_tab(array(
+				"link" => $link,
+				"caption" => $key,
+				"active" => ($key == $active),
+			));
+		};
 
 		// here be some magic to determine the correct output client
 		// this means we could create a TTY client for AW :)
@@ -92,22 +87,48 @@ class cfgmanager extends aw_template
 		// implemented.
 		$cli = get_instance("cfg/htmlclient");
 		$cli->start_output();
-		
 
+		// need to cycle over the property nodes, to replacemenets
+		// where needed and then cycle over the result and generate
+		// the output
+		$resprops = array();
 		foreach($realprops as $key => $val)
 		{
 			$val = $this->normalize_text_nodes($val);
 			$this->get_value(&$val);
 
+			$argblock = array(
+				"prop" => &$val,
+				"obj" => &$this->coredata,
+				"objdata" => &$this->objdata,
+			);
+			
 			if ($callback)
 			{
-				$inst->get_property(array(
-						"prop" => &$val,
-						"obj" => &$this->coredata,
-						"objdata" => &$this->objdata,
-				));
+				$inst->get_property($argblock);
 			};
 
+			// if the property has a getter, call it directly
+			if ($val["getter"])
+			{
+				$meth = $val["getter"];
+				if (method_exists($inst,$meth))
+				{
+					while($prop = $inst->$meth($argblock))
+					{
+						$resprops[] = $prop;
+					};
+
+				};
+			}
+			else
+			{
+				$resprops[] = $val;
+			};
+		}
+
+		foreach($resprops as $val)
+		{
 			$cli->add_property($val);
 		};
 
@@ -142,7 +163,6 @@ class cfgmanager extends aw_template
 			
 		if ($clfile == "menuedit")
 		{
-			$toolbar = get_instance("toolbar");
 			$this->group_magic(&$realprops,$group);
 		};
 
@@ -159,13 +179,24 @@ class cfgmanager extends aw_template
 			$field = $property["field"]["text"];
 			$method = $property["method"]["text"];
 			$handler = $property["handler"]["text"];
+			$type = $property["type"]["text"];
 			if ($handler == "callback")
 			{
 				// how on earth to I get the values
 				// back from the callback routine?
-				print "calling back<br>";
 			}
 			else
+			if ($type == "imgupload")
+			{
+				// upload the bloody image.
+				$t = get_instance("image");
+				$key = $name . "_id";
+				$oldid = (int)$this->coredata["meta"][$key];
+				$ar = $t->add_upload_image($name, $this->coredata["parent"], $oldid);
+				$metadata[$key] = $ar["id"];
+				$key = $name . "_url";
+				$metadata[$key] = image::check_url($ar["url"]);
+			}
 			if ($method == "serialize")
 			{
 				$metadata[$name] = $args[$name];
@@ -222,7 +253,10 @@ class cfgmanager extends aw_template
 			$group = "general";
 		};
 		$filtered = $by_group[$group];
-		$props = $filtered;
+		if (is_array($filtered))
+		{
+			$props = $filtered;
+		};
 	}
 
 	function create_toolbar($args = array())
