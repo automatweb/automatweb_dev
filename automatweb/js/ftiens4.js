@@ -130,8 +130,8 @@ function drawFolder(insertAtObj)
   var leftSide = leftSideHTML(this.leftSideCoded)
 
   if (browserVersion > 0) 
-    auxEv = "<a href='javascript:clickOnNode("+this.getID()+")'>" 
-    //auxEv = "<a href='javascript:clickOnNode(\""+this.getID()+"\")'>" 
+    //auxEv = "<a href='javascript:clickOnNode("+this.getID()+")'>" 
+    auxEv = "<a href='javascript:clickOnNode(\""+this.getID()+"\")'>" 
   else 
     auxEv = "<a>" 
 
