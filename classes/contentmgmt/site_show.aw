@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.75 2004/08/24 09:53:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.76 2004/08/24 14:58:38 kristo Exp $
 
 /*
 
@@ -126,10 +126,24 @@ class site_show extends class_base
 		{
 			$this->vars($arr["vars"]);
 		}
+
+		$request_uri = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
+		$pos = strpos($request_uri, "&");
+		$pos2 = strpos($request_uri, "set_lang_id");
+		if ($pos === false && $pos2 === false)
+		{
+			$printlink = $request_uri . "?print=1";
+		}
+		else
+		{
+			$printlink = $request_uri . "&print=1";
+		}
+
 		$this->vars(array(
 			"sel_menu_id" => $this->sel_section,
 			"sel_menu_comment" => isset($arr["comment"]) ? $arr["comment"] : "",
 			"site_title" => strip_tags($this->site_title),
+			"printlink" => $printlink
 		));
 		
 		// leat each class handle it's own variable import
@@ -1624,19 +1638,6 @@ class site_show extends class_base
 			$adt = $adt_o->name();
 		}
 
-		$request_uri = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
-		$pos = strpos($request_uri, "&");
-		$pos2 = strpos($request_uri, "set_lang_id");
-		if ($pos === false && $pos2 === false)
-		{
-			$printlink = $request_uri . "?print=1";
-		}
-		else
-		{
-			$printlink = $request_uri . "&print=1";
-		}
-
-
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
 			"ss2" => gen_uniq_id(),
@@ -1656,7 +1657,6 @@ class site_show extends class_base
 			"site_title_yah" => $site_title_yah,
 			"active_document_title" => $adt,
 			"current_period" => aw_global_get("current_period"),
-			"printlink" => $printlink
 		));
 
 		if (aw_global_get("uid") == "")
