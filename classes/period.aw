@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.10 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.11 2003/10/22 13:59:02 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -236,14 +236,14 @@ class period extends class_base
 	// $active muutujaga saab ette anda selle, milline periood peaks olema aktiivne
 	// kui $active == 0, siis on selected see option, mis parajasti aktiivne on
 	// kui $active == 'somethingelse', siis on selectitud vastava id-ga element
-	function period_list($active, $addempty = false)
+	function period_list($active, $addempty = false, $onlyarc = -1)
 	{
 		if ($active == 0)
 		{
 			$active = $this->get_cval("activeperiod");
 		};
 		$this->active = $active;
-		$this->clist();
+		$this->clist($onlyarc);
 		if ($addempty)
 		{
 			$elements = array("0" => "");
