@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.22 2004/02/13 12:26:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.23 2004/02/13 13:45:55 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -474,6 +474,19 @@ class forum_v2 extends class_base
 		};
 	}
 
+	function _get_fp_link($arr)
+	{
+		return html::href(array(
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $arr["id"],
+				"group" => $arr["group"],
+				"section" => aw_global_get("section"),
+				"_alias" => get_class($this),
+			)),
+			"caption" => $arr["name"],
+		));
+	}
+
 	////
 	// !Draws the contents of a single folder
 	function draw_folder($args = array())
@@ -493,6 +506,12 @@ class forum_v2 extends class_base
 		$obj_chain = array_reverse($obj_chain);
 
 		$path = array();
+		$path[] = $this->_get_fp_link(array(
+			"id" => $args["obj_inst"]->id(),
+			"group" => $args["request"]["group"],
+			"name" => $args["obj_inst"]->name(),
+		));
+
 		$stop = false;
 		foreach($obj_chain as $o)
 		{
@@ -500,40 +519,41 @@ class forum_v2 extends class_base
 			{
 				continue;
 			};
-			$key = $o->id();
-			$name = $o->name();
-			//if ($key == $fld)
-			//if ($key == $args["request"]["folder"])
-			global $XX3;
-			if ($XX3)
-			{
-				print "id = " . $o->id() . "<bR>";
-				print "t = " . $topic_obj->id() . "<br>";
-				print "n = ". $o->name() . "<br>";
-
-			};
 			if ($o->id() == $topic_obj->id())
 			{
-				/*
+				// this creates the link back to the front page 
+				// of the topic and stops processing
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => $this->rel_id,"_alias" => get_class($this))),
-					"caption" => $name,
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $args["obj_inst"]->id(),
+						"group" => $args["request"]["group"],
+						"section" => $this->rel_id,
+						"folder" => $o->id(),
+						"_alias" => get_class($this),
+					)),
+					"caption" => $o->name(),
 				));
-				*/
 				$stop = true;
-				break;
 			}
 			else
 			{
+				// this is used for all other levels
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"c" => $key,"group" => $args["request"]["group"],"section" => $this->rel_id,"_alias" => get_class($this))),
-					"caption" => $name,
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $args["obj_inst"]->id(),
+						"c" => $key,
+						"group" => $args["request"]["group"],
+						"section" => $this->rel_id,
+						"_alias" => get_class($this),
+					)),
+					"caption" => $o->name(),
 				));
 
 
 			}
 			$path[] = $name;
 		};
+
 		
 		$this->_add_style("style_topic_caption");
 		$this->_add_style("style_topic_replies");
@@ -629,7 +649,7 @@ class forum_v2 extends class_base
 		$this->vars(array(
 			"SUBTOPIC" => $c,
 			"name" => $topic_obj->name(),
-			"path" => join(" &gt; ",array_reverse($path)),
+			"path" => join(" &gt; ",$path),
 			"active_page" => $pager,
 			"add_topic_url" => $this->mk_my_orb("add_topic",array(
 				"id" => $args["obj_inst"]->id(),
@@ -718,22 +738,36 @@ class forum_v2 extends class_base
 
 		$fld = $topic_obj->parent(); 
 
+		$obj_chain = array_reverse($o->path());
+
 		$show = true;
-		foreach($o->path() as $_to)
+		foreach($obj_chain as $_to)
 		{
+
+			if ($_to->id() == aw_global_get("section"))
+			{
+				$show = false;
+			}
+
+			if ($_to->id() == $args["obj_inst"]->prop("topic_folder"))
+			{
+				$show = false;
+			};
+			
 			if (!$show)
 			{
 				continue;
 			}
 
-			if ($key == aw_global_get("section"))
+			global $XX3;
+			if ($XX3)
 			{
-				$show = false;
-			}
-
-			if ($key == $args["obj_inst"]->prop("topic_folder"))
-			{
-				$show = false;
+				print "id = " . $_to->id() . "<br>";
+				print "tf = " . $_to->name() . "<br>";
+				print "x = " . $args["obj_inst"]->prop("topic_folder") . "<br>";
+				print "fld = $fld<br>";
+				print "ocl = " . $_to->class_id() . "<br>";
+			//	print 
 			};
 
 			/*if ($key == $fld)
@@ -759,16 +793,44 @@ class forum_v2 extends class_base
 					else
 					{*/
 						$name = html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
+							"url" => $this->mk_my_orb("change",array(
+								"id" => $args["obj_inst"]->id(),
+								"group" => $args["request"]["group"],
+								"folder" => $obj->id(),
+								"section" => aw_global_get("section"),
+								"_alias" => get_class($this),
+							)),
 							"caption" => $obj->name(),
 						));
 					//};
+				}
+				elseif ($obj->class_id() == CL_MSGBOARD_TOPIC)
+				{
+					$name = html::href(array(
+						"url" => $this->mk_my_orb("change",array(
+							"id" => $args["obj_inst"]->id(),
+							"group" => $args["request"]["group"],
+							"topic" => $_to->id(),
+							"section" => aw_global_get("section"),
+							"_alias" => get_class($this),
+						)),
+						"caption" => $obj->name(),
+					));
 				};
+
 						
 			//};
+			array_unshift($path,$name);
 			//$path[] = $name;
-			$path = array($name) + $path;
 		};
+		
+		$fp = $this->_get_fp_link(array(
+			"id" => $args["obj_inst"]->id(),
+			"group" => $args["request"]["group"],
+			"name" => $args["obj_inst"]->name(),
+		));
+
+		array_unshift($path,$fp);
 
 		// path drawing ends .. sucks
 
@@ -777,7 +839,7 @@ class forum_v2 extends class_base
 			"name" => $topic_obj->name(),
 			"comment" => $topic_obj->comment(),
 			"COMMENT" => $c,
-			"path" => join(" &gt; ",array_reverse($path)),
+			"path" => join(" &gt; ",$path),
 		));
 
 		$rv = $this->parse();
