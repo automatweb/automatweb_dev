@@ -76,7 +76,7 @@
             <name>state</name>
             <group>general</group>
             <table>mrp_job</table>
-            <type>radio</type>
+            <type>text</type>
             <field>state</field>
             <caption>Staatus</caption>
       </property>

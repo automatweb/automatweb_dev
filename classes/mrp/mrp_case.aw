@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.6 2005/01/26 13:25:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.7 2005/01/26 14:51:06 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1144,6 +1144,8 @@ class mrp_case extends class_base
 			$row["message"] = nl2br($row["message"]);
 			$t->define_data($row);
 		}
+		$t->set_default_sortby("tm");
+		$t->sort_by();
 	}
 
 	function on_new_case($arr)

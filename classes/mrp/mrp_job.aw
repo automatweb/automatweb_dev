@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.4 2005/01/25 12:30:31 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.5 2005/01/26 14:51:05 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 @classinfo syslog_type=ST_MRP_JOB relationmgr=yes
 
@@ -342,6 +344,15 @@ class mrp_job extends class_base
 
 		$this_object->set_prop ("state", MRP_STATUS_ABORTED);
 		$this_object->save ();
+	}
+
+	function on_delete_job ($arr)
+	{
+		$job = obj ($arr["oid"]);
+		$job->set_prop ("state", MRP_STATUS_DELETED);
+		$job->save ();
+
+
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.10 2005/01/25 12:30:31 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.11 2005/01/26 14:51:06 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -14,6 +14,8 @@
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_users submit=no
 
 @groupinfo grp_settings caption="Seaded"
+
+@groupinfo grp_printer caption="Tr&uuml;kkali vaade" submit=no
 
 @default table=objects
 @default field=meta
@@ -119,8 +121,9 @@
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
+@default group=grp_printer
 
-
+	@property printer_jobs type=table no_caption=1
 
 
 // --------------- RELATION TYPES ---------------------
@@ -241,7 +244,7 @@ class mrp_workspace extends class_base
 			case "replan":
 				$plan_url = $this->mk_my_orb("create", array(
 					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-					"mrp_workspace" => $this_object->id (),
+					"workspace" => $this_object->id (),
 				), "mrp_schedule");
 				$plan_href = html::href(array(
 					"caption" => "[Planeeri]",
@@ -273,6 +276,10 @@ class mrp_workspace extends class_base
 
 			case "user_mgr":
 				$this->_user_mgr($arr);
+				break;
+
+			case "printer_jobs":
+				$this->_printer_jobs($arr);
 				break;
 		}
 		return $retval;
@@ -1564,6 +1571,245 @@ class mrp_workspace extends class_base
 
 		header("Location: ".html::get_change_url($id));
 		die();
+	}
+
+	function _init_printer_jobs_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "tm",
+			"caption" => t("Algus"),
+			"type" => "time",
+			"align" => "center",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1,
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "length",
+			"caption" => t("Pikkus"),
+			"align" => "center",
+			"numeric" => 1,
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "tm_end",
+			"caption" => t("L&otilde;pp"),
+			"type" => "time",
+			"align" => "center",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1,
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "resource",
+			"caption" => t("Ressurss"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "worker",
+			"caption" => t("Teostaja"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "job",
+			"caption" => t("Ava"),
+			"align" => "center",
+			"sortable" => 1
+		));
+	}
+
+	function _printer_jobs($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_printer_jobs_t($t);
+
+		$res = $this->get_cur_printer_resources();
+	
+		$jobs = $this->get_next_jobs_for_resources(array(
+			"resources" => $res,
+			"limit" => 30
+		));
+
+		$workers = $this->get_workers_for_resources($res);
+
+		foreach($jobs as $job)
+		{
+			$res = obj($job->prop("resource"));
+			$proj = obj($job->prop("project"));
+
+			$workers_str = array();
+			foreach(safe_array($workers[$res->id()]) as $person)
+			{
+				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+			}
+
+			$len  = sprintf("%02d", floor($job->prop("length") / 3600)).":";
+			$len .= sprintf("%02d", floor(($job->prop("length") % 3600) / 60));
+
+			$t->define_data(array(
+				"tm" => $job->prop("starttime"),
+				"tm_end" => $job->prop("starttime") + $job->prop("length"),
+				"length" => $len,
+				"job" => html::get_change_url($job->id(), array(
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					),
+					t("Ava")
+				),
+				"resource" => html::get_change_url($res->id(), array(
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					),
+					$res->name()
+				),
+				"worker" => join(",",$workers_str),
+				"project" => html::get_change_url($proj->id(), array(
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					),
+					$proj->name()
+				)
+			));
+		}
+	
+		$t->set_default_sortby("tm");
+		$t->sort_by();
+	}
+
+	function get_cur_printer_resources()
+	{
+		// get person
+		$u = get_instance(CL_USER);
+		$person = obj($u->get_current_person());
+
+		// get professions for person
+		$profs = new object_list($person->connections_from(array(
+			"type" => "RELTYPE_RANK"
+		)));
+
+		// if current person has no rank, return all resources
+		if (!$profs->count())
+		{
+			$ol = new object_list(array(	
+				"class_id" => CL_MRP_RESOURCE,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			return $this->make_keys($ol->ids());
+		}
+
+		// get resource operators for professions
+		$ops = new object_list(array(
+			"profession" => $profs->ids(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"class_id" => CL_MRP_RESOURCE_OPERATOR
+		));
+
+		// get resources
+		$ret = array();
+		foreach($ops->arr() as $op)
+		{
+			if (is_oid($op->prop("resource")) && $this->can("view", $op->prop("resource")))
+			{
+				$ret[$op->prop("resource")] = $op->prop("resource");
+			}
+		}
+		return $ret;
+	}
+
+	/** returns array of job objects for the given professions in time order
+
+		@comment
+			resources - array of recource id's to return jobs for
+			limit - limit number of returned data
+	**/
+	function get_next_jobs_for_resources($arr)
+	{
+		$jobs = new object_list(array(
+			"resource" => $arr["resources"],
+			"limit" => $arr["limit"],
+			"class_id" => CL_MRP_JOB,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER, 100)
+		));
+		$ret = array();
+		foreach($jobs->arr() as $o)
+		{
+			if (is_oid($o->prop("resource")) && $this->can("view", $o->prop("resource")))
+			{
+				$ret[] = $o;
+			}
+		}
+		return $ret;
+	}
+
+	/** reverse lookup, from resources to persons
+		
+		@comment 
+			res - array of resource id's to look up
+	**/
+	function get_workers_for_resources($res)
+	{
+		$persons = array();
+		$profs = array();
+
+		$ops = new object_list(array(
+			"class_id" => CL_MRP_RESOURCE_OPERATOR,
+			"resource" => $res,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		foreach($ops->arr() as $op)
+		{
+			// get professions for resources
+			$prof = $op->prop("profession");
+			$persons[$op->prop("resource")][$prof] = $prof;
+			$profs[$prof] = $prof;
+		}
+
+		if (!count($profs))
+		{
+			return array();
+		}
+
+		// get persons for professions
+		$prof2person = array();
+		$c = new connection();
+		$conns = $c->find(array(
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => 7,
+			"to.oid" => $profs
+		));
+		foreach($conns as $con)
+		{
+			$prof2person[$con["to"]][$con["from"]] = $con["from"];
+		}
+
+		$ret = array();
+		foreach($persons as $resource => $profs)
+		{
+			foreach($profs as $prof)
+			{
+				foreach(safe_array($prof2person[$prof]) as $person)
+				{
+					$ret[$resource][$person] = obj($person);
+				}
+			}
+		}
+		return $ret;
 	}
 }
 
