@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.43 2002/08/01 15:14:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.44 2002/08/01 17:00:14 duke Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -217,7 +217,10 @@ class form_table extends form_base
 				// first we compile the elements in the column together into one string and add their 
 				// separators
 				$str = "";
-				foreach($cc["els"] as $elid => $elid)
+				// NB! This crashes PHP on Sparc/Solaris8 -- duke
+				// foreach($cc["els"] as $elid => $elid)
+				
+				foreach($cc["els"] as $elid)
 				{
 					if ($dat["ev_".$elid] != "")
 					{
