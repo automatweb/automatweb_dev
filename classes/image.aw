@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.86 2004/03/25 09:39:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.87 2004/04/04 22:05:15 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -537,6 +537,7 @@ class image extends class_base
 			return $url;
 		}
 
+		$url = str_replace(aw_ini_get("baseurl"), "", $url);
 		$url = preg_replace("/^http:\/\/.*\//U","/",$url);
 		$url = preg_replace("/^https:\/\/.*\//U","/",$url);
 		if (substr($url,0,4) == "/img")
