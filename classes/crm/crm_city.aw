@@ -8,8 +8,8 @@
 	@property name type=textbox size=20
 	@caption Linna nimetus
 
-@property comment type=textarea cols=40 rows=3 table=objects field=comment
-@caption Kommentaar
+	@property comment type=textarea cols=40 rows=3 table=objects field=comment
+	@caption Kommentaar
 
 	@classinfo no_status=1
 	
@@ -37,6 +37,5 @@ class crm_city extends class_base
 			'clid' => CL_CRM_CITY,
 		));
 	}
-
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.10 2004/07/01 14:39:44 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.11 2004/07/05 13:21:15 rtoomas Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -90,6 +90,15 @@ class crm_meeting extends class_base
 					'tooltip' => 'Kustuta valitud',
 					'action' => 'submit_delete_participants_from_calendar',
 				));
+
+				$tb->add_separator();
+
+				$tb->add_button(array(
+					'name' => 'Search',
+					'img' => 'search.gif',
+					'tooltip' => 'Otsi',
+				));
+
 				$this->return_url=aw_global_get('REQUEST_URI');
 				break;
 			}
@@ -149,11 +158,14 @@ class crm_meeting extends class_base
    **/
    function submit_delete_participants_from_calendar($arr)
    {
-		foreach($arr['check'] as $person_id)
+		if(is_array($arr['check']))
 		{
-			$obj = new object($person_id);
-			$obj->disconnect(array('from'=>$arr['event_id']));
-		}
+			foreach($arr['check'] as $person_id)
+			{
+				$obj = new object($person_id);
+				$obj->disconnect(array('from'=>$arr['event_id']));
+			}
+		}		
    }
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.7 2004/06/29 09:43:09 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.8 2004/07/05 13:21:15 rtoomas Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 
@@ -82,9 +82,10 @@ class crm_org_search extends class_base
 		return $this->change($arr);
 	}
 
-	function do_search($arr)
+	function do_search($arr, $xfilter=array())
 	{
 		global $awt;
+		
 		$awt->start("crm-org-search");
 		$tf = &$arr["prop"]["vcl_inst"];
 		$tf->define_field(array(
@@ -93,11 +94,11 @@ class crm_org_search extends class_base
                         "sortable" => 1,
                 ));
 
-                $tf->define_field(array(
+                /*$tf->define_field(array(
                         "name" => "pohitegevus",
                         "caption" => "Põhitegevus",
                         "sortable" => 1,
-                ));
+                ));*/
 
                 $tf->define_field(array(
                         "name" => "corpform",
@@ -139,9 +140,8 @@ class crm_org_search extends class_base
                         "name" => "sel",
                 ));
 
-		$awt->stop("cmr-org-search");
 
-		if (!$this->valid_search)
+		if (!$this->valid_search && !sizeof($xfilter))
 		{
 			return false;
 		};
@@ -170,7 +170,7 @@ class crm_org_search extends class_base
 			$filter["ettevotlusvorm"] = $req["ettevotlusvorm"];
 		};
 
-		if (!empty($req["ceo"]))
+		if (sizeof($req["ceo"]) || sizeof($xfilter['firmajuht']))
 		{
 			// search by ceo name? first create a list of all crm_persons
 			// that match the search criteria and after that create a list
@@ -180,13 +180,20 @@ class crm_org_search extends class_base
 				"limit" => 100,
 				"name" => "%" . $req["ceo"] . "%",
 			);
+			if(sizeof($xfilter['firmajuht']))
+			{
+				$ceo_filter['name'] = $xfilter['firmajuht'];
+			}
 			$ceo_list = new object_list($ceo_filter);
 			if (sizeof($ceo_list->ids()) > 0)
 			{
 				$filter["firmajuht"] = $ceo_list->ids();
+				if(sizeof($xfilter['firmajuht']))
+				{
+					$xfilter['firmajuht'] = &$filter['firmajuht'];
+				}
 			};
 		};
-
 		$addr_filter = array();
 
 		if (!empty($req["city"]))
@@ -204,25 +211,89 @@ class crm_org_search extends class_base
 			$addr_filter["name"] = "%" . $req["address"] . "%";
 		};
 
-		if (sizeof($addr_filter) > 0)
+		$addr_xfilter = array();
+		$no_results = false;
+		if(sizeof($xfilter['linn']))
+		{
+			$city_list = new object_list(array(
+									'class_id'=>CL_CRM_CITY,
+									'limit' => 100,
+									'name' => $xfilter['linn'],
+							));
+			if(sizeof($city_list->ids()))
+			{
+				$addr_xfilter['linn'] = $city_list->ids();
+			}
+			else
+			{
+				$no_results = true;
+			}
+			unset($xfilter['linn']);
+		}
+
+		if(sizeof($xfilter['maakond']))
+		{
+			$county_list = new object_list(array(
+										'class_id' => CL_CRM_COUNTY,
+										'limit' => 100,
+										'name' => $xfilter['maakond']
+								));
+			if(sizeof($county_list->ids()))
+			{
+				$addr_xfilter['maakond'] = $county_list->ids();
+			}
+			else
+			{
+				$no_results = true;
+			}
+			unset($xfilter['maakond']);
+		}
+	
+		if(sizeof($xfilter['address']))
+		{
+			$addr_xfilter['name'] = &$xfilter['address'];
+			unset($xfilter['address']);
+		}
+
+		if (sizeof($addr_filter) > 0 || sizeof($addr_xfilter)>0)
 		{
 			$addr_filter["class_id"] = CL_CRM_ADDRESS;
 			$addr_filter["limit"] = 100;
+			$addr_xfilter['class_id'] = CL_CRM_ADDRESS;
+			$addr_xfilter['limit'] = 100;
+
+			if(sizeof($addr_xfilter))
+			{
+				$addr_filter = $addr_xfilter;
+			}
 			$addr_list = new object_list($addr_filter);
 			if (sizeof($addr_list->ids()) > 0)
 			{
 				$filter["contact"] = $addr_list->ids();
-			};
+				if(sizeof($addr_xfilter))
+				{
+					$xfilter['contact'] = &$filter['contact'];
+				}
+			}
+			else if(sizeof($addr_xfilter))
+			{
+				$no_results=true;
+			}
 		};
-
-		obj_set_opt("no_cache", 1);
+		
+		if(sizeof($xfilter))
+		{
+			$filter = $xfilter;
+		}
 		$results = new object_list($filter);
-		obj_set_opt("no_cache", 0);
-
 		$count = 0;
 
 		for ($o = $results->begin(); !$results->end(); $o = $results->next())
 		{
+			if($no_results)
+			{
+				break;
+			}
 			$count++;
 			// aga ülejäänud on kõik seosed!
 			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $url = $mail = "";
@@ -232,11 +303,11 @@ class crm_org_search extends class_base
 				$vorm = $tmp->name();
 			};
 
-			if (is_oid($o->prop("pohitegevus")))
+			/*if (is_oid($o->prop("pohitegevus")))
 			{
 				$tmp = new object($o->prop("pohitegevus"));
 				$tegevus = $tmp->name();
-			};
+			};*/
 			
 			if (is_oid($o->prop("contact")))
 			{
@@ -288,7 +359,7 @@ class crm_org_search extends class_base
 					"caption" => $o->name(),
 				)),
 				"reg_nr" => $o->prop("reg_nr"),
-				"pohitegevus" => $tegevus,
+				//"pohitegevus" => $tegevus,
 				"corpform" => $vorm,
 				"address" => $contact,
 				"ceo" => html::href(array(
@@ -310,8 +381,7 @@ class crm_org_search extends class_base
 		{
 			$tf->set_header("Otsing ei leidnud ühtegi objekti");
 		};
+		$awt->stop("cmr-org-search");
 	}
-
-
 }
 ?>

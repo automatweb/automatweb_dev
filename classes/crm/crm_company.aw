@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.46 2004/07/05 13:13:13 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.47 2004/07/05 13:21:15 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -41,7 +41,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @property kaubamargid type=textarea cols=65 rows=3 table=kliendibaas_firma
 @caption Kaubamärgid
-
 
 @property tegevuse_kirjeldus type=textarea cols=65 rows=3 table=kliendibaas_firma
 @caption Tegevuse kirjeldus
@@ -196,7 +195,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property customer_search_leader type=textbox size=30 store=no parent=vbox_customers_right
 @caption Firmajuht
 
-@property customer_search_ type=textbox size=30 store=no parent=vbox_customers_right
+@property customer_search_field type=textbox size=30 store=no parent=vbox_customers_right
 @caption Põhitegevus
 
 @property customer_search_county type=textbox size=30 store=no parent=vbox_customers_right
@@ -349,6 +348,7 @@ CREATE TABLE `kliendibaas_firma` (
 class crm_company extends class_base
 {
 	var $unit=0;
+	var $category=0;
 	var $active_node = 0;
 	var $group_not_shown = true;
 	var $data = null;
@@ -572,7 +572,6 @@ class crm_company extends class_base
 			$arr['groupinfo']['my_customers']['caption'] = $name;
 		}
 	
-
 		switch($data['name'])
 		{
 			//START OF CUSTOMER SEARCH
@@ -580,6 +579,16 @@ class crm_company extends class_base
 				if($this->show_customer_search)
 				{
 					$data['value'] = $arr['request']['customer_search_name'];
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'customer_search_field':
+				if($this->show_customer_search)
+				{
+					$data['value'] = $arr['request']['customer_search_field'];
 				}
 				else
 				{
@@ -1183,7 +1192,6 @@ class crm_company extends class_base
 			$tmp_obj = new object($arr['request']['cat']);
 			$professions[$tmp_obj->id()] = $tmp_obj->prop('name');
 		}
-	
 		if($old_iface)
 		{
 			$this->get_all_workers_for_company(&$arr['obj_inst'],&$persons,true);
@@ -1236,6 +1244,22 @@ class crm_company extends class_base
 				foreach($tmp_arr as $key=>$value)
 				{
 					$tmp_arr2[] = $professions[$value];
+				}
+				//getting the professions that the professions of the person are associated with
+				foreach($pdat['ranks_arr'] as $key=>$rank)
+				{
+					$tmp_obj = new object($key);
+					$conns=$tmp_obj->connections_from(array(
+								'type' => 1,
+					));
+					$tmp_arr = array();
+					foreach($conns as $conn)
+					{
+						if(!in_array($conn->prop('to'), array_keys($tmp_arr2)))
+						{
+							$tmp_arr2[$conn->prop('to')] = $conn->prop('to.name');
+						}
+					}
 				}
 				$pdat['rank'] = join(', ',$tmp_arr2);
 			}
@@ -2117,6 +2141,11 @@ class crm_company extends class_base
 
 		if(is_oid($arr['request']['category']))
 		{
+			$this->category=$arr['request']['category'];
+		}
+
+		if(is_oid($arr['request']['category']))
+		{
 			$this->reltype_category = $this->crm_category_reltype_category;
 		}
 		else
@@ -2131,6 +2160,7 @@ class crm_company extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr['unit'] = $this->unit;
+		$arr['category'] = $this->category;
 		$arr['return_url'] = aw_global_get('REQUEST_URI');
 	}
 
@@ -2153,6 +2183,7 @@ class crm_company extends class_base
 			$arr['args']['customer_search_leader'] = urlencode($arr['request']['customer_search_leader']);
 			$arr['args']['customer_search_city'] = urlencode($arr['request']['customer_search_city']);
 			$arr['args']['customer_search_county'] = urlencode($arr['request']['customer_search_county']);
+			$arr['args']['customer_search_field'] = urlencode($arr['request']['customer_search_field']);
 			$arr['args']['customer_search'] = $this->show_customer_search;
 		}
 	
@@ -2369,115 +2400,31 @@ class crm_company extends class_base
 	
 	function do_customer_search_results($arr)
 	{
-		$tf = &$arr["prop"]["vcl_inst"];
-		$tf->define_field(array(
-							"name" => "name",
-							"caption" => "Organisatsioon",
-							"sortable" => 1,
-				 ));
+		//i'll try the search from crm_org_search.aw
+		$searchable_fields = array('customer_search_name' => 'name',
+											'customer_search_reg' => 'reg_nr',
+											'customer_search_address'=> 'address',
+											'customer_search_city' => 'linn',
+											'customer_search_county' => 'maakond',
+		//									'customer_search_field' => 'L_CRM_COMPANY.RELTYPE_TEGEVUSALAD.name',
+											'customer_search_leader' => 'firmajuht');
 
-		$tf->define_field(array(
-				"name" => "pohitegevus",
-				"caption" => "Põhitegevus",
-				"sortable" => 1,
-		));
+		$search_params = array('class_id'=>CL_CRM_COMPANY,'limit'=>100,'sort_by'=>'name');
 
-		$tf->define_field(array(
-				"name" => "corpform",
-				"caption" => "Õiguslik vorm",
-				"sortable" => 1,
-		));
-
-		$tf->define_field(array(
-				"name" => "address",
-				"caption" => "Aadress",
-				"sortable" => 1,
-		));
-
-		$tf->define_field(array(
-				"name" => "email",
-				"caption" => "E-post",
-				"sortable" => 1,
-		));
-
-		$tf->define_field(array(
-				"name" => "url",
-				"caption" => "WWW",
-				"sortable" => 1,
-		));
-		$tf->define_field(array(
-				"name" => "phone",
-				"caption" => 'Telefon',
-		));
-
-		$tf->define_field(array(
-				"name" => "ceo",
-				"caption" => "Juht",
-				"sortable" => 1,
-		));
-
-		$tf->define_chooser(array(
-					"field" => "id",
-					"name" => "check",
-		));
-
-
-		$search_params = array('class_id'=>CL_CRM_PERSON,'limit'=>100,'sort_by'=>'name');
-
-		if($arr['request']['customer_search_name'])
+		foreach($searchable_fields as $key=>$value)
 		{
-			$search_params['firma_nim'] = '%'.urldecode($arr['request']['customer_search_name']).'%';
+			if($arr['request'][$key])
+			{
+				//let's clean up the item
+				$tmp_arr = explode(',',$arr['request'][$key]);
+				array_walk($tmp_arr,create_function('&$param','$param = trim($param);'));
+				array_walk($tmp_arr,create_function('&$param','$param = "%".$param."%";'));
+				$search_params[$value] = $tmp_arr;
+			}
 		}
-		if($arr['request']['customer_search_reg'])
-		{
-			$search_params['reg_nr'] = '%'.urldecode($arr['request']['customer_search_reg']).'%';
-		}
-		if($arr['request']['customer_search_address'])
-		{
-			$search_params['CL_CRM_COMPANY.ADDRESS.name'] = '%'.urldecode($arr['request']['customer_search_address']).'%';
-		}
-		/*
-		if($arr['request']['customer_search_firmajuht'])
-		{
-			$search_params['CL_CRM_COMPANY.'] = '%'.urldecode($arr['request']['customer_search_firmajuht']).'%';
-		}
-		*/
-		if($arr['request']['customer_search_linn'])
-		{
-			$search_params['CL_CRM_COMPANY.ADDRESS.linn'] = '%'.urldecode($arr['request']['customer_search_linn']).'%';
-		}
-		if($arr['request']['customer_search_maakond'])
-		{
-			$search_params['CL_CRM_COMPANY.ADDRESS.maakond'] = '%'.urldecode($arr['request']['customer_search_maakond']).'%';
-		}
-		//arr($search_params);
-		/*
-		$tf->define_data(array(
-			"id" => $o->id(),
-			"name" => html::href(array(
-				"url" => $this->mk_my_orb("change",array(
-					"id" => $o->id(),
-				),$o->class_id()),
-				"caption" => $o->name(),
-			)),
-			"reg_nr" => $o->prop("reg_nr"),
-			"pohitegevus" => $tegevus,
-			"corpform" => $vorm,
-			"address" => $contact,
-			"ceo" => html::href(array(
-				"url" => $this->mk_my_orb("change",array(
-					"id" => $juht_id,
-				),CL_CRM_PERSON),
-				"caption" => $juht,
-			)),
-			"phone" => $phone,
-			"url" => html::href(array(
-				"url" => $url,
-				"caption" => $url,
-			)),
-			"email" => $mail,
-		));
-		*/
+		
+		$crm_org_search = get_instance('crm/crm_org_search');
+		$crm_org_search->do_search(&$arr,$search_params);
 	}
 
 	function do_contacts_search_results($arr)
@@ -2577,7 +2524,35 @@ class crm_company extends class_base
 	**/
 	function save_customer_search_results($arr)
 	{
-	
+		if(is_array($arr['sel']))
+		{
+			$to = 0;
+			$reltype = -1;
+			$from = null;
+			if(is_oid($arr['category']))
+			{
+				$reltype = 3; //crm_category.customer
+				$from = new object((int)$arr['category']);
+			}
+			else
+			{
+				$reltype = 22; //crm_company.RELTYPE_CUSTOMER;
+				$from = new object((int)$arr['id']);
+			}
+
+			foreach($arr['sel'] as $key=>$value)
+			{
+				$from->connect(array(
+								'to'=>$value,
+								'reltype'=>$reltype,
+				));
+			}
+		}
+		return $this->mk_my_orb('change',array(
+								'id' => $arr['id'],
+								'category' => $arr['category'],
+								'group' => $arr['group'],
+							),$arr['class']);
 	}
 
 	/**
