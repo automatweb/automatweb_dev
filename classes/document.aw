@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.76 2002/01/08 05:07:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.77 2002/01/11 00:45:19 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -390,6 +390,7 @@ class document extends aw_template
 		{
 			$this->read_template($tpl);
 		};
+
 		$this->vars(array("imurl" => "/images/trans.gif"));
 
 		// load localization settings and put them in the template
@@ -442,6 +443,10 @@ class document extends aw_template
 		$img = new db_images;
 		$retval = "";
 		$used = array();
+
+		
+		// calculate the amount of comments this document has
+		$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$docid'","cnt");
 
 		// kui vaja on näidata ainult dokumendi leadi, siis see tehakse siin
  		if ($leadonly > -1) 
@@ -592,7 +597,11 @@ class document extends aw_template
 
 		// #top# link - viib doku yles
 		$top_link = $this->parse("top_link");
-		$this->vars(array("top_link" => ""));
+		$this->vars(array(
+			"top_link" => "",
+			"num_comments" => sprintf("%d",$num_comments),
+			"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid),"forum"),
+		));
 		$doc["content"] = str_replace("#top#", $top_link,$doc["content"]);
 
 		// noja, mis fucking "undef" see siin on?
@@ -733,7 +742,6 @@ class document extends aw_template
 			classload("forum");
 			$forum = new forum();
 			$fr = $forum->add_comment(array("board" => $docid));
-			#$fr = $this->parse("FORUM_ADD");
 		}
 
 		$langs = "";
@@ -2027,6 +2035,7 @@ class document extends aw_template
 			classload("object_chain");
 			$oc = new object_chain();
 			$oc->expl_chain(array("id" => $alias,"parent" => $id));
+			header("Location: ".$this->mk_orb("list_aliases",array("id" => $id),"aliasmgr"));
 		}
 		else
 		{
