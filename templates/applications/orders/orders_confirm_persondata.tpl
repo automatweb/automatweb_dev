@@ -1,3 +1,6 @@
+<div class="text"><font color="red">Palume Teil kontrollida kõiki sisestatud andmeid.<br>
+Kui kõik on korras, vajutage nuppu “Saada tellimus”.</font></div>
+
 <table border="0" width="100%" cellpadding="0" cellspacing="1">
 <tr>
         <td class='aw04contentcellleft' width="30%" nowrap>
@@ -105,7 +108,7 @@
 <tr>
 	<td colspan="2" align="left">
 	<form method="GET">
-		<input onClick="parent.location='{VAR:sendurl}'" class="formbutton" type='button' name='' value='Kinnita tellimus' accesskey="s">
+		<input onClick="parent.location='{VAR:sendurl}'" class="formbutton" type='button' name='' value='Saada tellimus' accesskey="s">
 	</form>
 	<form method="GET">
 		<input onClick="history.go(-1)" class="formbutton" type='button' name='' value='Soovin muuta tellimust' accesskey="s">

@@ -12,6 +12,7 @@
 	<td class="prodcarthead">Hind</td>
 	<td class="prodcarthead">Summa</td>
 	<td class="prodcarthead">&nbsp;</td>
+	<td class="prodcarthead">&nbsp;</td>
 </tr>
 <!-- SUB: shop_cart_table -->
 	<tr class="prodcartitem">
@@ -25,15 +26,16 @@
 		<td>{VAR:product_price}</td>
 		<td>{VAR:product_sum} EEK</td>
 		<td><a href="{VAR:editurl}">Muuda</a></td>
+		<td><a href="{VAR:delete_url}">Kustuta</a></td>
 	</tr>
 <!-- END SUB: shop_cart_table -->
 <tr class="prodcartitem">
 	<td colspan="8"><b>Postikulu</b></td>
-	<td colspan="2">{VAR:postal_fee} EEK</td>
+	<td colspan="3">{VAR:postal_fee} EEK</td>
 </tr>
 <tr class="prodcartitem">
 	<td colspan="8"><b>Kokku</b></td>
-	<td colspan="2">{VAR:totalsum} EEK</td>
+	<td colspan="3">{VAR:totalsum} EEK</td>
 </tr>
 </table>
 <!-- END SUB: shop_table -->
