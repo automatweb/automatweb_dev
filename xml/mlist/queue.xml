@@ -1,6 +1,5 @@
 <?xml version='1.0'?>
 <tabledef>
-
 <data>
 <field name="qid" caption="#" talign="center" sortable="1" type="int" numeric="yea"/>
 <field name="lid" caption="List" talign="center" sortable="1"/>
