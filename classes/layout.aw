@@ -105,7 +105,10 @@ class layout extends class_base
 		$grid = $ob->meta('grid');
 		$grid['table_style'] = $ob->meta('table_style');
 
-		return $ge->show($grid, $alias["target"], &$tpls);
+		$tmp =  $ge->show($grid, $alias["target"], &$tpls);
+		$d = get_instance("document");
+		$d->create_relative_links($tmp);
+		return $tmp; 
 	}
 
 	////
@@ -250,6 +253,8 @@ class layout extends class_base
 		$ol = new object_list(array(
 			"parent" => $folders,
 			"class_id" => CL_CSS,
+			"lang_id" => array(),
+			"site_id" => array()
 		));
 		$styles = $ol->names(array(
 			"add_folders" => true
