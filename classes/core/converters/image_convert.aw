@@ -58,6 +58,7 @@ class image_convert extends class_base
 		$driver = "_int_image_convert_driver_".$driver;
 
 		$this->driver = new $driver;
+		$this->dirver->ref =& $this;
 	}
 
 	// this is here, because the authors of the php gd module are stupid idiots.
@@ -149,11 +150,22 @@ class image_convert extends class_base
 	{
 		$this->driver->merge($img);
 	}
+
+	function set_error_reporting($rep)
+	{
+		$this->driver->error_rep = $rep;
+	}
+
+	function is_error()
+	{
+		return $this->is_error;
+	}
 }
 
 class _int_image_convert_driver_gd extends aw_template
 {
 	var $image;
+	var $ref;
 
 	function load_from_string($str)
 	{
@@ -172,12 +184,20 @@ class _int_image_convert_driver_gd extends aw_template
 			$this->load_from_file($tn);
 			unlink($tn);
 		}
+
 		if (!$this->image)
 		{
-			error::throw(array(
-				"id" => ERR_IMAGE_FORMAT,
-				"msg" => "image_convert::gd_driver::load_from_string(): could not detect image format!"
-			));
+			if ($this->error_rep == false)
+			{
+				$this->ref->is_error = true;
+			}
+			else
+			{
+				error::throw(array(
+					"id" => ERR_IMAGE_FORMAT,
+					"msg" => "image_convert::gd_driver::load_from_string(): could not detect image format!"
+				));
+			}
 		}
 	}
 
