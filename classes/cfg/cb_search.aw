@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.2 2004/06/09 19:09:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.3 2004/06/10 07:20:05 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -18,6 +18,9 @@
 
 @property next_connection type=select
 @caption Where do you want to go from here?
+
+@property view_cf type=select
+@caption Vaatamise seadete vorm
 
 @groupinfo props caption="Väljad"
 
@@ -43,7 +46,6 @@
 // step 1 - choose a class
 // step 2 - choose a connection (might be optional)
 // step 3 - choose another class (also optional)
-
 */
 
 class cb_search extends class_base
@@ -68,6 +70,7 @@ class cb_search extends class_base
 				break;
 
 			case "root_class_cf":
+			case "view_cf":
 				if ($arr["obj_inst"]->prop("root_class"))
 				{
 					$ol = new object_list(array(
@@ -173,9 +176,9 @@ class cb_search extends class_base
 					"value" => $form_dat[$clid][$pn]["caption"]
 				)),
 				"ord" => html::textbox(array(
-					"name" => "form_dat[$clid][$pn][ord]",
+					"name" => "form_dat[$clid][$pn][jrk]",
 					"size" => 5,
-					"value" => $form_dat[$clid][$pn]["ord"]
+					"value" => $form_dat[$clid][$pn]["jrk"]
 				))
 			));
 		};
@@ -253,9 +256,38 @@ class cb_search extends class_base
 			{
 				$item["value"] = $this->search_data[$item["clid"]][$name];
 			};
+
 			$res[$iname] = $item;
+
+			if ($item["type"] == "classificator")
+			{
+				$this->mod_chooser_prop($res, $iname);
+			}
 		};
 		return $res;
+	}
+
+	function mod_chooser_prop(&$props, $pn)
+	{
+		// since storage can't do this yet, we gots to do sql here :(
+		$p =& $props[$pn];
+		$opts = array("" => "");
+		if ($p["table"] != "" && $p["field"] != "")
+		{
+			$this->db_query("SELECT distinct($p[field]) as val FROM $p[table]");
+			while ($row = $this->db_next())
+			{
+				$opts[$row["val"]] = $row["val"];
+			}
+		}
+
+		// now make names
+		$ol = new object_list(array(
+			"oid" => $opts
+		));
+
+		$p["type"] = "select";
+		$p["options"] = array("" => "") + $ol->names();
 	}
 
 	function _prepare_search($arr)
@@ -277,18 +309,50 @@ class cb_search extends class_base
 
 	}
 
+	function __proptbl_srt($pa, $pb)
+	{
+		$a = $this->__tdata[$pa];
+		$b = $this->__tdata[$pb];
+
+		if ($a["jrk"] == $b["jrk"])
+		{
+			return 0;
+		}
+		return $a["jrk"] > $b["jrk"];
+	}
+
 	function mk_result_table($arr)
 	{
 		$this->_prepare_form_data($arr);
 		$this->_prepare_search($arr);
 		$t = &$arr["prop"]["vcl_inst"];
+
 		foreach($this->in_results as $iname => $item)
 		{
-			$t->define_field(array(
+			$dat = array(
 				"name" => $iname,
 				"caption" => $item["caption"],
-			));
+			);
+			if ($this->__tdata[$iname]["sortable"])
+			{
+				$dat["sortable"] = 1;
+			}
+			$t->define_field($dat);
 		}
+
+		if ($this->__tdata["__defaultsort"])
+		{
+			$t->set_default_sortby($this->__tdata["__defaultsort"]);	
+			$t->set_default_sorder("asc");
+		}
+		else
+		{
+			$t->set_default_sortby("name");
+			$t->set_default_sorder("asc");
+		}
+
+		list($f_props) = $this->get_props_from_obj($arr["obj_inst"]);
+
 		// now do the actual bloody search
 		foreach($this->search_data as $clid => $data)
 		{
@@ -296,16 +360,59 @@ class cb_search extends class_base
 			{
 				$sdata = array();
 				$sdata["class_id"] = $clid;
+				$sdata[] = new object_list_filter(array("non_filter_classes" => $clid));
 				foreach($data as $key => $val)
 				{
-					$sdata[$key] = "%" . $val . "%";
+					if ($key == "per_page")
+					{
+						continue;
+					}
+					if ($this->in_form[$key]["type"] == "classificator")
+					{
+						$sdata[$key] = $val;
+					}
+					else
+					{
+						$sdata[$key] = "%" . $val . "%";
+					}
 				};
+
+				if ($GLOBALS["sortby"] != "")
+				{
+					$sp = $f_props[$GLOBALS["sortby"]];
+					$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
+				}
+				else
+				if ($this->__tdata["__defaultsort"] != "")
+				{
+					$sp = $f_props[$this->__tdata["__defaultsort"]];
+					$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ASC ";
+				}
+				else
+				{
+					$sdata["sort_by"] = "objects.name ASC ";
+				}
+
+				$olist_cnt = new object_list($sdata);
+				if ($data["per_page"])
+				{
+					$sdata["limit"] = ($arr["request"]["ft_page"] * $data["per_page"]).",".$data["per_page"];
+					$t->pageselector_string = $t->draw_text_pageselector(array(
+						"d_row_cnt" => $olist_cnt->count(),
+						"records_per_page" => $data["per_page"]
+					));
+				}
 				$olist = new object_list($sdata);
 				for($o = $olist->begin(); !$olist->end(); $o = $olist->next())
 				{
 					$row = $o->properties();
+					$vparms = array("id" => $o->id());
+					if ($arr["obj_inst"]->prop("view_cf"))
+					{
+						$vparms["cfgform"] = $arr["obj_inst"]->prop("view_cf");
+					}
 					$row["view_link"] = html::href(array(
-						"url" => $this->mk_my_orb("view", array("id" => $o->id()), $o->class_id()),
+						"url" => $this->mk_my_orb("view", $vparms, $o->class_id()),
 						"caption" => $this->in_results["view_link"]["caption"]
 					));
 					$row["change_link"] = html::href(array(
@@ -316,6 +423,8 @@ class cb_search extends class_base
 				};
 			};
 		};
+
+		$t->sort_by();
 	}
 				
 	function _prepare_form_data($arr)
@@ -349,6 +458,9 @@ class cb_search extends class_base
 			$this->in_form[$pn]["caption"] = $pd["caption"];
 		};
 
+		$this->__tdata = $o->meta("form_dat");
+		uksort($this->in_form, array(&$this, "__proptbl_srt"));
+
 		$this->in_results = array();
 		foreach($this->tdata as $pn => $pd)
 		{
@@ -360,6 +472,9 @@ class cb_search extends class_base
 			$this->in_results[$pn]["clid"] = $clid;
 			$this->in_results[$pn]["caption"] = $pd["caption"];
 		}
+
+		$this->__tdata = $o->meta("tdata");
+		uksort($this->in_results, array(&$this, "__proptbl_srt"));
 
 		/*
 		$relin = $relx[$o->prop("next_connection")];
@@ -424,12 +539,27 @@ class cb_search extends class_base
 				"caption" => "Kataloog",
 				"name" => "parent"
 			);
+
+			$ret["per_page"] = array(
+				"type" => "select",
+				"caption" => "Mitu kirjet lehel",
+				"name" => "per_page",
+				"options" => array(
+					10 => "10",
+					25 => "25",
+					50 => "50",
+					100 => "100",
+					250 => "250"
+				)
+			);
 		}
 
 		if ($ret["name"])
 		{
 			$ret["name"]["type"] = "textbox";
 			$ret["name"]["name"] = "name";
+			$ret["name"]["table"] = "objects";
+			$ret["name"]["field"] = "name";
 		}
 		return array($ret, $o->prop("root_class"), $cfgx->get_relinfo());
 	}

@@ -28,6 +28,15 @@
             <caption>Where do you want to go from here?</caption>
       </property>
       <property>
+            <name>view_cf</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Vaatamise seadete vorm</caption>
+      </property>
+      <property>
             <name>choose_fields</name>
             <table>objects</table>
             <group>props</group>
