@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.14 2004/11/30 10:16:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.15 2004/12/15 12:29:49 ahti Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -198,6 +198,66 @@
 
 @property usertext5 type=text store=no group=data
 @caption Usertext5
+
+@property usertext6 type=text store=no group=data
+@caption Usertext6
+
+@property usertext7 type=text store=no group=data
+@caption Usertext7
+
+@property usertext8 type=text store=no group=data
+@caption Usertext8
+
+@property usertext9 type=text store=no group=data
+@caption Usertext9
+
+@property usertext10 type=text store=no group=data
+@caption Usertext10
+
+@property usertext11 type=text store=no group=data
+@caption Usertext11
+
+@property usertext12 type=text store=no group=data
+@caption Usertext12
+
+@property usertext13 type=text store=no group=data
+@caption Usertext13
+
+@property usertext14 type=text store=no group=data
+@caption Usertext14
+
+@property usertext15 type=text store=no group=data
+@caption Usertext15
+
+@property usertext16 type=text store=no group=data
+@caption Usertext16
+
+@property usertext17 type=text store=no group=data
+@caption Usertext17
+
+@property usertext18 type=text store=no group=data
+@caption Usertext18
+
+@property usertext19 type=text store=no group=data
+@caption Usertext19
+
+@property usertext20 type=text store=no group=data
+@caption Usertext20
+
+@property usertext21 type=text store=no group=data
+@caption Usertext21
+
+@property usertext22 type=text store=no group=data
+@caption Usertext22
+
+@property usertext23 type=text store=no group=data
+@caption Usertext23
+
+@property usertext24 type=text store=no group=data
+@caption Usertext24
+
+@property usertext25 type=text store=no group=data
+@caption Usertext25
 
 @property usersubmit1 type=submit store=no
 @caption User-defined submit 1
