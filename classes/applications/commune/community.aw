@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.2 2004/08/17 11:17:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/community.aw,v 1.3 2004/08/25 07:13:38 ahti Exp $
 // community.aw - Kogukond 
 /*
 
@@ -48,7 +48,7 @@ class community extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case 'forum':
+			case "forum":
 				
 				break;
 

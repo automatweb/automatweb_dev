@@ -1,17 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.4 2004/08/17 11:17:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.5 2004/08/25 07:13:39 ahti Exp $
 // quickmessage.aw - Kiirteade 
 /*
 
-@classinfo syslog_type=ST_QUICKMESSAGE relationmgr=yes
+@classinfo syslog_type=ST_QUICKMESSAGE relationmgr=yes no_status=1 no_comment=1
 @tableinfo quickmessages index=id master_table=objects master_index=brother_of
 
 @default table=quickmessages
 @default group=general
 
-@groupinfo message caption="Uus teade"
-@default group=message
-//@default form=message2 parent=message
+//@default form=message
 
 @property user_from type=text
 @caption Kellelt
@@ -24,31 +22,6 @@
 
 @property content type=textarea
 @caption Sisu
-
-@default store=no
-@default submit=no
-
-@groupinfo inbox caption="Inbox"
-@default group=inbox
-
-@property inbox type=table no_caption=1
-@caption this is inbox
-
-
-@groupinfo outbox caption="Outbox"
-@default group=outbox
-
-@property fake1 type=text
-@caption this is outbox
-
-
-@groupinfo archive caption="Arhiiv"
-@default group=archive
-
-@property fake2 type=text
-@caption this is archive
-
-@classinfo no_status=1 no_comment=1
 
 */
 
@@ -73,6 +46,7 @@ class quickmessage extends class_base
 
 	function get_property($arr)
 	{
+		//arr($arr);
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -80,9 +54,11 @@ class quickmessage extends class_base
 			case "user_from":
 				$prop["value"] = aw_global_get("uid");
 				break;
+			/*
 			case "user_to":
 				$prop["value"] = $arr["request"]["user"];
 				break;
+			*/
 			case "name":
 				$retval = PROP_IGNORE;
 				break;
@@ -90,7 +66,6 @@ class quickmessage extends class_base
 		};
 		return $retval;
 	}
-
 	function get_inbox_for_user($arr)
 	{
 		$user_to = $arr["user_to"];
@@ -122,7 +97,6 @@ class quickmessage extends class_base
 		};
 		return $msgs;
 	}
-
 	/*
 	function set_property($arr = array())
 	{

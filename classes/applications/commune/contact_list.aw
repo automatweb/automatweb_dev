@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/contact_list.aw,v 1.1 2004/08/17 11:33:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/contact_list.aw,v 1.2 2004/08/25 07:13:38 ahti Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -74,7 +74,7 @@ class contact_list extends class_base
             		"tooltip" => "Lisa aadressiraamatusse",
             		"img" => "new.gif",
             		"url" => $this->mk_my_orb(
-						"change", array("group" => "addnew", "id" => $arr["obj_inst"]->oid), CL_CONTACT_LIST),
+						"change", array("group" => "addnew", "id" => $arr["obj_inst"]->id()), CL_CONTACT_LIST),
         		));
 				$tb->add_separator();
 				$tb->add_button(array(
@@ -101,7 +101,7 @@ class contact_list extends class_base
 				$a = $q->begin();
 				$vars = array(
 					"obj_inst" => &$arr["obj_inst"],
-					"commune" => $a->oid,
+					"commune" => $a->id(),
 					"vcl_inst" => &$arr["prop"]["vcl_inst"],
 				);
 				$this->show_contact_list($vars);
@@ -111,6 +111,12 @@ class contact_list extends class_base
 	}
 	function show_contact_list($arr)
 	{
+		/*
+		$c = new connection();
+		$asd = $c->find(array("to" => $arr["id"], "type" => 1));
+		arr($asd);
+		*/
+		//arr($arr["obj_inst"]);
 		$contacts = array();
 		$owner = &$arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_LIST_OWNER");
 		if(is_object($owner))
@@ -127,10 +133,10 @@ class contact_list extends class_base
 				$profile = $cont->to();
 				$person = $profile->get_first_obj_by_reltype("RELTYPE_PERSON");
 				$creator = $profile->createdby();
-				$contacts[$creator->oid] = array(
+				$contacts[$creator->id()] = array(
 					"name" => $creator->name(),
 					"email" => $person->prop("email"),
-					"profile" => $profile->oid,
+					"profile" => $profile->id(),
 				);
 			}
 		}
@@ -138,15 +144,16 @@ class contact_list extends class_base
 			"type" => "RELTYPE_ADDED_USER",
 			"sort_by" => "objects.desc",
 		));
+		//arr($users);
 		foreach($users as $user)
 		{
 			$user_o = $user->to();
 			$person = $user_o->get_first_obj_by_reltype("RELTYPE_PERSON");
 			$profile = $person->get_first_obj_by_reltype("RELTYPE_PROFILE");
-			$contacts[$user_o->oid] = array(
+			$contacts[$user_o->id()] = array(
 				"name" => $user_o->name(),
-				"email" => $person->prop("email"),
-				"profile" => $profile->oid,
+				"email" => $user_o->prop("email"),
+				"profile" => $profile->id(),
 			);
 		}
 		$t = &$arr["vcl_inst"];
@@ -172,12 +179,34 @@ class contact_list extends class_base
 		));
 		foreach($contacts as $id => $contact)
 		{
+			// h4x0rD stuff -- ahz
+			if($arr["include"])
+			{
+				$profile = $this->mk_my_orb("change",array(
+					"id" => $arr["commune"],
+					"group" => "friend_details",
+					"profile" => $contact["profile"],
+				), "commune");
+				$message = $this->mk_my_orb("change",array(
+					"id" => $arr["commune"],
+					"user" => $contact["name"],
+					"group" => "newmessage",
+				),"commune");
+			}
+			else
+			{
+				$profile = $this->mk_my_orb("change",array(
+					"id" => $contact["profile"],
+				),"profile");
+				$message = $this->mk_my_orb("change",array(
+					"user" => $contact["name"],
+					"group" => "newmessage",
+				),"quickmessage");
+			}
 			$t->define_data(array(
 				"id" => $id,
 				"name" => html::href(array(
-					"url" => $this->mk_my_orb("change",array(
-						"id" => $contact["profile"],
-					),"profile"),
+					"url" => $profile,
 					"caption" => $contact["name"],
 				)),
 				"email" => html::href(array(
@@ -185,10 +214,7 @@ class contact_list extends class_base
 					"caption" => $contact["email"],
 				)),
 				"sendmessage" => html::href(array(
-					"url" => $this->mk_my_orb("change",array(
-						"user" => $contact["name"],
-						"group" => "newmessage",
-					),"quickmessage"),
+					"url" => $message,
 					"caption" => "Saada sõnum",
 				)),
 			));

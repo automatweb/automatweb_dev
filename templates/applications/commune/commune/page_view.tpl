@@ -60,4 +60,8 @@
     <td width="250" height="100" align="center" valign="middle" bgcolor="#FEFAEF">{VAR:item8}</td>
     <td width="250" height="100" align="center" valign="middle" bgcolor="#FFF1DC">{VAR:item9}</td>
   </tr>
+  <tr>
+    <td width="250" height="100" align="center" valign="middle" bgcolor="#FEFAEF">{VAR:item9}</td>
+    <td width="250" height="100" align="center" valign="middle" bgcolor="#FFF1DC">{VAR:item10}</td>
+  </tr>
 </table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.2 2004/08/17 11:17:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.3 2004/08/25 07:13:38 ahti Exp $
 // profile.aw - Profiil 
 /*
 
@@ -15,7 +15,7 @@
 
 
 // ------------------------------------------------------------
-// general (Üldine) tabi alla suvad asjad
+// general (Üldine) tabi alla asuvad asjad
 // ------------------------------------------------------------
 @property cfgmanager type=relpicker reltype=RELTYPE_CFG_MANAGER method=serialize table=objects field=meta group=general
 @caption Seadete haldur
@@ -346,6 +346,7 @@ class profile extends class_base
 		}
 		return NULL;
 	}
+
 	function make_birthday($var)
 	{
 		//19840719
@@ -356,6 +357,7 @@ class profile extends class_base
 		$birthday = $var{7}.$var{6}.".".$var{5}.$var{4}.".".$var{3}.$var{2}.$var{1}.$var{0};
 		return $birthday;
 	}
+
 	function get_age2($var)
 	{
 		if($var == 0)
@@ -388,6 +390,7 @@ class profile extends class_base
 		}
 		return $age;
 	}
+
 	function get_age($arr)
 	{
 		$age = NULL;

@@ -34,8 +34,20 @@
 //@property commune_profile_link type=text store=no
 //@caption Profiil kommuunis
 
-//@property add_friend_link type=text store=no
-//@caption Lisa sõber
+@property add_friend_link type=text store=no
+@caption Lisa sõber
+
+@property add_ignored_link type=text store=no
+@caption Ignoreeri
+
+@property add_blocked_link type=text store=no
+@caption Blokeeri
+
+@property send_message_link type=text store=no
+@caption Saade teade
+
+@property contact_list_link type=text store=no
+@caption Lisa aadressiraamatusse
 
 @property comments type=comments store=no
 @caption Kommentaarium
@@ -73,7 +85,6 @@ class image_rate extends class_base
 	{
 		//echo "siia siis ei tulegi? :(";
 	}
-
 	function init_rate($arr)
 	{
 		$this->inst->kala = "tursk";
@@ -85,10 +96,22 @@ class image_rate extends class_base
 		//arr($value);
 			$var[] = $value;
 		}
-		while(!is_oid($row["img_id"]))
+		$count = 0;
+		while(!$true)
 		{
+			$count++;
+			$true = false;
 			shuffle($var);
 			$row = $var[0];
+			if($this->can("view", $row["img_id"]))
+			{
+				$true = true;
+			}
+			// a little check against endless loop
+			if($count > 100)
+			{
+				break;
+			}
 		}
 		//	$q = "SELECT profile2image.* FROM profile2image LEFT JOIN objects ON (profile2image.img_id = //objects.oid) WHERE objects.status > 0 ORDER BY rand() LIMIT 1";
 		// see võtab praegu kõik süsteemis olevad kommuunide poolt tekitatud pildid,
@@ -183,6 +206,19 @@ class image_rate extends class_base
 				));
 				break;
 			// THIS should certainly NOT be here, goes under profile view -- ahz
+			*/
+			case "send_message_link":
+				$user = $this->profile_data->createdby();
+				$params = array(
+					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
+					"user" => $user->name(),
+					"group" => "newmessage",
+				);
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("change", $params, "commune"),
+					"caption" => "Saada sõnum",
+				));
+				break;
 			case "add_friend_link":
 				$params = array(
 					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
@@ -195,7 +231,46 @@ class image_rate extends class_base
 					"caption" => "lisa sõprade hulka",
 				));
 				break;
-			*/
+			case "add_ignored_link":
+				$user = $this->profile_data->createdby();
+				$params = array(
+					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
+					"user" => $user->id(),
+					"commact" => "add_ignored",
+					"group" => "ignored_list",
+				);
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("commaction", $params, "commune"),
+					"caption" => "Ignoreeri",
+				));
+				break;
+			case "add_blocked_link":
+				$user = $this->profile_data->createdby();
+				$params = array(
+					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
+					"user" => $user->id(),
+					"commact" => "add_blocked",
+					"group" => "blocked_list",
+				);
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("commaction", $params, "commune"),
+					"caption" => "Blokeeri",
+				));
+				break;
+			case "contact_list_link":
+				$user = $this->profile_data->createdby();
+				$params = array(
+					"id" => $GLOBALS["id"], // commune'i id! ($arr["request"]["id"] ei anna midagi, sest form)
+					"user" => $user->id(),
+					"commact" => "add_contact",
+					"group" => "address_book",
+				);
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("commaction", $params, "commune"),
+					"caption" => "Lisa kontaktidesse",
+				));
+				break;
+				
 			case "image":
 				$i = get_instance(CL_IMAGE);
 				$imgdata = $i->get_image_by_id($this->image_data->id());
@@ -203,13 +278,12 @@ class image_rate extends class_base
 				$prop["value"] .= html::img(array(
 					"url" => $imgdata["url"],
 				));
-
 				break;
-
+				
 			case "image_comment":
 				$prop["value"] = $this->image_data->comment();
 				break;
-
+				
 			case "rate":
 				$prop["options"] = array(
 					"1" => "1",
