@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.62 2004/05/03 11:23:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.63 2004/05/03 11:37:57 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -27,6 +27,8 @@ class htmlclient extends aw_template
 		$this->layoutinfo = array();
 		$this->start_output();
 		$this->tp = get_instance("vcl/tabpanel");
+
+		// I even need those in the tabpanel
 	}
 
 	function set_layout($arr)
@@ -605,17 +607,37 @@ class htmlclient extends aw_template
 			};
 			if ($this->form_layout != "boxed")
 			{
+				// perhaps, just perhaps I should create a separate property type
+				// out of the tabpanel
+				//$rv = $this->tp->get_tabpanel(array());
 				$rv = $tp->get_tabpanel(array(
 					"content" => $rv,
-					//"panels_only" => true,
 				));
 			}
 			else
 			{
-				$tabs = $tp->get_tabpanel(array());
-				$this->additional_content["top"] .= $tabs;
+
+				$tabs = $this->tp->get_tabpanel(array(
+					"content" => $rv,
+					//"panels_only" => true,
+				));
+				if (is_array($tabs))
+				{
+					foreach($tabs as $key => $item)
+					{
+						$this->additional_content[$key] .= join("",$item);
+					};
+				}
+				else
+				{
+					$rv = $tabs;
+				};
+				//$this->additional_content["top"] .= $tabs;
+				//$tabs = $tp->get_tabpanel(array());
+				//$this->additional_content["top"] .= $tabs;
 			};
 		};
+				
 
 		if ($this->form_layout == "boxed")
 		{
