@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.17 2002/06/26 11:22:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.18 2002/07/23 21:20:02 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -15,6 +15,8 @@ define('WARNING','This is a MIME encoded message');
 define('OCTET','application/octet-stream');
 define('TEXT','text/plain');
 define('HTML','text/html');
+// ISO-8859-4 (Latin4)
+// Latin4 introduced letters for Estonian (et), the Baltic languages Latvian (lv, Lettish) and Lithuanian (lt)
 define('CHARSET','iso-8859-4');
 define('INLINE','inline');
 define('ATTACH','attachment');
@@ -565,6 +567,7 @@ class aw_mail {
 		{
 			$this->set_header("Content-Type","text/plain; charset=\"iso-8859-4\"");
 		};
+
 		unset($this->headers["To"]);
 // why is this here? it will screw up sending to mailinglists - only the first mail will get the subject
 //		unset($this->headers["Subject"]);
