@@ -1,5 +1,5 @@
 <?php
-// $Id: ds_local_sql.aw,v 1.6 2003/03/12 13:15:11 duke Exp $
+// $Id: ds_local_sql.aw,v 1.7 2003/03/31 10:10:05 duke Exp $
 // ds_local_sql - interface for the local SQL database
 class ds_local_sql extends aw_template
 {
@@ -15,7 +15,7 @@ class ds_local_sql extends aw_template
 	{
 		extract($args);
 		$retval = false;
-		if ($table && $idfield && $id)
+		if (isset($table) && isset($idfield) && isset($id))
 		{
 			$retval = new aw_array($this->get_record($table,$idfield,$id,array_keys($fields)));
 			$tmp = array();
