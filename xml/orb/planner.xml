@@ -1,61 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="planner" extends="class_base">
-		<action name="_new">
-			<function name="add">
-				<arguments>
-					<required name="parent" type="int" acl="add"/>
-					<optional name="return_url"/>
-					<optional name="alias_to"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="_submit_add">
-			<function name="submit_add">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="_new_alias">
-			<function name="add_alias">
-				<arguments>
-					<required name="parent"/>
-					<required name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-		
-		
-		<action name="_change">
-			<function name="view">
-				<arguments>
-					<required name="id" type="int" acl="view;edit"/>
-					<optional name="return_url"/>
-					<optional name="date"/>
-					<optional name="type"/>
-					<optional name="alias_to"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="_configure">
-			<function name="change">
-				<arguments>
-					<required name="id" type="int" acl="view;edit"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="_submit">
-			<function name="submit">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="view">
 			<function name="view">
 				<arguments>
@@ -68,19 +13,9 @@
 			</function>
 		</action>
 		
-		
-		
 		<action name="redir">
 			<function name="redir">
 				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="display_object">
-			<function name="display_object">
-				<arguments>
-					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
