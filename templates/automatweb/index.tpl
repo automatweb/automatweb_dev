@@ -152,7 +152,7 @@ div.menu div.menuItemSep {
 </td>
 </tr>
 </table>
-<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+<div style="width:1px;height:1px" ></div>
 <table border="0" cellpadding="0" cellspacing="0">
 {VAR:content}
 </table>
