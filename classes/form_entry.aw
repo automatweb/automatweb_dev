@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.11 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.12 2002/09/09 12:29:16 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -109,6 +109,35 @@ class form_entry extends aw_template
 		
 		return $new_id;
 
+	}
+
+	////
+	// !adding alias to document support
+	// we must let the user select whether he wants to view or edit the entry
+	function addalias($arr)
+	{
+		extract($arr);
+		$this->mk_path($al["parent"],"<a href='".$this->mk_my_orb("list_aliases", array("id" => $id),"aliasmgr")."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");
+		$this->read_template("alias_type.tpl");
+
+		$fb = new form_base;
+		$form = $fb->get_form_for_entry($alias);
+
+		$opl = $fb->get_op_list($form);
+
+		$this->vars(array(
+			"op_sel" => $this->picker("", $opl[$form]),
+			"reforb" => $this->mk_reforb("submit_select_alias", array("docid" => $docid, "alias" => $alias, "form_id" => $form))
+		));
+		$ret = $this->parse();
+		return $ret;
+	}
+
+	function submit_select_alias($arr)
+	{
+		extract($arr);
+		$this->add_alias($docid,$alias,serialize(array("type" => $type, "output" => $output, "form_id" => $form_id)));
+		return $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr");
 	}
 }
 ?>
