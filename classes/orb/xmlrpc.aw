@@ -359,6 +359,7 @@ class xmlrpc extends aw_template
 
 			default:
 				// ignore all unknown types
+				$pre .= $pad."<string></string>\n";
 				return $pre;
 		}
 		return $pre;
