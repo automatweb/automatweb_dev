@@ -1,9 +1,7 @@
-<table border="0" style="border-collapse: collapse; border: 1px solid blue;" width="100%">
+<table border="0" style="border-collapse: collapse;" width="100%" height="100%">
 <tr>
-<td valign="top" style="border: 1px solid blue;">
-<strong>{VAR:daynum}</strong>
+<td valign="top" style="border: 1px solid gray;">
 <small>
-<p>
 	<!-- SUB: EVENT -->
 		<strong>{VAR:time}</strong> - {VAR:name}<br>
 	<!-- END SUB: EVENT -->

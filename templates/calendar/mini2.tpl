@@ -1,0 +1,27 @@
+<table class="minical_table">
+<tr>
+<td colspan="7" class="minical_header">
+<a href="{VAR:caption_url}">{VAR:caption}</a>
+</td>
+</tr>
+
+<!-- SUB: header -->
+<tr>
+	<!-- SUB: header_cell -->
+	<td valign="middle" align="center">
+	{VAR:header_content}
+	</td>
+	<!-- END SUB: header_cell -->
+</tr>
+<!-- END SUB: header -->
+
+<!-- SUB: line -->
+<tr>
+	<!-- SUB: cell -->
+	<td class="{VAR:daycell_style}">
+	<a href="{VAR:day_url}">{VAR:daynum}</a>
+	</td>
+	<!-- END SUB: cell -->
+</tr>
+<!-- END SUB: line -->
+</table>
