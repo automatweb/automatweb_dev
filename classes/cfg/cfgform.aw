@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.35 2004/08/26 14:34:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.36 2004/08/30 14:01:44 ahti Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -387,10 +387,9 @@ class cfgform extends class_base
 		foreach($by_group as $key => $proplist)
 		{
 			$this->vars(array(
-				"grp_caption" => $this->grplist[$key]["caption"],
+				"grp_caption" => $this->grplist[$key]["caption"]." ($key)",
 				"grpid" => $key,
 			));
-
 
 			$sc = "";
 			foreach($proplist as $property)
