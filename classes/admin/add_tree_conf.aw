@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.9 2004/03/09 14:17:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.10 2004/03/23 12:47:51 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -309,6 +309,38 @@ class add_tree_conf extends class_base
 		}
 
 		return $ret;
+	}
+
+	/** returns true if the given class can be used in the given conf
+	
+		@comment
+			
+			$atc - add_tree_conf object instance
+			$class - the name of the class to check access to
+
+	**/
+	function can_access_class($atc, $class)
+	{
+		$us = $atc->meta("usable");
+		
+		$class_id = false;
+
+		$clss = aw_ini_get("classes");
+		foreach($clss as $clid => $cld)
+		{
+			if (basename($cld["file"]) == $class)
+			{
+				$class_id = $clid;
+				break;
+			}
+		}
+
+		error::throw_if(!$class_id, array(
+			"id" => ERR_NO_CLASS,
+			"msg" => "add_tree_conf::can_access_class($atc, $class): could not find class id for class name!"
+		));
+
+		return $us[$class_id] == 1;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.111 2004/03/09 10:53:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.112 2004/03/23 12:47:50 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1185,6 +1185,31 @@ class users extends users_user
 				}
 			}
 		}
+		else
+		{
+			// no user is logged in. what we need to do here is check if a not-logged-in user group exists
+			// and if it does, then set the gidlist accordingly
+			// if not, then create a group for them under the groups folder
+			// now the only problem is how do I identify the group. 
+			// that's gonna be a problem, but I guess the only way is the config table.
+			$nlg = $this->get_cval("non_logged_in_users_group");
+			if (!$nlg && ($grpp = aw_ini_get("groups.tree_root")))
+			{
+				$nlg = $this->addgroup(0, "Sisse logimata kasutajad", GRP_REGULAR, 0, 1, 0, $grpp);
+				$this->set_cval("non_logged_in_users_group", $nlg);
+			}
+
+			$gd = $this->fetchgroup($nlg);
+
+			$gidlist = array($nlg => $nlg);
+			$gidlist_pri = array($nlg => $gd["priority"]);
+			$gidlist_oid = array($gd["oid"] => $gd["oid"]);
+
+			aw_global_set("gidlist", $gidlist);
+			aw_global_set("gidlist_pri", $gidlist_pri);
+			aw_global_set("gidlist_oid", $gidlist_oid);
+		}
+
 		if (!is_array(aw_global_get("gidlist")))
 		{
 			aw_global_set("gidlist", array());

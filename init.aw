@@ -483,11 +483,10 @@ function aw_startup()
 	$p->request_startup();
 
 	// this check reduces the startup memory usage for not logged in users by a whopping 1.3MB! --duke
-	if (($uid = aw_global_get("uid")) != "")
-	{
-		$u = get_instance("users");
-		$u->request_startup();
-	}
+	// 
+	// the check was if user is logged on. now we need to do this all the time, because public users are acl controlled now. 
+	$u = get_instance("users");
+	$u->request_startup();
 
 	if (!is_array(aw_global_get("gidlist")))
 	{

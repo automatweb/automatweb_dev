@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.54 2003/12/14 15:22:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.56 2004/03/23 12:47:50 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -63,6 +63,9 @@ class orb extends aw_template
 		$action = ($action) ? $action : $orb_defs[$class]["default"];
 
 		$this->check_login(array("class" => $class,"action" => $action));
+
+		// check access for this class. access is checked by the "add tree conf" object assigned to groups
+		$this->check_class_access($class);
 
 		// if the action is found in one of the classes defined by
 		// the extends attribute, it should know which class was really
@@ -144,7 +147,6 @@ class orb extends aw_template
 		// check acl
 		$this->do_orb_acl_checks($orb_defs[$class][$action], $vars);
 
-
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
 			$t = new $class;
@@ -153,7 +155,7 @@ class orb extends aw_template
 			{
 				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),true,$silent);
 			}
- 
+
 			if ($orb_defs[$class][$action]["xmlrpc"] == 1)
 			{
 				$url = $this->do_orb_xmlrpc_call($orb_defs[$class][$action]["server"],$class,$action,$vars);
@@ -958,6 +960,22 @@ class orb extends aw_template
 			$meth["values"]["parent"] = aw_global_get("section");
 		}
 		return $meth;
+	}
+
+	function check_class_access($class)
+	{
+		$atc = get_instance("admin/add_tree_conf");
+		$conf = $atc->get_current_conf();
+		if (!$conf)
+		{
+			// by default you can add all types of objects
+			return true;
+		}
+
+		error::throw_if(!$atc->can_access_class(obj($conf), $class),array(
+			"id" => ERR_ACL,
+			"msg" => "orb::check_class_access($class): no permissions to access the class! (denied by $conf)"
+		));
 	}
 }
 ?>
