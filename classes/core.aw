@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.48 2001/08/02 03:40:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.49 2001/08/03 03:18:27 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -522,6 +522,7 @@ class core extends db_connector
 	// parent(int) - millisest nodest alustame?
 	// class(int) - milline klass meid huvitab?
 	// type(int) - kui tegemist on menüüga, siis loetakse sisse ainult seda tüüpi menüüd.
+	// active(bool) - kui true, siis tagastakse ainult need objektid, mis on aktiivse
 	function get_objects_below($args = array())
 	{
 		extract($args);
@@ -530,6 +531,7 @@ class core extends db_connector
 					"parent" => $parent,
 					"class" => $class,
 					"type" => $type,
+					"active" => $active,
 			));
 			
 		while($row = $this->db_next())
@@ -1064,11 +1066,14 @@ class core extends db_connector
 	// argumendid
 	// class (int) - klassi id
 	// parent(id)(opt) - kui defineeritud, siis loeb ainult objekte selle parenti all
+	// active(bool) - kui true, siis tagastame ainult aktiivsed dokud
 	function get_objects_by_class($args = array())
 	{
 		extract($args);
 		// kui parent on antud, siis moodustame sellest IN klausli
 		$pstr = ($parent) ? " AND parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
+
+		$astr = ($active) ? " AND status = 2 " : "";
 		
 		// kui tegemist on menüüdega, siis joinime kylge ka menu tabeli
 		if ($class == CL_PSEUDO)
@@ -1076,13 +1081,13 @@ class core extends db_connector
 			$typestr = (isset($type)) ? " AND menu.type = '$type' " : "";
 			$q = "SELECT objects.* FROM objects 
 				LEFT JOIN menu ON (objects.oid = menu.id)
-				WHERE objects.class_id = $class AND objects.status != 0 $pstr $typestr";
+				WHERE objects.class_id = $class AND objects.status != 0 $pstr $astr $typestr";
 		}
 		else
 		{
 			$q = "SELECT objects.*
 					FROM objects
-					WHERE class_id = $class AND status != 0 $pstr";
+					WHERE class_id = $class AND status != 0 $pstr $astr";
 		};
 		$this->db_query($q);
 	}
@@ -1457,17 +1462,26 @@ class core extends db_connector
 	// !fwrite wrapper
 	function put_file($arr)
 	{
-		if (!$arr["file"])
+		if (not($arr["file"]))
 		{
 			$this->raise_error(LC_CORE_PUT_FILE_NO_NAME,true);
 		};
+
 		$file = $arr["file"];
-		if (!($fh = fopen($file,"w")))
+
+		// jama on selles, et "w" modes avamine truncateb olemasoleva faili,
+		// ja sellest voib tekkida jamasid... see, et mitu inimest korraga sama
+		// faili kirjutavad, peaks olema suht väikese tõenäosusega sündmus, sest
+		// üldjuhul me kasutame random nimedega faile.
+		if (not(($fh = fopen($file,"w"))))
 		{
 			$this->raise_error("Couldn't open file '$file' for writing",true);
 		};
 		fwrite($fh,$arr["content"]);
 		fclose($fh);
+		// actually this should return a boolean value and an error message should
+		// be stored somewhere inside the class.
+		return true;
 	}
 
 	////

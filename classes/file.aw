@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.12 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.13 2001/08/03 03:18:27 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -125,6 +125,31 @@ class file extends aw_template
 					"content" => $args["content"],
 			));
 		return $file;
+	}
+
+	////
+	// !Salvestab special faili, ehk siis otse files kataloogi
+	// argumendid:
+	// name(string) - faili nimi
+	// data(string) - faili sisu
+	// sys(bool) - kas panna faili systeemi juurde?
+	function put_special_file($args = array())
+	{
+		if ($args["sys"])
+		{
+			$path = AW_PATH . "/files";
+		}
+		else
+		{
+			$path = SITE_DIR . "/files";
+		};
+
+		$success =$this->put_file(array(
+			"file" => $path . "/" . $args["name"],
+			"content" => $args["content"],
+		));
+
+		return $success;
 	}
 
 	////
