@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.44 2002/09/09 15:42:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.45 2002/09/09 16:38:17 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -162,10 +162,6 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			};
 		};
 
-// what is this for?
-//		$construct = get_instance("construct");
-		$this->aliases = $aliases;
-
 		$by_alias = array();
 		foreach($this->cfg["classes"] as $clid => $cldat)
 		{
@@ -181,75 +177,101 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 
 		if (is_array($matches))
 		{
+			// we gather all aliases in here, grouped by class so we gan give them to parse_alias_list()
+			$toreplace = array();
 			foreach ($matches as $key => $val)
 			{
-				// if nothing comes up, we just replace it with a empty string
-				$replacement = "";
-
-				// store the class id of the alias into a temprary variable for later use
 				$clid = $by_alias[$val[2]]["class_id"];
-				$emb_obj_name = "emb" . $clid;
-
 				$idx = $val[3] - 1;
+				$target = $aliases[$clid][$idx]["target"];
 
-				if (not(is_object($$emb_obj_name)))
+				$toreplace[$clid][$val[0]] = $aliases[$clid][$idx];
+				$toreplace[$clid][$val[0]]["val"] = $val;
+			}
+
+			// here we do the actual parse/replace bit
+			foreach($toreplace as $clid => $claliases)
+			{
+				$emb_obj_name = "emb" . $clid;
+				$cldat = $this->cfg["classes"][$clid];
+				$class_name = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
+
+				if ($class_name)
 				{
-					$class_name = $by_alias[$val[2]]["file"];
-					if ($class_name)
-					{
-						// load and create the class needed for that alias type
-						$$emb_obj_name = get_instance($class_name);
-					};
-				};
-
-				if ( is_object($$emb_obj_name) )
-				{
-					$params = array(
-						"oid" => $oid,
-						"matches" => $val,
-						"alias" => $aliases[$clid][$idx],
-						"tpls" => &$args["templates"],
-					);
-
-					global $DEBUG;
-					if ($DEBUG)
-					{
-						print "<pre>";
-						print_r($aliases);
-						print_r($val);
-						print "clid = $clid<br>";
-						print "idx = $idx<br>";
-					};
-// yeah. what exactly does this do?
-//					$construct->load($clid,$aliases[$clid][$idx]["target"],$params);
-
-					$repl = $$emb_obj_name->parse_alias($params);
-				
-					$inplace = false;
-					if (is_array($repl))
-					{
-						$replacement = $repl["replacement"];
-						$inplace = $repl["inplace"];
-					}
-					else
-					{
-						$replacement = $repl;
-					}
+					// load and create the class needed for that alias type
+					$$emb_obj_name = get_instance($class_name);
 				}
 
-				if ($inplace)
+				if (method_exists($$emb_obj_name, "parse_alias_list"))
 				{
-					$this->tmp_vars = array($inplace => $replacement);
-					$replacement = "";
-				};
-					
-				$source = str_replace($val[0],$replacement,$source);
+					// if the class supports alias list parsing, do it
+					$repl = $$emb_obj_name->parse_alias_list(array(
+						"oid" => $oid,
+						"aliases" => $claliases,
+						"tpls" => &$args["templates"],
+					));
+					if (is_array($repl))
+					{
+						foreach($repl as $aname => $avalue)
+						{
+							$inplace = false;
+							if (is_array($avalue))
+							{
+								$replacement = $avalue["replacement"];
+								$inplace = $avalue["inplace"];
+							}
+							else
+							{
+								$replacement = $avalue;
+							}
 
+							if ($inplace)
+							{
+								$this->tmp_vars = array($inplace => $replacement);
+								$replacement = "";
+							};
+								
+							$source = str_replace($aname,$replacement,$source);
+						}
+					}
+				}
+				else
+				{
+					// if not, then parse all the aliases one by one
+					foreach($claliases as $avalue => $adata)
+					{
+						// if nothing comes up, we just replace it with a empty string
+						$replacement = "";
+
+						$repl = $$emb_obj_name->parse_alias(array(
+							"oid" => $oid,
+							"matches" => $adata["val"],
+							"alias" => $adata,
+							"tpls" => &$args["templates"],
+						));
+					
+						$inplace = false;
+						if (is_array($repl))
+						{
+							$replacement = $repl["replacement"];
+							$inplace = $repl["inplace"];
+						}
+						else
+						{
+							$replacement = $repl;
+						}
+
+						if ($inplace)
+						{
+							$this->tmp_vars = array($inplace => $replacement);
+							$replacement = "";
+						};
+							
+						$source = str_replace($avalue,$replacement,$source);
+					}
+				}
 			}
 		};
-// nice. but still. why?
-//		upd_instance("construct",$construct);
-		//return $source;
 	}
 
 	////
