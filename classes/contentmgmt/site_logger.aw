@@ -13,7 +13,6 @@ class site_logger extends core
 	function add($arr)
 	{
 		register_shutdown_function("log_pv", $GLOBALS["awt"]->timers["__global"]["started"]);
-
 		if (aw_ini_get("syslog.log_pageviews") != 1)
 		{
 			return false;
@@ -34,7 +33,7 @@ class site_logger extends core
 			$sec_id = aw_ini_get("frontpage");
 		}
 
-		if ($this->can("view", $sec_id))
+		if (is_oid($sec_id) && $this->can("view", $sec_id))
 		{
 			$sec_o = obj($sec_id);
 			$path_str = $sec_o->path_str();
@@ -56,7 +55,6 @@ class site_logger extends core
 		}
 
 		// evil e-mail link tracking code
-
 		global $artid,$sid,$mlxuid;
 		if ($artid)	// tyyp tuli meilist, vaja kirja panna
 		{
@@ -85,11 +83,29 @@ class site_logger extends core
 				$msg = $ml_user["name"]." (".$ml_user["mail"].") vaatas lehte $path_str";
 			}
 		}
+		elseif($_GET["t"])
+		{
+			$uid = aw_global_get("uid");
+			if(!empty($uid))
+			{
+				$user = obj(aw_global_get("uid_oid"));
+				$emails = $user->connections_from(array(
+					"type" => "RELTYPE_EMAIL",
+				));
+				$match = array();
+				foreach($emails as $eml)
+				{
+					$email = $eml->to();
+					$match[] = "'".$email->prop("name")." <".$email->prop("mail").">'";
+				}
+				$q = "UPDATE ml_sent_mails SET vars = 1 WHERE target IN (".implode(",",$match).") AND mail_sent IS NOT NULL AND message LIKE '%".$_SERVER["REQUEST_URI"]."%'";
+				$this->db_query($q);
+			}
+		}
 		else
 		{
 			$msg = $path_str;
 		}
-
 		return $msg;
 	}
 }
