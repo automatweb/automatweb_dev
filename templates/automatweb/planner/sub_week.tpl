@@ -4,7 +4,7 @@
 	<table border="0" cellspacing="1" cellpadding="2" width="100%">
 	<tr>
 	<!-- SUB: header -->
-	<td class="header1" align="center" bgcolor="{VAR:bgcolor}">
+	<td width="15" class="header1" align="center" bgcolor="{VAR:bgcolor}">
 	<a href="?class=planner&action=change&id={VAR:hid}&disp={VAR:disp}&date={VAR:date}">{VAR:head}</a>
 	<br>
 	{VAR:dateinfo}

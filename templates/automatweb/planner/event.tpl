@@ -58,12 +58,24 @@
 <!-- SUB: delete -->
 <input type="submit" name="delete" value="Kustuta" onClick="if (confirm('Oled kindel?')) {document.event.submit()}">
 <!-- END SUB: delete -->
-<input type="hidden" name="dayskip_type" value="{VAR:dayskip_type}">
-<input type="hidden" name="dayskip_value" value="{VAR:dayskip_value}">
-<input type="hidden" name="wd" value="{VAR:wd}">
+
+<input type="hidden" name="dayskip" value="{VAR:dayskip}">
+<input type="hidden" name="daypwhen" value="{VAR:daypwhen}">
+
+<input type="hidden" name="weekskip" value="{VAR:weekskip}">
+<input type="hidden" name="weekpwhen" value="{VAR:weekpwhen}">
+
+<input type="hidden" name="monskip" value="{VAR:monskip}">
+<input type="hidden" name="monpwhen" value="{VAR:monpwhen}">
+<input type="hidden" name="monpwhen2" value="{VAR:monpwhen2}">
+
+<input type="hidden" name="yearskip" value="{VAR:yearskip}">
+<input type="hidden" name="yearpwhen" value="{VAR:yearpwhen}">
+
 <input type="hidden" name="repeat" value="{VAR:repeat}">
 <input type="hidden" name="repeat_value" value="{VAR:repeat_value}">
 <input type="hidden" name="repeat_type" value="{VAR:repeat_type}">
+
 {VAR:reforb}
 </td>
 </tr>
