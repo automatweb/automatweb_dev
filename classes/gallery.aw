@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.9 2001/08/15 15:23:34 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.10 2001/08/16 16:08:40 cvs Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -263,38 +263,28 @@ class gallery extends aw_template
 		{
 			$page = 0;
 		}
-//		echo "submit ! id = $id , page = $page <br>";
-//		echo "gal = <pre>", var_dump($this->arr), "</pre> <br>";
-		global $page;
 		for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
 		{
-//			echo "row $row <br>";
 			for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 			{
 				$t = new db_images;
 				$var = "tn_".$row."_".$col;
 				global $$var,${$var."_type"};
-//				echo "row = $row , col = $col var = ", $$var , "<br>";
 				if ($$var != "none")
 				{
-//					echo "new img! <br>";
 					if ($this->arr[$page]["content"][$row][$col]["tn_id"] != 0)
 					{
-//						echo "change <br>";
 						$ar = $t->_replace(array("filename" => $$var,"file_type" => ${$var."_type"}, "poid" => $this->arr[$page]["content"][$row][$col]["tn_id"]));
 						$pid = $ar["id"];
 					}
 					else
 					{
-//						echo "upload! <br>";
 						$ar = $t->_upload(array("filename" => $$var,"file_type" => ${$var."_type"}, "oid" => $this->id));
 						$pid = $ar["id"];
-//						echo "pid = $pid <br>";
 					}
 					$img = $t->get_img_by_id($pid);
 					$this->arr[$page]["content"][$row][$col]["tn_id"] = $img["id"];
 					$this->arr[$page]["content"][$row][$col]["tnurl"] = $img["url"];
-//					echo "tnid = $img[id] , tnurl = $img[url] <br>";
 				}
 
 				$t = new db_images;
