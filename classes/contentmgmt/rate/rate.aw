@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.18 2004/08/18 07:21:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.19 2004/10/08 15:24:59 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -112,6 +112,11 @@ class rate extends class_base
 
 	function get_rating_for_object($oid, $type = RATING_AVERAGE)
 	{
+		if (!is_oid($oid))
+		{
+			return 0;
+		}
+		
 		// we need to cache this shit.
 		// so, let's make add_rate write it to the object's metadata, in the rate array
 		$ob = obj($oid);
