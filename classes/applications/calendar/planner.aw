@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.27 2004/11/19 11:31:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.28 2004/11/25 12:09:32 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -505,6 +505,7 @@ class planner extends class_base
 		// also include events from any projects that are connected to this calender
 		// if the user wants so
 
+		enter_function("get_event_list::my_projects");
 		// "my_projects" is misleading, what it actually does is that it includes
 		// events from projects that the owner of the current calendar participiates in
 		if ($obj->prop("my_projects") == 1)
@@ -558,6 +559,7 @@ class planner extends class_base
 				};
 			};
 		};
+		exit_function("get_event_list::my_projects");
 		
 		
 		$rv = array();
@@ -629,6 +631,7 @@ class planner extends class_base
 
 		// now, I need another clue string .. perhaps even in that big fat ass query?
 
+		enter_function("get_event_list::query");
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -638,9 +641,11 @@ class planner extends class_base
 				"end" => $row["end"],
 			);
 		};
+		exit_function("get_event_list::query");
 
 		$fldstr = join(",",$folders);
 
+		enter_function("get_event_list::recur");
 		if (aw_ini_get("calendar.recurrence_enabled") == 1)
 		{
 			// now collect recurrence data
@@ -667,6 +672,7 @@ class planner extends class_base
 				$this->recur_info[$row["id"]][] = $row["recur_start"];
 			};
 		};
+		exit_function("get_event_list::recur");
 		return $rv;
 	}
 
@@ -1585,28 +1591,36 @@ class planner extends class_base
 				"mask" => OBJ_IS_DONE,
 				"flags" => 0,
 			),
-			
+		));
+
+		$tasklist = new object_list(array(
+			new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"brother_of" => $tasklist->brother_ofs(),
+				)
+			)),
+			new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"brother_of" => new obj_predicate_prop("id"),
+				)
+			)),
+			"flags" => array(
+				"mask" => OBJ_IS_DONE,
+				"flags" => 0
+			)
 		));
 
 		$rv = array();
 
-		foreach($tasklist->arr() as $task)
+		foreach($tasklist->names() as $task => $name)
 		{
-			if ($task->is_brother())
-			{
-				$task = $task->get_original();
-				if (($task->flags() & OBJ_IS_DONE) == OBJ_IS_DONE)
-				{
-					continue;
-				};
-			};
-				
-
 			$rv[] = array(
-				"name" => $task->prop("name"),
+				"name" => $name,
 				"url" => $this->get_event_edit_link(array(
 					"cal_id" => $this->calendar_inst->id(),
-					"event_id" => $task->id(),
+					"event_id" => $task,
 				)),
 			);
 		};
