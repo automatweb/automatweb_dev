@@ -96,8 +96,8 @@
       </property>
       <property>
             <name>filter_types</name>
-            <type>generated</type>
-            <generator>get_filter_types</generator>
+            <type>callback</type>
+            <callback>get_filter_types</callback>
             <group>types</group>
             <table>objects</table>
             <field>meta</field>
@@ -106,8 +106,8 @@
       </property>
       <property>
             <name>filter_actions</name>
-            <type>generated</type>
-            <generator>get_filter_actions</generator>
+            <type>callback</type>
+            <callback>get_filter_actions</callback>
             <group>actions</group>
             <table>objects</table>
             <field>meta</field>
@@ -116,8 +116,8 @@
       </property>
       <property>
             <name>filter_combo</name>
-            <type>generated</type>
-            <generator>get_filter_combo</generator>
+            <type>callback</type>
+            <callback>get_filter_combo</callback>
             <group>combo</group>
             <table>objects</table>
             <field>meta</field>
@@ -126,7 +126,8 @@
       </property>
       <property>
             <name>ip_save_folder</name>
-            <type>select</type>
+            <type>objpicker</type>
+            <clid>CL_MENU</clid>
             <group>ipfilter</group>
             <table>objects</table>
             <field>meta</field>
@@ -135,7 +136,8 @@
       </property>
       <property>
             <name>ip_block_folders</name>
-            <type>select</type>
+            <type>objpicker</type>
+            <clid>CL_MENU</clid>
             <multiple>1</multiple>
             <group>ipfilter</group>
             <table>objects</table>
@@ -155,7 +157,8 @@
       </property>
       <property>
             <name>ip_allow_folders</name>
-            <type>select</type>
+            <type>objpicker</type>
+            <clid>CL_MENU</clid>
             <multiple>1</multiple>
             <group>ipfilter</group>
             <table>objects</table>
@@ -174,9 +177,6 @@
             <caption>Kas n&amp;auml;idata ka alamkataloogid</caption>
       </property>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <types>
                   <caption>T&amp;uuml;&amp;uuml;bid</caption>
             </types>
