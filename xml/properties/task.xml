@@ -27,6 +27,15 @@
             <group>general</group>
             <caption>Sisu</caption>
       </property>
+      <property>
+            <name>aliasmgr</name>
+            <type>aliasmgr</type>
+            <store>no</store>
+            <table>objects</table>
+            <group>general</group>
+            <field>aliasmgr</field>
+            <caption>Seostehaldur</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
             <relationmgr>yes</relationmgr>
