@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.3 2004/09/18 13:36:06 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.4 2004/09/20 14:53:30 kristo Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -21,6 +21,13 @@
 
 @property cols type=textbox
 @caption Tulpasid
+
+@default group=order
+
+@property persons_order_table type=table no_caption=1 store=no
+
+@groupinfo order caption="Järjekord"
+
 
 @reltype SECTION value=1 clid=CL_CRM_SECTION
 @caption &uuml;ksus
@@ -48,6 +55,10 @@ class crm_section_webside extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "persons_order_table":
+				$this->do_persons_order_table($arr);
+			break;
+			
 			case "view":
 				$prop["options"] = array(
 					0 => "Piltidega vaade",
@@ -62,6 +73,43 @@ class crm_section_webside extends class_base
 			break;
 		};
 		return $retval;
+	}
+	
+	function do_persons_order_table(&$arr)
+	{
+		$table = &$arr["prop"]["vcl_inst"];
+
+		$table->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"sortable" => 1,	
+		));
+		
+		
+		$table->define_field(array(
+			"name" => "ord",
+			"caption" => "Järjekord",
+			"sortable" => 1,
+			"numeric" => 1,
+			"align" => "center",
+		));
+		
+		$section = get_instance(CL_CRM_SECTION);
+		$workers = $section->get_section_workers($arr["obj_inst"]->id(), true);
+
+		foreach ($workers->arr() as $worker)
+		{
+			$table->define_data(array(
+				"name" => $worker->name(),
+				"ord" => html::textbox(array(
+					"name" => "ord[".$worker->id()."]",
+					"value" => $worker->ord(),
+					"size" => 3
+				)),
+				//"jrk" => $worker-ord(),
+			));	
+		}
+		$table->sort_by("jrk");
 	}
 	
 	/*
@@ -129,6 +177,34 @@ class crm_section_webside extends class_base
 		$this->vars(array(
 			"name" => $person->prop("name"),
 		));
+
+		$has_nl = false;
+		foreach($person->connections_from(array("type" => "RELTYPE_DESCRIPTION_DOC")) as $c)
+		{
+			if ($c->prop("to.lang_id") == aw_global_get("lang_id"))
+			{
+				$this->vars(array(
+					"name_link" => obj_link($c->prop("to"))
+				));
+				$has_nl = true;
+			}
+		}
+
+		if ($has_nl)
+		{
+			$this->vars(array(
+				"NAME_LINK" => $this->parse("NAME_LINK"),
+				"NO_NAME_LINK" => ""
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"NAME_LINK" => "",
+				"NO_NAME_LINK" => $this->parse("NO_NAME_LINK")
+			));
+		}
+
 		return  $this->parse();
 	}
 	
@@ -141,6 +217,18 @@ class crm_section_webside extends class_base
 		foreach ($workers->arr() as $worker)
 		{
 			
+		}
+	}
+	
+	function callback_post_save($arr)
+	{
+		$section = get_instance(CL_CRM_SECTION);
+		$workers = $section->get_section_workers($arr["obj_inst"]->id(), true);
+		
+		foreach ($workers->arr() as $worker)
+		{
+			$worker->set_ord($arr["request"]["ord"][$worker->id()]);
+			$worker->save();
 		}
 	}
 	
@@ -164,6 +252,11 @@ class crm_section_webside extends class_base
 		$ob = &obj($arr["id"]);
 		$section = get_instance(CL_CRM_SECTION);
 		$workers = $section->get_section_workers($ob->id(), true);
+		
+		$workers->sort_by(array(
+        	"prop" => "ord",
+        	"order" => "asc"
+    	));
 		
 		$cols = $ob->prop("cols");
 		

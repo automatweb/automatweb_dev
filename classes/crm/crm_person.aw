@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.55 2004/08/19 08:04:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.56 2004/09/20 14:53:30 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -328,6 +328,9 @@ caption CV
 
 @reltype PROGRAMMING_SKILLS value=33 clid=CL_CRM_PERSON_PROGRAMMING_SKILLS
 @caption Programmeerimisoskus
+
+@reltype DESCRIPTION_DOC value=34 clid=CL_DOCUMENT,CL_MENU
+@caption kirjelduse dokument
 
 */
 

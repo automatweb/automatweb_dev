@@ -637,6 +637,14 @@
                   <clid>CL_CRM_PERSON_PROGRAMMING_SKILLS</clid>
                   <caption>Programmeerimisoskus</caption>
             </PROGRAMMING_SKILLS>
+            <DESCRIPTION_DOC>
+                  <value>34</value>
+                  <clid>
+                        <num_0>CL_DOCUMENT</num_0>
+                        <num_1>CL_MENU</num_1>
+                  </clid>
+                  <caption>kirjelduse dokument</caption>
+            </DESCRIPTION_DOC>
       </reltypes>
 </properties>
 
