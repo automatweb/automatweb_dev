@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.49 2003/04/17 11:13:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.50 2003/04/17 11:14:10 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2584,6 +2584,8 @@ class form extends form_base
 
 			if ($GLOBALS["get_csv_file"] == 1)
 			{
+				header("Content-type: text/csv");
+				header("Content-disposition: inline; filename=tulemused.csv;");
 				die($form_table->t->get_csv_file());
 			}
 		}
