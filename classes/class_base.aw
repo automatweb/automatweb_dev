@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.309 2004/10/14 15:24:56 duke Exp $
+// $Id: class_base.aw,v 2.310 2004/10/16 22:35:30 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -117,6 +117,7 @@ class class_base extends aw_template
 			"project_selector" => "applications/groupware/vcl/project_selector",
 			"calendar_selector" => "applications/calendar/vcl/calendar_selector",
 			"participant_selector" => "applications/calendar/vcl/participant_selector",
+			"date_chooser" => "vcl/date_chooser",
 			//"relationmgr" => "vcl/relationmgr",
 		);
 
@@ -1778,7 +1779,7 @@ class class_base extends aw_template
 		// current time for datetime_select properties for new objects
 		// XXX: for now this->use_form is empty for add/change forms, this
 		// will probably change in the future
-		if (empty($this->id) && empty($this->use_form) && ($property["type"] == "datetime_select" || $property["type"] == "date_select") && !$property["no_default"])
+		if (empty($this->id) && empty($this->use_form) && ($property["type"] == "datetime_select" || $property["type"] == "date_select") && !$property["no_default"] && empty($property["value"]))
 		{
 			$property["value"] = time();
 		}
@@ -1934,6 +1935,8 @@ class class_base extends aw_template
                                         $res = $ot->init_vcl_property(array(
 						"prop" => &$val,
 						// this is deprecated
+						"new" => $this->new,
+						"request" => $this->request,
                                                 "property" => &$val,
 						"id" => $this->id,
                                                 "clid" => $this->clid,
@@ -3150,6 +3153,9 @@ class class_base extends aw_template
 				$vcl_inst->process_releditor($argblock);
 			};
 
+			// the current behaviour is to call set_property and not ever
+			// call process_vcl_property if set_property returns false
+
 			if ($this->vcl_register[$property["type"]])
                         {
                                 $reginst = $this->vcl_register[$property["type"]];
@@ -3159,6 +3165,13 @@ class class_base extends aw_template
                                         $argblock["prop"] = $property;
                                         $argblock["clid"] = $this->clid;
                                         $res = $ot->process_vcl_property($argblock);
+			
+					if (PROP_ERROR == $res)
+					{
+						$propvalues[$name]["error"] = $argblock["prop"]["error"];
+						aw_session_set("cb_values",$propvalues);
+						return false;
+					};
                                 };
                         };
 
@@ -3166,13 +3179,6 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-
-			/*
-			if ($property["type"] == "callback")
-			{
-				continue;
-			};
-			*/
 
 			// XXX: create a VCL component out of this
 			// would be nice if one VCL component could handle multiple property types
