@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.2 2001/12/19 18:10:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_chain.aw,v 2.3 2001/12/19 23:26:44 duke Exp $
 // menu_chain.aw - menüüpärjad
 global $orb_defs;
 $orb_defs["menu_chain"] = "xml";
@@ -69,6 +69,36 @@ class menu_chain extends aw_template {
 		{
 			$_tmp = $this->get_object($id);
 			$par_obj = $this->get_object($_tmp["parent"]);
+			$parent = $par_obj["oid"];
+			// the menu aliases the parent of this menu has
+			if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE) )
+			{
+				$old_menus = array_merge(array(),aw_unserialize($_tmp["metadata"]));
+				$r_old = array_flip($old_menus);
+				$menu_chains = $this->get_aliases_for($parent,CL_MENU_ALIAS);
+				if (is_array($menu_chains))
+				{
+					foreach($menu_chains as $key => $val)
+					{
+						if (isset($r_old[$val["last"]]))
+						{
+							$this->delete_alias($parent,$val["oid"]);
+							$this->delete_object($val["oid"]);
+						};
+					};
+				};
+				if (is_array($old_menus))
+				{
+					foreach($old_menus as $key => $val)
+					{
+						#$target = $this->get_object($val);
+						#print "parent is $parent, val is $val<br>";
+						#$this->delete_alias($parent,$val);
+						#$this->delete_object($val);
+					};
+				};
+
+			}
 			
 			$this->upd_object(array(
 				"oid" => $id,
@@ -76,7 +106,7 @@ class menu_chain extends aw_template {
 				"comment" => $comment,
 				"metadata" => $meta,
 			));
-		
+
 		}
 		else
 		{
@@ -94,6 +124,19 @@ class menu_chain extends aw_template {
 			{
 				$this->add_alias($parent,$id);
 			};
+		};
+
+		if (is_array($menus))
+		{
+			classload("menu");
+			$mn = new menu();
+			foreach($menus as $key => $val)
+			{
+				$_id = $mn->create_menu_alias(array(
+					"parent" => $parent,
+					"menu" => $val,
+				));
+			}
 		};
 		$url = $this->mk_my_orb("change",array("id" => $id,"return_url" => urlencode($return_url)));
 		return $url;
