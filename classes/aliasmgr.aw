@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.71 2003/01/31 00:32:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.72 2003/02/12 14:32:26 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -64,7 +64,14 @@ class aliasmgr extends aw_template
 
 	function search_callback_modify_data($row,$args)
 	{
-		$row["change"] = "<input type='checkbox' name='check' value='$row[oid]'>";
+		if (method_exists($this,'search_callback_popup_get'))
+		{
+			$this->search_callback_popup_get(&$row,$args);
+		}
+		else
+		{
+			$row["change"] = "<input type='checkbox' name='check' value='$row[oid]'>";
+		}
 	}
 
 	////
