@@ -191,7 +191,7 @@ class aw_site extends class_base
 						"class" => "objects",
 						"action" => "get_list",
 						"params" => array(
-							"rootobj" => 1
+							"rootobj" => 0
 						),
 						"method" => "xmlrpc",
 						"server" => $serv,
@@ -279,7 +279,6 @@ class aw_site extends class_base
 				foreach($arr['obj_inst']->meta('select_tpl_sites') as $sn)
 				{
 					$sn = str_replace("http://","",$sn);
-
 
 					$_t = $this->do_orb_method_call(array(
 						"class" => "templatemgr",
@@ -654,10 +653,16 @@ class aw_site extends class_base
 			}
 		}
 
+		echo "finish init classes <br>\n";
+		flush();
+
 		if (!$site['site_obj']['use_existing_database'])
 		{
 			$dbi->db_query("UPDATE objects SET lang_id = 1");
 			$dbi->db_query("UPDATE objects SET parent = ".$ini_opts["groups.tree_root"]." WHERE class_id = ".CL_GROUP);
+
+			echo "updated lang id and paren <br>\n";
+			flush();
 
 			// acl
 			$acls = array(
@@ -670,6 +675,9 @@ class aw_site extends class_base
 			$dbi->db_query("select gid FROM groups WHERE type = 0 AND gid != ".$ini_opts["groups.all_users_grp"]);
 			while ($row = $dbi->db_next())
 			{
+				echo "gid = $row[gid] <br>\n";
+				flush();
+
 				$dbi->save_handle();
 				// access to root menu
 				$dbi->add_acl_group_to_obj($row["gid"], $ini_opts["admin_rootmenu2"]);
@@ -683,8 +691,14 @@ class aw_site extends class_base
 			}
 		}
 
+		echo "gid init done <br>\n";
+		flush();
+
 		// now, create the menus based on subs in main.tpl
 		$this->_do_create_menus_from_template($dbi, $site, $ini_opts, $log, $osi_vars);		
+
+		echo "did menus from template <br>\n";
+		flush();
 
 		if (!$site['site_obj']['use_existing_database'])
 		{
@@ -702,11 +716,17 @@ class aw_site extends class_base
 			$dbi->db_query("UPDATE objects SET lang_id = 1");
 		}
 
+		echo "did user object names <br>\n";
+		flush();
+
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
 
 		$GLOBALS["object_loader"]->switch_db_connection($old_ds);
 		$GLOBALS["cfg"]["acl"]["no_check"] = 0;
 		aw_global_set("db::".$this->default_cid, $default_db);
+
+		echo "init classes exit <br>\n";
+		flush();
 	}
 
 	function create_site_name($site, &$ini_opts, &$log)
