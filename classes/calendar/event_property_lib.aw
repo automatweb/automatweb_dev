@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.9 2004/09/24 09:30:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.10 2004/10/06 15:24:55 duke Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -133,11 +133,20 @@ class event_property_lib extends aw_template
 			"brother_of" => $orig->id(),
 		));
 
+		// determine all projects that this event is part of,
+		// compare that list to the selected items in the form
+		// and put the event (create a brother) into all the projects
+		// that it wasn't already a part of
 		$xlist = array();
 		for($o =& $olist->begin(); !$olist->end(); $o =& $olist->next())
 		{
-			$xlist[$o->id()] = $o->parent();
+			if ($o->id() != $o->brother_of())
+			{
+				$xlist[$o->id()] = $o->parent();
+			};
 		};
+
+		//arr($xlist);
 
 		$awt->stop("retr-project-connections");
 
@@ -150,22 +159,21 @@ class event_property_lib extends aw_template
 		$prj_inst = get_instance(CL_PROJECT);
 		$awt->start("disconnect-from-project");
 
-		//foreach($e_conns as $conn)
+
 		foreach($xlist as $obj_id => $folder_id)
 		{
 			if (!$new_ones[$obj_id])
 			{
-				$prj_inst->disconnect_event(array(
-					//"id" => $conn->prop("from"),
-					"event_id" => $obj_id,
-				));
+				$bo = new object($obj_id);
+				$bo->delete();
 			};
 			unset($new_ones[$obj_id]);
 		};
+
 		$awt->stop("disconnect-from-project");
 		$awt->start("connect-to-project");
 
-		$clones = array();
+		$clones = $transx = array();
 		$event_clones = $event_obj->connections_from(array(
 			"type" => "RELTYPE_COPY",
 		));
@@ -175,20 +183,68 @@ class event_property_lib extends aw_template
 			$clones[] = $event_clone->prop("to");
 		};
 
+		obj_set_opt("no_auto_translation", 1);
+		$translations = $event_obj->connections_from(array(
+			"type" => RELTYPE_TRANSLATION,
+		));
+
+		foreach($translations as $translation)
+		{
+			$transx[] = $translation->prop("to");
+		};
+		obj_set_opt("no_auto_translation", 0);
+
+		// uut venda ei looda kui ta juba olemas on
+
 		foreach($new_ones as $new_id => $whatever)
 		{
+			$event_obj->create_brother($new_id);
+
+			// aga vend tuleb luua iga keele alla kuhu sündmus pandud on!
+
+			// ja tuleks ka kontrollida kas see seos on juba olemas või ei
+
 			// seos projektist sündmusse
+			/*
 			$prj_inst->connect_event(array(
 				"id" => $new_id,
 				"event_id" => $event_obj->id(),
 			));
+			*/
+
+			foreach($transx as $trans_item)
+			{
+				obj_set_opt("no_auto_translation", 1);
+				$trans_obj = new object($trans_item);
+				obj_set_opt("no_auto_translation", 0);
+			
+				dbg::p1("translation is " . $trans_obj->id() . "/" . $trans_obj->lang());
+				
+				$trans_brother = $trans_obj->create_brother($new_id);
+				$trans_brother_obj = new object($trans_brother);
+
+				// by default tehakse tõlge ju aktiivse keele koodiga
+				$trans_brother_obj->set_lang($trans_obj->lang());
+				$trans_brother_obj->save();
+
+				// kloonil pole alguskuupäeva, vaat mis :(
+				dbg::p1("created translation with id " . $trans_brother_obj->id());
+			};
 
 			foreach($clones as $clone_item)
 			{
+				/*
+				$clone_obj = new object($clone_item);
+				$clone_obj->create_brother($new_id);
+				*/
+
+				// ja tõlked on ju kaaa vaja kloonida! ooh fuck
+				/*
 				$prj_inst->connect_event(array(
 					"id" => $new_id,
 					"event_id" => $clone_item,
 				));
+				*/
 			};
 
 			// lisaks tuleb koopiad korralikult ära connectida
