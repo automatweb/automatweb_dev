@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.6 2001/06/21 03:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.7 2001/06/21 17:50:41 duke Exp $
 // mailinglist saadetavate mailide klass
 
 	class email extends aw_template
@@ -299,7 +299,8 @@
 		{
 			extract($args);
 			classload("defs");
-			$q = "SELECT * FROM ml_users WHERE list_id = '$list_id'";
+			$q = "SELECT ml_users.mail AS mail FROM objects LEFT JOIN ml_users ON (objects.oid = ml_users.id)
+				WHERE objects.parent = '$list_id' AND status = 2";
 			$this->db_query($q);
 			$retval= array();
 			while($row = $this->db_next())
