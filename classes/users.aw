@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.31 2002/01/07 16:32:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.32 2002/02/13 12:44:19 duke Exp $
+// users.aw - User Management
 classload("users_user","config","form","objects");
 
 load_vcl("table","date_edit");
@@ -1869,6 +1870,183 @@ class users extends users_user
 			}
 		}
 		return $this->mk_my_orb("user_acl", array("s_uid" => $s_uid,"page" => $page));
+	}
+
+	////
+	// !Generates an unique hash, which when used in a url can be used to let the used change
+	// his/her password
+	function send_hash($args = array())
+	{
+		extract($args);
+		
+		if (not(defined("MD5_PASSWORDS")))
+		{
+			return "<font color=red>This site does not use encrypted passwords and therefore this function does not work</font>";
+		};
+
+		$this->read_adm_template("send_hash.tpl");
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_send_hash",array()),
+		));
+
+		return $this->parse();
+	}
+
+	function submit_send_hash($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
+		$this->db_query($q);
+		$row = $this->db_next();
+		if (not($row))
+		{
+			global $status_msg;
+			$status_msg = "Sellist kasutajat pole registreeritud";
+			session_register("status_msg");
+			return $this->mk_my_orb("send_hash",array());
+		}
+		else
+		{
+			if (not(is_email($row["email"])))
+			{
+				global $status_msg;
+				$status_msg = "Sellel kasutajal puudub korrektne e-posti aadress. Palun pöörduge veebisaidi haldaja poole";
+				session_register("status_msg");
+				return $this->mk_my_orb("send_hash",array());
+			};
+			$ts = time();
+			$hash = gen_uniq_id();
+
+			$this->set_user_config(array(
+				"uid" => $uid,
+				"key" => "password_hash",
+				"value" => $hash,
+			));
+
+			$this->set_user_config(array(
+				"uid" => $uid,
+				"key" => "password_hash_timestamp",
+				"value" => $ts,
+			));
+
+			global $status_msg;
+			$host = $GLOBALS["HTTP_HOST"];
+			$churl = $this->mk_my_orb("pwhash",array("uid" => $uid,"key" => $hash));
+			$msg = "Keegi (ilmselt teie) soovis vahetada oma parooli saidis $host. Parooli vahetamiseks klikkige \n$churl\n\nKui te aga ei soovinud parooli vahetada, siis võite seda kirja ignoreerida\n";
+			mail($row["email"],"Paroolivahetus saidil $GLOBALS[HTTP_HOST]",$msg,"From: AutomatWeb <automatweb@automatweb.com>");
+			$status_msg = "Link saadeti aadressile <b>$row[email]</b>. Vaata oma postkasti";
+			session_register("status_msg");
+			return $this->mk_my_orb("send_hash",array());
+		};
+	}
+
+	////
+	// !Allows the user to change his/her password
+	function password_hash($args = array())
+	{	
+		$this->quote($args);
+		extract($args);
+		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = '0'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		if (not($row))
+		{
+			$this->read_adm_template("hash_results.tpl");
+			$this->vars(array(
+				"msg" => "Sellist kasutajat pole registreeritud",
+			));
+			return $this->parse();
+		};
+
+		$pwhash = $this->get_user_config(array(
+			"uid" => $uid,
+			"key" => "password_hash",
+		));
+
+		if ($pwhash != $key)
+		{	$this->read_adm_template("hash_results.tpl");
+			$this->vars(array(
+				"msg" => "Sellist võtit pole väljastatud",
+			));
+			return $this->parse();
+		};
+
+		$ts = $this->get_user_config(array(
+			"uid" => $uid,
+			"key" => "password_hash_timestamp",
+		));
+
+		// default expiration time is 1 hour (3600 seconds)
+		if (($ts + 3600) < time())
+		{
+			$this->read_adm_template("hash_results.tpl");
+			$this->vars(array(
+				"msg" => "See võti on juba aegunud",
+			));
+			return $this->parse();
+		}
+
+		$this->read_adm_template("hash_change_password.tpl");
+
+		$this->vars(array(
+			"uid" => $uid,
+			"reforb" => $this->mk_reforb("submit_password_hash",array("uid" => $uid,"pwhash" => $pwhash)),
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Submits the password
+	function submit_password_hash($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
+		$this->db_query($q);
+		$row = $this->db_next();
+		global $status_msg;
+		if (not($row))
+		{
+			$status_msg = "Sellist kasutajat pole registreeritud";
+			session_register("status_msg");
+			return $this->mk_my_orb("send_hash",array());
+		};
+		
+		$pwhash1 = $this->get_user_config(array(
+			"uid" => $uid,
+			"key" => "password_hash",
+		));
+
+		if ($pwhash1 != $pwhash)
+		{
+			$status_msg = "Sellist võtit pole väljastatud";
+			session_register("status_msg");
+			return $this->mk_my_orb("send_hash",array());
+		};
+		
+		if (not(is_valid("password",$pass1)))
+		{
+			$status_msg = "Parool sisaldab keelatud märke";
+			session_register("status_msg");
+			return $this->mk_my_orb("send_hash",array());
+		};
+
+		if ($pass1 != $pass2)
+		{
+			$status_msg = "Paroolid pole ühesugused";
+			session_register("status_msg");
+			return $this->mk_my_orb("send_hash",array());
+		};
+
+		// tundub, et kõik on allright. muudame parooli ära
+		$newpass = md5($pass1);
+		$q = "UPDATE users SET password = '$newpass' WHERE uid = '$uid'";
+		$this->db_query($q);
+		$this->_log("auth","$uid vahetas parooli (hash)");
+		$this->read_adm_template("password_change_success.tpl");
+		return $this->parse();
 	}
 }
 ?>
