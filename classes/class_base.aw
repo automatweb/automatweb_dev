@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.146 2003/09/22 12:08:35 kristo Exp $
+// $Id: class_base.aw,v 2.147 2003/09/23 09:03:25 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1065,6 +1065,8 @@ class class_base extends aw_template
 		$this->realfields = isset($realfields) ? $realfields : NULL;
 
 		$idx = $this->default_group;
+		
+		
 
 		return $retval;
 	}
@@ -1275,6 +1277,23 @@ class class_base extends aw_template
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 
 		$this->inst->all_props = $this->all_props;
+
+		// this we use to keep track of which groups to show and which to hide
+		$this->props_by_group = $group_el_cnt;
+
+		/*
+		foreach($this->all_props as $key => $val)
+		{
+			if (empty($this->props_by_group[$val["group"]]))
+			{
+				$this->props_by_group[$val["group"]] = 1;
+			}
+			else
+			{
+				$this->props_by_group[$val["group"]]++;
+			};
+		}
+		*/
 
 		return $this->all_props;
 	}
@@ -1697,19 +1716,6 @@ class class_base extends aw_template
 			}
 		}
 
-		// this we use to keep track of which groups to show and which to hide
-		$this->props_by_group = array();
-		foreach($resprops as $key => $val)
-		{
-			if (empty($this->props_by_group[$val["group"]]))
-			{
-				$this->props_by_group[$val["group"]] = 1;
-			}
-			else
-			{
-				$this->props_by_group[$val["group"]]++;
-			};
-		}
 
 		return $resprops;
 	}

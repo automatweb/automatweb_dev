@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.39 2003/09/17 14:55:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.40 2003/09/23 09:03:25 kristo Exp $
 
 /*
 
@@ -312,6 +312,11 @@ class links extends class_base
 		}
 
 		$this->_log(ST_EXTLINK, SA_CLICK, $o->name(), $id);
+	}
+
+	function request_execute($obj)
+	{
+		$this->show(array("id" => $obj->id()));
 	}
 }
 ?>

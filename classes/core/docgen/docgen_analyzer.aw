@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.4 2003/09/22 13:46:18 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.5 2003/09/23 09:03:25 kristo Exp $
 
 	@comment 
 	analyses aw code
@@ -111,6 +111,7 @@ class docgen_analyzer extends class_base
 	{
 		extract($arr);
 
+		die($this->get_doc_comment_from_orb_def("docgen_analyzer"));
 		$data = $this->analyze_file($file);
 		//echo dbg::dump($data);
 
@@ -787,6 +788,108 @@ class docgen_analyzer extends class_base
 		$xml .= "\t</class>\n";
 		$xml .= "</orb>\n";
 		return $xml;
+	}
+
+	function get_doc_comment_from_orb_def($class)
+	{
+		$o = get_instance("orb");
+		$dat = $o->load_xml_orb_def($class);
+		$dat = $dat[$class];
+		echo dbg::dump($dat);
+		foreach($dat as $nm => $inf)
+		{
+			if ($nm == "_extends" || $nm == "___folder" || $nm == "default")
+			{
+				continue;
+
+			}
+
+			echo "Comment for function $inf[function] = <br><br>\n";
+
+			$comm  = "\t/** short comment \n";
+			$comm .= "\t\t\n";
+
+			$x_a = array();
+			$x_a["nologin"] = $inf["nologin"];
+			$x_a["is_public"] = $inf["is_public"];
+			$x_a["all_args"] = $inf["all_args"];
+			$x_a["caption"] = $inf["caption"];
+			$x_a["default"] = (int)($nm == $dat["default"]);
+
+			$comm .= "\t\t@attrib name=".$nm." ".join(" ", map2("%s=\"%s\"",$x_a))."\n\t\t\n";
+
+			// make params
+			foreach($inf["required"] as $p_n => $param)
+			{
+				$comm .= "\t\t@param $p_n required";
+				if ($inf["types"][$p_n] != "")
+				{
+					$comm .= " type=".$inf["types"][$p_n];
+				}
+
+				if ($inf["acl"][$p_n] != "")
+				{
+					$comm .= " acl=\"".$inf["types"][$p_n]."\"";
+				}
+
+				if ($inf["defaults"][$p_n] != "")
+				{
+					$comm .= " default=\"".$inf["defaults"][$p_n]."\"";
+				}
+
+				$comm .= "\n";
+			}
+
+			foreach($inf["optional"] as $p_n => $param)
+			{
+				$comm .= "\t\t@param $p_n optional";
+				if ($inf["types"][$p_n] != "")
+				{
+					$comm .= " type=".$inf["types"][$p_n];
+				}
+
+				if ($inf["acl"][$p_n] != "")
+				{
+					$comm .= " acl=\"".$inf["types"][$p_n]."\"";
+				}
+
+				if ($inf["defaults"][$p_n] != "")
+				{
+					$comm .= " default=\"".$inf["defaults"][$p_n]."\"";
+				}
+
+				$comm .= "\n";
+			}
+
+			foreach($inf["define"] as $p_n => $val)
+			{
+				$comm .= "\t\t@param $p_n define";
+				if ($inf["types"][$p_n] != "")
+				{
+					$comm .= " type=".$inf["types"][$p_n];
+				}
+
+				if ($inf["acl"][$p_n] != "")
+				{
+					$comm .= " acl=\"".$inf["types"][$p_n]."\"";
+				}
+
+				if ($inf["defaults"][$p_n] != "")
+				{
+					$comm .= " default=\"".$inf["defaults"][$p_n]."\"";
+				}
+
+				$comm .= " value=\"$val\"\n";
+			}
+			$comm .= "\t\t\n";
+			$comm .= "\t\t@returns\n";
+			$comm .= "\t\tReturn data desc\n";
+			$comm .= "\t\t\n";
+			$comm .= "\t\t@comment\n";
+			$comm .= "\t\t\n";
+			$comm .= "\t**/\n";
+			echo "comm = ".nl2br(htmlentities($comm))." <br>";
+		}
 	}
 }
 ?>

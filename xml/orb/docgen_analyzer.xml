@@ -19,6 +19,7 @@
 		<action name="frames" default="1">
 			<function name="frameset">
 				<arguments>
+					<define name="aa" value="100"/>
 				</arguments>
 			</function>
 		</action>
