@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.3 2004/11/18 17:21:47 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.4 2004/11/30 12:40:33 ahti Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -115,7 +115,6 @@ class contact_list extends class_base
 		$owner = &$arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_LIST_OWNER");
 		if(is_object($owner))
 		{
-			
 			// now, first we sort out the things we need -- ahz
 			$person = $owner->get_first_obj_by_reltype("RELTYPE_PERSON");
 			$conts = $person->connections_from(array(
@@ -145,7 +144,7 @@ class contact_list extends class_base
 		{
 			$b_person = $pers->to();
 			$b_user = $b_person->createdby();
-			$b_profile = $person->get_first_obj_by_reltype("RELTYPE_PROFILE");
+			$b_profile = $b_person->get_first_obj_by_reltype("RELTYPE_PROFILE");
 			$contacts[] = array(
 				"id" => $b_user->id(),
 				"name" => $b_user->name(),

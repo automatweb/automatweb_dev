@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.4 2004/11/18 17:21:47 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.5 2004/11/30 12:40:33 ahti Exp $
 // quickmessagebox.aw - Kiirsõnumite haldus 
 /*
 
@@ -371,64 +371,80 @@ class quickmessagebox extends class_base
 	
 	function callback_new_message($arr)
 	{
-		$obj_inst = $arr["obj_inst"];
-		$arr = $arr["request"];
-		$c_list = $obj_inst->get_first_conn_by_reltype("RELTYPE_CONTACT_LIST");
-		// how the hell do i connect this thing to a contact list? -- ahz
-		//arr($arr);
-		//arr($c_list);
-		$cu = get_instance("cfg/cfgutils");
-		$props = $cu->load_properties(array(
-			"file" => "quickmessage", 
-			"clid" => CL_QUICKMESSAGE,
-		));
-		//arr($props);
-		$needed_props = array("user_from", "user_to", "subject", "content");
-		/*
-		if(!empty($c_list))
+		$sent = aw_global_get("has_sent_message");
+		if(!empty($sent))
 		{
-			$gotit_props = array(
-				"contact_list" => array(
-					"name" => "contact_list",
-					"type" => "text",
-					//"no_caption" => 1,
-					"value" => html::href(array(
-						"url" => "javascript:void(0)",
-						"onClick" => "javascript:window.open(\"".$this->mk_my_orb("show_list", array(
-							"id" => $c_list->prop("to"),
-						), CL_CONTACT_LIST, false, true)."\",\"\",\" toolbar=no,directories=no,status=no,location=no,resizable=no,scrollbars=yes,menubar=no,height=300,width=500\");return false;",
-						"caption" => "Aadressiraamat",
-					)),
-				),
+			$msg = $sent == 1 ? "teadet ei õnnestunud saata, proovi uuesti" : "teade edukalt kohale toimetatud!";
+			aw_session_del("has_sent_message");
+			$gotit_props["one"] = array(
+				"name" => "has_msg",
+				"type" => "text",
+				"no_caption" => 1,
+				"value" => $msg,
 			);
 		}
 		else
 		{
-		*/
-			$gotit_props = array();
-		//}
-		foreach($props as $key => $value)
-		{
-			if(in_array($key, $needed_props))
+			$obj_inst = $arr["obj_inst"];
+			$arr = $arr["request"];
+			$c_list = $obj_inst->get_first_conn_by_reltype("RELTYPE_CONTACT_LIST");
+			// how the hell do i connect this thing to a contact list? -- ahz
+			//arr($arr);
+			//arr($c_list);
+			$cu = get_instance("cfg/cfgutils");
+			$props = $cu->load_properties(array(
+				"file" => "quickmessage", 
+				"clid" => CL_QUICKMESSAGE,
+			));
+			//arr($props);
+			$needed_props = array("user_from", "user_to", "subject", "content");
+			/*
+			if(!empty($c_list))
 			{
-				$gotit_props[$key] = $value;
+				$gotit_props = array(
+					"contact_list" => array(
+						"name" => "contact_list",
+						"type" => "text",
+						//"no_caption" => 1,
+						"value" => html::href(array(
+							"url" => "javascript:void(0)",
+							"onClick" => "javascript:window.open(\"".$this->mk_my_orb("show_list", array(
+								"id" => $c_list->prop("to"),
+							), CL_CONTACT_LIST, false, true)."\",\"\",\" toolbar=no,directories=no,status=no,location=no,resizable=no,scrollbars=yes,menubar=no,height=300,width=500\");return false;",
+							"caption" => "Aadressiraamat",
+						)),
+					),
+				);
 			}
-		}
-			$gotit_props["user_from"]["value"] = aw_global_get("uid");
-		if($arr["forward"] == 1 && $o = $this->is_that_class(array("id" => $arr["mid"], "class" => CL_QUICKMESSAGE)))
-		{
-			$users = get_instance("users");
-			$user_from = $users->get_uid_for_oid($o->prop("user_from"));
-			$gotit_props["subject"]["value"] = "Fwd: ".$o->prop("subject");
-			$gotit_props["content"]["value"] = $user_from." kirjutas:\n".$o->prop("content");
-		}
-		else
-		{
-			$gotit_props["user_to"]["value"] = $arr["cuser"];
-			$gotit_props["subject"]["value"] = urldecode($arr["subject"]);
+			else
+			{
+			*/
+				$gotit_props = array();
+			//}
+			foreach($props as $key => $value)
+			{
+				if(in_array($key, $needed_props))
+				{
+					$gotit_props[$key] = $value;
+				}
+			}
+				$gotit_props["user_from"]["value"] = aw_global_get("uid");
+			if($arr["forward"] == 1 && $o = $this->is_that_class(array("id" => $arr["mid"], "class" => CL_QUICKMESSAGE)))
+			{
+				$users = get_instance("users");
+				$user_from = $users->get_uid_for_oid($o->prop("user_from"));
+				$gotit_props["subject"]["value"] = "Fwd: ".$o->prop("subject");
+				$gotit_props["content"]["value"] = $user_from." kirjutas:\n".$o->prop("content");
+			}
+			else
+			{
+				$gotit_props["user_to"]["value"] = $arr["cuser"];
+				$gotit_props["subject"]["value"] = urldecode($arr["subject"]);
+			}
 		}
 		//arr($gotit_props);
 		return $gotit_props;
+		
 	}
 
 	// user gets a message box if he doesn't have it already -- ahz
@@ -448,7 +464,7 @@ class quickmessagebox extends class_base
 	
 	function dispatch_message($arr)
 	{
-		// commune / prop / to / message
+		// commune / prop / to / message / from
 		if(!$templates_folder = $arr["commune"]->prop("message_templates_folder"))
 		{
 			return false;
@@ -461,20 +477,37 @@ class quickmessagebox extends class_base
 		{
 			return false;
 		}
-		if(!$msgbox = $this->get_message_box_for_user($arr["to"]))
+		if($arr["msg1"] == true)
 		{
-			return false;
+			$awm = get_instance("protocols/mail/aw_mail");
+			$awm->create_message(array(
+				"froma" => !empty($arr["from"]) ? $arr["from"] : $arr["commune"]->prop("sender_mail"),
+				"subject" => $message->prop("subject"),
+				"to" => $arr["to"]->prop("email"),
+				"body" => str_replace("#content#", $arr["message"], $message->prop("content")),
+			));
+			$awm->gen_mail();
 		}
-		$o = new object();
-		$o->set_class_id(CL_QUICKMESSAGE);
-		$o->set_parent($msgbox->id());
-		$o->set_status(STAT_ACTIVE);
-		$o->set_prop("mstatus", 1);
-		$o->set_prop("subject", $message->prop("subject"));
-		$o->set_prop("content", str_replace("#content#", $arr["message"], $message->prop("content")));
-		$o->set_prop("user_to", $arr["to"]->id());
-		$o->set_name($message->prop("subject"));
-		$o->save();
+		if($arr["msg2"] == true)
+		{
+			if($msgbox = $this->get_message_box_for_user($arr["to"]))
+			{
+				$o = new object();
+				$o->set_class_id(CL_QUICKMESSAGE);
+				$o->set_parent($msgbox->id());
+				$o->set_status(STAT_ACTIVE);
+				$o->set_prop("mstatus", 1);
+				if(!empty($arr["from"]))
+				{
+						$o->prop("user_from", $arr["from"]);
+				}
+				$o->set_prop("subject", $message->prop("subject"));
+				$o->set_prop("content", str_replace("#content#", $arr["message"], $message->prop("content")));
+				$o->set_prop("user_to", $arr["to"]->id());
+				$o->set_name($message->prop("subject"));
+				$o->save();
+			}
+		}
 		return true;
 	}
 	
@@ -567,7 +600,7 @@ class quickmessagebox extends class_base
 			{
 				continue;
 			}
-			$q_users[$r_id] = $mbox->id();
+			$q_users[$r_obj->id()] = $mbox->id();
 		}
 		$tmp = array();
 		
@@ -622,7 +655,12 @@ class quickmessagebox extends class_base
 			$vars["content"] = substr($vars["content
 		}
 		*/
-
+		if(count($q_users) <= 0)
+		{
+			aw_session_set("has_sent_message", 1);
+			return;
+		}
+		aw_session_set("has_sent_message", 2);
 		$o = new object();
 		$o->set_class_id(CL_QUICKMESSAGE);
 		$o->set_parent($arr["obj_inst"]->id());

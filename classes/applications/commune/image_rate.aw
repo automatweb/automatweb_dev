@@ -157,6 +157,7 @@ class image_rate extends class_base
 				user_o.status != 0 AND
 				user_o.oid != '$user_id'
 				$w
+				LIMIT 100
 		";
 		$this->db_query($q2);
 		$var = array();
@@ -288,7 +289,16 @@ class image_rate extends class_base
 				
 			case "rate":
 				$scale = get_instance(CL_RATE_SCALE);
-				$prop["options"] = $scale->get_scale_for_obj($this->image_data->id());
+				$scl = $scale->get_scale_for_obj($this->image_data->id());
+				$commune = obj($GLOBALS["id"]);
+				$me = obj(aw_global_get("uid_oid"));
+				$q = "SELECT SUM(sum) AS kokku FROM rate_sum WHERE oid = '".$me->id()."'";
+				$val = $this->db_fetch_field($q, "kokku");
+				if((int)$val >= $commune->prop("rate_sum"))
+				{
+					$scl[7] = 7;
+				}
+				$prop["options"] = $scl;
 				$prop["onclick"] = "this.form.submit()";
 				break;
 
@@ -308,6 +318,7 @@ class image_rate extends class_base
 			case "comments":
 				//var_dump(aw_global_get("uid")); //mitte sisse logituna: bool(false)
 				$prop["use_parent"] = $this->image_data->id();
+				$prop["head_text"] = "pildi";
 				break;
 
 		};
