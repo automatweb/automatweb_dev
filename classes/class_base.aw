@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.77 2003/02/19 14:58:10 duke Exp $
+// $Id: class_base.aw,v 2.78 2003/02/21 12:49:07 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -729,6 +729,10 @@ class class_base extends aliasmgr
 	{	
 		// load the object data, if there is anything to load at all
 		// but if no tables are defined, then it seems we don't load anything at all
+		if (!is_array($this->tables))
+		{
+			return false;
+		};
 		foreach($this->tables as $key => $val)
 		{
 			// that we already got
@@ -777,9 +781,9 @@ class class_base extends aliasmgr
 		$classname = get_class($this->orb_class);
 
 		// XXX: pathi peab htmlclient tegema
+		$title = $args["title"];
 		if ($this->id)
 		{
-			$title = $args["title"];
 			if (!$title)
 			{
 				$title = "Muuda $classname objekti " . $this->coredata["name"];
@@ -788,7 +792,10 @@ class class_base extends aliasmgr
 		}
 		else
 		{
-			$title = "Lisa $classname objekt";
+			if (!$title)
+			{
+				$title = "Lisa $classname objekt";
+			};
 			$parent = $args["parent"];
 		};
 
@@ -1538,6 +1545,10 @@ class class_base extends aliasmgr
 	function parse_properties($args = array())
 	{
 		$properties = &$args["properties"];
+		if (!is_array($properties))
+		{
+			return false;
+		};
 
 		// I really doubt that get_property appears out of blue
 		// while we are generating the output form
@@ -1577,13 +1588,13 @@ class class_base extends aliasmgr
 				// do nothing
 			}
 			else
-/*			if ($status == PROP_ERROR)
+			if ($status == PROP_ERROR)
 			{
 				$val["type"] = "text";
 				$val["value"] = "Viga: $val[error]";
 				$resprops[$key] = $val;
 			}
-			else*/
+			else
 			if ( ($val["editonly"] == 1) && !$this->id)
 			{
 				// do nothing
@@ -1774,6 +1785,8 @@ class class_base extends aliasmgr
 		));
 	}	
 
+	////
+	// !Handles the "saving" of relation list
 	function submit_list($args = array())
 	{
 		$retval = parent::submit_list($args);
@@ -1784,7 +1797,10 @@ class class_base extends aliasmgr
 		};
 		return $retval;
 	}
-	
+
+	////
+	// !Handles creating of new relations between the object and
+	// selected search results
 	function orb_addalias($args = array())
 	{
 		$retval = parent::orb_addalias($args);
@@ -1951,6 +1967,138 @@ class class_base extends aliasmgr
 		));
 
 		return $resprops;
+	}
+
+	////	
+	// !Shows a form for editing relation properties
+	function edit_relation($args = array())
+	{
+		$this->init_class_base();
+
+		$obj = $this->get_object(array(
+			"oid" => $args["id"],
+			"class_id" => CL_RELATION,
+		));
+		
+		$def = $this->cfg["classes"][$this->clid]["def"];
+		$this->values = $obj["meta"]["values"][$def];
+
+		$cfgu = get_instance("cfg/cfgutils");
+		$_all_props = $cfgu->load_class_properties(array(
+				"clid" => $this->clid,
+		));
+		$rel_properties = array();
+		foreach($_all_props as $key => $val)
+		{
+			if ($val["rel"])
+			{
+				$rel_properties[$key] = $val;
+			};
+		};
+		
+		$this->request = $args;
+		
+
+		if (sizeof($rel_properties) == 0)
+		{
+			return $this->gen_output(array(
+				"content" => "Sellel seosel pole muudatavaid omadusi",
+				"title" => "Muuda seost",
+			));
+		}
+
+		$this->groupnames = array(
+			"relation" => "Seose omadused",
+		);
+
+		$this->activegroup = "relation";
+
+		// now I have to draw a form from that data somehow.
+		// and then finally I need to decide how and when or why
+		// am I going to save that data
+		//$this->load_obj_data(array("id" => $args["id"]));
+
+
+		// parse the properties - resolve generated properties and
+		// do any callbacks
+
+		$resprops = $this->parse_properties(array(
+			"properties" => &$rel_properties,
+		));
+		
+		$cli = get_instance("cfg/" . $this->output_client);
+		foreach($resprops as $val)
+		{
+			$cli->add_property($val);
+		};
+		
+		$argblock = array(
+			"orb_class" => $this->cfg["classes"][$this->clid]["file"],
+			"id" => $args["id"],
+			"return_url" => urlencode($args["return_url"]),
+		);
+
+		$cli->finish_output(array(
+			"action" => "submit_relation",
+			"data" => $argblock,
+		));
+
+		$content = $cli->get_result();
+		
+		return $this->gen_output(array(
+			"content" => $content,
+			"title" => "Muuda seost",
+		));
+	}
+	
+	////	
+	// !Saves relation properties
+	function submit_relation($args = array())
+	{
+		$this->init_class_base();
+		// possible save scenarion.
+		// save them into object metadata under the symbolic ID for the class
+
+		$obj = $this->get_object(array(
+			"oid" => $args["oid"],
+			"class_id" => CL_RELATION,
+		));
+
+		$def = $this->cfg["classes"][$this->clid]["def"];
+		
+		$cfgu = get_instance("cfg/cfgutils");
+		$_all_props = $cfgu->load_class_properties(array(
+				"clid" => $this->clid,
+		));
+		$rel_properties = new aw_array();
+		foreach($_all_props as $key => $val)
+		{
+			if ($val["rel"])
+			{
+				$rel_properties->set_at($key,$val);
+			};
+		};
+
+		$values = array();
+
+		foreach($rel_properties->get() as $key => $val)
+		{
+			$values[$key] = $args[$key];
+		};
+
+		$old_values = $obj["meta"]["values"];
+		// overwrite the old values for this class type
+		$old_values[$def] = $values;
+
+		$this->upd_object(array(
+			"oid" => $args["id"],
+			"metadata" => array(
+				"values" => $old_values,
+			),
+		));
+		
+		return $this->mk_my_orb("edit_relation",array("id" => $args["id"],"return_url" => $args["return_url"]));
+
 	}
 
 	////

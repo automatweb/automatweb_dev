@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.78 2003/02/20 18:48:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.79 2003/02/21 12:47:21 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -16,6 +16,9 @@ class aliasmgr extends aw_template
 
 		$this->contents = "";
 		$this->lc_load("aliasmgr","lc_aliasmgr");
+		
+		// we need a better way to do a version upgrade or smth.
+		$this->do_check_tables();
 	}
 
 	////
@@ -236,7 +239,6 @@ class aliasmgr extends aw_template
 					{
 						$by_alias[$lv]["file"] = $cldat["file"];
 					}
-					//2/20/2003$by_alias[$lv]["file"] = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
 					$by_alias[$lv]["class_id"] = $clid;
 				}
 			}
@@ -525,7 +527,6 @@ class aliasmgr extends aw_template
 			"type" => $types
 		));
 
-		
 		$chlinks = array();
 		foreach($alist as $alias)
 		{
@@ -568,7 +569,22 @@ class aliasmgr extends aw_template
 				"caption" => ($alias["name"] == "") ? "(no name)" : $alias["name"],
 			));
 
-			$alias["reltype"] = $this->reltypes[$reltype_id];
+			if ($alias["relobj_id"])
+			{
+				// create a clickable link to the relation object, if one is
+				// present. Basic functionality comes from the class_based
+				// but the class_base based class can override it of course
+				$alias["reltype"] = html::href(array(
+					"url" => $this->mk_my_orb("edit_relation",array("id" => $alias["relobj_id"],"return_url" => $return_url),$classes[$alias["type"]]["file"]),
+					"caption" => $this->reltypes[$reltype_id],
+				));
+			}
+			else
+			{
+				$alias["reltype"] = $this->reltypes[$reltype_id];
+			};
+				
+
 
 			$alias["cache"] = html::checkbox(array(
 				'name' => 'cache['.$alias['target'].']',
@@ -616,20 +632,40 @@ class aliasmgr extends aw_template
 			{
 				$al = $this->get_object($_al);
 			}
+			
+			// parent will be the parent of the object from which the relation
+			// goes out.
+			$relobj_id = $this->new_object(array(
+				"parent" => $obj["parent"],
+				"class_id" => CL_RELATION,
+				"status" => STAT_ACTIVE,
+			));
+
 			// let the correct class override the alias adding if it wants to
 			// if the class does not handle it, it falls back on core::addalias
 			$cl = $this->cfg["classes"][$al["class_id"]]["alias_class"];
 			if ($cl != "")
 			{
 				$inst = get_instance($cl);
-				$inst->addalias(array("id" => $id,"alias" => $onealias));
+				$inst->addalias(array(
+					"id" => $id,
+					"alias" => $onealias,
+					"reltype" => $reltype,
+					"relobj_id" => $relobj_id,
+				));
 				$alias_reltype[$onealias] = $reltype;
 			}
 			else
 			{
-				$this->add_alias($id,$onealias);
+				$this->addalias(array(
+					"id" => $id,
+					"alias" => $onealias,
+					"reltype" => $reltype,
+					"relobj_id" => $relobj_id,
+				));
 				$alias_reltype[$onealias] = $reltype;
 			}
+			
 		};
 
 		$this->set_object_metadata(array(
@@ -952,6 +988,21 @@ class aliasmgr extends aw_template
 			$this->make_alias_classarr();
 			$parts["class_id"] = sprintf("class_id IN (%s)",join(",",array_keys($this->classarr)));
 		};
+	}
+
+	////
+	// !Create new fields in the aliases table. The concept sucks, but I think
+	// that separate fields are the best approach to this.
+	function do_check_tables()
+	{
+		$table = $this->db_get_table("aliases");
+		if (!$table["fields"]["relobj_id"])
+		{
+			$q = "ALTER TABLE aliases ADD relobj_id bigint unsigned not null";
+			$this->db_query($q);
+			$q = "ALTER TABLE aliases ADD reltype bigint unsigned not null";
+			$this->db_query($q);
+		}; 
 	}
 }
 ?>
