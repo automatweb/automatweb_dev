@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.18 2005/02/01 13:04:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.19 2005/02/01 13:10:52 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -1218,7 +1218,7 @@ class ml_list extends class_base
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => "Kustuta",
-			"url" => "javascript:document.changeform.action.value='delete_queue_items';document.changeform.submit();",
+			"action" => "delete_queue_items",
 			"img" => "delete.gif",
 		));
 	}
