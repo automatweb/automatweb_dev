@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.105 2002/09/03 06:32:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.106 2002/09/09 12:30:49 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -2188,6 +2188,23 @@ class core extends db_connector
 			"SEL_ITEM" => ""
 		));
 		return $this->parse();
+	}
+
+	////
+	// !the base version of per-class alias adding
+	// a class can override this, to implement adding aliases differently
+	// for instance - when adding an alias to form_entry it lets you pick the output
+	// with which the entry is shown. 
+	// but basically what this function needs to do, is to call core::add_alias($id,$alias)
+	// and finally redirect the user to $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr")
+	// parameters:
+	//   id - the id of the object where the alias will be attached
+	//   alias - the id of the object to attach as an alias
+	function addalias($arr)
+	{
+		extract($arr);
+		$this->add_alias($id,$alias);
+		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
 	}
 };
 ?>
