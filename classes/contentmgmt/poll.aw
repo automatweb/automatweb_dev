@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.26 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.27 2005/03/24 12:04:08 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -405,6 +405,44 @@ class poll extends class_base
 		{
 			$this->vars(array("HAS_ARCHIVE" => $this->parse("HAS_ARCHIVE")));
 		}
+		return $this->parse();
+	}
+
+	/**  
+		
+		@attrib name=show_archive params=name nologin="1" default="0"
+		
+	**/
+	function show_archive($id)
+	{
+		$this->read_template("show_archive.tpl");
+
+		$lang_id = aw_global_get("lang_id");
+		$this->vars(array(
+			"set_lang_id" => $lang_id
+		));
+
+		// pollide arhiiv
+		$ol = new object_list(array(
+			"class_id" => CL_POLL
+		));
+		foreach($ol->arr() as $o)
+		{
+			if (true || $o->meta('in_archive') == 1)
+			{
+				$this->vars(array(
+					"question" => $o->name(), 
+					"poll_id" => $o_id, 
+					"link" => $this->mk_my_orb("show", array("poll_id" => $o->id()))
+				));
+				$p.=$this->parse("QUESTION");
+			}
+		}
+
+		$this->vars(array(
+			"QUESTION" => $p
+		));
+
 		return $this->parse();
 	}
 
