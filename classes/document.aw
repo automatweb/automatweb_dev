@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.313 2005/01/17 16:43:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.314 2005/01/18 10:54:23 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -540,7 +540,12 @@ class document extends aw_template
 		# translate stuff between #code# and #/code#
 		if (false !== strpos($doc["content"],"#code#"))
 		{
-		       $doc["content"] = preg_replace("/(#code#)(.+?)(#\/code#)/esm","\"<pre>\".htmlspecialchars(stripslashes('\$2')).\"</pre>\"",$doc["content"]);
+		       $doc["content"] = preg_replace("/(#code#)(.+?)(#\/code#)/esm","\"<pre>\".str_replace('#','&#35;',htmlspecialchars(stripslashes('\$2'))).\"</pre>\"",$doc["content"]);
+		};
+
+		if (false !== strpos($doc["content"],"#noparse#"))
+		{
+		       $doc["content"] = preg_replace("/(#noparse#)(.+?)(#\/noparse#)/esm","str_replace('#','&#35;','\$2')",$doc["content"]);
 		};
 
 		if (false !== strpos($doc["content"],"#php#"))
@@ -852,6 +857,16 @@ class document extends aw_template
 		if (trim($doc["user3"]) != "" && strpos($doc["user3"],"#") !== false)
 		{
 			$al->parse_oo_aliases($doc["docid"],&$doc["user3"],array("templates" => &$this->templates,"meta" => &$meta));
+		}
+
+		if (trim($doc["moreinfo"]) != "" && strpos($doc["moreinfo"],"#") !== false)
+		{
+			$al->parse_oo_aliases($doc["docid"],&$doc["moreinfo"],array("templates" => &$this->templates,"meta" => &$meta));
+		}
+
+		if (trim($doc["user2"]) != "" && strpos($doc["user2"],"#") !== false)
+		{
+			$al->parse_oo_aliases($doc["docid"],&$doc["user2"],array("templates" => &$this->templates,"meta" => &$meta));
 		}
 
 		// where do I put that shit? that break conversion thingie?
