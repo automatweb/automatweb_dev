@@ -21,16 +21,6 @@
             <caption>Näitamisfunktsioon</caption>
       </property>
       <property>
-            <name>event_cfgform</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_EVENT_ENTRY</reltype>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general2</group>
-            <caption>Def. sündmuse sisetamise vorm</caption>
-      </property>
-      <property>
             <name>day_start</name>
             <type>time_select</type>
             <group>time_settings</group>
