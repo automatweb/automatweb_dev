@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.55 2003/07/07 11:12:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.56 2003/07/07 14:19:46 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2277,8 +2277,16 @@ class form_element extends aw_template
 				break;
 
 			case "checkbox":
-				$sel = ($this->entry_id ? checked($this->entry == 1) : checked($this->arr["default"] == 1));
-				$html .= "<input $disabled $stat_check type='checkbox' NAME='".$element_name."' VALUE='1' $sel />\n";
+				if ($this->arr["hidden"])
+				{
+					$sel = ($this->entry_id ? $this->entry  : $this->arr["default"]);
+					$html .= "<input type=\"hidden\" name=\"$element_name\" value=\"$sel\" />";
+				}
+				else
+				{
+					$sel = ($this->entry_id ? checked($this->entry == 1) : checked($this->arr["default"] == 1));
+					$html .= "<input $disabled $stat_check type='checkbox' NAME='".$element_name."' VALUE='1' $sel />\n";
+				}
 				break;
 
 			case "textbox":
