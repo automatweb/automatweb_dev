@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.49 2002/09/23 17:47:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.50 2002/09/24 17:41:44 duke Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -1704,9 +1704,10 @@ class users extends users_user
 			return "<font color=red>This site does not use encrypted passwords and therefore this function does not work</font>";
 		};
 
-		$this->read_adm_template("send_hash.tpl");
+		$this->read_template("send_hash.tpl");
 
 		$this->vars(array(
+			"webmaster" => $this->cfg["webmaster_mail"],
 			"reforb" => $this->mk_reforb("submit_send_hash",array()),
 		));
 
@@ -1715,17 +1716,36 @@ class users extends users_user
 
 	function submit_send_hash($args = array())
 	{
+		$this->quote($args);
 		extract($args);
-		if (not(is_valid("uid",$uid)))
+		if (($type == "uid") && not(is_valid("uid",$uid)))
 		{
 			global $status_msg;
 			$status_msg = "Vigane kasutajanimi";
 			session_register("status_msg");
 			return $this->mk_my_orb("send_hash",array());
 		};
-		$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
+		if (($type == "email") && not(is_email($email)))
+		{
+			global $status_msg;
+			$status_msg = "Vigane e-posti aadress";
+			session_register("status_msg");
+			return $this->mk_my_orb("send_hash",array());
+		};
+		if ($type == "uid")
+		{
+			$q = "SELECT * FROM users WHERE uid = '$uid' AND blocked = 0";
+		}
+		else
+		{
+			$q = "SELECT * FROM users WHERE email = '$email' AND blocked = 0";
+		};
 		$this->db_query($q);
 		$row = $this->db_next();
+		if ($type == "email")
+		{
+			$uid = $row["uid"];
+		};
 		if (not($row))
 		{
 			global $status_msg;
@@ -1743,7 +1763,7 @@ class users extends users_user
 				return $this->mk_my_orb("send_hash",array());
 			};
 			$ts = time();
-			$hash = gen_uniq_id();
+			$hash = substr(gen_uniq_id(),0,15);
 
 			$this->set_user_config(array(
 				"uid" => $uid,
@@ -1759,10 +1779,14 @@ class users extends users_user
 
 			global $status_msg;
 			$host = aw_global_get("HTTP_HOST");
-			$churl = $this->mk_my_orb("pwhash",array("uid" => $uid,"key" => $hash),"users",0,1);
-			$msg = "Keegi (ilmselt teie) soovis vahetada oma parooli saidis $host. Parooli vahetamiseks klikkige \n$churl\n\nKui te aga ei soovinud parooli vahetada, siis võite seda kirja ignoreerida\n";
-			mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: AutomatWeb <automatweb@automatweb.com>");
-			$status_msg = "Link saadeti aadressile <b>$row[email]</b>. Vaata oma postkasti";
+			$churl = $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $hash),"users",0,0);
+
+			$email = $this->cfg["webmaster_mail"];
+
+			$msg = "Tere $row[uid]\n\nTeie isikliku parooli vahetamiseks kodulehel $host tuleb teil klikkida lingil\n\n$churl\n\nLingile klikkides avanab Teile parooli muutmise leht. Soovitame parool välja vahetada!\n\nProbleemide korral saatke email $email.\n\nKõike paremat soovides,\n$host";
+			$from = sprintf("%s <%s>",$this->cfg["webmaster_name"],$this->cfg["webmaster_mail"]);
+			mail($row["email"],"Paroolivahetus saidil ".aw_global_get("HTTP_HOST"),$msg,"From: $from");
+			$status_msg = "<br>Parooli muutmise link saadeti  aadressile <b>$row[email]</b>. Vaata oma postkasti<br>Täname!";
 			session_register("status_msg");
 			return $this->mk_my_orb("send_hash",array());
 		};
@@ -1774,6 +1798,8 @@ class users extends users_user
 	{	
 		$this->quote($args);
 		extract($args);
+		$uid = $u;
+		$key = $k;
 		if (not(is_valid("uid",$uid)))
 		{
 			$this->read_adm_template("hash_results.tpl");
@@ -1894,21 +1920,21 @@ class users extends users_user
 		{
 			$status_msg = "Sellist võtit pole väljastatud";
 			session_register("status_msg");
-			return $this->mk_my_orb("send_hash",array());
+			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 		
 		if (not(is_valid("password",$pass1)))
 		{
 			$status_msg = "Parool sisaldab keelatud märke";
 			session_register("status_msg");
-			return $this->mk_my_orb("send_hash",array());
+			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 
 		if ($pass1 != $pass2)
 		{
-			$status_msg = "Paroolid pole ühesugused";
+			$status_msg = "Paroolid peavad olema ühesugused";
 			session_register("status_msg");
-			return $this->mk_my_orb("send_hash",array());
+			return $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $pwhash));
 		};
 
 		// tundub, et kõik on allright. muudame parooli ära
@@ -1920,7 +1946,7 @@ class users extends users_user
 //		return $this->parse();
 		$status_msg = "<b><font color=green>Parool on edukalt vahetatud</font></b>";
 		session_register("status_msg");
-		return $this->mk_my_orb("send_hash",array());
+		return $this->login(array("uid" => $uid, "password" => $pass1));
 	}
 
 	function request_startup()
