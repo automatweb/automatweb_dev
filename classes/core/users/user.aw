@@ -1344,6 +1344,11 @@ class user extends class_base
 		}
 	}
 
+	function get_current_user()
+	{
+		return $this->users->get_oid_for_uid(aw_global_get("uid"));
+	}
+
 	/** returns the oid of the CL_CRM_PERSON object that's attached to the current user
 	**/
 	function get_current_person()
