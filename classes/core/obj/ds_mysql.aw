@@ -375,7 +375,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->quote($str);
 				$seta[$field] = $str;
 			}
-			$sets = join(",",map2("%s = '%s'",$seta));
+			$sets = join(",",map2("%s = '%s'",$seta,0,true));
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
