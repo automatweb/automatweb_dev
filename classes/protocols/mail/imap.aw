@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.16 2003/12/09 12:42:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.17 2004/02/11 17:18:59 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -322,7 +322,7 @@ class imap extends class_base
 		$msgid = $arr["msgid"];
 		$msg_no = imap_msgno($this->mbox,$arr["msgid"]);
 		$hdrinfo = @imap_headerinfo($this->mbox,$msg_no);
-			
+
 		// I should mark the message as "read" in the cache as well	
 			
 		$cache = get_instance("cache");
@@ -332,15 +332,15 @@ class imap extends class_base
 		$mbox_over["contents"][$arr["msgid"]]["seen"] = 1;
 		$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
 
-
 		$msgdata = array(
 			"from" => $this->MIME_decode($hdrinfo->fromaddress),
 			"reply_to" => $this->MIME_decode($hdrinfo->reply_toaddress),
 			"to" => $this->MIME_decode($hdrinfo->toaddress),
 			"subject" => $this->_parse_subj($hdrinfo->subject),
+			"cc" => $this->MIME_decode($hdrinfo->ccaddress),
 			"date" => $hdrinfo->MailDate,
 		);
-		
+
 		$overview = @imap_fetchstructure($this->mbox,$msgid,FT_UID);
 
 		$rv = "";
@@ -362,6 +362,13 @@ class imap extends class_base
 		}
 
 		return $msgdata;
+	}
+
+	function fetch_headers($arr)
+	{
+		$msg_no = imap_msgno($this->mbox,$arr["msgid"]);
+		$raw_headers = @imap_fetchbody($this->mbox,$msg_no,0);
+		return $raw_headers;
 	}
 
 	function dissect_part($this_part,$part_no)
