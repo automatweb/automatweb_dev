@@ -54,7 +54,6 @@ class riik extends aw_template
 		$this->read_template("riik_change.tpl");
 
 
-
 		$this->vars(array(
 			"name"=>$f_name,
 			"comment"=>$ob["comment"],
@@ -173,25 +172,88 @@ class riik extends aw_template
 	function riik_list()
 	{
 	
-	$this->db_query("select * from kliendibaas_riik");
+		$this->db_query("select * from kliendibaas_riik");
+		load_vcl("table");
+		$t = new aw_table(array(
+			"prefix" => "kliendibaas", 
+		));
 
-			load_vcl("table");
-			$t = new aw_table(array(
-				"prefix" => "kliendibaas", 
-			));
-//echo $this->cfg["site_basedir"];
-//			$t->parse_xml_def($this->cfg["site_basedir"]."/xml/linklist/show_stats.xml"); 
-			$t->parse_xml_def("/www/automatweb_dev/xml/kliendibaas/riik_list.xml"); 
-			
-			while ($row= $this->db_next()) 
-			{ 
-				$t->define_data($row); 
-			} 
-			$t->sort_by(); 
-			return $t->draw();
+		$t->parse_xml_def($this->cfg["basedir"]."/xml/kliendibaas/riik_list.xml");
 
+		$t->define_field(array(
+			"name" => "oid",
+			"caption" => "oid",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "10",
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "name",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "name_native",
+			"caption" => "name native",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "name_en",
+			"caption" => "name english",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "languages",
+			"caption" => "keeled",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "location",
+			"caption" => "asukoht",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "lyhend",
+			"caption" => "lühend",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+			"sortable" => 1,
+		));
+
+		while ($row= $this->db_next()) 
+		{ 
+			$t->define_data(//array()
+				$row
+			); 
+		} 
+		$t->sort_by(); 
+		return $t->draw();
 	}
-
-
 }
 ?>

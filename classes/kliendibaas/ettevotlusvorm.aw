@@ -184,7 +184,9 @@ class ettevotlusvorm extends aw_template
 			
 			while ($row= $this->db_next()) 
 			{ 
+
 				$t->define_data($row); 
+
 			} 
 			$t->sort_by(); 
 			return $t->draw();

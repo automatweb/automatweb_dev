@@ -1,63 +1,44 @@
 <?php
+
+/*
+	@default table=objects
+	@default group=general
+
+	@property comment type=textarea field=comment cols=40 rows=3
+	@caption Kommentaar
+
+
+	@default field=meta
+	@default method=serialize
+
+	@property kataloogid type=generated generator=changi group=whee
+
+	@property blaa
+
+	@property toolbar type=generated generator=my_toolbar group=whee
+
+*/
+
+
+//property kataloogid type=generated generator=change
 class kliendibaas extends aw_template
 {
-
 	function kliendibaas()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be 
-		$this->init("kliendibaas");
+		$this->init(array(
+//			'tpldir' => 'kliendibaas',
+			'clid' => CL_KLIENDIBAAS,
+		));
 	}
 
 
-	function add($arr)
-	{
-		extract($arr);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa .....");
-		}
-		else
-		{
-			$this->mk_path($parent,"Lisa linklist");
-		}
-		$this->read_template("kliendibaas_add.tpl");
-
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
-		$toolbar->add_button(array(
-			"name" => "save",
-			"tooltip" => "salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif",
-		));
-
-
-		$this->vars(array(
-			"name" => "uus kliendibaas",
-			"toolbar"=>$toolbar->get_toolbar(),
-			"reforb" => 	$this->mk_reforb("submit", 
-				array(
-					"parent" => $parent, 
-					"alias_to" => $alias_to, 
-					"return_url" => $return_url,
-				)),
-		));
-		return $this->parse();
-	}
-
-
-
-	////
-	// !this gets called when the user clicks on change object 
-	// parameters:
-	// id - the id of the object to change
-	// return_url - optional, if set, "back" link should point to it
-	function change($arr)
+	function changi($arr)
 	{
 
 		extract($arr);
 
-		$ob = $this->get_object($id);
+		$ob = $this->get_object($obj['oid']);
+//print_r($obj);
 		if ($return_url != "")
 		{
 			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda kliendibaas");
@@ -66,8 +47,32 @@ class kliendibaas extends aw_template
 		{
 			$this->mk_path($ob["parent"], "Muuda kliendibaas");
 		}
-		$this->read_template("kliendibaas_change.tpl");
 
+		$par = get_instance("objects");
+
+		return array(
+			array(
+				"caption" => "vali kataloogid",
+				"type" => "select",
+				"name" => "kataloogid",
+				"options" =>$par->get_list(false,true,50477),
+				"selected" => $obj['meta']['kataloogid'],
+	                ),
+	                array(
+				"caption" => "blaa",
+				"type" => "textbox",
+				"name" => "blaa",
+				"value" => $obj['meta']['blaa'],
+			),
+
+		);
+	
+	}
+
+
+
+	function my_toolbar($arr)
+	{
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
 		$toolbar->add_button(array(
 			"name" => "save",
@@ -77,33 +82,42 @@ class kliendibaas extends aw_template
 			"img" => "save.gif",
 		));
 		$toolbar->add_button(array(
-			"name" => "lisa_firma",
-			"tooltip" => "lisa firma",
-			"url" => $this->mk_my_orb("new", array("return_url" => urlencode($return_url),"parent" => $ob["parent"],),"firma"), //parent tuleb panna selleks mida confist määran!!
-			"imgover" => "new_over.gif",
-			"img" => "new.gif",
+			"name" => "lisa_blaa",
+			"tooltip" => "lisa blaa",
+			"url" => $this->mk_my_orb("new", array("return_url" => urlencode($return_url),"parent" => $ob['blaa']["parent"],),"blaa"), //parent tuleb panna selleks mida confist määran!!
+			"imgover" => "blaa_over.gif",
+			"img" => "blaa.gif",
 		));
 		$toolbar->add_button(array(
-			"name" => "lisa_tegevusala",
-			"tooltip" => "lisa tegevusala",
-			"url" => $this->mk_my_orb("new", array("return_url" => urlencode($return_url),"parent" => $ob["parent"],),"tegevusala"), //parent tuleb panna selleks mida confist määran!!
-			"imgover" => "new_over.gif",
-			"img" => "new.gif",
+			"name" => "lisa_blaa1",
+			"tooltip" => "lisa blaa",
+			"url" => $this->mk_my_orb("new", array("return_url" => urlencode($return_url),"parent" => $ob['blaa']["parent"],),"blaa"), //parent tuleb panna selleks mida confist määran!!
+			"imgover" => "blaa_over.gif",
+			"img" => "blaa.gif",
 		));
-
-		$this->vars(array(
-			"name"=>$ob["name"],
-			"comment"=>$ob["comment"],
-			"toolbar"=>$toolbar->get_toolbar(),
-			"id"=>$firma["id"],
-			"vorm"=>$form,
-
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url))),
+		$toolbar->add_button(array(
+			"name" => "lisa_blaa2",
+			"tooltip" => "lisa blaa",
+			"url" => $this->mk_my_orb("new", array("return_url" => urlencode($return_url),"parent" => $ob['blaa']["parent"],),"blaa"), //parent tuleb panna selleks mida confist määran!!
+			"imgover" => "blaa_over.gif",
+			"img" => "blaa.gif",
 		));
-		return $this->parse();
+		
+	return array(
+                array(
+                        "caption" => "toolbar",
+                        "type" => "text",
+                        "name" => "toolbar",
+                        "value" => $toolbar->get_toolbar(),
+                ),
+        );
+	
 	}
 
 
+
+
+/*
 	////
 	// !this gets called when the user submits the object's form
 	// parameters:
@@ -142,32 +156,6 @@ class kliendibaas extends aw_template
 
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
-
-	////
-	// !
-	// 
-	//
-	function show($arr)
-	{
-		extract($arr); // cd = current directory
-
-		$this->vars(array(
-
-			"abix" => $tase,
-		));
-
-		return $this->parse();
-	}
-
-
-
-	////
-	// !called, when adding a new object 
-	// parameters:
-	// parent - the folder under which to add the object
-	// return_url - optional, if set, the "back" link should point to it
-	// alias_to - optional, if set, after adding the object an alias to the object with oid alias_to should be created
-
-
+*/
 }
 ?>

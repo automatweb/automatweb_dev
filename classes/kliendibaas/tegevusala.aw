@@ -43,6 +43,7 @@ class tegevusala extends aw_template
 			{
 				$this->mk_path($ob["parent"], "Muuda tegevusala");
 			}
+
 			$toolbar->add_button(array(
 				"name" => "lisa_tegevusala",
 				"tooltip" => "lisa uus tegevusala",
@@ -57,16 +58,6 @@ class tegevusala extends aw_template
 			$this->mk_path($ob["parent"], "Muuda tegevusala");
 		}
 
-			$toolbar->add_button(array(
-				"name" => "html_import",
-				"tooltip" => "html import",
-				"url" => $this->mk_my_orb("new", array("return_url" => urlencode($return_url),"parent" => $ob["parent"],),"html_import"), //parent tuleb panna selleks mida confist määran!!
-				"imgover" => "change_over.gif",
-				"img" => "change.gif",
-			));
-
-
-
 
 		$this->vars(array(
 			"name"=>$ob["name"],
@@ -76,7 +67,6 @@ class tegevusala extends aw_template
 			"kirjeldus"=>$f_kirjeldus,
 			"sourcefile"=>$f_sourcefile,
 			"toolbar"=>$toolbar->get_toolbar(),
-
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "parent"=>$parent, "return_url" => urlencode($return_url))),
 		));
 		return $this->parse();
@@ -96,7 +86,7 @@ class tegevusala extends aw_template
 
 			$this->upd_object(array(
 				"oid" => $id,
-				"name" => $name,
+				"name" => $tegevusala_et,
 				"comment" => $comment,
 				"metadata" => array(
 				)
@@ -107,13 +97,14 @@ class tegevusala extends aw_template
 		{
 			$id = $this->new_object(array(
 				"parent" => $parent,
-				"name" => $name,
+				"name" => $tegevusala_et,
 				"class_id" => CL_TEGEVUSALA,
 				"comment" => $comment,
 				"metadata" => array(
 				)
 			));
-			$q="insert into kliendibaas_tegevusala (kood, oid, tegevusala_ik, tegevusala_et, kirjeldus) values ('$kood','$id','$tegevusala_ik', '$tegevusala_et','$kirjeldus')";
+			$q="insert into kliendibaas_tegevusala (kood, oid, tegevusala_ik, tegevusala_et, kirjeldus)
+			values ('$kood','$id','$tegevusala_ik', '$tegevusala_et','$kirjeldus')";
 		}
 
 $this->db_query($q);
@@ -125,31 +116,6 @@ $this->db_query($q);
 
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
-
-	////
-	// !
-	// 
-	//
-	function show($arr)
-	{
-		extract($arr); // cd = current directory
-
-		$this->vars(array(
-
-			"abix" => $tase,
-		));
-
-		return $this->parse();
-	}
-
-
-
-	////
-	// !called, when adding a new object 
-	// parameters:
-	// parent - the folder under which to add the object
-	// return_url - optional, if set, the "back" link should point to it
-	// alias_to - optional, if set, after adding the object an alias to the object with oid alias_to should be created
 
 
 }

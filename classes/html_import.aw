@@ -251,13 +251,14 @@ function mk_field_len($type,$length)
 	}
 
 	////
-	// ! see on prosta tabel
+	// ! see on prosta tabel andmete näitamiseks 
+	//
 	function show_data($table,$limit=10)
 	{
 		$str.="<tr>";		
-		$this->db_query("select count(*) from $table");
-		$rr=$this->db_next();
-		$str.="<td colspan=4>total in table:".(int)$rr["count(*)"].", showing first $limit</td>";
+		$rr = $this->db_fetch_field("select count(*) from $table","count(*)");
+		//		$rr=$this->db_next();
+		$str.="<td colspan=4>total in table:".(int)$rr.", showing first $limit</td>";
 		$str.="</tr>";
 		$this->db_query("select * from $table limit $limit");		
 		$str.="<tr>";
@@ -811,8 +812,9 @@ function mk_field_len($type,$length)
 			$got=0;
 				foreach($val as $key => $val)
 				{
+					$val=$this->quote(trim(strip_tags($val)));
 					$got=$val?"yes":$got;
-					$va[$key]="'".addslashes(trim(strip_tags($val)))."'";
+					$va[$key]="'".$val."'";
 				}
 				if($got)
 				{
@@ -979,7 +981,7 @@ function mk_field_len($type,$length)
 		return $this->show(array("id" => $alias["target"]));
 	}
 
-
+/*
 	////////////////////////////////////
 	// object persistance functions - used when copying/pasting object
 	// if the object does not support copy/paste, don't define these functions
@@ -1009,6 +1011,51 @@ function mk_field_len($type,$length)
 		$id = $this->new_object($row);
 		return true;
 	}
+*/
+
+	////////////////////////////////////
+	// object persistance functions - used when copying/pasting object
+	// if the object does not support copy/paste, don't define these functions
+	////////////////////////////////////
+
+	////
+	// !this should create a string representation of the object
+	// parameters
+	//    oid - object's id
+	function _serialize($arr)
+	{
+		extract($arr);
+		$ob = $this->get_object($oid);
+		if (is_array($ob))
+		{
+			return aw_serialize($ob, SERIALIZE_NATIVE);
+		}
+		return false;
+	}
+
+	////
+	// !this should create an object from a string created by the _serialize() function
+	// parameters
+	//    str - the string
+	//    parent - the folder where the new object should be created
+	function _unserialize($arr)
+	{
+		extract($arr);
+		$row = aw_unserialize($str);
+		$row["parent"] = $parent;
+		unset($row["brother_of"]);
+		$this->quote(&$row);
+		$id = $this->new_object($row);
+		if ($id)
+		{
+			return true;
+		}
+		return false;
+	}
+
+
+
+
 
 	////
 	// !this is not required 99% of the time, but you can override adding aliases to documents - when the user clicks

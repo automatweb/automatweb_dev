@@ -8,6 +8,7 @@ class contact extends aw_template
 		$this->init("kliendibaas");
 	}
 
+
 	////
 	// !this gets called when the user clicks on change object 
 	// parameters:
@@ -21,11 +22,11 @@ class contact extends aw_template
 		$ob = $this->get_object($id);
 		if ($return_url != "")
 		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda contact");
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda kontakt");
 		}
 		else
 		{
-			$this->mk_path($ob["parent"], "Muuda contact");
+			$this->mk_path($ob["parent"], "Muuda kontakt");
 		}
 		$this->read_template("contact_change.tpl");
 
@@ -65,8 +66,6 @@ class contact extends aw_template
 			$res=$this->db_next();
 			extract($res, EXTR_PREFIX_ALL, "f");
 		}
-
-
 
 
 
@@ -156,6 +155,57 @@ function show($arr)
 
 
 
+
+
+	////	
+	// ! create new contact entry
+	// contact		at least one element required here		
+	//	name
+	//	riik
+	//	linn
+	//	...		
+	// name
+	// parent
+	// comment
+	// ...
+	function new_contact($arr)
+	{
+		extract($arr);
+
+			foreach ($contact as $key=>$val)
+			{
+				{
+					$this->quote($val);
+					$f[]=$key;
+					$v[]="'".$val."'";
+				}
+			}
+
+			$id = $this->new_object(array(
+				"name" => $name,
+				"parent" => $parent,
+				"class_id" => CL_CONTACT,
+				"comment" => $comment,
+				"metadata" => array(
+//					"contact"=>$contact,
+				)
+			));
+			$f[]='oid';
+			$v[]="'".$id."'";
+
+			$q='insert into kliendibaas_contact('.implode(",",$f).')values('.implode(",",$v).')';
+		
+		$this->db_query($q);
+		return $id;
+	}
+
+
+
+
+
+
+
+
 	////
 	// !this gets called when the user submits the object's form
 	// parameters:
@@ -185,39 +235,13 @@ function show($arr)
 					"contact"=>$contact,
 				)
 			));
-
+			$this->db_query($q);
 		}
 		else
 		{
-//			$exclude=array("1","oid","id");
-			foreach ($contact as $key=>$val)
-			{
-//				if(!array_search($key,$exclude))
-				{
-					$f[]=$key;
-					$v[]="'".$val."'";
-				}
-			}
-	
-			$ff=implode(",",$f);
-			$vv=implode(",",$v);
-			$id = $this->new_object(array(
-				"name" => $contact["name"],
-				"parent" => $parent,
-				"class_id" => CL_CONTACT,
-				"comment" => $comment,
-				"metadata" => array(
-//					"contact"=>$contact,
-				)
-			));
-			$q="insert into kliendibaas_contact($ff,oid)values($vv,'$id')";
+			$id=$this->new_contact($arr);
 
 		}
-//echo $q;
-//if($q)
-$this->db_query($q);
-
-
 		if ($alias_to)
 		{
 			$this->add_alias($alias_to, $id);
@@ -288,7 +312,7 @@ $this->db_query($q);
 		}
 
 
-
+		asort($data);
 		$options=$this->picker($selected,array(0=>" - ")+(array)$data);
 
 		$this->vars=array(
