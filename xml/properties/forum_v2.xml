@@ -2,23 +2,23 @@
 <properties>
       <property>
             <name>topic_folder</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TOPIC_FOLDER</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TOPIC_FOLDER</reltype>
             <caption>Teemade kataloog</caption>
             <comment>Sellest kataloogist võetakse foorumi teemasid</comment>
       </property>
       <property>
             <name>address_folder</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADDRESS_FOLDER</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS_FOLDER</reltype>
             <caption>Listiliikmete kataloog</caption>
             <comment>
             <![CDATA[Sellesse kataloogi paigutatakse "listi liikmete" objektid]]>
@@ -26,307 +26,261 @@
       </property>
       <property>
             <name>topics_on_page</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Teemasid lehel</caption>
       </property>
       <property>
             <name>comments_on_page</name>
-            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Postitusi lehel</caption>
       </property>
       <property>
             <name>topic_depth</name>
-            <type>select</type>
-            <default>1</default>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>select</type>
             <caption>Teemade sügavus</caption>
       </property>
       <property>
             <name>topic_selector</name>
-            <type>text</type>
-            <group>topic_selector</group>
-            <no_caption>1</no_caption>
             <table>objects</table>
+            <group>topic_selector</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
             <caption>Teemade tasemed</caption>
       </property>
       <property>
-            <name>container</name>
-            <type>text</type>
-            <store>no</store>
-            <group>container</group>
-            <no_caption>1</no_caption>
+            <name>topic</name>
             <table>objects</table>
+            <group>contents</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Konteiner</caption>
-      </property>
-      <property>
-            <name>topic</name>
             <type>hidden</type>
             <store>no</store>
-            <group>container</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Topic ID (sys)</caption>
       </property>
       <property>
-            <name>subaction</name>
-            <type>hidden</type>
-            <store>no</store>
-            <group>container</group>
+            <name>show</name>
             <table>objects</table>
+            <group>contents</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Subact (sys)</caption>
-      </property>
-      <property>
-            <name>show</name>
             <type>callback</type>
             <callback>callback_gen_contents</callback>
             <store>no</store>
             <no_caption>1</no_caption>
-            <group>contents</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Foorumi sisu</caption>
       </property>
       <property>
-            <name>add_topic</name>
-            <type>callback</type>
-            <callback>callback_gen_add_topic</callback>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <group>add_topic</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Lisa teema</caption>
-      </property>
-      <property>
-            <name>add_comment</name>
-            <type>callback</type>
-            <callback>callback_gen_add_comment</callback>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <group>add_comment</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Lisa kommentaar</caption>
-      </property>
-      <property>
             <name>style_donor</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE_DONOR</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE_DONOR</reltype>
             <caption>Stiilidoonor</caption>
       </property>
       <property>
             <name>style_caption</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Tabeli pealkirja stiil</caption>
       </property>
       <property>
             <name>style_l1_folder</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Esimese taseme folderi stiil</caption>
       </property>
       <property>
             <name>style_folder_caption</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Folderi pealkirja stiil</caption>
       </property>
       <property>
             <name>style_folder_topic_count</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Folderi teemade arvu stiil</caption>
       </property>
       <property>
             <name>style_folder_comment_count</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Folderi postituste arvu stiil</caption>
       </property>
       <property>
             <name>style_folder_last_post</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Folderi viimase postituse stiil</caption>
       </property>
       <property>
             <name>style_forum_yah</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Foorumi YAH</caption>
       </property>
       <property>
             <name>style_topic_caption</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Teema pealkirja stiil</caption>
       </property>
       <property>
             <name>style_topic_replies</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Teema vastuste arvu stiil</caption>
       </property>
       <property>
             <name>style_topic_author</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Teema autori stiil</caption>
       </property>
       <property>
             <name>style_topic_last_post</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Teema viimase postituste stiil</caption>
       </property>
       <property>
             <name>style_comment_count</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Kommentaaride arvu stiil</caption>
       </property>
       <property>
             <name>style_comment_creator</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Teema püstitaja stiil</caption>
       </property>
       <property>
             <name>style_comment_user</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Kommentaari kasutajainfo stiil</caption>
       </property>
       <property>
             <name>style_comment_time</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Kommentaari aja stiil</caption>
       </property>
       <property>
             <name>style_comment_text</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Kommentaari teksti stiil</caption>
       </property>
       <property>
             <name>style_form_caption</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Sisestusvormi pealkirja stiil</caption>
       </property>
       <property>
             <name>style_form_text</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Sisestusvormi teksti stiil</caption>
       </property>
       <property>
             <name>style_form_element</name>
-            <type>relpicker</type>
-            <group>styles</group>
-            <reltype>RELTYPE_STYLE</reltype>
             <table>objects</table>
+            <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
             <caption>Sisestusvormi elemendi stiil</caption>
       </property>
       <classinfo>
@@ -334,29 +288,16 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <container>
-                  <caption>Foorum</caption>
-                  <submit>no</submit>
-            </container>
-            <topic_selector>
-                  <caption>Teemad</caption>
-            </topic_selector>
             <contents>
                   <caption>Sisu</caption>
                   <submit>no</submit>
-                  <parent>container</parent>
             </contents>
+            <topic_selector>
+                  <caption>Teemad</caption>
+            </topic_selector>
             <styles>
                   <caption>Stiilid</caption>
             </styles>
-            <add_topic>
-                  <caption>Lisa teema</caption>
-                  <parent>container</parent>
-            </add_topic>
-            <add_comment>
-                  <caption>Lisa kommentaar</caption>
-                  <parent>container</parent>
-            </add_comment>
       </groupinfo>
       <reltypes>
             <TOPIC_FOLDER>
