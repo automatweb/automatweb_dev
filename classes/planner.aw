@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.59 2002/02/06 02:23:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.60 2002/02/06 07:30:50 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -1626,6 +1626,7 @@ class planner extends calendar {
 		$ce = new cal_event();
 		$html = $ce->repeaters(array(
 			"id" => $id,
+			"stage" => $stage,
 		));
 		$this->mk_path($par_obj["parent"],"Kalender / Muuda sündmust");
 		return $menubar . $html;

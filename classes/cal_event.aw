@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.6 2002/02/06 03:14:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.7 2002/02/06 07:30:50 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -218,6 +218,7 @@ class cal_event extends aw_template {
 
 		$this->vars(array(
 			"rep_link" => $rep_link,
+			"rep_link2" => $this->mk_my_orb("event_repeaters",array("id" => $id,"stage" => 2),"planner"),
 		));
 
 		$this->vars(array(
@@ -277,8 +278,25 @@ class cal_event extends aw_template {
 			$rep_link = $this->mk_my_orb("change",array("id" => $id));
 		};
 
+		if ($stage == 2)
+		{
+			$stage2 = $this->mk_my_orb("event_repeaters",array("id" => $id),"planner");
+			$link2 = "Stage 2";
+			$link1 = "<a href='$stage2'>Stage 1</a>";
+		}
+		else
+		{
+			$stage2 = $this->mk_my_orb("event_repeaters",array("id" => $id,"stage" => 2),"planner");
+			$link1 = "Stage 1";
+			$link2 = "<a href='$stage2'>Stage 2</a>";
+		}
+			
+			
+
 		// oh, I know, this is sooo ugly
 		$this->vars(array(
+				"stage1" => $link1,
+				"stage2" => $link2,
 				"region1" => checked($meta["region1"]),
 				"dayskip" => ($meta["dayskip"] > 0) ? $meta["dayskip"] : 1,
 				"change_link" => $rep_link,
@@ -316,7 +334,7 @@ class cal_event extends aw_template {
 				"rep2_checked" => checked($meta["rep"] == 2),
 				"rep3_checked" => checked($meta["rep"] == 3),
 				"menubar" => $menubar,
-				"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id),"cal_event"),
+				"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id,"stage" => $stage),"cal_event"),
 		));
 		return $this->parse();
 	}
@@ -344,8 +362,19 @@ class cal_event extends aw_template {
 		$this->db_query($q);
 		$event = $this->db_next();
 
-		$this->reps = array();
 
+		if ($stage == 2)
+		{
+			// have to figure out the day the previous repeaters end
+			$event["start"] = $event["rep_until"];
+			$this->reps = aw_unserialize($event["repeaters"]);
+		}
+		else
+		{
+			$this->reps = array();
+		}
+		
+			
 		$rep_end = $this->process_repeaters($event,$args);
 
 		$reps = aw_serialize($this->reps,SERIALIZE_PHP_NOINDEX);
@@ -510,7 +539,7 @@ class cal_event extends aw_template {
 				// something weird is going on
 				$ts = mktime(23,59,59,1,$this->gdaynum,2001);
 				$this->reps[] = $this->gdaynum;
-				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
+				print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
 				$this->found = false;
 				// check whether we have reached the max count
 				if ( isset($this->max_rep_count) && ($this->rep_count == $this->max_rep_count) )
