@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.144 2004/07/22 13:44:35 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.145 2004/08/23 10:52:54 rtoomas Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -172,6 +172,7 @@ if (!defined("DEFS"))
 				$url = preg_replace("/&{2,}/","&",$url);
 			};
 		};
+		$url = str_replace('&&','&',$url);
 		return $url;
 	}
 
