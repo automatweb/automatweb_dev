@@ -76,9 +76,10 @@
 <input type="hidden" name="yearskip" value="{VAR:yearskip}">
 <input type="hidden" name="yearpwhen" value="{VAR:yearpwhen}">
 
-<input type="hidden" name="repeat" value="{VAR:repeat}">
-<input type="hidden" name="repeat_value" value="{VAR:repeat_value}">
-<input type="hidden" name="repeat_type" value="{VAR:repeat_type}">
+<input type="hidden" name="rep_type" value="{VAR:rep_type}">
+<input type="hidden" name="rep_dur" value="{VAR:rep_dur}">
+<input type="hidden" name="rep_forever" value="{VAR:rep_forever}">
+<input type="hidden" name="rep_until" value="{VAR:rep_until}">
 
 {VAR:reforb}
 </td>
