@@ -85,4 +85,12 @@ Tehnika:
 		mail("content@struktuur.ee","FB-SA-007 \"$title\"",$msg,"$headers");
 	}
 };
+
+class feedback extends db_feedback
+{
+	function feedback()
+	{
+		$this->db_feedback();
+	}
+}
 ?>
