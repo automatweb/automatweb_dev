@@ -44,6 +44,10 @@
 <td class="celltext"><input type="text" name="link_caption" value="{VAR:link_caption}"></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Saada ka e-mailile, mis on elemendis:</td>
+<td class="celltext"><select name="email_el" class="formselect">{VAR:email_el}</select></td>
+</tr>
+<tr class="aste01">
 <td></td>
 <td class="celltext"><input type='submit' class='formbutton' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.12 2003/03/28 10:22:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.13 2003/07/07 13:01:27 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -77,6 +77,7 @@ class form_actions extends form_base
 				{
 					case "email":
 						$data["email"] = $email;
+						$data["email_el"] = $email_el;
 						$data["op_id"] = $op_id;
 						$data["l_section"] = $l_section;
 						$data["no_mail_on_change"] = $no_mail_on_change;
@@ -270,7 +271,8 @@ class form_actions extends form_base
 			"LANG" => $lc,
 			"no_mail_on_change" => checked($data["no_mail_on_change"]),
             "link_to_change" => checked($data["link_to_change"]),
-            "link_caption" => $data["link_caption"]
+            "link_caption" => $data["link_caption"],
+			"email_el" => $this->picker($data["email_el"], $this->get_elements_for_forms(array($id), false, true))
 		));
 
 		return $this->parse();
@@ -684,11 +686,35 @@ class form_actions extends form_base
 
 			$awm->htmlbodyattach(array("data" => $app));
 			$awm->gen_mail();
+
+			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
+			{
+				$awm = get_instance("aw_mail");
+				$awm->create_message(array(
+					"froma" => "automatweb@automatweb.com",
+					"fromn" => "AutomatWeb",
+					"subject" => $subj,
+					"to" => $_to,
+					"body" => $msg.$app.$link_url,
+				));
+			
+				$app = $msg_html.'<br>'.$app_html.'<br>'.html::href(array(
+					'url' => $link_url,
+					'caption' => $data['link_caption']
+				));
+
+				$awm->htmlbodyattach(array("data" => $app));
+				$awm->gen_mail();
+			}
 		}
 		else
 		{
 			$app .= $link_url;
 			mail($data["email"],$subj, $msg.$app,"From: automatweb@automatweb.com\n");
+			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
+			{
+				mail($_to,$subj, $msg.$app,"From: automatweb@automatweb.com\n");
+			}
 		}
 	}
 
