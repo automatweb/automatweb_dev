@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.27 2001/06/18 17:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.28 2001/06/20 06:09:02 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -843,6 +843,19 @@ class core extends db_connector
 		}
 
 		return $objcache[$oid];
+	}
+
+	////
+	// !tagastab objekti nime ja class_id jargi
+	function get_object_by_name($args = array())
+	{
+		extract($args);
+		if ($class_id)
+		{
+			$part2 = " AND class_id = '$class_id'";
+		};
+		$q = "SELECT * FROM objects WHERE name = '$name' $part2 ORDER BY modified DESC";
+		$this->db_query($q);
 	}
 
 	////
