@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.6 2004/09/09 20:33:59 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.7 2004/12/02 14:36:51 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -17,6 +17,9 @@
 
 @property author_email type=textbox field=meta method=serialize
 @caption Autori meil
+
+@property answers_to_mail type=checkbox ch_value=1 store=no
+@caption Soovin vastuseid e-mailile
 
 @property subscribers_editor type=releditor store=no mode=manager reltype=RELTYPE_SUBSCRIBER props=mail,name group=subscribers
 
@@ -65,17 +68,26 @@ class forum_topic extends class_base
 		}
 	}
 	
-	/*
 	function set_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
+			case "author_name":
+			case "author_email":
+			case "comment":
+			case "name":
+				if (empty($prop["value"]))
+				{
+					$prop["error"] = $prop["caption"] . " ei tohi olla tühi";
+					$retval = PROP_FATAL_ERROR;
+				};
+				break;
 			
 		}
 		return $retval;
-	}*/
+	}
 
 	////
 	// !Well. Mails all the subscribers of a topic
