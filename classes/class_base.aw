@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.314 2004/11/02 12:18:37 kristo Exp $
+// $Id: class_base.aw,v 2.315 2004/11/04 13:43:54 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -500,6 +500,10 @@ class class_base extends aw_template
 
 		$this->cli = &$cli;
 
+		// käes ongi .. see asi eeldab, et layoutile on grupp peale väänatud ..
+		// samas ei pruugi see üldse case olla. sitta sellest grupist .. propertyle öeldakse
+		// mis grupis ta on ja kui seal mingi layout ka ringi töllerdab eks ma siis lihtsalt
+		// kasutan seda
 		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
 		{
 			$tmp = array();
@@ -509,8 +513,6 @@ class class_base extends aw_template
 				if ($val["group"] == $this->use_group)
 				{
 					$tmp[$key] = $val;
-
-
 				};
 			};
 			$cli->set_layout($tmp);
@@ -3085,7 +3087,11 @@ class class_base extends aw_template
 			{
 				$val = $property["value"];
 				$val = str_replace(",",".",$val);
-				if (is_numeric($val) === false)
+				if (empty($val))
+				{
+					$property["value"] = 0;
+				}
+				else if (is_numeric($val) === false)
 				{
 					$status = PROP_ERROR;
 					$property["error"] = $property["caption"] . " - siia saab sisestada ainult arvu!";
