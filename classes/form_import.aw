@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.16 2002/08/02 13:33:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.17 2002/10/09 09:51:40 kristo Exp $
 
 class form_import extends form_base
 {
@@ -206,6 +206,7 @@ class form_import extends form_base
 				}
 			}
 			// now insert it into the correct tables, form_entry and form_$fid_entries
+			$this->quote(&$entry_name);
 			$entry_id = $this->new_object(array("parent" => $parent, "name" => $entry_name, "class_id" => CL_FORM_ENTRY));
 			$q = "insert into form_entries(id,form_id) values($entry_id, $id)";
 			$this->db_query($q);
@@ -403,6 +404,7 @@ class form_import extends form_base
 					}
 				}
 				// now insert it into the correct tables, form_entry and form_$fid_entries
+				$this->quote(&$entry_name);
 				$entry_id = $this->new_object(array("parent" => $parent, "name" => $entry_name, "class_id" => CL_FORM_ENTRY));
 				$chentrys[$fid] = $entry_id;
 
