@@ -209,8 +209,13 @@ class form_controller extends form_base
 		$co = $this->load_controller($id);
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
-		$eq = "\$res = ".$eq.";";
-		eval($eq);
+		$eq = "\$res = ".$eq.";\$contr_finish = true;";
+		@eval($eq);
+		if (!$contr_finish)
+		{
+			$this->dequote(&$eq);
+			eval($eq);
+		}
 		dbg2("evaling $eq , res = $res<br>");
 		return $res;
 	}
