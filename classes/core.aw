@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.55 2001/09/18 00:37:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.56 2001/09/18 11:55:59 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -590,6 +590,7 @@ class core extends db_connector
 	{
 		$q = "UPDATE objects SET cachedirty = 0 WHERE oid = '$oid'";
 		$this->db_query($q);
+		$GLOBALS["cahe_dirty_cache"][$oid] = 0;
 	}
 
 	////
