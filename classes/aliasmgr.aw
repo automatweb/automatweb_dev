@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.139 2004/02/04 13:47:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.140 2004/02/18 14:21:50 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -1058,6 +1058,12 @@ class aliasmgr extends aw_template
 					$dvals .= ',"----------------","capt_new_object",'.$history.',"----------------","capt_new_object"';
 				}
 			}
+
+			$vals = str_replace("&auml;","ä",$vals);
+			$vals = str_replace("&uuml;","ü",$vals);
+			$vals = str_replace("&otilde;","õ",$vals);
+			$vals = str_replace("&Otilde;","Õ",$vals);
+
 
 			$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
 			$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.($sele ? $sele : $single_select).'");'."\n";
