@@ -1,0 +1,60 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>user_form_conf</name>
+            <type>objpicker</type>
+            <clid>CL_ML_LIST_CONF</clid>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vali konfiguratsioon</caption>
+      </property>
+      <property>
+            <name>vars</name>
+            <type>callback</type>
+            <callback>callback_gen_list_variables</callback>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Muutujad</caption>
+      </property>
+      <property>
+            <name>user_folders</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>15</size>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vali kataloogid, kust võetakse listi liikmed</caption>
+      </property>
+      <property>
+            <name>def_user_folder</name>
+            <type>select</type>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vali kataloog, kuhu pannakse automaatselt lisatud liikmed </caption>
+      </property>
+      <property>
+            <name>automatic_form</name>
+            <type>select</type>
+            <editonly>1</editonly>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Vali vorm, mille sisestustest tehakse automaatselt liikmed</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_MAILINGLIST</syslog_type>
+      </classinfo>
+</properties>
+
