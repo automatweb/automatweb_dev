@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.39 2002/07/18 10:44:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.40 2002/07/23 12:53:42 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -656,9 +656,7 @@ class users extends users_user
 	// !user changing from the admin interface
 	function change($arr)
 	{
-		global $session_filled_forms;
-		$session_filled_forms = array();
-
+		aw_session_set("session_filled_forms", array());
 		if (!$arr["id"])
 		{
 			$arr["id"] = aw_global_get("uid");
@@ -679,7 +677,7 @@ class users extends users_user
 
 	function get_next_jf($join_grp)
 	{
-		global $session_filled_forms;
+		$session_filled_forms = aw_global_get("session_filled_forms");
 
 		// find all the forms in the selected join group 
 		$this->db_query("SELECT id  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN);
@@ -715,7 +713,7 @@ class users extends users_user
 		else
 		{
 			// also, update users join form entries
-			$this->save(array("uid" => $id, "join_form_entry" => serialize($GLOBALS["session_filled_forms"]))); 
+			$this->save(array("uid" => $id, "join_form_entry" => serialize(aw_global_get("session_filled_forms")))); 
 
 			// zero out formgen's user data cache
 			$this->set_user_config(array("uid" => $id, "key" => "user_info_cache", "value" => false));
@@ -870,7 +868,7 @@ class users extends users_user
 				mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 			}
 			$add_state = "";
-			$GLOBALS["session_filled_forms"] = array();
+			aw_session_set("session_filled_forms",array());
 
 			$this->_log("user", $add_state["uid"]." joined");
 			return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after_join;
@@ -908,7 +906,7 @@ class users extends users_user
 			$this->update_dyn_user($add_state["uid"]);
 
 			$add_state = "";
-			$GLOBALS["session_filled_forms"] = array();
+			aw_session_set("session_filled_forms",array());
 			$this->_log("user", $add_state["uid"]." was added from admin interface by ".aw_global_get("uid"));
 			return $this->mk_orb("gen_list", array());
 		}
@@ -979,11 +977,12 @@ class users extends users_user
 		extract($arr);
 		$this->mk_path(0,"<a href='".$this->mk_orb("gen_list", array()).LC_USERS_USERS);
 		// siin hoitaxe forme, mis kasutaja on selle sessiooni jooxul t2itnud.
-		global $session_filled_forms,$add_state;
+		global $add_state;
+		$session_filled_forms = aw_global_get("session_filled_forms");
 
 		if (!$level)
 		{
-			$session_filled_forms = array();
+			aw_session_set("session_filled_forms", array());
 			$this->db_query("SELECT distinct(grp) as grp FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.subtype=".FSUBTYPE_JOIN);
 			$jgrps = array();
 			$found = false;
@@ -1058,7 +1057,7 @@ class users extends users_user
 	function get_join_form($after_join)
 	{
 		// siin hoitaxe forme, mis kasutaja on selle sessiooni jooxul t2itnud.
-		global $session_filled_forms;
+		$session_filled_forms = aw_global_get("session_filled_forms");
 
 		$jfs = array();
 		$this->db_query("SELECT objects.*,forms.grp as grp,forms.j_mustfill as j_mustfill FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 AND objects.site_id = ".$this->cfg["site_id"]." AND forms.subtype = ".FSUBTYPE_JOIN);
@@ -1129,7 +1128,7 @@ class users extends users_user
 	// !tagastab nimekirja formi sisestustest, mis on kasutaja t2itnud ja mis kuuluvad kasutaja liitumisformide gruppi $group
 	function get_join_form_entries($group)
 	{
-		global $session_filled_forms;
+		$session_filled_forms = aw_global_get("session_filled_forms");
 
 		$ret = array();
 
@@ -2190,8 +2189,6 @@ class users extends users_user
 	function submit_ua_form($arr)
 	{
 		extract($arr);
-		global $session_filled_forms;
-
 		// mark the previous form entry
 		if ($id)
 		{
@@ -2203,6 +2200,8 @@ class users extends users_user
 				$f->process_entry(array("id" => $id, "values" => $GLOBALS["HTTP_GET_VARS"], "entry_id" => $ex_entry));
 			}
 		}
+
+		$session_filled_forms = aw_global_get("session_filled_forms");
 
 		// find all the forms in the selected join group 
 		$this->db_query("SELECT id  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN);
