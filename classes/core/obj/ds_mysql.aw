@@ -319,9 +319,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($tbl == "objects")
 			{
 				$tableinfo[$tbl]["index"] = "oid";
+				$serfs["metadata"] = $objdata["meta"];
 			}
+			else
+			{
+				$serfs = array();
+			};
 			$seta = array();
-			$serfs = array();
 			foreach($tbld as $prop)
 			{
 				// this check is here, so that we won't overwrite default values, that are saved in create_new_object
