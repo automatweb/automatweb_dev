@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.57 2002/09/27 07:16:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.58 2002/10/02 08:48:43 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -414,7 +414,7 @@ class form_table extends form_base
 									{
 										$curfinst = $this->cache_get_form_instance($this->form_for_entry_id);
 										$curfinst->load_entry($dat["entry_id"]);
-										$ctrl_ok = $this->controller_instance->eval_controller($ctrlid, "", $curfinst);
+										$ctrl_ok &= $this->controller_instance->eval_controller($ctrlid, "", $curfinst);
 										$curfinst->unload_entry();
 									}
 								}
@@ -594,7 +594,7 @@ class form_table extends form_base
 				{
 					$form_id = $this->table["defs"][$i]["el_forms"][$element_id];
 					$form =& $this->cache_get_form_instance($form_id);
-					$el_ref = $form->get_element_by_id($element_id);
+					$el_ref = $form->get_element_by_id($this->table["defs"][$i]["basket_add_count_el"][$element_id]);
 					if (($fid = $el_ref->get_up_down_count_el_form()))
 					{
 						$ret[$fid][$el_ref->get_up_down_count_el_el()] = $el_ref->get_up_down_count_el_el();
@@ -649,6 +649,7 @@ class form_table extends form_base
 				}
 			}
 		}
+
 		return $ret;
 	}
 
