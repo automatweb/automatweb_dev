@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.6 2004/01/21 10:07:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.8 2004/02/13 16:13:13 duke Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -33,11 +33,13 @@
 @property static_gen_link type=text store=no group=static
 @caption Staatilise genereerimise link
 
+@reltype REPEATER value=1 clid=CL_REPEATER_OBJ 
+@caption kordus staatilise koopia genereerimiseks
+
+@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP
+@caption otsingu grupp
+
 */
-
-
-define("RELTYPE_REPEATER", 1);
-define("RELTYPE_SEARCH_GRP", 2);
 
 define("S_ORD_TIME", 1);
 define("S_ORD_TITLE", 2);
@@ -72,7 +74,7 @@ class site_search_content extends class_base
 				
 			case "static_gen_link":
 				$data['value'] = html::href(array(
-					"url" => $this->mk_my_orb("generate_static", array("id" => $args["obj"]["oid"])),
+					"url" => $this->mk_my_orb("generate_static", array("id" => $args["obj_inst"]->id())),
 					"caption" => "uuenda staatiline koopia"
 				));
 				break;
@@ -92,45 +94,20 @@ class site_search_content extends class_base
 				if ($data["value"])
 				{
 					$sc->add(array(
-						"event" => $this->mk_my_orb("generate_static", array("id" => $args["obj"]["oid"])),
+						"event" => $this->mk_my_orb("generate_static", array("id" => $args["obj_inst"]->id())),
 						"rep_id" => $data["value"]
 					));
 				}
 				else
 				{
 					$sc->remove(array(
-						"event" => $this->mk_my_orb("generate_static", array("id" => $args["obj"]["oid"])),
+						"event" => $this->mk_my_orb("generate_static", array("id" => $args["obj_inst"]->id())),
 					));
 				}
 				break;
 		}
 		return $retval;
 	}	
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_REPEATER => "kordus staatilise koopia genereerimiseks",
-			RELTYPE_SEARCH_GRP => "otsingu grupp",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		$retval = false;
-		switch($args["reltype"])
-		{
-			case RELTYPE_REPEATER:
-				$retval = array(CL_REPEATER_OBJ);
-				break;
-
-			case RELTYPE_SEARCH_GRP:
-				$retval = array(CL_SITE_SEARCH_CONTENT_GRP);
-				break;
-		};
-		return $retval;
-	}
-	
 
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
@@ -406,7 +383,7 @@ class site_search_content extends class_base
 		{
         	return 0;
 		}
-		return ($a["modified"] < $b["modified"]) ? -1 : 1;
+		return ($a["modified"] > $b["modified"]) ? -1 : 1;
 	}
 
 	function _sort_content($a, $b)

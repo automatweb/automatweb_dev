@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.4 2003/11/13 11:13:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.5 2004/02/13 16:13:13 duke Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -11,43 +11,22 @@
 @property users_only type=checkbox ch_value=1 field=meta method=serialize
 @caption Ainult sisse logitud kasutajatele
 
-@property menus type=text store=no callback=callback_get_menus
+@property menus type=text store=no callback=callback_get_menus edit_only=1
 @caption Vali men&uuml;&uuml;d
 
-*/
+@reltype MENU value=1 clid=CL_MENU
+@caption menüü, mille alt otsitakse
 
-define("RELTYPE_MENU", 1);
+*/
 
 class site_search_content_grp extends class_base
 {
 	function site_search_content_grp()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. the default folder does not actually exist, 
-		// it just points to where it should be, if it existed
 		$this->init(array(
 			"tpldir" => "contentmgmt/site_search/site_search_content_grp",
 			"clid" => CL_SITE_SEARCH_CONTENT_GRP
 		));
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_MENU => "men&uuml;&uuml; mille alt otsitakse",
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		$retval = false;
-		switch($args["reltype"])
-		{
-			case RELTYPE_MENU:
-				$retval = array(CL_MENU);
-				break;
-		};
-		return $retval;
 	}
 
 /*	function get_property($args)
@@ -66,12 +45,11 @@ class site_search_content_grp extends class_base
 	function set_property($args = array())
 	{
 		$data = &$args["prop"];
-		$meta = &$args["metadata"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "menus":
-				$args["obj_inst"]->set_meta("section_include_submenus", $args["form_data"]["include_submenus"]);
+				$args["obj_inst"]->set_meta("section_include_submenus", $args["request"]["include_submenus"]);
 				break;
 		}
 		return $retval;
@@ -79,13 +57,9 @@ class site_search_content_grp extends class_base
 
 	function callback_get_menus($args = array())
 	{
-		if (!$args["obj"]["oid"])
-		{
-			return PROP_IGNORE;
-		}
 		$prop = $args["prop"];
 		$nodes = array();
-		$section_include_submenus = $args["obj"]["meta"]["section_include_submenus"];
+		$section_include_submenus = $args["obj_inst"]->meta("section_include_submenus");
 		// now I have to go through the process of setting up a generic table once again
 		load_vcl("table");
 		$this->t = new aw_table(array(
@@ -113,7 +87,7 @@ class site_search_content_grp extends class_base
 			"align" => "center",
 		));
 
-		$obj = obj($args["obj"]["oid"]);
+		$obj = $args["obj_inst"];
 		$conns = $obj->connections_from(array(
 			"type" => RELTYPE_MENU
 		));
