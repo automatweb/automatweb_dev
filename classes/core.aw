@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.190 2003/05/14 11:36:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.191 2003/05/14 13:49:13 axel Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1738,9 +1738,9 @@ class core extends db_connector
 	// this function has became such a spaghetti, that it really should be rewritten. --duke
 	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = array(),$separator = "&")
 	{
-		global $awt;
-		$awt->count("mk_my_orb");
-		$awt->start("my_my_orb");
+		//global $awt;
+		//$awt->count("mk_my_orb");
+		//$awt->start("my_my_orb");
 		if ($cl_name == "")
 		{
 			$cl_name = get_class($this);
@@ -1822,13 +1822,14 @@ class core extends db_connector
 		{
 			$qm = "/";
 		}
-		// now figure out if we are in the admin interface. 
+		// now figure out if we are in the admin interface.
 		// how do we do that? easy :) we check the url for $baseurl/automatweb :)
 		// aga mis siis, kui me mingil hetkel tahame, et automatweb oleks teisel
 		// url-il? Ntx www.kirjastus.ee/pk/automatweb juures see ei tööta. - duke
 		if ((stristr($this->REQUEST_URI,"/automatweb")!=false) || $force_admin)
 		{
-			$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
+//			$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
+			$ret =  "orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
 		}
 		else
 		{
@@ -1847,12 +1848,12 @@ class core extends db_connector
 				$ret = $this->cfg["baseurl"].$uo.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
 			};
 		}
-		$awt->stop("my_my_orb");
+		//$awt->stop("my_my_orb");
 		return $ret;
 	}
 
 	////
-	// !old version of orb url maker, use mk_my_orb instead 
+	// !old version of orb url maker, use mk_my_orb instead
 	// kui user = 1, siis suunatakse tagasi Saidi sisse. Now, I do realize that this is not
 	// the best solution, but for now, it works
 
