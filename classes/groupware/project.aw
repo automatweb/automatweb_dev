@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.7 2004/01/13 17:37:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.8 2004/01/28 16:58:17 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -50,7 +50,6 @@ class project extends class_base
 	// !Optionally this also needs to support date range ..
 	function gen_event_list($arr)
 	{
-
 		$lds = $this->get_events_for_project(array(
 			"project_id" => $arr["obj_inst"]->id(),
 		));
@@ -61,8 +60,10 @@ class project extends class_base
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"],
 		));
+
 		$start = $range["start"];
 		$end = $range["end"];
+		classload("icons");
 
 		if (sizeof($lds) > 0)
 		{
@@ -79,7 +80,8 @@ class project extends class_base
 				$t->add_item(array(
 					"timestamp" => $o->prop("start1"),
 					"data" => array(
-						"name" => "<font color='gray'>" . $clinf["name"] . "</font> " . $o->prop("name"),
+						"name" => $o->prop("name"),
+						"icon" => icons::get_icon_url($o),
 						"url" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
 					),
 				));
