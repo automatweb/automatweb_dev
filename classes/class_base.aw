@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.125 2003/06/19 15:44:41 duke Exp $
+// $Id: class_base.aw,v 2.126 2003/06/26 16:57:39 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -616,6 +616,7 @@ class class_base extends aw_template
 					"id" => $key,
 					"tp" => &$this->tp,
 					"coredata" => $this->coredata,
+					"request" => $this->request,
 				);
 
 				$res = true;	
@@ -1932,6 +1933,8 @@ class class_base extends aw_template
 		{
 			$this->inst->callback_post_save(array(
 				"id" => $this->id,
+				"coredata" => $this->coredata,
+				"objdata" => $this->objdata,
 				"new" => $new,
 			));
 		}
