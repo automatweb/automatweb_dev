@@ -209,7 +209,16 @@ class _int_object
 			}
 			if (isset($param["type"]))
 			{
-				$filter["type"] = $param["type"];
+				if (!is_numeric($param["type"]) && substr($param["type"], 0, 7) == "RELTYPE")
+				{
+					// it is "RELTYPE_FOO"
+					// resolve it to numeric
+					$param["type"] = $GLOBALS["relinfo"][$this->obj["class_id"]][$param["type"]]["value"];
+				}
+				if ($param["type"])
+				{
+					$filter["type"] = $param["type"];
+				}
 			}
 			if (isset($param["class"]))
 			{
@@ -1137,7 +1146,7 @@ class _int_object
 		{
 			$file = "doc";
 		}
-		list($GLOBALS["properties"][$this->obj["class_id"]], $GLOBALS["tableinfo"][$this->obj["class_id"]]) = $GLOBALS["object_loader"]->load_properties(array(
+		list($GLOBALS["properties"][$this->obj["class_id"]], $GLOBALS["tableinfo"][$this->obj["class_id"]], $GLOBALS["relinfo"][$this->obj["class_id"]]) = $GLOBALS["object_loader"]->load_properties(array(
 			"file" => $file,
 			"clid" => $this->obj["class_id"]
 		));
@@ -1161,7 +1170,6 @@ class _int_object
 				$GLOBALS["of2prop"][$this->obj["class_id"]][$prop['name']] = $prop['name'];
 			}
 		}
-
 	}
 
 	function _int_do_save()
