@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.3 2003/10/14 10:29:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.4 2003/11/13 11:13:08 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -71,7 +71,7 @@ class site_search_content_grp extends class_base
 		switch($data["name"])
 		{
 			case "menus":
-				$meta["section_include_submenus"] = $args["form_data"]["include_submenus"];
+				$args["obj_inst"]->set_meta("section_include_submenus", $args["form_data"]["include_submenus"]);
 				break;
 		}
 		return $retval;
