@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.20 2004/04/15 06:23:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.21 2004/06/17 13:57:50 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -25,10 +25,15 @@ class scheduler extends aw_template
 			return false;
 		};
 
+		if ($uid == "")
+		{
+			$event = str_replace("automatweb/", "", $event);
+		}
+
 		if ($time)
 		{
 			$event_id = md5($event);
-			$this->evnt_add($time, $event, $uid, $password, 0, $event_id);
+			$this->evnt_add($time, $event, $uid, $password, 0, $event_id, $sessid);
 		}
 
 		if ($rep_id)
@@ -118,7 +123,7 @@ class scheduler extends aw_template
 		$this->close_session(true);
 	}
 
-	function evnt_add($time, $event, $uid = "", $password = "", $rep_id = 0, $event_id = "")
+	function evnt_add($time, $event, $uid = "", $password = "", $rep_id = 0, $event_id = "", $sessid ="")
 	{
 		$this->open_session();
 		$found = false;
@@ -151,6 +156,7 @@ class scheduler extends aw_template
 			"uid" => $uid,
 			"password" => $password,
 			"rep_id" => $rep_id,
+			"sessid" => $sessid
 		);
 
 		$this->close_session(true);
@@ -280,7 +286,10 @@ class scheduler extends aw_template
 
 		echo "url = $url <br />";
 		$awt = get_instance("aw_test");
-		$awt->handshake(array("host" => $url));
+		$awt->handshake(array(
+			"host" => $url,
+			"sessid" => $evnt["sessid"]
+		));
 
 		if ($evnt["uid"] && $evnt["password"])
 		{
