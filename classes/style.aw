@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.10 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.11 2002/02/14 16:23:20 kristo Exp $
 lc_load("style");
 global $orb_defs;
 // hey I just thought of another thing! you can have several aliases for 1 function :) wooho!
@@ -147,6 +147,8 @@ $style_cache = array();
 												"vspace"			=> $style["vspace"],
 												"header_style"	=> $this->picker($style["header_style"],$sel),
 												"footer_style"	=> $this->picker($style["footer_style"],$sel),
+												"even_style"	=> $this->picker($style["even_style"],$sel),
+												"odd_style"	=> $this->picker($style["odd_style"],$sel),
 												"num_frows"			=> $style["num_frows"],
 												"num_fcols"			=> $style["num_fcols"],
 												"frow_style"	=> $this->picker($style["frow_style"],$sel),
@@ -228,7 +230,7 @@ $style_cache = array();
 			$st = $this->mk_cache($id);
 
 			if ($st["type"] != ST_TABLE)
-				$this->raise_error("style->get_table_string($id): Style is not for tables!");
+				$this->raise_error(ERR_STYLE_WTYPE,"style->get_table_string($id): Style is not for tables!");
 
 			if ($st["bgcolor"] != "")
 				$str.="bgcolor=\"".$st["bgcolor"]."\" ";
@@ -419,6 +421,18 @@ $style_cache = array();
 		{
 			$st = $this->mk_cache($id);
 			return $st["footer_style"];
+		}
+
+		function get_odd_style($id)
+		{
+			$st = $this->mk_cache($id);
+			return $st["odd_style"];
+		}
+
+		function get_even_style($id)
+		{
+			$st = $this->mk_cache($id);
+			return $st["even_style"];
 		}
 
 		function mk_cache($id)

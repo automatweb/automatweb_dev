@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.26 2002/02/01 11:09:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.27 2002/02/14 16:23:20 kristo Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -101,7 +101,7 @@ $orb_defs["table"] ="xml";
 		$this->db_query($q);
 		if (!($row = $this->db_next()))
 		{
-			$this->raise_error("no such table $id (tables.class->load_table)!", true);
+			$this->raise_error(ERR_TBL_NO_TBL,"no such table $id (tables.class->load_table)!", true);
 		}
 		
 		/*$this->is_filter=$this->get_object_metadata(array("metadata"=>$row["metadata"],"key"=>"is_filter"));
@@ -1362,7 +1362,19 @@ $orb_defs["table"] ="xml";
 					$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 
 					$st = 0;
-					if ($scell["style"])
+					if ($this->arr["table_style"])
+					{
+						if (($row & 1) > 0)
+						{
+							$st = $stc->get_odd_style($this->arr["table_style"]);
+						}
+						else
+						{
+							$st = $stc->get_even_style($this->arr["table_style"]);
+						}
+					}
+
+					if ($scell["style"] && $st == 0)
 					{
 						$st = $scell["style"];
 					}
@@ -1797,7 +1809,7 @@ $orb_defs["table"] ="xml";
 			global $fail,$separator;
 
 			if ($fail == "none")
-				$this->raise_error("table->import: No file uploaded!",true);
+				$this->raise_error(ERR_TBL_IMPORT_NOFILE,"table->import: No file uploaded!",true);
 
 			$this->load_table($arr[id]);
 
