@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.82 2002/10/08 07:41:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.83 2002/10/08 08:29:35 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -2064,7 +2064,7 @@ class form_element extends aw_template
 					$onc = "fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",-".$udcnt.");";
 					if ($this->arr["down_button_use_img"] && $this->arr["down_button_img"]["id"])
 					{
-						$aft = "<input type='image' src='".image::check_url($this->arr["down_button_img"]["url"])."' onClick='$onc'>";
+						$aft .= "<input type='image' src='".image::check_url($this->arr["down_button_img"]["url"])."' onClick='$onc'>";
 					}
 					else
 					{
