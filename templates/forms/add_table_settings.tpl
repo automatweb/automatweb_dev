@@ -239,7 +239,7 @@
 												<td class="celltext" colspan="2"><input type="textbox" class="formtext" name="settings[empty_table_text]" value="{VAR:empty_table_text}"> T&uuml;hja tabeli asemel tekst</td>
 											</tr>
 											<tr>
-												<td class="celltext" colspan="2"><select class="formselect" name="settings[empty_table_alias]"><option value=''>{VAR:empty_table_alias}</select> T&uuml;hja tabeli asemel alias</td>
+												<td class="celltext" colspan="2"><select class="formselect" name="settings[empty_table_alias][]" multiple><option value=''>{VAR:empty_table_alias}</select> T&uuml;hja tabeli asemel alias</td>
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[no_grpels_in_restrict]" value="1" {VAR:no_grpels_in_restrict}> &Auml;ra pane grupeerimislemente uude otsingusse</td>
