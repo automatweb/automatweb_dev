@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.2 2003/04/30 11:19:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.3 2003/05/07 12:01:40 duke Exp $
 define("SHARED_FOLDER_ID",2147483647);
 class admin_folders extends aw_template
 {
@@ -398,7 +398,8 @@ class admin_folders extends aw_template
 			}
 
 			$iconurl = isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : "");
-			$blank = $this->mk_my_orb("blank");
+			// as far as I know, this works everywhere
+			$blank = "about:blank";
 			$this->vars(array(
 				"name"		=> $row["name"],
 				"id"			=> ($row["admin_feature"] == 4 ? "gp_" : "").$row["oid"], 
