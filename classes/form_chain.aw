@@ -118,7 +118,9 @@ class form_chain extends form_base
 			"name" => $fc["name"],
 			"comment" => $fc["comment"],
 			"fillonce" => checked($this->chain["fillonce"]),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id))
+			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
+			"import" => $this->mk_my_orb("import_chain_entries", array("id" => $id),"form_import"),
+			"entries" => $this->mk_my_orb("show_chain_entries", array("id" => $id))
 		));
 		return $this->parse();
 	}
@@ -279,6 +281,42 @@ class form_chain extends form_base
 		$tx = $x->xml_serialize($ar);
 		$this->quote(&$tx);
 		$this->db_query("UPDATE form_chain_entries SET ids = '$tx' WHERE id = $chain_entry_id");
+	}
+
+	function show_chain_entries($arr)
+	{
+		extract($arr);
+		$ob = $this->load_chain($id);
+		$this->mk_path($ob["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Muuda p&auml;rga</a> / Sisestused");
+		$this->read_template("show_chain_entries.tpl");
+
+		$this->db_query("SELECT * FROM form_chain_entries WHERE chain_id = $id");
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"tm" => $this->time2date($row["tm"], 2),
+				"uid" => $row["uid"],
+				"change" => $this->mk_my_orb("show", array("id" => $id, "entry_id" => $row["id"])),
+				"delete" => $this->mk_my_orb("delete_entry", array("id" => $id, "entry_id" => $row["id"])),
+			));
+			$this->parse("LINE");
+		}
+		return $this->parse();
+	}
+
+	function delete_entry($arr)
+	{
+		extract($arr);
+
+		$e = $this->get_chain_entry($entry_id);
+		foreach($e as $fid => $fentry_id)
+		{
+			$this->delete_object($fentry_id);
+		}
+
+		$this->db_query("DELETE FROM form_chain_entries WHERE id = $entry_id");
+
+		header("Location: ".$this->mk_my_orb("show_chain_entries", array("id" => $id)));
 	}
 }
 ?>
