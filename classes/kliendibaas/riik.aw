@@ -21,35 +21,29 @@
 
 	@property languages type=textbox size=30
 	@caption Keeled
-	
+
 	@property lyhend type=textbox size=10
 	@caption Lühend
 
 	@property location type=textarea
 	@caption Asukoha kirjeldus
-
-	@classinfo objtable=kliendibaas_riik
-	@classinfo objtable_index=oid
 */
 
 class riik extends class_base
 {
 	function riik()
 	{
-		//$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_RIIK,
 		));
 	}
+	
 	function get_property($args)
 	{
 		$data = &$args['prop'];
 		$retval = true;
 		switch($data["name"])
 		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
 			case 'jrk':
 				$retval=PROP_IGNORE;
 			break;
@@ -57,9 +51,7 @@ class riik extends class_base
 				$retval=PROP_IGNORE;
 			break;
 		}
-
 		return  $retval;
 	}
-
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 /*
-	@tableinfo kliendibaas_toode index=oid master_table=objects master_index=oid	
+	@tableinfo kliendibaas_toode index=oid master_table=objects master_index=oid
 	@default table=objects
 	@default group=general
 
@@ -20,16 +20,12 @@
 
 	@property kirjeldus type=textarea
 	@caption Toote kirjeldus
-
-	@classinfo objtable=kliendibaas_toode
-	@classinfo objtable_index=oid
 */
 
 class toode extends class_base
 {
 	function toode()
 	{
-//		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_TOODE,
 		));
@@ -40,9 +36,6 @@ class toode extends class_base
 		$retval = true;
 		switch($data["name"])
 		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
 			case 'jrk':
 				$retval=PROP_IGNORE;
 			break;
@@ -50,7 +43,6 @@ class toode extends class_base
 				$retval=PROP_IGNORE;
 			break;
 		}
-
 		return  $retval;
 	}
 

@@ -12,9 +12,6 @@
 
 	@property location type=textarea
 	@caption Asukoha kirjeldus
-
-	@classinfo objtable=kliendibaas_linn
-	@classinfo objtable_index=oid
 */
 
 class linn extends class_base
@@ -32,9 +29,6 @@ class linn extends class_base
 		$retval = true;
 		switch($data["name"])
 		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
 			case 'jrk':
 				$retval=PROP_IGNORE;
 			break;
@@ -42,7 +36,6 @@ class linn extends class_base
 				$retval=PROP_IGNORE;
 			break;
 		}
-
 		return  $retval;
 	}
 }

@@ -21,16 +21,12 @@
 
 	@property kirjeldus type=textarea
 	@caption Tegevusala kirjeldus
-
-	@classinfo objtable=kliendibaas_tegevusala
-	@classinfo objtable_index=oid
 */
 
 class tegevusala extends class_base
 {
 	function tegevusala()
 	{
-//		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_TEGEVUSALA,
 		));
@@ -41,9 +37,6 @@ class tegevusala extends class_base
 		$retval = true;
 		switch($data["name"])
 		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
 			case 'jrk':
 				$retval=PROP_IGNORE;
 			break;
@@ -51,9 +44,7 @@ class tegevusala extends class_base
 				$retval=PROP_IGNORE;
 			break;
 		}
-
 		return  $retval;
 	}
-
 }
 ?>

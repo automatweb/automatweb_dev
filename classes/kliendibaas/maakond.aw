@@ -18,16 +18,12 @@
 
 	@property location type=textarea
 	@caption Asukoha kirjeldus
-
-	@classinfo objtable=kliendibaas_maakond
-	@classinfo objtable_index=oid
 */
 
 class maakond extends class_base
 {
 	function maakond()
 	{
-//		$this->init("kliendibaas");
 		$this->init(array(
 			'clid' => CL_MAAKOND,
 		));
@@ -38,9 +34,6 @@ class maakond extends class_base
 		$retval = true;
 		switch($data["name"])
 		{
-			case 'status':
-				$retval=PROP_IGNORE;
-			break;
 			case 'jrk':
 				$retval=PROP_IGNORE;
 			break;
@@ -48,9 +41,7 @@ class maakond extends class_base
 				$retval=PROP_IGNORE;
 			break;
 		}
-
 		return  $retval;
 	}
-
 }
 ?>
