@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.63 2005/01/04 14:57:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.64 2005/01/06 12:06:08 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
@@ -35,7 +35,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
 	@property topic_depth type=select group=topic_selector default=0 
 	@caption Teemade sügavus
 
-	@property topic_selector type=text group=topic_selector no_caption=1
+	@property topic_selector type=table group=topic_selector no_caption=1
 	@caption Teemade tasemed
 
 	@property topic type=hidden store=no group=contents
@@ -54,13 +54,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
 	@caption Tabeli pealkirja stiil
 	
 	@property style_l1_folder type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Esimese taseme folderi stiil
+	@caption Teema kausta stiil
 
 	@property style_folder_caption type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Folderi pealkirja stiil
+	@caption Teema kausta pealkirja stiil
 	
 	@property style_folder_topic_count type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teemade arvu stiil
+	@caption Teema kausta arvu stiil
 	
 	@property style_folder_comment_count type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Teema kausta vastuste arvu stiil
@@ -199,7 +199,7 @@ class forum_v2 extends class_base
 				}
 				else
 				{
-					$data["value"] = $this->get_topic_selector($arr);
+					$this->get_topic_selector(&$arr);
 				};
 				break;
 
@@ -1365,7 +1365,32 @@ class forum_v2 extends class_base
 
 		$this->ot = $ot;
 
-		$this->read_template("topic_selector.tpl");
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "spacer",
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Teema",
+		));
+
+		$t->define_field(array(
+			"name" => "exclude",
+			"caption" => "Jäta välja",
+			"align" => "center",
+			"width" => 100,
+		));
+
+		$t->define_field(array(
+			"name" => "exclude_subs",
+			"caption" => "k.a. alamkaustad",
+			"align" => "center",
+			"width" => 100,
+		));
+
+		$this->t = &$t;
+
 		$this->exclude = $arr["obj_inst"]->meta("exclude");
 		$this->exclude_subs = $arr["obj_inst"]->meta("exclude_subs");
 
@@ -1373,9 +1398,6 @@ class forum_v2 extends class_base
 			"parent" => $topic_folder,
 		));
 
-		$this->vars(array(
-			"ITEM" => $this->rv,
-		));
 		return $this->parse();
 	}
 
@@ -1388,14 +1410,18 @@ class forum_v2 extends class_base
 		foreach($litems as $item)
 		{
 			$id = $item->id();
-			$this->vars(array(
-				"caption" => $item->name(),
-				"id" => $id,
+			$this->t->define_data(array(
+				"name" => $item->name(),
 				"spacer" => str_repeat("&nbsp;",$level*3),
-				"exclude" => checked($this->exclude[$id]),
-				"exclude_subs" => checked($this->exclude_subs[$id]),
-			));
-			$this->rv .= $this->parse("ITEM");
+				"exclude" => html::checkbox(array(
+					"name" => "exclude[${id}]",
+					"checked" => $this->exclude[$id],
+				)),
+				"exclude_subs" => html::checkbox(array(
+					"name" => "exclude_subs[${id}]",
+					"checked" => $this->exclude_subs[$id],
+				)),
+			));			
 			$level++;
 			$this->_do_rec_topic(array("parent" => $id));
 			$level--;
@@ -1434,13 +1460,6 @@ class forum_v2 extends class_base
 		);
 		$this->inst->embedded = true;
 		$this->embedded = true;
-
-		global $XX5;
-		if ($XX5)
-		{
-			//phpinfo();
-			//arr($_GET);
-		};
 
 		// nii. see paneb selle paika. Ja nüt, mk_my_orb peaks suutma detectida kas 
 		// relobj_id on püsti ja kui on, siis tegema kõik lingid selle baasil.
