@@ -241,6 +241,10 @@ function init_config($arr)
 		{
 			define($sad["def"], $said);
 		}
+		foreach($GLOBALS["cfg"]["translate"]["ids"] as $tid => $tdef)
+		{
+			define($tdef,$tid);
+		}
 	};
 
 	// db driver quoting settings
