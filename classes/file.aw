@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.33 2002/11/07 23:04:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.34 2002/12/05 11:02:47 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -103,7 +103,7 @@ class file extends aw_template
 		list($major,$minor) = explode("/",$args["type"]);
 
 		// first, we need to find a path to put the file
-		$filename = $this->gen_uniq_id();
+		$filename = gen_uniq_id();
 		$prefix = substr($filename,0,1);
 		if (!is_dir($site_basedir . "/files/" . $prefix))
 		{

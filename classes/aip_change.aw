@@ -413,24 +413,24 @@ class aip_change extends aw_template
 					{
 						// if no parent found, this means we must create new folder for file.
 						// well, actually we will no longer create folders by default..
-//						$aid = $this->gen_uniq_id();
+//						$aid = gen_uniq_id();
 //						$actions[$aid] = array("action" => CREATE_FOLDER,"file" => $fn);
 					}
-					$aid = $this->gen_uniq_id();
+					$aid = gen_uniq_id();
 					$actions[$aid] = array("action" => CREATE_FILE,"file" => $fn);
 				}
 				else
 				if ($fstat == FILE_STAT_MODIFIED)
 				{
 					// file changed, replace and archive old
-					$aid = $this->gen_uniq_id();
+					$aid = gen_uniq_id();
 					$actions[$aid] = array("action" => UPDATE_FILE,"file" => $fn);
 				}
 				else
 				if ($fstat == FILE_STAT_DELETED)
 				{
 					// file removed, remove from system. if no files left under menu, remove menu
-					$aid = $this->gen_uniq_id();
+					$aid = gen_uniq_id();
 					$actions[$aid] = array("action" => DELETE_FILE,"file" => $fn);
 				}
 			}

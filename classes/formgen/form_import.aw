@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.1 2002/10/29 10:10:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_import.aw,v 1.2 2002/12/05 11:02:49 kristo Exp $
 classload("formgen/form_base");
 class form_import extends form_base
 {
@@ -38,7 +38,7 @@ class form_import extends form_base
 		}
 
 		// liigutame faili kuskile seifi kohta ja j2tame meelde selle
-		$fname = $this->gen_uniq_id();
+		$fname = gen_uniq_id();
 
 		// peaks ka kontrollima, kas tmpdir on ikka olemas ja kirjutatav
 		move_uploaded_file($file,aw_ini_get("server.tmpdir")."/".$fname);
@@ -246,7 +246,7 @@ class form_import extends form_base
                 }
 
 		// liigutame faili kuskile seifi kohta ja j2tame meelde selle
-		$fname = $this->gen_uniq_id();
+		$fname = gen_uniq_id();
 		move_uploaded_file($HTTP_POST_FILES["file"]["tmp_name"],aw_ini_get("server.tmpdir")."/".$fname);
 
 		return $this->mk_my_orb("select_chain_els", array("id" => $id, "file" => $fname));

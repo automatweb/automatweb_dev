@@ -63,7 +63,7 @@ class aip_pdf extends aw_template
 					if (!$pr)
 					{
 						// if no parent found, this means we must create new folder for file.
-						$aid = $this->gen_uniq_id();
+						$aid = gen_uniq_id();
 						$this->vars(array(
 							"file" => $fn,
 							"action" => "Failile vastavat kataloogi ei leitud, loome uue (".$this->get_new_folder_name_for_file($fn).")",
@@ -73,7 +73,7 @@ class aip_pdf extends aw_template
 						$actions[$aid] = array("action" => CREATE_FOLDER,"file" => $fn);
 						$a.=$this->parse("CHANGE");
 					}
-					$aid = $this->gen_uniq_id();
+					$aid = gen_uniq_id();
 					$this->vars(array(
 						"file" => $fn,
 						"action" => "Fail lisati, lisame systeemi",
@@ -87,7 +87,7 @@ class aip_pdf extends aw_template
 				if ($fstat == FILE_STAT_MODIFIED)
 				{
 					// file changed, replace and archive old
-					$aid = $this->gen_uniq_id();
+					$aid = gen_uniq_id();
 					$this->vars(array(
 						"file" => $fn,
 						"action" => "Fail uuendati, arhiveerime vana ja uuendame faili AW's",
@@ -101,7 +101,7 @@ class aip_pdf extends aw_template
 				if ($fstat == FILE_STAT_DELETED)
 				{
 					// file removed, remove from system. if no files left under menu, remove menu
-					$aid = $this->gen_uniq_id();
+					$aid = gen_uniq_id();
 					$this->vars(array(
 						"file" => $fn,
 						"action" => "Fail kustutati, kustutame AW'st",

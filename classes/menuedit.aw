@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.182 2002/12/03 13:27:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.183 2002/12/05 11:02:47 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -166,7 +166,7 @@ class menuedit extends aw_template
 			reset($banner_defs);
 			while (list($name,$gid) = each($banner_defs))
 			{
-				$res = str_replace("[ss".$gid."]",$this->gen_uniq_id(),$res);
+				$res = str_replace("[ss".$gid."]",gen_uniq_id(),$res);
 			}
 		}
 		return $res;
@@ -514,9 +514,9 @@ class menuedit extends aw_template
 		$this->do_sub_callbacks($sub_callbacks);
 
 		$this->vars(array(
-			"ss" => $this->gen_uniq_id(),		// bannerite jaox
-			"ss2" => $this->gen_uniq_id(),
-			"ss3" => $this->gen_uniq_id(),
+			"ss" => gen_uniq_id(),		// bannerite jaox
+			"ss2" => gen_uniq_id(),
+			"ss3" => gen_uniq_id(),
 			"link" => "",
 			"section"	=> $section,
 			"uid" => aw_global_get("uid"),
@@ -6178,7 +6178,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$cur_id = $row["id"];
 
-				$hash = $this->gen_uniq_id();
+				$hash = gen_uniq_id();
 				$this->menu_hash2id[$cur_id] = $hash;
 
 				$od = $objs[$cur_id];
@@ -6205,7 +6205,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$dat = $this->serialize(array("oid" => $row["oid"]));
 				if ($dat !== false)
 				{
-					$hash = $this->gen_uniq_id();
+					$hash = gen_uniq_id();
 					$this->ser_obj[$hash] = array("is_object" => true, "objstr" => $dat, "parent" => $this->menu_hash2id[$oid]);
 				}
 			}
@@ -6220,7 +6220,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 		$this->ser_obj = array();
-		$hash = $this->gen_uniq_id();
+		$hash = gen_uniq_id();
 		$this->menu_hash2id[$oid] = $hash;
 		$od = $this->get_object($oid);
 		$od["parent"] = 0;
@@ -6248,7 +6248,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					$dat = $this->serialize(array("oid" => $row["oid"]));
 					if ($dat !== false)
 					{
-						$hash = $this->gen_uniq_id();
+						$hash = gen_uniq_id();
 						$this->ser_obj[$hash] = array("is_object" => true, "objstr" => $dat, "parent" => $this->menu_hash2id[$oid]);
 					}
 				}

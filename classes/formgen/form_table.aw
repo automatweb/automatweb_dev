@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.19 2002/12/04 11:32:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.20 2002/12/05 11:02:49 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2515,7 +2515,7 @@ class form_table extends form_base
 			$sep = "&";
 		}
 
-		$new_sk = $this->gen_uniq_id();
+		$new_sk = gen_uniq_id();
 		$url = $ru.$sep."use_table=".$alias_target;
 		// if we are doing grouping in the table then we must include the group elements value(s) as a restrict search element
 		// as well, because it would make a whole lotta sense that way

@@ -27,7 +27,7 @@ class backup extends aw_template
 
 		set_time_limit(0);
 		// ookay. first, the database dump.
-		$tmpnam = aw_ini_get("server.tmpdir")."/".$this->gen_uniq_id();
+		$tmpnam = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
 		mkdir($tmpnam,0777);
 		
 		$cmd = aw_ini_get("server.mysqldump_path")." --add-drop-table --user=".aw_ini_get("db.user")." --host=".aw_ini_get("db.host")." --password=".aw_ini_get("db.pass")." --quick ".aw_ini_get("db.base")." > ".$tmpnam."/db_dump.sql";

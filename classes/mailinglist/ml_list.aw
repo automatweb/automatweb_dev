@@ -348,7 +348,7 @@ class ml_list extends aw_template
 		$url=$this->mk_my_orb("post_message",array("id" => $id, "targets" => $targets),"",1);
 		$sched = get_instance("scheduler");
 		$sched->add(array(
-			"event" => $this->mk_my_orb("process_queue", array("rand" => $this->gen_uniq_id()), "ml_queue", false, true),
+			"event" => $this->mk_my_orb("process_queue", array("rand" => gen_uniq_id()), "ml_queue", false, true),
 			"time" => time()+120,	// every 2 minutes
 		));
 		return $url;

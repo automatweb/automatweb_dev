@@ -519,14 +519,14 @@ class icons extends aw_template
 		if ($fail != "none" && $fail != "")
 		{
 			// teeme temp. kataloogi kuhu faili lahti pakime. 
-			$dir = $tmpdir."/".$this->gen_uniq_id();
+			$dir = $tmpdir."/".gen_uniq_id();
 			if (!mkdir($dir,0777))
 			{
 				$this->raise_error(ERR_ICONS_NOTEMP,"Unable to create temp directory $dir !", true);
 			}
 
 			// siin konverdime
-			$tdir = $tmpdir."/".$this->gen_uniq_id();
+			$tdir = $tmpdir."/".gen_uniq_id();
 			if (!mkdir($tdir,0777))
 			{
 				$this->raise_error(ERR_ICONS_NOTEMP,"Unable to create temp directory $tdir !", true);

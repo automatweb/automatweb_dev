@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.3 2002/12/03 11:19:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner.aw,v 1.4 2002/12/05 11:02:48 kristo Exp $
 
 // act_type's:
 // 0 - always active
@@ -236,7 +236,7 @@ class banner extends aw_template
 		{
 			$h = "height=\"$height\"";
 		}
-		return "<img src='".$this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?bid=$id&noview=1&ss=".$this->gen_uniq_id()."' $h>";
+		return "<img src='".$this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?bid=$id&noview=1&ss=".gen_uniq_id()."' $h>";
 	}
 
 	function get($id)
@@ -610,7 +610,7 @@ class banner extends aw_template
 				// we avoud that by not writing the uid to the database now, but only the next time when the user returns and has a uid
 				// and that is not in the database, it will be written there. 
 
-				$buid = $this->gen_uniq_id();
+				$buid = gen_uniq_id();
 				setcookie("aw_banner_uid",$buid,time()+24*3600*1000,"/");
 				setcookie("aw_banner_check");	// erase check cookie.
 				$GLOBALS["aw_banner_uid"] = $buid;
@@ -888,7 +888,7 @@ class banner extends aw_template
 						"modifiedby" => $row["modifiedby"],
 						"modified" => $this->time2date($row["modified"],2),
 						"img" => $this->get_noview_url($row["oid"],30),
-						"img_large" => $this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?bid=".$row["oid"]."&noview=1&ss=".$this->gen_uniq_id(),
+						"img_large" => $this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?bid=".$row["oid"]."&noview=1&ss=".gen_uniq_id(),
 						"change" => $this->mk_orb("change_site", array("id" => $row["oid"])),
 						"delete" => $this->mk_orb("delete_site", array("id" => $row["oid"],"cl_id" => $id)),
 						"stats" => $this->mk_orb("showstats", array("id" => $row["oid"]))

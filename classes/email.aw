@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.23 2002/12/03 11:24:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.24 2002/12/05 11:02:47 kristo Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -342,7 +342,7 @@ class email extends aw_template
 	{
 		if (strpos($c,"#pwhash#"))
 		{
-			$hash = substr($this->gen_uniq_id(),0,15);
+			$hash = substr(gen_uniq_id(),0,15);
 			$c = str_replace("#pwhash#","a=$hash",$c);
 
 			$data = array("uid" => $uid,"ts" => time());

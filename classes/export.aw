@@ -459,7 +459,7 @@ class export extends aw_template
 			$is_print = true;
 		}
 //		echo "url = $url, print = ",($is_print ? "jah" : "ei")," name = $name <br>";
-		$this->save_file($fc,$name, $is_print, $current_section, $t_lang_id);
+		$this->save_file($fc,$name, $is_print, $current_section, $t_lang_id, $url);
 
 //		echo "fetch_and_save_page($_url, $lang_id) returning $f_name <br>";
 		$this->fsp_level--;
@@ -513,7 +513,7 @@ class export extends aw_template
 
 			if ($this->is_external($link) || $this->is_dynamic($link))
 			{
-				$fname = $this->gen_uniq_id();
+				$fname = gen_uniq_id();
 				$temps[$fname] = $link;
 			}
 			else
@@ -539,7 +539,7 @@ class export extends aw_template
 						$this->menu_cache->make_caches(array("lang_id" => $t_lang_id));
 						$fname = $this->get_hash_for_url($link,$t_lang_id).".".$this->get_ext_for_link($link,$http_response_header);
 					}
-					$tid = $this->gen_uniq_id();
+					$tid = gen_uniq_id();
 					$temps[$tid] = $fname;
 	//				echo "fname = $fname , tid = $tid <br>";
 					$fname = $tid;
@@ -572,7 +572,7 @@ class export extends aw_template
 //		echo "convert_links(fc,$lang_id) returning <br>";
 	}
 
-	function save_file($fc,$name, $no_db = false, $cur_sec = "", $lang_id = "")
+	function save_file($fc,$name, $no_db = false, $cur_sec = "", $lang_id = "", $url = '')
 	{
 //		echo "save_file(fc,$name) <br>";
 //		echo "saving file as $name <br>\n";
@@ -581,14 +581,16 @@ class export extends aw_template
 		{
 			$this->changed_files[] = array(
 				'name' => $name,
-				'global' => $mt[1]
+				'global' => $mt[1],
+				'url' => $url
 			);
 		}
 		else
 		{
 			$this->added_files[] = array(
 				'name' => $name,
-				'global' => $mt[1]
+				'global' => $mt[1],
+				'url' => $url
 			);
 		}
 
@@ -1084,7 +1086,7 @@ class export extends aw_template
 			}
 		}
 
-		$tmp = $this->gen_uniq_id(str_replace($this->cfg["baseurl"],"",$url)).",".$lang_id;
+		$tmp = gen_uniq_id(str_replace($this->cfg["baseurl"],"",$url)).",".$lang_id;
 //		echo "made hash for link $url = $tmp <br>";
 //		echo "get_hash_for_url($url, $lang_id) returning ",$tmp,"<br>";
 		$this->hash2url[$lang_id][$url] = $tmp;
@@ -1602,7 +1604,7 @@ class export extends aw_template
 				{
 					$fn = $from."/".$file;
 					$tn = $to."/".$file;
-					if (is_dir($file))
+					if (is_dir($fn))
 					{
 						// copy subdirs as well
 						mkdir($tn,0777);
@@ -1704,12 +1706,12 @@ class export extends aw_template
 		if ($type == "added")
 		{
 			$lstr .= "<b>LISATUD FAILID:</b><br><br>";
-			$lstr .= "<table border=1><tr><td class='celltext'>FAIL</td><td class='celltext'>GLOBAL</td></tr>";
+			$lstr .= "<table border=1><tr><td class='celltext'>URL</td><td class='celltext'>FAIL</td><td class='celltext'>GLOBAL</td></tr>";
 			$log = new aw_array(aw_unserialize($row["added_files"]));
 			foreach($log->get() as $entry)
 			{
 				$entry['global'] = "&nbsp;".round($entry['global'],2)."&nbsp;";
-				$lstr.="<tr><td class='celltext'>$entry[name]</td><td class='celltext'>$entry[global]</td></tr>\n";
+				$lstr.="<tr><td class='celltext'>$entry[url]&nbsp;</td><td class='celltext'>$entry[name]</td><td class='celltext'>$entry[global]</td></tr>\n";
 			}
 			$lstr .=" </table><Br><br>";
 		}
@@ -1726,12 +1728,12 @@ class export extends aw_template
 		if ($type == "changed")
 		{
 			$lstr .= "<b>MUUDETUD FAILID:</b><br><br>";
-			$lstr .= "<table border=1><tr><td class='celltext'>FAIL</td><td class='celltext'>GLOBAL</td></tr>";
+			$lstr .= "<table border=1><tr><td class='celltext'>URL</td><td class='celltext'>FAIL</td><td class='celltext'>GLOBAL</td></tr>";
 			$log = new aw_array(aw_unserialize($row["changed_files"]));
 			foreach($log->get() as $entry)
 			{
 				$entry['global'] = "&nbsp;".round($entry['global'],2)."&nbsp;";
-				$lstr .= "<tr><td class='celltext'>$entry[name]</td><td class='celltext'>$entry[global]</td></tr>\n";
+				$lstr .= "<tr><td class='celltext'>$entry[url]&nbsp;</td><td class='celltext'>$entry[name]</td><td class='celltext'>$entry[global]</td></tr>\n";
 			}
 			$lstr .= "</table>";
 		}

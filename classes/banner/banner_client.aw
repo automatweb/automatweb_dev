@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_client.aw,v 1.1 2002/11/04 00:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/banner/Attic/banner_client.aw,v 1.2 2002/12/05 11:02:48 kristo Exp $
 
 classload("banner/banner");
 class banner_client extends banner
@@ -152,7 +152,7 @@ class banner_client extends banner
 				$t_vi+=$vi;
 				$t_cl+=$cl;
 				$this->vars(array(
-					"img" => "<img src='".$this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?bid=".$row["oid"]."&noview=1&ss=".$this->gen_uniq_id()."'>",
+					"img" => "<img src='".$this->cfg["baseurl"]."/banner.".$this->cfg["ext"]."?bid=".$row["oid"]."&noview=1&ss=".gen_uniq_id()."'>",
 					"views" => $vi,
 					"clics" => $cl,
 					"ctr"	=> ($vi ? ((double)$cl/(double)$vi)*100.0 : 0),

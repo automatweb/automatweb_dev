@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.61 2002/12/03 12:52:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.62 2002/12/05 11:02:47 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -554,7 +554,7 @@ class users extends users_user
 			if ($al)
 			{
 				$uid = $add_state["uid"];
-				$session = $this->gen_uniq_id();
+				$session = gen_uniq_id();
 				aw_session_set("uid", $uid);
 				aw_session_set("session", $session);
 				aw_global_set("uid", $uid);
@@ -2049,7 +2049,7 @@ class users extends users_user
 		$gm = $this->getgroupmembers2($grps);
 		foreach($gm as $uid)
 		{
-			$pwd = substr($this->gen_uniq_id(),0,8);
+			$pwd = substr(gen_uniq_id(),0,8);
 			if (aw_ini_get("auth.md5_passwords"))
 			{
 				$pwd = md5($pwd);
