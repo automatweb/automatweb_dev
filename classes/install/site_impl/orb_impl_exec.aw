@@ -36,7 +36,7 @@ if ($vars["fastcall"] == 1)
 	session_name("automatweb");
 	session_start();
 	// loadime klassi
-	classload("fastcall_base");
+	classload("core/fastcall_base");
 	if (!class_exists("class_base"))
 	{
 		classload("class_base");
