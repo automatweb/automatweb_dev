@@ -48,22 +48,31 @@ function aw_save()
 {
 	cnt = 0;
 	res = "";
-	len = document.searchform.check.length;
-	for (i = 0; i < len; i++)
+	
+	if (document.searchform.check.length)
 	{
-		if (document.searchform.check[i].checked)
+		len = document.searchform.check.length;
+		for (i = 0; i < len; i++)
 		{
-			if (cnt == 0)
+			if (document.searchform.check[i].checked)
 			{
-				res = document.searchform.check[i].value;
-			}
-			else
-			{
-				res = res + "," + document.searchform.check[i].value;
-			}
-			cnt++;
+				if (cnt == 0)
+				{
+					res = document.searchform.check[i].value;
+				}
+				else
+				{
+					res = res + "," + document.searchform.check[i].value;
+				}
+				cnt++;
+			};
 		};
+	}
+	else
+	{
+		res = document.searchform.check.value;
 	};
+
 	if (res.length > 0)
 	{
 		link = '{VAR:saveurl}&alias=' + res;
@@ -90,4 +99,36 @@ function redir()
 		};
 	};
 };
+
+var chk_status = true;
+
+function selall()
+{
+	len = document.searchform.elements.length;
+	for (i=0; i < len; i++)
+	{
+		if (document.searchform.elements[i].name.indexOf("check") != -1)
+		{
+			document.searchform.elements[i].checked=chk_status;
+			window.status = ""+i+" / "+len;
+		}
+	}
+	chk_status = !chk_status;
+}
+
+
 </script>
+</form>
+<form method="GET" name="searchform" action="reforb.{VAR:ext}">
+{VAR:form}
+<table border=0 cellspacing=1 cellpadding=2>
+<tr>
+	<td class="celltext" colspan="2" align="center">
+	{VAR:reforb}
+	<input type="submit" value="Otsi">
+	</td>
+</tr>
+</table>
+{VAR:table}
+<input type="button" onClick="javascript:aw_save()" value="Tekita aliased">
+</form>
