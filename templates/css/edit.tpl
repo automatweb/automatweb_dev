@@ -84,6 +84,14 @@ function varvivalik(which)
 </td>
 </tr>
 <tr>
+<td class="fgtext">Line height:</td>
+<td class="fgtext"><input type="text" name="lineheight" size="7" maxlength="7" value="{VAR:lineheight}">
+<select name="lhunits">
+{VAR:lhunits}
+</select>
+</td>
+</tr>
+<tr>
 <td class="fgtext">Lingi stiil:</td>
 <td class="fgtext"><select name='a_style'>{VAR:a_style}</select></td>
 </tr>

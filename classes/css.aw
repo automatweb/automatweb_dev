@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.9 2002/01/31 00:25:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.10 2002/02/01 10:45:34 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -567,6 +567,10 @@ class css extends aw_template {
 				case "textdecoration":
 					$mask = "text-decoration: %s;\n";
 					break;
+
+				case "lineheight":
+					$mask = "line-height: %s ".$data["lhunits"].";\n";
+					break;
 				
 				default:
 					$ign = true;
@@ -726,8 +730,10 @@ class css extends aw_template {
 			"underline" => ($css_data["textdecoration"] == "underline") ? "checked" : "",
 			"fgcolor" => $css_data["fgcolor"],
 			"bgcolor" => $css_data["bgcolor"],
+			"lineheight" => $css_data["lineheight"],
 			"size" => $css_data["size"],
 			"units" => $this->picker($css_data["units"],$this->units),
+			"lhunits" => $this->picker($css_data["lhunits"],$this->units),
 			"link_sys_styles" => $this->mk_my_orb("group_content_list",array("gid" => $gid)),
 			"link_my_styles" => $this->mk_my_orb("my_list",array("gid" => $gid)),
 			"link_groups" => $this->mk_my_orb("list",array()),
@@ -756,8 +762,10 @@ class css extends aw_template {
 		$block["textdecoration"] = isset($args["underline"]) ? "underline" : "none";
 		$block["size"] = $args["size"];
 		$block["units"] = $args["units"];
+		$block["lhunits"] = $args["lhunits"];
 		$block["fgcolor"] = $args["fgcolor"];
 		$block["bgcolor"] = $args["bgcolor"];
+		$block["lineheight"] = $args["lineheight"];
 		$block["a_style"] = $args["a_style"];
 		$block["a_hover_style"] = $args["a_hover_style"];
 		$block["a_visited_style"] = $args["a_visited_style"];
