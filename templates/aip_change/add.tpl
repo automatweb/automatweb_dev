@@ -77,7 +77,7 @@
 	</td>
 </tr>
 <tr class="filestablefoldersback">
-	<td colspan="2" class="text" align="left">Failid mis muudatuse hulka kuuluvad:</td>
+	<td colspan="2" class="text" align="left">Kataloogid mis muudatuse hulka kuuluvad:</td>
 </tr>
 <tr class="filestablefoldersback">
 	<td colspan="2" class="text" align="left"><select class='formselect' name='files[]' size="20" multiple>{VAR:files}</select></td>

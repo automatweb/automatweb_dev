@@ -62,12 +62,6 @@ class aip_change extends aw_template
 		if ($id)
 		{
 			$ch = $this->load($id);
-			/*$sch->remove(array(
-				"event" => $this->mk_my_orb("do_change", array("id" => $id))
-			));
-			$sch->remove(array(
-				"event" => $this->mk_my_orb("do_publish", array("id" => $id))
-			));*/
 
 			$f = get_instance("file");
 
@@ -144,19 +138,6 @@ class aip_change extends aw_template
 				)
 			));
 		}
-
-		/*$sch->add(array(
-			"time" => $de->get_timestamp($act_time),
-			"event" => $this->mk_my_orb("do_publish", array("id" => $id))
-		));*/
-
-		if ($type != 3)
-		{
-		  /*$sch->add(array(
-				"time" => $de->get_timestamp($j_time),
-				"event" => $this->mk_my_orb("do_change", array("id" => $id))
-			));*/
-		}
 		return $this->mk_my_orb("change", array("id" => $id), "", false, true);
 	}
 
@@ -220,6 +201,9 @@ class aip_change extends aw_template
 				"NOT_SUP" => $this->parse("NOT_SUP")
 			));
 		}
+		$this->vars(array(
+			"CHANGE" => $this->parse("CHANGE")
+		));
 		return $this->parse();
 	}
 
@@ -229,13 +213,6 @@ class aip_change extends aw_template
 		$this->read_template("list.tpl");
 
 		$chd = $this->get_cval("aip_change::change_dir");
-		$act_1 = $this->get_cval("aip_change::act_change_1");
-		$act_2 = $this->get_cval("aip_change::act_change_2");
-		$act_3 = aw_unserialize($this->get_cval("aip_change::act_change_3"));
-		if (!is_array($act_3))
-		{
-			$act_3 = array();
-		}
 
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_AIP_CHANGE." AND status != 0");
 		while ($row = $this->db_next())
@@ -250,9 +227,9 @@ class aip_change extends aw_template
 				"id" => $row["oid"],
 				"modifiedby" => $row["modifiedby"],
 				"modified" => $this->time2date($row["modified"],2),
-				"checked_1" => checked($act_1 == $row["oid"]),
-				"checked_2" => checked($act_2 == $row["oid"]),
-				"checked_3" => checked(in_array($row['oid'],$act_3)),
+				"checked_1" => (time() > $meta["act_time"] && time() <= $meta["j_time"]) ? " X " : "",
+				"checked_2" => (time() > $meta["act_time"] && time() <= $meta["j_time"])  ? " X " : "",
+				"checked_3" => (time() > $meta["act_time"] && time() <= $meta["j_time"])  ? " X " : "",
 				"change" => $this->mk_my_orb("change", array("id" => $row["oid"])),
 				"delete" => $this->mk_my_orb("delete", array("id" => $row["oid"])),
 				"activate" => $this->mk_my_orb("do_change", array("id" => $row["oid"]))
@@ -336,11 +313,11 @@ class aip_change extends aw_template
 		extract($arr);
 
 		$co = get_instance("config");
-		$co->set_simple_config("aip_change::act_change_1", $act_1);
-		$co->set_simple_config("aip_change::act_change_2", $act_2);
-		$act_3 = aw_serialize($act_3);
-		$this->quote(&$act_3);
-		$co->set_simple_config("aip_change::act_change_3", $act_3);
+//		$co->set_simple_config("aip_change::act_change_1", $act_1);
+//		$co->set_simple_config("aip_change::act_change_2", $act_2);
+//		$act_3 = aw_serialize($act_3);
+//		$this->quote(&$act_3);
+//		$co->set_simple_config("aip_change::act_change_3", $act_3);
 
 		if ($is_del && is_array($sel))
 		{
@@ -378,14 +355,18 @@ class aip_change extends aw_template
 	{
 		$ret = array();
 
-		$dir = $this->get_cval("aip_change::change_dir");
-		if ($dir = @opendir($dir)) 
+		$odir = $this->get_cval("aip_change::change_dir");
+		if ($dir = @opendir($odir)) 
 		{
 		  while (($file = readdir($dir)) !== false) 
 			{
 				if (!($file == "." || $file == ".."))
 				{
-					$ret[$file] = $file;
+					//$ret[$file] = $file;
+					if (is_dir($odir."/".$file))
+					{
+						$ret[$file] = $file;
+					}
 				}
 		  }  
 		  closedir($dir);
@@ -404,7 +385,16 @@ class aip_change extends aw_template
 
 		if ($folder != "" && $parent)
 		{
-			$fd = $this->mk_file_list($folder,$parent);
+			$fd = array();
+			foreach($this->ob["meta"]["files"] as $p_fld)
+			{
+//				echo "make file list for $p_fld <br>";
+				$_t = new aw_array($this->mk_file_list($folder."/".$p_fld,$parent));
+				$fd = $fd + $_t->get();
+			}
+
+//			echo "got fd as ".dbg::dump($fd)." <br>";
+			
 			if (!is_array($fd))
 			{
 				$fd = array();
@@ -614,10 +604,17 @@ class aip_change extends aw_template
 		{
 			foreach($this->ob["meta"]["files"] as $fil)
 			{
-				// if the file exists, delete it so we can overwrite
-				@unlink($pdf_dir."/".$fil);
-				echo "rename ".$ch_dir."/".$fil." to ".$pdf_dir."/".$fil." <br />";
-				@rename($ch_dir."/".$fil, $pdf_dir."/".$fil);
+				$file_list = $this->get_directory(array("dir" => $ch_dir."/".$fil));
+				
+				foreach($file_list as $p_file)
+				{
+					// if the file exists, delete it so we can overwrite
+					unlink($pdf_dir."/".$p_file);
+					echo "rename ".$ch_dir."/".$fil."/".$p_file." to ".$pdf_dir."/".$p_file." <br />";
+					rename($ch_dir."/".$fil."/".$p_file, $pdf_dir."/".$p_file);
+				}
+
+				rmdir($ch_dir."/".$fil);
 			}
 		}
 		// now figure out all the menus that have this change and set them as active.
@@ -649,24 +646,55 @@ class aip_change extends aw_template
 
 	function show_files($arr)
 	{
+		// make list of all active changes for this type
+		$this->db_query("SELECT oid FROM objects WHERE status != 0 AND class_id = ".CL_AIP_CHANGE);
+		$chs = array();
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$ob = $this->get_object($row["oid"]);
+			// act_time - avaldamine , j_time - j6ustumine
+			if ($ob["meta"]["act_time"] <= time() && $ob["meta"]["j_time"] > time() && $ob["meta"]["upd_type"] == $arr["type"])
+			{
+				$ret .= $this->_show_files(array(
+					"type" => $arr["type"],
+					"change_id" => $row["oid"]
+				));
+			}
+			$this->restore_handle();
+		}
+		return $ret;
+	}
+
+	function _show_files($arr)
+	{
 		extract($arr);
 		$this->read_template("show_files.tpl");
 
 		if ($type == 3)
 		{
-			return $this->show_files_sup();
+			return $this->show_files_sup($arr["change_id"]);
 		}
 		$ids = array();
-		$ch = $this->load($this->get_cval("aip_change::act_change_".$type));
+		$ch = $this->load($arr["change_id"]);
 		if (is_array($ch["meta"]["files"]))
 		{
+			$change_fold = $this->get_cval("aip_change::change_dir");
 			foreach($ch["meta"]["files"] as $fi)
 			{
-				$ids[] = $fi;
+				$fld = $change_fold."/".$fi;
+				$fils = $this->get_directory(array("dir" => $fld));
+				foreach($fils as $fil)
+				{
+					$ids[] = $fi."/".$fil;
+				}
 			}
 		}
 
 		$change_o = $this->get_object($ch);
+		$this->vars(array(
+			"ch_name" => $ch["name"]
+		));
 		$j_time = $this->time2date($ch["meta"]["j_time"], 2);
 		$act_time = $this->time2date($ch["meta"]["act_time"], 2);
 
@@ -680,10 +708,10 @@ class aip_change extends aw_template
 				));
 
 				$this->vars(array(
-					"name" => str_replace(".pdf","",$fil),
+					"name" => str_replace(".pdf","",basename($fil)),
 					"j_time" => $j_time,
 					"act_time" => $act_time,
-					"link" => aw_ini_get("baseurl")."/index.aw?action=showchangefile&id=".$fil
+					"link" => aw_ini_get("baseurl")."/index.aw?action=showchangefile&id=".$this->binhex($fil)
 				));
 				$l.=$this->parse("LINE");
 			}
@@ -711,9 +739,10 @@ class aip_change extends aw_template
 		return $this->parse();
 	}
 
-	function show_files_sup()
+	function show_files_sup($id)
 	{
-		$sels = new aw_array(aw_unserialize($this->get_cval("aip_change::act_change_3")));
+		//$sels = new aw_array(aw_unserialize($this->get_cval("aip_change::act_change_3")));
+		$sels = new aw_array(array($id));
 		foreach($sels->get() as $chid)
 		{
 			$ch = $this->get_object($chid);
@@ -745,14 +774,16 @@ class aip_change extends aw_template
 	function mk_file_list($folder,$parent)
 	{
 		enter_function("aip_pdf::mk_file_list",array());
-		$fd = $this->get_file_data($parent);
+//		echo "get file data for $folder <br>";
+		$fd = $this->get_file_data($parent, $folder);
 		clearstatcache();
 		if ($dir = @opendir($folder)) 
 		{
 			while (($file = readdir($dir)) !== false) 
 			{
-				if ($file != "." && $file != ".." && !is_dir($folder."/".$file) && isset($this->ob["meta"]["files"][$file]))
+				if ($file != "." && $file != ".." && !is_dir($folder."/".$file) /*&& isset($this->ob["meta"]["files"][$file])*/)
 				{
+					echo "got file as $file <br>";
 					// here we need to figure out the status of the file - new / changed / unchanged
 					$mt = filemtime($folder."/".$file);
 
@@ -795,14 +826,20 @@ class aip_change extends aw_template
 		return $ret;
 	}
 
-	function get_file_data($parent)
+	function get_file_data($parent, $folder)
 	{
 		enter_function("aip_pdf::get_file_data",array());
 		$this->mk_menu_cache();
 		$menus = array();
 		$this->get_menus_below($parent,$menus);
 
-		$filstr = join(",",map("'%s'", $this->ob["meta"]["files"]));
+//		$filstr = join(",",map("'%s'", $this->ob["meta"]["files"]));
+		$filstr = join(",",map("'%s'", array_values($this->get_directory(array(
+			"dir" => $folder
+		)))));
+/*		echo "filstr = ".$filstr." folder = $folder , fcont = ".dbg::dump($this->get_directory(array(
+			"dir" => $folder
+		)))."<br>";*/
 		if ($filstr == "")
 		{
 			return array();

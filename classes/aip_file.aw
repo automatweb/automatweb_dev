@@ -83,10 +83,77 @@ class aip_file extends file
 		));
 		return $this->parse();
 	}
+        ////
+        // !Salvestab muudatused
+        function _submit_change($arr)
+        {
+                extract($arr);
+                global $file, $file_type,$file_name;
+
+                load_vcl("date_edit");
+                $de = new date_edit("act_time");
+
+                if (!is_uploaded_file($file)) 
+                {
+                        // uut failinime ei määratud, muudame infot
+                        $this->save_file(array(
+                                "file_id" => $id,
+                                "comment" => $comment,
+                                "showal" => $show,
+                                "newwindow" => $newwindow,
+                                "show_framed" => $show_framed,
+                                "act_time" => $de->get_timestamp($act_time),
+                                "j_time" => $de->get_timestamp($j_time)
+                        ));
+                }
+                else
+                {
+                        $pid = $this->save_file(array(
+                                "file_id" => $id,
+                                "name" => $file_name,
+                                "comment" => $comment,
+                                "content" => $this->get_file(array("file" => $file)),
+                                "showal" => $show,
+                                "type" => $file_type,
+                                "newwindow" => $newwindow,
+                                "act_time" => $de->get_timestamp($act_time),
+                                "j_time" => $de->get_timestamp($j_time),
+                                "show_framed" => $show_framed,
+                        ));
+                }
+
+                // Probleemikoht. Mis siis, kui ma tahan monda teise kohta minna peale submitti?
+                $obj = $this->get_object($id);
+                $parent = $obj["parent"];
+                if ($return_url != "")
+                {
+                        $retval = $return_url;
+                }
+                else
+                if ($doc)
+                {
+                        $retval = $this->mk_my_orb("change", array("id" => $doc),"document");
+                }
+                else
+                {
+                        if ($GLOBALS["user"])
+                        {
+                                //$retval = $this->mk_my_orb("gen_home_dir", array("id" => $parent),"users");
+                                $retval = $this->mk_my_orb("browse", array("id" => $parent),"manager",false,1);
+                        }
+                        else
+                        {
+                                //$retval = $this->mk_my_orb("obj_list", array("parent" => $parent),"menuedit");
+                                $retval = $this->mk_my_orb("change",array("id" => $id));
+                        }
+                };
+                return $retval;
+        }
+
 
 	function submit_change($arr)
 	{
-		parent::submit_change($arr);
+		$this->_submit_change($arr);
 		return $this->mk_my_orb("change",array("id" => $arr['id']),'',false,true);
 	}
 
@@ -138,6 +205,8 @@ class aip_file extends file
 					"j_time" => $de->get_timestamp($j_time)
 				));
 
+				$this->db_query("INSERT INTO aip_files(id,filename,tm,menu_id) VALUES($pid,'$file_name','".time()."','$parent')");
+				die("inserted !! $file_name <br>");
 				// id on dokumendi ID, kui fail lisatakse doku juurde
 				// add_alias teeb voimalikus #fn# tagi kasutamise doku kuvamise juures
 				if ($id)
