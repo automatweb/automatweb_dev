@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.5 2004/05/17 07:57:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.6 2004/05/19 16:20:07 kristo Exp $
 // class_list.aw - Klasside nimekiri 
 /*
 
@@ -42,6 +42,7 @@ class class_list extends class_base
 	**/
 	function register_new_class_id($arr)
 	{
+		$arr = $arr["data"];
 		if ($arr["id"])
 		{
 			$new_id = $arr["id"];
