@@ -317,6 +317,16 @@ function toggle_file_link_newwin()
 </tr>
 <!-- END SUB: HLINK_ITEMS -->
 
+<!-- SUB: CALENDAR_LINK -->
+<tr>
+<td class="fgtext">Kalendri lingi tüüp</td>
+<td class="fgtext"><select name="{VAR:cell_id}_clink_target">{VAR:clink_targets}</select></td>
+<td class="fgtext" colspan="2">
+&nbsp;
+</td>
+</tr>
+<!-- END SUB: CALENDAR_LINK -->
+
 <!-- SUB: RADIO_ITEMS -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_GROUP}:</td>
