@@ -1,0 +1,52 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>inbox</name>
+            <table>objects</table>
+            <group>inbox</group>
+            <store>no</store>
+            <submit>no</submit>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <field>inbox</field>
+            <caption>this is inbox</caption>
+      </property>
+      <property>
+            <name>fake1</name>
+            <table>objects</table>
+            <group>outbox</group>
+            <store>no</store>
+            <submit>no</submit>
+            <type>text</type>
+            <field>fake1</field>
+            <caption>this is outbox</caption>
+      </property>
+      <property>
+            <name>fake2</name>
+            <table>objects</table>
+            <group>archive</group>
+            <store>no</store>
+            <submit>no</submit>
+            <type>text</type>
+            <field>fake2</field>
+            <caption>this is archive</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_QUICKMESSAGEBOX</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <inbox>
+                  <caption>Inbox</caption>
+            </inbox>
+            <outbox>
+                  <caption>Outbox</caption>
+            </outbox>
+            <archive>
+                  <caption>Arhiiv</caption>
+            </archive>
+      </groupinfo>
+</properties>
+
