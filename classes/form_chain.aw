@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.28 2002/09/04 14:50:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.29 2002/09/25 14:59:43 kristo Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -496,6 +496,7 @@ class form_chain extends form_base
 		$update_fcal_timedef = false;
 		$cal_id = false;
 		$has_calendar = $ch["flags"] & OBJ_HAS_CALENDAR;
+
 
 		if ($has_calendar && $this->chain["cal_controller"])
 		{
