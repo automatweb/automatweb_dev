@@ -1,6 +1,6 @@
 <?php
 // See on adminni framework
-// $Revision: 1.1 $
+// $Revision: 1.1.1.1 $
 include("const.aw");
 include ("admin_header.$ext");
 classload("acl");
