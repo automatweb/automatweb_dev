@@ -144,5 +144,17 @@
                   <submit>no</submit>
             </avail>
       </groupinfo>
+      <reltypes>
+            <PROP_GROUP>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>omaduste kataloog</caption>
+            </PROP_GROUP>
+            <ELEMENT>
+                  <value>2</value>
+                  <clid>CL_RTE</clid>
+                  <caption>element</caption>
+            </ELEMENT>
+      </reltypes>
 </properties>
 
