@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.110 2002/09/26 16:16:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.111 2002/10/09 09:54:49 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -811,7 +811,7 @@ class core extends db_connector
 	{
 		extract($arr);
 		$this->add_alias($id,$alias);
-		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
+		//header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
 	}
 
 	////
@@ -1218,57 +1218,81 @@ class core extends db_connector
 	// hiljem voib seda funktsiooni täiendada nii, et ta joinib kylge ka igale klassile vastava tabeli
 	// argumendid
 	// class (int) - klassi id
-	// parent(id)(opt) - kui defineeritud, siis loeb ainult objekte selle parenti all
+	// parent(id/array)(opt) - kui defineeritud, siis loeb ainult objekte selle parenti all
 	// active(bool) - kui true, siis tagastame ainult aktiivsed objektid
+	// subclass - objects.subclass
+	// flags - objects.flags
 	function get_objects_by_class($args = array())
 	{
 		extract($args);
 		// kui parent on antud, siis moodustame sellest IN klausli
-		$pstr = ($parent) ? " AND parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
+		$sqlparts = array();
+		if (is_array($parent))
+		{
+			$sqlparts[] = "parent IN (" . join(",",map("'%s'",$parent)) . ")";
+		}
+		else
+		if ($parent)
+		{
+			$sqlparts[] = "parent = $parent";
+		}
 
-		$astr = ($active) ? " AND status = 2 " : " AND status != 0 ";
+		$sqlparts[] = ($active) ? "status = 2 " : "status != 0 ";
 
-		$status = ($status) ? $status : 2;
+		if ($subclass)
+		{
+			$sqlparts[] = "subclass = '$subclass' ";
+		}
 
-		$sc  = ($subclass) ? " AND subclass = '$subclass' " : "";
-
-		$fl = ($flags) ? " AND flags = '$flags' " : "";
+		if ($flags)
+		{
+			$sqlparts[] = "flags = '$flags' ";
+		}
+		
+		if ($name != "")
+		{
+			$sqlparts[] = "name LIKE '%$name%' ";
+		}
 
 		if ($lang_id)
 		{
 			if ($class == CL_PSEUDO)
 			{
-				$cstr = " AND (lang_id = $lang_id OR menu.type = ".MN_CLIENT.") ";
+				$sqlparts[] = "(lang_id = $lang_id OR menu.type = ".MN_CLIENT.") ";
 			}
 			else
 			{
-				$cstr = " AND lang_id = $lang_id ";
+				$sqlparts[] = "lang_id = $lang_id ";
 			}
 		}
-		else
+
+		$cl = is_array($class) ? join(",",$class) : $class;
+		if ($cl != "")
 		{
-			$cstr = "";
+			$sqlparts[] = "class_id IN ($cl)";
+		}
+		if (isset($type) && $class == CL_PSEUDO)
+		{
+			$sqlparts[] = "menu.type = '$type' ";
+		}
+
+		$where = join(" AND ", $sqlparts);
+		if ($where != "")
+		{
+			$where = " WHERE ".$where;
 		}
 
 		$ostr = ($orderby) ? " ORDER BY $orderby " : "";
-
-		$cl = is_array($class) ? join(",",$class) : $class;
-
-		
 		// kui tegemist on menüüdega, siis joinime kylge ka menu tabeli
 		if ($cl == CL_PSEUDO)
 		{
-			$typestr = (isset($type)) ? " AND menu.type = '$type' " : "";
-			$q = "SELECT objects.* FROM objects 
-				LEFT JOIN menu ON (objects.oid = menu.id)
-				WHERE objects.class_id = $class $pstr $astr $fl $cstr $typestr $ostr";
+			$q = "SELECT objects.* FROM objects LEFT JOIN menu ON (objects.oid = menu.id) $where $ostr";
 		}
 		else
 		{
-			$q = "SELECT objects.*
-					FROM objects
-					WHERE class_id IN ($cl) $fl AND status = $status $pstr $sc $astr $ostr";
+			$q = "SELECT objects.* FROM objects $where $ostr";
 		};
+
 		global $DBUG;
 		if ($DBUG)
 		{
@@ -1294,6 +1318,7 @@ class core extends db_connector
 	// parameetrid on samad, mis get_objects_by_class funxioonil
 	// lisaks:
 	// addempty - if true, empty element is inserted
+	// return - if ARR_ALL, all data about objects is returned, else only name
 	function list_objects($arr)
 	{
 		if ($arr["addempty"])
@@ -2291,6 +2316,42 @@ class core extends db_connector
 		classload("orb");
 		$ob = new new_orb;
 		return $ob->do_method_call($arr);
+	}
+
+	////
+	// !returns an array of all classes defined in the system, index is class id, value is class name and path
+	//  addempty - if true, empty element in front
+	function get_class_picker($arr = array())
+	{
+		extract($arr);
+		$cls = $this->cfg["classes"];
+		$clfs = $this->cfg["classfolders"];
+
+		$ret = array();
+		if ($addempty)
+		{
+			$ret = array(0 => "");
+		}
+
+		foreach($cls as $clid => $cld)
+		{
+			$clname = $cld["name"];
+			if ($clname != "")
+			{
+/*			if ($cld["parents"] != "")
+			{
+				list($prnt) = explode(",",$cld["parents"]);
+				while($prnt)
+				{
+					$clname = $clfs[$prnt]["name"]."/".$clname;
+					$prnt =$clfs[$prnt]["parent"];
+				}
+			}*/
+				$ret[$clid] = $clname;
+			}
+		}
+		asort($ret);
+		return $ret;
 	}
 };
 ?>
