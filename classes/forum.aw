@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.9 2001/11/02 11:22:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.10 2001/11/12 23:32:27 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -17,6 +17,12 @@ class forum extends aw_template
 		// to keep track of how many topics we have already drawn
 		$this->topic_count = 0; 
 		global $lc_msgboard;
+		global $section;
+		// remember the section id to keep the layout
+		if ($section)
+		{
+			$this->section = $section;
+		}
 		if (is_array($lc_msgboard))
 		{
 			$this->vars($lc_msgboard);
@@ -69,14 +75,14 @@ class forum extends aw_template
 			"status" => 2,
 		));
 
-		if ($section)
+		if ($section1)
 		{
 			global $baseurl;
 			$retval = $baseurl . "/?section=$section";
 		}
 		else
 		{
-			$retval = $this->mk_my_orb("topics",array("id" => $id));
+			$retval = $this->mk_my_orb("topics",array("id" => $id,"section" => $section));
 		}
 		return $retval;
 	}
@@ -87,7 +93,7 @@ class forum extends aw_template
 	{
 		extract($args);
 		$board_obj = $this->get_obj_meta($board);
-		$forum_obj = $this->get_object($board_obj["parent"]);
+		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
 		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
 		$this->_query_comments(array("board" => $board));
@@ -107,38 +113,47 @@ class forum extends aw_template
 		{
 			$id = $forum_obj["oid"];
 		};
-		
-		// arvutame häälte arvu sellele foorumile
-		if ($board_obj["meta"]["voters"] == 0)
-		{
-			$rate = 0;
-		}
-		else
-		{
-			$rate = $board_obj["meta"]["votesum"] / $board_obj["meta"]["voters"];
-		};
 
 		$this->vars(array(
-			"vote_reforb" => $this->mk_reforb("submit_vote",array("board" => $board)),
 			"topic" => $board_obj["name"],
-			"rate" => sprintf("%0.2f",$rate),
 		));
-		global $forum_votes;
-		if ($forum_votes[$board])
-		{
-			$voteblock = $this->parse("ALREADY_VOTED");
-		}
-		else
-		{
-			$voteblock = $this->parse("VOTE_FOR_TOPIC");
+
+		$voteblock = "";
+	
+		if ($forum_obj["meta"]["rated"])
+		{	
+			// arvutame häälte arvu sellele foorumile
+			if ($board_obj["meta"]["voters"] == 0)
+			{
+				$rate = 0;
+			}
+			else
+			{
+				$rate = $board_obj["meta"]["votesum"] / $board_obj["meta"]["voters"];
+			};
+
+			$this->vars(array(
+				"vote_reforb" => $this->mk_reforb("submit_vote",array("board" => $board)),
+				"rate" => sprintf("%0.2f",$rate),
+			));
+		
+			global $forum_votes;
+			if ($forum_votes[$board])
+			{
+				$voteblock = $this->parse("ALREADY_VOTED");
+			}
+			else
+			{
+				$voteblock = $this->parse("VOTE_FOR_TOPIC");
+			};
 		};
 
 
 		$this->vars(array(
 			"message" => $content,
-			"threaded_link" => $this->mk_my_orb("show_threaded",array("board" => $board)),
-			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $oid)),
-			"flat_link" => $this->mk_my_orb("show",array("board" => $board)),
+			"threaded_link" => $this->mk_my_orb("show_threaded",array("board" => $board,"section" => $this->section)),
+			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $this->section)),
+			"flat_link" => $this->mk_my_orb("show",array("board" => $board,"section" => $this->section)),
 			"forum_link" => $this->mk_my_orb("topics",array("id" => $id)),
 			"VOTE_FOR_TOPIC" => $voteblock,
 			"TOPIC" => $this->parse("TOPIC"),
@@ -310,14 +325,14 @@ class forum extends aw_template
 		));
 
 		$this->db_query($q);
-		if ($section)
-		{
-			$retval = $this->mk_url(array("section" => $section,"board" => $board));
-		}
-		else
-		{
-			$retval =$this->mk_my_orb("show",array("board" => $board));
-		};
+		#if ($section)
+		#{
+		#	$retval = $this->mk_url(array("section" => $section,"board" => $board));
+		#}
+		#else
+		#{
+			$retval =$this->mk_my_orb("show",array("board" => $board,"section" => $section));
+		#};
 		return $retval;
 
 	}
@@ -349,11 +364,11 @@ class forum extends aw_template
 		// pealkirjad, vastuseid, postitas, alustatud, hiliseim vastus
 
 		$this->vars(array(
-			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id)),
-			"props_link" => $this->mk_my_orb("edit_properties",array("id" => $id)),
-			"search_link" => $this->mk_my_orb("search",array("board" => $id)),
-			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id)),
-			"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id,"from" => $from)),
+			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $this->section)),
+			"props_link" => $this->mk_my_orb("edit_properties",array("id" => $id,"section" => $this->section)),
+			"search_link" => $this->mk_my_orb("search",array("board" => $id,"section" => $this->section)),
+			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id,"section" => $this->section)),
+			"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id,"from" => $from,"section" => $this->section)),
 			"TOPIC" => $content,
 			"TOPIC_EVEN" => $content,
 		));
@@ -377,12 +392,12 @@ class forum extends aw_template
 		));
 		
 		$this->vars(array(
-			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id)),
-			"topics_link" => $this->mk_my_orb("topics",array("id" => $id,"from" => $from)),
-			"props_link" => $this->mk_my_orb("edit_properties",array("id" => $id)),
-			"search_link" => $this->mk_my_orb("search",array("board" => $id)),
-			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id)),
-			"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id)),
+			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $section,)),
+			"topics_link" => $this->mk_my_orb("topics",array("id" => $id,"from" => $from,"section" => $this->section)),
+			"props_link" => $this->mk_my_orb("edit_properties",array("id" => $id,"section" => $this->section)),
+			"search_link" => $this->mk_my_orb("search",array("board" => $id,"section" => $section)),
+			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id,"section" => $this->section)),
+			"topic_detail_link" => $this->mk_my_orb("topics_detail",array("id" => $id,"section" => $this->section)),
 			"TOPIC" => $content,
 			"TOPIC_EVEN" => $content,
 		));
@@ -519,7 +534,7 @@ class forum extends aw_template
 		$aw_mb_last = unserialize($HTTP_COOKIE_VARS["aw_mb_last"]);
 		$aw_mb_last[$id] = time();
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
-		return $this->mk_my_orb("topics",array("id" => $id));
+		return $this->mk_my_orb("topics",array("id" => $id,"section" => $section));
 	}
 
 	function parse_alias($args = array())
@@ -661,7 +676,7 @@ class forum extends aw_template
 
 		if ($this->use_orb_for_links)
 		{
-			$topic_link = $this->mk_my_orb("show",array("board" => $args["oid"]));
+			$topic_link = $this->mk_my_orb("show",array("board" => $args["oid"],"section" => $this->section));
 		}
 		else
 		{
@@ -723,9 +738,9 @@ class forum extends aw_template
 		$num_pages = (int)(($total / $onpage) + 1);
 
 		// no pager, if we have less entries than will fit on one page
-		if ($total > ($num_pages * $onpage))
+		if ($total < ($onpage - 1))
 		{
-			return false;
+			return array(0,$total);
 		};
 
 		for ($i = 1; $i <= $num_pages; $i++)
@@ -744,7 +759,7 @@ class forum extends aw_template
 			};
 			$pg_action = ($args["details"]) ? "topics_detail" : "topics";
 			$this->vars(array(
-				"pagelink" => $this->mk_my_orb($pg_action,array("id" => $this->forum_id,"from" => $page_start)),
+				"pagelink" => $this->mk_my_orb($pg_action,array("id" => $this->forum_id,"from" => $page_start,"section" => $this->section)),
 				"linktext" => $i,
 			));
 			$content .= $this->parse($tpl);
