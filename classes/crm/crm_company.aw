@@ -1,9 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.25 2004/06/15 11:13:03 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.26 2004/06/17 11:26:58 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
-
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_UNIT, on_connect_unit_to_person)
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_org)
@@ -65,7 +64,7 @@ caption Õiguslik vorm
 @property addresslist type=text store=no parent=hbox1 no_caption=1
 @caption Aadress
 
-@property green_button_toolbar type=toolbar no_caption=1 store=no group=contacts
+@property contact_toolbar type=toolbar no_caption=1 store=no group=contacts
 @caption "The Green Button"
 
 @default group=cedit
@@ -123,8 +122,16 @@ caption Õiguslik vorm
 //@property org_toolbar type=toolbar group=customers store=no no_caption=1
 //@caption Org. toolbar
 
-//@property customer type=table group=customers store=no no_caption=1
-//@caption Kliendid
+
+@property customer_toolbar type=toolbar no_caption=1 store=no group=customers
+@caption "Klientide toolbar"
+
+@layout hbox2 type=hbox group=customers
+@property customer_listing_tree type=treeview parent=hbox2 no_caption=1 group=customers
+@caption Rühmade puu
+
+@property customer type=table group=customers store=no no_caption=1 parent=hbox2
+@caption Kliendid
 
 @groupinfo contacts caption="Kontaktid" 
 @groupinfo contacts2 caption="Kontaktid" parent=contacts submit=no
@@ -139,8 +146,8 @@ groupinfo humanres caption="Inimesed" submit=no
 @groupinfo tasks_overview caption="Ülevaade" parent=overview
 @groupinfo personal caption="Personal"
 @groupinfo jobs caption="Tööpakkumised" parent=personal
-@groupinfo relorg caption="Seotud organisatsioonid"
-@groupinfo customers caption="Kliendid" parent=relorg
+@groupinfo relorg caption="Kliendid"
+@groupinfo customers caption="Kliendid" parent=relorg submit=no
 @groupinfo fcustomers caption="Tulevased kliendid" parent=relorg
 @groupinfo partners caption="Partnerid" parent=relorg
 @groupinfo fpartners caption="Tulevased partnerid" parent=relorg
@@ -200,7 +207,7 @@ groupinfo humanres caption="Inimesed" submit=no
 @reltype TOOTSIJA value=21 clid=CL_CRM_PERSON
 @caption Tööotsija
 
-@reltype CUSTOMER value=22 clid=CL_CRM_COMPANY
+@reltype CUSTOMER value=22 clid=CL_CRM_COMPANY,CL_CRM_CATEGORY
 @caption Klient
 
 @reltype POTENTIONAL_CUSTOMER value=23 clid=CL_CRM_COMPANY
@@ -218,8 +225,14 @@ groupinfo humanres caption="Inimesed" submit=no
 @reltype ORDER value=27 clid=CL_SHOP_ORDER
 @caption tellimus
 
-@reltype UNIT value=28 clid=CL_CRM_UNIT
+@reltype SECTION value=28 clid=CL_CRM_SECTION
 @caption Üksus
+
+@reltype PROFESSIONS value=29 clid=CL_CRM_PROFESSION
+@caption Võimalikud ametinimetused
+
+@reltype CATEGORY value=30 clid=CL_CRM_CATEGORY
+@caption Kategooria
 
 @classinfo no_status=1
 			
@@ -255,45 +268,81 @@ class crm_company extends class_base
 			'tpldir' => 'firma',
 		));
 	}
-		
-	function generate_tree($tree, $obj,$node_id)
+
+	/*
+		$tree -> the treeview object
+		$obj -> the rootnode
+		$type1 -> what type of connections are allowed
+		$skip -> a type can have many "to" object types, if any of them
+					should be skipped, then $skip does the trick
+		$attrib -> the node link can have some extra attributes
+		$leafs -> if leafs should be shown (not exactly what the description implies)
+	*/
+	function generate_tree($tree, $obj,$node_id,$type1,$skip, $attrib, $leafs)
 	{
-		//objekti kõik seosed
+		//all connections from the currrent object
 		$conns = $obj->connections_from(array(
-			'type'=>'RELTYPE_UNIT'
+			'type'=>$type1
 		));
-		//kõik objektid järgnevas loobis peavad minema parentisse, mille
-		//id on parameetri hetke väärtus		
+		//parent nodes'id actually
 		$this_level_id = $node_id;
-		foreach($conns as $conn){
+		foreach($conns as $key=>$conn)
+		{
+			//$skip in action
+			if(in_array($conn->prop('type'),$skip))
+				continue;
 			//iga alam item saab ühe võrra suurema väärtuse
-			$node_id++;
+			//if the 'to.id' eq activeNode then it should be bold
 			if($conn->prop('to')==$this->activeNode)
 				$name='<b>'.$conn->prop('to.name').'</b>';
 			else
 				$name=$conn->prop('to.name');
+			//add another item to the tree
 			$tree->add_item($this_level_id,
-									array("id"=>$node_id,
+									array("id"=>++$node_id,
 											"name"=>$name,
-											'url'=>aw_url_change_var('unit',$conn->prop('to')))
+											'url'=>aw_url_change_var(array($attrib=>$conn->prop('to'),
+																					'cat'=>''))) //<- hack!
 			);			
 			//$conn'ist saab objekt
 			$conn = $conn->to();
-			//vaatame, kas tal on seoseid
-			$tmp = $conn->connections_from(array(
-				'type'=>'RELTYPE_UNIT'
-			));			
-			if(sizeof($tmp)){				
-				crm_company::generate_tree(&$tree,$conn,&$node_id);
-			}
-		}		
+			crm_company::generate_tree(&$tree,&$conn,&$node_id,$type1,&$skip, &$attrib, $leafs);
+		}
+		
+		//if leafs
+		if($leafs)
+		{
+			$this->tree_node_items(&$tree,&$obj,$this_level_id,&$node_id);
+		}
 	}
+
+	//hardcoded
+	function tree_node_items($tree,$obj,$this_level_id,$node_id)
+	{
+		//getting the list of professions for the current
+		//unit/organization
+		$prof_connections = $obj->connections_from(array(
+			'type'=>'RELTYPE_SPROFESSIONS',
+			'sort_by'=>'name'
+		));
+		foreach($prof_connections as $prof_conn)
+		{
+			$tree->add_item($this_level_id,
+						array('id'=>++$node_id,
+								'name'=>$prof_conn->prop('to.name'),
+								'iconurl'=>'images/scl.gif',
+								'url'=>aw_url_change_var(array('cat'=>$prof_conn->prop('to')))
+						));
+		}	
+	}
+	
 	
 	function get_property($arr)
 	{
 		$data = &$arr['prop'];
 		$retval = PROP_OK;
-		if((int)$arr['request']['unit']){
+		if((int)$arr['request']['unit'])
+		{
 			$this->unit=$arr['request']['unit'];
 		}
 		switch($data['name'])
@@ -302,55 +351,53 @@ class crm_company extends class_base
 			{
 				$tree_inst = &$arr['prop']['vcl_inst'];	
 				//toplevel tree item, unit=>parent won't fall into if((int)$arr['request']['unit']), so its okay
-				if($arr['request']['unit']=='parent'){//isset($arr['request']['unit']) && (int)$arr['request']['unit']){
+				if($arr['request']['unit']=='parent' || !$arr['request']['unit'])
+				{
 					$name = '<b>'.'Üksused'.'</b>';
 				}
 				else
 					$name = 'Üksused';
 				$tree_inst->add_item(0,array("id"=>1,
 														'name'=>$name,
-														'url'=>aw_url_change_var('unit','parent')));
+														'url'=>aw_url_change_var(array('unit'=>'parent',
+																									'cat'=>''))
+				));
 				$node_id = 1;
 				$this->activeNode = (int)$arr['request']['unit'];
-				crm_company::generate_tree(&$tree_inst,&$arr['obj_inst'],&$node_id);
+				crm_company::generate_tree(&$tree_inst,&$arr['obj_inst'],&$node_id,RELTYPE_SECTION,array(),'unit',true);
 				break;
 			}
-			case 'green_button_toolbar':{
-				$tb = &$data['toolbar'];
-				
-				$tb->add_menu_button(array(
-						'name'=>'add_item',
-						'tooltip'=>'Uus'
-				));
-
-				
-				$alias_to = $arr['obj_inst']->id();
-				$rel_type = RELTYPE_WORKERS;
-				
-				if((int)$arr['request']['unit']){
-					$alias_to = $arr['request']['unit'];
-					$rel_type = RELTYPE_MEMBER;
+			case "customer_listing_tree":
+			{
+				$tree_inst = &$arr['prop']['vcl_inst'];
+				if($arr['request']['customer']=='parent' || !$arr['request']['customer'])
+				{
+					$name = '<b>'.'Kategooriad'.'</b>';
 				}
-
-				$tb->add_menu_item(array(
-						'parent'=>'add_item',
-						'text'=>'Lisa töötaja',
-						'link'=>$this->mk_my_orb('new',array(
-							'parent'=>$arr['obj_inst']->id(),
-							'alias_to'=>$alias_to,//$arr['obj_inst']->id(),
-							'reltype'=>$rel_type,
-							'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
-						),'crm_person')
-						
-				));
-				//delete button
-				$tb->add_button(array(
-					'name' => 'del',
-					'img' => 'delete.gif',
-					'tooltip' => 'Kustuta valitud',
-					'action' => 'submit_delete_relations',
-				));
+				else
+				{
+					$name = 'Kategooriad';
+				}
 				
+				$tree_inst->add_item(0,array('id'=>1,
+														'name'>$name,
+														'url'=>aw_url_change_var('customer','parent')
+				));
+				$node_id=1;
+				$this->activeNode = (int)$arr['request']['customer'];
+				break;
+				crm_company::generate_tree(&$tree_inst,&$arr['obj_inst'],&$node_id,
+													RELTYPE_CATEGORY,array(CL_CRM_COMPANY),'customer',false);
+				break;
+			}
+			case 'contact_toolbar':
+			{
+				$this->do_contact_toolbar(&$data['toolbar'],&$arr);
+				break;
+			}
+			case 'customer_toolbar':
+			{
+				$this->do_customer_toolbar(&$data['toolbar'],&$arr);	
 				break;
 			}
 			case "customer":
@@ -571,12 +618,14 @@ class crm_company extends class_base
 		));
 
 		//if listing from a specific unit, then the reltype is different
-		if((int)$arr['request']['unit']){
+		if((int)$arr['request']['unit'])
+		{
 			$obj = new Object((int)$arr['request']['unit']);
 			$conns = $obj->connections_from(array(
 				'type' => RELTYPE_MEMBER,
 			));
 		}
+		
 
 		$crmp = get_instance(CL_CRM_PERSON);
 
@@ -589,7 +638,7 @@ class crm_company extends class_base
 		// reltype_org oleks vastava seose id
 
 		$pl = get_instance(CL_PLANNER);
-		$cal_id = $pl->get_calendar_for_user();
+		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
 
 		// XXX: I should check whether $this->cal_id exists and only include those entries
 		// when it does.
@@ -605,6 +654,24 @@ class crm_company extends class_base
 				"cal_id" => $cal_id,
 			));
 
+			if((int)$arr['request']['cat'])
+			{
+				//persoon
+				$tmp_obj = new object($conn->prop('to'));	
+				//persoon -> ametinimetus on reltype_rank
+				$tmp_conns = $tmp_obj->connections_from(array('type'=>RELTYPE_RANK));
+				$continue=true;
+				foreach($tmp_conns as $tmp_conn)
+				{
+					if($tmp_conn->prop('to')==$arr['request']['cat'])
+					{
+						$continue=false;
+					}
+				}
+				if($continue)
+					continue;
+			}
+
 			$tdata = array(
 				"name" => $conn->prop("to.name"),
 				"id" => $conn->prop("to"),
@@ -614,7 +681,6 @@ class crm_company extends class_base
 					"url" => "mailto:" . $pdat["email"],
 					"caption" => $pdat["email"],
 				)),
-				'id' => $conn->prop('to'),
 			);
 
 			if ($cal_id)
@@ -825,13 +891,10 @@ class crm_company extends class_base
 		}
 	}
 
-	// Invoked when a connection is created from unit to person
-	// .. this will then create the opposite connection.
-	function on_connect_unit_to_person($arr)
-	{
+	function on_connect_unit_to_person($arr){
 		$conn = $arr["connection"];
 		$target_obj = $conn->to();
-		if ($target_obj->class_id() == CL_CRM_UNIT)
+		if ($target_obj->class_id() == CL_CRM_PERSON)
 		{
 			$target_obj->connect(array(
 				"to" => $conn->prop("from"),
@@ -853,41 +916,94 @@ class crm_company extends class_base
 			));
 		};
 	}
+	
+	/**
+		@attrib name=submit_new_task
+		@param id required type=int acl=view
+	**/
+	function submit_new_task($arr)
+	{
+		$arr['clid'] = CL_TASK;
+		$this->submit_new_action_to_person(&$arr);
+	}
+	
+	/**
+		@attrib name=submit_new_call
+		@param id required type=int acl=view
+	**/
+	function submit_new_call($arr)
+	{
+		$arr['clid'] = CL_CRM_CALL;
+		$this->submit_new_action_to_person(&$arr);
+	}
+	
+	/**
+		@attrib name=submit_new_meeting
+		@param id required type=int acl=view
+	**/
+	function submit_new_meeting($arr)
+	{
+		$arr['clid'] = CL_CRM_MEETING;
+		$this->submit_new_action_to_person(&$arr);
+	}
+
+	function submit_new_action_to_person($arr)
+	{
+		if(!is_array($arr['check']))
+			return;
+		$prsn = get_instance(CL_CRM_PERSON);
+		$pl = get_instance(CL_PLANNER);
+		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
+		$alias_to_org_arr = array();
+		$fake_alias = 0;
+		reset($arr['check']);
+		$fake_alias = current($arr['check']);
+		$url = $this->mk_my_orb('change',array(
+				'id'=>$cal_id,
+				'group'=>'add_event',
+				'alias_to_org'=>$fake_alias,
+				'reltype_org'=>9, //PERSON_CALL
+				'clid'=>$arr['clid'],
+				'alias_to_org_arr'=>urlencode(serialize($arr['check'])),
+			),'planner');
+		header('Location: '.$url);	
+		die();
+	}
 
 	// If an event is added to a person, then this method
 	// makes that event appear in any organization
 	// calendars that the person has a "workplace" connection
 	// with.
-        function on_add_event_to_person($arr)
-        {
-                $event_obj = new object($arr["event_id"]);
-                $typemap = array(
-			CL_CRM_MEETING => 11,
-                        CL_CRM_CALL => 12,
-			CL_TASK => 13,
-                );
+	function on_add_event_to_person($arr)
+	{
+		$event_obj = new object($arr["event_id"]);
+		$typemap = array(
+				CL_CRM_MEETING => 11,
+				CL_CRM_CALL => 12,
+				CL_TASK => 13,
+		);
 
-                $reltype = $typemap[$event_obj->class_id()];
-                if (empty($reltype))
-                {
-                        return false;
-                };
+		$reltype = $typemap[$event_obj->class_id()];
+		if (empty($reltype))
+		{
+				return false;
+		};
 
-                $per_obj = new object($arr["source_id"]);
+		$per_obj = new object($arr["source_id"]);
 
-                $conns = $per_obj->connections_to(array(
-                        "type" => 8,
-                ));
+		$conns = $per_obj->connections_to(array(
+				"type" => 8, //RELTYPE_WORKERS
+		));
 
-                foreach($conns as $conn)
-                {
-                        $org_obj = $conn->from();
-                        $org_obj->connect(array(
-                                "to" => $arr["event_id"],
-                                "reltype" => $reltype,
-                        ));
-                }
-        }
+		foreach($conns as $conn)
+		{
+			$org_obj = $conn->from();
+			$org_obj->connect(array(
+					  "to" => $arr["event_id"],
+					  "reltype" => $reltype,
+			));
+		}
+	}
 
 	
 	function navtoolbar(&$args)
@@ -1124,7 +1240,7 @@ class crm_company extends class_base
 
 		$tf->define_chooser(array(
                         "field" => "id",
-                        "name" => "sel",
+                        "name" => "check",
                 ));
 
 		$orgs = $arr["obj_inst"]->connections_from(array(
@@ -1231,15 +1347,165 @@ class crm_company extends class_base
 
 		return $this->mk_my_orb('change',array(
 			'id' => $arr['id'],
-			'group'=>'contacts',),
+			'group'=>'contacts',
+			'unit'=>$arr['unit'],),
 			CL_CRM_COMPANY
 		);
+	}
+
+
+	/**
+		deletes the relations category -> organization || organization -> category
+		@attrib name=submit_delete_customer_relations
+		@param id required type=int acl=view
+		@param customer optional type=int
+	**/
+	function submit_delete_customer_relations($arr)
+	{
+		$mainObj = new Object($arr['id']);
+		
+		if((int)$arr['customer']){
+			$mainObj = new Object($arr['customer']);
+		}
+		foreach($arr['check'] as $key=>$value){
+			$mainObj->disconnect(array('from'=>$value));
+		}
+
+		return $this->mk_my_orb('change',array(
+			'id' => $arr['id'],
+			'group'=>'relorg',
+			'customer'=>$arr['customer']),
+			CL_CRM_COMPANY
+		);
+			
 	}
 
 	function callback_mod_reforb($arr)
 	{
 		$arr['unit'] = $this->unit;
 	}
-}
 
+	function do_contact_toolbar($tb,$arr)
+	{
+		$tb->add_menu_button(array(
+				'name'=>'add_item',
+				'tooltip'=>'Uus'
+		));
+		
+		$alias_to = $arr['obj_inst']->id();
+		$rel_type = RELTYPE_WORKERS;
+		
+		if((int)$arr['request']['unit'])
+		{
+			$alias_to = $arr['request']['unit'];
+			$rel_type = RELTYPE_MEMBER;
+		}
+
+		$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text'=>'Lisa töötaja',
+				'link'=>$this->mk_my_orb('new',array(
+					'parent'=>$arr['obj_inst']->id(),
+					'alias_to'=>$alias_to,//$arr['obj_inst']->id(),
+					'reltype'=>$rel_type,
+					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
+				),'crm_person')
+				
+		));
+		
+		$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text'=>'Lisa sektsioon',
+				'link'=>$this->mk_my_orb('new',array(
+					'parent'=>$arr['obj_inst']->id(),
+					'alias_to'=>$alias_to,
+					'reltype'=>RELTYPE_SECTION,
+					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
+					),
+					'crm_section')
+		));
+		
+		$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text'=>'Lisa ametinimetus',
+				'link'=>$this->mk_my_orb('new',array(
+					'parent'=>$arr['obj_inst']->id(),
+					'alias_to'=>$alias_to,
+					'reltype'=>RELTYPE_SPROFESSIONS,
+					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
+					),
+					'crm_profession')
+		));
+	
+		//delete button
+		$tb->add_button(array(
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => 'Kustuta valitud',
+			'action' => 'submit_delete_relations',
+		));
+	
+		//uus kõne
+		$tb->add_button(array(
+			'name' => 'Kõne',
+			'img' => 'class_223.gif',
+			'tooltip' => 'Tee kõne',
+			'action' => 'submit_new_phone_call'
+		));
+
+		//uus date
+		$tb->add_button(array(
+			'name' => 'Kohtumine',
+			'img' => 'class_224.gif',
+			'tooltip' => 'Uus kohtumine',
+			'action' => 'submit_new_meeting'
+		));
+
+		//uus task
+		$tb->add_button(array(
+			'name' => 'Toimetus',
+			'img' => 'class_244.gif',
+			'tooltip' => 'Uus toimetus',
+			'action' => 'submit_new_task'
+		));
+	}
+
+	function do_customer_toolbar($tb, $arr)
+	{
+	
+		$tb->add_menu_button(array(
+				'name'=>'add_item',
+				'tooltip'=>'Uus'
+		));
+
+		$alias_to = $arr['obj_inst']->id();
+		$rel_type = RELTYPE_CATEGORY;
+		
+		if((int)$arr['request']['category'])
+		{
+			$alias_to = $arr['request']['category'];
+			$parent = (int)$arr['request']['category'];
+			$rel_type = RELTYPE_CATEGORY;
+		}
+
+		$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text'=>'Lisa kategooria',
+				'link'=>$this->mk_my_orb('new',array(
+					'parent'=>$arr['obj_inst']->id(),
+					'alias_to'=>$alias_to,
+					'reltype'=>$rel_type,
+					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
+				),'crm_category')
+				
+		));
+		//delete button
+		$tb->add_button(array(
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => 'Kustuta valitud',
+			'action' => 'submit_delete_customer_relations',
+		));		
+	}
+}
 ?>
