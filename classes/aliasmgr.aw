@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.105 2003/06/26 14:55:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.106 2003/07/01 14:54:00 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -400,6 +400,7 @@ class aliasmgr extends aw_template
 				{
 					// load and create the class needed for that alias type
 					$$emb_obj_name = get_instance($class_name);
+					$$emb_obj_name->embedded = true;
 				}
 
 				if (method_exists($$emb_obj_name, "parse_alias_list"))
