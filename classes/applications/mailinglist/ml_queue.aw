@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.2 2004/11/03 17:15:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.3 2004/11/18 08:20:06 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -445,8 +445,9 @@ class ml_queue extends aw_template
 		flush();
 		//decho("process_queue:<br />");//dbg
 		$tm=time();
+		$old = time()-3600;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
-		$this->db_query("SELECT * FROM ml_queue WHERE status IN (0,1) AND start_at<='$tm'");
+		$this->db_query("SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at<='$tm') OR (status = 3 AND position < total AND last_sent < $old)");
 		echo "select <br />\n";
 		flush();
 		
@@ -551,6 +552,10 @@ class ml_queue extends aw_template
 	function do_queue_item($msg)
 	{
 		$this->awm->clean();
+		if (!is_oid($msg["mail"]) || !$this->can("view", $msg["mail"]))
+		{
+			return;
+		}
 		$msgobj = new object($msg["mail"]);
 		$is_html = $msgobj->prop("html_mail") == 1024;
 		//$is_html=$msg["type"] & MSG_HTML;
