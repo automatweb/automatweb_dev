@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.7 2001/08/15 12:35:42 duke Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -362,21 +363,21 @@ class gallery extends aw_template
 		{
 			global $col, $row;
 			$this->read_template("show_pic.tpl");
-			$cell = $this->arr[$page][content][$row][$col];
-			$this->vars(array("bigurl" => $cell[bigurl], "caption" => $cell[caption], "date" => $cell[date]));
+			$cell = $this->arr[$page]["content"][$row][$col];
+			$this->vars(array("bigurl" => $cell["bigurl"], "caption" => $cell["caption"], "date" => $cell["date"]));
 		}
 		else
 		{
 			$this->read_template("show.tpl");
 
-			for ($row = 0; $row < $this->arr[$page][rows]; $row++)
+			for ($row = 0; $row < $this->arr[$page]["rows"]; $row++)
 			{
 				$c = "";
-				for ($col = 0; $col < $this->arr[$page][cols]; $col++)
+				for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 				{
-					$cell = $this->arr[$page][content][$row][$col];
-					$xsize = $cell[xsize] ? $cell[xsize] : 500;
-					$ysize = $cell[ysize] ? $cell[ysize] + 50: 400;
+					$cell = $this->arr[$page]["content"][$row][$col];
+					$xsize = $cell["xsize"] ? $cell["xsize"] : 500;
+					$ysize = $cell["ysize"] ? $cell["ysize"] + 50: 400;
 					if ($cell["link"] != "")
 					{
 						$url = $cell["link"];
@@ -388,13 +389,13 @@ class gallery extends aw_template
 						$target = "";
 					}
 					$this->vars(array(
-						"tnurl" => $cell[tnurl], 
-						"caption" => $cell[caption], 
-						"date" => $cell[date],
+						"tnurl" => $cell["tnurl"], 
+						"caption" => $cell["caption"], 
+						"date" => $cell["date"],
 						"url" => $url,
 						"target" => $target
 					));
-					if ($cell[tnurl] != "")
+					if ($cell["tnurl"] != "")
 					{
 						$c.=$this->parse("IMAGE");
 					}
@@ -407,7 +408,7 @@ class gallery extends aw_template
 		global $section;
 		$baseurl = $GLOBALS["baseurl"]."/index.aw/section=$section";
 
-		for ($pg = 0; $pg < $this->arr[pages]; $pg++)
+		for ($pg = 0; $pg < $this->arr["pages"]; $pg++)
 		{
 			$this->vars(array("num" => $pg,"url" => $baseurl."/page=$pg"));
 			$p.=$this->parse("PAGE");
