@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.85 2003/04/14 16:00:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.86 2003/04/16 13:00:40 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -656,6 +656,7 @@ class aliasmgr extends aw_template
 				"parent" => $obj["parent"],
 				"class_id" => CL_RELATION,
 				"status" => STAT_ACTIVE,
+				"subclass" => $al["class_id"],
 			));
 
 			// let the correct class override the alias adding if it wants to
@@ -837,7 +838,7 @@ class aliasmgr extends aw_template
 		{
 			if (isset($cldat["alias"]))
 			{
-				$fil = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
+				$fil = ($cldat["alias_class"] != "") ? $cldat["alias_class"] : $cldat["file"];
 				preg_match("/(\w*)$/",$fil,$m);
 				$lib = $m[1];
 				// indent the names
@@ -1047,6 +1048,29 @@ class aliasmgr extends aw_template
 		}
 		asort($ret);
 		return $ret;
+	}
+
+	function conv()
+	{
+		$q = "SELECT target,source,type,relobj_id FROM aliases LEFT JOIN objects ON (aliases.relobj_id = objects.oid) WHERE objects.class_id = 179 AND relobj_id != 0";
+		$this->db_query($q);
+		$updates = array();
+		while($row = $this->db_next())
+		{
+			$updates[] = "UPDATE objects SET subclass = $row[type] WHERE oid = $row[relobj_id]";
+		};
+		if (is_array($updates))
+		{
+			foreach($updates as $q)
+			{
+				print $q;
+				print "<br>";
+				flush();
+				$this->db_query($q);
+				sleep(1);
+			};
+		};			
+		print "all done!<br>";
 	}
 }
 ?>
