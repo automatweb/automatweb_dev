@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.11 2001/12/12 22:52:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.12 2001/12/12 23:00:32 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -25,16 +25,7 @@ class aliasmgr extends aw_template {
 		// we can create policys about what type of aliases to show
 		// depending on different conditions (site policy, menu 
 		// properties).
-/*		$this->defs["images"] = array(
-				"alias" => "p",
-				"title" => "Pildid",
-				"table" => "image",
-				"addlink" => $this->mk_my_orb("new", array("parent" => $this->id),"images"),
-				"chlink" => $this->mk_my_orb("change",array(),"images"),
-				"dellink" => $this->mk_my_orb("delete",array("docid" => $this->id),"images"),
-				"field" => "id",
-
-		);*/
+		
 		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $this->id) ) );
 
 		$this->defs["links"] = array(
@@ -227,6 +218,7 @@ class aliasmgr extends aw_template {
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
+			"width" => 200,
 			"nowrap" => "1",
 			//"sortable" => 1,
                 ));
@@ -241,11 +233,15 @@ class aliasmgr extends aw_template {
 			"name" => "alias",
 			"caption" => "Alias",
 			"talign" => "center",
+			"width" => 50,
+			"align" => "center",
 			//"nowrap" => "1",
                 ));
 		$this->t->define_field(array(
 			"name" => "modifiedby",
 			"caption" => "Muutja",
+			"width" => 80,
+			"align" => "center",
 			"talign" => "center",
 			"nowrap" => "1",
 			//"sortable" => 1,
@@ -253,12 +249,14 @@ class aliasmgr extends aw_template {
 		$this->t->define_field(array(
 			"name" => "modified",
 			"caption" => "Muudetud",
+			"width" => 100,
 			"talign" => "center",
 			"nowrap" => "1",
 			//"sortable" => 1,
                 ));
 		$this->t->define_field(array(
 			"name" => "check",
+			"width" => 20,
 			"align" => "center",
 		));
 
@@ -601,10 +599,11 @@ class aliasmgr extends aw_template {
 	{
 		$id = ($args["id"]) ? $args["id"] : $args["oid"];
 		$this->acounter++;
+		$alias = sprintf("#%s%d#",$this->defs[$this->def_id]["alias"],$this->acounter);
 		$this->t->merge_data(array(
 			"check" => sprintf("<input type='checkbox' name='c_%s' value='%d'>",$this->attribs["table"],$id),
 			"icon"	=> sprintf("<img src='%s'>",get_icon_url($this->defs[$this->def_id]["class_id"],"")),
-			"alias" => sprintf("#%s%d#",$this->defs[$this->def_id]["alias"],$this->acounter),
+			"alias" => sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$alias,$alias),
 		));
 	}
 };
