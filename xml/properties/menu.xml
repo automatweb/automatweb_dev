@@ -20,6 +20,15 @@
             <caption>Menüü värv</caption>
       </property>
       <property>
+            <name>color2</name>
+            <type>colorpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <table>objects</table>
+            <caption>Menüü värv 2</caption>
+      </property>
+      <property>
             <name>icon</name>
             <type>icon</type>
             <field>meta</field>
