@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.60 2002/11/14 17:46:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.61 2002/11/15 22:03:30 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -84,7 +84,7 @@ class aliasmgr extends aw_template
 			"overwrite" => 1,
 		));
 		$this->cache_oo_aliases($id);
-		return $this->mk_my_orb("list_aliases",array("id" => $id),$this->orb_class);
+		return $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class));
 	}
 		
 	////
@@ -423,6 +423,9 @@ class aliasmgr extends aw_template
 		{
 			$aclid = $alias["class_id"];
 			list($astr) = explode(",",$classes[$aclid]["alias"]);
+			// oh no. this is BAD. if I have a document with a lot of images
+			// for example and delete one of those - ALL other images
+			// will shift. I mean, fuck
 			$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
 			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
 			$chlinks[$alias["target"]] = $ch;
@@ -446,6 +449,8 @@ class aliasmgr extends aw_template
 			"reforb" => $this->mk_reforb("submit_list",array("id" => $id,"subaction" => "none","return_url" => $return_url),$this->use_class),
 			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
 			"toolbar" => $this->mk_toolbar(),
+			"return_url" => $return_url,
+			"period" => $period,
 		));
 
 		return $this->parse();
@@ -480,7 +485,7 @@ class aliasmgr extends aw_template
 				$this->add_alias($id,$onealias);
 			}
 		};
-		return $this->mk_my_orb("list_aliases",array("id" => $id),$this->orb_class);
+		return $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class));
 	}
 
 	////
