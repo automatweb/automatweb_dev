@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.3 2001/05/24 16:58:05 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.4 2001/05/24 17:03:49 cvs Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending mail. MIME compatible
 
@@ -136,7 +136,7 @@ class aw_mail {
 
 			//$this->headers["Content-Type"] = $contenttype;
 			$this->headers["Content-Transfer-Encoding"] = $encoding;
-			$this->mimeparts[0] = $emsg;
+			$this->mimeparts[0] = "\n\n" . $emsg . "\n\n";
 		}
 		else
 		{	
