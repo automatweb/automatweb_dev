@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.20 2002/12/05 11:02:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.21 2002/12/16 16:20:00 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1064,10 +1064,19 @@ class form_table extends form_base
 				<header_sortable value=\"style_".$this->table["header_sortable"]."\"/>
 				<header_sorted value=\"style_".$this->table["header_sorted"]."\"/>
 				<content_style1 value=\"style_".$this->table["content_style1"]."\"/>
-				<content_style2 value=\"style_".$this->table["content_style2"]."\"/>
-				<content_style1_selected value=\"style_".$this->table["content_sorted_style1"]."\"/>
-				<content_style2_selected value=\"style_".$this->table["content_sorted_style2"]."\"/>
-				<group_style value=\"style_".$this->table["group_style"]."\"/>\n";
+				<content_style2 value=\"style_".$this->table["content_style2"]."\"/>";
+		if ($this->table["content_sorted_style1"])
+		{
+		  $xml .= "<content_style1_selected value=\"style_".$this->table["content_sorted_style1"]."\"/>";
+		}
+		if ($this->table["content_sorted_style2"])
+	    {
+		  $xml .= "<content_style2_selected value=\"style_".$this->table["content_sorted_style2"]."\"/>";
+	    }
+		if ($this->table["group_style"])
+		{		
+		  $xml.= "<group_style value=\"style_".$this->table["group_style"]."\"/>\n";
+		}
 		$xml.="<tableattribs ";
 
 		if ($this->table["table_style"])
