@@ -277,7 +277,7 @@ class propcollector extends aw_template
 		$sr = get_instance("xml",array("ctag" => ""));
 		$sr->set_child_id("properties","property");
 		$outdir = $this->cfg["basedir"] . "/xml/properties/";
-		if (sizeof($this->properties) > 0)
+		if (sizeof($this->properties) > 0 || sizeof($this->classinfo) > 0)
 		{
 			$fullname = $outdir . $this->cl_name . ".xml";
 			print "Creating $fullname\n";
