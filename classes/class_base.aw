@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.255 2004/04/21 09:17:37 duke Exp $
+// $Id: class_base.aw,v 2.256 2004/04/21 12:43:29 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1610,6 +1610,7 @@ class class_base extends aw_template
 			$filter = array(
 				"class_id" => constant($val["clid"]),
 				"lang_id" => array(),
+				"site_id" => array(),
 			);
 
 			if (isset($val["subclass"]))
