@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.40 2003/03/10 10:55:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.41 2003/04/23 14:22:13 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -25,7 +25,8 @@ class form_table extends form_base
 			"cnt" => "Count",
 			"formel" => "Koguse element",
 			"formel_price" => "Hinna element",
-			"entry_id" => "Sisestuse ID"
+			"entry_id" => "Sisestuse ID",
+			"text" => "Tekst"
 		);
 
 		$this->lang_id = aw_global_get("lang_id");
@@ -386,6 +387,7 @@ class form_table extends form_base
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$cc = $this->table["defs"][$col];
+			$dat["ev_text"] = $cc["is_type_text"];
 			if (is_array($cc["els"]) && !$cc["not_active"])
 			{
 				// do this better. 
@@ -1954,12 +1956,20 @@ class form_table extends form_base
 				$coldata[$col][3] = $this->parse("SEL_ORDER_FORM");
 			}
 
+			if ($this->table["defs"][$col]["els"]["text"] == "text")
+			{
+				$this->vars(array(
+					"is_type_text" => $this->table["defs"][$col]["is_type_text"]
+				));
+				$coldata[$col][4] = $this->parse("IS_TYPE_TEXT");
+			}
+
 			if ($this->table["has_aliasmgr"])
 			{
 				$this->vars(array(
 					"aliases" => $this->mpicker($this->table["defs"][$col]["alias"], $this->get_aliases_for_table())
 				));
-				$coldata[$col][4] = $this->parse("SEL_ALIAS");
+				$coldata[$col][5] = $this->parse("SEL_ALIAS");
 			}
 
 			if ($this->table["has_groupacl"])
@@ -1968,7 +1978,7 @@ class form_table extends form_base
 				$this->vars(array(
 					"grps" => $this->mpicker($this->table["defs"][$col]["grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC))))
 				));
-				$coldata[$col][5] = $this->parse("SEL_GRPS");
+				$coldata[$col][6] = $this->parse("SEL_GRPS");
 			}
 
 			if ($this->table["defs"][$col]["link"] == 1)
@@ -1976,7 +1986,7 @@ class form_table extends form_base
 				$this->vars(array(
 					"link" => $this->picker($this->table["defs"][$col]["link_el"], $els)
 				));
-				$coldata[$col][6] = $this->parse("SEL_LINK");
+				$coldata[$col][7] = $this->parse("SEL_LINK");
 			}
 
 			if ($this->table["defs"][$col]["els"]["formel"] == "formel")
@@ -1984,7 +1994,7 @@ class form_table extends form_base
 				$this->vars(array(
 					"formels" => $this->mpicker($this->table["defs"][$col]["formel"], $els_nof)
 				));
-				$coldata[$col][7] = $this->parse("SEL_FORMEL");
+				$coldata[$col][8] = $this->parse("SEL_FORMEL");
 			}
 			else
 			if ($this->table["defs"][$col]["els"]["formel_price"] == "formel_price")
@@ -1992,7 +2002,7 @@ class form_table extends form_base
 				$this->vars(array(
 					"formels" => $this->mpicker($this->table["defs"][$col]["formel"], $els_nof)
 				));
-				$coldata[$col][7] = $this->parse("SEL_FORMEL");
+				$coldata[$col][8] = $this->parse("SEL_FORMEL");
 			}
 
 			if ($this->table["defs"][$col]["els"]["formel"] == "formel")
@@ -2023,7 +2033,7 @@ class form_table extends form_base
 						$this->vars(array(
 							"EL_IS_SUBMIT" => $issb
 						));
-						$coldata[$col][8] .= $this->parse("SEL_BASKET");
+						$coldata[$col][9] .= $this->parse("SEL_BASKET");
 					}
 				}
 			}
@@ -2072,7 +2082,7 @@ class form_table extends form_base
 				"col_not_active" => checked($this->table["defs"][$col]["not_active"]),
 				"col_el_sep" => $this->table["defs"][$col]["col_el_sep"]
 			));
-			$coldata[$col][9] = $this->parse("SEL_SETTINGS");
+			$coldata[$col][10] = $this->parse("SEL_SETTINGS");
 
 			$sts = $style_inst->get_select(0,ST_CELL, true);
 
@@ -2106,7 +2116,7 @@ class form_table extends form_base
 			$this->vars(array(
 				"HAS_STYLE" => $hst
 			));
-			$coldata[$col][10] = $this->parse("SEL_SETINGS2");
+			$coldata[$col][11] = $this->parse("SEL_SETINGS2");
 
 			$this->vars(array(
 				"popup_width" => $this->table["defs"][$col]["link_popup_width"],
@@ -2116,18 +2126,18 @@ class form_table extends form_base
 				"toolbar" => checked($this->table["defs"][$col]["link_popup_toolbar"]),
 				"addressbar" => checked($this->table["defs"][$col]["link_popup_addressbar"]),
 			));
-			$coldata[$col][11] = $this->parse("SEL_POPUP");
+			$coldata[$col][12] = $this->parse("SEL_POPUP");
 
 			$this->vars(array(
 				"img_type_img" => checked($this->table["defs"][$col]["image_type"] == "img"),
 				"img_type_tximg" => checked($this->table["defs"][$col]["image_type"] == "tximg"),
 				"img_type_imgtx" => checked($this->table["defs"][$col]["image_type"] == "imgtx"),
 			));
-			$coldata[$col][12] = $this->parse("SEL_IMAGE");
+			$coldata[$col][13] = $this->parse("SEL_IMAGE");
 		}
 
 		$l = "";
-		for ($idx = 1; $idx < 13; $idx++)
+		for ($idx = 1; $idx < 14; $idx++)
 		{
 			$td = "";
 			for ($col = 0; $col < $this->table["cols"]; $col++)
@@ -2708,15 +2718,37 @@ class form_table extends form_base
 	// $alias_target - linked op id
 	// $entry_id - the entry_id for the current row
 	// $section - the current section
-	function get_fop_alias_url($elval, $alias_target, $entry_id, $section)
+	function get_fop_alias_url($elval, $alias_target, $entry_id, $section, $popdat)
 	{
-		$url = $this->mk_my_orb("show_entry", array(
-			"id" => $this->get_form_for_entry($entry_id),
-			"entry_id" => $entry_id,
-			"op_id" => $alias_target,
-			"section" => $section
-		),"form");
-		return "<a href='".$url."'>".$elval."</a>";
+		if (isset($popdat["link_popup"]) && $popdat["link_popup"])
+		{
+			$url = $this->mk_my_orb("show_entry", array(
+				"id" => $this->get_form_for_entry($entry_id),
+				"entry_id" => $entry_id,
+				"op_id" => $alias_target,
+				"section" => $section
+			),"form", false, true);
+			$url = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
+				$url,
+				$popdat["link_popup_scrollbars"],
+				!$popdat["link_popup_fixed"],
+				$popdat["link_popup_toolbar"],
+				$popdat["link_popup_addressbar"],
+				$popdat["link_popup_width"],
+				$popdat["link_popup_height"]
+			);
+		}
+		else
+		{
+			$url = $this->mk_my_orb("show_entry", array(
+				"id" => $this->get_form_for_entry($entry_id),
+				"entry_id" => $entry_id,
+				"op_id" => $alias_target,
+				"section" => $section
+			),"form");
+		}
+	
+		return "<a href=\"".$url."\">".$elval."</a>";
 	}
 
 	////
@@ -2779,7 +2811,7 @@ class form_table extends form_base
 				else
 				if ($alias_data["class_id"] == CL_FORM_OUTPUT)
 				{
-					$str = $this->get_fop_alias_url($str, $alias_data["target"], $dat["entry_id"], $section);
+					$str = $this->get_fop_alias_url($str, $alias_data["target"], $dat["entry_id"], $section, $cc);
 				}
 			}
 		}
