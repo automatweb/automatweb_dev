@@ -30,21 +30,20 @@ class search_filter extends aw_template
                 $this->mk_path($parent,"Lisa Filter");
                 $this->read_template("new_filter.tpl");
 
-                $this->fb=get_instance("formgen/form_base");
-                $formlist=$this->fb->get_list(FTYPE_ENTRY,false,true);
+                $this->fb = get_instance("formgen/form_base");
+                $formlist = $this->fb->get_list(FTYPE_ENTRY,false,true);
 
-                $chainlist=array();
-                $this->get_objects_by_class(array("class"=>CL_FORM_CHAIN));
-                while ($r = $this->db_next())
-                {
-                        $chainlist[$r["oid"]]=$r["name"];
-                };
+				$ol = new object_list(array(
+					"class_id" => CL_FORM_CHAIN
+				));
+
+                $chainlist = $ol->names();
                 $this->vars(array(
-                        "formlist"=>$this->picker("",$formlist),
-                        "chainlist"=>$this->picker("",$chainlist),
-                        "reforb" => $this->mk_reforb("submit_new",array("parent" => $parent))
-                        ));
-                
+					"formlist"=>$this->picker("",$formlist),
+					"chainlist"=>$this->picker("",$chainlist),
+					"reforb" => $this->mk_reforb("submit_new",array("parent" => $parent))
+				));
+              
                 return $this->parse();
         }
 
@@ -196,37 +195,6 @@ class search_filter extends aw_template
         {
                 $arr=array("filter"=>$this->filter);
                 $this->obj_set_meta(array("oid" => $this->id,"meta" => $arr));
-        }
-
-	/**  
-		
-		@attrib name=convert_objects params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-        function convert_objects()
-        {
-                $this->get_objects_by_class(array("class"=>CL_SEARCH_FILTER));
-                while ($r = $this->db_next())
-                {
-                        $this->save_handle();
-						$tmp = obj($r["oid"]);
-						$arr = $tmp->meta();
-
-                        echo("doing id".$r["oid"]."<br />");
-                        if (is_array($arr))
-                        {
-                                $arr2=array("data"=>$arr["data"],"filter"=>$arr["filter"]);
-                                $this->obj_set_meta(array("oid" => $r["oid"],"meta" => $arr2));
-                        };
-                        $this->restore_handle();
-                };
-                die("ehee");
         }
 
         function build_master_array()
@@ -709,14 +677,10 @@ class search_filter extends aw_template
                         $parse2=preg_replace("/<input type='hidden' name='reforb'/","<input type='hidden' name='filter_id' value='$id'><input type='hidden' name='reforb'",$parse2);
                         
 
-                        $this->get_objects_by_class(array("class"=>CL_TABLE));
-                        
-                        $tables=array();
-                        
-                        while($data=$this->db_next())
-                        {
-                                $tables[$data["oid"]]=$data["name"]." (".$data["oid"].")";
-                        };
+						$ol = new object_list(array(
+							"class_id" => CL_TABLE
+						));
+						$tables = $ol->names();
 
                         $this->read_template("selstattable.tpl");
                         $this->vars(array(
@@ -1070,13 +1034,10 @@ class search_filter extends aw_template
                 $r=$this->db_next();
                 $parent=$r["parent"];
                 
-
-                $this->get_objects_by_class(array("class" => CL_FORM_TABLE));
-                $obj_arr=array();
-                while($r=$this->db_next())
-                {
-                        $obj_arr[$r["oid"]]=$r["name"];
-                };
+				$ol = new object_list(array(
+					"class_id" => CL_FORM_TABLE
+				));
+				$obj_arr = $ol->names();
 
                 $this->read_template("select_formtable.tpl");
                 $this->vars(array(
