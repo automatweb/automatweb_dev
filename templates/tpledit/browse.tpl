@@ -1,7 +1,4 @@
 <table border="0" cellspacing="1" cellpadding="3" bgcolor="#CCCCCC">
-<tr>
-<td class="fgtitle" colspan="9"><b>{VAR:path}</b></td>
-</tr>
 <!-- SUB: directory -->
 <tr>
 <td class="fgtext" align="center"><img src="images/ftv2folderclosed.gif"></td>
@@ -9,28 +6,28 @@
 <td class="fgtext">{VAR:date}
 </tr>
 <!-- END SUB: directory -->
+</table>
+<br>
+<script language="JavaScript">
+function submit_files()
+{
+	document.browse.submit();
+};
+</script>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#CCCCCC">
+<form method="POST" name="browse">
 <tr>
-<td class="fgtitle" colspan="9"><b>Failid</b></td>
+<td>
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+<tr bgcolor="#DDDDDD">
+<td class="title" colspan="7" bgcolor="#DDDDDD"><b>Failid:</b>
+<a href="javascript:submit_files()"><span style="color: red; font-weight: bold">Salvesta</span></a>
+</td>
 </tr>
-<tr>
-<td class="fgtext2">ID</td>
-<td class="fgtext2">Nimi</td>
-<td class="fgtext2">Muudetud</td>
-<td class="fgtext2">Faili suurus</td>
-<td class="fgtext2">Muutja</td>
-<td class="fgtext2" colspan="4" align="center">Tegevus</td>
+{VAR:files}
+</table>
+</td>
 </tr>
-<!-- SUB: file -->
-<tr>
-<td class="fgtext">{VAR:oid}</td>
-<td class="fgtext">{VAR:name}</td>
-<td class="fgtext">{VAR:date}</td>
-<td class="fgtext" align="right">{VAR:size}</td>
-<td class="fgtext">{VAR:modifiedby}&nbsp;</td>
-<td class="fgtext" align="center"><a href="{VAR:edlink}">Muuda</a></td>
-<td class="fgtext" align="center">{VAR:arclink}&nbsp;</td>
-<td class="fgtext" align="center"><a href="{VAR:uplink}">Upload</a></td>
-<td class="fgtext" align="center"><a href="{VAR:dnlink}">Download</a></td>
-</tr>
-<!-- END SUB: file -->
+{VAR:reforb}
+</form>
 </table>
