@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.10 2005/02/17 13:14:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.11 2005/02/28 09:26:52 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -357,6 +357,7 @@ class mrp_prisma_import extends class_base
 
 	function _imp_proj($db, $co)
 	{
+		classload("date_calc");
 		// get db
 		$proj = array();
 		$db->db_query("
@@ -377,6 +378,16 @@ class mrp_prisma_import extends class_base
 			{
 				$row["TellimuseTähtaeg"] = -1;
 			}
+
+			// if date is at 00:00 hrs, make it 16:00 hrs
+			if ((get_day_start($row["TööAlgus"]) - $row["TööAlgus"]) < 120)
+			{
+				$row["TööAlgus"] = get_day_start($row["TööAlgus"]) + 16 * 3600;
+			}
+			if ((get_day_start($row["TellimuseTähtaeg"]) - $row["TellimuseTähtaeg"]) < 120)
+                        {
+                                $row["TellimuseTähtaeg"] = get_day_start($row["TellimuseTähtaeg"]) + 16 * 3600;
+                        }
 			$proj[$row["TellimuseNr"]] = $row;
 		}
 
@@ -549,6 +560,17 @@ class mrp_prisma_import extends class_base
 		if ($dat["TellimuseTähtaeg"] < 100000)
 		{
 			$dat["TellimuseTähtaeg"] = -1;
+		}
+
+		classload("date_calc");
+		// if date is at 00:00 hrs, make it 16:00 hrs
+		if ((get_day_start($dat["TööAlgus"]) - $dat["TööAlgus"]) < 120)
+		{
+			$dat["TööAlgus"] = get_day_start($dat["TööAlgus"]) + 16 * 3600;
+		}
+		if ((get_day_start($dat["TellimuseTähtaeg"]) - $dat["TellimuseTähtaeg"]) < 120)
+		{
+			$dat["TellimuseTähtaeg"] = get_day_start($dat["TellimuseTähtaeg"]) + 16 * 3600;
 		}
 
 		// check if we got it
