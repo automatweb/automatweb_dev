@@ -1742,13 +1742,17 @@ class user extends class_base
 		{
 			return array();
 		}
-		
-		$user_obj = &obj(users::get_oid_for_uid($uid));
-		$grups_list = new object_list(
-			$user_obj->connections_from(array(
-				"type" => "RELTYPE_GRP",
-			))
-		);
+		$grups_list = array();
+		$tmp = users::get_oid_for_uid($uid);
+		if (is_oid($tmp) && $this->can("view", $tmp))
+		{
+			$user_obj = obj($tmp);
+			$grups_list = new object_list(
+				$user_obj->connections_from(array(
+					"type" => "RELTYPE_GRP",
+				))
+			);
+		}
 		return $grups_list;
 	}
 	

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.100 2004/11/04 11:55:18 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.101 2004/11/05 14:21:33 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -292,7 +292,7 @@ class users_user extends aw_template
 	{
 		$user_inst = get_instance(CL_USER);
 		$gid_obj = $user_inst->get_highest_pri_grp_for_user($uid);
-		if($gid_obj->prop("require_change_pass"))
+		if(is_object($gid) && $gid_obj->prop("require_change_pass"))
 		{
 			return true;
 		}
