@@ -740,7 +740,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			if (substr($k, 0, 5) == "from.")
 			{
-				$sql .= " AND o_s.".substr($k, 5)." = '$v' ";
+				if (is_array($v))
+				{
+					$sql .= " AND o_s.".substr($k, 5)." IN (" . join(",",$v) . ") ";
+				}
+				else
+				{
+					$sql .= " AND o_s.".substr($k, 5)." = '$v' ";
+				};
 			}
 		}
 
