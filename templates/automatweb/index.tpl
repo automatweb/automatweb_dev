@@ -28,7 +28,7 @@ window.location=url
 </script>
 </head>
 <!-- kas see create_objects on vajalik? -->
-<body bgcolor='#F7F7F7' link='#0000ff' vlink='#0000ff' onLoad="create_objects()" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<body bgcolor='#eeeeee' link='#0000ff' vlink='#0000ff' onLoad="create_objects()" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 
 
 <table border=0 width="100%" cellspacing="0" cellpadding="2">
