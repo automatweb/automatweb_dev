@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.53 2004/10/05 07:14:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.54 2004/10/08 09:49:32 kristo Exp $
 
 /*
 
@@ -628,7 +628,11 @@ class gallery_v2 extends class_base
 		$old = $this->_page_content[$row][$col];
 		// check uploaded images and shit
 		$cd = $post_data['g'][$page][$row][$col];
-		$this->_page_content[$row][$col] = $cd;
+		$this->_page_content[$row][$col]["caption"] = $cd["caption"];
+		$this->_page_content[$row][$col]["date"] = $cd["date"];
+		$this->_page_content[$row][$col]["has_textlink"] = $cd["has_textlink"];
+		$this->_page_content[$row][$col]["textlink"] = $cd["textlink"];
+		$this->_page_content[$row][$col]["ord"] = $cd["ord"];
 	
 		// also upload images
 		$img_n = "g_".$page."_".$row."_".$col."_img";
@@ -638,6 +642,7 @@ class gallery_v2 extends class_base
 		{
 			$imgfolder = $obj->parent();
 		}
+
 		if (trim($_FILES[$img_n]["type"]) == "application/pdf" || ($old["img"]["is_file"] == 1 && $_FILES[$img_n]["tmp_file"] == ""))
 		{
 			$f = get_instance("file");
