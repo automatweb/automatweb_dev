@@ -1,46 +1,5 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="ml_member" folder="mailinglist" extends="class_base">
-		<action name="submit_change_lists">
-			<function name="orb_submit_change_lists">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="delete">
-			<function name="orb_delete">
-				<arguments>
-					<required name="id" acl="delete"/>
-					<required name="parent"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="sent">
-			<function name="orb_sent">
-				<arguments>
-					<required name="id"/>
-					<optional name="lid"/>
-					<optional name="sortby"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="sent_show">
-			<function name="orb_sent_show">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="sent_delete">
-			<function name="orb_sent_delete">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-		</class>
-	</orb>
+	</class>
+</orb>
