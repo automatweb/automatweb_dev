@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.70 2004/06/18 17:24:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.71 2004/06/25 20:09:02 duke Exp $
 
 class admin_menus extends aw_template
 {
@@ -1304,7 +1304,7 @@ class admin_menus extends aw_template
 	function rf_toolbar($args = array())
 	{
 		extract($args);
-		$toolbar = get_instance("toolbar");
+		$toolbar = get_instance("vcl/toolbar");
 		
 		if ($this->can("add", $parent))
 		{

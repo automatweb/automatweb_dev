@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.30 2004/06/25 18:29:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.31 2004/06/25 20:09:02 duke Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -254,10 +254,9 @@ class admin_folders extends aw_template
 
 		));
 
-		$tb = get_instance("toolbar");
 		// perioodide tropp.
 		// temp workaround
-		$tb = get_instance("toolbar");
+		$tb = get_instance("vcl/toolbar");
 		if ($this->cfg["per_oid"])
 		{
 			$dbp = get_instance("period",$this->cfg["per_oid"]);

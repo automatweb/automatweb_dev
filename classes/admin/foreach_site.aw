@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.3 2004/01/13 16:24:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/foreach_site.aw,v 1.4 2004/06/25 20:09:02 duke Exp $
 // foreach_site.aw - foreach site 
 
 class foreach_site extends class_base
@@ -58,6 +58,10 @@ class foreach_site extends class_base
 
 		foreach($sites as $site)
 		{
+			if (1 != $site["site_used"])
+			{
+				continue;
+			};
 			$url = $site["url"];
 			if ($url == "")
 			{
