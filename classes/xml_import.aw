@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.4 2002/07/17 10:47:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.5 2002/07/23 21:13:16 duke Exp $
 class xml_import extends aw_template
 {
 
@@ -34,6 +34,7 @@ class xml_import extends aw_template
 		{
 			$caption = "Lisa uus XML import objekt";
 			$prnt = $parent;
+			$chn = "";
 			$meta = array();
 		}
 		else
@@ -41,6 +42,10 @@ class xml_import extends aw_template
 			$caption = "Muuda XML import objekti";
 			$obj = $this->get_object($id);
 			$meta = $obj["meta"];
+			$this->vars(array(
+				"rep_link" => $this->mk_my_orb("repeaters",array("id" => $id)),
+			));
+			$chn = $this->parse("change");
 			$prnt = $obj["parent"];
 		};
 
@@ -48,6 +53,7 @@ class xml_import extends aw_template
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit",array("id" => $id,"parent" => $parent)),
 			"name" => $obj["name"],
+			"change" => $chn,
 			"datasources" => $this->picker($meta["datasource"],$datasources),
 			"run_import" => $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1),
 			"import_functions" => $this->picker($meta["import_function"],$this->methods),
@@ -89,6 +95,31 @@ class xml_import extends aw_template
 		));
 
 		return $this->mk_my_orb("change",array("id" => $id));
+
+	}
+
+	////
+	// !Wrapper to display the repeater editing interface inside this classes frame
+	function repeaters($args = array())
+	{
+		extract($args);
+		classload("cal_event");
+                $ce = new cal_event();
+                $html = $ce->repeaters(array(
+                        "id" => $id,
+                        "cycle" => $cycle,
+			"hide_menubar" => true,
+                ));
+		$this->read_template("repeaters.tpl");
+		$this->vars(array(
+			"ch_link" => $this->mk_my_orb("change",array("id" => $id)),
+			"repeaters" => $html,
+		));
+		$obj = $this->get_object($id);
+		$this->mk_path($obj["parent"],"Muuda XML import objekti");
+		return $this->parse();
+
+
 
 	}
 
@@ -180,18 +211,45 @@ class xml_import extends aw_template
 		xml_parser_free($parser);
 		$q = "DELETE FROM ut_struktuurid";
 		$this->db_query($q);
+		$lastlevel = 0;
+		$ylem_list = array();
+		$ylem_ilist = array();
 		foreach($values as $key => $val)
 		{
+			/*
+			print "lastlevel = $lastlevel<br>";
+			print "<pre>";
+			print_r($val);
+			print "</pre>";
+			*/
+
 			if ($val["tag"] == "struktuur")
 			{
+					
 				if ($val["type"]  ==  "open")
 				{
+
 					if ($val["level"] == 2)
 					{
 						$osakond = $this->convert_unicode($val["attributes"]["nimetus"]);
 						$ylem_id = $val["attributes"]["id"];
+						$attr = $val["attributes"];		
+						$ylem_name = $this->convert_unicode($attr["nimetus"]);
 						$this->quote($osakond);
 					};
+				};
+
+				if ( ($val["type"] == "close"))
+				{
+					/*
+						print  "popping<br>";
+						print "<pre>";
+						print_r($val);
+						print "</pre>";
+					print "<b>popping</b><br>";
+						*/
+					array_pop($ylem_list);
+					array_pop($ylem_ilist);
 				};
 
 				if ( ($val["type"] == "open") || ($val["type"]  == "complete") )
@@ -207,13 +265,44 @@ class xml_import extends aw_template
 					$telefon = $attr["telefon"];
 					$faks = $attr["faks"];
 
-					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id)
-							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$ylem_id')";
+					/*
+					print "<pre>";
+					print_r($ylem_list);
+					print  "</pre>";
+					*/
+					$real_ylem_name = $ylem_list[sizeof($ylem_list) - 1];
+					$real_ylem_id = $ylem_ilist[sizeof($ylem_list) - 1];
+
+					if (preg_match("/vastutusala/",$nimetus))
+					{
+						$real_ylem_id = -1;
+					};
+					
+					if (preg_match("/teaduskond/",$nimetus))
+					{
+						$real_ylem_id = 0;
+					};
+
+					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus)
+							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name')";
 					print $q;
 					$this->db_query($q);
 					print "<br>";
+					$lastlevel = $val["level"];
 				};
-			};
+
+				if ($val["type"]  ==  "open")
+				{
+					$attr = $val["attributes"];		
+					$ylem_name = $this->convert_unicode($attr["nimetus"]);
+					$yid = $val["attributes"]["id"];
+					/*
+					print "<b>pushing</b><br>";
+					*/
+					array_push($ylem_list,$ylem_name);
+					array_push($ylem_ilist,$yid);
+				};
+			} 
 		}
 	}
 	
