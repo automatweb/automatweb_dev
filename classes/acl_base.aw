@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.72 2004/03/25 08:57:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.73 2004/05/06 12:28:44 kristo Exp $
 
 lc_load("definition");
 
@@ -201,6 +201,10 @@ class acl_base extends db_connector
 		$max_acl = $GLOBALS["cfg"]["acl"]["default"];
 		$max_acl["acl_rel_id"] = "666";
 		$cnt = 0;
+		if ($GLOBALS["acl_dbg"] == 1)
+		{
+			echo "canaw for $acess => $oid <br>";
+		}
 		// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
 		while ($oid > 0)
 		{
@@ -209,6 +213,10 @@ class acl_base extends db_connector
 			{
 				$tacl = $_t;
 				$parent = $_t["parent"];
+		if ($GLOBALS["acl_dbg"] == 1)
+		{
+			echo "got acl from cache for oid $oid tacl = ".dbg::dump($tacl)." <br>";
+		}
 				if (!isset($tacl["oid"]))
 				{
 					// if we are on any level and we get back no object, return no access
@@ -218,8 +226,14 @@ class acl_base extends db_connector
 			}
 			else
 			{
+
 				$tacl = $this->get_acl_for_oid($oid);
 
+		if ($GLOBALS["acl_dbg"] == 1)
+		{
+			echo "got acl from dfatabase for oid $oid tacl = ".dbg::dump($tacl)." <br>";
+		}				
+		
 				if (!isset($tacl["oid"]))
 				{
 					// if we are on any level and we get back no object, return no access
@@ -259,6 +273,11 @@ class acl_base extends db_connector
 
 		$this->restore_handle();
 	
+		if ($GLOBALS["acl_dbg"] == 1)
+		{
+			echo "final acl = ".dbg::dump($max_acl)." <br>";
+		}
+
 		// if the max_acl does not contain view and no user is logged, return default
 		if (!isset($max_acl["can_view"]) && aw_global_get("uid") == "")
 		{
@@ -288,6 +307,10 @@ class acl_base extends db_connector
 			{
 				include($fqfn);
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+				if ($GLOBALS["acl_dbg"] == 1)
+				{
+					echo "acl for $access, $oid , got from file cache , mac_acl = ".dbg::dump($max_acl)." <br>";
+				}
 			}
 			else
 			{
@@ -337,6 +360,10 @@ class acl_base extends db_connector
 			}
 		}
 
+		if ($GLOBALS["acl_dbg"] == 1)
+		{
+			echo "final final acl, asked for $access $oid = ".dbg::dump($max_acl)." <br>";
+		}
 		$access="can_".$access;
 		return $max_acl[$access];
 	}
@@ -367,9 +394,16 @@ class acl_base extends db_connector
 			$gr = $this->get_user_group($uuid);
 			if (!$gr) 
 			{
-				$this->raise_error(ERR_ACL_NOGRP,LC_NO_DEFAULT_GROUP,true);
+				if (method_exists($this, "raise_error"))
+				{
+					$this->raise_error(ERR_ACL_NOGRP,LC_NO_DEFAULT_GROUP,true);
+				}
 			};
-			$this->add_acl_group_to_obj($gr["gid"], $oid, $aclarr, false);
+
+			if ($gr)
+			{
+				$this->add_acl_group_to_obj($gr["gid"], $oid, $aclarr, false);
+			}
 			//$this->save_acl($oid,$gr["gid"], $aclarr);		// give full access to the creator
 		}
 	}
