@@ -147,16 +147,6 @@
             <caption>Omadused</caption>
       </property>
       <property>
-            <name>form_groups</name>
-            <table>objects</table>
-            <group>special</group>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Kasuta vormi gruppe</caption>
-      </property>
-      <property>
             <name>style_folder</name>
             <table>objects</table>
             <group>styles</group>
@@ -243,7 +233,7 @@
       <property>
             <name>search</name>
             <table>objects</table>
-            <group>set_controllers</group>
+            <group>search</group>
             <method>serialize</method>
             <field>meta</field>
             <type>text</type>
@@ -306,10 +296,6 @@
                   <caption>Omadused</caption>
                   <submit>no</submit>
             </props>
-            <specail>
-                  <caption>Spetsiaal</caption>
-                  <submit>no</submit>
-            </specail>
             <styles>
                   <caption>Stiilid</caption>
             </styles>

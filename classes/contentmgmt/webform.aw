@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.53 2005/02/02 09:30:41 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.54 2005/02/02 13:24:53 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -68,11 +68,11 @@
 
 
 ------------- special -------------
-@groupinfo specail caption="Spetsiaal" submit=no
-@default group=special
+//@groupinfo special caption="Spetsiaal" submit=no
+//@default group=special
 
-@property form_groups type=checkbox ch_value=1
-@caption Kasuta vormi gruppe
+//@property form_groups type=checkbox ch_value=1
+//@caption Kasuta vormi gruppe
 
 //@property availtoolbar type=toolbar no_caption=1
 //@caption Toolbar
@@ -126,7 +126,7 @@
 
 ------------- search -------------
 @groupinfo search caption="Otsing" parent=show_entries submit_method=get submit=no
-@default group=set_controllers
+@default group=search
 
 @property search type=text no_caption=1
 @caption Otsing
@@ -694,7 +694,7 @@ class webform extends class_base
 		$set_controllers = array(
 			array(
 				"name" => "M&auml;&auml;ra saaja aadressiks",
-				"formula" => '$value = is_array($prop["value"]) ? $prop["value"] : array($prop["value"]);$vals = array();foreach($value as $val){if(is_oid($val) && $this->can("view", $val)){$obj = obj($val);$vals[$val] = $obj->name();}}if(!empty($vals)){aw_global_set("recievers_name", $vals);}',
+				"formula" => '$value = is_array($prop["value"]) ? $prop["value"] : array($prop["value"]);$vals = array();foreach($value as $val){if(is_oid($val) && $this->can("view", $val)){$obj = obj($val);$vals[$val] = $obj->comment();}}if(!empty($vals)){aw_global_set("recievers_name", $vals);}',
 			),
 			array(
 				"name" => "M&auml;&auml;ra saatja aadressiks",
@@ -1487,7 +1487,7 @@ class webform extends class_base
 			{
 				$els[$key]["value"] = nl2br($all_props[$key]["value"]);
 			}
-			$aliasmgr->parse_oo_aliases($id, $els[$key]["caption"]);
+			$aliasmgr->parse_oo_aliases($id, &$els[$key]["caption"]);
 			// some goddamn thing messes up the element captions, reorder them
 			//$els[$key]["caption"] = $all_props[$key]["caption"];
 			$els[$key]["capt_ord"] = $all_props[$key]["wf_capt_ord"];
