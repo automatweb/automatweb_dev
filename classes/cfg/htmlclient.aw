@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.49 2004/02/12 12:56:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.50 2004/03/02 12:48:21 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -306,6 +306,7 @@ class htmlclient extends aw_template
 		};
 
 		// I wanda mis kammi ma selle tmp-iga tegin
+		// different layout mode eh? well, it sucks!
 		if (is_object($this->tmp))
 		{
 			$this->tmp->vars(array(
@@ -349,7 +350,7 @@ class htmlclient extends aw_template
 	function put_header_subtitle($args)
 	{
 		$this->vars(array(
-			"value" => $args["value"],
+			"value" => !empty($args["value"]) ? $args["value"] : $args["caption"],
 		));
 		return $this->parse("SUB_TITLE");
 	}
@@ -393,7 +394,7 @@ class htmlclient extends aw_template
 
 		if (sizeof($this->proplist) > 0)
 		{
-			foreach($this->proplist as $item)
+			foreach($this->proplist as $ki => $item)
 			{
 				if (!empty($item["error"]))
 				{
@@ -450,11 +451,13 @@ class htmlclient extends aw_template
 		};
 		if ($arr["raw_output"])
 		{
-			return $this->vars["content"];
+			$rv = $this->vars["content"];
+			return $rv;
 		}
 		else
 		{
-			return $this->parse();
+			$rv = $this->parse();
+			return $rv;
 		};
 	}
 
@@ -493,8 +496,8 @@ class htmlclient extends aw_template
 						$retval .= html::radiobutton(array(
 							"caption" => $val,
 							"name" => $arr["name"],
-							"value" => $key,
 							"checked" => ($arr["value"] == $key),
+							"value" => $key,
 						));
 					};
 					if ($arr["orient"] == "vertical")
@@ -580,10 +583,6 @@ class htmlclient extends aw_template
 				$retval = html::datetime_select($arr);
 				break;
 			
-			case "popup_objmgr":
-				$retval = html::popup_objmgr($arr);
-				break;
-
 			case "img":
 				$retval = html::img($arr);
 				break;
