@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.68 2005/01/11 13:17:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.69 2005/01/18 11:32:42 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -51,6 +51,12 @@ caption Msn/yahoo/aol/icq
 
 @property birthday type=date_select year_from=1930 year_to=2010 default=-1
 @caption Sünnipäev
+
+@property education type=relpicker reltype=RELTYPE_EDUCATION automatic=1
+@caption Haridus
+
+@property address type=relpicker reltype=RELTYPE_ADDRESS
+@caption Aadress
 
 @property social_status type=chooser 
 @caption Perekonnaseis
@@ -376,11 +382,11 @@ class crm_person extends class_base
 
 	function set_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$form = &$arr["request"];
 
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "lastname":
 			
@@ -389,11 +395,6 @@ class crm_person extends class_base
 					$arr["obj_inst"]->set_name($form['firstname']." ".$form['lastname']);
 				}			
 				break;
-			case 'rank':
-				
-				break;	
-			
-		
 		};
 		//echo "<pre>";
 		//print_r($arr);
@@ -424,7 +425,6 @@ class crm_person extends class_base
 				$data['options'] = array_reverse($data['options'], true);
 				break;
 			case 'rank' :
-			{
 				//let's list the professions the organization/unit is associated with
 				$drop_down_list = array();
 				//if the person is associated with a section then show the professions
@@ -457,7 +457,7 @@ class crm_person extends class_base
 						'class_id' => CL_CRM_PROFESSION
 					));
 
-					for($o=$ol->begin();!$ol->end();$o=$ol->next())
+					foreach($ol->arr() as $o)
 					{
 						$drop_down_list[$o->id()] = $o->prop('name');
 					}
@@ -469,7 +469,6 @@ class crm_person extends class_base
 				$drop_down_list = array_reverse($drop_down_list,true);
 				$data['options'] = &$drop_down_list;
 				break;
-			}
 			case "title":
 				$data["options"] = array(
 					t("Härra"),
@@ -656,7 +655,7 @@ class crm_person extends class_base
 				break;
 
 			case "username":
-				if (!($tmp = $this->has_user($arr["obj_inst"])))
+				if ($arr["new"] || !($tmp = $this->has_user($arr["obj_inst"])))
 				{
 					return PROP_IGNORE;
 				}
@@ -769,8 +768,11 @@ class crm_person extends class_base
 			"tooltip" => t("Uus"),
 		));
 
+		$req = urlencode(aw_global_get("REQUEST_URI"));
+
 		$menudata = '';
 		$clss = aw_ini_get("classes");
+		$oid = $args["obj_inst"]->id();
 		if (is_array($action))
 		{
 			foreach($action as $key => $val)
@@ -789,7 +791,7 @@ class crm_person extends class_base
 					$toolbar->add_menu_item(array(
 						"parent" => "add_event",
 						'url' => $this->mk_my_orb('new',array(
-							'alias_to_org' => $args["obj_inst"]->id(),
+							'alias_to_org' => $oid,
 							'reltype_org' => $val['reltype'],
 							'class' => 'planner',
 							'id' => $cal_id,
@@ -798,7 +800,7 @@ class crm_person extends class_base
 							'action' => 'change',
 							'title' => $clss[$val["clid"]]["name"].': '.$args['obj_inst']->name(),
 							'parent' => $parents[$val['reltype']],///?
-							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+							'return_url' => $req,
 						)),
 						'text' => sprintf(t('Lisa '),$clss[$val["clid"]]["name"]),
 					));
@@ -810,10 +812,9 @@ class crm_person extends class_base
 				$toolbar->add_button(array(
 					"name" => "user_calendar",
 					"tooltip" => t("Kasutaja kalender"),
-					"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
+					"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => $req,),'planner'),
 					"onClick" => "",
 					"img" => "icon_cal_today.gif",
-					"class" => "menuButton",
 				));
 			}
 
@@ -930,6 +931,8 @@ class crm_person extends class_base
 			$address = join(",", $address_a);
 		}
 
+		$oid = $o->id();
+
 		$rv = array(
 			'name' => $o->prop('firstname').' '.$o->prop('lastname'),
 			'firstname' => $o->prop('firstname'),
@@ -945,21 +948,21 @@ class crm_person extends class_base
 			"add_task_url" => $this->mk_my_orb("change",array(
 				"id" => $cal_id,
 				"group" => "add_event",
-				"alias_to_org" => $o->id(),
+				"alias_to_org" => $oid,
 				"reltype_org" => 10,
 				"clid" => CL_TASK,
 			),CL_PLANNER),
 			"add_call_url" => $this->mk_my_orb("change",array(
 				"id" => $cal_id,
 				"group" => "add_event",
-				"alias_to_org" => $o->id(),
+				"alias_to_org" => $oid,
 				"reltype_org" => 9,
 				"clid" => CL_CRM_CALL,
 			),CL_PLANNER),
 			"add_meeting_url" => $this->mk_my_orb("change",array(
 				"id" => $cal_id,
 				"group" => "add_event",
-				"alias_to_org" => $o->id(),
+				"alias_to_org" => $oid,
 				"reltype_org" => 8,
 				"clid" => CL_CRM_MEETING,
 			),CL_PLANNER),
