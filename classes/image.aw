@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.117 2004/11/02 12:18:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.118 2004/11/03 12:16:27 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -362,7 +362,10 @@ class image extends class_base
 				ORDER BY created DESC";
 			$this->db_query($q);
 			$row = $this->db_next();
-			array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
+			if (is_array($row))
+			{
+				array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
+			}
 
 			$row["url"] = $this->get_url($row["file"]);
 			$row["meta"] = aw_unserialize($row["metadata"]);
