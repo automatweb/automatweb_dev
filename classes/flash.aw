@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.1 2003/03/27 17:27:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.2 2003/04/23 09:35:01 duke Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -41,7 +41,14 @@ class flash extends class_base
 		switch($data["name"])
 		{
 			case "preview":
-				$data["value"] = $this->view(array("id" => $args["obj"]["oid"]));
+				if (isset($args["obj"]["meta"]["file"]))
+				{
+					$data["value"] = $this->view(array("id" => $args["obj"]["oid"]));
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
 				break;
 
 			case "file":
@@ -64,13 +71,16 @@ class flash extends class_base
                         if ($fdata["type"] == "application/x-shockwave-flash" &&
 				is_uploaded_file($fdata["tmp_name"]))
                         {
-                                // fail sisse
+                                // SLURP!
                                 $fc = $this->get_file(array(
                                         "file" => $fdata["tmp_name"],
                                 ));
 
-				if ($fc != "")
+				$imgdata = getimagesize($fdata["tmp_name"]);
+				if (is_array($imgdata) && ($fc != ""))
 				{
+					$this->real_width = $imgdata[0];
+					$this->real_height = $imgdata[1];
 					// stick the file in the filesystem
 					$awf = get_instance("file");
 					$fs = $awf->_put_fs(array(
@@ -82,8 +92,11 @@ class flash extends class_base
                                         $this->file_name = $fdata["name"];
                                 };
 
+			}
+			else
+			{
+				$retval = PROP_IGNORE;
 			};
-
 		};
 		return $retval;
 	}
@@ -95,14 +108,26 @@ class flash extends class_base
 		{
 			$coredata["name"] = $this->file_name;
 		};
+		if (isset($this->real_width) && isset($this->real_height))
+		{
+			$coredata["metadata"]["width"] = $this->real_width;
+			$coredata["metadata"]["height"] = $this->real_height;
+		};
         }
 
 
 	function get_url($url)
 	{
-                $url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"flash",false,
-true,"/");
-                return str_replace("automatweb/", "", $url);
+		if ($url)
+		{
+                	$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"flash",false,true,"/");
+			$url = str_replace("automatweb/","",$url);
+		}
+		else
+		{
+			$url = "";
+		};
+		return $url;
         }
 
 
