@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.90 2003/03/12 13:44:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.91 2003/03/12 15:26:14 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -612,7 +612,7 @@ class planner extends class_base
 		$this->actlink = $actlink;
 		
 		$use_tabpanel = false;
-		if (isset($this->conf["use_tabpanel"]))
+		if (!empty($this->conf["use_tabpanel"]))
 		{
 			$use_tabpanel = true;
 		};
@@ -786,7 +786,9 @@ class planner extends class_base
 		switch($type)
 		{
 			case "week":
-				$content = $this->disp_week(array("events" => $events,"di" => $di,"tpl" => "disp_week.tpl"));
+				$tpl = isset($args["week_tpl"]) ? $args["week_tpl"] : "disp_week.tpl";
+				$content = $this->disp_week(array("events" => $events,"di" => $di,"tpl" => $tpl));
+
 				$caption = sprintf("%s - %s",$this->time2date($di["start"],2),$this->time2date($di["end"],2));
 				$start = $date;
 				break;
@@ -1109,7 +1111,7 @@ class planner extends class_base
 		}
 		$calstring = join(",",$calendars);
 		//$q = "SELECT * FROM aliases LEFT JOIN planner ON (aliases.target = planner.id) LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
-		$q = "SELECT name,class_id,planner.* FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE parent IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
+		$q = "SELECT name,class_id,planner.*,documents.lead,documents.moreinfo FROM objects LEFT JOIN planner ON (objects.oid = planner.id) LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
 		$this->db_query($q);
 		$results = array();
 		while($row = $this->db_next())
@@ -2035,6 +2037,11 @@ class planner extends class_base
 			foreach($events as $key => $e)
 			{
 				// draws single cells inside the day
+                                $this->vars(array(
+                                        "lead" => $e["lead"],
+                                        "moreinfo" => $e["moreinfo"],
+                                        "title" => $e["title"],
+                                ));
 				$c .= $this->ev->draw($e);
 			};
 		};
@@ -2187,6 +2194,12 @@ class planner extends class_base
 
 				$head .= $this->parse("header_cell");
 				$c .= $this->parse("content_cell");
+
+				$this->vars(array(
+                                        "lead" => "",
+                                        "moreinfo" => "",
+                                        "title" => "",
+                                ));
 
 				$this->vars(array(
 					"event" => $c1,
