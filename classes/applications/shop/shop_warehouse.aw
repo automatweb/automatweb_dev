@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.16 2004/09/17 12:18:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.17 2004/09/20 13:13:37 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -504,7 +504,8 @@ class shop_warehouse extends class_base
 		$ot = new object_tree(array(
 			"parent" => $this->config->prop("prod_fld"),
 			"class_id" => CL_MENU,
-			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
+			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
+			"sort_by" => "objects.jrk"
 		));
 		
 		classload("vcl/treeview");
@@ -604,6 +605,7 @@ class shop_warehouse extends class_base
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					), $o->class_id()),
 					"caption" => "Muuda"
 				)),
@@ -780,7 +782,8 @@ class shop_warehouse extends class_base
 		$ot = new object_tree(array(
 			"parent" => $this->config->prop("pkt_fld"),
 			"class_id" => CL_MENU,
-			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
+			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE),
+			"sort_by" => "objects.jrk"
 		));
 		
 		classload("vcl/treeview");
@@ -836,6 +839,7 @@ class shop_warehouse extends class_base
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					), CL_SHOP_PACKET),
 					"caption" => "Muuda"
 				)),
