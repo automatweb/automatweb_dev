@@ -38,7 +38,13 @@ text-decoration: none;
 
 	</tr>
 	<!-- END SUB: FILE -->
+	<!-- SUB: FILE_GROUP -->
+	<tr bgcolor="{VAR:group_bgcolor}">
+		<td class="{VAR:css_class}" colspan="{VAR:cols_count}">{VAR:content}</td>
+	</tr>
+	<!-- END SUB: FILE_GROUP -->
 </table>
 
 {VAR:reforb}
+
 </form>
