@@ -234,7 +234,7 @@ class export extends aw_template
 
 		if (!is_dir($this->folder))
 		{
-			$this->raise_error(ERR_SITEXPORT_NOFOLDER,"Folder $this->folder does not exist on server!",true);
+			$this->raise_error(ERR_SITEXPORT_NOFOLDER,sprintf(t("Folder %s does not exist on server!"), $this->folder),true);
 		}
 
 		if ($rule_id)
@@ -247,7 +247,7 @@ class export extends aw_template
 			$mt = filemtime(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id"));
 			if ((time() - $mt) < 600)
 			{
-				die("eksport juba k&auml;ib!");
+				die(t("eksport juba k&auml;ib!"));
 			}
 			unlink(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id"));
 		}
@@ -468,7 +468,7 @@ class export extends aw_template
 				echo "<b>Found stop flag as ".$_stfn.", shutting down.</b><br />\n";
 				$this->err_log[] = array(
 					"tm" => time(),
-					"msg" => "Found stop flag as ".$_stfn.", shutting down."
+					"msg" => sprintf(t("Found stop flag as %s, shutting down."), $_stfn)
 				);
 				$this->write_log();
 				@unlink($_stfn);
@@ -491,7 +491,7 @@ class export extends aw_template
 			echo "<p><br />VIGA, tyhi url! </b><br />";
 			$this->err_log[] = array(
 				"tm" => time(),
-				"msg" => "VIGA, tyhi url!"
+				"msg" => t("VIGA, tyhi url!")
 			);
 		}
 
@@ -780,7 +780,7 @@ class export extends aw_template
 			$this->err_log[] = array(
 				"tm" => time(),
 				"url" => $link,
-				"msg" => "VIGA! EI LEIDNUD ext for type $ct"
+				"msg" => sprintf(t("VIGA! EI LEIDNUD ext for type %s"), $ct)
 			);
 		}
 
@@ -1667,7 +1667,8 @@ class export extends aw_template
 		$fp = fopen(aw_ini_get("server.tmpdir")."/aw.export.stop","w");
 		fwrite($fp, $id);
 		fclose($fp);
-		die("Kirjutasin expordi stop flagi faili ".aw_ini_get("server.tmpdir")."/aw.export.stop<br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'>Tagasi</a>");
+		die("Kirjutasin expordi stop flagi faili ".
+			aw_ini_get("server.tmpdir")."/aw.export.stop<br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'>Tagasi</a>");
 	}
 
 	/**  
@@ -1752,7 +1753,8 @@ class export extends aw_template
 
 			set_time_limit(0);
 			$this->copy_contents($li, $this->folder);
-			die("<a href='".$this->mk_my_orb("pick_active_version", array())."'>Tagasi</a>");
+			die("<a href='".
+				$this->mk_my_orb("pick_active_version", array())."'>Tagasi</a>");
 		}
 		else
 		{

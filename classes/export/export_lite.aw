@@ -49,7 +49,7 @@ class export_lite extends aw_template
 			$mt = filemtime($this->lock_file);
 			if ((time() - $mt) < 600)
 			{
-				die("eksport juba k&auml;ib!");
+				die(t("eksport juba k&auml;ib!"));
 			}
 			unlink($this->lock_file);
 		}
@@ -1003,7 +1003,8 @@ class export_lite extends aw_template
 		$fp = fopen(aw_ini_get("server.tmpdir")."/aw.export_lite.stop","w");
 		fwrite($fp, $id);
 		fclose($fp);
-		die("Kirjutasin expordi stop flagi faili ".aw_ini_get("server.tmpdir")."/aw.export_lite.stop<br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'>Tagasi</a>");
+		die("Kirjutasin expordi stop flagi faili ".
+			aw_ini_get("server.tmpdir")."/aw.export_lite.stop<br /><a href='".$this->mk_my_orb("change", array("id" => $id))."'>Tagasi</a>");
 	}
 
 	function get_content_type_from_headers($headers)
