@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.12 2001/05/24 00:04:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.13 2001/05/28 17:38:30 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -636,7 +636,7 @@ classload("cache","validator","defs");
 				$this->vars($vars);
 			}
 
-			if ($GLOBALS["uid"] != "")
+			if (defined("UID"))
 			{
 				classload("users");
 				$t = new users;
@@ -654,6 +654,10 @@ classload("cache","validator","defs");
 				if ($this->prog_acl("view", PRG_MENUEDIT))
 				{
 					$this->vars(array("MENUEDIT_ACCESS" => $this->parse("MENUEDIT_ACCESS")));
+				}
+				else
+				{
+					$this->vars(array("MENUEDIT_ACCESS" => ""));
 				}
 				$login = $this->parse("logged");
 			}
