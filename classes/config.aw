@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.2 2001/05/18 18:46:59 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.3 2001/05/22 06:36:24 kristo Exp $
 class db_config extends aw_template {
 	function db_config() {
 		$this->db_init();
@@ -216,7 +216,7 @@ class db_config extends aw_template {
 		reset($class_defs);
 		while (list($clid,$desc) = each($class_defs))
 		{
-			$this->vars(array("name" => $desc[name], "url" => ($il[content][$clid][imgurl] == "" ? "/images/icon_aw.gif" : $il[content][$clid][imgurl]),"id" => $clid));
+			$this->vars(array("name" => $desc["name"], "url" => ($il["content"][$clid]["imgurl"] == "" ? "/images/icon_aw.gif" : $il["content"][$clid]["imgurl"]),"id" => $clid));
 			$l.=$this->parse("LINE");
 		}
 		$this->vars(array("LINE" => $l));
@@ -240,7 +240,7 @@ class db_config extends aw_template {
 		while (list(,$clid) = each($sel))
 		{
 			$ret.="\x01classicon\x02\n";
-			$icon = $il[content][$clid][imgid] ? $ic->get($il[content][$clid][imgid]) : -1;
+			$icon = $il["content"][$clid]["imgid"] ? $ic->get($il["content"][$clid]["imgid"]) : -1;
 			$ar = array("clid" => $clid, "icon" => $icon);
 			$ret.=serialize($ar)."\n";
 		}

@@ -7,6 +7,11 @@ function selall()
 	st = !st;
 	return false;
 }
+
+function del_ic()
+{
+document.boo.action.value='del_icons';document.boo.submit();
+}
 </script>
 <form name='boo' action='refcheck.{VAR:ext}' method=post>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
@@ -51,7 +56,7 @@ function selall()
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
-<td class="fgtext"><a href='javascript:document.boo.submit()'>Ekspordi</a><br><a href='#' onClick="boo.action.value='del_icons';document.boo.submit()">Kustuta</a></td>
+<td class="fgtext"><a href='javascript:document.boo.submit()'>Ekspordi</a><br><a href='javascript:del_ic()'>Kustuta</a></td>
 </tr>
 </table>
 </td>

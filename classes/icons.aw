@@ -152,7 +152,7 @@ class icons extends aw_template
 		$this->db_query("SELECT * FROM icons WHERE id = $id");
 		$ret = $this->db_next(false);
 		global $ext,$baseurl;
-		$ret[url] = $baseurl."/icon.$ext?id=$id";
+		$ret["url"] = $baseurl."/icon.$ext?id=$id";
 
 		$GLOBALS["icon_cache"][$id] = $ret;
 
@@ -168,19 +168,29 @@ class icons extends aw_template
 		}
 
 		$ic = $this->get($id);
-		header("Content-type: $ic[file_type]");
-		#print $ic[file_type];
-		echo $ic[file];
+		header("Content-type: ".$ic["file_type"]);
+		echo $ic["file"];
 	}
 
 	function get_url($row)
 	{
-		return $GLOBALS["baseurl"]."/icon.".$GLOBALS["ext"]."?id=".$row[id];
+		return $GLOBALS["baseurl"]."/icon.".$GLOBALS["ext"]."?id=".$row["id"];
 	}
 
 	function delete($id)
 	{
 		$this->db_query("DELETE FROM icons WHERE id = $id");
+	}
+
+	function del_icons($sel)
+	{
+		if(is_array($sel))
+		{
+			foreach($sel as $icon_id)
+			{
+				$this->delete($icon_id);
+			}
+		}
 	}
 
 	function sel_icon($rtype,$rid,$sstring = "",$sstring2 = "")
@@ -242,11 +252,10 @@ class icons extends aw_template
 		if (!is_array($sel))
 			return;
 
-
 		$sels = join(",",$sel);
 		$this->db_query("SELECT * FROM icons WHERE id IN ($sels)");
 		header("Content-type: automatweb/icon-export");
-		while ($row = $this->db_next())
+		while ($row = $this->db_next(false))
 		{
 			$ret.= "\x01icon\x02\n".serialize($row)."\n";
 		}
@@ -257,7 +266,7 @@ class icons extends aw_template
 	{
 		$this->db_query("SELECT * FROM icons");
 		header("Content-type: automatweb/icon-export");
-		while ($row = $this->db_next())
+		while ($row = $this->db_next(false))
 		{
 			$ret.= "\x01icon\x02\n".serialize($row)."\n";
 		}
@@ -295,7 +304,7 @@ class icons extends aw_template
 		while (list(,$v) = each($arr))
 		{
 			$v = unserialize($v);
-			if (!$this->get_icon_by_file($v[file]))
+			if (!$this->get_icon_by_file($v["file"]))
 			{
 				$this->add_array($v);
 				$cnt++;
@@ -308,7 +317,7 @@ class icons extends aw_template
 	function add_array($v)
 	{
 		// @desc: adds a new icon to the database. the icon is described in the array
-		$this->quote(&$v[file]);
+		$this->quote(&$v["file"]);
 		$id = $this->db_fetch_field("SELECT MAX(id) as id FROM icons","id")+1;
 		$this->db_query("INSERT INTO icons (id,name,comment,kelle,puhastatud,praht,opsys,p2rit,m2rks6nad,m2rks6nad2,programm,file,file_type) 
 										VALUES($id,'$v[name]','$v[comment]','$v[kelle]','$v[puhastatud]','$v[praht]','$v[opsys]','$v[p2rit]','$v[m2rks6nad]','$v[m2rks6nad2]','$v[programm]','$v[file]','$v[file_type]')");
@@ -320,7 +329,7 @@ class icons extends aw_template
 		$this->quote(&$fila);
 		$this->db_query("SELECT id FROM icons WHERE file = '$fila'");
 		$row = $this->db_next();
-		return $row[id];
+		return $row["id"];
 	}
 
 	function upload_zip($arr)
