@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cache_manager.aw,v 2.6 2003/10/05 20:47:53 duke Exp $
 
 /*
 
@@ -69,14 +70,14 @@ class cache_manager extends class_base
 	function callback_post_save($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
-		$delete = $ob['meta']['delete'];
+		$ob = $arr["obj_inst"];
+		$delete = $ob->prop("delete");
 
 		if ($delete == 1)
 		{
 			$cache_inst = get_instance("cache");
 			// go over all selected aliases and flush their caches
-			$alist = new aw_array($ob['meta']['aliases']);
+			$alist = new aw_array($ob->prop("aliases"));
 			$this->db_query("SELECT * FROM aliases WHERE id IN (".$alist->to_sql().")");
 			while ($row = $this->db_next())
 			{
@@ -84,25 +85,24 @@ class cache_manager extends class_base
 			}
 		}
 
-		if ($ob['meta']['repeater_obj'])
+		if ($ob->prop("repeater_obj"))
 		{
 			$sched = get_instance('scheduler');
 			$sched->remove(array(
-				'event' => str_replace('/automatweb','',$this->mk_my_orb('update_cache', array('id' => $id))),
+				'event' => str_replace('/automatweb','',$this->mk_my_orb('update_cache', array('id' => $ob->id()))),
 			));
 
 			$sched->add(array(
-				'event' => str_replace('/automatweb','',$this->mk_my_orb('update_cache', array('id' => $id))),
-				'rep_id' => $ob['meta']['repeater_obj']
+				'event' => str_replace('/automatweb','',$this->mk_my_orb('update_cache', array('id' => $ob->id()))),
+				'rep_id' => $ob->prop("repeater_obj"),
 			));
 		}
 	}
 
 	function update_cache($arr)
 	{
-		extract($arr);
-
-		$ob = $this->get_object($id);
+		// say what?
+		$ob = new object($arr["id"]);
 
 		die("yeah, all done");
 	}
