@@ -37,15 +37,15 @@
 <td class="fform">Linkide stiil:</td><td class="fform"><select name='link_style'>{VAR:link_style}</select></td>
 </tr>
 <tr>
-<td class="fform">Vaata link <i>popup</i>-s:</td><td class="fform"><input type="checkbox" name="view_new_win" value="1" {VAR:view_new_win}></td>
-</tr>
-<tr>
-<td class="fform"><i>Popup</i> akna mõõtmed:</td><td class="fform"><input type="text" name="new_win_x" value="{VAR:new_win_x}" size="3">x<input type="text" name="new_win_y" value="{VAR:new_win_y}" size="3">
+<td class="fform">Vaata link <i>popup</i>-s:</td>
+<td class="fform">
+	<input type="checkbox" name="view_new_win" value="1" {VAR:view_new_win}>
 </td>
 </tr>
 <tr>
-<td class="fform">Sulge aken nupp:</td><td class="fform">Kuvatud: <input type="checkbox" name="closewin" value="1" {VAR:closewin}>
-&nbsp;&nbsp;&nbsp;Tekst:<input type="text" name="closewin_value" value="{VAR:closewin_value}" size="20">
+<td class="fform"><i>Popup</i> akna mõõtmed:</td><td class="fform"><input type="text" name="new_win_x" value="{VAR:new_win_x}" size="3">x<input type="text" name="new_win_y" value="{VAR:new_win_y}" size="3">
+	Kerimisribad: <input type="checkbox" name="new_win_scroll" {VAR:new_win_scroll} value="1">
+	Fikseeritud suurus: <input type="checkbox" name="new_win_fixedsize" {VAR:new_win_fixedsize} value="1">
 </td>
 </tr>
 <tr>
