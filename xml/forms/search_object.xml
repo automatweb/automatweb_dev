@@ -1,0 +1,42 @@
+<?xml version='1.0'?>
+<elements>
+	<key type="text" name="name">
+		<source method="get_fvalue">
+		</source>
+	</key>
+
+	<key type="text" name="comment">
+		<source method="get_fvalue">
+		</source>
+	</key>
+
+	<key type="select" name="type">
+		<source method="get_fvalue">
+		</source>
+	</key>
+
+	<key type="select" name="parent">
+		<source method="get_fvalue">
+		</source>
+	</key>
+
+	<key type="select" name="createdby">
+		<source method="get_fvalue">
+		</source>
+	</key>
+
+	<key type="select" name="modifiedby">
+		<source method="get_fvalue">
+		</source>
+	</key>
+
+	<key type="checkbox" name="active">
+		<source method="get_fvalue">
+		</source>
+	</key>
+
+	<key type="text" name="alias">
+		<source method="get_fvalue">
+		</source>
+	</key>
+</elements>
