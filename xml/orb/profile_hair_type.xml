@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="profile_hair_type" folder="profiil" extends="class_base">
+	</class>
+</orb>
+		

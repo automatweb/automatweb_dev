@@ -1,0 +1,154 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>eyes_color</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRF_EYES_COLOR</reltype>
+            <automatic>1</automatic>
+            <group>settings</group>
+            <table>aw_profiles</table>
+            <field>eyes_color</field>
+            <caption>Silmade värv</caption>
+      </property>
+      <property>
+            <name>hair_color</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRF_HAIR_COLOR</reltype>
+            <automatic>1</automatic>
+            <group>settings</group>
+            <table>aw_profiles</table>
+            <field>hair_color</field>
+            <caption>Juuksevärv</caption>
+      </property>
+      <property>
+            <name>hair_type</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRF_HAIR_TYPE</reltype>
+            <automatic>1</automatic>
+            <group>settings</group>
+            <table>aw_profiles</table>
+            <field>hair_type</field>
+            <caption>Juuste tüüp</caption>
+      </property>
+      <property>
+            <name>body_type</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRF_BODY_TYPE</reltype>
+            <automatic>1</automatic>
+            <group>settings</group>
+            <table>aw_profiles</table>
+            <field>body_type</field>
+            <caption>Keha tüüp</caption>
+      </property>
+      <property>
+            <name>sexual_orientation</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRF_SEX_ORIENT</reltype>
+            <automatic>1</automatic>
+            <group>settings</group>
+            <table>aw_profiles</table>
+            <field>sexual_orientation</field>
+            <caption>Seksuaalne kalduvus   </caption>
+      </property>
+      <property>
+            <name>alcohol</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRF_ALCOHOL</reltype>
+            <automatic>1</automatic>
+            <group>settings</group>
+            <table>aw_profiles</table>
+            <field>alcohol</field>
+            <caption>Alkoholi tarbimine</caption>
+      </property>
+      <property>
+            <name>tobacco</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PRF_TOBACCO</reltype>
+            <automatic>1</automatic>
+            <group>settings</group>
+            <table>aw_profiles</table>
+            <field>tobacco</field>
+            <caption>Tubaka tarbimine</caption>
+      </property>
+      <property>
+            <name>org_add_comment</name>
+            <type>releditor</type>
+            <reltype>RELTYPE_TASK_COMMENT</reltype>
+            <props>
+                  <num_0>uname</num_0>
+                  <num_1>commtext</num_1>
+            </props>
+            <store>no</store>
+            <group>comments</group>
+            <table>objects</table>
+            <field>org_add_comment</field>
+            <caption>Lisa Kommentaar</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROFIIL</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
+            <comments>
+                  <caption>Kommentaarid</caption>
+            </comments>
+      </groupinfo>
+      <tableinfo>
+            <aw_profiles>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_profiles>
+      </tableinfo>
+      <reltypes>
+            <TASK_COMMENT>
+                  <value>1</value>
+                  <clid>CL_COMMENT</clid>
+                  <caption>Kommentaar</caption>
+            </TASK_COMMENT>
+            <PRF_EYES_COLOR>
+                  <value>2</value>
+                  <clid>CL_PROFILE_EYES_COLOR</clid>
+                  <caption>Silmade värv</caption>
+            </PRF_EYES_COLOR>
+            <PRF_HAIR_COLOR>
+                  <value>3</value>
+                  <clid>CL_HAIR_COLOR</clid>
+                  <caption>Juuksevärv</caption>
+            </PRF_HAIR_COLOR>
+            <PRF_HAIR_TYPE>
+                  <value>4</value>
+                  <clid>CL_PROFILE_HAIR_TYPE</clid>
+                  <caption>Juuksetüüp</caption>
+            </PRF_HAIR_TYPE>
+            <PRF_BODY_TYPE>
+                  <value>5</value>
+                  <clid>CL_PROFILE_BODY_TYPE</clid>
+                  <caption>Keha tüüp</caption>
+            </PRF_BODY_TYPE>
+            <PRF_SEX_ORIENT>
+                  <value>6</value>
+                  <clid>CL_SEXUAL_ORIENTATION</clid>
+                  <caption>Seksuaalne kalduvus</caption>
+            </PRF_SEX_ORIENT>
+            <PRF_ALCOHOL>
+                  <value>7</value>
+                  <clid>CL_PROFILE_ALCOHOL</clid>
+                  <caption>Alkoholi tarbimine</caption>
+            </PRF_ALCOHOL>
+            <PRF_TOBACCO>
+                  <value>8</value>
+                  <clid>CL_PROFILE_TOBACCO</clid>
+                  <caption>Tubaka tarbimine</caption>
+            </PRF_TOBACCO>
+            <AW_PERSON>
+                  <value>9</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Isikuobjekt</caption>
+            </AW_PERSON>
+      </reltypes>
+</properties>
+
