@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.4 2001/07/26 16:49:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.5 2001/10/08 14:47:37 kristo Exp $
 
 // form_actions.aw - creates and executes form actions
 lc_load("form");
@@ -76,7 +76,9 @@ class form_actions extends form_base
 				switch($type)
 				{
 					case "email":
-						$data = $email;
+						$data["email"] = $email;
+						$data["op_id"] = $op_id;
+						$data = serialize($data);
 						break;
 
 					case "move_filled":
@@ -151,7 +153,18 @@ class form_actions extends form_base
 			{
 				case "email":
 					$this->read_template("action_email.tpl");
-					$this->vars(array("email" => $row["data"],
+					$try = unserialize($row["data"]);
+					if (is_array($try))
+					{
+						$data = $try;
+					}
+					else
+					{
+						$data = array("email" => $data);
+					}
+					$opar = $this->get_op_list($id);
+					$this->vars(array("email" => $data["email"],
+														"ops" => $this->picker($data["op_id"],array(0 => "") + (array)$opar[$id]),
 														"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2))));
 					return $this->parse();
 					break;
