@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.11 2002/01/10 01:01:14 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.12 2002/02/18 13:43:04 kristo Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
 lc_load("form");
@@ -39,7 +39,7 @@ class form_import extends form_base
 		global $file,$file_type;
 		if (!is_uploaded_file($file))
 		{
-			$this->raise_error(LC_FORM_IMPORT_NOT_FILE_SELECTED,true);
+			$this->raise_error(ERR_FG_NOFILE,LC_FORM_IMPORT_NOT_FILE_SELECTED,true);
 		}
 
 		// liigutame faili kuskile seifi kohta ja j2tame meelde selle
@@ -238,7 +238,7 @@ class form_import extends form_base
 		global $file,$file_type;
 		if (!is_uploaded_file($file))
 		{
-			$this->raise_error(LC_FORM_IMPORT_NOT_FILE_SELECTED,true);
+			$this->raise_error(ERR_FG_NOFILE,LC_FORM_IMPORT_NOT_FILE_SELECTED,true);
 		}
 
 		// liigutame faili kuskile seifi kohta ja j2tame meelde selle
