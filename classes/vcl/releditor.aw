@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.22 2004/06/18 15:20:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.23 2004/07/01 12:31:24 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -126,11 +126,34 @@ class releditor extends core
 		// and to customize table display in manager mode
 		//$all_props = $t->get_property_group($filter);
 		$all_props = $t->load_defaults();
-
-		$this->all_props = $all_props;
-		
 		$act_props = array();
+		$use_form = $prop["use_form"];
 
+		if (!empty($use_form))
+		{
+			foreach($all_props as $key => $prop)
+			{
+				if (is_array($prop["form"]) && in_array($use_form,$prop["form"]))
+				{
+					$props[$key] = $key;
+				};
+			};
+		};
+
+		//if (!empty($form_type) || $visual != "manager")
+		//{
+			foreach($all_props as $key => $prop)
+			{
+				//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
+				if (is_array($props) && in_array($key,$props))
+				{
+					$act_props[$key] = $prop;
+				};
+			};
+		//};
+
+		$this->all_props = $act_props;
+		
 		$form_type = $arr["request"][$this->elname];
 		$this->form_type = $form_type;
 		if ($visual == "manager")
@@ -197,19 +220,8 @@ class releditor extends core
 			};
 		};
 
-		$use_form = $prop["use_form"];
 
 
-		if (!empty($form_type) || $visual != "manager")
-		{
-			foreach($all_props as $key => $prop)
-			{
-				if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
-				{
-					$act_props[$key] = $prop;
-				};
-			};
-		};
 
 		if (is_object($obj_inst))
 		{
@@ -278,7 +290,7 @@ class releditor extends core
 			$this->elname => "new",
 		));
 
-		classload("toolbar");
+		classload("vcl/toolbar");
 		$tb = new toolbar();
 		$tb->add_button(array(
 			"name" => "new",
@@ -496,7 +508,7 @@ class releditor extends core
 				else
 				{
 					// this shit takes care of those non-empty select boxes
-					if ($emb[$item["name"]] && $item["type"] != "datetime_select")
+					if ($emb[$item["name"]] && $item["type"] != "datetime_select" && $item["name"] != "status")
 					{
 						$el_count++;
 					};
