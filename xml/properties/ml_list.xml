@@ -44,6 +44,17 @@
             <caption>Dokument millele suunata</caption>
       </property>
       <property>
+            <name>member_config</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MEMBER_CONFIG</reltype>
+            <rel>1</rel>
+            <caption>Listi liikmete seadetevorm</caption>
+      </property>
+      <property>
             <name>member_list_tb</name>
             <table>objects</table>
             <field>meta</field>
@@ -365,6 +376,11 @@
                   <clid>CL_MESSAGE_TEMPLATE</clid>
                   <caption>kirja template</caption>
             </TEMPLATE>
+            <MEMBER_CONFIG>
+                  <value>5</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Listi liikme seadetevorm</caption>
+            </MEMBER_CONFIG>
       </reltypes>
 </properties>
 
