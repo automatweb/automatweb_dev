@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/index.aw,v 2.1 2001/05/31 18:17:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/index.aw,v 2.2 2001/06/18 21:34:25 kristo Exp $
 session_name("automatweb");
 session_start();
-if (!$uid) {
+if (!$uid) 
+{
 	include("sorry.aw");
-       exit;
+  exit;
 };
 global $HTTP_HOST;
 include("const.aw");

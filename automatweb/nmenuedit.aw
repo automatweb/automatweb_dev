@@ -16,7 +16,7 @@ if (!$tt->prog_acl("view", PRG_MENUEDIT))
 
 <frameset cols="30%,*" frameborder="yes" framespacing=1>
   <frame name="menuFrame" src="menuedit.aw?type=folders" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
-  <frame name="list" src="menuedit_right.html" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
+  <frame name="list" src="menuedit_right.aw" MARGINHEIGHT=0 MARGINWIDTH=0 scrolling=auto>
 </frameset>
 
 </html>
