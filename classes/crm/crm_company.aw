@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.49 2004/07/08 07:24:21 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.50 2004/07/08 09:21:07 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -356,8 +356,6 @@ class crm_company extends class_base
 	var $group_not_shown = true;
 	var $data = null;
 
-	var $no_customer_search_results = false;
-
 	var $customer_search_results;
 	//bad name, it is in the meaning of
 	//show_contacts_search
@@ -550,8 +548,16 @@ class crm_company extends class_base
 						));
 		}	
 	}
-	
-	
+
+	function callback_mod_tab($arr)
+	{
+		if($arr['id']=='customers')
+		{
+			$tmp_obj = new object($arr['request']['id']);
+			$arr['caption'] = $tmp_obj->prop('name');
+		}
+	}
+
 	function get_property($arr)
 	{
 		$data = &$arr['prop'];
@@ -580,9 +586,16 @@ class crm_company extends class_base
 			}
 			$arr['groupinfo']['my_customers']['caption'] = $name;
 		}
-	
+
+		if($arr['request']['group']=='relorg')
+		{
+			$this->show_customer_search=true;
+			$arr['request']['no_results'] = 1;
+		}
+
 		switch($data['name'])
 		{
+
 			//START OF CUSTOMER SEARCH
 			case 'customer_search_name':
 				if($this->show_customer_search)
@@ -665,15 +678,11 @@ class crm_company extends class_base
 				{
 					$filter = $this->construct_customer_search_filter(&$arr);
 					$this->customer_search_results = &$this->get_customer_search_results($filter);
-					if($this->customer_search_results && sizeof($this->customer_search_results->ids()))
+					if($this->customer_search_results && sizeof($this->customer_search_results->ids()) 
+						|| $arr['request']['no_results'])
 					{
 						return PROP_IGNORE;
 					}
-					else
-					{
-						$this->no_customer_search_results = true;
-					}
-				
 				}
 				else
 				{
