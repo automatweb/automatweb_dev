@@ -274,7 +274,7 @@
                   <submit>no</submit>
             </show_entries>
             <entries>
-                  <caption>Nï¿½ta sisestusi</caption>
+                  <caption>Näita sisestusi</caption>
                   <submit>no</submit>
                   <parent>show_entries</parent>
             </entries>
@@ -293,7 +293,7 @@
                   <parent>controllers</parent>
             </set_controllers>
             <get_controllers>
-                  <caption>Nï¿½tamine</caption>
+                  <caption>Näitamine</caption>
                   <parent>controllers</parent>
             </get_controllers>
       </groupinfo>

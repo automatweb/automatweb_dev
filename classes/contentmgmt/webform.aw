@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.32 2005/01/05 11:42:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.33 2005/01/06 12:45:55 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -90,7 +90,7 @@
 
 
 ------------- entries -------------
-@groupinfo entries caption="Nï¿½ta sisestusi" submit=no parent=show_entries
+@groupinfo entries caption="Näita sisestusi" submit=no parent=show_entries
 
 @property entries_toolbar type=toolbar group=entries,search no_caption=1
 @caption Sisestuste toolbar
@@ -123,7 +123,7 @@
 
 
 ------------- get_controllers -------------
-@groupinfo get_controllers caption="Nï¿½tamine" parent=controllers
+@groupinfo get_controllers caption="Näitamine" parent=controllers
 
 @property get_controller_folder type=relpicker reltype=RELTYPE_CONTROLLER_FOLDER field=meta method=serialize group=get_controllers
 @caption Kontrollerite kaust
@@ -271,13 +271,13 @@ class webform extends class_base
 		switch($prop["name"])
 		{
 			case "form_type_value":
-				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("Sndmuse vorm");
+				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("Sündmuse vorm");
 				break;
 				
 			case "form_type":
 				$prop["options"] = array(
 					CL_REGISTER_DATA => t("Tavaline vorm"),
-					CL_CALENDAR_REGISTRATION_FORM => t("Sndmuse vorm"),
+					CL_CALENDAR_REGISTRATION_FORM => t("Sündmuse vorm"),
 				);
 				break;
 				
@@ -519,7 +519,7 @@ class webform extends class_base
 		$arr["obj_inst"]->save();
 		$this->p_clid = $arr["request"]["form_type"];
 		$form = obj();
-		$form->set_name(($this->p_clid == CL_REGISTER_DATA ? "Registri andmed " : "Sndmuse vorm ").$arr["obj_inst"]->id());
+		$form->set_name(($this->p_clid == CL_REGISTER_DATA ? "Registri andmed " : "Sündmuse vorm ").$arr["obj_inst"]->id());
 		$form->set_parent($arr["obj_inst"]->id());
 		$form->set_class_id($this->p_clid);
 		$form->set_status(STAT_ACTIVE);
@@ -659,9 +659,14 @@ class webform extends class_base
 		}
 		$set_controllers = array(
 			array(
-				"name" => "*elemendinimi* peab olema tï¿½detud",
+				"name" => "Määra saatja aadressiks",
+				"formula" => 'aw_global_set("global_name", $prop["value"]);',
+				"errmgs" => "send_from_mail",
+			),
+			array(
+				"name" => "*elemendinimi* peab olema täidetud",
 				"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
-				"errmsg" => "%caption peab olema tï¿½detud",
+				"errmsg" => "%caption peab olema täidetud",
 			),
 			array(
 				"name" => "*elemendinimi* peab olema valitud",
@@ -669,7 +674,7 @@ class webform extends class_base
 				"errmsg" => "%caption peab olema valitud",
 			),
 			array(
-				"name" => "Kontrolli e-maili ï¿½gsust",
+				"name" => "Kontrolli e-maili õigsust",
 				"formula" => 'if(!is_email($prop["value"])){$retval = PROP_ERROR;}',
 				"errmsg" => "%caption sisestatud e-mailiaadress pole korrektne",
 			),
@@ -796,6 +801,10 @@ class webform extends class_base
 		// these props won't go to heaven
 		foreach($this->cfgform_i->all_props as $key => $prop)
 		{
+			if(!array_key_exists($prop["type"], $prop_order))
+			{
+				continue;
+			}
 			if(!in_array($prop_order[$prop["type"]], $show_props) && !array_key_exists($key, $c_props))
 			{
 				$show_props[$prop_order[$prop["type"]]] = $prop;
@@ -978,9 +987,9 @@ class webform extends class_base
 		);
 		$prp_types = array(
 			"" => "-- vali --",
-			"mselect" => "Mitmerealine rippmen",
-			"select" => "Rippmen",
-			"checkboxes" => "Mï¿½keruut",
+			"mselect" => "Mitmerealine rippmenüü",
+			"select" => "Rippmenüü",
+			"checkboxes" => "Märkeruut",
 			"radiobuttons" => "Raadionupp",
 		);
 		$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
@@ -1594,17 +1603,29 @@ class webform extends class_base
 			$emails = $obj_inst->connections_from(array(
 				"type" => "RELTYPE_EMAIL",
 			));
+			$nm = aw_global_get("global_name");
+			if(!empty($nm))
+			{
+				$prx = array(
+					"froma" => $nm,
+				);
+			}
+			else
+			{
+				$prx = array(
+					"fromn" => $obj_inst->prop("def_name"),
+					"froma" => $obj_inst->prop("def_mail"),
+				);
+			}
 			$awm = get_instance("protocols/mail/aw_mail");
 			foreach($emails as $eml)
 			{
 				$email = $eml->to();
 				$awm->create_message(array(
-					"fromn" => $obj_inst->prop("def_name"),
-					"froma" => $obj_inst->prop("def_mail"),
 					"subject" => $obj_inst->name(),
 					"to" => $email->prop("mail"),
 					"body" => $body,
-				));
+				) + $prx);
 				$awm->gen_mail();
 			}
 		}
