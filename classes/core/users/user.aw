@@ -1408,8 +1408,10 @@ class user extends class_base
 			"key" => "real_name",
 		));
 
+		obj_set_opt("no_cache", 1);
 		if($mail = $o->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 		{
+			obj_set_opt("no_cache", 0);
 			$mail->set_prop("mail", $umail);
 			$mail->set_prop("name", $uname);
 			$mail->set_name($uname." &lt;".$umail."&gt;");
@@ -1417,6 +1419,7 @@ class user extends class_base
 		}
 		else
 		{
+			obj_set_opt("no_cache", 0);
 			$mail = new object();
 			$mail->set_class_id(CL_ML_MEMBER);
 			$mail->set_parent($o->id());
@@ -1457,9 +1460,11 @@ class user extends class_base
 
 	function get_person_for_user($u)
 	{
+		obj_set_opt("no_cache", 1);
 		$person_c = reset($u->connections_from(array(
 			"type" => "RELTYPE_PERSON",
 		)));
+		obj_set_opt("no_cache", 0);
 
 		if (!$person_c)
 		{
@@ -1494,10 +1499,12 @@ class user extends class_base
 		$person = $this->get_current_person();
 		if ($person)
 		{
+			obj_set_opt("no_cache", 1);
 			$p_o = obj($person);
 			$org_c = reset($p_o->connections_from(array(
 				"type" => "RELTYPE_WORK",
 			)));
+			obj_set_opt("no_cache", 0);
 
 			if (!$org_c)
 			{
