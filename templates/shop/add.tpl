@@ -92,7 +92,7 @@ function idxforvalue(el,val)
 <!-- SUB: OF -->
 <tr>
 	<td class="fcaption2">{VAR:of_name}</td>
-	<td class="fcaption2"><input type='checkbox' name='of_rep[{VAR:of_id}]' VALUE='1' {VAR:of_checked}></td>
+	<td class="fcaption2"><input type='checkbox' name='of_rep[{VAR:of_id}]' VALUE='1' {VAR:of_checked}>&nbsp;&nbsp;V&auml;ljund:&nbsp;<select name='of_op[{VAR:of_id}]'>{VAR:of_ops}</select></td>
 </tr>
 <!-- END SUB: OF -->
 <tr>
