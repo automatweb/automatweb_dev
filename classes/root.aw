@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.15 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.16 2002/11/12 10:11:57 kristo Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -9,7 +9,7 @@ classload("defs");
 // in code and reduces the amount of indenting
 class aw_array
 {
-	function aw_array($arg)
+	function aw_array($arg = false)
 	{
 		$this->arg = (is_array($arg)) ? $arg : array();
 	}
@@ -17,6 +17,11 @@ class aw_array
 	function &get()
 	{
 		return $this->arg;
+	}
+
+	function get_at($key)
+	{
+		return $this->arg[$key];
 	}
 
 	function next()
@@ -27,6 +32,26 @@ class aw_array
 	function reset()
 	{
 		reset($this->arg);
+	}
+
+	function set($val)
+	{
+		$this->arg[] = $val;
+	}
+
+	function set_at($key, $val)
+	{
+		$this->arg[$key] = $val;
+	}
+
+	function to_sql()
+	{
+		$str = join(",",$this->arg);
+		if ($str == "")
+		{
+			return "NULL";
+		}
+		return $str;
 	}
 };
 
