@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.44 2003/02/14 14:31:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.45 2003/02/26 10:42:40 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -63,6 +63,10 @@
 
 class file extends class_base
 {
+	var $ext2type = array(
+		"pdf" => "application/pdf"
+	);
+
 	////
 	// !Konstruktor
 	function file()
@@ -482,6 +486,11 @@ class file extends class_base
 		$id = (int)$id;
 		$fc = $this->get_file_by_id($id);
 
+		if ($fc["type"] == "")
+		{
+			$pi = pathinfo($fc["name"]);
+			$fc["type"] = $this->ext2type[$pi['extension']];
+		}
 		header("Content-type: ".$fc["type"]);
 		header("Content-Disposition: filename=$fc[name]");
 		header("Pragma: no-cache");
@@ -499,6 +508,11 @@ class file extends class_base
 		}
 		else
 		{
+			if ($fc["type"] == "")
+			{
+				$pi = pathinfo($fc["name"]);
+				$fc["type"] = $this->ext2type[$pi['extension']];
+			}
 			header("Content-type: ".$fc["type"]);
 			header("Content-Disposition: filename=$fc[name]");
 			header("Pragma: no-cache");
