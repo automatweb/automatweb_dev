@@ -89,6 +89,7 @@ class site_template_compiler extends aw_template
 		}
 		$this->tplhash = md5($path.$tpl);
 		$this->parse_template_parts($mdefs);
+
 		$this->compile_template_parts();
 		$code =  "<?php\n".$this->generate_code()."?>";
 
@@ -144,17 +145,28 @@ class site_template_compiler extends aw_template
 			}
 
 			// check if it has HAS_IMAGE subtemplate or NO_IMAGE subtemplate
-			if ($this->is_parent_tpl("HAS_IMAGE", $tpl))
+			if ($this->is_parent_tpl("HAS_IMAGE", $tpl) || $this->is_template($tpl.".HAS_IMAGE"))
 			{
 				$this->menu_areas[$area]["levels"][$level]["has_image_tpl"] = 1;
 			}
-			if ($this->is_parent_tpl("NO_IMAGE", $tpl))
+			if ($this->is_parent_tpl("NO_IMAGE", $tpl) || $this->is_template($tpl.".NO_IMAGE"))
 			{
 				$this->menu_areas[$area]["levels"][$level]["no_image_tpl"] = 1;
 			}
-			if ($this->is_parent_tpl("HAS_LUGU", $tpl))
+
+			if ($this->is_parent_tpl("HAS_LUGU", $tpl) || $this->is_template($tpl.".HAS_LUGU"))
 			{
 				$this->menu_areas[$area]["levels"][$level]["has_lugu"] = 1;
+			}
+
+			if ($this->is_template("PREV_LINK_".$area."_L".$level))
+			{
+				$this->menu_areas[$area]["levels"][$level]["has_prev_link"] = 1;
+			}
+
+			if ($this->is_template("NEXT_LINK_".$area."_L".$level))
+			{
+				$this->menu_areas[$area]["levels"][$level]["has_next_link"] = 1;
 			}
 
 			// figure out if the template was inside another menu template
@@ -432,7 +444,12 @@ class site_template_compiler extends aw_template
 
 		$this->ops[] = array(
 			"op" => OP_LOOP_LIST_BEGIN,
-			"params" => array()
+			"params" => array(
+				"has_prev_link" => $ldat["has_prev_link"],
+				"has_next_link" => $ldat["has_next_link"],
+				"a_name" => $area,
+				"level" => $level
+			)
 		);
 
 		$tt = $ldat["templates"];		
@@ -525,7 +542,9 @@ class site_template_compiler extends aw_template
 						"has_image_tpl" => $ldat["has_image_tpl"],
 						"no_image_tpl" => $ldat["no_image_tpl"],
 						"a_parent" => $adat["parent"],
-						"level" => $level
+						"level" => $level,
+						"has_prev_link" => $ldat["has_prev_link"],
+						"has_next_link" => $ldat["has_next_link"]
 					)
 				);
 
@@ -1079,7 +1098,8 @@ class site_template_compiler extends aw_template
 
 		$ret = "";
 		$ret .= $this->_gi().$content_name." = \"\";\n";
-		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(), ".$loop_counter_name." = 0; !".$list_name."->end(); \$prev_obj = ".$o_name.",".$o_name." =& ".$list_name."->next(),".$loop_counter_name."++)\n";
+		
+		$ret .= $this->_gi()."for(".$o_name." =& ".$list_name."->begin(), ".$loop_counter_name." = 0,\$prev_obj = NULL; !".$list_name."->end(); \$prev_obj = ".$o_name.",".$o_name." =& ".$list_name."->next(),".$loop_counter_name."++)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 
@@ -1115,6 +1135,46 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."}\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
+
+		// if nextprev, then this be the place
+		if ($arr["has_prev_link"])
+		{
+			$ret .= $this->_gi()."if (\$prev_obj && aw_global_get(\"section\") == ".$o_name."->id())\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+				$ret .= $this->_gi()."\$this->vars(array(\n";
+				$this->brace_level++;
+					$ret .= $this->_gi()."\"link\" => \$this->make_menu_link(\$prev_obj)\n";
+				$this->brace_level--;
+				$ret .= $this->_gi()."));\n";
+
+				$ret .= $this->_gi()."\$this->vars(array(\n";
+				$this->brace_level++;
+					$ret .= $this->_gi()."\"PREV_LINK_".$arr["a_name"]."_L".$arr["level"]."\" => \$this->parse(\"PREV_LINK_".$arr["a_name"]."_L".$arr["level"]."\")\n";
+				$this->brace_level--;
+				$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+		}
+
+		if ($arr["has_next_link"])
+		{
+			$ret .= $this->_gi()."if ((\$prev_obj && aw_global_get(\"section\") == \$prev_obj->id()) || (!\$prev_obj && aw_global_get(\"section\") == ".$o_name."->parent()))\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+				$ret .= $this->_gi()."\$this->vars(array(\n";
+				$this->brace_level++;
+					$ret .= $this->_gi()."\"link\" => \$this->make_menu_link(".$o_name.")\n";
+				$this->brace_level--;
+				$ret .= $this->_gi()."));\n";
+				$ret .= $this->_gi()."\$this->vars(array(\n";
+				$this->brace_level++;
+					$ret .= $this->_gi()."\"NEXT_LINK_".$arr["a_name"]."_L".$arr["level"]."\" => \$this->parse(\"NEXT_LINK_".$arr["a_name"]."_L".$arr["level"]."\")\n";
+				$this->brace_level--;
+				$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+		}
 
 		return $ret;
 	}
