@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.17 2004/08/27 11:16:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.18 2004/12/22 09:38:44 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -32,6 +32,7 @@ class site_cache extends aw_template
 		else
 		if (($content = $this->get_cached_content($arr)))
 		{
+			$this->ip_access($arr);
 			return $this->do_final_content_checks($content);
 		}
 		// okey, now
@@ -198,6 +199,28 @@ class site_cache extends aw_template
 		aw_session_set("no_cache", 0);
 
 		return $res;
+	}
+
+	function ip_access($arr)
+	{
+		$so = obj(aw_global_get("section"));
+		$p = $so->path();
+		$p[] = $so;
+		$p = array_reverse($p);
+		foreach($p as $o)
+		{
+			$ipa = $o->meta("ip_allow");
+			$ipd = $o->meta("ip_deny");
+			if ((is_array($ipd) && count($ipd)) || (is_array($ipa) && count($ipa)))
+			{
+				$si = get_instance("contentmgmt/site_show");
+				$si->section_obj = $so;
+				$si->do_check_ip_access(array(
+					"allowed" => $ipa,
+					"denied" => $ipd
+				));
+			}
+		}
 	}
 }
 ?>

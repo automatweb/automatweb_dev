@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.107 2004/12/10 10:08:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.108 2004/12/22 09:38:45 kristo Exp $
 
 /*
 
@@ -303,23 +303,24 @@ class site_show extends class_base
 		if (count($allowed) > 0)
 		{
 			$deny = true;
+			$has_ip = false;
 			foreach($allowed as $ipid => $t)
 			{
-				if (!is_oid($ipid) || !$this->can("view", $ipid))
+				if (is_oid($ipid) && $this->can("view", $ipid))
 				{
-					continue;
-				}
-				$ipo = obj($ipid);
+					$has_ip = true;
+					$ipo = obj($ipid);
 
-				if ($ipa->match($ipo->prop("addr"), $cur_ip))
-				{
-					$deny = false;
+					if ($ipa->match($ipo->prop("addr"), $cur_ip))
+					{
+						$deny = false;
+					}
 				}
 			}
 
-			if ($deny)
+			if ($deny && $has_ip)
 			{
-				$this->no_access_redir($this->section_obj->id());
+				$this->no_ip_access_redir($this->section_obj->id());
 			}
 			else
 			{
@@ -330,23 +331,24 @@ class site_show extends class_base
 		if (count($denied) > 0)
 		{
 			$deny = false;
+			$has_ip = false;
 			foreach($denied as $ipid => $t)
 			{
-				if (!is_oid($ipid) || !$this->can("view", $ipid))
+				if (is_oid($ipid) && $this->can("view", $ipid))
 				{
-					continue;
-				}
-				$ipo = obj($ipid);
+					$ipo = obj($ipid);
+					$has_ip = true;
 
-				if ($ipa->match($ipo->prop("addr"), $cur_ip))
-				{
-					$deny = true;
+					if ($ipa->match($ipo->prop("addr"), $cur_ip))
+					{
+						$deny = true;
+					}
 				}
 			}
 
-			if ($deny)
+			if ($deny && $has_ip)
 			{
-				$this->no_access_redir($this->section_obj->id());
+				$this->no_ip_access_redir($this->section_obj->id());
 			}
 			else
 			{
@@ -2284,6 +2286,11 @@ class site_show extends class_base
 
 		$rv .= $this->build_popups();
 		return $rv;
+	}
+	
+	function no_ip_access_redir($o)
+	{
+		die(t("Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: ".aw_global_get("REMOTE_ADDR")."<br>Leht: ".$o));
 	}
 
 	////
