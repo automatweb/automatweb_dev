@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.48 2004/02/13 10:52:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.49 2004/03/08 17:51:16 kristo Exp $
 
 /*
 
@@ -278,7 +278,7 @@ class links extends class_base
 		};
 		return $retval;
 	}
-	
+
 	////
 	// !Hoolitseb ntx doku sees olevate extlinkide aliaste parsimise eest (#l2#)
 	function parse_alias($args = array())
@@ -295,6 +295,7 @@ class links extends class_base
 			"caption" => $caption,
 			"target" => $target,
 			"img" => $this->img,
+			"real_link" => $this->real_link
 		);
 		if (isset($tpls["link"]))
 		{
@@ -332,6 +333,7 @@ class links extends class_base
 		{
 			$linksrc = aw_ini_get("baseurl")."/".$link->id();
 		};
+		$this->real_link = $link->prop("url");
 
 		if ($link->prop("link_image_check_active") && ($link->prop("link_image_active_until") >= time()) )
 		{
