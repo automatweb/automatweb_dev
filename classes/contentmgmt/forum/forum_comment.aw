@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.6 2004/06/02 10:52:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.7 2004/06/04 11:43:04 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -119,7 +119,7 @@ class forum_comment extends class_base
 		{
 			$qparts["period"] = $arr["period"];
 		};
-		$q = sprintf("SELECT oid,name,created,createdby,commtext FROM objects
+		$q = sprintf("SELECT oid,uname,name,created,createdby,commtext FROM objects
 				LEFT JOIN forum_comments ON (objects.oid = forum_comments.id)
 				WHERE (%s) ORDER BY created",join(" AND ",map2("%s='%s'",$qparts)));
 
