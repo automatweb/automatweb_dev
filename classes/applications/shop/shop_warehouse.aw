@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.12 2004/06/17 13:39:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.13 2004/06/19 19:17:34 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -350,6 +350,16 @@ class shop_warehouse extends class_base
 		));
 
 		$this->_req_add_itypes($tb, $this->prod_type_fld, $data);
+
+		$tb->add_menu_item(array(
+			"parent" => "crt_".$this->prod_type_fld,
+			"text" => "Lisa kaust",
+			"link" => $this->mk_my_orb("new", array(
+				"parent" => $this->prod_tree_root,
+				"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+			), CL_MENU)
+		));
+
 
 		$tb->add_button(array(
 			"name" => "del",
@@ -1731,7 +1741,7 @@ class shop_warehouse extends class_base
 		$oc = obj($o->prop("order_center"));
 		$oc_i = $oc->instance();
 
-		$props = $oc_i->get_properties_from_data_form($oc);
+		$props = $oc_i->get_properties_from_data_form($oc, $cud);
 
 		if (($pp = $oc->prop("data_form_person")) && is_oid($o->prop("order_current_person")))
 		{
@@ -1804,6 +1814,9 @@ class shop_warehouse extends class_base
 			"user_data" => $o->meta("order_cur_ud")
 		));
 		$soc->clear_cart();
+		$o->set_prop("order_current_person", "");
+		$o->set_prop("order_current_org", "");
+		$o->save();
 		return $this->mk_my_orb("gen_pdf", array(
 			"id" => $ordid
 		), "applications/shop/shop_order");
@@ -1967,7 +1980,8 @@ class shop_warehouse extends class_base
 		$conf = obj($wh->prop("conf"));
 		$awa = new aw_array($conf->prop("manager_cos"));
 		$mc = $awa->get();
-		
+
+		$mc = $this->make_keys($mc);
 		if ($mc[$id])
 		{
 			return true;

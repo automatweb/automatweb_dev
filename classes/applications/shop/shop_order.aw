@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.6 2004/06/17 13:39:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.7 2004/06/19 19:17:34 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -515,7 +515,7 @@ class shop_order extends class_base
 		// get person
 		if ($o->prop("orderer_person"))
 		{
-			$po = obj($o->prop("orderer_person") && $this->can("view", $o->prop("orderer_person")));
+			$po = obj($o->prop("orderer_person"));
 			$this->vars(array(
 				"person_name" => $po->name(),
 			));

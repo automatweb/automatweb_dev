@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.8 2004/06/17 13:39:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.9 2004/06/19 19:17:34 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -628,7 +628,7 @@ class shop_order_center extends class_base
 		}
 	}
 
-	function get_properties_from_data_form($oc)
+	function get_properties_from_data_form($oc, $cud = array())
 	{
 		$ret = array();
 

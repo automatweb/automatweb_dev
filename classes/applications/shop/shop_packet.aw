@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.4 2004/05/06 12:19:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.5 2004/06/19 19:17:34 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -175,6 +175,11 @@ class shop_packet extends class_base
 		));
 
 		return $l_inst->parse();
+	}
+
+	function get_contained_products($o)
+	{
+		return array($o);
 	}
 }
 ?>
