@@ -152,6 +152,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="blank">
+			<function name="blank">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
