@@ -322,6 +322,12 @@ class object
 		return $GLOBALS["objects"][$this->oid]->properties($param);
 	}
 
+	function fetch()
+	{
+		return $GLOBALS["objects"][$this->oid]->fetch();
+	}
+
+
 	function is_cache_dirty()
 	{
 		return $GLOBALS["objects"][$this->oid]->is_cache_dirty($param);

@@ -769,6 +769,24 @@ class _int_object
 		return $this->obj["properties"];
 	}
 
+	function fetch()
+	{
+		// returns something which resembles the return value of get_object
+		// this approach might suck, but it's a awfully big task to convert
+		// _everything_ and I'm running out of time
+		$retval = array();
+		if (is_array($this->obj["properties"]))
+		{
+			$retval = $this->obj["properties"];
+			unset($this->obj["properties"]);
+		};
+		if (is_array($this->obj))
+		{
+			$retval = array_merge($retval,$this->obj);
+		};
+		return $retval;
+	}
+
 	function is_cache_dirty()
 	{
 		return $this->obj["cachedirty"];
