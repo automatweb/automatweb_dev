@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.9 2005/03/29 05:54:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.10 2005/03/30 20:18:20 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -186,16 +186,6 @@ class css extends class_base
 		die($this->parse());
 	}
 
-	/**
-		@attrib name=table_dialog all_args="1"
-
-	**/
-	function table_dialog($arr)
-	{
-		$this->tpl_init("automatweb");
-		$this->read_template("insert_table.tpl");
-		die($this->parse());
-	}
 
 	function get_style_data_by_id($id)
 	{
