@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.115 2004/10/13 09:19:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.116 2004/10/27 15:23:44 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -133,7 +133,14 @@ class image extends class_base
 			if (!empty($imgbaseurl))
 			{
 				$first = substr(basename($url),0,1);
-				$url = $this->cfg["baseurl"] . $imgbaseurl . "/" . $first . "/" . basename($url);
+				if (substr($imgbaseurl, 0, 4) == "http")
+				{
+					$url = $imgbaseurl . "/" . $first . "/" . basename($url);
+				}
+				else
+				{
+					$url = $this->cfg["baseurl"] . $imgbaseurl . "/" . $first . "/" . basename($url);
+				}
 			}
 			else
 			{
