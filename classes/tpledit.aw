@@ -15,12 +15,28 @@ class tpledit extends aw_template {
 
 	}
 
+	////
+	// !Displays the directory browser
 	function browse($args = array())
 	{
 		extract($args);
+
+		// gather information about all template metaobjects
+		$q = "SELECT * FROM objects WHERE class_id = " . CL_TEMPLATE;
+		$this->db_query($q);
+		$tdata = array();
+		while($row = $this->db_next())
+		{
+			$tdata[$row["name"]] = $row;
+		}
+
 		global $tpldirs,$HTTP_HOST;
 		$tpldir = $tpldirs[$HTTP_HOST];
 		$tplroot = $tpldir;
+		if (!$parent)
+		{
+			$parent = "root";
+		};
 		if ($parent == "root")
 		{
 			$parent = "/";
@@ -52,6 +68,7 @@ class tpledit extends aw_template {
 		$d = "";
 		$f = "";
 
+		// Joonistame kataloogid
 		foreach($dirs as $name)
 		{
 			$fullname = $tpldir .$name;
@@ -65,6 +82,7 @@ class tpledit extends aw_template {
 			$d .= $this->parse("directory");
 		};
 
+		// Joonistame failid
 		foreach($files as $name)
 		{
 			$fullname = $tpldir . $sep . $name;
@@ -73,6 +91,7 @@ class tpledit extends aw_template {
 				"name" => $name,
 				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
 				"size" => $stat[$fullname][FILE_SIZE],
+				"modifiedby" => $tdata[$relname]["modifiedby"],
 				"edlink" => $this->mk_orb("edit",array("file" => $relname)),
 				"dnlink" => $this->mk_orb("download",array("file" => $relname)),
 			));
@@ -107,11 +126,13 @@ class tpledit extends aw_template {
 		return $this->parse();
 	}
 
+	// Kuvab faili edimise vormi
 	function edit($args = array())
 	{
 		extract($args);
 		global $tpldirs,$HTTP_HOST;
 		$tpldir = $tpldirs[$HTTP_HOST];
+		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
 		$source = join("",@file($tpldir . "/" . $file));
 		$this->read_template("edit.tpl");
 		$this->vars(array(
@@ -129,13 +150,45 @@ class tpledit extends aw_template {
 		extract($args);
 		global $tpldirs,$HTTP_HOST;
 		$tpldir = $tpldirs[$HTTP_HOST];
-		$fullpath = $tpldir . $args["file"];
+		$fullpath = $tpldir . "/" . $args["file"];
 		$this->put_file(array(
 			"file" => $fullpath,
 			"content" => stripslashes($source),
 		));
+		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
+		if (not($meta_obj))
+		{
+			print "registering new object<br>";
+			// Objekti polnud, teeme uue
+			$this->new_object(array(
+					"class_id" => CL_TEMPLATE,
+					"name" => $file,
+			));
+		}
+		else
+		{
+			print "updagint existing object<br>";
+			// Uuendame olemasoleva objekti metainfot
+			$this->upd_object(array(
+					"oid" => $meta_obj["oid"],
+					"name" => $file,
+			));
+		}
 		return $this->mk_orb("edit",array("file" => $file));
 	}
+
+	// Fetchib template metaobjekti
+	// name(string) - template nimi
+	function _fetch_tpl_obj($args = array())
+	{
+		extract($args);
+		$q = sprintf("SELECT * FROM objects WHERE class_id = %d AND name = '%s'",
+					CL_TEMPLATE,$name);
+		$this->db_query($q);
+		$row = $this->db_next();
+		return $row;
+	}
+
 
 	function download($args = array())
 	{
