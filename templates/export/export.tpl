@@ -70,6 +70,10 @@ onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseu
 		<td class="celltext">Kuidas tehakse failide nimed:</td>
 		<td colspan="2" class="celltext"><input type='radio' class='formradio' name='fn_type' value='1' {VAR:fn_type_1}> sektsiooni id <input type='radio' class='formradio' name='fn_type' value='2' {VAR:fn_type_2}> men&uuml;&uuml; nimi <input type='radio' class='formradio' name='fn_type' value='3' {VAR:fn_type_3}> hash <input type='radio' class='formradio' name='fn_type' value='4' {VAR:fn_type_4}> men&uuml;&uuml;aliased </td>
 	</tr>
+	<tr class="aste05">
+		<td class="celltext">Kataloogid millele saab ruule teha:</td>
+		<td colspan="2" class="celltext"><select class='formselect' name='rule_folders[]' multiple size=20>{VAR:rule_folders}</select></td>
+	</tr>
 </table>
 
 </td>
