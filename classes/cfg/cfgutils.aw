@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.40 2004/04/07 14:57:05 duke Exp $
+// $Id: cfgutils.aw,v 1.41 2004/04/13 12:19:44 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -58,24 +58,14 @@ class cfgutils extends aw_template
 		};
 
 		$retval = false;
-
+		
 		if ($fname)
 		{
+			// that check is a bit of stupid, OTOH it needs to be fast
 			$retval = file_exists($this->fbasedir . $fname . '.xml');
 		};
 
 		return $retval;
-	}
-
-	function get_clid_by_file($args = array())
-	{
-		$this->_init_clist();
-		return array_search($args['file'],$this->clist);
-	}
-
-	function get_clid_by_cldef($args = array())
-	{
-		return constant($args['cldef']);
 	}
 
 	////
@@ -148,6 +138,16 @@ class cfgutils extends aw_template
 			$tableinfo = $parser->get_data("/properties/tableinfo");
 			$relinfo = $parser->get_data("/properties/reltypes");
 			$forminfo = $parser->get_data("/properties/forminfo");
+			$columns = $parser->get_data("/properties/columns");
+			$tmp = array();
+			if (is_array($columns[0]))
+			{
+				foreach($columns[0] as $key => $val)
+				{
+					$tmp[$key] = $this->normalize_text_nodes($val[0]);
+				};
+			};
+			$this->columns = $tmp;
 			$tmp = array();
 			if (is_array($groupinfo[0]))
 			{	
@@ -457,6 +457,7 @@ class cfgutils extends aw_template
 			$classinfo = $parser->get_data("/properties/classinfo");
 			$groupinfo = $parser->get_data("/properties/groupinfo");
 			$tableinfo = $parser->get_data("/properties/tableinfo");
+			$columns = $parser->get_data("/properties/column");
 
 			$tmp = array();
 			if (is_array($groupinfo[0]))
@@ -512,6 +513,11 @@ class cfgutils extends aw_template
 	function get_forminfo()
 	{
 		return $this->forminfo;
+	}
+
+	function get_columninfo()
+	{
+		return $this->columns;
 	}
 
 	function get_groupinfo()
