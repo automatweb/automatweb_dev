@@ -73,7 +73,7 @@
 												<td colspan="2" class="celltext"><input type="checkbox" {VAR:has_grpnames} name="settings[has_grpnames]" value="1" class="formcheck">N?ita tulpade nimesid iga grupeerimiselemendi all</td>
 											</tr>
 											<tr>
-												<td colspan="2" class="celltext"><input type="checkbox" {VAR:has_print_button} name="settings[print_button]" value="1" class="formcheck">Prindi nupp &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Browse ikoon&nbsp;<input type="file" class="formfile" name="settings[print_button_file]"></td>
+												<td colspan="2" class="celltext"><input type="checkbox" {VAR:has_print_button} name="settings[print_button]" value="1" class="formcheck">Prindi nupp &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Browse ikoon&nbsp;<input type="file" class="formfile" name="settings_print_button_file"> {VAR:print_button_file}</td>
 											</tr>
 <!-- SUB: CHANGE -->
 											<tr>
