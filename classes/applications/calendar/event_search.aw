@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.24 2005/01/24 11:23:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.25 2005/01/24 13:42:50 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -737,10 +737,6 @@ class event_search extends class_base
 					$parx2[] = $rn2;
 				}
 			}
-			if(is_oid($arr["evt_id"]) && $this->can("view", $arr["evt_id"]))
-			{
-				$search["brother_of"] = $arr["evt_id"];
-			}
 			$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
 			$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
 			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
@@ -758,6 +754,10 @@ class event_search extends class_base
 					"conditions" => $or_parts,
 				));
 			}
+			if(is_oid($arr["evt_id"]) && $this->can("view", $arr["evt_id"]))
+			{
+				$search = array("brother_of" => $arr["evt_id"]);
+			}
 			$clinf = aw_ini_get("classes");
 			$edata = array();
 			$ecount = array();
@@ -765,30 +765,37 @@ class event_search extends class_base
 			// it would be a nice habbit to always commment my own code,
 			// but then again, these magical bugs have miraculous ability to come into
 			// makes tasklist, so why bother :) ok ok, i really should...
-			if (sizeof($search["parent"]) != 0)
+			if (sizeof($search["parent"]) != 0 || $search["brother_of"])
 			{
-				$ol = new object_list($search);
-				$oris = $ol->brother_ofs();
-				$search2 = $search;
-				$search2["parent"] = $parx2;
-				$ol = new object_list($search2);
-				$oris2 = $ol->brother_ofs();
-				$ids = array_intersect($oris2, $oris);
-				if(!empty($ids))
+				if($search["brother_of"])
 				{
-					$ol = new object_list(array(
-						"oid" => $ids,
-						"class_id" => array(CL_CRM_MEETING, CL_CALENDAR_EVENT),
-						"CL_CRM_MEETING.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm),
-						"CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
-						"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm),
-						"CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
-						"sort_by" => "planner.start",
-					));
+					$ol = new object_list($search);
 				}
 				else
 				{
-					$ol = new object_list();
+					$ol = new object_list($search);
+					$oris = $ol->brother_ofs();
+					$search2 = $search;
+					$search2["parent"] = $parx2;
+					$ol = new object_list($search2);
+					$oris2 = $ol->brother_ofs();
+					$ids = array_intersect($oris2, $oris);
+					if(!empty($ids))
+					{
+						$ol = new object_list(array(
+							"oid" => $ids,
+							"class_id" => array(CL_CRM_MEETING, CL_CALENDAR_EVENT),
+							"CL_CRM_MEETING.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm),
+							"CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+							"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm),
+							"CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+							"sort_by" => "planner.start",
+						));
+					}
+					else
+					{
+						$ol = new object_list();
+					}
 				}
 				
 				$this->read_template(($search["brother_of"] ? "show_event.tpl" : "search_results.tpl"));
@@ -820,7 +827,6 @@ class event_search extends class_base
 				$origs = array();
 				foreach($ol->arr() as $res)
 				{
-					
 					$pr = new object($res->parent());
 					// see on project
 					// aga mitte orig_name vaid .. HAHA. bljaad raisk
@@ -854,6 +860,14 @@ class event_search extends class_base
 					$orig = $res->get_original();
 					if (!$edata[$orig_id])
 					{
+						$bros = new object_list(array(
+							"brother_of" => $orig_id,
+						));
+						$prjx = array();
+						foreach($bros->arr() as $bro)
+						{
+							$prjx[] = $bro->prop("project_selector");
+						}
 						//arr($orig->properties());
 						//$edata[$orig_id] = $orig->properties();
 						
@@ -868,7 +882,7 @@ class event_search extends class_base
 							"date" => date("d-m-Y", $res->prop("start1")),
 						);
 						$edata[$orig_id] = array_merge($edata[$orig_id], $orig->properties());
-						
+						$edata[$orig_id]["project_selector"] = implode(", ", $prjx);
 					};
 					//arr($orig->properties());
 					$ecount[$orig_id]++;
