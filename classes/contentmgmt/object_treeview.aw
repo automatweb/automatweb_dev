@@ -16,14 +16,17 @@
 @property folders type=text store=no group=folders callback=callback_get_menus
 @caption Kataloogid
 
+@property root_name type=textbox group=folders field=meta table=objects method=serialize
+@caption Rootkataloogi nimi
+
 @property show_folders type=checkbox ch_value=1 field=meta method=serialize
 @caption N&auml;ita katalooge
 
 @property show_add type=checkbox ch_value=1 field=meta method=serialize
 @caption N&auml;ita toolbari
 
-@property js_tree type=checkbox ch_value=1 field=meta method=serialize
-@caption Puu puhul kasuta javascripti
+@property tree_type type=chooser  field=meta method=serialize default=1
+@caption Puu n&auml;itamise meetod
 
 @property groupfolder_acl type=checkbox ch_value=1 field=meta method=serialize
 @caption &Otilde;igused piiratud grupi kataloogide j&auml;rgi
@@ -84,6 +87,19 @@ class object_treeview extends class_base
 			"FOLDERS" => $this->_draw_folders($ob, $ol, $fld)
 		));
 
+		// get all related object types
+		// and their cfgforms
+		// and make a nice little lut from them.
+		$class2cfgform = array();
+		foreach($ob->connections_from(array("type" => RELTYPE_ADD_TYPE)) as $c)
+		{
+			$addtype = $c->to();
+			if ($addtype->prop("use_cfgform"))
+			{
+				$class2cfgform[$addtype->prop("type")] = $addtype->prop("use_cfgform");
+			}
+		}
+
 		$cnt = 0;
 		$c = "";
 		foreach($ol as $oid)
@@ -135,6 +151,7 @@ class object_treeview extends class_base
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $od->id(), 
 						"section" => $od->parent(),
+						"cfgform" => $class2cfgform[$od->class_id()]
 					), $fl),
 					"caption" => html::img(array(
 						"border" => 0,
@@ -156,7 +173,7 @@ class object_treeview extends class_base
 			$modder = $od->modifiedby();
 			$this->vars(array(
 				"show" => $url,
-				"name" => $od->name(),
+				"name" => parse_obj_name($od->name()),
 				"oid" => $od->id(),
 				"target" => $target,
 				"sizeBytes" => $fileSizeBytes,
@@ -436,10 +453,10 @@ class object_treeview extends class_base
 		// use treeview widget
 		$tv = get_instance("vcl/treeview");
 		$tv->start_tree(array(
-			"root_name" => "",
-			"root_url" => "",
+			"root_name" => $ob->prop("root_name"),
+			"root_url" => $this->mk_my_orb("show", array("id" => $ob->id(), "section" => aw_global_get("section"))),
 			"root_icon" => "",
-			"type" => ($ob->meta('js_tree') ? TREE_JS : TREE_HTML)
+			"type" => $ob->meta('tree_type')
 		));
 
 		// now, insert all folders defined
@@ -746,6 +763,20 @@ class object_treeview extends class_base
 	function get_yah_link($tree, $cur_menu)
 	{
 		return $this->mk_my_orb("show", array("id" => $tree, "tv_sel" => $cur_menu->id(), "section" => $cur_menu->id()));
+	}
+
+	function get_property($arr)
+	{
+		$prop =&$arr["prop"];
+		if ($prop["name"] == "tree_type")
+		{
+			$prop["options"] = array(
+				TREE_HTML => "HTML",
+				TREE_JS => "Javascript",
+				TREE_DHTML => "DHTML"
+			);
+		}
+		return PROP_OK;
 	}
 }
 ?>
