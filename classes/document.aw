@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.300 2004/11/10 14:48:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.301 2004/11/15 17:45:59 sven Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -541,9 +541,9 @@ class document extends aw_template
 		
 		
 		if(aw_ini_get("document.parse_keywords") && $doc_o->prop("link_keywords2"))
-		{
-			
+		{	
 			$this->parse_keywords($doc["content"]);	
+			$this->parse_keywords($doc["lead"]);
 		}
 		
 		$awt->stop("phase4");
