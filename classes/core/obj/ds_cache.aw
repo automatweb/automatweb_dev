@@ -150,7 +150,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			return false;
 		}
-		$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$cfn."-$fn-$oid";
+		$fqfn = $this->cache->get_fqfn($cfn."-$fn-$oid");
 		if (file_exists($fqfn))
 		{
 			include($fqfn);

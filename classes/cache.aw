@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.23 2004/02/25 16:12:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.24 2004/03/10 15:27:55 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -39,7 +39,27 @@ class cache extends core
 			{
 				$fname = "/".md5($fname);
 			}
-			$fname = $this->cfg["page_cache"].$fname;
+
+			$hash = md5($fname);
+			$fqfn = $this->cfg["page_cache"]."/".$hash{0};
+			if (!is_dir($fqfn))
+			{
+				mkdir($fqfn, 0777);
+			}
+
+			$fqfn .= "/".$hash{1};
+			if (!is_dir($fqfn))
+			{
+				mkdir($fqfn, 0777);
+			}
+
+			$fqfn .= "/".$hash{2};
+			if (!is_dir($fqfn))
+			{
+				mkdir($fqfn, 0777);
+			}
+
+			$fname = $fqfn.$fname;
 			$this->put_file(array("file" => $fname, "content" => $content));
 			if ($clear_flag)
 			{
@@ -74,7 +94,7 @@ class cache extends core
 			{
 				$fname = "/".md5($fname);
 			}
-			$fname = $this->cfg["page_cache"].$fname;
+			$fname = $this->get_fqfn($fname);
 			if ($this->cache_dirty($oid, $fname))
 			{
 				return false;
@@ -102,7 +122,29 @@ class cache extends core
 	{
 		if ($this->cfg["page_cache"] != "")
 		{
-			$fname = $this->cfg["page_cache"] . "/$key";
+			$fname = $this->cfg["page_cache"];
+
+			$hash = md5($key);
+			// make 3-level folder structure
+			$fname .= "/".$hash{0};
+			if (!is_dir($fname))
+			{
+				mkdir($fname, 0777);
+			}
+
+			$fname .= "/".$hash{1};
+			if (!is_dir($fname))
+			{
+				mkdir($fname, 0777);
+			}
+
+			$fname .= "/".$hash{2};
+			if (!is_dir($fname))
+			{
+				mkdir($fname, 0777);
+			}
+
+			$fname .= "/$key";
 			$this->put_file(array("file" => $fname, "content" => $value));
 		}
 	}
@@ -113,7 +155,16 @@ class cache extends core
 		{
 			return false;
 		}
-		return $this->get_file(array("file" => $this->cfg["page_cache"]."/".$key));
+
+		return $this->get_file(array(
+			"file" => $this->get_fqfn($key)
+		));
+	}
+
+	function get_fqfn($key)
+	{
+		$hash = md5($key);
+		return $this->cfg["page_cache"]."/".$hash{0}."/".$hash{1}."/".$hash{2}."/".$key;
 	}
 
 	function file_get_ts($key, $ts)
@@ -122,7 +173,7 @@ class cache extends core
 		{
 			return false;
 		}
-		$fqfn = $this->cfg["page_cache"]."/".$key;
+		$fqfn = $this->get_fqfn($key);
 		if ((@filemtime($fqfn)) < $ts)
 		{
 			return false;
@@ -135,7 +186,7 @@ class cache extends core
 	{
 		if ($this->cfg["page_cache"] != "")
 		{
-			@unlink($this->cfg["page_cache"]."/".$key);
+			@unlink($this->get_fqfn($key));
 		}
 	}
 
@@ -254,23 +305,35 @@ class cache extends core
 	// in the correct directory. 
 	function file_invalidate_regex($regex)
 	{
-		$cnt = 0;
-		if ($dir = @opendir($this->cfg["page_cache"])) 
+		$this->__fir_cnt = 0;
+		$this->_file_inv_re_req($this->cfg["page_cache"], $regex);
+		return $this->__for_cnt;
+	}
+
+	function _file_inv_re_req($fld, $regex)
+	{
+		if ($dir = @opendir($fld)) 
 		{
-		  while (($file = readdir($dir)) !== false) 
+			while (($file = readdir($dir)) !== false) 
 			{
 				if (!($file == "." || $file == ".."))
 				{
-					if (preg_match("/$regex/", $file))
+					if (is_dir($fld."/".$file))
 					{
-						$this->file_invalidate($file);
-						$cnt++;
+						$this->_file_inv_re_req($fld."/".$file, $regex);
+					}
+					else
+					{
+						if (preg_match("/$regex/", $file))
+						{
+							$this->file_invalidate($file);
+							$this->__fir_cnt++;
+						}
 					}
 				}
 			}
-	  }  
-	  closedir($dir);
-		return $cnt;
+		}  
+		closedir($dir);
 	}
 };
 ?>

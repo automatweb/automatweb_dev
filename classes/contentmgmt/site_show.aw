@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.42 2004/03/08 17:53:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.43 2004/03/10 15:27:55 kristo Exp $
 
 /*
 
@@ -1860,7 +1860,7 @@ class site_show extends class_base
 	function get_cached_compiled_filename($arr)
 	{
 		$tpl = $arr["tpldir"]."/".$arr["template"];
-		$fn = aw_ini_get("cache.page_cache")."/compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
+		$fn = $this->cache->get_fqfn("compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id"));
 		if (file_exists($fn) && is_readable($fn) && filectime($fn) > filectime($tpl))
 		{
 			return $fn;
@@ -1881,7 +1881,7 @@ class site_show extends class_base
 		$ca = get_instance("cache");
 		$ca->file_set($fn, $code);
 
-		return aw_ini_get("cache.page_cache")."/".$fn;
+		return $ca->get_fqfn($fn);
 	}
 
 	function do_show_template($arr)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.28 2004/02/11 11:33:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.29 2004/03/10 15:27:55 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -122,9 +122,13 @@ class menu_cache extends aw_template
 		{
 			$lang_id = aw_global_get("lang_id");
 		}
+
+		$cache = get_instance("cache");
+
 		$SITE_ID = $this->cfg["site_id"];
 		$filename = "menuedit-menu_cache-lang-" . $lang_id . "-site_id-" . $SITE_ID."-period-".$this->period;
-		$fn = aw_ini_get("cache.page_cache")."/".$filename;
+		$fn = $cache->get_fqfn($filename);
+
 		if ($this->loaded_cache != $filename)
 		{
 			// argh. lets NOT clear the menu cache if we are not going to reload it !
@@ -143,7 +147,6 @@ class menu_cache extends aw_template
 				// and retry
 				if (!$cache_loaded)
 				{
-					$cache = get_instance("cache");
 					$cache->file_invalidate($filename);
 					$this->make_caches($args);
 				}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.57 2004/03/10 12:34:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.58 2004/03/10 15:27:55 kristo Exp $
 
 lc_load("definition");
 
@@ -303,7 +303,9 @@ class acl_base extends db_connector
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
 		{
 			// try for file cache
-			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
+			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
+			$hash = md5($fn);
+			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$hash{1}."/".$hash{2}."/".$fn;
 			if (file_exists($fqfn))
 			{
 				include($fqfn);
@@ -318,7 +320,29 @@ class acl_base extends db_connector
 					$str = "<?php\n";
 					$str .= aw_serialize($max_acl, SERIALIZE_PHP_FILE, array("arr_name" => "max_acl"));
 					$str .= "?>";
-				
+
+					// make folders if not exist. this is copypaste from cache class, but we can't access that from here. 
+					$fname = $GLOBALS["cfg"]["cache"]["page_cache"];
+
+					// make 3-level folder structure
+					$fname .= "/".$hash{0};
+					if (!is_dir($fname))
+					{
+						mkdir($fname, 0777);
+					}
+
+					$fname .= "/".$hash{1};
+					if (!is_dir($fname))
+					{
+						mkdir($fname, 0777);
+					}
+
+					$fname .= "/".$hash{2};
+					if (!is_dir($fname))
+					{
+						mkdir($fname, 0777);
+					}
+
 					$fp = fopen($fqfn, "w");
 					flock($fp, LOCK_EX);
 					fwrite($fp, $str);
