@@ -24,7 +24,7 @@ class dronline_log extends class_base
 		extract($arr);
 		$ob = $this->_change_init($arr, 'AW_Log');
 
-		$fn = '_do_'.$ob['meta']['dro_type'];
+		$fn = '_do_'.($ob['meta']['dro_type'] != "" ? $ob['meta']['dro_type'] : "dronline");
 
 		$dro = get_instance('syslog/dronline');
 		$ret = $dro->$fn(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.16 2005/02/16 09:41:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.17 2005/03/01 14:38:13 kristo Exp $
 /*
 
 @default table=objects
@@ -101,12 +101,12 @@ class dronline_conf extends class_base
 		else
 		if ($prop['name'] == 'from' && $arr['new'])
 		{
-			$prop['value'] = mktime(0,0,0,1,1,date("Y"));
+			//$prop['value'] = mktime(0,0,0,1,1,date("Y"));
 		}
 		else
 		if ($prop['name'] == 'to' && !$arr['new'])
 		{
-			$prop['value'] = time();
+			//$prop['value'] = time();
 		}
 		else
 		if (($prop['name'] == 'name' || $prop['name'] == 'comment' || $prop['name'] == 'status') && $this->embedded == true)
@@ -256,7 +256,7 @@ class dronline_conf extends class_base
 			{
 				// check if this action applies for this type
 				$tlist = explode(",", $acd['types']);
-				if (in_array($tpid, $tlist))
+				if (in_array($tpid, $tlist) || $acid == SA_DELETE)
 				{
 					$rt = 'slc_'.$tpid.'_'.$acid;
 					$acts[$rt] = array(
@@ -291,7 +291,7 @@ class dronline_conf extends class_base
 		return true;
 	}
 
-	function submit($arr)
+	/*function submit($arr)
 	{
 		$ret = parent::submit($arr);
 		if ($arr['extraids']['ret_url'] != "")
@@ -308,7 +308,7 @@ class dronline_conf extends class_base
 			$arr['extraids']['ret_url'] = aw_global_get("REQUEST_URI");
 		};
 		return parent::change($arr);
-	}
+	}*/
 
 	////
 	// !creates a clone of object $from under folder $parent with name $name

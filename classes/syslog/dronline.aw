@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.31 2004/06/26 09:47:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.32 2005/03/01 14:38:13 kristo Exp $
 
 /*
 
@@ -78,6 +78,7 @@ class dronline extends class_base
 {
 	function dronline()
 	{
+		classload("date_calc");
 		$this->init(array(
 			'tpldir' => 'syslog/dronline',
 			'clid' => CL_DRONLINE,
@@ -103,7 +104,7 @@ class dronline extends class_base
 			'stat_addr' => 'Statistika aadresside l&otilde;ikes',
 			'stat_obj' => 'Statistika objektide l&otilde;ikes',
 			'ipblock' => 'IP Blokk',
-			'show_queries' => 'Salvestatud p&auml;ringud',
+			//'show_queries' => 'Salvestatud p&auml;ringud',
 			'general' => 'M&auml;&auml;rangud',
 			'tab_conf' => 'P&auml;ringud',
 			'folders' => "Kataloogid",
@@ -253,10 +254,12 @@ class dronline extends class_base
 			}
 			else
 			{
+				$_parms = array_merge($arr, array('dro_tab' => $tabid));
+				unset($_parms["show_oid"]);
 				$tbp->add_tab(array(
 					'active' => ($dro_tab == $tabid ? true : false),
 					'caption' => $tabname,
-					'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => $tabid)))
+					'link' => $this->mk_my_orb('change', $_parms)
 				));
 			}
 		}
@@ -288,6 +291,7 @@ class dronline extends class_base
 
 	function _do_general($arr)
 	{
+		$arr["fxt"] = 1;
 		return parent::change($arr);
 	}
 
@@ -440,7 +444,7 @@ class dronline extends class_base
 
 		if ($ob->meta('to') > (400*24*3600))
 		{
-			$conf_o['meta']['to'] = $ob->meta('to');
+			$conf_o['meta']['to'] = get_day_start($ob->meta('to')) + 24*3600;
 		}
 
 		$conf_o['meta']['def_span'] = $def_span;
@@ -455,7 +459,7 @@ class dronline extends class_base
 		if ($mt['def_span'])
 		{
 			$sql[] = 'syslog.tm >= '.$this->def_spans[$mt['def_span']]['from'];
-			$sql[] = 'syslog.tm <= '.$this->def_spans[$mt['def_span']]['to'];
+			$sql[] = 'syslog.tm <= '.(get_day_start($this->def_spans[$mt['def_span']]['to']) + 24 * 3600);
 			$this->vars(array(
 				"desc" => "M&auml;&auml;ratud vahemik:",
 				"value" => $this->def_spans[$mt['def_span']]["text"]
@@ -475,7 +479,7 @@ class dronline extends class_base
 			}
 			if ($mt['to'] > (400*24*3600))
 			{
-				$sql[] = 'syslog.tm <= '.$mt['to'];
+				$sql[] = 'syslog.tm <= '.(get_day_start($mt['to']) + 24 * 3600);
 				$this->vars(array(
 					"desc" => "Kuni:",
 					"value" => $this->time2date($mt['to'],2)
@@ -1271,7 +1275,7 @@ class dronline extends class_base
 			$prop['options'] = $this->tablist;
 		}
 		else
-		if ($prop['name'] == 'bg_query_status' && !$arr['new'])
+		if ($prop['name'] == 'bg_query_status' && !$arr['new'] && is_oid($arr["obj_inst"]->id()))
 		{
 			$q = 'SELECT status FROM dronline_bg_status WHERE id = '.$arr['obj_inst']->id();
 			$prop['value'] = $this->statuses[$this->db_fetch_field($q,"status")];
@@ -1282,7 +1286,7 @@ class dronline extends class_base
 			$prop['value'] = 'Uuenda p&auml;ringute&nbsp;cache';
 		}
 		else
-		if ($prop['name'] == 'bg_query_created' && !$arr['new'])
+		if ($prop['name'] == 'bg_query_created' && !$arr['new'] && is_oid($arr["obj_inst"]->id()))
 		{
 			$q = 'SELECT tm FROM dronline_bg_status WHERE id = '.$arr['obj_inst']->id();
 			$prop['value'] = $this->time2date($this->db_fetch_field($q,"tm"),2);
@@ -1727,6 +1731,10 @@ class dronline extends class_base
 
 		// check if the object for the prev tab already exists. if it does not, create it
 		$tcid = $this->check_hidden_conf($prev_tab, obj($id));
+
+		$retu = urlencode($this->mk_my_orb("change", array("id" => $id, "dro_tab" => $prev_tab)));
+		header("Location: ".html::get_change_url($tcid, array("return_url" => $retu)));
+		die();
 
 		$droc = get_instance("syslog/dronline_conf");
 		$droc->embedded = true;
