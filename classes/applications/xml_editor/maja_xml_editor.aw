@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.8 2004/11/02 14:07:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.9 2005/02/14 09:43:31 duke Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -417,6 +417,11 @@ class maja_xml_editor extends class_base
 
 		$db_table_contents_obj = obj($arr['obj_inst']->prop("db_table_contents"));
 		$db_table_name = $db_table_contents_obj->prop("db_table");
+
+		if ($arr["new"])
+		{
+			return false;
+		};
 
 		$db_tmp = $this->db_fetch_array("SELECT id,staatus,korter FROM ".$db_table_name." WHERE maja_nimi LIKE '%".$arr['obj_inst']->prop("house_name")."%'");
 
