@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.110 2002/07/24 20:48:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.111 2002/07/25 22:05:16 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -712,6 +712,20 @@ class form extends form_base
 		$o = get_instance("objects");
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
+
+		$ft = get_instance("form_table");
+
+		// once upon a time there was a function called get_tables_for_form in the
+		// form_table class. Alas, now it's gone and there is a function with the
+		// same name in form_db_base .. which does a completely different thing.
+		// Well, anyway. the function that returns a list of tables for a form
+		// should be elsewhere. Feel free to move the following code out of here.
+		$tables = array("0" => "Vali üks");
+		$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = $id");
+                while ($row = $this->db_next())
+                {
+                        $tables[$row["table_id"]] = $row["name"];
+                }
 
 		$this->vars(array(
 			"allow_html"	=> checked($this->arr["allow_html"]),
