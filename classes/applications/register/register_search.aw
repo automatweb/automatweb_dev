@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.2 2004/05/19 15:17:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.3 2004/05/21 11:06:55 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -50,6 +50,8 @@ class register_search extends class_base
 			"tpldir" => "applications/register/register_search",
 			"clid" => CL_REGISTER_SEARCH
 		));
+
+		$this->fts_name = "fulltext_search";
 	}
 
 	function get_property($arr)
@@ -131,6 +133,12 @@ class register_search extends class_base
 			"sortable" => 1,
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "u_name",
+			"caption" => "Elemendi tekst",
+			"sortable" => 1,
+			"align" => "center"
+		));
 	}
 
 	function do_sform_frm_tbl($arr)
@@ -145,6 +153,12 @@ class register_search extends class_base
 		$props = $this->get_props_from_reg($reg);
 		foreach($props as $pn => $pd)
 		{
+			if (!is_array($fdata[$pn]) || $fdata[$pn]["caption"] == "")
+			{
+				$fdata[$pn] = array(
+					"caption" => $pd["caption"]
+				);
+			}
 			$t->define_data(array(
 				"jrk" => html::textbox(array(
 					"size" => 5,
@@ -162,8 +176,32 @@ class register_search extends class_base
 					"value" => 1,
 					"checked" => ($fdata[$pn]["is_num"] == 1)
 				)),
+				"u_name" => html::textbox(array(
+					"name" => "fdata[$pn][caption]",
+					"value" => $fdata[$pn]["caption"]
+				)),
 			));
 		}
+
+		$pn = $this->fts_name;
+		$t->define_data(array(
+			"jrk" => html::textbox(array(
+				"size" => 5,
+				"name" => "fdata[$pn][jrk]",
+				"value" => $fdata[$pn]["jrk"]
+			)),
+			"el" => "T&auml;istekstiotsing",
+			"searchable" => html::checkbox(array(
+				"name" => "fdata[$pn][searchable]",
+				"value" => 1,
+				"checked" => ($fdata[$pn]["searchable"] == 1)
+			)),
+			"is_num" => "",
+			"u_name" => html::textbox(array(
+				"name" => "fdata[$pn][caption]",
+				"value" => ($fdata[$pn]["caption"] == "" ? "T&auml;istekstiotsing" : $fdata[$pn]["caption"])
+			)),
+		));
 
 		$t->set_default_sortby("jrk");
 		$t->sort_by();
@@ -194,6 +232,12 @@ class register_search extends class_base
 		$t->define_field(array(
 			"name" => "sortable",
 			"caption" => "Sorditav",
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "u_name",
+			"caption" => "Tulba pealkiri",
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -229,8 +273,32 @@ class register_search extends class_base
 					"value" => 1,
 					"checked" => ($tdata[$pn]["sortable"] == 1)
 				)),
+				"u_name" => html::textbox(array(
+					"name" => "tdata[$pn][caption]",
+					"value" => ($tdata[$pn]["caption"] == "" ? $pd["caption"] : $tdata[$pn]["caption"])
+				)),
 			));
 		}
+
+		$pn = "change_link";
+		$t->define_data(array(
+			"jrk" => html::textbox(array(
+				"size" => 5,
+				"name" => "tdata[$pn][jrk]",
+				"value" => $tdata[$pn]["jrk"]
+			)),
+			"el" => "Muuda",
+			"visible" => html::checkbox(array(
+				"name" => "tdata[$pn][visible]",
+				"value" => 1,
+				"checked" => ($tdata[$pn]["visible"] == 1)
+			)),
+			"sortable" => "",
+			"u_name" => html::textbox(array(
+				"name" => "tdata[$pn][caption]",
+				"value" => ($tdata[$pn]["caption"] == "" ? "Muuda" : $tdata[$pn]["caption"])
+			)),
+		));
 
 		$t->set_default_sortby("jrk");
 		$t->sort_by();
@@ -290,30 +358,37 @@ class register_search extends class_base
 
 	function get_props_from_reg($reg)
 	{
-		$cff = obj($reg->prop("data_cfgform"));
-		$class_id = $cff->prop("ctype");
-		$class_i = get_instance($class_id);
-		$tmp = $class_i->load_from_storage(array(
-			"id" => $cff->id()
-		));
-
 		$properties = array();
-		foreach($tmp as $k => $v)
+		$awa = new aw_array($reg->prop("data_cfgform"));
+		foreach($awa->get() as $cfid)
 		{
-			if ($v["name"] != "needs_translation" && $v["name"] != "is_translated")
+			$cff = obj($cfid);
+			$class_id = $cff->prop("ctype");
+			$class_i = get_instance($class_id);
+			$tmp = $class_i->load_from_storage(array(
+				"id" => $cff->id()
+			));
+
+			foreach($tmp as $k => $v)
 			{
-				$properties[$k] = $v;
+				if ($v["name"] != "needs_translation" && $v["name"] != "is_translated")
+				{
+					$properties[$k] = $v;
+				}
 			}
 		}
-
 		return $properties;
 	}
 
 	function get_clid_from_reg($reg)
 	{
-		$cff = obj($reg->prop("data_cfgform"));
-		$class_id = $cff->prop("ctype");
-		return $class_id;
+		$awa = new aw_array($reg->prop("data_cfgform"));
+		foreach($awa->get() as $cfid)
+		{
+			$cff = obj($cfid);
+			$class_id = $cff->prop("ctype");
+			return $class_id;
+		}
 	}
 
 	function callback_get_sform($arr)
@@ -343,6 +418,17 @@ class register_search extends class_base
 			}
 			$tmp[$pn] = $pd + $f_props[$pn];
 			$tmp[$pn]["value"] = $request["rsf"][$pn];
+			$tmp[$pn]["caption"] = $fdata[$pn]["caption"];
+		}
+
+		if ($fdata[$this->fts_name]["searchable"] == 1)
+		{
+			$tmp[$this->fts_name] = array(
+				"name" => $this->fts_name,
+				"type" => "textbox",
+				"caption" => $fdata[$this->fts_name]["caption"],
+				"value" => $request["rsf"][$this->fts_name]
+			);
 		}
 
 		$i = get_instance($clid);
@@ -386,10 +472,21 @@ class register_search extends class_base
 			{
 				$t->define_field(array(
 					"name" => $pn,
-					"caption" => $pd["caption"],
+					"caption" => $tdata[$pn]["caption"],
 					"sortable" => $tdata[$pn]["sortable"]
 				));
 			}
+		}
+
+		$pn = "change_link";
+		if ($tdata[$pn]["visible"])
+		{
+			$t->define_field(array(
+				"name" => $pn,
+				"caption" => $tdata[$pn]["caption"],
+				"sortable" => $tdata[$pn]["sortable"],
+				"align" => "center"
+			));
 		}
 	}
 
@@ -418,11 +515,28 @@ class register_search extends class_base
 			}
 		}
 
+		// if fulltext search
+		if ($request["rsf"][$this->fts_name] != "")
+		{
+			$tmp = array();
+			foreach($props as $pn => $pd)
+			{
+				$tmp[$pn] = "%".$request["rsf"][$this->fts_name]."%";
+			}
+
+			$filter[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => $tmp
+			));
+		}
+
+
 		$ret = new object_list();
 		if (count($filter) > 2)
 		{
 			$ret = new object_list($filter);
 		}
+
 		return $ret;
 	}
 
@@ -437,7 +551,17 @@ class register_search extends class_base
 			$data = array();
 			foreach($t->rowdefs as $k => $v)
 			{
-				$data[$v["name"]] = $o->prop($v["name"]);
+				if ($v["name"] == "change_link")
+				{
+					$data[$v["name"]] = html::href(array(
+						"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
+						"caption" => "Muuda"
+					));
+				}
+				else
+				{
+					$data[$v["name"]] = $o->prop($v["name"]);
+				}
 			}			
 
 			$t->define_data($data);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.3 2004/05/19 15:17:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.4 2004/05/21 11:06:55 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -8,7 +8,7 @@
 @default table=objects
 @default group=general
 
-@property data_cfgform type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+@property data_cfgform type=relpicker reltype=RELTYPE_CFGFORM multiple=1 field=meta method=serialize
 @caption Andmete seadete vorm
 
 @property data_rootmenu type=relpicker reltype=RELTYPE_MENU field=meta method=serialize

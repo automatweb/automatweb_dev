@@ -6,6 +6,7 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_CFGFORM</reltype>
+            <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
             <caption>Andmete seadete vorm</caption>
