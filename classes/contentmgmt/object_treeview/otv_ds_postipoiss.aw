@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.13 2004/06/17 13:54:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.14 2004/08/23 09:31:37 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -580,6 +580,7 @@ class otv_ds_postipoiss extends class_base
 
 	function do_update_ds($o)
 	{
+		set_time_limit(0);
 		classload("icons", "image");
 		$xml_fld = $o->prop("xml_fld");
 
@@ -589,19 +590,24 @@ class otv_ds_postipoiss extends class_base
 		$ret = array();
 
 		$mtime = 0;
+		$file_cnt = 0;
 		foreach($dc as $fe)
 		{
 			$mtime = max(@filemtime($xml_fld."/".$fe), $mtime);
+			//echo "file = ".$xml_fld."/".$fe." , mtime = ".date("d.m.Y H:i", filemtime($xml_fld."/".$fe))."<br>";
+			$file_cnt++;
 		}
 
 		$c_mtime = $this->db_fetch_field("SELECT MAX(aw_mtime) as mtime FROM aw_otv_ds_pp_cache WHERE aw_pp_id = '".$o->id()."'", "mtime");
 
-		if ($c_mtime > $mtime)
+		$cache_count = $this->db_fetch_field("SELECT count(aw_mtime) as mtime FROM aw_otv_ds_pp_cache WHERE aw_pp_id = '".$o->id()."'", "mtime");
+
+		if ($c_mtime > $mtime && $cache_count == $file_cnt)
 		{
-			echo "Cache on uuem kui failid, uuendada pole vaja!<br>";
+			echo "Cache on uuem kui failid, uuendada pole vaja (".date("d.m.Y H:i", $c_mtime)." > ".date("d.m.Y H:i", $mtime).") !<br>";
 			return;
 		}
-
+	//die("fc = $file_cnt , cache = $cache_count <br>");
 		$this->db_query("DELETE FROM aw_otv_ds_pp_cache WHERE aw_pp_id = '".$o->id()."'");
 		$this->db_query("DELETE FROM aw_otv_ds_pp_cache_file2folder WHERE aw_pp_id = '".$o->id()."'");
 		
@@ -674,6 +680,7 @@ class otv_ds_postipoiss extends class_base
 				$this->db_query("INSERT INTO aw_otv_ds_pp_cache_file2folder(aw_file, aw_folder, aw_pp_id) values('$id','$sb','".$o->id()."')");
 			}
 		}
+		$this->flush_cache();
 		echo "all done! <br>\n";
 		flush();
 	}
