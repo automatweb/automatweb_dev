@@ -229,7 +229,7 @@ function clearstyles()
 		// nuke span tags
 		old2 = old.replace(/<span.+?>|<\/span>|<font.+?>|<\/font>/gi,"");
 		//old2 = old2.replace(/<p.+?>/gi,"<p>");
-		old2 = old2.replace(/class="\w+?"/gi,"");
+		old2 = old2.replace(/class=".*?"/gi,"");
 		old2 = old2.replace(/style=".*?"/gi,"");
 		old2 = old2.replace(/<!--.+?-->/gi,"");
 		old2 = old2.replace(/<o:p>/gi,"");
