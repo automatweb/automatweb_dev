@@ -71,7 +71,7 @@
 				<arguments>
 					<optional name="class"/>
 					<optional name="addempty"/>
-					<optional name="parent" type="int"/>
+					<optional name="parent"/>
 					<optional name="onlyactive"/>
 					<optional name="name"/>
 					<optional name="return"/>
