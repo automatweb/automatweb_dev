@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.84 2004/12/02 11:34:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.85 2004/12/02 11:51:26 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -125,7 +125,7 @@ class htmlclient extends aw_template
 		$this->read_template($tpl);
 		if(!empty($this->tpl_vars))
 		{
-			$this->vars($this->tpl_vars));
+			$this->vars($this->tpl_vars);
 		}
 		$script = aw_global_get("SCRIPT_NAME");
 		//$handler = empty($script) ? "index" : "orb";
