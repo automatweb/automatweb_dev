@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.3 2004/11/22 16:30:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.4 2004/12/02 14:04:10 duke Exp $
 // mail_rule.aw - Maili ruul 
 /*
 @classinfo syslog_type=ST_MAIL_RULE relationmgr=yes
@@ -139,7 +139,7 @@ class mail_rule extends class_base
 			};
 			$target_folder = $o->prop("target_folder");
 			$target_folder = str_replace(" ","\\ ",$target_folder);
-			$rule .= '\$MAILDIR/.' . $target_folder . "/\n";
+			$rule .= '$MAILDIR/.' . $target_folder . "/\n";
 			$rule_end = $rule_id . " end\n";
 			$rule .= $rule_end;
 			$msgr_id = $this->get_owner(array(
