@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.15 2004/05/06 12:26:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.16 2004/05/17 12:36:39 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -179,7 +179,7 @@ class poll extends class_base
 
 			$this->vars(array(
 				"answer_id" => $k,
-				"answer" => $v["answer"], 
+				"answer" => is_array($v) ? $v["answer"] : $v, 
 				"click_answer" => str_replace("&", "&amp;", $au),
 				"clicks" => $v["clicks"],
 			));
@@ -210,6 +210,16 @@ class poll extends class_base
 		global $polls_clicked;
 		$poa = unserialize($polls_clicked);
 
+		// block google
+		if (strpos($_SERVER["HTTP_USER_AGENT"], "Google") !== false)
+		{
+			return;
+		}
+		if (strpos($_SERVER["HTTP_USER_AGENT"], "spider") !== false)
+		{
+			return;
+		}
+		
 		$poll_id = $this->db_fetch_field("SELECT poll_id FROM poll_answers WHERE id = $aid", "poll_id");
 
 		if ($poa[$poll_id] != 1)
@@ -255,7 +265,11 @@ class poll extends class_base
 			return "";
 		}
 
-		global $answer_id;
+		global $answer_id, $aid;
+		if ($aid && !$answer_id)
+		{
+			$answer_id = $aid;
+		}
 		if ($answer_id && $GLOBALS["poll_id"] == $id)
 		{
 			$this->add_click($answer_id);
@@ -296,7 +310,7 @@ class poll extends class_base
 			}
 			$mp = $this->cfg["result_width_mp"];
 			$this->vars(array(
-				"answer" => $v["answer"],
+				"answer" => is_array($v) ? $v["answer"] : $v,
 				"percent" => $percent,
 				"width" => (int)$width*$mp,
 				"clicks" => $v["clicks"],
