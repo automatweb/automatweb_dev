@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_config.aw,v 1.1 2003/09/08 14:48:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_config.aw,v 1.2 2003/09/11 13:28:43 duke Exp $
 // messenger_config.aw - Messengeri config 
 /*
 
@@ -7,6 +7,11 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
+
+@property msgs_on_page type=select 
+@caption Kirju lehel
 
 */
 
@@ -55,14 +60,6 @@
 	       * Kirjale lisatavate attachide arv (msg_cnt_att)
 
 
-
-	       
-		
-		
-
-
-
-
 */
 
 define("RELTYPE_MAIL_FOLDER",1);
@@ -83,18 +80,19 @@ class messenger_config extends class_base
 	//////
 	// class_base classes usually need those, uncomment them if you want to use them
 
-	/*
 	function get_property($args)
 	{
 		$data = &$args["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "msgs_on_page":
+				$data["options"] = array(25 => 25,50 => 50,100 => 100);
+				break;
 
 		};
 		return $retval;
 	}
-	*/
 
 	/*
 	function set_property($args = array())
