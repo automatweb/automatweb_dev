@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.9 2004/08/30 09:31:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.10 2004/09/09 11:01:14 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -42,6 +42,9 @@
 
 @property results type=table group=search no_caption=1
 @caption Tulemused
+
+@reltype SYN value=1 clid=CL_CB_SEARCH_SYNONYMS
+@caption s&uuml;non&uuml;mid
 
 // step 1 - choose a class
 // step 2 - choose a connection (might be optional)
@@ -404,10 +407,30 @@ class cb_search extends class_base
 				$sdata[] = new object_list_filter(array("non_filter_classes" => $clid));
 				foreach($data as $key => $val)
 				{
-					if ($key == "per_page" || $key == "fts_search")
+					if ($key == "per_page")
 					{
 						continue;
 					}
+					if ($key == "fts_search")
+					{
+						$t_cond = array();
+						foreach($f_props as $t_pn => $t_pd)
+						{
+							if ($t_pn == "is_translated" || $t_pn == "needs_translation" || $t_pd["store"] == "no" || $t_pn == "fts_search" || $t_pn == "per_page")
+							{
+								continue;
+							}
+	
+							$t_cond[$t_pn] = "%".$val."%";
+						}
+
+						$sdata[] = new object_list_filter(array(
+							"logic" => "OR",
+							"conditions" => $t_cond
+						));
+						continue;
+					}
+
 					if ($this->in_form[$key]["type"] == "classificator")
 					{
 						$sdata[$key] = $val;
@@ -422,6 +445,8 @@ class cb_search extends class_base
 						$sdata[$key] = "%" . $val . "%";
 					}
 				};
+
+				$this->proc_syns_in_sdata($arr["obj_inst"], $sdata);
 
 				if ($GLOBALS["sortby"] != "")
 				{
@@ -883,6 +908,138 @@ class cb_search extends class_base
 		$o = obj($arr["id"]);
 		$o->delete();
 		return $arr["return_url"];
+	}
+
+	/** 
+
+		sdata is list object list filter parameter
+		get the synonyms from rels and insert or clauses
+
+	**/
+	function proc_syns_in_sdata($o, &$sdata)
+	{
+		$scs = $o->connections_from(array(
+			"type" => "RELTYPE_SYN"
+		));
+		foreach($scs as $c)
+		{
+			$iter = $sdata;
+			$syno = $c->to();
+			$syns = safe_array($syno->meta("syns"));
+			foreach($iter as $k => $v)
+			{
+				if (is_object($v))
+				{
+					// FIXME: implement this for fts search
+				}
+				else
+				if (is_array($v))
+				{
+					$tmp = array();
+					foreach($v as $str)
+					{
+						$ps = $this->proc_perm_str($o, $str, $syns);
+						foreach($ps as $p)
+						{
+							$tmp[] = $p;
+						}
+					}
+					$v = $tmp;
+				}
+				else
+				{
+					$v = $this->proc_perm_str($o, $v, $syns);
+				}
+				
+				$sdata[$k] = $v;
+			}
+		}
+	}
+
+	function proc_perm_str($o, $v, $syns)
+	{
+		// string
+		$has_pct = ($v{0} == "%" ? true : false);
+		$v = str_replace("%", "", $v);
+
+		$has_syn = false;
+		$p_syns = array();
+		$varr = array();
+		foreach($syns as $synrow)
+		{
+			if ($synrow != "")
+			{
+				$synlist = explode(",", $synrow);
+				$words = explode(" ",$v);
+
+				foreach($synlist as $syn)
+				{
+					if (($pos = array_search($syn, $words)) !== false)
+					{
+						$has_syn = true;
+						$p_syns[$syn] = array("p" => $pos, "l" => $synlist);
+						break;
+					}
+				}
+			}
+		}
+
+		$res = array($v);
+		// make permutations
+		if ($has_syn)
+		{
+			// synonym lists are in $p_syns,
+			// current words are in $words
+			// must make all permutations of those
+			$res = $this->req_do_perms($words, $p_syns);
+		}
+
+		if ($has_pct)
+		{
+			$tmp = array();
+			foreach($res as $val)
+			{
+				$tmp[] = "%".$val."%";
+			}
+			$res = $tmp;
+		}
+		return $res;
+	}
+
+	function req_do_perms($words, $p_syns)
+	{
+		// for all syns, make all possibilities of that syn and add to an array
+		$res = array($words);
+		foreach($p_syns as $wd => $dat)
+		{
+			$others = $dat["l"];
+			$pos = $dat["p"];
+
+			foreach($others as $other)
+			{
+				foreach($res as $wordlist)
+				{
+					$tmp = array();
+					foreach($wordlist as $idx => $word)
+					{
+						if ($idx == $pos)
+						{
+							$word = $other;
+						}
+						$tmp[] = $word;
+					}
+					$res[] = $tmp;
+				}
+			}
+		}
+
+		$tmp = array();
+		foreach($res as $wl)
+		{
+			$tmp[] = join(" ", $wl);
+		}
+
+		return array_unique($tmp);
 	}
 }
 ?>

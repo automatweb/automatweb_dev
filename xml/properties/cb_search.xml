@@ -105,5 +105,12 @@
                   <submit_method>get</submit_method>
             </search>
       </groupinfo>
+      <reltypes>
+            <SYN>
+                  <value>1</value>
+                  <clid>CL_CB_SEARCH_SYNONYMS</clid>
+                  <caption>s&amp;uuml;non&amp;uuml;mid</caption>
+            </SYN>
+      </reltypes>
 </properties>
 
