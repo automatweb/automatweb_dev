@@ -22,5 +22,12 @@
 			</function>
 		</action>
 
+		<action name="clear_all">
+			<function name="clear_all">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.9 2005/01/18 11:22:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.10 2005/01/28 10:17:13 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 @default table=objects
@@ -183,12 +183,21 @@ class recycle_bin extends class_base
     		"tooltip" => "Uuenda",
     		"url" => aw_url_change_var(array()),
     	));
+
     	$tb->add_button(array(
     		"name" => "delete",
     		"img" => "delete.gif",
     		"tooltip" => "Kustuta",
     		"action" => "final_delete",
 			"confirm" => "Kas olete 100% kindel et soovite valitud objekte l&otilde;plikult kustutada?"
+    	));
+
+    	$tb->add_button(array(
+    		"name" => "clear_all",
+    		"img" => "del_all.gif",
+    		"tooltip" => "T&uuml;hjenda",
+    		"action" => "clear_all",
+			"confirm" => "Kas olete 100% kindel et soovite K&Otilde;IK objektid kustutada?"
     	));
 	}
 
@@ -297,7 +306,11 @@ class recycle_bin extends class_base
 		foreach(safe_array($arr["mark"]) as $id)
 		{
 			// get class
-			$clid = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '$id'", "class_id");
+			$clid = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '$id' AND status = 0", "class_id");
+			if (!$clid)
+			{
+				continue;
+			}
 			
 			// load props by clid
 			$file = $cl[$clid]["file"];
@@ -326,6 +339,24 @@ class recycle_bin extends class_base
 			"id" => $arr["id"],
 			"group" => $arr["group"]
 		));	
+	}
+
+	/** clears all deleted objects from the bin. sorta dangerous or something.
+
+		@attrib name=clear_all
+
+	**/
+	function clear_all($arr)
+	{
+		// get list of all deleted objects
+		$query = "SELECT oid FROM objects WHERE status=0 AND site_id = ".aw_ini_get("site_id");
+		$this->db_query($query);
+		while ($row = $this->db_next())
+		{
+			$arr["mark"][$row["oid"]] = $row["oid"];
+		}
+		// feed it to final_delete
+		return $this->final_delete($arr);
 	}
 }
 ?>
