@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.68 2004/03/17 11:42:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.69 2004/03/17 11:44:55 kristo Exp $
 
 lc_load("definition");
 
@@ -16,7 +16,7 @@ class acl_base extends db_connector
 		$qstr = array();
                 if (!is_array($this->cfg["acl"]["ids"]))
                 {
-                        $this->cfg["acl"]["ids"] = aw_ini_get("acl.ids");
+                        $this->cfg["acl"]["ids"] = $GLOBALS["cfg"]["acl"]["ids"];
                 }
 
 		reset($this->cfg["acl"]["ids"]);
@@ -51,7 +51,7 @@ class acl_base extends db_connector
 		if (sizeof($aclarr) == 0)
 		{
 			// set default acl if not specified otherwise
-			$aclarr = $this->cfg["acl"]["default"];
+			$aclarr = $GLOBALS["cfg"]["acl"]["default"];
 		};
 		$this->save_acl($oid,$gid,$aclarr);		
 		if ($invd)
@@ -72,17 +72,17 @@ class acl_base extends db_connector
 
 	function save_acl($oid,$gid,$aclarr)
 	{
-		$acl_ids = $this->cfg["acl"]["ids"];
+		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
 		reset($acl_ids);
 		while(list($bitpos,$name) = each($acl_ids))
 		{
 			if (isset($aclarr[$name]) && $aclarr[$name] == 1)
 			{
-				$a = $this->cfg["acl"]["allowed"];
+				$a = $GLOBALS["cfg"]["acl"]["allowed"];
 			}
 			else
 			{
-				$a = $this->cfg["acl"]["denied"];
+				$a = $GLOBALS["cfg"]["acl"]["denied"];
 			}
 
 			$qstr[] = " ( $a << $bitpos ) ";
@@ -99,7 +99,7 @@ class acl_base extends db_connector
 	{
 		$acl = $this->get_acl_for_oid_gid($oid,$gid);
 
-		$acl_ids = $this->cfg["acl"]["ids"];
+		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
 		reset($acl_ids);
 		while(list($bitpos,$name) = each($acl_ids))
 		{
@@ -107,11 +107,11 @@ class acl_base extends db_connector
 			{
 				if (isset($aclarr[$name]) && $aclarr[$name] == 1)
 				{
-					$a = $this->cfg["acl"]["allowed"];
+					$a = $GLOBALS["cfg"]["acl"]["allowed"];
 				}
 				else
 				{
-					$a = $this->cfg["acl"]["denied"];
+					$a = $GLOBALS["cfg"]["acl"]["denied"];
 				}
 			}
 			else
@@ -198,7 +198,7 @@ class acl_base extends db_connector
 		$this->save_handle();
 
 		$max_priority = -1;
-		$max_acl = $this->cfg["acl"]["default"];
+		$max_acl = $GLOBALS["cfg"]["acl"]["default"];
 		$max_acl["acl_rel_id"] = "666";
 		$cnt = 0;
 		// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
@@ -347,7 +347,7 @@ class acl_base extends db_connector
 			$uuid = aw_global_get("uid");
 		}
 
-		$acl_ids = $this->cfg["acl"]["ids"];
+		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
 
 		if ($uuid != "")
 		{
@@ -355,7 +355,7 @@ class acl_base extends db_connector
 			$aclarr = array();
 			while (list(,$k) = each($acl_ids))
 			{
-				$aclarr[$k] = $this->cfg["acl"]["allowed"];
+				$aclarr[$k] = $GLOBALS["cfg"]["acl"]["allowed"];
 			}
 
 			$gr = $this->get_user_group($uuid);
@@ -381,12 +381,12 @@ class acl_base extends db_connector
 		{
 			return;
 		}
-		$acl_ids = $this->cfg["acl"]["ids"];
+		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
 
 		reset($acl_ids);
 		while (list(,$k) = each($acl_ids))
 		{
-			$aclarr[$k] = $this->cfg["acl"]["denied"];
+			$aclarr[$k] = $GLOBALS["cfg"]["acl"]["denied"];
 		}
 
 		// so we wouldn't add the group twice
