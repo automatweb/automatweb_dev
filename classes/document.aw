@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.203 2003/08/01 13:27:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.204 2003/08/18 10:34:03 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1592,7 +1592,16 @@ class document extends aw_template
 		{
 			$q = "INSERT INTO menu (id,type) VALUES ('$lid','99')";
 		};
-		$defaults = $this->fetch($parent);
+		$def = $this->fetch($parent);
+		$idef = aw_ini_get("document.defaults");
+		if (is_array($idef))
+		{
+			$defaults = $idef + $def;
+		}
+		else
+		{
+			$defaults = $def;
+		}
 		$this->quote(&$defaults);
 		$flist = array();
 		$vlist = array();
