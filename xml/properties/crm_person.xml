@@ -218,6 +218,14 @@
             <caption>Kontakt</caption>
       </property>
       <property>
+            <name>default_cv</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>org_actions</name>
             <table>kliendibaas_isik</table>
             <group>all_actions</group>

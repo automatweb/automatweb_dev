@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.23 2004/04/13 16:40:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.24 2004/04/22 15:36:46 sven Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -91,6 +91,7 @@ caption Kodused kontaktandmed
 
 //property email type=textbox store=no 
 //caption E-post
+@property default_cv type=hidden table=objects field=meta method=serialize
 
 @default group=overview
 
