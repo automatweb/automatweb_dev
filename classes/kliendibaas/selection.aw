@@ -41,6 +41,18 @@
 
 */
 
+
+/*
+CREATE TABLE `selection` (
+  `oid` int(11) NOT NULL default '0',
+  `object` int(11) NOT NULL default '0',
+  `jrk` int(11) default NULL,
+  `status` tinyint(4) default NULL,
+  UNIQUE KEY `oid` (`oid`,`object`)
+) TYPE=MyISAM
+
+*/
+
 define ('PILOT', 1);
 
 class selection extends class_base

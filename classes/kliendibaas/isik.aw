@@ -86,6 +86,34 @@
 
 */
 
+/*
+
+CREATE TABLE `kliendibaas_isik` (
+  `oid` int(11) NOT NULL default '0',
+  `firstname` varchar(50) default NULL,
+  `lastname` varchar(50) default NULL,
+  `name` varchar(100) default NULL,
+  `gender` varchar(10) default NULL,
+  `personal_id` bigint(20) default NULL,
+  `title` varchar(10) default NULL,
+  `nickname` varchar(20) default NULL,
+  `messenger` varchar(200) default NULL,
+  `birthday` varchar(20) default NULL,
+  `social_status` varchar(20) default NULL,
+  `spouse` varchar(50) default NULL,
+  `children` varchar(100) default NULL,
+  `personal_contact` int(11) default NULL,
+  `work_contact` int(11) default NULL,
+  `digitalID` text,
+  `notes` text,
+  `pictureurl` varchar(200) default NULL,
+  `picture` blob,
+  PRIMARY KEY  (`oid`),
+  UNIQUE KEY `oid` (`oid`)
+) TYPE=MyISAM
+
+*/
+
 
 define ('HOMEADDRESS',1);
 define ('WORKADDRESS',2);

@@ -212,7 +212,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 //			'' => '',
 //			'' => '',
 		);
-		
+
 		foreach ($arr as $key => $value)
 		{
 			$k = $this->mk_my_orb('new', array('parent' => $args['obj']['parent']),$key);
@@ -719,6 +719,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		}
 */
 
+
+
+///rõvedus!! aga ma tahan et baasist tõesti ei küsitaks asju mida vaja pole
 		$tabelid = array(
 			'vorm' => 'left join kliendibaas_ettevotlusvorm as vorm on vorm.oid=firma.ettevotlusvorm',
 			'juht' => 'left join kliendibaas_isik as juht on juht.oid=firma.firmajuht',

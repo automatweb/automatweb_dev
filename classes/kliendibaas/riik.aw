@@ -29,6 +29,23 @@
 	@caption Asukoha kirjeldus
 */
 
+/*
+
+CREATE TABLE `kliendibaas_riik` (
+  `oid` int(11) NOT NULL default '0',
+  `name` varchar(255) default NULL,
+  `comment` text,
+  `name_en` text,
+  `name_native` text,
+  `languages` text,
+  `location` text,
+  `lyhend` varchar(20) default NULL,
+  PRIMARY KEY  (`oid`),
+  UNIQUE KEY `oid` (`oid`)
+) TYPE=MyISAM
+
+*/
+
 class riik extends class_base
 {
 	function riik()

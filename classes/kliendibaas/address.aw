@@ -15,7 +15,7 @@
 	@caption telefon
 
 	@property mobiil type=textbox size=10 maxlength=15
-	@caption telefon
+	@caption mobiiltelefon
 
 	@property faks type=textbox size=10 maxlength=20
 	@caption faks
@@ -41,6 +41,31 @@
 	@property riik type=relpicker reltype=RIIK
 	@caption riik
 */
+
+/*
+
+CREATE TABLE `kliendibaas_address` (
+  `oid` int(11) NOT NULL default '0',
+  `name` varchar(200) default NULL,
+  `tyyp` int(11) default NULL,
+  `riik` int(11) default NULL,
+  `linn` int(11) default NULL,
+  `maakond` int(11) default NULL,
+  `postiindeks` varchar(5) default NULL,
+  `telefon` varchar(20) default NULL,
+  `mobiil` varchar(20) default NULL,
+  `faks` varchar(20) default NULL,
+  `piipar` varchar(20) default NULL,
+  `aadress` text,
+  `e_mail` varchar(255) default NULL,
+  `kodulehekylg` varchar(255) default NULL,
+  PRIMARY KEY  (`oid`),
+  UNIQUE KEY `oid` (`oid`)
+) TYPE=MyISAM
+
+*/
+
+
 
 define('LINN',1);
 define('RIIK',2);

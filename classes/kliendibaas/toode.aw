@@ -22,6 +22,21 @@
 	@caption Toote kirjeldus
 */
 
+
+/*
+CREATE TABLE `kliendibaas_toode` (
+  `oid` int(11) NOT NULL default '0',
+  `kood` varchar(30) default NULL,
+  `toode` text,
+  `toode_en` text,
+  `kirjeldus` text,
+  PRIMARY KEY  (`oid`),
+  UNIQUE KEY `oid` (`oid`),
+  KEY `kood_i` (`kood`)
+) TYPE=MyISAM
+
+*/
+
 class toode extends class_base
 {
 	function toode()

@@ -13,7 +13,16 @@
 	@property location type=textarea
 	@caption Asukoha kirjeldus
 */
-
+/*
+CREATE TABLE `kliendibaas_linn` (
+  `oid` int(11) NOT NULL default '0',
+  `name` varchar(255) default NULL,
+  `comment` text,
+  `location` text,
+  PRIMARY KEY  (`oid`),
+  UNIQUE KEY `oid` (`oid`)
+) TYPE=MyISAM
+*/
 class linn extends class_base
 {
 	function linn()

@@ -14,6 +14,19 @@
 	@caption vorm
 */
 
+
+/*
+CREATE TABLE `kliendibaas_ettevotlusvorm` (
+  `oid` int(11) NOT NULL default '0',
+  `name` varchar(255) default NULL,
+  `vorm` varchar(255) default NULL,
+  `comment` text,
+  PRIMARY KEY  (`oid`),
+  UNIQUE KEY `oid` (`oid`)
+) TYPE=MyISAM
+
+*/
+
 class ettevotlusvorm extends class_base
 {
 	function ettevotlusvorm()

@@ -42,6 +42,28 @@
 	@caption firmajuht
 */
 
+
+/*
+
+CREATE TABLE `kliendibaas_firma` (
+  `oid` int(11) NOT NULL default '0',
+  `firma_nim` varchar(255) default NULL,
+  `reg_nr` varchar(20) default NULL,
+  `ettevotlusvorm` int(11) default NULL,
+  `pohitegevus` int(11) default NULL,
+  `tegevuse_kirjeldus` text,
+  `contact` int(11) default NULL,
+  `firmajuht` int(11) default NULL,
+  `korvaltegevused` text,
+  `kaubamargid` text,
+  `tooted` text,
+  PRIMARY KEY  (`oid`),
+  UNIQUE KEY `oid` (`oid`),
+  KEY `teg_i` (`pohitegevus`)
+) TYPE=MyISAM
+
+*/
+
 define ('ETTEVOTLUSVORM',1);
 define ('POHITEGEVUS',2);
 define ('ADDRESS',3);

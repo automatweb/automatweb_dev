@@ -20,6 +20,19 @@
 	@caption Asukoha kirjeldus
 */
 
+
+/*
+
+CREATE TABLE `kliendibaas_maakond` (
+  `oid` int(11) NOT NULL default '0',
+  `name` varchar(255) default NULL,
+  `comment` text,
+  `location` text,
+  PRIMARY KEY  (`oid`),
+  UNIQUE KEY `oid` (`oid`)
+) TYPE=MyISAM
+
+*/
 class maakond extends class_base
 {
 	function maakond()

@@ -23,6 +23,20 @@
 	@caption Tegevusala kirjeldus
 */
 
+/*
+
+CREATE TABLE `kliendibaas_tegevusala` (
+  `oid` int(11) NOT NULL default '0',
+  `kood` varchar(30) default NULL,
+  `tegevusala` text,
+  `tegevusala_en` text,
+  `kirjeldus` text,
+  PRIMARY KEY  (`oid`),
+  UNIQUE KEY `oid` (`oid`),
+  KEY `kood_i` (`kood`)
+) TYPE=MyISAM
+*/
+
 class tegevusala extends class_base
 {
 	function tegevusala()
