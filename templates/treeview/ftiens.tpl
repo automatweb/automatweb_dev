@@ -2,7 +2,7 @@
 <script src="{VAR:baseurl}/automatweb/js/ftiens4.js"></script>
 <script language="javascript">
 USETEXTLINKS = 1
-LINKTARGET = "";
+LINKTARGET = "{VAR:linktarget}";
 ICONPATH = '{VAR:baseurl}/automatweb/images/';
 pr_{VAR:root} = gFld("<b>{VAR:rootname}</b>", "{VAR:rooturl}","{VAR:icon_root}")
 
