@@ -1,9 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.30 2001/11/20 14:49:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.31 2001/11/23 16:39:51 kristo Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 if (!defined("DEFS"))
 {
 define(DEFS,1);
+
+define("SERIALIZE_PHP",1);
+define("SERIALIZE_XML",2);
+define("SERIALIZE_NATIVE",3);
+
+classload("xml","php");
+
 ////
 // !saadab 404 Not found vmt.
 function bail_out()
@@ -599,6 +606,48 @@ function dbg($msg)
 	}
 }
 
+
+function aw_serialize($arr,$type = SERIALIZE_PHP)
+{
+	switch($type)
+	{
+		case SERIALIZE_PHP:
+			$ser = new php_serializer;
+			$str = $ser->php_serialize($arr);
+			break;
+
+		case SERIALIZE_XML:
+			$ser = new xml;
+			$str = $ser->xml_serialize($arr);
+			break;
+
+		case SERIALIZE_NATIVE:
+			$str = serialize($arr);
+			break;
+	}
+
+	return $str;
+}
+
+function aw_unserialize($str)
+{
+	if (substr($str,0,14) == "<?xml version=")
+	{
+		$x = new xml;
+		return $x->xml_unserialize(array("source" => $str));
+	}
+	else
+	if (substr($str,0,6) == "\$arr =")
+	{
+		// php serializer
+		$p = new php_serializer;
+		return $p->php_unserialize($str);
+	}
+	else
+	{
+		return unserialize($str);
+	}
+}
 
 };
 
