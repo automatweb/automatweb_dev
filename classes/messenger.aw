@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.35 2001/05/29 00:39:50 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.36 2001/05/29 02:28:22 cvs Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -627,9 +627,9 @@ class messenger extends menuedit_light
 					$msg["id"] = $msg["oid"];
 					$msg["color"] = ($cnt % 2) ? "#EEEEEE" : "#FFFFFF";
 					$msg["style"] = ($msg["status"]) ? "textsmall" : "textsmallbold";
-					if ($msg["type"] == 2)
+					if ($msg["type"] == MSG_EXTERNAL)
 					{
-						$from = $msg["mfrom"];
+						$from = $this->MIME_decode($msg["mfrom"]);
 						if ($this->msgconf["msg_filter_address"])
 						{
 							$from = preg_replace("/[<|\(|\[].*[>|\)|\]]/","",$from);
@@ -1213,32 +1213,47 @@ class messenger extends menuedit_light
 		{
 			case MSG_EXTERNAL:
 				// replace < and > in the fields with correspondening HTML entitites
+				$from = $msg["mfrom"];
+				$from = quoted_printable_decode($this->MIME_decode($from));
+				$subject = quoted_printable_decode($this->MIME_decode($msg["subject"]));
 				$vars = array(
-					"mfrom" => htmlspecialchars($msg["mfrom"]),
+					"mfrom" => htmlspecialchars($from),
 					"mtargets" => htmlspecialchars($msg["mto"]),
-					"subject" => htmlspecialchars($this->MIME_decode($msg["subject"])),
+					"subject" => htmlspecialchars($subject),
 				);
 				break;
 
 			case MSG_INTERNAL:
+				$subject = quoted_printable_decode($this->MIME_decode($msg["subject"]));
 				$vars = array(
 					"mfrom" => $msg["createdby"],
 					"mto" => $msg["mto"],
 					"mtargets" => $msg["mtargets1"],
-					"subject" => $msg["subject"],
+					"subject" => $subject,
 				);
 				break;
 		};
 
 		$this->vars($vars);	
 
+		$message = $msg["message"];
+		$message = ereg_replace("((ftp://)|(http://))(([[:alnum:]]|[[:punct:]])*)", "<a href=\"\\0\" target='_new'>\\0</a>",$message);
+
+		$message = quoted_printable_decode($message);
+		$message = nl2br($this->MIME_decode($message));
+		#if ($this->msgconf["msg_font"] != "courier")
+	#	{
+			$message = preg_replace("/[\r|\n|\r\n|\n\r]/","<br>",$message);
+	#	};
 		$this->vars(array(
 			"tm" => $this->time2date($msg["tm"]),
 			"mtargets2" => $msg["mtargets2"],
 			"id" => $msg["id"],
 			"msg_id" => $id,
 			"status" => $msg["status"],
-			"message" => nl2br($this->MIME_decode($msg["message"])),
+			"message" => $message,
+			"msg_font" => ($this->msgconf["msg_font"]) ? $this->msgconf["msg_font"] : "Courier",
+			"msg_font_size" => ($this->msgconf["msg_font_size"]) ? $this->msgconf["msg_font_size"] : "0",
 			"del_reforb" => $this->mk_reforb("delete",array("id" => $msg["id"])),
 			"reply_reforb" => $this->mk_reforb("reply",array("id" => $msg["id"])),
 			"mailbox" => $this->picker($mailbox,$mboxes),
@@ -1499,6 +1514,8 @@ class messenger extends menuedit_light
 						"msg_cnt_att" => $this->picker($conf["msg_cnt_att"],array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5")),
 						"msg_move_read_folder" => $this->picker($conf["msg_move_read_folder"],$folder_list),
 						"msg_move_read" => checked($conf["msg_move_read"]),
+						"msg_font" => $this->picker($conf["msg_font"],array("courier" => "Courier","arial" => "Arial","Tahoma" => "Tahoma")),
+						"msg_font_size" => $this->picker($conf["msg_font_size"],array("1" => "1","2" => "2", "3" => "3","+2" => "+2", "+3" => "+3")),
 						"aftpage" => "general",
 						);
 				break;
@@ -2322,7 +2339,7 @@ class messenger extends menuedit_light
 	function MIME_decode($string)
 	{
 		$pos = strpos($string,'=?');
-		if ($pos == false)
+		if ($pos === false)
 		{
 			return $string;
 		};
