@@ -598,7 +598,10 @@ class dronline extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'sel',
-			'caption' => 'Vali',
+			'caption' => html::href(array(
+				'url' => 'javascript:selall()',
+				'caption' => 'Vali'
+			)),
 			'sortable' => 0,
 			'nowrap' => 1,
 			'width' => '1',
@@ -677,21 +680,22 @@ class dronline extends class_base
 			'name' => 'blokk',
 			'content' => $tb->get_toolbar().$tbl.$this->mk_reforb('submit_block', $arr)
 		));
-		return $ret;
+		$this->read_template("selall.tpl");
+		return $this->parse().$ret;
 	}
 
 	function _do_stat_obj_show_oid($arr)
 	{
-		$tb = get_instance('toolbar');
+/*		$tb = get_instance('toolbar');
 		$tarr = $arr;
 		unset($tarr['show_oid']);
 
 		$tb->add_cdata(html::href(array(
 			'url' => $this->mk_my_orb('change', $tarr),
 			'caption' => '<span class="awmenuedittabletext">Tagasi objektide statistikasse</span>'
-		)));
+		)));*/
 
-		return $tb->get_toolbar().$this->_do_dronline($arr);
+		return /*$tb->get_toolbar().*/$this->_do_dronline($arr);
 	}
 
 	function _do_stat_obj($arr)
