@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.2 2001/05/17 15:09:47 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
