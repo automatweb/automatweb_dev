@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.19 2004/11/23 10:40:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.20 2004/11/25 11:28:59 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -498,6 +498,7 @@ class object_import extends class_base
 	function automatic_import($arr)
 	{
 		$o = obj($arr["id"]);
+		$this->do_init_import($o);
 		$this->do_exec_import($o);
 	}
 
