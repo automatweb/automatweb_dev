@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.87 2003/05/22 06:34:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.88 2003/06/04 19:19:09 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -25,54 +25,17 @@ class users extends users_user
 
 	// returns:
 	//	array of users, in the form
-	//	array(	"uid1" => acl_array,
-	//		"uidn" => acl_array),
-
-	// where acl_array can be either empty (in case we don't care about explicit
-	// acl information) or contains the following values
-	//		can_view,
-	//		can_change,
-	//		can_del
-	// which are set to boolean true
-	
+	//	array(	"uid1" => "uid1",
+	//		"uidn" => "uidn"),
 	function _gen_usr_list($args = array())
 	{
 		extract($args);
-		$retval[aw_global_get("uid")] = array(	
-			"can_change" 	=> true,
-			"can_view"	=> true,
-			// no we don't let you suicide
-			// um, why not exactly? - terryf
-			"can_del"	=> false
-		);	
-
-		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_GROUP);
-	
-		$q = "SELECT groups.oid,groups.gid,objects.name
-			FROM groups
-			LEFT JOIN objects ON (objects.oid = groups.oid)
-			WHERE objects.status != 0 AND groups.type IN (".GRP_REGULAR.",".GRP_DYNAMIC.",".GRP_DEFAULT.",".GRP_USERGRP . ")";
-		$this->db_query($q);
-		while($row = $this->db_next())
+		$retval = array();
+		$this->db_query("SELECT uid FROM users WHERE blocked != 1");
+		while ($row = $this->db_next())
 		{
-			$can_change = $this->can("change_users", $row["oid"]);
-			$can_view = $this->can("view_users", $row["oid"]);
-			$can_del = $this->can("delete_users", $row["oid"]);
-			if ($can_change || $can_view || $can_del)
-			{
-				// add all users of this group to list of users
-				$this->save_handle();
-				$ul = $this->getgroupmembers2($row["gid"]);
-				foreach($ul as $u_uid)
-				{
-					$retval[$u_uid] = array();
-					$retval[$u_uid]["can_view"] = ($can_view) ? true : false;
-					$retval[$u_uid]["can_change"] = ($can_change) ? true : false;
-					$retval[$u_uid]["can_del"] = ($can_del) ? true : false;
-				}
-				$this->restore_handle();
-			}
-		};
+			$retval[$row["uid"]] = $row["uid"];
+		}
 		return $retval;
 	}
 
@@ -133,8 +96,7 @@ class users extends users_user
 			"import" => $this->mk_my_orb("import")
 		));
 
-		$users = $this->_gen_usr_list();
-		$uid_list = array_keys($users);
+		$uid_list = $this->_gen_usr_list();
 		
 		$let = "";
 		if ($letter != "")
@@ -368,14 +330,12 @@ class users extends users_user
 			$id = aw_global_get("uid");
 		}
 
-		// FIXME: _reaaaaalllyyy_ bloody inefficient way to do this
-		$uacls = $this->_gen_usr_list();
-		if (!$uacls[$id]["can_change"])
+		$u = $this->fetch($id);
+		if (!$this->can("change", $u["oid"]))
 		{
 			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
 		}
 
-		$u = $this->fetch($id);
 		$this->read_template("changepwd.tpl");
 		$this->vars(array(
 			"email" => $u["email"],
@@ -390,9 +350,8 @@ class users extends users_user
 	function submit_change_pwd($arr)
 	{
 		extract($arr);
-		// FIXME: _reaaaaalllyyy_ bloody inefficient way to do this
-		$uacls = $this->_gen_usr_list();
-		if (!$uacls[$id]["can_change"])
+		$udata = $this->fetch($id);
+		if (!$this->can("change", $udata["oid"]))
 		{
 			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
 		}
@@ -453,9 +412,7 @@ class users extends users_user
 	function delete($arr)
 	{
 		extract($arr);
-		$this->save(array("uid" => $id, "blocked" => 1, "blockedby" => aw_global_get("uid")));
-		$this->savegroup(array("gid" => $this->get_gid_by_uid($id),"type" => 3));
-		$this->_log(ST_USERS, SA_BLOCK_USER, aw_global_get("uid")." blocked user $id");
+		$this->do_delete_user($id);
 		header("Location: ".$this->mk_orb("gen_list", array()));
 	}
 
@@ -2109,7 +2066,7 @@ class users extends users_user
 	//	add_empty - optional, if true, empty field is added in the beginning
 	function get_user_picker($arr = array())
 	{
-		$ret =  $this->make_keys(array_keys($this->_gen_usr_list()));
+		$ret = $this->_gen_usr_list();
 		ksort($ret);
 		return ($arr['add_empty'] ? array('' => '') : array()) + $ret;
 	}
@@ -2160,13 +2117,29 @@ class users extends users_user
 			$m = get_instance("menuedit");
 			// make it use the correct db connection
 			$m->dc = $dbi->dc;
+			// create aw objects root folder
+			$aw_o_root = $m->add_new_menu(array(
+				"parent" => $ini_opts["rootmenu"],
+				"name" => "AW Objektd",
+				"status" => 2,
+				"type" => MN_CLIENT,
+			));
+			
 			$gparent = $m->add_new_menu(array(
-				"parent" => 0,
+				"parent" => $aw_o_root,
 				"name" => "Groups",
 				"status" => 2,
 				"type" => MN_CLIENT,
 			));
 			$ini_opts["groups.tree_root"] = $gparent;
+
+			$uparent = $m->add_new_menu(array(
+				"parent" => $aw_o_root,
+				"name" => "Users",
+				"status" => 2,
+				"type" => MN_CLIENT,
+			));
+			$ini_opts["users.root_folder"] = $uparent;
 
 			// create default group
 			$this->dc = $dbi->dc;
@@ -2186,6 +2159,7 @@ class users extends users_user
 				"password" => $site["site_obj"]["default_user_pwd"],
 				"all_users_grp" => $aug,
 				"use_md5_passwords" => true,
+				"obj_parent" => $uparent
 			));
 		}
 		$ini_opts["auth.md5_passwords"] = 1;
@@ -2274,6 +2248,44 @@ class users extends users_user
 			)));
 		}
 		return $this->mk_my_orb("gen_list");
+	}
+
+	////
+	// !sends user welcome mail to user and others 
+	// parameters:
+	//	uid - the user whose mail to send
+	//	pass - if set, #password# is replaced by this, 
+	//	       since passwords in db are hashed, we can't read it from there
+	function send_welcome_mail($arr)
+	{
+		extract($arr);
+		$udata = $this->get_user(array(
+			"uid" => $uid
+		));
+
+		// send him some email as well if the users selected to do so
+		$c = get_instance("config");
+		$mail = $c->get_simple_config("join_mail".aw_global_get("LC"));
+		$mail = str_replace("#parool#", $pass,$mail);
+		$mail = str_replace("#kasutaja#", $uid,$mail);
+		$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array(
+			"nohtml" => true, 
+			"user" => $uid
+		))),$mail);
+		$mail = str_replace("#pwd_hash#", $this->get_change_pwd_hash_link($uid), $mail);
+
+		mail($udata["email"],$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+		$jsa = $c->get_simple_config("join_send_also");
+		if ($jsa != "")
+		{
+			mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
+		}
+	}
+
+	function on_delete_alias($arr)
+	{
+		$i = get_instance("core/users/user");	
+		$i->on_delete_alias($arr);
 	}
 }
 ?>
