@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.58 2004/03/10 15:27:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.59 2004/03/11 09:04:23 kristo Exp $
 
 lc_load("definition");
 
@@ -264,7 +264,7 @@ class acl_base extends db_connector
 				else
 				{
 					// no acl for this object in the database, find it's parent
-					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $oid","parent");
+					$parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = '$oid'","parent");
 					$tacl = array("oid" => $oid,"parent" => $parent,"priority" => -1);
 					aw_cache_set("aclcache",$oid,$tacl);
 				}
