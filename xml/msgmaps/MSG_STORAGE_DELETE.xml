@@ -1,13 +1,13 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/user</class>
-      <func>on_delete_user</func>
-      <param>CL_USER</param>
-</num_0>
-<num_1>
       <class>core/users/group</class>
       <func>on_delete_grp</func>
       <param>CL_GROUP</param>
+</num_0>
+<num_1>
+      <class>core/users/user</class>
+      <func>on_delete_user</func>
+      <param>CL_USER</param>
 </num_1>
 </xml>
