@@ -124,6 +124,61 @@
             <caption>Põhitegevus</caption>
       </property>
       <property>
+            <name>userta1</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined TA 1</caption>
+      </property>
+      <property>
+            <name>userta2</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined TA 2</caption>
+      </property>
+      <property>
+            <name>userta3</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined TA 3</caption>
+      </property>
+      <property>
+            <name>userta4</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined TA 4</caption>
+      </property>
+      <property>
+            <name>userta5</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined TA 5</caption>
+      </property>
+      <property>
             <name>addresslist</name>
             <table>objects</table>
             <group>oldcontacts</group>
@@ -742,6 +797,10 @@
                   <caption>Tegevus</caption>
                   <parent>general</parent>
             </org_sections>
+            <add_info>
+                  <caption>Lisainfo</caption>
+                  <parent>general</parent>
+            </add_info>
             <people>
                   <caption>Inimesed</caption>
             </people>

@@ -1,48 +1,27 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>forum</name>
+            <name>owner</name>
             <table>objects</table>
-            <group>forum</group>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>hidden</type>
             <store>no</store>
-            <no_caption>1</no_caption>
-            <caption>Foorum</caption>
+            <newonly>1</newonly>
       </property>
       <property>
-            <name>calendar_view_toolbar</name>
+            <name>category</name>
             <table>objects</table>
-            <group>calendar_view</group>
+            <group>general2</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Kalendri toolbar</caption>
-      </property>
-      <property>
-            <name>calendar_view</name>
-            <table>objects</table>
-            <group>calendar_view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>calendar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <caption>Kalender</caption>
-      </property>
-      <property>
-            <name>add_event</name>
-            <table>objects</table>
-            <group>add_event</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>callback</type>
-            <callback>callback_add_event</callback>
-            <no_caption>1</no_caption>
-            <caption>Lisa sündmus</caption>
+            <type>classificator</type>
+            <reltype>RELTYPE_CATEGORIES</reltype>
+            <orient>vertical</orient>
+            <multiple>1</multiple>
+            <recursive>1</recursive>
+            <caption>Kategooriad</caption>
       </property>
       <property>
             <name>forum_settings</name>
@@ -66,13 +45,37 @@
             <caption>Kalendri seaded</caption>
       </property>
       <property>
-            <name>categories</name>
+            <name>content</name>
             <table>objects</table>
-            <group>settings</group>
+            <group>content</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CATEGORIES</reltype>
+            <type>callback</type>
+            <callback>callback_content</callback>
+            <no_caption>1</no_caption>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>members_toolbar</name>
+            <table>objects</table>
+            <group>members</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Liikmete toolbar</caption>
+      </property>
+      <property>
+            <name>members</name>
+            <table>objects</table>
+            <group>members</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Liikmed</caption>
       </property>
       <property>
             <name>moderators_toolbar</name>
@@ -92,81 +95,113 @@
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
+            <no_caption>1</no_caption>
             <store>no</store>
             <caption>Moderaatorid</caption>
+      </property>
+      <property>
+            <name>blocked_toolbar</name>
+            <table>objects</table>
+            <group>blocked</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Blokeeritute toolbar</caption>
+      </property>
+      <property>
+            <name>blocked</name>
+            <table>objects</table>
+            <group>blocked</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Blokeeritud</caption>
       </property>
       <classinfo>
             <syslog_type>ST_COMMUNITY</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <forum>
-                  <caption>Foorum</caption>
-                  <submit>no</submit>
-            </forum>
-            <calendar>
-                  <caption>Kalender</caption>
-            </calendar>
-            <calendar_view>
-                  <caption>Sisuvaade</caption>
-                  <parent>calendar</parent>
-                  <submit>no</submit>
-            </calendar_view>
-            <add_event>
-                  <caption>Lisa sündmus</caption>
-                  <parent>calendar</parent>
-            </add_event>
-            <settings>
-                  <caption>Seaded</caption>
-            </settings>
+            <general2>
+                  <caption>Üldised seaded</caption>
+                  <parent>general</parent>
+            </general2>
             <forum_settings>
                   <caption>Foorumi seaded</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </forum_settings>
             <calendar_settings>
                   <caption>Kalendri seaded</caption>
-                  <parent>settings</parent>
+                  <parent>general</parent>
             </calendar_settings>
+            <content>
+                  <caption>Sisu</caption>
+                  <submit>no</submit>
+            </content>
+            <connected>
+                  <caption>Seotud isikud</caption>
+                  <submit>no</submit>
+            </connected>
+            <members>
+                  <caption>Liikmed</caption>
+                  <submit>no</submit>
+                  <parent>connected</parent>
+            </members>
             <moderators>
                   <caption>Moderaatorid</caption>
                   <submit>no</submit>
+                  <parent>connected</parent>
             </moderators>
+            <blocked>
+                  <caption>Blokeeritud</caption>
+                  <submit>no</submit>
+                  <parent>connected</parent>
+            </blocked>
       </groupinfo>
       <reltypes>
             <MODERATOR>
                   <value>3</value>
                   <clid>CL_USER</clid>
-                  <caption>moderaator</caption>
+                  <caption>Moderaator</caption>
             </MODERATOR>
             <MEMBER>
                   <value>4</value>
-                  <clid>CL_PROFILE</clid>
-                  <caption>kogukonna liige</caption>
+                  <clid>CL_USER</clid>
+                  <caption>Kogukonna liige</caption>
             </MEMBER>
             <BLOCKED>
                   <value>5</value>
                   <clid>CL_USER</clid>
-                  <caption>blokeeritud kasutaja</caption>
+                  <caption>Blokeeritud kasutaja</caption>
             </BLOCKED>
             <FORUM>
                   <value>1</value>
                   <clid>CL_FORUM_V2</clid>
-                  <caption>foorum</caption>
+                  <caption>Foorum</caption>
             </FORUM>
             <CALENDAR>
                   <value>2</value>
                   <clid>CL_PLANNER</clid>
-                  <caption>kalender</caption>
+                  <caption>Kalender</caption>
             </CALENDAR>
+            <CALENDAR_VIEW>
+                  <value>8</value>
+                  <clid>CL_CALENDAR_VIEW</clid>
+                  <caption>Kalendri vaade</caption>
+            </CALENDAR_VIEW>
             <CATEGORIES>
                   <value>6</value>
                   <clid>CL_META</clid>
-                  <caption>kogukondade kategooriad</caption>
+                  <caption>Kogukondade kategooriad</caption>
             </CATEGORIES>
             <CFG_MANAGER>
                   <value>7</value>
                   <clid>CL_CFGMANAGER</clid>
-                  <caption>seadete haldur</caption>
+                  <caption>Seadete haldur</caption>
             </CFG_MANAGER>
       </reltypes>
 </properties>
