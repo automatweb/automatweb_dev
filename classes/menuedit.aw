@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.272 2003/04/04 07:23:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.273 2003/04/04 13:48:27 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -445,7 +445,7 @@ class menuedit extends aw_template
 		// that planner under this menu. 
 		// I will fix this later.. --duke
 
-		// see siin genereerib nädala vaate, aga damn I really do hate this
+		// see siin genereerib nä¤¡la vaate, aga damn I really do hate this
 		if (is_array($meta["aliases_by_class"]) && sizeof($meta["aliases_by_class"][CL_PLANNER]) > 0)
 		{
 			$pl = get_instance("planner");
@@ -1767,7 +1767,7 @@ class menuedit extends aw_template
 			*/
 		}
 
-		# see hoolitseb sügavamalt olevate klasside nimekirjade eest
+		# see hoolitseb s gavamalt olevate klasside nimekirjade eest
 		if (is_array($this->cfg["classes"]) && $prnt != 0)
 		{
 			foreach($this->cfg["classes"] as $clid => $cldata)
@@ -2782,7 +2782,7 @@ class menuedit extends aw_template
 					continue;
 				};
 			};
-			
+
 			// only show content menus
 			if ($row["mtype"] != MN_CONTENT && $row["mtype"] != MN_CLIENT && $row["mtype"] != MN_HOME_FOLDER_SUB && $row["mtype"] != MN_PMETHOD)
 			{
@@ -2943,7 +2943,7 @@ class menuedit extends aw_template
 				$no_mid = true;
 				continue;
 			}*/
-			if ($row["mid"] == 1)
+			if ($row["mid"] == 1 && !$this->cfg["ignore_mids"])
 			{
 				$ap.="_MID";		// menu in center
 				$is_mid = true;
