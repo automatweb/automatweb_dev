@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.7 2001/06/05 16:16:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.8 2001/06/12 23:09:34 duke Exp $
 if (DEFS_LOADED == 1)
 {
 }
@@ -291,6 +291,10 @@ function is_valid($set,$string)
 	while( ($i < strlen($string) && (!($valid === false))))
 	{
 		$valid = !(strpos($checkagainst,$string[$i]) === false);
+		if (!$valid)
+		{
+			echo "invd char = ", $string[$i],"<br>";
+		}
 		$i++;
 	};
 	return $valid;
@@ -379,13 +383,13 @@ function gen_uniq_id($param = "")
 
 function checked($arg)
 {
-	return ($arg > 0) ? "checked" : "";
+	return ($arg) ? "checked" : "";
 }
 
 // for <select elements
 function selected($arg)
 {
-	return ($arg > 0) ? "SELECTED" : "";
+	return ($arg) ? "SELECTED" : "";
 }
 
 // kontrollime, kas parameeter on kuupäev (kujul pp-kk-aaaa)
