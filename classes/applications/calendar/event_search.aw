@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.21 2005/01/21 12:45:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.22 2005/01/21 14:13:53 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -85,7 +85,7 @@ class event_search extends class_base
 	function event_search()
 	{
 		$this->init(array(
-			"tpldir" => "applications/calendar",
+			"tpldir" => "applications/calendar/event_search",
 			"clid" => CL_EVENT_SEARCH,
 		));
 
