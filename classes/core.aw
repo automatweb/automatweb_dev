@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.132 2002/12/03 14:19:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.133 2002/12/06 10:07:49 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -1510,7 +1510,6 @@ class core extends db_connector
 	function raise_error($err_type,$msg, $fatal = false, $silent = false) 
 	{
 		$this->errmsg[] = $msg;
-		$this->errorlevel++;
 
 		$orig_msg = $msg;
 		$is_rpc_call = aw_global_get("__is_rpc_call");

@@ -1,70 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.21 2002/12/05 11:02:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.22 2002/12/06 10:07:49 kristo Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
 classload("defs");
-
-// wrapper for arrays - helps to get rid of numerous is_array checks
-// in code and reduces the amount of indenting
-class aw_array
-{
-	function aw_array($arg = false)
-	{
-		$this->arg = (is_array($arg)) ? $arg : array();
-		reset($this->arg);
-	}
-
-	function &get()
-	{
-		return $this->arg;
-	}
-
-	function get_at($key)
-	{
-		return $this->arg[$key];
-	}
-
-	function set($val)
-	{
-		$this->arg[] = $val;
-	}
-
-	function set_at($key, $val)
-	{
-		$this->arg[$key] = $val;
-	}
-
-	function next()
-	{
-		return each($this->arg);
-	}
-
-	function reset()
-	{
-		reset($this->arg);
-	}
-
-	function to_sql()
-	{
-		$str = join(",",array_values($this->arg));
-		if ($str == "")
-		{
-			return "NULL";
-		}
-		return $str;
-	}
-};
-
 class root
 {
-	// siin asuvad mõned sagedamini kasutataivamad funktsioonid
-	var $errorlevel;
 	function root()
 	{
-		$this->errorlevel = 0;
 		$this->stacks = array();
-		lc_load("definition");
 	}
 
 	////
