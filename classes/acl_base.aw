@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.79 2004/07/18 18:43:07 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.80 2004/07/28 09:10:08 rtoomas Exp $
 
 lc_load("definition");
 
@@ -98,7 +98,12 @@ class acl_base extends db_connector
 
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
-		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
+		//let's calculate the acl in PHP
+		//don't want to multiple the different syntaxes of bitshifting into every
+		//freaking db implementations
+		eval('$acl='.join(" | ",$qstr).";");
+		$this->db_query("UPDATE acl SET acl = $acl WHERE oid = $oid AND gid = $gid");
+		//$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
 
 
 		if ($invd)
