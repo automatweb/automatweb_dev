@@ -556,6 +556,41 @@
             <field>customer_search_results</field>
             <caption>Otsi tulemused </caption>
       </property>
+      <property>
+            <name>my_customers_toolbar</name>
+            <table>objects</table>
+            <group>my_customers</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>my_customers_hbox_toolbar</parent>
+            <field>my_customers_toolbar</field>
+            <caption>
+            <![CDATA["Klientide toolbar"]]>
+            </caption>
+      </property>
+      <property>
+            <name>my_customers_listing_tree</name>
+            <table>objects</table>
+            <group>my_customers</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>vbox_my_customers_left</parent>
+            <store>no</store>
+            <field>my_customers_listing_tree</field>
+            <caption>Rühmade puu</caption>
+      </property>
+      <property>
+            <name>my_customers_table</name>
+            <table>objects</table>
+            <group>my_customers</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_my_customers_right</parent>
+            <field>my_customers_table</field>
+            <caption>Kliendid</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
@@ -614,7 +649,7 @@
                   <submit>no</submit>
             </customers>
             <my_customers>
-                  <caption>kliendid</caption>
+                  <caption>Kliendid</caption>
                   <parent>relorg</parent>
                   <submit>no</submit>
             </my_customers>
@@ -860,6 +895,25 @@
                   <parent>customers_hbox_others</parent>
                   <group>customers</group>
             </vbox_customers_right>
+            <my_customers_hbox_toolbar>
+                  <type>hbox</type>
+                  <group>my_customers</group>
+            </my_customers_hbox_toolbar>
+            <my_customers_hbox_others>
+                  <type>hbox</type>
+                  <group>my_customers</group>
+                  <width>20%:80%</width>
+            </my_customers_hbox_others>
+            <vbox_my_customers_left>
+                  <type>vbox</type>
+                  <parent>my_customers_hbox_others</parent>
+                  <group>my_customers</group>
+            </vbox_my_customers_left>
+            <vbox_my_customers_right>
+                  <type>vbox</type>
+                  <parent>my_customers_hbox_others</parent>
+                  <group>my_customers</group>
+            </vbox_my_customers_right>
       </layout>
 </properties>
 
