@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.14 2003/02/07 15:19:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.15 2003/02/07 15:46:10 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -967,7 +967,7 @@ class form_calendar extends form_base
 
 		foreach($amount_els->get() as $el_with_value => $count_el_id)
 		{
-			$lb_id_data[$count_el_id] = $args["els"][$count_el_id];
+			$lb_id_data[$count_el_id] = $post_vars[$count_el_id];
 		}
 
 		foreach($amount_els->get() as $el_with_value => $count_el_id)
