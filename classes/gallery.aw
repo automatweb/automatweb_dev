@@ -1,7 +1,8 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.29 2002/10/23 09:30:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.30 2002/10/29 15:21:52 kristo Exp $
 
+classload("image");
 class gallery extends aw_template
 {
 	function gallery($id = 0)
@@ -168,7 +169,9 @@ class gallery extends aw_template
 					"col" => $col,
 					"date" => $cell["date"],
 					"link" => $cell["link"],
-					"ord" => $cell["ord"]
+					"ord" => $cell["ord"],
+					"has_textlink" => checked($cell["has_textlink"]),
+					"textlink" => $cell["textlink"],
 				));
 				$b = $cell["bigurl"] != "" ? $this->parse("BIG") : "";
 				$h = $cell["tnurl"] != "" ? $this->parse("HAS_IMG") : "";
@@ -305,6 +308,16 @@ class gallery extends aw_template
 				$v = str_replace("\\","",$$var);
 				$v = str_replace("'","\"",$v);
 				$this->arr[$page]["content"][$row][$col]["ord"] = $v;
+
+				$var = "has_textlink_".$row."_".$col;
+				global $$var;
+				$this->arr[$page]["content"][$row][$col]["has_textlink"] = $$var;
+
+				$var = "textlink_".$row."_".$col;
+				global $$var;
+				$v = str_replace("\\","",$$var);
+				$v = str_replace("'","\"",$v);
+				$this->arr[$page]["content"][$row][$col]["textlink"] = $v;
 
 				$var = "erase_".$row."_".$col;
 				global $$var;
@@ -516,21 +529,33 @@ class gallery extends aw_template
 						"caption" => $cell["caption"], 
 						"date" => $cell["date"],
 						"url" => $url,
-						"target" => $target
+						"target" => $target,
+						"textlink" => $cell["textlink"],
 					));
 					if ($cell["tnurl"] != "")
 					{
 						if ($cell["bigurl"] != "" || !$this->is_template("NOLINK_IMAGE")) 
 						{
-							$c.=$this->parse("IMAGE");
+							$_tpl = "IMAGE";
 						}
 						else
 						{
-							$c.=$this->parse("NOLINK_IMAGE");
+							$_tpl = "NOLINK_IMAGE";
 						}
 					}
+					else
+					{
+						$_tpl = "EMPTY";
+					}
+
+					if ($cell["has_textlink"] && $this->is_template("LINK"))
+					{
+						$_tpl = "LINK";
+					};
+
+					$c .= $this->parse($_tpl);
 				}
-				$this->vars(array("IMAGE" => $c,"NOLINK_IMAGE" => ""));
+				$this->vars(array("IMAGE" => $c,"NOLINK_IMAGE" => "", "LINK" => ""));
 				$l.=$this->parse("LINE");
 			}
 		}

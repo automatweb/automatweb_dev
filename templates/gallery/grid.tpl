@@ -91,12 +91,16 @@
 				<td><input type='file' NAME='tn_{VAR:row}_{VAR:col}' class="formfile"></td>
 			</tr>
 			<tr>
+				<td align=right class="celltext">Tekstilink:</td>
+				<td><input type="checkbox" name="has_textlink_{VAR:row}_{VAR:col}" {VAR:has_textlink}><input type='text' NAME='textlink_{VAR:row}_{VAR:col}' class="formtext" value="{VAR:textlink}" size="26"></td>
+			</tr>
+			<tr>
 				<td align=right class="celltext">{VAR:LC_GALLERY_IMAGE}:</td>
 				<td><input type='file' NAME='im_{VAR:row}_{VAR:col}' class="formfile"></td>
 			</tr>
 			<tr>
 				<td align=right class="celltext">Jrk:</td>
-				<td><input type='text' NAME='ord_{VAR:row}_{VAR:col}' class="formtext" size="3" VALUE='{VAR:ord}'></td>
+				<td><input type='text' NAME='ord_{VAR:row}_{VAR:col}' class="formtext" size="3" value='{VAR:ord}'></td>
 			</tr>
 		</table>
 	</td>
