@@ -688,9 +688,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (is_object($oid))
 		{
-			$oid = $oid->id();
+			$stat = $oid->status();
 		}
-		$stat = $this->db_fetch_field("SELECT status FROM objects WHERE oid = '$oid'", "status");
+		else
+		{
+			if ($GLOBALS["objects"][$oid])
+			{
+				// this should come from cache
+				$tmp = new object($oid);
+				$stat = $tmp->status();
+			}
+			else
+			{
+				$stat = $this->db_fetch_field("SELECT status FROM objects WHERE oid = '$oid'", "status");
+			};
+		};
 		return ($stat > 0);
 	}
 
