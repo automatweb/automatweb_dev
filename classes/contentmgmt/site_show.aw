@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.64 2004/06/09 20:24:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.65 2004/06/11 08:41:01 kristo Exp $
 
 /*
 
@@ -588,6 +588,13 @@ class site_show extends class_base
 			};
 
 			$no_fp_document = aw_ini_get("menuedit.no_fp_document");
+
+			if (strpos($ordby,"planner.start") !== false)
+			{
+				$filter[] = new object_list_filter(array(
+					"non_filter_classes" => CL_DOCUMENT
+				));
+			}
 
 			$filter["status"] = STAT_ACTIVE;
 			$filter["class_id"] = array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT);
