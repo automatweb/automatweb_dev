@@ -42,7 +42,7 @@
 <!-- END SUB: COMMENT -->
 </table>
 <!-- SUB: DELETE_ACTION -->
-<div align="right">
+<div align="right" style="background: #FFFFFF;">
 <input type="button" name="delete_comments" value="Kustuta valitud kommentaarid" onClick="if(confirm('Kustutada?')){document.changeform.action.value='delete_comments';document.changeform.submit();};"/>
 </div>
 <!-- END SUB: DELETE_ACTION -->
