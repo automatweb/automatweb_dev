@@ -1,11 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.7 2002/10/16 14:35:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.8 2002/10/18 14:18:13 kristo Exp $
 // search.aw - Search Manager
 class search extends aw_template
 {
 	function search($args = array())
 	{
 		$this->init("search");
+		$this->db_rows = array();
 	}
 
 	////
@@ -17,8 +18,6 @@ class search extends aw_template
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit",array("parent" => $parent)),
 		));
-
-
 	}
 
 	////
@@ -54,6 +53,7 @@ class search extends aw_template
 	// 	obj - reference to caller
 	function show($args = array())
 	{
+		$this->db_rows = array();
 		// all the required fields and their default values
 		$defaults = array(
 			"name" => "",
@@ -98,6 +98,7 @@ class search extends aw_template
 					$parent = (int)$parent;
 					$toolbar = $mn->rf_toolbar(array(
 						"parent" => $parent,
+						"no_save" => 1,
 					));
 				};
 			};
@@ -120,7 +121,7 @@ class search extends aw_template
 		if ($search)
 		{
 
-			$obj_list = $this->get_menu_list(false,true);
+			$obj_list = $this->_get_s_parent($args);
 			load_vcl("table");
 			$this->t = new aw_table(array(
 				"prefix" => "search",
@@ -251,11 +252,25 @@ class search extends aw_template
 				{
 					$where = join(" AND ",$parts);
 					$q = "SELECT * FROM objects WHERE $where";
-					$this->db_query($q);
+					$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
+					if (is_array($_tmp))
+					{
+						$this->db_rows = $_tmp;
+					}
+					reset($this->db_rows);
 				};
 
 				$results = 0;
 			};
+
+			// we need to make the object change links point to the remote server if specified. so fake it. 
+			if ($args["s"]["server"])
+			{
+				$lo = get_instance("remote_login");
+				$serv = $lo->get_server($args["s"]["server"]);
+				$old_bu = $this->cfg["baseurl"];
+				$this->cfg["baseurl"] = "http://".$serv;
+			}
 
 			//while($row = $this->db_next())
 			while($row = $this->get_next())
@@ -276,7 +291,7 @@ class search extends aw_template
 				));
 				if (!$args["clid"] || ($args["clid"] == "aliasmgr"))
 				{
-					$row["name"] = "<a href='" . $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $this->cfg["classes"][$row["class_id"]]["file"]) . "'>$row[name]</a>";
+					$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $this->cfg["classes"][$row["class_id"]]["file"]) . "'>$row[name]</a>";
 				};
 
 				// trim the location to show only up to 3 levels
@@ -296,6 +311,11 @@ class search extends aw_template
 				$this->t->define_data($row);
 				$results++;
 			};
+
+			if ($args["s"]["server"])
+			{
+				$this->cfg["baseurl"] = $old_bu;
+			}
 
 			if ($partcount > 0)
 			{
@@ -424,7 +444,18 @@ class search extends aw_template
 			};
 			if (is_array($args["s"]))
 			{
-				$ss = join("\n",map2("<input type='hidden' name='s[%s]' value='%d'>",$args["s"]));
+				$ss = "";
+//				foreach($args["s"] as $k => $v)
+//				{
+//					if (is_array($v))
+//					{
+						$ss = $this->req_array_reforb("s", $args["s"]);
+//					}
+//					else
+//					{
+//						$ss.="<input type='hidden' name='s[$k]' value='$v'>\n";
+//					}
+//				}
 				unset($args["s"]);
 			};
 			$this->vars(array(
@@ -441,6 +472,7 @@ class search extends aw_template
 			$toolbar = $mn->rf_toolbar(array(
 				"parent" => $parent,
 				"callback" => array($this,"modify_toolbar"),
+				"no_save" => 1,
 			));
 
 			// override the search button with our own
@@ -470,13 +502,10 @@ class search extends aw_template
 		{
 			$args["toolbar"]->add_separator();
 
-                        $args["toolbar"]->add_button(array(
-                                "name" => "mkgroup",
-                                "tooltip" => "Moodusta objektigrupp",
-                                "url" => "javascript:mk_group('Objektigrupi nimi:')",
-                                "imgover" => "save_over.gif",
-                                "img" => "save.gif",
-                        ));
+			$url = "javascript:mk_group('Objektigrupi nimi:')";
+			$link = "<a href=\"$url\" class=\"fgtext\">Moodusta objektigrupp</a>";
+
+                        $args["toolbar"]->add_cdata($link);
 			
 		};
 	}
@@ -494,6 +523,16 @@ class search extends aw_template
 		// 2 - put the names of the search fields into an array
 		// s[name] .. and so on, so that I can access them by 
 		// accessing the s array. I like the latter a lot more.
+
+		if (!$fields["server"])
+		{
+			$fields["server"] = array(
+				"type" => "select",
+				"caption" => "Server",
+				"options" => $this->list_objects(array("addempty" => true, "class" => CL_AW_LOGIN)),
+				"selected" => $args["s"]["server"],
+			);
+		};
 
 		if (!$fields["name"])
 		{
@@ -539,7 +578,7 @@ class search extends aw_template
 			$fields["location"] = array(
 				"type" => "select",
 				"caption" => "Asukoht",
-				"options" => $this->_get_s_parent($args["s"]["location"]),
+				"options" => $this->_get_s_parent($args),
 				"selected" => $args["location"],
 			);
 		};
@@ -590,10 +629,9 @@ class search extends aw_template
 		return $tar;
 	}
 
-	function _get_s_parent($val)
+	function _get_s_parent($args)
 	{
-		$li = array("0" => "igalt poolt") + $this->get_menu_list(false,true);
-		return $li;
+		return array("0" => "Igalt poolt") + $this->_search_mk_call("objects", "get_list", array(), $args);
 	}
 
 	function _get_s_redir_target()
@@ -690,7 +728,7 @@ class search extends aw_template
 		
 		$this->t->define_field(array(
 			"name" => "change",
-			"caption" => "",
+			"caption" => "<a href='javascript:search_selall()'>Vali</a>",
 			"align" => "center",
 			"talign" => "center",
 		));
@@ -704,7 +742,8 @@ class search extends aw_template
 		}
 		else
 		{
-			$result = $this->db_next();
+//			$result = $this->db_next();
+			list(,$result) = each($this->db_rows);
 		};
 		return $result;
 	}
@@ -771,7 +810,8 @@ class search extends aw_template
 	{
 		$this->quote($args);
 		extract($args);
-		if ($subaction == "cut")
+		// if we searched from a remote server we need to copy the damn things instead
+		if ($subaction == "cut" && !$s["server"])
 		{
 			$cut_objects = array();
 			if (is_array($sel))
@@ -781,16 +821,22 @@ class search extends aw_template
 					$cut_objects[$oid] = $oid;
 				}
 			}
-                	aw_session_set("cut_objects",$cut_objects);
+      aw_session_set("cut_objects",$cut_objects);
 		}
-		elseif($subaction == "copy")
+		elseif($subaction == "copy" || ($subaction == "cut" && $s["server"]))
 		{
 			$copied_objects = array();
 			if (is_array($sel))
 			{
 				foreach($sel as $oid => $one)
 				{
-					$r = $this->serialize(array("oid" => $oid));
+					$r = $this->_search_mk_call("objects", "serialize", array("oid" => $oid), $args);
+					if ($s["server"])
+					{
+						// yeah, sucks
+						$r = aw_serialize($r, SERIALIZE_NATIVE);
+					}
+
 					if ($r != false)
 					{
 						$copied_objects[$oid] = $r;
@@ -805,8 +851,8 @@ class search extends aw_template
 			{
 				while (list($ooid,) = each($sel))
 				{
-					$this->delete_object($ooid);
-					$this->delete_aliases_of($ooid);
+					$this->_search_mk_call("objects", "delete_object", array("oid" => $ooid), $args);
+					$this->_search_mk_call("objects", "delete_aliases_of", array("oid" => $ooid), $args);
 				}
 			};
 		}
@@ -814,11 +860,11 @@ class search extends aw_template
 		{
 			// aga kuidas otsing kirja panna?
 			$id = $this->new_object(array(
-                                "parent" => $parent,
-                                "name" => $grpname,
-                                "class_id" => CL_OBJECT_CHAIN,
+				"parent" => $parent,
+        "name" => $grpname,
+        "class_id" => CL_OBJECT_CHAIN,
 				"metadata" => array("objs" => $sel,"s" => $s),
-                        ));
+			));
 		}
 		elseif ($subaction == "assign_config")
 		{
@@ -842,6 +888,21 @@ class search extends aw_template
 		print_r($args);
 		print "</pre>";
 
+	}
+
+	function _search_mk_call($class, $action, $params, $args)
+	{
+		$_parms = array(
+			"class" => $class,
+			"action" => $action, 
+			"params" => $params
+		);
+		if ($args["s"]["server"])
+		{
+			$_parms["method"] = "xmlrpc";
+			$_parms["login_obj"] = $args["s"]["server"];
+		}
+		return $this->do_orb_method_call($_parms);
 	}
 }
 ?>

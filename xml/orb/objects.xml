@@ -88,6 +88,30 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="db_query">
+			<function name="orb_db_query">
+				<arguments>
+					<required name="sql"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_object">
+			<function name="orb_delete_object">
+				<arguments>
+					<required name="oid"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_aliases_of">
+			<function name="orb_delete_aliases_of">
+				<arguments>
+					<required name="oid"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.36 2002/10/09 09:49:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.37 2002/10/18 14:18:13 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 classload("cache");
 class db_objects extends aw_template 
@@ -752,6 +752,30 @@ class objects extends db_objects
 				
 		};
 		return $retval;
+	}
+
+	function orb_db_query($arr)
+	{
+		extract($arr);
+		$ret = array();
+		$this->db_query($sql);
+		while ($row = $this->db_next())
+		{
+			$ret[] = $row;
+		}
+		return $ret;
+	}
+
+	function orb_delete_object($arr)
+	{
+		extract($arr);
+		return $this->delete_object($oid);
+	}
+
+	function orb_delete_aliases_of($arr)
+	{
+		extract($arr);
+		return $this->delete_aliases_of($oid);
 	}
 }
 

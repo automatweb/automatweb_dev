@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.7 2002/10/16 13:51:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.8 2002/10/18 14:18:13 kristo Exp $
 // remote_login.aw - AW remote login
 classload("socket");
 
@@ -208,6 +208,12 @@ class remote_login extends aw_template
 		));
 
 		return array($ob["meta"]["server"],$this->cookie);
+	}
+
+	function get_server($id)
+	{
+		$ob = $this->get_object($id);
+		return $ob["meta"]["server"];
 	}
 
 	function getcookie($arr)
