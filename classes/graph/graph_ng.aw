@@ -1,10 +1,9 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/graph/Attic/graph_ng.aw,v 1.3 2004/02/11 21:46:45 duke Exp $
 /*
 
 @classinfo syslog_type=ST_GRAPH_NG
 
-@groupinfo general caption=Üldine
 @groupinfo data caption=Andmed
 @groupinfo conf caption=&Uuml;dine_konfiguratsioon
 @groupinfo specific caption=T&uuml;&uuml;bi_konfiguratsioon
@@ -12,12 +11,10 @@
 @default table=objects
 @default group=general
 @default field=meta
-
 @default method=serialize
 
 @property graph_type type=select 
 @caption Graafiku t&uuml;&uuml;p
-
 
 @default group=data
 
@@ -33,11 +30,8 @@
 @property data_cvs_sep type=textbox size=2
 @caption CSV failis eraldaja
 
-
-
 @property typeconf type=generated generator=prop_gen group=specific
 @caption Konf
-
 
 @default group=conf
 
@@ -80,41 +74,6 @@ class graph_ng extends class_base
 	}
 
 	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
 	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
@@ -129,12 +88,12 @@ class graph_ng extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = new object($id);
 
 		$this->read_template('show.tpl');
 
 		$this->vars(array(
-			'name' => $ob['name']
+			'name' => $ob->id(),
 		));
 
 		return $this->parse();
@@ -167,12 +126,12 @@ class graph_ng extends class_base
 	// !gets the drawing module instance by graph object id
 	function get_module_inst($id)
 	{
-		$ob = $this->get_object($id);
-		if ($ob['meta']['graph_type'] == '')
+		$ob = new object($id);
+		if ("" == $ob->prop('graph_type'))
 		{
 			return get_instance('graph/graph_base');
 		}
-		return get_instance('graph/modules/'.$ob['meta']['graph_type']);
+		return get_instance('graph/modules/'.$ob->prop('graph_type'));
 	}
 
 	function get_property(&$arr)
