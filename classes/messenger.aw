@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.89 2001/08/31 00:35:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.90 2001/08/31 01:06:33 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 lc_load("messenger");
@@ -1171,7 +1171,9 @@ class messenger extends menuedit_light
 		$this->dequote($message);
 		$this->dequote($subject);
 		$this->dequote($subject);
-		
+	
+		// Signatuuri voiks siiski juba edismivormi lisada,
+		// siis saab kasutaja seda muuta soovi kohaselt
 		if ($args["signature"] != "none")
 		{
 			// signatuur loppu
@@ -1181,7 +1183,7 @@ class messenger extends menuedit_light
 		classload("aw_mail");
 		$this->awm = new aw_mail();
 
-		$message = str_replace("\n","\r\n",$message);
+		//$message = str_replace("\n","\r\n",$message);
 		// kui meil on tarvis saata ka valiseid faile, siis teeme seda siin
 		if (sizeof($externals) > 0)
 		{
@@ -1266,7 +1268,8 @@ class messenger extends menuedit_light
 
 		$mfrom = sprintf("%s <%s>",$fromn,$froma);
 		$this->quote($mfrom);
-		$q = "UPDATE messages SET mfrom = '$mfrom' WHERE id = '$msg_id'";
+		$tm = time();
+		$q = "UPDATE messages SET mfrom = '$mfrom',tm=$tm WHERE id = '$msg_id'";
 		$this->db_query($q);
 
 		$this->awm->create_message(array(
@@ -1858,10 +1861,11 @@ class messenger extends menuedit_light
 
 		$message = $msg["message"];
 		$message = htmlspecialchars($message);
-		//$message = preg_replace("/(http:\/\/\S+)/si","\\1<a href='\2' target='new'>\2</a>",$message);
+		$message = preg_replace("/(http|https|ftp)(:\/\/\S+?)\s/si","<a href=\"\\1\\2\" target=\"_blank\">\\1\\2</a>", $message);
 
 		$message = $this->MIME_decode($message);
-		$message = preg_replace("/(\r|\n)/","<br>",$message);
+		$message = preg_replace("/(\r)/","",$message);
+		$message = preg_replace("/(\n)/","<br>",$message);
 		$this->vars(array("msg_id" => $args["id"]));
 		
 		// soltuvalt "op"-ist naitame kas show voi preview sectionit muutmistemplatest
