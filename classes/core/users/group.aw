@@ -370,7 +370,17 @@ class group extends class_base
 
 	////
 	// !override alias adding
-	function addalias($arr)
+	function callback_on_addalias($arr)
+	{
+		$tar = explode(",", $arr["alias"]);
+		foreach($tar as $alias)
+		{
+			$arr["alias"] = $alias;
+			$this->on_addalias($arr);
+		}
+	}
+
+	function on_addalias($arr)
 	{
 		// now, if the alias is of type RELTYPE_MEMBER, then we must add the user to the group
 		if ($arr["reltype"] == RELTYPE_MEMBER)
@@ -388,7 +398,6 @@ class group extends class_base
 		{
 			$this->normalize_acl_group_aliases();
 		}
-		return core::addalias($arr);
 	}
 
 	function get_acls($arr)
@@ -466,6 +475,15 @@ class group extends class_base
 			$a = get_instance("acl_class");
 			$a->remove_group_from_acl($a_o[OID], $this->users->get_gid_for_oid($id));
 		}
+		else
+		if ($a_o["class_id"] == CL_USER)
+		{
+//			echo "remove users from group , , id = $id gid = ".$this->users->get_gid_for_oid($id)." alias = $alias, uid = ".$this->users->get_uid_for_oid($alias)." <br>";
+			$this->users->remove_users_from_group_rec(
+				$this->users->get_gid_for_oid($id),
+				array($this->users->get_uid_for_oid($alias))
+			);
+		}
 	}
 
 	function callback_on_submit_relation_list($arr)
@@ -476,6 +494,7 @@ class group extends class_base
 
 	function normalize_acl_group_aliases()
 	{
+		return;
 		// get all groups
 		$go = $this->list_objects(array(
 			"class" => CL_GROUP,
@@ -526,6 +545,20 @@ class group extends class_base
 				}
 			}
 		}		
+	}
+
+	function callback_pre_save($arr)
+	{
+		$arr["coredata"]["name"] = $arr["form_data"]["name"];
+	}
+
+	function on_delete_hook($oid)
+	{
+		$gid = $this->users->get_gid_for_oid($oid);
+		if ($gid)
+		{
+			$this->users->deletegroup($gid);
+		}
 	}
 }
 ?>

@@ -64,6 +64,12 @@
 @property passwd_again store=no type=password store=no
 @caption Password veelkord
 
+@property gen_pwd store=no type=text 
+@caption Genereeri parool
+
+@property genpwd store=no type=textbox 
+@caption Genereeritud parool
+
 @property resend_welcome store=no type=checkbox ch_value=1
 @caption Saada tervitusmeil uuesti
 
@@ -207,6 +213,33 @@ class user extends class_base
 			case "stat":
 				$prop["value"] = $this->_get_stat($arr["objdata"]["uid"]);
 				break;
+
+			case "gen_pwd":
+				$prop["value"] = 
+					"
+						<script language=\"javascript\">
+						function gp()
+						{
+							pwd = new String(\"\");
+							for (i = 0; i < 8; i++)
+							{
+								rv = Math.random()*(123-97);
+								rn = parseInt(rv);
+								rt = rn+97;
+								pwd = pwd + String.fromCharCode(rt);
+							}
+							document.changeform.passwd.value = pwd;
+							document.changeform.passwd_again.value = pwd;
+							document.changeform.genpwd.value = pwd;
+						}
+						</script>					
+					".
+					html::href(array(
+					"url" => "#",
+					"onClick" => "gp();",
+					"caption" => "Genereeri parool"
+				));
+				break;
 		}
 		return PROP_OK;
 	}	
@@ -214,6 +247,7 @@ class user extends class_base
 	function set_property(&$arr)
 	{
 		$prop =& $arr["prop"];
+		load_vcl("date_edit");
 		switch($prop['name'])
 		{
 			case "name":
@@ -237,7 +271,7 @@ class user extends class_base
 				$this->users->set_user_config(array(
 					"uid" => $arr["objdata"]["uid"],
 					"key" => "act_from",
-					"value" => $prop['value']
+					"value" => date_edit::get_timestamp($prop['value'])
 				));
 				break;
 
@@ -245,7 +279,7 @@ class user extends class_base
 				$this->users->set_user_config(array(
 					"uid" => $arr["objdata"]["uid"],
 					"key" => "act_to",
-					"value" => $prop['value']
+					"value" => date_edit::get_timestamp($prop['value'])
 				));
 				break;
 
@@ -670,7 +704,7 @@ class user extends class_base
 		return $acls;
 	}
 
-	function on_delete_alias($arr)
+/*	function on_delete_alias($arr)
 	{
 		extract($arr);
 		// if the alias to delete is acl, then we must remove this group from the acl.
@@ -680,7 +714,7 @@ class user extends class_base
 			$a = get_instance("acl_class");
 			$a->remove_group_from_acl($a_o[OID], $this->users->get_gid_for_oid($id));
 		}
-	}
+	}*/
 
 	function _get_stat($uid)
 	{
