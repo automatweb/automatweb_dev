@@ -150,12 +150,12 @@ class layout extends class_base
 
 			case "grid_aliases":
 				$ge = get_instance("vcl/grid_editor");
-				$arr['metadata']['grid'] = $ge->on_aliases_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']);
+				$arr['obj_inst']->set_meta("grid",$ge->on_aliases_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']));
 				break;
 
 			case "grid_styles":
 				$ge = get_instance("vcl/grid_editor");
-				$arr['metadata']['grid'] = $ge->on_styles_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']);
+				$arr["obj_inst"]->set_meta("grid",$ge->on_styles_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']));
 				break;
 
 			case "rows":
