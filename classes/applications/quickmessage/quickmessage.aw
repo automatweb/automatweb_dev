@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.1 2004/06/02 10:22:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.2 2004/06/23 12:21:55 duke Exp $
 // quickmessage.aw - Kiirteade 
 /*
 
@@ -58,14 +58,6 @@ class quickmessage extends class_base
 				$retval = PROP_IGNORE;
 				break;
 
-			case "status":
-				$retval = PROP_IGNORE;
-				break;
-
-			case "comment":
-				$retval = PROP_IGNORE;
-				break;
-
 		};
 		return $retval;
 	}
@@ -73,26 +65,30 @@ class quickmessage extends class_base
 	function get_inbox_for_user($arr)
 	{
 		$user_to = $arr["user_to"];
-		$q = "SELECT quickmessages.* FROM quickmessages LEFT JOIN objects ON (quickmessages.id = objects.brother_of) WHERE user_to = '$user_to' ORDER BY objects.created DESC";
-		$this->db_query($q);
+		$ol = new object_list(array(
+			"user_to" => $user_to,
+			"sort_by" =>  "objects.created DESC",
+		));
 		$msgs = array();
-		while($row = $this->db_next())
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$msgs[] = $row;
-		}
+			$msgs[] = $o->properties();
+		};
 		return $msgs;
 	}
 
 	function get_outbox_for_user($arr)
 	{
 		$user_from = $arr["user_from"];
-		$q = "SELECT quickmessages.* FROM quickmessages LEFT JOIN objects ON (quickmessages.id = objects.brother_of) WHERE user_from = '$user_from' ORDER BY objects.created DESC";
-		$this->db_query($q);
+		$ol = new object_list(array(
+			"user_from" => $user_from,
+			"sort_by" => "objects.created DESC",
+		));
 		$msgs = array();
-		while($row = $this->db_next())
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$msgs[] = $row;
-		}
+			$msgs[] = $o->properties();
+		};
 		return $msgs;
 	}
 
