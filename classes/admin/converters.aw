@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.47 2004/09/15 18:06:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.48 2004/09/20 13:14:07 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1735,6 +1735,7 @@ class converters extends aw_template
 			{
 				$nm = str_replace("can_", "", $nm);
 				$r1 = $this->can($nm, $row["oid"]);
+				//$r1 = $GLOBALS["object_loader"]->can($nm, $row["oid"], true);
 				$r2 = $GLOBALS["object_loader"]->can($nm, $row["oid"]);
 				if ($r1 != $r2)
 				{
