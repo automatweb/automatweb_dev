@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.5 2004/10/04 12:00:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.6 2004/10/08 15:24:46 kristo Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 
@@ -56,6 +56,10 @@ class abstract_datasource extends class_base
 		{
 			case "file_has_header":
 			case "file_separator":
+				if (!is_oid($arr["obj_inst"]->prop("ds")))
+				{
+					return PROP_IGNORE;
+				}
 				$dso = obj($arr["obj_inst"]->prop("ds"));
 				if ($dso->class_id() != CL_FILE)
 				{
