@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.40 2002/12/19 15:18:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.41 2003/01/02 15:33:23 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -594,11 +594,20 @@ class config extends db_config
 				FROM forms
 				LEFT JOIN objects ON objects.oid = forms.id
 				WHERE objects.status != 0 AND forms.type = ".FTYPE_ENTRY);
-			
+		
+		$forms = array();
+
 		$f = get_instance("formgen/form");
 		$ops = $f->get_op_list();
 		while ($row = $this->db_next())
 		{
+			if ($row["subtype"] == FSUBTYPE_JOIN)
+			{
+				$forms[$row["oid"]] = $row["oid"];
+			}
+			$tops = new aw_array($ops[$row["oid"]]);
+			$rops = array(0 => '') + $tops->get();
+
 			$this->vars(array(
 				"form_id"	=> $row["oid"],
 				"form_name" 	=> $row["name"],
@@ -608,8 +617,8 @@ class config extends db_config
 				"change"	=> $this->mk_orb("change", array("id" => $row["oid"]), "form"),
 				"name"		=> $row["j_name"],
 				"order"		=> $row["j_order"],
-				"jops"			=> $this->picker($row["j_op"],$ops[$row["oid"]]),
-				"jops2"			=> $this->picker($row["j_op2"],$ops[$row["oid"]]),
+				"jops"			=> $this->picker($row["j_op"], $rops),
+				"jops2"			=> $this->picker($row["j_op2"],$rops),
 				"mf" => checked($row["j_mustfill"] == 1)
 			));
 			if ($row["subtype"] == FSUBTYPE_JOIN)
@@ -635,7 +644,32 @@ class config extends db_config
 			"reforb" => $this->mk_reforb("save_jf")
 		));
 
+		// now select elements part
+		$email_el = $this->get_cval("users::email_element");
+		$name_els = aw_unserialize($this->get_cval("users::name_elements"));
+		$name_els_sep = $this->get_cval("users::name_elements_sep");
+
+		$finst = get_instance("formgen/form");
+		$els = $finst->get_elements_for_forms($forms, false, true);
+
+		$this->vars(array(
+			"email_el" => $this->picker($email_el, $els),
+			"name_els" => $this->mpicker($name_els, $els),
+			"name_els_sep" => $name_els_sep,
+			"n_reforb" => $this->mk_reforb("submit_email_els")
+		));
 		return $this->parse();
+	}
+
+	function submit_email_els($arr)
+	{
+		extract($arr);
+		$this->set_cval("users::email_element",$email_el);
+		$ser = aw_serialize($this->make_keys($name_els));
+		$this->quote(&$ser);
+		$this->set_cval("users::name_elements", $ser);
+		$this->set_cval("users::name_elements_sep",$name_els_sep);
+		return $this->mk_my_orb("sel_join_form");
 	}
 
 	function save_jf($arr)

@@ -2,6 +2,10 @@
 {VAR:error}
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
+<td class="fcaption">Nimi liitumisformist:</td>
+<td class="fcaption">{VAR:name}</td>
+</tr>
+<tr>
 <td class="fcaption">Kasutajanimi:</td>
 <td class="fcaption"><input type="text" name="a_uid" VALUE='{VAR:uid}'></td>
 </tr>

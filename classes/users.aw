@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.71 2002/12/30 13:40:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.72 2003/01/02 15:33:23 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -720,6 +720,14 @@ class users extends users_user
 			}
 			if ($found)
 			{
+				if (count($jgrps) == 1)
+				{
+					reset($jgrps);
+					list(,$gp) = each($jgrps);
+					header("Location: ".$this->mk_my_orb("add_user", array("level" => 1, "join_grp" => $gp)));
+					die();
+				}
+
 				$this->read_template("sel_join_grp.tpl");
 				$this->vars(array(
 					"reforb" => $this->mk_reforb("add_user", array("level" => 1,"no_reforb" => true)),
@@ -769,11 +777,44 @@ class users extends users_user
 			else
 			{
 				// and when we're dont with all of them, let the user select username/password
+				// if email is not set, then try to read it from the entered data
+				if ($add_state["email"] == "")
+				{
+					$email_el = $this->get_cval("users::email_element");
+					$name_els = aw_unserialize($this->get_cval("users::name_elements"));
+					$name_els_sep = $this->get_cval("users::name_elements_sep");
+
+					$finst = get_instance("formgen/form");
+
+					$sff = new aw_array($session_filled_forms);
+					foreach($sff->get() as $sf_id => $sf_e_id)
+					{
+						$sf_els = $finst->get_elements_for_forms(array($sf_id => $sf_id));
+						if (isset($sf_els[$email_el]))
+						{
+							$finst->load($sf_id);
+							$finst->load_entry($sf_e_id);
+							$add_state["email"] = $finst->get_element_value($email_el);
+						}
+						foreach($name_els as $nelid)
+						{
+							if (isset($sf_els[$nelid]))
+							{
+								$finst->load($sf_id);
+								$finst->load_entry($sf_e_id);
+								$add_state["name"] .= $finst->get_element_value($nelid).$name_els_sep;
+							}
+						}
+					}
+					aw_session_set("add_state", $add_state);
+				}
+
 				$this->read_template("add.tpl");
 				$this->vars(array(
 					"error" => $add_state["error"], 
 					"uid" => $add_state["uid"],
 					"email" => $add_state["email"],
+					"name" => $add_state["name"],
 					"reforb"	=> $this->mk_reforb("submit_user", array("join_grp" => $join_grp))
 				));
 				return $this->parse();
@@ -2017,11 +2058,43 @@ class users extends users_user
 		else
 		{
 			// and when we're dont with all of them, let the user select username/password
+			if ($add_state["email"] == "")
+			{
+				$email_el = $this->get_cval("users::email_element");
+				$name_els = aw_unserialize($this->get_cval("users::name_elements"));
+				$name_els_sep = $this->get_cval("users::name_elements_sep");
+
+				$finst = get_instance("formgen/form");
+
+				$sff = new aw_array($session_filled_forms);
+				foreach($sff->get() as $sf_id => $sf_e_id)
+				{
+					$sf_els = $finst->get_elements_for_forms(array($sf_id => $sf_id));
+					if (isset($sf_els[$email_el]))
+					{
+						$finst->load($sf_id);
+						$finst->load_entry($sf_e_id);
+						$add_state["email"] = $finst->get_element_value($email_el);
+					}
+					foreach($name_els as $nelid)
+					{
+						if (isset($sf_els[$nelid]))
+						{
+							$finst->load($sf_id);
+							$finst->load_entry($sf_e_id);
+							$add_state["name"] .= $finst->get_element_value($nelid).$name_els_sep;
+						}
+					}
+				}
+				aw_session_set("add_state", $add_state);
+			}
+
 			$this->read_template("add.tpl");
 			$this->vars(array(
 				"error" => $add_state["error"], 
 				"uid" => $add_state["uid"],
 				"email" => $add_state["email"],
+				"name" => $add_state["name"],
 				"reforb"	=> $this->mk_reforb("submit_user", array("join_grp" => $join_grp))
 			));
 			return $this->parse();

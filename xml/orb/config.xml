@@ -99,6 +99,13 @@
 			</function>
 		</action>
 
+		<action name="submit_email_els">
+			<function name="submit_email_els">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="config">
 			<function name="gen_config">
 				<arguments>

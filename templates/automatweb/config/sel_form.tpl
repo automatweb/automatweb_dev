@@ -58,3 +58,22 @@ Muutja: {VAR:modifiedby}
 <input type='submit' VALUE='Salvesta'>
 {VAR:reforb}
 </form>
+<Br><br><br>
+<form action="reforb.{VAR:ext}" method="POST">
+<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+<tr bgcolor="#C9EFEF">
+<td class="plain">E-maili element: </td>
+<td class="plain"><select name="email_el">{VAR:email_el}</select></td>
+</tr>
+<tr bgcolor="#C9EFEF">
+<td class="plain">Nime elemendid: </td>
+<td class="plain"><select multiple name="name_els[]">{VAR:name_els}</select></td>
+</tr>
+<tr bgcolor="#C9EFEF">
+<td class="plain">Nime elementide eraldaja: </td>
+<td class="plain"><input type='text' name='name_els_sep' value="{VAR:name_els_sep}" size=3></td>
+</tr>
+</table>
+<input type='submit' VALUE='Salvesta'>
+{VAR:n_reforb}
+</form>
