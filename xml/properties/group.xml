@@ -59,8 +59,7 @@
       </property>
       <property>
             <name>type</name>
-            <type>text</type>
-            <store>no</store>
+            <type>select</type>
             <table>groups</table>
             <group>general</group>
             <field>type</field>
@@ -74,6 +73,14 @@
             <group>general</group>
             <field>search_form</field>
             <caption>Otsinguvorm</caption>
+      </property>
+      <property>
+            <name>data</name>
+            <type>text</type>
+            <group>dyn_search</group>
+            <no_caption>1</no_caption>
+            <table>groups</table>
+            <field>data</field>
       </property>
       <property>
             <name>import</name>
@@ -128,6 +135,10 @@
             <general>
                   <caption>Üldine</caption>
             </general>
+            <dyn_search>
+                  <caption>Otsing</caption>
+                  <submit>no</submit>
+            </dyn_search>
             <import>
                   <caption>Import</caption>
             </import>

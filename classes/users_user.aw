@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.61 2003/07/02 15:23:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.62 2003/07/07 15:01:59 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1394,7 +1394,8 @@ class users_user extends aw_template
 			FROM aliases
 				LEFT JOIN objects ON (aliases.target = objects.oid)
 			WHERE 
-				aliases.source = '$gd[oid]'
+				aliases.source = '$gd[oid]' AND 
+				aliases.reltype = '2'
 		";
 		$this->db_query($q);
 		$aliases = array();

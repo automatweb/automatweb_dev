@@ -5,6 +5,7 @@
 @classinfo syslog_type=ST_GROUP relationmgr=yes
 
 @groupinfo general caption=Üldine
+@groupinfo dyn_search caption=Otsing submit=no
 @groupinfo import caption=Import
 @groupinfo roles caption=Rollid
 @groupinfo objects caption="Objektid ja &Otilde;igused"
@@ -35,11 +36,13 @@
 @property createdby type=text field=createdby
 @caption Kes l&otilde;i
 
-@property type type=text store=no
+@property type type=select 
 @caption T&uuml;&uuml;p
 
 @property search_form type=relpicker reltype=RELTYPE_SEARCHFORM
 @caption Otsinguvorm
+
+@property data type=text group=dyn_search no_caption=1
 
 @property import type=fileupload store=no group=import
 @caption Impordi kasutajaid
@@ -104,6 +107,18 @@ class group extends class_base
 	
 		switch($prop['name'])
 		{
+			case "data":
+				$f = get_instance("formgen/form");
+				$prop['value'] = $f->gen_preview(array(
+					"id" => $arr["objdata"]["search_form"],
+					"entry_id" => $prop['value'], 
+					"extraids" => array(
+						"group_id" => $arr["obj"]["oid"],
+					),
+					"tpl" => "show_noform.tpl"
+				));				
+				break;
+
 			case "comment":
 				return PROP_IGNORE;
 
@@ -116,7 +131,10 @@ class group extends class_base
 				break;
 
 			case "type":
-				$prop['value'] = ($prop['value'] == GRP_DYNAMIC ? "D&uuml;naamiline" : "Tavaline");
+				$prop['options'] = array(
+					GRP_REGULAR => 'Tavaline',
+					GRP_DYNAMIC => "D&uuml;naamiline"
+				);
 				break;
 
 			case "roles":
@@ -148,6 +166,23 @@ class group extends class_base
 		$prop =& $arr["prop"];
 		$gid = $this->users->get_gid_for_oid($arr["obj"]["oid"]);
 
+		if ($prop['name'] == 'data')
+		{
+			$gid = $this->users->get_gid_for_oid($arr["form_data"]["group_id"]);
+			$pg = $this->users->fetchgroup($gid);
+		
+			$f = get_instance("formgen/form");
+			$f->process_entry(array(
+				"id" => $pg["search_form"], 
+				"entry_id" => $arr["entry_id"]
+			));
+			$eid = $f->entry_id;
+
+			$this->db_query("UPDATE groups SET data = '$eid' WHERE gid = '$gid'");
+
+			$this->users->update_dyn_group($gid);
+		}
+		else
 		if ($prop['name'] == 'import')
 		{
 			global $import;
@@ -576,6 +611,20 @@ class group extends class_base
 		{
 			$this->users->deletegroup($gid);
 		}
+	}
+
+	function callback_mod_tab($parm)
+	{
+		$id = $parm['id'];
+		if ($id == 'dyn_search')
+		{
+			$od = $this->users->fetchgroup($this->users->get_gid_for_oid($parm['coredata']['oid']));
+			if ($od["type"] != GRP_DYNAMIC)
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }
 ?>
