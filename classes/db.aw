@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.17 2003/03/12 13:07:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.18 2003/03/12 16:43:43 duke Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -230,7 +230,6 @@ class db_connector extends root
 	// key(array) name => value (oid => 666)
 	// values(array) name => value pairs of fields that need to be updated
 	// table(string) - name of the table to update
-	// replace(bool) - whether to use replace instead of update
 	// can be updated to support multiple keys
 	// Example:
 	// $this->db_update_record(array
@@ -261,17 +260,13 @@ class db_connector extends root
 
 		if ($fields)
 		{
-			if (isset($replace))
+			$old = $this->get_record($table,$keyname,$keyvalue,array($keyname));
+			if (empty($old))
 			{
-				$fields .= ", $keyname = $keyvalue ";
-				// XXX: probably MySQL specific, but then again, this whole function
-				// shouldn't do any queries itself -- duke
-				$q = "REPLACE $table SET $fields";
-			}
-			else
-			{
-				$q = sprintf("UPDATE %s SET %s WHERE %s IN (%s)",$table,$fields,$keyname,$keyvalue);
+				$q = "INSERT INTO $table ($keyname) VALUES ($keyvalue)";
+				$this->db_query($q);
 			};
+			$q = sprintf("UPDATE %s SET %s WHERE %s IN (%s)",$table,$fields,$keyname,$keyvalue);
 			$this->db_query($q);
 		};
 	}
