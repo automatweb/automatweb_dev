@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.20 2005/03/15 11:41:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.21 2005/03/15 11:59:52 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -766,7 +766,7 @@ class mrp_resource extends class_base
 **/
 	function start_job ($arr)
 	{
-		if (is_oid)
+		if (is_oid ($arr["resource"]))
 		{
 			$resource = obj ($arr["resource"]);
 		}
@@ -801,7 +801,7 @@ class mrp_resource extends class_base
 **/
 	function stop_job ($arr)
 	{
-		if (is_oid)
+		if (is_oid ($arr["resource"]))
 		{
 			$resource = obj ($arr["resource"]);
 		}
@@ -836,7 +836,7 @@ class mrp_resource extends class_base
 **/
 	function start_job ($arr)
 	{
-		if (is_oid)
+		if (is_oid ($arr["resource"]))
 		{
 			$resource = obj ($arr["resource"]);
 		}
