@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.48 2003/04/22 16:06:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.49 2003/04/24 13:40:40 axel Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -117,7 +117,7 @@ class image extends class_base
 		$f = $alias;
 		if (!$f["target"])
 		{
-			// now try and list images by the old way 
+			// now try and list images by the old way
 			$idata = $this->get_img_by_oid($oid,$matches[3]);
 			if (!is_array($idata))
 			{
@@ -127,7 +127,7 @@ class image extends class_base
 		else
 		{
 			$idata = $this->get_image_by_id($f["target"]);
-		}	
+		}
 
 
 		$replacement = "";
@@ -334,7 +334,7 @@ class image extends class_base
 		$rootdir = $this->cfg["site_basedir"];
 		$f1 = substr($file,0,1);
 		$fname = $rootdir . "/img/$f1/" . $file;
-		if ($file) 
+		if ($file)
 		{
 			if (strpos("/",$file) !== false) 
 			{
@@ -414,6 +414,7 @@ class image extends class_base
 		$this->mk_path($idata["parent"],"Vaata pilti");
 		$retval = html::img(array(
 			"url" => $idata["url"],
+			'height' => (isset($args['height']) ? $args['height'] : NULL),
 		));
 		return $retval;
 	}
