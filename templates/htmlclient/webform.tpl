@@ -1,4 +1,4 @@
-<table class="webform_form">
+<table class="webform_form" border="0" cellspacing="0" cellpadding="0">
 <form action='{VAR:form_handler}' method='{VAR:method}' name='changeform' {VAR:form_target}>
 <!--<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>-->
 
@@ -45,7 +45,7 @@
 
 <!-- SUB: CONTENT -->
 <tr>
-	<td colspan='2' class='webform_content'>
+	<td id="{VAR:cell_id}" colspan='2' class='webform_content'>
 	{VAR:value}
 	</td>
 </tr>
@@ -53,8 +53,10 @@
 
 <!-- SUB: SUBMIT -->
 <tr>
-	<td class='webform_content' colspan="2">
-		<input type='submit' name='{VAR:name}' value='{VAR:sbt_caption}'>
+	<td class='webform_content'>
+	</td>
+	<td class="webfrom_submit_cell">
+		<input class='webform_submit' type='submit' name='{VAR:name}' value='{VAR:sbt_caption}'>
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
