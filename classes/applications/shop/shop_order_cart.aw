@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.21 2004/11/26 13:57:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.22 2004/12/01 14:04:11 ahti Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -107,7 +107,7 @@ class shop_order_cart extends class_base
 		}
 
 		// now get item layout from cart
-		error::throw_if(!$cart_o->prop("prod_layout"), array(
+		error::raise_if(!$cart_o->prop("prod_layout"), array(
 			"id" => "ERR_NO_PROD_LAYOUT",
 			"msg" => "shop_order_cart::show(): no product layout set for cart (".$cart_o->id().") "
 		));
@@ -489,7 +489,7 @@ class shop_order_cart extends class_base
 		{
 			if (!is_oid($oc->prop("warehouse")))
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => "ERR_NO_WAREHOOS",
 					"msg" => "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart ".$oc->id()."!"
 				));
@@ -653,7 +653,7 @@ class shop_order_cart extends class_base
 		}
 
 		// now get item layout from cart
-		error::throw_if(!$cart_o->prop("prod_layout"), array(
+		error::raise_if(!$cart_o->prop("prod_layout"), array(
 			"id" => "ERR_NO_PROD_LAYOUT",
 			"msg" => "shop_order_cart::show(): no product layout set for cart (".$cart_o->id().") "
 		));
@@ -825,7 +825,7 @@ class shop_order_cart extends class_base
 		}
 
 		// now get item layout from cart
-		error::throw_if(!$cart_o->prop("prod_layout"), array(
+		error::raise_if(!$cart_o->prop("prod_layout"), array(
 			"id" => "ERR_NO_PROD_LAYOUT",
 			"msg" => "shop_order_cart::show(): no product layout set for cart (".$cart_o->id().") "
 		));

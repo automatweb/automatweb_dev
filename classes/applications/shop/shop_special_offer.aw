@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.8 2004/11/23 10:47:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.9 2004/12/01 14:04:12 ahti Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -148,7 +148,7 @@ class shop_special_offer extends class_base
 	{
 		$ob = new object($arr["id"]);
 
-		error::throw_if(!$ob->prop("template"), array(
+		error::raise_if(!$ob->prop("template"), array(
 			"id" => "ERR_NO_LAYOUT",
 			"msg" => "shop_special_offer::show(): no layout set for product display in special offer!"
 		));

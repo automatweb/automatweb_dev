@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.72 2004/11/12 12:16:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.73 2004/12/01 14:01:19 ahti Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -607,7 +607,7 @@ class orb extends aw_template
 							}
 							if(!$true)
 							{
-								error::throw(array(
+								error::raise(array(
 									"id" => "ERR_ORB_WRONG_CLASS",
 									"msg" => $vars["class"]."::".$vars["action"].": class id of argument ".$varname." is not ".implode(" or ", $act["class_ids"][$varname]),
 								));
@@ -1033,7 +1033,7 @@ class orb extends aw_template
 			return true;
 		}
 
-		error::throw_if(!$atc->can_access_class(obj($conf), $class),array(
+		error::raise_if(!$atc->can_access_class(obj($conf), $class),array(
 			"id" => ERR_ACL,
 			"msg" => "orb::check_class_access($class): no permissions to access the class! (denied by $conf)"
 		));

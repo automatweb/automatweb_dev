@@ -1524,7 +1524,7 @@ class user extends class_base
 	function add_user($arr)
 	{
 		extract($arr);
-		error::throw_if(empty($uid), array(
+		error::raise_if(empty($uid), array(
 			"id" => ERR_NO_UID,
 			"msg" => "users::add_user($arr): no uid specified"
 		));

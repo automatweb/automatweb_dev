@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.4 2004/11/05 14:13:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.5 2004/12/01 14:05:58 ahti Exp $
 
 lc_load("definition");
 
@@ -330,7 +330,7 @@ class acl_base extends db_connector
 			}
 			if (++$cnt > 100)
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_ACL_EHIER,
 					"msg" => "acl_base->can($access,$oid): error in object hierarchy, count exceeded!"
 				));
@@ -545,7 +545,7 @@ class acl_base extends db_connector
 		else
 		{
 			// the only program you can ask for is PRG_MENUEDIT 
-			error::throw_if($progid != PRG_MENUEDIT, array(
+			error::raise_if($progid != PRG_MENUEDIT, array(
 				"id" => ERR_PROG_ACL,
 				"msg" => "acl_base::prog_acl($right, $progid): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
 			));

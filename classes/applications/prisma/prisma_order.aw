@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.9 2004/10/27 12:04:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.10 2004/12/01 14:03:50 ahti Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -838,13 +838,13 @@ class prisma_order extends class_base
 
 	function _get_resource_list($o)
 	{
-		error::throw_if(!$o->meta("entity_instance"), array(
+		error::raise_if(!$o->meta("entity_instance"), array(
 			"id" => ERR_NO_ENT,
 			"msg" => "prisma_order::get_resource_list(): no entity instance id!"
 		));
 		$e_i_o = obj($o->meta("entity_instance"));
 		
-		error::throw_if(!$e_i_o->prop("entity_type"), array(
+		error::raise_if(!$e_i_o->prop("entity_type"), array(
 			"id" => ERR_NO_ENT,
 			"msg" => "prisma_order::get_resource_list(): no entity type id in entity instance (".$e_i_o->id().") !"
 		));
@@ -871,7 +871,7 @@ class prisma_order extends class_base
 
 	function _get_actions($o)
 	{
-		error::throw_if(!$o->meta("entity_instance"), array(
+		error::raise_if(!$o->meta("entity_instance"), array(
 			"id" => ERR_NO_ENT,
 			"msg" => "prisma_order::get_resource_list(): no entity instance id!"
 		));
@@ -883,7 +883,7 @@ class prisma_order extends class_base
 
 	function _get_cur_action($o)
 	{
-		error::throw_if(!$o->meta("entity_instance"), array(
+		error::raise_if(!$o->meta("entity_instance"), array(
 			"id" => ERR_NO_ENT,
 			"msg" => "prisma_order::get_resource_list(): no entity instance id!"
 		));

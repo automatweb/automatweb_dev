@@ -129,7 +129,7 @@ class ipaddress extends class_base
 
 		if (!$a2_is_num_complete)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_IP,
 				"msg" => "ipaddress::match($a1, $a2): the second parameter must be a complete ip address, it can not be a mask!"
 			));

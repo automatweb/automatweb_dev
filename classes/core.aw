@@ -648,7 +648,7 @@ class core extends acl_base
 	// !prints an error message about the fact that the user has no access to do this
 	function acl_error($right, $oid)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ACL,
 			"msg" => "ACL error saidil ".aw_ini_get("baseurl")." ".sprintf(E_ACCESS_DENIED1,"CAN_".$right,$oid)
 		));

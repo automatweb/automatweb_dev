@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.11 2004/11/29 13:55:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.12 2004/12/01 14:06:15 ahti Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -108,7 +108,7 @@ class auth_server_ldap extends class_base
 	{
 		if (!extension_loaded("ldap"))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => "ERR_NO_LDAP",
 				"msg" => "auth_server_ldap::check_auth(): The LDAP module for PHP is not installed, but the auth configuration specifies a LDAP server to authenticate against!",
 				"fatal" => false,

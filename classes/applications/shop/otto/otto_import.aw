@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.12 2004/11/26 13:52:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.13 2004/12/01 14:04:18 ahti Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -355,7 +355,7 @@ class otto_import extends class_base
 
 							if (!$ismatch)
 							{
-								error::throw(array(
+								error::raise(array(
 									"id" => "ERR_NO_FETCH",
 									"msg" => "otto_import::images(): could not fetch html for url $nurl!"
 								));
@@ -414,7 +414,7 @@ class otto_import extends class_base
 
 					if (!$ismatch)
 					{
-						error::throw(array(
+						error::raise(array(
 							"id" => "ERR_NO_FETCH",
 							"msg" => "otto_import::images(): could not fetch html for url $nurl!"
 						));

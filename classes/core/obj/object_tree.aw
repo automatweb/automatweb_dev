@@ -13,7 +13,7 @@ class object_tree extends _int_obj_container_base
 	{
 		if ($param != NULL && !is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object_tree:constructor(): if you specify a parameter, it must be a filter array!"
 			));
@@ -31,7 +31,7 @@ class object_tree extends _int_obj_container_base
 	{
 		if (!is_array($filter))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object_tree::filter(): filter parameter must be an array!"
 			));
@@ -64,7 +64,7 @@ class object_tree extends _int_obj_container_base
 	{
 		if (!is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object_tree::foreach_o(): parameter must be an array"
 			));
@@ -77,7 +77,7 @@ class object_tree extends _int_obj_container_base
 
 		if (!$GLOBALS["object_loader"]->is_object_member_fun($param["func"]))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object_tree::foreach_o(): $param[func] is not a member function of the object class!"
 			));
@@ -114,7 +114,7 @@ class object_tree extends _int_obj_container_base
 	{
 		if (!is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object_tree::foreach_cb(): parameter must be an array!"
 			));
@@ -129,7 +129,7 @@ class object_tree extends _int_obj_container_base
 		{
 			if (!method_exists($param["func"][0], $param["func"][1]))
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_PARAM,
 					"msg" => "object_tree::foreach_cb(): callback method ".$param["func"][1]." does not exist in class ".get_class($param["func"][1])."!"
 				));
@@ -138,7 +138,7 @@ class object_tree extends _int_obj_container_base
 		else
 		if ($param["func"] == "" || !function_exists($param["func"]))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object_tree::foreach_cb(): callback function ".$param["func"][1]." does not exist!"
 			));
@@ -246,7 +246,7 @@ class object_tree extends _int_obj_container_base
 		// load using only lists, not datasource. funky.
 		if (false && !$filter["parent"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object_tree::filter(): parent filter parameter mut always be passed!"
 			));

@@ -49,7 +49,7 @@ class connection
 		{
 			if (!(is_numeric($id) || is_array($id)))
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_CONNECTION,
 					"msg" => "connection::constructior($id): parameter must be numeric or array!"
 				));
@@ -68,7 +68,7 @@ class connection
 		else
 		if (!is_numeric($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CONNECTION,
 				"msg" => "connection::load(): parameter must be either array (connection data) or integer (connection id)!"
 			));
@@ -87,7 +87,7 @@ class connection
 		}
 		if (!is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "connection::find(): parameter must be an array of filter parameters!"
 			));
@@ -99,7 +99,7 @@ class connection
 	{
 		if (!is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_ARG,
 				"msg" => "connection::change($param): parameter must be an array!"
 			));
@@ -122,7 +122,7 @@ class connection
 	{
 		if (!$this->conn["id"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CONNECTION,
 				"msg" => "connection::delete(): no current connection to delete!"
 			));
@@ -131,7 +131,7 @@ class connection
 		// now, check acl - both ends must be visible for the connection to be deleted
 		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["from"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["to"])))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_ACL,
 				"msg" => "connection::delete(): no view access for this connection (".$this->conn["id"].")!"
 			));
@@ -181,7 +181,7 @@ class connection
 	{
 		if (!$this->conn["id"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CONNECTION,
 				"msg" => "connection::to(): no current connection!"
 			));
@@ -193,7 +193,7 @@ class connection
 	{
 		if (!$this->conn["id"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CONNECTION,
 				"msg" => "connection::to(): no current connection!"
 			));
@@ -215,7 +215,7 @@ class connection
 		$this->conn = $GLOBALS["object_loader"]->ds->read_connection($id);
 		if ($this->conn === false)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CONNECTION,
 				"msg" => "connection::load($id): no connection with id $id!"
 			));
@@ -224,7 +224,7 @@ class connection
 		// now, check acl - both ends must be visible for the connection to be shown
 		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["from"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["to"])))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_ACL,
 				"msg" => "connection::load($id): no view access for this connection!"
 			));
@@ -235,7 +235,7 @@ class connection
 	{
 		if (!$this->conn["from"] || !$this->conn["to"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CONNECTION,
 				"msg" => "connection::save(): connection must have both ends defined!"
 			));
@@ -246,7 +246,7 @@ class connection
 		// now, check acl - both ends must be visible for the connection to be changed
 		if (!($GLOBALS["object_loader"]->ds->can("view", $this->conn["from"]) || $GLOBALS["object_loader"]->ds->can("view", $this->conn["to"])))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_ACL,
 				"msg" => "connection::load($id): no view access for this connection!"
 			));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.15 2004/10/14 13:31:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.16 2004/12/01 14:04:11 ahti Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -942,7 +942,7 @@ class shop_order_center extends class_base
 				break;
 
 			default:
-				error::throw(array(
+				error::raise(array(
 					"id" => "ERR_WRONG_MAP",
 					"msg" => "shop_order_center::get_property_map($oc_id, $type): the options for type are 'person' and 'org'"
 				));

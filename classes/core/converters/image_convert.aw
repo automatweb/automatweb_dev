@@ -193,7 +193,7 @@ class _int_image_convert_driver_gd extends aw_template
 			}
 			else
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_IMAGE_FORMAT,
 					"msg" => "image_convert::gd_driver::load_from_string(): could not detect image format!"
 				));
@@ -218,7 +218,7 @@ class _int_image_convert_driver_gd extends aw_template
 		}
 		if (!$this->image)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_IMAGE_FORMAT,
 				"msg" => "image_convert::gd_driver::load_from_file(): could not detect image format!"
 			));

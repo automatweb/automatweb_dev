@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.2 2004/03/09 15:34:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.3 2004/12/01 14:05:00 ahti Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -66,7 +66,7 @@ class server_folder extends class_base
 	{
 		extract($arr);
 		list($oid, $fname) = explode(":", $fid);
-		error::throw_if(!is_oid($oid), array(
+		error::raise_if(!is_oid($oid), array(
 			"id" => ERR_PARAM,
 			"msg" => "server_folder::show_file($fid): the fid parameter does not contain a valid object id!"
 		));
@@ -92,7 +92,7 @@ class server_folder extends class_base
 	function del_file($fid)
 	{
 		list($oid, $fname) = explode(":", $fid);
-		error::throw_if(!is_oid($oid), array(
+		error::raise_if(!is_oid($oid), array(
 			"id" => ERR_PARAM,
 			"msg" => "server_folder::del_file($fid): the fid parameter does not contain a valid object id!"
 		));
@@ -120,7 +120,7 @@ class server_folder extends class_base
 		extract($arr);
 		list($oid, $fname) = explode(":", $fid);
 
-		error::throw_if(!is_oid($oid), array(
+		error::raise_if(!is_oid($oid), array(
 			"id" => ERR_PARAM,
 			"msg" => "server_folder::change_file($fid): the fid parameter does not contain a valid object id!"
 		));
@@ -143,7 +143,7 @@ class server_folder extends class_base
 		extract($arr);
 
 		list($oid, $fname) = explode(":", $fid);
-		error::throw_if(!is_oid($oid), array(
+		error::raise_if(!is_oid($oid), array(
 			"id" => ERR_PARAM,
 			"msg" => "server_folder::change_file($fid): the fid parameter does not contain a valid object id!"
 		));
@@ -220,7 +220,7 @@ class server_folder extends class_base
 	{
 		extract($arr);
 
-		error::throw_if(!is_oid($id), array(
+		error::raise_if(!is_oid($id), array(
 			"id" => ERR_PARAM,
 			"msg" => "server_folder::submit_addfile($id): the id parameter does not contain a valid object id!"
 		));

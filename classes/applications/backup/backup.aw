@@ -55,7 +55,7 @@ class backup extends class_base
 	{
 		extract($arr);
 		$folder = $o->prop("folder");
-		error::throw_if(!$folder, array(
+		error::raise_if(!$folder, array(
 			"id" => "ERR_NO_FOLDER",
 			"msg" => "backup::do_backup(): no server folder set for backup!"
 		));

@@ -53,7 +53,7 @@ class _int_object
 	{
 		if (!$this->_int_can_save())
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_SAVE,
 				"msg" => "object::save(): object (".$this->obj["oid"].") cannot be saved, needed properties are not set (parent, class_id)"
 			));
@@ -90,7 +90,7 @@ class _int_object
 	{
 		if (!$this->obj["oid"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_NO_OID,
 				"msg" => "object::delete(): no current object loaded"
 			));
@@ -98,7 +98,7 @@ class _int_object
 		
 		if (!$this->can("delete"))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_ACL,
 				"msg" => "object::delete(): no delete access for current object (".$this->obj["oid"].")"
 			));
@@ -111,7 +111,7 @@ class _int_object
 	{
 		if (!is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object::connect($param): parameter must be an array of connection parameters!"
 			));
@@ -165,7 +165,7 @@ class _int_object
 				}
 				else
 				{
-					error::throw(array(
+					error::raise(array(
 						"id" => ERR_ACL,
 						"msg" => "object::connect(): no view access for both endpoints (".$this->obj["brother_of"]." and $oid)!"
 					));
@@ -178,7 +178,7 @@ class _int_object
 	{
 		if (!is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object::disconnect($param): parameter must be an array!"
 			));
@@ -200,7 +200,7 @@ class _int_object
 				}
 				else
 				{
-					error::throw(array(
+					error::raise(array(
 						"id" => ERR_CONNECTION,
 						"msg" => "object::disconnect(): could not find connection to object $oid from object ".$this->obj["oid"]
 					));
@@ -217,7 +217,7 @@ class _int_object
 	{
 		if (!$this->obj["oid"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_NO_OBJ,
 				"msg" => "object::connections_from(): no current object loaded!"
 			));
@@ -231,7 +231,7 @@ class _int_object
 		{
 			if (!is_array($param))
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_PARAM,
 					"msg" => "object::connections_from(): if argument is present, then argument must be array of filter parameters!"
 				));
@@ -322,7 +322,7 @@ class _int_object
 	{
 		if (!$this->obj["oid"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_NO_OBJ,
 				"msg" => "object::connections_to(): no current object loaded!"
 			));
@@ -336,7 +336,7 @@ class _int_object
 		{
 			if (!is_array($param))
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_PARAM,
 					"msg" => "object::connections_to(): if argument is present, then argument must be array of filter parameters!"
 				));
@@ -411,7 +411,7 @@ class _int_object
 
 		if (!$this->obj["oid"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_NO_OBJ,
 				"msg" => "object::path(): no object loaded!"
 			));
@@ -419,7 +419,7 @@ class _int_object
 
 		if ($param !== NULL && !is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object::path($param): if parameter is specified, it must be an array!"
 			));
@@ -439,7 +439,7 @@ class _int_object
 		{
 			if (!is_array($param))
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_PARAM,
 					"msg" => "object::path_str(): parameter must be an array if present!"
 				));
@@ -475,7 +475,7 @@ class _int_object
 	{
 		if (!$this->obj["oid"])
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_ACL,
 				"msg" => "object::can($param): no current object loaded!"
 			));
@@ -502,7 +502,7 @@ class _int_object
 
 		if (!$parent)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_NO_PARENT,
 				"msg" => "object::set_parent($parent): no parent specified!"
 			));
@@ -539,7 +539,7 @@ class _int_object
 
 		if (!is_class_id($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CLASS_ID,
 				"msg" => "object::set_class($param): specified class id id is not valid!"
 			));
@@ -577,7 +577,7 @@ class _int_object
 				break;
 
 			default:
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_STATUS,
 					"msg" => "object::set_status($param): incorrect status code!"
 				));
@@ -612,7 +612,7 @@ class _int_object
 		$lang_id = $li->get_langid_for_code($param);
 		if (!$lang_id)
 		{
-			/*error::throw(array(
+			/*error::raise(array(
 				"id" => ERR_LANG,
 				"msg" => "object::set_lang($param): no language with such code is defined in the system!"
 			));*/
@@ -648,7 +648,7 @@ class _int_object
 		
 		if (!is_numeric($param) && $param != "")
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_ORD,
 				"msg" => "object::set_ord($param): order must be integer!"
 			));
@@ -692,7 +692,7 @@ class _int_object
 		$oid = $ui->get_oid_for_uid($uid);
 		if (!$oid)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_USER_NO_OID,
 				"msg" => "object::createdby(): the user $uid, who created the current object (".$this->obj["oid"]."), has no object!"
 			));
@@ -727,7 +727,7 @@ class _int_object
 		$oid = $ui->get_oid_for_uid($uid);
 		if (!$oid)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_USER_NO_OID,
 				"msg" => "object::createdby(): the user $uid, who last modified the current object (".$this->obj["oid"]."), has no object!"
 			));
@@ -758,7 +758,7 @@ class _int_object
 
 		if (!is_numeric($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PERIOD,
 				"msg" => "object::set_period($param): period must be integer!"
 			));
@@ -780,7 +780,7 @@ class _int_object
 
 		if (!(is_numeric($param) || is_bool($param)))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_BOOL,
 				"msg" => "object::set_periodic($param): order must be integer or boolean!"
 			));
@@ -802,7 +802,7 @@ class _int_object
 
 		if (!is_numeric($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_SITE_ID,
 				"msg" => "object::set_site_id($param): site_id must be integer!"
 			));
@@ -846,7 +846,7 @@ class _int_object
 
 		if (!is_numeric($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_SUBCLASS,
 				"msg" => "object::set_subclass($param): subclass must be integer!"
 			));
@@ -868,7 +868,7 @@ class _int_object
 
 		if (!is_numeric($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_FLAGS,
 				"msg" => "object::set_flags($param): flags must be integer!"
 			));
@@ -883,7 +883,7 @@ class _int_object
 	{
 		if (!is_numeric($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_FLAG,
 				"msg" => "object::flag($param): flag must be integer!"
 			));
@@ -896,14 +896,14 @@ class _int_object
 	{
 		if (!is_numeric($flag))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_FLAG,
 				"msg" => "object::set_flag($flag, $val): flag must be integer!"
 			));
 		}
 		if (!(is_numeric($val) || is_bool($val)))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_FLAG,
 				"msg" => "object::set_flag($flag, $val): value must be integer!"
 			));
@@ -1008,7 +1008,7 @@ class _int_object
 	{
 		if (!$this->_int_is_property($key))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PROP,
 				"msg" => "object::set_prop($key, $val): no property $key defined for current object!"
 			));
@@ -1066,7 +1066,7 @@ class _int_object
 	{
 		if (!is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_MERGE,
 				"msg" => "object::merge($param): parameter must be an array of properties to merge!"
 			));
@@ -1080,7 +1080,7 @@ class _int_object
 	{
 		if (!is_array($param))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_MERGE,
 				"msg" => "object::merge_prop($param): parameter must be an array of properties to merge!"
 			));
@@ -1127,7 +1127,7 @@ class _int_object
 	{
 		if (!(is_numeric($param) || is_bool($param)))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CACHE_FLAG,
 				"msg" => "object::set_cache_dirty($param): parameter must be integer or boolean!"
 			));
@@ -1156,7 +1156,7 @@ class _int_object
 		$clid = $this->class_id();
 		if (!$clid)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_OBJ_INSTANCE,
 				"msg" => "object::instance(): no object loaded or class id not set!"
 			));
@@ -1167,12 +1167,12 @@ class _int_object
 
 	function create_brother($parent)
 	{
-		error::throw_if(!$this->obj["oid"], array(
+		error::raise_if(!$this->obj["oid"], array(
 			"id" => ERR_CORE_OID,
 			"msg" => "object::create_brother($parent): no object loaded!"
 		));
 
-		error::throw_if(!is_oid($parent), array(
+		error::raise_if(!is_oid($parent), array(
 			"id" => ERR_CORE_OID,
 			"msg" => "object::create_brother($parent): no parent!"
 		));
@@ -1226,7 +1226,7 @@ class _int_object
 	{
 		if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_ACL,
 				"msg" => "object::load($oid): no view access for object $oid!"
 			));
@@ -1479,7 +1479,7 @@ class _int_object
 
 			if ($cnt > 100)
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_HIER, 
 					"msg" => "object::path(".$this->id()."): error in object hierarchy, infinite loop!"
 				));
@@ -1526,7 +1526,7 @@ class _int_object
 				}
 				else
 				{
-					error::throw(array(
+					error::raise(array(
 						"id" => ERR_ACL,
 						"msg" => "object::save(): no acess to save object ".$this->obj["oid"]." under ".$this->obj["parent"]." !"
 					));
@@ -1540,7 +1540,7 @@ class _int_object
 				}
 				else
 				{
-					error::throw(array(
+					error::raise(array(
 						"id" => ERR_ACL,
 						"msg" => "object::save(): no access to add object under folder ".$this->obj["parent"]." (gidlist = ".join(",", aw_global_get("gidlist")).")!"
 					));

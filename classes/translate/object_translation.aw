@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.18 2004/11/23 13:14:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.19 2004/12/01 14:07:31 ahti Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -119,7 +119,7 @@ class object_translation extends aw_template
 		));
 		if (!$clone_id)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CLONE,
 				"msg" => "object_translation::create(): could not clone object ".$orig->id()
 			));
@@ -201,7 +201,7 @@ class object_translation extends aw_template
 				"from" => $oid,
 				"type" => RELTYPE_ORIGINAL
 			));
-			error::throw_if(count($conn) > 1, array(
+			error::raise_if(count($conn) > 1, array(
 				"id" => ERR_TRANS,
 				"msg" => "object_translation::translation_list(): found more than one RELTYPE_ORIGINAL translation from object ".$oid
 			));

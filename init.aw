@@ -444,7 +444,7 @@ function get_instance($class,$args = array(), $errors = true)
 			{
 				return false;
 			}
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_CLASS,
 				"msg" => "the requested class $class does not exist !"
 			));

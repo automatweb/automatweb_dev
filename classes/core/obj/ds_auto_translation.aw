@@ -95,7 +95,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 		if (count($conns) > 1)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_TRANS,
 				"msg" => "ds_auto_translation::get_objdata($oid): found more than one translation relation to object $oid!"
 			));
@@ -153,7 +153,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 			if (count($conns2) > 1)
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_TRANS,
 					"ds_auto_translation::get_objdata($oid): found more than one translation relation from object $conns2[0][from] pointing to an object with lang id $lang_id!"
 				));
@@ -216,7 +216,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 
 				if (count($conns) > 1)
 				{
-					error::throw(array(
+					error::raise(array(
 						"id" => ERR_TRANS,
 						"msg" => "ds_auto_translation::get_objdata($oid): found more than one translation relation from object $oid pointing to an object with lang id $lang_id!"
 					));
@@ -290,7 +290,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			$orig_oid = $this->objdata[$oid]["trans_orig"];
 			if (!$orig_oid)
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_TRANS,
 					"msg" => "ds_auto_translation::read_properties(): no original object id for object $oid in get_objdata cache!"
 				));
@@ -322,7 +322,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 		}
 		else
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_TRANS,
 				"msg" => "ds_auto_translation::read_properties(): no info about object $oid in get_objdata cache!"
 			));

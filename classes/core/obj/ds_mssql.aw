@@ -49,7 +49,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 			}
 			else
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_NO_OBJ,
 					"msg" => "object::load($oid): no such object!"
 				));
@@ -906,7 +906,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				else
 				if ($this->properties[$key]["method"] == "serialize")
 				{
-					error::throw(array(
+					error::raise(array(
 						"id" => ERR_FIELD,
 						"msg" => "filter cannot contain properties ($key) that are in serialized fields other than metadata!"
 					));
@@ -997,7 +997,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 							break;
 
 						default:
-							error::throw(array(
+							error::raise(array(
 								"id" => ERR_OBJ_COMPARATOR,
 								"msg" => "obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value supplied, was: ".$val->comparator."!"
 							));
@@ -1176,7 +1176,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 		{
 			if (!is_array($params["class_id"]))
 			{
-				error::throw_if(!is_class_id($params["class_id"]), array(
+				error::raise_if(!is_class_id($params["class_id"]), array(
 					"id" => ERR_OBJ_NO_CLID,
 					"msg" => "ds_mysql::do_proc_complex_param($key, $val): if a complex join parameter is given without a class id as the first element, the class_id parameter must be set!"
 				));
@@ -1276,7 +1276,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 		if (substr($pp, 0, 8) == "RELTYPE_")
 		{
 			$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
-			error::throw_if(!$reltype_id, array(
+			error::raise_if(!$reltype_id, array(
 				"id" => ERR_OBJ_NO_RELATION,
 				"msg" => "ds_mysql::_req_do_pcp(): no relation from class $cur_clid named $pp"
 			));
@@ -1302,7 +1302,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				));
 			}
 
-			error::throw_if(!is_array($GLOBALS["properties"][$cur_clid][$pp]), array(
+			error::raise_if(!is_array($GLOBALS["properties"][$cur_clid][$pp]), array(
 				"id" => ERR_OBJ_NO_PROP,
 				"msg" => "ds_mysql::_req_do_pcp(): no property $pp in class $cur_clid "
 			));
@@ -1315,12 +1315,12 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 			// if it is the last one, then it can be anything
 			if ($pos < (count($filt) - 1))
 			{
-				error::throw_if($cur_prop["type"] != "relpicker", array(
+				error::raise_if($cur_prop["type"] != "relpicker", array(
 					"id" => ERR_OBJ_NO_RP,
 					"msg" => "ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise"
 				));
 	
-				error::throw_if($cur_prop["method"] == "serialize", array(
+				error::raise_if($cur_prop["method"] == "serialize", array(
 					"id" => ERR_OBJ_NO_META,
 					"msg" => "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property $pp in class $cur_clid)"
 				));
@@ -1331,7 +1331,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 						$relt_s = $cur_prop["reltype"];
 						$relt = $GLOBALS["relinfo"][$cur_clid][$relt_s]["value"];
 				
-						error::throw_if(!$relt, array(
+						error::raise_if(!$relt, array(
 							"id" => ERR_OBJ_NO_REL,
 							"msg" => "ds_mysql::_req_do_pcp(): no reltype $relt_s in class $cur_clid , got reltype from relpicker property $cur_prop[name]"
 						));
@@ -1340,7 +1340,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 						break;
 	
 					default:
-						error::throw(array(
+						error::raise(array(
 							"id" => ERR_OBJ_W_TP,
 							"msg" => "ds_mysql::_req_do_pcp(): incorrect prop type! ($cur_prop[type])"
 						));

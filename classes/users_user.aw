@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.103 2004/11/22 10:45:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.104 2004/12/01 14:01:19 ahti Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1040,7 +1040,7 @@ class users_user extends aw_template
 
 			if (++$count > 100)
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_GROUP_HIER,
 					"msg" => "Error in group hierarchy, count of 100 exceeded! probably offending group - $gid"
 				));

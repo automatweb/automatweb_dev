@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.328 2004/11/30 20:37:19 kristo Exp $
+// $Id: class_base.aw,v 2.329 2004/12/01 14:01:16 ahti Exp $
 // the root of all good.
 // <<<<<
 // ------------------------------------------------------------------
@@ -4090,7 +4090,7 @@ class class_base extends aw_template
 			$cfgform_obj = new object($id);
 			if ($cfgform_obj->class_id() != CL_CFGFORM)
 			{
-				error::throw(array(
+				error::raise(array(
 					"msg" => "$id is not a valid configuration form!",
 					"fatal" => true,
 				));

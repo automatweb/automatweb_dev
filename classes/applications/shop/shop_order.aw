@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.20 2004/11/05 13:51:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.21 2004/12/01 14:04:08 ahti Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -248,7 +248,7 @@ class shop_order extends class_base
 
 		$parent = $conf->prop("export_fld");
 
-		error::throw_if(!$parent, array(
+		error::raise_if(!$parent, array(
 			"id" => ERR_ORDER,
 			"msg" => "shop_order::do_confirm(): could not find parent folder for warehouse export!"
 		));

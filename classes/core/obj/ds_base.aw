@@ -24,7 +24,7 @@ class _int_obj_ds_base extends acl_base
 	//	parent - optional
 	function get_oid_by_alias($arr)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::get_oid_by_alias"
 		));
@@ -35,7 +35,7 @@ class _int_obj_ds_base extends acl_base
 	// metadata must be unserialized
 	function get_objdata($oid, $param = array())
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::get_objdata"
 		));
@@ -49,7 +49,7 @@ class _int_obj_ds_base extends acl_base
 	//	objdata - result of this::get_objdata
 	function read_properties($arr)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::read_properties"
 		));
@@ -65,7 +65,7 @@ class _int_obj_ds_base extends acl_base
 	//	new oid
 	function create_new_object($arr)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::create_new_object"
 		));
@@ -82,7 +82,7 @@ class _int_obj_ds_base extends acl_base
 	//	propvalues - property values
 	function save_properties($arr)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::save_properties"
 		));
@@ -92,7 +92,7 @@ class _int_obj_ds_base extends acl_base
 	// !returns all data for connection $id
 	function read_connection($id)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::read_connection"
 		));
@@ -102,7 +102,7 @@ class _int_obj_ds_base extends acl_base
 	// !saves connection 
 	function save_connection($data)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::save_connection"
 		));
@@ -112,7 +112,7 @@ class _int_obj_ds_base extends acl_base
 	// !deletes connection $id
 	function delete_connection($id)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::delete_connection"
 		));
@@ -123,7 +123,7 @@ class _int_obj_ds_base extends acl_base
 	// !returns all connections that match filter
 	function find_connections($arr)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::find_connections"
 		));
@@ -136,7 +136,7 @@ class _int_obj_ds_base extends acl_base
 	// if class id is present, properties can also be filtered, otherwise only object table fields
 	function search($params)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::search"
 		));
@@ -146,7 +146,7 @@ class _int_obj_ds_base extends acl_base
 	// !deletes object $oid
 	function delete_object($oid)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::delete_object"
 		));
@@ -156,7 +156,7 @@ class _int_obj_ds_base extends acl_base
 	// !make bro
 	function create_brother($oid)
 	{
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_ABSTRACT,
 			"msg" => "called abstract function ds_base::create_brother"
 		));

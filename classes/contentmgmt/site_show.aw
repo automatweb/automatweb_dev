@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.105 2004/11/30 07:27:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.106 2004/12/01 14:05:00 ahti Exp $
 
 /*
 
@@ -1316,7 +1316,7 @@ class site_show extends class_base
 				"from" => $obj->id(),
 				"type" => RELTYPE_ORIGINAL
 			));
-			error::throw_if(count($conn) > 1, array(
+			error::raise_if(count($conn) > 1, array(
 				"id" => ERR_TRANS,
 				"msg" => "site_show::make_context_langs(): found more than one RELTYPE_ORIGINAL translation from object ".$obj->id()
 			));
@@ -1541,7 +1541,7 @@ class site_show extends class_base
 		
 		if ($filename == "")
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_NO_COMPILED,
 				"msg" => "site_show::do_draw_menus(): no compiled filename set!"
 			));
@@ -1621,7 +1621,7 @@ class site_show extends class_base
 					enter_function("mainc-$fl");
 					if (!method_exists($inst, "on_get_subtemplate_content"))
 					{
-						error::throw(array(
+						error::raise(array(
 							"id" => ERR_NO_SUBTPL_HANDLER,
 							"msg" => "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in ".$cldef["file"]
 						));
@@ -1791,7 +1791,7 @@ class site_show extends class_base
 		{
 			if ($this->is_template("JOIN_FORM"))
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => "ERR_JF",
 					"msg" => "site_show::make_final_vars(): need JOIN_FORM sub back!"
 				));

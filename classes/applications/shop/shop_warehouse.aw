@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.19 2004/10/29 19:06:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.20 2004/12/01 14:04:14 ahti Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1932,7 +1932,7 @@ class shop_warehouse extends class_base
 	{
 		$o = obj($arr["id"]);
 		$oc = $o->prop("order_center");
-		error::throw_if(!$oc, array(
+		error::raise_if(!$oc, array(
 			"id" => ERR_NO_OC,
 			"msg" => "shop_warehouse::gen_order(): no order center object selected!"
 		));
@@ -2196,7 +2196,7 @@ class shop_warehouse extends class_base
 
 	function get_order_folder($w)
 	{
-		error::throw_if(!$w->prop("conf"), array(
+		error::raise_if(!$w->prop("conf"), array(
 			"id" => ERR_FATAL,
 			"msg" => "shop_warehouse::get_order_folder($w): the warehouse has not configuration object set!"
 		));
@@ -2204,7 +2204,7 @@ class shop_warehouse extends class_base
 		$conf = obj($w->prop("conf"));
 		$tmp = $conf->prop("order_fld");
 
-		error::throw_if(empty($tmp), array(
+		error::raise_if(empty($tmp), array(
 			"id" => ERR_FATAL,
 			"msg" => "shop_warehouse::get_order_folder($w): the warehouse configuration has no order folder set!"
 		));

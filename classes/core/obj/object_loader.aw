@@ -105,7 +105,7 @@ class _int_object_loader
 			$oid = $this->oid_for_alias($param);
 			if (!$oid)
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_NO_ALIAS,
 					"msg" => "object_loader::param_to_oid($param): no object with alias $param!"
 				));
@@ -122,7 +122,7 @@ class _int_object_loader
 			}
 		}
 
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_PARAM,
 			"msg" => "object_loader::param_to_oid(): parameter must be either: oid , string (alias) or object instance!"
 		));
@@ -141,7 +141,7 @@ class _int_object_loader
 			$oid = $this->oid_for_alias($param);
 			if (!$oid)
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_NO_ALIAS,
 					"msg" => "no object with alias $param!"
 				));
@@ -173,7 +173,7 @@ class _int_object_loader
 			return $param;
 		}
 
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_PARAM,
 			"msg" => "parameter must be either: oid , string (alias), object instance or object list instance!"
 		));
@@ -199,7 +199,7 @@ class _int_object_loader
 	{
 		if (!is_oid($oid))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_PARAM,
 				"msg" => "object_loader::load($oid): parameter is not object id!"
 			));
@@ -212,7 +212,7 @@ class _int_object_loader
 			$ref->obj_sys_flags = $GLOBALS["__obj_sys_opts"];
 			if ($ref->id() === NULL)
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_PARAM,
 					"msg" => "object_loader::load($oid): no such object!"
 				));
@@ -236,7 +236,7 @@ class _int_object_loader
 	{
 		if (!is_object($GLOBALS["objects"][$oid]))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_OBJECT,
 				"msg" => "object_loader::save($oid): no object with oid $oid exists in the global list"
 			));
@@ -283,7 +283,7 @@ class _int_object_loader
 	{
 		if (!is_object($GLOBALS["objects"][$oid]))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_OBJECT,
 				"msg" => "object_loader::save_new($oid): no object with oid $oid exists in the global list"
 			));
@@ -353,7 +353,7 @@ class _int_object_loader
 			$ds =& $ds->contained;
 		}
 
-		error::throw_if(!is_object($ds), array(
+		error::raise_if(!is_object($ds), array(
 			"id" => ERR_NO_DS,
 			"msg" => "object_loader::switch_db_connection($new_conn): could nto find root connection!"
 		));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.5 2004/10/07 22:37:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.6 2004/12/01 14:05:11 ahti Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -388,7 +388,7 @@ class otv_ds_pp_search extends class_base
 
 		if (!$o->prop("pp"))
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => "ERR_NO_PP",
 				"msg" => "otv_ds_pp_search: postipoisi andmeallikas on valimata!"
 			));

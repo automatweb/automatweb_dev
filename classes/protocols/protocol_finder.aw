@@ -14,7 +14,7 @@ class protocol_finder
 			case "ftp":
 				return get_instance("protocols/file/ftp");
 		}
-		error::throw(array(
+		error::raise(array(
 			"id" => ERR_NO_PROTOCOL,
 			"msg" => "protocol_fnider::inst($url): no protocol implemented for url"
 		));

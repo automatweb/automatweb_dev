@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.33 2004/12/01 11:19:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.34 2004/12/01 14:04:54 ahti Exp $
 
 /*
 
@@ -917,7 +917,7 @@ class object_treeview extends class_base
 	**/
 	function obj_delete($arr)
 	{
-		error::throw_if(!$arr["id"], array(
+		error::raise_if(!$arr["id"], array(
 			"id" => ERR_PARAM,
 			"msg" => "object_treeview::obj_delete(): no ibject id specified!"
 		));
