@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.1 2004/07/23 10:59:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.2 2004/08/25 08:37:50 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1529,7 +1529,19 @@ class planner extends class_base
 			$day_end = $this->default_day_end;
 		};
 
-		$span = $this->span;
+		$span = $this->span_length;
+
+		if ($day_start["hour"] == 0)
+		{
+			$day_start["hour"] = 9;
+			$day_start["minute"] = 0;
+		};
+
+		if ($day_end["hour"] < $day_start["hour"])
+		{
+			$day_end["hour"] = 17;
+			$day_end["minute"] = 0;
+		};
 
 		$real_day_start = ($day_start["hour"] * 3600) + ($day_start["minute"] * 60);
 		$real_day_end = ($day_end["hour"] * 3600) + ($day_end["minute"] * 60);
@@ -1542,7 +1554,9 @@ class planner extends class_base
 		$real_day_end += $start;
 		$ord = 0;
 
+
 		// now I need events in that range and take them into account to do my calculations
+
 		$existing_events = $this->get_event_list(array(
 			"id" => $arr["id"],
 			"start" => $real_day_start,
@@ -1554,7 +1568,6 @@ class planner extends class_base
 		$slots = array();
 		for ($i = $real_day_start; $i <= ($real_day_end - $span); $i = $i + $span)
 		{
-			// so how do I do matrix calculations?
 			// now cycle over events to see whether that slot can be added
 			$available = true;
 			$slot_start = $i;
