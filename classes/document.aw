@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.5 2001/05/19 00:11:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.6 2001/05/21 10:06:12 cvs Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -82,6 +82,7 @@ class document extends aw_template
 				"nobreaks"		=> "nobreaks",
 				"No left pane"		=> "no_left_pane",
 				"No right pane"		=> "no_right_pane",
+				"No search"		=> "no_search",
 				"N@ita muudetud" =>	"show_modified");
 	}
 
@@ -1000,7 +1001,7 @@ class document extends aw_template
 		// tsykkel yle koigi "tuntud" v2ljade, salvestame ainult 
 		// nende sisu, mida vormis kasutati
 		while(list($fcap,$fname) = each($this->knownfields)) {
-			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane")  
+			if (isset($data[$fname]) || $fname=="esilehel" || $fname=="esileht_yleval" || $fname=="esilehel_uudis" || $fname=="is_forum" || $fname=="lead_comments" || $fname=="showlead" || $fname=="yleval_paremal" || $fname == "show_title" || $fname=="copyright" || $fname == "show_modified" || $fname == "title_clickable" || $fname == "newwindow" || $fname == "no_right_pane" || $fname == "no_left_pane" || $fname == "no_search")  
 			{
 				$q_parts[] = "$fname = '$data[$fname]'";
 				// paneme väljade nimed ka kirja, et formeerida logi
@@ -1187,7 +1188,7 @@ class document extends aw_template
 		$this->db_query("SELECT documents.*,objects.parent as parent, objects.modified as modified 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 $ml");
+										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND (documents.no_search is null OR documents.no_search = 0) $ml");
 		while($row = $this->db_next())
 		{
 			// find number of matches in document for search string, for calculating percentage
@@ -1647,6 +1648,7 @@ class document extends aw_template
 											"menurl"		=> $this->mk_my_orb("sel_menus",array("id" => $id)),
 											"preview"	=> $this->mk_my_orb("preview", array("id" => $id)),
 											"cstatus"	=> checked($document["status"] == 2),
+											"no_search" => checked($document["no_search"]),
 											"no_left_pane" => checked($document["no_left_pane"]),
 											"no_right_pane" => checked($document["no_right_pane"])
 											));

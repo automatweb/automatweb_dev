@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.3 2001/05/21 07:12:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.4 2001/05/21 10:06:12 cvs Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -1380,7 +1380,7 @@ class db_documents extends aw_template
 		$this->db_query("SELECT documents.*,objects.parent as parent, objects.modified as modified 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%') AND objects.status = 2 $ml");
+										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%') AND objects.status = 2 AND (documents.no_search is null OR documents.no_search = 0) $ml");
 		while($row = $this->db_next())
 		{
 			// find number of matches in document for search string, for calculating percentage
