@@ -7,7 +7,7 @@ none
 none
 
 <b>returns:</b>
-none
+first object in the object list
 
 <b>examples:</b>
 #php#
