@@ -54,6 +54,10 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
+#: classes/admin/object_import.aw:439
+msgid ""
+msgstr ""
+
 #: classes/admin/object_import.aw:456
 msgid "&Auml;ra impordi"
 msgstr ""

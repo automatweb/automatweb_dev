@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.6 2005/03/16 14:45:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.7 2005/03/22 15:32:37 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -165,7 +165,7 @@ class class_designer extends class_base
 			case "visualize":
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("view",array("id" => $arr["obj_inst"]->id()),"class_visualizer"),
-					"caption" => "Visualiseeri",
+					"caption" => t("Visualiseeri"),
 				));
 				break;
 
@@ -256,7 +256,7 @@ class class_designer extends class_base
 		// elementi saab lisada ainult siis kui parentiks on grid
 		$tb->add_menu_item(array(
 			"parent" => "new",
-			"text" => "Uus tab",
+			"text" => t("Uus tab"),
 			"link" => $this->mk_my_orb("create_group", array(
 				"group_parent" => $this->group_parent, 
 				"return_url" => get_ru(),
@@ -267,7 +267,7 @@ class class_designer extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "new",
-			"text" => "Uus grid",
+			"text" => t("Uus grid"),
 			"link" => $this->mk_my_orb("create_grid", array(
 				"group_parent" => $this->group_parent, 
 				"return_url" => get_ru(),
@@ -405,7 +405,7 @@ class class_designer extends class_base
 					"value" => $elords[$element->id()],
 				)),
 				"edit" => html::href(array(
-					"caption" => "Muuda",
+					"caption" => t("Muuda"),
 					"url" => $this->mk_my_orb("change",array("id" => $el_id, "return_url" => urlencode(aw_global_get("REQUEST_URI"))),$el_clid),
 				)),
 			));
@@ -437,7 +437,7 @@ class class_designer extends class_base
 
 		$ol = new object_list(array("class_id" => CL_PROPERTY_GROUP, "parent" => $arr["group_parent"]));
 
-		$g->set_name("Grupp ".($ol->count()+1));
+		$g->set_name(t("Grupp ").($ol->count()+1));
 		$g->save();
 
 		$o = obj($arr["id"]);
@@ -468,7 +468,7 @@ class class_designer extends class_base
 
 		$ol = new object_list(array("class_id" => CL_PROPERTY_GRID, "parent" => $arr["group_parent"]));
 
-		$g->set_name("vbox ".($ol->count() + 1));
+		$g->set_name(t("vbox ").($ol->count() + 1));
 		$g->save();
 
 		$o = obj($arr["id"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.1 2005/01/18 10:38:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.2 2005/03/22 15:32:37 kristo Exp $
 // auth_server_nds.aw - Autentimisserver NDS 
 /*
 
@@ -114,11 +114,11 @@ class auth_server_nds extends class_base
 		{
 			error::raise(array(
 				"id" => "ERR_NO_LDAP",
-				"msg" => "auth_server_ldap::check_auth(): The LDAP module for PHP is not installed, but the auth configuration specifies a LDAP server to authenticate against!",
+				"msg" => t("auth_server_ldap::check_auth(): The LDAP module for PHP is not installed, but the auth configuration specifies a LDAP server to authenticate against!"),
 				"fatal" => false,
 				"show" => false
 			));
-			return array(false, "LDAP Moodul pole installeeritud!");
+			return array(false, t("LDAP Moodul pole installeeritud!"));
 		}
 
 		$srv = $server->prop("server");
@@ -130,7 +130,7 @@ class auth_server_nds extends class_base
 		$res = ldap_connect($srv, $server->prop("server_port"));
 		if (!$res)
 		{
-			return array(false, "Ei saanud &uuml;hendust LDAP serveriga ".$server->prop("server"));
+			return array(false, sprintf(t("Ei saanud &uuml;hendust LDAP serveriga %s"), $server->prop("server")));
 		}
 		ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
 
@@ -167,7 +167,7 @@ class auth_server_nds extends class_base
 				}
 			}
 		}
-		return array(false, "Sellist kasutajat pole v&otilde;i parool on vale!", $break);
+		return array(false, t("Sellist kasutajat pole v&otilde;i parool on vale!"), $break);
 	}
 
 	function _get_ad_grps($o)
@@ -182,7 +182,7 @@ class auth_server_nds extends class_base
 
 		if (!$res)
 		{
-			$this->last_error = "Ei saanud serveriga &uuml;hendust!";
+			$this->last_error = t("Ei saanud serveriga &uuml;hendust!");
 			return PROP_ERROR;
 		}
 		ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
@@ -223,7 +223,6 @@ class auth_server_nds extends class_base
 
 		$sr=ldap_search($res, $o->prop("ad_base_dn"), "(objectClass=groupOfNames)"); 
 		$info = ldap_get_entries($res, $sr);
-
 		$ret = false;
 		for ($i = 0; $i < $info["count"]; $i++) 
 		{

@@ -6,3 +6,79 @@ msgstr ""
 msgid "You forgot to enter server data"
 msgstr ""
 
+#: classes/applications/persona_import/persona_import.aw:155
+msgid "You forgot to enter server data"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:161
+msgid "Nii ei saa ju rallit sõita!"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:171
+msgid "Isikute kataloog valimata"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:177
+msgid "Aadresside kataloog valimata"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:183
+msgid "Default kataloog valimata"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:192
+msgid "Kliendibaasil puudub muutujate haldur"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:237
+msgid "Getting source data<br>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:251
+msgid "Not enough data to process<bR>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:255
+msgid "got data<br>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:263
+msgid "parse finished, processing starts<br>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:403
+msgid "creating yksused objects<br>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:452
+msgid "created new section<br>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:465
+msgid "updating existing section"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:509
+msgid "<h1>sections</h1>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:511
+msgid "<h1>sections done</h1>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:515
+msgid "creating person objects<br>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:525
+msgid "<br>creating new person object<br>"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:531
+msgid "updating existing person object"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:914
+msgid "You forgot to enter server data"
+msgstr ""
+

@@ -1,0 +1,4 @@
+#: classes/applications/clients/ut/xml_import/xml_import.aw:52
+msgid "Käivita import"
+msgstr ""
+

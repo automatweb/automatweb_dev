@@ -1,3 +1,11 @@
+#: classes/menu.aw:359
+msgid "Vasak"
+msgstr ""
+
+#: classes/menu.aw:360
+msgid "Parem"
+msgstr ""
+
 #: classes/menu.aw:388
 msgid "kasuta parenti valikut"
 msgstr ""
@@ -122,6 +130,10 @@ msgstr ""
 msgid "Vali Pilt"
 msgstr ""
 
+#: classes/menu.aw:720
+msgid "Kustuta"
+msgstr ""
+
 #: classes/menu.aw:735
 msgid "Vali menüüd"
 msgstr ""
@@ -190,6 +202,10 @@ msgstr ""
 msgid "Nimi"
 msgstr ""
 
+#: classes/menu.aw:1236
+msgid "kustuta"
+msgstr ""
+
 #: classes/menu.aw:1275
 msgid "ID"
 msgstr ""
@@ -200,5 +216,17 @@ msgstr ""
 
 #: classes/menu.aw:1288
 msgid "k.a. alammen&uuml;&uuml;d"
+msgstr ""
+
+#: classes/menu.aw:1430
+msgid "Dokument"
+msgstr ""
+
+#: classes/menu.aw:1437
+msgid "ka alammen&uuml;&uuml;de juures"
+msgstr ""
+
+#: classes/menu.aw:1443
+msgid "Vali asukoht"
 msgstr ""
 

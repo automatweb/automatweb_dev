@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.27 2005/03/03 12:58:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.28 2005/03/22 15:32:37 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -436,7 +436,7 @@ class object_import extends class_base
 		$t->set_sortable(false);
 		$t->define_field(array(
 			"name" => "prop",
-			"caption" => "",
+			"caption" => t(""),
 			"align" => "right",
 			"width" => "10%",
 			"nowrap" => 1

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.103 2005/03/07 14:41:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.104 2005/03/22 15:32:36 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -774,7 +774,7 @@ class doc extends class_base
 			);
 		}
 		$retval["doc_brother"] = array(
-			"caption" => "Dokument (vend)",
+			"caption" => t("Dokument (vend)"),
 			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document_brother"),
 		);
 		return $retval;
@@ -969,17 +969,6 @@ class doc extends class_base
 	**/
 	function upg($arr)
 	{
-		//$this->db_query("ALTER TABLE documents ADD no_show_in_promo int default 0");
-		//die("all done");
-		$f = fopen("/tmp/viiger_test", "w");
-		fwrite($f, "viiger oli siin");
-		fclose($f);
-		$sc = get_instance("scheduler");
-		$sc->add(array(
-			"event" => $this->mk_my_orb("test_hash", array("a" => 56)),
-			"time" => time()-60,
-			"auth_as_local_user" => true
-		));
 	}
 
 	/**

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.6 2005/03/21 12:50:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.7 2005/03/22 15:32:37 kristo Exp $
 // property_table.aw - Tabel 
 /*
 
@@ -397,7 +397,7 @@ class property_table extends class_base
 			$sys_name = strtolower(preg_replace("/\s/","_",$el->name()));
 			$rv .= "\t\t" . '$t->define_field(array(' . "\n";
 			$rv .= "\t\t\t" . '"name" => "' . $sys_name . '",' . "\n";
-			$rv .= "\t\t\t" . '"caption" => "' . $el->name() . '",' . "\n";
+			$rv .= "\t\t\t\"caption\" => \"" . $el->name() . "\",\n";
 			if ($el->prop("width"))
 			{
 				$rv .= "\t\t\t" . '"width" => "' . $el->prop("width") . '",' . "\n";
@@ -675,7 +675,7 @@ class property_table extends class_base
 	{
 		$t->define_field(array(
 			"name" => "col",
-			"caption" => "Tulp",
+			"caption" => t("Tulp"),
 			"align" => "center"
 		));
 	}

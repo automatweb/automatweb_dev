@@ -22,7 +22,7 @@ class site_list extends class_base
 	function orb_list($arr)
 	{
 		extract($arr);
-		$this->mk_path(0,"AW Saitide list");
+		$this->mk_path(0,t("AW Saitide list"));
 
 		load_vcl('table');
 		$t = new aw_table(array('prefix' => 'site_list'));
@@ -30,38 +30,38 @@ class site_list extends class_base
 
 		$t->define_field(array(
 			'name' => 'id',
-			'caption' => 'ID',
+			'caption' => t('ID'),
 			'sortable' => 1,
 			'numeric' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => 'Nimi',
+			'caption' => t('Nimi'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'url',
-			'caption' => 'URL',
+			'caption' => t('URL'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'server_name',
-			'caption' => 'Server',
+			'caption' => t('Server'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'site_used',
-			'caption' => 'Kasutusel',
+			'caption' => t('Kasutusel'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'code_branch',
-			'caption' => 'Koodi versioon',
+			'caption' => t('Koodi versioon'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'last_update',
-			'caption' => 'Viimane uuendus',
+			'caption' => t('Viimane uuendus'),
 			'sortable' => 1,
 			'type' => 'time',
 			'numberic' => 1,
@@ -69,7 +69,7 @@ class site_list extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'change',
-			'caption' => 'Muuda',
+			'caption' => t('Muuda'),
 		));
 
 		if ($actonly)
@@ -104,7 +104,7 @@ class site_list extends class_base
 				$row["code_branch"] = "";
 			}
 
-			$row["site_used"] = $row["site_used"] == 1 ? "Jah" : "Ei";
+			$row["site_used"] = $row["site_used"] == 1 ? t("Jah") : t("Ei");
 			$t->define_data($row);
 			$cnt++;
 		}
@@ -115,11 +115,11 @@ class site_list extends class_base
 		
 		$str = $t->draw();
 
-		$str .= "Kokku $cnt saiti<br />\n";
-		$str .= "Kasutusel $cnt_used saiti <br />\n";
-		$str .= "Serverite kaupa: <br />\n";
+		$str .= sprintf(t("Kokku %s saiti<br />\n"), $cnt);
+		$str .= sprintf(t("Kasutusel %s saiti <br />\n"), $cnt_used);
+		$str .= t("Serverite kaupa: <br />\n");
 		$str .= $this->_get_server_stats();
-		$str .= "Koodiversioonide kaupa: <br />\n";
+		$str .= t("Koodiversioonide kaupa: <br />\n");
 		$str .= $this->_get_cver_stats();
 
 		return $str;
@@ -151,12 +151,12 @@ class site_list extends class_base
 
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => 'Server',
+			'caption' => t('Server'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'cnt',
-			'caption' => 'Mitu',
+			'caption' => t('Mitu'),
 			'sortable' => 1,
 			'numeric' => 1
 		));
@@ -181,12 +181,12 @@ class site_list extends class_base
 
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => 'Koodiversioon',
+			'caption' => t('Koodiversioon'),
 			'sortable' => 1,
 		));
 		$t->define_field(array(
 			'name' => 'cnt',
-			'caption' => 'Mitu',
+			'caption' => t('Mitu'),
 			'sortable' => 1,
 			'numeric' => 1
 		));
@@ -206,18 +206,11 @@ class site_list extends class_base
 	/**  
 		
 		@attrib name=server_list params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function orb_server_list($arr)
 	{
 		extract($arr);
-		$this->mk_path(0,"AW Serverite list");
+		$this->mk_path(0,t("AW Serverite list"));
 
 		load_vcl('table');
 		$t = new aw_table(array('prefix' => 'server_list'));
@@ -225,26 +218,26 @@ class site_list extends class_base
 
 		$t->define_field(array(
 			'name' => 'id',
-			'caption' => 'ID',
+			'caption' => t('ID'),
 			'sortable' => 1,
 			'numeric' => 1,
 		));
 
 		$t->define_field(array(
 			'name' => 'name',
-			'caption' => 'Nimi',
+			'caption' => t('Nimi'),
 			'sortable' => 1,
 		));
 
 		$t->define_field(array(
 			'name' => 'ip',
-			'caption' => 'IP aadress',
+			'caption' => t('IP aadress'),
 			'sortable' => 1,
 		));
 
 		$t->define_field(array(
 			'name' => 'change',
-			'caption' => 'Muuda',
+			'caption' => t('Muuda'),
 		));
 
 		$this->db_query("SELECT * FROM aw_server_list");
@@ -252,7 +245,7 @@ class site_list extends class_base
 		{
 			$row["change"] = html::href(array(
 				'url' => $this->mk_my_orb("change_server", array("id" => $row["id"])),
-				'caption' => "Muuda"
+				'caption' => t("Muuda")
 			));
 			$t->define_data($row);
 		}
@@ -268,9 +261,6 @@ class site_list extends class_base
 	/** adds or updates site 
 		
 		@attrib name=update_site params=name all_args="1" default="0"
-		
-		
-		@returns
 		
 		
 		@comment
@@ -342,10 +332,6 @@ class site_list extends class_base
 		
 		@attrib name=update_server params=name all_args="1" default="0"
 		
-		
-		@returns
-		
-		
 		@comment
 		parameters:
 		id - server id
@@ -397,9 +383,6 @@ class site_list extends class_base
 		@attrib name=get_site_list params=name default="0"
 		
 		@param server_id optional
-		
-		@returns
-		
 		
 		@comment
 		params:
@@ -458,11 +441,6 @@ class site_list extends class_base
 		
 		@param ip required
 		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function get_server_id_by_ip($arr)
 	{
@@ -476,11 +454,6 @@ class site_list extends class_base
 		
 		@param url required
 		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function get_site_id_by_url($arr)
 	{
@@ -493,9 +466,6 @@ class site_list extends class_base
 		@attrib name=get_site_data params=name default="0"
 		
 		@param site_id required
-		
-		@returns
-		
 		
 		@comment
 		parameters:
@@ -523,17 +493,10 @@ class site_list extends class_base
 		@attrib name=change_site params=name default="0"
 		
 		@param id required type=int
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function change_site($arr)
 	{
 		extract($arr);
-
 
 		#$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
 		$htmlc = get_instance("cfg/htmlclient");
@@ -544,14 +507,14 @@ class site_list extends class_base
 		$htmlc->add_property(array(
 			"name" => "id",
 			"type" => "text",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"value" => $id,
 		));
 		
 		$htmlc->add_property(array(
 			"name" => "name",
 			"type" => "textbox",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"size" => 50,
 			"value" => $sd["name"],
 		));
@@ -559,7 +522,7 @@ class site_list extends class_base
 		$htmlc->add_property(array(
 			"name" => "url",
 			"type" => "textbox",
-			"caption" => "URL",
+			"caption" => t("URL"),
 			"size" => 50,
 			"value" => $sd["url"],
 		));
@@ -567,7 +530,7 @@ class site_list extends class_base
 		$htmlc->add_property(array(
 			"name" => "server_id",
 			"type" => "select",
-			"caption" => "Server",
+			"caption" => t("Server"),
 			"value" => $sd["server_id"],
 			"options" => $this->server_picker(),
 		));
@@ -575,7 +538,7 @@ class site_list extends class_base
 		$htmlc->add_property(array(
 			"name" => "site_used",
 			"type" => "checkbox",
-			"caption" => "Used?",
+			"caption" => t("Used?"),
 			"value" => 1,
 			"ch_value" => $sd["site_used"],
 		));
@@ -583,28 +546,28 @@ class site_list extends class_base
 		$htmlc->add_property(array(
 			"name" => "code_branch",
 			"type" => "textbox",
-			"caption" => "Code branch",
+			"caption" => t("Code branch"),
 			"value" => $sd["code_branch"],
 		));
 		
 		$htmlc->add_property(array(
 			"name" => "basedir",
 			"type" => "text",
-			"caption" => "Basedir",
+			"caption" => t("Basedir"),
 			"value" => $sd["basedir"],
 		));
 		
 		$htmlc->add_property(array(
 			"name" => "updater_uid",
 			"type" => "text",
-			"caption" => "Updater",
+			"caption" => t("Updater"),
 			"value" => $sd["updater_uid"],
 		));
 		
 		$htmlc->add_property(array(
 			"name" => "last_update",
 			"type" => "text",
-			"caption" => "Last update",
+			"caption" => t("Last update"),
 			"value" => !empty($sd["last_update"]) ? date("d.m.Y / H:i",$sd["last_update"]) : "n/a",
 		));
 
@@ -624,13 +587,6 @@ class site_list extends class_base
 	/**  
 		
 		@attrib name=submit_change_site params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function submit_change_site($arr)
 	{
@@ -648,20 +604,14 @@ class site_list extends class_base
 		@attrib name=change_server params=name default="0"
 		
 		@param id required type=int
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function change_server($arr)
 	{
 		extract($arr);
 		$this->mk_path(0, html::href(array(
 			'url' => $this->mk_my_orb("server_list"),
-			'caption' => "AW Serverite list"
-		))." / Muuda serverit ");
+			'caption' => t("AW Serverite list")
+		)).t(" / Muuda serverit "));
 		$this->read_template("change_server.tpl");
 		$sd = $this->get_server_data(array("server_id" => $id));
 		$this->vars($sd);
@@ -674,13 +624,6 @@ class site_list extends class_base
 	/**  
 		
 		@attrib name=submit_change_server params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function submit_change_server($arr)
 	{

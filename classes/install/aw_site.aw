@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.37 2005/03/20 16:21:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.38 2005/03/22 15:32:38 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -139,7 +139,7 @@ class aw_site extends class_base
 	
 				if ($arr['obj_inst']->meta('site_url') == '')
 				{
-					$this->err_str = "Saidi url on m&auml;&auml;ramata!";
+					$this->err_str = t("Saidi url on m&auml;&auml;ramata!");
 					return PROP_IGNORE;
 				}
 				break;
@@ -159,7 +159,7 @@ class aw_site extends class_base
 
 					if (!is_array($sl))
 					{
-						$this->err_str = "Ei saanud lugeda serveri saitide nimekirja! (vali andmebaas)";
+						$this->err_str = t("Ei saanud lugeda serveri saitide nimekirja! (vali andmebaas)");
 						return PROP_IGNORE;
 					}
 
@@ -192,7 +192,7 @@ class aw_site extends class_base
 					));
 					if (!is_array($flds))
 					{
-						$this->err_str = "Ei saanud lugeda kataloogide nimekirja saidist $serv!";
+						$this->err_str = sprintf(t("Ei saanud lugeda kataloogide nimekirja saidist %s!"), $serv);
 					}
 					$prop['options'] = $flds;
 				}
@@ -220,7 +220,7 @@ class aw_site extends class_base
 
 				if (!is_array($sl))
 				{
-					$this->err_str = "Ei saanud lugeda serveri saitide nimekirja! (vali templatede sait)";
+					$this->err_str = t("Ei saanud lugeda serveri saitide nimekirja! (vali templatede sait)");
 					return PROP_IGNORE;
 				}
 
@@ -249,7 +249,7 @@ class aw_site extends class_base
 
 				if (!is_array($sl))
 				{
-					$this->err_str = "Ei saanud lugeda serveri saitide nimekirja! (vali piltide ja css sait)";
+					$this->err_str = t("Ei saanud lugeda serveri saitide nimekirja! (vali piltide ja css sait)");
 					return PROP_IGNORE;
 				}
 
@@ -314,7 +314,7 @@ class aw_site extends class_base
 			case "site_url":
 				if (!is_valid("url", $prop["value"]))
 				{
-					$prop["error"] = "Saidi urlis v&otilde;ivad sisalduda ainult numbrid, t&auml;hed, punkt ja sidekriips. URL'i ette pole vaja panna http://'d!";
+					$prop["error"] = t("Saidi urlis v&otilde;ivad sisalduda ainult numbrid, t&auml;hed, punkt ja sidekriips. URL'i ette pole vaja panna http://'d!");
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -345,10 +345,10 @@ class aw_site extends class_base
 		
 			if (!$this->is_site_ok($site))
 			{
-				$this->raise_error(ERR_SITE_CFG, "errir in site config: $this->err_str",true,false);
+				$this->raise_error(ERR_SITE_CFG, sprintf(t("error in site config: %s"), $this->err_str),true,false);
 			}
 				
-			echo "Loon saiti! \n<br />HOIATUS! Saidi loomine v&otilde;tab paar minutit aega!<br /><br />\n";
+			echo t("Loon saiti! \n<br />HOIATUS! Saidi loomine v&otilde;tab paar minutit aega!<br /><br />\n");
 			flush();
 
 			$ini_opts = array();
@@ -361,7 +361,7 @@ class aw_site extends class_base
 			$log = get_instance("install/aw_site_gen_log");
 			$log->start_log(array(
 				"parent" => $ob->parent(),
-				"name" => "Saidi ".$site["url"]." loomise log"
+				"name" => sprintf(t("Saidi %s loomise log"), $site["url"])
 			));
 
 			// first, create site folders
@@ -397,7 +397,7 @@ class aw_site extends class_base
 			aw_global_set("__is_install", 0);
 			flush();
 			touch("/tmp/ap_reboot");
-			echo "<br><br><b>Valmis! sait on kasutatav 30 sekundi p&auml;rast!</b><br />\n";
+			echo t("<br><br><b>Valmis! sait on kasutatav 30 sekundi p&auml;rast!</b><br />\n");
 			flush();
 			die();
 		}
@@ -409,14 +409,14 @@ class aw_site extends class_base
 		$si->add_cmd("mkdir ".$fld);
 		$si->add_cmd("chmod 777 ".$fld);
 		$si->exec();
-		$stat = "OK";
+		$stat = t("OK");
 		if (!is_dir($fld))
 		{
-			$stat = "Kataloogi ei ole!";
+			$stat = t("Kataloogi ei ole!");
 		}
 		$log->add_line(array(
 			"uid" => "System",
-			"msg" => "Lisas kataloogi",
+			"msg" => t("Lisas kataloogi"),
 			"comment" => $fld,
 			"result" => $stat
 		));
@@ -443,9 +443,9 @@ class aw_site extends class_base
 		$si->exec();
 		$log->add_line(array(
 			"uid" => "System",
-			"msg" => "Kopeeris default keelefailid",
+			"msg" => t("Kopeeris default keelefailid"),
 			"comment" => "",
-			"result" => "OK"
+			"result" => t("OK")
 		));
 
 		$this->_do_add_folder($site['docroot']."/pagecache", &$log);
@@ -467,9 +467,9 @@ class aw_site extends class_base
 		$si->exec();
 		$log->add_line(array(
 			"uid" => "System",
-			"msg" => "Kopeeris default kujunduse",
+			"msg" => t("Kopeeris default kujunduse"),
 			"comment" => "",
-			"result" => "OK"
+			"result" => t("OK")
 		));
 
 		
@@ -495,14 +495,14 @@ class aw_site extends class_base
 		$si->add_cmd("copy $vhost_file_name ".$site["vhost_file"]);
 		$si->exec();
 
-		$stat = "OK";
+		$stat = t("OK");
 		if (!file_exists($site['vhost_file']))
 		{
-			$stat = "Faili ei ole!";
+			$stat = t("Faili ei ole!");
 		}
 		$log->add_line(array(
 			"uid" => "System",
-			"msg" => "Tegi virtualhost konfi!",
+			"msg" => t("Tegi virtualhost konfi!"),
 			"comment" => $site["vhost_file"],
 			"result" => $stat
 		));
@@ -511,14 +511,14 @@ class aw_site extends class_base
 		$si = get_instance("install/su_exec");
 		$si->add_cmd("ln -s ".($this->cfg["basedir"]."/automatweb")." ".$site["docroot"]."/public/automatweb");
 		$si->exec();
-		$stat = "OK";
+		$stat = t("OK");
 		if (!is_link($site["docroot"]."/public/automatweb"))
 		{
-			$stat = "Linki ei ole!";
+			$stat = t("Linki ei ole!");
 		}
 		$log->add_line(array(
 			"uid" => "System",
-			"msg" => "Linkis automatweb kataloogi",
+			"msg" => t("Linkis automatweb kataloogi"),
 			"comment" => $site["docroot"]."/public/automatweb",
 			"result" => $stat
 		));
@@ -543,9 +543,9 @@ class aw_site extends class_base
 
 		$log->add_line(array(
 			"uid" => "System",
-			"msg" => "Kopeeris saidi koodi",
+			"msg" => t("Kopeeris saidi koodi"),
 			"comment" => "",
-			"result" => "OK"
+			"result" => t("OK")
 		));
 
 		// now, make the const.aw file from the template
@@ -564,14 +564,14 @@ class aw_site extends class_base
 		$si = get_instance("install/su_exec");
 		$si->add_cmd("copy $constaw_file_name ".$site["docroot"]."/public/const.aw");
 		$si->exec();
-		$stat = "OK";
+		$stat = t("OK");
 		if (!file_exists($site["docroot"]."/public/const.aw"))
 		{
-			$stat = "Faili ei ole!";
+			$stat = t("Faili ei ole!");
 		}
 		$log->add_line(array(
 			"uid" => "System",
-			"msg" => "Tegi const.aw faili",
+			"msg" => t("Tegi const.aw faili"),
 			"comment" => $site["docroot"]."/public/const.aw",
 			"result" => $stat
 		));
@@ -740,7 +740,7 @@ class aw_site extends class_base
 			$dbi->db_query("UPDATE objects SET lang_id = 1");
 		}
 
-		echo "did user object names <br>\n";
+		echo t("did user object names <br>\n");
 		flush();
 
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
@@ -749,7 +749,7 @@ class aw_site extends class_base
 		$GLOBALS["cfg"]["acl"]["no_check"] = 0;
 		aw_global_set("db::".$this->default_cid, $default_db);
 
-		echo "init classes exit <br>\n";
+		echo t("init classes exit <br>\n");
 		flush();
 	}
 
@@ -778,9 +778,9 @@ class aw_site extends class_base
 		$ini_opts["stitle"] = $site['url'];
 		$log->add_line(array(
 			"uid" => "System",
-			"msg" => "Konfigureeris nimeserveri",
+			"msg" => t("Konfigureeris nimeserveri"),
 			"comment" => aw_ini_get("install.default_ip"),
-			"result" => "OK"
+			"result" => t("OK")
 		));
 	}
 
@@ -846,9 +846,9 @@ class aw_site extends class_base
 			$ini_opts['db.pass'] = $site['db_pwd'];
 			$log->add_line(array(
 				"uid" => aw_ini_get('install.mysql_user'),
-				"msg" => "L&otilde;i saidi andmebaasi",
+				"msg" => t("L&otilde;i saidi andmebaasi"),
 				"comment" => $site["db_name"],
-				"result" => "OK"
+				"result" => t("OK")
 			));
 		}
 	}
@@ -859,21 +859,21 @@ class aw_site extends class_base
 		// check if the site base folder exists
 		if (is_dir($site['docroot']))
 		{
-			$this->err_str = "Saidi baaskataloog on juba olemas! ($site[docroot]) ";
+			$this->err_str = sprintf(t("Saidi baaskataloog on juba olemas! (%s) "), $site["docroot"]);
 			return false;
 		}
 
 		// check if the log folder exists
 		if (is_dir($site['logroot']))
 		{
-			$this->err_str = "Saidi logide kataloog on juba olemas! ($site[logroot]) ";
+			$this->err_str = sprintf(t("Saidi logide kataloog on juba olemas! (%s) "), $site["logroot"]);
 			return false;
 		}
 
 		// check if the site vhost file exists
 		if (file_exists($site['vhost_file']))
 		{
-			$this->err_str = "Saidi apache konfiguratsioon on juba olemas! ($site[vhost_file]) ";
+			$this->err_str = sprintf(t("Saidi apache konfiguratsioon on juba olemas! (%s) "), $site["vhost_file"]);
 			return false;
 		}
 
@@ -882,13 +882,13 @@ class aw_site extends class_base
 		{
 			if (!is_array($site['site_obj']['select_tpl_sites']) || count($site['site_obj']['select_tpl_sites']) < 1)
 			{
-				$this->err_str = "Saidid, kust templatesid kopeerida on valimata! ";
+				$this->err_str = t("Saidid, kust templatesid kopeerida on valimata! ");
 				return false;
 			}
 			else
 			if (!$site["site_obj"]["tpls_are_linked"] && (!is_array($site['site_obj']['select_tpl_folders']) || count($site['site_obj']['select_tpl_folders']) < 1))
 			{
-				$this->err_str = "Kataloogid, kust templatesid kopeerida on valimata! ";
+				$this->err_str = t("Kataloogid, kust templatesid kopeerida on valimata! ");
 				return false;
 			}
 		}
@@ -899,13 +899,13 @@ class aw_site extends class_base
 		{
 			if ($site['site_obj']['select_db'] == "")
 			{
-				$this->err_str = "Kasutatav andmebaas on valimata!";
+				$this->err_str = t("Kasutatav andmebaas on valimata!");
 				return false;
 			}
 
 			if (!$site['site_obj']['select_parent_folder'])
 			{
-				$this->err_str = "Uue saidi root kataloog olemasolevas andmebaasis on valimata!";
+				$this->err_str = t("Uue saidi root kataloog olemasolevas andmebaasis on valimata!");
 				return false;
 			}
 
@@ -920,7 +920,7 @@ class aw_site extends class_base
 			));
 			if (!is_array($db_dat))
 			{
-				$this->err_str = "Sait on liiga vana koodiversiooniga et selle p&otilde;hjal uut luua!";
+				$this->err_str = t("Sait on liiga vana koodiversiooniga et selle p&otilde;hjal uut luua!");
 				return false;
 			}
 		}
@@ -949,7 +949,7 @@ class aw_site extends class_base
 
 			if ($found)
 			{
-				$this->err_str = "Saidi andmebaas on juba olemas! ($site[db_name]) ";
+				$this->err_str = sprintf(t("Saidi andmebaas on juba olemas! (%s) "), $site["db_name"]);
 				return false;
 			}
 		}
@@ -962,18 +962,18 @@ class aw_site extends class_base
 			$ip = gethostbyname($site['url']);
 			if ($ip == $site['url'])
 			{
-				$this->warning_str = "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! ($site[url]) ";
+				$this->warning_str = sprintf(t("Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! (%s) "), $site["url"]);
 			}
 			if ($ip != aw_ini_get("install.default_ip"))
 			{
-				$this->err_str = "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeen viitab valele IP aadressile! (vajalik = ".aw_ini_get("install.default_ip")." domeeni ip = $ip)";
+				$this->err_str = sprintf(t("Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeen viitab valele IP aadressile! (vajalik = %s domeeni ip = %s)"), aw_ini_get("install.default_ip"), $ip);
 			}
 		}
 		else
 		{
 			if (($_ip = gethostbyname($site['url'])) != $site['url'])
 			{
-				$this->warning_str = "Saidi domeen on juba registreeritud! (domeen = $site[url] ip = $_ip) Kui selle domeeni pealt k&auml;ib m&otilde;ni teine sait, siis seda ei saa p&auml;rast uue saidi loomist kasutada!";
+				$this->warning_str = sprintf(t("Saidi domeen on juba registreeritud! (domeen = %s ip = %s) Kui selle domeeni pealt k&auml;ib m&otilde;ni teine sait, siis seda ei saa p&auml;rast uue saidi loomist kasutada!"), $site["url"], $_ip);
 			}
 		}
 
@@ -989,7 +989,7 @@ class aw_site extends class_base
 		));
 		if ($site_id)
 		{
-			$this->err_str = "Saitide registris on juba sait, mille url on $site[url] !";
+			$this->err_str = sprintf(t("Saitide registris on juba sait, mille url on %s !"), $site["url"]);
 			return false;
 		}
 
@@ -1005,7 +1005,7 @@ class aw_site extends class_base
 		));
 		if (!$server_id)
 		{
-			$this->err_str = "IP aadressi ".aw_ini_get("install.default_ip")." jaoks pole serverite registris kirjet!";
+			$this->err_str = sprintf(t("IP aadressi %s jaoks pole serverite registris kirjet!"), aw_ini_get("install.default_ip"));
 			return false;
 		}
 
@@ -1013,7 +1013,7 @@ class aw_site extends class_base
 		$sue = get_instance("install/su_exec");
 		if (!$sue->is_ok())
 		{
-			$this->err_str = "Ei saa root kasutaja &otilde;iguseid kasutada!";
+			$this->err_str = t("Ei saa root kasutaja &otilde;iguseid kasutada!");
 			return false;
 		}
 		return true;
@@ -1103,14 +1103,14 @@ class aw_site extends class_base
 		$sue->add_cmd("copy $tmpnam ".$site['docroot']."/aw.ini");
 		$sue->add_cmd("chmod 666 $site[docroot]/aw.ini");
 		$sue->exec();
-		$status = "OK";
+		$status = t("OK");
 		if (!file_exists($site['docroot']."/aw.ini"))
 		{
-			$status = "Faili ei ole!";
+			$status = t("Faili ei ole!");
 		}
 		$log->add_line(array(
 			"uid" => "System",
-			"msg" => "Tegi ini faili",
+			"msg" => t("Tegi ini faili"),
 			"comment" => $site['docroot']."/aw.ini",
 			"result" => $status
 		));
@@ -1147,9 +1147,9 @@ class aw_site extends class_base
 		$ini_opts["site_id"] = $site_id;
 		$log->add_line(array(
 			"uid" => aw_global_get("uid"),
-			"msg" => "K&uuml;sis uue saidi id",
+			"msg" => t("K&uuml;sis uue saidi id"),
 			"comment" => $site_id,
-			"result" => "OK"
+			"result" => t("OK")
 		));
 	}
 
@@ -1168,7 +1168,7 @@ class aw_site extends class_base
 		));
 		if (!$server_id)
 		{
-			$this->err_str = "Ei saanud lugeda serveri id'd! (vali andmebaas)";
+			$this->err_str = t("Ei saanud lugeda serveri id'd! (vali andmebaas)");
 			return PROP_IGNORE;
 		}
 
@@ -1442,11 +1442,11 @@ class aw_site extends class_base
 			);
 
 			$_templates_n = array(
-				"SCROLL_PROMO" => "Skrolliv",
-				"LEFT_PROMO" => "Vasak",
-				"RIGHT_PROMO" => "Parem",
-				"UP_PROMO" => "&Uuml;lemine", 
-				"DOWN_PROMO" => "Alumine",
+				"SCROLL_PROMO" => t("Skrolliv"),
+				"LEFT_PROMO" => t("Vasak"),
+				"RIGHT_PROMO" => t("Parem"),
+				"UP_PROMO" => t("&Uuml;lemine"), 
+				"DOWN_PROMO" => t("Alumine"),
 			);
 
 			$templates = array();
@@ -1470,7 +1470,7 @@ class aw_site extends class_base
 			$o->set_class_id(CL_PROMO);
 			$o->set_parent($osi_vars["cont"]);
 			$o->set_status(STAT_ACTIVE);
-			$o->set_name($astr." konteiner");
+			$o->set_name(sprintf(t("%s konteiner"), $astr));
 			$o->set_prop("tpl_lead", 2);
 			$o->set_prop("type", $id);
 			$o->set_prop("all_menus", 1);
@@ -1480,9 +1480,9 @@ class aw_site extends class_base
 			$do->set_class_id(CL_DOCUMENT);
 			$do->set_parent($o->id());
 			$do->set_status(STAT_ACTIVE);
-			$do->set_prop("lead", "$astr konteineri sisu");
-			$do->set_prop("title", "pealkiri");
-			$do->set_name("pealkiri");
+			$do->set_prop("lead", sprintf(t("%s konteineri sisu"), $astr));
+			$do->set_prop("title", t("pealkiri"));
+			$do->set_name(t("pealkiri"));
 			$do->save();
 		}
 	}
@@ -1506,32 +1506,32 @@ class aw_site extends class_base
 		if ($o->prop("site_url") != $old["url"])
 		{
 			$changes = true;
-			$warnings[] = "Saidi url muutus ".$old["url"]." => ".$o->prop("site_url");
+			$warnings[] = sprintf(t("Saidi url muutus %s => %s"), $old["url"], $o->prop("site_url"));
 		}
 
 		if ($o->prop("use_existing_templates") != $old["site_obj"]["use_existing_templates"])
 		{
 			$changes = true;
-			$warnings[] = "HOIATUS! Templatede valiku muutmisel kirjutatakse olemasolevad templated &uuml;le!";
-			$warnings[] = "Templated muutusid default templatedest teise saidi omadeks!";
+			$warnings[] = t("HOIATUS! Templatede valiku muutmisel kirjutatakse olemasolevad templated &uuml;le!");
+			$warnings[] = t("Templated muutusid default templatedest teise saidi omadeks!");
 		}
 
 		if ($o->prop("select_tpl_folders") != $old["site_obj"]["select_tpl_folders"])
 		{
 			$changes = true;
-			$warnings[] = "Templatede kataloogide nimekiri muutus!";
+			$warnings[] = t("Templatede kataloogide nimekiri muutus!");
 		}
 
 		if ($o->prop("tpls_are_linked") != $old["site_obj"]["tpls_are_linked"])
 		{
 			$changes = true;
-			$warnings[] = "Templatede linkimine muutus!";
+			$warnings[] = t("Templatede linkimine muutus!");
 		}
 
 		if ($o->prop("select_imgcss_sites") != $old["site_obj"]["select_imgcss_sites"])
 		{
 			$changes = true;
-			$warnings[] = "Piltide ja css sait muutus (".$old["site_obj"]["select_imgcss_sites"]." => ".$o->prop("select_imgcss_sites").")!";
+			$warnings[] = sprintf(t("Piltide ja css sait muutus (%s => %s)!"), $old["site_obj"]["select_imgcss_sites"], $o->prop("select_imgcss_sites"));
 		}
 
 		return $changes;
@@ -1609,7 +1609,7 @@ class aw_site extends class_base
 		{
 			error::raise(array(
 				"id" => ERR_XLMRPC,
-				"msg" => "aw_site::_do_change_url($old_url): pagecache folder is empty or bad ( ".$_t["cache.page_cache"]." )!"
+				"msg" => sprintf(t("aw_site::_do_change_url(%s): pagecache folder is empty or bad ( %s )!"), $old_url, $_t["cache.page_cache"])
 			));
 		}
 		$sue->add_cmd("rm -rf $cache");
@@ -1684,7 +1684,7 @@ class aw_site extends class_base
 
 		// restart apache
 		touch("/tmp/ap_reboot");
-		echo "Valmis! Sait on uue aadressi pealt kasutatav paari minuti p&auml;rast! <Br>\n";
+		echo t("Valmis! Sait on uue aadressi pealt kasutatav paari minuti p&auml;rast! <Br>\n");
 		flush();
 	}
 
@@ -1717,7 +1717,7 @@ class aw_site extends class_base
 		{
 			error::raise(array(
 				"id" => ERR_XLMRPC,
-				"msg" => "aw_site::_do_change_imgcss(): pagecache folder is empty or wrong (".$_t["cache.page_cache"].")!"
+				"msg" => sprintf(t("aw_site::_do_change_imgcss(): pagecache folder is empty or wrong (%s)!"), $_t["cache.page_cache"])
 			));
 		}
 
@@ -1725,7 +1725,7 @@ class aw_site extends class_base
 		{
 			error::raise(array(
 				"id" => ERR_XLMRPC,
-				"msg" => "aw_site::_do_change_imgcss(): basedir is empty or bad ($_t[site_basedir])!"
+				"msg" => sprintf(t("aw_site::_do_change_imgcss(): basedir is empty or bad (%s)!"), $_t["site_basedir"])
 			));
 		}
 		$sue = get_instance("install/su_exec");
@@ -1776,7 +1776,7 @@ class aw_site extends class_base
 			{
 				error::raise(array(
 					"id" => ERR_XLMRPC,
-					"msg" => "aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (".$_t["cache.page_cache"].")!"
+					"msg" => sprintf(t("aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (%s)!"), $_t["cache.page_cache"])
 				));
 			}
 			$sue = get_instance("install/su_exec");

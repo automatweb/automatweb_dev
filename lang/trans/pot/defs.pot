@@ -1,0 +1,8 @@
+#: classes/defs.aw:516
+msgid ""
+msgstr ""
+
+#: classes/defs.aw:601
+msgid "(nimetu)"
+msgstr ""
+

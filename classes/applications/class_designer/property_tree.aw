@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.5 2005/03/18 12:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.6 2005/03/22 15:32:37 kristo Exp $
 // property_tree.aw - Puu komponent 
 /*
 
@@ -119,13 +119,13 @@ class property_tree extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"align" => "center",
 			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "change",
-			"caption" => "Muuda",
+			"caption" => t("Muuda"),
 			"align" => "center",
 			"sortable" => 1
 		));

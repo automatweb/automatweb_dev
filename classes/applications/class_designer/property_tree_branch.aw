@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree_branch.aw,v 1.3 2005/03/18 12:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree_branch.aw,v 1.4 2005/03/22 15:32:37 kristo Exp $
 // property_tree_branch.aw - Puu oks 
 /*
 
@@ -87,13 +87,13 @@ class property_tree_branch extends class_base
 	{
 		$t->define_field(array(
 			"name" => "clid",
-			"caption" => "Klass",
+			"caption" => t("Klass"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "rel",
-			"caption" => "Seoset&uuml;&uuml;p",
+			"caption" => t("Seoset&uuml;&uuml;p"),
 			"align" => "center"
 		));
 	}
@@ -226,12 +226,12 @@ class property_tree_branch extends class_base
 	{
 		$t->define_field(array(
 			"name" => "prop",
-			"caption" => "Omadus",
+			"caption" => t("Omadus"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "value",
-			"caption" => "V&auml;&auml;rtus",
+			"caption" => t("V&auml;&auml;rtus"),
 			"align" => "center",
 		));
 	}

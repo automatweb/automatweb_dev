@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.2 2005/03/02 13:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.3 2005/03/22 15:32:37 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -22,8 +22,8 @@ class xml_import extends class_base
 	function xml_import($args = array())
 	{
 		$this->init(array(
-                        "clid" => CL_XML_IMPORT,
-                ));
+			"clid" => CL_XML_IMPORT,
+		));
 
 		$this->methods = array(
 			"import_tudengid" => "import_tudengid",
@@ -49,7 +49,7 @@ class xml_import extends class_base
 				classload("html");
 				$id	= $args["obj_inst"]->id();
 				$url = $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1);
-				$data["value"] = html::href(array("url" => $url,"caption" => "Käivita import","target" => "_blank"));
+				$data["value"] = html::href(array("url" => $url,"caption" => t("Käivita import"),"target" => "_blank"));
 				break;
 		};
 	}

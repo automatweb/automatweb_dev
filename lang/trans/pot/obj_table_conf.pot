@@ -1,0 +1,180 @@
+#: classes/admin/obj_table_conf.aw:30
+msgid "ID"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:31
+msgid "parent"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:32
+msgid "Nimi"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:33
+msgid "Looja"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:34
+msgid "Millal loodud"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:35
+msgid "Muutja"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:36
+msgid "Millal muudetud"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:37
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:38
+msgid "Aktiivsus"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:39
+msgid "Keel"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:40
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:41
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:42
+msgid "Periood"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:43
+msgid "Alias"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:44
+msgid "Periodic"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:45
+msgid "Saidi ID"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:46
+msgid "Aktiveeri millal"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:47
+msgid "Deaktiveeri millal"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:48
+msgid "Aktiveeri automaatselt"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:49
+msgid "Deaktiveeri automaatselt"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:50
+msgid "---- actions"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:51
+msgid "Ikoon"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:52
+msgid "Link"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:53
+msgid "Vali"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:54
+msgid "Muuda"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:55
+msgid "Kustuta"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:56
+msgid "Muuda ACLi"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:57
+msgid "Java menu"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:58
+msgid "---- use next ones with caution!"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:59
+msgid "hits"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:60
+msgid "last"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:61
+msgid "visible"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:62
+msgid "doc_template"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:63
+msgid "Mille vend"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:64
+msgid "Cache dirty"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:65
+msgid "metadata"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:66
+msgid "meta"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:67
+msgid "Subclass"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:68
+msgid "cachedata"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:69
+msgid "Flags"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:102
+msgid "Salvesta muudatused"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:122
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:128
+msgid "Järjekord"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:134
+msgid "Sorteeritav"
+msgstr ""
+
+#: classes/admin/obj_table_conf.aw:139
+msgid "Omadus"
+msgstr ""
+

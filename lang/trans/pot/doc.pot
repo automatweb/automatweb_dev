@@ -14,3 +14,7 @@ msgstr ""
 msgid "Dokument 2.0"
 msgstr ""
 
+#: classes/doc.aw:777
+msgid "Dokument (vend)"
+msgstr ""
+

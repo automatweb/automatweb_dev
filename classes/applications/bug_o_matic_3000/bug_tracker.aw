@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.2 2005/01/18 10:34:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.3 2005/03/22 15:32:37 kristo Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -126,19 +126,19 @@ class bug_tracker extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "createdby",
-			"caption" => "Looja",
+			"caption" => t("Looja"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "created",
-			"caption" => "Loodud",
+			"caption" => t("Loodud"),
 			"sortable" => 1,
 			"type" => "time",
 			"numberic" => 1,
@@ -147,13 +147,13 @@ class bug_tracker extends class_base
 
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
 			"sortable" => 1,
 			"type" => "time",
 			"numberic" => 1,

@@ -1,0 +1,28 @@
+#: classes/install/aw_site_gen_log.aw:45
+msgid "Millal"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:55
+msgid "Kes"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:61
+msgid "Mida"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:67
+msgid "Tulemus"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:73
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:99
+msgid "Saidi logi alustemisele ei antud parent menyy idd!"
+msgstr ""
+
+#: classes/install/aw_site_gen_log.aw:129
+msgid "Logimist pole alustatud!"
+msgstr ""
+

@@ -1,0 +1,20 @@
+#: classes/applications/clients/ut/xml_import/datasource.aw:46
+msgid "lokaalne fail (serveris)"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:47
+msgid "http"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:48
+msgid "https"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:54
+msgid "XML"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/datasource.aw:94
+msgid "%s not found"
+msgstr ""
+

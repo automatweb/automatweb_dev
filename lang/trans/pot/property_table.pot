@@ -42,3 +42,7 @@ msgstr ""
 msgid "Omadus"
 msgstr ""
 
+#: classes/applications/class_designer/property_table.aw:678
+msgid "Tulp"
+msgstr ""
+

@@ -1,20 +1,152 @@
-#: classes/mrp/mrp_case.aw:1370
+#: classes/mrp/mrp_case.aw:261
+msgid "Uus"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:262
+msgid "Töösse planeeritud"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:263
+msgid "Töös"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:264
+msgid "Katkestatud"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:265
+msgid "Valmis"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:266
+msgid "Lukustatud"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:267
+msgid "Paus"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:268
+msgid "Kustutatud"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:269
+msgid "Plaanist väljas"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:270
+msgid "Arhiveeritud"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:411
+msgid "Ei tohi olla rohkem kui &uuml;ks sama nimega projekt!"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:706
+msgid "<< N&auml;dal tagasi"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:710
+msgid "N&auml;dal edasi >>"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:756
+msgid "Kustuta valitud töö(d)"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:757
+msgid "Kustutada kõik valitud tööd?"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:764
+msgid "Testi/hinda valmimisaega"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:780
+msgid "Planeeri"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:796
+msgid "Võta planeerimisest v&auml;lja"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:811
+msgid "Katkesta projekt"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:812
+msgid "Katkesta projekt?"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:827
+msgid "Arhiveeri projekt"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:841
+msgid "Nr."
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:845
+msgid "Eeldustööd"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:849
+msgid "Nimi"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:853
+msgid "Pikkus (h)"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:857
+msgid "Eelpuhver (h)"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:861
+msgid "Järelpuhver (h)"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:865
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:870
+msgid "Staatus"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:874
+msgid "Töösse"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:878
+msgid "Ava"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:961
+msgid "JAH"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:968
+msgid "Ava"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:1425
 msgid "Millal"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1380
+#: classes/mrp/mrp_case.aw:1435
 msgid "T&ouml;&ouml"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1387
+#: classes/mrp/mrp_case.aw:1442
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1394
+#: classes/mrp/mrp_case.aw:1449
 msgid "sisu"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1401
+#: classes/mrp/mrp_case.aw:1456
 msgid "Kommentaar"
 msgstr ""
 

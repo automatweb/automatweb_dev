@@ -1,0 +1,56 @@
+#: classes/mrp/mrp_resource.aw:155
+msgid "/Ressursid"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:159
+msgid "Ressurss ei kuulu ühessegi ressursihaldussüsteemi."
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:169
+msgid "Ressursi kasutust planeeritakse"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:170
+msgid "Ressursi kasutust ei planeerita"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:171
+msgid "Ressurss on allhange"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:184
+msgid "Vaba"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:185
+msgid "Kasutusel"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:186
+msgid "Suletud"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:274
+msgid "Klient"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:280
+msgid "Projekt"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:286
+msgid "Töö"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:292
+msgid "Alustamisaeg"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:298
+msgid "Ava"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:339
+msgid "Ava"
+msgstr ""
+

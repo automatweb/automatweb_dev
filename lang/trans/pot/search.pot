@@ -1,0 +1,140 @@
+#: classes/search.aw:200
+msgid "Objektitüübi omadused"
+msgstr ""
+
+#: classes/search.aw:217
+msgid "<b><font color='red'>Sellel klassil pole ühtegi otsitavat omadust</font></b>"
+msgstr ""
+
+#: classes/search.aw:372
+msgid "Cannot create an instance of %s"
+msgstr ""
+
+#: classes/search.aw:1019
+msgid "Otsi"
+msgstr ""
+
+#: classes/search.aw:1079
+msgid "Objekti nimi"
+msgstr ""
+
+#: classes/search.aw:1095
+msgid "Server"
+msgstr ""
+
+#: classes/search.aw:1105
+msgid "Nimi"
+msgstr ""
+
+#: classes/search.aw:1114
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/search.aw:1123
+msgid "Tüüp"
+msgstr ""
+
+#: classes/search.aw:1136
+msgid "ID"
+msgstr ""
+
+#: classes/search.aw:1147
+msgid "Asukoht"
+msgstr ""
+
+#: classes/search.aw:1157
+msgid "Looja"
+msgstr ""
+
+#: classes/search.aw:1167
+msgid "Muutja"
+msgstr ""
+
+#: classes/search.aw:1177
+msgid "Aktiivsus"
+msgstr ""
+
+#: classes/search.aw:1178
+msgid "Kõik"
+msgstr ""
+
+#: classes/search.aw:1178
+msgid "Aktiivsed"
+msgstr ""
+
+#: classes/search.aw:1178
+msgid "Deaktiivsed"
+msgstr ""
+
+#: classes/search.aw:1187
+msgid "Alias"
+msgstr ""
+
+#: classes/search.aw:1200
+msgid "Keel"
+msgstr ""
+
+#: classes/search.aw:1211
+msgid "Periood"
+msgstr ""
+
+#: classes/search.aw:1220
+msgid "Igalt poolt"
+msgstr ""
+
+#: classes/search.aw:1228
+msgid "Igalt poolt"
+msgstr ""
+
+#: classes/search.aw:1231
+msgid "Saidi ID"
+msgstr ""
+
+#: classes/search.aw:1241
+msgid "Leia vendi"
+msgstr ""
+
+#: classes/search.aw:1302
+msgid "ID"
+msgstr ""
+
+#: classes/search.aw:1312
+msgid ""
+msgstr ""
+
+#: classes/search.aw:1323
+msgid "Nimi"
+msgstr ""
+
+#: classes/search.aw:1330
+msgid "Keel"
+msgstr ""
+
+#: classes/search.aw:1340
+msgid "Tüüp"
+msgstr ""
+
+#: classes/search.aw:1349
+msgid "Asukoht"
+msgstr ""
+
+#: classes/search.aw:1357
+msgid "Loodud"
+msgstr ""
+
+#: classes/search.aw:1369
+msgid "Looja"
+msgstr ""
+
+#: classes/search.aw:1377
+msgid "Muudetud"
+msgstr ""
+
+#: classes/search.aw:1389
+msgid "Muutja"
+msgstr ""
+
+#: classes/search.aw:1397
+msgid "<a href='javascript:selall(\"sel\")'>Vali</a>"
+msgstr ""
+

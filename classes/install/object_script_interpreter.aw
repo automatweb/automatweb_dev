@@ -28,7 +28,7 @@ class object_script_interpreter extends class_base
 		$sc = $this->get_file(array("file" => $file));
 		error::raise_if($sc === false, array(
 			"id" => ERR_NO_FILE,
-			"msg" => "object_script_interpreter::exec_file($file): file does not exist!"
+			"msg" => sprintf(t("object_script_interpreter::exec_file(%s): file does not exist!"), $file)
 		));
 
 		return $this->exec(array(
@@ -120,7 +120,7 @@ class object_script_interpreter extends class_base
 	{
 		error::raise_if(!isset($this->sym_table[$n]), array(
 			"id" => ERR_OSI_NO_VAR,
-			"msg" => "object_script_interpreter::_get_sym($n): no variable by the name $n defined on line ".$this->lineno."!"
+			"msg" => sprintf(t("object_script_interpreter::_get_sym(%s): no variable by the name %s defined on line %s!"), $n, $n, $this->lineno)
 		));
 		return $this->sym_table[$n];
 	}
@@ -174,7 +174,7 @@ class object_script_interpreter extends class_base
 		{
 			error::raise(array(
 				"id" => ERR_OSI_PARSE,
-				"msg" => "object_script_interpreter::_tokenize_line($line): parse error - unrecognized command on line ".$this->lineno."!"
+				"msg" => sprintf(t("object_script_interpreter::_tokenize_line(%s): parse error - unrecognized command on line %s!"), $line, $this->lineno)
 			));
 		}
 
@@ -182,12 +182,12 @@ class object_script_interpreter extends class_base
 
 		error::raise_if($line{0} != "{", array(
 			"id" => ERR_OSI_PARSE,
-			"msg" => "object_script_interpreter::_tokenize_line($line): parse error no opening brace after command on line ".$this->lineno."!"
+			"msg" => sprintf(t("object_script_interpreter::_tokenize_line(%s): parse error no opening brace after command on line %s!"), $line, $this->lineno)
 		));
 
 		error::raise_if($line{strlen($line)-1} != "}", array(
 			"id" => ERR_OSI_PARSE,
-			"msg" => "object_script_interpreter::_tokenize_line($line): parse error no closing brace on line ".$this->lineno."!"
+			"msg" => sprintf(t("object_script_interpreter::_tokenize_line(%s): parse error no closing brace on line %s!"), $line, $this->lineno)
 		));
 
 		$line = trim(substr(substr($line,0,-1), 1));

@@ -10,3 +10,23 @@ msgstr ""
 msgid "Lisa kategooria"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:129
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:135
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:141
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:150
+msgid "Muutja"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_tracker.aw:156
+msgid "Muudetud"
+msgstr ""
+

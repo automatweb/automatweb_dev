@@ -184,8 +184,11 @@ class pot_scanner extends core
 
 			if (preg_match("/\"caption\"(\s*)=>(\s*)['|\"](.*)['|\"]/imsU", $line))
 			{
-				echo "$from_file:".($ln+1)." / untranslated caption ->\n".trim($line)."\n";
-				$this->warn_cnt++;
+				if (strpos($line, "t(") === false)
+				{
+					echo "$from_file:".($ln+1)." / untranslated caption ->\n".trim($line)."\n";
+					$this->warn_cnt++;
+				}
 			}
 			else
 			if (preg_match("/die(\s*)\(['|\"](.*)['|\"]\)/imsU", $line))

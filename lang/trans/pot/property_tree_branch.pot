@@ -1,0 +1,16 @@
+#: classes/applications/class_designer/property_tree_branch.aw:90
+msgid "Klass"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:96
+msgid "Seoset&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:229
+msgid "Omadus"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:234
+msgid "V&auml;&auml;rtus"
+msgstr ""
+

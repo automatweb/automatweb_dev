@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site_gen_log.aw,v 1.3 2004/02/17 20:23:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site_gen_log.aw,v 1.4 2005/03/22 15:32:38 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_AW_SITE_GEN_LOG
@@ -42,7 +42,7 @@ class aw_site_gen_log extends class_base
 
 		$t->define_field(array(
 			'name' => 'tm',
-			'caption' => 'Millal',
+			'caption' => t('Millal'),
 			'sortable' => 1,
 			'numeric' => 1,
 			'type' => 'time',
@@ -52,25 +52,25 @@ class aw_site_gen_log extends class_base
 
 		$t->define_field(array(
 			"name" => "uid",
-			"caption" => "Kes",
+			"caption" => t("Kes"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "msg",
-			"caption" => "Mida",
+			"caption" => t("Mida"),
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "result",
-			"caption" => "Tulemus",
+			"caption" => t("Tulemus"),
 			"sortable" => 1
 		));
 	
 		$t->define_field(array(
 			"name" => "comment",
-			"caption" => "Kommentaar",
+			"caption" => t("Kommentaar"),
 			"sortable" => 1
 		));
 
@@ -96,7 +96,7 @@ class aw_site_gen_log extends class_base
 		extract($arr);
 		if (!$parent)
 		{
-			$this->raise_error(ERR_SG_NO_PARENT, "Saidi logi alustemisele ei antud parent menyy idd!", false, true);
+			$this->raise_error(ERR_SG_NO_PARENT, t("Saidi logi alustemisele ei antud parent menyy idd!"), false, true);
 		}
 
 		$this->cur_log_obj = new object;
@@ -126,7 +126,7 @@ class aw_site_gen_log extends class_base
 	{
 		if (!$this->cur_log_obj)
 		{
-			$this->raise_error(ERR_NO_LOG, "Logimist pole alustatud!", false, true);
+			$this->raise_error(ERR_NO_LOG, t("Logimist pole alustatud!"), false, true);
 		}
 
 		$this->cur_log_obj->set_meta("log",$this->log_entries);

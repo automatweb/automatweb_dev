@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.89 2005/03/22 11:15:56 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.90 2005/03/22 15:32:36 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -197,7 +197,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		$retval = array();
 		$item = array(
-			"caption" => "Objektitüübi omadused",
+			"caption" => t("Objektitüübi omadused"),
 		);
 		$retval[] = $item;
 
@@ -214,7 +214,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		if (sizeof($retval) == 1)
 		{
 			$item = array(
-				"caption" => "<b><font color='red'>Sellel klassil pole ühtegi otsitavat omadust</font></b>",
+				"caption" => t("<b><font color='red'>Sellel klassil pole ühtegi otsitavat omadust</font></b>"),
 			);
 			$retval[] = $item;
 		};
@@ -369,7 +369,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$_obj = get_instance($args["clid"]);
 				if (!$_obj)
 				{
-					$this->raise_error(ERR_CORE_NO_FILE,"Cannot create an instance of $clid",true);
+					$this->raise_error(ERR_CORE_NO_FILE,sprintf(t("Cannot create an instance of %s"), $clid),true);
 				};
 				$this->obj_ref = $_obj;
 				if ($args["clid"] == "document")
@@ -1016,7 +1016,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			// override the search button with our own
 			$toolbar->add_button(array(
 				"name" => "search",
-				"tooltip" => "Otsi",
+				"tooltip" => t("Otsi"),
 				"url" => "javascript:document.searchform.submit()",
 				"imgover" => "search_over.gif",
 				"img" => "search.gif",
@@ -1076,7 +1076,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["obj_name"] = array(
 				"type" => "textbox",
-				"caption" => "Objekti nimi",
+				"caption" => t("Objekti nimi"),
 				"value" => $args["s"]["obj_name"],
 			);
 		};
@@ -1092,7 +1092,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			$fields["server"] = array(
 				"type" => "select",
-				"caption" => "Server",
+				"caption" => t("Server"),
 				"options" => $lll,
 				"selected" => $args["s"]["server"],
 			);
@@ -1102,7 +1102,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["name"] = array(
 				"type" => "textbox",
-				"caption" => "Nimi",
+				"caption" => t("Nimi"),
 				"value" => $args["s"]["name"],
 			);
 		};
@@ -1111,7 +1111,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["comment"] = array(
 				"type" => "textbox",
-				"caption" => "Kommentaar",
+				"caption" => t("Kommentaar"),
 				"value" => $args["s"]["comment"],
 			);
 		};
@@ -1120,7 +1120,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["class_id"] = array(
 				"type" => "multiple",
-				"caption" => "Tüüp",
+				"caption" => t("Tüüp"),
 				"size" => 10,
 				"options" => $this->_get_s_class_id($args["s"]["class_id"]),
 				"selected" => $args["s"]["class_id"],
@@ -1133,7 +1133,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["oid"] = array(
 				"type" => "textbox",
-				"caption" => "ID",
+				"caption" => t("ID"),
 				"size" => 6,
 				"value" => $args["s"]["oid"],
 			);
@@ -1144,7 +1144,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["location"] = array(
 				"type" => "textbox",
-				"caption" => "Asukoht",
+				"caption" => t("Asukoht"),
 				"size" => '25',
 				"value" => $args["s"]["location"],
 			);
@@ -1154,7 +1154,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["createdby"] = array(
 				"type" => "textbox",
-				"caption" => "Looja",
+				"caption" => t("Looja"),
 				"value" => $args["s"]["createdby"],
 				'size' => '15',
 			);
@@ -1164,7 +1164,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["modifiedby"] = array(
 				"type" => "textbox",
-				"caption" => "Muutja",
+				"caption" => t("Muutja"),
 				"value" => $args["s"]["modifiedby"],
 				'size' => '15',
 			);
@@ -1174,8 +1174,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["status"] = array(
 				"type" => "radiogroup",
-				"caption" => "Aktiivsus",
-				"options" => array("3" => "Kõik","2" => "Aktiivsed","1" => "Deaktiivsed"),
+				"caption" => t("Aktiivsus"),
+				"options" => array("3" => t("Kõik"),"2" => t("Aktiivsed"),"1" => t("Deaktiivsed")),
 				"selected" => ($args["s"]["status"]) ? $args["s"]["status"] : 3,
 			);
 		};
@@ -1184,7 +1184,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["alias"] = array(
 				"type" => "textbox",
-				"caption" => "Alias",
+				"caption" => t("Alias"),
 				"value" => $args["s"]["alias"],
 			);
 		};
@@ -1197,7 +1197,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			$fields["lang_id"] = array(
 //				"type" => "select",
 				"type" => 'radiogroup',
-				"caption" => "Keel",
+				"caption" => t("Keel"),
 				"options" => $li,
 				"selected" => $args["s"]["lang_id"],
 			);
@@ -1208,7 +1208,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			$lg = get_instance("period");
 			$fields["period"] = array(
 				"type" => "select",
-				"caption" => "Periood",
+				"caption" => t("Periood"),
 				"options" => $lg->period_list(aw_global_get("act_per_id"), true),
 				"selected" => $args["s"]["period"],
 			);
@@ -1217,7 +1217,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		if (!$fields["site_id"])
 		{
 			$dat = $this->_search_mk_call("objects","db_query", array("sql" => "SELECT distinct(site_id) as site_id FROM objects"), $args);
-			$sites = array("0" => "Igalt poolt");
+			$sites = array("0" => t("Igalt poolt"));
 			if (is_array($dat))
 			{
 				foreach($dat as $row)
@@ -1225,10 +1225,10 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					$sites[$row["site_id"]] = $row["site_id"];
 				}
 			};	
-			$sites["0"] = "Igalt poolt";
+			$sites["0"] = t("Igalt poolt");
 			$fields["site_id"] = array(
 				"type" => "select",
-				"caption" => "Saidi ID",
+				"caption" => t("Saidi ID"),
 				"options" => $sites,
 				"selected" => ($args["s"]["site_id"] ? $args["s"]["site_id"] : 0),
 			);
@@ -1238,7 +1238,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$fields["search_bros"] = array(
 				"type" => "checkbox",
-				"caption" => "Leia vendi",
+				"caption" => t("Leia vendi"),
 				"ch_value" => 1,
 				"value" => $args["s"]["search_bros"],
 			);
@@ -1299,7 +1299,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	{
 		$this->t->define_field(array(
 			"name" => "oid",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -1309,7 +1309,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		$this->t->define_field(array(
 			"name" => "icon",
-			"caption" => "",
+			"caption" => t(""),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -1320,14 +1320,14 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		$this->t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 			"sortable" => 1,
 			"chgbgcolor" => "cutcopied",
 		));
 		$this->t->define_field(array(
 			"name" => "lang",
-			"caption" => "Keel",
+			"caption" => t("Keel"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -1337,7 +1337,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			
 		$this->t->define_field(array(
 			"name" => "type",
-			"caption" => "Tüüp",
+			"caption" => t("Tüüp"),
 			"talign" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
@@ -1346,7 +1346,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			
 		$this->t->define_field(array(
 			"name" => "location",
-			"caption" => "Asukoht",
+			"caption" => t("Asukoht"),
 			"talign" => "center",
 			"sortable" => 1,
 			"chgbgcolor" => "cutcopied",
@@ -1354,7 +1354,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			
 		$this->t->define_field(array(
 			"name" => "created",
-			"caption" => "Loodud",
+			"caption" => t("Loodud"),
 			"talign" => "center",
 			"sortable" => 1,
 			"numeric" => 1,
@@ -1366,7 +1366,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		$this->t->define_field(array(
 			"name" => "createdby",
-			"caption" => "Looja",
+			"caption" => t("Looja"),
 			"talign" => "center",
 			"sortable" => 1,
 			"chgbgcolor" => "cutcopied",
@@ -1374,7 +1374,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		$this->t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => t("Muudetud"),
 			"talign" => "center",
 			"sortable" => 1,
 			"nowrap" => "1",
@@ -1386,7 +1386,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			
 		$this->t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => t("Muutja"),
 			"talign" => "center",
 			"sortable" => 1,
 			"chgbgcolor" => "cutcopied",
@@ -1394,7 +1394,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		
 		$this->t->define_field(array(
 			"name" => "change",
-			"caption" => "<a href='javascript:selall(\"sel\")'>Vali</a>",
+			"caption" => t("<a href='javascript:selall(\"sel\")'>Vali</a>"),
 			"align" => "center",
 			"talign" => "center",
 			"chgbgcolor" => "cutcopied",

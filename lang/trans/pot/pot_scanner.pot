@@ -1,0 +1,6 @@
+#: classes/core/trans/pot_scanner.aw:187
+msgid ") === false)
+				{
+					echo "
+msgstr ""
+

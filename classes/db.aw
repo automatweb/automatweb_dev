@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.24 2005/01/26 12:09:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.25 2005/03/22 15:32:36 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -101,7 +101,7 @@ class db_connector
 		$dc = get_instance("db_drivers/".$driver);
 		if (!is_object($dc))
 		{
-			die("this driver is not supported");
+			die(t("this driver is not supported"));
 		};
 
 		// FIXME: check for return value

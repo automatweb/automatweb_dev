@@ -1,3 +1,15 @@
+#: classes/applications/class_designer/class_designer.aw:168
+msgid "Visualiseeri"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:259
+msgid "Uus tab"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:270
+msgid "Uus grid"
+msgstr ""
+
 #: classes/applications/class_designer/class_designer.aw:306
 msgid "Save"
 msgstr ""
@@ -32,5 +44,17 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:364
 msgid "Muuda"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:408
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:440
+msgid "Grupp "
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:471
+msgid "vbox "
 msgstr ""
 

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.10 2005/03/22 15:23:44 kristo Exp $
-// aorders_order.aw - Tellimus 
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.11 2005/03/22 15:32:37 kristo Exp $
+// orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
 @tableinfo orders_order index=oid master_table=objects master_index=brother_of
@@ -148,32 +148,32 @@ class orders_order extends class_base
 				$table = &$prop["vcl_inst"];
 				$table->define_field(array(
 					"name" => "product_name",
-					"caption" => "Toode",
+					"caption" => t("Toode"),
 				));
 			
 				$table->define_field(array(
 					"name" => "product_code",
-					"caption" => "Toote kood",
+					"caption" => t("Toote kood"),
 				));
 					
 				$table->define_field(array(
 					"name" => "product_color",
-					"caption" => "Värv",
+					"caption" => t("Värv"),
 				));
 				
 				$table->define_field(array(
 					"name" => "product_size",
-					"caption" => "Suurus",
+					"caption" => t("Suurus"),
 				));
 				
 				$table->define_field(array(
 					"name" => "product_count",
-					"caption" => "Kogus",
+					"caption" => t("Kogus"),
 				));
 					
 				$table->define_field(array(
 					"name" => "product_price",
-					"caption" => "Hind",
+					"caption" => t("Hind"),
 				));
 				
 				$conns = $arr["obj_inst"]->connections_from(array(
@@ -440,7 +440,7 @@ class orders_order extends class_base
 		{
 			//$arr["udef_checkbox1"] = 0;
 			// fail here
-			$_SESSION["udef_checkbox1_error"] = "Tellimiseks peate n&ouml;ustuma tellimistingimustega!";
+			$_SESSION["udef_checkbox1_error"] = t("Tellimiseks peate n&ouml;ustuma tellimistingimustega!");
 			return $this->mk_my_orb("change", 
 				array(
 					"id" => $_SESSION["order_form_id"],
@@ -460,7 +460,7 @@ class orders_order extends class_base
 		if (!$arr["udef_checkbox1"])
 		{
 			$cv = aw_global_get("cb_values");
-			$cv["udef_checkbox1"]["error"] = "Tellimiseks peate n&otilde;ustuma tellimistingimustega";
+			$cv["udef_checkbox1"]["error"] = t("Tellimiseks peate n&otilde;ustuma tellimistingimustega");
 			aw_session_set("cb_values", $cv);
 		}
 		if(aw_global_get("cb_values"))

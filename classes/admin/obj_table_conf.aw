@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/obj_table_conf.aw,v 1.1 2005/03/17 18:17:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/obj_table_conf.aw,v 1.2 2005/03/22 15:32:37 kristo Exp $
 // obj_table_conf - Objekti tabeli conf 
 /*
 
@@ -24,51 +24,51 @@
 */
 class obj_table_conf extends class_base
 {
-	var $data = array(
-		"oid" => array("name" => "ID", "type" => "int", "sortable" => true),
-		"parent" => array("name" => "parent", "type" => "int", "sortable" => true),
-		"name" => array("name" => "Nimi", "type" => "text", "sortable" => true),
-		"createdby" => array("name" => "Looja", "type" => "text", "sortable" => true),
-		"created" => array("name" => "Millal loodud", "type" => "time", "sortable" => true),
-		"modifiedby" => array("name" => "Muutja", "type" => "text", "sortable" => true),
-		"modified" => array("name" => "Millal muudetud", "type" => "time", "sortable" => true),
-		"class_id" => array("name" => "T&uuml;&uuml;p", "type" => "int", "sortable" => true),
-		"status" => array("name" => "Aktiivsus", "type" => "int"),
-		"lang_id" => array("name" => "Keel", "type" => "int", "sortable" => true),
-		"comment" => array("name" => "Kommentaar", "type" => "text", "sortable" => true),
-		"jrk" => array("name" => "J&auml;rjekord", "type" => "int"),
-		"period" => array("name" => "Periood", "type" => "int", "sortable" => true),
-		"alias" => array("name" => "Alias", "type" => "text", "sortable" => true),
-		"perioodiline" => array("name" => "Periodic", "type" => "int"),
-		"site_id" => array("name" => "Saidi ID", "type" => "int", "sortable" => true),
-		"activate_at" => array("name" => "Aktiveeri millal", "type" => "time", "sortable" => true),
-		"deactivate_at" => array("name" => "Deaktiveeri millal", "type" => "time", "sortable" => true),
-		"autoactivate" => array("name" => "Aktiveeri automaatselt", "type" => "int"),
-		"autodeactivate" => array("name" => "Deaktiveeri automaatselt", "type" => "int"),
-		"---- actions" => array("name" => "---- actions"),
-		"icon" => array("name" => "Ikoon"),
-		"link" => array("name" => "Link"),
-		"select" => array("name" => "Vali"),
-		"change" => array("name" => "Muuda"),
-		"delete" => array("name" => "Kustuta"),
-		"acl" => array("name" => "Muuda ACLi"),
-		"java" => array("name" => "Java menu"),
-		"---- use next ones with caution!" => array("name" => "---- use next ones with caution!"),
-		"hits" => array("name" => "hits", "type" => "int", "sortable" => true),
-		"last" => array("name" => "last", "type" => "text", "sortable" => true),
-		"visible" => array("name" => "visible", "type" => "int", "sortable" => true),
-		"doc_template" => array("name" => "doc_template", "type" => "int", "sortable" => true),
-		"brother_of" => array("name" => "Mille vend", "type" => "int", "sortable" => true),
-		"cachedirty" => array("name" => "Cache dirty", "type" => "int", "sortable" => true),
-		"metadata" => array("name" => "metadata", "type" => "text", "sortable" => true),
-		"meta" => array("name" => "meta", "type" => "text", "sortable" => true),
-		"subclass" => array("name" => "Subclass", "type" => "int", "sortable" => true),
-		"cachedata" => array("name" => "cachedata", "type" => "text", "sortable" => true),
-		"flags" => array("name" => "Flags", "type" => "int", "sortable" => true),
-	);
-	
 	function obj_table_conf()
 	{
+		$this->data = array(
+			"oid" => array("name" => t("ID"), "type" => "int", "sortable" => true),
+			"parent" => array("name" => t("parent"), "type" => "int", "sortable" => true),
+			"name" => array("name" => t("Nimi"), "type" => "text", "sortable" => true),
+			"createdby" => array("name" => t("Looja"), "type" => "text", "sortable" => true),
+			"created" => array("name" => t("Millal loodud"), "type" => "time", "sortable" => true),
+			"modifiedby" => array("name" => t("Muutja"), "type" => "text", "sortable" => true),
+			"modified" => array("name" => t("Millal muudetud"), "type" => "time", "sortable" => true),
+			"class_id" => array("name" => t("T&uuml;&uuml;p"), "type" => "int", "sortable" => true),
+			"status" => array("name" => t("Aktiivsus"), "type" => "int"),
+			"lang_id" => array("name" => t("Keel"), "type" => "int", "sortable" => true),
+			"comment" => array("name" => t("Kommentaar"), "type" => "text", "sortable" => true),
+			"jrk" => array("name" => t("J&auml;rjekord"), "type" => "int"),
+			"period" => array("name" => t("Periood"), "type" => "int", "sortable" => true),
+			"alias" => array("name" => t("Alias"), "type" => "text", "sortable" => true),
+			"perioodiline" => array("name" => t("Periodic"), "type" => "int"),
+			"site_id" => array("name" => t("Saidi ID"), "type" => "int", "sortable" => true),
+			"activate_at" => array("name" => t("Aktiveeri millal"), "type" => "time", "sortable" => true),
+			"deactivate_at" => array("name" => t("Deaktiveeri millal"), "type" => "time", "sortable" => true),
+			"autoactivate" => array("name" => t("Aktiveeri automaatselt"), "type" => "int"),
+			"autodeactivate" => array("name" => t("Deaktiveeri automaatselt"), "type" => "int"),
+			"---- actions" => array("name" => t("---- actions")),
+			"icon" => array("name" => t("Ikoon")),
+			"link" => array("name" => t("Link")),
+			"select" => array("name" => t("Vali")),
+			"change" => array("name" => t("Muuda")),
+			"delete" => array("name" => t("Kustuta")),
+			"acl" => array("name" => t("Muuda ACLi")),
+			"java" => array("name" => t("Java menu")),
+			"---- use next ones with caution!" => array("name" => t("---- use next ones with caution!")),
+			"hits" => array("name" => t("hits"), "type" => "int", "sortable" => true),
+			"last" => array("name" => t("last"), "type" => "text", "sortable" => true),
+			"visible" => array("name" => t("visible"), "type" => "int", "sortable" => true),
+			"doc_template" => array("name" => t("doc_template"), "type" => "int", "sortable" => true),
+			"brother_of" => array("name" => t("Mille vend"), "type" => "int", "sortable" => true),
+			"cachedirty" => array("name" => t("Cache dirty"), "type" => "int", "sortable" => true),
+			"metadata" => array("name" => t("metadata"), "type" => "text", "sortable" => true),
+			"meta" => array("name" => t("meta"), "type" => "text", "sortable" => true),
+			"subclass" => array("name" => t("Subclass"), "type" => "int", "sortable" => true),
+			"cachedata" => array("name" => t("cachedata"), "type" => "text", "sortable" => true),
+			"flags" => array("name" => t("Flags"), "type" => "int", "sortable" => true),
+		);
+
 		$this->init(array(
 			"clid" => CL_OBJ_TABLE_CONF
 		));
@@ -83,10 +83,11 @@ class obj_table_conf extends class_base
 		{
 			case "proptable":
 				$this->gen_proptable($arr);
-			break;
+				break;
+
 			case "proptoolbar":
 				$this->gen_proptoolbar($arr);
-			break;
+				break;
 		};
 		return $retval;
 	}
@@ -98,7 +99,7 @@ class obj_table_conf extends class_base
    			"name" => "save",
     		"img" => "save.gif",
     		"action" => "submit",
-    		"tooltip" => "Salvesta muudatused",
+    		"tooltip" => t("Salvesta muudatused"),
     	));
 	}
 	
@@ -118,24 +119,24 @@ class obj_table_conf extends class_base
 		
 		$table->define_field(array(
 			"name" => "name",
-			"caption" => "Pealkiri",
+			"caption" => t("Pealkiri"),
 			"align" => "center",	
 		));
 		
 		$table->define_field(array(
 			"name" => "jrk",
-			"caption" => "Järjekord",
+			"caption" => t("Järjekord"),
 			"sortable" => 1,
 		));
 		
 		$table->define_field(array(
 			"name" => "sortable",
-			"caption" => "Sorteeritav",	
+			"caption" => t("Sorteeritav"),	
 		));
 		
 		$table->define_field(array(
 			"name" => "property",
-			"caption" => "Omadus",	
+			"caption" => t("Omadus"),	
 		));
 		
 		if($arr["obj_inst"]->meta("cols"))

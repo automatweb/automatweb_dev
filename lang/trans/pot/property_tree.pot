@@ -14,3 +14,11 @@ msgstr ""
 msgid "Oled kindel et soovid valitud objekte kustutada?"
 msgstr ""
 
+#: classes/applications/class_designer/property_tree.aw:122
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:128
+msgid "Muuda"
+msgstr ""
+

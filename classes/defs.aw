@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.180 2005/03/20 15:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.181 2005/03/22 15:32:36 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -513,7 +513,7 @@ if (!defined("DEFS"))
 		echo '<hr/>';
 		if ($die)
 		{
-			die('');
+			die(t(''));
 		}
 		return $arr;
 	}
@@ -598,7 +598,7 @@ if (!defined("DEFS"))
 	function parse_obj_name($name)
 	{
 		$name = trim($name);
-		$rv = empty($name) ? "(nimetu)" : $name;
+		$rv = empty($name) ? t("(nimetu)") : $name;
 		$rv = str_replace('"',"&quot;", $rv);
 		return $rv;
 	}

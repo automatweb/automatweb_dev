@@ -1,0 +1,76 @@
+#: classes/mrp/mrp_job.aw:123
+msgid "Uus"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:124
+msgid "Töösse planeeritud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:125
+msgid "Töös"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:126
+msgid "Katkestatud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:127
+msgid "Valmis"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:128
+msgid "Lukustatud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:129
+msgid "Paus"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:130
+msgid "Kustutatud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:131
+msgid "Plaanist väljas"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:132
+msgid "Arhiveeritud"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:170
+msgid "Ressurss määramata"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:181
+msgid "Määramata"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:275
+msgid "Alusta"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:286
+msgid "Valmis"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:293
+msgid "Katkesta"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:296
+msgid "Kommentaar peab olema t&auml;idetud!"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:304
+msgid "Paus"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:311
+msgid "Vahetuse l&otilde;pp"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:320
+msgid "J&auml;tka"
+msgstr ""
+

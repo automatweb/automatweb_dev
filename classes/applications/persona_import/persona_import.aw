@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.3 2005/03/18 13:42:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.4 2005/03/22 15:32:37 kristo Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -152,13 +152,13 @@ class persona_import extends class_base
 
 		if (sizeof($config["ftp"]) == 0)
 		{
-			die("You forgot to enter server data");
+			die(t("You forgot to enter server data"));
 		};
 
 		$crm_db_id = $obj->prop("crm_db_id");
 		if (!is_oid($crm_db_id))
 		{
-			die("Nii ei saa ju rallit sõita!");
+			die(t("Nii ei saa ju rallit sõita!"));
 		};
 
 		$crm_db = new object($crm_db_id);
@@ -168,19 +168,19 @@ class persona_import extends class_base
 
 		if (!is_oid($folder_person))
 		{
-			die("Isikute kataloog valimata");
+			die(t("Isikute kataloog valimata"));
 		};
 
 		$folder_address = $crm_db->prop("dir_address");
 		if (!is_oid($folder_address))
 		{
-			die("Aadresside kataloog valimata");
+			die(t("Aadresside kataloog valimata"));
 		};
 
 		$dir_default = $crm_db->prop("dir_default");
 		if (!is_oid($dir_default))
 		{
-			die("Default kataloog valimata");
+			die(t("Default kataloog valimata"));
 		};
 
 		// figure out variable manager
@@ -189,7 +189,7 @@ class persona_import extends class_base
 		));
 		if (sizeof($mt_conns) == 0)
 		{
-			die("Kliendibaasil puudub muutujate haldur");
+			die(t("Kliendibaasil puudub muutujate haldur"));
 		};
 		$first = reset($mt_conns);
 		$metamgr = new object($first->prop("to"));
@@ -234,7 +234,7 @@ class persona_import extends class_base
 			$meta_cat["peatumised"] = $meta1["Peatumiste liigid"];
 		};
 
-		print "Getting source data<br>";
+		print t("Getting source data<br>");
 		flush();
 
 		$c = get_instance(CL_FTP_LOGIN);
@@ -248,11 +248,11 @@ class persona_import extends class_base
 
 		if (strlen($fdat) == 0)
 		{
-			die("Not enough data to process<bR>");
+			die(t("Not enough data to process<bR>"));
 		};
 
 
-		print "got data<br>";
+		print t("got data<br>");
 	
 		flush();
 
@@ -260,7 +260,7 @@ class persona_import extends class_base
 		xml_parse_into_struct($p, $fdat, $vals, $index);
 		xml_parser_free($p);
 
-		print "parse finished, processing starts<br>";
+		print t("parse finished, processing starts<br>");
 		flush();
 
 		$workers = array();
@@ -400,7 +400,7 @@ class persona_import extends class_base
 
 		arr($simple_data);
 
-		print "creating yksused objects<br>";
+		print t("creating yksused objects<br>");
 		/*
 			 <yksused>
 				  <rida>
@@ -449,7 +449,7 @@ class persona_import extends class_base
 
 			if (empty($sections[$ext_id]))
 			{
-				print "created new section<br>";
+				print t("created new section<br>");
 				$yk = new object();
 				$yk->set_parent($dir_default);
 				$yk->set_class_id(CL_CRM_SECTION);
@@ -462,7 +462,7 @@ class persona_import extends class_base
 			}
 			else
 			{
-				print "updating existing section";
+				print t("updating existing section");
 				$yk = new object($sections[$ext_id]);
 				$yk->set_name($name);
 				$yk->save();
@@ -506,13 +506,13 @@ class persona_import extends class_base
 			};
 		};	
 
-		print "<h1>sections</h1>";
+		print t("<h1>sections</h1>");
 		arr($sections);
-		print "<h1>sections done</h1>";
+		print t("<h1>sections done</h1>");
 
 		$persons = array();
 
-		print "creating person objects<br>";
+		print t("creating person objects<br>");
 		foreach($data["TOOTAJAD"] as $worker)
 		{
 			$ext_id = $worker["TOOTAJA_ID"];
@@ -522,13 +522,13 @@ class persona_import extends class_base
 				$person_obj = new object();
 				$person_obj->set_parent($folder_person);
 				$person_obj->set_class_id(CL_CRM_PERSON);
-				print "<br>creating new person object<br>";
+				print t("<br>creating new person object<br>");
 			}
 			else
 			{
 				$person_obj = new object($person_match[$ext_id]); 
 				unset($person_match[$ext_id]);
-				print "updating existing person object";
+				print t("updating existing person object");
 			};	
 
 			print "SA = " . $worker["SYNNIAEG"];
@@ -911,7 +911,7 @@ class persona_import extends class_base
 
 		if (sizeof($config["ftp"]) == 0)
 		{
-			die("You forgot to enter server data");
+			die(t("You forgot to enter server data"));
 		};
 
 		$c = get_instance(CL_FTP_LOGIN);

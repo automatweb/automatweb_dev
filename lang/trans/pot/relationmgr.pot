@@ -1,0 +1,80 @@
+#: classes/vcl/relationmgr.aw:57
+msgid "Objekti tüüp"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:59
+msgid "Objekti tüüp"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:63
+msgid "Objekti tüüp"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:226
+msgid "Lisa uus objekt"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:233
+msgid "Otsi"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:242
+msgid "Otsi"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:253
+msgid "Tõlgi"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:264
+msgid "Uuenda"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:286
+msgid "Salvesta"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:293
+msgid "Kustuta seos(ed)"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:335
+msgid "Nimi"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:341
+msgid "Keel"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:348
+msgid "Muu info"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:354
+msgid "Alias"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:362
+msgid "Link"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:371
+msgid "Cache"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:380
+msgid "Muutja"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:388
+msgid "Muudetud"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:399
+msgid "Tüüp"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:407
+msgid "Seose tüüp"
+msgstr ""
+

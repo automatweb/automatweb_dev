@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.126 2005/03/20 15:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.127 2005/03/22 15:32:36 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -356,8 +356,8 @@ class menu extends class_base
 
 			case "panes":
 				$data["options"] = array(
-					"left_pane" => "Vasak",
-					"right_pane" => "Parem",
+					"left_pane" => t("Vasak"),
+					"right_pane" => t("Parem"),
 				);
 				$data["value"]["left_pane"] = $ob->prop("left_pane");
 				$data["value"]["right_pane"] = $ob->prop("right_pane");
@@ -717,7 +717,7 @@ class menu extends class_base
 		));
 /*		$t->define_field(array(
 			"name" => "del",
-			"caption" => "Kustuta",
+			"caption" => t("Kustuta"),
 			"talign" => "center",
 			"align" => "center",
 		));*/
@@ -1233,7 +1233,7 @@ class menu extends class_base
 		));
 /*		$t->define_field(array(
 			"name" => "check",
-			"caption" => "kustuta",
+			"caption" => t("kustuta"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -1427,20 +1427,20 @@ class menu extends class_base
 	{
 		$t->define_field(array(
 			"name" => "doc",
-			"caption" => "Dokument",
+			"caption" => t("Dokument"),
 			"align" => "center",
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "doc_subs",
-			"caption" => "ka alammen&uuml;&uuml;de juures",
+			"caption" => t("ka alammen&uuml;&uuml;de juures"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "tpl",
-			"caption" => "Vali asukoht",
+			"caption" => t("Vali asukoht"),
 			"align" => "center"
 		));
 	}

@@ -73,7 +73,7 @@ if (substr($content,0,5) == "http:" || $vars["reforb"] == 1)
         {
                 print html::href(array(
                         "url" => $content,
-                        "caption" => "Kliki siia jätkamiseks",
+                        "caption" => t("Kliki siia jätkamiseks"),
                 ));
         }
         else

@@ -1,3 +1,31 @@
+#: classes/applications/class_designer/property_toolbar_button.aw:65
+msgid "Eraldaja"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:66
+msgid "Nupp"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:67
+msgid "Menu&uuml;&uuml;"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:291
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:297
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:303
+msgid "URL"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:309
+msgid "Eraldaja?"
+msgstr ""
+
 #: classes/applications/class_designer/property_toolbar_button.aw:389
 msgid "Salvesta"
 msgstr ""

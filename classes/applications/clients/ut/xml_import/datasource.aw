@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/datasource.aw,v 1.2 2005/03/02 13:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/datasource.aw,v 1.3 2005/03/22 15:32:37 kristo Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -43,15 +43,15 @@ class datasource extends class_base
 		{
 			case "type":
 				$data["options"] = array(
-					"0" => "lokaalne fail (serveris)",
-					"1" => "http",
-					"2" => "https",
+					"0" => t("lokaalne fail (serveris)"),
+					"1" => t("http"),
+					"2" => t("https"),
 				);
 				break;
 
 			case "subclass":
 				$data["options"] = array(
-					DS_XML => "XML",
+					DS_XML => t("XML"),
 				);
 				break;
 
@@ -91,7 +91,7 @@ class datasource extends class_base
 			{
 				 error::raise(array(
 					"id" => "ERR_DS_NO_AGENT",
-					"msg" => "$curl not found"
+					"msg" => sprintf(t("%s not found"), $curl)
 				));
 			};
 			*/

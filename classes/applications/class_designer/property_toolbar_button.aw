@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar_button.aw,v 1.5 2005/03/18 12:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar_button.aw,v 1.6 2005/03/22 15:32:37 kristo Exp $
 // property_toolbar_button.aw - Taoolbari nupp 
 /*
 
@@ -62,9 +62,9 @@ class property_toolbar_button extends class_base
 		));
 
 		$this->button_types = array(
-			"sep" => "Eraldaja",
-			"but" => "Nupp", 
-			"men" => "Menu&uuml;&uuml;"
+			"sep" => t("Eraldaja"),
+			"but" => t("Nupp"), 
+			"men" => t("Menu&uuml;&uuml;")
 		);
 	}
 
@@ -288,25 +288,25 @@ class property_toolbar_button extends class_base
 	{	
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "ord",
-			"caption" => "J&auml;rjekord",
+			"caption" => t("J&auml;rjekord"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "url",
-			"caption" => "URL",
+			"caption" => t("URL"),
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "is_sep",
-			"caption" => "Eraldaja?",
+			"caption" => t("Eraldaja?"),
 			"align" => "center",
 		));
 
