@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.15 2003/05/13 15:17:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.16 2003/05/15 14:51:14 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -587,6 +587,41 @@ class doc extends class_base
 		};
 
 	}
+
+	////
+	// !Retrieves some information from the "show" template
+	// parent - id of the menu from which to start the template search
+	// template_dir - root template dir
+	// inst - reference to an object that has loaded the required template (optional)
+	// hm, maybe this should be a separate class? one which handles all
+	// that document template class
+	function parse_long_template($args = array())
+	{
+		// now, I want to gather some information about the "show" template:
+		extract($args);
+		if (!is_object($inst))
+		{
+			$_long = $this->get_long_template($parent);
+			$inst = get_instance("aw_template");
+			$base2 = substr($template_dir,strlen($this->cfg["tpldir"]));
+			$inst->init($base2);
+			$inst->read_any_template($_long);
+		};
+
+		// now I want get the list of "plugins"
+		$tpls = array_keys($inst->v2_templates);
+		$sx = "MAIN.plugin";
+		$plugins = array();
+		foreach($tpls as $key)
+		{
+		    if (preg_match("/MAIN\.plugin\.(\w*)/",$key,$matches))
+		    {
+			$plugins[] = $matches[1];
+		    };
+		};
+		return $plugins;
+	}
+
 
 };
 ?>
