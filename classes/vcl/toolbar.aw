@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.1 2004/06/25 20:04:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.2 2004/06/26 10:15:02 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -254,15 +254,12 @@ class toolbar extends aw_template
 	function init_vcl_property($arr)
 	{
 		$name = $arr["property"]["name"];
-		$vcl_inst = &$this;
-		$rv = array($name => array(
-			"name" => $name,
-			"type" => "toolbar",
-			"vcl_inst" => &$vcl_inst,
+		$vcl_inst = $this;
+		$res = $arr["property"];
+		$res["vcl_inst"] = &$vcl_inst;
 			// for backwards compatibility
-			"toolbar" => &$vcl_inst,
-			"no_caption" => $arr["property"]["no_caption"],
-		));
+		$res["toolbar"] = &$vcl_inst;
+		$rv = array($name => $res);
 		return $rv;
 	}
 
