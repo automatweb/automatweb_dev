@@ -11,6 +11,16 @@
             <cols>80</cols>
             <caption>Valem</caption>
       </property>
+      <property>
+            <name>errmsg</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Veateade</caption>
+            <comment>Kuvatakse, kui kontroller blokeerib sisestuse</comment>
+      </property>
       <classinfo>
             <syslog_type>ST_CFGCONTROLLER</syslog_type>
             <relationmgr>yes</relationmgr>
