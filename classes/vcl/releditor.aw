@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.26 2004/07/12 09:40:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.27 2004/07/13 15:43:57 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -20,6 +20,7 @@ class releditor extends core
 		$prop = $arr["prop"];
 		$this->elname = $prop["name"];
 		$obj = $arr["obj_inst"];
+		$obj_inst = $obj;
 
 		$clid = $arr["prop"]["clid"][0];
 
@@ -197,7 +198,7 @@ class releditor extends core
 			{
 				$obj_inst = new object($edit_id);
 			}
-			else if (!empty($prop["rel_id"]))
+			else if (!empty($prop["rel_id"]) || $prop["rel_id"] == "first")
 			{
 			//else if ($prop["rel_id"] == "first")
 			//{
@@ -377,52 +378,56 @@ class releditor extends core
 		// and how do I get values for those?
 
 		// and how do I show the selected row?
-
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => $arr["prop"]["reltype"],
-		));
-
-		$name = $arr["prop"]["name"];
-
-		foreach($conns as $conn)
+		
+		if (!$arr["new"])
 		{
-			if ($arr["prop"]["direct_links"] == 1)
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => $arr["prop"]["reltype"],
+			));
+
+			$name = $arr["prop"]["name"];
+
+			
+			foreach($conns as $conn)
 			{
-				$url = $this->mk_my_orb("change",array("id" => $conn->prop("to")),$conn->prop("to.class_id"));
-			}
-			else
-			{
-				$url = aw_url_change_var(array($this->elname => $conn->prop("to")));
-			};
-			$target = $conn->to();
-			$rowdata = array(
-				"id" => $conn->prop("to"),
-				"conn_id" => $conn->id(),
-				"name" => $conn->prop("to.name"),
-				"edit" => html::href(array(
-					"caption" => "Muuda",
-					"url" => $url,
-				)),
-				"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
-			);
-			$export_props = $target->properties();
-			if ($ed_fields && ($this->form_type != $target->id()))
-			{
-				foreach($ed_fields->get() as $ed_field)
+				if ($arr["prop"]["direct_links"] == 1)
 				{
-					// fucking hackery! :(
-					if ($this->all_props[$ed_field]["type"] == "textbox")
+					$url = $this->mk_my_orb("change",array("id" => $conn->prop("to")),$conn->prop("to.class_id"));
+				}
+				else
+				{
+					$url = aw_url_change_var(array($this->elname => $conn->prop("to")));
+				};
+				$target = $conn->to();
+				$rowdata = array(
+					"id" => $conn->prop("to"),
+					"conn_id" => $conn->id(),
+					"name" => $conn->prop("to.name"),
+					"edit" => html::href(array(
+						"caption" => "Muuda",
+						"url" => $url,
+					)),
+					"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
+				);
+				$export_props = $target->properties();
+				if ($ed_fields && ($this->form_type != $target->id()))
+				{
+					foreach($ed_fields->get() as $ed_field)
 					{
-						$export_props[$ed_field] = html::textbox(array(
-							"name" => "$name" . '[_data][' . $conn->prop("id") . '][' . $ed_field . "]",
-							"value" => $export_props[$ed_field],
-							"size" => $this->all_props[$ed_field]["size"],
-						));
+						// fucking hackery! :(
+						if ($this->all_props[$ed_field]["type"] == "textbox")
+						{
+							$export_props[$ed_field] = html::textbox(array(
+								"name" => "$name" . '[_data][' . $conn->prop("id") . '][' . $ed_field . "]",
+								"value" => $export_props[$ed_field],
+								"size" => $this->all_props[$ed_field]["size"],
+							));
+						};
 					};
 				};
+				$rowdata = $rowdata + $export_props;
+				$awt->define_data($rowdata);
 			};
-			$rowdata = $rowdata + $export_props;
-			$awt->define_data($rowdata);
 		};
 
 		$rv = array(
