@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.14 2004/12/10 10:10:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.15 2005/03/02 13:11:36 kristo Exp $
 // pullout.aw - Pullout manager
 
 /*
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes syslog_type=ST_PULLOUT
 	
 	@default table=objects
 	@default field=meta

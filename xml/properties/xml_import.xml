@@ -31,6 +31,7 @@
       </property>
       <classinfo>
             <no_status>1</no_status>
+            <syslog_type>ST_UT_XML_IMPORT</syslog_type>
       </classinfo>
 </properties>
 

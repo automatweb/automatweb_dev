@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.116 2005/02/23 07:26:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.117 2005/03/02 13:11:37 kristo Exp $
 
 /*
 
@@ -2303,6 +2303,9 @@ class site_show extends class_base
 		$awt->start("part2");
 		$this->do_draw_menus($arr);
 		$awt->stop("part2");
+
+		// repeated here, so you can use things both ways
+		$this->do_menu_images();
 
 		$awt->start("part3");
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array(), true);

@@ -35,7 +35,7 @@
 
 @property submit type=submit value=Saada
 
-@classinfo hide_tabs=1
+@classinfo hide_tabs=1 syslog_type=ST_STAT_UPLOADER
 @forminfo stat onsubmit=submit_upload
 */
 

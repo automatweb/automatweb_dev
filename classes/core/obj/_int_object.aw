@@ -1245,7 +1245,8 @@ class _int_object
 		$ol = new object_list(array(
 			"parent" => $parent,
 			"brother_of" => $this->obj["oid"],
-			"site_id" => array()
+			"site_id" => array(),
+			"lang_id" => array()
 		));
 		if ($ol->count() > 0)
 		{
@@ -1676,7 +1677,14 @@ class _int_object
 			$tmpo = obj($oid);
 			// get object's class info
 			$clid = $tmpo->class_id();
-			$type = @constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]);
+			if ($clid == 7)
+			{
+				$type = ST_DOCUMENT;
+			}
+			else
+			{
+				$type = @constant($GLOBALS["classinfo"][$clid]["syslog_type"]["text"]);
+			}
 			$nm = $tmpo->name();
 
 			$GLOBALS["object_loader"]->ds->delete_object($oid);

@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.18 2004/12/01 20:34:34 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.19 2005/03/02 13:11:37 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -11,7 +11,7 @@
 
 /*
 
-@classinfo no_status=1 no_comment=1 relationmgr=yes
+@classinfo no_status=1 no_comment=1 relationmgr=yes syslog_type=ST_DOCGEN_VIEWER
 @default table=objects
 @default group=general 
 

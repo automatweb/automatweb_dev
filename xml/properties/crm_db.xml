@@ -184,6 +184,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_CRM_DB</syslog_type>
       </classinfo>
       <groupinfo>
             <f2>

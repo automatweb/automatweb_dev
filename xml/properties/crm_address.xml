@@ -70,6 +70,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_CRM_ADDRESS</syslog_type>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.7 2005/02/11 09:13:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.8 2005/03/02 13:11:37 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -8,7 +8,7 @@
 	@default method=serialize
 	@default group=general
 
-	@classinfo trans=1
+	@classinfo trans=1 syslog_type=ST_MENU_TREE
 
 	@property menus type=select multiple=1 size=15 trans=1
 	@caption Menüüd

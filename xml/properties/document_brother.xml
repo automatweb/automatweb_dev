@@ -515,6 +515,7 @@
       </property>
       <classinfo>
             <trans>1</trans>
+            <syslog_type>ST_DOCUMENT</syslog_type>
       </classinfo>
       <groupinfo>
             <calendar>

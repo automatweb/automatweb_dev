@@ -1,6 +1,6 @@
 <?php
 /*
-@classinfo relationmgr=yes
+@classinfo relationmgr=yes syslog_type=ST_MENU_SEPARATOR
 
 @default table=objects
 @default group=general

@@ -42,6 +42,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_OBJECT_TYPE</syslog_type>
       </classinfo>
       <groupinfo>
             <settings>

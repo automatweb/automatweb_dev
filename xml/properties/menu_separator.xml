@@ -2,6 +2,7 @@
 <properties>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_MENU_SEPARATOR</syslog_type>
       </classinfo>
 </properties>
 

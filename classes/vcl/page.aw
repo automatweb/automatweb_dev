@@ -1,12 +1,12 @@
 <?php
-// $Id: page.aw,v 1.6 2004/01/13 16:24:33 kristo Exp $
+// $Id: page.aw,v 1.7 2005/03/02 13:11:36 kristo Exp $
 // page.aw - Generic HTML page
 /*
 	@default table=objects
 	@default group=general
 	@default field=meta
 	@default method=serialize
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes syslog_type=ST_PAGE
 
 	@property background type=relpicker reltype=RELTYPE_BACKGROUND_IMAGE 
 	@caption Taustapilt

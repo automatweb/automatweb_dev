@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.6 2005/01/25 15:12:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.7 2005/03/02 13:11:38 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
-	@classinfo no_comment=1 no_status=1 
+	@classinfo no_comment=1 no_status=1 syslog_type=ST_MAIL_MESSAGE
 	@default group=general
 	@default table=messages
 

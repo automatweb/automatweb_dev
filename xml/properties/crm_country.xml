@@ -37,6 +37,7 @@
       </property>
       <classinfo>
             <no_status>1</no_status>
+            <syslog_type>ST_SRM_COUNTRY</syslog_type>
       </classinfo>
       <tableinfo>
             <kliendibaas_riik>

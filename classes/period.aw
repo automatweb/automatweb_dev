@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.27 2005/02/09 16:36:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.28 2005/03/02 13:11:36 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -54,7 +54,7 @@
 	@caption Aktiivsus
 
 	@tableinfo periods index=obj_id master_table=objects master_index=oid
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes syslog_type=ST_PERIOD
 	@groupinfo activity caption=Aktiivsus
 
 	@reltype IMAGE value=1 clid=CL_IMAGE

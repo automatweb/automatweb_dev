@@ -32,6 +32,7 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <syslog_type>ST_OBJ_TABLE_CONF</syslog_type>
       </classinfo>
       <groupinfo>
             <proptab>

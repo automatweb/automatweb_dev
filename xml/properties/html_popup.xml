@@ -64,6 +64,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_HTML_POPUP</syslog_type>
       </classinfo>
       <reltypes>
             <OBJ>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.17 2005/03/01 14:38:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.18 2005/03/02 13:11:37 kristo Exp $
 /*
 
 @default table=objects
@@ -195,11 +195,25 @@ class dronline_conf extends class_base
 
 	function get_filter_types($arr)
 	{
+		// get list of types in syslog
+		$types = array();
+		$this->db_query("SELECT distinct(type) as t FROM syslog");
+		while ($row = $this->db_next())
+		{
+			$types[$row["t"]] = $row["t"];
+		}
+
 		$acts = array();
 		$values = $arr["obj_inst"]->meta();
 		$tps = aw_ini_get("syslog.types");
+		uasort($tps, array(&$this, "__nm_srt"));
 		foreach($tps as $tpid => $tpd)
 		{
+			if (!isset($types[$tpid]))
+			{
+				continue;
+			}
+
 			$rt = 'slt_'.$tpid;
 
 			$acts[$rt] = array(
@@ -213,6 +227,15 @@ class dronline_conf extends class_base
 		}
 
 		return $acts;
+	}
+
+	function __nm_srt($a, $b)
+	{
+		if ($a["name"] == $b["name"])
+		{	
+			return 0;
+		}
+		return strcmp($a["name"], $b["name"]);
 	}
 
 	function get_filter_actions($arr)
@@ -239,12 +262,26 @@ class dronline_conf extends class_base
 
 	function get_filter_combo($arr)
 	{
+		// get list of types in syslog
+		$types = array();
+		$this->db_query("SELECT distinct(type) as t FROM syslog");
+		while ($row = $this->db_next())
+		{
+			$types[$row["t"]] = $row["t"];
+		}
+
 		$acts = array();
 		$values = $arr["obj_inst"]->meta();
 		$tps = aw_ini_get("syslog.types");
 		$acts = aw_ini_get("syslog.actions");
+		uasort($tps, array(&$this, "__nm_srt"));
 		foreach($tps as $tpid => $tpd)
 		{
+			if (!isset($types[$tpid]))
+			{
+				continue;
+			}
+
 			// add type separator
 			$rt = 'slc_sep_'.$tpid;
 			$acts[$rt] = array(

@@ -30,5 +30,12 @@
 			</function>
 		</action>
 
+		<action name="submit_act_lang">
+			<function name="submit_act_lang">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

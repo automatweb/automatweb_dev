@@ -5,7 +5,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_org)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
-@classinfo relationmgr=yes
+@classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
 
 @default table=objects

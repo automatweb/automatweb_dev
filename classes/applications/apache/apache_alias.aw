@@ -4,7 +4,7 @@
 
 /*
 
-@classinfo relationmgr=yes no_status=1 no_comment=1
+@classinfo relationmgr=yes no_status=1 no_comment=1 syslog_type=ST_APACHE_ALIAS
 @default group=general 
 
 @tableinfo apache_aliases master_index=brother_of master_table=objects index=id

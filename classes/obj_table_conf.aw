@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/obj_table_conf.aw,v 2.7 2004/10/14 13:47:21 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/obj_table_conf.aw,v 2.8 2005/03/02 13:11:36 kristo Exp $
 // obj_table_conf - Objekti tabeli conf 
 /*
 
-@classinfo relationmgr=yes no_status=1
+@classinfo relationmgr=yes no_status=1 syslog_type=ST_OBJ_TABLE_CONF
 
 @default table=objects
 @default group=general

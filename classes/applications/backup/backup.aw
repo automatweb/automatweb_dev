@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo no_comment=1 no_status=1
+@classinfo no_comment=1 no_status=1 syslog_type=ST_BACKUP
 
 @default table=objects
 @default group=general

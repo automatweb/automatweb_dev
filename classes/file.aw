@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.101 2005/02/03 11:59:01 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.102 2005/03/02 13:11:36 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -18,7 +18,7 @@
 //
 
 /*
-	@classinfo trans=1 relationmgr=yes
+	@classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
 	@default table=files
 	@default group=general
 
@@ -669,7 +669,6 @@ class file extends class_base
 		$id = (int)$id;
 		error::view_check($id);
 		$fc = $this->get_file_by_id($id);
-
 		$pi = pathinfo($fc["name"]);
 		$mimeregistry = get_instance("core/aw_mime_types");
 		$tmp = $mimeregistry->type_for_ext($pi["extension"]);
@@ -677,6 +676,7 @@ class file extends class_base
 		{
 			$fc["type"] = $tmp;
 		}
+		header("Content-Length: ".strlen($fc["content"]));
 		header("Content-type: ".$fc["type"]);
 		header("Cache-control: public");
 		//header("Content-Disposition: inline; filename=\"$fc[name]\"");

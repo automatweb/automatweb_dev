@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/tree_root.aw,v 1.2 2003/11/09 18:19:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/tree_root.aw,v 1.3 2005/03/02 13:11:38 kristo Exp $
 // tree_root.aw - puu rootobjekt
 
 /*
@@ -11,7 +11,7 @@
 	@property root type=relpicker reltype=RELTYPE_ROOT
 	@caption Rootmenüü
 
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes syslog_type=ST_TREE_ROOT
 	
 	@reltype ROOT value=1 clid=CL_MENU
 	@caption juurmenüü

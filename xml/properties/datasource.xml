@@ -40,6 +40,7 @@
       </property>
       <classinfo>
             <no_status>1</no_status>
+            <syslog_type>ST_DATASOURCE</syslog_type>
       </classinfo>
 </properties>
 

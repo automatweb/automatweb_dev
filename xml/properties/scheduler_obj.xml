@@ -33,6 +33,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_SCHEDULER_OBJ</syslog_type>
       </classinfo>
       <groupinfo>
             <recurrence>

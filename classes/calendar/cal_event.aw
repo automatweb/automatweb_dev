@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.10 2004/12/01 11:48:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.11 2005/03/02 13:11:37 kristo Exp $
 
 /*
 	@default table=objects
@@ -16,7 +16,7 @@
 	@caption Korduste kontroller
 
 	@tableinfo planner index=id master_table=objects master_index=oid
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes syslog_type=ST_CAL_EVENT
 
 */
 

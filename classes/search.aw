@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.84 2005/01/21 13:14:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.85 2005/03/02 13:11:36 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -693,6 +693,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			$clss = aw_ini_get("classes");
 			while($row = $this->get_next())
 			{
+				$row["name"] = strip_tags($row["name"]);
 				// after all, what good does a local acl check do for a remote object?
 				if (!$is_remote && !$this->can("view",$row["oid"]))
 				{

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.41 2005/02/17 08:00:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.42 2005/03/02 13:11:37 kristo Exp $
 // treeview.aw - tree generator
 /*
 
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes syslog_type=ST_TREEVIEW
 
 	@default table=objects
 	@default group=general

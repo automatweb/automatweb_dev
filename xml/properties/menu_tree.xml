@@ -55,6 +55,7 @@
       </property>
       <classinfo>
             <trans>1</trans>
+            <syslog_type>ST_MENU_TREE</syslog_type>
       </classinfo>
 </properties>
 

@@ -17,7 +17,7 @@
 	@property kood type=textbox size=8 table=kliendibaas_tegevusala
 	@caption Tegevusala kood
 
-	@classinfo no_status=1
+	@classinfo no_status=1 syslog_type=ST_CRM_SECTOR
 */
 
 /*

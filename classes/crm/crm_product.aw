@@ -16,7 +16,7 @@
 	@property kood type=textbox size=8 table=kliendibaas_toode
 	@caption Toote kood	
 
-	@classinfo no_status=1
+	@classinfo no_status=1 syslog_type=ST_CRM_PRODUCT
 	
 */
 

@@ -13,6 +13,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_CFGMANAGER</syslog_type>
       </classinfo>
       <groupinfo>
             <config>

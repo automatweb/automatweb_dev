@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.8 2005/01/07 11:59:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.9 2005/03/02 13:11:37 kristo Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -27,7 +27,7 @@
 
 @property subscribers_editor type=releditor store=no mode=manager reltype=RELTYPE_SUBSCRIBER props=mail,name group=subscribers
 
-@classinfo relationmgr=yes
+@classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC
 
 @groupinfo subscribers caption="Mailinglist"
 

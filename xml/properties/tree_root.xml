@@ -12,6 +12,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_TREE_ROOT</syslog_type>
       </classinfo>
       <reltypes>
             <ROOT>

@@ -11,7 +11,7 @@
 	@property comment type=textarea cols=40 rows=3 table=objects field=comment
 	@caption Kommentaar
 
-	@classinfo no_status=1
+	@classinfo no_status=1 syslog_type=ST_CRM_CITY
 	
 	//@property location type=textarea
 	//@caption Asukoha kirjeldus

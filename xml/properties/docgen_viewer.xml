@@ -1,6 +1,9 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <comment></comment>
+      </property>
+      <property>
             <name>foorum</name>
             <table>objects</table>
             <group>general</group>
@@ -41,6 +44,7 @@
             <no_status>1</no_status>
             <no_comment>1</no_comment>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_DOCGEN_VIEWER</syslog_type>
       </classinfo>
       <groupinfo>
             <more_options>

@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.26 2005/03/01 13:21:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.27 2005/03/02 13:11:38 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
 
-	@classinfo no_comment=1 no_status=1
+	@classinfo no_comment=1 no_status=1 syslog_type=ST_ADD_TREE_CONF
 
 	@default table=objects
 	@default field=meta
@@ -124,7 +124,7 @@ class add_tree_conf extends class_base
 				if ($cld["parents"] == 0)
 				{
 					$ala = "";
-					if ($cld["alias"] != "")
+					if (true || $cld["alias"] != "")
 					{
 						$ala = html::checkbox(array(
 							"name" => "alias_add[$cl_id]",
@@ -179,7 +179,7 @@ class add_tree_conf extends class_base
 					if ($pss[$id])
 					{
 						$ala = "";
-						if ($cld["alias"] != "")
+						if (true || $cld["alias"] != "")
 						{
 							$ala = html::checkbox(array(
 								"name" => "alias_add[$cl_id]",

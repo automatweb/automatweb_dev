@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.32 2005/03/01 14:38:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.33 2005/03/02 13:11:37 kristo Exp $
 
 /*
 
@@ -62,6 +62,9 @@
 @reltype FOLDER value=1 clid=CL_MENU
 @caption filtri kataloog
 
+@reltype LANGUAGE value=2 clid=CL_LANGUAGE
+@caption filtri keel
+
 */
 
 define("RNG_HOUR", 1);
@@ -108,6 +111,7 @@ class dronline extends class_base
 			'general' => 'M&auml;&auml;rangud',
 			'tab_conf' => 'P&auml;ringud',
 			'folders' => "Kataloogid",
+			'languages' => "Keeled",
 			'aliasmgr' => "Seostehaldur",
 		);
 
@@ -292,6 +296,7 @@ class dronline extends class_base
 	function _do_general($arr)
 	{
 		$arr["fxt"] = 1;
+		$arr["group"] = "general";
 		return parent::change($arr);
 	}
 
@@ -1781,6 +1786,34 @@ class dronline extends class_base
 		));
 	}
 
+	function _do_languages($arr)
+	{
+		$t = $this->_get_languages_table();
+		$o = obj($arr["id"]);
+		$fdat = $o->meta("lang_dat");
+
+		foreach($o->connections_from(array("type" => RELTYPE_LANGUAGE)) as $c)
+		{
+			$to = $c->to();
+			$t->define_data(array(
+				"fld" => $to->path_str(),
+				"act" => html::checkbox(array(
+					"name" => "act[".$to->id()."]",
+					"value" => 1,
+					"checked" => ($fdat[$to->id()]["act"])
+				)),
+			));
+		}
+
+		return html::form(array(
+			"method" => "POST",
+			"action" => aw_ini_get("baseurl")."/automatweb/orb.".aw_ini_get("ext"),
+			"content" => $t->draw().html::submit(array(
+				"value" => "Salvesta"
+			)).$this->mk_reforb("submit_act_lang", array("id" => $arr["id"]))
+		));
+	}
+
 	/** saves folder filter table content
 
 		@attrib name=submit_act_tbl
@@ -1801,6 +1834,26 @@ class dronline extends class_base
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "folders", "dro_tab" => "folders"));
 	}
 
+	/** saves lang filter table content
+
+		@attrib name=submit_act_lang
+
+	**/
+	function submit_act_lang($arr)
+	{
+		$o = obj($arr["id"]);
+		$fd = array();
+		foreach($o->connections_from(array("type" => RELTYPE_LANGUAGE)) as $c)
+		{
+			$to = $c->to();
+			$fd[$to->id()]["act"] = $arr["act"][$to->id()];
+			$fd[$to->id()]["sub"] = $arr["sub"][$to->id()];
+		}
+		$o->set_meta("lang_dat", $fd);
+		$o->save();
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "languages", "dro_tab" => "languages"));
+	}
+
 	function _get_folders_table()
 	{
 		load_vcl("table");
@@ -1819,6 +1872,24 @@ class dronline extends class_base
 		$t->define_field(array(
 			"name" => "sub",
 			"caption" => "k.a. alammen&uuml;&uuml;d",
+			"align" => "center"
+		));
+
+		return $t;
+	}
+
+	function _get_languages_table()
+	{
+		load_vcl("table");
+		$t = new aw_table(array("layout" => "generic"));
+		$t->define_field(array(
+			"name" => "fld",
+			"caption" => "Keel"
+		));
+
+		$t->define_field(array(
+			"name" => "act",
+			"caption" => "Aktiivne",
 			"align" => "center"
 		));
 

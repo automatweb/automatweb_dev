@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.1 2004/12/01 11:19:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.2 2005/03/02 13:11:37 kristo Exp $
 
 /*
 
@@ -75,7 +75,7 @@
 @property link_image_active_until type=date_select 
 @caption Pilt aktiivne kuni
 
-@classinfo no_status=1
+@classinfo no_status=1 syslog_type=ST_LINKS
 
 */
 

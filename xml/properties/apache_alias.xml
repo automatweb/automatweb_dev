@@ -35,6 +35,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
+            <syslog_type>ST_APACHE_ALIAS</syslog_type>
       </classinfo>
       <groupinfo>
             <list>

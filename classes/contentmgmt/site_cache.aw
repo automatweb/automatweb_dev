@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.19 2004/12/27 12:41:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.20 2005/03/02 13:11:37 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -197,7 +197,78 @@ class site_cache extends aw_template
 		// therefore this is the only place where we can safely clear the flag.
 		aw_session_set("no_cache", 0);
 
+		$res .= $this->build_popups();
+
 		return $res;
+	}
+
+	// builds HTML popups
+	function build_popups()
+	{
+		$so = obj(aw_global_get("section"));
+		$this->path = $so->path();
+
+		$last_menu = 0;
+		$cnt = count($this->path);
+		for ($i = 0; $i < $cnt; $i++)
+		{
+			if ($this->path[$i]->class_id() == CL_MENU)
+			{
+				$last_menu = $this->path[$i]->id();
+			}
+		}
+		$this->sel_section = $last_menu;
+
+		// that sucks. We really need to rewrite that
+		// I mean we always read information about _all_ the popups
+		$pl = new object_list(array(
+			"status" => STAT_ACTIVE,
+			"class_id" => CL_HTML_POPUP,
+			"site_id" => array(),
+		));
+		if (count($pl->ids()) > 0)
+		{
+			$t = get_instance(CL_HTML_POPUP);
+		};
+		foreach($pl->arr() as $o)
+		{
+			$o_id = $o->id();
+			if ($o->prop("only_once") && $_SESSION["popups_shown"][$o_id] == 1)
+			{
+				continue;
+			}
+
+			$sh = false;
+			foreach($o->connections_from(array("type" => "RELTYPE_FOLDER")) as $c)
+			{
+				if ($c->prop("to") == $this->sel_section)
+				{
+					//$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+					$popups .= $t->get_popup_data($o);
+					$sh = true;
+					$_SESSION["popups_shown"][$o_id] = 1;
+				}
+			}
+
+			$inc_submenus = $o->meta("section_include_submenus");
+
+			if (!$sh && is_array($inc_submenus) && count($inc_submenus) > 0)
+			{
+				$path = obj($this->sel_section);
+				$path = $path->path();
+
+				foreach($path as $p_o)
+				{
+					if ($inc_submenus[$p_o->parent()])
+					{
+						//$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+						$popups .= $t->get_popup_data($o);
+						$_SESSION["popups_shown"][$o_id] = 1;
+					}
+				}
+			}
+		}
+		return $popups;
 	}
 
 	function ip_access($arr)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.53 2005/01/21 13:18:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.54 2005/03/02 13:11:37 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -85,7 +85,7 @@
 	@groupinfo defaults caption="Omaduste väärtused" parent=settings
 	@groupinfo system caption="Vormi seaded" parent=settings
 
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes syslog_type=ST_CFGFORM
 
 	@reltype PROP_GROUP value=1 clid=CL_MENU
 	@caption omaduste kataloog

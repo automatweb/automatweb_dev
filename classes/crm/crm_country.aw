@@ -19,7 +19,7 @@
 	@property name_native type=textbox size=20
 	@caption Nimetus kohalikus keeles
 
-	@classinfo no_status=1
+	@classinfo no_status=1 syslog_type=ST_SRM_COUNTRY
 
 */
 

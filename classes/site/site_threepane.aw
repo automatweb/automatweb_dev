@@ -1,5 +1,5 @@
 <?php
-// $Id: site_threepane.aw,v 1.10 2004/01/13 16:24:31 kristo Exp $
+// $Id: site_threepane.aw,v 1.11 2005/03/02 13:11:37 kristo Exp $
 // site_threepane.aw - simpel 3 paaniga sait.
 /*
 	@default table=objects
@@ -22,7 +22,7 @@
 	@property preview editonly=1 type=text 
 	@caption Näita
 
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes syslog_type=ST_SITE_THREEPANE
 
 	@reltype SITE_FRAMESET value=1 clid=CL_FRAMESET
 	@caption Frameset

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.15 2004/12/01 13:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.16 2005/03/02 13:11:38 kristo Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -23,7 +23,7 @@
 	@groupinfo settings caption="Klassi konfiguratsioon"
 	@groupinfo defobj caption="Aktiivne objekt"
 
-	@classinfo relationmgr=yes
+	@classinfo relationmgr=yes syslog_type=ST_OBJECT_TYPE
 	
 	@reltype OBJECT_CFGFORM value=1 clid=CL_CFGFORM
 	@caption Seadete vorm

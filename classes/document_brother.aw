@@ -2,7 +2,7 @@
 
 /*
 
-@classinfo trans=1
+@classinfo trans=1 syslog_type=ST_DOCUMENT
 
 @default table=documents
 @default group=general

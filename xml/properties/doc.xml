@@ -589,6 +589,7 @@
             <trans>1</trans>
             <no_comment>1</no_comment>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_DOCUMENT</syslog_type>
       </classinfo>
       <groupinfo>
             <calendar>

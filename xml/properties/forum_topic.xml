@@ -71,6 +71,7 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
+            <syslog_type>ST_FORUM_TOPIC</syslog_type>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>

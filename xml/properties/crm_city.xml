@@ -21,6 +21,7 @@
       </property>
       <classinfo>
             <no_status>1</no_status>
+            <syslog_type>ST_CRM_CITY</syslog_type>
       </classinfo>
       <tableinfo>
             <kliendibaas_linn>
