@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.101 2002/07/16 19:22:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.102 2002/07/17 00:50:55 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -712,6 +712,12 @@ class document extends aw_template
 			$doc["content"] = str_replace("#board_last5#",$mb->mk_last5(),$doc["content"]);
 		}
 
+		// used in am - shows all documents whose author field == current documents title field
+		if (!(strpos($doc["content"], "#autori_dokumendid#") === false))
+		{
+			$doc["content"] = str_replace("#autori_dokumendid#",$this->author_docs($doc["title"]),$doc["content"]);
+		}
+
 		// #top# link - viib doku yles
 		$top_link = $this->parse("top_link");
 		$doc["content"] = str_replace("#top#", $top_link,$doc["content"]);
@@ -743,7 +749,7 @@ class document extends aw_template
 			if ($this->cfg["link_authors"] && ($this->templates["pblock"]))
 			{
 				$x = $this->get_relations_by_field(array(
-					"field"    => "title",
+					"field"    => "name",
 					"keywords" => strip_tags($doc["photos"]),
 					"section"  => $this->cfg["link_authors_section"]
 				));
@@ -819,7 +825,7 @@ class document extends aw_template
 			if ($this->cfg["link_authors"] && isset($this->templates["ablock"])) 
 			{
 				$x = $this->get_relations_by_field(array(
-					"field"    => "title",
+					"field"    => "name",
 					"keywords" => $doc["author"],
 					"section"  => $this->cfg["link_authors_section"]
 				));
@@ -947,6 +953,11 @@ class document extends aw_template
 			$this->vars(array("TITLE_LINK_BEGIN" => $this->parse("TITLE_LINK_BEGIN"), "TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));
 		}
 
+		if ($doc["channel"] != "")
+		{
+			$this->vars(array("HAS_CHANNEL" => $this->parse("HAS_CHANNEL")));
+		}
+
 		$this->vars(array(
 			"SHOW_TITLE" 	=> ($doc["show_title"] == 1) ? $this->parse("SHOW_TITLE") : "",
 			"EDIT" 		=> ($this->prog_acl("view",PRG_MENUEDIT)) ? $this->parse("EDIT") : "",
@@ -1072,17 +1083,30 @@ class document extends aw_template
 		} 
 		else 
 		{
-			// moodustame päringu dokude saamiseks, mis vastavad meile
+			// moodustame päringu dokude (v6i menyyde) saamiseks, mis vastavad meile
 			// vajalikule tingimusele
 			$retval = array();
 			while(list($k,$v) = each($keywords)) 
 			{
 				// fields may contain HTML and we don't want that
 				$v = trim(strip_tags($v));
-				$q = "SELECT docid FROM documents
-							LEFT JOIN objects ON (documents.docid = objects.oid)
-							WHERE parent = $section AND $field LIKE '%$v%' AND objects.status = 2";
-				$retval[$v] = $this->db_fetch_field($q,"docid");
+				if (is_array($section))
+				{
+					$prnt = "parent IN (".join(",",$section).")";
+				}
+				else
+				{
+					$prnt = "parent = $section";
+				}
+				$q = "SELECT oid FROM objects
+							WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_PSEUDO;
+				$retval[$v] = $this->db_fetch_field($q,"oid");
+				if (!$retval[$v])
+				{
+					$q = "SELECT oid FROM objects
+								WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_DOCUMENT;
+					$retval[$v] = $this->db_fetch_field($q,"oid");
+				}
 			}; // eow
 			return $retval;
 		}; // eoi
@@ -3505,6 +3529,51 @@ class document extends aw_template
 			"docid" => $section,
 			"tpl" => "print.tpl"
 		)));
+	}
+
+	function author_docs($author)
+	{
+		$lsu = aw_ini_get("menuedit.long_section_url");
+
+		$this->db_query("
+			SELECT docid,title 
+			FROM documents 
+				LEFT JOIN objects ON objects.oid = documents.docid 
+			WHERE author = '$author' AND objects.status = 2
+			ORDER BY objects.created DESC
+		");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$row[docid]'","cnt");
+			$this->restore_handle();
+
+			if ($lsu)
+			{
+				$link = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$row["docid"];
+			}
+			else
+			{
+				$link = $this->cfg["baseurl"]."/".$row["docid"];
+			}
+
+			$this->vars(array(
+				"link" => $link,
+				"comments" => $num_comments,
+				"title" => strip_tags($row["title"]),
+				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $row["docid"]),"forum"),
+			));
+			$hc = "";
+			if ($num_comments > 0)
+			{
+				$hc = $this->parse("HAS_COMM");
+			}
+
+			$this->vars(array("HAS_COMM" => $hc));
+
+			$c.=$this->parse("AUTHOR_DOC");
+		}
+		return $c;
 	}
 };
 ?>
