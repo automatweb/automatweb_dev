@@ -431,6 +431,15 @@
             <field>ndocs</field>
             <caption>Mitu viimast dokumenti</caption>
       </property>
+      <property>
+            <name>export</name>
+            <type>callback</type>
+            <callback>callback_get_export_options</callback>
+            <group>import_export</group>
+            <table>menu</table>
+            <field>export</field>
+            <caption>Eksport</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <objtable>menu</objtable>
@@ -457,6 +466,10 @@
             <show>
                   <caption>Näitamine</caption>
             </show>
+            <import_export>
+                  <caption>Import/Eksport</caption>
+                  <submit>no</submit>
+            </import_export>
       </groupinfo>
       <tableinfo>
             <menu>
