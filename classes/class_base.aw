@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.325 2004/11/28 21:16:57 ahti Exp $
+// $Id: class_base.aw,v 2.326 2004/11/29 03:07:45 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2895,11 +2895,10 @@ class class_base extends aw_template
 					);
 				};
 			};
-			
 			if($controllers[$key])
 			{
 				$controller = is_array($controllers[$key]) ? $controllers[$key] : array($controllers[$key]);
-				foreach($controllers as $controller_id)
+				foreach($controller as $controller_id)
 				{
 					$prpdata["value"] = $val;
 					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], $prpdata, $arr["request"], $val);
