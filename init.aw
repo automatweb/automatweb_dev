@@ -390,9 +390,9 @@ function classload($args)
 			{
 				$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
 
-				if ($GLOBALS["cfg"]["__default"]["class_translation"] == 1)
+				if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 				{
-					$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/en/aw/".$lib.".aw";
+					$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".$lib.".aw";
 					if (file_exists($trans_fn))
 					{
 						require_once($trans_fn);
@@ -476,9 +476,9 @@ function get_instance($class,$args = array(), $errors = true)
 		require_once($classdir."/".str_replace(".","", $class).".".$ext);
 
 		// also load translations
-		if ($GLOBALS["cfg"]["__default"]["class_translation"] == 1)
+		if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 		{
-			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/en/aw/".$class.".aw";
+			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".$class.".aw";
 			if (file_exists($trans_fn))
 			{
 				require_once($trans_fn);
