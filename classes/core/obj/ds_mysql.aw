@@ -634,6 +634,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->has_lang_id = false;
 
 		$this->meta_filter = array();
+		$this->alias_joins = array();
 
 		$where = $this->req_make_sql($params);
 
@@ -660,6 +661,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$js[] = " LEFT JOIN $tbl ON $tbl.".$this->tableinfo[$tbl]["index"]." = objects.brother_of ";
 			}
+		}
+		foreach($this->alias_joins as $aj)
+		{
+			$js[] = " LEFT JOIN aliases $aj[name] ON $aj[on] ";
 		}
 		$joins = join("", $js);
 
@@ -770,6 +775,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$tf = $tbl.".".$fld;
 			$this->used_tables[$tbl] = $tbl;
 
+			if ($this->properties[$key]["store"] == "connect")
+			{
+				// join aliases as many-many relation and filter by that
+				$this->alias_joins[$key] = array(
+					"name" => "aliases_".$key,
+					"on" => $tbl.".".$this->tableinfo[$this->properties[$key]["table"]]["index"]." = "."aliases_".$key.".source"
+				);
+			}
+
 			if (($this->properties[$key]["method"] == "bitmask" || $key == "flags") && is_array($val))
 			{
 				$sql[] = $tf." & ".$val["mask"]." = ".$val["flags"];
@@ -871,6 +885,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					{
 						continue;
 					}
+					if ($this->properties[$key]["store"] == "connect")
+					{
+						$str[] = "aliases_".$key.".target = '$v' ";
+					}
+					else
 					if (strpos("%", $v) !== false)
 					{
 						$str[] = $tf." LIKE '".$v."'";
@@ -888,6 +907,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 			else
 			{
+				if ($this->properties[$key]["store"] == "connect")
+				{
+					$str[] = " aliases_".$key.".target = '$v' ";
+				}
+				else
 				if ($key == "modified" || $key == "flags")
 				{
 					// pass all arguments .. &, >, < or whatever the user wants to
