@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.109 2003/04/29 15:28:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.110 2003/05/07 15:44:19 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -26,7 +26,7 @@
 	@caption Päev lõpeb
 
 	@property only_days_with_events type=checkbox ch_value=1 group=advanced
-	@caption Päeva vaates on ainult sündmustega päevad
+	@caption Näidatakse ainult sündmustega päevi
 
 	@property tab_add_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Lisa event" nähtav
@@ -72,7 +72,7 @@
 
 	@property preview type=text callback=callback_get_preview_link store=no editonly=1
 	@caption Eelvaade
-	
+
 	@groupinfo advanced caption=Seaded
 
 	// -- calendar view
@@ -207,6 +207,7 @@ class planner extends class_base
 				$tmp = array("0" => "näita kalendri sisu") + $awo->get_classes_by_interface(array("interface" => "content"));
 				$data["options"] = $tmp;
 				break;
+
 		}
 		return $retval;
 	}
@@ -229,6 +230,12 @@ class planner extends class_base
 			case "add_event":
 				$this->create_planner_event($args);
 				break;
+
+			case "calendar_relation":
+				// this is where I need to read the type of the output
+				// and put it .. somewhere
+				break;
+
 		}
 		return $retval;
 	}
@@ -269,6 +276,7 @@ class planner extends class_base
 		return $retval;
 	}
 
+	// this is called from calendar "properties"
 	function _init_event_source($args = array())
 	{
 		extract($args);
@@ -293,7 +301,8 @@ class planner extends class_base
 		
 		$section = aw_global_get("section");
 
-		$this->prevlink = $this->mk_my_orb("change",array(
+
+		$this->prevref = $this->mk_my_orb("change",array(
 			"section" => $section,
 			"id" => $id,
 			"group" => "show_" . $type,
@@ -303,7 +312,7 @@ class planner extends class_base
 			"cb_view" => "show",
 		));
 
-		$this->nextlink = $this->mk_my_orb("change",array(
+		$this->nextref = $this->mk_my_orb("change",array(
 			"section" => $section,
 			"id" => $id,
 			"group" => "show_" . $type,
@@ -313,8 +322,19 @@ class planner extends class_base
 			"cb_view" => "show",
 		));
 
+		$q = "SELECT metadata FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source = '$id' AND reltype = " . RELTYPE_EVENT_SOURCE;
+		$this->db_query($q);
+		$folders = array($folder);
+		while($row = $this->db_next())
+		{
+			$mx = aw_unserialize($row["metadata"]);
+			if (!empty($mx["event_folder"]))
+			{
+				$folders[] = $mx["event_folder"];
+			};
+		};
 
-		$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = '$folder' AND objects.status != 0";
+		$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND objects.status != 0",join(",",$folders));
 		$this->db_query($q);
 		$events = array();
 		// we sure pass around a LOT of data
@@ -346,7 +366,7 @@ class planner extends class_base
 				$row["name"] = $real_obj["name"];
 				$this->restore_handle();
 			};
-			$events[$gx][] = $row;
+			$events[$gx][$row["brother_of"]] = $row;
 		};
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","cb_view" => "show"));
 		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week","cb_view" => "show"));
@@ -684,7 +704,6 @@ class planner extends class_base
 				"clid" => CL_RELATION,
 			));
 
-
 			$overrides = $relobj["meta"]["values"]["CL_PLANNER"];
 			if (is_array($overrides))
 			{
@@ -694,6 +713,8 @@ class planner extends class_base
 			{
 				$this->caption = $relobj["name"];
 			};
+
+			$this->relobj_id = $alias["relobj_id"];
 		}
 
 		$replacement = $this->view(array("id" => $alias["target"]));
@@ -1023,9 +1044,12 @@ class planner extends class_base
 		{
 			case "week":
 				$this->type = CAL_SHOW_WEEK;
-				$tpl = isset($args["week_tpl"]) ? $args["week_tpl"] : "disp_week.tpl";
+				$tpl = "disp_week.tpl";
 
 				// sucky sucky 
+				// siin on mingi värk sellega, et on 2 erinevat nädalavaadet ..
+				// ühe saidi piires .. I need to fix this, yes.
+				// 1010 on hollar
 				if ($this->cfg["site_id"] == "1010")
 				{
 					$tpl = "week.tpl";
@@ -1033,6 +1057,8 @@ class planner extends class_base
 
 				$content = $this->disp_week(array("events" => $events,"di" => $di,"tpl" => $tpl));
 
+				// I really hate creating captions this way, that format should be specified
+				// in some other way
 				$caption = sprintf("%s - %s",$this->time2date($di["start"],8),$this->time2date($di["end"],8));
 				$start = $date;
 				break;
@@ -1172,9 +1198,9 @@ class planner extends class_base
 		unset($mlist[0]);
 		$section = aw_global_get("section");
 
-		if (isset($this->prevlink))
+		if (isset($this->prevref))
 		{
-			$prev = $this->prevlink;
+			$prev = $this->prevref;
 		}
 		else
 		{
@@ -1188,9 +1214,9 @@ class planner extends class_base
 			));
 		};	
 
-		if (isset($this->nextlink))
+		if (isset($this->nextref))
 		{
-			$next = $this->nextlink;
+			$next = $this->nextref;
 		}
 		else
 		{
@@ -1240,7 +1266,7 @@ class planner extends class_base
 		
 		if ($this->is_template("HAS_PREV"))
 		{
-			if (!empty($next))
+			if (!empty($prev))
 			{
 				$this->vars(array(
 					"HAS_PREV" => $this->parse("HAS_PREV"),
@@ -1416,102 +1442,26 @@ class planner extends class_base
 	function get_events2($args = array())
 	{
 		$de = get_instance("doc_event");
+		if (!empty($this->relobj_id))
+		{
+			$args["relobj_id"] = $this->relobj_id;
+		};
 		$evx = $de->get_events_in_range($args);
+
 		$this->start_date = $de->start_date;
-		$prevlink = $de->prev_event;
-		$nextlink = $de->next_event;
-		if (isset($prevlink))
+		$this->prevref = $de->prev_event;
+		$this->nextref = $de->next_event;
+
+		global $XX1;
+		if ($XX1)
 		{
-			$this->prevref = $prevlink;
-		};	
-		if (isset($nextlink))
-		{
-			$this->nextref = $nextlink;
-		};	
-		return $evx;
-		extract($args);
-		// figure out which other calendars we are interested in
-		$alias_reltype = new aw_array($conf["alias_reltype"]);
-		$calendars = array($folder,$id);
-		$content_generator = $args["conf"]["content_generator"];
-		$generator_class = $generator_method = "";
-		list($cl,$met) = explode("/",$content_generator);
-		if (isset($cl) && isset($met))
-		{
-			$generator_class = $cl;
-			$generator_method = $met;
+			print "<pre>";
+			var_dump($this->prevref);
+			var_dump($this->nextref);
+			print "</pre>";
 		};
 
-		foreach($alias_reltype->get() as $key => $val)
-		{
-			if ($val == 2)
-			{
-				$calendars[] = $key;
-			};
-		}
-		$calstring = join(",",$calendars);
-		$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') AND (start <= '$end')) AND objects.status != 0";
-		$this->db_query($q);
-		$results = array();
-		$count = $this->num_rows();
-		$almgr = get_instance("aliasmgr");
-		$next_active = false;
-		if (($type == "day") && ($count == 0) && $conf["only_days_with_events"])
-		{
-			// this is where I have to find the next active event
-			$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE objects.status != 0 AND parent IN ($calstring) AND (start >= '$start') LIMIT 1";
-			$this->db_query($q);
-			$next_active = true;
-
-		};	
-		while($row = $this->db_next())
-		{
-			if ($next_active)
-			{
-				$this->start_date = date("d-m-Y",$row["start"]);
-			};
-
-			$gx = date("dmY",$row["start"]);
-			$fl = $this->cfg["classes"][$row["class_id"]]["file"];
-			if ($fl == "document")
-			{
-				$row["caption"] = html::href(array(
-					"url" => "/" . $row["id"],
-					"caption" => $row["name"],
-				));
-			}
-			else
-			{
-				$row["caption"] = html::href(array(
-					"url" => $this->mk_my_orb("view",array("id" => $row["id"]),$fl),
-					"caption" => $row["name"],
-				));
-			};
-			$row["title"] = $row["name"];
-			if (!empty($generator_class) && !empty($generator_method))
-			{
-				$this->save_handle();
-                                $row["lead"] = $this->do_orb_method_call(array(
-					"class" => $generator_class,
-					"action" => $generator_method,
-					"params" => array(
-						"id" => $row["id"],
-					),
-				));
-				$row["moreinfo"] = "";
-				$row["name"] = "";
-				$row["caption"] = "";
-                                $this->restore_handle();
-			}
-			else
-			{
-				$almgr->parse_oo_aliases($row["id"],$row["lead"]);
-				$almgr->parse_oo_aliases($row["id"],$row["moreinfo"]);
-			};
-			$results[$gx][] = $row;
-		}
-		return $results;
-
+		return $evx;
 
 		/*
 		$q = "SELECT *,planner.oid AS aid FROM planner
@@ -1842,12 +1792,19 @@ class planner extends class_base
 		{
 			if ($val[0]["lead"])
 			{
-				$tgt = $this->_get_cal_target($val[0]["meta"]["calendar_relation"]);
+				if (isset($val[0]["ev_link"]))
+				{
+					$ev_link = $val[0]["ev_link"];
+				}
+				else
+				{
+					$ev_link = "/" . $this->_get_cal_target($val[0]["meta"]["calendar_relation"]);
+				};
 				$this->vars(array(
 					"lead" => $val["0"]["lead"],
 					"date" => date("d.m.Y",$val[0]["start"]),
 					"title" => $val["0"]["title"],
-					"ev_link" => "/" . $tgt,
+					"ev_link" => $ev_link,
 				));
 				$cells[] = $this->parse("CELL");
 			}
@@ -2253,14 +2210,12 @@ class planner extends class_base
 				};
 				if (($e["class_id"] == CL_DOCUMENT) || ($e["class_id"] == CL_BROTHER_DOCUMENT))
 				{
-					//$daylink = $this->cfg["baseurl"] . "/section=$e[parent]/cal=$e[parent]/date=" . date("d-m-Y",$e["start"]);
 					$daylink = "";
 
-					$dxx = get_instance("doc_event");
 					// figure out prev and next events
 					if ($tgt)
 					{
-						$daylink = "/" . $tgt;
+						$daylink = "/section=" . $tgt . "/date=" . date("d-m-Y",$e["start"]);
 					};
 					$section = $e["id"];
 					if ($this->type == CAL_SHOW_DAY)
@@ -2690,6 +2645,36 @@ class planner extends class_base
 			"items" => $items,
 		);
 		return array($retval);
+	}
+
+	function callback_on_addalias($args = array())
+	{
+		// now, $args[alias] is a reference to the thingie we are interested in
+		// and $args[id] - is the source object ... I want to load the metadata
+		// of the source object
+		if ($args["reltype"] == RELTYPE_DC_RELATION)
+		{
+			$src = $this->get_object($args["id"]);
+			if ($src["class_id"] == CL_RELATION)
+			{
+				$type = $src["meta"]["values"]["CL_PLANNER"]["content_generator"];
+				if (!empty($type))
+				{
+					// noja kuhu phrsse ma selle siis redirectin?
+					$target = $this->get_object($args["alias"]);
+					$oldmeta = $target["meta"];
+					// this is probably bad, I need a better approach to mark
+					// content generators .. but for now this has to do
+					// ... cause, what if gallery_v2 is changed to something other?
+					$oldmeta["content_generator"][$type] = $args["id"];
+					$this->upd_object(array(
+						"oid" => $args["alias"],
+						"metadata" => $oldmeta,
+					));
+				};
+			};
+		};
+
 	}
 };
 ?>
