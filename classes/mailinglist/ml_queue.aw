@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.27 2004/06/25 19:26:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.28 2004/06/30 11:03:24 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -633,7 +633,7 @@ class ml_queue extends aw_template
 		for($member = $member_list->begin(); !$member_list->end(); $member = $member_list->next())
 		{
 			$this->preprocess_one_message(array(
-				"name" => $member->name(),
+				"name" => $member->prop("name"),
 				"mail" => $member->prop("mail"),
 				"mail_id" => $arr["mail_id"],
 				"member_id" => $member->id(),
