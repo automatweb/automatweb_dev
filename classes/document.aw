@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.244 2004/03/11 09:34:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.245 2004/03/16 11:30:11 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -771,10 +771,11 @@ class document extends aw_template
 			"link_text" => $doc["link_text"],
 		));
 
-		if ($this->cfg["link_authors"] && is_oid($this->cfg["link_authors_section"]))
+		if ((!empty($doc["photos"]) || !empty($doc["author"])) && $this->cfg["link_authors"] && is_oid($this->cfg["link_authors_section"]))
 		{
 			global $awt;
 			$awt->start("obj_tree");
+			$awt->count("obj_tree");
 			$author_list = array();
 			$author_tree = new object_tree(array(
 				"parent" => $this->cfg["link_authors_section"],
@@ -932,16 +933,25 @@ class document extends aw_template
 				$ab = $this->parse("ablock");
 			};
 		};
-		$points = $doc["num_ratings"] == 0 ? 3 : $doc["rating"] / $doc["num_ratings"];
-		$pts = "";
-		for ($i=0; $i < $points; $i++)
-			$pts.=$this->parse("RATE");
+
+		if ($this->is_template("RATE"))
+		{
+			$points = $doc["num_ratings"] == 0 ? 3 : $doc["rating"] / $doc["num_ratings"];
+			$pts = "";
+			for ($i=0; $i < $points; $i++)
+				$pts.=$this->parse("RATE");
+		};
 
 		$fr = "";
-		
-		if ($doc["is_forum"] && (not($print)) )
+
+		if (	$doc["is_forum"] &&
+			empty($print) && 
+			($this->template_has_var("num_comments") || $this->is_template("FORUM_ADD_SUB") || $this->is_template("FORUM_ADD_SUB_ALWAYS"))
+			
+	     	)
 		{
 			// calculate the amount of comments this document has
+			// XXX: I could use a way to figure out which variables are present in the template
 			$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$docid'","cnt");
 			$this->vars(array(
 				"num_comments" => sprintf("%d",$num_comments),
@@ -963,21 +973,24 @@ class document extends aw_template
 		}
 
 		$langs = "";
-		$l = get_instance("languages");
-		$larr = $l->listall();
-		reset($larr);
-		while (list(,$v) = each($larr))
+		if ($this->is_template("SEL_LANG") || $this->is_template("LANG"))
 		{
-			$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"]));
-			if (aw_global_get("lang_id") == $v["id"])
+			$l = get_instance("languages");
+			$larr = $l->listall();
+			reset($larr);
+			while (list(,$v) = each($larr))
 			{
-				$langs.=$this->parse("SEL_LANG");
+				$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"]));
+				if (aw_global_get("lang_id") == $v["id"])
+				{
+					$langs.=$this->parse("SEL_LANG");
+				}
+				else
+				{
+					$langs.=$this->parse("LANG");
+				}
 			}
-			else
-			{
-				$langs.=$this->parse("LANG");
-			}
-		}
+		};
 
 		$lc = "";
 		if ($doc["lead_comments"]==1)
