@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.30 2004/07/23 08:10:13 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.31 2004/08/19 08:04:45 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -124,6 +124,16 @@ class object_list extends _int_obj_container_base
 	{
 		$this->iter_index++;
 		return $this->_int_get_at($this->iter_lut[$this->iter_index]);
+	}
+
+	function get_prev()
+	{
+		return $this->_int_get_at($this->iter_lut[$this->iter_index-1]);
+	}
+
+	function get_next()
+	{
+		return $this->_int_get_at($this->iter_lut[$this->iter_index+1]);
 	}
 
 	function end()
