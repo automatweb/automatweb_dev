@@ -110,6 +110,20 @@ function fetch_node(node)
       }
    }
 
+	//i'm craving for a need of is_numeric in js
+	function is_numeric(input)
+	{
+		var valid_chars = "0123456789.,-";	
+
+		for(i=0;i<input.length;i++)
+		{
+			if(valid_chars.indexOf(input.charAt(i))==-1)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
 
 // would be nice to have those generated for me
 
@@ -161,7 +175,11 @@ open_nodes = new Array({VAR:open_nodes});
    {
       attached_sections[{VAR:menu_level}] = new Array();
    }
-   attached_sections[{VAR:menu_level}][{VAR:id}] = {VAR:id};
+	tmp = '{VAR:id}';
+	if(is_numeric(tmp))
+	{
+		attached_sections[{VAR:menu_level}][tmp] = tmp;
+	}
 </script>
 <div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children(this,{VAR:menu_level});return false;" href="javascript:void();"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}">{VAR:name}</a>
 <!-- SUB: SUB_NODES -->
