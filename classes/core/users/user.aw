@@ -82,7 +82,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @property passwd_again type=password store=no
 @caption Password veelkord
 
-@property password type=hidden table=users
+@property password type=hidden table=users field=password store=no
 
 
 @property gen_pwd store=no type=text 
@@ -434,7 +434,8 @@ class user extends class_base
 
 		// now, go over both lists and get rid of the dyn groups
 		$_member = array();
-		foreach($member as $gid => $is)
+		$_tm = new aw_array($member);
+		foreach($_tm->get() as $gid => $is)
 		{
 			if ($gl[$gid]["type"] != GRP_DYNAMIC)
 			{
@@ -521,7 +522,8 @@ class user extends class_base
 				$this->users->add_users_to_group_rec($gid, array($uid), true, true, false);
 
 				$group = obj($this->users->get_oid_for_gid($gid));
-				$user = obj($this->users->get_oid_for_uid($uid));
+				$_o = $this->users->get_oid_for_uid($uid);
+				$user = obj($_o);
 
 				// get groups
 				$grps = $group->path();

@@ -1015,7 +1015,8 @@ class _int_object
 		// the $parent menu. 
 		$ol = new object_list(array(
 			"parent" => $parent,
-			"brother_of" => $this->obj["oid"]
+			"brother_of" => $this->obj["oid"],
+			"site_id" => array()
 		));
 		if ($ol->count() > 0)
 		{

@@ -52,6 +52,13 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		return $id;
 	}
 
+	function create_brother($arr)
+	{
+		$id =  $this->contained->create_brother($arr);
+		$this->_clear_cache($id);
+		return $id;
+	}
+
 	function save_properties($arr)
 	{
 		$this->_clear_cache($arr["objdata"]["oid"]);
