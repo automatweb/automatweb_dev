@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.5 2004/05/27 08:51:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.6 2004/06/04 11:11:00 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -68,6 +68,11 @@ class shop_order_cart extends class_base
 		$soce_arr = $soce->get();
 		foreach($soce->get() as $prid => $errmsg)
 		{
+			if (!$errmsg["is_err"])
+			{
+				continue;
+			}
+
 			$this->vars(array(
 				"msg" => $errmsg["msg"],
 				"prod_name" => $errmsg["prod_name"],
@@ -109,7 +114,8 @@ class shop_order_cart extends class_base
 					"layout" => $layout,
 					"prod" => $i,
 					"quantity" => $quant,
-					"oc_obj" => $oc
+					"oc_obj" => $oc,
+					"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
 				))
 			));
 
@@ -180,7 +186,8 @@ class shop_order_cart extends class_base
 						"prod_id" => $i_o->id(),
 						"must_order_num" => $mon,
 						"ordered_num" => $cc,
-						"ordered_num_enter" => $quant
+						"ordered_num_enter" => $quant,
+						"is_err" => true
 					);
 					aw_session_set("soc_err", $soce);
 					$order_ok = false;
@@ -190,6 +197,21 @@ class shop_order_cart extends class_base
 
 		if (!$order_ok)
 		{
+			$awa = new aw_array($arr["add_to_cart"]);
+			$soce = aw_global_get("soc_err");
+			foreach($awa->get() as $iid => $quant)
+			{
+				if (isset($soce[$iid]))
+				{
+					continue;
+				}
+				$soce[$iid] = array(
+					"is_err" => false,
+					"ordered_num_enter" => $quant
+				);
+			}
+			aw_session_set("soc_err", $soce);
+
 			if (!$arr["return_url"])
 			{
 				header("Location: ".$this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"])));

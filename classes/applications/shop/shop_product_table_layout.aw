@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.4 2004/05/27 08:51:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.5 2004/06/04 11:11:00 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -13,6 +13,10 @@
 
 @property rows type=textbox size=5 field=meta method=serialize
 @caption Ridu
+
+@property template type=select field=meta method=serialize
+@caption Template
+
 
 */
 
@@ -32,7 +36,12 @@ class shop_product_table_layout extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "template":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "applications/shop/shop_product_table_layout"
+				));
+				break;
 		};
 		return $retval;
 	}
@@ -60,11 +69,21 @@ class shop_product_table_layout extends class_base
 		$this->t = $t;
 		$this->oc = $oc;
 		$this->cnt = 0;
-		$this->read_template("table.tpl");
+		$tpl = "table.tpl";
+		if ($t->prop("template") != "")
+		{
+			$tpl = $t->prop("template");
+		}
+		$this->read_template($tpl);
 
 		$soce = new aw_array(aw_global_get("soc_err"));
 		foreach($soce->get() as $prid => $errmsg)
 		{
+			if (!$errmsg["is_err"])
+			{
+				continue;
+			}
+
 			$this->vars(array(
 				"msg" => $errmsg["msg"],
 				"prod_name" => $errmsg["prod_name"],

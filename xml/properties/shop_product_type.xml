@@ -20,6 +20,26 @@
             <method>serialize</method>
             <caption>Vorm, millega toote pakendit sisestatakse</caption>
       </property>
+      <property>
+            <name>image_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Toodete piltide kataloog</caption>
+      </property>
+      <property>
+            <name>file_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Toodete failide kataloog</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT_TYPE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -31,6 +51,11 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>seadete vorm</caption>
             </SP_CFGFORM>
+            <FOLDER>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>kataloog</caption>
+            </FOLDER>
       </reltypes>
 </properties>
 

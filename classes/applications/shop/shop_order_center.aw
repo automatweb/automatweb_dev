@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.4 2004/05/27 08:51:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.5 2004/06/04 11:11:00 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -436,7 +436,8 @@ class shop_order_center extends class_base
 				"prod" => $o,
 				"layout" => $layout,
 				"oc_obj" => $soc,
-				"quantity" => $soce[$o->id()]["ordered_num_enter"]
+				"quantity" => $soce[$o->id()]["ordered_num_enter"],
+				"is_err" => $soce[$o->id()]["is_err"]
 			)));
 		}
 

@@ -20,6 +20,15 @@
             <method>serialize</method>
             <caption>Ridu</caption>
       </property>
+      <property>
+            <name>template</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Template</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT_TABLE_LAYOUT</syslog_type>
             <relationmgr>yes</relationmgr>
