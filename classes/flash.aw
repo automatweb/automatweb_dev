@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.8 2004/06/16 15:42:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.9 2004/10/13 07:56:10 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -75,7 +75,7 @@ class flash extends class_base
 				));
 
 				$imgdata = getimagesize($fdata["tmp_name"]);
-				if (is_array($imgdata) && ($fc != ""))
+				if (true || is_array($imgdata) && ($fc != ""))
 				{
 					$this->real_width = $imgdata[0];
 					$this->real_height = $imgdata[1];
