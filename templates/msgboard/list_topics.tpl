@@ -1,24 +1,50 @@
-<table width="100%" border="0" cellspacing="14" cellpadding="0" height="100" class="sisuteks">
+
+
+<table width="100%" border="0" cellspacing="2" cellpadding="0" height="100" >
 	<tr> 
 		<td align="left" valign="top"> 
-			<table width="98%" border="0" cellspacing="1" cellpadding="0" height="100%" class="sisuteks">
+			<table width="98%" border="0" cellspacing="1" cellpadding="0" height="100%">
 				<tr> 
-					<td align="left" valign="top" class="maintext"> 
-						<table width="100%" border="0" cellspacing="0" cellpadding="0" class="sisuteks" align="center">
+					<td align="left" valign="top"> 
+						<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
 							<tr> 
-								<td colspan="4" height="14" class="header3"> 
-									<div align="center">
-																			<a href="{VAR:newtopic_link}" class="sisuteks">{VAR:LC_MSGBOARD_NEW_SUBJECT}</a> | 
-																			<a href="{VAR:search_forum_link}" class="sisuteks">{VAR:LC_MSGBOARD_SEARCH} </a> | 
-																			<a href="{VAR:mark_all_read}" class="sisuteks">{VAR:LC_MSGBOARD_ALL_READ} </a> |
-																			<a href="{VAR:props_link}" class="sisuteks">H‰‰lestamine </a> | 
+								<td bgcolor="#efefef" colspan="4" height="14"> 
+<center>
+<table border="0" cellspacing="0" cellpadding="2" bgcolor="#ffffff">
+<tr>
+<td class="mboardtab">
+	<a href="{VAR:newtopic_link}" class="mboardtab">{VAR:LC_MSGBOARD_NEW_SUBJECT}</a>  
+</td>
+<td>
+	<img src="images/trans.gif" width="5">
+</td>
+<td class="mboardtab">
+	<a href="{VAR:search_forum_link}" class="mboardtab">{VAR:LC_MSGBOARD_SEARCH} </a>  
+</td>
+<td>
+	<img src="images/trans.gif" width="5">
+</td>
+<td class="mboardtab">
+	<a href="{VAR:mark_all_read}" class="mboardtab">{VAR:LC_MSGBOARD_ALL_READ} </a> 
+</td>
+<td>
+	<img src="images/trans.gif" width="5">
+</td>
+<td class="mboardtab">
+	<a href="{VAR:props_link}" class="mboardtab">H‰‰lestamine </a>  
+</td>
+</tr>
+</table>
+<img src="images/mboard_joon.gif" border="0" width="100%" height="2" alt=""><br>
+
+</center>
 																			<!--
 																			<a href="{VAR:topic_detail_link}" class="sisuteks">N‰ita detailselt </a> 
 																			-->
 									</div>
 								</td>
 							</tr>
-							<tr bgcolor="#CCCCCC" class="header4"> 
+							<tr bgcolor="#ffffff" class="mboard"> 
 								<td colspan=2>   
 									<div align="left"><b>{VAR:LC_MSGBOARD_TITLE}</b></div>
 								</td>
@@ -31,38 +57,38 @@
 							</tr>
 							<!-- SUB: TOPIC_EVEN -->
 							<tr> 
-								<td class="header5" bgcolor="#CCCCCC" valign="top">{VAR:image}</td>
-								<td class="header5" bgcolor="#CCCCCC" valign="top"><a href="{VAR:topic_link}">{VAR:topic}</a>
-									<!-- SUB: NEW -->
+								<td class="mboardtexttopic" bgcolor="#eCeCeC" valign="top">{VAR:image}</td>
+								<td class="mboardtexttopic" bgcolor="#eCeCeC" valign="top"><a href="{VAR:topic_link}">{VAR:topic}</a>
+									<!-- SUB: NEW_MSGS -->
 										<font color="#990000">{VAR:LC_MSGBOARD_NEW}!</font>
-									<!-- END SUB: NEW -->
+									<!-- END SUB: NEW_MSGS -->
 
 									<!-- SUB: DELETE -->
 										<br><a href=""></a>
 									<!-- END SUB: DELETE -->
 									
 								</td>
-								<td height="21" class="header5"> 
-									<div class="header5" align="center">{VAR:from}</div>
+								<td height="21" class="mboardtexttopic" align="center"> 
+									{VAR:from}
 								</td>
-								<td height="21" class="header5"> 
-									<div class="header5" align="center">{VAR:created}</div>
+								<td height="21" class="mboardtexttopic" align="center"> 
+									{VAR:created}
 								</td>
 							</tr>
 							<!-- END SUB: TOPIC_EVEN -->
 
 							<!-- SUB: TOPIC_ODD -->
-							<tr> 
-							<td class="foorum_cont" bgcolor="#FFFFFF" valign="top">{VAR:image} </td>
-							<td class="header4" bgcolor="#FFFFFF" valign="top"><a href="{VAR:topic_link}" class="header4">{VAR:topic}</a>
+							<tr bgcolor="#FFFFFF"> 
+							<td class="mboardtexttopic" bgcolor="#FFFFFF" valign="top">{VAR:image} </td>
+							<td class="mboardtexttopic" bgcolor="#FFFFFF" valign="top"><a href="{VAR:topic_link}" class="header4">{VAR:topic}</a>
 										{VAR:DELETE}
 										{VAR:NEW}
 								</td>
-								<td height="21" class="header4"> 
-									<div class="header4" align="center">{VAR:from}</div>
+								<td height="21" class="mboardtexttopic" align="center"> 
+									{VAR:from}
 								</td>
-								<td height="21" class="header4"> 
-									<div class="header4" align="center">{VAR:created}</div>
+								<td height="21" class="mboardtexttopic" align="center"> 
+									{VAR:created}
 								</td>
 							</tr>
 							<!-- END SUB: TOPIC_ODD -->
