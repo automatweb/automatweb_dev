@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.53 2001/12/13 17:24:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.54 2002/01/03 09:32:13 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -264,7 +264,7 @@ else
 			preg_match("/(\w*)$/",$lib,$m);
 			$lib = $m[1];
 			$lib = "$classdir/$lib.$ext";
-			include_once($lib);
+			@include_once($lib);
 		};
 	}
 	////
@@ -371,8 +371,6 @@ define("CL_MESSAGE",52);
 // kalendri event
 define("CL_CAL_EVENT",53);
 
-
-
 define("CL_BANNER",54);
 define("CL_BANNER_CLIENT",55);
 define("CL_BANNER_PROFILE",56);	// this actually specifies the location of the banner. legacy code sucks. what can I do.
@@ -404,11 +402,10 @@ define("CL_CSS",71); // CSS objekt
 define("CL_ML_LIST",72);
 define("CL_ML_MEMBER",73);
 define("CL_ML_STAMP",74);
-define("CL_ML_RULE",77);//õumaigaad, someone has taken 75:)
-
 define("CL_SHOP_TABLE",75);
-
 define("CL_CSS_GROUP",76); // Oh yeah, I know it should be next to CL_CSS
+
+define("CL_ML_RULE",77);//õumaigaad, someone has taken 75:)
 
 define("CL_SEARCH_FILTER",78);
 
@@ -423,6 +420,12 @@ define("CL_KEYWORD_DB", 83); // keywordide andmebaas
 define("CL_MENU_CHAIN",84); // menüüde pärg
 
 define("CL_PULLOUT",85); // pullout - promo kast doku sees
+
+define("CL_OBJECT_CHAIN",86); // objektide p2rg - acli jaoks
+define("CL_ROLE",87); // roll - acli jaoks
+define("CL_ACL",88); // acli - seob objekti p2rga, rolli ja gruppe
+
+define("CL_MENU_ALIAS",89); // menüü alias .. doku/tabeli sisse menüü kutsumiseks
 
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
@@ -488,7 +491,10 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_KEYWORD => array("name" => "AW võtmesõna", "file" => "keywords", "can_add" => 1),
 			CL_KEYWORD_DB => array("name" => "V&otilde;tmes&otilde;nade baas", "file" => "keyword_db", "can_add" => 1),
 			CL_MENU_CHAIN => array("name" => "Menüüpärg", "file" => "menu_chain", "can_add" => 1),
-			CL_PULLOUT => array("name" => "Pullout", "file" => "pullout", "can_add" => 1)
+			CL_PULLOUT => array("name" => "Pullout", "file" => "pullout", "can_add" => 1),
+			CL_OBJECT_CHAIN => array("name" => "Objektip&auml;rg", "file" => "object_chain", "can_add" => 1),
+			CL_ROLE => array("name" => "Roll", "file" => "role", "can_add" => 1),
+			CL_ACL => array("name" => "ACL", "file" => "acl_class", "can_add" => 1),
 );
 // kliendid. 
 // hierarhia esimene element on root
@@ -603,7 +609,7 @@ PRG_BUGTRACK					=> array("name" => MN_BUGTRACK,					"url" => "orb.aw?action=lis
 PRG_FORMGEN						=> array("name" => MN_FORMGEN,					"url" => "forms.$ext"),
 PRG_GRAPH							=> array("name" => MN_GRAPH,						"url" => "graph.$ext"),
 PRG_FACE							=> array("name" => MN_FACE,							"url" => "nagu.$ext"),
-PRG_POLL							=> array("name" => MN_POLL,							"url" => "poll.$ext"),
+PRG_POLL							=> array("name" => MN_POLL,							"url" => "orb.aw?class=poll&action=list"),
 PRG_SEARCH						=> array("name" => MN_SEARCH,						"url" => "orb.aw?class=search_conf&action=change"),
 PRG_PERIODS						=> array("name" => MN_PERIODS,					"url" => "periods.$ext"),
 PRG_TESTS							=> array("name" => MN_TESTS,						"url" => "orb.$ext?class=tests&action=list_testid"),
