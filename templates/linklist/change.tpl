@@ -37,7 +37,9 @@
 										<tr>
 											<td class="celltext">YAH riba näidatakse</td>
 											<td class="celltext">
-											<input type=checkbox {VAR:path} NAME="path" value='1' class="formcheckbox">
+											<input type=checkbox {VAR:YAH} NAME="YAH" value='1' class="formcheckbox">
+
+											(kuda ja kas üldse saab konstuida Yah riba kui kataloogid leitakse formsisestusest?...cookie?)
 											</td>
 										</tr>
 										<tr>
@@ -82,50 +84,13 @@
 														vormi määratud väljund
 														<br />
 														</td>
-														<td class="celltext"valign=top>
+														<td class="celltext" valign=top>
 														<fieldset>
 															<legend><b>lingi attribuudid</b></legend>
 															<input type=checkbox {VAR:active_links} NAME='active_links' value='1' class="formcheckbox">
 														kuvada ainult aktiivsed lingid<br />
-															<input type=checkbox {VAR:newwindow} NAME="newwindow" value='1' class="formcheckbox">
-														lingid avanevad uues aknas<br />
-															<input type=checkbox {VAR:show_links} NAME="show_links" value='1' class="formcheckbox">
-														linke näidatakse <br />
-														<table border=1>
-															<tr>
-																<td class="celltext">attribuut</td>
-																<td class="celltext">järjekord</td>
-																<td class="celltext">hüperlink</td>
-																<td class="celltext">nähtav</td>
-																<td class="celltext">vali stiil</td>
-																<td class="celltext">tekst enne</td>
-																<td class="celltext">tekst peale</td>
-															</tr>
-															<!-- SUB: klikitav -->
-															<tr>
-																<td class="celltext">{VAR:mis}</td>
-																<td>
-																	<input type=text NAME='lorder[{VAR:mis}]' class="formtext" value="{VAR:lorder}" size=4>
-																</td>
-																<td>
-																	<input type=checkbox name='klikitav[{VAR:mis}]' value='{VAR:mis}' {VAR:is_hyper}>
-																</td>
-																<td>
-																	<input type=checkbox name='nahtav[{VAR:mis}]' value='{VAR:mis}' {VAR:nahtav}>
-																</td>
-																<td>
-																	<select NAME='stiil[{VAR:mis}]' class="formselect">{VAR:stiilid}</select>
-																</td>
-																<td>
-																	<input type=text NAME='tbefore[{VAR:mis}]' class="formtext" value="{VAR:tbefore}" size=8>
-																</td>
-																<td>
-																	<input type=text NAME='tafter[{VAR:mis}]' class="formtext" value="{VAR:tafter}" size=8>
-																</td>
-															</tr>
-															<!-- END SUB: klikitav -->											
-														</table>
-
+<!--															<input type=checkbox {VAR:show_links} NAME="show_links" value='1' class="formcheckbox">
+														linke näidatakse <br />-->
 														</fieldset>
 														</td>
 													</tr>
@@ -143,70 +108,94 @@
 
 												<table border=1>
 												<tr>
-													<td>tasandi nr</td>
-													<td>tulpasid</td>
-													<td>tulpa by jrk</td>
-													<td>templiit</td>
-													<td>kataloogid sortida</td>
-													<td>lingid sortida</td>
-													<td>kustuta</td>
-												</tr>
-												<tr>
-													<td>default</td>
-													<td>
-														<input type=text NAME='default_tulpi' class="formtext" value="{VAR:default_tulpi}" size=4>
-													</td>
-													<td>
-														<input type=checkbox name=jrk_columns_default value=1 {VAR:jrk_columns_default}>
-													</td>
-													<td>
-														<select NAME='default_template' class="formselect">{VAR:default_template}</select>
-													</td>
-													<td>
-														<select NAME='default_sortby_dirs' class="formselect">{VAR:default_sortby_dirs}</select>
-													</td>
-													<td>
-														<select NAME='default_sortby_links' class="formselect">{VAR:default_sortby_links}</select>
-													</td>
-													<td> </td>
+													<td class="celltext">tasandi nr</td>
+													<td class="celltext">tulpasid</td>
+													<td class="celltext">tulpa by jrk</td>
+													<td class="celltext">templiit</td>
+													<td class="celltext">kataloogid sortida</td>
+													<td class="celltext">näita linke</td>
+													<td class="celltext">uues aknas</td>
+													<td class="celltext">lingid sortida</td>
+													<td class="celltext">kustuta tase</td>
+													<td class="celltext">stiil</td>
 												</tr>
 												<!-- SUB: levels -->
 												<tr>
-													<td> {VAR:tas} </td>
+													<td> {VAR:level} </td>
 													<td>
-														<input type=text NAME='tulpi[{VAR:tas}]' class="formtext" value={VAR:tulpi} size=4>
+														<input type=text NAME='dir[{VAR:level}][tulpi]' class="formtext" value='{VAR:tulpi}' size=4>
 													</td>
 													<td>
-														<input type=checkbox name=jrk_columns[{VAR:tas}] value=1 {VAR:jrk_columns}>
+														<input type=checkbox name='dir[{VAR:level}][jrk_columns]' value=1 {VAR:jrk_columns}>
 													</td>
 													<td>
-														<select NAME='level_template[{VAR:tas}]' class="formselect">{VAR:level_template}</select>
+														<select NAME='dir[{VAR:level}][level_template]' class="formselect">{VAR:level_template}</select>
 													</td>
 													<td>
-														<select NAME='sortby_dirs[{VAR:tas}]' class="formselect">{VAR:sortby_dirs}</select>
+														<select NAME='dir[{VAR:level}][sortby_dirs]' class="formselect">{VAR:sortby_dirs}</select>
 													</td>
 													<td>
-														<select NAME='sortby_links[{VAR:tas}]' class="formselect">{VAR:sortby_links}</select>
+														<input type=checkbox NAME="dir[{VAR:level}][show_links]" value='1' class="formcheckbox" {VAR:show_links}>
 													</td>
 													<td>
-														<input type=checkbox name=kustuta[{VAR:tas}] value=1>
+														<input type=checkbox NAME="dir[{VAR:level}][newwindow]" value='1' class="formcheckbox" {VAR:newwindow}>
+													</td>
+													<td>
+														<select NAME='dir[{VAR:level}][sortby_links]' class="formselect">{VAR:sortby_links}</select>
+													</td>
+													<td>
+														<input type=checkbox name='dir[{VAR:level}][kustuta]' value=1>
+													</td>
+													<td>
+														<a href=#l{VAR:level}>stiil</a>
 													</td>
 											</tr>
 											<!-- END SUB: levels -->
 											</table>
 											</fieldset>
-{VAR:stat}
+											<!-- SUB: level_styles -->
 											<fieldset>
-												<legend><select class="formselect"><option>1<option>2</select>. tasandi stiil</legend>
-												<select><option>mingi stiilivalik
-												</select>
-												<select><option>mingi stiilivalik2
-												</select>
+												<legend><b>{VAR:level} tasandi linkide stiil ja konf</b></legend>
+														<a name="l{VAR:level}">
+														<table border=1>
+															<tr>
+																<td class="celltext">attribuut</td>
+																<td class="celltext">järjekord</td>
+																<td class="celltext">nähtav</td>
+																<td class="celltext">hüperlink</td>
+																<td class="celltext">vali stiil</td>
+																<td class="celltext">tekst + linebreak</td>
+															</tr>
 
+															<!-- SUB: level_style -->
+															<tr>
+																<td class="celltext">{VAR:mis}</td>
+																<td>
+																	<input type=text NAME='link[{VAR:level}][{VAR:mis}][jrk]' class="formtext" value="{VAR:jrk}" size=4>
+																</td>
+																<td>
+																	<input type=checkbox name='link[{VAR:level}][{VAR:mis}][show]' value=1 {VAR:show}>
+																</td>
+																<td>
+																	<input type=checkbox name='link[{VAR:level}][{VAR:mis}][hyper]' value=1 {VAR:hyper}>
+																</td>
+																<td>
+																	<select NAME='link[{VAR:level}][{VAR:mis}][style]' class="formselect">{VAR:stiilid}</select>
+																</td>
+																<td>
+<!-- SUB: add_text -->
+																	<input type=text NAME='link[{VAR:level}][{VAR:mis}][text]' class="formtext" value="{VAR:text}" size=14>
+<!-- END SUB: add_text -->
+																	<input type=checkbox name='link[{VAR:level}][{VAR:mis}][br]' value=1 {VAR:br}>
+																</td>
+															</tr>
+															<!-- END SUB: level_style -->
+														</table>
 											</fieldset>
-											<input type=text name="test[1][2][8]" value="proov">
+											<!-- END SUB: level_styles -->
 
-											{VAR:abix}
+<!--														<input type=text name='level' value="{VAR:level}">-->
+											{VAR:abix} miks krt see asi siin sellist värvi on, aru ma ei saa
 											</td>
 										</tr>
 									</table>
@@ -214,7 +203,7 @@
 							</tr>
 										<tr>
 										<td class="icontext" align="center" colspan=2>
-										{VAR:_toolbar}
+										{VAR:toolbar}
 										</td>
 										</tr>
 

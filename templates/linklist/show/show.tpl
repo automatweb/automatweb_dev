@@ -1,42 +1,45 @@
-<h6>object: {VAR:name}<h6>
+<i>object: {VAR:name}<br>
+{VAR:comment}</i>
+{VAR:css}
 <center>
-{VAR:abix}
 	<table width=500 border=1 cellpadding=0 cellspacing=0>
+				<!-- SUB: YAHBAR -->
 	<tr>
+
 		<td colspan=3>
 			<i>
-			<b>{VAR:nms}
-				<!-- SUB: tee -->
+			<b>
+				<!-- SUB: YAH -->
 				&nbsp;/&nbsp;<a href={VAR:link}>{VAR:name}</a>
-				<!-- END SUB: tee -->
+				<!-- END SUB: YAH -->
 			</b>
 			</i> <small><small>{VAR:total}</small></small>
 		</td>
 	</tr>
+				<!-- END SUB: YAHBAR -->
 	<tr>
-			{VAR:tulbad}
 			<!-- SUB: tulp -->
-			<td valign=top>{VAR:dirs}</td>
-			<!-- END SUB: tulp -->
-
+			<td valign=top>
 			<!-- SUB: dir -->
-			&nbsp;&nbsp;&nbsp;<b><a href={VAR:link}>{VAR:name}</a></b><br />
+			&nbsp;&nbsp;&nbsp;<b><a href={VAR:link}>{VAR:name}</a></b>
+			<!-- SUB: sub_count -->
+			<small>[{VAR:count}]</small>
+			<!-- END SUB: sub_count -->			
+			<small><i>hits {VAR:hits}</i></small><br />
 			<!-- END SUB: dir -->
-	</tr>	
 
-	<!-- SUB: links -->	
-	<tr>
-		<td>&nbsp;&nbsp;&nbsp;{VAR:l_name}&nbsp;&nbsp;</td>
-		<td>&nbsp;&nbsp;&nbsp;<small><u>{VAR:l_url}</u>&nbsp;&nbsp;</td>
-		<td>&nbsp;&nbsp;&nbsp;<i>{VAR:l_comment}</i></small>&nbsp;&nbsp;</td>
+			</td>
+			<!-- END SUB: tulp -->
 	</tr>
-	<!-- END SUB: links -->
-	
-	
+	<table width=100% border=1><tr><td>
+		{VAR:links}
+	</td></tr></table>
+
 	<tr>
 		<td colspan=3>
 			<hr>statusbar:  
 			&nbsp;linke kataloogis:	{VAR:total2}
+			  // abix:{VAR:abix}
 		</td>
 	</tr>
 	</table>
