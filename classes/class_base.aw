@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.115 2003/06/03 16:46:54 duke Exp $
+// $Id: class_base.aw,v 2.116 2003/06/04 14:02:27 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -856,7 +856,6 @@ class class_base extends aw_template
 			};
 		};
 
-
 	}	
 
 	function gen_output($args = array())
@@ -1126,11 +1125,12 @@ class class_base extends aw_template
 				};
 			};
 		};
-
+		
 		if (empty($this->id))
 		{
 			$use_group = "general";
 		};
+
 		
 		// and if nothing suitable was found, use the first group from the list
 		if (empty($use_group))
