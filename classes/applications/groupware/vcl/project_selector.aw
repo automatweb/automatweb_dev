@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.2 2004/10/12 17:12:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.3 2004/10/13 15:51:53 duke Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -30,9 +30,6 @@ class project_selector extends core
 		$prop = $arr["prop"];
 
 		$propname = $prop["name"];
-
-		print $propname;
-
 
 		// väga lahe - nüüd tuleb veel grupeerimine teha
 		if (1 == $prop["all_projects"])
