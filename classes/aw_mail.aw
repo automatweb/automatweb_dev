@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.7 2001/06/04 06:56:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.8 2001/06/19 14:39:34 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -103,6 +103,12 @@ class aw_mail {
 		// Do we have a multipart message?
 		if (preg_match("/^multipart\/mixed/i",$this->headers["Content-Type"]))
 		{
+			if (!$this->headers["Boundary"])
+			{
+				preg_match("/boundary=(.*)$/i",$this->headers["Content-Type"],$matches);
+				print "setting boundary to ($matches[1])<br>";
+				$this->headers["Boundary"] = $matches[1];
+			};
 			$separator = "--" . $this->headers["Boundary"]; // feel free to consult the RFC to understand this
 			$msg_parts = explode($separator,$res["body"]);
 			$count = sizeof($msg_parts);
@@ -212,20 +218,24 @@ class aw_mail {
 	
 		foreach($_headers as $line)
 		{
-			if (preg_match("/^Content-Type: (.*); (.*)$/",$line,$matches))
+			if (preg_match("/^Content-Type: (.*); (.*)$/i",$line,$matches))
 			{
 				$headers["Content-Type"] = $matches[1];
-				if (preg_match("/boundary=\"(.*)\"/",$matches[2],$bmatch))
+				if (preg_match("/boundary=\"(.*)\"/i",$matches[2],$bmatch))
+				{
+					$headers["Boundary"] = $bmatch[1];
+				}
+				elseif (preg_match("/boundary=(.*)/i",$matches[2],$bmatch))
 				{
 					$headers["Boundary"] = $bmatch[1];
 				};
 	 
-				if (preg_match("/name=\"(.*)\"/",$matches[2],$nmatch))
+				if (preg_match("/name=\"(.*)\"/i",$matches[2],$nmatch))
 				{
 					$headers["Content-Name"] = $nmatch[1];
 				};
 			}
-			elseif (preg_match("/^Date: (.*)$/",$line,$mt))
+			elseif (preg_match("/^Date: (.*)$/i",$line,$mt))
 			{
 				$headers["Date"] = $mt[1];
 			}
