@@ -215,9 +215,13 @@
 			</function>
 		</action>
 
-		<action name="change_pwd_hash" all_args="1">
+		<action name="change_pwd_hash" nologin="1">
 			<function name="change_pwd_hash">
-				<arguments/>
+				<arguments>
+					<required name="pass1"/>
+					<required name="pass2"/>
+					<required name="a"/>
+					<optional name="change"/>
 			</function>
 		</action>
 	</class>
