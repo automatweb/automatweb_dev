@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.36 2004/10/29 12:35:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.37 2004/10/29 14:42:32 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -493,22 +493,26 @@ class object_list extends _int_obj_container_base
 		// cb is checked before getting here
 		
 		$this->cb = $cb;
-		uksort($this->list, array(&$this, "_int_sort_list_cb_cb"));
+
+		// init list
+		foreach($this->list as $k => $v)
+		{
+			$this->_int_get_at($k);
+		}
+		uasort($this->list, array(&$this, "_int_sort_list_cb_cb"));
 		unset($this->cb);
 	}
 
 	function _int_sort_list_cb_cb($a, $b)
 	{
-		$a_o = $this->_int_get_at($a);
-		$b_o = $this->_int_get_at($b);
 		if (is_array($this->cb))
 		{
 			$tcb = $this->cb;
-			return $tcb[0]->$tcb[1]($a_o, $b_o);
+			return $tcb[0]->$tcb[1]($a, $b);
 		}
 		else
 		{
-			return $this->cb($a_o, $b_o);
+			return $this->cb($a, $b);
 		}
 	}
 
@@ -521,5 +525,4 @@ class object_list extends _int_obj_container_base
 		}
 	}
 }
-
 ?>
