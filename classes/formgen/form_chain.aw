@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.26 2004/11/02 09:55:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.27 2005/01/21 13:19:10 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -444,7 +444,7 @@ class form_chain extends form_base
 				if ($prev["cur"] && $ent["show"])
 				{
 					$form_id = $ent["id"];
-					echo "god id as $form_id <br>";
+					//echo "god id as $form_id <br>";
 				}
 
 				$prev = $ent;
