@@ -247,7 +247,7 @@ class form_controller extends form_base
 		$res = $this->eval_controller_ref($id, $entry, $form_ref, $el_ref);
 		if (!$res)
 		{
-			$co = $this->loaded_controller;
+			$co = $this->load_controller($id);
 			if ($co["meta"]["errmsg"][aw_global_get("lang_id")] != "")
 			{
 				return $this->replace_vars($co,$co["meta"]["errmsg"][aw_global_get("lang_id")],false,&$form_ref, $el_ref, $entry);
@@ -285,7 +285,7 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
-		if (aw_global_get("uid") == "")
+/*		if (aw_global_get("uid") == "kix")
 		{
 			//echo("controller id $id: evaling <pre>$eq</pre> <br />");
 			//echo("controller id $id: for row ".$el_ref->row." col = ".$el_ref->col." <br />");
@@ -294,10 +294,10 @@ class form_controller extends form_base
 			//echo "result = ".dbg::dump($res)." <br>";
 		}
 		else
-		{
+		{*/
 			dbg::p2("controller id $id: evaling $eq <br />");
 			@eval($eq);
-		}
+//		}
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br />");
 		if (!$contr_finish)
 		{
