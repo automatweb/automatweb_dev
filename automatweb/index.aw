@@ -15,7 +15,7 @@ if (!$tt->prog_acl("view", PRG_MENUEDIT))
 $tableinfo = $tt->db_get_table("periods");
 if (!$tableinfo["fields"]["obj_id"])
 {
-	$url = $this->mk_my_orb("convert_periods",array(),"converters");
+	$url = $tt->mk_my_orb("convert_periods",array(),"converters");
 	header("Location: $url");
 	exit;
 };
