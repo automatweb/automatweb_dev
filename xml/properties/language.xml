@@ -108,6 +108,15 @@
             <store>no</store>
             <caption>Keeled</caption>
       </property>
+      <property>
+            <name>texts</name>
+            <table>objects</table>
+            <group>texts</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>texts</field>
+      </property>
       <classinfo>
             <syslog_type>ST_LANGUAGE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -118,6 +127,9 @@
             <langs>
                   <caption>K&amp;otilde;ik keeled</caption>
             </langs>
+            <texts>
+                  <caption>Tekstid</caption>
+            </texts>
       </groupinfo>
       <tableinfo>
             <languages>

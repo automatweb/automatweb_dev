@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.6 2004/04/07 06:54:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.7 2004/06/02 10:49:20 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -47,6 +47,11 @@
 
 @property langs type=table group=langs field=meta method=serialize store=no
 @caption Keeled
+
+@groupinfo texts caption="Tekstid"
+@default group=texts
+
+@property texts type=table no_caption=1
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption pilt
@@ -127,6 +132,10 @@ class language extends class_base
 
 			case "lang_charset":
 				return PROP_IGNORE;
+
+			case "texts":
+				$this->do_texts_table($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -181,6 +190,9 @@ class language extends class_base
 				$prop["value"] = join(",", array_keys(is_array($prop["value"]) ? $prop["value"] : array()));
 				break;
 
+			case "texts":
+				$this->save_texts_table($arr);
+				break;
 		}
 		return $retval;
 	}	
@@ -251,6 +263,87 @@ class language extends class_base
 		$conv->lang_new_convert(array(
 			"parent" => $osi_vars["langs"]
 		));
+	}
+
+	function _init_texts_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "text_name",
+			"caption" => "Muutuja nimi"
+		));
+
+		$t->define_field(array(
+			"name" => "text_value",
+			"caption" => "Muutuja v&auml;&auml;rtus"
+		));
+
+		$t->set_sortable(false);
+	}
+
+	function do_texts_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_texts_table($t);
+
+		$cnt = 0;
+		$txts = new aw_array($arr["obj_inst"]->meta("texts"));
+		foreach($txts->get() as $varn => $varv)
+		{
+			$cnt++;
+			$t->define_data(array(
+				"text_name" => html::textbox(array(
+					"name" => "varvals[$cnt][name]",
+					"value" => $varn
+				)),
+				"text_value" => html::textbox(array(
+					"name" => "varvals[$cnt][val]",
+					"value" => $varv
+				)),
+			));
+		}
+
+		for($i = 0; $i < 5; $i++)
+		{
+			$cnt++;
+			$t->define_data(array(
+				"text_name" => html::textbox(array(
+					"name" => "varvals[$cnt][name]",
+					"value" => ""
+				)),
+				"text_value" => html::textbox(array(
+					"name" => "varvals[$cnt][val]",
+					"value" => ""
+				)),
+			));
+		}
+	}
+
+	function save_texts_table($arr)
+	{
+		$awa = new aw_array($arr["request"]["varvals"]);
+		$tarr = $awa->get();
+		
+		$texts = array();
+		foreach($tarr as $cnt => $dat)
+		{
+			if ($dat["val"] != "" && $dat["name"] != "")
+			{
+				$texts[$dat["name"]] = $dat["val"];
+			}
+		}
+
+		$arr["obj_inst"]->set_meta("texts", $texts);
+	}
+
+	function do_insert_texts(&$that)
+	{
+		$loid = aw_global_get("lang_oid");
+		if ($loid)
+		{
+			$o = obj($loid);
+			$txts = new aw_array($o->meta("texts"));
+			$that->vars($txts->get());
+		}
 	}
 }
 ?>
