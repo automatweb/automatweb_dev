@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.18 2005/01/19 12:17:17 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.19 2005/01/19 12:40:34 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -973,10 +973,9 @@ class event_search extends class_base
 					$cdat .= $this->parse("CELL");
 					$this->vars(array("CELL" => $cdat));
 				}
-				$nmx = "";
+				$nmx = "content";
 				if(!empty($eval["content"]) && $tabledef["content"]["active"])
 				{
-					$nmx = "content";
 					$aliasmrg->parse_oo_aliases($ekey, $eval["content"]);
 					$content = $eval["content"];
 				}
@@ -984,7 +983,7 @@ class event_search extends class_base
 				{
 					$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
 					$content = $eval["utextarea1"];
-					$nmx = "content";
+					
 				}
 				$i++;
 				$this->vars(array(
