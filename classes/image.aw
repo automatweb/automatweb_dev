@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.122 2004/12/01 11:35:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.123 2004/12/27 12:43:49 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -242,7 +242,8 @@ class image extends class_base
 				"w_big_height" => isset($size[1]) ? $size[1]+10 : "",
 				"bi_show_link" => $bi_show_link,
 				"bi_link" => $bi_link,
-				"author" => $idata["meta"]["author"]
+				"author" => $idata["meta"]["author"],
+				"docid" => $args["oid"]
 			);
 
 			$ha = ""; 
@@ -998,7 +999,7 @@ class image extends class_base
 		$im = $this->get_image_by_id($id);
 		$this->read_any_template("show_big.tpl");
 		$this->vars(array(
-			"big_url" => $this->get_url($im["meta"]["file2"])
+			"big_url" => $this->get_url($im["meta"]["file2"]),
 		));
 		die($this->parse());
 	}
