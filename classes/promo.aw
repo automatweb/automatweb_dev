@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.29 2003/05/21 16:32:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.30 2003/06/03 15:33:22 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -31,6 +31,9 @@
 
 	@property groups type=select multiple=1 size=15 group=show method=serialize
 	@caption Grupid, kellele kasti näidata
+
+	@property use_fld_tpl type=checkbox ch_value=1 group=show method=serialize
+	@caption Kasuta dokumendi asukoha templatet
 	
 	@property section type=text callback=callback_get_menus group=menus method=serialize
 	@caption Vali menüüd, mille all kasti näidata
@@ -138,6 +141,10 @@ class promo extends class_base
 			$meta["section_include_submenus"] = $args["form_data"]["include_submenus"];
 		};
 
+		if ($data["name"] == "ndocs")
+		{
+			$args["metadata"]["as_name"] = $args["form_data"]["as_name"];
+		}
 		return $retval;
 
 	}
@@ -244,6 +251,12 @@ class promo extends class_base
                         //"nowrap" => "1",
                         "sortable" => 1,
                 ));
+                $this->t->define_field(array(
+                        "name" => "as_name",
+                        "caption" => "Pane pealkirjaks",
+                        "talign" => "center",
+                        "align" => "center",
+                ));
 
 		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
 		// and from this array, I need to get the list of objects that
@@ -274,8 +287,22 @@ class promo extends class_base
 				$this->t->define_data(array(
 					"oid" => $row["oid"],
 					"name" => $path . "/" . $row["name"],
+					"as_name" => html::radiobutton(array(
+						"name" => "as_name",
+						"value" => $row["oid"],
+						"checked" => ($args["obj"]["meta"]["as_name"] == $row["oid"])
+					))
 				));
 			};
+			$this->t->define_data(array(
+				"oid" => 0,
+				"name" => "",
+				"as_name" => html::radiobutton(array(
+					"name" => "as_name",
+					"value" => 0,
+					"checked" => (!$args["obj"]["meta"]["as_name"])
+				))
+			));
 		};
 		
 		$nodes[$prop["name"]] = array(
@@ -456,33 +483,75 @@ class promo extends class_base
 	function parse_alias($args = array())
 	{
 		$alias = $args["alias"];
-                $this->read_template("default.tpl");
-                $me = get_instance("contentmgmt/site_content");
-                $def = new aw_array($me->get_default_document($alias["target"],true));
-                $content = "";
-                $doc = get_instance("document");
-                $mn = $this->get_menu($alias["target"]);
-                $q = "SELECT filename FROM template WHERE id = '$mn[tpl_lead]'";
-                $this->db_query($q);
-                $row = $this->db_next();
-                foreach($def->get() as $key => $val)
-                {
-                        $content .= $doc->gen_preview(array(
-                                "docid" => $val,
-                                "leadonly" => 1,
-                                "tpl" => $row["filename"],
-                                "showlead" => 1,
-                                "boldlead" => 1,
-                                "no_strip_lead" => 1,
-                        ));
-                };
+		$ob = $this->get_object($alias["target"]);
 
-                $this->vars(array(
-                        "title" => $alias["name"],
-                        "content" => $content,
-                ));
-				return $this->parse();
+		$this->read_template("default.tpl");
 
+		$me = get_instance("contentmgmt/site_content");
+		if (is_array($ob['meta']['last_menus']))
+		{
+			$def = array();
+			foreach($ob['meta']['last_menus'] as $menu)
+			{
+				$_t = new aw_array($me->get_default_document($menu,true));
+				$def += $_t->get();
+			}
+			$def = new aw_array($def);
+		}
+		else
+		{
+			$def = new aw_array($me->get_default_document($alias["target"],true));
+		}
+
+		$ndocs = $this->db_fetch_field("SELECT ndocs FROM menu WHERE id = '$alias[target]'", "ndocs");
+		if ($ndocs)
+		{
+			$def = new aw_array(array_slice($def->get(), 0, $ndocs));
+		}
+
+		$content = "";
+		$doc = get_instance("document");
+
+		$mn = $this->get_menu($alias["target"]);
+
+		$q = "SELECT filename FROM template WHERE id = '$mn[tpl_lead]'";
+		$row = $this->db_fetch_row($q);
+
+		$parms = array(
+			"leadonly" => 1,
+			"showlead" => 1,
+			"boldlead" => 1,
+			"no_strip_lead" => 1,
+		);
+		if (!$ob['meta']['use_fld_tpl'])
+		{
+			$parms["tpl"] = $row["filename"];
+		}
+	
+		foreach($def->get() as $key => $val)
+		{
+			$_parms = $parms;
+			$_parms["docid"] = $val;
+			$content .= $doc->gen_preview($_parms);
+		}
+
+		if ($ob['meta']['as_name'] && $ob["name"] == "")
+		{
+			$ob["name"] = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '".$ob['meta']['as_name']."'","name");
+		}
+
+		$this->vars(array(
+			"title" => $ob["name"],
+			"content" => $content,
+		));
+
+		if (!$ob['meta']['no_title'])
+		{
+			$this->vars(array(
+				"SHOW_TITLE" => $this->parse("SHOW_TITLE")
+			));
+		}
+		return $this->parse();
 	}
 }
 ?>

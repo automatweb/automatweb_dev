@@ -74,6 +74,16 @@
             <caption>Grupid, kellele kasti näidata</caption>
       </property>
       <property>
+            <name>use_fld_tpl</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>show</group>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Kasuta dokumendi asukoha templatet</caption>
+      </property>
+      <property>
             <name>section</name>
             <type>text</type>
             <callback>callback_get_menus</callback>
