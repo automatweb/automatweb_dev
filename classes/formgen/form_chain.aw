@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.14 2004/02/11 11:50:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.15 2004/06/11 08:50:40 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -694,7 +694,8 @@ class form_chain extends form_base
 //		echo "err = $f->has_controller_errors , nce  =$new_chain_entry <br />";
 		if ($f->has_controller_errors && $new_chain_entry)
 		{
-			$this->delete_object($chain_entry_id);
+			$tmp = obj($chain_entry_id);
+			$tmp->delete();
 			$chain_entry_id = 0;
 		}
 		else
@@ -877,12 +878,14 @@ class form_chain extends form_base
 		$e = $this->get_chain_entry($entry_id);
 		foreach($e as $fid => $fentry_id)
 		{
-			$this->delete_object($fentry_id);
+			$tmp = obj($fentry_id);
+			$tmp->delete();
 			$this->db_query("UPDATE form_".$fid."_entries SET chain_id = NULL WHERE id = $fentry_id");
 		}
 
 		// now delete chain entry object
-		$this->delete_object($entry_id);
+		$tmp = obj($entry_id);
+		$tmp->delete();
 		header("Location: ".$this->mk_my_orb("show_chain_entries", array("id" => $id)));
 	}
 

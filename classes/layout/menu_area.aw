@@ -115,8 +115,8 @@ class menu_area extends class_base
 		{
 			if ($level > $num)
 			{
-				$this->delete_object($oid);
-				$this->delete_aliases_of($oid);
+				$tmp = obj($oid);
+				$tmp->delete();
 				unset($od["level_objs"][$level]);
 			}
 		}

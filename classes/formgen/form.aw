@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.96 2004/06/09 21:01:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.97 2004/06/11 08:50:39 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -4423,8 +4423,9 @@ class form extends form_base
 	function delete($arr)
 	{
 		extract($arr);
-		$this->delete_object($id);
-		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
+		$tmp = obj($id);
+		$name = $tmp->name();
+		$tmp->delete();
 		$this->_log(ST_FORM, SA_DELETE, $name, $id);
 		header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent), "menuedit"));
 	}

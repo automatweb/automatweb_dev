@@ -444,7 +444,8 @@ class form_db_base extends aw_template
 		}
 		if (($this->arr["save_table"] == 1 && $this->arr["save_tables_obj_tbl"] != "") || $this->arr["save_table"] != 1)
 		{
-			$this->delete_object($entry_id, false, false);
+			$tmp = obj($entry_id);
+			$tmp->delete();
 			$this->_log(ST_FORM_ENTRY, SA_DELETE,"form $this->name sisestus $entry_id", $entry_id);
 		}
 		else
