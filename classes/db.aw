@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.13 2002/12/18 15:05:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.14 2003/01/02 15:30:57 duke Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -251,7 +251,7 @@ class db_connector extends root
 			$keyvalue =  join(",",$keyvalue);
 		};
 
-		$fields = join(",",map2(" %s = '%s' ",$values));
+		$fields = join(",",map2(" %s = '%s' ",$values, 0, true));
 
 		if ($fields)
 		{
