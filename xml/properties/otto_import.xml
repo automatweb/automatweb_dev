@@ -99,23 +99,14 @@
             <caption>Failinimed</caption>
       </property>
       <property>
-            <name>imgs_csv</name>
+            <name>folders</name>
             <table>objects</table>
-            <group>imgs</group>
+            <group>folders</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <caption>Piltide CSV faili url</caption>
-      </property>
-      <property>
-            <name>do_img_i</name>
-            <table>objects</table>
-            <group>imgs</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Teosta piltide import</caption>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>do_fixes</name>
@@ -137,9 +128,9 @@
             <files>
                   <caption>Failid</caption>
             </files>
-            <imgs>
-                  <caption>Pildid</caption>
-            </imgs>
+            <folders>
+                  <caption>Kataloogid</caption>
+            </folders>
             <post_import_fix>
                   <caption>Parandused</caption>
             </post_import_fix>
