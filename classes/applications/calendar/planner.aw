@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.30 2004/12/01 15:01:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.31 2004/12/17 12:24:12 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1531,6 +1531,7 @@ class planner extends class_base
 		));
 		$awt->stop("init-event-source");
 
+
 		foreach($events as $event)
 		{
 			if ($arr["request"]["clid_filt"] && $event["class_id"] != $arr["request"]["clid_filt"])
@@ -1592,6 +1593,11 @@ class planner extends class_base
 				"flags" => 0,
 			),
 		));
+
+		if (0 == $tasklist->count())
+		{
+			return array();
+		};
 
 		$tasklist = new object_list(array(
 			new object_list_filter(array(
