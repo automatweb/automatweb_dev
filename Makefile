@@ -32,7 +32,7 @@ properties:
 		echo "Cmdline php not found, cannot collect properties"; \
 	fi
 
-trans:
+awtrans:
 	@echo "Generating translation templates"
 	@if test -e scripts/php; \
 		then \
@@ -41,16 +41,18 @@ trans:
 		echo "Cmdline php not found, cannot create translation templates"; \
 	fi
 
+trans:	awtrans ini
+
 msg:
 	@echo "Generating message maps"
 	@if test -e scripts/php; \
 		then \
-		./scripts/php -d register_argc_argv=1 -q -f ./scripts/msg_scan.aw \
+		./scripts/php -n -d register_argc_argv=1 -q -f ./scripts/msg_scan.aw \
 	else \
 		echo "Cmdline php not found, cannot create message maps"; \
 	fi
 
 class:
-	@scripts/php -q scripts/mk_class/mk_class.aw
+	@scripts/php -n -q scripts/mk_class/mk_class.aw
 
 all: ini properties msg
