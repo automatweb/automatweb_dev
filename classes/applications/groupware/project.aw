@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.13 2004/11/03 12:15:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.14 2004/11/19 12:03:28 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -81,6 +81,12 @@
 
 @reltype PRJ_IMAGE value=8 clid=CL_IMAGE
 @caption Pilt
+
+@reltype ORDERER value=9 clid=CL_CRM_COMPANY
+@caption tellija
+
+@reltype IMPLEMENTOR value=10 clid=CL_CRM_COMPANY
+@caption teostaja
 
 */
 
@@ -454,17 +460,6 @@ class project extends class_base
 			$stat_str = "objects.status = " . $arr["status"];
 		};
 
-		// mulle tundub et ma pean siis lugema kõiki objekte sõltumata lang_id-st
-		/*
-		$q = "SELECT objects.oid AS id,objects.parent,objects.class_id,objects.brother_of,objects.name,planner.start,planner.end
-                        FROM planner
-                        LEFT JOIN objects ON (planner.id = objects.brother_of)
-                        WHERE planner.start >= '${_start}' AND
-                        (planner.end <= '${_end}' OR planner.end IS NULL) AND
-                        $stat_str AND parent IN (${parent}) AND lang_id = ${lang_id} $limit";
-		*/		
-
-
 		$active_lang_only = aw_ini_get("project.act_lang_only");
 
 		$q = "
@@ -478,9 +473,13 @@ class project extends class_base
 				planner.end
 			FROM planner
 			LEFT JOIN objects ON (planner.id = objects.brother_of)
-			WHERE planner.start >= '${_start}' AND
-			(planner.end <= '${_end}' OR planner.end IS NULL) AND
+			WHERE ((planner.start >= '${_start}' AND planner.start <= '${_end}')
+			OR
+			(planner.end >= '${_start}' AND planner.end <= '${_end}')) AND
 			$stat_str AND objects.parent IN (${parent}) order by planner.start"; // $limit
+
+
+		// SELECT objects.oid AS id, objects.parent, objects.class_id, objects.brother_of, objects.name, planner.start, planner.end FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE ((planner.start >= '1099260000' AND planner.start <= '1104530399') OR (planner.end >= '1099260000' AND planner.end <= '1104530399')) AND objects.status != 0 AND objects.parent IN (2186)
 
 		
 
@@ -489,49 +488,67 @@ class project extends class_base
 		$this->db_query($q);
 		$events = array();
 		$pl = get_instance(CL_PLANNER);
-		$projects = array();
+		$projects = $by_parent = array();
 		obj_set_opt("no_auto_translation", 0);
 		$lang_id = aw_global_get("lang_id");
 		// weblingi jaoks on vaja küsida connectioneid selle projekti juurde!
 		while($row = $this->db_next())
 		{
 			// now figure out which project this thing belongs to?
-			$projects[$row["parent"]] = $row["parent"];
-			$web_page_id = $row["parent"];
+			//$web_page_id = $row["parent"];
 
 			if (!$this->can("view",$row["brother_of"]))
 			{
-				dbg::p1($row["name"]);
-				dbg::p1("skip1");
+				//dbg::p1($row["name"]);
+				//dbg::p1("skip1");
 				continue;
 			};
 
 			$e_obj = new object($row["brother_of"]);
+			// see leiab siis objekti originaali parenti
 			$pr_obj = new object($e_obj->parent());
-			$project_name = $pr_obj->name();
 
 
-			// check whether this project has an attached image
 			if ($active_lang_only == 1 && $pr_obj->lang_id() != $lang_id)
 			{
-				dbg::p1($row["name"]);
-				dbg::p1("skip2");
+				//dbg::p1($row["name"]);
+				//dbg::p1("skip2");
 				continue;
 			};
+			
+			$projects[$row["parent"]] = $row["parent"];
+			
+			$project_name = $pr_obj->name();
+
+			// koostan nimekirja asjadest, mida mul vaja on? ja edasi on vaja
+			// nimekirja piltidest
+
+			//enter_function("find-original");
 
 
-			obj_set_opt("no_auto_translation",1);
-			$fx = $pr_obj->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
-			if ($fx)
-			{
-				$pr_obj = $fx;
-			};
+			// nii, see on see koht, mis tuleks tsüklist välja tõsta.
+			//obj_set_opt("no_auto_translation",1);
+			//$fx = $pr_obj->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
+			//exit_function("find-original");
+			//if ($fx)
+			//{
+			//	$pr_obj = $fx;
+			//};
+			
+			$prid = $pr_obj->id();
+
+			// mida fakki .. miks see asi NII on?
+			$projects[$prid] = $prid;
+
+			// äkki ma saan siis siin ka kasutada seda tsüklite ühendamist?
 			obj_set_opt("no_auto_translation",0);
+			/*
 			$conns = $pr_obj->connections_to(array(
 				"type" => 17, // RELTYPE_CONTENT_FROM
 				"from.lang_id" => aw_global_get("lang_id"),
 			));
 
+			// see on see bloody originaal ju :(
 			$first = reset($conns);
 			if (is_object($first))
 			{
@@ -539,11 +556,13 @@ class project extends class_base
 				//$web_page_id = $first->prop("from");
 				$web_page_id = $from->id();
 			};
+			*/
+			
 			
 
 			// but some objects have no idea about an image
 			// what the hell am I going to do with those?
-			$pr_image = $pr_obj->get_first_obj_by_reltype(RELTYPE_PRJ_IMAGE);
+			/*$pr_image = $pr_obj->get_first_obj_by_reltype(RELTYPE_PRJ_IMAGE);
 
 
 			if ($pr_image)
@@ -551,24 +570,35 @@ class project extends class_base
 				$inst = $pr_image->instance();
 				$row["project_image"] = $inst->get_url_by_id($pr_image->id());
 			};
+			*/
 
-			$events[$e_obj->brother_of()] = array(
+			$eid = $e_obj->id();
+
+			$event_parent = $e_obj->parent();
+			$event_brother = $e_obj->brother_of();
+
+			enter_function("assign-event");
+			$events[$event_brother] = array(
 				"start" => $row["start"],
+				"pr" => $prid,
 				"name" => $e_obj->name(),
-				"parent" => $e_obj->parent(),
+				"parent" => $event_parent,
 				"lang_id" => $e_obj->lang_id(),
-				"id" => $e_obj->id(),
-				"project_image" => $row["project_image"],
+				"id" => $eid,
+				//"project_image" => $row["project_image"],
 				"original_id" => $row["brother_of"],
-				"project_weblink" => aw_ini_get("baseurl") . "/" . $web_page_id,
-				"project_day_url" => aw_ini_get("baseurl") . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$row["start"]),
+				//"project_weblink" => aw_ini_get("baseurl") . "/" . $web_page_id,
+				//"project_day_url" => aw_ini_get("baseurl") . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$row["start"]),
 				"project_name" => $project_name,
 				"project_name_ucase" => strtoupper($project_name),
 				"link" => $this->mk_my_orb("change",array(
-					"id" => $e_obj->id(),
+					"id" => $eid,
 				),$row["class_id"],true,true),
 			);
+			exit_function("assign-event");
 			$ids[$row["brother_of"]] = $row["brother_of"];
+
+			$by_parent[$event_parent][] = $event_brother;
 
 			if (++$limit_counter >= $limit_num && $limit_num)
 			{
@@ -576,7 +606,112 @@ class project extends class_base
 			}
 		};
 
+		// kas ma saan pr-i hiljem arvutada?
 		exit_function("project::query");
+
+		// kuidas ma saan sellest jamast lahti?
+
+		// now i have a list of all projects .. I need to figure out which menus connect to those projects
+		$web_pages = $project_images = array();
+		$c = new connection();
+
+		$conns = $c->find(array(
+			"from" => $projects,
+			"type" => RELTYPE_ORIGINAL,
+		));
+
+		obj_set_opt("no_auto_translation",1);
+		foreach($conns as $conn)
+		{
+			$from = $conn["from"];
+			$to = $conn["to"];
+			$xto = new object($to);
+			//$xtod = $xto->id();
+			//if ($projects[$from])
+			//{
+				//unset($projects[$from]);
+				$projects[$from] = $to;
+				//$projects[$to] = $from;
+			//};
+		};
+		obj_set_opt("no_auto_translation",0);
+
+
+		// nii .. ühesõnaga me diilime kogu aeg originaalprojektidega siin. eks?
+		$conns = $c->find(array(
+			"to" => $projects,
+			"from.lang_id" => aw_global_get("lang_id"),
+			"type" => 17,
+		));
+		foreach($conns as $conn)
+		{
+			$web_pages[$conn["to"]] = $conn["from"];
+		};
+
+		if (1 == $arr["first_image"])
+		{
+			$conns = $c->find(array(
+				"from" => $projects,
+				"type" => RELTYPE_PRJ_IMAGE,
+			));
+
+			$t_img = get_instance(CL_IMAGE);
+		
+
+			foreach($conns as $conn)
+			{
+				$project_images[$conn["from"]] = $t_img->get_url_by_id($conn["to"]);
+			};
+
+			$conns = $c->find(array(
+				"from" => $ids,
+				"type" => 1, // RELTYPE_PICTURE from CL_STAGING
+			));
+
+			foreach($conns as $conn)
+			{
+				$project_images[$conn["from"]] = $t_img->get_url_by_id($conn["to"]);
+			};
+
+			foreach($ids as $id)
+			{
+				$fx = $id;
+				$fxo = new object($fx);
+				$project_images[$fxo->id()] = $project_images[$fx];
+			};
+
+		};
+		
+		$baseurl = aw_ini_get("baseurl");
+
+		foreach($events as $key => $event)
+		{
+			$prid = $event["pr"];
+			if ($projects[$prid])
+			{
+				$prid = $projects[$prid];
+			};
+			if ($web_pages[$prid])
+			{
+				$web_page_id = $web_pages[$prid];
+				$events[$key]["project_weblink"] =  $baseurl . "/" . $web_page_id;
+				$events[$key]["project_day_url"] = $baseurl . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$event["start"]);
+			};
+
+			if ($project_images[$event["id"]])
+			{
+				$events[$key]["first_image"] = $project_images[$event["id"]];
+			}
+			else if ($project_images[$event["pr"]])
+			{
+				$events[$key]["first_image"] = $project_images[$event["pr"]];
+			}
+			else
+			{
+				$events[$key]["first_image"] = $baseurl . "/img/trans.gif";
+			};
+		};
+
 
 		if (sizeof($events) > 0)
 		{
@@ -594,6 +729,9 @@ class project extends class_base
 			$this->_recurse_projects2($mpr->id());
 			
 
+			// aaah, see on see bloody brother_list ju
+
+			// iga eventi kohta on vaja teada kõiki vendi
 			$ol = new object_list(array(
 				"brother_of" => $ids,
 				"lang_id" => array(),
@@ -615,17 +753,26 @@ class project extends class_base
 			// yield a list of project id's which is then matched against the 
 			// project level numbers - and this gives us the desired result
 
-			foreach($ol->arr() as $brot)
+			enter_function("find-parent");
+			$ox = $ol->arr();
+			foreach($ox as $brot)
 			{
+				// et siis teeme uue nimekirja kõigist objektidest, jees?
 				$prnt = new object($brot->parent());
-				$prj_level = $this->_ptree[$prnt->id()];
+				$pid = $prnt->id();
+				$prj_level = $this->_ptree[$pid];
+				enter_function("get-original");
 				$orig = $brot->get_original();
+				exit_function("get-original");
 
 				if ($prj_level)
 				{
-					$events[$orig->id()]["parent_" . $prj_level . "_name"] = $this->_pnames[$prnt->id()];
+					enter_function("project-assign-event");
+					$events[$orig->id()]["parent_" . $prj_level . "_name"] = $this->_pnames[$pid];
+					exit_function("project-assign-event");
 				};
 			};
+			exit_function("find-parent");
 
 		};
 
@@ -1007,21 +1154,6 @@ class project extends class_base
 		));
 		foreach($prj_conns as $prj_conn)
 		{
-			/*
-			global $XX5;
-			if ($XX5)
-			{
-				print "<h2>";
-				print $prj_conn->prop("from.name");
-				print " - ";
-				print $prj_conn->prop("from");
-				print " - ";
-				print $prj_conn->prop("to.name");
-				print " - ";
-				print $prj_conn->prop("to");
-				print "</h2>";
-			};
-			*/
 			$subprj_id = $prj_conn->prop("to");
 			$to = $prj_conn->to();
 			$this->prj_map[$parent][$subprj_id] = $subprj_id;
@@ -1378,6 +1510,8 @@ class project extends class_base
 		$project_obj = $obj;
 
 		// no need for that .. I just get the type from url
+
+		// argh .. projekti otse vaatamin on ikka paras sitt küll
 
 		$caldata = $cal_view->parse_alias(array(
 			"obj_inst" => $project_obj,
