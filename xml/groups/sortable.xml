@@ -1,9 +1,0 @@
-<?xml version='1.0'?>
-<grouplist>
-<field caption="#" value="rec"/>
-<field caption="GID" value="gid" sortable="1"/>
-<field caption="Tyyp" value="type" sortable="1"/>
-<field caption="Nimi" value="name" sortable="1"/>
-<field caption="Liikmeid" value="gcount" sortable="1"/>
-<field caption="Loodud" value="created" sortable="1"/>
-</grouplist>

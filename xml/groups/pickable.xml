@@ -1,8 +1,0 @@
-<?xml version='1.0'?>
-<grouplist>
-<field caption="X" value="rec" type="special" action="javascript:CheckAll()"/>
-<field caption="GID" value="gid" sortable="1"/>
-<field caption="Tyyp" value="type" sortable="1"/>
-<field caption="Nimi" value="name" sortable="1"/>
-<field caption="Loodud" value="created"/>
-</grouplist>
