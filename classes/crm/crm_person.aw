@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.78 2005/03/24 10:02:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.79 2005/03/24 11:13:47 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -90,7 +90,7 @@ caption Msn/yahoo/aol/icq
 @property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik group=contact
 @caption Organisatsioon
 
-@property org_section type=relpicker reltype=RELTYPE_SECTION multiple=1 table=objects field=meta method=serialize group=contact
+@property org_section type=relpicker reltype=RELTYPE_SECTION multiple=1 table=objects field=meta method=serialize group=contact store=connect
 @caption Osakond
 
 @property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact

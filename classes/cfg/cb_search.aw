@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.27 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.28 2005/03/24 11:13:47 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -169,6 +169,12 @@ class cb_search extends class_base
 		));	
 
 		$t->define_field(array(
+			"name" => "search_tb",
+			"caption" => t("Tekstikast otsimiseks"),
+			"align" => "center",
+		));	
+
+		$t->define_field(array(
 			"name" => "caption",
 			"caption" => t("Tekst"),
 			"align" => "center",
@@ -210,6 +216,11 @@ class cb_search extends class_base
 					"name" => "form_dat[$clid][$pn][search_mult]",
 					"value" => 1,
 					"checked" => ($form_dat[$clid][$pn]["search_mult"] == 1)
+				)),
+				"search_tb" => html::checkbox(array(
+					"name" => "form_dat[$clid][$pn][search_tb]",
+					"value" => 1,
+					"checked" => ($form_dat[$clid][$pn]["search_tb"] == 1)
 				)),
 				"caption" => html::textbox(array(
 					"name" => "form_dat[$clid][$pn][caption]",
@@ -324,6 +335,10 @@ class cb_search extends class_base
 				}
 			}
 
+			if ($this->form_dat[$item["clid"]][$iname]["search_tb"] == 1)
+			{
+				$item["type"] = "textbox";
+			}
 			$res[$iname] = $item;
 
 			if ($item["type"] == "classificator")
@@ -449,6 +464,9 @@ class cb_search extends class_base
 				$price_props[$td_p] = $td_p;
 			}
 		}
+
+		$clss = aw_ini_get("classes");
+
 		// now do the actual bloody search
 		foreach($this->search_data as $clid => $data)
 		{
@@ -485,7 +503,14 @@ class cb_search extends class_base
 
 					if ($this->in_form[$key]["type"] == "classificator" || $this->in_form[$key]["type"] == "relpicker" || $this->in_form[$key]["type"] == "relmanager")
 					{
-						$sdata[$key] = $val;
+						if ($this->form_dat[$clid][$key]["search_tb"] == 1)
+						{
+							$sdata[$clss[$clid]["def"].".".$f_props[$key]["reltype"].".name"] = "%".$val."%";
+						}
+						else
+						{
+							$sdata[$key] = $val;
+						}
 					}
 					else
 					if ($this->form_dat[$clid][$key]["search_mult"])

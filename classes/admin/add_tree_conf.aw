@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.29 2005/03/18 11:46:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.30 2005/03/24 11:13:46 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -50,6 +50,13 @@ class add_tree_conf extends class_base
 		}
 
 		return PROP_OK;
+	}
+
+	function callback_pre_save($arr)
+	{
+		// save folder structure from ini file
+		$arr["obj_inst"]->set_meta("folder_structure", aw_ini_get("classfolders"));
+		$arr["obj_inst"]->set_meta("class_structure", aw_ini_get("classes"));
 	}
 
 	function _do_sel_tbl(&$arr, $visible, $usable, $alias_add)
@@ -267,12 +274,21 @@ class add_tree_conf extends class_base
 		$v = $o->meta("visible");
 		$ret = array();
 
-		$clss = aw_ini_get("classes");
-		$grps = aw_ini_get("classfolders");
+		$clss = $o->meta("class_structure");
+		if (!is_array($clss))
+		{
+			$clss = aw_ini_get("classes");
+		}
+
+		$grps = $o->meta("folder_structure");
+		if (!is_array($grps))
+		{
+			$grps = aw_ini_get("classfolders");
+		}
 
 		foreach($r as $clid => $one)
 		{
-			if (true || $one == 1)
+			if ($one == 1)
 			{
 				// also, if the class is in some groups and for all those groups access has been turned off
 				// do not show the alias
@@ -306,13 +322,12 @@ class add_tree_conf extends class_base
 					$show = true;
 				}
 
-				if ($show /*&& $clid != CL_MENU*/)
+				if ($show)
 				{
 					$ret[$clid] = $clid;
 				}
 			}
 		}
-		//$ret[CL_MENU] = CL_MENU;
 		return $ret;
 	}
 
@@ -326,13 +341,21 @@ class add_tree_conf extends class_base
 	**/
 	function can_access_class($atc, $class)
 	{
-	return true;
-		$grps = aw_ini_get("classfolders");
+		$grps = $atc->meta("folder_structure");
+		if (!is_array($grps))
+		{
+			$grps = aw_ini_get("classfolders");
+		}
 		$us = $atc->meta("usable");
 		
 		$class_id = false;
 		
-		$clss = aw_ini_get("classes");
+		$clss = $atc->meta("class_structure");
+		if (!is_array($clss))
+		{
+			$clss = aw_ini_get("classes");
+		}
+
 		if (is_class_id($class))
 		{
 			$class_id = $class;

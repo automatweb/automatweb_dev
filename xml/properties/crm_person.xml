@@ -221,6 +221,7 @@
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
+            <store>connect</store>
             <caption>Osakond</caption>
       </property>
       <property>

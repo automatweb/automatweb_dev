@@ -1457,6 +1457,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					$str .= " objects_".$join["from_class"].".oid ";
 				}
+
+				if ($join["reltype"])
+				{
+					$str .= " AND aliases_".$join["from_class"].".reltype = ".$join["reltype"];
+				}
 				$this->joins[] = $str;
 
 				$str  = " LEFT JOIN objects objects_".$join["to_class"]." ON aliases_".$join["from_class"].".target = ";
@@ -1487,7 +1492,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$field = $new_t[$tbl]["index"];
 					}
 
-					$this->joins[] = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$prev_t.".target ";
+					$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$prev_t.".target ";
+					$this->joins[] = $str;
 					$ret = array(
 						$tbl,
 						$join["field"],
