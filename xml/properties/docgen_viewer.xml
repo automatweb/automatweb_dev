@@ -1,9 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <comment></comment>
-      </property>
-      <property>
             <name>foorum</name>
             <table>objects</table>
             <group>general</group>
