@@ -15,10 +15,17 @@
 	@property searching callback=search
 */
 
-//define ('',6);
-
 class popup_objmgr extends class_base
 {
+	function popup_objmgr()
+	{
+		$this->init(array(
+			'clid' => CL_POPUP_OBJMGR,
+			"tpldir" => "popup_objmgr",
+		));
+
+	}
+
 	function search($args = array())
 	{
 		extract($args);
@@ -84,8 +91,10 @@ arr($args,1);
 	{
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
 		$choices = array();
-		$classes = $this->cfg["classes"];
+		
+		//$classes = $this->cfg["classes"];
 		//print_r($classes);
+		/*
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
@@ -110,6 +119,7 @@ arr($args,1);
 			"imgover" => "new_over.gif",
 			"img" => "new.gif",
 		));
+		*/
 
 		$toolbar->add_button(array(
 			"name" => "search",
@@ -178,6 +188,7 @@ arr($args,1);
 				"type" => "select",
 				"caption" => "Klass",
 				"options" => $choices,
+				"selected" => $args["s"]["class_id"],
 //			"selected" => $args['force_clid'],
 			);
 		}
@@ -215,14 +226,6 @@ arr($args,1);
 		return $retval;
 	}
 
-	function popup_objmgr()
-	{
-		$this->init(array(
-			'clid' => CL_POPUP_OBJMGR,
-			"tpldir" => "popup_objmgr",
-		));
-
-	}
 
 }
 ?>
