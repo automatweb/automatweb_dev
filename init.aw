@@ -234,7 +234,13 @@ function lc_load($file)
 function lc_site_load($file,&$obj)
 {
 //	enter_function("__global::lc_site_load",array());
-	global $LC;
+	$LC = aw_global_get("LC");
+	$fname = aw_ini_get("site_basedir")."/lang/".$LC."/$file.".aw_ini_get("ext");
+	global $DLC;
+	if ($DLC)
+	{
+		print "fn = $fname<br>";
+	};
 	@include_once(aw_ini_get("site_basedir")."/lang/" . $LC . "/$file.".aw_ini_get("ext"));
 	if ($obj)
 	{
@@ -283,7 +289,7 @@ function get_instance($class,$args = array())
 		preg_match("/(\w*)$/",$class,$m);
 		$lib = $m[1];
 		$lib = "$classdir/$lib.$ext";
-		@include_once($lib);
+		include_once($lib);
 		if (sizeof($args) > 0)
 		{
 			$instance = new $class($args);
@@ -341,6 +347,9 @@ function aw_startup()
 	classload("users");
 	$u = new users;
 	$u->request_startup();
+
+	$syslog = get_instance("syslog");
+	$syslog->request_startup();
 
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_e = $sec + $micro;
