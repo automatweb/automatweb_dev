@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.18 2002/06/10 15:50:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.19 2002/07/17 20:33:24 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -101,7 +101,7 @@ class acl_base extends core
 				}
 				else
 				{
-					$a = aw_ini_set("acl.denied");
+					$a = aw_ini_get("acl.denied");
 				}
 			}
 			else
