@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.12 2002/11/26 12:38:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.13 2002/11/27 15:21:53 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -67,7 +67,7 @@ class html extends aw_template
 			$args["width"] = $cols * 10;
 			$args["height"] = $rows * 10;
 			$args["value"] = str_replace("\"","&quot;",$args["value"]);
-			$retval = $this->richtext($args);
+			$retval = html::richtext($args);
 		}
 		else
 		{
