@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.20 2005/03/14 17:27:29 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.21 2005/03/20 14:51:54 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -343,7 +343,7 @@ class docgen_viewer extends class_base
 	{
 		set_time_limit(0);
 		$method = $arr["method"];
-		$p = get_instance("parser");
+		$p = get_instance("core/docgen/parser");
 		$files = array();
 		$p->_get_class_list(&$files, $this->cfg["classdir"]);
 		
@@ -768,7 +768,7 @@ class docgen_viewer extends class_base
 	{
 		extract($arr);
 		$files = array();
-		$p = get_instance("parser");
+		$p = get_instance("core/docgen/parser");
 		$p->_get_class_list($files,$this->cfg["classdir"]);
 
 		foreach($files as $file)

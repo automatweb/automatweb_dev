@@ -3,7 +3,7 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_orb_gen.aw,v 1.5 2004/11/12 12:16:56 ahti Exp $
+	@cvs $Id: docgen_orb_gen.aw,v 1.6 2005/03/20 14:51:54 kristo Exp $
 
 	@comment 
 	generates orb defs, based on information from docgen_analyzer
@@ -249,7 +249,7 @@ class docgen_orb_gen extends class_base
 	
 	function make_orb_defs_from_doc_comments()
 	{
-		$p = get_instance("parser");
+		$p = get_instance("core/docgen/parser");
 		$files = array();
 		$p->_get_class_list(&$files, $this->cfg["basedir"]."/classes");
 
