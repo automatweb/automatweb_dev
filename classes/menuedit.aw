@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.144 2002/08/06 10:39:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.145 2002/08/06 15:10:07 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -3987,7 +3987,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			$num_menu_images = $this->cfg["num_menu_images"];
 			$has_image = false;
-			$imgar = $meta["menu_images"];
+			if (is_array($meta["menu_images"]))
+			{
+				$imgar = $meta["menu_images"];
+			}
+			else
+			{
+				$imgar = array();
+			}
 			for ($_i=0; $_i < $num_menu_images; $_i++)
 			{
 				if ($imgar[$_i]["url"] != "")
