@@ -1,17 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>topic_folder</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TOPIC_FOLDER</reltype>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Teemade kataloog</caption>
-            <comment>Sellest kataloogist võetakse foorumi teemasid</comment>
-      </property>
-      <property>
             <name>address_folder</name>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_FOLDER</reltype>
@@ -26,7 +15,7 @@
       </property>
       <property>
             <name>topics_on_page</name>
-            <type>select</type>
+            <type>chooser</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -35,7 +24,7 @@
       </property>
       <property>
             <name>comments_on_page</name>
-            <type>select</type>
+            <type>chooser</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -44,7 +33,7 @@
       </property>
       <property>
             <name>topic_depth</name>
-            <type>select</type>
+            <type>chooser</type>
             <default>1</default>
             <table>objects</table>
             <group>general</group>
@@ -54,9 +43,9 @@
       </property>
       <property>
             <name>topic_selector</name>
-            <type>callback</type>
-            <callback>callback_get_topic_selector</callback>
+            <type>text</type>
             <group>topic_selector</group>
+            <no_caption>1</no_caption>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>

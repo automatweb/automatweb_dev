@@ -428,6 +428,14 @@
             <caption>Kestab</caption>
       </property>
       <property>
+            <name>doc_modified</name>
+            <type>hidden</type>
+            <table>documents</table>
+            <field>modified</field>
+            <group>general</group>
+            <caption>Dok. modified</caption>
+      </property>
+      <property>
             <name>link_calendars</name>
             <type>callback</type>
             <store>no</store>

@@ -40,6 +40,7 @@
             <name>aliasmgr</name>
             <type>aliasmgr</type>
             <no_caption>1</no_caption>
+            <store>no</store>
             <table>planner</table>
             <group>general</group>
             <field>aliasmgr</field>

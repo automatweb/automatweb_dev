@@ -320,7 +320,11 @@
             </EVENT_SOURCE>
             <EVENT>
                   <value>3</value>
-                  <clid>CL_TASK</clid>
+                  <clid>
+                        <num_0>CL_TASK</num_0>
+                        <num_1>CL_CRM_CALL</num_1>
+                        <num_2>CL_CRM_MEETING</num_2>
+                  </clid>
                   <caption>sündmus</caption>
             </EVENT>
             <DC_RELATION>

@@ -2,7 +2,7 @@
 <properties>
       <property>
             <name>event_list</name>
-            <type>table</type>
+            <type>calendar</type>
             <group>event_list</group>
             <no_caption>1</no_caption>
             <store>no</store>
