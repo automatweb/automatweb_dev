@@ -1,0 +1,24 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>name</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>name</field>
+            <caption>Number</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PHONE</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+
