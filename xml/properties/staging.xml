@@ -39,8 +39,7 @@
             <group>projects</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>cb_project_selector</callback>
+            <type>project_selector</type>
             <store>no</store>
             <all_projects>1</all_projects>
             <caption>Projektid</caption>
