@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.31 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.32 2001/09/12 20:17:10 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -282,13 +282,16 @@ lc_load("definition");
 				return "";
 
 			global $lang_id;
-			if ($this->form->lang_id == $lang_id)
+			if (!$this->arr["ignore_text"])
 			{
-				$text = $this->arr["text"];
-			}
-			else
-			{
-				$text = $this->arr["lang_text"][$lang_id];
+				if ($this->form->lang_id == $lang_id)
+				{
+					$text = $this->arr["text"];
+				}
+				else
+				{
+					$text = $this->arr["lang_text"][$lang_id];
+				}
 			}
 
 			$html = trim($text)." ";
