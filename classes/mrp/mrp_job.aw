@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.24 2005/03/22 11:13:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.25 2005/03/22 20:54:15 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -31,6 +31,10 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 	@property post_buffer type=textbox
 	@caption Järelpuhveraeg (h)
+
+	@property minstart type=datetime_select
+	@comment Enne seda kuupäeva, kellaaega ei lubata tööd alustada
+	@caption Varaseim alustusaeg
 
 	@property resource type=text
 	@caption Ressurss
@@ -79,6 +83,7 @@ CREATE TABLE `mrp_job` (
   `resource` int(11) unsigned default NULL,
   `exec_order` smallint(5) unsigned NOT NULL default '1',
   `project` int(11) unsigned default NULL,
+  `minstart` int(10) unsigned default NULL,
   `starttime` int(10) unsigned default NULL,
   `prerequisites` char(255) default NULL,
   `state` tinyint(2) unsigned default '1',
@@ -121,7 +126,7 @@ class mrp_job extends class_base
 	{
 		$this->states = array(
 			MRP_STATUS_NEW => t("Uus"),
-			MRP_STATUS_PLANNED => t("Töösse planeeritud"),
+			MRP_STATUS_PLANNED => t("Planeeritud"),
 			MRP_STATUS_INPROGRESS => t("Töös"),
 			MRP_STATUS_ABORTED => t("Katkestatud"),
 			MRP_STATUS_DONE => t("Valmis"),
@@ -330,7 +335,13 @@ class mrp_job extends class_base
 **/
 	function start ($arr)
 	{
-		$errors = false;
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
 
 		if (is_oid ($arr["id"]))
 		{
@@ -338,10 +349,12 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Töö id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project =& $this->get_project ($arr);
+		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_project_states = array (
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_INPROGRESS,
@@ -349,6 +362,16 @@ class mrp_job extends class_base
 		$applicable_job_states = array (
 			MRP_STATUS_PLANNED,
 		);
+
+		if (!in_array ($project->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Projekt pole töös ega planeeritud");
+		}
+
+		if (!in_array ($this_object->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Töö pole planeeritud");
+		}
 
 		### check if prerequisites are done
 		$prerequisites = explode (",", $this_object->prop ("prerequisites"));
@@ -367,55 +390,66 @@ class mrp_job extends class_base
 			}
 			else
 			{
-				return false;
+				$errors[] = t("Eeldustööd tegemata");
 			}
 		}
 
+		### reserve resource
 		$mrp_resource = get_instance(CL_MRP_RESOURCE);
 		$resource_is_reserved = $mrp_resource->start_job(array("resource" => $this_object->prop("resource")));
 
-		if ( (in_array ($project->prop ("state"), $applicable_project_states)) and (in_array ($this_object->prop ("state"), $applicable_job_states)) and $prerequisites_done and $resource_is_reserved )
+		if (!$resource_is_reserved)
 		{
+			$errors[] = t("Ressurss kinni");
+		}
+
+		### if no errors, save
+		if ($errors)
+		{
+			### free resource and exit
+			$mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
+		{
+			### start project if first job
 			if (((int) $this_object->prop ("exec_order")) === 1)
 			{
-				### start project
 				$mrp_case = get_instance(CL_MRP_RESOURCE);
 				$project_start = $mrp_case->start(array("id" => $project->id ()));
 
-				if (!$project_start)
+				$project_errors = parse_url($project_start);
+				$project_errors = explode("&", $project_errors["query"]);
+				$project_errors = unserialize(urldecode($project_errors["errors"]));
+
+				if ($project_errors)
 				{
-					$errors = true;
+					$errors[] = t("Projekti alustamine ebaõnnestus");
+					$errors = array_merge($errors, $project_errors);
+
+					### free resource and exit
+					$mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
+					$errors = urlencode(serialize($errors));
+					return aw_url_change_var ("errors", $errors, $return_url);
 				}
 			}
 
 			### set project state & progress
 			$progress = time () + $this_object->prop ("planned_length");
-			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
 			$project->set_prop ("progress", $progress);
 
 			### start job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
-		}
-		else
-		{
-			$errors = true;
-		}
 
-		if ($errors)
-		{
-			### free resource and exit
-			$mrp_resource->stop_job(array("resource" => $this_object->prop("resource")));
-			return false;
-		}
-		else
-		{
 			### log
 			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 
 			### all went well, save and say OK
 			$this_object->save ();
 			$project->save ();
-			return true;
+
+			return $return_url;
 		}
 	}
 
@@ -425,21 +459,42 @@ class mrp_job extends class_base
 **/
 	function done ($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid ($arr["id"]))
 		{
 			$this_object = obj ($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Töö id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
+		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 		);
 
-		if (in_array ($this_object->prop ("state"), $applicable_states))
+		if (!in_array ($this_object->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Töö staatus sobimatu");
+		}
+
+		### ...
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### finish job
 			$this_object->set_prop ("state", MRP_STATUS_DONE);
@@ -476,7 +531,17 @@ class mrp_job extends class_base
 			{
 				### finish project
 				$mrp_case = get_instance(CL_MRP_RESOURCE);
-				$mrp_case->finish(array("id" => $project->id ()));
+				$project_finish = $mrp_case->finish(array("id" => $project->id ()));
+
+				$project_errors = parse_url($project_finish);
+				$project_errors = explode("&", $project_errors["query"]);
+				$project_errors = unserialize(urldecode($project_errors["errors"]));
+
+				if ($project_errors)
+				{
+					$errors[] = t("Projekti lõpetamine ebaõnnestus");
+					$errors = array_merge($errors, $project_errors);
+				}
 			}
 			else
 			{
@@ -485,11 +550,8 @@ class mrp_job extends class_base
 				$project->save ();
 			}
 
-			return true;
-		}
-		else
-		{
-			return false;
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 	}
 
@@ -499,13 +561,23 @@ class mrp_job extends class_base
 **/
 	function abort ($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid ($arr["id"]))
 		{
 			$this_object = obj ($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Töö id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
 		$applicable_states = array (
@@ -513,7 +585,18 @@ class mrp_job extends class_base
 			MRP_STATUS_PAUSED,
 		);
 
-		if (in_array ($this_object->prop ("state"), $applicable_states))
+		if (!in_array ($this_object->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Töö pole tegemisel");
+		}
+
+		### ...
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### abort job
 			$this_object->set_prop ("state", MRP_STATUS_ABORTED);
@@ -527,11 +610,7 @@ class mrp_job extends class_base
 			$ws = get_instance(CL_MRP_WORKSPACE);
 			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 
-			return true;
-		}
-		else
-		{
-			return false;
+			return $return_url;
 		}
 	}
 
@@ -541,21 +620,42 @@ class mrp_job extends class_base
 **/
 	function pause($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid ($arr["id"]))
 		{
 			$this_object = obj ($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Töö id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
+		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 		);
 
-		if (in_array ($this_object->prop ("state"), $applicable_states))
+		if (!in_array ($this_object->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Töö pole tegemisel");
+		}
+
+		### ...
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### pause job
 			$this_object->set_prop ("state", MRP_STATUS_PAUSED);
@@ -570,11 +670,7 @@ class mrp_job extends class_base
 			$ws = get_instance (CL_MRP_WORKSPACE);
 			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 
-			return true;
-		}
-		else
-		{
-			return false;
+			return $return_url;
 		}
 	}
 
@@ -584,16 +680,26 @@ class mrp_job extends class_base
 **/
 	function scontinue($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid ($arr["id"]))
 		{
 			$this_object = obj ($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Töö id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
+		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_project_states = array (
 			MRP_STATUS_INPROGRESS,
 			// MRP_STATUS_ONHOLD,
@@ -602,7 +708,23 @@ class mrp_job extends class_base
 			MRP_STATUS_PAUSED,
 		);
 
-		if ( (in_array ($project->prop ("state"), $applicable_project_states)) and (in_array ($this_object->prop ("state"), $applicable_job_states)) )
+		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
+		{
+			$errors[] = t("Töö pole pausil");
+		}
+
+		if (!in_array ($project->prop ("state"), $applicable_project_states))
+		{
+			$errors[] = t("Projekt pole jätkatav");
+		}
+
+		### ...
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### continue job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
@@ -617,11 +739,7 @@ class mrp_job extends class_base
 			$ws = get_instance(CL_MRP_WORKSPACE);
 			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 
-			return true;
-		}
-		else
-		{
-			return false;
+			return $return_url;
 		}
 	}
 
@@ -631,21 +749,42 @@ class mrp_job extends class_base
 **/
 	function end_shift($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid ($arr["id"]))
 		{
 			$this_object = obj ($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Töö id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
-		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
+		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 		);
 
-		if (in_array ($this_object->prop ("state"), $applicable_states))
+		if (!in_array ($this_object->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Töö pole tegemisel");
+		}
+
+		### ...
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### pause job
 			$this_object->set_prop ("state", MRP_STATUS_PAUSED);
@@ -664,11 +803,7 @@ class mrp_job extends class_base
 			$u = get_instance("users");
 			$u->orb_logout();
 
-			return true;
-		}
-		else
-		{
-			return false;
+			return $return_url;
 		}
 	}
 

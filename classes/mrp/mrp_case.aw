@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.38 2005/03/22 11:13:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.39 2005/03/22 20:54:14 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -20,6 +20,10 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_schedule caption="Kalender" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
+
+
+
+	@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_details,grp_case_schedule,grp_general,grp_case_workflow editonly=1
 
 
 @default group=grp_general
@@ -172,13 +176,9 @@ default group=grp_case_material
 
 
 @default group=grp_case_workflow
-	@property workflow_toolbar type=toolbar store=no no_caption=1
 	@property manager type=text no_caption=1 store=no wrapchildren=1
 	@property resource_tree type=text store=no no_caption=1 parent=manager
 	@property workflow_table type=table store=no no_caption=1 parent=manager
-
-	// @property set_plannable type=checkbox store=no ch_value=1
-	// @caption Planeeri projekti
 
 
 @default group=grp_case_schedule
@@ -259,7 +259,7 @@ class mrp_case extends class_base
 	{
 		$this->states = array (
 			MRP_STATUS_NEW => t("Uus"),
-			MRP_STATUS_PLANNED => t("Töösse planeeritud"),
+			MRP_STATUS_PLANNED => t("Planeeritud"),
 			MRP_STATUS_INPROGRESS => t("Töös"),
 			MRP_STATUS_ABORTED => t("Katkestatud"),
 			MRP_STATUS_DONE => t("Valmis"),
@@ -269,7 +269,7 @@ class mrp_case extends class_base
 			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
 			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
 		);
-	
+
 		$this->init(array(
 			"tpldir" => "mrp/mrp_case",
 			"clid" => CL_MRP_CASE
@@ -750,14 +750,17 @@ class mrp_case extends class_base
 		$this_object =& $arr["obj_inst"];
 		$toolbar =& $arr["prop"]["toolbar"];
 
-		$toolbar->add_button(array(
-			"name" => "delete",
-			"img" => "delete.gif",
-			"tooltip" => t("Kustuta valitud töö(d)"),
-			"confirm" => t("Kustutada kõik valitud tööd?"),
-			"action" => "delete",
-		));
-		$toolbar->add_separator();
+		if ($arr["request"]["group"] == "grp_case_workflow")
+		{
+			$toolbar->add_button(array(
+				"name" => "delete",
+				"img" => "delete.gif",
+				"tooltip" => t("Kustuta valitud töö(d)"),
+				"confirm" => t("Kustutada kõik valitud tööd?"),
+				"action" => "delete",
+			));
+			$toolbar->add_separator();
+		}
 		// $toolbar->add_button(array(
 			// "name" => "test",
 			// "img" => "preview.gif",
@@ -784,7 +787,6 @@ class mrp_case extends class_base
 
 		### states for taking a project out of scheduling
 		$applicable_states = array(
-			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PLANNED,
 		);
 
@@ -863,6 +865,11 @@ class mrp_case extends class_base
 		$table->define_field(array(
 			"name" => "comment",
 			"caption" => t("Kommentaar"),
+			"align" => "center"
+		));
+		$table->define_field(array(
+			"name" => "minstart",
+			"caption" => t("Min. algusaeg"),
 			"align" => "center"
 		));
 		$table->define_field(array(
@@ -998,11 +1005,17 @@ class mrp_case extends class_base
 					"disabled" => $disabled,
 					)
 				),
+				"minstart" => html::datetime_select(array(
+					"name" => "mrp_workflow_job-" . $job_id . "-minstart",
+					"value" => $job->prop ("minstart"),
+					"disabled" => $disabled,
+					)
+				),
 				"exec_order" => $job->prop ("exec_order"),
 				"starttime" => $planned_start,
 				"status" => $status,
 				"job_id" => $job_id,
-				"comment" => $comment
+				"comment" => $comment,
 			));
 		}
 	}
@@ -1130,6 +1143,11 @@ class mrp_case extends class_base
 								///!!! spetsif veateade
 								$errors .= "Viga";
 							}
+							break;
+
+						case "minstart":
+							$minstart = mktime ($value["hour"], $value["minute"], 0, $value["month"], $value["day"], $value["year"]);
+							$job->set_prop ("minstart", $minstart);
 							break;
 					}
 
@@ -1561,13 +1579,23 @@ class mrp_case extends class_base
 **/
 	function start ($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid($arr["id"]))
 		{
 			$project = obj($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Projekti id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
 		### states for starting a project
@@ -1575,7 +1603,18 @@ class mrp_case extends class_base
 			MRP_STATUS_PLANNED,
 		);
 
-		if (in_array ($project->prop ("state"), $applicable_states))
+		if (!in_array ($project->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Projekt pole planeeritud");
+		}
+
+		### ...
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### start project
 			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
@@ -1585,11 +1624,9 @@ class mrp_case extends class_base
 			### log change
 			$ws = get_instance (CL_MRP_WORKSPACE);
 			$ws->mrp_log ($project->id (), NULL, "Projekt l&auml;ks t&ouml;&ouml;sse");
-			return true;
-		}
-		else
-		{
-			return false;
+
+
+			return $return_url;
 		}
 	}
 
@@ -1599,13 +1636,23 @@ class mrp_case extends class_base
 **/
 	function finish ($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid($arr["id"]))
 		{
 			$project = obj($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Projekti id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
 		### check if all jobs are done
@@ -1613,39 +1660,52 @@ class mrp_case extends class_base
 			"class_id" => CL_MRP_JOB,
 			"project" => $project->id (),
 		));
-		$jobs = $job_list->count ();
+		$jobs = (int) $job_list->count ();
 
 		### states for jobs that allow finishing a project
 		$applicable_states = array (
 			MRP_STATUS_DONE,
 		);
-		$jobs_done = $job_list->filter (array (
+		$jobs_done = (int) $job_list->filter (array (
 			"state" => $applicable_states,
 		));
+
+		if ($jobs_done != $jobs)
+		{
+			$errors[] = t("Projekti tööd pole kõik valmis");
+		}
 
 		### states for finishing a project
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 		);
 
-		if (in_array ($project->prop ("state"), $applicable_states) and ($jobs_done == $jobs))
+		if (!in_array ($project->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Projekt pole töös");
+		}
+
+		### ...
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### finish project
 			$project->set_prop ("state", MRP_STATUS_DONE);
 			$project->save ();
 
 			### log event
+			$ws = get_instance(CL_MRP_WORKSPACE);
 			$ws->mrp_log(
 				$project->id(),
 				NULL,
 				"Projekt l&otilde;petati"
 			);
 
-			return true;
-		}
-		else
-		{
-			return false;
+			return $return_url;
 		}
 	}
 
@@ -1655,13 +1715,23 @@ class mrp_case extends class_base
 **/
 	function abort ($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid($arr["id"]))
 		{
 			$project = obj($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Projekti id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
 		### states for aborting a project
@@ -1669,7 +1739,18 @@ class mrp_case extends class_base
 			MRP_STATUS_INPROGRESS,
 		);
 
-		if (in_array ($this_object->prop ("state"), $applicable_states))
+		if (!in_array ($project->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Projekt pole töös");
+		}
+
+		### if no errors, abort project
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### abort project
 			$this_object->set_prop ("state", MRP_STATUS_ABORTED);
@@ -1679,11 +1760,7 @@ class mrp_case extends class_base
 			$ws = get_instance(CL_MRP_WORKSPACE);
 			$ws->mrp_log ($this_object->id (), NULL, "Projekt katkestati");
 
-			return true;
-		}
-		else
-		{
-			return false;
+			return $return_url;
 		}
 	}
 
@@ -1693,13 +1770,23 @@ class mrp_case extends class_base
 **/
 	function archive ($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid($arr["id"]))
 		{
 			$project = obj($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Projekti id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
 		### states for archiving a project
@@ -1707,24 +1794,32 @@ class mrp_case extends class_base
 			MRP_STATUS_DONE,
 		);
 
-		if (in_array($project->prop("state"), $applicable_states))
+		if (!in_array ($project->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Projekt pole valmis");
+		}
+
+		### if no errors, archive project
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### archive project
 			$project->set_prop("state", MRP_STATUS_ARCHIVED);
 			$project->save();
 
 			### log event
+			$ws = get_instance(CL_MRP_WORKSPACE);
 			$ws->mrp_log(
 				$project->id(),
 				NULL,
 				"Projekt arhiveeriti"
 			);
 
-			return true;
-		}
-		else
-		{
-			return false;
+			return $return_url;
 		}
 	}
 
@@ -1734,13 +1829,23 @@ class mrp_case extends class_base
 **/
 	function plan ($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid($arr["id"]))
 		{
 			$project = obj($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Projekti id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
 		### states for planning a project
@@ -1750,9 +1855,23 @@ class mrp_case extends class_base
 			MRP_STATUS_ONHOLD,
 		);
 
-		if (in_array($project->prop("state"), $applicable_states))
+		if (!in_array ($project->prop ("state"), $applicable_states))
+		{
+			$errors[] = t("Projekt pole planeerimiseks valmis");
+		}
+
+		### if no errors, plan project
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
 		{
 			### plan project
+			$project->set_prop("state", MRP_STATUS_PLANNED);
+			$project->save();
+
 			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 
 			if ($workspace)
@@ -1761,17 +1880,14 @@ class mrp_case extends class_base
 			}
 
 			### log event
+			$ws = get_instance(CL_MRP_WORKSPACE);
 			$ws->mrp_log(
 				$project->id(),
 				NULL,
 				"Projekt sisestati planeerimisse"
 			);
 
-			return true;
-		}
-		else
-		{
-			return false;
+			return $return_url;
 		}
 	}
 
@@ -1781,13 +1897,23 @@ class mrp_case extends class_base
 **/
 	function set_on_hold ($arr)
 	{
+		$errors = array ();
+		$return_url = $this->mk_my_orb("change", array(
+			"id" => $arr["id"],
+			"return_url" => urlencode ($arr["return_url"]),
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
+		), "mrp_case");
+
 		if (is_oid($arr["id"]))
 		{
 			$project = obj($arr["id"]);
 		}
 		else
 		{
-			return false;
+			$errors[] = t("Projekti id vale");
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
 		### states for taking a project out of schedule
@@ -1796,24 +1922,32 @@ class mrp_case extends class_base
 			MRP_STATUS_PLANNED,
 		);
 
-		if (in_array($project->prop("state"), $applicable_states))
+		if (!in_array ($project->prop ("state"), $applicable_states))
 		{
-			### archive project
+			$errors[] = t("Projekti staatus sobimatu");
+		}
+
+		### if no errors, set project on hold
+		if ($errors)
+		{
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
+		}
+		else
+		{
+			### set project on hold
 			$project->set_prop("state", MRP_STATUS_ONHOLD);
 			$project->save();
 
 			### log event
+			$ws = get_instance(CL_MRP_WORKSPACE);
 			$ws->mrp_log(
 				$project->id(),
 				NULL,
-				"Projekt võeti planeeimisest välja"
+				"Projekt võeti planeerimisest välja"
 			);
 
-			return true;
-		}
-		else
-		{
-			return false;
+			return $return_url;
 		}
 	}
 }

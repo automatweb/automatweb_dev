@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.51 2005/03/22 09:06:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.52 2005/03/22 20:54:15 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -465,19 +465,28 @@ class mrp_workspace extends class_base
 			case "projects_toolbar":
 				$this->create_projects_toolbar ($arr);
 				break;
+
 			case "projects_tree":
 				$this->create_projects_tree ($arr);
 				break;
+
 			case "projects_list":
-				if ($arr["request"]["mrp_projects_show"] == "subcontracts")
+				switch ($arr["request"]["mrp_projects_show"])
 				{
-					$this->create_jobs_list ($arr);
-				}
-				else
-				{
-					$this->create_projects_list ($arr);
+					case "subcontracts":
+						$this->create_subcontract_jobs_list ($arr);
+						break;
+
+					case "aborted_jobs":
+						$this->create_aborted_jobs_list ($arr);
+						break;
+
+					default:
+						$this->create_projects_list ($arr);
+						break;
 				}
 				break;
+
 			case "legend":
 				$prop["value"] = '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_PLANNED_OVERDUE . '; border: 1px solid black;">&nbsp;</span> '.t("&Uuml;le t&auml;htaja planeeritud").'</div>';
 				$prop["value"] .= '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_OVERDUE . '; border: 1px solid black;">&nbsp;</span> '.t("&Uuml;le t&auml;htaja l&auml;inud").'</div>';
@@ -1118,6 +1127,12 @@ class mrp_workspace extends class_base
 			"url" => aw_url_change_var ("mrp_projects_show", "subcontracts"),
 		));
 
+		$tree->add_item (0, array (
+			"name" => t("Katkestatud t&ouml;&ouml;d"),
+			"id" => "aborted_jobs",
+			"url" => aw_url_change_var ("mrp_projects_show", "aborted_jobs"),
+		));
+
 		$active_node = empty ($arr["request"]["mrp_projects_show"]) ? "planned" : $arr["request"]["mrp_projects_show"];
 		$tree->set_selected_item ($active_node);
 		$arr["prop"]["value"] = $tree->finalize_tree ();
@@ -1161,7 +1176,7 @@ class mrp_workspace extends class_base
 			case "aborted":
 				$table->define_field (array (
 					"name" => "starttime",
-			"caption" => t("Materjalide saabumine"),
+					"caption" => t("Materjalide saabumine"),
 					"chgbgcolor" => "bgcolour_overdue",
 					"sortable" => 1,
 				));
@@ -1173,7 +1188,7 @@ class mrp_workspace extends class_base
 				));
 				$table->define_field(array(
 					"name" => "due_date",
-			"caption" => t("Tähtaeg"),
+					"caption" => t("Tähtaeg"),
 					"chgbgcolor" => "bgcolour_overdue",
 					"sortable" => 1,
 				));
@@ -1412,7 +1427,7 @@ class mrp_workspace extends class_base
 		}
 	}
 
-	function create_jobs_list ($arr = array ())
+	function create_subcontract_jobs_list ($arr = array ())
 	{
 		$table =& $arr["prop"]["vcl_inst"];
 		$this_object =& $arr["obj_inst"];
@@ -1431,19 +1446,10 @@ class mrp_workspace extends class_base
 		));
 		$table->define_field (array (
 			"name" => "resource",
-			"caption" => t("Teostaja"),
+			"caption" => t("Ressurss"),
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
-		// $table->define_field(array(
-			// "name" => "planned_date",
-			// "type" => "time",
-			// "format" => MRP_DATE_FORMAT,
-			// "numeric" => 1,
-			// "caption" => t("Kokkulepitud algusaeg"),
-			// "chgbgcolor" => "bgcolour_overdue",
-			// "sortable" => 1,
-		// ));
 		$table->define_field(array(
 			"name" => "scheduled_date",
 			"type" => "time",
@@ -1539,6 +1545,93 @@ class mrp_workspace extends class_base
 			{
 				unset ($definition["bgcolour_overdue"]);
 			}
+
+			$table->define_data($definition);
+		}
+	}
+
+	function create_aborted_jobs_list ($arr = array ())
+	{
+		$table =& $arr["prop"]["vcl_inst"];
+		$this_object =& $arr["obj_inst"];
+
+		$table->define_field (array (
+			"name" => "customer",
+			"caption" => t("Klient"),
+			"sortable" => 1,
+		));
+		$table->define_field (array (
+			"name" => "project",
+			"caption" => t("Projekt"),
+			"sortable" => 1,
+		));
+		$table->define_field (array (
+			"name" => "resource",
+			"caption" => t("Ressurss"),
+			"sortable" => 1,
+		));
+		$table->define_field(array(
+			"name" => "due_date",
+			"type" => "time",
+			"format" => MRP_DATE_FORMAT,
+			"numeric" => 1,
+			"caption" => t("Projekti tähtaeg"),
+			"sortable" => 1,
+		));
+		$table->define_field(array(
+			"name" => "modify",
+			"caption" => t("Ava"),
+		));
+
+		$table->set_default_sortby ("due_date");
+		$table->set_default_sorder ("asc");
+		$table->draw_text_pageselector (array (
+			"records_per_page" => 50,
+		));
+
+		$applicable_states = array (
+			MRP_STATUS_ABORTED,
+		);
+
+		$list = new object_list (array (
+			"class_id" => CL_MRP_JOB,
+			"state" => $applicable_states,
+			"parent" => $this_object->prop ("jobs_folder"),
+		));
+		$jobs = $list->arr ();
+
+		foreach ($jobs as $job_id => $job)
+		{
+			$project_id = $job->prop ("project");
+			$resource_id = $job->prop ("resource");
+
+			if (!is_oid ($project_id) or !is_oid ($resource_id))
+			{
+				continue;
+			}
+
+			$project = obj ($project_id);
+			$resource = obj ($resource_id);
+			$change_url = $this->mk_my_orb("change", array(
+				"id" => $job_id,
+				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
+			), "mrp_job");
+
+			### get project customer
+			$customer = $project->get_first_obj_by_reltype("RELTYPE_MRP_CUSTOMER");
+
+			### define data for html table row
+			$definition = array (
+				"customer" => (is_object ($customer) ? $customer->name () : ""),
+				"project" => $project->name (),
+				"resource" => $resource->name (),
+				"due_date" => $project->prop ("due_date"),
+				"modify" => html::href (array (
+					"caption" => t("Ava"),
+					"url" => $change_url,
+					)
+				),
+			);
 
 			$table->define_data($definition);
 		}

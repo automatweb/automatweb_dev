@@ -1,6 +1,20 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>workflow_toolbar</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <group>
+                  <num_0>grp_case_details</num_0>
+                  <num_1>grp_case_schedule</num_1>
+                  <num_2>grp_general</num_2>
+                  <num_3>grp_case_workflow</num_3>
+            </group>
+            <editonly>1</editonly>
+            <field>workflow_toolbar</field>
+      </property>
+      <property>
             <name>header</name>
             <group>
                   <num_0>grp_general</num_0>
@@ -382,16 +396,6 @@
             <method>serialize</method>
             <type>comments</type>
             <caption>Kommentaarid juhtumi ja tööde kohta</caption>
-      </property>
-      <property>
-            <name>workflow_toolbar</name>
-            <group>grp_case_workflow</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
       </property>
       <property>
             <name>manager</name>

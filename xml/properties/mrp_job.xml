@@ -42,6 +42,15 @@
             <caption>Järelpuhveraeg (h)</caption>
       </property>
       <property>
+            <name>minstart</name>
+            <group>data</group>
+            <table>mrp_job</table>
+            <type>datetime_select</type>
+            <field>minstart</field>
+            <comment>Enne seda kuupäeva, kellaaega ei lubata tööd alustada</comment>
+            <caption>Varaseim alustusaeg</caption>
+      </property>
+      <property>
             <name>resource</name>
             <group>data</group>
             <table>mrp_job</table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.20 2005/03/21 21:48:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.21 2005/03/22 20:54:15 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -399,6 +399,7 @@ class mrp_schedule extends class_base
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_NEW,
+			MRP_STATUS_ABORTED,
 		);
 
 		$this->db_query ("SELECT * FROM `" . $this->jobs_table . "` WHERE
@@ -480,7 +481,7 @@ class mrp_schedule extends class_base
 /* dbg */ }
 
 
-				$minstart = max ($project_start, $project_progress, time(), $starttime_index[$job["oid"]]);
+				$minstart = max ($project_start, $project_progress, time(), $starttime_index[$job["oid"]], $job["minstart"]);
 				// $minstart = $job["pre_buffer"] + $minstart;
 
 
@@ -491,8 +492,14 @@ class mrp_schedule extends class_base
 // /* dbg */ echo "sched start: " . date (MRP_DATE_FORMAT,$this->schedule_start) . "<br>";
 // /* dbg */ }
 
+				### states for planning jobs
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_NEW,
+					MRP_STATUS_ABORTED,
+				);
 
-				if ( in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or ($job["starttime"] < $this->schedule_start) or !$job["starttime"]) )
+				if ( in_array ($job["state"], $applicable_states) and in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or ($job["starttime"] < $this->schedule_start) or !$job["starttime"]) )
 				{
 
 // /* dbg */ if ($this->mrpdbg) {
