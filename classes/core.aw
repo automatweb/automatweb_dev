@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.195 2003/05/22 10:57:38 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.196 2003/05/22 13:06:34 axel Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -885,9 +885,6 @@ class core extends db_connector
 			'key' => 'aliasmgr_obj_history',
 			'value' => $hist
 		));
-		arr($hist);
-
-
 
 		$this->db_query($q);
 		$aliasmgr = get_instance("aliasmgr");
