@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.273 2004/07/12 08:24:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.274 2004/08/23 09:41:01 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1183,6 +1183,7 @@ class document extends aw_template
 			setlocale(LC_CTYPE, $old_loc);
 		}
 
+		$orig_doc_tm = $doc["tm"];
 		if (!$doc["tm"])
 		{
 			$doc["tm"] = $doc["modified"];
@@ -1243,6 +1244,7 @@ class document extends aw_template
 			"timestamp" => ($doc["modified"] > 1 ? $doc["modified"] : $doc["created"]),
 			"channel"		=> $doc["channel"],
 			"tm"				=> $doc["tm"],
+			"tm_only" => $orig_doc_tm,
 			"link_text"	=> $doc["link_text"],
 			// please don't change the format
 			"start1" => date("d.m.Y", $doc["start1"]),
@@ -1266,9 +1268,9 @@ class document extends aw_template
 		));
 
 		if (is_object($si) && method_exists($si,"get_document_vars"))
-                {
-                        $this->vars($si->get_document_vars(&$doc));
-                };
+		{
+			$this->vars($si->get_document_vars(&$doc));
+		};
 
 		if ($title != "")
 		{
@@ -1302,14 +1304,14 @@ class document extends aw_template
 			$this->vars(array("HAS_CHANNEL" => $this->parse("HAS_CHANNEL")));
 		}
 
-
 		$this->vars(array(
 			"SHOW_TITLE" 	=> ($doc["show_title"] == 1 && $doc["title"] != "") ? $this->parse("SHOW_TITLE") : "",
 			"SHOW_TITLE2" 	=> ($doc["show_title"] == 1 && $doc["title"] != "") ? $this->parse("SHOW_TITLE2") : "",
 			"EDIT" 		=> ($this->prog_acl("view",PRG_MENUEDIT)) ? $this->parse("EDIT") : "",
 			"SHOW_MODIFIED" => ($doc["show_modified"]) ? $this->parse("SHOW_MODIFIED") : "",
 			"COPYRIGHT"	=> ($doc["copyright"]) ? $this->parse("COPYRIGHT") : "",
-			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : "")
+			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : ""),
+			"HAS_MODIFIED" => ($orig_doc_tm != "" ? $this->parse("HAS_MODIFIED") : "")
 			));
 
 
