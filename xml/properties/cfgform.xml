@@ -2,29 +2,31 @@
 <properties>
       <property>
             <name>subclass</name>
-            <type>generated</type>
-            <generator>callback_get_class_list</generator>
+            <type>callback</type>
+            <callback>callback_get_class_list</callback>
             <field>subclass</field>
             <table>objects</table>
+            <group>general</group>
             <caption>Klass</caption>
       </property>
       <property>
-            <name>properties</name>
-            <type>generated</type>
-            <generator>callback_get_prop_list</generator>
-            <editonly>1</editonly>
+            <name>xml_definition</name>
+            <type>fileupload</type>
             <table>objects</table>
+            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Omadused</caption>
+            <caption>Uploadi vormi fail</caption>
       </property>
       <property>
-            <name>ord</name>
-            <type>hidden</type>
+            <name>preview</name>
+            <type>text</type>
+            <store>no	</store>
             <table>objects</table>
+            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Jrk</caption>
+            <caption>Definitsioon</caption>
       </property>
       <classinfo>
             <corefields>name,comment,status</corefields>

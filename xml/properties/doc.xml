@@ -135,9 +135,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
-            <table>documents</table>
             <group>general</group>
-            <field>clear_styles</field>
             <caption>Tühista stiilid</caption>
       </property>
       <property>
@@ -145,9 +143,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
-            <table>documents</table>
             <group>general</group>
-            <field>link_keywords</field>
             <caption>Lingi võtmesõnad</caption>
       </property>
       <property>
@@ -218,10 +214,8 @@
       <property>
             <name>refopt</name>
             <type>select</type>
-            <table>objects</table>
             <store>no</store>
             <group>general</group>
-            <field>refopt</field>
             <caption>Ref tüüp</caption>
       </property>
       <property>
@@ -231,8 +225,6 @@
             <size>20</size>
             <group>vennastamine</group>
             <store>no</store>
-            <table>documents</table>
-            <field>sections</field>
             <caption>Sektsioonid</caption>
       </property>
       <property>
@@ -249,8 +241,6 @@
             <callback>callback_get_event_editor</callback>
             <store>no</store>
             <group>calendar</group>
-            <table>documents</table>
-            <field>cal_event</field>
             <caption>Kalendrisündmus</caption>
       </property>
       <classinfo>

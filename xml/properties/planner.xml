@@ -3,11 +3,22 @@
       <property>
             <name>default_view</name>
             <type>select</type>
+            <group>advanced</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Default vaade</caption>
+      </property>
+      <property>
+            <name>event_cfgform</name>
+            <type>objpicker</type>
+            <clid>CL_CFGFORM</clid>
+            <subclass>CL_DOCUMENT</subclass>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
-            <caption>Default vaade</caption>
+            <caption>Sündmuse lisamise vorm</caption>
       </property>
       <property>
             <name>day_start</name>
@@ -31,10 +42,11 @@
             <name>tab_add_visible</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>1</default>
+            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>
             <![CDATA["Lisa event" nähtav]]>
             </caption>
@@ -43,10 +55,11 @@
             <name>tab_day_visible</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>1</default>
+            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>
             <![CDATA["Päev" nähtav]]>
             </caption>
@@ -55,10 +68,11 @@
             <name>tab_overview_visible</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>1</default>
+            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>
             <![CDATA["Ülevaade" nähtav]]>
             </caption>
@@ -67,10 +81,11 @@
             <name>tab_week_visible</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>1</default>
+            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>
             <![CDATA["Nädal" nähtav]]>
             </caption>
@@ -79,10 +94,11 @@
             <name>tab_month_visible</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>1</default>
+            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>
             <![CDATA["Kuu" nähtav]]>
             </caption>
@@ -91,10 +107,11 @@
             <name>navigator_visible</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <default>1</default>
+            <group>advanced</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>general</group>
             <caption>Näita navigaatorit</caption>
       </property>
       <property>
@@ -107,27 +124,117 @@
             <caption>Kuud navigaatoris</caption>
       </property>
       <property>
-            <name>workdays</name>
-            <type>generated</type>
-            <generator>callback_get_workday_choices</generator>
+            <name>event_folder</name>
+            <type>select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
+            <caption>Sündmuste kataloog</caption>
+      </property>
+      <property>
+            <name>workdays</name>
+            <callback>callback_get_workday_choices</callback>
+            <group>advanced</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Tööpäevad</caption>
       </property>
       <property>
             <name>preview</name>
             <type>text</type>
             <callback>callback_get_preview_link</callback>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>no</store>
+            <editonly>1</editonly>
             <group>general</group>
             <caption>Eelvaade</caption>
+      </property>
+      <property>
+            <name>id</name>
+            <type>hidden</type>
+            <table>objects</table>
+            <field>oid</field>
+            <group>
+                  <num_0>show_day</num_0>
+                  <num_1>show_overview</num_1>
+                  <num_2>show_week</num_2>
+                  <num_3>show_month</num_3>
+                  <num_4>add_event</num_4>
+            </group>
+            <method>serialize</method>
+            <view>show</view>
+      </property>
+      <property>
+            <name>show_day</name>
+            <callback>callback_show_day</callback>
+            <group>show_day</group>
+            <view>show</view>
+            <store>no</store>
+            <caption>Päev</caption>
+      </property>
+      <property>
+            <name>show_overview</name>
+            <callback>callback_show_overview</callback>
+            <group>show_overview</group>
+            <view>show</view>
+            <store>no</store>
+            <caption>Ülevaade</caption>
+      </property>
+      <property>
+            <name>show_week</name>
+            <callback>callback_show_week</callback>
+            <group>show_week</group>
+            <view>show</view>
+            <store>no</store>
+            <caption>Nädal</caption>
+      </property>
+      <property>
+            <name>show_month</name>
+            <callback>callback_show_month</callback>
+            <group>show_month</group>
+            <view>show</view>
+            <store>no</store>
+            <caption>Kuu</caption>
+      </property>
+      <property>
+            <name>add_event</name>
+            <callback>callback_get_add_event</callback>
+            <group>add_event</group>
+            <view>show</view>
+            <store>no</store>
+            <caption>Lisa sündmus</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <advanced>
+                  <caption>Seaded</caption>
+            </advanced>
+            <show_day>
+                  <caption>Päev</caption>
+                  <submit>no</submit>
+            </show_day>
+            <show_overview>
+                  <caption>Ülevaade</caption>
+                  <submit>no</submit>
+            </show_overview>
+            <show_week>
+                  <caption>Nädal</caption>
+                  <submit>no</submit>
+            </show_week>
+            <show_month>
+                  <caption>Kuu</caption>
+                  <submit>no</submit>
+            </show_month>
+            <add_event>
+                  <caption>Lisa_sündmus</caption>
+                  <submit>no</submit>
+            </add_event>
+      </groupinfo>
+      <views>
+            <show>1</show>
+      </views>
 </properties>
 
