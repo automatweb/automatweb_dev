@@ -10,6 +10,12 @@ void stradd_deinit(UDF_INIT *initid);
 void stradd_reset(UDF_INIT *initid, UDF_ARGS *args,char *is_null, char *error);
 void stradd_add(UDF_INIT *initid, UDF_ARGS *args,char *is_null, char *error);
 
+#define MAX_ENTRIES 1000
+
+typedef struct _entry {
+	int len;
+	char *str;
+} entry;
 
 struct stradd_struct
 {
@@ -17,6 +23,9 @@ struct stradd_struct
 	int sep_len;
 	char *collect;
 	int collect_len;
+	int is_uniq;
+	int num_entries;
+	entry entries[MAX_ENTRIES];
 };
 
 //#define DBG 1
@@ -24,16 +33,23 @@ struct stradd_struct
 my_bool stradd_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
 {
 	struct stradd_struct *pt;
+	long long iv;
+	int i;
 #ifdef DBG
 	FILE *fp;
 #endif
 
-	if (args->arg_count != 2)
+	if (args->arg_count < 2)
 	{
 		strcpy(message,"stradd() requires two arguments");
 		return 1;
 	}
 
+	if (args->arg_count == 3 && args->arg_type[2] != INT_RESULT)
+	{
+		strcpy(message, "second argument must be number (1 =only unique, 0 = all)");
+		return 1;
+	}
 
 	args->arg_type[0] = STRING_RESULT;
 	args->arg_type[1] = STRING_RESULT;
@@ -57,12 +73,33 @@ my_bool stradd_init(UDF_INIT *initid, UDF_ARGS *args, char *message)
 	pt->sep = (char *)malloc(args->lengths[0]);
 	pt->sep_len = args->lengths[0];
 	memcpy(pt->sep, args->args[0], pt->sep_len);
+
+	if (args->arg_count == 3 && args->args[2] != NULL)
+	{
+		iv = *((long long *)args->args[2]);
+		if (iv == 1)
+		{
+			pt->is_uniq = 1;
+			pt->num_entries = 0;
+			for (i = 0; i < MAX_ENTRIES; i++)
+			{
+				pt->entries[i].len = 0;
+				pt->entries[i].str = NULL;
+			}
+		}
+	}
+	else
+	{
+		pt->is_uniq = 0;
+	}
 	return 0;
 }
 
 void stradd_deinit(UDF_INIT *initid)
 {
 	struct stradd_struct *pt = ((struct stradd_struct *)initid->ptr);
+	int i;
+
 #ifdef DBG
 	FILE *fp;
 	fp = fopen("/tmp/stradd.log","a");
@@ -71,12 +108,24 @@ void stradd_deinit(UDF_INIT *initid)
 #endif 
 	free(pt->collect);
 	free(pt->sep);
+
+	if (pt->is_uniq == 1)
+	{
+		for (i = 0; i < pt->num_entries; i++)
+		{
+			if (pt->entries[i].str != NULL)
+			{
+				free(pt->entries[i].str);
+			}
+		}
+	}
 	free(initid->ptr);
 }
 
 void stradd_reset(UDF_INIT *initid, UDF_ARGS *args,char *is_null, char *error)
 {
 	struct stradd_struct *pt = ((struct stradd_struct *)initid->ptr);
+	int i;
 #ifdef DBG
 	FILE *fp;
 
@@ -89,12 +138,25 @@ void stradd_reset(UDF_INIT *initid, UDF_ARGS *args,char *is_null, char *error)
 	fprintf(fp, "exit stradd_reset()\n");	
 	fclose(fp);
 #endif	
+	if (pt->is_uniq == 1)
+	{
+		for (i = 0; i < pt->num_entries; i++)
+		{
+			if (pt->entries[i].str != NULL)
+			{
+				free(pt->entries[i].str);
+			}
+			pt->entries[i].len = 0;
+		}
+		pt->num_entries = 0;
+	}
 	stradd_add(initid,args,is_null, error);
 }
 
 void stradd_add(UDF_INIT *initid, UDF_ARGS *args,char *is_null, char *error)
 {
 	struct stradd_struct *pt = ((struct stradd_struct *)initid->ptr);
+	int i, found ,add_str = 1;
 #ifdef DBG
 	FILE *fp;
 	fp = fopen("/tmp/stradd.log","a");
@@ -122,16 +184,45 @@ void stradd_add(UDF_INIT *initid, UDF_ARGS *args,char *is_null, char *error)
 	}
 #endif
 	
-	if (pt->collect_len > 0 && args->lengths[1] > 0 && args->args[1] != NULL)
+	if (pt->is_uniq == 1 && args->lengths[1] > 0 && args->args[1] != NULL)
 	{
-		memcpy(pt->collect+pt->collect_len, pt->sep, pt->sep_len);
-		pt->collect_len+=pt->sep_len;
+		found = 0;
+		for (i = 0; i < pt->num_entries; i++)
+		{
+			if (pt->entries[i].len == args->lengths[1])
+			{
+				if (strncmp(pt->entries[i].str, args->args[1], pt->entries[i].len) == 0)
+				{
+					found = 1;
+				}
+			}
+		}
+		if (found == 0)
+		{
+			pt->entries[pt->num_entries].len = args->lengths[1];
+			pt->entries[pt->num_entries].str = (char *)malloc(args->lengths[1]);
+			memcpy(pt->entries[pt->num_entries].str, args->args[1], args->lengths[1]);
+			pt->num_entries++;
+		}
+		else
+		{
+			add_str = 0;
+		}
 	}
 
-	if (((pt->collect_len + args->lengths[1]) < 65000) && args->lengths[1] > 0 && args->args[1] != NULL)
+	if (add_str == 1)
 	{
-		memcpy(pt->collect+pt->collect_len, args->args[1], args->lengths[1]);
-		pt->collect_len += args->lengths[1];
+		if (pt->collect_len > 0 && args->lengths[1] > 0 && args->args[1] != NULL)
+		{
+			memcpy(pt->collect+pt->collect_len, pt->sep, pt->sep_len);
+			pt->collect_len+=pt->sep_len;
+		}
+
+		if (((pt->collect_len + args->lengths[1]) < 65000) && args->lengths[1] > 0 && args->args[1] != NULL)
+		{
+			memcpy(pt->collect+pt->collect_len, args->args[1], args->lengths[1]);
+			pt->collect_len += args->lengths[1];
+		}
 	}
 
 #ifdef DBG
