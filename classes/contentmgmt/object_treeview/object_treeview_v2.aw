@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.38 2005/01/04 11:11:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.39 2005/01/04 11:17:15 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -853,7 +853,7 @@ class object_treeview_v2 extends class_base
 	{
 		if (!$ob->meta('show_folders'))
 		{
-		//	return;
+			return;
 		}
 
 		classload("icons");
