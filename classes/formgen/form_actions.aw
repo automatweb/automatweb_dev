@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.32 2004/11/04 11:37:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.33 2004/11/29 09:09:24 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -615,6 +615,9 @@ class form_actions extends form_base
 	// $entry_id - submitted form entry id
 	function do_join_list_action(&$form, $data, $entry_id)
 	{
+		// old list does not exist any more
+		return;
+
 		if ($data["list"])
 		{
 			$li = get_instance("mlist");
