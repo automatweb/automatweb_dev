@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.2 2001/06/05 16:41:16 duke Exp $
+// graph.aw - graafikute haldamine
 		global $orb_defs;
 		$orb_defs["graph"] = array(
 			"new" => array("function" => "add", "params"=> array("parent"), "opt" => array("alias_doc")),
@@ -35,6 +37,25 @@ define(TYPE_BAR,2);
 			$this->tpl_init();
 			$this->db_init();
 		}
+		
+		////
+		// !parsib aliast
+		function parse_alias($args = array())
+		{
+			extract($args);
+			if (!is_array($this->graphaliases))
+			{
+				$this->graphaliases = $this->get_aliases(array(
+                                                                "oid" => $oid,
+                                                                "type" => CL_GRAPH,
+                                                        ));
+                        };	
+			$g = $this->graphaliases[$matches[3] - 1];
+			$replacement = "<img src='/graphs.aw?type=show&id=$g[target]'>";
+			return $replacement;
+		}
+
+		
 		//Uue graafiku lisamise pildi ettemanamine
 		function add($arr)
 		{
