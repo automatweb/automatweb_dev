@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.62 2004/09/02 13:24:26 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.63 2004/09/09 11:06:37 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -1031,6 +1031,8 @@ class ml_list extends class_base
 			));	
 		};
 		
+		// this is sl8888w and otto needs to be fffffaaassssttt
+		/*
 		$classificator_inst = get_instance(CL_CLASSIFICATOR);
 		
 		for ($i = 1; $i <= 5; $i++)
@@ -1047,6 +1049,7 @@ class ml_list extends class_base
 				)),
 			));
 		}
+		*/
 
 		if (is_array($cb_reqdata))
 		{
