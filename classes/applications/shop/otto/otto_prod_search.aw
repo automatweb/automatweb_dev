@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.9 2005/01/28 14:04:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.10 2005/02/01 15:22:55 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -125,7 +125,8 @@ class otto_prod_search extends class_base
 					"user20" => "%".substr($arr["str"], 0,7)."%",
 				)
 			)),
-			"price" => new obj_predicate_not(10000000)
+			"price" => new obj_predicate_not(10000000),
+			"user18" => $this->_get_pgs()
 		);
 
 		return $this->do_draw_res($arr, $filter);
@@ -420,6 +421,7 @@ class otto_prod_search extends class_base
 				$filter["parent"] = $parents;
 			}
 
+			$filter["user18"] = $this->_get_pgs();
 			$str = $this->do_draw_res($arr, $filter);
 		}
 
@@ -450,6 +452,17 @@ class otto_prod_search extends class_base
 		));
 
 		return $this->parse().$str;
+	}
+
+	function _get_pgs()
+	{
+		$ret = array();
+		$this->db_query("SELECT distinct(pg) as pg FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get("lang_id"));
+		while ($row = $this->db_next())
+		{
+			$ret[$row["pg"]] = $row["pg"];
+		}
+		return $ret;
 	}
 }
 ?>
