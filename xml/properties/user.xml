@@ -85,6 +85,24 @@
             <caption>Admin lang.</caption>
       </property>
       <property>
+            <name>base_lang</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Baaskeel</caption>
+      </property>
+      <property>
+            <name>target_lang</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Sihtkeel</caption>
+      </property>
+      <property>
             <name>act_from</name>
             <store>no</store>
             <type>date_select</type>
