@@ -57,7 +57,8 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				$this->objdata[$oid]["type"] = OBJ_TRANS_TRANSLATED;
 				$this->objdata[$oid]["trans_orig"] = $f_c["from"];
 
-				return $objdata;
+				// but we still gots to read the original and get the untranslated props from that!
+				return $this->_merge_obj_dat($this->contained->get_objdata($f_c["from"]), $objdata);
 			}
 			// this is not the corret language object. get the original and try to find
 			// a related translation object that has the correct lang_id
@@ -89,24 +90,11 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				$this->objdata[$f_c2["to"]]["trans_orig"] = $f_c["from"];
 
 				// the correct object is in $f_c2["to"]
-				$ret = $this->contained->get_objdata($f_c2["to"]);
-				// why did we do this??!? 
-				//$ret["lang_id"] = $req_od["lang_id"];
-				$ret["meta"] = $req_od["meta"];
-				// just the bit about OBJ_IS_TRANSLATED
-				$ret["flags"] = $ret["flags"] & (~OBJ_IS_TRANSLATED);	// first unset it
-				$ret["flags"] |= $req_od["flags"] & OBJ_IS_TRANSLATED; // now or the one from the translated object back
-				return $ret;
+				return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c2["to"]));
 			}
 			else
 			{
-				// no connections, return the untranslated object
-				$ret = $this->contained->get_objdata($f_c["from"]);
-				$ret["lang_id"] = $req_od["lang_id"];
-				$ret["meta"] = $req_od["meta"];
-				$ret["flags"] = $ret["flags"] & (~OBJ_IS_TRANSLATED);	// first unset it
-				$ret["flags"] |= $req_od["flags"] & OBJ_IS_TRANSLATED; // now or the one from the translated object back
-				return $ret;
+				return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($f_c["from"]));
 			}
 		}
 		else
@@ -143,13 +131,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 					$this->objdata[$dat["to"]]["trans_orig"] = $oid;
 
 					// the correct object is in $dat["to"]
-					$ret = $this->contained->get_objdata($dat["to"]);
-					// why did we do this?!?!
-					//$ret["lang_id"] = $req_od["lang_id"];
-					$ret["meta"] = $req_od["meta"];
-					// just the bit about OBJ_IS_TRANSLATED
-					$ret["flags"] = $ret["flags"] & (~OBJ_IS_TRANSLATED);	// first unset it
-					$ret["flags"] |= $req_od["flags"] & OBJ_IS_TRANSLATED; // now or the one from the translated object back
+					return $this->_merge_obj_dat($req_od, $this->contained->get_objdata($dat["to"]));
 				}
 				else
 				{
@@ -278,6 +260,20 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 			$params["lang_id"] = aw_global_get("lang_id");
 		}
 		return $this->contained->search($params);
+	}
+
+	function _merge_obj_dat($original, $translated)
+	{
+		// FIXME: actually, not all metadata should be merged, just the bits that are in nit translated properties
+		$translated["meta"] = $original["meta"];
+
+		// for the object flags, all flags, except for the OBJ_IS_TRANSLATED flag must be copied from the original
+		$tmpf = $translated["flags"];
+
+		$translated["flags"] = $original["flags"] & (~OBJ_IS_TRANSLATED);	// first unset it
+		$translated["flags"] |= $tmpf & OBJ_IS_TRANSLATED; // now or the one from the translated object back
+
+		return $translated;
 	}
 }
 
