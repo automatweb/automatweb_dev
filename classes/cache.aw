@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.37 2004/11/19 08:22:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.38 2005/01/28 08:36:19 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -430,61 +430,47 @@ class cache extends core
 				$lookfor++;
 			};
 		};
+	}
 
+	/** returns the timestamp of the last modified object. caches it as well.
 
-		/*
-		foreach($this->cache_files as $cache_file)
+		@attrib api=1
+
+	**/
+	function get_objlastmod()
+	{
+		static $last_mod;
+		if (!$last_mod)
 		{
-			$awt->start("preg_match");
-			$awt->count("preg_match");
-			*(
-			/*
-			if (preg_match("/$regex/", $cache_file))
+			if (($last_mod = $this->file_get("objlastmod")) === false)
 			{
-				$this->file_invalidate($cache_file);
-				$this->__fir_cnt++;
-			}
-			*/
-			/*
-			if (strpos($cache_file,$r_regex) === 0)
-			{
-				if (aw_global_get("uid") == "duke")
+				$add = "";
+				if (aw_ini_get("site_show.objlastmod_only_menu"))
 				{
-					print "f = $cache_file<br>";
-				};
-				$this->file_invalidate($cache_file);
-				$this->__fir_cnt++;
-			};
-			$awt->stop("preg_match");
-		};
-		*/
-		/*
-		if ($dir = @opendir($fld)) 
-		{
-			while (($file = readdir($dir)) !== false) 
-			{
-				if (!($file == "." || $file == ".."))
-				{
-					if (is_dir($fld."/".$file))
-					{
-						$this->_file_inv_re_req($fld."/".$file, $regex);
-					}
-					else
-					{
-						$awt->start("preg_match");
-						$awt->count("preg_match");
-						if (preg_match("/$regex/", $file))
-						{
-							$this->file_invalidate($file);
-							$this->__fir_cnt++;
-						}
-						$awt->stop("preg_match");
-					}
+					$add = " WHERE class_id = ".CL_MENU;
 				}
+				$last_mod = $this->db_fetch_field("SELECT MAX(modified) as m FROM objects".$add, "m");
+				$this->file_set("objlastmod", $last_mod);
 			}
-		}  
-		closedir($dir);
-		*/
+		}
+		return $last_mod;
+	}
+
+	/** completely clears the cache
+
+		@attrib api=1
+
+	**/
+	function full_flush()
+	{
+		$this->cache_files = array();
+		$this->cache_files2 = array();
+		$this->_get_cache_files(aw_ini_get("cache.page_cache"));
+
+		foreach($this->cache_files2 as $file)
+		{
+			@unlink($file);
+		}
 	}
 };
 ?>
