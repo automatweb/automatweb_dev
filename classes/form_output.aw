@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.13 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.14 2001/07/30 04:46:05 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -409,7 +409,11 @@ class form_output extends form_base
 				for ($i=0; $i < $cell["el_count"]; $i++)
 				{
 					$this->vars(array(
-						"el_name" => $cell["elements"][$i]["name"]
+						"el_name" => $cell["elements"][$i]["name"],
+						"el_text" => $cell["elements"][$i]["text"],
+						"col" => $rcol, 
+						"row" => $rrow,
+						"el_cnt" => $i
 					));
 					$element.=$this->parse("ELEMENT");
 				}
@@ -418,8 +422,6 @@ class form_output extends form_base
 					"colspan" => $arr["colspan"], 
 					"rowspan" => $arr["rowspan"],
 					"num_els_plus3" => $cell["el_count"]+5,
-					"col" => $rcol, 
-					"row" => $rrow,
 					"cell_id" => ($rrow."_".$rcol), 
 					"ELEMENT" => $element, 
 					"exp_left"	=> $this->mk_orb("exp_left", array("id" => $op_id, "col" => $col, "row" => $row)),
@@ -492,10 +494,13 @@ class form_output extends form_base
 			$this->parse("LINE");
 		}
 
+		classload("objects");
+		$ob = new db_objects;
 		$this->vars(array(
 			"reforb"	=> $this->mk_reforb("submit_admin", array("id" => $id, "op_id" => $op_id)),
 			"addr_reforb" => $this->mk_reforb("add_n_rows", array("id" => $id,"after" => $this->output["rows"]-1)),
 			"addc_reforb" => $this->mk_reforb("add_n_cols", array("id" => $id,"after" => $this->output["cols"]-1)),
+			"folders" => $this->picker(0,$ob->get_list(false,true)),
 			"translate" => $this->mk_my_orb("translate", array("id" => $id))
 		));
 		return $this->parse();
@@ -532,14 +537,53 @@ class form_output extends form_base
 		{
 			for ($col=0; $col < $this->output["cols"]; $col++)
 			{
+				$cell = &$this->output[$row][$col];
 				if ($sel[$row][$col] == 1)
 				{
-					$cell = &$this->output[$row][$col];
 					$cell["style"] = $selstyle;
+				}
+				for ($i=0; $i < $cell["el_count"]; $i++)
+				{
+					$cell["elements"][$i]["text"] = $texts[$row][$col][$i];
+					if ($cell["elements"][$i]["name"] != $names[$row][$col][$i])
+					{
+						$fe = new form_entry_element;
+						$fe->do_change_name($names[$row][$col][$i], $cell["elements"][$i]["id"]);
+						$cell["elements"][$i]["name"] = $names[$row][$col][$i];
+					}
+					if ($elsel[$row][$col][$i] == 1 && $setfolder)
+					{
+						$this->upd_object(array("oid" => $cell["elements"][$i]["id"], "parent" => $setfolder));
+					}
 				}
 			}
 		}
 		
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				$cell = &$this->output[$row][$col];
+				for ($i=0; $i < $cell["el_count"]; $i++)
+				{
+					if ($elsel[$row][$col][$i] == 1 && isset($diliit))
+					{
+						// we must delete the element from this op.
+						// we must also shift all other elements up one 
+						for ($a=$i; $a < $cell["el_count"]; $a++)
+						{
+							if ($a > 0)
+							{
+								$cell["elements"][$a-1] = $cell["elements"][$a];
+							}
+						}
+						$cell["el_count"] --;
+					}
+				}
+			}
+		}
+
+		// nyyt elementide liigutamine 
 		$this->save_output($id);
 		return $this->mk_orb("admin_op", array("id" => $id));
 	}
