@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.186 2003/05/07 13:29:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.187 2003/05/14 09:36:50 axel Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -495,46 +495,71 @@ class core extends db_connector
 			die("cannot write to syslog: " . $this->db_last_error["error_string"]);
 		};
 	}
-		
-	//// 
+
+	////
 	// !Returns user information
 	// parameters:
 	//	uid - required, the user to fetch
 	//	field - optional, if set, only this field's value is returned, otherwise the whole record
 	function get_user($args = false)
 	{
-		if (!is_array($args))
-		{
-			$uid = aw_global_get("uid");
-		}
-		else
+		if (isset($args['oid']))
 		{
 			extract($args);
-		}
-		if ($uid == "")
-		{
-			return false;
-		}
-		if (!is_array(($row = aw_cache_get("users_cache",$uid))))
-		{
-			$q = "SELECT * FROM users WHERE uid = '$uid'";
-			$row = $this->db_fetch_row($q);
-			aw_cache_set("users_cache",$uid,$row);
-		}
-
-		if (isset($field))
-		{
-			$row = $row[$field];
+			{
+				$q = "SELECT * FROM users WHERE oid = '$oid'";
+				$row = $this->db_fetch_row($q);
+			}
+			if (isset($field))
+			{
+				$row = $row[$field];
+			}
+			else
+			{
+				if (isset($row))
+				{
+					// inbox defauldib kodukataloogile, kui seda määratud pole
+					$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
+				}
+			}
+			return $row;
 		}
 		else
 		{
-			if (isset($row))
+			if (!is_array($args))
 			{
-				// inbox defauldib kodukataloogile, kui seda määratud pole
-				$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
+				$uid = aw_global_get("uid");
 			}
+			else
+			{
+				extract($args);
+			}
+			if ($uid == "")
+			{
+				return false;
+			}
+			if (!is_array(($row = aw_cache_get("users_cache",$uid))))
+			{
+				$q = "SELECT * FROM users WHERE uid = '$uid'";
+				$row = $this->db_fetch_row($q);
+				aw_cache_set("users_cache",$uid,$row);
+			}
+
+			if (isset($field))
+			{
+				$row = $row[$field];
+			}
+			else
+			{
+				if (isset($row))
+				{
+					// inbox defauldib kodukataloogile, kui seda määratud pole
+					$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
+				}
+			}
+			return $row;
 		}
-		return $row;	
+
 	}
 
 	////
@@ -2503,6 +2528,25 @@ class core extends db_connector
 			}
 		}
 		return $ret;
+	}
+	
+	function parse_alias($args)
+	{
+		extract($args);
+		if (isset($alias['target']))
+		{
+			return $this->show(array('id' => $alias['target']));
+		}
+		else
+		{
+			return '';
+		}
+	}
+
+	function show($args)
+	{
+		$obj = $this->get_object($args['id']);
+		return $obj['name'];
 	}
 };
 ?>
