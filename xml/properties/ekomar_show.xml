@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>notfound</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kuhu suunata kui ei leitud &amp;uuml;htegi tulemust</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_EKOMAR</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+
