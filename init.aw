@@ -358,17 +358,20 @@ function get_instance($class,$args = array())
 	enter_function("__global::get_instance",array());
 
 	$site = false;
+	if (is_numeric($class))
+	{
+		$class = $GLOBALS["cfg"]["__default"]["classes"][$class]["file"];
+	}
 	if (isset($GLOBALS["cfg"]["__default"]["site_classes"][$class]))
 	{
 		$class = $GLOBALS["cfg"]["__default"]["site_classes"][$class];
 		$site = true;
 	}
 
-	$id = sprintf("instance::%s",$class);
+	$id = "instance::" . $class;
 	$instance = aw_global_get($id);
 
-	preg_match("/(\w*)$/",$class,$m);
-	$lib = $m[1];
+	$lib = basename($class);
 
 	if (not(is_object($instance)))
 	{
