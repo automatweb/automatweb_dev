@@ -631,6 +631,11 @@ class _int_object
 				"msg" => "object::createdby(): the user $uid, who created the current object (".$this->obj["oid"]."), has no object!"
 			));
 		}
+		if (!$GLOBALS["object_loader"]->ds->can("view", $oid))
+		{
+			return new object();
+		}
+
 		return new object($oid);
 	}
 
