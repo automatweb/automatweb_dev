@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.13 2002/02/26 23:18:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.14 2002/03/01 13:13:37 duke Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -30,7 +30,13 @@ class db_connector extends root
 			print mysql_error();
 			exit;
 		};
-		@mysql_select_db($base,$this->dbh);
+		if (not(@mysql_select_db($base,$this->dbh)))
+		{
+			echo "Can't connect to database";
+			print "<br>";
+			print mysql_error();
+			exit;	
+		};
 		$this->db_base = $base;
 	}
 
