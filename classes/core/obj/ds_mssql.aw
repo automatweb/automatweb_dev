@@ -144,7 +144,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				{
 					if (!$_got_fields[$prop["field"]])
 					{
-						$fields[] = $table.".".$prop["field"]." AS ".$prop["field"];
+						$fields[] = $table.".".$prop["field"]." AS [".$prop["field"]."]";
 						$_got_fields[$prop["field"]] = true;
 					}
 				}
@@ -186,7 +186,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				}
 				else
 				{
-					$fields[] = $table.".".$prop["field"]." AS ".$prop["name"];
+					$fields[] = $table.".".$prop["field"]." AS [".$prop["name"]."]";
 				}
 			}
 
