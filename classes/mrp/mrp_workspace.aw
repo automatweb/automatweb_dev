@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.37 2005/02/28 09:31:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.38 2005/03/11 09:09:38 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
+
+EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes
 
@@ -151,7 +153,7 @@
 	@property workspace_configmanager type=relpicker reltype=RELTYPE_MRP_WORKSPACE_CFGMGR clid=CL_CFGMANAGER
 	@caption Keskkonna seadetehaldur
 
-	@property case_header_controller type=relpicker reltype=RELTYPE_MRP_HEADER_CONTROLLER 
+	@property case_header_controller type=relpicker reltype=RELTYPE_MRP_HEADER_CONTROLLER
 	@caption Projekti headeri kontroller
 
 	@property title_sceduler_parameters type=text store=no subtitle=1
@@ -295,8 +297,9 @@
 */
 
 ### resource types
-define ("MRP_RESOURCE_MACHINE", 1);
-define ("MRP_RESOURCE_OUTSOURCE", 2);
+define ("MRP_RESOURCE_SCHEDULABLE", 1);
+define ("MRP_RESOURCE_NOT_SCHEDULABLE", 2);
+define ("MRP_RESOURCE_SUBCONTRACTOR", 3);
 
 ### states
 define ("MRP_STATUS_NEW", 1);
@@ -307,6 +310,7 @@ define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
 define ("MRP_STATUS_DELETED", 8);
+define ("MRP_STATUS_ONHOLD", 9);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -436,11 +440,18 @@ class mrp_workspace extends class_base
 				$this->create_projects_tree ($arr);
 				break;
 			case "projects_list":
-				$this->create_projects_list ($arr);
+				if ($arr["request"]["mrp_projects_show"] == "subcontractjobs")
+				{
+					$this->create_jobs_list ($arr);
+				}
+				else
+				{
+					$this->create_projects_list ($arr);
+				}
 				break;
 			case "legend":
-				$prop["value"] = '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_PLANNED_OVERDUE . '; border: 1px solid black;"></span> &Uuml;le t&auml;htaja planeeritud projektid</div>';
-				$prop["value"] .= '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_OVERDUE . '; border: 1px solid black;"></span> &Uuml;le t&auml;htaja l&auml;inud</div>';
+				$prop["value"] = '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_PLANNED_OVERDUE . '; border: 1px solid black;">&nbsp;</span> &Uuml;le t&auml;htaja planeeritud</div>';
+				$prop["value"] .= '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_OVERDUE . '; border: 1px solid black;">&nbsp;</span> &Uuml;le t&auml;htaja l&auml;inud</div>';
 				break;
 
 			### users tab
@@ -987,6 +998,12 @@ class mrp_workspace extends class_base
 			"mrp_projects_show" => "aborted",
 			"mrp_tree_active_item" => 8,
 		), "mrp_workspace");
+		$url_subcontract_jobs = $this->mk_my_orb("change", array(
+			"id" => $this_object->id (),
+			"group" => "grp_projects",
+			"mrp_projects_show" => "subcontractjobs",
+			"mrp_tree_active_item" => 9,
+		), "mrp_workspace");
 
 ///!!! appdeitida need count listid table listide j2rgi
 		$list = new object_list (array (
@@ -1097,6 +1114,12 @@ class mrp_workspace extends class_base
 			"url" => $url_projects_all,
 		));
 
+		$tree->add_item (0, array (
+			"name" => "Allhanket&ouml;&ouml;d",
+			"id" => 9,
+			"url" => $url_subcontract_jobs,
+		));
+
 		$active_node = is_integer ($arr["request"]["mrp_tree_active_item"]) ? $arr["request"]["mrp_tree_active_item"] : 7;
 		$tree->set_selected_item ($active_node);
 		$arr["prop"]["value"] = $tree->finalize_tree ();
@@ -1112,7 +1135,7 @@ class mrp_workspace extends class_base
 		}
 		else
 		{
-		$list_request = $arr["request"]["mrp_projects_show"] ? $arr["request"]["mrp_projects_show"] : "planned";
+			$list_request = $arr["request"]["mrp_projects_show"] ? $arr["request"]["mrp_projects_show"] : "planned";
 		}
 
 		$table->define_field (array (
@@ -1190,10 +1213,10 @@ class mrp_workspace extends class_base
 
 		if ($list_request != "search")
 		{
-			$table->define_chooser(array(
-				"name" => "selection",
-				"field" => "project_id",
-			));
+		$table->define_chooser(array(
+			"name" => "selection",
+			"field" => "project_id",
+		));
 		}
 		$table->set_default_sortby ("modified");
 		$table->set_default_sorder ("desc");
@@ -1378,6 +1401,129 @@ class mrp_workspace extends class_base
 		}
 	}
 
+	function create_jobs_list ($arr = array ())
+	{
+		$table =& $arr["prop"]["vcl_inst"];
+		$this_object =& $arr["obj_inst"];
+
+		$table->define_field (array (
+			"name" => "customer",
+			"caption" => "Klient",
+			"chgbgcolor" => "bgcolour_overdue",
+			"sortable" => 1,
+		));
+		$table->define_field (array (
+			"name" => "project",
+			"caption" => "Projekt",
+			"chgbgcolor" => "bgcolour_overdue",
+			"sortable" => 1,
+		));
+		$table->define_field (array (
+			"name" => "resource",
+			"caption" => "Teostaja",
+			"chgbgcolor" => "bgcolour_overdue",
+			"sortable" => 1,
+		));
+		// $table->define_field(array(
+			// "name" => "planned_date",
+			// "type" => "time",
+			// "format" => MRP_DATE_FORMAT,
+			// "numeric" => 1,
+			// "caption" => "Kokkulepitud algusaeg",
+			// "chgbgcolor" => "bgcolour_overdue",
+			// "sortable" => 1,
+		// ));
+		$table->define_field(array(
+			"name" => "scheduled_date",
+			"type" => "time",
+			"format" => MRP_DATE_FORMAT,
+			"numeric" => 1,
+			"caption" => "Planeeritud algusaeg",
+			"chgbgcolor" => "bgcolour_overdue",
+			"sortable" => 1,
+		));
+		$table->define_field(array(
+			"name" => "modify",
+			"chgbgcolor" => "bgcolour_overdue",
+			"caption" => "Ava",
+		));
+
+		$table->set_default_sortby ("scheduled_date");
+		$table->set_default_sorder ("asc");
+		$table->draw_text_pageselector (array (
+			"records_per_page" => 50,
+		));
+
+		$resource_tree = new object_tree (array (
+			"parent" => $this_object->prop ("resources_folder"),
+			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
+		));
+		$list = $resource_tree->to_list ();
+		$list->filter (array (
+			"class_id" => CL_MRP_RESOURCE,
+			"type" => MRP_RESOURCE_SUBCONTRACTOR,
+		), true);
+		$subcontractors = $list->ids ();
+
+		if (!empty ($subcontractors))
+		{
+			$applicable_states = array (
+				MRP_STATUS_NEW,
+				MRP_STATUS_PLANNED,
+			);
+
+			$list = new object_list (array (
+				"class_id" => CL_MRP_JOB,
+				"state" => $applicable_states,
+				"resource" => $subcontractors,
+				"parent" => $this_object->prop ("jobs_folder"),
+			));
+			$jobs = $list->arr ();
+		}
+		else
+		{
+			$jobs = array ();
+		}
+
+		foreach ($jobs as $job_id => $job)
+		{
+			$project = obj ($job->prop ("project"));
+			$resource = obj ($job->prop ("resource"));
+			$change_url = $this->mk_my_orb("change", array(
+				"id" => $job_id,
+				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
+			), "mrp_case");
+
+			### get project customer
+			$customer = $project->get_first_obj_by_reltype("RELTYPE_MRP_CUSTOMER");
+
+			### hilight for planned overdue
+			$bg_colour = ($job->prop ("starttime") > $planned_date) ? MRP_COLOUR_PLANNED_OVERDUE : false;
+
+			### define data for html table row
+			$definition = array (
+				"customer" => (is_object ($customer) ? $customer->name () : ""),
+				"project" => $project->name (),
+				"resource" => $resource->name (),
+				"scheduled_date" => $job->prop ("starttime"),
+				// "planned_date" => "",
+				"modify" => html::href (array (
+					"caption" => "Ava",
+					"url" => $change_url,
+					)
+				),
+				"bgcolour_overdue" => $bg_colour,
+			);
+
+			if (!$bg_colour)
+			{
+				unset ($definition["bgcolour_overdue"]);
+			}
+
+			$table->define_data($definition);
+		}
+	}
+
 	function create_schedule_chart ($arr)
 	{
 		$this_object = $arr["obj_inst"];
@@ -1390,7 +1536,7 @@ class mrp_workspace extends class_base
 
 		switch ($columns)
 		{
-			case "1":
+			case 1:
 				$subdivisions = 24;
 				break;
 
@@ -1475,9 +1621,12 @@ class mrp_workspace extends class_base
 				$job = obj ($job["oid"]);
 				$length = $job->prop ("planned_length");
 				$resource_id = $job->prop ("resource");
+				$resource = obj ($resource_id);
 				$project_id = $job->prop ("project");
+				$project = obj ($project_id);
 				$start = $job->prop ("starttime");
 				$hilight = in_array ($job->id (), $hilighted_jobs) ? true : false;
+				$job_name = $project->name () . " - " . $resource->name ();
 
 				$bar = array (
 					"row" => $resource_id,
@@ -1485,8 +1634,8 @@ class mrp_workspace extends class_base
 					"hilight" => $hilight,
 					"length" => $length,
 					"uri" => aw_url_change_var ("mrp_hilight", $project_id),
-					"title" => $job->name () . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-/* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
+					"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
+// /* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
 				);
 
 				$chart->add_bar ($bar);
@@ -1501,7 +1650,7 @@ class mrp_workspace extends class_base
 			"end" => $range_end,
 			"columns" => $columns,
 			"subdivisions" => $subdivisions,
-			"timespans" => 3,
+			"timespans" => $subdivisions,
 			"width" => 950,
 		));
 
@@ -1755,7 +1904,7 @@ class mrp_workspace extends class_base
 		$arr['cat'] = $_GET["cat"];
 		$arr['pj_job'] = $_GET["pj_job"];
 		$arr['mrp_tree_active_item'] = $_GET["mrp_tree_active_item"];
-
+//!!! if true?
 		if (true || is_oid($_GET["pj_job"]) || $_GET["group"] == "grp_printer")
 		{
 			aw_register_header_text_cb(array(&$this, "make_aw_header"));
@@ -2500,7 +2649,7 @@ class mrp_workspace extends class_base
 					foreach($person->connections_from(array("RELTYPE_SECTION")) as $c)
 					{
 						$sect = $c->to();
-	
+
 						// get all resources for section
 						$ol = new object_list(array(
 							"class_id" => CL_MRP_RESOURCE_OPERATOR,
@@ -2514,7 +2663,7 @@ class mrp_workspace extends class_base
 				}
 			}
 		}
-		
+
 		return $ret;
 	}
 
@@ -2886,7 +3035,7 @@ class mrp_workspace extends class_base
 			}
 			$results = new object_list($filt);
 		}
-		
+
 		$arr["list_request"] = "search";
 		$arr["search_res"] = $results;
 		$this->create_projects_list($arr);

@@ -431,6 +431,25 @@
             <parent>manager</parent>
       </property>
       <property>
+            <name>set_plannable</name>
+            <group>grp_case_workflow</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <caption>Planeeri projekti</caption>
+      </property>
+      <property>
+            <name>chart_navigation</name>
+            <group>grp_case_schedule</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>schedule_chart</name>
             <group>grp_case_schedule</group>
             <table>objects</table>

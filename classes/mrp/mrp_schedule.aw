@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.14 2005/02/22 10:52:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.15 2005/03/11 09:09:38 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
+
+HANDLE_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED, create)
 
 @classinfo syslog_type=ST_MRP_SCHEDULE relationmgr=yes
 
@@ -13,8 +15,9 @@
 */
 
 ### resource types
-define ("MRP_RESOURCE_MACHINE", 1);
-define ("MRP_RESOURCE_OUTSOURCE", 2);
+define ("MRP_RESOURCE_SCHEDULABLE", 1);
+define ("MRP_RESOURCE_NOT_SCHEDULABLE", 2);
+define ("MRP_RESOURCE_SUBCONTRACTOR", 3);
 
 ### states
 define ("MRP_STATUS_NEW", 1);
@@ -25,15 +28,21 @@ define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
 define ("MRP_STATUS_DELETED", 8);
+define ("MRP_STATUS_ONHOLD", 9);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 
-ini_set ("max_execution_time", "600");
-set_time_limit(600);
+ini_set ("max_execution_time", "90");
 
 class mrp_schedule extends class_base
 {
+	# time() at the moment of starting scheduling (int)
+	var $scheduling_time;
+
+	# how many seconds from time() to start schedule, should be at least scheduler's maximum execution time (int)
+	var $min_planning_jobstart = 300;
+
 	# how many seconds from time() to start schedule, should be at least scheduler's maximum execution time (int)
 	var $schedule_start = 300;
 
@@ -56,6 +65,12 @@ class mrp_schedule extends class_base
 	var $schedulable_resources = array ();
 	var $workspace_id;
 	var $jobs_table = "mrp_job";
+	var $non_schedulable_states = array (
+		MRP_STATUS_INPROGRESS,
+		MRP_STATUS_DONE,
+		MRP_STATUS_DELETED,
+		MRP_STATUS_NEW,
+	);
 
 	# array (res_id => array (), ...)
 	var $resource_data = array ();
@@ -116,6 +131,8 @@ class mrp_schedule extends class_base
 			exit (VIGA1);//!!!
 		}
 
+		$this->scheduling_time = time ();
+
 		### get parameters
 		$schedule_length = $workspace->prop ("parameter_schedule_length");
 		$this->schedule_length = (int) is_numeric ($schedule_length) ? $schedule_length : $this->schedule_length;
@@ -123,8 +140,7 @@ class mrp_schedule extends class_base
 
 		$schedule_start = $workspace->prop ("parameter_schedule_start");
 		$this->schedule_start = (int) is_numeric ($schedule_start) ? (time () + $schedule_start) : (time () + $this->schedule_start);
-
-		$this->scheduling_day_end = mktime (23, 59, 59, date ("m", $this->schedule_start), date ("d", $this->schedule_start), date("Y", $this->schedule_start));
+		$this->scheduling_day_end = mktime (23, 59, 59, date ("m", $this->scheduling_time), date ("d", $this->scheduling_time), date("Y", $this->scheduling_time));
 
 		### get combined_priority parameters
 		$p1 = $workspace->prop ("parameter_due_date_overdue_slope");
@@ -174,7 +190,7 @@ class mrp_schedule extends class_base
 		$resource_list = $resource_tree->to_list ();
 		$resource_list->filter (array (
 			"class_id" => CL_MRP_RESOURCE,
-			"type" => MRP_RESOURCE_MACHINE,
+			"type" => new obj_predicate_not (MRP_RESOURCE_NOT_SCHEDULABLE),
 		), true);
 
 		for ($resource = $resource_list->begin (); !$resource_list->end (); $resource = $resource_list->next ())
@@ -254,7 +270,6 @@ class mrp_schedule extends class_base
 			}
 		}
 
-
 /* timing */ timing ("initiate resource timetables", "end");
 /* timing */ timing ("get all projects from db & initiate project array", "start");
 
@@ -289,7 +304,7 @@ class mrp_schedule extends class_base
 
 
 		### get all jobs from db
-		$this->db_query ("SELECT * FROM `" . $this->jobs_table . "` WHERE (`state`=" . MRP_STATUS_NEW . " OR `state`=" . MRP_STATUS_LOCKED . " OR `state`=" . MRP_STATUS_PLANNED . ") AND `length` > 0 AND `project` != 0 AND `resource` != 0 AND `project` IS NOT NULL AND `resource` IS NOT NULL");
+		$this->db_query ("SELECT * FROM `" . $this->jobs_table . "` WHERE (`state`=" . MRP_STATUS_NEW . " OR `state`=" . MRP_STATUS_LOCKED . " OR `state`=" . MRP_STATUS_PLANNED . " OR `state`=" . MRP_STATUS_INPROGRESS . ") AND `length` > 0 AND `project` != 0 AND `resource` != 0 AND `project` IS NOT NULL AND `resource` IS NOT NULL");
 
 
 /* timing */ timing ("get all jobs from db", "end");
@@ -354,16 +369,15 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("one job total", "start");
 /* timing */ timing ("reserve time & modify earliest start", "start");
-/* dbg */ if ($job["oid"] == 7408 ) {
+// /* dbg */ if ($job["oid"] == 7408 ) {
+/* dbg */ if ($job["resource"] == 6670  ) {
 /* dbg */ $this->mrpdbg=1;
 /* dbg */ }
 
 				$job_length = $job["pre_buffer"] + $job["length"];
 //!!! misasi on prebuffer?
 //!!! kas ressursi default puhvrid pole mitte eraldi asjad vrd. t88de puhvritega?
-
 //!!! teha et kui konfigureeritakse ajaskaala laiemaks kui sched. length siis ....
-//!!! vaadata mis saab siis kui workflows on hargnemine aga taaskokkuminek puudub. seda olukorda vist ikka ei tohi lubada, sest selle korrigeerimine siin v2listab v6imaluse teatavaid workf. konstrueerida.
 
 				if ($project_start !== false)
 				{
@@ -379,7 +393,7 @@ class mrp_schedule extends class_base
 // /* dbg */ echo "presched: minstart-". date (MRP_DATE_FORMAT,$minstart )." | length - ". $job_length/3600 ."h <br>";
 // /* dbg */ }
 
-				if ( (in_array ($job["resource"], $this->schedulable_resources)) or ($job["state"] == MRP_STATUS_NEW) )
+				if (in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or !$job["starttime"]) and !in_array ($job["state"], $this->non_schedulable_states))
 				{
 					### schedule job next in line
 					list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $job_length);
@@ -388,8 +402,8 @@ class mrp_schedule extends class_base
 				else
 				{
 					### schedule fixed job
-					$scheduled_start = $job["starttime"];
-					$scheduled_length = $job["planned_length"];
+					$scheduled_start = empty ($job["starttime"]) ? $minstart : $job["starttime"];
+					$scheduled_length = empty ($job["planned_length"]) ? $job["length"] : $job["planned_length"];
 
 					//!!! teatada kinnise t88 yleplaneerimisest kui vaja.
 				}
@@ -847,11 +861,11 @@ class mrp_schedule extends class_base
 		list ($start, $end) = $this->_get_closest_unavailable_period ($resource_id, $time);
 
 // /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . "<br>";
+// /* dbg */ echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
 // /* dbg */ }
 
 		### find if period ends before another starts
-		while (true)
+		while ($i++ < 1000)
 		{
 			list ($period_start, $period_end) = $this->_get_closest_unavailable_period ($resource_id, $end);
 
@@ -866,6 +880,12 @@ class mrp_schedule extends class_base
 			else
 			{
 				break;
+			}
+
+			if ($i == 1000)
+			{
+				//!!! siia j6utakse t6en2oliselt siis kui kogu aeg on ressurss kinni, tykkide kaupa.
+				//!!! midagi teha siin, teavitada, saata juttu kellegile ...
 			}
 		}
 

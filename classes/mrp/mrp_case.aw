@@ -1,11 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.28 2005/02/28 09:31:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.29 2005/03/11 09:09:38 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
+EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @classinfo syslog_type=ST_MRP_CASE relationmgr=yes
 
@@ -173,8 +174,12 @@ default group=grp_case_material
 	@property resource_tree type=text store=no no_caption=1 parent=manager
 	@property workflow_table type=table store=no no_caption=1 parent=manager
 
+	@property set_plannable type=checkbox
+	@caption Planeeri projekti
+
 
 @default group=grp_case_schedule
+	@property chart_navigation type=text store=no no_caption=1
 	@property schedule_chart type=text store=no no_caption=1
 
 
@@ -221,8 +226,9 @@ CREATE TABLE `mrp_case` (
 */
 
 ### resource types
-define ("MRP_RESOURCE_MACHINE", 1);
-define ("MRP_RESOURCE_OUTSOURCE", 2);
+define ("MRP_RESOURCE_SCHEDULABLE", 1);
+define ("MRP_RESOURCE_NOT_SCHEDULABLE", 2);
+define ("MRP_RESOURCE_SUBCONTRACTOR", 3);
 
 ### states
 define ("MRP_STATUS_NEW", 1);
@@ -233,6 +239,7 @@ define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
 define ("MRP_STATUS_DELETED", 8);
+define ("MRP_STATUS_ONHOLD", 9);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -324,6 +331,14 @@ class mrp_case extends class_base
 					return PROP_IGNORE;
 				}
 				break;
+
+			case "set_plannable":
+				$prop["value"] = (empty ($prop["value"])) ? 0 : 1;
+				break;
+
+			case "chart_navigation":
+				$prop["value"] = $this->create_chart_navigation ($arr);
+				break;
 		}
 
 		return $retval;
@@ -339,6 +354,7 @@ class mrp_case extends class_base
 
 	function set_property($arr = array())
 	{
+		$this_object = $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
 
@@ -365,6 +381,41 @@ class mrp_case extends class_base
 
 			case "workflow_table":
 				$this->save_workflow_data ($arr);
+				break;
+
+			case "set_plannable":
+				if ($prop["value"] == 1)
+				{
+					$prop["value"] = $this_object->prop ("state");
+					$this_object->set_prop ("state", MRP_STATUS_PLANNED);
+				}
+				else
+				{
+					$prev_state = $this_object->prop ("set_plannable");
+
+					switch ($prev_state)
+					{
+						case MRP_STATUS_PLANNED:
+						case MRP_STATUS_NEW:
+						case MRP_STATUS_ABORTED:
+							$state = MRP_STATUS_ONHOLD;
+							break;
+
+						case MRP_STATUS_DONE:
+							$state = MRP_STATUS_DONE;
+							break;
+
+						case MRP_STATUS_DELETED:
+							$state = MRP_STATUS_DELETED;
+							break;
+
+						default:
+							$state = MRP_STATUS_ONHOLD;
+							break;
+					}
+
+					$this_object->set_prop ("state", $state);
+				}
 				break;
 		}
 
@@ -416,22 +467,6 @@ class mrp_case extends class_base
 			));
 			$this_object->set_parent ($projects_folder);
 			$this_object->save ();
-
-			// ### create n new jobs. connect, name & ... them
-			// if ($arr["request"]["number_of_jobs"])
-			// {
-				// $jobs_folder = $workspace->prop ("jobs_folder");
-				// $job_number = $arr["request"]["number_of_jobs"];
-
-				// while ($job_number)
-				// {
-					// $arr["mrp_job_exec_order"] = $job_number;
-					// $this->add_job ($arr);
-					// $job_number--;
-				// }
-
-				// $this->order_jobs ($arr);
-			// }
 		}
 		else
 		{
@@ -460,7 +495,7 @@ class mrp_case extends class_base
 			// kill project - mark as done && all jobs as well
 			$arr["obj_inst"]->set_prop("state", MRP_STATUS_DONE);
 			$arr["obj_inst"]->save();
-			
+
 			$jl = new object_list(array(
 				"class_id" => CL_MRP_JOB,
 				"project" => $arr["obj_inst"]->id()
@@ -502,64 +537,150 @@ class mrp_case extends class_base
 
 	function create_schedule_chart ($arr)
 	{
-		$this_object = $arr["obj_inst"];
+		$this_object =& $arr["obj_inst"];
 		$chart = get_instance ("vcl/gantt_chart");
+		$columns = 7;
+		$hilighted_project = $this_object->id ();
+		$hilighted_jobs = array ();
 
-		### get  project jobs
+		### add row dfn-s, resource names
 		$connections = $this_object->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
-		$project_start = 100000000000000000;
-		$project_length = 0;
-		$jobs = array ();
 		$project_resources = array ();
+		$project_start = "NA";
 
 		foreach ($connections as $connection)
 		{
 			$job = $connection->to ();
-			// $length = $job->prop ("pre_buffer") + $job->prop ("length") + $job->prop ("post_buffer");
-			$length = $job->prop ("planned_length");
-			$resource = $job->prop ("resource");
-			$project_length += $length;
-			$jobs[] = $job;
-			$project_resources[] = $resource;
+			$project_resources[] = $job->prop ("resource");
 			$starttime = $job->prop ("starttime");
-			$project_start = ($starttime < $project_start) ? $starttime : $project_start;
-
-			$bar = array (
-				"row" => $resource,
-				"start" => $starttime,
-				"length" => $length,
-				"title" => $job->name (),
-				"hilight" => true,
-			);
-			$chart->add_bar ($bar);
+			$project_start = ($project_start == "NA") ? $starttime : min ($starttime, $project_start);
 		}
 
-		$project_start = ($project_start == 100000000000000000) ? $this_object->prop ("starttime") : $project_start;
+		### add rows
 		$project_resources = array_unique ($project_resources);
-
-		$chart->configure_chart (array (
-			"chart_id" => "project_schedule_chart",
-			"start" => $project_start,
-			"end" => $this_object->prop("due_date"),
-			"cells" => 1,
-			"cell_size" => $project_length,
-		));
 
 		foreach ($project_resources as $resource_id)
 		{
-			if (!$this->can("view", $resource_id))
+			if ($this->can("view", $resource_id))
 			{
-				continue;
+				$resource = obj ($resource_id);
+				$chart->add_row (array (
+					"name" => $resource_id,
+					"title" => $resource->name (),
+					"uri" => html::get_change_url ($resource_id),
+				));
 			}
-			$resource = obj ($resource_id);
-			$chart->add_row (array (
-				"name" => $resource_id,
-				"title" => $resource->name (),
-				"uri" => html::get_change_url ($resource_id)
+		}
+
+		### ...
+		$range_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
+		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : $range_start);
+		$range_end = (int) ($range_start + $columns * 86400);
+
+		### get jobs in requested range & add bars
+		// $list = new object_list (array (
+			// "class_id" => CL_MRP_JOB,
+			// "parent" => $this_object->prop ("jobs_folder"),
+			// "state" => new obj_predicate_not (MRP_STATUS_DELETED),
+			// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $range_start, $range_end),
+		// ));
+		$res = $this->db_fetch_array (
+			"SELECT `planned_length` FROM `mrp_job` ".
+			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
+			"`length` > 0 ".
+			"ORDER BY `planned_length` DESC ".
+			"LIMIT  1".
+		"");
+		$max_length = isset ($res[0]["planned_length"]) ? $res[0]["planned_length"] : 0;
+
+		$jobs = $this->db_fetch_array (
+			"SELECT `oid` FROM `mrp_job` ".
+			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
+			"`length` > 0 AND ".
+			"`starttime` > " . ($range_start - $max_length) . " AND ".
+			"`starttime` < " . $range_end . " AND ".
+			"`resource` != 0 AND ".
+			"`resource` IS NOT NULL".
+		"");
+
+		foreach ($jobs as $job)
+		{
+			if ($this->can ("view", $job["oid"]))
+			{
+				$job = obj ($job["oid"]);
+				$resource_id = $job->prop ("resource");
+
+				if (!in_array ($resource_id, $project_resources))
+				{
+					continue;
+				}
+
+				$length = $job->prop ("planned_length");
+				$resource = obj ($resource_id);
+				$start = $job->prop ("starttime");
+				$hilight = ($job->prop ("project") == $hilighted_project) ? true : false;
+				$job_name = $this_object->name () . " - " . $resource->name ();
+
+				$bar = array (
+					"row" => $resource_id,
+					"start" => $start,
+					"hilight" => $hilight,
+					"length" => $length,
+					"uri" => html::get_change_url ($job["oid"]),
+					"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
+// /* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
+				);
+
+				$chart->add_bar ($bar);
+			}
+		}
+
+		### config
+		$chart->configure_chart (array (
+			"chart_id" => "master_schedule_chart",
+			"style" => "aw",
+			"start" => $range_start,
+			"end" => $range_end,
+			"columns" => $columns,
+			"width" => 950,
+		));
+
+		### define columns
+		$i = 0;
+		$days = array ("P", "E", "T", "K", "N", "R", "L");
+
+		while ($i < $columns)
+		{
+			$day_start = ($range_start + ($i * 86400));
+			$day = date ("w", $day_start);
+			$date = date ("j/m/Y", $day_start);
+			$chart->define_column (array (
+				"col" => ($i + 1),
+				"title" => $days[$day] . " - " . $date,
 			));
+			$i++;
 		}
 
 		return $chart->draw_chart ();
+	}
+
+	function create_chart_navigation ($arr)
+	{
+		$start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : time ());
+		$start_nav = array ();
+		$period_length = 7 * 86400;
+
+		$start_nav[] = html::href (array (
+			"caption" => "<< N&auml;dal tagasi",
+			"url" => aw_url_change_var ("mrp_chart_start", ($start - $period_length)),
+		));
+		$start_nav[] = html::href (array (
+			"caption" => "N&auml;dal edasi >>",
+			"url" => aw_url_change_var ("mrp_chart_start", ($start + $period_length + 1)),
+		));
+
+		$navigation = '&nbsp;&nbsp;' . implode (" &nbsp;&nbsp; ", $start_nav);
+		return $navigation;
 	}
 
 	function create_resource_tree ($arr = array ())
@@ -615,12 +736,12 @@ class mrp_case extends class_base
 			"tooltip" => "Testi/hinda valmimisaega",
 			"action" => "test",
 		));
-		$toolbar->add_button(array(
-			"name" => "plan",
-			"img" => "save.gif",
-			"tooltip" => "Planeeri",
-			"action" => "plan",
-		));
+		// $toolbar->add_button(array(
+			// "name" => "plan",
+			// "img" => "save.gif",
+			// "tooltip" => "Planeeri",
+			// "action" => "plan",
+		// ));
 	}
 
 	function create_workflow_table ($arr)
@@ -640,10 +761,6 @@ class mrp_case extends class_base
 		$table->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
-		));
-		$table->define_field(array(
-			"name" => "resource",
-			"caption" => "Ressurss",
 		));
 		$table->define_field(array(
 			"name" => "length",
@@ -769,14 +886,7 @@ class mrp_case extends class_base
 					"url" => $change_url,
 					)
 				),
-				"name" => html::textbox(array(
-					"name" => "mrp_workflow_job-" . $job_id . "-name",
-					"size" => "4",
-					"value" => $job->name (),
-					"disabled" => $disabled,
-					)
-				),
-				"resource" => $resource_name,
+				"name" => $this_object->name () . " - " . $resource_name,
 				"length" => html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-length",
 					"size" => "3",
@@ -847,10 +957,6 @@ class mrp_case extends class_base
 
 					switch ($property)
 					{
-						case "name":
-							$job->set_name ($value);
-							break;
-
 						case "prerequisites":
 							### translate prerequisites from execution orders to object id-s
 							$prerequisites = $job->prop ("prerequisites");
@@ -1113,14 +1219,12 @@ class mrp_case extends class_base
 		if (is_oid ($resource_id))
 		{
 			$resource = obj ($resource_id);
-			$name = $this_object->name () . " - " . $resource->name ();
 			$pre_buffer = $resource->prop ("default_pre_buffer");
 			$post_buffer = $resource->prop ("default_post_buffer");
 		}
 		else
 		{
 			$resource = false;
-			$name = $this_object->name () . " - ...";
 			$pre_buffer = 0;
 			$post_buffer = 0;
 		}
@@ -1140,7 +1244,6 @@ class mrp_case extends class_base
 		$prerequisite = is_object ($prerequisite_job) ? $prerequisite_job->id () : "";
 
 		$job =& new object (array (
-		   "name" => $name,
 		   "parent" => $jobs_folder,
 		   // "class_id" => CL_MRP_JOB,
 		));
@@ -1303,6 +1406,23 @@ class mrp_case extends class_base
 	function on_delete_case ($arr)
 	{
 		$project = obj ($arr["oid"]);
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_LOCKED,
+			MRP_STATUS_OVERDUE,
+		);
+
+		if (in_array ($project->prop ("state"), $applicable_states))
+		{
+			$workspace = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+			if ($workspace)
+			{
+				post_message (MSG_MRP_RESCHEDULING_NEEDED, array ("mrp_workspace" => $workspace->id ()));
+			}
+		}
+
 		$project->set_prop ("state", MRP_STATUS_DELETED);
 		$project->save ();
 

@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.14 2005/02/28 09:31:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.15 2005/03/11 09:09:38 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
+EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @classinfo syslog_type=ST_MRP_JOB relationmgr=yes no_status=1
 
@@ -105,8 +106,9 @@ CREATE TABLE `mrp_job` (
 */
 
 ### resource types
-define ("MRP_RESOURCE_MACHINE", 1);
-define ("MRP_RESOURCE_OUTSOURCE", 2);
+define ("MRP_RESOURCE_SCHEDULABLE", 1);
+define ("MRP_RESOURCE_NOT_SCHEDULABLE", 2);
+define ("MRP_RESOURCE_SUBCONTRACTOR", 3);
 
 ### states
 define ("MRP_STATUS_NEW", 1);
@@ -117,8 +119,9 @@ define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
 define ("MRP_STATUS_DELETED", 8);
+define ("MRP_STATUS_ONHOLD", 9);
 
-### sub states 
+### sub states
 define ("MRP_SUBSTATUS_PAUSED", 9);
 
 ### misc
@@ -301,7 +304,7 @@ class mrp_job extends class_base
 					//"img" => "continue.gif",
 					"tooltip" => "J&auml;tka",
 					"action" => "scontinue",
-				));
+			));
 			}
 		}
 	}
@@ -486,7 +489,7 @@ class mrp_job extends class_base
 
 		$ws = get_instance(CL_MRP_WORKSPACE);
 		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti Vahetuse l&otilde;pp", $arr["pj_change_comment"]);
-		
+
 		// log out user
 		$u = get_instance("users");
 		$u->orb_logout();

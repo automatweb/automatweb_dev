@@ -78,7 +78,6 @@
             <group>grp_resource_unavailable_work</group>
             <type>releditor</type>
             <reltype>RELTYPE_RECUR_WRK</reltype>
-            <use_form>emb</use_form>
             <mode>manager</mode>
             <props>
                   <num_0>name</num_0>
@@ -86,10 +85,6 @@
                   <num_2>end</num_2>
                   <num_3>time</num_3>
                   <num_4>length</num_4>
-                  <num_5>recur_type</num_5>
-                  <num_6>interval_daily</num_6>
-                  <num_7>interval_weekly</num_7>
-                  <num_8>interval_yearly</num_8>
             </props>
             <table_fields>
                   <num_0>name</num_0>
@@ -97,7 +92,6 @@
                   <num_2>end</num_2>
                   <num_3>time</num_3>
                   <num_4>length</num_4>
-                  <num_5>recur_type</num_5>
             </table_fields>
             <store>no</store>
             <caption>T&amp;ouml;&amp;ouml;ajad</caption>
