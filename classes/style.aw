@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.36 2004/10/22 11:47:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.37 2004/10/28 10:13:03 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -333,6 +333,8 @@ class style extends aw_template
 		$st = $this->mk_cache($id);
 		if ($st["class_id"] == CL_CSS)
 		{
+			classload("layout/active_page_data");
+			active_page_data::add_site_css_style($st["oid"]);
 			return "class=\"".$this->get_style_name($st["oid"])."\"";
 		}
 
