@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.90 2004/04/29 12:44:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.91 2004/05/06 12:20:56 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -74,7 +74,7 @@
 	@property img_timing type=textbox size=3 field=meta method=serialize group=presentation
 	@caption Viivitus piltide vahel (sek.)
 	
-	@property imgrelmanager type=relmanager reltype=IMAGE store=no group=presentation
+	@property imgrelmanager type=relmanager reltype=RELTYPE_IMAGE store=no group=presentation
 	@caption Vali pilte
 
 	@property img_act type=relpicker reltype=RELTYPE_IMAGE field=meta method=serialize group=presentation
@@ -229,7 +229,7 @@
 	@reltype ACL_GROUP value=7 clid=CL_GROUP
 	@caption Kasutajagrupp
 
-	@reltype OBJ_TREE value=8 clid=CL_OBJECT_TREE
+	@reltype OBJ_TREE value=8 clid=CL_OBJECT_TREE,CL_OBJECT_TREEVIEW_V2
 	@caption objektide nimekiri
 
 	@reltype DOCS_FROM_MENU value=9 clid=CL_MENU
@@ -250,7 +250,7 @@
 	@reltype IMAGE value=14 clid=CL_IMAGE
 	@caption pilt
 
-	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION
+	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2
 	@caption alammen&uuml;&uuml;d objektist
 */
 

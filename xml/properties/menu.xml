@@ -213,7 +213,7 @@
             <name>imgrelmanager</name>
             <table>objects</table>
             <type>relmanager</type>
-            <reltype>IMAGE</reltype>
+            <reltype>RELTYPE_IMAGE</reltype>
             <store>no</store>
             <group>presentation</group>
             <field>imgrelmanager</field>
@@ -640,7 +640,10 @@
             </ACL_GROUP>
             <OBJ_TREE>
                   <value>8</value>
-                  <clid>CL_OBJECT_TREE</clid>
+                  <clid>
+                        <num_0>CL_OBJECT_TREE</num_0>
+                        <num_1>CL_OBJECT_TREEVIEW_V2</num_1>
+                  </clid>
                   <caption>objektide nimekiri</caption>
             </OBJ_TREE>
             <DOCS_FROM_MENU>
@@ -678,6 +681,7 @@
                   <clid>
                         <num_0>CL_SHOP_ORDER_CENTER</num_0>
                         <num_1>CL_CRM_SECTION</num_1>
+                        <num_2>CL_OBJECT_TREEVIEW_V2</num_2>
                   </clid>
                   <caption>alammen&amp;uuml;&amp;uuml;d objektist</caption>
             </SUBMENUS>
