@@ -1,25 +1,37 @@
-<form method=POST action="refcheck.{VAR:ext}">
+<form method=POST action="reforb.{VAR:ext}" enctype="multipart/form-data">
+	<input type='hidden' name="MAX_FILE_SIZE"  value="10000000">
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption">ID</td>
-	<td class="fcaption">{VAR:ID}</td>
+	<td class="fgtext">ID</td>
+	<td class="fgtext">{VAR:ID}</td>
 </tr>
 <tr>
-	<td class="fcaption">Nimetus</td>
-	<td class="fform"><input type="text" name="description" value="{VAR:description}"></td>
+	<td class="fgtext">Nimetus</td>
+	<td class="fgtext"><input type="text" name="description" value="{VAR:description}"></td>
 </tr>
 <tr>
-	<td class="fcaption">Arhiveeritud</td>
-	<td class="fform"><select name="archived">
+	<td class="fgtext">Arhiveeritud</td>
+	<td class="fgtext"><select name="archived">
 	{VAR:arc}
 	</select>
 	</td>
+</tr>
 <tr>
-	<td class="fform" colspan="2">
+	<td class="fgtext">Pilt:</td>
+	<td class="fgtext"><input type="file" name="image"> {VAR:image}</td>
+</tr>
+<tr>
+	<td class="fgtext">Pildi link</td>
+	<td class="fgtext"><input type="text" name="image_link" value="{VAR:image_link}"></td>
+</tr>
+<tr>
+	<td class="fgtext">Aasta</td>
+	<td class="fgtext"><select name="pyear">{VAR:pyear}</select></td>
+</tr>
+<tr>
+	<td class="fgtext" colspan="2">
 	<input type="submit" value="Salvesta periood">
-	<input type="hidden" name="id" value="{VAR:ID}">
-	<input type="hidden" name="action" value="period">
-	<input type="hidden" name="subaction" value="save">
+	{VAR:reforb}
 	</td>
 </tr>
 </table>

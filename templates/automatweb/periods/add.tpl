@@ -1,12 +1,12 @@
-<form method=POST action="refcheck.{VAR:ext}">
+<form method=POST action="reforb.{VAR:ext}">
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 <tr>
-	<td class="fcaption">Nimetus</td>
-	<td class="fform"><input type="text" size="40" name="description"></td>
+	<td class="fgtext">Nimetus</td>
+	<td class="fgtext"><input type="text" size="40" name="description"></td>
 </tr>
 <tr>
-	<td class="fcaption">Algus</td>
-	<td class="fform">P‰ev: <input type="text" name="sday" size="2" maxlength="2">
+	<td class="fgtext">Algus</td>
+	<td class="fgtext">P‰ev: <input type="text" name="sday" size="2" maxlength="2">
 	Kuu: <select name="smonth">
 	<option value="0"> </option>
 	<option value="1">jaanuar</option>
@@ -27,8 +27,8 @@
 	</td>
 </tr>
 <tr>
-	<td class="fcaption">Lopp</td>
-	<td class="fform">P‰ev: <input type="text" name="eday" size="2" maxlength="2">
+	<td class="fgtext">Lopp</td>
+	<td class="fgtext">P‰ev: <input type="text" name="eday" size="2" maxlength="2">
 	Kuu: <select name="emonth">
 	<option value="0"> </option>
 	<option value="1">jaanuar</option>
@@ -50,15 +50,17 @@
 </td>
 </tr>
 <tr>
-	<td class="fcaption">M‰‰rangud</td>
-	<td class="fform">Aktiveerub ise: <input type="checkbox" name="autoactivate"></td>
+	<td class="fgtext">M‰‰rangud</td>
+	<td class="fgtext">Aktiveerub ise: <input type="checkbox" name="autoactivate"></td>
 </tr>
 <tr>
-	<td class="fform" colspan="2" align="center">
+	<td class="fgtext">Aasta</td>
+	<td class="fgtext"><select name="pyear">{VAR:pyear}</select></td>
+</tr>
+<tr>
+	<td class="fgtext" colspan="2" align="center">
 	<input type="submit" value="Lisa periood">
-	<input type="hidden" name="action" value="period">
-	<input type="hidden" name="oid" value="{VAR:oid}">
-	<input type="hidden" name="subaction" value="add">
+	{VAR:reforb}
 </tr>
 </table>
 </form>
