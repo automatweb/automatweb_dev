@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.12 2004/10/08 18:48:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.13 2004/10/21 16:41:14 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -32,6 +32,9 @@
 @property sortbl type=table store=no group=showing
 @caption Andmete sorteerimine
 
+@property filter_table type=table store=no group=showing
+@caption Andmete filtreerimine
+
 @groupinfo styles caption="Stiilid"
 @property title_bgcolor type=colorpicker field=meta method=serialize group=styles
 @caption Pealkirja taustav&auml;rv
@@ -53,7 +56,7 @@
 @caption Tulbad
 
 
-@reltype DATASOURCE value=1 clid=CL_OTV_DS_OBJ,CL_OTV_DS_POSTIPOISS
+@reltype DATASOURCE value=1 clid=CL_OTV_DS_OBJ,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_ROADINFO,CL_OTV_DS_MYSQL
 @caption andmed
 
 @reltype CSS value=2 clid=CL_CSS
@@ -100,6 +103,10 @@ class object_treeview_v2 extends class_base
 				$this->do_sortbl($arr);
 				break;
 
+			case "filter_table":
+				$this->do_filter_table($arr);
+				break;
+
 			case "access":
 				$this->do_access_tbl($arr);
 				break;
@@ -121,6 +128,10 @@ class object_treeview_v2 extends class_base
 
 			case "sortbl":
 				$this->do_save_sortbl($arr);
+				break;
+
+			case "filter_table":
+				$this->do_save_filter_table($arr);
 				break;
 		}
 		return $retval;
@@ -179,6 +190,35 @@ class object_treeview_v2 extends class_base
 				$class2cfgform[$addtype->prop("type")] = $addtype->prop("use_cfgform");
 			}
 		}
+
+		// do some filtering in $ol
+		$filters = $ob->meta("saved_filters");
+
+		$ol_result = array();
+		foreach($ol as $ol_item)
+		{
+			foreach($filters as $filter)
+			{
+				if($filter['is_strict'] == 1)
+				{
+					if($ol_item[$filter['field']] == $filter['value'])
+					{
+						array_push($ol_result, $ol_item);
+						break;
+					}
+				}
+				else
+				{
+					if(strpos(strtolower($ol_item[$filter['field']]), strtolower($filter['value'])) !== false)
+					{
+						array_push($ol_result, $ol_item);
+						break;
+					}
+				}
+			}
+		}
+
+		$ol = $ol_result;
 
 		$this->cnt = 0;
 		$c = "";
@@ -854,6 +894,100 @@ class object_treeview_v2 extends class_base
 		{
 			return $comp_a < $comp_b ? -1 : 1;
 		}
+	}
+
+	function do_filter_table(&$arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$this->_init_filter_table($t);
+
+		
+
+		$all_cols = $this->_get_col_list($arr["obj_inst"]);
+		$tmp = $arr["obj_inst"]->meta("sel_columns");
+		$cols = array("" => "");
+		foreach($all_cols as $col_id => $col_name)
+		{
+			if (1 == $tmp[$col_id])
+			{
+				$cols[$col_id] = $col_name;
+			}
+		}
+
+		$saved_filters = new aw_array($arr['obj_inst']->meta("saved_filters"));
+
+		$max_id = 0;
+		foreach($saved_filters->get() as $id => $filter_data)
+		{
+			$t->define_data(array(
+				"filter_field" => html::select(array(
+						"name" => "filters[".$id."][field]",
+						"options" => $cols,
+						"selected" => $filter_data['field'],
+					)),
+				"filter_value" => html::textbox(array(
+						"name" => "filters[".$id."][value]",
+						"value" => $filter_data['value'],
+					)),
+				"filter_strict" => html::checkbox(array(
+						"name" => "filters[".$id."][is_strict]",
+						"value" => 1,
+						"checked" => ($filter_data['is_strict'] == 1) ? true : false,
+					)),
+			));
+//			$max_id = max($max_id, $id);
+		}
+//		$max_id++;
+//		$t->define_data(array(
+//			"filter_field" => html::select(array(
+//					"name" => "filters[".$max_id."][field]",
+//					"options" => $cols,
+//					"selected" => "",
+//				)),
+//			"filter_value" => html::textbox(array(
+//					"name" => "filters[".$max_id."][value]",
+//					"value" => "",
+//				)),
+//		));
+
+		$t->set_sortable(false);
+
+	}
+
+	function do_save_filter_table(&$arr)
+	{
+		$saved_filters = new aw_array($arr['request']['filters']);
+		$valid_filters = array();
+		foreach($saved_filters->get() as $filter_key => $filter_value)
+		{
+			if($filter_value['field'])
+			{
+				array_push($valid_filters, $filter_value);
+			}
+		}
+		$arr['obj_inst']->set_meta("saved_filters", $valid_filters);
+	}
+
+	function _init_filter_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "filter_field",
+			"caption" => "Filtreeritav v&auml;li",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "filter_value",
+			"caption" => "Filtreeritav v&auml;&auml;rtus",
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "filter_strict",
+			"caption" => "Kas t&auml;pne",
+			"align" => "center",
+		));
+
 	}
 
 	function do_pageselector(&$list, $per_page)
