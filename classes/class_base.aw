@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.86 2003/03/19 14:38:10 duke Exp $
+// $Id: class_base.aw,v 2.87 2003/03/19 18:08:17 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -829,7 +829,7 @@ class class_base extends aliasmgr
 		{
 			if (empty($title))
 			{
-				$title = "Muuda $classname " . $name;
+				$title = "Muuda $classname objekti " . $name;
 			};
 			$parent = $this->coredata["parent"];
 		}
@@ -950,7 +950,7 @@ class class_base extends aliasmgr
 				"link" => $link,
 				"caption" => "Seostehaldur",
 				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
-				"disabled" => !isset($this->id),
+				"disabled" => empty($this->id),
 			));
 		};
 
@@ -1189,6 +1189,8 @@ class class_base extends aliasmgr
 			$property["store"] = isset($property["store"]) ? $property["store"] : "";
 			$property["field"] = isset($property["field"]) ? $property["field"] : "";
 			$property["method"] = isset($property["method"]) ? $property["method"] : "direct";
+			// it escapes me why a property would not have a type. but some do not. -- duke
+			$property["type"] = isset($property["type"]) ? $property["type"] : "";
 
 
 			if (isset($property_list[$key]["caption"]))
@@ -1345,7 +1347,7 @@ class class_base extends aliasmgr
 				};
 			};
 
-			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
+			if (isset($val["type"]) && ($val["type"] == "generated") && method_exists($this->inst,$val["generator"]))
 			{
 				$meth = $val["generator"];
 				$vx = new aw_array($this->inst->$meth($argblock));
@@ -1427,13 +1429,14 @@ class class_base extends aliasmgr
 		};
 
 
-		if (($val["type"] == "objpicker") && $val["clid"])
+		if (($val["type"] == "objpicker") && isset($val["clid"]) && defined($val["clid"]))
 		{
 			$val["type"] = "select";
 			$val["options"] = $this->list_objects(array(
 				"class" => constant($val["clid"]),
 				"subclass" => isset($val["subclass"]) ? constant($val["subclass"]) : "",
 				"addempty" => true,
+				"add_folders" => true,
 			));
 		};
 
@@ -1476,7 +1479,14 @@ class class_base extends aliasmgr
 				};
 			};
 
-			$objlist = new aw_array($this->alist[constant($val["clid"])]);
+			if (defined($val["clid"]))
+			{
+				$objlist = new aw_array($this->alist[constant($val["clid"])]);
+			}
+			else
+			{
+				$objlist = new aw_array();
+			};
 
 			$options = array("0" => "--vali--");
 			// generate option list
