@@ -8,6 +8,45 @@
 				</arguments>
 			</function>
 		</action>
+		<action name="dodelete">
+			<function name="dodelete">
+				<arguments>
+				<required name="id"/>
+				<required name="class_id"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="redirect">
+			<function name="redirect">
+				<arguments>
+				<required name="url"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="show_icons">
+			<function name="show_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pipe">
+			<function name="pipe">
+				<arguments>
+				<required name="id"/>
+				<optional name="element"/>
+				<optional name="top"/>
+				<optional name="left"/>
+				<optional name="W"/>
+				<optional name="I"/>
+				<optional name="WS"/>
+				<optional name="WC"/>
+				<optional name="WI"/>
+				<optional name="reorder"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
-		
+
