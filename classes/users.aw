@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.95 2003/10/22 07:34:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.96 2003/11/19 16:21:12 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1921,11 +1921,13 @@ class users extends users_user
 			}
 			$gidlist = array();
 			$gidlist_pri = array();
+			$gidlist_oid = array();
 			$gl = $this->get_gids_by_uid($uid,true);
 			foreach($gl as $gid => $gd)
 			{
 				$gidlist[(int)$gid] = (int)$gd["gid"];
 				$gidlist_pri[(int)$gid] = (int)$gd["priority"];
+				$gidlist_oid[(int)$gd["oid"]] = (int)$gd["oid"];
 			}
 
 			if (count($gidlist) < 1)
@@ -1934,6 +1936,7 @@ class users extends users_user
 			}
 			aw_global_set("gidlist", $gidlist);
 			aw_global_set("gidlist_pri", $gidlist_pri);
+			aw_global_set("gidlist_oid", $gidlist_oid);
 			$this->touch($uid);
 
 			// get highest priority group
