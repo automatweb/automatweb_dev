@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.57 2002/08/09 11:08:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.58 2002/08/29 03:13:59 kristo Exp $
 // form_entry_element.aw - 
 classload("currency");
 load_vcl("date_edit");
@@ -95,9 +95,10 @@ class form_entry_element extends form_element
 	}
 
 
-	function gen_user_html_not($prefix = "",$elvalues = array(),$no_submit = false)		// function that doesn't use templates
+	// function that doesn't use templates
+	function gen_user_html_not($prefix = "",$elvalues = array(),$no_submit = false, $element_name = false, $udcnt_values = false)		
 	{
-		return $this->do_core_userhtml($prefix,$elvalues,$no_submit);
+		return $this->do_core_userhtml($prefix,$elvalues,$no_submit, $element_name, $udcnt_values);
 	}
 
 	function process_entry(&$entry, $id,$prefix = "")

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.49 2002/08/24 12:31:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.50 2002/08/29 03:13:41 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -21,7 +21,9 @@ class form_table extends form_base
 			"order" => "Order", 
 			"select" => "Select",
 			"jrk" => "Jrk",
-			"cnt" => "Count"
+			"cnt" => "Count",
+			"formel" => "Koguse element",
+			"formel_price" => "Hinna element"
 		);
 
 		$this->lang_id = aw_global_get("lang_id");
@@ -29,6 +31,7 @@ class form_table extends form_base
 		$this->ru = aw_global_get("REQUEST_URI");
 		$this->image = get_instance("image");
 		$this->uid = aw_global_get("uid");
+		$this->controller_instance = get_instance("form_controller");
 	}
 
 	////
@@ -50,26 +53,60 @@ class form_table extends form_base
 	{
 		$ret = array();
 		$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = '$id'");
-                while ($row = $this->db_next())
-                {
-                        $ret[$row["table_id"]] = $row["name"];
-                }
+		while ($row = $this->db_next())
+		{
+			$ret[$row["table_id"]] = $row["name"];
+		}
 		return $ret;
 	}
 
 	////
 	// !starts the table data definition for table $id
-	function start_table($id)
+	// form_for_entry_id - optional - the id of the form that has the entries with the id that will be in the entry_id column
+	function start_table($id, $form_for_entry_id = 0)
 	{
 		load_vcl("table");
 		$this->t = new aw_table(array("prefix" => "fg_".$id));
 		$this->t->parse_xml_def_string($this->get_xml($id));
+
+		// this figures out which fields in the table are numeric and tells the vcl table component about their names
 		$this->set_numeric_fields_in_table();
+
+		// this is used when showing order elements - we need to know to which form the entry currently being shown belongs to
+		// so this should be passed to this function if all rows are from the same form, or
+		// set before calling row_data
+		$this->form_for_entry_id = $form_for_entry_id;
+
+		// figure out a unique name for the form that contains this table
+		$cnt = 1;
+		$fns = aw_global_get("form_table_html_form_names");
+		while (isset($fns["tb_".$this->table_id."_".$cnt]))
+		{
+			$cnt++;
+		}
+		$fns["tb_".$this->table_id."_".$cnt] = 1;
+		$this->table_html_form_name = "tb_".$this->table_id."_".$cnt;
+		aw_global_set("form_table_html_form_names", $fns);
+
+		// initialize all the baskets that are to be used in this table
+		for ($i=0; $i < $this->table["cols"]; $i++)
+		{
+			$bid = $this->table["defs"][$i]["basket"];
+			if ($bid)
+			{
+				$this->baskets[$bid] =& get_instance("basket");
+				$this->baskets[$bid]->init_basket($bid);
+			}
+		}
+
+		// all the price element's values in the table are accumulated in here
+		$this->pricel_sum = 0;
 
 		if ($GLOBALS["tbl_dbg"])
 		{
 			echo "table id = $id <br>";
 		}
+
 		enter_function("form_table::groupsettings");
 		$this->in_show_all_entries_groups = false;
 		if (is_array($this->table["user_entries_except_grps"]) && count($this->table["user_entries_except_grps"]) > 0)
@@ -167,6 +204,8 @@ class form_table extends form_base
 
 		$this->num_lines++;
 
+		$reset_aliases = array();
+
 		if ($form_id != 0)
 		{
 			// here also make the view and other links
@@ -175,13 +214,50 @@ class form_table extends form_base
 			$dat["ev_change"] = $this->table["texts"]["change"][$this->lang_id];
 			foreach($this->table["change_cols"] as $chel)
 			{
-				$dat["ev_".$chel] = "<a href='".$change_link."'>".$dat["ev_".$chel]."</a>";
+				$cl = $this->get_col_for_el($chel);
+				$popdat = $this->table["defs"][$cl];
+				if (isset($popdat["link_popup"]) && $popdat["link_popup"])
+				{
+					$change_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
+						$change_link,
+						$popdat["link_popup_scrollbars"],
+						!$popdat["link_popup_fixed"],
+						$popdat["link_popup_toolbar"],
+						$popdat["link_popup_addressbar"],
+						$popdat["link_popup_width"],
+						$popdat["link_popup_height"]
+					);
+				};
+
+				// check if any image aliases are set for this column and if there are, stick them in the link
+				// and remove them from the array so that they will not be shown l8r
+				if (is_array($popdat["alias"]))
+				{
+					// first, the image aliases, because they affect the row contents
+					foreach($popdat["alias"] as $_aidx => $aid)	
+					{
+						$alias_data = $popdat["alias_data"][$aid];
+						if ($alias_data["class_id"] == CL_IMAGE)
+						{
+							$imgdat = $this->image->get_image_by_id($alias_data["target"]);
+							$dat["ev_".$chel] = "<img border='0' src='".$imgdat["url"]."' alt='".$dat["ev_".$chel]."'>";
+							$reset_aliases[$cl][$_aidx] = $this->table["defs"][$cl]["alias"][$_aidx];
+							unset($this->table["defs"][$cl]["alias"][$_aidx]);
+						}
+					}
+				}
+
+				$dat["ev_".$chel] = "<a href=\"".$change_link."\">".$dat["ev_".$chel]."</a>";
 			}
 
 			$show_link = $this->get_link("show", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
 			$show_link_popup = $this->get_link("show_popup", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
-			$this->table["view_cols"]["view"] = "view";
-			$dat["ev_view"] = $this->table["texts"]["view"][$this->lang_id];
+			if ($this->get_col_for_el("view"))
+			{
+				// only do this, when necessary and perhaps avoid the next loop
+				$this->table["view_cols"]["view"] = "view";
+				$dat["ev_view"] = $this->table["texts"]["view"][$this->lang_id];
+			}
 			foreach($this->table["view_cols"] as $v_el)
 			{
 				$cl = $this->get_col_for_el($v_el);
@@ -190,23 +266,61 @@ class form_table extends form_base
 				$popdat = $this->table["defs"][$cl];
 				if (isset($popdat["link_popup"]) && $popdat["link_popup"])
 				{
-					$show_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",
+					$show_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
 						$show_link_popup,
 						$popdat["link_popup_scrollbars"],
 						!$popdat["link_popup_fixed"],
+						$popdat["link_popup_toolbar"],
+						$popdat["link_popup_addressbar"],
 						$popdat["link_popup_width"],
 						$popdat["link_popup_height"]
 					);
 				};
 
-				// I don't see _targetwin being defined anywhere and this causes a warning
-				//$dat["ev_".$v_el] = sprintf("<a href=\"%s\" %s>%s</a>",$show_link,$_targetwin,$_caption);
-				$dat["ev_".$v_el] = sprintf("<a href=\"%s\">%s</a>",$show_link,$_caption);
+				if (is_array($popdat["alias"]))
+				{
+					// first, the image aliases, because they affect the row contents
+					foreach($popdat["alias"] as $_aidx => $aid)	
+					{
+						$alias_data = $popdat["alias_data"][$aid];
+						if ($alias_data["class_id"] == CL_IMAGE)
+						{
+							$imgdat = $this->image->get_image_by_id($alias_data["target"]);
+							$show_link = "<img border='0' src='".$show_link."' alt='".$dat["ev_".$v_el]."'>";
+							$reset_aliases[$cl][$_aidx] = $this->table["defs"][$cl]["alias"][$_aidx];
+							unset($this->table["defs"][$cl]["alias"][$_aidx]);
+						}
+					}
+				}
 
+				// I don't see _targetwin being defined anywhere and this causes a warning
+				$dat["ev_".$v_el] = sprintf("<a href=\"%s\">%s</a>",$show_link,$_caption);
 			}
 
 			$del_link = $this->get_link("delete", $form_id,$section,$op_id,$chain_id,$chain_entry_id, $dat["entry_id"]);
-			$dat["ev_delete"] = "<a href='".$del_link."'>".$this->table["texts"]["delete"][$this->lang_id]."</a>";
+			$del_cl = $this->get_col_for_el("delete");
+			$deltxt = $this->table["texts"]["delete"][$this->lang_id];
+			if ($del_cl)
+			{
+				$popdat = $this->table["defs"][$del_cl];
+				if (is_array($popdat["alias"]))
+				{
+					// first, the image aliases, because they affect the row contents
+					foreach($popdat["alias"] as $_aidx => $aid)	
+					{
+						$alias_data = $popdat["alias_data"][$aid];
+						if ($alias_data["class_id"] == CL_IMAGE)
+						{
+							$imgdat = $this->image->get_image_by_id($alias_data["target"]);
+							$deltxt = "<img border='0' src='".$imgdat["url"]."' alt='".$deltxt."'>";
+							$reset_aliases[$del_cl][$_aidx] = $this->table["defs"][$del_cl]["alias"][$_aidx];
+							unset($this->table["defs"][$del_cl]["alias"][$_aidx]);
+						}
+					}
+				}
+			}
+
+			$dat["ev_delete"] = "<a href='".$del_link."'>".$deltxt."</a>";
 
 			if (isset($dat["created"]))
 			{
@@ -226,6 +340,10 @@ class form_table extends form_base
 			$dat["ev_jrk"] = "[__jrk_replace__]";
 		}
 
+		$cursums = aw_global_get("fg_element_sums");
+
+		$basketsonrow = array();
+
 		// here we must preprocess the data, cause then the column names will be el_col_[col_number] not element names
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
@@ -236,38 +354,116 @@ class form_table extends form_base
 				// first we compile the elements in the column together into one string and add their 
 				// separators
 				$str = "";
-				// NB! This crashes PHP on Sparc/Solaris8 -- duke
-				// foreach($cc["els"] as $elid => $elid)
-				
+				$noshowstr = "";
 				foreach($cc["els"] as $elid)
 				{
 					if ($dat["ev_".$elid] != "")
 					{
 						if ($cc["el_show"][$elid] == 1)
 						{
+							$cursums[$elid] += $dat["ev_".$elid];
 							$str .= $dat["ev_".$elid];
 							$str .= $this->table["defs"][$col]["el_sep"][$elid];
 						}
+						else
+						{
+							$noshowstr .= $dat["ev_".$elid];
+							$noshowstr .= $this->table["defs"][$col]["el_sep"][$elid];
+						}
 					}
 					else
+					if ($cc["el_show"][$elid] == 1)
 					{
 						// order element will never have a value in the data
-						if ($elid == "order" && $cc["el_show"][$elid] == 1)
+						if ($elid == "order" )
 						{
 							$str .= $this->get_order_url($col,$dat);
 							$str .= $this->table["defs"][$col]["el_sep"][$elid];
+						}
+						else
+						if ($elid == "formel")
+						{
+							if (!$cc["basket"])
+							{
+								$this->raise_error(ERR_FG_TBL_NOBASKET, "Column $col for form table $this->table_id has a count element selected, but no basket! You must also select a basket, where the ordered items will be stored!", true);
+							}
+							// bit of trickey here - this will get used in some next loop iteration to calculate price
+							$basketsonrow[] = $cc["basket"];
+
+							// now, if we have a controller set for this basket
+							$ctrl_ok = true;
+							if ($cc["basket_controller"])
+							{
+								// eval it. and if it returns false, then we must not show this basket's count element
+								// but in order to eval it, we must load the form for the current row
+								// and then the entry for the current row
+								$curfinst = $this->cache_get_form_instance($this->form_for_entry_id);
+								$curfinst->load_entry($dat["entry_id"]);
+								$ctrl_ok = $this->controller_instance->eval_controller($cc["basket_controller"], "", $curfinst);
+								$curfinst->unload_entry();
+							}
+
+							if ($ctrl_ok)
+							{
+								// this is the form where the count element will come from
+								$element_id = $cc["formel"];
+								$form_id = $cc["el_forms"][$element_id];
+								$form =& $this->cache_get_form_instance($form_id);
+								$form->set_form_html_name($this->get_html_name_for_tbl_form());
+								$el_ref = $form->get_element_by_id($element_id);
+
+								$bcount = $this->baskets[$cc["basket"]]->get_item_count(array("item_id" => $dat["entry_id"]));
+								$str .= $el_ref->gen_user_html_not(
+									"",
+									array($el_ref->get_el_name() => $bcount),
+									false,
+									"ftbl_el[$col][".$this->form_for_entry_id."][".$dat["entry_id"]."]",
+									$dat
+								);							
+							}
+						}
+						else
+						if ($elid == "formel_price")
+						{
+							$element_id = $cc["formel"];
+							$basket_count = 0;
+							foreach($basketsonrow as $bid)
+							{
+								// set the item price for the item in all the baskets it can get to from this table
+								$this->baskets[$bid]->set_item_price(array("item_id" => $dat["entry_id"], "price" => $dat["ev_".$element_id]));
+
+								// calculate the total count of the item on this table row (we can have several baskets on one row)
+								$basket_count += $this->baskets[$bid]->get_item_count(array("item_id" => $dat["entry_id"]));
+							}
+							$this->pricel_sum += $dat["ev_".$element_id]*$basket_count;
+							$str .= $dat["ev_".$element_id]*$basket_count;
 						}
 					}
 				}
 				$textvalue = $str;
 
 				// then we add the aliases to the column
-				$str = $this->process_row_aliases($str, $cc, $dat, $col, $section, $form_id, $textvalue);
+				$str = $this->process_row_aliases($str, $cc, $dat, $col, $section, $form_id, $textvalue, $noshowstr);
 
 				// and then, finally some misc settings
 				if (isset($cc["link_el"]))
 				{
-					$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$str."</a>";
+					if (isset($cc["link_popup"]) && $cc["link_popup"])
+					{
+						$str = "<a href=\"".sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
+							$dat["ev_".$cc["link_el"]],
+							$cc["link_popup_scrollbars"],
+							!$cc["link_popup_fixed"],
+							$cc["link_popup_toolbar"],
+							$cc["link_popup_addressbar"],
+							$cc["link_popup_width"],
+							$cc["link_popup_height"]
+						)."\">".$str."</a>";
+					}
+					else
+					{
+						$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$str."</a>";
+					}
 				}
 				else
 				if (isset($this->table["defs"][$col]["is_email"]))
@@ -278,6 +474,16 @@ class form_table extends form_base
 			}
 		}
 
+		foreach($reset_aliases as $col => $adat)
+		{
+			foreach($adat as $aidx => $aval)
+			{
+				$this->table["defs"][$col]["alias"][$aidx] = $aval;
+			}
+		}
+
+		aw_global_set("fg_element_sums", $cursums);
+
 		$this->t->define_data($dat);
 		exit_function("form_table::row_data", array());
 	}
@@ -286,12 +492,14 @@ class form_table extends form_base
 	// !reads the loaded entries from array of forms $forms and adds another row of data to the table
 	function row_data_from_form($forms,$special = "")
 	{
-		$rds = array();
+		$dat = array();
 		foreach($forms as $form)
 		{
-			$rds["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form->id, "entry_id" => $form->entry_id), "form")."'>Muuda</a>";
-			$rds["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $form->arr["search_outputs"][$form->id]),"form")."'>Vaata</a>";
-			$rds["ev_special"] = $special;
+			if (!isset($dat["entry_id"]))
+			{
+				$dat["entry_id"] = $form->entry_id;
+			}
+
 			for ($row = 0; $row < $form->arr["rows"]; $row++)
 			{
 				for ($col = 0; $col < $form->arr["cols"]; $col++)
@@ -300,12 +508,13 @@ class form_table extends form_base
 					reset($elar);
 					while (list(,$el) = each($elar))
 					{
-						$rds["ev_".$el->get_id()] = $el->get_value();
+						$dat["ev_".$el->get_id()] = $el->get_value();
+						$dat["el_".$el->get_id()] = $el->get_val();
 					}
 				}
 			}
 		}
-		$this->t->define_data($rds);
+		return $this->row_data($dat);
 	}
 
 	////
@@ -332,7 +541,11 @@ class form_table extends form_base
 		{
 			foreach($this->table["defsort"] as $el)
 			{
-				$ret[$this->table["defsort_forms"][$el["el"]]][$el["el"]] = $el["el"];
+				$fid = $this->table["defsort_forms"][$el["el"]];
+				if ($fid)
+				{
+					$ret[$fid][$el["el"]] = $el["el"];
+				}
 			}
 		}
 
@@ -343,17 +556,29 @@ class form_table extends form_base
 				$ret[$this->table["rgrps_forms"][$dat["el"]]][$dat["el"]] = $dat["el"];
 				if ($dat["sort_el"])
 				{
-					$ret[$this->table["rgrps_forms"][$dat["sort_el"]]][$dat["sort_el"]] = $dat["sort_el"];
+					$fid = $this->table["rgrps_forms"][$dat["sort_el"]];
+					if ($fid)
+					{
+						$ret[$fid][$dat["sort_el"]] = $dat["sort_el"];
+					}
 				}
 				if ($dat["search_val_el"])
 				{
-					$ret[$this->table["rgrps_forms"][$dat["search_val_el"]]][$dat["search_val_el"]] = $dat["search_val_el"];
+					$fid = $this->table["rgrps_forms"][$dat["search_val_el"]];
+					if ($fid)
+					{
+						$ret[$fid][$dat["search_val_el"]] = $dat["search_val_el"];
+					}
 				}
 				if (is_array($dat["data_els"]))
 				{
 					foreach($dat["data_els"] as $_del)
 					{
-						$ret[$this->table["rgrps_forms"][$_del]][$_del] = $_del;
+						$fid = $this->table["rgrps_forms"][$_del];
+						if ($fid)
+						{
+							$ret[$fid][$_del] = $_del;
+						}
 					}
 				}
 			}
@@ -454,7 +679,13 @@ class form_table extends form_base
 
 		if (!$no_form_tags)
 		{
-			$tbl.="<form action='reforb.".$this->cfg["ext"]."' method='POST' name='tb_".$this->table_id."'>\n";
+			$tbl.="<form action='reforb.".$this->cfg["ext"]."' method='POST' name='".$this->get_html_name_for_tbl_form()."'>\n";
+		}
+
+		if ($this->table["buttons"]["save"]["pos"]["up"])
+		{
+			// draw top button
+			$tbl.="<input type='submit' value='".$this->table["buttons"]["save"]["text"]."'>";
 		}
 
 		$tbl.=$this->t->draw(array(
@@ -467,13 +698,18 @@ class form_table extends form_base
 			"act_page" => $GLOBALS["ft_page"]
 		));
 
+		if ($this->table["buttons"]["save"]["pos"]["down"])
+		{
+			// draw top button
+			$tbl.="<input type='submit' value='".$this->table["buttons"]["save"]["text"]."'>";
+		}
+
 		if (!$no_form_tags)
 		{
 			$tbl.= $this->mk_reforb("submit_table", 
 				array(
-					"return" => $this->binhex(
-						$this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id))
-					)
+					"return" => $this->binhex($this->ru),
+					"table_id" => $this->table_id
 				)
 			);
 			$tbl.="</form>";
@@ -811,16 +1047,40 @@ class form_table extends form_base
 
 				function tb_selall()
 				{
-					len = document.tb_".$this->table_id.".elements.length;
+					len = document.".$this->get_html_name_for_tbl_form().".elements.length;
 					for (i=0; i < len; i++)
 					{
-						if (document.tb_".$this->table_id.".elements[i].name.indexOf('sel') != -1)
+						if (document.".$this->get_html_name_for_tbl_form().".elements[i].name.indexOf('sel') != -1)
 						{
-							document.tb_".$this->table_id.".elements[i].checked=chk_status;
+							document.".$this->get_html_name_for_tbl_form().".elements[i].checked=chk_status;
 						}
 					}
 					chk_status = !chk_status;
 					return false;
+				}
+
+				function fg_increment(formname, elname, value)
+				{
+					form = eval('document.'+formname+'.elements');
+					for (i=0; i < form.length; i++)
+					{
+						if (form[i].name == elname)
+						{
+							vl = parseInt(form[i].value);
+							if (!vl)
+							{
+								vl = 0;
+							}
+							form[i].value = Math.max(0,vl + value);
+						}
+					}
+				}
+
+				function ft_popup(url, name, scrollbars, fixed, toolbar, locationbar, width, height)
+				{
+					var wprops = \"toolbar=\"+toolbar+\",location=\"+locationbar+\",directories=0,status=0,\"+
+					\"menubar=0,scrollbars=\"+scrollbars+\",resizable=\"+fixed+\",width=\" + width + \",height=\" + height;
+					openwindow = window.open(url,name,wprops);
 				}
 		</script>";
 	}
@@ -896,6 +1156,7 @@ class form_table extends form_base
 		$this->table["has_pages_type"] = $settings["has_pages_type"];
 		$this->table["records_per_page"] = $settings["records_per_page"];
 		$this->table["skip_one_liners"] = $settings["skip_one_liners"];
+		$this->table["skip_one_liners_col"] = $settings["skip_one_liners_col"];
 		$this->table["user_entries"] = $settings["user_entries"];
 		$this->table["doc_title_is_search"] = $settings["doc_title_is_search"];
 		$this->table["doc_title_is_search_upper"] = $settings["doc_title_is_search_upper"];
@@ -1032,6 +1293,7 @@ class form_table extends form_base
 			"records_per_page" => $this->table["records_per_page"],
 			"uee_grps" => $this->mpicker($this->table["user_entries_except_grps"], $us->get_group_picker(array("type" => array(GRP_REGULAR,GRP_DYNAMIC)))),
 			"skip_one_liners" => checked($this->table["skip_one_liners"]),
+			"skip_one_liners_col" => $this->picker($this->table["skip_one_liners_col"],$this->get_col_picker()),
 			"show_second_table" => checked($this->table["show_second_table"]),
 			"no_grpels_in_restrict" => checked($this->table["no_grpels_in_restrict"]),
 			"no_show_empty" => checked($this->table["no_show_empty"]),
@@ -1312,7 +1574,31 @@ class form_table extends form_base
 				$coldata[$col][6] = $this->parse("SEL_LINK");
 			}
 
-			
+			if ($this->table["defs"][$col]["els"]["formel"] == "formel")
+			{
+				$this->vars(array(
+					"formels" => $this->picker($this->table["defs"][$col]["formel"], $this->get_tbl_elements(true))
+				));
+				$coldata[$col][7] = $this->parse("SEL_FORMEL");
+			}
+			else
+			if ($this->table["defs"][$col]["els"]["formel_price"] == "formel_price")
+			{
+				$this->vars(array(
+					"formels" => $this->picker($this->table["defs"][$col]["formel"], $this->get_tbl_elements(true))
+				));
+				$coldata[$col][7] = $this->parse("SEL_FORMEL");
+			}
+
+			if ($this->table["defs"][$col]["els"]["formel"] == "formel")
+			{
+				$this->vars(array(
+					"baskets" => $this->picker($this->table["defs"][$col]["basket"], $this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
+					"basket_controller" => $this->picker($this->table["defs"][$col]["basket_controller"], $this->list_objects(array("class" => CL_FORM_CONTROLLER, "addempty" => true)))
+				));
+				$coldata[$col][8] = $this->parse("SEL_BASKET");
+			}
+
 			$l = "";
 			$elns = array();
 			if (is_array($this->table["defs"][$col]["els"]))
@@ -1352,7 +1638,7 @@ class form_table extends form_base
 			$this->vars(array(
 				"HAS_FTABLE_ALIASES" => ($has_ftable_aliases ? $this->parse("HAS_FTABLE_ALIASES") : "")
 			));
-			$coldata[$col][7] = $this->parse("SEL_SETTINGS");
+			$coldata[$col][9] = $this->parse("SEL_SETTINGS");
 
 			$this->vars(array(
 				"col_sortable" => checked($this->table["defs"][$col]["sortable"]),
@@ -1361,7 +1647,7 @@ class form_table extends form_base
 				"col_link" => checked($this->table["defs"][$col]["link"]),
 				"col_link_popup" => checked($this->table["defs"][$col]["link_popup"])
 			));
-			$coldata[$col][8] = $this->parse("SEL_SETINGS2");
+			$coldata[$col][10] = $this->parse("SEL_SETINGS2");
 
 			$this->vars(array(
 				"popup_width" => $this->table["defs"][$col]["link_popup_width"],
@@ -1371,21 +1657,21 @@ class form_table extends form_base
 				"toolbar" => checked($this->table["defs"][$col]["link_popup_toolbar"]),
 				"addressbar" => checked($this->table["defs"][$col]["link_popup_addressbar"]),
 			));
-			$coldata[$col][9] = $this->parse("SEL_POPUP");
+			$coldata[$col][11] = $this->parse("SEL_POPUP");
 
 			$this->vars(array(
 				"img_type_img" => checked($this->table["defs"][$col]["image_type"] == "img"),
 				"img_type_tximg" => checked($this->table["defs"][$col]["image_type"] == "tximg"),
 				"img_type_imgtx" => checked($this->table["defs"][$col]["image_type"] == "imgtx"),
 			));
-			$coldata[$col][10] = $this->parse("SEL_IMAGE");
+			$coldata[$col][12] = $this->parse("SEL_IMAGE");
 		}
 
 		$l = "";
-		for ($idx = 1; $idx < 11; $idx++)
+		for ($idx = 1; $idx < 13; $idx++)
 		{
 			$td = "";
-			for ($col =0 ; $col < $this->table["cols"]; $col++)
+			for ($col = 0; $col < $this->table["cols"]; $col++)
 			{
 				$this->vars(array(
 					"content" => $coldata[$col][$idx]
@@ -1407,6 +1693,8 @@ class form_table extends form_base
 			"SEL_POPUP" => "",
 			"SEL_IMAGE" => "",
 			"SEL_ORDER_FORM" => "",
+			"SEL_FORMEL" => "",
+			"SEL_BASKET" => "",
 		));
 		return $this->parse();
 	}
@@ -1445,6 +1733,16 @@ class form_table extends form_base
 			{
 				$this->table["defs"][$i]["el_forms"][$elid] = $els[$elid];
 				$this->table["defs"][$i]["el_types"][$elid] = $elsubtypes[$els[$elid]][$elid]["subtype"];
+
+				// if the damn element is a "formel" then we gots to figure out the damn thing's form 
+				// so that when we show the damn thing, we will know what damn form to load the damn thing from. 
+				// damn. 
+				// oh. did I say that already?
+				if ($elid == "formel" || $elid == "formel_price")
+				{
+					$this->table["defs"][$i]["el_forms"][$this->table["defs"][$i]["formel"]] = $els[$this->table["defs"][$i]["formel"]];
+				}
+
 				// if the element was just added, default the damn thing to show and search
 				if (!isset($old_defs[$i]["els"][$elid]))
 				{
@@ -1658,7 +1956,7 @@ class form_table extends form_base
 	////
 	// !returns an array of all elements that are in the forms selected for this table
 	// honors the no_text_tlements setting
-	function get_tbl_elements()
+	function get_tbl_elements($no_fakels = false)
 	{
 		$ret = array();
 		if (is_array($this->table["forms"]))
@@ -1668,7 +1966,10 @@ class form_table extends form_base
 				$ret += $this->get_form_elements(array("id" => $fid, "key" => "id", "all_data" => false));
 			}
 		}
-		$ret+=$this->fakels;
+		if (!$no_fakels)
+		{
+			$ret+=$this->fakels;
+		}
 		return $ret;
 	}
 
@@ -1760,22 +2061,23 @@ class form_table extends form_base
 	// $elval - element value befure adding image
 	// $alias_target - the linked image id
 	// $col - the column that we are talking about
-	function get_image_alias_url($elval, $alias_target, $col)
+	// $alt - the image's alt text
+	function get_image_alias_url($elval, $alias_target, $col, $alt = "")
 	{
 		$imgdat = $this->image->get_image_by_id($alias_target);
 
 		switch($this->table["defs"][$col]["image_type"])
 		{
 			case "img":
-				$elval = "<img border='0' src='".$imgdat["url"]."'>";
+				$elval = "<img border='0' src='".$imgdat["url"]."' alt=\"$alt\">";
 				break;
 
 			case "tximg":
-				$elval .= "<img border='0' src='".$imgdat["url"]."'>";
+				$elval .= "<img border='0' src='".$imgdat["url"]."' alt=\"$alt\">";
 				break;
 
 			case "imgtx":
-				$elval = "<img border='0' src='".$imgdat["url"]."'>".$elval;
+				$elval = "<img border='0' src='".$imgdat["url"]."' alt=\"$alt\">".$elval;
 				break;
 		}
 		return $elval;
@@ -1853,9 +2155,36 @@ class form_table extends form_base
 				}
 			}
 		}
-		$this->last_table_alias_url = $url;
-		$ret = "<a href='".$url."'>";
-		$ret.=$elval."</a>";
+		if (!isset($this->table["skip_one_liners_col"]))
+		{
+			$this->last_table_alias_url = $url;
+		}
+		else
+		{
+			if ($col == $this->table["skip_one_liners_col"])
+			{
+				$this->last_table_alias_url = $url;
+			}
+		}
+
+		$cc = $this->table["defs"][$col];
+		if (isset($cc["link_popup"]) && $cc["link_popup"])
+		{
+			$ret = "<a href=\"".sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
+				$url,
+				$cc["link_popup_scrollbars"],
+				!$cc["link_popup_fixed"],
+				$cc["link_popup_toolbar"],
+				$cc["link_popup_addressbar"],
+				$cc["link_popup_width"],
+				$cc["link_popup_height"]
+			)."\">".$elval."</a>";
+		}
+		else
+		{
+			$ret = "<a href='".$url."'>";
+			$ret.=$elval."</a>";
+		}
 		return $ret;
 	}
 
@@ -1887,7 +2216,8 @@ class form_table extends form_base
 	// $section - the current section
 	// $form_id - the id of the form of the current entry
 	// $textvalue - the value of the column without any images or links or shit
-	function process_row_aliases($str, $cc, $dat, $col, $section, $form_id, $textvalue)
+	// $image_alt - if set and soem image alaises are present, it gets set as the alt text for the image
+	function process_row_aliases($str, $cc, $dat, $col, $section, $form_id, $textvalue, $image_alt = "")
 	{
 		if (is_array($cc["alias"]))
 		{
@@ -1897,7 +2227,7 @@ class form_table extends form_base
 				$alias_data = $cc["alias_data"][$aid];
 				if ($alias_data["class_id"] == CL_IMAGE)
 				{
-					$str = $this->get_image_alias_url($str, $alias_data["target"], $col);
+					$str = $this->get_image_alias_url($str, $alias_data["target"], $col, $image_alt);
 				}
 			}
 
@@ -1972,14 +2302,7 @@ class form_table extends form_base
 				break;
 
 			case "delete":
-				$after_show = $this->mk_my_orb("show_entry", 
-					array(
-						"id" => $form_id, 
-						"entry_id" => $entry_id, 
-						"op_id" => $op_id,
-						"section" => $section
-					),"form"
-				);
+				$after_show = $this->ru;
 				if ($chain_id)
 				{
 					$after_show = $this->mk_my_orb("show",
@@ -2209,6 +2532,69 @@ class form_table extends form_base
 	function set_num_rows($num)
 	{
 		$this->data_num_rows = $num;
+	}
+
+	////
+	// !if we put a submit button in the table and the user presses it, this is where we end up
+	function submit_table($arr)
+	{
+		extract($arr);
+
+		$this->load_table($table_id);
+
+		// now, if we gots a basket where we should add selected stuff, then add the damn things
+		if (is_array($ftbl_el))
+		{
+			$baskets = array();
+
+			foreach($ftbl_el as $col => $coldat)
+			{
+				$basket_id = $this->table["defs"][$col]["basket"];
+				if (!is_object($baskets[$basket_id]))
+				{
+					$baskets[$basket_id] =&get_instance("basket");
+					$baskets[$basket_id]->init_basket($basket_id);
+				}
+
+				foreach($coldat as $form_id => $form_data)
+				{
+					foreach($form_data as $entry_id => $count)
+					{
+						$baskets[$basket_id]->set_item_count(array("form_id" => $form_id, "item_id" => $entry_id, "count" => $count));
+					}
+				}
+			}
+
+			foreach($baskets as $bid => $bo)
+			{
+				$bo->save_user_basket();
+			}
+		}
+		return $this->hexbin($return);
+	}
+
+	function get_col_picker()
+	{
+		$ret = array();
+		for ($i=0; $i < $this->table["cols"]; $i++)
+		{
+			$ret[$i] = $this->table["defs"][$i]["lang_title"][aw_global_get("lang_id")];
+		}
+		return $ret;
+	}
+
+	////
+	// !returns the name attribute of the <form tag that surrounds the current table
+	function get_html_name_for_tbl_form()
+	{
+		return $this->table_html_form_name;
+	}
+
+	////
+	// !returns the sum of all price elements shown in the current table so far
+	function get_price_elements_sum()
+	{
+		return $this->pricel_sum;
 	}
 }
 ?>
