@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.66 2005/01/06 15:16:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.67 2005/01/16 16:46:02 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_connect_menu)
@@ -1752,7 +1752,7 @@ class forum_v2 extends class_base
 	/**  
 		@attrib name=change params=name all_args="1" nologin="1"
 		
-		@param id optional type=int acl="edit"
+		@param id optional type=int 
 		@param group optional
 		@param period optional
 		@param alias_to optional
@@ -1768,6 +1768,7 @@ class forum_v2 extends class_base
 		if (!is_admin())
 		{
 			$arr["fxt"] = 1;
+			$arr["group"] = "contents";
 		}
 		return parent::change($arr);
 	}
@@ -1789,15 +1790,13 @@ class forum_v2 extends class_base
 		if ($_GET["XX5"])
 		{
 			$nlg = $this->get_cval("non_logged_in_users_group");
-                        $g_oid = users::get_oid_for_gid($nlg);
+			$g_oid = users::get_oid_for_gid($nlg);
 			print "nlg = $nlg, g_oid = $g_oid<br>";
-
-		};		
+		};
 
 
 		$gids = aw_global_get("gidlist_oid");
 		$check_ids = array($uid_oid) + $gids;
-
 		$c = new connection();
 		$conns = $c->find(array(
 			"from" => $forum_id,
