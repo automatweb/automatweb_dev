@@ -448,6 +448,16 @@
             <caption>User-defined checkbox 5</caption>
       </property>
       <property>
+            <name>userch6nostore</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>checkbox</type>
+            <store>no</store>
+            <ch_value>1</ch_value>
+            <field>userch6nostore</field>
+            <caption>User-defined checkbox 6 (store=no)</caption>
+      </property>
+      <property>
             <name>usersubtitle1</name>
             <group>data</group>
             <table>aw_register_data</table>
