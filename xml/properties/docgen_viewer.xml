@@ -1,29 +1,52 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <comment></comment>
-      </property>
-      <property>
             <name>foorum</name>
+            <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_FORUM</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
       </property>
       <property>
             <name>view</name>
+            <table>objects</table>
             <group>general</group>
             <type>text</type>
             <store>no</store>
             <field>view</field>
+      </property>
+      <property>
+            <name>refresh_text</name>
+            <table>objects</table>
+            <group>more_options</group>
+            <type>text</type>
+            <store>no</store>
+            <value>Uuenda</value>
+            <field>refresh_text</field>
+            <caption>Uuenda</caption>
+      </property>
+      <property>
+            <name>refresh_properties</name>
+            <table>objects</table>
+            <group>more_options</group>
+            <type>submit</type>
+            <store>no</store>
+            <value>Uuenda</value>
+            <field>refresh_properties</field>
+            <caption>Uuenda</caption>
       </property>
       <classinfo>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <more_options>
+                  <caption>Seaded</caption>
+            </more_options>
+      </groupinfo>
       <reltypes>
             <FORUM>
                   <value>1</value>
