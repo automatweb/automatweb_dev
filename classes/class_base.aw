@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.118 2003/06/04 16:48:01 duke Exp $
+// $Id: class_base.aw,v 2.119 2003/06/10 15:41:54 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -118,6 +118,7 @@ class class_base extends aw_template
 		));
 
 		$this->validate_cfgform($cfgform_id);
+
 		
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
@@ -137,6 +138,7 @@ class class_base extends aw_template
 				$this->inst->callback_pre_edit(array(
 					"id" => $this->id,
 					"coredata" => &$this->coredata,
+					"data" => &$this->data,
 				));
 
 			};
@@ -247,311 +249,14 @@ class class_base extends aw_template
 
 		$this->validate_cfgform($cgid);
 
-
-		$this->id = isset($id) ? $id : "";
-
-		
-		// get the list of properties in the active group
-		// actually, it does a little more than dat, it also
-		// sorts the data into different variables
-		$realprops = $this->get_active_properties(array(
-			"clfile" => $this->clfile,
-			"group" => $args["group"],
-			"cb_view" => $args["cb_view"],
-			"rel" => $this->is_rel,
-		));
-
-		// now, in embedded cases, we don't want to create any objects,
-		// I just want to get the information sorted by tables.
-
-		// now, how do I figure out whether we want to save an object
-		// or just use the form interactively.
-
-		if (empty($id))
-		{
-			// create the object, if it wasn't already there
-
-			// I need a nice elegant way to override the parent 
-			// so that added objects can land where I want them 
-			// to land. 
-			$id = $this->ds->ds_new_object(array(),array(
-					"parent" => $parent,
-					"name" => isset($name) ? $name : "",
-					"comment" => isset($comment) ? $comment : "",
-					"period" => isset($period) ? $period : "",
-					"class_id" => $this->clid,
-					"alias" => isset($alias) ? $alias : "",
-					"status" => !empty($status) ? $status : 1,
-			));
-
-			if ($alias_to)
-			{
-				$almgr = get_instance("aliasmgr");
-				$almgr->create_alias(array(
-					"alias" => $id,
-					"id" => $alias_to,
-					"reltype" => $reltype,
-				));
-			};
-
-			$this->new = true;
-			$this->id = $id;
-		}
-
-		$fields = $this->fields["objects"];
-		// for objects, we always load the parent field as well
-		$fields["parent"] = "direct";
-		$fields["metadata"] = "serialize";
-		$tmp = $this->load_object(array(
-			"id" => $this->id,
-			"table" => "objects",
-			"idfield" => "oid",
-			"fields" => $fields,
-		));
-
-		$tmp["oid"] = $this->id;
-
-		$this->coredata = $tmp;
-
-		// now we need to figure out the save strategy
-		// cycle over the properties and sort out all the stuff
-		// that has values in the form
-		$objdata = array();
-		$coredata = array();
-		$metadata = array();
-		// give the object a chance to change the data that
-		// before it's written out to the table
-		$callback = method_exists($this->inst,"set_property");
-
-		// collect the list of properties we want to save.
-		// we will do that in 2 stages, since some set_property
-		// calls might actually want to modify (GASP!) the
-		// data, that gets saved
-
-		$this->load_object(array("id" => $id));
-		$this->load_obj_data(array("id" => $id));
-
-
-		$resprops = array();
-		$savedata = array();
-		$form_data = $args;
-		
-		load_vcl('date_edit');
-
-		foreach($realprops as $property)
-		{
-			// do not call set_property for edit_only properties when a new
-			// object is created.
-			if ($this->new && isset($property["editonly"]))
-			{
-				continue;
-			};
-
-			// that is not set for checkboxes
-			$xval = (isset($form_data[$property["name"]])) ? $form_data[$property["name"]] : "";
-			if (($property["type"] == "checkbox") && ($property["method"] != "serialize"))
-			{
-				// set value to 0 for unchecked checkboxes, which are not to be saved
-				// into metainfo. 
-				$xval = (int)$xval;
-			};
-
-			$property["value"] = $xval;
-                        
-			$argblock = array(
-                                "prop" => &$property,
-                                "obj" => &$this->coredata,
-                                "objdata" => &$this->objdata,
-				"metadata" => &$metadata,
-                                "form_data" => &$form_data,
-                        );
-	
-
-                        // give the class a possiblity to execute some action
-                        // while we are saving it.
-
-                        // for callback, the return status of the function decides
-                        // whether to save the data or not, so please, make sure
-                        // that your set_property returns PROP_OK for stuff
-                        // that you want to save
-                        if ($callback)
-                        {
-                                // I need a way to let set_property insert
-                                // data back into the save queue
-                                $status = $this->inst->set_property($argblock);
-                        }
-                        else
-                        {
-                                $status = PROP_OK;
-                        };
-
-                        // move the data into save queue only of set_property
-                        // returns PROP_OK
-			if ($status == PROP_OK)
-			{
-				$name = $property["name"];
-
-				$savedata[$name] = ($property["value"]) ? $property["value"] : $xval;
-
-				$table = isset($property["table"]) ? $property["table"] : "";
-				$field = $property["field"];
-				$method = $property["method"];
-				$type = $property["type"];
-				if ($type == "text")
-				{
-					continue;
-				};
-
-				if ($property["store"] == "no")
-				{
-					continue;
-				};
-
-				if (($type == "date_select") || ($type == "datetime_select"))
-				{
-					// turn the array into a timestamp
-					$savedata[$name] = date_edit::get_timestamp($savedata[$name]);
-				};
-				if (($type == "select") && isset($property["multiple"]))
-				{
-					$savedata[$name] = $this->make_keys($savedata[$name]);
-				};
-				if ($type == "imgupload")
-				{
-					if (isset($form_data["del_" . $name]))
-					{
-						$metadata[$name . "_id"] = 0;
-						$metadata[$name . "_url"] = "";
-					}
-					else
-					{
-						// upload the bloody image.
-						$t = get_instance("image");
-						$key = $name . "_id";
-						$oldid = (int)$this->coredata["meta"][$key];
-						$ar = $t->add_upload_image($name, $this->coredata["parent"], $oldid);
-						$metadata[$key] = $ar["id"];
-						$key = $name . "_url";
-						$metadata[$key] = image::check_url($ar["url"]);
-					};
-				}
-
-				// XXX: this does not belong here
-				if ( ($type == "relpicker") && isset($property["pri"]) )
-				{
-					// first, I need to resolve the symbolic class_id to a number
-					// how?
-					$realclid =  constant($property["clid"]);
-					// first zero out all other pri fields
-					$q = sprintf("UPDATE aliases SET pri = 0 WHERE source = %d AND type = %d",
-							$this->id,$realclid);
-					$this->db_query($q);
-					if (!empty($property["value"]))
-					{
-						// and now .. if a value is set, update the pri of _that_
-						$q = sprintf("UPDATE aliases SET pri = %d WHERE source = %d AND target = %d AND type = %d",
-								$property["pri"],$this->id,$property["value"],$realclid);
-						$this->db_query($q);		
-					};
-				}
-
-				if ($this->is_rel)
-				{
-					if ($name == "name")
-					{
-						$coredata["name"] = $savedata[$name];
-					}
-					else
-					{
-						$values[$name] = $savedata[$name];
-					};
-				}
-				elseif ($method == "serialize")
-				{
-					$metadata[$name] = $savedata[$name];
-				}
-				elseif ($table == "objects")
-				{
-					if (isset($savedata[$name]))
-					{
-						$coredata[$field] = $savedata[$name];
-					};
-				}
-				else
-				{
-					if (isset($savedata[$name]))
-					{
-						$_field = ($name != $field) ? $field : $name;
-						$objdata[$table][$_field] = $savedata[$name];
-					};
-				};
-			};
-		};
-
-
-		if (sizeof($metadata) > 0)
-		{
-			$coredata["metadata"] = $metadata;
-		};
-
-		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
-		{
-			$def = $this->cfg["classes"][$this->clid]["def"];
-			$_tmp = $this->get_object($id);
-			$old = $_tmp["meta"]["values"][$def];
-			$new = array_merge($old,$values);
-			$coredata["metadata"]["values"][$def] = $new;
-		}
-
-
-		// I only want to call those functions below this line in case I'm saving an actual object
-		// otherwise the caller will probably want to do something else with the data I gathered
-		// from here. He probably needs only saveadata anyway, since what good is that stuff
-		// sorted into separate arrays by the table
-		$coredata["id"] = $id;
-
-		$period = aw_global_get("period");
-		if ($period)
-		{
-			$coredata["period"] = $period;
-		};
-
-		// ex-fucking-xactly, I need another way to parse the data that enters from the form,
-		// and get back the contens of coredata and objdata
-		
-		if (method_exists($this->inst,"callback_pre_save"))
-		{
-			$this->inst->callback_pre_save(array(
-				"id" => $this->id,
-				"coredata" => &$coredata,
-				"objdata" => &$objdata,
-				"form_data" => &$args,
-				"object" => array_merge($this->coredata,$this->objdata),
-			));
-		}
-
-		// it is set (or not) on validate_cfgform
-		if (isset($this->cfgform_id) && is_numeric($this->cfgform_id))
-		{
-			$coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
-		};
-
-		$this->ds->ds_save_object(array("id" => $id,"clid" => $this->clid),$coredata);
-
-		$this->save_object(array("data" => $objdata));
-
-		if (method_exists($this->inst,"callback_post_save"))
-		{
-			$this->inst->callback_post_save(array(
-				"id" => $this->id,
-				"new" => $this->new,
-			));
-		}
+		// heh.
+		$args["rawdata"] = $args;
+		$this->process_data($args);
 
 		$this->log_obj_change();
 
 		$args = array(
-			"id" => $id,
+			"id" => $this->id,
 			"group" => $group,
 			"period" => aw_global_get("period"),
 			"alias_to" => $form_data["alias_to"],
@@ -658,92 +363,6 @@ class class_base extends aw_template
 		return $retval;
 	}
 	
-	////
-	// !Processes form data
-	function process_form_data($args = array())
-	{
-		// check whether this current class is based on class_base
-		$this->init_class_base();
-		
-		// get the list of properties in the active group	
-		// actually, it does a little more than dat, it also
-		// sorts the data into different variables
-		$realprops = $this->get_active_properties(array(
-			"classonly" => $args["classonly"],
-			"clfile" => $this->clfile,
-			"group" => $args["group"],
-			"content" => $args["content"],
-		));
-
-
-		if (isset($args["group_by"]))
-		{
-			// right now this is the only group option I support anyway
-			$group_by = "table";
-
-		};
-
-		$savedata = array();
-
-		$form_data = $args["form_data"];
-
-		load_vcl('date_edit');
-
-		foreach($realprops as $property)
-		{
-			// that is not set for checkboxes
-			$xval = (isset($form_data[$property["name"]])) ? $form_data[$property["name"]] : "";
-			if (($property["type"] == "checkbox") && ($property["method"] != "serialize"))
-			{
-				// set value to 0 for unchecked checkboxes, which are to be saved
-				// into metainfo. Dunno about usual fields.
-				$xval = (int)$xval;
-			};
-			
-			$name = $property["name"];
-
-			$val = $xval;
-		
-			$table = $property["table"];
-			$field = $property["field"];
-			$method = $property["method"];
-			$type = $property["type"];
-			if (($type == "text") || ($type == "callback") || ($property["store"] == "no"))
-			{
-				continue;
-			};
-			if ($type == "date_select")
-			{
-				// turn the array into a timestamp
-				$val = date_edit::get_timestamp($val);
-			};
-			if (($type == "select") && $property["multiple"])
-			{
-				$val = $this->make_keys($savedata[$name]);
-			};
-
-			if (isset($group_by))
-			{
-				if ($method == "serialize")
-				{
-					$savedata[$property[$group_by]][$field][$name] = $val;
-				}
-				else
-				{
-					$savedata[$property[$group_by]][$name] = $val;
-				};
-			}
-			else
-			{
-				$savedata[$name] = $val;
-			};
-		};
-		// yah, but it would be rather nice, if I could let this same function
-		// handle the saving as well
-		return $savedata;
-	}
-
-
 	////
 	// !This checks whether we have all required data and sets up the correct
 	// environment if so.
@@ -1107,13 +726,13 @@ class class_base extends aw_template
 	{
 		// properties are all saved in a single file, so sadly
 		// we do need to load them all
+		$no_group = !empty($args["all"]) ? $args["all"] : false;
 		$this->get_all_properties(array(
 			"classonly" => isset($args["classonly"]) ? $args["classonly"] : "",
 			"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 			"content" => isset($args["content"]) ? $args["content"] : "",
 			"rel" => isset($args["rel"]) ? $args["rel"] : "",
 		));
-		
 
 		// figure out which group is active
 		// it the group argument is a defined group, use that
@@ -1192,24 +811,31 @@ class class_base extends aw_template
 			};
 
 			// multiple groups for properties are supported too
-			$_tgr = new aw_array($val["group"]);
-			foreach($_tgr->get() as $_grp)
+			if ($no_group === false)
 			{
-				$tmp = $val;
-				if (isset($sub_group) && $_grp == $sub_group)
+				$_tgr = new aw_array($val["group"]);
+				foreach($_tgr->get() as $_grp)
 				{
-					$tmp["group"] = $this->activegroup;
-					$property_list[$key] = $tmp;
-				}
-				elseif (isset($sub_group) && $_grp == $this->activegroup && $sub_group == $this->grp_children[$this->activegroup][0])
-				{
-					// remap to the first child group
-					$property_list[$key] = $tmp;
-				}
-				elseif (empty($sub_group) && $tmp["group"] == $this->activegroup)
-				{
-					$property_list[$key] = $tmp;
+					$tmp = $val;
+					if (isset($sub_group) && $_grp == $sub_group)
+					{
+						$tmp["group"] = $this->activegroup;
+						$property_list[$key] = $tmp;
+					}
+					elseif (isset($sub_group) && $_grp == $this->activegroup && $sub_group == $this->grp_children[$this->activegroup][0])
+					{
+						// remap to the first child group
+						$property_list[$key] = $tmp;
+					}
+					elseif (empty($sub_group) && $tmp["group"] == $this->activegroup)
+					{
+						$property_list[$key] = $tmp;
+					};
 				};
+			}
+			else
+			{
+				$property_list[$key] = $val;
 			};
 			
 			if (isset($val["table"]) && empty($tables[$val["table"]]))
@@ -1284,7 +910,7 @@ class class_base extends aw_template
 				$grpid = $val["group"];
 			};
 
-			if ($grpid == $use_group)
+			if ($no_group || ($grpid == $use_group))
 			{
 				$retval[$key] = $property;
 			};
@@ -1300,21 +926,12 @@ class class_base extends aw_template
 		return $retval;
 	}
 
+	////
+	// !Load all properties for the current class
 	function get_all_properties($args = array())
 	{
-		// load all properties for the current class
-		$cfgu = get_instance("cfg/cfgutils");
-		// actually, config forms should hold a serialized form 
-		// of the data, and not the raw XML source. And I should
-		// validate the XML before I upload it to the object -- duke
-		if ($args["rel"])
-		{
-			$filter = array("rel" => 1);
-		}
-		else
-		{
-			$filter = "";
-		};
+		$filter = $args["rel"] ? array("rel" => 1) : "";
+		$cb_view = $args["cb_view"];
 
 		if (isset($this->cfgform["meta"]["cfg_proplist"]))
 		{
@@ -1323,6 +940,8 @@ class class_base extends aw_template
 			$grplist = $this->cfgform["meta"]["cfg_groups"];
 		}
 
+		$cfgu = get_instance("cfg/cfgutils");
+		
 		// content comes from the config form
 		if ($args["content"])
 		{
@@ -1347,22 +966,17 @@ class class_base extends aw_template
 			));
 		};
 
-		// 1) generate a list of all views
-		$this->cb_views = array();
-		// 2) then count the elements in all group using those which match the active group
-		$group_el_cnt = array();
-		// 3) skip empty groups
+		$this->cb_views = $group_el_cnt = $this->all_props = array();
 
-		$cb_view = $args["cb_view"];
+		// use the group list defined in the config form, if we are indeed using a config form
+		if (!is_array($grplist))
+		{
+			$grplist = $cfgu->get_groupinfo();
+		};
 
-		$this->all_props = array();
-
-		$tmp = empty($this->cfgform_id) ? $_all_props : $proplist;
-		
-		$tmp_grpinfo = $cfgu->get_groupinfo();
 		$this->grp_children = array();
 		
-		foreach($tmp_grpinfo as $key => $val)
+		foreach($grplist as $key => $val)
 		{
 			// don't even try that
 			if (!empty($val["parent"]) && $val["parent"] != $key)
@@ -1377,6 +991,7 @@ class class_base extends aw_template
 			};
 		};				
 
+		$tmp = empty($this->cfgform_id) ? $_all_props : $proplist;
 		foreach($tmp as $k => $val)
 		{
 			// if a config form is loaded, then ignore stuff that isn't
@@ -1478,9 +1093,9 @@ class class_base extends aw_template
 
 		$this->classinfo = $cfgu->get_classinfo();
 		$grpinfo = array();
-		if (is_array($tmp_grpinfo))
+		if (is_array($grplist))
 		{
-			foreach($tmp_grpinfo as $key => $val)
+			foreach($grplist as $key => $val)
 			{
 				if (in_array($key,array_keys($group_el_cnt)))
 				{
@@ -1510,6 +1125,8 @@ class class_base extends aw_template
 
 		$this->groupinfo = $grpinfo;
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
+	
+		return $this->all_props;
 	}
 
 	function convert_element(&$val)
@@ -1960,7 +1577,319 @@ class class_base extends aw_template
 		return $retval;
 	}
 
+	////
+	// !_serialize replacement for class_base based objects
+	function _serialize($args = array())
+	{
+		$this->init_class_base();
+		$this->id = $args["oid"];
 
+		$realprops = $this->get_active_properties(array(
+				"clfile" => $this->clfile,
+				"all" => true,
+		));
+
+		$this->load_obj_data(array("id" => $this->id));
+
+		$result = array();
+
+		foreach($realprops as $key => $val)
+		{
+			$this->get_value(&$val);
+			if (!empty($val["value"]) || $val["store"] != "no")
+			{
+				$result[$val["name"]] = $val["value"];
+			};
+		}
+
+		return aw_serialize($result, SERIALIZE_NATIVE);
+	}
+
+	////
+	// !_unserialize replacement for class_base based objects
+	function _unserialize($args = array())
+	{
+		$raw = aw_unserialize($args["str"]);
+		$this->init_class_base();
+
+
+		$this->process_data(array(
+			"parent" => $args["parent"],
+			"rawdata" => $raw,
+		));
+
+		return true;
+	}
+
+	////
+	// !Processes and saves form data
+	function process_data($args = array())
+	{
+		extract($args);
+		$this->init_class_base();
+
+		// and this of course should handle both creating new objects and updating existing ones
+		
+		$callback = method_exists($this->inst,"set_property");
+		
+		$new = false;
+		$this->id = isset($id) ? $id : "";
+
+		$realprops = $this->get_active_properties(array(
+				"clfile" => $this->clfile,
+				"all" => empty($group) ? true : false,
+				"group" => $group,
+				"cb_view" => $cb_view,
+				"rel" => $this->is_rel,
+		));
+
+
+		// only create the object, if one of the tables used by the object
+		// is the objects table
+		if (empty($id) && isset($this->tables["objects"]))
+		{
+			$period = aw_global_get("period");
+			$id = $this->ds->ds_new_object(array(),array(
+				"parent" => $parent,
+				"class_id" => $this->clid,
+				"status" => !empty($status) ? $status : 1,
+				"period" => $period,
+			));
+
+			if ($alias_to)
+			{
+				$almgr = get_instance("aliasmgr");
+				$almgr->create_alias(array(
+					"alias" => $id,
+					"id" => $alias_to,
+					"reltype" => $reltype,
+				));
+			};
+			
+			$new = true;
+			$this->id = $id;
+		};
+
+		if (isset($this->tables["objects"]))
+		{
+			$fields = $this->fields["objects"];
+			// for objects, we always load the parent field as well
+			$fields["parent"] = "direct";
+			$fields["metadata"] = "serialize";
+			$tmp = $this->load_object(array(
+				"id" => $this->id,
+				"table" => "objects",
+				"idfield" => "oid",
+				"fields" => $fields,
+			));
+
+			$tmp["oid"] = $this->id;
+
+			$this->coredata = $tmp;
+		};
+
+		$this->load_object(array("id" => $this->id));
+                $this->load_obj_data(array("id" => $this->id));
+
+		$metadata = array();
+
+		foreach($realprops as $key => $property)
+		{
+			//do not call set_property for edit_only properties when a new
+			// object is created.
+			if ($new && isset($property["editonly"]))
+			{
+				continue;
+			};
+
+			$name = $property["name"];
+			$type = $property["type"];
+
+                        $xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
+                        if ($property["type"] == "checkbox")
+                        {
+                                // set value to 0 for unchecked checkboxes
+				$xval = (int)$xval;
+                        };
+
+			$property["value"] = $xval;
+
+
+                        $argblock = array(
+                                "prop" => &$property,
+                                "obj" => &$this->coredata,
+                                "objdata" => &$this->objdata,
+                                "metadata" => &$metadata,
+                                "form_data" => &$rawdata,
+                                "new" => $new,
+                        );
+
+			$status = PROP_OK;
+
+			// give the class a possiblity to execute some action
+			// while we are saving it.
+
+			// for callback, the return status of the function decides
+			// whether to save the data or not, so please, make sure
+			// that your set_property returns PROP_OK for stuff
+			// that you want to save
+			if ($callback)
+			{
+				$status = $this->inst->set_property($argblock);
+			};
+
+			// oh well, bail out then.
+			if ($status != PROP_OK)
+                        {
+				continue;
+			};
+
+
+			// don't care about text elements
+			if ($type == "text")
+			{
+				continue;	
+			};
+
+			if ($property["store"] == "no")
+			{
+				continue;
+			};
+
+
+			if (($type == "date_select") || ($type == "datetime_select"))
+			{
+				if (is_array($rawdata[$name]))
+				{
+					$property["value"] = date_edit::get_timestamp($rawdata[$name]);
+				};
+			};
+
+			if (($type == "select") && isset($property["multiple"]))
+			{
+				$property["value"] = $this->make_keys($rawdata[$name]);
+			};
+
+			// XXX: investigate the possibility of moving this out of class_base
+			if ($type == "imgupload")
+			{
+				if (isset($rawdata["del_" . $name]))
+				{
+					$metadata[$name . "_id"] = 0;
+					$metadata[$name . "_url"] = "";
+				}
+				else
+				{
+					// upload the bloody image.
+					$t = get_instance("image");
+					$key = $name . "_id";
+					$oldid = (int)$this->coredata["meta"][$key];
+					$ar = $t->add_upload_image($name, $this->coredata["parent"], $oldid);
+					$metadata[$key] = $ar["id"];
+					$key = $name . "_url";
+					$metadata[$key] = image::check_url($ar["url"]);
+				};
+			};
+
+			// XXX: this is not good!
+			if ( ($type == "relpicker") && isset($property["pri"]) )
+			{
+				$realclid =  constant($property["clid"]);
+				// first zero out all other pri fields
+				$q = sprintf("UPDATE aliases SET pri = 0 WHERE source = %d AND type = %d",
+					$this->id,$realclid);
+				$this->db_query($q);
+				if (!empty($property["value"]))
+				{
+					// and now .. if a value is set, update the pri of _that_
+					$q = sprintf("UPDATE aliases SET pri = %d WHERE source = %d AND target = %d AND type = %d",
+					$property["pri"],$this->id,$property["value"],$realclid);
+					$this->db_query($q);
+				};
+			}
+
+			$method = $property["method"];
+			$table = $property["table"];
+			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
+			
+			if ($this->is_rel)
+			{
+				if ($name == "name")
+				{
+					$this->coredata["name"] = $property["value"];
+				}
+				else
+				{
+					$values[$name] = $property["value"];
+				};
+			}
+			else if ($method == "serialize")
+			{
+				$metadata[$name] = $property["value"];
+			}
+			elseif ($table == "objects")
+			{
+				if (isset($rawdata[$name]))
+				{
+					$this->coredata[$field] = $property["value"];
+				};
+			}
+			else
+			{
+				if (isset($property["value"]) && !empty($table))
+				{
+					$_field = ($name != $field) ? $field : $name;
+					$this->objdata[$table][$_field] = $property["value"];
+				};
+			};
+		};
+
+		if (sizeof($metadata) > 0)
+		{
+			$this->coredata["metadata"] = $metadata;
+		};
+
+		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
+		{
+			$def = $this->cfg["classes"][$this->clid]["def"];
+			$_tmp = $this->get_object($this->id);
+			$old = $_tmp["meta"]["values"][$def];
+			$new = array_merge($old,$values);
+			$this->coredata["metadata"]["values"][$def] = $new;
+		}
+
+		$this->coredata["id"] = $this->id;
+
+		if (method_exists($this->inst,"callback_pre_save"))
+		{
+			$this->inst->callback_pre_save(array(
+				"id" => $this->id,
+				"coredata" => &$this->coredata,
+				"objdata" => &$this->objdata,
+				"form_data" => &$args,
+				"object" => array_merge($this->coredata,$this->objdata),
+			));
+		}
+
+                // it is set (or not) on validate_cfgform
+                if (isset($this->cfgform_id) && is_numeric($this->cfgform_id))
+                {
+                        $this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
+                };
+
+		$this->ds->ds_save_object(array("id" => $this->id,"clid" => $this->clid),$this->coredata);
+		$this->save_object(array("data" => $this->objdata));
+
+		if (method_exists($this->inst,"callback_post_save"))
+		{
+			$this->inst->callback_post_save(array(
+				"id" => $this->id,
+				"new" => $new,
+			));
+		}
+		return true;
+	}
+		
 	//////////////////////////////////////////////////////////////////////
 	// 
 	// init functions for classes that do not use automatic form generator
