@@ -339,8 +339,8 @@ switch($action)
 		break;
 
 	case "alias_type":
-		classload("documents");
-		$docs = new db_documents;
+		classload("document");
+		$docs = new document;
 		$docs->add_alias($docid,$alias,serialize(array("type" => $type, "output" => $output, "form_id" => $form_id)));
 		header("Location: documents.$ext?docid=$docid");
 		break;
@@ -643,8 +643,8 @@ switch($action)
 		break;
 
 	case "save_doc_brother":
-		classload("documents");
-		$d = new db_documents;
+		classload("document");
+		$d = new document;
 		$d->submit_brother($HTTP_POST_VARS);
 		header("Location: documents.$ext?type=bro&oid=$docid");
 		break;

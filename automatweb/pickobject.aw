@@ -1,4 +1,5 @@
 <?php
+// Obsolete?
 include("const.aw");
 include("admin_header.$ext");
 // see on nö lyhendatud versioon object prauserit ... saab kasutada yhe konkreetse objekti
@@ -8,8 +9,8 @@ include("admin_header.$ext");
 if ($docid) 
 {
 	// meil on vaja kindlaks teha dokumendi nimi, millele me lisame
-	classload("documents");
-	$docs = new db_documents;
+	classload("document");
+	$docs = new document;
 	$docdata = $docs->fetch($docid);
 	// siin on ka sobiv koht ACL kontrolliks
 	if (!$docdata) 

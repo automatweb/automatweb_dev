@@ -2,9 +2,9 @@
 // väliste linkide manageerimine
 include("const.aw");
 include("admin_header.$ext");
-classload("extlinks","documents");
+classload("extlinks","document");
 $extlinks = new extlinks;
-$docs = new db_documents;
+$docs = new document;
 $extlinks->tpl_init("automatweb/extlinks");
 $extlinks->db_init();
 switch($op) {

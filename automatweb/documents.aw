@@ -1,8 +1,7 @@
 <?php
 include("const.aw");
 include("admin_header.$ext");
-classload("images");
-classload("documents");
+classload("images","document");
 if (!$docid && $oid)
 	$docid = $oid;
 
@@ -13,7 +12,7 @@ if ($obj[period] > 0) {
 	$pdata = $periods->get($obj[period]);	
 };
 $img = new db_images;
-$docs = new db_documents;
+$docs = new document;
 $docs->tpl_init("automatweb/documents");
 
 switch($type) {

@@ -1,8 +1,8 @@
 <?php
 include("const.aw");
 include("admin_header.$ext");
-classload("documents","periods");
-$docs = new db_documents;
+classload("document","periods");
+$docs = new document;
 $docs->tpl_init("automatweb/documents");
 switch($action) {
 	case "all":

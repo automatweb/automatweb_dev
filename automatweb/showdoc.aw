@@ -7,8 +7,8 @@ classload("menuedit");
 $t = new menuedit;
 $docid  = $t->get_default_document($section);
 
-classload("documents");
-$d = new db_documents;
+classload("document");
+$d = new document;
 
  $content = $d->show($docid,"undef","admin.tpl");
 

@@ -22,8 +22,8 @@ if ($action == "upload") {
 	exit;
 };
 
-classload("documents");
-$doc = new db_documents;
+classload("document");
+$doc = new document;
 
 switch($type) {
 	case "new":
