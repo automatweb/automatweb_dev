@@ -86,6 +86,74 @@
             <callback>do_order_form</callback>
             <field>ordering</field>
       </property>
+      <property>
+            <name>has_rent</name>
+            <table>objects</table>
+            <group>payment</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saab maksta j&amp;auml;relmaksuga</caption>
+      </property>
+      <property>
+            <name>rent_min_amt</name>
+            <table>objects</table>
+            <group>payment</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>6</size>
+            <caption>J&amp;auml;relmasu min. summa</caption>
+      </property>
+      <property>
+            <name>rent_min_amt_payment</name>
+            <table>objects</table>
+            <group>payment</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>6</size>
+            <caption>&amp;Uuml;he makse miinimumsumma</caption>
+      </property>
+      <property>
+            <name>rent_min_amt_payment_text</name>
+            <table>objects</table>
+            <group>payment</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Miinimumsumma veateade</caption>
+      </property>
+      <property>
+            <name>rent_max_amt_warn</name>
+            <table>objects</table>
+            <group>payment</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>6</size>
+            <caption>J&amp;auml;relmaksu maksimaalne summa</caption>
+      </property>
+      <property>
+            <name>rent_max_amt_warn_text</name>
+            <table>objects</table>
+            <group>payment</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Maksimaalse summa &amp;uuml;letamise hoiatus</caption>
+      </property>
+      <property>
+            <name>rent_item_types</name>
+            <table>objects</table>
+            <group>payment</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Makseperioodid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ORDERS_FORM</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -98,6 +166,9 @@
             <config>
                   <caption>Seaded</caption>
             </config>
+            <payment>
+                  <caption>Makseviisid</caption>
+            </payment>
       </groupinfo>
       <reltypes>
             <ORDERFORM>

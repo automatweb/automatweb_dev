@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.6 2005/01/16 16:54:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.7 2005/02/15 13:15:58 kristo Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -35,6 +35,31 @@
 
 @property ordering type=callback group=ordering no_caption=1 callback=do_order_form
 
+@default group=payment
+@default field=meta
+@default method=serialize
+
+@property has_rent type=checkbox ch_value=1 
+@caption Saab maksta j&auml;relmaksuga
+
+@property rent_min_amt type=textbox size=6
+@caption J&auml;relmasu min. summa
+
+@property rent_min_amt_payment type=textbox size=6 field=meta method=serialize table=objects
+@caption &Uuml;he makse miinimumsumma
+
+@property rent_min_amt_payment_text type=textbox field=meta method=serialize table=objects
+@caption Miinimumsumma veateade
+
+@property rent_max_amt_warn type=textbox size=6 field=meta method=serialize table=objects
+@caption J&auml;relmaksu maksimaalne summa
+
+@property rent_max_amt_warn_text type=textbox  field=meta method=serialize table=objects
+@caption Maksimaalse summa &uuml;letamise hoiatus
+
+@property rent_item_types type=table 
+@caption Makseperioodid
+
 @reltype ORDERFORM value=1 clid=CL_CFGFORM
 @caption Tellimuse seadetevorm
 
@@ -52,6 +77,8 @@
 
 @groupinfo ordering caption=Tellimine submit=no
 @groupinfo config caption=Seaded 
+@groupinfo payment caption="Makseviisid"
+
 */
 class orders_form extends class_base
 {
@@ -188,7 +215,7 @@ class orders_form extends class_base
 			}
 		}
 		
-		if(!$_SESSION["order_cart_id"] || !$_SESSION["order_form_id"])
+		if(!is_oid($_SESSION["order_cart_id"]) || !$this->can("view", $_SESSION["order_cart_id"]) || !$_SESSION["order_form_id"])
 		{
 			$order = new object();
 			$order->set_class_id(CL_ORDERS_ORDER);
@@ -230,7 +257,7 @@ class orders_form extends class_base
 		{
 			$this->vars(array(
 				"show_confirm" => $this->get_confirm_persondata($order),
-				"shop_table" => $this->get_cart_table(),
+				"shop_table" => ($_SESSION["orders_form"]["payment"]["type"] == "rent" ? $this->get_rent_table() : $this->get_cart_table()),
 			));
 		}
 		else
@@ -285,6 +312,7 @@ class orders_form extends class_base
 			$phone_obj = &obj($person->prop("phone"));
 			$phonenr = $phone_obj->name();
 		}
+
 		$this->vars(array(
 			"firstname" => $person->prop("firstname"),
 			"lastname" => $person->prop("lastname"),
@@ -298,11 +326,30 @@ class orders_form extends class_base
 			"udef_textbox4" => $order->prop("udef_textbox4"),
 			"udef_textbox5" => $order->prop("udef_textbox5"),
 			"udef_textbox6" => $order->prop("udef_textbox6"),
+			"udef_textbox7" => $order->prop("udef_textbox7"),
 			"person_contact" => $person->prop("comment"),
 			"birthday" => get_lc_date($person->prop("birthday"), 1),
+			"payment_type" => ($_SESSION["orders_form"]["payment"]["type"] == "cod" ? "Lunamaks" : "J&auml;relmaks"),
 		));
+
+		if ($_SESSION["orders_form"]["payment"]["type"] == "rent")
+		{
+			$o = obj($_GET["id"]);
+			$this->get_rent_table();
+			if ($this->_totalsum > $o->prop("rent_max_amt_warn"))
+			{
+				$this->vars(array(
+					"too_large_err" => $o->prop("rent_max_amt_warn_text")
+				));
+				$this->vars(array(
+					"TOO_LARGE" => $this->parse("TOO_LARGE")
+				));
+			}
+		}
+
 		$retval = $this->parse();
 		$this->read_template("orders_form.tpl");
+
 		return 	$retval;
 	}
 	
@@ -374,12 +421,14 @@ class orders_form extends class_base
 			$esmakordselt = "esmakordselt";
 		}
 		
+		$cv = aw_global_get("cb_values");
 		$this->vars(array(
 			"year_select" => $year_select,
 			"customer_type1" => html::radiobutton(array(
 				"name" => "udef_textbox6",
 				"value" => $pysiklient,
-				"checked" => $udef_check1
+				"checked" => $udef_check1,
+				"onclick" => "check_rent()"
 			)),
 			"udef_checkbox1" => html::checkbox(array(
 				"name" => "udef_checkbox1",
@@ -389,9 +438,47 @@ class orders_form extends class_base
 			"customer_type2" => html::radiobutton(array(
 				"name" => "udef_textbox6",
 				"value" => $esmakordselt,
-				"checked" => $udef_check2
-			))
+				"checked" => $udef_check2,
+				"onclick" => "check_rent()"
+			)),
+			"udef_checkbox1_error" => $cv["udef_checkbox1"]["error"]
 		));
+
+		$o = obj($arr["id"]);
+		if ($o->prop("has_rent"))
+		{
+			$cr = false;
+			if ($_SESSION["orders_form"]["payment"]["type"] == "rent" || $_SESSION['person_form_values']['udef_textbox6'] != "esmakordselt")
+			{
+				$cr = true;
+			}
+
+			if ($this->get_cart_sum() < $o->prop("rent_min_amt"))
+			{
+				$cr = false;
+			}
+
+			$this->vars(array(
+				"cod_selected" => checked($_SESSION["orders_form"]["payment"]["type"] != "rent"),
+				"rent_selected" => checked($_SESSION["orders_form"]["payment"]["type"] == "rent")
+			));
+
+			if ($cr)
+			{
+				$this->vars(array(
+					"can_rent" => $this->parse("can_rent")
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"no_can_rent" => $this->parse("no_can_rent")
+				));
+			}
+			$this->vars(array(
+				"RENT" => $this->parse("RENT")
+			));
+		}
 		
 		unset($_SESSION["cb_values"]);
 		$retval = $this->parse();
@@ -465,7 +552,111 @@ class orders_form extends class_base
 		
 		return $retval;
 	}
-	
+
+	function get_cart_items()
+	{
+		$order = &obj($_SESSION["order_cart_id"]);
+		$form = &obj($_SESSION["order_form_id"]);
+		$conns = $order->connections_from(array(
+			"type" => "RELTYPE_ORDER"
+		));
+
+		return new object_list($conns);
+	}	
+
+	function get_cart_sum()
+	{
+		$totalsum = 0;
+
+		$order = &obj($_SESSION["order_cart_id"]);
+		$form = &obj($_SESSION["order_form_id"]);
+		$conns = $order->connections_from(array(
+			"type" => "RELTYPE_ORDER"
+		));
+
+		$ol = new object_list($conns);
+		foreach ($ol->arr() as $item)
+		{
+			$totalsum = $totalsum + $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price"));
+		}
+
+		return $totalsum;
+	}
+
+	function get_rent_table()
+	{
+		$o = obj($_GET["id"]);
+		$inf = $o->meta("rent_data");
+
+		// get items in cart
+		$items = $this->get_cart_items();
+
+		$cats = array();
+		foreach($items->arr() as $item)
+		{
+			$cats[(int)$_SESSION["orders_form"]["payment"]["itypes"][$item->id()]][$item->id()] = $item;
+		}
+
+		// display cats
+		$item_cat = "";
+		$totalsum = 0;
+		foreach($cats as $cat => $items)
+		{
+			$item_in_cat = "";
+			foreach($items as $item)
+			{
+				$this->_insert_item_inf($item);
+
+				$item_in_cat .= $this->parse("ITEM_IN_CAT");
+			}
+
+			$dat = $inf[(int)$_SESSION["orders_form"]["payment"]["itypes"][$item->id()]];
+
+			$tot_price = $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price"));
+			$prepayment = (($tot_price / 100.0) * (float)$inf[$cat]["prepayment"]);
+			$num_payments = max($_SESSION["orders_form"]["payment"]["lengths"][$item->id()], $dat["min_mons"]);
+
+			$cp = $tot_price - $prepayment;
+
+			$percent = $inf[$cat]["interest"];
+
+			$payment = ($cp+($cp*$num_payments*(1+($percent/100))/100))/($num_payments+1);
+
+			$rent_price = $payment * ($num_payments+1) + $prepayment;
+
+			$totalsum += $rent_price;
+
+			$this->vars(array(
+				"catalog_price" => number_format($tot_price, 2),
+				"prepayment_price" => number_format($prepayment,2),
+				"prepayment" => (int)$inf[$cat]["prepayment"],
+				"num_payments" => $num_payments+1,
+				"rent_payment" => number_format($payment,2),
+				"total_rent_price" => number_format($rent_price,2)
+			));
+
+			$this->vars(array(
+				"cat_name" => $inf[$cat]["type"],
+				"ITEM_IN_CAT" => $item_in_cat,
+				"HAS_PREPAYMENT" => ($inf[$cat]["prepayment"] > 0 ? $this->parse("HAS_PREPAYMENT") : "")
+			));
+
+			$item_cat .= $this->parse("ITEM_CAT");
+		}
+			
+		$form = &obj($_SESSION["order_form_id"]);
+		$this->vars(array(
+			"ITEM_CAT" => $item_cat,
+			"totalsum" => number_format($totalsum + $form->prop("postal_fee"), 2),
+			"postal_fee" => $form->prop("postal_fee"),
+			"print_url" => aw_url_change_var("print", 1)
+		));
+		$this->_totalsum = $totalsum + $form->prop("postal_fee");
+
+		$retval = $this->parse("shop_table_rent");
+		return $retval;
+	}
+
 	function get_cart_table()
 	{	
 		$order = &obj($_SESSION["order_cart_id"]);
@@ -518,6 +709,127 @@ class orders_form extends class_base
 		));
 		$retval = $this->parse("shop_table");
 		return $retval;
+	}
+
+	function get_property($arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop["name"])
+		{
+			case "rent_item_types":
+				$this->_do_rent_item_types($arr);
+				break;
+		}
+		return PROP_OK;
+	}
+
+	function _init_rent_item_types_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => "Kauba t&uuml;&uuml;p",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "min_mons", 
+			"caption" => "Min. Kuud",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "max_mons",
+			"caption" => "Max. Kuud",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "prepayment",
+			"caption" => "Esmase sissemakse %",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "interest",
+			"caption" => "Intressi %",
+			"align" => "center"
+		));
+	}
+
+	function _do_rent_item_types($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_rent_item_types_t($t);
+
+		$rent_data = safe_array($arr["obj_inst"]->meta("rent_data"));
+		$rent_data[""] = array();
+
+		foreach($rent_data as $dat)
+		{
+			++$idx;
+			$t->define_data(array(
+				"type" => html::textbox(array(
+					"name" => "dat[$idx][type]",
+					"value" => $dat["type"]
+				)),
+				"min_mons" => html::textbox(array(
+					"name" => "dat[$idx][min_mons]",
+					"value" => $dat["min_mons"],
+					"size" => 5,
+				)),
+				"max_mons" => html::textbox(array(
+					"name" => "dat[$idx][max_mons]",
+					"value" => $dat["max_mons"],
+					"size" => 5,
+				)),
+				"prepayment" => html::textbox(array(
+					"name" => "dat[$idx][prepayment]",
+					"value" => $dat["prepayment"],
+					"size" => 5,
+				)),
+				"interest" => html::textbox(array(
+					"name" => "dat[$idx][interest]",
+					"value" => $dat["interest"],
+					"size" => 5,
+				)),
+			));
+		}
+		$t->set_sortable(false);
+	}
+
+	function set_property($arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop["name"])
+		{
+			case "rent_item_types":
+				$inf = array();
+				foreach(safe_array($arr["request"]["dat"]) as $idx => $dat)
+				{
+					if ($dat["type"] != "" && $dat["min_mons"] && $dat["max_mons"])
+					{
+						$inf[] = $dat;
+					}
+				}
+				$arr["obj_inst"]->set_meta("rent_data", $inf);
+				break;
+		}
+		return PROP_OK;
+	}
+
+	function _insert_item_inf($item)
+	{
+		$this->vars(array(
+			"product_code" => $item->prop("product_code"),
+			"product_color" => $item->prop("product_color"),
+			"product_size" => $item->prop("product_size"),
+			"product_count" => $item->prop("product_count"),
+			"product_price" => $item->prop("product_price"),
+			"product_image" => $item->prop("product_image"),
+			"product_page" => $item->prop("product_page"),
+			"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
+			"name" => $item->name(),
+		));
 	}
 }
 ?>

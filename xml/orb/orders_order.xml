@@ -29,5 +29,37 @@
 			</function>
 		</action>
 
+		<action name="rent_step_1" nologin="1">
+			<function name="rent_step_1">
+				<arguments>
+					<required name="id" />
+					<required name="section" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_rent_step_1" nologin="1">
+			<function name="submit_rent_step_1">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="rent_step_2" nologin="1">
+			<function name="rent_step_2">
+				<arguments>
+					<required name="id" />
+					<required name="section" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_rent_step_2" nologin="1">
+			<function name="submit_rent_step_2">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

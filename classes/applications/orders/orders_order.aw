@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.4 2005/01/18 10:51:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.5 2005/02/15 13:15:58 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -37,6 +37,7 @@
 @property udef_textbox4 type=textbox user=1
 @property udef_textbox5 type=textbox user=1
 @property udef_textbox6 type=textbox user=1 field=meta method=serialize table=objects
+@property udef_textbox7 type=textbox user=1 field=meta method=serialize table=objects
 
 
 @property udef_textarea1 type=textarea user=1
@@ -414,11 +415,20 @@ class orders_order extends class_base
 			$arr["udef_checkbox1"] = 0;
 		}
 		
+		$_SESSION["orders_form"]["payment"]["type"] = $arr["payment_method"];
+
 		$oform = &obj($_SESSION["order_form_id"]);
 		$arr["cfgform"] = $oform->prop("orderform");
 		parent::submit($arr);
 		
 		$_SESSION["person_form_values"] = $arr;
+
+		if (!$arr["udef_checkbox1"])
+		{
+			$cv = aw_global_get("cb_values");
+			$cv["udef_checkbox1"]["error"] = "Tellimiseks peate n&otilde;ustuma tellimistingimustega";
+			aw_session_set("cb_values", $cv);
+		}
 		if(aw_global_get("cb_values"))
 		{	
 			return $this->mk_my_orb("change", 
@@ -428,6 +438,18 @@ class orders_order extends class_base
 			), CL_ORDERS_FORM);
 			
 		}
+
+		// if use selected payent type as rent, go through the rent settings
+		if ($arr["payment_method"] == "rent")
+		{
+			return $this->mk_my_orb("rent_step_1", array(
+					"id" => $_SESSION["order_form_id"],
+					"group" => "confirmpage",
+					"section" => $_SESSION["orders_section"],
+				)
+			);
+		}
+
 		return $this->mk_my_orb("change", 
 			array(
 				"id" => $_SESSION["order_form_id"],
@@ -477,7 +499,9 @@ class orders_order extends class_base
 		$msg->set_prop("name", $form->name());
 		$msg->set_prop("html_mail", 1);
 			
-		$msg->set_prop("message", $form_inst->get_confirm_persondata($order)."<br />".$form_inst->get_cart_table());
+		
+		$content = $form_inst->get_confirm_persondata($order)."<br />".($_SESSION["orders_form"]["payment"]["type"] == "rent" ? $form_inst->get_rent_table() : $form_inst->get_cart_table());
+		$msg->set_prop("message", $content);
 		
 		$msg->save();
 		$mail_inst = get_instance(CL_MESSAGE);	
@@ -531,6 +555,240 @@ class orders_order extends class_base
 		unset($_SESSION["order_form_id"]);
 		unset($_SESSION["order_cart_id"]);
 		return aw_ini_get("baseurl")."/".$order_form->prop("thankudoc");
+	}
+
+	/**
+
+		@attrib name=rent_step_1 nologin=1
+
+		@param id required
+		@param section required
+	**/
+	function rent_step_1($arr)
+	{
+		$this->read_template("rent_step_1.tpl");
+	
+		$o = obj($arr["id"]);
+		$inf = $o->meta("rent_data");
+		$item_types = array();
+		foreach(safe_array($inf) as $idx => $dat)
+		{
+			$item_types[$idx] = $dat["type"];
+		}
+
+		// get items in cart
+		$f = get_instance(CL_ORDERS_FORM);
+		$items = $f->get_cart_items();
+
+		foreach($items->arr() as $item)
+		{
+			$this->_insert_item_inf($item);
+			$this->vars(array(
+				"item_types" => html::select(array(
+					"name" => "rent_items[".$item->id()."]",
+					"options" => $item_types,
+					"selected" => $_SESSION["orders_form"]["payment"]["itypes"][$item->id()]
+				))
+			));
+
+			$rent_item .= $this->parse("RENT_ITEM");
+		}
+
+		$this->vars(array(
+			"RENT_ITEM" => $rent_item,
+			"reforb" => $this->mk_reforb("submit_rent_step_1", $arr),
+			"back" => $this->mk_my_orb("change", array("id" => $arr["id"], "section" => $arr["section"], "group" => "persondata"), "orders_form")
+		));		
+
+		return $this->parse();
+	}
+
+	function _insert_item_inf($item)
+	{
+		$this->vars(array(
+			"product_code" => $item->prop("product_code"),
+			"product_color" => $item->prop("product_color"),
+			"product_size" => $item->prop("product_size"),
+			"product_count" => $item->prop("product_count"),
+			"product_price" => $item->prop("product_price"),
+			"product_image" => $item->prop("product_image"),
+			"product_page" => $item->prop("product_page"),
+			"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
+			"name" => $item->name(),
+		));
+	}
+
+	/**
+
+		@attrib name=submit_rent_step_1 nologin=1
+
+	**/
+	function submit_rent_step_1($arr)
+	{
+		// save item types
+		foreach(safe_array($arr["rent_items"]) as $id => $type)
+		{
+			$_SESSION["orders_form"]["payment"]["itypes"][$id] = $type;
+		}
+
+		if ($arr["save_only"] != "")
+		{
+			return $this->mk_my_orb("rent_step_1", array("id" => $arr["id"], "section" => $arr["section"]));
+		}
+		return $this->mk_my_orb("rent_step_2", array("id" => $arr["id"], "section" => $arr["section"]));
+	}
+
+	/**
+
+		@attrib name=rent_step_2 nologin=1
+
+		@param id required
+		@param section required
+
+	**/
+	function rent_step_2($arr)
+	{
+		$this->read_template("rent_step_2.tpl");
+
+		$o = obj($arr["id"]);
+		$inf = $o->meta("rent_data");
+
+		// get items in cart
+		$f = get_instance(CL_ORDERS_FORM);
+		$items = $f->get_cart_items();
+
+		$cats = array();
+		foreach($items->arr() as $item)
+		{
+			$cats[(int)$_SESSION["orders_form"]["payment"]["itypes"][$item->id()]][$item->id()] = $item;
+		}
+
+		// display cats
+		$item_cat = "";
+		foreach($cats as $cat => $items)
+		{
+			$item_in_cat = "";
+			$tot_price = 0;
+			foreach($items as $item)
+			{
+				$this->_insert_item_inf($item);
+
+				$item_in_cat .= $this->parse("ITEM_IN_CAT");
+
+				$tot_price += $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price"));
+			}
+
+			$dat = $inf[(int)$_SESSION["orders_form"]["payment"]["itypes"][$item->id()]];
+			$lengths = array();
+			for($i = $dat["min_mons"]; $i <= $dat["max_mons"]; $i++)
+			{
+				$lengths[$i] = $i." kuud";
+			}
+
+			$prepayment = (($tot_price / 100.0) * (float)$inf[$cat]["prepayment"]);
+			$num_payments = max($_SESSION["orders_form"]["payment"]["lengths"][$item->id()], $dat["min_mons"]);
+
+			$cp = $tot_price - $prepayment;
+
+			$percent = $inf[$cat]["interest"];
+
+			$payment = ($cp+($cp*$num_payments*(1+($percent/100))/100))/($num_payments+1);
+
+			$rent_price = $payment * ($num_payments+1) + $prepayment;
+
+			$this->vars(array(
+				"catalog_price" => number_format($tot_price, 2),
+				"prepayment_price" => number_format($prepayment,2),
+				"prepayment" => (int)$inf[$cat]["prepayment"],
+				"sel_period" => html::select(array(
+					"name" => "rent_lengths[".$item->id()."]",
+					"options" => $lengths,
+					"selected" => $num_payments
+				)),
+				"num_payments" => $num_payments+1,
+				"rent_payment" => number_format($payment,2),
+				"total_rent_price" => number_format($rent_price,2),
+			));
+
+			$this->vars(array(
+				"cat_name" => $inf[$cat]["type"],
+				"ITEM_IN_CAT" => $item_in_cat,
+				"HAS_PREPAYMENT" => ($inf[$cat]["prepayment"] > 0 ? $this->parse("HAS_PREPAYMENT") : ""),
+				
+			));
+
+			$item_cat .= $this->parse("ITEM_CAT");
+		}
+
+		$this->vars(array(
+			"rent_payment_error" => ($_SESSION["orders_form"]["payment"]["errors"]["too_small"] ? $o->prop("rent_min_amt_payment_text") : "")
+		));
+		
+		$this->vars(array(
+			"ITEM_CAT" => $item_cat,
+			"reforb" => $this->mk_reforb("submit_rent_step_2", $arr),
+			"back" => $this->mk_my_orb("rent_step_1", array("id" => $arr["id"], "section" => $arr["section"])),
+			"PAYMENT_ERR" => ($_SESSION["orders_form"]["payment"]["errors"]["too_small"] ? $this->parse("PAYMENT_ERR") : "")
+		));		
+		unset($_SESSION["orders_form"]["payment"]["errors"]["too_small"]);
+
+		return $this->parse();
+	}
+
+	/**
+
+		@attrib name=submit_rent_step_2 nologin=1
+
+	**/
+	function submit_rent_step_2($arr)
+	{
+		foreach(safe_array($arr["rent_lengths"]) as $item => $len)
+		{
+			$_SESSION["orders_form"]["payment"]["lengths"][$item] = $len;
+		}
+
+		$o = obj($arr["id"]);
+		$inf = $o->meta("rent_data");
+
+		// get items in cart
+		$f = get_instance(CL_ORDERS_FORM);
+		$items = $f->get_cart_items();
+
+		$cats = array();
+		foreach($items->arr() as $item)
+		{
+			$cats[(int)$_SESSION["orders_form"]["payment"]["itypes"][$item->id()]][$item->id()] = $item;
+		}
+
+		// display cats
+		$tot_pm = 0;
+		foreach($cats as $cat => $items)
+		{
+			$tot_price = 0;
+			foreach($items as $item)
+			{
+				$tot_price += $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price"));
+			}
+			$prepayment = (($tot_price / 100.0) * (float)$inf[$cat]["prepayment"]);
+			$num_payments = max($_SESSION["orders_form"]["payment"]["lengths"][$item->id()], $dat["min_mons"]);
+			$cp = $tot_price - $prepayment;
+			$percent = $inf[$cat]["interest"];
+			$payment = ($cp+($cp*$num_payments*(1+($percent/100))/100))/($num_payments+1);
+
+			$tot_pm += $payment;
+		}
+
+		if ($tot_pm < $o->prop("rent_min_amt_payment"))
+		{
+			$_SESSION["orders_form"]["payment"]["errors"]["too_small"] = 1;
+			$stay = true;
+		}
+
+		if ($arr["save_only"] != "" || $stay)
+		{
+			return $this->mk_my_orb("rent_step_2", array("id" => $arr["id"], "section" => $arr["section"]));
+		}
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "section" => $arr["section"], "group" => "confirmpage"), "orders_form");
 	}
 }
 ?>

@@ -124,6 +124,15 @@
             <method>serialize</method>
       </property>
       <property>
+            <name>udef_textbox7</name>
+            <table>objects</table>
+            <group>orderinfo</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>udef_textarea1</name>
             <table>orders_order</table>
             <group>orderinfo</group>

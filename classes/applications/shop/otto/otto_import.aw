@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.18 2005/02/11 14:25:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.19 2005/02/15 13:15:58 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -310,6 +310,7 @@ class otto_import extends class_base
 				echo "for product $pcode multiple images! <br>\n";
 				flush();
 
+				$o_html = $html;
 				// subrequest for two images
 				preg_match_all("/<a href=\"Javascript:document\.location\.href='(.*)'\+link_ext\" class=\"produkt\">/imsU", $html, $mt, PREG_PATTERN_ORDER);
 				$urld = array();
@@ -449,6 +450,15 @@ class otto_import extends class_base
 					}
 				}
 			}
+
+			// check for rundumanshiftph
+			if (strpos($o_html, "rundum_eb") !== false)
+			{
+				// save rundum
+				echo "set flash to true <br>";
+				$this->db_query("UPDATE otto_prod_img SET has_flash = 1 WHERE pcode = '$pcode' AND nr = 1");
+			}
+
 			$stat = fopen($this->cfg["site_basedir"]."/files/status.txt","w");
 		
 			fwrite($stat, $pcode);

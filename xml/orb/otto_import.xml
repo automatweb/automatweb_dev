@@ -36,5 +36,13 @@
 			</function>
 		</action>
 
+		<action name="swt">
+			<function name="swt">
+				<arguments>
+					<required name="pcode" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
