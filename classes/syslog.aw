@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.9 2001/11/20 13:40:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.10 2002/01/31 00:14:13 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 lc_load("syslog");
@@ -21,7 +21,7 @@ class db_syslog extends aw_template
 	function display_last_10()
 	{
 		// faking global muutujad?
-		global $syslog_types,$syslog_params;
+		global $syslog_types,$syslog_params,$filter_uid;
 		$this->read_template("parts.tpl");
 		if (is_array($syslog_types))
 		{
@@ -59,7 +59,31 @@ class db_syslog extends aw_template
 		if (isset($sortby))		$syslog_params[sortby] = $sortby;
 		if (isset($uid_c))		$syslog_params[uid_c] = $uid_c;
 		if (isset($email_c))	$syslog_params[email_c] = $email_c;
-		
+
+		if ($syslog_params["filter_uid"] != "" && $syslog_params["user"] == "")
+		{
+			$syslog_params["filter_uid"] = "";
+			$GLOBALS["filter_uid"] = "";
+		}
+
+		if ($GLOBALS["filter_uid"] != "")
+		{
+			$syslog_params["filter_uid"] = $GLOBALS["filter_uid"];
+			$syslog_params["user"] = $GLOBALS["filter_uid"];
+		}
+
+		if ($GLOBALS["filter_uid"] != "")
+		{
+			$fu = $GLOBALS["filter_uid"];
+		}
+		else
+		{
+			$fu = $syslog_params["filter_uid"];
+		}
+		$this->vars(array(
+			"filter_uid" => $fu
+		));
+
 		if ($syslog_params[update] < 1)
 			$syslog_params[update] = 5;
 			
@@ -94,8 +118,10 @@ class db_syslog extends aw_template
 		// umh?
 		$users = array("" => "");
 		while ($ur = $u->db_next())
-			$users[$ur[uid]] = $ur[uid];
-		$this->vars(array("user" => $this->option_list($syslog_params[user],$users)));
+		{
+			$users[$ur["uid"]] = $ur["uid"];
+		}
+		$this->vars(array("user" => $this->option_list($syslog_params["user"],$users)));
 
 		if ($ss == "")
 			$ss = " WHERE uid LIKE '%".$syslog_params[user]."%' ";
