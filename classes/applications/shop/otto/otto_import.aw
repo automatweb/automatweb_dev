@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.24 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.25 2005/03/30 12:17:11 ahti Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -1510,7 +1510,7 @@ class otto_import extends class_base
 			$vars["add_to_cart"][$arr["add_to_cart"]] = $arr["add_to_cart_count"];
 		}
 
-		$i = get_instance("applications/shop/shop_order_cart");
+		$i = get_instance(CL_SHOP_ORDER_CART);
 		$i->submit_add_cart($vars);
 
 		return $retval;

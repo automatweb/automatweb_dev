@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_reception.aw,v 1.3 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_reception.aw,v 1.4 2005/03/30 12:17:11 ahti Exp $
 // shop_warehouse_reception.aw - Lao sissetulek 
 /*
 
@@ -92,7 +92,7 @@ class shop_warehouse_reception extends class_base
 
 		$this->_init_inc_table($arr["prop"]["vcl_inst"]);
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_PRODUCT)) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			if ($arr["obj_inst"]->prop("confirm") == 1)
 			{
@@ -127,7 +127,7 @@ class shop_warehouse_reception extends class_base
 		}
 
 		$pd = $o->meta("inc_content");
-		foreach($o->connections_from(array("type" => 1/*RELTYPE_PRODUCT*/)) as $c)
+		foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			$to = $c->to();
 			$to->set_prop("item_count", $to->prop("item_count") + $pd[$to->id()]);
