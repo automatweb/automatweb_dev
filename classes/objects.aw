@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.48 2003/05/19 15:40:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.49 2003/06/04 13:37:03 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -66,7 +66,10 @@ class db_objects extends aw_template
 
 	function orb_get_list($arr)
 	{
-		extract($arr);
+		if (is_array($arr))
+		{
+			extract($arr);
+		}
 		if (!isset($rootobj))
 		{
 			$rootobj = -1;
