@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.59 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.60 2001/10/14 13:51:54 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -415,27 +415,27 @@ class menuedit extends aw_template
 			$sel_menu_meta = $this->get_object_metadata(array(
 				"metadata" => $this->mar[$si_parent]["metadata"],
 			));
-			$this->vars(array("url" => $this->mar[$si_parent]["img_url"]));
+			$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$this->mar[$si_parent]["img_url"])));
 			$smi =$this->parse("SEL_MENU_IMAGE");
 
 			if ($sel_menu_meta["img2_id"])
 			{
-				$this->vars(array("url" => $sel_menu_meta["img2_url"]));
+				$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$sel_menu_meta["img2_url"])));
 				$smi.=$this->parse("SEL_MENU_IMAGE");
 			}
 			if ($sel_menu_meta["img3_id"])
 			{
-				$this->vars(array("url" => $sel_menu_meta["img3_url"]));
+				$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$sel_menu_meta["img3_url"])));
 				$smi.=$this->parse("SEL_MENU_IMAGE");
 			}
 			if ($sel_menu_meta["img4_id"])
 			{
-				$this->vars(array("url" => $sel_menu_meta["img4_url"]));
+				$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$sel_menu_meta["img4_url"])));
 				$smi.=$this->parse("SEL_MENU_IMAGE");
 			}
 			if ($sel_menu_meta["img5_id"])
 			{
-				$this->vars(array("url" => $sel_menu_meta["img5_url"]));
+				$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$sel_menu_meta["img5_url"])));
 				$smi.=$this->parse("SEL_MENU_IMAGE");
 			}
 			$sel_image = "<img name='sel_menu_image' src='".$this->mar[$si_parent]["img_url"]."' border='0'>";
@@ -1086,6 +1086,7 @@ class menuedit extends aw_template
 				objects.alias as alias,
 				objects.class_id as class_id,
 				objects.brother_of as brother_of,
+				objects.metadata as metadata,
 				menu.type as mtype,
 				menu.link as link,
 				menu.clickable as clickable,
