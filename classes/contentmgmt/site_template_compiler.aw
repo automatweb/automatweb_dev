@@ -79,10 +79,7 @@ class site_template_compiler extends aw_template
 	function compile($path, $tpl, $mdefs = NULL, $no_cache = false)
 	{
 		enter_function("site_template_compiler::compile");		
-		//aw_template::tpl_init uses $path as "$this->cfg['tpldir']."/$path"
-		//and it defaults to "", I HOPE SOMEONE IS READING THIS AND THINKING!
-		//now that i don't give it $path, the location won't smthing like $basedir/$basedir
-		$this->tpl_init();//$path);
+		$this->tpl_init($path);
 		$this->no_use_ma_cache = $no_cache;
 		//echo "compiling \$this->read_template($tpl,true)<br>";
 		$success = $this->read_template($tpl,true);
