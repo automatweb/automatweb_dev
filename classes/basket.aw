@@ -10,7 +10,14 @@ class basket extends aw_template
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,"Lisa korv");
+		if ($return_url != "")
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa korv");
+		}
+		else
+		{
+			$this->mk_path($parent,"Lisa korv");
+		}
 		$this->read_template("add.tpl");
 
 		$ob = get_instance("objects");
@@ -20,7 +27,7 @@ class basket extends aw_template
 			"ftbls" => $this->picker(0,$this->list_objects(array("class" => CL_FORM_TABLE, "addempty" => true))),
 			"ord_parents" => $this->picker(0,$ob->get_list()),
 			"order_form" => $this->picker(0, $fo->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true))),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_doc" => $alias_doc))
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url))
 		));
 		return $this->parse();
 	}
@@ -44,9 +51,9 @@ class basket extends aw_template
 			));
 		}
 
-		if ($alias_doc)
+		if ($alias_to)
 		{
-			$this->add_alias($alias_doc, $id);
+			$this->add_alias($alias_to, $id);
 		}
 
 		$this->set_object_metadata(array(
@@ -59,14 +66,21 @@ class basket extends aw_template
 				"order_form" => $order_form
 			)
 		));
-		return $this->mk_my_orb("change", array("id" => $id));
+		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 
 	function change($arr)
 	{
 		extract($arr);
 		$ob = $this->get_basket($id);
-		$this->mk_path($ob["parent"], "Muuda korvi");
+		if ($return_url != "")
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda korvi");
+		}
+		else
+		{
+			$this->mk_path($ob["parent"], "Muuda korvi");
+		}
 		$this->read_template("add.tpl");
 
 		$oj = get_instance("objects");
@@ -78,7 +92,7 @@ class basket extends aw_template
 			"ftbls" => $this->picker($ob["meta"]["ftbl"],$this->list_objects(array("class" => CL_FORM_TABLE, "addempty" => true))),
 			"ord_parents" => $this->picker($ob["meta"]["ord_parent"],$oj->get_list()),
 			"order_form" => $this->picker($ob["meta"]["order_form"], $fo->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true))),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id))
+			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
 
 		return $this->parse();
