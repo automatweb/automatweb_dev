@@ -6,7 +6,7 @@
 <table border="0" cellspacing="1" cellpadding="2"  width=100%>
 <tr>
 <td height="15" colspan="15" class="fgtitle">&nbsp;<b>MEILID:&nbsp;<a href='list.{VAR:ext}?type=new_mail&parent={VAR:parent}'>Lisa</a> |
-<a href='#' onClick="document.defform.submit()">Salvesta</a></b></td>
+<a href="javascript:document.defform.submit()">Salvesta</a></b></td>
 </tr>
 <tr>
 <td align="center" class="title">&nbsp;From&nbsp;</td>
