@@ -61,6 +61,15 @@
             <caption>Mitu kirjet lehel</caption>
       </property>
       <property>
+            <name>cfgform_name_in_field</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kirje lisamisel pane seadete vormi nimi v&amp;auml;lja</caption>
+      </property>
+      <property>
             <name>data_tb</name>
             <table>objects</table>
             <group>data</group>

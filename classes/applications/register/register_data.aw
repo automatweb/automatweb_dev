@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.1 2004/05/17 14:15:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.2 2004/06/04 11:12:12 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -11,7 +11,7 @@
 
 @property register_id type=hidden field=aw_register_id group=general
 
-@groupinfo data caption="Admed"
+@groupinfo data caption="Andmed"
 @default group=data
 
 @property user1 type=textbox field=aw_user1 group=data
@@ -20,7 +20,7 @@
 @property user2 type=textbox  field=aw_user2 group=data
 @caption User-defined 2
 
-@property user3 type=textbox  field=aw_user3 group=data
+@property user3 type=text  field=aw_user3 group=data
 @caption User-defined 3
 
 @property user4 type=textbox  field=aw_user4 group=data
@@ -135,6 +135,22 @@
 @property uservar10 type=classificator  field=aw_varuser10 group=data reltype=RELTYPE_VARUSER10 store=connect
 @caption User-defined var 10
 
+@property userdate1 type=date_select  field=aw_userdate1 group=data year_from=1970 year_to=2020
+@caption User-defined date select 1
+
+@property userdate2 type=date_select  field=aw_userdate2 group=data year_from=1970 year_to=2020
+@caption User-defined date select 2
+
+@property userdate3 type=date_select  field=aw_userdate3 group=data year_from=1970 year_to=2020
+@caption User-defined date select 3
+
+@property userdate4 type=date_select  field=aw_userdate4 group=data year_from=1970 year_to=2020
+@caption User-defined date select 4
+
+@property userdate5 type=date_select  field=aw_userdate5 group=data year_from=1970 year_to=2020
+@caption User-defined date select 5
+
+
 @reltype VARUSER1 value=1 clid=CL_META
 @caption kasutajadefineeritud muutuja 1
 
@@ -186,6 +202,15 @@ class register_data extends class_base
 		{
 		};
 		$this->set_register_id = $arr["request"]["set_register_id"];
+		if ($this->set_register_id && $arr["request"]["cfgform"])
+		{
+			$rego = obj($this->set_register_id);
+			if ($rego->prop("cfgform_name_in_field") != "" && $prop["name"] == $rego->prop("cfgform_name_in_field"))
+			{
+				$co = obj($arr["request"]["cfgform"]);
+				$prop["value"] = $co->name();
+			}
+		}
 		return $retval;
 	}
 
@@ -196,6 +221,7 @@ class register_data extends class_base
 		switch($prop["name"])
 		{
 		}
+
 		return $retval;
 	}	
 
@@ -209,6 +235,15 @@ class register_data extends class_base
 		if ($arr["new"] && $arr["request"]["set_register_id"])
 		{
 			$arr["obj_inst"]->set_prop("register_id", $arr["request"]["set_register_id"]);
+			if ($arr["request"]["cfgform"])
+			{
+				$rego = obj($arr["request"]["set_register_id"]);
+				if ($rego->prop("cfgform_name_in_field") != "")
+				{
+					$co = obj($arr["request"]["cfgform"]);
+					$arr["obj_inst"]->set_prop($rego->prop("cfgform_name_in_field"),$co->name());
+				}
+			}
 		}
 	}
 

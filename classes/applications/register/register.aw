@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.5 2004/05/27 08:42:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.6 2004/06/04 11:12:12 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -25,6 +25,9 @@
 
 @property per_page type=textbox size=5 field=meta method=serialize
 @caption Mitu kirjet lehel
+
+@property cfgform_name_in_field type=select field=meta method=serialize
+@caption Kirje lisamisel pane seadete vormi nimi v&auml;lja
 
 
 @groupinfo data caption=Andmed
@@ -101,6 +104,16 @@ class register extends class_base
 						"id" => $arr["obj_inst"]->prop("search_o"),
 						"no_form" => 1
 					));
+				}
+				break;
+
+			case "cfgform_name_in_field":
+				$rs = get_instance(CL_REGISTER_SEARCH);
+				$ps = $rs->get_props_from_reg($arr["obj_inst"]);
+				$prop["options"] = array();
+				foreach($ps as $pn => $pd)
+				{
+					$prop["options"][$pn] = $pd["caption"];
 				}
 				break;
 		};
@@ -304,15 +317,20 @@ class register extends class_base
 	function show($arr)
 	{
 		$o = obj($arr["id"]);
-		$tb = get_instance("toolbar");
-		$this->do_data_toolbar(array(
-			"prop" => array(
-				"toolbar" => &$tb
-			),
-			"obj_inst" => $o
-		));
 
-		$html =  $tb->get_toolbar();
+		$html = "";
+		if ($this->can("add", $o->prop("data_rootmenu")))
+		{
+			$tb = get_instance("toolbar");
+			$this->do_data_toolbar(array(
+				"prop" => array(
+					"toolbar" => &$tb
+				),
+				"obj_inst" => $o
+			));
+
+			$html =  $tb->get_toolbar();
+		}
 
 		if ($o->prop("show_all"))
 		{

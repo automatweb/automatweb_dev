@@ -27,7 +27,7 @@
             <name>user3</name>
             <group>data</group>
             <table>aw_register_data</table>
-            <type>textbox</type>
+            <type>text</type>
             <field>aw_user3</field>
             <caption>User-defined 3</caption>
       </property>
@@ -347,6 +347,56 @@
             <store>connect</store>
             <caption>User-defined var 10</caption>
       </property>
+      <property>
+            <name>userdate1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate1</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 1</caption>
+      </property>
+      <property>
+            <name>userdate2</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate2</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 2</caption>
+      </property>
+      <property>
+            <name>userdate3</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate3</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 3</caption>
+      </property>
+      <property>
+            <name>userdate4</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate4</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 4</caption>
+      </property>
+      <property>
+            <name>userdate5</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>date_select</type>
+            <field>aw_userdate5</field>
+            <year_from>1970</year_from>
+            <year_to>2020</year_to>
+            <caption>User-defined date select 5</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_REGISTER_DATA</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -355,7 +405,7 @@
       </classinfo>
       <groupinfo>
             <data>
-                  <caption>Admed</caption>
+                  <caption>Andmed</caption>
             </data>
       </groupinfo>
       <tableinfo>
