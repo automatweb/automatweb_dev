@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.2 2002/01/03 18:29:13 duke Exp $
+// object_chain.aw - Objektipärjad
 
 classload("objects");
 
@@ -14,10 +16,17 @@ class object_chain extends aw_template
 	{
 		extract($arr);
 		$this->read_template("add.tpl");
-		$this->mk_path($parent,"Lisa objektip&auml;rg");
+		if ($return_url)
+		{
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa objektipärg");
+		}
+		else
+		{
+			$this->mk_path($parent,"Lisa objektip&auml;rg");
+		}
 
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent))
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"return_url" => $return_url))
 		));
 		return $this->parse();
 	}
@@ -32,6 +41,9 @@ class object_chain extends aw_template
 				"oid" => $id,
 				"name" => $name
 			));
+		
+			$_tmp = $this->get_object($id);
+			$par_obj = $this->get_object($_tmp["parent"]);
 		}
 		else
 		{
@@ -40,7 +52,18 @@ class object_chain extends aw_template
 				"name" => $name,
 				"class_id" => CL_OBJECT_CHAIN
 			));
+			$par_obj = $this->get_object($parent);
+			if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE))
+			{
+				$this->add_alias($parent,$id);
+			};
 		}
+
+			#$old_contents = $this->get_objects_in_chain($id);
+			#print "<pre>";
+			#print $par_obj["oid"];
+			#print_r($old_contents);
+			#print "</pre>";
 
 		$arr = array();
 		if (is_array($objs))
@@ -64,6 +87,20 @@ class object_chain extends aw_template
 				}
 			}
 		}
+		
+		// kui tegemist on aliaste ja kui see siin on objektipärg, siis
+		// loeme koigepealt sisse olemasolevad aliased ning _kustutame_ need
+		if ( ($par_obj["class_id"] == CL_DOCUMENT) || ($par_obj["class_id"] == CL_TABLE))                        {
+			$old_contents = $this->get_objects_in_chain($id);
+			if (is_array($old_contents))
+			{
+				foreach($old_contents as $value)
+				{
+					$this->delete_alias($par_obj["oid"],$value);
+				}
+			};
+			$this->expl_chain(array("id" => $id,"parent" => $par_obj["oid"],"objects" => $arr));
+		};
 
 		$this->set_object_metadata(array(
 			"oid" => $id,
@@ -71,7 +108,27 @@ class object_chain extends aw_template
 			"value" => $arr
 		));
 
-		return $this->mk_my_orb("change", array("id" => $id,"search" => $search,"s_name" => $s_name,"s_comment" => $s_comment,"s_type" => $s_type));
+		return $this->mk_my_orb("change", array("id" => $id,"search" => $search,"s_name" => $s_name,"s_comment" => $s_comment,"s_type" => $s_type,"return_url" => urlencode($return_url)));
+	}
+
+	//// explodes the added object into single aliases
+	function expl_chain($args = array())
+	{
+		extract($args);
+		if (not($objects))
+		{
+			$objects = $this->get_objects_in_chain($id);
+		};
+		
+		if (is_array($objects))
+		{
+			foreach($objects as $value)
+			{
+				print "$parent - $value<br>";
+				$this->add_alias($parent,$value);
+			};
+		};
+
 	}
 
 	function change($arr)
@@ -80,7 +137,15 @@ class object_chain extends aw_template
 		$this->read_template("add.tpl");
 		$o = $this->get_object($id);
 	
-		$this->mk_path($o["parent"], "Muuda objektip&auml;rga");
+		if ($return_url)
+		{
+			$return_url = urldecode($return_url);
+			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Lisa objektipärg");
+		}
+		else
+		{
+			$this->mk_path($o["parent"], "Muuda objektip&auml;rga");
+		};
 
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $o["metadata"]
@@ -94,7 +159,7 @@ class object_chain extends aw_template
 		}
 
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
+			"reforb" => $this->mk_reforb("submit", array("id" => $id,"return_url" => urlencode($return_url))),
 			"s_name" => $s_name,
 			"s_comment" => $s_comment,
 			"types" => $this->multiple_option_list($this->make_keys($s_type),$tar)
