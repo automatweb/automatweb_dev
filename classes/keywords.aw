@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.2 2001/05/18 15:02:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.3 2001/05/18 16:29:55 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 class keywords extends aw_template {
 	function keywords($args = array())
@@ -52,7 +52,7 @@ class keywords extends aw_template {
 		{
 			$resarray[] = $row["keyword"];
 		};
-		return join(",",$resarray);
+		return $resarray;
 	}
 			
 			
@@ -84,6 +84,10 @@ class keywords extends aw_template {
 		};
 		
 		// teeme kindlaks koik votmesonad, millel polnud ID-d (uued)
+		// loome ka uue listi votmesona jaoks
+		classload("lists");
+		$lists = new lists();
+
 		foreach($klist as $val)
 		{
 			if (!$ids[$val])
@@ -94,9 +98,17 @@ class keywords extends aw_template {
 				$row = $this->db_next();
 				$newid = $row["id"];
 				$newid++;
-				$q = "INSERT INTO keywords (id,keyword) VALUES ('$newid','$val')";
+				$this->save_handle();
+				$list_id = $lists->create_list(array(
+								"parent" => KEYWORD_LISTS,
+								"name" => $val,
+								"comment" => "automaagiliselt loodud list",
+							));
+				$this->restore_handle();
+				$q = "INSERT INTO keywords (id,list_id,keyword) VALUES ('$newid','$list_id','$val')";
 				$this->db_query($q);
 				$ids[$val] = $newid;
+
 			};
 		};
 
