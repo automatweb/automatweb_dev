@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.12 2004/11/11 15:08:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.13 2004/11/24 10:28:56 ahti Exp $
 
 /*
 
@@ -119,6 +119,28 @@ class rate_scale extends class_base
 		}
 	}
 
+	function get_scale_obj_for_obj($oid)
+	{
+		$ob = obj($oid);
+		$oc = $ob->path();
+		foreach($oc as $odp)
+		{
+			$sql = "SELECT * FROM rate2menu WHERE menu_id = '".$odp->id()."'";
+			$this->db_query($sql);
+			while ($row = $this->db_next())
+			{
+				if ($row["clid"] == $ob->class_id())
+				{
+					return $row["rate_id"];
+				}
+			}
+		}
+		if($rate = $this->db_fetch_field("SELECT rate_id FROM rate2clid WHERE clid = '".$ob->class_id()."'", "rate_id"))
+		{
+			return $rate;
+		}
+		return false;
+	}
 
 	function get_scale_for_obj($oid)
 	{
@@ -167,17 +189,17 @@ class rate_scale extends class_base
 		if ($this->can("view", $id))
 		{
 			$ob = obj($id);
+			$no_rate = $ob->prop("no_rate");
+			if(!empty($no_rate))
+			{
+				$ret[0] = "ei hinda";
+			}
 			if ($ob->prop("type_nr") == 1)
 			{
 				for ($i = $ob->prop("nr_from"); $i <= $ob->prop("nr_to"); $i += $ob->prop("nr_step"))
 				{
 					$ret[$i] = $i;
 				}
-			}
-			$no_rate = $ob->prop("no_rate");
-			if(!empty($no_rate))
-			{
-				$ret[0] = "ei hinda";
 			}
 		}
 		return $ret;
