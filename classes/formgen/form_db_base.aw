@@ -495,7 +495,7 @@ class form_db_base extends aw_template
 				$lang = " AND $idx_tbl.lang_id = ".aw_global_get("lang_id");
 			}
 		}
-		$sql = "SELECT $sql_data FROM $sql_join WHERE $idx_tbl.$idx_col = '$entry_id' $lang";
+		$sql = "SELECT $sql_data FROM $sql_join WHERE $idx_tbl.$idx_col = '$entry_id' $lang LIMIT 1";
 		if ($GLOBALS["fg_re_dbg"] == 1)	echo "read_entry sql = $sql <br>";
 
 		$this->db_query($sql);
