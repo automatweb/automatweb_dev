@@ -1,14 +1,47 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.10 2005/01/28 10:17:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.11 2005/01/28 11:13:58 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
-@default table=objects
-@default group=recycle
-@classinfo no_yah=1
-@property toolbar type=toolbar store=no no_caption=1
-@property recycle_table type=text store=no no_caption=1
 
+@default table=objects
+
+@classinfo no_yah=1
+
+@default group=recycle_list
+	@property toolbar type=toolbar store=no no_caption=1 group=recycle_list,recycle_search
+	@property recycle_table type=text store=no no_caption=1
+
+@default group=recycle_search 
+	@property s_name type=textbox 
+	@caption Nimi
+
+	@property s_comment type=textbox
+	@caption Kommentaar
+
+	@property s_class_id type=select multiple=1
+	@caption Objektit&uuml;&uuml;p
+
+	@property s_modifiedby type=textbox 
+	@caption Kustutaja
+
+	@property s_modified_from type=datetime_select
+	@caption Kustutatud alates
+
+	@property s_modified_to type=datetime_select
+	@caption Kustutatud kuni
+
+	@property submit_btn type=submit 
+	@caption Otsi
+
+	@property s_inf type=text subtitle=1
+	@caption Otsingu tulemused
+
+	@property s_res type=table no_caption=1
+	
 @groupinfo recycle submit=no caption="Prügikast"
+@groupinfo recycle_list submit=no caption="Nimekiri" parent=recycle
+@groupinfo recycle_search caption="Otsing" parent=recycle submit_method=get
+
 */
 class recycle_bin extends class_base
 {
@@ -33,22 +66,41 @@ class recycle_bin extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "s_name":
+			case "s_comment":
+			case "s_class_id":
+			case "s_modifiedby":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+
+			case "s_modified_from":
+			case "s_modified_to":
+				load_vcl("date_edit");
+				$ts = date_edit::get_timestamp($arr["request"][$prop["name"]]);
+				$prop["value"] = $ts;
+				break;
+
 			case "toolbar":
 				$this->do_toolbar(&$arr);
-			break;
+				break;
+
 			case "recycle_table":
 				$prop["value"] = $this->do_recycle_table($arr);
-			break;
+				break;
+		
+			case "s_res":
+				$this->_do_s_res($arr);
+				break;
+
+			case "s_class_id":
+				$prop["options"] = get_class_picker();
+				break;
 		};
 		return $retval;
 	}
 
-	function do_recycle_table($arr)
+	function _init_table(&$table)
 	{
-		//$table = &$arr["prop"]["vcl_inst"];
-		classload("vcl/table");
-		$table = new aw_table();
-		
 		$table->define_field(array(
 			"name" => "icon",
 			"caption" => "",
@@ -105,11 +157,16 @@ class recycle_bin extends class_base
     		"field" => "id",
     		"caption" => "Vali",
 		));
-	
-		$classes = aw_ini_get("classes");
-		
-		get_instance("icons");
+	}
 
+	function do_recycle_table($arr)
+	{
+		//$table = &$arr["prop"]["vcl_inst"];
+		classload("vcl/table");
+		$table = new aw_table();
+	
+		$this->_init_table($table);	
+	
 		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM objects WHERE status=0 ", "cnt");
 		
 		if ($arr["request"]["sortby"] == "")
@@ -134,6 +191,20 @@ class recycle_bin extends class_base
 			$rows[$row["oid"]] = $row;
 		}
 
+		$this->_insert_tbl($rows, $table);
+
+		return $table->draw_text_pageselector(array(
+			"d_row_cnt" => $cnt,
+			"records_per_page" => 100
+		)).$table->draw();
+	}
+
+	function _insert_tbl($rows, &$table)
+	{	
+		$classes = aw_ini_get("classes");
+		
+		get_instance("icons");
+
 		$paths = $this->_get_paths($rows);
 		
 		foreach($rows as $row)
@@ -146,7 +217,14 @@ class recycle_bin extends class_base
 				"id" => $row["oid"],
 				"restore" => html::href(array(
 					"caption" => "Taasta",
-					"url" => $this->mk_my_orb("restore_object", array("oid" => $row["oid"]), "recycle_bin"),
+					"url" => $this->mk_my_orb(
+						"restore_object", 
+						array(
+							"oid" => $row["oid"],
+							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						), 
+						"recycle_bin"
+					),
 				)),
 				"class_id" => $classes[$row["class_id"]]["name"],
 				"icon" => html::img(array(
@@ -156,16 +234,10 @@ class recycle_bin extends class_base
 				))
 			));	
 		}
-		//set_default_sort_by("modified");
 	 	$table->set_default_sorder("desc");
 		$table->set_default_sortby("modified");
 
 		$table->sort_by();		
-
-		return $table->draw_text_pageselector(array(
-			"d_row_cnt" => $cnt,
-			"records_per_page" => 100
-		)).$table->draw();
 	}
 	
 	function do_toolbar($arr)
@@ -212,7 +284,7 @@ class recycle_bin extends class_base
 		$c = get_instance("cache");
 		$c->file_invalidate_regex(".*");
 		
-		return $this->mk_my_orb("change", array("group" => "recycle"), "recycle_bin");
+		return aw_ini_get("baseurl").$arr["return_url"];
 	}
 	
 	/**
@@ -220,6 +292,11 @@ class recycle_bin extends class_base
 	**/
 	function restore_objects($arr)
 	{
+		if (count($arr) == 0)
+		{
+			$arr = $_GET;
+		}
+
 		if($arr["mark"])
 		{
 			foreach($arr["mark"] as $oid)
@@ -233,7 +310,7 @@ class recycle_bin extends class_base
 		$c = get_instance("cache");
 		$c->file_invalidate_regex(".*");
 
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);	
+		return aw_ini_get("baseurl").$arr["return_url"];
 	}
 
 	function _get_paths($rows)
@@ -301,6 +378,10 @@ class recycle_bin extends class_base
 	**/
 	function final_delete($arr)
 	{
+		if (count($arr) == 0)
+		{
+			$arr = $_GET;
+		}
 		$cl = aw_ini_get("classes");
 
 		foreach(safe_array($arr["mark"]) as $id)
@@ -335,10 +416,7 @@ class recycle_bin extends class_base
 			}
 		}
 
-		return $this->mk_my_orb("change", array(
-			"id" => $arr["id"],
-			"group" => $arr["group"]
-		));	
+		return aw_ini_get("baseurl").$arr["return_url"];
 	}
 
 	/** clears all deleted objects from the bin. sorta dangerous or something.
@@ -348,6 +426,11 @@ class recycle_bin extends class_base
 	**/
 	function clear_all($arr)
 	{
+		if (count($arr) == 0)
+		{
+			$arr = $_GET;
+		}
+
 		// get list of all deleted objects
 		$query = "SELECT oid FROM objects WHERE status=0 AND site_id = ".aw_ini_get("site_id");
 		$this->db_query($query);
@@ -357,6 +440,67 @@ class recycle_bin extends class_base
 		}
 		// feed it to final_delete
 		return $this->final_delete($arr);
+	}
+
+	function _do_s_res($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_table($t);
+
+		$where = array();
+		if (!empty($arr["request"]["s_name"]))
+		{
+			$where[] = " name LIKE '%".$arr["request"]["s_name"]."%' ";
+		}
+
+		if (!empty($arr["request"]["s_comment"]))
+		{
+			$where[] = " comment LIKE '%".$arr["request"]["s_comment"]."%' ";
+		}
+
+		if (!empty($arr["request"]["s_class_id"]) && is_array($arr["request"]["s_class_id"]) && count($arr["request"]["s_class_id"]))
+		{
+			$awa = new aw_array($arr["request"]["s_class_id"]);
+			$where[] = " class_id IN (".$awa->to_sql().") ";
+		}
+
+		if (!empty($arr["request"]["s_modifiedby"]))
+		{
+			$where[] = " modifiedby LIKE '%".$arr["request"]["s_modifiedby"]."%' ";
+		}
+
+		load_vcl("date_edit");
+		$ts = date_edit::get_timestamp($arr["request"]["s_modified_from"]);
+		if ($ts > 1)
+		{
+			$where[] = " modified >=  $ts ";
+		}
+
+		$ts = date_edit::get_timestamp($arr["request"]["s_modified_to"]);
+		if ($ts > 1)
+		{
+			$where[] = " modified <=  $ts ";
+		}
+
+		if (count($where) == 0)
+		{
+			return;
+		}
+
+		// get results
+		$sql = "SELECT * FROM objects WHERE status = 0 AND site_id = ".aw_ini_get("site_id")." AND ".join(" AND ", $where);
+		$this->db_query($sql);
+		$rows = array();
+		while ($row = $this->db_next())
+		{
+			$rows[$row["oid"]] = $row;
+		}
+		$this->_insert_tbl($rows, $t);
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["return_url"] = aw_global_get("REQUEST_URI");
 	}
 }
 ?>

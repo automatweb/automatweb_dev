@@ -3,7 +3,10 @@
       <property>
             <name>toolbar</name>
             <table>objects</table>
-            <group>recycle</group>
+            <group>
+                  <num_0>recycle_list</num_0>
+                  <num_1>recycle_search</num_1>
+            </group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -12,11 +15,87 @@
       <property>
             <name>recycle_table</name>
             <table>objects</table>
-            <group>recycle</group>
+            <group>recycle_list</group>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>recycle_table</field>
+      </property>
+      <property>
+            <name>s_name</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>textbox</type>
+            <field>s_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>s_comment</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>textbox</type>
+            <field>s_comment</field>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
+            <name>s_class_id</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <field>s_class_id</field>
+            <caption>Objektit&amp;uuml;&amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>s_modifiedby</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>textbox</type>
+            <field>s_modifiedby</field>
+            <caption>Kustutaja</caption>
+      </property>
+      <property>
+            <name>s_modified_from</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>datetime_select</type>
+            <field>s_modified_from</field>
+            <caption>Kustutatud alates</caption>
+      </property>
+      <property>
+            <name>s_modified_to</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>datetime_select</type>
+            <field>s_modified_to</field>
+            <caption>Kustutatud kuni</caption>
+      </property>
+      <property>
+            <name>submit_btn</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>submit_btn</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>s_inf</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <field>s_inf</field>
+            <caption>Otsingu tulemused</caption>
+      </property>
+      <property>
+            <name>s_res</name>
+            <table>objects</table>
+            <group>recycle_search</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>s_res</field>
       </property>
       <classinfo>
             <no_yah>1</no_yah>
@@ -26,6 +105,16 @@
                   <submit>no</submit>
                   <caption>Prügikast</caption>
             </recycle>
+            <recycle_list>
+                  <submit>no</submit>
+                  <caption>Nimekiri</caption>
+                  <parent>recycle</parent>
+            </recycle_list>
+            <recycle_search>
+                  <caption>Otsing</caption>
+                  <parent>recycle</parent>
+                  <submit_method>get</submit_method>
+            </recycle_search>
       </groupinfo>
 </properties>
 
