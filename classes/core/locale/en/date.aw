@@ -1,15 +1,18 @@
 <?php
 class date
 {
+	function date()
+	{
+		$this->month = array("january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december");
+
+	}
+
 	function get_lc_date($timestamp, $format)
 	{
 		if ($timestamp==0)
 		{
 			$timestamp=time();
 		}
-		
-		$month = array("january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december");
-		
 		
 		switch ($format)
 		{
@@ -22,11 +25,11 @@ class date
 				return $newdate;
 				
 			case 3:
-				$newdate=date("d. ", $timestamp).$month[date("m", $timestamp)-1].date(" y",$timestamp);
+				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
 				return $newdate;
 				
 			case 4:
-				$newdate=date("d. ", $timestamp).$month[date("m", $timestamp)-1].date(" Y",$timestamp);
+				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				return $newdate;
 		}
 	}
@@ -36,6 +39,11 @@ class date
 		$names = array("Monday","Tueday","Wednesday","Thursday","Friday","Saturday","Sunday");
 		$num--;
 		return $short ? substr($names[$num],0,3) : $names[$num];
+	}
+
+	function get_lc_month($num)
+	{
+		return ucfirst($this->month[$num-1]);
 	}
 	
 	

@@ -1,6 +1,11 @@
 <?php
 class date
 {
+	function date()
+	{
+		$this->month = array("jaanuar", "veebruar", "m&auml;rts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember");
+	}
+
 	function get_lc_date($timestamp, $format)
 	{
 		if ($timestamp==0)
@@ -8,7 +13,6 @@ class date
 			$timestamp=time();
 		}
 		
-		$month = array("jaanuar", "veebruar", "m&auml;rts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember");
 		switch ($format)
 		
 		{
@@ -21,11 +25,11 @@ class date
 				return $newdate;
 				
 			case 3:
-				$newdate=date("d. ", $timestamp).$month[date("m", $timestamp)-1].date(" y",$timestamp);
+				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
 				return $newdate;
 				
 			case 4:
-				$newdate=date("d. ", $timestamp).$month[date("m", $timestamp)-1].date(" Y",$timestamp);
+				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				return $newdate;
 		}
 	}
@@ -36,6 +40,11 @@ class date
 		// array starts from 0, estonian weekdays from 1
 		$num--;
 		return $short ? substr($names[$num],0,1) : $names[$num];
+	}
+	
+	function get_lc_month($num)
+	{
+		return ucfirst($this->month[$num-1]);
 	}
 	
 	
