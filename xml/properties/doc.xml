@@ -427,16 +427,6 @@
             <caption>Kestab</caption>
       </property>
       <property>
-            <name>link_calendars</name>
-            <type>callback</type>
-            <store>no</store>
-            <callback>callback_gen_link_calendars</callback>
-            <group>calendar</group>
-            <table>documents</table>
-            <field>link_calendars</field>
-            <caption>Vali kalendrid, millesse see sündmus veel salvestatakse.</caption>
-      </property>
-      <property>
             <name>calendar_relation</name>
             <type>select</type>
             <field>meta</field>
