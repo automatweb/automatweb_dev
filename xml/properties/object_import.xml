@@ -121,6 +121,11 @@
                   <clid>CL_ABSTRACT_DATASOURCE</clid>
                   <caption>andmeallikas</caption>
             </DATASOURCE>
+            <EXCEPTION>
+                  <value>4</value>
+                  <clid>CL_OBJECT_IMPORT_EXCEPTION</clid>
+                  <caption>erand</caption>
+            </EXCEPTION>
       </reltypes>
 </properties>
 

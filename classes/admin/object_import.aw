@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.8 2004/05/30 13:10:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.9 2004/06/09 12:56:41 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -46,6 +46,9 @@
 
 @reltype DATASOURCE value=3 clid=CL_ABSTRACT_DATASOURCE
 @caption andmeallikas
+
+@reltype EXCEPTION value=4 clid=CL_OBJECT_IMPORT_EXCEPTION
+@caption erand
 
 */
 
@@ -116,6 +119,8 @@ class object_import extends class_base
 			case "props":
 				$arr["obj_inst"]->set_meta("isimp", $arr["request"]["isimp"]);
 				$arr["obj_inst"]->set_meta("userval", $arr["request"]["userval"]);
+				$arr["obj_inst"]->set_meta("has_ex", $arr["request"]["has_ex"]);
+				$arr["obj_inst"]->set_meta("ex", $arr["request"]["ex"]);
 				break;
 
 			case "connect_props":
@@ -215,6 +220,19 @@ class object_import extends class_base
 			"align" => "center"
 		));
 
+		$t->define_field(array(
+			"name" => "has_ex",
+			"caption" => "Oman erandeid?",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "ex",
+			"caption" => "Erandid",
+			"align" => "center"
+		));
+
+
 		$t->set_default_sortby("prop");
 	}
 
@@ -225,6 +243,14 @@ class object_import extends class_base
 
 		$isimp = $arr["obj_inst"]->meta("isimp");
 		$userval = $arr["obj_inst"]->meta("userval");
+		$has_ex = $arr["obj_inst"]->meta("has_ex");
+		$ex = $arr["obj_inst"]->meta("ex");
+
+		$exes = array("" => "--vali--");
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EXCEPTION")) as $c)
+		{
+			$exes[$c->prop("to")] = $c->prop("to.name");
+		}
 
 		foreach($this->get_props_from_obj($arr["obj_inst"]) as $pn => $pd)
 		{
@@ -232,6 +258,18 @@ class object_import extends class_base
 			{
 				continue;
 			}
+
+			$exs = "";
+			if ($has_ex[$pn] == 1)
+			{
+				$exs = html::select(array(
+					"multiple" => 1,
+					"name" => "ex[$pn]",
+					"options" => $exes,
+					"selected" => $this->make_keys($ex[$pn])
+				));
+			}
+
 			$t->define_data(array(
 				"prop" => $pd["caption"],
 				"isimp" => html::checkbox(array(
@@ -243,7 +281,13 @@ class object_import extends class_base
 					"name" => "userval[$pn]",
 					"value" => $userval[$pn],
 					"size" => 5
-				))
+				)),
+				"has_ex" => html::checkbox(array(
+					"name" => "has_ex[$pn]",
+					"value" => 1,
+					"checked" => ($has_ex[$pn] == 1)
+				)),
+				"ex" => $exs
 			));
 		}
 
@@ -257,7 +301,7 @@ class object_import extends class_base
 		if (!$type_o->prop("use_cfgform"))
 		{
 			list($properties) = $GLOBALS["object_loader"]->load_properties(array(
-				"clid" => $this->obj["class_id"]
+				"clid" => $class_id
 			));
 		}
 		else
@@ -365,19 +409,34 @@ class object_import extends class_base
 		// save
 		// loop
 		// js redir back to change
-		if ($o->prop("ds") && $o->prop("folder"))
+		if ($o->prop("ds"))
 		{
 			set_time_limit(0);
 			$type_o = obj($o->prop("object_type"));
 			$class_id = $type_o->prop("type");
-			$p2c = $o->meta("p2c");		
-			$userval = $o->meta("userval");		
+			$p2c = $o->meta("p2c");
+			$userval = $o->meta("userval");
+			$has_ex = $o->meta("has_ex");
+			$ex = $o->meta("ex");
+
+			$folder = $o->prop("folder");
+			if (!$folder)
+			{
+				$folder = $o->parent();
+			}
 
 			$line_n = 0;
 
 			$ds_o = obj($o->prop("ds"));
 			$ds_i = $ds_o->instance();
 			$data_rows = $ds_i->get_objects($ds_o);
+
+			// read props
+			list($properties) = $GLOBALS["object_loader"]->load_properties(array(
+				"clid" => $class_id
+			));
+
+			$ex_i = get_instance(CL_OBJECT_IMPORT_EXCEPTION);
 
 			foreach($data_rows as $line)
 			{
@@ -419,16 +478,51 @@ class object_import extends class_base
 				}
 
 				$dat->set_class_id($class_id);
-				$dat->set_parent($o->prop("folder"));
+				$dat->set_parent($folder);
 			
+				$linebak = $line;
 				foreach($p2c as $pn => $idx)
 				{
 					if ($pn == "needs_translation" || $pn == "is_translated" || $idx == "dontimp")
 					{
 						continue;
 					}
-					$dat->set_prop($pn, convert_unicode($line[$idx]));
+					$line[$idx] = convert_unicode($line[$idx]);
+
+					if ($has_ex[$pn] && is_array($ex[$pn]))
+					{
+						foreach($ex[$pn] as $iexp)
+						{
+							$line[$idx] = $ex_i->do_replace($iexp, $line[$idx]);
+						}
+					}
+
+					// now, if the property is of type classificator, then we need to make a list of all options
+					// search that and then select the correct one
+					if ($properties[$pn]["type"] == "classificator")
+					{
+						if (!is_array($classif_cache[$pn]))
+						{
+							$clf = get_instance("classificator");
+							$classif_cache[$pn] = $clf->get_options_for(array(
+								"name" => $pn,
+								"clid" => $class_id
+							));
+						}
+
+						foreach($classif_cache[$pn] as $clf_id => $clf_n)
+						{
+							if (trim(strtolower($line[$idx])) == trim(strtolower($clf_n)))
+							{
+								$line[$idx] = $clf_id;
+								break;
+							}
+						}
+					}
+
+					$dat->set_prop($pn, $line[$idx]);
 				}
+				$line = $linebak;
 
 				// now, if we have separate folder settings, then move to correct place.
 				if (($fldfld = $o->prop("folder_field")))
