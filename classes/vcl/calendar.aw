@@ -1,13 +1,18 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.10 2004/02/11 10:25:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.11 2004/02/11 13:05:58 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
-	function vcalendar()
+	function vcalendar($arr = array())
 	{
+		// calendar_view class needs templates from its own directory
+		$this->cal_tpl_dir = isset($arr["tpldir"]) ? $arr["tpldir"] : "calendar";
 		$this->init(array(
-			"tpldir" => "calendar",
+			"tpldir" => $this->cal_tpl_dir,
 		));
+
+
+		$this->container_template = "container.tpl";
 	}
 
 	function init_calendar($arr)
@@ -22,22 +27,29 @@ class vcalendar extends aw_template
 	// overview_func -> a function that is used to define the presence of the quick navigator
 	function configure($arr = array())
 	{
-		if ($arr["tasklist_func"])
+		if (!empty($arr["tasklist_func"]))
 		{
 			$this->tasklist_func = $arr["tasklist_func"];
 		};
 		// fact is, event list and overview should use different functions,
 		// cause they need different kinds of data. It should be faster with
 		// different functions
-		if ($arr["overview_func"])
+		if (!empty($arr["overview_func"]))
 		{
 			$this->overview_func = $arr["overview_func"];
 		};
 
-		if ($arr["overview_range"])
+		if (!empty($arr["overview_range"]))
 		{
 			$this->overview_range = $arr["overview_range"];
 		};
+
+		if (!empty($arr["container_template"]))
+		{
+			$this->container_template = $arr["container_template"];
+		};
+
+
 	}
 
 	////
@@ -140,7 +152,7 @@ class vcalendar extends aw_template
 		};
 
 		$this->evt_tpl = get_instance("aw_template");
-		$this->evt_tpl->tpl_init("calendar");
+		$this->evt_tpl->tpl_init($this->cal_tpl_dir);
 		$tpl = $this->range["viewtype"] == "relative" ? "sub_event2.tpl" : "sub_event.tpl";
 		$this->evt_tpl->read_template($tpl);
 		switch($this->range["viewtype"])
@@ -227,7 +239,7 @@ class vcalendar extends aw_template
 			};
 		};
 
-		$this->read_template("container.tpl");
+		$this->read_template($this->container_template);
 		$types = array(
 			"day" => "Päev",
 			"week" => "Nädal",
@@ -235,6 +247,7 @@ class vcalendar extends aw_template
 			"relative" => "Ülevaade",
 		);
 		$ts = "";
+
 		foreach($types as $type => $name)
 		{
 			$link = aw_url_change_var("viewtype",$type);
