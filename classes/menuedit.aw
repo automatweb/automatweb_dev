@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.71 2001/11/20 08:14:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.72 2001/11/20 08:49:36 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3931,6 +3931,20 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				$imgurl = "";
 			};
+
+			global $num_menu_images;
+			$imgar = $meta["menu_images"];
+			for ($_i=0; $_i < $num_menu_images; $_i++)
+			{
+				if ($imgar[$_i]["url"] != "")
+				{
+					$this->vars(array(
+						"menu_image_".$_i => "<img src='".$imgar[$_i]["url"]."'>",
+						"menu_image_".$_i."_url" => $imgar[$_i]["url"]
+					));
+				}
+			}
+
 			$this->vars(array(
 				"text" 		=> $row["name"],
 				"link" 		=> $link,
@@ -4350,8 +4364,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		global $awt,$lang_id,$SITE_ID;
 		$awt->start("menuedit::make_menu_caches");
 		$cache = new cache();
-//		$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
-		$ms = false;
+		$ms = $cache->db_get("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
 		if (!$ms)
 		{
 			// make one big array for the whole menu
