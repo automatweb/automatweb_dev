@@ -56,6 +56,19 @@
             <caption>Välimus</caption>
       </property>
       <property>
+            <name>prj_image</name>
+            <table>objects</table>
+            <group>prj_image</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_PRJ_IMAGE</reltype>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <caption>Pilt</caption>
+      </property>
+      <property>
             <name>event_toolbar</name>
             <table>objects</table>
             <group>event_list</group>
@@ -123,6 +136,10 @@
                   <parent>general</parent>
                   <caption>Veebiseadistused</caption>
             </web_settings>
+            <prj_image>
+                  <parent>general</parent>
+                  <caption>Pilt</caption>
+            </prj_image>
             <event_list>
                   <caption>Sündmused</caption>
                   <submit>no</submit>
@@ -182,6 +199,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Kirjeldus</caption>
             </PRJ_DOCUMENT>
+            <PRJ_IMAGE>
+                  <value>8</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Pilt</caption>
+            </PRJ_IMAGE>
       </reltypes>
 </properties>
 

@@ -20,13 +20,12 @@
             <name>perimage</name>
             <group>general</group>
             <table>objects</table>
-            <type>releditor</type>
+            <type>relpicker</type>
             <reltype>RELTYPE_IMAGE</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
             <field>meta</field>
             <method>serialize</method>
-            <store>no</store>
             <caption>Pilt2</caption>
       </property>
       <property>
