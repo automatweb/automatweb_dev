@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.5 2004/01/15 20:24:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.6 2004/04/19 09:50:51 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -902,50 +902,16 @@ class maitenance extends class_base
 		<input type='button' value='clear cache' 
 		onclick=\"document.location='".$this->mk_my_orb('cache_clear', array('clear' => '1'))."'\"><br />";
 		
-		$dir = aw_ini_get("cache.page_cache").'/';	
-		$files = array();
-		$cnt = 0;
-		if ($handle = opendir($dir))
-		{
-			while (false !== ($file = readdir($handle)))
-			{ 
-				if ($file != "." && $file != "..")
-				{ 
-					$files[] = $file; 
-				} 
-			}
-			closedir($handle); 
-		}		
-		
 		if (isset($args['clear']))
 		{
-			echo 'about to delete '.count($files).' files<br />';
-			$deleted = 0;
-			foreach($files as $val)
+			$cache = get_instance("cache");
+			$cache->_get_cache_files(aw_ini_get("cache.page_cache"));
+			echo 'about to delete '.count($cache->cache_files).' files<br />';
+			foreach($cache->cache_files as $file)
 			{
-				if (unlink($dir.$val))
-				{
-					$deleted++;
-				}
-				
-				$cnt++;
-				if ($cnt > 1000)
-				{
-					echo " #";
-					flush(); 
-					$cnt = 0;
-				}
+				$cache->file_invalidate($file);
 			}
-			echo '<br />'.$deleted.' files deleted!!<br />';
-		}
-		else
-		{
-			echo 'total:'. count($files).' files';
-			if (isset($args['list']))
-			{
-				arr($files);
-			}
-
+			echo '<br />'.count($cache->cache_files).' files deleted!!<br />';
 		}
 		die();
 	}
