@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.13 2004/07/09 11:22:32 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.14 2004/07/12 06:11:38 duke Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -347,8 +347,10 @@ class docgen_viewer extends class_base
 	function view_source($arr)
 	{
 		extract($arr);
-		
-		$file = str_replace(".", "", urldecode($file));
+
+		$file = urldecode($file);
+		$file = str_replace(".","",dirname($file)) . "/" . basename($file);
+
 		$da = get_instance("core/docgen/docgen_analyzer");
 		$data = $da->analyze_file($file);
 
