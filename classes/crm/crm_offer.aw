@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.14 2004/08/26 15:32:44 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.15 2004/08/28 12:13:23 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -7,41 +7,33 @@
 
 @default table=objects
 @default group=general
-@default field=meta
 
-@property orderer type=select field=meta method=serialize
+@property orderer type=select table=aw_crm_offer
 @caption Tellija
 
 @property start1 type=datetime_select field=start table=planner
 @caption Algus
 
-property orderer type=relpicker automatic=1 reltype=RELTYPE_ORDERER field=meta method=serialize
-caption Tellija
+@property preformer type=hidden table=aw_crm_offer
 
-@property preformer type=hidden field=meta method=serialize
-
-@property preformer_cap type=text field=meta method=serialize
+@property preformer_cap type=text store=no
 @caption Täitja
 
-@property salesman type=select field=meta method=serialize
+@property salesman type=select table=aw_crm_offer
 @caption Pakkumise koostaja
 
-@property offer_status type=select field=meta method=serialize
+@property offer_status type=select table=aw_crm_offer
 @caption Staatus
 
-@property content type=textarea cols=60 rows=30 table=planner field=description
+@property content type=textarea cols=60 rows=20 table=planner field=description
 @caption Sisu
 
 @property prev_status type=hidden store=no
 
-property done type=checkbox ch_value=1 field=meta method=serialize
-caption Tehtud
-
-@property sum type=textbox field=meta method=serialize size=7
+@property sum type=textbox table=aw_crm_offer size=7
 @caption Hind(ilma KM)
 
 
-default group=other_calendars
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
 @default method=serialize
@@ -58,8 +50,6 @@ default group=other_calendars
 @property package_table type=table no_caption=1 store=no group=packages_show
 
 @property products_table type=table no_caption=1 store=no group=products_show
-
-property packages_search_toolbar type=toolbar no_caption=1 store=no group=packages_show,products_show
 
 @property packages_search type=callback callback=do_packages_search_form no_caption=1 store=no group=packages_show,products_show
 @property packages_search_results type=table no_caption=1 store=no group=packages_show,products_show
@@ -79,8 +69,8 @@ property packages_search_toolbar type=toolbar no_caption=1 store=no group=packag
 @groupinfo history caption=Ajalugu submit=no
 
 
-
 @tableinfo planner index=id master_table=objects master_index=brother_of
+@tableinfo aw_crm_offer index=aw_oid master_table=objects master_index=brother_of
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
@@ -99,9 +89,26 @@ property packages_search_toolbar type=toolbar no_caption=1 store=no group=packag
 
 @reltype PACKAGE value=6 clid=CL_SHOP_PACKET
 @caption Pakett
-
 */
 
+/*
+CREATE TABLE `aw_crm_offer` (
+`aw_oid` INT UNSIGNED NOT NULL ,
+`preformer` INT UNSIGNED NOT NULL ,
+`orderer` INT UNSIGNED NOT NULL ,
+`salesman` INT UNSIGNED NOT NULL ,
+`sum` INT NOT NULL ,
+`offer_status` TINYINT NOT NULL ,
+PRIMARY KEY ( `aw_oid` )
+);
+*/
+
+
+define("OFFER_ON_PROCESS",1);
+define("OFFER_IS_SENT",2);
+define("OFFER_IS_PREFORMED",3);
+define("OFFER_IS_DECLINED",4);
+define("OFFER_IS_POSITIVE",4);
 class crm_offer extends class_base
 {		
 	var $u_i;
@@ -129,6 +136,10 @@ class crm_offer extends class_base
 				if(!($arr["new"] == 1))
 				{
 					$ord_company_id = $arr["obj_inst"]->prop("preformer"); 
+					if(!$ord_company_id)
+					{
+						return PROP_IGNORE;
+					}
 				}
 				elseif ($_GET["alias_to"])
 				{
@@ -218,7 +229,7 @@ class crm_offer extends class_base
 			break;
 			
 			case "offer_status":
-				$prop["options"] = $this->statuses; //array("Koostamisel", "Saadetud", "Esitletud", "Tagasilükatud", "Suletud");
+				$prop["options"] = $this->statuses; 
 			break;
 			
 			case "prev_status":

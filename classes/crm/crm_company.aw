@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.71 2004/08/26 14:07:47 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.72 2004/08/28 12:13:06 sven Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -264,21 +264,35 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property offers_listing_toolbar type=toolbar no_caption=1 parent=offers_toolbar group=offers
 @property offers_listing_tree type=treeview no_caption=1 parent=offers_tree group=offers
 @property offers_listing_table type=table no_caption=1 parent=offers_table group=offers
+
+@property offers_current_org_id type=hidden store=no group=offers
 ------------ END PAKKUMISED -------------------
 
 ------------ ORGANISATSIOONI OBJEKTID ---------
-layout objects_toolbar type=hbox group=org_objects
-layout objects_main type=hbox width=20%:80% group=org_objects
-layout objects_tree type=vbox parent=objects_main group=org_objects
-layout objects_table type=vbox parent=objects_main group=org_objects
+@layout objects_toolbar type=hbox group=org_objects,projects
+@layout objects_main type=hbox width=20%:80% group=org_objects,projects
+@layout objects_tree type=vbox parent=objects_main group=org_objects,projects
+@layout objects_table type=vbox parent=objects_main group=org_objects,projects
 
-property objects_listing_toolbar type=toolbar no_caption=1 parent=objects_toolbar group=org_objects
-property objects_listing_tree type=treeview no_caption=1 parent=objects_tree group=org_objects
-property objects_listing_table type=table no_caption=1 parent=objects_table group=org_objects
+@property objects_listing_toolbar type=toolbar no_caption=1 parent=objects_toolbar group=org_objects
+@property objects_listing_tree type=treeview no_caption=1 parent=objects_tree group=org_objects
+@property objects_listing_table type=table no_caption=1 parent=objects_table group=org_objects
 ---------- END ORGANISATSIOONI OBJEKTID ---------
 
 ---------- PROJEKTID ----------------------------
+layout projects_toolbar type=hbox group=org_projects
+@layout projects_main type=hbox width=20%:80% group=org_projects
+@layout projects_tree type=vbox parent=projects_main group=org_projects
+@layout projects_table type=vbox parent=projects_main group=org_projects
 
+@default group=org_projects
+@default no_caption=1
+
+property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_toolbar 
+@property projects_listing_tree type=treeview no_caption=1 parent=projects_tree 
+@property projects_listing_table type=table no_caption=1 parent=projects_table
+
+-------------------------------------------------
 
 @groupinfo contacts caption="Kontaktid"
 @groupinfo oldcontacts caption="Isikud" parent=contacts submit=no
@@ -300,7 +314,6 @@ property objects_listing_table type=table no_caption=1 parent=objects_table grou
 @groupinfo competitors caption="Konkurendid" parent=relorg
 
 
-
 @groupinfo personal caption="Värbamine"
 @groupinfo personal_offers caption="Tööpakkumised" parent=personal submit=no
 @groupinfo personal_candits caption="Kandideerijad" parent=personal submit=no
@@ -311,8 +324,6 @@ property objects_listing_table type=table no_caption=1 parent=objects_table grou
 
 @groupinfo org_projects_main caption="Projektid" submit=no
 @groupinfo org_projects caption="Projektid" submit=no parent=org_projects_main
-
-
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -505,6 +516,7 @@ class crm_company extends class_base
 		$this->group_not_shown = false;
 		$us = get_instance(CL_USER);
 		$this->users_person = new object($us->get_current_person());
+		$this->users_company = new object($us->get_current_company());
 	}
 
 	/*
@@ -746,7 +758,10 @@ class crm_company extends class_base
 				}
 				$data['caption'] .= '<br><a href="'.$url.'">Muuda</a>';
 			break;
-
+			
+			case "projects_listing_tree":
+					$this->do_offers_listing_tree($arr);
+			break;
 			//START OF CUSTOMER SEARCH
 			case 'customer_search_name':
 				if($this->show_customer_search)
@@ -1160,7 +1175,13 @@ class crm_company extends class_base
 			case "tasks_call":
 				$this->do_tasks_call($arr);
 				break;
-
+				
+			case "offers_current_org_id":
+				$data["value"] = $arr["request"]["org_id"];
+		 	break;
+				
+			break;
+				
 			case "addresslist":
 				$this->do_addresslist($arr);
 			break;
@@ -1191,6 +1212,14 @@ class crm_company extends class_base
 			
 			case "objects_listing_tree":
 				$this->do_objects_listing_tree($arr);
+			break;
+			
+			case "projects_listing_toolbar":
+				$this->do_projects_listing_toolbar($arr);
+			break;
+			
+			case "projects_listing_table":
+				$this->do_projects_listing_table($arr);
 			break;
 			
 		};
@@ -2079,7 +2108,11 @@ class crm_company extends class_base
 			$deleted_obj = &obj($deleted_obj_id);
 			$deleted_obj->delete();	
 		}
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
+		return $this->mk_my_orb("change", array(
+				"id" => $arr["id"], 
+				"group" => $arr["group"], 
+				"org_id" => $arr["offers_current_org_id"]),
+				$arr["class"]);
 	}
 	
 	/**
@@ -3803,6 +3836,12 @@ class crm_company extends class_base
 			"align" => "center",
 		));
 		
+		$table->define_field(array(
+			"name" => "offer_status",
+			"caption" => "Pakkumise staatus",
+			"sortable" => "1",
+			"align" => "center",
+		));
 		
 		$table->define_chooser(array(
 			"name" => "select",
@@ -3811,32 +3850,48 @@ class crm_company extends class_base
 		));
 		
 		$offer_inst = get_instance(CL_CRM_OFFER);
-		$offers = &$offer_inst->get_offers_for_company($arr["request"]["org_id"], $arr["obj_inst"]->id());
+		if($arr["request"]["org_id"])
+		{
+			$offers = &$offer_inst->get_offers_for_company($arr["request"]["org_id"], $arr["obj_inst"]->id());
+		}
+		else
+		{
+			$offers = new object_list(array(
+				"preformer" => $arr["obj_inst"]->id(),
+				"offer_status" => array(0,1,2),
+				"class_id" => CL_CRM_OFFER,
+			));
+		}
 		
 		if(is_object($offers))
 		{
 			if($offers->count() > 0)
 			{
-				
+				$statuses = array("Koostamisel", "Saadetud", "Esitletud", "Tagasilükatud", "Positiivelt lõppenud");
 				foreach ($offers->arr() as $offer)
 				{
+					//Do not list brother offers
+					if($offer->is_brother())
+					{
+						continue;
+					}
 					$org = &obj($offer->prop("orderer"));
-					
 					if($this->can("view", $offer->prop("salesman")))
 					{
 						$salesman = &obj($offer->prop("salesman"));
 						$salesmanlink = html::get_change_url($salesman->id(), array(), $salesman->name());
 					}
-					
 					$table->define_data(array(
 						"org" => is_object($org)?html::get_change_url($org->id(), array(), $org->name()):false,
-						//"show_offer" => html::get_change_url($offer->id(), false, "Vaata pakkumist"),
 						"salesman" => $salesmanlink,
 						"offer_name" => html::get_change_url($offer->id(), array(), $offer->name()),
 						"offer_made" => $offer->created(),
-						"offer_sum" => $offer_inst->total_sum($offer->id()),
+						"offer_sum" => $offer->prop("sum"),//$offer_inst->total_sum($offer->id()),
 						"select" => $offer->id(),
+						"offer_status" => $statuses[$offer->prop("offer_status")],
+						"offer_nr_status" => $offer->prop("offer_status"),
 					));
+					$table->set_default_sortby("offer_nr_status");
 				}
 			}
 		}
@@ -4164,5 +4219,11 @@ class crm_company extends class_base
 			return $obj;
 		}
 	}
+	
+	function do_projects_listing_toolbar($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+	}
+	
 }
 ?>
