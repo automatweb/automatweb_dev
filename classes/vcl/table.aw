@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.29 2004/09/09 11:05:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.30 2004/10/05 09:15:01 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1014,7 +1014,7 @@ class aw_table extends aw_template
 	function _format_csv_field($d, $sep = ";")
 	{
 		$new=strtr($d,array('"'=>'""'));
-		if (!(strpos($d,$sep)===false) || $new != $d)
+		if (!(strpos($d,$sep)===false) || $new != $d || strpos($d, "\n") !== false)
 		{
 			$new='"'.$new.'"';
 		};
@@ -1030,7 +1030,7 @@ class aw_table extends aw_template
 		if (is_array($this->rowdefs))
 		while(list($k,$v) = each($this->rowdefs)) 
 		{
-				$tbl .= ($tbl?$sep:"").$this->_format_csv_field($v["caption"]);
+				$tbl .= ($tbl?$sep:"").$this->_format_csv_field($v["caption"],$sep);
 		};
 		$d[]=$tbl;
 
@@ -1708,9 +1708,11 @@ class vcl_table extends aw_table
 	**/
 	function data_from_ol($ol, $args = array())
 	{
+		$clss = aw_ini_get("classes");
+
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$data = array();
+			$data = array("oid" => $o->id());
 			foreach($this->rowdefs as $k => $v)
 			{
 				if ($v["name"] == "oid")
@@ -1728,6 +1730,11 @@ class vcl_table extends aw_table
 				{
 					$tmp = $o->modifiedby();
 					$val = $tmp->name();
+				}
+				else
+				if ($v["name"] == "class_id")
+				{
+					$val = $clss[$o->class_id()]["name"];
 				}
 				else
 				{
