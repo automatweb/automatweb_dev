@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.3 2004/01/13 16:24:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.4 2004/05/13 14:51:41 kristo Exp $
 // workbench.aw - Töölaud 
 /*
 
@@ -130,9 +130,9 @@ class workbench extends class_base
                         "content" => $afd->gen_folders($arr["period"])
                 ));
 		$awt->stop("ng-gen_folders");
-		print "<!--";
+		/*print "<!--";
 		print_r($awt->summaries());
-		print "-->";
+		print "-->";*/
 		die($this->parse());
 	}
 
