@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.31 2002/12/23 13:31:19 kristo Exp $
+// $Id: class_base.aw,v 2.32 2002/12/23 13:55:32 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -511,13 +511,19 @@ class class_base extends aliasmgr
 		$classname = get_class($this->orb_class);
 		$name = $this->coredata["name"];
 
+		$syslog_type = ST_CONFIG;
+		if (isset($this->classinfo['syslog_type']))
+		{
+			$syslog_type = constant($this->classinfo['syslog_type']['text']);
+		}
+
 		if ($this->new)
 		{
-			$this->_log(ST_CONFIG, SA_ADD, "Lisas $classname objekti $name ($id)", $id);
+			$this->_log($syslog_type, SA_ADD, "Lisas $classname objekti $name ($id)", $id);
 		}
 		else
 		{
-			$this->_log(ST_CONFIG, SA_CHANGE, "Muutis $classname objekti $name ($id)", $id);
+			$this->_log($syslog_type, SA_CHANGE, "Muutis $classname objekti $name ($id)", $id);
 		};
 
 		$args = array("id" => $id,"group" => $group,"period" => aw_global_get("period")) + (is_array($extraids) ? $extraids : array());
