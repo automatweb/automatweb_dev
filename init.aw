@@ -380,7 +380,7 @@ function classload($args)
 //	exit_function("__global::classload");
 }
 
-function get_instance($class,$args = array())
+function get_instance($class,$args = array(), $errors = true)
 {
 	enter_function("__global::get_instance",array());
 
@@ -426,6 +426,10 @@ function get_instance($class,$args = array())
 		$ext = $GLOBALS["cfg"]["__default"]["ext"];
 		if (!file_exists($classdir."/".str_replace(".","", $class).".".$ext))
 		{
+			if (!$errors)
+			{
+				return false;
+			}
 			error::throw(array(
 				"id" => ERR_CLASS,
 				"msg" => "the requested class $class does not exist !"
