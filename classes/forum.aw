@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.42 2002/03/13 14:18:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.43 2002/03/13 14:43:38 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 global $orb_defs;
@@ -638,6 +638,7 @@ class forum extends aw_template
 		$this->vars(array(
 			"topic" => $board_obj["name"],
 			"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
+			"email" => $board_obj["meta"]["author_email"],
 			"created" => $this->time2date($board_obj["created"],2),
 			"rated" => $rated,
 			"rate" => sprintf("%0.2f",$board_obj["rate"]),
@@ -750,7 +751,7 @@ class forum extends aw_template
 		$this->comments = array();
 		$this->content = "";
 		extract($args);
-		$board_obj = $this->get_object($board);
+		$board_obj = $this->get_obj_meta($board);
 		$forum_obj = $this->get_object($board_obj["parent"]);
 		$meta = $this->get_object_metadata(
 			array("oid" => $forum_obj["oid"],
@@ -819,6 +820,7 @@ class forum extends aw_template
 			"reforb" => $this->mk_reforb("submit_messages",array("board" => $board,"section" => $this->section,"act" => "show_threaded")),
 			"topic" => $board_obj["name"],
 			"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
+			"email" => $board_obj["meta"]["author_email"],
 			"created" => $this->time2date($board_obj["created"],2),
 			"rated" => $rated,
 			"rate" => sprintf("%0.2f",$board_obj["rate"]),
@@ -1723,12 +1725,13 @@ class forum extends aw_template
 		extract($arr);
 		$this->read_template("add_topic.tpl");
 
-		$top = $this->get_object($board);
+		$top = $this->get_obj_meta($board);
 
 		$this->vars(array(
 			"name" => $top["name"],
 			"comment" => $top["comment"],
 			"from" => $top["last"],
+			"email" => $top["meta"]["author_email"],
 			"reforb" => $this->mk_reforb("save_topic", array("board" => $board))
 		));
 		return $this->parse();
@@ -1739,6 +1742,7 @@ class forum extends aw_template
 	// !Submits the changed topic
 	function save_topic($arr)
 	{
+		$this->quote($arr);
 		extract($arr);
 		$this->upd_object(array(
 			"oid" => $board,
@@ -1746,6 +1750,12 @@ class forum extends aw_template
 			"last" => $from,
 			"comment" => $comment
 		));
+		$this->set_object_metadata(array(
+			"oid" => $board,
+			"key" => "author_email",
+			"value" => $email,
+		));
+
 		$pobj = $this->get_object($forum_id);
 		if ($pobj["class_id"] == CL_DOCUMENT)
 		{
