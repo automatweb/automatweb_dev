@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.7 2002/07/17 20:33:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.8 2002/10/09 09:56:49 kristo Exp $
 // acl.aw - Access Control Lists
 
 class acl extends aw_template 
@@ -259,39 +259,42 @@ class acl extends aw_template
 				$objstr=" / ".$row["name"].$objstr;
 			}
 			$objstr = substr($objstr,3);
-			$aclarr = $this->get_acl_groups_for_obj($oid);
-			while(list(,$arr) = each($aclarr)) 
+			if ($oid)
 			{
-				reset($fields);
-				$c = "";
-				while(list($k,$v) = each($fields)) 
+				$aclarr = $this->get_acl_groups_for_obj($oid);
+				while(list(,$arr) = each($aclarr)) 
 				{
-					if ($v["SPECIAL"] == "1") 
+					reset($fields);
+					$c = "";
+					while(list($k,$v) = each($fields)) 
 					{
-						$tpl = "check";
-						$bld->vars(array(
-							"gid"			=> $arr["gid"],	
-							"oid"			=> $oid, 
-							"key"			=> $v["VALUE"],
-							"checked"	=> ($arr[$v["VALUE"]] == $this->cfg["allowed"]) ? "checked" : ""
-						));
-						$c .= $bld->parse("check");
-					} 
-					else 
-					{
-						$bld->vars(array("content" => $arr[$v["VALUE"]])); 
-						$c .= $bld->parse("text");
-					}; // end if
-				};
+						if ($v["SPECIAL"] == "1") 
+						{
+							$tpl = "check";
+							$bld->vars(array(
+								"gid"			=> $arr["gid"],	
+								"oid"			=> $oid, 
+								"key"			=> $v["VALUE"],
+								"checked"	=> ($arr[$v["VALUE"]] == $this->cfg["allowed"]) ? "checked" : ""
+							));
+							$c .= $bld->parse("check");
+						} 
+						else 
+						{
+							$bld->vars(array("content" => $arr[$v["VALUE"]])); 
+							$c .= $bld->parse("text");
+						}; // end if
+					};
 
-				$this->vars(array(
-					"cline" => $c,
-					"name"	=> $objstr,
-					"oid" => $oid,
-					"gid"   => $arr["gid"]
-				));
-				$content .= $this->parse("line");
-			};
+					$this->vars(array(
+						"cline" => $c,
+						"name"	=> $objstr,
+						"oid" => $oid,
+						"gid"   => $arr["gid"]
+					));
+					$content .= $this->parse("line");
+				};
+			}
 		}
 		$this->vars(array(
 			"line" => $content,
