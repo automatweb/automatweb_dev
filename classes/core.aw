@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.104 2002/08/24 18:30:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.105 2002/09/03 06:32:16 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1401,6 +1401,8 @@ class core extends db_connector
 	{
 		$this->errmsg[] = $msg;
 		$this->errorlevel++;
+
+		$msg = "Suhtuge veateadetesse rahulikult!  Te ei ole korda saatnud midagi katastroofilist. Ilmselt juhib programm Teie tähelepanu mingile ebatäpsusele  andmetes või näpuveale.<Br><br>\n\n".$msg;
 
 		$this->_log("error",$msg);	
 		// meilime veateate listi ka
