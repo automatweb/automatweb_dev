@@ -1181,7 +1181,7 @@ class site_show extends class_base
 		{
 			$last_mod = $this->db_fetch_field("SELECT MAX(modified) as m FROM objects", "m");
 			// also compiled menu template
-			$last_mod = max($last_mod, filemtime($this->compiled_filename));
+			$last_mod = max($last_mod, @filemtime($this->compiled_filename));
 		}
 		return $last_mod;
 	}

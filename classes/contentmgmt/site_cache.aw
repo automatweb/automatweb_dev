@@ -126,7 +126,7 @@ class site_cache extends aw_template
 	// !returns the file where the generated code for the template is, if it is in the cache
 	function get_cached_compiled_filename($arr)
 	{
-		$fn = aw_ini_get("cache.page_cache")."/compiled_menu_template::".str_replace(".","_",$arr["template"]);
+		$fn = aw_ini_get("cache.page_cache")."/compiled_menu_template::".str_replace(".","_",$arr["template"])."-".aw_global_get("lang_id");
 		$tpl = $this->site_template_dir."/".$arr["template"];
 		if (file_exists($fn) && is_readable($fn) && filectime($fn) > filectime($tpl))
 		{
@@ -142,7 +142,7 @@ class site_cache extends aw_template
 		$co = get_instance("contentmgmt/site_template_compiler");
 		$code = $co->compile($tpl);
 
-		$fn = "compiled_menu_template::".str_replace(".","_",$tpl);		
+		$fn = "compiled_menu_template::".str_replace(".","_",$tpl)."-".aw_global_get("lang_id");
 
 		$ca = get_instance("cache");
 		$ca->file_set($fn, $code);

@@ -88,19 +88,25 @@ class site_template_compiler extends aw_template
 		}
 		$tpls = array_unique($_tpls);
 
+		$mdefs = aw_ini_get("menuedit.menu_defs");
+		if (aw_ini_get("menuedit.lang_defs") == 1)
+		{
+			$mdefs = $mdefs[aw_global_get("lang_id")];
+		}
+		
 		foreach($tpls as $tpl)
 		{
 			$parts = explode("_", $tpl);
 			$area = $parts[1];
 			$level = substr($parts[2], 1);
 
-			if (!array_search($area, aw_ini_get("menuedit.menu_defs")))
+			if (!array_search($area, $mdefs))
 			{
 				continue;
 			}
 
 			$this->menu_areas[$area]["levels"][$level]["templates"][] = $parts;
-			$this->menu_areas[$area]["parent"] = array_search($area, aw_ini_get("menuedit.menu_defs"));
+			$this->menu_areas[$area]["parent"] = array_search($area, $mdefs);
 			foreach($parts as $part)
 			{
 				$this->menu_areas[$area]["levels"][$level]["all_opts"][$part] = $part;
