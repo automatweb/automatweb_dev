@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.121 2004/02/13 11:11:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.122 2004/02/23 16:37:05 sven Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -34,7 +34,14 @@ if (!defined("DEFS"))
 
 		aw_global_set("__in_post_message", 0);
 	}
-
+	
+	function get_lc_date($time=0, $format=3)
+	{
+		$inst = get_instance("core/locale/".aw_global_get("LC")."/date");
+			
+		return $inst->get_lc_date($time, $format);
+	}
+	
 	function post_message_with_param($msg, $param, $params)
 	{
 		if (aw_global_get("__in_post_message") == 1)
