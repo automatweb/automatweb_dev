@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.19 2004/09/03 15:08:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.20 2004/09/05 19:39:12 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -367,7 +367,7 @@ class planner extends class_base
 				}
 			break;
 			case "event_search_results_table":
-				if($arr["request"]["search"] == 1 &&($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"]))
+				if($arr["request"]["search"] == 1  && ($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"]))
 				{
 					$results = $this->do_event_search($arr["request"]);
 					if($results->count() > 0)
@@ -1940,12 +1940,7 @@ class planner extends class_base
 		
 		$user_inst = get_instance(CL_USER);		
 		foreach ($data->arr() as $result)
-		{
-			if($arr["request"]["event_search_add"]["all_cal"] && $result->id() != $result->brother_of())
-			{
-				continue;		
-			}
-			
+		{			
 			$participants = $result->connections_to(array(
 				"type" => array(8,9,10),
 				"from.class_id" => CL_CRM_PERSON,
@@ -2025,6 +2020,7 @@ class planner extends class_base
 	**/
 	function do_event_search($arr)
 	{
+	
 		//IF search from all calenders
 		if($arr["event_search_add"]["all_cal"])
 		{
@@ -2077,9 +2073,24 @@ class planner extends class_base
 		{
 			$params["class_id"] = $this->event_entry_classes;
 		}
-
+		
 		$event_ol = new object_list($params);
-		return $event_ol;
+		if($event_ol->count() == 0)
+		{
+			return $event_ol;
+		}
+		
+		//Now lets get orginal objects ,not brothers
+		foreach ($event_ol->arr() as $item)
+		{
+			$ids[$item->brother_of()] = $item->brother_of();
+		}
+		
+		$retval = new object_list(array(
+			"oid" => $ids,
+		));
+
+		return $retval;
 	}
 };
 ?>

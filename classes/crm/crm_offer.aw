@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.18 2004/09/03 10:24:08 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.19 2004/09/05 19:36:31 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
