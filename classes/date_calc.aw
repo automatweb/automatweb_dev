@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.10 2003/12/03 12:35:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.11 2004/01/29 17:36:55 duke Exp $
 
 ////
 // !get_date_range
@@ -10,6 +10,13 @@ function get_date_range($args = array())
 	if ($date)
 	{
 		list($d,$m,$y) = split("-",$date);
+		// deal with 2 part url-s
+		if (empty($y))
+		{
+			$y = $m;
+			$m = $d;
+			$d = 1;
+		};
 	}
 	else
 	{
@@ -110,6 +117,11 @@ function get_date_range($args = array())
 			};
 			break;
 		
+		case "3month":
+			$start_ts = mktime(0,0,0,$m-1,1,$y);
+			$end_ts = mktime(23,59,59,$m+1,0,$y);
+			break;
+		
 		
 		case "week":
 			$next = mktime(0,0,0,$m,$d+7,$y);
@@ -186,6 +198,8 @@ function get_date_range($args = array())
 		"end" => $end_ts,
 		"start_wd" => convert_wday(date("w",$start_ts)),
 		"end_wd" => convert_wday(date("w",$end_ts)),
+		"m" => $m,
+		"y" => $y,
 		"wd" => convert_wday(date("w",$timestamp)),
 		"prev" => date("d-m-Y",$prev),
 		"next" => date("d-m-Y",$next),
