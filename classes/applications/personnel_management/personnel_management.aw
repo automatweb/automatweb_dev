@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.1 2004/04/22 12:41:53 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.2 2004/05/23 11:46:45 kristo Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -8,80 +8,49 @@
 @default table=objects
 @default group=general
 
--------------------MY PROFILE PROPERTIES-----------------
+-----------------MANAGER PROFILE--------------------
+@property my_manager_profile_persons_tb type=toolbar no_caption=1 group=manager_profile_persons
+@property my_manager_profile_orgs_tb type=toolbar no_caption=1 group=manager_profile_orgs
+
+
+-----------------MY PROFILE PROPERTIES--------------
 @property my_profile_mycvs_tb type=toolbar no_caption=1 group=my_profile_mycvs
 @property my_profile_candits_tb type=toolbar no_caption=1 group=my_profile_candits
 
 @property my_profile_cvtable type=table no_caption=1 group=my_profile_mycvs
 @property my_profile_candits_table type=table no_caption=1 group=my_profile_candits group=my_profile_candits
 
-
-@property my_personal_info_firstname type=textbox group=my_profile_personal store=no
-@caption Eesnimi
-
-@property my_personal_info_lastname type=textbox group=my_profile_personal store=no
-@caption Perekonnanimi
-
-@property my_personal_info_username type=text group=my_profile_personal store=no
-@caption Kasutajanimi
-
-@property gender type=chooser group=my_profile_personal store=no
-@caption Sugu
-
-@property my_personal_info_id type=textbox group=my_profile_personal store=no
-@caption Isikukood
-
-@property my_personal_info_password type=textbox group=my_profile_personal store=no
-@caption Parool
-
-@property my_personal_info_password_again type=textbox group=my_profile_personal store=no
-@caption Parool uuesti
-
 -----------------MY ORG PROFILE--------------------
 @property org_profile_jobs_tb type=toolbar group=org_profile_jobs store=no no_caption=1
 @property org_profile_jobs_candits_tb type=toolbar group=org_profile_candits store=no no_caption=1
 
 @property org_profile_jobtable type=table group=org_profile_jobs no_caption=1
-@property org_profile_candits type=table no_caption=1 group=org_profile_candits
+@property org_profile_candits type=table group=org_profile_candits no_caption=1
 
-@property org_username type=text group=org_profile_info
-@caption Kasutajanimi
-
-@property orgname type=textbox group=org_profile_info
-@caption Organisatsiooni nimi
-
-@property org_password type=textbox group=org_profile_info
-@caption Parool
-
-@property org_password_rep type=textbox group=org_profile_info
-@caption Parooli kordus
-
-@property my_join_worker type=callback group=my_join_worker callback=callback_get_join_worker store=no
-@property my_join_offerer type=callback group=my_join_offerer callback=callback_get_join_offerer store=no
+@property my_join_worker type=callback group=my_join_worker,my_profile_personal  callback=callback_get_join_worker store=no
+@property my_join_offerer type=callback group=my_join_offerer,org_profile_info callback=callback_get_join_offerer store=no
 
 -------------------TÖÖOTSIJAD-----------------------
-@property manager_person type=text no_caption=1 store=no wrapchildren=1 group=employee
-@property treeview_person type=text parent=manager_person store=no group=employee
-@property personlist type=table parent=manager_person store=no group=employee
-
+// las nad olla üksteise peal
+property manager_person type=text no_caption=1 store=no wrapchildren=1 group=employee
+@property treeview_person type=text store=no group=employee no_caption=1
+@property personlist type=table store=no group=employee no_caption=1
 
 -------------------TÖÖPAKKUMISED---------------------
-@property manager type=text no_caption=1 store=no wrapchildren=1 group=employers
-@property treeview type=text parent=manager store=no group=employers
-@property joblist type=table parent=manager store=no group=employers
-
-
+property manager type=text no_caption=1 store=no wrapchildren=1 group=employers
+@property treeview type=text store=no group=employers no_caption=1
+@property joblist type=table store=no group=employers no_caption=1
 
 -----------------TAB DEFINTIONS--------------------
-@groupinfo my_profile caption="Minu profiil"
-@groupinfo org_profile caption="Tööpakkuja profiil"
+@groupinfo my_profile caption="Minu profiil" tabgroup=navi
+@groupinfo org_profile caption="Tööpakkuja profiil" 
 @groupinfo employee caption="Tööotsijad" submit=no
 @groupinfo employers caption="Tööpakkumised" submit=no
 @groupinfo managers caption="Halduri profiil"
 
-@groupinfo my_profile_mycvs caption="Minu CV-d" parent=my_profile submit=no
-@groupinfo my_profile_candits caption="Kandideerin" parent=my_profile submit=no
-@groupinfo my_profile_personal caption="Minu andmed" parent=my_profile
+@groupinfo my_profile_mycvs caption="Minu CV-d" parent=my_profile submit=no tabgroup=navi
+@groupinfo my_profile_candits caption="Kandideerin" parent=my_profile submit=no tabgroup=navi
+@groupinfo my_profile_personal caption="Minu andmed" parent=my_profile tabgroup=navi
 
 @groupinfo org_profile caption="Tööpakkuja profiil" submit=no
 @groupinfo org_profile_jobs caption="Tööpakkumised" parent=org_profile submit=no
@@ -91,12 +60,35 @@
 @groupinfo all_setings caption="Seadistused"
 @groupinfo dir_setings caption="Kaustade seaded" parent=all_setings
 @groupinfo layout_setings caption="Seaded" parent=all_setings
+@groupinfo env_setings caption="Keskkonna seaded" parent=all_setings
 
-@groupinfo my_join caption="Liitu kasutajaks" 
-@groupinfo my_join_worker caption="T&ouml;&ouml;otsija" parent=my_join
-@groupinfo my_join_offerer caption="T&ouml;&ouml;pakkuja" parent=my_join
+
+@groupinfo my_join caption="Registreeru" tabgroup=left
+@groupinfo my_join_worker caption="T&ouml;&ouml;otsija" parent=my_join tabgroup=left
+@groupinfo my_join_offerer caption="T&ouml;&ouml;pakkuja" parent=my_join tabgroup=left
+
+@groupinfo manager_profile caption="Halduri profiil"
+@groupinfo manager_profile_persons caption="Tööotsijad" parent=manager_profile
+@groupinfo manager_profile_orgs caption="Tööpakkujad" parent=manager_profile
+
+@groupinfo search caption="Otsi"
+@groupinfo search_cv caption="Otsi CV'sid"
+@groupinfo search_offer caption="Otsi pakkumisi"
 
 --------------------PROPERTIES----------------------
+@property cv_acitvity_prop type=chooser orient=vertical table=objects group=env_setings store=no
+@caption CVde aktiivsus
+
+@property max_active_cv type=textbox size=3 group=env_setings store=no
+@caption CV maksimaalselt aktiivne(päevades)
+
+@property max_active_cv_def type=textbox size=3 group=env_setings store=no
+@caption CV maksimaalselt aktiivne(päevades)
+
+@property max_active_job type=textbox size=3 group=env_setings store=no
+@caption Tööpakkumine maksimaalselt aktiivne(päevades) 
+
+
 @property orgs type=relpicker group=dir_setings table=objects method=serialize field=meta reltype=RELTYPE_MENU
 @caption Organisatsioonide kaust
 
@@ -121,6 +113,26 @@
 @property locations type=callback callback=callback_get_locations group=layout_setings field=meta method=serialize
 @caption Asukohad
 
+--------------- SEARCH -----------------
+
+// CV
+@property search_cv type=form group=search_cv sclass=applications/personnel_management/personnel_management_cv_search sform=cv_search store=no
+@caption Otsi CV-sid
+
+property search_cv_name type=textbox group=search_cv store=no
+caption Otsi nimest
+
+property search_cv_results type=table group=search_cv store=no
+caption Otsingu tulemused
+
+// OFFER 
+property search_offer_name type=textbox group=search_offer store=no
+caption Otsi nimest
+
+property search_offer_results type=table group=search_offer store=no
+caption Otsingu tulemused
+
+
 ---------------RELATION DEFINTIONS-----------------
 @reltype MENU value=1 clid=CL_MENU
 @caption Kaust
@@ -133,12 +145,18 @@
 
 @reltype CONTENT value=22 clid=CL_MENU_AREA,CL_POLL,CL_PROMO
 @caption Sisuelement
+
+@reltype LAYOUT_BACKGROUND value=23 clid=CL_IMAGE
+@caption Kujunduse taustapilt
+
+@reltype LAYOUT_LOGO value=24 clid=CL_IMAGE
+@caption Kujunduse logo
 */
 
 class personnel_management extends class_base
 {
 	var $my_profile;
-	
+
 	function personnel_management()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be, 
@@ -146,8 +164,10 @@ class personnel_management extends class_base
 		$this->init(array(
 			"clid" => CL_PERSONNEL_MANAGEMENT
 		));
-		
-		$this->my_profile = $this->get_my_profile();
+		if (!aw_global_get("no_db_connection"))
+		{
+			$this->my_profile = $this->get_my_profile();
+		}
 	}
 
 	
@@ -168,7 +188,6 @@ class personnel_management extends class_base
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), CL_PERSONNEL_MANAGEMENT);
 	}
-
 	
 	/**
 		@attrib name=set_default_cv
@@ -186,12 +205,57 @@ class personnel_management extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "my_profile_cvtable":
-				$this->do_my_profile_cvtable($arr);
+			case "tabpanel":
+				$logos = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_LAYOUT_LOGO",
+				));
+				$first_logo = reset($logos);
+				
+				$bgs = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_LAYOUT_BACKGROUND",
+				));
+				$first_bg = reset($bgs);
+
+				$t = get_instance(CL_IMAGE);
+				$prop["vcl_inst"]->set_style("with_logo");
+				$prop["vcl_inst"]->configure(array(
+					"logo_image" => $t->get_url_by_id($first_logo->prop("to")),
+					"background_image" => $t->get_url_by_id($first_bg->prop("to")),
+				));
+						
 			break;
 			
-			case "org_username":
-				$prop["value"] = aw_global_get("uid");
+			case "max_active_cv":
+				$prop["value"] = $this->my_profile["org_obj"]->meta("max_active_cv");
+				if($arr["obj_inst"]->prop("cv_acitvity_prop"))
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			
+			case "max_active_cv_def":
+				$prop["value"] = $this->my_profile["org_obj"]->meta("max_active_cv_def");
+				if(!$arr["obj_inst"]->prop("cv_acitvity_prop"))
+				{
+					return PROP_IGNORE;
+				}
+			break;
+	
+			case "max_active_job":
+				$prop["value"] = $this->my_profile["org_obj"]->meta("max_active_job");
+			break;
+			
+			case "cv_acitvity_prop":
+				$prop["value"] = $this->my_profile["org_obj"]->meta("cv_acitvity_prop");
+				$prop["options"] = array("Tööotsija saab CV tähtaega ise määrata", "Tööotsija ei saa CV tähtaega ise määrata");
+			break;
+			
+			case "my_manager_profile_persons_tb":
+				$this->do_my_manager_profile_persons_tb($arr);
+			break;
+			
+			case "my_profile_cvtable":
+				$this->do_my_profile_cvtable($arr);
 			break;
 			
 			case "my_profile_mycvs_tb":
@@ -204,26 +268,6 @@ class personnel_management extends class_base
 			
 			case "my_profile_candits_table":
 				$this->my_profile_candits_table($arr);
-			break;
-			
-			case "my_personal_info_username":
-				$prop["value"] = aw_global_get("uid");
-			break;
-			
-			case "my_personal_info_firstname":
-				$prop["value"] = $this->my_profile["person_obj"]->prop("firstname");
-			break;
-			
-			case "my_personal_info_lastname":
-				$prop["value"] = $this->my_profile["person_obj"]->prop("lastname");
-			break;
-			
-			case "my_personal_info_id":
-				$prop["value"] = $this->my_profile["person_obj"]->prop("personal_id");
-			break;
-			
-			case "my_personal_info_gender":
-				$prop["value"] = $this->my_profile["person_obj"]->prop("gender");
 			break;
 			
 			case "org_profile_jobtable":
@@ -253,19 +297,25 @@ class personnel_management extends class_base
 			case "joblist":
 				$this->do_joblist($arr);
 			break;
-			
-			case "gender":
-				$prop["options"] = array(
-					"M" => "Mees",
-					"N" => "Naine"
-					);
-            break;
             
             case "personlist":
             	$this->do_personlist_table($arr);
             break;
 		};
 		return $retval;
+	}
+	
+	
+	function do_my_manager_profile_persons_tb($arr)
+	{
+		$tb = &$arr["prop"]["toolbar"];
+	
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => "Kustuta kandidaadid",
+			"action" => "delete_rels",
+		));
 	}
 	
 	function do_personlist_table($arr)
@@ -290,13 +340,18 @@ class personnel_management extends class_base
 				"sortable" => 1,
 		));
 		
+		/*
 		$table->define_field(array(
 				"name" => "sectors",
 				"caption" => "Valdkonnad",
 				"sortable" => 1,
 		));
-		
+		*/
 		$manager = current($this->my_profile["manager_list"]);
+		if (!is_object($manager))
+		{
+			return 0;
+		}
 		
 		foreach ($manager->connections_from(array("type" => RELTYPE_TOOTSIJA)) as $tootu)
 		{
@@ -320,14 +375,24 @@ class personnel_management extends class_base
 				
 			if($default_cv_obj->status() == STAT_ACTIVE)
 			{
-				$table->define_data(array(
-					"nimi" => html::href(array(
-						"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $tootu->id()), CL_PERSONNEL_MANAGEMENT_CV). "\",\"cv\",800,600)",
-						"caption" => $tootu->name(),
+				$job_cat_conns = new connection();
+						
+				$job_cat_conns = $job_cat_conns->find(array(
+					"from" => $default_cv_obj->id(),
+					"to" => $_GET["sector_id"],
+				));
+				
+				if($job_cat_conns)
+				{
+					$table->define_data(array(
+						"nimi" => html::href(array(
+							"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $default_cv_obj->id()), CL_PERSONNEL_MANAGEMENT_CV, true, true). "\",\"cv\",800,600)",
+							"caption" => $tootu->name(),
 					)),
-					"modified" => get_lc_date($this->my_profile["person_obj"]->modified()),
+					"modified" => get_lc_date($default_cv_obj->modified()),
 					"synd" => $date,
-				));		
+					));
+				}		
 			}	
 		}
 	}
@@ -356,84 +421,157 @@ class personnel_management extends class_base
 		));
 
 		$table->define_field(array(
-			"name" => "sectors",
-			"caption" => "Valdkond",
-			"sortable" => 1,
-			
-		));	
-
-		$table->define_field(array(
 			"name" => "deadline",
 			"caption" => "Tähtaeg",
 			"sortable" => 1,
 				
 		));
-				
-		$manager = current($this->my_profile["manager_list"]);
 		
-		foreach ($manager->connections_from(array("type" => RELTYPE_TOOPAKKUJA)) as $toopakkuja)
+		$manager = current($this->my_profile["manager_list"]);
+		if  (!is_object($manager))
 		{
-			$toopakkuja = $toopakkuja->to();
+			return 0;
+		}
+		
+		$toopakkujad_ids = array();
+		$toopakkujad = array();
+		
+		foreach($manager->connections_from(array("type" => RELTYPE_TOOPAKKUJA)) as $toopakkuja)
+		{
+			array_push($toopakkujad_ids, $toopakkuja->prop("to"));
+			$toopakkujad[$toopakkuja->prop("to")]["name"]=$toopakkuja->prop("to.name");
+		}
+		
+		$jobs_conn = new connection();
+		$jobs_list = $jobs_conn->find(array(
+			"from" => $toopakkujad_ids,
+			"type" => RELTYPE_JOBS,
+			"to.status" => STAT_ACTIVE,
+			"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+		));
+		
+		foreach ($jobs_list as $job)
+		{
+			$job_data[$job["to"]]["company"] = $job["from.name"]; 
+			$job_ids[] = $job["to"];	
+		}
+		
+		if($_GET["sector_id"])
+		{
+			$job_sector_conns = new connection();
 			
-			foreach ($toopakkuja->connections_from(array("type" => RELTYPE_JOBS)) as $job)
+			$job_sector_list = $job_sector_conns->find(array(
+				"from" => $job_ids,
+				"to" => $_GET["sector_id"],
+			));
+			
+			$job_sector_list;
+			$job_ids = "";
+			
+			//Mingi anomaalia aga foreach ei taha selle masiiviga töödata.
+			while($job_sector_list)
 			{
-								
-				$job_connection_id = $job->id();
-				$job = $job->to();
-				
-				foreach ($job->connections_from(array("type" => RELTYPE_TEGEVUSVALDKOND)) as $sector)
-				{
-					$sector_list[] = $sector->prop("to.name");
-				}				
-				$sector_list_str = join(",", $sector_list);
-				$sector_list = array();
-				
-				if($job->prop("status") == STAT_ACTIVE)
-				{
-					$job_cat_conns = new connection();
-						
-					$job_cat_conns = $job_cat_conns->find(array(
-						"from" => $job->id(),
-						"to" => $arr["request"]["sector_id"],
-					));
-					
-					if($job_cat_conns)
-					{		
-						if($job->prop("asukoht"))
-						{
-							$city = &obj($job->prop("asukoht"));
-							$city = $city->name();
-						}
-								
-						$table->define_data(array(
-							"amet" => html::href(array(
-								"caption" => $job->prop("name"),
-								"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $job->id()) , CL_PERSONNEL_MANAGEMENT_JOB_OFFER). "\",\"cv\",800,600)",
-								)),
-
-								"pakkuja" => $toopakkuja->name(),
-							"asukoht" => $city,
-							"deadline" => get_lc_date($job->prop("deadline")),
-							"sectors" =>  $sector_list_str,
-							
-						));
-					}
-				}
-				
+				$temp = array_pop($job_sector_list);
+				$job_ids[] = $temp["from"];
 			}
-		}			
+		}
+		
+		$job_ob_list = new object_list(array(
+        	"status" => STAT_ACTIVE,
+        	"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+        	"oid" => $job_ids
+        ));
+        
+        $city_conns = new connection();
+        
+        $city_conns = $city_conns->find(array(
+        	"from" => $job_ob_list->ids(),
+        	"type" => 4,
+        ));
+        
+        foreach($city_conns as $city_conn)
+        {
+        	$city_data[$city_conn["from"]] = $city_conn["to.name"];
+        }
+        
+		foreach ($job_ob_list->arr() as $job)
+		{
+			$table->define_data(array(
+				"amet" => html::href(array(
+							"caption" => $job->prop("name"),
+							"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $job->id()) , CL_PERSONNEL_MANAGEMENT_JOB_OFFER, true, true). "\",\"cv\",800,600)",
+				)),
+				
+				"pakkuja" => $job_data[$job->id()]["company"],
+				"asukoht" => $city_data[$job->id()],
+				"deadline" => get_lc_date($job->prop("deadline")),
+				"created" => $job->created(),
+			));
+		}
+		
+		$table->set_default_sortby("created");
+		$table->set_default_sorder("desc");
+		$table->sort_by(); 
 	}
 	
+	function count_sector_cvs(&$arr, $sector_id)
+	{
+		$manager = current($this->my_profile["manager_list"]);		
+		if (!is_object($manager))
+		{
+			return 0;
+		}
+
+		foreach($manager->connections_from(array("type" => RELTYPE_TOOTSIJA)) as $person)
+		{
+			$person = $person->to();
+			$default_cv = $person->prop("default_cv");
+			
+			if(!$default_cv)
+			{
+				$default_cv = current($person->connections_from(array("type" => RELTYPE_CV)));
+				if(is_object($default_cv))
+				{
+					$default_cv = $default_cv->prop("to");
+				}
+			}
+			$default_cv_obj = &obj($default_cv);
+			
+			if($default_cv_obj->status() == STAT_ACTIVE)
+			{
+				$job_cat_conns = new connection();
+						
+				$job_cat_conns = $job_cat_conns->find(array(
+					"from" => $default_cv_obj->id(),
+					"to" => $sector_id,
+				));
+			
+				if($job_cat_conns)
+				{
+					$counter++;
+				}
+			}
+		}
+		if(!$counter)
+		{
+			return "0";
+		}
+		return $counter;
+	}
 	
 	
 	function count_sector_jobs(&$arr, $sector_id)
 	{
 		$manager = current($this->my_profile["manager_list"]);		
-		foreach ($manager->connections_from(array("type" => RELTYPE_TOOPAKKUJA)) as $toopakkuja)
+		if (!is_object($manager))
+		{
+			return 0;
+		}
+		foreach ($manager->connections_from(array("type" => "RELTYPE_TOOPAKKUJA")) as $toopakkuja)
 		{
 			$toopakkuja = $toopakkuja->to();
 			
-			foreach ($toopakkuja->connections_from(array("type" => RELTYPE_JOBS)) as $job)
+			foreach ($toopakkuja->connections_from(array("type" => "RELTYPE_JOBS")) as $job)
 			{		
 				$job = $job->to();
 				if($job->prop("status") == STAT_ACTIVE)
@@ -492,7 +630,7 @@ class personnel_management extends class_base
 			}
 			else
 			{
-				$count = 0;
+				$count = $this->count_sector_cvs($arr, $tegevusala->id());
 			}
 			
 			$tree->add_item($parent, array(
@@ -502,7 +640,7 @@ class personnel_management extends class_base
     	                  				"sector_id" => $tegevusala->id(), 
 	                      				"group" => $arr["request"]["group"], 
 	                      				"id"=> $arr["obj_inst"]->id(),
-								))
+								), "personnel_management", false, false)
 			));
 		}
 		$arr["prop"]["value"] = $tree->finalize_tree();
@@ -536,12 +674,9 @@ class personnel_management extends class_base
 			"parent" => "new",
 			"text" => "Tööpakkumine",
 			"title" => "Tööpakkumine",
-			"url" => $this->mk_my_orb("new", array(
-						"parent" => $this->my_profile["org_obj"]->parent(),
-						"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-						), CL_PERSONNEL_MANAGEMENT_JOB_OFFER)
+			"url" => "javascript:aw_popup_scroll('".$this->mk_my_orb("new", array(), CL_PERSONNEL_MANAGEMENT_JOB_OFFER, true, true)."','cv',800,600)"//,
 		));
-			
+				
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -605,7 +740,7 @@ class personnel_management extends class_base
 							)),
 				"nimi" => html::href(array(
 					"caption" => $mycv->name(),
-					"url" => "javascript:aw_popup_scroll(\"". $this->mk_my_orb("change", array("id" => $mycv->id()), "personnel_management_cv"). "\",\"cv\",800,600)",
+					"url" => "javascript:aw_popup_scroll(\"". $this->mk_my_orb("change", array("id" => $mycv->id()), "personnel_management_cv", true, true). "\",\"cv\",800,600)",
 				)),
 				"active" => get_lc_date($mycv->prop("active_until")),
 				"muudetud" => get_lc_date($mycv->modified()),
@@ -664,7 +799,7 @@ class personnel_management extends class_base
 			"align" => "center",
 		));
 		
-		foreach ($this->my_profile["org_obj"]->connections_from(array("type" => RELTYPE_JOBS, "to" => $arr["request"]["jobid"])) as $job)
+		foreach ($this->my_profile["org_obj"]->connections_from(array("type" => RELTYPE_JOBS)) as $job)
 		{
 			$job = $job->to();
 			foreach ($job->connections_from(array("type" => 5)) as $cv)
@@ -679,17 +814,17 @@ class personnel_management extends class_base
 					
 				$cv = $cv->to();
 
-				foreach ($cv->connections_from(array("type" => RELTYPE_CV_OWNER)) as $person)
+				foreach ($cv->connections_to(array("from.class_id" => CL_CRM_PERSON)) as $person)
 				{
 					$table->define_data(array(
 						"name"  => html::href(array(
-							"caption" => $person->prop("to.name"),
-							"url" => $this->mk_my_orb("change", array("id" => $cv->id()) , CL_PERSONNEL_MANAGEMENT_CV),
+							"caption" => $person->prop("from.name"),
+							"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $cv->id()) , CL_PERSONNEL_MANAGEMENT_CV, true, true)."\",\"cv\",800,600)",
 						)),
 						"job" 	=> html::href(array(
-								"caption" => $job->name(),
-								"url" => $this->mk_my_orb("change", array("id" => $job->id()) ,CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
-						)),
+									"caption" => $job->name(),
+									"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $job->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER, true, true)."\",\"cv\",800,600)",
+									)),
 						"deadline" => get_lc_date($cv_rel_created),
 						"from" => $cv_connid,
 						"to" => $cv_connid,
@@ -700,6 +835,7 @@ class personnel_management extends class_base
 		}
 		
 		$table->set_default_sortby("hinne");
+		$table->set_default_sorder("desc");
 		$table->sort_by(); 
 	}
 
@@ -745,14 +881,11 @@ class personnel_management extends class_base
 
 					$table->define_data(array(
 						"ametikoht" => html::href(array(
-								"url" => $this->mk_my_orb("change", array("id" => $job->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
+								"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $job->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER, true, true)."\",\"cv\",800,600)",
 								"caption" => $job->name(),
 								)),
 						"deadline" => get_lc_date($job->prop("deadline")),
-						"organisatsioon" => html::href(array(
-							"caption" => $company->prop("from.name"),
-							"url" => $this->mk_my_orb("change", array("id" => $company->prop("from")), CL_CRM_COMPANY),
-						)),
+						"organisatsioon" => $company->prop("from.name"),
 						"from" => $cvconnn_id,
 					));
 					
@@ -791,10 +924,7 @@ class personnel_management extends class_base
     		"parent" => "new",
     		"text" => "CV",
     		"title" => "CV",
-    		"url" => $this->mk_my_orb("new", array(
-    							"parent" => $this->my_profile["person_obj"]->prop("parent"),
-    							"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-    							), "personnel_management_cv"),
+    		"url" => "javascript:aw_popup_scroll('".$this->mk_my_orb("new", array(), "personnel_management_cv", true, true). "','cv',800,600)",
     		"disabled" => false,
 		));
 	}
@@ -820,14 +950,12 @@ class personnel_management extends class_base
 			"name" => "ametikoht",
 			"caption" => "Ametikoht",
 			"sortable" => 1,
-			"width" => "70%"
 		));
 			
 		$table->define_field(array(
 			"name" => "deadline",
 			"caption" => "Tähtaeg",
 			"sortable" => 1,
-			"width" => "10%",
 			"align" => "center"
 		));
 		
@@ -835,7 +963,6 @@ class personnel_management extends class_base
 			"name" => "kandidaate",
 			"caption" => "Kandidaate",
 			"sortable" => 1,
-			"width" => "10%",
 			"align" => "center"
 		));
 		
@@ -843,7 +970,6 @@ class personnel_management extends class_base
 			"name" => "status",
 			"caption" => "Staatus",
 			"sortable" => 1,
-			"with" => "10%",
 		));
 			
 		$table->define_chooser(array(
@@ -854,20 +980,22 @@ class personnel_management extends class_base
 		
 		foreach ($this->my_profile["org_obj"]->connections_from(array("type" => RELTYPE_JOBS)) as $job)
 		{
+			$job_conn_id = $job->id();
 			$job = $job->to();
-			$candits_count = count(($job->connections_from(array("type" => 1))));
+			$candits_count = count(($job->connections_from(array("type" => 5))));
 			
 			$table->define_data(array(
 					"ametikoht" =>	html::href(array(
 										"caption" => $job->name(),
-										"url" => $this->mk_my_orb("change", array("id" => $job->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
+										"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $job->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER, true, true)."\",\"cv\",800,600)",
 									)),
 					"deadline" => get_lc_date($job->prop("deadline")),
 					"kandidaate" => html::href(array(
-									"caption" => $candits_count,
-									"url" => $this->mk_my_orb("change", array("id" => $job->id(), "group" => "kandideerinud"), CL_PERSONNEL_MANAGEMENT_CV),
-								)),
+										"caption" => $candits_count,
+										"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $job->id(), "group" => "kandideerinud"), CL_PERSONNEL_MANAGEMENT_JOB_OFFER, true, true)."\",\"cv\",800,600)",
+									)),
 					"status" => ($job->status() == STAT_ACTIVE)?"Aktiivne":"Mitteaktiivne",
+					"from" => $job_conn_id
 			));
 		}
 		
@@ -879,23 +1007,7 @@ class personnel_management extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
-		{
-			case "my_personal_info_firstname":
-				$this->my_profile["person_obj"]->set_prop("firstname", $prop["value"]);
-			break;
-			
-			case "my_personal_info_lastname":
-				$this->my_profile["person_obj"]->set_prop("lastname", $prop["value"]);
-			break;
-			
-			case "my_personal_info_id":
-				$this->my_profile["person_obj"]->set_prop("personal_id", $prop["value"]);
-			break;
-			
-			case "gender":
-				$this->my_profile["person_obj"]->set_prop("gender", $prop["value"]);
-			break;
-			
+		{			
 			case "org_profile_candits":
 				foreach ($arr["request"]["hinne"] as $key => $value)
 				{
@@ -916,6 +1028,19 @@ class personnel_management extends class_base
 					{
 						$ji = get_instance("contentmgmt/join/join_site");
 						$url = $ji->submit_join_form($tmp);
+		
+						if ($ji->join_done)
+						{
+							//Temporay solution
+							$my_profile = $this->get_my_profile();
+							$haldur = &obj(aw_ini_get("personnel_management.default_manager"));
+					
+							$haldur->connect(array(
+								"to" => $my_profile["org_obj"]->id(),
+								"reltype" => 20
+							));
+						}
+
 						if ($url != "")
 						{
 							header("Location: $url");
@@ -941,6 +1066,19 @@ class personnel_management extends class_base
 					{
 						$ji = get_instance("contentmgmt/join/join_site");
 						$url = $ji->submit_join_form($tmp);
+
+						if ($ji->join_done)
+						{
+							//Temporay solution
+							$my_profile = $this->get_my_profile();
+							$haldur = &obj(aw_ini_get("personnel_management.default_manager"));
+				
+							$haldur->connect(array(
+								"to" => $my_profile["person_obj"]->id(),
+								"reltype" => 21
+							));
+						}
+
 						if ($url != "")
 						{
 							header("Location: $url");
@@ -953,17 +1091,37 @@ class personnel_management extends class_base
 						$ji->submit_update_form($tmp);
 					}
 				}
+				break;
+
+			case "search_cv_name":
+				$this->url_data["search_cv_name"] = $prop["value"];
+				echo "ud = ".dbg::dump($this->url_data)." <br>";
 			break;
-		}
-		
-		if($this->my_profile["person_obj"])
-		{
-			$this->my_profile["person_obj"]->save();
+			
+			case "max_active_cv":
+				$this->my_profile["org_obj"]->set_meta("max_active_cv", $prop["value"]);
+				$this->my_profile["org_obj"]->save();
+			break;
+			
+			case "max_active_cv_def":
+				$this->my_profile["org_obj"]->set_meta("max_active_cv_def", $prop["value"]);
+				$this->my_profile["org_obj"]->save();
+			break;
+			
+			case "max_active_job":
+				$this->my_profile["org_obj"]->set_meta("max_active_job", $prop["value"]);
+				$this->my_profile["org_obj"]->save();
+			break;
+			
+			case "cv_acitvity_prop":
+				$this->my_profile["org_obj"]->set_meta("cv_acitvity_prop", $prop["value"]);	
+				$this->my_profile["org_obj"]->save();
+			break;
 		}
 		
 		return $retval;
 	}	
-	
+
 
 	function get_employee_profile()
 	{
@@ -971,8 +1129,9 @@ class personnel_management extends class_base
 		$user_id = users::get_oid_for_uid(aw_global_get("uid"));
 		
 		$employee_profile["user_obj"] = & obj($user_id);
-		$employee_profile["person_obj"] = array_pop($employee_profile["user_obj"]->connections_from(array("type" => RELTYPE_PERSON)));
-		$employee_profile["person_obj"] = $employee_profile["person_obj"]->to();
+		
+		$u_i = get_instance("core/users/user");
+		$employee_profile["person_obj"] = obj($u_i->get_current_person());
 		
 		$manager_conns = new connection();
 		
@@ -981,6 +1140,7 @@ class personnel_management extends class_base
     	    "type" => 21,
 		)); 
 		
+		$employee_profile["manager_list"] = array();
 		foreach ($manager_conns_list as $manager_conn)
 		{
 			$employee_profile["manager_list"][] = &obj($manager_conn["from"]);
@@ -995,11 +1155,10 @@ class personnel_management extends class_base
 		$user_id = users::get_oid_for_uid(aw_global_get("uid"));
 		$employer_profile["user_obj"] = & obj($user_id);
 		
-		$employer_profile["person_obj"] = array_pop($employer_profile["user_obj"]->connections_from(array("type" => RELTYPE_PERSON)));
-		$employer_profile["person_obj"] = $employer_profile["person_obj"]->to(); 
-		
-		$employer_profile["org_obj"] = array_pop($employer_profile["person_obj"]->connections_from(array("type" => RELTYPE_WORK)));
-		$employer_profile["org_obj"] = $employer_profile["org_obj"]->to();
+		$u_i = get_instance("core/users/user");
+		$employer_profile["person_obj"] = obj($u_i->get_current_person());
+
+		$employer_profile["org_obj"] = obj($u_i->get_current_company());
 		
 		
 		$manager_conns = new connection();
@@ -1008,11 +1167,11 @@ class personnel_management extends class_base
     	    "type" => 20,
 		));
 		
+		$employer_profile["manager_list"] = array();
 		foreach ($manager_conns_list as $manager_conn)
 		{
 			$employer_profile["manager_list"][] = &obj($manager_conn["from"]);
 		}
-		
 		return $employer_profile;
 	}
 	
@@ -1023,24 +1182,21 @@ class personnel_management extends class_base
 		$user_id = users::get_oid_for_uid(aw_global_get("uid"));
 		$manager_profile["user_obj"] = & obj($user_id);
 		
-		$manager_profile["person_obj"] = array_pop($manager_profile["user_obj"]->connections_from(array("type" => RELTYPE_PERSON)));
-		$manager_profile["person_obj"] = $manager_profile["person_obj"]->to(); 
+		$u_i = get_instance("core/users/user");
+	
+		$manager_profile["person_obj"] = obj($u_i->get_current_person());
 		
-		$manager_profile["org_obj"] = array_pop($manager_profile["person_obj"]->connections_from(array("type" => RELTYPE_WORK)));
-		$manager_profile["org_obj"] = $manager_profile["org_obj"]->to();
-		
+		$manager_profile["org_obj"] = obj($u_i->get_current_company());
+
+		$manager_profile["manager_list"] = array();		
+
 		return $manager_profile;
 	}
 	
 	function get_my_profile()
 	{
-		$gidlist = users::getgroupsforuser(aw_global_get("uid"));
-		
-		//Konverdime grupi_id-d objekti id-deks.
-		foreach ($gidlist as $key=>$value)
-		{
-			$gidlist[$key] = users::get_oid_for_gid($key); 
-		}
+
+		$gidlist = aw_global_get("gidlist_oid");
 
 		if(array_search($this->cfg["employee_group"] , $gidlist))
 		{
@@ -1050,8 +1206,14 @@ class personnel_management extends class_base
 		{
 			return $this->get_employer_profile();
 		}
-		elseif (array_search($this->cfg["manager_group"] , $gidlist))
+		elseif (array_search($this->cfg["unloged_users"] , $gidlist))
 		{
+			$unloged_profile["manager_list"][] = &obj($this->cfg["default_manager"]);
+			return 	$unloged_profile;
+		}
+		else
+		{
+			// if nothing else, then assume manager
 			return $this->get_manager_profile();
 		}
 	}
@@ -1193,12 +1355,34 @@ class personnel_management extends class_base
                                 $ct = "";
                                 if (CL_PROMO == $to_obj->class_id())
                                 {
-                                        $clinst = get_instance(CL_PROMO);
-                                        $ct = $clinst->parse_alias(array(
-                                                "alias" => array(
-                                                        "target" => $to,
-                                                ),
-                                        ));
+					// just shoot me
+					$gidlist = aw_global_get("gidlist");
+					$found = false;
+
+					if (!is_array($to_obj->meta("groups")) || count($to_obj->meta("groups")) < 1)
+					{
+						$found = true;
+					}
+					else
+					{
+						foreach($to_obj->meta("groups") as $gid)
+						{
+							if (isset($gidlist[$gid]) && $gidlist[$gid] == $gid)
+							{
+								$found = true;
+							}
+						}
+					}
+
+					if ($found == true)
+					{
+						$clinst = get_instance(CL_PROMO);
+						$ct = $clinst->parse_alias(array(
+							"alias" => array(
+								"target" => $to,
+							),
+						));
+					};
                                 };
 				if (CL_MENU_AREA == $to_obj->class_id())
 				{
@@ -1249,6 +1433,20 @@ class personnel_management extends class_base
 		$args["id"] = $arr->id();
 		$rv = $this->change($args);
 		return $rv;
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$args =& $arr["args"];
+		if (is_array($this->url_data))
+		{
+			$args += $this->url_data;
+		}
+		if (is_array($arr["request"]["search_cv"]))
+                {
+                        $args["search_cv"] = $arr["request"]["search_cv"];
+                };
+
 	}
 }
 ?>

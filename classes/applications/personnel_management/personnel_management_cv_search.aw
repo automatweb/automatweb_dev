@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.1 2004/05/13 14:51:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.2 2004/05/23 11:46:45 kristo Exp $
 // personnel_management_cv_search.aw - CV Otsing 
 /*
 
@@ -9,8 +9,7 @@
 @default group=general
 @default form=cv_search
 
-@property s_cv_name type=textbox
-@caption Otsi nimest
+
 
 @property s_cv_ametinimetus type=textbox
 @caption Ametinimetus
@@ -29,11 +28,6 @@
 
 @property s_cv_koormus type=classificator multiple=1 orient=vertical mode=checkboxes
 @caption T&ouml;&ouml; koormus
-
-@property s_cv_job_addinfo type=textarea 
-@caption Lisainfo soovitava t&ouml;&ouml; kohta
-
-
 
 @property cv_search_button type=submit value=Otsi
 @caption Otsi
@@ -55,12 +49,19 @@
 
 class personnel_management_cv_search extends class_base
 {
+	var $my_profile;
+	
 	function personnel_management_cv_search()
 	{
 		$this->init(array(
 			"tpldir" => "applications/personnel_management/personnel_management_cv_search",
 			"clid" => CL_PERSONNEL_MANAGEMENT_CV_SEARCH
 		));
+		if (!aw_global_get("no_db_connection"))
+		{
+			$personalikeskkond = get_instance("applications/personnel_management/personnel_management");
+			$this->my_profile = $personalikeskkond->my_profile;
+		}
 	}
 
 	function get_property($arr)
@@ -150,7 +151,6 @@ class personnel_management_cv_search extends class_base
 
 	/**
 		@attrib name=test all_args="1"
-
 	**/
 	function test($arr)
 	{
@@ -158,20 +158,57 @@ class personnel_management_cv_search extends class_base
 		return $this->change($arr);
 	}
 
+	function get_cv_list()
+	{
+		$manager = current($this->my_profile["manager_list"]);
+		if(!is_object($manager))
+		{
+			die();
+		}
+		
+		$tootsijad = $manager->connections_from(array("type" => RELTYPE_TOOTSIJA));
+		
+		foreach ($tootsijad as $otsija)
+		{
+			$job_seekers[] = $otsija->prop("to");
+		}
+		
+		$tootsijad_obj_list = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+        	"oid" => $job_seekers,
+       	));
+		
+       	$tootsijad_obj_list = $tootsijad_obj_list->arr();
+       	foreach($tootsijad_obj_list as $otsija)
+       	{
+       		if($otsija->prop("default_cv"))
+       		{
+       			$cv_oids[] = $otsija->prop("default_cv");
+       		}
+       	}
+       	return $cv_oids;
+	}
+	
+	
 	function do_sres_tbl($arr)
 	{
+		
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_sres_tbl($t);
-		
+				
 		$params = array(
 			"class_id" => CL_PERSONNEL_MANAGEMENT_CV,
+			"status" => STAT_ACTIVE,
 			"language" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"oid" => $this->get_cv_list(),
 		);
 
-		$ps = false;
-
+		$ps = true;
+		
+		/*
 		$sa = new aw_array($arr["request"]);
+	
 		foreach($sa->get() as $k => $v)
 		{
 			if ($v != "" && substr($k, 0, 4) == "s_cv")
@@ -194,12 +231,16 @@ class personnel_management_cv_search extends class_base
 				$ps = true;
 			}
 		}
-
+		
+		print_r($ps);
+		*/
 		if ($ps)
 		{
 			$ol = new object_list($params);
+
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
+				
 				// manual search, just because I'm a fucking asshole and the important cv datas are in metadata anyway - terryf.
 				if ($arr["request"]["s_cv_palgasoov"])
 				{
