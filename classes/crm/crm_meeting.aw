@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.20 2004/11/24 15:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.21 2004/12/31 09:46:56 ahti Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -20,6 +20,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property end type=datetime_select table=planner 
 @caption Lõpeb
+
+@property public type=checkbox ch_value=1 default=1 field=meta method=serialize
+@caption Avalik
 
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
 @caption Kestab terve päeva
@@ -48,7 +51,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property other_selector type=callback callback=cb_calendar_others store=no group=others
 @caption Teised
 
-@property project_selector type=project_selector store=no group=projects
+@property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
 
 @property comment_list type=comments group=comments no_caption=1
@@ -106,6 +109,7 @@ class crm_meeting extends class_base
 		$data = &$arr['prop'];
 		switch($data['name'])
 		{
+		
          case 'info_on_object':
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
@@ -259,6 +263,19 @@ class crm_meeting extends class_base
 		}
 		switch($data["name"])
 		{
+			case "public":
+				$rights = array();
+				if(checked($data["value"]))
+				{
+					$rights = array("can_view" => 1);
+				}
+				$nlg = $this->get_cval("non_logged_in_users_group");
+				$g_oid = users::get_oid_for_gid($nlg);
+				$group = obj($g_oid);
+				$arr["obj_inst"]->acl_set($group, $rights);
+				$arr["obj_inst"]->save();
+				break;
+				
 			case "other_selector":
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_other_selector($arr);
