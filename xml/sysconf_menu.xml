@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<sysconf>
+	<general>
+		<caption>Üldine</caption>
+		<link>?class=sysconf&amp;action=config&amp;page=general</link>
+	</general>
+	<menus>
+		<caption>Menüüd</caption>
+		<link>?class=sysconf&amp;action=config&amp;page=menus</link>
+	</menus>
+	<templates>
+		<caption>Templated</caption>
+		<link>?class=sysconf&amp;action=config&amp;page=templates</link>
+	</templates>
+	<devel>
+		<caption>Development</caption>
+		<link>?class=sysconf&amp;action=config&amp;page=devel</link>
+	</devel>
+</sysconf>
