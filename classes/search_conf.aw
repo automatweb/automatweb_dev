@@ -148,6 +148,14 @@ class search_conf extends aw_template
 			}
 		}
 		$search_list = $this->get_search_list(&$def);
+		// if s_parent isn't numeric, set it to zero. otherwise various 
+		// interesting effects will happen. I spent fscking 2 hours debugging
+		// this in www.eas.ee
+		if ($s_parent != sprintf("%d",$s_parent))
+		{
+			$s_parent = 0;
+		};
+
 		$this->vars(array(
 			"search_sel" => $this->option_list($s_parent,$search_list),
 			"sstring_title" => $sstring_title,
