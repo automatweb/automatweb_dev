@@ -3,4 +3,3 @@
 	<class name="messageboard" folder="contentmgmt" extends="class_base">
 	</class>
 </orb>
-		

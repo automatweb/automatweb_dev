@@ -3,4 +3,3 @@
 	<class name="document_archive" folder="contentmgmt/archive" extends="class_base">
 	</class>
 </orb>
-		

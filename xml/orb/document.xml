@@ -129,6 +129,7 @@
 			<function name="feedback">
 				<arguments>
 					<required name="section" />
+					<optional name="e" type="int"/>
 				</arguments>
 			</function>
 		</action>
