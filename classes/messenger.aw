@@ -1,13 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.4 2001/05/17 10:31:08 duke Exp $
-/*       _\|/_
-         (o o)
- +----oOO-{_}-OOo----------------------------------+
- |          AW Foundation Classes                  |
- |          (C) StruktuurMeedia 2000,2001          |
- +------------------------------------------------*/
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.5 2001/05/22 05:07:53 duke Exp $
 // messenger.aw - teadete saatmine
-
 // klassid - CL_MESSAGE. Teate objekt
 
 classload("defs");
@@ -365,6 +358,8 @@ class messenger extends menuedit_light
 	{
 		// Kui siia tullakse esimest korda, ja messenger on veel konfigureerimata,
 		// siis just siitkaudu saab seda teha
+		// hm. tegelikult peaks seda kontrolli tegema ka mujal, kus
+		// messengeri poole pöördutakse
 		if (!isset($this->conf["msg_outbox"]))
 		{
 			$retval = "Initsialiseerin Messengeri<br>";
@@ -647,69 +642,6 @@ class messenger extends menuedit_light
 			"reforb" => $this->mk_reforb("post",array()),
 		));
 
-		
-		// siin on miski weird_ass kala
-		//if ($id || $msg_edit)
-		//{
-		//	if ($msg_edit)
-		//	{
-		//		$msg = $this->driver->msg_get(array("id" => $msg_edit));
-		//		$this->vars(array(
-		//			"id" => $msg["id"],
-		//			"mtargets" => $msg["mtargets1"],
-		//			"subject" => $msg["Subject"],
-		//			"message" => $msg["message"],
-		//		));
-		//		$q = "SELECT * FROM msg_objects WHERE message_id = '$id'";
-		//		$this->db_query($q);
-		//		$att_list = array();
-		/////		while($row = $this->db_next())
-		//		{
-		//			$_tmp = unserialize($row["content"]);
-		//			$att_list[] = $_tmp;
-		//		};
-		//		global $class_defs;
-		//		while(list($k,$v) = each($att_list))
-		//		{
-		//			$data = $class_defs[$v["class_id"]];
-		//			$icon = sprintf("<img src='%s'>",get_icon_url($v["class_id"],"test"));
-		//			$name = $v["name"];
-		//			$this->vars(array("att_name" => $data["name"] . $icon . " | " . $name));
-		//			$att .= $this->parse("attach");
-		//		};
-		//	}
-		//	else
-		//	{
-		//		$msg = $this->driver->msg_get(array("id" => $id));
-		//		$msg["message"] = str_replace("\n","\n>",$msg["message"]);
-		//		$q = "SELECT * FROM msg_objects WHERE message_id = '$id'";
-		//		$this->db_query($q);
-		//		$att_list = array();
-		//		while($row = $this->db_next())
-		//		{
-		//			$_tmp = unserialize($row["content"]);
-		//			$att_list[] = $_tmp;
-		//		};
-		//		global $class_defs;
-		//		while(list($k,$v) = each($att_list))
-		//		{
-		//			$data = $class_defs[$v["class_id"]];
-		//			$icon = sprintf("<img src='%s'>",get_icon_url($v["class_id"],"test"));
-		//			$name = $v["name"];
-		//			$this->vars(array("att_name" => $data["name"] . $icon . " | " . $name));
-		//			$att .= $this->parse("attach");
-		//		};
-		//			
-		//		$this->vars(array(
-		//			"reply" => $msg["id"],
-		//			"mtargets" => $msg["mtargets1"],
-		//			"subject" => "Re: " . $msg["subject"],
-		//			"message" => $msg["message"],
-		//		));
-		//	};
-		//	$oid = $msg["id"];
-		//}
-
 		return $this->parse();
 	}
 
@@ -762,22 +694,6 @@ class messenger extends menuedit_light
 		$message .= $this->conf["signatures"][$this->conf["defsig"]]["content"];
 		$this->quote($message);
 
-		// tegelikult seda osa on vaja ainult siis, kui kasutaja soovib teadet oma outboxi salvestada
-		// praegu on see safe to ignore. Or at least, I think so.
-		//$q = "UPDATE messages 
-		//	SET mfrom = '$uid,
-		//		subject = '$subject',
-		//		tm = $t,
-		//		message = '$message',
-		//		mtargets1 = '$mtargets1',
-		//		mtargets2 = '$mtargets2',	
-		//		pri = '$pri'
-		//	WHERE id = '$msg_id'";
-		//$this->db_query($q);
-				
-				
-				
-		
 		// $mto sisaldab aadresse
 		// now, kui seal on komasid
 		$mtargets = $args["mtargets"];
@@ -1002,12 +918,28 @@ class messenger extends menuedit_light
 		));
 		$folder_list = $this->_folder_list();
 		$this->read_template("message.tpl");
+		$vars = array();
+		if ($msg["type"] == 2)
+		{
+			$vars = array(
+				"mfrom" => htmlspecialchars($msg["mfrom"]),
+				"mtargets" => htmlspecialchars($msg["mto"]),
+				"subject" => htmlspecialchars($msg["subject"]),
+			);
+		}
+		else
+		{
+			$vars = array(
+				"mfrom" => $msg["createdby"],
+				"mto" => $msg["mto"],
+				"mtargets" => $msg["mtargets1"],
+				"subject" => $msg["subject"],
+			);
+		};
+
+		$this->vars($vars);	
 		$this->vars(array(
-			"mfrom" => $msg["createdby"],
-			"mto" => $msg["mto"],
-			"subject" => $msg["subject"],
 			"tm" => $this->time2date($msg["tm"]),
-			"mtargets" => $msg["mtargets1"],
 			"mtargets2" => $msg["mtargets2"],
 			"id" => $msg["id"],
 			"msg_id" => $id,
@@ -1150,7 +1082,10 @@ class messenger extends menuedit_light
 		
 
 	////
-	// !Kuvab konfigureerimisvormi
+	// !Kuvab konfigureerimisvormi (oigemini vastava lehe sellelt)
+	// FIXME: for some weird reason tundub mulle, et seda funktsiooni kutsutakse
+	// iga konfimislehe jaoks mitu korda. Praegu pole aega fixida, märkus
+	// tulevikuks
 	function configure($args = array())
 	{
 		extract($args);
@@ -1162,7 +1097,6 @@ class messenger extends menuedit_light
 				"l2" => $page,
 				));
 
-		// Koigepealt loetakse sisse konkreetsele häälestuslehele vastava template
 		$vars = array();
 		
 
@@ -1213,6 +1147,33 @@ class messenger extends menuedit_light
 						"sigcount" => verbalize_number($cnt));
 				$tpl = "conf_signatures.tpl";
 				break;
+			case "accounts":
+				$tpl = "accounts.tpl";
+				$this->read_template($tpl);
+				classload("users");
+				$users = new users();
+				$pop3conf = $users->get_user_config(array(
+									"uid" => UID,
+									"key" => "pop3servers",
+							));
+				$c = "";
+				if (is_array($pop3conf))
+				{
+					
+					foreach($pop3conf as $accid => $cvalues)
+					{
+						$this->vars(array(
+								"id" => $accid,
+								"name" => $cvalues["name"],
+								"checked" => ($cvalues["default"]) ? "checked" : "",
+								"type" => "POP3", // *pun intended*
+						));
+						$c .= $this->parse("line");
+					};
+				};
+				$acclist = $c;
+				$vars = array("line" => $acclist);
+				break;
 
 			default:
 				$tpl = "conf_general.tpl";
@@ -1256,55 +1217,85 @@ class messenger extends menuedit_light
 		$bool = array("foo","confirm_send","store_sent");
 		$bool = array_flip($bool);
 		reset($bool);
-	
-		// Salvestamisel küsime kõigepealt messengeri esialgse konfiguratsiooni	
-		$conf = $this->_get_msg_conf(array(
-							"conf" => $this->user["messenger"],
+
+		if ($page == "accounts")
+		{
+			classload("users");
+			$users = new users();
+			$pop3conf = $users->get_user_config(array(
+								"uid" => UID,
+								"key" => "pop3servers",
 						));
-		$_aq = "";
-		if ($msg_inbox)
-		{
-			// see on ainuke muutuja, mida kasutajatabelis hoitakse
-			$_aq = "msg_inbox = '$msg_inbox',";
-		};
-
-		reset($knownfields);
-
-		// overraidime vanas konfis olnud väärtused vormist tulnutega
-		foreach($knownfields as $field)
-		{
-			if ((isset($args[$field])) || ($bool[$field]))
+			foreach($pop3conf as $key => $val)
 			{
-				$conf[$field] = ($args[$field]) ? $args[$field] : 0;
-			};
-		};
-
-		// kustutame märgitud signatuurid
-		if (is_array($delsig))
-		{
-			foreach($delsig as $key => $val)
-			{
-				// Kontrollime just in case
-				if (isset($conf["signatures"][$key]))
+				if ($key == $default)
 				{
-					unset($conf["signatures"][$key]);
+					$pop3conf[$key]["default"] = 1;
+				}
+				else
+				{
+					unset($pop3conf[$key]["default"]);
 				};
 			};
-		};
 
-		// kas lisati uus signa?
-		// lisame ainult siis, kui nii nimi, kui ka sisu on määratud
-		if ($new_signature && $new_signame)
+			$users->set_user_config(array(
+						"uid" => UID,
+						"key" => "pop3servers",
+						"value" => $pop3conf,
+						));
+		}
+		else
 		{
-			$conf["signatures"][] = array("name" => $new_signame,"content" => $new_signature);
+	
+			// Salvestamisel küsime kõigepealt messengeri esialgse konfiguratsiooni	
+			$conf = $this->_get_msg_conf(array(
+								"conf" => $this->user["messenger"],
+							));
+			$_aq = "";
+			if ($msg_inbox)
+			{
+				// see on ainuke muutuja, mida kasutajatabelis hoitakse
+				$_aq = "msg_inbox = '$msg_inbox',";
+			};
+
+			reset($knownfields);
+	
+			// overraidime vanas konfis olnud väärtused vormist tulnutega
+			foreach($knownfields as $field)
+			{
+				if ((isset($args[$field])) || ($bool[$field]))
+				{
+					$conf[$field] = ($args[$field]) ? $args[$field] : 0;
+				};
+			};
+
+			// kustutame märgitud signatuurid
+			if (is_array($delsig))
+			{
+				foreach($delsig as $key => $val)
+				{
+					// Kontrollime just in case
+					if (isset($conf["signatures"][$key]))
+					{
+						unset($conf["signatures"][$key]);
+					};
+				};
+			};
+	
+			// kas lisati uus signa?
+			// lisame ainult siis, kui nii nimi, kui ka sisu on määratud
+			if ($new_signature && $new_signame)
+			{
+				$conf["signatures"][] = array("name" => $new_signame,"content" => $new_signature);
+			};
+			classload("xml");
+			$xml = new xml();
+			// Moodustame konfi pohjal uue xml-i
+			$newconf = $xml->xml_serialize($conf);
+			$this->quote($newconf);
+			$q = "UPDATE users SET $_aq messenger = '$newconf' WHERE uid = '" . UID . "'";
+			$this->db_query($q);
 		};
-		classload("xml");
-		$xml = new xml();
-		// Moodustame konfi pohjal uue xml-i
-		$newconf = $xml->xml_serialize($conf);
-		$this->quote($newconf);
-		$q = "UPDATE users SET $_aq messenger = '$newconf' WHERE uid = '" . UID . "'";
-		$this->db_query($q);
 		global $status_msg;
 		$status_msg = "Konfiguratsiooni muudatused on salvestatud";
 		session_register("status_msg");
@@ -1313,6 +1304,219 @@ class messenger extends menuedit_light
 			"page" => $page,
 		));
 	}
+
+	////
+	// !Kuvab uue accoundi tüübi valimise vormi
+	function account_type($args = array())
+	{
+		extract($args);
+		$this->read_template("account1.tpl");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_account_type",array()),
+		));
+		return $this->parse();
+	}
+
+	////
+	//
+	function submit_account_type($args = array())
+	{
+		extract($args);
+		return $this->mk_my_orb("configure_pop3",array("id" => "new"));
+	}
+
+	////
+	// !Kuvab pop3 accoundi haldamise vormi
+	function configure_pop3($args = array())
+	{
+		$menu = $this->gen_msg_menu(array(
+				"l1" => "configure",
+				"l2" => "accounts",
+				));
+		extract($args);
+		classload("users");
+		$users = new users();
+		$pop3conf = $users->get_user_config(array(
+					"uid" => UID,
+					"key" => "pop3servers",
+		));
+		$name = $pop3conf[$id]["name"];
+		$server = $pop3conf[$id]["server"];
+		$uid = $pop3conf[$id]["uid"];
+		$password = $pop3conf[$id]["password"];
+		$this->read_template("pop3conf.tpl");
+		$this->vars(array(
+			"name" => $name,
+			"server" => $server,
+			"uid" => $uid,
+			"password" => $password,
+			"reforb" => $this->mk_reforb("submit_pop3_conf",array("id" => $id)),
+			"menu" => $menu,
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Handled pop3 konfigureerimisvormist tulnud datat
+	function submit_pop3_conf($args = array())
+	{
+		extract($args);
+		classload("users");
+		$users = new users();
+		$pop3conf = $users->get_user_config(array(
+					"uid" => UID,
+					"key" => "pop3servers",
+		));
+		$confblock = array(
+					"name" => $name,
+					"server" => $server,
+					"uid" => $uid,
+					"password" => $password,
+				);
+					
+		global $status_msg;
+		if ($id == "new")
+		{
+			$pop3conf[] = $confblock;
+			$status_msg = "Konto on lisatud";
+		}
+		else
+		{
+			// kui mailbox oli default, siis hoiame selle info alles
+			if ($pop3conf[$id]["default"])
+			{
+				$confblock["default"] = 1;
+			};
+			$pop3conf[$id] = $confblock;
+			$status_msg = "Konto muudatused on salvestatud";
+		};
+		$users->set_user_config(array(
+					"uid" => UID,
+					"key" => "pop3servers",
+					"value" => $pop3conf,
+		));
+		session_register("status_msg");
+		return $this->mk_my_orb("configure",array("page" => "accounts"));
+	}
+
+	////
+	// !Fetchib maili default pop3 serverist
+	function get_mail($args = array())
+	{
+		classload("users");
+		$users = new users();
+		$pop3conf = $users->get_user_config(array(
+						"uid" => UID,
+						"key" => "pop3servers",
+					));
+		$c = "";
+		$accdata = array();
+		if (is_array($pop3conf))
+		{
+			foreach($pop3conf as $accid => $cvalues)
+			{
+				if ($cvalues["default"])
+				{
+					$accdata = $cvalues;
+				};
+			};
+		};
+		$q = "SELECT msg_inbox FROM users WHERE uid = '" . UID . "'";
+		$this->db_query($q);
+		$row = $this->db_next();
+
+		if (!$row["msg_inbox"])
+		{
+			print "inbox does not exist. aborting";
+			exit;
+		};
+
+		$inbox = $row["msg_inbox"];
+
+		// tekitame uidl-ide nimekirja
+		$uidls = array();
+		$q = "SELECT uidl FROM messages WHERE folder = '$inbox'";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$uidls[] = $row["uidl"];
+		};
+		#print "getting mail from " . $accdata["server"];
+		classload("pop3");
+		$pop3 = new pop3();
+		$msgs = $pop3->get_messages($accdata["server"],$accdata["uid"],$accdata["password"],false,$uidls);
+
+
+		if (is_array($msgs))
+		{
+			foreach($msgs as $data)
+			{
+				// siin peab olema mingi tsykkel, mis leiab kirjale ntx "Subject" välja
+				$msglines = explode("\n",$data["msg"]);
+				$header = "";
+				$content = "";
+				$inheader = true;
+				foreach($msglines as $line)
+				{
+					if (preg_match("/^Subject: (.*)$/",$line,$mt))
+					{
+						$subject = trim($mt[1]);
+					};
+
+					if (preg_match("/^Date: (.*)$/",$line,$mt))
+					{
+						$tm = strtotime($mt[1]);
+					};
+					
+					if (preg_match("/^From: (.*)$/",$line,$mt))
+					{
+						$from = trim($mt[1]);
+					};
+					
+					if (preg_match("/^To: (.*)$/",$line,$mt))
+					{
+						$to = trim($mt[1]);
+					};
+
+					if (strlen(trim($line)) == 0)
+					{
+						$inheader = false;
+					};
+
+					if ($inheader)
+					{
+						$header .= $line;
+					}
+					else
+					{
+						$content .= $line;
+					};
+				};
+				$uidl = trim($data["uidl"]);
+				// registreerime vastse teate
+				$this->quote($subject);
+				$this->quote($from);
+				$this->quote($to);
+				$this->quote($uidl);
+				$this->quote($uidl);
+				$this->quote($content);
+				$this->quote($header);
+				$oid = $this->new_object(array(
+						"parent" => $inbox,
+						"name" => $subject,
+						"class_id" => CL_MESSAGE),false);
+				// tyypi 2 on välised kirjad. as simpel as that.
+				$q = "INSERT INTO messages (id,pri,mfrom,mto,folder,subject,tm,type,uidl,message,headers)
+					VALUES('$oid','0','$from','$to','$inbox','$subject','$tm','2','$uidl','$content','$header')";
+				$this->db_query($q);
+
+
+			};
+		};
+		return $this->mk_my_orb("folder",array());
+	}
+
+
 
 	////
 	// !Kuvab ruulide konfigureerimisvormi
