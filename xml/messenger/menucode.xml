@@ -20,6 +20,10 @@
 				<caption>Uus otsing</caption>
 				<link>?class=messenger&amp;action=search</link>
 			</newsearch>
+			<refine>
+				<caption>Muuda otsingu tingimusi</caption>
+				<link>?class=messenger&amp;action=refine_search</link>
+			</refine>
 		</sublinks>
 	</search>
 	<configure>
