@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.49 2004/04/21 08:46:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.50 2004/04/27 11:16:10 duke Exp $
 
 /*
 
@@ -817,7 +817,7 @@ class site_show extends class_base
 			die($docc);
 		}
 
-		if ($this->sel_section_obj->prop("no_menus") == 1 || $GLOBALS["print"])
+		if ($this->sel_section_obj->prop("no_menus") == 1 || $GLOBALS["print"] || 1 == $arr["content_only"])
 		{
 			return $docc;
 		}
@@ -1745,6 +1745,10 @@ class site_show extends class_base
 			{
 				list($_cl,$_act) = explode("/",$pclass);
 				$orb = get_instance("orb");
+				if ($_cl == "periods")
+				{
+					$_cl = "period";
+				};
 				$meth = $orb->get_public_method(array(
 					"id" => $_cl,
 					"action" => $_act,
