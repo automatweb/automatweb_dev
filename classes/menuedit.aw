@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.62 2001/10/22 22:29:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.63 2001/11/01 11:14:59 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -396,61 +396,7 @@ class menuedit extends aw_template
 		}
 		
 		// here we must find the menu image, if it is not specified for this menu, then use the parent's and so on.
-		$sel_image = "";
-		$si_parent = $sel_menu_id;
-		while ($sel_image == "" && $si_parent)
-		{
-			$sel_image = isset($this->mar[$si_parent]["img_url"]) && $this->mar[$si_parent]["img_url"] != "";
-			if ($sel_image)
-			{
-				break;
-			}
-			$si_parent = $this->mar[$si_parent]["parent"];
-		}
-
-		if ($sel_image)
-		{
-			$sel_menu_meta = $this->get_object_metadata(array(
-				"metadata" => $this->mar[$si_parent]["metadata"],
-			));
-			$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$this->mar[$si_parent]["img_url"])));
-			$smi =$this->parse("SEL_MENU_IMAGE");
-
-			if ($sel_menu_meta["img2_id"])
-			{
-				$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$sel_menu_meta["img2_url"])));
-				$smi.=$this->parse("SEL_MENU_IMAGE");
-			}
-			if ($sel_menu_meta["img3_id"])
-			{
-				$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$sel_menu_meta["img3_url"])));
-				$smi.=$this->parse("SEL_MENU_IMAGE");
-			}
-			if ($sel_menu_meta["img4_id"])
-			{
-				$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$sel_menu_meta["img4_url"])));
-				$smi.=$this->parse("SEL_MENU_IMAGE");
-			}
-			if ($sel_menu_meta["img5_id"])
-			{
-				$this->vars(array("url" => preg_replace("/^http:\/\/.*\//","/",$sel_menu_meta["img5_url"])));
-				$smi.=$this->parse("SEL_MENU_IMAGE");
-			}
-			$sel_image = "<img name='sel_menu_image' src='".$this->mar[$si_parent]["img_url"]."' border='0'>";
-			$sel_image_url = $this->mar[$si_parent]["img_url"];
-		}
-		else
-		{
-			$sel_image = "";
-		};
-		$this->vars(array(
-			"SEL_MENU_IMAGE" => $smi,
-			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
-			"sel_menu_image" => $sel_image,
-			"sel_menu_image_url" => $sel_image_url,
-			"sel_menu_id" => $sel_menu_id,
-			"sel_menu_timing" => $sel_menu_meta["img_timing"] ? $sel_menu_meta["img_timing"] : 4 
-		));
+		$this->do_menu_images($sel_menu_id);
 
 		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne
 		$sel_comment = "";
@@ -606,10 +552,12 @@ class menuedit extends aw_template
 						$this->dmsg("<b>KRAAX</b>");
 						if ( $this->subitems[$blockname] > 0) 
 						{
+							$this->dmsg("has subitems<br>");
 							$this->vars(array($blocktemplate_subs => $this->parse($blocktemplate_subs)));
 						}
 						else
 						{
+							$this->dmsg("no subitems  - $blocktemplate_nosubs<br>");
 							$this->vars(array($blocktemplate_nosubs = $this->parse($blocktemplate_nosubs)));
 						};
 					};
@@ -2753,17 +2701,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 			$pers = serialize($par);
 			// pildi uploadimine
-			global $img, $img_type,$img_act,$img_act_type,$img2, $img2_type,$img3, $img3_type,$img4, $img4_type,$img5, $img5_type;
-			$tt = "";
-			if ($img != "none" && $img != "")
-			{
-				classload("images");
-				$t = new db_images;
-				$im = $t->_upload(array("filename" => $img, "file_type" => $img_type, "oid" => $id));
-				$tt = "img_id  = ".$im["id"].",";
-				$img = $t->get_img_by_id($im["id"]);
-				$tt.="img_url = '".$img["url"]."',";
-			}
+			global $img_act,$img_act_type;
 			$tt2 = "";
 			if ($img_act != "none" && $img_act != "")
 			{
@@ -2782,74 +2720,54 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"value" => $img["url"],
 				));
 			}
-			if ($img2 != "none" && $img2 != "")
+
+			global $num_menu_images; 
+
+			classload("images");
+			$t = new db_images;
+
+			$imgar = $meta["menu_images"];
+			for ($i=0; $i < $num_menu_images; $i++)
 			{
-				classload("images");
-				$t = new db_images;
-				$im = $t->_upload(array("filename" => $img2, "file_type" => $img2_type, "oid" => $id));
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img2_id",
-					"value" => $im["id"],
-				));
-				$img = $t->get_img_by_id($im["id"]);
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img2_url",
-					"value" => $img["url"],
-				));
+				if ($img_del[$i] == 1)
+				{
+					unset($imgar[$i]);
+				}
+				else
+				{
+					$imgar[$i]["ord"] = $img_ord[$i];
+					$var = "img".$i;
+					$var_t = "img".$i."_type";
+					global $$var, $$var_t;
+					if ($$var != "none" && $$var != "")
+					{
+						$im = $t->_upload(array("filename" => $$var, "file_type" => $$var_t, "oid" => $id));
+						$imgar[$i]["id"] = $im["id"];
+						$img = $t->get_img_by_id($im["id"]);
+						$imgar[$i]["url"] = $img["url"];
+					}
+				}
 			}
-			if ($img3 != "none" && $img3 != "")
+
+			$timgar = array();
+			$cnt = 0;
+			for ($i=0; $i < $num_menu_images; $i++)
 			{
-				classload("images");
-				$t = new db_images;
-				$im = $t->_upload(array("filename" => $img3, "file_type" => $img3_type, "oid" => $id));
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img3_id",
-					"value" => $im["id"],
-				));
-				$img = $t->get_img_by_id($im["id"]);
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img3_url",
-					"value" => $img["url"],
-				));
+				if ($imgar[$i]["id"])
+				{
+					$timgar[$cnt++] = $imgar[$i];
+				}
 			}
-			if ($img4 != "none" && $img4 != "")
-			{
-				classload("images");
-				$t = new db_images;
-				$im = $t->_upload(array("filename" => $img4, "file_type" => $img4_type, "oid" => $id));
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img4_id",
-					"value" => $im["id"],
-				));
-				$img = $t->get_img_by_id($im["id"]);
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img4_url",
-					"value" => $img["url"],
-				));
-			}
-			if ($img5 != "none" && $img5 != "")
-			{
-				classload("images");
-				$t = new db_images;
-				$im = $t->_upload(array("filename" => $img5, "file_type" => $img5_type, "oid" => $id));
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img5_id",
-					"value" => $im["id"],
-				));
-				$img = $t->get_img_by_id($im["id"]);
-				$this->set_object_metadata(array(
-					"oid" => $id,
-					"key" => "img5_url",
-					"value" => $img["url"],
-				));
-			}
+
+			// now sort the image array
+			usort($timgar,array($this,"_menu_img_cmp"));
+
+			$this->set_object_metadata(array(
+				"oid" => $id,
+				"key" => "menu_images",
+				"value" => $timgar,
+			));
+
 			if ($number > 0)
 			{
 				$nn = "number = '$number',";
@@ -3347,32 +3265,26 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}
 		classload("images");
 		$t = new db_images;
-		if ($row["img_id"])
-		{
-			$img = $t->get_img_by_id($row["img_id"]);
-			$this->vars(array("image" => "<img src='".$img["url"]."'>"));
-		}
+		global $num_menu_images;
+		$imgar = $meta["menu_images"];
 
-		if ($meta["img2_id"])
+		for ($i=0; $i < $num_menu_images; $i++)
 		{
-			$img2 = $t->get_img_by_id($meta["img2_id"]);
-			$this->vars(array("image2" => "<img src='".$img2["url"]."'>"));
+			$image = "";
+			if ($imgar[$i]["id"])
+			{
+				$img = $t->get_img_by_id($imgar[$i]["id"]);
+				$image = "<img src='".$img["url"]."'>";
+			}
+			$this->vars(array(
+				"nr" => $i,
+				"image" => $image,
+				"img_ord" => $imgar[$i]["ord"]
+			));
+			$ims.=$this->parse("M_IMG");
 		}
-		if ($meta["img3_id"])
-		{
-			$img3 = $t->get_img_by_id($meta["img3_id"]);
-			$this->vars(array("image3" => "<img src='".$img3["url"]."'>"));
-		}
-		if ($meta["img4_id"])
-		{
-			$img4 = $t->get_img_by_id($meta["img4_id"]);
-			$this->vars(array("image4" => "<img src='".$img4["url"]."'>"));
-		}
-		if ($meta["img5_id"])
-		{
-			$img5 = $t->get_img_by_id($meta["img5_id"]);
-			$this->vars(array("image5" => "<img src='".$img5["url"]."'>"));
-		}
+		$this->vars(array("M_IMG" => $ims));
+
 		classload("shop");
 		$sh = new shop;
 		$shs = $sh->get_list();
@@ -4517,6 +4429,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		if (is_array($docid)) 
 		{
 			$template = $this->get_lead_template($section);
+			$template = $template == "" ? "plain.tpl" : $template;
 			$template2 = file_exists($GLOBALS["tpldir"]."/automatweb/documents/".$template."2") ? $template."2" : $template;
 			$ct = ""; 
 			$dk=1;
@@ -5035,6 +4948,141 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"SEL_LANG" => ""
 		));
 		$awt->stop("menuedit::make_langs");
+	}
+
+	function convimages()
+	{
+		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu on menu.id = objects.oid WHERE class_id = ".CL_PSEUDO." AND status != 0");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $row["metadata"]
+			));
+
+			$cnt = 0;
+			$imgar = array();
+
+			$t = new db_images;
+			if ($row["img_id"])
+			{
+				$img = $t->get_img_by_id($row["img_id"]);
+				$this->vars(array(
+					"image" => "<img src='".$img["url"]."'>",
+					"img_ord1" => $meta["img1_ord"]
+				));
+				$imgar[$cnt]["id"] = $row["img_id"];
+				$imgar[$cnt]["url"] = $img["url"];
+				$imgar[$cnt]["ord"] = $meta["img1_ord"];
+				$cnt++;
+			}
+
+			if ($meta["img2_id"])
+			{
+				$img2 = $t->get_img_by_id($meta["img2_id"]);
+				$this->vars(array(
+					"image2" => "<img src='".$img2["url"]."'>",
+					"img_ord2" => $meta["img2_ord"]
+				));
+				$imgar[$cnt]["id"] = $meta["img2_id"];
+				$imgar[$cnt]["url"] = $img2["url"];
+				$imgar[$cnt]["ord"] = $meta["img2_ord"];
+				$cnt++;
+			}
+			if ($meta["img3_id"])
+			{
+				$img3 = $t->get_img_by_id($meta["img3_id"]);
+				$this->vars(array(
+					"image3" => "<img src='".$img3["url"]."'>",
+					"img_ord3" => $meta["img3_ord"]
+				));
+				$imgar[$cnt]["id"] = $meta["img3_id"];
+				$imgar[$cnt]["url"] = $img3["url"];
+				$imgar[$cnt]["ord"] = $meta["img3_ord"];
+				$cnt++;
+			}
+			if ($meta["img4_id"])
+			{
+				$img4 = $t->get_img_by_id($meta["img4_id"]);
+				$this->vars(array(
+					"image4" => "<img src='".$img4["url"]."'>",
+					"img_ord4" => $meta["img4_ord"]
+				));
+				$imgar[$cnt]["id"] = $meta["img4_id"];
+				$imgar[$cnt]["url"] = $img4["url"];
+				$imgar[$cnt]["ord"] = $meta["img4_ord"];
+				$cnt++;
+			}
+			if ($meta["img5_id"])
+			{
+				$img5 = $t->get_img_by_id($meta["img5_id"]);
+				$this->vars(array(
+					"image5" => "<img src='".$img5["url"]."'>",
+					"img_ord5" => $meta["img5_ord"]
+				));
+				$imgar[$cnt]["id"] = $meta["img5_id"];
+				$imgar[$cnt]["url"] = $img5["url"];
+				$imgar[$cnt]["ord"] = $meta["img5_ord"];
+				$cnt++;
+			}
+
+			usort($imgar,array($this,"_menu_img_cmp"));
+
+			$this->set_object_metadata(array(
+				"oid" => $row["oid"],
+				"key" => "menu_images",
+				"value" => $imgar
+			));
+
+			echo "menu $row[oid] <br>\n";
+			flush();
+			$this->restore_handle();
+		}
+	}
+
+	function do_menu_images($sel_menu_id)
+	{
+		$si_parent = $sel_menu_id;
+		$imgs = false;
+		while ($sel_image == "" && $si_parent)
+		{
+			$sel_menu_meta = $this->get_object_metadata(array(
+				"metadata" => $this->mar[$si_parent]["metadata"],
+			));
+			if (is_array($sel_menu_meta["menu_images"]) && count($sel_menu_meta["menu_images"]) > 0)
+			{
+				$imgs = true;
+				break;
+			}
+			$si_parent = $this->mar[$si_parent]["parent"];
+		}
+
+		if ($imgs)
+		{
+			$imgar = $sel_menu_meta["menu_images"];
+			$smi = "";
+			foreach($imgar as $nr => $dat)
+			{
+				if ($smi == "")
+				{
+					$sel_image = "<img name='sel_menu_image' src='".preg_replace("/^http:\/\/.*\//","/",$dat["url"])."' border='0'>";
+					$sel_image_url = $dat["url"];
+				}
+				$this->vars(array(
+					"url" => preg_replace("/^http:\/\/.*\//","/",$dat["url"])
+				));
+				$smi .= $this->parse("SEL_MENU_IMAGE");
+			}
+		}
+		$this->vars(array(
+			"SEL_MENU_IMAGE" => $smi,
+			"sel_menu_name" => $this->mar[$sel_menu_id]["name"],
+			"sel_menu_image" => $sel_image,
+			"sel_menu_image_url" => $sel_image_url,
+			"sel_menu_id" => $sel_menu_id,
+			"sel_menu_timing" => $sel_menu_meta["img_timing"] ? $sel_menu_meta["img_timing"] : 4 
+		));
 	}
 }
 ?>

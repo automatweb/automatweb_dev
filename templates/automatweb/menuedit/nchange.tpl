@@ -117,6 +117,14 @@ function savemenu() {
 		<td class="fgtext_g" colspan=10>&nbsp;</td>
 	</tr>
 	<tr>
+		<td class="title" width=10% nowrap >Keywords (META):</td>
+		<td class="fgtext_g" colspan=10><input type="text" name="keywords" size="50" value="{VAR:keywords}"></td>
+	</tr>
+	<tr>
+		<td class="title" width=10% nowrap >Description (META):</td>
+		<td class="fgtext_g" colspan=10><input type="text" name="description" size="50" value="{VAR:description}"></td>
+	</tr>
+	<tr>
 		<td class="title" width=10% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
 		<td class="fgtext_g" colspan=10>&nbsp;</td>
 	</tr>
@@ -268,59 +276,34 @@ function savemenu() {
 <table border=0 cellspacing=1 cellpadding=1 width=750>
 	<tr>
 		<td class="title" width=10%>&nbsp;ID:&nbsp;</td>
-		<td class="fgtext_g"><b>{VAR:id}</b></td>
+		<td class="fgtext_g" colspan="3"><b>{VAR:id}</b></td>
 	</tr>
 	<tr>
-		<td class="title">{VAR:LC_MENUEDIT_PICTURE}:</td>
+		<td class="title">{VAR:LC_MENUEDIT_PICTURE}</td>
+		<td class="title">Jrk</td>
+		<td class="title">Kustuta</td>
+		<td class="title">Upload</td>
+	</tr>
+	<!-- SUB: M_IMG -->
+	<tr>
 		<td class="fgtext_g">{VAR:image}</td>
+		<td class="fgtext_g"><input type="text" name="img_ord[{VAR:nr}]" size="3" value="{VAR:img_ord}" class="small_button"></td>
+		<td class="fgtext_g"><input type="checkbox" name="img_del[{VAR:nr}]" value="1" class="small_button"></td>
+		<td class="fgtext_g"><input type='file' name='img{VAR:nr}'></td>
 	</tr>
-	<tr>
-		<td class="title">{VAR:LC_MENUEDIT_PICTURE}:</td>
-		<td class="fgtext_g">{VAR:image2}</td>
-	</tr>
-	<tr>
-		<td class="title">{VAR:LC_MENUEDIT_PICTURE}:</td>
-		<td class="fgtext_g">{VAR:image3}</td>
-	</tr>
-	<tr>
-		<td class="title">{VAR:LC_MENUEDIT_PICTURE}:</td>
-		<td class="fgtext_g">{VAR:image4}</td>
-	</tr>
-	<tr>
-		<td class="title">{VAR:LC_MENUEDIT_PICTURE}:</td>
-		<td class="fgtext_g">{VAR:image5}</td>
-	</tr>
-	<tr>
-		<td class="title">&nbsp;</td>
-		<td class="fgtext_g"><input type='file' name='img'></td>
-	</tr>
-	<tr>
-		<td class="title">&nbsp;</td>
-		<td class="fgtext_g"><input type='file' name='img2'></td>
-	</tr>
-	<tr>
-		<td class="title">&nbsp;</td>
-		<td class="fgtext_g"><input type='file' name='img3'></td>
-	</tr>
-	<tr>
-		<td class="title">&nbsp;</td>
-		<td class="fgtext_g"><input type='file' name='img4'></td>
-	</tr>
-	<tr>
-		<td class="title">&nbsp;</td>
-		<td class="fgtext_g"><input type='file' name='img5'></td>
-	</tr>
+	<!-- END SUB: M_IMG -->
+
 	<tr>
 		<td class="title">Kui pikk vahe:</td>
-		<td class="fgtext_g"><input type='text' name='img_timing' value='{VAR:img_timing}'></td>
+		<td class="fgtext_g" colspan="3"><input type='text' name='img_timing' value='{VAR:img_timing}'></td>
 	</tr>
 	<tr>
 		<td class="title">Aktiivse men&uuml;&uuml; pilt:</td>
-		<td class="fgtext_g">{VAR:image_act}</td>
+		<td class="fgtext_g" colspan="3">{VAR:image_act}</td>
 	</tr>
 	<tr>
 		<td class="title">&nbsp;</td>
-		<td class="fgtext_g"><input type='file' name='img_act'></td>
+		<td class="fgtext_g" colspan="3"><input type='file' name='img_act'></td>
 	</tr>
 </table>
 </td>
