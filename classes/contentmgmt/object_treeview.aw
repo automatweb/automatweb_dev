@@ -263,11 +263,6 @@ class object_treeview extends class_base
 	{
 		$ret = array();
 
-		if (count($folders) < 1)
-		{
-			$folders = array($this->first_folder);
-		}
-
 		// right. if the user has said, that no tree should be shown
 		// then get files in all selected folders
 		if (!$ob->meta('show_folders'))
@@ -275,17 +270,25 @@ class object_treeview extends class_base
 			$parent = $folders;
 		}
 		else
+		// if the folder is specified in the url, then show that
+		if ($GLOBALS["tv_sel"])
 		{
-			// if the folder is specified in the url, then show that
-			// else, the first selected folder
-			reset($folders);
-			list(,$parent) = each($folders);
+			$parent = $GLOBALS["tv_sel"];
+		}
 
-			if ($GLOBALS["tv_sel"])
+		if (!$parent)
+		{
+			// if parent can't be found. then get the objects from all the root folders
+			$con = $ob->connections_from(array(
+				"type" => RELTYPE_FOLDER
+			));
+			$parent = array();
+			foreach($con as $c)
 			{
-				$parent = $GLOBALS["tv_sel"];
+				$parent[$c->prop("to")] = $c->prop("to");
 			}
 		}
+
 		if (!is_array($ob->meta('clids')) || count($ob->meta('clids')) < 1)
 		{
 			return array();
