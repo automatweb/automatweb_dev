@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.42 2003/05/30 09:37:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.43 2003/06/12 16:59:18 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -542,7 +542,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						break;
 
 					case "site_id":
-						if ($val)
+						// ignore site_id if we are doing a remote search
+						if (empty($args["s"]["server"]) && $val)
 						{
 							$parts["site_id"] = " site_id = '$val' ";
 						};
@@ -1582,11 +1583,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		if ($caller_search === false)
 		{
 			$query = $this->search_callback(array("name" => "get_query","args" => $args,"parts" => $parts));
-			global $XXX;
-			if ($XXX)
-			{
-				print $query;
-			};
 
 			if ($query)
 			{
