@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.123 2004/12/27 12:43:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.124 2005/01/11 15:17:11 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -280,7 +280,7 @@ class image extends class_base
 				{
 					if ($idata["comment"] != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a></td></tr><tr><td align=\"center\" class=\"imageLinked\">&nbsp;%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
 					}
 					else
 					{
