@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.3 2001/10/22 05:06:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.4 2001/11/07 17:21:07 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud muutujas PAGE_CACHE
@@ -31,7 +31,7 @@ class cache extends core
 				$fname.="-".$v;
 			}
 			$this->put_file(array("file" => $fname, "content" => $content));
-			echo "<!-- cache put file $fname -->\n";
+//			echo "<!-- cache put file $fname -->\n";
 			if ($clear_flag)
 			{
 				$this->clear_cache($oid);
