@@ -151,12 +151,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				else
 				if ($prop["store"] == "connect")
 				{
+					if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
+					{
 					// resolve reltype and do find_connections
 					$values = array();
 					$_co_reltype = $prop["reltype"];
 					$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
+
 					if ($_co_reltype)
 					{
+						$alt_n = "conn_als_".$prop["name"];
+						//$pjoins[] = " LEFT JOIN aliases $alt_n ON $alt_n.source = '$object_id' ";
+						//$fields[] = $alt_n.".target AS ".$prop["name"];
+
 						$this->db_query("
 							SELECT 
 								target 
@@ -183,6 +190,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					$conn_prop_vals[$prop["name"]] = $values;
 					//echo "resolved reltype to ".dbg::dump($_co_reltype)." <br>";
+					}
 				}
 				else
 				{
@@ -891,7 +899,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					else
 					{
-						$sql[] = $tf." != ".$v_data." ";
+						$opn_app = "";
+						if ($v_data != 0)
+						{
+							$opn_app = "OR $tf IS NULL";
+						}
+	
+						$sql[] = " (".$tf." != ".$v_data."  $opn_app ) ";
 					}
 				}
 				else
