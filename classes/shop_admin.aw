@@ -821,12 +821,12 @@ class shop_admin extends shop_base
 					{
 						$f = new form;
 						$info = "";
-						if ($orders[$row["order_id"]]["hotel_op_id"] != "")
+						if ($orders[$row["order_id"]]["hotel_op_id"] != "" && (int)$orders[$row["order_id"]]["hotel_form_id"] > 0 && (int)$orders[$row["order_id"]]["hotel_op_id"] > 0)
 						{
 							$info = $f->show(array(
-								"id" => $orders[$row["order_id"]]["hotel_form_id"], 
-								"entry_id" => $orders[$row["order_id"]]["hotel_entry_id"],
-								"op_id" => $orders[$row["order_id"]]["hotel_op_id"]
+								"id" => (int)$orders[$row["order_id"]]["hotel_form_id"], 
+								"entry_id" => (int)$orders[$row["order_id"]]["hotel_entry_id"],
+								"op_id" => (int)$orders[$row["order_id"]]["hotel_op_id"]
 							));
 						}
 						$this->vars(array("info" => $info));

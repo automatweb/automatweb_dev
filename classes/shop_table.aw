@@ -534,9 +534,28 @@ class shop_table extends shop_base
 
 		$place_arr = $this->get_place_counts($item_id);
 
+		$data = array();
+
+		classload("planner");
+		$pl = new planner;
+		$reps = $pl->get_events(array("start" => $from,"index_time" => true,"event" => $it["per_event_id"],"end" => $to));
+		if (is_array($reps))
+		{
+			foreach($reps as $time => $evnt)
+			{
+				$data[$time] = array("item_id" => $item_id,"period" => $time, "num_sold" => 0);
+			}
+		}
 		// we must basically show the part of shop_item_period_avail that fits between $from and $to - right?
 		$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = $item_id AND period >= $from AND period <= $to ORDER BY period");
 		while ($row = $this->db_next())
+		{
+			$data[$row["period"]] = $row;
+		}
+
+		ksort($data);
+
+		foreach($data as $_tm => $row)
 		{
 			$col = "";
 			for ($i=0; $i < $sht["table"]["nnum_cols"]; $i++)

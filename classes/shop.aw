@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.40 2001/10/15 11:18:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.41 2001/11/02 11:35:55 kristo Exp $
 // shop.aw - Shop
 lc_load("shop");
 global $orb_defs;
@@ -273,6 +273,9 @@ class shop extends shop_base
 		}
 
 		// some of the shop categories
+		$mj = array();
+		$ms = array();
+		$mn = array();
 		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2 ORDER BY objects.jrk");
 		while ($row = $this->db_next())
 		{
@@ -280,7 +283,67 @@ class shop extends shop_base
 			{
 				continue;
 			};
+			$mj[$row["oid"]] = $row["oid"];
+			$ms[$row["oid"]] = $row;
+			$mn[$row["oid"]] = $row["oid"];
+		}
 
+		$mss = join(",",$mj);
+		$max_p = $this->get_cart_max_period();
+		$min_p = $this->get_cart_min_period();
+		if ($mss != "" && $max_p > 1)
+		{
+			// siia paneme kirja menyyd, mille all on m6ni kaup
+			$_ms = array();
+			// siia cacheme itemi tyybid
+			$_itypes = array();
+
+			$q = "SELECT objects.brother_of as oid,objects.parent as parent,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent IN ($mss) AND class_id = ".CL_SHOP_ITEM." AND status = 2";
+			dbg("q = $q <br>");
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$this->save_handle();
+				unset($mn[$row["parent"]]);
+
+				dbg("thingee $row[oid]  under $row[parent] for period from ".$this->time2date($min_p,2)." to ".$this->time2date($max_p,2)." <br>");
+				if (!isset($_itypes[$row["type_id"]]))
+				{
+					$_itypes[$row["type_id"]] = $this->get_item_type($row["type_id"]);
+				}
+
+				if ($this->is_item_available(&$row,1,new form(),$min_p,$max_p,$_itypes[$row["type_id"]]))
+				{
+					$_ms[$row["parent"]] = true;
+					dbg("available <br>");
+				}
+				else
+				{
+					dbg("not available <br>");
+				}
+				$this->restore_handle();
+			}
+
+			// also set status to true for menus that have no items under them
+			foreach($mn as $tmp => $_mid)
+			{
+				$_ms[$_mid] = true;
+				dbg("putting back menu $_mid cause it doesn't have any items <br>");
+			}
+
+			$_tmp = $ms;
+			foreach($_tmp as $mid => $row)
+			{
+				if (!$_ms[$mid])
+				{
+					unset($ms[$mid]);
+					dbg("not showing menu $mid <br>");
+				}
+			}
+		}
+
+		foreach($ms as $_oid => $row)
+		{
 			if ($row["link"] != "")
 			{
 				$link = $row["link"];
@@ -1870,7 +1933,6 @@ class shop extends shop_base
 			}
 
 			$q = "SELECT max_items FROM shop_item2per_places WHERE tfrom <= $period AND tto >= $period AND per_type = $weeks AND item_id = ".$it["oid"];
-			dbg("max_items_q = $q <br>");
 			$this->db_query($q);
 			$tr = $this->db_next();
 			if (is_array($tr))
@@ -1878,8 +1940,6 @@ class shop extends shop_base
 				$it["max_items"] = $tr["max_items"];
 			}
 
-			dbg("max_items_result = $it[max_items] <br>");
-			
 			if ($it["has_period"])
 			{
 				// if the item has periods and has objects for each period then we figure out for which time span the
@@ -1942,11 +2002,6 @@ class shop extends shop_base
 						{
 							// kui on samal ajal tellitud siis lisame vanas tellimuses tellitud asjade arvu juurde max itemsitele
 							$it["max_items"] += $shopping_cart["old_items"][$it["oid"]]["cnt"];
-						}
-
-						if ($it["oid"] == 9471)
-						{
-							dbg("count = $count , num_sold = $num_sold , max items = $it[max_items] <br>");
 						}
 
 						if (($it["max_items"] - $num_sold) < $count)
