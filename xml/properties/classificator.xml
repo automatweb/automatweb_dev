@@ -35,11 +35,6 @@
             <syslog_type>ST_CLASSIFICATOR</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
-      <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
-      </groupinfo>
       <reltypes>
             <FOLDER>
                   <value>1</value>
