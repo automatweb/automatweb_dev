@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.5 2002/08/29 03:12:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.6 2002/09/09 12:28:18 kristo Exp $
 // right now this class manages only the functios related to adding menu aliases
 // to documents and tables. But I think that all functions dealing with a single
 // menu should be moved here.
@@ -34,7 +34,7 @@ class menu extends aw_template
 
 		$this->vars(array(
 			"menu" => $this->picker($obj["last"],$olist),
-			"reforb" => $this->mk_reforb("submit_alias",array("id" => $id,"parent" => $parent, "return_url" => $return_url)),
+			"reforb" => $this->mk_reforb("submit_alias",array("id" => $id,"parent" => $parent, "return_url" => $return_url, "alias_to" => $alias_to)),
 		));
 		return $this->parse();
 	}
@@ -59,6 +59,11 @@ class menu extends aw_template
 		{
 			$id = $this->create_menu_alias($args);
 		};
+
+		if ($alias_to)
+		{
+			$this->add_alias($alias_to, $id);
+		}
 		return $this->mk_my_orb("change_alias",array("id" => $id,"return_url" => urlencode($return_url)));
 	}
 
