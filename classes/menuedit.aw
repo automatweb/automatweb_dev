@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.8 2001/05/22 12:14:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.9 2001/05/23 16:34:28 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -234,14 +234,14 @@ classload("cache","validator","defs");
 			$this->sel_section = $section;
 
 			// loome sisu
-			if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section))
+			if ($obj["class_id"] == CL_PSEUDO && $this->is_link_collection($section) && $text == "")
 			{
 				// tshekime et kas 2kki on selle menyy all lingikogu. kui on, siis joonistame selle.
 				$this->vars(array("doc_content" => $this->do_link_collection($section)));
 				$this->read_template($template);
 			}
 			else
-			if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0))
+			if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0) && $text == "")
 			{
 				// tshekime et kas 2kki on selle menyy all pood. kui on, siis joonistame selle.
 				$this->vars(array("doc_content" => $this->do_shop($section,$sh_id)));
