@@ -14,6 +14,12 @@ class shop_item extends shop_base
 	function shop_item()
 	{
 		$this->shop_base();
+		lc_load("shop");
+		global $lc_shop;
+		if (is_array($lc_shop))
+		{
+			$this->vars($lc_shop);
+		}
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.8 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.9 2001/07/03 18:26:52 kristo Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -8,7 +8,7 @@ $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=
 														"change"				=> array("function"	=> "change","params"	=> array("id")),
 														"delete"				=> array("function"	=> "delete","params"	=> array("id"), "opt" =>array("parent","docid"))
 														);
-
+lc_load("document");
 
 // wrapper, et saax asja orbiga kasutada
 // why the flying fuck do we have 2 classes in here? What the fuck is going on?
@@ -16,7 +16,7 @@ class images extends aw_template
 {
 	function images()
 	{
-		$this->di = new db_images;
+		$this->di = new db_images;	
 	}
 
 	///
@@ -124,6 +124,11 @@ class db_images extends aw_template
 		$this->db_init();
 		$this->tpl_init("automatweb/images");
 		$this->proc_parent=-1;
+		global $lc_document;
+		if (is_array($lc_document))
+		{
+			$this->vars($lc_document);
+		}
 	}
 
 	// pildid on kõik objektide tabelis registeeritud, 

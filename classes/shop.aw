@@ -19,15 +19,21 @@ define("ORD_FILLED",1);
 
 define("PER_PAGE",10);
 
-lc_load("shop");
+//lc_load("shop");
 classload("shop_base");
 class shop extends shop_base
 {
 	function shop()
 	{
 		$this->shop_base();
-		lc_site_load("shop",$this);
+		lc_site_load("shop",&$this);
+		lc_load("shop");
 		$this->shop_menus = "";
+		global $lc_shop;
+		if (is_array($lc_shop))
+		{
+			$this->vars($lc_shop);
+		}
 	}
 
 	////
@@ -591,13 +597,25 @@ class shop extends shop_base
 			$eq = $eq["comment"];
 			foreach($els as $elname)
 			{
-				if ($f->get_element_by_name($elname))
+				if (($el = $f->get_element_by_name($elname)))
 				{
-					$elval = (int)$f->get_element_value_by_name($elname);
+					$elval = $el->get_value(true);
 				}
 				else
 				{
-					$elval = (int)$f_kaup->get_element_value_by_name($elname);
+					$el = $f_kaup->get_element_by_name($elname);
+					if ($el)
+					{
+						$elval = $el->get_value(true);
+					}
+					else
+					{
+						$elval = 0;
+					}
+				}
+				if ($elval == 0)
+				{
+					$elval = "0.0";
 				}
 				$eq = str_replace($elname,$elval,$eq);
 			}

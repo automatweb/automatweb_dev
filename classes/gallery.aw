@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.3 2001/06/05 16:50:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.4 2001/07/03 18:26:52 kristo Exp $
 // gallery.aw - galeriide haldus
 classload("images");
 
 global $orb_defs;
 $orb_defs["gallery"] = "xml";
-
+lc_load("gallery");
 class gallery extends aw_template
 {
 	function gallery($id = 0)
@@ -16,6 +16,11 @@ class gallery extends aw_template
 		if ($id)
 		{
 			$this->load($id,$GLOBALS["page"]);
+		}
+	global $lc_gallery;
+		if (is_array($lc_gallery))
+		{
+			$this->vars($lc_gallery);
 		}
 	}
 

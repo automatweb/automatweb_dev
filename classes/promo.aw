@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.5 2001/06/18 19:17:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.6 2001/07/03 18:26:52 kristo Exp $
 
 global $orb_defs;
 $orb_defs["promo"] = "xml";
 
 classload("objects");
+classload("menuedit");
 class promo extends aw_template
 {
 	function promo()
@@ -146,6 +147,28 @@ class promo extends aw_template
 			"reforb" => $this->mk_reforb("submit", array("id" => $id))
 		));
 		return $this->parse();
+	}
+
+	////
+	// !override the mk_path on core.aw , cause in menuedit mk_path is used in the upper frame, not in the objects frame
+	// !and thus must go to a different place when clicked.
+	function mk_path($oid,$text = "",$period = 0,$set = true)
+	{
+		global $ext;
+
+		$ch = $this->get_object_chain($oid,false,$GLOBALS["admin_rootmenu2"]);
+		$path = "";
+		reset($ch);
+		while (list(,$row) = each($ch))
+		{
+			$path="<a target='list' href='menuedit_right.$ext?parent=".$row["oid"]."&period=".$period."'>".strip_tags($row["name"])."</a> / ".$path;
+		}
+
+		if ($set)
+		{
+			$GLOBALS["site_title"] = $path.$text;
+		}
+		return $path;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.2 2001/05/25 15:25:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.3 2001/07/03 18:26:52 kristo Exp $
 global $orb_defs;
 $orb_defs["banner"] = "xml";
 
@@ -493,7 +493,7 @@ class banner extends aw_template
 	// also cleans the banner_ids table of all views older than 48 hours	
 	function find_url($ss,$clid,$buid)
 	{
-		$bid = $this->db_fetch_field("SELECT bid FROM banner_ids WHERE ss = '$ss'","bid");
+		$bid = $this->db_fetch_field("SELECT bid FROM banner_ids WHERE ss = '$ss' AND clid = '$clid'","bid");
 		if (!$bid)
 		{
 			$this->error_click();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.19 2001/07/02 00:24:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.20 2001/07/03 18:26:52 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -36,8 +36,7 @@ load_vcl("date_edit");
 												"type_active_multiple"		=> ($this->arr["type"] == "multiple" ? " SELECTED " : ""),
 												"type_active_file"				=> ($this->arr["type"] == "file" ? " SELECTED " : ""),
 												"type_active_link"				=> ($this->arr["type"] == "link" ? " SELECTED " : ""),
-												"type_active_submit"			=> ($this->arr["type"] == "submit" ? " SELECTED " : ""),
-												"type_active_reset"				=> ($this->arr["type"] == "reset" ? " SELECTED " : ""),
+												"type_active_button"			=> ($this->arr["type"] == "button" ? " SELECTED " : ""),
 												"type_active_price"				=> ($this->arr["type"] == "price" ? " SELECTED " : ""),
 												"type_active_date"				=> ($this->arr["type"] == "date" ? " SELECTED " : ""),
 												"default_name"						=> "element_".$this->id."_def",
@@ -89,18 +88,34 @@ load_vcl("date_edit");
 			{	
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
-					"must_error" => $this->arr["must_error"]
+					"must_error" => $this->arr["must_error"],
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
 				{
-					$this->vars(array("listbox_item_id" 			=> "element_".$this->id."_lb_".$b,
-														"listbox_item_value"		=> $this->arr["listbox_items"][$b],
-														"listbox_radio_name"		=> "element_".$this->id."_lradio",
-														"listbox_radio_value"		=> $b,
-														"listbox_radio_checked"	=> ($this->arr["listbox_default"] == $b ? $chk_val : "")));
+					$this->vars(array(
+						"listbox_item_id" 			=> "element_".$this->id."_lb_".$b,
+						"listbox_item_value"		=> $this->arr["listbox_items"][$b],
+						"listbox_radio_name"		=> "element_".$this->id."_lradio",
+						"listbox_radio_value"		=> $b,
+						"listbox_radio_checked"	=> ($this->arr["listbox_default"] == $b ? $chk_val : ""),
+						"listbox_order_name" => "element_".$this->id."_lb_order_".$b,
+						"listbox_order_value" => $this->arr["listbox_order"][$b],
+						"num" => $b
+					));
 					$lb.=$this->parse("LISTBOX_ITEMS");
 				}	
+			}
+
+			if ($this->arr["type"] == "listbox" || $this->arr["type"] == "multiple")
+			{
+				$this->vars(array(
+					"sort_by_order" => checked($this->arr["sort_by_order"]),
+					"sort_by_alpha" => checked($this->arr["sort_by_alpha"])
+				));
+				$this->vars(array(
+					"LISTBOX_SORT" => $this->parse("LISTBOX_SORT")
+				));
 			}
 
 			$mu = "";
@@ -108,11 +123,15 @@ load_vcl("date_edit");
 			{	
 				for ($b=0; $b < ($this->arr["multiple_count"]+1); $b++)
 				{
-					$this->vars(array("multiple_item_id" 				=> "element_".$this->id."_mul_".$b,
-														"multiple_item_value"			=> $this->arr["multiple_items"][$b],
-														"multiple_check_name"			=> "element_".$this->id."_m_".$b,
-														"multiple_check_value"		=> "1",
-														"multiple_check_checked"	=> ($this->arr["multiple_defaults"][$b] == 1 ? $chk_val : "")));
+					$this->vars(array(
+						"multiple_item_id" 				=> "element_".$this->id."_mul_".$b,
+						"multiple_item_value"			=> $this->arr["multiple_items"][$b],
+						"multiple_check_name"			=> "element_".$this->id."_m_".$b,
+						"multiple_check_value"		=> "1",
+						"multiple_check_checked"	=> ($this->arr["multiple_defaults"][$b] == 1 ? $chk_val : ""),
+						"multiple_order_name" => "element_".$this->id."_m_order_".$b,
+						"multiple_order_value" => $this->arr["multiple_order"][$b],
+					));
 					$mu.=$this->parse("MULTIPLE_ITEMS");
 				}	
 			}
@@ -177,13 +196,38 @@ load_vcl("date_edit");
 				$bt = $this->parse("BUTTON_ITEMS");
 			}
 
+			$bt = "";
+			if ($this->arr["type"] == "button")
+			{
+				if ($this->arr["subtype"] == "preview")
+				{
+					$formb = new form_base;
+					$opl = $formb->get_op_list();
+
+					$this->vars(array(
+						"bops" => $this->picker($this->arr["button_op"],$opl[$this->fid])
+					));
+				}
+				$this->vars(array(
+					"button_text" => $this->arr["button_text"],
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","submit" => "Submit", "reset" => "Reset","delete" => "Kustuta","url" => "URL","preview" => "Eelvaade")),
+					"button_url" => $this->arr["button_url"],
+				));
+				$bt = $this->parse("BUTTON_ITEMS");
+				$this->vars(array(
+					"HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE"),
+					"BUTTON_SUB_URL" => ($this->arr["subtype"] == "url" ? $this->parse("BUTTON_SUB_URL") : ""),
+					"BUTTON_SUB_OP" => ($this->arr["subtype"] == "preview" ? $this->parse("BUTTON_SUB_OP") : "")
+				));
+			}
+
 			$di = "";
 			if ($this->arr["type"] == "date")
 			{
 				$this->vars(array(
 					"from_year" => $this->arr["from_year"],
 					"to_year" => $this->arr["to_year"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","from" => "Algus", "to" => "L&otilde;pp"))
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","from" => "Algus", "to" => "L&otilde;pp","expires" => "Aegumine"))
 				));
 				$di = $this->parse("DATE_ITEMS");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
@@ -212,7 +256,13 @@ load_vcl("date_edit");
 			extract($arr);
 
 			$base = "element_".$this->id;
-			
+
+			$var = $base."_sort_order";
+			$this->arr["sort_by_order"] = $$var;
+
+			$var = $base."_sort_alpha";
+			$this->arr["sort_by_alpha"] = $$var;
+
 			$var=$base."_text";
 			$this->arr["text"] = $$var;
 			$var=$base."_name";
@@ -229,7 +279,9 @@ load_vcl("date_edit");
 
 			$var=$base."_type";
 			if ($$var == "delete")
+			{
 				return false;
+			}
 
 			$this->arr["type"] = $$var;
 			$var = $base."_info";
@@ -243,20 +295,44 @@ load_vcl("date_edit");
 
 			if ($this->arr["type"] == "listbox")
 			{
+				$arvar = $base."_sel";
+				$ar = $$arvar;
+
+				$dwtvar = $base."_lbitems_dowhat";
+				$dwat = $$dwtvar;
+
+				$this->arr["listbox_items"] = array();
 				$cnt=$this->arr["listbox_count"]+1;
-				for ($b=0; $b < $cnt; $b++)
+				for ($b=0,$num=0; $b < $cnt; $b++)
 				{
-					$var=$base."_lb_".$b;
-					$this->arr["listbox_items"][$b] = $$var;
+					if (!($dwat == "del" && $ar[$b] == 1))
+					{
+						$var=$base."_lb_".$b;
+						$this->arr["listbox_items"][$num] = $$var;
+
+						$var=$base."_lb_order_".$b;
+						$this->arr["listbox_order"][$num] = $$var;
+						$num++;
+						if ($dwat=="add" && $ar[$b] == 1)
+						{
+							$this->arr["listbox_items"][$num] = " ";
+							$num++;
+						}
+					}
 				}
-				while (isset($this->arr["listbox_items"][$cnt-1]) && ($this->arr["listbox_items"][$cnt-1] == ""))
+				while (isset($this->arr["listbox_items"][$num-1]) && ($this->arr["listbox_items"][$num-1] == ""))
 				{
-					$cnt--;
+					$num--;
 				}
 
-				$this->arr["listbox_count"]=$cnt;
+				$this->arr["listbox_count"]=$num;
 				$var = $base."_lradio";
 				$this->arr["listbox_default"] = $$var;
+
+				$this->import_lb_data();
+
+				// sort listbox
+				$this->sort_listbox();
 			}
 
 			if ($this->arr["type"] == "multiple")
@@ -269,10 +345,16 @@ load_vcl("date_edit");
 
 					$var = $base."_m_".$b;
 					$this->arr["multiple_defaults"][$b] = $$var;
+
+					$var=$base."_m_order_".$b;
+					$this->arr["multiple_order"][$b] = $$var;
 				}
 				if ($this->arr["multiple_items"][$cnt-1] == "")
 					$cnt--;
 				$this->arr["multiple_count"]=$cnt;
+				$this->sort_multiple();
+
+				$this->import_m_data();
 			}
 
 			if ($this->arr["type"] == "textarea")
@@ -352,10 +434,16 @@ load_vcl("date_edit");
 				$this->arr["to_year"] = $$var;
 			}
 
-			if ($this->arr["type"] == "submit" || $this->arr["type"] == "reset")
+			if ($this->arr["type"] == "submit" || $this->arr["type"] == "reset" || $this->arr["type"] == "button")
 			{
 				$var = $base."_btext";
 				$this->arr["button_text"] = $$var;
+
+				$var = $base."_burl";
+				$this->arr["button_url"] = $$var;
+
+				$var = $base."_bop";
+				$this->arr["button_op"] = $$var;
 			}
 
 			$var = $base."_separator_type";
@@ -377,6 +465,7 @@ load_vcl("date_edit");
 
 			$var = $base."_srow_grp";
 			$this->arr["srow_grp"] = $$var;
+
 			return true;
 		}
 
@@ -501,15 +590,26 @@ load_vcl("date_edit");
 					$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
 					break;
 
+				case "button":
 				case "submit":
+				case "reset":
 					if (!$no_submit)
 					{
-						$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"return check_submit();\">";
+						if ($this->arr["subtype"] == "submit" || $this->arr["type"] == "submit")
+						{
+							$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"return check_submit();\">";
+						}
+						else
+						if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
+						{
+							$html = "<input type='reset' VALUE='".$this->arr["button_text"]."'>";
+						}
+						else
+						if ($this->arr["subtype"] == "url")
+						{
+							$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">";
+						}
 					}
-					break;
-
-				case "reset":
-					$html = "<input type='reset' VALUE='".$this->arr["button_text"]."'>";
 					break;
 
 				case "file":
@@ -762,7 +862,7 @@ load_vcl("date_edit");
 
 		////
 		// !returns the elements value in the currently loaded entry in a form that can be presented to the user
-		function get_value()
+		function get_value($numeric = false)
 		{
 			if ($this->arr["type"] == "textarea")
 			{
@@ -771,7 +871,14 @@ load_vcl("date_edit");
 			else
 			if ($this->arr["type"] == "radiobutton")
 			{
-				$html=($this->entry == $this->id ? " (X) " : " (-) ");
+				if (!$numeric)
+				{
+					$html=($this->entry == $this->id ? " (X) " : " (-) ");
+				}
+				else
+				{
+					$html=($this->entry == $this->id ? 1 : 0);
+				}
 			}
 			else		
 			if ($this->arr["type"] == "listbox")
@@ -792,7 +899,14 @@ load_vcl("date_edit");
 			else
 			if ($this->arr["type"] == "checkbox")
 			{
-				$html=$this->entry == 1 ? "(X) " : " (-) ";
+				if (!$numeric)
+				{
+					$html=$this->entry == 1 ? "(X) " : " (-) ";
+				}
+				else
+				{
+					$html = $this->entry;
+				}
 			}
 			else
 			if ($this->arr["type"] == "textbox")
@@ -815,6 +929,186 @@ load_vcl("date_edit");
 				$html=$this->entry["address"];
 			}
 			return $html;
+		}
+
+		function sort_listbox()
+		{
+			if (is_array($this->arr["listbox_items"]))
+			{
+				$cnt=0;
+				foreach($this->arr["listbox_items"] as $k => $v)
+				{
+					if ($v != "")
+					{
+						$ar[$cnt++] = $v;
+					}
+				}
+
+				if (is_array($ar))
+				{
+					uksort($ar,array($this,"__lb_sort"));
+					$cnt=0;
+					$ordar = $this->arr["listbox_order"];
+					foreach( $ar as $k => $v)
+					{
+						$this->arr["listbox_items"][$cnt] = $v;
+						$this->arr["listbox_order"][$cnt] = $ordar[$k];
+						$cnt++;
+					}
+				}
+			}
+		}
+
+		function __lb_sort($a,$b)
+		{
+			if ($this->arr["sort_by_order"])
+			{
+				if ($this->arr["listbox_order"][$a] == $this->arr["listbox_order"][$b])
+				{
+					if ($this->arr["sort_by_alpha"])
+					{
+						$res =  strcmp($this->arr["listbox_items"][$a],$this->arr["listbox_items"][$b]);
+						return $res;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+				else
+				if ($this->arr["listbox_order"][$a] < $this->arr["listbox_order"][$b])
+				{
+					return -1;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			else
+			if ($this->arr["sort_by_alpha"])
+			{
+				return strcmp($this->arr["listbox_items"][$a],$this->arr["listbox_items"][$b]);
+			}
+			else
+			{
+				return 0;
+			}
+		}
+
+		function sort_multiple()
+		{
+			if (is_array($this->arr["multiple_items"]))
+			{
+				$cnt=0;
+				foreach($this->arr["multiple_items"] as $k => $v)
+				{
+					if ($v != "")
+					{
+						$ar[$cnt++] = $v;
+					}
+				}
+
+				if (is_array($ar))
+				{
+					uksort($ar,array($this,"__mb_sort"));
+					$cnt=0;
+					$ordar = $this->arr["multiple_order"];
+					foreach( $ar as $k => $v)
+					{
+						$this->arr["multiple_items"][$cnt] = $v;
+						$this->arr["multiple_order"][$cnt] = $ordar[$k];
+						$cnt++;
+					}
+				}
+			}
+		}
+
+		function __mb_sort($a,$b)
+		{
+			if ($this->arr["sort_by_order"])
+			{
+				if ($this->arr["multiple_order"][$a] == $this->arr["multiple_order"][$b])
+				{
+					if ($this->arr["sort_by_alpha"])
+					{
+						$res =  strcmp($this->arr["multiple_items"][$a],$this->arr["multiple_items"][$b]);
+						return $res;
+					}
+					else
+					{
+						return 0;
+					}
+				}
+				else
+				if ($this->arr["multiple_order"][$a] < $this->arr["multiple_order"][$b])
+				{
+					return -1;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+			else
+			if ($this->arr["sort_by_alpha"])
+			{
+				return strcmp($this->arr["multiple_items"][$a],$this->arr["multiple_items"][$b]);
+			}
+			else
+			{
+				return 0;
+			}
+		}
+
+		////
+		// !imports the data from a text file if the user uploaded it
+		function import_lb_data()
+		{
+			$base = "element_".$this->id;
+			$var = $base."_import";
+			global $$var;
+			if (is_uploaded_file($$var))
+			{
+				// imprtime siis phaili sisu
+				$this->arr["listbox_items"] = array();
+				$fc = file($$var);
+				$cnt=0;
+				foreach($fc as $line)
+				{
+					if ($line == "")
+					{
+						$line = " ";
+					}
+					$this->arr["listbox_items"][$cnt++] = $line;
+				}
+				$this->arr["listbox_count"] = $cnt;
+			}
+		}
+
+		////
+		// !imports the data from a text file if the user uploaded it
+		function import_m_data()
+		{
+			$base = "element_".$this->id;
+			$var = $base."_import";
+			global $$var;
+			if (is_uploaded_file($$var))
+			{
+				// imprtime siis phaili sisu
+				$this->arr["multiple_items"] = array();
+				$fc = file($$var);
+				$cnt=0;
+				foreach($fc as $line)
+				{
+					if ($line == "")
+					{
+						$line = " ";
+					}
+					$this->arr["multiple_items"][$cnt++] = $line;
+				}
+				$this->arr["multiple_count"] = $cnt;
+			}
 		}
 	}
 ?>

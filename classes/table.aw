@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.4 2001/06/18 18:46:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.5 2001/07/03 18:26:52 kristo Exp $
 // table.aw - tabelite haldus
-
 global $orb_defs;
+
 $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html",		"params"	=> array("id")),
 													 "admin"						=> array("function"	=> "gen_admin2_html",		"params"	=> array("id")),
 													 "add_col"					=> array("function"	=> "add_col",						"params"	=> array("id", "after", "num")),
@@ -34,10 +34,10 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 													 "delete"						=> array("function" => "delete",						"params"	=> array("id","parent")),
 													 "submit_add"				=> array("function" => "submit_add",				"params"	=> array())
 													 );
-
+ 
 	classload("images");
 	classload("style");
-
+  lc_load("table");
 	class table extends aw_template
 	{
 		var $table_id;
@@ -50,6 +50,11 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 			$this->sub_merge = 1;
 			$this->db_init();
 			$this->table_loaded = false;
+		global $lc_table;
+		if (is_array($lc_table))
+	{
+			$this->vars($lc_table);
+		}
 		}
 
 		////
@@ -1478,7 +1483,7 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 		function add($arr)
 		{
 			extract($arr);
-			$this->mk_path($parent,"Lisa tabel");
+			$this->mk_path($parent,"{VAR:LC_TABLE_COMM}");
 			$this->read_template("table_add.tpl");
 		  $this->vars(array("reforb" => $this->mk_reforb("submit_add", array("parent" => $parent))));
 			return $this->parse();

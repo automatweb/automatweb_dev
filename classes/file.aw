@@ -1,8 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.10 2001/07/02 06:13:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.11 2001/07/03 18:26:52 kristo Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
+
+lc_load("file");
 class file extends aw_template
 {
 	////
@@ -11,6 +13,11 @@ class file extends aw_template
 	{
 		$this->tpl_init("file");
 		$this->db_init();
+	global $lc_file;
+		{if (is_array($lc_file))
+		
+			$this->vars($lc_file);
+		}
 	}
 
 	////

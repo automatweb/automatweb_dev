@@ -157,6 +157,18 @@ class form_element extends aw_template
 			"name"		=> $this->arr["name"]
 		));
 
+		for ($col=0; $col < $f->arr["cols"]; $col++)
+		{
+			$this->vars(array(
+				"col" => $col
+			));
+			$cc.=$this->parse("COLNUMC");
+			$cc2.=$this->parse("COLNUM");
+		}
+		$this->vars(array(
+			"COLNUMC" => $cc,
+			"COLNUM" => $cc2
+		));
 		for ($row = 0; $row < $f->arr["rows"]; $row++)
 		{
 			$c = "";

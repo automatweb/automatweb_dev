@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.3 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.4 2001/07/03 18:26:52 kristo Exp $
 // graph.aw - graafikute haldamine
 		global $orb_defs;
 		$orb_defs["graph"] = array(
@@ -26,7 +26,7 @@
 define("TYPE_PIE",0);
 define("TYPE_LINE",1);
 define("TYPE_BAR",2);
-
+lc_load("graph");
 	class graph extends aw_template
 	{
 		//mis tyypi pilte me siin 6ieti loome
@@ -36,6 +36,11 @@ define("TYPE_BAR",2);
 		{
 			$this->tpl_init();
 			$this->db_init();
+		global $lc_graph;
+		{if (is_array($lc_graph))
+		
+			$this->vars($lc_graph);
+		}
 		}
 		
 		////

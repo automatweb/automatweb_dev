@@ -9,6 +9,12 @@ class shop_eq extends shop_base
 	function shop_eq()
 	{
 		$this->shop_base();
+		lc_load("shop");
+		global $lc_shop;
+		if (is_array($lc_shop))
+		{
+			$this->vars($lc_shop);
+		}
 	}
 
 	function add($arr)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.29 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.30 2001/07/03 18:26:52 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -635,7 +635,9 @@ class menuedit extends aw_template
 			"uid" => $GLOBALS["uid"], 
 			"date" => $this->time2date(time(), 2),
 			"date2" => $this->time2date(time(), 8),
-			"CHANGEDOCUMENT" => $this->active_doc ? $this->parse("CHANGEDOCUMENT") : ""
+			"CHANGEDOCUMENT" => $this->active_doc ? $this->parse("CHANGEDOCUMENT") : "",
+			"IS_FRONTPAGE" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE") : ""),
+			"IS_FRONTPAGE2" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE2") : "")
 		));
 		if (is_array($vars))
 		{
@@ -666,14 +668,14 @@ class menuedit extends aw_template
 			{
 				$this->vars(array("MENUEDIT_ACCESS" => ""));
 			}
-			$login = $this->parse("logged");
+			$logged = $this->parse("logged");
+			$this->vars(array("logged" => $logged, "login" => ""));
 		}
 		else
 		{
 			$login = $this->parse("login");
+			$this->vars(array("login" => $login, "logged" => ""));
 		}
-
-		$this->vars(array("login" => $login, "logged" => ""));
 
 		$lp = "";
 		$rp = "";
@@ -917,7 +919,6 @@ class menuedit extends aw_template
 			{
 				$docid[$cnt++] = $row["oid"];
 			}
-
 			$awt->stop("menuedit->get_default_document()");
 			if ($cnt > 1)
 			{
@@ -2661,10 +2662,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$long_templates[$tpl["id"]] = $tpl["name"];
 		};
 
-		$sar = array();
+		$bsar = array();
 		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER);
 		while ($arow = $this->db_next())
-			$sar[$arow["parent"]] = $arow["parent"];
+			$bsar[$arow["parent"]] = $arow["parent"];
 
 		classload("objects");
 		$ob = new db_objects;
@@ -2750,7 +2751,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 											"sep_checked"	=> ($row["type"] == 4 ? "CHECKED" : ""),
 											"mid"	=> ($row["mid"] == 1 ? "CHECKED" : ""),
 											"doc_checked"	=> ($row["type"] == 6 ? "CHECKED" : ""),
-											"sections"		=> $this->multiple_option_list($sar,$ob->get_list(false,true)),
+											"sections"		=> $this->multiple_option_list($bsar,$ob->get_list(false,true)),
 											"real_id"			=> $row["brother_of"],
 											"reforb"			=> $this->mk_reforb("submit",array("id" => $id, "parent" => $parent,"period" => $period)),
 											"ndocs"				=> $row["ndocs"],
@@ -3061,12 +3062,22 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 												"section"	=> $row["oid"],
 												"target" 	=> $target,
 												"image"		=> (isset($row["img_url"]) && $row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
-
+	
 			$l.=$this->parse($mn.$ap);
 			$this->vars(array($mn.$ap => ""));
+			if ($this->is_template($mn."2"))
+			{
+				$l2.=$this->parse($mn."2".$ap);
+				$this->vars(array($mn."2".$ap => ""));
+				$second = true;
+			}
 			$cnt++;
 		}
 		$this->vars(array($mn => $l));
+		if ($second)
+		{
+			$this->vars(array($mn."2" => $l2));
+		}
 		$this->level--;
 		return $cnt;
 	}

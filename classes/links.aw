@@ -14,6 +14,11 @@ class links extends extlinks
 	{
 		$this->tpl_init("automatweb/extlinks");
 		$this->db_init();
+		global $lc_extlinks;
+		if (is_array($lc_extlinks))
+		{
+			$this->vars($lc_extlinks);
+		}
 	}
 
 	function add($arr)

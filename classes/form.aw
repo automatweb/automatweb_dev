@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.30 2001/07/02 04:10:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.31 2001/07/03 18:26:52 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -31,6 +31,11 @@ $orb_defs["form"] = "xml";
 		function form()
 		{
 			$this->tpl_init("forms");
+			global $lc_form;
+		if (is_array($lc_form))
+	{
+			$this->vars($lc_form);
+		}
 			$this->db_init();
 			if (func_num_args() == 1)
 			{
@@ -45,6 +50,7 @@ $orb_defs["form"] = "xml";
 			$this->typearr = array(FORM_ENTRY => FG_ENTRY_FORM, FORM_SEARCH => FG_SEARCH_FORM, FORM_RATING => FG_RATING_FORM);
 			$this->formaliases = "";
 			$this->entry_id = 0;
+		
 		}
 
 		////
@@ -1226,7 +1232,7 @@ $orb_defs["form"] = "xml";
 
 				// create the sql that searches from this form's entries
 				$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 ";
-				if (is_array)
+				if (is_array($parent))
 				{
 					$query .= sprintf(" AND objects.parent IN (%s)",join(",",$parent));
 				}
@@ -1744,7 +1750,7 @@ $orb_defs["form"] = "xml";
 		function change_el_pos($arr)
 		{
 			extract($arr);
-			$this->init($id, "", "<a href='".$this->mk_orb("change", array("id" => $this->id))."'>Muuda formi</a> / Vali elemendi asukoht");
+			$this->init($id, "", "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda formi</a> / Vali elemendi asukoht");
 			$el =&$this->get_element_by_id($el_id);
 			return $el->change_pos($arr,&$this);
 		}
@@ -1753,7 +1759,6 @@ $orb_defs["form"] = "xml";
 		// !saves the element position changes
 		function submit_chpos($arr)
 		{
-			$this->dequote(&$arr);
 			extract($arr);
 			$this->load($id);
 			
@@ -1762,21 +1767,31 @@ $orb_defs["form"] = "xml";
 			if (is_array($c_cell))
 			{
 				$oldel = $this->arr["elements"][$row][$col][$el_id];
+				$oldel_ob = $this->get_object($el_id);
+
 				$cnt = 1;
 				foreach($c_cell as $rowc)
 				{
 					list($r,$c) = explode("_", $rowc);
 					// $r,$c = kuhu kopeerida element
-					$name = $oldel["name"]."_".$cnt;
-					$new_el = $this->new_object(array("parent" => $oldel["parent"], "name" => $name, "class_id" => CL_PSEUDO));
-					$this->db_query("INSERT INTO menu (id,type) values($new_el,".MN_FORM_ELEMENT.")");
-					$this->db_query("INSERT INTO form_elements (id) VALUES($new_el)");
-					$this->arr["contents"][$r][$c]->_do_add_element($this->id,$new_el);
-					$arr = $oldel;
-					$arr["id"] = $new_el;
-					$arr["name"] = $name;
-					$this->arr["elements"][$r][$c][$new_el] = $arr;
-					$cnt++;
+					// kordame niimitu korda kui mitu elementi tyyp tahtis
+					
+					for ($i=0; $i < $el_count; $i++)
+					{
+						$name = $oldel["name"]."_".$cnt;
+						$new_el = $this->new_object(array("parent" => $oldel_ob["parent"], "name" => $name, "class_id" => CL_PSEUDO));
+						$this->db_query("INSERT INTO menu (id,type) values($new_el,".MN_FORM_ELEMENT.")");
+						$this->db_query("INSERT INTO form_elements (id) VALUES($new_el)");
+
+						// we must also update the form_$id_entries table
+						$this->db_query("ALTER TABLE form_".$id."_entries add el_$new_el text");
+
+						$arr = $oldel;
+						$arr["id"] = $new_el;
+						$arr["name"] = $name;
+						$this->arr[elements][$r][$c][$new_el] = $arr;
+						$cnt++;
+					}
 				}
 				$this->save();	// sync
 				$this->load($id);
@@ -1786,11 +1801,11 @@ $orb_defs["form"] = "xml";
 
 			if (!($r == $row && $c == $col))
 			{
-				$this->arr["elements"][$r][$c][$el_id] = $this->arr["elements"][$row][$col][$el_id];
-				unset($this->arr["elements"][$row][$col][$el_id]);
-				if (!is_array($this->arr["elements"][$row][$col]))
+				$this->arr[elements][$r][$c][$el_id] = $this->arr[elements][$row][$col][$el_id];
+				unset($this->arr[elements][$row][$col][$el_id]);
+				if (!is_array($this->arr[elements][$row][$col]))
 				{
-					$this->arr["elements"][$row][$col] = array();
+					$this->arr[elements][$row][$col] = array();
 				}
 				$this->save();
 			}

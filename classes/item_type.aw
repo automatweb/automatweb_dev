@@ -9,6 +9,12 @@ class item_type extends shop_base
 	function item_type()
 	{
 		$this->shop_base();
+		lc_load("shop");
+		global $lc_shop;
+		if (is_array($lc_shop))
+		{
+			$this->vars($lc_shop);
+		}
 	}
 
 	////
