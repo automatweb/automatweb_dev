@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.196 2004/01/13 16:24:12 kristo Exp $
+// $Id: class_base.aw,v 2.197 2004/01/13 16:55:22 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -97,7 +97,7 @@ class class_base extends aw_template
 		
 		@attrib name=new params=name all_args="1" default="0"
 		
-		@param parent optional type=int acl="int"
+		@param parent optional type=int acl="edit"
 		@param period optional
 		@param alias_to optional
 		@param return_url optional
@@ -115,7 +115,7 @@ class class_base extends aw_template
 		
 		@attrib name=change params=name all_args="1" default="0"
 		
-		@param id optional type=int acl="int"
+		@param id optional type=int acl="edit"
 		@param group optional
 		@param period optional
 		@param alias_to optional
