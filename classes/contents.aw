@@ -17,7 +17,8 @@ class contents extends aw_template
 
 		$this->mc = get_instance("menu_cache");
 		$this->doc = get_instance("document");
-
+		
+		$this->per = get_instance("periods");
 
 		$this->period = aw_global_get("act_per_id");
 
@@ -55,10 +56,15 @@ class contents extends aw_template
 			));
 			$this->doc->restore_handle();
 		}
+		
+		$act_per = $this->per->get($this->period);
+                                                                                                                            
+                $this->vars(array(
+                        "act_per_comment" => $act_per["data"]["comment"],
+                        "act_per_name" => $act_per["description"],
+                        "MENU" => $this->l,
+                ));
 
-		$this->vars(array(
-			"MENU" => $this->l,
-		));
 		return $this->parse();
 	}
 
