@@ -83,9 +83,15 @@ class date_edit
 		{
 			$clid="class=\"$this->classid\"";
 		};
+		// support for ISO-8601 date format
+		list($year,$month,$day) = sscanf($this->timestamp,"%4d-%2d-%2d");
 		if ($this->timestamp == -1)
 		{
 			$year = $month = $day = $hour = $minute = -1;
+		}
+		elseif ($year && $month && $day)
+		{
+
 		}
 		else
 		{
