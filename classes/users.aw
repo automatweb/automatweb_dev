@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.29 2001/11/22 22:12:29 kristo Exp $
-classload("users_user","config","form");
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.30 2002/01/04 12:52:56 duke Exp $
+classload("users_user","config","form","objects");
 
-load_vcl("table");
+load_vcl("table","date_edit");
 
 session_register("add_state");
 
@@ -63,13 +63,18 @@ class users extends users_user
 		{
 			return false;
 		};
-		// yeah. me salvestame selle info xml-is
-		classload("xml");
-		$xml = new xml(array("ctag" => "config"));
-		$config = $xml->xml_unserialize(array(
-					"source" => $udata["config"],
-				));
-		return $config[$key];
+		$tmp = aw_unserialize($udata["config"]);
+		// return a single key if asked
+		if ($key)
+		{
+			$retval = $tmp[$key];
+		}
+		// otherwise the whole config block
+		else
+		{
+			$retval = $tmp;
+		};
+		return $retval;
 	}
 
 	function _get_user_config($uid)
@@ -98,13 +103,16 @@ class users extends users_user
 		{
 			return false;
 		};
-		classload("xml");
-		$xml = new xml(array("ctag" => "config"));
-		$config = $xml->xml_unserialize(array(
-					"source" => $old["config"],
-				));
-		$config[$key] = $value;
-		$newconfig = $xml->xml_serialize($config);
+		$config = aw_unserialize($old["config"]);
+		if (is_array($data))
+		{
+			$config = array_merge($config,$data);
+		}
+		else
+		{
+			$config[$key] = $value;
+		};
+		$newconfig = aw_serialize($config,SERIALIZE_PHP);
 		$this->quote($newconfig);
 		$q = "UPDATE users SET config = '$newconfig' WHERE uid = '$uid'";
 		$this->db_query($q);
@@ -227,40 +235,115 @@ class users extends users_user
 			$this->prog_acl_error("view", PRG_USERS);
 		}
 		$this->read_template("list.tpl");
-
 		extract($arr);
-		if ($s_uid == "")
+		unset($arr["search_click"]);
+		if ($search_click == 1)
 		{
-			$s_uid = "%";
+			$letter = "";
+			$page = 0;
+			unset($arr["letter"]);
+			unset($arr["page"]);
 		}
 
-		if ($s_mail == "")
+		for ($i=ord('A'); $i < ord('Z'); $i++)
 		{
-			$s_mail = "%";
+			$_arr = $arr;
+			$_arr["letter"] = chr($i);
+			$this->vars(array(
+				"l_url" => $this->mk_my_orb("gen_list", $_arr),
+				"letter" => chr($i)
+			));
+			if ($letter == chr($i))
+			{
+				$lc.=$this->parse("SEL_LETTER");
+			}
+			else
+			{
+				$lc.=$this->parse("LETTER");
+			}
 		}
+
+		$_arr = $arr;
+		unset($_arr["letter"]);
+		$_arr2 = $arr;
+		$_arr2["search"] = 1;
+		$_arr2["page"] = 0;
+		$_arr3 = $arr;
+		unset($_arr3["search"]);
+		$_arr3["page"] = 0;
 
 		$this->vars(array(
-			"s_mail" => $s_mail,
-			"s_uid" => $s_uid,
-			"reforb" => $this->mk_reforb("gen_list", array("page" => $page, "no_reforb" => 1))
+			"SEL_LETTER" => "",
+			"LETTER" => $lc,
+			"all_url" => $this->mk_my_orb("gen_list", $_arr),
+			"search" => $this->mk_my_orb("gen_list", $_arr2),
+			"list" => $this->mk_my_orb("gen_list", $_arr3),
+			"stats" => $this->mk_my_orb("user_stats")
 		));
-		global $lookfor, $sortby,$uid;
+
 		$users = $this->_gen_usr_list();
-		
 		$uid_list = array_keys($users);
 		
-		$page = $arr["page"];
+		$let = "";
+		if ($letter != "")
+		{
+			$let = "AND uid LIKE '".$letter."%'";
+		}
 
-		
-		$num_users = $this->db_fetch_field("SELECT count(uid) as cnt FROM users WHERE uid IN(".join(",",map("'%s'",$uid_list)).") AND blocked = 0 AND uid LIKE '%".$s_uid."%' AND email LIKE '%".$s_mail."%'","cnt");
+		if ($search)
+		{
+			if ($created_from["year"])
+			{
+				$s_created_from = mktime(0,0,0,$created_from["month"],$created_from["day"],$created_from["year"]);
+			}
+			if ($created_to["year"])
+			{
+				$s_created_to = mktime(0,0,0,$created_to["month"],$created_to["day"],$created_to["year"]);
+			}
+
+			$let.=" AND uid LIKE '%".$s_uid."%'";
+			$let.=" AND email LIKE '%".$s_email."%'";
+			if ($s_created_from > 1)
+			{
+				$let.=" AND created > $s_created_from ";
+			}
+			if ($s_created_to > 1)
+			{
+				$let.=" AND created < $s_created_to ";
+			}
+			$de = new date_edit("s_created_from",time());
+			$de->configure(array("year" => "","month" => "","day" => ""));
+
+			$this->vars(array(
+				"s_uid" => $s_uid,
+				"s_email" => $s_email,
+				"reforb" => $this->mk_reforb("gen_list", array("no_reforb" => 1, "page" => $page, "letter" => $letter,"search" => 1,"search_click" => 1)),
+				"created_from" => $de->gen_edit_form("created_from", $s_created_from, 1999,2005,true),
+				"created_to" => $de->gen_edit_form("created_to", $s_created_to, 1999,2005,true),
+			));
+			$this->vars(array(
+				"IS_SEARCH" => $this->parse("IS_SEARCH"),
+				"IS_SEARCH2" => $this->parse("IS_SEARCH2")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"NO_SEARCH" => $this->parse("NO_SEARCH")
+			));
+		}
+
+		$num_users = $this->db_fetch_field("SELECT count(uid) as cnt FROM users WHERE uid IN(".join(",",map("'%s'",$uid_list)).") AND blocked = 0 $let","cnt");
 
 		$pages = $num_users / PER_PAGE;
 		for ($i=0; $i < $pages; $i++)
 		{
+			$_arr = $arr;
+			$_arr["page"] = $i;
 			$this->vars(array(
 				"from" => $i*PER_PAGE,
 				"to" => min(($i+1)*PER_PAGE, $num_users),
-				"link" => $this->mk_orb("gen_list", array("page" => $i,"s_uid" => $s_uid, "s_mail" => $s_mail))
+				"link" => $this->mk_orb("gen_list", $_arr)
 			));
 			if ($i == $page)
 			{
@@ -271,7 +354,10 @@ class users extends users_user
 				$pg.=$this->parse("PAGE");
 			}
 		}
-		$this->vars(array("PAGE" => $pg, "SEL_PAGE" => ""));
+		$this->vars(array(
+			"PAGE" => $pg, 
+			"SEL_PAGE" => ""
+		));
 
 		if ($page < 1)
 		{
@@ -279,36 +365,43 @@ class users extends users_user
 		}
 		// hmpf. Huvitav, kas IN klauslil mingi suuruspiirang ka on?
 		// kui kasutajaid on ntx 2000, siis see päring voib ysna jube olla
-			$q = "SELECT * FROM users WHERE uid IN(".join(",",map("'%s'",$uid_list)).") AND blocked = 0 AND uid LIKE '%".$s_uid."%' AND email LIKE '%".$s_mail."%' order by uid LIMIT ".$page*PER_PAGE.",".PER_PAGE;
-			$this->db_query($q);
-			while ($row = $this->db_next())
+		$q = "SELECT * FROM users WHERE uid IN(".join(",",map("'%s'",$uid_list)).") AND blocked = 0 $let order by uid LIMIT ".$page*PER_PAGE.",".PER_PAGE;
+		$this->db_query($q);
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"uid"				=> $row["uid"], 
+				"logs"				=> $row["logins"],
+				"online"			=> $row["online"] == 1 ? LC_YES : LC_NO,
+				"last"				=> $this->time2date($row["lastaction"],2),
+				"change"			=> $this->mk_orb("change", array("id" => $row["uid"])),
+				"delete"			=> $this->mk_orb("delete", array("id" => $row["uid"])),
+				"change_pwd"			=> $this->mk_orb("change_pwd", array("id" => $row["uid"])),
+				"settings" => $this->mk_my_orb("settings", array("id" => $row["uid"])),
+				"log" => $this->mk_my_orb("user_stats", array("s_uid" => $row["uid"])),
+				"acl" => $this->mk_my_orb("user_acl", array("s_uid" => $row["uid"]))
+			));
+			$cc = ""; $cd = ""; $cpw = "";
+			if ($users[$row["uid"]]["can_change"])
 			{
-				$this->vars(array(
-					"uid"				=> $row["uid"], 
-					"logs"				=> $row["logins"],
-					"online"			=> $row["online"] == 1 ? LC_YES : LC_NO,
-					"last"				=> $this->time2date($row["lastaction"],2),
-					"change"			=> $this->mk_orb("change", array("id" => $row["uid"])),
-					"delete"			=> $this->mk_orb("delete", array("id" => $row["uid"])),
-					"change_pwd"			=> $this->mk_orb("change_pwd", array("id" => $row["uid"])),
-					"settings" => $this->mk_my_orb("settings", array("id" => $row["uid"]))
-				));
-				$cc = ""; $cd = ""; $cpw = "";
-				if ($users[$row["uid"]]["can_change"])
-				{
-					$cc = $this->parse("CAN_CHANGE");
-					$cpw = $this->parse("CAN_PWD");
-				}
-				if ($users[$row["uid"]]["can_del"])
-				{
-					$cd = $this->parse("CAN_DEL");
-				}
-				$this->vars(array("CAN_CHANGE" => $cc, "CAN_DEL" => $cd, "CAN_PWD" => $cpw));
-				$l.=$this->parse("LINE");
+				$cc = $this->parse("CAN_CHANGE");
+				$cpw = $this->parse("CAN_PWD");
 			}
+			if ($users[$row["uid"]]["can_del"])
+			{
+				$cd = $this->parse("CAN_DEL");
+			}
+			$this->vars(array(
+				"CAN_CHANGE" => $cc, 
+				"CAN_DEL" => $cd, 
+				"CAN_PWD" => $cpw
+			));
+			$l.=$this->parse("LINE");
+		}
 		$this->vars(array(
 			"LINE" => $l,
-			"add"		=> $this->mk_orb("add_user", array())));
+			"add"		=> $this->mk_orb("add_user", array())
+		));
 		$ad = "";
 		if ($this->prog_acl("add", PRG_USERS))
 		{
@@ -1208,9 +1301,10 @@ class users extends users_user
 		classload("currency");
 		$cu = new currency;
 		$cul = $cu->get_list();
-	
-		$ccur = $this->get_user_config(array("uid" => $id, "key" => "user_currency"));
 
+		$userconfig = $this->get_user_config(array("uid" => $id));
+		$ccur = $userconfig["user_currency"];
+	
 		foreach($cul as $cuid => $cuname)
 		{
 			$this->vars(array(
@@ -1231,9 +1325,17 @@ class users extends users_user
 			$eid = $this->get_user_config(array("uid" => $id, "key" => "info_entry"));
 			$this->vars(array("form" => $f->gen_preview(array("id" => $fo, "entry_id" => $eid,"silent_errors" => true,"reforb" => $this->mk_reforb("submit_user_info", array("entry_id" => $eid,"u_uid" => $id),"users")))));
 		}
+
+		$calendars = array();
+		$this->get_objects_by_class(array("class" => CL_CALENDAR));
+		while($row = $this->db_next())
+		{
+			$calendars[$row["oid"]] = ($row["name"]) ? $row["name"] : "(nimetu)";
+		};
 		$this->vars(array(
 			"LANG" => $lp,
 			"CUR" => $ccr,
+			"calendar" => $this->picker($userconfig["calendar"],$calendars),
 			"reforb" => $this->mk_reforb("submit_settings", array("id" => $id))
 		));
 		return $this->parse();
@@ -1278,7 +1380,7 @@ class users extends users_user
 	{
 		extract($arr);
 
-		$this->set_user_config(array("uid" => $id, "key" => "user_currency", "value" => $currency));
+		$this->set_user_config(array("uid" => $id, "data" => array("user_currency" => $currency,"calendar" => $calendar)));
 
 		classload("languages");
 		$t = new languages;
@@ -1290,6 +1392,483 @@ class users extends users_user
 
 		$this->_log("user", $GLOBALS["uid"]." changed settings ");
 		return $this->mk_my_orb("settings", array("id" => $id));
+	}
+
+	////
+	// !statistics about users
+	function user_stats($arr)
+	{
+		extract($arr);
+		$this->read_template("stats.tpl");
+		$this->vars(array(
+			"add"		=> $this->mk_my_orb("add_user", array()),
+			"search" => $this->mk_my_orb("gen_list", array("search" => 1)),
+			"stats" => $this->mk_my_orb("user_stats", array()),
+			"s_uid" => $s_uid,
+			"syslog_url" => $GLOBALS["baseurl"]."/monitor.".$GLOBALS["ext"]."?filter_uid=".$s_uid,
+		));
+		if ($this->prog_acl("add", PRG_USERS))
+		{
+			$ad = $this->parse("ADD");
+		}
+		if ($s_uid != "")
+		{
+			$uo = $this->parse("USER_ONLY");
+		}
+		$this->vars(array(
+			"USER_ONLY" => $uo,
+			"ADD" => $ad,
+			"NO_SEARCH" => $this->parse("IS_SEARCH")
+		));
+
+		$de = new date_edit("from");
+		$de->configure(array(
+			"year" => "",
+			"month" => "",
+			"day" => "",
+			"hour" => ""
+		));
+
+		if ($from["year"])
+		{
+			$s_from = mktime(0,0,0,$from["month"],$from["day"],$from["year"]);
+		}
+		if ($to["year"])
+		{
+			$s_to = mktime(0,0,0,$to["month"],$to["day"],$to["year"]);
+		}
+
+		$this->vars(array(
+			"join_sel" => checked($stat_type == "join"),
+			"login_sel" => checked($stat_type == "login"),
+			"hour_sel" => checked($stat_span == "hour"),
+			"day_sel" => checked($stat_span == "day"),
+			"week_sel" => checked($stat_span == "week"),
+			"month_sel" => checked($stat_span == "month"),
+			"year_sel" => checked($stat_span == "year"),
+			"bar_sel" => checked($graph_type == "BarGraph"),
+			"line_sel" => checked($graph_type == "LineGraph"),
+			"pie_sel" => checked($graph_type == "PieGraph"),
+			"from" => $de->gen_edit_form("from", $s_from, 1999,2005,true),
+			"to" => $de->gen_edit_form("to", $s_to, 1999,2005,true),
+			"reforb" => $this->mk_reforb("user_stats", array("no_reforb" => 1,"s_uid" => $s_uid))
+		));
+
+		if ($stat_type != "" && $stat_span != "")
+		{
+			if ($stat_type == "join")
+			{
+				$this->mk_join_stats(array("from" => $s_from,"to" => $s_to,"span" => $stat_span,"typestr" => $graph_type,"s_uid" => $s_uid));
+			}
+			else
+			if ($stat_type == "login")
+			{
+				$this->mk_login_stats(array("from" => $s_from,"to" => $s_to,"span" => $stat_span,"typestr" => $graph_type,"s_uid" => $s_uid));
+			}
+
+			$this->vars(array(
+				"STATS" => $this->parse("STATS")
+			));
+		}
+		return $this->parse();
+	}
+
+	function mk_join_stats($arr)
+	{
+		extract($arr);
+
+		$lt = array();
+		if ($s_from)
+		{
+			$lt[] = " created > $s_from ";
+		}
+		if ($s_to)
+		{
+			$lt[] = " created < $s_to ";
+		}
+		if ($s_uid != "")
+		{
+			$lt[] = " uid = '$s_uid' ";
+		}
+
+		$dat = array();
+		switch ($span)
+		{
+			case "hour":
+				$grp = " GROUP BY users.created_hour "; 
+				$get = " created_hour";
+				$xtitle = "Tund";
+				for ($i=0; $i < 24; $i++)
+				{
+					$dat[$i] = array("cnt" => 0, "span" => $i);
+				}
+				break;
+			case "week":
+				$grp = " GROUP BY users.created_week "; 
+				$get = " created_week";
+				$xtitle = "N&auml;dalap&auml;ev";
+				for ($i=0; $i < 7; $i++)
+				{
+					$dat[$i] = array("cnt" => 0, "span" => $i);
+				}
+				break;
+			case "day":
+				$grp = " GROUP BY users.created_day "; 
+				$get = " created_day";
+				$xtitle = "P&auml;ev";
+				break;
+			case "month":
+				$grp = " GROUP BY users.created_month "; 
+				$get = " created_month";
+				$xtitle = "Kuu";
+				for ($i=0; $i < 12; $i++)
+				{
+					$dat[$i] = array("cnt" => 0, "span" => $i);
+				}
+				break;
+			case "year":
+				$grp = " GROUP BY users.created_year "; 
+				$get = " created_year";
+				$xtitle = "Aasta";
+				break;
+		}
+
+		$wh = join("AND",$lt);
+		if ($wh != "")
+		{
+			$wh = " WHERE ".$wh;
+		}
+		$max = 0;
+		$min = 2000000000;
+
+		$this->db_query("SELECT count(*) as cnt,$get as span FROM users $wh $grp");
+		while ($row = $this->db_next())
+		{
+			$dat[$row["span"]] = $row;
+			$max = max($max,$row["cnt"]);
+			$min = min($min,$row["cnt"]);
+		}
+
+		$xvals = array();
+		$yvals = array();
+		foreach($dat as $_rsp => $row)
+		{
+			if ($max < 1)
+			{
+				$width="0";
+			}
+			else
+			{
+				$width = 200*($row["cnt"]/$max);
+			}
+			if ($span == "day")
+			{
+				$tm = $this->time2date($row["span"],8);
+			}
+			else
+			if ($span == "week")
+			{
+				$tm = get_lc_weekday($row["span"]+1);
+			}
+			else
+			if ($span == "month")
+			{
+				$tm = get_lc_month($row["span"]+1);
+			}
+			else
+			{
+				$tm = $row["span"];
+			}
+			$this->vars(array(
+				"time" => $tm,
+				"cnt" => $row["cnt"],
+				"width" => $width
+			));
+			$sl.=$this->parse("STAT_LINE");
+			$xvals[] = $tm;
+			$data[] = $row["cnt"];
+		}
+
+		$yvals = array(0,$max);
+		$this->vars(array(
+			"STAT_LINE" => $sl,
+			"graph" => $this->mk_my_orb("stat_chart", array(
+				"xvals" => urlencode(join(",",$xvals)), 
+				"yvals" => urlencode(join(",",$yvals)),
+				"data" => urlencode(join(",",$data)),
+				"title" => "Liitumisi",
+				"xtitle" => $xtitle,
+				"ytitle" => "Liitumisi",
+				"typestr" => $typestr
+			),"banner")
+		));
+	}
+
+	function mk_login_stats($arr)
+	{
+		extract($arr);
+
+		$lt = "";
+		if ($s_from)
+		{
+			$lt .= " AND tm > $s_from ";
+		}
+		if ($s_to)
+		{
+			$lt .= " AND tm < $s_to ";
+		}
+		if ($s_uid)
+		{
+			$lt.=" AND uid = '$s_uid' ";
+		}
+
+		$dat = array();
+		switch ($span)
+		{
+			case "hour":
+				$grp = " GROUP BY created_hour "; 
+				$get = " created_hour";
+				$xtitle = "Tund";
+				for ($i=0; $i < 24; $i++)
+				{
+					$dat[$i] = array("cnt" => 0, "span" => $i);
+				}
+				break;
+			case "week":
+				$grp = " GROUP BY created_week "; 
+				$get = " created_week";
+				$xtitle = "N&auml;dalap&auml;ev";
+				for ($i=0; $i < 7; $i++)
+				{
+					$dat[$i] = array("cnt" => 0, "span" => $i);
+				}
+				break;
+			case "day":
+				$grp = " GROUP BY created_day "; 
+				$get = " created_day";
+				$xtitle = "P&auml;ev";
+				break;
+			case "month":
+				$grp = " GROUP BY created_month "; 
+				$get = " created_month";
+				$xtitle = "Kuu";
+				for ($i=0; $i < 12; $i++)
+				{
+					$dat[$i] = array("cnt" => 0, "span" => $i);
+				}
+				break;
+			case "year":
+				$grp = " GROUP BY created_year "; 
+				$get = " created_year";
+				$xtitle = "Aasta";
+				break;
+		}
+
+		$max = 0;
+		$min = 2000000000;
+
+		$this->db_query("SELECT count(*) as cnt,$get as span FROM syslog WHERE type = 'auth' $lt $grp");
+		while ($row = $this->db_next())
+		{
+			$dat[$row["span"]] = $row;
+			$max = max($max,$row["cnt"]);
+			$min = min($min,$row["cnt"]);
+		}
+
+		$xvals = array();
+		$yvals = array();
+		foreach($dat as $_rsp => $row)
+		{
+			if ($max < 1)
+			{
+				$width="0";
+			}
+			else
+			{
+				$width = 200*($row["cnt"]/$max);
+			}
+			if ($span == "day")
+			{
+				$tm = $this->time2date($row["span"],8);
+			}
+			else
+			if ($span == "week")
+			{
+				$tm = get_lc_weekday($row["span"]+1);
+			}
+			else
+			if ($span == "month")
+			{
+				$tm = get_lc_month($row["span"]+1);
+			}
+			else
+			{
+				$tm = $row["span"];
+			}
+			$this->vars(array(
+				"time" => $tm,
+				"cnt" => $row["cnt"],
+				"width" => $width
+			));
+			$sl.=$this->parse("STAT_LINE");
+			$xvals[] = $tm;
+			$data[] = $row["cnt"];
+		}
+
+		$yvals = array(0,$max);
+		$this->vars(array(
+			"STAT_LINE" => $sl,
+			"graph" => $this->mk_my_orb("stat_chart", array(
+				"xvals" => urlencode(join(",",$xvals)), 
+				"yvals" => urlencode(join(",",$yvals)),
+				"data" => urlencode(join(",",$data)),
+				"title" => "Sisse logimisi",
+				"xtitle" => $xtitle,
+				"ytitle" => "Logimisi",
+				"typestr" => $typestr
+			),"banner")
+		));
+	}
+
+	function convusers()
+	{
+		$this->db_query("SELECT * FROM users");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$this->db_query("UPDATE users SET created_hour = '".(date("H",$row["created"]))."', created_day = '".(mktime(0,0,0,date("m",$row["created"]),date("d",$row["created"]),date("Y",$row["created"])))."', created_week = '".(date("w",$row["created"]))."', created_month = '  ".(date("m",$row["created"]))."', created_year = '".(date("Y",$row["created"]))."' WHERE uid = '".$row["uid"]."'");
+			echo "updated $row[uid] <Br>";
+			flush();
+			$this->restore_handle();
+		}
+	}
+
+	function convsyslog()
+	{
+		$this->db_query("SELECT * FROM syslog");
+		$cnt=0;
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$this->db_query("UPDATE syslog SET created_hour = '".(date("H",$row["tm"]))."', created_day = '".(mktime(0,0,0,date("m",$row["tm"]),date("d",$row["tm"]),date("Y",$row["tm"])))."', created_week = '".(date("w",$row["tm"]))."', created_month = '  ".(date("m",$row["tm"]))."', created_year = '".(date("Y",$row["tm"]))."' WHERE id = '".$row["id"]."'");
+			if (($cnt % 100) == 0)
+			{
+				echo "updated $cnt records <Br>";
+				flush();
+			}
+			$cnt++;
+			$this->restore_handle();
+		}
+	}
+
+	////
+	// !displays objects that the user s_uid has been assigned acls to
+	function user_acl($arr)
+	{
+		extract($arr);
+		$per_page = 50;
+		$this->read_template("user_acl.tpl");
+		$this->vars(array(
+			"add"		=> $this->mk_my_orb("add_user", array()),
+			"list" => $this->mk_my_orb("gen_list", array("search" => 0)),
+			"stats" => $this->mk_my_orb("user_stats", array()),
+		));
+		if ($this->prog_acl("add", PRG_USERS))
+		{
+			$ad = $this->parse("ADD");
+		}
+		$this->vars(array(
+			"ADD" => $ad,
+			"NO_SEARCH" => $this->parse("IS_SEARCH")
+		));
+
+		$acl_list = $this->acl_list_acls();
+		foreach($acl_list as $bp => $acl_name)
+		{
+			$this->vars(array(
+				"acl_name" => $acl_name
+			));
+			$at .= $this->parse("ACL_TITLE");
+		}
+		$this->vars(array(
+			"ACL_TITLE" => $at
+		));
+
+		$grp = $this->get_user_group($GLOBALS["uid"]);
+
+		$obj = new objects;
+		$ol = $obj->get_list();
+
+		$num = $this->db_fetch_field("SELECT COUNT(*) as cnt FROM acl WHERE gid = ".$grp["gid"],"cnt");
+		$pages = $num/$per_page;
+		for ($i=0; $i < $pages; $i++)
+		{
+			$this->vars(array(
+				"from" => $i*$per_page,
+				"to" => min(($i+1)*$per_page,$num),
+				"link" => $this->mk_my_orb("user_acl", array("s_uid" => $s_uid,"page" => $i))
+			));
+			if ($i == $page)
+			{
+				$ps.=$this->parse("SEL_PAGE");
+			}
+			else
+			{
+				$ps.=$this->parse("PAGE");
+			}
+		}
+		$this->vars(array(
+			"PAGE" => $ps,
+			"SEL_PAGE" => ""
+		));
+
+		$this->acl_get_acls_for_grp($grp["gid"],$page*$per_page,$per_page);
+		while ($row = $this->db_next())
+		{
+			$this->vars(array(
+				"oid" => $row["oid"],
+				"o_name" => $ol[$row["oid"]]."/".$row["name"],
+			));
+
+			$at = "";
+			foreach($acl_list as $bp => $acl_name)
+			{
+				$this->vars(array(
+					"acl_name" => $acl_name,
+					"checked" => checked($row[$acl_name] == ALLOWED),
+					"acl_value" => $row[$acl_name]
+				));
+				$at .= $this->parse("ACL_CELL");
+			}
+			$this->vars(array(
+				"ACL_CELL" => $at
+			));
+			$al.=$this->parse("ACL_LINE");
+		}
+		$this->vars(array(
+			"ACL_LINE" => $al,
+			"reforb" => $this->mk_reforb("submit_user_acl", array("s_uid" => $s_uid,"page" => $page))
+		));
+		return $this->parse();
+	}
+
+	function submit_user_acl($arr)
+	{
+		extract($arr);
+		$grp = $this->get_user_group($GLOBALS["uid"]);
+
+		foreach($old_acls as $oid => $odata)
+		{
+			$acl_list = $this->acl_list_acls();
+			foreach($acl_list as $bp => $acl_name)
+			{
+				if (((int)$acls[$oid][$acl_name]) != ((int)$odata[$acl_name]))
+				{
+					$this->save_acl_masked($oid,$grp["gid"],array($acl_name => $acls[$oid][$acl_name]),array($acl_name => 1));
+				}
+			}
+		}
+		return $this->mk_my_orb("user_acl", array("s_uid" => $s_uid,"page" => $page));
 	}
 }
 ?>
