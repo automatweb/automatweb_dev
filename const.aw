@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.85 2003/12/18 11:14:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.86 2004/01/08 07:43:20 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -22,6 +22,9 @@ if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
 {
 	$pi .= "?".$QUERY_STRING;
 };
+
+$pi = preg_replace("/\?automatweb=[^&]*/","", $pi);
+$_SERVER["REQUEST_URI"] = preg_replace("/\?automatweb=[^&]*/","", $_SERVER["REQUEST_URI"]);
 
 if ($pi) 
 {
