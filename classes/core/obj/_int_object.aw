@@ -1636,7 +1636,9 @@ class _int_object
 		{
 			// find all of its brothers and delete all of them. 
 			list($tmp) = $GLOBALS["object_loader"]->ds->search(array(
-				"brother_of" => $oid
+				"brother_of" => $oid,
+				"lang_id" => array(),
+				"site_id" => array()
 			));
 			$todelete = array_keys($tmp);
 		}
