@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kui kasutaja on sisse loginud, siis täidab e-posti ja nime välja automaatselt</caption>
+            <caption>Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt</caption>
       </property>
       <property>
             <name>topic_folder</name>
@@ -55,7 +55,7 @@
       <property>
             <name>topic_depth</name>
             <table>objects</table>
-            <group>general</group>
+            <group>topic_selector</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
