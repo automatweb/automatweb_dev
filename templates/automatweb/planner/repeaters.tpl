@@ -463,7 +463,6 @@ function toggle_year()
 {VAR:reforb}
 </td>
 </tr>
-<input type="button" onClick="alert(document.repeater.region1.checked)" value="krt">
 </form>
 </table>
 

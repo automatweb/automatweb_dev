@@ -1,7 +1,7 @@
 <div align="center">
 <span class="lefttab">
 <a href="/?class=planner&action=show_week&date={VAR:prev}">&lt;&lt;</a>
-<big><b>Nädal</b></big>
+<big><b>{VAR:LC_PLANNER_WEEKK}</b></big>
 <a href="/?class=planner&action=show_week&date={VAR:next}">&gt;&gt;</a>
 </span>
 </div>

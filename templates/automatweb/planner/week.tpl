@@ -1,6 +1,6 @@
 <table border="0" cellspacing="0" cellpadding="0" width="100%">
 <tr>
-<td class="lefttab" colspan="2" align="center">Nädala plaan</td>
+<td class="lefttab" colspan="2" align="center">{VAR:LC_PLANNER_WEEK_PLAN}</td>
 </tr>
 <!-- SUB: line -->
 <tr>
