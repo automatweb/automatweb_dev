@@ -45,8 +45,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>select</type>
             <caption>Kuva dokumendis s&amp;uuml;ndmuse sisu</caption>
       </property>
       <property>
