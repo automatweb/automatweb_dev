@@ -60,155 +60,6 @@ switch($action)
 		header("Location: periods.$ext?oid=$oid");
 		exit;
 
-// ----------- formide funktsioonid												
-		case "admin_output":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$t->admin_output($HTTP_POST_VARS);
-			header("Location: forms.$ext?type=output_list&id=$id");
-			break;
-
-		case "save_output_grid":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$t->save_output_grid($HTTP_POST_VARS);
-			header("Location: forms.$ext?type=output_grid&id=$id&op_id=$op_id");
-			break;
-
-		case "save_output_settings":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$t->save_output_settings($HTTP_POST_VARS);
-			header("Location: forms.$ext?type=output_settings&id=$id&op_id=$op_id");
-			break;
-
-		case "save_output_metadata":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$t->save_output_metadata($HTTP_POST_VARS);
-			header("Location: forms.$ext?type=output_meta&id=$id&op_id=$op_id");
-			break;
-
-		case "save_metadata":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$t->save_metainfo($HTTP_POST_VARS);
-			header("Location: forms.$ext?type=metainfo&id=$id");
-			break;
-		
-		case "export_data":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$t->export_data($HTTP_POST_VARS);
-			die();
-			break;
-
-		case "import_data":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$fn = $t->import_data();
-			header("Location: forms.$ext?type=import_contents&step=2&id=$id&fname=$fn&ftype=$ftype&numrows=$numrows");
-			break;
-
-		case "import_data_step2":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$fn = $t->import_data();
-			die();
-			break;
-
-		case "admin_cell":
-			include("$classdir/form.$ext");
-			$t = new form_cell($id, $row, $col);
-			$t->save(&$HTTP_POST_VARS);
-			header("Location: forms.$ext?type=change_form_cell&f_id=$id&col=$col&row=$row#el_".$savedfrom);
-			break;
-
-		case "save_form_grid":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$t->save_grid();
-			header("Location: forms.$ext?type=grid&id=$id");
-			break;
-
-		case "save_form_settings":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$t->save_settings($HTTP_POST_VARS);
-			header("Location: forms.$ext?type=settings&id=$id");
-			break;
-
-		case "save_form_actions":
-			include("$classdir/form.$ext");
-			$t = new form($id);
-			$t->save_actions($HTTP_POST_VARS);
-			header("Location: forms.$ext?type=actions&id=$id");
-			break;
-
-	case "save_entry":
-		include("$classdir/form.$ext");
-		$f = new form($id);
-		$entry_id = $f->process_entry($entry_id, true);
-		switch ($f->get_location())
-		{
-			case "text":
-				header("Location: forms.$ext?type=ae_text&id=$id&entry_id=$entry_id");
-				break;
-			case "redirect":
-				header("Location: ".$f->get_ae_location());
-				break;
-			case "search_results":
-				header("Location: forms.$ext?type=show_entry&id=$id&entry_id=$entry_id");
-				break;
-			default:
-				header("Location: forms.$ext?type=change_entry&id=$id&entry_id=$entry_id");
-				break;
-		}
-		break;
-
-	case "add_form":
-		include("$classdir/form_categories.$ext");
-		$t = new form_categories;
-		$t->add_form_submit($HTTP_POST_VARS);
-		header("Location: forms.$ext?type=list&parent=$parent");
-		break;
-
-	case "submit_form_category":
-		include("$classdir/form_categories.$ext");
-		$t = new form_categories;
-		$parent = $t->submit_category($HTTP_POST_VARS);
-		header("Location: forms.$ext?type=list&parent=$parent");
-		break;
-	
-	case "set_category_style":
-		include("$classdir/form_categories.$ext");
-		$t = new form_categories;
-		$t->save_default_style($HTTP_POST_VARS);
-		header("Location: forms.$ext?type=list&parent=$parent");
-		break;
-
-	case "export_forms":
-		classload("form_categories");
-		classload("form");
-		$t = new form_categories;
-		$t->export_forms();
-		break;
-
-	case "import_forms":
-		classload("form_categories");
-		classload("form");
-		$t = new form_categories;
-		$t->import_forms($level,$parent);
-		header("Location: forms.$ext?type=list&parent=$parent");
-		break;
-
-	case "save_search_sel":
-		classload("form");
-		$t = new form($id);
-		$t->save_search_sel($HTTP_POST_VARS);
-		header("Location: forms.aw?type=sel_search&id=$id");
-		break;
-
 	case "submit_menu":
 		classload("objects");
 		classload("menuedit");
@@ -234,23 +85,6 @@ switch($action)
 			$hsuff = "";
 		};
 		header("Location: menuedit.$ext?parent=$parent&menu=menu$hsuff");
-		break;
-
-	case "submit_filled_cat":
-		classload("form");
-		$t = new form($id);
-		$parent = $t->submit_filled_cat($HTTP_POST_VARS);
-		header("Location: forms.$ext?type=filled_forms&level=1&parent=$parent&id=$id&op_id=$op_id");
-		break;
-
-	case "submit_action":
-		classload("form");
-		$t = new form($id);
-		$aid = $t->submit_action($HTTP_POST_VARS);
-		if ($level < 1)
-			header("Location: forms.$ext?type=change_action&level=1&action_id=$aid&id=$id");
-		else
-			header("Location: forms.$ext?type=actions&id=$id");
 		break;
 
 	case "submit_list":
@@ -328,29 +162,6 @@ switch($action)
 		header("Location: list.$ext?type=list_stamps");
 		break;
 
-	case "cut_forms":
-		classload("form_categories");
-		classload("form");
-		$t = new form_categories;
-		$t->cut_forms();
-		header("Location: forms.$ext?type=list&parent=$parent");
-		break;
-
-	case "delete_forms":
-		classload("form_categories");
-		classload("form");
-		$t = new form_categories;
-		$t->delete_forms();
-		header("Location: forms.$ext?type=list&parent=$parent");
-		break;
-
-	case "alias_type":
-		classload("document");
-		$docs = new document;
-		$docs->add_alias($docid,$alias,serialize(array("type" => $type, "output" => $output, "form_id" => $form_id)));
-		header("Location: documents.$ext?docid=$docid");
-		break;
-
 	case "admin_promo":
 		classload("menuedit");
 		$t = new menuedit;
@@ -370,37 +181,6 @@ switch($action)
 		$t = new mlist($list_id);
 		$t->submit_change_vars($HTTP_POST_VARS);
 		header("Location: list.$ext?parent=$parent");
-		break;
-
-	case "expander":
-		classload("menuedit");
-		$m = new menuedit;
-		if ($exp_all)
-			$m->open_all(1);
-		else
-			$m->open_all(0);
-		header("Location: menuedit.$ext?parent=$parent");
-		break;
-
-	case "submit_mailbox_conf":
-		classload("mailbox");
-		$t = new mailbox;
-		$t->configure_submit($HTTP_POST_VARS);
-		header("Location: mail_frameset.html");
-		break;
-
-	case "submit_mail_folder":
-		classload("mailbox");
-		$t = new mailbox;
-		$t->submit_folder($HTTP_POST_VARS);
-		header("Location: mail.aw?type=folders&parent=$parent");
-		break;
-
-	case "submit_mail":
-		classload("mailbox");
-		$t = new mailbox;
-		$t->mail_submit($HTTP_POST_VARS);
-		header("Location: mail.aw?type=show_mail");
 		break;
 
 	//Graafikute asjad
@@ -442,28 +222,10 @@ switch($action)
 		break;
 	//Graafikute asjade l6pp
 
-	case "submit_msg_list":
-		classload("mailbox");
-		$t = new mailbox;
-		$t->submit_list($HTTP_POST_VARS);
-		header("Location: mail.$ext?parent=$parent");
-		break;
-
 	case "submit_change_user":
 		$t = new users;
 		$t->submit_change($HTTP_POST_VARS);
 		header("Location: users.$ext?gid=$gid");
-		break;
-
-	case "user_change_pwd":
-		$t = new users;
-		if (!$t->submit_change_pwd($HTTP_POST_VARS))
-		{
-			header("Location: users.$ext?type=change_pwd&uid=$uid&gid=$gid");
-			$error = "Passwordid polnud samad!";
-		}
-		else
-			header("Location: users.$ext?gid=$gid");
 		break;
 
 	case "adduser":
@@ -499,12 +261,6 @@ switch($action)
 		header("Location: $from");
 		break;
 
-	case "menuedit_prygikoll":
-		classload("menuedit");
-		$t = new menuedit;
-		$t->do_prygikoll($HTTP_POST_VARS);
-		header("Location: menuedit.$ext?menu=menu&parent=$destination");
-		break;
 	case "savedocuments":
 		classload("menuedit");
 		$t = new menuedit;
@@ -535,13 +291,6 @@ switch($action)
 		print " ";
 		exit;
 
-	case "move_documents":
-		classload("menuedit");
-		$t = new menuedit;
-		$t->submit_move_docs($HTTP_POST_VARS);
-		header("Location: menuedit.$ext?parent=$dest");
-		break;
-
 	case "update_grp_priorities":
 		classload("groups");
 		$t = new groups;
@@ -568,13 +317,6 @@ switch($action)
 		$t = new acl;
 		$t->ui_save_acl($HTTP_POST_VARS);
 		header("Location: editacl.$ext?oid=$oid&file=$file");
-		break;
-
-	case "sel_kroonika_pilt":
-		classload("kroonika_top");
-		$t = new kroonika_top;
-		$t->save($HTTP_POST_VARS);
-		header("Location: kroonika_top.aw");
 		break;
 
 	case "admin_search_conf":
