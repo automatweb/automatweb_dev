@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.10 2002/07/23 13:00:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.11 2002/08/12 19:57:22 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -25,7 +25,7 @@ class cache extends core
 	{
 		if (aw_ini_get("cache.use_page_cache") && !aw_global_get("uid"))
 		{
-			$fname = "/$oid";
+			$fname = "/".str_replace("/","_",$oid);
 			reset($arr);
 			while (list(,$v) = each($arr))
 			{
@@ -58,7 +58,7 @@ class cache extends core
 	{
 		if (aw_ini_get("cache.use_page_cache") && !aw_global_get("uid"))
 		{
-			$fname = "/$oid";
+			$fname = "/".str_replace("/","_",$oid);
 			reset($arr);
 			while (list(,$v) = each($arr))
 			{
