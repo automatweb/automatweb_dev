@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.24 2003/01/14 10:25:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.25 2003/01/27 09:45:29 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -398,8 +398,26 @@ class form_element extends aw_template
 				{
 					$this->vars(array("LISTBOX_SORT_ACTIVITY" => $this->parse("LISTBOX_SORT_ACTIVITY")));
 				}
+
+				$lbdforms = $this->list_objects(array(
+					"class" => CL_FORM,
+					"ret" => ARR_NAME,
+					"addempty" => true
+				));
+				asort($lbdforms);
+				$lbdeels = array("0" => "");
+				if ($this->arr["lb_data_from_form"])
+				{
+					$lbdeels = $this->form->get_elements_for_forms(array($this->arr["lb_data_from_form"]),false, true);
+				}
 				$this->vars(array(
-					"LISTBOX_SORT" => $this->parse("LISTBOX_SORT")
+					"lb_data_from_form" => $this->picker($this->arr["lb_data_from_form"], $lbdforms),
+					"lb_data_from_el" => $this->picker($this->arr["lb_data_from_el"], $lbdeels)
+				));
+
+				$this->vars(array(
+					"LISTBOX_SORT" => $this->parse("LISTBOX_SORT"),
+					"LB_MUL_DS" => $this->parse("LB_MUL_DS")
 				));
 			}
 
@@ -886,6 +904,15 @@ class form_element extends aw_template
 			{
 				$this->arr["metadata"][$this->form->lang_id][$vl] = $varv[$nr];
 			}
+		}
+
+		if ($this->arr["type"] == "listbox" || $this->arr["type"] == "multiple")
+		{
+			$var = $base."_lb_data_from_form";
+			$this->arr["lb_data_from_form"] = $$var;
+
+			$var = $base."_lb_data_from_el";
+			$this->arr["lb_data_from_el"] = $$var;
 		}
 
 		if ($this->arr["type"] == "listbox")
@@ -1922,6 +1949,24 @@ class form_element extends aw_template
 					$rel = true;
 					$this->make_relation_listbox_content();
 				}
+				else
+				if ($this->arr["lb_data_from_form"] && $this->arr["lb_data_from_el"])
+				{
+					$opts = array(
+						"rel_form" => $this->arr["lb_data_from_form"],
+						"rel_element" => $this->arr["lb_data_from_form"],
+						"sort_by_alpha" => $this->arr["sort_by_alpha"],
+						"rel_unique" => $this->arr["rel_unique"],
+						"ret_ids" => true,
+					);
+					list($cnt,$vals) = $this->form->get_entries_for_element($opts);
+					foreach($vals as $e_id => $e_val)
+					{
+						$this->arr["listbox_items"][$e_id] = $e_val;
+					}
+					$this->arr["listbox_count"] = $cnt;
+				}
+
 				if (!$this->arr['hidden'])
 				{
 					$html .="<select $disabled $stat_check name='".$element_name."'";
@@ -2035,6 +2080,25 @@ class form_element extends aw_template
 				break;
 
 			case "multiple":
+				if ($this->arr["lb_data_from_form"] && $this->arr["lb_data_from_el"])
+				{
+					$opts = array(
+						"rel_form" => $this->arr["lb_data_from_form"],
+						"rel_element" => $this->arr["lb_data_from_el"],
+						"sort_by_alpha" => $this->arr["sort_by_alpha"],
+						"rel_unique" => $this->arr["rel_unique"],
+						"ret_ids" => true,
+					);
+					$this->arr["multiple_items"] = array();
+					$this->arr["multiple_lang_items"] = array();
+					list($cnt,$vals) = $this->form->get_entries_for_element($opts);
+					foreach($vals as $e_id => $e_val)
+					{
+						$this->arr["multiple_items"][$e_id] = $e_val;
+						$this->arr["multiple_lang_items"][$lang_id][$e_id] = $e_val;
+					}
+					$this->arr["multiple_count"] = count($vals);;
+				}
 				$html.="<select $disabled $stat_check NAME='".$element_name."[]' MULTIPLE";
 				if ($this->arr["mb_size"] > 1)
 				{
@@ -2056,7 +2120,7 @@ class form_element extends aw_template
 					$larr = $this->arr["multiple_items"];
 				}
 
-				for ($b=0; $b < $this->arr["multiple_count"]; $b++)
+				foreach($larr as $b => $itval)
 				{
 					$sel = false;
 					if ($this->entry_id)
@@ -2081,7 +2145,7 @@ class form_element extends aw_template
 					{
 						foreach($this->arr["lb_item_controllers"] as $ctrlid)
 						{
-							if (($res = $this->form->controller_instance->do_check($ctrlid, $larr[$b], &$this->form, $this)) !== true)
+							if (($res = $this->form->controller_instance->do_check($ctrlid, $itval, &$this->form, $this)) !== true)
 							{
 								$controllers_ok = false;
 							}
@@ -2090,7 +2154,7 @@ class form_element extends aw_template
 
 					if ($controllers_ok)
 					{
-						$html.="<option ".selected($sel == true)." VALUE='$b'>".$larr[$b] ."</option>";
+						$html.="<option ".selected($sel == true)." VALUE='$b'>".$itval ."</option>";
 					}
 				}
 				$html.="</select>\n";
