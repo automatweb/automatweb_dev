@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.62 2004/03/12 12:46:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.63 2004/03/12 12:50:07 duke Exp $
 
 lc_load("definition");
 
@@ -270,7 +270,8 @@ class acl_base extends db_connector
 			// try for file cache
 			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
 			$hash = md5($fn);
-			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$hash{1}."/".$hash{2}."/".$fn;
+			//$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$hash{1}."/".$hash{2}."/".$fn;
+			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$fn;
 			if (file_exists($fqfn))
 			{
 				include($fqfn);
