@@ -38,6 +38,8 @@ class relmanager extends aw_template
 			// XXX: should we support multiple classes?
 			"class" => $prop["clid"][0],
 		));	
+		
+		$this->kala = "tursk";
 
 		// load properties for the target class and then add lines to the
 		// table
@@ -55,9 +57,12 @@ class relmanager extends aw_template
 			"name" => "chooser",
 			"caption" => "Vali üks",
 			"align" => "center",
+			"width" => 100,
 		));
 
 		$proplist = is_array($prop["props"]) ? $prop["props"] : array($prop["props"]);
+
+		$xproplist = array();
 
 		foreach($props as $item)
 		{
@@ -104,17 +109,22 @@ class relmanager extends aw_template
 
 		// how do I get saving to work?
 		// that translates into getting 
-		$this->t->define_data(array(
+		$addline = array(
 			"chooser" => html::hidden(array(
 				"name" => $prefix . "[parent]",
 				// XXX: There might be a need to use different parents
 				"value" => $arr["obj_inst"]->parent(),
 			)) . " Uus ",
-			"mail" => html::textbox(array(
-				"name" => $prefix . "[mail]",
-			)),
-		));
+		);
 
+		foreach($proplist as $propitem)
+		{
+			$addline[$propitem] = html::textbox(array(
+					"name" => $prefix . "[" . $propitem . "]",
+			));
+		};
+
+		$this->t->define_data($addline);
 	}
 
 	function get_html()

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.4 2004/01/13 14:16:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.5 2004/01/19 11:47:30 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -151,7 +151,7 @@ class vcalendar extends aw_template
 			"day" => "Päev",
 			"week" => "Nädal",
 			"month" => "Kuu",
-			"relative" => "Suhteline",
+			"relative" => "Ülevaade",
 		);
 		$ts = "";
 		foreach($types as $type => $name)
@@ -425,7 +425,7 @@ class vcalendar extends aw_template
 			"name" => $evt["name"],
 			"link" => !empty($evt["link"]) ? $evt["link"] : "javascript:void(0)",
 			"modifiedby" => $evt["modifiedby"],
-			"iconurl" => !empty($evt["icon"]) ? "/automatweb/images/icons/" . $evt["icon"] : "/automatweb/images/trans.gif",
+			"iconurl" => !empty($evt["icon"]) ? $evt["icon"] : "/automatweb/images/trans.gif",
 		));
 		return $this->evt_tpl->parse();
 	}
