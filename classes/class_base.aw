@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.252 2004/04/13 15:23:57 duke Exp $
+// $Id: class_base.aw,v 2.253 2004/04/15 06:07:58 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1043,6 +1043,12 @@ class class_base extends aw_template
 					unset($val["active"]);
 				};
 
+				// XXX: temporary hack to hide general tab
+				if ($key == "general" && $this->hide_general)
+				{
+					$res = false;
+				};
+
 				if ($res !== false)
 				{
 					// so, how do I figure out
@@ -1068,6 +1074,12 @@ class class_base extends aw_template
 		};
 
 		if (1 == $this->classinfo["disable_relationmgr"])
+		{
+			$this->classinfo["relationmgr"] = false;
+		};
+
+		// temporary workaround to hide relationmgr
+		if ($this->hide_relationmgr)
 		{
 			$this->classinfo["relationmgr"] = false;
 		};
@@ -1732,7 +1744,15 @@ class class_base extends aw_template
                         if ($this->vcl_register[$val["type"]])
                         {
                                 $reginst = $this->vcl_register[$val["type"]];
-                                $ot = get_instance($reginst);
+				if ($val["type"] == "table")
+				{
+					classload("vcl/table");
+					$ot = new vcl_table();
+				}
+				else
+				{
+                                	$ot = get_instance($reginst);
+				};
                                 if (is_callable(array($ot,"init_vcl_property")))
                                 {
                                         $res = $ot->init_vcl_property(array(
@@ -1818,7 +1838,7 @@ class class_base extends aw_template
 				));
 
 				// and how I get the class_instance?
-				$clx_name = $val["sclass"];
+				$clx_name = "crm/" . $val["sclass"];
 				$clx_inst = get_instance($clx_name);
 
 				$clx_inst->orb_class = $clx_name;
@@ -3190,6 +3210,14 @@ class class_base extends aw_template
 				$rgroupmap[$gkey] = $ginfo["parent"];
 			};
 		}
+
+		global $XX3;
+		if ($XX3)
+		{
+			print "<pre>";
+			print_r($this->groupinfo);
+			print "</pre>";
+		};
 
 		/// XXX: group remapping is NOT done!
 
