@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.173 2003/11/19 12:46:44 duke Exp $
+// $Id: class_base.aw,v 2.174 2003/11/20 13:26:43 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1659,6 +1659,11 @@ class class_base extends aw_template
 
 		foreach($properties as $key => $val)
 		{
+			if ($val["name"] == "status" && $this->classinfo["no_status"]["text"] == 1)
+			{
+				continue;
+			};
+				
 			if (isset($val["emb"]) && $val["emb"] == 1)
 			{
 				// embedded properties have already passed through parse_properties
@@ -2147,7 +2152,7 @@ class class_base extends aw_template
 			$o = new object;
 			$o->set_class_id($this->clid);
 			$o->set_parent($parent);
-			$o->set_status(!empty($status) ? $status : STAT_ACTIVE);
+			$o->set_status($status ? $status : STAT_ACTIVE);
 			if ($period)
 			{
 				$o->set_period($period);
@@ -2462,11 +2467,9 @@ class class_base extends aw_template
 		}
 
 		// it is set (or not) on validate_cfgform
-		//if (isset($this->cfgform_id) && is_numeric($this->cfgform_id))
 		if (isset($this->cfgform_id))
 		{
 			$this->obj_inst->set_meta("cfgform_id",$this->cfgform_id);
-			//$this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
 		};
 
 		// this is here to solve the line break problems with RTE
@@ -2474,6 +2477,14 @@ class class_base extends aw_template
 		{
 			$this->obj_inst->set_meta("cb_nobreaks",$args["cb_nobreaks"]);
 		}
+
+		// there is a bug somewhere which causes certain objects to get a 
+		// status of 0, until I figure it out, the first part of this if clause
+		// deals with it -- duke
+		if ($this->obj_inst->status == 0 || $this->classinfo["no_status"]["text"] == 1)
+		{
+			$this->obj_inst->set_status(STAT_ACTIVE);
+		};
 
 		$this->obj_inst->save();
 
