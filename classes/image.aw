@@ -205,7 +205,14 @@ class image extends aw_template
 					$tpl = "image";
 					$inplace = 0;
 				};
-				$replacement = $this->localparse($tpls[$tpl],$vars);
+				if ($this->is_template($tpls[$tpl]))
+				{
+					$replacement = $this->localparse($tpls[$tpl],$vars);
+				}
+				else
+				{
+					$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
+				};
 			}	
 		};
 		$retval = array(
