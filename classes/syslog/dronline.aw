@@ -465,8 +465,8 @@ class dronline extends class_base
 		$mt = $conf_o['meta'];
 		if ($mt['def_span'])
 		{
-			$sql[] = 'tm >= '.$this->def_spans[$mt['def_span']]['from'];
-			$sql[] = 'tm <= '.$this->def_spans[$mt['def_span']]['to'];
+			$sql[] = 'syslog.tm >= '.$this->def_spans[$mt['def_span']]['from'];
+			$sql[] = 'syslog.tm <= '.$this->def_spans[$mt['def_span']]['to'];
 			$this->vars(array(
 				"desc" => "M&auml;&auml;ratud vahemik:",
 				"value" => $this->def_spans[$mt['def_span']]["text"]
@@ -477,7 +477,7 @@ class dronline extends class_base
 		{
 			if ($mt['from'] > (400*24*3600))
 			{
-				$sql[] = 'tm >= '.$mt['from'];
+				$sql[] = 'syslog.tm >= '.$mt['from'];
 				$this->vars(array(
 					"desc" => "Alates:",
 					"value" => $this->time2date($mt['from'],2)
@@ -486,7 +486,7 @@ class dronline extends class_base
 			}
 			if ($mt['to'] > (400*24*3600))
 			{
-				$sql[] = 'tm <= '.$mt['to'];
+				$sql[] = 'syslog.tm <= '.$mt['to'];
 				$this->vars(array(
 					"desc" => "Kuni:",
 					"value" => $this->time2date($mt['to'],2)
@@ -496,7 +496,7 @@ class dronline extends class_base
 		}
 		if ($mt['user'] != '')
 		{
-			$sql[] = 'uid = \''.$mt['user'].'\'';
+			$sql[] = 'syslog.uid = \''.$mt['user'].'\'';
 			$this->vars(array(
 				"desc" => "Kasutaja:",
 				"value" => $mt['user']
@@ -505,7 +505,7 @@ class dronline extends class_base
 		}
 		if ($mt['address'] != '')
 		{
-			$sql[] = 'ip LIKE \'%'.$mt['address'].'%\'';
+			$sql[] = 'syslog.ip LIKE \'%'.$mt['address'].'%\'';
 			$this->vars(array(
 				"desc" => "IP:",
 				"value" => $mt['address']
@@ -515,7 +515,7 @@ class dronline extends class_base
 		if ($mt['textfilter'] != '')
 		{
 			$tfl = explode(',', $mt['textfilter']);
-			$sql[] = '('.join(' OR ', map('action LIKE \'%%%s%%\'', $tfl)).')';
+			$sql[] = '('.join(' OR ', map('syslog.action LIKE \'%%%s%%\'', $tfl)).')';
 			$this->vars(array(
 				"desc" => "Tegevuse filter:",
 				"value" => $mt['textfilter']
@@ -525,7 +525,7 @@ class dronline extends class_base
 
 		if (count($mt['sites']) > 0 && aw_ini_get("syslog.has_site_id"))
 		{
-			$sql[] = "site_id IN (".join(",",map("%s",$mt['sites'])).")";
+			$sql[] = "syslog.site_id IN (".join(",",map("%s",$mt['sites'])).")";
 			$this->vars(array(
 				"desc" => "Saidid:",
 				"value" => join(",",$mt['sites'])
@@ -566,14 +566,14 @@ class dronline extends class_base
 				if (substr($k,0,4) == 'slc_' && $v == 1)	// syslog action&type combo
 				{
 					$_t = explode('_',$k);
-					$cin[] = '( type = \''.$_t[1].'\' AND action = \''.$_t[2].'\' )';
+					$cin[] = '( syslog.type = \''.$_t[1].'\' AND syslog.action = \''.$_t[2].'\' )';
 					$c_strs[] = $sts[$_t[1]]['name']."/".$stas[$_t[2]]['name'];
 				}
 			}
 
 			if (count($tin) > 0)
 			{
-				$tsql[] = 'type IN ('.join(',',$tin).')';
+				$tsql[] = 'syslog.type IN ('.join(',',$tin).')';
 				$this->vars(array(
 					"desc" => "T&uuml;&uuml;bid:",
 					"value" => join(", ", $t_strs)
@@ -582,7 +582,7 @@ class dronline extends class_base
 			}
 			if (count($ain) > 0)
 			{
-				$tsql[] = 'act_id IN ('.join(',',$ain).')';
+				$tsql[] = 'syslog.act_id IN ('.join(',',$ain).')';
 				$this->vars(array(
 					"desc" => "Tegevused:",
 					"value" => join(", ", $a_strs)
@@ -606,7 +606,7 @@ class dronline extends class_base
 		$bip = aw_unserialize($this->get_cval('blockedip'));
 		if (is_array($bip) && count($bip) > 0)
 		{
-			$sql[] = 'ip NOT IN ('.join(',',map('\'%s\'',$bip)).')';
+			$sql[] = 'syslog.ip NOT IN ('.join(',',map('\'%s\'',$bip)).')';
 			$this->vars(array(
 				"desc" => "Blokeeritud IP'd:",
 				"value" => join(',',map('\'%s\'',$bip))
