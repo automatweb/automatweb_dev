@@ -1,0 +1,421 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>register_id</name>
+            <group>general</group>
+            <table>aw_register_data</table>
+            <type>hidden</type>
+            <field>aw_register_id</field>
+      </property>
+      <property>
+            <name>user1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user1</field>
+            <caption>User-defined 1</caption>
+      </property>
+      <property>
+            <name>user2</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user2</field>
+            <caption>User-defined 2</caption>
+      </property>
+      <property>
+            <name>user3</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user3</field>
+            <caption>User-defined 3</caption>
+      </property>
+      <property>
+            <name>user4</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user4</field>
+            <caption>User-defined 4</caption>
+      </property>
+      <property>
+            <name>user5</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user5</field>
+            <caption>User-defined 5</caption>
+      </property>
+      <property>
+            <name>user6</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user6</field>
+            <caption>User-defined 6</caption>
+      </property>
+      <property>
+            <name>user7</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user7</field>
+            <caption>User-defined 7</caption>
+      </property>
+      <property>
+            <name>user8</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user8</field>
+            <caption>User-defined 8</caption>
+      </property>
+      <property>
+            <name>user9</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user9</field>
+            <caption>User-defined 9</caption>
+      </property>
+      <property>
+            <name>user10</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user10</field>
+            <caption>User-defined 10</caption>
+      </property>
+      <property>
+            <name>user11</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user11</field>
+            <caption>User-defined 11</caption>
+      </property>
+      <property>
+            <name>user12</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user12</field>
+            <caption>User-defined 12</caption>
+      </property>
+      <property>
+            <name>user13</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user13</field>
+            <caption>User-defined 13</caption>
+      </property>
+      <property>
+            <name>user14</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user14</field>
+            <caption>User-defined 14</caption>
+      </property>
+      <property>
+            <name>user15</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user15</field>
+            <caption>User-defined 15</caption>
+      </property>
+      <property>
+            <name>user16</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user16</field>
+            <caption>User-defined 16</caption>
+      </property>
+      <property>
+            <name>user17</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user17</field>
+            <caption>User-defined 17</caption>
+      </property>
+      <property>
+            <name>user18</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user18</field>
+            <caption>User-defined 18</caption>
+      </property>
+      <property>
+            <name>user19</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user19</field>
+            <caption>User-defined 19</caption>
+      </property>
+      <property>
+            <name>user20</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textbox</type>
+            <field>aw_user20</field>
+            <caption>User-defined 20</caption>
+      </property>
+      <property>
+            <name>userta1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser1</field>
+            <caption>User-defined ta 1</caption>
+      </property>
+      <property>
+            <name>userta2</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser2</field>
+            <caption>User-defined ta 2</caption>
+      </property>
+      <property>
+            <name>userta3</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser3</field>
+            <caption>User-defined ta 3</caption>
+      </property>
+      <property>
+            <name>userta4</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser4</field>
+            <caption>User-defined ta 4</caption>
+      </property>
+      <property>
+            <name>userta5</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser5</field>
+            <caption>User-defined ta 5</caption>
+      </property>
+      <property>
+            <name>userta6</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser6</field>
+            <caption>User-defined ta 6</caption>
+      </property>
+      <property>
+            <name>userta7</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser7</field>
+            <caption>User-defined ta 7</caption>
+      </property>
+      <property>
+            <name>userta8</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser8</field>
+            <caption>User-defined ta 8</caption>
+      </property>
+      <property>
+            <name>userta9</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser9</field>
+            <caption>User-defined ta 9</caption>
+      </property>
+      <property>
+            <name>userta10</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>textarea</type>
+            <field>aw_tauser10</field>
+            <caption>User-defined ta 10</caption>
+      </property>
+      <property>
+            <name>uservar1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser1</field>
+            <reltype>RELTYPE_VARUSER1</reltype>
+            <store>connect</store>
+            <caption>User-defined var 1</caption>
+      </property>
+      <property>
+            <name>uservar2</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser2</field>
+            <reltype>RELTYPE_VARUSER2</reltype>
+            <store>connect</store>
+            <caption>User-defined var 2</caption>
+      </property>
+      <property>
+            <name>uservar3</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser3</field>
+            <reltype>RELTYPE_VARUSER3</reltype>
+            <store>connect</store>
+            <caption>User-defined var 3</caption>
+      </property>
+      <property>
+            <name>uservar4</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser4</field>
+            <reltype>RELTYPE_VARUSER4</reltype>
+            <store>connect</store>
+            <caption>User-defined var 4</caption>
+      </property>
+      <property>
+            <name>uservar5</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser5</field>
+            <reltype>RELTYPE_VARUSER5</reltype>
+            <store>connect</store>
+            <caption>User-defined var 5</caption>
+      </property>
+      <property>
+            <name>uservar6</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser6</field>
+            <reltype>RELTYPE_VARUSER6</reltype>
+            <store>connect</store>
+            <caption>User-defined var 6</caption>
+      </property>
+      <property>
+            <name>uservar7</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser7</field>
+            <reltype>RELTYPE_VARUSER7</reltype>
+            <store>connect</store>
+            <caption>User-defined var 7</caption>
+      </property>
+      <property>
+            <name>uservar8</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser8</field>
+            <reltype>RELTYPE_VARUSER8</reltype>
+            <store>connect</store>
+            <caption>User-defined var 8</caption>
+      </property>
+      <property>
+            <name>uservar9</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser9</field>
+            <reltype>RELTYPE_VARUSER9</reltype>
+            <store>connect</store>
+            <caption>User-defined var 9</caption>
+      </property>
+      <property>
+            <name>uservar10</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>classificator</type>
+            <field>aw_varuser10</field>
+            <reltype>RELTYPE_VARUSER10</reltype>
+            <store>connect</store>
+            <caption>User-defined var 10</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_REGISTER_DATA</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <data>
+                  <caption>Admed</caption>
+            </data>
+      </groupinfo>
+      <tableinfo>
+            <aw_register_data>
+                  <index>aw_id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_register_data>
+      </tableinfo>
+      <reltypes>
+            <VARUSER1>
+                  <value>1</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 1</caption>
+            </VARUSER1>
+            <VARUSER2>
+                  <value>2</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 2</caption>
+            </VARUSER2>
+            <VARUSER3>
+                  <value>3</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 3</caption>
+            </VARUSER3>
+            <VARUSER4>
+                  <value>4</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 4</caption>
+            </VARUSER4>
+            <VARUSER5>
+                  <value>5</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 5</caption>
+            </VARUSER5>
+            <VARUSER6>
+                  <value>6</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 6</caption>
+            </VARUSER6>
+            <VARUSER7>
+                  <value>7</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 7</caption>
+            </VARUSER7>
+            <VARUSER8>
+                  <value>8</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 8</caption>
+            </VARUSER8>
+            <VARUSER9>
+                  <value>9</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 9</caption>
+            </VARUSER9>
+            <VARUSER10>
+                  <value>1</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 10</caption>
+            </VARUSER10>
+      </reltypes>
+</properties>
+

@@ -1,0 +1,89 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>register</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REGISTER</reltype>
+            <caption>Register, millest otsida</caption>
+      </property>
+      <property>
+            <name>sform_frm</name>
+            <table>objects</table>
+            <group>mkfrm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>butt_text</name>
+            <table>objects</table>
+            <group>mkfrm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Otsi nupu tekst</caption>
+      </property>
+      <property>
+            <name>sform_tbl</name>
+            <table>objects</table>
+            <group>mktbl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>search</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <store>no</store>
+            <callback>callback_get_sform</callback>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>search_res</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_REGISTER_SEARCH</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <mkfrm>
+                  <caption>Koosta otsinguvorm</caption>
+            </mkfrm>
+            <mktbl>
+                  <caption>Koosta tulemuste tabel</caption>
+            </mktbl>
+            <search>
+                  <caption>Otsi</caption>
+                  <submit_method>get</submit_method>
+            </search>
+      </groupinfo>
+      <reltypes>
+            <REGISTER>
+                  <value>1</value>
+                  <clid>CL_REGISTER</clid>
+                  <caption>register millest otsida</caption>
+            </REGISTER>
+      </reltypes>
+</properties>
+

@@ -1,0 +1,64 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>data_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Andmete seadete vorm</caption>
+      </property>
+      <property>
+            <name>data_rootmenu</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MENU</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Andmete kataloog</caption>
+      </property>
+      <property>
+            <name>data_tb</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>data_tb</field>
+      </property>
+      <property>
+            <name>data</name>
+            <table>objects</table>
+            <group>data</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>data</field>
+      </property>
+      <classinfo>
+            <syslog_type>ST_REGISTER</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <data>
+                  <caption>Andmed</caption>
+            </data>
+      </groupinfo>
+      <reltypes>
+            <CFGFORM>
+                  <value>1</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>andmete seadete vorm</caption>
+            </CFGFORM>
+            <MENU>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>andmete kataloog</caption>
+            </MENU>
+      </reltypes>
+</properties>
+
