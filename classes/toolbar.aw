@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.23 2004/01/26 17:30:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.25 2004/01/28 16:48:48 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -44,6 +44,7 @@ class toolbar extends aw_template
 			$arr["img"] = "new.gif";
 		};
 		$arr["type"] = "button";
+		$arr["ismenu"] = 1;
 		$arr["id"] = $name;
 		$this->matrix[$arr["name"]] = $arr;
 	}
@@ -54,6 +55,7 @@ class toolbar extends aw_template
 		{
 			$arr["onClick"] = " onClick=\"". $arr["onClick"] . "\"";
 		};
+
 		if (!empty($arr["link"]))
 		{
 			$arr["url"] = $arr["link"];
@@ -172,13 +174,18 @@ class toolbar extends aw_template
 						$val["onClick"] = "";
 					};
 					$this->vars($val);
+					$tpl = $val["type"];
+					if ($val["ismenu"])
+					{
+						$tpl = "menu_button";
+					};
 					if ($side == "left")
 					{
-						$result .= $this->parse($val["type"]);
+						$result .= $this->parse($tpl);
 					}
 					else
 					{
-						$right_side_content .= $this->parse($val["type"]);
+						$right_side_content .= $this->parse($tpl);
 					};
 					break;
 				
