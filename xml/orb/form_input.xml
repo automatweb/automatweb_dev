@@ -1,0 +1,37 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="form_input">
+
+		<action name="new">
+			<function name="add">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_add">
+			<function name="submit_add">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_change">
+			<function name="submit_change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		
