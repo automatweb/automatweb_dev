@@ -37,11 +37,61 @@
             <field>aliasmgr</field>
             <caption>Seostehaldur</caption>
       </property>
+      <property>
+            <name>recurrence</name>
+            <type>releditor</type>
+            <reltype>RELTYPE_RECURRENCE</reltype>
+            <group>recurrence</group>
+            <rel_id>first</rel_id>
+            <props>
+                  <num_0>start</num_0>
+                  <num_1>weekdays</num_1>
+                  <num_2>end</num_2>
+            </props>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kordused</caption>
+      </property>
+      <property>
+            <name>calendar_selector</name>
+            <type>callback</type>
+            <callback>cb_calendar_selector</callback>
+            <store>no</store>
+            <group>calendars</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kalendrid</caption>
+      </property>
+      <property>
+            <name>project_selector</name>
+            <type>callback</type>
+            <callback>cb_project_selector</callback>
+            <store>no</store>
+            <group>projects</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Projektid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <no_comment>1</no_comment>
       </classinfo>
+      <groupinfo>
+            <recurrence>
+                  <caption>Kordumine</caption>
+            </recurrence>
+            <calendars>
+                  <caption>Kalendrid</caption>
+            </calendars>
+            <projects>
+                  <caption>Projektid</caption>
+            </projects>
+      </groupinfo>
       <tableinfo>
             <planner>
                   <index>id</index>
@@ -49,5 +99,12 @@
                   <master_index>brother_of</master_index>
             </planner>
       </tableinfo>
+      <reltypes>
+            <RECURRENCE>
+                  <value>1</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Kordus</caption>
+            </RECURRENCE>
+      </reltypes>
 </properties>
 

@@ -11,16 +11,6 @@
             <caption>Aeg</caption>
       </property>
       <property>
-            <name>content_generator</name>
-            <type>select</type>
-            <rel>1</rel>
-            <group>advanced</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Näitamisfunktsioon</caption>
-      </property>
-      <property>
             <name>day_start</name>
             <type>time_select</type>
             <group>time_settings</group>
@@ -39,16 +29,6 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Päev lõpeb</caption>
-      </property>
-      <property>
-            <name>only_days_with_events</name>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <group>advanced</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Näidatakse ainult sündmustega päevi</caption>
       </property>
       <property>
             <name>navigator_visible</name>
@@ -78,70 +58,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Näita minu projekte</caption>
-      </property>
-      <property>
-            <name>items_on_line</name>
-            <type>textbox</type>
-            <size>4</size>
-            <group>special</group>
-            <rel>1</rel>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Max. cell'e reas</caption>
-      </property>
-      <property>
-            <name>event_direction</name>
-            <type>chooser</type>
-            <group>advanced</group>
-            <rel>1</rel>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Suund</caption>
-      </property>
-      <property>
-            <name>range_start</name>
-            <type>date_select</type>
-            <group>time_settings</group>
-            <rel>1</rel>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Alates</caption>
-      </property>
-      <property>
-            <name>event_time_item</name>
-            <type>textbox</type>
-            <size>4</size>
-            <group>time_settings</group>
-            <rel>1</rel>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Mitu päeva</caption>
-      </property>
-      <property>
-            <name>event_max_items</name>
-            <type>textbox</type>
-            <size>4</size>
-            <group>advanced</group>
-            <rel>1</rel>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Max. sündmusi </caption>
-      </property>
-      <property>
-            <name>use_template</name>
-            <type>select</type>
-            <group>advanced</group>
-            <rel>1</rel>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Template</caption>
+            <caption>Näita projekte</caption>
       </property>
       <property>
             <name>event_folder</name>
@@ -229,10 +146,6 @@
                   <caption>Ajaseaded</caption>
                   <parent>general</parent>
             </time_settings>
-            <special>
-                  <caption>Spetsiaalne</caption>
-                  <parent>general</parent>
-            </special>
             <add_event>
                   <caption>Muuda sündmust</caption>
             </add_event>
