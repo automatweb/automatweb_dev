@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.49 2001/06/04 03:14:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.50 2001/06/04 03:23:22 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -500,7 +500,14 @@ class messenger extends menuedit_light
 						$msg["from"] = $msg["modifiedby"];
 					};
 					$subject = $this->MIME_decode($msg["subject"]);
-					$msg["subject"] = "<a href='?class=messenger&action=show&id=$msg[id]'>" . $subject . "</a>";
+					if ($args["id"] == $this->conf["msg_draft"])
+					{
+						$msg["subject"] = "<a href='?class=messenger&action=edit&id=$msg[id]'>" . $subject . "</a>";
+					}
+					else
+					{
+						$msg["subject"] = "<a href='?class=messenger&action=show&id=$msg[id]'>" . $subject . "</a>";
+					};
 					$msg["pri"] = ($msg["pri"]) ? $msg["pri"] : 0;
 					$msg["cnt"] = $cnt;
 					$msg["tm"] = $this->time2date($msg["tm"],1);
