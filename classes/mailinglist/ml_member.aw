@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.28 2004/06/25 19:26:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.29 2004/07/21 13:22:46 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -35,13 +35,12 @@ class ml_member extends class_base
 	{
 		$this->quote($args);
 		extract($args);
-		// XXX: can I do this with object_list/search?
 		$ol = new object_list(array(
 			"class_id" => CL_ML_MEMBER,
 			"mail" => $email,
 			"parent" => $folder,
 		));
-		$rv = $ol->count > 0 ? $ol->begin() : false;
+		$rv = $ol->count() > 0 ? $ol->begin() : false;
 		return $rv;
 	}
 
@@ -170,10 +169,9 @@ class ml_member extends class_base
 			"folder" => $user_folder,
 		));
 
-		if ($check)
+		if (is_object($check))
 		{
-			$member_obj = new object($check["oid"]); 
-			$member_obj->delete();
+			$check->delete();
 		};
 
 		// fuck me plenty
