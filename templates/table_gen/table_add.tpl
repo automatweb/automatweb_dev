@@ -1,15 +1,24 @@
 <form action='reforb.{VAR:ext}' method=post>
-<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
-		<tr>
-			<td class="fcaption">{VAR:LC_TABLE_NAME}:</td><td class="fform"><input type='text' NAME='name'></td>
+
+<table border=0 cellspacing=0 cellpadding=0>
+<tr><td class="aste01">
+
+<table border=0 cellspacing=0 cellpadding=2>
+<tr>
+
+			<td class="celltext" align="right">{VAR:LC_TABLE_NAME}:</td>
+			<td class="celltext"><input type='text' NAME='name' class="formtext" size="40"></td>
 		</tr>
 	<tr>
-		<td class="fcaption">{VAR:LC_TABLE_COMM}:</td>
-		<td class="fform"><textarea name=comment cols=50 rows=5></textarea></td>
+		<td class="celltext" align="right">{VAR:LC_TABLE_COMM}:</td>
+		<td class="celltext"><textarea name=comment cols=40 rows=5 class="formtext"></textarea></td>
 	</tr>
 		<tr>
-			<td class="fcaption" colspan=2><input type='submit' class='small_button' VALUE='{VAR:LC_TABLE_SAVE}'></td>
+		<td>&nbsp;</td>
+			<td class="celltext"><input type='submit' class='formbutton' VALUE='{VAR:LC_TABLE_SAVE}'></td>
 		</tr>
 	</table>
+
+</td></tr></table>
 	{VAR:reforb}
 </form>
