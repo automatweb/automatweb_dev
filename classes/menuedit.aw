@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.101 2002/02/27 00:50:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.102 2002/02/27 17:58:24 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -116,17 +116,17 @@ class menuedit extends aw_template
 		$this->invalidate_menu_cache();
 	}
 
-// parameetrid:
-// section - millist naidata?
-// text - kui see != "" , siis n2idatakse dokude asemel seda
-// docid - millist dokumenti selle sektsiooni alt naidata?
-// s.t. kui on dokumentide nimekiri ntx.
-// strip_img - kas imaged maha strippida dokudest
-// template - mis template ga menyysid n2idataxe
-// vars - array kuhu saab sisu kirjutada, et seal
-//	olevad muutujad pannaxe menyyediti template sisse
-// $sub_callbacks - array template_name => funxiooninimi
-//  neid kutsutakse siis v2lja kui vastav sub on template sees olemas
+	// parameetrid:
+	// section - millist naidata?
+	// text - kui see != "" , siis n2idatakse dokude asemel seda
+	// docid - millist dokumenti selle sektsiooni alt naidata?
+	// s.t. kui on dokumentide nimekiri ntx.
+	// strip_img - kas imaged maha strippida dokudest
+	// template - mis template ga menyysid n2idataxe
+	// vars - array kuhu saab sisu kirjutada, et seal
+	//	olevad muutujad pannaxe menyyediti template sisse
+	// $sub_callbacks - array template_name => funxiooninimi
+	//  neid kutsutakse siis v2lja kui vastav sub on template sees olemas
 	function gen_site_html($params)
 	{
 		global $awt;
@@ -254,6 +254,7 @@ class menuedit extends aw_template
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $obj["metadata"],
 		));
+
 		////
 		// Kui küsiti infot RDF-is, siis tagastame vastava väljundi
 		// hm. Ja tegelikult peaks selle üleüldse kuhugi mujale viima.
@@ -325,22 +326,17 @@ class menuedit extends aw_template
 		// a few other functions
 		$this->build_menu_chain($this->sel_section);
 
-		// if the remote user is not logged in, check whether the requested menu
-		// or any of it's parents has the "users_only" attribute set. 
-		// If so, the user will be redirected to the correspondending error page
-		if ( aw_global_get("uid") == "" )
+		// if the remote user is not logged in and the users_only property is set,
+		// redirect the him to the correspondending error page
+		if ( (aw_global_get("uid") == "") && ($this->properties["users_only"]) )
 		{
-			$this->check_users_only($this->sel_section);
+			$this->users_only_redir();
 		};
 
-		// find out which template set to use for this menu
-		$tpldir = $this->find_template_set($this->sel_section);
-
-		// if this or one of the parent objects had the tpl_dir attribute
-		// set, reinitialize the template class
-		if ($tpldir)
+		// if the tpl_dir property is set, reinitialize the template class
+		if ($this->properties["tpl_dir"])
 		{
-			$this->tpl_init("../$tpldir/automatweb/menuedit");
+			$this->tpl_init(sprintf("../%s/automatweb/menuedit",$this->properties["tpl_dir"]));
 		};
 		
 		$this->read_template($template);
@@ -349,30 +345,22 @@ class menuedit extends aw_template
 		$d = new document();
 		$this->doc = new document();
 		
-		
+	
+		// so, if the current object is not a menu,
+		// just pretend that the parent is. Hm, I think that's wrong
 		if (!is_array($this->mar[$sel_menu_id]))
 		{
 			$seobj = $this->get_object($sel_menu_id);
 			$sel_menu_id = $seobj["parent"];
 		}
 		
-		// here we must find the menu image, if it is not specified for this menu, then use the parent's and so on.
+		// here we must find the menu image, if it is not specified for this menu,
+		//then use the parent's and so on.
 		$this->do_menu_images($sel_menu_id);
 
 		// nii nyt leiame aktiivse kommentaari - kui aktiivsel menyyl on tyhi, siis parenti oma jne
-		$sel_comment = "";
-		$si_parent = $sel_menu_id;
-		while ($sel_comment == "" && $si_parent)
-		{
-			$sel_comment = isset($this->mar[$si_parent]["comment"]) && $this->mar[$si_parent]["comment"] != "" ? $this->mar[$si_parent]["comment"] : "";
-			if ($sel_comment)
-			{
-				break;
-			}
-			$si_parent = $this->mar[$si_parent]["parent"];
-		}
 		$this->vars(array(
-			"sel_menu_comment" => $sel_comment
+			"sel_menu_comment" => $this->properties["comment"],
 		));
 
 		if (!$this->mar[$sel_menu_id]["left_pane"])
@@ -442,11 +430,11 @@ class menuedit extends aw_template
 		lc_site_load("menuedit",$this);
 
 		// get array with path of objects in it
-		$this->path = $this->get_path($section,$obj);
-		$path = $this->path;
+		$path = $this->get_path($section,$obj);
+		#$path = $this->path;
 
 		// you are here links		
-		$this->vars(array("YAH_LINK" => $this->make_yah($path)));
+		$this->vars(array("YAH_LINK" => $this->make_yah($this->path)));
 
 		// language selecta
 		if ($this->is_template("LANG"))
@@ -456,7 +444,7 @@ class menuedit extends aw_template
 
 
 		// write info about viewing to the syslog
-		$this->do_syslog(&$this->mar,&$path,count($path)-1,$section);
+		$this->do_syslog($section);
 
 		// right, now build the menus
 		global $menu_defs,$rootmenu;
@@ -961,19 +949,18 @@ class menuedit extends aw_template
 		$awt->stop("menuedit::do_syslog_core");
 	}
 
-	function do_syslog(&$mar,&$path,$cnt,$section = 0)
+	function do_syslog($section = 0)
 	{
 		global $awt;
 		$awt->start("menuedit::do_syslog");
 		// now build the string to put in syslog
 		$log = "";
-		for ($i=0; $i < $cnt; $i++)	
+		foreach($this->path as $val)
 		{
-			if (($i+1) == $cnt)
-				$log.=$mar[$path[$i+1]]["name"];
-			else
-				$log.=$mar[$path[$i+1]]["name"]." / ";
-		}
+			$names[] = $this->menu_chain[$val]["name"];
+		};
+
+		$log = join(" / ",$names);
 		$this->do_syslog_core($log,$section);
 		$awt->stop("menuedit::do_syslog");
 	}
@@ -4515,36 +4502,34 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$ya = "";  
 		$show = false;
 		$cnt = count($path);
-		global $DEBUG;
-		if ($DEBUG)
-		{
-			print "<pre>";
-			print_r($path);
-			print "</pre>";
-		};
-		for ($i=0; $i < $cnt; $i++)	
+
+		foreach($this->path as $val)
 		{
 			if ($show)
 			{
-				$link = "/".$this->mar[$path[$i+1]]["oid"];
-				if ($this->mar[$path[$i+1]]["link"] != "")
+				// default to the link field in the object
+				$link = $this->menu_chain[$val]["link"];
+				// or if that is not set, create a link
+				if (not($link))
 				{
-					$link = $this->mar[$path[$i+1]]["link"];
-				}
+					$link = "/".$this->menu_chain[$val]["oid"];
+				};
+				
+				$text = $this->menu_chain[$val]["name"];
 
 				$this->vars(array(
 					"link" => $link,
-					"text" => str_replace("&nbsp;","",strip_tags($this->mar[$path[$i+1]]["name"])), 
-					"ysection" => $this->mar[$path[$i+1]]["oid"]
+					"text" => str_replace("&nbsp;","",strip_tags($text)), 
+					"ysection" => $val,
 				));
 
-				if ($this->mar[$path[$i+1]]["clickable"] == 1)
+				if ($this->menu_chain[$val]["clickable"] == 1)
 				{
 					$ya.=$this->parse("YAH_LINK");
 				}
 			}
-			// don't show things that are before $frontpage
-			if (isset($path[$i]) && isset($this->mar[$path[$i]]) && $this->mar[$path[$i]]["oid"] == $GLOBALS["rootmenu"])
+
+			if ($val == $GLOBALS["rootmenu"])
 			{
 				$show = true;
 			}
@@ -5310,7 +5295,20 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function build_menu_chain($section)
 	{
 		$parent = $section;
+		// this is used to store the whole menu chain
 		$this->menu_chain = array();
+		
+		// this is where we store the full path to the object
+		$this->path = array();
+	
+		// we will this with properties from the first element in chain who
+		// has thoses
+		$this->properties = array(
+			"tpl_dir"  => "",
+			"users_only" => 0,
+			"comment" => "",
+		);
+
 		while($parent)
 		{
 			$obj = $this->mar[$parent];
@@ -5323,67 +5321,46 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			if (is_array($obj))
 			{
+				array_unshift($this->path,$obj["oid"]);
 				$this->menu_chain[$obj["oid"]] = $obj;
+				// check whether this object has any properties that 
+				// none of the previous ones had
+				$_dat = (is_array($obj["meta"])) ? array_merge($obj,$obj["meta"]) : $obj;
+				$intersect = array_intersect(array_keys($_dat),array_keys($this->properties));
+				foreach($intersect as $val)
+				{
+					if (not($this->properties[$val]))
+					{
+						//print "<!-- found at $obj[oid] -->\n";
+						$this->properties[$val] = $_dat[$val];
+					};
+				};
 			};
 			// also, check whether the parent of the current object is alreay handled
 			// and if so, just drop out of the cycle
 			$parent = ($this->menu_chain[$obj["parent"]]) ? false : $obj["parent"];
 		};
+		/*
+		  print "<!--";
+		  print_r($this->properties);
+		  print "-->";
+		 */
 
 	}
 
 	////
 	// !Checks whether the section or one of it's parents is marked as "users_only
-	function check_users_only($section)
+	function users_only_redir()
 	{
-		$uo_parent = $section;
-		$found = false;
-
-		while ($uo_parent && not($found))
-		{
-			$obj = $this->menu_chain[$uo_parent];
-
-			if ($obj["meta"]["users_only"] == 1)
-			{
-				$found = true;
-			};
-
-			$uo_parent = $obj["parent"];
-		}
-
-		if ($found)
-		{
-			classload("config");
-			$dbc = new db_config();
-			$url = $dbc->get_simple_config("orb_err_mustlogin");
-			global $baseurl;
-			header("Location: $baseurl/$url");
-			// exit from inside the class, yuck.
-			exit;
-		};
+		classload("config");
+		$dbc = new db_config();
+		$url = $dbc->get_simple_config("orb_err_mustlogin");
+		global $baseurl;
+		header("Location: $baseurl/$url");
+		// exit from inside the class, yuck.
+		exit;
 	}
 
-	////
-	// !Walks through the menu chain to figure out which template set to use
-	function find_template_set($section)
-	{
-		$parent = $section;
-		$found = false;
-		$tpldir = "";
-
-		while($parent && not($found))
-		{
-			$obj = $this->menu_chain[$parent];
-			$tpldir = $obj["meta"]["tpl_dir"];
-			if ($tpldir)
-			{
-				$found = true;
-			};
-			$parent = $obj["parent"];
-		}		
-
-		return $tpldir;
-	}
 
 	////
 	// !Redirect the user if he/she didn't have the right to view that section
