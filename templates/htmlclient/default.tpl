@@ -1,4 +1,4 @@
-<table border='0' class="aw04contenttable" align="center" cellpadding="0" cellspacing="0">
+<table border='0' class="aw04contenttable" align="center" cellpadding="0" cellspacing="0" width="100%">
 <form action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
 
