@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.1 2002/01/15 20:28:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.2 2002/01/16 20:27:49 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -40,6 +40,20 @@ class cal_event extends aw_template {
 			"#009900" => "roheline",
 			"#000099" => "sinine",
 		);
+
+		$calendars = array();
+		$this->get_objects_by_class(array(
+			"class" => CL_CALENDAR,
+			"active" => 1,
+		));
+		while($row = $this->db_next())
+		{
+			if ($row["name"])
+			{
+				$calendars[$row["oid"]] = $row["name"];
+			};
+		};
+
 		// nimekiri tundidest
                 $h_list = range(0,23);
                 // nimekiri minutitest
@@ -48,9 +62,12 @@ class cal_event extends aw_template {
 			"start" => $start_ed,
 			"shour" => $this->picker($shour,$h_list),
 			"smin" => $this->picker($smin,$m_list),
+			"calendars" => $this->picker($args["folder"],$calendars),
 			"dhour" => $this->picker($dhour,$h_list),
 			"dmin" => $this->picker($dmin,$m_list),
 			"color" => $this->picker($args["color"],$colors),
+			"calendar_url" => $this->mk_my_orb("view",array("id" => $args["folder"]),"planner"),
+			"icon_url" => get_icon_url(CL_CALENDAR,""),
 		));
 	}
 
@@ -61,7 +78,7 @@ class cal_event extends aw_template {
 		extract($args);
 		$this->read_template("edit.tpl");
 		$this->mk_path($parent,"Lisa kalendrisündmus");
-		$this->_fill_event_form();
+		$this->_fill_event_form(array("folder" => $args["folder"]));
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit",array("parent" => $parent)),
 		));
@@ -89,8 +106,8 @@ class cal_event extends aw_template {
 			));
 
 			$q = "INSERT INTO planner
-				(id,start,end,title,place,description,color)
-                                VALUES ('$id','$st','$et','$title','$place','$description','$color')";
+				(id,start,end,title,place,description,color,folder)
+                                VALUES ('$id','$st','$et','$title','$place','$description','$color','$folder')";
 			$this->db_query($q);
 		}
 		else
@@ -106,6 +123,7 @@ class cal_event extends aw_template {
 				title = '$title',
 				color = '$color',
 				place = '$place',
+				folder = '$folder',
 				description = '$description'
 				WHERE id = '$id'";
 			$this->db_query($q);
@@ -119,7 +137,7 @@ class cal_event extends aw_template {
 	{
 		extract($args);
 		$object = $this->get_object($id);
-		$this->mk_path($id,"Muuda kalendrisündmust");
+		$this->mk_path($object["parent"],"Muuda kalendrisündmust");
 		$q = "SELECT *,planner.* FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE objects.oid = '$id'";
 		$this->db_query($q);
 		$row = $this->db_next();
