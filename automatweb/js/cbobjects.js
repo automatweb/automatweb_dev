@@ -509,14 +509,17 @@ function nsVisibility() {
 
 
 // For IE, pull all DIV blocks into object array
-function create_ie_objects() {
-   theelements = document.all.tags("DIV");
-   theobjs = new Array();
-   for (i = 0; i < theelements.length; i++){
-      if (theelements[i].id != "") {
-	   theobjs[theelements[i].id] = new ie_object(theelements[i]);
-	   }
-      }
+function create_ie_objects() 
+{
+	theelements = document.all.tags("DIV");
+	theobjs = new Array();
+	for (i = 0; i < theelements.length; i++)
+	{
+		if (theelements[i].id != "") 
+		{
+			theobjs[theelements[i].id] = new ie_object(theelements[i]);
+		}
+	}
 }
 
 // For Navigator 4.x, pull all DIV blocks into object array
@@ -540,15 +543,25 @@ function create_dom_objects() {
 }
 
 
-function create_objects() {
-
-    // if IE
-    if (navigator.appName == "Microsoft Internet Explorer")
-	   create_ie_objects();
-    else // Navigator or Mozilla
-        if (navigator.appName == "Mozilla" || navigator.appName == "Netscape")
-           if (navigator.appVersion.indexOf("4.") == -1)
-	      create_dom_objects();
-           else 
-  	      create_ns_objects();
+function create_objects() 
+{
+	// if IE
+	if (navigator.appName == "Microsoft Internet Explorer")
+	{
+		create_ie_objects();
+	}
+	else // Navigator or Mozilla
+	{
+		if (navigator.appName == "Mozilla" || navigator.appName == "Netscape")
+		{
+			if (navigator.appVersion.indexOf("4.") == -1)
+			{
+				create_dom_objects();
+			}
+			else
+			{
+				create_ns_objects();
+			}
+		}
+	}
 }
