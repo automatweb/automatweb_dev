@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.7 2002/11/26 12:36:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.8 2002/11/26 18:30:29 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -170,107 +170,6 @@ class cfgform extends aw_template
 
 	}
 
-	function get_cfgforms_by_class($args = array())
-	{
-		$clid = $args["clid"];
-		$class_id = constant($clid);
-		$folder = $this->cfg["cfgfolders"][$class_id];
-		// XXX: check whether the directory actually exists, is inside
-		// the AW tree and is readable
-		if (!$folder)
-		{
-			return false;
-		};
-
-		// now, prep a list of files inside that directory
-		$dircontents = $this->get_directory(array(
-			"dir" => $folder,
-		));
-
-		// cycle over the files and figure out the names
-		$flist = new aw_array($dircontents);
-		$retval = array("" => "");
-		foreach($flist->get() as $val)
-		{
-			$fqfn = $folder . "/$val";
-			$contents = $this->get_file(array(
-				"file" => $fqfn,
-			));
-			$data = aw_unserialize($contents);
-			if ($data["oid"] && $data["name"] && $data["class_id"] == $class_id)
-			{
-				$retval[$val] = $data["name"];
-			};
-
-		};
-		return $retval;
-	}
-
-	////
-	// !Retrieves a config form from a file
-	// clid(string) - symbolic id of the class
-	// id(id) - file id
-	function get_cfgform_from_file($args = array())
-	{
-		$folder = $this->cfg["cfgfolders"][constant($args["clid"])];
-		if (!$folder)
-		{
-			return false;
-		};
-		$fqfn = $folder . "/" . $args["id"];
-		$contents = $this->get_file(array(
-			"file" => $fqfn,
-		));
-		$data = aw_unserialize($contents);
-		$retval = false;
-		$class_id = constant($args["clid"]);
-		if ($data["oid"] && $data["name"] && $data["class_id"] == $class_id)
-		{
-			$retval = $data;
-		};
-		return $retval;
-	}
-
-	////
-	// !called after a configuration form is saved
-	function callback_post_save($args = array())
-	{
-		$id = (int)$args["id"];
-		$cfgform = $this->get_object($id);
-		$subclass = $cfgform["subclass"];
-		$active_properties = $cfgform["meta"]["properties"];
-		$ord = $cfgform["meta"]["ord"];
-		$savefolder = $this->cfg["cfgfolders"][$subclass];
-		/// XXX: better checking needed
-		if ($this->cfg["save_to_files"] && is_array($active_properties) && is_array($ord))
-		{
-			// reap the stuff with no ords
-			$useful_ord = array();
-			foreach($ord as $key => $val)
-			{
-				if ($val)
-				{
-					$useful_ord[$key] = $val;
-				};
-			};
-
-			$data = array(
-				"name" => $cfgform["name"],
-				"class_id" => $cfgform["subclass"],
-				"oid" => $cfgform["oid"],
-				"properties" => $active_properties,
-				"property_order" => $useful_ord,
-			);
-			$ser = aw_serialize($data,SERIALIZE_XML,array("ctag" => "template"));
-			$fname = $savefolder . "/template" . $id . ".xml";
-
-			$this->put_file(array(
-				"file" => $fname,
-				"content" => $ser,
-			));
-		};
-	}
-	
 	function _serialize($arr)
 	{
 		extract($arr);
