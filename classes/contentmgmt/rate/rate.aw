@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.12 2003/11/27 16:26:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.13 2003/12/23 14:39:19 duke Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -172,12 +172,16 @@ class rate extends class_base
 			");
 			$ro[$oid] = $rating;
 
+			$stat_query = "SELECT MIN(rating) AS min,MAX(rating) AS max,AVG(rating) AS avg FROM ratings WHERE oid = '$oid'";
+			$this->db_query($stat_query);
+			$row = $this->db_next();
+
 			$rs = array(
-				RATING_AVERAGE => $this->db_fetch_field("SELECT AVG(rating) AS avg FROM ratings WHERE oid = '$oid'", "avg"),
-				RATING_HIGHEST => $this->db_fetch_field("SELECT MAX(rating) AS max FROM ratings WHERE oid = '$oid'", "max"),
+				RATING_AVERAGE => $row["avg"],
+				RATING_HIGHEST => $row["max"],
 				RATING_VIEWS => $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits"),
 				RATING_LOWEST_VIEWS => $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits"),
-				RATING_LOWEST_RATE => $this->db_fetch_field("SELECT MIN(rating) AS min FROM ratings WHERE oid = '$oid'", "min"),
+				RATING_LOWEST_RATE => $row["min"],
 			);
 			$this->set_object_metadata(array(
 				"oid" => $oid,
