@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.303 2004/10/05 09:25:26 kristo Exp $
+// $Id: class_base.aw,v 2.304 2004/10/06 09:13:41 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2835,14 +2835,6 @@ class class_base extends aw_template
 				"request" => $args,
 			));
 		}
-		
-		
-		if (method_exists($this->inst,"callback_on_load"))
-		{
-				$this->inst->callback_on_load(array(
-						"request" => $args,
-				));
-		};
 
 		// and this of course should handle both creating new objects and updating existing ones
 
