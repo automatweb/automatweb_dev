@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.59 2004/08/27 11:04:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.60 2004/08/27 11:13:44 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -1007,8 +1007,8 @@ class ml_list extends class_base
 	{
 		$cb_errmsg = aw_global_get("cb_errmsg");
 		$cb_reqdata = aw_global_get("cb_reqdata");
-		aw_session_set("cb_errmsg","");
-		aw_session_set("cb_reqdata","");
+		aw_session_del("cb_errmsg","");
+		aw_session_del("cb_reqdata","");
 		$tobj = new object($args["alias"]["target"]);
 		$sub_form_type = $tobj->prop("sub_form_type");
 		if (!empty($args["alias"]["relobj_id"]))
