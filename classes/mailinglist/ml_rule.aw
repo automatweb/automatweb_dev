@@ -429,7 +429,8 @@ class ml_rule extends aw_template
 					"rule" => $id
 				));
 
-				$tmpstr = join(",",$_tmp);
+				$_tt = new aw_array($_tmp);
+				$tmpstr = join(",",$_tt->get());
 				if ($tmpstr != "")
 				{
 //				echo "entries not members = $tmpstr <br>";

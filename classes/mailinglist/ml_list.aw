@@ -490,7 +490,7 @@ class ml_list extends aw_template
 		load_vcl('date_edit');
 		unset($aid);
 		$total=0;
-		$_lists = new aw_array($lists)
+		$_lists = new aw_array($lists);
 		foreach($_lists->get() as $lid => $v)
 		{
 			foreach($v["c"] as $gid => $gname)
@@ -701,6 +701,7 @@ class ml_list extends aw_template
 	function update_automatic_list($id)
 	{
 		// get all members for the list
+	    $this->list_ob = false;
 		$mem = $this->get_members($id);
 
 		$automatic_form = $this->list_ob["meta"]["automatic_form"];
@@ -710,7 +711,7 @@ class ml_list extends aw_template
 		$memstr = join(",", array_keys($mem));
 		if ($memstr != "")
 		{
-			$this->db_query("SELECT * FROM ml_member2form_entry WHERE member_id IN($memstr) AND form_id = '$automatic_form'");
+			$this->db_query("SELECT * FROM ml_member2form_entry LEFT JOIN objects ON objects.oid = member_id WHERE member_id IN($memstr) AND form_id = '$automatic_form' AND objects.status != 0");
 			while ($row = $this->db_next())
 			{
 				$meminf[$row["entry_id"]] = $row;

@@ -121,6 +121,11 @@ class ml_member extends aw_template
 		$o=$this->get_object($id);
 		$this->mk_path($o["parent"],"Muuda meililisti liiget");				
 
+		if (!$o["meta"]["conf_obj"])
+		{
+		  $this->raise_error(ERR_MLM_NOCONF, "The configuration object for this list member has not been set (try deleting the member and recreting it, after making sure that the list has a configuration object set)!", true);
+		}
+
 		$mlc_inst = get_instance("mailinglist/ml_list_conf");
 		$fl = $mlc_inst->get_forms_by_id($o["meta"]["conf_obj"]);
 
@@ -318,14 +323,13 @@ class ml_member extends aw_template
 		$dat = array("conf_obj" => $conf);
 		foreach($entries as $fid => $eid)
 		{
-//			echo "create member = $fid => $eid <br>";
 			$dat["form_entries"][$fid] = $eid;
 			$this->db_query("INSERT INTO ml_member2form_entry (member_id, form_id, entry_id) VALUES('$id', '$fid', '$eid')");
 		}
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => $dat
-		));
+		$this->upd_object(array(
+								"oid" => $id,
+								"metadata" => $dat
+								));
 
 		$this->update_member_name($id);
 		$ml_inst = get_instance("mailinglist/ml_list");
