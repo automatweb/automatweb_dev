@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.141 2002/07/24 20:33:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.142 2002/08/01 00:53:23 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -338,6 +338,28 @@ class menuedit extends aw_template
 			$this->sel_section = $obj["parent"];
 		}
 		else
+		if ($obj["class_id"] == CL_BROTHER_DOCUMENT)
+		{
+			$bo = $this->get_object($obj["brother_of"]);
+			$bo_meta = $this->get_object_metadata(array(
+				"metadata" => $bo["metadata"]
+			));
+			if ($bo_meta["show_real_pos"])
+			{
+				$section = $bo["parent"];
+				$this->sel_section = $bo["parent"];
+			}
+			else
+			{
+				$this->sel_section = $obj["parent"];
+			}
+		}
+		else
+		if ($obj["class_id"]  == CL_BROTHER)
+		{
+			$this->sel_section = $obj["brother_of"];
+		}
+		else
 		{
 			$this->sel_section = $section;
 		}
@@ -502,7 +524,16 @@ class menuedit extends aw_template
 			$this->menu_defaults = $this->cfg["menu_defaults"][aw_global_get("lang_id")];
 		}
 		$frontpage = $this->cfg["frontpage"];
-		
+
+		global $DBUG;
+		if ($DBUG)
+		{
+			print "<pre>";
+			var_dump($this->cfg["lang_defs"]);
+			var_dump($menu_defs_v2);
+			print "</pre>";
+		};
+	
 
 		if (isset($menu_defs_v2) && is_array($menu_defs_v2))
 		{
@@ -529,6 +560,11 @@ class menuedit extends aw_template
 				// so we can get the root menu of the menu area from the menu area's name quickly
 				$this->menu_defs_name_map[$name] = $id;
 
+				global $DBUG;
+				if ($DBUG)
+				{
+					print "drawing $id $name<br>";
+				};
 				$this->req_draw_menu($id,$name,&$path,false);
 				if ($this->sel_section == $frontpage)
 				{
@@ -4002,26 +4038,26 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if (isset($this->mpr[$row["oid"]]) && is_array($this->mpr[$row["oid"]]))
 			{
 				$hs = "";
-				if ($this->is_template("HAS_SUBITEMS_".$name))
+				if ($this->is_template($mn.$ap.".HAS_SUBITEMS_".$name))
 				{
-					$this->parse("HAS_SUBITEMS_".$name);
+					$this->parse($mn.$ap.".HAS_SUBITEMS_".$name);
 				}
 				$hsl = "";
-				if ($this->is_template("HAS_SUBITEMS_".$name."_L".$this->level))
+				if ($this->is_template($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level))
 				{
-					$hsl = $this->parse("HAS_SUBITEMS_".$name."_L".$this->level);
+					$hsl = $this->parse($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level);
 				}
 				if (in_array($row["oid"],$path))	// this menu is selected
 				{
 					$_tmp = "";
-					if ($this->is_template("HAS_SUBITEMS_".$name."_L".$this->level."_SEL"))
+					if ($this->is_template($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL"))
 					{
-						$_tmp = $this->parse("HAS_SUBITEMS_".$name."_L".$this->level."_SEL");
+						$_tmp = $this->parse($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL");
 					}
 					$this->vars(array(
 							"HAS_SUBITEMS_".$name."_L".$this->level."_SEL" => $_tmp
 					));
-					if ($this->is_template("HAS_SUBITEMS_".$name."_L".$this->level."_SEL_MID"))
+					if ($this->is_template($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL_MID"))
 					{
 						$_hm = false;
 						foreach($this->mpr[$row["oid"]] as $_row)
@@ -4033,7 +4069,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 						}
 						if ($_hm)
 						{
-							$hslm = $this->parse("HAS_SUBITEMS_".$name."_L".$this->level."_SEL_MID");
+							$hslm = $this->parse($mn.$ap.".HAS_SUBITEMS_".$name."_L".$this->level."_SEL_MID");
 						}
 					}
 					$this->vars(array(
@@ -4044,14 +4080,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			else
 			{
 				$hs = "";
-				if ($this->is_template("NO_SUBITEMS_".$name))
+				if ($this->is_template($mn.$ap.".NO_SUBITEMS_".$name))
 				{
-					$hs = $this->parse("NO_SUBITEMS_".$name);
+					$hs = $this->parse($mn.$ap.".NO_SUBITEMS_".$name);
 				}
 				$hsl = "";
-				if ($this->is_template("NO_SUBITEMS_".$name."_L".$this->level))
+				if ($this->is_template($mn.$ap.".NO_SUBITEMS_".$name."_L".$this->level))
 				{
-					$hsl = $this->parse("NO_SUBITEMS_".$name."_L".$this->level);
+					$hsl = $this->parse($mn.$ap.".NO_SUBITEMS_".$name."_L".$this->level);
 				}
 			}
 			$this->vars(array(
@@ -5872,7 +5908,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				{
 					if ($this->is_template($sub))
 					{
-						$si->$fun(&$this);
+						if (is_object($si))
+						{
+							$si->$fun(&$this);
+						};
 					}
 				}
 			}
