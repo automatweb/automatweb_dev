@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.3 2002/12/02 12:19:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_test.aw,v 2.4 2003/04/28 14:11:11 kristo Exp $
 // aw_test.aw - AW remote control
 class aw_test extends aw_template 
 {
@@ -163,7 +163,10 @@ class aw_test extends aw_template
 		));
 		
 		$op = "HEAD / HTTP/1.0\r\n";
-		$op .= "Host: $host\r\n\r\n";
+		$op .= "Host: $host\r\n";
+		$op .= "Cache-control: no-cache\r\n";
+		$op .= "Pragma: no-cache\r\n";
+		$op .= "\r\n";
 
 		print "<pre>";
 		print "Acquiring session\n";
@@ -203,10 +206,12 @@ class aw_test extends aw_template
 		
 		$request = "uid=$uid&password=$password&class=users&action=login";
 
-		$op = "POST http://$host/orb.".$ext." HTTP/1.0\r\n";
+		$op = "POST /reforb.".$ext." HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n";
 		$op .= "Keep-Alive: 5\r\n";
+		$op .= "Cache-control: no-cache\r\n";
+		$op .= "Pragma: no-cache\r\n";
 		$op .= "Referer: http://$host/login.".$ext."\r\n";
 		$op .= "Content-type: application/x-www-form-urlencoded\r\n";
 		$op .= "Content-Length: " . strlen($request) . "\r\n\r\n";
@@ -239,6 +244,8 @@ class aw_test extends aw_template
 		));
 		$op = "GET $req HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
+		$op .= "Cache-control: no-cache\r\n";
+		$op .= "Pragma: no-cache\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n\r\n";
 		print "sending request $req <br>\n";
 		$socket->write($op);
@@ -297,6 +304,8 @@ class aw_test extends aw_template
 		));
 		$op = "GET /index.".$this->cfg["ext"]."?class=users&action=logout HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n";
+		$op .= "Cache-control: no-cache\r\n";
+		$op .= "Pragma: no-cache\r\n";
 		$op .= "Cookie: automatweb=$cookie\r\n\r\n";
 
 		print "<pre>";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.12 2003/04/24 14:31:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.13 2003/04/28 14:11:11 kristo Exp $
 // scheduler.aw - Scheduler
 
 class scheduler extends aw_template
@@ -148,6 +148,17 @@ class scheduler extends aw_template
 		{
 			$this->repdata = array();
 		}
+		
+		// also remove events that only have time set, but no url
+		$nrd = array();
+		foreach($this->repdata as $idx => $evnt)
+		{
+			if ($evnt["event"] != "")
+			{
+				$nrd[] = $evnt;
+			}
+		}
+		$this->repdata = $nrd;
 	}
 
 	function close_session($write = false)
@@ -185,7 +196,7 @@ class scheduler extends aw_template
 
 		// read in all events
 		$this->open_session();
-		$this->close_session();
+		$this->close_session(true);
 
 		// now do all events for which the time has expired
 		$cp = $this->repdata;
@@ -273,6 +284,8 @@ class scheduler extends aw_template
 
 	function open_log_session()
 	{
+		$this->log = array();
+		return;
 		$this->log_fp = fopen($this->cfg["log_file"], "a+");
 		flock($this->log_fp,LOCK_EX);
 
@@ -288,6 +301,8 @@ class scheduler extends aw_template
 
 	function close_log_session($write = false)
 	{
+		$this->log = array();
+		return;
 		if ($write)
 		{
 			ftruncate($this->log_fp,0);
