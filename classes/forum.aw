@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.48 2002/08/07 11:06:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.49 2002/08/22 21:51:41 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -291,8 +291,8 @@ class forum extends aw_template
 			"comment" => $obj["comment"],
 			"comments" => checked($meta["comments"]),
 			"template" => $this->picker($meta["template"],aw_ini_get("menuedit.template_sets")),
-			"onpage" => $this->picker($meta["onpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
-			"topicsonpage" => $this->picker($meta["topicsonpage"],array(10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
+			"onpage" => $this->picker($meta["onpage"],array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
+			"topicsonpage" => $this->picker($meta["topicsonpage"],array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30)),
 			"rated" => checked($meta["rated"]),
 			"reforb" => $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent)),
 			"URL" => $url,
@@ -378,6 +378,7 @@ class forum extends aw_template
 			"configure" => $this->mk_my_orb("configure",array("id" => $id,"_alias" => "forum","section" => $this->section)),
 			"addcomment" => $this->mk_my_orb("addcomment",array("board" => $board,"_alias" => "forum","section" => $this->section)),
 			"forum_link" => $this->mk_my_orb("topics",array("id" => $id,"_alias" => "forum", "section" => $this->section)),
+			"archive" => $this->mk_my_orb("topics",array("id" => $id,"_alias" => "forum", "section" => $this->section,"archive" => 1)),
 			"props_link" => $this->mk_my_orb("configure",array("id" => $id)),
 			"mark_all_read" => $this->mk_my_orb("mark_all_read",array("id" => $id,"_alias" => "forum", "section" => $this->section)),
 			"search" => $this->mk_my_orb("search",array("id" => $id,"_alias" => "forum","section" => $this->section,)),
@@ -395,13 +396,14 @@ class forum extends aw_template
 			"addcomment" => "Uus küsimus",
 			"flat" => "Teemade nimekiri",
 			"configure" => "Konfigureeri",
+			"archive" => "Arhiiv",
 			"threadedsubjects" => "Ainult pealkirjad",
 			"mark_all_read" => "Kõik loetuks",
 			"search" => "Otsi",
-			"no_response" => "Vastamata küsimused",
+			//"no_response" => "Vastamata küsimused",
 			"details" => "Foorum",
 			"flatcomments" => "Aja järgi",
-			"threadedcomments" => "Küsimused/vastused",
+			//"threadedcomments" => "Küsimused ja vastused",
 		);
 
 		$retval .= "";
@@ -414,12 +416,16 @@ class forum extends aw_template
 			}
 			else
 			{
-				$this->vars(array(
-					"link" => $tabs[$val],
-					"caption" => $captions[$val],
-				));
-				$tpl = ($active == $val) ? "active_tab" : "tab";
-				$retval .= $this->parse($tpl);
+				if ($captions[$val])
+				{
+					$this->vars(array(
+						"link" => $tabs[$val],
+						"caption" => $captions[$val],
+
+					));
+					$tpl = ($active == $val) ? "active_tab" : "tab";
+					$retval .= $this->parse($tpl);
+				};
 			};
 		}
 		$this->vars(array(
@@ -1226,6 +1232,7 @@ topic");
 
 		$this->forum_id = $id;
 		$this->from = $from;
+		$this->archive = $archive;
 		if ($archive)
                 {
                         $act_tab = "archive";
@@ -1339,6 +1346,7 @@ topic");
 			return;
 		};
 		$this->section = $section;
+		$this->forum_id = $id;
 		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"search");
 		$this->read_template("search.tpl");
 		$o = $this->get_object($board);
@@ -1352,6 +1360,7 @@ topic");
 		));
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_search",array("id" => $id, "board" => $board,"no_reforb" => 1,"section" => $this->section)),
+			"TABS" => $tabs,
 		));
 		return $this->parse();
 	}
@@ -1362,6 +1371,7 @@ topic");
 	{
 		extract($args);
 		$this->section = $section;
+		$this->forum_id = $id;
 		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"search");
 		$this->read_template("search_results.tpl");
 		if (not($board))
@@ -1384,7 +1394,8 @@ topic");
 		}
 		else
 		{	
-			$q = "SELECT * FROM objects WHERE parent = '$board' AND status = 2 AND class_id = " . CL_MSGBOARD_TOPIC;
+			$status = ($in_archive) ? "" : " AND status = 2";
+			$q = "SELECT * FROM objects WHERE parent = '$board' $status AND class_id = " . CL_MSGBOARD_TOPIC;
 			$this->db_query($q);
 			$this->forum_id = $board_obj["parent"];
 			$this->mk_links(array(
@@ -1424,6 +1435,7 @@ topic");
 		$this->vars(array(
 			"count" => $cnt,
 			"message" => $c,
+			"TABS" => $tabs,
 		));
 		return $this->parse();
 
@@ -1514,11 +1526,12 @@ topic");
 	function _draw_all_topics($args = array())
 	{
 		extract($args);
+		$act = ($this->archive) ? 1 : 2;
 		$obj = $this->get_objects_below(array(
 			"parent" => $id,
 			"class" => CL_MSGBOARD_TOPIC,
 			"orderby" => "created desc",
-			"active" => 1,
+			"status" => $this->archive ? 1 : 2,
 		));
 		$content = "";
 		if (is_array($obj))
@@ -1707,7 +1720,7 @@ topic");
 			};
 			$pg_action = ($args["details"]) ? "topics_detail" : "topics";
 			$this->vars(array(
-				"pagelink" => $this->mk_my_orb($pg_action,array("id" => $this->forum_id,"from" => $page_start,"section" => $this->section)),
+				"pagelink" => $this->mk_my_orb($pg_action,array("id" => $this->forum_id,"from" => $page_start,"section" => $this->section,  "archive" => $this->archive)),
 				"linktext" => $i,
 			));
 			$content .= $this->parse($tpl);
