@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.49 2004/12/08 10:41:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.50 2004/12/31 09:41:12 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -206,9 +206,9 @@ class cfgform extends class_base
 					"name" => $prop["name"],
 					"type" => $prop["type"],
 					"value" => html::checkbox(array(
-						"name" => $pname . "[" . $prop["name"] . "]",
+						"name" => $pname."[".$prop["name"]."]",
 						"value" => 1,
-						"checked" => $this->prplist[$prop["name"]]["default"] == 1,
+						"checked" => $this->prplist[$prop["name"]]["default"] == "" ? $prop["default"] : ($this->prplist[$prop["name"]]["default"] == 1),
 					)),
 				));
 			};
