@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.6 2001/06/05 11:00:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.7 2001/06/05 16:16:14 duke Exp $
 if (DEFS_LOADED == 1)
 {
 }
@@ -452,7 +452,7 @@ function map($format,$array)
 	}
 	else
 	{
-		$retval[]= sprintf($format,$val);
+		$retval[]= sprintf($format,$array);
 	};
 	return $retval;
 }
@@ -488,7 +488,7 @@ function map2($format,$array,$type = 0)
 	}
 	else
 	{
-		$retval[] = sprintf($format,$val);
+		$retval[] = sprintf($format,$array);
 	};
 	return $retval;
 }
