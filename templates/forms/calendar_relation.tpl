@@ -12,6 +12,14 @@
 <td class="celltext" colspan="2"><select name="el_relation" {VAR:relation_disabled}>{VAR:relation_els}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Kasuta pärja sisestuse ID-d kalendrisse kirjutamisel:</td>
+<td class="celltext" colspan="2"><input type="checkbox"  name="el_use_chain_entry_id" value="1" {VAR:el_use_chain_entry_id}"></td>
+</tr>
+<tr class="aste01">
+<td class="celltext">Luba ülebroneeringuid:</td>
+<td class="celltext" colspan="2"><input type="checkbox"  name="el_allow_exceed" value="1" {VAR:el_allow_exceed}"></td>
+</tr>
+<tr class="aste01">
 <td class="celltext">Sündmuse alguse element:</td>
 <td class="celltext" colspan="2"><select name="el_start" {VAR:start_disabled}>{VAR:start_els}</select></td>
 </tr>
