@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.40 2001/08/08 06:43:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.41 2001/08/08 07:44:18 cvs Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -392,6 +392,19 @@ class document extends aw_template
 		{
 			if (($doc["lead"]) && ($doc["showlead"] == 1 || $showlead == 1) )
 			{
+				if ($this->is_template("image_pos"))
+				{
+					if (preg_match("/#p(\d+?)(v|k|p|)#/i",$doc["lead"],$match)) 
+					{
+						// asendame 
+						$idata = $img->get_img_by_oid($docid,$match[1]);
+						$this->vars(array(
+							"imgref" => $idata["url"]
+						));
+						$this->vars(array("image_pos" => $this->parse("image_pos")));
+						$doc["lead"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["lead"]);
+					}
+				}
 				if ($no_strip_lead != 1)
 				{
 					$doc["lead"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["lead"]);
@@ -2444,7 +2457,7 @@ class document extends aw_template
 		$this->db_query("SELECT documents.*,objects.parent as parent, objects.modified as modified 
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
-										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND (documents.no_search is null OR documents.no_search = 0) $ml");
+										 WHERE (documents.title LIKE '%".$str."%' OR documents.content LIKE '%".$str."%' $fasstr $mtalsstr) AND objects.status = 2 AND objects.lang_id = ".$GLOBALS["lang_id"]." AND (documents.no_search is null OR documents.no_search = 0) $ml");
 		while($row = $this->db_next())
 		{
 			// find number of matches in document for search string, for calculating percentage
