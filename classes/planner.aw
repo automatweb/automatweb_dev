@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.54 2002/01/17 22:34:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.55 2002/01/18 00:40:18 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -63,9 +63,13 @@ class planner extends calendar {
 	{
 		extract($args);
 		$object = $this->get_object($id);
+		if (!$date)
+		{
+			$date = date("d-m-Y");
+		};
 		$menubar = $this->gen_menu(array(
 				"activelist" => array("config"),
-				"vars" => array("id" => $id),
+				"vars" => array("id" => $id,"date" => $date),
 		));
 		$this->read_template("change.tpl");
 		$this->mk_path($object["parent"],"Muuda kalendrit");
@@ -176,6 +180,8 @@ class planner extends calendar {
 			$date = date("d-m-Y");
 		};
 
+		$this->date = $date;
+
 		if ($type == "day")
 		{
 			$act = ($date == date("d-m-Y")) ? "today" : "day";
@@ -191,8 +197,10 @@ class planner extends calendar {
 			));
 
 		$object = $this->get_object($id);
+		$par_obj = $this->get_object($object["parent"]);
 
-			
+		$this->parent_class = $object["class_id"];
+
 		list($d,$m,$y) = split("-",$date);
 		
 		$xdate = $d . $m . $y;
@@ -466,6 +474,8 @@ class planner extends calendar {
 		return $this->parse();
 	}
 
+	////
+	// !Draws a single event
 	function _draw_event($e = array())
 	{
 		if ($e["aid"])
@@ -488,9 +498,19 @@ class planner extends calendar {
 		{
 			$name = "";
 		};
+		if ($this->parent_class == CL_CALENDAR)
+		{
+			$ev_link = $this->mk_my_orb("change_event",array("id" => $e["id"],"date" => $this->date),"planner");
+		}
+		else
+		{
+			$ev_link = $this->mk_my_orb("change",array("id" => $e["id"],"date" => $this->date),"cal_event");
+		};
+
 		$this->vars(array(
 			"color" => $e["color"],
 			"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
+			"event_link" => $ev_link,
 			"id" => $e["id"],
 			"title" => ($e["title"]) ? $e["title"] : "(nimetu)",
 			"object" => $name,
@@ -1525,6 +1545,83 @@ class planner extends calendar {
 		));
 			
 	}
+
+	////
+	// !Since we need to show the planner tabs when adding an event we need to wrap
+	// those functions from cal_event here
+	function new_event($args = array())
+	{
+		extract($args);
+		$menubar = $this->gen_menu(array(
+				"activelist" => array("add"),
+				"vars" => array("id" => $parent,"date" => $date),
+		));
+		classload("cal_event");
+		$ce = new cal_event();
+		$html = $ce->add(array(
+			"parent" => $parent,
+			"folder" => $parent,
+			"date" => $date,
+		));
+		return $menubar . $html;
+	}
+	
+	function change_event($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($id);
+		$par_obj = $this->get_object($obj["parent"]);
+		$menubar = $this->gen_menu(array(
+				"activelist" => array("xxx"),
+				"vars" => array("id" => $obj["parent"]),
+		));
+		classload("cal_event");
+		$ce = new cal_event();
+		$html = $ce->change(array(
+			"id" => $id,
+		));
+		$this->mk_path($par_obj["parent"],"Kalender / Muuda sündmust");
+		return $menubar . $html;
+	}
+	
+	function event_repeaters($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($id);
+		$par_obj = $this->get_object($obj["parent"]);
+		$menubar = $this->gen_menu(array(
+				"activelist" => array("xxx"),
+				"vars" => array("id" => $obj["parent"]),
+		));
+		classload("cal_event");
+		$ce = new cal_event();
+		$html = $ce->repeaters(array(
+			"id" => $id,
+		));
+		$this->mk_path($par_obj["parent"],"Kalender / Muuda sündmust");
+		return $menubar . $html;
+	}
+	
+	function event_object_search($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($id);
+		$par_obj = $this->get_object($obj["parent"]);
+		$menubar = $this->gen_menu(array(
+				"activelist" => array("xxx"),
+				"vars" => array("id" => $obj["parent"]),
+		));
+		classload("cal_event");
+		$ce = new cal_event();
+		$html = $ce->search(array(
+			"id" => $id,
+			"s_name" => $s_name,
+			"s_type" => $s_type,
+			"s_comment" => $s_comment,
+		));
+		return $menubar . $html;
+	}
+
 
 };
 ?>
