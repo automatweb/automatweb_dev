@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.94 2005/03/03 12:59:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.95 2005/03/14 10:26:26 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -111,6 +111,13 @@ class admin_menus extends aw_template
 								"caption" => $cldata["name"],
 								"link" => $addlink,
 							);
+
+							if (isset($cldata["separator"]))
+							{	
+								$this->add_menu[0][$tcnt."_sepa"] = array(
+									"separator" => true,
+								);
+							};
 						}
 					}
 				}
@@ -147,6 +154,12 @@ class admin_menus extends aw_template
 								"caption" => $cldata["name"],
 								"link" => $addlink,
 							);
+							if (isset($cldata["separator"]))
+							{	
+								$this->add_menu[$fld_id]["class_" . $clid."_sepa"] = array(
+									"separator" => true,
+								);
+							};
 						}
 					}
 				}
@@ -1094,8 +1107,6 @@ class admin_menus extends aw_template
 
 			$row["lang_id"] = $lar[$row["lang_id"]];
 
-			$this->save_handle();
-
 			if ($view_type == 'detail')
 			{
 				$this->vars(array(
@@ -1127,8 +1138,6 @@ class admin_menus extends aw_template
 			}
 
 
-			$this->restore_handle();
-			
 			$iu = icons::get_icon_url($row["class_id"],$row["name"]);
 			$iconcomm = "Objekti id on ".$row["oid"];
 			$row["icon"] = '<img alt="'.$iconcomm.'" title="'.$iconcomm.'" src="'.$iu.'">';
