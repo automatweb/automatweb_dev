@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.72 2003/05/19 15:31:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.73 2003/05/28 08:45:01 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1247,6 +1247,11 @@ topic");
 			{
 				$name = $from;
 			};
+			$this->quote(&$name);
+			$this->quote(&$email);
+			$this->quote(&$comment);
+			$this->quote(&$subj);
+			$this->quote(&$response);
 			if ($response)
 			{
 				$q = "INSERT INTO comments (parent, board_id, name, email, comment, subj,
