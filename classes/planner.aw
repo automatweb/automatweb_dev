@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.179 2004/05/06 12:34:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.180 2004/05/14 10:32:12 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -467,12 +467,6 @@ class planner extends class_base
 		$this->rec = array();
 		// that eidlist thingie is no good! I might have events out of my range which I still need to include
 		// I need folders! Folders! I'm telling you! Folders! Those I can probably include in my query!
-		if (aw_global_get("uid") == "duke")
-		{
-			print "<pre>";
-			print_r($events);
-			print "</pre>";
-		};
 		foreach($events as $event)
 		{
 			// fuck me. plenty of places expect different data from me .. until I'm
@@ -840,8 +834,8 @@ class planner extends class_base
 		// vaid broadcastitakse vastav message .. ja siis kalender tekitab selle sündmuse?
 
 
-		preg_match('/alias_to_org=(\w*)&/', $gl, $o);
-		preg_match('/reltype_org=(\w*)&/', $gl, $r);
+		preg_match('/alias_to_org=(\w*|\d*)&/', $gl, $o);
+		preg_match('/reltype_org=(\w*|\d*)&/', $gl, $r);
 
 		if (is_numeric($o[1]) && is_numeric($r[1]))
 		{
