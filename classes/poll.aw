@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.33 2003/03/28 10:24:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.34 2003/04/15 12:30:05 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -434,7 +434,7 @@ class poll extends aw_template
 		if ($id)
 		{
 			$ap = $this->get_object($id);
-			$this->read_template("poll_embed.tpl");
+			$this->read_any_template("poll_embed.tpl");
 		}
 		else
 		{
@@ -443,7 +443,7 @@ class poll extends aw_template
 				return "";
 			}
 			$def = true;
-			$this->read_template("poll.tpl");
+			$this->read_any_template("poll.tpl");
 		}
 
 		$lid = aw_global_get("lang_id");
