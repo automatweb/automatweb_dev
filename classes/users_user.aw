@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.85 2004/03/28 21:48:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.86 2004/05/06 12:26:54 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -552,7 +552,7 @@ class users_user extends aw_template
 	{
 		$this->db_query("SELECT groupmembers.*,users.join_form_entry as join_form_entry FROM groupmembers 
 										 LEFT JOIN users ON users.uid = groupmembers.uid
-										 WHERE gid = $gid AND users.blocked < 1");
+										 WHERE gid = '$gid' AND users.blocked < 1");
 		$ret = array();
 		while ($row = $this->db_next())
 		{
