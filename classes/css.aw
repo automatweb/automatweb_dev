@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.13 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.14 2002/08/29 03:19:48 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -37,7 +37,9 @@ class css extends aw_template
 	function css ($args = array())
 	{
 		// kuidas ma seda edimisvormi alati automawebi juurest lugeda saan?
-		$this->init("css");
+//		$this->init("css");
+		$this->db_init();
+		$this->tpl_init("css");
 		$this->lc_load("css","lc_css");
 		// fondifamilyd, do not change the order
 		$this->font_families = array(
