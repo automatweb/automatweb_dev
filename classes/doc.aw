@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.89 2004/11/15 17:13:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.90 2004/11/18 11:38:51 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -256,6 +256,11 @@ class doc extends class_base
 				if ($arr["new"])
 				{
 					$format = aw_ini_get("document.date_format");
+					if ($format == "n/a")
+					{
+						$format = "";
+					}
+					else
 					if (empty($format))
 					{
 						$format = "d.m.Y";
