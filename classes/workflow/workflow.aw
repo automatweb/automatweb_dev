@@ -125,7 +125,7 @@ class workflow extends class_base
 		
 		$this->cfg_obj = new object($cfgid);
 
-		$this->treeview_conf_id = $this->cfg_obj->prop("treeview_conf");
+		/*$this->treeview_conf_id = $this->cfg_obj->prop("treeview_conf");
 
 		if (empty($this->treeview_conf_id))
 		{
@@ -133,7 +133,7 @@ class workflow extends class_base
 			return PROP_ERROR;
 		};
 
-		$this->treeview_conf = new object($this->treeview_conf_id);
+		$this->treeview_conf = new object($this->treeview_conf_id);*/
 
 		$entity_rootmenu_id = $this->cfg_obj->prop("entity_rootmenu");
 
@@ -432,7 +432,7 @@ class workflow extends class_base
 
 		$entity_tree_filter = new object_tree(array(
 			"parent" => ($_GET["tree_filter"] ? $_GET["tree_filter"] : $this->entity_rootmenu),
-			"class_id" => CL_ENTITY
+			"class_id" => array(CL_MENU,CL_ENTITY)
 		));
 		$entity_list = $entity_tree_filter->to_list();
 
@@ -1507,7 +1507,7 @@ class workflow extends class_base
 	{
 		$tree = new object_tree(array(
 			"parent" => $arr["rootmenu"],
-			"class_id" => $arr["class_id"]
+			"class_id" => array(CL_MENU, $arr["class_id"])
 		));
 
 		classload("vcl/treeview");
