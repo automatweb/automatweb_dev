@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.78 2002/09/30 10:05:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.79 2002/09/30 10:18:45 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -2934,6 +2934,10 @@ class form_element extends aw_template
 		// too - to check whether the entry falls into allowed range in a calendar
 		$opts = $this->arr;
 		$opts["ret_ids"] = true;
+		if ($this->arr["chain_entries_only"])
+		{
+			$opts["limit_chain_id"] = $this->form->entry["chain_id"];
+		}
 
 		if (!is_array($this->arr["rel_el_ord"]))
 		{

@@ -1496,6 +1496,7 @@ class form_db_base extends aw_template
 	// ret_ids - if set, array index is entry_id
 	// user_entries_only - if set, only entries that were created by the current user are returned
 	// chain_entries_only - if set, only chain entries are returned
+	// limit_chain_id - if set, only entries with that chain id are returned
 	function get_entries_for_element($args)
 	{
 		extract($args);
@@ -1524,6 +1525,10 @@ class form_db_base extends aw_template
 			if ($chain_entries_only)
 			{
 				$where = " AND ".$rel_tbl.".chain_id IS NOT NULL ";
+			}
+			if ($limit_chain_id)
+			{
+				$where = " AND ".$rel_tbl.".chain_id = '$limit_chain_id' ";
 			}
 		}
 
