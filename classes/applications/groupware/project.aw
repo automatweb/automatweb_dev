@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.17 2004/11/26 14:11:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.18 2004/12/01 12:47:13 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -122,10 +122,10 @@ class project extends class_base
 				break;
 
 			case "use_template":
-                                $data["options"] = array(
-                                        "weekview" => "Nädala vaade",
-                                );
-                                break;
+				$data["options"] = array(
+					"weekview" => t("Nädala vaade"),
+				);
+				break;
 		}
 		return $retval;
 	}
@@ -133,17 +133,15 @@ class project extends class_base
 	function set_property($arr)
 	{
 		$data = &$arr["prop"];
-                $retval = PROP_OK;
+		$retval = PROP_OK;
 
-                switch($data["name"])
-                {
-                        case "add_event":
-                                $this->register_event_with_planner($arr);
-                                break;
-
+		switch($data["name"])
+		{
+			case "add_event":
+				$this->register_event_with_planner($arr);
+				break;
 		}
 		return $retval;
-
 	}
 	
 
@@ -154,9 +152,9 @@ class project extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 
 		$arr["prop"]["vcl_inst"]->configure(array(
-                        "overview_func" => array(&$this,"get_overview"),
+			"overview_func" => array(&$this,"get_overview"),
 			"full_weeks" => 1,
-                ));
+		));
 
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
@@ -248,9 +246,9 @@ class project extends class_base
 	}
 
 	function get_overview($arr = array())
-        {
-                return $this->overview;
-        }
+	{
+		return $this->overview;
+	}
 
 
 	////
@@ -954,7 +952,7 @@ class project extends class_base
 		$tb->add_menu_button(array(
 			"name" => "subprj",
 			"img" => "new.gif",
-			"tooltip" => "Alamprojekt",
+			"tooltip" => t("Alamprojekt"),
 		));
 
 		// see nupp peaks kuvama ka alamprojektid
@@ -1059,7 +1057,7 @@ class project extends class_base
 				$tb->add_menu_item(array(
 					"name" => "x_" . $o->id(),
 					"parent" => "subprj",
-					"text" => "Etendus",
+					"text" => t("Etendus"),
 					"link" => $this->mk_my_orb("new",array(
 						"parent" => $o->id(),
 						"group" => "change",
@@ -1255,14 +1253,14 @@ class project extends class_base
 		else
 		{
 			if (!empty($args["request"]["clid"]))
-                        {
-                                $clid = $args["request"]["clid"];
-                        }
-                        elseif (is_oid($event_cfgform))
-                        {
-                                $cfgf_obj = new object($event_cfgform);
-                                $clid = $cfgf_obj->prop("subclass");
-                        };
+			{
+				$clid = $args["request"]["clid"];
+			}
+			elseif (is_oid($event_cfgform))
+			{
+				$cfgf_obj = new object($event_cfgform);
+				$clid = $cfgf_obj->prop("subclass");
+			};
 		};
 
 		$res_props = array();
@@ -1283,7 +1281,7 @@ class project extends class_base
 			{
 				return array(array(
 					"type" => "text",
-					"value" => "Seda klassi ei saa kasutada sündmuste sisestamiseks",
+					"value" => t("Seda klassi ei saa kasutada sündmuste sisestamiseks"),
 				));
 			}
 			else
@@ -1304,14 +1302,14 @@ class project extends class_base
 				$t->id = $this->event_id;
 
 				$all_props = $t->get_property_group(array(
-                                        "group" => $emb_group,
-                                        "cfgform_id" => $event_cfgform,
-                                ));
+					"group" => $emb_group,
+					"cfgform_id" => $event_cfgform,
+				));
 
 				$xprops = $t->parse_properties(array(
-						"obj_inst" => $event_obj,
-						"properties" => $all_props,
-						"name_prefix" => "emb",
+					"obj_inst" => $event_obj,
+					"properties" => $all_props,
+					"name_prefix" => "emb",
 				));
 
 				//$resprops = array();
@@ -1341,38 +1339,36 @@ class project extends class_base
 
 	function do_group_headers($arr)
 	{
-                $xtmp = $arr["t"]->groupinfo;
-                $tmp = array(
-                        "type" => "text",
-                        "caption" => "header",
-                        "subtitle" => 1,
-                );
-                $captions = array();
-                // still, would be nice to make 'em _real_ second level groups
-                // right now I'm simply faking 'em
-                // now, just add another
-                foreach($xtmp as $key => $val)
-                {
-                        if ($this->event_id && ($key != $this->emb_group))
-                        {
-                                $new_group = ($key == "general") ? "" : $key;
-                                $captions[] = html::href(array(
-                                                "url" => aw_url_change_var("cb_group",$new_group),
-                                                "caption" => $val["caption"],
-                                ));
-                        }
-                        else
-                        {
-                                $captions[] = $val["caption"];
-                        };
-                };
-                $this->emb_group = $emb_group;
-                $tmp["value"] = join(" | ",$captions);
-                return $tmp;
-        }
+		$xtmp = $arr["t"]->groupinfo;
+		$tmp = array(
+			"type" => "text",
+			"caption" => "header",
+			"subtitle" => 1,
+		);
+		$captions = array();
+		// still, would be nice to make 'em _real_ second level groups
+		// right now I'm simply faking 'em
+		// now, just add another
+		foreach($xtmp as $key => $val)
+		{
+			if ($this->event_id && ($key != $this->emb_group))
+			{
+				$new_group = ($key == "general") ? "" : $key;
+				$captions[] = html::href(array(
+					"url" => aw_url_change_var("cb_group",$new_group),
+					"caption" => $val["caption"],
+				));
+			}
+			else
+			{
+				$captions[] = $val["caption"];
+			};
+		};
+		$this->emb_group = $emb_group;
+		$tmp["value"] = join(" | ",$captions);
+		return $tmp;
+	}
 
-
-	
 	function register_event_with_planner($args = array())
 	{
 		$event_folder = $args["obj_inst"]->id();
@@ -1676,7 +1672,6 @@ class project extends class_base
 		$level = 0;
 		$parent_selections = array();
 
-	
 		while ($o2 != false)
 		{
 			$level++;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.9 2004/10/29 15:54:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.10 2004/12/01 12:47:14 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -181,7 +181,7 @@ class task extends class_base
 				$tb->add_button(array(
 					'name' => 'del',
 					'img' => 'delete.gif',
-					'tooltip' => 'Kustuta valitud',
+					'tooltip' => t('Kustuta valitud'),
 					'action' => 'submit_delete_participants_from_calendar',
 				));
 
@@ -190,7 +190,7 @@ class task extends class_base
 				$tb->add_button(array(
 					'name' => 'Search',
 					'img' => 'search.gif',
-					'tooltip' => 'Otsi',
+					'tooltip' => t('Otsi'),
 					'url' => aw_url_change_var(array(
 						'show_search' => 1,
 					)),
@@ -199,7 +199,7 @@ class task extends class_base
 				$tb->add_button(array(
 					'name' => 'save',
 					'img' => 'save.gif',
-					'tooltip' => 'Salvesta',
+					'tooltip' => t('Salvesta'),
 					"action" => "save_participant_search_results"
 				));
 				$this->return_url=aw_global_get('REQUEST_URI');
