@@ -185,6 +185,15 @@
             <caption>T&amp;auml;hestiku kuvamisel kasutada v&amp;auml;iket&amp;auml;hti </caption>
       </property>
       <property>
+            <name>sproc_params</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Andmeallika parameetrid</caption>
+      </property>
+      <property>
             <name>title_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
