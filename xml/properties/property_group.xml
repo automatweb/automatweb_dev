@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>rootmenu</name>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <caption>Rootmenüü</caption>
+      </property>
+      <property>
+            <name>subclass</name>
+            <type>generated</type>
+            <generator>callback_get_class_list</generator>
+            <field>subclass</field>
+            <table>objects</table>
+            <caption>Klassid</caption>
+      </property>
+      <property>
+            <name>generate</name>
+            <editonly>1</editonly>
+            <type>text</type>
+            <table>objects</table>
+            <caption>Genereeri objektid</caption>
+      </property>
+      <classinfo>
+            <corefields>name,comment,status</corefields>
+      </classinfo>
+</properties>
+
