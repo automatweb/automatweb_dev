@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.275 2004/08/31 08:31:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.276 2004/09/03 10:02:42 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -801,16 +801,6 @@ class document extends aw_template
 		{
 			if (strpos($doc["content"],"#") !== false)
 			{
-				$awt->start("almgr-parse-oo-aliases");
-				$awt->count("almgr-parse-oo-aliases");
-				global $XX3;
-				if ($XX3)
-				{
-					arr($doc["content"]);
-				};	
-				$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
-				$awt->stop("almgr-parse-oo-aliases");
-		
 				$awt->start("phase722");
 				$doc["content"] = $this->parse_aliases(array(
 					"oid" => $docid,
@@ -850,6 +840,16 @@ class document extends aw_template
 		{
 			$doc["content"] = str_replace("\r\n","<br />",$doc["content"]);
 		};
+
+		$awt->start("almgr-parse-oo-aliases");
+		$awt->count("almgr-parse-oo-aliases");
+		global $XX3;
+		if ($XX3)
+		{
+			arr($doc["content"]);
+		};	
+		$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
+		$awt->stop("almgr-parse-oo-aliases");
 
 		$awt->stop("phase73");
 
@@ -3114,8 +3114,7 @@ class document extends aw_template
 		}
 		else
 		{
-			
-			$replacement = $this->gen_preview(array("docid" => $d["target"], "leadonly" => 1));
+			$replacement = $this->gen_preview(array("docid" => $d["target"] /*, "leadonly" => 1 */));
 		};
 		return $replacement;
 

@@ -160,7 +160,7 @@ class layout extends class_base
 		{
 			return $tmp;
 		}
-		return create_email_links($tmp);
+		return str_replace("\r\n","<br />",create_email_links($tmp));
 	}
 
 	////
