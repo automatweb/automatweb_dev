@@ -56,6 +56,10 @@
 	<td class="fform"><input type='radio' name='entry_type' value='writer_entry' {VAR:et_writer_entry}></td>
 	<td class="fform">SQL kirjutaja k&auml;esolev sisestus</td>
 </tr>
+<tr>
+	<td class="fform"><input type='radio' name='entry_type' value='element_sum' {VAR:et_element_sum}></td>
+	<td class="fform">K&otilde;ik vaadataval lehel olevate selle elemendi sisestuste summa</td>
+</tr>
 
 <!-- END SUB: EL_SEL -->
 
