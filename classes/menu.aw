@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.51 2003/06/18 15:25:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.52 2003/06/18 15:31:36 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -111,7 +111,7 @@
 	@property pmethod_properties type=callback callback=callback_get_pmethod_options group=general store=no
 	@caption Avaliku meetodi seaded
 	
-	@property clickable type=checkbox group=advanced ch_value=1
+	@property clickable type=checkbox group=advanced ch_value=1 value=1
 	@caption Klikitav
 	
 	@property no_menus type=checkbox group=advanced ch_value=1
