@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.36 2003/11/19 13:55:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.37 2003/11/21 17:03:27 hannes Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -961,6 +961,7 @@ class admin_menus extends aw_template
 			if (in_array($row["class_id"],$containers))
 			{
 				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
+				$comment = $row["comment"];
 				$row["is_menu"] = 1;
 			}
 			else
@@ -1022,11 +1023,11 @@ class admin_menus extends aw_template
 			$this->restore_handle();
 			
 			$iu = icons::get_icon_url($row["class_id"],$row["name"]);
-			$row["icon"] = '<img src="'.$iu.'">';
+			$row["icon"] = '<img alt="'.$comment.'" src="'.$iu.'">';
 			$this->t->set_default_sortby(array("name" => "name"));
 			$caption = ($row["name"] == '' ? "(nimeta)" : $row["name"]);
 
-			$row["name"] = '<a href="'.$chlink.'">'.$caption."</a>";
+			$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'">'.$caption."</a>";
 
 			if ($row["class_id"] == CL_SHORTCUT)
 			{
