@@ -131,6 +131,26 @@
             <no_caption>1</no_caption>
             <field>order_confirmed</field>
       </property>
+      <property>
+            <name>order_orderer_cos_tree</name>
+            <table>objects</table>
+            <group>order_orderer_cos</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>hbox_oc</parent>
+            <no_caption>1</no_caption>
+            <field>order_orderer_cos_tree</field>
+      </property>
+      <property>
+            <name>order_orderer_cos</name>
+            <table>objects</table>
+            <group>order_orderer_cos</group>
+            <type>table</type>
+            <store>no</store>
+            <parent>hbox_oc</parent>
+            <no_caption>1</no_caption>
+            <field>order_orderer_cos</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -171,6 +191,10 @@
                   <parent>order</parent>
                   <caption>Kinnitatud</caption>
             </order_confirmed>
+            <order_orderer_cos>
+                  <parent>order</parent>
+                  <caption>Tellijad</caption>
+            </order_orderer_cos>
       </groupinfo>
       <tableinfo>
             <aw_shop_warehouses>
@@ -211,5 +235,11 @@
                   <caption>tellimus</caption>
             </ORDER>
       </reltypes>
+      <layout>
+            <hbox_oc>
+                  <type>hbox</type>
+                  <group>order_orderer_cos</group>
+            </hbox_oc>
+      </layout>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.1 2004/03/24 11:00:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.2 2004/04/14 14:37:31 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -266,6 +266,151 @@ class shop_order extends class_base
 		}
 	
 		return $sum;
+	}
+
+	function start_order($warehouse)
+	{
+		$this->order_items = array();
+		$this->order_warehouse = $warehouse;
+	}
+
+	function add_item($item, $quantity)
+	{
+		$this->order_items[$item] = $quantity;
+	}
+
+	/** returns order id 
+	**/
+	function finish_order()
+	{
+		$wh = $this->order_warehouse->instance();
+
+		$oi = obj();
+		$oi->set_parent($wh->get_order_folder($this->order_warehouse));
+		$oi->set_name("Tellimus laost ".$this->order_warehouse->name());
+		$oi->set_class_id(CL_SHOP_ORDER);
+		$id = $oi->save();
+
+		// connect to current person/company
+		$us = get_instance("core/users/user");
+		if (($pers_id = $us->get_current_person()))
+		{
+			$oi->connect(array(
+				"to" => $pers_id,
+				"reltype" => 3 // RELTYPE_PERSON
+			));
+			$oi->set_prop("orderer_person", $pers_id);
+			$p_o = obj($pers_id);
+			$p_o->connect(array(
+				"to" => $oi->id(),
+				"reltype" => 20 // RELTYPE_ORDER
+			));
+		}
+		if (($com_id = $us->get_current_company()))
+		{
+			$oi->connect(array(
+				"to" => $com_id,
+				"reltype" => 4 // RELTYPE_ORG
+			));
+			$oi->set_prop("orderer_company", $com_id);
+			$p_o = obj($com_id);
+			$p_o->connect(array(
+				"to" => $oi->id(),
+				"reltype" => 27 // RELTYPE_ORDER
+			));
+		}
+
+		// now, products
+		$mp = array();
+		$sum = 0;
+		foreach($this->order_items as $iid => $quant)
+		{
+			if ($quant < 1)
+			{
+				continue;
+			}
+			$i_o = obj($iid);
+			$i_inst = $i_o->instance();
+
+			$oi->connect(array(
+				"to" => $iid,
+				"reltype" => 1 // RELTYPE_PRODUCT
+			));
+			$mp[$iid] = $quant;
+			$sum += ($quant * $i_inst->get_price($i_o));
+		}
+
+		$oi->set_meta("order_content", $mp);
+		$oi->set_prop("sum", $sum);
+		$oi->save();
+
+		return $oi->id();
+	}
+
+	/** shows thes order
+
+		@attrib name=show
+
+		@param id required type=int acl=view
+	**/
+	function show($arr)
+	{
+		$this->read_template("show.tpl");
+		
+		$o = obj($arr["id"]);
+		$tp = $o->meta("order_content");
+
+		$p = "";
+		$total = 0;
+		foreach($o->connections_from(array("type" => 1 /* RELTYPE_PRODUCT */)) as $c)
+		{
+			$prod = $c->to();
+			$inst = $prod->instance();
+
+			$pr = $inst->get_price($prod);
+			$this->vars(array(
+				"name" => $prod->name(),
+				"quant" => $tp[$prod->id()],
+				"price" => $pr
+			));
+
+			$total += ($pr * $tp[$prod->id()]);
+
+			$p .= $this->parse("PROD");
+		}
+
+		// get person
+		$po = obj($o->prop("orderer_person"));
+		$co = obj($o->prop("orderer_company"));
+
+		$this->vars(array(
+			"PROD" => $p,
+			"total" => $total,
+			"person_name" => $po->name(),
+			"company_name" => $co->name(),
+			"id" => $o->id()
+		));
+
+		return $this->parse();
+	}
+
+	function get_orderer($o)
+	{
+		$m = $o->modifiedby();
+		$mb = $m->name();
+		if ($o->prop("orderer_person"))
+		{
+			$_person = obj($o->prop("orderer_person"));
+			$mb = $_person->name();
+		}
+
+		if ($o->prop("orderer_company"))
+		{
+			$_comp = obj($o->prop("orderer_company"));
+			$mb .= " / ".$_comp->name();
+		}
+
+		return $mb;
 	}
 }
 ?>

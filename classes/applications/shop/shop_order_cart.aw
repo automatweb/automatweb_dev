@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.1 2004/04/13 12:36:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.2 2004/04/14 14:37:31 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -139,8 +139,31 @@ class shop_order_cart extends class_base
 			}
 		}
 
-		return $this->mk_my_orb("show_cart", array("oc" => $arr["oc"]));
+		if (!empty($arr["confirm_order"]))
+		{
+			// do confirm order and show user
+			$ordid = $this->do_create_order_from_cart($arr["oc"]);
+			return $this->mk_my_orb("show", array("id" => $ordid), "shop_order");
+		}
+		else
+		{
+			return $this->mk_my_orb("show_cart", array("oc" => $arr["oc"]));
+		}
 	}
 
+	function do_create_order_from_cart($oc)
+	{
+		$so = get_instance("applications/shop/shop_order");
+		$oc = obj($oc);
+		$so->start_order(obj($oc->prop("warehouse")));
+
+		$awa = new aw_array($_SESSION["cart"]["items"]);
+		foreach($awa->get() as $iid => $quant)
+		{
+			$so->add_item($iid, $quant);
+		}
+
+		return $so->finish_order();
+	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.3 2004/04/13 12:36:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.4 2004/04/14 14:37:31 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -52,12 +52,18 @@
 @groupinfo order caption="Telli"
 @groupinfo order_unconfirmed parent=order caption="Kinnitamata"
 @groupinfo order_confirmed parent=order caption="Kinnitatud"
+@groupinfo order_orderer_cos parent=order caption="Tellijad"
 
 @property order_unconfirmed_toolbar type=toolbar no_caption=1 group=order_unconfirmed store=no
 @property order_unconfirmed type=table store=no group=order_unconfirmed no_caption=1
 
 @property order_confirmed_toolbar type=toolbar no_caption=1 group=order_confirmed store=no
 @property order_confirmed type=table store=no group=order_confirmed no_caption=1
+
+@layout hbox_oc type=hbox group=order_orderer_cos 
+
+@property order_orderer_cos_tree type=text store=no parent=hbox_oc group=order_orderer_cos no_caption=1
+@property order_orderer_cos type=table store=no parent=hbox_oc group=order_orderer_cos no_caption=1
 
 ////////// reltypes
 @reltype CONFIG value=1 clid=CL_SHOP_WAREHOUSE_CONFIG
@@ -150,6 +156,14 @@ class shop_warehouse extends class_base
 
 			case "order_confirmed":
 				$this->do_order_confirmed_tbl($arr);
+				break;
+
+			case "order_orderer_cos":
+				$this->do_order_orderer_cos_tbl($arr);
+				break;
+
+			case "order_orderer_cos_tree":
+				$this->do_order_orderer_cos_tree($arr);
 				break;
 		};
 		return $retval;
@@ -404,6 +418,11 @@ class shop_warehouse extends class_base
 		if (!$this->config->prop("order_fld"))
 		{
 			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellimuste kataloog valimata!";
+			return false;
+		}
+		if (!$this->config->prop("buyers_fld"))
+		{
+			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellijate kataloog valimata!";
 			return false;
 		}
 
@@ -1178,6 +1197,249 @@ class shop_warehouse extends class_base
 				$re->do_confirm(obj($inc));
 			}
 		}
+	}
+
+	function _init_order_orderer_cos_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+		));
+
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => "Hind",
+		));
+		$t->define_field(array(
+			"name" => "who",
+			"caption" => "Kes",
+		));
+		$t->define_field(array(
+			"name" => "when",
+			"caption" => "Millal",
+		));
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => "Vaata",
+		));
+	}
+
+	function do_order_orderer_cos_tbl($arr)
+	{
+		$t =&$arr["prop"]["vcl_inst"];
+		$this->_init_order_orderer_cos_tbl($t);
+
+		// get orders by orderer
+		if ($arr["request"]["tree_worker"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_ORDER,
+				"orderer_person" => $arr["request"]["tree_worker"]
+			));
+		}
+		else
+		if ($arr["request"]["tree_company"])
+		{
+			// get workers for co
+			$co = obj($arr["request"]["tree_company"]);
+			$ids = array();
+			foreach($co->connections_from(array("type" => 8 /* RELTYPE_WORKER */)) as $c)
+			{
+				$ids[] = $c->prop("to");
+			}
+			$ol = new object_list(array(
+				"class_id" => CL_SHOP_ORDER,
+				"orderer_person" => $ids
+			));
+		}
+		else
+		if ($arr["request"]["tree_code"])
+		{
+			// get workers for co
+			$categories = new object_list(array(
+				"parent" => $this->buyers_fld,
+				"class_id" => CL_CRM_SECTOR,
+				"kood" => $arr["request"]["tree_code"]."%"
+			));
+			$ids = array();
+			for($cat = $categories->begin(); !$categories->end(); $cat = $categories->next())
+			{
+				foreach($cat->connections_to(array("from.class_id" => CL_CRM_COMPANY)) as $c)
+				{
+					$co = $c->from();
+					foreach($co->connections_from(array("type" => 8 /* RELTYPE_WORKER */)) as $c)
+					{
+						$ids[] = $c->prop("to");
+					}
+				}
+			}
+
+			if (count($ids) < 1)
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_SHOP_ORDER,
+					"orderer_person" => $ids
+				));
+			}
+		}
+		else
+		{
+			$ol = new object_list();
+		}
+
+		$oinst = get_instance("applications/shop/shop_order");
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$t->define_data(array(
+				"name" => $o->name(),
+				"price" => $o->prop("sum"),
+				"who" => $oinst->get_orderer($o),
+				"when" => $o->modified(),
+				"view" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
+					"caption" => "Vaata"
+				))
+			));
+		}
+	}
+
+	function do_order_orderer_cos_tree(&$arr)
+	{
+		// get categories
+		$categories = new object_list(array(
+			"parent" => $this->buyers_fld,
+			"class_id" => CL_CRM_SECTOR,
+		));
+
+		$tv = $this->get_vcl_tree_from_cat_list($categories);
+	
+		$arr["prop"]["value"] = $tv->finalize_tree();
+	}
+
+	function get_vcl_tree_from_cat_list($categories)
+	{
+		// now, gotst to make tree out of them. 
+		// algorithm is: sort by length, add the shortest to first level, then start adding by legth
+		// prop: kood
+		$ta = array();
+		$ids = array();
+		for($o = $categories->begin(); !$categories->end(); $o = $categories->next())
+		{
+			$ta[$o->prop("kood")] = $o;
+			$ids[] = $o->id();
+		}
+		uksort($ta, array(&$this, "__ta_sb_cb"));
+
+		// get all companies with these categories
+		$cos = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"pohitegevus" => $ids
+		));
+		$this->cos_by_code = array();
+		for($o = $cos->begin(); !$cos->end(); $o = $cos->next())
+		{
+			// get all type rels
+			foreach($o->connections_from(array("to.class_id" => CL_CRM_SECTOR)) as $c)
+			{
+				$s = $c->to();
+				$this->cos_by_code[$s->prop("kood")][] = $o;
+			}
+		}
+
+		// now, start adding things to the tree.
+		$tv = get_instance("vcl/treeview");
+		$tv->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "shwhordcos",
+			"persist_state" => true
+		));
+
+		$this->_req_filter_and_add($tv, $ta, "", 0);
+
+		return $tv;
+	}
+
+	function _req_filter_and_add(&$tv, $ta, $filter_code, $parent)
+	{
+		$nta = array();
+
+		$fclen = strlen($filter_code);
+		$minl = 1000;
+		$cpta = $ta;
+
+		foreach($cpta as $code => $code_o)
+		{
+			if (substr($code, 0, $fclen) == $filter_code && $code != $filter_code)
+			{
+				$nta[$code] = $code_o;
+				if (strlen($code) < $minl)
+				{
+					$minl = strlen($code);
+				}
+			}
+		}
+
+		if (count($nta) < 1)
+		{
+			// we reached the end of the tree, add cos now
+			$this->_do_add_cos_by_code($tv, $filter_code);
+			return;
+		}
+
+		uksort($nta, array(&$this, "__ta_sb_cb"));
+
+		reset($nta);
+		list($code, $code_o) = each($nta);
+		while (strlen($code) == $minl)
+		{
+			$tv->add_item($parent, array(
+				"name" => $code_o->name(),
+				"id" => $code,
+				"url" => aw_url_change_var("tree_code", $code, aw_url_change_var("tree_company", NULL, aw_url_change_var("tree_worker", NULL)))
+			));
+
+			// now find the children for this. 
+			// how to do this? simple, filter the list by the start of this code and sort and insert smallest length, 
+			// lather, rinse, repeat
+			$this->_req_filter_and_add($tv, $nta, $code, $code);
+
+			list($code, $code_o) = each($nta);
+		}
+	}
+
+	function _do_add_cos_by_code(&$tv, $code)
+	{
+		if (!is_array($this->cos_by_code[$code]))
+		{
+			return;
+		}
+		foreach($this->cos_by_code[$code] as $co)
+		{
+			$tv->add_item($code, array(
+				"name" => $co->name(),
+				"id" => $code."co".$co->id(),
+				"url" => aw_url_change_var("tree_code", NULL, aw_url_change_var("tree_company", $co->id(), aw_url_change_var("tree_worker", NULL)))
+			));
+
+			// now all people for that company
+			foreach($co->connections_from(array("type" => 8 /* RELTYPE_WORKER */)) as $c)
+			{
+				$tv->add_item($code."co".$co->id(), array(
+					"name" => $c->prop("to.name"),
+					"id" => $code."wk".$c->prop("to"),
+					"url" => aw_url_change_var("tree_code", NULL, aw_url_change_var("tree_company", NULL, aw_url_change_var("tree_worker", $c->prop("to"))))
+				));
+			}
+		}
+	}
+
+	function __ta_sb_cb($a, $b)
+	{
+		return ($a == $b ? 0 : ((strlen($a) < strlen($b)) ? -1 : 1));
 	}
 
 	///////////////////////////////////////////////

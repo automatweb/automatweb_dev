@@ -96,6 +96,166 @@
             <field>user9</field>
             <caption>User-defined 9</caption>
       </property>
+      <property>
+            <name>userta1</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser1</field>
+            <caption>User-defined ta 1</caption>
+      </property>
+      <property>
+            <name>userta2</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser2</field>
+            <caption>User-defined ta 2</caption>
+      </property>
+      <property>
+            <name>userta3</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser3</field>
+            <caption>User-defined ta 3</caption>
+      </property>
+      <property>
+            <name>userta4</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser4</field>
+            <caption>User-defined ta 4</caption>
+      </property>
+      <property>
+            <name>userta5</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser5</field>
+            <caption>User-defined ta 5</caption>
+      </property>
+      <property>
+            <name>userta6</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser6</field>
+            <caption>User-defined ta 6</caption>
+      </property>
+      <property>
+            <name>userta7</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser7</field>
+            <caption>User-defined ta 7</caption>
+      </property>
+      <property>
+            <name>userta8</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser8</field>
+            <caption>User-defined ta 8</caption>
+      </property>
+      <property>
+            <name>userta9</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser9</field>
+            <caption>User-defined ta 9</caption>
+      </property>
+      <property>
+            <name>userta10</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser10</field>
+            <caption>User-defined ta 10</caption>
+      </property>
+      <property>
+            <name>uservar1</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser1</field>
+            <caption>User-defined var 1</caption>
+      </property>
+      <property>
+            <name>uservar2</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser2</field>
+            <caption>User-defined var 2</caption>
+      </property>
+      <property>
+            <name>uservar3</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser3</field>
+            <caption>User-defined var 3</caption>
+      </property>
+      <property>
+            <name>uservar4</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser4</field>
+            <caption>User-defined var 4</caption>
+      </property>
+      <property>
+            <name>uservar5</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser5</field>
+            <caption>User-defined var 5</caption>
+      </property>
+      <property>
+            <name>uservar6</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser6</field>
+            <caption>User-defined var 6</caption>
+      </property>
+      <property>
+            <name>uservar7</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser7</field>
+            <caption>User-defined var 7</caption>
+      </property>
+      <property>
+            <name>uservar8</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser8</field>
+            <caption>User-defined var 8</caption>
+      </property>
+      <property>
+            <name>uservar9</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser9</field>
+            <caption>User-defined var 9</caption>
+      </property>
+      <property>
+            <name>uservar10</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>varuser10</field>
+            <caption>User-defined var 10</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT</syslog_type>
             <relationmgr>yes</relationmgr>
