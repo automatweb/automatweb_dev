@@ -241,9 +241,12 @@ function init_config($arr)
 		{
 			define($sad["def"], $said);
 		}
-		foreach($GLOBALS["cfg"]["translate"]["ids"] as $tid => $tdef)
+		if (is_array($GLOBALS["cfg"]["translate"]["ids"]))
 		{
-			define($tdef,$tid);
+			foreach($GLOBALS["cfg"]["translate"]["ids"] as $tid => $tdef)
+			{
+				define($tdef,$tid);
+			}
 		}
 	};
 
