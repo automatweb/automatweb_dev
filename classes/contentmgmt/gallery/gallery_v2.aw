@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.40 2004/03/12 09:43:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.41 2004/03/12 11:57:26 duke Exp $
 
 /*
 
@@ -299,7 +299,7 @@ class gallery_v2 extends class_base
 			// _get_image_folder also only needs the parent
 			// this obj thingie gets passed to _set_edit_cell_content, which only uses
 			// that image_folder value
-			$obj["meta"]["image_folder"] = $this->_get_imate_folder($obj);
+			$obj["meta"]["image_folder"] = $this->_get_image_folder($obj);
 
 			$ge = get_instance("vcl/grid_editor");
 			$pg_data[$page_number]['layout'] = $ge->on_edit_submit(
