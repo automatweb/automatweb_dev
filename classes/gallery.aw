@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.20 2002/01/09 13:53:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.21 2002/01/18 18:54:48 cvs Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -418,7 +418,7 @@ class gallery extends aw_template
 					for ($col = 0; $col < $this->arr[$page]["cols"]; $col++)
 					{
 						$cell = $this->arr[$page]["content"][$row][$col];
-						if ($cell["bigurl"] != "")
+						if ($cell["tnurl"] != "")
 						{
 							$imgurls[] = $cell;
 						}
@@ -430,13 +430,13 @@ class gallery extends aw_template
 			$ius = array();
 			foreach($imgurls as $dat)
 			{
-				$bigurl = preg_replace("/^http:\/\/.*\//","/",$dat["bigurl"]);
+				$bigurl = preg_replace("/^http:\/\/.*\//","/",$dat["tnurl"]);
 				$ius[] = "\"".$bigurl."\"";
 			}
 
 			$this->vars(array(
 				"img_urls" => join(",",$ius),
-				"img_url" => preg_replace("/^http:\/\/.*\//","/",$this->arr[0]["content"][0][0]["bigurl"])
+				"img_url" => preg_replace("/^http:\/\/.*\//","/",$this->arr[0]["content"][0][0]["tnurl"])
 			));
 			return $this->parse();
                 }
@@ -511,7 +511,7 @@ class gallery extends aw_template
 
 			global $baseurl,$ext;
 			$this->vars(array(
-				"bigurl" => $bigurl,
+				"bigurl" => $tnurl,
 				"caption" => $cap,
 				"date" => $deit,
 				"next" => $this->mk_my_orb("show", array("id" => $this->id, "nr" => $next_nr),"",false,true),
