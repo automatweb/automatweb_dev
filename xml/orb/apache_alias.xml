@@ -1,0 +1,42 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="apache_alias">
+		<action name="list">
+			<function name="gen_list">
+				<arguments>
+					<optional name="page" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new">
+			<function name="change">
+			 	<arguments/>
+			</function>
+		</action>
+
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="remove">
+			<function name="remove">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		
