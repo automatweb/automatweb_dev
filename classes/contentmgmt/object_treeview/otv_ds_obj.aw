@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.22 2005/01/24 14:54:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.23 2005/02/03 14:53:32 ahti Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -391,7 +391,7 @@ class otv_ds_obj extends class_base
 		{
 
 			$con = $ob->connections_from(array(
-				"type" => RELTYPE_FOLDER
+				"type" => "RELTYPE_FOLDER"
 			));
 
 			$parent = array();
@@ -401,12 +401,10 @@ class otv_ds_obj extends class_base
 			}
 
 		}
-
 		if (!is_oid($ob->id()))
 		{
 			return;
 		}
-
 		if (!$parent)
 		{
 			// if parent can't be found. then get the objects from all the root folders
