@@ -100,6 +100,7 @@
             <name>gen_site</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <edit_only>1</edit_only>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -127,11 +128,9 @@
       <classinfo>
             <syslog_type>ST_SITE</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <templates>
                   <caption>Templated</caption>
             </templates>
@@ -139,5 +138,12 @@
                   <caption>Andmebaas</caption>
             </db>
       </groupinfo>
+      <reltypes>
+            <LAYOUT>
+                  <value>1</value>
+                  <clid>CL_LAYOUT</clid>
+                  <caption>Saidi layout</caption>
+            </LAYOUT>
+      </reltypes>
 </properties>
 
