@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.45 2003/03/06 17:06:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.46 2003/03/06 17:54:24 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -43,6 +43,10 @@ class aw_table
 		// seda on vaja selleks, et m??rata default sort order.
 		$this->first = true;
 		$this->set_layout(isset($data["layout"]) ? $data["layout"] : "generic");
+		if (isset($data["xml_def"]))
+		{
+			$this->parse_xml_def($data["xml_def"]);
+		};
 	}
 
 	////
@@ -380,7 +384,7 @@ class aw_table
 		extract($arr);
 		$PHP_SELF = aw_global_get("PHP_SELF");
 		$REQUEST_URI = aw_global_get("REQUEST_URI");
-		$this->titlebar_under_groups = $arr["titlebar_under_groups"];
+		$this->titlebar_under_groups = isset($arr["titlebar_under_groups"]) ? $arr["titlebar_under_groups"] : "";
 		$tbl = "";
 
 		// moodustame välimise raami alguse
@@ -401,7 +405,7 @@ class aw_table
 			$tbl .= $this->opentag($tmp);
 		}
 
-		if ($this->headerstring)
+		if (!empty($this->headerstring))
 		{
 			$colspan = sizeof($this->rowdefs) + sizeof($this->actions)-(int)$this->headerextrasize;
 			$tbl .= $this->opentag(array("name" => "tr"));
@@ -420,7 +424,7 @@ class aw_table
 			foreach($this->rowdefs as $k => $v)
 			{
 				$style = false;
-				$style = (isset($v["sortable"]) ? ($this->sortby[$v["name"]] ? $this->col_styles[$v["name"]]["header_sorted"] : $this->col_styles[$v["name"]]["header_sortable"]) : $this->col_styles[$v["name"]]["header_normal"]);
+				$style = (isset($v["sortable"]) ? (isset($this->sortby[$v["name"]]) ? $this->col_styles[$v["name"]]["header_sorted"] : $this->col_styles[$v["name"]]["header_sortable"]) : $this->col_styles[$v["name"]]["header_normal"]);
 				if (!$style)
 				{
 					$style = (isset($v["sortable"]) ? ($this->sortby[$v["name"]] ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
@@ -428,11 +432,11 @@ class aw_table
 				$tbl.=$this->opentag(array(
 					"name" => "td",
 					"classid"=> $style,
-					"align" => ($v["talign"] ? $v["talign"] : ""),
-					"valign" => ($v["tvalign"] ? $v["tvalign"] : ""),
-					"bgcolor" => ($this->tbgcolor ? $this->tbgcolor : ""),
-					"nowrap" => ($v["nowrap"] ? 1 : ""),
-					"width" => ($v["width"] ? $v["width"] : ""),
+					"align" => isset($v["talign"]) ? $v["talign"] : "center",
+					"valign" => isset($v["tvalign"]) ? $v["tvalign"] : "",
+					"bgcolor" => isset($this->tbgcolor) ? $this->tbgcolor : "",
+					"nowrap" => isset($v["nowrap"]) ? 1 : "",
+					"width" => isset($v["width"]) ? $v["width"] : "",
 				));
 
 				// if the column is sortable, turn it into a link
@@ -495,7 +499,7 @@ class aw_table
 			{
 				$counter++;
 				// if this is not on the active page, don't show the damn thing
-				if ($has_pages)
+				if (isset($has_pages))
 				{
 					$cur_page = (int)(($counter-1) / $records_per_page);
 					if ($cur_page != $act_page)
@@ -506,9 +510,13 @@ class aw_table
 
 				// rida algab
 				$tbl .= $this->opentag(array("name" => "tr", "class" => ((($counter % 2) == 0) ? $this->tr_style2 : $this->tr_style1)));
-				
+			
+				$tmp = "";	
 				// grpupeerimine
-				$tmp = $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v);
+				if (isset($rgroupby) && is_array($rgroupby))
+				{
+					$tmp = $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v);
+				};
 				if ($tmp != "")
 				{
 					$counter = 1;
@@ -520,7 +528,7 @@ class aw_table
 				{
 					$rowspan = 1;
 					$style = false;
-					if (is_array($this->vgroupby))
+					if (isset($this->vgroupby) && is_array($this->vgroupby))
 					{
 						if (isset($this->vgroupby[$v1["name"]]))
 						{
@@ -551,10 +559,10 @@ class aw_table
 						}
 					}
 
-					// m??rame ?ra staili
+					// määrame ära staili
 					if (!$style)
 					{
-						if ($this->sortby[$v1["name"]]) 
+						if (isset($this->sortby[$v1["name"]])) 
 						{
 							$style = (($counter % 2) == 0) ? $this->col_styles[$v1["name"]]["content_sorted_style2"] : $this->col_styles[$v1["name"]]["content_sorted_style1"];
 							$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
@@ -567,7 +575,7 @@ class aw_table
 
 						if (!$style)
 						{
-							if ($this->sortby[$v1["name"]]) 
+							if (isset($this->sortby[$v1["name"]])) 
 							{
 								$style = (($counter % 2) == 0) ? $this->selected2 : $this->selected1;
 								$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
@@ -581,17 +589,17 @@ class aw_table
 					}
 						
 					// moodustame celli
-					$rowspan = $this->actionrows ? $this->actionrows : $rowspan;
+					$rowspan = isset($this->actionrows) ? $this->actionrows : $rowspan;
 					$tbl .= $this->opentag(array(
 						"name"    => "td",
 						"classid" => $style,
-						"width" => $v1["width"],
+						"width" => isset($v1["width"]) ? $v1["width"] : "",
 						"rowspan" => ($rowspan > 1) ? $rowspan : 0,
-						"style" => (($v1["chgbgcolor"] && $v[$v1["chgbgcolor"]]) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
-						"align" => ($v1["align"] ? $v1["align"] : ""),
-						"valign" => ($v1["valign"] ? $v1["valign"] : ""),
-						"nowrap" => ($v1["nowrap"] ? 1 : ""),
-						"bgcolor" => ($v["bgcolor"] ? $v["bgcolor"] : $bgcolor),
+						"style" => ((isset($v1["chgbgcolor"]) && isset($v[$v1["chgbgcolor"]])) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
+						"align" => isset($v1["align"]) ? $v1["align"] : "",
+						"valign" => isset($v1["valign"]) ? $v1["valign"] : "",
+						"nowrap" => isset($v1["nowrap"]) ? 1 : "",
+						"bgcolor" => isset($v["bgcolor"]) ? $v["bgcolor"] : $bgcolor,
 					));
 
 					if ($v1["name"] == "rec") 
@@ -600,7 +608,7 @@ class aw_table
 					} 
 					else 
 					{
-						if ($v1["strformat"])
+						if (isset($v1["strformat"]))
 						{
 							$format = localparse($v1["strformat"],$v);
 							$val = sprintf($format,$v[$v1["name"]]);
@@ -611,17 +619,22 @@ class aw_table
 						};
 					};
 
-					if ($v1["type"] == "time") 
+					if (empty($v1["type"]))
+					{
+						$v1["type"] = "";
+					};
+
+					if (isset($v1["type"]) && $v1["type"] == "time") 
 					{
 						$val = date($v1["format"],$val);
 					};
 
-					if (!$val && $v1["type"]!="int") 
+					if (empty($val) && $v1["type"]!="int") 
 					{
 						$val = "&nbsp;";
 					};
 
-					if ($v1["thousands_sep"] != "")
+					if (isset($v1["thousands_sep"]))
 					{
 						// insert separator every after every 3 chars, starting from the end. 
 						$val = strrev(chunk_split(strrev(trim($val)),3,$v1["thousands_sep"]));
@@ -633,7 +646,7 @@ class aw_table
 				};
 
 				// joonistame actionid
-				$actionridu = $this->actionrows ? $this->actionrows : 1;
+				$actionridu = isset($this->actionrows) ? $this->actionrows : 1;
 
 				for ($arow = 1; $arow <= $actionridu; $arow++)
 				{
@@ -944,40 +957,40 @@ class aw_table
 				};
 				$this->rowdefs[] = $temp;
 				
-				if ($attrs["numeric"]) 
+				if (isset($attrs["numeric"])) 
 				{
 					$this->nfields[$attrs["name"]] = 1;
 				};
 
-				if ($attrs["header_normal"] != "")
+				if (!empty($attrs["header_normal"]))
 				{
 					$this->col_styles[$attrs["name"]]["header_normal"] = $attrs["header_normal"];
 				}
-				if ($attrs["header_sortable"] != "")
+				if (!empty($attrs["header_sortable"]))
 				{
 					$this->col_styles[$attrs["name"]]["header_sortable"] = $attrs["header_sortable"];
 				}
-				if ($attrs["header_sorted"] != "")
+				if (!empty($attrs["header_sorted"]))
 				{
 					$this->col_styles[$attrs["name"]]["header_sorted"] = $attrs["header_sorted"];
 				}
-				if ($attrs["content_style1"] != "")
+				if (!empty($attrs["content_style1"]))
 				{
 					$this->col_styles[$attrs["name"]]["content_style1"] = $attrs["content_style1"];
 				}
-				if ($attrs["content_style2"] != "")
+				if (!empty($attrs["content_style2"]))
 				{
 					$this->col_styles[$attrs["name"]]["content_style2"] = $attrs["content_style2"];
 				}
-				if ($attrs["content_sorted_style1"] != "")
+				if (!empty($attrs["content_sorted_style1"]))
 				{
 					$this->col_styles[$attrs["name"]]["content_sorted_style1"] = $attrs["content_sorted_style1"];
 				}
-				if ($attrs["content_sorted_style2"] != "")
+				if (!empty($attrs["content_sorted_style2"]))
 				{
 					$this->col_styles[$attrs["name"]]["content_sorted_style2"] = $attrs["content_sorted_style2"];
 				}
-				if ($attrs["group_style"] != "")
+				if (!empty($attrs["group_style"]))
 				{
 					$this->col_styles[$attrs["name"]]["group_style"] = $attrs["group_style"];
 				}
@@ -1090,7 +1103,7 @@ class aw_table
 			$tbl .= $this->opentag(array(
 				"name" => "td",
 				"classid" => ($this->col_styles[$v["name"]]["header_normal"] ? $this->col_styles[$v["name"]]["header_normal"] : $this->header_normal), 
-				"align" => ($v["talign"] ? $v["talign"] : ""),
+				"align" => ($v["talign"] ? $v["talign"] : "center"),
 				"valign" => ($v["tvalign"] ? $v["tvalign"] : ""),
 				"bgcolor" => ($this->tbgcolor ? $this->tbgcolor : ""),
 				"width" => ($v["width"] ? $v["width"] : "")
@@ -1148,50 +1161,47 @@ class aw_table
 	function do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v)
 	{
 		$tbl = "";
-		if (is_array($rgroupby))
+		foreach($rgroupby as $rgel)
 		{
-			foreach($rgroupby as $rgel)
+			$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v[$rgel]);
+			if ($this->lgrpvals[$rgel] != $_a)
 			{
-				$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v[$rgel]);
-				if ($this->lgrpvals[$rgel] != $_a)
+				// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
+				$tbl.=$this->opentag(array(
+					"name" => "td",
+					"colspan" => count($this->rowdefs),
+					"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
+				));
+				$tbl.=$_a;
+				$this->lgrpvals[$rgel] = $_a;
+				// if we should display some other elements after the group element
+				// they will be passed in the $rgroupdat array
+				$val = "";
+				if (is_array($rgroupdat[$rgel]))
 				{
-					// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
-					$tbl.=$this->opentag(array(
-						"name" => "td",
-						"colspan" => count($this->rowdefs),
-						"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
-					));
-					$tbl.=$_a;
-					$this->lgrpvals[$rgel] = $_a;
-					// if we should display some other elements after the group element
-					// they will be passed in the $rgroupdat array
-					$val = "";
-					if (is_array($rgroupdat[$rgel]))
+					$val .= $rgroupby_sep[$rgel]["pre"];
+					$_ta = array();
+					foreach($rgroupdat[$rgel] as $rgdat)
 					{
-						$val .= $rgroupby_sep[$rgel]["pre"];
-						$_ta = array();
-						foreach($rgroupdat[$rgel] as $rgdat)
+						if (trim($v[$rgdat["el"]]) != "")
 						{
-							if (trim($v[$rgdat["el"]]) != "")
-							{
-								$_ta[] = $rgdat["sep"].$v[$rgdat["el"]].$rgdat["sep_after"];
-							}
+							$_ta[] = $rgdat["sep"].$v[$rgdat["el"]].$rgdat["sep_after"];
 						}
-						$val .= join($rgroupby_sep[$rgel]["mid_sep"],$_ta);
-						$val .= $rgroupby_sep[$rgel]["after"];
 					}
-					$tbl .= str_replace("[__jrk_replace__]",$this->rgroupcounts[$_a],$val);
-					$tbl.=$this->closetag(array("name" => "td"));
-					$tbl .= $this->closetag(array("name" => "tr"));
-
-					// draw the damn titlebar under the grouping element if so instructed
-					if ($this->titlebar_under_groups)
-					{
-						$tbl.=$this->draw_titlebar_under_rgrp();
-					}
-
-					$tbl .= $this->opentag(array("name" => "tr"));
+					$val .= join($rgroupby_sep[$rgel]["mid_sep"],$_ta);
+					$val .= $rgroupby_sep[$rgel]["after"];
 				}
+				$tbl .= str_replace("[__jrk_replace__]",$this->rgroupcounts[$_a],$val);
+				$tbl.=$this->closetag(array("name" => "td"));
+				$tbl .= $this->closetag(array("name" => "tr"));
+
+				// draw the damn titlebar under the grouping element if so instructed
+				if ($this->titlebar_under_groups)
+				{
+					$tbl.=$this->draw_titlebar_under_rgrp();
+				}
+
+				$tbl .= $this->opentag(array("name" => "tr"));
 			}
 		}
 		return $tbl;
