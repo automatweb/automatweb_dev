@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.12 2004/06/09 08:03:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.13 2004/06/25 18:29:41 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -130,8 +130,8 @@ class site_translation extends class_base
 			return false;
 		};
 		// get the current user and figure out the base and target languages
-		$udat = $this->get_user();
-		$ucfg = new object($udat["oid"]);
+		$us = get_instance(CL_USER);
+		$ucfg = new object($us->get_current_user());
 
 		$tr_o = $args["obj_inst"];
 		if ($tr_o->prop("baselang"))

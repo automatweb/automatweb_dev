@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.90 2004/06/19 20:02:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.91 2004/06/25 18:29:41 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1200,6 +1200,47 @@ class users_user extends aw_template
 			aw_cache_set("get_oid_for_uid", $uid, $ret);
 		}
 		return $ret;
+	}
+
+	//// 
+	// !Returns user information
+	// parameters:
+	//	uid - required, the user to fetch
+	//	field - optional, if set, only this field's value is returned, otherwise the whole record
+	function get_user($args = false)
+	{
+		if (!is_array($args))
+		{
+			$uid = aw_global_get("uid");
+		}
+		else
+		{
+			extract($args);
+		}
+		if ($uid == "")
+		{
+			return false;
+		}
+		if (!is_array(($row = aw_cache_get("users_cache",$uid))))
+		{
+			$q = "SELECT * FROM users WHERE uid = '$uid'";
+			$row = $this->db_fetch_row($q);
+			aw_cache_set("users_cache",$uid,$row);
+		}
+
+		if (isset($field))
+		{
+			$row = $row[$field];
+		}
+		else
+		{
+			if (isset($row))
+			{
+				// inbox defauldib kodukataloogile, kui seda määratud pole
+				$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
+			}
+		}
+		return $row;
 	}
 };
 ?>

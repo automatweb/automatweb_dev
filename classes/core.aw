@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.269 2004/06/25 18:14:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.270 2004/06/25 18:29:41 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -115,47 +115,6 @@ class core extends acl_base
 				die("cannot write to syslog: " . $this->db_last_error["error_string"]);
 			};
 		}
-	}
-
-	//// 
-	// !Returns user information
-	// parameters:
-	//	uid - required, the user to fetch
-	//	field - optional, if set, only this field's value is returned, otherwise the whole record
-	function get_user($args = false)
-	{
-		if (!is_array($args))
-		{
-			$uid = aw_global_get("uid");
-		}
-		else
-		{
-			extract($args);
-		}
-		if ($uid == "")
-		{
-			return false;
-		}
-		if (!is_array(($row = aw_cache_get("users_cache",$uid))))
-		{
-			$q = "SELECT * FROM users WHERE uid = '$uid'";
-			$row = $this->db_fetch_row($q);
-			aw_cache_set("users_cache",$uid,$row);
-		}
-
-		if (isset($field))
-		{
-			$row = $row[$field];
-		}
-		else
-		{
-			if (isset($row))
-			{
-				// inbox defauldib kodukataloogile, kui seda määratud pole
-				$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
-			}
-		}
-		return $row;
 	}
 
 	////
@@ -1126,7 +1085,8 @@ class core extends acl_base
 		$head = "";
 		if (($uid = aw_global_get("uid")) != "")
 		{
-			$udata = $this->get_user(array("uid" => $uid));
+			$us = get_instance("users");
+			$udata = $us->get_user(array("uid" => $uid));
 			$eml = $udata["email"];
 			if ($eml == "")
 			{

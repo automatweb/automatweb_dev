@@ -508,21 +508,6 @@ class site_content extends menuedit
 		}
 		else
 		{
-			$t = get_instance("users");
-			$udata = $this->get_user();
-			$jfar = $t->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
-			$jfs = "";
-			reset($jfar);
-			while (list($fid,$name) = each($jfar))
-			{
-				$this->vars(array(
-					"form_id" => $fid, 
-					"form_name" => $name
-				));
-				$jfs.=$this->parse("JOIN_FORM");
-			}
-			$this->vars(array("JOIN_FORM" => $jfs));
-
 			if ($this->can("edit",$section) && $this->active_doc)
 			{
 				$cd = $this->parse("CHANGEDOCUMENT");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.47 2004/06/15 08:57:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.48 2004/06/25 18:29:41 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 
 define("ARR_LISTID", 1);
@@ -746,7 +746,8 @@ class keywords extends aw_template
 	// see peaks vist tegelikult hoopis mujal klassis olema
 	function _get_user_data($args = array())
 	{
-		$udata = $this->get_user();
+		$that = get_instance("users");
+		$udata = $that->get_user();
 		$jf = unserialize($udata["join_form_entry"]);
 		$eesnimi = $perenimi = "";
 		if (is_array($jf))

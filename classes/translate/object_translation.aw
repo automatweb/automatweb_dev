@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.14 2004/06/18 16:21:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.15 2004/06/25 18:29:41 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -69,8 +69,8 @@ class object_translation extends aw_template
 		// if no dstlang argument is given, figure it out from the user info
 		if (empty($dstlang))
 		{
-			$udat = $this->get_user();
-			$ucfg = new object($udat["oid"]);
+			$us = get_instance(CL_USER);
+			$ucfg = new object($us->get_current_user());
 			$dstlang_id = $ucfg->meta("target_lang");
 		}
 		else

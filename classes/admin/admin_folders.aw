@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.29 2004/05/13 14:52:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.30 2004/06/25 18:29:41 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -430,20 +430,15 @@ class admin_folders extends aw_template
 	// !Loob kasutaja kodukataloogi
 	function mk_homefolder(&$arr)
 	{
-		$udata = $this->get_user();
 		$uid = aw_global_get("uid");
 		$admin_rootmenu2 = $this->cfg["admin_rootmenu2"];
 		$ext = $this->cfg["ext"];
 		$baseurl = $this->cfg["baseurl"];
 
-		$hf = new object($udata["home_folder"]);
+		$us = get_instance(CL_USER);
+		$ucfg = new object($us->get_current_user());
+		$hf = new object($ucfg->prop("home_folder"));
 
-		// if the home directory does not exist, then raise an error .. but
-		// if we try to load an non-existing object, then the object class
-		// will yell anyway
-	
-			// $this->raise_error(ERR_MNEDIT_NOFOLDER,sprintf(MN_E_NO_HOME_FOLDER,$uid),true);
-	
 		$ret = $this->rec_tree($arr, $hf->id(),0);
 
 		$this->tree->add_item($admin_rootmenu2, array(
