@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.3 2003/08/01 13:27:47 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.4 2003/12/04 16:37:01 kristo Exp $
 
 /*
 	@default table=objects
@@ -19,6 +19,13 @@
 	@classinfo relationmgr=yes
 
 */
+
+/*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CAL_EVENT, on_add_alias)
+
+*/
+
 
 class cal_event extends class_base 
 {
@@ -1034,20 +1041,21 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		return $this->parse();
 	}	
 
-	function addalias($args = array())
+	function on_add_alias($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
-		$par_obj = $this->get_object($obj["parent"]);
-		$q = "UPDATE planner SET oid = '$alias' WHERE id = '$id'";
+		$obj = obj($args["connection"]->prop("from"));
+		$par_obj = obj($obj->parent());
+
+		$q = "UPDATE planner SET oid = '".$args["connection"]->prop("to")."' WHERE id = '".$args["connection"]->prop("from")."'";
 		$this->db_query($q);
-		if ($par_obj["class_id"] == CL_CALENDAR)
+		if ($par_obj->class_id() == CL_CALENDAR)
 		{
-			return $this->mk_my_orb("change_event",array("id" => $id),"planner");
+			return $this->mk_my_orb("change_event",array("id" => $args["connection"]->prop("from")),"planner");
 		}
 		else
 		{
-			return $this->mk_my_orb("change",array("id" => $id));
+			return $this->mk_my_orb("change",array("id" => $args["connection"]->prop("from")));
 		};
 	}
 

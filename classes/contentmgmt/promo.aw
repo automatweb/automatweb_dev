@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.19 2003/11/24 15:30:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.20 2003/12/04 16:37:02 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -334,20 +334,16 @@ class promo extends class_base
 		$section = array();
 		$last_menus = array();
 
-		$alias_reltype = $obj->meta("alias_reltype");
-		$new_alias_reltype = array();
 		foreach($oldaliases as $alias)
 		{
 			if ($alias->prop("reltype") == RELTYPE_ASSIGNED_MENU)
 			{
 				$section[$alias->prop("to")] = $alias->prop("to");
-				$new_alias_reltype[$alias->prop("to")] = RELTYPE_ASSIGNED_MENU;
 			};
 			
 			if ($alias->prop("reltype") == RELTYPE_DOC_SOURCE)
 			{
 				$last_menus[$alias->prop("to")] = $alias->prop("to");
-				$new_alias_reltype[$alias->prop("to")] = RELTYPE_DOC_SOURCE;
 			};
 		};
 
@@ -360,8 +356,6 @@ class promo extends class_base
 
 		$obj->set_meta("section",$section);
 		$obj->set_meta("last_menus",$last_menus);
-		$obj->set_meta("alias_reltype",$new_alias_reltype);
-
 
 		$obj->save();
 	}
@@ -617,9 +611,9 @@ class promo extends class_base
 				{
 					if (($d_cnt % 2)  == 1)
 					{
-						if (file_exists(aw_ini_get("tpldir")."/automatweb/documents/".$row["filename"]."2"))
+						if (file_exists(aw_ini_get("tpldir")."/automatweb/documents/".$tpl_filename."2"))
 						{
-							$row["filename"] .= "2";
+							$tpl_filename .= "2";
 						}
 					}
 					$cont = $doc->gen_preview(array(

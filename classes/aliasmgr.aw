@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.126 2003/12/04 12:22:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.127 2003/12/04 16:36:59 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -14,9 +14,6 @@ class aliasmgr extends aw_template
 		$this->use_class = isset($args["use_class"]) ? $args["use_class"] : get_class($this);
 		$this->init("aliasmgr");
 		$this->lc_load("aliasmgr","lc_aliasmgr");
-
-		// we need a better way to do a version upgrade or smth.
-		$this->do_check_tables();
 	}
 
 	////
@@ -235,6 +232,10 @@ class aliasmgr extends aw_template
 	{
 		extract($args);
 
+		if (!$oid)
+		{
+			return array();
+		}
 		$this->recover_idx_enumeration($oid);
 
 		$obj = obj($oid);
@@ -678,7 +679,8 @@ class aliasmgr extends aw_template
 				"id" => $id,
 				"subaction" => "none",
 				"return_url" => $return_url
-				),$this->use_class);
+				),$this->use_class
+			);
 		};
 
 		$this->vars(array(
@@ -709,71 +711,16 @@ class aliasmgr extends aw_template
 	{
 		extract($args);
 		$aliases = explode(",",$alias);
-		$obj = $this->get_object($id);
-		$alias_reltype = $obj["meta"]["alias_reltype"];
 
 		foreach($aliases as $onealias)
 		{
-			$_al = (int)$onealias;
-			if ($_al > 0)
-			{
-				$al = $this->get_object($_al);
-			}
-
-			// now. if the alias added has type 10 000, then it's a brother and we gots to actually create the damn brother..
-			if ($reltype == 10000)
-			{
-				$o = obj($id);
-				$o->create_brother($onealias);
-			}
-
-			// parent will be the parent of the object from which the relation
-			// goes out.
-			$relobj_id = $this->new_object(array(
-				"parent" => $obj["parent"],
-				"class_id" => CL_RELATION,
-				"status" => STAT_ACTIVE,
-				"subclass" => $al["class_id"],
-				"no_flush" => 1,
+			$o = obj($id);
+			$o->connect(array(
+				"to" => $onealias,
+				"reltype" => $reltype,
+				"data" => $args["data"]
 			));
-
-			// let the correct class override the alias adding if it wants to
-			// if the class does not handle it, it falls back on core::addalias
-			$cl = $this->cfg["classes"][$al["class_id"]]["alias_class"];
-			if ($cl != "")
-			{
-				$inst = get_instance($cl);
-				$inst->addalias(array(
-					"id" => $id,
-					"alias" => $onealias,
-					"reltype" => $reltype,
-					"relobj_id" => $relobj_id,
-					"extra" => $args["data"],
-				));
-				$alias_reltype[$onealias] = $reltype;
-			}
-			else
-			{
-				$this->addalias(array(
-					"id" => $id,
-					"alias" => $onealias,
-					"reltype" => $reltype,
-					"relobj_id" => $relobj_id,
-					"extra" => $args["data"],
-					'add_obj_type_history' => true,
-				));
-				$alias_reltype[$onealias] = $reltype;
-			}
 		};
-
-		// this really is obsoleted by the reltype field in the aliases table ..
-		// but before it can be removed, we should check whether any code
-		// relies on reading the type from metainfo. -- duke
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "alias_reltype",
-			"value" => $alias_reltype,
-		));
 	}
 
 	function orb_addalias($args = array())
@@ -849,21 +796,21 @@ class aliasmgr extends aw_template
 		$cnts = array();
 		$ret = array();
 
-		$aliases = $this->get_aliases_for($oid);
-		foreach($aliases as $ad)
+		$o = obj($oid);
+		foreach($o->connections_from() as $c)
 		{
-			list($astr) = explode(",",$this->cfg["classes"][$ad["class_id"]]["alias"]);
-			$ret[$ad["id"]] = "#".$astr.(++$cnts[$ad["class_id"]])."#";
+			list($astr) = explode(",",$this->cfg["classes"][$c->prop("to.class_id")]["alias"]);
+			$ret[$c->prop("id")] = "#".$astr.(++$cnts[$c->prop("to.class_id")])."#";
 		}
 		return $ret;
 	}
 
 	function recover_idx_enumeration($id)
 	{
-		// fetch a list of all the aliases for this object
-		/*$alist = $this->get_aliases(array(
-			"oid" => $id,
-		));*/
+		if (!$id)
+		{
+			return;
+		}
 		$o = obj($id);
 		$alist = $o->connections_from();
 
@@ -901,8 +848,10 @@ class aliasmgr extends aw_template
 		{
 			foreach($idx_by_id as $id => $idx)
 			{
-				$q = "UPDATE aliases SET idx = '$idx' WHERE id = '$id'";
-				$this->db_query($q);
+				$c = new connection($id);
+				$c->change(array(
+					"idx" => $idx
+				));
 			};
 		};
 	}
@@ -1219,25 +1168,6 @@ HTM;
 		$parts["brother_id"] = "(brother_of = 0 OR brother_of = oid)";
 	}
 
-	////
-	// !Create new fields in the aliases table. The concept sucks, but I think
-	// that separate fields are the best approach to this.
-	function do_check_tables()
-	{
-		$table = $this->db_get_table("aliases");
-		if (!$table["fields"]["relobj_id"])
-		{
-			$q = "ALTER TABLE aliases ADD relobj_id bigint unsigned not null";
-			$this->db_query($q);
-			$q = "ALTER TABLE aliases ADD reltype bigint unsigned not null";
-			$this->db_query($q);
-		}; 
-		if (!$table["fields"]["pri"])
-		{
-			$this->db_query("ALTER TABLE aliases ADD pri int unsigned not null default 0");
-		};
-	}
-	
 	////
 	// !returns an array of class_id => class name's that you can feed to picker()
 	function get_clid_picker()

@@ -6,6 +6,15 @@ this message will get posted whenever an alias is about to be deleted
 the message will get the connection object as the "conenction" parameter
 EMIT_MESSAGE(MSG_STORAGE_ALIAS_DELETE)
 
+this message will get posted after a new alias is created
+the message will get the connection object as the "conenction" parameter
+EMIT_MESSAGE(MSG_STORAGE_ALIAS_ADD)
+
+this message will get posted after a new alias is created
+the message will have the class id of the object for the "to" end as the message parameter
+the message will get the connection object as the "conenction" parameter
+EMIT_MESSAGE(MSG_STORAGE_ALIAS_ADD_TO)
+
 */
 
 class connection
@@ -201,8 +210,52 @@ class connection
 			));
 		}
 
+		// check if this is a new connection
+		$new = false;
+		if (!$this->conn["id"])
+		{
+			$new = true;
+
+			// now, if it is, then check if a relobj_id was passed
+			if (!$this->conn["relobj_id"])
+			{
+				// if it wasn't, then create the relobj
+				$from = obj($this->conn["from"]);
+				$to = obj($this->conn["to"]);
+
+				$o = obj();
+				$o->set_parent($from->parent());
+				$o->set_class_id(CL_RELATION);
+				$o->set_status(STAT_ACTIVE);
+				$o->set_subclass($to->class_id());
+
+				$this->conn["relobj_id"] = $o->save();
+			}
+		}
+
 		// now that everything is ok, save the damn thing
 		$this->conn["id"] = $GLOBALS["object_loader"]->ds->save_connection($this->conn);
+
+		// load all connection parameters
+		$this->_int_load($this->conn["id"]);
+
+		if ($new)
+		{
+			post_message(
+				MSG_STORAGE_ALIAS_ADD,
+				array(
+					"connection" => &$this
+				)
+			);
+
+			post_message(
+				MSG_STORAGE_ALIAS_ADD_TO,
+				$this->conn["to.class_id"],
+				array(
+					"connection" => &$this
+				)
+			);
+		}
 	}
 }
 

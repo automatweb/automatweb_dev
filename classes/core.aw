@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.235 2003/12/04 10:03:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.236 2003/12/04 16:36:59 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1037,10 +1037,8 @@ class core extends acl_base
 	{
 		$this->blocks = array();
 		extract($args);
-		$meta = $this->get_object_metadata(array(
-			"oid" => $oid,
-			"key" => "aliaslinks",
-		));
+		$o = obj($oid);
+		$meta = $o->meta();
 
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
 		// esimese tsükliga kutsume parserite reset funktioonud välja. If any.

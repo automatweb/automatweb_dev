@@ -1,6 +1,6 @@
 <?php
 // poll_ng.aw - New generation poll
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.4 2003/08/29 11:51:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll_ng.aw,v 1.5 2003/12/04 16:37:00 kristo Exp $
 
 /*
 
@@ -34,7 +34,6 @@ class poll_ng extends class_base
 
 	function callback_get_choices($args = array())
 	{
-		$choice_objects = new aw_array($args["obj"]["meta"]["alias_reltype"]);
 		$this->t = new aw_table(array(
                         "prefix" => "poll_choices",
                 ));
@@ -69,19 +68,15 @@ class poll_ng extends class_base
                         "nowrap" => "1",
                 ));
 		
-		$choice_objects = new aw_array($args["obj"]["meta"]["alias_reltype"]);
-		foreach($choice_objects->get() as $key => $val)
+		$o = obj($args["obj"]["oid"]);
+		foreach($o->connections_from(array("type" => 1)) as $c)
 		{
-			if ($val == 1)
-			{
-				$obj = $this->get_object($key);
-				$this->t->define_data(array(
-					"id" => $obj["oid"],
-					"name" => $obj["name"],
-					"clicks" => " 0",
-					"percent" => "0%",
-				));
-			};
+			$this->t->define_data(array(
+				"id" => $c->prop("to"),
+				"name" => $c->prop("to.name"),
+				"clicks" => " 0",
+				"percent" => "0%",
+			));
 		};
 	
 		$node = array(
@@ -96,28 +91,30 @@ class poll_ng extends class_base
 	function parse_alias($args = array())
 	{
 		$target = $args["alias"]["target"];
-		$poll = $this->get_object($target);
-		if (!$poll)
+		if (!$target)
 		{
 			return false;
 		};
-		$choices = new aw_array($poll["meta"]["alias_reltype"]);
-		// so, load the fscking objects
+
+		$poll = obj($target);
+
 		$retval = "<div style='border: 1px #cccccc solid'>";
-		$retval .= "<div style='background: #cccccc;'>$poll[name]</div>";
-		$url = $this->mk_my_orb("vote",array("oid" => $args["oid"],"poll" => $poll["oid"],"section" => aw_global_get("section")),"poll_ng");
-		$votes = $poll["meta"]["votes"];
-		foreach($choices->get() as $key => $val)
+		$retval .= "<div style='background: #cccccc;'>".$poll->name()."</div>";
+		$url = $this->mk_my_orb("vote",array(
+			"oid" => $args["oid"],
+			"poll" => $poll->id(),
+			"section" => aw_global_get("section")
+		),"poll_ng");
+
+		$votes = $poll->meta("votes");
+
+		foreach($poll->connections_from(array("type" => 1)) as $c)
 		{
-			if ($val == 1)
-			{
-				$choice = $this->get_object($key);
-				$retval .= sprintf("%d ",$votes[$key]);
-				$retval .= html::href(array(
-					"url" => $url . "&choice=" . $key,
-					"caption" => $choice["name"],
-				)) . "<br />";
-			};
+			$retval .= sprintf("%d ",$votes[$c->prop("to")]);
+			$retval .= html::href(array(
+				"url" => $url . "&choice=" . $c->prop("to"),
+				"caption" => $c->prop("to.name"),
+			)) . "<br />";
 		};
 		$retval .= "</div>";
 		return $retval;
@@ -136,14 +133,20 @@ class poll_ng extends class_base
 		};
 		// no check, whether this poll actually has a choice with this id
 		// poll <==> choice
-		$pobj = $this->get_object($poll);
-		$choices = $pobj["meta"]["alias_reltype"];
-		if (!$choices[$choice] == 1)
+
+		$pobj = obj($poll);
+		$conn = $pobj->connections_from(array(
+			"type" => 1,
+			"to" => $choice
+		));
+		if (count($conn) < 1)
 		{
 			die ("invalid choice");
 		};
+
 		// everything seems OK, record the vote
-		$votes = $pobj["meta"]["votes"];
+		$votes = $pobj->meta("votes");
+
 		if ($votes[$choice])
 		{
 			$votes[$choice]++;

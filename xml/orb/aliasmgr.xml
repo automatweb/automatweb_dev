@@ -37,15 +37,11 @@
 				<arguments>
 					<required name="id"/>
 					<required name="alias"/>
+					<optional name="reltype"/>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="conv">
-			<function name="conv">
-				<arguments/>
-			</function>	
-		</action>	
 
 	</class>
 </orb>

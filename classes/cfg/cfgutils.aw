@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.31 2003/12/04 10:03:56 kristo Exp $
+// $Id: cfgutils.aw,v 1.32 2003/12/04 16:37:02 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -500,18 +500,21 @@ class cfgutils extends aw_template
 			$reltype = $val["reltype"];
 		};
 
-		$o = obj($args["id"]);
-		$conn = $o->connections_from(array(
-			"type" => $reltype
-		));
-
-		foreach($conn as $c)
+		if ($args["id"])
 		{
-			$options[$c->prop("to")] = $c->prop("to.name");
-		}
+			$o = obj($args["id"]);
+			$conn = $o->connections_from(array(
+				"type" => $reltype
+			));
+	
+			foreach($conn as $c)
+			{
+				$options[$c->prop("to")] = $c->prop("to.name");
+			}
 
-		$val["type"] = "select";
-		$val["options"] = $options;
+			$val["type"] = "select";
+			$val["options"] = $options;
+		}
 	}
 };
 ?>

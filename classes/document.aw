@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.222 2003/12/04 10:03:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.223 2003/12/04 16:37:00 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -423,7 +423,7 @@ class document extends aw_template
 		$this->vars(array("imurl" => "/images/trans.gif"));
 		// import charset for print
 		$_langs = get_instance("languages");
-		$_ld = $_langs->fetch(aw_global_get("lang_id"),true);
+		$_ld = $_langs->fetch(aw_global_get("lang_id"));
 		$this->vars(array(
 			"charset" => $_ld["charset"]
 		));

@@ -1,6 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.12 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_chain.aw,v 2.13 2003/12/04 16:37:00 kristo Exp $
 // object_chain.aw - Objektipärjad
+
+/*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_OBJECT_CHAIN, on_add_alias)
+
+*/
 
 class object_chain extends aw_template
 {
@@ -263,20 +269,21 @@ class object_chain extends aw_template
 
 	////
 	// !adding alias to document support
-	function addalias($arr)
+	function on_add_alias($arr)
 	{
-		extract($arr);
-		$this->expl_chain(array("id" => $alias,"parent" => $id));
-		//header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
+		$this->expl_chain(array(
+			"id" => $arr["connection"]->prop("to"),
+			"parent" => $arr["connection"]->prop("from")
+		));
 	}
 
 	////
 	// !Adds a new object group
 	function add_group($args = array())
 	{
-		print "<pre>";
-		print_r($args);
-		print "</pre>";
+//		print "<pre>";
+//		print_r($args);
+//		print "</pre>";
 
 
 	}

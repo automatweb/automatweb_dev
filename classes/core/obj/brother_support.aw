@@ -3,6 +3,7 @@
 /*
 
 HANDLE_MESSAGE(MSG_STORAGE_ALIAS_DELETE, on_delete_alias)
+HANDLE_MESSAGE(MSG_STORAGE_ALIAS_ADD, on_add_alias)
 
 
 */
@@ -23,6 +24,18 @@ class brother_support
 			{
 				$o->delete();
 			}
+		}
+	}
+
+	function on_add_alias($arr)
+	{
+		// now, get the alias. if it has reltype of 10000, then add a brother below the folder
+		// the connection points to
+		if ($arr["connection"]->prop("reltype") == 10000)
+		{
+			$to = $arr["connection"]->to();
+			$from = $arr["connection"]->from();
+			$from->create_brother($to->id());
 		}
 	}
 }

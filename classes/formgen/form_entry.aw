@@ -1,10 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.3 2003/06/18 13:47:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.4 2003/12/04 16:37:05 kristo Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
 // but it doesn't contain any of the functionality, it just forwards calls to class form
 // well, ok, not an interface class in it's purest meaning, but still pretty cool
+
+/*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_FORM_ENTRY, on_add_alias)
+
+*/
 
 class form_entry extends aw_template
 {
@@ -113,20 +119,20 @@ class form_entry extends aw_template
 	////
 	// !adding alias to document support
 	// we must let the user select whether he wants to view or edit the entry
-	function addalias($arr)
+	function on_add_alias($arr)
 	{
 		extract($arr);
-		$this->mk_path($al["parent"],"<a href='".$this->mk_my_orb("list_aliases", array("id" => $id),"aliasmgr")."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");
+		$this->mk_path($al["parent"],"<a href='".$this->mk_my_orb("list_aliases", array("id" => $arr["connection"]->prop("from")),"aliasmgr")."'>Tagasi</a> / Vali aliase t&uuml;&uuml;p");
 		$this->read_template("alias_type.tpl");
 
 		$fb = get_instance("formgen/form_base");
-		$form = $fb->get_form_for_entry($alias);
+		$form = $fb->get_form_for_entry($arr["connection"]->prop("to"));
 
 		$opl = $fb->get_op_list($form);
 
 		$this->vars(array(
 			"op_sel" => $this->picker("", $opl[$form]),
-			"reforb" => $this->mk_reforb("submit_select_alias", array("docid" => $docid, "alias" => $alias, "form_id" => $form))
+			"reforb" => $this->mk_reforb("submit_select_alias", array("docid" => $docid, "alias" => $arr["connection"]->prop("from"), "form_id" => $form))
 		));
 		$ret = $this->parse();
 		return $ret;

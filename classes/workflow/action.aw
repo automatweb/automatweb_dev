@@ -80,22 +80,19 @@ class action extends workflow_common
 			"class_id" => CL_ACTION,
 		));
 
-		$alias_reltype = $source_obj["meta"]["alias_reltype"];
-                if (!is_array($alias_reltype))
-                {
-                        die("Objektil puuduvad 'tegevus' tüüpi seosed");
-                };
+		$root_action = $source_obj["meta"]["root_action"];
+		// list all non-root actions
 
-                $root_action = $source_obj["meta"]["root_action"];
-                // list all non-root actions
-                $actions = array();
-                foreach($alias_reltype as $key => $val)
-                {
-                        if ( ($key != $root_action) && ($val == RELTYPE_ACTION) && ($key != $target_id) )
-                        {
-                                $actions[] = $key;
-                        };
-                }
+		$so = obj($row["source"]);
+		$actions = array();
+		foreach($so->connections_from(array("type" => RELTYPE_ACTION)) as $c)
+		{
+			$key = $c->prop("to");
+			if ( ($key != $root_action) ($key != $target_id) )
+			{
+				$actions[] = $key;
+			};
+		}
 
 		// what would be the best interface for this crap.
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.24 2003/11/13 11:08:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.25 2003/12/04 16:37:01 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -222,10 +222,6 @@ class converters extends aw_template
 
                 $flatlist = array();
 
-                foreach($oldaliases as $alias)
-                {
-                        //$flatlist[$alias->to(] = $alias_reltype[$alias["target"]];
-                };
 
 		// basically, I have to get a list of menus in $args["object"]["meta"]["section"]
 		// and create a relation of type RELTYPE_ASSIGNED_MENU for each of those
@@ -269,11 +265,8 @@ class converters extends aw_template
                 }
 
                 // update reltype information, that is only if there is anything to update
-                if (sizeof($alias_reltype) > 0)
-                {
-                        $args["obj_inst"]->set_meta("uses_relationmgr",1);
+                       $args["obj_inst"]->set_meta("uses_relationmgr",1);
                         $args["obj_inst"]->save();
-                };
 
 	}
 	
