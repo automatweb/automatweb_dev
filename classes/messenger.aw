@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.47 2001/06/01 06:15:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.48 2001/06/04 02:58:30 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1309,8 +1309,8 @@ class messenger extends menuedit_light
 			case MSG_EXTERNAL:
 				// replace < and > in the fields with correspondening HTML entitites
 				$from = $msg["mfrom"];
-				$from = quoted_printable_decode($this->MIME_decode($from));
-				$subject = quoted_printable_decode($this->MIME_decode($msg["subject"]));
+				$from = $this->MIME_decode($from);
+				$subject = $this->MIME_decode($msg["subject"]);
 				$vars = array(
 					"mfrom" => htmlspecialchars($from),
 					"mtargets1" => htmlspecialchars($msg["mto"]),
@@ -1319,7 +1319,7 @@ class messenger extends menuedit_light
 				break;
 
 			case MSG_INTERNAL:
-				$subject = quoted_printable_decode($this->MIME_decode($msg["subject"]));
+				$subject = $this->MIME_decode($msg["subject"]);
 				$vars = array(
 					"mfrom" => $msg["createdby"],
 					"mto" => $msg["mto"],
@@ -1342,12 +1342,7 @@ class messenger extends menuedit_light
 		$message = $msg["message"];
 		$message = ereg_replace("((ftp://)|(http://))(([[:alnum:]]|[[:punct:]])*)", "<a href=\"\\0\" target='_new'>\\0</a>",$message);
 
-		$message = quoted_printable_decode($message);
 		$message = nl2br($this->MIME_decode($message));
-		#if ($this->msgconf["msg_font"] != "courier")
-	#	{
-		#	$message = preg_replace("/[\r|\n|\r\n|\n\r]/","<br>",$message);
-	#	};
 		$this->vars(array("msg_id" => $args["id"]));
 		$s = ($op == "show") ? $this->parse("show") : $this->parse("preview");
 		$this->vars(array(
@@ -1568,6 +1563,7 @@ class messenger extends menuedit_light
 				$tpl = "accounts.tpl";
 				$this->read_template($tpl);
 				$c = "";
+				$cnt = 0;
 				$pop3conf = $this->msgconf["msg_pop3servers"];
 				if (is_array($pop3conf))
 				{
@@ -1576,9 +1572,11 @@ class messenger extends menuedit_light
 						$this->vars(array(
 								"id" => $accid,
 								"name" => $cvalues["name"],
+								"defcheck" => checked($this->msgconf["msg_default_account"] == $cnt),
 								"checked" => checked($cvalues["default"]),
 								"type" => "POP3", // *pun intended*
 						));
+						$cnt++;
 						$c .= $this->parse("line");
 					};
 				};
@@ -2368,7 +2366,7 @@ class messenger extends menuedit_light
 		$pos = strpos($string,'=?');
 		if ($pos === false)
 		{
-			return $string;
+			return quoted_printable_decode($string);
 		};
 
 		// take out any spaces between multiple encoded words
@@ -2427,7 +2425,8 @@ class messenger extends menuedit_light
 				break;
 			}
 
-		return $preceding . $decoded . $this->MIME_decode($rest);
+		$retval = $preceding . $decoded . $this->MIME_decode($rest);
+		return quoted_printable_decode($retval);
 	}
 
 };
