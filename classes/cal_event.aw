@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.16 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.17 2002/07/23 21:16:09 duke Exp $
 
 class cal_event extends aw_template 
 {
@@ -9,7 +9,7 @@ class cal_event extends aw_template
 		extract($args);
 		$this->init("cal_event");
 	}
-	
+
 	////
 	// !Joonistab menüü
 	// argumendid:
@@ -342,6 +342,27 @@ class cal_event extends aw_template
 			};
 		
 			load_vcl("date_edit");
+			// set up the time editor
+
+			if ($meta["own_time"])
+			{
+				$reptime_val = mktime($meta[reptime][hour],$meta[reptime][minute],0,1,1,2001);
+			}
+			else
+			{
+				if ($event["start"])
+				{
+					$reptime_val = $event["start"];
+				}
+				else
+				{
+					$reptime_val = 0;
+				};
+			};
+
+			$reptime = new date_edit("time");
+			$reptime->configure(array("hour" => 1,"minute" => 2));
+			$reptime_ed = $reptime->gen_edit_form("reptime",$reptime_val);
 			// set up the date editor for cycle end
 			$repend = new date_edit("start");
 			$repend->configure(array("day" => 1,"month" => 2,"year" => 3));
@@ -371,6 +392,7 @@ class cal_event extends aw_template
 			$this->vars(array(
 					"region1" => checked($meta["region1"]),
 					"dayskip" => ($meta["dayskip"] > 0) ? $meta["dayskip"] : 1,
+					"time" => $reptime_ed,
 					"day1" => checked($meta["day"] == 1),
 					"day2" => checked($meta["day"] == 2),
 					"day3" => checked($meta["day"] == 3),
@@ -379,6 +401,7 @@ class cal_event extends aw_template
 					"wday3" => checked($meta["wday"][3]),
 					"wday4" => checked($meta["wday"][4]),
 					"wday5" => checked($meta["wday"][5]),
+					"own_time" => checked($meta["own_time"]),
 					"wday6" => checked($meta["wday"][6]),
 					"wday7" => checked($meta["wday"][7]),
 					"monpwhen2" => $meta["monpwhen2"],
@@ -444,9 +467,12 @@ class cal_event extends aw_template
 			));
 		}
 
-		$this->vars(array(
-			"menubar" => $menubar,
-		));
+		if (not($hide_menubar))
+		{
+			$this->vars(array(
+				"menubar" => $menubar,
+			));
+		};
 			
 		return $this->parse();
 	}
