@@ -1,6 +1,7 @@
 <?php
 // $Header
 
+classload("formgen/form_search_element");
 class form_filter_search_element extends form_search_element
 {
 	function form_filter_search_element()
