@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>url</name>
+            <type>textbox</type>
+            <size>40</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Sisu (URL)</caption>
+      </property>
+      <property>
+            <name>width</name>
+            <type>textbox</type>
+            <size>4</size>
+            <maxlength>4</maxlength>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Laius</caption>
+      </property>
+      <property>
+            <name>height</name>
+            <type>textbox</type>
+            <size>4</size>
+            <maxlength>4</maxlength>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kõrgus</caption>
+      </property>
+      <property>
+            <name>menus</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>20</size>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Menüüd</caption>
+      </property>
+</properties>
+
