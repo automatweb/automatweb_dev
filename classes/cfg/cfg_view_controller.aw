@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.2 2005/02/11 13:06:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.3 2005/03/11 14:05:19 ahti Exp $
 // cfg_view_controller.aw - NÃ&auml;itamise kontroller 
 /*
 
@@ -30,8 +30,10 @@ class cfg_view_controller extends class_base
 	}
 	
 		
-	function check_property($prop, $controller_oid, $arr)
+	function check_property($arr)
 	{
+		// $prop, $controller_oid, $arr
+		extract($arr);
 		$retval = PROP_OK;
 		$controller_inst = &obj($controller_oid);
 		eval($controller_inst->prop("formula"));

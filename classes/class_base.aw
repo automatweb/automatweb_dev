@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.367 2005/02/23 09:56:13 kristo Exp $
+// $Id: class_base.aw,v 2.368 2005/03/11 14:05:18 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1921,7 +1921,13 @@ class class_base extends aw_template
 				$val = is_array($value) ? $value : array($value);
 				foreach($val as $value)
 				{
-					$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
+					// &$properties[$key], $value, $argblock
+					// $prop, $controller_oid, $arr
+					$retval = $view_controller_inst->check_property(array(
+						"prop" => &$properties[$key],
+						"controller_oid" => $value,
+						"arr" => $argblock,
+					));
 					if($retval == PROP_IGNORE)
 					{
 						unset($properties[$key]);
@@ -2960,7 +2966,16 @@ class class_base extends aw_template
 				{
 					$controller_id = $contr;
 					$prpdata["value"] = $val;
-					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst);
+					// $controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst
+					// $controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst
+					$controller_ret = $controller_inst->check_property(array(
+						"controller_oid" => $controller_id,
+						"obj_id" => $args["id"],
+						"prop" => &$prpdata,
+						"request" => &$arr["request"],
+						"entry" => $val,
+						"obj_inst" => &$this->obj_inst,
+					));
 					if ($controller_ret != PROP_OK)
 					{
 						$ctrl_obj = new object($controller_id);
