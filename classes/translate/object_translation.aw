@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.15 2004/06/25 18:29:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.16 2004/10/05 09:15:49 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -89,6 +89,7 @@ class object_translation extends aw_template
 			"reltype" => RELTYPE_TRANSLATION,
 			"to.lang_id" => $dstlang_id
 		));
+
 		if (count($conns) > 0)
 		{
 			// it already has the translation, don't create a new one, just go to changing
