@@ -129,6 +129,12 @@ class propcollector extends aw_template
 				$fields[$key] = $val;
 			};
 		};
+
+		// field defaults to the name of the property
+		if (!$fields["field"])
+		{
+			$fields["field"] = $fields["name"];
+		};
 		$this->properties[$name] = $fields;
 		$this->name = $name;
 
@@ -198,19 +204,21 @@ class propcollector extends aw_template
 			//print "writing out $fullname\n";
 			$arr = array();
 			$arr["properties"] = array_values($this->properties);
+
 			if (sizeof($this->classinfo) > 0)
 			{
 				$arr["properties"]["classinfo"] = $this->classinfo;
 			};
+
 			if (sizeof($this->groupinfo) > 0)
 			{
 				$arr["properties"]["groupinfo"] = $this->groupinfo;
 			};
+
 			if (sizeof($this->tableinfo) > 0)
 			{
 				$arr["properties"]["tableinfo"] = $this->tableinfo;
 			};
-
 
 			$res = $sr->xml_serialize($arr);
 			//print_r($res);
