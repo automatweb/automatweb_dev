@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.6 2004/12/20 10:34:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.7 2004/12/20 13:41:45 ahti Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -218,7 +218,7 @@ class timing extends class_base
 		{
 			$t->define_data(array(
 				"id" => $obj->prop("to"),
-				"name" => tml::get_change_url($obj->prop("to"), array(), $obj->prop("to.name")),
+				"name" => html::get_change_url($obj->prop("to"), array(), $obj->prop("to.name")),
 				"type" => $classes[$obj->prop("to.class_id")]["name"],
 			));
 		}
