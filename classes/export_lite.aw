@@ -98,7 +98,7 @@ class export_lite extends aw_template
 		}
 		touch($this->lock_file);
 		$url = $this->rewrite_link($url);
-//		echo "rewrote link to $url <br>";
+///		echo "rewrote link to $url <br>";
 
 		$_url = $url;
 		if ($url == "")

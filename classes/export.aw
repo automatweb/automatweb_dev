@@ -243,6 +243,15 @@ class export extends aw_template
 			$this->load_rule($rule_id);
 		}
 
+		if (file_exists(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id")))
+		{
+			$mt = filemtime(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id")));
+			if ((time() - $mt) < 600)
+			{
+				die("eksport juba k&auml;ib!");
+			}
+			unlink(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id")));
+		}
 		// ok, this is the complicated bit.
 		// so, how do we do this? first. forget the time limit, this is gonna take a while.
 		set_time_limit(0);
@@ -350,6 +359,7 @@ class export extends aw_template
 		}
 
 		@unlink(aw_ini_get("server.tmpdir")."/exp_running.".$this->rule_id);
+		@unlink(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id"));
 
 		if ($zip_file != "")
 		{
@@ -474,6 +484,7 @@ class export extends aw_template
 		{
 			touch(aw_ini_get("server.tmpdir")."/exp_running.".$this->rule_id);
 		}
+		touch(aw_ini_get("server.tmpdir")."/exp_running_sid".aw_ini_get("site_id"));
 
 		$url = $this->rewrite_link($url);
 		$_url = $url;
