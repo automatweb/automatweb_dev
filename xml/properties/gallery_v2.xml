@@ -128,6 +128,61 @@
             <no_caption>1</no_caption>
             <table>objects</table>
       </property>
+      <property>
+            <name>ftp_host</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>FTP Server</caption>
+      </property>
+      <property>
+            <name>ftp_user</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>FTP Kasutaja</caption>
+      </property>
+      <property>
+            <name>ftp_pass</name>
+            <type>password</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>FTP Parool</caption>
+      </property>
+      <property>
+            <name>ftp_folder</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>FTP Serveri kataloog</caption>
+      </property>
+      <property>
+            <name>import_overwrite</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>Importimisel kirjuta olemasolevad pildid &amp;uuml;le</caption>
+      </property>
+      <property>
+            <name>do_import</name>
+            <type>submit</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <value>Impordi</value>
+            <table>objects</table>
+      </property>
       <classinfo>
             <syslog_type>ST_GALLERY</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -163,6 +218,9 @@
             <page_9>
                   <caption>Lehek&amp;uuml;lg&amp;nbsp;9</caption>
             </page_9>
+            <import>
+                  <caption>Impordi</caption>
+            </import>
             <preview>
                   <caption>Eelvaade</caption>
             </preview>
