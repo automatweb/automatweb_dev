@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.5 2004/10/05 09:21:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.6 2004/10/14 13:41:13 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -20,7 +20,8 @@ class otto_prod_search extends class_base
 		array("Jalatsid", array(142)),
 		array("Spordirõivad", array(1383)),
 		array("Mööbel", array(143)),
-		array("Kodusisustus", array(144))	
+		array("Kodusisustus", array(144))
+		//array("Eripakkumised", array(149113))
 	);
 
 	function otto_prod_search()
@@ -137,8 +138,9 @@ class otto_prod_search extends class_base
 				LEFT JOIN objects o ON pr.aw_oid = o.oid 
 			WHERE
 				o.status > 0 AND o.lang_id = ".aw_global_get("lang_id")." AND
-				pr.aw_oid IN ($jstr) AND
-				pi.imnr IS NOT NULL
+				pr.aw_oid IN (".$jstr.") AND
+				pi.imnr IS NOT NULL AND 
+				o.parent < 169384
 			GROUP BY
 				pi.imnr
 		";
