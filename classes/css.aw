@@ -1,18 +1,25 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.42 2004/10/29 16:37:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.43 2004/11/05 14:11:20 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
 @classinfo syslog_type=ST_CSS relationmgr=yes
-@groupinfo preview caption=Eelvaade
 
 @default group=general 
 @default table=objects
 @default field=meta
 @default method=serialize
 
-@property ffamily type=select
-@caption Font
+@property ffamily1 type=select
+@caption Font 1
+
+@property ffamily2 type=select
+@caption Font 3
+
+@property ffamily3 type=select
+@caption Font 3
+
+@property ffamily type=hidden 
 
 @property italic type=checkbox ch_value=1 
 @caption <i>Italic</i>
@@ -33,7 +40,7 @@
 @caption Tausta v&auml;rv
 
 @property lineheight type=textbox size=5
-@caption Joone k&otilde;rgus
+@caption Joone k&otilde;rgus 
 
 @property border type=textbox size=5
 @caption &Auml;&auml;rejoone j&auml;medus
@@ -53,6 +60,12 @@
 @property height type=textbox size=5
 @caption K&otilde;rgus
 
+@property padding type=textbox size=5 datatype=int
+@caption Elementide vahe (cellspacing) (px)
+
+@property margin type=textbox size=5 datatype=int
+@caption Sisu kaugus joontest (cellspadding) (px)
+
 @property a_style type=relpicker reltype=RELTYPE_CSS
 @caption Lingi stiil
 
@@ -71,6 +84,34 @@
 @property site_css type=textbox 
 @caption Saidi css failis defineeritud stiil
 
+@groupinfo table caption="Tabel"
+@default group=table
+
+@property num_frows type=textbox size=5 datatype=int
+@caption Mitmele esimesele reale
+
+@property frow_style type=relpicker reltype=RELTYPE_CSS
+@caption Esimeste ridade stiil
+
+@property num_fcols type=textbox size=5 datatype=int
+@caption Mitmele esimesele tulbale
+
+@property fcol_style type=relpicker reltype=RELTYPE_CSS
+@caption Esimeste tulpade stiil
+
+@property header_style type=relpicker reltype=RELTYPE_CSS
+@caption P&auml;ise stiil
+
+@property footer_style type=relpicker reltype=RELTYPE_CSS
+@caption Jaluse stiil
+
+@property odd_style type=relpicker reltype=RELTYPE_CSS
+@caption Paaritu rea stiil
+
+@property even_style type=relpicker reltype=RELTYPE_CSS
+@caption Paaris rea stiil
+
+@groupinfo preview caption=Eelvaade
 @property pre type=text group=preview no_caption=1
 @caption Eelvaade
 
@@ -103,6 +144,8 @@ class css extends class_base
 			"6" => "cursive",
 			"7" => "Trebuchet MS,Tahoma,sans-serif"
 		);
+
+		$this->ff = array("", "Verdana", "Helvetica", "Arial", "Tahoma", "Trbuchet MS", "sans-serif", "serif", "cursive", "monospace");
 	}
 
 
@@ -250,6 +293,14 @@ class css extends class_base
 					}
 					break;
 
+				case "margin":
+					$mask = "margin: %spx;\n";
+					break;
+
+				case "padding":
+					$mask = "padding: %spx;\n";
+					break;
+
 				default:
 					$ign = true;
 					break;
@@ -274,12 +325,12 @@ class css extends class_base
 
 		$retval .= "}\n";
 
-		if ($has_border)
+		if ($has_border || trim($data["padding"]) != "" || trim($data["margin"]) != "")
 		{
 			$retval .= ".$name td {\n";
 			if (trim($data["border"]) != "")
 			{
-				$retval .= "border: $data[border]px solid ";
+				$retval .= "\tborder: $data[border]px solid ";
 				if (trim($data["bordercolor"]) != "")
 				{
 					if ($data["bodercolor"]{0} != "#")
@@ -343,10 +394,29 @@ class css extends class_base
 	function get_property(&$arr)
 	{
 		$prop =& $arr["prop"];
+		if (is_numeric($ffm =$arr["obj_inst"]->prop("ffamily")))
+		{
+			$ffm = $this->font_families[$ffm];
+		}
+		list($f1,$f2,$f3) = explode(",", $ffm);
+
 		switch($prop['name'])
 		{
-			case "ffamily":
-				$prop['options'] = $this->font_families;
+			case "ffamily1":
+				$prop['options'] = $this->ff;
+				$prop["value"] = array_search($f1, $this->ff);
+				break;
+
+			case "ffamily2":
+				list(,$f) = explode(",", $arr["obj_inst"]->prop("ffamily"));
+				$prop['options'] = $this->ff;
+				$prop["value"] = array_search($f2, $this->ff);
+				break;
+
+			case "ffamily3":
+				list(,,$f) = explode(",", $arr["obj_inst"]->prop("ffamily"));
+				$prop['options'] = $this->ff;
+				$prop["value"] = array_search($f3, $this->ff);
 				break;
 
 			case "align":
@@ -369,6 +439,12 @@ class css extends class_base
 
 			case "pre":
 				$this->read_template("preview.tpl");
+				$st = get_instance("style");
+				$this->vars(array(
+					"clname" => $st->get_style_name($arr["obj_inst"]->id())
+				));
+				classload("layout/active_page_data");
+				active_page_data::add_site_css_style($arr["obj_inst"]->id());
 				$prop['value'] = $this->parse();
 				break;
 		}
@@ -391,6 +467,23 @@ class css extends class_base
 
 	function callback_pre_save($arr)
 	{
+		// put ffamily style together from bits
+		$ffm = array();
+		if ($arr["obj_inst"]->prop("ffamily1") > 0 )
+		{
+			$ffm[] = $this->ff[$arr["obj_inst"]->prop("ffamily1")];
+		}
+		if ($arr["obj_inst"]->prop("ffamily2") > 0)
+		{
+			$ffm[] = $this->ff[$arr["obj_inst"]->prop("ffamily2")];
+		}
+		if ($arr["obj_inst"]->prop("ffamily3") > 0)
+		{
+			$ffm[] = $this->ff[$arr["obj_inst"]->prop("ffamily3")];
+		}
+		$ffm = join(",", $ffm);
+
+		$arr["obj_inst"]->set_prop("ffamily", $ffm);
 		$meta = $arr["obj_inst"]->meta();
 		$cssmeta = array(); ;
 		$_t = new aw_array($meta);
