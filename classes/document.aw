@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.154 2003/02/06 18:55:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.155 2003/02/10 18:06:32 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -400,6 +400,7 @@ class document extends aw_template
 		$si = __get_site_instance();
 		//hook for site specific document parsing
 		$doc["tpl"] = $tpl;
+		$doc["leadonly"] = $leadonly;
 		if ($si)
 		{
 			$si->parse_document(&$doc);
