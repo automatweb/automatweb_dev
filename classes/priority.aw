@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/priority.aw,v 2.4 2003/01/26 22:24:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/priority.aw,v 2.5 2003/02/21 13:12:02 duke Exp $
 // priority.aw - prioriteedi objekt
 /*
 	@default table=objects
@@ -89,7 +89,7 @@ class priority extends class_base
 				}
 
 				uasort($pr, create_function('$a,$b','if ($a["pri"] > $b["pri"]) { return 1; } if ($a["pri"] < $b["pri"]) { return -1; } return 0;'));
-				$form_data["pri"] = $pr;
+				$data["value"] = $pr;
 		};
 		return $retval;
 	}
