@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.6 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.7 2004/03/15 13:41:14 duke Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -19,7 +19,6 @@
 	@property preview type=text store=no
 	@caption Eelvaade
 
-	@groupinfo general caption=Üldine
 	@classinfo syslog_type=ST_FLASH
 
 */
@@ -63,7 +62,7 @@ class flash extends class_base
 	function set_property($arr)
 	{
 		$data = &$arr["prop"];
-		$form_data = &$arr["form_data"];
+		$request = &$arr["request"];
 		$retval = PROP_OK;
 		if ($data["name"] == "file")
 		{
