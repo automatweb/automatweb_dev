@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.23 2004/12/23 11:28:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.24 2004/12/23 15:43:21 ahti Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -868,6 +868,10 @@ class object_import extends class_base
 		foreach($o->prop("unique_id") as $unique_id)
 		{
 			$prop = $properties[$unique_id];
+			if(empty($prop))
+			{
+				continue;
+			}
 			if ($prop["store"] == "no")
 			{
 				continue;
