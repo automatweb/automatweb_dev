@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="datasource" folder="www/dev/terryf/awcl/classes" extends="class_base">
+	<class name="datasource" folder="www/dev/terryf/automatweb_dev/classes" extends="class_base">
 		<action name="fetch" >
 			<function name="fetch">
 				<arguments>

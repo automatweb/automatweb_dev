@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="workbench" folder="www/dev/terryf/awcl/classes/admin" extends="class_base">
+	<class name="workbench" folder="admin" extends="class_base">
 		<action name="gen_workbench" >
 			<function name="gen_workbench">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_db" folder="www/dev/terryf/awcl/classes/crm" extends="class_base">
+	<class name="crm_db" folder="crm" extends="class_base">
 		<action name="process_organizations" all_args="1">
 			<function name="process_organizations">
 				<arguments>

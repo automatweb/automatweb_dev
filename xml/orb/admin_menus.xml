@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="admin_menus" folder="www/dev/terryf/awcl/classes/admin" extends="aw_template">
+	<class name="admin_menus" folder="admin" extends="aw_template">
 		<action name="import" >
 			<function name="import">
 				<arguments>

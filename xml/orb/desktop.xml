@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="desktop" folder="www/dev/terryf/awcl/classes/desktop" extends="class_base">
+	<class name="desktop" folder="desktop" extends="class_base">
 		<action name="show_icons" >
 			<function name="show_icons">
 				<arguments>

@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="xulclient" folder="www/dev/terryf/awcl/classes/cfg" extends="aw_template">
+	<class name="xulclient" folder="cfg" extends="aw_template">
 	</class>
 </orb>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="objects" folder="www/dev/terryf/awcl/classes" extends="db_objects">
+	<class name="objects" folder="www/dev/terryf/automatweb_dev/classes" extends="db_objects">
 		<action name="search" >
 			<function name="search">
 				<arguments>

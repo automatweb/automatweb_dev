@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="mysql_analyzer" folder="www/dev/terryf/awcl/classes/analyzer" extends="aw_template">
+	<class name="mysql_analyzer" folder="analyzer" extends="aw_template">
 	</class>
 </orb>

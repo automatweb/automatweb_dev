@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="taket_ebasket" folder="www/dev/terryf/awcl/classes/taket" extends="class_base">
+	<class name="taket_ebasket" folder="taket" extends="class_base">
 		<action name="show" >
 			<function name="show">
 				<arguments>

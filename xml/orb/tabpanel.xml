@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="tabpanel" folder="www/dev/terryf/awcl/classes/vcl" extends="aw_template">
+	<class name="tabpanel" folder="vcl" extends="aw_template">
 	</class>
 </orb>

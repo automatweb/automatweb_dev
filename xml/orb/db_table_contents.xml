@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="db_table_contents" folder="www/dev/terryf/awcl/classes/awmyadmin" extends="class_base">
+	<class name="db_table_contents" folder="awmyadmin" extends="class_base">
 		<action name="change" >
 			<function name="change">
 				<arguments>

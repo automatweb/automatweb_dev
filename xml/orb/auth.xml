@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="auth" folder="www/dev/terryf/awcl/classes" extends="aw_template">
+	<class name="auth" folder="www/dev/terryf/automatweb_dev/classes" extends="aw_template">
 		<action name="show_login" nologin="1">
 			<function name="show_login">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="menu_separator" folder="www/dev/terryf/awcl/classes/admin" extends="class_base">
+	<class name="menu_separator" folder="admin" extends="class_base">
 		<action name="show" >
 			<function name="show">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="page" folder="www/dev/terryf/awcl/classes/vcl" extends="class_base">
+	<class name="page" folder="vcl" extends="class_base">
 		<action name="show" >
 			<function name="show">
 				<arguments>

@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="object_translation" folder="www/dev/terryf/awcl/classes/translate" extends="aw_template">
+	<class name="object_translation" folder="translate" extends="aw_template">
 		<action name="create" all_args="1">
 			<function name="create">
 				<arguments>
