@@ -67,16 +67,16 @@
 @reltype CHILD_ORG value=7 clid=CL_CRM_COMPANY
 @caption Tütar-organisatsioonid
 
-@reltype WORKERS value=8 clid=CL_ISIK
+@reltype WORKERS value=8 clid=CL_CRM_PERSON
 @caption Töötajad
 
-@reltype PAKKUMINE value=9 clid=CL_PAKKUMINE
+@reltype PAKKUMINE value=9 clid=CL_CRM_OFFER
 @caption Pakkumine
 
-@reltype TEHING value=10 clid=CL_TEHING
+@reltype TEHING value=10 clid=CL_CRL_DEAL
 @caption Tehing
 
-@reltype KOHTUMINE value=11 clid=CL_KOHTUMINE
+@reltype KOHTUMINE value=11 clid=CL_CRM_MEETING
 @caption Kohtumine
 
 @reltype CALL value=12 clid=CL_CRM_CALL
@@ -265,7 +265,8 @@ class crm_company extends class_base
 			'sortable' => '1',
 		));
 
-		$reltype_caption = $this->callback_get_rel_types();
+		// soooo , I need the names of the relations
+		//$reltype_caption = $this->callback_get_rel_types();
 		
 		foreach($relobjects as $val)
 		{
@@ -286,6 +287,7 @@ class crm_company extends class_base
 			
 			$t->define_data(array(
 				'name' => html::href(array('caption' => $val['name'],'url' => $this->mk_my_orb('change', array('id' => $val[OID]), $cldat["file"]))),
+				// oh geez. so that is how it's done
 				'type' => $reltype_caption[$val['reltype']],
 				'event_start' => date('Y-m-d H:i',$pl['start']),
 				'event_end' => date('Y-m-d H:i',$pl['end']),
@@ -463,7 +465,6 @@ class crm_company extends class_base
 			"url" => "",
 			"onClick" => "return buttonClick(event, 'mainmenu');",
 			"img" => "new.gif",
-			"imgover" => "new_over.gif",
 			"class" => "menuButton",
 		));
 		
@@ -475,7 +476,6 @@ class crm_company extends class_base
 				"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
 				"onClick" => "",
 				"img" => "icon_cal_today.gif",
-				"imgover" => "icon_cal_today_over.gif",
 				"class" => "menuButton",
 			));
 		}

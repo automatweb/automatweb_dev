@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.1 2003/11/10 19:46:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.2 2003/11/11 10:23:54 duke Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -8,20 +8,19 @@
 @default table=objects
 @default group=general
 @default field=meta
-@default method=serialize
-
 
 default group=calendar
-@property start1 type=datetime_select field=start table=planner group=calendar
+@property start1 type=datetime_select field=start table=planner
 @caption Algab 
 
-@property duration type=time_select field=end table=planner group=calendar
+@property duration type=time_select field=end table=planner 
 @caption Kestab
 
 @property content type=textarea cols=60 rows=30 table=planner field=description
 @caption Sisu
 
 default group=other_calendars
+@tableinfo planner index=id master_table=objects master_index=brother_of
 
 */
 

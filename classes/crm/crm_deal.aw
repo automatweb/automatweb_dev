@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.1 2003/11/10 19:59:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.2 2003/11/11 10:23:54 duke Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -15,7 +15,7 @@ class crm_deal extends class_base
 	function crm_deal()
 	{
 		$this->init(array(
-			"clid" => CL_DEAL
+			"clid" => CL_CRM_DEAL
 		));
 	}
 
