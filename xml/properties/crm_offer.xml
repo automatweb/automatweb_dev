@@ -1,20 +1,35 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>start1</name>
-            <table>planner</table>
+            <name>orderer</name>
+            <table>objects</table>
             <group>general</group>
-            <field>start</field>
-            <type>datetime_select</type>
-            <caption>Algab </caption>
+            <field>meta</field>
+            <type>relpicker</type>
+            <automatic>1</automatic>
+            <reltype>RELTYPE_ORDERER</reltype>
+            <method>serialize</method>
+            <caption>Tellija</caption>
       </property>
       <property>
-            <name>duration</name>
-            <table>planner</table>
+            <name>preformer</name>
+            <table>objects</table>
             <group>general</group>
-            <field>end</field>
-            <type>time_select</type>
-            <caption>Kestab</caption>
+            <field>meta</field>
+            <type>relpicker</type>
+            <automatic>1</automatic>
+            <reltype>RELTYPE_PREFORMER</reltype>
+            <method>serialize</method>
+            <caption>Täitja</caption>
+      </property>
+      <property>
+            <name>salesman</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>select</type>
+            <method>serialize</method>
+            <caption>Pakkumise koostaja</caption>
       </property>
       <property>
             <name>content</name>
@@ -27,31 +42,32 @@
             <caption>Sisu</caption>
       </property>
       <property>
-            <name>aliasmgr</name>
+            <name>goals</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
-            <type>aliasmgr</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Aliastehaldur</caption>
+            <type>textarea</type>
+            <cols>60</cols>
+            <rows>15</rows>
+            <method>serialize</method>
+            <caption>Eesmärgid</caption>
       </property>
       <property>
-            <name>recurrence</name>
+            <name>offer_status</name>
             <table>objects</table>
-            <group>recurrence</group>
+            <group>general</group>
             <field>meta</field>
+            <type>select</type>
             <method>serialize</method>
-            <type>releditor</type>
-            <reltype>RELTYPE_RECURRENCE</reltype>
-            <rel_id>first</rel_id>
-            <props>
-                  <num_0>start</num_0>
-                  <num_1>weekdays</num_1>
-                  <num_2>end</num_2>
-            </props>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>prev_status</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <type>hidden</type>
             <store>no</store>
-            <caption>Kordused</caption>
       </property>
       <property>
             <name>calendar_selector</name>
@@ -75,9 +91,80 @@
             <store>no</store>
             <caption>Projektid</caption>
       </property>
+      <property>
+            <name>package_toolbar</name>
+            <table>objects</table>
+            <group>
+                  <num_0>packages_show</num_0>
+                  <num_1>products_show</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>package_table</name>
+            <table>objects</table>
+            <group>packages_show</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>products_table</name>
+            <table>objects</table>
+            <group>products_show</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>packages_search</name>
+            <table>objects</table>
+            <group>
+                  <num_0>packages_show</num_0>
+                  <num_1>products_show</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>do_packages_search_form</callback>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>packages_search_results</name>
+            <table>objects</table>
+            <group>
+                  <num_0>packages_show</num_0>
+                  <num_1>products_show</num_1>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>offer_history</name>
+            <table>objects</table>
+            <group>history</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <recurrence>
@@ -89,6 +176,18 @@
             <projects>
                   <caption>Projektid</caption>
             </projects>
+            <packages_show>
+                  <caption>Paketid</caption>
+                  <submit>no</submit>
+            </packages_show>
+            <products_show>
+                  <caption>Tooted</caption>
+                  <submit>no</submit>
+            </products_show>
+            <history>
+                  <caption>Ajalugu</caption>
+                  <submit>no</submit>
+            </history>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -103,6 +202,31 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECURRENCE>
+            <ORDERER>
+                  <value>2</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Tellija</caption>
+            </ORDERER>
+            <PREFORMER>
+                  <value>3</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Täitja</caption>
+            </PREFORMER>
+            <SALESMAN>
+                  <value>4</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Pakkumise koostaja</caption>
+            </SALESMAN>
+            <PRODUCT>
+                  <value>5</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Toode</caption>
+            </PRODUCT>
+            <PACKAGE>
+                  <value>6</value>
+                  <clid>CL_SHOP_PACKET</clid>
+                  <caption>Pakett</caption>
+            </PACKAGE>
       </reltypes>
 </properties>
 

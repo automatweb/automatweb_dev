@@ -367,10 +367,7 @@
       <property>
             <name>unit_listing_tree_personal</name>
             <table>objects</table>
-            <group>
-                  <num_0>personal_offers</num_0>
-                  <num_1>personal_candits</num_1>
-            </group>
+            <group>personal_offers</group>
             <type>treeview</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -386,6 +383,36 @@
             <parent>personal_hbox_table</parent>
             <store>no</store>
             <field>personal_offers_table</field>
+      </property>
+      <property>
+            <name>personal_candidates_toolbar</name>
+            <table>objects</table>
+            <group>personal_candits</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>personal_toolbar_cand</parent>
+            <field>personal_candidates_toolbar</field>
+      </property>
+      <property>
+            <name>unit_listing_tree_candidates</name>
+            <table>objects</table>
+            <group>personal_candits</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>personal_hbox_tree_cand</parent>
+            <field>unit_listing_tree_candidates</field>
+      </property>
+      <property>
+            <name>personal_candidates_table</name>
+            <table>objects</table>
+            <group>personal_candits</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>personal_hbox_table_cand</parent>
+            <store>no</store>
+            <field>personal_candidates_table</field>
       </property>
       <property>
             <name>customer_toolbar</name>
@@ -591,6 +618,36 @@
             <field>my_customers_table</field>
             <caption>Kliendid</caption>
       </property>
+      <property>
+            <name>offers_listing_toolbar</name>
+            <table>objects</table>
+            <group>offers</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <parent>offers_toolbar</parent>
+            <store>no</store>
+            <field>offers_listing_toolbar</field>
+      </property>
+      <property>
+            <name>offers_listing_tree</name>
+            <table>objects</table>
+            <group>offers</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>offers_tree</parent>
+            <store>no</store>
+            <field>offers_listing_tree</field>
+      </property>
+      <property>
+            <name>offers_listing_table</name>
+            <table>objects</table>
+            <group>offers</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>offers_table</parent>
+            <store>no</store>
+            <field>offers_listing_table</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
@@ -682,6 +739,28 @@
                   <parent>personal</parent>
                   <submit>no</submit>
             </personal_candits>
+            <offers>
+                  <caption>Pakkumised</caption>
+                  <submit>no</submit>
+            </offers>
+            <org_objects_main>
+                  <caption>Objektid</caption>
+                  <submit>no</submit>
+            </org_objects_main>
+            <org_objects>
+                  <caption>Objektid</caption>
+                  <submit>no</submit>
+                  <parent>org_objects_main</parent>
+            </org_objects>
+            <org_projects_main>
+                  <caption>Projektid</caption>
+                  <submit>no</submit>
+            </org_projects_main>
+            <org_projects>
+                  <caption>Projektid</caption>
+                  <submit>no</submit>
+                  <parent>org_projects_main</parent>
+            </org_projects>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -841,6 +920,11 @@
                   <clid>CL_PROJECT</clid>
                   <caption>Projekt</caption>
             </PROJECT>
+            <CLIENT_MANAGER>
+                  <value>34</value>
+                  <clid>CL_CRM_MANAGER</clid>
+                  <caption>Kliendihaldur</caption>
+            </CLIENT_MANAGER>
       </reltypes>
       <layout>
             <hbox_toolbar>
@@ -881,6 +965,25 @@
                   <group>personal_offers</group>
                   <parent>personal_tree_table</parent>
             </personal_hbox_table>
+            <personal_toolbar_cand>
+                  <type>hbox</type>
+                  <group>personal_candits</group>
+            </personal_toolbar_cand>
+            <personal_tree_table_cand>
+                  <type>hbox</type>
+                  <group>personal_candits</group>
+                  <width>20%:80%</width>
+            </personal_tree_table_cand>
+            <personal_hbox_tree_cand>
+                  <type>vbox</type>
+                  <group>personal_candits</group>
+                  <parent>personal_tree_table_cand</parent>
+            </personal_hbox_tree_cand>
+            <personal_hbox_table_cand>
+                  <type>vbox</type>
+                  <group>personal_candits</group>
+                  <parent>personal_tree_table_cand</parent>
+            </personal_hbox_table_cand>
             <customer_hbox_toolbar>
                   <type>hbox</type>
                   <group>customers</group>
@@ -919,6 +1022,25 @@
                   <parent>my_customers_hbox_others</parent>
                   <group>my_customers</group>
             </vbox_my_customers_right>
+            <offers_toolbar>
+                  <type>hbox</type>
+                  <group>offers</group>
+            </offers_toolbar>
+            <offers_main>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>offers</group>
+            </offers_main>
+            <offers_tree>
+                  <type>vbox</type>
+                  <parent>offers_main</parent>
+                  <group>offers</group>
+            </offers_tree>
+            <offers_table>
+                  <type>vbox</type>
+                  <parent>offers_main</parent>
+                  <group>offers</group>
+            </offers_table>
       </layout>
 </properties>
 
