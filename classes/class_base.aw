@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.88 2003/03/27 12:04:45 duke Exp $
+// $Id: class_base.aw,v 2.89 2003/03/28 18:27:55 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -74,14 +74,16 @@ class class_base extends aliasmgr
 		{
 			die($this->ds->get_error_text());
 		};
-		
-		$this->validate_cfgform($args["cfgform"]);
+	
+		if (!empty($args["cfgform"]))
+		{	
+			$this->validate_cfgform($args["cfgform"]);
+		};
 
 		$this->parent = $args["parent"];
 		extract($args);
 
 		$this->id = "";
-
 
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
@@ -182,9 +184,10 @@ class class_base extends aliasmgr
 		$this->init_class_base();
 
 		extract($args);
-
+			
+		// I need to get that stuff working in situations where there is
+		// no id .. login forms, and stuff like that
 		$this->id = $id;
-		
 		$obj = $this->get_object($this->id);
 
 		$this->validate_cfgform($obj["meta"]["cfgform_id"]);
@@ -196,6 +199,7 @@ class class_base extends aliasmgr
 				"group" => isset($args["group"]) ? $args["group"] : "",
 				"cb_view" => isset($args["cb_view"]) ? $args["cb_view"] : "",
 		));
+
 		
 		$this->load_obj_data(array("id" => $this->id));
 
@@ -300,13 +304,31 @@ class class_base extends aliasmgr
 		// check whether this current class is based on class_base
 		$this->init_class_base();
 
-		$this->validate_cfgform($args["cfgform"]);
-
 		$this->quote($args);
-
 		extract($args);
 
+		// I need to know the id of the configuration form, so that I 
+		// can load it. Reason being, the properties can be grouped
+		// differently in the config form then they are in the original
+		// properties
+		if (isset($id))
+		{
+			$_tmp = $this->get_object($id);
+			$cgid = 0;
+			if (isset($_tmp["meta"]["cfgform_id"]))
+			{
+				$cgid = $_tmp["meta"]["cfgform_id"];
+			};
+		}
+		else
+		{
+			$cgid = isset($args["cfgform"]) ? $args["cfgform"] : 0;
+		};
+
+		$this->validate_cfgform($cgid);
+
 		$this->id = isset($id) ? $id : "";
+
 		
 		// get the list of properties in the active group
 		// actually, it does a little more than dat, it also
@@ -505,10 +527,12 @@ class class_base extends aliasmgr
 			};
 		};
 
+
 		if (sizeof($metadata) > 0)
 		{
 			$coredata["metadata"] = $metadata;
 		};
+
 
 		// I only want to call those functions below this line in case I'm saving an actual object
 		// otherwise the caller will probably want to do something else with the data I gathered
@@ -536,7 +560,8 @@ class class_base extends aliasmgr
 			));
 		}
 
-		if (isset($this->cfgform_id))
+		// it is set (or not) on validate_cfgform
+		if ($this->cfgform_id)
 		{
 			$coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
 		};
@@ -605,6 +630,7 @@ class class_base extends aliasmgr
 	{
 		// try to load the bastard
 		$this->cfgform_id = 0;
+		$this->cfgform = array();
 		if ($id)
 		{
 			$_tmp = $this->get_object(array(
@@ -616,6 +642,7 @@ class class_base extends aliasmgr
 			if ($_tmp)
 			{
 				$this->cfgform_id = $_tmp["oid"];
+				$this->cfgform = $_tmp;
 			};
 		};
 	}
@@ -815,6 +842,7 @@ class class_base extends aliasmgr
 				$this->coredata = $tmp;
 			};
 		};
+
 	}	
 
 	function gen_output($args = array())
@@ -1126,62 +1154,15 @@ class class_base extends aliasmgr
 		// This concept of core fields sucks beams through a garden hose
 		$corefields = $this->get_visible_corefields();
 		
-		// if any configuration form applies to the current object,
-		// then load it
-		if (empty($this->cfgform_id))
+		$retval = $tables = $fields = $realfields = array();
+
+		// I need to replace this with a better check if I want to be able
+		// to use config forms in other situations besides editing objects
+
+		if (!empty($this->id))
 		{
-			$cfgform_id = (int)$this->get_active_cfgform();
-			$this->cfgform_id = $cfgform_id;
-		}
-
-		// the thing is - if there is a configuration form defined,
-		// then all layout information should be loaded from that form
-		// that includes the name of forms
-
-		if ($this->cfgform_id)
-		{
-			$cfgform = $this->get_object(array(
-				"oid" => $this->cfgform_id,
-				"class_id" => CL_CFGFORM,
-			));
-
-			// oh, and I need to deal with groups in here as well
-
-			// btw, some clients will probably want the contents
-			// of all tabs
-			$row = array();
-			$t = get_instance("doc");
-			// XXX, if we use config forms, then parse_properties
-			// will be called twice. (first time in get_properties_by_group)
-			$xprops = $t->get_properties_by_group(array(
-                                "content" => $cfgform["meta"]["xml_definition"],
-                                "group" => "general",
-                                "values" => array("id" => $this->id) + $row,
-                        ));
-
-			// yuck.
-			unset($xprops["sbt"]);
-
-			$_tmp = array();
-
-			$cfgu = get_instance("cfg/cfgutils");
-
-			foreach($t->tableinfo as $key => $val)
-			{
-				$_tmp[$key] = $cfgu->normalize_text_nodes($val[0]);
-			};
-			$this->tableinfo = $_tmp;
-
-			$this->all_props = $xprops;
-			$property_list = $xprops;
-
-			$this->groupnames = array("general" => "Üldine");
+			$tables["objects"] = array("index" => "oid");
 		};
-
-		$retval = array();
-		$tables = array();
-		$fields = array();
-		$realfields = array();
 
 		foreach($property_list as $key => $val)
 		{
@@ -1277,6 +1258,14 @@ class class_base extends aliasmgr
 	{
 		// load all properties for the current class
 		$cfgu = get_instance("cfg/cfgutils");
+		// actually, config forms should hold a serialized form 
+		// of the data, and not the raw XML source. And I should
+		// validate the XML before I upload it to the object -- duke
+		if (isset($this->cfgform["meta"]["xml_definition"]))
+		{
+			list($proplist,$grplist) = $cfgu->parse_cfgform($this->cfgform["meta"]);
+		}
+
 		if ($args["content"])
 		{
 			$_all_props = $cfgu->parse_definition(array(
@@ -1312,8 +1301,34 @@ class class_base extends aliasmgr
 
 		// ok, first add all the generated props to the props array 
 		$this->all_props = array();
-		foreach($_all_props as $k => $val)
+
+		$tmp = empty($this->cfgform_id) ? $_all_props : $proplist;
+
+		foreach($tmp as $k => $val)
 		{
+			// if a config form is loaded, then ignore stuff that isn't
+			// defined in there. I really shouldn't cause any problems
+			// with well working code.
+			if (!empty($this->cfgform_id) && empty($_all_props[$val["name"]]))
+			{
+				//print "skipping $val[name]<br>";
+				continue;
+			};
+
+			// override original property definitions with those in config form
+			if (!empty($this->cfgform_id))
+			{
+				$val = array_merge($_all_props[$k],$val);
+			}
+
+			/*
+			print "<pre>";
+			print_r($val);
+			print "</pre>";
+			*/
+
+			//print "using $val[name]<br>";
+
 			if (empty($val["view"]))
 			{
 				$val["view"] = "";
@@ -1349,7 +1364,7 @@ class class_base extends aliasmgr
 				};
 			};
 
-			if (isset($val["type"]) && ($val["type"] == "generated") && method_exists($this->inst,$val["generator"]))
+			if (isset($val["type"]) && isset($val["generator"]) && ($val["type"] == "generated") && method_exists($this->inst,$val["generator"]))
 			{
 				$meth = $val["generator"];
 				$vx = new aw_array($this->inst->$meth($argblock));
@@ -1371,16 +1386,42 @@ class class_base extends aliasmgr
 		$this->classinfo = $cfgu->get_classinfo();
 		$tmp_grpinfo = $cfgu->get_groupinfo();
 		$grpinfo = array();
+		/*
+		print "<pre>";
+		print_r($this->all_props);
+		print_r($grplist);
+		print_r($tmp_grpinfo);
+		print_r($group_el_cnt);
+		print "</pre>";
+		*/
 		if (is_array($tmp_grpinfo))
 		{
 			foreach($tmp_grpinfo as $key => $val)
 			{
+				//print "key = $key, val = $val<br>";
 				if (in_array($key,array_keys($group_el_cnt)))
 				{
-					$grpinfo[$key] = $val;
+				//	print "X";
+					if (!empty($this->cfgform_id) && empty($grplist[$key]))
+					{
+				//		print "skipping $key<br>";
+						continue;
+					}
+					else
+					{
+						$grpinfo[$key] = $val;
+					};
 				};
 			};
 		};
+		/*
+		print "-- in get_all_properties --<bR>";
+		print "<pre>";
+		print_r($grpinfo);
+		print "</pre>";
+		print "-- END OF: in get_all_properties --<bR>";
+		exit;
+		*/
 		$this->groupinfo = new aw_array($grpinfo);
 		$this->tableinfo = $cfgu->get_opt("tableinfo");
 	}
@@ -1467,7 +1508,7 @@ class class_base extends aliasmgr
 		if (($val["type"] == "aliasmgr") && isset($this->id))
 		{
 			$link = $this->mk_my_orb("list_aliases",array("id" => $this->id),"aliasmgr");
-			$val["value"] = "<iframe width='100%' height='800' frameborder='0' src='$link'></iframe>";
+			$val["value"] = "<iframe width='100%' name='aliasmgr' height='800' frameborder='0' src='$link'></iframe>";
 			$val["type"] = "";
 			$val["caption"] = "";
 		};
@@ -1478,7 +1519,7 @@ class class_base extends aliasmgr
 			if (empty($this->alist))
 			{
 				$almgr = get_instance("aliasmgr");
-				if (isset($this->id))
+				if (!empty($this->id))
 				{
 					$this->alist = $almgr->get_oo_aliases(array(
 								"oid" => $this->id,
@@ -1643,24 +1684,6 @@ class class_base extends aliasmgr
 		return $corefields;
 	}
 
-	////
-	// !Figures out the correct configuration form that should be used
-	// for displaying the object editing form
-
-	// right now this only works for documents and the "doc" class
-	function get_active_cfgform($args = array())
-	{
-		$retval = false;
-		if ($this->clid == CL_PSEUDO)
-		{
-			if (isset($this->parent))
-			{
-				$parobj = $this->get_object($this->parent);
-				$retval = (int)$parobj["meta"]["cfgmanager"];
-			};
-		};
-		return $retval;
-	}
 
 	function parse_properties($args = array())
 	{
@@ -1818,17 +1841,17 @@ class class_base extends aliasmgr
 				"id" => $this->id,
 			));
 		};
-		/*
 		if ($this->cfgform_id)
 		{
+			/*
 			$ac = $this->get_object($this->cfgform_id);
 			$toolbar->add_cdata(html::href(array(
 				"url" => $this->mk_my_orb("change",array("id" => $this->cfgform_id),"cfgform"),
 				"caption" => "Aktiivne konfivorm: " . $ac["name"],
 				"target" => "_blank",
 			)));
+			*/
 		};
-		*/
 		$this->toolbar = $toolbar->get_toolbar();
 		$this->toolbar2 = $toolbar->get_toolbar(array("id" => "bottom"));
 
