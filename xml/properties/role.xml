@@ -54,9 +54,6 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <acls>
                   <caption>Lubatud &amp;otilde;igused</caption>
             </acls>
