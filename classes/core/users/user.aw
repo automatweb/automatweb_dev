@@ -78,10 +78,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @default group=chpwd
 
 @property passwd type=password store=no
-@caption Password
+@caption Salasõna
 
 @property passwd_again type=password store=no
-@caption Password veelkord
+@caption Salasõna uuesti
 
 @property password type=hidden table=users field=password store=no
 
@@ -861,8 +861,11 @@ class user extends class_base
 			{
 				continue;
 			}
+			if (!is_oid($row["oid"]))
+			{
+				continue;
+			};
 			$o = obj($row["oid"]);
-			$row['obj_parent'] = $o->path_str();
 			$row["acl"] = html::href(array(
 				"caption" => "Muuda",
 				"url" => aw_url_change_var("edit_acl", $row["oid"])
@@ -1393,7 +1396,7 @@ class user extends class_base
 		$o = obj();
 		$o->set_name($uid);
 		$o->set_class_id(CL_USER);
-		$o->set_parent(aw_ini_get("users.rootmenu"));
+		$o->set_parent(aw_ini_get("users.root_folder"));
 		$o->set_prop("uid", $uid);
 		$o->set_prop("password", $password);
 		$o->set_prop("email", $email);
@@ -1403,7 +1406,7 @@ class user extends class_base
 			"uid" => $uid,
 			"password" => $password,
 			"email" => $o->prop("email"),
-			"join_grp" => "",
+			"join_grp" => $arr["join_grp"],
 			"join_form_entry" => "",
 			"user_oid" => $o->id(),
 			"no_add_user" => true
