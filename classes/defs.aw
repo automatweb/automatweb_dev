@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.28 2001/11/20 14:29:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.29 2001/11/20 14:34:44 duke Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 if (!defined("DEFS"))
 {
@@ -24,7 +24,7 @@ function bail_out()
 function create_links($src)
 {
 	$src = preg_replace("/((http(s?):\/\/)|(www\.))(.+?)(\s?)/iU", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
-	$src = preg_replace("/(\w*?\@.*\.\w*)/i","<a href=\"mailto:$1\">$1</a>",$src);
+	$src = preg_replace("/([^\s]*?\@.*\.\w*)/i","<a href=\"mailto:$1\">$1</a>",$src);
 	return $src;
 }
 	

@@ -1,40 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.14 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.15 2001/11/20 14:34:44 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
-$orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_admin_html",		"params"	=> array("id"),),
-													 "admin"						=> array("function"	=> "gen_admin2_html",		"params"	=> array("id")),
-													 "add_col"					=> array("function"	=> "add_col",						"params"	=> array("id", "after", "num")),
-													 "del_col"					=> array("function" => "del_col",						"params"	=> array("id", "col")),
-													 "nadd_col"					=> array("function"	=> "nadd_col",					"params"	=> array("id", "after", "num")),
-													 "ndel_col"					=> array("function" => "ndel_col",					"params"	=> array("id", "col")),
-													 "add_row"					=> array("function"	=> "add_row",						"params"	=> array("id", "after", "num")),
-													 "del_row"					=> array("function" => "del_row",						"params"	=> array("id", "row")),
-													 "nadd_row"					=> array("function"	=> "nadd_row",						"params"	=> array("id", "after", "num")),
-													 "ndel_row"					=> array("function" => "ndel_row",						"params"	=> array("id", "row")),
-													 "submit"						=> array("function"	=> "submit",						"params"	=> array()),
-													 "submit_styles"		=> array("function"	=> "submit_styles",			"params"	=> array()),
-													 "submit_admin"			=> array("function"	=> "submit_admin",			"params"	=> array()),
-													 "submit_pickstyle" => array("function"	=> "submit_pickstyle",	"params"	=> array()),
-													 "styles"						=> array("function"	=> "gen_styles",				"params"	=> array("id")),
-													 "view"							=> array("function"	=> "show",							"params"	=> array("id"),),
-													 "pick_style"				=> array("function" => "pick_style",				"params"	=> array("id")),
-													 "exp_right"				=> array("function"	=> "exp_right",					"params"	=> array("id","col","row","cnt")),
-													 "exp_left"					=> array("function"	=> "exp_left",					"params"	=> array("id","col","row","cnt")),
-													 "exp_up"						=> array("function"	=> "exp_up",						"params"	=> array("id","col","row","cnt")),
-													 "exp_down"					=> array("function"	=> "exp_down",					"params"	=> array("id","col","row","cnt")),
-													 "split_ver"				=> array("function"	=> "split_ver",					"params"	=> array("id","col","row")),
-													 "split_hor"				=> array("function"	=> "split_hor",					"params"	=> array("id","col","row")),
-													 "gen_import"				=> array("function"	=> "gen_import",				"params"	=> array("id")),
-													 "import"						=> array("function"	=> "import",						"params"	=> array()),
-													 "new"							=> array("function"	=> "add",								"params"	=> array("parent")),
-													 "add_doc"					=> array("function" => "add_doc",						"params"	=> array("id","parent")),
-													 "submit_doc"				=> array("function" => "submit_doc",				"params"	=> array("id","parent")),
-													 "delete"						=> array("function" => "delete",						"params"	=> array("id","parent")),
-													 "submit_add"				=> array("function" => "submit_add",				"params"	=> array())
-													 );*/
- 
+$orb_defs["table"] ="xml";
+
+
 	classload("images");
 	classload("style");
   lc_load("table");
@@ -1761,6 +1732,7 @@ $orb_defs["table"] ="xml";/* array("change"						=> array("function"	=> "gen_adm
 				return "&nbsp;";
 			$txt = str_replace("  ", "&nbsp;&nbsp;", $txt);
 
+			$txt = create_links($txt);
 			if ($txt == "")
 			{
 				$txt = "<img src='".$GLOBALS["baseurl"]."/images/transa.gif'>";
