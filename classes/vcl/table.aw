@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.9 2004/03/30 11:42:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.10 2004/04/12 08:56:11 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -391,7 +391,9 @@ class aw_table extends aw_template
 
 		if (isset($this->sort_flag) && ($this->sort_flag == SORT_NUMERIC))
 		{
-			if (((int)$v1) == ((int)$v2))
+			$_a = strtolower(strip_tags($v1));
+			$_b = strtolower(strip_tags($v2));
+			if (((int)$_a) == ((int)$_b))
 			{
 				if ($GLOBALS["vcl_sort_dbg"] == 1)
 				{
@@ -402,7 +404,7 @@ class aw_table extends aw_template
 
 			if ($this->u_sorder == "asc")
 			{
-				$ret = ((int)$v1) < ((int)$v2) ? -1 : 1;
+				$ret = ((int)$_a) < ((int)$_b) ? -1 : 1;
 				if ($GLOBALS["vcl_sort_dbg"] == 1)
 				{
 					echo "compare integers $v1 , $v2 , ";
@@ -420,7 +422,7 @@ class aw_table extends aw_template
 			}
 			else
 			{
-				$ret = ((int)$v1) > ((int)$v2) ? -1 : 1;
+				$ret = ((int)$_a) > ((int)$_b) ? -1 : 1;
 				if ($GLOBALS["vcl_sort_dbg"] == 1)
 				{
 					echo "compare integers $v1 , $v2 , ret $v1 less than $v2 <br>";
