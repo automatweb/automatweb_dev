@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.18 2004/12/22 09:38:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.19 2004/12/27 12:41:38 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -14,10 +14,9 @@ class site_cache extends aw_template
 		{
 			$arr["template"] = "main.tpl";
 		}
-
+		
 		$log = get_instance("contentmgmt/site_logger");
 		$log->add($arr);
-
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si,"pre_start_display"))
 		{

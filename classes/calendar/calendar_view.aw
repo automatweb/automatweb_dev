@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.19 2004/12/16 19:48:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.20 2004/12/27 12:43:02 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -510,7 +510,6 @@ class calendar_view extends class_base
 			$range_p["viewtype"] = "last_events";
 			$range_p["type"] = "last_events";
 		}
-
 
 		$range = $vcal->get_range($range_p);
 

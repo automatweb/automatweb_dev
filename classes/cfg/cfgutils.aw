@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.47 2004/09/14 09:30:48 kristo Exp $
+// $Id: cfgutils.aw,v 1.48 2004/12/27 12:42:47 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -335,6 +335,7 @@ class cfgutils extends aw_template
 			"file" => $file,
 			"filter" => $filter,
 		));
+
 
 		if (empty($this->classinfo["trans"]))
 		{
