@@ -87,6 +87,76 @@
             <caption>User-defined textbox 3</caption>
       </property>
       <property>
+            <name>udeftb4</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 4</caption>
+      </property>
+      <property>
+            <name>udeftb5</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 5 </caption>
+      </property>
+      <property>
+            <name>udeftb6</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 6 </caption>
+      </property>
+      <property>
+            <name>udeftb7</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 7</caption>
+      </property>
+      <property>
+            <name>udeftb8</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 8 </caption>
+      </property>
+      <property>
+            <name>udeftb9</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 9 </caption>
+      </property>
+      <property>
+            <name>udeftb10</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textbox 10 </caption>
+      </property>
+      <property>
             <name>udefta1</name>
             <table>objects</table>
             <group>general</group>
@@ -95,6 +165,26 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>User-defined textarea 1</caption>
+      </property>
+      <property>
+            <name>udefta2</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textarea 2</caption>
+      </property>
+      <property>
+            <name>udefta3</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <user>1</user>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>User-defined textarea 3</caption>
       </property>
       <property>
             <name>content</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.26 2005/01/25 11:00:02 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.27 2005/03/07 13:42:44 dragut Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -36,8 +36,35 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property udeftb3 type=textbox user=1 field=meta method=serialize
 @caption User-defined textbox 3
 
+@property udeftb4 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 4
+
+@property udeftb5 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 5 
+
+@property udeftb6 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 6 
+
+@property udeftb7 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 7
+ 
+@property udeftb8 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 8 
+
+@property udeftb9 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 9 
+
+@property udeftb10 type=textbox user=1 field=meta method=serialize
+@caption User-defined textbox 10 
+
 @property udefta1 type=textarea user=1 field=meta method=serialize
 @caption User-defined textarea 1
+
+@property udefta2 type=textarea user=1 field=meta method=serialize
+@caption User-defined textarea 2
+
+@property udefta3 type=textarea user=1 field=meta method=serialize
+@caption User-defined textarea 3
 
 @property content type=textarea cols=60 rows=30 table=documents
 @caption Sisu
