@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.13 2004/11/24 15:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.14 2005/01/21 12:58:59 duke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes
@@ -45,7 +45,7 @@
 	@property dir_firma type=relpicker reltype=RELTYPE_FIRMA_CAT
 	@caption Vaikimisi firmade kaust
 
-	@property dir_isik type=relpicker reltype=RELTYPE_ISIK_CAT
+	@property folder_person type=relpicker reltype=RELTYPE_ISIK_CAT
 	@caption Vaikimisi töötajate kaust
 
 	@property dir_address type=relpicker reltype=RELTYPE_ADDRESS_CAT
@@ -133,6 +133,9 @@
 
 @reltype FORMS  value=13 clid=CL_CFGFORM
 @caption Sisestusvormid
+
+@reltype METAMGR value=14 clid=CL_METAMGR
+@caption Muutujad
 
 */
 
