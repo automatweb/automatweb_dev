@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.156 2003/02/11 16:23:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.157 2003/02/17 09:16:18 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -664,6 +664,7 @@ class document extends aw_template
 		// and this also means that we can't have xml inside the document. sniff.
 		$doc["content"] = preg_replace("/<\?xml(.*)\/>/imsU","",$doc["content"]); 
 
+
 		$this->docid = $docid;
 		$this->source = $doc["content"];
 
@@ -1003,6 +1004,9 @@ class document extends aw_template
 			"date"     => $this->time2date(time(),2),
 			"section"  => $GLOBALS["section"],
 			"lead_comments" => $lc,
+			"copyright" => $doc["copyright"],
+			"long_title" => $doc["long_title"],
+			"link_text" => $doc["link_text"],
 			"modified"	=> $this->time2date($doc["modified"],2),
 			"date2"	=> $this->time2date($doc["modified"],8),
 			"channel"		=> $doc["channel"],
@@ -1696,7 +1700,7 @@ class document extends aw_template
 					$vlist[] = "'" . $defaults[$v] . "'";
 					break;
 				case "copyright":
-					$vlist[] = "'1'";
+					$vlist[] = "''";
 					break;
 				case "show_title":
 					$vlist[] = "'1'";
@@ -1910,7 +1914,7 @@ class document extends aw_template
 											"esileht_yleval" => checked($document["esileht_yleval"] == 1),
 											"show_modified" => checked($document["show_modified"] == 1),
 											"is_forum" => checked($document["is_forum"] == 1),
-											"copyright" => checked($document["copyright"] == 1),
+											"copyright" => $document["copyright"],
 											"lead_comments" => checked($document["lead_comments"] == 1),
 											"show_title" => checked($document["show_title"] == 1),
 											"show_print" => checked($meta["show_print"]),
@@ -3486,7 +3490,10 @@ class document extends aw_template
 			foreach ($keywords as $k_key => $k_val)
 			{
 				$k_key = str_replace("/","\/",$k_key);
-				$text = preg_replace("/\b$k_key\b/i",$k_val," " . $text . " ");
+				if (trim($k_key) != "")
+				{
+					$text = preg_replace("/\b$k_key\b/i",$k_val," " . $text . " ");
+				}
 			};
 		}
 	}
