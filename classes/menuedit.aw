@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.37 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.38 2001/07/25 03:14:40 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -214,6 +214,7 @@ class menuedit extends aw_template
 
 		// read all the menus and other necessary info into arrays from the database
 		$this->make_menu_caches();
+
 
 		$this->read_template($template);
 
@@ -1791,7 +1792,9 @@ class menuedit extends aw_template
 		}
 
 		$pobj = $this->get_object($parent);
+		
 		// the default document for the menu is in menu[last][$lang_id]
+		// ma arvan, et tegelikult seda ei peaks last-is hoidma
 		$lastar = unserialize($pobj["last"]);
 		$default_doc = $lastar[$GLOBALS["lang_id"]];
 
@@ -1864,7 +1867,7 @@ class menuedit extends aw_template
 			$forms = array();
 			$fesstr = join(",",$fstrs);
 			$ops = $fop->get_op_list();
-			$q = "SELECT distinct(form_id) as form_id FROM form_entries WHERE form_entries.id IN ($fesstr)";
+			$q = "SELECT distinct(form_id) AS form_id FROM form_entries WHERE form_entries.id IN ($fesstr)";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
@@ -1930,10 +1933,11 @@ class menuedit extends aw_template
 				}
 				$change = $GLOBALS["baseurl"]."/files.".$GLOBALS["ext"]."/id=".$row["oid"]."/".urlencode($row["name"]);
 			}
+			$name = ($row["name"]) ? strip_tags($row["name"]) : " (no name)";
 			$this->vars(array(
 				"is_cut"			=> $cut_objects[$row["oid"]] ? $cut : ($copied_objects[$row["oid"]] ? $copied : $nocut),
 				"target"			=> $target,
-				"name"				=> strip_tags($row["name"]),
+				"name"				=> $name,
 				"class_id"		=> $row["class_id"],
 				"oid"					=> $row["oid"], 
 				"order"				=> $row["jrk"], 
