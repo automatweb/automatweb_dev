@@ -735,7 +735,7 @@ class form_db_base extends aw_template
 	function get_sql_fetch_for_search($joins, $start_relations_from, $used_els, $gp_coll_els = array(), $group_els = false, $only_el = false, $only_eid = false)
 	{
 		$sql = "";
-		$usedtbls = array();
+		$usedtbls = $this->pruned_forms;
 		foreach($joins as $jdata)
 		{
 			// find the form for the table and get all elements of the form and find out what columns they map to in the table
@@ -1824,6 +1824,7 @@ class form_db_base extends aw_template
 
 	function prune_relation_tree()
 	{
+		$this->pruned_forms = array();
 		if (is_array($this->arr["leave_out_joins"]))
 		{
 			$nrt = array();
@@ -1835,6 +1836,10 @@ class form_db_base extends aw_template
 					if ($this->arr["leave_out_joins"][$relid] != $relid)
 					{
 						$nrt[$_ff_id][$_tf_id] = $_jdat;
+					}
+					else
+					{
+						$this->pruned_forms[$_tf_id] = $_tf_id;
 					}
 				}
 			}
