@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.15 2004/12/02 16:36:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.16 2005/01/25 07:42:46 dragut Exp $
 // register.aw - Register 
 /*
 
@@ -48,6 +48,17 @@
 @property data_tree type=text store=no no_caption=1 parent=datalt
 @property data type=table store=no no_caption=1 parent=datalt
 
+@groupinfo mail_send_settings caption="e-maili saatmise seaded"
+@default group=mail_send_settings
+
+@property mail_address_to type=relpicker multiple=1 reltype=RELTYPE_MAIL
+@caption e-maili aadress, (to)
+
+@property mail_address_from type=relpicker reltype=RELTYPE_MAIL
+@caption e-maili aadress, (from)
+
+@property mail_subject type=textbox
+@caption subject
 
 @groupinfo search caption="Otsing" submit_method=get submit=no
 @default group=search
@@ -62,6 +73,9 @@
 
 @reltype SEARCH value=3 clid=CL_REGISTER_SEARCH
 @caption registri otsing
+
+@reltype MAIL value=4 clid=CL_ML_MEMBER
+@caption e-maili aadress
 */
 
 class register extends class_base

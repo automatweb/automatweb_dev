@@ -121,6 +121,36 @@
             <parent>datalt</parent>
       </property>
       <property>
+            <name>mail_address_to</name>
+            <table>objects</table>
+            <group>mail_send_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_MAIL</reltype>
+            <caption>e-maili aadress, (to)</caption>
+      </property>
+      <property>
+            <name>mail_address_from</name>
+            <table>objects</table>
+            <group>mail_send_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAIL</reltype>
+            <caption>e-maili aadress, (from)</caption>
+      </property>
+      <property>
+            <name>mail_subject</name>
+            <table>objects</table>
+            <group>mail_send_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>subject</caption>
+      </property>
+      <property>
             <name>search</name>
             <table>objects</table>
             <group>search</group>
@@ -139,6 +169,9 @@
             <data>
                   <caption>Andmed</caption>
             </data>
+            <mail_send_settings>
+                  <caption>e-maili saatmise seaded</caption>
+            </mail_send_settings>
             <search>
                   <caption>Otsing</caption>
                   <submit_method>get</submit_method>
@@ -161,6 +194,11 @@
                   <clid>CL_REGISTER_SEARCH</clid>
                   <caption>registri otsing</caption>
             </SEARCH>
+            <MAIL>
+                  <value>4</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>e-maili aadress</caption>
+            </MAIL>
       </reltypes>
       <layout>
             <datalt>
