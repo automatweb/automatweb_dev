@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.8 2004/11/25 07:32:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.9 2004/11/25 07:42:45 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -108,7 +108,7 @@ class auth_server_ldap extends class_base
 		{
 			return array(false, "Ei saanud &uuml;hendust LDAP serveriga ".$server->prop("server"));
 		}
-		//ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
+		ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
 
 		$uid = $credentials["uid"];
 		if ($server->prop("ad_domain"))
@@ -120,14 +120,24 @@ class auth_server_ldap extends class_base
 		$bind = @ldap_bind($res, $uid, $credentials["password"]);
 		if ($bind)
 		{
-			$grp = $server->prop("ad_grp_text");
+			$grp = $server->prop("ad_grp_txt");
 			if ($server->prop("ad_grp") != "")
 			{
 				$grp = $server->prop("ad_grp");
 			}
-
 			if ($grp == "" || ($grp != "" && $this->_is_member_of($res, $server, $grp, $credentials)))
 			{
+				// search user's email
+				/*$dna = array("CN=Users");
+				foreach(explode(".", $o->prop("ad_domain")) as $part)
+				{
+					$dna[] = "dc=".$part;
+				}
+
+				$dn = join(", ",$dna);
+				$sr=ldap_search($res, $dn, "samaccountname=".$cred["uid"],array("mail")); 
+				$info = ldap_get_entries($res, $sr);
+				die(dbg::dump($info));*/
 				return array(true, "");
 			}
 			else
@@ -169,7 +179,7 @@ class auth_server_ldap extends class_base
 		$dn = join(", ",$dna);
 		$sr=ldap_search($res, $dn, "cn=*",array("memberof")); 
 		$info = ldap_get_entries($res, $sr);
-
+		
 		$ret = array("" => "");
 		for ($i=0; $i<$info["count"]; $i++) 
 		{
@@ -186,22 +196,22 @@ class auth_server_ldap extends class_base
 
 	function _is_member_of($res, $o, $grp, $cred)
 	{
-		$dna = array("OU=".$grp);
-		foreach(explode(".", $o->prop("ad_domain")) as $part)
+		$dn = $o->prop("ad_base_dn");
+		if (!$dn)
 		{
-			$dna[] = "dc=".$part;
+			return;
 		}
 
-		$dn = join(", ",$dna);
-		$sr=ldap_search($res, $dn, "samaccountname=".$cred["uid"], array("samaccountname")); 
+		$sr=ldap_search($res, $dn, "samaccountname=".$cred["uid"], array("memberof"));
+
 		$info = ldap_get_entries($res, $sr);
 
 		$ret = false;
 		for ($i=0; $i<$info["count"]; $i++) 
 		{
-			for($a = 0; $a < $info[$i]["samaccountname"]["count"]; $a++)
+			for($a = 0; $a < $info[$i]["memberof"]["count"]; $a++)
 			{
-				if (strtolower($info[$i]["samaccountname"][$a]) == strtolower($cred["uid"]))
+				if (in_array($grp, ldap_explode_dn($info[$i]["memberof"][$a], true)))
 				{
 					$ret = true;
 				}
