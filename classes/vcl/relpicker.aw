@@ -74,7 +74,7 @@ class relpicker extends  core
 		};
 
 
-                $val["type"] = "select";
+		$val["type"] = ($val["display"] == "radio") ? "chooser" : "select";
 		return array($val["name"] => $val);
 
 	}
