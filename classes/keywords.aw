@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.21 2001/05/24 21:07:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.22 2001/05/27 20:08:50 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -463,11 +463,17 @@ class keywords extends aw_template {
 				{	
 					$perenimi = $el->entry;
 				};
+				$el = $f->get_element_by_name("ees_ja_perekonnanimi");
+				if ($el->entry)
+				{
+					$nimi = $el->entry;
+				};
 			};
 		};
 		$res = array();
 		$res["Eesnimi"] = $eesnimi;
 		$res["Perenimi"] = $perenimi;
+		$res["Nimi"] = $nimi;
 		$res["Email"] = $udata["email"];
 		return $res;
 	}
@@ -487,8 +493,9 @@ class keywords extends aw_template {
 					"uid" => UID,
 					));
 		global $REQUEST_URI,$ext;
+		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
 		$this->vars(array(
-				"name" => $udata["Eesnimi"] . " " . $udata["Perenimi"],
+				"name" => $name,
 				"email" => $udata["Email"],
 				"keywords" => $this->multiple_option_list($act,$kw->get_all_keywords(array("beg" => $beg))),
 				"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode("/index.$ext?section=$section")))
@@ -519,8 +526,9 @@ class keywords extends aw_template {
 			));
 			$ret .= $this->parse("keywords");
 		};
+		$name = ($udata["Nimi"]) ? $udata["Nimi"] : $udata["Eesnimi"] . " " . $udata["Perenimi"];
 		$this->vars(array(
-				"name" => $udata["Eesnimi"] . " " . $udata["Perenimi"],
+				"name" => $name,
 				"email" => $udata["Email"],
 				"keywords" => $ret,
 				"reforb" => $this->mk_reforb("submit_interests",array("gotourl" => urlencode("/index.$ext?section=$section"))),
