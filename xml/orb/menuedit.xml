@@ -89,7 +89,7 @@
 		</action>
 
 		<action name="right_frame">
-			<function name="new_right_frame">
+			<function name="right_frame">
 				<arguments>
 					<optional name="parent"/>
 					<optional name="period"/>
