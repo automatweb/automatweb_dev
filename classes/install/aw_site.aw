@@ -207,7 +207,8 @@ class aw_site extends class_base
 						"class" => "templatemgr",
 						"action" => "get_template_folder_list",
 						"method" => "xmlrpc",
-						"server" => $sn
+						"server" => $sn,
+						"no_errors" => true
 					));
 					if (is_array($_t))
 					{
@@ -784,7 +785,8 @@ class aw_site extends class_base
 				"class" => "templatemgr",
 				"action" => "get_template_folder_list",
 				"method" => "xmlrpc",
-				"server" => $sn
+				"server" => $sn,
+				"no_errors" => true
 			));
 			if (is_array($_t))
 			{
