@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.270 2004/05/24 15:41:38 duke Exp $
+// $Id: class_base.aw,v 2.271 2004/05/31 07:44:01 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1686,15 +1686,20 @@ class class_base extends aw_template
 		// cb_values comes from session and is set, if the previous process_request
 		// run encounterend any PROP_ERRORS, this takes care of displaying the
 		// error messages in correct places
-		if (is_array($this->cb_values) && !empty($this->cb_values[$property["name"]]["value"]))
+
+		//if (is_array($this->cb_values) && !empty($this->cb_values[$property["name"]]["value"]))
+		if (is_array($this->cb_values))
 		{
-			$property["value"] = $this->cb_values[$property["name"]]["value"];
+			if (!empty($this->cb_values[$property["name"]]["value"]))
+			{
+				$property["value"] = $this->cb_values[$property["name"]]["value"];
+			};
 			if (!empty($this->cb_values[$property["name"]]["error"]))
 			{
 				$property["error"] = $this->cb_values[$property["name"]]["error"];
 			};
 		};
-
+		
 		// this was implemented for BDG, because I needed to allow the user to 
 		// choose one connected image to be used as the flyer for an event.
 		// would be nice to get rid of this.
@@ -1833,7 +1838,7 @@ class class_base extends aw_template
 		$properties = $resprops;
 
 		$resprops = array();
-
+	
 		// First we resolve all callback properties, so that get_property calls will
 		// be valid for those as well
 		$has_rte = false;
@@ -2159,6 +2164,10 @@ class class_base extends aw_template
 					$target_reltype = @constant($val["reltype"]);
 					$argblock["prop"]["reltype"] = $target_reltype;
 					$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
+					if (is_array($this->cb_values[$val["name"]]))
+					{
+						$argblock["cb_values"] = $this->cb_values[$val["name"]];
+					};
 					
 					// init_rel_editor returns an array of properties to be embbeded
 					$relres = $val["vcl_inst"]->init_rel_editor($argblock);
@@ -2283,7 +2292,6 @@ class class_base extends aw_template
 		}
 
 		$awt->stop("parse-properties");
-
 
 		return $resprops;
 	}
@@ -2811,6 +2819,12 @@ class class_base extends aw_template
 				// value in the session. Is that a problem?
 			};
 
+			if ("int" == $property["datatype"] && (is_numeric($property["value"]) === false))
+			{
+				$status = PROP_ERROR;
+				$property["error"] = "Siia saab sisestada ainult arvu!";
+			}
+
 			if (PROP_ERROR == $status)
 			{
 				$propvalues[$name]["error"] = $argblock["prop"]["error"];
@@ -2824,13 +2838,20 @@ class class_base extends aw_template
 				// so what the fuck do I do now?
 				// I need to give back a sensible error message
 				// and allow the user to correct the values in the form
-
 				// I need to remember the values .. oh fuck, fuck, fuck, fuck
 				
 				// now register the variables in the session
 
 				// I don't even want to think about serializers right about now.
-				$propvalues[$name]["error"] = $argblock["prop"]["error"];
+				if (isset($args["prefix"]))
+				{
+					$prefix = $args["prefix"];
+					$propvalues[$prefix][$name]["error"] = $argblock["prop"]["error"];
+				}
+				else
+				{
+					$propvalues[$name]["error"] = $argblock["prop"]["error"];
+				};
 				aw_session_set("cb_values",$propvalues);
 				return false;
 			};
