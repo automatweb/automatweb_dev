@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.19 2003/07/09 13:02:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.20 2003/07/09 14:41:34 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -797,6 +797,40 @@ class converters extends aw_template
 			}
 			$this->restore_handle();
 		}
+	}
+
+	function convert_seealso_menus()
+	{
+		$q = "SELECT oid,metadata FROM objects WHERE class_id = 1";
+		$this->db_query($q);
+		$sao = array();
+		while($row = $this->db_next())
+		{
+			$unmet = aw_unserialize($row["metadata"]);
+			if (is_array($unmet["seealso_refs"]))
+			{
+				$sao[$row["oid"]] = $unmet["seealso_refs"];
+			};		
+		}
+
+		print "<pre>";
+		print_r($sao);
+		print "</pre>";
+
+		$q = "SELECT id,seealso FROM menu WHERE seealso IS NOT NULL";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$unser_seealso = aw_unserialize($row["seealso"]);
+			if (is_array($unser_seealso))
+			{
+				print "<pre>";
+				print "id = $row[id]<bR>";
+				print_r($unser_seealso);
+				print "</pre>";
+			};
+		};
+
 	}
 };
 ?>
