@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.34 2004/02/18 14:38:21 kristo Exp $
 
 /*
 
@@ -1683,6 +1684,11 @@ class site_show extends class_base
 					}
 				};
 
+				if ($_cl == "menu")
+				{
+					$values["parent"] = aw_global_get("section");
+				}
+
 				if (not($err))
 				{
 					//$_sec = aw_global_get("section");
@@ -1691,7 +1697,7 @@ class site_show extends class_base
 					{
 						$values["section"] = $_sec;
 					};
-					$link = $this->mk_my_orb($_act,$values,$_cl,$o->meta("pm_url_admin"),!$o->meta("pm_url_menus"));
+					$link = $this->mk_my_orb($_act,$values,($_cl == "document" ? "doc" : $_cl),$o->meta("pm_url_admin"),!$o->meta("pm_url_menus"));
 				}
 				else
 				{
