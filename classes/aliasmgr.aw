@@ -1,10 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.140 2004/02/18 14:21:50 duke Exp $
-
-// used to specify how get_oo_aliases should return the list
-define("GET_ALIASES_BY_CLASS",1);
-define("GET_ALIASES_FLAT",2);
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.141 2004/02/25 16:13:03 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -16,18 +12,6 @@ class aliasmgr extends aw_template
 		$this->lc_load("aliasmgr","lc_aliasmgr");
 	}
 
-	/** Allows to search for objects to include in the document 
-		
-		@attrib name=search params=name all_args="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-		intended to replace pickobject.aw
-
-	**/
 	/**  
 		
 		@attrib name=search_aliases params=name all_args="1" default="0"
@@ -1000,9 +984,14 @@ class aliasmgr extends aw_template
 
 		$hist = !is_array($hist) ? array() : $this->make_alias_classarr2($hist);
 
-		$this->reltypes[10000] = "lisa vend";
-		$this->rel_type_classes[10000] = array(
-			1 => $this->cfg["classes"][CL_MENU]["name"]
+		$this->reltypes[RELTYPE_BROTHER] = "lisa vend";
+		$this->rel_type_classes[RELTYPE_BROTHER] = array(
+			CL_MENU => $this->cfg["classes"][CL_MENU]["name"]
+		);
+
+		$this->reltypes[RELTYPE_ACL] = "&otilde;igus";
+		$this->rel_type_classes[RELTYPE_ACL] = array(
+			CL_GROUP => $this->cfg["classes"][CL_GROUP]["name"]
 		);
 
 		foreach($this->reltypes as $k => $v)
