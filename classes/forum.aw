@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.58 2002/11/07 12:57:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.59 2002/11/24 21:08:45 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -22,6 +22,9 @@
 	@property topicsonpage type=select field=meta method=serialize
 	@caption Teemasid lehel
 
+	@classinfo corefields=name,comment,status
+	@classinfo toolbar=yes
+
 */
 
 class forum extends aw_template
@@ -31,7 +34,10 @@ class forum extends aw_template
 		extract($args);
 		$this->embedded = false;
 
-		$this->init("msgboard");
+		$this->init(array(
+			"tpldir" => "msgboard",
+			"clid" => CL_FORUM,
+		));
 		// $this->sub_merge = 1;
 		// to keep track of how many topics we have already drawn
 		$this->topic_count = 0; 
@@ -252,42 +258,10 @@ class forum extends aw_template
 		return $this->mk_my_orb("notify_list",array("id" => $id));
 	}
 
-	////
-	// !Displays the form for configuring the form
-	function configure($arr)
+	function callback_get_toolbar($args = array())
 	{
-		extract($arr);
-		// oh fuck, this is SO bad
-		if ($return_url)
-		{
-			$title = "<a href='$return_url'>Tagasi</a>";	
-			$pathparent = 0;
-		}
-		else
-		{
-			$pathparent = $parent;
-		};
-
-		if ($id)
-		{
-			$obj = $this->get_object($id);
-			$this->id = $id;
-			$pobj = $this->get_object($obj["parent"]);
-			$title .= "/ Muuda foorumit";
-			$meta = $this->get_object_metadata(array("metadata" => $obj["metadata"]));
-		}
-		else
-		{
-			$pobj = $this->get_object($parent);
-			$title .= "/ Lisa foorum";
-		
-			$meta = array();
-		};
-		// otherwise we are modifying an existing forum
-		$this->mk_path($pathparent, $title);
-
-		$toolbar = get_instance("toolbar");
-
+		$toolbar = &$args["toolbar"];
+		$id = $args["id"];
 		$content_url = $this->mk_my_orb("topics",array("id" => $id));
 		$rates_url = $this->mk_my_orb("change_rates",array("id" => $id));
 		$notify_url = $this->mk_my_orb("notify_list",array("id" => $id));
@@ -304,7 +278,7 @@ class forum extends aw_template
 			"img" => "save.gif",
                 ));
 
-		if ($this->id)
+		if ($id)
 		{
 			$toolbar->add_separator();
 			$toolbar->add_cdata($content_link);
@@ -315,67 +289,6 @@ class forum extends aw_template
 		
 			$toolbar->add_cdata($notify_link);
 		};
-
-		$cfgform = get_instance("cfg/cfgform");
-		$reforb = $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent,"alias_to" => $alias_to,"return_url" => $return_url));
-		$xf = $cfgform->ch_form(array(
-				"clid" => &$this,
-				"obj" => $obj,
-				"reforb" => $reforb,
-		));
-
-		return $toolbar->get_toolbar() . $xf;
-	}
-	
-	////
-	// !Creates a new forum or updates configuration for an existing one
-	function submit_properties($arr)
-	{
-		$this->quote($arr);
-		extract($arr);
-		// we need to know the type of the parent object to figure
-		// out what to do after the forum has been added.
-		$pobj = $this->get_object($parent);
-		if ($id)
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-			));
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_FORUM,
-				"name" => $name,
-				"comment" => $comment,
-			));
-		}
-	
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => array(
-				"comments" => $comments,
-				"rated" => $rated,
-				"template" => $template,
-				"onpage" => $onpage,
-				"topicsonpage" => $topicsonpage,
-			),
-		));
-
-		if ($alias_to)
-		{
-			$this->delete_alias($alias_to,$id);
-			$this->add_alias($alias_to,$id);
-			$retval = $this->mk_my_orb("list_aliases",array("id" => $alias_to),"aliasmgr");
-		}
-		else
-		{
-			$retval = $this->mk_my_orb("configure", array("id" => $id,"parent" => $parent));
-		};
-		return $retval;
 	}
 
 	////
@@ -1988,62 +1901,6 @@ topic");
 		};
 
 		return $retval;
-	}
-
-	function get_properties($args = array())
-	{
-		$fields = array();
-		if ($this->id)
-		{
-			$url = $this->mk_my_orb("topics",array("id" => $this->id));
-			$fields["content_link"] = array(
-				"type" => "text",
-				"caption" => "URL",
-				"value" => "<a href='$url' target='_blank'>$url</a>",
-			);
-		};
-
-		$fields["comments"] = array(
-                        "type" => "checkbox",
-                        "caption" => "Kommenteeritav",
-			"checked" => $args["comments"],
-			"value" => 1,
-                        "store" => "meta",
-                );
-		
-		$fields["rated"] = array(
-                        "type" => "checkbox",
-                        "caption" => "Hinnatav",
-                        "checked" => $args["rated"],
-			"value" => 1,
-                        "store" => "meta",
-                );
-
-		$fields["template"] = array(
-                        "type" => "select",
-                        "options" => aw_ini_get("menuedit.template_sets"),
-                        "caption" => "Template",
-                        "selected" => $args["template"],
-                        "store" => "meta",
-                );
-
-		$fields["onpage"] = array(
-                        "type" => "select",
-                        "options" => array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30),
-                        "caption" => "Kommentaare lehel",
-                        "selected" => $args["onpage"],
-                        "store" => "meta",
-                );
-		
-		$fields["topicsonpage"] = array(
-                        "type" => "select",
-                        "options" => array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30),
-                        "caption" => "Teemasid lehel",
-                        "selected" => $args["topicsonpage"],
-                        "store" => "meta",
-                );
-
-		return $fields;
 	}
 
 	function get_property($args)
