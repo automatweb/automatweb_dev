@@ -9,6 +9,13 @@
 			</function>
 		</action>
 
+		<action name="submitimport">
+			<function name="submitimport">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="contacts">
 			<function name="contacts">
 				<arguments>
