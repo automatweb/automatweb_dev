@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.39 2004/03/09 18:24:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.40 2004/03/12 09:43:12 duke Exp $
 
 /*
 
@@ -278,7 +278,7 @@ class gallery_v2 extends class_base
 	function set_property(&$arr)
 	{
 		$prop = &$arr['prop'];
-		$obj = get_object($arr["obj_inst"]->id());
+		$obj = $this->get_object($arr["obj_inst"]->id());
 		$meta = $arr["obj_inst"]->meta();
 		if (substr($prop['name'],0,3) == "pg_")
 		{
