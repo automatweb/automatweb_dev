@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.1 2003/07/17 13:17:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.2 2003/07/18 10:11:08 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -159,7 +159,7 @@ class promo extends class_base
 	{
 		$data = &$args["prop"];
 		$meta = &$args["metadata"];
-                $retval = PROP_OK;
+		$retval = PROP_OK;
 		if ($data["name"] == "section")
 		{
 			$meta["section_include_submenus"] = $args["form_data"]["include_submenus"];
@@ -180,56 +180,52 @@ class promo extends class_base
 		$section_include_submenus = $args["obj"]["meta"]["section_include_submenus"];
 		// now I have to go through the process of setting up a generic table once again
 		load_vcl("table");
-                $this->t = new aw_table(array(
-                        "prefix" => "promo_menus",
-                ));
-                $this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-                $this->t->define_field(array(
-                        "name" => "oid",
-                        "caption" => "ID",
-                        "talign" => "center",
-                        "align" => "center",
-                        "nowrap" => "1",
-                        "width" => "30",
-                ));
-                $this->t->define_field(array(
-                        "name" => "name",
-                        "caption" => "Nimi",
-                        "talign" => "center",
-                ));
-                $this->t->define_field(array(
-                        "name" => "check",
-                        "caption" => "k.a. alammenüüd",
-                        "talign" => "center",
+		$this->t = new aw_table(array(
+			"prefix" => "promo_menus",
+			"layout" => "generic"
+		));
+		$this->t->define_field(array(
+			"name" => "oid",
+			"caption" => "ID",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+		));
+		$this->t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+		));
+		$this->t->define_field(array(
+			"name" => "check",
+			"caption" => "k.a. alammenüüd",
+			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
-                ));
+		));
 
-
-		$q = sprintf("SELECT oid,name,status FROM aliases LEFT JOIN objects on (aliases.target = objects.oid) LEFT JOIN menu on (aliases.target = menu.id) WHERE source = '%d'",$args["obj"]["oid"]);
-
-		$this->db_query($q);
-		while($row = $this->db_next())
+		$obj = obj($args["obj"]["oid"]);
+		$conns = $obj->connections_from(array(
+			"type" => RELTYPE_ASSIGNED_MENU
+		));
+		foreach($conns as $c)
 		{
-			// it shouldn't be too bad, cause get_object is cached.
-			// still, it sucks.
-			$this->save_handle();
-			$chain = array_reverse($this->get_obj_chain(array(
-				"oid" => $row["oid"],
-			)), true);
-			$path = join("/",array_slice($chain,-3));
-			$this->restore_handle();
+			$c_o = $c->to();
+
 			$this->t->define_data(array(
-				"oid" => $row["oid"],
-				"name" => $path,
+				"oid" => $c_o->id(),
+				"name" => $c_o->path_str(array(
+					"max_len" => 3
+				)),
 				"check" => html::checkbox(array(
-					"name" => "include_submenus[$row[oid]]",
-					"value" => $row["oid"],
-					"checked" => $section_include_submenus[$row["oid"]],
+					"name" => "include_submenus[".$c_o->id()."]",
+					"value" => $c_o->id(),
+					"checked" => $section_include_submenus[$c_o->id()],
 				)),
 			));
-		};
-		
+		}
+ 
 		$nodes[$prop["name"]] = array(
 			"type" => "text",
 			"caption" => $prop["caption"],
@@ -244,78 +240,60 @@ class promo extends class_base
 		$nodes = array();
 		// now I have to go through the process of setting up a generic table once again
 		load_vcl("table");
-                $this->t = new aw_table(array(
-                        "prefix" => "promo_menus",
-                ));
-                $this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-                $this->t->define_field(array(
-                        "name" => "oid",
-                        "caption" => "ID",
-                        "talign" => "center",
-                        "align" => "center",
-                        "nowrap" => "1",
-                        "width" => "30",
-                ));
-                $this->t->define_field(array(
-                        "name" => "name",
-                        "caption" => "Nimi",
-                        "talign" => "center",
-                        //"nowrap" => "1",
-                        "sortable" => 1,
-                ));
-                $this->t->define_field(array(
-                        "name" => "as_name",
-                        "caption" => "Pane pealkirjaks",
-                        "talign" => "center",
-                        "align" => "center",
-                ));
+		$this->t = new aw_table(array(
+			"prefix" => "promo_menus",
+			"layout" => "generic"
+		));
+		$this->t->define_field(array(
+			"name" => "oid",
+			"caption" => "ID",
+			"talign" => "center",
+			"align" => "center",
+			"nowrap" => "1",
+			"width" => "30",
+		));
+		$this->t->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+			"sortable" => 1,
+		));
+		$this->t->define_field(array(
+			"name" => "as_name",
+			"caption" => "Pane pealkirjaks",
+			"talign" => "center",
+			"align" => "center",
+		));
 
-		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
-		// and from this array, I need to get the list of objects that
-		// have the reltype RELTYPE_DOC_SOURCE
-		if (is_array($alias_reltype))
+		$obj = obj($args["obj"]["oid"]);
+		$conns = $obj->connections_from(array(
+			"type" => RELTYPE_DOC_SOURCE
+		));
+
+		foreach($conns as $c)
 		{
-			$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_DOC_SOURCE) return true;'));
-		};
-
-		if (sizeof($menu_ids) > 0)
-		{
-
-			// now get those objects and put them into table
-			$q = sprintf("SELECT oid,name,status FROM objects
-					LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
-
-			$this->db_query($q);
-			while($row = $this->db_next())
-			{
-				// it shouldn't be too bad, cause get_object is cached.
-				// still, it sucks.
-				$this->save_handle();
-				$chain = array_reverse($this->get_obj_chain(array(
-					"oid" => $row["oid"],
-				)),true);
-				$this->restore_handle();
-				$path = join("/",array_slice($chain,-3));
-				$this->t->define_data(array(
-					"oid" => $row["oid"],
-					"name" => $path,
-					"as_name" => html::radiobutton(array(
-						"name" => "as_name",
-						"value" => $row["oid"],
-						"checked" => ($args["obj"]["meta"]["as_name"] == $row["oid"])
-					))
-				));
-			};
+			$c_o = $c->to();
 			$this->t->define_data(array(
-				"oid" => 0,
-				"name" => "",
+				"oid" => $c_o->id(),
+				"name" => $c_o->path_str(array(
+					"max_len" => 3
+				)),
 				"as_name" => html::radiobutton(array(
 					"name" => "as_name",
-					"value" => 0,
-					"checked" => (!$args["obj"]["meta"]["as_name"])
+					"value" => $c_o->id(),
+						"checked" => ($args["obj"]["meta"]["as_name"] == $c_o->id())
 				))
 			));
-		};
+		}
+		$this->t->define_data(array(
+			"oid" => 0,
+			"name" => "",
+			"as_name" => html::radiobutton(array(
+				"name" => "as_name",
+				"value" => 0,
+				"checked" => (!$args["obj"]["meta"]["as_name"])
+			))
+		));
 		
 		$nodes[$prop["name"]] = array(
 			"type" => "text",
@@ -419,15 +397,16 @@ class promo extends class_base
 	function callback_on_submit_relation_list($args = array())
 	{
 		// this is where we put data back into object metainfo, for backwards compatibility
-		$id = $args["id"];
-		$obj = $this->get_object($id);
-		
-		$oldaliases = $this->get_aliases_for($id,CL_PSEUDO);
+		$obj =& obj($args["id"]);
+
+		$oldaliases = $obj->connections_from(array(
+			"class" => CL_PSEUDO
+		));
 		
 		$section = array();
 		$last_menus = array();
 
-		$alias_reltype = $obj["meta"]["alias_reltype"];
+		$alias_reltype = $obj->meta("alias_reltype");
 		$new_alias_reltype = array();
 		foreach($oldaliases as $alias)
 		{
@@ -451,20 +430,17 @@ class promo extends class_base
 			$last_menus = "";
 		};
 
-		$this->upd_object(array(
-			"oid" => $id,
-			"metadata" => array(
-				"section" => $section,
-				"last_menus" => $last_menus,
-				"alias_reltype" => $new_alias_reltype,
-			),
-		));
+		$obj->set_meta("section",$section);
+		$obj->set_meta("last_menus",$last_menus);
+		$obj->set_meta("alias_reltype",$new_alias_reltype);
+
+		$obj->save();
 	}
 
 	function callback_on_addalias($args = array())
 	{
 		$obj_list = explode(",",$args["alias"]);
-		$obj = $this->get_object($args["id"]);
+		$obj =&obj($args["id"]);
 
 		if ($args["reltype"] == RELTYPE_ASSIGNED_MENU)
 		{
@@ -476,34 +452,30 @@ class promo extends class_base
 			$var = "last_menus";
 		};
 
-		$data = $obj["meta"][$var];
+		$data = $obj->meta($var);
 
 		foreach($obj_list as $val)
 		{
 			$data[$val] = $val;
 		};
 
-		$this->upd_object(array(
-			"oid" => $args["id"],
-			"metadata" => array(
-				$var => $data,
-			),
-		));
+		$obj->set_meta($var,$data);
+		$obj->save();
 	}
 
 
 	function parse_alias($args = array())
 	{
 		$alias = $args["alias"];
-		$ob = $this->get_object($alias["target"]);
+		$ob =& obj($alias["target"]);
 
 		$this->read_template("default.tpl");
 
 		$me = get_instance("contentmgmt/site_content");
-		if (is_array($ob['meta']['last_menus']))
+		if (is_array($ob->meta('last_menus')))
 		{
 			$def = array();
-			foreach($ob['meta']['last_menus'] as $menu)
+			foreach($ob->meta('last_menus') as $menu)
 			{
 				$_t = new aw_array($me->get_default_document($menu,true));
 				$def += $_t->get();
@@ -518,30 +490,26 @@ class promo extends class_base
 		$_ob = aw_ini_get("menuedit.document_list_order_by");
 		if ($_ob != "")
 		{
-			$_ids = $def->to_sql();
-			$_q = "SELECT objects.oid as oid FROM objects  LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.oid IN ($_ids) ORDER BY $_ob";
-			$this->db_query($_q);
-			$def = array();
-			while ($row = $this->db_next())
-			{
-				$def[] = $row["oid"];
-			}
-			$def = new aw_array($def);
+			$ol = new object_list(array(
+				"class_id" => CL_DOCUMENT,
+				"oid" => $def,
+				"sort_by" => $_ob,
+			));
+			
+			$def = new aw_array($ol->ids());
 		}
 
-		$ndocs = $this->db_fetch_field("SELECT ndocs FROM menu WHERE id = '$alias[target]'", "ndocs");
+		$ndocs = $ob->prop("ndocs");
 		if ($ndocs)
 		{
 			$def = new aw_array(array_slice($def->get(), 0, $ndocs));
 		}
 
+		$q = "SELECT filename FROM template WHERE id = '".$ob->prop("tpl_lead")."'";
+		$row = $this->db_fetch_row($q);
+
 		$content = "";
 		$doc = get_instance("document");
-
-		$mn = $this->get_menu($alias["target"]);
-
-		$q = "SELECT filename FROM template WHERE id = '$mn[tpl_lead]'";
-		$row = $this->db_fetch_row($q);
 
 		$parms = array(
 			"leadonly" => 1,
@@ -549,7 +517,7 @@ class promo extends class_base
 			"boldlead" => 1,
 			"no_strip_lead" => 1,
 		);
-		if (!$ob['meta']['use_fld_tpl'])
+		if (!$ob->meta('use_fld_tpl'))
 		{
 			$parms["tpl"] = $row["filename"];
 		}
@@ -565,17 +533,18 @@ class promo extends class_base
 			$content .= $doc->gen_preview($_parms);
 		}
 
-		if ($ob['meta']['as_name'] && $ob['meta']["caption"] == "")
+		if ($ob->meta('as_name') && $ob->meta("caption") == "")
 		{
-			$ob["meta"]['caption'] = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '".$ob['meta']['as_name']."'","name");
+			$as_n_o = obj($ob->meta("as_name"));
+			$ob->set_meta('caption',$as_n_o->name());
 		}
 
 		$this->vars(array(
-			"title" => $ob['meta']["caption"],
+			"title" => $ob->meta("caption"),
 			"content" => $content,
 		));
 
-		if (!$ob['meta']['no_title'])
+		if (!$ob->meta('no_title'))
 		{
 			$this->vars(array(
 				"SHOW_TITLE" => $this->parse("SHOW_TITLE")
