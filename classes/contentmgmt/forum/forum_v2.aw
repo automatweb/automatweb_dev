@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.26 2004/05/17 13:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.27 2004/05/28 14:55:30 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -559,7 +559,7 @@ class forum_v2 extends class_base
 			{
 				$last = array(
 					"created" => $subtopic_obj->created(),
-					"createdby" => $creator->name(),
+					"createdby" => $subtopic_obj->prop("author_name"),
 				);
 			};
 
@@ -568,7 +568,7 @@ class forum_v2 extends class_base
 				"comment_count" => (int)$comm_counts[$subtopic_obj->id()],
 				"last_date" => $this->time2date($last["created"],2),
 				"last_createdby" => $last["createdby"],
-				"author" => $creator->name(),
+				"author" => $subtopic_obj->prop("author_name"),
 				"open_topic_url" => $this->mk_my_orb("change",array(
 						"id" => $args["obj_inst"]->id(),
 						"group" => $args["request"]["group"],
@@ -670,6 +670,7 @@ class forum_v2 extends class_base
 					"commtext" => nl2br($comment["commtext"]),
 					"date" => $this->time2date($comment["created"],2),
 					"createdby" => $comment["createdby"],
+					"uname" => $comment["uname"],
 				));
 				$c .= $this->parse("COMMENT");
 			};
@@ -711,17 +712,6 @@ class forum_v2 extends class_base
 			{
 				continue;
 			}
-
-			global $XX3;
-			if ($XX3)
-			{
-				print "id = " . $_to->id() . "<br>";
-				print "tf = " . $_to->name() . "<br>";
-				print "x = " . $args["obj_inst"]->prop("topic_folder") . "<br>";
-				print "fld = $fld<br>";
-				print "ocl = " . $_to->class_id() . "<br>";
-			//	print 
-			};
 
 			/*if ($key == $fld)
 			{
@@ -790,6 +780,8 @@ class forum_v2 extends class_base
 		$this->vars(array(
 			"active_page" => $pager,
 			"name" => $topic_obj->name(),
+			"createdby" => $topic_obj->prop("author_name"),
+			"date" => $this->time2date($topic_obj->created(),2),
 			"comment" => $topic_obj->comment(),
 			"COMMENT" => $c,
 			"path" => join(" &gt; ",$path),
