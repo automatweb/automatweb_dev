@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.22 2004/11/25 11:26:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.23 2004/11/26 13:56:46 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -728,11 +728,12 @@ class object_treeview_v2 extends class_base
 		{
 			$tb->add_button(array(
 				"name" => "del",
-				"tooltip" => "Kustuta",
-				"url" => "javascript:void(0)",
+				"tooltip" => t("Kustuta"),
+				"url" => "#",
 				"onClick" => "document.objlist.subact.value='delete';document.objlist.submit()",
 				"img" => "delete.gif",
 				"class" => "menuButton",
+				"confirm" => t("Oled kindel et tahad objekte kustutada?")
 			));
 			$has_b = true;
 		}
@@ -743,8 +744,8 @@ class object_treeview_v2 extends class_base
 			$tb->add_button(array(
 				"name" => "save",
 				"tooltip" => "Salvesta",
-				"url" => "javascript:void(0)",
-				"onClick" => "document.objlist.submit()",
+				"url" => "#",
+				"onClick" => "document.objlist.submit();return true;",
 				"img" => "save.gif"
 			));
 		}
