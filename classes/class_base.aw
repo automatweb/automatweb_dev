@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.347 2004/12/27 13:32:44 ahti Exp $
+// $Id: class_base.aw,v 2.348 2004/12/27 13:43:55 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3108,6 +3108,11 @@ class class_base extends aw_template
 			{
 				continue;
 			};
+			// and also skip the properties that are newonly
+			if(!$new && isset($property["newonly"]))
+			{
+				continue;
+			}
 			// status has already been written out, no need to do this again
 			/*
 			if ($property["name"] == "status")
