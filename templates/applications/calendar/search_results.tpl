@@ -1,14 +1,14 @@
-<table border="1" width="100%">
+<table border="0" width="100%" cellspacing="2" cellpadding="2" class="text">
 <tr>
-<th>Sündmus</th>
-<th>Koht</th>
-<th>Aeg</th>
+<!-- SUB: COLHEADER -->
+<th>{VAR:colcaption}</th>
+<!-- END SUB: COLHEADER -->
 </tr>
 <!-- SUB: EVENT -->
 <tr>
-<td>{VAR:event}</td>
-<td>{VAR:place}</td>
-<td>{VAR:date}</td>
+<!-- SUB: CELL -->
+<td>{VAR:cell}</td>
+<!-- END SUB: CELL -->
 </tr>
 <!-- END SUB: EVENT -->
 </table>
