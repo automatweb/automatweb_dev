@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.295 2004/09/07 07:25:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.296 2004/09/09 11:15:24 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -711,7 +711,7 @@ class core extends acl_base
 			}
 		}
 
-		if ($err_type == 83 && aw_ini_get("site_id") == 543 && strpos($content, "main_esi") !== false)
+		if ($err_type == 83 && aw_ini_get("site_id") == 543)
 		{
 			$send_mail = false;
 		}
