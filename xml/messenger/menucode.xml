@@ -34,6 +34,10 @@
 				<caption>Üldine</caption>
 				<link>?class=messenger&amp;action=configure&amp;page=general</link>
 			</general>
+			<pop3>
+				<caption>Kontod</caption>
+				<link>?class=messenger&amp;action=configure&amp;page=accounts</link>
+			</pop3>
 		</sublinks>
 	</configure>
 	<search>
