@@ -110,7 +110,7 @@ class _int_object
 		foreach($oids as $oid)
 		{
 			$c = new connection();
-			$param["to"] = $oid;
+			$param["from"] = $this->obj["oid"];
 			$c->change($param);
 		}
 	}
