@@ -692,9 +692,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <caption>Legend</caption>
@@ -706,41 +705,10 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-      </property>
-      <property>
-            <name>pj_project</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
-            </group>
-            <type>text</type>
-            <store>no</store>
-            <caption>Projekt</caption>
-      </property>
-      <property>
-            <name>pj_case_header</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
-            </group>
-            <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
@@ -751,14 +719,27 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Muuda staatust</caption>
+      </property>
+      <property>
+            <name>pj_case_header</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
+            </group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>pj_errors</name>
@@ -767,9 +748,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -782,9 +762,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>textarea</type>
             <rows>5</rows>
@@ -799,9 +778,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -815,9 +793,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -830,9 +807,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -845,9 +821,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -860,9 +835,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -875,9 +849,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -891,9 +864,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -906,9 +878,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -921,9 +892,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -936,9 +906,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -951,9 +920,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -966,9 +934,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -981,9 +948,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -996,9 +962,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1011,9 +976,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1026,9 +990,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1041,9 +1004,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1056,9 +1018,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1071,9 +1032,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1086,9 +1046,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1101,9 +1060,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>
@@ -1116,9 +1074,8 @@
             <method>serialize</method>
             <group>
                   <num_0>grp_printer_current</num_0>
-                  <num_1>grp_printer_old</num_1>
-                  <num_2>grp_printer_done</num_2>
-                  <num_3>grp_printer_aborted</num_3>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
             </group>
             <type>text</type>
             <store>no</store>

@@ -1,11 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.56 2005/04/02 19:04:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.57 2005/04/05 08:38:18 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
+HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_MRP_CASE, on_popup_search_change)
 
 @classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1
 
@@ -47,7 +48,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property state type=text
 	@caption Staatus
 
-	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER
+	@property customer type=popup_search reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY
 	@caption Klient
 
 	@property progress type=hidden
@@ -324,6 +325,7 @@ class mrp_case extends class_base
 		switch($prop["name"])
 		{
 			case "header":
+			case "customer":
 				if ($arr["new"])
 				{
 					return PROP_IGNORE;
@@ -2024,6 +2026,21 @@ class mrp_case extends class_base
 
 			return $return_url;
 		}
+	}
+
+	/** message handler for the MSG_POPUP_SEARCH_CHANGE message so we can create the correct relation
+	**/
+	function on_popup_search_change($arr)
+	{
+		$o = obj($arr["oid"]);
+		foreach($o->connections_from(array("type" => "RELTYPE_MRP_CUSTOMER")) as $c)
+		{
+			$c->delete();
+		}
+		$o->connect(array(
+			"to" => $o->prop($arr["prop"]),
+			"reltype" => "RELTYPE_MRP_CUSTOMER"
+		));
 	}
 }
 

@@ -76,8 +76,9 @@
             <name>customer</name>
             <group>grp_general</group>
             <table>mrp_case</table>
-            <type>relpicker</type>
+            <type>popup_search</type>
             <reltype>RELTYPE_MRP_CUSTOMER</reltype>
+            <clid>CL_CRM_COMPANY</clid>
             <field>customer</field>
             <caption>Klient</caption>
       </property>

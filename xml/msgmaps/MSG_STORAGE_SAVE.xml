@@ -1,34 +1,34 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/group</class>
-      <func>on_save_grp</func>
-      <param>CL_GROUP</param>
-</num_0>
-<num_1>
-      <class>core/users/user</class>
-      <func>on_save_user</func>
-      <param>CL_USER</param>
-</num_1>
-<num_2>
-      <class>core/users/user</class>
-      <func>on_save_addr</func>
-      <param>CL_ML_MEMBER</param>
-</num_2>
-<num_3>
-      <class>core/obj_inherit_props_conf</class>
-      <func>on_save_conf</func>
-      <param>CL_OBJ_INHERIT_PROPS_CONF</param>
-</num_3>
-<num_4>
       <class>crm/crm_user_creator</class>
       <func>on_save_person</func>
       <param>CL_CRM_PERSON</param>
-</num_4>
-<num_5>
+</num_0>
+<num_1>
       <class>crm/crm_user_creator</class>
       <func>on_save_co</func>
       <param>CL_CRM_COMPANY</param>
+</num_1>
+<num_2>
+      <class>core/users/user</class>
+      <func>on_save_user</func>
+      <param>CL_USER</param>
+</num_2>
+<num_3>
+      <class>core/users/user</class>
+      <func>on_save_addr</func>
+      <param>CL_ML_MEMBER</param>
+</num_3>
+<num_4>
+      <class>core/users/group</class>
+      <func>on_save_grp</func>
+      <param>CL_GROUP</param>
+</num_4>
+<num_5>
+      <class>core/obj_inherit_props_conf</class>
+      <func>on_save_conf</func>
+      <param>CL_OBJ_INHERIT_PROPS_CONF</param>
 </num_5>
 <num_6>
       <class>applications/personnel_management/personnel_management_cv</class>

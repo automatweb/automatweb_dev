@@ -1,48 +1,48 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/group</class>
-      <func>on_add_alias_for_group</func>
-      <param>CL_GROUP</param>
-</num_0>
-<num_1>
-      <class>applications/personnel_management/personnel_management_job_offer</class>
-      <func>on_connect_to_sector</func>
-      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
-</num_1>
-<num_2>
-      <class>applications/calendar/calendar_registration_form_conf</class>
-      <func>on_rfconnect_to</func>
-      <param>CL_MENU</param>
-</num_2>
-<num_3>
-      <class>applications/mailinglist/ml_list</class>
-      <func>on_mconnect_to</func>
-      <param>CL_MENU</param>
-</num_3>
-<num_4>
-      <class>calendar/cal_event</class>
-      <func>on_add_alias</func>
-      <param>CL_CAL_EVENT</param>
-</num_4>
-<num_5>
       <class>contentmgmt/reminder</class>
       <func>on_rconnect_to</func>
       <param>CL_DOCUMENT</param>
-</num_5>
-<num_6>
+</num_0>
+<num_1>
       <class>contentmgmt/timing</class>
       <func>on_tconnect_to</func>
       <param>CL_DOCUMENT</param>
-</num_6>
-<num_7>
+</num_1>
+<num_2>
       <class>contentmgmt/timing</class>
       <func>on_tconnect_to</func>
       <param>CL_MENU</param>
-</num_7>
-<num_8>
+</num_2>
+<num_3>
+      <class>calendar/cal_event</class>
+      <func>on_add_alias</func>
+      <param>CL_CAL_EVENT</param>
+</num_3>
+<num_4>
+      <class>core/users/group</class>
+      <func>on_add_alias_for_group</func>
+      <param>CL_GROUP</param>
+</num_4>
+<num_5>
       <class>formgen/form_entry</class>
       <func>on_add_alias</func>
       <param>CL_FORM_ENTRY</param>
+</num_5>
+<num_6>
+      <class>applications/personnel_management/personnel_management_job_offer</class>
+      <func>on_connect_to_sector</func>
+      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
+</num_6>
+<num_7>
+      <class>applications/calendar/calendar_registration_form_conf</class>
+      <func>on_rfconnect_to</func>
+      <param>CL_MENU</param>
+</num_7>
+<num_8>
+      <class>applications/mailinglist/ml_list</class>
+      <func>on_mconnect_to</func>
+      <param>CL_MENU</param>
 </num_8>
 </xml>

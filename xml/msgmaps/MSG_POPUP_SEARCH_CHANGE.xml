@@ -5,4 +5,9 @@
       <func>on_popup_search_change</func>
       <param>CL_SHOP_WAREHOUSE</param>
 </num_0>
+<num_1>
+      <class>mrp/mrp_case</class>
+      <func>on_popup_search_change</func>
+      <param>CL_MRP_CASE</param>
+</num_1>
 </xml>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.77 2005/04/04 10:01:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.78 2005/04/05 08:38:18 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -207,21 +207,21 @@
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
-@default group=grp_printer_current,grp_printer_old,grp_printer_done,grp_printer_aborted
+@default group=grp_printer_current,grp_printer_done,grp_printer_aborted
 
 	@property printer_legend type=text
 	@caption Legend
 
 	@property printer_jobs type=table no_caption=1
 
-	@property pj_project type=text store=no
-	@caption Projekt
+	@property pj_toolbar type=toolbar store=no no_caption=1
+	@caption Muuda staatust
+
+	property pj_project type=text store=no
+	caption Projekt
 
 	// these are shown when a job is selected
 	@property pj_case_header type=text no_caption=1 store=no
-
-	@property pj_toolbar type=toolbar store=no no_caption=1
-	@caption Muuda staatust
 
 	@property pj_errors type=text store=no
 	@caption Vead
@@ -1247,6 +1247,32 @@ class mrp_workspace extends class_base
 		));
 		$count_projects_aborted = $list->count ();
 
+		$list = new object_list (array (
+			"class_id" => CL_MRP_CASE,
+			"state" => MRP_STATUS_ARCHIVED,
+			"parent" => $this_object->prop ("projects_folder"),
+			// "createdby" => aw_global_get('uid'),
+		));
+		$count_projects_archived = $list->count();
+
+		$list = new object_list (array (
+			"class_id" => CL_MRP_CASE,
+			"parent" => $this_object->prop ("projects_folder"),
+			// "createdby" => aw_global_get('uid'),
+		));
+		$count_projects_all = $list->count();
+
+		$list = new object_list (array (
+			"class_id" => CL_MRP_CASE,
+			"state" => MRP_STATUS_ABORTED,
+			"parent" => $this_object->prop ("projects_folder"),
+			// "createdby" => aw_global_get('uid'),
+		));
+		$count_projects_aborted = $list->count();
+
+		$list = $this->_get_subcontract_job_list($this_object);
+		$count_projects_subcontracted = $list->count();
+
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree (array (
 				"type" => TREE_DHTML,
@@ -1255,67 +1281,67 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Kõik plaanisolevad") . "(" . $count_projects_planned . ")",
+			"name" => t("Kõik plaanisolevad") . " (" . $count_projects_planned . ")",
 			"id" => "planned",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "planned"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Hetkel töösolevad") . "(" . $count_projects_in_work . ")",
+			"name" => t("Hetkel töösolevad") . " (" . $count_projects_in_work . ")",
 			"id" => "inwork",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "inwork"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Planeeritud üle tähtaja") . "(" . $count_projects_planned_overdue . ")",
+			"name" => t("Planeeritud üle tähtaja") . " (" . $count_projects_planned_overdue . ")",
 			"id" => "planned_overdue",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "planned_overdue"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Üle tähtaja") . "(" . $count_projects_overdue . ")",
+			"name" => t("Üle tähtaja") . " (" . $count_projects_overdue . ")",
 			"id" => "overdue",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "overdue"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Uued") . "(" . $count_projects_new . ")",
+			"name" => t("Uued") . " (" . $count_projects_new . ")",
 			"id" => "new",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "new"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Katkestatud") . "(" . $count_projects_aborted . ")",
+			"name" => t("Katkestatud") . " (" . $count_projects_aborted . ")",
 			"id" => "aborted",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "aborted"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Valmis") . "(" . $count_projects_done . ")",
+			"name" => t("Valmis") . " (" . $count_projects_done . ")",
 			"id" => "done",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "done"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Arhiveeritud"),
+			"name" => t("Arhiveeritud") . " (" . $count_projects_archived . ")",
 			"id" => "archived",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "archived"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Kõik projektid"),
+			"name" => t("Kõik projektid") . " (" . $count_projects_all . ")",
 			"id" => "all",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "all"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Allhanket&ouml;&ouml;d"),
+			"name" => t("Allhanket&ouml;&ouml;d") . " (" . $count_projects_subcontracted . ")",
 			"id" => "subcontracts",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "subcontracts"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Katkestatud t&ouml;&ouml;d"),
+			"name" => t("Katkestatud t&ouml;&ouml;d") . " (" . $count_projects_aborted . ")",
 			"id" => "aborted_jobs",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "aborted_jobs"),
 		));
@@ -1661,37 +1687,8 @@ class mrp_workspace extends class_base
 			"records_per_page" => 50,
 		));
 
-		$resource_tree = new object_tree (array (
-			"parent" => $this_object->prop ("resources_folder"),
-			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
-			"sort_by" => "objects.jrk",
-		));
-		$list = $resource_tree->to_list ();
-		$list->filter (array (
-			"class_id" => CL_MRP_RESOURCE,
-			"type" => MRP_RESOURCE_SUBCONTRACTOR,
-		));
-		$subcontractors = $list->ids ();
-
-		if (!empty ($subcontractors))
-		{
-			$applicable_states = array (
-				MRP_STATUS_NEW,
-				MRP_STATUS_PLANNED,
-			);
-
-			$list = new object_list (array (
-				"class_id" => CL_MRP_JOB,
-				"state" => $applicable_states,
-				"resource" => $subcontractors,
-				"parent" => $this_object->prop ("jobs_folder"),
-			));
-			$jobs = $list->arr ();
-		}
-		else
-		{
-			$jobs = array ();
-		}
+		$jobs_l = $this->_get_subcontract_job_list($this_object);
+		$jobs = $jobs_l->arr();
 
 		foreach ($jobs as $job_id => $job)
 		{
@@ -3857,6 +3854,38 @@ class mrp_workspace extends class_base
 
 		$rows .= '<tr>' . $dfn . '</tr>';
 		return '<table cellspacing="4" cellpadding="0">' . $rows . '</table>';
+	}
+
+	function _get_subcontract_job_list($this_object)
+	{
+		$resource_tree = new object_tree (array (
+			"parent" => $this_object->prop ("resources_folder"),
+			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
+			"sort_by" => "objects.jrk",
+		));
+		$list = $resource_tree->to_list ();
+		$list->filter (array (
+			"class_id" => CL_MRP_RESOURCE,
+			"type" => MRP_RESOURCE_SUBCONTRACTOR,
+		));
+		$subcontractors = $list->ids ();
+
+		if (!empty ($subcontractors))
+		{
+			$applicable_states = array (
+				MRP_STATUS_NEW,
+				MRP_STATUS_PLANNED,
+			);
+
+			$list = new object_list (array (
+				"class_id" => CL_MRP_JOB,
+				"state" => $applicable_states,
+				"resource" => $subcontractors,
+				"parent" => $this_object->prop ("jobs_folder"),
+			));
+			return $list;
+		}
+		return new object_list();
 	}
 }
 
