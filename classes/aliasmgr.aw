@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.41 2002/07/24 13:20:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.42 2002/08/29 03:20:07 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -36,6 +36,11 @@ class aliasmgr extends aw_template
 		
 		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $this->id) ) );
 		$this->return_url = $return_url;
+
+		// used letters: l,p,t,f,u,w,v,g,y,d,c,x,o,r,m,q,a,k,e,i,z
+		// kb ordering:  q,w,e,r,t,u,i,o,p,a,|,d,f,g,h,j,k,l,z,x,c,v, , ,m
+		//                                   \-> #s[num]# is used for creating in-document links
+		// as you can see, we have quite a problem here: there are just 2 letters left on my us keyboard!
 
 		$this->defs["links"] = array(
 				"alias" => "l",
@@ -356,6 +361,31 @@ class aliasmgr extends aw_template
 				"field" => "id"
 		);
 */
+
+		$this->defs["basket"] = array(
+				"alias" => "h",
+				"title" => "Ostukorv",
+				"class" => "basket",
+				"generator" => "_basket_aliases",
+				"class_id" => CL_SHOP_BASKET,
+				"addlink" =>  $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"basket"),
+				"chlink" => $this->mk_my_orb("change",array(),"basket"),
+				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
+				"field" => "id",
+		);
+
+		$this->defs["basket_users"] = array(
+				"alias" => "j",
+				"title" => "Kasutaja tellimused",
+				"class" => "basket_users",
+				"generator" => "_basket_users_aliases",
+				"class_id" => CL_SHOP_BASKET_USER_ORDERS,
+				"addlink" =>  $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"basket_users"),
+				"chlink" => $this->mk_my_orb("change",array(),"basket_users"),
+				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
+				"field" => "id",
+		);
+
 	}
 
 	////
@@ -1062,6 +1092,48 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		{
 			$cc++;
 			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"form_chain");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+			$this->t->define_data(array(
+				"name"                => $link,
+				"description" => $v["comment"],
+				"id"                  => $v["id"],
+			));
+			$this->_common_parts($v);
+		};
+	}
+
+	function _basket_aliases($args = array())
+	{
+		$ffl = "";
+		$chains = $this->get_aliases_for($this->id,CL_SHOP_BASKET,$s_basket_sortby, $s_basket_order);
+		$cc = 0;
+		reset($chains);
+		while (list(,$v) = each($chains))
+		{
+			$cc++;
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"basket");
+			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
+			$v["url"] = $url;
+			$this->t->define_data(array(
+				"name"                => $link,
+				"description" => $v["comment"],
+				"id"                  => $v["id"],
+			));
+			$this->_common_parts($v);
+		};
+	}
+
+	function _basket_users_aliases($args = array())
+	{
+		$ffl = "";
+		$chains = $this->get_aliases_for($this->id,CL_SHOP_BASKET_USER_ORDERS,$s_basket_users_sortby, $s_basket_users_order);
+		$cc = 0;
+		reset($chains);
+		while (list(,$v) = each($chains))
+		{
+			$cc++;
+			$url = $this->mk_my_orb("change", array("id" => $v["id"]),"basket_users");
 			$link = sprintf("<a href='%s'>%s</a>",$url,$v["name"]);
 			$v["url"] = $url;
 			$this->t->define_data(array(
