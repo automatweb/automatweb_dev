@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.27 2003/03/12 15:00:40 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.28 2003/03/12 16:28:12 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -30,11 +30,11 @@ class html extends aw_template
 			$name .= "[]";
 		};
 
-		if (is_array($selected))
+		if (isset($selected) && is_array($selected))
 		{
 			$sel_array = $selected;
 		}
-		elseif ($selected)
+		elseif (isset($selected))
 		{
 			$sel_array = array($selected);
 		}
@@ -272,8 +272,8 @@ class html extends aw_template
 	}
 
 	////
-	// !Date selector
-	function date_select($args = array())
+	// !Datetime selector
+	function datetime_select($args = array())
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
@@ -281,6 +281,24 @@ class html extends aw_template
 		if (is_array($args['value']))
 		{
 			$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$args["value"]["month"],$args["value"]["day"],$args["value"]["year"]);
+		}
+		else
+		{
+			$val = $args['value'];
+		}
+		return $selector->gen_edit_form($args["name"], $val, 2001, 2004, true);
+	}
+	
+	////
+	// !Date selector
+	function date_select($args = array())
+	{
+		load_vcl("date_edit");
+		$selector = new date_edit($args["name"]);
+		$selector->configure(array("day" => 1,"month" => 1,"year" => 1));
+		if (is_array($args['value']))
+		{
+			$val = mktime(0,0,0,$args["value"]["month"],$args["value"]["day"],$args["value"]["year"]);
 		}
 		else
 		{
