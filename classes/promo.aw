@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.21 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.22 2003/01/23 14:11:13 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -260,6 +260,38 @@ class promo extends class_base
 			sleep(1);
 			flush();
 		};
+	}
+
+	function parse_alias($args = array())
+	{
+		$alias = $args["alias"];
+                $this->read_template("default.tpl");
+                $me = get_instance("menuedit");
+                $def = new aw_array($me->get_default_document($alias["target"],true));
+                $content = "";
+                $doc = get_instance("document");
+                $mn = $this->get_menu($alias["target"]);
+                $q = "SELECT filename FROM template WHERE id = '$mn[tpl_lead]'";
+                $this->db_query($q);
+                $row = $this->db_next();
+                foreach($def->get() as $key => $val)
+                {
+                        $content .= $doc->gen_preview(array(
+                                "docid" => $val,
+                                "leadonly" => 1,
+                                "tpl" => $row["filename"],
+                                "showlead" => 1,
+                                "boldlead" => 1,
+                                "no_strip_lead" => 1,
+                        ));
+                };
+
+                $this->vars(array(
+                        "title" => $alias["name"],
+                        "content" => $content,
+                ));
+                return $this->parse();
+
 	}
 }
 ?>
