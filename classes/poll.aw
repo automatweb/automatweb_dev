@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.16 2002/09/09 18:22:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.17 2002/09/19 15:11:22 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -95,7 +95,7 @@ class poll extends aw_template
 
 		$this->db_query("SELECT * FROM objects
 				WHERE class_id = ".CL_POLL." AND
-				status != 0 AND site_id = ".aw_ini_get("site_id"));
+				status != 0 AND site_id = ".$this->cfg["site_id"]);
 
 		while ($row = $this->db_next())
 		{
@@ -400,7 +400,7 @@ class poll extends aw_template
 		}
 		$this->vars(array(
 			"ANSWER" => $as,
-			"show_url" => str_replace("&", "&amp;", $au)
+			"show_url" => str_replace("&", "&amp;", $au),
 			"section" => aw_global_get("section")
 		));
 		return $this->parse();
@@ -490,7 +490,7 @@ class poll extends aw_template
 		$t = new forum;
 
 		// pollide arhiiv
-		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_POLL." AND status != 0 AND site_id = ".aw_ini_get("site_id"));
+		$this->db_query("SELECT objects.* FROM objects WHERE class_id = ".CL_POLL." AND status != 0 AND site_id = ".$this->cfg["site_id"]);
 		while ($row = $this->db_next())
 		{
 			if ($id != $row["oid"])
