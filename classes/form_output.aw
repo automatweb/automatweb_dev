@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.21 2002/07/24 20:35:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.22 2002/08/02 13:33:09 kristo Exp $
 
 class form_output extends form_base 
 {
@@ -967,7 +967,7 @@ class form_output extends form_base
 		$ret = array();
 		if (is_array($this->arr["relation_forms"]))
 		{
-			foreach ($this->arr["relation_forms"] as $fid => $fid)
+			foreach ($this->arr["relation_forms"] as $fid)
 			{
 				$o = $this->get_object($fid);
 				$ret[$fid] = $o["name"];
