@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.95 2004/11/16 11:16:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.96 2004/11/26 13:53:45 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -59,7 +59,6 @@
     @groupinfo dates caption=Ajad
 
 	@tableinfo files index=id master_table=objects master_index=oid	
-	@classinfo no_status=1
 
 	@reltype KEYWORD value=2 clid=CL_KEYWORD
 	@caption Märksõna

@@ -90,7 +90,6 @@
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>
-            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <settings>
