@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.64 2003/02/01 13:33:38 duke Exp $
+// $Id: class_base.aw,v 2.65 2003/02/03 14:50:22 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -394,7 +394,7 @@ class class_base extends aliasmgr
 			{
 				$name = $property["name"];
 
-				$savedata[$name] = $xval;
+				$savedata[$name] = ($property["value"]) ? $property["value"] : $xval;
 			
 				$table = $property["table"];
 				$field = $property["field"];

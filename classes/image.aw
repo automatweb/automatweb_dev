@@ -437,7 +437,7 @@ class image extends class_base
 			if (is_uploaded_file($file))
 			{
 				$fl = $_fi->_put_fs(array("type" => $file_type, "content" => $this->get_file(array("file" => $file))));
-				$form_data["file"] = $fl;
+				$prop["value"] = $fl;
 			}
 			else
 			{
