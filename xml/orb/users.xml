@@ -126,5 +126,12 @@
 			</function>
 		</action>
 
+		<action name="submit_settings">
+			<function name="submit_settings">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
