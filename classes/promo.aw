@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.33 2003/06/04 11:21:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.34 2003/06/04 16:38:55 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -209,9 +209,9 @@ class promo extends class_base
 				// it shouldn't be too bad, cause get_object is cached.
 				// still, it sucks.
 				$this->save_handle();
-				$chain = $this->get_obj_chain(array(
+				$chain = array_reverse($this->get_obj_chain(array(
 					"oid" => $row["oid"],
-				));
+				)), true);
 				$path = join("/",array_slice($chain,-3));
 				$this->restore_handle();
 				$this->t->define_data(array(
