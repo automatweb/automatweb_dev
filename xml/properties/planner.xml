@@ -1,0 +1,133 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>default_view</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Default vaade</caption>
+      </property>
+      <property>
+            <name>day_start</name>
+            <type>time_select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Päev algab</caption>
+      </property>
+      <property>
+            <name>day_end</name>
+            <type>time_select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Päev lõpeb</caption>
+      </property>
+      <property>
+            <name>tab_add_visible</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>
+            <![CDATA["Lisa event" nähtav]]>
+            </caption>
+      </property>
+      <property>
+            <name>tab_day_visible</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>
+            <![CDATA["Päev" nähtav]]>
+            </caption>
+      </property>
+      <property>
+            <name>tab_overview_visible</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>
+            <![CDATA["Ülevaade" nähtav]]>
+            </caption>
+      </property>
+      <property>
+            <name>tab_week_visible</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>
+            <![CDATA["Nädal" nähtav]]>
+            </caption>
+      </property>
+      <property>
+            <name>tab_month_visible</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>
+            <![CDATA["Kuu" nähtav]]>
+            </caption>
+      </property>
+      <property>
+            <name>navigator_visible</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Näita navigaatorit</caption>
+      </property>
+      <property>
+            <name>navigator_months</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kuud navigaatoris</caption>
+      </property>
+      <property>
+            <name>workdays</name>
+            <type>generated</type>
+            <generator>callback_get_workday_choices</generator>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Tööpäevad</caption>
+      </property>
+      <property>
+            <name>preview</name>
+            <type>text</type>
+            <callback>callback_get_preview_link</callback>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Eelvaade</caption>
+      </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+

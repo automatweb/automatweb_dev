@@ -1,0 +1,40 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>start</name>
+            <type>date_select</type>
+            <table>planner</table>
+            <field>start</field>
+            <group>general</group>
+            <caption>Algab</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <type>date_select</type>
+            <table>planner</table>
+            <field>end</field>
+            <group>general</group>
+            <caption>Lõpeb</caption>
+      </property>
+      <property>
+            <name>repeater_obj</name>
+            <type>relpicker</type>
+            <clid>CL_REPEATER_OBJ</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Korduste kontroller</caption>
+      </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <tableinfo>
+            <planner>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </planner>
+      </tableinfo>
+</properties>
+
