@@ -48,7 +48,7 @@ href="#" onClick="this.document.aa.save_acl.value=1;this.document.aa.submit();">
 </tr>
 <tr>
 	<td colspan="2" class="celltext">Vali &otilde;igused, mida muudetakse:</td>
-	<td class="celltext">Lubatud / Keelatud</td>
+	<td class="celltext">Lubatud</td>
 </tr>
 <!-- SUB: ACLS -->
 <tr>
