@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.13 2004/05/13 12:44:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.14 2004/05/19 13:22:58 duke Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -235,7 +235,10 @@ class document_statistics extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
+		global $awt;
+		$awt->start("stat-arr");
 		$st = $this->get_stat_arr($ob, $arr["yesterday"]);
+		$awt->stop("stat-arr");
 				
 
 		$this->read_template("show.tpl");
@@ -273,73 +276,59 @@ class document_statistics extends class_base
 	**/
 	function add_hit($docid)
 	{
-		// open and lock file
-		list($fp, $size) = $this->_open_and_lock_stat_file();
-		if ($this->error)
-		{
-			return false;
-		};
-
-		// get contents
-		$fc = explode("\n", fread($fp, $size));
-
-		// modify the correct line
-		$nf = "";
-		$found = false;
-		foreach($fc as $line)
-		{
-			if ($line == "")
-			{
-				continue;
-			}
-			list($did, $hc) = explode(",", $line);
-			if ($did == $docid)
-			{
-				$line = $docid.",".($hc+1);
-				$found = true;
-			}
-			$nf .= trim($line)."\n";
-		}
-
-		if (!$found)
-		{
-			$nf .= $docid.",1\n";
-		}
-	
-		// write file
-		ftruncate($fp, 0);
-		fwrite($fp, $nf);
-
-		// unlock & close
-		$this->_close_and_unlock_stat_file($fp);
-	}
-
-	function _open_and_lock_stat_file()
-	{
 		$fld = $this->cfg["site_basedir"]."/files/docstats";
 		if (!is_dir($fld))
 		{
 			mkdir($fld, 0777);
 			@chmod($fld, 0777);
 		}
-		$fp = $fld."/".date("Y-m-d").".txt";
-		$ret = @fopen($fp, "a+");
-		if ($ret)
-		{
-			flock($ret, LOCK_EX);
-		}
-		else
-		{
-			$this->error = true;
-		};
-		return array($ret, filesize($fp));
+
+		// daily stat
+		$fname = date("Y-m-d").".txt";
+		$this->_upd_stat_file($fld . "/" . $fname,$docid);
+	
+		// monthly stat
+		$fname = date("Y-m").".txt";
+		$this->_upd_stat_file($fld . "/" . $fname,$docid);
 	}
 
-	function _close_and_unlock_stat_file($fp)
+	function _upd_stat_file($fname,$docid)
 	{
-		fflush($fp);
-		flock($fp, LOCK_UN);
-		fclose($fp);
+		$old = $this->get_file(array(
+			"file" => $fname,
+		));
+
+		$nf = "";
+
+		if ($old !== false)
+		{
+			$lines = explode("\n",$old);
+			foreach($lines as $line)
+			{
+				list($did, $hc) = explode(",", $line);
+				if ($line == "")
+				{
+					continue;
+				};
+				if ($did == $docid)
+				{
+					$line = $docid.",".($hc+1);
+					$found = true;
+				}
+				$nf .= trim($line)."\n";
+			}
+		};
+
+		if (!$old || !$found)
+		{
+			$nf .= $docid . ",1\n";
+		};
+
+		// write file
+		$this->put_file(array(
+			"file" => $fname,
+			"content" => $nf,
+		));
 	}
 
 	/** returns an array of statistics for document views
@@ -364,6 +353,7 @@ class document_statistics extends class_base
 		}
 
 		classload("date_calc");
+		global $awt;
 		if ($timespan == "week")
 		{
 			$fc = array();
@@ -384,16 +374,30 @@ class document_statistics extends class_base
 		{
 			$fc = array();
 			$tm = get_month_start();
+			$awt->start("docstat-get-file");
+			$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m").".txt";
+			if (file_exists($fp))
+			{
+				$tmp = file($fp);
+				$fc = array_merge($fc,$tmp);
+			};
+			/*
 			while ($tm < $rtm)
 			{
+				$awt->count("docstat-get-file");
 				$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d", $tm).".txt";
-				$tmp = explode("\n", $this->get_file(array("file" => $fp)));
-				if (is_array($tmp))
+				if (file_exists($fp))
 				{
-					$fc = array_merge($fc, $tmp);
+					$tmp = file($fp);
+					if (is_array($tmp))
+					{
+						$fc = array_merge($fc, $tmp);
+					}
 				}
 				$tm += 24*3600;
 			}
+			*/
+			$awt->stop("docstat-get-file");
 		}
 		else
 		{
@@ -401,9 +405,12 @@ class document_statistics extends class_base
 			$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d", $rtm).".txt";
 			$fc = explode("\n", $this->get_file(array("file" => $fp)));
 		}
+		$awt->start("calc2");
 
 		// now, get list of documents 
 		$c_dids = $this->_get_document_list($obj);
+
+		$awt->stop("calc2");
 
 		$ds_arr = array();
 
