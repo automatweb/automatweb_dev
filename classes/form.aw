@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.60 2001/09/05 13:12:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.61 2001/09/05 15:18:10 cvs Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1262,12 +1262,12 @@ class form extends form_base
 		{
 			if ($silent_errors)
 			{
-				$this->raise_error(sprintf(E_FORM_NO_SUCH_ENTRY,$entry_id,$id),false,true);
+				$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$id),false,true);
 				$this->entry_id = 0;
 			}
 			else
 			{
-				$this->raise_error(sprintf(E_FORM_NO_SUCH_ENTRY,$entry_id,$id),true);
+				$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$id),true);
 			}
 		};
 
@@ -2155,7 +2155,7 @@ class form extends form_base
 						$row["ev_created"] = $this->time2date($row["created"], 2);
 						$row["ev_uid"] = $row["modifiedby"];
 						$row["ev_modified"] = $this->time2date($row["modified"], 2);
-						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_search_form],"section" => $section))."'>Vaata</a>";		
+						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $this->main_search_form,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$this->main_search_form],"section" => $section))."'>Vaata</a>";		
 						$row["ev_delete"] = "<a href='".$this->mk_my_orb(
 							"delete_entry", 
 								array(
