@@ -19,6 +19,13 @@
 			</function>
 		</action>
 
+		<action name="submit_all_els2" >
+			<function name="submit_all_els2">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="all_elements" >
 			<function name="gen_all_elements">
 				<arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.90 2004/03/03 11:33:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.91 2004/03/09 15:32:20 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -405,6 +405,11 @@ class form extends form_base
 		return $this->do_menu_return();
 	}
 
+	/** 
+
+		@attrib name=submit_all_els2
+
+	**/
 	function submit_all_els2($arr)
 	{
 		extract($arr);
