@@ -7,21 +7,18 @@ class datasource extends aw_template
 {
 	function datasource($args = array())
 	{
-		enter_function("datasource::datasource",array());
 		$this->init("datasource");
 		$this->types = array(
 			"0" => "lokaalne fail (serveris)",
 			"1" => "http",
 			"2" => "https",
 		);
-		exit_function("datasource::datasource");
 	}
 
 	////
 	// !Displays form for adding new or modifying an existing datasource objekt
 	function change($args = array())
 	{
-		enter_function("datasource::change",array());
 		extract($args);
 		$this->read_template("change.tpl");
 		if ($parent)
@@ -76,7 +73,6 @@ class datasource extends aw_template
 			"src" => $src,
 			"reforb" => $this->mk_reforb("submit",array("id" => $id,"parent" => $parent)),
 		));
-		exit_function("datasource::change");
 		return $this->parse();
 	}
 
@@ -84,7 +80,6 @@ class datasource extends aw_template
 	// !Adds new or submits changes to an existing XML import objekt
 	function submit($args = array())
 	{
-		enter_function("datasource::submit",array());
 		$this->quote($args);
 		extract($args);
 		if ($parent)
@@ -119,7 +114,6 @@ class datasource extends aw_template
 			"data" => $meta,
 		));
 
-		exit_function("datasource::submit");
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
@@ -131,7 +125,7 @@ class datasource extends aw_template
 		extract($args);
 		$obj = $this->get_object($id);
 		$type = $obj["meta"]["type"];
-		$url = $obj["meta"]["url"];
+		$url = escapeshellarg($obj["meta"]["url"]);
 		if ($type == 2)
 		{
 			$read = "";
