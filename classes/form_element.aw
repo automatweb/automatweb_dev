@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.63 2002/08/09 11:08:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.64 2002/08/09 13:31:01 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
 class form_element extends aw_template
 {
+		// FIXME: need stringid lokaliseerida
 		var $all_subtypes=array(
 			"textbox" => array(
 				"" => "",
@@ -71,6 +72,9 @@ class form_element extends aw_template
 				"multiple" => "Mitmekordne", 
 			),
 			"timeslice" => array(
+				"" => "",
+				"period" => "Periood",
+				"release" => "Release period",
 			),
 		);
 
@@ -93,17 +97,14 @@ class form_element extends aw_template
 
 	function form_element()
 	{
-		// FIXME: need stringid lokaliseerida
 		$this->lc_load("form_element","lc_form_element");
 	
 		// we need that for wysiwyg "textareas"
 		$this->is_ie = !(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false);
 
-		// week and month do not work very well yet
 		$this->timeslice_types = array(
 			'hour' => $this->vars["SUBTYPE_TS_HOUR"],
 			'day' => $this->vars["SUBTYPE_TS_DAY"],
-			'week' => $this->vars["SUBTYPE_TS_WEEK"],
 		);
 
 	}	
@@ -582,6 +583,19 @@ class form_element extends aw_template
 				));
 			}
 
+			$tslice = "";
+			if ($this->arr["type"] == "timeslice")
+			{
+				$this->vars(array(
+					"slicelengthlist" => $this->picker($this->arr["slicelength"],$this->timeslice_types),
+					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["timeslice"]),
+				));
+				$this->vars(array(
+					"TIMESLICE" => $this->parse("TIMESLICE"),
+					"HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE"),
+				));
+			};
+
 			$di = "";
 			if ($this->arr["type"] == "date")
 			{
@@ -738,6 +752,7 @@ class form_element extends aw_template
 
 		$var = $base."_search_logical";
 		global $$var;
+
 		$this->arr["search_logical"] = $$var;
 
 		$var=$base."_text";
@@ -1054,6 +1069,12 @@ class form_element extends aw_template
 			$this->arr["link_op"] = $$var;
 		}
 
+		if ($this->arr["type"] == 'timeslice')
+		{
+			$var=$base."_slicelength";
+			$this->arr["slicelength"] = $$var;
+		}
+
 		if ($this->arr["type"] == 'date')
 		{
 			$var=$base."_from_year";
@@ -1154,7 +1175,7 @@ class form_element extends aw_template
 
 		$var = $base."_subtype";
 		$this->arr["subtype"] = $$var;
-
+			
 		$var = $base."_srow_grp";
 		$this->arr["srow_grp"] = $$var;
 		
