@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.5 2002/02/06 02:27:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cal_event.aw,v 2.6 2002/02/06 03:14:24 duke Exp $
 global $class_defs;
 $class_defs["cal_event"] = "xml";
 
@@ -258,7 +258,15 @@ class cal_event extends aw_template {
 		load_vcl("date_edit");
 		$repend = new date_edit("start");
 		$repend->configure(array("day" => 1,"month" => 2,"year" => 3));
-		$repend_ed= $repend->gen_edit_form("repend",strtotime("+1 week"));
+		if ($meta["repend"])
+		{
+			$_tmp = mktime(0,0,0,$meta["repend"]["month"],$meta["repend"]["day"],$meta["repend"]["year"]);
+		}
+		else
+		{
+			$_tmp = strtotime("+1 week");
+		};
+		$repend_ed= $repend->gen_edit_form("repend",$_tmp);
 		
 		if ($par_obj["class_id"] == CL_CALENDAR)
 		{
@@ -302,6 +310,11 @@ class cal_event extends aw_template {
 				"yearpwhen" => ($meta["yearpwhen"] > 0) ? $meta["yearpwhen"] : 1,
 				"region4" => checked($meta["region4"]),
 				"yearskip" => ($meta["yearskip"] > 0) ? $meta["yearskip"] : 1,
+				"repend" => $repend_ed,
+				"repeats" => ($meta["repeats"]) ? $meta["repeats"] : 6,
+				"rep1_checked" => ($meta["rep"]) ? checked($meta["rep"] == 1) : "checked",
+				"rep2_checked" => checked($meta["rep"] == 2),
+				"rep3_checked" => checked($meta["rep"] == 3),
 				"menubar" => $menubar,
 				"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id),"cal_event"),
 		));
@@ -492,12 +505,26 @@ class cal_event extends aw_template {
 			$this->wd++;
 			if ($this->found)
 			{
+				$this->rep_count++;
 				//$ts = mktime(0,0,0,$month,$this->d,$year);
 				// something weird is going on
-				$ts = mktime(0,0,0,1,$this->gdaynum,2001);
+				$ts = mktime(23,59,59,1,$this->gdaynum,2001);
 				$this->reps[] = $this->gdaynum;
 				//print "<b>MATCH:</b> " . date("l, d-m-Y",$ts) . "<br>";;
 				$this->found = false;
+				// check whether we have reached the max count
+				if ( isset($this->max_rep_count) && ($this->rep_count == $this->max_rep_count) )
+				{
+					$this->finished = true;
+					return;
+				};
+
+				if ( ($ts + 1) > $this->rep_end )
+				{
+					$this->finished = true;
+					return;
+				}
+					
 			};
 		
 			$this->daynum++;
@@ -523,6 +550,12 @@ class cal_event extends aw_template {
 		$this->start_day = $sx_d;
 		$this->start_month = $sx_m;
 
+		// that's a semaphore, which is used to decide whether we should drop out
+		// from the calculations
+		$this->finished = false;
+		// we use this to count the repeaters we have to use
+		$this->rep_count = 0;
+
 		// then, we have to find out the time where the repeaters end
 		switch($rep)
 		{
@@ -535,6 +568,7 @@ class cal_event extends aw_template {
 			case "2":
 				// we need to know the count of events to use that,
 				// so for the moment we just guess
+				$this->max_rep_count = $repeats;
 				$end_year = "2037";
 				$end_date = "31-12-2037";
 				break;
@@ -547,7 +581,9 @@ class cal_event extends aw_template {
 	
 		list($_d,$_m,$_y) = explode("-",$end_date);
 		$rep_end = mktime(23,59,59,$_m,$_d,$_y);
-		
+
+		$this->rep_end = $rep_end;
+
 		classload("date_calc");
 		$timebase = mktime(0,0,0,1,1,2001);
 		$ddiff = get_day_diff($timebase,$start);
@@ -559,20 +595,6 @@ class cal_event extends aw_template {
 		// if the user selected the every X year option, so we alter the skip accordingly
 		$yearskip = ($region4) ? $yearskip : 1;
 		
-		$months = array();
-		// every X months
-		if ($month == 2)
-		{
-			$months = explode(",",$yearpwhen);
-		}
-		else
-		{
-			$monthskip = ($region3) ? $monthskip : 1;
-			for ($m = 1; $m <= 12; $m = $m + $monthskip)
-			{
-				$months[] = $m;
-			};
-		};
 
 
 		// we need four cycles inside each other, years, months, weeks, days
@@ -584,6 +606,23 @@ class cal_event extends aw_template {
 		//print "start_year = $start_year, end_year = $end_year, yearskip = $yearskip<br>";
 		for ($y = $start_year; $y <= $end_year; $y = $y + $yearskip)
 		{
+		
+			$months = array();
+			// every X months
+			if ($month == 2)
+			{
+				$months = explode(",",$yearpwhen);
+			}
+			else
+			{
+				$monthskip = ($region3) ? $monthskip : 1;
+
+				$sm = ($y == $start_year) ? $sx_m : 1;
+				for ($m = $sm; $m <= 12; $m = $m + $monthskip)
+				{
+					$months[] = $m;
+				};
+			};
 
 			$this->year = $y;
 			if ( ($y - 1) != $last_year)
@@ -618,6 +657,10 @@ class cal_event extends aw_template {
 				else
 				{
 					$this->_process_month(array("month" => $m,"year" => $y));
+					if ($this->finished)
+					{
+						return;
+					};
 				};
 				$this->from_scratch = false;
 				//print "<br>";
