@@ -1,0 +1,34 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>start1</name>
+            <type>datetime_select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>start1</field>
+            <caption>Algab </caption>
+      </property>
+      <property>
+            <name>duration</name>
+            <type>time_select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>duration</field>
+            <caption>Kestab</caption>
+      </property>
+      <property>
+            <name>content</name>
+            <type>textarea</type>
+            <cols>60</cols>
+            <rows>30</rows>
+            <table>objects</table>
+            <group>general</group>
+            <field>content</field>
+            <caption>Sisu</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CRM_CALL</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+
