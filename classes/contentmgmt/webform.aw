@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.44 2005/01/20 09:17:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.45 2005/01/20 09:18:21 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1275,7 +1275,7 @@ class webform extends class_base
 		}
 		else
 		{
-			$section = aw_ini_get("baseurl")."/".$_SERVER["REQUEST_URI"];
+			$section = aw_ini_get("baseurl").$_SERVER["REQUEST_URI"];
 		}
 		$vrs = array();
 		if($ftype == CL_CALENDAR_REGISTRATION_FORM)
