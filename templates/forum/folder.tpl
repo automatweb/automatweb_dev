@@ -1,9 +1,13 @@
-<table border="0" width="100%">
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
 <tr>
-<td class="{VAR:style_caption}">
+<td height="20" style="font: Bold 10px Verdana, Arial, Sans-Serif; background-color: #FFFFFF; padding-left:10px;" colspan="2"><a href="{VAR:add_topic_url}"><img src="{VAR:baseurl}/img/add_new.gif" align="absmiddle" border="0" alt="Lisa uus teema"></a> <a href="{VAR:add_topic_url}">Lisa uus teema</a>
+</td>
+</tr>
+<tr>
+<td class="{VAR:style_forum_yah}">
 <strong>{VAR:path}</strong>
 </td>
-<td class="{VAR:style_caption}">
+<td class="{VAR:style_caption}" style="border-right:solid 1px #FFFFFF">
 <!-- SUB: active_page -->
  <strong>[ {VAR:num} ]</strong>
 <!-- END SUB: active_page -->
@@ -12,24 +16,21 @@
 <!-- END SUB: page -->
 </td>
 </tr>
-<tr>
-<td colspan="2" class="{VAR:style_caption}"><a href="{VAR:add_topic_url}">Lisa teema</a></td>
-</tr>
 </table>
-<table border="1" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
+<table border="0" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
 <tr>
-	<td colspan=2 class="{VAR:style_caption}">Teemad</td>
-	<td class="{VAR:style_caption}">Vastuseid</td>
-	<td class="{VAR:style_caption}">Autor</td>
-	<td class="{VAR:style_caption}">Viimane vastus</td>
+	<td colspan=2 align="center" class="{VAR:style_caption}">Teemad</td>
+	<td align="center" class="{VAR:style_caption}">Vastuseid</td>
+	<td align="center" class="{VAR:style_caption}">Autor</td>
+	<td align="center" class="{VAR:style_caption}" style="border-right:solid 1px #FFFFFF">Viimane vastus</td>
 </tr>
 <!-- SUB: SUBTOPIC -->
 <tr>
-	<td class="{VAR:style_topic_caption}"><center><big>*</big></center></td>
+	<td class="{VAR:style_topic_caption}"><center><img src="{VAR:baseurl}/img/arrow_sm.gif"></center></td>
 	<td class="{VAR:style_topic_caption}"><a href="{VAR:open_topic_url}">{VAR:name}</a></td>
-	<td class="{VAR:style_topic_replies}">{VAR:comment_count}</td>
-	<td class="{VAR:style_topic_author}">{VAR:author}</td>
-	<td class="{VAR:style_topic_last_post}">{VAR:last_date}<br>{VAR:last_createdby}</td>
+	<td align="center" class="{VAR:style_topic_replies}">{VAR:comment_count}</td>
+	<td align="center" class="{VAR:style_topic_author}">{VAR:author}</td>
+	<td align="center" class="{VAR:style_topic_last_post}">{VAR:last_date}<br>{VAR:last_createdby}</td>
 </tr>
 <!-- END SUB: SUBTOPIC -->
 </table>

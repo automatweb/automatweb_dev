@@ -1,9 +1,9 @@
-<table border="1" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
+<table border="0" cellspacing="0" cellpadding="3" width="100%" style="border-collapse: collapse;">
 <tr>
 	<td colspan="3" class="{VAR:style_caption}" align="center">Foorum</td>
 	<td class="{VAR:style_caption}" align="center">Teemasid</td>
 	<td class="{VAR:style_caption}" align="center">Postitusi</td>
-	<td class="{VAR:style_caption}" align="center">Viimane</td>
+	<td class="{VAR:style_caption}" style="border-right:solid 1px #FFFFFF "align="center">Viimane</td>
 </tr>
 {VAR:forum_contents}
 <!-- SUB: FOLDER -->
@@ -15,7 +15,7 @@
 <!-- SUB: LAST_LEVEL -->
 <tr>
 	<td class="{VAR:style_folder_caption}">{VAR:spacer}</td>
-	<td class="{VAR:style_folder_caption}"><center>*</big></center></td>
+	<td class="{VAR:style_folder_caption}"><img src="{VAR:baseurl}/img/arrow_sm.gif"><center></center></td>
 	<td class="{VAR:style_folder_caption}"><a href="{VAR:open_topic_url}">{VAR:name}</a><br>{VAR:comment}</td>
 	<td class="{VAR:style_folder_topic_count}" align="center">{VAR:topic_count}</td>
 	<td class="{VAR:style_folder_comment_count}" align="center">{VAR:comment_count}</td>
