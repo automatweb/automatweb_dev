@@ -302,8 +302,8 @@ class site_content extends menuedit
 		$this->menu_defaults = aw_ini_get("menuedit.menu_defaults");
 		if (aw_ini_get("menuedit.lang_defs"))
 		{
-			$menu_defs = aw_ini_get("menuedit.menu_defs" . aw_global_get("lang_id"));
-			$this->menu_defaults = aw_ini_get("menuedit.menu_defaults" . aw_global_get("lang_id"));
+			$menu_defs = $menu_defs[aw_global_get("lang_id")];
+			$this->menu_defaults = $this->menu_defaults[aw_global_get("lang_id")];
 		}
 		$frontpage = $this->cfg["frontpage"];
 
