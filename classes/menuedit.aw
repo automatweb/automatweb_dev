@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.333 2004/10/08 15:26:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.334 2004/10/13 13:29:16 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -314,25 +314,26 @@ class menuedit extends aw_template
 		$set_lang_id = false;
 		if ($this->can("view",$realsect))
 		{
-		$_obj = obj($realsect);
-		if ($_obj->class_id() == CL_MENU)
-		{
-			if (!($_obj->prop("type") == MN_CLIENT || aw_ini_get("config.object_translation") == 1))
+			$_obj = obj($realsect);
+			$class_id = $_obj->class_id();
+			if ($class_id == CL_MENU)
+			{
+				if (!($_obj->prop("type") == MN_CLIENT || aw_ini_get("config.object_translation") == 1))
+				{
+					$set_lang_id = $_obj->lang_id();
+				};
+			}
+			else
 			{
 				$set_lang_id = $_obj->lang_id();
+				// we do document hit count logging here, because
+				// we know if it's a document or not here
+				if (1 == aw_ini_get("document_statistics.use") && $realsect != aw_ini_get("frontpage") && ($class_id == CL_DOCUMENT || $class_id == CL_BROTHER_DOCUMENT || $class_id == CL_PERIODIC_SECTION))
+				{
+					$dt = get_instance("contentmgmt/document_statistics");
+					$dt->add_hit($realsect);
+				}
 			};
-		}
-		else
-		{
-			$set_lang_id = $_obj->lang_id();
-			// we do document hit count logging here, because
-			// we know if it's a document or not here
-			if (1 == aw_ini_get("document_statistics.use") && $realsect != aw_ini_get("frontpage") && ($_obj->class_id() == CL_DOCUMENT || $_obj->class_id() == CL_BROTHER_DOCUMENT || $_obj->class_id() == CL_PERIODIC_SECTION))
-			{
-				$dt = get_instance("contentmgmt/document_statistics");
-				$dt->add_hit($realsect);
-			}
-		};
 		};
 
 		// let logged-in users see not-active language stuff
