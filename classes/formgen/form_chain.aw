@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.9 2003/04/25 13:01:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.10 2003/05/09 17:12:58 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -575,6 +575,7 @@ class form_chain extends form_base
 				"cal_relation" => $_eid,
 				"no_ml_rules" => true
 		));
+		$this->quote(&$f->entry_name);
 		$submitted_form_id = $form_id;
 
 //		echo "err = $f->has_controller_errors , nce  =$new_chain_entry <Br>";
