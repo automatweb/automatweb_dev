@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.114 2002/08/02 13:36:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.115 2002/08/21 14:20:09 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -879,7 +879,10 @@ class document extends aw_template
 			$forum = new forum();
 			$fr = $forum->add_comment(array("board" => $docid));
 
-			$this->vars(array("FORUM_ADD_SUB" => $this->parse("FORUM_ADD_SUB")));
+			if ($num_comments > 0)
+			{
+				$this->vars(array("FORUM_ADD_SUB" => $this->parse("FORUM_ADD_SUB")));
+			}
 		}
 
 		$langs = "";
@@ -1341,7 +1344,10 @@ class document extends aw_template
 		$this->upd_object($oq_parts);
 
 		// uuendame vennastatud dokude nimed ka
-		$this->db_query("UPDATE objects SET name='".$data["name"]."' WHERE brother_of = '".$old["brother_of"]."'");
+		if ($old["brother_of"])
+		{
+			$this->db_query("UPDATE objects SET name='".$data["name"]."' WHERE brother_of = '".$old["brother_of"]."'");
+		}
 
 		// nih, updateme objekti metadata ka 2ra.
 		foreach($this->metafields as $m_name => $m_key)
@@ -2579,6 +2585,7 @@ class document extends aw_template
 			$obj = $this->get_object($id);
 			if ($obj["parent"] != $parent)
 			{
+				$this->quote(&$obj["name"]);
 				$noid = $this->new_object(array(
 					"parent" => $parent,
 					"class_id" => CL_BROTHER_DOCUMENT,
