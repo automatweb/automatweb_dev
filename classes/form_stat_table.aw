@@ -198,9 +198,11 @@ class form_stat_table extends form_base
 		$f = get_instance("form");
 		for ($col=0; $col < $this->s_table["meta"]["num_cols"]; $col++)
 		{
-			$this->col_data[$col] = $f->get_distinct_entries_for_element(array(
-				"form" => $this->s_table["meta"]["cols"][$col]["form"],
-				"element" => $this->s_table["meta"]["cols"][$col]["element"],
+			$this->col_data[$col] = $f->get_entries_for_element(array(
+				"rel_form" => $this->s_table["meta"]["cols"][$col]["form"],
+				"rel_element" => $this->s_table["meta"]["cols"][$col]["element"],
+				"rel_unique" => true,
+				"ret_values" => true
 			));
 		}
 	}
