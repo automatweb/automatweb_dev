@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.9 2004/05/06 12:27:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.10 2004/10/22 14:45:46 kristo Exp $
 // iframe.aw - iframes
 
 /*
@@ -42,8 +42,8 @@ class iframe extends class_base
 		$this->min_height = 30;
 
 		// max values
-		$this->max_width = 600;
-		$this->max_height = 600;
+		$this->max_width = 6000;
+		$this->max_height = 6000;
 
 		global $lc_iframe;
 		lc_load("iframe");
