@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.8 2002/11/19 15:22:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.9 2002/11/22 17:05:40 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
 	function draw($arg)
 	{
+
 		$arg = new aw_array($arg);
 		$args = $arg->get();
 		$type = $args["type"];
@@ -178,6 +179,26 @@ class html extends aw_template
 		extract($args);
 		$target = ($target) ? " target='$target' " : "";
 		return "<a href='$url' $target>$caption</a>";
+	}
+
+	function richtext($args = array())
+	{
+		// richtext editors are inside a template
+		static $rtcounter = 0;
+		$rtcounter++;
+		$this->init(array(
+			"tpldir" => "html",
+		));
+		$retval = "";
+		$this->vars($args);
+		if ($rtcounter == 1)
+		{
+			$this->rt_elements = array($args["name"]);
+			$this->read_template("ie_richtexteditor.tpl");
+			$retval .= $this->parse("toolbar");
+		};
+		$retval .= $this->parse("field");
+		return $retval;
 	}
 
 };
