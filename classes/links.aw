@@ -1,7 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.28 2002/12/20 14:40:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.29 2002/12/21 17:45:22 kristo Exp $
 
 /*
+
+@groupinfo general caption=&Uuml;ldine
+@groupinfo Javascript caption=Javascript
+@groupinfo Pilt caption=Pilt
+
+@tableinfo extlinks index=id
 
 @classinfo objtable=extlinks
 @classinfo objtable_index=id
