@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.10 2004/09/09 11:01:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.11 2004/09/14 11:03:04 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -787,6 +787,7 @@ class cb_search extends class_base
 
 	function show($arr)
 	{
+		aw_session_set("no_cache", 1);
 		$ob = new object($arr["id"]);
 		$request = array("s" => $GLOBALS["s"]);
 		if ($GLOBALS["search_butt"])
