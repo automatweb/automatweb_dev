@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.68 2003/10/06 14:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.69 2003/11/04 12:18:30 duke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -96,11 +96,11 @@ class users_user extends aw_template
 			$config[$key] = $value;
 		};
 		$newconfig = aw_serialize($config);
-		if (($row = aw_cache_get("users_cache", $uid)))
-		{
+		//if (($row = aw_cache_get("users_cache", $uid)))
+		//{
 			$row["config"] = $newconfig;
 			aw_cache_set("users_cache", $uid, $row);
-		}
+		//}
 		$this->quote($newconfig);
 		$q = "UPDATE users SET config = '$newconfig' WHERE uid = '$uid'";
 		$this->db_query($q);
