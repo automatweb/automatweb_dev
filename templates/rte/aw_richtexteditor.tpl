@@ -231,6 +231,10 @@ function clearstyles()
 		//old2 = old2.replace(/<p.+?>/gi,"<p>");
 		old2 = old2.replace(/class="\w+?"/gi,"");
 		old2 = old2.replace(/style=".*?"/gi,"");
+		old2 = old2.replace(/<!--.+?-->/gi,"");
+		old2 = old2.replace(/<o:p>/gi,"");
+		old2 = old2.replace(/<\/o:p>/gi,"");
+		old2 = old2.replace(/(&nbsp;)+/gi,"&nbsp;");
 
 		//alert('clearing styles from ' + sel_el);
 		// put innerHTML back
