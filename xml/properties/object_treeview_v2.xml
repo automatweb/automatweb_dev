@@ -61,6 +61,17 @@
             <caption>Mitu rida lehel</caption>
       </property>
       <property>
+            <name>show_hidden_cols</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <caption>N&amp;auml;ita peidetud tulpasid?</caption>
+      </property>
+      <property>
             <name>sortbl</name>
             <table>objects</table>
             <group>showing</group>

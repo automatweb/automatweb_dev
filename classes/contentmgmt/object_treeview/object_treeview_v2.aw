@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.18 2004/10/26 11:51:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.19 2004/11/02 16:46:26 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -31,6 +31,9 @@
 
 @property per_page type=textbox size=5 
 @caption Mitu rida lehel
+
+@property show_hidden_cols type=checkbox ch_value=1  default=1
+@caption N&auml;ita peidetud tulpasid?
 
 @property sortbl type=table store=no 
 @caption Andmete sorteerimine
@@ -115,6 +118,9 @@ class object_treeview_v2 extends class_base
 			case "access":
 				$this->do_access_tbl($arr);
 				break;
+			case "only_selected_cols":
+				arr($prop);
+				break;
 		};
 		return $retval;
 	}
@@ -123,6 +129,7 @@ class object_treeview_v2 extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		
 		switch($prop["name"])
 		{
 			case "columns":
@@ -755,11 +762,21 @@ class object_treeview_v2 extends class_base
 		$cols = $this->_get_col_list($arr["obj_inst"]);
 		$tmp = $arr["obj_inst"]->meta("sel_columns");
 		$elements = array("" => "");
+
+//		arr($arr['obj_inst']->prop("only_visible_cols"));
+
 		foreach($cols as $colid => $coln)
 		{
-			if (1 == $tmp[$colid])
+			if($arr['obj_inst']->prop("show_hidden_cols") == 1)
 			{
 				$elements[$colid] = $coln;
+			}
+			else
+			{
+				if (1 == $tmp[$colid])
+				{
+					$elements[$colid] = $coln;
+				}
 			}
 		}
 		
@@ -895,16 +912,21 @@ class object_treeview_v2 extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_filter_table($t);
 
-		
-
 		$all_cols = $this->_get_col_list($arr["obj_inst"]);
 		$tmp = $arr["obj_inst"]->meta("sel_columns");
 		$cols = array("" => "");
 		foreach($all_cols as $col_id => $col_name)
 		{
-			if (1 == $tmp[$col_id])
+			if($arr['obj_inst']->prop("show_hidden_cols") == 1)
 			{
 				$cols[$col_id] = $col_name;
+			}
+			else
+			{
+				if (1 == $tmp[$col_id])
+				{
+					$cols[$col_id] = $col_name;
+				}
 			}
 		}
 
@@ -982,7 +1004,7 @@ class object_treeview_v2 extends class_base
 
 		$t->define_field(array(
 			"name" => "filter_strict",
-			"caption" => "Kas t&auml;pne",
+			"caption" => "Kas t&auml;pne?",
 			"align" => "center",
 		));
 
