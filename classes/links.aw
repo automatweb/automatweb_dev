@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.53 2004/05/12 13:51:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.54 2004/05/19 12:22:43 kristo Exp $
 
 /*
 
@@ -17,6 +17,8 @@
 
 @property url type=textbox 
 @caption URL
+
+@property docid type=hidden table=extlinks 
 
 @property hits type=text 
 @caption Klikke
@@ -212,7 +214,12 @@ class links extends class_base
 		extract($arr);
 		$link = obj($id);
 		$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
-		header("Location: ".$link->prop("url"));
+		$url = $link->prop("url");
+		if ($url == "" && $link->prop("docid") != "")
+		{
+			$url = "/".$link->prop("docid");
+		}
+		header("Location: ".$url);
 		header("Content-type: ");
 		exit;
 	}
@@ -247,6 +254,13 @@ class links extends class_base
 					'search_doc' => $this->mk_my_orb('search_doc')
 				));
 				$prop['value'] = $this->parse();
+				break;
+	
+			case "url":
+				if ($prop["value"] == "" && $arr["obj_inst"]->prop("docid") != "")
+				{
+					$prop["value"] = "/".$arr["obj_inst"]->prop("docid");
+				}
 				break;
 		}
 		return $retval;

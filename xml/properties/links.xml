@@ -19,6 +19,13 @@
             <caption>URL</caption>
       </property>
       <property>
+            <name>docid</name>
+            <group>general</group>
+            <table>extlinks</table>
+            <type>hidden</type>
+            <field>docid</field>
+      </property>
+      <property>
             <name>hits</name>
             <group>general</group>
             <table>extlinks</table>
