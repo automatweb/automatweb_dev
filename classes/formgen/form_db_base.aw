@@ -88,7 +88,7 @@ class form_db_base extends aw_template
 		$this->save_handle();
 		if (!($ret = aw_cache_get("form_for_entry_cache", $entry_id)))
 		{
-			$ret = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = $entry_id","form_id");
+			$ret = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = '$entry_id'","form_id");
 			aw_cache_set("form_for_entry_cache", $entry_id, $ret);
 		}
 		$this->restore_handle();
@@ -694,8 +694,12 @@ class form_db_base extends aw_template
 						$jdata["from_el"] = "id";
 					}
 					// other tables get joined - making sure we don't accidentally join them several times
-					$sql.=" LEFT JOIN ".$this->get_rtbl_from_tbl($jdata["to_tbl"])." AS ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
-					$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
+					$__t = $this->get_rtbl_from_tbl($jdata["to_tbl"]);
+					if ($__t != "")
+					{
+						$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
+						$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
+					}
 				}
 			}
 			$first = false;
@@ -1465,13 +1469,16 @@ class form_db_base extends aw_template
 		{
 			return;
 		}
+//	echo "build_join_rels_from_path path eq <pre>", var_dump($path),"</pre> <br>";
 		reset($path);
 		while(list(,$fid) = each($path))
 		{
+//			echo "got $fid from path <br>";
 			// get next from path
 			if (!list(,$n_fid) = each($path))
 			{
 				// we are at the last form - so exit
+//				echo "returnig because of eop <br>";
 				return;
 			}
 
@@ -1482,8 +1489,11 @@ class form_db_base extends aw_template
 			$t_dat = $this->cache_get_form_eldat($n_fid);
 //			echo "eldat = $n_fid = <pre>", var_dump($t_dat),"</pre> <br>";
 		
+//			echo "get from f_dat elfrom = ",$this->form_rel_tree[$fid][$n_fid]["el_from"]," <br>";
 			$f_el = $f_dat["els"][$this->form_rel_tree[$fid][$n_fid]["el_from"]];
 			$t_el = $t_dat["els"][$this->form_rel_tree[$fid][$n_fid]["el_to"]];
+//			echo "f_el = <pre>", var_dump($f_el),"</pre> <br>";
+//			echo "join from $fid to $n_fid , from el = $f_el[table] $f_el[col] , to el = $t_el[table] $t_el[col] <br>";
 
 			if ($this->form_rel_tree[$fid][$n_fid]["el_from"] == "chain_id")
 			{
@@ -1734,6 +1744,10 @@ class form_db_base extends aw_template
 	// static
 	function mk_tblname($tbl,$frm)
 	{
+		if ($tbl == "" || !$frm)
+		{
+			return "";
+		}
 		return $tbl."_".$frm;
 	}
 
