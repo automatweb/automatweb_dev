@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.57 2004/04/13 12:17:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.58 2004/04/13 15:36:07 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -509,8 +509,8 @@ class htmlclient extends aw_template
 				};
 				if ($type == "hbox")
 				{
-					$res .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top><table border=0 cellpadding=0 cellspacing=0>";
-					$res .= join("</table></td><td valign=top><table border=0 cellpadding=0 cellspacing=0>",$val["items"]);
+					$res .= "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr><td valign=top><table border=0 cellpadding=0 cellspacing=0 width=100%>";
+					$res .= join("</table></td><td valign=top><table border=0 cellpadding=0 cellspacing=0 width=100%>",$val["items"]);
 					$res .= "</table></td></tr></table>";
 				};
 			};
