@@ -374,7 +374,7 @@ class form_db_base extends aw_template
 		else
 		{
 			// now put all the joins into sql
-			$sql_join = $this->get_sql_joins_for_search(false,$this->id);
+			$sql_join = $this->get_sql_joins_for_search(false,$this->id, true);
 
 			// now get fetch data part
 			$sql_data = $this->get_sql_fetch_for_search($this->_joins, $this->id,false);
@@ -509,10 +509,10 @@ class form_db_base extends aw_template
 	// !this builds the sql joins necessary for the search to succeed
 	// also builds the relation tree $this->form_rel_tree and
 	// $this->_joins array 
-	function get_sql_joins_for_search($used_els, $start_relations_from)
+	function get_sql_joins_for_search($used_els, $start_relations_from,$no_reverse_rels = false)
 	{
 		// recurse through the selected search form relations. boo-ya!
-		$this->build_form_relation_tree($start_relations_from);
+		$this->build_form_relation_tree($start_relations_from, 0, $no_reverse_rels);
 
 /*		$c_key = "get_sql_joins_for_search::srf::".$start_relations_from."::";
 		if (is_array($used_els))
@@ -1183,26 +1183,26 @@ class form_db_base extends aw_template
 	// if $chain is specified, $f_root is assumed to be a member of chain $chain and other chains it belongs to are ignored
 	// $this->form_rel_tree is an array - index is the form id and value is an array of relations 
 	// from the key form index is the related form id and value is an array of the relation data
-	function build_form_relation_tree($f_root, $chain = 0)
+	function build_form_relation_tree($f_root, $chain = 0, $no_reverse_rels = false)
 	{
 		$this->_fr_forms_used = array();
 		$this->form_rel_tree = array();
 
 		$cache = get_instance("cache");
 
-		if (($rt = aw_cache_get("form_rel_trees", $f_root)))
+/*		if (($rt = aw_cache_get("form_rel_trees", $f_root)))
 		{
 			$this->form_rel_tree = $rt;
 		}
-/*		else
+		else
 		if (($rt = $cache->db_get("form_rel_tree_cache::".$f_root)))
 		{
 			$this->form_rel_tree = aw_unserialize($rt);
 			aw_cache_set("form_rel_trees", $f_root, $this->form_rel_tree);
 		}*/
-		else
-		{
-			$this->req_build_form_relation_tree($f_root);
+//		else
+//		{
+			$this->req_build_form_relation_tree($f_root, $no_reverse_rels);
 
 			aw_cache_set("form_rel_trees", $f_root, $this->form_rel_tree);
 			// whoop-whoop yo. 
@@ -1214,7 +1214,7 @@ class form_db_base extends aw_template
 			// and now we'll do the easy version - all caches will be invalidated when we change any form
 			// but since the cache invalidating has not been implemented yet, we don't do the caching just yet
 //			$cache->db_set("form_rel_tree_cache::".$f_root,aw_serialize($this->form_rel_tree));
-		}
+//		}
 //		echo "built form relations tree, starting from $f_root: <br><pre>", var_dump($this->form_rel_tree),"</pre> <Br>";
 	}
 
@@ -1262,7 +1262,7 @@ class form_db_base extends aw_template
 	// to form_load that says, don't create elements, just read the data structure. well, but still that will contain a lot 
 	// of data that we don't need here. 
 	// 
-	function req_build_form_relation_tree($f_root)
+	function req_build_form_relation_tree($f_root, $no_reverse_rels = false)
 	{
 
 		// let's not do this twice for a form
@@ -1311,15 +1311,18 @@ class form_db_base extends aw_template
 			}
 		}
 
-		// reverse relation elements detecting - from related element to listbox
-		$q = "SELECT * FROM form_relations LEFT JOIN objects ON objects.oid = form_relations.form_to LEFT JOIN forms ON forms.id = form_relations.form_to WHERE form_from = '$f_root' AND objects.status != 0 AND forms.type = ".FTYPE_ENTRY;
-		$this->db_query($q);
-		while ($row = $this->db_next())
+		if (!$no_reverse_rels)
 		{
-			$this->form_rel_tree[$f_root][$row["form_to"]] = array("form_from" => $f_root, "el_from" => $row["el_from"], "form_to" => $row["form_to"], "el_to" => $row["el_to"]);
-			if (!$this->_fr_forms_used[$row["form_to"]])
+			// reverse relation elements detecting - from related element to listbox
+			$q = "SELECT * FROM form_relations LEFT JOIN objects ON objects.oid = form_relations.form_to LEFT JOIN forms ON forms.id = form_relations.form_to WHERE form_from = '$f_root' AND objects.status != 0 AND forms.type = ".FTYPE_ENTRY;
+			$this->db_query($q);
+			while ($row = $this->db_next())
 			{
-				$this->req_build_form_relation_tree($row["form_to"]);
+				$this->form_rel_tree[$f_root][$row["form_to"]] = array("form_from" => $f_root, "el_from" => $row["el_from"], "form_to" => $row["form_to"], "el_to" => $row["el_to"]);
+				if (!$this->_fr_forms_used[$row["form_to"]])
+				{
+					$this->req_build_form_relation_tree($row["form_to"]);
+				}
 			}
 		}
 		$this->restore_handle();
@@ -1439,14 +1442,17 @@ class form_db_base extends aw_template
 	function get_sql_grpby($grpby)
 	{
 		$gpb = array();
-		foreach($grpby as $fid => $elid)
+		foreach($grpby as $fid => $fdat)
 		{
 			if ($fid)
 			{
 				$finst = $this->cache_get_form_eldat($fid);
-//				echo "fid = $fid <br>";
+				foreach($fdat as $elid)
+				{
+//				echo "fid = $fid , elid = $elid <br>";
 //				echo "looking for el $elid els = <pre>",var_dump($finst["els"]),"</pre> <br>";
-				$gpb[] = form_db_base::mk_tblcol($finst["els"][$elid]["table"],$finst["els"][$elid]["col"],$fid);
+					$gpb[] = form_db_base::mk_tblcol($finst["els"][$elid]["table"],$finst["els"][$elid]["col"],$fid);
+				}
 			}
 		}
 
