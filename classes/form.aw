@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.129 2002/08/22 21:34:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.130 2002/08/23 22:38:10 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1099,6 +1099,18 @@ class form extends form_base
 				{
 					$_req_items = 1;
 				};
+					
+				// now I need to figure out the selected value of the relation
+				// element
+				$this->save_handle();
+				$q = "SELECT * FROM form_relations WHERE el_to = $row[el_relation]";
+				$this->db_query($q);
+				$frel = $this->db_next();
+				$q = sprintf("SELECT id,ev_%s AS name FROM form_%d_entries WHERE id = '%d'",
+						$frel["el_from"],$frel["form_from"],$_rel);
+				$this->db_query($q);
+				$rowx = $this->db_next();
+				$this->restore_handle();
 
 				$vac = $fcal->get_vac_by_contr(array(
 					"start" => $this->post_vars[$row["el_start"]],
@@ -1107,22 +1119,12 @@ class form extends form_base
 					"entry_id" => $entry_id,
 					"req_items" => $_req_items,
 					"rel" => $_rel,
+					"rel2" => $rowx["id"],
 					"id" => $id,
 				));
-
+				
 				if ($vac < 0)
 				{
-					// now I need to figure out the selected value of the relation
-					// element
-					$this->save_handle();
-					$q = "SELECT * FROM form_relations WHERE el_to = $row[el_relation]";
-					$this->db_query($q);
-					$frel = $this->db_next();
-					$q = sprintf("SELECT ev_%s AS name FROM form_%d_entries WHERE id = '%d'",
-							$frel["el_from"],$frel["form_from"],$_rel);
-					$this->db_query($q);
-					$rowx = $this->db_next();
-					$this->restore_handle();
 					$has_errors = true;
 					$this->controller_errors[$row["el_cnt"]][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
 				};
@@ -1281,11 +1283,11 @@ class form extends form_base
 						$_cnt = 1;
 					};
 					$_start = (int)get_ts_from_arr($this->post_vars[$row["el_start"]]);
+					$_end = (int)get_ts_from_arr($this->post_vars[$row["el_end"]]);
 					$__rel = $this->post_vars[$row["el_relation"]];
 					preg_match("/lbopt_(\d+?)$/",$__rel,$m);
 					$_rel = (int)$m[1];
 					list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
-					$_end = mktime(23,59,59,$_m,$_d,$_y);
 					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id)
 							VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id')";
 					$this->db_query($q);
@@ -1307,13 +1309,16 @@ class form extends form_base
 				$_reltype = $_types[$this->post_vars[$this->arr["el_event_release"] . "_type"]];
 				$_oid = $this->id;
 				$_eid = $this->entry_id;
+				
+				$cal_id = (int)$cal_id;
+				$cal_relation = (int)$cal_relation;
 
-				$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid'";
+				$q = "DELETE FROM calendar2timedef WHERE oid = '$_oid' AND relation = '$cal_relation'";
 				$this->db_query($q);
 
-				$q = "INSERT INTO calendar2timedef (oid,start,end,max_items,period,period_cnt,
+				$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,start,end,max_items,period,period_cnt,
 							release,release_cnt,entry_id) VALUES 
-							('$_oid','$_start','$_end','$_cnt','$_pertype','$_period','$_reltype',
+							('$_oid','$cal_relation','$cal_id','$_start','$_end','$_cnt','$_pertype','$_period','$_reltype',
 							'$_release','$_eid')";
 
 				$this->db_query($q);
@@ -2152,7 +2157,7 @@ class form extends form_base
 			$form_table->current_search_form_inst =& $this;
 
 			$used_els = $form_table->get_used_elements();
-//			echo "used_els = <pre>", var_dump($used_els),"</pre> <br>";
+//			echo "used_els = <pre>", print_r($used_els),"</pre> <br>";
 
 			$group_els = $form_table->get_group_by_elements();
 //			echo "group_els = <pre>", var_dump($group_els),"</pre> <br>";
@@ -2169,15 +2174,6 @@ class form extends form_base
 		}
 		exit_function("form::new_do_search::init_table",array());
 
-		// now get the search query
-//		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
-		$sql = $this->get_search_query(array(
-			"used_els" => $used_els,
-			"group_els" => $group_els,
-			"group_collect_els" => $group_collect_els
-		));
-//		echo "sql = $sql <br>";
-		$result = "";
 
 
 		// execute it and show the results in the desired form
@@ -2219,13 +2215,7 @@ class form extends form_base
 				{
 					$has_vacancies = false;
 				};
-				/*
-				print "<pre>";
-				print_r($row);
-				print "id = " . $this->id . "<br>";
-				print "</pre>";
-				*/
-				$els = $this->get_form_elements(array("id" => $this->id));
+				$els = $fcal->get_form_elements(array("id" => $this->id));
 				// figure out the start and end elements
 				$start_el = $end_el = 0;
 				$count_el = 0;
@@ -2270,6 +2260,78 @@ class form extends form_base
 
 			};
 		}
+		// if we use a calendar, retrieve the data first without grouping
+		// so that we can perform our magic on it.
+		/*
+		print "<pre>";
+		print_r($used_els);
+		print "</pre>";
+		*/
+		if ($has_calendar)
+		{
+			$sql = $this->get_search_query(array(
+				"used_els" => $used_els,
+			));
+//			print $sql;
+//			print "<br>";
+			$this->db_query($sql,false);
+			list(,$__gr) = each($used_els);
+			if (is_array($__gr))
+			{
+				list(,$_gr) = each($__gr);
+			};
+			$groups = array();
+			$_key = "el_" . $_gr;
+
+			while($row = $this->db_next())
+			{
+				/*
+				print "<pre>";
+				print_r($row);
+				print "</pre>";
+				*/
+				$vacs = $fcal->check_vacancies(array(
+					"cal_id" => $this->arr["search_chain"],
+					"contr" => $contr,
+					//"eform" => $this->id,
+					"entry_id" => $row["entry_id"],
+					//"entry_id" => $others,
+					"id" => $cf["form_id"],
+					"eid" => $row["chain_entry_id"],
+					"start" => $start,
+					"end" => $end - 1,
+					"req_items" => $count,
+				));
+				if (!$groups[$row[$_key]] && ($vacs > -1))
+				{
+					$groups[$row[$_key]] = $vacs;
+					//print "xassigning $vacs to $row[$_key]<br>";
+				}
+				else
+				if (($groups[$row[$_key]] < $vacs) && ($vacs > -1))
+				{
+					//print "assigning $vacs to $row[$_key]<br>";
+					$groups[$row[$_key]] = $vacs;
+				}
+				
+			};
+		};
+
+		/*
+		print "<pre>";
+		print_r($groups);
+		print "</pre>";
+		*/
+
+		// now get the search query
+//		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
+		$sql = $this->get_search_query(array(
+			"used_els" => $used_els,
+			"group_els" => $group_els,
+			"group_collect_els" => $group_collect_els
+		));
+//		echo "sql = $sql <br>";
+		$result = "";
 		enter_function("form::new_do_search::query",array());
 		$this->db_query($sql,false);
 		if ($this->arr["show_table"])
@@ -2279,6 +2341,11 @@ class form extends form_base
 		exit_function("form::new_do_search::query",array());
 		while ($row = $this->db_next())
 		{
+			/*
+			print "<pre>";
+			print_r($row);
+			print "</pre>";
+			*/
 			if ($this->arr["show_table"])
 			{
 				enter_function("form::new_do_search::table_loop",array());
@@ -2289,40 +2356,15 @@ class form extends form_base
 					$this->restore_handle();
 				};
 
-				$DBX = aw_global_get("uid");
-				if ($DBX1 == "kix")
-				{
-					print "<pre>";
-					print_r($chain);
-					print_r($fc->chain);
-					print "cid = $cid<br>";
-					print "</pre>";
-				};
-
+				//print "processing entry $row[entry_id]<br>";
 				if ($has_calendar)
 				{
-					if ($DBX1 == "kix")
+					$vacs = $groups[$row[$_key]];
+					//print "key = $_key<br>";
+					//print "vacs = $vacs<br>";
+					if ($vacs > -1.1)
 					{
-						print "chain has a calendar!<br>";
-					};
-					dbg("cid = $cid<br>");
-					//print "checking<br>";
-					//print $row[chain_entry_id];
-					//echo("checking calendar for $row[chain_entry_id]<br>");
-					dbg("id = " . $fc->chain["cal_form"] . "<br>");
-					$has_vacancies = $fcal->check_vacancies(array(
-						"cal_id" => $cid,
-						"contr" => $contr,
-						//"eform" => $this->id,
-						"id" => $cf["form_id"],
-						"eid" => $row["chain_entry_id"],
-						"start" => $start,
-						"end" => $end - 1,
-						"req_items" => $count,
-					));
-					//$has_vacancies = true;
-					if ($has_vacancies > -1)
-					{
+						//print "added line<br>";
 						$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$row["chain_entry_id"]);
 					}
 					else
@@ -5300,6 +5342,7 @@ class form extends form_base
 				$this->vars(array(
 					"name" => $row["name"],
 					"start" => $_els[$row["el_start"]]["name"],
+					"end" => $_els[$row["el_end"]]["name"],
 					"cnt" => $_els[$row["el_cnt"]]["name"],
 					"table" => $tables[$row["ev_table"]],
 					"rel" => $_els[$row["el_relation"]]["name"],
@@ -5408,6 +5451,7 @@ class form extends form_base
 		$els_start = array("0" => " -- Vali -- ");
 		$els_count = array("0" => " -- Vali -- ");
 		$els_relation = array("0" => " -- Vali --");
+		$els_end = array("0" => " -- Vali --");
 
 		foreach($_els as $key => $val)
 		{
@@ -5415,6 +5459,12 @@ class form extends form_base
 			{
 				$els_start[$key] = $val["name"];
 			};
+			
+			if ( ($val["type"] == "date") && ($val["subtype"] == "to") )
+			{
+				$els_end[$key] = $val["name"];
+			};
+			
 			
 			if ( ($val["type"] == "textbox") && ($val["subtype"] == "count") )
 			{
@@ -5446,6 +5496,7 @@ class form extends form_base
 			"target_objects" => $this->picker($item["cal_id"],$target_objects),
 			"start_els" => $this->picker($item["el_start"],$els_start),
 			"cnt_els" => $this->picker($item["el_cnt"],$els_count),
+			"end_els" => $this->picker($item["el_end"],$els_end),
 			"relation_els" => $this->picker($item["el_relation"],$els_relation),
 			"ev_tables" => $this->picker($item["ev_table"],$tables),
 			"reforb" => $this->mk_reforb("submit_cal_rel",array("form_id" => $form_id,"id" => $id)),
@@ -5463,13 +5514,14 @@ class form extends form_base
 				el_start = '$el_start',
 				el_cnt = '$el_cnt',
 				ev_table = '$ev_table',
-				el_relation = '$el_relation'
+				el_relation = '$el_relation',
+				el_end = '$el_end'
 				WHERE id = '$id'";
 		}
 		else
 		{
-			$q = "INSERT INTO calendar2forms (cal_id,form_id,el_start,el_cnt,ev_table,el_relation)
-				VALUES ('$cal_id','$form_id','$el_start','$el_cnt','$ev_table','$el_relation')";
+			$q = "INSERT INTO calendar2forms (cal_id,form_id,el_start,el_cnt,ev_table,el_relation,el_end)
+				VALUES ('$cal_id','$form_id','$el_start','$el_cnt','$ev_table','$el_relation','$el_end')";
 		};
 		$this->db_query($q);
 		return $this->mk_my_orb("calendar",array("id" => $form_id));

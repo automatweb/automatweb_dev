@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.72 2002/08/22 21:34:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.73 2002/08/23 22:38:10 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -352,6 +352,7 @@ class planner extends calendar
 				"eform" => $vac_cont,
 				"ctrl" => $ctrl,
 			));
+
 
 			$this->raw_events = $fc->raw_events;
 			$this->raw_headers = $fc->raw_headers;

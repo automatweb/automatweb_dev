@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.9 2002/08/22 21:34:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.10 2002/08/23 22:38:10 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -8,243 +8,6 @@ class form_calendar extends form_base
 		$this->form_base();
 	}
 
-	////
-	// !Loads calendar controller form
-	// id(int) - controller form
-	// eid(int) - chain entry id
-	// start(timestamp) - start of timeframe
-	// end(timestamp) - end of timeframe
-	
-	// cal_controller on see _korduv vorm p‰rjas, mis sisaldab infot selle
-	// konkreetse kalendri vakantside kohta
-	function load_cal_controller($args = array())
-	{
-		extract($args);
-		$id = (int)$id;
-		$this->load($id);
-
-		if ($this->arr["has_calendar"] && $this->arr["cal_controller"])
-		{
-			$cal_controller = $this->arr["cal_controller"];
-			$event_entry_form = $this->arr["event_entry_form"];
-		};
-
-		if (not($cal_controller))
-		{
-			// FIXME: shouldn't just drop out
-			print "this form has no calendar controller, cannot show calendar!";
-			exit;
-		};
-
-		// need to figure out what elements of the controller form control the behaviour of
-		// the calendar
-		$els = $this->get_form_elements(array("id" => $cal_controller));
-		
-
-		foreach($els as $key => $el)
-		{
-			// start of the period
-			if ( ($el["type"] == "date") && ($el["subtype"] == "from") )
-			{
-				$this->start_el = $el["id"];
-			};
-
-			// end of the period
-			if ( ($el["type"] == "date") && ($el["subtype"] == "to") )
-			{
-				$this->end_el = $el["id"];
-			};
-
-			// max entries in one window
-			if ( ($el["type"] == "textbox") && ($el["subtype"] == "count") )
-			{
-				$this->max_el = $el["id"];
-			};
-
-			// length of the windows
-			if ( ($el["type"] == "timeslice") && (!$this->tslice_el) )
-			{
-				$this->tslice_el = $el["id"];
-			};
-
-			// pregap, reserved time before the start of the window
-			if ( ($el["type"] == "timeslice") && ($this->tslice_el > 0) )
-			{
-				$this->tslice_el2 = $el["id"];
-			};
-		};
-		
-		// need all the entry id-s for that chain entry
-		$eids = $this->get_form_entries_for_chain_entry($eid,$cal_controller);
-		
-		// figure out all the windows defined by the controller form entries
-		$blocks = array();
-
-
-		foreach($eids as $entry_id)
-		{
-			$new_blocks = $this->_ctrl_process_entry(array(
-							"entry_id" => $entry_id,
-							"start" => $start,
-							"end" => $end,
-			));
-
-			$blocks = $blocks + $new_blocks;
-		};
-		
-
-		$this->vector = array();
-		
-		
-		// get events in range and build an incremental vector of all events. for
-		// example, if we have 2 events, one from 10:00-13:00 and other from
-		// 11:00-14:00, then the vector will look akin to (keys are timestamps)
-		// [10:00] -> +1
-		// [11:00] -> +1
-		// [13:00] -> -1
-		// [14:00] -> -1
-
-		// --------
-
-		if ($event_entry_form)
-		{
-			$events = $this->_get_entries_in_range(array(
-								"id" => $event_entry_form,
-								"start" => $start,
-								"end" => $end,
-								"cal_id" => $eid,
-								"ignore" => $ignore,
-			));
-		}
-		else
-		{
-			$events = array();
-		};
-		
-
-		// now we have all the ranges (if any) and events (if any)
-		// and are going to build the events for calendar
-
-
-		ksort($this->vector);
-		// I have three kinds of data
-		// 1) time windows defined by the calendar controller form (blocks)
-		// 2) events that were entered through the event entry form
-		// 3) incremental timeline for all events
-		
-		// there will be two kinds of those events
-		// 1 - usual entries, which link to their editing forms
-		// 2 - special entries, which show how many vacancies are left
-		// in a given time slot and link to the reservation form again
-		// but this time that form will be prefilled with start date.
-		// special entries are shown only if there are actually vacancies in
-		// that slot
-
-		// so then, first I will go over all the blocks and figure out how 
-		// many reservations each one has
-		$this->blocks = $blocks;
-		reset($this->blocks);
-		
-		if ( is_array($this->blocks) && (sizeof($this->blocks) > 0) )
-		{
-			array_walk($this->vector,array(&$this,"_process_frame"));
-		}
-		
-		
-		// If I want to find vacancies, then I have to check whether each block has
-		// the required amount of blocks available:
-		
-
-		if ($check == "vacancies")
-		{
-			$this->has_vacancies = true;
-		}
-			
-		// do not show usual entries		
-		//$events = array();
-
-		// no blocks, just bail out
-		if (sizeof($this->blocks) == 0)
-		{
-			$this->has_vacancies = false;
-		}
-
-		// done. now we can build the special entries for the calenar
-		
-		foreach($this->blocks as $bid => $block)
-		{
-			$dkey = date("dmY",$block["start"]);
-			$cnt = (int)$this->event_counts[$dkey];
-			//$vac = $block["max"] - $block["cnt"];
-			$vac = $block["max"] - $cnt;
-
-			$title = "<small>free <b>$vac of $block[max]</b></small>";
-
-			if ($check == "vacancies")
-			{
-				if ($vac < $count)
-				{
-					$this->has_vacancies = false;
-				};
-			};
-
-
-			if ($vac == $block["max"])
-			{
-				$color = "#AAFFAA";
-			}
-			elseif ($vac == 0)
-			{
-				//$title = "fully booked ($block[max])!";
-				$color = "#FF6633";
-			}
-			// shouldn't happen, maybe should even be configurable?
-			elseif ($vac < 0)
-			{
-				$title = sprintf("<b>OVERBOOKED BY %d!</b>",abs($vac));
-				$color = "#FF0000";
-			}
-			else
-			{
-				$color = "#FFFFAA";
-			};
-			
-			$this->raw_headers[$dkey] = $title;
-		
-			$dummy = array(
-				"title" => $title,
-				"start" => $block["start"],
-				"end" => $block["end"],
-				"color" => $color,
-				"target" => "_new",
-			);
-
-			if ($vac != 0)
-			{
-				$events[$dkey][] = $dummy;
-			}
-		};
-
-		// and now add the usual entries too
-
-
-		// and then there is that problem somewhere behind the horizon ...
-		// how do we check whether the entered event is a valid one?
-
-
-		if ($check == "vacancies")
-		{
-			return $this->has_vacancies;
-		}
-		else
-		{
-			return $events;
-		};
-
-		
-
-	}
-	
 	////
 	//! Processes frames
 	function _process_frame($val,$key)
@@ -430,6 +193,7 @@ class form_calendar extends form_base
 			$e_count = (int)$row["items"];
 
 			$dkey = date("dmY",$e_start);
+			$ekey = date("dmY",$e_end);
 
 			$event = array(
 				"start" => $e_start,
@@ -583,97 +347,6 @@ class form_calendar extends form_base
 		return $row;
 	}
 
-	////
-	// !updates calende time period definitons
-	function upd_timedef_xxx($args = array())
-	{
-		extract($args);
-		// figure out which form element does what
-		// but that's obsolete, I already know 
-		// how it's done
-		foreach($els as $key => $el)
-		{
-			// start of the period
-			if ( ($el["type"] == "date") && ($el["subtype"] == "from") )
-			{
-				$start_el = $el["id"];
-			};
-
-			// end of the period
-			if ( ($el["type"] == "date") && ($el["subtype"] == "to") )
-			{
-				$end_el = $el["id"];
-			};
-
-			// max entries in one window
-			if ( ($el["type"] == "textbox") && ($el["subtype"] == "count") )
-			{
-				$max_el = $el["id"];
-			};
-
-			// length of the windows
-			if ( ($el["type"] == "timeslice") && (!$tslice_el) )
-			{
-				$tslice_el = $el["id"];
-			};
-
-			// pregap, reserved time before the start of the window
-			if ( ($el["type"] == "timeslice") && ($tslice_el > 0) )
-			{
-				$tslice_el2 = $el["id"];
-			};
-		};
-		
-		if (($args["arr"]["event_start_el"]))
-		{
-			$start_el = $args["arr"]["event_start_el"];
-		};
-
-		/*
-		print "start = $start_el<br>";
-		print "end = $end_el<br>";
-		print "max = $max_el<br>";
-		print "tslice_el = $tslice_el<br>";
-		print "tslice_el2 = $tslice_el2<br>";
-		*/
-		// now I have the indexes for $entry array so I have to form the query 
-		// for calendar2timedef table
-
-		// first delete the existing record
-		
-		$q = "DELETE FROM calendar2timedef WHERE entry_id = '$entry_id'";
-		$this->db_query($q);
-
-		$ct_start = $entry[$start_el];
-		if (not($end_el))
-		{
-			$ct_end = $ct_start + 3600;
-		}
-		else
-		{ 
-			$ct_end = $entry[$end_el];
-		};
-
-		$ct_max = $entry[$max_el];
-
-		$ct_tslice = (int)$entry[$tslice_el]["count"];
-		if ($ct_tslice == 0)
-		{
-			$ct_tslice = 1;
-		};
-
-		//$ct_tslice2 = $entry[$tslice_el2]);
-		// this one can be zero as well
-		//$ct_pregap = $ct_tslice2["count"];
-
-		$q = "INSERT INTO calendar2timedef 
-			(entry_id,cal_id,start,end,timedef,max_items)
-			VALUES ('$entry_id','$cal_id','$ct_start','$ct_end','$ct_tslice',
-				'$ct_max')";
-
-		$this->db_query($q);
-		//print $q;
-	}
 		
 	function _process_blocks($args = array())
 	{
@@ -711,110 +384,64 @@ class form_calendar extends form_base
 	{
 		extract($args);	
 		$id = (int)$id;
-		$found = false;
-		$blocks = array();
+		/*
+		print "check_vacs()<br>";
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
+		print "<br>";
+		*/
+
+		if (is_array($entry_id))
+		{
+			$r_entry_id = join(",",$entry_id);
+		}
+		else
+		{
+			$r_entry_id = $entry_id;
+		};
 		
+		/*
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
 			 WHERE oid = '$contr' 
-				AND start <= '$end' AND end >= '$start'";
+				AND relation IN ($r_entry_id) AND start <= '$end' AND end >= '$start'";
+		*/
+		$q = "SELECT MIN(max_items) AS max FROM calendar2timedef
+			 WHERE oid = '$contr' 
+				AND relation IN ($r_entry_id) AND start <= '$end' AND end >= '$start'";
+
+		/*
+		print "start = $start, end = $end<br>";
+		*/
+
 		$this->db_query($q);
 		$row2 = $this->db_next();
 		$max = (int)$row2["max"];
+		//print "loading window for $entry_id - it has $max max slots<br>";
 		// and now, for each calendar figure out how many
 		// free spots does it have in the requested period.
 		// for this, I'll have to query the calendar2event table
+
+		// kui eventi_lopp >= otsingu_algus OR eventi_algus <= otsingu_lopp
+		// siis langeb see event meid huvitava ajavahemiku sisse ja ma tean
+		// tema broneeritud ruumide summaga arvestama
 		$q = "SELECT SUM(items) AS sum FROM calendar2event
 			LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
 			WHERE objects.status = 2 AND cal_id = '$cal_id' AND form_id = '$id'
-				AND start >= '$start' AND end <= '$end'";
+				AND relation = '$entry_id' 
+				AND end >= '$start' AND start <= '$end'";
+		/*
+		print $q;
+		print "<br>";
+		*/
 		$this->db_query($q);
 		$row2 = $this->db_next();
 		$sum = (int)$row2["sum"];
 		$vac = $max - $sum - $req_items;
-		//print "max avail = $max, reserved = $sum, requested = $req_items<br>";
+		//print "id = $r_entry_id, max avail = $max, reserved = $sum, vac = $vac, requested = $req_items<br>";
+		//print "$sum ruumi on broneeritud<br>";
+		//print "$vac j‰‰ks j‰rgi<br>";
 		return $vac;
-
-		if ($cal_id)
-		{
-			$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE cal_id = '$eid' AND start <= '$start' AND end >= '$end' AND status = 2";
-			$this->db_query($q);
-			while($row = $this->db_next())
-			{
-				$found = true;
-				$new_blocks = $this->_process_blocks($row);
-				$blocks = $blocks + $new_blocks;
-			}
-			$this->vector = array();
-		
-		
-			// get events in range and build an incremental vector of all events. for
-			// example, if we have 2 events, one from 10:00-13:00 and other from
-			// 11:00-14:00, then the vector will look akin to (keys are timestamps)
-			// [10:00] -> +1
-			// [11:00] -> +1
-			// [13:00] -> -1
-			// [14:00] -> -1
-
-			// --------
-
-			$events = $this->_get_entries_in_range2(array(
-							"start" => $start,
-							"end" => $end,
-							"cal_id" => $eid,
-							"eform" => $eform,
-			));
-
-
-			// now we have all the ranges (if any) and events (if any)
-			// and are going to build the events for calendar
-			ksort($this->vector);
-			$this->blocks = $blocks;
-			reset($this->blocks);
-		
-			if ( is_array($this->blocks) && (sizeof($this->blocks) > 0) )
-			{
-				array_walk($this->vector,array(&$this,"_process_frame"));
-			}
-		
-			// If I want to find vacancies, then I have to check whether each block has
-			// the required amount of blocks available:
-			
-
-			//if ($check == "vacancies")
-			//{
-				$this->has_vacancies = true;
-			//}
-			
-			// do not show usual entries		
-			//$events = array();
-
-			// no blocks, just bail out
-			if (sizeof($this->blocks) == 0)
-			{
-				$this->has_vacancies = false;
-			}
-
-			// done. now we can build the special entries for the calenar
-			
-			foreach($this->blocks as $bid => $block)
-			{
-				$dkey = date("dmY",$block["start"]);
-				$cnt = (int)$this->event_counts[$dkey];
-				//$vac = $block["max"] - $block["cnt"];
-				$vac = $block["max"] - $cnt;
-				$title = "<small>free <b>$vac of $block[max]</b></small>";
-	
-				if ($vac < $count)
-				{
-					$this->has_vacancies = false;
-				};
-	
-			};
-	
-		}
-		return $this->has_vacancies;
-		#return $found;
-
 	}
 	
 	function get_events($args = array())
@@ -828,7 +455,7 @@ class form_calendar extends form_base
 		$this->raw_headers = array();
 
 		//$this->load($eform);
-		$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$start' AND end >= '$end' AND status = 2";
+		$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$start' AND end >= '$end' AND relation = '$ctrl' AND status = 2";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
@@ -891,7 +518,6 @@ class form_calendar extends form_base
 
 			// done. now we can build the special entries for the calenar
 
-			
 			foreach($this->blocks as $bid => $block)
 			{
 				$dkey = date("dmY",$block["start"]);
@@ -959,7 +585,7 @@ class form_calendar extends form_base
 		list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
 		$_end = mktime(23,59,59,$_m,$_d,$_y);
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
-			 WHERE oid = '$contr' 
+			 WHERE oid = '$contr' AND relation IN ($rel2)
 				AND start <= '$_end' AND end >= '$_start'";
 		$this->db_query($q);
 		$row2 = $this->db_next();
@@ -967,16 +593,84 @@ class form_calendar extends form_base
 		// and now, for each calendar figure out how many
 		// free spots does it have in the requested period.
 		// for this, I'll have to query the calendar2event table
+		
+		// kui eventi_lopp >= otsingu_algus OR eventi_algus <= otsingu_lopp
+		// siis langeb see event meid huvitava ajavahemiku sisse ja ma tean
+		// tema broneeritud ruumide summaga arvestama
+
 		$q = "SELECT SUM(items) AS sum FROM calendar2event
 			LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
 			WHERE oid != '$entry_id' AND relation = '$rel' AND objects.status = 2 AND
-				cal_id = '$cal_id' AND form_id = '$id' AND start >= '$_start' AND
-				end <= '$_end'";
+				cal_id = '$cal_id' AND form_id = '$id' AND end >= '$_start' AND
+				start <= '$_end'";
 		$this->db_query($q);
 		$row2 = $this->db_next();
 		$sum = (int)$row2["sum"];
+		//print "max = $max, sum = $sum, req = $req_items<br>";
 		$vac = $max - $sum - $req_items;
 		return $vac;
+	}
+
+	function get_rel_el($args = array())
+	{
+		extract($args);
+		$q = "SELECT * FROM calendar2forms WHERE cal_id = '$id'";
+		$this->db_query($q);
+		$c2f = $this->db_next();
+		// now c2f["form_id"] has the id of event entry form
+		// and c2f["el_relation"] has the id of the element in that form, which
+		// interests us. A relation element. Now we figure from which form
+		// that element originates
+		$q = "SELECT * FROM form_relations WHERE el_to = $c2f[el_relation]";
+		$this->db_query($q);
+		$f_r = $this->db_next();
+
+		// $f_r[form_from] is it.
+		// $f_r[el_from] is the element id which contains the information we want
+		/*
+		print "form: $f_r[form_from] el: $f_r[el_from]<br>";
+		*/
+
+		// and now the final step - figure out, which
+		// load the current chain entry
+
+		$q = "SELECT * FROM form_chain_entries WHERE id = '$chain_entry_id'";
+		$this->db_query($q);
+		$fce = $this->db_next();
+		$_eids = aw_unserialize($fce["ids"]);
+
+		/*
+		print "<pre>";
+		print_r($_eids);
+		print "</pre>";
+		*/
+
+		$_eid = $_eids[$f_r["form_from"]];
+		return $_eid;
+
+	}
+
+	function get_other_entries($args = array())
+	{
+		extract($args);
+		if ($this->cached_others["id"] == $id)
+		{
+			return $this->cached_others["data"];
+		};
+		$q = "SELECT form_id FROM form_entries WHERE id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		$others = array();
+		$q = "SELECT id FROM form_entries WHERE form_id = '$row[form_id]'";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$others[$row["id"]] = $row["id"];
+
+		}
+		$this->cached_others["id"] = $id;
+		$this->cached_others["data"] = $others;
+		return $others;
 	}
 		
 };
