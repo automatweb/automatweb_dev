@@ -7,6 +7,6 @@ Can be used to change the information that will be returned from the save handle
 #php#
 function callback_mod_retval($arr)
 {
-	$args["fubar"] = 1;
+	$arr["args"]["fubar"] = 1;
 }
 #/php#
