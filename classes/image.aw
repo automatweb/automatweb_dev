@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.102 2004/07/13 08:34:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.103 2004/07/13 08:35:19 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -882,7 +882,7 @@ class image extends class_base
 			));
 		}
 
-		//$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
+		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
 	}
 
 	/**  
