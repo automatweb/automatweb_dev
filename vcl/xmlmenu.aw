@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.0 2001/06/08 23:45:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/xmlmenu.aw,v 2.1 2001/06/09 00:01:41 duke Exp $
 // xmlmenu.aw - xml-i ja aw_template abil menüüde genereerimise skript
+classload("defs");
 class xmlmenu {
 	// konstruktor
 	// argumendid
@@ -11,16 +12,48 @@ class xmlmenu {
 	{
 		extract($args);
 		$this->tpl = new aw_template();
-		$this->vars(is_array($vars) ? $vars : array());
 		$this->xmldef = $this->tpl->localparse($xmldef,$vars);
-		$this->tpl->use_template($template);
 	}
-
+	
+	//// Impordib muutujad, mida kas template voi xml defi sees kasutakse
 	function vars($args = array())
 	{
-		$this->tpl->vars($args);
+		$this->vars = is_array($args) ? $args : array();
+		$this->tpl->vars($this->vars);
 	}
 
+	////
+	// !Laeb vajalikud definitsioonid failist
+	// argumendid:
+	// xml - xml faili full path
+	// tpl - template faili full path
+	function load_from_files($args = array())
+	{
+		extract($args);
+		$menudef = get_file(array(
+			"file" => $xml,
+		));
+
+		$template = get_file(array(
+			"file" => $tpl,
+		));
+		$this->load_from_memory(array(
+					"template" => $template,
+					"xmldef" => $menudef,
+			));
+	}
+
+	////
+	// !Laeb vajalikud definitsioonid mälust
+	// argumendid:
+	// xmldef(text) - menüü definitsioon, XML-is
+	// template(text) - template, mida kasutada menüü joonistamiseks
+	function load_from_memory($args = array())
+	{
+		$this->tpl->use_template($args["template"]);
+		$this->xmldef = $this->tpl->localparse($args["xmldef"],$this->vars);
+	}
+		
 	////
 	// !Loob menüü
 	// argumendid:
