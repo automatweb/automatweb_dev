@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.34 2003/03/04 22:08:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.35 2003/03/28 10:17:34 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -116,7 +116,8 @@ class form_element extends aw_template
 	// $form - the form this element is contained in
 	// $col - col of the element
 	// $row - row of the element
-	function load(&$arr,&$form,$col,$row)
+	// $idx - the index this element has in the parent cell's element array
+	function load(&$arr,&$form,$col,$row, $idx = 0)
 	{
 		$this->form =& $form;
 		$this->arr = $arr;
@@ -124,6 +125,7 @@ class form_element extends aw_template
 		$this->fid = $form->get_id();
 		$this->col = $col;
 		$this->row = $row;
+		$this->index = $idx;
 		if (!isset($this->arr["type"]))
 		{
 			$this->arr["type"] = "";
@@ -353,7 +355,8 @@ class form_element extends aw_template
 				$this->vars(array(
 					"RELATION_LB" => $relation_lb,
 					"RELATION_LB_SHOW" => $relation_lb_show,
-					"SEARCH_RELATION" => $relation_uniq
+					"SEARCH_RELATION" => $relation_uniq,
+					"HAS_DEFAULT_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_DEFAULT_CONTROLLER") : ""),
 				));
 			}
 
@@ -663,7 +666,8 @@ class form_element extends aw_template
 					"BUTTON_SUB_URL" => ($this->arr["subtype"] == "url" ? $this->parse("BUTTON_SUB_URL") : ""),
 					"BUTTON_SUB_OP" => ($this->arr["subtype"] == "preview" ? $this->parse("BUTTON_SUB_OP") : ""),
 					"BUTTON_SUB_ORDER" => ($this->arr["subtype"] == "order" ? $this->parse("BUTTON_SUB_ORDER") : ""),
-					"HAS_ONLY_SHOW_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_ONLY_SHOW_CONTROLLER") : "")
+					"HAS_ONLY_SHOW_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_ONLY_SHOW_CONTROLLER") : ""),
+					"HAS_CONTROLLER" => ""
 				));
 			}
 
@@ -1550,11 +1554,32 @@ class form_element extends aw_template
 
 	function get_el_lb_items()	
 	{
+		// XYZ
 		if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
 		{
 			$this->make_relation_listbox_content();
 		}
-		return is_array($this->arr["listbox_items"]) ? $this->arr["listbox_items"] : array();
+
+		// I want the contents of the listbox for that kind of listboxes tooo -- duke
+		if ($this->arr["lb_data_from_form"] && $this->arr["lb_data_from_el"])
+		{
+			$opts = array(
+				"rel_form" => $this->arr["lb_data_from_form"],
+				"rel_element" => $this->arr["lb_data_from_el"],
+				"sort_by_alpha" => $this->arr["sort_by_alpha"],
+				"rel_unique" => $this->arr["rel_unique"],
+				"ret_ids" => true,
+			);
+			list($cnt,$vals) = $this->form->get_entries_for_element($opts);
+			foreach($vals as $e_id => $e_val)
+			{
+				$this->arr["listbox_items"][$e_id] = $e_val;
+			}
+			$this->arr["listbox_count"] = $cnt;
+		}
+
+		$retval = is_array($this->arr["listbox_items"]) ? $this->arr["listbox_items"] : array();
+		return $retval;
 	} 
 
 	function get_thousands_sep() 
@@ -2016,6 +2041,11 @@ class form_element extends aw_template
 					}
 					$this->arr["listbox_count"] = $cnt;
 				}
+				else
+				if ($this->arr["value_controller"] && $this->form->arr["has_controllers"])
+				{
+					$this->form->controller_instance->eval_controller($this->arr["value_controller"], $this->entry, &$this->form, &$this);
+				}
 
 				if (!$this->arr['hidden'])
 				{
@@ -2059,7 +2089,14 @@ class form_element extends aw_template
 					}
 					else
 					{
-						$_lbsel = "element_".$this->id."_lbopt_".$this->arr["listbox_default"];
+						if ($this->form->arr["has_controllers"] && $this->arr["default_controller"])
+						{
+							$_lbsel = $this->form->controller_instance->eval_controller($this->arr["default_controller"], "", &$this->form, $this);
+						}
+						else
+						{
+							$_lbsel = "element_".$this->id."_lbopt_".$this->arr["listbox_default"];
+						}
 					}
 				}
 
@@ -2817,15 +2854,22 @@ class form_element extends aw_template
 		// if value controiller is set, always use that
 		if ($this->arr["value_controller"] && !$this->form->arr["sql_writer_writer"]) 
 		{
-			$var = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $var, &$this->form, $this);
+			//$var = $this->form->controller_instance->eval_controller($this->arr["value_controller"], $var, &$this->form, $this);
+			$this->form->value_controller_queue[] = array(
+				"col" => $this->col,
+				"row" => $this->row,
+				"idx" => $this->index,
+				"id" => $this->id,
+				"ctrl_id" => $this->arr["value_controller"],
+				"val" => $var,
+			);
 		}
 
 		$entry[$this->id] = $var;
 		$this->entry = $var;
 		$this->entry_id = $id;
 
-		$var = $this->form->post_vars[$prefix.$this->id];
-//		echo "id = ",$this->id," entry = ", $var ,"<br>";
+
 		if ($this->form->arr["has_controllers"])
 		{
 			// now let all the element's controllers do their checks
