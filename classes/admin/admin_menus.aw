@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.63 2004/04/30 08:48:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.64 2004/05/13 13:49:08 duke Exp $
 
 class admin_menus extends aw_template
 {
@@ -858,6 +858,7 @@ class admin_menus extends aw_template
 		$lang_id = aw_global_get("lang_id");
 		$site_id = $this->cfg["site_id"];
 		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
+		$menu_obj = new object($parent);
 		$sel_objs = aw_global_get("cut_objects");
 		if (!is_array($sel_objs))
 		{
@@ -879,10 +880,21 @@ class admin_menus extends aw_template
 
 		$ps = "";
 
+		$current_period = aw_global_get("current_period");
+
 		if ($period)
 		{
 			$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_PSEUDO." AND objects.periodic = 1)) ";
 		}
+		// if no period is set in the url, BUT the menu is periodic, then only show objects from the current period
+		elseif ($menu_obj->prop("periodic") == 1 && isset($current_period))
+		{
+			$ps = " AND ((objects.period = '$current_period') OR (objects.class_id = ".CL_PSEUDO." AND objects.periodic = 1)) ";
+		}
+		else
+		{
+			$ps = " AND (period = 0 OR period IS NULL)";
+		};
 
 
 		// do not show relation objects in the list. hm, I wonder whether
@@ -1065,7 +1077,7 @@ class admin_menus extends aw_template
 			
 			$iu = icons::get_icon_url($row["class_id"],$row["name"]);
 			$row["icon"] = '<img alt="'.$comment.'" src="'.$iu.'">';
-			$this->t->set_default_sortby(array("name" => "name"));
+			$this->t->set_default_sortby("name");
 			$caption = ($row["name"] == '' ? "(nimeta)" : $row["name"]);
 
 			$row["name"] = '<a href="'.$chlink.'" title="'.$comment.'">'.$caption."</a>";
@@ -1138,12 +1150,13 @@ class admin_menus extends aw_template
 			"ret_data" => true,
 			"sharp" => true,
 			"addmenu" => 1,
-			"period" => $period,
+			"period" => empty($period) && $menu_obj->prop("periodic") == 1 ? $current_period : $period,
 		));
 
 		$this->read_template("js_add_menu.tpl");
 
 		$whole_menu = "";
+
 
 		foreach($this->add_menu as $item_id => $item_collection)
 		{
