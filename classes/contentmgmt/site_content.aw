@@ -25,10 +25,10 @@ class site_content extends menuedit
 
 		// right, so if we got format=pdf then do a sub-request for the same 
 		// url, except for the format part, then convert it
-		if ($GLOBALS["format"] == "pdf")
+		/*if ($GLOBALS["format"] == "pdf")
 		{
 			return $this->do_pdf($params);
-		}
+		}*/
 
 		$obj2 = obj($section);
 		if ($text == "")
@@ -649,7 +649,17 @@ class site_content extends menuedit
 		}
 
 		$retval = $this->parse();
-		return $this->parse() . $popups;
+		$tmp =  $this->parse() . $popups;
+
+		if ($GLOBALS["format"] == "pdf")
+		{
+			$conv = get_instance("core/converters/html2pdf");
+			header("Content-type: application/pdf");
+			die($conv->convert(array(
+				"content" => $tmp
+			)));
+		}
+		return $tmp;
 	}
 	
 	function req_draw_menu($parent,$name,&$path,$ignore_path)
