@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.1 2004/02/20 11:28:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.2 2004/03/25 21:47:32 duke Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see kõik pole
@@ -45,6 +45,7 @@ class metamgr extends class_base
 		$meta_tree = new object_tree(array(
 			"parent" => $arr["obj_inst"]->id(),
 			"class_id" => CL_META,
+			"lang_id" => array(),
 		));
 		$olist = $meta_tree->to_list();
 		$rw_tree = array();
@@ -140,6 +141,13 @@ class metamgr extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "value",
+			"caption" => "Väärtus",
+			"callback" => array(&$this, "callb_value"),
+			"callb_pass_row" => true,
+		));
+
+		$t->define_field(array(
 			"name" => "ord",
 			"caption" => "Jrk",
 			"sortable" => 1,
@@ -167,6 +175,7 @@ class metamgr extends class_base
 		$olist = new object_list(array(
 			"parent" => $root_obj->id(),
 			"class_id" => CL_META,
+			"lang_id" => array(),
 		));
 
 		for ($o = $olist->begin(); !$olist->end(); $o = $olist->next())
@@ -176,6 +185,7 @@ class metamgr extends class_base
 				"is_new" => 0,
 				"id" => $id,
 				"name" => $o->name(),
+				"value" => $o->comment(),
 				"ord" => $o->prop("ord"),
 			));
 		};
@@ -231,6 +241,15 @@ class metamgr extends class_base
 			"value" => $arr["name"],
 		));
 	}
+	
+	function callb_value($arr)
+	{
+		return html::textbox(array(
+			"name" => "submeta[" . $arr["id"] . "][value]",
+			"size" => 10,
+			"value" => $arr["value"],
+		));
+	}
 
 	function callb_ord($arr)
 	{
@@ -257,6 +276,7 @@ class metamgr extends class_base
 			$no->set_class_id(CL_META);
 			$no->set_status(STAT_ACTIVE);
 			$no->set_parent($parent);
+			$no->set_comment($new["value"]);
 			$no->set_name($new["name"]);
 			$no->set_prop("ord",(int)$new["ord"]);
 			$no->save();
@@ -269,6 +289,7 @@ class metamgr extends class_base
 			{
 				$so = new object($skey);
 				$so->set_name($sval["name"]);
+				$so->set_comment($sval["value"]);
 				$so->set_prop("ord",$sval["ord"]);
 				$so->save();
 			};
