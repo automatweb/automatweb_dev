@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.6 2002/11/21 17:21:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.7 2002/11/22 17:07:38 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -103,6 +103,14 @@ class htmlclient extends aw_template
 		if ($args["type"] == "imgupload")
 		{
 			$args["type"] = "fileupload";
+		};
+
+		if ( ($args["type"] == "textarea") && ($args["richtext"]) && (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") > 0) )
+		{
+			$args["type"] = "richtext";
+			$args["width"] = $args["cols"] * 10;
+			$args["height"] = $args["rows"] * 10;
+			$args["value"] = str_replace("\"","&quot;",$args["value"]);
 		};
 
 		if ($args["type"] == "colorpicker")
