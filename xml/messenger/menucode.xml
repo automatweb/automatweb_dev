@@ -6,7 +6,7 @@
 	</inbox>
 	<write>
 		<caption>Uus teade</caption>
-		<link>?class=messenger&amp;action=write</link>
+		<link>?class=messenger&amp;action=create</link>
 	</write>
 	<getmail>
 		<caption>Too meili</caption>
@@ -82,16 +82,6 @@
 				</newfolder>
 				</sublinks>
 			</folders2>
-			<identities>
-				<caption>Identiteedid</caption>
-				<link>?class=messenger&amp;action=configure&amp;page=identities</link>
-				<sublinks>
-					<new>
-						<caption>Lisa uus</caption>
-						<link>?class=messenger&amp;action=add_identity</link>
-					</new>
-				</sublinks>
-			</identities>
 		</sublinks>
 	</configure>
 </messenger>
