@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.120 2003/06/10 16:25:38 duke Exp $
+// $Id: class_base.aw,v 2.121 2003/06/10 16:43:12 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -280,7 +280,7 @@ class class_base extends aw_template
 		// rrrr, temporary hack
 		if (isset($this->id_only))
 		{
-			$retval = $id;
+			$retval = $this->id;
 		}
 		else
 		{
