@@ -61,5 +61,25 @@ class error
 			error::raise($arr);
 		}
 	}
+
+	/** checks if the current user has view access to the given oid and if not, redirects the user to the error page or gives a 404 error. does NOT send an error e-mail to the list
+
+		@attrib api=1
+
+		@param $oid 
+
+		@comment
+			oid - id of object to check
+	**/
+	function view_check($oid)
+	{
+		$t = new acl_base;
+		$t->init();
+		if (!is_oid($oid) || !$t->can("view", $oid))
+		{
+			$i = get_instance("menuedit");
+			$i->_do_error_redir($oid);
+		}
+	}
 }
 ?>
