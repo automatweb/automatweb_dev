@@ -26,7 +26,7 @@ class image extends aw_template
 		$ob = new objects;
 		$this->vars(array(
 			"parents" => $this->picker($parent, $ob->get_list()),
-			"reforb" => $this->mk_reforb("submit", array("return_url" => $return_url,"alias_to" => $alias_to))
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"return_url" => $return_url,"alias_to" => $alias_to))
 		));
 		return $this->parse();
 	}
@@ -195,17 +195,18 @@ class image extends aw_template
 			}
 			else
 			{
-				if ($tpls["image_inplace"])
+				if ($tpls["image_inplace"] && !$this->image_inplace_used)
 				{
 					$tpl = "image_inplace";
 					$inplace = $tpl;
+					$this->image_inplace_used = true;
 				}
 				else
 				{
 					$tpl = "image";
 					$inplace = 0;
 				};
-				if ($this->is_template($tpls[$tpl]))
+				if (isset($tpls[$tpl]))
 				{
 					$replacement = $this->localparse($tpls[$tpl],$vars);
 				}
