@@ -56,8 +56,33 @@
 
 		function del_{VAR:type}()
 		{
-			alert('deleting object ' + sel_{VAR:type});
-
+			len = document.aform.elements.length;
+			cnt = 0;
+			chk = 0;
+			for (i = 0; i < len; i++)
+			{
+				with(document.aform.elements[i])
+				{
+					if (type == "checkbox" 
+						&& name.indexOf("_{VAR:type}") != -1
+						&& checked )
+						{
+							cnt++;
+							chk = value;
+						}	
+				}
+			};
+			if (cnt != 1)
+			{
+				alert('Palun valige _üks_ objekt kustutamiseks');
+			}
+			else
+			{
+				if (confirm('Kustutada see objekt?'))
+				{
+					window.location = '{VAR:dellink}&id=' + chk;
+				};
+			};
 		}
 	</script>
 <tr>
