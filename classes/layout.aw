@@ -7,7 +7,7 @@
 @groupinfo settings caption=M&auml;&auml;rangud
 @groupinfo layout caption=Tabel
 @groupinfo styles caption=Stiilid
-@groupinfo aliases caption=Aliased
+@groupinfo aliases caption="Tabeli sisu"
 @groupinfo import caption=Import
 @groupinfo preview caption=Eelvaade
 
@@ -32,6 +32,12 @@
 
 @property table_style type=select group=settings 
 @caption Tabeli stiil
+
+@property row_widths type=callback callback=get_row_widths group=settings store=no
+@caption Ridade laiused
+
+@property row_heights type=callback callback=get_row_heights group=settings store=no
+@caption Ridade k&otilde;rgused
 
 @property grid_aliases type=callback group=aliases 
 @caption Aliased
@@ -105,10 +111,10 @@ class layout extends class_base
 		$grid = $ob->meta('grid');
 		$grid['table_style'] = $ob->meta('table_style');
 
-		$tmp =  $ge->show($grid, $alias["target"], &$tpls);
+		$tmp = $ge->show($grid, $alias["target"], &$tpls);
 		$d = get_instance("document");
 		$d->create_relative_links($tmp);
-		return $tmp; 
+		return $tmp;
 	}
 
 	////
@@ -217,6 +223,26 @@ class layout extends class_base
 						"file" => $import_file
 					)));
 				}
+				break;
+
+			case "row_widths":
+				$ge = get_instance("vcl/grid_editor");
+				$ge->_init_table($arr["obj_inst"]->meta("grid"));
+				for($i = 0; $i < $ge->get_num_cols(); $i++)
+				{
+					$ge->set_col_width($i, $arr["request"]["colw"][$i]);
+				}
+				$arr['obj_inst']->set_meta('grid',$ge->_get_table());
+				break;
+
+			case "row_heights":
+				$ge = get_instance("vcl/grid_editor");
+				$ge->_init_table($arr['obj_inst']->meta('grid'));
+				for($i = 0; $i < $ge->get_num_cols(); $i++)
+				{
+					$ge->set_col_height($i, $arr["request"]["colh"][$i]);
+				}
+				$arr['obj_inst']->set_meta('grid',$ge->_get_table());
 				break;
 		}
 		return $retval;
@@ -354,6 +380,50 @@ class layout extends class_base
 	{
 		$ob = new object($oid);
 		return $ob->meta("grid");
+	}
+
+	function get_row_widths($arr)
+	{
+		$ret = array();
+		$ge = get_instance("vcl/grid_editor");
+		$ge->_init_table($arr['obj_inst']->meta('grid'));
+		for($i = 0; $i < $ge->get_num_cols(); $i++)
+		{
+			$ret["colw[$i]"] = array(
+				"name" => "colw[$i]",
+				"type" => "textbox",
+				"size" => 6,
+				"group" => "settings",
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"caption" => (1+$i)." tulba laius",
+				"value" => $ge->get_col_width($i)
+			);
+		}
+		return $ret;
+	}
+	
+	function get_row_heights($arr)
+	{
+		$ret = array();
+		$ge = get_instance("vcl/grid_editor");
+		$ge->_init_table($arr['obj_inst']->meta('grid'));
+		for($i = 0; $i < $ge->get_num_cols(); $i++)
+		{
+			$ret["colh[$i]"] = array(
+				"name" => "colh[$i]",
+				"type" => "textbox",
+				"size" => 6,
+				"group" => "settings",
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"caption" => ($i+1)." tulba k&otilde;rgus",
+				"value" => $ge->get_col_height($i)
+			);
+		}
+		return $ret;
 	}
 }
 ?>

@@ -1064,6 +1064,9 @@ class grid_editor extends class_base
 			$col="";
 			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
+				$colw = !empty($this->arr["col_widths"][$a]) ? $this->arr["col_widths"][$a] : $spans["colspan"]*150+($spans["colspan"]-1)*7;
+				$colh = !empty($this->arr["col_heights"][$a]) ? $this->arr["col_heights"][$a] : $spans["rowspan"]*17+($spans["rowspan"]-1)*9;
+
 				if (!($spans = $this->get_spans($i, $a)))
 				{
 					continue;
@@ -1077,8 +1080,8 @@ class grid_editor extends class_base
 					"ta_rows" => $spans["rowspan"],
 					"ta_cols" => $spans["colspan"]*20+(($spans["colspan"]-1)*2),
 					"content" => htmlentities($this->arr['aliases'][$map['row']][$map['col']]),
-					"width" => $spans["colspan"]*150+($spans["colspan"]-1)*7,
-					"height" => $spans["rowspan"]*17+($spans["rowspan"]-1)*9,
+					"width" => $colw,
+					"height" => $colh,
 				));
 
 				$col.=$this->parse("COL_TA");
@@ -1106,12 +1109,12 @@ class grid_editor extends class_base
 	{
 		$this->_init_table($data);
 
-		$stc = get_instance("style"); 
+		$stc = get_instance("style");
 		$this->_init_show_styles();
 
 		if ($this->arr["table_style"])
 		{
-			$table.= "<table ".$stc->get_table_string($this->arr[table_style]).">";
+			$table.= "<table ".$stc->get_table_string($this->arr["table_style"]).">";
 		}
 		else
 		{
@@ -1385,11 +1388,11 @@ class grid_editor extends class_base
 		{
 			if (($row & 1) > 0)
 			{
-				$est = $this->style_inst->get_odd_style($this->arr["table_style"]);
+				$est = $this->style_inst->get_even_style($this->arr["table_style"]);
 			}
 			else
 			{
-				$est = $this->style_inst->get_even_style($this->arr["table_style"]);
+				$est = $this->style_inst->get_odd_style($this->arr["table_style"]);
 			}
 		}
 
@@ -1399,17 +1402,11 @@ class grid_editor extends class_base
 		}
 		else
 		{
-			if ($est)
-			{
-				$st = $est;
-			}
-			else
-			{
-				// tshekime et kui on esimene rida/tulp ja stiili pole m22ratud, siis 
+				// tshekime et kui on esimene rida/tulp ja stiili pole m22ratud, siis
 				// v6tame tabeli stiilist, kui see on m22ratud default stiili esimese rea/tulba jaox
 				if ($this->arr["table_style"] && $row < $this->num_frows)
 				{
-					$st = $frow_style;
+					$st = $this->frow_style;
 				}
 				else
 				if ($this->arr["table_style"] && $col < $this->num_fcols)
@@ -1417,22 +1414,26 @@ class grid_editor extends class_base
 					$st = $this->fcol_style;
 				}
 
-				// kui tabeli stiilis pold m22ratud stiili v6i ei old esimene rida/tulp, 
+				// kui tabeli stiilis pold m22ratud stiili v6i ei old esimene rida/tulp,
 				// siis v6tame default celli stiili, kui see on
 				if ($st == 0 && $this->arr["default_style"])
 				{
 					$st = $this->arr["default_style"];
 				}
 				// damn this was horrible
+
+			if (!$st)
+			{
+				$st = $est;
 			}
-		}
+  		}
 		return $st;
 	}
 
 	function _init_show_styles()
 	{
 		$this->style_inst = get_instance("style");
-		$this->frow_style = 0; 
+		$this->frow_style = 0;
 		$this->fcol_style = 0; 
 		$this->num_fcols = 0; 
 		$this->num_frows = 0;
@@ -2089,6 +2090,26 @@ class grid_editor extends class_base
 			}
 		}
 		return $linearr;
+	}
+
+	function set_col_width($col, $width)
+	{
+		$this->arr["col_widths"][$col] = $width;
+	}
+	
+	function set_col_height($col, $height)
+	{
+		$this->arr["col_heights"][$col] = $height;
+	}
+
+	function get_col_width($col)
+	{
+		return $this->arr["col_widths"][$col];
+	}
+	
+	function get_col_height($col)
+	{
+		return $this->arr["col_heights"][$col];
 	}
 }
 ?>
