@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.11 2004/11/25 11:16:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.12 2004/11/25 11:28:38 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -427,7 +427,7 @@ class register extends class_base
 			"parent" => $r->prop("data_rootmenu"),
 			"class_id" => CL_MENU
 		));
-		return $ot->ids();
+		return $ot->ids() + array($r->prop("data_rootmenu"));
 	}
 }
 ?>
