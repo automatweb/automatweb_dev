@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.76 2004/08/24 14:58:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.77 2004/08/24 15:13:19 kristo Exp $
 
 /*
 
@@ -514,7 +514,7 @@ class site_show extends class_base
 								"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
 								"sort_by" => "objects.parent"
 							));
-							$sections = $sections + $ot->ids();
+							$sections = $sections + $this->make_keys($ot->ids());
 						}
 					}
 				}
