@@ -1,14 +1,14 @@
 <script language='javascript'>
 
-function varv(vrv) 
+function set_color(color) 
 {
-	document.forms[0].elements[2].value="#"+vrv;
+	document.forms[0].elements[2].value="#"+color;
 } 
 
-function varvivalik() 
+function pick_color() 
 {
-  aken=window.open("/vv.html","varvivalik","HEIGHT=220,WIDTH=310")
- 	aken.focus()
+  win=window.open("{VAR:baseurl}/automatweb/orb.{VAR:ext}?class=css&action=colorpicker","colorpicker","HEIGHT=220,WIDTH=310")
+ 	win.focus()
 }
 </script>
 
@@ -63,7 +63,7 @@ href="javascript:this.document.aa.submit();">Salvesta</a>
 </tr>
 <tr>
 <td class="celltext">{VAR:LC_STYLE_BACK_COLOR}:</td>
-<td class="celltext"><input type='text' NAME='st[bgcolor]' class="formtext" VALUE='{VAR:bgcolor}'> <a href="#" onclick="varvivalik();">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
+<td class="celltext"><input type='text' NAME='st[bgcolor]' class="formtext" VALUE='{VAR:bgcolor}'> <a href="#" onclick="pick_color();">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
 </tr>
 <tr>
 <td class="celltext">{VAR:LC_STYLE_EDGE_WIDTH}:</td>

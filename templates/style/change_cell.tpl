@@ -2,19 +2,19 @@
 
 el = "color";
 
-function varv(vrv) 
+function set_color(color) 
 {
 	if (el == "color")
-		document.forms[0].elements[6].value="#"+vrv;
+		document.forms[0].elements[6].value="#"+color;
 	else
 	if (el == "bgcolor")
-		document.forms[0].elements[7].value="#"+vrv;
+		document.forms[0].elements[7].value="#"+color;
 } 
 
-function varvivalik(milline) 
+function pick_color(el_id) 
 {
-	el = milline;
-  aken=window.open("/vv.html","varvivalik","HEIGHT=220,WIDTH=310")
+	el = el_id;
+  win=window.open("{VAR:baseurl}/automatweb/orb.{VAR:ext}?class=css&action=colorpicker","colorpicker","HEIGHT=220,WIDTH=310")
  	aken.focus()
 }
 </script>
@@ -85,11 +85,11 @@ href="javascript:this.document.aa.submit();">Salvesta</a>
 	</tr>
 	<tr>
 		<td class="celltext">{VAR:LC_STYLE_COLOR}</td>
-		<td class="celltext"><input class="formtext" type="text" name="st[color]" VALUE='{VAR:color}'> <a href="#" onclick="varvivalik('color');">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
+		<td class="celltext"><input class="formtext" type="text" name="st[color]" VALUE='{VAR:color}'> <a href="#" onclick="pick_color('color');">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
 	</tr>
 	<tr>
 		<td class="celltext">{VAR:LC_STYLE_BACK_COLOR}:</td>
-		<td class="celltext"><input type="text" class="formtext" name="st[bgcolor]" VALUE='{VAR:bgcolor}'> <a href="#" onclick="varvivalik('bgcolor');">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
+		<td class="celltext"><input type="text" class="formtext" name="st[bgcolor]" VALUE='{VAR:bgcolor}'> <a href="#" onclick="pick_color('bgcolor');">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
 	</tr>
 	<tr>
 		<td class="celltext">{VAR:LC_STYLE_FONT_STYLE}:</td>
