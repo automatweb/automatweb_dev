@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.49 2004/05/24 10:54:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.50 2004/05/24 16:43:15 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -44,6 +44,7 @@
 
 	@property mass_subscribe type=textarea rows=25 store=no
 	@caption Massiline liitmine
+	@comment Iga aadress eraldi real, nimi ja aadress komaga eraldatud
 
 	------------------------------------------------------------------------
 	@default group=unsubscribing
@@ -59,6 +60,14 @@
 	
 	@property mass_unsubscribe type=textarea rows=25 store=no 
 	@caption Massiline kustutamine
+	
+	------------------------------------------------------------------------
+	@default group=export_members
+	@property export_type type=chooser orient=vertical store=no
+	@caption Formaat
+
+	@property exp_sbt type=submit
+	@caption Ekspordi
 
 	------------------------------------------------------------------------
 	@default group=list_status
@@ -109,6 +118,7 @@
 	@groupinfo member_list caption=Nimekiri submit=no parent=membership
 	@groupinfo subscribing caption=Liitumine parent=membership
 	@groupinfo unsubscribing caption=Lahkumine parent=membership
+	@groupinfo export_members caption=Eksport parent=membership
 	@groupinfo raports caption=Kirjad
 	@groupinfo list_status caption="Saadetud kirjad" parent=raports submit=no
 	@groupinfo write_mail caption="Saada kiri" parent=raports 
@@ -131,6 +141,9 @@
 	
 */
 
+define("ML_EXPORT_CSV",1);
+define("ML_EXPORT_NAMEADDR",2);
+define("ML_EXPORT_ADDR",3);
 
 class ml_list extends class_base
 {
@@ -412,6 +425,15 @@ class ml_list extends class_base
 				$this->gen_list_status_tb($arr);
 				break;
 
+			case "export_type":
+				$data["options"] = array(
+					ML_EXPORT_CSV => "nimi,aadress",
+					ML_EXPORT_NAMEADDR => "nimi &lt;aadress&gt;",
+					ML_EXPORT_ADDR => "aadress",
+				);
+				$data["value"] = 1;
+				break;
+
 			case "show_mail_subject":
 			case "show_mail_from":
 			case "show_mail_message":
@@ -476,8 +498,23 @@ class ml_list extends class_base
 			case "write_mail":
 				$this->submit_write_mail($arr);
 				break;
+
+			case "exp_sbt":
+				$this->do_export = true;
+				$this->export_type = $arr["request"]["export_type"];
+				break;
 		};
 		return $retval;
+	}
+
+	function callback_mod_retval($arr)
+	{
+		if (isset($this->do_export))
+		{
+			$arr["action"] = "export_members";
+			$arr["args"]["filename"] = "members.txt";
+			$arr["args"]["export_type"] = $this->export_type;
+		};
 	}
 	
 
@@ -603,20 +640,17 @@ class ml_list extends class_base
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => "Kustuta",
-			"url" => "javascript:document.changeform.action.value='delete_members';document.changeform.submit();",		
+			"action" => "delete_members",
+			"confirm" => "Kustutada need liikmed?",
 			"img" => "delete.gif",
 		));		
-		$toolbar->add_separator();
-		$toolbar->add_cdata(html::href(array(
-			"url" => $this->mk_my_orb("export_members",array("id" => $arr["obj_inst"]->id(),"filename" => $arr["obj_inst"]->name() . " liikmed.txt")),
-			"caption" => "ekspordi liikmed",
-		)));
 	}
 
 	/** Exports list members as a plain text file
 		@attrib name=export_members
 		@param id required type=int 
 		@param filename optional
+		@param export_type optional type=int
 
 
 	**/
@@ -632,14 +666,25 @@ class ml_list extends class_base
 				"lid" => $arr["id"],
 				"member" => $val["oid"],
 			));
-			$ser .= $memberdata["name"];
-			$ser .= ",";
-			$ser .= $mailto;
+			switch($arr["export_type"])
+			{
+				case ML_EXPORT_ADDR:
+					$ser .= $mailto;
+					break;
+
+				case ML_EXPORT_NAMEADDR:
+					$ser .= $memberdata["name"] . " <" . $mailto . ">";
+					break;
+
+				default:
+					$ser .= $memberdata["name"] . "," . $mailto;
+					break;
+			};
 			$ser .= "\n";
 		};
 		header("Content-Type: text/plain");
 		header("Content-length: " . strlen($ser));
-		header("Content-Disposition: filename=liikmed.txt");
+		header("Content-Disposition: filename=members.txt");
 		print $ser;
 		exit;
 	}
