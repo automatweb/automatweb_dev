@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.2 2003/05/12 19:42:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.3 2003/05/13 12:08:06 duke Exp $
 // period.aw - periods 
 /*
 
@@ -26,6 +26,9 @@
 
 	@property pyear type=select
 	@caption Aasta
+
+	@property preview type=text store=no editonly=1
+	@caption Eelvaade
 
 	@property activity type=callback callback=callback_get_activity_list group=activity no_caption=1
 	@caption Aktiivsus
@@ -75,6 +78,18 @@ class period extends class_base
 					2004 => 2004,
 					2005 => 2005,
 				);
+				break;
+
+			case "preview":
+				$perdat = $this->get_record("periods","obj_id",$args["obj"]["oid"]);
+				// mk_my_orb doesn't let me create URL's to the site from admin,
+				// and I don't have time to fix it, so I have to do this.
+				$url = $this->cfg["baseurl"] . "?class=contents&action=show&period=$perdat[id]";
+				$data["value"] = html::href(array(
+					"url" => $url,
+					"caption" => $args["prop"]["caption"],
+					"target" => "_blank",
+				));
 				break;
 
 		};
