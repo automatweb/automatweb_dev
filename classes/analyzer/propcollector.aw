@@ -3,7 +3,7 @@ class propcollector extends aw_template
 {
 	function propcollector($args = array())
 	{
-		$this->init("");
+		$this->init(array("no_db" => 1));
 	}
 
         function req_dir($args = array())
