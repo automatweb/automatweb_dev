@@ -25,9 +25,11 @@
 @property clids type=callback callback=get_clids group=clids store=no
 @caption Klassid
 
+@reltype FOLDER value=1 clid=CL_MENU
+@caption kataloog
+
 */
 
-define("RELTYPE_FOLDER", 1);
 
 class object_treeview extends class_base
 {
@@ -38,56 +40,6 @@ class object_treeview extends class_base
 			'clid' => CL_OBJECT_TREE
 		));
 		$this->sub_merge = 1;
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_FOLDER => "kataloog"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_FOLDER)
-		{
-			return array(CL_PSEUDO);
-		}
-	}
-
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
 	}
 
 	////
@@ -103,48 +55,35 @@ class object_treeview extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
-
-		// make $ob['meta']['folders'] - gather all aliased menus there
-		$alias_reltype = new aw_array($ob["meta"]["alias_reltype"]);
-		$menu_ids = array_filter($alias_reltype->get(),create_function('$val','if ($val==RELTYPE_FOLDER) return true;'));
-		$ob['meta']['folders'] = $this->make_keys(array_keys($menu_ids));
-
-		// now, for all menus that have include_submenus defined, include submenus
-		$ar = new aw_array($ob['meta']['include_submenus']);
-		foreach($ar->get() as $mid)
-		{
-			$ob['meta']['folders'] += $this->make_keys(array_keys($this->get_objects_below(array(
-				"class" => CL_PSEUDO,
-				"parent" => $mid,
-				"status" => STAT_ACTIVE,
-				"full" => true,
-				"ret" => ARR_NAME
-			))));
-		}
+		$ob = obj($id);
 
 		$this->read_template('show.tpl');
 
+		// returns an array of object id's that are folders that are in the object
+		$fld = $this->_get_folders($ob);
+
 		// get all objects to show
-		$ol = $this->_get_objects($ob);
+		$ol = $this->_get_objects($ob, $fld);
 
 		// make folders
 		$this->vars(array(
-			"FOLDERS" => $this->_draw_folders($ob, $ol)
+			"FOLDERS" => $this->_draw_folders($ob, $ol, $fld)
 		));
 
 		$cnt = 0;
 		$c = "";
-		foreach($ol as $oid => $od)
+		foreach($ol as $oid)
 		{
+			$od = obj($oid);
+
 			$target = "";
-			if ($od["class_id"] == CL_EXTLINK)
+			if ($od->class_id() == CL_EXTLINK)
 			{
 				$li = get_instance("links");
 				list($url,$target,$caption) = $li->draw_link($oid);
 			}
 			else
-			if ($od["class_id"] == CL_FILE)
+			if ($od->class_id() == CL_FILE)
 			{
 				$fi = get_instance("file");
 				$fd = $fi->get_file_by_id($oid);
@@ -158,14 +97,14 @@ class object_treeview extends class_base
 			{
 				$url = $this->cfg["baseurl"]."/".$oid;
 			}
-			classload("icons");
+			classload("icons", "image");
 			$this->vars(array(
 				"show" => $url,
-				"name" => $od['name'],
+				"name" => $od->name(),
 				"target" => $target,
-				"type" => $this->cfg["classes"][$od["class_id"]]["name"],
-				"add_date" => $this->time2date($od["modified"], 2),
-				"icon" => image::make_img_tag(icons::get_icon_url($od["class_id"], $od["name"]))
+				"type" => $this->cfg["classes"][$od->class_id()]["name"],
+				"add_date" => $this->time2date($od->modified(), 2),
+				"icon" => image::make_img_tag(icons::get_icon_url($od->class_id(), $od->name()))
 			));
 
 			if ($this->is_template("FILE_ODD"))
@@ -194,43 +133,87 @@ class object_treeview extends class_base
 		return $this->parse();
 	}
 
-	function _get_objects($ob)
+	function _get_objects($ob, $folders)
 	{
 		$ret = array();
 
 		// right. if the user has said, that no tree should be shown
 		// then get files in all selected folders
-		if (!$ob['meta']['show_folders'])
+		if (!$ob->meta('show_folders'))
 		{
-			$parent = $ob['meta']['folders'];
+			$parent = $folders;
 		}
 		else
 		{
 			// if the folder is specified in the url, then show that
 			// else, the first selected folder
-			reset($ob['meta']['folders']);
-			list(,$parent) = each($ob['meta']['folders']);
+			reset($folders);
+			list(,$parent) = each($folders);
 
 			if ($GLOBALS["tv_sel"])
 			{
 				$parent = $GLOBALS["tv_sel"];
 			}
 		}
-		if (!is_array($ob['meta']['clids']) || count($ob['meta']['clids']) < 1)
+		if (!is_array($ob->meta('clids')) || count($ob->meta('clids')) < 1)
 		{
 			return array();
 		}
-		return $this->list_objects(array(
+
+		$ol = new object_list(array(
 			"parent" => $parent,
 			"status" => STAT_ACTIVE,
-			"class" => $ob['meta']['clids'],
-			"return" => ARR_ALL
+			"class_id" => $ob->meta('clids'),
+			"sort_by" => "objects.modified DESC"
 		));
+
+		return $this->make_keys($ol->ids());
 	}
 
-	function _draw_folders($ob, $ol)
+	function _get_folders($ob)
 	{
-		if (!$ob['meta']['show_folders'])
+		// go over all related menus and add subtree id's together if the user has so said. 
+		$ret = array();
+		
+		$sub = $ob->meta("include_submenus");
+   		$igns = $ob->meta("ignoreself");
+
+		$conns = $ob->connections_from(array(
+			"type" => RELTYPE_FOLDER
+		));
+		foreach($conns as $conn)
+		{
+			$c_o = $conn->to();
+
+			$cur_ids = array();
+
+			if ($sub[$c_o->id()])
+			{
+				$_ot = new object_tree(array(
+					"class_id" => CL_MENU,
+					"parent" => $c_o->id(),
+					"status" => STAT_ACTIVE
+				));
+				$cur_ids = $_ot->ids();
+			}
+
+			if (!$igns[$c_o->id()])
+			{
+				$cur_ids[] = $c_o->id();
+			}
+
+			foreach($cur_ids as $c_id)
+			{
+				$ret[$c_id] = $c_id;
+			}
+		}
+
+		return $ret;
+	}
+
+	function _draw_folders($ob, $ol, $folders)
+	{
+		if (!$ob->meta('show_folders'))
 		{
 			return;
 		}
@@ -242,40 +225,40 @@ class object_treeview extends class_base
 			"root_name" => "",
 			"root_url" => "",
 			"root_icon" => "",
-			"type" => ($ob['meta']['js_tree'] ? TREE_JS : TREE_HTML)
+			"type" => ($ob->meta('js_tree') ? TREE_JS : TREE_HTML)
 		));
 		// now, insert all folders defined
 		// but first, leave out all folders that are set don't show self
-		$ar = new aw_array($ob['meta']['ignoreself']);
-		foreach($ar->get() as $_oid)
+		$ar = new aw_array($ob->meta('ignoreself'));
+		$ignoreself = $ar->get();
+
+		
+		foreach($folders as $fld)
 		{
-			unset($ob['meta']['folders'][$_oid]);
-		}
-		$ar = new aw_array($ob['meta']['folders']);
-		foreach($ar->get() as $fld)
-		{
-			$i_o = $this->get_object($fld);
+			$i_o = obj($fld);
 			$parent = 0;
-			if (in_array($i_o["parent"],$ar->get()))
+			if (in_array($i_o->parent(),$folders))
 			{
-				$parent = $i_o["parent"];
+				$parent = $i_o->parent();
 			}
 
 			// find modification time
-			$tm = $i_o["modified"];
-			foreach($ol as $od)
+			$tm = $i_o->modified();
+			foreach($ol as $o_oid)
 			{
-				if ($od["parent"] == $fld && $od["modified"] > $tm)
+				$o_o = obj($o_oid);
+
+				if ($o_o->parent() == $fld && $o_o->modified() > $tm)
 				{
-					$tm = $od["modified"];
+					$tm = $o_o->modified();
 				}
 			}
 
 			$tv->add_item($parent, array(
 				"id" => $fld,
-				"name" => $i_o["name"],
+				"name" => $i_o->name(),
 				"url" => aw_url_change_var("tv_sel", $fld),
-				"icon" => icons::get_icon_url($i_o["class_id"], ""),
+				"icon" => icons::get_icon_url($i_o->class_id(), ""),
 				"data" => array(
 					"changed" => $this->time2date($tm, 2)
 				)
@@ -287,6 +270,8 @@ class object_treeview extends class_base
 
 	function get_clids($arr)
 	{
+		$clids = $arr["obj_inst"]->meta("clids");
+
 		$ret = array();
 		classload("aliasmgr");
 		$a = aliasmgr::get_clid_picker();
@@ -300,7 +285,7 @@ class object_treeview extends class_base
 				'ch_value' => 1,
 				'store' => 'no',
 				'group' => 'clids',
-				'value' => $arr["obj"]["meta"]["clids"][$clid] == $clid
+				'value' => ($clids[$clid] == $clid)
 			);
 		}
 		return $ret;
@@ -311,7 +296,7 @@ class object_treeview extends class_base
 		$prop =& $arr["prop"];
 		if ($prop['name'] == 'clids')
 		{
-			$arr['metadata']['clids'] = array();
+			$_clids = array();
 			classload("aliasmgr");
 			$a = aliasmgr::get_clid_picker();
 			foreach($a as $clid => $clname)
@@ -319,14 +304,15 @@ class object_treeview extends class_base
 				$rt = "clid_".$clid;
 				if (isset($arr["form_data"][$rt]) && $arr["form_data"][$rt] == 1)
 				{
-					$arr['metadata']['clids'][$clid] = $clid;
+					$_clids[$clid] = $clid;
 				}
 			}
+			$arr["obj_inst"]->set_meta("clids", $_clids);
 		}
 		if ($prop["name"] == "folders")
 		{
-			$arr['metadata']["include_submenus"] = $arr["form_data"]["include_submenus"];
-			$arr['metadata']["ignoreself"] = $arr["form_data"]["ignoreself"];
+			$arr['obj_inst']->set_meta("include_submenus",$arr["form_data"]["include_submenus"]);
+			$arr['obj_inst']->set_meta("ignoreself",$arr["form_data"]["ignoreself"]);
 		};
 
 		return PROP_OK;
@@ -336,8 +322,7 @@ class object_treeview extends class_base
 	{
 		$prop = $args["prop"];
 		$nodes = array();
-		$include_submenus = $args["obj"]["meta"]["include_submenus"];
-		$ignoreself = $args["obj"]["meta"]["ignoreself"];
+
 		// now I have to go through the process of setting up a generic table once again
 		load_vcl("table");
 		$this->t = new aw_table(array(
@@ -372,47 +357,34 @@ class object_treeview extends class_base
 			"align" => "center",
 		));
 
-		$alias_reltype = $args["obj"]["meta"]["alias_reltype"];
-		// and from this array, I need to get the list of objects that
-		// have the reltype RELTYPE_FOLDER
-		if (is_array($alias_reltype))
-		{
-			$menu_ids = array_filter($alias_reltype,create_function('$val','if ($val==RELTYPE_FOLDER) return true;'));
-		};
+		$include_submenus = $args["obj_inst"]->meta("include_submenus");
+		$ignoreself = $args["obj_inst"]->meta("ignoreself");
 
-		if (sizeof($menu_ids) > 0)
-		{
-			// now get those objects and put them into table
-			$q = sprintf("SELECT oid,name,status FROM objects
-					LEFT JOIN menu ON (objects.oid = menu.id) WHERE oid IN (%s)",join(",",array_keys($menu_ids)));
 
-			$this->db_query($q);
-			while($row = $this->db_next())
-			{
-				// it shouldn't be too bad, cause get_object is cached.
-				// still, it sucks.
-				$this->save_handle();
-				$chain = array_reverse($this->get_obj_chain(array(
-					"oid" => $row["oid"],
-				)), true);
-				
-				$path = join("/",array_slice($chain,-3));
-				$this->restore_handle();
-				$this->t->define_data(array(
-					"oid" => $row["oid"],
-					"name" => $path . "/" . $row["name"],
-					"check" => html::checkbox(array(
-						"name" => "include_submenus[$row[oid]]",
-						"value" => $row["oid"],
-						"checked" => $include_submenus[$row["oid"]],
-					)),
-					"ignoreself" => html::checkbox(array(
-						"name" => "ignoreself[$row[oid]]",
-						"value" => $row["oid"],
-						"checked" => $ignoreself[$row["oid"]],
-					)),
-				));
-			};
+		$conns = $args["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_FOLDER
+		));
+
+		foreach($conns as $conn)
+		{
+			$c_o = $conn->to();
+
+			$this->t->define_data(array(
+				"oid" => $c_o->id(),
+				"name" => $c_o->path_str(array(
+					"max_len" => 3
+				)) . "/" . $c_o->name(),
+				"check" => html::checkbox(array(
+					"name" => "include_submenus[".$c_o->id()."]",
+					"value" => $c_o->id(),
+					"checked" => $include_submenus[$c_o->id()],
+				)),
+				"ignoreself" => html::checkbox(array(
+					"name" => "ignoreself[".$c_o->id()."]",
+					"value" => $c_o->id(),
+					"checked" => $ignoreself[$c_o->id()],
+				)),
+			));
 		};
 		
 		$nodes[$prop["name"]] = array(
