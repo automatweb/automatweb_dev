@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.20 2004/12/08 12:48:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.21 2004/12/21 11:32:01 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -293,6 +293,7 @@ class cb_search extends class_base
 
 		$this->_prepare_search($arr);
 
+		$fd = $arr["obj_inst"]->meta("form_dat");
 
 		// would be nice to separate things by blah
 		$res = array();
@@ -305,6 +306,7 @@ class cb_search extends class_base
 				$item["value"] = $this->search_data[$item["clid"]][$name];
 			};
 
+			$item["ord"] = $fd[$item["clid"]][$iname]["jrk"];
 			$res[$iname] = $item;
 
 			if ($item["type"] == "classificator")
@@ -312,6 +314,8 @@ class cb_search extends class_base
 				$this->mod_chooser_prop($res, $iname, $item["clid"], $arr["obj_inst"]);
 			}
 		};
+
+		uasort($res, create_function('$a,$b','if ($a["ord"] == $b["ord"] ) { return 0; } else { return $a["ord"] > $b["ord"] ? 1 : -1; }'));
 		exit_function("cb_search::callback_gen_search");
 		return $res;
 	}
