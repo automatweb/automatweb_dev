@@ -25,6 +25,13 @@
             <caption>Arhiivis</caption>
       </property>
       <property>
+            <name>syear</name>
+            <type>hidden</type>
+            <table>periods</table>
+            <field>syear</field>
+            <group>general</group>
+      </property>
+      <property>
             <name>per_id</name>
             <type>text</type>
             <table>periods</table>
@@ -89,14 +96,6 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Aktiivsus</caption>
-      </property>
-      <property>
-            <name>syear</name>
-            <type>hidden</type>
-            <table>periods</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.14 2004/01/09 11:28:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.15 2004/01/09 11:34:53 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -16,6 +16,8 @@
 
 	@property status type=status
 	@caption Arhiivis
+
+	@property syear type=hidden table=periods field=syear
 
 	@property per_id type=text table=periods field=id
 	@caption Perioodi id.
@@ -43,8 +45,6 @@
 	
 	@property activity type=table group=activity no_caption=1
 	@caption Aktiivsus
-
-	@property syear type=hidden table=periods 
 
 	@tableinfo periods index=obj_id master_table=objects master_index=oid
 	@classinfo relationmgr=yes
