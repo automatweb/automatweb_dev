@@ -29,7 +29,7 @@
 @caption Tabel
 
 @property grid_styles type=callback group=styles 
-@caption Stiilid
+@caption Vali element
 
 @property table_style type=select group=settings 
 @caption Tabeli stiil

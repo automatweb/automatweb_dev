@@ -49,7 +49,7 @@
             <method>serialize</method>
             <type>callback</type>
             <group>styles</group>
-            <caption>Stiilid</caption>
+            <caption>Vali element</caption>
       </property>
       <property>
             <name>table_style</name>
