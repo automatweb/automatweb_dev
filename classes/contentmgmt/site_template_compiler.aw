@@ -910,6 +910,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"parent\" => \$parent_obj->id(),\n";
 		$ret .= $this->_gi()."\"class_id\" => array(CL_PSEUDO,CL_BROTHER),\n";
 		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
+		$ret .= $this->_gi()."\"lang_id\" => aw_global_get(\"lang_id\"),\n";
 		$ret .= $this->_gi()."\"sort_by\" => (\$parent_obj->prop(\"sort_by_name\") ? \"objects.name\" : \"objects.jrk,objects.created\"),\n";
 		return $ret;
 	}
