@@ -172,7 +172,12 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$str .= "?>";
 
 		$this->cache->file_set($cfn."-$fn-$oid", $str);
-		$this->cache->flush_cache();
+		if ("objcache"  == $cfn)
+		{
+			// this is a VERY expensive query and up until now it was done
+			// when doing connections_from
+			$this->cache->flush_cache();
+		};
 	}
 
 	function _clear_cache($oid, $cfn = "objcache")
