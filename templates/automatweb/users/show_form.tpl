@@ -1,13 +1,13 @@
-<form action="orb.{VAR:ext}" method="GET">
+<form action="orb.{VAR:ext}" method="GET" name="aa">
 <table>
 <tr>
-	<td><input type="radio" name="entry_type" value="existing"> Vali olemasolev sisestus:</td>
+	<td>Vali olemasolev sisestus:</td>
 </tr>
 <tr>
-	<td><select name="ex_entry">{VAR:entries}</select></td>
+	<td><select name="ex_entry" onChange="document.aa.submit()">{VAR:entries}</select></td>
 </tr>
 <tr>
-	<td><input type="radio" name="entry_type" value="new" checked> Tee uus sisestus:</td>
+	<td>Tee uus sisestus:</td>
 </tr>
 <tr>
 	<td>{VAR:form}</td>
