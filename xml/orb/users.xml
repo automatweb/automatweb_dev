@@ -249,5 +249,18 @@
 			</function>
 		</action>
 
+		<action name="login" nologin="1">
+			<function name="login">
+				<arguments>
+					<required name="uid" />
+					<required name="password" />
+					<optional name="remote_ip" />
+					<optional name="reforb" />
+					<optional name="remote_host" />
+					<optional name="return" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.99 2004/01/13 16:24:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.100 2004/01/14 09:53:56 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2669,6 +2669,30 @@ class users extends users_user
 		{
 			send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		}
+	}
+
+
+	/** login
+		
+		@attrib name=login params=name default="0" nologin="1"
+		
+		@param uid required
+		@param password required
+		@param remote_ip optional
+		@param reforb optional
+		@param remote_host optional
+		@param return optional
+		
+		@returns
+		
+		
+		@comment
+			logs the user in, if all arguments are correct and redirects to the correct url
+
+	**/
+	function login($arr)
+	{
+		return parent::login($arr);
 	}
 }
 ?>
