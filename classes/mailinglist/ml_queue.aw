@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.22 2004/01/13 16:24:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.23 2004/02/05 16:46:32 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 classload("messenger/messenger_v2");
@@ -572,7 +572,7 @@ class ml_queue extends aw_template
 
 		if ($is_html)
 		{
-			$this->awm->htmlbodyattach(array("data"=>nl2br($message)));
+			$this->awm->htmlbodyattach(array("data"=>$message));
 		};
 
 		$this->awm->gen_mail();
