@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.242 2003/02/25 11:47:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.243 2003/02/25 14:36:33 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -421,7 +421,6 @@ class menuedit extends aw_template
 			$this->vars(array("doc_content" => $text));
 		}
 
-//		die();
 		// import language constants
 		lc_site_load("menuedit",$this);
 
@@ -3760,7 +3759,7 @@ class menuedit extends aw_template
 		$metaref = array();
 		
 		$d->set_opt("parent",$section);
-		
+
 		if (is_array($docid)) 
 		{
 			$template = $this->get_lead_template($section);
@@ -4093,7 +4092,6 @@ class menuedit extends aw_template
 			{
 				continue;
 			};
-			
 			$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
 
 			$found = false;
@@ -4172,6 +4170,7 @@ class menuedit extends aw_template
 								"showlead" => 1,
 								"boldlead" => 1,
 								"no_strip_lead" => 1,
+								"no_acl_checks" => $this->cfg["no_view_acl_checks"]
 							));
 							$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
 						}
@@ -4188,6 +4187,7 @@ class menuedit extends aw_template
 						"showlead" => 1, 
 						"boldlead" => 0,
 						"no_strip_lead" => 1,
+						"no_acl_checks" => $this->cfg["no_view_acl_checks"]
 					));
 				}
 
@@ -5142,10 +5142,15 @@ class menuedit extends aw_template
 		}
 
 		$u = get_instance("users");
-		$addobject_type = $u->get_user_config(array(
+		$addobject_type = $this->cfg["addobject_type"];
+		$_addobject_type = $u->get_user_config(array(
 			"uid" => aw_global_get("uid"),
 			"key" => "addobject_type",
 		));
+		if ($_addobject_type != "")
+		{
+			$addobject_type = $_addobject_type;
+		}
 
 		$this->read_template("js_popup_menu.tpl");
 
