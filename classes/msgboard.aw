@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.5 2001/07/03 08:23:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.6 2001/07/03 09:29:45 duke Exp $
 
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
@@ -550,7 +550,7 @@ class msgboard extends aw_template
 				$l.=$this->parse($this->line & 1 ? "TOPIC_EVEN" : "TOPIC_ODD");
 				if (defined("UID"))
 				{
-					$l .= ($votes[$row["oid"]]) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");
+					$l .= (isset($votes[$row["oid"]])) ? $this->parse("ALREADY_VOTED") : $this->parse("VOTE_FOR_TOPIC");
 				};
 				$this->line++;
 			}
