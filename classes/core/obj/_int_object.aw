@@ -94,7 +94,7 @@ class _int_object
 			));
 		}
 
-		$this->_int_do_delete();
+		$this->_int_do_delete($this->obj["oid"]);
 	}
 
 	function connect($param)
