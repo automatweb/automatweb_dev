@@ -57,6 +57,11 @@ function setsel(el,val)
 		}
 	}
 }
+
+function toggle_file_link_newwin()
+{
+	alert(document.f1.{VAR:cell_id}_filetype);
+}
 </script>
 <!-- END SUB: SEARCH_SCRIPT -->
 
@@ -143,6 +148,15 @@ function setsel(el,val)
 </tr>
 <!-- END SUB: RELATION_LB -->
 
+<!-- SUB: SEARCH_RELATION -->
+<tr>
+	<td class="fgtext">Ainult unikaalsed:</td>
+	<td class="fgtext">&nbsp;<input type='checkbox' class='small_button' value='1' name='{VAR:cell_id}_unique' {VAR:unique}></td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: SEARCH_RELATION -->
+
 <!-- SUB: LISTBOX_SORT -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_SORTING}:</td>
@@ -205,14 +219,19 @@ function setsel(el,val)
 <!-- SUB: FILE_ITEMS -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_DISPLAYING}:</td>
-<td class="fgtext"><input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='1' {VAR:ftype_image_selected}> {VAR:LC_FORMS_AS_A_PICTURE} <input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='2' {VAR:ftype_file_selected}> {VAR:LC_FORMS_LINKED_AS_FILE} failina</td>
+<td class="fgtext"><input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='1' {VAR:ftype_image_selected}> {VAR:LC_FORMS_AS_A_PICTURE} <input CLASS="small_button" type='radio' NAME='{VAR:cell_id}_filetype' VALUE='2' {VAR:ftype_file_selected}> {VAR:LC_FORMS_LINKED_AS_FILE} failina
+<input type='checkbox' name='{VAR:cell_id}_file_newwin' value=1 {VAR:file_new_win}> Link uues aknas
+<input type="button" onClick="toggle_file_link_newwin()">
+</td>
 <td class="fgtext">{VAR:LC_FORMS_LINK_TEXT}:</td>
 <td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:cell_id}_file_link_text' VALUE='{VAR:file_link_text}'></td>
 </tr>
 <tr>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext"><input type='radio' NAME='{VAR:cell_id}_file_show' VALUE=1 {VAR:file_show}> {VAR:LC_FORMS_DISPLAY_NOW} <input type='radio' NAME='{VAR:cell_id}_file_show' VALUE=0 {VAR:file_alias}> {VAR:LC_FORMS_MAKING_ALIAS}</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">
+&nbsp;
+</td>
 <td class="fgtext">&nbsp;</td>
 </tr>
 <!-- END SUB: FILE_ITEMS -->
