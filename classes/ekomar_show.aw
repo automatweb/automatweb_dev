@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/ekomar_show.aw,v 1.3 2004/01/13 16:24:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/ekomar_show.aw,v 1.4 2004/06/11 09:17:10 kristo Exp $
 // ekomar_show.aw - Ekomar 
 /*
 
@@ -41,7 +41,7 @@ class ekomar_show extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = obj($id);
 
 		if ($GLOBALS["ekomar_search"] == 1)
 		{
@@ -104,7 +104,7 @@ class ekomar_show extends class_base
 			}
 			if ($cnt == 0)
 			{
-				header("Location: ".aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."/section=".$ob['meta']["notfound"]."/s_name=$f_name/s_ark=$f_ark");
+				header("Location: ".aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."/section=".$ob->meta("notfound")."/s_name=$f_name/s_ark=$f_ark");
 			}
 			$this->vars(array(
 				"LINE" => $l
@@ -116,7 +116,7 @@ class ekomar_show extends class_base
 			$this->read_template("ekomar_form.tpl");
 			$this->vars(array(
 				"section" => aw_global_get("section"),
-				"notfound" => $ob['meta']['notfound']
+				"notfound" => $ob->meta('notfound')
 			));
 			if ($f_ark != "" && ($f_ark <= 10000000 || $f_ark >= 11000000))
 			{
@@ -154,7 +154,7 @@ class ekomar_show extends class_base
 		$this->read_template("ekomar_form.tpl");
 		$this->vars(array(
 			"section" => aw_global_get("section"),
-			"notfound" => $ob['meta']['notfound']
+			"notfound" => $ob->meta('notfound')
 		));
 		return $this->parse();
 	}

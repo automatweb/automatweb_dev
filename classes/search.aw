@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.70 2004/06/09 15:31:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.71 2004/06/11 09:13:59 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -189,10 +189,10 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	{
 		// now I need to load the bloody object and retrieve the property list
 		// for it.
-		$obj = $this->get_object($args["obj"]["oid"]);
+		$obj = obj($args["obj"]["oid"]);
 		$cfgu = get_instance("cfg/cfgutils");
 		$_all_props = $cfgu->load_properties(array(
-			"clid" => $obj["meta"]["s_class_id"],
+			"clid" => $obj->meta("s_class_id"),
 		));
 
 		$retval = array();
@@ -205,7 +205,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			if ($val["search"])
 			{
-				$val["value"] = $obj["meta"]["obj"][$val["name"]];
+				$tmp = $obj->meta("obj");
+				$val["value"] = $tmp[$val["name"]];
 				$retval[] = $val;
 			};
 		}
@@ -223,10 +224,10 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function callback_pre_save($args = array())
 	{
-		$obj = $this->get_object($args["id"]);
+		$obj = obj($args["id"]);
 		$cfgu = get_instance("cfg/cfgutils");
 		$_all_props = $cfgu->load_properties(array(
-			"clid" => $obj["meta"]["s_class_id"],
+			"clid" => $obj->meta("s_class_id"),
 		));
 		
 		$obj_search_fields = array();
@@ -1919,8 +1920,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	function view($args = array())
 	{
 		extract($args);
-		$fobj = $this->get_object($id);
-		$meta = new aw_array($fobj["meta"]);
+		$fobj = obj($id);
+		$meta = new aw_array($fobj->meta());
 		$params = array();
 		foreach($meta->get() as $key => $val)
 		{
@@ -1935,15 +1936,15 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"real_fields" => $real_fields,
 			"request" => $args,
 		));
-		$this->mk_path($fobj["parent"],"Vaata otsingut $fobj[name]");
+		$this->mk_path($fobj->parent(),"Vaata otsingut $fobj[name]");
 		return $this->table;
 	}
 
 	function get_search_results($args = array())
 	{
 		extract($args);
-		$fobj = $this->get_object($id);
-		$meta = new aw_array($fobj["meta"]);
+		$fobj = obj($id);
+		$meta = new aw_array($fobj->meta());
 		$params = array();
 		foreach($meta->get() as $key => $val)
 		{

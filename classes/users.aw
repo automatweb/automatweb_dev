@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.118 2004/04/30 08:49:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.119 2004/06/11 09:11:26 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1184,16 +1184,20 @@ class users extends users_user
 				$_oid = $this->get_oid_for_gid($hig);
 				if ($_oid)
 				{
-					$o = $this->get_object($_oid);
-					if (is_array($o["meta"]["admin_rootmenu2"]) && $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")])
+					aw_disable_acl();
+					$o = obj($_oid);
+					aw_restore_acl();
+					$ar2 = $o->meta("admin_rootmenu2");
+					$gf = $o->meta("grp_frontpage");
+					if (is_array($ar2) && $ar2[aw_global_get("lang_id")])
 					{
-						$GLOBALS["cfg"]["__default"]["admin_rootmenu2"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
+						$GLOBALS["cfg"]["__default"]["admin_rootmenu2"] = $ar2[aw_global_get("lang_id")];
 						$GLOBALS["cfg"]["__default"]["ini_rootmenu"] = $GLOBALS["cfg"]["__default"]["rootmenu"];
-						$GLOBALS["cfg"]["__default"]["rootmenu"] = $o["meta"]["admin_rootmenu2"][aw_global_get("lang_id")];
+						$GLOBALS["cfg"]["__default"]["rootmenu"] = $ar2[aw_global_get("lang_id")];
 					}
-					if (is_array($o["meta"]["grp_frontpage"]) && $o["meta"]["grp_frontpage"][aw_global_get("lang_id")])
+					if (is_array($gf) && $gf[aw_global_get("lang_id")])
 					{
-						$GLOBALS["cfg"]["__default"]["frontpage"] = $o["meta"]["grp_frontpage"][aw_global_get("lang_id")];
+						$GLOBALS["cfg"]["__default"]["frontpage"] = $gf[aw_global_get("lang_id")];
 					}
 				}
 			}
