@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.3 2003/09/11 13:13:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.4 2003/09/12 11:47:05 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -40,29 +40,29 @@ caption Identiteet
 @property msg_outbox type=relpicker reltype=RELTYPE_FOLDER
 @caption Outbox
 
+@property filter_test type=text group=filters no_caption=1
+@caption Filtrite test
+
 @groupinfo message_view caption="Kirjad" submit=no
 @groupinfo write_mail caption="Uus kiri" submit=no
+@groupinfo filters caption="Testi ruule" submit=no
 
 
 */
-// here I have to define different kinds of relations .. like ... which folders we should use,
-// which accounts .. and all the other things like that
 
 define("RELTYPE_MAIL_IDENTITY",1); // things that appear on the From lines etc...
 define("RELTYPE_MAIL_SOURCE",2); // pop3, imap, etc..
 define("RELTYPE_MAIL_CONFIG",3); // millist konfiguratsiooni kasutada
 define("RELTYPE_FOLDER",4); // kataloog kuhu maile salvestada .. kehtib ainult local delivery korral
 define("RELTYPE_ADDRESS",5); // used to specify delivery addresses .. which can be AW lists for example
+define("RELTYPE_RULE",6); // maili ruul
 
 class messenger_v2 extends class_base
 {
 	function messenger_v2()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. the default folder does not actually exist, 
-		// it just points to where it should be, if it existed
 		$this->init(array(
-			"tpldir" => "messenger/messenger_v2",
+			"tpldir" => "messenger_v2",
 			"clid" => CL_MESSENGER_V2
 		));
 		$this->connected = false;
@@ -83,8 +83,6 @@ class messenger_v2 extends class_base
 				}
 				else
 				{
-					// I need a better way to lay out properties .. what about for example ..
-					// parent for properties? eh .. well, I think that could really work
 					$data["value"] = $this->gen_message_list($arr);
 				};
 				break;
@@ -101,6 +99,10 @@ class messenger_v2 extends class_base
 				// ugly hackling. Will go away as soon as I figure out how to put a tree and
 				// a vcl table side by side
 				$data["value"] = "</td></tr></table>";
+				break;
+
+			case "filter_test":
+				$data["value"] = $this->make_filter_test($arr);
 				break;
 
 		};
@@ -139,22 +141,30 @@ class messenger_v2 extends class_base
 	{
 		if (!$this->connected)
 		{
+			$this->msgobj = new object($arr["msgr_id"]);
+			$conns = $this->msgobj->connections_from(array("type" => RELTYPE_MAIL_SOURCE));
+			
 			// right now it only deals with a single server.
-			$msgobj = new object($arr["msgr_id"]);
-			$conns = $msgobj->connections_from(array("type" => RELTYPE_MAIL_SOURCE));
 			$_sdat =$conns[0];
-
 			$sdat = new object($_sdat->to());
 
 			$this->drv_inst = get_instance("protocols/mail/imap");
 			$this->drv_inst->set_opt("use_mailbox",$this->use_mailbox);
 			$this->drv_inst->connect_server(array("id" => $_sdat->to()));
+			$this->drv_inst->set_opt("messenger_id",$arr["msgr_id"]);
 
 			$this->mbox = $this->drv_inst->get_opt("mbox");
 			$this->servspec = $this->drv_inst->get_opt("servspec");
                         $this->mboxspec = $this->drv_inst->get_opt("mboxspec");
 
 			$this->connected = true;
+
+			$msg_cfg = $this->msgobj->prop("config");
+			if (!empty($msg_cfg))
+			{
+				$msg_cfg_obj = new object($msg_cfg);
+				$this->perpage = $msg_cfg_obj->prop("msgs_on_page");
+			};
 		};
 	}
 
@@ -164,7 +174,8 @@ class messenger_v2 extends class_base
 			"msgr_id" => $arr["obj"]["oid"],
 		));
 
-		$perpage = 50;
+		$perpage = empty($this->perpage) ? 50 : $this->perpage;
+
 		$ft_page = (int)$GLOBALS["ft_page"];
 
 		$contents = $this->drv_inst->get_folder_contents(array(
@@ -220,6 +231,7 @@ class messenger_v2 extends class_base
 
 	function _format($str,$flag)
 	{
+		$str = wordwrap($str,20,"\n",1);
 		return ($flag) ? $str : "<strong>$str</strong>";
 
 
@@ -330,7 +342,6 @@ class messenger_v2 extends class_base
 
 	function gen_message_view($arr)
 	{
-		
 		$msgid = $arr["request"]["msgid"];
 		$this->_connect_server(array(
 			"msgr_id" => $arr["obj"]["oid"],
@@ -341,21 +352,39 @@ class messenger_v2 extends class_base
 				"msgid" => $msgid,
 		));
 
-		$rv = "";
-		$rv .= "<br><b>From: </b>" . htmlspecialchars(parse_obj_name($msgdata["from"]));
-		$rv .= "<br><b>Reply-To: </b>" . htmlspecialchars(parse_obj_name($msgdata["reply_to"]));
-		$rv .= "<br><b>To: </b>" . htmlspecialchars(parse_obj_name($msgdata["to"]));
-		$rv .= "<br><b>Subject: </b>" . htmlspecialchars(parse_obj_name($msgdata["subject"]));
-		$rv .= "<br><b>Date: </b>" . $msgdata["date"];
-		$rv .= "<br><br>";
-		$rv .= nl2br(htmlspecialchars($msgdata["content"]));
+		$cont = htmlspecialchars($msgdata["content"]);
+		$cont = nl2br(create_links($cont));
 
-		return $rv;
+		$this->read_template("plain.tpl");
+		$this->sub_merge = 1;
+
+		$this->vars(array(
+			"from" => htmlspecialchars(parse_obj_name($msgdata["from"])),
+			"reply_to" => htmlspecialchars(parse_obj_name($msgdata["reply_to"])),
+			"to" => htmlspecialchars(parse_obj_name($msgdata["to"])),
+			"subject" => htmlspecialchars(parse_obj_name($msgdata["subject"])),
+			"date" => $msgdata["date"],
+			"content" => $cont,
+		));
+
+		if (is_array($msgdata["attachments"]))
+		{
+			foreach($msgdata["attachments"] as $num => $data)
+			{
+				$this->vars(array(
+					"part_name" => $data,
+					"get_part_url" => $this->mk_my_orb("get_part",array(
+						"id" => $arr["obj"]["oid"],
+						"msgid" => $msgid,
+						"mailbox" => $this->use_mailbox,
+						"part" => $num,
+					)),
+				));
+				$this->parse("attachment");
+			};
+		};
+		return $this->parse();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
 
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
@@ -529,16 +558,157 @@ class messenger_v2 extends class_base
 
 	}
 
+	function make_filter_test($arr)
+	{
+		$this->_connect_server(array(
+			"msgr_id" => $arr["obj"]["oid"],
+		));
+			
+		$conns = $this->msgobj->connections_from(array("type" => RELTYPE_RULE));
+
+		if (sizeof($conns) == 0)
+		{
+			return "ühtegi ruuli pole seostatud";
+		};
+
+		$rv = "";
+
+		$rules = array();
+
+		$subjrules = $fromrules = array();
+
+		$targets = array();
+
+		foreach($conns as $item)
+		{
+			$filter_obj = new object($item->to());
+
+			$from_rule = $filter_obj->prop("rule_from");
+			$subj_rule = $filter_obj->prop("rule_subject");
+			$target_folder = $filter_obj->prop("target_folder");
+			$id = $filter_obj->id();
+
+			if (!empty($from_rule))
+			{
+				$fromrules[$id] = $from_rule;
+			}
+
+			if (!empty($subj_rule))
+			{
+				$subjrules[$id] = $subj_rule;
+			};
+
+			if (!empty($target_folder))
+			{
+				$targets[$id] = $target_folder;
+			};
+		};
+
+		// now I need read the messages
+		$contents = $this->drv_inst->get_folder_contents(array(
+			"from" => 1,
+			"to" => 1000,
+		));
+
+		$rv = "";
+
+		$done = false;
+
+
+		foreach($contents as $mkey => $message)
+		{
+			foreach($subjrules as $key => $val)
+			{
+				if (strpos($message["subject"],$val) !== false)
+				{
+					$rv .= sprintf("<strong>message with subject: %s</strong><br>",$message["subject"]);
+					$target = $targets[$key];
+					$rv .= " &nbsp; &nbsp; uid = $mkey, matches subject rule $key, moving to $target folder<br>";
+					// ( resource imap_stream, string msglist, string mbox [, int options])
+					$done = true;
+					if (!imap_mail_move($this->mbox,$mkey,$target,CP_UID))
+					{
+						$err = imap_last_error();
+						$rv .= " &nbsp; &nbsp; <font color='red'>$err</font><br>";
+					};
+					break;
+
+				}
+			};
+			foreach($fromrules as $key => $val)
+			{
+				if (strpos($message["from"],$val) !== false)
+				{
+					$rv .= sprintf("<strong>message with subject: %s</strong><br>",$message["subject"]);
+					$target = $targets[$key];
+					$rv .= " &nbsp; &nbsp; matches from rule $key, moving to $target folder<br>";
+					if (!imap_mail_move($this->mbox,$mkey,$target,CP_UID))
+					{
+						$err = imap_last_error();
+						$rv .= " &nbsp; &nbsp; <font color='red'>$err</font><br>";
+					};
+					$done = true;
+					break;
+
+				}
+			};
+			/*
+			printf("from = %s<br>",$message["from"]);
+			*/
+		}
+
+		if ($done === false)
+		{
+			$rv = "ükski kiri INBOXis ei matchinud ühegi ruuliga<br>";
+		};
+		// expunge any moved messages
+		imap_expunge($this->mbox);
+
+		return "<pre>" . $rv . "</pre>";
+
+	}
+
+	////
+	// !Can be used to download message parts
+	function get_part($arr)
+	{
+		$msgid = $arr["msgid"];
+		$this->_connect_server(array(
+			"msgr_id" => $arr["id"],
+		));
+
+		$this->drv_inst->fetch_part(array(
+			"msgid" => $msgid,
+			"part" => $arr["part"],
+		));
+		
+
+		// I need to figure out the message structure
+		// then get information about the requested part
+		// and then somehow make it available
+
+		print "<pre>";
+		print_r($msgdata);
+		print "</pre>";
+
+		print "downloading message part<br>";
+		print "<pre>";
+		print_r($arr);
+		print "</pre>";
+
+	}
+
 	function callback_get_rel_types()
 	{
 		return array(
 			RELTYPE_MAIL_IDENTITY => "messengeri identiteet",
 			RELTYPE_MAIL_SOURCE => "mailikonto",
 			RELTYPE_MAIL_CONFIG => "messengeri konfiguratsioon",
-			RELTYPE_FOLDER => "mailikataloog",
+			RELTYPE_FOLDER => "kataloog",
 			RELTYPE_ADDRESS => "adressaat",
+			RELTYPE_RULE => "maili ruul",
 		);
-	}
+	} 
 
 	function callback_get_classes_for_relation($arr)
 	{
@@ -555,6 +725,14 @@ class messenger_v2 extends class_base
 
 			case RELTYPE_FOLDER:
 				$retval = array(CL_MENU);
+				break;
+
+			case RELTYPE_MAIL_CONFIG:
+				$retval = array(CL_MESSENGER_CONFIG);
+				break;
+
+			case RELTYPE_RULE:
+				$retval = array(CL_MAIL_RULE);
 				break;
 		};
 		return $retval;
