@@ -22,14 +22,14 @@
 			</function>
 		</action>
 
-		<action name="dbsync" nologin="1">
+		<action name="dbsync" >
 			<function name="db_compare_choose_donor">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="db_compare_dbs" nologin="1">
+		<action name="db_compare_dbs" >
 			<function name="_db_compare_dbs">
 				<arguments>
 				</arguments>
