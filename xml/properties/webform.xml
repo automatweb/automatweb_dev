@@ -6,20 +6,19 @@
             <group>general</group>
             <type>hidden</type>
             <newonly>1</newonly>
-            <value>1</value>
-            <store>no</store>
             <field>on_init</field>
             <caption>Initsialiseeri objekt</caption>
       </property>
       <property>
-            <name>style_folder</name>
+            <name>obj_name</name>
             <table>objects</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_STYLE_FOLDER</reltype>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>3</size>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Stiilide kataloog</caption>
+            <caption>Millised sisestatud v‰‰rtused pannakse nimeks</caption>
       </property>
       <property>
             <name>redirect</name>
@@ -81,6 +80,19 @@
             <caption>Eelvaade</caption>
       </property>
       <property>
+            <name>entries_toolbar</name>
+            <table>objects</table>
+            <group>
+                  <num_0>entries</num_0>
+                  <num_1>search</num_1>
+            </group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>entries_toolbar</field>
+            <caption>Sisestuste toolbar</caption>
+      </property>
+      <property>
             <name>entries</name>
             <table>objects</table>
             <group>entries</group>
@@ -89,6 +101,34 @@
             <store>no</store>
             <field>entries</field>
             <caption>Sisestused</caption>
+      </property>
+      <property>
+            <name>style_folder</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Stiilide kaust</caption>
+      </property>
+      <property>
+            <name>def_caption_style</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi pealkirja stiil</caption>
+      </property>
+      <property>
+            <name>def_prop_style</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi elemendi stiil</caption>
       </property>
       <property>
             <name>styles</name>
@@ -101,6 +141,16 @@
             <caption>Stiilid</caption>
       </property>
       <property>
+            <name>get_controller_folder</name>
+            <table>objects</table>
+            <group>get_controllers</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_VIEWCONTROLLER_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kontrollerite kaust</caption>
+      </property>
+      <property>
             <name>view_controllers</name>
             <table>objects</table>
             <group>get_controllers</group>
@@ -109,6 +159,16 @@
             <no_caption>1</no_caption>
             <field>view_controllers</field>
             <caption>Kontrollerid</caption>
+      </property>
+      <property>
+            <name>set_controller_folder</name>
+            <table>objects</table>
+            <group>set_controllers</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kontrollerite kaust</caption>
       </property>
       <property>
             <name>submit_controllers</name>
@@ -145,16 +205,27 @@
                   <caption>Omadused</caption>
                   <submit>no</submit>
             </props>
+            <styles>
+                  <caption>Stiilid</caption>
+            </styles>
             <preview>
                   <caption>Eelvaade</caption>
                   <submit>no</submit>
             </preview>
-            <entries>
+            <show_entries>
                   <caption>Sisestused</caption>
+                  <submit>no</submit>
+            </show_entries>
+            <entries>
+                  <caption>N‰ita sisestusi</caption>
+                  <submit>no</submit>
+                  <parent>show_entries</parent>
             </entries>
-            <styles>
-                  <caption>Stiilid</caption>
-            </styles>
+            <search>
+                  <caption>Otsing</caption>
+                  <parent>show_entries</parent>
+                  <submit>no</submit>
+            </search>
             <controllers>
                   <caption>Kontrollerid</caption>
                   <submit>no</submit>
@@ -212,8 +283,18 @@
             <STYLE_FOLDER>
                   <value>9</value>
                   <clid>CL_MENU</clid>
-                  <caption>Stiilide kataloog</caption>
+                  <caption>Stiilide kaust</caption>
             </STYLE_FOLDER>
+            <VIEWCONTROLLER_FOLDER>
+                  <value>10</value>
+                  <clid>CL_MENU</clid>
+                  <caption>N‰itamise kontrollerite kaust</caption>
+            </VIEWCONTROLLER_FOLDER>
+            <CONTROLLER_FOLDER>
+                  <value>10</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Salvestamise kontrollerite kaust</caption>
+            </CONTROLLER_FOLDER>
       </reltypes>
 </properties>
 

@@ -10,5 +10,15 @@
 			</function>
 		</action>
 
+		<action name="remove_entries">
+			<function name="remove_entries">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<optional name="group" />
+					<required name="select" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

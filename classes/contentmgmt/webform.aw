@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.1 2004/11/26 06:31:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.2 2004/11/29 05:07:59 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -8,21 +8,22 @@
 @default table=objects
 @default group=general
 
-@property on_init type=hidden newonly=1 value=1 store=no
+@property on_init type=hidden newonly=1
 @caption Initsialiseeri objekt
 
-@property style_folder type=relpicker reltype=RELTYPE_STYLE_FOLDER field=meta method=serialize
-@caption Stiilide kataloog
+@property obj_name type=select multiple=1 size=3 field=meta method=serialize
+@caption Millised sisestatud väärtused pannakse nimeks
 
 @property redirect type=textbox field=meta method=serialize
 @caption Kuhu suunata peale täitmist
 
 @groupinfo form caption="Vorm" submit=no
 @groupinfo props caption="Omadused" submit=no
-@groupinfo preview caption="Eelvaade" submit=no
-@groupinfo entries caption="Sisestused"
 @groupinfo styles caption="Stiilid"
-
+@groupinfo preview caption="Eelvaade" submit=no
+@groupinfo show_entries caption="Sisestused" submit=no
+@groupinfo entries caption="Näita sisestusi" submit=no parent=show_entries
+@groupinfo search caption="Otsing" parent=show_entries submit=no
 @groupinfo controllers caption="Kontrollerid" submit=no
 @groupinfo set_controllers caption="Salvestamine" parent=controllers
 @groupinfo get_controllers caption="Näitamine" parent=controllers
@@ -42,14 +43,32 @@
 @property preview type=callback callback=callback_preview group=preview no_caption=1
 @caption Eelvaade
 
+@property entries_toolbar type=toolbar group=entries,search no_caption=1
+@caption Sisestuste toolbar
+
 @property entries type=table group=entries no_caption=1
 @caption Sisestused
+
+@property style_folder type=relpicker reltype=RELTYPE_STYLE_FOLDER field=meta method=serialize group=styles
+@caption Stiilide kaust
+
+@property def_caption_style type=select group=styles field=meta method=serialize
+@caption Vaikimisi pealkirja stiil
+
+@property def_prop_style type=select group=styles field=meta method=serialize
+@caption Vaikimisi elemendi stiil
 
 @property styles type=callback callback=callback_styles group=styles no_caption=1
 @caption Stiilid
 
+@property get_controller_folder type=relpicker reltype=RELTYPE_VIEWCONTROLLER_FOLDER field=meta method=serialize group=get_controllers
+@caption Kontrollerite kaust
+
 @property view_controllers type=callback callback=callback_view_controllers group=get_controllers no_caption=1
 @caption Kontrollerid
+
+@property set_controller_folder type=relpicker reltype=RELTYPE_CONTROLLER_FOLDER field=meta method=serialize group=set_controllers
+@caption Kontrollerite kaust
 
 @property submit_controllers type=callback callback=callback_submit_controllers group=set_controllers no_caption=1
 @caption Kontrollerid
@@ -82,8 +101,13 @@
 @caption Stiil
 
 @reltype STYLE_FOLDER value=9 clid=CL_MENU
-@caption Stiilide kataloog
+@caption Stiilide kaust
 
+@reltype VIEWCONTROLLER_FOLDER value=10 clid=CL_MENU
+@caption Näitamise kontrollerite kaust
+
+@reltype CONTROLLER_FOLDER value=10 clid=CL_MENU
+@caption Salvestamise kontrollerite kaust
 */
 
 class webform extends class_base
@@ -94,6 +118,15 @@ class webform extends class_base
 			"tpldir" => "contentmgmt/webform",
 			"clid" => CL_WEBFORM
 		));
+		$this->trans_names = array(
+			"text" => "Tekst",
+			"textbox" => "Tekstikast",
+			"classificator" => "Valikväli",
+			"date_select" => "Kuupäevavalik",
+			"textarea" => "Tekstiväli",
+			"hidden" => "Peidetud väli",
+			"submit" => "Saada nupp",
+		);
 	}
 	
 	function callback_on_load($arr)
@@ -127,6 +160,57 @@ class webform extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "entries_toolbar":
+				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
+				$register_search = $register->get_first_obj_by_reltype("RELTYPE_SEARCH");
+				$toolbar = &$arr["prop"]["toolbar"];
+				$toolbar->add_button(array(
+					"name" => "search",
+					"tooltip" => "Otsi",
+					"url" => html::get_change_url($arr["obj_inst"]->id(), array(
+						"group" => "search",
+					)),
+					"img" => "search.gif",
+				));
+				$toolbar->add_button(array(
+					"name" => "change",
+					"tooltip" => "Muuda otsingu seadeid",
+					"url" => html::get_change_url($register_search->id(), array(
+						"return_url" => urlencode(html::get_change_url($arr["obj_inst"]->id(), array(
+							"group" => $arr["request"]["group"],
+						))),
+					)),
+					"img" => "../blue/obj_settings.gif",
+				));
+				$toolbar->add_button(array(
+					"name" => "delete",
+					"tooltip" => "Kustuta valitud sisestused",
+					"action" => "remove_entries",
+					"img" => "delete.gif",
+					"confirm" => "Oled kindel, et tahad valitud sisestused kustutada?",
+				));
+				break;
+			case "def_caption_style":
+				$this->get_rel_props(array(
+					"obj_inst" => $arr["obj_inst"],
+					"prop" => "style",
+				));
+				$prop["options"] = array(0 => "-- Vali --") + $this->all_rels;
+				break;
+			case "def_prop_style":
+				$this->get_rel_props(array(
+					"obj_inst" => $arr["obj_inst"],
+					"prop" => "style",
+				));
+				$prop["options"] = array(0 => "-- Vali --") + $this->all_rels;
+				break;
+			case "obj_name":
+				$prop["options"] = array("-- vali --");
+				foreach(safe_array($this->cfgform_i->prplist) as $key => $val)
+				{
+					$prop["options"][$key] = $val["caption"];
+				}
+				break;
 			case "entries":
 				if(!$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER"))
 				{
@@ -139,8 +223,31 @@ class webform extends class_base
 					"request" => &$arr["request"],
 				));
 				break;
+			case "search":
+				$s = get_instance(CL_REGISTER_SEARCH);
+				$prop["value"] = $s->show(array(
+					"id" => $register->prop("search_o"),
+					"no_form" => 1,
+				));
+				break;
 			case "navtoolbar":
-				$this->cfgform_i->gen_navtoolbar($arr);
+				//$this->cfgform_i->gen_navtoolbar($arr);
+				$toolbar = &$arr["prop"]["toolbar"];
+
+				$toolbar->add_button(array(
+					"name" => "save",
+					"tooltip" => "Salvesta",
+					"url" => "javascript:submit_changeform()",
+					"img" => "save.gif",
+				));
+				
+				$toolbar->add_button(array(
+					"name" => "delete",
+					"tooltip" => "Kustuta valitud omadused",
+					"url" => "javascript:document.changeform.subaction.value='delete';submit_changeform();",
+					"img" => "delete.gif",
+					"confirm" => "Oled kindel, et tahad antud omadused kustutada?",
+				));
 				break;
 			case "availtoolbar":
 				$this->cfgform_i->gen_availtoolbar($arr);
@@ -156,6 +263,10 @@ class webform extends class_base
 		switch($prop["name"])
 		{
 			case "on_init":
+				if(!$arr["new"])
+				{
+					return PROP_IGNORE;
+				}
 				$arr["obj_inst"]->save();
 				$register_data = obj();
 				$register_data->set_parent($arr["obj_inst"]->id());
@@ -224,7 +335,7 @@ class webform extends class_base
 				$register->set_prop("default_cfgform", 1);
 				$register->set_prop("data_rootmenu", $dir->id());
 				$register->set_prop("show_all", 1);
-				$register->set_prop("per_page", 50);
+				$register->set_prop("per_page", 100);
 				$register->save();
 				$arr["obj_inst"]->connect(array(
 					"to" => $register->id(),
@@ -242,33 +353,108 @@ class webform extends class_base
 					"to" => $cfgform->id(),
 					"reltype" => "RELTYPE_CFGFORM",
 				));
+				$register_search = obj();
+				$register_search->set_parent($register->id());
+				$register_search->set_class_id(CL_REGISTER_SEARCH);
+				$register_search->set_status(STAT_ACTIVE);
+				$register_search->set_prop("per_page", 100);
+				$register_search->set_prop("register", $register->id());
+				$register_search->prop("show_all_in_empty_search", 1);
+				$register_search->prop("show_date", 1);
+				$register_search->save();
+				$register_search->connect(array(
+					"to" => $register->id(),
+					"reltype" => "RELTYPE_REGISTER",
+				));
+				$register->set_prop("search_o", $register_search->id());
+				$register->save();
+				$register->connect(array(
+					"to" => $register_search->id(),
+					"reltype" => "RELTYPE_SEARCH",
+				));
+				$set_controllers = array(
+					array(
+						"name" => "Väli *elemendinimi* peab olema täidetud",
+						"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
+						"errmsg" => "Väli %caption peab olema täidetud",
+					),
+					array(
+						"name" => "Väli *elemendinimi* peab olema valitud",
+						"formula" => 'if(!checked($prop["value"])){$retval = PROP_ERROR;}',
+						"errmsg" => "Väli %caption peab olema valitud",
+					),
+				);
+				$get_controllers = array(
+					array(
+						"name" => "Kuva sisestuses vormi täitja IP aadressi",
+						"formula" => "",
+					),
+					array(
+						"name" => "Kuva sisestuses vormi täitja host aadressi",
+						"formula" => "",
+					),
+					array(
+						"name" => "Kuva sisestuses vormi täitmise kuupäeva",
+						"formula" => "",
+					),
+				);
+				$i = 0;
+				foreach($set_controllers as $key => $val)
+				{
+					$controller = obj();
+					$controller->set_class_id(CL_CFGCONTROLLER);
+					$controller->set_parent($arr["obj_inst"]->id());
+					$controller->set_name($val["name"]);
+					$controller->set_prop("formula", $val["formula"]);
+					$controller->set_prop("errmsg", $val["errmsg"]);
+					$controller->save();
+					$arr["obj_inst"]->connect(array(
+						"to" => $controller->id(),
+						"reltype" => "RELTYPE_CONTROLLER",
+					));
+					$i++;
+				}
+				$i = 0;
+				/*
+				foreach($get_controllers as $key => $val)
+				{
+					$controller = obj();
+					$controller->set_class_id(CL_CFG_VIEW_CONTROLLER);
+					$controller->set_parent($arr["obj_inst"]->id());
+					$controller->set_name($val["name"]);
+					$controller->set_prop("formula", $val["formula"]);
+					$controller->save();
+					$arr["obj_inst"]->connect(array(
+						"to" => $controller->id(),
+						"reltype" => "RELTYPE_VIEWCONTROLLER",
+					));
+					$i++;
+				}
+				*/
 				break;
 				
 			case "view_controllers":
 				if($this->cfgform)
 				{
-					$this->cfgform->set_meta("controllers", $arr["request"]["controllers"]);
+					$this->cfgform->set_meta("controllers", $arr["request"]["view_controllers"]);
 				}
 				break;
 			
 			case "submit_controllers":
 				if($this->cfgform)
 				{
-					$this->cfgform->set_meta("controllers", $arr["request"]["view_controllers"]);
+					$this->cfgform->set_meta("controllers", $arr["request"]["controllers"]);
 				}
 				break;
 				
 			case "props":
 				if($this->cfgform)
 				{
-					$this->cfgform_i->add_new_properties(array(
-						"obj_inst" => &$this->cfgform,
-						"request" => &$arr["request"],
-					));
+					$this->add_new_properties($arr);
 					if(($metamgr = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_METAMGR")) && ($object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE")))
 					{
 						$classificator = $object_type->meta("classificator");
-						foreach($this->cfgform_i->cfg_proplist as $key => $val)
+						foreach(safe_array($this->cfgform_i->cfg_proplist) as $key => $val)
 						{
 							if($this->cfgform_i->all_props[$key]["type"] == "classificator" && !$classificator[$key])
 							{
@@ -344,7 +530,6 @@ class webform extends class_base
 									"status"=> STAT_ACTIVE,
 								));
 								$e_prps = $e_prp_list->names();
-								$e_prp_list->delete();
 								foreach($prps as $prp)
 								{
 									$prp = trim($prp);
@@ -387,7 +572,103 @@ class webform extends class_base
 		}
 		return $retval;
 	}
-	
+
+	function callback_props($arr)
+	{
+		//arr($this->cfgform_i->all_props);
+		$this->read_template("avail_props.tpl");
+		$prp_count = array();
+		foreach(safe_array($this->cfgform_i->prplist) as $key => $prop)
+		{
+			$prp_count[$prop["type"]]++;
+		}
+		$show_props = array();
+		$ext_count = array();
+		foreach($this->cfgform_i->all_props as $key => $prop)
+		{
+			if(!in_array($prop["type"], $show_props) && $prop["type"] != "status")
+			{
+				$show_props[$prop["type"]] = $prop;
+			}
+			$ext_count[$prop["type"]]++;
+		}
+		$sc = "";
+		foreach($show_props as $key => $prop)
+		{
+			$this->vars(array(
+				"prp_name" => $this->trans_names[$prop["type"]],
+				"prp_type" => $prop["type"],
+				"prp_used" => (int)$prp_count[$prop["type"]],
+				"prp_unused" => ((int)$ext_count[$prop["type"]] - (int)$prp_count[$prop["type"]]),
+			));
+			$sc .= $this->parse("avail_property");
+		}
+		$this->vars(array(
+			"avail_property" => $sc,
+		));
+		$this->vars(array(
+			"avail" => $this->parse("avail"),
+		));
+		$item["value"] = $this->parse();
+		return array($item);
+	}
+
+	function add_new_properties($arr)
+	{
+		$target = $arr["request"]["target"];
+		// first check, whether a group with that id exists
+		$_tgt = $this->cfgform->meta("cfg_groups");
+		if (isset($_tgt[$target]))
+		{
+			$this->cfgform_i->_init_cfgform_data($this->cfgform);
+			// and now I just have to modify the proplist, eh?
+			$prplist = $this->cfgform_i->prplist;
+			$prp_count = array();
+			$prplist = safe_array($this->cfgform_i->prplist);
+			foreach($prplist as $key => $prop)
+			{
+				$prp_count[$prop["type"]]++;
+			}
+			$ext_count = array();
+			foreach($this->cfgform_i->all_props as $key => $prop)
+			{
+				$ext_count[$prop["type"]]++;
+			}
+			$mark = $arr["request"]["mark"];
+			foreach(safe_array($mark) as $pkey => $pval)
+			{
+				$count = (int)$ext_count[$pkey] - (int)$prp_count[$pkey];
+				$pval = (int)$pval;
+				if($count > 0 && !empty($pval))
+				{
+					// now, lets count the real ammount of thing we'll add
+					$pval = $pval > $count ? $count : $pval;
+					for($c = $pval; $c > 0; $c--)
+					{
+						foreach($this->cfgform_i->all_props as $key => $val)
+						{
+							if($c <= 0)
+							{
+								break;
+							}
+							if(!array_key_exists($key, $prplist) && $val["type"] == $pkey)
+							{
+								$prplist[$key] = array(
+									"name" => $key,
+									//"caption" => $this->all_props[$pkey]["caption"],
+									"group" => $target,
+									"type" => $val["type"],
+								);
+								$c--;
+							}
+						}
+					}
+				}
+			}
+			$this->cfgform_i->cfg_proplist = $prplist;
+		}
+	}
+
 	function callback_form($arr)
 	{
 		$this->read_template("layout.tpl");
@@ -430,11 +711,10 @@ class webform extends class_base
 		$c = "";
 		$cnt = 0;
 		$capt_opts = array(
-			0 => "default",
+			0 => "Vasakul",
+			"right" => "Paremal",
 			"top" => "Peal",
 			"bottom" => "All",
-			"left" => "Vasakul",
-			"right" => "Paremal",
 			//"in" => "Sees",
 		);
 		$prp_types = array(
@@ -467,7 +747,7 @@ class webform extends class_base
 				$this->vars(array(
 					"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
 					"prp_caption" => $property["caption"],
-					"prp_type" => $prpdata["type"],
+					"prp_type" => $this->trans_names[$prpdata["type"]],
 					"prp_key" => $prpdata["name"],
 					"prp_order" => $property["ord"],
 					"capt_ord" => html::select(array(
@@ -485,22 +765,21 @@ class webform extends class_base
 						"status" => STAT_ACTIVE,
 						"sort_by" => "objects.name DESC",
 					));
-					$prp_metas = implode(";", $metas->names());
+					$prp_metas = implode("; ", $metas->names());
 					$this->vars(array(
 						"clf_type" => html::select(array(
 							"name" => "clf_type[".$prpdata["name"]."]",
 							"options" => $prp_types,
 							"selected" => $clf_type[$prpdata["name"]],
 						)),
-						"prp_metas" => $prp_metas,
 						"metamgr_link" => html::get_change_url($metamgr->id(), array(
 							"group" => "manager",
 							"meta" => $classificator[$prpdata["name"]],
 						)),
+						"predefs" => $prp_metas,
 					));
 					$this->vars(array(
 						"clf1" => $this->parse("clf1"),
-						"clf3" => $this->parse("clf3"),
 					));
 				}
 				else
@@ -510,7 +789,7 @@ class webform extends class_base
 						"prp_metas" => "",
 						"metamgr_link" => "",
 						"clf1" => "",
-						"clf3" => "",
+						"predefs" => "",
 					));
 				}
 				$sc .= $this->parse("property");
@@ -540,31 +819,52 @@ class webform extends class_base
 		return array($item);
 	}
 	
-	function load_styles($obj_inst)
+	function get_rel_props($arr)
 	{
-		classload("layout/active_page_data");
-		$style_folders = $obj_inst->connections_from(array(
-			"type" => "RELTYPE_STYLE_FOLDER",
+		$prop = $arr["prop"];
+		$vars = array(
+			"get_controllers" => array(
+				"rel" => "VIEWCONTROLLER",
+				"obj" => "CFG_VIEW_CONTROLLER",
+			),
+			"set_controllers" => array(
+				"rel" => "CONTROLLER",
+				"obj" => "CFGCONTROLLER",
+			),
+			"style" => array(
+				"rel" => "STYLE",
+				"obj" => "CSS",
+			),
+		);
+		/*
+		$rel_folders = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_".$vars[$prop]["rel"]."_FOLDER",
 		));
-		$styles = $obj_inst->connections_from(array(
-			"type" => "RELTYPE_STYLE",
+		*/
+		$rels = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_".$vars[$prop]["rel"],
 		));
-		$this->all_styles = array();
-		foreach($style_folders as $style_folder)
+		$this->all_rels = array();
+		$folder_id = $arr["obj_inst"]->prop($prop."_folder");
+		if(!empty($folder_id))
 		{
-			$styles = new object_list(array(
-				"parent" => $style_folder->prop("to"),
-				"class_id" => CL_CSS,
+			$objs = new object_list(array(
+				"parent" => $folder_id,
+				"class_id" => constant("CL_".$vars[$prop]["obj"]),
 			));
-			$this->all_styles = $this->all_styles + $styles->names();
+			$this->all_rels = $this->all_rels + $objs->names();
 		}
-		foreach($this->all_styles as $key => $val)
+		foreach($rels as $rel)
 		{
-			active_page_data::add_site_css_style($key);
+			$this->all_rels[$rel->prop("to")] = $rel->prop("to.name");
 		}
-		foreach($styles as $style)
+		if($prop == "style")
 		{
-			$this->all_styles[$style->prop("to")] = $style->prop("to.name");
+			classload("layout/active_page_data");
+			foreach($this->all_rels as $key => $val)
+			{
+				active_page_data::add_site_css_style($key);
+			}
 		}
 	}
 	
@@ -573,14 +873,17 @@ class webform extends class_base
 		//$object_type = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$sel_styles = safe_array($arr["obj_inst"]->meta("styles"));
 		$m_styles = safe_array($arr["obj_inst"]->meta("m_styles"));
-		$this->load_styles($arr["obj_inst"]);
-		$this->all_styles = array(0 => "-- Vali --") + $this->all_styles;
+		$this->get_rel_props(array(
+			"obj_inst" => $arr["obj_inst"],
+			"prop" => "style",
+		));
+		$this->all_rels = array(0 => "-- Vali --") + $this->all_rels;
 		$props = array();
 		$props["error"] = array(
 			"name" => "m_style[error]",
 			"caption" => "Veateate stiil",
 			"type" => "select",
-			"options" => $this->all_styles,
+			"options" => $this->all_rels,
 			"selected" => $m_styles["error"],
 		);
 		foreach($this->cfgform_i->prplist as $key => $val)
@@ -589,14 +892,14 @@ class webform extends class_base
 				"name" => "style[$key][prop]",
 				"caption" => $val["caption"]." stiil",
 				"type" => "select",
-				"options" => $this->all_styles,
+				"options" => $this->all_rels,
 				"selected" => $sel_styles[$key]["prop"],
 			);
 			$props[$key."_capt"] = array(
 				"name" => "style[$key][caption]",
 				"caption" => $val["caption"]." pealkirja stiil",
 				"type" => "select",
-				"options" => $this->all_styles,
+				"options" => $this->all_rels,
 				"selected" => $sel_styles[$key]["caption"],
 			);
 		}
@@ -613,27 +916,61 @@ class webform extends class_base
 			"value" => $this->show(array("id" => $arr["obj_inst"]->id())),
 		));
 	}
-	
+
 	function callback_view_controllers($arr)
 	{
-		if($this->cfgform)
+		$controllers = $this->cfgform->meta("view_controllers");
+		$retval = array();
+		$this->get_rel_props(array(
+			"obj_inst" => $arr["obj_inst"],
+			"prop" => "get_controllers",
+		));
+		foreach ($this->cfgform_i->prplist as $prop)
 		{
-			return $this->cfgform_i->gen_view_controller_props(array("obj_inst" => $this->cfgform));
+			$caption = $prop["caption"];
+			if(!$caption)
+			{
+				$caption = $prop["name"];
+			}
+			$retval[] = array(
+				"name" => "view_controllers[".$prop["name"]."]",
+				"caption" => $caption,
+				"type" => "select",
+				"multiple" => 1,
+				"size" => 3,
+				"value" => $controllers[$prop["name"]],
+				"options" => $this->all_rels,
+			);
 		}
+		return  $retval;
 	}
 	
 	function callback_submit_controllers($arr)
 	{
-		if($this->cfgform)
+		$controllers = $this->cfgform->meta("controllers");
+		$retval = array();
+		$this->get_rel_props(array(
+			"obj_inst" => $arr["obj_inst"],
+			"prop" => "set_controllers",
+		));
+		foreach ($this->cfgform_i->prplist as $prop)
 		{
-			return $this->cfgform_i->gen_controller_props(array("obj_inst" => $this->cfgform));
+			$caption = $prop["caption"];
+			if(!$caption)
+			{
+				$caption = $prop["name"];
+			}
+			$retval[] = array(
+				"name" => "controllers[".$prop["name"]."]",
+				"caption" => $caption,
+				"type" => "select",
+				"multiple" => 1,
+				"size" => 3,
+				"value" => $controllers[$prop["name"]],
+				"options" => $this->all_rels,
+			);
 		}
-	}
-	
-	function callback_props($arr)
-	{
-		return $this->cfgform_i->callback_gen_avail_props($arr);
-		//arr($rval);
+		return  $retval;
 	}
 	
 	function parse_alias($arr)
@@ -644,16 +981,22 @@ class webform extends class_base
 	function show($arr)
 	{
 		$obj_inst = obj($arr["id"]);
-		$this->load_styles($obj_inst);
+		$this->get_rel_props(array(
+			"obj_inst" => $obj_inst,
+			"prop" => "style",
+		));
 		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
+		$errors = aw_global_get("wf_errors");
+		$values = aw_global_get("wf_data");
+
 		$rval = $this->draw_cfgform_from_ot(array(
 			"ot" => $object_type->id(),
 			"reforb" => $this->mk_reforb("save_form_data", array(
 				"id" => $arr["id"],
 				"return_url" => $obj_inst->prop("redirect"),
-				"errors" => aw_global_get("wf_errors"),
-				"values" => aw_global_get("wf_data"),
 			)),
+			"errors" => $errors,
+			"values" => $values,
 			"obj_inst" => $obj_inst,
 		));
 		aw_session_del("wf_errors");
@@ -663,7 +1006,6 @@ class webform extends class_base
 	
 	function draw_cfgform_from_ot($arr)
 	{
-		// get all props
 		$cfgform_i = get_instance(CL_CFGFORM);
 		$els = $cfgform_i->get_props_from_ot($arr);
 		$cfgform = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CFGFORM");
@@ -693,8 +1035,26 @@ class webform extends class_base
 		));
 		foreach($els as $key => $val)
 		{
+			// some goddamn this messes up the element captions, reorder them
+			$els[$key]["caption"] = $all_props[$key]["caption"];
 			$els[$key]["capt_ord"] = $all_props[$key]["wf_capt_ord"];
 			$els[$key]["style"] = $sel_styles[$key];
+		}
+		$def_caption_style = $arr["obj_inst"]->prop("def_caption_style");
+		$def_prop_style = $arr["obj_inst"]->prop("def_prop_style");
+		if(!empty($def_caption_style) or !empty($def_prop_style))
+		{
+			foreach($els as $key => $val)
+			{
+				if(!empty($def_caption_style))
+				{
+					$els[$key]["style"]["caption"] = $def_caption_style;
+				}
+				if(!empty($def_prop_style))
+				{
+					$els[$key]["style"]["prop"] = $def_prop_style;
+				}
+			}
 		}
 		classload("cfg/htmlclient");
 		$htmlc = new htmlclient(array(
@@ -747,6 +1107,7 @@ class webform extends class_base
 		{
 			aw_session_set("wf_errors", $is_valid);
 			aw_session_set("wf_data", $arr);
+			return aw_ini_get("baseurl")."/".aw_global_get("section");
 		}
 		else
 		{
@@ -762,16 +1123,46 @@ class webform extends class_base
 			}
 			$o->set_class_id(CL_REGISTER_DATA);
 			$o->set_parent($parent);
+			$o->set_status(STAT_ACTIVE);
 			foreach($o->get_property_list() as $pn => $pd)
 			{
 				$o->set_prop($pn, $arr[$pn]);
 			}
+
 			$o->set_meta("object_type", $object_type->id());
 			$o->set_meta("cfgform_id", $cfgform->id());
-			$o->set_name("entry ".date("d-m-Y H:i"));
+			$o->set_prop("register_id", $register->id());
+			$o->set_name(implode(" ", safe_array($obj_inst->prop("obj_name"))));
 			$o->save();
 		}
 		return $rval;
+	}
+
+	/**  
+		
+		@attrib name=remove_entries	
+		@param id required type=int acl="view"
+		@param group optional
+		@param select required
+
+	**/
+	function remove_entries($arr)
+	{
+		if(is_array($arr["select"]))
+		{
+			foreach($arr["select"] as $val)
+			{
+				if(is_oid($val) && $this->can("view", $val))
+				{
+					$obj = obj($val);
+					if($obj->class_id = CL_REGISTER_DATA)
+					{
+						$obj->delete();
+					}
+				}
+			}
+		}
+		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
 	}
 }
 ?>
