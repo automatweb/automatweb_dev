@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.71 2003/02/13 09:21:46 kristo Exp $
+// $Id: class_base.aw,v 2.72 2003/02/14 18:34:13 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -134,6 +134,7 @@ class class_base extends aliasmgr
 			"parent" => $parent,
 			"period" => $period,
 			"alias_to" => $this->request["alias_to"],
+			"reltype" => $this->request["reltype"],
 			"return_url" => urlencode($this->request["return_url"]),
 		);
 
@@ -320,10 +321,13 @@ class class_base extends aliasmgr
 					"status" => isset($status) ? $status : 1,
 			));
 
-			if ($alias_to)
-			{
-				$this->add_alias($alias_to,$id);
-			};
+			$almgr = get_instance("aliasmgr");
+			$almgr->create_alias(array(
+				"alias" => $id,
+				"id" => $alias_to,
+				"reltype" => $reltype,
+			));
+
 			$this->new = true;
 			$this->id = $id;
 		}
@@ -1705,7 +1709,7 @@ class class_base extends aliasmgr
 
 		$reltypes = $this->get_rel_types();
 
-		$gen = $almgr->new_list_aliases(array(
+		$gen = $almgr->list_aliases(array(
 			"id" => $id,
 			"reltypes" => $reltypes,
 			"return_url" => $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
@@ -1733,6 +1737,16 @@ class class_base extends aliasmgr
 				"clfile" => $this->clfile,
 				"group" => $group,
 		));
+
+		$clid_list = array();
+		if (method_exists($this->inst,"callback_get_classes_for_relation"))
+		{
+			$clid_list = $this->inst->callback_get_classes_for_relation(array(
+				"reltype" => $reltype,
+			));
+		}
+
+		$args["clid_list"] = $clid_list;
 
 		$args["return_url"] = $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
 		$gen = $almgr->search($args + array("reltypes" => $this->get_rel_types()));
