@@ -30,7 +30,8 @@
 </tr>
 <!-- END SUB: LINE -->
 </table>
-<select name='setstyle' class='small_button'>{VAR:styles}</select><br>
+Vali stiil:<select name='setstyle' class='small_button'>{VAR:styles}</select><br>
+Vali kataloog, kuhu elemendid liigutada:<select name='setfolder' class='small_button'>{VAR:folders}</select><br>
 <input type='submit' value='Salvesta' class='small_button'>
 {VAR:reforb}
 </form>

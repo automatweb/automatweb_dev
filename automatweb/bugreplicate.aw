@@ -5,8 +5,8 @@ classload("replicator","bugtrack");
 
 $bt=new bugtrack();
 
-$hostkey=$bt->sitekeys[$SERVER_NAME]?
-	$bt->sitekeys[$SERVER_NAME]:"unsetsitekey57005-49374";
+$hostkey=$bt->sitekeys[$baseurl]?
+	$bt->sitekeys[$baseurl]:"unsetsitekey57005-49374";
 
 $rh=new replicator_host($hostkey,"bugreplicate");
 
@@ -21,7 +21,8 @@ if (!$req["nop"])
 			case "testing":
 				$reply["servertime"]=time();
 				$reply["servername"]=$SERVER_NAME;
-				$reply["hkey"]=$rh->key;
+				$reply["baseurl"]=$baseurl;
+				$reply["hkey"]=$rh->key;// see pole mingi turvaauk, siia nigunii siis ei tule, kui õige sitekey teada pole
 				$reply["tid"]=$req["tid"];
 				$reply["hash"]=$req["hash"];
 				break;

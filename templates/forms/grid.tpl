@@ -72,7 +72,7 @@
 	<td   bgcolor=#ffffff ><input class='tekstikast_n' size=2 type='text' NAME='element_{VAR:element_id}_order' VALUE='{VAR:form_cell_order}'></td>
 	<td   bgcolor=#ffffff class='fgen_text'><input class='tekstikast_n' size=20 type='text' NAME='element_{VAR:element_id}_name' VALUE='{VAR:el_name}'></td>
 	<td  bgcolor=#ffffff class='fgen_text'>{VAR:el_type}</td>
-	<td  bgcolor=#ffffff  colspan=2><input class='tekstikast_n' size=15 type='text' NAME='element_{VAR:element_id}_text' VALUE='{VAR:form_cell_text}'><span class='fgen_text'><a href='{VAR:chpos}'>M</a></span></td>
+	<td  bgcolor=#ffffff  colspan=2><input class='tekstikast_n' size=15 type='text' NAME='element_{VAR:element_id}_text' VALUE='{VAR:form_cell_text}'><span class='fgen_text'><a href='{VAR:chpos}'>M</a><input type='checkbox' name='sel[]' value='{VAR:element_id}'></span></td>
 </tr>
 <!-- END SUB: ELEMENT -->
 

@@ -475,4 +475,7 @@ define("LC_MESSENGER_RULE_ADDED","Reegel lisatud");
 define("LC_MESSENGER_FOLDER_ADDED","Folder on lisatud");
 define("LC_MESSENGER_NOTE_ERASED","Teade kustutati");
 define("LC_MESSENGER_NEW_FOLDER","Uus folder");
+
+//mysql.aw
+define("LC_MYSQL_ERROR_QUERY","Vigane päring");
 ?>

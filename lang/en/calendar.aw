@@ -1,8 +1,8 @@
 <?php
-define("CAL_DAY","Päev");
-define("CAL_WEEK","Nädal");
-define("CAL_MONTH","Kuu");
-define("CAL_OVERVIEW","Ülevaade");
+define("CAL_DAY","Day");
+define("CAL_WEEK","Week");
+define("CAL_MONTH","Month");
+define("CAL_OVERVIEW","Overview");
 
-define("CAL_CH_TITLE","Muuda kalendrit");
+define("CAL_CH_TITLE","Change calendar");
 ?>

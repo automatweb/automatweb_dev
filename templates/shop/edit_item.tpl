@@ -57,6 +57,18 @@
 				<tr>
 					<td class="fcaption2" colspan=2>{VAR:type}</td>
 				</tr>
+				<tr>
+					<td class="fcaption2" colspan=2>Choose quantity form (if it is different defined by item type):</td>
+				</tr>
+				<tr>
+					<td class="fcaption2" colspan=2><select name='cnt_form'>{VAR:cnt_form}</select></td>
+				</tr>
+				<tr>
+					<td class="fcaption2" colspan=2>Choose formula (if it is different defined by item type):</td>
+				</tr>
+				<tr>
+					<td class="fcaption2" colspan=2><select name='item_eq'>{VAR:item_eq}</select></td>
+				</tr>
 			</table>
 				<input class="small_button" type='submit' value='{VAR:LC_SHOP_SAVE}'>
 				{VAR:reforb3}

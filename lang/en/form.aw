@@ -7,5 +7,6 @@ $lc_form["LC_FORM_COMM"] = "Comment";
 $lc_form["LC_FORM_TYPE"] = "Type";
 $lc_form["LC_FORM_INPUT"] = "Entry";
 $lc_form["LC_FORM_SEARCH"] = "Search";
-$lc_form["LC_FORM_RESEARCH"] = "Raiting";
+$lc_form["LC_FORM_RESEARCH"] = "Rating";
+$lc_form["LC_FORM_BASE"] = "Base form:";
 ?>

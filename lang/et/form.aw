@@ -8,4 +8,5 @@ $lc_form["LC_FORM_TYPE"] = "T&uuml;&uuml;p";
 $lc_form["LC_FORM_INPUT"] = "Sisestus";
 $lc_form["LC_FORM_SEARCH"] = "Otsingu";
 $lc_form["LC_FORM_RESEARCH"] = "Reitimis";
+$lc_form["LC_FORM_BASE"] = "Alusform:";
 ?>

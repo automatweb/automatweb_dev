@@ -7,6 +7,12 @@
 <td colspan=2 class="fform"><select name='ff_folder' class='small_button'>{VAR:ff_folder}</select></td>
 </tr>
 <tr>
+<td class="fform" colspan=2>Kataloog kuhu salvestatakse formist rebitud elemendid:</td>
+</tr>
+<tr>
+<td colspan=2 class="fform"><select name='tear_folder' class='small_button'>{VAR:tear_folder}</select></td>
+</tr>
+<tr>
 <td class="fform" colspan=2>Vali kataloogid kuhu saab uusi elemente salvestada:</td>
 </tr>
 <tr>

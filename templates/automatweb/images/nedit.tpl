@@ -5,11 +5,11 @@
 	<td colspan="2"><img src="{VAR:url}"></td>
 </tr>
 <tr>
-	<td class="fcaption">Vali uus pilt</td>
+	<td class="fcaption">Choose new image</td>
 	<td class="fform"><input type="file" size="40" name="pilt"></td>
 </tr>
 <tr>
-	<td class="fcaption">Pildiallkiri</td>
+	<td class="fcaption">Image signature</td>
 	<td class="fform"><input type="text" size="40" name="comment" value="{VAR:comment}"></td>
 </tr>
 <tr>
@@ -17,13 +17,13 @@
 	<td class="fform"><input type="text" size="40" name="link" value="{VAR:link}"></td>
 </tr>
 <tr>
-	<td class="fcaption">Uues aknas?</td>
+	<td class="fcaption">In a new window?</td>
 	<td class="fform"><input type="checkbox" name="newwindow" value="1" {VAR:newwindow}></td>
 </tr>
 <tr>
 	<td class="fform" colspan="2" align="center">
 	{VAR:reforb}
-	<input type="submit" value="Salvesta">
+	<input type="submit" value="Save">
 	</td>
 </tr>
 </table>

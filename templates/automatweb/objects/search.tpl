@@ -45,9 +45,10 @@
 </table>
 <table border="0" cellspacing="1" cellpadding="2"  width=100%>
 <tr>
-	<td class="fcaption2" colspan=9>Leitud objektid:</td>
+	<td class="fcaption2" colspan=10>Leitud objektid:</td>
 </tr>
 <tr>
+	<td class="fcaption2" >ID</td>
 	<td class="fcaption2" >Nimi</td>
 	<td class="fcaption2" nowrap>&nbsp;T&uuml;&uuml;p&nbsp;</td>
 	<td class="fcaption2" nowrap>&nbsp;Loodud&nbsp;</td>
@@ -60,6 +61,7 @@
 </tr>
 <!-- SUB: LINE -->
 <tr>
+	<td class="fcaption2" >{VAR:oid}</td>
 	<td class="fcaption2" ><input type='text' class='tekstikast_n' name='text[{VAR:oid}]' value='{VAR:name}'><input type='hidden' name='old_text[{VAR:oid}]' value='{VAR:name}'></td>
 	<td class="fcaption2" >{VAR:type}</td>
 	<td class="fcaption2" nowrap>{VAR:created}</td>
@@ -73,10 +75,10 @@
 <!-- END SUB: LINE -->
 <tr>
 	<td class='fcaption2'>Vali kuhu liigutada:</td>
-	<td class='fcaption2' colspan=8><select name='moveto' class='small_button'>{VAR:moveto}</select></td>
+	<td class='fcaption2' colspan=9><select name='moveto' class='small_button'>{VAR:moveto}</select></td>
 </tr>
 <tr>
-	<td class='fcaption2' colspan=9><input class='small_button' type='submit' value='Salvesta'></td>
+	<td class='fcaption2' colspan=10><input class='small_button' type='submit' value='Salvesta'></td>
 </tr>
 </table>
 {VAR:reforb}

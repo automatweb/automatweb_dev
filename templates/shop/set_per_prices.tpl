@@ -9,12 +9,12 @@
 <form action="reforb.{VAR:ext}" method="POST">
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 	<tr>
-		<td class="fcaption2">Alates:</td>
-		<td class="fcaption2">Kuni:</td>
-		<td class="fcaption2">Hind:</td>
-		<td class="fcaption2">N&auml;dala hind:</td>
-		<td class="fcaption2">Kahe n&auml;dala hind:</td>
-		<td class="fcaption2">Kustuta:</td>
+		<td class="fcaption2">From:</td>
+		<td class="fcaption2">To:</td>
+		<td class="fcaption2">Price:</td>
+		<td class="fcaption2">Weekly price:</td>
+		<td class="fcaption2">To weeks price:</td>
+		<td class="fcaption2">Delete:</td>
 	</tr>
 	<!-- SUB: PERIOD -->
 	<tr>
@@ -27,7 +27,7 @@
 	</tr>
 	<!-- END SUB: PERIOD -->
 	<tr>
-		<td class="fcaption2" colspan=8><input type='submit' value='Salvesta'></td>
+		<td class="fcaption2" colspan=8><input type='submit' value='Save'></td>
 	</tr>
 </table>
 {VAR:reforb}

@@ -35,6 +35,7 @@
 <field name="uid" caption="Kes" talign="center" sortable="1"/>
 <field name="developer" caption="Kellele" talign="center" sortable="1"/>
 <field name="site" caption="Site" talign="center" sortable="1"/>
+<field name="commentcount" caption="kommentaare" talign="center" sortable="0" type="int"/>
 </data>
 
 </tabledef>

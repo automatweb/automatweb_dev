@@ -58,7 +58,7 @@ function paste()
 <!-- SUB: PASTE -->
  | <a href='javascript:paste()' class="fgtitle_link">Paste</a>
 <!-- END SUB: PASTE -->
- | <a href='javascript:del()' class="fgtitle_link">Kustuta</a>
+ | <a href='javascript:del()' class="fgtitle_link">Delete</a>
 </b>
 </td>
 <td height="15" colspan="11" class="fgtitle_new" valign=center background="images/uus_sinine.gif" align=right>[<a target="list" href='languages.{VAR:ext}'><b><font size=2 color="#FF8080">{VAR:lang_name}</font></b></a>]&nbsp;&nbsp; <a href='orb.aw?action=list&class=bugtrack&filt=all' class='fgtitle_link'>BugTrack</a></td>

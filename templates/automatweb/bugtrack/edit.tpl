@@ -1,4 +1,5 @@
 <form method="POST" action="reforb.{VAR:ext}">
+<a href="{VAR:backlink}">tagasi</a>
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
 <tr>
 	<td class="fcaption2">Kes</td>
@@ -72,6 +73,7 @@
 </tr>
 <tr>
 	<td class="fform" align="center" colspan="2">
+	<a href="{VAR:backlink}">tagasi</a>
 	<input type="submit" value="Salvesta">
 	{VAR:reforb}
 	</td>

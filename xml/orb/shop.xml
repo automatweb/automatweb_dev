@@ -227,6 +227,36 @@
 			</function>
 		</action>
 
+		<action name="change_order">
+			<function name="change_order">
+				<arguments>
+					<required name="shop"/>
+					<required name="order_id"/>
+					<required name="section"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cancel_order">
+			<function name="cancel_order">
+				<arguments>
+					<required name="shop"/>
+					<required name="order_id"/>
+					<required name="section"/>
+					<optional name="page"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cancel_current">
+			<function name="cancel_current">
+				<arguments>
+					<required name="shop"/>
+					<required name="section"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

@@ -488,7 +488,21 @@ define("LC_MESSENGER_FOLDER_ADDED","Folder on lisatud");
 define("LC_MESSENGER_NOTE_ERASED","Teade kustutati");
 define("LC_MESSENGER_NEW_FOLDER","Uus folder");
 
+//mysql.aw
+define("LC_MYSQL_ERROR_QUERY","Vigane päring");
 
+//objects.aw
+define("LC_OBJECTS_TO_WHO", "<a href='$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid' target='content'>Objektid</a>&nbsp; &nbsp;<a href='$baseurl/?class=planner&action=draw_day&msgid=$msgid' target='content'>Kalender</a>");
+define("LC_OBJECTS_TO_WHO","'>Võta see</a>");
+define("LC_OBJECTS_TO_WHO","K&otilde;ik");
+
+
+define("LC_OBJECTS_TO_WHO","Kellele");
+define("LC_OBJECTS_TO_WHO","Kellele");
+define("LC_OBJECTS_TO_WHO","Kellele");
+define("LC_OBJECTS_TO_WHO","Kellele");
+define("LC_OBJECTS_TO_WHO","Kellele");
+define("LC_OBJECTS_TO_WHO","Kellele");
 
 
 

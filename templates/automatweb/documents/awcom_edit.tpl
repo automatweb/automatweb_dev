@@ -235,6 +235,7 @@ function del_gallery()
 			Foorum:	<input type='checkbox' name='is_forum' value='1' {VAR:is_forum}>
 	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
 	| Ilma parema paanita: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>
+	| Pealkiri klikitav:	<input type='checkbox' name="title_clickable" {VAR:title_clickable} value=1>
 		</td>
 	</tr>
 </table>
