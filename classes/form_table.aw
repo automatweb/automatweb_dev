@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.56 2002/09/25 15:01:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.57 2002/09/27 07:16:26 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -2735,7 +2735,7 @@ class form_table extends form_base
 			}
 		}
 
-		if ($butt_delete != "" && is_array($sel))
+		if (($butt_delete != "" || $butt_delete_x > 0) && is_array($sel))
 		{
 			foreach($sel as $id => $one)
 			{
@@ -2777,7 +2777,7 @@ class form_table extends form_base
 		$ret = "";
 		if ($this->table["buttons"][$bt_id]["image"]["url"] != "")
 		{
-			$ret ="<input name='butt_".$bt_id."' type='image' src='".image::check_url($this->table["buttons"][$bt_id]["image"]["url"])."'>";
+			$ret ="<input value='".$this->table["buttons"][$bt_id]["text"]."' name='butt_".$bt_id."' type='image' src='".image::check_url($this->table["buttons"][$bt_id]["image"]["url"])."'>";
 		}
 		else
 		{
