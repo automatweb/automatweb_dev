@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.12 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.13 2002/02/26 23:18:46 duke Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -95,7 +95,8 @@ class db_connector extends root
 			$awt->start("db_next");
 			$awt->count("db_next");
 		};
-		$res = @mysql_fetch_array($this->qID);
+		// don't need numeric indices
+		$res = @mysql_fetch_array($this->qID,MYSQL_ASSOC);
 		if ($res) 
 		{
 			$this->rec_count++;
