@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.104 2004/12/01 14:01:19 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.105 2005/01/19 12:45:43 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -466,10 +466,12 @@ class users_user extends aw_template
 		";
 		$this->db_query($q);
 
+		$this->counts = array();
 		$tmp = array();
 		while ($row = $this->db_next())
 		{
 			$tmp[] = $row["gid"];
+			$this->counts[$row["gid"]] = $row["gcount"];
 		}
 
 		if (count($tmp) > 0)
@@ -503,6 +505,7 @@ class users_user extends aw_template
 		while ($row = $this->db_next())
 		{
 			$ret[$row["gid"]] = $row;
+			$ret[$row["gid"]]["gcount"] = $this->counts[$row["gid"]];
 		}
 		return $ret;
 	}
