@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.88 2002/02/01 01:24:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.89 2002/02/01 09:24:23 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -347,7 +347,7 @@ class document extends aw_template
 			global $REQUEST_URI;
 			if (defined("PRINT_CAP"))
 			{
-				$pc = localparse(PRINT_CAP,array("link" => "/section=$docid" . "&print=1"));
+				$pc = localparse(PRINT_CAP,array("link" => "/section=$docid" . "&print=1","docid" => $docid));
 				if (defined("PC_BOTTOM"))
 				{
 					$doc["content"] .= $pc;
@@ -546,13 +546,22 @@ class document extends aw_template
 		$this->source = $doc["content"];
 
 		$this->register_parsers();
-
 		$this->create_relative_links(&$doc["content"]);
-
 		// viimati muudetud dokude listi rida
 		if (preg_match("/#viimati_muudetud num=\"(.*)\"#/",$doc["content"], $matches))
 		{
 			$doc["content"] = str_replace("#viimati_muudetud num=\"".$matches[1]."\"#",$this->get_last_doc_list($matches[1]),$doc["content"]);
+		}
+
+		if (strpos($doc["content"], "#chat#") !== false)
+		{
+			$doc["content"] = str_replace("#chat#", "<applet codebase=\"http://aw.struktuur.ee/risto/arco/\" code=Klient.class height=37 width=77></applet>",$doc["content"]);
+			if($GLOBALS["uid"] != "")
+			{
+				$socket = fsockopen("aw.struktuur.ee", 10020,$errno,$errstr,10);
+				fputs($socket,"NIMI ".$login."\n");
+				fclose($socket);
+			}
 		}
 
 		// create keyword links unless we are in print mode, since you cant click
@@ -595,6 +604,11 @@ class document extends aw_template
 			classload("aliasmgr");
 			$al = new aliasmgr();
 			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates));
+			$doc["content"] = $this->parse_aliases(array(
+                                "oid" => $docid,
+                                "text" => $doc["content"],
+                        ));
+
 			$this->vars($al->get_vars());
 		}; 
 
@@ -642,9 +656,14 @@ class document extends aw_template
 			};
 		};
 
+		classload("msgboard");
+		$t = new msgboard;
+		$nc = $t->get_num_comments($docid);
+		$nc = $nc < 1 ? "0" : $nc;
+		$doc["content"] = str_replace("#kommentaaride arv#",$nc,$doc["content"]);
+
 		// <mail to="bla@ee">lahe tyyp</mail>
     		$doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
-		
 		$doc["content"] = str_replace(LC_DOCUMENT_CURRENT_TIME,$this->time2date(time(),2),$doc["content"]);
 
 		if (!(strpos($doc["content"],"#liitumisform") === false))
@@ -1167,7 +1186,7 @@ class document extends aw_template
 	// !Send a link to someone
 	function send_link()
 	{
-		global $from_name, $from, $baseurl, $ext, $section, $copy,$to_name, $to,$SITE_ID;
+		global $from_name, $from, $baseurl, $ext, $section, $copy,$to_name, $to,$comment, $SITE_ID;
 
 		if ($SITE_ID == 5)
 		{
@@ -1199,11 +1218,22 @@ class document extends aw_template
 			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$GLOBALS["baseurl"],$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 		else
+		if ($SITE_ID == 71)
+		{
+			$text = "$from_name ($from) soovitab teil vaadata saiti ".$GLOBALS["baseurl"].",\ntäpsemalt linki ".$GLOBALS["baseurl"]."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
+
+			if ($copy != "")
+				$bcc = "\nCc: $copy ";
+
+			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$GLOBALS["baseurl"],$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+		}
+		else
 		{
 			$text = "$from_name ($from) soovitab teil vaadata Nädala saidile www.nadal.ee,\ntäpsemalt linki http://www.nadal.ee/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
+
 
 			mail("\"$to_name\" <".$to.">",LC_DOCUMENT_ART_FROM_NADAL,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
