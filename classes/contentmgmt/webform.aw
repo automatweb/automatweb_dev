@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.35 2005/01/06 15:28:57 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.36 2005/01/06 15:30:54 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1636,7 +1636,7 @@ class webform extends class_base
 	
 	function _insert_event_inf($e, $o)
 	{
-		$start = $e->class_id() == CL_CRM_MEETING ? $e->prop("start") : $e->prop("start");
+		$start = $e->prop("start");
 		$end = $e->prop("end");
 		$this->vars(array(
 			"ev_title" => $e->name(),
@@ -1644,12 +1644,7 @@ class webform extends class_base
 			"ev_end" => locale::get_lc_date($end, LC_DATE_FORMAT_LONG_FULLYEAR)." ".date("H:i",$end),
 			"ev_content" => nl2br($e->prop("content"))
 		));
-
-		$ct = "";
-		if ($o->prop("show_content") == 1)
-		{
-			$ct = $this->parse("SHOW_CONTENT");
-		}
+		$ct = $this->parse("SHOW_CONTENT");
 		$this->vars(array(
 			"SHOW_CONTENT" => $ct
 		));
