@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.21 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.22 2001/10/30 16:14:04 cvs Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -68,7 +68,7 @@ class msgboard extends aw_template
 		$aw_mb_last = unserialize(stripslashes($aw_mb_last));
 		$aw_mb_last[$id] = time();
 		// miks mitte sessiooni kasutada?
-		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000,"/");
+		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
 
 		if ($msgboard_type == "flat")	// the wussy version
 			return $this->show_flat($id, $page,$forum_id);
@@ -213,11 +213,13 @@ class msgboard extends aw_template
 
 		$this->tpl_reset();
 		$this->read_template("add.tpl");
+		global $topic_id;
 		$this->vars(array(
 			"email" => $email,
 			"message" => $msg,
 			"parent" => $parent, 
-			"section" => $section,
+			"topic_id" => ($topic_id) ? $topic_id : $section,
+			"section" => ($parent) ? $section : $GLOBALS["section"], 
 			"ext" => $GLOBALS["ext"],
 			"subj" => $subj, 
 			"comment" => $comment,
@@ -273,7 +275,12 @@ class msgboard extends aw_template
 			// eh?
 			$ip = "---".substr($ip,$pp);
 
-			$this->db_query("INSERT INTO comments(parent, board_id,name, email,comment,subj,time,site_id,sendmail,ip) values($parent,'$section','$from','$email','$comment','$subj',".time().",".$GLOBALS["SITE_ID"].",'$sendmail','$ip')");
+			
+			$from = strip_tags($from);
+			$subj = strip_tags($subj);
+			$email = strip_tags($email);
+
+			$this->db_query("INSERT INTO comments(parent, board_id,name, email,comment,subj,time,site_id,sendmail,ip) values($parent,'$topic_id','$from','$email','$comment','$subj',".time().",".$GLOBALS["SITE_ID"].",'$sendmail','$ip')");
 			$id = $this->db_fetch_field("SELECT MAX(id) as id FROM comments","id");
 
 			// if it is under a topic object, update the topic objects modified date if the configuration says so.
@@ -366,7 +373,8 @@ class msgboard extends aw_template
 		}
 
 
-		$this->vars(array("section" => $id,"page" => $page));
+		global $section;
+		$this->vars(array("section" => $section,"page" => $page));
 
 		$msg_num = 0;
 		$msg_begin = $page * PER_FLAT_PAGE;
@@ -453,6 +461,11 @@ class msgboard extends aw_template
 
 	function search($id,$forum_id)
 	{
+		$obj = $this->get_obj_meta($forum_id);
+		if ($obj["meta"]["template"])
+		{
+			$this->tpl_init("../" . $obj["meta"]["template"] . "/msgboard");
+		};
 		$this->read_template("search.tpl");
 		$this->vars(array(
 			"section" => $id,
@@ -462,23 +475,73 @@ class msgboard extends aw_template
 		return $this->parse();
 	}
 
+	function do_search2($args = array())
+	{
+		$this->quote($args);
+		extract($args);
+		$this->read_template("search_results.tpl");
+		$this->vars(array("forum_id" => $forum_id));
+		$s_params = array("site_id = ".$GLOBALS["SITE_ID"]);
+		// Otsida ainult kommentaaridest?
+		$this->read_template("search_results.tpl");
+		$tables = array("objects");
+		$c = "";
+		$count = 0;
+		// board_id on topic
+		if ($s_comments)
+		{
+			$q = "SELECT *,objects.* FROM comments LEFT JOIN objects ON (comments.WHERE name LIKE '%$name%' AND subj LIKE '%$subject%' AND comment LIKE '%$comment%' AND board_id = '$section'";
+			return $this->do_search($args);
+		}
+		else
+		{
+			// need to figure out the id-s of all topics.
+			$q = "SELECT * FROM objects WHERE parent = '$forum_id' AND status = 2 AND name LIKE '%$subject%' AND comment LIKE '%$comment%' AND class_id = " . CL_MSGBOARD_TOPIC . " AND site_id = " . $GLOBALS["SITE_ID"];
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$count++;
+				$this->vars(array(
+					"topic" => $row["name"],
+					"comment" => $row["comment"],
+					"from" => $row["last"],
+					"time" => $this->time2date($row["created"],2),
+				));
+				$c .= $this->parse("topic");
+			};
+		};
+		$this->vars(array(
+			"topic" => $c,
+			"count" => $count,
+		));
+		return $this->parse();
+
+	}
+
+
 	function do_search($arr)
 	{
 		$this->quote(&$arr);
 		extract($arr);
 
-		$s_params = array("site_id = ".$GLOBALS["SITE_ID"]);
 
-		if ($s_from == 1)			$s_params[] = " name LIKE '%$from%' ";
-		if ($s_email == 1)		$s_params[] = " email LIKE '%$email%' ";
-		if ($s_subj == 1)			$s_params[] = " subj LIKE '%$subj%' ";
-		if ($s_subj == 1)			$s_params[] = " subj LIKE '%$subj%' ";
-		if ($s_comment == 1)	$s_params[] = " comment LIKE '%$comment%' ";
+		if ($from)			$s_params[] = " name LIKE '%$from%' ";
+		if ($email)		$s_params[] = " email LIKE '%$email%' ";
+		if ($subj)			$s_params[] = " subj LIKE '%$subj%' ";
+		if ($comment)	$s_params[] = " comment LIKE '%$comment%' ";
 		if ($s_all != 1)			$s_params[] = " board_id = '$section' ";
 
-		$s_str = join(" AND ", $s_params);
+		if (is_array($s_params))
+		{
+			$s_str = join(" AND ", $s_params);
+		};
 		if ($s_str == "")
-			return "";
+		{
+			#return "";
+			// kui otsiti tyhja vormiga, siis naitame 0-i vastust
+			// loodetavasti. Nome hakk
+			$s_str = " name LIKE '|||||||||||||||||||||||' "; 
+		};
 
 		$this->read_template("search_results.tpl");
 		$this->vars(array("forum_id" => $forum_id));
@@ -487,6 +550,7 @@ class msgboard extends aw_template
 		$msg_end = ($page+1) * PER_FLAT_PAGE;
 
 		$cnt = 0;
+
 		$this->db_query("SELECT * FROM comments WHERE $s_str ORDER BY board_id, time");
 		while ($row = $this->db_next())
 		{
@@ -524,6 +588,7 @@ class msgboard extends aw_template
 				$p.=$this->parse("SEL_PAGE");
 			else
 				$p.=$this->parse("PAGE");
+
 		}
 		if ($num_pages > 1)
 		{
@@ -596,9 +661,10 @@ class msgboard extends aw_template
 		{
 			$this->tpl_init("../" . $obj["meta"]["template"] . "/msgboard");
 		};
+
 		$this->read_template("list_topics.tpl");
 		global $section;
-		$this->vars(array("forum_id" => $forum_id,"section" => $section));
+		$this->vars(array("forum_id" => $forum_id,"section" => $section,"comment" => $obj["comment"]));
 
 		$this->db_query("SELECT COUNT(id) as cnt ,board_id, MAX(time) as mtime FROM comments GROUP BY board_id");
 		while ($row = $this->db_next())
@@ -945,7 +1011,7 @@ class msgboard extends aw_template
 		{
 			$aw_mb_last[$row[oid]] = time();
 		}
-		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000,"/");
+		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
 	}
 
 	function show_threaded($id,$page,$forum_id)
@@ -1022,7 +1088,7 @@ class msgboard extends aw_template
 		}
 
 		$this->aw_mb_last[$row[oid]] = time();
-		setcookie("aw_mb_last",serialize($this->aw_mb_last),time()+24*3600*1000,"/");
+		setcookie("aw_mb_last",serialize($this->aw_mb_last),time()+24*3600*1000);
 
 		$subj = strpos($subj,"Re:")===false ? "Re: ".$subj : $subj;
 		$comment = join("\r\n",$this->map("> %s",explode("\r\n",wordwrap($comment,33,"\r\n",1))));
