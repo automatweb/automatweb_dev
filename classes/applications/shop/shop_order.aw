@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.18 2004/10/29 19:06:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.19 2004/11/03 14:52:45 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -609,27 +609,34 @@ class shop_order extends class_base
 			if (is_object($product_info))
 			{
 				$product_info = $product_info->from();
-				for( $i=1; $i<21; $i++)
-				{
-					$ui = $product_info->prop("user".$i);
-					if ($i == 16 && aw_ini_get("site_id") == 139 && $product_info->prop("userch5"))
-					{
-						$ui = $prod->prop("user3");
-					}
+			}
 
-					$this->vars(array(
-						'user'.$i => $ui
-					));
+			if (!is_object($product_info))
+			{
+				$product_info = $prod;
+			}
+
+			for( $i=1; $i<21; $i++)
+			{
+				$ui = $product_info->prop("user".$i);
+				if ($i == 16 && aw_ini_get("site_id") == 139 && $product_info->prop("userch5"))
+				{
+					$ui = $prod->prop("user3");
 				}
-				$product_info_i = $product_info->instance();
-				$cur_tot = $tp[$prod->id()] * $product_info_i->get_calc_price($product_info);
-				$prod_total += $cur_tot;
+
 				$this->vars(array(
-					"prod_name" => $product_info->name(),
-					"prod_price" => $product_info_i->get_price($product_info),
-					"prod_tot_price" => number_format($cur_tot, 2)
+					'user'.$i => $ui
 				));
 			}
+
+			$product_info_i = $product_info->instance();
+			$cur_tot = $tp[$prod->id()] * $product_info_i->get_calc_price($product_info);
+			$prod_total += $cur_tot;
+			$this->vars(array(
+				"prod_name" => $product_info->name(),
+				"prod_price" => $product_info_i->get_price($product_info),
+				"prod_tot_price" => number_format($cur_tot, 2)
+			));
 
 			foreach(safe_array($ord_item_data[$prod->id()]) as $__nm => $__vl)
 			{
@@ -805,14 +812,14 @@ class shop_order extends class_base
 		}
 
 		$ll = $lln = "";
-		if (aw_global_get("uid") != "")
+		/*if (aw_global_get("uid") != "")
 		{
 			$ll = $this->parse("logged");
 		}
 		else
-		{
+		{*/
 			$lln = $this->parse("not_logged");
-		}
+		//}
 
 		$this->vars(array(
 			"logged" => $ll,
