@@ -52,6 +52,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="submit_interests2">
+			<function name="submit_interests2">
+				<arguments>
+				</arguments>
+			</function>	
+		</action>
 	</class>
 </orb>
 		
