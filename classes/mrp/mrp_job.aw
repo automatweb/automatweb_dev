@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.25 2005/03/22 20:54:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.26 2005/03/23 16:05:28 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -363,18 +363,18 @@ class mrp_job extends class_base
 			MRP_STATUS_PLANNED,
 		);
 
-		if (!in_array ($project->prop ("state"), $applicable_states))
+		if (!in_array ($project->prop ("state"), $applicable_project_states))
 		{
 			$errors[] = t("Projekt pole töös ega planeeritud");
 		}
 
-		if (!in_array ($this_object->prop ("state"), $applicable_states))
+		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
 		{
 			$errors[] = t("Töö pole planeeritud");
 		}
 
 		### check if prerequisites are done
-		$prerequisites = explode (",", $this_object->prop ("prerequisites"));
+		$prerequisites = trim($this_object->prop ("prerequisites")) != ""  ?explode (",", $this_object->prop ("prerequisites")) : array();
 		$prerequisites_done = true;
 
 		foreach ($prerequisites as $prerequisite_oid)
@@ -416,7 +416,7 @@ class mrp_job extends class_base
 			### start project if first job
 			if (((int) $this_object->prop ("exec_order")) === 1)
 			{
-				$mrp_case = get_instance(CL_MRP_RESOURCE);
+				$mrp_case = get_instance(CL_MRP_CASE);
 				$project_start = $mrp_case->start(array("id" => $project->id ()));
 
 				$project_errors = parse_url($project_start);
@@ -439,10 +439,16 @@ class mrp_job extends class_base
 			$progress = time () + $this_object->prop ("planned_length");
 			$project->set_prop ("progress", $progress);
 
+			### set resource in use
+			$resource_obj = obj($this_object->prop("resource"));
+			$resource_obj->set_prop("state", MRP_STATUS_RESOURCE_INUSE);
+			$resource_obj->save();
+
 			### start job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
 
 			### log
+			$ws = get_instance(CL_MRP_WORKSPACE);
 			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 
 			### all went well, save and say OK
@@ -847,6 +853,7 @@ class mrp_job extends class_base
 		### check if resource is available
 		$resource = obj($job->prop("resource"));
 		$applicable_states = array (
+			NULL,
 			MRP_STATUS_RESOURCE_AVAILABLE,
 		);
 
