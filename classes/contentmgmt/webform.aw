@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.59 2005/02/14 13:26:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.60 2005/02/14 13:31:34 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1506,11 +1506,11 @@ class webform extends class_base
 				$sbz[$pn] = $pd;
 				continue;
 			}
-			if($pd["type"] == "classificator")
+			if($pd["type"] == "classificator" && $all_props[$pn]["sort_by"])
 			{
 				$pd["sort_by"] = $all_props[$pn]["sort_by"];
 			}
-			if($pd["type"] == "date_select")
+			if($pd["type"] == "date_select" && $all_props[$pn]["defaultx"])
 			{
 				$pd["default"] = $all_props[$pn]["defaultx"];
 			}
