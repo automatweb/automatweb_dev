@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.82 2001/07/03 04:28:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.83 2001/07/03 06:18:48 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -542,9 +542,9 @@ class messenger extends menuedit_light
 					$t->define_data(array(
 							"check" => sprintf("<input type='checkbox' name='check[%d]' value='1'>",$msg["id"]),
 							"from" => $msg["from"],
+							"id" => $msg["oid"],
 							"subject" => $subject . $msg["attach"],
 							"when" => $tm2,
-							"bgcolor" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
 							"style" => ($msg["status"]) ? "textsmall" : "textsmallbold",
 						));
 				};
@@ -558,7 +558,6 @@ class messenger extends menuedit_light
 		// $id - aktiivne folder
 		$pagelist = array();
 
-		print "sorting by $args[sortby]<br>";
 		$t->sort_by(array("field" => $args["sortby"]));
 
 		for ($i = 1; $i <= $pages; $i++)
@@ -1341,6 +1340,8 @@ class messenger extends menuedit_light
 							"uid" => UID,
 							"key" => "msg_searches",
 					));
+
+
 		if (is_array($_sconf) && ($args["refine"]))
 		{
 			list(,$sconf) = each($_sconf);
@@ -1374,7 +1375,7 @@ class messenger extends menuedit_light
 			$c .= $this->parse("line");
 		};
 
-		$rf =  $this->mk_reforb("do_search",array());
+		$rf =  $this->mk_reforb("register_search",array());
 
 		$sline = "";
 
@@ -1382,14 +1383,17 @@ class messenger extends menuedit_light
 		{
 			$chosen = ($checkall) ? -1 : $sconf["field"][$i];
 
-			if ( ($i == 0) && (isset($args["mfrom"])) )
+			if (isset($args["mfrom"]))
 			{
-				$value = htmlspecialchars(rawurldecode($args["mfrom"]));
-				$value = stripslashes($value);
-			}
-			else
-			{
-				$value = "";
+				if ( $i == 0 )
+				{
+					$value = htmlspecialchars(rawurldecode($args["mfrom"]));
+					$value = stripslashes($value);
+				}
+				else
+				{
+					$value = "";
+				};
 			};
 
 			$this->vars(array(
@@ -1422,18 +1426,14 @@ class messenger extends menuedit_light
 	}
 
 	////
-	// !Otsib kirju
+	// !Registreerib otsingu
 	// argumendid:
 	// connector (array) - sisaldab koiki connectoreid
 	// search (array) - sisaldab otsistringe
 	// field (array) - sisaldab fielde, millest otsida.
-	function do_search($args = array())
+	function register_search($args = array())
 	{
 		extract($args);
-		$menu = $this->gen_msg_menu(array(
-				"title" => MSG_TITLE_SEARCH,
-				"activelist" => array("search"),
-				));
 
 		$id = "s" . gen_uniq_id();
 
@@ -1446,6 +1446,31 @@ class messenger extends menuedit_light
 					"key" => "msg_searches",
 					"value" => array($id => $args),
 				));
+
+		return $this->mk_site_orb(array(
+				"action" => "do_search",
+				));
+	}
+
+	////
+	// !Performs the actual search
+	function do_search($args = array())
+	{
+		$menu = $this->gen_msg_menu(array(
+				"title" => MSG_TITLE_SEARCH,
+				"activelist" => array("search"),
+				));
+
+		$this->_init_search();
+		
+		$_sconf = $this->awuser->get_user_config(array(
+							"uid" => UID,
+							"key" => "msg_searches",
+					));
+
+		list(,$sconf) = each($_sconf);
+		
+		extract($sconf);
 
 		$folder_list = $this->_folder_list();
 		
@@ -1474,10 +1499,56 @@ class messenger extends menuedit_light
 			return $this->mk_site_orb(array("action" => "search"));
 		};
 
-		#if (!is_array($folders))
-		#{
-		#	$folders = array($folders => $folders);
-		#};
+		load_vcl("table");
+		$t = new aw_table(array(
+				"prefix" => "mailbox_search",
+				"imgurl"    => $GLOBALS["baseurl"]."/img",
+				"tbgcolor" => "#C3D0DC",
+			));
+
+		$t->parse_xml_def($GLOBALS["basedir"]."/xml/messenger/table.xml");
+
+		$t->set_header_attribs(array(
+				"class" => "messenger",
+				"action" => "do_search",
+		));
+		global $baseurl;
+
+		$t->define_field(array(
+				"name" => "folder",
+				"caption" => "Folder",
+				"strformat" => "<a href='$baseurl/?class=messenger&action=folder&id={VAR:fid}'>%s</a>",
+				"talign" => "left",
+				"sortable" => 1,
+		));
+
+		$t->define_field(array(
+				"name" => "from",
+				"caption" => "Kellelt",
+				"talign" => "left",
+				"nowrap" => 1,
+				"sortable" => 1,
+		));
+	
+
+		$t->define_field(array(
+				"name" => "subject",
+				"caption" => "Teema",
+				"strformat" => "<a href='$baseurl/?class=messenger&action=show&id={VAR:id}'>%s</a>",
+				"talign" => "left",
+				"sortable" => 1,
+		));
+		
+		$t->define_field(array(
+				"name" => "when",
+				"caption" => "Aeg",
+				"talign" => "left",
+				"type" => "time",
+				"format" => "H:i d-M-Y",
+				"nowrap" => 1,
+				"sortable" => 1,
+		));
+
 		$results = $this->driver->msg_search(array(
 					"value" => $value,
 					"connector" => $connector,
@@ -1491,19 +1562,29 @@ class messenger extends menuedit_light
 			$subject = (isset($contents["subject"])) ? $this->MIME_decode($contents["subject"]) : "(no subject)";
 			$this->dequote($subject);
 			$this->dequote($subject);
-			$contents["tm"] = $this->time2date($contents["tm"],2);
+			//$contents["tm"] = $this->time2date($contents["tm"],2);
 			$contents["from"] = $this->MIME_decode($contents["mfrom"]);
 			$contents["folder"] = $folder_list[$contents["parent"]];
 			$contents["fid"] = $contents["parent"];
 			$contents["mid"] = $contents["oid"];
 			$contents["subject"] = $subject;
+			$t->define_data(array(
+					"folder" => $folder_list[$contents["parent"]],
+					"from" => $this->MIME_decode($contents["mfrom"]),
+					"subject" => $subject,
+					"id" => $contents["oid"],
+					"fid" => $contents["parent"],
+					"when" => $contents["tm"],
+			));
 			$this->vars($contents);
 			$c .= $this->parse("line");
 		};
+		
+		$t->sort_by(array("field" => $args["sortby"]));
 		$this->vars(array(
 				"line" => $c,
-				#"fields" => join(",",array_keys($fields)),
 				"quser" => $quser,
+				"table" => $t->draw(),
 				"value" => $value,
 				"menu" => $menu,
 		));
