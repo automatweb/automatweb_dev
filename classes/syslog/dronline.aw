@@ -122,7 +122,7 @@ class dronline extends class_base
 		extract($arr);
 		if ($dro_tab == '')
 		{
-			$dro_tab = 'dronline';
+			$dro_tab = 'general';
 		}
 		if (!$cur_range)
 		{
@@ -134,19 +134,26 @@ class dronline extends class_base
 			'dro_tab' => $dro_tab,
 			'cur_range' => $cur_range
 		);
-		$ret = parent::change($arr);
 
 		// if no conf object has been set yet, return the change form
 		$ob = $this->get_object($id);
+		$this->mk_path($ob['parent'], "Muuda dronline objekti");
 		if (!$ob['meta']['conf'])
 		{
-			return $ret;
+			return $this->_do_general($arr);
 		}
 
 		unset($arr['class']);
 		unset($arr['action']);
 
 		$tbp = get_instance("vcl/tabpanel");
+
+		$tbp->add_tab(array(
+			'active' => ($dro_tab == 'general' ? true : false),
+			'caption' => '&Uuml;ldine',
+			'link' => $this->mk_my_orb('change', array_merge($arr, array('dro_tab' => 'general')))
+		));
+
 		$tbp->add_tab(array(
 			'active' => ($dro_tab == 'dronline' ? true : false),
 			'caption' => 'DR. Online',
@@ -184,9 +191,14 @@ class dronline extends class_base
 		));
 
 		$fn = '_do_'.$dro_tab;
-		return $ret.$tbp->get_tabpanel(array(
+		return $tbp->get_tabpanel(array(
 			'content' => $this->$fn($arr)
 		));
+	}
+
+	function _do_general($arr)
+	{
+		return parent::change($arr);
 	}
 
 	function _do_dronline($arr)
@@ -265,7 +277,7 @@ class dronline extends class_base
 			$numres = $this->db_fetch_field("SELECT count(*) AS cnt FROM syslog ".$whc." ORDER BY tm DESC ".$this->get_limit_clause($id), "cnt");
 			if ($numres > 1000)
 			{
-				return "Tulemus on liiga suur! Maksimaalne kuvatav ridade arv on 1000, kuid tulemises on $numres rida!";
+				return "Tulemus on liiga suur! Maksimaalne kuvatav ridade arv on 1000, kuid tulemuses on $numres rida!";
 			}
 		}
 
