@@ -121,6 +121,10 @@ href="javascript:this.document.aa.submit();">Salvesta</a>
 		<td class="celltext">Nowrap:</td>
 		<td class="celltext"><input type="checkbox" name="st[nowrap]" VALUE=1 {VAR:nowrap}></td>
 	</tr>
+	<tr>
+		<td class="celltext">K&uuml;lastatud lingi stiil:</td>
+		<td class="celltext"><select class="small_button" name="st[visited]">{VAR:visited}</select></td>
+	</tr>
 </table>
 {VAR:reforb}
 </form>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.18 2002/12/23 10:33:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.19 2003/01/08 12:52:03 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -183,6 +183,7 @@ class style extends aw_template
 			"width"		=> $style["width"],
 			"css_class"		=> $style["css_class"],
 			"nowrap"	=> $style["nowrap"]  ? "CHECKED" : "",
+			"visited" => $this->picker($style["visited"], $this->get_select(0, ST_CELL, true)),
 			"reforb"	=> $this->mk_reforb("submit",array("parent" => $parent, "id" => $id))
 		));
 		return $this->parse();
@@ -621,6 +622,16 @@ class style extends aw_template
 		if ($fsstr != "")
 		{
 			$str = ".style_".$id." { \n".$fsstr." \n} \n";
+		}
+
+		if ($st['visited'])
+		{
+			$vst = $this->mk_cache($st['visited']);
+			$visstr = $this->_get_css($vst);
+			if ($visstr != "")
+			{
+				$str .= ".style_".$id.":visited { \n".$visstr." \n} \n";
+			}
 		}
 
 		if ($a_id)
