@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.7 2002/11/18 15:45:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.8 2002/11/19 15:22:26 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -50,7 +50,7 @@ class html extends aw_template
 		{
 			$options = $this->picker($selected,$options);
 		};
-		return "<select name='$name' $sz $mz>\n$options</select>\n";
+		return "<select name='$name' id='$name' $sz $mz>\n$options</select>\n";
 	}
 	
 	////
@@ -62,7 +62,23 @@ class html extends aw_template
 	{
 		extract($args);
 		$size = ($size) ? $size : 40;
-		return "<input type='text' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
+		return "<input type='text' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
+	}
+
+	////
+	// !html textarea
+	// name(string)
+	// value(string)
+	// cols(int)
+	// rows(int)
+	// wrap(string)
+	function textarea($args = array())
+	{
+		extract($args);
+		$cols = ($cols) ? $cols : 40;
+		$rows = ($rows) ? $rows : 5;
+		$wrap = ($wrap) ? $wrap : "soft";
+		return "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap'>$value</textarea>\n";
 	}
 	
 	////
@@ -74,7 +90,7 @@ class html extends aw_template
 	{
 		extract($args);
 		$size = ($size) ? $size : 40;
-		return "<input type='password' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
+		return "<input type='password' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength'/>\n";
 	}
 
 	////
@@ -99,7 +115,7 @@ class html extends aw_template
 	function fileupload($args = array())
 	{
 		extract($args);
-		return "$value <input type='file' name='$name'>\n";
+		return "$value <input type='file' id='$name' name='$name'>\n";
 	}
 	
 	////
@@ -115,7 +131,7 @@ class html extends aw_template
 		{
 			$value = 1;
 		};
-		return "<input type='checkbox' name='$name' value='$value' $checked/>\n";
+		return "<input type='checkbox' id='$name' name='$name' value='$value' $checked/>\n";
 	}
 
 	////
@@ -127,7 +143,7 @@ class html extends aw_template
 	{
 		extract($args);
 		$checked = checked($checked);
-		return "<input type='radio' name='$name' value='$value' $checked/>\n $caption";
+		return "<input type='radio' id='$name' name='$name' value='$value' $checked/>\n $caption";
 	}
 	
 	////
