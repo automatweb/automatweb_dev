@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.226 2004/02/27 12:11:56 duke Exp $
+// $Id: class_base.aw,v 2.227 2004/03/01 11:12:03 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -269,7 +269,7 @@ class class_base extends aw_template
 
 		// Now I need to deal with relation elements
 		$properties = $this->get_property_group($filter);
-		
+
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
 			$o_t = get_instance("translate/object_translation");
@@ -2959,12 +2959,19 @@ class class_base extends aw_template
 		// I need group and caption from each one
 
 		$first_subgrp = array();
+		$groupmap = $rgroupmap = array();
 
 		foreach($this->groupinfo as $gkey => $ginfo)
 		{
 			if (!empty($ginfo["parent"]) && empty($first_subgrp[$ginfo["parent"]]))
 			{
 				$first_subgrp[$ginfo["parent"]] = $gkey;
+			};
+
+			if (!empty($ginfo["parent"]))
+			{
+				$groupmap[$ginfo["parent"]][] = $gkey;
+				$rgroupmap[$gkey] = $ginfo["parent"];
 			};
 		}
 
@@ -2996,15 +3003,23 @@ class class_base extends aw_template
 			};
 		};
 
+		// I need to detect whether a group has children groups. If it has, then all
+		// properties that belong to this group will have to be remapped to the
+		// first subgroup
+
 		$this->use_group = $use_group;
 
-		// if a group with subgroups is requested, then we need to return the contents
-		// of first subgroup
-		if (isset($first_subgrp[$use_group]))
+		if ($rgroupmap[$use_group])
+		{
+			$this->parent_group = $rgroupmap[$use_group];
+		}
+		elseif (isset($groupmap[$use_group][0]))
 		{
 			$this->parent_group = $use_group;
-			$use_group = $first_subgrp[$use_group];
+			$use_group = $groupmap[$use_group][0];
+
 		};
+
 
 		$this->prop_by_group = array();
 
@@ -3021,7 +3036,12 @@ class class_base extends aw_template
 			};
 
 			$propdata = array_merge($all_properties[$key],$val);
-			
+
+			if (isset($first_subgrp[$propdata["group"]]))
+			{
+				$val["group"] = $first_subgrp[$propdata["group"]];
+			};
+
 			// deal with properties belonging to multiple groups
 			$propgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);
 			$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
