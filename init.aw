@@ -618,6 +618,14 @@ function &__get_site_instance()
 		{
 			include($fname);
 		}
+		else
+		{
+			$fname = aw_ini_get("site_basedir")."/public/".$fname;
+			if (file_exists($fname))
+			{
+				include($fname);
+			}
+		}
 		if (class_exists("site"))
 		{
 			$__site_instance = new site;
