@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.10 2004/05/26 22:19:43 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.11 2004/06/02 14:37:23 duke Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -160,7 +160,9 @@ class docgen_viewer extends class_base
 
 	function display_class($data, $cur_file)
 	{
+		
 		$this->read_template("class_info.tpl");
+
 		$f = "";
 		foreach($data["functions"] as $func => $f_data)
 		{
@@ -220,6 +222,7 @@ class docgen_viewer extends class_base
 			"start_line" => $data["start_line"],
 			"FUNCTION" => $f,
 			"LONG_FUNCTION" => $fl,
+			"view_class" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"]))
 		));
 
 		$str = $this->parse();
@@ -328,7 +331,7 @@ class docgen_viewer extends class_base
 
 		@param file required
 		@param v_class required
-		@param func required
+		@param func optional
 
 	**/
 	function view_source($arr)
@@ -338,12 +341,23 @@ class docgen_viewer extends class_base
 		$da = get_instance("core/docgen/docgen_analyzer");
 		$data = $da->analyze_file($file);
 
-		$start_line = $data["classes"][$v_class]["functions"][$func]["start_line"];
-		$end_line = $data["classes"][$v_class]["functions"][$func]["end_line"];
+		if ($func)
+		{
+			$start_line = $data["classes"][$v_class]["functions"][$func]["start_line"];
+			$end_line = $data["classes"][$v_class]["functions"][$func]["end_line"];
+		}
+		else
+		{
+			$start_line = 0;
+			$end_line = 100000;
+		}
 		
 		$fd = file($this->cfg["basedir"]."/classes".$file);
 		$line = 1;
-		$str = "<?php\n";
+		if ($func)
+		{
+			$str = "<?php\n";
+		}
 		foreach($fd as $l)
 		{
 			if ($line >= $start_line && $line <= $end_line)
@@ -352,7 +366,10 @@ class docgen_viewer extends class_base
 			}
 			$line++;
 		}
-		$str .= "?>";
+		if ($func)
+		{
+			$str .= "?>";
+		}
 
 		return highlight_string($str,true);
 	}
