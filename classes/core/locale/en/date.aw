@@ -39,6 +39,9 @@ class date
 			case 6:
 				$rv = ucfirst($this->month[date("m",$timestamp)-1]) . " " . date("d",$timestamp) . date(" Y",$timestamp);
 				return $rv;
+			case 7:
+				$newdate=date("H:i d.m.y", $timestamp);
+				return $newdate;
 				
 		}
 	}

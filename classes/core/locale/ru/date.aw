@@ -27,6 +27,9 @@ class date
 			case 4:
 				$newdate=date("d. ", $timestamp).$month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				return $newdate;
+			case 7:
+				$newdate=date("H:i d.m.y", $timestamp);
+				return $newdate;
 		}
 	}
 

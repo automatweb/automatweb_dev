@@ -40,6 +40,9 @@ class date
 			case 6:
 				$rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1] . date(" Y",$timestamp);
 				break;
+			case 7:
+				$rv = date("H:i j.m.Y", $timestamp);
+				break;
 				
 
 

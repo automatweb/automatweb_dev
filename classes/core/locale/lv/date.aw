@@ -39,6 +39,9 @@ class date
 			case 6:
 				$rv = date("d.",$timestamp).$this->month[date("m",$timestamp)-1] . date(".Y",$timestamp);
 				return $rv;
+			case 7:
+				$newdate=date("H:i d.m.y", $timestamp);
+				return $newdate;
 		}
 	}
 	
