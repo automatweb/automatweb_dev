@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.4 2001/05/21 16:28:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.5 2001/05/22 02:40:53 kristo Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -216,6 +216,10 @@ class core extends db_connector
 			case "7":
 				// 04-2001
 				$dateformat = "M-Y";
+				break;
+			case "8":
+				// 01/04/00
+				$dateformat = "m/d/y";
 				break;
 			default:
 				// 12:22 04-01
