@@ -635,11 +635,13 @@ class bugtrack extends aw_template
 		extract($arr);
 
 		$bug = $this->get_bug($id);
+		
 		// enda pandud bugi saab kaa muuta
 		if (!$this->prog_acl("admin", PRG_BUGTRACK) && ($bug["uid"]!=UID || !UID))
 		{
 			$this->prog_acl_error("admin", PRG_BUGTRACK);
 		};
+		
 
 		$uusmails=$bug["mails"].($mails?($bug["mails"]?",":"").$mails:"");
 		$developer=join(",",is_array($developer)?$developer:array());
