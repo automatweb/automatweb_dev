@@ -4,13 +4,13 @@
 <td class="fcaption">List:</td><td class="fcaption">{VAR:list_name}</td>
 </tr>
 <tr>
-<td class="fcaption">Nimi:</td><td class="fform"><input type='text' NAME='name' VALUE='{VAR:user_name}'></td>
+<td class="fcaption">{VAR:LC_MAILINGLIST_NAME}:</td><td class="fform"><input type='text' NAME='name' VALUE='{VAR:user_name}'></td>
 </tr>
 <tr>
-<td class="fcaption">E-mafdsfdsil:</td><td class="fform"><input type='text' NAME='email' VALUE='{VAR:user_mail}'></td>
+<td class="fcaption">E-mail:</td><td class="fform"><input type='text' NAME='email' VALUE='{VAR:user_mail}'></td>
 </tr>
 <tr>
-<td class="fcaption" colspan=2>Muutujad:</td>
+<td class="fcaption" colspan=2>{VAR:LC_MAILINGLIST_SMALL_VARIABLES}:</td>
 </tr>
 <!-- SUB: VARS -->
 <tr>
@@ -19,7 +19,7 @@
 </tr>
 <!-- END SUB: VARS -->
 <tr>
-<td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='Salvesta'></td>
+<td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='{VAR:LC_MAILINGLIST_SAVE}'></td>
 </tr>
 </table>
 <input type='hidden' NAME='action' VALUE='new_user'>

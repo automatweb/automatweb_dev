@@ -6,19 +6,19 @@
 
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="11" class="fgtitle">&nbsp;<b>KATEGOORIAD: 
+<td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_CATEGORIES}: 
 <!-- SUB: ADD_CAT -->
-<a href='list.{VAR:ext}?type=add_cat&parent={VAR:parent}'>Lisa</a>
+<a href='list.{VAR:ext}?type=add_cat&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_ADD}</a>
 <!-- END SUB: ADD_CAT -->
 </b>
 </td>
 </tr>
 <tr>
-<td height="15" class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Kirjeldus&nbsp;</td>
-<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
-<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
-<td align="center" colspan="3" class="title">&nbsp;Tegevus&nbsp;</td>
+<td height="15" class="title">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_DESCRIPTION}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_CHANGER}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_CHANGED}&nbsp;</td>
+<td align="center" colspan="3" class="title">&nbsp;{VAR:LC_MAILINGLIST_ACTION}&nbsp;</td>
 </tr>
 
 <!-- SUB: C_LINE -->
@@ -42,8 +42,7 @@
 &nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: CAN_DELETE -->
-<a href="javascript:box2('Oled kindel, et soovid seda kategooriat 
-kustutada?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}')">Kustuta</a>
+<a href="javascript:box2('{VAR:LC_MAILINGLIST_WANT_TO_DEL_CAT}?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}')">{VAR:LC_MAILINGLIST_DELETE}</a>
 <!-- END SUB: CAN_DELETE -->
 &nbsp;</td>
 <td class="fgtext2">&nbsp;
@@ -68,18 +67,18 @@ kustutada?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}'
 
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>LISTID:&nbsp;
+<td height="15" colspan="15" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_LISTS}:&nbsp;
 <!-- SUB: ADD_LIST -->
-<a href='list.{VAR:ext}?type=add_list&parent={VAR:parent}'>Lisa</a> |
-<a href='#' onClick='document.listform.submit()'>Salvesta</a>
+<a href='list.{VAR:ext}?type=add_list&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_ADD}</a> |
+<a href='#' onClick='document.listform.submit()'>{VAR:LC_MAILINGLIST_SAVE}</a>
 <!-- END SUB: ADD_LIST -->
 </b></td>
 </tr>
 <tr>
 <td align="center" class="title">&nbsp;ID&nbsp;</td>
-<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Kommentaar&nbsp;</td>
-<td align="center" colspan="7" class="title">Tegevus</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_COMMENTARY}&nbsp;</td>
+<td align="center" colspan="7" class="title">{VAR:LC_MAILINGLIST_ACTION}</td>
 <td align="center" class="title">&nbsp;Default&nbsp;</td>
 </tr>
 <!-- SUB: LINE -->
@@ -89,13 +88,13 @@ kustutada?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}'
 <td class="fgtext">&nbsp;{VAR:list_comment}&nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: L_CHANGE -->
-<a href='list.{VAR:ext}?type=change_list&id={VAR:list_id}'>Muuda</a>
+<a href='list.{VAR:ext}?type=change_list&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_CHANGE}</a>
 <!-- END SUB: L_CHANGE -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=change_list_vars&id={VAR:list_id}&parent={VAR:parent}'>Muutujad</a>&nbsp;</td>
+<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=change_list_vars&id={VAR:list_id}&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_SMALL_VARIABLES}</a>&nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: L_DELETE -->
-<a href="javascript:box2('Oled kindel, et soovid seda listi kustutada?','list.{VAR:ext}?type=delete_list&id={VAR:list_id}')">Kustuta</a>
+<a href="javascript:box2('{VAR:LC_MAILINGLIST_WANT_TO_DEL_LIST}?','list.{VAR:ext}?type=delete_list&id={VAR:list_id}')">{VAR:LC_MAILINGLIST_DELETE}</a>
 <!-- END SUB: L_DELETE -->
 &nbsp;</td>
 <td class="fgtext2">&nbsp;
@@ -103,11 +102,11 @@ kustutada?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}'
 <a href="editacl.{VAR:ext}?oid={VAR:list_id}&file=list.xml">ACL</a>
 <!-- END SUB: L_ACL -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=list_inimesed&id={VAR:list_id}'>Listi liikmed</a>&nbsp;</td>
-<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=list_mails&id={VAR:list_id}'>Meilid</a>&nbsp;</td>
+<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=list_inimesed&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_LIST_MEMBERS}</a>&nbsp;</td>
+<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=list_mails&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_SMALL_MAILS}</a>&nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: L_IMPORT -->
-<a href='list.{VAR:ext}?type=import_file&id={VAR:list_id}'>Impordi aadresse</a>
+<a href='list.{VAR:ext}?type=import_file&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_IMPORT_ADDRESS}</a>
 <!-- END SUB: L_IMPORT -->
 &nbsp;</td>
 <td class="fgtext2" align="center"><input type="radio" name="default" value="{VAR:list_id}" {VAR:checked}>

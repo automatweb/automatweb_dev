@@ -1,6 +1,6 @@
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 	<tr>
-		<td height="15" colspan="4" class="fgtitle">&nbsp;<b>GRAAFIK: <a href='{VAR:conf}'>Konfima</a>&nbsp;|&nbsp;<a href='{VAR:prev}'>Eelvaade</a>
+		<td height="15" colspan="4" class="fgtitle">&nbsp;<b>{VAR:LC_GRAPH_GRAPH1}: <a href='{VAR:conf}'>{VAR:LC_GRAPH_CONFIG}</a>&nbsp;|&nbsp;<a href='{VAR:prev}'>{VAR:LC_GRAPH_PREW}</a>
 		</b></td>
 	</tr>
 	<tr><td>&nbsp;</tr></td>
@@ -11,16 +11,16 @@
 <form method="post" action="reforb.{VAR:ext}">
 <TABLE border=0>
 <TR>
-	<TD class="fcaption">Nimi:<TD class="fcaption"><input type="text" name="name" value="{VAR:name}">
+	<TD class="fcaption">{VAR:LC_GRAPH_NAME}:<TD class="fcaption"><input type="text" name="name" value="{VAR:name}">
 <TR>
-	<TD class="fcaption">Kommentaar:<TD class="fcaption"><textarea name="comment" COLS=50 ROWS=5 wrap='soft'>{VAR:comment}</textarea></tr>
+	<TD class="fcaption">{VAR:LC_GRAPH_COMM}:<TD class="fcaption"><textarea name="comment" COLS=50 ROWS=5 wrap='soft'>{VAR:comment}</textarea></tr>
 <TR>
-	<TD class="fcaption">Graafiku tüüp:<td class="fcaption">&nbsp;{VAR:type}&nbsp;
+	<TD class="fcaption">{VAR:LC_GRAPH_TYPE}:<td class="fcaption">&nbsp;{VAR:type}&nbsp;
 <TR>
-	<TD class="fcaption">Andmed:<td class="fcaption">&nbsp;{VAR:andmed}&nbsp;
+	<TD class="fcaption">{VAR:LC_GRAPH_DATA}:<td class="fcaption">&nbsp;{VAR:andmed}&nbsp;
 
 	</TABLE>   
-<input type="submit" name="Submit" value="Salvesta">
+<input type="submit" name="Submit" value="{VAR:LC_GRAPH_SAVE}">
 </TABLE>
 {VAR:reforb}
 </form>

@@ -23,29 +23,29 @@ function submitForm(val)
 
 <table border="0" cellspacing="1" cellpadding="0"  width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>LISTI {VAR:list_name} LIIKMED ({VAR:count}):&nbsp;
+<td height="15" colspan="15" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_LISTS_M} {VAR:list_name} {VAR:LC_MAILINGLIST_L_MEMBERS} ({VAR:count}):&nbsp;
 <!-- SUB: U_ADD -->
-<a href='list.{VAR:ext}?type=add_user&id={VAR:list_id}'>Lisa</a>&nbsp;|&nbsp;
+<a href='list.{VAR:ext}?type=add_user&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_ADD}</a>&nbsp;|&nbsp;
 <!-- END SUB: U_ADD -->
 <!-- SUB: PASTE -->
 <a href='list.{VAR:ext}?type=paste_user&id={VAR:list_id}'>Paste</a>&nbsp;|&nbsp;
 <!-- END SUB: PASTE -->
-<a href="javascript:submitForm('delete')" >Kustuta</a>
+<a href="javascript:submitForm('delete')" >{VAR:LC_MAILINGLIST_DELETE}</a>
 &nbsp;|&nbsp;<a href="javascript:submitForm('copy')" >Copy</a>
 &nbsp;|&nbsp;<a href="javascript:submitForm('cut')" >Cut</a>
 <!-- SUB: U_IMPORT -->
-&nbsp;|&nbsp;<a href="list.{VAR:ext}?type=import_file&id={VAR:list_id}" >Impordi</a>
+&nbsp;|&nbsp;<a href="list.{VAR:ext}?type=import_file&id={VAR:list_id}" >{VAR:LC_MAILINGLIST_IMPORT}</a>
 <!-- END SUB: U_IMPORT -->
-&nbsp;|&nbsp;<a href="list.{VAR:ext}?type=export_file&id={VAR:list_id}" >Ekspordi</a>
+&nbsp;|&nbsp;<a href="list.{VAR:ext}?type=export_file&id={VAR:list_id}" >{VAR:LC_MAILINGLIST_EXPORT}</a>
 </b></td>
 </tr>
 
 <tr>
-<td align="center" class="title">&nbsp;ID&nbsp;</td>
-<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;E-mail&nbsp;</td>
-<td align="center" class="title" colspan=2>Tegevus</td>
-<td align="center" class="title"><a href='#' onClick="selall();return false;">K&otilde;ik</a></td>
+<td align="center" class="title">&nbsp;<a href='list.{VAR:ext}?type=list_inimesed&id={VAR:list_id}&sortby=oid&order={VAR:is_so}'>ID</a> {VAR:id_sort_img}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='list.{VAR:ext}?type=list_inimesed&id={VAR:list_id}&sortby=name&order={VAR:is_so}'>{VAR:LC_MAILINGLIST_NAME}</a> {VAR:name_sort_img}&nbsp;</td>
+<td align="center" class="title">&nbsp;<a href='list.{VAR:ext}?type=list_inimesed&id={VAR:list_id}&sortby=mail&order={VAR:is_so}'>E-mail</a> {VAR:email_sort_img}&nbsp;</td>
+<td align="center" class="title" colspan=2>{VAR:LC_MAILINGLIST_ACTION}</td>
+<td align="center" class="title"><a href='#' onClick="selall();return false;">{VAR:LC_MAILINGLIST_ALL}</a></td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
@@ -54,7 +54,7 @@ function submitForm(val)
 <td {VAR:cut}>&nbsp;{VAR:user_mail}&nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;
 <!-- SUB: U_CHANGE -->
-<a href='list.{VAR:ext}?type=change_user&id={VAR:list_id}&user_id={VAR:user_id}'>Muuda</a>
+<a href='list.{VAR:ext}?type=change_user&id={VAR:list_id}&user_id={VAR:user_id}'>{VAR:LC_MAILINGLIST_CHANGE}</a>
 <!-- END SUB: U_CHANGE -->
 &nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;
@@ -77,6 +77,6 @@ function submitForm(val)
 </form>
 Legend:
 <table border=0>
-<tr><td>Copied on sellised:</td><td class="fgtext_copied">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
-<tr><td>Cut on sellised:</td><td class="fgtext_cut">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td>Copied {VAR:LC_MAILINGLIST_IS_LIKE_THIS}:</td><td class="fgtext_copied">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td>Cut {VAR:LC_MAILINGLIST_IS_LIKE_THIS}:</td><td class="fgtext_cut">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
 </table>

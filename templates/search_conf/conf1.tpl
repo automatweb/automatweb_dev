@@ -1,10 +1,10 @@
 <form action='refcheck.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class="fcaption">Vali rubriigid:</td><td class="fform"><SELECT NAME='section[]' SIZE=20 MULTIPLE>{VAR:section}</select></td>
+<td class="fcaption">{VAR:LC_SEARCH_CONF_CHOOSE_SECTION}:</td><td class="fform"><SELECT NAME='section[]' SIZE=20 MULTIPLE>{VAR:section}</select></td>
 </tr>
 <tr>
-<td class="fcaption" colspan=2><input type='submit' VALUE='Salvesta' CLASS="small_button"></td>
+<td class="fcaption" colspan=2><input type='submit' VALUE='{VAR:LC_SEARCH_CONF_SAVE}' CLASS="small_button"></td>
 </tr>
 </table>
 <input type='hidden' NAME='action' VALUE='admin_search_conf'>

@@ -1,20 +1,20 @@
 <form action='refcheck.{VAR:ext}' method=post>
 <table border=0 cellspacing=1 bgcolor=#cccccc cellpadding=2>
 <tr>
-<td class=title>Nimi</td>
-<td class=title colspan=3 align=center>Tegevus</td>
+<td class=title>{VAR:LC_STYLE_NAME}</td>
+<td class=title colspan=3 align=center>{VAR:LC_STYLE_ACTIVITY}</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
 <td class=plain>{VAR:style_name}</td>
 <td class=plain>
 <!-- SUB: CAN_CHANGE -->
-<a href='styles.{VAR:ext}?type=change_style&id={VAR:style_id}&parent={VAR:parent}'>Muuda</a>
+<a href='styles.{VAR:ext}?type=change_style&id={VAR:style_id}&parent={VAR:parent}'>{VAR:LC_STYLE_CHANGE}</a>
 <!-- END SUB: CAN_CHANGE -->
 &nbsp;</td>
 <td class=plain>
 <!-- SUB: CAN_DELETE -->
-<a href="javascript:box2('Kas oled kindel, et tahad stiili kustutada?','styles.{VAR:ext}?type=delete_style&id={VAR:style_id}&parent={VAR:parent}')">Kustuta</a>
+<a href="javascript:box2('{VAR:LC_STYLE_ARE_YOU_SURE}?','styles.{VAR:ext}?type=delete_style&id={VAR:style_id}&parent={VAR:parent}')">{VAR:LC_STYLE_DELETE}</a>
 <!-- END SUB: CAN_DELETE -->
 &nbsp;</td>
 <td class=plain align=center>
@@ -27,12 +27,12 @@
 <tr>
 <td class=plain colspan=3 align=center>
 <!-- SUB: CAN_ADD -->
-<a href='styles.{VAR:ext}?type=add_style&parent={VAR:parent}'>Lisa</a>
+<a href='styles.{VAR:ext}?type=add_style&parent={VAR:parent}'>{VAR:LC_STYLE_ADD}</a>
 <!-- END SUB: CAN_ADD -->
 &nbsp;</td>
 <td class=plain align=center>
 <!-- SUB: CAN_EXPORT_B -->
-<input class='small_button' type='submit' NAME='s' VALUE='Ekspordi'>
+<input class='small_button' type='submit' NAME='s' VALUE='{VAR:LC_STYLE_EXPORT}Ekspordi'>
 &nbsp;</td>
 <!-- END SUB: CAN_EXPORT_B -->
 </tr>
@@ -46,9 +46,9 @@
 <form action='refcheck.{VAR:ext}' method=post enctype='multipart/form-data'>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE=1000000>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
-<tr><td class="title" colspan=2>Impordi stiile:</td></tr>
-<tr><td class="plain">Fail:</td><td class="plain"><input class='small_button' type=file NAME=file></td></tr>
-<tr><td class="plain" colspan=2 align=right><input class='small_button' type=submit name=upload value=Impordi></td></tr>
+<tr><td class="title" colspan=2>{VAR:LC_STYLE_IMPORT_STYLES}:</td></tr>
+<tr><td class="plain">{VAR:LC_STYLE_FILE}:</td><td class="plain"><input class='small_button' type=file NAME=file></td></tr>
+<tr><td class="plain" colspan=2 align=right><input class='small_button' type=submit name=upload value='{VAR:LC_STYLE_IMPORT}'></td></tr>
 </table>
 <input type='hidden' NAME='action' VALUE='import_styles'>
 <input type='hidden' NAME='parent' VALUE='{VAR:parent}'>

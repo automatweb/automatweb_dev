@@ -1,11 +1,11 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td class="ftitle2">Sorteeri <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&type=nested"><b>VASTUSTE</b></a> või <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&type=flat"><b>AJA</b></a> järgi või <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&action=search"><b>OTSI</b></a></span><br></td>
+    <td class="ftitle2">{VAR:LC_MSGBOARD_SORT} <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&type=nested"><b>{VAR:LC_MSGBOARD_ANSWERS}</b></a> {VAR:LC_MSGBOARD_OR} <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&type=flat"><b>{VAR:LC_MSGBOARD_TIMA}</b></a> {VAR:LC_MSGBOARD_OR_BY} <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&action=search"><b>{VAR:LC_MSGBOARD_BIG_SEARCH}</b></a></span><br></td>
 	</tr>
 	<tr>
 		<td align="center" >&nbsp;<font color="#000000"><br>
 			<!-- SUB: PAGES -->
-			Lehed: 
+			{VAR:LC_MSGBOARD_PAGES}: 
 			<!-- SUB: PAGE -->
 			<span class="menyyLeft"><a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&page={VAR:pagenum}"><b>{VAR:ltext}</b></a></span><font color="#000000"> | </font>
 			<!-- END SUB: PAGE -->
@@ -30,18 +30,18 @@
 <td>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td class="textSmall"><a name="c{VAR:id}">Kes: <a href="mailto:{VAR:email}"><b>{VAR:from}</b></a> @ {VAR:time}</td>
+    <td class="textSmall"><a name="c{VAR:id}">{VAR:LC_MSGBOARD_WHO}: <a href="mailto:{VAR:email}"><b>{VAR:from}</b></a> @ {VAR:time}</td>
   </tr>
   <tr>
-    <td height="18" valign="top" class="textSmall">Teema: <b>{VAR:subj}</b></td>
+    <td height="18" valign="top" class="textSmall">{VAR:LC_MSGBOARD_SUBJECT}: <b>{VAR:subj}</b></td>
   </tr>
   <tr>
     <td class="text">{VAR:comment}</td>
 	</tr>
   <tr>
-    <td valign="bottom" height="18" class="textSmall">: <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?action=add&parent={VAR:id}&section={VAR:section}&page={VAR:page}"><b>Vasta</b></a>
+    <td valign="bottom" height="18" class="textSmall">: <a href="{VAR:baseurl}/automatweb/comments.{VAR:ext}?action=add&parent={VAR:id}&section={VAR:section}&page={VAR:page}"><b>{VAR:LC_MSGBOARD_ANSWER}</b></a>
 		<!-- SUB: KUSTUTA -->
-			&nbsp;&nbsp;: <a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?action=delete&parent={VAR:id}&section={VAR:section}&page={VAR:page}'>Kustuta</a>
+			&nbsp;&nbsp;: <a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?action=delete&parent={VAR:id}&section={VAR:section}&page={VAR:page}'>{VAR:LC_MSGBOARD_DELETE}</a>
 		<!-- END SUB: KUSTUTA -->
 		</td>
   </tr>
@@ -59,7 +59,7 @@
 <br>
 <table width="400" border="0" cellspacing="0" cellpadding="2">
   <tr>
-    <td class="ftitle2">: <b>Lisa uus kommentaar</b></td>
+    <td class="ftitle2">: <b>{VAR:LC_MSGBOARD_ADD_NEW_COMM}</b></td>
 	</tr>
 </table>
 

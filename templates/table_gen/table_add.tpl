@@ -8,7 +8,7 @@
 		<td class="fform"><textarea name=comment cols=50 rows=5></textarea></td>
 	</tr>
 		<tr>
-			<td class="fcaption" colspan=2><input type='submit' class='small_button' VALUE='Save'></td>
+			<td class="fcaption" colspan=2><input type='submit' class='small_button' VALUE='{VAR:LC_TABLE_SAVE}'></td>
 		</tr>
 	</table>
 	{VAR:reforb}

@@ -174,6 +174,12 @@ function setsel(el,val)
 <td class="fgtext">Algselt valitud:</td>
 <td class="fgtext"><input type='checkbox' NAME='{VAR:default_name}' VALUE='1' {VAR:default_checked}></td>
 </tr>
+<tr>
+<td class="fgtext">{VAR:LC_FORMS_RADIO_VALUE}</td>
+<td class="fgtext"><input type='text' name='{VAR:cell_id}_ch_value' value='{VAR:ch_value}' class='small_button'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
 <!-- END SUB: RADIO_ITEMS -->
 
 <!-- SUB: DEFAULT_TEXT -->
@@ -216,8 +222,8 @@ function setsel(el,val)
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_ORIGINALLY_SELECTED}:</td>
 <td class="fgtext"><input type='checkbox' NAME='{VAR:default_name}' VALUE='1' {VAR:default_checked}></td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">{VAR:LC_FORMS_CHECKBOX_VALUE}</td>
+<td class="fgtext"><input type='text' name='{VAR:cell_id}_ch_value' value='{VAR:ch_value}' class='small_button'></td>
 </tr>
 <!-- END SUB: CHECKBOX_ITEMS -->
 <!-- SUB: PRICE_ITEMS -->

@@ -66,7 +66,9 @@
 <td class="fform">UID</td>
 <td class="fform">{VAR:LC_FORMS_ACTIVITY}</td>
 <td class="fform">{VAR:LC_FORMS_CHANGING_POSITION}</td>
-<td class="fform">{VAR:LC_FORMS_COLUMN_TITLE}</td>
+<!-- SUB: LANG_H -->
+<td class="fform">{VAR:LC_FORMS_COLUMN_TITLE} ({VAR:lang_name})</td>
+<!-- END SUB: LANG_H -->
 <td class="fform">{VAR:LC_FORMS_SORTABLE}?</td>
 <td class="fform">{VAR:LC_FORMS_DEL_TABLE_COL}?</td>
 <td class="fform">{VAR:LC_FORMS_TABLE_ADD_COL}?</td>
@@ -89,7 +91,9 @@
 <td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='uid' {VAR:uid_checked}></td>
 <td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='active' {VAR:active_checked}></td>
 <td align="center" class="fform"><input type='checkbox' name='columns[{VAR:column}][]' value='chpos' {VAR:chpos_checked}></td>
-<td class="fform"><input type='text' class='small_button' name='names[{VAR:column}]' VALUE='{VAR:c_name}'></td>
+<!-- SUB: LANG -->
+<td class="fform"><input type='text' class='small_button' name='names[{VAR:column}][{VAR:lang_id}]' VALUE='{VAR:c_name}'></td>
+<!-- END SUB: LANG -->
 <td class="fform" align="center"><input type='checkbox' name='sortable[{VAR:column}]' VALUE='1' {VAR:sortable}></td>
 <td class="fform" align="center"><input type='checkbox' name='del[{VAR:column}]' VALUE='1'></td>
 <td class="fform" align="center"><input type='checkbox' name='addaf[{VAR:column}]' VALUE='1'></td>

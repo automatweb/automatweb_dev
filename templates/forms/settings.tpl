@@ -70,7 +70,7 @@ function varvivalik()
 
 <!-- SUB: SEARCH -->
 <tr>
-<td class="fform" colspan=2{VAR:LC_FORMS_SEARCH_RESULTS_SHOW_TABLE}>? <input type='checkbox' NAME='show_table' value='1' {VAR:show_table_checked}></td>
+<td class="fform" colspan=2>{VAR:LC_FORMS_SEARCH_RESULTS_SHOW_TABLE}? <input type='checkbox' NAME='show_table' value='1' {VAR:show_table_checked}></td>
 </tr>
 <tr>
 <td class="fform">{VAR:LC_FORMS_CHOOSE_TABLE}:</td>

@@ -1,7 +1,7 @@
 <form action='refcheck.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-	<td class="fcaption">Men&uuml;&uuml;</td><td class="fform">Tekst otsikastis</td><td class="fform">J&auml;rjekord</td>
+	<td class="fcaption">{VAR:LC_SEARCH_CONF_MENU}</td><td class="fform">{VAR:LC_SEARCH_CONF_TEXT_IN_BOX}</td><td class="fform">{VAR:LC_SEARCH_CONF_ORDER}</td>
 </tr>
 <!-- SUB: RUBR -->
 <tr>
@@ -9,7 +9,7 @@
 </tr>
 <!-- END SUB: RUBR -->
 <tr>
-<td class="fcaption" colspan=3><input type='submit' VALUE='Salvesta' CLASS="small_button"></td>
+<td class="fcaption" colspan=3><input type='submit' VALUE='{VAR:LC_SEARCH_CONF_SAVE}' CLASS="small_button"></td>
 </tr>
 </table>
 <input type='hidden' NAME='action' VALUE='admin_search_conf'>

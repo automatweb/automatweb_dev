@@ -16,6 +16,7 @@
 		<!-- END SUB: CUR_H -->
 		<td class="fcaption2">{VAR:LC_SHOP_WEEK_PRICE}:</td>
 		<td class="fcaption2">{VAR:LC_SHOP_2_WEEK_PRICE}:</td>
+		<td class="fcaption2">Mitu kohta:</td>
 		<td class="fcaption2">{VAR:LC_SHOP_DELETE}:</td>
 	</tr>
 	<!-- SUB: PERIOD -->
@@ -27,11 +28,12 @@
 		<!-- END SUB: CUR -->
 		<td class="fcaption2"><input type='radio' name='price_type[{VAR:id}]' value='1' {VAR:week_check}></td>
 		<td class="fcaption2"><input type='radio' name='price_type[{VAR:id}]' value='2' {VAR:2week_check}></td>
+		<td class="fcaption2"><input type='text' name='available[{VAR:id}]' value='{VAR:avail}' size=3></td>
 		<td class="fcaption2"><input type='checkbox' name='del[{VAR:id}]' value=1></td>
 	</tr>
 	<!-- END SUB: PERIOD -->
 	<tr>
-		<td class="fcaption2" colspan=8><input type='submit' value='{VAR:LC_SHOP_SAVE}'></td>
+		<td class="fcaption2" colspan=9><input type='submit' value='{VAR:LC_SHOP_SAVE}'></td>
 	</tr>
 </table>
 {VAR:reforb}

@@ -12,24 +12,31 @@
 <tr>
 <td class="fform">{VAR:LC_FORMS_CHOOSE_FORMS}:</td><td colspan=2 class="fform"><select name='forms[]' multiple size=10>{VAR:forms}</select></td>
 </tr>
+</table>
+<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class="fform">{VAR:LC_FORMS_NAME}</td><td class="fform">{VAR:LC_FORMS_ORDER}</td><td class="fform">{VAR:LC_FORMS_AFTER_FILLING_GO_FORWARD}</td>
+<!-- SUB: LANG_H -->
+<td class="fform">{VAR:LC_FORMS_NAME} {VAR:lang_name}</td>
+<!-- END SUB: LANG_H -->
+<td class="fform">{VAR:LC_FORMS_ORDER}</td><td class="fform">{VAR:LC_FORMS_AFTER_FILLING_GO_FORWARD}</td>
 </tr>
 <!-- SUB: FORM -->
 <tr>
-<td class="fform"><input type='text' name='fname[{VAR:form_id}]' value='{VAR:fname}' size=50 class='small_button'></td>
+<!-- SUB: LANG -->
+<td class="fform"><input type='text' name='fname[{VAR:form_id}][{VAR:lang_id}]' value='{VAR:fname}' size=20 class='small_button'></td>
+<!-- END SUB: LANG -->
 <td class="fform"><input type='text' name='fjrk[{VAR:form_id}]' value='{VAR:fjrk}' size=3 class='small_button'></td>
 <td class="fform"><input type='checkbox' name='fgoto[{VAR:form_id}]' value='1' {VAR:fgoto} class='small_button'></td>
 </tr>
 <!-- END SUB: FORM -->
 <tr>
-<td class="fcaption" colspan=3><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
+<td class="fcaption" colspan=30><input class='small_button' type='submit' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
 <tr>
-<td class="fform" colspan=3><a href='{VAR:import}'>{VAR:LC_FORMS_IMPORT_ENTRIES}</a></td>
+<td class="fform" colspan=30><a href='{VAR:import}'>{VAR:LC_FORMS_IMPORT_ENTRIES}</a></td>
 </tr>
 <tr>
-<td class="fform" colspan=3><a href='{VAR:entries}'>{VAR:LC_FORMS_ENTRIES}</a></td>
+<td class="fform" colspan=30><a href='{VAR:entries}'>{VAR:LC_FORMS_ENTRIES}</a></td>
 </tr>
 </table>
 {VAR:reforb}

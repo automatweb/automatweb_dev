@@ -5,19 +5,19 @@
 
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="11" class="fgtitle">&nbsp;<b>KATEGOORIAD: 
+<td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_CATEGORIES}: 
 <!-- SUB: ADD_CAT -->
-<a href='list.{VAR:ext}?type=add_var_cat&parent={VAR:parent}'>Lisa</a>
+<a href='list.{VAR:ext}?type=add_var_cat&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_ADD}</a>
 <!-- END SUB: ADD_CAT -->
 </b>
 </td>
 </tr>
 <tr>
-<td height="15" class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;Kirjeldus&nbsp;</td>
-<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
-<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
-<td align="center" colspan="3" class="title">&nbsp;Tegevus&nbsp;</td>
+<td height="15" class="title">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_DESCRIPTION}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_CHANGER}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_CHANGED}&nbsp;</td>
+<td align="center" colspan="3" class="title">&nbsp;{VAR:LC_MAILINGLIST_ACTION}&nbsp;</td>
 </tr>
 
 <!-- SUB: C_LINE -->
@@ -41,8 +41,7 @@
 &nbsp;</td>
 <td class="fgtext2">&nbsp;
 <!-- SUB: CAN_DELETE -->
-<a href="javascript:box2('Oled kindel, et soovid seda kategooriat 
-kustutada?','list.{VAR:ext}?type=delete_var_cat&id={VAR:cat_id}&parent={VAR:parent}')">Kustuta</a>
+<a href="javascript:box2('{VAR:LC_MAILINGLIST_WANT_TO_DEL_CAT}?','list.{VAR:ext}?type=delete_var_cat&id={VAR:cat_id}&parent={VAR:parent}')">{VAR:LC_MAILINGLIST_DELETE}</a>
 <!-- END SUB: CAN_DELETE -->
 &nbsp;</td>
 <td class="fgtext2">&nbsp;
@@ -60,21 +59,21 @@ kustutada?','list.{VAR:ext}?type=delete_var_cat&id={VAR:cat_id}&parent={VAR:pare
 
 
 
-Alati on ka defineeritud muutujad #nimi# , #email# ja #kuupaev# .
+{VAR:LC_MAILINGLIST_ALWAYS_DEFINED} #nimi# , #email# ja #kuupaev# .
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#CCCCCC">
 
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="11" class="fgtitle">&nbsp;<b>MUUTUJAD: 
-&nbsp;<a href='list.{VAR:ext}?type=add_var&parent={VAR:parent}'>Lisa</a></b>
+<td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_VARIABLES}: 
+&nbsp;<a href='list.{VAR:ext}?type=add_var&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_ADD}</a></b>
 </td>
 </tr>
 <tr>
 <td align=center class="title">&nbsp;Number&nbsp;</td>
-<td align=center class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" colspan="3" class="title">&nbsp;Tegevus&nbsp;</td>
+<td align=center class="title">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
+<td align="center" colspan="3" class="title">&nbsp;{VAR:LC_MAILINGLIST_ACTION}&nbsp;</td>
 </tr>
 
 <!-- SUB: LINE -->
@@ -83,12 +82,12 @@ Alati on ka defineeritud muutujad #nimi# , #email# ja #kuupaev# .
 <td class="fgtext">&nbsp;{VAR:var_name}&nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;
 <!-- SUB: V_CHANGE -->
-<a href='list.{VAR:ext}?type=change_var&id={VAR:var_id}&parent={VAR:parent}'>Muuda</a>
+<a href='list.{VAR:ext}?type=change_var&id={VAR:var_id}&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_CHANGE}</a>
 <!-- END SUB: V_CHANGE -->
 &nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;
 <!-- SUB: V_DELETE -->
-<a href='javascript:box2("Oled kindel et tahad kustutada muutujat {VAR:var_name}?","list.{VAR:ext}?type=delete_var&id={VAR:var_id}&parent={VAR:parent}")'>Kustuta</a>
+<a href='javascript:box2("{VAR:LC_MAILINGLIST_WANT_TO_DEL_VARIABLE} {VAR:var_name}?","list.{VAR:ext}?type=delete_var&id={VAR:var_id}&parent={VAR:parent}")'>{VAR:LC_MAILINGLIST_DELETE}</a>
 <!-- END SUB: V_DELETE -->
 &nbsp;</td>
 <td class="fgtext2" align=center>&nbsp;

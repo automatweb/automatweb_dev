@@ -41,29 +41,29 @@ if (document.forms[0].elements[{VAR:row}].checked)
 <td bgcolor="#CCCCCC">
 <TABLE border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
-	<td height="15" colspan="7" class="fgtitle">&nbsp;<b>GRAAFIKUD:&nbsp;
-	<a href='{VAR:add}'>Lisa</a>&nbsp;|&nbsp;<a href='javascript:doDelete()'>Kustuta&nbsp;</a>
+	<td height="15" colspan="7" class="fgtitle">&nbsp;<b>{VAR:LC_GRAPH_GRAPHS}:&nbsp;
+	<a href='{VAR:add}'>{VAR:LC_GRAPH_ADD}</a>&nbsp;|&nbsp;<a href='javascript:doDelete()'>{VAR:LC_GRAPH_DELETE}&nbsp;</a>
 	</b></td>
 </tr>
 <tr>
 	<td class=title>GID</td>
-	<td class=title>Nimi</td>
-	<td class=title>Kirjeldus</td>
-	<td class=title colspan=3 align=center>Tegevus</td>
-	<td align="center" colspan="1" class="title">&nbsp;<a href='#' onClick="selall();return false;">K&otilde;ik</a>&nbsp;</td>
+	<td class=title>{VAR:LC_GRAPH_NAME}</td>
+	<td class=title>{VAR:LC_GRAPH_DERSCRIPTION}</td>
+	<td class=title colspan=3 align=center>{VAR:LC_GRAPH_ACTIVITY}</td>
+	<td align="center" colspan="1" class="title">&nbsp;<a href='#' onClick="selall();return false;">{VAR:LC_GRAPH_ALL}</a>&nbsp;</td>
 </tr><!-- SUB: LINE -->
 	<tr>
 	<td class="fgtext">{VAR:id}</td>
 	<td class="fgtext">{VAR:name}</td>
 	<td class="fgtext">{VAR:comment}</td>
 	<td class="fgtext" align=center>
-	<a href='{VAR:change}'>Muuda</a>
+	<a href='{VAR:change}'>{VAR:LC_GRAPH_CHANGE}</a>
 	&nbsp;</td>	
 	<td class="fgtext" align=center>
 	<a href='{VAR:meta}'>Meta</a>
 	&nbsp;</td>	
 	<td class="fgtext" align=center>
-	<a href='{VAR:preview}'>Vaata</a>
+	<a href='{VAR:preview}'>{VAR:LC_GRAPH_LOOK}</a>
 	&nbsp;</td>
 	<td class="chkbox" align=center>
 	<input type='checkbox' NAME='grr_{VAR:id}' align=center>

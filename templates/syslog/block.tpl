@@ -15,7 +15,7 @@
 </head>
 <body bgcolor="#FFFFFF">
 sry, see on lihtsalt üks kiire häkk. edaspidi yhtlustab selle liidese dr. onlinega.
-<a href="{VAR:self}">tagasi</a>
+<a href="{VAR:self}">{VAR:LC_SYSLOG_BACK}</a>
 <p>
 <table border="0" cellspacing="0" cellpadding="0" bgcolor="#CCCCCC">
 <tr>
@@ -27,7 +27,7 @@ sry, see on lihtsalt üks kiire häkk. edaspidi yhtlustab selle liidese dr. online
 	</tr>
 	<tr>
 		<td class="line" align="center"><strong>IP</strong></center></td>
-		<td class="line" align="center"><strong>Aktiivne</strong></center></td>
+		<td class="line" align="center"><strong>{VAR:LC_SYSLOG_ACTIVE}</strong></center></td>
 	</tr>
 	<!-- SUB: line -->
 	<tr>
@@ -37,7 +37,7 @@ sry, see on lihtsalt üks kiire häkk. edaspidi yhtlustab selle liidese dr. online
 	<!-- END SUB: line -->
 	<tr>
 		<td class="line" align="center">
-		<input type="text" name="new" size="20"><input type="submit" value="Lisa/Salvesta">
+		<input type="text" name="new" size="20"><input type="submit" value="{VAR:LC_SYSLOG_ADD_SAVE}">
 		<input type="hidden" name="op" value="saveblock">
 		</td>
 	</tr>

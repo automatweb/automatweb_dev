@@ -1,10 +1,10 @@
 <h1>inbox</h1>
 <table border=1 cellspacing=1 cellpadding=1 width="100%">
 <tr>
-	<td>Kellelt</td>
-	<td>Teema</td>
-	<td>Aeg</td>
-	<td>Staatus</td>
+	<td>{VAR:LC_MESSENGER_FROM}</td>
+	<td>{VAR:LC_MESSENGER_SUBJECT}</td>
+	<td>{VAR:LC_MESSENGER_TIME}</td>
+	<td>{VAR:LC_MESSENGER_STATUS}</td>
 </tr>
 <!-- SUB: line -->
 <tr>
@@ -17,4 +17,4 @@
 </table>
 <hr size=1>
 <br>
-<a href="#">Uus teade</a>
+<a href="#">{VAR:LC_MESSENGER_NEW_MESSAGE}</a>

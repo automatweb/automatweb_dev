@@ -411,7 +411,7 @@ function format(what,opt)
 <td class="hele_hall_taust"><input class='tekstikast' type="text" name="keywords" size="80" value="{VAR:keywords}"></td>
 </tr>
 <tr>
-<td class="hele_hall_taust" colspan=2><b>&nbsp;Objektid&nbsp;</b> <a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa uus &gt;&gt;&gt;</a><br>
+<td class="hele_hall_taust" colspan=2><b>&nbsp;Objektid&nbsp;</b> <a href='pickobject.{VAR:ext}?docid={VAR:id}'>Lisa olemasolev &gt;&gt;&gt;</a><br>
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
 	<tr>
 		<td><img src='{VAR:baseurl}/images/transa.gif' width=113 height=1 border=0></td>

@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Perioodide võrdlemine</title>
+<title>{VAR:LC_SYSLOG_COMPARE_PERIODS}</title>
 <link rel="stylesheet" href="css/site.css">
 </head>
 <body bgcolor="#FFFFFF">
@@ -10,14 +10,14 @@
 <td>
 	<table border="0" cellspacing="1" cellpadding="2" width="100%" bgcolor="#CCCCCC">
 	<tr>
-	<td colspan="3" class="fgtitle"><b><a href="javascript:document.cform.submit()">Näita graafikut</a></b></a>
+	<td colspan="3" class="fgtitle"><b><a href="javascript:document.cform.submit()">{VAR:LC_SYSLOG_SHOW_GRAPH}</a></b></a>
 	</tr>
 	<tr>
-	<td colspan="3" class="fgtext">Periood: <b>Päevad</b><input type="radio" name="period" checked></td>
+	<td colspan="3" class="fgtext">{VAR:LC_SYSLOG_PERIOD}: <b>{VAR:LC_SYSLOG_DAYS}</b><input type="radio" name="period" checked></td>
 	</tr>
 	<tr>
-	<td class="fgtitle">Päev (pp-kk-aaaa)</td>
-	<td colspan="2" align="right" class="fgtitle">Värv</td>
+	<td class="fgtitle">{VAR:LC_SYSLOG_DAY} (pp-kk-aaaa)</td>
+	<td colspan="2" align="right" class="fgtitle">{VAR:LC_SYSLOG_COLOR}</td>
 	</tr>
 	<!-- SUB: line -->
 	<tr>
@@ -40,7 +40,7 @@
 </form>
 </table>
 <!-- SUB: graph -->
-Graafik:<br>
+{VAR:LC_SYSLOG_GRAPH}:<br>
 <img src="{VAR:self}?display=cgraph">
 <!-- END SUB: graph -->
 </body>

@@ -22,7 +22,7 @@ function varvivalik(milline)
 <form action='refcheck.{VAR:ext}' METHOD=post>
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 	<tr>
-		<td class="fcaption">Nimi</td>
+		<td class="fcaption">{VAR:LC_STYLE_NAME}</td>
 		<td class="fform"><input type="text" name="name" VALUE='{VAR:style_name}'></td>
 	</tr>
 	<tr>
@@ -58,7 +58,7 @@ function varvivalik(milline)
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption">Fondi suurus:</td>
+		<td class="fcaption">{VAR:LC_STYLE_FONT_SIZE}:</td>
 		<td class="fform">
 			<select NAME='fontsize'>
 				<!-- SUB: FONTSIZE -->
@@ -68,18 +68,18 @@ function varvivalik(milline)
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption">V&auml;rv</td>
-		<td class="fform"><input type="text" name="colour" VALUE='{VAR:font_colour}'> <a href="#" onclick="varvivalik('colour');">vali v&auml;rv</a></td>
+		<td class="fcaption">{VAR:LC_STYLE_COLOR}</td>
+		<td class="fform"><input type="text" name="colour" VALUE='{VAR:font_colour}'> <a href="#" onclick="varvivalik('colour');">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
 	</tr>
 	<tr>
-		<td class="fcaption">Tausta v&auml;rv:</td>
-		<td class="fform"><input type="text" name="bgcolour" VALUE='{VAR:bgcolour}'> <a href="#" onclick="varvivalik('bgcolour');">vali v&auml;rv</a></td>
+		<td class="fcaption">{VAR:LC_STYLE_BACK_COLOR}:</td>
+		<td class="fform"><input type="text" name="bgcolour" VALUE='{VAR:bgcolour}'> <a href="#" onclick="varvivalik('bgcolour');">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
 	</tr>
 	<tr>
-		<td class="fcaption">Fondi stiil:</td>
+		<td class="fcaption">{VAR:LC_STYLE_FONT_STYLE}:</td>
 		<td class="fform">
 			<select NAME='font_style'>
-				<option VALUE='normal' {VAR:font_style_normal_selected}>Tavaline
+				<option VALUE='normal' {VAR:font_style_normal_selected}>{VAR:LC_STYLE_COMMON}
 				<option VALUE='bold' {VAR:font_style_bold_selected}>Bold
 				<option VALUE='italic' {VAR:font_style_italic_selected}>Italic
 				<option VALUE='underline' {VAR:font_style_underline_selected}>Underline
@@ -88,18 +88,18 @@ function varvivalik(milline)
 	</tr>
 	<tr>
 		<td class="fcaption">Align:</td>
-		<td class="fform"><input type="radio" name="align" VALUE='left' {VAR:align_left}>Vasak <input type="radio" name="align" VALUE='center' {VAR:align_center}>Keskel <input type="radio" name="align" VALUE='right' {VAR:align_right}>Parem</td>
+		<td class="fform"><input type="radio" name="align" VALUE='left' {VAR:align_left}>{VAR:LC_STYLE_LEFT} <input type="radio" name="align" VALUE='center' {VAR:align_center}>{VAR:LC_STYLE_MIDDLE} <input type="radio" name="align" VALUE='right' {VAR:align_right}>{VAR:LC_STYLE_RIGHT}</td>
 	</tr>
 	<tr>
 		<td class="fcaption">Valign:</td>
-		<td class="fform"><input type="radio" name="valign" VALUE='top' {VAR:valign_top}>&Uuml;leval <input type="radio" name="valign" VALUE='center' {VAR:valign_center}>Keskel <input type="radio" name="valign" VALUE='bottom' {VAR:valign_bottom}>All</td>
+		<td class="fform"><input type="radio" name="valign" VALUE='top' {VAR:valign_top}>{VAR:LC_STYLE_UP} <input type="radio" name="valign" VALUE='center' {VAR:valign_center}>{VAR:LC_STYLE_MIDDLE} <input type="radio" name="valign" VALUE='bottom' {VAR:valign_bottom}>{VAR:LC_STYLE_DOWN}</td>
 	</tr>
 	<tr>
-		<td class="fcaption">K&otilde;rgus:</td>
+		<td class="fcaption">{VAR:LC_STYLE_HEIGHT}:</td>
 		<td class="fform"><input type="text" name="height" VALUE='{VAR:height}'></td>
 	</tr>
 	<tr>
-		<td class="fcaption">Laius:</td>
+		<td class="fcaption">{VAR:LC_STYLE_WITHD}:</td>
 		<td class="fform"><input type="text" name="width" VALUE='{VAR:width}'></td>
 	</tr>
 	<tr>
@@ -108,7 +108,7 @@ function varvivalik(milline)
 	</tr>
 	<tr>
 		<td class="fform" colspan="2">
-			<input type="submit" value="Salvesta">
+			<input type="submit" value="{VAR:LC_STYLE_SAVE}">
 			<input type="hidden" name="action" value="admin_style">
 			<input type="hidden" name="id" value="{VAR:style_id}">
 			<input type="hidden" name="back" value="{VAR:back}">

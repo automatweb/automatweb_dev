@@ -98,7 +98,7 @@ function invalidate()
 <form action='refcheck.{VAR:ext}' METHOD=post NAME=stil>
 <table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
 	<tr>
-		<td class="fcaption">Stiil:</td>
+		<td class="fcaption">{VAR:LC_STYLE_BIG_STYLE}:</td>
 		<td class="fform"><select NAME='id' onChange="change_style()">
 				<!-- SUB: STYLE_LIST -->
 						<option {VAR:style_item_active} VALUE='{VAR:style_item_value}'>{VAR:style_item_text}
@@ -139,7 +139,7 @@ function invalidate()
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption">Fondi suurus:</td>
+		<td class="fcaption">{VAR:LC_STYLE_FONT_SIZE}:</td>
 		<td class="fform">
 			<select NAME='fontsize' onChange="invalidate()">
 				<!-- SUB: FONTSIZE -->
@@ -149,18 +149,18 @@ function invalidate()
 		</td>
 	</tr>
 	<tr>
-		<td class="fcaption">V&auml;rv</td>
-		<td class="fform"><input type="text" name="colour" VALUE='' onChange="invalidate()"> <a href="#" onclick="varvivalik('colour');">vali v&auml;rv</a></td>
+		<td class="fcaption">{VAR:LC_STYLE_COLOR}</td>
+		<td class="fform"><input type="text" name="colour" VALUE='' onChange="invalidate()"> <a href="#" onclick="varvivalik('colour');">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
 	</tr>
 	<tr>
-		<td class="fcaption">Tausta v&auml;rv:</td>
-		<td class="fform"><input type="text" name="bgcolour" VALUE='' onChange="invalidate()"> <a href="#" onclick="varvivalik('bgcolour');">vali v&auml;rv</a></td>
+		<td class="fcaption">{VAR:LC_STYLE_BACK_COLOR}:</td>
+		<td class="fform"><input type="text" name="bgcolour" VALUE='' onChange="invalidate()"> <a href="#" onclick="varvivalik('bgcolour');">{VAR:LC_STYLE_CHOOSE_COLOR}</a></td>
 	</tr>
 	<tr>
-		<td class="fcaption">Fondi stiil:</td>
+		<td class="fcaption">{VAR:LC_STYLE_FONT_STYLE}:</td>
 		<td class="fform">
 			<select NAME='font_style' onChange="invalidate()">
-				<option VALUE='normal' >Tavaline
+				<option VALUE='normal' >{VAR:LC_STYLE_COMMON}
 				<option VALUE='bold' >Bold
 				<option VALUE='italic' >Italic
 				<option VALUE='underline' >Underline
@@ -169,19 +169,19 @@ function invalidate()
 	</tr>
 	<tr>
 		<td class="fcaption">Align:</td>
-		<td class="fform"><input type="radio" name="align" VALUE='left' onClick="invalidate()">Vasak <input type="radio" name="align" VALUE='center'  onClick="invalidate()">Keskel <input type="radio" name="align" VALUE='right' onClick="invalidate()">Parem</td>
+		<td class="fform"><input type="radio" name="align" VALUE='left' onClick="invalidate()">{VAR:LC_STYLE_LEFT} <input type="radio" name="align" VALUE='center'  onClick="invalidate()">{VAR:LC_STYLE_MIDDLE} <input type="radio" name="align" VALUE='right' onClick="invalidate()">{VAR:LC_STYLE_RIGHT}</td>
 	</tr>
 	<tr>
 		<td class="fcaption">Valign:</td>
-		<td class="fform"><input type="radio" name="valign" VALUE='top' onClick="invalidate()">&Uuml;leval <input type="radio" name="valign" VALUE='center'  onClick="invalidate()">Keskel <input type="radio" name="valign" VALUE='bottom' onClick="invalidate()">All</td>
+		<td class="fform"><input type="radio" name="valign" VALUE='top' onClick="invalidate()">{VAR:LC_STYLE_UP} <input type="radio" name="valign" VALUE='center'  onClick="invalidate()">{VAR:LC_STYLE_MIDDLE} <input type="radio" name="valign" VALUE='bottom' onClick="invalidate()">{VAR:LC_STYLE_DOWN}</td>
 	</tr>
 	<tr>
-		<td class="fcaption">K&otilde;rgus:</td>
-		<td class="fform"><input type="text" name="height" VALUE='' onChange="invalidate()">pikslit</td>
+		<td class="fcaption">{VAR:LC_STYLE_HEIGHT}:</td>
+		<td class="fform"><input type="text" name="height" VALUE='' onChange="invalidate()">{VAR:LC_STYLE_PIX}</td>
 	</tr>
 	<tr>
-		<td class="fcaption">Laius:</td>
-		<td class="fform"><input type="text" name="width" VALUE='' onChange="invalidate()">pikslit</td>
+		<td class="fcaption">{VAR:LC_STYLE_WITHD}:</td>
+		<td class="fform"><input type="text" name="width" VALUE='' onChange="invalidate()">{VAR:LC_STYLE_PIX}</td>
 	</tr>
 	<tr>
 		<td class="fcaption">Nowrap:</td>
@@ -189,7 +189,7 @@ function invalidate()
 	</tr>
 </table>
 <A NAME = "buttons">
-<font face='tahoma, arial, geneva, helvetica' size="2"><input type='submit' NAME='save_cell_style' VALUE='Salvesta'>
+<font face='tahoma, arial, geneva, helvetica' size="2"><input type='submit' NAME='save_cell_style' VALUE='{VAR:LC_STYLE_SAVE}'>
 <input type='hidden' NAME='action' VALUE='select_style'>
 <input type='hidden' NAME='parent' VALUE='{VAR:parent}'>
 <input type='hidden' NAME='back' VALUE='{VAR:back}'>

@@ -1,7 +1,7 @@
 
 
 
-<span class="textPealkiri">Otsingu tulemused</span> - <span class='textSmall'>Leiti <b>{VAR:count} </b>kommentaari</span><br>
+<span class="textPealkiri">{VAR:LC_MSGBOARD_RESULTS_OF_SEARCH}</span> - <span class='textSmall'>{VAR:LC_MSGBOARD_FOUND} <b>{VAR:count} </b>{VAR:LC_MSGBOARD_COMMENTS}</span><br>
 
 <img src="/img/trans.gif" width="1" height="10" border="0" alt=""><br>
 
@@ -10,7 +10,7 @@
   <tr>
     <td class="textSmall">
 
-: <a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&action=search'><b>Otsi uuesti</b></a> &nbsp; : <a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}'><b>Loe kommentaare</b></a>
+: <a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}&action=search'><b>{VAR:LC_MSGBOARD_SEARCH_AGAIN}</b></a> &nbsp; : <a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:section}'><b>{VAR:LC_MSGBOARD_READ_COMM}</b></a>
 
     </td>
     <td align="right">
@@ -35,13 +35,13 @@
 <table border=0 cellpadding=0 cellspacing=0 width=100%>
 <!-- SUB: message -->
   <tr>
-		<td class="vaikeVerdana">Kes:&nbsp;&nbsp;<b><a href='mailto:{VAR:email}'>{VAR:from}</a></b>&nbsp;@&nbsp;{VAR:time}</td>
+		<td class="vaikeVerdana">{VAR:LC_MSGBOARD_WHO}:&nbsp;&nbsp;<b><a href='mailto:{VAR:email}'>{VAR:from}</a></b>&nbsp;@&nbsp;{VAR:time}</td>
 	</tr>
 	<tr>
-		<td bgcolor="#EFEFEF" class="vaikeVerdana">Teema:&nbsp;&nbsp;<b>{VAR:subj}</b></td>
+		<td bgcolor="#EFEFEF" class="vaikeVerdana">{VAR:LC_MSGBOARD_SUBJECT}:&nbsp;&nbsp;<b>{VAR:subj}</b></td>
 	</tr>
 	<tr>
-		<td bgcolor="#ffffff" class="vaikeVerdana"><img src="/img/nool_pun.gif" width="9" height="7" border="0" alt=""><a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:s_section}&from=search&cid={VAR:comment_id}#c{VAR:comment_id}' class='linkSin'>Loe</a></td>
+		<td bgcolor="#ffffff" class="vaikeVerdana"><img src="/img/nool_pun.gif" width="9" height="7" border="0" alt=""><a href='{VAR:baseurl}/automatweb/comments.{VAR:ext}?section={VAR:s_section}&from=search&cid={VAR:comment_id}#c{VAR:comment_id}' class='linkSin'>{VAR:LC_MSGBOARD_READ}</a></td>
 	</tr>
 	<tr>
 		<td><img src="/img/trans.gif" width="1" height="5" border="0" alt=""><br></td>
@@ -60,7 +60,7 @@
 
 <span class="textSmall">&nbsp;
 <!-- SUB: PAGES -->
-: Vali lehekülg:&nbsp;
+: {VAR:LC_MSGBOARD_CHOOSE_PAGES}:&nbsp;
 <!-- SUB: PAGE -->
 <a href='{VAR:url}' class="link2"><b>{VAR:ltext}</b></a>&nbsp;&nbsp;
 <!-- END SUB: PAGE -->

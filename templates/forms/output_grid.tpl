@@ -1,8 +1,10 @@
 <form action=reforb.{VAR:ext} method=post>
 <input class='small_sub' type='submit' NAME='save' VALUE='{VAR:LC_FORMS_SAVE}!'>&nbsp;&nbsp;&nbsp;
 <!-- SUB: PREVIEW -->
-<a href='{VAR:preview}'>{VAR:LC_FORMS_PREVIEW}</a>
+<a href='{VAR:preview}'>{VAR:LC_FORMS_PREVIEW}</a> | 
 <!-- END SUB: PREVIEW -->
+<a href='{VAR:translate}'>T&otilde;lgi</a>
+
 <table border=0>
 <tr>
 <td bgcolor=#d0d0d0>

@@ -87,17 +87,17 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 <tr>
 
 <td colspan=6 class="fgtitle">
-<b>DR. ONLINE @ {VAR:pstring}<br><a href='javascript:show_all()'>K&otilde;ik</a> |
-<a href='javascript:show_yesterday()'>Eilsed</a> |
-<a href='javascript:show_today()'>T&auml;nased</a> |
+<b>DR. ONLINE @ {VAR:pstring}<br><a href='javascript:show_all()'>{VAR:LC_SYSLOG_ALL}</a> |
+<a href='javascript:show_yesterday()'>{VAR:LC_SYSLOG_YESTERDAY}</a> |
+<a href='javascript:show_today()'>{VAR:LC_SYSLOG_TODAYS}</a> |
 <a href='javascript:document.subb.submit()'>Reload</a> |
-<a href='javascript:show_stat()'>Statistika</a> |
+<a href='javascript:show_stat()'>{VAR:LC_SYSLOG_STATISTICS}</a> |
 <a href='{VAR:self}?display=block'>IP block</a>
-</b> Uuendatakse iga
+</b> {VAR:LC_SYSLOG_RENEWED_EVERY}
 <input type="text" name="update" size="4"  class="plain_el" value="{VAR:update}">
-minuti järel. N&auml;idatakse
+{VAR:LC_SYSLOG_MINUTE_SHOW}
 <input type="text" name="number" size="4" class="plain_el" value="{VAR:number}">
-rida</font>
+{VAR:LC_SYSLOG_ROW}</font>
 </td>
 </tr>
 
@@ -115,8 +115,8 @@ rida</font>
 <td valign=bottom class="fgtitle">
 <table border=0 cellpadding=0 cellspacing=0>
 <tr>
-	<td class="plain">Alates</td>
-	<td class="plain">Kuni</td>
+	<td class="plain">{VAR:LC_SYSLOG_FROM}</td>
+	<td class="plain">{VAR:LC_SYSLOG_TILL}</td>
 </tr>
 <tr>
 	<td class="plain">
@@ -130,16 +130,16 @@ rida</font>
 </td>
 
 <td valign=bottom class="fgtitle">
-Kasutaja<br>
+{VAR:LC_SYSLOG_USER}<br>
 <select name='user' class='plain_el'>{VAR:user}</select><br>
 </td>
 <td valign=bottom class="fgtitle">
-Aadress<br>
+{VAR:LC_SYSLOG_ADDRESS}<br>
 <input type='text' NAME='ip_addr' VALUE='{VAR:ip_addr}' class='plain_el' size=20>
 </td>
 
 <td valign=bottom class="fgtitle">
-Kasutaja (c)<br>
+{VAR:LC_SYSLOG_USER} (c)<br>
 <input type='text' NAME='uid_c' CLASS='plain_el' size=12 VALUE='{VAR:uid_c}'>
 </td>
 
@@ -149,7 +149,7 @@ E-mail (c)<br>
 </td>
 
 <td valign=bottom class="fgtitle">
-Mida tegi<br>
+{VAR:LC_SYSLOG_WHAT_DID}<br>
 <input type='text' NAME='act' CLASS='plain_el' size=50 VALUE='{VAR:act}'>
 </td>
 </tr>

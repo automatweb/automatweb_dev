@@ -8,8 +8,8 @@
 	</tr>
 
 	<tr>
-		<td class="fgtitle">Periood</td>
-		<td class="fgtitle">Vaatamisi</td>
+		<td class="fgtitle">{VAR:LC_SYSLOG_PERIOD}</td>
+		<td class="fgtitle">{VAR:LC_SYSLOG_LOOKS}</td>
 		<td class="fgtitle">&nbsp;</td>
 	</tr>
 	<!-- SUB: hits_line -->
@@ -27,7 +27,7 @@
 	<!-- END SUB: hits_line -->
 	<tr>
 		<td class="fgtext">
-		<strong>Kokku:</strong>
+		<strong>{VAR:LC_SYSLOG_TOGETHER}:</strong>
 		</td>
 		<td class="fgtext" colspan="2">
 		<strong>{VAR:total}</strong>
@@ -53,8 +53,8 @@
 	</tr>
 
 	<tr>
-		<td class="fgtitle">Kasutaja</td>
-		<td class="fgtitle">Logimisi</td>
+		<td class="fgtitle">{VAR:LC_SYSLOG_USER}</td>
+		<td class="fgtitle">{VAR:LC_SYSLOG_LOGS}</td>
 		<td class="fgtitle">&nbsp;</td>
 	</tr>
 	<!-- SUB: login_line -->
@@ -72,7 +72,7 @@
 	<!-- END SUB: login_line -->
 	<tr>
 		<td class="fgtext">
-		<strong>Kokku:</strong>
+		<strong>{VAR:LC_SYSLOG_TOGETHER}:</strong>
 		</td>
 		<td class="fgtext" colspan="2">
 		<strong>{VAR:total}</strong>
@@ -89,7 +89,7 @@
 <td>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#FFFFFF">
 	<tr>
-		<td colspan="4" class="fgtitle">Top 30 Vaatajat aadresside järgi</td>
+		<td colspan="4" class="fgtitle">Top 30 {VAR:LC_SYSLOG_LOOKER_BY_ADDRESS}</td>
 	</tr>
 
 	<tr>
@@ -116,7 +116,7 @@
 	<!-- END SUB: hosts_line -->
 	<tr>
 	<td class="fgtext" colspan="2">
-	<strong>Kokku:</strong>
+	<strong>{VAR:LC_SYSLOG_TOGETHER}:</strong>
 	</td>
 	<td class="fgtext" colspan="2">
 	<strong>{VAR:total}</strong>
@@ -133,13 +133,13 @@
 <td>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" bgcolor="#FFFFFF">
 	<tr>
-		<td colspan="4" class="fgtitle">Top muudetud menüüd</td>
+		<td colspan="4" class="fgtitle">Top {VAR:LC_SYSLOG_CHANGED_MENUS}</td>
 	</tr>
 
 	<tr>
 		<td class="fgtitle">#</td>
-		<td class="fgtitle">Menüü</td>
-		<td class="fgtitle">Muutmisi</td>
+		<td class="fgtitle">{VAR:LC_SYSLOG_MENU}</td>
+		<td class="fgtitle">{VAR:LC_SYSLOG_CHANGES}</td>
 		<td class="fgtitle">&nbsp;</td>
 	</tr>
 	<!-- SUB: menus_line -->
@@ -160,7 +160,7 @@
 	<!-- END SUB: menus_line -->
 	<tr>
 	<td class="fgtext" colspan="2">
-	<strong>Kokku:</strong>
+	<strong>{VAR:LC_SYSLOG_TOGETHER}:</strong>
 	</td>
 	<td class="fgtext" colspan="2">
 	<strong>{VAR:total}</strong>
@@ -183,15 +183,15 @@
 		<option value="50">50</option>
 		</select>
 		<select name="type">
-		<option value="pageview">Vaatamist</option>
-		</select> selles perioodis
+		<option value="pageview">{VAR:LC_SYSLOG_LOOKS1}</option>
+		</select> {VAR:LC_SYSLOG_THIS_PERIOD}
 		</td>
 	</tr>
 
 	<tr>
 		<td class="fgtitle">#</td>
 		<td class="fgtitle">Oid</td>
-		<td class="fgtitle">Nimi</td>
+		<td class="fgtitle">{VAR:LC_SYSLOG_NAME}</td>
 		<td class="fgtitle">Hitte</td>
 		<td class="fgtitle">&nbsp;</td>
 	</tr>
@@ -208,7 +208,7 @@
 	<!-- END SUB: objects_line -->
 	<tr>
 	<td class="fgtext" colspan="3">
-	<strong>Kokku:</strong>
+	<strong>{VAR:LC_SYSLOG_TOGETHER}:</strong>
 	</td>
 	<td class="fgtext" colspan="2">
 	<strong>{VAR:total}</strong>
@@ -227,19 +227,19 @@
 <input type='checkbox' NAME='types[]' VALUE='auth' {VAR:auth_sel}>Login
 </small></td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='mlist' {VAR:mlist_sel}>Listid
+<input type='checkbox' NAME='types[]' VALUE='mlist' {VAR:mlist_sel}>{VAR:LC_SYSLOG_LISTS}
 </small></td>
 <td bgcolor=#f8f8f8 class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='document' {VAR:document_sel}>Dokumendid
+<input type='checkbox' NAME='types[]' VALUE='document' {VAR:document_sel}>{VAR:LC_SYSLOG_DOCUMENTS}
 </small></td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='form' {VAR:form_sel}>Formid
+<input type='checkbox' NAME='types[]' VALUE='form' {VAR:form_sel}>{VAR:LC_SYSLOG_FORMS}
 </small></td>
 <td bgcolor=#f8f8f8 class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='user' {VAR:user_sel}>Kasutajad
+<input type='checkbox' NAME='types[]' VALUE='user' {VAR:user_sel}>{VAR:LC_SYSLOG_USERS}
 </small></td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='error' {VAR:alias_sel}>Vead
+<input type='checkbox' NAME='types[]' VALUE='error' {VAR:alias_sel}>{VAR:LC_SYSLOG_ERRORS}
 </small></td>
 </tr>
 
@@ -248,51 +248,51 @@
 <input type='checkbox' NAME='types[]' VALUE='auth' {VAR:auth_sel}>Logout
 </small></td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='ml_var' {VAR:ml_var_sel}>Muutujad
+<input type='checkbox' NAME='types[]' VALUE='ml_var' {VAR:ml_var_sel}>{VAR:LC_SYSLOG_VARIABLES}
 </small></td>
 <td bgcolor=#f8f8f8 class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='image' {VAR:image_sel}>Pildid
+<input type='checkbox' NAME='types[]' VALUE='image' {VAR:image_sel}>{VAR:LC_SYSLOG_IMAGES}
 </small></td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='style' {VAR:style_sel}>Stiilid
+<input type='checkbox' NAME='types[]' VALUE='style' {VAR:style_sel}>{VAR:LC_SYSLOG_STYLES}
 </small></td>
 <td bgcolor=#f8f8f8 class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='group' {VAR:group_sel}>Grupid
+<input type='checkbox' NAME='types[]' VALUE='group' {VAR:group_sel}>{VAR:LC_SYSLOG_GROUPS}
 </small></td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='bug' {VAR:bug_sel}>Bugid
+<input type='checkbox' NAME='types[]' VALUE='bug' {VAR:bug_sel}>Bug
 </small></td>
 </tr>
 
 <tr>
 <td bgcolor=#f8f8f8 class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='pageview' {VAR:pageview_sel}>Vaatamine
+<input type='checkbox' NAME='types[]' VALUE='pageview' {VAR:pageview_sel}>{VAR:LC_SYSLOG_LOOKING}
 </small></td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='e-mail' {VAR:e-mail_sel}>Meilid
+<input type='checkbox' NAME='types[]' VALUE='e-mail' {VAR:e-mail_sel}>{VAR:LC_SYSLOG_MAILS}
 </small></td>
 <td bgcolor=#f8f8f8 class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='alias' {VAR:alias_sel}>Aliased
+<input type='checkbox' NAME='types[]' VALUE='alias' {VAR:alias_sel}>{VAR:LC_SYSLOG_ALIASES}
 </small></td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='menuedit' {VAR:menuedit_sel}>Men&uuml;&uuml;editor
+<input type='checkbox' NAME='types[]' VALUE='menuedit' {VAR:menuedit_sel}>{VAR:LC_SYSLOG_MENUEDITOR}
 </small></td>
 <td bgcolor=#f8f8f8 class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='object' {VAR:object_sel}>Objektid
+<input type='checkbox' NAME='types[]' VALUE='object' {VAR:object_sel}>{VAR:LC_SYSLOG_OBJECTS}
 </small></td>
 <td bgcolor=#ffffff class="plain">&nbsp;</td>
 </tr>
 
 <tr>
 <td bgcolor=#f8f8f8 class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='link' {VAR:link_sel}>Lingile klikk
+<input type='checkbox' NAME='types[]' VALUE='link' {VAR:link_sel}>{VAR:LC_SYSLOG_LINK_CLICK}
 </small></td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='mliki' {VAR:mliki_sel}>Meili klikk
+<input type='checkbox' NAME='types[]' VALUE='mliki' {VAR:mliki_sel}>{VAR:LC_SYSLOG_MAIL_CLICK}
 </small></td>
 <td bgcolor=#f8f8f8 class="plain"><small>&nbsp;</td>
 <td bgcolor=#ffffff class="plain"><small>
-<input type='checkbox' NAME='types[]' VALUE='promo' {VAR:promo_sel}>Promo kastid
+<input type='checkbox' NAME='types[]' VALUE='promo' {VAR:promo_sel}>{VAR:LC_SYSLOG_PROMOBOX}
 </small></td>
 <td bgcolor=#f8f8f8 class="plain"><small>&nbsp;</td>
 <td bgcolor=#ffffff class="plain"><small>&nbsp;</td>

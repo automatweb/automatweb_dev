@@ -5,12 +5,12 @@
 
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
-<td height="15" colspan="11" class="fgtitle">&nbsp;<b>MUUTUJAD:&nbsp;<a href='javascript:fib.submit()'>Salvesta</a></b>
+<td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_VARIABLES}:&nbsp;<a href='javascript:fib.submit()'>{VAR:LC_MAILINGLIST_SAVE}</a></b>
 </td>
 </tr>
 <tr>
-<td align=center class="title">&nbsp;Nimi&nbsp;</td>
-<td align="center" class="title">&nbsp;K&otilde;ik&nbsp;</td>
+<td align=center class="title">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
+<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_ALL}&nbsp;</td>
 </tr>
 
 <!-- SUB: LINE -->
