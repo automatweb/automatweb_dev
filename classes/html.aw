@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.42 2003/12/11 12:26:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.43 2004/01/08 15:31:17 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -282,7 +282,8 @@ class html extends aw_template
 		{
 			$onclick = 'onclick="'.$onclick.'"';
 		}
-		return "<input type='submit' name='$name' value='$value' $onclick />\n";
+
+		return "<input id='cbsubmit' type='submit' name='$name' value='$value' $onclick />\n";
 	}
 
 	////
