@@ -46,7 +46,7 @@ pr_{VAR:root} = gFld("<b>AutomatWeb</b>", "menuedit_right.{VAR:ext}?parent={VAR:
     if (doc.layers) 
       browserVersion = 2 //NS4 
     else 
-      browserVersion = 0 //other 
+      browserVersion = 0//other 
  
  pr_{VAR:root}.initialize(0, 1, "") 
  pr_{VAR:root}.display()

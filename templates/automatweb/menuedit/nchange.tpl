@@ -339,7 +339,20 @@ See on vennastatud men&uuml;&uuml;, mille vanem vend asub <a href='menuedit.{VAR
 	</tr>
 	<tr>
 		<td class="title" width=10% nowrap>&nbsp;</td>
-		<td class="fgtext_g">&nbsp;</td>
+		<td class="fgtext_g">
+			<table border=0 cellpadding=0 cellspacing=0>
+				<tr>
+					<td class="fgtext_g">Nimi</td>
+					<td class="fgtext_g">J&auml;rjekord</td>
+				</tr>
+			<!-- SUB: SA_ITEM -->
+				<tr>
+					<td class="fgtext_g">{VAR:sa_name}</td>
+					<td class="fgtext_g">&nbsp;<input type="text" size=3 class="small_button" name='sa_ord[{VAR:sa_id}]' value='{VAR:sa_ord}'></td>
+				</tr>
+			<!-- END SUB: SA_ITEM -->
+			</table>
+		</td>
 	</tr>
 	<tr>
 		<td class="title" width=10% nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
