@@ -94,12 +94,14 @@ class parser extends aw_template
 				$this->do_parse($_class);
 				$this->saved_trees[$class]["functions"] = $this->functions;
 				$this->saved_trees[$class]["classes"] = $this->classes;
+				$this->saved_trees[$class]["fun_returns"] = $this->fun_returns;
 			}
 
 			foreach($classes as $class)
 			{
 				$this->functions = $this->saved_trees[$class]["functions"];
 				$this->classes = $this->saved_trees[$class]["classes"];
+				$this->fun_returns = $this->saved_trees[$class]["fun_returns"];
 
 				$_class = $this->cfg["classdir"]."/".$class;
 				if ($show_tree)
@@ -156,6 +158,7 @@ class parser extends aw_template
 
 		$this->classes = array();
 		$this->functions = array();
+		$this->fun_returns = array();
 
 		$this->find_funcs($fc,$file);
 
@@ -391,6 +394,12 @@ class parser extends aw_template
 					$cur_func = "";
 				}
 			}
+			else
+			if ($tok == "return")
+			{
+				// return from function - mark this down so we know the function exit points for all functions
+				$this->fun_returns[$cur_class][$cur_func][$this->p_get_line()] = $this->p_get_line();
+			}
 		}
 	}
 
@@ -572,113 +581,36 @@ class parser extends aw_template
 	// and the parse tree is in $this->classes and $this->functions
 	function add_enter_func($file)
 	{
+		$this->proc_lines();
+
 		$fc = $this->get_file(array("file" => $file));
-		$fc_noc = $this->strip_comments($fc);
-		$fc_noc_lines = explode("\n", $fc_noc);
 		$fc_lines = explode("\n", $fc);
 
-		$add_lines = 0;
-
-		$this->tkp = new parser;
-
-		// go over all functions in file 
-		foreach($this->functions as $class_name => $class_data)
+		$final = array();
+		// go over all the lines in the file and if we hit a function start line or a function end line or a function return line, 
+		// add the necessary stuff to it
+		foreach($fc_lines as $lnr => $line)
 		{
-			foreach($class_data as $func_name => $func_data)
+			if (($fdat = $this->is_func_start_line($lnr)))
 			{
-				// we'll add argument passing when we will actually do something with it
-				$enter_func_str = "\t\tenter_function(\"".$class_name."::".$func_name."\",array());";
-				$exit_func_str = "\t\texit_function(\"".$class_name."::".$func_name."\");";
-				// check if the function already has enter_function calls 
-				$fun_c = $this->get_func_content($class_name, $func_name, $fc_noc_lines);
-				if (strpos($fun_c, "enter_function") === false)
+				// add enter function
+				$final[] = "\t\tenter_function(\"".$fdat["class"]."::".$fdat["func"]."\",array());";
+			}
+
+			if (($fdat = $this->is_func_end_or_return_line($lnr)))
+			{
+				if ($lnr != ($last_exit+1))	// this to avoid 2 exit funcs at the end of a function that returns something
 				{
-					// ok, no enter func exists, add it
-					// but we must add it to the original source, to preserve comments
-
-					$tmp = array();
-					$this_al = 0;
-					reset($fc_lines);
-					// first, copy the beginning of file
-					$i=0;
-					while ($i < ($func_data["start_line"]+$add_lines))
-					{
-						list(,$line) = each($fc_lines);
-						$tmp[] = $line;
-						$i++;
-					}
-					// now add the enter line
-					$tmp[] = $enter_func_str;
-					$this_al++;
-
-					// now we must find all the return statements and place exit_function calls before all of them
-					// the easiest way to do that is tokenize each line
-					$retlines = array();
-					$this->tkp->p_init($fun_c);
-					while (($tok = $this->tkp->p_get_token()))
-					{
-						if ($tok == "return")
-						{
-							// found a line with return statement, mark it for exit func addition
-							$r_line = $this->tkp->p_get_line()+$this->functions[$class_name][$func_name]["start_line"];
-							echo "found token return $tok marking on line $r_line (p_line = ", $this->tkp->p_get_line()," , f_start = ",$this->functions[$class_name][$func_name]["start_line"],") <Br>";
-							$retlines[$r_line] = $r_line;
-						}
-					}
-					// check if the line contains a return statement - but, check the line
-					// in the version where comments are stripped, so we don't get exit funcs 
-					// before stuff in comments
-
-					// we must also check that the return statement is not in a string and that it has a separator at 
-					// each side
-
-					$last_line_add = false;
-					while($i < (($func_data["end_line"]-1)+$add_lines))
-					{
-						$last_line_add = false;
-						list(,$line) = each($fc_lines);
-
-						echo "$i|$add_lines: ".htmlspecialchars($line )." <br>";
-						if ($retlines[$i+$add_lines] == ($i+$add_lines))
-						{
-							echo "found line for return $i <br>";
-							$tmp[] = $exit_func_str;
-							$this_al++;
-							$last_line_add = true;
-						}
-
-						$tmp[] = $line;
-						$i++;
-					}
-					// add exit line to end as well, just in case - it would be kinda hard to figure 
-					// out whether we always return from a return statement ornot
-					if (!$last_line_add)
-					{
-						// only add this if the last line of the function did not contain a return call, 
-						// cause if it did, then it will look kind of silly really. 
-						$tmp[] = $exit_func_str;
-						$this_al++;
-					}
-
-					// now, copy the rest of the file
-					while(list(,$line) = each($fc_lines))
-					{
-						$tmp[] = $line;
-					}
-					$fc_lines = $tmp;
-					$add_lines+=$this_al;
+					// add exit function 
+					$final[] = "\t\texit_function(\"".$fdat["class"]."::".$fdat["func"]."\");";
+					$last_exit = $lnr;
 				}
 			}
+
+			$final[] = $line;
 		}
-		/*			echo "resulting class: <Br><pre>";
-					$lar = explode("\n",$fc);
-					$cnt = 1;
-					foreach($lar as $line)
-					{
-						echo "line $cnt: ".htmlentities($line)." \n";
-						$cnt++;
-					}*/
-		$fc_n = join("\n", $fc_lines);
+
+		$fc_n = join("\n", $final);
 		if ($fc_n != $fc)
 		{
 			$backup_name = $file.".".time().".aw-backup";
@@ -689,6 +621,7 @@ class parser extends aw_template
 			}
 			echo "saving new file as $file ....<br>\n";
 			$this->put_file(array("file" => $file, "content" => $fc_n));
+			chmod($file,0666);
 			echo "all done. <br><br>\n\n";
 		}
 		else
@@ -721,77 +654,18 @@ class parser extends aw_template
 	function remove_enter_func($file)
 	{
 		$fc = $this->get_file(array("file" => $file));
-		$fc_noc = $this->strip_comments($fc);
-		$fc_noc_lines = explode("\n", $fc_noc);
-		$fc_lines = explode("\n", $fc);
+		$fc_o = $fc;
 
-		$rm_lines = 0;
 		foreach($this->functions as $class_name => $class_data)
 		{
 			foreach($class_data as $func_name => $func_data)
 			{
-				// check if the function already has enter_function calls 
-				$fun_c = $this->get_func_content($class_name, $func_name, $fc_noc_lines);
-				if (strpos($fun_c, "enter_function") !== false)
-				{
-//					echo "fun_c for func $func_name = <pre>", htmlentities($fun_c) ,"</pre> <br>";
-					// found enter func call, remove it
-					$tmp = array();
-					$this_rm_lines = 0;
-
-					reset($fc_lines);
-					// first, copy the beginning of file
-					$i=0;
-					while ($i < ($func_data["start_line"]-$rm_lines))
-					{
-						list(,$line) = each($fc_lines);
-						$tmp[] = $line;
-						$i++;
-					}
-
-					// now we must find all the enter/exit_function calls and remove the lines
-	//				echo "rm_lines = $rm_lines <br>";
-					while($i < (($func_data["end_line"]-1)-$rm_lines))
-					{
-						list(,$line) = each($fc_lines);
-//						echo "line = <pre>", htmlentities($line),"</pre> <br>";
-						// check if the line contains the calls - but, check the line
-						// in the version where comments are stripped, so we don't remove stuff in comments
-						// and if it contains funcs, don't append it, assume there is nothing else on the line
-						if (strpos($fc_noc_lines[$i+$rm_lines], "enter_function") === false && strpos($fc_noc_lines[$i+$rm_lines], "exit_function") === false)
-						{
-//							echo "no match, adding ",htmlentities($fc_noc_lines[$i-$rm_lines])," , i = $i , rm_lines = $rm_lines <br>";
-							$tmp[] = $line;
-						}
-						else
-						{
-							$this_rm_lines++;
-//							echo "line removed , this_rm_lines = $this_rm_lines <br>";
-						}
-						$i++;
-//						echo "i++ = $i <br>";
-					}
-
-					// now, copy the rest of the file
-					while(list(,$line) = each($fc_lines))
-					{
-						$tmp[] = $line;
-					}
-					$fc_lines = $tmp;
-					$rm_lines+=$this_rm_lines;
-				}
+				$fc = preg_replace("/\t\tenter_function\(\"".$class_name."::".$func_name."\",array\(\)\);\n/U","",$fc);
+				$fc = preg_replace("/\t\texit_function\(\"".$class_name."::".$func_name."\"\);\n/U","",$fc);
 			}
 		}
-		/*			echo "resulting class: <Br><pre>";
-					$lar = explode("\n",$fc);
-					$cnt = 1;
-					foreach($lar as $line)
-					{
-						echo "line $cnt: ".htmlentities($line)." \n";
-						$cnt++;
-					}*/
-		$fc_n = join("\n", $fc_lines);
-		if ($fc_n != $fc)
+
+		if ($fc_o != $fc)
 		{
 			$backup_name = $file.".".time().".aw-backup";
 			echo "creating back-up of old class: $file to $backup_name <Br>\n";
@@ -800,7 +674,7 @@ class parser extends aw_template
 				die("copy of $file to $backup_name failed, stopping <br>\n");
 			}
 			echo "saving new file as $file ....<br>\n";
-			$this->put_file(array("file" => $file, "content" => $fc_n));
+			$this->put_file(array("file" => $file, "content" => $fc));
 			echo "all done. <br><br>\n\n";
 		}
 		else
@@ -823,6 +697,49 @@ class parser extends aw_template
 		}
 		echo "</pre><br>\n";
 		flush();
+	}
+
+	function proc_lines()
+	{
+		$this->start_lines = array();
+		$this->end_lines = array();
+
+		foreach($this->functions as $class => $cldat)
+		{
+			foreach($cldat as $fnname => $fndat)
+			{
+				$this->start_lines[$fndat["start_line"]] = array("class" => $class , "func" => $fnname);
+			}
+		}
+
+		foreach($this->functions as $class => $cldat)
+		{
+			foreach($cldat as $fnname => $fndat)
+			{
+				$this->end_lines[$fndat["end_line"]-1] = array("class" => $class , "func" => $fnname);
+			}
+		}
+
+		foreach($this->fun_returns as $class => $cldat)
+		{
+			foreach($cldat as $fnname => $fndat)
+			{
+				foreach($fndat as $eline)
+				{
+					$this->end_lines[$eline-1] = array("class" => $class , "func" => $fnname);
+				}
+			}
+		}
+	}
+
+	function is_func_start_line($line)
+	{
+		return $this->start_lines[$line];
+	}
+
+	function is_func_end_or_return_line($line)
+	{
+		return $this->end_lines[$line];
 	}
 }
 ?>
