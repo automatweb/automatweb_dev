@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/syslog.aw,v 1.4 2004/01/13 16:24:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/syslog.aw,v 1.5 2004/02/02 19:22:34 kristo Exp $
 // syslog.aw - syslog management
 // syslogi vaatamine ja analüüs
 class db_syslog extends aw_template
@@ -344,27 +344,6 @@ class db_syslog extends aw_template
 		header("Refresh: ".($syslog_params["update"]*60).";url=".$this->mk_my_orb("show", array(),"syslog", false,true));
 		$retval =  $this->parse("MAIN");
 		return $retval;
-	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$op_table = array(
-			"name" => "syslog", 
-			"fields" => array(
-				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
-				"tm" => array("name" => "tm", "length" => 11, "type" => "int", "flags" => ""),
-				"uid" => array("name" => "uid", "length" => 50, "type" => "string", "flags" => ""),
-				"type" => array("name" => "type", "length" => 100, "type" => "string", "flags" => ""),
-				"action" => array("name" => "action", "length" => 255, "type" => "string", "flags" => ""),
-				"ip" => array("name" => "ip", "length" => 100, "type" => "string", "flags" => ""),
-				"oid" => array("name" => "oid", "length" => 11, "type" => "int", "flags" => ""),
-			)
-		);
-
-		$ret = $sys->check_site_templates("syslog", array("parts.tpl","syslog.tpl"));
-		$ret.= $sys->check_db_tables(array($op_table),$fix);
-
-		return $ret;
 	}
 };
 

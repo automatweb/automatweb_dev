@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.102 2004/01/23 10:40:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.103 2004/02/02 19:22:34 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1183,13 +1183,6 @@ class users extends users_user
 			}
 		};
 		return $elvalues;
-	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$ret = $sys->check_admin_templates("automatweb/users", array("sel_list.tpl","list.tpl","changepwd.tpl","sel_join_grp.tpl","add.tpl"));
-		$ret.= $sys->check_orb_defs(array("users"));
-		return $ret;
 	}
 
 	function get_join_entries($uid = "")
@@ -2479,36 +2472,8 @@ class users extends users_user
 		}
 		else
 		{
-			// create parent folder for groups
-			$m = get_instance("menuedit");
-			// make it use the correct db connection
-			$m->dc = $dbi->dc;
-			// create aw objects root folder
-			$aw_o_root = $m->add_new_menu(array(
-				"parent" => $ini_opts["rootmenu"],
-				"name" => "AW Objektd",
-				"status" => 2,
-				"type" => MN_CLIENT,
-			));
-			
-			$gparent = $m->add_new_menu(array(
-				"parent" => $aw_o_root,
-				"name" => "Groups",
-				"status" => 2,
-				"type" => MN_CLIENT,
-			));
-			$ini_opts["groups.tree_root"] = $gparent;
-
-			$uparent = $m->add_new_menu(array(
-				"parent" => $aw_o_root,
-				"name" => "Users",
-				"status" => 2,
-				"type" => MN_CLIENT,
-			));
-			$ini_opts["users.root_folder"] = $uparent;
-
 			// create default group
-			$this->dc = $dbi->dc;
+			/*$this->dc = $dbi->dc;
 
 			$aug = $this->addgroup(
 				0,
@@ -2526,7 +2491,7 @@ class users extends users_user
 				"all_users_grp" => $aug,
 				"use_md5_passwords" => true,
 				"obj_parent" => $uparent
-			));
+			));*/
 		}
 		$ini_opts["auth.md5_passwords"] = 1;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.27 2004/01/13 16:24:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.28 2004/02/02 19:22:34 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -748,24 +748,6 @@ class style extends aw_template
 		}
 		return $str;
 	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$op_table = array(
-			"name" => "styles", 
-			"fields" => array(
-				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
-				"style" => array("name" => "style", "length" => 65535, "type" => "blob", "flags" => ""),
-				"type" => array("name" => "type", "length" => 11, "type" => "int", "flags" => ""),
-			)
-		);
-
-		$ret = $sys->check_admin_templates("style", array("list.tpl","add_sel.tpl","change_table.tpl","change_cell.tpl"));
-		$ret.= $sys->check_db_tables(array($op_table),$fix);
-
-		return $ret;
-	}
-
 
 	function _serialize($arr)
 	{

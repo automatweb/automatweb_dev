@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.2 2004/01/13 16:24:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/stat.aw,v 1.3 2004/02/02 19:22:34 kristo Exp $
 // stat.aw - generating statictis from the syslog
 // klass, mille abil saab genereerida statistikat syslog tabelist
 class db_stat extends aw_template
@@ -484,14 +484,6 @@ class db_stat extends aw_template
 			$bip = " AND ( ip NOT IN ($bips) ) ";
 		}
 		return $bip;
-	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$ret = $sys->check_site_templates("syslog", array("compare.tpl","stat.tpl","parts.tpl"));
-		$ret.= $sys->check_db_tables(array($op_table,$op2_table),$fix);
-
-		return $ret;
 	}
 };
 

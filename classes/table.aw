@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.51 2004/01/13 16:24:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.52 2004/02/02 19:22:34 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -2777,25 +2777,6 @@ class table extends aw_template
 		$this->db_query("UPDATE objects SET brother_of = oid WHERE oid = '$id'");
 		$this->db_query("INSERT INTO aw_tables(id,contents,idx,oid) VALUES($id,'".$row["contents"]."','".$row["tbl_idx"]."','".$row["tbl_oid"]."')");
 		return true;
-	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$op_table = array(
-			"name" => "aw_tables", 
-			"fields" => array(
-				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
-				"contents" => array("name" => "contents", "length" => 65535, "type" => "blob", "flags" => ""),
-				"idx" => array("name" => "idx", "length" => 11, "type" => "int", "flags" => ""),
-				"oid" => array("name" => "oid", "length" => 11, "type" => "int", "flags" => ""),
-			)
-		);
-
-		$ret = $sys->check_admin_templates("table_gen", array("table_modify.tpl","admin.tpl","styles.tpl","pickstyle.tpl","import.tpl","table_add.tpl"));
-		$ret.= $sys->check_site_files(array("/images/split_cell_down.gif","/images/split_cell_left.gif","/images/up_r_arr.gif","/images/left_r_arr.gif","/images/right_r_arr.gif","/images/down_r_arr.gif","/img/trans.gif"));
-		$ret.= $sys->check_db_tables(array($op_table),$fix);
-
-		return $ret;
 	}
 
 	function request_execute($obj)

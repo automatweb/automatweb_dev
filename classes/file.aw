@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.68 2004/01/13 16:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.69 2004/02/02 19:22:34 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -120,12 +120,6 @@ class file extends class_base
 
 			case "file":
 				$data["value"] = "";
-				$envir = $this->check_environment();
-				if (!empty($envir))
-                                {
-                                        $data["error"] = $envir;
-                                        $retval = PROP_ERROR;
-                                };
 				break;
 
 		}
@@ -497,49 +491,6 @@ class file extends class_base
 		$old["file_id"] = 0;
 		$old["parent"] = $parent;
 		$this->save_file($old);
-	}
-
-	////
-	// !checks whether the directory needed for file storing exists and is writable
-	function check_environment($args = array())
-	{
-		$retval = "";
-		if ($this->cfg["site_basedir"] == "") 
-		{
-			$retval .= LC_FILE_DIR_NOT_DEFINED;
-		}
-		else
-		{
-			$dir = $this->cfg["site_basedir"] . "/files";
-			if (!is_writable($dir))
-			{
-				$retval .= "failikataloog ei ole kirjutatav<br />";
-			};
-
-			// simply check whether every directory inside the files directory
-			// is writable by the user PHP is running as.
-
-			// I think we should give up using md5 as filename, it makes
-			// it awfully hard to locate files in the filesystem
-			if ($dh = opendir($dir))
-			{
-                        	while (false !== ($file = readdir($dh)))
-				{
-					// ignore thing with . in front of name
-					if (0 === strpos($file,"."))
-					{
-						continue;
-					};
-                                	$fn = $dir . "/" . $file;
-					if (is_dir($fn) && !is_writable($fn))
-					{
-						$retval .= "files/$file ei ole kirjutatav<br />";
-					};
-				};
-                        }
-                        closedir($dh);
-                };
-		return $retval;
 	}
 
 	////

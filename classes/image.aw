@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.81 2004/01/28 15:32:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.82 2004/02/02 19:22:34 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -600,13 +600,6 @@ class image extends class_base
 
 			case "file":
 			case "file2":
-				$fl = get_instance("file");
-				$envir = $fl->check_environment();
-				if (!empty($envir))
-				{
-					$prop["error"] = $envir;
-					$retval = PROP_ERROR;
-				};
 				$url = $this->get_url($arr["obj_inst"]->prop($prop["name"]));
 				if ($url != '')
 				{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.13 2004/01/13 16:24:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.14 2004/02/02 19:22:34 kristo Exp $
 
 class accessmgr extends aw_template
 {
@@ -103,12 +103,6 @@ class accessmgr extends aw_template
 			$this->quote(&$s);
 			$this->set_cval("accessmgr", $s);
 		}
-	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$ret = $sys->check_admin_templates("accessmgr", array("list.tpl"));
-		return $ret;
 	}
 }
 ?>

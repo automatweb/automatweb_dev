@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.10 2004/01/13 16:24:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_output.aw,v 1.11 2004/02/02 19:22:34 kristo Exp $
 classload("formgen/form_base");
 class form_output extends form_base 
 {
@@ -1318,31 +1318,6 @@ class form_output extends form_base
 			}
 		}
 		return $elarr;
-	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$op_table = array(
-			"name" => "form_output", 
-			"fields" => array(
-				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
-				"op" => array("name" => "op", "length" => 65535, "type" => "blob", "flags" => "")
-			)
-		);
-
-		$op2_table = array(
-			"name" => "output2form", 
-			"fields" => array(
-				"op_id" => array("name" => "op_id", "length" => 11, "type" => "int", "flags" => ""),
-				"form_id" => array("name" => "form_id", "length" => 11, "type" => "int", "flags" => "")
-			)
-		);
-
-		$ret = $sys->check_admin_templates("forms", array("add_output.tpl","output_grid.tpl","ch_op_cell.tpl"));
-		$ret.= $sys->check_site_templates("forms", array());
-		$ret.= $sys->check_db_tables(array($op_table,$op2_table),$fix);
-
-		return $ret;
 	}
 
 	/** Adds an element to the end of celll $row $col 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.11 2004/01/13 16:24:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.12 2004/02/02 19:22:34 kristo Exp $
 // acl.aw - Access Control Lists
 
 class acl extends aw_template 
@@ -264,12 +264,6 @@ class acl extends aw_template
 			}
 		}
 		return "editacl.".$this->cfg["ext"]."?oid=".$p_oid."&file=".$file;
-	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$ret = $sys->check_admin_templates("automatweb/acl", array("cells.tpl","editacl.tpl"));
-		return $ret;
 	}
 };
 ?>

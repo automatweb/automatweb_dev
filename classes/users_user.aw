@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.79 2004/02/02 19:10:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.80 2004/02/02 19:22:34 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1214,71 +1214,6 @@ class users_user extends aw_template
 		$gar = array();
 		$this->getgroupsabove($gid,$gar);
 		return count($gar);
-	}
-
-	function check_environment(&$sys, $fix = false)
-	{
-		$op_table = array(
-			"name" => "users", 
-			"fields" => array(
-				"uid" => array("name" => "uid", "length" => 50, "type" => "string", "flags" => ""),
-				"password" => array("name" => "password", "length" => 32, "type" => "string", "flags" => ""),
-				"created" => array("name" => "created", "length" => 11, "type" => "int", "flags" => ""),
-				"createdby" => array("name" => "createdby", "length" => 50, "type" => "string", "flags" => ""),
-				"modified" => array("name" => "modified", "length" => 11, "type" => "int", "flags" => ""),
-				"modifiedby" => array("name" => "modifiedby", "length" => 50, "type" => "string", "flags" => ""),
-				"logins" => array("name" => "logins", "length" => 11, "type" => "int", "flags" => ""),
-				"ip" => array("name" => "ip", "length" => 100, "type" => "string", "flags" => ""),
-				"blockedby" => array("name" => "blockedby", "length" => 50, "type" => "string", "flags" => ""),
-				"lang_id" => array("name" => "lang_id", "length" => 11, "type" => "int", "flags" => ""),
-				"online" => array("name" => "online", "length" => 11, "type" => "int", "flags" => ""),
-				"lastaction" => array("name" => "lastaction", "length" => 11, "type" => "int", "flags" => ""),
-				"join_form_entry" => array("name" => "join_form_entry", "length" => 65535, "type" => "blob", "flags" => ""),
-				"mailbox_conf" => array("name" => "mailbox_conf", "length" => 65535, "type" => "blob", "flags" => ""),
-				"exclude_grps" => array("name" => "exclude_grps", "length" => 65535, "type" => "blob", "flags" => ""),
-				"blocked" => array("name" => "blocked", "length" => 11, "type" => "int", "flags" => ""),
-				"email" => array("name" => "email", "length" => 255, "type" => "string", "flags" => ""),
-				"home_folder" => array("name" => "home_folder", "length" => 11, "type" => "int", "flags" => ""),
-				"join_grp" => array("name" => "join_grp", "length" => 200, "type" => "string", "flags" => ""),
-				"msg_inbox" => array("name" => "msg_inbox", "length" => 20, "type" => "int", "flags" => ""),
-				"config" => array("name" => "config", "length" => 65535, "type" => "blob", "flags" => ""),
-			)
-		);
-
-		$op2_table = array(
-			"name" => "groups", 
-			"fields" => array(
-				"gid" => array("name" => "gid", "length" => 11, "type" => "int", "flags" => ""),
-				"name" => array("name" => "name", "length" => 255, "type" => "string", "flags" => ""),
-				"createdby" => array("name" => "createdby", "length" => 50, "type" => "string", "flags" => ""),
-				"created" => array("name" => "created", "length" => 11, "type" => "int", "flags" => ""),
-				"modified" => array("name" => "modified", "length" => 11, "type" => "int", "flags" => ""),
-				"modifiedby" => array("name" => "modifiedby", "length" => 50, "type" => "string", "flags" => ""),
-				"type" => array("name" => "type", "length" => 11, "type" => "int", "flags" => ""),
-				"data" => array("name" => "data", "length" => 11, "type" => "int", "flags" => ""),
-				"parent" => array("name" => "parent", "length" => 11, "type" => "int", "flags" => ""),
-				"priority" => array("name" => "priority", "length" => 11, "type" => "int", "flags" => ""),
-				"oid" => array("name" => "oid", "length" => 11, "type" => "int", "flags" => ""),
-				"search_form" => array("name" => "search_form", "length" => 11, "type" => "int", "flags" => ""),
-			)
-		);
-
-		$op3_table = array(
-			"name" => "groupmembers", 
-			"fields" => array(
-				"gid" => array("name" => "gid", "length" => 11, "type" => "int", "flags" => ""),
-				"uid" => array("name" => "uid", "length" => 50, "type" => "string", "flags" => ""),
-				"createdby" => array("name" => "createdby", "length" => 50, "type" => "string", "flags" => ""),
-				"created" => array("name" => "created", "length" => 11, "type" => "int", "flags" => ""),
-				"permanent" => array("name" => "permanent", "length" => 11, "type" => "int", "flags" => ""),
-			)
-		);
-
-		$ret = $sys->check_admin_templates("automatweb/users", array());
-		$ret.= $sys->check_site_templates("automatweb/users", array("homefolder.tpl"));
-		$ret.= $sys->check_db_tables(array($op_table,$op2_table,$op3_table),$fix);
-
-		return $ret;
 	}
 
 	function find_group_login_redirect($uuid)
