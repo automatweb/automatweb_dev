@@ -1,0 +1,53 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>description</name>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>entity_cfgform</name>
+            <type>objpicker</type>
+            <clid>CL_CFGFORM</clid>
+            <subclass>CL_DOCUMENT</subclass>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Olem (konfivorm)</caption>
+      </property>
+      <property>
+            <name>entity_process</name>
+            <type>objpicker</type>
+            <clid>CL_PROCESS</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Protsess</caption>
+      </property>
+      <property>
+            <name>entity_actor</name>
+            <type>objpicker</type>
+            <clid>CL_ACTOR</clid>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Tegija</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_ENTITY</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+            </general>
+      </groupinfo>
+</properties>
+
