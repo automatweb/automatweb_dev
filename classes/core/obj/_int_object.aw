@@ -772,7 +772,19 @@ class _int_object
 
 		$prev = $this->obj["properties"][$key];
 
-		$this->obj["properties"][$key] = $val;
+		if ($this->properties[$key]["method"] == "bitmask")
+		{
+			$mask = $this->properties[$key]["ch_value"];
+			$field = $this->properties[$key]["field"];
+			$prev = $this->obj["properties"][$field];
+			$sx = (($prev & $mask) xor $val) ? ($val) ? $mask : -$mask : 0;
+			$this->obj["properties"][$field] += (($prev & $mask) xor $val) ? ($val) ? $mask : -$mask : 0;
+		}
+		else
+		{
+			$field = $key;
+			$this->obj["properties"][$key] = $val;
+		};
 
 		// if this is an object field property, sync to object field
 		if ($this->properties[$key]["table"] == "objects")
@@ -783,7 +795,8 @@ class _int_object
 			}
 			else
 			{
-				$this->obj[$this->properties[$key]["field"]] = $val;
+				//$this->obj[$this->properties[$key]["field"]] = $val;
+				$this->obj[$this->properties[$key]["field"]] = $this->obj["properties"][$field];
 			}
 		}
 
@@ -934,6 +947,7 @@ class _int_object
 			"objdata" => $this->obj,
 		));
 
+
 		foreach($this->of2prop as $key => $val)
 		{
 			if (!$this->obj["properties"][$key])
@@ -991,6 +1005,7 @@ class _int_object
 		// first, update modifier fields
 		$this->_int_set_of_value("modified", time());
 		$this->_int_set_of_value("modifiedby", aw_global_get("uid"));
+
 
 		if (!is_array($this->properties))
 		{

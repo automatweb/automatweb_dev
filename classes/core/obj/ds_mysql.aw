@@ -110,10 +110,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$ret[$prop["name"]] = $objdata[$prop["field"]][$prop["name"]];
 			}
 			else
+			if ($prop["method"] == "bitmask")
+			{
+				$ret[$prop["name"]] = $objdata[$prop["field"]] & $prop["ch_value"];
+			}
+			else
 			{
 				$ret[$prop["name"]] = $objdata[$prop["field"]];
 			}
 		}
+
 
 		// do a query for each table
 		foreach($tables as $table)
@@ -150,6 +156,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$unser = aw_unserialize($ret[$prop["field"]]);
 						$ret[$prop["name"]] = $unser[$prop["name"]];
 					}
+
 				}
 			}
 		}
@@ -301,6 +308,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$tbls[$data["table"]][] = $data;
 			}
 		}
+		
 
 		// now save all props to tables.
 		foreach($tbls as $tbl => $tbld)
@@ -327,10 +335,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					else
 					{
-						$str = $propvalues[$prop['name']];
+						$fld = ($prop["method"] == "bitmask") ? $prop["field"] : $prop["name"];
+						$str = $propvalues[$fld];
 						$this->quote(&$str);
 	
-						$seta[] = $prop["field"]." = '$str'";
+						$seta[$prop["field"]] = $str;
 					}
 				}
 			}
@@ -339,9 +348,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$str = aw_serialize($dat);
 				$this->quote($str);
-				$seta[] = $field." = '$str'";
+				$seta[$field] = $field." = '$str'";
 			}
-			$sets = join(",", $seta);
+			$sets = join(",",map2("%s = '%s'",$xset));
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
