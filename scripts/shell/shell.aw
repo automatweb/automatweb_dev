@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.1 2003/12/14 14:11:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.2 2003/12/15 14:46:57 duke Exp $
 echo "Welcome to AW shell!\n";
 // now I have to figure out a way to execute this from site directory.
 // so that I can actually parse an INI file
@@ -7,6 +7,7 @@ echo "Welcome to AW shell!\n";
 // print out working directory.
 $cwd = getcwd();
 $inifile = $cwd . "/aw.ini";
+$use_timer = false;
 if (!file_exists($inifile))
 {
 	die("No aw.ini found in current directory - $cwd\n");
@@ -27,6 +28,13 @@ while ($continue)
 	{
 		$continue = false;
 	}
+	if ($str == "timer")
+	{
+		$use_timer = true;
+		classload("timer");
+		$awt = new aw_timer();
+		print "Using timer from now on\n";
+	}
 	elseif ($str == "mysql")
 	{
 		$db_host = aw_ini_get("db.host");
@@ -40,7 +48,9 @@ while ($continue)
 	}
 	else
 	{
+		$awt->start("shellcommand");
 		eval($str);
+		$awt->stop("shellcommand");
 	};
 };
 echo "bye then ..\n";
