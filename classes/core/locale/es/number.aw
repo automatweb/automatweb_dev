@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/es/number.aw,v 1.1 2004/03/09 11:08:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/es/number.aw,v 1.2 2004/03/09 11:13:25 duke Exp $
 // es.aw - localizatione de espaniola la la la
-class es
+class number
 {
 	function get_lc_number($number)
 	{
