@@ -38,6 +38,24 @@ class relpicker extends  core
 				asort($names);
                         
 				$val["options"] = $options + $names;
+                        
+
+				if ($arr["id"])
+				{
+					$o = obj($arr["id"]);
+					$conn = $o->connections_from(array(
+						"type" => $reltype
+					));
+
+					$sel = array();
+
+					foreach($conn as $c)
+					{
+						$sel[$c->prop("to")] = $c->prop("to");
+					}
+
+					$val["value"] = $sel;
+				};
 			};
                 }
                 else
@@ -65,21 +83,34 @@ class relpicker extends  core
 	{
 		$property = $arr["prop"];
 
+
 		if ($property["type"] == "relpicker" && $property["automatic"] == 1)
 		{
 			$obj_inst = $arr["obj_inst"];
 			$conns = array();
+			$rt = $arr["relinfo"][$property["reltype"]]["value"];
 			if (!$arr["new"])
 			{
 				$rt = $arr["relinfo"][$property["reltype"]]["value"];
 				$conns = $obj_inst->connections_from(array(
-					"type" => $rt,
+					"type" => $property["reltype"],
 				));
 			};
 
 			// no existing connection, create a new one
 			if ($arr["new"] || sizeof($conns) == 0)
 			{
+				if (is_array($property["value"]))
+				{
+					foreach($property["value"] as $pval)
+					{
+						$obj_inst->connect(array(
+							"to" => $pval,
+							"reltype" => $rt,
+						));
+					}
+				}
+				else
 				if ($property["value"] != 0)
 				{
 					$obj_inst->connect(array(
@@ -90,17 +121,30 @@ class relpicker extends  core
 			}
 			else
 			{
-				// alter existing connection
-				list(,$existing) = each($conns);
-				if ($property["value"] == 0)
+				if (is_array($property["value"]))
 				{
-					$existing->delete();
+					foreach($conns as $conn)
+					{
+						if (!in_array($conn->prop("to"),$property["value"]))
+						{
+
+							$conn->delete();
+						};
+					}
 				}
 				else
 				{
-					$existing->change(array(
-						"to" => $property["value"],
-					));
+					list(,$existing) = each($conns);
+					if ($property["value"] == 0)
+					{
+						$existing->delete();
+					}
+					else
+					{
+						$existing->change(array(
+							"to" => $property["value"],
+						));
+					};
 				};
 			};
 
