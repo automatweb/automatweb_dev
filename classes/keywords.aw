@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.35 2001/11/20 13:19:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.36 2001/12/03 15:11:33 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -90,6 +90,7 @@ class keywords extends aw_template
 		$data = " $data ";
 		while($row = $this->db_next())
 		{
+			$row[keyword] = str_replace("/","\/",$row[keyword]);
 			if (preg_match("/$row[keyword]/i",$data))
 			{
 				$this->save_handle();
