@@ -26,5 +26,21 @@
 			</function>
 		</action>
 
+		<action name="delete_queue_items" >
+			<function name="delete_queue_items">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_members" >
+			<function name="delete_members">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
