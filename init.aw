@@ -251,7 +251,7 @@ function init_config($arr)
 	};
 
 	// db driver quoting settings
-	$GLOBALS['cfg']['__default']['magic_quotes_gpc'] = ini_get('magic_quotes_gpc');
+	$GLOBALS['cfg']['__default']['magic_quotes_runtime'] = ini_get('magic_quotes_runtime');
 }
 
 function aw_ini_set($key,$value)
