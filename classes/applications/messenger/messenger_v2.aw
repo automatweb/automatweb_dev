@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.2 2004/10/14 13:42:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.3 2004/11/18 23:25:06 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -160,7 +160,7 @@ class messenger_v2 extends class_base
 				break;
 
 			case "message_list":
-				$data["value"] = $this->gen_message_list($arr);
+				$retval = $this->gen_message_list($arr);
 				break;
 
 			case "mail_toolbar":
@@ -261,15 +261,23 @@ class messenger_v2 extends class_base
 		if (!$this->connected)
 		{
 			global $awt;
+
+			if (!extension_loaded("imap"))
+			{
+				$this->connect_errors = "IMAP extension not available";
+				return false;
+			};
 			$this->msgobj = new object($arr["msgr_id"]);
 			$conns = $this->msgobj->connections_from(array("type" => RELTYPE_MAIL_SOURCE));
+
 
 			// right now it only deals with a single server.
 			list(,$_sdat) = each($conns);
 			//$_sdat =$conns[0];
 			if (empty($_sdat))
 			{
-				die("Ühtegi sobivat IMAP sissepääsu ei leitud");
+				$this->connect_errors = "IMAP sissepääs on konfigureerimata";
+				return false;
 			};
 			$sdat = new object($_sdat->to());
 
@@ -279,7 +287,12 @@ class messenger_v2 extends class_base
 			$this->drv_inst->set_opt("use_mailbox",$this->use_mailbox);
 			$this->drv_inst->set_opt("outbox",$this->outbox);
 			$awt->start("imap-server-connect");
-			$this->drv_inst->connect_server(array("obj_inst" => $_sdat->to()));
+			$errors = $this->drv_inst->connect_server(array("obj_inst" => $_sdat->to()));
+			if ($errors)
+			{
+				$this->connect_errors = $errors;
+				return false;
+			}			
 			$awt->stop("imap-server-connect");
 			$this->drv_inst->set_opt("messenger_id",$arr["msgr_id"]);
 
@@ -302,6 +315,7 @@ class messenger_v2 extends class_base
 			};
 			$awt->stop("imap-list-folders");
 		};
+		return true;
 	}
 
 	function gen_message_list(&$arr)
@@ -310,6 +324,12 @@ class messenger_v2 extends class_base
 			"msgr_id" => $arr["obj_inst"]->id(),
 			"no_folders" => true,
 		));
+
+		if ($this->connect_errors)
+		{
+			$arr["prop"]["error"] = "Login failed, check whether server name, user and password are correct.<br>" . $this->connect_errors; 
+			return PROP_ERROR;
+		};
 
 		$perpage = empty($this->perpage) ? 50 : $this->perpage;
 
@@ -390,6 +410,7 @@ class messenger_v2 extends class_base
 		$t->set_default_sortby("date");
 		$t->set_default_sorder("desc");
 
+		return PROP_OK;
 	}
 
 
@@ -421,9 +442,14 @@ class messenger_v2 extends class_base
 
 	function make_folder_tree($arr)
 	{
-		$this->_connect_server(array(
+		$conn = $this->_connect_server(array(
 			"msgr_id" => $arr["obj_inst"]->id(),
 		));
+
+		if (!$conn)
+		{
+			return false;
+		};
 
 		$rv = "";
 
@@ -521,7 +547,7 @@ class messenger_v2 extends class_base
 
 	function gen_mail_toolbar($arr)
 	{
-		$this->_connect_server(array(
+		$rv = $this->_connect_server(array(
 			"msgr_id" => $arr["obj_inst"]->id(),
 		));
 
@@ -539,6 +565,11 @@ class messenger_v2 extends class_base
 		));
 		
 		$toolbar->add_separator();
+
+		if ($rv == false)
+		{
+			return false;
+		};
 	
 		$_tmp = array("0" => "Vii kirjad");
 		foreach($this->mailboxlist as $item)
