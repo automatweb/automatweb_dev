@@ -147,6 +147,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function _get_cache($fn, $oid, $cfn = "objcache")
 	{
+		if ($GLOBALS["__obj_sys_opts"]["no_cache"] == 1)
+		{
+			return false;
+		}
 		$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$cfn."-$fn-$oid";
 		if (file_exists($fqfn))
 		{
@@ -159,6 +163,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function _set_cache($fn, $oid, $dat, $cfn = "objcache")
 	{
+		if ($GLOBALS["__obj_sys_opts"]["no_cache"] == 1)
+		{
+			return false;
+		}
 		$GLOBALS["object_loader"]->ds->dequote(&$dat);
 		$str = "<?php\n";
 		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
