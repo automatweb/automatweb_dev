@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.31 2004/12/08 10:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.32 2004/12/13 15:46:48 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -250,26 +250,18 @@ class site_search_content extends class_base
 				break;
 
 			case "reledit":
-				$val = $prop["value"];
-				$d = $val["start"]["day"];
-				$m = $val["start"]["month"];
-				$y = $val["start"]["year"];
-
-				$time = $val["time"];
-				list($hour,$min) = explode(":",$time);
-				if ($hour && $min)
-				{
-					$stamp = mktime($hour,$min,0,$m,$d,$y);
-					
-				}
-				else
-				{
-					$stamp = mktime(4,0,0,$m,$d,$y);
-				};
+				$id = $prop["value"]["id"];
+				$rec = get_instance(CL_RECURRENCE);
+				$stamp = $rec->get_next_event(array(
+					"id" => $id
+				));
 				// set it to scheduler
 				$sc = get_instance("scheduler");
 				$sc->add(array(
-					"event" => $this->mk_my_orb("generate_static", array("id" => $arr["obj_inst"]->id())),
+					"event" => $this->mk_my_orb("generate_static", array(
+						"id" => $arr["obj_inst"]->id(),
+						"stamp" => $stamp
+					)),
 					"time" => $stamp,
 				));
 				break;
@@ -379,7 +371,27 @@ class site_search_content extends class_base
 	function generate_static($arr)
 	{
 		extract($arr);
-		
+
+		// if we have a scheduler for this thing, then add the next time to the scheduler
+		$o = obj($id);
+		$rep = $o->get_first_obj_by_reltype("RELTYPE_REPEATER");
+		if (is_object($rep))
+		{
+			$rec = get_instance(CL_RECURRENCE);
+			$stamp = $rec->get_next_event(array(
+				"id" => $rep->id(),
+				"time" => time()+600
+			));
+			// set it to scheduler
+			$sc = get_instance("scheduler");
+			$sc->add(array(
+				"event" => $this->mk_my_orb("generate_static", array(
+					"id" => $arr["id"],
+					"stamp" => $stamp
+				)),
+				"time" => $stamp,
+			));
+		}
 		// these funcs must write data to a db table (static_content), with structure like this:
 		// id, content, url, title, modified, section, lang_id, created_by
 		// optional fields - url, section, lang_id, set to NULL if not available
