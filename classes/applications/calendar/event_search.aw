@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.30 2005/01/27 08:38:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.31 2005/01/27 08:51:35 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -1029,13 +1029,12 @@ class event_search extends class_base
 					$eval["utextarea1"] = nl2br($eval["utextarea1"]);
 					$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
 					$content = $eval["utextarea1"];
-					
 				}
 				$i++;
 				$this->vars(array(
 					"num" => $i % 2 ? 1 : 2,
 				));
-				if($search["oid"] or ((!$clickable) && $tabledef["content"]["active"]))
+				if($search["oid"] or ((!$clickable) && $tabledef["content"]["active"] && !empty($content)))
 				{
 					$this->vars(array(
 						"fulltext_name" => $tabledef[$nmx]["caption"],
