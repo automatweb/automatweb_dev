@@ -53,6 +53,14 @@
             <caption>Aasta</caption>
       </property>
       <property>
+            <name>preview</name>
+            <type>text</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <group>general</group>
+            <caption>Eelvaade</caption>
+      </property>
+      <property>
             <name>activity</name>
             <type>callback</type>
             <callback>callback_get_activity_list</callback>
