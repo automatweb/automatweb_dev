@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.49 2003/08/27 13:47:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.50 2003/09/17 14:51:30 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -262,6 +262,11 @@ class aw_template extends core
 			return $this->v2_parent_map[$tpl] == $parent;
 		}
 	}
+
+	function get_parent_template($tpl)
+	{
+		return $this->v2_parent_map[$tpl];
+	}
        
 	////
 	// !Impordib muutujad templatesse, seejuures kirjutatakse juba eksisteerivad
@@ -372,16 +377,16 @@ class aw_template extends core
 	// things like plugins.add_comment, plugins.add_link, etc
 	function get_subtemplates_regex($regex)
 	{
-		$tpls = array_keys($this->v2_templates);
+		$tpls = array_keys($this->v2_name_map);
 		$res = array();
 		foreach($tpls as $key)
 		{
-		    if (preg_match("/MAIN\.$regex/",$key,$matches))
+		    if (preg_match("/^$regex/",$key,$matches))
 		    {
 			$res[] = $matches[1];
 		    };
 		};
-		return $res;
+		return array_unique($res);
 	}
 };
 classload("class_base","html");
