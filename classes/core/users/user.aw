@@ -1353,7 +1353,30 @@ class user extends class_base
 			"type" => 2 // RELTYPE_PERSON
 		)));
 
-		return $person_c->prop("to");
+		if (!$person_c)
+		{
+			// create new person next to user
+			$p = obj();
+			$p->set_class_id(CL_CRM_PERSON);
+			$p->set_parent($u->parent());
+			$p->set_name($this->users->get_user_config(array(
+				"uid" => aw_global_get("uid"),
+				"key" => "real_name",
+			))." ".aw_global_get("uid"));
+			aw_disable_acl();
+			$p->save();
+			aw_restore_acl();
+			// now, connect user to person
+			$u->connect(array(
+				"to" => $p->id(),
+				"reltype" => 2
+			));
+			return $p->id();
+		}
+		else
+		{
+			return $person_c->prop("to");
+		}
 	}
 
 	/** returns the CL_CRM_COMPANY that is connected to the current logged in user
@@ -1368,7 +1391,29 @@ class user extends class_base
 				"type" => 6 // RELTYPE_WORK
 			)));
 
+			if (!$org_c)
+			{
+				// create new person next to user
+				$p = obj();
+				$p->set_class_id(CL_CRM_COMPANY);
+				$p->set_parent($p_o->parent());
+				$p->set_name("CO ".$this->users->get_user_config(array(
+					"uid" => aw_global_get("uid"),
+					"key" => "real_name",
+				))." ".aw_global_get("uid"));
+				aw_disable_acl();
+				$p->save();
+				aw_restore_acl();
+				// now, connect user to person
+				$p_o->connect(array(
+					"to" => $p->id(),
+					"reltype" => 6 // RELTYPE_WORK from crm_person
+				));
+				return $p->id();
+			}
+
 			return $org_c->prop("to");
+		
 		}
 		return false;
 	}
