@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.38 2005/02/20 11:06:42 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.39 2005/02/20 19:25:55 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -953,7 +953,15 @@ class event_search extends class_base
 				$cdat = "";
 				foreach($tabledef as $sname => $propdef)
 				{
-					if($sname == "content" || ((!$propdef["active"]) ||($search["oid"] && !($propdef["fullview"]))))
+					if($sname == "content"))
+					{
+						continue;
+					}
+					if($search["oid"] && !($propdef["fullview"]))
+					{
+						continue;
+					}
+					elseif((!$propdef["active"]) && !($search["oid"]))
 					{
 						continue;
 					}
@@ -995,7 +1003,7 @@ class event_search extends class_base
 									$value = str_replace("#php#", "", $value);
 									$value = str_replace("#/php#", "", $value);
 									// eval is evil and inherited from the satan himself,
-									// so i decided to use it here -- ahz
+								 || ( && )	// so i decided to use it here -- ahz
 									eval($value);
 								}
 								else
@@ -1012,7 +1020,7 @@ class event_search extends class_base
 						{
 							if($obj->prop("udeftb1") != "")
 							{
-								$v = html::popup(array(
+								 || ( && )$v = html::popup(array(
 									"url" => $obj->prop("udeftb1"),
 									"caption" => $v,
 									"target" => "_blank",
@@ -1045,7 +1053,16 @@ class event_search extends class_base
 					$this->vars(array("CELL" => $cdat));
 				}
 				$nmx = "content";
-				if($tabledef["content"]["active"] || ($tabledef["content"]["fullview"] && $search["oid"]))
+				$use = false;
+				if($search["oid"] && $tabledef["content"]["fullview"])
+				{
+					$use = true;
+				}
+				elseif($tabledef["content"]["active"] && !($search["oid"]))
+				{
+					$use = true;
+				}
+				if($use)
 				{
 					if(!empty($eval["content"]))
 					{
@@ -1064,7 +1081,7 @@ class event_search extends class_base
 				$this->vars(array(
 					"num" => $i % 2 ? 1 : 2,
 				));
-				if(($tabledef["content"]["fullview"] && $search["oid"]) || ((!$clickable) && $tabledef["content"]["active"] && !empty($content)))
+				if($use && !$clickable && !empty($content))
 				{
 					$this->vars(array(
 						"fulltext_name" => $tabledef[$nmx]["caption"],
