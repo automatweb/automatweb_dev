@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.9 2004/06/25 20:16:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.10 2004/11/09 17:45:35 ahti Exp $
 // register.aw - Register 
 /*
 
@@ -7,26 +7,34 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
-@property data_cfgform type=relpicker reltype=RELTYPE_CFGFORM multiple=1 field=meta method=serialize
+@property data_cfgform type=relpicker reltype=RELTYPE_CFGFORM multiple=1
 @caption Andmete seadete vorm
 
-@property data_rootmenu type=relpicker reltype=RELTYPE_MENU field=meta method=serialize
+@property default_cfgform type=checkbox ch_value=1
+@caption Tee seadete vorm andmetele default'iks
+
+@property data_return_url type=textbox
+@caption Kuhu ümbersuunata peale andmete salvestamist
+
+@property data_rootmenu type=relpicker reltype=RELTYPE_MENU
 @caption Andmete kataloog
 
-@property data_tree_field type=select field=meta method=serialize
+@property data_tree_field type=select
 @caption Andmete puu struktuuri v&auml;li
 
-@property search_o type=relpicker reltype=RELTYPE_SEARCH field=meta method=serialize
+@property search_o type=relpicker reltype=RELTYPE_SEARCH
 @caption Otsingu konfiguratsioon
 
-@property show_all type=checkbox ch_value=1 field=meta method=serialize
+@property show_all type=checkbox ch_value=1
 @caption Kui pole valitud, n&auml;ita k&otilde;iki sisestusi
 
-@property per_page type=textbox size=5 field=meta method=serialize
+@property per_page type=textbox size=5
 @caption Mitu kirjet lehel
 
-@property cfgform_name_in_field type=select field=meta method=serialize
+@property cfgform_name_in_field type=select
 @caption Kirje lisamisel pane seadete vormi nimi v&auml;lja
 
 

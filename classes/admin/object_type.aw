@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.11 2004/08/26 09:43:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.12 2004/11/09 17:45:36 ahti Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -134,11 +134,18 @@ class object_type extends class_base
 		$rv = false;
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
-			$flg = $o->flag(OBJ_FLAG_IS_SELECTED);
-			if ($o->flag(OBJ_FLAG_IS_SELECTED))
+			if($arr["general"] === true)
 			{
 				$rv = $o->id();
-			};
+			}
+			else
+			{
+				$flg = $o->flag(OBJ_FLAG_IS_SELECTED);
+				if ($o->flag(OBJ_FLAG_IS_SELECTED))
+				{
+					$rv = $o->id();
+				};
+			}
 		};
 		return $rv;
 	}

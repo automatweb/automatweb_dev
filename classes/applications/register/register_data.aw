@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.5 2004/10/22 07:25:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.6 2004/11/09 17:45:35 ahti Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -165,6 +165,9 @@
 @property userch5 type=textbox  field=aw_userch5 group=data ch_value=1 datatype=int
 @caption User-defined checkbox 5
 
+@property usersubmit1 type=submit store=no
+@caption User-defined submit 1
+
 @reltype VARUSER1 value=1 clid=CL_META
 @caption kasutajadefineeritud muutuja 1
 
@@ -195,6 +198,8 @@
 @reltype VARUSER10 value=1 clid=CL_META
 @caption kasutajadefineeritud muutuja 10
 
+@reltype REGISTER value=10 clid=CL_REGISTER
+@caption Seostatud register
 
 */
 
@@ -206,6 +211,18 @@ class register_data extends class_base
 			"tpldir" => "applications/register/register_data",
 			"clid" => CL_REGISTER_DATA
 		));
+	}
+	
+	function callback_pre_edit($arr)
+	{
+		if($register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER"))
+		{
+			$default = safe_array($register->prop("gfdg"));
+			if($register->prop("default_cfgform") == 1 && !empty($default[0]))
+			{
+				$arr["obj_inst"]->set_meta("cfgform_id", $default[0]);
+			}
+		}
 	}
 
 	function get_property($arr)
@@ -255,7 +272,7 @@ class register_data extends class_base
 				if ($rego->prop("cfgform_name_in_field") != "")
 				{
 					$co = obj($arr["request"]["cfgform"]);
-					$arr["obj_inst"]->set_prop($rego->prop("cfgform_name_in_field"),$co->name());
+					$arr["obj_inst"]->set_prop($rego->prop("cfgform_name_in_field"), $co->name());
 				}
 			}
 		}
@@ -270,14 +287,82 @@ class register_data extends class_base
 	// !shows the data
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
+		$ot = get_instance(CL_OBJECT_TYPE);
+		$cf = get_instance(CL_CFGFORM);
+		$obj_inst = obj($arr["id"]);
+		$ot_id = $ot->get_obj_for_class(array(
+			"clid" => $obj_inst->class_id(),
+			"general" => true,
 		));
-		return $this->parse();
+		$return_url = aw_global_get("REQUEST_URI");
+		if($register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER"))
+		{
+			$url = $register->prop("data_return_url");
+			if(!empty($url))
+			{
+				$return_url = $url;
+			}
+		}
+		return $cf->draw_cfgform_from_ot(array(
+			"ot" => $ot_id,
+			"reforb" => $this->mk_reforb("save_form_data", array(
+				"id" => $arr["id"],
+				"return_url" => $return_url,
+			)),
+		));
 	}
 
+	/**
+
+		@attrib name=save_form_data nologin=1 all_args=1
+		
+		@param id required type=int acl=view
+		@param return_url optional
+	**/
+	function save_form_data($arr)
+	{
+		$rval = aw_ini_get("baseurl").$arr["return_url"];
+		$obj_inst = obj($arr["id"]);
+		$ot = get_instance(CL_OBJECT_TYPE);
+		if(!$ot_id = $ot->get_obj_for_class(array(
+			"clid" => $obj_inst->class_id(),
+			"general" => true,
+		)))
+		{
+			return $rval;
+		}
+		$ot = obj($ot_id);
+		
+		$is_valid = $this->validate_data(array(
+			"cfgform_id" => $ot->prop("use_cfgform"),
+			"request" => $arr,
+		));
+		if(empty($is_valid))
+		{
+			$o = obj();
+			$parent = $obj_inst->parent();
+			if($register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER"))
+			{
+				$prop = $register->prop("data_rootmenu");
+				if(!empty($prop))
+				{
+					$parent = $prop;
+				}
+			}
+			$o->set_class_id(CL_REGISTER_DATA);
+			$o->set_parent($parent);
+			foreach($o->get_property_list() as $pn => $pd)
+			{
+				$o->set_prop($pn, $arr[$pn]);
+			}
+			$o->set_meta("object_type", $ot->id());
+			$o->set_meta("cfgform_id", $ot->prop("use_cfgform"));
+			$o->set_name("entry ".date("d-m-Y H:i"));
+			$o->save();
+		}
+		return $rval;
+	}
+	
 	/**
 
 		@attrib name=view nologin=1 all_args=1
