@@ -17,5 +17,12 @@
 			</function>
 		</action>
 
+		<action name="upg" nologin="1">
+			<function name="upg">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

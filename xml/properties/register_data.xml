@@ -448,6 +448,56 @@
             <caption>User-defined checkbox 5</caption>
       </property>
       <property>
+            <name>usersubtitle1</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <field>usersubtitle1</field>
+            <caption>Subtitle1</caption>
+      </property>
+      <property>
+            <name>usersubtitle2</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <field>usersubtitle2</field>
+            <caption>Subtitle2</caption>
+      </property>
+      <property>
+            <name>usersubtitle3</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <field>usersubtitle3</field>
+            <caption>Subtitle3</caption>
+      </property>
+      <property>
+            <name>usersubtitle4</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <field>usersubtitle4</field>
+            <caption>Subtitle4</caption>
+      </property>
+      <property>
+            <name>usersubtitle5</name>
+            <group>data</group>
+            <table>aw_register_data</table>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <field>usersubtitle5</field>
+            <caption>Subtitle5</caption>
+      </property>
+      <property>
             <name>usersubmit1</name>
             <group>data</group>
             <table>aw_register_data</table>

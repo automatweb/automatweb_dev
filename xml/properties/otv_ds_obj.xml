@@ -11,6 +11,26 @@
             <caption>N&amp;auml;ita mitteaktiivseid objekte</caption>
       </property>
       <property>
+            <name>show_notact_noclick</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mitteaktiivsed pole klikitavad</caption>
+      </property>
+      <property>
+            <name>file_show_comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Failil nime asemel kommentaar</caption>
+      </property>
+      <property>
             <name>sort_by</name>
             <table>objects</table>
             <group>general</group>
