@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.6 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.7 2001/06/18 21:11:26 kristo Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -65,13 +65,14 @@ class aw_template extends acl_base
 		global $status_msg;
 		// edaspidi kui on vaja basedir-i kasutada, siis ei pea seda globaalsest skoobist importima
 		$this->basedir = $basedir;
-		$this->vars(array(	"self" => $PHP_SELF,
-					"ext"  => $ext,
-					"rand" => time(),
-					"status_msg" => $status_msg,
-					"baseurl" => $baseurl));
+		$this->vars(array(
+			"self" => $PHP_SELF,
+			"ext"  => $ext,
+			"rand" => time(),
+			"status_msg" => $status_msg,
+			"baseurl" => $baseurl
+		));
 	}
-
 
 	////
 	// !sets the root directory to read templates from
@@ -96,13 +97,12 @@ class aw_template extends acl_base
 		unset($this->templates);
 		unset($this->vars);
 		$this->_init_vars();
-
 	}
 
 	function ignore($array)
 	{
 		// see funktsioon ei tee mitte midagi ja on siin ainult backwards
-	// compatiblity jaoks
+		// compatiblity jaoks
 	}
 
 	// ma ei osanud seda mujale panna ;)
@@ -145,7 +145,6 @@ class aw_template extends acl_base
 		return $this->option_list($active,$array);
 	}
 
-
 	////
 	// !Loeb template failist
 	function read_template($filename,$dbg = 0)
@@ -183,94 +182,94 @@ class aw_template extends acl_base
 		// paigutame arraysse root elemendi, default nimega MAIN
 		$tpl = new tpl("MAIN");
 		$level = 0;
-                array_push($construct,$tpl);
+		array_push($construct,$tpl);
 
 		// tsükkel üle faili ridade
 		while(list($linenum,$line) = each($tlines))
 		{
-                        // kas see rida alustab subtemplatet?
-                        if (preg_match("/<!-- SUB: (.*) -->/",$line,$m))
+			// kas see rida alustab subtemplatet?
+      if (preg_match("/<!-- SUB: (.*) -->/",$line,$m))
 			{
 				$level++;
-                                // jep, loome uue objekti selle nimega
-                                $tpl = new tpl($m[1]);
+        // jep, loome uue objekti selle nimega
+        $tpl = new tpl($m[1]);
 
 				$this->names[] = $m[1];
 
-                                // votame constructist aktiivse template
+        // votame constructist aktiivse template
 				$last = array_pop($construct);
 
 				$this->tlist[$level][] = $m[1];
 
-                                // compatibility jauks
-                                isset($this->templates[$last->name]) ? $this->templates[$last->name].= $line : $this->templates[$last->name] = $line;
+        // compatibility jauks
+        isset($this->templates[$last->name]) ? $this->templates[$last->name].= $line : $this->templates[$last->name] = $line;
 
 				$this->relations[$m[1]] = $last->name;
 
-                                // ja lisame sinna sub-i asemele var-i  
-                                $last->sink("{VAR:$m[1]}");
-                                array_push($construct,$last);
+        // ja lisame sinna sub-i asemele var-i  
+        $last->sink("{VAR:$m[1]}");
+        array_push($construct,$last);
 
-                                // viga on siin, selles vahemikus
-                                // vaatame, kas constructis on veel midagi,
-                                $last1 = array_pop($construct);
-                                // lisame selle subi kohta info master template sisse
-                                $last1->add_sub($tpl);
-                                //$construct[sizeof($construct)-1]->add_sub($tpl);
-                                array_push($construct,$last1);
-                                // ja laadime selle objekti constructi sisse
-                                array_push($construct,$tpl);
-                        // kas see rida lopetab subtemplate?
-                        }
-			elseif (preg_match("/<!-- END SUB: (.*) -->/",$line,$m))
+        // viga on siin, selles vahemikus
+        // vaatame, kas constructis on veel midagi,
+        $last1 = array_pop($construct);
+        // lisame selle subi kohta info master template sisse
+        $last1->add_sub($tpl);
+        //$construct[sizeof($construct)-1]->add_sub($tpl);
+        array_push($construct,$last1);
+        // ja laadime selle objekti constructi sisse
+        array_push($construct,$tpl);
+        // kas see rida lopetab subtemplate?
+      }
+			else
+			if (preg_match("/<!-- END SUB: (.*) -->/",$line,$m))
 			{
 				$level--;
-                                // unloadime viimase objekti constructist
-                                $last = array_pop($construct);
-                                if ($last->name != $m[1])
+        // unloadime viimase objekti constructist
+        $last = array_pop($construct);
+        if ($last->name != $m[1])
 				{
-                                        printf("Broken template. Tried to close '%s' while '%s' was open",$m[1],$last->name);
-                                        die;
-                                };
-                        }
+          printf("Broken template. Tried to close '%s' while '%s' was open",$m[1],$last->name);
+          die;
+        };
+      }
 			else
 			{
-                                // votame constructist aktiivse template
-                                $last = array_pop($construct);
+        // votame constructist aktiivse template
+        $last = array_pop($construct);
 
-                                // compatibility jauks
-                                isset($this->templates[$last->name]) ?  $this->templates[$last->name].= $line : $this->templates[$last->name] = $line;
+        // compatibility jauks
+        isset($this->templates[$last->name]) ?  $this->templates[$last->name].= $line : $this->templates[$last->name] = $line;
 
-                                // ja lisame sinna töödeldava rea       
-                                $last->sink($line);
+        // ja lisame sinna töödeldava rea       
+        $last->sink($line);
 
-                                // viga on siin, selles vahemikus
-                                // vaatame, kas constructis on veel midagi,
-                                $last1 = array_pop($construct);
-                                // kui on, siis 
-                                if (is_object($last1))
+        // viga on siin, selles vahemikus
+        // vaatame, kas constructis on veel midagi,
+        $last1 = array_pop($construct);
+        // kui on, siis 
+        if (is_object($last1))
 				{
-                                        $kala = array_pop($last1->subs);
-                                        // votame sealsest sub-ide arrayst viimase
-                                        // elemendi
-                                        if ($kala)
+          $kala = array_pop($last1->subs);
+          // votame sealsest sub-ide arrayst viimase
+          // elemendi
+          if ($kala)
 					{
-                                                array_push($last1->subs,$last);
-                                                array_push($construct,$last1);
-                                        };
-                                };
-                                array_push($construct,$last);
-                        };
-                };
-                $last = array_pop($construct);
-                $this->construct = $last;
+            array_push($last1->subs,$last);
+            array_push($construct,$last1);
+          };
+        };
+        array_push($construct,$last);
+      };
+    };
+    $last = array_pop($construct);
+    $this->construct = $last;
 		if (isset($awt) && is_object($awt))
 		{
 			$awt->stop("read_template");
 		};
-                return $last;
-        }
-
+    return $last;
+  }
 
 	////
 	// !Saab kysida, kas sellise nimega template on registreeritud
@@ -293,7 +292,7 @@ class aw_template extends acl_base
 		};
 	}
        
-       	////
+	////
 	// !Tagastab template nime jargi
 	function get_tpl_by_name($name,$c = array())
 	{
@@ -301,7 +300,6 @@ class aw_template extends acl_base
 		$this->t_tree = array();
 		return $this->_get_tpl_by_name($name,$c);
   }
-
 
   function _get_tpl_by_name($name,$c = array())
 	{
@@ -343,40 +341,40 @@ class aw_template extends acl_base
    }
 
 	////
-        // !Impordib muutujad templatesse, seejuures kirjutatakse juba eksisteerivad
+  // !Impordib muutujad templatesse, seejuures kirjutatakse juba eksisteerivad
 	// muutujad yle
-        function vars($params)
+  function vars($params)
 	{
 		reset($params);
 		while(list($k,$v) = each($params))
 		{
 			$this->vars[$k] = $v;
 		};
-        }
+  }
 
 	////
-        // !Impordib muutujad, kui muutuja oli juba varem defineeritud, siis liidetakse
+  // !Impordib muutujad, kui muutuja oli juba varem defineeritud, siis liidetakse
 	// väärtus
-        function vars_merge($params)
+  function vars_merge($params)
 	{
-                while(list($k,$v) = each($params))
+		while(list($k,$v) = each($params))
 		{
-                        $this->vars[$k] .= $v;
-                };
-        }
+			$this->vars[$k] .= $v;
+    };
+  }
 
-        // impordime andmestruktuuri mingi template juurde
-        function define_data($tpl,$branches)
+  // impordime andmestruktuuri mingi template juurde
+  function define_data($tpl,$branches)
 	{
-                if (!is_array($branches))
+    if (!is_array($branches))
 		{
-                        return false;
-                }
+      return false;
+    }
 		else
 		{
-                        $this->branches[$tpl] = $branches;
-                };
-        }
+      $this->branches[$tpl] = $branches;
+    };
+  }
 
 	////
 	// !see on nüüd pisike häkk. Nimelt saab selle funktsiooni abil parsida kusagilt mujalt sissetoodud
@@ -448,19 +446,20 @@ class aw_template extends acl_base
 		reset($current);
 		while(list($k,$v) = each($current))
 		{
-                        $this->vars($v);
-                        $this->vars_merge(array($main_tpl->name => $this->parse($use_tpl)));
-                        if (sizeof($use_tpl->subs) > 0)
+      $this->vars($v);
+      $this->vars_merge(array($main_tpl->name => $this->parse($use_tpl)));
+      if (sizeof($use_tpl->subs) > 0)
 			{
-
-                                $new = $use_tpl->subs[0]->name;
-                                $newtpl = $this->get_tpl_by_name($new,array("0" => $this->construct));
-                                $this->draw_section(array("section_id" => $v[oid],
-                                                          "parent"     => $parent,
-                                                          "use_tpl"    => $newtpl,
-                                                          "main_tpl"   => $main_tpl));
-                        };
-                };
-        }
+        $new = $use_tpl->subs[0]->name;
+        $newtpl = $this->get_tpl_by_name($new,array("0" => $this->construct));
+        $this->draw_section(array(
+					"section_id" => $v[oid],
+          "parent"     => $parent,
+          "use_tpl"    => $newtpl,
+          "main_tpl"   => $main_tpl
+				));
+      };
+    };
+  }
 };
 ?>
