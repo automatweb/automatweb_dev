@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.9 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.10 2002/11/15 18:06:40 kristo Exp $
 // remote_login.aw - AW remote login
 class remote_login extends aw_template 
 {
@@ -72,7 +72,8 @@ class remote_login extends aw_template
 	function handshake($args = array())
 	{
 		extract($args);
-		$socket = get_instance("socket",array(
+		$socket = get_instance("socket");
+		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
 		));
@@ -83,7 +84,7 @@ class remote_login extends aw_template
 		if (!$silent)
 		{
 			print "<pre>";
-			print "Acquiring session  \n";
+			print "Acquiring session  \nop = ".htmlentities($op)."\n";
 			flush();
 		}
 
@@ -106,7 +107,7 @@ class remote_login extends aw_template
 		if (!$silent)
 		{
 			print "Got session, ID is $cookie\n";
-			print "</pre>";
+			print "ipd = ".htmlentities($ipd)."</pre>";
 			flush();
 		}
 		return $cookie;
@@ -116,7 +117,8 @@ class remote_login extends aw_template
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = get_instance("socket",array(
+		$socket = get_instance("socket");
+		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
 		));
@@ -131,7 +133,7 @@ class remote_login extends aw_template
 		if (!$silent)
 		{
 			print "<pre>";
-			echo "Logging in op = ",htmlentities($op),"\n";
+			echo "Logging in $host op = ",htmlentities($op),"\n";
 		}
 
 		$socket->write($op);
@@ -144,8 +146,7 @@ class remote_login extends aw_template
 
 		if (!$silent)
 		{
-			list($headers,$data) = explode("\r\n\r\n",$ipd);
-			print "Succeeded? Server returned $data\n";
+			print "Succeeded? Server returned ".htmlentities($ipd)."\n";
 			print "</pre>";
 			flush();
 		}
@@ -155,7 +156,8 @@ class remote_login extends aw_template
 	{
 		extract($args);
 		$cookie = $this->cookie;
-		$socket = get_instance("socket",array(
+		$socket = get_instance("socket");
+		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
 		));
@@ -216,7 +218,7 @@ class remote_login extends aw_template
 
 	function getcookie($arr)
 	{
-		return ("Relax, take a cookie.");
+		die("Relax, take a cookie.");
 	}
 };
 ?>

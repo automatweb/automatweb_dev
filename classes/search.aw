@@ -1,212 +1,66 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.21 2002/11/08 12:55:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.12 2002/11/15 18:06:40 kristo Exp $
 // search.aw - Search Manager
-
-/*
-	@default table=objects
-	@default field=meta
-	@default method=serialize
-	@default group=advanced
-
-	@property s_server type=objpicker clid=CL_AW_LOGIN
-	@caption Server
-
-	@property s_name type=textbox group=search,advanced,objsearch
-	@caption Nimi
-
-	@property s_comment type=textbox group=search,advanced,objsearch
-	@caption Kommentaar
-
-	@property s_class_id type=select group=search,advanced,objsearch
-	@caption Tüüp
-
-	@property s_oid type=textbox size=5
-	@caption OID
-
-	@property s_location type=select 
-	@caption Asukoht
-
-	@property s_lang_id type=select 
-	@caption Keel
-
-	@property s_status type=s_status group=search,advanced,objsearch
-	@caption Staatus
-
-	@property s_createdby type=textbox group=search,advanced,objsearch
-	@caption Looja
-
-	@property s_modifiedby type=textbox group=search,advanced,objsearch
-	@caption Muutja
-
-	@property s_alias type=textbox 
-	@caption Alias
-
-	@property s_period type=select
-	@caption Periood
-
-	@property s_site_id type=select
-	@caption Saidi ID
-
-	@property results type=text group=results callback=get_result_table
-	@caption Tulemused
-
-	@property objsearch type=text group=objsearch callback=get_objsearch
-
-	@groupinfo search caption=Lihtne_otsing 
-	@groupinfo advanced caption=Advanced_otsing
-	@groupinfo objsearch caption=Objektiotsing
-	@groupinfo results caption=Tulemused submit=no
-
-*/
-class search extends class_base
+class search extends aw_template
 {
 	function search($args = array())
 	{
-		$this->init(array(
-			"tpldir" => "search",
-			"clid" => CL_SEARCH,
-		));
+		$this->init("search");
 		$this->db_rows = array();
 	}
 
-	function get_property($args = array())
+	////
+	// !Displays the form for adding a new search
+	function add($args = array())
 	{
-		$data = &$args["prop"];
-                $retval = PROP_OK;
-                switch($data["name"])
-                {
-			case "s_class_id":
-				$data["options"] = $this->_get_s_class_id();
-				break;
-
-			case "s_location":
-				$data["options"] = $this->_get_s_parent();
-				break;
-
-			case "s_lang_id":
-				$lg = get_instance("languages");
-				$data["options"] = $lg->get_list(array("addempty" => true));
-				break;
-
-			case "s_period":
-				$pr = get_instance("periods");
-				$data["options"] = $pr->period_list(aw_global_get("act_per_id"),true);
-				break;
-
-			case "s_site_id":
-				$dat = $this->_search_mk_call("objects","db_query", array("sql" => "SELECT distinct(site_id) as site_id FROM objects"), $args);
-				$sites = array("0" => "");
-				foreach($dat as $row)
-				{
-					$sites[$row["site_id"]] = $row["site_id"];
-				}
-				$data["options"] = $sites;
-				break;	
-
-		}
-		return $retval;
+		extract($args);
+		$args["reforb"] = $this->mk_reforb("submit",array("obj" => $args["obj"],"docid" => $docid, "parent" => $parent));
+		$this->is_object_search = true;
+		return $this->show($args);
 	}
 
-	function get_objsearch($args = array())
+	////
+	// !Displays the form for modifying an existing search
+	function change($args = array())
 	{
-		// now I need to load the bloody object and retrieve the property list
-		// for it.
-		$obj = $this->get_object($args["obj"]["oid"]);
-		$cfgu = get_instance("cfg/cfgutils");
-                $_all_props = $cfgu->load_properties(array(
-                        "clid" => $obj["meta"]["s_class_id"],
-                ));
-		
-		$retval = array();
-		$item = array(
-			"caption" => "Objektitüübi omadused",
-		);
-		$retval[] = $item;
-
-		foreach($_all_props as $key => $val)
-		{
-			if ($val["search"])
-			{
-				$val["value"] = $obj["meta"]["obj"][$val["name"]];
-				$retval[] = $val;
-			};
-		}
-
-		if (sizeof($retval) == 1)
-		{
-			$item = array(
-				"caption" => "<b><font color='red'>Sellel klassil pole ühtegi otsitavat omadust</font></b>",
-			);
-			$retval[] = $item;
-		};
-
-		return $retval;
+		extract($args);
+		$ob = $this->get_object($id);
+		$args["s"] = $ob["meta"];
+		$args["parent"] = $ob["parent"];
+		$args["reforb"] = $this->mk_reforb("submit",array("obj" => $args["obj"],"docid" => $docid, "parent" => $parent,"id" => $id));
+		$args["search"] = 1;
+		$this->is_object_search = true;
+		return $this->show($args);
 	}
 
-	function callback_pre_save($args = array())
+	////
+	// !Submits a new or existing search
+	function submit($args = array())
 	{
-		$obj = $this->get_object($args["id"]);
-		$cfgu = get_instance("cfg/cfgutils");
-                $_all_props = $cfgu->load_properties(array(
-                        "clid" => $obj["meta"]["s_class_id"],
-                ));
-		
-		$obj_search_fields = array();
+		$this->quote($args);
+		extract($args);
 
-		foreach($_all_props as $key => $val)
+		if (!$args["id"])
 		{
-			if ($val["search"] && $args["form_data"][$val["name"]])
-			{
-				$retval[$val["name"]] = $args["form_data"][$val["name"]];
-			};
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_SEARCH,
+				"name" => $s["obj_name"]
+			));
 		}
-		$args["coredata"]["metadata"]["obj"] = $retval;
-	}
-
-	function get_result_table($args = array())
-	{
-		$meta = new aw_array($args["obj"]["meta"]);
-		$cfgu = get_instance("cfg/cfgutils");
-                $_all_props = $cfgu->load_properties(array(
-                        "clid" => $args["obj"]["meta"]["s_class_id"],
-                ));
-		
-		$params = array();
-		foreach($meta->get() as $key => $val)
+		else
 		{
-			if (substr($key,0,2) == "s_")
-			{
-				$realkey = substr($key,2);
-				$params[$realkey] = $val;
-			};
-		};
-		$real_fields = $this->get_real_fields(array("s" => $params));
-		// obj-meta-obj contains the values for object search
-		$obj_fields = $args["obj"]["meta"]["obj"];
-		$obj_data = array();
-		if (is_array($obj_fields))
-		{
-			foreach($obj_fields as $key => $val)
-			{
-				$obj_data[$key] = array(
-					"table" => $_all_props[$key]["table"],
-					"field" => $_all_props[$key]["field"],
-					"method" => $_all_props[$key]["method"],
-					"value" => $val,
-				);
-					
-			};
-		};
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $s["obj_name"]
+			));
+		}
 
-		$this->execute_search(array(
-			"real_fields" => $real_fields,
-			"obj_data" => $obj_data,
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"data" => $args["s"]
 		));
-		$nodes = array();
-		$nodes[] = array(
-			"value" => $this->table,
-		);
-		return $nodes;
+		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
 	////
@@ -219,7 +73,6 @@ class search extends class_base
 	// 	obj - reference to caller
 	function show($args = array())
 	{
-		classload('icons');
 		$this->db_rows = array();
 		// all the required fields and their default values
 		$defaults = array(
@@ -233,11 +86,11 @@ class search extends class_base
 			"special" => "",
 			"alias" => "",
 			"redir_target" => "",
-			"oid" => "",
 		);
 
 		$_obj = $args["obj"];
 		$real_fields = array_merge($defaults,$args["s"]);
+		$this->quote($real_fields);
 		$this->sub_merge = 1;
 		extract($args);
 		extract($real_fields);
@@ -289,7 +142,11 @@ class search extends class_base
 		{
 			$obj_list = $this->_get_s_parent($args);
 			load_vcl("table");
-			$this->t = new aw_table();
+			$this->t = new aw_table(array(
+				"prefix" => "search",
+			));
+
+			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 
 			$this->_init_os_tbl();
 
@@ -297,7 +154,6 @@ class search extends class_base
 			$partcount = 0;
 			foreach($real_fields as $key => $val)
 			{
-				$_part = "";
 				switch ($key)
 				{
 					case "name":
@@ -319,21 +175,14 @@ class search extends class_base
 					case "location":
 						if ($val == 0)
 						{
-							$tmp = join(",",array_filter(array_keys($obj_list),create_function('$v','return $v ? true : false;')));
-							if (!empty($tmp))
-							{
-								$_part = " parent IN ($tmp) ";
-							};
+							$_part = sprintf(" parent IN (%s) ",join(",",array_filter(array_keys($obj_list),create_function('$v','return $v ? true : false;'))));
 						}
 						else
 						{
 							$_part = " parent = '$val' ";
 							$partcount++;
 						};
-						if (!empty($_part))
-						{
-							$parts["location"] = $_part;
-						};
+						$parts["location"] = $_part;
 						break;
 
 					case "createdby":
@@ -415,14 +264,6 @@ class search extends class_base
 						};
 						break;
 
-					case "oid":
-						if ($val)
-						{
-							$parts["oid"] = " oid = '$oid' ";
-							$partcount++;
-						};
-						break;
-
 					default:
 				};
 					
@@ -436,8 +277,8 @@ class search extends class_base
 			// if not, use our own (old?) search method
 			if ($caller_search === false)
 			{
-				$this->search_callback(array("name" => "modify_parts","args" => &$args,"parts" => &$parts));
 				$query = $this->search_callback(array("name" => "get_query","args" => $args,"parts" => $parts));
+
 				if ($query)
 				{
 					$this->db_query($query);
@@ -478,7 +319,7 @@ class search extends class_base
 			{
 				$this->rescounter++;
 				$type = $this->cfg["classes"][$row["class_id"]]["name"];
-				$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row["class_id"],""));
+				$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",get_icon_url($row["class_id"],""));
 				if (!$row["name"])
 				{
 					$row["name"] = "(nimetu)";
@@ -776,17 +617,6 @@ class search extends class_base
 				"onChange" => "refresh_page(this)",
 			);
 		};
-		
-		if (!$fields["oid"])
-		{
-			$fields["oid"] = array(
-				"type" => "textbox",
-				"caption" => "ID",
-				"size" => 6,
-				"value" => $args["s"]["oid"],
-			);
-		};
-		
 
 		if (!$fields["location"])
 		{
@@ -875,13 +705,13 @@ class search extends class_base
 	}
 
 	// generates contents for the class picker drop-down menu
-	function _get_s_class_id()
+	function _get_s_class_id($val)
 	{
 		$tar = array(0 => LC_OBJECTS_ALL) + $this->get_class_picker();
 		return $tar;
 	}
 
-	function _get_s_parent($args = array())
+	function _get_s_parent($args)
 	{
 		$ret = $this->_search_mk_call("objects", "get_list", array(), $args);
 		if (!is_array($ret))
@@ -1010,11 +840,11 @@ class search extends class_base
 	function search_callback($args = array())
 	{
 		$prefix = "search_callback_";
+		$allowed = array("get_fields","get_query","get_table_defs","modify_data","table_header","table_footer","do_query","get_next");
 		if (!is_object($this->obj_ref))
 		{
 			return false;
 		};
-		$allowed = array("get_fields","get_query","get_table_defs","modify_data","table_header","table_footer","do_query","get_next","modify_parts");
 
 		// paranoia? maybe. but still, do not let the user use random functions
 		// from the caller.
@@ -1048,10 +878,6 @@ class search extends class_base
 			{
 				$retval = $this->obj_ref->$name();
 			}
-			elseif ($name == "search_callback_modify_parts")
-			{
-				$retval = $this->obj_ref->$name(&$args["args"],&$args["parts"]);
-			}
 			else
 			{
 				$retval = $this->obj_ref->$name($args["args"]);
@@ -1069,6 +895,7 @@ class search extends class_base
 
 	function submit_table($args = array())
 	{
+		$this->quote($args);
 		extract($args);
 		// if we searched from a remote server we need to copy the damn things instead
 		if ($subaction == "cut" && !$s["server"])
@@ -1163,363 +990,5 @@ class search extends class_base
 		$ret =  $this->do_orb_method_call($_parms);
 		return $ret;
 	}
-
-	function get_real_fields($args = array())
-	{
-		$defaults = array(
-			"name" => "",
-			"comment" => "",
-			"class_id" => 0,
-			"location" => 0,
-			"createdby" => "",
-			"modifiedby" => "",
-			"status" => 3,
-			"special" => "",
-			"alias" => "",
-			"redir_target" => "",
-			"oid" => "",
-		);
-		$real_fields = array_merge($defaults,$args["s"]);
-		return $real_fields;
-	}
-
-	function execute_search($args = array())
-	{
-		$obj_list = $this->_get_s_parent($args);
-		extract($args);
-		if (is_array($request))
-		{
-			extract($request);
-		};
-		$format = ($format) ? $format : "vcl";
-
-		if ($format == "vcl")	
-		{
-			load_vcl("table");
-			$this->t = new aw_table(array(
-				"prefix" => "search",
-			));
-
-			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
-			$this->_init_os_tbl();
-		};
-
-		$parts = array();
-		$partcount = 0;
-		foreach($real_fields as $key => $val)
-		{
-			switch ($key)
-			{
-				case "name":
-					if ($val)
-					{
-						$parts["name"] = " name LIKE '%$val%' ";
-						$partcount++;
-					};
-					break;
-
-				case "comment":
-					if ($val)
-					{
-						$parts["comment"] = " comment LIKE '%$val%' ";
-						$partcount++;
-					};
-					break;
-
-				case "location":
-					if ($val == 0)
-					{
-						$_part = sprintf(" parent IN (%s) ",join(",",array_filter(array_keys($obj_list),create_function('$v','return $v ? true : false;'))));
-					}
-					else
-					{
-						$_part = " parent = '$val' ";
-						$partcount++;
-					};
-					$parts["location"] = $_part;
-					break;
-
-				case "createdby":
-					if ($val)
-					{
-						$val = preg_replace("/\s/","",$val);
-						$_val = explode(",",$val);
-						$val = join(",",map("'%s'",$_val));
-						$parts["createdby"] = " createdby IN ($val) ";
-						$partcount++;
-					};
-					break;
-
-				case "modifiedby":
-					if ($val)
-					{
-						$val = preg_replace("/\s/","",$val);
-						$_val = explode(",",$val);
-						$val = join(",",map("'%s'",$_val));
-						$parts["modifiedby"] = " modifiedby IN ($val) ";
-					};
-					break;
-
-				case "alias":
-					if ($val)
-					{
-						$parts["alias"] = " alias LIKE '%$val%'";
-						$partcount++;
-					};
-					break;
-
-				case "class_id":
-					if (is_array($val))
-					{
-						$xval = join(",",$val);
-						$parts["class_id"] = " class_id IN ($xval) ";
-						$partcount++;
-					}
-					elseif ($val != 0)
-					{
-						$parts["class_id"] = " class_id = '$val' ";
-						$partcount++;
-					};
-					break;
-
-				case "status":
-					if ($val == 3)
-					{
-						$parts["status"] = " status != 0 ";
-					}
-					elseif ($val == 2)
-					{
-						$parts["status"] = " status = 2 ";
-					}
-					elseif ($val == 1)
-					{
-						$parts["status"] = " status = 1 ";
-					};
-					break;
-
-				case "lang_id":
-					if ($val)
-					{
-						$parts["lang_id"] = " lang_id = '$val' ";
-					};
-					break;
-
-				case "period":
-					if ($val)
-					{
-						$parts["period"] = " period = '$val' ";
-					};
-					break;
-
-				case "site_id":
-					if ($val)
-					{
-						$parts["site_id"] = " site_id = '$val' ";
-					};
-					break;
-
-				case "oid":
-					if ($val)
-					{
-						$parts["oid"] = " oid = '$oid' ";
-						$partcount++;
-					};
-					break;
-
-				default:
-			};
-				
-		};
-
-		// first check, whether the caller has a do_search callback,
-		// if so, we assume that it knows what it's doing and simply
-		// call it.
-		$caller_search = $this->search_callback(array("name" => "do_search","args" => $args));
-
-		// if not, use our own (old?) search method
-		if ($caller_search === false)
-		{
-			$query = $this->search_callback(array("name" => "get_query","args" => $args,"parts" => $parts));
-			global $XXX;
-			if ($XXX)
-			{
-				print $query;
-			};
-
-			if ($query)
-			{
-				$this->db_query($query);
-				$partcount = 1;
-			}
-			elseif ($partcount == 0)
-			{
-				$this->table = "<span style='font-family: Arial; font-size: 12px; color: red;'>Defineerige otsingutingimused</span>";
-			}
-			else
-			{
-				// if there are any object fields then I need to create the big badass query
-				// for property table now
-				$join = "";
-
-				if (is_array($obj_data) && (sizeof($obj_data) > 0))
-				{
-					$p = 0;
-					foreach($obj_data as $k => $v)
-					{
-						$p++;
-						if ( ($v["method"] == "serialize") )
-						{
-							$join .= " INNER JOIN properties AS p_val$p ON (p_val$p.oid = objects.oid AND p_val$p.pname = '$k' and p_val$p.pvalue = '$v[value]') ";
-						}
-						else
-						{
-							$join .= " INNER JOIN $v[table] AS p_val$p ON (p_val$p.id = objects.oid AND p_val$p.$v[field] = '$v[value]') ";
-						};
-					};
-				};
-				$where = join(" AND ",$parts);
-				$q = "SELECT *,objects.name AS name FROM objects $join WHERE $where";
-//					echo "s_q = $q <br>";
-				$_tmp = array();
-				$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
-				if (is_array($_tmp))
-				{
-					$this->db_rows = $_tmp;
-				}
-				reset($this->db_rows);
-			};
-
-			$results = 0;
-		};
-
-		// we need to make the object change links point to the remote server if specified. so fake it. 
-		if ($args["s"]["server"])
-		{
-			$lo = get_instance("remote_login");
-			$serv = $lo->get_server($args["s"]["server"]);
-			$old_bu = $this->cfg["baseurl"];
-			$this->cfg["baseurl"] = "http://".$serv;
-		}
-
-		get_instance("icons");
-
-		//while($row = $this->db_next())
-		while($row = $this->get_next())
-		{
-			$this->rescounter++;
-			$type = $this->cfg["classes"][$row["class_id"]]["name"];
-			$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row["class_id"],""));
-			if (!$row["name"])
-			{
-				$row["name"] = "(nimetu)";
-			};
-			$row["type"] = $type;
-			$row["location"] = $obj_list[$row["parent"]];
-			$this->search_callback(array(
-				"name" => "modify_data",
-				"data" => &$row,
-				"args" => $args,
-			));
-			if (!$args["clid"] || ($args["clid"] == "aliasmgr"))
-			{
-				$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $this->cfg["classes"][$row["class_id"]]["file"]) . "'>$row[name]</a>";
-			};
-
-			// trim the location to show only up to 3 levels
-			$_loc = explode("/",$row["location"]);
-			while(sizeof($_loc) > 3)
-			{
-				array_shift($_loc);
-			};
-			$row["location"] = join("/",$_loc);
-
-			if (!$args["clid"])
-			{
-				$row["change"] = "<input type='checkbox' name='sel[$row[oid]]' value='$row[oid]'>";
-			};
-
-			if ($format == "vcl")
-			{
-				$this->t->define_data($row);
-			};
-			$results++;
-		};
-
-		if ($args["s"]["server"])
-		{
-			$this->cfg["baseurl"] = $old_bu;
-		}
-
-
-		if ($partcount > 0)
-		{
-			if (!$sortby)
-			{
-				$sortby = "name";
-			}
-			if ($format == "vcl")
-			{
-				$this->t->sort_by(array("field" => $sortby));
-
-				$this->table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
-				$this->table .= $this->t->draw();
-				$this->table .= "<span style='font-family: Arial; font-size: 12px;'>$results tulemust</span>";
-			};
-		};
-
-		if ($results > 0)
-		{
-			// I use that in modify_toolbar to determine whether
-			// to show the "create object group" and "assign configuration"
-			// buttons
-			$this->has_results = 1;
-		};
-	}
-	
-	function view($args = array())
-	{
-		extract($args);
-		$fobj = $this->get_object($id);
-		$meta = new aw_array($fobj["meta"]);
-		$params = array();
-		foreach($meta->get() as $key => $val)
-		{
-			if (substr($key,0,2) == "s_")
-			{
-				$realkey = substr($key,2);
-				$params[$realkey] = $val;
-			};
-		};
-		$real_fields = $this->get_real_fields(array("s" => $params));
-		$this->execute_search(array(
-			"real_fields" => $real_fields,
-			"request" => $args,
-		));
-		$this->mk_path($fobj["parent"],"Vaata otsingut $fobj[name]");
-		return $this->table;
-	}
-
-	function get_search_results($args = array())
-	{
-		extract($args);
-		$fobj = $this->get_object($id);
-		$meta = new aw_array($fobj["meta"]);
-		$params = array();
-		foreach($meta->get() as $key => $val)
-		{
-			if (substr($key,0,2) == "s_")
-			{
-				$realkey = substr($key,2);
-				$params[$realkey] = $val;
-			};
-		};
-		$real_fields = $this->get_real_fields(array("s" => $params));
-		$this->execute_search(array(
-			"real_fields" => $real_fields,
-			"request" => $args,
-			"format" => "rows",
-		));
-		return $this->db_rows;
-	}
-};
+}
 ?>
