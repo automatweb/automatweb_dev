@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.203 2003/06/09 08:27:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.204 2003/06/17 11:56:03 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -727,7 +727,7 @@ class core extends db_connector
 
 	////
 	// !deletes alias $target from object $source
-	function delete_alias($source,$target, $no_cache = false)
+	function delete_alias($source,$target, $no_cache = false, $no_callback = false)
 	{
 		$q = "DELETE FROM aliases WHERE source = '$source' AND target = '$target'";
 		$this->db_query($q);
@@ -737,7 +737,7 @@ class core extends db_connector
 		$ob = $this->get_object($source);
 		$cls = aw_ini_get("classes");
 		$i = get_instance($cls[$ob["class_id"]]["file"]);
-		if (method_exists($i,"on_delete_alias"))
+		if (method_exists($i,"on_delete_alias") && !$no_callback)
 		{
 			$i->on_delete_alias(array(
 				"id" => $source,
@@ -825,7 +825,6 @@ class core extends db_connector
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			$row["id"] = $row["target"];
 			// note that the index inside the idx array is always one less than the 
 			// number in the alias. (e.g. oid of #f1# is stored at the position 0, etc)
 			if (sizeof($type) == 1)
