@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.29 2003/10/06 14:32:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.30 2003/11/12 13:04:00 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -42,7 +42,7 @@
 	@property confirm_unsubscribe_msg type=relpicker reltype=RELTYPE_ADM_MESSAGE 
 	@caption Lahkumise kinnituseks saadetav kiri
 
-	@property member_list type=text store=no group=members
+	@property member_list type=table store=no group=members
 	@caption Liikmed
 
 	@property import_textfile type=fileupload store=no group=general
@@ -52,11 +52,17 @@
 	@groupinfo subscribing caption="Liitumine/lahkumine"
 	@classinfo syslog_type=ST_MAILINGLIST
 	@classinfo relationmgr=yes
+
+	@reltype MEMBER_PARENT value=1 clid=CL_MENU
+	@caption listi liikmete kataloog
+
+	@reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
+	@caption ümbersuunamine
+
+	@reltype ADM_MESSAGE value=3
+	@caption administratiivne teade clid=CL_MESSAGE
 	
 */
-define("RELTYPE_MEMBER_PARENT",1);
-define("RELTYPE_REDIR_OBJECT",2);
-define("RELTYPE_ADM_MESSAGE",3);
 
 
 class ml_list extends class_base
@@ -73,42 +79,11 @@ class ml_list extends class_base
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 	}
 
-	function callback_get_rel_types()
-        {
-                return array(
-                        RELTYPE_MEMBER_PARENT => "listi liikmete kataloog",
-			RELTYPE_REDIR_OBJECT => "ümbersuunamine",
-			RELTYPE_ADM_MESSAGE => "administratiivne teade",
-                );
-        }
-
-	function callback_get_classes_for_relation($args = array())
+	function get_property($arr)
 	{
-		$retval = false;
-		switch($args["reltype"])
-		{
-			case RELTYPE_MEMBER_PARENT:
-				$retval = array(CL_PSEUDO);
-				break;
-
-			case RELTYPE_REDIR_OBJECT:
-				$retval = array(CL_DOCUMENT);
-				break;
-			
-			case RELTYPE_ADM_MESSAGE:
-				$retval = array(CL_MESSAGE);
-				break;
-		};
-		return $retval;
-	}
-
-
-
-	function get_property($args = array())
-	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		$conf_set = empty($args["obj"]["meta"]["user_form_conf"]) ? false : true;
+		$conf_set = $arr["obj_inst"]->prop("user_form_conf");
 		$name = $data["name"];
 		# don't show these elements, if the configuration has not been chosen
 		if (!$conf_set && in_array($data["name"],array("vars","automatic_form")))	
@@ -119,20 +94,18 @@ class ml_list extends class_base
 		switch($data["name"])
 		{
 			case "user_folders":
-                		$data["options"] = $this->_get_defined_user_folders($args["obj"]["meta"]["user_form_conf"]);
+                		$data["options"] = $this->_get_defined_user_folders($arr["obj_inst"]->prop("user_form_conf"));
 				break;
 	
 			case "automatic_form":
 				$fl = array("0" => "");
-				$ll = new aw_array($this->get_forms_for_list($args["obj"]["oid"]));
-				$llstr = join(",",$ll->get());
-				if ($llstr != "")
+				$ll = new aw_array($this->get_forms_for_list($arr["obj_inst"]->id()));
+				if ($ll->count() > 0)
 				{
-					$this->db_query("SELECT oid, name FROM objects WHERE oid IN(".$llstr.")");
-					while ($_row = $this->db_next())
-					{
-						$fl[$_row["oid"]] = $_row["name"];
-					}
+					$flist = new object_list(array(
+						"id" => $ll->get(),
+					));
+					$fl = array_merge($fl,$flist->names());
 				}
 				$data["options"] = $fl;
 				break;
@@ -144,9 +117,7 @@ class ml_list extends class_base
 				break;
 
 			case "member_list":
-				$data["value"] = $this->gen_member_list(array(
-					"list_id" => $args["obj"]["oid"],
-				));
+				$this->gen_member_list($arr);
 				break;
 				
 
@@ -154,9 +125,9 @@ class ml_list extends class_base
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -167,28 +138,28 @@ class ml_list extends class_base
 			// they should be one element. But right now, I _hope_ this will work
 			// -- duke
 			case "user_form_conf":
-				$ob = $this->load_list($args["obj"]["oid"]);
-				if ($data["value"] != $ob["meta"]["user_form_conf"])
+				$ob = $this->load_list($arr["obj_inst"]->id());
+				if ($data["value"] != $arr["obj_inst"]->prop("user_form_conf"))
 				{
 					// if form has changed, delete all pseudo vars
-					$arr = new aw_array($ob["meta"]["vars"]);
-					foreach ($arr->get() as $k => $v)
+					$vlist = new aw_array($arr["obj_inst"]->meta("vars"));
+					foreach ($vlist->get() as $k => $v)
 					{
-						$this->del_pseudo_var($args["obj"]["oid"],$k);
+						$this->del_pseudo_var($arr["obj_inst"]->id(),$k);
 					};
 				}
 				break;
 
 			case "vars":
 				$vars = $data["value"];
-				$obj = $this->load_list($args["obj"]["oid"]);
+				$obj = $this->load_list($arr["obj_inst"]->id());
 	
-				$arr = new aw_array($obj["meta"]["vars"]);
-				foreach ($arr->get() as $k => $v)
+				$vlist = new aw_array($arr["obj_inst"]->meta("vars"));
+				foreach ($vlist->get() as $k => $v)
 				{
 					if (!isset($vars[$k]))
 					{
-						$this->del_pseudo_var($args["obj"]["oid"],$k);
+						$this->del_pseudo_var($arr["obj_inst"]->id(),$k);
 					};
 				};
 				// leia lisatud muutujad
@@ -196,9 +167,9 @@ class ml_list extends class_base
 				{
 					foreach ($vars as $k => $v)
 					{
-						if (!isset($obj["meta"]["vars"][$k]))
+						if ($vlist->get_at($k))
 						{
-							$this->add_pseudo_var($args["obj"]["oid"],$k);
+							$this->add_pseudo_var($arr["obj_inst"]->id(),$k);
 						};
 					};
 				};
@@ -211,8 +182,9 @@ class ml_list extends class_base
 				{
 					return PROP_OK;
 				}
-				$this->list_ob = $this->get_object($args["obj"]["oid"], true);
-				$fld = $this->list_ob["meta"]["def_user_folder"];
+				//$this->list_ob = $this->get_object($arr["obj_inst"]->id(), true);
+				$fld = $arr["obj_inst"]->prop("def_user_folder");
+				//$fld = $this->list_ob["meta"]["def_user_folder"];
 				echo "Impordin kasutajaid kataloogi $fld... <br />";
 				$first = true;
 				$contents = file_get_contents($imp);
@@ -231,7 +203,7 @@ class ml_list extends class_base
 						$retval = $ml_member->subscribe_member_to_list(array(
 							"name" => $name,
 							"email" => $addr,
-							"list_id" => $args["obj"]["oid"],
+							"list_id" => $arr["obj_inst"]->id(),
 						));
 						usleep(500000);
 					}
@@ -246,8 +218,7 @@ class ml_list extends class_base
 				
 			
 			case "automatic_form":
-					$id = $args["obj"]["oid"];
-					$this->list_ob = $this->get_object($args["obj"]["oid"], true);
+					$id = $arr["obj_inst"]->id();
 
 					$tr = $this->db_fetch_row("SELECT * FROM ml_list2automatic_form WHERE lid = '$id'");
 					if (is_array($tr))
@@ -269,14 +240,11 @@ class ml_list extends class_base
 		return $retval;
 	}
 
-	function gen_member_list($args = array())
+	function gen_member_list($arr)
 	{
-		$ml_list_members = $this->get_members($args["list_id"]);
-		load_vcl("table");
-		$t = new aw_table(array(
-			"layout" => "generic",
-			"xml_def" => "mlist/member_list",
-		));
+		$ml_list_members = $this->get_members($arr["obj_inst"]->id());
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->parse_xml_def("mlist/member_list");
 		$ml_member_inst = get_instance("mailinglist/ml_member");
 		if (is_array($ml_list_members))
 		{	
@@ -287,7 +255,7 @@ class ml_list extends class_base
 				// but until the form based member thingies do not write
 				// to ml_users, there is no simpler way to do this
 				list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
-					"lid" => $args["list_id"],
+					"lid" => $arr["obj_inst"]->id(),
 					"member" => $val["oid"],
 				));
 				$this->restore_handle();
@@ -299,7 +267,6 @@ class ml_list extends class_base
 
 			}
 		};		
-		return $t->draw();
 	}
 
 	function _get_defined_user_folders($conf)
@@ -317,11 +284,12 @@ class ml_list extends class_base
 		return $this->defined_user_folders;
 	}
 
-	function callback_gen_list_variables($args = array())
+	function callback_gen_list_variables($arr)
 	{
 		$this->read_template("list_omadused.tpl");
-		$meta = $args["obj"]["meta"];
-		$allvars=$this->get_all_varnames(false,$meta["user_form_conf"]);
+		$meta = $arr["obj_inst"]->meta();
+		//$meta = $args["obj"]["meta"];
+		$allvars=$this->get_all_varnames(false,$arr["obj_inst"]->prop("user_form_conf"));
 
 		foreach ($allvars as $k => $name)
 		{
@@ -330,17 +298,17 @@ class ml_list extends class_base
 				"checked" => checked($meta["vars"][$k]),
 				"acl" => (isset($meta["vars"][$k]))? "ACL" : "",
 				"vid" => $k,
-				"l_acl" => (isset($meta["vars"][$k])) ? ("editacl.".$this->cfg["ext"]."?oid=".$this->get_pseudo_var($args["obj"]["oid"],$k)."&file=default.xml") : "",
+				"l_acl" => (isset($meta["vars"][$k])) ? ("editacl.".$this->cfg["ext"]."?oid=".$this->get_pseudo_var($arr["obj_inst"]->id(),$k)."&file=default.xml") : "",
 			));
 			$varparse.=$this->parse("variable");
 		};
 		$this->vars(array("variable" => $varparse));
 		$tmp = array(
 			"type" => "text",
-			"caption" => $args["prop"]["caption"],
+			"caption" => $arr["prop"]["caption"],
 			"value" => $this->parse(),
 		);
-		return array($args["prop"]["name"] => $tmp);
+		return array($arr["prop"]["name"] => $tmp);
 	}
 
 	////
