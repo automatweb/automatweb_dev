@@ -90,7 +90,11 @@ class basket_users extends basket
 
 		$this->_init_table();
 
-		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_SHOP_BASKET_ORDER." AND status = 2 AND subclass = '".$ob["meta"]["basket"]."'");
+		if ($ob["meta"]["basket"])
+		{
+			$ss = "AND subclass = '".$ob["meta"]["basket"]."'";
+		}
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_SHOP_BASKET_ORDER." AND status = 2 AND createdby = '".aw_global_get("uid")."' $ss");
 		while ($row = $this->db_next())
 		{
 			$row["meta"] = aw_unserialize($row["metadata"]);
