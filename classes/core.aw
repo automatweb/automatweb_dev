@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.133 2002/12/06 10:07:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.134 2002/12/06 13:59:09 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -2304,27 +2304,12 @@ class core extends db_connector
 
 	////
 	// !this should be called from the constructor of each class
-	function init()
+	function init($args = false)
 	{
-		$arg = @func_get_arg(0);
-		if ($arg === NULL)
+		parent::init($args);
+		if (is_array($args))
 		{
-			$this->db_init();
-			$this->tpl_init("");
-		}
-		else
-		{
-			if (is_array($arg))
-			{
-				$tpldir = $arg["tpldir"];
-				$this->clid = $arg["clid"];
-			}
-			else
-			{
-				$tpldir = $arg;
-			};
-			$this->db_init();
-			$this->tpl_init($tpldir);
+			$this->clid = $args["clid"];
 		}
 	}
 

@@ -1,10 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.30 2002/12/02 17:57:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.31 2002/12/06 13:59:09 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
 class aw_template extends acl_base
 {
+	function init($args = array())
+	{
+		parent::init($args);
+		if (is_array($args))
+		{
+			$this->tpl_init($args["tpldir"]);
+		}
+		else
+		{
+			$this->tpl_init($args);
+		}
+	}
+
 	function tpl_init($basedir = "")
 	{
 		if (!is_array($this->cfg))

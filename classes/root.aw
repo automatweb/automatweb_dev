@@ -1,21 +1,24 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.22 2002/12/06 10:07:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.23 2002/12/06 13:59:09 kristo Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
 classload("defs");
 class root
 {
-	function root()
+	////
+	// !the init function. all base classes that need to be initialized
+	// must override this and call parent::init($args) before doing their own init
+	function init()
 	{
 		$this->stacks = array();
 	}
 
 	////
-	// !Pushes a variable onto the stock
+	// !Pushes a variable onto the stack
 	function _push($item,$stack = "root")
 	{
-		if ( not(is_array($this->stacks[$stack])) )
+		if (not(is_array($this->stacks[$stack])))
 		{
 			$this->stacks[$stack] = array();
 		};
@@ -33,18 +36,8 @@ class root
 		}
 	}
 
-	// right, I made a stupid mistake by assuming
-	// that this function was no longer used, so I 
-	// deleted it, so I found out, that it was still
-	// needed. right, my bad, fuck me, BUT
-	// fuck, why wasn't this in the cvs anyway?
-	// I could have just restored it from there
-	// now I have not even the faintest idea, what this
-	// function is supposed to do? is this right?
-	// or is something broken somewhere?
-	//
-	// this is used in form_db_base.aw for generating the sql join from the form relation tree 
-	// and it seems correct to me - terryf
+	////
+	// !clears the stack $stack and returns all values in the stack as an array
 	function _clear_stack($stack = "root")
 	{
 		$tmp = $this->stacks[$stack];
@@ -53,7 +46,7 @@ class root
 	}
 
 	////
-	// !this takes an array and goes through it and makes another array that has as keyws the values of the given array and also
+	// !this takes an array and goes through it and makes another array that has as keys the values of the given array and also
 	// tha velues of the given array
 	function make_keys($arr)
 	{
@@ -67,5 +60,5 @@ class root
 		}
 		return $ret;
 	}
-};
+}
 ?>

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.10 2002/12/03 14:51:33 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.11 2002/12/06 13:59:09 kristo Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
-// means to creat and manage alternate database connections
+// means to create and manage alternate database connections
 
 
 /*
@@ -15,8 +15,14 @@
 	};
 
 	// but we can also create a second connection
-	$args = array("driver" => "mysql", "server" => "localhost","base" => "persona",
-		"username" => "guest", "password" => "guest","cid" => "persona");
+	$args = array(
+		"driver" => "mysql", 
+		"server" => "localhost",
+		"base" => "persona",
+		"username" => "guest", 
+		"password" => "guest",
+		"cid" => "persona"
+	);
 	$this->db_connect($args);
 	$this->dc["persona"]->db_query($q);
 	while($row = $this->dc["persona"]->db_next())
@@ -35,13 +41,39 @@
 	// should and will take care of connecting to correct sources 
 */
 
-// we dont really need that root class or do we?
 classload("root");
 class db_connector extends root
 {
 	var $dc; # this is where we hold connections
-	function db($args = array())
+
+	////
+	// !init default database connection
+	function init($args = array())
 	{
+		parent::init($args);
+		$this->default_cid = "DBMAIN";
+		
+		// if no connection id is set, pretend that this is the primary data source
+		$id = "db::".$this->default_cid;
+		$dc = aw_global_get($id);
+		
+		if ($dc)
+		{
+			$this->dc[$this->default_cid] = $dc;
+			// already connected, drop out
+			return false;
+		};
+
+		$this->db_connect(array(
+			"id" => $id,
+			"dc" => $dc,
+			"cid" => $this->default_cid,
+			"driver" => aw_ini_get("db.driver"),
+			"server" => aw_ini_get("db.host"),
+			"base" => aw_ini_get("db.base"),
+			"username" => aw_ini_get("db.user"),
+			"password" => aw_ini_get("db.pass"),
+		));
 	}
 
 	////
@@ -80,31 +112,7 @@ class db_connector extends root
 	// !Creates a connection with default arguments
 	function db_init($args = array())
 	{
-		$cid = "DBMAIN";
-		$this->default_cid = $cid;
-		
-		// if no connection id is set, pretend that this is the primary data source
-		$id = "db::$cid";
-		$dc = aw_global_get($id);
-		
-		if ($dc)
-		{
-			$this->dc[$cid] = $dc;
-			// already connected, drop out
-			return false;
-		};
-
-		$this->db_connect(array(
-			"id" => $id,
-			"dc" => $dc,
-			"cid" => $cid,
-			"driver" => aw_ini_get("db.driver"),
-			"server" => aw_ini_get("db.host"),
-			"base" => aw_ini_get("db.base"),
-			"username" => aw_ini_get("db.user"),
-			"password" => aw_ini_get("db.pass"),
-		));
-		
+		$this->init($args);
 	}
 
 	// route all functions to default/primary driver
