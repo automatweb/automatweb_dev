@@ -132,7 +132,7 @@ function go_acl(id)
 {VAR:toolbar}
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr><td class="{VAR:viewstyle}" style="border:1px solid #BBB">
+<tr><td class="{VAR:viewstyle}" bgcolor="#bdbdbd">
 {VAR:table}
 
 </td></tr></table>

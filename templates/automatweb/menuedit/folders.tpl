@@ -18,9 +18,9 @@ function zeropad(str)
 </script>
 </head>
 <body bgcolor="#eeeeee" onload="setInterval('showhide()',1000)">
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
+<table border="0" width="100%" cellspacing="0" cellpadding="0">
 	<tr>
-		<td align="left" class="yah">&nbsp;{VAR:uid} @ <span id="clock" style="font-family:monospace;"></span></td>
+		<td align="left"><div class="aw04yah">&nbsp;{VAR:uid} @ <span id="clock" style="font-family:monospace;"></span></div></td>
 	</tr>
 	<!-- SUB: has_toolbar -->
 	<tr>
