@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.30 2005/01/05 11:04:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.31 2005/01/05 11:11:31 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -187,14 +187,14 @@ class webform extends class_base
 		$this->n_props = array("checkboxes", "radiobuttons");
 		$this->trans_names = array(
 			"text" => t("Tekst"),
-			"textbox" => t("Väike tekstikast"),
-			"checkbox" => t("Märkeruut"),
-			"classificator" => t("Valikväli"),
-			"date_select" => t("Kuupäevavalik"),
+			"textbox" => t("V&auml;ike tekstikast"),
+			"checkbox" => t("M&auml;rkeruut"),
+			"classificator" => t("Valikv&auml;li"),
+			"date_select" => t("Kuup&auml;evavalik"),
 			"textarea" => t("Suur tekstikast"),
-			"hidden" => t("Peidetud väli"),
+			"hidden" => t("Peidetud v&auml;li"),
 			"submit" => t("Saada nupp"),
-			"reset" => t("Tühista nupp"),
+			"reset" => t("T&uuml;hista nupp"),
 		);
 		$this->def_props = array(
 			"firstname" => "Eesnimi",
