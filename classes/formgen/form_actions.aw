@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.33 2004/11/29 09:09:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.34 2004/12/28 12:56:34 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -803,7 +803,8 @@ class form_actions extends form_base
 
 		$f->load($form->get_id());
 		$f->load_entry($entry_id);
-		$msg = strip_tags($f->show_text());
+		$tmp = $f->show_text();
+		$msg = strip_tags(/*preg_replace("/<script(.*)>(.*)<\/script>/imsU", "", */$tmp/*)*/);
 
 		if (!is_array($data))
 		{
@@ -877,7 +878,7 @@ class form_actions extends form_base
 				'caption' => $data['link_caption']
 			));
 
-			$awm->htmlbodyattach(array("data" => $app));
+			$awm->htmlbodyattach(array("data" => preg_replace("/<script(.*)>(.*)<\/script>/imsU", "", $app)));
 
 			if (aw_global_get("fa_mail_priority"))
 			{
@@ -915,7 +916,9 @@ class form_actions extends form_base
 				$l = get_instance("languages");
 				$ct = "Content-type: text/plain; charset=".$l->get_charset()."\n";
 				$from = $f->get_element_value($data["from_email_el"]);
-				mail($data["email"], $subj, strip_tags($msg_html)."\n".$app."\n".$link_url, "From: $from\n$ct");
+				$tmp_msg = strip_tags(/*preg_replace("/<script(.*)>(.*)<\/script>/imsU", "", */$msg_html/*)*/);
+				
+				mail($data["email"], $subj, $tmp_msg."\n".$app."\n".$link_url, "From: $from\n$ct");
 			}
 			else
 			if ($data["email_el"] && ($_to = $f->get_element_value($data["email_el"])))
@@ -948,7 +951,10 @@ class form_actions extends form_base
 					$l = get_instance("languages");
 					$ct = "";/*"Content-type: text/plain; charset=".$l->get_charset()."\n";*/
 					$from = $f->get_element_value($data["from_email_el"]);
-					mail($_to, $subj, strip_tags($msg_html), "From: $fromstr\n$ct");
+					
+					$tmp_msg = strip_tags(/*preg_replace("/<script(.*)>(.*)<\/script>/imsU", "", */$msg_html/*)*/);
+					
+					mail($_to, $subj, $tmp_msg, "From: $fromstr\n$ct");
 				}
 				else
 				{
