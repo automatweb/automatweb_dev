@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.1 2001/05/18 23:45:42 duke Exp $
 // noja tekalt voib selle ju taiesti vabalt adminni index.aw sisse integreerida
 // voi mis?
 include("const.aw");
@@ -25,5 +26,6 @@ if ($reforb)
 	exit;
 };
 $content = $orb_data;
+$info = $orb->get_info();
 include("admin_footer.$ext");
 ?>
