@@ -16,11 +16,247 @@
             <field>mail</field>
             <caption>E-post</caption>
       </property>
+      <property>
+            <name>udef_txbox1</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 1</caption>
+      </property>
+      <property>
+            <name>udef_txbox2</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 2</caption>
+      </property>
+      <property>
+            <name>udef_txbox3</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 3</caption>
+      </property>
+      <property>
+            <name>udef_txbox4</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 4</caption>
+      </property>
+      <property>
+            <name>udef_txbox5</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 5</caption>
+      </property>
+      <property>
+            <name>udef_txbox6</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 6</caption>
+      </property>
+      <property>
+            <name>udef_txbox7</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 7</caption>
+      </property>
+      <property>
+            <name>udef_txbox8</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 8</caption>
+      </property>
+      <property>
+            <name>udef_txbox9</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 9</caption>
+      </property>
+      <property>
+            <name>udef_txbox10</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textbox 10</caption>
+      </property>
+      <property>
+            <name>udef_txarea1</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textarea 1</caption>
+      </property>
+      <property>
+            <name>udef_txarea2</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textarea 2</caption>
+      </property>
+      <property>
+            <name>udef_txarea3</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textarea 3</caption>
+      </property>
+      <property>
+            <name>udef_txarea4</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textarea 4</caption>
+      </property>
+      <property>
+            <name>udef_txarea5</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Textarea 5</caption>
+      </property>
+      <property>
+            <name>udef_checkbox1</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Checkbox 1</caption>
+      </property>
+      <property>
+            <name>udef_checkbox2</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Checkbox 2</caption>
+      </property>
+      <property>
+            <name>udef_checkbox3</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Checkbox 3</caption>
+      </property>
+      <property>
+            <name>udef_checkbox4</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Checkbox 4</caption>
+      </property>
+      <property>
+            <name>udef_checkbox5</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Checkbox 5</caption>
+      </property>
+      <property>
+            <name>udef_classificator1</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>classificator</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klassifikaator 1</caption>
+      </property>
+      <property>
+            <name>udef_classificator2</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>classificator</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klassifikaator 2</caption>
+      </property>
+      <property>
+            <name>udef_classificator3</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>classificator</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klassifikaator 3</caption>
+      </property>
+      <property>
+            <name>udef_classificator4</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>classificator</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klassifikaator 4</caption>
+      </property>
+      <property>
+            <name>udef_classificator5</name>
+            <table>objects</table>
+            <group>udef_fields</group>
+            <type>classificator</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klassifikaator 5</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST_MEMBER</syslog_type>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
       </classinfo>
+      <groupinfo>
+            <udef_fields>
+                  <caption>Muud</caption>
+                  <väljad></väljad>
+            </udef_fields>
+      </groupinfo>
       <tableinfo>
             <ml_users>
                   <index>id</index>
