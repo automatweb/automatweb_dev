@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.88 2003/04/22 10:29:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.89 2003/04/22 14:41:12 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -65,11 +65,12 @@ class aliasmgr extends aw_template
 		$fields = array();
 		$this->make_alias_classarr($this->clid_list);
 		asort($this->classarr);
+		$options = (sizeof($this->classarr) == 1) ? $this->classarr : array(""=>"") + $this->classarr;
 		$fields["special"] = "n/a";
 		$fields["class_id"] = array(
 			"type" => "select",
 			"caption" => "Klass",
-			"options" => array("" => "") + $this->classarr,
+			"options" => $options,
 			"selected" => $args["s"]["class_id"],
 		);
 	}
@@ -893,7 +894,7 @@ class aliasmgr extends aw_template
 			{
 				$toolbar->add_button(array(
 					"name" => "save",
-					"tooltip" => "Tee valitud objektidele aliased",
+					"tooltip" => "Loo seos(ed)",
 					"url" => "javascript:aw_save()",
 					"imgover" => "save_over.gif",
 					"img" => "save.gif",
