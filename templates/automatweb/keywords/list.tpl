@@ -17,6 +17,13 @@
 <td align="center" class="title">&nbsp;Huvilisi&nbsp;</td>
 <td align="center" class="title" width="*">&nbsp;&nbsp;</td>
 </tr>
+<!-- SUB: HEADER -->
+<tr>
+<td class="fgtext" colspan="5">
+<strong>{VAR:title}</strong>
+</td>
+</tr>
+<!-- END SUB: HEADER -->
 <!-- SUB: LINE -->
 <tr>
 <td class="fgtext" align="center"><input type="checkbox" name="check[{VAR:id}]" value="1"></td>
