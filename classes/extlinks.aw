@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.2 2001/06/05 11:43:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.3 2001/06/05 11:55:35 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 class extlinks extends aw_template {
 
@@ -26,13 +26,17 @@ class extlinks extends aw_template {
 	function parse_alias($args = array())
 	{
 		extract($args);
-		// koigepealt siis kysime koigi extrnal linkide aliased
-		$aliases = $this->get_aliases(array(
-						"oid" => $oid,
-						"type" => CL_EXTLINK,
-				));
+		// koigepealt siis kysime koigi extrnal linkide aliased. 
+		// peale esimest kaivitamist jatame nad meelde, et edaspidi ei peaks rohkem paringuid tegema
+		if (!is_array($this->extlinkaliases))
+		{
+			$this->extlinkaliases = $this->get_aliases(array(
+							"oid" => $oid,
+							"type" => CL_EXTLINK,
+					));
+		};
 		// now, match[3] contains the index inside the aliases array
-		$l = $aliases[$matches[3] - 1];
+		$l = $this->extlinkaliases[$matches[3] - 1];
 		$link = $this->get_link($l["target"]);
 
 		global $baseurl;
