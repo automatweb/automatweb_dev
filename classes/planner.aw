@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.92 2003/03/13 18:43:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.93 2003/03/14 13:02:50 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -483,10 +483,6 @@ class planner extends class_base
 			};
 		}
 
-		/*
-    		$c = $this->calaliases[$matches[3] - 1];
-		$replacement = $this->object_list(array("id" => $c["target"],"type" => "day"));
-		*/
 		$replacement = $this->view(array("id" => $alias["target"]));
 		return $replacement;
 	}
@@ -1323,43 +1319,6 @@ class planner extends class_base
 
 	}
 
-	function importfile($args = array())
-	{
-		$awf = get_instance("file");
-		$xml = get_instance("xml");
-		extract($args);
-		$fdat = $awf->get_file_by_id($id);
-		$edata = $xml->xml_unserialize(array("source" => $fdat["content"]));
-		$start = $edata["data"]["start"];
-		$end = $edata["data"]["end"];
-		$title = $edata["data"]["title"];
-		$description = $edata["data"]["description"];
-		$this->quote($title); $this->quote($description);
-		$udata = $this->get_user();
-		$uid = aw_global_get("uid");
-		$parent = $udata["home_folder"];
-		$id = $this->new_object(array(	
-			"class_id" => CL_CAL_EVENT,
-			"parent" => $parent,
-			"name" => $title,
-		),true);
-
-		$q = "INSERT INTO planner 
-			(id,uid,start,end,title,description)
-			VALUES ('$id','$uid','$start','$end','$title','$description')";
-
-		$this->db_query($q);
-		global $status_msg;
-		$status_msg = LC_DAY_IS_SAVED;
-		session_register("status_msg");
-		$obj = $this->get_object($args["id"]);
-		return $this->mk_site_orb(array(
-			"class" => "messenger",
-			"action" => "show",
-			"id" => $obj["parent"],
-		));
-	}
-
 	function redir($args = array())
 	{
 		extract($args);
@@ -2045,16 +2004,19 @@ class planner extends class_base
 			uasort($events,array($this,"__x_sort"));
 			$c = "";
 
+			$section = aw_global_get("section");
 	
 			foreach($events as $key => $e)
 			{
 				// draws single cells inside the day
+				$daylink = $this->mk_my_orb("view",array("section" => $section,"id" => $this->id,"type" => $type,"date" => $di["next"]));
                                 $this->vars(array(
                                         "lead" => $e["lead"],
                                         "moreinfo" => $e["moreinfo"],
                                         "title" => $e["title"],
 					"id" => $e["id"],
 					"content" => $e["content"],
+					"daylink" => $daylink,
 					"imgurl" => isset($e["imgurl"]) ? $e["imgurl"] : "/img/trans.gif",
                                 ));
 				if (!empty($e["content"]))
@@ -2062,6 +2024,10 @@ class planner extends class_base
 					$this->vars(array("link" => $this->parse("link")));
 					$_tmp = $this->parse("link");
 				};
+				$this->vars(array(
+                                        "link" => "",
+                                ));
+
 				$c .= $this->ev->draw($e);
 			};
 		};
