@@ -579,15 +579,6 @@ class dronline extends class_base
 		));
 
 		$t->define_field(array(
-			'name' => 'sel',
-			'caption' => 'Blokeeri',
-			'sortable' => 0,
-			'nowrap' => 1,
-			'width' => '1',
-			'align' => 'center'
-		));
-
-		$t->define_field(array(
 			'name' => 'ip',
 			'caption' => 'IP Aadress',
 			'sortable' => 0,
@@ -604,6 +595,14 @@ class dronline extends class_base
 			'name' => 'bar',
 			'caption' => '%',
 			'sortable' => 0,
+		));
+		$t->define_field(array(
+			'name' => 'sel',
+			'caption' => 'Vali',
+			'sortable' => 0,
+			'nowrap' => 1,
+			'width' => '1',
+			'align' => 'center'
 		));
 
 		if ($query != '')
