@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.227 2004/03/01 11:12:03 duke Exp $
+// $Id: class_base.aw,v 2.228 2004/03/02 15:58:41 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -605,6 +605,11 @@ class class_base extends aw_template
 				$args["XUL"] = 1;
 			};
 			$retval = $this->mk_my_orb($action,$args,$orb_class);
+			if ($args["return"] == "id")
+			{
+				$retval = $this->id;
+			};
+
 		};
 		return $retval;
 	}
@@ -1536,6 +1541,12 @@ class class_base extends aw_template
 		if (!is_array($properties))
 		{
 			return false;
+		};
+
+		if (is_object($args["obj_inst"]))
+		{
+			$this->obj_inst = $args["obj_inst"];
+			$this->id = $this->obj_inst->id();
 		};
 
 		// only relation object uses this. But hey, if the relation object
