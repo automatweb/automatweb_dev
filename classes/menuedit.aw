@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.338 2004/11/02 09:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.339 2004/11/23 13:19:20 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -581,6 +581,28 @@ class menuedit extends aw_template
 		if (!headers_sent())
 		{
 			header("X-AW-Section: ".$section);
+		}
+
+		if (aw_ini_get("config.object_translation"))
+		{
+			// check the lang_id of the section object. 
+			// if it is different from the current language, then that means 
+			// that the object exists, but in another language.
+			// in that case, redirect the user to no trans page
+			$o = obj($section);
+			$lid = $o->lang_id();
+			if ($lid != aw_global_get("lang_id"))
+			{
+				// only redirect of we are not in trans msg already
+				if (aw_global_get("action") == "")
+				{
+					header("Location: ".$this->mk_my_orb("show_trans", array(
+						"section" => $section,
+						"set_lang_id" => aw_global_get("lang_id")
+					), "object_translation"));
+					die();
+				}
+			}
 		}
 		return $section;
 	}
