@@ -23,3 +23,11 @@ ini:
 		echo "Cmdline php not found, cannot compile ini file"; \
 	fi
 
+properties:
+	@echo "Generating propety definitions"
+	@if test -e scripts/php; \
+		then \
+		./scripts/php -d register_argc_argv=1 -q -f ./scripts/prop/collect.aw \
+	else \
+		echo "Cmdline php not found, cannot collect properties"; \
+	fi
