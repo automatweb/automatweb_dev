@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.18 2004/05/14 06:53:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.19 2004/05/31 12:03:31 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -250,10 +250,14 @@ class releditor extends aw_template
 		aw_global_set("from_obj",$arr["obj_inst"]->id());
 
 		// maybe I can use the property name itself
+		if ($arr["cb_values"])
+		{
+			$t->cb_values = $arr["cb_values"];
+		};
 
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
-			"name_prefix" => "cba_emb",
+			"name_prefix" => $this->elname,
 			"obj_inst" => $obj_inst,
 		));
 		
@@ -387,7 +391,9 @@ class releditor extends aw_template
 
 		$clinst = get_instance($use_clid);
 
-		$emb = $arr["request"]["cba_emb"];
+		$elname = $prop["name"];
+
+		$emb = $arr["request"][$elname];
 		
 		$clinst->init_class_base();
 		$emb_group = "general";
@@ -418,7 +424,7 @@ class releditor extends aw_template
 				if ($item["type"] == "fileupload")
 				{
 					$name = $item["name"];
-					$_fileinf = $_FILES["cba_emb"];
+					$_fileinf = $_FILES[$elname];
 					$filename = $_fileinf["name"][$name];
 					$filetype = $_fileinf["type"][$name];
 					$tmpname = $_fileinf["tmp_name"][$name];
@@ -459,6 +465,7 @@ class releditor extends aw_template
 		$emb["group"] = "general";
 		$emb["parent"] = $obj->parent();
 		$emb["return"] = "id";
+		$emb["prefix"] = $elname;
 
 		$reltype = $arr["prop"]["reltype"];
 
@@ -481,18 +488,21 @@ class releditor extends aw_template
 			};
 		};
 
-		if (empty($emb["id"]))
+		if (is_oid($obj_id))
 		{
-			$obj->connect(array(
-				"to" => $obj_id,
-				"reltype" => $arr["prop"]["reltype"],
-			));
+			if (empty($emb["id"]))
+			{
+				$obj->connect(array(
+					"to" => $obj_id,
+					"reltype" => $arr["prop"]["reltype"],
+				));
+			};
 		};
-		
+			
 		$obj->save();
-
 		$cache_inst = get_instance("cache");
 		$cache_inst->file_invalidate_regex('alias_cache-source-.*');
+
 
 
 	}
