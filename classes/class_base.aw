@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.249 2004/04/07 17:17:41 duke Exp $
+// $Id: class_base.aw,v 2.250 2004/04/07 19:41:27 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3487,7 +3487,18 @@ class class_base extends aw_template
 					};
 				};
 			};
-			$this->groupinfo = $grps;
+			$orig_groups = $this->groupinfo;
+			$tmp = array();
+			foreach($grps as $gkey => $gval)
+			{
+				// use the "submit" setting from the original group
+				if ($orig_groups[$gkey]["submit"])
+				{
+					$gval["submit"] = $orig_groups[$gkey]["submit"];
+				};
+				$tmp[$gkey] = $gval;
+			};
+			$this->groupinfo = $tmp;
 			// if the class has a default config file, then load 
 			// that as well
 		};
