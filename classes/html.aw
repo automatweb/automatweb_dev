@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.52 2004/08/18 13:15:46 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.53 2004/08/23 10:54:16 rtoomas Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -312,6 +312,14 @@ class html extends aw_template
 		if (isset($border))
 		{
 			$ret.=" border='$border'";
+		}
+		if(isset($alt))
+		{
+			$ret.=" alt='$alt'";
+		}
+		if(isset($title))
+		{
+			$ret.=" title='$title'";
 		}
 		return $ret.">";
 	}
