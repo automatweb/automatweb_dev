@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.31 2003/10/30 13:38:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.32 2003/11/03 14:45:29 duke Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -161,6 +161,10 @@ class css extends class_base
 					{
 						$mask = "font-weight: bold;\n";
 					}
+					else
+					{
+						$ign = true;
+					};
 					break;
 				
 				case "fgcolor":
@@ -367,6 +371,7 @@ class css extends class_base
 		{
 			$cssmeta[$k] = $v;
 		}
+		unset($cssmeta["css"]);
 		$arr["obj_inst"]->set_meta("css",$cssmeta);
 	}
 };
