@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.218 2004/02/18 12:45:44 duke Exp $
+// $Id: class_base.aw,v 2.219 2004/02/20 10:04:10 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1550,7 +1550,7 @@ class class_base extends aw_template
 	
 			$argblock = array(
 				"id" => isset($this->id) ? $this->id : "",
-				"obj" => &$this->coredata,
+				//"obj" => &$this->coredata,
 			);
 
 			// generated elements count as one for this purpose
@@ -1854,7 +1854,7 @@ class class_base extends aw_template
 		$resprops = array();
 
 		$argblock = array(
-			"obj" => &$this->coredata,
+			//"obj" => &$this->coredata,
 			"request" => isset($this->request) ? $this->request : "",
 			"data" => &$this->data,
 			"obj_inst" => &$this->obj_inst,
@@ -2759,7 +2759,7 @@ class class_base extends aw_template
 
                         $argblock = array(
                                 "prop" => &$property,
-                                "obj" => &$this->coredata,
+                                //"obj" => &$this->coredata,
                                 "form_data" => &$rawdata,
 				"request" => &$rawdata,
                                 "new" => $new,
