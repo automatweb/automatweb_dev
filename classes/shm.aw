@@ -1,4 +1,5 @@
 <?php
+// $Header
 // shared memory functions here
 // all variable keys should be SHM_BASE + number
 
@@ -100,7 +101,7 @@ class shm
 	// !internal use - updates the keylist in shm
 	function update_keylist()
 	{
-		// 15k for your key-list should be enough, dammet!
+		// 15k for your key-list should be enough for everybody, dammet!
 		$s_id = shm_attach(SHM_KEYLIST, 15000, 0600);
 		shm_put_var($s_id, SHM_KEYLIST, $this->keylist);
 		shm_detach($s_id);
