@@ -105,17 +105,7 @@ function toggle_file_link_newwin()
 	<td class="fgtext"><select class="small_button" NAME='{VAR:cell_id}_type'>
     <option  VALUE=''>{VAR:LC_FORMS_ORDINARY_TEXT}
     <option  VALUE=''>---------
-    <option {VAR:type_active_textbox} VALUE='textbox'>{VAR:LC_FORMS_TEXTBOX}
-    <option {VAR:type_active_textarea} VALUE='textarea'>{VAR:LC_FORMS_MULTILINE_TEXT}
-    <option {VAR:type_active_checkbox} VALUE='checkbox'>Checkbox
-    <option {VAR:type_active_radiobutton} VALUE='radiobutton'>Radiobutton
-    <option {VAR:type_active_listbox} VALUE='listbox'>Listbox
-    <option {VAR:type_active_multiple} VALUE='multiple'>Multiple listbox
-    <option {VAR:type_active_file} VALUE='file'>{VAR:LC_FORMS_ADDING_FILE}
-    <option {VAR:type_active_link} VALUE='link'>{VAR:LC_FORMS_HYPERLINK}
-    <option {VAR:type_active_button} VALUE='button'>{VAR:LC_FORMS_BUTTON}
-    <option {VAR:type_active_price} VALUE='price'>{VAR:LC_FORMS_PRICE}
-    <option {VAR:type_active_date} VALUE='date'>{VAR:LC_FORMS_DATE}
+		{VAR:types}
 <!-- SUB: CAN_DELETE -->
     <option VALUE='delete'>{VAR:LC_FORMS_DELETE_THIS_ELEMENT}
 <!-- END SUB: CAN_DELETE -->
@@ -372,8 +362,8 @@ function toggle_file_link_newwin()
 <td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_chain_forward" value="1" {VAR:chain_forward}></td>
 </tr>
 <tr>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Pilt:</td>
+<td class="fgtext">{VAR:button_img}  <input class='small_button' type='file' name='{VAR:cell_id}_button_img'> Kas kasutada pilti? <input type='checkbox' name='{VAR:cell_id}_use_button_img' value='1' {VAR:use_button_img}></td>
 <td class="fgtext">{VAR:LC_FORMS_NOT_GO_BACK_IN_CHAIN}:</td>
 <td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_chain_backward" value="1" {VAR:chain_backward}></td>
 </tr>
