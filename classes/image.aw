@@ -117,12 +117,21 @@ class image extends aw_template
 	
 		$img = $this->get_image_by_id($id);
 
+		if ($this->is_flash($img["file"]))
+		{
+			$ima = "<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=4,0,2,0\" width=\"165\" height=\"75\" hspace=\"0\" vspace=\"0\" border=\"0\" align=\"absmiddle\"><param name=movie value=\"".$img["url"]."\"><param name=quality value=high><param name=\"BGCOLOR\" value=\"#336600\"><embed width=\"150\" height=\"150\" hspace=\"0\" vspace=\"0\" border=\"0\" align=\"absmiddle\" quality=\"high\" pluginspage=\"http://www.macromedia.com/shockwave/download/\" src=\"".$img["url"]."\" bgcolor=\"#336600\"></embed></object>";
+		}
+		else
+		{
+			$ima = "<img src='".$img["url"]."'>";
+		}
+
 		$ob = new objects;
 		$this->vars(array(
 			"parents" => $this->picker($obj["parent"],$ob->get_list()),
 			"name" => $obj["name"],
 			"comment" => $obj["comment"],
-			"img" => "<img src='".$img["url"]."'>",
+			"img" => $ima,
 			"link" => $img["link"],
 			"newwindow" => checked($img["newwindow"]==1),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => $return_url,"alias_to" => $alias_to))
@@ -189,6 +198,11 @@ class image extends aw_template
 				"target" => ($idata["newwindow"] ? "target=\"_blank\"" : "")
 			);
  
+			if ($this->is_flash($idata["file"]))
+			{
+				$replacement = $this->localparse($tpls["image_flash"],$vars);
+			}
+			else
 			if ($idata["link"] != "")
 			{
 				$replacement = $this->localparse($tpls["image_linked"],$vars);
@@ -233,6 +247,20 @@ class image extends aw_template
 		$row = $this->db_next();
 		$row["url"] = $this->get_url($row["file"]);
 		return $row;
+	}
+
+	function is_flash($file)
+	{
+		$pos = strrpos($file,".");
+		$ext = substr($file,$pos);
+		if ($ext == ".x-shockwave-flash")
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }
 ?>
