@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.148 2002/09/30 11:00:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.149 2002/10/04 12:19:51 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -969,6 +969,21 @@ class form extends form_base
 				}
 				$u = get_instance("users");
 				$elvalues=$elvalues + $u->get_user_info(aw_global_get("uid"));
+			}
+
+			if (is_array($elvalues))
+			{
+				foreach($elvalues as $_ename => $_eval)
+				{
+					$els = $this->get_element_by_name($_ename, RET_ALL);
+					if (is_array($els))
+					{
+						foreach($els as $el)
+						{
+							$this->set_element_value($el->get_id(), $_eval, true);
+						}
+					}
+				}
 			}
 		}
 
