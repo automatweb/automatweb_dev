@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.164 2004/02/03 10:59:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.165 2004/02/03 12:03:29 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1170,6 +1170,7 @@ class planner extends class_base
 					"name" => $event["name"],
 					"icon" => $event["event_icon_url"],
 					"link" => $event["link"],
+					"comment" => $event["comment"],
 				),
 			));
 		};
@@ -2918,14 +2919,6 @@ class planner extends class_base
 
 		$viewtype = $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
 
-		global $XX3;
-		if ($XX3)
-		{
-			print "<pre>";
-			print_r($arr);
-			print "</pre>";
-		};
-
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
@@ -2948,6 +2941,7 @@ class planner extends class_base
 					"name" => $event["name"],
 					"icon" => $event["event_icon_url"],
 					"link" => $event["link"],
+					"comment" => $event["comment"],
 				),
 			));
 		};
