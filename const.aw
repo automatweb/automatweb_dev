@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.25 2001/07/02 00:24:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.26 2001/07/04 23:00:01 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -340,6 +340,8 @@ define("CL_FORM_TABLE",66);  // otsinguformi tulemuste kuvamise tabel
 
 define("CL_CURRENCY",67);  // otsinguformi tulemuste kuvamise tabel
 
+define("CL_FORM_CHAIN",68);  // formi p2rg
+
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
 // nimekiri k6ikidest klassidest ikoonide jaox
@@ -352,7 +354,7 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_TABLE	=> array("name" => "Tabel", "file" => "table","can_add" => 1), 
 			CL_IMAGE	=> array("name" => "Pilt", "file" => "images", "can_add" => 0), 
 			CL_FORM_ENTRY => array("name" => "Formi sisestus", "file" => "form_entry"),
-			CL_FORM_ELEMENT => array("name" => "Formi element", "file" => "forms"),
+			CL_FORM_ELEMENT => array("name" => "Formi element", "file" => "form_element_vis"),
 			CL_STYLE	=> array("name" => "Stiil", "file" => "style","class" => "style", "can_add" => 1), 
 			CL_FORM_OUTPUT => array("name" => "Formi v&auml;ljund", "file" => "form_output","can_add" => 1),
 			CL_FORM_ACTION => array("name" => "Formi action", "file" => "forms"),
@@ -386,7 +388,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_SHOP_ITEM_TYPE => array("name" => "Kauba t&uuml;&uuml;p", "file" => "item_type", "can_add" => 1),
 			CL_SHOP_EQUASION => array("name" => "Kauba hinnavalem", "file" => "shop_eq", "can_add" => 1),
 			CL_FORM_TABLE => array("name" => "Formi tabel", "file" => "form_table", "can_add" => 1),
-			CL_CURRENCY => array("name" => "Valuuta kurss", "file" => "currency", "can_add" => 1)
+			CL_CURRENCY => array("name" => "Valuuta kurss", "file" => "currency", "can_add" => 1),
+			CL_FORM_CHAIN => array("name" => "Formi p&auml;rg", "file" => "form_chain", "can_add" => 1)
 );
 // kliendid. 
 // hierarhia esimene element on root
