@@ -11,12 +11,7 @@
 </td>
 </tr>
 <!-- END SUB: extdata -->
-<tr>
-<td bgcolor=#dddddd>{VAR:LC_TABLE_TABLE_NAME}:</td><td colspan=100><input type='text' name='table_name' VALUE='{VAR:table_name}'><input type='checkbox' name='show_title' VALUE=1 {VAR:show_title}></td>
-</tr>
-<tr>
-<td bgcolor=#dddddd>{VAR:LC_TABLE_TABLE_HEADER}:</td><td colspan=100><textarea name='table_header' cols=50 rows=4>{VAR:table_header}</textarea></td>
-</tr>
+
 <!-- SUB: LINE -->
 <tr>
 <!-- SUB: COL -->
@@ -34,9 +29,12 @@
 <!-- END SUB: COL -->
 </tr>
 <!-- END SUB: LINE -->
-<tr>
-<td>{VAR:LC_TABLE_TABLE_FOOTER}:</td><td colspan=100><textarea name='table_footer' cols=50 rows=4>{VAR:table_footer}</textarea></td>
+
 </table>
 <input type='submit' NAME='save_table' VALUE='{VAR:LC_TABLE_SAVE}'>
 {VAR:reforb}
 </form>
+<!-- SUB: aliases -->
+<iframe width="100%" height="800" frameborder="0" src="{VAR:aliasmgr_link}">
+</iframe>
+<!-- END SUB: aliases -->

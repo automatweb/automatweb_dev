@@ -65,12 +65,6 @@ function pick_style(row,col)
 <input type='submit' NAME='save_table' VALUE='{VAR:LC_TABLE_SAVE}'>
 <table border=0 bgcolor=#cccccc cellspacing=2 cellpadding=2>
 <tr>
-<td bgcolor=#FFFFFF colspan=2>{VAR:LC_TABLE_CHOOSE_TABLE_STYLE}:</td><td bgcolor="#FFFFFF" colspan=100><select name='table_style'><option value=''>{VAR:tablestyle}</select></td>
-</tr>
-<tr>
-<td colspan=2 bgcolor="#FFFFFF">{VAR:LC_TABLE_CHOOSE_CELL_STYLE}:</td><td bgcolor="#FFFFFF" colspan=100><select name='default_style'><option value=''>{VAR:defaultstyle}</select></td>
-</tr>
-<tr>
 <td bgcolor="#FFFFFF" colspan=2>{VAR:LC_TABLE_HOW_MANY_CELL_DEL}:</td><td bgcolor="#FFFFFF" colspan=100><input type='text' name='exp_count' value=1 size=2></td>
 </tr>
 <tr>
