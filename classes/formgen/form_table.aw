@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.43 2003/06/26 14:15:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.44 2003/07/01 10:49:05 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -617,7 +617,12 @@ class form_table extends form_base
 					{
 						if ($dat["ev_".$cc["link_el"]] != "")
 						{
-							$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$linktext."</a>";
+							$target = "";
+							if ($cc["link_new_window"])
+							{
+								$target = "target=\"_blank\"";
+							}
+							$str = "<a $target href='".$dat["ev_".$cc["link_el"]]."'>".$linktext."</a>";
 						}
 						else
 						{
@@ -2091,6 +2096,7 @@ class form_table extends form_base
 				"col_clicksearch" => checked($this->table["defs"][$col]["clicksearch"]),
 				"col_link" => checked($this->table["defs"][$col]["link"]),
 				"col_link_popup" => checked($this->table["defs"][$col]["link_popup"]),
+				"col_link_new_window" => checked($this->table["defs"][$col]["link_new_window"]),
 				"no_show_empty" => checked($this->table["defs"][$col]["no_show_empty"]),
 				"has_col_style" => checked($this->table["defs"][$col]["has_col_style"]),
 				"header_normal_styles" => $this->picker($this->table["defs"][$col]["styles"]["header_normal"], $sts),
