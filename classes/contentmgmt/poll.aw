@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.21 2004/09/04 17:40:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.22 2004/10/20 13:31:33 duke Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -152,28 +152,31 @@ class poll extends class_base
 			$namear = $ap->meta("names");
 		}
 
+		$poll_id = $ap->id();
+		$section = aw_global_get("section");
+
 		$this->vars(array(
-			"poll_id" => $ap->id(), 
-			"section" => aw_global_get("section"),
+			"poll_id" => $poll_id, 
+			"section" => $section,
 			"question" => ($namear[$lid] == "" ? $ap->name() : $namear[$lid]),
 			"set_lang_id" => $lid
 		));
 
-		$ans = $this->get_answers($ap->id());
+		$ans = $this->get_answers($poll_id);
 
 		$GLOBALS["poll_disp_count"]++;
 
 		reset($ans);
 		while (list($k,$v) = each($ans))
 		{
-			$o_l = $this->mk_my_orb("show", array("poll_id" => $ap->id(), "answer_id" => $k, "section" => aw_global_get("section")));
+			$o_l = $this->mk_my_orb("show", array("poll_id" => $poll_id, "answer_id" => $k, "section" => $section));
 			if ($def)	 
 			{	 
-				$au = "javascript:window.location.href='" . $this->mk_my_orb("show", array("poll_id" => $ap->id(), "answer_id" => $k, "section" => aw_global_get("section"))) . "'";
+				$au = "javascript:window.location.href='" . $this->mk_my_orb("show", array("poll_id" => $poll_id, "answer_id" => $k, "section" => $section)) . "'";
 			}	 
 			else	 
 			{	 
-				$au = "javascript:window.location.href='/?section=".$section."&poll_id=".$ap->id()."&answer_id=".$k."&section=".aw_global_get("section") . "'";	 
+				$au = "javascript:window.location.href='/?section=".$section."&poll_id=".$poll_id."&answer_id=".$k."&section=".$section . "'";	 
 			}
 			if (isset($v["answer"]))
 			{
@@ -195,11 +198,11 @@ class poll extends class_base
 		}
 		if ($def)
 		{
-			$au = $this->mk_my_orb("show", array("poll_id" => $ap->id()));
+			$au = $this->mk_my_orb("show", array("poll_id" => $poll_id));
 		}
 		else
 		{
-			$au = "/?section=".$section."&poll_id=".$ap->id();
+			$au = "/?section=".$section."&poll_id=".$poll_id;
 		}
 
 		$this->vars(array(
@@ -331,17 +334,18 @@ class poll extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_POLL
 		));
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		foreach($ol->arr() as $o)
 		{
-			if ($id != $o->id())
+			$o_id = $o->id();
+			if ($id != $o_id)
 			{
 				if ($o->meta('in_archive') == 1)
 				{
 					$this->vars(array(
 						"question" => $o->name(), 
-						"poll_id" => $o->id(), 
-						"num_comments" => $t->get_num_comments($o->id()),
-						"link" => $this->mk_my_orb("show", array("poll_id" => $o->id()))
+						"poll_id" => $o_id, 
+						"num_comments" => $t->get_num_comments($o_id),
+						"link" => $this->mk_my_orb("show", array("poll_id" => $o_id))
 					));
 					$p.=$this->parse("QUESTION");
 				}
@@ -631,23 +635,25 @@ class poll extends class_base
 			}
 
 			$tmpa = array();
+			$lang_id = aw_global_get("lang_id");
+			$o_id = $arr["obj_inst"]->id();
 			foreach($ans->get() as $id => $val)
 			{
 				if ($val != "")
 				{
-					if (!isset($answers[aw_global_get("lang_id")][$id]))
+					if (!isset($answers[$lang_id][$id]))
 					{
 						$tval = $val;
 						$this->quote($tval);
 						// manually find index
 						$id = $this->db_fetch_field("SELECT MAX(id) as id FROM poll_answers", "id")+1;
-						$this->db_query("INSERT INTO poll_answers(id, answer,poll_id) values($id,'".$tval."','".$arr["obj_inst"]->id()."')");
+						$this->db_query("INSERT INTO poll_answers(id, answer,poll_id) values($id,'".$tval."','".$o_id."')");
 					}
 					$tmpa[$id] = $val;
 				}
 			}
 
-			$answers[aw_global_get("lang_id")] = $tmpa;
+			$answers[$lang_id] = $tmpa;
 
 			$arr["obj_inst"]->set_meta("answers", $answers);
 		}
@@ -699,7 +705,7 @@ class poll extends class_base
 			"class_id" => CL_POLL,
 			"site_id" => array()
 		));	
-		for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
+		foreach($pl->arr() as $o)
 		{
 			$actcheck = checked($o->id() == $active);
 			$act_html = "<input type='radio' name='activeperiod' $actcheck value='".$o->id()."'>";
@@ -718,10 +724,11 @@ class poll extends class_base
 
 		$l = get_instance("languages");
 		$lgs = $l->get_list();
+		$lang_id = aw_global_get("lang_id");
 		foreach($lgs as $lid => $lname)
 		{
 			$idx = 0;
-			$adat = new aw_array($ansa[aw_global_get("lang_id")]);
+			$adat = new aw_array($ansa[$lang_id]);
 
 			$ret["splitter_".$lid] = array(
 				"type" => "text",
