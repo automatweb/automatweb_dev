@@ -115,6 +115,10 @@ class object_treeview extends class_base
 	function show($arr)
 	{
 		extract($arr);
+		if (!is_oid($id))
+		{
+			return "";
+		}
 		$ob = obj($id);
 
 		$this->read_template('show.tpl');
@@ -395,6 +399,11 @@ class object_treeview extends class_base
 			$parent = $folders;
 		}
 
+		if (!is_oid($ob->id()))
+		{
+			return;
+		}
+
 		if (!$parent)
 		{
 			// if parent can't be found. then get the objects from all the root folders
@@ -510,6 +519,11 @@ class object_treeview extends class_base
 		else
 		{
 			$is_admin = false;
+		}
+
+		if (!is_oid($ob->id()))
+		{
+			return;
 		}
 																		
 		$adm_c = $ob->connections_from(array(
