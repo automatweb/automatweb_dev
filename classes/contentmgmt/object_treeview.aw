@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.35 2004/12/02 15:41:14 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.36 2004/12/03 11:47:50 kristo Exp $
 
 /*
 
@@ -166,7 +166,7 @@ class object_treeview extends class_base
 		// and their cfgforms
 		// and make a nice little lut from them.
 		$class2cfgform = array();
-		foreach($ob->connections_from(array("type" => LTYPE_ADD_TYPE)) as $c)
+		foreach($ob->connections_from(array("type" => RELTYPE_ADD_TYPE)) as $c)
 		{
 			$addtype = $c->to();
 			if ($addtype->prop("use_cfgform"))
@@ -436,7 +436,7 @@ class object_treeview extends class_base
 		{
 			// if parent can't be found. then get the objects from all the root folders
 			$con = $ob->connections_from(array(
-				"type" => LTYPE_FOLDER
+				"type" => RELTYPE_FOLDER
 			));
 
 			$ignoreself = $ob->meta("ignoreself");
@@ -561,7 +561,7 @@ class object_treeview extends class_base
 		}
 																		
 		$adm_c = $ob->connections_from(array(
-			"type" => LTYPE_ALL_ACSS_GRP
+			"type" => RELTYPE_ALL_ACSS_GRP
 		));
 		foreach($adm_c as $adm_conn)
 		{
@@ -576,7 +576,7 @@ class object_treeview extends class_base
 		$access_by_parent = array();
 
 		$conns = $ob->connections_from(array(
-			"type" => LTYPE_FOLDER
+			"type" => RELTYPE_FOLDER
 		));
 		foreach($conns as $conn)
 		{
@@ -811,7 +811,7 @@ class object_treeview extends class_base
 
 
 		$conns = $args["obj_inst"]->connections_from(array(
-			"type" => LTYPE_FOLDER
+			"type" => RELTYPE_FOLDER
 		));
 
 		foreach($conns as $conn)
@@ -853,7 +853,7 @@ class object_treeview extends class_base
 	function _get_add_toolbar($ob)
 	{
 		$types_c = $ob->connections_from(array(
-			"type" => LTYPE_ADD_TYPE
+			"type" => RELTYPE_ADD_TYPE
 		));
 
 		$menu = "";
