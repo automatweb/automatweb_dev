@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.57 2005/03/24 12:49:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.58 2005/03/24 14:58:48 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.27 2005/03/24 12:49:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.28 2005/03/24 14:58:48 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -10,6 +10,7 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="Tööleht" submit=no
 @groupinfo grp_resource_settings caption="Seaded"
+@groupinfo grp_resource_maintenance caption="Hooldus"
 @groupinfo grp_resource_unavailable caption="Tööajad"
 	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
 	@groupinfo grp_resource_unavailable_una caption="Kinnised ajad" parent=grp_resource_unavailable
@@ -19,20 +20,13 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 @default field=meta
 @default method=serialize
 
+	@property state type=text group=general,grp_resource_maintenance
+	@caption Ressursi staatus
+
+
 @default group=general
 	@property category type=text editonly=1
 	@caption Kategooria
-
-	@property type type=select
-	@caption Tüüp
-
-	@property state type=chooser editonly=1 multiple=0
-	@caption Ressursi staatus
-
-	@property concurrent_threads type=textbox default=1
-	@comment Positiivne täisarv
-	@caption Samaaegseid töid enim
-
 
 @default group=grp_resource_schedule
 	@property resource_calendar type=text store=no no_caption=1
@@ -44,7 +38,22 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@caption Tööleht
 
 
+@default group=grp_resource_maintenance
+	@property out_of_service type=checkbox store=no ch_value=1
+	@caption Ressurss hoolduses
+
+	@property maintenance_history type=comments
+	@caption Hoolduskommentaarid
+
+
 @default group=grp_resource_settings
+	@property type type=select
+	@caption Tüüp
+
+	@property concurrent_threads type=textbox default=1
+	@comment Positiivne täisarv
+	@caption Samaaegseid töid enim
+
 	@property default_pre_buffer type=textbox
 	@caption Vaikimisi eelpuhveraeg (h)
 
@@ -116,6 +125,26 @@ class mrp_resource extends class_base
 {
 	function mrp_resource()
 	{
+		$this->resource_states = array(
+			0 => "M&auml;&auml;ramata",
+			MRP_STATUS_RESOURCE_AVAILABLE => t("Vaba"),
+			MRP_STATUS_RESOURCE_INUSE => t("Kasutusel"),
+			MRP_STATUS_RESOURCE_OUTOFSERVICE => t("Suletud"),
+		);
+
+		$this->states = array (
+			MRP_STATUS_NEW => t("Uus"),
+			MRP_STATUS_PLANNED => t("Planeeritud"),
+			MRP_STATUS_INPROGRESS => t("Töös"),
+			MRP_STATUS_ABORTED => t("Katkestatud"),
+			MRP_STATUS_DONE => t("Valmis"),
+			MRP_STATUS_LOCKED => t("Lukustatud"),
+			MRP_STATUS_PAUSED => t("Paus"),
+			MRP_STATUS_DELETED => t("Kustutatud"),
+			MRP_STATUS_ONHOLD => t("Plaanist väljas"),
+			MRP_STATUS_ARCHIVED => t("Arhiveeritud"),
+		);
+
 		$this->init(array(
 			"tpldir" => "mrp/mrp_resource",
 			"clid" => CL_MRP_RESOURCE
@@ -173,18 +202,25 @@ class mrp_resource extends class_base
 				break;
 
 			case "state":
-				$applicable_states = array (
-					MRP_STATUS_RESOURCE_AVAILABLE,
-					MRP_STATUS_RESOURCE_INUSE,
-					MRP_STATUS_RESOURCE_OUTOFSERVICE,
-				);
-				$prop["value"] = (in_array ($prop["value"], $applicable_states)) ? $prop["value"] : 0;
-				$prop["options"] = array (
-					0 => "M&auml;&auml;ramata",
-					MRP_STATUS_RESOURCE_AVAILABLE => t("Vaba"),
-					MRP_STATUS_RESOURCE_INUSE => t("Kasutusel"),
-					MRP_STATUS_RESOURCE_OUTOFSERVICE => t("Suletud"),
-				);
+				$prop["value"] = empty($prop["value"]) ? 0 : (int) $prop["value"];
+				$prop["value"] = $this->resource_states[$prop["value"]];
+				break;
+
+			case "out_of_service":
+				switch ($this_object->prop("state"))
+				{
+					case MRP_STATUS_RESOURCE_INUSE:
+						$prop["disabled"] = true;
+						break;
+
+					case MRP_STATUS_RESOURCE_AVAILABLE:
+						$prop["value"] = 0;
+						break;
+
+					case MRP_STATUS_RESOURCE_OUTOFSERVICE:
+						$prop["value"] = 1;
+						break;
+				}
 				break;
 
 			case "job_list":
@@ -213,6 +249,7 @@ class mrp_resource extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		$this_object = &$arr["obj_inst"];
 
 		switch ($prop["name"])
 		{
@@ -222,9 +259,43 @@ class mrp_resource extends class_base
 				$prop["value"] = round ($prop["value"] * 3600);
 				break;
 
+			case "maintenance_history":
+				if (strlen(trim($prop["value"]["comment"])) < 2)
+				{
+					$retval = PROP_IGNORE;
+				}
+				break;
+
 			case "work_hrs_recur":
 				$prop["value"]["recur_type"] = 1;
             	$prop["value"]["interval_daily"] = 1;
+				break;
+
+			case "out_of_service":
+				switch ($this_object->prop("state"))
+				{
+					case MRP_STATUS_RESOURCE_INUSE:
+						if ($prop["value"] == 1)
+						{
+							$prop["error"] = "Ressurss on kasutusel. Ei saa hooldusse panna.";
+							$retval = PROP_ERROR;
+						}
+						break;
+
+					case MRP_STATUS_RESOURCE_AVAILABLE:
+						if ($prop["value"] == 1)
+						{
+							$this_object->set_prop("state", MRP_STATUS_RESOURCE_OUTOFSERVICE);
+						}
+						break;
+
+					case MRP_STATUS_RESOURCE_OUTOFSERVICE:
+						if ($prop["value"] == 0)
+						{
+							$this_object->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
+						}
+						break;
+				}
 				break;
 		}
 
@@ -246,21 +317,6 @@ class mrp_resource extends class_base
 			));
 			$this_object->set_parent ($resources_folder);
 			$this_object->save ();
-		}
-
-		$applicable_types = array (
-			MRP_RESOURCE_SCHEDULABLE,
-			MRP_RESOURCE_SUBCONTRACTOR,
-		);
-
-		if (in_array ($this_object->prop ("type"), $applicable_types))
-		{
-			$workspace = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-			if ($workspace)
-			{
-				post_message (MSG_MRP_RESCHEDULING_NEEDED, array ("mrp_workspace" => $workspace->id ()));
-			}
 		}
 	}
 
@@ -291,6 +347,11 @@ class mrp_resource extends class_base
 			"name" => "starttime",
 			"caption" => t("Alustamisaeg"),
 			"sortable" => 1,
+			"align" => "center"
+		));
+		$table->define_field(array(
+			"name" => "state",
+			"caption" => t("Staatus"),
 			"align" => "center"
 		));
 		$table->define_field(array(
@@ -341,6 +402,7 @@ class mrp_resource extends class_base
 					)),
 				"project" => $project,
 				"name" => $job->name (),
+				"state" => $this->states[$job->prop("state")],
 				"starttime" => $starttime,
 				"client" => $client
 			));

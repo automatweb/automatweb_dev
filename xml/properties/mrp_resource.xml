@@ -1,6 +1,18 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>state</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <group>
+                  <num_0>general</num_0>
+                  <num_1>grp_resource_maintenance</num_1>
+            </group>
+            <caption>Ressursi staatus</caption>
+      </property>
+      <property>
             <name>category</name>
             <table>objects</table>
             <field>meta</field>
@@ -9,36 +21,6 @@
             <type>text</type>
             <editonly>1</editonly>
             <caption>Kategooria</caption>
-      </property>
-      <property>
-            <name>type</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>select</type>
-            <caption>Tüüp</caption>
-      </property>
-      <property>
-            <name>state</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>chooser</type>
-            <editonly>1</editonly>
-            <caption>Ressursi staatus</caption>
-      </property>
-      <property>
-            <name>concurrent_threads</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <type>textbox</type>
-            <default>1</default>
-            <comment>Positiivne täisarv</comment>
-            <caption>Samaaegseid töid enim</caption>
       </property>
       <property>
             <name>resource_calendar</name>
@@ -62,6 +44,46 @@
             <editonly>1</editonly>
             <no_caption>1</no_caption>
             <caption>Tööleht</caption>
+      </property>
+      <property>
+            <name>out_of_service</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_maintenance</group>
+            <type>checkbox</type>
+            <store>no</store>
+            <ch_value>1</ch_value>
+            <caption>Ressurss hoolduses</caption>
+      </property>
+      <property>
+            <name>maintenance_history</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_maintenance</group>
+            <type>comments</type>
+            <caption>Hoolduskommentaarid</caption>
+      </property>
+      <property>
+            <name>type</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>select</type>
+            <caption>Tüüp</caption>
+      </property>
+      <property>
+            <name>concurrent_threads</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_settings</group>
+            <type>textbox</type>
+            <default>1</default>
+            <comment>Positiivne täisarv</comment>
+            <caption>Samaaegseid töid enim</caption>
       </property>
       <property>
             <name>default_pre_buffer</name>
@@ -189,6 +211,9 @@
             <grp_resource_settings>
                   <caption>Seaded</caption>
             </grp_resource_settings>
+            <grp_resource_maintenance>
+                  <caption>Hooldus</caption>
+            </grp_resource_maintenance>
             <grp_resource_unavailable>
                   <caption>Tööajad</caption>
             </grp_resource_unavailable>

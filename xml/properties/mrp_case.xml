@@ -6,10 +6,9 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <group>
-                  <num_0>grp_case_details</num_0>
-                  <num_1>grp_case_schedule</num_1>
-                  <num_2>grp_general</num_2>
-                  <num_3>grp_case_workflow</num_3>
+                  <num_0>grp_case_schedule</num_0>
+                  <num_1>grp_general</num_1>
+                  <num_2>grp_case_workflow</num_2>
             </group>
             <editonly>1</editonly>
             <field>workflow_toolbar</field>
@@ -325,70 +324,6 @@
             <caption>M&amp;uuml;&amp;uuml;gi hind</caption>
       </property>
       <property>
-            <name>case_description</name>
-            <group>grp_case_details</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textarea</type>
-            <caption>Juhtumi kirjeldus?</caption>
-      </property>
-      <property>
-            <name>case_id</name>
-            <group>grp_case_details</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Töö/tellimuse number</caption>
-      </property>
-      <property>
-            <name>started_date</name>
-            <group>grp_case_details</group>
-            <table>objects</table>
-            <field>created</field>
-            <method>serialize</method>
-            <type>date</type>
-            <store>no</store>
-            <caption>Sisestatud</caption>
-      </property>
-      <property>
-            <name>finished_date</name>
-            <group>grp_case_details</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Valminud</caption>
-      </property>
-      <property>
-            <name>locked_date</name>
-            <group>grp_case_details</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <caption>Lukustatud</caption>
-      </property>
-      <property>
-            <name>aborted_date</name>
-            <group>grp_case_details</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>date</type>
-            <caption>Katkestatud</caption>
-      </property>
-      <property>
-            <name>abort_comment</name>
-            <group>grp_case_details</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textarea</type>
-            <caption>Katkestamise põhjus</caption>
-      </property>
-      <property>
             <name>user_comments</name>
             <group>grp_case_comments</group>
             <table>objects</table>
@@ -474,9 +409,6 @@
                   <caption>Projekti andmed</caption>
                   <parent>general</parent>
             </grp_case_data>
-            <grp_case_details>
-                  <caption>Projekti kirjeldus</caption>
-            </grp_case_details>
             <grp_case_workflow>
                   <caption>Ressursid ja töövoog</caption>
             </grp_case_workflow>

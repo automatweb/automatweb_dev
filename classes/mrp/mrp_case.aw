@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.40 2005/03/24 12:49:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.41 2005/03/24 14:58:48 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -14,7 +14,6 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @groupinfo grp_general caption="&Uuml;ldine" parent=general
 @groupinfo grp_case_data caption="Projekti andmed" parent=general
-@groupinfo grp_case_details caption="Projekti kirjeldus"
 groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_workflow caption="Ressursid ja töövoog"
 @groupinfo grp_case_schedule caption="Kalender" submit=no
@@ -23,7 +22,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 
 
-	@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_details,grp_case_schedule,grp_general,grp_case_workflow editonly=1
+	@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow editonly=1
 
 
 @default group=grp_general
@@ -135,29 +134,6 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 	@property myygi_hind type=textbox
 	@caption M&uuml;&uuml;gi hind
-
-
-@default group=grp_case_details
-	@property case_description type=textarea
-	@caption Juhtumi kirjeldus?
-
-	@property case_id type=text
-	@caption Töö/tellimuse number
-
-	@property started_date type=date field=created table=objects store=no
-	@caption Sisestatud
-
-	@property finished_date type=text default=0
-	@caption Valminud
-
-	@property locked_date type=checkbox
-	@caption Lukustatud
-
-	@property aborted_date type=date
-	@caption Katkestatud
-
-	@property abort_comment type=textarea
-	@caption Katkestamise põhjus
 
 
 default group=grp_case_material
@@ -1493,6 +1469,7 @@ class mrp_case extends class_base
 		{
 			return false;
 		}
+
 		return true;
 	}
 
