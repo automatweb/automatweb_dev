@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.53 2004/11/17 09:19:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.54 2004/12/01 11:08:08 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -135,7 +135,7 @@ class promo extends class_base
 				$prop["options"] = $tplmgr->get_template_list(array(
 					"type" => 1,
 					"def" => aw_ini_get("promo.default_tpl"),
-					"caption" => "Vali template"
+					"caption" => t("Vali template")
 				));
 				break;
 	
@@ -152,11 +152,11 @@ class promo extends class_base
 				else
 				{
 					$opts = array(
-						"0" => "Vasakul",
-						"1" => "Paremal",
-						"2" => "Üleval",
-						"3" => "All",
-						"scroll" => "Skrolliv",
+						"0" => t("Vasakul"),
+						"1" => t("Paremal"),
+						"2" => t("Üleval"),
+						"3" => t("All"),
+						"scroll" => t("Skrolliv"),
 					);
 				}
 				$prop["options"] = $opts;
@@ -172,19 +172,19 @@ class promo extends class_base
 			case "sort_by":
 				$prop['options'] = array(
 					'' => "",
-					'objects.jrk' => "J&auml;rjekorra j&auml;rgi",
-					'objects.created' => "Loomise kuup&auml;eva j&auml;rgi",
-					'objects.modified' => "Muutmise kuup&auml;eva j&auml;rgi",
-					'documents.modified' => "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi",
-					'objects.name' => "Objekti nime j&auml;rgi",
-					'planner.start' => "Kalendris valitud aja j&auml;rgi",
+					'objects.jrk' => t("J&auml;rjekorra j&auml;rgi"),
+					'objects.created' => t("Loomise kuup&auml;eva j&auml;rgi"),
+					'objects.modified' => t("Muutmise kuup&auml;eva j&auml;rgi"),
+					'documents.modified' => t("Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"),
+					'objects.name' => t("Objekti nime j&auml;rgi"),
+					'planner.start' => t("Kalendris valitud aja j&auml;rgi"),
 				);
 				break;
 
 			case "sort_ord":
 				$prop['options'] = array(
-					'DESC' => "Suurem (uuem) enne",
-					'ASC' => "V&auml;iksem (vanem) enne",
+					'DESC' => t("Suurem (uuem) enne"),
+					'ASC' => t("V&auml;iksem (vanem) enne"),
 				);
 				break;
 	
@@ -240,7 +240,7 @@ class promo extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -248,12 +248,12 @@ class promo extends class_base
 		));
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 		));
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => "k.a. alammenüüd",
+			"caption" => t("k.a. alammenüüd"),
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -287,7 +287,7 @@ class promo extends class_base
 
 		$t->define_field(array(
 			"name" => "id",
-			"caption" => "ID",
+			"caption" => t("ID"),
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
@@ -296,21 +296,21 @@ class promo extends class_base
 
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => t("Nimi"),
 			"talign" => "center",
 			"sortable" => 1,
 		));
 
 		$t->define_field(array(
 			"name" => "as_name",
-			"caption" => "Pane pealkirjaks",
+			"caption" => t("Pane pealkirjaks"),
 			"talign" => "center",
 			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "src_submenus",
-			"caption" => "k.a. alammen&uuml;&uuml;d",
+			"caption" => t("k.a. alammen&uuml;&uuml;d"),
 			"talign" => "center",
 			"align" => "center",
 		));
