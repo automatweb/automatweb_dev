@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.120 2003/05/08 17:36:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.121 2003/06/04 19:19:39 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1034,14 +1034,11 @@ class messenger extends menuedit_light
 			$this->get_objects_by_class(array("class" => CL_ML_STAMP));
 			while ($stamp = $this->db_next())
 			{
-				if ($this->can("send",$stamp["oid"]))
+				$stampsvahe.="&nbsp;<b>#".$stamp["name"]."#</b>&nbsp;";
+				if (strlen($stampsvahe)>100)
 				{
-					$stampsvahe.="&nbsp;<b>#".$stamp["name"]."#</b>&nbsp;";
-					if (strlen($stampsvahe)>100)
-					{
-						$stamps.=($stamps?"<br>":"")."$stampsvahe";
-						$stampsvahe="";
-					};
+					$stamps.=($stamps?"<br>":"")."$stampsvahe";
+					$stampsvahe="";
 				};
 			};
 			$stamps.=($stamps?"<br>":"")."$stampsvahe";
