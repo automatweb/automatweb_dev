@@ -2,7 +2,7 @@
 <planner>
 	<add>
 		<caption>Lisa</caption>
-		<link>?class=planner&amp;action=addevent&amp;date={VAR:date}</link>
+		<link>?class=planner&amp;action=addevent&amp;parent={VAR:id}&amp;date={VAR:date}</link>
 		<sublinks>
 			<edit>
 				<caption>Muuda</caption>
@@ -16,22 +16,22 @@
 	</add>
 	<today>
 		<caption>Täna</caption>
-		<link>?class=planner</link>
+		<link>?class=planner&amp;action=change&amp;id={VAR:id}</link>
 	</today>
 	<overview>
 		<caption>Ülevaade</caption>
-		<link>?class=planner&amp;action=overview&amp;date={VAR:date}</link>
+		<link>?class=planner&amp;action=overview&amp;id={VAR:id}&amp;date={VAR:date}</link>
 	</overview>
 	<day>
 		<caption>Päev</caption>
-		<link>?class=planner&amp;action=day&amp;date={VAR:date}</link>
+		<link>?class=planner&amp;action=day&amp;id={VAR:id}&amp;date={VAR:date}</link>
 	</day>
 	<week>
 		<caption>Nädal</caption>
-		<link>?class=planner&amp;action=show_week&amp;date={VAR:date}</link>
+		<link>?class=planner&amp;action=show_week&amp;id={VAR:id}&amp;date={VAR:date}</link>
 	</week>
 	<month>
 		<caption>Kuu</caption>
-		<link>?class=planner&amp;action=show_month&amp;date={VAR:date}</link>
+		<link>?class=planner&amp;action=show_month&amp;id={VAR:id}&amp;date={VAR:date}</link>
 	</month>
 </planner>

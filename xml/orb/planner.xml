@@ -98,7 +98,7 @@
 		<action name="addevent">
 			<function name="adm_event">
 				<arguments>
-					<optional name="parent"/>
+					<required name="parent"/>
 					<required name="date"/>
 					<define name="op" value="add"/>
 				</arguments>
@@ -151,6 +151,7 @@
 			<function name="user_planner">
 				<arguments>
 					<define name="disp" value="day"/>
+					<required name="id"/>
 					<optional name="date"/>
 				</arguments>
 			</function>
@@ -185,6 +186,7 @@
 			<function name="user_planner">
 				<arguments>
 					<optional name="date"/>
+					<required name="id"/>
 					<define name="disp" value="week"/>
 				</arguments>
 			</function>
@@ -194,6 +196,7 @@
 			<function name="user_planner">
 				<arguments>
 					<optional name="date"/>
+					<required name="id"/>
 					<define name="disp" value="week"/>
 				</arguments>
 			</function>
@@ -203,6 +206,7 @@
 			<function name="user_planner">
 				<arguments>
 					<optional name="date"/>
+					<required name="id"/>
 					<define name="disp" value="overview"/>
 				</arguments>
 			</function>
@@ -212,6 +216,7 @@
 			<function name="user_planner">
 				<arguments>
 					<define name="disp" value="month"/>
+					<required name="id"/>
 					<optional name="date"/>
 				</arguments>
 			</function>

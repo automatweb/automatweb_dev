@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.44 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.45 2001/10/24 19:27:08 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -407,10 +407,10 @@ class planner extends calendar {
 		{
 			$act = $disp;
 		};
-		
+	
 		$menubar = $this->gen_menu(array(
 				"activelist" => array($act),
-				"vars" => array("date" => $date),
+				"vars" => array("date" => $date,"id" => $id),
 			));
 
 		$object = $this->get_object($id);
@@ -421,7 +421,7 @@ class planner extends calendar {
 		// X marks the spot
 		$xdate = $d . $m . $y;
 
-		$this->mk_path($object["parent"],CAL_CH_TITLE);
+		$this->mk_path($object["parent"],"Kalender");
 
 		if (!$disp)
 		{
@@ -700,13 +700,13 @@ class planner extends calendar {
 		unset($mlist[0]);
 		if ($ctype == "oid")
 		{
-			$prev = "class=planner&action=change&id=$id&disp=$disp&date=$di[prev]";
-			$next = "class=planner&action=change&id=$id&disp=$disp&date=$di[next]";
+			$prev = "class=planner&action=change&id=$id&disp=$disp&date=$di[prev]&id=$id";
+			$next = "class=planner&action=change&id=$id&disp=$disp&date=$di[next]&id=$id";
 		}
 		else
 		{
-			$prev = "class=planner&action=$disp&date=$di[prev]";
-			$next = "class=planner&action=$disp&date=$di[next]";
+			$prev = "class=planner&action=$disp&date=$di[prev]&id=$id";
+			$next = "class=planner&action=$disp&date=$di[next]&id=$id";
 		};
 		$this->vars(array(
 			"menudef" => $menudef,
@@ -833,7 +833,8 @@ class planner extends calendar {
 			$ex = ($end > $row["rep_until"]) ? $row["rep_until"] : $end;
 			if (isset($event))
 			{
-				$start2 = ($row["start"] > $start) ? $row["start"] : $start;
+				#$start2 = ($row["start"] > $start) ? $row["start"] : $start;
+				$start2 = ($row["start"] > $start) ? $start : $row["start"];
 				$repeater->init($start,$start2,$ex);
 			}
 			else
@@ -860,10 +861,28 @@ class planner extends calendar {
 				{
 					$cnt++;
 					list(,$slice) = each($vector);
+					if (not(is_array($slice)))
+					{
+						$continue = false;
+						continue;
+					};
 					list($slice_start,$slice_end) = each($slice);
+					if ($slice_start < $start)
+					{
+						continue;
+					};
+					$_saast = $row["start"];
 					$index = date("dmY",$slice_start);
 					if ($index_time)
 					{
+						#if ($_saast > $slice_start)
+						#{
+						#	$_slice = $s_saast;
+						#}
+						#else
+						#{
+						#	$_slice = $slice_start;
+						#};
 						$retval[$slice_start] = $row;
 					}
 					else
@@ -910,9 +929,11 @@ class planner extends calendar {
 		{
 			// date on hidden field muutmis/lisamisvormist. Sisaldab eventi kuupäeva dd-mm-yyyy
 			list($d,$m,$y) = split("-",$date);
+
 			// sellest teeme timestampi
-			list($h,$m) = explode(":",date("H:i"));
-			$start = mktime($h,$m,0,$m,$d,$y);
+			list($hr,$mn) = explode(":",date("H:i"));
+			$start = mktime($hr,$mn,0,$m,$d,$y);
+
 			// kui parent on defineerimata, siis savelstame ta kodukataloogi alla
 			if (!$parent)
 			{
@@ -932,24 +953,20 @@ class planner extends calendar {
 			$retval = $this->mk_my_orb("editevent",array("id" => $id));
 			return $retval;
 		};
-			
+
+		$parobj = $this->get_object($id);
+		
 		$menubar = $this->gen_menu(array(
 			"activelist" => array("add","edit"),
-			"vars" => array("id" => $id),
+			"vars" => array("id" => $parobj["parent"]),
 		));
-		if ($parent)
-		{
-			$this->tpl_init("automatweb/planner");
-		}
-		else
-		{
-			$this->tpl_init("planner");
-		};
+		$this->tpl_init("automatweb/planner");
 		$this->read_template("event.tpl");
 		if ($op == "edit")
 		{
 			$par = $this->get_object($id);
-			$parent = $par["parent"];
+			$par2 = $this->get_object($par["parent"]);
+			$parent = $par2["parent"];
 			$caption = LC_CHANGE_EVENT;
 			$q = "SELECT * FROM planner WHERE id = '$id'";
 			$this->db_query($q);
@@ -971,7 +988,7 @@ class planner extends calendar {
 			$delbut = "";
 			$dhour = 1;
 		};
-		$this->mk_path($parent,CAL_CH_TITLE);
+		$this->mk_path($parent,"Kalender");
 		// nimekiri tundidest
 		$h_list = range(0,23);
 		// nimekiri minutitest
@@ -1463,6 +1480,7 @@ class planner extends calendar {
 		$date = "$day-$month-$year";
 		$params = array();
 		$params["date"] = $date;
+		$params["id"] = $id;
 		if ($ctype == "oid")
 		{
 			$params["id"] = $id;
@@ -2002,7 +2020,8 @@ class planner extends calendar {
 		};
 		$this->db_query($q);
 		// suunab tagasi default lehele, ehk tänasele päevale
-		return $this->mk_site_orb(array("date" => $date));
+		return $this->mk_orb("editevent",array("id" => $id));
+		#return $this->mk_site_orb(array("date" => $date));
 	}
 
 	////
