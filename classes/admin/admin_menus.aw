@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.84 2004/10/25 13:24:24 duke Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.85 2004/10/25 14:52:22 duke Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -200,10 +199,6 @@ class admin_menus extends aw_template
 	function get_popup_data($args = array())
 	{
 		extract($args);
-		if (isset($addmenu) && $addmenu == 1)
-		{
-			$this->get_add_menu($args);
-		}
 
 		if (!is_object($obj))
 		{
@@ -219,6 +214,9 @@ class admin_menus extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		$retval = "";
 
+		$parent = $obj->parent();
+		$clid = $obj->class_id();
+
 		$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj->id(),"period" => $period), "admin_menus",true,true);
 		$this->vars(array(
 			"link" => $ourl,
@@ -228,7 +226,7 @@ class admin_menus extends aw_template
 
 		if ($this->can("edit", $id))
 		{
-			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj->parent(),"period" => $period), $this->cfg["classes"][$obj->class_id()]["file"],true,true);
+			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $parent,"period" => $period), $clid,true,true);
 
 			$this->vars(array(
 				"link" => $churl,
@@ -236,7 +234,7 @@ class admin_menus extends aw_template
 			));
 			$retval .= $this->parse("MENU_ITEM");
 
-			$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj->parent(),"sel[$id]" => "1"), "admin_menus",true,true);
+			$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1"), "admin_menus",true,true);
 
 			$this->vars(array(
 				"link" => $cuturl,
@@ -245,7 +243,7 @@ class admin_menus extends aw_template
 			$retval .= $this->parse("MENU_ITEM");
 		}
 
-		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj->parent(),"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
+		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
 
 		$this->vars(array(
 			"link" => $copyurl,
@@ -255,7 +253,7 @@ class admin_menus extends aw_template
 
 		if ($this->can("delete", $id))
 		{
-			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj->parent(),"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
+			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $parent,"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
 
 			$delurl = "javascript:if(confirm('Kustutada valitud objektid?')){window.location='$delurl';};";
 
@@ -266,13 +264,6 @@ class admin_menus extends aw_template
 			$retval .= $this->parse("MENU_ITEM");
 		}
 
-		/*
-		$this->vars(array(
-			'link' => $this->mk_my_orb('mk_shortcut', array('id' => $id), 'admin/shortcut'),
-			'text' => 'Tee kiirviide',
-		));
-		$retval .= $this->parse("MENU_ITEM");
-		*/
 
 		if ($ret_data)
 		{
@@ -1074,11 +1065,6 @@ class admin_menus extends aw_template
 				$row["is_menu"] = 1;
 			}
 			else
-			if ($row["class_id"] == CL_PLANNER)
-			{
-				$chlink = $this->mk_my_orb("change",array("id" => $row["oid"]),"planner");
-			}
-			else
 			{
 				$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period),$this->cfg["classes"][$row["class_id"]]["file"]);
 			}
@@ -1209,8 +1195,6 @@ class admin_menus extends aw_template
 			"period" => empty($period) && $menu_obj->prop("periodic") == 1 ? $current_period : $period,
 		));
 
-		$la = get_instance("languages");
-
 		if (!$sortby)
 		{
 			$sortby = "hidden_jrk";
@@ -1264,7 +1248,7 @@ class admin_menus extends aw_template
 	{
 		extract($args);
 		$toolbar = get_instance("vcl/toolbar");
-		
+
 		if ($this->can("add", $parent) && is_array($this->add_menu))
 		{
 			$toolbar->add_menu_button(array(
@@ -1386,6 +1370,7 @@ class admin_menus extends aw_template
 			"small" => "Väiksed ikoonid",
 			"detail" => "Detailne vaade",
 		);
+
 
 		$toolbar->add_menu_button(array(
 			"name" => "viewtype",
