@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.1 2001/05/16 03:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.2 2001/05/16 03:09:22 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -249,6 +249,7 @@ class planner extends calendar {
 						foreach($events[$dx] as $key => $e)
 						{
 							$this->vars(array(
+									"color" => $e["color"],
 									"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
 									 "title" => $e["title"],
 									 "id" => $e["id"],
@@ -297,6 +298,7 @@ class planner extends calendar {
 				{
 					$cnt++;
 					$this->vars(array(
+							"color" => $e["color"],
 							"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
 							"id" => $e["id"],
 							"title" => $e["title"],
@@ -324,6 +326,7 @@ class planner extends calendar {
 					foreach($events[$dx] as $key => $e)
 					{
 						$this->vars(array(
+								"color" => $e["color"],
 								"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
 								 "title" => $e["title"],
 								 "id" => $e["id"],
@@ -369,6 +372,7 @@ class planner extends calendar {
 					{
 						$cnt++;
 						$this->vars(array(
+								"color" => $e["color"],
 								"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
 								"id" => $e["id"],
 								"title" => $e["title"],
