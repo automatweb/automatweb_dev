@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.291 2003/05/04 19:00:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.292 2003/06/03 13:52:38 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -79,6 +79,7 @@ class menuedit extends aw_template
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
 		// aliasega, voi lopetab t, kui miskit oli valesti
 		$section = $this->check_section($params["section"]);
+
 
 
 		// at this point $section is already numeric,
@@ -297,6 +298,8 @@ class menuedit extends aw_template
 	function request_startup()
 	{
 		// moved here from syslog - it doesn't make sense to load assload of code to do only that
+
+		// well, syslog now records referers on alla pageviews, so this is obsolete, yes? - terryf
 		$referer = aw_global_get("HTTP_REFERER");
 		if (preg_match("/^(http:\/\/.+)\//i",$referer,$mt))
 		{
