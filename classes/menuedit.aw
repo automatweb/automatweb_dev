@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.108 2002/03/07 22:08:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.109 2002/03/07 22:46:59 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -612,37 +612,8 @@ class menuedit extends aw_template
 		{
 			$this->vars(array("IS_FRONTPAGE" => $this->parse("IS_FRONTPAGE")));
 		}
-		if (!isset($d->li_cache))
-		{
-			$this->li_cache = "";
-		}
-		else
-		{
-			$this->li_cache = $d->li_cache;
-		}
 
-		// that sucks. We really need to rewrite that
-		$q = "SELECT * FROM objects WHERE status = 2 AND class_id = " . CL_HTML_POPUP;
-		$this->db_query($q);
-		$popups = "";
-		while($row = $this->db_next())
-		{
-			$meta = aw_unserialize($row["metadata"]);
-			//$this->save_handle();
-			//$meta = $this->obj_get_meta(array("oid" => $row["oid"]));
-			//$this->restore_handle();
-			if (is_array($meta["menus"]))
-			{
-			foreach($meta["menus"] as $key => $val)
-			{
-				if ($val == $section)
-				{
-					$popups .= "window.open('$meta[url]','popup','toolbar=0,location=0,menubar=0,scrollbars=0,width=$meta[width],height=$meta[height]');";
-				};
-			};
-			};
-		};
-		$popups = "<script language='javascript'>\n$popups\n</script>";
+		$popups = $this->build_popups();
 		return $this->parse() . $popups;
 	}
 
@@ -5701,6 +5672,30 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		};
 	}
-	
+
+	// builds HTML popups
+	function build_popups()
+	{
+		// that sucks. We really need to rewrite that
+		// I mean we always read information about _all_ the popups
+		$q = "SELECT * FROM objects WHERE status = 2 AND class_id = " . CL_HTML_POPUP;
+		$this->db_query($q);
+		$popups = "";
+		while($row = $this->db_next())
+		{
+			$meta = aw_unserialize($row["metadata"]);
+			if (is_array($meta["menus"]))
+			{
+				foreach($meta["menus"] as $key => $val)
+				{
+					if ($val == $section)
+					{
+						$popups .= "window.open('$meta[url]','popup','toolbar=0,location=0,menubar=0,scrollbars=0,width=$meta[width],height=$meta[height]');";
+					};
+				};
+			};
+		};
+		return (strlen($popups) > 0) ? "<script language='Javascript'>$popups</a>" : "";
+	}
 }
 ?>
