@@ -28,7 +28,7 @@
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>mobiil</field>
-            <caption>telefon</caption>
+            <caption>mobiiltelefon</caption>
       </property>
       <property>
             <name>faks</name>

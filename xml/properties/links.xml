@@ -167,6 +167,17 @@
             <objtable>extlinks</objtable>
             <objtable_index>id</objtable_index>
       </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>&amp;Uuml;ldine</caption>
+            </general>
+            <Javascript>
+                  <caption>Javascript</caption>
+            </Javascript>
+            <Pilt>
+                  <caption>Pilt</caption>
+            </Pilt>
+      </groupinfo>
       <tableinfo>
             <extlinks>
                   <index>id</index>

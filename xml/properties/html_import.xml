@@ -245,6 +245,8 @@
             </visual_conf>
             <sqlconf>
                   <caption>sql</caption>
+                  <tabeli></tabeli>
+                  <seaded></seaded>
             </sqlconf>
       </groupinfo>
 </properties>
