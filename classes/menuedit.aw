@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.247 2003/02/28 15:44:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.248 2003/02/28 17:13:27 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -845,7 +845,7 @@ class menuedit extends aw_template
 		$obj = $this->get_object($section);
 	
 		// if it is a document, use this one. 
-		if ($obj["class_id"] == CL_DOCUMENT)
+		if (($obj["class_id"] == CL_DOCUMENT) || ($obj["class_id"] == CL_PERIODIC_SECTION))
 		{
 			return $section;
 		}
