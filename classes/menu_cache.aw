@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.13 2002/12/02 11:18:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_cache.aw,v 2.14 2002/12/03 13:37:19 kristo Exp $
 // menu_cache.aw - Menüüde cache
 class menu_cache extends aw_template
 {
@@ -151,7 +151,6 @@ class menu_cache extends aw_template
 
 				classload("php");
 				$php = new php_serializer;	
-				$php->set("for_include", 1);
 
 				$php->set("arr_name", "this->mar");
 				$c_d .= "\n".$php->php_serialize($this->mar,true);

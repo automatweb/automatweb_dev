@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.130 2002/12/03 12:52:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.131 2002/12/03 13:37:19 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -2444,7 +2444,7 @@ class core extends db_connector
 			$this->mkah(&$ret,&$tt,$hf,aw_global_get("uid"));
 		}
 
-		$cache->file_set($cf_name,aw_serialize($tt,array("to_file" => true)));
+		$cache->file_set($cf_name,aw_serialize($tt));
 		aw_global_set($cf_name, $tt);
 
 		return $tt;

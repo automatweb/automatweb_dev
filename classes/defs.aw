@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.70 2002/12/03 13:29:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.71 2002/12/03 13:37:19 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {

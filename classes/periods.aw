@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.18 2002/12/03 13:27:55 kristo Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.19 2002/12/03 13:37:19 kristo Exp $
 
 class db_periods extends aw_template 
 {
@@ -151,7 +151,7 @@ class db_periods extends aw_template
 		$pr = $this->db_fetch_row();
 		$pr["data"] = aw_unserialize($pr["data"]);
 
-		$str = aw_serialize($pr, SERIALIZE_PHP, array("to_file" => 1));
+		$str = aw_serialize($pr);
 		$this->cache->file_set($this->cf_name.$id, $str);
 		aw_cache_set("per_by_id", $id, $pr);
 		return $pr;
