@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.166 2003/03/13 13:45:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.167 2003/03/13 14:23:33 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -586,17 +586,9 @@ class core extends db_connector
 		$this->save_handle();
 		$groups = array();
 
-		if ($full)
+		if (isset($full))
 		{
-			$this->get_objects_by_class(array(
-				"parent" => $parent,
-				"class" => CL_PSEUDO,
-				"type" => $type,
-				"lang_id" => $lang_id,
-				"active" => $active,
-				"status" => $status,
-				"orderby" => $orderby,
-			));
+			$this->get_objects_by_class($args + array("class" => CL_PSEUDO));
 			while ($row = $this->db_next())
 			{
 				$ta = $args;
@@ -609,19 +601,13 @@ class core extends db_connector
 			}
 		}
 
-		$this->get_objects_by_class(array(
-			"parent" => $parent,
-			"class" => $class,
-			"type" => $type,
-			"lang_id" => $lang_id,
-			"active" => $active,
-			"status" => $status,
-			"orderby" => $orderby,
-		));
+		// just pass everything, hopefully wont break anything, but it does kill
+		// a bunch of warnings
+		$this->get_objects_by_class($args);
 
 		while($row = $this->db_next())
 		{
-			if ($ret == ARR_NAME)
+			if (isset($ret) && $ret == ARR_NAME)
 			{
 				$groups[$row["oid"]] = $row["name"];
 			}
@@ -1213,8 +1199,8 @@ class core extends db_connector
 		if (is_array($arg))
 		{
 			$oid = $arg["oid"];
-			$class_id = $arg["class_id"];
-			$unserialize_meta = ($arg["unserialize_meta"]) ? $arg["unserialize_meta"] : true;
+			$class_id = isset($arg["class_id"]) ? $arg["class_id"] : false;
+			$unserialize_meta = isset($arg["unserialize_meta"]) ? $arg["unserialize_meta"] : true;
 		}
 		else
 		{
@@ -1261,7 +1247,7 @@ class core extends db_connector
 		}
 
 		// damn it, promo boxes act as menus too
-		if (isset($class_id) && ($class_id != CL_PSEUDO) && ($_t["class_id"] != $class_id) )
+		if (!empty($class_id) && ($class_id != CL_PSEUDO) && ($_t["class_id"] != $class_id) )
 		{
 			// objekt on valest klassist
 			$this->raise_error(ERR_CORE_WTYPE,"get_object: $oid ei ole tüüpi $class_id",true);
@@ -1441,7 +1427,7 @@ class core extends db_connector
 			}
 		}
 
-		if ($arr['add_folders'] == true && $arr["return"] != RET_ALL)
+		if (isset($arr["add_folders"]) && $arr["add_folders"] == true && $arr["return"] != RET_ALL)
 		{
 			$_tret = array();
 			$ml = $this->get_menu_list();
@@ -2257,7 +2243,7 @@ class core extends db_connector
 	function init($args = false)
 	{
 		parent::init($args);
-		if (is_array($args))
+		if (is_array($args) && isset($args["clid"]))
 		{
 			$this->clid = $args["clid"];
 		}
