@@ -41,9 +41,13 @@
 @property grid_preview type=callback group=preview method=serialize
 @caption Eelvaade
 
+@property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 method=serialize
+@caption Millistes kataloogides n&auml;idatakse
+
 */
 
 define("RELTYPE_CELLSTYLE_FOLDER",1);
+define("RELTYPE_SHOW_FOLDER",2);
 
 class layout extends class_base
 {
@@ -305,8 +309,22 @@ class layout extends class_base
 	{
 		return array(
 			RELTYPE_CELLSTYLE_FOLDER => "celli stiilide kataloog",
+			RELTYPE_SHOW_FOLDER => "n&auml;ita selles kataloogis",
 		);
 	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		if ($args["reltype"] == RELTYPE_CELLSTYLE_FOLDER)
+		{
+			return array(CL_PSEUDO);
+		}
+		if ($args["reltype"] == RELTYPE_SHOW_FOLDER)
+		{
+			return array(CL_PSEUDO);
+		}
+	}
+
 
 	////
 	// !returns the layout data that can be fed to grid editor. useful when you can select a default layout
