@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.14 2004/12/06 12:18:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.15 2004/12/14 08:38:17 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -178,6 +178,39 @@ class site_search_content_grp extends class_base
 			else
 			{
 				$ret[$m] = $m;
+			}
+		}
+
+		$gidlist = aw_global_get("gidlist");
+		$ol = new object_list(array(
+			"class_id" => array(CL_PROMO),
+			"oid" => $ret,
+			"site_id" => array(),
+			"lang_id"  => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			// filter list by groups to whom the promo can be shown
+			$found = false;
+			$groups = $o->meta("groups");
+			if (!is_array($groups) || count($groups) < 1)
+			{
+				$found = true;
+			}
+			else
+			{
+				foreach($groups as $gid)
+				{
+					if (isset($gidlist[$gid]) && $gidlist[$gid] == $gid)
+					{
+						$found = true;
+					}
+				}
+			}
+
+			if (!$found)
+			{
+				unset($ret[$o->id()]);
 			}
 		}
 		
