@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.123 2004/07/06 12:21:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.124 2004/08/02 12:36:48 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -311,7 +311,7 @@ class users extends users_user
 			}
 			else
 			{
-				$te = "Sellise kasutajanimega kasuta on juba olemas!";
+				$te = "Sellise kasutajanimega kasutaja on juba olemas!";
 			}
 			$add_state["error"] = $te;
 			return false;
