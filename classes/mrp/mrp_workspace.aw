@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.79 2005/04/05 13:05:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.80 2005/04/05 19:29:32 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2008,9 +2008,9 @@ class mrp_workspace extends class_base
 
 		$list = new object_list (array (
 			"class_id" => CL_MRP_JOB,
-			"parent" => $this_object->prop ("jobs_folder"),
 			"state" => $applicable_states,
-			// "started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+			"parent" => $this_object->prop ("jobs_folder"),
+			"started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
 			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 		));
@@ -2066,7 +2066,7 @@ class mrp_workspace extends class_base
 				case MRP_STATUS_PAUSED:
 				case MRP_STATUS_INPROGRESS:
 					$start = $job->prop ("started");
-					$length = $job->prop ("planned_length");
+					$length = (($start + $job->prop ("planned_length")) < $time) ? ($time - $start) : $job->prop ("planned_length");
 					break;
 			}
 
@@ -3085,19 +3085,18 @@ class mrp_workspace extends class_base
 		{
 			case "grp_printer_done":
 				$states = array(MRP_STATUS_DONE);
+				$default_sortby = "tm_end";
 				break;
 
 			case "grp_printer_aborted":
 				$states = array(MRP_STATUS_ABORTED);
+				$default_sortby = "tm";
 				break;
 
 			case "grp_printer":
 			case "grp_printer_current":
-				$states = array(
-					MRP_STATUS_NEW, MRP_STATUS_PLANNED, MRP_STATUS_INPROGRESS,
-					MRP_STATUS_LOCKED, MRP_STATUS_PAUSED, MRP_STATUS_DELETED,
-					MRP_STATUS_ONHOLD, MRP_STATUS_ARCHIVED
-				);
+				$default_sortby = "tm";
+				$states = array(MRP_STATUS_PLANNED);
 				break;
 		}
 
@@ -3130,9 +3129,6 @@ class mrp_workspace extends class_base
 				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
 			}
 
-			$len  = sprintf("%02d", floor($job->prop("length") / 3600)).":";
-			$len .= sprintf("%02d", floor(($job->prop("length") % 3600) / 60));
-
 			$custo = "";
 			$cust = $proj->get_first_obj_by_reltype("RELTYPE_MRP_CUSTOMER");
 			if (is_object($cust))
@@ -3144,6 +3140,7 @@ class mrp_workspace extends class_base
 				);
 			}
 
+			### set colours
 			if ($job->prop("state") == MRP_STATUS_DONE)
 			{
 				// dark green
@@ -3160,9 +3157,38 @@ class mrp_workspace extends class_base
 				// light red
 				$bgcol = $this->pj_colors["can_not_start"];
 			}
+			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+
+			### get length, end and start according to job state
+			switch ($arr["request"]["group"])
+			{
+				case "grp_printer_done":
+					$start = $job->prop("started");
+					$end = $job->prop("finished");
+					$length = $job->prop("finished") - $job->prop("started");
+					break;
+
+				case "grp_printer_aborted":
+					$start = $job->prop("started");
+					$end = "...";//!!! lugeda logist v kuskilt abortimise aeg
+					$length = 0;//!!!
+					break;
+
+				case "grp_printer":
+				case "grp_printer_current":
+					$start = $job->prop("starttime");
+					$end = $job->prop("starttime") + $job->prop("length");
+					$length = $job->prop("length");
+					break;
+			}
+
+			$len  = sprintf("%02d", floor($length / 3600)).":";
+			$len .= sprintf("%02d", floor(($length % 3600) / 60));
+
+			### ...
 			$t->define_data(array(
-				"tm" => $job->prop("starttime"),
-				"tm_end" => $job->prop("starttime") + $job->prop("length"),
+				"tm" => $start,
+				"tm_end" => $end,
 				"length" => $len,
 				"job" => html::href(array(
 					"caption" => t("Ava"),
@@ -3184,12 +3210,12 @@ class mrp_workspace extends class_base
 				),
 				"proj_pri" => $proj->prop("project_priority"),
 				"customer" => $custo,
-				"status" => $mrp_job->states[$job->prop("state")],
+				"status" => $state,
 				"bgcol" => $bgcol
 			));
 		}
 
-		$t->set_default_sortby("tm");
+		$t->set_default_sortby($default_sortby);
 		$t->sort_by();
 	}
 

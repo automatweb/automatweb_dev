@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.38 2005/04/02 19:04:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.39 2005/04/05 19:29:32 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -321,7 +321,7 @@ class mrp_schedule extends class_base
 
 				if (is_oid ($resource_id) and in_array ($resource_id, $this->schedulable_resources))
 				{
-					do
+					while ($threads--)
 					{
 						$resource_tag = $resource_id . "-" . $threads;
 
@@ -330,7 +330,6 @@ class mrp_schedule extends class_base
 							$this->reserved_times[$resource_tag][$key] = array ($start => 0);
 						}
 					}
-					while (--$threads);
 				}
 			}
 
@@ -714,10 +713,10 @@ class mrp_schedule extends class_base
 
 	function reserve_time ($resource_id, $start, $length)
 	{
-		$threads = (int) $this->resource_data[$resource_id]["threads"];
+		$threads = $this->resource_data[$resource_id]["threads"];
 		$available_times = array ();
 
-		do
+		while ($threads--)
 		{
 			$resource_tag = $resource_id . "-" . $threads;
 			$available_times[$resource_tag] = $this->get_available_time ($resource_tag, $start, $length);
@@ -730,7 +729,6 @@ class mrp_schedule extends class_base
 // /* dbg */ }
 
 		}
-		while (--$threads);
 
 		### select thread with minimal start&length
 		$weight = "NA";
@@ -1322,8 +1320,8 @@ class mrp_schedule extends class_base
 			if (is_oid ($resource_id))
 			{
 				$resource = obj ($resource_id);
-				$threads = (int) $resource->prop ("concurrent_threads");
-				$threads = ($threads < 1) ? 1 : $threads;
+				$thread_data = $resource->prop ("thread_data");
+				$threads = count ($thread_data) ? count ($thread_data) : 1;
 
 				$this->resource_data[$resource_id]["global_buffer"] = $resource->prop ("global_buffer");
 				$this->resource_data[$resource_id]["threads"] = $threads;

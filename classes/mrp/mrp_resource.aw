@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.41 2005/04/05 13:05:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.42 2005/04/05 19:29:32 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -17,9 +17,7 @@
 @default table=objects
 @default field=meta
 @default method=serialize
-	@property concurrent_threads type=hidden
-
-	@property state type=text group=general,grp_resource_maintenance
+	@property state type=text group=general,grp_resource_maintenance,grp_resource_settings
 	@caption Ressursi staatus
 
 @default group=general
@@ -48,7 +46,7 @@
 	@property type type=select
 	@caption Tüüp
 
-	@property thread_info type=textbox default=1
+	@property thread_data type=textbox default=1
 	@comment Positiivne täisarv
 	@caption Samaaegseid töid enim
 
@@ -236,8 +234,8 @@ class mrp_resource extends class_base
 				$prop["value"] = $this->create_resource_calendar ($arr);
 				break;
 
-			case "thread_info":
-				$prop["value"] = count ($this_object->prop ("thread_info"));
+			case "thread_data":
+				$prop["value"] = is_array ($this_object->prop ("thread_data")) ? count ($this_object->prop ("thread_data")) : 1;
 				break;
 
 			case "type":
@@ -312,7 +310,13 @@ class mrp_resource extends class_base
 		### post rescheduling msg where necessary
 		switch ($prop["name"])
 		{
-			case "thread_info":
+			case "thread_data":
+				if (count ($this_object->prop ($prop["name"])) != $prop["value"])
+				{
+					$this->workspace->set_prop("rescheduling_needed", 1);
+				}
+				break;
+
 			case "global_buffer":
 				if ($this_object->prop ($prop["name"]) != $prop["value"])
 				{
@@ -338,15 +342,16 @@ class mrp_resource extends class_base
 				$prop["value"] = round ($prop["value"] * 3600);
 				break;
 
-			case "thread_info":
-				$thread_info = $this_object->prop ("thread_info");
-				$concurrent_threads = count ($thread_info);
+			case "thread_data":
+				$thread_data = $this_object->prop ("thread_data");
+				$concurrent_threads = isset ($thread_data[0]["state"]) ? count ($thread_data) : 0;
+				$prop["value"] = ($prop["value"] < 1) ? 1 : (int) $prop["value"];
 
-				if (($concurrent_threads != $prop["value"])  and $prop["value"])
+				if (($concurrent_threads != $prop["value"]) and $prop["value"])
 				{
-					if (!$concurrent_threads)
+					if (!$concurrent_threads or empty ($thread_data[0]["state"]))
 					{
-						$thread_info = array_fill (0, (int) $prop["value"], array (
+						$thread_data = array_fill (0, (int) $prop["value"], array (
 							"state" => MRP_STATUS_RESOURCE_AVAILABLE,
 							"job" => NULL,
 						));
@@ -354,19 +359,17 @@ class mrp_resource extends class_base
 					elseif ($prop["value"] > $concurrent_threads)
 					{
 						$new_threads = (int) $prop["value"] - $concurrent_threads;
-						$thread_info = array_merge ($thread_info, array_fill ($concurrent_threads, $new_threads, array (
+						$thread_data = array_merge ($thread_data, array_fill ($concurrent_threads, $new_threads, array (
 							"state" => MRP_STATUS_RESOURCE_AVAILABLE,
 							"job" => NULL,
 						)));
 					}
 					elseif ($prop["value"] < $concurrent_threads)
 					{
-						$thread_info = array_slice ($thread_info, (int) $prop["value"]);
+						$thread_data = array_slice ($thread_data, 0, (int) $prop["value"]);
 					}
 
-					$resource->set_prop ("thread_info", $thread_info);
-					$resource->set_prop ("concurrent_threads", count ($thread_info));
-					$this->workspace->set_prop("rescheduling_needed", 1);
+					$prop["value"] = $thread_data;
 				}
 				break;
 
@@ -439,8 +442,18 @@ class mrp_resource extends class_base
 		$table =& $arr["prop"]["vcl_inst"];
 
 		$table->define_field(array(
-			"name" => "client",
-			"caption" => t("Klient"),
+			"name" => "modify",
+			"caption" => t("Ava"),
+			"align" => "center"
+		));
+		$table->define_field(array(
+			"name" => "state",
+			"caption" => t("Staatus"),
+			"align" => "center"
+		));
+		$table->define_field(array(
+			"name" => "starttime",
+			"caption" => t("Alustamisaeg"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -451,19 +464,9 @@ class mrp_resource extends class_base
 			"align" => "center"
 		));
 		$table->define_field(array(
-			"name" => "starttime",
-			"caption" => t("Alustamisaeg"),
+			"name" => "client",
+			"caption" => t("Klient"),
 			"sortable" => 1,
-			"align" => "center"
-		));
-		$table->define_field(array(
-			"name" => "state",
-			"caption" => t("Staatus"),
-			"align" => "center"
-		));
-		$table->define_field(array(
-			"name" => "modify",
-			"caption" => t("Ava"),
 			"align" => "center"
 		));
 
@@ -973,16 +976,16 @@ class mrp_resource extends class_base
 		switch ($resource->prop ("state"))
 		{
 			case MRP_STATUS_RESOURCE_AVAILABLE:
-				$thread_info = $resource->prop ("thread_info");
+				$thread_data = $resource->prop ("thread_data");
 				$started = false;
 				$last_thread = true;
 
-				foreach ($thread_info as $key => $thread)
+				foreach ($thread_data as $key => $thread)
 				{
 					if ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE and ($started === false))
 					{
-						$thread_info[$key]["state"] = MRP_STATUS_RESOURCE_INUSE;
-						$thread_info[$key]["job"] = $arr["job"];
+						$thread_data[$key]["state"] = MRP_STATUS_RESOURCE_INUSE;
+						$thread_data[$key]["job"] = $arr["job"];
 						$started = $key;
 					}
 					elseif ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE and ($started !== false))
@@ -997,7 +1000,7 @@ class mrp_resource extends class_base
 					$resource->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
 				}
 
-				$resource->set_prop ("thread_info", $thread_info);
+				$resource->set_prop ("thread_data", $thread_data);
 				$resource->save ();
 				return $started;
 
@@ -1022,19 +1025,19 @@ class mrp_resource extends class_base
 			return false;
 		}
 
-		$thread_info = $resource->prop ("thread_info");
+		$thread_data = $resource->prop ("thread_data");
 
-		foreach ($thread_info as $key => $thread)
+		foreach ($thread_data as $key => $thread)
 		{
 			if ($thread["job"] == $arr["job"])
 			{
-				$thread_info[$key]["state"] = MRP_STATUS_RESOURCE_AVAILABLE;
-				$thread_info[$key]["job"] = NULL;
+				$thread_data[$key]["state"] = MRP_STATUS_RESOURCE_AVAILABLE;
+				$thread_data[$key]["job"] = NULL;
 				break;
 			}
 		}
 
-		$resource->set_prop ("thread_info", $thread_info);
+		$resource->set_prop ("thread_data", $thread_data);
 		$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
 		$resource->save ();
 		return true;

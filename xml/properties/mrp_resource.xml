@@ -1,13 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>concurrent_threads</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-      </property>
-      <property>
             <name>state</name>
             <table>objects</table>
             <field>meta</field>
@@ -16,6 +9,7 @@
             <group>
                   <num_0>general</num_0>
                   <num_1>grp_resource_maintenance</num_1>
+                  <num_2>grp_resource_settings</num_2>
             </group>
             <caption>Ressursi staatus</caption>
       </property>
@@ -82,7 +76,7 @@
             <caption>Tüüp</caption>
       </property>
       <property>
-            <name>thread_info</name>
+            <name>thread_data</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>

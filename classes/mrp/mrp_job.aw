@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.48 2005/04/05 13:05:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.49 2005/04/05 19:29:32 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -10,6 +10,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 @tableinfo mrp_job index=oid master_table=objects master_index=oid
 
 @groupinfo data caption="Andmed"
+@groupinfo workflow caption="Töövoog"
 
 
 
@@ -20,26 +21,38 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@property comment type=textarea
 	@caption Kommentaar
 
-
-@default group=data
-@default table=objects
+@default group=workflow
 	@property job_toolbar type=toolbar no_caption=1 store=no
 
-	@property advised_starttime type=datetime_select field=meta method=serialize
-	@comment Allhankijaga kokkulepitud aeg, millal töö alustada.
-	@caption Soovitav algusaeg
-
-	@property started type=text field=meta method=serialize
-	@caption Alustatud
-
-	@property finished type=text field=meta method=serialize
-	@caption Lõpetatud
-
+	@property workflow_errors type=text store=no no_caption=1
 
 @default table=mrp_job
+	@property started type=text
+	@caption Alustatud
+
+	@property finished type=text
+	@caption Lõpetatud
+
 	@property resource type=text
 	@caption Ressurss
 
+	@property project type=hidden
+	@caption Projekt
+
+	@property exec_order type=hidden
+	@caption Töö jrk. nr.
+
+	@property starttime type=text
+	@caption Plaanitud töösseminekuaeg
+
+	@property planned_length type=text
+	@caption Planeeritud kestus (h)
+
+	@property state type=text
+	@caption Staatus
+
+
+@default group=data
 	@property length type=textbox
 	@caption Töö pikkus (h)
 
@@ -53,25 +66,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@comment Enne seda kuupäeva, kellaaega ei lubata tööd alustada
 	@caption Varaseim alustusaeg
 
-	@property project type=hidden
-	@caption Projekt
-
-	@property exec_order type=hidden
-	@caption Töö jrk. nr.
-
 	@property prerequisites type=textbox
 	@comment Komaga eraldatud
 	@caption Eeldustööd
 
-	@property starttime type=text
-	@caption Plaanitud töösseminekuaeg
 
-	@property planned_length type=text
-	@caption Planeeritud kestus (h)
-
-	@property state type=text
-	@caption Staatus
-
+@default table=objects
+@default field=meta
+@default method=serialize
+	@property advised_starttime type=datetime_select
+	@comment Allhankijaga kokkulepitud aeg, millal töö alustada.
+	@caption Soovitav algusaeg
 
 
 
@@ -104,6 +109,8 @@ CREATE TABLE `mrp_job` (
   `state` tinyint(2) unsigned default '1',
   `pre_buffer` int(10) unsigned default NULL,
   `post_buffer` int(10) unsigned default NULL,
+  `started` int(10) unsigned default NULL,
+  `finished` int(10) unsigned default NULL,
 
 	PRIMARY KEY  (`oid`),
 	UNIQUE KEY `oid` (`oid`)
@@ -244,6 +251,21 @@ class mrp_job extends class_base
 						array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
 						$this->resource->name ()
 					);
+				}
+				break;
+
+			case "workflow_errors":
+				if (!empty ($arr["request"]["errors"]))
+				{
+					$errors = $arr["request"]["errors"];
+					$this->dequote ($errors);
+					$errors = unserialize ($errors);
+
+					if (!empty ($errors))
+					{
+						$prop["value"] = ' <div style="color: #DF0D12; margin: 5px;">' . t('Esinenud tõrked: ') . implode (". ", $errors) . '.</div>';
+						unset ($arr["request"]["errors"]);
+					}
 				}
 				break;
 
@@ -533,7 +555,7 @@ class mrp_job extends class_base
 		else
 		{
 			### start project if first job
-			if ($this_object->prop ("exec_order") == 1)
+			if ($project->prop ("state") != MRP_STATUS_INPROGRESS)
 			{
 				$mrp_case = get_instance(CL_MRP_CASE);
 				$project_start = $mrp_case->start(array("id" => $project->id ()));
@@ -1078,6 +1100,7 @@ class mrp_job extends class_base
 		### check if job can start
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
+			MRP_STATUS_ABORTED,
 		);
 
 		if (!in_array ($job->prop ("state"), $applicable_states))

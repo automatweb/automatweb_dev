@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.58 2005/04/05 13:05:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.59 2005/04/05 19:29:32 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -8,7 +8,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_MRP_CASE, on_popup_search_change)
 
-@classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1
+@classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1 confirm_save_data=1
 
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
 
