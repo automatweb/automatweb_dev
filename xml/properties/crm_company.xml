@@ -179,10 +179,7 @@
             </WORKERS>
             <OFFER>
                   <value>9</value>
-                  <clid>
-                        <num_0>CL_CRM_OFFER</num_0>
-                        <num_1>CL_CRM_PERSON</num_1>
-                  </clid>
+                  <clid>CL_CRM_OFFER</clid>
                   <caption>Pakkumine</caption>
             </OFFER>
             <DEAL>

@@ -7,41 +7,34 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Näitamise templiit</caption>
-      </property>
-      <property>
-            <name>active_selection</name>
-            <type>textbox</type>
-            <group>selectione</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
+            <caption>Näitamise template</caption>
       </property>
       <property>
             <name>forms</name>
             <type>relpicker</type>
+            <multiple>1</multiple>
             <reltype>RELTYPE_BACKFORMS2</reltype>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>tagasiside vormid</caption>
+            <caption>Tagasiside vormid</caption>
       </property>
       <property>
             <name>active_selection_objects</name>
-            <type>text</type>
+            <type>callback</type>
             <callback>callback_obj_list</callback>
             <table>objects</table>
-            <group>selectione</group>
+            <group>contents</group>
             <field>meta</field>
             <method>serialize</method>
       </property>
       <property>
-            <name>dokus</name>
-            <type>text</type>
+            <name>contents</name>
+            <type>callback</type>
             <callback>show_selection</callback>
             <table>objects</table>
-            <group>shou</group>
+            <group>preview</group>
             <field>meta</field>
             <method>serialize</method>
       </property>
@@ -49,13 +42,14 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <selectione>
+            <contents>
                   <submit>no</submit>
-                  <caption>Seotud valimid</caption>
-            </selectione>
-            <shou>
+                  <caption>Objektid</caption>
+            </contents>
+            <preview>
                   <caption>Näita</caption>
-            </shou>
+                  <submit>no</submit>
+            </preview>
       </groupinfo>
       <reltypes>
             <BACKFORMS2>

@@ -56,15 +56,6 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>selection_manage_buttons</name>
-            <type>text</type>
-            <callback>selection_manage_bar</callback>
-            <table>objects</table>
-            <group>firmad</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
             <name>make_search</name>
             <type>textbox</type>
             <size>1</size>
@@ -91,24 +82,17 @@
             <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Tegevusalade toolbar</caption>
       </property>
       <property>
-            <name>tegevusala_manager</name>
-            <type>text</type>
-            <callback>tegevusala_manager</callback>
+            <name>sector_manager</name>
+            <type>callback</type>
+            <callback>callback_sector_manager</callback>
             <table>objects</table>
             <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
-      </property>
-      <property>
-            <name>selection_manage_buttons2</name>
-            <type>text</type>
-            <callback>selection_manage_bar</callback>
-            <table>objects</table>
-            <group>tegevusalad</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <caption>Tegevusalade kataloog</caption>
       </property>
       <property>
             <name>dir_firma</name>
@@ -201,56 +185,6 @@
             <caption>Vaikimisi kataloog, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda</caption>
       </property>
       <property>
-            <name>kone_form</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FORMS</reltype>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kıne sisestusvorm</caption>
-      </property>
-      <property>
-            <name>pakkumine_form</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FORMS</reltype>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Pakkumise sisestusvorm</caption>
-      </property>
-      <property>
-            <name>tehing_form</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FORMS</reltype>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Tehingu sisestusvorm</caption>
-      </property>
-      <property>
-            <name>kohtumine_form</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FORMS</reltype>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kohtumise sisestusvorm</caption>
-      </property>
-      <property>
-            <name>default_form</name>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FORMS</reltype>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Vaikimisi sisestusvorm</caption>
-      </property>
-      <property>
             <name>flimit</name>
             <type>select</type>
             <table>objects</table>
@@ -279,21 +213,9 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>active_selection_objects</name>
-            <type>text</type>
-            <callback>callback_obj_list</callback>
-            <table>objects</table>
-            <group>selectione</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
             <name>active_selection</name>
             <type>textbox</type>
-            <group>
-                  <num_0>firmad</num_0>
-                  <num_1>selectione</num_1>
-            </group>
+            <group>firmad</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -317,10 +239,6 @@
                   <caption>Objektide&amp;nbsp;lisamine</caption>
                   <submit>no</submit>
             </objects_manager>
-            <selectione>
-                  <submit>no</submit>
-                  <caption>Valimid</caption>
-            </selectione>
       </groupinfo>
       <reltypes>
             <SELECTIONS>
@@ -356,8 +274,13 @@
             <RIIK_CAT>
                   <value>7</value>
                   <clid>CL_MENU</clid>
-                  <caption>Tegevusalade kataloogid</caption>
+                  <caption>Riikide kataloogid</caption>
             </RIIK_CAT>
+            <TEGEVUSALA_CAT>
+                  <value>8</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Tegevusalade kataloogid</caption>
+            </TEGEVUSALA_CAT>
             <TOODE_CAT>
                   <value>9</value>
                   <clid>CL_MENU</clid>
