@@ -41,7 +41,6 @@ class tpledit extends aw_template {
 		{
 			$parent = "/";
 		};
-		#$parent = substr($parent,1);
 		$tpldir .= "$parent";
 		$files = array();
 		$dirs = array();
@@ -87,6 +86,15 @@ class tpledit extends aw_template {
 		{
 			$fullname = $tpldir . $sep . $name;
 			$relname = substr($fullname,strlen($tplroot) + 1);
+			$oid = $tdata[$relname]["oid"];
+			if ($oid)
+			{
+				$arclink = sprintf("<a href='%s'>%s</a>",$this->mk_orb("archive",array("oid" => $oid)),"Arhiiv");
+			}
+			else
+			{
+				$arclink = "";
+			};
 			$this->vars(array(
 				"name" => $name,
 				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
@@ -95,6 +103,7 @@ class tpledit extends aw_template {
 				"oid" => $tdata[$relname]["oid"],
 				"edlink" => $this->mk_orb("edit",array("file" => $relname)),
 				"dnlink" => $this->mk_orb("download",array("file" => $relname)),
+				"arclink" => $arclink,
 			));
 
 			$f .= $this->parse("file");
@@ -107,15 +116,19 @@ class tpledit extends aw_template {
 
 		$fullname = "";
 		
+	
 		foreach($parents as $name)
 		{
+			if (strlen($name) == 0)
+			{
+				continue;
+			};
+			$fullname .= "/$name";
 			$index = (strlen($fullname) > 0) ? $fullname : $name;
 			$path[$index] = $name;
-			$fullname .= "/$name";
 		};
 
 		$path = join(" / ",map2("<a href='orb.aw?class=tpledit&action=browse&parent=%s'>%s</a>",$path));
-
 		$this->vars(array(
 			"directory" => $d,
 			"file" => $f,
@@ -134,6 +147,7 @@ class tpledit extends aw_template {
 		global $tpldirs,$HTTP_HOST;
 		$tpldir = $tpldirs[$HTTP_HOST];
 		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
+		$dirname = dirname($file);
 		$source = join("",@file($tpldir . "/" . $file));
 		$this->read_template("edit.tpl");
 		$this->vars(array(
@@ -142,7 +156,7 @@ class tpledit extends aw_template {
 			"rawlink" => $this->mk_orb("source",array("file" => $file)),
 			"reforb" => $this->mk_reforb("submit",array("file" => $file)),
 		));
-		$GLOBALS["site_title"] = "<a href='" . $this->mk_orb("browse",array("parent" => "root")) . "'>TemplateEditor</a>";
+		$GLOBALS["site_title"] = "<a href='" . $this->mk_orb("browse",array("parent" => "/$dirname")) . "'>TemplateEditor</a>";
 		return $this->parse();
 	}
 
@@ -179,7 +193,7 @@ class tpledit extends aw_template {
 			// add a new copy of the template object to the archive
 			$arc->commit(array(
 				"oid" => $meta_obj["oid"],
-				"content" => $ser,
+				"content" => trim($ser),
 			));
 
 			
@@ -253,6 +267,79 @@ class tpledit extends aw_template {
 		$obj = $this->get_object($args["oid"]);
 		$ser = $this->_fetch_template(array("file" => $obj["name"]));
 		return $ser;
+	}
+
+	////
+	// Näitab templatearhiivi sisu
+	function show_archive($args = array())
+	{
+		classload("archive");
+		$arc = new archive();
+		$contents = $arc->get($args);
+		// FIXME: check the object class too
+		$obj = $this->get_object($args["oid"]);
+		$this->read_template("archive.tpl");
+		$GLOBALS["site_title"] = "<a href='" . $this->mk_orb("browse",array("parent" => "root")) . "'>TemplateEditor</a>";
+		$c = "";
+		if (is_array($contents))
+		{
+			foreach($contents as $element)
+			{
+				$this->vars(array(
+					"date" => $this->time2date($element[FILE_MODIFIED],9),
+					"action" => "Näita",
+					"size" => $element[FILE_SIZE],
+					"id" => $element[FILE_MODIFIED],
+				));
+
+				$c .= $this->parse("line");
+			};
+		};
+		$this->vars(array(
+			"line" => $c,
+			"reforb" => $this->mk_reforb("submit_archive",array("oid" => $args["oid"])),
+		));
+		return $this->parse();
+		
+	}
+
+	////
+	// !Submitib arhiivi
+	function submit_archive($args = array())
+	{
+		// active (int) - faili nimi arhiivist, mida aktiveerima peab
+		// oid (int) - millise objekti arhiivi lugeda]
+		classload("archive");
+		$arc = new archive();
+		$new_template = $arc->checkout(array("oid" => $args["oid"],"version" => $args["active"]));
+
+		$obj = $this->get_object($args["oid"]);
+		// We got the template the user wants to active, 
+		// now we have to copy the _current_ template to archive.
+			
+		$ser = $this->_archive(array("oid" => $args["oid"]));
+		$ser = trim($ser);
+		$arc->commit(array(
+			"oid" => $args["oid"],
+			"content" => $ser,
+		));
+		
+		global $tpldirs,$HTTP_HOST;
+		$tpldir = $tpldirs[$HTTP_HOST];
+		$fullpath = $tpldir . "/" . $obj["name"];
+
+		// lets put the old object instead of the current one
+		$this->put_file(array(
+			"file" => $fullpath,
+			"content" => $new_template,
+		));
+
+		// touch the object
+		$this->upd_object(array(
+			"oid" => $args["oid"],
+		));
+
+		return $this->mk_orb("archive",array("oid" => $args["oid"]));
 	}
 };
 ?>
