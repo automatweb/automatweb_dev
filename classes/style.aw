@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.40 2004/11/15 16:05:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.41 2004/11/26 14:03:52 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -898,7 +898,8 @@ class style extends aw_template
 		$ol = new object_list(array(
 			"class_id" => CL_CSS,
 			"lang_id" => array(),
-			"sort_by" => "objects.jrk,objects.name"
+			"sort_by" => "objects.jrk,objects.name",
+			"site_id" => array()
 		));
 		foreach($ol->names() as $id => $nm)
 		{
