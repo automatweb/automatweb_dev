@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.9 2001/06/20 05:21:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.10 2001/06/21 18:22:24 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -473,6 +473,11 @@ class aw_mail {
 			};
 		};
 		return $msg;
+	}
+
+	function set_header($name,$value)
+	{
+		$this->headers[$name] = $value;
 	}
 
 	function gen_mail()
