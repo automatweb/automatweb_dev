@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.89 2004/04/13 16:25:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.90 2004/04/29 12:44:01 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -53,6 +53,9 @@
 	@property show_lead type=checkbox field=meta method=serialize group=advanced ch_value=1
 	@caption Näita ainult leadi
 	
+	@property show_lead_template type=select field=meta method=serialize group=advanced 
+	@caption Leadi template
+	
 	@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
 	@caption AW Märksõnad
 
@@ -97,7 +100,7 @@
 
 	// ----------------
 
-	@property sa_manager type=relmanager reltype=SEEALSO group=relations store=no
+	@property sa_manager type=relmanager reltype=RELTYPE_SEEALSO group=relations store=no
 	@caption Seosehaldur
 
 	@property seealso type=table group=relations store=no
@@ -232,7 +235,7 @@
 	@reltype DOCS_FROM_MENU value=9 clid=CL_MENU
 	@caption v&otilde;ta dokumente men&uuml;&uuml; alt
 
-	@reltype PERIOD value=10 clid=CL_PERIOD
+	@reltype PERIOD value=10 clid=CL_PERIOD 
 	@caption v&otilde;ta dokumente perioodi alt
 
 	@reltype OBJ_TABLE_CONF value=11 clid=CL_OBJ_TABLE_CONF
@@ -453,6 +456,18 @@ class menu extends class_base
 
 			case "menu_images":
 				$data["value"] = $this->_get_images_table($arr);
+				break;
+
+			case "show_lead_template":
+				if ($arr["obj_inst"]->prop("show_lead") == 0)
+				{
+					return PROP_IGNORE;
+				}
+				$ol = new object_list(array(
+					"class_id" => CL_CONFIG_AW_DOCUMENT_TEMPLATE,
+					"type" => 1 // lead
+				));
+				$data["options"] = array("" => "") +$ol->names();
 				break;
 		};
 		return $retval;
