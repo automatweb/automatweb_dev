@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.35 2005/03/18 13:30:13 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.36 2005/03/21 13:21:09 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -48,6 +48,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property customer type=relpicker reltype=RELTYPE_MRP_CUSTOMER
 	@caption Klient
 
+	@property progress type=hidden
 	@property extern_id type=hidden
 
 	@property do_abort type=checkbox ch_value=1 table=objects field=meta method=serialize
@@ -214,6 +215,7 @@ default group=grp_case_material
 CREATE TABLE `mrp_case` (
   `oid` int(11) NOT NULL default '0',
   `starttime` int(10) unsigned default NULL,
+  `progress` int(10) unsigned default NULL,
   `due_date` int(10) unsigned default NULL,
   `project_priority` int(10) unsigned default NULL,
   `state` tinyint(2) unsigned default '1',
@@ -238,9 +240,10 @@ define ("MRP_STATUS_INPROGRESS", 3);
 define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
-define ("MRP_STATUS_OVERDUE", 7);
+define ("MRP_STATUS_PAUSED", 7);
 define ("MRP_STATUS_DELETED", 8);
 define ("MRP_STATUS_ONHOLD", 9);
+define ("MRP_STATUS_ARCHIVED", 10);
 
 define ("MRP_STATUS_RESOURCE_AVAILABLE", 10);
 define ("MRP_STATUS_RESOURCE_INUSE", 11);
@@ -287,7 +290,11 @@ class mrp_case extends class_base
 					MRP_STATUS_INPROGRESS => "Töös",
 					MRP_STATUS_ABORTED => "Katkestatud",
 					MRP_STATUS_DONE => "Valmis",
-					MRP_STATUS_OVERDUE => "Üle tähtaja",
+					MRP_STATUS_LOCKED => "Lukustatud",
+					MRP_STATUS_PAUSED => "Paus",
+					MRP_STATUS_DELETED => "Kustutatud",
+					MRP_STATUS_ONHOLD => "Plaanist väljas",
+					MRP_STATUS_ARCHIVED => "Arhiveeritud",
 				);
 				$prop["value"] = $states[$prop["value"]] ? $states[$prop["value"]] : "Määramata";
 				break;
@@ -355,8 +362,6 @@ class mrp_case extends class_base
 					$applicable_states = array (
 						MRP_STATUS_PLANNED,
 						MRP_STATUS_INPROGRESS,
-						MRP_STATUS_LOCKED,
-						MRP_STATUS_OVERDUE,
 					);
 					$prop["value"] = (in_array ($state, $applicable_states)) ? 1 : 0;
 				}
@@ -418,8 +423,6 @@ class mrp_case extends class_base
 						MRP_STATUS_ABORTED,
 						MRP_STATUS_NEW,
 						MRP_STATUS_INPROGRESS,
-						MRP_STATUS_LOCKED,
-						MRP_STATUS_OVERDUE,
 						MRP_STATUS_ONHOLD,
 					);
 
@@ -432,8 +435,6 @@ class mrp_case extends class_base
 				{
 					$applicable_states = array (
 						MRP_STATUS_INPROGRESS,
-						MRP_STATUS_LOCKED,
-						MRP_STATUS_OVERDUE,
 						MRP_STATUS_PLANNED,
 					);
 
@@ -579,7 +580,7 @@ class mrp_case extends class_base
 			$job = $connection->to ();
 			$project_resources[] = $job->prop ("resource");
 			$starttime = $job->prop ("starttime");
-			$project_start = ($project_start == "NA") ? $starttime : min ($starttime, $project_start);
+			$project_start = ($project_start === "NA") ? $starttime : min ($starttime, $project_start);
 		}
 
 		### add rows
@@ -835,12 +836,11 @@ class mrp_case extends class_base
 			$job_id = $job->id ();
 			$resource_id = $job->prop ("resource");
 			$resource = obj ($resource_id);
-			$status = $job->prop ("job_status");
 			$disabled = false;
 			$stag = '<span>';
 			$etag = '</span>';
 
-			switch ($status)
+			switch ($job->prop ("state"))
 			{
 				case MRP_STATUS_NEW:
 					$stag = '<span style="color: green;">';
@@ -848,7 +848,7 @@ class mrp_case extends class_base
 					break;
 
 				case MRP_STATUS_PLANNED:
-					$stag = '<span style="color: yellow;">';
+					$stag = '<span style="color: blue;">';
 					$status = 'Planeeritud';
 					break;
 
@@ -858,17 +858,19 @@ class mrp_case extends class_base
 					break;
 
 				case MRP_STATUS_INPROGRESS:
-					$stag = '<span style="color: blue;">';
+					$stag = '<span style="color: yellow;">';
 					$status = 'Töös';
 					$disabled = true;
 					break;
 
 				case MRP_STATUS_DONE:
-					$stag = '<span style="color: black;">';
+					$stag = '<span style="color: gray;">';
 					$status = 'Valmis';
 					$disabled = true;
 					break;
 			}
+
+			$status = $stag . $status . $etag;
 
 			### translate prerequisites from object id-s to execution orders
 			$prerequisites = $job->prop ("prerequisites");
@@ -891,7 +893,7 @@ class mrp_case extends class_base
 			$starttime = $job->prop ("starttime");
 			$planned_start = $starttime ? date (MRP_DATE_FORMAT, $starttime) : "Planeerimata";
 
-			$change_url = $this->mk_my_orb("change", array(
+			$change_url = $this->mk_my_orb ("change", array (
 				"id" => $job_id,
 				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 			), "mrp_job");
@@ -1452,8 +1454,6 @@ class mrp_case extends class_base
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_LOCKED,
-			MRP_STATUS_OVERDUE,
 		);
 
 		if (in_array ($project->prop ("state"), $applicable_states))
@@ -1520,10 +1520,7 @@ class mrp_case extends class_base
 		### check if project is ready to go on
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
-			MRP_STATUS_NEW,
 			MRP_STATUS_PLANNED,
-			MRP_STATUS_LOCKED,
-			MRP_STATUS_OVERDUE,
 		);
 
 		if (!in_array ($project->prop ("state"), $applicable_states))
@@ -1531,36 +1528,41 @@ class mrp_case extends class_base
 			return false;
 		}
 
-		if ($job->prop("state") == MRP_STATUS_DONE)
+		### check if job can start
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PLANNED,
+		);
+
+		if (!in_array ($job->prop ("state"), $applicable_states))
 		{
 			return false;
 		}
 
-		// check if resource is available
-		$resi = get_instance(CL_MRP_RESOURCE);
-		if (!$resi->can_start_job(array("resource" => $job->prop("resource"))))
+		### check if resource is available
+		$resource = get_instance(CL_MRP_RESOURCE);
+
+		if (!$resource->can_start_job(array("resource" => $job->prop("resource"))))
 		{
 			return false;
-		}
-
-		if (trim($job->prop ("prerequisites")) == "")
-		{
-			return true;
 		}
 
 		### check if all prerequisite jobs are done
-		$prerequisites = explode (",", $job->prop ("prerequisites"));
-		$applicable_states = array (
-			MRP_STATUS_DONE,
-		);
-
-		foreach ($prerequisites as $prerequisite_oid)
+		if (trim ($job->prop ("prerequisites")))
 		{
-			$prerequisite = obj ($prerequisite_oid);
+			$prerequisites = explode (",", $job->prop ("prerequisites"));
+			$applicable_states = array (
+				MRP_STATUS_DONE,
+			);
 
-			if (!in_array($prerequisite->prop ("state"), $applicable_states))
+			foreach ($prerequisites as $prerequisite_oid)
 			{
-				return false;
+				$prerequisite = obj ($prerequisite_oid);
+
+				if (!in_array ($prerequisite->prop ("state"), $applicable_states))
+				{
+					return false;
+				}
 			}
 		}
 
@@ -1582,15 +1584,115 @@ class mrp_case extends class_base
 			return false;
 		}
 
+		### states for starting a project
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
-			MRP_STATUS_LOCKED,
 		);
 
 		if (in_array ($project->prop ("state"), $applicable_states))
 		{
-			$project->set_prop ("state", MRP_STATUS_RESOURCE_INUSE);
+			### start project
+			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
+			$project->set_prop ("progress", time ());
 			$project->save ();
+
+			### log change
+			$ws = get_instance (CL_MRP_WORKSPACE);
+			$ws->mrp_log ($project->id (), NULL, "Projekt l&auml;ks t&ouml;&ouml;sse");
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+/**
+    @attrib name=finish
+	@param project required type=int
+**/
+	function finish_project ($arr)
+	{
+		if (is_oid ($arr["project"]))
+		{
+			$project = obj ($arr["project"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		### check if all jobs are done
+		$job_list = new object_list (array (
+			"class_id" => CL_MRP_JOB,
+			"project" => $project->id (),
+		));
+		$jobs = $job_list->count ();
+
+		### states for jobs that allow finishing a project
+		$applicable_states = array (
+			MRP_STATUS_DONE,
+		);
+		$jobs_done = $job_list->filter (array (
+			"state" => $applicable_states,
+		));
+
+		### states for finishing a project
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+		);
+
+		if (in_array ($project->prop ("state"), $applicable_states) and ($jobs_done == $jobs))
+		{
+			### finish project
+			$project->set_prop ("state", MRP_STATUS_DONE);
+			$project->save ();
+
+			### log event
+			$ws->mrp_log(
+				$project->id(),
+				NULL,
+				"Projekt l&otilde;petati"
+			);
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+/**
+	@attrib name=abort
+	@param project required type=int
+**/
+	function abort ($arr)
+	{
+		if (is_oid ($arr["project"]))
+		{
+			$this_object = obj ($arr["project"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		### states for aborting a project
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+		);
+
+		if (in_array ($this_object->prop ("state"), $applicable_states))
+		{
+			### abort project
+			$this_object->set_prop ("state", MRP_STATUS_ABORTED);
+			$this_object->save ();
+
+			### log event
+			$ws = get_instance(CL_MRP_WORKSPACE);
+			$ws->mrp_log ($this_object->id (), NULL, "Projekt katkestati");
+
 			return true;
 		}
 		else

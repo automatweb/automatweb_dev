@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.20 2005/03/18 13:30:13 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.21 2005/03/21 13:21:09 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -42,6 +42,7 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@caption Töö jrk. nr.
 
 	@property prerequisites type=textbox
+	@comment Komaga eraldatud
 	@caption Eeldustööd
 
 	@property starttime type=datetime_select
@@ -53,25 +54,7 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@property state type=text
 	@caption Staatus
 
-	@property sub_state type=hidden
-
-@default field=meta
-@default method=serialize
-	property started type=text
-	caption Alustatud
-
-	property finished type=text
-	caption Lõpetatud
-
-	property aborted type=checkbox
-	caption Katkestatud
-
-	property abort_comment type=textarea
-	caption Katkestamise põhjus
-
-
-//// old
-	property job_toolbar type=toolbar no_caption=1 store=no
+	@property job_toolbar type=toolbar no_caption=1 store=no
 
 // --------------- RELATION TYPES ---------------------
 
@@ -120,16 +103,14 @@ define ("MRP_STATUS_INPROGRESS", 3);
 define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
-define ("MRP_STATUS_OVERDUE", 7);
+define ("MRP_STATUS_PAUSED", 7);
 define ("MRP_STATUS_DELETED", 8);
 define ("MRP_STATUS_ONHOLD", 9);
+define ("MRP_STATUS_ARCHIVED", 10);
 
 define ("MRP_STATUS_RESOURCE_AVAILABLE", 10);
 define ("MRP_STATUS_RESOURCE_INUSE", 11);
 define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
-
-### sub states
-define ("MRP_SUBSTATUS_PAUSED", 9);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -143,9 +124,10 @@ class mrp_job extends class_base
 		MRP_STATUS_ABORTED => "Katkestatud",
 		MRP_STATUS_DONE => "Valmis",
 		MRP_STATUS_LOCKED => "Lukustatud",
-		MRP_STATUS_OVERDUE => "&Uuml;le t&auml;htaja",
+		MRP_STATUS_PAUSED => "Paus",
 		MRP_STATUS_DELETED => "Kustutatud",
-		MRP_STATUS_ONHOLD => "Peatatud"
+		MRP_STATUS_ONHOLD => "Plaanist väljas",
+		MRP_STATUS_ARCHIVED => "Arhiveeritud",
 	);
 
 	function mrp_job ()
@@ -315,7 +297,7 @@ class mrp_job extends class_base
 				"onClick" => "if (document.changeform.pj_change_comment.value.replace(/\\s+/, '') != '') { submit_changeform('abort') } else { alert('Kommentaar peab olema t&auml;idetud!'); }"
 			));
 
-			if ($this_object->prop("sub_state") != MRP_SUBSTATUS_PAUSED)
+			if ($this_object->prop("state") != MRP_STATUS_PAUSED)
 			{
 				$toolbar->add_button(array(
 					"name" => "pause",
@@ -338,7 +320,7 @@ class mrp_job extends class_base
 					//"img" => "continue.gif",
 					"tooltip" => "J&auml;tka",
 					"action" => "scontinue",
-			));
+				));
 			}
 		}
 	}
@@ -355,30 +337,75 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			return ERROR;///!!! ...
+			return false;
 		}
 
 		$project =& $this->get_project ($arr);
-		$log = $project->prop("state") != MRP_STATUS_INPROGRESS;
-		$project->set_prop ("state", MRP_STATUS_INPROGRESS);
-		$project->save ();
+		$applicable_project_states = array (
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_INPROGRESS,
+		);
+		$applicable_job_states = array (
+			MRP_STATUS_PLANNED,
+		);
 
+		### check if prerequisites are done
+		$prerequisites = explode (",", $this_object->prop ("prerequisites"));
+		$prerequisites_done = true;
 
-		$ws = get_instance(CL_MRP_WORKSPACE);
-		if ($log)
+		foreach ($prerequisites as $prerequisite_oid)
 		{
-			$ws->mrp_log($this_object->prop("project"), NULL, "Projekt l&auml;ks t&ouml;&ouml;sse");
+			if (is_oid ($prerequisite_oid))
+			{
+				$prerequisite = obj ($prerequisite_oid);
+
+				if (((int) $prerequisite->prop ("state")) !== MRP_STATUS_DONE)
+				{
+					$prerequisites_done = false;
+				}
+			}
+			else
+			{
+				return false;
+			}
 		}
 
-		$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
-		$this_object->save ();
+		$resource = get_instance(CL_MRP_RESOURCE);
+		$resource_is_reserved = $resource->start_job(array("resource" => $this_object->prop("resource")));
 
-		// set resource as in use
-		$resi = get_instance(CL_MRP_RESOURCE);
-		$resi->start_job(array("resource" => $this_object->prop("resource")));
+		if ( (in_array ($project->prop ("state"), $applicable_project_states)) and (in_array ($this_object->prop ("state"), $applicable_job_states)) and $prerequisites_done and $resource_is_reserved )
+		{
+			if (((int) $this_object->prop ("exec_order")) === 1)
+			{
+				### start project
+				$this->do_orb_method_call (array (
+					"action" => "start",
+					"class" => "mrp_case",
+					"params" => array (
+						"project" => $project->id ()
+					)
+				));
+			}
 
-		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+			### set project state & progress
+			$progress = time () + $this_object->prop ("planned_length");
+			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
+			$project->set_prop ("progress", $progress);
+			$project->save ();
 
+			### start job
+			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
+			$this_object->save ();
+
+			### log
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 /**
@@ -393,49 +420,70 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			return ERROR;///!!! ...
+			return false;
 		}
 
-		$this_object->set_prop ("state", MRP_STATUS_DONE);
-		$this_object->save ();
-
-		// set resource as free
-		$resi = get_instance(CL_MRP_RESOURCE);
-		$resi->stop_job(array("resource" => $this_object->prop("resource")));
-
-		$ws = get_instance(CL_MRP_WORKSPACE);
-		$ws->mrp_log(
-			$this_object->prop("project"),
-			$this_object->id(),
-			"T&ouml;&ouml; ".$this_object->name().
-				" staatus muudeti ".$this->states[$this_object->prop("state")],
-			$arr["pj_change_comment"]
+		$project =& $this->get_project ($arr);
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
 		);
 
-		### set status DONE for whole project if this was the last job
-		$project =& $this->get_project ($arr);
-		$list = new object_list (array (
-			"class_id" => CL_MRP_JOB,
-			"project" => $project->id (),
-			"exec_order" => new obj_predicate_compare (OBJ_COMP_GREATER, $this_object->prop ("exec_order")),
-		));
-		$next_jobs = $list->count ();
-
-		if (!$next_jobs)
+		if (in_array ($this_object->prop ("state"), $applicable_states))
 		{
-			$log = $project->prop("state") != MRP_STATUS_DONE;
+			### finish job
+			$this_object->set_prop ("state", MRP_STATUS_DONE);
+			$this_object->save ();
 
-			$project->set_prop ("state", MRP_STATUS_DONE);
-			$project->save ();
+			### set resource as free
+			$resource = get_instance(CL_MRP_RESOURCE);
+			$resource->stop_job(array("resource" => $this_object->prop("resource")));
 
-			if ($log)
+			### log job change
+			$ws = get_instance (CL_MRP_WORKSPACE);
+			$ws->mrp_log(
+				$this_object->prop ("project"),
+				$this_object->id (),
+				"T&ouml;&ouml; ".$this_object->name() . " staatus muudeti ".$this->states[$this_object->prop("state")],
+				$arr["pj_change_comment"]
+			);
+
+			### finish project if this was the last job
+			$list = new object_list (array (
+				"class_id" => CL_MRP_JOB,
+				"project" => $project->id (),
+				"state" => MRP_STATUS_DONE,
+			));
+			$done_jobs = $list->count ();
+
+			$list = new object_list (array (
+				"class_id" => CL_MRP_JOB,
+				"project" => $project->id (),
+			));
+			$all_jobs = $list->count ();
+
+			if ($done_jobs === $all_jobs)
 			{
-				$ws->mrp_log(
-					$project->id(),
-					NULL,
-					"Projekt l&otilde;petati"
-				);
+				### finish project
+				$this->do_orb_method_call (array (
+					"action" => "finish",
+					"class" => "mrp_case",
+					"params" => array (
+						"project" => $project->id ()
+					)
+				));
 			}
+			else
+			{
+				### update progress
+				$project->set_prop ("progress", time ());
+				$project->save ();
+			}
+
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 
@@ -451,24 +499,34 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			return ERROR;///!!! ...
+			return false;
 		}
 
-		$project = obj($this_object->prop("project"));
-		$project->set_prop ("state", MRP_STATUS_ABORTED);
-		$project->save ();
-//!!! siin vist tuleks panna projektile ka abort aga ainult siis kui leidub t8id mis eeldavad antud t88 valmimist
-//!!! siin tuleb ka abordikommentaare n6uda kuidagi
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PAUSED,
+		);
 
-		$this_object->set_prop ("state", MRP_STATUS_ABORTED);
-		$this_object->save ();
+		if (in_array ($this_object->prop ("state"), $applicable_states))
+		{
+			### abort job
+			$this_object->set_prop ("state", MRP_STATUS_ABORTED);
+			$this_object->save ();
 
-		// set resource as free
-		$resi = get_instance(CL_MRP_RESOURCE);
-		$resi->stop_job(array("resource" => $this_object->prop("resource")));
+			### set resource as free
+			$resource = get_instance(CL_MRP_RESOURCE);
+			$resource->stop_job(array("resource" => $this_object->prop("resource")));
 
-		$ws = get_instance(CL_MRP_WORKSPACE);
-		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+			### log event
+			$ws = get_instance(CL_MRP_WORKSPACE);
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 /**
@@ -483,14 +541,35 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			return ERROR;///!!! ...
+			return false;
 		}
 
-		$this_object->set_prop ("sub_state", MRP_SUBSTATUS_PAUSED);
-		$this_object->save ();
+		$project =& $this->get_project ($arr);
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+		);
 
-		$ws = get_instance(CL_MRP_WORKSPACE);
-		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("sub_state")], $arr["pj_change_comment"]);
+		if (in_array ($this_object->prop ("state"), $applicable_states))
+		{
+			### pause job
+			$this_object->set_prop ("state", MRP_STATUS_PAUSED);
+			$this_object->save ();
+
+			### update progress
+			$progress = max ($project->prop ("progress"), time ());
+			$project->set_prop ("progress", $progress);
+			$project->save ();
+
+			### log event
+			$ws = get_instance (CL_MRP_WORKSPACE);
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 /**
@@ -505,14 +584,39 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			return ERROR;///!!! ...
+			return false;
 		}
 
-		$this_object->set_prop ("sub_state", 0);
-		$this_object->save ();
+		$project =& $this->get_project ($arr);
+		$applicable_project_states = array (
+			MRP_STATUS_INPROGRESS,
+			// MRP_STATUS_ONHOLD,
+		);
+		$applicable_job_states = array (
+			MRP_STATUS_PAUSED,
+		);
 
-		$ws = get_instance(CL_MRP_WORKSPACE);
-		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("sub_state")], $arr["pj_change_comment"]);
+		if ( (in_array ($project->prop ("state"), $applicable_project_states)) and (in_array ($this_object->prop ("state"), $applicable_job_states)) )
+		{
+			### continue job
+			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
+			$this_object->save ();
+
+			### update progress
+			$progress = max ($project->prop ("progress"), time ());
+			$project->set_prop ("progress", $progress);
+			$project->save ();
+
+			### log event
+			$ws = get_instance(CL_MRP_WORKSPACE);
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 /**
@@ -527,18 +631,39 @@ class mrp_job extends class_base
 		}
 		else
 		{
-			return ERROR;///!!! ...
+			return false;
 		}
 
-		$this_object->set_prop ("sub_state", MRP_SUBSTATUS_PAUSED);
-		$this_object->save ();
+		$project =& $this->get_project ($arr);
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+		);
 
-		$ws = get_instance(CL_MRP_WORKSPACE);
-		$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti Vahetuse l&otilde;pp", $arr["pj_change_comment"]);
+		if (in_array ($this_object->prop ("state"), $applicable_states))
+		{
+			### pause job
+			$this_object->set_prop ("state", MRP_STATUS_PAUSED);
+			$this_object->save ();
 
-		// log out user
-		$u = get_instance("users");
-		$u->orb_logout();
+			### update progress
+			$progress = max ($project->prop ("progress"), time ());
+			$project->set_prop ("progress", $progress);
+			$project->save ();
+
+			### log event
+			$ws = get_instance(CL_MRP_WORKSPACE);
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti Vahetuse l&otilde;pp", $arr["pj_change_comment"]);
+
+			### log out user
+			$u = get_instance("users");
+			$u->orb_logout();
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	function on_delete_job ($arr)

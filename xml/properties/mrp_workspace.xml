@@ -335,16 +335,6 @@
             <no_caption>1</no_caption>
       </property>
       <property>
-            <name>chart_project_hilight</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>grp_schedule</group>
-            <type>select</type>
-            <store>no</store>
-            <caption>Valitud projekt</caption>
-      </property>
-      <property>
             <name>chart_project_hilight_gotostart</name>
             <table>objects</table>
             <field>meta</field>
@@ -353,6 +343,16 @@
             <type>checkbox</type>
             <store>no</store>
             <caption>Mine valitud projekti algusesse</caption>
+      </property>
+      <property>
+            <name>chart_project_hilight</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_schedule</group>
+            <type>select</type>
+            <store>no</store>
+            <caption>Valitud projekt</caption>
       </property>
       <property>
             <name>chart_start_date</name>
@@ -616,6 +616,28 @@
             <type>textbox</type>
             <default>300</default>
             <caption>Ajaplaani alguse vahe planeerimise alguse hetkega (s)</caption>
+      </property>
+      <property>
+            <name>parameter_start_priority</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>textbox</type>
+            <default>1</default>
+            <comment>Positiivne reaalarv või 0 kui algusaega ei taheta parima valimisel arvestada. Kasutatakse mitut paralleelset tööd võimaldavate ressursside juures tööle kalendrist parima koha valikul. Koha kaal arvutatakse valemiga: (AlgusajaKaal X ParalleelharuVabaAjaAlgus + PikkuseKaal X ParalleelharuVabaAjaPikkus)/2</comment>
+            <caption>Töö algusaja kaal</caption>
+      </property>
+      <property>
+            <name>parameter_length_priority</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>textbox</type>
+            <default>1</default>
+            <comment>Vt. töö algusaja kaalu selgitust.</comment>
+            <caption>Töö pikkuse kaal</caption>
       </property>
       <property>
             <name>parameter_timescale</name>

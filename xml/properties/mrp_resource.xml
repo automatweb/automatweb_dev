@@ -30,6 +30,17 @@
             <caption>Ressursi staatus</caption>
       </property>
       <property>
+            <name>concurrent_threads</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <default>1</default>
+            <comment>Positiivne täisarv</comment>
+            <caption>Samaaegseid töid enim</caption>
+      </property>
+      <property>
             <name>resource_calendar</name>
             <table>objects</table>
             <field>meta</field>
@@ -157,7 +168,10 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>Kinnised p&amp;auml;evad (formaat: kuupäev.kuu; kuupäev.kuu; ...)</caption>
+            <comment>Formaat: alguskuupäev.kuu, tund:minut - lõppkuupäev.kuu, tund:minut; alguskuupäev.kuu, ...</comment>
+            <caption>
+            <![CDATA[Kinnised päevad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...)]]>
+            </caption>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_RESOURCE</syslog_type>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.47 2005/03/18 13:30:13 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.48 2005/03/21 13:21:09 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -72,7 +72,7 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@property sp_customer type=textbox
 	@caption Klient
 
-	@property sp_status type=chooser multiple=1 
+	@property sp_status type=chooser multiple=1
 	@caption Staatus
 
 	@property sp_submit type=submit value=Otsi
@@ -114,11 +114,11 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@property chart_navigation type=text store=no no_caption=1
 	@property master_schedule_chart type=text store=no no_caption=1
 
-	@property chart_project_hilight type=select store=no
-	@caption Valitud projekt
-
 	@property chart_project_hilight_gotostart type=checkbox store=no
 	@caption Mine valitud projekti algusesse
+
+	@property chart_project_hilight type=select store=no
+	@caption Valitud projekt
 
 	@property chart_start_date type=date_select store=no
 	@caption N&auml;idatava perioodi algus
@@ -188,6 +188,14 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@property parameter_schedule_start type=textbox default=300
 	@caption Ajaplaani alguse vahe planeerimise alguse hetkega (s)
 
+	@property parameter_start_priority type=textbox default=1
+	@comment Positiivne reaalarv või 0 kui algusaega ei taheta parima valimisel arvestada. Kasutatakse mitut paralleelset tööd võimaldavate ressursside juures tööle kalendrist parima koha valikul. Koha kaal arvutatakse valemiga: (AlgusajaKaal X ParalleelharuVabaAjaAlgus + PikkuseKaal X ParalleelharuVabaAjaPikkus)/2
+	@caption Töö algusaja kaal
+
+	@property parameter_length_priority type=textbox default=1
+	@comment Vt. töö algusaja kaalu selgitust.
+	@caption Töö pikkuse kaal
+
 	@property parameter_timescale type=textarea
 	@caption Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.)
 	@property parameter_timescale_unit type=select
@@ -195,7 +203,7 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 @default group=grp_printer_current,grp_printer_old,grp_printer_done
 
-	@property printer_legend type=text 
+	@property printer_legend type=text
 	@caption Legend
 
 	@property printer_jobs type=table no_caption=1
@@ -318,9 +326,10 @@ define ("MRP_STATUS_INPROGRESS", 3);
 define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
-define ("MRP_STATUS_OVERDUE", 7);
+define ("MRP_STATUS_PAUSED", 7);
 define ("MRP_STATUS_DELETED", 8);
 define ("MRP_STATUS_ONHOLD", 9);
+define ("MRP_STATUS_ARCHIVED", 10);
 
 define ("MRP_STATUS_RESOURCE_AVAILABLE", 10);
 define ("MRP_STATUS_RESOURCE_INUSE", 11);
@@ -536,7 +545,7 @@ class mrp_workspace extends class_base
 
 				$list = new object_list (array (
 					"class_id" => CL_MRP_CASE,
-					"state" => new obj_predicate_not (MRP_STATUS_DELETED),//!!! peab olema not deleted and not new
+					"state" => new obj_predicate_not (MRP_STATUS_DELETED),//!!! siin peaks mitte n2idatama ka NEW, ONHOLD, ABORTED ja vbl muudki.
 					"parent" => $this_object->prop ("projects_folder"),
 					// "createdby" => aw_global_get('uid'),
 				));
@@ -702,7 +711,7 @@ class mrp_workspace extends class_base
 				$this_object = obj($arr["args"]["id"]);
 				$list = new object_list (array (
 					"class_id" => CL_MRP_JOB,
-					"state" => new obj_predicate_not (MRP_STATUS_DELETED),
+					"state" => new obj_predicate_not (MRP_STATUS_DELETED),//!!! muud applicable stated ka
 					"parent" => $this_object->prop ("jobs_folder"),
 					"exec_order" => 1,
 					"project" => $project_id,
@@ -1208,7 +1217,7 @@ class mrp_workspace extends class_base
 			case "new":
 			case "planned":
 			case "aborted":
-				$table->define_field(array( //!!! teha sortableks, arvestada et prioriteet on float. v6imalus: <span style="display: none;">$priority</span><input ... value="$priority">. jama: sorter teeb integeriks kui numeric field
+				$table->define_field(array(
 					"name" => "priority",
 					"chgbgcolor" => "bgcolour_overdue",
 					"caption" => "Prioriteet",
@@ -1492,7 +1501,7 @@ class mrp_workspace extends class_base
 		$list->filter (array (
 			"class_id" => CL_MRP_RESOURCE,
 			"type" => MRP_RESOURCE_SUBCONTRACTOR,
-		), true);
+		));
 		$subcontractors = $list->ids ();
 
 		if (!empty ($subcontractors))
@@ -1625,12 +1634,6 @@ class mrp_workspace extends class_base
 		}
 
 		### get jobs in requested range & add bars
-		// $list = new object_list (array (
-			// "class_id" => CL_MRP_JOB,
-			// "parent" => $this_object->prop ("jobs_folder"),
-			// "state" => new obj_predicate_not (MRP_STATUS_DELETED),
-			// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $range_start, $range_end),
-		// ));
 		$res = $this->db_fetch_array (
 			"SELECT `planned_length` FROM `mrp_job` ".
 			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
@@ -1640,55 +1643,58 @@ class mrp_workspace extends class_base
 		"");
 		$max_length = isset ($res[0]["planned_length"]) ? $res[0]["planned_length"] : 0;
 
-		$jobs = $this->db_fetch_array (
-			"SELECT `oid` FROM `mrp_job` ".
-			"WHERE `state`!=" . MRP_STATUS_DELETED . " AND ".
-			"`length` > 0 AND ".
-			"`starttime` > " . ($range_start - $max_length) . " AND ".
-			"`starttime` < " . $range_end . " AND ".
-			"`resource` != 0 AND ".
-			"`resource` IS NOT NULL".
-		"");
+		### job states that are shown in chart
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_INPROGRESS,
+		);
 
-		foreach ($jobs as $job)
-		// for ($job =& $list->begin (); !$list->end (); $job =& $list->next ())
+		$list = new object_list (array (
+			"class_id" => CL_MRP_JOB,
+			"parent" => $this_object->prop ("jobs_folder"),
+			"state" => $applicable_states,
+			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+		));
+
+		for ($job =& $list->begin (); !$list->end (); $job =& $list->next ())
 		{
-			if ($this->can ("view", $job["oid"]))
+			$project_id = $job->prop ("project");
+			$project = obj ($project_id);
+
+			### project states that are shown in chart
+			$applicable_states = array (
+				MRP_STATUS_PLANNED,
+				MRP_STATUS_INPROGRESS,
+			);
+
+			if (!in_array ($project->prop ("state"), $applicable_states))
 			{
-				$job = obj ($job["oid"]);
-				$project_id = $job->prop ("project");
-				$project = obj ($project_id);
-				$applicable_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_INPROGRESS,
-					MRP_STATUS_OVERDUE,
-					MRP_STATUS_DONE,
-				);
-
-				if (!in_array ($project->prop ("state"), $applicable_states))
-				{
-					continue;
-				}
-
-				$length = $job->prop ("planned_length");
-				$resource_id = $job->prop ("resource");
-				$resource = obj ($resource_id);
-				$start = $job->prop ("starttime");
-				$type = in_array ($job->id (), $hilighted_jobs) ? "hilighted" : "";
-				$job_name = $project->name () . " - " . $resource->name ();
-
-				$bar = array (
-					"row" => $resource_id,
-					"start" => $start,
-					"type" => $type,
-					"length" => $length,
-					"uri" => aw_url_change_var ("mrp_hilight", $project_id),
-					"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-/* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
-				);
-
-				$chart->add_bar ($bar);
+				continue;
 			}
+
+			$length = $job->prop ("planned_length");
+			$resource_id = $job->prop ("resource");
+			$resource = obj ($resource_id);
+			$start = $job->prop ("starttime");
+			$job_name = $project->name () . " - " . $resource->name ();
+
+			### set bar type
+			$type = ($job->prop ("state") == MRP_STATUS_INPROGRESS) ? "inprogress" : "";
+			$type = in_array ($job->id (), $hilighted_jobs) ? "hilighted" : $type;
+
+			$bar = array (
+				"row" => $resource_id,
+				"start" => $start,
+				"type" => $type,
+				"length" => $length,
+				"uri" => aw_url_change_var ("mrp_hilight", $project_id),
+				"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
+/* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
+			);
+
+			$chart->add_bar ($bar);
 		}
 
 		### config
@@ -2685,10 +2691,10 @@ class mrp_workspace extends class_base
 		// get resource operators for professions
 		$ops = new object_list(array(
 			"profession" => $profs->ids(),
-			"lang_id" => array(),
+				"lang_id" => array(),
 			"site_id" => array(),
 			"class_id" => CL_MRP_RESOURCE_OPERATOR
-		));
+			));
 
 		// get resources
 		$ret = array();
@@ -3208,29 +3214,29 @@ class mrp_workspace extends class_base
 			$results = new object_list();
 		}
 		else
-		{
+	{
 			$filt = array(
 				"class_id" => CL_CRM_COMPANY,
 				"name" => "%".$arr["request"]["cs_name"]."%",
 				"reg_nr" => "%".$arr["request"]["cs_reg_nr"]."%",
 			);
 			if ($arr["request"]["cs_firmajuht"] != "")
-			{
+		{
 				$filt["CL_CRM_COMPANY.firmajuht.name"] = "%".$arr["request"]["cs_firmajuht"]."%";
-			}
+		}
 			if ($arr["request"]["cs_contact"] != "")
 			{
 				$filt["CL_CRM_COMPANY.contact.name"] = "%".$arr["request"]["cs_contact"]."%";
-			}
+	}
 			if ($arr["request"]["cs_phone"] != "")
-			{
+	{
 				$filt["CL_CRM_COMPANY.phone.name"] = "%".$arr["request"]["cs_phone"]."%";
 			}
 			$results = new object_list($filt);
-		}
+	}
 
 		foreach($results->arr() as $cust)
-		{
+	{
 			$t->define_data(array(
 				"name" => html::get_change_url($cust->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $cust->name()),
 				"address" => $cust->prop_str("contact"),

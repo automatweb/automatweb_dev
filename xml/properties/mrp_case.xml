@@ -69,6 +69,13 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>progress</name>
+            <group>grp_general</group>
+            <table>mrp_case</table>
+            <type>hidden</type>
+            <field>progress</field>
+      </property>
+      <property>
             <name>extern_id</name>
             <group>grp_general</group>
             <table>mrp_case</table>
