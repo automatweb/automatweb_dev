@@ -47,6 +47,13 @@
 			</function>
 		</action>
 
+		<action name="pwd_remind" nologin="1">
+			<function name="pwd_remind">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_pwd_remind" nologin="1">
 			<function name="submit_pwd_remind">
 				<arguments>
