@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $id
+	@cvs $id$
 
 	@comment 
 	analyses aw code
@@ -98,8 +98,8 @@ class docgen_analyzer extends class_base
 		@attrib params=name nologin=0 is_public=0 all_args=0 caption="N&auml;ita klassi infot" default=0 name=class_info
 
 		@param file required type=int acl=view;edit 
-		@param file optional type=int acl=view;edit default=19
-		@param file define value=100
+		@param file_2 optional type=int acl=view;edit default=19
+		@param file_3 define value=100
 
 		@returns 
 		html with class info
@@ -544,7 +544,13 @@ class docgen_analyzer extends class_base
 			if (substr($line, 0, strlen("@param")) == "@param")
 			{
 				// parse parameter
-				$data["params"][] = trim(substr($line, strlen("@param")));
+				$_pm = trim(substr($line, strlen("@param")));
+				$pdat = $this->_do_parse_parameter($_pm);
+				if ($pdat["name"] == "")
+				{
+					die("error: do_parse_parameters failed for string $_pm <br>\n");
+				}
+				$data["params"][$pdat["name"]] = $pdat;
 			}
 			else
 			if (substr($line, 0, strlen("@returns")) == "@returns")
@@ -684,6 +690,18 @@ class docgen_analyzer extends class_base
 		return $ret;
 	}
 
+	function _do_parse_parameter($str)
+	{
+		$ret = array();
+		list($ret["name"], $ret["req"], $extra) = explode(" ", $str, 3);
+		
+		// now parse extra params
+		$att = $this->_do_parse_attributes($extra);
+
+		$ret = $ret+$att;
+		return $ret;
+	}
+
 	function _get_orb_defs($data)
 	{
 		$xml  = "<?xml version='1.0'?>\n";
@@ -721,13 +739,52 @@ class docgen_analyzer extends class_base
 					$x_a[] = "all_args=\"1\"";
 				}
 
+				if (isset($attr["is_content"]) && $attr["is_content"] == 1)
+				{
+					$x_a[] = "is_content=\"1\"";
+				}
+
 				if (isset($attr["caption"]) && $attr["caption"] != "")
 				{
 					$x_a[] = "caption=\"".$attr["caption"]."\"";
 				}
+
+				$xml .= " ".join(" ", $x_a).">\n";
+
+				// make parameters
+				$par = new aw_array($f_data["doc_comment"]["params"]);
+
+				foreach($par->get() as $p_name => $p_dat)
+				{
+					$xml .= "\t\t\t<".$p_dat["req"]." name=\"$p_name\"";
+					
+					$x_p = array();
+					if (isset($p_dat["type"]) && $p_dat["type"] != "")
+					{
+						$x_p[] = "type=\"".$p_dat["type"]."\"";
+					}
+
+					if (isset($p_dat["acl"]) && $p_dat["acl"] != "")
+					{
+						$x_p[] = "acl=\"".$p_dat["acl"]."\"";
+					}
+
+					if (isset($p_dat["default"]) && $p_dat["default"] != "")
+					{
+						$x_p[] = "default=\"".$p_dat["default"]."\"";
+					}
+
+					if (isset($p_dat["value"]) && $p_dat["value"] != "")
+					{
+						$x_p[] = "value=\"".$p_dat["value"]."\"";
+					}
+
+					$xml .= " ".join(" ", $x_p)."/>\n";
+				}
+				$xml .= "\t\t</action>\n";
 			}
 		}
-
+		$xml .= "\t</class>\n";
 		$xml .= "</orb>\n";
 		return $xml;
 	}
