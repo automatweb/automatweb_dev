@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.9 2005/03/29 05:52:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.10 2005/03/30 20:17:10 duke Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -49,6 +49,15 @@ class rte extends class_base
 	}	
 
 	*/
+	
+	/**
+		@attrib name=table_dialog all_args="1"
+	**/
+	function table_dialog($arr)
+	{
+		$this->read_template("insert_table.tpl");
+		die($this->parse());
+	}
 
 	function get_rte_toolbar($arr)
 	{
@@ -157,13 +166,13 @@ class rte extends class_base
 		$toolbar->add_menu_item(array(
 			"parent" => "table_props",
 			"text" => t("Lisa tulp"),
-			"url" => "javascript:{$js_url_prefix}insert_column();",
+			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}insert_column();",
 		));
 		
 		$toolbar->add_menu_item(array(
 			"parent" => "table_props",
 			"text" => t("Lisa rida"),
-			"url" => "javascript:{$js_url_prefix}insert_row();",
+			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}insert_row();",
 		));
 
 		$toolbar->add_menu_separator(array("parent" => "table_props"));
@@ -171,22 +180,35 @@ class rte extends class_base
 		$toolbar->add_menu_item(array(
 			"parent" => "table_props",
 			"text" => t("Kustuta tulp"),
-			"url" => "javascript:{$js_url_prefix}delete_column();",
+			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}delete_column();",
 		));
 		
 		$toolbar->add_menu_item(array(
 			"parent" => "table_props",
 			"text" => t("Kustuta rida"),
-			"url" => "javascript:{$js_url_prefix}delete_row();",
+			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}delete_row();",
 		));
-		
+	
+		/*
+		$toolbar->add_menu_separator(array("parent" => "table_props"));
+		$toolbar->add_menu_item(array(
+			"parent" => "table_props",
+			"text" => t("Poolita rida"),
+			"url" => "javascript:{$js_url_prefix}split_row();",
+		));
+		$toolbar->add_menu_item(array(
+			"parent" => "table_props",
+			"text" => t("Poolita tulp"),
+			"url" => "javascript:{$js_url_prefix}split_cell();",
+		));
+		*/
 
 		$toolbar->add_separator();
 
 
 		$toolbar->add_button(array(
 			"name" => "source",
-			"tooltip" => T("HTML"),
+			"tooltip" => t("HTML"),
 			"target" => "_self",
 			"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
 		));
@@ -254,5 +276,6 @@ class rte extends class_base
                 $retval .= $this->parse("field");
                 return $retval;
         }
+	
 };
 ?>
