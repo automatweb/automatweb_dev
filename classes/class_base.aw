@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.63 2003/01/30 19:24:39 duke Exp $
+// $Id: class_base.aw,v 2.64 2003/02/01 13:33:38 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -350,13 +350,25 @@ class class_base extends aliasmgr
 
 		foreach($realprops as $property)
 		{
-                        $argblock = array(
+			// that is not set for checkboxes
+			$xval = (isset($form_data[$property["name"]])) ? $form_data[$property["name"]] : "";
+			if (($property["type"] == "checkbox") && ($property["method"] != "serialize"))
+			{
+				// set value to 0 for unchecked checkboxes, which are not to be saved
+				// into metainfo. 
+				$xval = (int)$xval;
+			};
+
+			$property["value"] = $xval;
+                        
+			$argblock = array(
                                 "prop" => &$property,
                                 "obj" => &$this->coredata,
                                 "objdata" => &$this->objdata,
 				"metadata" => &$metadata,
                                 "form_data" => &$form_data,
                         );
+	
 
                         // give the class a possiblity to execute some action
                         // while we are saving it.
@@ -380,15 +392,6 @@ class class_base extends aliasmgr
                         // returns PROP_OK
 			if ($status == PROP_OK)
 			{
-				// that is not set for checkboxes
-				$xval = (isset($form_data[$property["name"]])) ? $form_data[$property["name"]] : "";
-				if (($property["type"] == "checkbox") && ($property["method"] != "serialize"))
-				{
-					// set value to 0 for unchecked checkboxes, which are to be saved
-					// into metainfo. Dunno about usual fields.
-					$xval = (int)$xval;
-				};
-				
 				$name = $property["name"];
 
 				$savedata[$name] = $xval;
