@@ -78,6 +78,16 @@
             <caption>Aasta</caption>
       </property>
       <property>
+            <name>contents_doc</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTENTS_DOC</reltype>
+            <caption>Sisukorra dokument</caption>
+      </property>
+      <property>
             <name>preview</name>
             <group>general</group>
             <table>objects</table>
@@ -120,6 +130,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>Perioodi pilt</caption>
             </IMAGE>
+            <CONTENTS_DOC>
+                  <value>1</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Sisukorra dokument</caption>
+            </CONTENTS_DOC>
       </reltypes>
 </properties>
 

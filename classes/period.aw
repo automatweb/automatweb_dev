@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.20 2004/03/18 16:19:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.21 2004/03/25 16:24:39 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -41,6 +41,9 @@
 	@property pyear type=select
 	@caption Aasta
 
+	@property contents_doc type=relpicker reltype=RELTYPE_CONTENTS_DOC table=objects field=meta method=serialize
+	@caption Sisukorra dokument
+
 	@property preview type=text store=no editonly=1
 	@caption Eelvaade
 
@@ -56,6 +59,9 @@
 
 	@reltype IMAGE value=1 clid=CL_IMAGE
 	@caption Perioodi pilt
+
+	@reltype CONTENTS_DOC value=1 clid=CL_DOCUMENT
+	@caption Sisukorra dokument
 
 */
 
@@ -581,6 +587,51 @@ class period extends class_base
 			));
 		}
 		
+	}
+
+	function parse_alias($arr)
+	{
+		return $this->show(array("id" => $arr["alias"]["target"]));
+	}
+
+	function show($arr)
+	{
+		$ap = aw_global_get("act_period");
+		$oid = $ap["obj_id"];
+		$o = obj($oid);
+		$this->read_template("show.tpl");
+
+		if ($o->prop("contents_doc"))
+		{
+			$link = aw_ini_get("baseurl")."/".$o->prop("contents_doc");
+		}
+		else
+		{
+			$link = aw_ini_get("baseurl")."/period=".$o->prop("per_id");
+		}
+
+		if ($o->prop("perimage"))
+		{
+			$i = get_instance("image");
+			$image = $i->make_img_tag($i->get_url_by_id($o->prop("perimage")));
+		}
+		else
+		if ($o->meta("image"))
+		{
+			$i = get_instance("image");
+			$image = $i->make_img_tag($i->get_url_by_id($o->meta("image")));
+		}
+		else
+		{
+			$image = $o->name();
+		}
+
+		$this->vars(array(
+			"name" => $o->name(),
+			"link" => $link,
+			"image" => $image
+		));
+		return $this->parse();
 	}
 };
 ?>
