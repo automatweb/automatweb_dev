@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.74 2001/10/16 04:29:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.75 2001/10/26 15:21:13 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1169,7 +1169,7 @@ class form extends form_base
 	//
 	// what exactly does this code do?
 	//
-	// well, you can select a bunch of elements and then the data entered in those elements will be used to neme the form_entry object.
+	// well, you can select a bunch of elements and then the data entered in those elements will be used to name the form_entry object.
 	// and this is where it's done - terryf
 	//
 	// and such was the reply.
@@ -1229,6 +1229,13 @@ class form extends form_base
 		$this->vars(array("entry_id" => $entry_id));
 		
 		// so we feed the data to the elements and that should be it
+		$this->read_entry_from_array();
+
+		$awt->stop("form::load_entry");
+	}
+
+	function read_entry_from_array()
+	{
 		for ($row=0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col=0; $col < $this->arr["cols"]; $col++)
@@ -1236,8 +1243,6 @@ class form extends form_base
 				$this->arr["contents"][$row][$col] -> set_entry(&$this->entry, $entry_id);
 			};
 		};
-
-		$awt->stop("form::load_entry");
 	}
 
 	////
@@ -1617,6 +1622,90 @@ class form extends form_base
 			"chains" => $this->picker($this->arr["se_chain"], $this->get_chains(true))
 		));
 
+		//////////////////////////////////////////////////
+		// new version starts here
+
+		// we let the user pick one - either the form searches from a form chain 
+		// or it searches from several forms
+		// if the use picks several forms, they will be checked, whether it is possible to bind them all together via relation elements
+		// if not, the user is notified of the error and the selection will not be saved
+		// after successfully selecting some forms the user will be able to select the output to use when showing the search results
+		// 
+		// if the user picks that the form searches from a chain 
+		// he can select the chain and after saving also select the output with what the data will be shown
+
+		global $status_msg,$form_selsearch_data,$form_selsearch_error;
+		if ($form_selsearch_error == 1)
+		{
+			$this->arr["search_type"] = $form_selsearch_data["search_type"];
+			$this->arr["search_forms"] = $form_selsearch_data["search_forms"];
+			$this->arr["search_form_op"] = $form_selsearch_data["search_form_op"];
+			$this->arr["search_chain"] = $form_selsearch_data["search_chain"];
+			$this->arr["search_chain_op"] = $form_selsearch_data["search_chain_op"];
+			$this->vars(array(
+				"status_msg" => $status_msg
+			));
+			session_unregister("form_selsearch_error");
+			session_unregister("form_selsearch_data");
+			session_unregister("status_msg");
+		}
+
+		$this->vars(array(
+			"forms_search" => checked($this->arr["search_type"] == "forms"),
+			"chain_search" => checked($this->arr["search_type"] == "chain"),
+			"forms" => $this->multiple_option_list($this->arr["search_forms"],$this->get_flist(array("type" => FTYPE_ENTRY))),
+			"nchains" => $this->picker($this->arr["search_chain"],$this->get_chains(true))
+		));
+
+		$cs = "";
+		if ($this->arr["search_chain"])
+		{
+			$forms = $this->get_forms_for_chain($this->arr["search_chain"]);
+			$_ops = array(0 => "");
+			foreach($ops as $o_fid => $ar)
+			{
+				if (in_array($o_fid,$forms) && is_array($ar))
+				{
+					foreach($ar as $_opid => $_opname)
+					{
+						$_ops[$_opid] = $_opname;
+					}
+				}
+			}
+
+			$this->vars(array(
+				"chain_op" => $this->picker($this->arr["search_chain_op"],$_ops)
+			));
+
+			$cs = $this->parse("CHAIN_SEL");
+		}
+
+		$fs = "";
+		if (count($this->arr["search_forms"]) > 0)
+		{
+			$_ops = array(0 => "");
+			foreach($ops as $o_fid => $ar)
+			{
+				if (in_array($o_fid,$this->arr["search_forms"]) && is_array($ar))
+				{
+					foreach($ar as $_opid => $_opname)
+					{
+						$_ops[$_opid] = $_opname;
+					}
+				}
+			}
+
+			$this->vars(array(
+				"form_op" => $this->picker($this->arr["search_form_op"],$_ops)
+			));
+			$fs = $this->parse("FORM_SEL");
+		}
+		$this->vars(array(
+			"FORM_SEL" => $fs,
+			"CHAIN_SEL" => $cs,
+			"reforb"	=> $this->mk_reforb("save_search_sel", array("id" => $this->id,"page" => $page)),
+		));
+
 		$awt->stop("form::gen_search_sel");
 		return $this->do_menu_return();
 	}
@@ -1629,21 +1718,222 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 
-		foreach($inpage as $ifid => $v)
+		if (is_array($inpage))
 		{
-			$var = "ch_".$ifid;
-			$this->arr["search_from"][$ifid] = $$var;
-			$var = "sel_".$ifid;
-			$this->arr["search_outputs"][$ifid] = $$var;
+			foreach($inpage as $ifid => $v)
+			{
+				$var = "ch_".$ifid;
+				$this->arr["search_from"][$ifid] = $$var;
+				$var = "sel_".$ifid;
+				$this->arr["search_outputs"][$ifid] = $$var;
+			}
+
+			// kas ocime aint formist v6i yritame p2rga leida
+			$this->arr["formsonly"] = $formsonly;
+
+			$this->arr["se_chain"] = $se_chain;
 		}
 		
-		// kas ocime aint formist v6i yritame p2rga leida
-		$this->arr["formsonly"] = $formsonly;
-
-		$this->arr["se_chain"] = $se_chain;
-
 		$this->save();
+
+		////////////////////////////////////////////
+		// new version here
+
+		$this->load($id);
+
+		$this->arr["search_type"] = $search_from;
+		$this->arr["search_forms"] = array();
+		if (is_array($forms))
+		{
+			foreach($forms as $fid)
+			{
+				$this->arr["search_forms"][$fid] = $fid;
+			}
+		}
+		
+		$this->arr["search_form_op"] = $form_op;
+
+		$this->arr["search_chain"] = $search_chain;
+		$this->arr["search_chain_op"] = $chain_op;
+
+		// here we must check if the users selection is valid - whether all the selected forms are connected via 
+		// relation elements and also remember the form where one should start in order to be able to traverse 
+		// all the selected forms in the most efficient manner
+		// if the users selection is not valid, save the data in the session and give an error message
+
+		if (($msg = $this->check_search_target_form_relations()) != "ok")
+		{
+			global $status_msg,$form_selsearch_data,$form_selsearch_error;
+			$form_selsearch_error = 1;
+			$form_selsearch_data["search_type"] = $this->arr["search_type"];
+			$form_selsearch_data["search_forms"] = $this->arr["search_forms"];
+			$form_selsearch_data["search_form_op"] = $this->arr["search_form_op"];
+			$form_selsearch_data["search_chain"] = $this->arr["search_chain"];
+			$form_selsearch_data["search_chain_op"] = $this->arr["search_chain_op"];
+			$status_msg = $msg;
+			session_register("status_msg","form_selsearch_data","form_selsearch_error");
+		}
+		else
+		{
+			$this->save();
+		}
 		return $this->mk_orb("sel_search", array("id" => $id,"page" => $page));
+	}
+
+	////
+	// !this checks if the search from forms settings are all nice and clean - if all the forms can be reached from 
+	// any other and sets the optimal form to start from
+	function check_search_target_form_relations()
+	{
+		if ($this->arr["search_type"] == "forms")
+		{
+			if (!$this->arr["search_form_op"])
+			{
+				return "No output selected for forms!";
+			}
+
+			$found = false;
+			foreach($this->arr["search_forms"] as $fid)
+			{
+				$this->req_check_stf_relations_map = array();
+				$this->req_check_stf_relations($fid);
+				// now we must check the map if all the selected forms are covered in it and there also must be no
+				// "holes" in it - meaning that you must be able to access all the selected forms startig from one of them 
+				// and touching all of them, but not any others - they might have relations to some other forms
+				// but you must not have to use those relations to access all of the search forms
+				$all_filled = true;
+				foreach($this->arr["search_forms"] as $_fid)
+				{
+					if ($this->req_check_stf_relations_map[$_fid] != $_fid)
+					{
+						$all_filled = false;
+					}
+				}
+				if ($all_filled)
+				{
+					$found = true;
+					$this->arr["start_search_relations_from"] = $fid;
+				}
+			}
+			if (!$found)
+			{
+				$this->arr["start_search_relations_from"] = 0;
+				return "Not all forms are connected via relations!";
+			}
+		}
+		else
+		{
+			if (!$this->arr["search_chain_op"])
+			{
+				$this->arr["start_search_relations_from"] = 0;
+				return "No output selected for chain!";
+			}
+		}
+		return "ok";
+	}
+
+	////
+	// !this recurses through all the relations and writes the info in a map - so we can check if it managed to touch
+	// all the selected forms or not. 
+	function req_check_stf_relations($fid)
+	{
+		// now here we must try to figure out if the form is connected to any others - via relation elements 
+
+		$this->req_check_stf_relations_map[$fid] = $fid;
+
+		$f = new form;
+		$f->load($fid);
+
+		$rels = $f->get_element_by_type("listbox","relation",true);
+		foreach($rels as $el)
+		{
+			// if the related form is selected as a search form, then follow the relation, otherwise don't
+			$rel_f = $el->get_related_form();
+			// also if we have already visited that form, make sure we don't end up in a loop
+			if ($this->arr["search_forms"][$rel_f] == $rel_f && $this->req_check_stf_relations_map[$rel_f] != $rel_f)
+			{
+				$this->req_check_stf_relations($rel_f);
+			}
+		}
+	}
+
+	////
+	// !searches and displays the results
+	// paramters:
+	//	$id - search form id - if not specified, assumes the form is loaded
+	//	$entry_id - search form entry id - if not specified, assumes loaded 
+	//	$section - the active section
+	function new_do_search($arr)
+	{
+		extract($arr);
+		if ($id)
+		{
+			$this->load($id);
+		}
+		if ($entry_id)
+		{
+			$this->load_entry($entry_id);
+		}
+
+		$form_table = new form_table;
+		$used_els = array();
+
+		// now, if the results are to be shown in a table, load the table and ask it for the necessary elements 
+		// if it is not to be shown in a table - but as a list of outputs - or whatever - assume all elements are necessary
+		if ($this->arr["show_table"])
+		{
+			if (!$this->arr["table"])
+			{
+				$this->raise_error("No table selected for showing search results for form ".$this->id."!",true);
+			}
+			$form_table->load_table($this->arr["table"]);
+			$used_els = $form_table->get_used_elements();
+			$form_table->start_table($this->entry_id,array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $this->entry_id, "op_id" => 1,"section" => $section));
+		}
+
+		// now get the search query
+		$sql = $this->get_search_query(array("used_els" => $used_els));
+
+		$result = "";
+
+		$show_form = new form;
+		$show_form->load($this->arr["start_search_relations_from"]);
+		$show_form->load_output($this->get_search_output());
+
+		// execute it and show the results in the desired form
+		$this->db_query($sql);
+		while ($row = $this->db_next())
+		{
+			if ($this->arr["show_table"])
+			{
+				$form_table->row_data($row);
+			}
+			else
+			{
+				// this should load the entry without doing any db queries - from the result row data
+				// hm - but - maybe we shouldn't do this - maybe the form also has some other relations that are 
+				// not selected as search forms - so their data will not get loaded. damn. ok, so we just do load_entry for the form
+				$show_form->load_entry($row["entry_id"]);
+				$result.=$show_form->show(array("id" => $show_form->id,"entry_id" => $row["entry_id"], "op_id" => $show_form->output_id,"no_load_entry" => true, "no_load_op" => true));
+			}
+		}
+		
+		// now if we are showing table, finish the table 
+		if ($this->arr["show_table"])
+		{
+			$result = $form_table->finalize_table();
+		}
+
+		return $result;
+	}
+
+	function get_search_output()
+	{
+		if ($this->arr["search_type"] == "forms")
+		{
+			return $this->arr["search_form_op"];
+		}
+		return $this->arr["search_chain_op"];
 	}
 
 	////
@@ -2104,7 +2394,10 @@ class form extends form_base
 				$joins = array();
 				$q_els = array();
 				$has_eid = false;
-				$used_els = array($this->search_form => array()) + $used_els;
+				if (!is_array($used_els[$this->search_form]))
+				{
+					$used_els = array($this->search_form => array()) + $used_els;
+				}
 				foreach($used_els as $form_id => $el_arr)
 				{
 					$joins[] = "LEFT JOIN form_".$form_id."_entries ON form_".$form_id."_entries.chain_id = form_chain_entries.id";

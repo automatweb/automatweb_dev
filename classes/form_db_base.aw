@@ -386,7 +386,7 @@ class form_db_base extends aw_template
 		$this->save_handle();
 
 		$tbl_col = $this->arr["save_tables"][$tbl];
-		$q = "SELECT ".$tbl.".* FROM $tbl WHERE ".$tbl.".".$tblcol." = '$entry_id' ";
+		$q = "SELECT ".$tbl.".* FROM $tbl WHERE ".$tbl.".".$tbl_col." = '$entry_id' ";
 		$this->db_query($q);
 		$row = $this->db_next();
 
@@ -557,6 +557,15 @@ class form_db_base extends aw_template
 		}
 		$this->restore_handle();
 		return $row;
+	}
+
+	////
+	// !returns the sql query that will perform the search, based on the loaded form and the loaded entry
+	// parameters:
+	//	$used_els - if it is omitted or is an empty array, then all elements from all the forms are returned
+	//							if it contains some element id's, then only those elements are returned
+	function get_search_query($arr)
+	{
 	}
 }
 ?>

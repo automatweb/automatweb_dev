@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.30 2001/10/16 04:29:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.31 2001/10/26 15:20:57 duke Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -766,6 +766,8 @@ class form_element extends aw_template
 	function get_row()		{ return $this->row; }
 	function get_col()		{ return $this->col; }
 	function get_el_group()		{ return $this->arr["group"]; }
+	function get_related_form() { return $this->arr["rel_form"]; }
+	function get_related_element() { return $this->arr["rel_elelement"]; }
 	function get_el_lb_items()	
 	{
 		return $this->arr["listbox_items"];
