@@ -40,6 +40,8 @@ class propcollector extends aw_template
 		$this->req_dir(array("path" => $cdir));
 		$files = $this->files;
 		asort($files);
+		$counter = 0;
+		$total = 0;
 		// now we need to parse all the files for properties
 		foreach($files as $key => $name)
 		{
@@ -49,15 +51,17 @@ class propcollector extends aw_template
 			$targetfile = $this->cfg["basedir"] . "/xml/properties/$cname" . ".xml";
 			if (file_exists($targetfile))
 			{
+				$total++;
 				$target_mtime = filemtime($targetfile);
 				$source_mtime = filemtime($name);
 
 				if ($source_mtime < $target_mtime)
 				{
-					print "$targetfile is up to date\n";
+					//print "$targetfile is up to date\n";
 					continue;
 				};
 			};
+
 
 			$lines = @file($name);
 
@@ -93,10 +97,15 @@ class propcollector extends aw_template
 						$this->add_caption($m[1]);
 					};
 				};
+				if (sizeof($this->properties) > 0)
+				{
+					$counter++;
+				};
 				$this->cl_end();
 				//print "parsed $name<br>";
 			};
 		};
+		printf("Updated %d files out of %d\nAll done.\n",$counter,$total);
 	}
 
 	////
