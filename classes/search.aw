@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.41 2003/05/29 15:31:02 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.42 2003/05/30 09:37:16 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -434,11 +434,14 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							{
 								$q = "select ".OID." from objects where class_id=".CL_PSEUDO." and name like '%".$val."%' limit 100";
 								$locs = $this->db_fetch_array($q);
-								foreach($locs as $val)
+								if (count($locs)>0)
 								{
-									$loc[] = $val[OID];
+									foreach($locs as $val)
+									{
+										$loc[] = $val[OID];
+									}
+									$_part = " parent in (".implode(',',$loc).") ";
 								}
-								$_part = " parent in (".implode(',',$loc).") ";
 								$partcount++;
 							}
 						};
