@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.74 2004/05/06 11:18:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.75 2004/05/11 07:49:18 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -192,6 +192,8 @@ class file extends class_base
 
 						$data["value"] = $fs;
 						$arr["obj_inst"]->set_name($file_name);
+						$arr["obj_inst"]->set_prop("type", $file_type);
+						$this->file_type = $file_type;
 						//$this->file_name = $file_name;
 					};
 			
@@ -200,6 +202,13 @@ class file extends class_base
 				{
 					$retval = PROP_IGNORE;
 				};
+				break;
+				
+			case "type":
+				if ($this->file_type)
+				{
+					$data["value"] = $this->file_type;
+				}
 				break;
 		};
 		// cause everything is alreay handled here
