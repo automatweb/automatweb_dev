@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.187 2002/12/17 19:20:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.188 2002/12/18 13:24:34 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -5836,7 +5836,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$ps = " AND ((period = '$period') OR (periodic = 1)) ";
 		}
 
+		$u = get_instance("users");
+		$addobject_type = $u->get_user_config(array(
+			"uid" => aw_global_get("uid"),
+			"key" => "addobject_type",
+		));
+			
 		$this->read_template("js_popup_menu.tpl");
+
+
 		$this->db_query("SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0 $ps ");
 		while ($row = $this->db_next())
 		{
@@ -5925,7 +5933,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		}
 		asort($types);
 
-		$this->read_template("java_popup_menu.tpl");
 
 		$content = $this->get_add_menu(array(
 			"id" => $parent,
@@ -5933,72 +5940,72 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"sharp" => true,
 			"addmenu" => 1,
 			"period" => $period,
-			"js" => 1,
 		));
 
-		$items = explode("#",$content);
-
-		// id|parent|caption|link
-
-		$byparent = array();
-		foreach($items as $item)
+		if ($addobject_type == "dhtml")
 		{
-			list($m_id,$m_parent,$m_caption,$m_link) = explode("|",$item);
-			$real_parent = (int)$m_parent;
-			if ($m_id)
+
+			$items = explode("#",$content);
+
+			// id|parent|caption|link
+
+			$byparent = array();
+			foreach($items as $item)
 			{
-					  $by_parent[$real_parent][$m_id] = array(
-						  "link" => $m_link,
-						  "caption" => $m_caption,
-					  );
+				list($m_id,$m_parent,$m_caption,$m_link) = explode("|",$item);
+				$real_parent = (int)$m_parent;
+				if ($m_id)
+				{
+						  $by_parent[$real_parent][$m_id] = array(
+							  "link" => $m_link,
+							  "caption" => $m_caption,
+						  );
+				};
 			};
-		};
 
-		$this->read_template("js_add_menu.tpl");
+			$this->read_template("js_add_menu.tpl");
 
-		$whole_menu = "";
+			$whole_menu = "";
 
 
-		// each parent starts a new menu
-		foreach($by_parent as $item_id => $item_collection)
-		{
-			$menu_data = "";
-			foreach($item_collection as $el_id => $el_data)
+			// each parent starts a new menu
+			foreach($by_parent as $item_id => $item_collection)
 			{
-				// if this el_id has children, make it a submenu
-				$children = sizeof($by_parent[$el_id]);
-				if ($el_id == "separator")
+				$menu_data = "";
+				foreach($item_collection as $el_id => $el_data)
 				{
-					$tpl = "MENU_SEPARATOR";
-				}
-				elseif ($children > 0)
-				{
-					$tpl = "MENU_ITEM_SUB";
-				}
-				else
-				{
-					$tpl = "MENU_ITEM";
+					// if this el_id has children, make it a submenu
+					$children = sizeof($by_parent[$el_id]);
+					if ($el_id == "separator")
+					{
+						$tpl = "MENU_SEPARATOR";
+					}
+					elseif ($children > 0)
+					{
+						$tpl = "MENU_ITEM_SUB";
+					}
+					else
+					{
+						$tpl = "MENU_ITEM";
+					};
+					$this->vars(array(
+						"caption" => $el_data["caption"],
+						"url" => $el_data["link"],
+						"sub_menu_id" => "aw_menu_" . $el_id,
+					));
+					$menu_data .= $this->parse($tpl);
 				};
 				$this->vars(array(
-					"caption" => $el_data["caption"],
-					"url" => $el_data["link"],
-					"sub_menu_id" => "aw_menu_" . $el_id,
+					"MENU_ITEM" => $menu_data,
+					"menu_id" => "aw_menu_" . $item_id,
 				));
-				$menu_data .= $this->parse($tpl);
+				$whole_menu .= $this->parse("MENU");
 			};
-			$this->vars(array(
-				"MENU_ITEM" => $menu_data,
-				"menu_id" => "aw_menu_" . $item_id,
-			));
-			$whole_menu .= $this->parse("MENU");
 		};
-
-//      print "<pre>";
-//      print_r($by_parent);
-//      print "</pre>";
 
 
 		// make applet for adding objects
+		$this->read_template("java_popup_menu.tpl");
 		$this->vars(array(
 			"icon_over" => $this->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
 			"icon" => $this->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
@@ -6024,7 +6031,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"URLPARAM" => $up,
 			"FETCHCONTENT" => $this->parse("FETCHCONTENT")
 		));
-		$add_applet = $this->parse();
+
+		if ($addobject_type == "dhtml")
+		{
+			$applet_data = $whole_menu;
+		}
+		else
+		{
+			$applet_data = $this->parse();
+		};
 
 		$la = get_instance("languages");
 
@@ -6047,12 +6062,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$this->read_template("right_frame.tpl");
 
+		$this->add_object_type = $addobject_type;
+
 		$toolbar = $this->rf_toolbar(array(
 			"parent" => $parent,
-			"add_applet" => $whole_menu,
+			"add_applet" => $applet_data,
 			"sel_count" => count($sel_objs),
 		));
 
+		$toolbar_data = $toolbar->get_toolbar();
+		if ($addobject_type == "dhtml")
+		{
+			$toolbar_data .= $whole_menu;
+		};
 
 		$this->vars(array(
 			"table" => $this->t->draw(),
@@ -6061,7 +6083,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"parent" => $parent,
 			"period" => $period,
 			"lang_name" => $la->get_langid(),
-			"toolbar" => $toolbar->get_toolbar() . $whole_menu,
+			"toolbar" => $toolbar_data,
 		));
 
 		return $this->parse();
@@ -6074,15 +6096,22 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		
 		if ($this->can("add", $parent))
 		{
-			$toolbar->add_button(array(
-				"name" => "add",
-				"tooltop" => "Uus",
-				"url" => "#",
-				"onClick" => "return buttonClick(event, 'aw_menu_0');",
-				"img" => "new.gif",
-				"imgover" => "new_over.gif",
-				"class" => "menuButton",
-			));
+			if ($this->add_object_type == "dhtml")
+			{
+				$toolbar->add_button(array(
+					"name" => "add",
+					"tooltop" => "Uus",
+					"url" => "#",
+					"onClick" => "return buttonClick(event, 'aw_menu_0');",
+					"img" => "new.gif",
+					"imgover" => "new_over.gif",
+					"class" => "menuButton",
+				));
+			}
+			else
+			{
+				$toolbar->add_cdata($add_applet);
+			};
 		};
 
 		if (!$no_save)
