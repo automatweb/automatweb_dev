@@ -266,6 +266,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	function selection_manage_bar($args = array())
 	{
 		$nodes = array();
+		if (!is_object($this->selection_object) && method_exists($this,'callback_obj_list'))
+		{
+			classload('kliendibaas/selection');
+			$this->selection_object = new selection();
+			$this->selection = $args['obj'];
+		}
 		$nodes['toolbar'] = array(
 			'value' => $this->selection_object->mk_toolbar(array(
 				'selection' => $args['obj'][OID],
