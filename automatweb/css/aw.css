@@ -1433,10 +1433,13 @@ border-top: 1px solid #FFFFFF;
 border-bottom: 1px solid #D0D0D0;
 border-left: 1px solid #FFFFFF;
 border-right: 1px solid #D0D0D0;
-background-color: #E1E1E1;
-padding: 8px;
+background-color: #C1C1C1;
+padding-top: 5px;
+padding-bottom: 5px;
+padding-left: 8px;
 font-family: Verdana, Arial, sans-serif;
-font-size: 11px;
+font-size: 12px;
+font-weight: bold;
 color:#000000;
 }
 
