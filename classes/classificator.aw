@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.4 2004/02/26 13:56:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.5 2004/03/17 17:13:05 duke Exp $
 
 /*
 
@@ -66,21 +66,174 @@ class classificator extends class_base
 	function init_vcl_property($arr)
 	{
 		$prop = &$arr["property"];
+		/*
 		$ot = get_instance(CL_OBJECT_TYPE);
 		$ff = $ot->get_obj_for_class(array(
 			"clid" => $arr["clid"],
 		));
 		$oft = new object($ff);
-		$meta = $oft->meta("classificator");
-		$ofto = new object($meta[$prop["name"]]);
+		$clf = $oft->meta("classificator");
+		$clf_type = $oft->meta("clf_type");
+		$use_type = $clf_type[$prop["name"]];
+
+		$ofto = new object($clf[$prop["name"]]);
 		$olx = new object_list(array(
 			"parent" => $ofto->id(),
 			"class_id" => CL_META,
 			"lang_id" => array(),
 		));
-		$prop["type"] = "select";
-		$prop["options"] = array("" => "") + $olx->names();
-		$prop["caption"] = $ofto->name();
+		*/
+		
+		list($choices,$name,$use_type) = $this->get_choices(array(
+			"clid" => $prop["clid"],
+			"name" => $prop["name"],
+		));
+
+		$selected = false;
+		$connections = array();
+
+		if ($prop["store"] == "connect")
+		{
+			$conns = $arr["obj_inst"]->connections_from(array(
+				"type" => constant($prop["reltype"]),
+			));
+
+			foreach($conns as $conn)
+			{
+				$selected = $conn->prop("to");
+				$connections[$selected] = $selected;
+			};
+
+			if ($use_type == "checkboxes")
+			{
+				$prop["value"] = $connections;
+			}
+			else
+			{
+				$prop["value"] = $selected;
+			};
+		};
+
+		$prop["caption"] = $name;
+		switch($use_type)
+		{
+			case "checkboxes":
+				$prop["type"] = "chooser";
+				$prop["multiple"] = 1;
+				$prop["options"] = $choices->names();
+				break;
+
+			case "radiobuttons":
+				$prop["type"] = "chooser";
+				$prop["options"] = $choices->names();
+				break;
+
+			default:
+				$prop["type"] = "select";
+				$prop["options"] = array("" => "") + $choices->names();
+		};
+
+
+		// well, that was pretty easy. Now I need a way to tell the bloody classificator, that
+		// it should use connections instead of field. And what could be easier than doing
+		// it where the classificator is defined. ajee!
+	}
+
+	function get_choices($arr)
+	{
+		// needs clid
+		// needs $property name
+
+		$ot = get_instance(CL_OBJECT_TYPE);
+		$ff = $ot->get_obj_for_class(array(
+			"clid" => $arr["clid"],
+		));
+
+		$oft = new object($ff);
+		$clf = $oft->meta("classificator");
+		$clf_type = $oft->meta("clf_type");
+		$use_type = $clf_type[$arr["name"]];
+
+		$ofto = new object($clf[$arr["name"]]);
+		$olx = new object_list(array(
+			"parent" => $ofto->id(),
+			"class_id" => CL_META,
+			"lang_id" => array(),
+		));
+
+		return array($olx,$ofto->name(),$use_type);
+
+	}
+
+	function process_classificator($arr)
+	{
+		$property = $arr["prop"];
+
+		$items = new aw_array($property["value"]);
+			
+		// first I need a list of old connections.
+		$oldconns = $arr["obj_inst"]->connections_from(array(
+			"type" => constant($property["reltype"]),
+		));
+
+		list($choices,,) = $this->get_choices(array(
+			"clid" => $property["clid"],
+			"name" => $property["name"],
+		));
+
+		$ids = $this->make_keys($choices->ids());
+
+		// I need to list the choices
+		$connections = array();
+		foreach($oldconns as $conn)
+		{
+			$connections[$conn->prop("to")] = $conn->prop("to");
+		};
+
+		foreach($items->get() as $item)
+		{
+			// skip invalid items
+			if (empty($ids[$item]))
+			{
+				continue;
+			};
+			if (is_oid($item))
+			{
+				// create the connection if it didn't exist
+				if (empty($connections[$item]))
+				{
+					$arr["obj_inst"]->connect(array(
+						"to" => $item,
+						"reltype" => constant($property["reltype"]),
+					));
+				};
+				unset($connections[$item]);
+
+			};
+		};
+
+		if (sizeof($connections) > 0)
+		{
+			foreach($connections as $to_remove)
+			{
+				$arr["obj_inst"]->disconnect(array(
+					"from" => $to_remove,
+				));
+			};
+		};
+
+
+			// XXX: would be nice if connect would recognize symbolic reltypes
+			// and this belongs to some place else, don't you think so?
+
+			// XXX: I need a method to synchronize data inside the form
+			// and in my class. Because I might not always have all the connections
+			// I have been using and then I'm going to get a lot of shit!
+
+			// thing is .. I do not want to save those things into form, instead
+			// I need to do my thing where I need it
+			// I need
+
 	}
 
 	////
