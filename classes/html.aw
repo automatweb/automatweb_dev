@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.9 2002/11/22 17:05:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.10 2002/11/22 17:59:08 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -78,8 +78,20 @@ class html extends aw_template
 		extract($args);
 		$cols = ($cols) ? $cols : 40;
 		$rows = ($rows) ? $rows : 5;
-		$wrap = ($wrap) ? $wrap : "soft";
-		return "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap'>$value</textarea>\n";
+		if ($richtext && (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") > 0) )
+		{
+			$args["type"] = "richtext";
+			$args["width"] = $cols * 10;
+			$args["height"] = $rows * 10;
+			$args["value"] = str_replace("\"","&quot;",$args["value"]);
+			$retval = $this->richtext($args);
+		}
+		else
+		{
+			$wrap = ($wrap) ? $wrap : "soft";
+			$retval = "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap'>$value</textarea>\n";
+		};
+		return $retval;
 	}
 	
 	////
@@ -200,6 +212,8 @@ class html extends aw_template
 		$retval .= $this->parse("field");
 		return $retval;
 	}
+
+
 
 };
 ?>
