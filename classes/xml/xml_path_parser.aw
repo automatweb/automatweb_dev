@@ -18,6 +18,7 @@ class xml_path_parser
 	function parse_file($args = array())
 	{
 		$basedir = aw_ini_get("basedir");
+		$this->children = array();
 		$fname = $args["fname"];
 		$cf = get_instance("cache");
                 $cf->get_cached_file(array(
@@ -32,6 +33,7 @@ class xml_path_parser
 	function parse_data($args = array())
 	{
 		$this->content = $args["content"];
+		$this->children = array();
 		$this->_setup_parser();
 		$retval = &$this->children;
 		return $retval;
