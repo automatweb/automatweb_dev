@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.27 2003/09/30 09:12:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.28 2003/10/05 17:26:36 duke Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -942,7 +942,8 @@ class admin_menus extends aw_template
 			$menu_last_view[$parent] = $view_type;
 			aw_session_set('menu_last_view',$menu_last_view);
 		}
-		
+	
+		$this->set_parse_method("eval");
 		$this->read_template($tpl);
 
 
