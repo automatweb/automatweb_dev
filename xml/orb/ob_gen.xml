@@ -10,23 +10,6 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="ob_conf">
-			<function name="ob_conf">
-				<arguments>
-					<required name="id"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="log_setup">
-			<function name="log_setup">
-				<arguments>
-					<required name="id"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="normalizer">
 			<function name="normalizer">
 				<arguments>
@@ -36,7 +19,6 @@
 				</arguments>
 			</function>
 		</action>
-
 		<action name="clear_log">
 			<function name="clear_log">
 				<arguments>

@@ -1,38 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="kliendibaas" folder="kliendibaas" extends="class_base">
-		<action name="pop_select">
-			<function name="pop_select">
-				<arguments>
-					<required name="tyyp"/>
-					<required name="table"/>
-					<optional name="id"/>
-					<optional name="default"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="contact_makah">
-			<function name="contact_makah">
-				<arguments>
-					<optional name="tyyp"/>
-					<optional name="id"/>
-					<optional name="name"/>
-					<required name="do"/>
-					<optional name="parent"/>
-				</arguments>
-			</function>
-		</action>
-		<action name="isik_makah">
-			<function name="isik_makah">
-				<arguments>
-					<optional name="tyyp"/>
-					<optional name="id"/>
-					<optional name="name"/>
-					<required name="do"/>
-					<optional name="parent"/>
-				</arguments>
-			</function>
-		</action>
 	</class>
 </orb>
 		
