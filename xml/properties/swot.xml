@@ -3,7 +3,7 @@
       <property>
             <name>swot_folder</name>
             <type>relpicker</type>
-            <reltype>RELTYPE_FOLDER</reltype>
+            <reltype>RELTYPE_SWOT_FOLDER</reltype>
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
@@ -84,5 +84,12 @@
                   <caption>&amp;Uuml;ldvaade</caption>
             </view>
       </groupinfo>
+      <reltypes>
+            <SWOT_FOLDER>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>SWOT objektide kataloog</caption>
+            </SWOT_FOLDER>
+      </reltypes>
 </properties>
 
