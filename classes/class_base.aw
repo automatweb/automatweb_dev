@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.18 2002/12/02 11:18:52 kristo Exp $
+// $Id: class_base.aw,v 2.19 2002/12/16 17:25:43 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -226,13 +226,13 @@ class class_base extends aliasmgr
 		$active = ($group) ? $group : "general";
 		$this->group = $active;
 		
-		$this->load_object(array("id" => $id));
-
 		// I need an easy way to turn off individual properties
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => $group,
 		));
+
+		$this->load_object(array("id" => $id));
 
 		// here be some magic to determine the correct output client
 		// this means we could create a TTY client for AW :)
