@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.19 2003/05/05 14:21:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.20 2003/05/07 13:43:07 duke Exp $
 
 /*
 
@@ -88,37 +88,11 @@ class gallery_v2 extends class_base
 
 	function parse_alias($args = array())
 	{
-		extract($args);
 		return $this->show(array(
-			"oid" => $alias["target"]
+			"oid" => $args["alias"]["target"]
 		));
 	}
 
-	////
-	// !this gets the id of an object, and this will scan it's relations
-	// and show a gallery it finds
-	function show_aliased($args = array())
-	{
-		extract($args);
-		if (empty($args["id"]))
-		{
-			return false;
-		};
-		$q = "SELECT target FROM aliases WHERE source = '$args[id]' AND type = " . $this->clid;
-		$this->db_query($q);
-		$row = $this->db_next();
-		if (is_array($row))
-		{
-			$retval = $this->show(array(
-				"oid" => $row["target"],
-			));
-		}
-		else
-		{
-			$retval = "";
-		};
-		return $retval;
-	}
 
 	function view($args = array())
 	{
@@ -176,7 +150,7 @@ class gallery_v2 extends class_base
 		else
 		if ($prop['name'] == "ftp_host" || $prop['name'] == "ftp_user" || $prop['name'] == "ftp_pass" || $prop['name'] == "ftp_folder")
 		{
-			classload("core/ftp");
+			classload("protocols/file/ftp");
 			if (!ftp::is_available())
 			{
 				return PROP_IGNORE;
@@ -632,21 +606,23 @@ class gallery_v2 extends class_base
 		return $cf->get_image_folder($this->_get_conf_for_folder($obj['parent']));
 	}
 
-	function _show_rate_objs($ob)
+	function _show_rate_objs($ob,$robj)
 	{
 		$rate = array();
-		$rateobjs = $this->_get_rate_objs($ob);
-		foreach($rateobjs as $oid => $name)
+		// I want to access that array from show to validate our argument
+		$this->rateobjs = $this->_get_rate_objs($ob);
+		foreach($this->rateobjs as $oid => $name)
 		{
 			$this->vars(array(
-				"link" => $this->mk_my_orb("show", array("id" => $oid, "section" => aw_global_get("section"), "gallery_id" => $ob["oid"]), "rate"),
-				"name" => $name
+				"link" => $this->mk_link(array("section" => aw_global_get("section"),"oid" => $oid,"date" => aw_global_get("date")),true),
+				"name" => $name,
 			));
-			$rate[] = $this->parse("RATE_OBJ");
+			$rate[] = $this->parse($oid == $robj ? "RATE_OBJ_SEL" : "RATE_OBJ");
 		}
 		$this->vars(array(
 			"RATE_OBJ" => join($this->parse("RATE_OBJ_SEP"), $rate),
-			"RATE_OBJ_SEP" => ""
+			"RATE_OBJ_SEP" => "",
+			"RATE_OBJ_SEL" => "",
 		));
 	}
 
@@ -736,19 +712,44 @@ class gallery_v2 extends class_base
 		$l = $ob['meta']['page_data'][$page]['layout'];
 
 		$this->read_any_template("show_v2.tpl");
+		
+		// decide which rate object to use
+		$robj = aw_global_get("oid");
 
 		// ok, do draw, first draw all rate objs
-		$this->_show_rate_objs($ob);
+		$this->_show_rate_objs($ob,$robj);
 
+		// and if that doesn't belong here, then show the default view
+		if (!$this->rateobjs[$robj])
+		{
+			unset($robj);
+		};
+		
+		$this->rating = get_instance("contentmgmt/rate/rate");
+
+		if ($robj)
+		{
+			// get the order, I dunno why, but rating->show wants a reference
+			// to the array
+			$tmp = array(
+				"id" => $robj,
+				"from_oid" => $oid,
+			);
+
+			// show is misleading, it merely returns the image order array
+			$imorder = $this->rating->show($tmp);
+
+			$this->reorder(&$ob,$imorder);
+		}
+		
 		$this->_show_pageselector($ob, $page);
 
 		// now all images 
-		$this->rating = get_instance("contentmgmt/rate/rate");
 
 		// get all hit counts for all images, so that we won't do a query for each image
 		$pd = $ob['meta']['page_data'][$page]['content'];
 		$this->hits = $this->_get_hit_counts($pd);
-		
+
 		$li = get_instance("vcl/grid_editor");
 		$li->_init_table($l);
 
@@ -772,16 +773,13 @@ class gallery_v2 extends class_base
 	}
 
 	////
-	// !shows gallery, but with images reordered - image order is in order array - image id's are in there
-	// parameters:
-	//	id - gallery id
+	// reorders images based using information in a rate object
+	//	ob - gallery object
 	//	order - array of image ids, the order they are shown in
-	function show_ordered($arr)
+	function reorder(&$ob,$order)
 	{
-		extract($arr);
+		//extract($arr);
 		global $page;
-
-		$ob = $this->get_object($id);
 
 		$newd = array();
 		$used = array();
@@ -814,9 +812,6 @@ class gallery_v2 extends class_base
 		}
 
 		$ob['meta']['page_data'] = $newd;
-		$arr['ob'] = $ob;
-
-		return $this->show($arr);		
 	}
 
 	function _find_image($id, $ob)
@@ -884,19 +879,21 @@ class gallery_v2 extends class_base
 		
 		$w = $pd['img']['sz'][0];
 		$h = $pd['img']['sz'][1]+70;
-		$link = "javascript:remote('no',$w,$h,'".$this->mk_my_orb("show_image", array(
+		$link = $this->mk_my_orb("show_image", array(
 			"id" => $obj['oid'],
 			"page" => $page,
 			"row" => $row,
 			"col" => $col,
 			"img_id" => $pd['img']['id']
-		))."')";
+		));
 		$this->has_images = true;
 
 		$tp = new aw_template;
 		$tp->tpl_init("gallery");
 		$tp->read_template("show_v2_cell_content.tpl");
 		$tp->vars(array(
+			"width" => $w,
+			"height" => $h,
 			"link" => $link,
 			"img" => image::make_img_tag(image::check_url($pd['tn']['url'])),
 			"rating" => $this->rating->get_rating_for_object($pd['img']['id']),
@@ -1442,7 +1439,35 @@ class gallery_v2 extends class_base
 		}
 		return $ret;
 	}
+	
+	////
+	// !this is a content generator - right now used by the calendar only
+	// shows a gallery attached to an object - or event
+	// it should probably be improved a bit, since right now it uses a tambov
+	// constant to decide WHICH attached gallery to show
+	function show_aliased($args = array())
+	{
+		extract($args);
+		if (empty($args["id"]))
+		{
+			return false;
+		};
+		$retval = "";
+		$tgt = $this->_get_target_gallery($args["id"]);
+		if ($tgt)
+		{
+			$retval = $this->show(array(
+				"oid" => $tgt,
+			));
+		};
+		return $retval;
+	}
 
+	////
+	// !This is another content generator, except that this one shows the image
+	// with the highest rate from the attached gallery, and it has the same
+	// flaw as the above show_aliased, since it uses a seemingly random attached
+	// gallery
 	function show_top_image($args = array())
 	{
 		extract($args);
@@ -1450,15 +1475,13 @@ class gallery_v2 extends class_base
 		{
 			return false;
 		};
-		$q = "SELECT target FROM aliases WHERE source = '$args[id]' AND type = " . $this->clid;
-		$this->db_query($q);
-		$row = $this->db_next();
-		if (empty($row))
+		$tgt = $this->_get_target_gallery($args["id"]);
+		if (empty($tgt))
 		{
 			return false;
 		};
 		$target = $this->get_object($args["id"]);
-		$glv = $this->get_object($row["target"]);
+		$glv = $this->get_object($tgt);
 
 		$this->img = get_instance("image");
 		$c_oid = $glv['oid'];
@@ -1505,6 +1528,14 @@ class gallery_v2 extends class_base
 			};
 		}
 		return $retval;
+	}
+
+	////
+	// !Used by the above content generators to decide which attached gallery to use
+	function _get_target_gallery($id)
+	{
+		$q = "SELECT target FROM aliases WHERE source = '$id' AND type = " . $this->clid;
+		return $this->db_fetch_field($q,"target");
 	}
 }
 ?>
