@@ -1687,7 +1687,7 @@ class site_content extends menuedit
 		// also in document::do_search and search_conf::search
 		if (aw_global_get("rewrite_links"))
 		{
-			$exp = get_instance("export");
+			$exp = get_instance("export/export");
 			if (!$exp->is_external($link))
 			{
 				$_link = $link;

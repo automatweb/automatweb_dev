@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.33 2004/12/16 11:13:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.34 2004/12/22 19:15:53 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -416,7 +416,7 @@ class site_search_content extends class_base
 	{
 		// right. now we will have to crawl the site and write all the info to a database table
 		// we use export_lite class for this. 
-		$ex = get_instance("export_lite");
+		$ex = get_instance("export/export_lite");
 		$ex->do_crawl();
 	}
 

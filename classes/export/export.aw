@@ -2150,7 +2150,7 @@ class export extends aw_template
 		$urls = explode("\n", $urls);
 		foreach($urls as $url)
 		{
-			$exp = get_instance("export");
+			$exp = get_instance("export/export");
 			$exp->init_settings();
 			$url = trim($url);
 			if ($url != "")

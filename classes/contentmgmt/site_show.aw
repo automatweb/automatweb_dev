@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.108 2004/12/22 09:38:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.109 2004/12/22 19:15:52 kristo Exp $
 
 /*
 
@@ -2128,7 +2128,7 @@ class site_show extends class_base
 		// also in document::do_search and search_conf::search
 		if (aw_global_get("rewrite_links"))
 		{
-			$exp = get_instance("export");
+			$exp = get_instance("export/export");
 			if (!$exp->is_external($link))
 			{
 				$_link = $link;

@@ -573,7 +573,7 @@ class search_conf extends aw_template
 
 				if (aw_ini_get("search.rewrite_urls"))
 				{
-					$exp = get_instance("export");
+					$exp = get_instance("export/export");
 					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
 					$sec = $exp->rewrite_link($sec);
 					$sec = aw_ini_get("baseurl")."/".$exp->get_hash_for_url($sec,aw_global_get("lang_id"));

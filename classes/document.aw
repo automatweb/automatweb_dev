@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.308 2004/12/22 09:40:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.309 2004/12/22 19:15:51 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2820,7 +2820,7 @@ class document extends aw_template
 
 		if (aw_ini_get("search.rewrite_urls"))
 		{
-			$exp = get_instance("export");
+			$exp = get_instance("export/export");
 			$exp->init_settings();
 		}
 
@@ -3570,7 +3570,7 @@ class document extends aw_template
 		echo "\n\r<br />"; flush();
 		ob_start();
 
-		$exp = get_instance("export");
+		$exp = get_instance("export/export");
 		$exp->init_settings();
 
 		$obj = obj($id);

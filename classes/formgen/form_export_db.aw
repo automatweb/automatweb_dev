@@ -20,7 +20,7 @@ class form_export_db extends form_base
 		flush();
 		$this->load($id);
 
-		$e = get_instance("export");
+		$e = get_instance("export/export");
 
 		$cols = array("id int primary key auto_increment");
 
