@@ -1,8 +1,11 @@
 <?php
-define("E_FORM_NO_SUCH_ENTRY","form->load_entry(%s): vormi %s jaoks pole sellist entryt registreeritud");
-define("FG_ENTRY_FORM", "Sisestus");
-define("FG_SEARCH_FORM", "Otsing");
-define("FG_RATING_FORM", "Reiting");
 
+global $lc_form;
 
+$lc_form["LC_FORM_NAME"] = "Nimi";
+$lc_form["LC_FORM_COMM"] = "Kommentaar";
+$lc_form["LC_FORM_TYPE"] = "T&uuml;&uuml;p";
+$lc_form["LC_FORM_INPUT"] = "Sisestus";
+$lc_form["LC_FORM_SEARCH"] = "Otsingu";
+$lc_form["LC_FORM_RESEARCH"] = "Reitimis";
 ?>
