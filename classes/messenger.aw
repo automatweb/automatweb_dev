@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.42 2001/06/01 04:32:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.43 2001/06/01 04:42:48 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -719,6 +719,8 @@ class messenger extends menuedit_light
 		};
 
 		// loome nimekirja signatuuridest
+
+
 		$siglist = array();
 		$siglist["none"] = "(puudub)";
 		if (is_array($this->msgconf["msg_signatures"]))
@@ -731,6 +733,8 @@ class messenger extends menuedit_light
 			$siglist = $this->picker($defsig,$siglist);
 		};
 
+		// picker funktsioonidel on 0 väärtusega elementidega kalad
+
 		$idlist = array();
 		$idlist["default"] = "Default (liitumisvormist)";
 
@@ -741,11 +745,29 @@ class messenger extends menuedit_light
 				$idlist[$idkey] = $idata["name"] . " " . $idata["surname"];
 			};
 			$idlist = $this->picker($defident,$idlist);
-			print $idlist;
 		};
 
 
 		$this->read_template("write.tpl");
+		
+		// koostame attachide nimekirja
+		$this->get_objects_by_class(array(
+						"class" => CL_FILE,
+						"parent" => $msg_id,
+					));
+		$c = 0;
+		$attaches = "";
+		while($row = $this->db_next())
+		{
+			$c++;
+			$this->vars(array(
+					"cnt" => $c,
+					"msgid" => $msg_id,
+					"icon" => get_icon_url($row["class_id"],""),
+					"name" => $row["name"],
+				));
+			$attaches .= $this->parse("attaches");
+		};
 
 		// siin tekitame nii mitu file input valja, kui konfis määratud oli
 		$attach = "";	
@@ -774,6 +796,7 @@ class messenger extends menuedit_light
 			"idlist" => $idlist,
 			"prilist" => $this->picker($this->msgconf["msg_default_pri"],array("0","1","2","3","4","5","6","7","8","9")),
 			"attach" => $attach,
+			"attaches" => $attaches,
 			"menu" => $menu,
 			"reforb" => $this->mk_reforb("handle",array()),
 		));
@@ -828,6 +851,11 @@ class messenger extends menuedit_light
 						));
 		};
 
+		if ($preview)
+		{
+			print "we should now display preview of the message here. think we can handle that?";
+		};
+
 		// Kuna me siia joudsime, siis jarelikult on meil vaja meil laiali saata
 		// koigepealt splitime mtargetsi komade pealt ära ja eemaldame whitespace
 		$targets = explode(",",$mtargets1);
@@ -839,7 +867,7 @@ class messenger extends menuedit_light
 
 		if (strlen($targets[0]) == 0)
 		{
-			$status_msg = "Yhtegi korrektset aadressi ei leitud. Kontrollige üle";
+			$status_msg = "Ühtegi korrektset aadressi ei leitud. Kontrollige üle";
 			session_register("status_msg");
 			// bounce back to edit form
 			return $this->mk_site_orb(array(
