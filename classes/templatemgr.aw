@@ -90,9 +90,17 @@ class templatemgr extends aw_template
 
 	////
 	// !Retrieves a list of templates
-	// type(int) 
+	// type(int) - the type of templtes to list
+	// caption - the string for the default entry, defaults to "default"
+	// menu - if set, default template is read from that menu
+	// def - default template filename
 	function get_template_list($args = array())
 	{
+		if (!isset($args["caption"]))
+		{
+			$args["caption"] = "default";
+		}
+
 		// kysime infot adminnitemplatede kohta
 		$type = (int)$args["type"];
 		if ($args["menu"])
@@ -116,7 +124,7 @@ class templatemgr extends aw_template
 		}
 		$q = "SELECT * FROM template WHERE type = $type ORDER BY id";
 		$this->db_query($q);
-		$result = array("0" => "default");
+		$result = array("0" => $args["caption"]);
 		while($tpl = $this->db_fetch_row())
 		{
 			$result[$tpl["id"]] = $tpl["name"];
