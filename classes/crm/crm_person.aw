@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.11 2004/02/25 14:46:58 jaanj Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.12 2004/02/25 15:48:59 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -215,7 +215,6 @@ class crm_person extends class_base
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		$form = &$arr["request"];
-		$obj = &$arr["obj"];
 		
 		switch($data["name"])
 		{
@@ -463,27 +462,6 @@ class crm_person extends class_base
 			$to_ids[] = $task->prop("to");
 		};
 
-		/*
-		if (aw_global_get("uid") == "duke")
-		{
-			if (sizeof($to_ids) > 0)
-			{
-				 find the latest object from the tables
-				 $olist = new object_list(array(
-					"class_id" => array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL),
-					"oid" => $to_ids,
-					"sort_by" => "planner.start DESC",
-					"limit" => 1,
-				));
-				print "from = " . $o->id();
-				print "name = " . $o->name();
-				print "<pre>";
-				print_r($olist->ids());
-				print "</pre>";
-			};
-		};
-		*/
-
 		$conns = $o->connections_from(array(
                         "type" => 13,
                 ));
@@ -491,7 +469,7 @@ class crm_person extends class_base
 		{
 			$phones[] = $conn->prop("to.name");
 		};
-		
+
 		$conns = $o->connections_from(array(
                         "type" => 12,
                 ));
