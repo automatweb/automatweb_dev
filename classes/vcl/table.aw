@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.30 2004/10/05 09:15:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.31 2004/11/02 09:53:46 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1024,6 +1024,7 @@ class aw_table extends aw_template
 	// tagastab csv andmed, kustuda välja draw asemel
 	function get_csv_file($sep = ";")
 	{
+		$sep = "\t";
 		$d=array();
 		reset($this->rowdefs);
 		$tbl="";
@@ -1529,7 +1530,7 @@ class aw_table extends aw_template
 					{
 						$tbl .= $rgroupby_sep[$rgel]["real_sep_before"];
 					}
-					$tbl.=create_links($_a);
+					$tbl.= create_links($_a);
 				}
 
 				$this->lgrpvals[$rgel] = $_a;
