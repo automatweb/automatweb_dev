@@ -154,17 +154,17 @@
                         <num_1>CL_TASK</num_1>
                         <num_2>CL_CRM_CALL</num_2>
                   </clid>
-                  <caption>s&amp;uuml;ndmus</caption>
+                  <caption>S&amp;uuml;ndmus</caption>
             </EVENT>
             <REG_ENTRY>
                   <value>3</value>
                   <clid>CL_CALENDAR_REGISTRATION_FORM_CONF</clid>
-                  <caption>sisestus</caption>
+                  <caption>Sisestus</caption>
             </REG_ENTRY>
             <FOLDER>
                   <value>4</value>
                   <clid>CL_MENU</clid>
-                  <caption>isikute kaust</caption>
+                  <caption>Isikute kaust</caption>
             </FOLDER>
             <WEBFORM>
                   <value>5</value>
