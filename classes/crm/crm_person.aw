@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.14 2004/03/10 13:35:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.15 2004/03/15 12:10:35 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -57,13 +57,10 @@ caption Msn/yahoo/aol/icq
 @property picture type=relpicker reltype=RELTYPE_PICTURE
 @caption Pilt/foto
 
-@property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik
+@property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik group=contact
 @caption Organisatsioon
 
-property rank type=objpicker clid=CL_CRM_PROFESSION table=kliendibaas_isik
-caption Ametinimetus
-
-@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1
+@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
 @caption Ametinimetus
 
 @property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_isik
