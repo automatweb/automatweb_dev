@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.4 2004/05/19 16:18:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.5 2004/05/21 11:10:45 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -291,6 +291,7 @@ class object_import extends class_base
 		// js redir back to change
 		if ($o->prop("ds") && $o->prop("folder"))
 		{
+			set_time_limit(0);
 			$type_o = obj($o->prop("object_type"));
 			$class_id = $type_o->prop("type");
 			$p2c = $o->meta("p2c");		
