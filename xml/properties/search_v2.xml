@@ -1,6 +1,19 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>stoolbar</name>
+            <group>
+                  <num_0>search</num_0>
+                  <num_1>advsearch</num_1>
+            </group>
+            <form>search</form>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>stoolbar</field>
+            <caption>Toolbar</caption>
+      </property>
+      <property>
             <name>server</name>
             <group>advsearch</group>
             <form>search</form>
