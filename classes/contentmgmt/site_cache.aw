@@ -17,7 +17,6 @@ class site_cache extends aw_template
 		$log = get_instance("contentmgmt/site_logger");
 		$log->add($arr);
 
-		
 		if (($content = $this->get_cached_content($arr)))
 		{
 			return $content;
