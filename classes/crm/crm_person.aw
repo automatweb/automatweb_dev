@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.26 2004/05/14 07:39:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.27 2004/05/14 09:10:53 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -814,11 +814,17 @@ class crm_person extends class_base
 		$pdat = $this->fetch_person_by_id(array(
 			"id" => $to->id(),
 		));
+
+		$al = get_instance("aliasmgr");
+		$notes = $to->prop("notes");
+
+		$al->parse_oo_aliases($to->id(),&$notes);
+
 		$this->vars(array(
 			"name" => $to->name(),
 			"phone" => $pdat["phone"],
 			"email" => $pdat["email"],
-			"notes" => nl2br($to->prop("notes")),
+			"notes" => nl2br($notes),
 		));
 		// show image if there is a placeholder for it in the current template
 		if ($this->template_has_var("imgurl"))
