@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.100 2005/03/01 08:26:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.101 2005/03/01 14:43:42 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -885,6 +885,11 @@ class doc extends class_base
 
 	function on_save_document($params)
 	{
+		if (!aw_ini_get("document.save_act_docs"))
+		{
+			return;
+		}
+
 		$o = obj($params["oid"]);
 		$period = $o->period();
 		$oid = $o->id();
@@ -894,16 +899,25 @@ class doc extends class_base
 		{
 			if ($p_o->id() != $o->id())
 			{
+				$save = false;
 				$docs = $p_o->meta("active_documents");
 				$docs_p = $p_o->meta("active_documents_p");
 				if ($o->status() == STAT_ACTIVE)
 				{
 					if ($period > 1)
 					{
+						if (!isset($docs_p[$period][$oid]))
+						{
+							$save = true;
+						}
 						$docs_p[$period][$oid] = $oid;
 					}
 					else
 					{
+						if (!isset($docs[$oid]))
+						{
+							$save = true;
+						}
 						$docs[$oid] = $oid;
 					}
 				}
@@ -914,17 +928,22 @@ class doc extends class_base
 						if (isset($docs_p[$period][$oid]))
 						{
 							unset($docs_p[$period][$oid]);
+							$save = true;
 						}
 					}
 					else
 					{
+						if (isset($docs[$oid]))
+						{
+							$save = true;
+						}
 						unset($docs[$oid]);
 					}
 				}
 
 				$p_o->set_meta("active_documents", $docs);
 				$p_o->set_meta("active_documents_p", $docs_p);
-				if ($p_o->class_id() && $p_o->parent() && $this->can("edit", $p_o->id()))
+				if ($save && $p_o->class_id() && $p_o->parent() && $this->can("edit", $p_o->id()))
 				{
 					$p_o->save();
 				}
