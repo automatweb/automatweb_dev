@@ -200,5 +200,12 @@
 			</function>
 		</action>
 
+		<action name="convert_user_mails">
+			<function name="convert_user_mails">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

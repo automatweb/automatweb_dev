@@ -4,6 +4,8 @@
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_USER, on_delete_user)
 
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_USER, on_save_user)
+
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_USER, on_delete_alias)
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
@@ -1387,35 +1389,44 @@ class user extends class_base
 			"value" => $arr["request"]["name"]
 		));
 
+		// now, find the correct brother
+		if ($go_to)
+		{
+			header("Location: ".$this->mk_my_orb("change", array("id" => $go_to), "user"));
+			die();
+		}
+	}
+
+	function on_save_user($arr)
+	{
+		$o = obj($arr["oid"]);
 
 		// create email object
-		$umail = $arr["obj_inst"]->prop("email");
-		if($mail = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+		$umail = $o->prop("email");
+		$uname = $this->users->get_user_config(array(
+			"uid" => $o->prop("uid"),
+			"key" => "real_name",
+		));
+
+		if($mail = $o->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 		{
 			$mail->set_prop("mail", $umail);
-			$mail->set_prop("name",$arr["request"]["name"]);
-			$mail->set_name($mail->prop("name")." &lt;".$umail."&gt;");
+			$mail->set_prop("name", $uname);
+			$mail->set_name($uname." &lt;".$umail."&gt;");
 			$mail->save();
 		}
 		else
 		{
 			$mail = new object();
 			$mail->set_class_id(CL_ML_MEMBER);
-			$mail->set_parent($arr["obj_inst"]->id());
+			$mail->set_parent($o->id());
 			$mail->set_prop("mail", $umail);
-			$mail->set_name($umail);
+			$mail->set_name($uname." &lt;".$umail."&gt;");
 			$mail->save();
-			$arr["obj_inst"]->connect(array(
+			$o->connect(array(
 				"to" => $mail->id(),
 				"reltype" => "RELTYPE_EMAIL",
 			));
-		}
-
-		// now, find the correct brother
-		if ($go_to)
-		{
-			header("Location: ".$this->mk_my_orb("change", array("id" => $go_to), "user"));
-			die();
 		}
 	}
 
@@ -1537,7 +1548,12 @@ class user extends class_base
 		$o = obj();
 		$o->set_name($uid);
 		$o->set_class_id(CL_USER);
-		$o->set_parent(aw_ini_get("users.root_folder"));
+		$pt = aw_ini_get("users.root_folder");
+		if ($pt < 2)
+		{
+			$pt = aw_ini_get("users.rootmenu");
+		}
+		$o->set_parent($pt);
 		$o->set_prop("uid", $uid);
 		$o->set_prop("password", $password);
 		$o->set_prop("email", $email);
@@ -1681,7 +1697,7 @@ class user extends class_base
 
 	function _aclw_get_controlling_acl($user, $oid)
 	{
-		if ($uid == "")
+		if ($user == "")
 		{
 			$nlg = $this->get_cval("non_logged_in_users_group");
 			$this->db_query("

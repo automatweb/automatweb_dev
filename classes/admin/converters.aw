@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.50 2004/12/01 13:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.51 2005/01/12 20:08:13 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1790,6 +1790,39 @@ class converters extends aw_template
 		}
 		aw_restore_messages();
 		die("all done");
+	}
+
+	/** convert users mail addresses
+
+		@attrib name=convert_user_mails
+
+	**/
+	function convert_user_mails($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_USER,
+			"brother_of" => new obj_predicate_prop("id"),
+		));
+		foreach($ol->arr() as $o)
+		{
+			echo "check user ".$o->prop("uid")." <br>\n";
+			flush();
+
+			$c = $o->connections_from(array(
+				"type" => RELTYPE_EMAIL
+			));
+			if (!count($c))
+			{
+				// trigger message handler
+				$u = $o->instance();
+				$u->on_save_user(array(
+					"oid" => $o->id()
+				));
+				echo "added mail <br>\n";
+				flush();
+			}
+		}
+		die("all done!");
 	}
 };
 ?>
