@@ -14,5 +14,15 @@
             <syslog_type>ST_EKOMAR</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <FOLDER>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_DOCUMENT</num_1>
+                  </clid>
+                  <caption>kuhu suunata</caption>
+            </FOLDER>
+      </reltypes>
 </properties>
 
