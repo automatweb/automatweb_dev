@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.161 2004/10/28 15:16:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.162 2004/10/29 16:06:58 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1203,7 +1203,7 @@ if (!defined("DEFS"))
 			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
 			if(!is_object($this->lc_date_inst))
 			{
-				$this->lc_date_inst = get_instance("core/locale/" . $this->default_locale . "/date");
+				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en") . "/date");
 			};
 		}
 
@@ -1212,7 +1212,7 @@ if (!defined("DEFS"))
 			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
 			if(!is_object($this->lc_date_inst))
 			{
-				$this->lc_date_inst = get_instance("core/locale/" . $this->default_locale . "/date");
+				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en") . "/date");
 			};
 			if (method_exists($this->lc_date_inst,"get_lc_weekday"))
 			{
@@ -1229,7 +1229,7 @@ if (!defined("DEFS"))
 			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
 			if(!is_object($this->lc_date_inst))
 			{
-				$this->lc_date_inst = get_instance("core/locale/" . $this->default_locale . "/date");
+				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en") . "/date");
 			};
 			if (method_exists($this->lc_date_inst,"get_lc_month"))
 			{
@@ -1246,7 +1246,7 @@ if (!defined("DEFS"))
 			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
 			if(!is_object($this->lc_date_inst))
 			{
-				$this->lc_date_inst = get_instance("core/locale/" . $this->default_locale . "/date");
+				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en")  . "/date");
 			};
 			if (method_exists($this->lc_date_inst,"get_lc_date"))
 			{
