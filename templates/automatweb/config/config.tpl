@@ -13,8 +13,12 @@ function setLink(li,title)
 <td class="plain"><input type='text' name='after_login' value='{VAR:after_login}'><a href="#" onclick="sel_el=document.b88.after_login;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
 </tr>
 <tr bgcolor="#C9EFEF">
-<td class="plain">Sisse-logimist vajava veateate asukoht:</td>
-<td class="plain"><input type='text' name='orb_err_mustlogin' value='{VAR:orb_err_mustlogin}'><a href="#" onClick="sel_el=document.b88.orb_err_mustlogin;remote('no',500,400,'{VAR:search_doc}')">Saidi sisene link</a></td>
+<td class="plain">Vali kasutaja info form:</td>
+<td class="plain"><select name='user_info_form'>{VAR:forms}</select></td>
+</tr>
+<tr bgcolor="#C9EFEF">
+<td class="plain">Vali kasutaja info v&auml;ljund:</td>
+<td class="plain"><select name='user_info_op'>{VAR:ops}</select></td>
 </tr>
 <tr bgcolor="#C9EFEF">
 <td class="plain" colspan=2><input type='submit' value='Salvesta'></td>
