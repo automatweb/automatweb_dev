@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.36 2005/01/04 10:02:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.37 2005/01/04 10:39:08 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -547,7 +547,7 @@ class object_treeview_v2 extends class_base
 				"subact" => "0",
 				"id" => $ob->id(),
 				"edit_mode" => count($edit_columns),
-				"tv_sel" => $arr["tv_sel"]
+				"tv_sel" => $_GET["tv_sel"]
 			))
 		));
 
@@ -1520,6 +1520,7 @@ class object_treeview_v2 extends class_base
 
 			$fld = $d_inst->get_folders($d_o);
 			$ol = $d_inst->get_objects($d_o, $fld, $arr["tv_sel"]); 
+
 			foreach($ol as $oid => $o)
 			{
 				if ($d_inst->check_acl("edit", $d_o, $oid))
