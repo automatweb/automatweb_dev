@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.194 2004/01/05 16:38:54 duke Exp $
+// $Id: class_base.aw,v 2.195 2004/01/13 14:12:53 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1376,6 +1376,11 @@ class class_base extends aw_template
 				{
 					unset($val["richtext"]);
 				};
+
+				if ($this->classinfo["allow_rte"] != 1)
+				{
+					unset($val["richtext"]);
+				};
 			}
 			
 			// if it is a translated object, then don't show properties that can't be translated
@@ -1802,7 +1807,7 @@ class class_base extends aw_template
 
 				if (($val["type"] == "relmanager") && !is_object($val["vcl_inst"]))
 				{
-					$val["vcl_inst"] = get_instance("vcl/dropmenu");
+					$val["vcl_inst"] = get_instance("vcl/relmanager");
 				};
 				
 				if (($val["type"] == "table") && !is_object($val["vcl_inst"]))
@@ -1850,7 +1855,11 @@ class class_base extends aw_template
 			
 			if ($val["type"] == "relmanager")
 			{
-				$this->init_rel_manager(&$argblock);
+				$target_reltype = constant($val["reltype"]);
+				$argblock["prop"]["reltype"] = $target_reltype;
+				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
+				$val["vcl_inst"]->init_rel_manager($argblock);
+				//$this->init_rel_manager(&$argblock);
 			};
 			
 			if ( isset($val["editonly"]) && empty($this->id))
@@ -2451,6 +2460,7 @@ class class_base extends aw_template
 				"request" => &$rawdata,
                                 "new" => $new,
 				"obj_inst" => &$this->obj_inst,
+				"relinfo" => $this->relinfo,
 			);
 
 			$status = PROP_OK;
@@ -2517,6 +2527,16 @@ class class_base extends aw_template
 					$property["value"] = date_edit::get_timestamp($rawdata[$name]);
 				};
 			};
+
+			if ($type == "relmanager")
+			{
+				
+
+
+
+
+			};
+
 
 			if (($type == "select") && isset($property["multiple"]))
 			{
