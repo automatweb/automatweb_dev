@@ -1526,7 +1526,10 @@ class form_db_base extends aw_template
 			if ($chain_entries_only)
 			{
 				$where .= " AND ".$rel_tbl.".chain_id IS NOT NULL ";
-				$where .= " AND ".$rel_tbl.".chain_id = '$limit_chain_id' ";
+				if ($limit_chain_id)
+				{
+					$where .= " AND ".$rel_tbl.".chain_id = '$limit_chain_id' ";
+				}
 			}
 		}
 
