@@ -10,7 +10,8 @@ classload(
 	"core/obj/object_tree",
 	"core/obj/object_list_filter",
 	"core/obj/obj_predicate_not",
-	"core/obj/obj_predicate_compare"
+	"core/obj/obj_predicate_compare",
+	"core/obj/obj_predicate_prop"
 );
 
 $GLOBALS["properties"] = array();

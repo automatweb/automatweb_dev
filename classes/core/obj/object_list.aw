@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.38 2004/11/19 11:34:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.39 2004/11/26 13:55:13 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -334,6 +334,16 @@ class object_list extends _int_obj_container_base
 		return $ret;
 	}
 
+	function brother_ofs()
+	{
+		$ret = array();
+		foreach($this->list_objdata as $oid => $d)
+		{
+			$ret[$d["brother_of"]] = $d["brother_of"];
+		}
+		return $ret;
+	}
+
 	
 	function count()
 	{
@@ -348,7 +358,7 @@ class object_list extends _int_obj_container_base
 		$this->_int_init_empty();
 
 		$tmp = $GLOBALS["object_loader"]->ds->search($filter);
-		list($oids, $meta_filter, $acldata) = $tmp;
+		list($oids, $meta_filter, $acldata, $parentdata, $objdata) = $tmp;
 		if (!is_array($oids))
 		{
 			return false;
@@ -389,6 +399,7 @@ class object_list extends _int_obj_container_base
 					{
 						$this->list[$oid] = $_o;
 						$this->list_names[$oid] = $oname;
+						$this->list_objdata[$oid] = $objdata[$oid];
 					}
 				}
 			}
@@ -401,6 +412,7 @@ class object_list extends _int_obj_container_base
 				{
 					$this->list[$oid] = $oid;
 					$this->list_names[$oid] = $oname;
+					$this->list_objdata[$oid] = $objdata[$oid];
 				}
 			}
 		}
@@ -412,6 +424,7 @@ class object_list extends _int_obj_container_base
 	{
 		$this->list = array();
 		$this->list_names = array();
+		$this->list_objdata = array();
 	}
 
 	function _int_sort_list($prop, $order)
@@ -476,6 +489,9 @@ class object_list extends _int_obj_container_base
 		{
 			$this->list[$oid] = new object($oid);
 			$this->list_names[$oid] = $this->list[$oid]->name();
+			$this->list_objdata[$oid] = array(
+				"brother_of" => $this->list[$oid]->brother_of()
+			);
 		}
 	}
 
@@ -522,6 +538,7 @@ class object_list extends _int_obj_container_base
 		{
 			unset($this->list[$oid]);
 			unset($this->list_names[$oid]);
+			unset($this->list_objdata[$oid]);
 		}
 	}
 }
