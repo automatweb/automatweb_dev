@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.38 2003/03/11 14:35:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.39 2003/03/12 11:16:33 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -148,7 +148,7 @@
 	@property tpl_lead type=select
 	@caption Template dokumendi näitamiseks (lühike)
 
-	@property tpl_edit_cfgform type=cfgform_picker clid=CL_DOCUMENT table=objects field=meta method=serialize
+	@property tpl_edit_cfgform type=objpicker clid=CL_CFGFORM subclass=CL_DOCUMENT table=objects field=meta method=serialize
 	@caption Konfivorm/template dokumendi muutmiseks
 	
 	@property hide_noact type=checkbox ch_value=1
