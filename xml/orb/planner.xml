@@ -4,7 +4,7 @@
 		<action name="edit_todo_item">
 			<function name="edit_todo_item">
 				<arguments>
-					<define name="op" value="add"/>
+					<define name="op" value="edit"/>
 					<required name="id"/>
 				</arguments>
 			</function>
@@ -13,7 +13,7 @@
 		<action name="add_todo_item">
 			<function name="edit_todo_item">
 				<arguments>
-					<define name="op" value="edit"/>
+					<define name="op" value="add"/>
 					<required name="date"/>
 				</arguments>
 			</function>
