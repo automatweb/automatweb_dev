@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/htmlpreview.aw,v 1.1 2003/01/16 17:22:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/htmlpreview.aw,v 1.2 2003/02/12 15:01:26 axel Exp $
 // htmlpreview - generates HTML views for objects
 
 class htmlpreview extends aw_template
@@ -232,11 +232,14 @@ class htmlpreview extends aw_template
 			case "xtime_select":
 				$retval = html::time_select($arr);
 				break;
-			
+
 			case "xdate_select":
 				$retval = html::date_select($arr);
 				break;
-
+			
+			case "xpopup_objmgr":
+				$retval = html::popup_objmgr($arr);
+				break;
 
 			case "ximg":
 				$retval = html::img($arr);
