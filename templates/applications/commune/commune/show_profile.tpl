@@ -7,24 +7,42 @@ Karma <img src="{VAR:baseurl}/img/smiley_{VAR:karma_smiley}.gif" alt="{VAR:alt_k
 <!-- END SUB: karma -->
 
 <!-- SUB: muuda -->
-<table align="right" width="*" border="0" cellspacing="0" cellpadding="0">
+<table align="right" width="*" border="0" cellspacing="0" cellpadding="3">
 	<tr>
-		<td align="right" style="color:#FFFFFF; font-family:Verdana, Arial, Helvetica, sans-serif; font-weight:bold;" bgcolor="#FFCC33" nowrap><img src="{VAR:baseurl}/img/prof_change_tab_left.gif" />{VAR:my_profile_switch}<img src="{VAR:baseurl}/img/prof_change_tab_right.gif" /></td>
+		<td align="right" style="color:#FFFFFF; font-family:Verdana, Arial, Helvetica, sans-serif; font-weight:bold;" bgcolor="#FFCC33" nowrap><img src="{VAR:baseurl}/img/prof_change_tab_left.gif" /><a href="{VAR:my_profile_switch}">{VAR:LC_RATE_CHANGE}</a><img src="{VAR:baseurl}/img/prof_change_tab_right.gif" /></td>
 	</tr>
 </table>
 <!-- END SUB: muuda -->
+
 <!-- SUB: send_message -->
-<a href="{VAR:send_url}"><img src="{VAR:baseurl}/img/icon_saada.gif" alt="Saada sõnum" border="0" /> Saada sõnum</a>
+<a href="{VAR:blog_url}"><img src="{VAR:baseurl}/img/icon_print.gif" alt="Loe blogi" border="0" /> {VAR:LC_RATE_READ_BLOG}</a> 
+<a href="{VAR:send_url}"><img src="{VAR:baseurl}/img/icon_saada.gif" alt="Saada snum" border="0" /> {VAR:LC_RATE_SEND_MAIL}</a>
 <!-- END SUB: send_message -->
 
+<!-- SUB: blog -->
+
+<!-- END SUB: blog -->
+
 <!-- SUB: header -->
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="2">
 	<tr height="20">
 		<td>
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td height="20" nowrap>{VAR:online}&nbsp;&nbsp;&nbsp;&nbsp;{VAR:karma}</td>
 					<td height="100%" align="right">{VAR:the_thing}</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+					<table class="text" border="0" cellpaddding="2" cellspacing="2" width="100%">
+					<tr>
+						<td class="rate_rowbgcolor_odd" align="center">{VAR:LC_RATE_LAST_VISIT}:<br /> {VAR:last_visit_time}</td>
+						<td class="rate_rowbgcolor_even" align="center">{VAR:LC_RATE_LAST_MOD}:<br /> {VAR:last_mod_time}</td>
+						<td class="rate_rowbgcolor_odd" align="center">{VAR:LC_RATE_REGISTERED}:<br /> {VAR:registered_time}</td>
+						<td class="rate_rowbgcolor_even" align="center">{VAR:LC_RATE_VISITS}:<br /> {VAR:visits} {VAR:LC_RATE_VISITS_TIMES}</td>
+					</tr>
+					</table>
+					</td>
 				</tr>
 			</table>
 		</td>
@@ -33,17 +51,28 @@ Karma <img src="{VAR:baseurl}/img/smiley_{VAR:karma_smiley}.gif" alt="{VAR:alt_k
 <!-- END SUB: header -->
 
 <!-- SUB: property_list -->
-<table border="0" class="text" align="center" cellpadding="0" cellspacing="0" width="100%">
-<!-- SUB: property_item -->
-  <tr class="rate_rowbgcolor_{VAR:evenodd}">
-    <td class="rate_aw04contentcellleft" width='80' nowrap>
+<table border="0" align="center" cellpadding="2" cellspacing="2" width="100%">
+{VAR:property_item}
+<!-- SUB: property_item_even -->
+  <tr class="text" height="14">
+    <td class="rate_rowbgcolor_even" width="100" height="16" padding="3" nowrap>
       {VAR:prop_caption}
     </td>
-    <td class="rate_aw04contentcellright">
+    <td class="rate_rowbgcolor_odd">
       {VAR:prop_value}
     </td>
   </tr>
-<!-- END SUB: property_item -->
+<!-- END SUB: property_item_even -->
+<!-- SUB: property_item_odd -->
+  <tr class="text"  height="14">
+    <td class="rate_rowbgcolor_odd" width="100"  height="16" nowrap>
+      {VAR:prop_caption}
+    </td>
+    <td class="rate_rowbgcolor_even">
+      {VAR:prop_value}
+    </td>
+  </tr>
+<!-- END SUB: property_item_odd -->
 </table>
 <!-- END SUB: property_list -->
 
@@ -51,7 +80,7 @@ Karma <img src="{VAR:baseurl}/img/smiley_{VAR:karma_smiley}.gif" alt="{VAR:alt_k
 <table border="0" class="text" cellpadding="0" cellspacing="0" width="100%">
 <!-- SUB: imgs -->
 <tr>
-	<td>Kokku {VAR:num} pilti:</td>
+	<td>{VAR:LC_RATE_HOWMANY} {VAR:num} {VAR:LC_RATE_PICTURE}</td>
 </tr>
 <!-- END SUB: imgs -->
 	<tr>
@@ -63,31 +92,3 @@ Karma <img src="{VAR:baseurl}/img/smiley_{VAR:karma_smiley}.gif" alt="{VAR:alt_k
 	</tr>
 </table>
 <!-- END SUB: img_list -->
-
-<table border="0" class="text" align="center" cellpadding="0" cellspacing="0">
-{VAR:person.firstname}
-{VAR:person.lastname}
-{VAR:person.gender}
-{VAR:person.nickname}
-{VAR:person.social_status}
-{VAR:profile.user_field1}
-{VAR:profile.age}
-{VAR:profile.sexual_orientation}
-{VAR:profile.height}
-{VAR:profile.weight}
-{VAR:profile.body_type}
-{VAR:profile.hair_color}
-{VAR:profile.hair_type}
-{VAR:profile.eyes_color}
-{VAR:profile.tobacco}
-{VAR:profile.alcohol}
-{VAR:profile.user_text1}
-{VAR:profile.user_text3}
-{VAR:profile.user_text2}
-{VAR:profile.user_text5}
-{VAR:profile.user_field2}
-{VAR:profile.user_text4}
-{VAR:profile.user_blob1}
-{VAR:profile.occupation}
-{VAR:profile.user_blob2}
-</table>
