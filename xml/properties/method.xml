@@ -1,0 +1,56 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>method</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>select</type>
+            <caption>Meetod</caption>
+      </property>
+      <property>
+            <name>name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>text</type>
+            <editonly>1</editonly>
+            <caption>Meetodi nimi</caption>
+      </property>
+      <property>
+            <name>method_class_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>text</type>
+            <editonly>1</editonly>
+            <caption>Klass</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <editonly>1</editonly>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>method_class_id</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>hidden</type>
+            <editonly>1</editonly>
+      </property>
+      <classinfo>
+            <syslog_type>ST_METHOD</syslog_type>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+</properties>
+

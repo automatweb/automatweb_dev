@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/method.aw,v 1.1 2004/09/09 10:56:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/method.aw,v 1.2 2004/09/09 11:08:58 ahti Exp $
 // method.aw - Klassi meetod
 /*
 
@@ -90,6 +90,14 @@ class method extends class_base
 		arr ($orb_defs);
 		return array("0" => "--vali--") + $orb->get_classes_by_interface(array("interface" => "public"));
 	}
-
+	
+	/**
+		@attrib name=method_parser is_public="1" caption="Meetodi kuvaja"
+			
+	**/
+	function method_parser($arr)
+	{
+		return null;
+	}
 }
 ?>
