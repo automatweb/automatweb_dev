@@ -108,7 +108,10 @@ class search_conf extends aw_template
 		$ret = array();
 		foreach($grps as $grpid => $gdata)
 		{
-			$ret[$grpid] = $gdata["name"];
+			if ($GLOBALS["uid"] != "" || $gdata["users_only"] != 1)
+			{
+				$ret[$grpid] = $gdata["name"];
+			}
 		}
 		return $ret;
 	}
@@ -627,6 +630,8 @@ class search_conf extends aw_template
 			"ord" => $grps[$id]["ord"],
 			"id" => $id,
 			"menus" => $this->multiple_option_list($grps[$id]["menus"],$ml),
+			"no_usersonly" => checked($grps[$id]["no_usersonly"] == 1),
+			"users_only" => checked($grps[$id]["users_only"] == 1),
 			"reforb" => $this->mk_reforb("submit_change_grp", array("id" => $id))
 		));
 		return $this->parse();
@@ -640,6 +645,8 @@ class search_conf extends aw_template
 
 		$grps[$id]["name"] = $name;
 		$grps[$id]["ord"] = $ord;
+		$grps[$id]["no_usersonly"] = $no_usersonly;
+		$grps[$id]["users_only"] = $users_only;
 		$grps[$id]["menus"] = array();
 		if (is_array($menus))
 		{
@@ -668,7 +675,7 @@ class search_conf extends aw_template
 		// here we must first sort the $grps array based on user entered order
 		uasort($grps,array($this,"_grp_sort"));
 
-		$lgps = $this->get_groups();
+		$lgps = $this->get_groups(true);
 		$lgps[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]] = $grps;
 		classload("xml");
 		$x = new xml;
@@ -679,7 +686,7 @@ class search_conf extends aw_template
 		$c->set_simple_config("search_grps", $dat);
 	}
 
-	function get_groups()
+	function get_groups($no_strip = false)
 	{
 		classload("config");
 		$c = new config;
@@ -687,7 +694,14 @@ class search_conf extends aw_template
 		classload("xml");
 		$x = new xml;
 		$ret = $x->xml_unserialize(array("source" => $dat));
-		$r = $ret[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]];
+		if ($no_strip)
+		{
+			$r = $ret;
+		}
+		else
+		{
+			$r = $ret[$GLOBALS["SITE_ID"]][$GLOBALS["lang_id"]];
+		}
 		if (!is_array($r))
 		{
 			return array();

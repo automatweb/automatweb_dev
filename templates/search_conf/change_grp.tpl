@@ -12,6 +12,14 @@
 <td class="fgtext">&nbsp;<input type="text" name="ord" value="{VAR:ord}">&nbsp;</td>
 </tr>
 <tr>
+<td class="fgtext">&nbsp;Users only men&uuml;&uuml;de alt ei otsita kui kasutaja pole sisse loginud:&nbsp;</td>
+<td class="fgtext">&nbsp;<input type="checkbox" name="no_usersonly" value="1" {VAR:no_usersonly}>&nbsp;</td>
+</tr>
+<tr>
+<td class="fgtext">&nbsp;Users only:&nbsp;</td>
+<td class="fgtext">&nbsp;<input type="checkbox" name="users_only" value="1" {VAR:users_only}>&nbsp;</td>
+</tr>
+<tr>
 <td class="fgtext">&nbsp;Men&uuml;&uuml;d:&nbsp;</td>
 <td class="fgtext">&nbsp;<select class='small_button' size=20 name='menus[]' multiple>{VAR:menus}</select>&nbsp;</td>
 </tr>
