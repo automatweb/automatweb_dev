@@ -30,13 +30,17 @@
 				<caption>Nimekiri</caption>
 				<link>?class=messenger&amp;action=contacts</link>
 			</list>
+			<search>
+				<caption>Otsi</caption>
+				<link>?class=messenger&amp;action=search_contact</link>
+			</search>
 			<newgroup>
 				<caption>Uus grupp</caption>
-				<link>?class=messenger&amp;action=add_contact_group</link>
+				<link>?class=messenger&amp;action=add_contact_group&amp;{VAR:folder}</link>
 			</newgroup>
 			<newcontact>
 				<caption>Uus kontakt</caption>
-				<link>?class=messenger&amp;action=add_contact</link>
+				<link>?class=messenger&amp;action=add_contact&amp;{VAR:folder}</link>
 			</newcontact>
 		</sublinks>
 	</contacts>
