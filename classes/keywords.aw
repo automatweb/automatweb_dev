@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.13 2001/05/22 12:23:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.14 2001/05/22 12:27:36 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -408,6 +408,10 @@ class keywords extends aw_template {
 
 	function show_interests_form($beg = "")
 	{
+		if ($beg != "")
+		{
+			$beg = explode(",",$beg);
+		}
 		$this->read_template("keywords.tpl");
 		classload("list","users_user","form");
 		$u = new users_user();
