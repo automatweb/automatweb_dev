@@ -32,7 +32,7 @@
             <method>serialize</method>
             <table>objects</table>
             <group>general</group>
-            <caption>Autori nimi</caption>
+            <caption>Autori meil</caption>
       </property>
       <property>
             <name>mail_answers</name>
@@ -45,7 +45,14 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
-            <trans_id>TR_FORUM</trans_id>
+            <no_status>1</no_status>
       </classinfo>
+      <reltypes>
+            <SUBSCRIBER>
+                  <value>1</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>tellija</caption>
+            </SUBSCRIBER>
+      </reltypes>
 </properties>
 
