@@ -249,7 +249,7 @@ class workflow extends class_base
 		};
 		
 		// transparent redirect to the "add new entity" form
-		if (isset($args["subgroup"]) && $request["subgroup"] == "entity_log")
+		if (isset($request["subgroup"]) && $request["subgroup"] == "entity_log")
 		{
 			$retval = $this->callback_entity_log($args);
 			return $retval;
@@ -681,7 +681,7 @@ class workflow extends class_base
 		$data["caption"] = "Log";
 		$oid = $args["request"]["oid"];
 		load_vcl("table");
-		$this->t = new aw_table(array("xml_def" => "workflow/entity_log"));
+		$this->t = new aw_table(array("xml_def" => "workflow/entity_log","layout" => "generic"));
 		$q = "SELECT * FROM logtrail WHERE obj_id = $oid";
 		$this->db_query($q);
 		while($row = $this->db_next())
