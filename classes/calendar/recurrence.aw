@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/recurrence.aw,v 1.4 2004/07/30 08:44:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/recurrence.aw,v 1.5 2004/08/02 15:35:38 kristo Exp $
 // recurrence.aw - Kordus 
 /*
 
@@ -304,7 +304,7 @@ class recurrence extends class_base
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
-                {
+		{
 
 		}
 		return $retval;
