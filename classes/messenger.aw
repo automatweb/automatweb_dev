@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.10 2001/05/23 03:53:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.11 2001/05/23 04:22:53 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -1143,16 +1143,10 @@ class messenger extends menuedit_light
 			case "accounts":
 				$tpl = "accounts.tpl";
 				$this->read_template($tpl);
-				classload("users");
-				$users = new users();
-				$pop3conf = $users->get_user_config(array(
-									"uid" => UID,
-									"key" => "pop3servers",
-							));
 				$c = "";
+				$pop3conf = $this->msgconf["msg_pop3servers"];
 				if (is_array($pop3conf))
 				{
-					
 					foreach($pop3conf as $accid => $cvalues)
 					{
 						$this->vars(array(
@@ -1203,12 +1197,21 @@ class messenger extends menuedit_light
 	function submit_configure($args = array())
 	{
 		// loeme vana konffi sisse
+		extract($args);
 		classload("users");
 		$users = new users();
-		#$msgconf = $users->get_user_config(array(
-		#				"uid" => UID,
-		#				"key" => "messenger",
-		#			));
+		// default_acc peaks sisaldama koigi nende accountide id-sid, millelt
+		// get mail id-sid peaks kysima
+		if (is_array($default_acc))
+		{
+			$serverlist = $this->msgconf["msg_pop3servers"];
+			foreach($serverlist as $key => $val)
+			{
+				$serverlist[$key]["default"] = $default_acc[$key];
+			};
+			$this->msgconf["msg_pop3servers"] = $serverlist;
+		};
+		
 		// nüüd tsükkel üle kõigi $args-i elementide, mille nimi algab msg_-ga
 		foreach($args as $key => $val)
 		{
@@ -1360,22 +1363,13 @@ class messenger extends menuedit_light
 				"l2" => "accounts",
 				));
 		extract($args);
-		classload("users");
-		$users = new users();
-		$pop3conf = $users->get_user_config(array(
-					"uid" => UID,
-					"key" => "pop3servers",
-		));
-		$name = $pop3conf[$id]["name"];
-		$server = $pop3conf[$id]["server"];
-		$uid = $pop3conf[$id]["uid"];
-		$password = $pop3conf[$id]["password"];
+		$pop3conf = $this->msgconf["msg_pop3servers"];
 		$this->read_template("pop3conf.tpl");
 		$this->vars(array(
-			"name" => $name,
-			"server" => $server,
-			"uid" => $uid,
-			"password" => $password,
+			"name" => $pop3conf[$id]["name"],
+			"server" => $pop3conf[$id]["server"],
+			"uid" => $pop3conf[$id]["uid"],
+			"password" => $pop3conf[$id]["password"],
 			"reforb" => $this->mk_reforb("submit_pop3_conf",array("id" => $id)),
 			"menu" => $menu,
 		));
@@ -1387,12 +1381,8 @@ class messenger extends menuedit_light
 	function submit_pop3_conf($args = array())
 	{
 		extract($args);
-		classload("users");
-		$users = new users();
-		$pop3conf = $users->get_user_config(array(
-					"uid" => UID,
-					"key" => "pop3servers",
-		));
+		$conf = $this->msgconf;
+		$pop3conf = $conf["msg_pop3servers"];
 		$confblock = array(
 					"name" => $name,
 					"server" => $server,
@@ -1416,10 +1406,13 @@ class messenger extends menuedit_light
 			$pop3conf[$id] = $confblock;
 			$status_msg = "Konto muudatused on salvestatud";
 		};
+		classload("users");
+		$users = new users();
+		$conf["msg_pop3servers"] = $pop3conf;
 		$users->set_user_config(array(
 					"uid" => UID,
-					"key" => "pop3servers",
-					"value" => $pop3conf,
+					"key" => "messenger",
+					"value" => $conf,
 		));
 		session_register("status_msg");
 		return $this->mk_my_orb("configure",array("page" => "accounts"));
