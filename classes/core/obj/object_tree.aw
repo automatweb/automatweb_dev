@@ -27,6 +27,11 @@ class object_tree extends _int_obj_container_base
 		}
 	}
 
+	/** 
+
+		@attrib api=1
+
+	**/
 	function filter($filter, $new = true)
 	{
 		if (!is_array($filter))
