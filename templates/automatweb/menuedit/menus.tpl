@@ -51,7 +51,7 @@ function paste()
 <a href='{VAR:addmenu}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD}</a>
 <!-- END SUB: ADD_CAT -->
  | <a href='{VAR:addpromo}' class="fgtitle_link">{VAR:LC_MENUEDIT_ADD_PROMO_BOX}</a>
- | <a href='javascript:foo.submit()' class="fgtitle_link">{VAR:LC_MENUEDIT_SAVE}</a>
+ | <a href='javascript:document.foo.submit()' class="fgtitle_link">{VAR:LC_MENUEDIT_SAVE}</a>
  | <a href='#' onClick='window.location.reload()' class="fgtitle_link">{VAR:LC_MENUEDIT_REFRESH}</a>
  | <a href='{VAR:import}' class="fgtitle_link">{VAR:LC_MENUEDIT_IMPORT}</a>
  | <a href='javascript:cut()' class="fgtitle_link">Cut</a>
