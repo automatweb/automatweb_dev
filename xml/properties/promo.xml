@@ -88,8 +88,7 @@
       </property>
       <property>
             <name>section</name>
-            <type>text</type>
-            <callback>callback_get_menus</callback>
+            <type>table</type>
             <group>menus</group>
             <method>serialize</method>
             <table>objects</table>
@@ -98,8 +97,7 @@
       </property>
       <property>
             <name>last_menus</name>
-            <type>text</type>
-            <callback>callback_get_doc_sources</callback>
+            <type>table</type>
             <group>menus</group>
             <method>serialize</method>
             <table>objects</table>
@@ -134,15 +132,10 @@
       </property>
       <classinfo>
             <trans>1</trans>
-            <corefields>name,comment,status</corefields>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_PROMO</syslog_type>
-            <trans_id>TR_PROMO</trans_id>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-            </general>
             <menus>
                   <caption>Kaustad</caption>
             </menus>
