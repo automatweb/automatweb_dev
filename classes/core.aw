@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.97 2002/07/19 10:51:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.98 2002/07/24 20:49:23 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1237,14 +1237,14 @@ class core extends db_connector
 	// argumendid
 	// class (int) - klassi id
 	// parent(id)(opt) - kui defineeritud, siis loeb ainult objekte selle parenti all
-	// active(bool) - kui true, siis tagastame ainult aktiivsed dokud
+	// active(bool) - kui true, siis tagastame ainult aktiivsed objektid
 	function get_objects_by_class($args = array())
 	{
 		extract($args);
 		// kui parent on antud, siis moodustame sellest IN klausli
 		$pstr = ($parent) ? " AND parent IN (" . join(",",map("'%s'",$parent)) . ")" : "";
 
-		$astr = ($active) ? " AND status = 2 " : "";
+		$astr = ($active) ? " AND status = 2 " : " AND status != 0 ";
 
 		$sc  = ($subclass) ? " AND subclass = '$subclass' " : "";
 
@@ -1272,13 +1272,13 @@ class core extends db_connector
 			$typestr = (isset($type)) ? " AND menu.type = '$type' " : "";
 			$q = "SELECT objects.* FROM objects 
 				LEFT JOIN menu ON (objects.oid = menu.id)
-				WHERE objects.class_id = $class AND objects.status != 0 $pstr $astr $cstr $typestr $ostr";
+				WHERE objects.class_id = $class $pstr $astr $cstr $typestr $ostr";
 		}
 		else
 		{
 			$q = "SELECT objects.*
 					FROM objects
-					WHERE class_id = $class AND status = 2 $pstr $sc $astr $ostr";
+					WHERE class_id = $class $pstr $sc $astr $ostr";
 		};
 		global $DBG;
 		if ($DBG)
