@@ -1,10 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.7 2001/06/26 15:29:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.8 2001/06/27 19:57:18 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
-$orb_defs["objects"] = array("search" => array("function" => "search", "params" => array())
-														);
+$orb_defs["objects"] = "xml";
 
 class db_objects extends aw_template 
 {
@@ -14,6 +13,32 @@ class db_objects extends aw_template
 		$this->tpl_init();
 		$this->typearr = array(CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE);		
 		$this->typearr2 = array(CL_PSEUDO,CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE);	
+	}
+
+	function browser($args = array())
+	{
+		extract($args);
+		load_vcl("html_frameset");
+		$retval = "";
+		switch($type)
+		{
+			default:
+				$frames = array(
+					"test1" => "test1.html",
+					"test2" => "test2.html",
+				);
+				
+				$frameset = new html_frameset(array(
+					"cols" => "*",
+					"rows" => "10%,90%",
+					"frames" => $frames,
+				));
+
+				$retval = $frameset->generate();
+				
+		}
+		print $retval;
+		exit;
 	}
 
 	function search_objs($docid)
