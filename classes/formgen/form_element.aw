@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.52 2003/06/26 15:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.53 2003/07/01 10:17:34 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2290,6 +2290,12 @@ class form_element extends aw_template
 				}
 
 				$tb_val = $this->get_val($elvalues);
+				if ($this->arr["subtype"] == "int")
+				{
+					$cursums = aw_global_get("fg_element_sums");
+					$cursums[$this->id] += $tb_val;
+					aw_global_set("fg_element_sums", $cursums);
+				}
 
 				$aft = "";
 				if ($this->arr["subtype"] == "int" && $this->arr["up_down_button"])
@@ -2794,7 +2800,10 @@ class form_element extends aw_template
 				if ($this->form->post_vars["bt_url_".$this->id] != "")
 				{
 					aw_session_set("form_redir_after_submit_".$this->form->id, $this->arr["button_url"]);
-					$this->form->set_use_eid_once = true;
+					if (!aw_ini_get("fg.no_set_use_eid_once"))
+					{
+						$this->form->set_use_eid_once = true;
+					}
 					$this->form->go_to_after_submit = $this->arr["button_url"];
 				}
 			}
