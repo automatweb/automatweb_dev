@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.24 2003/04/23 16:04:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.25 2003/06/04 19:16:52 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -156,28 +156,25 @@ class ml_list extends class_base
 				break;
 
 			case "vars":
-				if ($this->can("change_variables",$args["obj"]["oid"]))
+				$vars = $data["value"];
+				$obj = $this->load_list($args["obj"]["oid"]);
+	
+				$arr = new aw_array($obj["meta"]["vars"]);
+				foreach ($arr->get() as $k => $v)
 				{
-					$vars = $data["value"];
-					$obj = $this->load_list($args["obj"]["oid"]);
-		
-					$arr = new aw_array($obj["meta"]["vars"]);
-					foreach ($arr->get() as $k => $v)
+					if (!isset($vars[$k]))
 					{
-						if (!isset($vars[$k]))
-						{
-							$this->del_pseudo_var($args["obj"]["oid"],$k);
-						};
+						$this->del_pseudo_var($args["obj"]["oid"],$k);
 					};
-					// leia lisatud muutujad
-					if (is_array($vars))
+				};
+				// leia lisatud muutujad
+				if (is_array($vars))
+				{
+					foreach ($vars as $k => $v)
 					{
-						foreach ($vars as $k => $v)
+						if (!isset($obj["meta"]["vars"][$k]))
 						{
-							if (!isset($obj["meta"]["vars"][$k]))
-							{
-								$this->add_pseudo_var($args["obj"]["oid"],$k);
-							};
+							$this->add_pseudo_var($args["obj"]["oid"],$k);
 						};
 					};
 				};
@@ -265,7 +262,7 @@ class ml_list extends class_base
 				"checked" => checked($meta["vars"][$k]),
 				"acl" => (isset($meta["vars"][$k]))? "ACL" : "",
 				"vid" => $k,
-				"l_acl" => (isset($meta["vars"][$k])) ? ("editacl.".$this->cfg["ext"]."?oid=".$this->get_pseudo_var($args["obj"]["oid"],$k)."&file=ml_var.xml") : "",
+				"l_acl" => (isset($meta["vars"][$k])) ? ("editacl.".$this->cfg["ext"]."?oid=".$this->get_pseudo_var($args["obj"]["oid"],$k)."&file=default.xml") : "",
 			));
 			$varparse.=$this->parse("variable");
 		};
@@ -353,10 +350,7 @@ class ml_list extends class_base
 		$this->db_query("SELECT name,oid FROM objects WHERE class_id ='".CL_ML_LIST."' AND status != '0'");
 		while ($r = $this->db_next())
 		{
-			if (!$checkacl || $this->can("send",$r["oid"]) )
-			{
-				$alllists[$r["oid"]]=$r["name"];
-			};
+			$alllists[$r["oid"]]=$r["name"];
 		};
 		return $alllists;
 	}
