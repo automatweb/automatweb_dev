@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.30 2002/12/23 13:24:53 kristo Exp $
+// $Id: class_base.aw,v 2.31 2002/12/23 13:31:19 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1093,7 +1093,7 @@ class class_base extends aliasmgr
 		$argblock = array(
 			"obj" => &$this->coredata,
 			"objdata" => &$this->objdata,
-//			"request" => $this->request
+			"request" => $this->request
 		);
 
 		foreach($properties as $key => $val)
