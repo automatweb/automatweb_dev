@@ -84,6 +84,11 @@ switch ($type)
 
 	case "popup":
 		echo $m->gen_folders($period,1);
+if ($acl_server_socket)
+{
+	echo "closing socket <Br>\n";
+	fclose($acl_server_socket);
+}
 		exit;
 		break;
 
@@ -92,7 +97,23 @@ switch ($type)
 		$t = new languages;
 		$sf->read_template("index_folders.tpl");
 		$sf->vars(array("charset" => $t->get_charset(),"content" => $m->gen_folders($period)));
-		die($sf->parse());
+		echo $sf->parse();
+$sums = $awt->summaries();
+$site_stop = $awt->get_time();
+
+echo "<!--\n";
+while(list($k,$v) = each($sums))
+{
+	print "$k = $v\n";
+};
+echo " querys = $qcount \n";
+echo "-->\n";
+if ($acl_server_socket)
+{
+	echo "closing socket <Br>\n";
+	fclose($acl_server_socket);
+}
+die();
 		break;
 
 	case "menus":

@@ -58,5 +58,10 @@ $vars = array(
 			"charset"				=> $t->get_charset());
 $sf->vars($vars);
 echo $sf->parse();
+if ($acl_server_socket)
+{
+	echo "closing socket <Br>\n";
+	fclose($acl_server_socket);
+}
 
 ?>
