@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.28 2001/07/02 00:24:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.29 2001/07/02 03:56:34 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -1192,7 +1192,8 @@ $orb_defs["form"] = "xml";
 		// does the actual searching part and returns
 		// an array, that has one entry for each form selected as a search target
 		// and that entry is an array of matching entries for that form
-		function search($entry_id)
+		// parent(int) - millise parenti alt entrysid otsida
+		function search($entry_id,$parent = 0)
 		{
 			// laeb täidetud vormi andmed sisse
 			$this->load_entry($entry_id);
@@ -1209,6 +1210,11 @@ $orb_defs["form"] = "xml";
 
 			$ret = array();
 
+			if (!is_array($this->arr["search_from"]))
+			{
+				$this->raise_error("form->search($entry_id): no forms selected as search targets!",true);
+			}
+
 			reset($this->arr["search_from"]);
 
 			// loop through all the forms that are selected as search targets
@@ -1219,6 +1225,10 @@ $orb_defs["form"] = "xml";
 
 				// create the sql that searches from this form's entries
 				$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 ";
+				if (is_array)
+				{
+					$query .= sprintf(" AND objects.parent IN (%s)",join(",",$parent));
+				}
 
 				// loop through all the elements of this form 
 				reset($els);
