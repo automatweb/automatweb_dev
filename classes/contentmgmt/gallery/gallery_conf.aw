@@ -1,138 +1,152 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.6 2004/02/11 09:42:50 duke Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
 
-@groupinfo general caption=Üldine
 @groupinfo imgsize caption=Piltide&nbsp;suurused
 @groupinfo logo caption=Lisapilt
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
-@property conf_folders type=relpicker field=meta method=serialize reltype=RELTYPE_FOLDER multiple=1
+@property conf_folders type=relpicker reltype=RELTYPE_FOLDER multiple=1
 @caption Kataloogid, kus konf kehtib
 
-@property conf_ratings type=relpicker field=meta method=serialize reltype=RELTYPE_RATE multiple=1
+@property conf_ratings type=relpicker reltype=RELTYPE_RATE multiple=1
 @caption Hindamisobjektid
 
-@property images_folder type=relpicker field=meta method=serialize reltype=RELTYPE_IMAGES_FOLDER
+@property images_folder type=relpicker reltype=RELTYPE_IMAGES_FOLDER
 @caption Piltide asukoht
 
-@property def_layout type=relpicker field=meta method=serialize reltype=RELATION_LAYOUT
+@property def_layout type=relpicker reltype=RELATION_LAYOUT
 @caption Default layout:
 
-@property img_vert field=meta method=serialize group=imgsize
+@default group=imgsize
+
+@property img_vert 
 @caption Kui pilt on k&otilde;rgem kui laiem
 
-@property v_tn_subimage type=checkbox ch_value=1 field=meta method=serialize group=imgsize
+@property v_tn_subimage type=checkbox ch_value=1 
 @caption Kas v&auml;ike pilt on kadreeritud
 
-@property v_tn_subimage_left type=textbox size=5 field=meta method=serialize group=imgsize
+@property v_tn_subimage_left type=textbox size=5 
 @caption Mitu pikslit vasakult kaader algab
 
-@property v_tn_subimage_top type=textbox size=5 field=meta method=serialize group=imgsize
+@property v_tn_subimage_top type=textbox size=5 
 @caption Mitu pikslit &uuml;levalt kaader algab
 
-@property v_tn_subimage_width type=textbox size=5 field=meta method=serialize group=imgsize
+@property v_tn_subimage_width type=textbox size=5 
 @caption Kaadri laius
 
-@property v_tn_subimage_height type=textbox size=5 field=meta method=serialize group=imgsize
+@property v_tn_subimage_height type=textbox size=5
 @caption Kaadri k&otilde;rgus
 
-@property v_tn_width type=textbox size=5 field=meta method=serialize group=imgsize
+@property v_tn_width type=textbox size=5 
 @caption V&auml;ikese pildi laius
 
-@property v_tn_height type=textbox size=5 field=meta method=serialize group=imgsize
+@property v_tn_height type=textbox size=5 
 @caption V&auml;ikese pildi k&otilde;rgus
 
-@property v_width type=textbox size=5 field=meta method=serialize group=imgsize
+@property v_width type=textbox size=5 
 @caption Suure pildi laius
 
-@property v_height type=textbox size=5 field=meta method=serialize group=imgsize
+@property v_height type=textbox size=5 
 @caption Suure pildi k&otilde;rgus
 
-@property img_horiz field=meta method=serialize group=imgsize
+@property img_horiz 
 @caption Kui pilt on laiem kui k&otilde;rgem 
 
-@property h_tn_subimage type=checkbox ch_value=1 field=meta method=serialize group=imgsize
+@property h_tn_subimage type=checkbox ch_value=1
 @caption Kas v&auml;ike pilt on kadreeritud
 
-@property h_tn_subimage_left type=textbox size=5 field=meta method=serialize group=imgsize
+@property h_tn_subimage_left type=textbox size=5 
 @caption Mitu pikslit vasakult kaader algab
 
-@property h_tn_subimage_top type=textbox size=5 field=meta method=serialize group=imgsize
+@property h_tn_subimage_top type=textbox size=5 
 @caption Mitu pikslit &uuml;levalt kaader algab
 
-@property h_tn_subimage_width type=textbox size=5 field=meta method=serialize group=imgsize
+@property h_tn_subimage_width type=textbox size=5 
 @caption Kaadri laius
 
-@property h_tn_subimage_height type=textbox size=5 field=meta method=serialize group=imgsize
+@property h_tn_subimage_height type=textbox size=5 
 @caption Kaadri k&otilde;rgus
 
-@property h_tn_width type=textbox size=5 field=meta method=serialize group=imgsize
+@property h_tn_width type=textbox size=5 
 @caption V&auml;ikese pildi laius
 
-@property h_tn_height type=textbox size=5 field=meta method=serialize group=imgsize
+@property h_tn_height type=textbox size=5 
 @caption V&auml;ikese pildi k&otilde;rgus
 
-@property h_width type=textbox size=5 field=meta method=serialize group=imgsize
+@property h_width type=textbox size=5 
 @caption Suure pildi laius
 
-@property h_height type=textbox size=5 field=meta method=serialize group=imgsize
+@property h_height type=textbox size=5 
 @caption Suure pildi k&otilde;rgus
 
-@property insert_logo type=checkbox ch_value=1 field=meta method=serialize group=logo
+@default group=logo
+
+@property insert_logo type=checkbox ch_value=1
 @caption Kas suurele pildile kleepida lisapilt
 
-@property logo_img type=relpicker field=meta method=serialize group=logo reltype=RELTYPE_LOGO
+@property logo_img type=relpicker reltype=RELTYPE_LOGO
 @caption Lisapilt
 
-@property logo_corner type=select field=meta method=serialize group=logo
+@property logo_corner type=select 
 @caption Mis nurgas
 
-@property logo_dist_x type=textbox size=5 field=meta method=serialize group=logo
+@property logo_dist_x type=textbox size=5 
 @caption Mitu pikslit vertikaalsest servast
 
-@property logo_dist_y type=textbox size=5 field=meta method=serialize group=logo
+@property logo_dist_y type=textbox size=5 
 @caption Mitu pikslit horisontaalsest servast
 
-@property logo_transparency type=textbox size=5 field=meta method=serialize group=logo
+@property logo_transparency type=textbox size=5 
 @caption Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;bipaistev)
 
-@property logo_text type=textbox field=meta method=serialize group=logo
+@property logo_text type=textbox 
 @caption Lisapildi tekst (%nimi% asendatakse galerii nimega)
 
-@property tn_insert_logo type=checkbox ch_value=1 field=meta method=serialize group=logo
+@property tn_insert_logo type=checkbox ch_value=1
 @caption Kas v&auml;ikesele pildile kleepida lisapilt
 
-@property tn_logo_img type=relpicker field=meta method=serialize group=logo reltype=RELTYPE_LOGO
+@property tn_logo_img type=relpicker reltype=RELTYPE_LOGO
 @caption Lisapilt
 
-@property tn_logo_corner type=select field=meta method=serialize group=logo
+@property tn_logo_corner type=select 
 @caption Mis nurgas
 
-@property tn_logo_dist_x type=textbox size=5 field=meta method=serialize group=logo
+@property tn_logo_dist_x type=textbox size=5 
 @caption Mitu pikslit vertikaalsest servast
 
-@property tn_logo_dist_y type=textbox size=5 field=meta method=serialize group=logo
+@property tn_logo_dist_y type=textbox size=5 
 @caption Mitu pikslit horisontaalsest servast
 
-@property tn_logo_transparency type=textbox size=5 field=meta method=serialize group=logo
+@property tn_logo_transparency type=textbox size=5 
 @caption Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev)
 
-@property tn_logo_text type=textbox field=meta method=serialize group=logo
+@property tn_logo_text type=textbox 
 @caption Lisapildi tekst (%nimi% asendatakse galerii nimega)
+
+@reltype FOLDER value=1 clid=CL_MENU
+@caption hallatav kataloog
+
+@reltype RATE value=2 clid=CL_RATE
+@caption Hindamisobjektid
+
+@reltype IMAGES_FOLDER value=3 clid=CL_MENU
+@caption galerii piltide kataloog
+
+@reltype LOGO value=4 clid=CL_IMAGE
+@caption logo pilt
+
+@reltype LAYOUT value=5 clid=CL_LAYOUT
+@caption galerii lehe layout
 
 
 */
-
-define("RELTYPE_FOLDER", 1);
-define("RELTYPE_RATE", 2);
-define("RELTYPE_IMAGES_FOLDER", 3);
-define("RELTYPE_LOGO", 4);
-define("RELATION_LAYOUT",5);
 
 define("CORNER_LEFT_TOP", 1);
 define("CORNER_LEFT_BOTTOM", 2);
@@ -148,82 +162,11 @@ class gallery_conf extends class_base
 		));
 	}
 
-	////
-	// !this should create a string representation of the object
-	// parameters
-	//    oid - object's id
-	function _serialize($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($oid);
-		if (is_array($ob))
-		{
-			return aw_serialize($ob, SERIALIZE_NATIVE);
-		}
-		return false;
-	}
-
-	////
-	// !this should create an object from a string created by the _serialize() function
-	// parameters
-	//    str - the string
-	//    parent - the folder where the new object should be created
-	function _unserialize($arr)
-	{
-		extract($arr);
-		$row = aw_unserialize($str);
-		$row['parent'] = $parent;
-		unset($row['brother_of']);
-		$this->quote(&$row);
-		$id = $this->new_object($row);
-		if ($id)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_RATE => "hindamisobjektid",
-			RELTYPE_FOLDER => "hallatav kataloog",
-			RELTYPE_IMAGES_FOLDER => "galerii piltide kataloog",
-			RELTYPE_LOGO => "logo pilt",
-			RELATION_LAYOUT => "galerii lehe layout"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_FOLDER)
-		{
-			return array(CL_PSEUDO);
-		}
-		if ($args["reltype"] == RELTYPE_IMAGES_FOLDER)
-		{
-			return array(CL_PSEUDO);
-		}
-		if ($args["reltype"] == RELTYPE_RATE)
-		{
-			return array(CL_RATE);
-		}
-		if ($args["reltype"] == RELTYPE_LOGO)
-		{
-			return array(CL_IMAGE);
-		}
-		if ($args["reltype"] == RELATION_LAYOUT)
-		{
-			return array(CL_LAYOUT);
-		}
-	}
-
 	function callback_post_save($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
 		$this->db_query("DELETE FROM gallery_conf2menu WHERE conf_id = '$id'");
-		$d = new aw_array($ob['meta']['conf_folders']);
+		$d = new aw_array($arr["obj_inst"]->prop("conf_folders"));
 		foreach($d->get() as $fld)
 		{
 			$this->db_query("INSERT INTO gallery_conf2menu(menu_id, conf_id) VALUES('$fld','$id')");
@@ -232,14 +175,14 @@ class gallery_conf extends class_base
 
 	function get_image_folder($id)
 	{
-		$obj = $this->get_object($id);
-		return $obj['meta']['images_folder'];
+		$obj = new object($id);
+		return $obj->prop("images_folder");
 	}
 
 	function get_rate_objects($id)
 	{
-		$obj = $this->get_object($id);
-		return $obj['meta']['conf_ratings'];
+		$obj = new object($id);
+		return $obj->prop("conf_ratings");
 	}
 
 	function get_property(&$arr)
@@ -251,7 +194,7 @@ class gallery_conf extends class_base
 			case "v_tn_subimage_left":
 			case "v_tn_subimage_width":
 			case "v_tn_subimage_height":
-				if ($arr["obj"]["meta"]["v_tn_subimage"] != 1)
+				if ($arr["obj_inst"]->prop("v_tn_subimage") != 1)
 				{
 					return PROP_IGNORE;
 				}
@@ -261,7 +204,7 @@ class gallery_conf extends class_base
 			case "h_tn_subimage_left":
 			case "h_tn_subimage_width":
 			case "h_tn_subimage_height":
-				if ($arr["obj"]["meta"]["h_tn_subimage"] != 1)
+				if ($arr["obj_inst"]->prop("h_tn_subimage") != 1)
 				{
 					return PROP_IGNORE;
 				}
@@ -278,7 +221,7 @@ class gallery_conf extends class_base
 			case "logo_dist_x":
 			case "logo_transparency":
 			case "logo_dist_y":
-				if ($arr["obj"]["meta"]["insert_logo"] != 1)
+				if ($arr["obj_inst"]->prop("insert_logo") != 1)
 				{
 					return PROP_IGNORE;
 				}
@@ -295,7 +238,7 @@ class gallery_conf extends class_base
 			case "tn_logo_dist_x":
 			case "tn_logo_transparency":
 			case "tn_logo_dist_y":
-				if ($arr["obj"]["meta"]["tn_insert_logo"] != 1)
+				if ($arr["obj_inst"]->prop("tn_insert_logo") != 1)
 				{
 					return PROP_IGNORE;
 				}
@@ -306,8 +249,8 @@ class gallery_conf extends class_base
 
 	function get_default_layout($id)
 	{
-		$obj = $this->get_object($id);
-		return $obj['meta']['def_layout'];
+		$obj = new object($id);
+		return $obj->prop("def_layout");
 	}
 }
 ?>
