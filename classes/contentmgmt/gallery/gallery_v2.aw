@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.5 2003/03/26 03:48:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.6 2003/03/27 14:26:43 kristo Exp $
 
 /*
 
@@ -449,6 +449,11 @@ class gallery_v2 extends class_base
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['img'] = $idata;
 					$meta['page_data'][$_pg]['content'][$_row][$_col]['tn'] = $tn_idata;
 				}
+				$meta["do_import"] = "";
+				$this->upd_object(array(
+					"oid" => $arr["id"],
+					"metadata" => $meta
+				));
 			}
 			$meta["do_import"] = "";
 			$this->upd_object(array(
@@ -617,7 +622,7 @@ class gallery_v2 extends class_base
 		foreach($rateobjs as $oid => $name)
 		{
 			$this->vars(array(
-				"link" => $this->mk_my_orb("show", array("id" => $oid), "rate"),
+				"link" => $this->mk_my_orb("show", array("id" => $oid, "section" => aw_global_get("section")), "rate"),
 				"name" => $name
 			));
 			$rate[] = $this->parse("RATE_OBJ");
