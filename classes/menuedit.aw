@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.142 2002/08/01 00:53:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.143 2002/08/02 13:29:26 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -4260,15 +4260,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				if ($row["alias"] != "")
 				{
-					// FIXME: too fucking slow
-					if (not(preg_grep("/n\/a/",$this->menu_aliases)))
+					$tmp = array();
+					foreach($this->menu_aliases as $_al)
 					{
-						$link .= join("/",$this->menu_aliases);
-						if (sizeof($this->menu_aliases) > 0)
+						if ($_al != "n/a")
 						{
-							$link .= "/";
-						};
+							$tmp[] = $_al;
+						}
 					}
+					$link .= join("/",$tmp);
+					if (sizeof($tmp) > 0)
+					{
+						$link .= "/";
+					};
 					$link .= $row["alias"];
 				}
 				else
@@ -4294,18 +4298,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				{
 					$link = $this->cfg["baseurl"].$link;
 				}
-				$exp->fn_type = aw_ini_get("search.rewrite_url_type");
-				$link = $exp->rewrite_link($link);
-				if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
+				
+				if ($link != $this->cfg["baseurl"]."/index.".$this->cfg["ext"] && 
+						$link != $this->cfg["baseurl"]."/" &&
+						$link != $this->cfg["baseurl"])
 				{
-					$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
-					$_tl = $link;
-					$link = aw_ini_get("baseurl")."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
-//					echo "made hash for link $_tl = $link <br>";
-				}
-				else
-				{
-					$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
+					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
+					$link = $exp->rewrite_link($link);
+					if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
+					{
+						$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
+						$_tl = $link;
+						$link = aw_ini_get("baseurl")."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
+	//					echo "made hash for link $_tl = $link <br>";
+					}
+					else
+					{
+						$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
+					}
 				}
 			}
 		}
