@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.13 2004/11/25 13:29:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.14 2004/11/25 14:08:10 ahti Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -155,7 +155,7 @@ class object_type extends class_base
 		$type = $obj->prop("type");
 
 		$conns = $obj->connections_from(array(
-			"reltype" => RELTYPE_META_ELEMENTS,
+			"type" => RELTYPE_META_ELEMENTS,
 		));
 
 		$opts = array("" => "");
