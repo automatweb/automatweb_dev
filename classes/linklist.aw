@@ -51,12 +51,6 @@ class linklist extends aw_template
 			));
 		return $this->parse();
 	}
-
-	////
-	// !this gets called when the user clicks on change object 
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
 /*
 function teeseda() 
 { 
@@ -69,6 +63,13 @@ $html = $form->gen_preview(array(
 } 
 */	
 	
+
+
+	////
+	// !this gets called when the user clicks on change object 
+	// parameters:
+	//    id - the id of the object to change
+	//    return_url - optional, if set, "back" link should point to it
 	function change($arr)
 	{
 		extract($arr);
@@ -93,7 +94,8 @@ $html = $form->gen_preview(array(
 			,"url"=>"url"
 			,"caption"=>"caption"
 		);
-$propertid=array(
+
+$propertid=array( 
     "oid" =>     "oid"
 ,    "parent" =>    "parent"
 ,    "name" =>    "name" 
@@ -394,7 +396,7 @@ $ref = $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($
 					"link" => $this->mk_my_orb("show",array(
 								"aktiivne" => $oid
 								,"id"  => $id
-								,"otsi"=> $name//$value[$ob["meta"]["vordle"]]//$$ob["meta"]["vordle"]
+								,"otsi"=> $value[$ob["meta"]["vordle"]]//$$ob["meta"]["vordle"]
 //								,"form"=>$ob["meta"]["forms"]
 //							,"felement"=>$ob["meta"]["felement"]
 								),
