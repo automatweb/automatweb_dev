@@ -547,10 +547,11 @@ class _int_object
 		$lang_id = $li->get_langid_for_code($param);
 		if (!$lang_id)
 		{
-			error::throw(array(
+			/*error::throw(array(
 				"id" => ERR_LANG,
 				"msg" => "object::set_lang($param): no language with such code is defined in the system!"
-			));
+			));*/
+			$lang_id = aw_global_get("lang_id");
 		}
 
 		$this->_int_set_of_value("lang_id", $lang_id);
