@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.13 2003/04/10 12:15:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.14 2003/04/11 06:44:10 kristo Exp $
 
 /*
 
@@ -577,7 +577,7 @@ class gallery_v2 extends class_base
 			$old['tn']['id']
 		);
 
-		$d = $this->db_fetch_row("SELECT * FROM g_img_rel WHERE img_id = ".$this->_page_content[$row][$col]["img"]["id"]);
+		$d = $this->db_fetch_row("SELECT * FROM g_img_rel WHERE img_id = '".$this->_page_content[$row][$col]["img"]["id"]."'");
 		if (!is_array($d))
 		{
 			$this->db_query("INSERT INTO g_img_rel(img_id, tn_id) VALUES('".$this->_page_content[$row][$col]["img"]["id"]."','".$this->_page_content[$row][$col]["tn"]["id"]."')");
