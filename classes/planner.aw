@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.65 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.66 2002/06/26 11:24:42 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -295,9 +295,17 @@ class planner extends calendar
 			$co = $this->get_object($object["meta"]["confobject"]);
 			$this->conf = $co["meta"];
 
+			$types = array(
+				"0" => "default",
+				"1" => "day",
+				"2" => "overview",
+				"3" => "week",
+				"4" => "month",
+			);
+
 			if (not($type))
 			{
-				$type = $co["meta"]["default_view"];
+				$type = $types[$co["meta"]["default_view"]];
 			}
 
 		}
@@ -377,26 +385,6 @@ class planner extends calendar
 		
 		list($d,$m,$y) = split("-",$date);
 
-		$navi1 = $this->draw_month(array(
-				"year" => $y,
-				"mon" => $m,
-				"id" => $id,
-				"day" => $d,
-				"type" => $type,
-				"marked" => $events,
-				"tpl" =>  "small_month.tpl",
-		));
-
-		$this->vars(array("cell" => ""));
-
-		$navi2 = $this->draw_month(array(
-				"year" => $y,
-				"mon" => $m + 1,
-				"id" => $id,
-				"day" => "666",
-				"type" => $type,
-				"tpl" =>  "small_month.tpl",
-		));
 
 		$this->events = $events;
 
@@ -507,7 +495,49 @@ class planner extends calendar
 		};
 
 		// that is the outer frame
+		$navigator = "";
+
+
+		if ($this->conf["navigator_visible"])
+		{
+			$this->vars(array("cell" => ""));
+			$navi1 = $this->draw_month(array(
+					"year" => $y,
+					"mon" => $m,
+					"id" => $id,
+					"day" => $d,
+					"type" => $type,
+					"marked" => $events,
+					"tpl" =>  "small_month.tpl",
+			));
+
+			$this->vars(array("cell" => ""));
+
+			$navi2 = $this->draw_month(array(
+					"year" => $y,
+					"mon" => $m + 1,
+					"id" => $id,
+					"day" => "666",
+					"type" => $type,
+					"tpl" =>  "small_month.tpl",
+			));
+
+			$this->read_template("planner.tpl");
+			$this->vars(array(
+				"navi1" => $navi1,
+				"navi2" => $navi2,
+			));
+			$navigator = $this->parse("navigator");
+		};
+
 		$this->read_template("planner.tpl");
+		$this->vars(array(
+			"navi1" => "",
+			"navi2" => "",
+			"cell" => "",
+			"week" => "",
+		));
+
 		$ylist = array(
 			"2001" => "2001",
 			"2002" => "2002",
@@ -524,12 +554,10 @@ class planner extends calendar
 		unset($mlist[0]);
 		$prev = $this->mk_my_orb("view",array("id" => $id,"type" => $type,"date" => $di["prev"],"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle));
 		$next = $this->mk_my_orb("view",array("id" => $id,"type" => $type,"date" => $di["next"],"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle));
-
 		$this->vars(array(
 			"menudef" => $menudef,
 			"caption" => $caption,
-			"navi1" => $navi1,
-			"navi2" => $navi2,
+			"navigator" => $navigator,
 			"disp"	=> $disp,
 			"id" => $id,
 			"content" => $content,
@@ -1865,29 +1893,60 @@ class planner extends calendar
 			$thisday = strtotime("+$i days",$di["start"]);
 			$dx = date("dmY",$thisday);
 			$d = date("d",$thisday);
+			$w = date("w",$thisday);
+			
+			if ($this->conf["workday"])
+			{
+				$draw = false;
+				if (isset($this->conf["workday"][$w]))
+				{
+					$draw = true;
+				};
+			}
+			else
+			{
+				$draw = true;
+			};
 
-			// draws day
-			$c1 = $this->_disp_day(array("dx" => $dx));
+			$size = sizeof($this->conf["workday"]);
+			if ($size == 0)
+			{
+				$size = 7;
+			};
 
-			// draw header
-			$this->vars(array(
-				"hcell" => strtoupper(substr(get_lc_weekday($i+1),0,1)) . " " . date("d-M",$thisday),
-				"cell" => $c1,
-			));
+			$width = (int)(100 / $size);
 
-			$head .= $this->parse("header_cell");
-			$c .= $this->parse("content_cell");
+			if ($draw)
+			{
+				// draws day
+				$c1 = $this->_disp_day(array("dx" => $dx));
 
-			$this->vars(array(
-				"event" => $c1,
-				"head" => strtoupper(substr(get_lc_weekday($i+1),0,1)),
-				"did" => $id,
-				"hid" => $args["id"],
-				"type" => "week",
-				"date" => date("d-m-Y",$thisday),
-				"dateinfo" => "$d. " . get_lc_month(date("m",$thisday)),
-				"bgcolor" => $bgcolor
-			));
+				list($day,$mon,$year) = explode("-",date("d-m-Y",$thisday));
+
+				// draw header
+				$this->vars(array(
+					"cellwidth" => $width . "%",
+					"hcell" => strtoupper(substr(get_lc_weekday($i+1),0,1)) . " " . date("d-M",$thisday),
+					"hcell_weekday" => strtoupper(substr(get_lc_weekday($i+1),0,1)),
+					"hcell_date" =>  date("d-M",$thisday),
+					"dayorblink" => $this->mk_my_orb("view",array("id" => $this->id,"type" => "day","date" => "$day-$mon-$year")),
+					"cell" => $c1,
+				));
+
+				$head .= $this->parse("header_cell");
+				$c .= $this->parse("content_cell");
+
+				$this->vars(array(
+					"event" => $c1,
+					"head" => strtoupper(substr(get_lc_weekday($i+1),0,1)),
+					"did" => $id,
+					"hid" => $args["id"],
+					"type" => "week",
+					"date" => date("d-m-Y",$thisday),
+					"dateinfo" => "$d. " . get_lc_month(date("m",$thisday)),
+					"bgcolor" => $bgcolor
+				));
+			};
 		};
 		// finishing, compile the table
 		$this->vars(array(
@@ -1927,15 +1986,19 @@ class planner extends calendar
 		{
 			list($d,$m,$y) = explode("-",date("d-m-Y"));
 			$this->ts_daystart = mktime(0,0,0,$m,$d,$y) + ($this->conf["day_start"]["hour"] * 3600) + ($this->conf["day_start"]["minute"] * 60);
+			$this->ts_daystart = $this->conf["day_start"];
 			$this->ts_dayend = mktime(0,0,0,$m,$d,$y) + ($this->conf["day_end"]["hour"] * 3600) + ($this->conf["day_end"]["minute"] * 60);
+			$this->ts_dayend = $this->conf["day_end"];
 			for ($ts = $this->ts_daystart; $ts <= $this->ts_dayend; $ts = $ts + (30*60))
 			{
+				$min = date("i",$ts);
 				$this->vars(array(
 					"add_link" => $this->mk_my_orb("new_event",array("parent" => $this->id,"date" => $dm,"time" => date("H:i",$ts))),
 					
 					"time" => date("H:i",$ts),
 				));
-				$ranges .= $this->parse("timestamp");
+				$_tpl = ($min == 30) ? "timestamp2" : "timestamp";
+				$ranges .= $this->parse($_tpl);
 			};
 		};
 
@@ -1974,10 +2037,24 @@ class planner extends calendar
 	function get_config_keys()
 	{
 		return array(
-				"default_view"  => array("day" => "day","week" => "week","month" => "month"),
+				"default_view"  => array("" => "default", "day" => "day","week" => "week","month" => "month"),
 				"day_start" => "time",
 				"day_end" => "time",
-
+				"tab_add_visible" => "checkbox",
+				"tab_today_visible" => "checkbox",
+				"tab_overview_visible" => "checkbox",
+				"tab_day_visible" => "checkbox",
+				"tab_week_visible" => "checkbox",
+				"tab_month_visible" => "checkbox",
+				"navigator_visible" => "checkbox",
+				"navigator_months"  => array("" => "default", "1" => "1","2" => "2"),
+				"workdays_mon"  => "checkbox",
+				"workdays_tue" => "checkbox",
+				"workdays_wed" => "checkbox",
+				"workdays_thu" => "checkbox",
+				"workdays_fri" => "checkbox",
+				"workdays_sat" => "checkbox",
+				"workdays_sun" => "checkbox",
 		);
 	}
 
