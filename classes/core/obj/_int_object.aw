@@ -1261,7 +1261,7 @@ class _int_object
 
 		$this->_int_load_properties();
 
-		//$this->_int_load_property_values();
+		$this->_int_load_property_values();
 
 		// yeees, this looks weird, BUT it is needed if the loaded object is not actually the one requested
 		// this can happen in ds_auto_translation for instance
