@@ -94,7 +94,16 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function search($params)
 	{
-		$query_hash = "search::".md5(serialize($params));
+		$tp = $params;
+		if (!isset($tp["lang_id"]))
+		{
+			$tp["lang_id"] = aw_global_get("lang_id");
+		}
+		if (!isset($tp["site_id"]))
+		{
+			$tp["site_id"] = aw_ini_get("site_id");
+		}
+		$query_hash = "search::".md5(serialize($tp));
 		
 		$ret = $this->_get_cache($query_hash, 0);
 		if (is_array($ret))
@@ -126,6 +135,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function _set_cache($fn, $oid, $dat)
 	{
+		$GLOBALS["object_loader"]->ds->dequote(&$dat);
 		$str = "<?php\n";
 		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
 		$str .= "?>";

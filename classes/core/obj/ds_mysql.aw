@@ -120,6 +120,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
+		// fix old broken databases where brother_of may be 0 for non-brother objects
+		$object_id = ($objdata["brother_of"] ? $objdata["brother_of"] : $objdata["oid"]);
 
 		// do a query for each table
 		foreach($tables as $table)
@@ -136,7 +138,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 			if (count($fields) > 0)
 			{
-				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$objdata["brother_of"]."'";
+				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$object_id."'";
 				//echo "q = $q <br />";
 				$data = $this->db_fetch_row($q);
 				if (is_array($data))

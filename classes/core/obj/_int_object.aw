@@ -1061,9 +1061,12 @@ class _int_object
 		$parent = $this->id();
 		while ($parent && $parent != $this->ini["rootmenu"])
 		{
-			$t = obj($parent);
-			$ret[] = $t;
-			$parent = $t->parent();
+//			if ($GLOBALS["object_loader"]->ds->can("change", $parent))
+//			{
+				$t = obj($parent);
+				$ret[] = $t;
+				$parent = $t->parent();
+//			}
 		}
 		$ret[] = obj($this->ini["rootmenu"]);
 		return array_reverse($ret);
