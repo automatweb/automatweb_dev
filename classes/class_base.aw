@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.114 2003/06/03 15:59:04 duke Exp $
+// $Id: class_base.aw,v 2.115 2003/06/03 16:46:54 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1125,6 +1125,11 @@ class class_base extends aw_template
 					$use_group = $gkey;
 				};
 			};
+		};
+
+		if (empty($this->id))
+		{
+			$use_group = "general";
 		};
 		
 		// and if nothing suitable was found, use the first group from the list
