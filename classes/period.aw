@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.21 2004/03/25 16:24:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.22 2004/06/04 11:42:30 duke Exp $
 // period.aw - periods 
 /*
 
@@ -60,7 +60,7 @@
 	@reltype IMAGE value=1 clid=CL_IMAGE
 	@caption Perioodi pilt
 
-	@reltype CONTENTS_DOC value=1 clid=CL_DOCUMENT
+	@reltype CONTENTS_DOC value=2 clid=CL_DOCUMENT
 	@caption Sisukorra dokument
 
 */
@@ -421,15 +421,22 @@ class period extends class_base
 			{
 				$in_archive = true;
 			}
+			$current_period = $this->get_active_period();
+			aw_session_set("current_period", $current_period);
+
+
 			aw_session_set("in_archive", $in_archive);
 		} 
 		else 
 		{
+			$current_period = $this->get_active_period();
+			aw_session_set("current_period", $current_period);
 			// no period specified in the url
 			if (!aw_global_get("act_per_id"))
 			{
 				// and no period was previously active, pick the default. 
-				$act_per_id = $this->get_active_period();
+				//$act_per_id = $this->get_active_period();
+				$act_per_id = $current_period;
 				aw_session_set("act_per_id", $act_per_id);
 				$in_archive = false;
 				aw_session_set("in_archive", $in_archive);
