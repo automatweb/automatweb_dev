@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.232 2003/02/12 08:24:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.233 2003/02/12 12:36:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -91,7 +91,8 @@ class menuedit extends aw_template
 
 		// at this point $section is already numeric,
 		// we checked it in $this->request_startup()
-		$section = aw_global_get("section");
+//		$section = aw_global_get("section");
+//		echo "section = $section <br>";
 
 
 		$obj = $this->get_object($section);
@@ -260,7 +261,7 @@ class menuedit extends aw_template
 		// leiame, kas on tegemist perioodilise rubriigiga
 		$periodic = $this->is_periodic($section);
 
-		
+	
 		if ($obj["class_id"] != CL_PSEUDO)
 		{
 			$this->sel_section = $obj["parent"];
