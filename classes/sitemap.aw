@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.7 2002/06/10 15:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.8 2002/07/16 19:19:36 kristo Exp $
 // sitemap.aw - Site Map
 
 // DEPRECATED - duke's new menu tree showing class deprecates this one. 
@@ -48,7 +48,7 @@ class sitemap extends aw_template
 			};
 		}
 
-		$parent = $rootmenu == -1 ? $this->cfg["sitemap.rootmenu"] : $rootmenu;
+		$parent = $rootmenu == -1 ? aw_ini_get("sitemap.rootmenu") : $rootmenu;
 		return $this->req_map($parent);
 	}
 
