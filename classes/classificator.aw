@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.20 2004/07/02 16:18:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.21 2004/07/07 10:37:26 duke Exp $
 
 /*
 
@@ -80,9 +80,8 @@ class classificator extends class_base
 		{
 			if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 			{
-
 				$conns = $arr["obj_inst"]->connections_from(array(
-					"type" => constant($prop["reltype"]),
+					"type" => $prop["reltype"],
 				));
 
 				foreach($conns as $conn)
@@ -97,7 +96,8 @@ class classificator extends class_base
 				$connections = $prop["value"];
 			};
 
-			if ($use_type == "checkboxes" || ($use_type == "select" && $prop["multiple"] == 1))
+
+			if ($use_type == "checkboxes" || ($use_type == "select" && $prop["multiple"] == 1) || $use_type == "mselect")
 			{
 				$prop["value"] = $connections;
 			}
@@ -154,7 +154,8 @@ class classificator extends class_base
 		$ff = $ot->get_obj_for_class(array(
 			"clid" => $arr["clid"],
 		));
-		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		//if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->meta("object_type"))) 
 		{
 			$custom_ff = $arr["obj_inst"]->meta("object_type");
 			if (is_oid($custom_ff))
@@ -185,6 +186,11 @@ class classificator extends class_base
 	function process_vcl_property($arr)
 	{
 		$property = $arr["prop"];
+
+		if ($property["store"] != "connect")
+		{
+			return false;
+		};
 		$items = new aw_array($property["value"]);
 		$connections = array();
 
@@ -192,7 +198,7 @@ class classificator extends class_base
 		{
 			// first I need a list of old connections.
 			$oldconns = $arr["obj_inst"]->connections_from(array(
-				"type" => constant($property["reltype"]),
+				"type" => $property["reltype"],
 			));
 			foreach($oldconns as $conn)
 			{
@@ -208,9 +214,6 @@ class classificator extends class_base
 		$ids = $this->make_keys($choices->ids());
 
 		// I need to list the choices
-
-		//$arr["prop"]["value"] = $items->get();
-
 		foreach($items->get() as $item)
 		{
 			// skip invalid items
@@ -223,6 +226,7 @@ class classificator extends class_base
 				// create the connection if it didn't exist
 				if (empty($connections[$item]))
 				{
+					//print "connecting to $item with type " . constant($property["reltype"]) . "<br>";
 					$arr["obj_inst"]->connect(array(
 						"to" => $item,
 						"reltype" => constant($property["reltype"]),
@@ -233,10 +237,14 @@ class classificator extends class_base
 			};
 		};
 
+		//print "1 = <br>";
+		//arr($connections);
+
 		if (sizeof($connections) > 0)
 		{
 			foreach($connections as $to_remove)
 			{
+				//print "disconnecting from $to_remove<br>";
 				$arr["obj_inst"]->disconnect(array(
 					"from" => $to_remove,
 				));
