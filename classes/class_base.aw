@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.175 2003/11/27 12:00:38 duke Exp $
+// $Id: class_base.aw,v 2.176 2003/12/01 15:53:26 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -24,7 +24,7 @@
 	// translated objects have their own status fields .. they don't
 	// have to sync with the original .. allthu .. I do feel that
 	// we need to do this in a different way
-	@property status type=status trans=1
+	@property status type=status trans=1 default=2
 	@caption Aktiivne
 	@comment Kas objekt on aktiivne 
 
@@ -279,6 +279,7 @@ class class_base extends aw_template
 		// do any callbacks
 
 		$this->inst->classinfo = $this->classinfo;
+		$this->inst->relinfo = $this->relinfo;
 
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
@@ -2494,7 +2495,7 @@ class class_base extends aw_template
 		// there is a bug somewhere which causes certain objects to get a 
 		// status of 0, until I figure it out, the first part of this if clause
 		// deals with it -- duke
-		if ($this->obj_inst->status == 0 || $this->classinfo["no_status"]["text"] == 1)
+		if ($this->obj_inst->prop("status") == 0 || $this->classinfo["no_status"]["text"] == 1)
 		{
 			$this->obj_inst->set_status(STAT_ACTIVE);
 		};
