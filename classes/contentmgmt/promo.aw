@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.25 2004/02/13 16:54:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.26 2004/02/25 15:39:12 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -102,7 +102,7 @@ class promo extends class_base
 				$tplmgr = get_instance("templatemgr");
 				$data["options"] = $tplmgr->get_template_list(array(
 					"type" => 0,
-					"menu" => $args["obj_inst"]->id(),
+					"menu" => $arr["obj_inst"]->id(),
 				));
 				break;
 
