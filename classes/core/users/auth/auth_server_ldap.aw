@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.6 2004/11/01 12:29:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.7 2004/11/01 13:18:06 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -53,6 +53,11 @@ class auth_server_ldap extends class_base
 					return PROP_IGNORE;
 				}
 				$grps = $this->_get_ad_grps($arr["obj_inst"]);
+				if ($grps === PROP_ERROR)
+				{
+					$prop["error"] = $this->last_error;
+					return PROP_ERROR;
+				}
 				if (count($grps) == 0)
 				{
 					return PROP_IGNORE;
@@ -137,6 +142,11 @@ class auth_server_ldap extends class_base
 			return array();
 		}
 		$res = ldap_connect($o->prop("server"));
+		if (!$res)
+		{
+			$this->last_error = "Ei saanud serveriga &uuml;hendust!";
+			return PROP_ERROR;
+		}
 		ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
 
 		$uid = $o->prop("ad_uid");
