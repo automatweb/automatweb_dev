@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.10 2003/01/16 16:45:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.11 2003/01/30 12:33:59 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -60,8 +60,9 @@ class mysql
 			// if we couldn't do this the first time around, we probably won't be able to this time either
 			if (not($this->dbh))
 			{
-				print "I'm not connected to the database, cannot perform the requested query. Please report this to site administrator 	immediately";
-				exit;
+				$eri = new class_base;
+				$eri->init();
+				$eri->raise_error(ERR_DB_NOTCONNECTED, "I'm not connected to the database, cannot perform the requested query. Please report this to site administratorimmediately", true, false);
 			}
 		};
 		$this->qID = @mysql_query($qtext, $this->dbh);
@@ -77,20 +78,9 @@ class mysql
 				);
 				return false;
 			}
-			echo LC_MYSQL_ERROR_QUERY;
-			// lühendame päringu. Ntx failide lisamisel voib paring olla yle mega pikk
-			// ja selle ekraanile pritsimine ei anna mitte midagi.
-
-/*			if (strlen($qtext) > 5000)
-			{
-				$qtext = substr($qtext,0,5000) . '....(truncated)';
-			};*/
-
-			echo $qtext . '\n';
-			echo '<br>\n';
-			echo mysql_errno($this->dbh);
-			print ':';
-			echo mysql_error($this->dbh);
+			$eri = new class_base;
+			$eri->init();
+			$eri->raise_error(ERR_DB_QUERY,LC_MYSQL_ERROR_QUERY."\n".$qtext."\n".mysql_errno($this->dbh)."\n".mysql_error($this->dbh),true,false);
 		} 
 		else 
 		{
