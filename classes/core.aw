@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.298 2004/10/18 13:41:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.299 2004/10/18 13:53:47 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -219,49 +219,6 @@ class core extends acl_base
 		//XXX the following query was commented out on eau, have to watch out for this one
 
 		$this->db_query($q);
-	}
-
-	////
-	// !returns array of aliases pointing to object $oid
-	function get_aliases_of($args = array()) 
-	{
-		extract($args);
-		if (!$oid)
-		{
-			return;
-		}
-		$rl = "";
-		if (!empty($reltype))
-		{
-			$rl = " AND reltype = $reltype ";
-		};
-		if (!empty($lang_id))
-		{
-			$ll = " AND lang_id = $lang_id ";
-		};
-		$q = "SELECT *,objects.name as name,objects.parent as parent FROM aliases
-			LEFT JOIN objects ON
-			(aliases.source = objects.oid)
-			WHERE target = '$oid' $rl $ll ORDER BY id";
-		$this->db_query($q);
-		$aliases = array();
-		while($row = $this->db_next())
-		{
-			$aliases[$row["source"]]=array(
-				"type" => $row["type"],
-				"name" => $row["name"], 
-				"data" => $row["data"],
-				"id" => $row["source"],
-				"parent" => $row["parent"]);
-		};
-		return $aliases;
-	}
-
-	////
-	// !Deletes all aliases for $oid
-	function delete_aliases_of($oid)
-	{
-		$this->db_query("DELETE FROM aliases WHERE source = $oid");
 	}
 
 	////
@@ -670,26 +627,6 @@ class core extends acl_base
 			}
 		};
 		aw_global_set("__from_raise_error",0);
-	}
-
-	////
-	// !finds the lead template for menu $section
-	// if the template is not set for this menu, traverses the object tree upwards
-	// until it finds a menu for which it is set
-	function get_lead_template($section)
-	{
-		$tplmgr = get_instance("templatemgr");
-		return $tplmgr->get_lead_template($section);
-	}
-
-	////
-	// !finds the full document template for menu $section
-	// if the template is not set for this menu, traverses the object tree upwards 
-	// until it finds a menu for which it is set
-	function get_long_template($section)
-	{
-		$tplmgr = get_instance("templatemgr");
-		return $tplmgr->get_long_template($section);
 	}
 
 	////
