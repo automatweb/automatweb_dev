@@ -27,6 +27,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <multiple>1</multiple>
             <caption>Unikaalne omadus </caption>
       </property>
       <property>

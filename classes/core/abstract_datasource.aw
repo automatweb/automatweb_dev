@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.4 2004/07/01 16:33:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.5 2004/10/04 12:00:16 kristo Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 
@@ -28,6 +28,9 @@
 
 @property file_separator type=textbox size=5
 @caption Eraldaja
+
+@property max_lines type=textbox size=5
+@caption Mitu rida maksimaalselt importida
 
 
 @reltype DS value=1 clid=CL_FILE,CL_OTV_DS_POSTIPOISS,CL_OTV_DS_OBJ,CL_DB_TABLE_CONTENTS
@@ -176,6 +179,22 @@ class abstract_datasource extends class_base
 		}
 
 		$ret = $ds_i->get_objects($ds_o, $params);
+
+		if ($o->prop("max_lines"))
+		{
+			$cnt = 0;
+			$tmp = array();
+			foreach($ret as $k => $v)
+			{
+				$tmp[$k] = $v;
+				if (++$cnt > $o->prop("max_lines"))
+				{
+					break;
+				}
+			}
+			$ret = $tmp;
+		}
+
 		return $ret;
 	}
 

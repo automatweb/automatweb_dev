@@ -58,6 +58,16 @@
             <size>5</size>
             <caption>Eraldaja</caption>
       </property>
+      <property>
+            <name>max_lines</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Mitu rida maksimaalselt importida</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ABSTRACT_DATASOURCE</syslog_type>
             <relationmgr>yes</relationmgr>

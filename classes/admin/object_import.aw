@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.12 2004/07/08 12:32:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.13 2004/10/04 12:00:15 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -16,7 +16,7 @@
 @property object_type type=relpicker reltype=RELTYPE_OBJECT_TYPE
 @caption Imporditava objekti t&uuml;&uuml;p
 
-@property unique_id type=select 
+@property unique_id type=select multiple=1
 @caption Unikaalne omadus 
 
 @property folder_field type=select 
@@ -496,17 +496,28 @@ class object_import extends class_base
 				echo "impordin rida ".($line_n)."... <br>\n";
 				flush();
 
-				if ($o->prop("unique_id"))
+				if (!is_array($o->prop("unique_id")) && $o->prop("unique_id") != "")
 				{
-					// get column for uniq id
-					$u_col = $p2c[$o->prop("unique_id")];
+					$o->set_prop("unique_id", array($o->prop("unique_id") => $o->prop("unique_id")));
+				}
 
-					$ol = new object_list(array(
+				if (is_array($o->prop("unique_id")) && count($o->prop("unique_id")) > 0)
+				{
+					$un_filt = array(
 						"class_id" => $class_id,
-						$o->prop("unique_id") => $line[$u_col]
-					));
-					if ($ol->count() > 0)
+					);
+
+					foreach($o->prop("unique_id") as $unique_id)
 					{
+						// get column for uniq id
+						$u_col = $p2c[$unique_id];
+						$un_filt[$unique_id] = $line[$u_col];
+					}
+
+					$ol = new object_list($un_filt);
+
+					if ($ol->count() > 0)
+					{	
 						$dat = $ol->begin();
 						echo "leidsin juba olemasoleva objekti ".$dat->name().", kasutan olemasolevat objekti <br>";
 					}
