@@ -33,6 +33,15 @@
             <caption>Faili allkiri</caption>
       </property>
       <property>
+            <name>file_url</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Url, kust saadakse faili sisu</caption>
+      </property>
+      <property>
             <name>showal</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>

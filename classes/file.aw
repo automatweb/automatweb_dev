@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.59 2003/10/05 20:33:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.60 2003/10/15 10:33:19 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -33,7 +33,10 @@
 	@property comment type=textbox table=objects field=comment
 	@caption Faili allkiri
 
-	@property showal type=checkbox ch_value=1 group=settings
+	@property file_url type=textbox table=objects field=meta method=serialize
+	@caption Url, kust saadakse faili sisu
+
+	@property showal type=checkbox ch_value=1
 	@caption Näita kohe
 
 	@property newwindow type=checkbox ch_value=1 group=settings
@@ -191,6 +194,23 @@ class file extends class_base
 		}
 
 		$fi = $this->get_file_by_id($alias["target"]);
+		if ($fi["showal"] == 1 && $fi["meta"]["show_framed"])
+		{
+			// so what if we have it twice?
+			$this->dequote(&$fi["content"]);
+			$fi["content"] .= "</body>";
+			if (strpos(strtolower($fi["content"]),"<body>"))
+			{
+				preg_match("/<body(.*)>(.*)<\/body>/imsU",$fi["content"],$map);
+				// return only the body of the file
+   				$replacement = str_replace("\n","",$map[2]);
+			}
+			else
+			{
+				$replacement = $fi["content"];
+			};
+		}
+		else
 		if ($fi["showal"] == 1)
 		{
 			// n2itame kohe
@@ -206,7 +226,7 @@ class file extends class_base
 				// so what if we have it twice?
 				$this->dequote(&$fi["content"]);
 				$fi["content"] .= "</body>";
-				if (strpos($fi["content"],"<body>"))
+				if (strpos(strtolower($fi["content"]),"<body>"))
 				{
 					preg_match("/<body(.*)>(.*)<\/body>/imsU",$fi["content"],$map);
 					// return only the body of the file
@@ -506,6 +526,15 @@ class file extends class_base
 		$ret = $row->get() + $ar->get();
 
 		$ret["file"] = basename($ret["file"]);
+		if ($ret["meta"]["file_url"] != "")
+		{
+			$proto_find = get_instance("protocols/protocol_finder");
+			$proto_inst = $proto_find->inst($ret["meta"]["file_url"]);
+
+			$ret["content"] = $proto_inst->get($ret["meta"]["file_url"]);
+			$ret["type"] = $proto_inst->get_type();
+		}
+		else
 		if ($ret["file"] != "")
 		{
 			// file saved in filesystem - fetch it
