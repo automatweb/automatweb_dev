@@ -527,7 +527,11 @@ function &__get_site_instance()
 	global $__site_instance;
 	if (!is_object($__site_instance))
 	{
-		@include("site.".$GLOBALS["cfg"]["__default"]["ext"]);
+		$fname = "site.".$GLOBALS["cfg"]["__default"]["ext"];
+		if (file_exists($fname))
+		{
+			include($fname);
+		}
 		if (class_exists("site"))
 		{
 			$__site_instance = new site;
