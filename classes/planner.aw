@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.127 2003/07/17 15:46:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.128 2003/07/22 16:04:42 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -12,18 +12,18 @@
 	//@classinfo toolbar_type=menubar
 
 	@property default_view type=select rel=1
-	@caption Default vaade
+	@caption Aeg
 
-	@property content_generator type=select rel=1
+	@property content_generator type=select rel=1 group=advanced
 	@caption Näitamisfunktsioon
 
 	@property event_cfgform type=relpicker reltype=RELTYPE_EVENT_ENTRY
 	@caption Def. sündmuse sisetamise vorm
 
-	@property day_start type=time_select rel=1
+	@property day_start type=time_select group=time_settings rel=1
 	@caption Päev algab
 
-	@property day_end type=time_select rel=1
+	@property day_end type=time_select group=time_settings rel=1
 	@caption Päev lõpeb
 
 	@property only_days_with_events type=checkbox ch_value=1 group=advanced
@@ -32,10 +32,10 @@
 	@property tab_add_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Lisa event" nähtav
 
-	@property tab_day_visible type=checkbox ch_value=1 default=1 group=advanced
+	@property tab_day_visible type=checkbox ch_value=1 default=1 group=time_settings
 	@caption "Päev" nähtav
 
-	@property tab_week_visible type=checkbox ch_value=1 default=1 group=advanced
+	@property tab_week_visible type=checkbox ch_value=1 default=1 group=time_settings
 	@caption "Nädal" nähtav
 
 	@property tab_month_visible type=checkbox ch_value=1 default=1 group=advanced
@@ -59,10 +59,10 @@
 	@property event_direction type=callback callback=cb_get_event_direction group=advanced rel=1
 	@caption Suund
 
-	@property range_start type=date_select group=advanced rel=1
+	@property range_start type=date_select group=time_settings rel=1
 	@caption Alates
 
-	@property event_time_item type=textbox size=4 group=advanced rel=1
+	@property event_time_item type=textbox size=4 group=time_settings rel=1
 	@caption Mitu päeva
 	
 	@property event_max_items type=textbox size=4 group=advanced rel=1
@@ -75,7 +75,7 @@
 	@caption Sündmuste kataloog
 
 	@property workdays callback=callback_get_workday_choices group=advanced
-	@caption Tööpäevad
+	@caption Näidatavad päevad
 
 	@default store=no
 
@@ -96,12 +96,13 @@
 
 	@groupinfo general caption=Seaded
 	@groupinfo general2 caption=Üldine parent=general
-	@groupinfo advanced caption=Seaded parent=general
-	@groupinfo special caption=Spetsiaalne parent=general
+	@groupinfo advanced caption=Sisuseaded parent=general
 	@groupinfo views caption=Vaated
 	@groupinfo show_day caption=Päev submit=no parent=views
 	@groupinfo show_week caption=Nädal submit=no parent=views
 	@groupinfo show_month caption=Kuu submit=no default=1 parent=views
+	@groupinfo time_settings caption=Ajaseaded parent=general
+	@groupinfo special caption=Spetsiaalne parent=general
 	@groupinfo add_event caption=Lisa_sündmus
 */
 
@@ -147,7 +148,6 @@ class planner extends class_base
 		$this->lc_load("planner","lc_planner");
 			
 		$this->viewtypes = array(
-				"0" => "default",
 				"1" => "day",
 				"3" => "week",
 				"4" => "month",
@@ -248,7 +248,7 @@ class planner extends class_base
 			case "use_template":
 				$data["options"] = array(
 					"" => "",
-					"show_relative.tpl" => "Suhteline",
+					"show_relative.tpl" => "Piltide üldvaade",
 					"disp_day2.tpl" => "Päev",
 				);
 				break;
@@ -287,10 +287,7 @@ class planner extends class_base
 
 	function callback_get_workday_choices($args = array())
 	{
-		$tmp = array(
-			"name" => "workdays",
-			"caption" => "Tööpäevad",
-		);
+		$tmp = $args["prop"];
 		$daynames = explode("|",LC_WEEKDAY);
 		$wd = isset($args["obj"]["meta"]["workdays"]) ? $args["obj"]["meta"]["workdays"] : array();
 		for($i = 1; $i <= 7; $i++)
@@ -1036,22 +1033,38 @@ class planner extends class_base
 			case "day":
 				$this->type = CAL_SHOW_DAY;
 				$tpl = is_array($this->conf) ? "disp_day2.tpl" : "disp_day.tpl";
-				for ($i = $di["start"]; $i <= $di["end"]; $i = $i + 86400)
+				if (!empty($this->conf["use_template"]))
 				{
-					$tmp_di = $di;
-					$tmp_di["start"] = $i;
-					$content .= $this->disp_day(array(
+					$tpl = $this->conf["use_template"];
+				};
+				$this->read_template($tpl);
+				if ($this->is_template("CELL"))
+				{
+					$content = $this->disp_relative(array(
 						"events" => $events,
-						"di" => $tmp_di,
-						"tpl" => $tpl,
-					));
+						"di" => $di,
+					));	
+					$caption = "";
 				}
-				$caption = sprintf("%s, %d.%s %d",
-					ucfirst(get_lc_weekday($di["start_wd"])),
-					date("d",$di["start"]),
-					get_lc_month($m),
-					date("Y",$di["start"])
-				);
+				else
+				{
+					for ($i = $di["start"]; $i <= $di["end"]; $i = $i + 86400)
+					{
+						$tmp_di = $di;
+						$tmp_di["start"] = $i;
+						$content .= $this->disp_day(array(
+							"events" => $events,
+							"di" => $tmp_di,
+							"tpl" => $tpl,
+						));
+					}
+					$caption = sprintf("%s, %d.%s %d",
+						ucfirst(get_lc_weekday($di["start_wd"])),
+						date("d",$di["start"]),
+						get_lc_month($m),
+						date("Y",$di["start"])
+					);
+				};
 				$start = $date;
 				break;
 
@@ -1302,6 +1315,9 @@ class planner extends class_base
 		{
 			$args["relobj_id"] = $this->relobj_id;
 		};
+
+		// first things first, I need to sync the the date ranges given for day 
+		// and relative. That really is the tricky part
 		$evx = $de->get_events_in_range($args);
 
 		$this->start_time = $de->start_time;
@@ -1534,6 +1550,8 @@ class planner extends class_base
 		$empty = $this->parse("CELL");
 		$cells = array();
 
+		$_ev_count = 0;
+
 		foreach($args["events"] as $key => $val)
 		{
 			foreach($val as $vkey => $vval)
@@ -1556,7 +1574,16 @@ class planner extends class_base
 						"ev_link" => $ev_link,
 					));
 					$cells[] = $this->parse("CELL");
+					$_ev_count++;
+					if ($_ev_count >= $this->conf["event_max_items"])
+					{
+						break;
+					};
 				}
+			};
+			if ($_ev_count >= $this->conf["event_max_items"])
+			{
+				break;
 			};
 		}
 
@@ -1747,11 +1774,13 @@ class planner extends class_base
 			// drop out if this day has no events
 			if (not(is_array($this->events[$args["dx"]])))
 			{
+				$this->vars(array(
+					"event_content" => "",
+				));
 				return false;
 			};
-		
-			$events = $this->events[$args["dx"]];
 
+			$events = $this->events[$args["dx"]];
 
 			// moo. miks neid eventeid varem ära ei sorteerita?
 			// sort the events by start date
@@ -1782,7 +1811,7 @@ class planner extends class_base
 				{
 					$daylink = "/" . $tgt;
 				};
-				if (($e["class_id"] == CL_DOCUMENT) || ($e["class_id"] == CL_BROTHER_DOCUMENT))
+				if (!$this->is_template("CELL") && (($e["class_id"] == CL_DOCUMENT) || ($e["class_id"] == CL_BROTHER_DOCUMENT)))
 				{
 					$daylink = "";
 
@@ -1958,13 +1987,13 @@ class planner extends class_base
 		
 		$caption = sprintf("%d.%s %d - %d.%s %d",$d1,$mon1,$y1,$d2,$mon2,$y2);
 
+		$workdays = explode(",",$this->cfg["workdays"]);
 		// load the frame for the week
 		$this->read_template($tpl);
 		$c = "";
 		$head = "";
 		$cnt = "";
 		$d1 = date("d",$di["start"]);
-		$workdays = explode(",",$this->cfg["workdays"]);
 		for ($i = 0; $i <= 6; $i++)
 		{
 			$thisday = strtotime("+$i days",$di["start"]);
@@ -1977,10 +2006,10 @@ class planner extends class_base
 				$w = 7;
 			};
 			
-			if ($this->conf["workday"])
+			if ($this->conf["workdays"])
 			{
 				$draw = false;
-				if (isset($this->conf["workday"][$w]))
+				if (isset($this->conf["workdays"][$w]))
 				{
 					$draw = true;
 				};
@@ -1990,7 +2019,7 @@ class planner extends class_base
 				$draw = true;
 			};
 
-			$size = sizeof($this->conf["workday"]);
+			$size = sizeof($this->conf["workdays"]);
 			if ($size == 0)
 			{
 				$size = 7;
@@ -2101,7 +2130,6 @@ class planner extends class_base
 	{
 		extract($args);
 		// load the frame for the day
-		$this->read_template($tpl);
 		$c = "";
 		$head = "";
 		$cnt = "";
@@ -2118,15 +2146,6 @@ class planner extends class_base
 		$dm = date("d-m-Y",$thisday);
 		$m = date("m",$thisday);
 				
-		$wd_name = get_lc_weekday($i);
-
-		$lcw = substr($wd_name,0,1);
-		$this->vars(array(
-			"weekday_name" => ucfirst($wd_name),
-			"daynum" => $d,
-			"month_name" => get_lc_month($m),
-		));
-
 		$dcell = "";
 
 		if (is_array($this->conf) && $this->is_template("dcell"))
@@ -2209,8 +2228,20 @@ class planner extends class_base
 			}
 
 			list($d,$m,$y) = explode("-",$dm);
-			$this->ts_daystart = mktime(0,0,0,$m,$d,$y) + ($this->conf["day_start"]["hour"] * 3600) + ($this->conf["day_start"]["minute"] * 60);
-			$this->ts_dayend = mktime(0,0,0,$m,$d,$y) + ($this->conf["day_end"]["hour"] * 3600) + ($this->conf["day_end"]["minute"] * 60);
+			$this->ts_daystart = mktime(0,0,0,$m,$d,$y);
+			if (is_array($this->conf["day_start"]))
+			{
+				$this->ts_daystart += ($this->conf["day_start"]["hour"] * 3600) + ($this->conf["day_start"]["minute"] * 60);
+			};
+			$this->ts_dayend = mktime(0,0,0,$m,$d,$y);
+			if (is_array($this->conf["day_end"]) && $this->conf["day_end"]["hour"] != 0)
+			{
+				$this->ts_dayend += ($this->conf["day_end"]["hour"] * 3600) + ($this->conf["day_end"]["minute"] * 60);
+			}
+			else
+			{
+				$this->ts_dayend += 86399;
+			};
 			$this->vars(array(
 				"color" => "#FFFFFF",
 			));
@@ -2284,11 +2315,22 @@ class planner extends class_base
 			// draws day
 			$c1 = $this->_disp_day(array("dx" => $dx));
 		};
+		
+		$i = date("w",$di["start"]);
+		if ($i == 0)
+		{
+			$i = 7;
+		};
+		$wd_name = get_lc_weekday($i);
+		$lcw = substr($wd_name,0,1);
 
 		// draw header
 		$this->vars(array(
 			"hcell" => strtoupper(substr(get_lc_weekday($i),0,1)) . " " . date("d-M",$thisday),
 			"cell" => $c1,
+			"weekday_name" => ucfirst($wd_name),
+			"daynum" => $d,
+			"month_name" => get_lc_month($m),
 		));
 
 		$this->vars(array(
@@ -2366,16 +2408,23 @@ class planner extends class_base
 		$items = array();
 		$items[] = array(
 			"type" => "radiobutton",
-			"caption" => "Edasi",
+			"caption" => "Tagasi",
+			"name" => $args["prop"]["name"],
+			"rb_value" => 1,
+			"value" => $args["prop"]["value"],
+		);
+		$items[] = array(
+			"type" => "radiobutton",
+			"caption" => "Praegu &nbsp;",
 			"rb_value" => 0,
 			"name" => $args["prop"]["name"],
 			"value" => $args["prop"]["value"],
 		);
 		$items[] = array(
 			"type" => "radiobutton",
-			"caption" => "Tagasi",
+			"caption" => "Edasi &nbsp;",
+			"rb_value" => 2,
 			"name" => $args["prop"]["name"],
-			"rb_value" => 1,
 			"value" => $args["prop"]["value"],
 		);
 		$retval = array(
