@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.282 2003/04/15 15:20:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.283 2003/04/15 15:57:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -4854,7 +4854,7 @@ class menuedit extends aw_template
 
 		if ($period)
 		{
-			$ps = " AND ((period = '$period') OR (periodic = 1)) ";
+			$ps = " AND ((objects.period = '$period') OR (objects.periodic = 1)) ";
 		}
 
 		$this->read_template("js_popup_menu.tpl");
