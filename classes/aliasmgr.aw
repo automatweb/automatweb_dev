@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.18 2002/01/22 14:48:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.19 2002/01/29 23:43:59 duke Exp $
 
 global $orb_defs;
 $orb_defs["aliasmgr"] = "xml";
@@ -38,8 +38,10 @@ class aliasmgr extends aw_template {
 		$this->defs["links"] = array(
 				"alias" => "l",
 				"title" => "link",
+				"class" => "extlinks",
 				"generator" => "_link_aliases",
 				"class_id" => CL_EXTLINK,
+				"templates" => array("link"),
 				"addlink" => $this->mk_my_orb("new", array("docid" => $this->id, "parent" => $this->parent),"links"),
 				"chlink" => $this->mk_my_orb("change",array("parent" => $this->id),"links"),
 				"dellink" => $this->mk_my_orb("delete",array("parent" => $this->id),"links"),
@@ -49,7 +51,9 @@ class aliasmgr extends aw_template {
 		$this->defs["image"] = array(
 				"alias" => "p",
 				"title" => "pilt",
+				"class" => "image",
 				"generator" => "_image_aliases",
+				"templates" => array("image","image_linked","image_inplace","image_flash"),
 				"class_id" => CL_IMAGE,
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"image"),
 				"chlink" => "#",
@@ -58,6 +62,7 @@ class aliasmgr extends aw_template {
 		$this->defs["tables"] = array(
 				"alias" => "t",
 				"title" => "tabel",
+				"class" => "table",
 				"generator" => "_table_aliases",
 				"class_id" => CL_TABLE,
 				"addlink" => $this->mk_my_orb("add_doc", array("id" => $this->id, "parent" => $this->parent),"table"),
@@ -69,6 +74,7 @@ class aliasmgr extends aw_template {
 		$this->defs["forms"] = array(
 				"alias" => "f",
 				"title" => "vorm",
+				"class" => "form",
 				"class_id" => CL_FORM,
 				"generator" => "_form_aliases",
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form"),
@@ -82,6 +88,7 @@ class aliasmgr extends aw_template {
 				"title" => "fail",
 				"class_id" => CL_FILE,
 				"generator" => "_file_aliases",
+				"class" => "file",
 				"addlink" => $this->mk_my_orb("new",array("id" => $this->id, "parent" => $this->parent),"file"),
 				"chlink" => $this->mk_my_orb("change",array("doc" => $this->id),"file"),
 				"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
@@ -91,6 +98,7 @@ class aliasmgr extends aw_template {
 		$this->defs["graphs"] = array(
 				"alias" => "g",
 				"title" => "graafik",
+				"class" => "graph",
 				"class_id" => CL_GRAPH,
 				"generator" => "_graph_aliases",
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"graph"),
@@ -102,6 +110,7 @@ class aliasmgr extends aw_template {
 		$this->defs["galleries"] = array(
 				"alias" => "y",
 				"title" => "galerii",
+				"class" => "gallery",
 				"generator" => "_gallery_aliases",
 				"class_id" => CL_GALLERY,
 				"addlink" => $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"gallery"),
@@ -109,9 +118,21 @@ class aliasmgr extends aw_template {
 				"chlink" => "#",
 		);
 		
+		$this->defs["documents"] = array(
+				"alias" => "d",
+				"title" => "document",
+				"class" => "document",
+				"class_id" => CL_DOCUMENT,
+				"generator" => "_document_aliases",
+				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"poll"),
+				"chlink" => $this->mk_my_orb("change",array(),"document"),
+				"field" => "id"
+		);
+		
 		$this->defs["form_chains"] = array(
 				"alias" => "c",
 				"title" => "vormipärg",
+				"class" => "form_chain",
 				"generator" => "_form_chain_aliases",
 				"class_id" => CL_FORM_CHAIN,
 				"addlink" =>  $this->mk_my_orb("new", array("parent" => $this->parent,"alias_doc" => $this->id),"form_chain"),
@@ -123,6 +144,7 @@ class aliasmgr extends aw_template {
 		$this->defs["link_collections"] = array(
 				"alias" => "x",
 				"title" => "lingikogu",
+				"class" => "link_collection",
 				"class_id" => CL_LINK_COLLECTION,
 				"generator" => "_link_collection_aliases",
 				"addlink" => $this->mk_orb("pick_collection",array("parent" => $this->id),"link_collection"),
@@ -134,6 +156,7 @@ class aliasmgr extends aw_template {
 				"alias" => "o",
 				"title" => "foorum",
 				"class_id" => CL_FORUM,
+				"class" => "forum",
 				"generator" => "_forum_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id),"forum"),
 				"chlink" => "#",
@@ -144,6 +167,7 @@ class aliasmgr extends aw_template {
 		$this->defs["form_entry"] = array(
 				"alias" => "r",
 				"title" => "vormi sisestus",
+				"class" => "form_alias",
 				"generator" => "_form_entry_aliases",
 				"class_id" => CL_FORM_ENTRY,
 				"addlink" => $this->mk_my_orb("new_entry_alias",array("parent" => $this->parent, "return_url" => $return_url,"alias_to" => $this->id),"form_alias"),
@@ -175,6 +199,7 @@ class aliasmgr extends aw_template {
 		$this->defs["menus"] = array(
 				"alias" => "m",
 				"title" => "menüü link",
+				"class" => "menu",
 				"generator" => "_menu_aliases",
 				"class_id" => CL_PSEUDO,
 				"addlink" => $this->mk_my_orb("add_alias",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"menu"),
@@ -185,6 +210,7 @@ class aliasmgr extends aw_template {
 		$this->defs["pullouts"] = array(
 				"alias" => "q",
 				"title" => "pullout",
+				"class" => "pullout",
 				"class_id" => CL_PULLOUT,
 				"generator" => "_pullout_aliases",
 				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"pullout"),
@@ -192,25 +218,27 @@ class aliasmgr extends aw_template {
 				"field" => "id"
 		);
 		
-		$this->defs["poll"] = array(
-				"alias" => "k",
-				"title" => "poll",
-				"class_id" => CL_POLL,
-				"generator" => "_poll_aliases",
-				"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"poll"),
-				"chlink" => $this->mk_my_orb("change",array(),"poll"),
-				"field" => "id"
-		);
-		
-		//$this->defs["calendars"] = array(
+		//$this->defs["poll"] = array(
 		//		"alias" => "k",
-		//		"title" => "calendar",
-		//		"class_id" => CL_CALENDAR,
-		//		"generator" => "_calendar_aliases",
-		//		"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"planner"),
-		//		"chlink" => $this->mk_my_orb("change",array(),"planner"),
+		//		"title" => "poll",
+		//		"class" => "poll",
+		//		"class_id" => CL_POLL,
+		//		"generator" => "_poll_aliases",
+		//		"addlink" => $this->mk_my_orb("new",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"poll"),
+		//		"chlink" => $this->mk_my_orb("change",array(),"poll"),
 		//		"field" => "id"
 		//);
+		
+		$this->defs["calendars"] = array(
+				"alias" => "k",
+				"title" => "calendar",
+				"class" => "planner",
+				"class_id" => CL_CALENDAR,
+				"generator" => "_calendar_aliases",
+				"addlink" => $this->mk_my_orb("new_alias",array("parent" => $this->id, "return_url" => $return_url,"alias_to" => $this->id),"planner"),
+				"chlink" => $this->mk_my_orb("change",array(),"planner"),
+				"field" => "id"
+		);
 
 	}
 
@@ -555,6 +583,25 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 		};
 	}
 	
+	function _document_aliases($args = array())
+	{
+		$links = $this->get_aliases_for($this->id,CL_DOCUMENT,$_sby, $s_link_order);
+		reset($links);
+		while (list(,$v) = each($links))
+		{	
+			$url = $this->mk_my_orb("change", array("id" => $v["id"],"docid" => $id),"document");
+			$link = sprintf("<a href='%s'>%s</a>",$url,strip_tags($v["name"]));
+			$this->t->define_data(array(
+				"name"                => $link,
+				"modified"            => $this->time2date($v["modified"],2),
+				"modifiedby"          => $v["modifiedby"],
+				"description"             => $v["url"],
+			));
+			$v["url"] = $url;
+			$this->_common_parts($v);
+		};
+	}
+	
 	function _object_chain_aliases($args = array())
 	{
 		$menu_chains = $this->get_aliases_for($this->id,CL_OBJECT_CHAIN,$_sby, $s_link_order);
@@ -656,7 +703,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	
 	function _calendar_aliases($args = array())
 	{
-		$aliases = $this->get_aliases_for($this->id,CL_PULLOUT,$_sby, $s_link_order);
+		$aliases = $this->get_aliases_for($this->id,CL_CALENDAR,$_sby, $s_link_order);
 		reset($aliases);
 		while (list(,$v) = each($aliases))
 		{	
@@ -914,35 +961,18 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 	
 	function _initialize($id)
 	{
-		#$this->t->reset_data();
 		$this->acounter = 0;
-		#$this->t->set_attribs(array("prefix" => $this->defs[$id]["table"]));
-		#$this->t->set_header_attribs(array("table" => $this->defs[$id]["table"]));
-		#$this->vars(array(
-		#	"add_link" => $this->defs[$id]["addlink"],
-		#));
 	}
 
 	function _finalize($id)
 	{
-		if ($this->table == $this->attribs["table"])
-		{
-			#$this->t->sort_by(array("field" => $this->sortby));
-		}
-
 		$this->vars(array(
-			#"contents" => $this->t->draw(),
 			"title" => $this->defs[$id]["title"],
 			"type" => $this->defs[$id]["table"],
 			"chlink" => $this->defs[$d]["chlink"],
 			"field" => $this->defs[$id]["field"],
 			"dellink" => $this->mk_my_orb("delete_alias",array("docid" => $this->id),"document"),
 		));
-
-		#if ($this->t->rows() > 0)
-		#{
-		#	$this->contents .= $this->parse("table");
-		#};
 	}
 
 	function _common_parts($args = array())
@@ -960,6 +990,115 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			"icon"	=> sprintf("<img src='%s'>",get_icon_url($this->defs[$this->def_id]["class_id"],"")),
 			"alias" => sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$alias,$alias),
 		));
+	}
+
+	////
+	// !Parses all embedded objects inside another document
+	// arguments:
+	// oid(int) - object oid
+	function parse_oo_aliases($oid,&$source,$args = array())
+	{
+		extract($args);
+		$this->_init_aliases();
+		$oid = sprintf("%d",$oid);
+		// we get all aliases for that object. alltho we really should only
+		// get the ones which we actually need. But how?
+		$q = "SELECT aliases.target AS target, objects.class_id AS class_id
+			FROM aliases
+			LEFT JOIN objects ON (aliases.target = objects.oid)
+			WHERE source = '$oid' ORDER BY aliases.id";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$aliases[$row["class_id"]][] = $row;
+		};
+
+		$by_alias = array();
+		foreach($this->defs as $key => $val)
+		{
+			$by_alias[$val["alias"]] = $key;
+		}
+
+		$cnt = 0;
+		preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
+		// I nead to count each individual alias
+		$counters = array();
+
+		if (is_array($matches))
+		{
+			foreach ($matches as $key => $val)
+			{
+				// if nothing comes up, we just replace it with a empty string
+				// or perhaps we shouldn't? 
+				$replacement = "";
+
+				// reference to $this->defs
+				$defref = $by_alias[$val[2]];
+
+				// store the class id of the alias into a temprary variable for later use
+				$clid = $this->defs[$defref]["class_id"];
+				$emb_obj_name = "emb" . $clid;
+
+
+				if (not(is_object($$emb_obj_name)))
+				{
+					$class_name = $this->defs[$defref]["class"];
+					if ($class_name)
+					{
+						// load and create the class needed for that alias type
+						classload($class_name);
+						$$emb_obj_name = new $class_name;
+
+						// init the alias counter for this type
+						$counters[$clid] = 0;
+					};
+
+				};
+
+				if (is_object($$emb_obj_name))
+				{
+
+					$params = array(
+						"oid" => $oid,
+						"matches" => $val,
+						"alias" => $aliases[$clid][$counters[$clid]],
+						"tpls" => &$args["templates"],
+					);
+					$repl = $$emb_obj_name->parse_alias($params);
+				
+					if (is_array($repl))
+					{
+						$replacement = $repl["replacement"];
+						$inplace = $repl["inplace"];
+					}
+					else
+					{
+						$replacement = $repl;
+					}
+					
+					// increment the counter
+					$counters[$clid]++;
+
+				}
+
+				if ($inplace)
+				{
+					$this->tmp_vars = array($inplace => $replacement);
+					$replacement = "";
+				};
+					
+				$source = str_replace($val[0],$replacement,$source);
+
+			}
+		};
+		//return $source;
+	}
+
+	////
+	// Returns the variables createad by parse_oo_alias
+	function get_vars()
+	{
+		return (is_array($this->tmp_vars)) ? $this->tmp_vars : array();
 	}
 };
 ?>
