@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.14 2001/05/24 19:56:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.15 2001/05/24 21:07:01 duke Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -987,13 +987,16 @@ class db_documents extends aw_template
 			$doc["content"] = preg_replace("/#huvid_form algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
 		}
 
-		if (!(strpos($doc["huvid_check"],"#huvid_check#") == false))
+		if (!(strpos($doc["content"],"#huvid_check") == false))
 		{
-			preg_match("/#huvid_check#/",$doc["content"], $maat);
+			preg_match("/#huvid_check algus=\"(.*)\" go=\"(.*)\"#/",$doc["content"], $maat);
 			classload("keywords");
 			$kw = new keywords;
-			$t_int_form = $kw->show_interests_form2();
-			$doc["content"] = preg_replace("/#huvid_check#/",$t_int_form,$doc["content"]);
+			$t_int_form = $kw->show_interests_form2(array(
+							"beg" => $maat[1],
+							"section" => $maat[2],
+					));
+			$doc["content"] = preg_replace("/#huvid_check algus=\"(.*)\" go=\"(.*)\"#/",$t_int_form,$doc["content"]);
 		}
 
 		$awt->stop("db_documents->gen_preview()::misc_replaces");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.20 2001/05/24 19:56:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.21 2001/05/24 21:07:01 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -434,27 +434,23 @@ class keywords extends aw_template {
 
 		// and we should be done now
 	}
-		
+	
 
-	function show_interests_form($beg = "",$section = 0)
+	// see peaks vist tegelikult hoopis mujal klassis olema
+	function _get_user_data($args = array())
 	{
-		if ($beg != "")
-		{
-			$beg = explode(",",$beg);
-		}
-		$this->read_template("keywords.tpl");
-		classload("list","users_user","form");
+		classload("users_user","form");
 		$u = new users_user();
 		$udata = $u->get_user(array(
-			"uid" => UID,
-		));
+				"uid" => UID,
+			));
 		$jf = unserialize($udata["join_form_entry"]);
 		$eesnimi = $perenimi = "";
 		if (is_array($jf))
 		{
 			$f = new form();
 			foreach($jf as $joinform => $joinentry)
-			{
+			{ 
 				$f->load($joinform);
 				$f->load_entry($joinentry);
 				$el = $f->get_element_by_name("Eesnimi");
@@ -464,11 +460,27 @@ class keywords extends aw_template {
 				};
 				$el = $f->get_element_by_name("Perekonnanimi");
 				if ($el->entry)
-				{
+				{	
 					$perenimi = $el->entry;
 				};
 			};
 		};
+		$res = array();
+		$res["Eesnimi"] = $eesnimi;
+		$res["Perenimi"] = $perenimi;
+		$res["Email"] = $udata["email"];
+		return $res;
+	}
+
+	function show_interests_form($beg = "",$section = 0)
+	{
+		if ($beg != "")
+		{
+			$beg = explode(",",$beg);
+		}
+		$this->read_template("keywords.tpl");
+		$udata = $this->_get_user_data();
+		classload("list");
 		$mlist = new mlist();
 		$kw = new keywords();
 		$act = $mlist->get_user_lists(array(
@@ -476,8 +488,8 @@ class keywords extends aw_template {
 					));
 		global $REQUEST_URI,$ext;
 		$this->vars(array(
-				"name" => "$eesnimi $perenimi",
-				"email" => $udata["email"],
+				"name" => $udata["Eesnimi"] . " " . $udata["Perenimi"],
+				"email" => $udata["Email"],
 				"keywords" => $this->multiple_option_list($act,$kw->get_all_keywords(array("beg" => $beg))),
 				"reforb" => $this->mk_reforb("submit_interests", array("gotourl" => urlencode("/index.$ext?section=$section")))
 		));
@@ -486,8 +498,34 @@ class keywords extends aw_template {
 
 	function show_interests_form2($args = array())
 	{
-		$ret = "move along, move along, there is nothing to see here";
-		return $ret;
+		extract($args);
+		$this->read_template("keywords2.tpl");
+		$udata = $this->_get_user_data();
+		classload("list");
+		$mlist = new mlist();
+		$kw = new keywords();
+		$act = $mlist->get_user_lists(array(
+				"uid" => UID,
+			));
+		global $ext;
+		$kwlist = $this->get_all_keywords(array("beg" => $beg));
+		$ret = "";
+		foreach($kwlist as $k => $v)
+		{
+			$this->vars(array(
+					"checked" => ($act[$k]) ? "checked" : "",
+					"id" => $k,
+					"keyword" => $v,
+			));
+			$ret .= $this->parse("keywords");
+		};
+		$this->vars(array(
+				"name" => $udata["Eesnimi"] . " " . $udata["Perenimi"],
+				"email" => $udata["Email"],
+				"keywords" => $ret,
+				"reforb" => $this->mk_reforb("submit_interests",array("gotourl" => urlencode("/index.$ext?section=$section"))),
+			));
+		return $this->parse();
 	}
 };
 ?>
