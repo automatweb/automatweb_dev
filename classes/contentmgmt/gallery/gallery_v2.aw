@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.28 2003/10/30 11:22:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.29 2003/10/30 18:16:01 duke Exp $
 
 /*
 
@@ -110,7 +110,7 @@ class gallery_v2 extends class_base
 		if ($prop['name'] == "preview")
 		{
 			$prop['value'] = $this->show(array(
-				"oid" => $arr['obj']['oid']
+				"oid" => $arr['obj_inst']->id(),
 			));
 		}
 		else
@@ -181,7 +181,7 @@ class gallery_v2 extends class_base
 		$id = $parm['id'];
 		if (substr($id, 0, 5) == 'page_')
 		{
-			$od = $this->get_object($parm['coredata']['oid']);
+			$od = $this->get_object($parm['obj_inst']->id());
 			$pgnr = substr($id, 5);
 			if ($pgnr > $od['meta']['num_pages'])
 			{

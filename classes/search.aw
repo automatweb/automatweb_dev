@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.49 2003/10/22 13:24:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.50 2003/10/30 18:16:50 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -229,7 +229,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$retval[$val["name"]] = $args["form_data"][$val["name"]];
 			};
 		}
-		$args["coredata"]["metadata"]["obj"] = $retval;
+		$args["obj_inst"]->set_meta("obj",$retval);
 	}
 
 	function get_result_table($args = array())
