@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.217 2003/01/31 13:26:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.218 2003/01/31 18:12:14 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1145,8 +1145,15 @@ class menuedit extends aw_template
 				{
 					$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$section), $section);
 					// neat :), kui objekti ei leita, siis saadame 404 koodi
-					header ("HTTP/1.1 404 Not Found");
-					printf(E_ME_NOT_FOUND);
+					if ($this->cfg["404redir"])
+					{
+						header("Location: " . $this->cfg["404redir"]);
+					}
+					else
+					{
+						header ("HTTP/1.1 404 Not Found");
+						printf(E_ME_NOT_FOUND);
+					};
 					exit;
 				}
 				else
