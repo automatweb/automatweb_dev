@@ -6,7 +6,7 @@
             <form>stat</form>
             <type>textbox</type>
             <field>reg</field>
-            <caption>Reg. kood</caption>
+            <caption>Äriregistrikood</caption>
       </property>
       <property>
             <name>password</name>
@@ -14,7 +14,7 @@
             <form>stat</form>
             <type>password</type>
             <field>password</field>
-            <caption>Parool</caption>
+            <caption>Tunnuskood</caption>
       </property>
       <property>
             <name>report_type</name>
@@ -22,7 +22,7 @@
             <form>stat</form>
             <type>select</type>
             <field>report_type</field>
-            <caption>Aruande tüüp</caption>
+            <caption>Aruande nimetus</caption>
       </property>
       <property>
             <name>file</name>
@@ -30,7 +30,7 @@
             <form>stat</form>
             <type>fileupload</type>
             <field>file</field>
-            <caption>Fail </caption>
+            <caption>Aruande fail </caption>
       </property>
       <property>
             <name>name</name>
@@ -47,6 +47,14 @@
             <type>textbox</type>
             <field>email</field>
             <caption>Kontaktandmed</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <group>general</group>
+            <form>stat</form>
+            <type>textarea</type>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
       </property>
       <classinfo>
             <hide_tabs>1</hide_tabs>
