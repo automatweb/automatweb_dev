@@ -1442,6 +1442,7 @@ class site_template_compiler extends aw_template
 
 			$ares = "";
 
+			$ni = aw_ini_get("menuedit.num_menu_images");
 			foreach($adat["levels"] as $level => $ldat)
 			{
 				$has_vars = false;
@@ -1473,7 +1474,6 @@ class site_template_compiler extends aw_template
 				}
 
 				// insert image urls
-				$ni = aw_ini_get("menuedit.num_menu_images");
 				for($i = 0; $i < $ni; $i++)
 				{
 					$imres = "";
