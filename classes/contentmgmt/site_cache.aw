@@ -17,11 +17,12 @@ class site_cache extends aw_template
 		$log = get_instance("contentmgmt/site_logger");
 		$log->add($arr);
 
+		
 		if (($content = $this->get_cached_content($arr)))
 		{
 			return $content;
 		}
-		
+
 		if (!($compiled_filename = $this->get_cached_compiled_filename($arr)))
 		{
 			$compiled_filename = $this->cache_compile_template($arr["template"]);

@@ -830,16 +830,15 @@ class site_template_compiler extends aw_template
 			"loop_counter_name" => $loop_counter_name
 		));
 
+
 		$ret = "";
 
 		// also set the area as visible, because if we get here in execution, it is visible.
 		$ret .= $this->_gi()."\$this->menu_levels_visible[".$arr["a_parent"]."][".$arr["level"]."] = 1;\n";
 
-		$ret  .= $this->_gi()."$list_name = new object_list(array(\n";
-		$this->brace_level++;
 		if ($arr["level"] == 1)
 		{
-			$ret .= $this->_gi()."\"parent\" => ".$arr["a_parent_p_fn"].",\n";
+			$ret .= $this->_gi()."\$parent_obj = new object(".$arr["a_parent_p_fn"].");\n";
 		}
 		else
 		{
@@ -850,16 +849,21 @@ class site_template_compiler extends aw_template
 			if ($arr["in_parent_tpl"])
 			{
 				$parent_o_name = "\$o_".$arr["a_parent"]."_".($arr["level"]-1);
-				$ret .= $this->_gi()."\"parent\" => ".$parent_o_name."->id(),\n";
+				$ret .= $this->_gi()."\$parent_obj = ".$parent_o_name.";\n";
 			}
 			else
 			{
-				$ret .= $this->_gi()."\"parent\" => \$this->_helper_find_parent(".$arr["a_parent"].",".$arr["level"]."),\n";
+				$ret .= $this->_gi()."\$parent_obj = new object(\$this->_helper_find_parent(".$arr["a_parent"].",".$arr["level"]."));\n";
 			}
 		}
+
+
+		$ret  .= $this->_gi()."$list_name = new object_list(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"parent\" => \$parent_obj->id(),\n";
 		$ret .= $this->_gi()."\"class_id\" => array(CL_PSEUDO,CL_BROTHER),\n";
 		$ret .= $this->_gi()."\"status\" => STAT_ACTIVE,\n";
-		$ret .= $this->_gi()."\"sort_by\" => \"objects.jrk,objects.created\",\n";
+		$ret .= $this->_gi()."\"sort_by\" => (\$parent_obj->prop(\"sort_by_name\") ? \"objects.name\" : \"objects.jrk,objects.created\"),\n";
 		return $ret;
 	}
 
