@@ -283,6 +283,16 @@
             <reltype>RELTYPE_STYLE</reltype>
             <caption>Sisestusvormi elemendi stiil</caption>
       </property>
+      <property>
+            <name>import_xml_file</name>
+            <table>objects</table>
+            <group>import</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <store>no</store>
+            <caption>Vali XML fail</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_FORUM</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -292,12 +302,20 @@
                   <caption>Sisu</caption>
                   <submit>no</submit>
             </contents>
-            <topic_selector>
-                  <caption>Teemad</caption>
-            </topic_selector>
             <styles>
                   <caption>Stiilid</caption>
             </styles>
+            <settings>
+                  <caption>Seadistused</caption>
+            </settings>
+            <topic_selector>
+                  <caption>Teemad</caption>
+                  <parent>settings</parent>
+            </topic_selector>
+            <import>
+                  <caption>Import</caption>
+                  <parent>settings</parent>
+            </import>
       </groupinfo>
       <reltypes>
             <TOPIC_FOLDER>
