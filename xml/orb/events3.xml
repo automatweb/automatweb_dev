@@ -1,0 +1,96 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="events3">
+
+		<action name="add">
+			<function name="event_edit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="edit">
+			<function name="event_edit">
+				<arguments>
+					<required name="id"/>
+					<optional name="page"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="invite" nologin="1">
+			<function name="invite">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_invite" nologin="1">
+			<function name="submit_invite">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete">
+			<function name="event_delete">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="event_submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="list" nologin="1">
+			<function name="event_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="view" nologin="1">
+			<function name="event_view">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="my_events">
+			<function name="my_events">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_my_events">
+			<function name="submit_my_events">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+				
+
+		<action name="search" nologin="1">
+			<function name="event_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_search" nologin="1">
+			<function name="do_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
+		
