@@ -97,6 +97,94 @@
             <caption>User-defined 9</caption>
       </property>
       <property>
+            <name>user10</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user10</field>
+            <caption>User-defined 10</caption>
+      </property>
+      <property>
+            <name>user11</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user11</field>
+            <caption>User-defined 11</caption>
+      </property>
+      <property>
+            <name>user12</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user12</field>
+            <caption>User-defined 12</caption>
+      </property>
+      <property>
+            <name>user13</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user13</field>
+            <caption>User-defined 13</caption>
+      </property>
+      <property>
+            <name>user14</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user14</field>
+            <caption>User-defined 14</caption>
+      </property>
+      <property>
+            <name>user15</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user15</field>
+            <caption>User-defined 15</caption>
+      </property>
+      <property>
+            <name>user16</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user16</field>
+            <caption>User-defined 16</caption>
+      </property>
+      <property>
+            <name>user17</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user17</field>
+            <caption>User-defined 17</caption>
+      </property>
+      <property>
+            <name>user18</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user18</field>
+            <caption>User-defined 18</caption>
+      </property>
+      <property>
+            <name>user19</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user19</field>
+            <caption>User-defined 19</caption>
+      </property>
+      <property>
+            <name>user20</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user20</field>
+            <caption>User-defined 20</caption>
+      </property>
+      <property>
             <name>userta1</name>
             <table>aw_shop_products</table>
             <group>data</group>
@@ -256,6 +344,23 @@
             <field>varuser10</field>
             <caption>User-defined var 10</caption>
       </property>
+      <property>
+            <name>images</name>
+            <table>objects</table>
+            <group>img</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>ord</num_1>
+                  <num_2>status</num_2>
+                  <num_3>file</num_3>
+            </props>
+            <caption>Pildid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -264,6 +369,9 @@
             <data>
                   <caption>Toote info</caption>
             </data>
+            <img>
+                  <caption>Pildid</caption>
+            </img>
       </groupinfo>
       <tableinfo>
             <aw_shop_products>
@@ -272,5 +380,17 @@
                   <master_index>brother_of</master_index>
             </aw_shop_products>
       </tableinfo>
+      <reltypes>
+            <IMAGE>
+                  <value>1</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt</caption>
+            </IMAGE>
+            <PACKAGING>
+                  <value>2</value>
+                  <clid>CL_SHOP_PRODUCT_PACKAGING</clid>
+                  <caption>pakend</caption>
+            </PACKAGING>
+      </reltypes>
 </properties>
 

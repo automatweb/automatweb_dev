@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.2 2004/04/14 14:37:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.3 2004/05/06 12:19:25 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -17,11 +17,21 @@
 @property orderer_company type=relpicker reltype=RELTYPE_ORG table=aw_shop_orders field=aw_orderer_company 
 @caption Tellija
 
+@property oc type=relpicker reltype=RELTYPE_ORDER_CENTER table=aw_shop_orders field=aw_oc_id 
+@caption Tellimiskeskkond
+
+@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE table=aw_shop_orders field=aw_warehouse_id 
+@caption Ladu
+
 @tableinfo aw_shop_orders index=aw_oid master_table=objects master_index=brother_of
 
 @groupinfo items caption="Tellimuse sisu"
 
-@property items group=items field=meta method=serialize type=table no_caption=1
+@property items_orderer group=items type=text store=no
+@caption Tellija andmed
+
+@property items group=items field=meta method=serialize type=table
+@caption Tellitud tooted
 
 @property sum type=textbox table=aw_shop_orders field=aw_sum group=items
 @caption Summa
@@ -38,6 +48,12 @@
 
 @reltype ORG value=4 clid=CL_CRM_COMPANY
 @caption tellija organisatsioon
+
+@reltype WAREHOUSE value=5 clid=CL_SHOP_WAREHOUSE
+@caption ladu
+
+@reltype ORDER_CENTER value=6 clid=CL_SHOP_ORDER_CENTER
+@caption tellimiskeskkond
 
 */
 
@@ -71,6 +87,25 @@ class shop_order extends class_base
 
 			case "sum":
 				$data["value"] = $this->get_price($arr["obj_inst"]);
+				break;
+		
+			case "items_orderer":
+				$data["value"] = "";
+				if ($arr["obj_inst"]->prop("orderer_person"))
+				{
+					$po = obj($arr["obj_inst"]->prop("orderer_person"));
+					$data["value"] = $po->name();
+				}
+				if ($arr["obj_inst"]->prop("orderer_company"))
+				{
+					$co = obj($arr["obj_inst"]->prop("orderer_company"));
+					if ($data["value"] != "")
+					{
+						$data["value"] .= " / ";
+					}
+					$data["value"] .= $co->name();
+				}
+			
 				break;
 		};
 		return $retval;
@@ -185,24 +220,15 @@ class shop_order extends class_base
 		// create wh_export, add products to that and confirm THAT
 		// how to find the folder where to create the export -
 		// find the warehouse, from that get config, from that exp folder
-		// find warehouse - check if a relation exists to this object from a warehouse
-		// if so, then that's that
-		// else if a connection exists from order center, then get warehouse from that
+		// find warehouse - order is connected to warehouse
 
 		$parent = 0;
 
-		$conn = $o->connections_to(array(
-			"type" => 5 // RELTYPE_ORDER from warehouse
-		));
-		if (count($conn) > 0)
-		{
-			$c = reset($conn);
-			$warehouse = $c->from();
+		$warehouse = obj($o->prop("warehouse"));
 			
-			$conf = obj($warehouse->prop("conf"));
+		$conf = obj($warehouse->prop("conf"));
 
-			$parent = $conf->prop("export_fld");
-		}
+		$parent = $conf->prop("export_fld");
 
 		error::throw_if(!$parent, array(
 			"id" => ERR_ORDER,
@@ -265,13 +291,14 @@ class shop_order extends class_base
 			$sum += $inst->get_price($it) * $d[$it->id()];
 		}
 	
-		return $sum;
+		return number_format($sum, 2);
 	}
 
-	function start_order($warehouse)
+	function start_order($warehouse, $oc = NULL)
 	{
 		$this->order_items = array();
 		$this->order_warehouse = $warehouse;
+		$this->order_center = $oc;
 	}
 
 	function add_item($item, $quantity)
@@ -289,7 +316,30 @@ class shop_order extends class_base
 		$oi->set_parent($wh->get_order_folder($this->order_warehouse));
 		$oi->set_name("Tellimus laost ".$this->order_warehouse->name());
 		$oi->set_class_id(CL_SHOP_ORDER);
+		$oi->set_prop("warehouse", $this->order_warehouse->id());
+		if ($this->order_center)
+		{
+			$oi->set_prop("oc", $this->order_center->id());
+		}
 		$id = $oi->save();
+
+		$oi->connect(array(
+			"to" => $this->order_warehouse->id(),
+			"reltype" => 5 // RELTYPE_WAREHOUSE
+		));
+		// also, warehouse -> order connection
+		$this->order_warehouse->connect(array(
+			"to" => $oi->id(),
+			"reltype" => 5 // RELTYPE_ORDER
+		));
+
+		if ($this->order_center)
+		{
+			$oi->connect(array(
+				"to" => $this->order_center->id(),
+				"reltype" => 6 // RELTYPE_ORDER_CENTER
+			));
+		}
 
 		// connect to current person/company
 		$us = get_instance("core/users/user");
@@ -340,9 +390,36 @@ class shop_order extends class_base
 			$sum += ($quant * $i_inst->get_price($i_o));
 		}
 
-		$oi->set_meta("order_content", $mp);
+		$oi->set_meta("ord_content", $mp);
 		$oi->set_prop("sum", $sum);
 		$oi->save();
+
+		// also, if the warehouse has any e-mails, then generate html from the order and send it to those dudes
+		$emails = $this->order_warehouse->connections_from(array("type" => "RELTYPE_EMAIL"));
+		if (count($emails) > 0)
+		{
+			$html = $this->show(array(
+				"id" => $oi->id()
+			));
+
+			foreach($emails as $c)
+			{
+				$eml = $c->to();
+
+				$awm = get_instance("aw_mail");
+				$awm->create_message(array(
+					"froma" => "automatweb@automatweb.com",
+					"fromn" => str_replace("http://", "", aw_ini_get("baseurl")),
+					"subject" => "Tellimus laost ".$this->order_warehouse->name(),
+					"to" => $eml->prop("mail"),
+					"body" => strip_tags(str_replace("<br>", "\n",$html)),
+				));
+				$awm->htmlbodyattach(array(
+					"data" => $html
+				));
+				$awm->gen_mail();
+			}
+		}
 
 		return $oi->id();
 	}
@@ -358,7 +435,7 @@ class shop_order extends class_base
 		$this->read_template("show.tpl");
 		
 		$o = obj($arr["id"]);
-		$tp = $o->meta("order_content");
+		$tp = $o->meta("ord_content");
 
 		$p = "";
 		$total = 0;
@@ -371,7 +448,7 @@ class shop_order extends class_base
 			$this->vars(array(
 				"name" => $prod->name(),
 				"quant" => $tp[$prod->id()],
-				"price" => $pr
+				"price" => number_format($pr,2)
 			));
 
 			$total += ($pr * $tp[$prod->id()]);
@@ -380,14 +457,24 @@ class shop_order extends class_base
 		}
 
 		// get person
-		$po = obj($o->prop("orderer_person"));
-		$co = obj($o->prop("orderer_company"));
+		if ($o->prop("orderer_person"))
+		{
+			$po = obj($o->prop("orderer_person"));
+			$this->vars(array(
+				"person_name" => $po->name(),
+			));
+		}
+		if ($o->prop("orderer_company"))
+		{
+			$co = obj($o->prop("orderer_company"));
+			$this->vars(array(
+				"company_name" => $co->name(),
+			));
+		}
 
 		$this->vars(array(
 			"PROD" => $p,
-			"total" => $total,
-			"person_name" => $po->name(),
-			"company_name" => $co->name(),
+			"total" => number_format($total,2),
 			"id" => $o->id()
 		));
 
@@ -411,6 +498,18 @@ class shop_order extends class_base
 		}
 
 		return $mb;
+	}
+
+	function request_execute($o)
+	{
+		return $this->show(array(
+			"id" => $o->id()
+		));
+	}
+
+	function get_items_from_order($ord)
+	{
+		return $ord->meta("ord_content");
 	}
 }
 ?>

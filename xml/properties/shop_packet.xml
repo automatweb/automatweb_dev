@@ -35,6 +35,126 @@
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
+      <property>
+            <name>user1</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user1</field>
+            <caption>User-defined 1</caption>
+      </property>
+      <property>
+            <name>user2</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user2</field>
+            <caption>User-defined 2</caption>
+      </property>
+      <property>
+            <name>user3</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user3</field>
+            <caption>User-defined 3</caption>
+      </property>
+      <property>
+            <name>user4</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user4</field>
+            <caption>User-defined 4</caption>
+      </property>
+      <property>
+            <name>user5</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>user5</field>
+            <caption>User-defined 5</caption>
+      </property>
+      <property>
+            <name>userta1</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser1</field>
+            <caption>User-defined ta 1</caption>
+      </property>
+      <property>
+            <name>userta2</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser2</field>
+            <caption>User-defined ta 2</caption>
+      </property>
+      <property>
+            <name>userta3</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser3</field>
+            <caption>User-defined ta 3</caption>
+      </property>
+      <property>
+            <name>userta4</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser4</field>
+            <caption>User-defined ta 4</caption>
+      </property>
+      <property>
+            <name>userta5</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>textarea</type>
+            <field>tauser5</field>
+            <caption>User-defined ta 5</caption>
+      </property>
+      <property>
+            <name>uservar1</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuser1</field>
+            <caption>User-defined var 1</caption>
+      </property>
+      <property>
+            <name>uservar2</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuser2</field>
+            <caption>User-defined var 2</caption>
+      </property>
+      <property>
+            <name>uservar3</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuser3</field>
+            <caption>User-defined var 3</caption>
+      </property>
+      <property>
+            <name>uservar4</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuser4</field>
+            <caption>User-defined var 4</caption>
+      </property>
+      <property>
+            <name>uservar5</name>
+            <table>aw_shop_packets</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuser5</field>
+            <caption>User-defined var 5</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PACKET</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -44,6 +164,9 @@
             <packet>
                   <caption>Paketi sisu</caption>
             </packet>
+            <data>
+                  <caption>Toote info</caption>
+            </data>
       </groupinfo>
       <tableinfo>
             <aw_shop_packets>

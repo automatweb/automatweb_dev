@@ -165,7 +165,7 @@
                   <submit>no</submit>
             </packets>
             <storage>
-                  <caption>Lasoseis</caption>
+                  <caption>Laoseis</caption>
             </storage>
             <storage_storage>
                   <parent>storage</parent>
@@ -234,6 +234,11 @@
                   <clid>CL_SHOP_ORDER</clid>
                   <caption>tellimus</caption>
             </ORDER>
+            <EMAIL>
+                  <value>6</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>saada tellimused</caption>
+            </EMAIL>
       </reltypes>
       <layout>
             <hbox_oc>

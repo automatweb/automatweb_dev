@@ -27,6 +27,15 @@
             <field>layoutbl</field>
             <caption>Toodete layout</caption>
       </property>
+      <property>
+            <name>sortbl</name>
+            <table>objects</table>
+            <group>appear</group>
+            <type>table</type>
+            <store>no</store>
+            <field>sortbl</field>
+            <caption>Toodete sorteerimine</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>

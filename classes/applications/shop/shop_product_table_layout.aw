@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.1 2004/04/13 12:36:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.2 2004/05/06 12:19:25 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -61,6 +61,12 @@ class shop_product_table_layout extends class_base
 		$this->oc = $oc;
 		$this->cnt = 0;
 		$this->read_template("table.tpl");
+		$this->r_template = "ROW";
+		$this->r_cnt = 1;
+		if ($this->is_template("ROW1"))
+		{
+			$this->r_template = "ROW1";
+		}
 	}
 
 	/** adds a product to the product table
@@ -69,17 +75,31 @@ class shop_product_table_layout extends class_base
 	{
 		if (($this->cnt % $this->t->prop("columns")) == 0)
 		{
+			$this->r_template = "ROW";
+			if ($this->is_template("ROW1"))
+			{	
+				if (($this->r_cnt % 2) == 0)
+				{
+					$this->r_template = "ROW2";
+				}
+				else
+				{
+					$this->r_template = "ROW1";
+				}
+			}
+			
 			$this->vars(array(
 				"COL" => $this->t_str
 			));
-			$this->ft_str .= $this->parse("ROW");
+			$this->ft_str .= $this->parse($this->r_template);
 			$this->t_str = "";
+			$this->r_cnt++;
 		}
 	
 		$this->vars(array(
 			"product" => $p_html
 		));
-		$this->t_str .= $this->parse("COL");
+		$this->t_str .= $this->parse($this->r_template.".COL");
 		$this->cnt++;
 	}
 
@@ -90,10 +110,12 @@ class shop_product_table_layout extends class_base
 		$this->vars(array(
 			"COL" => $this->t_str
 		));
-		$this->ft_str .= $this->parse("ROW");
+		$this->ft_str .= $this->parse($this->r_template);
 		$this->vars(array(
 			"ROW" => $this->ft_str,
-			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $this->oc->id()), "shop_order_cart")
+			"ROW1" => $this->ft_str,
+			"ROW2" => "",
+			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section"), "oc" => $this->oc->id()), "shop_order_cart")
 		));
 		return $this->parse();
 	}

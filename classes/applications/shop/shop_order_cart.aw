@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.2 2004/04/14 14:37:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.3 2004/05/06 12:19:25 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -57,6 +57,7 @@ class shop_order_cart extends class_base
 		@attrib name=show_cart
 
 		@param oc optional type=int
+		@param section optional type=int
 	**/
 	function show($arr)
 	{
@@ -88,7 +89,8 @@ class shop_order_cart extends class_base
 				"prod_html" => $inst->do_draw_product(array(
 					"layout" => $layout,
 					"prod" => $i,
-					"quantity" => $quant
+					"quantity" => $quant,
+					"oc_obj" => $oc
 				))
 			));
 
@@ -100,7 +102,7 @@ class shop_order_cart extends class_base
 		$this->vars(array(
 			"PROD" => $str,
 			"total" => $total,
-			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1))
+			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"]))
 		));
 
 		return $this->parse();
@@ -143,11 +145,12 @@ class shop_order_cart extends class_base
 		{
 			// do confirm order and show user
 			$ordid = $this->do_create_order_from_cart($arr["oc"]);
-			return $this->mk_my_orb("show", array("id" => $ordid), "shop_order");
+			$this->start_order();
+			return $this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order");
 		}
 		else
 		{
-			return $this->mk_my_orb("show_cart", array("oc" => $arr["oc"]));
+			return $this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"]));
 		}
 	}
 
@@ -155,7 +158,7 @@ class shop_order_cart extends class_base
 	{
 		$so = get_instance("applications/shop/shop_order");
 		$oc = obj($oc);
-		$so->start_order(obj($oc->prop("warehouse")));
+		$so->start_order(obj($oc->prop("warehouse")), $oc);
 
 		$awa = new aw_array($_SESSION["cart"]["items"]);
 		foreach($awa->get() as $iid => $quant)
@@ -164,6 +167,16 @@ class shop_order_cart extends class_base
 		}
 
 		return $so->finish_order();
+	}
+
+	function start_order()
+	{
+		$_SESSION["cart"] = array();
+	}
+
+	function add_item($iid, $quant)
+	{
+		$_SESSION["cart"]["items"][$iid] += $quant;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.3 2004/04/13 12:36:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.4 2004/05/06 12:19:25 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -20,6 +20,53 @@
 @groupinfo packet caption="Paketi sisu"
 
 @property packet group=packet field=meta method=serialize type=table no_caption=1
+
+@groupinfo data caption="Toote info"
+
+@property user1 type=textbox table=aw_shop_packets field=user1 group=data
+@caption User-defined 1
+
+@property user2 type=textbox table=aw_shop_packets field=user2 group=data
+@caption User-defined 2
+
+@property user3 type=textbox table=aw_shop_packets field=user3 group=data
+@caption User-defined 3
+
+@property user4 type=textbox table=aw_shop_packets field=user4 group=data
+@caption User-defined 4
+
+@property user5 type=textbox table=aw_shop_packets field=user5 group=data
+@caption User-defined 5
+
+@property userta1 type=textarea table=aw_shop_packets field=tauser1 group=data
+@caption User-defined ta 1
+
+@property userta2 type=textarea table=aw_shop_packets field=tauser2 group=data
+@caption User-defined ta 2
+
+@property userta3 type=textarea table=aw_shop_packets field=tauser3 group=data
+@caption User-defined ta 3
+
+@property userta4 type=textarea table=aw_shop_packets field=tauser4 group=data
+@caption User-defined ta 4
+
+@property userta5 type=textarea table=aw_shop_packets field=tauser5 group=data
+@caption User-defined ta 5
+
+@property uservar1 type=classificator table=aw_shop_packets field=varuser1 group=data
+@caption User-defined var 1
+
+@property uservar2 type=classificator table=aw_shop_packets field=varuser2 group=data
+@caption User-defined var 2
+
+@property uservar3 type=classificator table=aw_shop_packets field=varuser3 group=data
+@caption User-defined var 3
+
+@property uservar4 type=classificator table=aw_shop_packets field=varuser4 group=data
+@caption User-defined var 4
+
+@property uservar5 type=classificator table=aw_shop_packets field=varuser5 group=data
+@caption User-defined var 5
 
 @tableinfo aw_shop_packets index=aw_oid master_table=objects master_index=brother_of
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
@@ -102,7 +149,7 @@ class shop_packet extends class_base
 
 	function get_price($o)
 	{
-		return $o->prop("price");
+		return number_format($o->prop("price"), 2);
 	}
 
 	/** returns the html for the product
@@ -123,7 +170,8 @@ class shop_packet extends class_base
 			"name" => $prod->name(),
 			"price" => $prod->prop("price"),
 			"id" => $prod->id(),
-			"quantity" => (int)($arr["quantity"])
+			"quantity" => (int)($arr["quantity"]),
+			"view_link" => obj_link($prod->id())
 		));
 
 		return $l_inst->parse();

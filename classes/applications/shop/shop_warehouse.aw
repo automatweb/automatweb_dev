@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.4 2004/04/14 14:37:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.5 2004/05/06 12:19:25 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -30,7 +30,7 @@
 @caption Pakettide nimekiri
 
 /////////// storage tab
-@groupinfo storage caption="Lasoseis"
+@groupinfo storage caption="Laoseis"
 @groupinfo storage_storage parent=storage caption="Laoseis" submit=no
 @groupinfo storage_income parent=storage caption="Sissetulekud" 
 @groupinfo storage_export parent=storage caption="V&auml;ljaminekud"
@@ -84,6 +84,9 @@
 @reltype ORDER value=5 clid=CL_SHOP_ORDER
 @caption tellimus
 
+@reltype EMAIL value=6 clid=CL_ML_MEMBER
+@caption saada tellimused
+
 */
 
 class shop_warehouse extends class_base
@@ -100,7 +103,7 @@ class shop_warehouse extends class_base
 	{
 		if (!$this->_init_view($arr))
 		{
-			return PROP_ERROR;
+			return PROP_OK;
 		}
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
@@ -386,43 +389,43 @@ class shop_warehouse extends class_base
 	{
 		if (!$arr["obj_inst"]->prop("conf"))
 		{
-			$arr["prop"]["value"] =  "VIGA: konfiguratsioon on valimata!";
+			//$arr["prop"]["value"] =  "VIGA: konfiguratsioon on valimata!";
 			return false;
 		}
 		$this->config = obj($arr["obj_inst"]->prop("conf"));
 		if (!$this->config->prop("prod_fld"))
 		{
-			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on toodete kataloog valimata!";
+			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on toodete kataloog valimata!";
 			return false;
 		}
 		if (!$this->config->prop("pkt_fld"))
 		{
-			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on pakettide kataloog valimata!";
+			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on pakettide kataloog valimata!";
 			return false;
 		}
 		if (!$this->config->prop("reception_fld"))
 		{
-			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on sissetulekute kataloog valimata!";
+			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on sissetulekute kataloog valimata!";
 			return false;
 		}
 		if (!$this->config->prop("export_fld"))
 		{
-			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on v&auml;jaminekute kataloog valimata!";
+			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on v&auml;jaminekute kataloog valimata!";
 			return false;
 		}
 		if (!$this->config->prop("prod_type_fld"))
 		{
-			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on toodete t&uuml;&uuml;pide kataloog valimata!";
+			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on toodete t&uuml;&uuml;pide kataloog valimata!";
 			return false;
 		}
 		if (!$this->config->prop("order_fld"))
 		{
-			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellimuste kataloog valimata!";
+			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellimuste kataloog valimata!";
 			return false;
 		}
 		if (!$this->config->prop("buyers_fld"))
 		{
-			$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellijate kataloog valimata!";
+			//$arr["prop"]["value"] =  "VIGA: konfiguratsioonist on tellijate kataloog valimata!";
 			return false;
 		}
 
@@ -1045,10 +1048,11 @@ class shop_warehouse extends class_base
 			$t->define_data(array(
 				"name" => $o->name(),
 				"modifiedby" => $mb,
-				"modified" => $m->modified(),
+				"modified" => $o->created(),
 				"view" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
-						"id" => $o->id()
+						"id" => $o->id(),
+						"group" => "items"
 					), CL_SHOP_ORDER),
 					"caption" => "Vaata"
 				)),
@@ -1059,13 +1063,17 @@ class shop_warehouse extends class_base
 				"price" => $o->prop("sum")
 			));
 		}
+		$t->set_default_sortby("modified");
+		$t->set_default_sorder("DESC");
+		$t->sort_by();
 	}
 
 	function _init_order_unconfirmed_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi"
+			"caption" => "Nimi",
+			"sortable" => 1
 		));
 
 		$t->define_field(array(
@@ -1083,7 +1091,8 @@ class shop_warehouse extends class_base
 		$t->define_field(array(
 			"name" => "modifiedby",
 			"caption" => "Kes",
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1
 		));
 
 		$t->define_field(array(
@@ -1091,7 +1100,8 @@ class shop_warehouse extends class_base
 			"caption" => "Millal",
 			"type" => "time",
 			"format" => "d.m.Y H:i",
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1
 		));
 
 		$t->define_field(array(
@@ -1315,7 +1325,35 @@ class shop_warehouse extends class_base
 			"class_id" => CL_CRM_SECTOR,
 		));
 
+		$all_cos = new object_list(array(
+			"parent" => $this->buyers_fld,
+			"class_id" => CL_CRM_COMPANY
+		));
+		$this->all_cos_ids = $all_cos->names();
+
 		$tv = $this->get_vcl_tree_from_cat_list($categories);
+
+		// now, add all remaining cos as top level items
+		foreach($this->all_cos_ids as $co_id => $con)
+		{
+			$tv->add_item(0, array(
+				"name" => $con,
+				"id" => "nocode_co".$co_id,
+				"url" => aw_url_change_var("tree_code", NULL, aw_url_change_var("tree_company", $co_id, aw_url_change_var("tree_worker", NULL)))
+			));
+
+			$co = obj($co_id);
+			// now all people for that company
+			foreach($co->connections_from(array("type" => 8 /* RELTYPE_WORKER */)) as $c)
+			{
+				$tv->add_item("nocode_co".$co->id(), array(
+					"name" => $c->prop("to.name"),
+					"id" => "nocode_wk".$c->prop("to"),
+					"url" => aw_url_change_var("tree_code", NULL, aw_url_change_var("tree_company", NULL, aw_url_change_var("tree_worker", $c->prop("to"))))
+				));
+			}
+		}
+
 	
 		$arr["prop"]["value"] = $tv->finalize_tree();
 	}
@@ -1424,6 +1462,7 @@ class shop_warehouse extends class_base
 				"id" => $code."co".$co->id(),
 				"url" => aw_url_change_var("tree_code", NULL, aw_url_change_var("tree_company", $co->id(), aw_url_change_var("tree_worker", NULL)))
 			));
+			unset($this->all_cos_ids[$co->id()]);
 
 			// now all people for that company
 			foreach($co->connections_from(array("type" => 8 /* RELTYPE_WORKER */)) as $c)

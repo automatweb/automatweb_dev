@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.1 2004/04/13 12:36:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.2 2004/05/06 12:19:25 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -21,6 +21,9 @@
 
 @property layoutbl type=table store=no
 @caption Toodete layout
+
+@property sortbl type=table store=no
+@caption Toodete sorteerimine
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption ladu
@@ -55,6 +58,10 @@ class shop_order_center extends class_base
 			case "layoutbl":
 				$this->do_layoutbl($arr);
 				break;
+
+			case "sortbl":
+				$this->do_sortbl($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -68,6 +75,10 @@ class shop_order_center extends class_base
 			case "layoutbl":
 				$this->do_save_layoutbl($arr);
 				break;
+
+			case "sortbl":
+				$this->do_save_sortbl($arr);
+				break;
 		}
 		return $retval;
 	}	
@@ -75,7 +86,23 @@ class shop_order_center extends class_base
 	function do_save_layoutbl(&$arr)
 	{
 		$arr["obj_inst"]->set_meta("itemlayouts", $arr["request"]["itemlayout"]);
+		$arr["obj_inst"]->set_meta("itemlayouts_long", $arr["request"]["itemlayout_long"]);
 		$arr["obj_inst"]->set_meta("tblayouts", $arr["request"]["tblayout"]);
+	}
+
+	function do_save_sortbl(&$arr)
+	{
+		$awa = new aw_array($arr["request"]["itemsorts"]);
+		$res = array();
+		foreach($awa->get() as $idx => $dat)
+		{
+			if ($dat["element"])
+			{
+				$res[] = $dat;
+			}
+		}
+
+		$arr["obj_inst"]->set_meta("itemsorts", $res);
 	}
 
 	function _init_layoutbl(&$t)
@@ -94,6 +121,12 @@ class shop_order_center extends class_base
 		$t->define_field(array(
 			"name" => "item_layout",
 			"caption" => "Paketi kujundus",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "item_layout_long",
+			"caption" => "Paketi vaate kujundus",
 			"align" => "center"
 		));
 
@@ -141,6 +174,8 @@ class shop_order_center extends class_base
 		}
 
 		$this->itemlayouts = $o->meta("itemlayouts");
+		$this->itemlayouts_long = $o->meta("itemlayouts_long");
+
 		$this->itemlayout_items = array("0" => "--vali--");
 		foreach($o->connections_from(array("type" => RELTYPE_ITEM_LAYOUT)) as $c)
 		{
@@ -156,6 +191,7 @@ class shop_order_center extends class_base
 		$t->sort_by();
 	}
 
+
 	function layoutbl_ot_cb(&$o, &$t)
 	{
 		$t->define_data(array(
@@ -170,7 +206,78 @@ class shop_order_center extends class_base
 				"options" => $this->itemlayout_items,
 				"selected" => $this->itemlayouts[$o->id()]
 			)),
+			"item_layout_long" => html::select(array(
+				"name" => "itemlayout_long[".$o->id()."]",
+				"options" => $this->itemlayout_items,
+				"selected" => $this->itemlayouts_long[$o->id()]
+			)),
 		));
+	}
+
+	function _init_sortbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "sby",
+			"caption" => "Sorditav v&auml;li",
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sby_ord",
+			"caption" => "Kasvav / kahanev",
+			"align" => "center"
+		));
+	}
+
+	function do_sortbl(&$arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_sortbl($t);
+
+		$elements = array("" => "");
+		list($GLOBALS["properties"][CL_SHOP_PRODUCT], $GLOBALS["tableinfo"][CL_SHOP_PRODUCT], $GLOBALS["relinfo"][CL_SHOP_PRODUCT]) = $GLOBALS["object_loader"]->load_properties(array(
+			"clid" => CL_SHOP_PRODUCT
+		));
+		foreach($GLOBALS["properties"][CL_SHOP_PRODUCT] as $pn => $pd)
+		{
+			$elements[$pn] = $pd["caption"];
+		}
+		
+
+		$maxi = 0;
+		$is = new aw_array($arr["obj_inst"]->meta("itemsorts"));
+		foreach($is->get() as $idx => $sd)
+		{
+			$t->define_data(array(
+				"sby" => html::select(array(
+					"options" => $elements,
+					"selected" => $sd["element"],
+					"name" => "itemsorts[$idx][element]"
+				)),
+				"sby_ord" => html::select(array(
+					"options" => array("asc" => "Kasvav", "desc" => "Kahanev"),
+					"selected" => $sd["ord"],
+					"name" => "itemsorts[$idx][ord]"
+				))
+			));
+			$maxi = max($maxi, $idx);
+		}
+		$maxi++;
+
+		$t->define_data(array(
+			"sby" => html::select(array(
+				"options" => $elements,
+				"selected" => "",
+				"name" => "itemsorts[$maxi][element]"
+			)),
+			"sby_ord" => html::select(array(
+				"options" => array("asc" => "Kasvav", "desc" => "Kahanev"),
+				"selected" => "",
+				"name" => "itemsorts[$maxi][ord]"
+			))
+		));
+
+		$t->set_sortable(false);
 	}
 
 	function parse_alias($arr)
@@ -180,12 +287,7 @@ class shop_order_center extends class_base
 
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
+		return $this->my_orders(array());
 	}
 
 	function get_folders_as_object_list($o, $level, $parent)
@@ -242,7 +344,7 @@ class shop_order_center extends class_base
 
 	/** shows shop items
 
-		@attrib name=show_items
+		@attrib name=show_items nologin="1"
 
 		@param id required type=int acl=view
 		@param section required type=int acl=view
@@ -263,13 +365,17 @@ class shop_order_center extends class_base
 		// get the table layout for this folder
 		$t_layout = $this->get_prod_table_layout_for_folder($soc, $section);
 
+		$pl = $wh->get_packet_list(array(
+			"id" => $wh_id,
+			"parent" => $section
+		));
+
+		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
+
 		return $this->do_draw_prods_with_layout(array(
 			"t_layout" => $t_layout, 
 			"layout" => $layout, 
-			"pl" => $wh->get_packet_list(array(
-				"id" => $wh_id,
-				"parent" => $section
-			)),
+			"pl" =>  $pl,
 			"soc" => $soc
 		));
 	}
@@ -323,11 +429,154 @@ class shop_order_center extends class_base
 			$i = $o->instance();
 			$tl_inst->add_product($i->do_draw_product(array(
 				"prod" => $o,
-				"layout" => $layout
+				"layout" => $layout,
+				"oc_obj" => $soc
 			)));
 		}
 
 		return $tl_inst->finish_table();
+	}
+
+	/** returns the long layout object for the product 
+
+		@comment
+			$soc - order center object
+			$prod - product object
+	**/
+	function get_long_layout_for_prod($arr)
+	{
+		extract($arr);
+		$il = $soc->meta("itemlayouts_long");
+		foreach(array_reverse($prod->path()) as $p)
+		{
+			if ($il[$p->id()])
+			{
+				return obj($il[$p->id()]);
+			}
+		}
+		return false;
+	}
+
+	/** shows the user a list of his/her previous orders
+
+		@attrib name=my_orders is_public=1 caption="Minu tellimused"
+
+	**/
+	function my_orders($arr)
+	{
+		extract($arr);
+		
+		// get current person and get the orders from that
+		$u = get_instance("core/users/user");
+		$p = obj($u->get_current_person());
+
+		$this->read_template("orders.tpl");
+
+		foreach($p->connections_from(array("type" => "RELTYPE_ORDER")) as $c)
+		{
+			$ord = $c->to();
+			$this->vars(array(
+				"name" => $ord->name(),
+				"tm" => $ord->created(),
+				"sum" => number_format($ord->prop("sum"), 2),
+				"view_link" => obj_link($ord->id()),
+				"id" => $ord->id()
+			));
+			$l .= $this->parse("LINE");
+		}
+
+		$this->vars(array(
+			"LINE" => $l,
+			"reforb" => $this->mk_reforb("submit_my_orders")
+		));
+
+		return $this->parse();
+	}
+
+	/** 
+
+		@attrib name=submit_my_orders 
+
+	**/
+	function submit_my_orders($arr)
+	{
+		extract($arr);
+		$ord_i = get_instance(CL_SHOP_ORDER);
+		$warehouse = 0;
+		$items = array();
+		if (is_array($sel) && count($sel) > 0 && !empty($makenew))
+		{
+			// create new order based on the selected orders
+			$first = true;
+			foreach($sel as $ordid)
+			{
+				$ord = obj($ordid);
+				if ($first)
+				{
+					// get order center
+					$oc = $ord->prop("oc");
+				}
+
+				// get all items from order
+				foreach($ord_i->get_items_from_order($ord) as $i_id => $quant)
+				{
+					$items[$i_id] += $quant;
+				}
+				$first = false;
+			}
+
+			// must not create a real order, just stuff the items in the session
+			$soc = get_instance(CL_SHOP_ORDER_CART);
+			$soc->start_order();
+			foreach($items as $iid => $q)
+			{
+				$soc->add_item($iid, $q);
+			}
+			return $this->mk_my_orb("show_cart" , array("oc" => $oc), CL_SHOP_ORDER_CART);
+		}
+
+		return $this->mk_my_orb("my_orders");
+	}
+
+	function do_sort_packet_list(&$pl, $itemsorts)
+	{
+		if (!is_array($itemsorts))
+		{
+			return;
+		}
+		$this->__is = $itemsorts;
+		usort($pl, array(&$this, "__is_sorter"));
+	}
+
+	function __is_sorter($a, $b)
+	{
+		$comp_a = NULL;
+		$comp_b = NULL;
+		// find the first non-matching element
+		foreach($this->__is as $isd)
+		{
+			$comp_a = $a->prop($isd["element"]);
+			$comp_b = $b->prop($isd["element"]);
+			$ord = $isd["ord"];
+			if ($comp_a != $comp_b)
+			{
+				break;
+			}
+		}
+		// sort by that element
+		if ($comp_a  == $comp_b)
+		{
+			return 0;
+		}
+
+		if ($ord == "asc")
+		{
+			return $comp_a > $comp_b ? 1 : -1;
+		}
+		else
+		{
+			return $comp_a > $comp_b ? -1 : 1;
+		}
 	}
 }
 ?>

@@ -5,6 +5,7 @@
 			<function name="show">
 				<arguments>
 					<optional name="oc" type="int"/>
+					<optional name="section" type="int"/>
 				</arguments>
 			</function>
 		</action>
