@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.63 2002/06/10 15:50:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.64 2002/06/13 23:11:34 kristo Exp $
 
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -29,14 +29,60 @@ if ($pi)
 		// replace ? and / with & in $pi and output the result to HTTP_GET_VARS
 		// why so?
 		parse_str(str_replace("?","&",str_replace("/","&",$pi)),$HTTP_GET_VARS);
+//		echo "$QUERY_STRING , $PATH_INFO , pi = $pi  str = ",str_replace("?","&",str_replace("/","&",$pi))," <br>";
 		extract($HTTP_GET_VARS);
 	} 
 	else 
 	{
 		$section = substr($pi,1);
 	};
+
+	// this here adds support for links like http://bla/index.aw/section=291/lcb=117
+	if (($_pos = strpos($pi, "section=")) !== false)
+	{
+		$t_pi = substr($pi, $_pos+strlen("section="));
+		if (($_eqp = strpos($t_pi, "="))!== false)
+		{
+			$t_pi = substr($t_pi, 0, $_eqp);
+			if (($_tpos1 = strpos($t_pi, "?")) !== false || ($_tpos2 = strpos($t_pi, "&")) !== false)
+			{
+				// if the thing contains ? or & , then section is the part before it
+				if ($_tpos1 === false)
+				{
+					$_tpos = $_tpos2;
+				}
+				else
+				if (!$_tpos2 === false)
+				{
+					$_tpos = $_tpos1;
+				}
+				else
+				{
+					$_tpos = min($_tpos1, $_tpos2);
+				}
+				$section = substr($t_pi, 0, $_tpos);
+			}
+			else
+			{
+				// if not, then te section is the part upto the last /
+				$_lslp = strrpos($t_pi, "/");
+				if ($_lslp !== false)
+				{
+					$section = substr($t_pi, 0, $_lslp);
+				}
+				else
+				{
+					$section = $t_pi;
+				}
+			}
+		}
+		else
+		{
+			$section = $t_pi;
+		}
+	}
 };
-	
+
 // support for crypted urls
 if (isset($__udat))
 {
@@ -96,6 +142,7 @@ define("FTYPE_ENTRY",1);
 define("FTYPE_SEARCH",2);
 define("FTYPE_RATING",3);
 define("FTYPE_FILTER_SEARCH",4);
+define("FTYPE_CONFIG",5);
 
 // formide alamtyybid
 define("FSUBTYPE_JOIN",1);
