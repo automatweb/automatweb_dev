@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.16 2004/06/10 13:40:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/orb/Attic/xmlrpc.aw,v 1.17 2004/08/30 09:28:43 kristo Exp $
 class xmlrpc extends aw_template
 {
 	var $allowed = array("I4","BOOLEAN","STRING", "DOUBLE","DATETIME.ISO8601","BASE64", "STRUCT", "ARRAY");
@@ -75,7 +75,7 @@ class xmlrpc extends aw_template
 		//if (aw_global_get("xmlrpc_dbg"))
 		if (aw_global_get("xmlrpc_dbg"))
 		{
-			echo "resp xml = <pre>", htmlspecialchars($xml),"</pre> <br />";
+			echo "resp xml = <pre>", htmlspecialchars($xml),"</pre> <br />---------------------------<br/>";
 		}
 		$result = array();
 
