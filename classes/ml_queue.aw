@@ -60,8 +60,6 @@ class ml_queue extends aw_template
 	{
 		extract($arr);
 		load_vcl("table");
-		global $queue_back;
-		session_register("queue_back");
 
 		$this->read_template("manager.tpl");
 		
@@ -86,6 +84,7 @@ class ml_queue extends aw_template
 			$name=$this->db_fetch_field("SELECT name FROM objects WHERE oid='$fid'","name");
 		};
 
+		$queue_back = aw_global_get("queue_back");
 		if ($queue_back)
 		{
 			$headerarray=array( $queue_back => "Tagasi");
@@ -174,7 +173,6 @@ class ml_queue extends aw_template
 
 		if ($manager)
 		{
-			global $title;
 			$title="Meililistid";
 
 			$fb=new form_base();
