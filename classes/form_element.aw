@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.42 2002/01/06 15:05:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.43 2002/01/08 05:34:25 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -44,6 +44,17 @@ class form_element extends aw_template
 				"expires" => "Aegumine",
 				"created" => "Loomine",
 				"activity" => "Aktiivsuse pikendamine"
+			),
+			"checkbox" => array(
+				"" => "",
+				"toggle_active" => "Aktiivsus",
+				"is_forum" => "Foorum",
+				"no_right_pane" => "Ilma parema paanita",
+				"clear_styles" => "T&uuml;hista stiilid",
+				"link_keywords" => "Lingi v&otilde;tmes&otilde;nad",
+				"archive" => "Arhiveeri",
+				"esilehel " => "Esilehel",
+				"frontpage_left" => "Esilehel tulbas"
 			)
 		);
 	}
@@ -248,12 +259,15 @@ class form_element extends aw_template
 			$ta = "";
 			if ($this->arr["type"] == "textarea")
 			{
-				$this->vars(array("textarea_cols_name"	=> "element_".$this->id."_ta_cols",
-													"textarea_rows_name"	=> "element_".$this->id."_ta_rows",
-													"must_fill_checked" => checked($this->arr["must_fill"] == 1),
-													"must_error" => $this->arr["must_error"],
-													"textarea_cols"	=> $this->arr["ta_cols"],
-													"textarea_rows"	=> $this->arr["ta_rows"]));
+				$this->vars(array(
+					"textarea_cols_name"	=> "element_".$this->id."_ta_cols",
+					"textarea_rows_name"	=> "element_".$this->id."_ta_rows",
+					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
+					"must_error" => $this->arr["must_error"],
+					"textarea_cols"	=> $this->arr["ta_cols"],
+					"textarea_rows"	=> $this->arr["ta_rows"],
+					"is_wysiwyg" => checked($this->arr["wysiwyg"] == 1)
+				));
 				$ta = $this->parse("TEXTAREA_ITEMS");
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 			}
@@ -685,6 +699,8 @@ class form_element extends aw_template
 			$this->arr["must_fill"] = $$var;
 			$var=$base."_must_error";
 			$this->arr["must_error"] = $$var;
+			$var=$base."_wysiwyg";
+			$this->arr["wysiwyg"] = $$var;
 		}
 
 		if ($this->arr["type"] == "radiobutton")
@@ -1260,9 +1276,22 @@ class form_element extends aw_template
 		switch($this->arr["type"])
 		{
 			case "textarea":
-				$html="<textarea $stat_check NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]. "'>";
-				$html .= htmlspecialchars($this->get_val($elvalues));
-				$html .= "</textarea>";
+				if ($this->arr["wysiwyg"] == 1)
+				{
+					$html.="<input type=\"hidden\" name=\"_el_".$prefix.$elid."\" value=\"".htmlspecialchars($this->get_val($elvalues))."\">";
+					$html.="<iframe name=\"_ifr_".$prefix.$elid."\" onFocus=\"sel_el='_el_".$prefix.$elid."'\" frameborder=\"1\" width=\"".($this->arr["ta_cols"]*10)."\" height=\"".($this->arr["ta_rows"]*10)."\"></iframe>";
+					$html.="<script for=window event=onload>\n";
+					$html.="_ifr_".$prefix.$elid.".document.designMode='On';\n";
+					$html.="_ifr_".$prefix.$elid.".document.write(\"<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>\");\n";
+					$html.="_ifr_".$prefix.$elid.".document.write(doc._el_".$prefix.$elid.".value);\n";
+					$html.="</script>\n";
+				}
+				else
+				{
+					$html="<textarea $stat_check NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]. "'>";
+					$html .= htmlspecialchars($this->get_val($elvalues));
+					$html .= "</textarea>";
+				}
 				break;
 
 			case "radiobutton":
@@ -1727,6 +1756,11 @@ class form_element extends aw_template
 			$this->entry_id = $id;
 			$awt->stop("form_element::core_process_entry");
 			return;
+		}
+		else
+		if ($this->arr["type"] == "textarea" && $this->arr["wysiwyg"] == 1)
+		{
+			$var = $this->form->post_vars["_ifr_".$prefix.$this->id];
 		}
 		else
 		{

@@ -211,6 +211,12 @@ function toggle_file_link_newwin()
 <td valign=top class="fgtext">{VAR:LC_FORMS_ORIGINAL_TEXT}:</td>
 <td class="fgtext"><input type=text CLASS="small_button"  SIZE=45 NAME='{VAR:default_name}' VALUE='{VAR:default}'></td>
 </tr>
+<tr>
+<td class="fgtext">WYSIWYG:</td>
+<td class="fgtext">&nbsp;<input type='checkbox' name='{VAR:cell_id}_wysiwyg' value='1' {VAR:is_wysiwyg}></td>
+<td valign=top class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
 <!-- END SUB: TEXTAREA_ITEMS -->
 
 <!-- SUB: DATE_ITEMS -->
