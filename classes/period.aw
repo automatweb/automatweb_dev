@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.4 2003/05/20 12:15:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.5 2003/05/21 12:45:59 duke Exp $
 // period.aw - periods 
 /*
 
@@ -337,7 +337,7 @@ class period extends class_base
 		}
 		// and finally, the db
 		dbg::p1("period::get no hit ");
-		$q = "SELECT * FROM periods LEFT JOIN objects ON (periods.obj_id = objects.oid) WHERE id = '$id'";
+		$q = "SELECT *,objects.name,objects.metadata FROM periods LEFT JOIN objects ON (periods.obj_id = objects.oid) WHERE id = '$id'";
 		$this->db_query($q);
 		$pr = $this->db_fetch_row();
 		$pr["data"] = aw_unserialize($pr["metadata"]);
