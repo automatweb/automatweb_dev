@@ -34,22 +34,12 @@
 <!-- END SUB: navigator -->
 
 
-<table border="0" cellpadding="0" cellspacing="0">
-<tr><td colspan="3"></td></tr>
-<!-- SUB: summary_header -->
-<tr class="calmonthback">
-<td width="25" align="center"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/cal_notes.gif" WIDTH="15" HEIGHT="15" BORDER=0 ALT=""></td>
-<td height="23" class="celltext" align="left">{VAR:caption}</td>
-<td width="20" align="center" valign="top"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/cal_config.gif" WIDTH="18" HEIGHT="18" BORDER=0 ALT=""></td>
-</tr>
-<tr><td class="caltableborderhele" colspan="3"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td></tr>
-<!-- END SUB: summary_header -->
+<table border="0" width="100%" cellpadding="0" cellspacing="0">
+<tr><td style="font-size: 10px; text-align: center; font-weight: bold;">Toimetused</td></tr>
+{VAR:summary_pane}
 <!-- SUB: summary_line -->
-<tr><td colspan="3">
+<tr><td style="font-size: 10px; padding: 3px;">
 <a href="{VAR:url}">{VAR:caption}</a><br>
-<blockquote>
-{VAR:desc}
-</blockquote>
 </td></tr>
 <!-- END SUB: summary_line -->
 </table>
