@@ -48,7 +48,7 @@ function del_rep()
 <tr>
 <td>
 
-<table border="1" cellspacing="1" cellpadding="1" bgcolor="#FFFFFF" width="100%">
+<table border="0" cellspacing="1" cellpadding="1" bgcolor="#FFFFFF" width="100%">
 <form method="POST" action="reforb.{VAR:ext}" name="replist">
 <tr>
 <td class="fgtitle" colspan="4">&nbsp;
@@ -66,8 +66,8 @@ function del_rep()
 <!-- SUB: line -->
 <tr>
 <td class="fgtitle">{VAR:id}</td>
-<td class="fgtitle">A: {VAR:start}</td>
-<td class="fgtitle">E: {VAR:end}</td>
+<td class="fgtitle">{VAR:start}</td>
+<td class="fgtitle">{VAR:end}</td>
 <td class="fgtitle" align="center"><input type="radio" name="check" value="{VAR:id}"></td>
 </tr>
 <!-- END SUB: line -->
