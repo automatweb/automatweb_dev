@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.39 2003/12/01 15:52:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.40 2003/12/01 17:06:01 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -55,6 +55,7 @@ class htmlclient extends aw_template
 		$this->read_template("default.tpl");
 		$this->orb_vars = array();
 		$this->submit_done = false;
+		$this->proplist = array();
 
 		// I need some handler code in the output form, if we have any RTE-s
 		$this->rte = false;
@@ -65,6 +66,9 @@ class htmlclient extends aw_template
 	{
 		// if value is array, then try to interpret
 		// it as a list of elements.
+
+		// I need to redo this
+
 		$wrapchildren = false;
 
 		// but actually, settings parets should take place in class_base itself
@@ -95,7 +99,8 @@ class htmlclient extends aw_template
 					};
 				};
 	 			$this->mod_property(&$el);
-				$res .= $this->draw_element($el);
+				$res .= $this->put_subitem($el);
+				//$res .= $this->draw_element($el);
 				if ($wrapchildren)
 				{
 					if ($i == $cnt)
@@ -126,18 +131,23 @@ class htmlclient extends aw_template
 
 		$type = isset($args["type"]) ? $args["type"] : "";
 
-
-		// hidden elements end up in the orb_vars
 		if ($type == "iframe")
 		{
-			$this->put_iframe($args);
+			$src = $args["src"];
+			$args["html"] = "<iframe id='contentarea' name='contentarea' src='${src}' style='width: 100%; height: 95%; border-top: 1px solid black;' frameborder='no' scrolling='yes'></iframe>";
 		}
 		else
 		if ($this->layout_mode == "fixed_toolbar")
 		{
-			$this->put_block($args);
+			$args["html"] = $args["value"];
 		}
 		else
+		if ($args["parent"])
+		{
+			$this->proplist[$args["parent"]]["html"] .= $this->put_subitem($args);
+		}
+		else
+		// hidden elements end up in the orb_vars
 		if ($type == "hidden")
 		{
 			$this->orb_vars[$args["name"]] = $args["value"];
@@ -145,26 +155,27 @@ class htmlclient extends aw_template
 		else
 		if (isset($args["no_caption"]))
 		{
-			$this->put_content($args);
+			$args["html"] = $this->put_content($args);
 		}
 		else
 		if (isset($args["subtitle"]))
 		{
-			$this->put_header_subtitle($args);
+			$args["html"] = $this->put_header_subtitle($args);
 		}
 		else
 		if ($type)
 		{
-			$this->put_line($args);
+			$args["html"] = $this->put_line($args);
 		}
 		elseif (!empty($args["caption"]))
 		{
-			$this->put_header($args);
+			$args["html"] = $this->put_header($args);
 		}
 		else
 		{
-			$this->put_content($args);
+			$args["html"] = $this->put_content($args);
 		};
+		$this->proplist[$args["name"]] = $args;
 	}
 
 	function mod_property(&$args)
@@ -254,15 +265,22 @@ class htmlclient extends aw_template
 				$args["value"] = $args["caption"];
 			};
 		};
+
+		if ($args["type"] == "container")
+		{
+			$args["type"] = "text";
+		};
 	}
 
 	////
 	// !Creates a normal line
 	function put_line($args)
 	{
+		$rv = "";
 		$caption = $args["caption"];
 		unset($args["caption"]);
 
+		// give the first letter of a caption a tooltip
 		if (!empty($args["comment"]))
 		{
 			$caption = html::href(array(
@@ -272,13 +290,14 @@ class htmlclient extends aw_template
 				)) . substr($caption,1);
 		};
 
+		// I wanda mis kammi ma selle tmp-iga tegin
 		if (is_object($this->tmp))
 		{
 			$this->tmp->vars(array(
 				"caption" => $caption,
 				"element" => $this->draw_element($args),
 			));
-			$this->res .= $this->tmp->parse("LINE");
+			$rv = $this->tmp->parse("LINE");
 		}
 		else
 		{
@@ -286,16 +305,30 @@ class htmlclient extends aw_template
 				"caption" => $caption,
 				"element" => $this->draw_element($args),
 			));
-			$this->res .= $this->parse("LINE");
+			$rv = $this->parse("LINE");
 		};
+		return $rv;
+	}
+
+	function put_subitem($args)
+	{
+		$this->vars(array(
+			"caption" => $args["caption"],
+			"element" => $this->draw_element($args),
+		));
+		// SUBITEM - element first, caption right next to it
+		// SUBITEM2 - caption first, element right next to it
+		$tpl = $args["type"] == "checkbox" ? "SUBITEM" : "SUBITEM2";
+		return $this->parse($tpl);
 	}
 
 	function put_header($args)
 	{
+		
 		$this->vars(array(
 			"caption" => $args["caption"],
 		));
-		$this->res .= $this->parse("HEADER");
+		return $this->parse("HEADER");
 	}
 	
 	function put_header_subtitle($args)
@@ -303,7 +336,7 @@ class htmlclient extends aw_template
 		$this->vars(array(
 			"value" => $args["value"],
 		));
-		$this->res .= $this->parse("SUB_TITLE");
+		return $this->parse("SUB_TITLE");
 	}
 	
 	function put_content($args)
@@ -311,23 +344,7 @@ class htmlclient extends aw_template
 		$this->vars(array(
 			"value" => $args["value"],
 		));
-		$this->res .= $this->parse("CONTENT");
-	}
-	
-	function put_block($args)
-	{
-		$this->vars(array(
-			"value" => $args["value"],
-		));
-		$this->res .= $this->parse("BLOCK");
-	}
-
-	function put_iframe($args)
-	{
-		$this->vars(array(
-			"src" => $args["src"],
-		));
-		$this->res .= $this->parse("IFRAME");
+		return $this->parse("CONTENT");
 	}
 	
 	////
@@ -350,6 +367,16 @@ class htmlclient extends aw_template
 		unset($data["orb_class"]);
 		$data = $data + $this->orb_vars;
 
+		$res = "";
+
+		if (sizeof($this->proplist) > 0)
+		{
+			foreach($this->proplist as $item)
+			{
+				$res .= $item["html"];
+			};
+		};
+
 		$submit_handler = $txt = "";
 		if ($this->rte)
 		{
@@ -368,7 +395,7 @@ class htmlclient extends aw_template
 
 		$this->vars(array(
 			"submit_handler" => $submit_handler,
-			"content" => $this->res,
+			"content" => $res,
 			"reforb" => $this->mk_reforb($action,$data,$orb_class),
 			"SUBMIT" => $sbt,
 		));
@@ -406,7 +433,7 @@ class htmlclient extends aw_template
 
 		// Check the types and call their counterparts
 		// from the HTML class. If you want to support
-		// a new object type, this is where you will have
+		// a new property type, this is where you will have
 		// to register it.
 		switch($args["type"])
 		{
@@ -433,6 +460,11 @@ class htmlclient extends aw_template
 							"checked" => ($arr["value"] == $key),
 						));
 					};
+					if ($arr["orient"] == "vertical")
+					{
+						$retval .= "<br />";
+
+					};
 						
 				};
 				break;
@@ -458,10 +490,6 @@ class htmlclient extends aw_template
 				$retval = html::password($arr);
 				break;
 
-			case "hidden":
-				$retval = html::hidden($arr);
-				break;
-
 			case "fileupload":
 				$retval = html::fileupload($arr);
 				break;
@@ -476,6 +504,8 @@ class htmlclient extends aw_template
 				));
 				break;
 
+				// will probably be deprecated, after all what good is a 
+				// single 
 			case "radiobutton":
 				$retval = html::radiobutton(array(
 					"name" => $arr["name"],
