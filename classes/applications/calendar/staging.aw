@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.2 2004/10/13 11:06:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.3 2004/10/29 15:57:10 duke Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -8,7 +8,7 @@
 @default table=objects
 @default group=general
 
-@property start1 type=datetime_select field=start table=planner
+@property start1 type=date_chooser field=start table=planner
 @caption Algab
 
 @default field=meta 
@@ -44,9 +44,6 @@ property utextbox8 type=textbox no_caption=1
 
 @property trans type=translator store=no group=trans props=name,utextarea1
 @caption Tõlkimine
-
-@property to type=text store=no group=trans
-@caption To
 
 @property times type=callback store=no callback=callback_gen_times group=times
 @caption Ajad
@@ -87,6 +84,7 @@ class staging extends class_base
 		$prefix = $arr["prop"]["name"];
 		// ja see asi siin peab arvestama tehtud seoseid
 		$o = $arr["obj_inst"];
+		$o = $o->get_original();
 
 		// check if this is a copy and then show connections from the original object
 		$copy_conns = $o->connections_to(array(
@@ -104,22 +102,37 @@ class staging extends class_base
 			"type" => "RELTYPE_COPY",
 		));
 
+		/*
 		$rv["active_" . $prefix] = array(
 			"type" => "datetime_select",
 			"name" => $prefix . "[active]",
 			"value" => $o->prop("start1"),
 			"caption" => "Aktiivne objekt",
 		);
+		*/
+		
+		$rv["active_" . $prefix] = array(
+			"type" => "text",
+			"name" => $prefix . "[active]",
+			"value" => date("d.m.Y H:i",$o->prop("start1")),
+			"caption" => "Originaalobjekt",
+		);
 
-		$empty_slots = 30;
+		$empty_slots = 15;
 		foreach($conns as $conn)
 		{
 			$to = $conn->to();
 			$id = $to->id();
+			$caption = "Koopia";
+			if ($id == $arr["obj_inst"]->id())
+			{
+				$caption .= " (Aktiivne)";
+			};
+				
 			$rv["existing_" . $prefix . $id] = array(
 				"type" => "datetime_select",
 				"name" => $prefix . "[existing][" . $id . "]",
-				"caption" => "Koopia",
+				"caption" => $caption,
 				"group" => $arr["prop"]["group"],
 				"value" => $to->prop("start1"),
 			);
@@ -176,84 +189,12 @@ class staging extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "to":
-				$prop["value"] = $this->gen_to_overview($arr);
-				break;
 
 
 
 
 		};
 		return $retval;
-	}
-
-	function gen_to_overview($arr)
-	{
-		$rv = "";
-		$o = $arr["obj_inst"];	
-		obj_set_opt("no_auto_translation", 1);
-		$trans = $o->connections_from(array(
-			"type" => RELTYPE_TRANSLATION,
-		));
-		foreach($trans as $t)
-		{
-			$to = $t->to();
-			$rv .= "tõlge: " . $to->id() . " / " . $to->name() . " / ". $to->lang() . "<br>";
-
-		};
-
-		$copies = $o->connections_from(array(
-			"type" => "RELTYPE_COPY",
-		));
-
-		$rv .= "Koopiad<br>";
-		foreach($copies as $c)
-		{
-			$to = $c->to();
-			$rv .= "koopia: " . $to->id() . " / " . $to->name() . " / ". $to->lang() . "<br>";
-
-			$trans = $to->connections_from(array(
-				"type" => RELTYPE_TRANSLATION,
-			));
-			foreach($trans as $t)
-			{
-				$tt = $t->to();
-				$rv .= "koopia tõlge: " . $tt->id() . " / " . $tt->name() . " / ". $tt->lang() . "<br>";
-
-			};
-
-			$ol = new object_list(array(
-				"brother_of" => $to->id(),
-			));
-
-			foreach($ol->arr() as $o)
-			{
-				$rv .= "koopia vend: " . $o->id() . "/" . $o->name . "/" . $o->lang() . "/" . $o->parent() .  "<br>";
-			};
-		};
-
-		$ol = new object_list(array(
-			"brother_of" => $o->id(),
-		));
-
-		// nii .. need vennad on nüüd teiste projektide all.
-
-		// ma pean nüüd võtma sündmuse tõlked ja need KA teiste projektide alla vennastama.
-		// parentiks on ikka see projekt ise, aga vennnad on teise keele ID-ga
-
-		// and that pretty much is it
-		foreach($ol->arr() as $o)
-		{
-			$rv .= "vend: " . $o->id() . "/" . $o->name . "/" . $o->lang() . "/" . $o->parent() .  "<br>";
-
-			$conns = $o->connections_from(array(
-				"type" => RELTYPE_TRANSLATION,
-			));
-
-			$rv .= "vs = " . sizeof($conns) . "<br>";
-		};
-		obj_set_opt("no_auto_translation", 0);
-		return $rv;
 	}
 
 	/**
@@ -305,6 +246,7 @@ class staging extends class_base
 		$de = new date_edit();
 
 		$o = $arr["obj_inst"];
+		$o = $o->get_original();
 		
 		// check if this is a copy and then show connections from the original object
 		$copy_conns = $o->connections_to(array(
@@ -323,6 +265,31 @@ class staging extends class_base
 			"brother_of" => $o->id(),
 		));
 
+		$o_id = $o->id();
+		$original_parent = $o->parent();
+
+		// nii aga iga venna kohta mul vaja teada tõlgete id-sid no less.
+
+		$blist = array();
+		$xblist = array();
+		foreach($brother_list->arr() as $brother)
+		{
+			$bparent = $brother->parent();
+
+			if ($brother->id() == $o_id)
+			{
+				$original_parent = $brother->parent();
+			};
+
+			$xblist[$bparent] = $this->_get_translations_for($bparent);
+			// xblist annab mulle ainult selle info kuhu alla vennad teha.
+			// tõlked tuleb ikka igast koopiast eraldi rajada
+
+			$blist[$bparent] = 1;
+		};
+
+		$object_translations = $this->_get_translations_for($o->id());
+
 
 		// siin loome (mitte ei uuenda) koopiaid - koopia tegemisel
 		// 1. teha uus objekt
@@ -330,50 +297,29 @@ class staging extends class_base
 		// 3. teha tõlgete objektid
 		// 4. kanda info üle
 
-		// kõigepealt on vaja välja mõelda mis keeltes meil tõlked on
-
-		// auto_translation on vist selleks et võetaks seosed ikka originaali pealt
-		obj_set_opt("no_auto_translation", 1);
-		$tr_conns = $o->connections_from(array(
-			"type" => RELTYPE_TRANSLATION,
-		));
-
-		// create list of translations
-		$trans_clone = array();
-		foreach($tr_conns as $tr_conn)
-		{
-			$trans_clone[$tr_conn->prop("to.lang_id")] = $tr_conn->prop("to");
-		};
-
-		// get a list of brothers, get a list of ...
-
-		// can't I create a simpler infrastructure for this shit?
-
-		// get a list of brothers ... get a list of translations from each brother
-
-		// now recreate all that structure
-
-
-		// update existing objects
+		// update times of existing objects
 		if (is_array($times["existing"]))
 		{
 			$ext = $times["existing"];
 			foreach($ext as $obj_id => $date_data)
 			{
-				// äkki ma saan seda asja kuidagi liita ..
-				// siin ma uuendan ainult aegu .. uute tõlgete tegemine on tõlkekomponendi
-				// ja mitte minu ülesanne
 				$ts = $de->get_timestamp($date_data);
 
 				$obj_copy = new object($obj_id);
 				$obj_copy->set_prop("start1",$ts);
 
 				$obj_copy->save();
+
+
+				if ($obj_id == $arr["obj_inst"]->id())
+				{
+					$arr["obj_inst"]->set_prop("start1",$ts);
+				};
+				
+
 			};
 		}
 		
-		obj_set_opt("no_auto_translation", 1);
-
 		$news = $times["newx"];
 		if (!is_array($news))
 		{
@@ -389,23 +335,16 @@ class staging extends class_base
 				$ts = $de->get_timestamp($date_data);
 				if ($news[$idx])
 				{
-					$props = $arr["obj_inst"]->properties();
-
-					// XX: miks ma ei saa omadusi üle tuua? :(
 					// loome uue koopia objekti
-					$new_obj = new object($o->properties());
+					//parent jääb samaks
+
+					$new_obj = $o;
+					
+
 					$new_obj->set_prop("start1",$ts);
 					$new_obj->save_new();
 
-					foreach($props as $prop => $value)
-					{
-						if (substr($prop,0,1) == "u")
-						{
-							$new_obj->set_prop($prop,$value);
-						};
-					};
 
-					$new_obj->save();
 
 					// connection from original to the copy so that the original
 					// can later manage copies
@@ -414,96 +353,88 @@ class staging extends class_base
 						"reltype" => RELTYPE_COPY,
 					));
 
-					dbg::p1("created new object with id " . $new_obj->id());
-
-					// now create copies of translation objects and connect them
-
-					// for each new copy I have to copy all the translations as well
-					obj_set_opt("no_auto_translation", 1);
-					foreach($trans_clone as $trans_obj_id)
+					obj_set_opt("no_auto_translation",1);
+					foreach($xblist as $orig_brother_id => $items)
 					{
-						// need to clone those objects
+						// loome vennad sinna kuhu vaja
+						$new_obj->create_brother($orig_brother_id);
+					};
 
-						// nii aga tõlke objektid tuleb ümber connectida
-						// originaalist siis
-						$trans_obj = new object($trans_obj_id);
-
-						// misasja siin tehakse?
-						$orig_trans = $trans_obj;
-
-
-						// create a copy of a single translation
-						$trans_obj->save_new();
-
-						dbg::p1("original translation object is " . $orig_trans->id() . " with lang " . $orig_trans->lang());
-						dbg::p1("created translation object " . $trans_obj->id() . " with lang " . $trans_obj->lang());
-
-						$tid = $trans_obj->id();
-
-						dbg::p1("connect from " . $orig_trans->id() . "to $tid");
-
-						// lingid master->slave tõlgete vahel
-
-						// aga mis juhtub kui ma lähen muudan slave tõlget?
-						$orig_trans->connect(array(
-							"to"=> $tid,
-							"reltype" => RELTYPE_COPY,
-						));
-	
-						// new_obj on äsja loodud kloon originaalist
+					foreach($object_translations as $lang_id => $item)
+					{
+						// nüüd tuleb teha iga asja jaoks tõlge
+						$translation_obj = new object($item);
+						$translation_obj->set_lang($lang_id);
+						$translation_obj->save_new();
+						
 						$new_obj->connect(array(
-							"to" => $tid,
+							"to" => $translation_obj->id(),
 							"reltype" => RELTYPE_TRANSLATION,
 						));
 
-						dbg::p1("connect from  " . $trans_obj->id() . " to " . $orig_trans->id());
-
-						// ja see on kloon sellest teisest
-
-						// ja muud infot ma ei muuda - seda lihtsalt pole tarvis ju
-
-
-						// võib-olla tuleks implementeerida kustutamine
-						// nii või teisiti, edasine action toimub juba tõlke komponendis
-						$trans_obj->connect(array(
+						$translation_obj->connect(array(
 							"to" => $new_obj->id(),
 							"reltype" => RELTYPE_ORIGINAL,
 						));
 
+						// ja nüüd kui tõlked on tehtud, tuleb tõlkest teha veel vennad
+						// sinna kuhu vaja.
+
+						foreach($xblist as $xb_key => $xb_val)
+						{
+							// sest see on juba tehtud
+							if ($xb_key != $original_parent)
+							{
+								$prx = $xb_val[$lang_id];
+								$brot_id = $translation_obj->create_brother($prx);
+								$brot_obj = new object($brot_id);
+								$brot_obj->set_lang($lang_id);
+								$brot_obj->save();
+
+							}
+						};
 					};
-					obj_set_opt("no_auto_translation", 0);
-					// I need to clone translations as well
-					// 1. load all translation connections from the original
-					// 2. create new objects from those with new start date
-					// 3. connect them to the copied original ..
+					obj_set_opt("no_auto_translation",0);
 				};
+					
+
 			};
 
 		};
 
+		// start time of the original object is also shown in that form so 
+		// update this as well
+		/*
 		$valx = $de->get_timestamp($times["active"]);
-		$arr["obj_inst"]->set_prop("start1",$valx);
-
-		//arr($new_obj->properties());
-
-		//$tmp_obj = new object();
-
-		// get timestamp?
-		// tsükkel üle times array - kusjuures 1 sisaldab hetkel kehtiva sündmuse kuupäeva
-		
-		// loo uued sündmused, nii palju kui neil infot on.
-		// ehk - loe olemasolev objekt sisse
-		// loo uue objekti instants - säti propertyd
-		// säti uus algusaeg
-		// connecti olemasoleva külge
-		// salvesta
-
-		// and I'm done
-
-		//print "<h1>times end</h1>";
+		$o->set_prop("start1",$valx);
+		*/
 
 
 	}
+
+	function _get_translations_for($id,$ids = false)
+	{
+		$obj = new object($id);
+		obj_set_opt("no_auto_translation", 1);
+
+		$tr_conns = $obj->connections_from(array(
+			"type" => RELTYPE_TRANSLATION,
+		));
+
+		$rv = array();
+
+		foreach($tr_conns as $tr_conn)
+		{
+			$tr_obj = $tr_conn->to();
+			$argstr = $ids ? $tr_obj->lang_id() : $tr_obj->lang();
+			$rv[$argstr] = $tr_obj->id();
+		};
+
+		obj_set_opt("no_auto_translation",0);
+
+		return $rv;
+	}
+
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
@@ -516,6 +447,34 @@ class staging extends class_base
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
+	}
+
+	/**
+		@attrib name=fixxer
+	**/
+	function fixer($arr)
+	{
+		$sql = "select objects.oid,name from objects left join planner on (objects.brother_of = planner.id) where planner.start >= 1125179999";
+		$this->db_query($sql);
+		$queries = array();
+		while($row = $this->db_next())
+		{
+			arr($row);
+			$queries[] = "UPDATE objects SET status = 0 WHERE oid = " . $row["oid"];
+		}
+		arr($queries);
+
+		foreach($queries as $query)
+		{
+			$this->db_query($query);
+		};
+
+
+
+		print "<h1>all done</h1>";
+
+
+		//arr($queries);
 	}
 
 	////
