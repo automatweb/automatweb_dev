@@ -66,7 +66,6 @@ class aw_site extends class_base
 		{
 			case "comment":
 			case "alias":
-			case "status":
 			case "jrk":
 				return PROP_IGNORE;
 				break;
