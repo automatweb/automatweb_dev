@@ -26,7 +26,8 @@ class form_chain extends form_base
 
 		$this->vars(array(
 			"forms" => $this->multiple_option_list(array(),$this->get_list(FTYPE_ENTRY,false,true)),
-			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"alias_doc" => $alias_doc))
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent,"alias_doc" => $alias_doc)),
+			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 		));
 		return $this->parse();
 	}
@@ -58,6 +59,9 @@ class form_chain extends form_base
 		$ct["during_show_op"] = $during_show_op;
 		$ct["op_pos"] = $op_pos;
 		$ct["rep"] = $rep;
+
+		$ct["after_redirect"] = $after_redirect;
+		$ct["after_redirect_url"] = $after_redirect_url;
 
 		$this->chain = $ct;
 		uksort($ct["forms"],array($this,"__ch_sort"));
@@ -175,6 +179,9 @@ class form_chain extends form_base
 			"op_right" => checked($this->chain["op_pos"] == "right"),
 			"d_ops" => $this->picker($this->chain["during_show_op"], $this->listall_ops()),
 			"LANG_H" => $lh,
+			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
+			"after_redirect" => checked($this->chain["after_redirect"] == 1),
+			"after_redirect_url" => $this->chain["after_redirect_url"]
 		));
 		return $this->parse();
 	}
@@ -396,6 +403,11 @@ class form_chain extends form_base
 			if ($this->chain["after_show_entry"] == 1 && $this->chain["after_show_op"] > 0  && $this->chain["gotonext"][$form_id] == 1)
 			{
 				return $this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $f->entry_id,"op_id" => $this->chain["after_show_op"],"section" => $section),"form");
+			}
+			else
+			if ($this->chain["after_redirect"] == 1 && $this->chain["gotonext"][$form_id] == 1)
+			{
+				return $this->chain["after_redirect_url"];
 			}
 		}
 
