@@ -450,6 +450,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			if ($tbl == "objects")
 			{
+				continue;
 				$tableinfo[$tbl]["index"] = "oid";
 				$serfs["metadata"] = $objdata["meta"];
 			}
