@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.37 2003/02/26 15:56:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.38 2003/03/05 16:52:46 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -223,7 +223,37 @@ class aw_template extends acl_base
 		}
 		return $retval;
 	}
-	
+
+	function read_any_template($name, $silent = false)
+	{
+		$this->template_filename = $this->site_template_dir."/".$name;
+		if (file_exists($this->template_filename))
+		{
+			$retval = $this->read_tpl(file($this->template_filename));
+		}
+		else
+		{
+			$this->template_filename = $this->adm_template_dir."/".$name;
+			if (file_exists($this->template_filename))
+			{
+				$retval = $this->read_tpl(file($this->template_filename));
+			}
+			else
+			{
+				if ($silent)
+				{
+					$retval = false;
+				}
+				else
+				{
+					// raise_error drops out, therefore $retval has no meaning here
+					$this->raise_error(ERR_TPL_NOTPL,"Template '".$this->template_filename."' not found in admin or site folder",true);
+				};
+			}
+		}
+		return $retval;
+	}
+
 	////
 	// !Saab kysida, kas sellise nimega template on registreeritud
 	function is_template($name)
