@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.281 2003/04/14 16:02:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.282 2003/04/15 15:20:59 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -50,7 +50,7 @@ class menuedit extends aw_template
 
 		if (!$args['no_flush'])   
 		{   
-			$this->invalidate_menu_cache(array($newoid));   
+			$this->invalidate_menu_cache();
 		}
 
 		return $newoid;   
@@ -2147,7 +2147,6 @@ class menuedit extends aw_template
 	// shouldn't this be somewhere else? --duke
 	function create_homes()
 	{
-		$upd = array();
 		$this->db_query("SELECT * FROM users");
 		while ($row = $this->db_next())
 		{
@@ -2158,10 +2157,9 @@ class menuedit extends aw_template
 			echo "created for $row[uid] , id = $id<br>";
 			flush();
 			$this->restore_handle();
-			$upd[] = $id;
 		}
 
-		$this->invalidate_menu_cache($upd);
+		$this->invalidate_menu_cache();
 	}
 
 	////
@@ -2954,23 +2952,26 @@ class menuedit extends aw_template
 			{
 				if ($row["alias"] != "")
 				{
-					$tmp = array();
-					if (!is_array($this->menu_aliases))
+					if ($this->cfg["long_menu_aliases"])
 					{
-						$this->menu_aliases = array();
-					};
-					foreach($this->menu_aliases as $_al)
-					{
-						if ($_al != "n/a")
+						$tmp = array();
+						if (!is_array($this->menu_aliases))
 						{
-							$tmp[] = $_al;
+							$this->menu_aliases = array();
+						};
+						foreach($this->menu_aliases as $_al)
+						{
+							if ($_al != "n/a")
+							{
+								$tmp[] = $_al;
+							}
 						}
+						$link .= join("/",$tmp);
+						if (sizeof($tmp) > 0)
+						{
+							$link .= "/";
+						};
 					}
-					$link .= join("/",$tmp);
-					if (sizeof($tmp) > 0)
-					{
-						$link .= "/";
-					};
 					$link .= $row["alias"];
 				}
 				else
@@ -3129,7 +3130,7 @@ class menuedit extends aw_template
 			$this->req_import_menus($i_p, &$menus, $parent);
 		}
 
-		$this->invalidate_menu_cache($this->updmenus);
+		$this->invalidate_menu_cache();
 
 		return $this->mk_my_orb("right_frame", array("parent" => $parent));
 //		return $url = "javascript:go_go(".$parent.",'')";
@@ -3168,7 +3169,6 @@ class menuedit extends aw_template
 						 (id,link,type,is_l3,periodic,clickable,target,mid,hide_noact,ndocs,admin_feature,number,icon_id,links) 
 			VALUES ($id,'".$db["link"]."','".$db["mtype"]."','".$db["is_l3"]."','".$db["periodic"]."','".$db["clickable"]."','".$db["target"]."','".$db["mid"]."','".$db["hide_noact"]."','".$db["ndocs"]."','".$db["admin_feature"]."','".$db["number"]."',$icon_id,'".$db["links"]."')");
 
-			$this->updmenus[] = $id;
 			// tegime vanema menyy 2ra, teeme lapsed ka.
 			$this->req_import_menus($db["oid"],$menus,$id);
 		}
@@ -3278,8 +3278,6 @@ class menuedit extends aw_template
 		$cut_objects = aw_global_get("cut_objects");
 		$copied_objects = aw_global_get("copied_objects");
 
-		$updmenus = array();
-
 		if (is_array($cut_objects))
 		{
 			reset($cut_objects);
@@ -3288,7 +3286,6 @@ class menuedit extends aw_template
 				if ($oid != $parent)
 				{
 					$this->upd_object(array("oid" => $oid, "parent" => $parent,"period" => $period,"lang_id" => aw_global_get("lang_id")));
-					$updmenus[] = $oid;
 				}
 			}
 		}
@@ -3303,7 +3300,7 @@ class menuedit extends aw_template
 			}
 		}
 
-		$this->invalidate_menu_cache($updmenus);
+		$this->invalidate_menu_cache();
 
 		$GLOBALS["copied_objects"] = array();
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
@@ -4336,56 +4333,13 @@ class menuedit extends aw_template
 		));
 	}
 
-	function invalidate_menu_cache($ar)
+	function invalidate_menu_cache()
 	{
 		$cache = get_instance("cache");
 
 		// here we gots to invalidate the objects::get_list cache as well, cause it also contains menus
-		// but that's gonna be a bit harder, cause it might be in a zillion different files and we must unlink
-		// all of them. so scan the damn folder for all those files
-		if ($dir = @opendir(aw_ini_get("cache.page_cache"))) 
-		{
-			$lang_id = aw_global_get("lang_id");
-		  while (($file = readdir($dir)) !== false) 
-			{
-				if (substr($file,0,strlen("objects::get_list::")) == "objects::get_list::")
-				{
-					$cache->file_invalidate($file);
-				}
-				else
-				if (substr($file,0,strlen("menuedit::menu_cache::lang::".$lang_id."::site_id::".aw_ini_get("site_id"))) == "menuedit::menu_cache::lang::".$lang_id."::site_id::".aw_ini_get("site_id"))
-				{
-					$cache->file_invalidate($file);
-				}
-			}
-	  }  
-	  closedir($dir);
-
-		if (is_array($ar) && (sizeof($ar) > 0))
-		{
-			array_unique($ar);
-			$this->save_handle();
-			$this->db_query("SELECT parent FROM objects WHERE oid IN(".join(",",map("%s", $ar)).")");
-			$str = "";
-//			foreach($ar as $oid)
-			while ($row = $this->db_next())
-			{
-				$str.="1 ".$this->cfg["site_id"]." ".$row["parent"]."\n";
-			}
-			// this is a problem since the user can override the treetype,
-			// but this will still try to contact the java daemon if 
-			// tree_type is set to java in the ini file -- duke
-/*			if ($this->cfg["tree_type"] == "java" && $this->cfg["java_tree_update"])
-			{
-				$server_socket = fsockopen($this->cfg["java_tree_update_server"], $this->cfg["java_tree_update_port"],$errno,$errstr,10);
-				if ($server_socket)
-				{
-					fputs($server_socket,$str);
-					fclose($server_socket);
-				}
-			}*/
-			$this->restore_handle();
-		}
+		$cache->file_invalidate_regex("objects::get_list::.*");
+		$cache->file_invalidate_regex("menuedit::menu_cache::.*");
 	}
 
 	function do_center_menu($oid)
@@ -4916,7 +4870,16 @@ class menuedit extends aw_template
 		// by the way, mk_my_orb is pretty expensive and all those calls to it
 		// here take up to 10% of the time used to create the page -- duke
 
-		$q = "SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0 $cls $ps ";
+		$q = "
+			SELECT objects.* 
+			FROM objects 
+				LEFT JOIN menu m ON m.id = objects.oid
+			WHERE 
+				objects.parent = '$parent' AND 
+				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT.") AND 
+				site_id = '$site_id' AND 
+				status != 0 
+				$cls $ps ";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
@@ -5227,7 +5190,6 @@ class menuedit extends aw_template
 	function submit_rf($arr)
 	{
 		extract($arr);
-		$upd = array();
 
 		if (is_array($old))
 		{
@@ -5246,19 +5208,17 @@ class menuedit extends aw_template
 							"oid" => $oid,
 							$column => $val
 						));
-						$upd[] = $oid;
 					}
 				}
 			}
 		}
-		$this->invalidate_menu_cache($upd);
+		$this->invalidate_menu_cache();
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
 	}
 
 	function new_delete($arr)
 	{
 		extract($arr);
-		$upd = array();
 		if (is_array($sel))
 		{
 			$oids = join(",",array_keys($sel));
@@ -5277,12 +5237,11 @@ class menuedit extends aw_template
 						}
 					}
 					$this->delete_object($row["oid"]);
-					$upd[] = $row["oid"];
 				}
 				$this->restore_handle();
 			}
 		}
-		$this->invalidate_menu_cache($upd);
+		$this->invalidate_menu_cache();
 		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
 	}
 
