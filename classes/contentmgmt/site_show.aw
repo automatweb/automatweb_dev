@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.77 2004/08/24 15:13:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.78 2004/09/01 14:46:25 duke Exp $
 
 /*
 
@@ -1790,7 +1790,8 @@ class site_show extends class_base
 			{
 				continue;
 			}
-			$url = $o->prop("show_obj") ?  obj_link($o->prop("show_obj")) : $o->meta("url");
+			//$url = $o->prop("show_obj") ?  obj_link($o->prop("show_obj")) : $o->meta("url");
+			$url = $this->mk_my_orb("show", array("id" => $o->meta("show_obj"), "no_menus" => 1), "objects");
 			$ar = new aw_array($o->meta("menus"));
 			$sh = false;
 			foreach($ar->get() as $key => $val)
@@ -2196,6 +2197,18 @@ class site_show extends class_base
 				$arr["text"] = $obj_inst->request_execute($this->section_obj);
 			}
 		}
+
+		$content_from_obj = $this->section_obj->prop("get_content_from");
+		if (is_oid($content_from_obj))
+		{
+			$content_obj = obj($content_from_obj);
+			$content_obj_inst = $content_obj->instance();
+			if (method_exists($content_obj_inst, "request_execute"))
+			{
+				$arr["text"] = $content_obj_inst->request_execute($content_obj);
+			};
+
+		};
 
 		// until we can have class-static variables, this actually SETS current text content
 		classload("layout/active_page_data");
