@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.26 2004/10/13 15:50:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.27 2004/10/18 20:39:02 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -137,6 +137,11 @@ class vcalendar extends aw_template
 	// data - arr
 	function add_item($arr)
 	{
+		if ($GLOBALS["DD"] == 1)
+		{
+			echo "id = ".$arr["data"]["id"]." name = ".$arr["data"]["name"]." <br>";
+		}
+
 		// convert timestamp to day, since calendar is usually day based
 		$use_date = date("Ymd",$arr["timestamp"]);
 		$this->el_count++;
@@ -447,13 +452,18 @@ class vcalendar extends aw_template
 
 		$calendar_blocks = array();
 
+		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$realstart));
 		for ($j = $realstart; $j <= $realend; $j = $j + (7*86400))
 		{
 			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
 			{
-				$dstamp = date("Ymd",$i);
+				$reals = mktime(0,0,0,$s_parts["mon"],$s_parts["day"],$s_parts["year"]);
+				$s_parts["day"]++;
+
+				#$dstamp = date("Ymd",$i);
+				$dstamp = date("Ymd",$reals);
 				$events_for_day = "";
-				$wn = date("w",$i);
+				$wn = date("w",$reals);
 				if ($wn == 0)
 				{
 					$wn = 7;
@@ -475,23 +485,29 @@ class vcalendar extends aw_template
 						$events_for_day .= $sday;
 					};
 				};
-				$calendar_blocks[date("Ymd",$i)] = $events_for_day;
+				$calendar_blocks[date("Ymd",$reals)] = $events_for_day;
 			};
 		};
 
 		$last = 0;
 
+		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$realstart));
 		for ($j = $realstart; $j < $realend; $j = $j + (7*86400))
 		{
 			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
 			{
-				$dstamp = date("Ymd",$i);
+				$reals = mktime(0,0,0,$s_parts["mon"],$s_parts["day"],$s_parts["year"]);
+				$s_parts["day"]++;
+
+				$dstamp = date("Ymd",$reals);
+				/*
 				if ($last == $dstamp)
 				{
 					continue;
 				};
+				*/
 				$events_for_day = "";
-				$wn = date("w",$i);
+				$wn = date("w",$reals);
 				if ($wn == 0)
 				{
 					$wn = 7;
@@ -502,15 +518,15 @@ class vcalendar extends aw_template
 				};
 				
 				$this->vars(array(
-					"EVENT" => $calendar_blocks[date("Ymd",$i)],
-					"daynum" => date("j",$i),
-					"dayname" => date("F d, Y",$i),
+					"EVENT" => $calendar_blocks[date("Ymd",$reals)],
+					"daynum" => date("j",$reals),
+					"dayname" => date("F d, Y",$reals),
 					"daylink" => aw_url_change_var(array(
 						"viewtype" => "day",
-						"date" => date("d-m-Y",$i),
+						"date" => date("d-m-Y",$reals),
 					)),
 				));
-				$tpl = date("Ymd",$i) == $now ? "TODAY" : "DAY";
+				$tpl = $dstamp == $now ? "TODAY" : "DAY";
 				$rv .= $this->parse($tpl);
 
 				$last = $dstamp;
@@ -609,9 +625,23 @@ class vcalendar extends aw_template
 		{
 			$this->show_days_with_events = 1;
 		};
+
+		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$this->range["start"]));
+		#$e_parts = unpack("a4year/a2mon/a2day",date("Ymd",$this->range["end"]));
+
+		// alright, aga see saast siis ju eeldab et mul on 
+		#for ($t = 0; $t < 7; $t++)
+		#{
+
 		for ($i = $this->range["start"]; $i <= $this->range["end"]; $i = $i + 86400)
 		{
-			$dstamp = date("Ymd",$i);
+			// XXX: relative view joonistab draw_weeki, but shouldnt
+			$reals = mktime(0,0,0,$s_parts["mon"],$s_parts["day"],$s_parts["year"]);
+			$s_parts["day"]++;
+
+			// kuidas kurat ma siis kompenseerin seda daylight saving timet?
+			$dstamp = date("Ymd",$reals);
+			#$dstamp = $s_parts["year"] . $s_parts["mon"] . $s_parts["day"];
 			$events_for_day = "";
 			if (is_array($this->items[$dstamp]))
 			{
@@ -626,30 +656,31 @@ class vcalendar extends aw_template
 			{
 				continue;	
 			};
-			$wn = date("w",$i);
+			$wn = date("w",$reals);
 			if ($wn == 0)
 			{
 				$wn = 7;
 			};
 		
-			$dt = date("d",$i);
-                	$mn = locale::get_lc_month(date("m",$i));
-                	$mn2 = $mn . " " . date("H:i",$i);
+			$dt = date("d",$reals);
+                	$mn = locale::get_lc_month(date("m",$reals));
+                	$mn2 = $mn . " " . date("H:i",$reals);
 
 
 			$this->vars(array(
 				"EVENT" => $events_for_day,
-				"daynum" => date("j",$i),
-				"dayname" => date("F d, Y",$i),
-				"lc_weekday" => ucfirst(get_lc_weekday($wn,$i)),
+				"daynum" => date("j",$reals),
+				"dayname" => date("F d, Y",$reals),
+				"lc_weekday" => ucfirst(get_lc_weekday($wn,$reals)),
 				"lc_month" => $mn,
-				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
+				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$reals))),
                         	"date_and_time" => $dt . ". " . $mn2,
 				"day_name" => locale::get_lc_weekday($wn,true),
 				"long_day_name" => locale::get_lc_weekday($wn),
                         	"date" => $dt . ". " . $mn,
+                        	"date" => locale::get_lc_date($reals,5),
 			));
-			$tpl = date("Ymd",$i) == $now ? "TODAY" : "DAY";
+			$tpl = $dstamp == $now ? "TODAY" : "DAY";
 			$rv .= $this->parse($tpl);
 		};
 
@@ -836,12 +867,16 @@ class vcalendar extends aw_template
 		};
 
 		$j = $realstart;
+		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$realstart));
 		while($j <= $realend)
 		{
 			$i = $j;
 			while($i <= $j + (7*86400)-1)
 			{
-				$dstamp = date("Ymd",$i);
+				$reals = mktime(0,0,0,$s_parts["mon"],$s_parts["day"],$s_parts["year"]);
+				$s_parts["day"]++;
+
+				$dstamp = date("Ymd",$reals);
 				$has_events = $this->overview_items[$dstamp];
 				$style = $has_events ? $style_day_with_events : $style_day_without_events;
 				if (between($i,$arr["start"],$arr["end"]))
@@ -877,7 +912,7 @@ class vcalendar extends aw_template
 				}
 				else
 				{
-					$day_url = aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i)));
+					$day_url = aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$reals)));
 				};
 
 				// cell_empty has class, doesn't have a link, used to show days with no events
@@ -896,7 +931,7 @@ class vcalendar extends aw_template
 				};
 
 				// daynum
-				$rv .= date("j",$i);
+				$rv .= date("j",$reals);
 
 				if ($mode == 0)
 				{
