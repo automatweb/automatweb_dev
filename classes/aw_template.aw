@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.40 2003/03/07 10:34:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.41 2003/03/07 13:18:29 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -31,7 +31,7 @@ class aw_template extends acl_base
 
 		$this->template_dir = $this->cfg["tpldir"] . "/$basedir";
 		$this->adm_template_dir = $this->cfg["basedir"] . "/templates/$basedir";
-		$this->site_template_dir = $this->cfg["site_basedir"].'/templates/'.$basedir;
+		$this->site_template_dir = $this->cfg["site_tpldir"]."/".$basedir;
 		
 		// I'm trying to fix the breakage of links class
 		// it does $this->extlinks() first, which loads the localizations
