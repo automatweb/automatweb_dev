@@ -9,9 +9,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property server type=textbox field=meta method=serialize
 @caption Server
 
