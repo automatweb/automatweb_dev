@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.51 2002/06/26 11:28:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.52 2002/06/27 22:16:01 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -1559,15 +1559,15 @@ class form_element extends aw_template
 			$html.="<input type='hidden' name='".$prefix.$elid."' value='".$this->get_val($elvalues)."'>";
 		}
 
+		$is_ie = !(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false);
 		switch($this->arr["type"])
 		{
 			case "textarea":
-				// FIXME: should check what type of browser we are using instead of just trying
-				// to shove the IE richtext editor down the users throat
-				if ($this->arr["wysiwyg"] == 1)
+				// only IE supports wysiwyg editor
+				if (($this->arr["wysiwyg"] == 1) && ($is_ie))
 				{
 					$html.="<input type=\"hidden\" name=\"_el_".$prefix.$elid."\" value=\"".htmlspecialchars($this->get_val($elvalues))."\">";
-					$html.="<iframe name=\"_ifr_".$prefix.$elid."\" onFocus=\"sel_el='_el_".$prefix.$elid."'\" frameborder=\"1\" width=\"".($this->arr["ta_cols"]*10)."\" height=\"".($this->arr["ta_rows"]*10)."\"></iframe>";
+					$html.="<iframe name=\"_ifr_".$prefix.$elid."\" onFocus=\"sel_el='_el_".$prefix.$elid."'\" frameborder=\"1\" width=\"".($this->arr["ta_cols"]*10)."\" height=\"".($this->arr["ta_rows"]*10)."\"></iframe>\n";
 					$html.="<script for=window event=onload>\n";
 					$html.="_ifr_".$prefix.$elid.".document.designMode='On';\n";
 					$html.="_ifr_".$prefix.$elid.".document.write(\"<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>\");\n";
@@ -1900,11 +1900,6 @@ class form_element extends aw_template
 				break;
 
 			case "date":
-				global $DK;
-				if ($DK)
-				{
-					print "creating date<bR>";
-				};
 				$de = new date_edit(time());
 				$bits = array();
 				$has_some = false;
@@ -2091,6 +2086,9 @@ class form_element extends aw_template
 		if ($this->arr["type"] == "button" && $this->arr["subtype"] == "confirm")
 		{
 			// confirm button moves the entry to another folder
+
+			// but we don't use a prefix when creating a confirm button,
+			// which means we can just ignore it (prefix) here.
 			if (isset($GLOBALS[$prefix."confirm"]))
 			{
 				// just set the entry parent to the correct value, the object will actually be updated a bit later
