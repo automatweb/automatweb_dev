@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.31 2003/05/20 11:55:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.32 2003/06/03 15:09:56 duke Exp $
 // this is here so that orb will work...
 class periods extends aw_template
 {
@@ -49,7 +49,7 @@ class periods extends aw_template
 
 		// read all periods from db and then compare the oids to the ones in the object chain for $oid
 		$oid = $this->oid;
-		$sufix = ($arc_only > -1) ? " AND archived = 1 " : "";
+		$sufix = ($arc_only > -1) ? " AND objects.status = 2 " : "";
 		$ochain = $this->get_object_chain($this->oid);
 		$valid_period = 0;
 		if (is_array($ochain)) 
@@ -58,7 +58,7 @@ class periods extends aw_template
 			$parent = $this->oid;
 			while ($parent > 1)
 			{
-				// now, if some periods exist for this object, use that object. 
+				// now, if some periods exist for this object, use that objects. 
 				if (is_array($this->period_cache[$parent]))
 				{
 					$valid_period = $parent;
@@ -74,7 +74,7 @@ class periods extends aw_template
 			$valid_period = $this->oid;
 		}
 		// if no periods were found, attach them to the object - this happens if no periods exist for instance
-		$q = "SELECT * FROM periods	WHERE oid = '$valid_period' $sufix ORDER BY jrk DESC";
+		$q = "SELECT *,objects.name,objects.metadata FROM periods LEFT JOIN objects ON (periods.obj_id = objects.oid) WHERE periods.oid = '$valid_period' $sufix ORDER BY objects.jrk DESC";
 		$this->oid = $valid_period;
 		$this->db_query($q);
 	}
@@ -195,10 +195,10 @@ class periods extends aw_template
 		}
 		// and finally, the db
 		dbg::p1("period::get no hit ");
-		$q = "SELECT * FROM periods WHERE id = '$id'";
+		$q = "SELECT *,objects.name,objects.metadata FROM periods LEFT JOIN objects ON (periods.obj_id = objects.oid) WHERE id = '$id'";
 		$this->db_query($q);
 		$pr = $this->db_fetch_row();
-		$pr["data"] = aw_unserialize($pr["data"]);
+		$pr["data"] = aw_unserialize($pr["metadata"]);
 
 		$str = aw_serialize($pr);
 		$this->cache->file_set($this->cf_name.$id, $str);
@@ -258,7 +258,7 @@ class periods extends aw_template
 		$pyear = 0;
 		while($row = $this->db_next()) 
 		{
-			$dat = aw_unserialize($row["data"]);
+			$dat = aw_unserialize($row["metadata"]);
 			if ($pyear != $dat["pyear"])
 			{
 				$this->vars(array(
@@ -270,7 +270,7 @@ class periods extends aw_template
 			};
 			$this->vars(array(
 				"period" => $row["id"],
-				"description" => $row["description"]
+				"description" => $row["name"]
 			));
 			if ($row["id"] == aw_global_get("act_per_id")) 
 			{
