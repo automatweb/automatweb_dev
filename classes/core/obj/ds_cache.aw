@@ -90,7 +90,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !returns all connections that match filter
 	function find_connections($arr)
 	{
-		$query_hash = "search::".md5(serialize($arr));
+		$query_hash = md5(serialize($arr));
 
 		$res = $this->_get_cache("search::".$query_hash, 0, "connection");
 		if (!is_array($res))
