@@ -82,7 +82,12 @@ Tehnika:
 						'$homepage','$wantsnew1','$wantsnew2',
 						'$wantsfeedback')";
 		$this->db_query($q);
-		mail("content@struktuur.ee","FB-SA-007 \"$title\"",$msg,"$headers");
+		$to = aw_ini_get("feedback.mail_to");
+		if ($to == "")
+		{
+			$to = "content@struktuur.ee";
+		}
+		mail($to,"\"$title\"",$msg,"$headers");
 	}
 };
 
