@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.5 2005/03/16 14:45:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.6 2005/03/18 12:13:19 ahti Exp $
 // property_toolbar.aw - Toolbar 
 /*
 
@@ -61,7 +61,7 @@ class property_toolbar extends class_base
 		$t = get_instance("vcl/toolbar");
 		
 		$buttons = new object_list($el->connections_from(array(
-			"type" => RELTYPE_BUTTON,
+			"type" => "RELTYPE_BUTTON",
 			"sort_by" => "jrk"
 		)));
 		foreach($buttons->arr() as $b)
@@ -88,7 +88,7 @@ class property_toolbar extends class_base
 		);
 
 		$buttons = new object_list($el->connections_from(array(
-			"type" => RELTYPE_BUTTON,
+			"type" => "RELTYPE_BUTTON",
 			"sort_by" => "jrk"
 		)));
 		foreach($buttons->arr() as $b)
@@ -127,7 +127,7 @@ class property_toolbar extends class_base
 		$content .= "\t\t\$t =& \$arr[\"prop\"][\"vcl_inst\"];\n\n";
 
 		$buttons = new object_list($el->connections_from(array(
-			"type" => RELTYPE_BUTTON
+			"type" => "RELTYPE_BUTTON",
 		)));
 		foreach($buttons->arr() as $b)
 		{
