@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.89 2003/04/13 17:00:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.90 2003/04/16 16:31:17 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -313,6 +313,14 @@ if (!defined("DEFS"))
 			$ip = aw_global_get("REMOTE_ADDR");
 		}
 		return $ip;
+	}
+
+	////
+	// !Let's deal with no name objects in one place
+	function parse_obj_name($name)
+	{
+		return empty($name) ? "(nimetu)" : $name;
+
 	}
 
 	function aw_serialize($arr,$type = SERIALIZE_PHP, $flags = array())
