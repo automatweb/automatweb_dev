@@ -477,6 +477,7 @@ class site_show extends class_base
 
 		set_time_limit(0);
 
+
 		// no default, show list
 		if ($docid < 1)	
 		{
@@ -498,7 +499,7 @@ class site_show extends class_base
 								 "status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
 								 "sort_by" => "objects.parent"
 						  ));
-						  $sections = $ot->ids();
+						  $sections = $sections + $ot->ids();
 
 			
 							/*
