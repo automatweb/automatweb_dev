@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.9 2004/03/24 13:46:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.10 2004/03/25 16:16:38 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -93,7 +93,15 @@ class releditor extends aw_template
 			return $xprops;
 		};
 
-		$t = get_instance($clid);
+		if ($clid == 7)
+		{
+			$use_clid = "doc";
+		}
+		else
+		{
+			$use_clid = $clid;
+		};
+		$t = get_instance($use_clid);
 		$t->init_class_base();
 		$emb_group = "general";
 
@@ -222,7 +230,6 @@ class releditor extends aw_template
 			"obj_inst" => $obj_inst,
 		));
 		$awt->stop("init-rel-editor");
-		
 		
 		return $xprops;
 	}
