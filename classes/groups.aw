@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.9 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.10 2002/09/04 17:52:32 kristo Exp $
 load_vcl("table");
 classload("users_user","config");
 
@@ -296,26 +296,6 @@ class groups extends users_user
 		return $ret;
 	}
 
-	function gen_list($parent,$all,$groups)
-	{
-		$this->read_template("list.tpl");
-		$this->vars(array("LINE" => $this->make_tree($parent),"parent" => $parent));
-		$this->vars(array("grp_level"	=> $this->sel_level+1));
-
-		$t = new users;
-
-		$pg = $this->fetchgroup($parent);
-
-		$ng = new groups;
-
-		$this->vars(array(
-			"CAN_ADD"		=> ($seltype == 0 || $seltype == 2) && ($this->can("add",$pg["oid"]) || $parent < 1) ? $this->parse("CAN_ADD") : "",
-			"userlist"	=> ($parent ? ($groups ? $ng->gen_grpgrp_list() : $t->gen_select_list($parent,$all)) : ""),
-			"from"			=> aw_global_get("REQUEST_URI")
-		));
-		return $this->parse();
-	}
-
 	function gen_pick_list()
 	{
 		global $parent,$all,$oid,$groups;
@@ -334,7 +314,6 @@ class groups extends users_user
 		$ng = new groups;
 		$this->vars(array(
 			"CAN_ADD"		=> ($seltype == 0 || $seltype == 2) && ($this->can("add",$pg["oid"]) || $parent < 1) ? $this->parse("CAN_ADD") : "",
-			"userlist"	=> ($parent ? ($groups ? $ng->gen_grpgrp_list() : $t->gen_select_list($parent,$all)) : ""),
 			"from"			=> aw_global_get("REQUEST_URI"),
 			"reforb"  => $this->mk_reforb("submit_acl_groups", array("oid" => $oid,"user" => $user)),
 			"oid"				=> $oid,
@@ -351,34 +330,6 @@ class groups extends users_user
 		return "/?orb=1&class=acl&action=edit&oid=" . $arr["oid"];
 	}
 	
-	function gen_grpgrp_list()
-	{
-		global $parent,$all,$oid,$groups,$sparent;
-		$this->read_template("pick_list_groups.tpl");
-
-		// tell the tree generator that this is a pickable list and also the member groups
-		$this->pick_list = true;
-		$this->pick_arr = $this->get_member_groups_for_gid($parent);
-
-		$this->vars(array("LINE" => $this->make_tree($sparent,"sparent"),"parent" => $parent));
-		$this->vars(array("grp_level"	=> $this->sel_level+1));
-
-		$t = new users;
-		$pg = $this->fetchgroup($parent);
-
-		$this->vars(array(
-			"userlist"	=> ($sparent ? $t->gen_select_list($sparent,$all,false) : ""),
-			"from"			=> aw_global_get("REQUEST_URI"),
-			"parent"		=> $parent,
-			"urlgrp"		=> $this->make_url(array("parent" => $parent,"all" => 0,"groups" => 0)),
-			"urlall"		=> $this->make_url(array("parent"	=> $parent,"all" => 1,"groups" => 0)),
-			"urlgrps"		=> $this->make_url(array("parent"	=> $parent,"all" => 0,"groups" => 1)),
-			"from"			=> aw_global_get("REQUEST_URI")
-		));
-		$this->vars(array("CAN_EDIT"=> ($this->can("edit",$pg["oid"]) ? $this->parse("CAN_EDIT") : "")));
-		return $this->parse();
-	}
-
 	function submit_group($arr)
 	{
 		$this->quote(&$arr);

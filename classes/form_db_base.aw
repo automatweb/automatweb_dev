@@ -478,6 +478,7 @@ class form_db_base extends aw_template
 	//			elements, then they end up in this array. the end result of this is that the values these elements
 	//			have on the rows that are not displayed, are concatenated together. 
 	//	$group_els - grouping elements - if specified, the sql will do a GROUP BY on all these elements
+	//  $ret_id_only - if true, only the entry id is fetched in the query, nothing else
 	function get_search_query($arr)
 	{
 		extract($arr);
@@ -493,11 +494,11 @@ class form_db_base extends aw_template
 
 //		echo "sw = $sql_where <br>";
 		// now put all the joins into sql
-		$sql_join = $this->get_sql_joins_for_search($used_els,$this->arr["start_search_relations_from"]);
+		$sql_join = $this->get_sql_joins_for_search($used_els,$this->arr["start_search_relations_from"],false,$ret_id_only);
 //		echo "sj = $sql_join <br>";
 
 		// now get fetch data part
-		$sql_data = $this->get_sql_fetch_for_search($this->_joins,$this->arr["start_search_relations_from"],$used_els, $group_collect_els, $group_els);
+		$sql_data = $this->get_sql_fetch_for_search($this->_joins,$this->arr["start_search_relations_from"],$used_els, $group_collect_els, $group_els,false,$ret_id_only);
 //		echo "sd = $sql_data <br>";
 
 		// this adds deleted object checking if the form entries have objects attached
@@ -572,16 +573,22 @@ class form_db_base extends aw_template
 	// start_relations_from - the starting point of the relation finding
 	// no_reverse_rels - don't try to find reverse relations between tables 
 	//		(connected_el -> relation_el - this finds a lot of relations that are not always necessary 
-	function get_sql_joins_for_search($used_els, $start_relations_from,$no_reverse_rels = false)
+	// no_fetch_joins - no forms are joined that are used in fetch data part, only the forms used in where clause
+	function get_sql_joins_for_search($used_els, $start_relations_from,$no_reverse_rels = false, $no_fetch_joins = false)
 	{
 		// recurse through the selected search form relations. boo-ya!
 		$this->build_form_relation_tree($start_relations_from, 0, $no_reverse_rels);
 
 		$this->_joins = array();
 
-		// if used_els is not an array, that means all elements from all forms should be included
+		if ($no_fetch_joins)
+		{
+			$used_els = array();
+		}
+		else
 		if (!is_array($used_els))
 		{
+			// if used_els is not an array, that means all elements from all forms should be included
 			$used_els = array();
 			if (is_array($this->form_rel_tree))
 			{
@@ -642,9 +649,12 @@ class form_db_base extends aw_template
 		// - to do that we add the elements that are used in the where part (come from the search form)
 		// to the elements that are already in the used_elements array (come from form_table)
 		$forms_queried = $this->get_forms_used_in_where();
-		foreach($used_els as $fid => $els)
+		if (!$no_fetch_joins)
 		{
-			$forms_queried[$fid] = $fid;
+			foreach($used_els as $fid => $els)
+			{
+				$forms_queried[$fid] = $fid;
+			}
 		}
 
 		foreach($forms_queried as $fid)
@@ -697,7 +707,8 @@ class form_db_base extends aw_template
 	// group_els - the elements that will be in the GROUP BY clause
 	// only_el - if true, only el_[xxx] fetches will be created, if true, both - we don't need the ev_[xxx] fetches when we 
 	//		are simply loading a single entry
-	function get_sql_fetch_for_search($joins, $start_relations_from, $used_els, $gp_coll_els = array(), $group_els = false, $only_el = false)
+	// only_eid - if true, only entry_id's are put in the fetch sql
+	function get_sql_fetch_for_search($joins, $start_relations_from, $used_els, $gp_coll_els = array(), $group_els = false, $only_el = false, $only_eid = false)
 	{
 		$sql = "";
 		$usedtbls = array();
@@ -723,6 +734,10 @@ class form_db_base extends aw_template
 					{
 						// if we are doing a chain search, then also get the chain id
 						$sql.=",".$tbl.".chain_id AS chain_entry_id "; 
+					}
+					if ($only_eid)
+					{
+						return $sql;
 					}
 				}
 

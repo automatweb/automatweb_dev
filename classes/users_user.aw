@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.37 2002/08/02 14:18:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.38 2002/09/04 17:52:32 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -29,7 +29,7 @@ class users_user extends aw_template
 	}
 
 	////
-	// !Listib koik grupid
+	// !do query to list all users. ig gid is set, only users from that group will be listed
 	function listall($gid= 0) 
 	{
 		if ($gid)
@@ -244,25 +244,6 @@ class users_user extends aw_template
 		$this->_log("auth",USR_LOGGED_OUT);
 	}
 
-	// Kuvab messengeri jaoks folderi valimise vormi
-	// kusjuures, see oli mingi nuriidee, seda funktsiooni pole vaja enam
-	function pick_folder($args = array())
-	{
-		classload("menuedit_light");
-		$mnl = new menuedit_light();
-		$chooser = $mnl->gen_rec_list(array(
-			"start_from" => 220,
-			"tpl" => "objects/chooser.tpl",
-			"start_tpl" => "object",
-			"single_tpl" => true,
-		));
-		$this->read_template("pick_folder.tpl");
-		$this->vars(array(
-			"variants" => $chooser,
-		));
-		return $this->parse();
-	}
-
 	////
 	// !Logib välja. Orb-i versioon
 	function orb_logout($args)
@@ -273,82 +254,6 @@ class users_user extends aw_template
 		return $this->cfg["baseurl"];
 	}
 	
-
-	////
-	//! Genereerib sisselogitud kasutaja kodukataloogi
-	function gen_homedir($args = array())
-	{
-		$udata = $this->get_user(array("uid" => aw_global_get("uid")));
-
-		$tpl = ($args["tpl"]) ? $args["tpl"] : "homefolder.tpl";
-		$this->read_template($tpl);
-
-		// koigepealt teeme kodukataloogi id kindlaks
-		$this->db_query("SELECT menu.*,objects.* FROM menu
-					LEFT JOIN objects ON objects.oid = menu.id
-					WHERE oid = $udata[home_folder]");
-		$hf = $this->db_next();
-		$result = array();
-		$startfrom = ($parent == 0) ? $hf["oid"] : $parent;
-		$thisone = $this->get_object($parent);
-		$prnt = $this->get_object($thisone["parent"]);
-		$up = "";
-		if ($parent)
-		{
-			if ($prnt["oid"] != $hf["oid"])
-			{
-				$this->vars(array(
-					"id" => "id=$prnt[oid]",
-				));
-			};
-			$this->vars(array(
-				"name" => $prnt["name"],
-			));
-			$up = $this->parse("up");
-		}
-		$q = "SELECT objects.*,menu.* FROM objects
-			LEFT JOIN menu ON (objects.oid = menu.id)
-			WHERE objects.parent = '$startfrom'";
-		$this->db_query($q);
-		$folders = "";
-		$cnt = 0;
-		while($row = $this->db_next())
-		{
-			$cnt++;
-			$this->vars(array(
-				"name" => $row["name"],
-				"id" => $row["oid"],
-				"iconurl" => get_icon_url($row["class_id"],0),
-			));
-			switch ($row["class_id"])
-			{
-				case CL_PSEUDO:
-					$tpl = "folder";
-					break;
-				default:
-					$tpl = "doc";
-					break;
-			};
-			$folders .= $this->parse($tpl);
-		};
-		$delete = "";
-		if ($cnt > 0)
-		{
-			$delete = $this->parse("delete");
-		};
-
-		$this->vars(array(
-			"folder" => $folders,
-			"doc" => $docs,
-			"name" => $thisone["name"],
-			"parent" => $startfrom,
-			"delete" => $delete,
-			"total" => $cnt,
-			"up" => $up,
-		));
-		return $this->parse();
-	}
-
 	////
 	// Küsib info mingit kasutaja kohta
 	// DEPRECATED. core->get_user on parem
@@ -725,16 +630,6 @@ class users_user extends aw_template
 		$this->_log("user", "Kustutas grupi ".$this->grpcache[$gid]["name"]);
 
 		
-		//magistrali korral võtan javaga yhendust
-		if($this->cfg["site_id"]==12)
-		{
-			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
-			//teatan, et saidilt kustutati grupp $grpcache[$gid]
-			$str="5 ".$this->cfg["site_id"]." ".aw_global_get("uid")." ".$gid."\n";
-			fputs($acl_server_socket,$str);
-			fclose($acl_server_socket);
-		}
-		
 		if (!is_array($this->grpcache[$gid]))
 		{
 			return;
@@ -749,7 +644,7 @@ class users_user extends aw_template
 
 	function get_gid_by_uid($uid)
 	{
-		return $this->db_fetch_field("SELECT gid FROM groups WHERE name = '$uid' AND type = 1","gid");
+		return $this->db_fetch_field("SELECT gid FROM groups WHERE name = '$uid' AND type = ".GRP_DEFAULT,"gid");
 	}
 
 	function update_dyn_group($gid)
@@ -765,6 +660,7 @@ class users_user extends aw_template
 		// now do the search
 		$f = new form();
 		$f->load($sfid);
+		// FIXME: new search func needed
 		$matches = $f->search($gr["data"]);
 
 		// find all the users that have those join form entries that match
@@ -796,19 +692,15 @@ class users_user extends aw_template
 		$toadd = array();
 
 		reset($matches);
-//		while (list($fid,$ar) = each($matches))
-//		{
-//			reset($ar);
-			while (list(,$eid) = each($matches))
+		while (list(,$eid) = each($matches))
+		{
+			$u_uid = $users[$eid];
+			if (!$cmembers[$u_uid])
 			{
-				$u_uid = $users[$eid];
-				if (!$cmembers[$u_uid])
-				{
-					$toadd[$u_uid] = $u_uid;
-				}
-				unset($cmembers[$u_uid]);
+				$toadd[$u_uid] = $u_uid;
 			}
-//		}
+			unset($cmembers[$u_uid]);
+		}
 
 		// now toadd contains users to add and $cmembers contains users to remove
 
@@ -858,6 +750,7 @@ class users_user extends aw_template
 			}
 
 			$f->load($group["search_form"]);
+			// FIXME: new search func needed
 			$mt = $f->search($group["data"]);
 
 			// check if the user is in the result set

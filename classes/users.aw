@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.43 2002/08/26 10:18:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.44 2002/09/04 17:52:32 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -19,20 +19,6 @@ class users extends users_user
 		$this->lc_load("users","lc_users");
 	}
 
-	function rpc_getuser($args = array())
-	{
-		$uid = $args[0];
-		$q = "SELECT * FROM users WHERE uid = '$uid'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		$block = array();
-		$block["uid"] = $row["uid"];
-		$block["email"] = $row["email"];
-		$block["logins"] = $row["logins"];
-		$block["created"] = $row["created"];
-		return $block;
-	}
-	
 	// users tabelis on väli config, tyypi text, kuhu saab salvestada
 	// igasugu misc informatsiooni, mida pole vaja kiiresti kätte saada,
 	// aga mis on siiski oluline. Järgnevad 2 funktsiooni tegelevad
@@ -52,17 +38,13 @@ class users extends users_user
 		{
 			return false;
 		};
-		$tmp = aw_unserialize($udata["config"]);
+		$retval = aw_unserialize($udata["config"]);
 		// return a single key if asked
 		if ($key)
 		{
 			$retval = $tmp[$key];
 		}
 		// otherwise the whole config block
-		else
-		{
-			$retval = $tmp;
-		};
 		return $retval;
 	}
 
@@ -106,75 +88,18 @@ class users extends users_user
 		{
 			$config[$key] = $value;
 		};
-		$newconfig = aw_serialize($config,SERIALIZE_PHP);
+		$newconfig = aw_serialize($config);
+		if (($row = aw_cache_get("users_cache", $uid)))
+		{
+			$row["config"] = $newconfig;
+			aw_cache_set("users_cache", $uid, $row);
+		}
 		$this->quote($newconfig);
 		$q = "UPDATE users SET config = '$newconfig' WHERE uid = '$uid'";
 		$this->db_query($q);
 		return true;
 	}
 			
-
-	function gen_select_list($gid,$all,$pickable = true)
-	{
-		$pg = $this->fetchgroup($gid);
-		$can_edit = $this->can("edit",$pg["oid"]);
-
-		$this->read_template("sel_list.tpl");
-
-		global $lookfor, $sortby;
-		$t = new aw_table(array(
-			"prefix" => "users",
-		));
-		$t->parse_xml_def($this->cfg["basedir"]."/xml/users/pickable.xml");
-
-		$members = $this->getgroupmembers2($gid);
-
-		if ($all)
-		{
-			$this->listall();
-		}
-		else
-		{
-			$this->listall($gid);
-		}
-		while ($row = $this->db_next())
-		{
-			$row["online"] = $row["online"] == 1 ? LC_YES : LC_NO;
-			$row["uuid"] = $row["uid"];		// blah, gotta rename it, because "uid" is a used global variable :(
-
-			// check if user is a member
-			$vl = isset($members[$row["uid"]]) ? "CHECKED" : "";
-			$v2 = isset($members[$row["uid"]]) ? 1 : 0;
-
-			// um_$uid shows if the user is in the group or not
-			// and us_$uid lets you change it
-			if ($can_edit && $pickable)
-			{
-				$row["check"] = "<input type='hidden' NAME='um_".$row["uid"]."' VALUE='$v2'><input type='checkbox' NAME='us_".$row["uid"]."' VALUE='1' $vl>";
-			}
-			else
-			{
-				$row["check"] = "";
-			}
-			$t->define_data($row);
-		}
-		$t->sort_by(array("field" => $sortby));
-		$this->vars(array(
-			"table"		=> $t->draw(),
-			"gid"			=> $gid,
-			"all"			=> $all,
-			"urlgrp"	=> $this->make_url(array("parent" => $gid,"all" => 0,"groups" => 0)),
-			"urlall"	=> $this->make_url(array("parent"	=> $gid,"all" => 1,"groups" => 0)),
-			"urlgrps"	=> $this->make_url(array("parent"	=> $gid,"all" => 0,"groups" => 1)),
-			"from"		=> aw_global_get("REQUEST_URI")
-		));
-		$this->vars(array(
-			"CAN_EDIT"=> ($can_edit && $pickable ? $this->parse("CAN_EDIT") : ""),
-			"CAN_EDIT_2"=> ($can_edit && $pickable ? $this->parse("CAN_EDIT_2") : "")
-		));
-		return $this->parse();
-	}
-
 	////
 	// !generates list of users. For internal use
 	// I made this a separate function, because I'm going to need this functionality in
@@ -215,14 +140,12 @@ class users extends users_user
 			$can_change = $this->can("change_users", $row["oid"]);
 			$can_view = $this->can("view_users", $row["oid"]);
 			$can_del = $this->can("delete_users", $row["oid"]);
-//			echo "grp $row[name] , oid = $row[oid] , can_change = $can_change <br>";
 			if ($can_change || $can_view || $can_del)
 			{
 				// add all users of this group to list of users
 				$this->save_handle();
 				$ul = $this->getgroupmembers2($row["gid"]);
-				reset($ul);
-				while (list(,$u_uid) = each($ul))
+				foreach($ul as $u_uid)
 				{
 					$retval[$u_uid] = array();
 					$retval[$u_uid]["can_view"] = ($can_view) ? true : false;
@@ -243,8 +166,8 @@ class users extends users_user
 		{
 			$this->prog_acl_error("view", PRG_USERS);
 		}
-		$this->read_template("list.tpl");
 		extract($arr);
+		$this->read_template("list.tpl");
 		unset($arr["search_click"]);
 		if ($search_click == 1)
 		{
@@ -432,227 +355,6 @@ class users extends users_user
 	}
 
 	////
-	// !generates a list of visible users, using an user-defined template 
-	function gen_plain_list($args = array())
-	{
-		extract($args);
-		$users = $this->_gen_usr_list();
-		$this->read_template($tpl);
-		$c = "";
-		foreach($users as $uuid => $acl)
-		{
-			$this->vars(array(
-				"uid" => $uuid,
-				"online" => "n/a",
-			));
-			$c .= $this->parse("line");
-		};
-		$this->vars(array("line" => $c));
-		return $this->parse();
-	}
-
-	
-	////
-	// !deletes the objects from the users home folder that are selected
-	function del_objects($arr)
-	{
-		extract($arr);
-		if (is_array($delete))
-		{
-			reset($delete);
-			while (list(,$id) = each($delete))
-			{
-				$this->delete_object($id);
-			}
-		}
-		return $this->mk_site_orb(array("action" => "gen_home_dir", "id" => $parent));
-	}
-
-	////
-	//! Genereerib sisselogitud kasutaja kodukataloogi
-	function gen_home_dir($args = array())
-	{
-		$udata = $this->get_user();
-		$baseurl = $this->cfg["baseurl"];
-		$parent = $args["id"];
-
-		$tpl = ($args["tpl"]) ? $args["tpl"] : "homefolder.tpl";
-		$this->read_template($tpl);
-
-		$result = array();
-		$startfrom = (!$parent) ? $udata["home_folder"] : $parent;
-
-		$grps_by_parent = array();
-		$grps = array();
-	
-		// we always start from the home folder
-		$fldr = $udata["home_folder"];
-
-		do
-		{
-			$groups = $this->get_objects_below(array(
-				"parent" => $fldr,
-				"class" => CL_PSEUDO,
-			));
-
-			foreach($groups as $key => $val)
-			{
-				$grps_by_parent[$val["parent"]][$key] = $val;
-				$grps[$key] = $val["parent"];
-			};
-
-			$fldr = array_keys($groups);
-
-		} while(sizeof($groups) > 0);
-
-		$current = $startfrom;
-		
-		while ($udata["home_folder"] != $current)
-		{
-			$path[$current] = 1;
-			$current = $grps[$current];
-		}
-		
-		$path[$udata["home_folder"]] = 1;
-
-		// security check. if the requested is outside or above the
-		// users home folder, we will show him the home folder.
-
-		// this should be done differently of course, by checking the
-		// ACL of the respective document, but for now, we will settle
-		// to this.
-		if (!$grps[$startfrom])
-		{
-			$startfrom = $udata["home_folder"];
-		};
-
-		// we need a small cycle that passes all the oids-s and 
-		// parents until we do find 
-
-		$this->path = $path;
-		$this->folders = "";
-		$this->active = $startfrom;
-		$this->_show_hf_folder($grps_by_parent,$udata["home_folder"]);
-
-		
-		// print sizeof($grps_by_parent[$udata["home_folder"]]);
-		
-		// we will always have to display the first level,
-		// and then find out the parents of the currently
-		// opened folder, and then we have to track the parents
-		// back up to the home folder
-	
-		$thisone = $this->get_object($startfrom);
-		$prnt = $this->get_object($thisone["parent"]);
-
-		$q = "SELECT name,oid,class_id,name FROM objects
-			WHERE objects.parent = '$startfrom' and objects.status != 0 and objects.class_id != 1";
-		$this->db_query($q);
-
-		$folders = "";
-		$cnt = 0;
-		while($row = $this->db_next())
-		{
-			$class = $this->cfg["classes"][$row["class_id"]]["file"];
-			$preview = $this->mk_my_orb("preview", array("id" => $row["oid"]),$class);
-			$cnt++;
-			switch ($row["class_id"])
-			{
-				case CL_PSEUDO:
-					$tpl = "folder";
-					break;
-				
-				case CL_FILE:
-					$preview = file::get_url($row["oid"],$row["name"]);
-					$iconurl = get_icon_url(CL_FILE,$row["name"]);
-					$tpl = "doc";
-					break;
-
-				default:
-					$iconurl = get_icon_url($row["class_id"],0);
-					$tpl = "doc";
-					break;
-			};
-			$this->vars(array(
-				"name" => ($row["name"]) ? $row["name"] : "(nimetu)",
-				"id" => $row["oid"],
-				"iconurl" => $iconurl,
-				"color" => ($cnt % 2) ? "#FFFFFF" : "#EEEEEE",
-				"f_click" => $this->mk_my_orb("gen_home_dir", array("id" => $row["oid"])),
-				"preview" => $preview,
-				"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),$class)
-			));
-
-			$folders .= $this->parse($tpl);
-		};
-		$delete = "";
-		if ($cnt > 0)
-		{
-			$delete = $this->parse("delete");
-		};
-
-		$this->vars(array(
-			"folder" => $folders,
-			"doc" => "",
-			"name" => $thisone["name"],
-			"parent" => $startfrom,
-			"delete" => $delete,
-			"total" => $cnt,
-			"folders" => $this->folders,
-			"reforb1" => $this->mk_reforb("del_objects", array("parent" => $startfrom)),	// delete form
-			"home_f" => $this->mk_my_orb("gen_home_dir"),
-		));
-		return $this->parse();
-	}
-	
-	////
-	// !for internal use
-	function _show_hf_folder($items,$section)
-	{
-		static $indent = 0;
-		$indent++;
-		static $cnt = 0;
-		if (!is_array($items[$section]))
-		{
-			$indent--;
-			return;
-		};
-
-		while(list($key,$val) = each($items[$section]))
-		{
-			$cnt++;
-			$this->vars(array(
-				"id" => $val["oid"],
-				"indent" => str_repeat("&nbsp;",$indent * 3),
-				"name" => $val["name"],
-				"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
-			));
-			$tpl = ($this->active == $key) ? "activefolder" : "folders";
-			$this->folders .= $this->parse($tpl);
-			if ( (is_array($items[$key])) && ($this->path[$key]))
-			{
-				$this->_show_hf_folder($items,$key);
-			};
-		}
-		$indent--;
-	}
-
-	////
-	// !creates a new folder int the users home folder
-	function submit_add_folder($arr)
-	{
-		extract($arr);
-		$id = $this->new_object(array("parent" => $parent, "class_id" => CL_PSEUDO, "status" => 2, "name" => $name));
-		$this->db_query("INSERT INTO menu(id,type) values($id,".MN_HOME_FOLDER_SUB.")");
-		global $status_msg;
-		$status_msg = LC_USERS_FOLDER_ADDED;
-		session_register("status_msg");
-
-		$this->_log("user", "Lisas kodukataloogi alla kataloogi $name");
-		return $this->mk_my_orb("gen_home_dir", array("id" => $parent));
-	}
-
-	////
 	// !user changing from the admin interface
 	function change($arr)
 	{
@@ -756,18 +458,6 @@ class users extends users_user
 	}
 
 	////
-	// !generates form for changing the password inside the site
-	function user_change_pwd($arr)
-	{
-		extract($arr);
-		$this->read_template("changeuserpwd.tpl");
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_user_change_pwd",array("section" => $section))
-		));
-		return $this->parse();
-	}
-
-	////
 	// !saves the uses changed password
 	function submit_change_pwd($arr)
 	{
@@ -812,16 +502,6 @@ class users extends users_user
 		$this->savegroup(array("gid" => $this->get_gid_by_uid($id),"type" => 3));
 		$this->_log("user", aw_global_get("uid")." blocked user $id");
 		header("Location: ".$this->mk_orb("gen_list", array()));
-
-		//magistrali korral võtan javaga yhendust
-		if (aw_ini_get("acl.use_server") == 1)
-		{
-			$acl_server_socket = fsockopen("127.0.0.1", 10000,$errno,$errstr,10);
-			//teatan, et user kustutati saidilt 
-			$str="2 12 ".$id." 0\n";
-			fputs($acl_server_socket,$str);
-			fclose($acl_server_socket);
-		}
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.138 2002/09/04 17:45:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.139 2002/09/04 17:52:32 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -723,9 +723,6 @@ class form extends form_base
 		// clause) to figure out the type of the form -- duke
 
 		$keys = array(0,FSUBTYPE_EV_ENTRY,FSUBTYPE_CAL_CONF,FSUBTYPE_CAL_SEARCH,FSUBTYPE_CAL_CONF2);
-
-		$sx = FSUBTYPE_EV_ENTRY + FSUBTYPE_CAL_CONF + FSUBTYPE_CALSEARCH + FSUBTYPE_CAL_CONF2;
-		$_sel_role = (int)$this->subtype & $sx;
 		foreach($keys as $_role)
 		{
 			if ((int)$this->subtype & $_role)
@@ -733,7 +730,7 @@ class form extends form_base
 				$sel_role = $_role;
 			};
 		};
-		
+
 		// let form_base->do_menu know that it needs to draw the calendar tab
 		if ($sel_role)
 		{
@@ -1042,18 +1039,6 @@ class form extends form_base
 		}
 
 		return $st;
-	}
-	
-	////
-	// !Generates a preview of the form and adds the formgen menubars to it	
-	function preview_form($args = array())
-	{
-		extract($args);
-		$this->if_init($id,"show.tpl", "Eelvaade");
-		$this->vars(array(
-			"LINE" => $this->gen_preview(array("id" => $id)),
-		));
-		return $this->do_menu_return();				
 	}
 
 	////
@@ -1413,11 +1398,9 @@ class form extends form_base
 			$_max = (int)$this->arr["cal_count"];
 			$_period_cnt = (int)$this->arr["cal_period"];
 			$q = "DELETE FROM calendar2timedef WHERE cal_id = '$id'";
-			$entry_id = $this->entry_id;
 			$this->db_query($q);
-			$cal_relation = (int)$cal_relation;
-			$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,entry_id,start,end,max_items,period,period_cnt)
-				VALUES ('$id','$cal_relation','$id','$entry_id','$_start','$_end','$_max','2','$_period_cnt')";
+			$q = "INSERT INTO calendar2timedef (oid,cal_id,entry_id,start,end,max_items,period,period_cnt)
+				VALUES ('$id','$id','$entry_id','$_start','$_end','$max','2','$_period_cnt')";
 			$this->db_query($q);
 		};
 
@@ -1524,7 +1507,6 @@ class form extends form_base
 			$this->update_entry_object($uar);
 		}
 	}
-
 
 	////
 	// !shows entry $entry_id of form $id using output $op_id
@@ -2531,6 +2513,11 @@ class form extends form_base
 	// will be set to value $restrict_val
 	function search($entry_id = 0,$parent = 0,$search_el = "",$search_val = "",$restrict_search_el = 0, $restrict_search_val = "")
 	{
+		if ($this->arr["new_search_engine"] == 1)
+		{
+			return $this->new_search($entry_id);
+		}
+
 		// laeb täidetud vormi andmed sisse
 		if ($search_el != "" && $search_val != "")
 		{
@@ -5873,6 +5860,35 @@ class form extends form_base
 	function set_form_html_name($name)
 	{
 		$this->form_html_name = $name;
+	}
+
+	////
+	// !uses the new search engine to do the search for the form that is loaded 
+	// and the search terms are specified in entry $entry_id
+	// the difference between new_do_search and this is that new_do_search returns html for the search results
+	// but this returns an array of matching entry id's
+	// parameters:
+	//    entry_id - the entry for the loaded form that contains the search terms. if not specified, loaded entry is used
+	function new_search($arr)
+	{
+		extract($arr);
+		if ($entry_id)
+		{
+			$this->load_entry($entry_id);
+		}
+
+		$ret = array();
+		$sql = $this->get_search_query(array(
+			"ret_id_only" => true
+		));
+
+		$this->db_query($sql);
+		while ($row = $this->db_next())
+		{
+			$ret[] = $row["entry_id"];
+		}
+
+		return $ret;
 	}
 };	// class ends
 ?>
