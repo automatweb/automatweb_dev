@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.7 2004/03/09 18:24:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.8 2004/06/02 10:51:27 kristo Exp $
 
 /*
 
@@ -117,22 +117,22 @@ class rate_scale extends class_base
 	function get_scale_for_obj($oid)
 	{
 		// read the object
-		$ob = $this->get_object($oid);
+		$ob = obj($oid);
 		// find the correct scale for the object
 
-		$oc = $this->get_object_chain($ob['parent']);
+		$oc = $ob->path();
 		// first, we check if any menus have rate objects in the menu chain for that object
 
-		foreach($oc as $od)
+		foreach($oc as $odp)
 		{
-			$sql = "SELECT * FROM rate2menu WHERE menu_id = '$od[oid]'";
+			$sql = "SELECT * FROM rate2menu WHERE menu_id = '".$odp->id()."'";
 			$this->db_query($sql);
 			while ($row = $this->db_next())
 			{
 				// if we find one, then we check if it only applies for a class
 					// if not, we found it!
 					// if it does and the clid does not match, then continue
-				if (!$row['clid'] || ($row['clid'] == $ob['class_id']))
+				if (!$row['clid'] || ($row['clid'] == $odp->class_id()))
 				{
 					return $this->_get_scale($row['rate_id']);
 				}
@@ -142,7 +142,7 @@ class rate_scale extends class_base
 		// if we don't find one, then chect the rate2clid table
 			// if found, return
 			// if not, error 
-		if (($rate = $this->db_fetch_field("SELECT rate_id FROM rate2clid WHERE clid = '$ob[class_id]'", "rate_id")))
+		if (($rate = $this->db_fetch_field("SELECT rate_id FROM rate2clid WHERE clid = '".$ob->class_id()."'", "rate_id")))
 		{
 			return $this->_get_scale($rate);
 		}

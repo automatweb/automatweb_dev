@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.15 2004/02/16 16:12:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.16 2004/06/02 10:51:45 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -114,24 +114,23 @@ class rate extends class_base
 	{
 		// we need to cache this shit.
 		// so, let's make add_rate write it to the object's metadata, in the rate array
-		$ob = $this->get_object($oid);
-		if (!is_array($ob['meta']['__ratings']) || !isset($ob['meta']['__ratings'][$type]))
+		$ob = obj($oid);
+		$rts = $ob->meta("__ratings");
+		if (!is_array($rts))
 		{
 			$avg = $this->db_fetch_field("SELECT AVG(rating) AS avg FROM ratings WHERE oid = '$oid'", "avg");
 			$l_rate = $this->db_fetch_field("SELECT MIN(rating) AS min FROM ratings WHERE oid = '$oid'", "min");
 			$max = $this->db_fetch_field("SELECT MAX(rating) AS max FROM ratings WHERE oid = '$oid'", "max");
 			$views = $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits");
-			$this->set_object_metadata(array(
-				"oid" => $oid,
-				"key" => "__ratings",
-				"value" => array(
-					RATING_AVERAGE => $avg,
-					RATING_HIGHEST => $max,
-					RATING_VIEWS => $views,
-					RATING_LOWEST_RATE => $l_rate,
-					RATING_LOWEST_VIEWS => $views
-				)
-			));
+			$rts = array(
+				RATING_AVERAGE => $avg,
+				RATING_HIGHEST => $max,
+				RATING_VIEWS => $views,
+				RATING_LOWEST_RATE => $l_rate,
+				RATING_LOWEST_VIEWS => $views
+			);
+			$ob->set_meta("__ratings",$rts);
+			$ob->save();
 			
 			if ($type == RATING_AVERAGE)
 			{
@@ -157,7 +156,7 @@ class rate extends class_base
 				return round($max);
 			}
 		}
-		return number_format((float)$ob['meta']['__ratings'][$type],2,".",",");
+		return number_format((float)$rts[$type],2,".",",");
 	}
 
 	/**  
@@ -198,11 +197,9 @@ class rate extends class_base
 				RATING_LOWEST_VIEWS => $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits"),
 				RATING_LOWEST_RATE => $row["min"],
 			);
-			$this->set_object_metadata(array(
-				"oid" => $oid,
-				"key" => "__ratings",
-				"value" => $rs
-			));
+			$o = obj($oid);
+			$o->set_meta("__ratings",$rs);
+			$o->save();
 		}
 		
 		aw_session_set("rated_objs", $ro);
@@ -228,21 +225,22 @@ class rate extends class_base
 		extract($arr);
 		$this->read_any_template("show.tpl");
 		
-		$ob = $this->get_object($id);
+		$ob = obj($id);
 
 		if (!empty($from_oid))
 		{
 			// we we need to show results in the gallery, read objects from that
-			$ob['meta']['objects_from'] = OBJECTS_FROM_OID;
-			$ob['meta']['objects_from_oid'] = $from_oid;
+			$ob->set_meta('objects_from',OBJECTS_FROM_OID);
+			$ob->set_meta('objects_from_oid',$from_oid);
+			$ob->save();
 		}
 
 		// get list of all objects that this rating applies to
 		$oids = array();
-		switch($ob["meta"]["objects_from"])
+		switch($ob->meta("objects_from"))
 		{
 			case OBJECTS_FROM_CLID:
-				$where = "objects.class_id = ".$ob['meta']['objects_from_clid'];
+				$where = "objects.class_id = ".$ob->meta('objects_from_clid');
 				break;
 
 			case OBJECTS_FROM_FOLDER:
@@ -250,7 +248,7 @@ class rate extends class_base
 				$mn = array();
 				//$pts = new aw_array($ob['meta']['objects_from_folder']);
 				$_parent_list = new object_list(array(
-					"parent" => $ob["meta"]["objects_from_folder"],
+					"parent" => $ob->meta("objects_from_folder"),
 					"class_id" => CL_MENU,
 				));
 				$mn = array($fld => $fld) + $_parent_list->ids();
@@ -258,9 +256,9 @@ class rate extends class_base
 				break;
 
 			case OBJECTS_FROM_OID:
-				$c_oid = $ob['meta']['objects_from_oid'];
-				$c_obj = $this->get_object($c_oid);
-				$c_inst = get_instance($this->cfg['classes'][$c_obj['class_id']]['file']);
+				$c_oid = $ob->meta('objects_from_oid');
+				$c_obj = obj($c_oid);
+				$c_inst = $c_obj->instance();
 				if (method_exists($c_inst, "get_contained_objects"))
 				{
 					$c_objs = $c_inst->get_contained_objects(array(
@@ -278,7 +276,7 @@ class rate extends class_base
 
 		// query the max/avg for those. 
 		$order = "DESC";
-		switch($ob["meta"]["top_type"])
+		switch($ob->meta("top_type"))
 		{
 			case ORDER_HIGHEST:
 				$fun = "rating";
@@ -326,7 +324,7 @@ class rate extends class_base
 			GROUP BY 
 				objects.oid
 			ORDER BY val $order
-			LIMIT ".(int)($ob['meta']['top'])."
+			LIMIT ".(int)($ob->meta('top'))."
 		";
 		$this->db_query($sql);
 		if (!empty($from_oid))
@@ -355,8 +353,8 @@ class rate extends class_base
 			}
 			$this->vars(array(
 				"LINE" => $l,
-				"name" => $ob['name'],
-				"count" => $ob['meta']['top']
+				"name" => $ob->name(),
+				"count" => $ob->meta('top')
 			));
 			return $this->parse();
 		}
