@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.33 2002/12/30 12:14:07 duke Exp $
+// $Id: class_base.aw,v 2.34 2002/12/30 17:12:23 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -130,6 +130,8 @@ class class_base extends aliasmgr
 				"orb_class" => $orb_class,
 				"parent" => $parent,
 				"period" => $period,
+				"alias_to" => $this->request["alias_to"],
+				"return_url" => urlencode($this->request["return_url"]),
 			),
 		));
 
@@ -264,6 +266,8 @@ class class_base extends aliasmgr
 				"orb_class" => $orb_class,
 				"parent" => $parent,
 				"period" => $period,
+				"alias_to" => $this->request["alias_to"],
+				"return_url" => urlencode($this->request["return_url"]),
 			)+(is_array($extraids) ? array('extraids' => $extraids) : array()),
 		));
 
@@ -319,6 +323,10 @@ class class_base extends aliasmgr
 					"status" => isset($status) ? $status : 1,
 			));
 
+			if ($alias_to)
+			{
+				$this->add_alias($alias_to,$id);
+			};
 			$this->new = true;
 		}
 		$this->id = $id;
@@ -526,7 +534,13 @@ class class_base extends aliasmgr
 			$this->_log($syslog_type, SA_CHANGE, "Muutis $classname objekti $name ($id)", $id);
 		};
 
-		$args = array("id" => $id,"group" => $group,"period" => aw_global_get("period")) + (is_array($extraids) ? $extraids : array());
+		$args = array(
+			"id" => $id,
+			"group" => $group,
+			"period" => aw_global_get("period"),
+			"alias_to" => $args["alias_to"],
+			"return_url" => $args["return_url"],
+		) + (is_array($extraids) ? $extraids : array());
 		return $this->mk_my_orb("change",$args,get_class($this->orb_class));
 	}
 
@@ -601,6 +615,15 @@ class class_base extends aliasmgr
 				"parent" => $args["parent"],
 				"object" => $this->coredata,
 			));
+		};
+
+		if ($this->request["return_url"])
+		{
+			$parent = -1;
+			$title = html::href(array(
+				"url" => $this->request["return_url"],
+				"caption" => "Tagasi",
+			)) . " / " . $title;
 		};
 
 		$this->mk_path($parent,$title,aw_global_get("period"));
