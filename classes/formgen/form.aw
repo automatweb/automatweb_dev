@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.2 2002/10/30 10:58:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.3 2002/11/06 09:28:34 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -18,7 +18,7 @@ define("RET_FIRST", 1);
 // it returns all elements with the name, return type is array
 define("RET_ALL", 2);
 
-classload("formgen/form_base","formgen/form_cell", "image");
+classload("formgen/form_base");
 class form extends form_base
 {
 	function form()
@@ -1311,6 +1311,13 @@ class form extends form_base
 			// see logimine on omal kohal ainult siis, kui t‰itmine toimub
 			// l‰bi veebi.
 			$this->_log("form","T&auml;itis formi $this->name");
+			// check automatic mailinglist
+			$ml_list_inst = get_instance("mailinglist/ml_list");
+			$this->db_query("SELECT * FROM ml_list2automatic_form WHERE fid = '$this->id'");
+			while ($row = $this->db_next())
+			{
+				$ml_list_inst->update_automatic_list($row["lid"]);
+			}
 		}
 		else
 		{
@@ -2144,14 +2151,12 @@ class form extends form_base
 	//	search_form - use the specified form instead of the default ($id)
 	function new_do_search($arr)
 	{
-		enter_function("form::new_do_search",array());
 		extract($arr);
 
 		// $this->arr["search_chain"] on selle chaini id, mille kalendreid ma arvestama pean
 		// samas kuulub seal iga kalender konkreetse p‰rja elementvormi k¸lge, so I have
 		// to figure out which one it is, to find the calendars I required
 
-		enter_function("form::new_do_search::load",array());
 		if ($search_form)
 		{
 			$id = $search_form;
@@ -2188,9 +2193,7 @@ class form extends form_base
 			};
 
 		}
-		exit_function("form::new_do_search::load",array());
 
-		enter_function("form::new_do_search::restrict",array());
 		if (is_array($restrict_search_el))
 		{
 			// alter the loaded search entry with the data
@@ -2206,9 +2209,7 @@ class form extends form_base
 				}
 			}
 		}
-		exit_function("form::new_do_search::restrict",array());
 
-		enter_function("form::new_do_search::init_table",array());
 		$show_form = get_instance("formgen/form");	// if showing results as outputs, this will be used
 		$form_table = get_instance("formgen/form_table"); // if showing results as a form_table, this will be used
 
@@ -2248,9 +2249,6 @@ class form extends form_base
 			$show_form->load_output($this->get_search_output());
 			$used_els = $this->get_op_linked_elements();
 		}
-		exit_function("form::new_do_search::init_table",array());
-
-
 
 		if (!$output_id)
 		{
@@ -2383,22 +2381,18 @@ class form extends form_base
 		// now get the search query
 //		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
 
-		enter_function("form::new_do_search::get_query",array());
 		$sql = $this->get_search_query(array(
 			"used_els" => $used_els,
 			"group_els" => $group_els,
 			"group_collect_els" => $group_collect_els
 		));
-		exit_function("form::new_do_search::get_query",array());
 //		echo "sql = $sql <br>";
 		$result = "";
-		enter_function("form::new_do_search::query",array());
 		$this->db_query($sql,false);
 		if ($this->arr["show_table"])
 		{
 			$form_table->set_num_rows($this->num_rows());
 		}
-		exit_function("form::new_do_search::query",array());
 		while ($row = $this->db_next())
 		{
 			/*
@@ -2408,7 +2402,6 @@ class form extends form_base
 			*/
 			if ($this->arr["show_table"])
 			{
-				enter_function("form::new_do_search::table_loop",array());
 				if (isset($row["chain_entry_id"]) && $row["chain_entry_id"])
 				{
 					$this->save_handle();
@@ -2450,7 +2443,6 @@ class form extends form_base
 
 					$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$rcid);
 				}
-				exit_function("form::new_do_search::table_loop",array());
 			}
 			else
 			{
@@ -2465,15 +2457,12 @@ class form extends form_base
 		}
 
 		
-		enter_function("form::new_do_search::finalize_table",array());
 		// now if we are showing table, finish the table 
 		if ($this->arr["show_table"])
 		{
 			$result = $form_table->finalize_table(array("no_form_tags" => $no_form_tags));
 		}
-		exit_function("form::new_do_search::finalize_table",array());
 
-		exit_function("form::new_do_search",array());
 		return $result;
 	}
 
@@ -2941,7 +2930,6 @@ class form extends form_base
 				$this->raise_error(ERR_FG_NOTABLE,"No table selected for showing data!",true);
 			}
 
-			classload("formgen/form_table");
 			$ft = get_instance("formgen/form_table");
 			// This stuff is here for the numeric element type. -->
 			/*
@@ -5201,7 +5189,6 @@ class form extends form_base
 	//Output m‰‰ratakse niikuinii filtri poolt.
 	function do_filter_search($entry_id, $output_id,$arr)
 	{
-		classload("search_filter");
 		if (!$this->arr["search_filter"])
 		{
 			return "Kasutatav filter formile $this->id on m‰‰ramata";
