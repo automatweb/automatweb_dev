@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.11 2003/09/24 12:49:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.12 2003/10/06 11:28:10 duke Exp $
 // promo.aw - promokastid.
 
 /*
@@ -36,10 +36,10 @@
 	@property all_menus type=checkbox ch_value=1 value=1 group=menus method=serialize
 	@caption Näita igal pool
 
-	@property section type=text callback=callback_get_menus group=menus method=serialize
+	@property section type=table group=menus method=serialize
 	@caption Vali menüüd, mille all kasti näidata
 	
-	@property last_menus type=text callback=callback_get_doc_sources group=menus method=serialize
+	@property last_menus type=table group=menus method=serialize
 	@caption Vali menüüd, mille alt viimaseid dokumente võetakse
 
 	@property ndocs type=textbox size=4 group=menus table=menu field=ndocs 
@@ -50,17 +50,13 @@
 
 	@property sort_ord type=select table=objects field=meta method=serialize group=show
 
-	@classinfo corefields=name,comment,status
 	@classinfo relationmgr=yes
 	@classinfo syslog_type=ST_PROMO
 
 	@tableinfo menu index=id master_table=objects master_index=oid
 
-	@groupinfo general caption=Üldine
 	@groupinfo menus caption=Kaustad
 	@groupinfo show caption=Näitamine
-
-	@classinfo trans_id=TR_PROMO
 			
 */
 define("RELTYPE_ASSIGNED_MENU",1);
@@ -72,7 +68,6 @@ class promo extends class_base
 		$this->init(array(
 			"clid" => CL_PROMO,
 			"tpldir" => "promo",
-			"trid" => TR_PROMO,
 		));
 		lc_load("definition");
 		$this->lc_load("promo","lc_promo");
@@ -82,7 +77,7 @@ class promo extends class_base
 	{
 		if ($args["reltype"] == RELTYPE_ASSIGNED_MENU || $args["reltype"] == RELTYPE_DOC_SOURCE)
 		{
-			return array(CL_PSEUDO);
+			return array(CL_MENU);
 		}
 	}
 
@@ -94,9 +89,9 @@ class promo extends class_base
 		);
 	}
 
-	function get_property($args = array())
+	function get_property($arr = array())
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK; 
 		switch($data["name"])
 		{
@@ -143,53 +138,56 @@ class promo extends class_base
 					'ASC' => "V&auml;iksem (vanem) enne",
 				);
 				break;
+	
+			case "last_menus":
+				$this->get_doc_sources($arr);
+				break;
+
+			case "section":
+				$this->get_menus($arr);
+				break;
 		}
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
-		$meta = &$args["metadata"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
-		if ($data["name"] == "section")
+		switch($data["name"])
 		{
-			$meta["section_include_submenus"] = $args["form_data"]["include_submenus"];
-		};
+			case "section":
+				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["form_data"]["include_submenus"]);
+				break;
 
-		if ($data["name"] == "ndocs")
-		{
-			$args["metadata"]["as_name"] = $args["form_data"]["as_name"];
-		}
+			case "ndocs":
+				$arr["obj_inst"]->set_meta("as_name",$arr["form_data"]["as_name"]);
+				break;
+		};
 		return $retval;
 
 	}
 
-	function callback_get_menus($args = array())
+	function get_menus($arr)
 	{
-		$prop = $args["prop"];
-		$nodes = array();
-		$section_include_submenus = $args["obj"]["meta"]["section_include_submenus"];
-		// now I have to go through the process of setting up a generic table once again
-		load_vcl("table");
-		$this->t = new aw_table(array(
-			"prefix" => "promo_menus",
-			"layout" => "generic"
-		));
-		$this->t->define_field(array(
-			"name" => "oid",
+		$obj = $arr["obj_inst"];
+		$section_include_submenus = $obj->meta("section_include_submenus");
+
+		$t = &$arr["prop"]["obj_inst"];
+		$t->define_field(array(
+			"name" => "id",
 			"caption" => "ID",
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
 			"width" => "30",
 		));
-		$this->t->define_field(array(
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
 		));
-		$this->t->define_field(array(
+		$t->define_field(array(
 			"name" => "check",
 			"caption" => "k.a. alammenüüd",
 			"talign" => "center",
@@ -197,16 +195,16 @@ class promo extends class_base
 			"align" => "center",
 		));
 
-		$obj = obj($args["obj"]["oid"]);
 		$conns = $obj->connections_from(array(
 			"type" => RELTYPE_ASSIGNED_MENU
 		));
+
 		foreach($conns as $c)
 		{
 			$c_o = $c->to();
 
-			$this->t->define_data(array(
-				"oid" => $c_o->id(),
+			$t->define_data(array(
+				"id" => $c_o->id(),
 				"name" => $c_o->path_str(array(
 					"max_len" => 3
 				)),
@@ -217,93 +215,78 @@ class promo extends class_base
 				)),
 			));
 		}
- 
-		$nodes[$prop["name"]] = array(
-			"type" => "text",
-			"caption" => $prop["caption"],
-			"value" => $this->t->draw(),
-		);
-		return $nodes;
 	}
 
-	function callback_get_doc_sources($args = array())
+	function get_doc_sources($arr)
 	{
-		$prop = $args["prop"];
-		$nodes = array();
-		// now I have to go through the process of setting up a generic table once again
-		load_vcl("table");
-		$this->t = new aw_table(array(
-			"prefix" => "promo_menus",
-			"layout" => "generic"
-		));
-		$this->t->define_field(array(
-			"name" => "oid",
+		$t = &$arr["prop"]["obj_inst"];
+
+		$t->define_field(array(
+			"name" => "id",
 			"caption" => "ID",
 			"talign" => "center",
 			"align" => "center",
 			"nowrap" => "1",
 			"width" => "30",
 		));
-		$this->t->define_field(array(
+
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
 			"sortable" => 1,
 		));
-		$this->t->define_field(array(
+
+		$t->define_field(array(
 			"name" => "as_name",
 			"caption" => "Pane pealkirjaks",
 			"talign" => "center",
 			"align" => "center",
 		));
 
-		$obj = obj($args["obj"]["oid"]);
+		$obj = $arr["obj_inst"];
+
 		$conns = $obj->connections_from(array(
 			"type" => RELTYPE_DOC_SOURCE
 		));
 
+		$as_name = $obj->meta("as_name");
+
 		foreach($conns as $c)
 		{
 			$c_o = $c->to();
-			$this->t->define_data(array(
-				"oid" => $c_o->id(),
+			$t->define_data(array(
+				"id" => $c_o->id(),
 				"name" => $c_o->path_str(array(
 					"max_len" => 3
 				)),
 				"as_name" => html::radiobutton(array(
 					"name" => "as_name",
 					"value" => $c_o->id(),
-						"checked" => ($args["obj"]["meta"]["as_name"] == $c_o->id())
+						"checked" => ($as_name == $c_o->id())
 				))
 			));
 		}
-		$this->t->define_data(array(
-			"oid" => 0,
+		$t->define_data(array(
+			"id" => 0,
 			"name" => "",
 			"as_name" => html::radiobutton(array(
 				"name" => "as_name",
 				"value" => 0,
-				"checked" => (!$args["obj"]["meta"]["as_name"])
+				"checked" => (!$as_name)
 			))
 		));
-		
-		$nodes[$prop["name"]] = array(
-			"type" => "text",
-			"caption" => $prop["caption"],
-			"value" => $this->t->draw(),
-		);
-
-		return $nodes;
 	}
 
 	function callback_pre_edit($args = array())
 	{
-		$id = $args["coredata"]["oid"];
-		$menu = $this->get_menu($id);
+		$id = $args["obj_inst"]->id();
+		$obj = $args["obj_inst"];
+
 		// first check, whether the promo box was in the very old format (contained serialized data
 		// in the comment field
-		$check1 = aw_unserialize($menu["comment"]);
-		$check2 = aw_unserialize($menu["sss"]);
+		$check1 = aw_unserialize($obj->prop("comment"));
+		$check2 = aw_unserialize($obj->meta("sss"));
 		if (is_array($check1) || is_array($check2))
 		{
 			$convert_url = $this->mk_my_orb("promo_convert",array(),"converters");
@@ -313,102 +296,8 @@ class promo extends class_base
 		
 		// now, check, whether we have to convert the current contents of comment and sss to relation objects
 		// we use a flag in object metainfo for that
+		// converters->convert_promo_relations()
 
-		// and still, it would be nice if we could convert all the promo boxes at once.
-		// then I wouldn't have to check for this shit each fucking time, for each
-		// fucking promo box. But maybe it's not as bad as I imagine it
-		if ($args["object"]["meta"]["uses_relationmgr"])
-		{
-			return true;
-		};
-		
-		$oldaliases = $this->get_aliases_for($id,CL_PSEUDO);
-		$flatlist = array();
-		$alias_reltype = $args["coredata"]["meta"]["alias_reltype"];
-
-
-		$q = "SELECT * FROM aliases WHERE source = '$id'";
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			if (($row["reltype"] == 0) && ($alias_reltype[$row["target"]]))
-			{
-				$this->save_handle();
-				$q = "UPDATE aliases SET reltype = " . $alias_reltype[$row["target"]] . " WHERE id = $row[id]";
-				$this->db_query($q);
-				$this->restore_handle();
-			};
-		}
-
-
-		foreach($oldaliases as $alias)
-		{
-			$flatlist[$alias["target"]] = $alias_reltype[$alias["target"]];
-		};
-
-		// basically, I have to get a list of menus in $args["object"]["meta"]["section"]
-		// and create a relation of type RELTYPE_ASSIGNED_MENU for each of those
-
-		$sections = $args["coredata"]["meta"]["section"];
-		if ( is_array($sections) && (sizeof($sections) > 0) )
-		{
-			foreach($sections as $key => $val)
-			{
-				if (!$flatlist[$val])
-				{
-					$alias_reltype[$val] = RELTYPE_ASSIGNED_MENU;
-					$this->addalias(array(
-						"id" => $id,
-						"alias" => $val,
-						"reltype" => RELTYPE_ASSIGNED_MENU,
-					));
-					//$this->add_alias($id,$val,CL_PSEUDO);
-				};
-			};
-		}
-
-		// then I have to get a list of menus in $args["object"]["meta"]["last_menus"] and
-		// create a relation of type RELTYPE_DOC_SOURCE for each of those.
-
-		// I also want to keep the old representation around, so that old code keeps working
-		$last_menus = $args["coredata"]["meta"]["last_menus"];
-		if ( is_array($last_menus) && (sizeof($last_menus) > 0) )
-		{
-			foreach($last_menus as $key => $val)
-			{
-				if (!$flatlist[$val])
-				{
-					$alias_reltype[$val] = RELTYPE_DOC_SOURCE;
-					$this->addalias(array(
-						"id" => $id,
-						"alias" => $val,
-						"reltype" => RELTYPE_DOC_SOURCE,
-					));
-					//$this->add_alias($id,$val,CL_PSEUDO);
-				};
-			};
-		}
-
-		// update reltype information, that is only if there is anything to update
-		if (sizeof($alias_reltype) > 0)
-		{
-			$this->upd_object(array(
-				"oid" => $args["coredata"]["oid"],
-				"metadata" => array(
-					//"alias_reltype" => $alias_reltype,
-					"uses_relationmgr" => 1,
-				),
-			));
-		};
-	}
-
-	function callback_pre_save($args = array())
-	{
-		$objdata = &$args["objdata"];
-		if (!$objdata["type"])
-		{
-			$objdata["type"] = MN_PROMO_BOX;
-		};
 	}
 
 	function callback_on_submit_relation_list($args = array())
@@ -417,7 +306,7 @@ class promo extends class_base
 		$obj =& obj($args["id"]);
 
 		$oldaliases = $obj->connections_from(array(
-			"class" => CL_PSEUDO
+			"class" => CL_MENU
 		));
 		
 		$section = array();
