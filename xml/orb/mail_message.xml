@@ -8,6 +8,17 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="get_part">
+			<function name="get_part">
+				<arguments>
+					<required name="msgrid" type="int"/>
+					<required name="msgid" type="int"/>
+					<required name="mailbox"/>
+					<required name="part" type="int"/>
+				</arguments>		
+			</function>
+		</action>
 	</class>
 </orb>
 		
