@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.3 2004/01/06 18:21:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.4 2004/01/06 18:23:07 duke Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -168,9 +168,9 @@ class crm_address extends class_base
 				
 				if (count($name) < 1)
 				{
-					if (!empty($form["e_mail"]))
+					if (!empty($form["email"]))
 					{
-						$name[] = $form["e_mail"];
+						$name[] = $form["email"];
 					};
 				}
 				
