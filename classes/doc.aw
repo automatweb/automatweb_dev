@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.14 2003/05/06 13:54:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.15 2003/05/13 15:17:49 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -195,14 +195,31 @@ class doc extends class_base
 
 					if (is_numeric($fldr))
 					{
-						$this->new_object(array(
-							"parent" => $fldr,
-							"class_id" => CL_BROTHER_DOCUMENT,
-							"status" => STAT_ACTIVE,
-							"brother_of" => $args["obj"]["oid"],
-						));
+						// do not create duplicates
+						$b = $args["obj"]["oid"];
+						$q = sprintf("SELECT oid FROM objects
+								WHERE parent = %d AND brother_of = $b
+								AND status != 0 AND class_id IN (%d,%d)",
+								$fldr,CL_DOCUMENT,CL_BROTHER_DOCUMENT);
+						$xrow = $this->db_fetch_row($q);
+						if (empty($xrow))
+						{
+							$this->new_object(array(
+								"parent" => $fldr,
+								"class_id" => CL_BROTHER_DOCUMENT,
+								"status" => STAT_ACTIVE,
+								"brother_of" => $args["obj"]["oid"],
+							));
+						};
 					}
-				};
+				}
+				else
+				{
+					// nuke all brothers
+					$q = sprintf("UPDATE objects SET status = 0 WHERE brother_of = %d AND class_id = %d",
+							$args["obj"]["oid"],CL_BROTHER_DOCUMENT);
+					$this->db_query($q);
+				}
 				break;
 
 			case "clear_styles":
@@ -320,33 +337,13 @@ class doc extends class_base
 	{
 		extract($args);
 		$sar = array();
-		$this->db_query("SELECT * FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
+		$this->db_query("SELECT parent FROM objects WHERE brother_of = $id AND status != 0 AND class_id = ".CL_BROTHER_DOCUMENT);
 		while ($arow = $this->db_next())
 		{
 			$sar[$arow["parent"]] = $arow["parent"];
 		}
 
-		$ob = get_instance("objects");
-		$ol = $ob->get_list(true);
-
-		$conf = get_instance("config");
-		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
-		$xml = get_instance("xml");
-		$_df = $xml->xml_unserialize(array("source" => $df));
-
-		$ndf = array();
-
-		foreach($_df as $dfid => $dfname)
-		{
-			$ndf[$dfid] = $ol[$dfid];
-		}
-		
-		if (count($ndf) < 2)
-		{
-			$ndf = $ol;
-		}
-
-		return array($sar,$ndf);
+		return array($sar,$this->get_menu_list(true));
 	}
 
 	function update_brothers($args = array())
@@ -442,13 +439,19 @@ class doc extends class_base
 				"class_id" => CL_DOCUMENT,
 			));
 
+			$q = sprintf("SELECT target FROM aliases WHERE source = %d AND type = %d AND pri = 1",
+					$args["id"],CL_IMAGE);
+		
+			$tgt = $this->db_fetch_field($q,"target");
 
-			if (!empty($obj["meta"]["img1"]))
+
+			if (!empty($tgt))
 			{
 				$awi = get_instance("image");
-				$picdata = $awi->get_image_by_id($obj["meta"]["img1"]);
+				$picdata = $awi->get_image_by_id($tgt);
 				$retval = html::img(array(
 					"url" => $picdata["url"],
+					"border" => 0,
 				));
 			};
 		};
@@ -496,7 +499,7 @@ class doc extends class_base
 
 		foreach($this->get_planners_with_folders() as $row)
 		{
-			if ($row["event_folder"] == $args["obj"]["parent"])
+			if (($row["class_id"] == CL_DOCUMENT) && $row["event_folder"] == $args["obj"]["parent"])
 			{
 				continue;
 			};
@@ -504,7 +507,7 @@ class doc extends class_base
 			$retval["cal_" . $row["oid"]] = array(
 				"type" => "checkbox",
 				"name" => $args["prop"]["name"] . "[]",
-				"caption" => "Kalender: " . $row["name"] . "<br>Folder: " . $folderdat["name"],
+				"caption" => $row["name"],
 				"ch_value" => $row["oid"],
 				"value" => isset($bs[$row["event_folder"]]) ? $row["oid"] : 0,
 				"group" => $args["prop"]["group"],
@@ -562,7 +565,20 @@ class doc extends class_base
 	function set_calendars($args = array())
 	{
 		$cal_list = join(",",$args);
-		$q = "SELECT source,target,relobj_id,objects.name FROM aliases LEFT JOIN objects ON (aliases.target = objects.oid) WHERE source IN ($cal_list)";
+		// first I have to check whether this calendar has been told to
+		// get it's calendar relations from somewhere else
+		$q = "SELECT target FROM aliases
+			LEFT JOIN objects ON (aliases.target = objects.oid)
+			WHERE source IN ($cal_list) AND reltype = 5";
+		///
+		$other = $this->db_fetch_row($q);
+		if (isset($other["target"]))
+		{
+			$cal_list = $other["target"];
+		};
+		$q = "SELECT source,target,relobj_id,objects.name FROM aliases
+			LEFT JOIN objects ON (aliases.target = objects.oid)
+			WHERE source IN ($cal_list) AND reltype = 4";
 		$this->db_query($q);
 		$this->calendar_list = array("" => "");
 		while($row = $this->db_next())

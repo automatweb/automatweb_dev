@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.178 2003/05/13 12:58:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.179 2003/05/13 15:17:49 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1892,22 +1892,13 @@ class document extends aw_template
 		$meta = $this->get_object_metadata(array("oid" => $id));
 
 		$conf = get_instance("config");
-		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
-		if ($df != "")
-		{
-			$xml = get_instance("xml");
-			$_df = $xml->xml_unserialize(array("source" => $df));
-			$this->vars(array(
-				"docfolders" => $this->picker($oob["parent"],$_df)
-			));
-		}
 		$is_ie = false;
 		if (!(strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") === false))
 		{
 			$is_ie = true;
 		}
 
-    $this->vars(array("title" => ($is_ie ? str_replace("\"","&quot;",$document["title"]) : $document["title"]),
+    $this->vars(array("title" => str_replace("\"","&quot;",$document["title"]),
 											"jrk1"  => $this->picker($document["jrk1"],$jrk),
 										  "jrk2"  => $this->picker($document["jrk2"],$jrk),
 										  "jrk3"  => $this->picker($document["jrk3"],$jrk),
@@ -2467,28 +2458,10 @@ class document extends aw_template
 			$sar[$arow["parent"]] = $arow["parent"];
 		}
 
-		$ob = get_instance("objects");
-		$ol = $ob->get_list(true);
-
-		$conf = get_instance("config");
-		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
-		$xml = get_instance("xml");
-		$_df = $xml->xml_unserialize(array("source" => $df));
-
-		$ndf = array();
-
-		foreach($_df as $dfid => $dfname)
-		{
-			$ndf[$dfid] = $ol[$dfid];
-		}
-		
-		if (count($ndf) < 2)
-		{
-			$ndf = $ol;
-		}
+		$ol = $this->get_menu_list(true);
 
 		$this->vars(array(
-			"docid" => $id,"sections"		=> $this->multiple_option_list($sar,$ndf),
+			"docid" => $id,"sections"		=> $this->multiple_option_list($sar,$ol),
 			"reforb"	=> $this->mk_reforb("submit_menus",array("id" => $id)),
 			"menurl"	=> $this->mk_orb("sel_menus",array("id" => $id)),
 			"weburl"	=> $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$id,
@@ -3120,88 +3093,6 @@ class document extends aw_template
 				$this->rec_list($v["oid"],$pref."/".$v["name"]);
 			}
 		}
-	}
-
-	function list_user_docs($arr)
-	{
-		extract($arr);
-		$this->read_template("user_docs.tpl");
-
-		$ob = get_instance("objects");
-		$obl = $ob->get_list(false,false,$this->cfg["rootmenu"]);
-		$conf = get_instance("config");
-		$df = $conf->get_simple_config("docfolders".aw_global_get("LC"));
-		if ($df != "")
-		{
-			$xml = get_instance("xml");
-			$_df = $xml->xml_unserialize(array("source" => $df));
-		}
-
-		if (!$parent)
-		{
-			reset($_df);
-			list($parent,$parent) = each($_df);
-		}
-
-		$lang_id = aw_global_get("lang_id");
-
-		$_df = array(0 => "Vaata / Liiguta") + $_df;
-		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_DOCUMENT." AND status != 0 AND parent = '$parent' AND lang_id = '$lang_id'");
-		while ($row = $this->db_next())
-		{
-			$this->vars(array(
-				"name" => $row["name"],
-				"created" => $this->time2date($row["created"],3),
-				"active" => checked($row["status"] == 2),
-				"status" => $row["status"],
-				"change" => $this->mk_my_orb("change", array("id" => $row["oid"],"section" => $GLOBALS["doc_edit_section"])),
-				"parent_name" => $obl[$row["parent"]],
-				"docid" => $row["oid"],
-				"ord" => $row["jrk"]
-			));
-			$rd = $this->parse("ROW");
-		}
-
-		$this->vars(array(
-			"ROW" => $rd,
-			"reforb" => $this->mk_reforb("submit_user_docs",array("section" => $GLOBALS["section"])),
-			"docfolders" => $this->picker(0,$_df)
-		));
-
-		return $this->parse();
-	}
-
-	function submit_user_docs($arr)
-	{
-		extract($arr);
-
-		if (is_array($old_act) && $save != "")
-		{
-			foreach($old_act as $docid => $stat)
-			{
-				$this->upd_object(array("oid" => $docid, "status" => ($act[$docid] == 1 ? 2 : 1)));
-			}
-		}
-
-		if (is_array($ord) && $save != "")
-		{
-			foreach($ord as $docid => $_ord)
-			{
-				$this->upd_object(array("oid" => $docid, "jrk" => $_ord));
-			}
-		}
-
-		if (is_array($sel) && $move != "")
-		{
-			foreach($sel as $docid => $one)
-			{
-				if ($one == 1)
-				{
-					$this->upd_object(array("oid" => $docid, "parent" => $parent));
-				}
-			}
-		}
-		return $this->mk_my_orb("list_user_docs",array("parent" => $parent,"section" => $section));
 	}
 
 	function lookup($args = array())
