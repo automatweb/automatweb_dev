@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.1 2005/01/13 19:47:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.2 2005/01/14 07:44:23 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -367,6 +367,8 @@ class mrp_prisma_import extends class_base
 		));
 		$existing = $ol->arr();
 
+		$ws = obj(aw_ini_get("prisma.ws"));
+
 		// diff
 		foreach($existing as $o)
 		{
@@ -385,7 +387,15 @@ class mrp_prisma_import extends class_base
 				{
 					$this->_upd_proj_o($o, $dat);
 					$o->set_meta("imp_ts", $dat["TimeStamp"]);
+					$o->set_parent($ws->prop("projects_folder"));
 					$o->save();
+					if (!$o->is_connected_to(array("to" => $ws->id())))
+					{
+						$o->connect(array(
+							"to" => $ws->id(),
+							"reltype" => "RELTYPE_MRP_OWNER"
+						));
+					}
 					echo "project ".$o->name()." (".$o->id().") updated! <br>\n";
 					flush();
 				}
@@ -393,6 +403,7 @@ class mrp_prisma_import extends class_base
 
 			unset($proj[$o->prop("extern_id")]);
 		}
+
 		foreach($proj as $id => $dat)
 		{
 			$ol = new object_list(array(
@@ -401,10 +412,11 @@ class mrp_prisma_import extends class_base
 			));
 			$t = $ol->begin();
 
+		
 			// added
 			$o = obj();	
 			$o->set_class_id(CL_MRP_CASE);
-			$o->set_parent($co->id());
+			$o->set_parent($ws->prop("projects_folder"));
 			$o->set_prop("extern_id", $id);
 			$o->set_prop("customer", $t->id());
 			$o->set_prop("customer_priority", $t->prop("priority"));
@@ -412,6 +424,10 @@ class mrp_prisma_import extends class_base
 			$this->_upd_proj_o($o, $dat);
 			$o->save();
 
+			$o->connect(array(
+				"to" => $ws->id(),
+				"reltype" => "RELTYPE_MRP_OWNER"
+			));
 
 			$t->connect(array(
 				"to" => $o->id(),
@@ -434,6 +450,10 @@ class mrp_prisma_import extends class_base
 	function write_proj($id)
 	{
 		$o = obj($id);
+		if (!$o->prop("extern_id"))
+		{
+			return;
+		}
 		$sets = array();
 		foreach($this->prj_flds as $prop => $fld)
 		{
