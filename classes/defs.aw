@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.91 2003/04/24 07:47:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.92 2003/04/30 11:15:43 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -358,8 +358,9 @@ if (!defined("DEFS"))
 	// !Let's deal with no name objects in one place
 	function parse_obj_name($name)
 	{
-		return empty($name) ? "(nimetu)" : $name;
-
+		$rv = empty($name) ? "(nimetu)" : $name;
+		$rv = str_replace("\"","&quot;", $rv);
+		return $rv;
 	}
 
 	function aw_serialize($arr,$type = SERIALIZE_PHP, $flags = array())
