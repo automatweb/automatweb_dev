@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.21 2002/01/18 18:54:48 cvs Exp $
+// gallery.aw - gallery management
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.22 2002/01/29 23:55:21 duke Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -27,16 +28,7 @@ class gallery extends aw_template
 	function parse_alias($args = array())
 	{
 		extract($args);
-		if (!is_array($this->galaliases) || ($oid != $this->cached_oid) )
-		{
-			$this->galaliases = $this->get_aliases(array(
-								"oid" => $oid,
-								"type" => CL_GALLERY,
-						));
-			$this->cached_oid = $oid;
-		};
-		$g = $this->galaliases[$matches[3] - 1];
-		$this->load($g["target"],$GLOBALS["page"]);
+		$this->load($alias["target"],$GLOBALS["page"]);
 		$replacement = $this->show($GLOBALS["page"]);
 		return $replacement;
 	}
